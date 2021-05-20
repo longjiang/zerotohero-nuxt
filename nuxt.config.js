@@ -11,15 +11,18 @@ export default {
       { hid: 'description', name: 'description', content: '' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'stylesheet', href: '/vendor/fontawesome/css/all.min.css'}
     ],
     script: [
-      { hid: 'papaparse', src: '/vendor/papaparse/papaparse.min.js', defer: true }
+      { hid: 'papaparse', src: '/vendor/papaparse/papaparse.min.js', defer: true },
+      { hid: 'jquery', src: '/vendor/jquery/jquery.min.js', defer: true }
     ]
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
+    
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
@@ -42,7 +45,8 @@ export default {
     // https://go.nuxtjs.dev/bootstrap
     'bootstrap-vue/nuxt',
     // https://go.nuxtjs.dev/axios
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    'nuxt-i18n'
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
