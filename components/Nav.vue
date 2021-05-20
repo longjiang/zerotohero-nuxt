@@ -252,6 +252,12 @@ export default {
               icon: 'fas fa-book-open',
               show: true,
             },
+            {
+              name: 'pinyin-list',
+              title: 'Pinyin List',
+              icon: 'fa fa-list',
+              show: true,
+            },
           ],
         },
         {
@@ -323,6 +329,12 @@ export default {
               name: 'articles-wiki',
               title: 'Wiki',
               icon: 'fab fa-wikipedia-w',
+              show: true,
+            },
+            {
+              name: 'pinyin-squared',
+              title: 'Pinyin Squared',
+              icon: 'fa fa-list',
               show: true,
             },
           ],
