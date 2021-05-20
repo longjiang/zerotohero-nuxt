@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import VTooltip from 'v-tooltip'
 import VueObserveVisibility from 'vue-observe-visibility'
-import Languages from '@/lib/languages'
 import VueAnalytics from 'vue-analytics'
 import VueDisqus from 'vue-disqus'
 
@@ -33,13 +32,4 @@ Vue.filter('truncate', function(text, length, clamp){
 })
 
 
-Languages.load().then(languages => {
-  Vue.prototype.$languages = languages
-  Vue.prototype.$settings = Object.assign({
-    showDefinition: false,
-    showTranslation: true,
-    showPinyin: true,
-    useTraditional: false,
-    showQuiz: true,
-  }, JSON.parse(localStorage.getItem('zthSettings')))
-})
+

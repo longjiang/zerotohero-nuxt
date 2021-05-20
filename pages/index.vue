@@ -77,7 +77,7 @@
           <div class="container">
             <div class="row mb-5">
               <div class="col-sm-12">
-                <Choose :compact="true" />
+                <Choose v-if="langsReady" :compact="true" />
               </div>
             </div>
           </div>
@@ -234,7 +234,7 @@
           </div>
         </div>
       </div>
-      <Choose :compact="true" />
+      <Choose v-if="langsReady" :compact="true" />
     </template>
   </div>
 </template>
@@ -242,6 +242,7 @@
 <script lang="ts">
 import Vue from "vue";
 import Config from '@/lib/config'
+import Languages from '@/lib/languages'
 
 export default Vue.extend({
   data() {
@@ -250,6 +251,7 @@ export default Vue.extend({
       updateSettings: 0,
       classes: undefined,
       languages: [],
+      langsReady: false,
       langsLoaded: false,
       focus: false,
       loaded: false,
@@ -360,31 +362,40 @@ export default Vue.extend({
       }
     },
   },
+  async created() {
+    let languages = await Languages.load()
+    Vue.prototype.$languages = languages
+    this.langsReady = true
+    Vue.prototype.$settings = Object.assign({
+      showDefinition: false,
+      showTranslation: true,
+      showPinyin: true,
+      useTraditional: false,
+      showQuiz: true,
+    }, JSON.parse(localStorage.getItem('zthSettings')))
+    this.$ga.page(this.$route.path);
+    if (this.$route.params.l1 && this.$route.params.l2) {
+      if (
+        (this.$l1 && this.$route.params.l1 !== this.$l1.code) ||
+        (this.$l2 && this.$route.params.l2 !== this.$l2.code)
+      ) {
+        // switching language
+        location.reload();
+      } else {
+        // first time loading, set the language
+        await this.setL1();
+        await this.setL2();
+        this.loadLanguages();
+        this.updateFavicon();
+        this.updateTitle();
+        this.loadSettings();
+        this.updateClasses();
+      }
+    }
+  },
   watch: {
     updateSettings() {
       this.updateClasses();
-    },
-    async $route() {
-      console.log('routing...')
-      this.$ga.page(this.$route.path);
-      if (this.$route.params.l1 && this.$route.params.l2) {
-        if (
-          (this.$l1 && this.$route.params.l1 !== this.$l1.code) ||
-          (this.$l2 && this.$route.params.l2 !== this.$l2.code)
-        ) {
-          // switching language
-          location.reload();
-        } else {
-          // first time loading, set the language
-          await this.setL1();
-          await this.setL2();
-          this.loadLanguages();
-          this.updateFavicon();
-          this.updateTitle();
-          this.loadSettings();
-          this.updateClasses();
-        }
-      }
     },
   },
 });
