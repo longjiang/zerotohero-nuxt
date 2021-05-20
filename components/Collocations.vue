@@ -1,7 +1,7 @@
 <template>
   <div class="widget">
     <div class="widget-title">
-      {{ $t('Collocations with “{text}”', { text: term }) }}
+      {{ $t("Collocations with “{text}”", { text: term }) }}
     </div>
     <div class="widget-body jumbotron-fluid p-4">
       <div class="row">
@@ -73,10 +73,11 @@
       >
         Sorry, we could not find any “{{ term }}” collocations in this corpus
         (dataset). You can set a different corpus in
-        <a :href="`/${$l1.code}/${$l2.code}/settings`">Settings</a>.
+        <a :href="`/${$l1.code}/${$l2.code}/settings`">Settings</a>
+        .
       </div>
       <div class="mt-2">
-        {{ $t('Collocations provided by') }}
+        {{ $t("Collocations provided by") }}
         <a
           target="_blank"
           :href="`https://app.sketchengine.eu/#wordsketch?corpname=${encodeURIComponent(
@@ -95,15 +96,11 @@
 </template>
 
 <script>
-import SketchEngine from '@/lib/sketch-engine'
-import Helper from '@/lib/helper'
-import { mapState } from 'vuex'
+import SketchEngine from "@/lib/sketch-engine";
+import Helper from "@/lib/helper";
+import { mapState } from "vuex";
 
 export default {
-  components: {
-    Collocation,
-    SmallStar,
-  },
   props: {
     word: {
       type: Object,
@@ -112,7 +109,7 @@ export default {
       type: String,
     },
     level: {
-      default: 'outside',
+      default: "outside",
     },
   },
   data() {
@@ -123,81 +120,83 @@ export default {
       updating: false,
       SketchEngine,
       Helper,
-    }
+    };
   },
   methods: {
     saveLine(collocation) {
-      this.$store.dispatch('savedCollocations/add', {
+      this.$store.dispatch("savedCollocations/add", {
         term: this.term,
         line: collocation.line,
         l2: this.$l2.code,
-      })
-      collocation.saved = true
+      });
+      collocation.saved = true;
     },
     removeSavedLine(collocation) {
-      this.$store.dispatch('savedCollocations/remove', {
+      this.$store.dispatch("savedCollocations/remove", {
         term: this.term,
         line: collocation.line,
         l2: this.$l2.code,
-      })
-      collocation.saved = false
+      });
+      collocation.saved = false;
     },
     async update() {
-      this.updating = true
-      this.colDesc = undefined
-      this.sketch = undefined
+      this.updating = true;
+      this.colDesc = undefined;
+      this.sketch = undefined;
       if (this.sC && this.sC.length > 0) {
-        this.collapsed = true
-        this.$emit('collocationsReady')
+        this.collapsed = true;
+        this.$emit("collocationsReady");
       }
       this.sketch = await SketchEngine.wsketch({
         term: this.term,
         l2: this.$l2,
-      })
-      this.colDesc = await SketchEngine.collocationDescription({ l2: this.$l2 })
+      });
+      this.colDesc = await SketchEngine.collocationDescription({
+        l2: this.$l2,
+      });
       if (this.sketch && this.sketch.Gramrels) {
-        this.$emit('collocationsReady')
+        this.$emit("collocationsReady");
       }
-      this.updating = false
+      this.updating = false;
     },
     getGramrelsByName(gramrels, name) {
       return gramrels.find(
         (gram) => gram.name === name && gram.Words && gram.Words.length > 0
-      )
+      );
     },
   },
   computed: {
-    ...mapState('savedCollocations', ['savedCollocations']),
+    ...mapState("savedCollocations", ["savedCollocations"]),
     sC() {
-      return this.savedCollocations[this.$l2.code]
+      return (this.savedCollocations[this.$l2.code] || [])
         .filter((collocation) => collocation.term === this.term)
         .map((collocation) => {
-          collocation.saved = true
-          return collocation
-        })
+          collocation.saved = true;
+          return collocation;
+        });
     },
     term() {
-      return this.word ? this.word.bare : this.text
+      return this.word ? this.word.bare : this.text;
     },
   },
   mounted() {
     if (!this.updating) {
-      this.update()
+      this.update();
     }
   },
   watch: {
     word() {
       if (!this.updating) {
-        this.update()
+        this.update();
       }
     },
     text() {
       if (this.colDesc) {
-        this.update()
+        this.update();
       }
     },
   },
-}
+};
 </script>
 <style lang="scss" scoped>
 .saved-collocations {

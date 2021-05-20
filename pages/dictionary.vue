@@ -1,6 +1,7 @@
 <router>
   {
-    path: '/:l1/:l2/dictionary'
+    path: '/:l1/:l2/dictionary/:method?/:args?',
+    props: true
   }
 </router>
 <template>

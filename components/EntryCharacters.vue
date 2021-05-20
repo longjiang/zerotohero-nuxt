@@ -32,9 +32,6 @@ export default {
       default: ''
     }
   },
-  components: {
-    Character
-  },
   computed: {
     pinyinArr() {
       return this.$l2.code === 'zh' ? this.pinyin.split(' ') : this.pinyin.split('')

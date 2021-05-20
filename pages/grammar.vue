@@ -1,3 +1,8 @@
+<router>
+  {
+    path: '/:l1/:l2/grammar'
+  }
+</router>
 <template>
   <div class="main mt-5 mb-5" id="main">
     <div class="container">
