@@ -347,7 +347,8 @@ export default {
   methods: {
     nameOfSelfOrFirstChild(item) {
       if (item) {
-        return item.name || (item.children && item.children.length > 0 ? item.children[0].name : '')
+        let result = item.name || (item.children && item.children.length > 0 ? item.children[0].name : '')
+        return result
       }
     },
     last(item) {

@@ -25,6 +25,12 @@ export default {
     
   ],
 
+  vue: {
+    config: {
+      runtimeCompiler: true
+    }
+  },
+
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     '~plugins/main.js'
@@ -54,5 +60,8 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+    extend(config) {
+        config.resolve.alias['vue'] = 'vue/dist/vue.common'
+    }
   }
 }

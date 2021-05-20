@@ -23,10 +23,12 @@
     "nuxt-i18n": "^6.27.0",
     "sass": "^1.32.13",
     "transliteration": "^2.2.0",
+    "v-runtime-template": "^1.10.0",
     "v-tooltip": "^2.1.3",
     "vue-analytics": "^5.22.1",
     "vue-disqus": "^4.0.1",
-    "vue-observe-visibility": "^1.0.0"
+    "vue-observe-visibility": "^1.0.0",
+    "wikimedia-commons-file-path": "^2.0.0"
   },
   "devDependencies": {
     "@nuxt/types": "^2.15.3",
