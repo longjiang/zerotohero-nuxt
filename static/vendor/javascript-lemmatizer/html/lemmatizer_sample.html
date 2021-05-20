@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+</head>
+<body>
+  <script src="../bower_components/jquery/dist/jquery.js"></script>
+  <script src="../bower_components/underscore/underscore.js"></script>
+  <script src="../js/lemmatizer.js"></script>
+
+  <script type="text/javascript">
+    var lemmatizer = new Lemmatizer();
+
+    function escapeHTML(val) {
+      return $('<div />').text(val).html();
+    };
+
+    function display_lemma(form, pos) {
+      if (!form) { return; }
+      var html = '';
+      _.each(lemmatizer.lemmas(form, pos), function(val) {
+        html = html + "The base form of '" + escapeHTML(form) + "' is '" + escapeHTML(val[0]) + "' as " + escapeHTML(val[1]) + ".<br />";
+      });
+      $("#lem-result").html(html);
+    }
+
+    $(document).ready( function() {
+      $("#search-lemma").click( function(){
+        var word = $("#word").val();
+        var pos  = $("#pos").val();
+        display_lemma(word, pos);
+      });
+
+      $('#lem-exc-button').click( function() {
+        $('#lem-confirm').html( confirm_dic('exc') );
+      });
+
+      $('#lem-list-button').click( function() {
+        // index data is much larger than exceptions data.
+        $('#lem-confirm').html( confirm_dic('idx') );
+      });
+    });
+
+    // for debug to use like $('#lem-confirm').html( confirm_dic('exc') )
+    function confirm_dic(type) {
+      var words = null;
+      if (type == 'exc') {
+        words = lemmatizer.exceptions;
+      } else if (type == 'idx') {
+        words = lemmatizer.wordlists;
+      }
+      var html = '*** ' + type + ' ***<br />';
+      var parts = ['verb', 'noun', 'adj', 'adv'];
+      var len = parts.length;
+      for (var i = 0; i < len; i++) {
+        var pos = parts[i];
+        var pos_comment = '--- ' + pos + ' ---<br />';
+        var html = html + pos_comment;
+        for (var w in words[pos]) {
+          var item = w + ' -> ' + words[pos][w] + '<br />';
+          var html = html + item;
+        }
+      }
+      return html;
+    }
+  </script>
+
+  <form action="">
+    English word　:
+    <input id="word" type="text"><br />
+    Part of speech:
+    <select id="pos">
+      <option value="">-----</option>
+      <option value="verb">verb</option>
+      <option value="noun">noun</option>
+      <option value="adj">adjective</option>
+      <option value="adv">adverb</option>
+    </select>
+  </form>
+  <button id="search-lemma">Search Lemma</button>
+  <br /><br />
+  *** Show base form here ***
+  <div id="lem-result"></div>
+	
+
+  <!--
+  // Uncomment the following code to display dictionary data.
+  // Be careful the dictionary data is large, so it might take a long time.
+  -->
+
+  <!--
+  <br /><br />
+  <button id="lem-exc-button">confirm all base form exceptions</button>
+  <button id="lem-list-button">confirm all base form lists</button>
+  <br /><br />
+  *** Show all lemma here ***
+  <div id="lem-confirm"></div>
+  <br /><br />
+  -->
+
+</body>
+</html>

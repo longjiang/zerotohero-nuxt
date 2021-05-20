@@ -1,0 +1,24 @@
+iso639-3,english,zerotohero
+afr,Engels,Nul tot held
+ara,الإنجليزية,من الصفر الى البطل
+ell,Αγγλικά,Μηδέν στον Ήρωα
+fin,Englanti,nolla sankarille
+fra,Anglais,Zéro à héro
+gle,Béarla,nialas go laoch
+hin,अंग्रेज़ी,जीरो से हीरो
+hrv,Engleski,nula heroju
+hun,Angol,nulla hősnek
+ita,Inglese,zero all'eroe
+jpn,英語,ゼロからヒーロー
+lat,Anglicus,nulla heros est
+nld,Engels,Nul naar Held
+pol,Angielski,zero do bohatera
+por,Inglês,zero para o herói
+ron,Engleză,zero la erou
+rus,Aнглийский,ноль герою
+spa,Inglés,Cero al héroe
+srp,Енглеска,нула хероју
+swa,Kiingereza,sifuri kwa shujaa
+swe,Engelska,noll till hjälten
+tur,ingilizce,sıfırdan zirveye
+zho,英语,英雄
