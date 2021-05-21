@@ -1,36 +1,35 @@
 <template>
   <ul class="articles list-unstyled">
     <li v-for="article in articles" class="article-list-item collapsed">
-      <a :href="article.url" 
-        >
-        <ArticleCard :article="article" :edit="edit"/>
-        </a>
+      <router-link :to="article.url">
+        <ArticleCard :article="article" :edit="edit" />
+      </router-link>
     </li>
   </ul>
 </template>
 
 <script>
-import Config from '@/lib/config'
-import ArticleCard from '@/components/ArticleCard'
+import Config from "@/lib/config";
+import ArticleCard from "@/components/ArticleCard";
 
 export default {
   components: {
-    ArticleCard
+    ArticleCard,
   },
   props: {
     articles: {
-      default: []
+      default: [],
     },
     edit: {
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
-      Config
-    }
-  }
-}
+      Config,
+    };
+  },
+};
 </script>
 
 <style scoped>

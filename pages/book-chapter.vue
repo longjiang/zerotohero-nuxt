@@ -21,8 +21,12 @@
         <SimpleSearch
           placeholder="Enter the URL of a book chapter from a variety of eBook websites"
           :action="
-            url => {
-              location.href = `/${$l1.code}/${$l2.code}/book/chapter?url=${encodeURIComponent(url)}`
+            (url) => {
+              this.$router.push({
+                path: `/${$l1.code}/${
+                  $l2.code
+                }/book/chapter?url=${encodeURIComponent(url)}`,
+              });
             }
           "
           ref="search"
@@ -40,19 +44,20 @@
         >
           <Loader :sticky="true" />
         </div>
-        <Annotate tag="h1" :foreign="foreign" :showTranslate="foreign"><span>{{ chapterTitle }}</span></Annotate
-        >
+        <Annotate tag="h1" :foreign="foreign" :showTranslate="foreign">
+          <span>{{ chapterTitle }}</span>
+        </Annotate>
         <div class="chapter-content" v-if="chapterContent">
           <SpeechBar
             :lang="chapterLang ? chapterLang : $l2.code"
             :html="chapterContent"
             :foreign="foreign"
           />
-          
         </div>
         <b-button-group class="d-flex mb-5">
           <b-button variant="light" v-if="previous" @click="previousClick">
-            <i class="fas fachevron-up mr-2"></i>Previous
+            <i class="fas fachevron-up mr-2"></i>
+            Previous
           </b-button>
           <b-button variant="light" v-if="next" @click="nextClick">
             Next
@@ -63,7 +68,11 @@
       <div class="col-md-4 text-center" :key="'book-' + bookTitle">
         <a
           :href="
-            bookURL ? `/${$l1.code}/${$l2.code}/book/index?url=${encodeURIComponent(bookURL)}` : false
+            bookURL
+              ? `/${$l1.code}/${$l2.code}/book/index?url=${encodeURIComponent(
+                  bookURL
+                )}`
+              : false
           "
           class="link-unstyled"
         >
@@ -110,12 +119,17 @@
               'link-unstyled': true,
               active:
                 location.pathname ===
-                `/${$l1.code}/${$l2.code}/book/chapter?url=${encodeURIComponent(chapter.url)}`
+                `/${$l1.code}/${$l2.code}/book/chapter?url=${encodeURIComponent(
+                  chapter.url
+                )}`,
             }"
             :foreign="foreign"
-            :href="`/${$l1.code}/${$l2.code}/book/chapter?url=${encodeURIComponent(chapter.url)}`"
-            ><span>{{ chapter.title }}</span></Annotate
+            :href="`/${$l1.code}/${
+              $l2.code
+            }/book/chapter?url=${encodeURIComponent(chapter.url)}`"
           >
+            <span>{{ chapter.title }}</span>
+          </Annotate>
         </div>
       </div>
     </div>
@@ -123,131 +137,144 @@
 </template>
 
 <script>
-import Config from '@/lib/config'
-import Library from '@/lib/library'
-import SimpleSearch from '@/components/SimpleSearch'
-import SpeechBar from '@/components/SpeechBar'
+import Config from "@/lib/config";
+import Library from "@/lib/library";
+import SimpleSearch from "@/components/SimpleSearch";
+import SpeechBar from "@/components/SpeechBar";
 
 export default {
   props: {
     method: {
-      type: String
+      type: String,
     },
     args: {
-      type: String
-    }
+      type: String,
+    },
   },
   components: {
     SimpleSearch,
-    SpeechBar
+    SpeechBar,
   },
   data() {
     return {
       Config,
       Library,
       bookThumbnail: undefined,
-      bookTitle: '',
-      bookAuthor: '',
-      bookURL: '',
+      bookTitle: "",
+      bookAuthor: "",
+      bookURL: "",
       libraryL2: undefined,
       chapters: [],
-      chapterTitle: '',
-      chapterContent: '',
+      chapterTitle: "",
+      chapterContent: "",
       chapterLang: undefined,
       location,
       foreign: true,
-      loaded: false
-    }
+      loaded: false,
+    };
   },
   watch: {
     args() {
-      this.updateURL()
-    }
+      this.updateURL();
+    },
   },
   computed: {
     previous() {
       if (this.chapters) {
         let index = this.chapters.findIndex(
-          chapter => chapter.url === this.args
-        )
+          (chapter) => chapter.url === this.args
+        );
         if (index && index > 0 && this.chapters[index - 1]) {
-          return this.chapters[index - 1].url
+          return this.chapters[index - 1].url;
         } else {
-          return false
+          return false;
         }
       } else {
-        return false
+        return false;
       }
     },
     next() {
-      let next = false
+      let next = false;
       if (this.chapters) {
         let index = this.chapters.findIndex(
-          chapter => chapter.url === this.args
-        )
+          (chapter) => chapter.url === this.args
+        );
         if (
           index !== undefined &&
           index < this.chapters.length - 1 &&
           this.chapters[index + 1]
         ) {
-          next = this.chapters[index + 1].url
+          next = this.chapters[index + 1].url;
         }
       }
-      return next
-    }
+      return next;
+    },
   },
   methods: {
     async updateURL() {
-      let url = decodeURIComponent(this.args)
-      this.$refs.search.text = url
-      this.chapterTitle = ''
-      this.chapterContent = ''
+      let url = decodeURIComponent(this.args);
+      this.$refs.search.text = url;
+      this.chapterTitle = "";
+      this.chapterContent = "";
       try {
-        this.libraryL2 = await (await import(`@/lib/library-l2s/library-${this.$l2['iso639-3']}.js`)).default
-        await Library.setLangSources(this.libraryL2.sources)
+        this.libraryL2 = await (
+          await import(`@/lib/library-l2s/library-${this.$l2["iso639-3"]}.js`)
+        ).default;
+        await Library.setLangSources(this.libraryL2.sources);
       } catch (err) {
-        console.log(
-          `Booklists for ${this.$l2['iso639-3']} is unavailable.`
-        )
+        console.log(`Booklists for ${this.$l2["iso639-3"]} is unavailable.`);
       }
-      let chapter = await Library.getChapter(url)
+      let chapter = await Library.getChapter(url);
       if (chapter) {
-        this.chapterTitle = chapter.title
-        let $chapterContent = $('<div>').html(chapter.content)
-        for (let a of $chapterContent.find('a')) {
-          if (!$(a).attr('target')) {
-            let url = $(a).attr('href')
-            $(a).attr('href', `/${this.$l1.code}/${this.$l2.code}/book/chapter?url=${encodeURIComponent(url)}`)
+        this.chapterTitle = chapter.title;
+        let $chapterContent = $("<div>").html(chapter.content);
+        for (let a of $chapterContent.find("a")) {
+          if (!$(a).attr("target")) {
+            let url = $(a).attr("href");
+            $(a).attr(
+              "href",
+              `/${this.$l1.code}/${
+                this.$l2.code
+              }/book/chapter?url=${encodeURIComponent(url)}`
+            );
           }
         }
-        this.chapterContent = $chapterContent.html()
+        this.chapterContent = $chapterContent.html();
         if (chapter.lang && chapter.lang === this.$l1.code) {
-          this.foreign = false
+          this.foreign = false;
         } else {
-          this.foreign = true
+          this.foreign = true;
         }
         if (chapter.book) {
-          this.chapters = chapter.book.chapters
-          this.bookThumbnail = chapter.book.thumbnail
-          this.bookTitle = chapter.book.title
-          this.bookAuthor = chapter.book.author
-          this.bookURL = chapter.book.url
+          this.chapters = chapter.book.chapters;
+          this.bookThumbnail = chapter.book.thumbnail;
+          this.bookTitle = chapter.book.title;
+          this.bookAuthor = chapter.book.author;
+          this.bookURL = chapter.book.url;
         }
-        this.chapterLang = chapter.lang
+        this.chapterLang = chapter.lang;
       }
-      this.loaded = true
+      this.loaded = true;
     },
     previousClick() {
-      location.href = `/${this.$l1.code}/${this.$l2.code}/book/chapter?url=${encodeURIComponent(this.previous)}`
+      this.$router.push({
+        path: `/${this.$l1.code}/${
+          this.$l2.code
+        }/book/chapter?url=${encodeURIComponent(this.previous)}`,
+      });
     },
     nextClick() {
-      location.href = `/${this.$l1.code}/${this.$l2.code}/book/chapter?url=${encodeURIComponent(this.next)}`
-    }
+      this.$router.push({
+        path: `/${this.$l1.code}/${
+          this.$l2.code
+        }/book/chapter?url=${encodeURIComponent(this.next)}`,
+      });
+    },
   },
   async mounted() {
-    this.updateURL()
-  }
-}
+    this.updateURL();
+  },
+};
 </script>
 
 <style lang="scss">

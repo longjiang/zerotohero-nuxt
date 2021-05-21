@@ -20,9 +20,10 @@
             class="dewey-l1-title"
             :explore="true"
             :wordBlockTemplateFilter="wordBlockTemplateFilter"
-             :showTranslate="true"
-            ><span>{{ l1.title }}</span></Annotate
+            :showTranslate="true"
           >
+            <span>{{ l1.title }}</span>
+          </Annotate>
         </h4>
         <div :key="l1Key + i * 1000">
           <ul class="dewey-l2" v-if="showL1[i]">
@@ -44,9 +45,10 @@
                   class="dewey-l2-title"
                   :explore="true"
                   :wordBlockTemplateFilter="wordBlockTemplateFilter"
-                   :showTranslate="true"
-                  ><span>{{ l2.title }}</span></Annotate
+                  :showTranslate="true"
                 >
+                  <span>{{ l2.title }}</span>
+                </Annotate>
               </h5>
               <div :key="l2Key + i + j * 1000">
                 <ul class="dewey-l3" v-if="showL2[i][j]">
@@ -58,7 +60,7 @@
                         class="dewey-l3-title"
                         :explore="true"
                         :wordBlockTemplateFilter="wordBlockTemplateFilter"
-                         :showTranslate="true"
+                        :showTranslate="true"
                       >
                         <span>{{ l3.title }}</span>
                       </Annotate>
@@ -75,9 +77,9 @@
 </template>
 
 <script>
-import $ from 'jquery'
-import Helper from '@/lib/helper'
-import Dewey from '@/lib/dewey'
+import $ from "jquery";
+import Helper from "@/lib/helper";
+import Dewey from "@/lib/dewey";
 
 export default {
   data() {
@@ -87,50 +89,52 @@ export default {
       showL2: [],
       l1Key: 0,
       l2Key: 0,
-      browseKey: 0
-    }
+      browseKey: 0,
+    };
   },
   async mounted() {
-    await Dewey.load()
-    window.Dewey = Dewey
-    let top = Dewey.top()
+    await Dewey.load();
+    window.Dewey = Dewey;
+    let top = Dewey.top();
     for (let i in top) {
-      this.showL1[i] = false
-      this.showL2[i] = []
+      this.showL1[i] = false;
+      this.showL2[i] = [];
       for (let j in top[i].children) {
-        this.showL2[i][j] = false
+        this.showL2[i][j] = false;
       }
     }
-    this.l1s = top
+    this.l1s = top;
   },
   methods: {
     toggleL1(i) {
-      this.showL1[i] = !this.showL1[i]
-      this.l1Key++
+      this.showL1[i] = !this.showL1[i];
+      this.l1Key++;
     },
 
     toggleL2(i, j) {
-      this.showL2[i][j] = !this.showL2[i][j]
-      this.l2Key++
+      this.showL2[i][j] = !this.showL2[i][j];
+      this.l2Key++;
     },
 
     wordBlockTemplateFilter(block, textOrCandidates) {
       if (Array.isArray(textOrCandidates)) {
-        const candidates = textOrCandidates
+        const candidates = textOrCandidates;
         for (let candidate of candidates) {
-          const saved = Helper.saved(candidate)
-          if (saved) $(block).addClass('saved')
+          const saved = Helper.saved(candidate);
+          if (saved) $(block).addClass("saved");
         }
         $(block)
-          .addClass('word-block-related')
-          .click(function() {
-            location.href = `/${this.$l1.code}/${this.$l2.code}/explore/related/${candidates[0].id}`
+          .addClass("word-block-related")
+          .click(() => {
+            this.$router.push({
+              path: `/${this.$l1.code}/${this.$l2.code}/explore/related/${candidates[0].id}`,
+            });
           })
-          .prepend('<i class="fas fa-expand-arrows-alt"></i>')
+          .prepend('<i class="fas fa-expand-arrows-alt"></i>');
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style>

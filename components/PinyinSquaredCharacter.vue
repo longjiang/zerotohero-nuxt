@@ -5,21 +5,21 @@
       <div class="character" v-if="initial">
         <simple-svg
           v-if="initial"
-          :filepath="`/img/pinyin-squared/${initial}.svg`"
-          fill="#717171"
-          class="initial"
+          :src="`/img/pinyin-squared/${initial}.svg`"
+          :fill="`#717171`"
+          custom-class-name="initial"
         />
         <simple-svg
           v-if="final"
-          :filepath="`/img/pinyin-squared/${final}.svg`"
-          fill="#717171"
-          class="final"
+          :src="`/img/pinyin-squared/${final}.svg`"
+          :fill="`#717171`"
+          custom-class-name="final"
         />
         <simple-svg
           v-if="tone"
-          :filepath="`/img/pinyin-squared/tone-${tone}.svg`"
-          fill="#28a745"
-          class="tone"
+          :src="`/img/pinyin-squared/tone-${tone}.svg`"
+          :fill="`#28a745`"
+          custom-class-name="tone"
         />
       </div>
       <div class="string" v-if="string">{{ string }}</div>
@@ -28,27 +28,27 @@
       <div>
         <simple-svg
           v-if="initial"
-          :filepath="`/img/pinyin-squared/${initial}.svg`"
-          fill="#717171"
-          class="legend-initial"
+          :src="`/img/pinyin-squared/${initial}.svg`"
+          :fill="`#717171`"
+          custom-class-name="legend-initial"
         />
         = {{ initial }}
       </div>
       <div>
         <simple-svg
           v-if="final"
-          :filepath="`/img/pinyin-squared/${final}.svg`"
-          fill="#717171"
-          class="legend-final"
+          :src="`/img/pinyin-squared/${final}.svg`"
+          :fill="`#717171`"
+          custom-class-name="legend-final"
         />
         = {{ final }}
       </div>
       <div>
         <simple-svg
           v-if="tone"
-          :filepath="`/img/pinyin-squared/tone-${tone}.svg`"
-          fill="#28a745"
-          class="legend-tone"
+          :src="`/img/pinyin-squared/tone-${tone}.svg`"
+          :fill="`#28a745`"
+          custom-class-name="legend-tone"
         />
         = tone {{ tone }}
       </div>

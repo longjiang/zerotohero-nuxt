@@ -3,10 +3,12 @@ import VTooltip from 'v-tooltip'
 import VueObserveVisibility from 'vue-observe-visibility'
 import VueAnalytics from 'vue-analytics'
 import VueDisqus from 'vue-disqus'
+import VueSimpleSVG from 'vue-simple-svg'
 
 Vue.config.productionTip = false
 
 Vue.use(VTooltip)
+Vue.use(VueSimpleSVG)
 Vue.use(VueObserveVisibility)
 Vue.use(VueAnalytics, {
   id: 'UA-1846573-21'

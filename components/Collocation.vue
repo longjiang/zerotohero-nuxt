@@ -71,12 +71,13 @@ export default {
   computed: {
     ...mapState('savedCollocations', ['savedCollocations']),
     sC() {
-      return this.savedCollocations[this.$l2.code]
+      let cols = this.savedCollocations[this.$l2.code]
+      return cols ? cols
         .filter((collocation) => collocation.term === this.term)
         .map((collocation) => {
           collocation.saved = true
           return collocation
-        })
+        }) : []
     },
     term() {
       return this.word ? this.word.bare : this.text

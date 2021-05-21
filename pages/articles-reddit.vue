@@ -15,43 +15,53 @@
 </router>
 <template>
   <div class="main mt-5 mb-5">
-    <div
-      v-if="method === 'list'"
-      class="container"
-      :key="`subreddits-${key}`"
-    >
+    <div v-if="method === 'list'" class="container" :key="`subreddits-${key}`">
       <div class="row">
         <div class="col-sm-12 col-md-8">
           <div v-if="subreddits && subreddits.length > 0">
             <h3 class="mb-5">
               Reddit Posts under
-              <a :href="`https://www.reddit.com/${subreddits[0].sub}`"
-                >{{subreddits[0].sub}}</a
-              >
+              <a :href="`https://www.reddit.com/${subreddits[0].sub}`">
+                {{ subreddits[0].sub }}
+              </a>
             </h3>
             <RedditArticlesList :path="`${subreddits[0].sub}/hot`" />
           </div>
           <div v-if="subreddits && subreddits.length === 0">
             <div class="jumbotron shadow rounded bg-white text-center">
-              <h5>We don’t know about a subreddit for learning {{$l2.name}} yet.</h5>
-              <p class="lead mb-3">If you know of a subreddit related to learning {{$l2.name}}, pleaes let us know so we can add it.</p>
+              <h5>
+                We don’t know about a subreddit for learning {{ $l2.name }} yet.
+              </h5>
+              <p class="lead mb-3">
+                If you know of a subreddit related to learning {{ $l2.name }},
+                pleaes let us know so we can add it.
+              </p>
               <div class="text-center">
-                <a :href="`/${$l1.code}/${$l2.code}/contact-us`" class="btn btn-success">Contact Us</a>
+                <a
+                  :href="`/${$l1.code}/${$l2.code}/contact-us`"
+                  class="btn btn-success"
+                >
+                  Contact Us
+                </a>
               </div>
             </div>
           </div>
         </div>
-        <div class="col-sm-12 col-md-4" v-if="subreddits && subreddits.length > 0">
+        <div
+          class="col-sm-12 col-md-4"
+          v-if="subreddits && subreddits.length > 0"
+        >
           <h4 class="mb-5">About Reddit</h4>
           <hr />
           <p>
-            This is a community for people studying or teaching {{$l2.name}} - or
-            just interested in the language. Please post interesting links,
-            language learning advice, or questions about the {{$l2.name}} language.
-            To participate and create new content,
-            <a :href="`https://www.reddit.com/${subreddits[0].sub}/`"
-              >visit the community on Reddit</a
-            >.
+            This is a community for people studying or teaching {{ $l2.name }} -
+            or just interested in the language. Please post interesting links,
+            language learning advice, or questions about the
+            {{ $l2.name }} language. To participate and create new content,
+            <a :href="`https://www.reddit.com/${subreddits[0].sub}/`">
+              visit the community on Reddit
+            </a>
+            .
           </p>
         </div>
       </div>
@@ -67,17 +77,17 @@
 </template>
 
 <script>
-import Config from '@/lib/config'
-import Helper from '@/lib/helper'
-import RedditArticlesList from '@/components/RedditArticlesList.vue'
-import RedditArticle from '@/components/RedditArticle.vue'
+import Config from "@/lib/config";
+import Helper from "@/lib/helper";
+import RedditArticlesList from "@/components/RedditArticlesList.vue";
+import RedditArticle from "@/components/RedditArticle.vue";
 
 export default {
   components: {
     RedditArticlesList,
-    RedditArticle
+    RedditArticle,
   },
-  props: ['method', 'args'],
+  props: ["method", "args"],
   data() {
     return {
       subreddits: undefined,
@@ -86,37 +96,41 @@ export default {
       Config,
       Helper,
       key: 0,
-    }
+    };
   },
   watch: {
     $route() {
-      if (this.$route.name === 'articles-reddit') {
-        this.route()
+      if (this.$route.name === "articles-reddit") {
+        this.route();
       }
-    }
+    },
   },
   methods: {
     async route() {
       if (this.method) {
-        if (this.method === 'view' && this.args) {
-          this.articleId = this.args.split(',')[0]
-        } else if (this.method === 'list') {
+        if (this.method === "view" && this.args) {
+          this.articleId = this.args.split(",")[0];
+        } else if (this.method === "list") {
           if (!this.subreddits) {
-            let response = await $.getJSON(`${Config.wiki}items/subreddits?filter[l2][eq]=${this.$l2.id}`)
+            let response = await $.getJSON(
+              `${Config.wiki}items/subreddits?filter[l2][eq]=${this.$l2.id}`
+            );
             if (response) {
-              this.subreddits = response.data
+              this.subreddits = response.data;
             }
           }
         }
       } else {
-        location.href = `/${this.$l1.code}/${this.$l2.code}/articles/reddit/list`
+        this.$router.push({
+          path: `/${this.$l1.code}/${this.$l2.code}/articles/reddit/list`,
+        });
       }
-    }
+    },
   },
   created() {
-    this.route()
-  }
-}
+    this.route();
+  },
+};
 </script>
 
 <style></style>

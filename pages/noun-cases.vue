@@ -34,48 +34,52 @@
 </template>
 
 <script>
-import CaseNav from '@/components/CaseNav'
-import Case from '@/components/Case'
+import CaseNav from "@/components/CaseNav";
+import Case from "@/components/Case";
 
 export default {
   components: {
     Case,
-    CaseNav
+    CaseNav,
   },
   props: {
     args: {
-      type: String
-    }
+      type: String,
+    },
   },
   created() {
-    loadAllCsvsThen(files => {
-      const nounFile = files.find(file => file.pos === 'noun')
-      this.types = nounFile.dataColumns
-      this.data = formatExampleSentenceHtml(this.types, nounFile.data)
-      this.route()
-    })
+    loadAllCsvsThen((files) => {
+      const nounFile = files.find((file) => file.pos === "noun");
+      this.types = nounFile.dataColumns;
+      this.data = formatExampleSentenceHtml(this.types, nounFile.data);
+      this.route();
+    });
   },
   data() {
     return {
       types: [],
-      type: undefined
-    }
+      type: undefined,
+    };
   },
   methods: {
     route() {
       if (this.args) {
-        this.type = this.args.replace('_', ' ')
+        this.type = this.args.replace("_", " ");
       } else {
-        location.href = `/${this.$l1.code}/${this.$l2.code}/cases/nouns/${this.types[0].replace(' ', '_')}`
+        this.$router.push({
+          path: `/${this.$l1.code}/${
+            this.$l2.code
+          }/cases/nouns/${this.types[0].replace(" ", "_")}`,
+        });
       }
-    }
+    },
   },
   watch: {
     $route() {
-      if (this.$route.name === 'noun-cases') {
-        this.route()
+      if (this.$route.name === "noun-cases") {
+        this.route();
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>

@@ -37,34 +37,38 @@
             transliteration &&
             transliteration !== token.candidates[0].head
           "
-          >{{ savedTransliteration || transliteration }}</span
         >
+          {{ savedTransliteration || transliteration }}
+        </span>
         <span
           v-if="['zh', 'yue', 'nan', 'hak'].includes($l2.code)"
           class="word-block-simplified"
           @click="wordBlockClick()"
-          >{{ token.candidates[0].simplified }}</span
         >
+          {{ token.candidates[0].simplified }}
+        </span>
         <span
           v-if="['zh', 'yue', 'nan', 'hak'].includes($l2.code)"
           class="word-block-traditional"
           @click="wordBlockClick()"
-          >{{ token.candidates[0].traditional }}</span
         >
-        <span v-else class="word-block-text" @click="wordBlockClick()">{{
-          token.text
-        }}</span>
+          {{ token.candidates[0].traditional }}
+        </span>
+        <span v-else class="word-block-text" @click="wordBlockClick()">
+          {{ token.text }}
+        </span>
       </template>
       <template v-else>
         <span
           class="word-block-pinyin"
           v-if="phonetics && transliteration && transliteration !== text"
-          >{{ savedTransliteration || transliteration }}</span
         >
+          {{ savedTransliteration || transliteration }}
+        </span>
         <span class="word-block-text" @click="wordBlockClick()">
-          <template v-if="$l2.code === 'ru' && text.length > 9">{{
-            segment(text)
-          }}</template>
+          <template v-if="$l2.code === 'ru' && text.length > 9">
+            {{ segment(text) }}
+          </template>
           <slot v-else></slot>
         </span>
       </template>
@@ -88,32 +92,34 @@
         <div v-if="word">
           <div v-for="match in word.matches" style="color: #999">
             <b>{{ match.field }} {{ match.number }}</b>
-            {{ match.table !== 'declension' ? match.table : '' }}
+            {{ match.table !== "declension" ? match.table : "" }}
             of
           </div>
           <div>
-            <span style="color: #999" v-if="word.jyutping">{{
-              word.jyutping
-            }}</span>
-            <span style="color: #999" v-else-if="word.pinyin">{{
-              word.pinyin
-            }}</span>
-            <span style="color: #999" v-else-if="word.pronunciation"
-              >/{{ word.pronunciation }}/</span
-            >
+            <span style="color: #999" v-if="word.jyutping">
+              {{ word.jyutping }}
+            </span>
+            <span style="color: #999" v-else-if="word.pinyin">
+              {{ word.pinyin }}
+            </span>
+            <span style="color: #999" v-else-if="word.pronunciation">
+              /{{ word.pronunciation }}/
+            </span>
             <span
               style="color: #999"
               v-else-if="word.kana && word.kana !== word.bare"
-              >{{ word.kana }}</span
             >
+              {{ word.kana }}
+            </span>
             <span
               style="color: #999"
               v-else-if="$hasFeature('transliteration')"
-              >{{ tr(word.bare) }}</span
             >
+              {{ tr(word.bare) }}
+            </span>
             <span style="color: #999" v-if="word.jyutping && word.pinyin">
-              / {{ word.pinyin }}</span
-            >
+              / {{ word.pinyin }}
+            </span>
             <Speak
               :text="word.kana || word.bare"
               :mp3="word.audio"
@@ -127,40 +133,48 @@
             class="mr-1"
             style="position: relative; bottom: 0.1rem"
           ></Star>
-          <b :data-level="word.level || 'outside'" style="font-size: 1.5rem">{{
-            $l2.code === 'ru' && text.length > 9
-              ? segment(word.accented)
-              : word.accented
-          }}</b>
+          <b :data-level="word.level || 'outside'" style="font-size: 1.5rem">
+            {{
+              $l2.code === "ru" && text.length > 9
+                ? segment(word.accented)
+                : word.accented
+            }}
+          </b>
           <span
             v-if="word.traditional && word.traditional !== word.simplified"
             class="ml-1"
             style="font-size: 1.2em; color: #999"
-            >{{ word.traditional }}</span
           >
+            {{ word.traditional }}
+          </span>
           <span
             v-if="$l2.code === 'ko' && word.cjk && word.cjk.canonical"
             class="ml-1"
             style="font-size: 1.2em; color: #999"
-            >[{{ word.cjk.canonical }}]</span
           >
+            [{{ word.cjk.canonical }}]
+          </span>
           <span
             v-if="word.level && word.level !== 'outside'"
             :data-bg-level="word.level"
             class="pl-1 pr-1 ml-1 rounded d-inline-block"
             style="font-size: 0.8em; position: relative; bottom: 0.1rem"
-            >{{ $l2.code === 'zh' ? 'HSK ' : '' }}{{ word.level }}</span
-          ><span
+          >
+            {{ $l2.code === "zh" ? "HSK " : "" }}{{ word.level }}
+          </span>
+          <span
             v-if="word.newHSK"
             class="ml-1"
             :style="`position: relative; bottom: 0.2em; font-size: 0.8em; color: ${
               word.newHSK === '7-9' ? '#00716B' : 'inherit'
             }`"
-            ><i class="fa fa-arrow-right mr-1" />新 HSK {{ word.newHSK }}</span
           >
-          <span v-if="word.unit" style="font-size: 0.8em" class="ml-1"
-            >Unit {{ word.unit }}</span
-          >
+            <i class="fa fa-arrow-right mr-1" />
+            新 HSK {{ word.newHSK }}
+          </span>
+          <span v-if="word.unit" style="font-size: 0.8em" class="ml-1">
+            Unit {{ word.unit }}
+          </span>
           <router-link
             :to="`/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${word.id}`"
             class="ml-1 link-unstyled"
@@ -175,7 +189,7 @@
             v-if="word.type !== 'other'"
             style="color: #999"
           >
-            {{ word.verbs ? abbreviate(word.verbs.aspect) : '' }}
+            {{ word.verbs ? abbreviate(word.verbs.aspect) : "" }}
             {{ abbreviate(word.type) }}
           </span>
           <span class="word-type" v-if="word.pos" style="color: #999">
@@ -183,7 +197,7 @@
             {{
               word.heads && word.heads[0] && word.heads[0][1]
                 ? word.heads[0][1]
-                : ''
+                : ""
             }}
           </span>
           <span class="word-translation" v-if="word.definitions">
@@ -195,12 +209,12 @@
               "
             ></em>
           </span>
-          <span class="word-counters" v-if="word.counters"
-            ><em>:</em>
+          <span class="word-counters" v-if="word.counters">
+            <em>:</em>
             {{
               word.counters
-                .map((counter) => '一' + counter.simplified)
-                .join(word.simplified + '、') + word.simplified
+                .map((counter) => "一" + counter.simplified)
+                .join(word.simplified + "、") + word.simplified
             }}。
           </span>
         </div>
@@ -212,23 +226,27 @@
         <a
           :href="`https://www.google.com/search?q=${this.text}`"
           target="_blank"
-          >Google</a
         >
+          Google
+        </a>
         |
-        <a :href="`https://en.wiktionary.org/wiki/${this.text}`" target="_blank"
-          >Wiktionary</a
+        <a
+          :href="`https://en.wiktionary.org/wiki/${this.text}`"
+          target="_blank"
         >
+          Wiktionary
+        </a>
       </div>
     </template>
   </v-popover>
 </template>
 
 <script>
-import Helper from '@/lib/helper'
-import Config from '@/lib/config'
-import WordPhotos from '@/lib/word-photos'
-import { mapState } from 'vuex'
-import { transliterate as tr } from 'transliteration'
+import Helper from "@/lib/helper";
+import Config from "@/lib/config";
+import WordPhotos from "@/lib/word-photos";
+import { mapState } from "vuex";
+import { transliterate as tr } from "transliteration";
 
 export default {
   props: {
@@ -263,108 +281,108 @@ export default {
       images: [],
       words: [],
       classes: {
-        'tooltip-entry': true,
+        "tooltip-entry": true,
       },
       checkSaved: true,
       Config,
-    }
+    };
   },
   computed: {
     attributes() {
-      let attributes = {}
+      let attributes = {};
       if (this.words && this.words.length > 0) {
         if (this.popup) {
-          attributes['data-hover-level'] =
-            this.words[0].newHSK && this.words[0].newHSK === '7-9'
-              ? '7-9'
-              : false || this.words[0].level || 'outside'
+          attributes["data-hover-level"] =
+            this.words[0].newHSK && this.words[0].newHSK === "7-9"
+              ? "7-9"
+              : false || this.words[0].level || "outside";
         }
-        if (this.words[0].rank) attributes['data-rank'] = this.words[0].rank
+        if (this.words[0].rank) attributes["data-rank"] = this.words[0].rank;
         if (this.words[0].weight)
-          attributes['data-weight'] = this.words[0].weight
+          attributes["data-weight"] = this.words[0].weight;
       }
-      return attributes
+      return attributes;
     },
   },
   mounted() {
-    if (!this.transliteration && this.$hasFeature('transliteration')) {
+    if (!this.transliteration && this.$hasFeature("transliteration")) {
       if (
         this.token &&
         this.token.candidates &&
         this.token.candidates.length > 0
       ) {
-        if (this.$l2.code === 'ja' && this.token.candidates[0].kana) {
-          this.transliteration = this.token.candidates[0].kana
+        if (this.$l2.code === "ja" && this.token.candidates[0].kana) {
+          this.transliteration = this.token.candidates[0].kana;
         } else if (
-          ['zh', 'nan', 'hak'].includes(this.$l2.code) &&
+          ["zh", "nan", "hak"].includes(this.$l2.code) &&
           this.token.candidates[0].pinyin
         ) {
-          this.transliteration = this.token.candidates[0].pinyin
+          this.transliteration = this.token.candidates[0].pinyin;
         } else if (
-          this.$l2.code === 'yue' &&
+          this.$l2.code === "yue" &&
           this.token.candidates[0].jyutping
         ) {
-          this.transliteration = this.token.candidates[0].jyutping
+          this.transliteration = this.token.candidates[0].jyutping;
         } else {
-          this.transliteration = tr(this.token.candidates[0].head)
+          this.transliteration = tr(this.token.candidates[0].head);
         }
       }
       if (
         !this.transliteration &&
-        !['ja', 'zh', 'nan', 'hak'].includes(this.$l2.code)
+        !["ja", "zh", "nan", "hak"].includes(this.$l2.code)
       ) {
-        this.transliteration = tr(this.text)
+        this.transliteration = tr(this.text);
       }
     }
     if (this.sticky) {
-      this.lookup()
+      this.lookup();
     }
-    this.update()
+    this.update();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type.startsWith('savedWords')) {
-        this.update()
+      if (mutation.type.startsWith("savedWords")) {
+        this.update();
       }
-    })
+    });
   },
   beforeDestroy() {
     // you may call unsubscribe to stop the subscription
-    this.unsubscribe()
+    this.unsubscribe();
   },
   methods: {
     getLevel() {
       if (
-        this.$l2.code === 'zh' &&
+        this.$l2.code === "zh" &&
         this.token &&
         this.token.candidates &&
         this.token.candidates.length > 0
       ) {
         if (
           this.token.candidates[0].newHSK &&
-          this.token.candidates[0].newHSK === '7-9'
+          this.token.candidates[0].newHSK === "7-9"
         ) {
-          return '7-9'
+          return "7-9";
         } else if (
-          this.token.candidates[0].hsk === 'outside' &&
+          this.token.candidates[0].hsk === "outside" &&
           !this.token.candidates[0].newHSK &&
           this.token.candidates[0].weight < 750
         ) {
-          return 'outside'
+          return "outside";
         } else {
-          return false
+          return false;
         }
       } else if (
-        this.$l2.code === 'en' &&
+        this.$l2.code === "en" &&
         this.token &&
         this.token.candidates &&
         this.token.candidates.length > 0
       ) {
-        if (this.token.candidates[0].level === 'C2') {
-          return 'C2'
+        if (this.token.candidates[0].level === "C2") {
+          return "C2";
         } else {
-          return false
+          return false;
         }
       } else {
-        return false
+        return false;
       }
     },
     wordBlockClick() {
@@ -374,88 +392,90 @@ export default {
         this.token.candidates &&
         this.token.candidates.length > 0
       ) {
-        location.href = `/${this.$l1.code}/${this.$l2.code}/explore/related/${this.token.candidates[0].id}`
+        this.$router.push({
+          path: `/${this.$l1.code}/${this.$l2.code}/explore/related/${this.token.candidates[0].id}`,
+        });
       }
     },
     tr(text) {
-      return tr(text)
+      return tr(text);
     },
     segment(text) {
       return text
         .replace(
           /([́ёеуюйыаоэяицкнгшщзхъфвпрлджчсмтьб])([цкнгшщзхъфвпрлджчсмтб])/gi,
-          '$1·$2'
+          "$1·$2"
         )
         .replace(
           /·([цкнгшщзхъфвпрлджчсмтб])([цкнгшщзхъфвпрлджчсмтб])/gi,
-          '$1·$2'
+          "$1·$2"
         )
-        .replace(/·([цкнгшщзхъфвпрлджчсмтб])ь/gi, '$1ь')
-        .replace(/·([цкнгшщзхъфвпрлджчсмтб])·/gi, '·$1')
-        .replace(/^(.)·/, '$1')
-        .replace(/·(.)$/, '$1')
+        .replace(/·([цкнгшщзхъфвпрлджчсмтб])ь/gi, "$1ь")
+        .replace(/·([цкнгшщзхъфвпрлджчсмтб])·/gi, "·$1")
+        .replace(/^(.)·/, "$1")
+        .replace(/·(.)$/, "$1");
       //([ёеуюйыаоэяи])
     },
     async update() {
-      if (this.$l1) this.classes[`l1-${this.$l1.code}`] = true
-      if (this.$l2) this.classes[`l2-${this.$l2.code}`] = true
+      if (this.$l1) this.classes[`l1-${this.$l1.code}`] = true;
+      if (this.$l2) this.classes[`l2-${this.$l2.code}`] = true;
       if (this.checkSaved) {
-        let savedWord = false
+        let savedWord = false;
         if (
           this.token &&
           this.token.candidates &&
           this.token.candidates.length > 0
         ) {
           for (let word of this.token.candidates) {
-            savedWord = this.$store.getters['savedWords/has']({
+            savedWord = this.$store.getters["savedWords/has"]({
               l2: this.$l2.code,
               text: word.bare,
-            })
-            if (savedWord) break
+            });
+            if (savedWord) break;
           }
         } else {
           if (this.$slots.default) {
-            savedWord = this.$store.getters['savedWords/has']({
+            savedWord = this.$store.getters["savedWords/has"]({
               l2: this.$l2.code,
               text:
                 this.$slots.default &&
                 this.$slots.default[0] &&
                 this.$slots.default[0].text
                   ? this.$slots.default[0].text.toLowerCase()
-                  : '',
-            })
+                  : "",
+            });
           }
         }
         if (
           savedWord &&
           savedWord.id &&
-          ['ja', 'zh', 'nan', 'hak'].includes(this.$l2.code)
+          ["ja", "zh", "nan", "hak"].includes(this.$l2.code)
         ) {
-          let word = await (await this.$dictionary).get(savedWord.id)
+          let word = await (await this.$dictionary).get(savedWord.id);
           let text =
             this.text ||
             (this.token && this.token.candidates.length > 0
               ? this.token.candidates[0].head
-              : undefined)
+              : undefined);
           if (word && word.head && word.head === text) {
             this.savedTransliteration =
-              word.jyutping || word.pinyin || word.kana || this.transliteration
+              word.jyutping || word.pinyin || word.kana || this.transliteration;
           }
-          this.saved = word ? word : false
+          this.saved = word ? word : false;
         } else {
-          this.saved = savedWord ? savedWord : false
+          this.saved = savedWord ? savedWord : false;
         }
       }
     },
     matchCase(text) {
       if (this.text.match(/^[\wА-ЯЁ]/)) {
         if (this.text.match(/^.[\wА-ЯЁ]/)) {
-          return text.toUpperCase()
+          return text.toUpperCase();
         } else {
-          return Helper.ucFirst(text)
+          return Helper.ucFirst(text);
         }
       } else {
-        return text
+        return text;
       }
     },
     async loadImages() {
@@ -465,83 +485,83 @@ export default {
             term: this.token ? this.token.text : this.text,
             lang: this.$l2.code,
           })
-        ).slice(0, 5)
+        ).slice(0, 5);
       }
     },
     async mouseover() {
       if (await this.$dictionary) {
         if (this.loading === true) {
           if (this.words && this.words.length === 0) {
-            this.lookup()
+            this.lookup();
           }
         }
         setTimeout(() => {
-          if ($('.popover:hover').length === 0) {
-            this.hover = true
+          if ($(".popover:hover").length === 0) {
+            this.hover = true;
           }
-        }, 300) // Allow user to interact with previous popover
-        this.loadImages()
+        }, 300); // Allow user to interact with previous popover
+        this.loadImages();
       }
     },
     mouseout() {
       setTimeout(() => {
         // Allow user to interact with popover
-        let $popovers = $('.popover:hover')
+        let $popovers = $(".popover:hover");
         if ($popovers && $popovers.length === 0) {
-          this.hover = false
+          this.hover = false;
         }
-      }, 300)
+      }, 300);
     },
     async lookup() {
-      if (this.token && this.$l2.code !== 'ja') {
-        this.words = this.token.candidates
+      if (this.token && this.$l2.code !== "ja") {
+        this.words = this.token.candidates;
       } else if (this.text) {
-        if (!this.text && this.token) this.text = this.token.candidates[0].head
-        let words = await (await this.$dictionary).lookupFuzzy(this.text)
+        if (!this.text && this.token) this.text = this.token.candidates[0].head;
+        let words = await (await this.$dictionary).lookupFuzzy(this.text);
         if (words) {
           for (let word of words) {
             if (word && word.matches) {
               for (let match of word.matches) {
-                match.form = await (await this.$dictionary).accent(match.form)
+                match.form = await (await this.$dictionary).accent(match.form);
                 match.field = await (await this.$dictionary).stylize(
                   match.field
-                )
+                );
                 match.number = await (await this.$dictionary).stylize(
                   match.number
-                )
+                );
                 match.table = await (await this.$dictionary).stylize(
                   match.table
-                )
+                );
               }
             }
           }
         }
-        this.words = words
+        this.words = words;
       }
-      this.loading = false
+      this.loading = false;
     },
     abbreviate(type) {
       let abb = {
-        noun: 'n.',
-        adjective: 'adj.',
-        verb: 'v.',
-        pronoun: 'pron.',
-        perfective: 'perf.',
-        imperfective: 'imperf.',
-      }
-      return abb[type] || type
+        noun: "n.",
+        adjective: "adj.",
+        verb: "v.",
+        pronoun: "pron.",
+        perfective: "perf.",
+        imperfective: "imperf.",
+      };
+      return abb[type] || type;
     },
     speak(text) {
-      if (this.$hasFeature('speech')) {
+      if (this.$hasFeature("speech")) {
         if (!speechSynthesis.speaking) {
-          this.utterance = new SpeechSynthesisUtterance(text)
-          this.utterance.lang = this.$l2.code
-          speechSynthesis.speak(this.utterance)
+          this.utterance = new SpeechSynthesisUtterance(text);
+          this.utterance.lang = this.$l2.code;
+          speechSynthesis.speak(this.utterance);
         }
       }
     },
   },
-}
+};
 </script>
 
 <style lang="scss">
@@ -674,7 +694,7 @@ export default {
     margin: 5px;
   }
 
-  &[x-placement^='top'] {
+  &[x-placement^="top"] {
     margin-bottom: 1rem;
 
     .tooltip-arrow {
@@ -689,7 +709,7 @@ export default {
     }
   }
 
-  &[x-placement^='bottom'] {
+  &[x-placement^="bottom"] {
     margin-top: 5px;
 
     .tooltip-arrow {
@@ -704,7 +724,7 @@ export default {
     }
   }
 
-  &[x-placement^='right'] {
+  &[x-placement^="right"] {
     margin-left: 5px;
 
     .tooltip-arrow {
@@ -719,7 +739,7 @@ export default {
     }
   }
 
-  &[x-placement^='left'] {
+  &[x-placement^="left"] {
     margin-right: 5px;
 
     .tooltip-arrow {
@@ -734,13 +754,13 @@ export default {
     }
   }
 
-  &[aria-hidden='true'] {
+  &[aria-hidden="true"] {
     visibility: hidden;
     opacity: 0;
     transition: opacity 0.15s, visibility 0.15s;
   }
 
-  &[aria-hidden='false'] {
+  &[aria-hidden="false"] {
     visibility: visible;
     opacity: 1;
     transition: opacity 0.15s;

@@ -462,14 +462,14 @@ export default {
   border: none;
 }
 
-.tab.router-link-active,
+.tab.nuxt-link-active,
 .tab:hover {
   color: #fd4f1c;
   background: white;
   text-decoration: none;
 }
 
-.tab-saved-words.router-link-active,
+.tab-saved-words.nuxt-link-active,
 .tab-saved-words:hover {
   color: #f8b61e;
 }
@@ -478,7 +478,7 @@ export default {
   display: none;
 }
 
-.tab-saved-words.router-link-active .tab-saved-words-count,
+.tab-saved-words.nuxt-link-active .tab-saved-words-count,
 .tab-saved-words:hover .tab-saved-words-count {
   background: #f8b61e;
   color: white;
@@ -512,7 +512,7 @@ export default {
   top: -0.1rem;
 }
 
-.router-link-active .saved-words-count {
+.nuxt-link-active .saved-words-count {
   color: #fd4f1c;
   background: white;
 }
@@ -531,7 +531,7 @@ export default {
   background-color: #f7f7f7;
 }
 
-.secondary-menu-item.router-link-active {
+.secondary-menu-item.nuxt-link-active {
   background: #fd4f1c;
   color: white;
 }

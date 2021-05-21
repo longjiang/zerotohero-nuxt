@@ -17,17 +17,23 @@
   <div class="container pt-5 pb-5 main" id="library">
     <div class="row">
       <div class="col-sm-12">
-        <h1 class="mb-5 text-center">{{ $t('Library') }}</h1>
-        <p
-          class="text-center lead"
-          style="margin-bottom: 5rem"
-        >{{ $t('This is where you can enjoy reading a variety of {l2} books with the help of hover dictionary and the ability to save words.', {l2: $t($l2.name)}) }}</p>
-        
+        <h1 class="mb-5 text-center">{{ $t("Library") }}</h1>
+        <p class="text-center lead" style="margin-bottom: 5rem">
+          {{
+            $t(
+              "This is where you can enjoy reading a variety of {l2} books with the help of hover dictionary and the ability to save words.",
+              { l2: $t($l2.name) }
+            )
+          }}
+        </p>
+
         <ul class="list-unstyled p-0 mb-5 booklists">
           <li v-for="booklist in booklists" class="text-center mb-5">
             <a
               class="link-unstyled"
-              :href="`/${$l1.code}/${$l2.code}/book/list?url=${encodeURIComponent(booklist.url)}`"
+              :href="`/${$l1.code}/${
+                $l2.code
+              }/book/list?url=${encodeURIComponent(booklist.url)}`"
             >
               <img
                 :src="`/img/books-${Math.floor(Math.random() * 10)}.png`"
@@ -38,23 +44,35 @@
                   <span>{{ booklist.title }}</span>
                 </Annotate>
               </h5>
-              <p class="mb-0" style="color: #aaa" v-if="Library.source(booklist.url)">Source: {{ Library.source(booklist.url).name }}</p>
+              <p
+                class="mb-0"
+                style="color: #aaa"
+                v-if="Library.source(booklist.url)"
+              >
+                Source: {{ Library.source(booklist.url).name }}
+              </p>
             </a>
           </li>
         </ul>
 
         <hr class="mb-5" />
 
-        <h3 class="text-center mt-5 mb-4">{{ $t('Custom Reading') }}</h3>
+        <h3 class="text-center mt-5 mb-4">{{ $t("Custom Reading") }}</h3>
 
-        <p class="text-center lead mb-5">{{ $t('Read any online document by pasting the URL.') }}</p>
+        <p class="text-center lead mb-5">
+          {{ $t("Read any online document by pasting the URL.") }}
+        </p>
 
         <div class="jumbotron bg-light pt-4 pb-3 mt-3 mb-3">
           <SimpleSearch
             placeholder="Enter the URL of a book from one of the sites below."
             :action="
-              url => {
-                location.href = `/${$l1.code}/${$l2.code}/book/index?url=${encodeURIComponent(url)}`
+              (url) => {
+                this.$router.push({
+                  path: `/${$l1.code}/${
+                    $l2.code
+                  }/book/index?url=${encodeURIComponent(url)}`,
+                });
               }
             "
             class="mb-3"
@@ -62,8 +80,8 @@
           />
           <p>
             We can work with these content providers.
-            <b>Copy paste</b> URLs like the following into the above text box
-            and enjoy reading!
+            <b>Copy paste</b>
+            URLs like the following into the above text box and enjoy reading!
           </p>
           <ul>
             <li v-for="source in sources">
@@ -78,17 +96,17 @@
 </template>
 
 <script>
-import Library from '@/lib/library'
-import SimpleSearch from '@/components/SimpleSearch'
+import Library from "@/lib/library";
+import SimpleSearch from "@/components/SimpleSearch";
 
 export default {
   components: {
-    SimpleSearch
+    SimpleSearch,
   },
   props: {
     args: {
-      type: String
-    }
+      type: String,
+    },
   },
   data() {
     return {
@@ -96,22 +114,22 @@ export default {
       libraryL2: undefined,
       location,
       booklists: [],
-      sources: []
-    }
+      sources: [],
+    };
   },
   async mounted() {
     try {
-      this.libraryL2 = await (await import(`@/lib/library-l2s/library-${this.$l2['iso639-3']}.js`)).default
-      Library.setLangSources(this.libraryL2.sources)
-      this.booklists = await this.libraryL2.booklists()
+      this.libraryL2 = await (
+        await import(`@/lib/library-l2s/library-${this.$l2["iso639-3"]}.js`)
+      ).default;
+      Library.setLangSources(this.libraryL2.sources);
+      this.booklists = await this.libraryL2.booklists();
     } catch (err) {
-      console.log(
-        `Booklists for ${this.$l2['iso639-3']} is unavailable.`
-      )
+      console.log(`Booklists for ${this.$l2["iso639-3"]} is unavailable.`);
     }
-    this.sources = Library.sources()
-  }
-}
+    this.sources = Library.sources();
+  },
+};
 </script>
 
 <style lang="scss">

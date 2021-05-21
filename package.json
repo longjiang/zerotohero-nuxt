@@ -35,6 +35,7 @@
     "vue-disqus": "^4.0.1",
     "vue-drag-drop": "^1.1.4",
     "vue-observe-visibility": "^1.0.0",
+    "vue-simple-svg": "^2.0.2",
     "wikimedia-commons-file-path": "^2.0.0"
   },
   "devDependencies": {

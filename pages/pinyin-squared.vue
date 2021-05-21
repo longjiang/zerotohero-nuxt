@@ -86,7 +86,7 @@ import PinyinSquaredCharacter from '@/components/PinyinSquaredCharacter'
 
 export default {
   components: {
-    PinyinSquaredCharacter
+    PinyinSquaredCharacter,
   },
   computed: {
     blocksOrStrings() {

@@ -21,8 +21,12 @@
         <SimpleSearch
           placeholder="Enter the URL of a book from a variety of eBook websites"
           :action="
-            url => {
-              location.href = `/${$l1.code}/${$l2.code}/book/index?url=${encodeURIComponent(url)}`
+            (url) => {
+              this.$router.push({
+                path: `/${$l1.code}/${
+                  $l2.code
+                }/book/index?url=${encodeURIComponent(url)}`,
+              });
             }
           "
           ref="search"
@@ -55,9 +59,13 @@
               'link-unstyled': true,
               active:
                 location.pathname ===
-                `/${$l1.code}/${$l2.code}/book/chapter?url=${encodeURIComponent(chapter.url)}`
+                `/${$l1.code}/${$l2.code}/book/chapter?url=${encodeURIComponent(
+                  chapter.url
+                )}`,
             }"
-            :href="`/${$l1.code}/${$l2.code}/book/chapter?url=${encodeURIComponent(chapter.url)}`"
+            :href="`/${$l1.code}/${
+              $l2.code
+            }/book/chapter?url=${encodeURIComponent(chapter.url)}`"
           >
             <span>{{ chapter.title }}</span>
           </Annotate>
@@ -68,77 +76,81 @@
 </template>
 
 <script>
-import Config from '@/lib/config'
-import Library from '@/lib/library'
-import SimpleSearch from '@/components/SimpleSearch'
+import Config from "@/lib/config";
+import Library from "@/lib/library";
+import SimpleSearch from "@/components/SimpleSearch";
 
 export default {
   props: {
     method: {
-      type: String
+      type: String,
     },
     args: {
-      type: String
-    }
+      type: String,
+    },
   },
   components: {
-    SimpleSearch
+    SimpleSearch,
   },
   data() {
     return {
       Config,
       bookThumbnail: undefined,
-      bookTitle: '',
-      bookAuthor: '',
+      bookTitle: "",
+      bookAuthor: "",
       libraryL2: undefined,
       chapters: [],
-      location
-    }
+      location,
+    };
   },
   watch: {
     args() {
-      this.updateURL()
-    }
+      this.updateURL();
+    },
   },
   methods: {
     async updateURL() {
-      this.bookThumbnail = ''
-      this.bookTitle = ''
-      this.bookAuthor = ''
-      this.chapters = []
-      let url = decodeURIComponent(this.args)
-      this.$refs.search.text = url
+      this.bookThumbnail = "";
+      this.bookTitle = "";
+      this.bookAuthor = "";
+      this.chapters = [];
+      let url = decodeURIComponent(this.args);
+      this.$refs.search.text = url;
       try {
-        this.libraryL2 = await (await import(`@/lib/library-l2s/library-${this.$l2['iso639-3']}.js`)).default
-        await Library.setLangSources(this.libraryL2.sources)
+        this.libraryL2 = await (
+          await import(`@/lib/library-l2s/library-${this.$l2["iso639-3"]}.js`)
+        ).default;
+        await Library.setLangSources(this.libraryL2.sources);
       } catch (err) {
-        console.log(
-          `Booklists for ${this.$l2['iso639-3']} is unavailable.`
-        )
+        console.log(`Booklists for ${this.$l2["iso639-3"]} is unavailable.`);
       }
-      let book = await Library.getBook(url)
+      let book = await Library.getBook(url);
       if (book) {
-        this.bookThumbnail = book.thumbnail
-        this.bookTitle = book.title
-        this.bookAuthor = book.author
+        this.bookThumbnail = book.thumbnail;
+        this.bookTitle = book.title;
+        this.bookAuthor = book.author;
         this.chapters =
           book.chapters && book.chapters.length > 0
             ? book.chapters
             : [
                 {
-                  title: 'Read',
-                  url: encodeURIComponent(this.args)
-                }
-              ]
+                  title: "Read",
+                  url: encodeURIComponent(this.args),
+                },
+              ];
       } else {
-        location.href = `/${this.$l1.code}/${this.$l2.code}/book/chapter?url=${encodeURIComponent(this.args)}`
+        this.$router.push({
+          path: `/${this.$l1.code}/${
+            this.$l2.code
+          }/book/chapter?url=${encodeURIComponent(this.args)}`,
+        });
       }
-    }
+    },
   },
   async mounted() {
-    this.updateURL()
-  }
-}
+    this.updateURL();
+  },
+};
 </script>
 
 <style></style>

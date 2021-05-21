@@ -9,9 +9,10 @@
       <p class="mb-3">
         <b>
           These are
-          <em>not</em> subscriptions.
-        </b> You pay once and you will
-        own it for life. No recurring fees.
+          <em>not</em>
+          subscriptions.
+        </b>
+        You pay once and you will own it for life. No recurring fees.
       </p>
       <p>
         Currency:
@@ -20,7 +21,9 @@
             v-for="(rate, symbol) in rates"
             :value="symbol"
             :selected="currency === symbol"
-          >{{ symbol.replace('CNY', 'RMB') }}</option>
+          >
+            {{ symbol.replace("CNY", "RMB") }}
+          </option>
         </select>
       </p>
 
@@ -36,133 +39,199 @@
         <tbody class="table-hover">
           <tr>
             <td class="text-left text-light" data-bg-level="1">
-              <a href="https://courses.chinesezerotohero.com/p/hsk-1-course">HSK 1</a>
+              <a href="https://courses.chinesezerotohero.com/p/hsk-1-course">
+                HSK 1
+              </a>
             </td>
             <td class="text-center">
-              <span v-html="price(29, {sale: false})"></span>
+              <span v-html="price(29, { sale: false })"></span>
             </td>
             <td class="text-center align-middle" rowspan="4">
-              <span v-html="price(134, {sale: false})"></span>
+              <span v-html="price(134, { sale: false })"></span>
               <br />
-              <span style="color:rgb(26,148,6); font-size:12px;">Save {{ money(24) }}</span>
+              <span style="color: rgb(26, 148, 6); font-size: 12px">
+                Save {{ money(24) }}
+              </span>
             </td>
             <td class="text-center align-middle" rowspan="9">
-              <span v-html="price(219, {sale: false})"></span>
+              <span v-html="price(219, { sale: false })"></span>
               <br />
-              <span style="color:rgb(26,148,6); font-size:12px;">Save {{ money(67) }}</span>
+              <span style="color: rgb(26, 148, 6); font-size: 12px">
+                Save {{ money(67) }}
+              </span>
             </td>
           </tr>
 
           <tr>
             <td class="text-left text-light" data-bg-level="2">
-              <a href="https://courses.chinesezerotohero.com/p/hsk-2-course">HSK 2</a>
+              <a href="https://courses.chinesezerotohero.com/p/hsk-2-course">
+                HSK 2
+              </a>
             </td>
             <td class="text-center">
-              <span v-html="price(29, {sale: false})"></span>
+              <span v-html="price(29, { sale: false })"></span>
             </td>
           </tr>
 
           <tr>
             <td class="text-left text-light" data-bg-level="3">
-              <a href="https://courses.chinesezerotohero.com/p/hsk-3-course">HSK 3</a>
+              <a href="https://courses.chinesezerotohero.com/p/hsk-3-course">
+                HSK 3
+              </a>
             </td>
             <td class="text-center">
-              <span v-html="price(36, {sale: false})"></span>
+              <span v-html="price(36, { sale: false })"></span>
             </td>
           </tr>
 
           <tr>
             <td class="text-left text-light" data-bg-level="4">
-              <a href="https://courses.chinesezerotohero.com/p/hsk-4-course">HSK 4</a>
+              <a href="https://courses.chinesezerotohero.com/p/hsk-4-course">
+                HSK 4
+              </a>
             </td>
             <td class="text-center">
-              <span v-html="price(64, {sale: false})"></span>
+              <span v-html="price(64, { sale: false })"></span>
             </td>
           </tr>
 
           <tr>
             <td class="text-left text-light" data-bg-level="5">
-              <a href="https://courses.chinesezerotohero.com/p/hsk-5-course">HSK 5</a><br/>
+              <a href="https://courses.chinesezerotohero.com/p/hsk-5-course">
+                HSK 5
+              </a>
+              <br />
             </td>
             <td class="text-center">
-              <span v-html="price(64, {sale: false})"></span>
+              <span v-html="price(64, { sale: false })"></span>
             </td>
             <td class="text-center align-middle" rowspan="5">
-              <span v-html="price(109, {sale: false})"></span>
+              <span v-html="price(109, { sale: false })"></span>
               <br />
-              <span style="color:rgb(26,148,6); font-size:12px;">Save {{ money(48) }}</span>
+              <span style="color: rgb(26, 148, 6); font-size: 12px">
+                Save {{ money(48) }}
+              </span>
             </td>
           </tr>
 
           <tr>
             <td class="text-left text-light" data-bg-level="5">
-              <a href="https://chinesezerotohero.teachable.com/p/expansion-courses">HSK 5 Expansion Courses</a><br/>
-              <div style="font-weight: normal; margin-left: 1rem">6 comprehensible input courses for HSK 5</div>
+              <a
+                href="https://chinesezerotohero.teachable.com/p/expansion-courses"
+              >
+                HSK 5 Expansion Courses
+              </a>
+              <br />
+              <div style="font-weight: normal; margin-left: 1rem">
+                6 comprehensible input courses for HSK 5
+              </div>
             </td>
             <td class="text-center align-middle">
-              <span v-html="price(9, {sale: false})"></span> ea.<br/>
-              <span><b>FREE</b> with HSK 5</span>
-            </td>
-          </tr>
-          
-          <tr>
-            <td class="text-left text-light" data-bg-level="6">
-              <a href="https://courses.chinesezerotohero.com/p/hsk-6-course">HSK 6</a>
-            </td>
-            <td class="text-center">
-              <span v-html="price(64, {sale: false})"></span>
+              <span v-html="price(9, { sale: false })"></span>
+              ea.
+              <br />
+              <span>
+                <b>FREE</b>
+                with HSK 5
+              </span>
             </td>
           </tr>
 
           <tr>
             <td class="text-left text-light" data-bg-level="6">
-              <a href="https://chinesezerotohero.teachable.com/p/expansion-courses">HSK 6 Expansion Courses</a><br/>
-              <div style="font-weight: normal; margin-left: 1rem">8 comprehensible input courses for HSK 6</div>
-            </td>
-            <td class="text-center align-middle">
-              <span v-html="price(9, {sale: false})"></span> ea.<br/>
-              <span><b>FREE</b> with HSK 6</span>
-            </td>
-          </tr>
-          <tr>
-            <td class="text-left text-light" style="background-color: #0076BA;">
-              <a href="https://chinesezerotohero.teachable.com/p/path-to-fluency">Path To Fluency</a> <div style="font-weight: normal;  margin-left: 1rem">learning strategy course</div>
+              <a href="https://courses.chinesezerotohero.com/p/hsk-6-course">
+                HSK 6
+              </a>
             </td>
             <td class="text-center">
-              <span v-html="price(29, {sale: false})"></span><br>
-              <span><b>FREE</b> with HSK 5 or HSK 6</span>
+              <span v-html="price(64, { sale: false })"></span>
             </td>
           </tr>
 
           <tr>
-            <td class="text-left text-light" style="background-color: #666;">
-              <a href="https://courses.chinesezerotohero.com/p/ci-shifu">Word Builder: Ci Shifu</a>
+            <td class="text-left text-light" data-bg-level="6">
+              <a
+                href="https://chinesezerotohero.teachable.com/p/expansion-courses"
+              >
+                HSK 6 Expansion Courses
+              </a>
+              <br />
+              <div style="font-weight: normal; margin-left: 1rem">
+                8 comprehensible input courses for HSK 6
+              </div>
+            </td>
+            <td class="text-center align-middle">
+              <span v-html="price(9, { sale: false })"></span>
+              ea.
+              <br />
+              <span>
+                <b>FREE</b>
+                with HSK 6
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td class="text-left text-light" style="background-color: #0076ba">
+              <a
+                href="https://chinesezerotohero.teachable.com/p/path-to-fluency"
+              >
+                Path To Fluency
+              </a>
+              <div style="font-weight: normal; margin-left: 1rem">
+                learning strategy course
+              </div>
+            </td>
+            <td class="text-center">
+              <span v-html="price(29, { sale: false })"></span>
+              <br />
+              <span>
+                <b>FREE</b>
+                with HSK 5 or HSK 6
+              </span>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="text-left text-light" style="background-color: #666">
+              <a href="https://courses.chinesezerotohero.com/p/ci-shifu">
+                Word Builder: Ci Shifu
+              </a>
             </td>
             <td class="text-center" colspan="3">
-              <span v-html="price(9, {sale: false})"></span>
+              <span v-html="price(9, { sale: false })"></span>
             </td>
           </tr>
           <tr>
-            <td class="text-left text-light" style="background-color: #666;">
+            <td class="text-left text-light" style="background-color: #666">
               <a
                 href="https://chinesezerotohero.teachable.com/p/phonetics-with-chinese-characteristics"
-              >Phonetics with Chinese Characteristics</a>
+              >
+                Phonetics with Chinese Characteristics
+              </a>
             </td>
             <td class="text-center" colspan="3">
               <b>FREE</b>
             </td>
           </tr>
           <tr>
-            <td class="text-left text-light" style="background-color: #666;">
-              <a href="https://chinesezerotohero.teachable.com/p/chinese-short-poems">Learn Chinese with Poems</a>
+            <td class="text-left text-light" style="background-color: #666">
+              <a
+                href="https://chinesezerotohero.teachable.com/p/chinese-short-poems"
+              >
+                Learn Chinese with Poems
+              </a>
             </td>
             <td class="text-center" colspan="3">
               <b>FREE</b>
             </td>
           </tr>
           <tr>
-            <td class="text-left text-light" style="background-color: #666;">
-              <a href="https://chinesezerotohero.teachable.com/p/learn-chinese-with-songs">Learn Chinese with Songs</a>
+            <td class="text-left text-light" style="background-color: #666">
+              <a
+                href="https://chinesezerotohero.teachable.com/p/learn-chinese-with-songs"
+              >
+                Learn Chinese with Songs
+              </a>
             </td>
             <td class="text-center" colspan="3">
               <b>FREE</b>
@@ -171,47 +240,48 @@
         </tbody>
       </table>
       <p>
-        <b>VAT</b> applies to any merchant selling a product or service
-        (including digital products like an online course) to a customer based
-        in Europe. So if you're based in Europe, we are required to charge VAT
-        on top of these prices.
+        <b>VAT</b>
+        applies to any merchant selling a product or service (including digital
+        products like an online course) to a customer based in Europe. So if
+        you're based in Europe, we are required to charge VAT on top of these
+        prices.
       </p>
     </div>
   </div>
 </template>
 
 <script>
-import fx from 'money'
-import accounting from 'accounting'
-import Sale from '@/components/Sale'
+import fx from "money";
+import accounting from "accounting";
+import Sale from "@/components/Sale";
 
 export default {
   components: {
-    Sale
+    Sale,
   },
   props: {
     currency: {
-      default: 'USD'
-    }
+      default: "USD",
+    },
   },
   data() {
     return {
       accounting,
-      key: 'USD',
-      rates: undefined
-    }
+      key: "USD",
+      rates: undefined,
+    };
   },
   methods: {
     money(n) {
       if (this.rates) {
         return accounting
           .formatMoney(
-            Math.round(fx.convert(n, { from: 'USD', to: this.currency })),
-            { symbol: this.currency, format: '%v %s', precision: 0 }
+            Math.round(fx.convert(n, { from: "USD", to: this.currency })),
+            { symbol: this.currency, format: "%v %s", precision: 0 }
           )
-          .replace('CNY', 'RMB')
+          .replace("CNY", "RMB");
       } else {
-        return n + ' USD'
+        return n + " USD";
       }
     },
     price(n, options) {
@@ -220,34 +290,36 @@ export default {
           n
         )}</strike><br/><span class="sale-price">SALE: <b>${this.money(
           n * 0.7
-        )}</b></span>`
+        )}</b></span>`;
       } else {
-        return `<b>${this.money(n)}</b>`
+        return `<b>${this.money(n)}</b>`;
       }
-    }
+    },
   },
   watch: {
     currency() {
-      location.href = `/${this.$l1.code}/${this.$l2.code}/pricing/${this.currency}`
-    }
+      this.$router.push({
+        path: `/${this.$l1.code}/${this.$l2.code}/pricing/${this.currency}`,
+      });
+    },
   },
   created() {
     // Load exchange rates data via AJAX:
     $.getJSON(
       // NB: using Open Exchange Rates here, but you can use any source!
-      'https://api.exchangeratesapi.io/latest',
-      data => {
+      "https://api.exchangeratesapi.io/latest",
+      (data) => {
         // Check money.js has finished loading:
-        this.rates = data.rates
-        this.key = this.currency
-        if (typeof fx !== 'undefined' && fx.rates) {
-          fx.rates = data.rates
-          fx.base = data.base
+        this.rates = data.rates;
+        this.key = this.currency;
+        if (typeof fx !== "undefined" && fx.rates) {
+          fx.rates = data.rates;
+          fx.base = data.base;
         }
       }
-    )
-  }
-}
+    );
+  },
+};
 </script>
 
 <style>
