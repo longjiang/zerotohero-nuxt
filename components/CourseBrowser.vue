@@ -69,7 +69,6 @@
 </template>
 
 <script>
-import $ from 'jquery'
 
 export default {
   data() {

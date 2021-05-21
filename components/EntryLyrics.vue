@@ -28,7 +28,6 @@
 </template>
 
 <script>
-import $ from 'jquery'
 import LRC from '@/lib/lrc'
 import Helper from '@/lib/helper'
 import Song from '@/components/Song'

@@ -31,7 +31,6 @@
 </template>
 
 <script>
-import $ from 'jquery'
 import html2canvas from 'html2canvas'
 import Loader from '@/components/Loader'
 import Instagram from '@/components/Instagram'

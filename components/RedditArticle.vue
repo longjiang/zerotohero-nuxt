@@ -33,7 +33,6 @@
 </template>
 
 <script>
-import $ from 'jquery'
 import Config from '@/lib/config'
 import Helper from '@/lib/helper'
 import RedditArticleCard from '@/components/RedditArticleCard'

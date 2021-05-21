@@ -68,7 +68,6 @@
 </template>
 
 <script>
-import $ from "jquery";
 import Config from "@/lib/config";
 import ArticlesList from "@/components/ArticlesList.vue";
 import ArticleCard from "@/components/ArticleCard.vue";

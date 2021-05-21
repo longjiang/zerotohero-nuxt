@@ -31,7 +31,6 @@
 import Decomposition from '@/components/Decomposition.vue'
 import Helper from '@/lib/helper'
 import Config from '@/lib/config'
-import $ from 'jquery'
 
 export default {
   props: ['id', 'text', 'type', 'definitions', 'hsk', 'pinyin'],

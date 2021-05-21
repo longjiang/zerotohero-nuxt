@@ -78,7 +78,6 @@
   </div>
 </template>
 <script>
-import $ from 'jquery'
 import CollocationQuestion from '@/components/questions/CollocationQuestion.vue'
 import DecompositionQuestion from '@/components/questions/DecompositionQuestion.vue'
 import FillInTheBlankQuestion from '@/components/questions/FillInTheBlankQuestion.vue'

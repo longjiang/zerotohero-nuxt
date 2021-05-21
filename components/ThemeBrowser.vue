@@ -77,7 +77,6 @@
 </template>
 
 <script>
-import $ from "jquery";
 import Helper from "@/lib/helper";
 import Dewey from "@/lib/dewey";
 

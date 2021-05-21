@@ -31,6 +31,7 @@
     "transliteration": "^2.2.0",
     "v-runtime-template": "^1.10.0",
     "v-tooltip": "^2.1.3",
+    "vercel": "^22.0.1",
     "vue-analytics": "^5.22.1",
     "vue-disqus": "^4.0.1",
     "vue-drag-drop": "^1.1.4",
