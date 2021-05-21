@@ -1,7 +1,7 @@
 <template>
   <div id="zerotohero" :class="classes">
     <template v-if="this.$route.path !== '/'">
-      <template v-if="langsLoaded">
+      <template>
         <div class="container-fluid p-2 pl-3 site-top-bar">
           <div>
             <a href="/" style="color: #ccc; line-height: 2.3rem">
@@ -10,7 +10,7 @@
             </a>
           </div>
           <a
-            v-if="$l1.code === 'zh' && $l2.code === 'en'"
+            v-if="l1 === 'zh' && l2 === 'en'"
             class="btn btn-sign-in text-white ml-1"
             style="background-color: #2c5aff"
             href="https://m.cctalk.com/inst/stevmab3"
@@ -20,7 +20,7 @@
             <img src="/img/logo-cctalk-white.png" class="logo-small ml-1" />
           </a>
           <a
-            v-if="$l1.code === 'en' && $l2.code === 'zh'"
+            v-if="l1 === 'en' && l2 === 'zh'"
             class="btn btn-primary btn-sign-in text-white ml-1"
             href="https://sso.teachable.com/secure/133035/users/sign_in"
             target="_blank"
@@ -35,7 +35,7 @@
               <div class="row">
                 <div class="col-sm-12 text-center">
                   <a
-                    v-if="this.$l1.code === 'en' && this.$l2.code === 'zh'"
+                    v-if="l1 === 'en' && l2 === 'zh'"
                     href="/en/zh"
                   >
                     <img
@@ -45,7 +45,7 @@
                     />
                   </a>
                   <a
-                    v-else-if="this.$l1.code === 'zh' && this.$l2.code === 'en'"
+                    v-else-if="l1 === 'zh' && l2 === 'en'"
                     href="/zh/en"
                   >
                     <img
@@ -55,7 +55,7 @@
                     />
                   </a>
                   <LanguageLogo
-                    v-else
+                    v-else-if="$l1 && $l2"
                     :l1="$l1"
                     :l2="$l2"
                     style="margin-top: 1.5rem"
@@ -64,18 +64,18 @@
               </div>
             </div>
           </div>
-          <Nav />
+          <Nav v-if="$l1 && $l2" />
         </div>
 
         <Nuxt />
 
-        <ReaderComp :iconMode="true" />
+        <ReaderComp v-if="$l1 && $l2" :iconMode="true" />
 
         <footer class="container-fluid bg-dark text-light pt-4 pb-4">
           <div class="container">
             <div class="row mb-5">
               <div class="col-sm-12">
-                <Choose v-if="langsReady" :compact="true" />
+                <Choose :compact="true" />
               </div>
             </div>
           </div>
@@ -232,7 +232,7 @@
           </div>
         </div>
       </div>
-      <Choose v-if="langsReady" :compact="true" />
+      <Choose :compact="true" />
     </template>
   </div>
 </template>
@@ -241,7 +241,6 @@
 import Vue from "vue";
 import Config from '@/lib/config'
 import Dict from '@/lib/dict'
-import Languages from '@/lib/languages'
 
 export default Vue.extend({
   data() {
@@ -249,28 +248,17 @@ export default Vue.extend({
       Config,
       updateSettings: 0,
       classes: undefined,
-      languages: [],
-      langsReady: false,
-      langsLoaded: false,
       focus: false,
       loaded: false,
+      l1: '',
+      l2: ''
     };
   },
+  computed: {
+
+  },
   methods: {
-    loadSettings() {
-      Vue.prototype.$settings = Object.assign(
-        {
-          showDefinition: false,
-          showTranslation: true,
-          showPinyin: true,
-          useTraditional: false,
-          showQuiz: true,
-          adminMode: false,
-        },
-        JSON.parse(localStorage.getItem("zthSettings"))
-      );
-    },
-    async loadLanguages() {
+    loadLanguages() {
       Vue.prototype.$hasFeature = (feature) => {
         return this.$languages
           .getFeatures({
@@ -290,18 +278,6 @@ export default Vue.extend({
           l2: this.$l2["iso639-3"],
         });
       }
-      if (!Vue.prototype.$hanzi && ["zh", "ko", "ja"].includes(this.$l2.code)) {
-        Vue.prototype.$hanzi = (await import(`@/lib/hanzi.js`)).default.load();
-        Vue.prototype.$unihan = (
-          await import(`@/lib/unihan.js`)
-        ).default.load();
-      }
-      if (!Vue.prototype.$grammar && ["zh"].includes(this.$l2.code)) {
-        Vue.prototype.$grammar = (
-          await import(`@/lib/grammar.js`)
-        ).default.load();
-      }
-      this.langsLoaded = true;
     },
     updateClasses() {
       this.classes = {
@@ -330,69 +306,55 @@ export default Vue.extend({
         .replace("| Zero to Hero", `| ${this.$l2.name} Zero to Hero`)
         .replace(/^Zero to Hero/, `${this.$l2.name} Zero to Hero`);
     },
-    async setL1() {
-      Vue.prototype.$l1 = this.$languages.getSmart(this.$route.params.l1);
+    seti18n() {
       this.$i18n.locale = this.$l1.code;
       this.$i18n.silentTranslationWarn = true;
-      try {
+      if (this.$l1.translations) {
         this.$i18n.setLocaleMessage(
           this.$l1.code,
-          (await import(`@/lib/langs/${this.$l1["iso639-3"]}.js`)).default
-            .translations
-        );
-      } catch (err) {
-        console.log(
-          `UI translations for ${this.$l1["iso639-3"]} is unavailable.`
-        );
+          this.$l1.translations
+        )
       }
     },
-    async setL2() {
-      Vue.prototype.$l2 = this.$languages.getSmart(this.$route.params.l2);
-      try {
-        this.$i18n.setLocaleMessage(
-          this.$l2.code,
-          (await import(`@/lib/langs/${this.$l2["iso639-3"]}.js`)).default
-            .translations
-        );
-      } catch (err) {
-        console.log(
-          `UI translations for ${this.$l2["iso639-3"]} is unavailable.`
-        );
+    async loadAdditionalL2Files(l2) {
+      if (!Vue.prototype.$hanzi && ["zh", "ko", "ja"].includes(l2)) {
+        Vue.prototype.$hanzi = (await import(`@/lib/hanzi.js`)).default.load();
+        Vue.prototype.$unihan = (
+          await import(`@/lib/unihan.js`)
+        ).default.load();
+      }
+      if (!Vue.prototype.$grammar && ["zh"].includes(l2)) {
+        Vue.prototype.$grammar = (
+          await import(`@/lib/grammar.js`)
+        ).default.load();
       }
     },
+    updateLanguages(l1, l2) {
+      this.l1 = l1
+      this.l2 = l2
+      Vue.prototype.$l1 = this.$languages.getSmart(l1);
+      Vue.prototype.$l2 = this.$languages.getSmart(l2);
+      this.seti18n();
+      this.loadLanguages();
+      this.updateFavicon();
+      this.updateTitle();
+      this.updateClasses();
+    }
   },
   async created() {
-    let languages = Languages.load()
-    Vue.prototype.$languages = languages
-    this.langsReady = true
-    Vue.prototype.$settings = Object.assign({
-      showDefinition: false,
-      showTranslation: true,
-      showPinyin: true,
-      useTraditional: false,
-      showQuiz: true,
-    }, JSON.parse(localStorage.getItem('zthSettings')))
-    this.$ga.page(this.$route.path);
     if (this.$route.params.l1 && this.$route.params.l2) {
-      if (
-        (this.$l1 && this.$route.params.l1 !== this.$l1.code) ||
-        (this.$l2 && this.$route.params.l2 !== this.$l2.code)
-      ) {
-        // switching language
-        location.reload();
-      } else {
-        // first time loading, set the language
-        await this.setL1();
-        await this.setL2();
-        this.loadLanguages();
-        this.updateFavicon();
-        this.updateTitle();
-        this.loadSettings();
-        this.updateClasses();
-      }
+      this.updateLanguages(this.$route.params.l1, this.$route.params.l2)
+      await this.loadAdditionalL2Files(this.$route.params.l2)
     }
   },
   watch: {
+    async $route() {
+      this.$ga.page(this.$route.path);
+      if (this.$route.params.l1 !== this.l1 || this.$route.params.l2 !== this.l2) {
+        this.updateLanguages(this.$route.params.l1, this.$route.params.l2)
+        await this.loadAdditionalL2Files(this.$route.params.l2)
+      }
+    },
     updateSettings() {
       this.updateClasses();
     },

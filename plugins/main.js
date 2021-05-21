@@ -4,6 +4,7 @@ import VueObserveVisibility from 'vue-observe-visibility'
 import VueAnalytics from 'vue-analytics'
 import VueDisqus from 'vue-disqus'
 import VueSimpleSVG from 'vue-simple-svg'
+import Languages from '@/lib/languages'
 
 Vue.config.productionTip = false
 
@@ -25,7 +26,7 @@ Vue.filter('striphtml', function (value) {
 })
 
 https://stackoverflow.com/questions/35070271/vue-js-components-how-to-truncate-the-text-in-the-slot-element-in-a-component
-Vue.filter('truncate', function(text, length, clamp){
+Vue.filter('truncate', function (text, length, clamp) {
   clamp = clamp || '...'
   var node = document.createElement('div')
   node.innerHTML = text
@@ -34,4 +35,14 @@ Vue.filter('truncate', function(text, length, clamp){
 })
 
 
-
+Vue.prototype.$languages = Vue.prototype.$languages || Languages.load()
+Vue.prototype.$settings = {
+  showDefinition: false,
+  showTranslation: true,
+  showPinyin: true,
+  useTraditional: false,
+  showQuiz: true,
+}
+if (typeof localStorage !== 'undefined') {
+  Vue.prototype.$settings = Object.assign(Vue.prototype.$settings, JSON.parse(localStorage.getItem('zthSettings')))
+}
