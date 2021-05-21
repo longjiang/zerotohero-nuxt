@@ -12,11 +12,12 @@
           ><img
             :src="
               hero.avatar
-                ? hero.avatar.data.full_url
+                ? hero.avatar.data.thumbnails[0].url
                 : '/img/default-avatar.jpg'
             "
             alt=""
             class="avatar"
+            v-lazy-load
         /></span>
         <div class="slice">
           <div

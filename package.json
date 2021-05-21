@@ -25,6 +25,7 @@
     "node-sass": "^6.0.0",
     "nuxt": "^2.15.3",
     "nuxt-i18n": "^6.27.0",
+    "nuxt-lazy-load": "^1.2.6",
     "sass": "^1.32.13",
     "smartquotes": "^2.3.2",
     "subtitle": "^4.1.0",
