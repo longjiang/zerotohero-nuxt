@@ -4,8 +4,10 @@ let localStorage = process.browser ? localStorage : false
 
 
 export const
-  state = {
-    savedHits: localStorage ? JSON.parse(localStorage.getItem('zthSavedHits')) : {} || {}
+  state = () => {
+    return {
+      savedHits: localStorage ? JSON.parse(localStorage.getItem('zthSavedHits')) : {} || {}
+    }
   }
 export const mutations = {
   ADD_SAVED_HIT(state, options) {

@@ -1,7 +1,9 @@
 let localStorage = process.browser ? localStorage : false
 
-export const state = {
-  savedCollocations: localStorage ? JSON.parse(localStorage.getItem('zthSavedCollocations')) : {} || {}
+export const state = () => {
+  return {
+    savedCollocations: localStorage ? JSON.parse(localStorage.getItem('zthSavedCollocations')) : {} || {}
+  }
 }
 export const mutations = {
   ADD_SAVED_COLLOCATION(state, options) {

@@ -1,7 +1,9 @@
 let localStorage = process.browser ? localStorage : false
 
-export const state = {
-  savedWords: localStorage ? JSON.parse(localStorage.getItem('zthSavedWords')) : {} || {}
+export const state = () => {
+  return {
+    savedWords: localStorage ? JSON.parse(localStorage.getItem('zthSavedWords')) : {} || {}
+  }
 }
 export const mutations = {
   ADD_SAVED_WORD(state, options) {

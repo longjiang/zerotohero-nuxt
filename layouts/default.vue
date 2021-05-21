@@ -237,7 +237,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="javascript">
 import Vue from "vue";
 import Config from '@/lib/config'
 import Dict from '@/lib/dict'
