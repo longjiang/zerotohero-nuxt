@@ -126,7 +126,6 @@ export default {
     },
     async route() {
       if (this.method && this.args) {
-        console.log('this.$dictionaryName', this.$dictionaryName)
         if (this.method === this.$dictionaryName) {
           if (this.args === "random") {
             this.random();
@@ -259,7 +258,6 @@ export default {
     this.unbindKeys();
   },
   mounted() {
-    console.log('mounted')
     if (this.$route.name === "dictionary") {
       this.route();
       this.updateWords();

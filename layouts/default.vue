@@ -362,7 +362,7 @@ export default Vue.extend({
     },
   },
   async created() {
-    let languages = await Languages.load()
+    let languages = Languages.load()
     Vue.prototype.$languages = languages
     this.langsReady = true
     Vue.prototype.$settings = Object.assign({
