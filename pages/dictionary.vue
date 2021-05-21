@@ -24,7 +24,7 @@
         </div>
         <h2
           class="mt-5 mb-5 text-center"
-          v-if="!entry"
+          v-if="$l2 && !entry"
           style="min-height: 10rem"
         >
           {{ $t("For the love of {l2} words.", { l2: $t($l2.name) }) }}
@@ -81,7 +81,6 @@ export default {
   },
   data() {
     return {
-      l1Name: this.$l1.name,
       entry: undefined,
       entryKey: 0,
       paginatorKey: 0,
@@ -127,6 +126,7 @@ export default {
     },
     async route() {
       if (this.method && this.args) {
+        console.log('this.$dictionaryName', this.$dictionaryName)
         if (this.method === this.$dictionaryName) {
           if (this.args === "random") {
             this.random();
@@ -259,6 +259,7 @@ export default {
     this.unbindKeys();
   },
   mounted() {
+    console.log('mounted')
     if (this.$route.name === "dictionary") {
       this.route();
       this.updateWords();

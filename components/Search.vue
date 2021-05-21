@@ -14,7 +14,7 @@
       <router-link
         v-if="random"
         class="btn btn-secondary btn-random ml-2"
-        :to="`/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/random`"
+        :to="`/${$root.l1}/${$root.l2}/dictionary/${$dictionaryName}/random`"
       >
         <i class="fas fa-random mr-1"></i>
         <span>{{ $t('Random') }}</span>
