@@ -16,7 +16,8 @@ export default {
     ],
     script: [
       { hid: 'papaparse', src: '/vendor/papaparse/papaparse.min.js', defer: true },
-      { hid: 'jquery', src: '/vendor/jquery/jquery.min.js', defer: true }
+      { hid: 'jquery', src: '/vendor/jquery/jquery.min.js', defer: true },
+      { hid: 'axios', src: '/vendor/axios/axios.min.js', defer: true }
     ]
   },
 
@@ -75,9 +76,9 @@ export default {
 
   generate: {
     routes: [
-      '/en/zh/dictionary/hsk-cedict/%E7%95%99%E5%B0%BE%E5%B7%B4,li%C3%BA_w%C4%9Bi_ba,0',
-      '/en/zh/dictionary/hsk-cedict/%E5%8D%81%E6%88%92,sh%C3%AD_ji%C3%A8,0',
-      '/en/zh/dictionary/hsk-cedict/%E9%9B%95%E5%88%BB,di%C4%81o_k%C3%A8,0'
+      // '/en/zh/dictionary/hsk-cedict/%E7%95%99%E5%B0%BE%E5%B7%B4,li%C3%BA_w%C4%9Bi_ba,0',
+      // '/en/zh/dictionary/hsk-cedict/%E5%8D%81%E6%88%92,sh%C3%AD_ji%C3%A8,0',
+      // '/en/zh/dictionary/hsk-cedict/%E9%9B%95%E5%88%BB,di%C4%81o_k%C3%A8,0'
     ]
   }
 }

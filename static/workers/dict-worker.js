@@ -1,4 +1,5 @@
 importScripts('../vendor/papaparse/papaparse.min.js')
+importScripts('../vendor/axios/axios.min.js')
 
 
 let ready = false
@@ -8,8 +9,9 @@ onmessage = function(e) {
   const method = e.data[1]
   const args = e.data[2]
   if (method === 'load') {
-    let options = args[0]
-    importScripts(`../js/${options.dict}.js?v=${Date.now()}`)
+    let moduleName = args[0]
+    let options = args[1]
+    importScripts(`../js/${moduleName}.js?v=${Date.now()}`)
     Dictionary.load(options).then(() => {
       ready = true
       this.postMessage([1, 'load', 'ready'])

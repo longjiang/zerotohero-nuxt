@@ -35,6 +35,7 @@
     "nuxt-i18n": "^6.27.0",
     "nuxt-lazy-load": "^1.2.6",
     "papaparse": "^5.3.0",
+    "raw-loader": "^4.0.2",
     "sass": "^1.32.13",
     "smartquotes": "^2.3.2",
     "subtitle": "^4.1.0",

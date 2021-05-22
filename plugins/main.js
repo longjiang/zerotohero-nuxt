@@ -6,6 +6,7 @@ import VueDisqus from 'vue-disqus'
 import VueSimpleSVG from 'vue-simple-svg'
 import Languages from '@/lib/languages'
 import ModuleLoader from '~/lib/module-loader'
+import WorkerModuleLoader from '~/lib/worker-module-loader'
 
 Vue.config.productionTip = false
 
@@ -60,19 +61,24 @@ export default ({ app, store }, inject) => {
       }, process.browser)
       .includes(feature);
   });
-  inject('getDictionary',  async () => {
-    let dictionary = ModuleLoader.load(store.state.settings.dictionaryName)
-    return dictionary
+  inject('getDictionary', async () => {
+    if (process.server) {
+      let dictionary = ModuleLoader.load(store.state.settings.dictionaryName, { l1: store.state.settings.l1["iso639-3"], l2: store.state.settings.l2["iso639-3"] })
+      return dictionary
+    } else {
+      let dictionary = WorkerModuleLoader.load(store.state.settings.dictionaryName, { l1: store.state.settings.l1["iso639-3"], l2: store.state.settings.l2["iso639-3"] })
+      return dictionary
+    }
   })
-  inject('getGrammar',  async () => {
+  inject('getGrammar', async () => {
     let module = await import(`@/lib/grammar`)
     return module.default.load()
   })
-  inject('getHanzi',  async () => {
+  inject('getHanzi', async () => {
     let module = await import(`@/lib/hanzi`)
     return module.default.load()
   })
-  inject('getUnihan',  async () => {
+  inject('getUnihan', async () => {
     let module = await import(`@/lib/unihan`)
     return module.default.load()
   })

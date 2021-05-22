@@ -18,10 +18,13 @@ export default {
       return this.$store.state.settings.l2
     }
   },
+  async created() {
+    let dictionary = await this.$getDictionary()
+    console.log(await (await dictionary).lookup('你'), 'dictionary.lookup')
+  },
   async mounted() {
     let dictionary = await this.$getDictionary()
     console.log(await (await dictionary).lookup('你'), 'dictionary.lookup')
-    console.log(await (await dictionary).lookup('好'), 'dictionary.lookup')
   }
 };
 </script>
