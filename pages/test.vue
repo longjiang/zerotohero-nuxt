@@ -4,7 +4,7 @@
   }
 </router>
 <template>
-  <div>Language {{ $hasFeature('youtube') }}</div>
+  <div>Language {{  }}</div>
 </template>
 
 <script>
@@ -18,8 +18,8 @@ export default {
       return this.$store.state.settings.l2
     }
   },
-  mounted() {
-   console.log('test.vue mounted', this.$store.state.settings.l1.name)
+  async mounted() {
+    console.log(await (await this.$getDictionary()).lookup('你'), 'this')
   }
 };
 </script>

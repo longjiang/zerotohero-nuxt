@@ -1,4 +1,7 @@
-const Dictionary = {
+import Papa from 'papaparse'
+import axios from 'axios'
+
+export default {
   file: 'https://server.chinesezerotohero.com/data/hsk-cedict/hsk_cedict.csv.txt',
   characterFile: 'https://server.chinesezerotohero.com/data/hsk-cedict/hsk_characters.csv.txt',
   newHSKFile: 'https://server.chinesezerotohero.com/data/hsk-cedict/new_hsk.csv.txt',
@@ -12,41 +15,39 @@ const Dictionary = {
   load() {
     return new Promise(resolve => {
       let wordsPromise = new Promise(resolve => {
-        Papa.parse(this.file, {
-          download: true,
-          header: true,
-          complete: results => {
-            this.words = results.data.map(row => this.augment(row))
+        axios.get(this.file).then(response => {
+          let results = Papa.parse(response.data, {
+            header: true
+          })
+          this.words = results.data.map(row => this.augment(row))
             .sort((a, b) => b.simplified.length - a.simplified.length)
-            for (let row of this.words) {
-              row.rank = row.weight / this._maxWeight
-            }
-            resolve()
+          for (let row of this.words) {
+            row.rank = row.weight / this._maxWeight
           }
+          resolve()
         })
       })
       let characterPromise = new Promise(resolve => {
-        Papa.parse(this.characterFile, {
-          download: true,
-          header: true,
-          complete: results => {
-            this.characters = results.data
-            resolve()
-          }
+        axios.get(this.characterFile).then(response => {
+          let results = Papa.parse(response.data, {
+            header: true
+          })
+          this.characters = results.data
+          resolve()
+
         })
       })
       let newHSKPromise = new Promise(resolve => {
-        Papa.parse(this.newHSKFile, {
-          download: true,
-          header: true,
-          delimiter: ',',
-          complete: results => {
-            this.newHSK = results.data
-            resolve()
-          }
+        axios.get(this.newHSKFile).then(response => {
+          let results = Papa.parse(response.data, {
+            header: true,
+            delimiter: ','
+          })
+          this.newHSK = results.data
+          resolve()
         })
       })
-      Promise.all([wordsPromise, characterPromise, newHSKPromise]).then(() => resolve())
+      Promise.all([wordsPromise, characterPromise, newHSKPromise]).then(() => resolve(this))
     })
   },
   getWordsWithCharacter(term) {
@@ -89,7 +90,7 @@ const Dictionary = {
   },
   unique(names) {
     var uniqueNames = []
-    $.each(names, function(i, el) {
+    $.each(names, function (i, el) {
       if ($.inArray(el, uniqueNames) === -1) uniqueNames.push(el)
     })
     return uniqueNames
@@ -119,7 +120,7 @@ const Dictionary = {
     return uniqueArray
   },
   getByHSKId(hskId) {
-    let word =  this.words.find(row => row.hskId === hskId)
+    let word = this.words.find(row => row.hskId === hskId)
     return this.addNewHSK(word)
   },
   get(id) {
@@ -136,8 +137,8 @@ const Dictionary = {
   },
   compileBooks() {
     // https://www.consolelog.io/group-by-in-javascript/
-    Array.prototype.groupBy = function(prop) {
-      return this.reduce(function(groups, item) {
+    Array.prototype.groupBy = function (prop) {
+      return this.reduce(function (groups, item) {
         const val = item[prop]
         groups[val] = groups[val] || []
         groups[val].push(item)
@@ -341,7 +342,7 @@ const Dictionary = {
     const tradOrSimp = traditional ? 'traditional' : 'simplified'
     let matches = this.words
       .filter(row => this.isChinese(row.simplified))
-      .filter(function(row) {
+      .filter(function (row) {
         if (first) {
           return row[tradOrSimp] === first
         } else {
@@ -452,7 +453,7 @@ const Dictionary = {
   },
   subdictFromText(text) {
     return this.subdict(
-      this.words.filter(function(row) {
+      this.words.filter(function (row) {
         return text.includes(row.simplified) || text.includes(row.traditional)
       })
     )

@@ -5,6 +5,7 @@ import VueAnalytics from 'vue-analytics'
 import VueDisqus from 'vue-disqus'
 import VueSimpleSVG from 'vue-simple-svg'
 import Languages from '@/lib/languages'
+import Dict from '@/lib/dict'
 
 Vue.config.productionTip = false
 
@@ -34,6 +35,8 @@ Vue.filter('truncate', function (text, length, clamp) {
   return content.length > length ? content.slice(0, length) + clamp : content
 })
 
+
+
 export default ({ app, store }, inject) => {
   if (!app.$languages) {
     inject('languages', Languages.load())
@@ -59,4 +62,12 @@ export default ({ app, store }, inject) => {
       }, process.browser)
       .includes(feature);
   });
+  inject('getDictionary',  async () => {
+    return await Dict.load({
+      dict: store.state.settings.dictionaryName,
+      l1: store.state.settings.l1["iso639-3"],
+      l2: store.state.settings.l2["iso639-3"],
+      worker: process.browser
+    })
+  })
 }
