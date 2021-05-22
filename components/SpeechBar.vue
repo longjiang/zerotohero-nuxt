@@ -17,6 +17,7 @@
         <b-dropdown right text="Switch Voice" style="flex: 1">
           <b-dropdown-item
             v-for="(voice, index) in voices"
+            :key="`speech-bar-voice-${index}-${voice.name}`"
             @click="setvoice(index)"
             >{{ voice.name }}</b-dropdown-item
           >

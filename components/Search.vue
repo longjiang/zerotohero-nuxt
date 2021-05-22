@@ -31,7 +31,7 @@
       </div>
     </div>
     <div class="suggestions" :key="suggestionsKey" v-cloak v-if="active && text && text.length > 0">
-      <router-link class="suggestion" v-for="suggestion in suggestions" :to="hrefFunc(suggestion)">
+      <router-link class="suggestion" v-for="(suggestion, index) in suggestions" :key="`search-suggestion-${index}-${suggestion.bare}`" :to="hrefFunc(suggestion)">
         <span v-if="suggestion">
           <span
             class="suggestion-word font-weight-bold mr-1"

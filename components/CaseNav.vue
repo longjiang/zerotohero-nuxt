@@ -4,6 +4,7 @@
       class="type-nav-item"
       v-for="type in types"
       :to="`/${$l1.code}/${$l2.code}/cases/nouns/${type.replace(' ', '_')}`"
+      :key="`case-nav-${type}`"
       >{{ type.charAt(0).toUpperCase() + type.substr(1) }}</router-link
     >
   </div>

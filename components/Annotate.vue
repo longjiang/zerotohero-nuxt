@@ -54,7 +54,8 @@
     <slot v-if="!annotated"></slot>
     <v-runtime-template
       v-if="annotated"
-      v-for="template of annotatedSlots"
+      v-for="(template, index) of annotatedSlots"
+      :key="`annotate-template-${Helper.uniqueId()}-${index}`"
       :template="template"
     />
     <div>{{ translation }}</div>
@@ -114,6 +115,7 @@ export default {
       fullscreenMode: false,
       batchId: 0,
       text: '',
+      Helper,
       tokenized: [],
     }
   },

@@ -50,8 +50,9 @@
         </p>
         <div id="output" class="p-4 rounded shadow" v-if="blocksOrStrings.length > 0">
           <PinyinSquaredCharacter
-            v-for="blockOrString in blocksOrStrings"
+            v-for="(blockOrString, index) in blocksOrStrings"
             :blockOrString="blockOrString"
+            :key="`pinyin-squared-character-${index}`"
           />
           <p
             class="mt-3 mb-0"

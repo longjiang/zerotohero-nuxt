@@ -284,7 +284,6 @@ import Grammar from '@/components/Grammar.vue'
 import EntryHeader from '@/components/EntryHeader.vue'
 import Mistakes from '@/components/Mistakes.vue'
 import WebImages from '@/components/WebImages.vue'
-import EntryLyrics from '@/components/EntryLyrics.vue'
 import CompareCollocations from '@/components/CompareCollocations.vue'
 import CompareDefs from '@/components/CompareDefs.vue'
 import SearchCompare from '@/components/SearchCompare.vue'
@@ -303,7 +302,6 @@ export default {
     Grammar,
     EntryHeader,
     Mistakes,
-    EntryLyrics,
     CompareCollocations,
     WebImages,
     Korean,

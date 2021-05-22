@@ -9,17 +9,23 @@
       </div>
     </div>
     <div v-else class="resources">
-      <Resource v-for="resource of resources" :resource="resource" />
+      <Resource v-for="(resource, index) of resources" :resource="resource" :key="`resource-${Helper.uniqueId()}-${index}`" />
     </div>
   </div>
 </template>
 
 <script>
 import Resource from '@/components/Resource'
+import Helper from '@/lib/helper'
 
 export default {
   components: {
     Resource
+  },
+  data() {
+    return {
+      Helper
+    }
   },
   props: {
     resources: {

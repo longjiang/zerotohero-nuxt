@@ -22,6 +22,7 @@
           <b-dropdown id="dropdown-1" :text="levels[level]" class="ml-1">
             <b-dropdown-item
               v-for="(title, slug) in levels"
+              :key="`level-item-${slug}`"
               @click="changeLevel(slug)"
             >
               {{ title }}
@@ -29,8 +30,9 @@
           </b-dropdown>
           <b-dropdown id="dropdown-1" :text="`Lesson ${lesson}`" class="ml-1">
             <b-dropdown-item
-              v-for="lesson in levelLessons[level]"
+              v-for="(lesson, index) in levelLessons[level]"
               @click="changeLesson(lesson)"
+              :key="`lesson-item-${index}`"
             >
               Lesson {{ lesson }}
             </b-dropdown-item>

@@ -60,6 +60,7 @@
             >
               <b-dropdown-item
                 v-for="(title, slug) in topics"
+                :key="`change-topic-item-${slug}`"
                 @click="changeTopic(slug)"
                 >{{ title }}</b-dropdown-item
               >
@@ -73,6 +74,7 @@
               >
                 <b-dropdown-item
                   v-for="(title, slug) in levels"
+                  :key="`change-level-item-${slug}`"
                   @click="changeLevel(slug)"
                   >{{ title }}</b-dropdown-item
                 >

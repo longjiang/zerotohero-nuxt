@@ -53,7 +53,8 @@
         <div class="list-group text-left">
           <Annotate
             tag="a"
-            v-for="chapter in chapters"
+            v-for="(chapter, index) in chapters"
+            :key="`chapter-${chapter.title}-${index}`"
             :class="{
               'list-group-item': true,
               'link-unstyled': true,

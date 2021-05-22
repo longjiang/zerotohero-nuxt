@@ -84,7 +84,7 @@ export default {
 .logo-grid {
   display: flex;
   flex-wrap: wrap;
-  justify-content: start;
+  justify-content: flex-start;
 }
 
 .logo-grid > * {

@@ -3,35 +3,39 @@
     <div class="text-center" v-if="grammarPoints && grammarPoints.length > 0">
       <div class="widget-title mb-2">Grammar notes</div>
       <div class="grammar-notes" id="grammar">
-        <GrammarPoint v-for="grammar in grammarPoints" :grammar="grammar" />
+        <GrammarPoint
+          v-for="(grammar, index) in grammarPoints"
+          :key="`grammar-point-${index}`"
+          :grammar="grammar"
+        />
       </div>
     </div>
   </div>
 </template>
 <script>
-import Helper from '@/lib/helper'
-import Grammar from '@/lib/grammar'
-import GrammarPoint from '@/components/GrammarPoint'
+import Helper from "@/lib/helper";
+import Grammar from "@/lib/grammar";
+import GrammarPoint from "@/components/GrammarPoint";
 
 export default {
   props: {
     text: {
-      type: String
-    }
+      type: String,
+    },
   },
   components: {
-    GrammarPoint
+    GrammarPoint,
   },
   data() {
     return {
       Helper,
       grammarKey: 0,
-      grammarPoints: undefined
-    }
+      grammarPoints: undefined,
+    };
   },
   mounted() {
-    this.grammarPoints = Grammar.lookupFuzzy(this.text)
-    this.grammarKey += 1
-  }
-}
+    this.grammarPoints = Grammar.lookupFuzzy(this.text);
+    this.grammarKey += 1;
+  },
+};
 </script>

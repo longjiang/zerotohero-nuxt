@@ -14,6 +14,7 @@
         :word="word"
         :compareWith="compareWith"
         :index="index"
+        :key="`word-card-${Helper.uniqueId()}-${index}`"
       />
     </ul>
     <ShowMoreButton
@@ -25,6 +26,7 @@
 </template>
 <script>
 import WordCard from '@/components/WordCard'
+import Helper from '@/lib/helper'
 
 export default {
   components: {
@@ -32,7 +34,8 @@ export default {
   },
   data() {
     return {
-      listKey: 0
+      listKey: 0,
+      Helper
     }
   },
   props: {
