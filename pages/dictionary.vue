@@ -54,7 +54,7 @@
         v-if="entry"
         :entry="entry"
         ref="dictionaryEntry"
-        :key="`dictionary-entry-${id}`"
+        :key="`dictionary-entry-${entry.id}`"
       />
     </article>
   </div>
