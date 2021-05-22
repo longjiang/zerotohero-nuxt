@@ -1,6 +1,6 @@
 <template>
   <div id="zerotohero" :class="classes">
-    <template v-if="this.$route.path !== '/'">
+    <template v-if="$route.path !== '/'">
       <template>
         <div class="container-fluid p-2 pl-3 site-top-bar">
           <div>
@@ -34,20 +34,14 @@
             <div class="container">
               <div class="row">
                 <div class="col-sm-12 text-center">
-                  <a
-                    v-if="l1 === 'en' && l2 === 'zh'"
-                    href="/en/zh"
-                  >
+                  <a v-if="l1 === 'en' && l2 === 'zh'" href="/en/zh">
                     <img
                       src="/img/czh-logo-light.png"
                       alt="Chinese Zero to Hero"
                       style="max-width: 11rem; margin: 1.5rem 0"
                     />
                   </a>
-                  <a
-                    v-else-if="l1 === 'zh' && l2 === 'en'"
-                    href="/zh/en"
-                  >
+                  <a v-else-if="l1 === 'zh' && l2 === 'en'" href="/zh/en">
                     <img
                       src="/img/ezh-logo-light.png"
                       alt="Chinese Zero to Hero"
@@ -55,21 +49,21 @@
                     />
                   </a>
                   <LanguageLogo
-                    v-else-if="$l1 && $l2"
-                    :l1="$l1"
-                    :l2="$l2"
+                    v-else-if="l1 && l2"
+                    :l1="l1"
+                    :l2="l2"
                     style="margin-top: 1.5rem"
                   />
                 </div>
               </div>
             </div>
           </div>
-          <Nav v-if="$l1 && $l2" />
+          <!-- <Nav /> -->
         </div>
 
         <Nuxt />
 
-        <ReaderComp v-if="$l1 && $l2" :iconMode="true" />
+        <ReaderComp v-if="l1 && l2" :iconMode="true" />
 
         <footer class="container-fluid bg-dark text-light pt-4 pb-4">
           <div class="container">
@@ -238,128 +232,42 @@
 </template>
 
 <script lang="javascript">
-import Vue from "vue";
-import Config from '@/lib/config'
-import Dict from '@/lib/dict'
+import Config from "@/lib/config";
 
-export default Vue.extend({
+export default {
   data() {
     return {
       Config,
       updateSettings: 0,
-      classes: undefined,
       focus: false,
       loaded: false,
-      l1: '',
-      l2: ''
     };
   },
+  methods: {},
   computed: {
-
-  },
-  methods: {
-    loadLanguages() {
-      Vue.prototype.$hasFeature = (feature) => {
-        return this.$languages
-          .getFeatures({
-            l1: this.$l1,
-            l2: this.$l2,
-          })
-          .includes(feature);
-      };
-      let dictionaries = this.$l1.dictionaries // ['freedict']
-        ? this.$l1.dictionaries[this.$l2["iso639-3"]]
-        : undefined;
-      if (!Vue.prototype.$dictionary && dictionaries) {
-        Vue.prototype.$dictionaryName = dictionaries[0]; // 'freedict'
-        Vue.prototype.$dictionary = Dict.load({
-          dict: Vue.prototype.$dictionaryName,
-          l1: this.$l1["iso639-3"],
-          l2: this.$l2["iso639-3"],
-        });
-      }
+    l1() {
+      if (typeof this.$l1 !== "undefined") return this.$l1;
     },
-    updateClasses() {
-      this.classes = {
+    l2() {
+      if (typeof this.$l2 !== "undefined") return this.$l2;
+    },
+    classes() {
+      let classes = this.l2 ? {
         "hide-except-focus": this.focus,
         "show-pinyin": this.$settings.showPinyin,
-        "show-pinyin-for-saved": !this.$settings.showPinyin && this.$l2.han,
+        "show-pinyin-for-saved": !this.$settings.showPinyin && this.l2.han,
         "show-simplified": !this.$settings.useTraditional,
         "show-traditional": this.$settings.useTraditional,
         "show-definition": this.$settings.showDefinition,
         "show-translation": this.$settings.showTranslation,
-      };
-      if (this.$l1) this.classes[`l1-${this.$l1.code}`] = true;
-      if (this.$l2) this.classes[`l2-${this.$l2.code}`] = true;
-    },
-    updateFavicon() {
-      var link =
-        document.querySelector("link[rel*='icon']") ||
-        document.createElement("link");
-      link.type = "image/x-icon";
-      link.rel = "shortcut icon";
-      link.href = this.$languages.logo(this.$l2.code);
-      document.getElementsByTagName("head")[0].appendChild(link);
-    },
-    updateTitle() {
-      document.title = document.title
-        .replace("| Zero to Hero", `| ${this.$l2.name} Zero to Hero`)
-        .replace(/^Zero to Hero/, `${this.$l2.name} Zero to Hero`);
-    },
-    seti18n() {
-      this.$i18n.locale = this.$l1.code;
-      this.$i18n.silentTranslationWarn = true;
-      if (this.$l1.translations) {
-        this.$i18n.setLocaleMessage(
-          this.$l1.code,
-          this.$l1.translations
-        )
-      }
-    },
-    async loadAdditionalL2Files(l2) {
-      if (!Vue.prototype.$hanzi && ["zh", "ko", "ja"].includes(l2)) {
-        Vue.prototype.$hanzi = (await import(`@/lib/hanzi.js`)).default.load();
-        Vue.prototype.$unihan = (
-          await import(`@/lib/unihan.js`)
-        ).default.load();
-      }
-      if (!Vue.prototype.$grammar && ["zh"].includes(l2)) {
-        Vue.prototype.$grammar = (
-          await import(`@/lib/grammar.js`)
-        ).default.load();
-      }
-    },
-    updateLanguages(l1, l2) {
-      this.l1 = l1
-      this.l2 = l2
-      Vue.prototype.$l1 = this.$languages.getSmart(l1);
-      Vue.prototype.$l2 = this.$languages.getSmart(l2);
-      this.seti18n();
-      this.loadLanguages();
-      this.updateFavicon();
-      this.updateTitle();
-      this.updateClasses();
-    }
-  },
-  async created() {
-    if (this.$route.params.l1 && this.$route.params.l2) {
-      this.updateLanguages(this.$route.params.l1, this.$route.params.l2)
-      await this.loadAdditionalL2Files(this.$route.params.l2)
-    }
-  },
-  watch: {
-    async $route() {
-      this.$ga.page(this.$route.path);
-      if (this.$route.params.l1 !== this.l1 || this.$route.params.l2 !== this.l2) {
-        this.updateLanguages(this.$route.params.l1, this.$route.params.l2)
-        await this.loadAdditionalL2Files(this.$route.params.l2)
-      }
-    },
-    updateSettings() {
-      this.updateClasses();
+      } : {};
+
+      if (this.l1) classes[`l1-${l1.code}`] = true;
+      if (this.l2) classes[`l2-${l2.code}`] = true;
+      return classes;
     },
   },
-});
+};
 </script>
 
 <style>
@@ -476,8 +384,8 @@ export default Vue.extend({
 }
 
 @font-face {
-  font-family: 'Klingon pIqaD HaSta';
-  src: url('/fonts/Klingon-pIqaD-HaSta.ttf') format('truetype');
+  font-family: "Klingon pIqaD HaSta";
+  src: url("/fonts/Klingon-pIqaD-HaSta.ttf") format("truetype");
 }
 
 .bg-dark .language-list a {
@@ -501,7 +409,18 @@ body {
   min-height: calc(100vh - 30rem);
 }
 
-h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
   font-weight: bold;
 }
 
@@ -510,10 +429,9 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   padding: 1rem 0;
 }
 
-
 .shadowed {
-  -webkit-filter: drop-shadow(5px 5px 5px rgba(0,0,0,0.3));
-  filter: drop-shadow(5px 5px 5px  rgba(0,0,0,0.3));
+  -webkit-filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.3));
+  filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.3));
 }
 
 .link-unstyled,
@@ -528,7 +446,6 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   top: 0;
 }
 
-
 .cards {
   display: flex;
   flex-wrap: wrap;
@@ -538,14 +455,13 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   padding: 1.5rem;
   margin: 1rem;
   flex: 1;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
   min-width: 20rem;
 }
 
 .book-thumb {
   height: 10rem;
 }
-
 
 .aspect-wrapper {
   padding-bottom: 56.25%;
@@ -598,7 +514,6 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   border-radius: 0.5rem;
   position: relative;
 }
-
 
 .declined-word-inner {
   display: flex;
@@ -660,7 +575,6 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   display: none;
 }
 
-
 .mt1 {
   margin-top: 1rem;
 }
@@ -674,31 +588,31 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   position: relative;
 }
 
-[data-case*='nominative'] {
+[data-case*="nominative"] {
   background-color: #fff0c2;
 }
 
-[data-case*='genitive'] {
+[data-case*="genitive"] {
   background-color: #e6ffc2;
 }
 
-[data-case*='dative'] {
+[data-case*="dative"] {
   background-color: #c2f3ff;
 }
 
-[data-case*='accusative'] {
+[data-case*="accusative"] {
   background-color: #ffd6d6;
 }
 
-[data-case*='instrumental'] {
+[data-case*="instrumental"] {
   background-color: #d0f7f3;
 }
 
-[data-case*='prepositional'] {
+[data-case*="prepositional"] {
   background-color: #dbe4fb;
 }
 
-[data-case*='locative'] {
+[data-case*="locative"] {
   background-color: #fac2ff;
 }
 
@@ -725,119 +639,118 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   display: none;
 }
 
-
-.show-level-1 .word-block-dictionary[data-level='Pre-A1']:not(.seen),
-.show-level-2 .word-block-dictionary[data-level='A1']:not(.seen),
-.show-level-3 .word-block-dictionary[data-level='A2']:not(.seen),
-.show-level-4 .word-block-dictionary[data-level='B1']:not(.seen),
-.show-level-5 .word-block-dictionary[data-level='B2']:not(.seen),
-.show-level-6 .word-block-dictionary[data-level='C1']:not(.seen),
-.show-level-outside .word-block-dictionary[data-level='C2']:not(.seen):not(.common) {
+.show-level-1 .word-block-dictionary[data-level="Pre-A1"]:not(.seen),
+.show-level-2 .word-block-dictionary[data-level="A1"]:not(.seen),
+.show-level-3 .word-block-dictionary[data-level="A2"]:not(.seen),
+.show-level-4 .word-block-dictionary[data-level="B1"]:not(.seen),
+.show-level-5 .word-block-dictionary[data-level="B2"]:not(.seen),
+.show-level-6 .word-block-dictionary[data-level="C1"]:not(.seen),
+.show-level-outside
+  .word-block-dictionary[data-level="C2"]:not(.seen):not(.common) {
   display: inline;
   color: #838888 !important;
 }
 
 .levelPreA1,
-[data-level='Pre-A1'],
-[data-hover-level='Pre-A1']:hover,
-[data-hover-level='Pre-A1'].saved {
-  color: #B51700 !important;
+[data-level="Pre-A1"],
+[data-hover-level="Pre-A1"]:hover,
+[data-hover-level="Pre-A1"].saved {
+  color: #b51700 !important;
 }
 
-
 .levelA1,
-[data-level='A1'],
-[data-hover-level='A1']:hover,
-[data-hover-level='A1'].saved {
-  color: #0076BA !important;
+[data-level="A1"],
+[data-hover-level="A1"]:hover,
+[data-hover-level="A1"].saved {
+  color: #0076ba !important;
 }
 
 .levelA2,
-[data-level='A2'],
-[data-hover-level='A2']:hover,
-[data-hover-level='A2'].saved {
-  color: #00882B !important;
+[data-level="A2"],
+[data-hover-level="A2"]:hover,
+[data-hover-level="A2"].saved {
+  color: #00882b !important;
 }
 
 .levelB1,
-[data-level='B1'],
-[data-hover-level='B1']:hover,
-[data-hover-level='B1'].saved {
-  color: #6A348A !important;
+[data-level="B1"],
+[data-hover-level="B1"]:hover,
+[data-hover-level="B1"].saved {
+  color: #6a348a !important;
 }
 
 .levelB2,
-[data-level='B2'],
-[data-hover-level='B2']:hover,
-[data-hover-level='B2'].saved {
-  color: #5B0516 !important;
+[data-level="B2"],
+[data-hover-level="B2"]:hover,
+[data-hover-level="B2"].saved {
+  color: #5b0516 !important;
 }
 
 .levelC1,
-[data-level='C1'],
-[data-hover-level='C1']:hover,
-[data-hover-level='C1'].saved {
-  color: #011B3C !important;
+[data-level="C1"],
+[data-hover-level="C1"]:hover,
+[data-hover-level="C1"].saved {
+  color: #011b3c !important;
 }
 
 .levelC2,
-[data-level='C2'],
-[data-hover-level='C2']:hover,
-[data-hover-level='C2'].saved {
-  color: #005F58 !important;
+[data-level="C2"],
+[data-hover-level="C2"]:hover,
+[data-hover-level="C2"].saved {
+  color: #005f58 !important;
 }
 
 .leveloutside,
-[data-level='outside'],
-[data-hover-level='outside']:hover,
-[data-hover-level='outside'].saved {
+[data-level="outside"],
+[data-hover-level="outside"]:hover,
+[data-hover-level="outside"].saved {
   color: #c59f94 !important;
 }
 
 .bg-levelPreA1,
-[data-bg-level='Pre-A1'] {
-  background-color: #B51700 !important;
+[data-bg-level="Pre-A1"] {
+  background-color: #b51700 !important;
   color: white !important;
 }
 
 .bg-levelA1,
-[data-bg-level='A1'] {
-  background-color: #0076BA !important;
+[data-bg-level="A1"] {
+  background-color: #0076ba !important;
   color: white !important;
 }
 
 .bg-levelA2,
-[data-bg-level='A2'] {
-  background-color: #00882B !important;
+[data-bg-level="A2"] {
+  background-color: #00882b !important;
   color: white !important;
 }
 
 .bg-levelB1,
-[data-bg-level='B1'] {
-  background-color: #6A348A !important;
+[data-bg-level="B1"] {
+  background-color: #6a348a !important;
   color: white !important;
 }
 
 .bg-levelB2,
-[data-bg-level='B2'] {
-  background-color: #5B0516 !important;
+[data-bg-level="B2"] {
+  background-color: #5b0516 !important;
   color: white !important;
 }
 
 .bg-levelC1,
-[data-bg-level='C1'] {
-  background-color: #011B3C !important;
+[data-bg-level="C1"] {
+  background-color: #011b3c !important;
   color: white !important;
 }
 
 .bg-levelC2,
-[data-bg-level='C2'] {
-  background-color: #005F58 !important;
+[data-bg-level="C2"] {
+  background-color: #005f58 !important;
   color: white !important;
 }
 
 .bg-leveloutside,
-[data-bg-level='outside'] {
+[data-bg-level="outside"] {
   background-color: #c59f94 !important;
   color: white !important;
 }
@@ -846,126 +759,129 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   display: none;
 }
 
-.l2-zh .show-level-1 .word-block-dictionary[data-level='1']:not(.seen),
-.l2-zh .show-level-2 .word-block-dictionary[data-level='2']:not(.seen),
-.l2-zh .show-level-3 .word-block-dictionary[data-level='3']:not(.seen),
-.l2-zh .show-level-4 .word-block-dictionary[data-level='4']:not(.seen),
-.l2-zh .show-level-5 .word-block-dictionary[data-level='5']:not(.seen),
-.l2-zh .show-level-6 .word-block-dictionary[data-level='6']:not(.seen),
-.l2-zh .show-level-outside .word-block-dictionary[data-level='outside']:not(.seen):not(.common) {
+.l2-zh .show-level-1 .word-block-dictionary[data-level="1"]:not(.seen),
+.l2-zh .show-level-2 .word-block-dictionary[data-level="2"]:not(.seen),
+.l2-zh .show-level-3 .word-block-dictionary[data-level="3"]:not(.seen),
+.l2-zh .show-level-4 .word-block-dictionary[data-level="4"]:not(.seen),
+.l2-zh .show-level-5 .word-block-dictionary[data-level="5"]:not(.seen),
+.l2-zh .show-level-6 .word-block-dictionary[data-level="6"]:not(.seen),
+.l2-zh
+  .show-level-outside
+  .word-block-dictionary[data-level="outside"]:not(.seen):not(.common) {
   display: inline;
   color: inherit !important;
 }
 
 .l2-zh .level1,
-.l2-zh [data-level='1'],
-.l2-zh [data-hover-level='1']:hover,
-.l2-zh [data-hover-level='1'].saved,
-.l2-zh .show-level-1 [data-hover-level='1'].sticky:not(.seen) {
+.l2-zh [data-level="1"],
+.l2-zh [data-hover-level="1"]:hover,
+.l2-zh [data-hover-level="1"].saved,
+.l2-zh .show-level-1 [data-hover-level="1"].sticky:not(.seen) {
   color: #f8b51e !important;
 }
 
 .l2-zh .level2,
-.l2-zh [data-level='2'],
-.l2-zh [data-hover-level='2']:hover,
-.l2-zh [data-hover-level='2'].saved,
-.l2-zh .show-level-2 [data-hover-level='2'].sticky:not(.seen) {
+.l2-zh [data-level="2"],
+.l2-zh [data-hover-level="2"]:hover,
+.l2-zh [data-hover-level="2"].saved,
+.l2-zh .show-level-2 [data-hover-level="2"].sticky:not(.seen) {
   color: #267f94 !important;
 }
 
 .l2-zh .level3,
-.l2-zh [data-level='3'],
-.l2-zh [data-hover-level='3']:hover,
-.l2-zh [data-hover-level='3'].saved,
-.l2-zh .show-level-3 [data-hover-level='3'].sticky:not(.seen) {
+.l2-zh [data-level="3"],
+.l2-zh [data-hover-level="3"]:hover,
+.l2-zh [data-hover-level="3"].saved,
+.l2-zh .show-level-3 [data-hover-level="3"].sticky:not(.seen) {
   color: #fd4f1c !important;
 }
 
 .l2-zh .level4,
-.l2-zh [data-level='4'],
-.l2-zh [data-hover-level='4']:hover,
-.l2-zh [data-hover-level='4'].saved,
-.l2-zh .show-level-4 [data-hover-level='4'].sticky:not(.seen) {
+.l2-zh [data-level="4"],
+.l2-zh [data-hover-level="4"]:hover,
+.l2-zh [data-hover-level="4"].saved,
+.l2-zh .show-level-4 [data-hover-level="4"].sticky:not(.seen) {
   color: #bb1718 !important;
 }
 
 .l2-zh .level5,
-.l2-zh [data-level='5'],
-.l2-zh [data-hover-level='5']:hover,
-.l2-zh [data-hover-level='5'].saved,
-.l2-zh .show-level-5 [data-hover-level='5'].sticky:not(.seen) {
+.l2-zh [data-level="5"],
+.l2-zh [data-hover-level="5"]:hover,
+.l2-zh [data-hover-level="5"].saved,
+.l2-zh .show-level-5 [data-hover-level="5"].sticky:not(.seen) {
   color: #1b3e76 !important;
 }
 
 .l2-zh .level6,
-.l2-zh [data-level='6'],
-.l2-zh [data-hover-level='6']:hover,
-.l2-zh [data-hover-level='6'].saved,
-.l2-zh .show-level-6 [data-hover-level='6'].sticky:not(.seen) {
+.l2-zh [data-level="6"],
+.l2-zh [data-hover-level="6"]:hover,
+.l2-zh [data-hover-level="6"].saved,
+.l2-zh .show-level-6 [data-hover-level="6"].sticky:not(.seen) {
   color: #6a3669 !important;
 }
 
 .l2-zh .level7-9,
-.l2-zh [data-level='7-9'],
-.l2-zh [data-hover-level='7-9']:hover,
-.l2-zh [data-hover-level='7-9'].saved,
-.l2-zh .show-level-7-9 [data-hover-level='7-9'].sticky:not(.seen) {
-  color: #005F58 !important;
+.l2-zh [data-level="7-9"],
+.l2-zh [data-hover-level="7-9"]:hover,
+.l2-zh [data-hover-level="7-9"].saved,
+.l2-zh .show-level-7-9 [data-hover-level="7-9"].sticky:not(.seen) {
+  color: #005f58 !important;
 }
 
 .l2-zh .leveloutside,
-.l2-zh [data-level='outside'],
-.l2-zh [data-hover-level='outside']:hover,
-.l2-zh [data-hover-level='outside'].saved,
-.l2-zh .show-level-7 [data-hover-level='outside'].sticky:not(.seen):not(.common) {
+.l2-zh [data-level="outside"],
+.l2-zh [data-hover-level="outside"]:hover,
+.l2-zh [data-hover-level="outside"].saved,
+.l2-zh
+  .show-level-7
+  [data-hover-level="outside"].sticky:not(.seen):not(.common) {
   color: #c59f94 !important;
 }
 
 .l2-zh .bg-level1,
-.l2-zh [data-bg-level='1'] {
+.l2-zh [data-bg-level="1"] {
   background-color: #f8b51e !important;
   color: white !important;
 }
 
 .l2-zh .bg-level2,
-.l2-zh [data-bg-level='2'] {
+.l2-zh [data-bg-level="2"] {
   background-color: #267f94 !important;
   color: white !important;
 }
 
 .l2-zh .bg-level3,
-.l2-zh [data-bg-level='3'] {
+.l2-zh [data-bg-level="3"] {
   background-color: #fd4f1c !important;
   color: white !important;
 }
 
 .l2-zh .bg-level4,
-.l2-zh [data-bg-level='4'] {
+.l2-zh [data-bg-level="4"] {
   background-color: #bb1718 !important;
   color: white !important;
 }
 
 .l2-zh .bg-level5,
-.l2-zh [data-bg-level='5'] {
+.l2-zh [data-bg-level="5"] {
   background-color: #1b3e76 !important;
   color: white !important;
 }
 
 .l2-zh .bg-level6,
-.l2-zh [data-bg-level='6'] {
+.l2-zh [data-bg-level="6"] {
   background-color: #6a3669 !important;
   color: white !important;
 }
 
-
 .l2-zh .bg-level7-9,
-.l2-zh [data-bg-level='7-9'] {
-  background-color: #005F58 !important;
+.l2-zh [data-bg-level="7-9"] {
+  background-color: #005f58 !important;
   color: white !important;
 }
 
 .l2-zh .bg-leveloutside,
-.l2-zh [data-bg-level='outside'] {
+.l2-zh [data-bg-level="outside"] {
   background-color: #c59f94 !important;
   color: white !important;
 }
@@ -992,17 +908,14 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   background: #f6f6f6;
 }
 
-
 .logo-small {
   max-width: 6rem;
   max-height: 3rem;
 }
 
-
 .highlight {
   font-weight: bold;
 }
-
 
 .btn-medium {
   display: inline-block;
@@ -1033,35 +946,35 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   background: #989898;
 }
 
-ul.collapsed li:nth-child(n+5) {
+ul.collapsed li:nth-child(n + 5) {
   display: none;
 }
 
-ul.collapse-4.collapsed li:nth-child(-n+4) {
+ul.collapse-4.collapsed li:nth-child(-n + 4) {
   display: inherit;
 }
 
-ul.collapse-5.collapsed li:nth-child(-n+5) {
+ul.collapse-5.collapsed li:nth-child(-n + 5) {
   display: inherit;
 }
 
-ul.collapse-6.collapsed li:nth-child(-n+6) {
+ul.collapse-6.collapsed li:nth-child(-n + 6) {
   display: inherit;
 }
 
-ul.collapse-7.collapsed li:nth-child(-n+7) {
+ul.collapse-7.collapsed li:nth-child(-n + 7) {
   display: inherit;
 }
 
-ul.collapse-8.collapsed li:nth-child(-n+8) {
+ul.collapse-8.collapsed li:nth-child(-n + 8) {
   display: inherit;
 }
 
-ul.collapse-9.collapsed li:nth-child(-n+9) {
+ul.collapse-9.collapsed li:nth-child(-n + 9) {
   display: inherit;
 }
 
-ul.collapse-10.collapsed li:nth-child(-n+10) {
+ul.collapse-10.collapsed li:nth-child(-n + 10) {
   display: inherit !important;
 }
 
@@ -1089,7 +1002,6 @@ ul.collapse-10.collapsed li:nth-child(-n+10) {
   font-size: 3rem;
   font-weight: bold;
 }
-
 
 #zerotohero:not(.show-simplified) .simplified,
 #zerotohero:not(.show-traditional) .traditional {
@@ -1201,9 +1113,6 @@ ul.collapse-10.collapsed li:nth-child(-n+10) {
   border-radius: 0.2rem;
 }
 
-
-
-
 .study-sheet-table {
   position: relative;
 }
@@ -1212,7 +1121,6 @@ ul.collapse-10.collapsed li:nth-child(-n+10) {
   min-width: 20vw;
 }
 
- 
 .show-pinyin .study-sheet-table .word-block .word-block-pinyin,
 .show-simplified .study-sheet-table .word-block .word-block-simplified,
 .show-traditional .study-sheet-table .word-block .word-block-traditional,
@@ -1228,7 +1136,7 @@ ul.collapse-10.collapsed li:nth-child(-n+10) {
   padding: 4px;
   vertical-align: top;
   padding-right: 21px;
-  color: #8FA9C1;
+  color: #8fa9c1;
   line-height: 14px;
 }
 
@@ -1248,7 +1156,6 @@ ul.collapse-10.collapsed li:nth-child(-n+10) {
   vertical-align: top;
   line-height: 14px;
 }
-
 
 .study-sheet-table .study-sheet-td-definition span {
   color: #757171 !important;
@@ -1292,50 +1199,57 @@ ul.collapse-10.collapsed li:nth-child(-n+10) {
   font-family: "gentium plus";
 }
 
-
 /* for the text column */
-.show-level-1 .study-sheet-table [data-hover-level='1'].sticky:not(.seen) span,
-.show-level-2 .study-sheet-table [data-hover-level='2'].sticky:not(.seen) span,
-.show-level-3 .study-sheet-table [data-hover-level='3'].sticky:not(.seen) span,
-.show-level-4 .study-sheet-table [data-hover-level='4'].sticky:not(.seen) span,
-.show-level-5 .study-sheet-table [data-hover-level='5'].sticky:not(.seen) span,
-.show-level-6 .study-sheet-table [data-hover-level='6'].sticky:not(.seen) span,
-.show-level-outside .study-sheet-table [data-hover-level='outside'].sticky:not(.seen):not(.common) span {
-  color: #B74900 !important;
+.show-level-1 .study-sheet-table [data-hover-level="1"].sticky:not(.seen) span,
+.show-level-2 .study-sheet-table [data-hover-level="2"].sticky:not(.seen) span,
+.show-level-3 .study-sheet-table [data-hover-level="3"].sticky:not(.seen) span,
+.show-level-4 .study-sheet-table [data-hover-level="4"].sticky:not(.seen) span,
+.show-level-5 .study-sheet-table [data-hover-level="5"].sticky:not(.seen) span,
+.show-level-6 .study-sheet-table [data-hover-level="6"].sticky:not(.seen) span,
+.show-level-outside
+  .study-sheet-table
+  [data-hover-level="outside"].sticky:not(.seen):not(.common)
+  span {
+  color: #b74900 !important;
 }
 
 /* for the definition column */
-.show-level-1 .study-sheet-table [data-level='1']:not(.seen),
-.show-level-2 .study-sheet-table [data-level='2']:not(.seen),
-.show-level-3 .study-sheet-table [data-level='3']:not(.seen),
-.show-level-4 .study-sheet-table [data-level='4']:not(.seen),
-.show-level-5 .study-sheet-table [data-level='5']:not(.seen),
-.show-level-6 .study-sheet-table [data-level='6']:not(.seen),
-.show-level-outside .study-sheet-table [data-level='outside']:not(.seen):not(.common) {
-  color: #B74900 !important;
+.show-level-1 .study-sheet-table [data-level="1"]:not(.seen),
+.show-level-2 .study-sheet-table [data-level="2"]:not(.seen),
+.show-level-3 .study-sheet-table [data-level="3"]:not(.seen),
+.show-level-4 .study-sheet-table [data-level="4"]:not(.seen),
+.show-level-5 .study-sheet-table [data-level="5"]:not(.seen),
+.show-level-6 .study-sheet-table [data-level="6"]:not(.seen),
+.show-level-outside
+  .study-sheet-table
+  [data-level="outside"]:not(.seen):not(.common) {
+  color: #b74900 !important;
 }
 
-
 /* for the text column */
-.show-level-1 .study-sheet-table [data-hover-level='Pre-A1'].sticky:not(.seen),
-.show-level-2 .study-sheet-table [data-hover-level='A1'].sticky:not(.seen),
-.show-level-3 .study-sheet-table [data-hover-level='A2'].sticky:not(.seen),
-.show-level-4 .study-sheet-table [data-hover-level='B1'].sticky:not(.seen),
-.show-level-5 .study-sheet-table [data-hover-level='B2'].sticky:not(.seen),
-.show-level-6 .study-sheet-table [data-hover-level='C1'].sticky:not(.seen),
-.show-level-outside .study-sheet-table [data-hover-level='C2'].sticky:not(.seen):not(.common) {
-  color: #B74900 !important;
+.show-level-1 .study-sheet-table [data-hover-level="Pre-A1"].sticky:not(.seen),
+.show-level-2 .study-sheet-table [data-hover-level="A1"].sticky:not(.seen),
+.show-level-3 .study-sheet-table [data-hover-level="A2"].sticky:not(.seen),
+.show-level-4 .study-sheet-table [data-hover-level="B1"].sticky:not(.seen),
+.show-level-5 .study-sheet-table [data-hover-level="B2"].sticky:not(.seen),
+.show-level-6 .study-sheet-table [data-hover-level="C1"].sticky:not(.seen),
+.show-level-outside
+  .study-sheet-table
+  [data-hover-level="C2"].sticky:not(.seen):not(.common) {
+  color: #b74900 !important;
 }
 
 /* for the definition column */
-.show-level-1 .study-sheet-table [data-level='Pre-A1']:not(.seen),
-.show-level-2 .study-sheet-table [data-level='A1']:not(.seen),
-.show-level-3 .study-sheet-table [data-level='A2']:not(.seen),
-.show-level-4 .study-sheet-table [data-level='B1']:not(.seen),
-.show-level-5 .study-sheet-table [data-level='B2']:not(.seen),
-.show-level-6 .study-sheet-table [data-level='C1']:not(.seen),
-.show-level-outside .study-sheet-table [data-level='C2']:not(.seen):not(.common):not(.low-rank) {
-  color: #B74900 !important;
+.show-level-1 .study-sheet-table [data-level="Pre-A1"]:not(.seen),
+.show-level-2 .study-sheet-table [data-level="A1"]:not(.seen),
+.show-level-3 .study-sheet-table [data-level="A2"]:not(.seen),
+.show-level-4 .study-sheet-table [data-level="B1"]:not(.seen),
+.show-level-5 .study-sheet-table [data-level="B2"]:not(.seen),
+.show-level-6 .study-sheet-table [data-level="C1"]:not(.seen),
+.show-level-outside
+  .study-sheet-table
+  [data-level="C2"]:not(.seen):not(.common):not(.low-rank) {
+  color: #b74900 !important;
 }
 
 .word-square {

@@ -25,16 +25,15 @@ export default {
     'css-percentage-circle'
   ],
 
+  router: {
+    middleware: ['language-switch']
+  },
+
   vue: {
     config: {
       runtimeCompiler: true
     }
   },
-
-  // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [
-    '~plugins/main.js'
-  ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -54,6 +53,11 @@ export default {
     '@nuxtjs/axios',
     'nuxt-i18n',
     'nuxt-lazy-load'
+  ],
+
+  // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
+  plugins: [
+    '~plugins/main.js'
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios

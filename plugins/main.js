@@ -34,15 +34,20 @@ Vue.filter('truncate', function (text, length, clamp) {
   return content.length > length ? content.slice(0, length) + clamp : content
 })
 
-
-Vue.prototype.$languages = Vue.prototype.$languages || Languages.load()
-Vue.prototype.$settings = {
-  showDefinition: false,
-  showTranslation: true,
-  showPinyin: true,
-  useTraditional: false,
-  showQuiz: true,
-}
-if (typeof localStorage !== 'undefined') {
-  Vue.prototype.$settings = Object.assign(Vue.prototype.$settings, JSON.parse(localStorage.getItem('zthSettings')))
+export default ({ app }, inject) => {
+  if (!app.$languages) {
+    inject('languages', Languages.load())
+  }
+  if (!app.$settings) {
+    inject('settings', {
+      showDefinition: false,
+      showTranslation: true,
+      showPinyin: true,
+      useTraditional: false,
+      showQuiz: true,
+    })
+  }
+  if (typeof localStorage !== 'undefined') {
+    inject('settings', Object.assign(app.$settings, JSON.parse(localStorage.getItem('zthSettings'))))
+  }
 }

@@ -291,4 +291,5 @@ const Dictionary = {
     return text.replace(/'/g, '́')
   }
 }
-  
+
+export default Dictionary
