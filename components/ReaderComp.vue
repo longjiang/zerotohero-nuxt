@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="$l2 && $hasFeature('reader')">
     <button
       v-if="iconMode && !fullscreen"
       @click="fullscreen = !fullscreen"
@@ -58,7 +58,9 @@
             v-if="!fullscreen"
             @click="toggleFullscreen"
             class="reader-button"
-          ><i class="fa fa-expand" /></button>
+          >
+            <i class="fa fa-expand" />
+          </button>
           <button
             v-if="fullscreen"
             @click="toggleFullscreen"
@@ -78,57 +80,62 @@
               'reader-button': true,
               'reader-button-active': showTranslate === 'en',
             }"
-          ><span style="font-size: 0.7em">EN</span></button>
+          >
+            <span style="font-size: 0.7em">EN</span>
+          </button>
           <button
             @click="toggleTranslation('ko')"
             :class="{
               'reader-button': true,
               'reader-button-active': showTranslate === 'ko',
             }"
-          ><span style="font-size: 0.7em">한</span></button>
+          >
+            <span style="font-size: 0.7em">한</span>
+          </button>
           <button
             @click="toggleTranslation('ja')"
             :class="{
               'reader-button': true,
               'reader-button-active': showTranslate === 'ja',
             }"
-          ><span style="font-size: 0.7em">日</span></button>
+          >
+            <span style="font-size: 0.7em">日</span>
+          </button>
           <button
             @click="toggleTranslation('ru')"
             :class="{
               'reader-button': true,
               'reader-button-active': showTranslate === 'ru',
             }"
-          ><span style="font-size: 0.7em">РУ</span></button>
+          >
+            <span style="font-size: 0.7em">РУ</span>
+          </button>
           <button
             @click="toggleTranslation('es')"
             :class="{
               'reader-button': true,
               'reader-button-active': showTranslate === 'es',
             }"
-          ><span style="font-size: 0.7em">ES</span></button>
+          >
+            <span style="font-size: 0.7em">ES</span>
+          </button>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-import Marked from 'marked'
+import Marked from "marked";
 export default {
   data() {
     return {
-      text: '',
+      text: "",
       annotated: false,
       readerKey: 0, // used to force re-render this component
       fontSize: this.iconMode ? 2 : 1,
       fullscreen: false,
       showTranslate: false,
-      translationSrc: this.translationUrl(
-        this.$l1.code,
-        this.$l2.code,
-        this.text
-      ),
-    }
+    };
   },
   props: {
     iconMode: {
@@ -136,59 +143,71 @@ export default {
     },
   },
   computed: {
+    translationSrc() {
+      return this.translationUrl(this.$l1.code, this.$l2.code, this.text);
+    },
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
     marked() {
       return (
-        Marked(this.text.replace(/^ {4,}/gm, '')) || this.text // 4 spaces in a row would emit <code>!
-      )
+        Marked(this.text.replace(/^ {4,}/gm, "")) || this.text // 4 spaces in a row would emit <code>!
+      );
     },
   },
   methods: {
     toggleTranslation(lang) {
-      this.showTranslate = this.showTranslate === lang ? false : lang
-      this.translationSrc = this.translationUrl(lang, this.$l2.code, this.text)
+      this.showTranslate = this.showTranslate === lang ? false : lang;
+      this.translationSrc = this.translationUrl(lang, this.$l2.code, this.text);
     },
     translationUrl(l1Code, l2Code, text) {
       let langs = {
         en: {
-          zh: (text) => `https://www.bing.com/translator/?from=zh&to=en&text=${text}`,
+          zh: (text) =>
+            `https://www.bing.com/translator/?from=zh&to=en&text=${text}`,
         },
         // yandex, papago, baidu all refuse iframes
-      }
+      };
       if (langs[l1Code] && langs[l1Code][l2Code]) {
-        return langs[l1Code][l2Code](text)
+        return langs[l1Code][l2Code](text);
       } else {
-        return `https://www.bing.com/translator/?from=auto&to=${l1Code}&text=${text}`
+        return `https://www.bing.com/translator/?from=auto&to=${l1Code}&text=${text}`;
       }
     },
     toggleFullscreen() {
-      this.fullscreen = !this.fullscreen
+      this.fullscreen = !this.fullscreen;
     },
     toggleButtons() {
-      this.buttons = !this.buttons
+      this.buttons = !this.buttons;
     },
     smaller() {
-      this.fontSize = this.fontSize * 0.8
+      this.fontSize = this.fontSize * 0.8;
     },
     bigger() {
-      this.fontSize = this.fontSize * 1.25
+      this.fontSize = this.fontSize * 1.25;
     },
     reset() {
-      this.fontSize = 1
+      this.fontSize = 1;
     },
     show() {
-      const marked = Marked(this.text) || this.text
+      const marked = Marked(this.text) || this.text;
       if (marked) {
-        $('#reader-annotated').html(marked)
+        $("#reader-annotated").html(marked);
       }
     },
   },
   watch: {
     text() {
-      this.$emit('readerTextChanged', this.text)
-      this.readerKey++
+      this.$emit("readerTextChanged", this.text);
+      this.readerKey++;
     },
   },
-}
+};
 </script>
 <style lang="scss" scoped>
 .reader-icon {
@@ -213,7 +232,7 @@ export default {
   color: red !important;
 }
 #reader-annotated >>> del .word-block .word-block-simplified::after {
-  content: ' \2717';
+  content: " \2717";
   color: red !important;
 }
 #translation-iframe {

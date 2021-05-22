@@ -246,10 +246,10 @@ export default {
   methods: {},
   computed: {
     l1() {
-      if (typeof this.$l1 !== "undefined") return this.$l1;
+      if (typeof this.$store.state.settings.l1 !== "undefined") return this.$store.state.settings.l1;
     },
     l2() {
-      if (typeof this.$l2 !== "undefined") return this.$l2;
+      if (typeof this.$store.state.settings.l2 !== "undefined") return this.$store.state.settings.l2;
     },
     classes() {
       let classes = this.l2 ? {
@@ -262,8 +262,8 @@ export default {
         "show-translation": this.$settings.showTranslation,
       } : {};
 
-      if (this.l1) classes[`l1-${l1.code}`] = true;
-      if (this.l2) classes[`l2-${l2.code}`] = true;
+      // if (typeof this.l1 !== undefined) classes[`l1-${this.l1.code}`] = true;
+      // if (typeof this.l2 !== undefined) classes[`l2-${this.l2.code}`] = true;
       return classes;
     },
   },

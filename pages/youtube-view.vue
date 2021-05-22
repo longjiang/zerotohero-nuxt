@@ -354,7 +354,7 @@ export default {
         locales = locales.concat(this.$l2.locales)
       }
 
-      await Helper.scrape2(
+      await Helper.scrape(
         `https://www.youtube.com/api/timedtext?v=${this.args}&type=list`
       ).then(($html) => {
         for (let track of $html.find('track')) {
@@ -366,7 +366,7 @@ export default {
       })
 
       if (this.l2Locale) {
-        await Helper.scrape2(
+        await Helper.scrape(
           `https://www.youtube.com/api/timedtext?v=${this.args}&lang=${this.l2Locale}&fmt=srv3`
         ).then(($html) => {
           if ($html) {

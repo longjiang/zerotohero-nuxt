@@ -14,7 +14,7 @@
       <router-link
         v-if="random"
         class="btn btn-secondary btn-random ml-2"
-        :to="`/${$root.l1}/${$root.l2}/dictionary/${$dictionaryName}/random`"
+        :to="`/${$l1.code}/${$l2.code}/dictionary/${$store.state.settings.dictionaryName}/random`"
       >
         <i class="fas fa-random mr-1"></i>
         <span>{{ $t('Random') }}</span>
@@ -50,7 +50,7 @@
       </router-link>
       <router-link class="suggestion" v-if="suggestions.length === 0 && type === 'dictionary'" :to="`/${$l1.code}/${$l2.code}/phrase/search/${text}`">
         <span class="suggestion-not-found">
-          <b>&ldquo;{{ text }}&rdquo;</b> is not in {{ $dictionaryName }}, press Return to look it up as a Phrase.
+          <b>&ldquo;{{ text }}&rdquo;</b> is not in {{ $store.state.settings.dictionaryName }}, press Return to look it up as a Phrase.
         </span>
       </router-link>
       <div class="suggestion" v-if="suggestions.length === 0 && type === 'generic'">
@@ -93,7 +93,7 @@ export default {
       type: Function,
       default: function (entry) {
         if (entry) {
-          return `/${this.$l1.code}/${this.$l2.code}/dictionary/${this.$dictionaryName}/${entry.id}`
+          return `/${this.$l1.code}/${this.$l2.code}/dictionary/${this.$store.state.settings.dictionaryName}/${entry.id}`
         }
       },
     },
@@ -140,6 +140,19 @@ export default {
         this.suggestions = this.suggestionsFunc(this.text)
       }
     },
+  },
+  computed: {
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
+    $dictionary() {
+      return this.$getDictionary()
+    }
   },
   methods: {
     focusOnInput() {

@@ -51,10 +51,9 @@
     <article>
       <SocialHead :title="title" :description="description" :image="image" />
       <DictionaryEntry
-        v-if="entry"
         :entry="entry"
         ref="dictionaryEntry"
-        :key="`dictionary-entry-${entry.id}`"
+        :key="`dictionary-entry-${id}`"
       />
     </article>
   </div>
@@ -86,17 +85,30 @@ export default {
       paginatorKey: 0,
     };
   },
+  async asyncData({params, store, app}) {
+    if (params.method && params.args) {
+      if (params.method === store.state.settings.dictionaryName) {
+        if (params.args !== "random") {
+          let entry = await (await app.$getDictionary()).get(params.args);
+          return {entry, id: entry.id};
+        }
+      } else if (params.method === "hsk") {
+        let entry = await (await app.$getDictionary()).getByHSKId(params.args);
+        return {entry, id: entry.id};
+      }
+    }
+  },
   head() {
     return {
       title: this.title,
       meta: [
         {
-          hid: 'description',
-          name: 'description',
-          content: this.description
-        }
-      ]
-    }
+          hid: "description",
+          name: "description",
+          content: this.description,
+        },
+      ],
+    };
   },
   methods: {
     async updateWords() {
@@ -104,7 +116,7 @@ export default {
       this.savedTexts = [];
       if (this.$root.savedWords && this.$root.savedWords[this.$l2.code]) {
         for (let savedWord of this.$root.savedWords[this.$l2.code]) {
-          let word = await (await this.$dictionary).get(savedWord.id);
+          let word = await (await this.$getDictionar()).get(savedWord.id);
           if (word) {
             this.sW.push(word);
           }
@@ -121,28 +133,12 @@ export default {
         })
       );
     },
-    async show(entry) {
-      this.entry = entry
-    },
-    async route() {
-      if (this.method && this.args) {
-        if (this.method === this.$dictionaryName) {
-          if (this.args === "random") {
-            this.random();
-          } else {
-            let entry = await (await this.$dictionary).get(this.args);
-            this.show(entry);
-          }
-        } else if (this.method === "hsk") {
-          let entry = await (await this.$dictionary).getByHSKId(this.args);
-          this.show(entry);
-        }
-      }
-    },
     async random() {
-      let randomId = (await (await this.$dictionary).random()).id;
+      console.log('random')
+      let randomId = (await (await this.$getDictionary()).random()).id;
+      console.log(randomId)
       this.$router.push({
-        path: `/${this.$l1.code}/${this.$l2.code}/dictionary/${this.$dictionaryName}/${randomId}`,
+        path: `/${this.$l1.code}/${this.$l2.code}/dictionary/${this.$store.state.settings.dictionaryName}/${randomId}`,
       });
     },
 
@@ -218,6 +214,14 @@ export default {
     },
   },
   computed: {
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
     title() {
       if (this.entry) {
         return `${this.entry.bare} ${
@@ -237,7 +241,7 @@ export default {
     image() {
       if (this.entry) {
         if (this.$refs.dictionaryEntry && this.$refs.dictionaryEntry.webImage) {
-          return this.$refs.dictionaryEntry.webImage
+          return this.$refs.dictionaryEntry.webImage;
         }
         return this.$languages.logo(this.$l2.code);
       }
@@ -259,7 +263,6 @@ export default {
   },
   mounted() {
     if (this.$route.name === "dictionary") {
-      this.route();
       this.updateWords();
       this.unsubscribe = this.$store.subscribe((mutation, state) => {
         if (mutation.type.startsWith("savedWords")) {

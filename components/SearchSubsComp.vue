@@ -12,15 +12,15 @@
       >
         <i class="fas fa-step-backward" />
       </button>
-      <b-button @click="previousLine" class="btn btn-small"
-        ><i class="fa fa-chevron-left"
-      /></b-button>
-      <b-button @click="rewind" class="btn btn-small"
-        ><i class="fa fa-undo"
-      /></b-button>
-      <span class="ml-0 btn-small mr-0" style="background: none">{{
-        groupsRight['zthSaved'].length
-      }}</span>
+      <b-button @click="previousLine" class="btn btn-small">
+        <i class="fa fa-chevron-left" />
+      </b-button>
+      <b-button @click="rewind" class="btn btn-small">
+        <i class="fa fa-undo" />
+      </b-button>
+      <span class="ml-0 btn-small mr-0" style="background: none">
+        {{ groupsRight["zthSaved"].length }}
+      </span>
       <SmallStar
         :item="currentHit"
         :saved="(hit) => hit.saved"
@@ -29,9 +29,9 @@
         style="overflow: hidden; margin-bottom: -0.2rem"
         class="ml-0 mr-0"
       />
-      <span class="ml-0 btn-small mr-0" style="background: none"
-        >{{ hitIndex + 1 }} of {{ hits.length }}</span
-      >
+      <span class="ml-0 btn-small mr-0" style="background: none">
+        {{ hitIndex + 1 }} of {{ hits.length }}
+      </span>
       <b-dropdown
         class="primary playlist-dropdown"
         toggle-class="playlist-dropdown-toggle"
@@ -39,8 +39,8 @@
         no-caret
       >
         <template #button-content><i class="fa fa-stream" /></template>
-        <b-dropdown-item
-          ><button
+        <b-dropdown-item>
+          <button
             :class="{
               btn: true,
               'btn-small': true,
@@ -49,8 +49,9 @@
             }"
             @click.stop.prevent="sort = 'left'"
           >
-            Sort Left</button
-          ><button
+            Sort Left
+          </button>
+          <button
             :class="{
               btn: true,
               'btn-small': true,
@@ -60,8 +61,8 @@
             @click.stop.prevent="sort = 'right'"
           >
             Sort Right
-          </button></b-dropdown-item
-        >
+          </button>
+        </b-dropdown-item>
         <template
           v-for="c in sort === 'right' ? groupIndexRight : groupIndexLeft"
         >
@@ -82,11 +83,13 @@
                   :item="hit"
                   :saved="(hit) => hit.saved"
                   :save="saveHit"
-                  :remove="removeSavedHit" />
+                  :remove="removeSavedHit"
+                />
                 <img
                   class="hit-thumb"
                   :src="`//img.youtube.com/vi/${hit.video.youtube_id}/hqdefault.jpg`"
-                  :alt="hit.video.title" />
+                  :alt="hit.video.title"
+                />
                 <Annotate
                   :phonetics="false"
                   :checkSaved="false"
@@ -95,12 +98,13 @@
                   :key="`dropdown-line-${index}-annotate-${
                     hit.video.subs_l2[Number(hit.lineIndex)].line
                   }`"
-                  ><span
+                >
+                  <span
                     v-if="sort === 'left' && hit.lineIndex > 0"
                     v-html="hit.video.subs_l2[Number(hit.lineIndex) - 1].line"
                     style="margin-right: 0.5em; opacity: 0.5"
-                  ></span
-                  ><span
+                  ></span>
+                  <span
                     v-html="
                       Helper.highlightMultiple(
                         hit.video.subs_l2[Number(hit.lineIndex)].line,
@@ -108,23 +112,24 @@
                         level
                       )
                     "
-                  ></span
-                  ><span
+                  ></span>
+                  <span
                     v-if="
                       sort === 'right' &&
                       hit.lineIndex < hit.video.subs_l2.length - 1
                     "
                     v-html="hit.video.subs_l2[Number(hit.lineIndex) + 1].line"
                     style="margin-left: 0.5em; opacity: 0.5"
-                  ></span></Annotate
-              ></b-dropdown-item>
+                  ></span>
+                </Annotate>
+              </b-dropdown-item>
             </template>
           </div>
         </template>
       </b-dropdown>
-      <b-button @click="nextLine" class="btn btn-small"
-        ><i class="fa fa-chevron-right"
-      /></b-button>
+      <b-button @click="nextLine" class="btn btn-small">
+        <i class="fa fa-chevron-right" />
+      </b-button>
       <button
         :disabled="hitIndex >= hits.length - 1"
         @click="nextHit"
@@ -145,7 +150,7 @@
         }"
         @click="toggleSpeed()"
       >
-        {{ speed === 1 ? '慢' : speed + 'x' }}
+        {{ speed === 1 ? "慢" : speed + "x" }}
       </b-button>
       <input
         type="text"
@@ -157,8 +162,9 @@
       <router-link
         :to="`/${$l1.code}/${$l2.code}/youtube/view/${currentHit.video.youtube_id}/`"
         class="btn btn-small pr-0"
-        ><i class="fa fa-window-restore"
-      /></router-link>
+      >
+        <i class="fa fa-window-restore" />
+      </router-link>
       <b-button
         class="btn btn-small search-subs-fullscreen"
         @click="toggleFullscreen"
@@ -205,13 +211,13 @@
 </template>
 
 <script>
-import YouTubeWithTranscript from '@/components/YouTubeWithTranscript'
-import SyncedTranscript from '@/components/SyncedTranscript'
-import SimpleSearch from '@/components/SimpleSearch'
-import SmallStar from '@/components/SmallStar'
-import Config from '@/lib/config'
-import Helper from '@/lib/helper'
-import YouTube from '@/lib/youtube'
+import YouTubeWithTranscript from "@/components/YouTubeWithTranscript";
+import SyncedTranscript from "@/components/SyncedTranscript";
+import SimpleSearch from "@/components/SimpleSearch";
+import SmallStar from "@/components/SmallStar";
+import Config from "@/lib/config";
+import Helper from "@/lib/helper";
+import YouTube from "@/lib/youtube";
 
 export default {
   components: {
@@ -249,35 +255,35 @@ export default {
       groupIndexRight: [],
       Helper,
       fullscreen: false,
-      excludeStr: '',
+      excludeStr: "",
       excludeArr: [],
       speed: 0.75,
-      sort: 'right',
+      sort: "right",
       youglishLang: {
-        zh: 'chinese',
-        en: 'english',
-        ar: 'arabic',
-        nl: 'dutch',
-        fr: 'french',
-        de: 'german',
-        he: 'hebrew',
-        it: 'italian',
-        ja: 'japanese',
-        ko: 'korean',
-        pl: 'polish',
-        pt: 'portuguese',
-        ru: 'russian',
-        es: 'spanish',
-        tr: 'turkish',
+        zh: "chinese",
+        en: "english",
+        ar: "arabic",
+        nl: "dutch",
+        fr: "french",
+        de: "german",
+        he: "hebrew",
+        it: "italian",
+        ja: "japanese",
+        ko: "korean",
+        pl: "polish",
+        pt: "portuguese",
+        ru: "russian",
+        es: "spanish",
+        tr: "turkish",
       },
-    }
+    };
   },
   async mounted() {
-    this.checking
-    if (this.$l2.code === 'zh' && this.terms[0].length === 1) {
+    this.checking;
+    if (this.$l2.code === "zh" && this.terms[0].length === 1) {
       this.excludeTerms = await (await this.$dictionary).getWordsWithCharacter(
         this.terms[0]
-      )
+      );
     }
     let hits = await YouTube.searchSubs(
       this.terms,
@@ -286,303 +292,317 @@ export default {
       this.$l2.id,
       this.$settings.adminMode,
       this.$l2.continua
-    )
-    hits = this.updateSaved(hits)
-    this.collectContext(hits)
-    this.$emit('loaded', hits)
-    this.checking = false
+    );
+    hits = this.updateSaved(hits);
+    this.collectContext(hits);
+    this.$emit("loaded", hits);
+    this.checking = false;
   },
   activated() {
     setTimeout(() => {
-      if (this.$refs.youtube) this.$refs.youtube.pause()
-    }, 800)
+      if (this.$refs.youtube) this.$refs.youtube.pause();
+    }, 800);
   },
   destroyed() {
-    if (this.keyboard) this.unbindKeys()
+    if (this.keyboard) this.unbindKeys();
   },
   unmounted() {
-    if (this.keyboard) this.unbindKeys()
+    if (this.keyboard) this.unbindKeys();
   },
   deactivated() {
-    if (this.keyboard) this.unbindKeys()
+    if (this.keyboard) this.unbindKeys();
   },
   updated() {
-    if (this.keyboard) this.unbindKeys()
-    if (this.keyboard) this.bindKeys()
+    if (this.keyboard) this.unbindKeys();
+    if (this.keyboard) this.bindKeys();
   },
   watch: {
     excludeStr() {
-      this.excludeArr = this.excludeStr.split(',')
-      let hits = []
+      this.excludeArr = this.excludeStr.split(",");
+      let hits = [];
       for (let hit of this.hits) {
-        let regex = new RegExp(this.excludeArr.join('|'))
+        let regex = new RegExp(this.excludeArr.join("|"));
         if (
           !regex.test(hit.video.subs_l2[hit.lineIndex].line) &&
           !regex.test(hit.video.title)
         ) {
-          hits.push(hit)
+          hits.push(hit);
         }
       }
-      this.collectContext(hits)
-      this.$emit('updated', hits)
+      this.collectContext(hits);
+      this.$emit("updated", hits);
     },
   },
   computed: {
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
+    $dictionary() {
+      return this.$getDictionary();
+    },
+    $dictionaryName() {
+      return this.$store.state.settings.dictionaryName;
+    },
     hitIndex() {
-      let hits = this.hits
-      return hits.findIndex((hit) => hit === this.currentHit)
+      let hits = this.hits;
+      return hits.findIndex((hit) => hit === this.currentHit);
     },
     hits() {
-      let hits = []
+      let hits = [];
       for (let index of this[`groupIndex${Helper.ucFirst(this.sort)}`]) {
         for (let hit of this[`groups${Helper.ucFirst(this.sort)}`][index]) {
-          hits.push(hit)
+          hits.push(hit);
         }
       }
-      return hits
+      return hits;
     },
   },
   methods: {
     collectContext(hits) {
-      let contextLeft = []
-      let contextRight = []
+      let contextLeft = [];
+      let contextRight = [];
       for (let hit of hits) {
-        contextLeft.push(hit.leftContext)
-        contextRight.push(hit.rightContext)
+        contextLeft.push(hit.leftContext);
+        contextRight.push(hit.rightContext);
       }
       this.contextLeft = Helper.unique(contextLeft).sort((a, b) =>
-        a.localeCompare(b, 'zh-CN')
-      )
+        a.localeCompare(b, "zh-CN")
+      );
       this.contextRight = Helper.unique(contextRight).sort((a, b) =>
-        a.localeCompare(b, 'zh-CN')
-      )
-      this.groupsLeft = this.groupContext(this.contextLeft, hits, 'left')
-      this.groupsRight = this.groupContext(this.contextRight, hits, 'right')
-      this.groupIndexLeft = this.sortGroupIndex(this.groupsLeft)
-      this.groupIndexRight = this.sortGroupIndex(this.groupsRight)
-      this.currentHit = this.hits[0]
+        a.localeCompare(b, "zh-CN")
+      );
+      this.groupsLeft = this.groupContext(this.contextLeft, hits, "left");
+      this.groupsRight = this.groupContext(this.contextRight, hits, "right");
+      this.groupIndexLeft = this.sortGroupIndex(this.groupsLeft);
+      this.groupIndexRight = this.sortGroupIndex(this.groupsRight);
+      this.currentHit = this.hits[0];
     },
     groupContext(context, hits, leftOrRight) {
-      let hitGroups = {}
-      let savedHits = []
+      let hitGroups = {};
+      let savedHits = [];
       let unsavedHits = hits.filter((hit) => {
-        if (hit.saved) savedHits.push(hit)
-        return !hit.saved
-      })
+        if (hit.saved) savedHits.push(hit);
+        return !hit.saved;
+      });
       for (let c of context.map((s) => s.charAt(0))) {
-        if (!hitGroups[c.charAt(0)]) hitGroups[c.charAt(0)] = {}
+        if (!hitGroups[c.charAt(0)]) hitGroups[c.charAt(0)] = {};
         hitGroups[c.charAt(0)] = unsavedHits.filter((hit) =>
           c.length > 0
             ? hit[`${leftOrRight}Context`].startsWith(c)
-            : hit[`${leftOrRight}Context`] === ''
-        )
+            : hit[`${leftOrRight}Context`] === ""
+        );
       }
-      hitGroups = Object.assign({ zthSaved: savedHits }, hitGroups)
+      hitGroups = Object.assign({ zthSaved: savedHits }, hitGroups);
       for (let key in hitGroups) {
         hitGroups[key] = hitGroups[key].sort((a, b) =>
-          a.leftContext.localeCompare(b[`${leftOrRight}Context`], 'zh-CN')
-        )
+          a.leftContext.localeCompare(b[`${leftOrRight}Context`], "zh-CN")
+        );
       }
-      return hitGroups
+      return hitGroups;
     },
     sortGroupIndex(group) {
-      let index = []
+      let index = [];
       for (let c in group) {
-        index.push({ c, length: group[c].length })
+        index.push({ c, length: group[c].length });
       }
-      index = index.sort((a, b) => b.length - a.length).map((i) => i.c)
-      index.splice(index.indexOf('zthSaved'), 1)
-      return ['zthSaved'].concat(index)
+      index = index.sort((a, b) => b.length - a.length).map((i) => i.c);
+      index.splice(index.indexOf("zthSaved"), 1);
+      return ["zthSaved"].concat(index);
     },
     updateSaved(hits) {
       for (let hit of hits) {
-        hit.saved = this.$store.getters['savedHits/has']({
+        hit.saved = this.$store.getters["savedHits/has"]({
           l2: this.$l2.code,
           hit,
           terms: this.terms,
-        })
+        });
       }
-      return hits
+      return hits;
     },
     saveHit(hit) {
-      console.log('saving', hit)
-      this.$store.dispatch('savedHits/add', {
+      console.log("saving", hit);
+      this.$store.dispatch("savedHits/add", {
         terms: this.terms,
         hit: hit,
         l2: this.$l2.code,
-      })
-      hit.saved = true
-      if (this.currentHit === hit) this.nextHit()
-      this.groupsLeft['zthSaved'].push(hit)
-      this.groupsRight['zthSaved'].push(hit)
-      this.findAndRemoveHit(this.groupsLeft, hit)
-      this.findAndRemoveHit(this.groupsRight, hit)
+      });
+      hit.saved = true;
+      if (this.currentHit === hit) this.nextHit();
+      this.groupsLeft["zthSaved"].push(hit);
+      this.groupsRight["zthSaved"].push(hit);
+      this.findAndRemoveHit(this.groupsLeft, hit);
+      this.findAndRemoveHit(this.groupsRight, hit);
     },
     removeSavedHit(hit) {
-      console.log('removing', hit)
-      this.$store.dispatch('savedHits/remove', {
+      console.log("removing", hit);
+      this.$store.dispatch("savedHits/remove", {
         terms: this.terms,
         hit: hit,
         l2: this.$l2.code,
-      })
-      hit.saved = false
-      if (this.currentHit === hit) this.nextHit()
-      let index = this.groupsLeft['zthSaved'].findIndex((h) => h === hit)
-      if (index !== -1) this.groupsLeft['zthSaved'].splice(index, 1)
-      index = this.groupsRight['zthSaved'].findIndex((h) => h === hit)
-      if (index !== -1) this.groupsRight['zthSaved'].splice(index, 1)
-      this.putHitBack(this.groupsLeft, hit, 'left')
-      this.putHitBack(this.groupsRight, hit, 'right')
+      });
+      hit.saved = false;
+      if (this.currentHit === hit) this.nextHit();
+      let index = this.groupsLeft["zthSaved"].findIndex((h) => h === hit);
+      if (index !== -1) this.groupsLeft["zthSaved"].splice(index, 1);
+      index = this.groupsRight["zthSaved"].findIndex((h) => h === hit);
+      if (index !== -1) this.groupsRight["zthSaved"].splice(index, 1);
+      this.putHitBack(this.groupsLeft, hit, "left");
+      this.putHitBack(this.groupsRight, hit, "right");
     },
     findAndRemoveHit(groups, hit) {
       for (let c in groups) {
-        if (c !== 'zthSaved') {
-          let group = groups[c]
-          let index = group.findIndex((h) => h === hit)
-          if (index !== -1) group.splice(index, 1)
+        if (c !== "zthSaved") {
+          let group = groups[c];
+          let index = group.findIndex((h) => h === hit);
+          if (index !== -1) group.splice(index, 1);
         }
       }
     },
     putHitBack(groups, hit, leftOrRight) {
       for (let c in groups) {
         if (hit[`${leftOrRight}Context`].startsWith(c)) {
-          groups[c].push(hit)
-          break
+          groups[c].push(hit);
+          break;
         }
       }
     },
     toggleSpeed() {
-      this.speed = this.speed === 1 ? 0.75 : this.speed === 0.75 ? 0.5 : 1
+      this.speed = this.speed === 1 ? 0.75 : this.speed === 0.75 ? 0.5 : 1;
     },
     startLineIndex(hit) {
-      return hit.lineIndex
+      return hit.lineIndex;
     },
     previousLine() {
-      if (this.$refs.youtube) this.$refs.youtube.previousLine()
+      if (this.$refs.youtube) this.$refs.youtube.previousLine();
     },
     nextLine() {
-      if (this.$refs.youtube) this.$refs.youtube.nextLine()
+      if (this.$refs.youtube) this.$refs.youtube.nextLine();
     },
     rewind() {
-      if (this.$refs.youtube) this.$refs.youtube.rewind()
+      if (this.$refs.youtube) this.$refs.youtube.rewind();
     },
     async remove() {
-      let id = this.hits[this.hitIndex].video.id
+      let id = this.hits[this.hitIndex].video.id;
       let response = await $.ajax({
         url: `${Config.wiki}items/youtube_videos/${id}`,
-        type: 'DELETE',
-        contentType: 'application/json',
+        type: "DELETE",
+        contentType: "application/json",
         xhr: function () {
           return window.XMLHttpRequest == null ||
             new window.XMLHttpRequest().addEventListener == null
-            ? new window.ActiveXObject('Microsoft.XMLHTTP')
-            : $.ajaxSettings.xhr()
+            ? new window.ActiveXObject("Microsoft.XMLHTTP")
+            : $.ajaxSettings.xhr();
         },
-      })
+      });
       if (response) {
-        this.hits = this.hits.filter((hit) => hit.video.id !== id)
+        this.hits = this.hits.filter((hit) => hit.video.id !== id);
       }
     },
     prevHit() {
-      let index = Math.max(this.hitIndex - 1, 0)
-      this.currentHit = this.hits[index]
-      this.navigated = true
+      let index = Math.max(this.hitIndex - 1, 0);
+      this.currentHit = this.hits[index];
+      this.navigated = true;
     },
     nextHit() {
-      let index = Math.min(this.hitIndex + 1, this.hits.length - 1)
-      this.currentHit = this.hits[index]
-      this.navigated = true
+      let index = Math.min(this.hitIndex + 1, this.hits.length - 1);
+      this.currentHit = this.hits[index];
+      this.navigated = true;
     },
     goToHit(hit) {
-      this.currentHit = hit
-      this.navigated = true
+      this.currentHit = hit;
+      this.navigated = true;
       setTimeout(() => {
-        document.activeElement.blur()
-      }, 100)
+        document.activeElement.blur();
+      }, 100);
     },
     seekYouTube(starttime) {
-      this.$refs.youtube.seek(starttime)
+      this.$refs.youtube.seek(starttime);
     },
     pauseYouTube() {
-      this.$refs.youtube.pause()
+      this.$refs.youtube.pause();
     },
     playYouTube() {
-      this.$refs.youtube.play()
+      this.$refs.youtube.play();
     },
     togglePaused() {
-      if (this.$refs.youtube) this.$refs.youtube.togglePaused()
+      if (this.$refs.youtube) this.$refs.youtube.togglePaused();
     },
     toggleFullscreen() {
-      if (this.hits.length > 0) this.fullscreen = !this.fullscreen
+      if (this.hits.length > 0) this.fullscreen = !this.fullscreen;
     },
     bindKeys() {
-      document.addEventListener('keydown', this.keydown)
+      document.addEventListener("keydown", this.keydown);
     },
     unbindKeys() {
-      document.removeEventListener('keydown', this.keydown)
+      document.removeEventListener("keydown", this.keydown);
     },
     keydown(e) {
       if (
-        !['INPUT', 'TEXTAREA'].includes(e.target.tagName.toUpperCase()) &&
+        !["INPUT", "TEXTAREA"].includes(e.target.tagName.toUpperCase()) &&
         !e.metaKey
       ) {
         // left = 37
         if (e.keyCode == 37 && e.shiftKey) {
-          this.prevHit()
-          e.preventDefault()
-          return false
+          this.prevHit();
+          e.preventDefault();
+          return false;
         }
-        if (e.code == 'KeyM') {
-          this.toggleSpeed()
-          e.preventDefault()
-          return false
+        if (e.code == "KeyM") {
+          this.toggleSpeed();
+          e.preventDefault();
+          return false;
         }
         // right = 39
         if (e.keyCode == 39 && e.shiftKey) {
-          this.nextHit()
-          e.preventDefault()
-          return false
+          this.nextHit();
+          e.preventDefault();
+          return false;
         }
         // up = 38, left = 37
         if (e.keyCode == 38 || (e.keyCode == 37 && !e.shiftKey)) {
-          this.previousLine()
-          e.preventDefault()
-          return false
+          this.previousLine();
+          e.preventDefault();
+          return false;
         }
         // down = 40, right = 39
         if (e.keyCode == 40 || (e.keyCode == 39 && !e.shiftKey)) {
-          this.nextLine()
-          e.preventDefault()
-          return false
+          this.nextLine();
+          e.preventDefault();
+          return false;
         }
         // r = 82
         if (e.keyCode == 82) {
-          this.rewind()
-          e.preventDefault()
-          return false
+          this.rewind();
+          e.preventDefault();
+          return false;
         }
         // spacebar = 32
         if (e.keyCode == 32) {
-          this.togglePaused()
-          e.preventDefault()
-          return false
+          this.togglePaused();
+          e.preventDefault();
+          return false;
         }
         // f = 70
         if (e.keyCode == 70) {
-          if (this.fullscreenToggle) this.toggleFullscreen()
-          e.preventDefault()
-          return false
+          if (this.fullscreenToggle) this.toggleFullscreen();
+          e.preventDefault();
+          return false;
         }
         // escape = 27
         if (e.keyCode == 27) {
-          if (this.fullscreenToggle) this.fullscreen = false
-          e.preventDefault()
-          return false
+          if (this.fullscreenToggle) this.fullscreen = false;
+          e.preventDefault();
+          return false;
         }
       }
     },
   },
-}
+};
 </script>
 <style lang="scss">
 .hit-thumb {

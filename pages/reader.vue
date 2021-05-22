@@ -110,15 +110,9 @@ export default {
       let method = this.$route.params.method
       let arg = this.$route.params.arg
       if (method) {
-        if (method === 'md-url') {
+        if (method === 'md-url' || method === 'html-url') {
           Helper.proxy(arg).then(response => {
-            console.log(response)
             this.text = response || ''
-          })
-        }
-        if (method === 'html-url') {
-          Helper.scrape(arg, (html, response, text) => {
-            this.text = text
           })
         }
         if (method === 'md') {
