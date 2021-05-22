@@ -52,12 +52,13 @@
       <i class="fas fa-times" />
     </span>
     <slot v-if="!annotated"></slot>
-    <v-runtime-template
-      v-if="annotated"
-      v-for="(template, index) of annotatedSlots"
-      :key="`annotate-template-${Helper.uniqueId()}-${index}`"
-      :template="template"
-    />
+    <div v-if="annotated">
+      <v-runtime-template
+        v-for="(template, index) of annotatedSlots"
+        :key="`annotate-template-${index}`"
+        :template="template"
+      />
+    </div>
     <div>{{ translation }}</div>
   </component>
 </template>
@@ -117,6 +118,7 @@ export default {
       text: '',
       Helper,
       tokenized: [],
+      dictionary: undefined
     }
   },
   mounted() {
@@ -134,9 +136,6 @@ export default {
     $l2() {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
-    },
-    $dictionary() {
-      return this.$getDictionary();
     },
     $dictionaryName() {
       return this.$store.state.settings.dictionaryName;
@@ -231,7 +230,7 @@ export default {
       let html = text
       if (this.$l2.continua) {
         html = ''
-        let tokenized = await (await this.$dictionary).tokenize(text)
+        let tokenized = await (await this.$getDictionary()).tokenize(text)
         this.tokenized[batchId] = tokenized
         for (let index in this.tokenized[batchId]) {
           let item = this.tokenized[batchId][index]
@@ -274,7 +273,7 @@ export default {
               candidates: [],
             }
             for (let lemma of lemmas) {
-              let candidates = await (await this.$dictionary).lookupMultiple(
+              let candidates = await (await this.$getDictionary()).lookupMultiple(
                 lemma[0]
               )
               if (candidates.length > 0) {
