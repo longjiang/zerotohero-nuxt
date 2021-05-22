@@ -89,11 +89,11 @@ export default {
     if (params.method && params.args) {
       if (params.method === store.state.settings.dictionaryName) {
         if (params.args !== "random") {
-          let entry = await (await app.$getDictionary()).get(params.args);
+          let entry = await (await app.$getDictionary(app)).get(params.args);
           return {entry, id: entry.id};
         }
       } else if (params.method === "hsk") {
-        let entry = await (await app.$getDictionary()).getByHSKId(params.args);
+        let entry = await (await app.$getDictionary(app)).getByHSKId(params.args);
         return {entry, id: entry.id};
       }
     }
@@ -109,6 +109,41 @@ export default {
         },
       ],
     };
+  },
+  computed: {
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
+    title() {
+      if (this.entry) {
+        return `${this.entry.bare} ${
+          this.entry.pronunciation ? "(" + this.entry.pronunciation + ")" : ""
+        } | ${this.$l2 ? this.$l2.name : ""} Zero to Hero Dictionary`;
+      }
+      return `Dictionary | ${this.$l2 ? this.$l2.name : ""} Zero to Hero`;
+    },
+    description() {
+      if (this.entry) {
+        return `"${this.entry.bare}" means ${this.entry.definitions.join(
+          "; "
+        )}`;
+      }
+      return `Look up  ${this.$l2 ? this.$l2.name : ""} words.`;
+    },
+    image() {
+      if (this.entry) {
+        if (this.$refs.dictionaryEntry && this.$refs.dictionaryEntry.webImage) {
+          return this.$refs.dictionaryEntry.webImage;
+        }
+        return this.$languages.logo(this.$l2.code);
+      }
+      return "/img/icon-z2h.jpeg";
+    },
   },
   methods: {
     async updateWords() {
@@ -211,41 +246,6 @@ export default {
           return false;
         }
       }
-    },
-  },
-  computed: {
-    $l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-    },
-    $l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
-    },
-    title() {
-      if (this.entry) {
-        return `${this.entry.bare} ${
-          this.entry.pronunciation ? "(" + this.entry.pronunciation + ")" : ""
-        } | ${this.$l2 ? this.$l2.name : ""} Zero to Hero Dictionary`;
-      }
-      return `Dictionary | ${this.$l2 ? this.$l2.name : ""} Zero to Hero`;
-    },
-    description() {
-      if (this.entry) {
-        return `"${this.entry.bare}" means ${this.entry.definitions.join(
-          "; "
-        )}`;
-      }
-      return `Look up  ${this.$l2 ? this.$l2.name : ""} words.`;
-    },
-    image() {
-      if (this.entry) {
-        if (this.$refs.dictionaryEntry && this.$refs.dictionaryEntry.webImage) {
-          return this.$refs.dictionaryEntry.webImage;
-        }
-        return this.$languages.logo(this.$l2.code);
-      }
-      return "/img/icon-z2h.jpeg";
     },
   },
   watch: {

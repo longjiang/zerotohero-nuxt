@@ -5,7 +5,7 @@ import VueAnalytics from 'vue-analytics'
 import VueDisqus from 'vue-disqus'
 import VueSimpleSVG from 'vue-simple-svg'
 import Languages from '@/lib/languages'
-import Dict from '@/lib/dict'
+import ModuleLoader from '~/lib/module-loader'
 
 Vue.config.productionTip = false
 
@@ -35,8 +35,6 @@ Vue.filter('truncate', function (text, length, clamp) {
   return content.length > length ? content.slice(0, length) + clamp : content
 })
 
-
-
 export default ({ app, store }, inject) => {
   if (!app.$languages) {
     inject('languages', Languages.load())
@@ -63,8 +61,8 @@ export default ({ app, store }, inject) => {
       .includes(feature);
   });
   inject('getDictionary',  async () => {
-    let module = await import(`@/static/js/${store.state.settings.dictionaryName}`)
-    return module.default.load()
+    let dictionary = ModuleLoader.load(store.state.settings.dictionaryName)
+    return dictionary
   })
   inject('getGrammar',  async () => {
     let module = await import(`@/lib/grammar`)

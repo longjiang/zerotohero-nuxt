@@ -19,8 +19,9 @@ export default {
     }
   },
   async mounted() {
-    console.log(await (await this.$getDictionary()).lookup('你'), 'dictionary.lookup')
-    console.log(await (await this.$getGrammar()).get(123), 'grammar.get')
+    let dictionary = await this.$getDictionary()
+    console.log(await (await dictionary).lookup('你'), 'dictionary.lookup')
+    console.log(await (await dictionary).lookup('好'), 'dictionary.lookup')
   }
 };
 </script>

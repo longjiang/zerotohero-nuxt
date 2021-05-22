@@ -1,5 +1,3 @@
-import Dict from '@/lib/dict'
-
 export default async function ({ app, route, params, i18n }, inject) {
   if (typeof app.$l1 === 'undefined' || typeof app.$l2 === 'undefined' || app.$l1.code !== params.l1 || app.$l2.code !== params.l2) {
 
@@ -40,17 +38,5 @@ export default async function ({ app, route, params, i18n }, inject) {
       inject('dictionary', dictionary)
     }
   }
-
-  // if (!app.$hanzi && ["zh", "ko", "ja"].includes(params.l2)) {
-  //   inject('hanzi', (await import(`@/lib/hanzi.js`)).default.load());
-  //   inject('unihan', (
-  //     await import(`@/lib/unihan.js`)
-  //   ).default.load())
-  // }
-  // if (!app.$grammar && ["zh"].includes(params.l2)) {
-  //   inject('grammar', (
-  //     await import(`@/lib/grammar.js`)
-  //   ).default.load())
-  // }
   
 }
