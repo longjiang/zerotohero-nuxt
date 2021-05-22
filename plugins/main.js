@@ -63,11 +63,19 @@ export default ({ app, store }, inject) => {
       .includes(feature);
   });
   inject('getDictionary',  async () => {
-    return await Dict.load({
-      dict: store.state.settings.dictionaryName,
-      l1: store.state.settings.l1["iso639-3"],
-      l2: store.state.settings.l2["iso639-3"],
-      worker: process.browser
-    })
+    let module = await import(`@/static/js/${store.state.settings.dictionaryName}`)
+    return module.default.load()
+  })
+  inject('getGrammar',  async () => {
+    let module = await import(`@/lib/grammar`)
+    return module.default.load()
+  })
+  inject('getHanzi',  async () => {
+    let module = await import(`@/lib/hanzi`)
+    return module.default.load()
+  })
+  inject('getUnihan',  async () => {
+    let module = await import(`@/lib/unihan`)
+    return module.default.load()
   })
 }
