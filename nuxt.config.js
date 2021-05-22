@@ -25,9 +25,12 @@ export default {
     'css-percentage-circle'
   ],
 
-  // router: {
-  //   middleware: ['language-switch']
-  // },
+  router: {
+    middleware: [
+      // 'language-switch',
+      'test-middleware'
+    ]
+  },
 
   vue: {
     config: {

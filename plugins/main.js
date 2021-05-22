@@ -34,7 +34,7 @@ Vue.filter('truncate', function (text, length, clamp) {
   return content.length > length ? content.slice(0, length) + clamp : content
 })
 
-export default ({ app }, inject) => {
+export default ({ app, store }, inject) => {
   if (!app.$languages) {
     inject('languages', Languages.load())
   }
@@ -50,4 +50,13 @@ export default ({ app }, inject) => {
   if (typeof localStorage !== 'undefined') {
     inject('settings', Object.assign(app.$settings, JSON.parse(localStorage.getItem('zthSettings'))))
   }
+
+  inject('hasFeature', (feature) => {
+    return app.$languages
+      .getFeatures({
+        l1: store.state.settings.l1,
+        l2: store.state.settings.l2,
+      }, process.browser)
+      .includes(feature);
+  });
 }

@@ -1,7 +1,6 @@
 import Dict from '@/lib/dict'
 
 export default async function ({ app, route, params, i18n }, inject) {
-  if (typeof app.$ga !== 'undefined') app.$ga.page(route.path);
   if (typeof app.$l1 === 'undefined' || typeof app.$l2 === 'undefined' || app.$l1.code !== params.l1 || app.$l2.code !== params.l2) {
 
     let l1 = app.$languages.getSmart(params.l1)
