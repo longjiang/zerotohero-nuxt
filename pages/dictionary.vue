@@ -51,6 +51,7 @@
     <article>
       <SocialHead :title="title" :description="description" :image="image" />
       <DictionaryEntry
+        v-if="entry"
         :entry="entry"
         ref="dictionaryEntry"
         :key="`dictionary-entry-${id}`"
@@ -85,16 +86,22 @@ export default {
       paginatorKey: 0,
     };
   },
-  async asyncData({params, store, app}) {
-    if (params.method && params.args) {
-      if (params.method === store.state.settings.dictionaryName) {
-        if (params.args !== "random") {
-          let entry = await (await app.$getDictionary(app)).get(params.args);
-          return {entry, id: entry.id};
+  async fetch() {
+    let method = this.$route.params.method
+    let args = this.$route.params.args
+    if (method && args) {
+      if (method === this.$store.state.settings.dictionaryName) {
+        if (args !== "random") {
+        let dictionary = await this.$getDictionary();
+        this.entry = await (await dictionary).get(args);
+          // let dictionary = await this.$getDictionary();
+          // this.entry = await (await dictionary).get(params.args);
+          // console.log(this.entry)
         }
-      } else if (params.method === "hsk") {
-        let entry = await (await app.$getDictionary(app)).getByHSKId(params.args);
-        return {entry, id: entry.id};
+      } else if (method === "hsk") {
+        this.entry = await (await this.$getDictionary()).getByHSKId(
+          args
+        );
       }
     }
   },
@@ -169,9 +176,9 @@ export default {
       );
     },
     async random() {
-      console.log('random')
-      let randomId = (await (await this.$getDictionary()).random()).id;
-      console.log(randomId)
+      let randomEntry = await (await this.$getDictionary()).random()
+      console.log(randomEntry, 'randomEntry')
+      let randomId = randomEntry.id;
       this.$router.push({
         path: `/${this.$l1.code}/${this.$l2.code}/dictionary/${this.$store.state.settings.dictionaryName}/${randomId}`,
       });
@@ -249,9 +256,12 @@ export default {
     },
   },
   watch: {
-    $route() {
-      if (this.$route.name === "dictionary") {
-        this.route();
+    "$route.params"() {
+      if (
+        this.$route.name === "dictionary" &&
+        this.$route.params.args === "random"
+      ) {
+        this.random();
       }
     },
   },
@@ -262,6 +272,12 @@ export default {
     this.unbindKeys();
   },
   mounted() {
+    if (
+      this.$route.name === "dictionary" &&
+      this.$route.params.args === "random"
+    ) {
+      this.random();
+    }
     if (this.$route.name === "dictionary") {
       this.updateWords();
       this.unsubscribe = this.$store.subscribe((mutation, state) => {
