@@ -58,7 +58,7 @@
               </div>
             </div>
           </div>
-          <!-- <Nav /> -->
+          <Nav v-if="l1 && l2" :l1="l1" :l2="l2" />
         </div>
 
         <Nuxt />

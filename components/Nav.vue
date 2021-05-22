@@ -14,7 +14,7 @@
   >
     <div class="row">
       <nav class="site-nav tabs">
-        <router-link
+        <NuxtLink
           v-for="(item, index) in menu.filter((item) => item.show)"
           :class="{
             tab: true,
@@ -26,13 +26,13 @@
         >
           <i :class="item.icon"></i>
           {{ $t(item.title) }}
-        </router-link>
+        </NuxtLink>
       </nav>
     </div>
 
     <div class="row">
       <nav class="secondary-menu text-center bg-white pt-3" v-if="parent && parent.children">
-        <router-link
+        <NuxtLink
           class="secondary-menu-item"
           v-for="child in parent.children.filter((child) => child.show)"
           :key="`subnav-${child.name}`"
@@ -46,7 +46,7 @@
             v-if="child.name === 'saved-words'"
             >{{ savedWordsCount() }}</span
           >
-        </router-link>
+        </NuxtLink>
       </nav>
     </div>
   </div>
@@ -56,7 +56,6 @@
 export default {
   data() {
     return {
-      l2: this.$l2,
       shortcuts: [],
       menu: [
         {
@@ -68,31 +67,31 @@ export default {
               name: 'courses',
               title: 'Language Courses',
               icon: 'fas fa-chalkboard-teacher',
-              show: this.$l2.code === 'zh',
+              show: this.l2.code === 'zh',
             },
             {
               name: 'textbooks-workbooks',
               title: 'Textbooks',
               icon: 'fas fa-book',
-              show: this.$l2.code === 'zh',
+              show: this.l2.code === 'zh',
             },
             {
               name: 'video-count',
               title: 'Video Count',
               icon: 'fas fa-list-ol',
-              show: this.$l2.code === 'zh',
+              show: this.l2.code === 'zh',
             },
             {
               name: 'pricing',
               title: 'Pricing',
               icon: 'fas fa-tag',
-              show: this.$l2.code === 'zh',
+              show: this.l2.code === 'zh',
             },
             {
               name: 'course-release-schedule',
               title: 'Schedule',
               icon: 'fas fa-clock',
-              show: this.$l2.code === 'zh',
+              show: this.l2.code === 'zh',
             },
           ],
         },
@@ -100,7 +99,7 @@ export default {
           name: 'hall-of-heroes',
           icon: 'fa fa-trophy',
           title: 'Heroes',
-          show: this.$l1.code === 'en' && this.$l2.code === 'zh',
+          show: this.l1.code === 'en' && this.l2.code === 'zh',
         },
         {
           icon: 'fas fa-video',
@@ -117,13 +116,13 @@ export default {
               name: 'tv-shows',
               icon: 'fa fa-tv',
               title: 'TV Shows',
-              show: ['zh', 'ja'].includes(this.$l2.code),
+              show: ['zh', 'ja'].includes(this.l2.code),
             },
             {
               name: 'lesson-videos',
               title: 'Lesson Expansion',
               icon: 'fa fa-chalkboard-teacher',
-              show: this.$l2.code === 'zh',
+              show: this.l2.code === 'zh',
             },
             {
               name: 'youtube-view',
@@ -192,13 +191,13 @@ export default {
               name: 'idioms',
               icon: 'fa fa-border-all',
               title: 'Idioms',
-              show: this.$l2.code === 'zh',
+              show: this.l2.code === 'zh',
             },
             {
               name: 'separable',
               icon: 'fa fa-angle-double-right',
               title: 'Separables',
-              show: this.$l2.code === 'zh',
+              show: this.l2.code === 'zh',
             },
             {
               name: 'explore-roots',
@@ -343,7 +342,7 @@ export default {
           name: 'contact',
           icon: 'fas fa-id-card',
           title: 'Contact',
-          show: ['en', 'zh'].includes(this.$l2.code),
+          show: ['en', 'zh'].includes(this.l2.code),
         },
         {
           name: 'settings',
@@ -354,6 +353,14 @@ export default {
         },
       ],
       history: [],
+    }
+  },
+  props: {
+    l1: {
+      type: Object
+    },
+    l2: {
+      type: Object
     }
   },
   methods: {
@@ -383,7 +390,7 @@ export default {
       }
     },
     savedWordsCount() {
-      let count = this.$store.getters['savedWords/count']({ l2: this.$l2.code })
+      let count = this.$store.getters['savedWords/count']({ l2: this.l2.code })
       // eslint-disable-next-line vue/no-parsing-error
       return count < 100 ? count : '99+'
     },

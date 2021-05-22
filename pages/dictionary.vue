@@ -93,7 +93,7 @@ export default {
       if (method === this.$store.state.settings.dictionaryName) {
         if (args !== "random") {
         let dictionary = await this.$getDictionary();
-        this.entry = await (await dictionary).get(args);
+        this.entry = await dictionary.get(args);
           // let dictionary = await this.$getDictionary();
           // this.entry = await (await dictionary).get(params.args);
           // console.log(this.entry)
@@ -158,7 +158,7 @@ export default {
       this.savedTexts = [];
       if (this.$root.savedWords && this.$root.savedWords[this.$l2.code]) {
         for (let savedWord of this.$root.savedWords[this.$l2.code]) {
-          let word = await (await this.$getDictionar()).get(savedWord.id);
+          let word = await (await this.$getDictionary()).get(savedWord.id);
           if (word) {
             this.sW.push(word);
           }
