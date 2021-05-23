@@ -1,14 +1,20 @@
-import Vue from 'vue'
-
-export const state = () => ({
-  l1: undefined,
-  l2: undefined,
-  dictionary: undefined,
-  dictionaryName: undefined,
-  hanzi: undefined,
-  unihan: undefined,
-  grammar: undefined
-})
+export const state = () => {
+  return {
+    l1: undefined,
+    l2: undefined,
+    dictionary: undefined,
+    dictionaryName: undefined,
+    adminMODE: false,
+    settingsLoaded: false,
+    l2Settings: {
+      showDefinition: false,
+      showPinyin: true,
+      useTraditional: false,
+      showTranslation: false,
+      showQuiz: true
+    }
+  }
+}
 
 export const mutations = {
   SET_L1(state, l1) {
@@ -23,13 +29,29 @@ export const mutations = {
   SET_DICTIONARY_NAME(state, dictionaryName) {
     state.dictionaryName = dictionaryName
   },
-  SET_HANZI(state, hanzi) {
-    state.hanzi = hanzi
+  LOAD_SETTINGS(state, l2) {
+    if (typeof localStorage !== 'undefined') {
+      let settings = JSON.parse(localStorage.getItem('zthSettings') || '{}')
+      state.adminMode = settings.adminMode
+      state.l2Settings = settings[l2] || state.l2Settings
+    }
+    state.settingsLoaded = true
   },
-  SET_GRAMMAR(state, grammar) {
-    state.grammar = grammar
+  SET_ADMIN_MODE(state, adminMode) {
+    state.adminMODE = adminMode
+    if (typeof localStorage !== 'undefined') {
+      let settings = JSON.parse(localStorage.getItem('zthSettings'))
+      settings.adminMode = adminMode
+      localStorage.setItem('zthSettings', JSON.stringify(settings))
+    }
   },
-  SET_UNIHAN(state, unihan) {
-    state.unihan = unihan
-  },
+  SET_L2_SETTINGS(state, l2Settings) {
+    state.l2Settings = Object.assign(state.l2Settings, l2Settings)
+    if (typeof localStorage !== 'undefined') {
+      let settings = JSON.parse(localStorage.getItem('zthSettings') || '{}')
+      settings[state.l2.code] = state.l2Settings
+      console.log('setting settings', settings)
+      localStorage.setItem('zthSettings', JSON.stringify(settings))
+    }
+  }
 }

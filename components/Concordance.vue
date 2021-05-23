@@ -122,8 +122,6 @@ export default {
       this.updating = true
       this.examples = undefined
       let dictionary = await this.$getDictionary()
-      console.log(dictionary, 'dictionary')
-      console.log(dictionary.wordForms, 'dictionary.wordForms')
       let forms = this.word
         ? (await dictionary.wordForms(this.word)).map((form) =>
             form.form.replace(/'/g, '')

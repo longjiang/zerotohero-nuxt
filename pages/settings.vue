@@ -88,18 +88,19 @@ export default {
       adminMode: this.$settings.adminMode
     }
   },
-  methods: {
-    saveSettings() {
-      this.$settings = Object.assign(this.$settings, {
-        adminMode: this.adminMode
-      })
-      localStorage.setItem('zthSettings', JSON.stringify(this.$settings))
-      this.$parent.$parent.updateSettings++
-    }
+  computed: {
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
   },
   watch: {
     adminMode() {
-      this.saveSettings()
+      this.$store.commit('settings/SET_ADMIN_MODE', this.adminMode)
     }
   }
 }

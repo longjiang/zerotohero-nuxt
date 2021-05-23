@@ -233,6 +233,7 @@
 
 <script lang="javascript">
 import Config from "@/lib/config";
+import { mapState } from "vuex";
 
 export default {
   data() {
@@ -241,30 +242,48 @@ export default {
       updateSettings: 0,
       focus: false,
       loaded: false,
+      classes: {}
     };
   },
   methods: {},
+  mounted() {
+    this.updateClasses()
+  },
+  updated() {
+    if (!this.$store.state.settings.settingsLoaded) {
+      this.$store.commit("settings/LOAD_SETTINGS");
+      this.updateClasses()
+    }
+  },
+  methods: {
+    updateClasses() {
+      this.classes = {
+        "show-pinyin": this.l2Settings.showPinyin,
+        "show-pinyin-for-saved":
+          !this.l2Settings.showPinyin && this.l2 && this.l2.han,
+        "show-simplified": !this.l2Settings.useTraditional,
+        "show-traditional": this.l2Settings.useTraditional,
+        "show-definition": this.l2Settings.showDefinition,
+        "show-translation": this.l2Settings.showTranslation,
+      };
+      this.classes[`l1-${this.l1.code}`] = true;
+      this.classes[`l2-${this.l2.code}`] = true;
+    }
+  },
+  watch: {
+    l2Settings() {
+      console.log('l2settings changed')
+    },
+  },
   computed: {
+    ...mapState("settings", ["l2Settings"]),
     l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined") return this.$store.state.settings.l1;
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
     },
     l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined") return this.$store.state.settings.l2;
-    },
-    classes() {
-      let classes = this.l2 ? {
-        "hide-except-focus": this.focus,
-        "show-pinyin": this.$settings.showPinyin,
-        "show-pinyin-for-saved": !this.$settings.showPinyin && this.l2.han,
-        "show-simplified": !this.$settings.useTraditional,
-        "show-traditional": this.$settings.useTraditional,
-        "show-definition": this.$settings.showDefinition,
-        "show-translation": this.$settings.showTranslation,
-      } : {};
-
-      // if (typeof this.l1 !== undefined) classes[`l1-${this.l1.code}`] = true;
-      // if (typeof this.l2 !== undefined) classes[`l2-${this.l2.code}`] = true;
-      return classes;
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
     },
   },
 };

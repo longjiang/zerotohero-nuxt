@@ -52,13 +52,13 @@
       <i class="fas fa-times" />
     </span>
     <slot v-if="!annotated"></slot>
-    <div v-if="annotated">
+    <span v-if="annotated">
       <v-runtime-template
         v-for="(template, index) of annotatedSlots"
         :key="`annotate-template-${index}`"
         :template="template"
       />
-    </div>
+    </span>
     <div>{{ translation }}</div>
   </component>
 </template>

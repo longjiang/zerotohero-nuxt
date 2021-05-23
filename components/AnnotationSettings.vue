@@ -106,6 +106,16 @@ export default {
       showQuiz: this.$settings.showQuiz,
     }
   },
+  computed: {
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
+  },
   methods: {
     saveSettings() {
       this.$settings = Object.assign(this.$settings, {
@@ -121,19 +131,19 @@ export default {
   },
   watch: {
     showDefinition() {
-      this.saveSettings()
+      this.$store.commit('settings/SET_L2_SETTINGS', {showDefinition: this.showDefinition})
     },
     showPinyin() {
-      this.saveSettings()
+      this.$store.commit('settings/SET_L2_SETTINGS', {showPinyin: this.showPinyin})
     },
     useTraditional() {
-      this.saveSettings()
+      this.$store.commit('settings/SET_L2_SETTINGS', {useTraditional: this.useTraditional})
     },
     showTranslation() {
-      this.saveSettings()
+      this.$store.commit('settings/SET_L2_SETTINGS', {showTranslation: this.showTranslation})
     },
     showQuiz() {
-      this.saveSettings()
+      this.$store.commit('settings/SET_L2_SETTINGS', {showQuiz: this.showQuiz})
     }
   }
 }
