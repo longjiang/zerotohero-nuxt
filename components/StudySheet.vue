@@ -127,7 +127,7 @@ export default {
       if (this.$l2.continua) {
         annotatedHtml = ''
         dictionaryTemplate = ''
-        let tokenized = await (await this.$dictionary).tokenize(text)
+        let tokenized = await (await this.$getDictionary()).tokenize(text)
         this.tokenized[batchId] = tokenized
         for (let index = 0; index < this.tokenized[batchId].length; index++) {
           let item = this.tokenized[batchId][index]
@@ -158,7 +158,7 @@ export default {
             lemmas = [[word, 'inflected']].concat(lemmas)
             let found = false
             for (let lemma of lemmas) {
-              let candidates = await (await this.$dictionary).lookupMultiple(lemma[0])
+              let candidates = await (await this.$getDictionary()).lookupMultiple(lemma[0])
               if (candidates.length > 0) {
                 let token = {
                   text: seg,
@@ -188,7 +188,7 @@ export default {
             annotatedHtml += `<span>${item}</span>`
           }
         }
-        let phrases = await (await this.$dictionary).findPhrases(text)
+        let phrases = await (await this.$getDictionary()).findPhrases(text)
         this.phrases[batchId] = phrases
         for (let index = 0; index < this.phrases[batchId].length; index++) {
           let phrase = this.phrases[batchId][index]

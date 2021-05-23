@@ -281,7 +281,7 @@ export default {
   async mounted() {
     this.checking;
     if (this.$l2.code === "zh" && this.terms[0].length === 1) {
-      this.excludeTerms = await (await this.$dictionary).getWordsWithCharacter(
+      this.excludeTerms = await (await this.$getDictionary()).getWordsWithCharacter(
         this.terms[0]
       );
     }

@@ -96,7 +96,7 @@ export default {
       )
       for (let character of part.characters.slice(0, 1)) {
         character.examples = []
-        character.examples = await (await this.$dictionary).lookupByCharacter(
+        character.examples = await (await this.$getDictionary()).lookupByCharacter(
           character.character
         )
         part.getting = false

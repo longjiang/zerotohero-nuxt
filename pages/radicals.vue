@@ -70,7 +70,7 @@ export default {
       let characters = await (await this.$hanzi).searchByRadical(radical)
       let hskCharacters = []
       for (let character of characters) {
-        let c = await (await this.$dictionary).lookupHSKChar(character.character)
+        let c = await (await this.$getDictionary()).lookupHSKChar(character.character)
         let d = c ? Object.assign(c, character) : character
         if (!d.hsk) d.hsk = '7'
         hskCharacters.push(d)

@@ -131,7 +131,7 @@ export default {
     },
     async minRankPercentage() {
       if (this.$l2.code === 'en') {
-        let maxRank = await (await this.$dictionary).maxRank()
+        let maxRank = await (await this.$getDictionary()).maxRank()
         let minRankPercentage = this.minRankPercentage
         $('.word-block-dictionary, .word-block').each(function() {
           // console.log($(this).attr('data-rank'))

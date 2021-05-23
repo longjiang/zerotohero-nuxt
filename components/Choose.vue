@@ -58,8 +58,8 @@ export default {
     }
   },
   async mounted() {
-    if (this.$dictionary) {
-      this.dictionaryCredit = await (await this.$dictionary).credit()
+    if (this.$getDictionary()) {
+      this.dictionaryCredit = await (await this.$getDictionary()).credit()
     }
     let english = this.$languages.l1s.find(language => language.code === 'en')
     this.languages = this.$languages.l1s

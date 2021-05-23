@@ -136,7 +136,7 @@ export default {
         this.rootWords = [];
         this.arg = this.$route.params.arg;
         this.rootsKey++;
-        let words = await (await this.$dictionary).lookupByPattern(this.arg);
+        let words = await (await this.$getDictionary()).lookupByPattern(this.arg);
         this.rootWords = words
           .sort((a, b) => a.simplified.length - b.simplified.length)
           .sort((a, b) => a.hsk - b.hsk);
@@ -149,7 +149,7 @@ export default {
       } else {
         this.arg = "";
         for (let root of this.roots) {
-          let words = await (await this.$dictionary).lookupSimplified(
+          let words = await (await this.$getDictionary()).lookupSimplified(
             root.pattern.replace(/～/g, "")
           );
           root.word = words[0];

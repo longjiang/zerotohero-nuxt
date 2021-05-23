@@ -24,8 +24,10 @@
           v-if="$settings.adminMode"
           class="btn btn-small bg-danger text-white mt-2 ml-2"
           @click="removeAll()"
-          ><i class="fas fa-trash mr-2"></i>Remove All</b-button
         >
+          <i class="fas fa-trash mr-2"></i>
+          Remove All
+        </b-button>
         <template v-if="videos && videos.length > 0">
           <YouTubeVideoList
             :videos="videos"
@@ -67,7 +69,7 @@
                 }/youtube/browse/${topic}/${level}/0/${encodeURIComponent(
                   url
                 )}`,
-              })
+              });
             }
           "
         />
@@ -142,7 +144,7 @@
                 path: `/${$l1.code}/${
                   $l2.code
                 }/youtube/search/${encodeURIComponent(url)}`,
-              })
+              });
             }
           "
           ref="search"
@@ -153,13 +155,14 @@
 </template>
 
 <script>
-import YouTubeNav from '@/components/YouTubeNav'
-import YouTubeVideoList from '@/components/YouTubeVideoList'
-import YouTubeChannelCard from '@/components/YouTubeChannelCard'
-import SimpleSearch from '@/components/SimpleSearch'
-import Config from '@/lib/config'
-import Helper from '@/lib/helper'
-import YouTube from '@/lib/youtube'
+import YouTubeNav from "@/components/YouTubeNav";
+import YouTubeVideoList from "@/components/YouTubeVideoList";
+import YouTubeChannelCard from "@/components/YouTubeChannelCard";
+import SimpleSearch from "@/components/SimpleSearch";
+import Config from "@/lib/config";
+import Helper from "@/lib/helper";
+import YouTube from "@/lib/youtube";
+import axios from "axios";
 
 export default {
   components: {
@@ -170,13 +173,13 @@ export default {
   },
   props: {
     topic: {
-      default: 'all',
+      default: "all",
     },
     level: {
-      default: 'all',
+      default: "all",
     },
     keyword: {
-      default: '',
+      default: "",
     },
     start: {
       default: 0,
@@ -184,47 +187,51 @@ export default {
   },
   data() {
     return {
-      location,
       channels: [],
       videos: [],
       levels: Helper.levels(this.$l2),
       topics: Helper.topics,
-    }
+    };
+  },
+  async fetch() {
+    this.videos = await this.getVideos();
+    this.channels = await this.getChannels();
   },
   methods: {
     removeAll() {
-      this.$refs.youtubeVideoList.removeAll()
+      this.$refs.youtubeVideoList.removeAll();
     },
     async getVideos() {
-      let filters = ''
-      if (this.topic !== 'all') {
-        filters += '&filter[topic][eq]=' + this.topic
+      let filters = "";
+      if (this.topic !== "all") {
+        filters += "&filter[topic][eq]=" + this.topic;
       }
-      if (this.level !== 'all') {
-        filters += '&filter[level][eq]=' + this.level
+      if (this.level !== "all") {
+        filters += "&filter[level][eq]=" + this.level;
       }
-      if (this.keyword !== '') {
-        filters += '&filter[title][contains]=' + this.keyword + '&sort=title'
+      if (this.keyword !== "") {
+        filters += "&filter[title][contains]=" + this.keyword + "&sort=title";
       }
-      let response = await $.getJSON(
+      let response = await axios.get(
         `${Config.wiki}items/youtube_videos?sort=-id&filter[l2][eq]=${
           this.$l2.id
         }${filters}&limit=10&offset=${this.start}&timestamp=${
           this.$settings.adminMode ? Date.now() : 0
         }`
-      )
-      let videos = response.data || []
+      );
+      let videos = response.data.data || [];
       if (videos && this.$settings.adminMode) {
-        videos = await YouTube.checkShows(videos, this.$l2.id)
+        videos = await YouTube.checkShows(videos, this.$l2.id);
       }
-      this.videos = Helper.uniqueByValue(videos, 'youtube_id')
+      videos = Helper.uniqueByValue(videos, "youtube_id");
+      return videos
     },
     async getChannels() {
-      let response = await $.getJSON(
+      let response = await axios.get(
         `${Config.wiki}items/youtube_channels?filter[language][eq]=${this.$l2.id}&fields=*,avatar.*`
-      )
+      );
       if (response.data && response.data.length > 0) {
-        let channels = response.data.map((channel) => {
+        let channels = response.data.data.map((channel) => {
           return {
             id: channel.channel_id,
             avatar:
@@ -233,34 +240,42 @@ export default {
                 : undefined,
             title: channel.name,
             description: channel.description,
-          }
-        })
-        channels = Helper.uniqueByValue(channels, 'youtube_id')
-        this.channels = channels
+          };
+        });
+        return Helper.uniqueByValue(channels, "youtube_id");
       }
     },
     route() {
-      let canonical = `/${this.$l1.code}/${this.$l2.code}/youtube/browse/${this.topic}/${this.level}/${this.start}`
+      let canonical = `/${this.$l1.code}/${this.$l2.code}/youtube/browse/${this.topic}/${this.level}/${this.start}`;
       if (this.keyword) {
-        canonical = canonical + '/' + this.keyword
+        canonical = canonical + "/" + this.keyword;
       }
       if (this.$router.currentRoute.path !== canonical) {
-        this.$router.push({ path: canonical })
+        this.$router.push({ path: canonical });
       } else {
-        this.getVideos()
-        this.getChannels()
+        this.$fetch();
       }
     },
   },
   created() {
-    this.route()
+    this.route();
+  },
+  computed: {
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
   },
   watch: {
     $route() {
-      if (this.$route.name === 'youtube-browse') {
-        this.route()
+      if (this.$route.name === "youtube-browse") {
+        this.route();
       }
     },
   },
-}
+};
 </script>

@@ -124,7 +124,7 @@ export default {
       this.sW = []
       if(this.$root.savedWords && this.$root.savedWords[this.$l2.code]) {
         for (let savedWord of this.$root.savedWords[this.$l2.code]) {
-          let word = await (await this.$dictionary).get(savedWord.id)
+          let word = await (await this.$getDictionary()).get(savedWord.id)
           if (word) {
             this.sW.push(word)
           }

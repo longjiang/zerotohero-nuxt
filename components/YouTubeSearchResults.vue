@@ -9,7 +9,6 @@
 </template>
 
 <script>
-import Helper from '@/lib/helper'
 import YouTube from '@/lib/youtube'
 import YouTubeVideoList from '@/components/YouTubeVideoList'
 
@@ -61,6 +60,16 @@ export default {
     start() {
       this.updateURL()
     }
+  },
+  computed: {
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
   },
   methods: {
     prevPage() {

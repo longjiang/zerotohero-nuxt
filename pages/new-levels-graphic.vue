@@ -56,10 +56,10 @@ export default {
     }
   },
   async mounted() {
-    let newHSK = await (await this.$dictionary).getNewHSK()
+    let newHSK = await (await this.$getDictionary()).getNewHSK()
     newHSK = newHSK
     for (let word of newHSK) {
-      let w = await (await this.$dictionary).lookup(word.simplified)
+      let w = await (await this.$getDictionary()).lookup(word.simplified)
       if (w) {
         word.hsk = w.hsk
         word.pinyin = w.pinyin

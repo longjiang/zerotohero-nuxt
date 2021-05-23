@@ -59,7 +59,7 @@ export default {
   methods: {
     async allForms() {
       let wordForms =
-        (await (await this.$dictionary).wordForms(this.word)) || [];
+        (await (await this.$getDictionary()).wordForms(this.word)) || [];
       wordForms = wordForms.filter((form) => form !== "");
       wordForms = [this.word.bare.toLowerCase()].concat(
         wordForms.map((form) => form.form.replace(/'/g, ""))

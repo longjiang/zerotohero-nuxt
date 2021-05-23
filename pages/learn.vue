@@ -99,7 +99,7 @@ export default {
       this.savedTexts = [];
       if (this.$root.savedWords && this.$root.savedWords[this.$l2.code]) {
         for (let wordForms of this.$root.savedWords[this.$l2.code]) {
-          let word = await (await this.$dictionary).lookup(wordForms[0]);
+          let word = await (await this.$getDictionary()).lookup(wordForms[0]);
           if (word) {
             this.savedWords.push(word);
           } else {
@@ -117,7 +117,7 @@ export default {
           return;
         } else if (this.method == "hsk" && this.$route.params.args) {
           this.args = this.$route.params.args.split(",");
-          this.words = await (await this.$dictionary).getByBookLessonDialog(
+          this.words = await (await this.$getDictionary()).getByBookLessonDialog(
             this.args[0],
             this.args[1],
             this.args[2]

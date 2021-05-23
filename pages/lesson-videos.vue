@@ -120,7 +120,6 @@
 <script>
 import WordList from "@/components/WordList";
 import YouTubeVideoList from "@/components/YouTubeVideoList";
-import Loader from "@/components/Loader";
 import Config from "@/lib/config";
 import Helper from "@/lib/helper";
 
@@ -169,6 +168,14 @@ export default {
     },
   },
   computed: {
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
     unmatchedWords() {
       return this.words.filter((word) => {
         let noMatch = true;
@@ -205,7 +212,7 @@ export default {
       await this.getLessonVideos();
       this.updateVideos++;
       this.updateLessonVideos++;
-      let words = await (await this.$dictionary).lookupByLesson(
+      let words = await (await this.$getDictionary()).lookupByLesson(
         this.level,
         this.lesson
       );

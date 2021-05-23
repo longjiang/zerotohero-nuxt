@@ -85,7 +85,7 @@ export default {
         this.word = undefined
         this.related = []
         this.arg = this.$route.params.arg
-        let word = await (await this.$dictionary).get(this.arg)
+        let word = await (await this.$getDictionary()).get(this.arg)
         document.title = `Words Related to ${word.simplified} (${word.pinyin}) ${word.definitions[0].text}`
         this.word = word
         this.$refs.search.dEntry = word
@@ -98,7 +98,7 @@ export default {
         this.words = []
         if (response) {
           for (let Word of response.Words) {
-            let words = await (await this.$dictionary).lookupSimplified(
+            let words = await (await this.$getDictionary()).lookupSimplified(
               Word.word
             )
             if (words.length > 0) {

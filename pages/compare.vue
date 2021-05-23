@@ -332,34 +332,34 @@ export default {
       }
       if (method && args) {
         if (method === 'hsk') {
-          this.a = await (await this.$dictionary).getByHSKId(aId)
-          this.b = await (await this.$dictionary).getByHSKId(bId)
+          this.a = await (await this.$getDictionary()).getByHSKId(aId)
+          this.b = await (await this.$getDictionary()).getByHSKId(bId)
         } else if (method === 'bare') {
-          let resultsA = await (await this.$dictionary).lookupbare(aId)
+          let resultsA = await (await this.$getDictionary()).lookupbare(aId)
           this.a = resultsA[0]
-          let resultsB = await (await this.$dictionary).lookupbare(bId)
+          let resultsB = await (await this.$getDictionary()).lookupbare(bId)
           this.b = resultsB[0]
         } else if (method === 'simplified') {
-          let resultsA = await (await this.$dictionary).lookupSimplified(
+          let resultsA = await (await this.$getDictionary()).lookupSimplified(
             args[0]
           )
           this.a = resultsA[0]
-          let resultsB = await (await this.$dictionary).lookupSimplified(
+          let resultsB = await (await this.$getDictionary()).lookupSimplified(
             args[1]
           )
           this.b = resultsB[0]
         } else if (method === 'traditional') {
-          let resultsA = await (await this.$dictionary).lookupTraditional(
+          let resultsA = await (await this.$getDictionary()).lookupTraditional(
             args[0]
           )
           this.a = resultsA[0]
-          let resultsB = await (await this.$dictionary).lookupTraditional(
+          let resultsB = await (await this.$getDictionary()).lookupTraditional(
             args[1]
           )
           this.b = resultsB[0]
         } else {
-          this.a = await (await this.$dictionary).get(aId)
-          this.b = await (await this.$dictionary).get(bId)
+          this.a = await (await this.$getDictionary()).get(aId)
+          this.b = await (await this.$getDictionary()).get(bId)
         }
       }
     },

@@ -78,7 +78,7 @@ export default {
     }
   },
   async mounted() {
-    this.books = await (await this.$dictionary).compileBooks()
+    this.books = await (await this.$getDictionary()).compileBooks()
   },
   methods: {
     saveAllClick: function(e) {

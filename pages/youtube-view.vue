@@ -165,17 +165,7 @@
     </div>
     <div class="container-fluid">
       <div class="row">
-        <div class="col-md-6 p-5">
-          <h4 class="mt-5 mb-4">
-            {{ $t('Related') }}
-          </h4>
-          <YouTubeSearchResults
-            :term="channel ? channel.title : title"
-            :checkSaved="false"
-            :start="0"
-          />
-        </div>
-        <div class="col-md-6 p-5" id="comments">
+        <div class="col-sm-12 p-5" id="comments">
           <h4 class="mt-5 mb-4">
             {{ $t('Comments') }}
           </h4>
@@ -218,6 +208,16 @@ export default {
     },
     lesson: {
       default: false,
+    },
+  },
+  computed: {
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
     },
   },
   watch: {
@@ -314,7 +314,7 @@ export default {
       return saved
     },
     async allForms(word) {
-      let wordForms = (await (await this.$dictionary).wordForms(word)) || []
+      let wordForms = (await (await this.$getDictionary()).wordForms(word)) || []
       wordForms = wordForms.filter((form) => form !== '')
       wordForms = [word.bare.toLowerCase()].concat(
         wordForms.map((form) => form.form.replace(/'/g, ''))
@@ -325,7 +325,7 @@ export default {
       return wordForms
     },
     async saveWords() {
-      let words = await (await this.$dictionary).lookupByLesson(
+      let words = await (await this.$getDictionary()).lookupByLesson(
         this.saved.level,
         this.saved.lesson
       )

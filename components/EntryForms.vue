@@ -85,11 +85,11 @@ export default {
           return groups
         }, {})
       }
-      let forms = await (await this.$dictionary).wordForms(this.word)
+      let forms = await (await this.$getDictionary()).wordForms(this.word)
       for (let form of forms) {
-        form.form = await (await this.$dictionary).accent(form.form)
-        form.field = await (await this.$dictionary).stylize(form.field)
-        form.table = await (await this.$dictionary).stylize(form.table)
+        form.form = await (await this.$getDictionary()).accent(form.form)
+        form.field = await (await this.$getDictionary()).stylize(form.field)
+        form.table = await (await this.$getDictionary()).stylize(form.table)
       }
       this.tables = forms.groupBy('table')
     }

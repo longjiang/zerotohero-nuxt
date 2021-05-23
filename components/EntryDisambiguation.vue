@@ -55,7 +55,7 @@ export default {
   },
   methods: {
     async getOtherPronunciations() {
-      let words = this.$l2.code === 'zh' ? await (await this.$dictionary).lookupSimplified(this.entry.simplified) : await (await this.$dictionary).lookup(this.entry.bare)
+      let words = this.$l2.code === 'zh' ? await (await this.$getDictionary()).lookupSimplified(this.entry.simplified) : await (await this.$getDictionary()).lookup(this.entry.bare)
       for (let word of words) {
         if (word.id !== this.entry.id) {
           this.similarWords.push(word)
@@ -67,14 +67,14 @@ export default {
         .split('')
         .reverse()
         .join('')
-      let words = await (await this.$dictionary).lookupSimplified(reverse)
+      let words = await (await this.$getDictionary()).lookupSimplified(reverse)
       for (let word of words) {
         this.similarWords.push(word)
       }
     },
     async getSimilarWords() {
       for (let definition of this.entry.definitions) {
-        let words = await (await this.$dictionary).lookupByDef(definition)
+        let words = await (await this.$getDictionary()).lookupByDef(definition)
         for (let word of words) {
           if (word.id !== this.entry.id) {
             this.similarWords.push(word)
@@ -83,7 +83,7 @@ export default {
       }
     },
     async getHomonyms() {
-      let words = await (await this.$dictionary).lookupPinyinFuzzy(this.entry.pinyin)
+      let words = await (await this.$getDictionary()).lookupPinyinFuzzy(this.entry.pinyin)
       for (let word of words) {
         if (word.id !== this.entry.id) {
           this.similarWords.push(word)

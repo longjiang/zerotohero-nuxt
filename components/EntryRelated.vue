@@ -78,8 +78,8 @@ export default {
       for (let Word of response.Words) {
         let words =
           this.$l2.han && this.$l2.code !== 'ja'
-            ? await (await this.$dictionary).lookupSimplified(Word.word)
-            : [await (await this.$dictionary).lookup(Word.word)]
+            ? await (await this.$getDictionary()).lookupSimplified(Word.word)
+            : [await (await this.$getDictionary()).lookup(Word.word)]
         if (words.length > 0 && words[0]) {
           let word = words[0]
           word.saved = this.$store.getters['savedWords/has']({

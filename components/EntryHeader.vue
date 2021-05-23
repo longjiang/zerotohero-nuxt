@@ -156,7 +156,7 @@ export default {
         let match = this.entry.newHSKMatches.find(
           (match) => match.level === '7-9'
         )
-        let newEntry = await (await this.$dictionary).getByNewHSK(
+        let newEntry = await (await this.$getDictionary()).getByNewHSK(
           '7-9',
           Math.min(Number(match.num) + 1),
           5635
@@ -171,7 +171,7 @@ export default {
         let match = this.entry.newHSKMatches.find(
           (match) => match.level === '7-9'
         )
-        let newEntry = await (await this.$dictionary).getByNewHSK(
+        let newEntry = await (await this.$getDictionary()).getByNewHSK(
           '7-9',
           Math.max(0, Number(match.num) - 1)
         )

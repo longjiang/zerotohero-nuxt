@@ -74,7 +74,7 @@ export default {
     lookup(text) {
       let words = text.split('\n').map(async line => {
         let seen = []
-        let candidates = await (await this.$dictionary).lookupSimplified(line)
+        let candidates = await (await this.$getDictionary()).lookupSimplified(line)
         this.words = candidates.filter(candidate => {
           const keep = !seen.includes(candidate.pinyin)
           seen.push(candidate.pinyin)

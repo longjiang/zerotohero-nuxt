@@ -116,11 +116,11 @@ export default {
       if (!this.grammar || grammar.pattern !== this.grammar.pattern)
         this.delayed = false
       this.grammar = grammar
-      let entry = await (await this.$dictionary).lookup(
+      let entry = await (await this.$getDictionary()).lookup(
         this.grammar.structure.replace(/…….*/, '').replace(Helper.nonCjk, '')
       )
       this.entry =
-        entry || (await (await this.$dictionary).lookup(this.grammar.pattern.replace(/\*.*/, '')))
+        entry || (await (await this.$getDictionary()).lookup(this.grammar.pattern.replace(/\*.*/, '')))
       this.getDrill(this.grammar.id)
       setTimeout(() => {
         if (this.id === this.grammar.id) this.delayed = true

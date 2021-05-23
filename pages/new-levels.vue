@@ -106,7 +106,7 @@ export default {
     }
   },
   async mounted() {
-    let newHSK = await (await this.$dictionary).getNewHSK()
+    let newHSK = await (await this.$getDictionary()).getNewHSK()
     this.newHSK = newHSK
   },
   methods: {},

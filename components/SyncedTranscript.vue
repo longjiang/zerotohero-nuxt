@@ -282,7 +282,7 @@ export default {
       }
     },
     async findSimilarWords(text) {
-      let words = await (await this.$dictionary).lookupFuzzy(text)
+      let words = await (await this.$getDictionary()).lookupFuzzy(text)
       words = words.filter((word) => word.head !== text)
       words = Helper.uniqueByValue(words, 'head')
       return words.sort(
@@ -301,7 +301,7 @@ export default {
         this.$root.savedWords[this.$l2.code]
       ) {
         for (let savedWord of this.$root.savedWords[this.$l2.code]) {
-          let word = await (await this.$dictionary).get(savedWord.id)
+          let word = await (await this.$getDictionary()).get(savedWord.id)
           if (word) {
             let seenLines = []
             for (let form of savedWord.forms
@@ -330,7 +330,7 @@ export default {
                     let similarWords = await this.findSimilarWords(form)
                     if (similarWords.length < 2) {
                       for (let i of [1, 2]) {
-                        let randomWord = await (await this.$dictionary).random()
+                        let randomWord = await (await this.$getDictionary()).random()
                         similarWords.push(randomWord)
                       }
                     }

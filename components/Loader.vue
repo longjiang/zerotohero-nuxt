@@ -21,7 +21,7 @@ export default {
     }
   },
   async mounted() {
-    await this.$dictionary
+    await this.$getDictionary()
     this.loading = false
   }
 }

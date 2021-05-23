@@ -468,7 +468,7 @@ export default {
           savedWord.id &&
           ["ja", "zh", "nan", "hak"].includes(this.$l2.code)
         ) {
-          let word = await (await this.$dictionary).get(savedWord.id);
+          let word = await (await this.$getDictionary()).get(savedWord.id);
           let text =
             this.text ||
             (this.token && this.token.candidates.length > 0
@@ -506,7 +506,7 @@ export default {
       }
     },
     async mouseover() {
-      if (await this.$dictionary) {
+      if (await this.$getDictionary()) {
         if (this.loading === true) {
           if (this.words && this.words.length === 0) {
             this.lookup();
@@ -534,19 +534,19 @@ export default {
         this.words = this.token.candidates;
       } else if (this.text) {
         if (!this.text && this.token) this.text = this.token.candidates[0].head;
-        let words = await (await this.$dictionary).lookupFuzzy(this.text);
+        let words = await (await this.$getDictionary()).lookupFuzzy(this.text);
         if (words) {
           for (let word of words) {
             if (word && word.matches) {
               for (let match of word.matches) {
-                match.form = await (await this.$dictionary).accent(match.form);
-                match.field = await (await this.$dictionary).stylize(
+                match.form = await (await this.$getDictionary()).accent(match.form);
+                match.field = await (await this.$getDictionary()).stylize(
                   match.field
                 );
-                match.number = await (await this.$dictionary).stylize(
+                match.number = await (await this.$getDictionary()).stylize(
                   match.number
                 );
-                match.table = await (await this.$dictionary).stylize(
+                match.table = await (await this.$getDictionary()).stylize(
                   match.table
                 );
               }

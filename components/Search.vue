@@ -128,10 +128,10 @@ export default {
       if (this.type === 'dictionary') {
         this.suggestions = []
         this.suggestions = this.suggestions.concat(
-          await (await this.$dictionary).lookupByDef(this.text, 10)
+          await (await this.$getDictionary()).lookupByDef(this.text, 10)
         )
         this.suggestions = this.suggestions.concat(
-          await (await this.$dictionary).lookupFuzzy(this.text, 10)
+          await (await this.$getDictionary()).lookupFuzzy(this.text, 10)
         )
         this.suggestions = this.suggestions
           .sort((a, b) => b.bare.length - a.bare.length)

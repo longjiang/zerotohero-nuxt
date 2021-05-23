@@ -54,15 +54,15 @@ import Helper from '@/lib/helper'
 
 export default {
   async mounted() {
-    this.characters = await (await this.$dictionary).listCharacters()
+    this.characters = await (await this.$getDictionary()).listCharacters()
   },
   methods: {
     async buildCharactersTable() {
-      let characters = await (await this.$dictionary).listCharacters()
+      let characters = await (await this.$getDictionary()).listCharacters()
       for (let character of characters) {
         let h = await (await this.$hanzi).lookupShallow(character.word)
         character = Object.assign(character, h)
-        let examples = (await (await this.$dictionary).lookupByCharacter(
+        let examples = (await (await this.$getDictionary()).lookupByCharacter(
           character.character
         )).filter(example => example.hsk !== 'outside').sort((a, b) => a.hsk - b.hsk)
         character.examples = [...new Set(examples.map(item => item.simplified))]
