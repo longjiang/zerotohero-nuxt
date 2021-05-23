@@ -17,7 +17,7 @@
             target="_blank"
           >
             登陆
-            <img src="/img/logo-cctalk-white.png" class="logo-small ml-1" />
+            <img src="/img/logo-cctalk-white.png" class="logo-small ml-1" data-not-lazy />
           </a>
           <a
             v-if="l1.code === 'en' && l2.code === 'zh'"
@@ -26,7 +26,7 @@
             target="_blank"
           >
             Login to
-            <img src="/img/teachable_light.png" class="logosp-small" />
+            <img src="/img/teachable_light.png" class="logosp-small" data-not-lazy />
           </a>
         </div>
         <div class="zth-header">
@@ -39,6 +39,7 @@
                       src="/img/czh-logo-light.png"
                       alt="Chinese Zero to Hero"
                       style="max-width: 11rem; margin: 1.5rem 0"
+                      data-not-lazy
                     />
                   </a>
                   <a v-else-if="l1.code === 'zh' && l2.code === 'en'" href="/zh/en">
@@ -46,6 +47,7 @@
                       src="/img/ezh-logo-light.png"
                       alt="Chinese Zero to Hero"
                       style="max-width: 11rem; margin: 1.5rem 0"
+                      data-not-lazy
                     />
                   </a>
                   <LanguageLogo

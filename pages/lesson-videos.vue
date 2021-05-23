@@ -122,6 +122,7 @@ import WordList from "@/components/WordList";
 import YouTubeVideoList from "@/components/YouTubeVideoList";
 import Config from "@/lib/config";
 import Helper from "@/lib/helper";
+import axios from 'axios'
 
 export default {
   data() {
@@ -131,7 +132,6 @@ export default {
       matchedWords: [],
       lessonVideos: [],
       videos: [],
-      levels: Helper.levels(this.$l2),
       levelLessons: {
         1: 15,
         2: 15,
@@ -157,17 +157,10 @@ export default {
       default: 1,
     },
   },
-  mounted() {
-    this.route();
-  },
-  watch: {
-    $route() {
-      if (this.$route.name === "lesson-videos") {
-        this.route();
-      }
-    },
-  },
   computed: {
+    levels() {
+      return Helper.levels(this.$l2)
+    },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -185,6 +178,32 @@ export default {
         return noMatch;
       });
     },
+  },
+  async fetch() {
+    this.lessonVideos = [];
+    let response = await axios.get(
+      `${Config.wiki}items/youtube_videos?sort=-id&filter[l2][eq]=${this.$l2.id}&filter[level][eq]=${this.level}&filter[lesson][eq]=${this.lesson}`
+    );
+    let videos = response.data.data || [];
+    if (videos.length > 0) {
+      videos = videos.map((video) => {
+        video.subs_l2 = JSON.parse(video.subs_l2);
+        return video;
+      });
+    }
+    this.loading = false;
+    this.lessonVideos = Helper.uniqueByValue(videos, "youtube_id");
+    let words = await (await this.$getDictionary()).lookupByLesson(
+      this.level,
+      this.lesson
+    );
+    words = words.filter((word) => !word.oofc || !word.oofc === "");
+    if (this.$l2.han && this.$l2.code !== "ja") {
+      this.words = Helper.uniqueByValue(words, "simplified");
+    } else {
+      this.words = Helper.uniqueByValue(words, "head");
+    }
+    this.updateMatches();
   },
   methods: {
     changeLevel(level) {
@@ -208,22 +227,6 @@ export default {
       );
       this.matchedWordsKey++;
     },
-    async route() {
-      await this.getLessonVideos();
-      this.updateVideos++;
-      this.updateLessonVideos++;
-      let words = await (await this.$getDictionary()).lookupByLesson(
-        this.level,
-        this.lesson
-      );
-      words = words.filter((word) => !word.oofc || !word.oofc === "");
-      if (this.$l2.han && this.$l2.code !== "ja") {
-        this.words = Helper.uniqueByValue(words, "simplified");
-      } else {
-        this.words = Helper.uniqueByValue(words, "head");
-      }
-      this.updateMatches();
-    },
     matchWords(video) {
       let matches = [];
       if (video.subs_l2) {
@@ -241,24 +244,6 @@ export default {
         }
       }
       return matches;
-    },
-    async getLessonVideos() {
-      this.loading = true;
-      this.lessonVideos = [];
-      let response = await $.getJSON(
-        `${Config.wiki}items/youtube_videos?sort=-id&filter[l2][eq]=${this.$l2.id}&filter[level][eq]=${this.level}&filter[lesson][eq]=${this.lesson}`
-      );
-      let videos = response.data || [];
-      if (videos.length > 0) {
-        videos = videos.map((video) => {
-          video.subs_l2 = JSON.parse(video.subs_l2);
-          return video;
-        });
-      }
-      this.loading = false;
-      this.lessonVideos = Helper.uniqueByValue(videos, "youtube_id");
-      this.updateLessonVideos++;
-      return true;
     },
   },
 };
