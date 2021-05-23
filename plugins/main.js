@@ -64,12 +64,14 @@ export default ({ app, store }, inject) => {
       .includes(feature);
   });
   inject('getDictionary', async () => {
-    if (process.server) {
-      let dictionary = ModuleLoader.load('dictionaries/' + store.state.settings.dictionaryName, { l1: store.state.settings.l1["iso639-3"], l2: store.state.settings.l2["iso639-3"] })
-      return dictionary
-    } else {
-      let dictionary = WorkerModuleLoader.load(store.state.settings.dictionaryName, { l1: store.state.settings.l1["iso639-3"], l2: store.state.settings.l2["iso639-3"] })
-      return dictionary
+    if (store.state.settings.l1 && store.state.settings.l1 && store.state.settings.dictionaryName) {
+      if (process.server) {
+        let dictionary = ModuleLoader.load('dictionaries/' + store.state.settings.dictionaryName, { l1: store.state.settings.l1["iso639-3"], l2: store.state.settings.l2["iso639-3"] })
+        return dictionary
+      } else {
+        let dictionary = WorkerModuleLoader.load(store.state.settings.dictionaryName, { l1: store.state.settings.l1["iso639-3"], l2: store.state.settings.l2["iso639-3"] })
+        return dictionary
+      }
     }
   })
   inject('getGrammar', async () => {

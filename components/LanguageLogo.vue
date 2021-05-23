@@ -1,5 +1,5 @@
 <template>
-  <a :href="`/${l1.code}/${l2.code}/`" class="mr-4 mb-4 d-inline-block link-unstyled">
+  <router-link :to="`/${l1.code}/${l2.code}/`" class="mr-4 mb-4 d-inline-block link-unstyled">
     <div class="logo-constructed">
       <div class="logo-circle-wrapper">
         <div :class="`${randomBlendClass()} logo-circle`">
@@ -29,7 +29,7 @@
         </template>
       </div>
     </div>
-  </a>
+  </router-link>
 </template>
 
 <script>

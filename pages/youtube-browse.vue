@@ -74,18 +74,18 @@
           "
         />
         <div class="list-group">
-          <a
+          <router-link
             :class="{
               'link-unstyled': true,
               'list-group-item': true,
               'list-group-item-action': topic === 'all',
               active: topic === 'all',
             }"
-            :href="`/${$l1.code}/${$l2.code}/youtube/browse/all/${level}`"
+            :to="`/${$l1.code}/${$l2.code}/youtube/browse/all/${level}`"
           >
             All
-          </a>
-          <a
+          </router-link>
+          <router-link
             v-for="(topicName, topicValue) in topics"
             :class="{
               'link-unstyled': true,
@@ -93,10 +93,10 @@
               'list-group-item-action': topicValue === topic,
               active: topicValue === topic,
             }"
-            :href="`/${$l1.code}/${$l2.code}/youtube/browse/${topicValue}/all`"
+            :to="`/${$l1.code}/${$l2.code}/youtube/browse/${topicValue}/all`"
           >
             {{ topicName }}
-          </a>
+          </router-link>
         </div>
         <h6 class="mt-4 mb-4 text-center">Filter by Level</h6>
         <div class="list-group">

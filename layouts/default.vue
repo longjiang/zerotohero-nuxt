@@ -4,10 +4,10 @@
       <template>
         <div class="container-fluid p-2 pl-3 site-top-bar">
           <div>
-            <a href="/" style="color: #ccc; line-height: 2.3rem">
+            <router-link to="/" style="color: #ccc; line-height: 2.3rem">
               <i class="fa fa-chevron-left mr-2"></i>
               Zero to Hero Education
-            </a>
+            </router-link>
           </div>
           <a
             v-if="l1.code === 'zh' && l2.code === 'en'"
@@ -17,7 +17,11 @@
             target="_blank"
           >
             登陆
-            <img src="/img/logo-cctalk-white.png" class="logo-small ml-1" data-not-lazy />
+            <img
+              src="/img/logo-cctalk-white.png"
+              class="logo-small ml-1"
+              data-not-lazy
+            />
           </a>
           <a
             v-if="l1.code === 'en' && l2.code === 'zh'"
@@ -26,7 +30,11 @@
             target="_blank"
           >
             Login to
-            <img src="/img/teachable_light.png" class="logosp-small" data-not-lazy />
+            <img
+              src="/img/teachable_light.png"
+              class="logosp-small"
+              data-not-lazy
+            />
           </a>
         </div>
         <div class="zth-header">
@@ -34,22 +42,25 @@
             <div class="container">
               <div class="row">
                 <div class="col-sm-12 text-center">
-                  <a v-if="l1.code === 'en' && l2.code === 'zh'" href="/en/zh">
+                  <router-link v-if="l1.code === 'en' && l2.code === 'zh'" to="/en/zh">
                     <img
                       src="/img/czh-logo-light.png"
                       alt="Chinese Zero to Hero"
                       style="max-width: 11rem; margin: 1.5rem 0"
                       data-not-lazy
                     />
-                  </a>
-                  <a v-else-if="l1.code === 'zh' && l2.code === 'en'" href="/zh/en">
+                  </router-link>
+                  <router-link
+                    v-else-if="l1.code === 'zh' && l2.code === 'en'"
+                    to="/zh/en"
+                  >
                     <img
                       src="/img/ezh-logo-light.png"
                       alt="Chinese Zero to Hero"
                       style="max-width: 11rem; margin: 1.5rem 0"
                       data-not-lazy
                     />
-                  </a>
+                  </router-link>
                   <LanguageLogo
                     v-else-if="l1 && l2"
                     :l1="l1"
@@ -80,25 +91,30 @@
     </template>
     <template v-else>
       <div class="container-fluid pt-4">
-        <img src="/img/background-stars.jpg" class="bg-stars" />
+        <img src="/img/background-stars.jpg" class="bg-stars" data-not-lazy />
         <div class="container">
           <div class="row pt-5">
             <div class="col-sm-6">
-              <img src="/img/logo-z2h.png" class="z2h-logo" />
+              <img src="/img/logo-z2h.png" class="z2h-logo" data-not-lazy />
             </div>
             <div class="col-sm-6">
               <img
                 src="/img/language-education-done-right.png"
                 class="z2h-slogan img-fluid d-none d-sm-block"
+                data-not-lazy
               />
             </div>
           </div>
           <div class="row pt-5">
             <div class="col-sm-6">
               <div class="home-card">
-                <a href="/en/zh">
-                  <img src="/img/czh-logo-dark.png" class="czh-logo" />
-                </a>
+                <router-link to="/en/zh">
+                  <img
+                    src="/img/czh-logo-dark.png"
+                    class="czh-logo"
+                    data-not-lazy
+                  />
+                </router-link>
                 <hr />
                 <ul class="czh-links">
                   <li>
@@ -109,13 +125,13 @@
                       HSK courses
                     </a>
                   </li>
-                  <li><a href="/en/zh/dictionary">Dictionary</a></li>
-                  <li><a href="/en/zh/grammar">Grammar reference</a></li>
+                  <li><router-link to="/en/zh/dictionary">Dictionary</router-link></li>
+                  <li><router-link to="/en/zh/grammar">Grammar reference</router-link></li>
                   <li>
-                    <a href="/en/zh/youtube/browse">Audio-visual tools</a>
+                    <router-link to="/en/zh/youtube/browse">Audio-visual tools</router-link>
                   </li>
-                  <li><a href="/en/zh/reader">Reading tools</a></li>
-                  <li><a href="/en/zh/resource/list/all/all">Resources</a></li>
+                  <li><router-link to="/en/zh/reader">Reading tools</router-link></li>
+                  <li><router-link to="/en/zh/resource/list/all/all">Resources</router-link></li>
                 </ul>
                 <hr />
                 <div
@@ -153,31 +169,35 @@
             </div>
             <div class="col-sm-6">
               <div class="home-card">
-                <a href="/zh/en">
-                  <img src="/img/ezh-logo-dark.png" class="ezh-logo" />
-                </a>
+                <router-link to="/zh/en">
+                  <img
+                    src="/img/ezh-logo-dark.png"
+                    class="ezh-logo"
+                    data-not-lazy
+                  />
+                </router-link>
                 <hr />
                 <ul class="czh-links">
                   <li>
-                    <a
-                      href="/zh/en/online-courses"
+                    <router-link
+                      to="/zh/en/online-courses"
                       style="color: #1b3e76; font-weight: bold"
                     >
                       剑桥英语视频教程
-                    </a>
+                    </router-link>
                   </li>
                   <li>
-                    <a
-                      href="/zh/en/online-courses"
+                    <router-link
+                      to="/zh/en/online-courses"
                       style="color: #1b3e76; font-weight: bold"
                     >
                       美式口语课程
-                    </a>
+                    </router-link>
                   </li>
-                  <li><a href="/zh/en/dictionary">词典工具</a></li>
-                  <li><a href="/zh/en/youtube/browse">视听工具</a></li>
-                  <li><a href="/zh/en/reader">阅读工具</a></li>
-                  <li><a href="/zh/en/resource/list/all/all">其它资源</a></li>
+                  <li><router-link to="/zh/en/dictionary">词典工具</router-link></li>
+                  <li><router-link to="/zh/en/youtube/browse">视听工具</router-link></li>
+                  <li><router-link to="/zh/en/reader">阅读工具</router-link></li>
+                  <li><router-link to="/zh/en/resource/list/all/all">其它资源</router-link></li>
                 </ul>
                 <hr />
                 <div
@@ -241,41 +261,27 @@ export default {
   data() {
     return {
       Config,
-      updateSettings: 0,
       focus: false,
       loaded: false,
-      classes: {}
+      classes: {},
     };
   },
-  methods: {},
   mounted() {
-    this.updateClasses()
-    console.log('mounted')
-    console.log(this.$store.state.savedWords.savedWordsLoaded)
-    if (!this.$store.state.savedWords.savedWordsLoaded) {
-      this.$store.commit("savedWords/LOAD_SAVED_WORDS");
-    }
-    if (!this.$store.state.savedCollocations.savedCollocationsLoaded) {
-      this.$store.commit("savedCollocations/LOAD_SAVED_COLLOCATIONS");
-    }
-    if (!this.$store.state.savedCollocations.savedHitsLoaded) {
-      this.$store.commit("savedCollocations/LOAD_SAVED_HITS");
-    }
-  },
-  updated() {
-    if (!this.$store.state.settings.settingsLoaded) {
-      this.$store.commit("settings/LOAD_SETTINGS");
-      this.updateClasses()
-    }
-  },
-  created() {
-    this.$i18n.locale = this.l1.code
-    this.$i18n.silentTranslationWarn = true
-    this.$i18n.setLocaleMessage(
-      this.l1.code, this.l1.translations
-    )
+    if (this.l1 && this.l2) this.updateClasses()
+    if (this.l1 && this.l2) this.loadSettings()
+    if (this.l1) this.updatei18n()
   },
   methods: {
+    updatei18n() {
+      this.$i18n.locale = this.l1.code;
+      this.$i18n.silentTranslationWarn = true;
+      if (this.l1.translations) {
+        this.$i18n.setLocaleMessage(
+          this.l1.code,
+          this.l1.translations
+        )
+      }
+    },
     updateClasses() {
       this.classes = {
         "show-pinyin": this.l2Settings.showPinyin,
@@ -288,15 +294,36 @@ export default {
       };
       this.classes[`l1-${this.l1.code}`] = true;
       this.classes[`l2-${this.l2.code}`] = true;
+    },
+    loadSettings() {
+      if (!this.$store.state.settings.settingsLoaded) {
+        this.$store.commit("settings/LOAD_SETTINGS");
+      }
+      if (!this.$store.state.savedWords.savedWordsLoaded) {
+        this.$store.commit("savedWords/LOAD_SAVED_WORDS");
+      }
+      if (!this.$store.state.savedCollocations.savedCollocationsLoaded) {
+        this.$store.commit("savedCollocations/LOAD_SAVED_COLLOCATIONS");
+      }
+      if (!this.$store.state.savedCollocations.savedHitsLoaded) {
+        this.$store.commit("savedCollocations/LOAD_SAVED_HITS");
+      }
     }
   },
   watch: {
+    l1() {
+      this.updatei18n()
+    },
+    l2() {
+      this.updateClasses()
+      this.loadSettings()
+    },
     l2Settings() {
-      console.log('l2settings changed')
+      console.log("l2settings changed");
     },
   },
   computed: {
-    ...mapState("settings", ["l2Settings", "l1", "l2"])
+    ...mapState("settings", ["l2Settings", "l1", "l2"]),
   },
 };
 </script>
