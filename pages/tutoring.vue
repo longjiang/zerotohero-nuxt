@@ -142,11 +142,21 @@ export default {
       lessons: undefined,
     };
   },
+  computed: {
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
+  },
   async created() {
-    let response = await $.getJSON(
+    let response = await axios.get(
       `${Config.wiki}items/tutoring_kit?fields=id,name,reading,free_talk,writing,level`
     );
-    this.lessons = response.data || [];
+    this.lessons = response.data.data || [];
   },
   methods: {
     goto(id) {

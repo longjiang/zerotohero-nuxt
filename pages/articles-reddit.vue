@@ -81,6 +81,7 @@ import Config from "@/lib/config";
 import Helper from "@/lib/helper";
 import RedditArticlesList from "@/components/RedditArticlesList.vue";
 import RedditArticle from "@/components/RedditArticle.vue";
+import axios from 'axios'
 
 export default {
   components: {
@@ -98,6 +99,16 @@ export default {
       key: 0,
     };
   },
+  computed: {
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
+  },
   watch: {
     $route() {
       if (this.$route.name === "articles-reddit") {
@@ -112,11 +123,11 @@ export default {
           this.articleId = this.args.split(",")[0];
         } else if (this.method === "list") {
           if (!this.subreddits) {
-            let response = await $.getJSON(
+            let response = await axios.get(
               `${Config.wiki}items/subreddits?filter[l2][eq]=${this.$l2.id}`
             );
-            if (response) {
-              this.subreddits = response.data;
+            if (response.data) {
+              this.subreddits = response.data.data;
             }
           }
         }

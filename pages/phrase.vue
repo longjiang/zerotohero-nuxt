@@ -35,7 +35,8 @@
                 (text) => `/${$l1.code}/${$l2.code}/phrase/search/${text}`
               "
               :compareUrlFunc="
-                (text) => `/${$l1.code}/${$l2.code}/phrase/compare/${term}/${text}`
+                (text) =>
+                  `/${$l1.code}/${$l2.code}/phrase/compare/${term}/${text}`
               "
             />
           </div>
@@ -86,11 +87,11 @@
 </template>
 
 <script>
-import Concordance from '@/components/Concordance'
-import Collocations from '@/components/Collocations'
-import SearchCompare from '@/components/SearchCompare'
-import WebImages from '@/components/WebImages'
-import SearchSubsComp from '@/components/SearchSubsComp'
+import Concordance from "@/components/Concordance";
+import Collocations from "@/components/Collocations";
+import SearchCompare from "@/components/SearchCompare";
+import WebImages from "@/components/WebImages";
+import SearchSubsComp from "@/components/SearchSubsComp";
 
 export default {
   components: {
@@ -104,68 +105,81 @@ export default {
     method: {
       type: String,
     },
-    term: '',
-    compareTerm: '',
+    term: "",
+    compareTerm: "",
   },
   data() {
     return {
       delayed: {
         default: false,
       },
-    }
+    };
   },
   watch: {
     $route() {
-      this.route()
+      this.route();
+    },
+  },
+  computed: {
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
     },
   },
   methods: {
     route() {
-      this.delayed = false
+      this.delayed = false;
       setTimeout(() => {
-        this.delayed = true
-      }, 1000)
+        this.delayed = true;
+      }, 1000);
     },
 
     bindKeys() {
-      window.addEventListener('keydown', this.keydown)
+      window.addEventListener("keydown", this.keydown);
     },
     unbindKeys() {
-      window.removeEventListener('keydown', this.keydown)
+      window.removeEventListener("keydown", this.keydown);
     },
 
     keydown(e) {
-      if (!['INPUT', 'TEXTAREA'].includes(e.target.tagName.toUpperCase()) && !e.metaKey) {
+      if (
+        !["INPUT", "TEXTAREA"].includes(e.target.tagName.toUpperCase()) &&
+        !e.metaKey
+      ) {
         // home
         if (e.keyCode == 36) {
           document
-            .getElementById('main')
-            .scrollIntoView({ behavior: 'smooth' })
+            .getElementById("main")
+            .scrollIntoView({ behavior: "smooth" });
           // this.$refs.searchCompare.focusOnSearch()
-          e.preventDefault()
-          return false
+          e.preventDefault();
+          return false;
         }
         // end
         if (e.keyCode == 35) {
           document
-            .getElementById('search-subs')
-            .scrollIntoView({ behavior: 'smooth' })
-          e.preventDefault()
-          return false
+            .getElementById("search-subs")
+            .scrollIntoView({ behavior: "smooth" });
+          e.preventDefault();
+          return false;
         }
       }
     },
   },
   activated() {
-    this.bindKeys()
+    this.bindKeys();
   },
   deactivated() {
-    this.unbindKeys()
+    this.unbindKeys();
   },
   mounted() {
-    this.route()
+    this.route();
   },
-}
+};
 </script>
 
 <style></style>

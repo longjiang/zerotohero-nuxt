@@ -1,8 +1,6 @@
 <router>
   {
     path: '/:l1/:l2',
-    name: 'home',
-    props: true,
     meta: {
       title: 'Zero to Hero',
       metaTags: [
@@ -18,7 +16,7 @@
   <div class="main">
     <div class="container pt-5 pb-5">
       <div class="row">
-        <div class="col-sm-12"></div>
+        <div class="col-sm-12">HOME</div>
       </div>
     </div>
   </div>
@@ -26,7 +24,17 @@
 
 <script>
 export default {
-  activated() {
+  computed: {
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
+  },
+  created() {
     if (
       this.$l1 &&
       this.$route.params.l1 === this.$l1.code &&

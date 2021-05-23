@@ -50,12 +50,10 @@ export default {
     async loadVariants() {
       let variants = await (await this.$unihan).variants(this.text)
       for (let variant of variants) {
-        $.getJSON(
+        let response = await axios.get(
           `${Config.wiki}items/hsk_cedict?filter[traditional][eq]=${variant}`,
-          response => {
-            this.words = this.words.concat(response.data)
-          }
         )
+        this.words = this.words.concat(response.data.data)
       }
 
     }

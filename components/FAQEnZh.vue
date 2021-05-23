@@ -52,23 +52,14 @@
           <h5>Where can I download the audio, answers, or transcript that comes with the textbook or workbook?</h5>
           <div>
             <p>Links to these can be found:</p>
-            <ul v-if="!isZh">
+            <ul>
               <li>in our courses (in the intro section of each course)</li>
               <li>
                 on the publishing&rsquo;s
                 <a href="http://blcup.com/">website&nbsp;</a> (See the
                 <a href="https://youtu.be/_0UvuDT0ewQ">video</a> for instructions)
               </li>
-              <li>from our Wiki
-                <a
-                  href="http://wiki.chinesezerotohero.com/index.php?title=Course_Books"
-                >page</a>&nbsp;
-              </li>
               <li>audio can also be found in the CD attached to your textbook, or by scanning the QR code at the back of your book.</li>
-            </ul>
-            <ul v-else>
-              <li>In our courses (in the intro section of each course)</li>
-              <li>Audio can also be found in the CD attached to your textbook, or by scanning the QR code at the back of your book.</li>
             </ul>
           </div>
         </div>

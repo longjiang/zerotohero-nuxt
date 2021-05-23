@@ -14,7 +14,7 @@
         :word="word"
         :compareWith="compareWith"
         :index="index"
-        :key="`word-card-${Helper.uniqueId()}-${index}`"
+        :key="`word-card-${index}`"
       />
     </ul>
     <ShowMoreButton

@@ -488,17 +488,9 @@ export default {
     },
     async remove() {
       let id = this.hits[this.hitIndex].video.id;
-      let response = await $.ajax({
-        url: `${Config.wiki}items/youtube_videos/${id}`,
-        type: "DELETE",
-        contentType: "application/json",
-        xhr: function () {
-          return window.XMLHttpRequest == null ||
-            new window.XMLHttpRequest().addEventListener == null
-            ? new window.ActiveXObject("Microsoft.XMLHTTP")
-            : $.ajaxSettings.xhr();
-        },
-      });
+      let response = await axios.delete(
+        `${Config.wiki}items/youtube_videos/${id}`
+      );
       if (response) {
         this.hits = this.hits.filter((hit) => hit.video.id !== id);
       }

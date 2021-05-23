@@ -9,7 +9,7 @@
       </div>
     </div>
     <div v-else class="resources">
-      <Resource v-for="(resource, index) of resources" :resource="resource" :key="`resource-${Helper.uniqueId()}-${index}`" />
+      <Resource v-for="(resource, index) of resources" :resource="resource" :key="`resource-${index}`" />
     </div>
   </div>
 </template>
@@ -21,6 +21,16 @@ import Helper from '@/lib/helper'
 export default {
   components: {
     Resource
+  },
+  computed: {
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
   },
   data() {
     return {

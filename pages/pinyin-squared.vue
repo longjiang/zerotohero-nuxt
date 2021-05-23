@@ -38,8 +38,8 @@
         <p>Well, I imagine that it could look like this:</p>
         <div class="jumbotron p-3 text-center mb-3">
           zhōngwén →
-          <PinyinSquaredCharacter :blockOrString="{initial: 'zh', final: 'ong', tone: 1}" />
-          <PinyinSquaredCharacter :blockOrString="{initial: 'w', final: 'en', tone: 2}" />
+          <!-- <PinyinSquaredCharacter :blockOrString="{initial: 'zh', final: 'ong', tone: 1}" /> -->
+          <!-- <PinyinSquaredCharacter :blockOrString="{initial: 'w', final: 'en', tone: 2}" /> -->
         </div>
         <p>Hover over the characters to see how they are constructed from pinyin.</p>
         <hr class="mt-5 mb-5" />
@@ -89,47 +89,25 @@ export default {
   components: {
     PinyinSquaredCharacter,
   },
-  computed: {
-    blocksOrStrings() {
-      return PinyinSquared.preprocess(this.text)
-    }
-  },
   data() {
     return {
       text: ''
     }
   },
-  created() {
-    // Load typekit
-    (function(d) {
-      var config = {
-          kitId: 'yfx5xjt',
-          scriptTimeout: 3000,
-          async: true
-        },
-        h = d.documentElement,
-        t = setTimeout(function() {
-          h.className =
-            h.className.replace(/\bwf-loading\b/g, '') + ' wf-inactive'
-        }, config.scriptTimeout),
-        tk = d.createElement('script'),
-        f = false,
-        s = d.getElementsByTagName('script')[0],
-        a
-      h.className += ' wf-loading'
-      tk.src = 'https://use.typekit.net/' + config.kitId + '.js'
-      tk.async = true
-      tk.onload = tk.onreadystatechange = function() {
-        a = this.readyState
-        if (f || (a && a != 'complete' && a != 'loaded')) return
-        f = true
-        clearTimeout(t)
-        try {
-          Typekit.load(config)
-        } catch (e) {}
+  computed: {
+    blocksOrStrings() {
+      if (typeof document !== 'undefined')  {
+        return PinyinSquared.preprocess(this.text)
       }
-      s.parentNode.insertBefore(tk, s)
-    })(document)
+    },
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
   },
   methods: {
     convertClick() {}

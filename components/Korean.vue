@@ -48,12 +48,11 @@ export default {
     async loadVariants() {
       let variants = await (await this.$unihan).variants(this.text)
       for (let variant of variants) {
-        $.getJSON(
-          `${Config.wiki}items/kengdic?filter[hanja][eq]=${variant}`,
-          response => {
-            this.words = this.words.concat(response.data)
-          }
+        let response = await axios.get(
+          `${Config.wiki}items/kengdic?filter[hanja][eq]=${variant}`
         )
+        response = response.data
+        this.words = this.words.concat(response.data)
       }
     }
   },

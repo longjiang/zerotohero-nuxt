@@ -71,6 +71,7 @@
 import Config from "@/lib/config";
 import ArticlesList from "@/components/ArticlesList.vue";
 import ArticleCard from "@/components/ArticleCard.vue";
+import axios from 'axios'
 
 export default {
   components: {
@@ -93,25 +94,34 @@ export default {
       }
     },
   },
+  computed: {
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
+  },
   methods: {
-    route() {
+    async route() {
       if (this.$route.params.method) {
         this.method = this.$route.params.method;
         if (this.method === "list") {
           this.articles = [];
-          $.getJSON(
-            `${Config.wiki}items/articles?filter[l2][eq]=${this.$l2.id}`,
-            (response) => {
-              this.articles = response.data.map((article) => {
-                article.url = `/${this.$l1.code}/${
-                  this.$l2.code
-                }/articles/wiki/view/${article.id},${encodeURIComponent(
-                  article.title
-                )}`;
-                return article;
-              });
-            }
+          let response = await axios.get(
+            `${Config.wiki}items/articles?filter[l2][eq]=${this.$l2.id}`
           );
+
+          this.articles = response.data.data.map((article) => {
+            article.url = `/${this.$l1.code}/${
+              this.$l2.code
+            }/articles/wiki/view/${article.id},${encodeURIComponent(
+              article.title
+            )}`;
+            return article;
+          });
         } else if (this.method === "view" && this.$route.params.args) {
           this.args = this.$route.params.args.split(",");
           this.article = undefined;

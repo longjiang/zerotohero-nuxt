@@ -3,11 +3,9 @@
     <li v-for="article in articles" class="article-list-item collapsed">
       <a
         class="link-unstyled"
-        :href="
-          `/${$l1.code}/${$l2.code}/articles/reddit/view/${article.id},${encodeURIComponent(
-            article.title
-          )}`
-        "
+        :href="`/${$l1.code}/${$l2.code}/articles/reddit/view/${
+          article.id
+        },${encodeURIComponent(article.title)}`"
       >
         <RedditArticleCard :article="article" />
       </a>
@@ -16,41 +14,48 @@
 </template>
 
 <script>
-import Config from '@/lib/config'
-import Helper from '@/lib/helper'
-import RedditArticleCard from '@/components/RedditArticleCard'
+import Config from "@/lib/config";
+import Helper from "@/lib/helper";
+import RedditArticleCard from "@/components/RedditArticleCard";
 
 export default {
   components: {
-    RedditArticleCard
+    RedditArticleCard,
   },
   props: {
     path: {
-      type: String
+      type: String,
     },
     edit: {
-      default: false
-    }
+      default: false,
+    },
   },
-  created() {
-    let cacheLife = 3600 // clear cache every hour
-    $.getJSON(
-      `${Config.jsonProxy}?cache_life=${cacheLife}&url=https://www.reddit.com/${
-        this.path
-      }.json`,
-      response => {
-        this.articles = response.data.data.children.map(item => item.data)
-      }
-    )
+  computed: {
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
+  },
+  async created() {
+    let cacheLife = 3600; // clear cache every hour
+    let response = await axios.get(
+      `${Config.jsonProxy}?cache_life=${cacheLife}&url=https://www.reddit.com/${this.path}.json`
+    );
+    response = response.data
+    this.articles = response.data.data.children.map((item) => item.data);
   },
   data() {
     return {
       Config,
       Helper,
-      articles: []
-    }
-  }
-}
+      articles: [],
+    };
+  },
+};
 </script>
 
 <style scoped></style>

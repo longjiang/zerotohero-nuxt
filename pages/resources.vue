@@ -76,6 +76,7 @@
 import Config from '@/lib/config'
 import Helper from '@/lib/helper'
 import ResourceList from '@/components/ResourceList'
+import axios from 'axios'
 
 export default {
   components: {
@@ -123,6 +124,16 @@ export default {
       }
     }
   },
+  computed: {
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
+  },
   methods: {
     async route() {
       let canonical = `/${this.$l1.code}/${this.$l2.code}/resource/list/${this.topic}/${this.type}`
@@ -136,10 +147,10 @@ export default {
         if (this.type !== 'all') {
           filters += '&filter[type][eq]=' + this.type
         }
-        let response = await $.getJSON(
+        let response = await axios.get(
           `${Config.wiki}items/resources?filter[l2][eq]=${this.$l2.id}${filters}&fields=*,thumbnail.*`
         )
-        this.resources = response.data.map(resource => {
+        this.resources = response.data.data.map(resource => {
           resource.thumbnail = resource.thumbnail.data.full_url
           return resource
         }) || []

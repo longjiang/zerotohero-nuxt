@@ -176,21 +176,19 @@ export default {
       });
     },
   },
-  created() {
+  async created() {
     // Load exchange rates data via AJAX:
-    $.getJSON(
+    let response = await axios.get(
       // NB: using Open Exchange Rates here, but you can use any source!
-      "https://api.exchangeratesapi.io/latest",
-      (data) => {
-        // Check money.js has finished loading:
-        this.rates = data.rates;
-        this.key = this.currency;
-        if (typeof fx !== "undefined" && fx.rates) {
-          fx.rates = data.rates;
-          fx.base = data.base;
-        }
-      }
+      "https://api.exchangeratesapi.io/latest"
     );
+    let data = response.data;
+    this.rates = data.rates;
+    this.key = this.currency;
+    if (typeof fx !== "undefined" && fx.rates) {
+      fx.rates = data.rates;
+      fx.base = data.base;
+    }
   },
 };
 </script>

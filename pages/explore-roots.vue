@@ -1,6 +1,7 @@
 <router>
   {
     path: '/:l1/:l2/explore/roots/:arg?',
+    props: true,
     meta: {
       title: 'Roots | Zero to Hero',
       metaTags: [
@@ -30,7 +31,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="root in rootsAugmented">
+                <tr v-for="(root, index) in rootsAugmented" :key="`root=${index}`">
                   <td class="root">
                     <router-link
                       :to="`/${$l1.code}/${$l2.code}/explore/roots/${root.pattern}`"
@@ -39,7 +40,7 @@
                         class="root-word"
                         v-if="root.word"
                         v-html="
-                          Helper.highlight(
+                          highlight(
                             root.pattern,
                             root.word.simplified,
                             root.word.hsk
@@ -94,17 +95,17 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
 import WordListExtended from "@/components/WordListExtended.vue";
 import EntryCharacters from "@/components/EntryCharacters.vue";
+import Helper from '@/lib/helper'
 
 export default {
   components: {
     EntryCharacters,
     WordListExtended,
   },
-  beforeMount() {
-    this.route();
+  props: {
+    arg: undefined
   },
   computed: {
     $l1() {
@@ -117,6 +118,9 @@ export default {
     },
   },
   methods: {
+    highlight(a, b, c) {
+      return Helper.highlight(a,b,c)
+    },
     currentIndex() {
       return this.roots.findIndex((root) => root.pattern === this.arg);
     },
@@ -140,46 +144,33 @@ export default {
         });
       }
     },
-    async route() {
-      if (this.$route.params.arg) {
-        this.rootCharacter = undefined;
-        this.rootWords = [];
-        this.arg = this.$route.params.arg;
-        this.rootsKey++;
-        let words = await (await this.$getDictionary()).lookupByPattern(this.arg);
-        this.rootWords = words
-          .sort((a, b) => a.simplified.length - b.simplified.length)
-          .sort((a, b) => a.hsk - b.hsk);
-        this.rootCharacter = (await this.$getHanzi()).lookup(
-          this.arg.replace(/～/g, "")
-        );
-        document.title = `${this.arg} (${this.rootCharacter.pinyin}, ${
-          this.rootCharacter.definition.split(",")[0]
-        }) Words  | Chinese Learning Wiki`;
-      } else {
-        this.arg = "";
-        for (let root of this.roots) {
-          let words = await (await this.$getDictionary()).lookupSimplified(
-            root.pattern.replace(/～/g, "")
-          );
-          root.word = words[0];
-          this.rootsAugmented.push(root);
-        }
-      }
-    },
   },
-  watch: {
-    $route() {
-      if (this.$route.name === "explore-roots") {
-        this.route();
+  async fetch() {
+    if (this.arg) {
+      let words = await (await this.$getDictionary()).lookupByPattern(this.arg);
+      let rootWords = words 
+        .sort((a, b) => a.simplified.length - b.simplified.length)
+        .sort((a, b) => a.hsk - b.hsk);
+      let rootCharacter = (await this.$getHanzi()).lookup(
+        this.arg.replace(/～/g, "")
+      );
+      this.rootWords = rootWords
+      
+    } else {
+      let rootsAugmented = [];
+      for (let root of this.roots) {
+        let words = await (await this.$getDictionary()).lookupSimplified(
+          root.pattern.replace(/～/g, "")
+        );
+        root.word = words[0];
+        rootsAugmented.push(root);
       }
-    },
+      this.rootsAugmented = rootsAugmented;
+    }
   },
   data() {
     return {
-      Helper,
       rootsKey: 0,
-      arg: undefined,
       rootCharacter: undefined,
       rootWords: [],
       rootsAugmented: [],

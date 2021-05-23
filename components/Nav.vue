@@ -255,7 +255,7 @@ export default {
               name: 'pinyin-list',
               title: 'Pinyin List',
               icon: 'fa fa-list',
-              show: true,
+              show: this.l2.code === 'zh',
             },
           ],
         },
@@ -334,15 +334,34 @@ export default {
               name: 'pinyin-squared',
               title: 'Pinyin Squared',
               icon: 'fa fa-list',
-              show: true,
+              show: false,
             },
           ],
         },
         {
-          name: 'contact',
           icon: 'fas fa-id-card',
           title: 'Contact',
-          show: ['en', 'zh'].includes(this.l2.code),
+          show: true,
+          children: [
+            {
+              name: 'contact',
+              icon: 'fas fa-id-card',
+              show: true,
+              title: 'Contact Us',
+            },
+            {
+              name: 'affiliate-program',
+              icon: 'fas fa-id-card',
+              show: true,
+              title: 'Affiliate Program',
+            },
+            {
+              name: 'faq',
+              icon: 'fas fa-id-card',
+              show: true,
+              title: 'FAQ',
+            }
+          ]
         },
         {
           name: 'settings',

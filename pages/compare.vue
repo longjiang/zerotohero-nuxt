@@ -189,85 +189,6 @@
       </div>
     </div>
 
-    <!--
-      
-    <div class="container focus mt-5">
-      <div class="row">
-        <div class="col-sm-6">
-          <Grammar v-if="a" :text="a.bare" :key="`${a.id}-grammar`"></Grammar>
-        </div>
-        <div class="col-sm-6">
-          <Grammar v-if="b" text="b.bare" :key="`${b.id}-grammar`"></Grammar>
-        </div>
-      </div>
-    </div>
-
-    <div class="container focus">
-      <div class="row">
-        <div class="col-sm-6">
-          <Mistakes v-if="a" :text="a.bare" :key="aKey"></Mistakes>
-        </div>
-        <div class="col-sm-6">
-          <Mistakes v-if="b" :text="b.bare" :key="bKey"></Mistakes>
-        </div>
-      </div>
-      -->
-    <!--
-      <div class="row" v-if="['ja', 'ko'].includes($l2.code)">
-        <div class="col-sm-6">
-          <Chinese
-            v-if="a && a.cjk && a.cjk.canonical && a.cjk.canonical !== 'NULL'"
-            :text="a.cjk.canonical"
-            :key="`${a.id}-chinese`"
-          />
-        </div>
-        <div class="col-sm-6">
-          <Chinese
-            v-if="b && b.cjk && b.cjk.canonical && b.cjk.canonical !== 'NULL'"
-            :text="b.cjk.canonical"
-            :key="`${b.id}-chinese`"
-          />
-        </div>
-      </div>
-      <div class="row" v-if="['zh', 'ja'].includes($l2.code)">
-        <div class="col-sm-6">
-          <Korean
-            v-if="a && a.cjk && a.cjk.canonical && a.cjk.canonical !== 'NULL'"
-            class="mb-5"
-            :text="a.cjk.canonical"
-            :key="`${a.id}-korean`"
-          />
-        </div>
-        <div class="col-sm-6">
-          <Korean
-            v-if="b && b.cjk && b.cjk.canonical && b.cjk.canonical !== 'NULL'"
-            class="mb-5"
-            :text="b.cjk.canonical"
-            :key="`${b.id}-korean`"
-          />
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-6" v-if="['zh', 'ko'].includes($l2.code)">
-          <Japanese
-            v-if="a && a.cjk && a.cjk.canonical && a.cjk.canonical !== 'NULL'"
-            class="mb-5"
-            :text="a.cjk.canonical"
-            :key="`${a.id}-japanese`"
-          />
-        </div>
-        <div class="col-sm-6">
-          <Japanese
-            v-if="b && b.cjk && b.cjk.canonical && b.cjk.canonical !== 'NULL'"
-            class="mb-5"
-            :text="b.cjk.canonical"
-            :key="`${b.id}-japanese`"
-          />
-        </div>
-      </div>
-    </div>
-    -->
-
     <EntryCourseAd
       v-if="$l2 === 'zh' && a && b"
       :entry="b.hsk > a.hsk ? b : a"
@@ -318,6 +239,17 @@ export default {
       aKey: 0,
       bKey: 100,
     }
+  },
+  computed: {
+
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
   },
   methods: {
     async route() {

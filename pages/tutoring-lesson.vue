@@ -115,13 +115,13 @@ export default {
   },
   methods: {
     async route() {
-      let lesson = (await $.getJSON(
+      let lesson = (await axios.get(
         `${Config.wiki}items/tutoring_kit/${this.id}`
       )).data
-      let readings = (await $.getJSON(
+      let readings = (await axios.get(
         `${Config.wiki}items/reading?filter[l2][eq]=${this.$l2.id}&filter[lesson][eq]=${this.id}`
       )).data
-      let youtubeVideos = (await $.getJSON(
+      let youtubeVideos = (await axios.get(
         `${Config.wiki}items/youtube_videos?filter[l2][eq]=${this.$l2.id}&filter[lesson][eq]=${this.id}`
       )).data.map(video => {
         return {

@@ -37,7 +37,8 @@ export default {
     }
   },
   async created() {
-    this.languages = await $.getJSON(`${Config.server}data/languages.json`)
+    this.languages = await axios.get(`${Config.server}data/languages.json`)
+    response = response.data
   }
 }
 </script>

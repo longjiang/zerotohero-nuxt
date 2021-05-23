@@ -16,7 +16,9 @@
           <i class="fa fa-times" />
         </button>
       </div>
-      <a :href="`/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${word.id}`">
+      <a
+        :href="`/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${word.id}`"
+      >
         <img
           v-if="srcs && srcs.length > 0"
           :src="srcs[0]"
@@ -36,7 +38,10 @@
         {{ word.pinyin }}
         <Speak :text="word.simplified" />
       </div>
-      <a v-if="word" :href="`/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${word.id}`">
+      <a
+        v-if="word"
+        :href="`/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${word.id}`"
+      >
         <div :data-level="word.hsk" class="word-list-ext-item-word simplified">
           {{ word.simplified }}
         </div>
@@ -47,13 +52,13 @@
 
       <div v-if="word.definitions" class="character-example-english mb-2">
         <div v-for="definition in word.definitions.slice(0, 3)">
-          <span v-if="definition.text">{{
-            definition.text.replace(/\(.*\)/, '')
-          }}</span>
+          <span v-if="definition.text">
+            {{ definition.text.replace(/\(.*\)/, "") }}
+          </span>
         </div>
       </div>
       <div
-        v-html="Helper.highlight(word.example, word.simplified, word.hsk)"
+        v-html="highlight(word.example, word.simplified, word.hsk)"
         class="word-list-ext-example"
       ></div>
       <div class="character-example-english mt-1">
@@ -65,7 +70,8 @@
         class="btn show-more word-list-ext-compare-btn mt-3"
         :data-bg-level="word.hsk"
       >
-        <i class="glyphicon glyphicon-adjust"></i> Compare
+        <i class="glyphicon glyphicon-adjust"></i>
+        Compare
       </a>
       <a
         v-if="compareWith"
@@ -73,38 +79,39 @@
         class="btn show-more word-list-ext-related-btn mt-3"
         :data-bg-level="word.hsk"
       >
-        <i class="glyphicon glyphicon-fullscreen"></i> Related
+        <i class="glyphicon glyphicon-fullscreen"></i>
+        Related
       </a>
     </div>
   </component>
 </template>
 
 <script>
-import Config from '@/lib/config'
-import Frequency from '@/components/Frequency'
-import WordPhotos from '@/lib/word-photos'
-import Helper from '@/lib/helper'
+import Config from "@/lib/config";
+import Frequency from "@/components/Frequency";
+import WordPhotos from "@/lib/word-photos";
+import Helper from "@/lib/helper";
 
 export default {
   components: {
-    Frequency
+    Frequency,
   },
   props: {
     tag: {
-      default: 'div'
+      default: "div",
     },
     word: {
-      default: undefined
+      default: undefined,
     },
     compareWith: {
-      default: false
+      default: false,
     },
     star: {
-      default: true
+      default: true,
     },
     index: {
-      default: 0
-    }
+      default: 0,
+    },
   },
   computed: {
     $l1() {
@@ -122,49 +129,32 @@ export default {
   data() {
     return {
       Config,
-      Helper,
       removed: false,
-      srcs: []
-    }
+      srcs: [],
+    };
   },
-  mounted() {
-    this.updateImages()
+  async fetch() {
+    console.log('fetch')
+    if (this.srcs.length === 0) {
+      let images = await WordPhotos.getWebImages(this.word.simplified);
+      this.srcs = this.srcs.concat(images.map((image) => image.img));
+    }
   },
   methods: {
+    highlight(a, b, c) {
+      return Helper.highlight(a, b, c);
+    },
     remove() {
-      this.removed = true
+      this.removed = true;
     },
     imgPrev() {
-      this.srcs.push(this.srcs.shift())
+      this.srcs.push(this.srcs.shift());
     },
     imgNext() {
-      this.srcs.unshift(this.srcs.pop())
+      this.srcs.unshift(this.srcs.pop());
     },
-    updateImages() {
-      if (this.srcs.length === 0) {
-        if (this.word.hsk !== 'outside') {
-          WordPhotos.getPhoto(
-            this.word,
-            src => {
-              this.srcs.push(src)
-              this.getWebImages()
-            },
-            () => {
-              this.getWebImages()
-            }
-          )
-        } else {
-          this.getWebImages()
-        }
-      }
-    },
-    getWebImages() {
-      WordPhotos.getWebImages(this.word.simplified, images => {
-        this.srcs = this.srcs.concat(images.map(image => image.img))
-      })
-    }
-  }
-}
+  },
+};
 </script>
 
 <style>

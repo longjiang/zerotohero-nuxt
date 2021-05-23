@@ -68,7 +68,7 @@ export default {
     async getSaved() {
       this.saved = false
       let response = (
-        await $.getJSON(
+        await axios.get(
           `${Config.wiki}items/youtube_channels?filter[channel_id][eq]=${this.channel_id}`
         )
       ).data

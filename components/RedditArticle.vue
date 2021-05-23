@@ -4,21 +4,20 @@
     <div>
       <div class="mt-5 mb-5 p-5 text-center shadow">
         <p>
-          To participate, go to reddit.com/<a
-            :href="
-              `https://www.reddit.com/${
-                article.subreddit_name_prefixed
-              }/comments/cpdv8t`
-            "
-            ><b>{{ article.subreddit_name_prefixed }}</b></a
+          To participate, go to reddit.com/
+          <a
+            :href="`https://www.reddit.com/${article.subreddit_name_prefixed}/comments/cpdv8t`"
           >
+            <b>{{ article.subreddit_name_prefixed }}</b>
+          </a>
           directly.
         </p>
         <a
           :href="`https://www.reddit.com/r/ChineseLanguage/comments/cpdv8t`"
           class="btn btn-danger"
-          >Go to r/ChineseLanguage</a
         >
+          Go to r/ChineseLanguage
+        </a>
       </div>
 
       <div v-for="comment in comments">
@@ -33,41 +32,37 @@
 </template>
 
 <script>
-import Config from '@/lib/config'
-import Helper from '@/lib/helper'
-import RedditArticleCard from '@/components/RedditArticleCard'
+import Config from "@/lib/config";
+import Helper from "@/lib/helper";
+import RedditArticleCard from "@/components/RedditArticleCard";
+import axios from 'axios'
 
 export default {
-  props: ['articleId'],
+  props: ["articleId"],
   components: {
-    RedditArticleCard
+    RedditArticleCard,
   },
   data() {
     return {
       comments: [],
       article: undefined,
       Config,
-      Helper
-    }
+      Helper,
+    };
   },
   methods: {},
-  created() {
-    let cacheLife = 3600 // clear cache every hour
-    $.getJSON(
-      `${
-        Config.jsonProxy
-      }?cache_life=${cacheLife}&url=https://www.reddit.com/comments/${
-        this.articleId
-      }/.json`,
-      response => {
-        let article = response.data[0].data.children[0].data
-        this.article = article
-        let comments = response.data[1].data.children.map(item => item.data)
-        this.comments = comments
-      }
-    )
-  }
-}
+  async created() {
+    let cacheLife = 3600; // clear cache every hour
+    let response = await axios.get(
+      `${Config.jsonProxy}?cache_life=${cacheLife}&url=https://www.reddit.com/comments/${this.articleId}/.json`
+    );
+    response = response.data
+    let article = response.data[0].data.children[0].data;
+    this.article = article;
+    let comments = response.data[1].data.children.map((item) => item.data);
+    this.comments = comments;
+  },
+};
 </script>
 
 <style scoped></style>
