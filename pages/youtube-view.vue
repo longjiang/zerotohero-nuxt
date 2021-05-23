@@ -15,6 +15,12 @@
 </router>
 <template>
   <div class="youtube-view main pt-3 pb-5">
+    <SocialHead
+      v-if="video"
+      :title="`Learn Chinese from the video ${video.title} | ${$l2.name} Zero to Hero`"
+      :description="`Watch the video -- ${video.title} -- study the subtitles and improve your Chinese! Full transcript: ${this.video.subs_l2.map(l => l.line).join(' ')}`"
+      :image="`https://img.youtube.com/vi/${this.video.youtube_id}/maxresdefault.jpg`"
+    />
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
@@ -256,60 +262,6 @@ export default {
       paused: false,
       speed: 1,
     };
-  },
-  head() {
-    if (this.video) {
-      return {
-        title: `Learn Chinese from a TV Show | ${this.$l2.name} Zero to Hero`,
-        meta: [
-          {
-            hid: `description`,
-            name: "description",
-            content: `Watch the video "${this.video.title}", study the subtitles and improve your Chinese! Full transcript: ${this.video.subs_l2.map(l => l.line).join(' ')}`,
-          },
-          {
-            hid: "og:url",
-            property: "og:url",
-            content: `https://www.zerotohero.ca${this.$route.fullPath}`,
-          },
-          {
-            hid: "og:title",
-            property: "og:title",
-            content: `Learn Chinese from a TV Show | ${this.$l2.name} Zero to Hero`,
-          },
-          {
-            hid: "og:description",
-            property: "og:description",
-            content: `Watch the video "${this.video.title}", study the subtitles and improve your Chinese! Full transcript: ${this.video.subs_l2.map(l => l.line).join(' ')}`,
-          },
-          {
-            hid: "og:image",
-            property: "og:image",
-            content: `https://img.youtube.com/vi/${this.video.youtube_id}/hqdefault.jpg`,
-          },
-          {
-            hid: "twitter:url",
-            name: "twitter:url",
-            content: `https://www.zerotohero.ca${this.$route.fullPath}`,
-          },
-          {
-            hid: "twitter:title",
-            name: "twitter:title",
-            content: `Learn Chinese from a TV Show | ${this.$l2.name} Zero to Hero`,
-          },
-          {
-            hid: "twitter:description",
-            name: "twitter:description",
-            content: `Watch the video "${this.video.title}", study the subtitles and improve your Chinese! Full transcript: ${this.video.subs_l2.map(l => l.line).join(' ')}`,
-          },
-          {
-            hid: "twitter:image",
-            name: "twitter:image",
-            content: `https://img.youtube.com/vi/${this.video.youtube_id}/hqdefault.jpg`,
-          },
-        ],
-      };
-    }
   },
   async fetch() {
     // this.$refs.search.url = `https://www.youtube.com/watch?v=${this.args}`

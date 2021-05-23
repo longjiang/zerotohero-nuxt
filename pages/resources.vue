@@ -15,6 +15,12 @@
 </router>
 <template>
   <div class="main mt-5 mb-5">
+    <SocialHead
+      v-if="resources[0]"
+      :title="`${resources.length} Resources to Help You ${$l2.name} | ${$l2.name} Zero to Hero`"
+      :description="`${resources.map(r => r.title).join(', ')}`"
+      :image="resources[0].thumbnail"
+    />
     <div class="container">
       <div class="row">
         <div class="col-sm-12 col-md-8 pr-4 mb-5">
@@ -29,20 +35,24 @@
                 'link-unstyled': true,
                 'list-group-item': true,
                 'list-group-item-action': topic === 'all',
-                active: topic === 'all'
+                active: topic === 'all',
               }"
               :href="`/${$l1.code}/${$l2.code}/resource/list/all/${type}`"
-            >All</a>
+            >
+              All
+            </a>
             <a
               v-for="(topicName, topicValue) in topics"
               :class="{
                 'link-unstyled': true,
                 'list-group-item': true,
                 'list-group-item-action': topicValue === topic,
-                active: topicValue === topic
+                active: topicValue === topic,
               }"
               :href="`/${$l1.code}/${$l2.code}/resource/list/${topicValue}/all`"
-            >{{ topicName }}</a>
+            >
+              {{ topicName }}
+            </a>
           </div>
           <h6 class="mt-4 mb-4 text-center">Type</h6>
           <div class="list-group">
@@ -51,20 +61,24 @@
                 'link-unstyled': true,
                 'list-group-item': true,
                 'list-group-item-action': type === 'all',
-                active: type === 'all'
+                active: type === 'all',
               }"
               :href="`/${$l1.code}/${$l2.code}/resource/list/${topic}/all`"
-            >All</a>
+            >
+              All
+            </a>
             <a
               v-for="(typeName, typeValue) in types"
               :class="{
                 'link-unstyled': true,
                 'list-group-item': true,
                 'list-group-item-action': typeValue === type,
-                active: typeValue === type
+                active: typeValue === type,
               }"
               :href="`/${$l1.code}/${$l2.code}/resource/list/all/${typeValue}`"
-            >{{ typeName }}</a>
+            >
+              {{ typeName }}
+            </a>
           </div>
         </div>
       </div>
@@ -73,22 +87,22 @@
 </template>
 
 <script>
-import Config from '@/lib/config'
-import Helper from '@/lib/helper'
-import ResourceList from '@/components/ResourceList'
-import axios from 'axios'
+import Config from "@/lib/config";
+import Helper from "@/lib/helper";
+import ResourceList from "@/components/ResourceList";
+import axios from "axios";
 
 export default {
   components: {
-    ResourceList
+    ResourceList,
   },
   props: {
     topic: {
-      default: 'all'
+      default: "all",
     },
     type: {
-      default: 'all'
-    }
+      default: "all",
+    },
   },
   data() {
     return {
@@ -96,33 +110,33 @@ export default {
       Helper,
       resources: [],
       types: {
-        av: 'Audio-Visual',
-        community: 'Community',
-        courses: 'Courses',
-        games: 'Games',
-        lists: 'Lists of Resources',
-        music: 'Music',
-        reading: 'Reading',
-        software: 'Software',
-        textbooks: 'Textbooks',
-        multiple: 'Miscellaneous'
+        av: "Audio-Visual",
+        community: "Community",
+        courses: "Courses",
+        games: "Games",
+        lists: "Lists of Resources",
+        music: "Music",
+        reading: "Reading",
+        software: "Software",
+        textbooks: "Textbooks",
+        multiple: "Miscellaneous",
       },
       topics: {
-        strategy: 'Learning Strategy',
-        characters: 'Characters',
-        culture: 'Culture',
-        grammar: 'Grammar',
-        vocabulary: 'Vocabulary',
-        multiple: 'Miscellaneous'
-      }
-    }
+        strategy: "Learning Strategy",
+        characters: "Characters",
+        culture: "Culture",
+        grammar: "Grammar",
+        vocabulary: "Vocabulary",
+        multiple: "Miscellaneous",
+      },
+    };
   },
   watch: {
     $route() {
-      if (this.$route.name === 'resources') {
-        this.route()
+      if (this.$route.name === "resources") {
+        this.route();
       }
-    }
+    },
   },
   computed: {
     $l1() {
@@ -136,31 +150,32 @@ export default {
   },
   methods: {
     async route() {
-      let canonical = `/${this.$l1.code}/${this.$l2.code}/resource/list/${this.topic}/${this.type}`
-      let filters = ''
+      let canonical = `/${this.$l1.code}/${this.$l2.code}/resource/list/${this.topic}/${this.type}`;
+      let filters = "";
       if (this.$router.currentRoute.path !== canonical) {
-        this.$router.push({ path: canonical })
+        this.$router.push({ path: canonical });
       } else {
-        if (this.topic !== 'all') {
-          filters += '&filter[topic][eq]=' + this.topic
+        if (this.topic !== "all") {
+          filters += "&filter[topic][eq]=" + this.topic;
         }
-        if (this.type !== 'all') {
-          filters += '&filter[type][eq]=' + this.type
+        if (this.type !== "all") {
+          filters += "&filter[type][eq]=" + this.type;
         }
         let response = await axios.get(
           `${Config.wiki}items/resources?filter[l2][eq]=${this.$l2.id}${filters}&fields=*,thumbnail.*`
-        )
-        this.resources = response.data.data.map(resource => {
-          resource.thumbnail = resource.thumbnail.data.full_url
-          return resource
-        }) || []
+        );
+        this.resources =
+          response.data.data.map((resource) => {
+            resource.thumbnail = resource.thumbnail.data.full_url;
+            return resource;
+          }) || [];
       }
-    }
+    },
   },
   created() {
-    this.route()
-  }
-}
+    this.route();
+  },
+};
 </script>
 
 <style></style>

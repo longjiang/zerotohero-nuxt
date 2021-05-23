@@ -1,5 +1,11 @@
 <template>
   <article class="updown article">
+    <SocialHead
+      v-if="article && article.post_hint === 'image'"
+      :image="`${article.url}`"
+      :title="`Reddit Posts under r/${article.subreddit} | ${$l2.name} Zero to Hero`"
+      :description="`Articles: ${article.title}`"
+    />
     <div class="updown-head">
       <i class="fa fa-arrow-up" />
       <div>{{ article.ups }}</div>
@@ -19,9 +25,9 @@
         <Annotate tag="h4" class="article-title" :showTranslate="true"><span>{{ article.title }}</span></Annotate>
         <div
           v-if="article.media && article.media.oembed"
-          v-html="Helper.unescape(article.media.oembed.html)"
+          v-html="unescape(article.media.oembed.html)"
         ></div>
-        <Annotate tag="div" class="article-body" :showTranslate="true"><div v-html="Helper.unescape(article.selftext_html)"></div></Annotate>
+        <Annotate tag="div" class="article-body" :showTranslate="true"><div v-html="unescape(article.selftext_html)"></div></Annotate>
       </div>
     </div>
   </article>
@@ -34,10 +40,24 @@ export default {
   props: ['article'],
   data() {
     return {
-      Helper
+
     }
   },
-  methods: {},
+  computed: {
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
+  },
+  methods: {
+    unescape(escapedHTML) {
+      return Helper.unescape(escapedHTML)
+    }
+  },
   created() {}
 }
 </script>

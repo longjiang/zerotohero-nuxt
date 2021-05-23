@@ -8,12 +8,6 @@ export default {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'Language education done right.' },
-      { property: "og:site_name", content: "Zero to Hero Education" },
-      { hid: "og:type", property: "og:type", content: "website" },
-      { property: "og:image:width", content: "740" },
-      { property: "og:image:height", content: "300" },
-      { name: "twitter:card", content: "summary_large_image" },
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/img/icons/favicon.ico' },

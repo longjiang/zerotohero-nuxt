@@ -2,15 +2,6 @@
   {
     path: '/:l1/:l2/articles/reddit/:method?/:args?',
     props: true,
-    meta: {
-      title: 'Reddit Posts | Zero to Hero',
-      metaTags: [
-        {
-          name: 'description',
-          content: 'Read Reddit posts related to language.'
-        }
-      ]
-    }
   }
 </router>
 <template>
@@ -78,7 +69,6 @@
 
 <script>
 import Config from "@/lib/config";
-import Helper from "@/lib/helper";
 import RedditArticlesList from "@/components/RedditArticlesList.vue";
 import RedditArticle from "@/components/RedditArticle.vue";
 import axios from 'axios'
@@ -95,7 +85,6 @@ export default {
       articles: [],
       articleId: undefined,
       Config,
-      Helper,
       key: 0,
     };
   },
@@ -116,30 +105,25 @@ export default {
       }
     },
   },
-  methods: {
-    async route() {
-      if (this.method) {
-        if (this.method === "view" && this.args) {
-          this.articleId = this.args.split(",")[0];
-        } else if (this.method === "list") {
-          if (!this.subreddits) {
-            let response = await axios.get(
-              `${Config.wiki}items/subreddits?filter[l2][eq]=${this.$l2.id}`
-            );
-            if (response.data) {
-              this.subreddits = response.data.data;
-            }
+  async fetch() {
+    if (this.method) {
+      if (this.method === "view" && this.args) {
+        this.articleId = this.args.split(",")[0];
+      } else if (this.method === "list") {
+        if (!this.subreddits) {
+          let response = await axios.get(
+            `${Config.wiki}items/subreddits?filter[l2][eq]=${this.$l2.id}`
+          );
+          if (response.data) {
+            this.subreddits = response.data.data;
           }
         }
-      } else {
-        this.$router.push({
-          path: `/${this.$l1.code}/${this.$l2.code}/articles/reddit/list`,
-        });
       }
-    },
-  },
-  created() {
-    this.route();
+    } else {
+      this.$router.push({
+        path: `/${this.$l1.code}/${this.$l2.code}/articles/reddit/list`,
+      });
+    }
   },
 };
 </script>

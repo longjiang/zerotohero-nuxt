@@ -15,6 +15,10 @@
 </router>
 <template>
   <div class="main pt-5 pb-5">
+    <SocialHead
+      :title="`Tutoring Kit | ${$l2.name} Zero to Hero`"
+      :description="`A resource kit to help you get most out of your ${$l2.name} tutoring lessons, including topics for descussion and activities!`"
+    />
     <div class="container">
       <div class="row">
         <div class="col-sm-12">

@@ -9,21 +9,39 @@ export default {
   props: {
     title: {
       type: String,
-      required: true
+      default: 'Zero to Hero Education'
     },
     description: {
       type: String,
-      required: true
+      default: 'Language education done right.'
     },
     image: {
       type: String,
-      default: '/img/icon-z2h.jpeg'
-    }
+      default: '/img/zth-share-image.jpg'
+    },
   },
-
+  computed: {
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
+  },
   head() {
     return {
+      title: this.title,
+      htmlAttrs: {
+        lang: this.$l1.code
+      },
+      link: [
+        { rel: 'icon', type: 'image/x-icon', href: this.$l2 ? this.$languages.logo(this.$l2.code) : '/img/icons/favicon.ico' },
+      ],
       meta: [
+        { hid: 'description', name: 'description', content: this.description },
+        { name: "twitter:card", content: "summary_large_image" },
         {
           hid: 'twitter:title',
           name: 'twitter:title',
@@ -44,10 +62,17 @@ export default {
           name: 'twitter:image:alt',
           content: this.title
         },
+        { property: "og:site_name", content: "Zero to Hero Education" },
+        { hid: "og:type", property: "og:type", content: "website" },
         {
           hid: 'og:title',
           property: 'og:title',
           content: this.title
+        },
+        {
+          hid: 'og:url',
+          property: 'og:url',
+          content: `https://www.zerotohero.ca/${this.$route.fullPath}`
         },
         {
           hid: 'og:description',
@@ -59,6 +84,8 @@ export default {
           property: 'og:image',
           content: this.image
         },
+        { property: "og:image:width", content: "1280" },
+        { property: "og:image:height", content: "720" },
         {
           hid: 'og:image:secure_url',
           property: 'og:image:secure_url',

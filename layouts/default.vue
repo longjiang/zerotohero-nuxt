@@ -249,6 +249,7 @@
         </div>
       </div>
       <Choose :compact="true" />
+      <SocialHead />
     </template>
   </div>
 </template>
@@ -305,8 +306,8 @@ export default {
       if (!this.$store.state.savedCollocations.savedCollocationsLoaded) {
         this.$store.commit("savedCollocations/LOAD_SAVED_COLLOCATIONS");
       }
-      if (!this.$store.state.savedCollocations.savedHitsLoaded) {
-        this.$store.commit("savedCollocations/LOAD_SAVED_HITS");
+      if (!this.$store.state.savedHits.savedHitsLoaded) {
+        this.$store.commit("savedHits/LOAD_SAVED_HITS");
       }
     }
   },

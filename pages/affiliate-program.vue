@@ -1,19 +1,15 @@
 <router>
   {
-    path: '/:l1/:l2/affiliate-program',
-    meta: {
-      title: 'Affiliate Program | Zero To Hero',
-      metaTags: [
-        {
-          name: 'description',
-          content: 'Help us get the word out!'
-        }
-      ]
-    }
+    path: '/:l1/:l2/affiliate-program'
   }
 </router>
 <template>
   <div class="affiliate container mt-5 mb-5">
+    <SocialHead
+      :title="`Affiliate Program | ${$l2.name} Zero to Hero`"
+      :description="`Affiliates are our partners and we want them to make money too! Do you
+      have a social media following?`"
+    />
     <h1 class="mb-2 text-center">Join Our Affiliate Program</h1>
     <p class="lead text-center mb-5">
       Let more people benefit from {{ $l2.name }} Zero to Hero.

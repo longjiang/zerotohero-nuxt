@@ -1,20 +1,11 @@
 <router>
   {
-    path: '/:l1/:l2/faq',
-    meta: {
-      title: 'Frequently Asked Questions | Zero To Hero',
-      metaTags: [
-        {
-          name: 'description',
-          content:
-            'We often hear these questions. Hopefully this page can answer yours.'
-        }
-      ]
-    }
+    path: '/:l1/:l2/faq'
   }
 </router>
 <template>
   <div class="faq container mt-5 mb-5">
+    <SocialHead :title="`Frequently Asked Questions | ${$l2.name} Zero to Hero`" />
     <div class="row" v-if="$l1.code === 'en' && $l2.code === 'zh'">
       <FAQEnZh />
     </div>

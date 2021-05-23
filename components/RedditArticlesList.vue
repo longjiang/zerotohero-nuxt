@@ -15,8 +15,8 @@
 
 <script>
 import Config from "@/lib/config";
-import Helper from "@/lib/helper";
 import RedditArticleCard from "@/components/RedditArticleCard";
+import axios from 'axios'
 
 export default {
   components: {
@@ -40,7 +40,7 @@ export default {
         return this.$store.state.settings.l2;
     },
   },
-  async created() {
+  async fetch() {
     let cacheLife = 3600; // clear cache every hour
     let response = await axios.get(
       `${Config.jsonProxy}?cache_life=${cacheLife}&url=https://www.reddit.com/${this.path}.json`
@@ -51,7 +51,6 @@ export default {
   data() {
     return {
       Config,
-      Helper,
       articles: [],
     };
   },

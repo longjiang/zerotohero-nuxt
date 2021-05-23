@@ -14,10 +14,15 @@
 </router>
 <template>
   <div class="container main mt-5 mb-5">
+    <SocialHead :title="`Contact Us | ${$l2.name} Zero to Hero`" />
     <template v-if="this.$l1.code && this.$l2.code === 'en'">
       <div class="row">
         <div class="col-sm-12 text-center mt-4">
-          <img src="/img/contact-us.svg" class="img-fluid" style="max-width: 690px" />
+          <img
+            src="/img/contact-us.svg"
+            class="img-fluid"
+            style="max-width: 690px"
+          />
         </div>
       </div>
     </template>
@@ -25,7 +30,7 @@
       <div class="row">
         <div class="col-sm-12">
           <h1 class="mb-5 text-center">
-            {{ $t('Contact {l2} Zero to Hero', { l2: $l2.name }) }}
+            {{ $t("Contact {l2} Zero to Hero", { l2: $l2.name }) }}
           </h1>
         </div>
       </div>
@@ -38,38 +43,39 @@
               </div>
               <div class="col-sm-8">
                 <h3 class="mb-3">
-                  {{ $t('Contact Ken with general or business inquiries.') }}
+                  {{ $t("Contact Ken with general or business inquiries.") }}
                 </h3>
                 <p>
-                  <span
-                    ><strong>{{ $t('Ken’s Email:') }} </strong
-                    ><a href="mailto:ken@chinesezerotohero.com"
-                      >ken@chinesezerotohero.com</a
-                    >
+                  <span>
+                    <strong>{{ $t("Ken’s Email:") }}</strong>
+                    <a href="mailto:ken@chinesezerotohero.com">
+                      ken@chinesezerotohero.com
+                    </a>
                     (please note that our email server was down from December 10
                     to December 15, 2020. If you've sent an email during this
-                    period, please send it again)</span
-                  >
+                    period, please send it again)
+                  </span>
                 </p>
                 <p>
-                  <strong>{{ $t('Ken’s WeChat:') }}</strong> kendai9&nbsp;
+                  <strong>{{ $t("Ken’s WeChat:") }}</strong>
+                  kendai9&nbsp;
                 </p>
               </div>
             </div>
           </div>
-          <div class="rounded shadow bg-light p-4  mt-4  mb-4 container">
+          <div class="rounded shadow bg-light p-4 mt-4 mb-4 container">
             <div class="row">
               <div class="col-sm-4">
                 <img src="/img/jon-sitting.png" alt="" style="height: 8rem" />
               </div>
               <div class="col-sm-8">
                 <h3 class="mb-3">
-                  {{ $t('Contact Jon with course-related questions.') }}
+                  {{ $t("Contact Jon with course-related questions.") }}
                 </h3>
                 <p>
                   {{
                     $t(
-                      'If you are taking our courses and have a question regarding any content, leave a comment in the comment area of the lecture.'
+                      "If you are taking our courses and have a question regarding any content, leave a comment in the comment area of the lecture."
                     )
                   }}
                 </p>
@@ -78,13 +84,13 @@
             </div>
           </div>
         </div>
-        <div v-if="!isZh" class="col-sm-12 col-lg-6">
+        <div v-if="this.$l2.code === 'zh'" class="col-sm-12 col-lg-6">
           <div class="rounded shadow bg-light p-4 container">
-            <h3>{{ $t('Join our WeChat discussion group') }}</h3>
+            <h3>{{ $t("Join our WeChat discussion group") }}</h3>
             <p class="mt-3">
               {{
                 $t(
-                  'Download the WeChat app, scan Ken’s QR code below, leave him a message, and he will invite you into the group.'
+                  "Download the WeChat app, scan Ken’s QR code below, leave him a message, and he will invite you into the group."
                 )
               }}
             </p>
@@ -104,7 +110,7 @@
 </template>
 
 <script>
-import Page from '@/components/Page'
+import Page from "@/components/Page";
 
 export default {
   computed: {
@@ -118,9 +124,9 @@ export default {
     },
   },
   components: {
-    Page
-  }
-}
+    Page,
+  },
+};
 </script>
 
 <style></style>
