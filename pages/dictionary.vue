@@ -177,7 +177,6 @@ export default {
     },
     async random() {
       let randomEntry = await (await this.$getDictionary()).random()
-      console.log(randomEntry, 'randomEntry')
       let randomId = randomEntry.id;
       this.$router.push({
         path: `/${this.$l1.code}/${this.$l2.code}/dictionary/${this.$store.state.settings.dictionaryName}/${randomId}`,

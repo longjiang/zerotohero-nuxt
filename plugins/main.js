@@ -7,6 +7,7 @@ import VueSimpleSVG from 'vue-simple-svg'
 import Languages from '@/lib/languages'
 import ModuleLoader from '~/lib/module-loader'
 import WorkerModuleLoader from '~/lib/worker-module-loader'
+import { i18n } from '~/plugins/i18n.js'
 
 Vue.config.productionTip = false
 
@@ -17,6 +18,7 @@ Vue.use(VueAnalytics, {
   id: 'UA-1846573-21'
 })
 Vue.use(VueDisqus)
+Vue.use(i18n)
 
 
 // https://stackoverflow.com/questions/44371639/how-to-remove-html-tags-from-rendered-text

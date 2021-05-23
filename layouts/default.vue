@@ -255,6 +255,13 @@ export default {
       this.updateClasses()
     }
   },
+  created() {
+    this.$i18n.locale = this.l1.code
+    this.$i18n.silentTranslationWarn = true
+    this.$i18n.setLocaleMessage(
+      this.l1.code, this.l1.translations
+    )
+  },
   methods: {
     updateClasses() {
       this.classes = {
@@ -276,15 +283,7 @@ export default {
     },
   },
   computed: {
-    ...mapState("settings", ["l2Settings"]),
-    l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-    },
-    l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
-    },
+    ...mapState("settings", ["l2Settings", "l1", "l2"])
   },
 };
 </script>
