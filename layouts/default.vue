@@ -248,6 +248,12 @@ export default {
   methods: {},
   mounted() {
     this.updateClasses()
+    console.log('mounted')
+    console.log(this.$store.state.savedWords.savedWordsLoaded)
+    if (!this.$store.state.savedWords.savedWordsLoaded) {
+      console.log('msavingd')
+      this.$store.commit("savedWords/LOAD_SAVED_WORDS");
+    }
   },
   updated() {
     if (!this.$store.state.settings.settingsLoaded) {

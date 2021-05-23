@@ -1,13 +1,21 @@
-let localStorage = process.browser ? localStorage : false
-
 export const state = () => {
   return {
-    savedWords: localStorage ? JSON.parse(localStorage.getItem('zthSavedWords')) : {} || {}
+    savedWords: {},
+    savedWordsLoaded: false
   }
 }
 export const mutations = {
+  LOAD_SAVED_WORDS(state, l2) {
+    console.log('loading saved words', typeof localStorage)
+    if (typeof localStorage !== 'undefined') {
+      let savedWords = JSON.parse(localStorage.getItem('zthSavedWords') || '{}')
+      state.savedWords = savedWords || state.savedWords
+      state.savedWordsLoaded = true
+    }
+  },
   ADD_SAVED_WORD(state, options) {
-    if (localStorage) {
+    if (typeof localStorage !== 'undefined') {
+      console.log('adding', options)
       if (!state.savedWords[options.l2]) {
         state.savedWords[options.l2] = []
       }
@@ -20,27 +28,27 @@ export const mutations = {
           forms: options.wordForms
         })
         localStorage.setItem('zthSavedWords', JSON.stringify(savedWords))
-        Vue.set(state, 'savedWords', savedWords)
+        this._vm.$set(state, 'savedWords', savedWords)
       }
     }
   },
   REMOVE_SAVED_WORD(state, options) {
-    if (localStorage && state.savedWords[options.l2]) {
+    if (typeof localStorage !== 'undefined' && state.savedWords[options.l2]) {
       const keepers = state.savedWords[options.l2].filter(
         item => item.id !== options.word.id
       )
       let savedWords = Object.assign({}, state.savedWords)
       savedWords[options.l2] = keepers
       localStorage.setItem('zthSavedWords', JSON.stringify(savedWords))
-      Vue.set(state, 'savedWords', savedWords)
+      this._vm.$set(state, 'savedWords', savedWords)
     }
   },
   REMOVE_ALL_SAVED_WORDS(state, options) {
-    if (localStorage && state.savedWords[options.l2]) {
+    if (typeof localStorage !== 'undefined' && state.savedWords[options.l2]) {
       let savedWords = Object.assign({}, state.savedWords)
       savedWords[options.l2] = []
       localStorage.setItem('zthSavedWords', JSON.stringify(savedWords))
-      Vue.set(state, 'savedWords', savedWords)
+      this._vm.$set(state, 'savedWords', savedWords)
     }
   }
 }

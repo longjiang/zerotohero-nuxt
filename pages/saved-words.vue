@@ -131,15 +131,16 @@ export default {
   },
   methods: {
     async updateWords() {
-      this.sW = []
-      if(this.$root.savedWords && this.$root.savedWords[this.$l2.code]) {
-        for (let savedWord of this.$root.savedWords[this.$l2.code]) {
+      let sW = []
+      if(this.$store.state.savedWords.savedWords && this.$store.state.savedWords.savedWords[this.$l2.code]) {
+        for (let savedWord of this.$store.state.savedWords.savedWords[this.$l2.code]) {
           let word = await (await this.$getDictionary()).get(savedWord.id)
           if (word) {
-            this.sW.push(word)
+            sW.push(word)
           }
         }
       }
+      this.sW = sW
     },
     async csv() {
       if (this.sW.length <= 0) {

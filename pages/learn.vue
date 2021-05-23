@@ -89,10 +89,8 @@ export default {
       }
     },
   },
-  beforeMount() {
+  created() {
     this.route();
-  },
-  mounted() {
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type.startsWith("savedWords")) {
         this.updateWords();
@@ -105,19 +103,17 @@ export default {
   },
   methods: {
     async updateWords() {
-      this.savedWords = [];
-      this.savedTexts = [];
-      if (this.$root.savedWords && this.$root.savedWords[this.$l2.code]) {
-        for (let wordForms of this.$root.savedWords[this.$l2.code]) {
-          let word = await (await this.$getDictionary()).lookup(wordForms[0]);
+      let sW = []
+      if(this.$store.state.savedWords.savedWords && this.$store.state.savedWords.savedWords[this.$l2.code]) {
+        for (let savedWord of this.$store.state.savedWords.savedWords[this.$l2.code]) {
+          let word = await (await this.$getDictionary()).get(savedWord.id)
           if (word) {
-            this.savedWords.push(word);
-          } else {
-            this.savedTexts.push(wordForms[0].form);
+            sW.push(word)
           }
         }
       }
-      this.words = this.savedWords;
+      this.savedWords = sW
+      this.words = sW;
     },
     async route() {
       if (this.$route.params.method) {

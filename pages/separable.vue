@@ -17,11 +17,7 @@
   <div class="container main mt-5 mb-5">
     <div class="row">
       <div class="col-sm-12">
-        <h1 class="text-center">
-          Separable verbs (
-          <Annotate><span>离合词</span></Annotate>
-          )
-        </h1>
+        <h1 class="text-center">Separable verbs ( 离合词 )</h1>
         <p class="text-center mb-5">
           <Annotate>
             <span>
