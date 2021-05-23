@@ -61,7 +61,7 @@ export default {
         {
           icon: 'fas fa-graduation-cap',
           title: 'Courses',
-          show: this.$hasFeature('courses'),
+          show: this.hasFeature('courses'),
           children: [
             {
               name: 'courses',
@@ -104,7 +104,7 @@ export default {
         {
           icon: 'fas fa-video',
           title: 'Audio-Visual',
-          show: this.$hasFeature('youtube'),
+          show: this.hasFeature('youtube'),
           children: [
             {
               name: 'youtube-browse',
@@ -133,13 +133,13 @@ export default {
         {
           icon: 'fas fa-book',
           title: 'Dictionary',
-          show: this.$hasFeature('dictionary'),
+          show: this.hasFeature('dictionary'),
           children: [
             {
               name: 'dictionary',
               icon: 'fas fa-font',
               title: 'Look Up',
-              show: this.$hasFeature('dictionary'),
+              show: this.hasFeature('dictionary'),
               shortcut: (e) => e.code === 'KeyD' && e.metaKey && e.shiftKey,
             },
             {
@@ -167,25 +167,25 @@ export default {
               name: 'levels',
               icon: 'fa fa-signal',
               title: 'HSK',
-              show: this.$hasFeature('levels'),
+              show: this.hasFeature('levels'),
             },
             {
               name: 'new-levels',
               icon: 'fa fa-signal',
               title: 'New HSK',
-              show: this.$hasFeature('levels'),
+              show: this.hasFeature('levels'),
             },
             {
               name: 'radicals',
               icon: 'fa fa-code-branch',
               title: 'Radicals',
-              show: this.$hasFeature('radicals'),
+              show: this.hasFeature('radicals'),
             },
             {
               name: 'characters',
               icon: 'fa fa-pen-alt',
               title: 'Characters',
-              show: this.$hasFeature('characters'),
+              show: this.hasFeature('characters'),
             },
             {
               name: 'idioms',
@@ -203,25 +203,25 @@ export default {
               name: 'explore-roots',
               icon: 'fa fa-wrench',
               title: 'Word Builder',
-              show: this.$hasFeature('roots'),
+              show: this.hasFeature('roots'),
             },
             {
               name: 'explore-topics',
               icon: 'fas fa-certificate',
               title: 'Topics',
-              show: this.$hasFeature('explore-topics'),
+              show: this.hasFeature('explore-topics'),
             },
             {
               name: 'explore-related',
               icon: 'fas fa-expand-arrows-alt',
               title: 'Related',
-              show: this.$hasFeature('related'),
+              show: this.hasFeature('related'),
             },
             {
               name: 'learn',
               icon: 'fa fa-chalkboard',
               title: 'Learn',
-              show: this.$hasFeature('learn'),
+              show: this.hasFeature('learn'),
             },
           ],
         },
@@ -229,8 +229,8 @@ export default {
           icon: 'fas fa-book-open',
           title: 'Reading',
           show:
-            this.$hasFeature('dictionary') ||
-            this.$hasFeature('transliteration'),
+            this.hasFeature('dictionary') ||
+            this.hasFeature('transliteration'),
           children: [
             {
               name: 'reader',
@@ -262,14 +262,14 @@ export default {
         {
           icon: 'fas fa-list-ul',
           title: 'Grammar',
-          show: this.$hasFeature('grammar'),
+          show: this.hasFeature('grammar'),
           shortcut: (e) => e.code === 'KeyG' && e.metaKey && e.shiftKey,
           children: [
             {
               name: 'grammar',
               icon: 'fas fa-list-ul',
               title: 'Grammar Cheat Sheet',
-              show: this.$hasFeature('grammar'),
+              show: this.hasFeature('grammar'),
             },
             {
               name: 'grammar-view',
@@ -281,19 +281,19 @@ export default {
           name: 'noun-cases',
           icon: 'fas fa-list-ul',
           title: 'Grammar Tools',
-          show: this.$hasFeature('noun-cases'),
+          show: this.hasFeature('noun-cases'),
         },
         {
           name: 'keyboard',
           icon: 'fas fa-keyboard',
           title: 'Keyboard',
-          show: this.$hasFeature('keyboard'),
+          show: this.hasFeature('keyboard'),
         },
         {
           name: 'bookmarklet',
           icon: 'fas fa-bookmark',
           title: 'Bookmarklet',
-          show: this.$hasFeature('bookmarklet'),
+          show: this.hasFeature('bookmarklet'),
         },
         {
           icon: 'fas fa-gem',
@@ -383,6 +383,9 @@ export default {
     }
   },
   methods: {
+    hasFeature(feature) {
+      return this.$hasFeature(feature)
+    },
     nameOfSelfOrFirstChild(item) {
       if (item) {
         let result = item.name || (item.children && item.children.length > 0 ? item.children[0].name : '')

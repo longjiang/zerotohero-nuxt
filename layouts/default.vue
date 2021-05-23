@@ -71,7 +71,7 @@
               </div>
             </div>
           </div>
-          <Nav v-if="l1 && l2" :l1="l1" :l2="l2" />
+          <Nav v-if="l1 && l2" :l1="l1" :l2="l2" :key="`nav-${l1.code}-${l2.code}`"/>
         </div>
 
         <Nuxt />

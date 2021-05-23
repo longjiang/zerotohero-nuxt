@@ -6,7 +6,7 @@
           <LanguageSwitch class="mt-3 mb-4" />
           <ul v-if="languages && languages.length > 0" class="language-list">
             <li v-for="language in languages" class="language-list-item">
-              <a :href="`/en/${language.code}`">{{ language.name }}</a>
+              <router-link :to="`/en/${language.code}`">{{ language.name }}</router-link>
             </li>
           </ul>
         </div>

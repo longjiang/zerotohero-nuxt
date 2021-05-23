@@ -412,12 +412,16 @@ export default {
     },
     async getTranscript() {
       this.l1Lines = []
-      let l2Subs = this.saved
-        ? (this.l2Lines = JSON.parse(this.saved.subs_l2)).filter(
+      let l2Subs = []
+      if (this.saved) {
+        let savedSubs = JSON.parse(this.saved.subs_l2)
+        if (savedSubs) {
+          l2Subs = savedSubs.filter(
             (line) => line.starttime
           )
-        : false
-      this.l2Lines = l2Subs ? l2Subs : []
+        }
+      }
+      this.l2Lines = l2Subs
       this.hasSubtitles = false
       this.loading = true
       if (this.l2Lines.length === 0) {
