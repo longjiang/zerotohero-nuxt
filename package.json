@@ -12,7 +12,8 @@
     "test": "jest"
   },
   "browser": {
-    "jsdom": false
+    "jsdom": false,
+    "canvas": false
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.13.1",
