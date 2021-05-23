@@ -27,6 +27,7 @@
               <img
                 :src="`//img.youtube.com/vi/${show.youtube_id}/hqdefault.jpg`"
                 class="youtube-thumbnail aspect"
+                v-lazy-load
               />
             </router-link>
             <div class="media-body">

@@ -63,7 +63,7 @@ export default ({ app, store }, inject) => {
   });
   inject('getDictionary', async () => {
     if (process.server) {
-      let dictionary = ModuleLoader.load(store.state.settings.dictionaryName, { l1: store.state.settings.l1["iso639-3"], l2: store.state.settings.l2["iso639-3"] })
+      let dictionary = ModuleLoader.load('dictionaries/' + store.state.settings.dictionaryName, { l1: store.state.settings.l1["iso639-3"], l2: store.state.settings.l2["iso639-3"] })
       return dictionary
     } else {
       let dictionary = WorkerModuleLoader.load(store.state.settings.dictionaryName, { l1: store.state.settings.l1["iso639-3"], l2: store.state.settings.l2["iso639-3"] })
@@ -71,15 +71,15 @@ export default ({ app, store }, inject) => {
     }
   })
   inject('getGrammar', async () => {
-    let module = await import(`@/lib/grammar`)
-    return module.default.load()
+    let grammar = ModuleLoader.load('grammar')
+    return grammar
   })
   inject('getHanzi', async () => {
-    let module = await import(`@/lib/hanzi`)
-    return module.default.load()
+    let hanzi = ModuleLoader.load('hanzi')
+    return hanzi
   })
   inject('getUnihan', async () => {
-    let module = await import(`@/lib/unihan`)
-    return module.default.load()
+    let unihan = ModuleLoader.load('unihan')
+    return unihan
   })
 }

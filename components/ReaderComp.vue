@@ -1,5 +1,5 @@
 <template>
-  <div v-if="$l2 && $hasFeature('reader')">
+  <div>
     <button
       v-if="iconMode && !fullscreen"
       @click="fullscreen = !fullscreen"

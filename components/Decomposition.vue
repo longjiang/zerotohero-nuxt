@@ -94,7 +94,7 @@ export default {
       } 
     },
     async drawDecomposition(char, selector) {
-      const character = (await this.$hanzi).lookup(char)
+      const character = (await this.$getHanzi()).lookup(char)
       if (!character) return
       await character.walkDecompositionTree(async node => {
         if (character.isIdeographicDescCharacter(node.character)) {
@@ -112,7 +112,7 @@ export default {
           if (node.character === '？') {
             $template = $(`<div class="part-pinyin">(other elements)</div>`)
           } else {
-            const childCharacter = (await this.$hanzi).lookupShallow(
+            const childCharacter = (await this.$getHanzi()).lookupShallow(
               node.character
             )
             $template = $(`

@@ -110,12 +110,13 @@ export default {
     },
     async loadGrammar() {
       this.drills = []
-      let grammar = (await this.$grammar)._grammarData.find(
+
+      let grammar = await this.$getGrammar()
+      this.grammar = grammar._grammarData.find(
         (row) => row.id === this.id
       )
       if (!this.grammar || grammar.pattern !== this.grammar.pattern)
         this.delayed = false
-      this.grammar = grammar
       let entry = await (await this.$getDictionary()).lookup(
         this.grammar.structure.replace(/…….*/, '').replace(Helper.nonCjk, '')
       )

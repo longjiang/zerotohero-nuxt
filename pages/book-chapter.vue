@@ -119,7 +119,7 @@
               'list-group-item': true,
               'link-unstyled': true,
               active:
-                location.pathname ===
+                $route.fullPath ===
                 `/${$l1.code}/${$l2.code}/book/chapter?url=${encodeURIComponent(
                   chapter.url
                 )}`,
@@ -169,7 +169,6 @@ export default {
       chapterTitle: "",
       chapterContent: "",
       chapterLang: undefined,
-      location,
       foreign: true,
       loaded: false,
     };
@@ -180,6 +179,14 @@ export default {
     },
   },
   computed: {
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
     previous() {
       if (this.chapters) {
         let index = this.chapters.findIndex(

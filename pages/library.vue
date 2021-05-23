@@ -84,9 +84,9 @@
             URLs like the following into the above text box and enjoy reading!
           </p>
           <ul>
-            <li v-for="source in sources">
+            <li v-for="(source, index) in sources" :key="`library-source-${index}`">
               {{ source.name }}, example URL:
-              <code v-html="`${source.example($l2.code)}`"></code>
+              <code v-if="typeof source.example === 'function'" v-html="`${source.example($l2.code)}`"></code>
             </li>
           </ul>
         </div>
@@ -112,10 +112,19 @@ export default {
     return {
       Library,
       libraryL2: undefined,
-      location,
       booklists: [],
       sources: [],
     };
+  },
+  computed: {
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
   },
   async mounted() {
     try {

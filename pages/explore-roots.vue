@@ -106,6 +106,16 @@ export default {
   beforeMount() {
     this.route();
   },
+  computed: {
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
+  },
   methods: {
     currentIndex() {
       return this.roots.findIndex((root) => root.pattern === this.arg);
@@ -140,7 +150,7 @@ export default {
         this.rootWords = words
           .sort((a, b) => a.simplified.length - b.simplified.length)
           .sort((a, b) => a.hsk - b.hsk);
-        this.rootCharacter = (await this.$hanzi).lookup(
+        this.rootCharacter = (await this.$getHanzi()).lookup(
           this.arg.replace(/～/g, "")
         );
         document.title = `${this.arg} (${this.rootCharacter.pinyin}, ${

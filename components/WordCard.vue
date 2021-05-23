@@ -21,6 +21,7 @@
           v-if="srcs && srcs.length > 0"
           :src="srcs[0]"
           class="word-list-ext-image"
+          v-lazy-load
         />
       </a>
     </div>
@@ -104,6 +105,19 @@ export default {
     index: {
       default: 0
     }
+  },
+  computed: {
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
+    $dictionaryName() {
+      return this.$store.state.settings.dictionaryName;
+    },
   },
   data() {
     return {

@@ -10,7 +10,7 @@
             </a>
           </div>
           <a
-            v-if="l1 === 'zh' && l2 === 'en'"
+            v-if="l1.code === 'zh' && l2.code === 'en'"
             class="btn btn-sign-in text-white ml-1"
             style="background-color: #2c5aff"
             href="https://m.cctalk.com/inst/stevmab3"
@@ -20,7 +20,7 @@
             <img src="/img/logo-cctalk-white.png" class="logo-small ml-1" />
           </a>
           <a
-            v-if="l1 === 'en' && l2 === 'zh'"
+            v-if="l1.code === 'en' && l2.code === 'zh'"
             class="btn btn-primary btn-sign-in text-white ml-1"
             href="https://sso.teachable.com/secure/133035/users/sign_in"
             target="_blank"
@@ -34,14 +34,14 @@
             <div class="container">
               <div class="row">
                 <div class="col-sm-12 text-center">
-                  <a v-if="l1 === 'en' && l2 === 'zh'" href="/en/zh">
+                  <a v-if="l1.code === 'en' && l2.code === 'zh'" href="/en/zh">
                     <img
                       src="/img/czh-logo-light.png"
                       alt="Chinese Zero to Hero"
                       style="max-width: 11rem; margin: 1.5rem 0"
                     />
                   </a>
-                  <a v-else-if="l1 === 'zh' && l2 === 'en'" href="/zh/en">
+                  <a v-else-if="l1.code === 'zh' && l2.code === 'en'" href="/zh/en">
                     <img
                       src="/img/ezh-logo-light.png"
                       alt="Chinese Zero to Hero"

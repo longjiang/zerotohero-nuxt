@@ -91,7 +91,7 @@ export default {
     },
     async getPartExamples(part) {
       part.getting = true
-      part.characters = await (await this.$hanzi).searchByRadical(
+      part.characters = await (await this.$getHanzi()).searchByRadical(
         part.character
       )
       for (let character of part.characters.slice(0, 1)) {

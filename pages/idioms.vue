@@ -16,7 +16,7 @@
 <template>
   <div class="container main mt-5 mb-5">
     <h1 class="mb-5 text-center">
-      Idioms (<Annotate><span>成语</span></Annotate>) in the HSK
+      Idioms (成语) in the HSK
     </h1>
     <div class="text-center mb-5">
       <p>

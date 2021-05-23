@@ -60,7 +60,8 @@ export default {
     }
   },
   async mounted() {
-    this.characters = await (await this.$hanzi).getCharactersInWord(this.text)
+    let hanzi = await this.$getHanzi()
+    this.characters = await hanzi.getCharactersInWord(this.text)
   }
 }
 </script>

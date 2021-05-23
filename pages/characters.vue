@@ -60,7 +60,7 @@ export default {
     async buildCharactersTable() {
       let characters = await (await this.$getDictionary()).listCharacters()
       for (let character of characters) {
-        let h = await (await this.$hanzi).lookupShallow(character.word)
+        let h = await (await this.$getHanzi()).lookupShallow(character.word)
         character = Object.assign(character, h)
         let examples = (await (await this.$getDictionary()).lookupByCharacter(
           character.character

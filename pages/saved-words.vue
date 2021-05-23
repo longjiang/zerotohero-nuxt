@@ -88,6 +88,16 @@ export default {
   components: {
     WordList
   },
+  computed: {
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
+  },
   data() {
     return {
       loaded: false,
@@ -96,7 +106,7 @@ export default {
       sW: [],
       selectedCsvOptions: ['en', 'definitions'],
       csvOptions: [
-        { text: this.$t(this.$l2.name), value: this.$l2.code },
+        { text: this.$t(this.$store.state.settings.l2.name), value: this.$store.state.settings.l2.code },
         { text: this.$t('Pronunciation'), value: 'pronunciation' },
         { text: this.$t('Definitions'), value: 'definitions' }
       ]
