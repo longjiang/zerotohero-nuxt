@@ -11,9 +11,6 @@
     "lint": "npm run lint:js",
     "test": "jest"
   },
-  "browser": {
-    "jsdom": false
-  },
   "dependencies": {
     "@nuxtjs/axios": "^5.13.1",
     "accounting": "^0.4.1",
@@ -27,7 +24,6 @@
     "fs": "^0.0.1-security",
     "html2canvas": "^1.0.0-rc.7",
     "jquery": "^3.6.0",
-    "jsdom": "^16.5.3",
     "marked": "^2.0.4",
     "money": "^0.2.0",
     "net": "^1.0.2",
