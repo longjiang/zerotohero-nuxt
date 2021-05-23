@@ -69,31 +69,19 @@ export default {
       return this.$getHanzi()
     }
   },
+  async fetch() {
+    this.images = []
+    let scraped = await WordPhotos.getGoogleImages({
+      term: this.text,
+      lang: this.$l2.code
+    })
+    let images = scraped.slice(0, this.limit)
+    this.images = images
+    this.$emit('loaded', this.images)
+  },
   methods: {
-    async update() {
-      this.images = []
-      let images = (await WordPhotos.getGoogleImages({
-        term: this.text,
-        lang: this.$l2.code
-      })).slice(0, this.limit)
-      this.images = images
-      this.$emit('loaded', this.images)
-      if (this.entry) {
-        Vue.set(this.entry, 'images', this.images)
-      }
-    },
     goto(url) {
       window.open(url)
-    }
-  },
-  watch: {
-    text() {
-      this.update()
-    }
-  },
-  created() {
-    if (this.images.length === 0) {
-      this.update()
     }
   },
   data() {
