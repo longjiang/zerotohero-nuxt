@@ -28,7 +28,7 @@
                   path: `/${$l1.code}/${
                     $l2.code
                   }/youtube/search/${encodeURIComponent(url)}`,
-                })
+                });
               }
             "
             ref="search"
@@ -36,48 +36,52 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-12">
-          <h5 :key="title">
+        <div class="col-sm-12" v-if="video">
+          <h5 :key="`video-title-${video.title}`">
             <Annotate :showTranslate="true">
-              <span>{{ title }}</span>
+              <span>{{ video.title }}</span>
             </Annotate>
           </h5>
           <div>
-            <template v-if="!loading && (hasSubtitles || $settings.adminMode)">
-              <b-button v-if="!saved" @click="save"
-                ><i class="fas fa-plus mr-2"></i>Add to Library</b-button
-              >
+            <template v-if="video && !video.id">
+              <b-button v-if="!saved" @click="save">
+                <i class="fas fa-plus mr-2"></i>
+                Add to Library
+              </b-button>
               <b-button v-else variant="success">
-                <i class="fa fa-check mr-2"></i>Added
+                <i class="fa fa-check mr-2"></i>
+                Added
               </b-button>
             </template>
             <b-dropdown
               id="dropdown-1"
-              v-if="saved"
-              :text="saved.topic ? topics[saved.topic] : 'Topic'"
-              :variant="saved.topic ? 'success' : undefined"
+              v-if="video && video.id"
+              :text="video.topic ? topics[video.topic] : 'Topic'"
+              :variant="video.topic ? 'success' : undefined"
               class="ml-1"
             >
               <b-dropdown-item
                 v-for="(title, slug) in topics"
                 :key="`change-topic-item-${slug}`"
                 @click="changeTopic(slug)"
-                >{{ title }}</b-dropdown-item
               >
+                {{ title }}
+              </b-dropdown-item>
             </b-dropdown>
-            <template v-if="saved && !saved.lesson">
+            <template v-if="video && video.id && !video.lesson">
               <b-dropdown
                 id="dropdown-1"
-                :text="saved.level ? levels[saved.level] : 'Level'"
-                :variant="saved.level ? 'success' : undefined"
+                :text="video.level ? levels[video.level] : 'Level'"
+                :variant="video.level ? 'success' : undefined"
                 class="ml-1"
               >
                 <b-dropdown-item
                   v-for="(title, slug) in levels"
                   :key="`change-level-item-${slug}`"
                   @click="changeLevel(slug)"
-                  >{{ title }}</b-dropdown-item
                 >
+                  {{ title }}
+                </b-dropdown-item>
               </b-dropdown>
 
               <b-button
@@ -85,8 +89,9 @@
                 variant="danger"
                 @click="remove"
                 class="ml-1"
-                ><i class="fas fa-trash-alt"></i
-              ></b-button>
+              >
+                <i class="fas fa-trash-alt"></i>
+              </b-button>
 
               <drop
                 v-if="$settings.adminMode"
@@ -103,8 +108,9 @@
                 :key="`drop-${transcriptKey}`"
                 @dragover="over = true"
                 @dragleave="over = false"
-                >Drop Subs Here</drop
               >
+                Drop Subs Here
+              </drop>
             </template>
           </div>
           <div v-if="$settings.adminMode && saved" class="mt-2">
@@ -116,34 +122,35 @@
               class="d-inline-block ml-1"
               style="width: 4rem"
             />
-            <b-button v-if="!subsUpdated" @click="updateSubs" class="ml-2"
-              ><i class="fa fa-save mr-2"></i>Update Subs</b-button
-            >
+            <b-button v-if="!subsUpdated" @click="updateSubs" class="ml-2">
+              <i class="fa fa-save mr-2"></i>
+              Update Subs
+            </b-button>
             <b-button v-else variant="success" class="ml-2">
-              <i class="fa fa-check mr-2"></i>Updated
+              <i class="fa fa-check mr-2"></i>
+              Updated
             </b-button>
           </div>
           <hr class="mt-3" />
           <YouTubeChannelCard
-            v-if="channel"
-            :channel="channel"
-            :key="`channel-${channel.id}`"
+            v-if="video.channel"
+            :channel="video.channel"
+            :key="`channel-${video.channel.id}`"
             class="mb-4 d-inline-block"
           />
         </div>
       </div>
     </div>
-    <div v-if="loading" class="text-center">
+    <div v-if="!video" class="text-center">
       <Loader :sticky="true" />
     </div>
     <YouTubeWithTranscript
-      v-if="!loading"
-      :youtube="args"
+      v-if="video"
+      :youtube="video.youtube_id"
       ref="youtube"
-      :l2Lines="this.l2Lines"
-      :l1Lines="this.l1Lines"
+      :l2Lines="video.subs_l2"
       :quiz="true"
-      :key="`transcript-${args}-${transcriptKey}`"
+      :key="`transcript-${video.youtube_id}-${transcriptKey}`"
       :speed="speed"
       @paused="updatePaused"
     />
@@ -152,22 +159,22 @@
         class="speed shadow btn-secondary d-inline-block text-center"
         @click="speed = speed === 1 ? 0.75 : speed === 0.75 ? 0.5 : 1"
       >
-        <i v-if="speed === 1" class="fas fa-tachometer-alt"></i
-        ><span v-else style="font-size: 0.8em">{{ speed }}x</span>
+        <i v-if="speed === 1" class="fas fa-tachometer-alt"></i>
+        <span v-else style="font-size: 0.8em">{{ speed }}x</span>
       </span>
       <span
         class="play-pause shadow btn-primary d-inline-block text-center"
         @click="togglePaused"
       >
-        <i v-if="paused" class="fas fa-play"></i
-        ><i v-else class="fas fa-pause"></i>
+        <i v-if="paused" class="fas fa-play"></i>
+        <i v-else class="fas fa-pause"></i>
       </span>
     </div>
     <div class="container-fluid">
       <div class="row">
         <div class="col-sm-12 p-5" id="comments">
           <h4 class="mt-5 mb-4">
-            {{ $t('Comments') }}
+            {{ $t("Comments") }}
           </h4>
           <div class="comments">
             <Disqus
@@ -183,15 +190,17 @@
 </template>
 
 <script>
-import YouTubeWithTranscript from '@/components/YouTubeWithTranscript'
-import YouTubeChannelCard from '@/components/YouTubeChannelCard'
-import SimpleSearch from '@/components/SimpleSearch'
-import YouTubeSearchResults from '@/components/YouTubeSearchResults'
-import YouTube from '@/lib/youtube'
-import Helper from '@/lib/helper'
-import Config from '@/lib/config'
-import { Drag, Drop } from 'vue-drag-drop'
-import { parseSync } from 'subtitle'
+import YouTubeWithTranscript from "@/components/YouTubeWithTranscript";
+import YouTubeChannelCard from "@/components/YouTubeChannelCard";
+import SimpleSearch from "@/components/SimpleSearch";
+import YouTubeSearchResults from "@/components/YouTubeSearchResults";
+import YouTube from "@/lib/youtube";
+import Helper from "@/lib/helper";
+import Config from "@/lib/config";
+import axios from "axios";
+import { Drag, Drop } from "vue-drag-drop";
+import { parseSync } from "subtitle";
+import { parse } from "node-html-parser";
 
 export default {
   components: {
@@ -221,258 +230,218 @@ export default {
     },
   },
   watch: {
-    async args() {
-      this.mountOrUpdate()
-    },
     firstLineTime() {
-      if (this.l2Lines.length > 0) {
+      if (this.video.subs_l2 && this.video.subs_l2.length > 0) {
         let subsShift =
-          Number(this.firstLineTime) - Number(this.l2Lines[0].starttime)
+          Number(this.firstLineTime) - Number(this.video.subs_l2[0].starttime);
         if (subsShift !== 0) {
-          for (let line of this.l2Lines) {
-            line.starttime = Number(line.starttime) + subsShift
+          for (let line of this.video.subs_l2) {
+            line.starttime = Number(line.starttime) + subsShift;
           }
         }
-        this.transcriptKey++
+        this.transcriptKey++;
       }
     },
   },
   data() {
     return {
-      title: undefined,
-      channel: undefined,
       l2Locale: undefined,
-      saved: undefined,
-      loading: true,
-      hasSubtitles: false,
+      video: undefined,
       levels: Helper.levels(this.$l2),
       topics: Helper.topics,
-      l1Lines: [],
-      l2Lines: [],
       transcriptKey: 0,
       firstLineTime: 0,
       subsUpdated: false,
       over: false,
       paused: false,
       speed: 1,
+    };
+  },
+  async fetch() {
+    // this.$refs.search.url = `https://www.youtube.com/watch?v=${this.args}`
+    let video = await this.getSaved();
+    if (this.lesson && this.video.level && this.video.lesson) {
+      this.saveWords(this.video.level, this.video.lesson);
     }
+    if (!video || !video.channel_id) {
+      console.log("getting video");
+      video = await YouTube.videoByApi(this.args);
+    }
+    video.subs_l2 = await this.getTranscript(video);
+    if (video.subs_l2 && video.subs_l2.length > 0) {
+      this.firstLineTime = video.subs_l2[0].starttime;
+    }
+    if (video && !video.channel_id) {
+      this.addChannelID(video);
+    }
+    this.video = video
   },
   methods: {
     updatePaused(paused) {
       if (paused !== this.paused) {
-        this.paused = paused
+        this.paused = paused;
       }
     },
     handleDrop(data, event) {
-      event.preventDefault()
-      let file = event.dataTransfer.files[0]
-      let reader = new FileReader()
-      reader.readAsText(file)
+      event.preventDefault();
+      let file = event.dataTransfer.files[0];
+      let reader = new FileReader();
+      reader.readAsText(file);
       reader.onload = (event) => {
-        let srt = event.target.result
-        this.l2Lines = parseSync(srt).map((cue) => {
+        let srt = event.target.result;
+        this.video.subs_l2 = parseSync(srt).map((cue) => {
           return {
             starttime: cue.data.start / 1000,
             line: cue.data.text,
-          }
-        })
-        console.log('loaded')
-        this.firstLineTime = this.l2_lines[0].starttime
-        this.hasSubtitles = true
-        this.transcriptKey++
-      }
-    },
-    async mountOrUpdate() {
-      this.l2LinesUnshifted = []
-      this.l2Lines = []
-      this.firstLineTime = 0
-      this.subsUpdated = false
-      this.$refs.search.url = `https://www.youtube.com/watch?v=${this.args}`
-      await this.getSaved()
-      if (!this.saved || !this.saved.channel_id) {
-        await this.getVideoDetails()
-      } else {
-        this.title = this.saved.title
-      }
-      await this.getTranscript()
-      if (this.l2Lines.length > 0) {
-        this.firstLineTime = this.l2Lines[0].starttime
-      }
-      if (this.saved && !this.saved.channel_id) {
-        this.addChannelID()
-      }
-      document.title = `${this.title}`
+          };
+        });
+        console.log("loaded");
+        this.firstLineTime = this.l2_lines[0].starttime;
+        this.hasSubtitles = true;
+        this.transcriptKey++;
+      };
     },
     wordSaved(word) {
-      let saved = false
+      let saved = false;
       if (word) {
-        saved = this.$store.getters['savedWords/has']({
+        saved = this.$store.getters["savedWords/has"]({
           id: word.id,
           l2: this.$l2.code,
-        })
+        });
       }
-      return saved
+      return saved;
     },
     async allForms(word) {
-      let wordForms = (await (await this.$getDictionary()).wordForms(word)) || []
-      wordForms = wordForms.filter((form) => form !== '')
+      let wordForms =
+        (await (await this.$getDictionary()).wordForms(word)) || [];
+      wordForms = wordForms.filter((form) => form !== "");
       wordForms = [word.bare.toLowerCase()].concat(
-        wordForms.map((form) => form.form.replace(/'/g, ''))
-      )
+        wordForms.map((form) => form.form.replace(/'/g, ""))
+      );
       wordForms = Helper.unique(wordForms).filter(
-        (form) => form && form !== '' && form !== '-'
-      )
-      return wordForms
+        (form) => form && form !== "" && form !== "-"
+      );
+      return wordForms;
     },
-    async saveWords() {
+    async saveWords(level, lesson) {
       let words = await (await this.$getDictionary()).lookupByLesson(
-        this.saved.level,
-        this.saved.lesson
-      )
+        level,
+        lesson
+      );
       for (let word of words) {
         if (word && !this.wordSaved(word)) {
-          let wordForms = await this.allForms(word)
-          this.$store.dispatch('savedWords/add', {
+          let wordForms = await this.allForms(word);
+          this.$store.dispatch("savedWords/add", {
             word: word,
             wordForms: wordForms,
             l2: this.$l2.code,
-          })
+          });
         }
-      }
-    },
-    async getVideoDetails() {
-      let video = await YouTube.videoByApi(this.args)
-      if (video) {
-        this.channel = video.channel
-        this.title = video.title
       }
     },
     async getL2Transcript() {
-      const promises = []
-      let locales = [this.$l2.code]
+      let locales = [this.$l2.code];
       if (this.$l2.locales) {
-        locales = locales.concat(this.$l2.locales)
+        locales = locales.concat(this.$l2.locales);
       }
 
-      await Helper.scrape(
+      let html = await Helper.proxy(
         `https://www.youtube.com/api/timedtext?v=${this.args}&type=list`
-      ).then(($html) => {
-        for (let track of $html.find('track')) {
-          let locale = $(track).attr('lang_code')
-          if (locales.includes(locale)) {
-            this.l2Locale = locale
-          }
+      );
+      let root = parse(html);
+      for (let track of root.querySelectorAll("track")) {
+        let locale = track.getAttribute("lang_code");
+        if (locales.includes(locale)) {
+          this.l2Locale = locale;
         }
-      })
+      }
 
       if (this.l2Locale) {
-        await Helper.scrape(
+        html = await Helper.proxy(
           `https://www.youtube.com/api/timedtext?v=${this.args}&lang=${this.l2Locale}&fmt=srv3`
-        ).then(($html) => {
-          if ($html) {
-            let lines = []
-            for (let p of $html.find('p')) {
-              let line = {
-                line: $(p).text(),
-                starttime: parseInt($(p).attr('t')) / 1000,
-              }
-              lines.push(line)
-            }
-            this.l2Lines = lines.filter((line) => line.line.trim() !== '')
-          }
-        })
+        );
+
+        let lines = [];
+        let root = parse(html);
+        for (let p of root.querySelectorAll("p")) {
+          let line = {
+            line: p.innerText,
+            starttime: parseInt(p.getAttribute("t")) / 1000,
+          };
+          lines.push(line);
+        }
+        return lines.filter((line) => line.line.trim() !== "");
       }
     },
     async save() {
-      let response = await $.post(`${Config.wiki}items/youtube_videos`, {
-        youtube_id: this.args,
-        channel_id: this.channel ? this.channel.id : '',
-        title: this.title,
-        l2: this.$l2.id,
-        subs_l2: JSON.stringify(this.l2Lines),
-      })
+      let response = await axios.post(
+        `${Config.wiki}items/youtube_videos`,
+        Object.assign(this.video, {
+          l2: this.$l2.id,
+          subs_l2: JSON.stringify(this.video.subs_l2),
+        })
+      );
       if (response) {
-        this.saved = response.data
+        this.video.id = response.data.id;
       }
     },
     async getL1Transcript() {
       await Helper.scrape(
         `https://www.youtube.com/api/timedtext?v=${this.args}&lang=${this.l2Locale}&fmt=srv3&tlang=${this.$l1.code}`,
         ($html) => {
-          for (let p of $html.find('p')) {
+          for (let p of $html.find("p")) {
             let line = {
               line: $(p).text(),
-              starttime: parseInt($(p).attr('t')) / 1000,
-            }
-            this.l1Lines.push(line)
+              starttime: parseInt($(p).attr("t")) / 1000,
+            };
+            this.l1Lines.push(line);
           }
         }
-      )
-      this.hasSubtitles = true
+      );
+      this.hasSubtitles = true;
     },
-    async getTranscript() {
-      this.l1Lines = []
-      let l2Subs = []
-      if (this.saved) {
-        let savedSubs = JSON.parse(this.saved.subs_l2)
+    async getTranscript(video) {
+      if (video.subs_l2 && typeof video.subs_l2 === "string") {
+        let savedSubs = JSON.parse(video.subs_l2);
         if (savedSubs) {
-          l2Subs = savedSubs.filter(
-            (line) => line.starttime
-          )
+          return savedSubs.filter((line) => line.starttime);
         }
       }
-      this.l2Lines = l2Subs
-      this.hasSubtitles = false
-      this.loading = true
-      if (this.l2Lines.length === 0) {
-        await this.getL2Transcript()
+      if (!video.subs_l2 || video.subs_l2.length === 0) {
+        return await this.getL2Transcript();
       }
-      if (this.l2Lines.length > 0) {
-        await this.getL1Transcript()
-        this.hasSubtitles = true
-      }
-      this.loading = false
     },
-    async addChannelID() {
-      if (this.channel && this.channel.id) {
-        let channelId = this.channel.id
-        let response = await $.ajax({
-          url: `${Config.wiki}items/youtube_videos/${this.saved.id}`,
-          data: JSON.stringify({ channel_id: channelId }),
-          type: 'PATCH',
-          contentType: 'application/json',
-          xhr: function () {
-            return window.XMLHttpRequest == null ||
-              new window.XMLHttpRequest().addEventListener == null
-              ? new window.ActiveXObject('Microsoft.XMLHTTP')
-              : $.ajaxSettings.xhr()
-          },
-        })
+    async addChannelID(video) {
+      if (video.channel && video.channel.id) {
+        let channelId = video.channel.id;
+        let response = await axios.patch(
+          `${Config.wiki}items/youtube_videos/${video.id}`,
+          { channel_id: channelId }
+        );
         if (response && response.data) {
-          this.saved = response.data
+          video = response.data;
         }
       }
     },
     async updateSubs() {
       let response = await $.ajax({
-        url: `${Config.wiki}items/youtube_videos/${this.saved.id}`,
-        data: JSON.stringify({ subs_l2: JSON.stringify(this.l2Lines) }),
-        type: 'PATCH',
-        contentType: 'application/json',
+        url: `${Config.wiki}items/youtube_videos/${this.video.id}`,
+        data: JSON.stringify({ subs_l2: JSON.stringify(this.video.subs_l2) }),
+        type: "PATCH",
+        contentType: "application/json",
         xhr: function () {
           return window.XMLHttpRequest == null ||
             new window.XMLHttpRequest().addEventListener == null
-            ? new window.ActiveXObject('Microsoft.XMLHTTP')
-            : $.ajaxSettings.xhr()
+            ? new window.ActiveXObject("Microsoft.XMLHTTP")
+            : $.ajaxSettings.xhr();
         },
-      })
+      });
       if (response && response.data) {
-        this.subsUpdated = true
+        this.subsUpdated = true;
       }
     },
     async getSaved() {
-      this.saved = undefined
-      let response = await $.getJSON(
+      let response = await axios.get(
         `${Config.wiki}items/youtube_videos?filter[youtube_id][eq]=${
           this.args
         }&filter[l2][eq]=${
@@ -480,105 +449,100 @@ export default {
         }&fields=id,youtube_id,channel_id,l2,title,level,topic,lesson,subs_l2&timestamp=${
           this.$settings.adminMode ? Date.now() : 0
         }`
-      )
+      );
+      response = response.data;
       if (response && response.data && response.data.length > 0) {
-        this.saved = response.data[0]
-        if (this.lesson) {
-          this.saveWords()
-        }
+        return response.data[0];
       }
     },
     async changeLevel(slug) {
       let response = await $.ajax({
-        url: `${Config.wiki}items/youtube_videos/${this.saved.id}`,
+        url: `${Config.wiki}items/youtube_videos/${this.video.id}`,
         data: JSON.stringify({ level: slug }),
-        type: 'PATCH',
-        contentType: 'application/json',
+        type: "PATCH",
+        contentType: "application/json",
         xhr: function () {
           return window.XMLHttpRequest == null ||
             new window.XMLHttpRequest().addEventListener == null
-            ? new window.ActiveXObject('Microsoft.XMLHTTP')
-            : $.ajaxSettings.xhr()
+            ? new window.ActiveXObject("Microsoft.XMLHTTP")
+            : $.ajaxSettings.xhr();
         },
-      })
+      });
       if (response && response.data) {
-        this.saved = response.data
+        this.video = response.data;
       }
     },
     async changeTopic(slug) {
       let response = await $.ajax({
-        url: `${Config.wiki}items/youtube_videos/${this.saved.id}`,
+        url: `${Config.wiki}items/youtube_videos/${this.video.id}`,
         data: JSON.stringify({ topic: slug }),
-        type: 'PATCH',
-        contentType: 'application/json',
+        type: "PATCH",
+        contentType: "application/json",
         xhr: function () {
           return window.XMLHttpRequest == null ||
             new window.XMLHttpRequest().addEventListener == null
-            ? new window.ActiveXObject('Microsoft.XMLHTTP')
-            : $.ajaxSettings.xhr()
+            ? new window.ActiveXObject("Microsoft.XMLHTTP")
+            : $.ajaxSettings.xhr();
         },
-      })
+      });
       if (response && response.data) {
-        this.saved = response.data
+        this.video = response.data;
       }
     },
     async remove() {
       let response = await $.ajax({
-        url: `${Config.wiki}items/youtube_videos/${this.saved.id}`,
-        type: 'DELETE',
-        contentType: 'application/json',
+        url: `${Config.wiki}items/youtube_videos/${this.video.id}`,
+        type: "DELETE",
+        contentType: "application/json",
         xhr: function () {
           return window.XMLHttpRequest == null ||
             new window.XMLHttpRequest().addEventListener == null
-            ? new window.ActiveXObject('Microsoft.XMLHTTP')
-            : $.ajaxSettings.xhr()
+            ? new window.ActiveXObject("Microsoft.XMLHTTP")
+            : $.ajaxSettings.xhr();
         },
-      })
+      });
       if (response) {
-        this.saved = undefined
+        this.video = undefined;
       }
     },
     scrollToComments() {
-      document.getElementById('comments').scrollIntoView()
+      document.getElementById("comments").scrollIntoView();
     },
     togglePaused() {
-      this.$refs.youtube.togglePaused()
+      this.$refs.youtube.togglePaused();
     },
     bindKeys() {
       window.onkeydown = (e) => {
-        if (e.target.tagName.toUpperCase() !== 'INPUT') {
+        if (e.target.tagName.toUpperCase() !== "INPUT") {
           if (e.keyCode == 32) {
             // Spacebar
-            this.togglePaused()
-            return false
+            this.togglePaused();
+            return false;
           }
           if (e.keyCode == 38) {
             // Up arrow
-            this.$refs.transcript.previousLine()
-            return false
+            this.$refs.transcript.previousLine();
+            return false;
           }
           if (e.keyCode == 40) {
             // Down arrow
-            this.$refs.transcript.nextLine()
-            return false
+            this.$refs.transcript.nextLine();
+            return false;
           }
         }
-      }
+      };
     },
     unbindKeys() {
-      window.onkeydown = null
+      window.onkeydown = null;
     },
   },
-  async mounted() {
-    this.mountOrUpdate()
-  },
   activated() {
-    this.bindKeys()
+    this.bindKeys();
   },
   deactivated() {
-    this.unbindKeys()
+    this.unbindKeys();
   },
-}
+};
 </script>
 <style lang="scss">
 .subs-drop.drop.over {
