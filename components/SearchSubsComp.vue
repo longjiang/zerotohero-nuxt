@@ -89,6 +89,7 @@
                   class="hit-thumb"
                   :src="`//img.youtube.com/vi/${hit.video.youtube_id}/hqdefault.jpg`"
                   :alt="hit.video.title"
+                  v-lazy-load
                 />
                 <Annotate
                   :phonetics="false"

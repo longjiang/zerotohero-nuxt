@@ -251,8 +251,13 @@ export default {
     console.log('mounted')
     console.log(this.$store.state.savedWords.savedWordsLoaded)
     if (!this.$store.state.savedWords.savedWordsLoaded) {
-      console.log('msavingd')
       this.$store.commit("savedWords/LOAD_SAVED_WORDS");
+    }
+    if (!this.$store.state.savedCollocations.savedCollocationsLoaded) {
+      this.$store.commit("savedCollocations/LOAD_SAVED_COLLOCATIONS");
+    }
+    if (!this.$store.state.savedCollocations.savedHitsLoaded) {
+      this.$store.commit("savedCollocations/LOAD_SAVED_HITS");
     }
   },
   updated() {

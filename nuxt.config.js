@@ -12,7 +12,7 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', href: '/vendor/fontawesome/css/all.min.css'}
+      { rel: 'stylesheet', href: '/vendor/fontawesome/css/all.min.css' }
     ],
     script: [
       { hid: 'papaparse', src: '/vendor/papaparse/papaparse.min.js', defer: true },
@@ -56,7 +56,9 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     'nuxt-i18n',
-    'nuxt-lazy-load'
+    ['nuxt-lazy-load', {
+      defaultImage: '/img/placeholder.jpg'
+    }]
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
@@ -70,7 +72,7 @@ export default {
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     extend(config) {
-        config.resolve.alias['vue'] = 'vue/dist/vue.common'
+      config.resolve.alias['vue'] = 'vue/dist/vue.common'
     }
   },
 

@@ -5,8 +5,7 @@ export const state = () => {
   }
 }
 export const mutations = {
-  LOAD_SAVED_WORDS(state, l2) {
-    console.log('loading saved words', typeof localStorage)
+  LOAD_SAVED_WORDS(state) {
     if (typeof localStorage !== 'undefined') {
       let savedWords = JSON.parse(localStorage.getItem('zthSavedWords') || '{}')
       state.savedWords = savedWords || state.savedWords
@@ -15,7 +14,6 @@ export const mutations = {
   },
   ADD_SAVED_WORD(state, options) {
     if (typeof localStorage !== 'undefined') {
-      console.log('adding', options)
       if (!state.savedWords[options.l2]) {
         state.savedWords[options.l2] = []
       }

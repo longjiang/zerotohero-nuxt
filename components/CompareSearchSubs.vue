@@ -104,6 +104,7 @@
                         v-if="ab === 'A' && hit"
                         :src="`//img.youtube.com/vi/${hit.video.youtube_id}/hqdefault.jpg`"
                         :alt="hit.video.title"
+                        v-lazy-load
                       />
                     </div>
                     <div style="flex: 1">
@@ -153,6 +154,7 @@
                         v-if="ab === 'B' && hit"
                         :src="`//img.youtube.com/vi/${hit.video.youtube_id}/hqdefault.jpg`"
                         :alt="hit.video.title"
+                        v-lazy-load
                       />
                     </div>
                   </div>

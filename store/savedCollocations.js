@@ -1,53 +1,65 @@
-let localStorage = process.browser ? localStorage : false
+import deepEqual from 'deep-equal'
 
 export const state = () => {
   return {
-    savedCollocations: localStorage ? JSON.parse(localStorage.getItem('zthSavedCollocations')) : {} || {}
+    savedCollocations: {},
+    savedCollocationsLoaded: false
   }
 }
 export const mutations = {
+  LOAD_SAVED_COLLOCATIONS(state) {
+    if (typeof localStorage !== 'undefined') {
+      let savedCollocations = JSON.parse(localStorage.getItem('zthSavedCollocations') || '{}')
+      state.savedCollocations = savedCollocations || state.savedCollocations
+      state.savedCollocationsLoaded = true
+    }
+  },
   ADD_SAVED_COLLOCATION(state, options) {
-    let CollocationToSave = {
-      term: options.term,
-      line: options.line
-    }
-    if (!state.savedCollocations[options.l2]) {
-      state.savedCollocations[options.l2] = []
-    }
-    if (
-      !state.savedCollocations[options.l2].find(Collocation => deepEqual(Collocation, CollocationToSave))
-    ) {
-      let savedCollocations = Object.assign({}, state.savedCollocations)
-      savedCollocations[options.l2].push(CollocationToSave)
-      localStorage.setItem('zthSavedCollocations', JSON.stringify(savedCollocations))
-      Vue.set(state, 'savedCollocations', savedCollocations)
+    if (typeof localStorage !== 'undefined') {
+      let CollocationToSave = {
+        term: options.term,
+        line: options.line
+      }
+      if (!state.savedCollocations[options.l2]) {
+        state.savedCollocations[options.l2] = []
+      }
+      if (
+        !state.savedCollocations[options.l2].find(Collocation => deepEqual(Collocation, CollocationToSave))
+      ) {
+        let savedCollocations = Object.assign({}, state.savedCollocations)
+        savedCollocations[options.l2].push(CollocationToSave)
+        localStorage.setItem('zthSavedCollocations', JSON.stringify(savedCollocations))
+        this._vm.$set(state, 'savedCollocations', savedCollocations)
+      }
     }
   },
   REMOVE_SAVED_COLLOCATION(state, options) {
-    let CollocationToRemove = {
-      term: options.term,
-      line: options.line
-    }
-    let cols = state.savedCollocations[options.l2]
-    if (cols) {
-      const index = cols.findIndex(
-        Collocation => Collocation.term === CollocationToRemove.term && Collocation.line === CollocationToRemove.line
-      )
-      if (index !== -1) {
-        cols.splice(index, 1)
-        let savedCollocations = Object.assign({}, state.savedCollocations)
-        savedCollocations[options.l2] = cols
-        localStorage.setItem('zthSavedCollocations', JSON.stringify(savedCollocations))
-        Vue.set(state, 'savedCollocations', savedCollocations)
+    if (typeof localStorage !== 'undefined' && state.savedCollocations[options.l2]) {
+      let CollocationToRemove = {
+        term: options.term,
+        line: options.line
+      }
+      let cols = state.savedCollocations[options.l2]
+      if (cols) {
+        const index = cols.findIndex(
+          Collocation => Collocation.term === CollocationToRemove.term && Collocation.line === CollocationToRemove.line
+        )
+        if (index !== -1) {
+          cols.splice(index, 1)
+          let savedCollocations = Object.assign({}, state.savedCollocations)
+          savedCollocations[options.l2] = cols
+          localStorage.setItem('zthSavedCollocations', JSON.stringify(savedCollocations))
+          this._vm.$set(state, 'savedCollocations', savedCollocations)
+        }
       }
     }
   },
   REMOVE_ALL_SAVED_COLLOCATIONS(state, options) {
-    if (state.savedCollocations[options.l2]) {
+    if (typeof localStorage !== 'undefined' && state.savedCollocations[options.l2]) {
       let savedCollocations = Object.assign({}, state.savedCollocations)
       savedCollocations[options.l2] = []
       localStorage.setItem('zthSavedCollocations', JSON.stringify(savedCollocations))
-      Vue.set(state, 'savedCollocations', savedCollocations)
+      this._vm.$set(state, 'savedCollocations', savedCollocations)
     }
   }
 }

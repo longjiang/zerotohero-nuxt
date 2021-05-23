@@ -1,28 +1,34 @@
 import deepEqual from 'deep-equal'
 
-let localStorage = process.browser ? localStorage : false
-
-
-export const
-  state = () => {
-    return {
-      savedHits: localStorage ? JSON.parse(localStorage.getItem('zthSavedHits')) : {} || {}
-    }
+export const state = () => {
+  return {
+    savedHits: {},
+    savedHitsLoaded: false
   }
+}
 export const mutations = {
+  LOAD_SAVED_HITS(state) {
+    if (typeof localStorage !== 'undefined') {
+      let savedHits = JSON.parse(localStorage.getItem('zthSavedHits') || '{}')
+      state.savedHits = savedHits || state.savedHits
+      state.savedHitsLoaded = true
+    }
+  },
   ADD_SAVED_HIT(state, options) {
-    let hitToSave = {
-      terms: options.terms,
-      videoId: options.hit.video.id,
-      lineIndex: options.hit.lineIndex
+    if (typeof localStorage !== 'undefined') {
+      let hitToSave = {
+        terms: options.terms,
+        videoId: options.hit.video.id,
+        lineIndex: options.hit.lineIndex
+      }
+      if (!state.savedHits[options.l2]) {
+        state.savedHits[options.l2] = []
+      }
+      let savedHits = Object.assign({}, state.savedHits)
+      savedHits[options.l2].push(hitToSave)
+      localStorage.setItem('zthSavedHits', JSON.stringify(savedHits))
+      this._vm.$set(state, 'savedHits', savedHits)
     }
-    if (!state.savedHits[options.l2]) {
-      state.savedHits[options.l2] = []
-    }
-    let savedHits = Object.assign({}, state.savedHits)
-    savedHits[options.l2].push(hitToSave)
-    localStorage.setItem('zthSavedHits', JSON.stringify(savedHits))
-    Vue.set(state, 'savedHits', savedHits)
   },
   REMOVE_SAVED_HIT(state, options) {
     let hitToRemove = {
@@ -30,8 +36,7 @@ export const mutations = {
       videoId: options.hit.video.id,
       lineIndex: options.hit.lineIndex
     }
-    console.log(hitToRemove)
-    if (state.savedHits[options.l2]) {
+    if (typeof localStorage !== 'undefined' && state.savedHits[options.l2]) {
       let savedHits = Object.assign({}, state.savedHits)
       savedHits[options.l2] = savedHits[options.l2].filter(
         hit =>
@@ -40,15 +45,15 @@ export const mutations = {
             && hit.lineIndex === hitToRemove.lineIndex)
       )
       localStorage.setItem('zthSavedHits', JSON.stringify(savedHits))
-      Vue.set(state, 'savedHits', savedHits)
+      this._vm.$set(state, 'savedHits', savedHits)
     }
   },
   REMOVE_ALL_SAVED_HITS(state, options) {
-    if (state.savedHits[options.l2]) {
+    if (typeof localStorage !== 'undefined' && state.savedHits[options.l2]) {
       let savedHits = Object.assign({}, state.savedHits)
       savedHits[options.l2] = []
       localStorage.setItem('zthSavedHits', JSON.stringify(savedHits))
-      Vue.set(state, 'savedHits', savedHits)
+      this._vm.$set(state, 'savedHits', savedHits)
     }
   }
 }
