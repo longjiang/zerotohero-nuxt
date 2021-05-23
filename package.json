@@ -19,6 +19,7 @@
     "accounting": "^0.4.1",
     "bootstrap": "^4.6.0",
     "bootstrap-vue": "^2.21.2",
+    "canvas": "^2.8.0",
     "child_process": "^1.0.2",
     "core-js": "^3.9.1",
     "css-percentage-circle": "^2.0.1",
