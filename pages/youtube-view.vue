@@ -285,7 +285,7 @@ export default {
           {
             hid: "og:image",
             property: "og:image",
-            content: `https:///img.youtube.com/vi/${this.video.youtube_id}/hqdefault.jpg`,
+            content: `https://img.youtube.com/vi/${this.video.youtube_id}/hqdefault.jpg`,
           },
           {
             hid: "twitter:url",
