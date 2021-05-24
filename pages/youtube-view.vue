@@ -18,7 +18,7 @@
     <SocialHead
       v-if="video"
       :title="`Learn Chinese from the video ${video.title} | ${$l2.name} Zero to Hero`"
-      :description="`Watch the video -- ${video.title} -- study the subtitles and improve your Chinese! Full transcript: ${this.video.subs_l2.map(l => l.line).join(' ')}`"
+      :description="`Watch the video -- ${video.title} -- study the subtitles and improve your Chinese! ${this.video.subs_l2 ? 'Full transcript: ' + this.video.subs_l2.map(l => l.line).join(' ') : ''}`"
       :image="`https://img.youtube.com/vi/${this.video.youtube_id}/maxresdefault.jpg`"
     />
     <div class="container">
@@ -154,7 +154,7 @@
       v-if="video"
       :youtube="video.youtube_id"
       ref="youtube"
-      :l2Lines="video.subs_l2"
+      :l2Lines="video.subs_l2 ? video.subs_l2 : []"
       :quiz="true"
       :key="`transcript-${video.youtube_id}-${transcriptKey}`"
       :speed="speed"
@@ -204,6 +204,7 @@ import YouTube from "@/lib/youtube";
 import Helper from "@/lib/helper";
 import Config from "@/lib/config";
 import axios from "axios";
+import parser from 'fast-xml-parser'
 import { Drag, Drop } from "vue-drag-drop";
 import { parseSync } from "subtitle";
 import { parse } from "node-html-parser";
@@ -350,19 +351,21 @@ export default {
         locales = locales.concat(this.$l2.locales);
       }
 
-      let html = await Helper.proxy(
+      let xml = await Helper.proxy(
         `https://www.youtube.com/api/timedtext?v=${this.args}&type=list`
       );
-      let root = parse(html);
-      for (let track of root.querySelectorAll("track")) {
-        let locale = track.getAttribute("lang_code");
+      let root = parser.parse(xml, {
+        ignoreAttributes: false,
+      });
+      console.log(root, 'root')
+      for (let track of root.transcript_list.track) {
+        let locale = track['@_lang_code'];
         if (locales.includes(locale)) {
           this.l2Locale = locale;
         }
       }
-
       if (this.l2Locale) {
-        html = await Helper.proxy(
+        let html = await Helper.proxy(
           `https://www.youtube.com/api/timedtext?v=${this.args}&lang=${this.l2Locale}&fmt=srv3`
         );
 
