@@ -269,8 +269,8 @@ export default {
       } words and see how they are used differently in common collocations and on TV shows.`;
     },
     image() {
-      if (this.aImages.length > 0) {
-        return this.aImages[0].src;
+      if (this.aImages.length > 0 || this.bImages.length > 0) {
+        return this.bImages.length > 0 ? this.bImages[0].src : this.aImages[0].src;
       } else {
         return "/img/zth-share-image.jpg";
       }

@@ -18,7 +18,7 @@
     <SocialHead
       v-if="resources[0]"
       :title="`${resources.length} Resources to Help You ${$l2.name} | ${$l2.name} Zero to Hero`"
-      :description="`${resources.map(r => r.title).join(', ')}`"
+      :description="`${resources.map((r) => r.title).join(', ')}`"
       :image="resources[0].thumbnail"
     />
     <div class="container">
@@ -131,12 +131,27 @@ export default {
       },
     };
   },
-  watch: {
-    $route() {
-      if (this.$route.name === "resources") {
-        this.route();
+  async fetch() {
+    let canonical = `/${this.$l1.code}/${this.$l2.code}/resource/list/${this.topic}/${this.type}`;
+    let filters = "";
+    if (this.$router.currentRoute.path !== canonical) {
+      this.$router.push({ path: canonical });
+    } else {
+      if (this.topic !== "all") {
+        filters += "&filter[topic][eq]=" + this.topic;
       }
-    },
+      if (this.type !== "all") {
+        filters += "&filter[type][eq]=" + this.type;
+      }
+      let response = await axios.get(
+        `${Config.wiki}items/resources?filter[l2][eq]=${this.$l2.id}${filters}&fields=*,thumbnail.*`
+      );
+      this.resources =
+        response.data.data.map((resource) => {
+          resource.thumbnail = resource.thumbnail.data.full_url;
+          return resource;
+        }) || [];
+    }
   },
   computed: {
     $l1() {
@@ -147,33 +162,6 @@ export default {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
-  },
-  methods: {
-    async route() {
-      let canonical = `/${this.$l1.code}/${this.$l2.code}/resource/list/${this.topic}/${this.type}`;
-      let filters = "";
-      if (this.$router.currentRoute.path !== canonical) {
-        this.$router.push({ path: canonical });
-      } else {
-        if (this.topic !== "all") {
-          filters += "&filter[topic][eq]=" + this.topic;
-        }
-        if (this.type !== "all") {
-          filters += "&filter[type][eq]=" + this.type;
-        }
-        let response = await axios.get(
-          `${Config.wiki}items/resources?filter[l2][eq]=${this.$l2.id}${filters}&fields=*,thumbnail.*`
-        );
-        this.resources =
-          response.data.data.map((resource) => {
-            resource.thumbnail = resource.thumbnail.data.full_url;
-            return resource;
-          }) || [];
-      }
-    },
-  },
-  created() {
-    this.route();
   },
 };
 </script>
