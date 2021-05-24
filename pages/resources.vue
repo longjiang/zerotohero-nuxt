@@ -30,18 +30,18 @@
         <div class="col-sm-12 col-md-4">
           <h6 class="text-center mb-4">Topic</h6>
           <div class="list-group">
-            <a
+            <router-link
               :class="{
                 'link-unstyled': true,
                 'list-group-item': true,
                 'list-group-item-action': topic === 'all',
                 active: topic === 'all',
               }"
-              :href="`/${$l1.code}/${$l2.code}/resource/list/all/${type}`"
+              :to="`/${$l1.code}/${$l2.code}/resource/list/all/${type}`"
             >
               All
-            </a>
-            <a
+            </router-link>
+            <router-link
               v-for="(topicName, topicValue) in topics"
               :class="{
                 'link-unstyled': true,
@@ -49,25 +49,25 @@
                 'list-group-item-action': topicValue === topic,
                 active: topicValue === topic,
               }"
-              :href="`/${$l1.code}/${$l2.code}/resource/list/${topicValue}/all`"
+              :to="`/${$l1.code}/${$l2.code}/resource/list/${topicValue}/all`"
             >
               {{ topicName }}
-            </a>
+            </router-link>
           </div>
           <h6 class="mt-4 mb-4 text-center">Type</h6>
           <div class="list-group">
-            <a
+            <router-link
               :class="{
                 'link-unstyled': true,
                 'list-group-item': true,
                 'list-group-item-action': type === 'all',
                 active: type === 'all',
               }"
-              :href="`/${$l1.code}/${$l2.code}/resource/list/${topic}/all`"
+              :to="`/${$l1.code}/${$l2.code}/resource/list/${topic}/all`"
             >
               All
-            </a>
-            <a
+            </router-link>
+            <router-link
               v-for="(typeName, typeValue) in types"
               :class="{
                 'link-unstyled': true,
@@ -75,10 +75,10 @@
                 'list-group-item-action': typeValue === type,
                 active: typeValue === type,
               }"
-              :href="`/${$l1.code}/${$l2.code}/resource/list/all/${typeValue}`"
+              :to="`/${$l1.code}/${$l2.code}/resource/list/all/${typeValue}`"
             >
               {{ typeName }}
-            </a>
+            </router-link>
           </div>
         </div>
       </div>

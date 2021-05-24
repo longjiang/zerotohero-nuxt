@@ -4,7 +4,7 @@
       <div class="jumbotron shadow rounded bg-white">
         <p class="lead text-center mb-3">No resource is found in this category. Why not add your own here?</p>
         <div class="text-center">
-          <a :href="`/${$l1.code}/${$l2.code}/contact-us`" class="btn btn-success">Contact Us</a>
+          <router-link :to="`/${$l1.code}/${$l2.code}/contact-us`" class="btn btn-success">Contact Us</router-link>
         </div>
       </div>
     </div>
