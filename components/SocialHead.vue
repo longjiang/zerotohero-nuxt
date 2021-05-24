@@ -34,7 +34,7 @@ export default {
     return {
       title: this.title,
       htmlAttrs: {
-        lang: this.$l1.code
+        lang: this.$l1 ? this.$l1.code : 'en'
       },
       link: [
         { rel: 'icon', type: 'image/x-icon', href: this.$l2 ? this.$languages.logo(this.$l2.code) : '/img/icons/favicon.ico' },
