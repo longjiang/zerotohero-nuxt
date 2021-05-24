@@ -16,8 +16,8 @@
           <i class="fa fa-times" />
         </button>
       </div>
-      <a
-        :href="`/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${word.id}`"
+      <router-link
+        :to="`/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${word.id}`"
       >
         <img
           v-if="srcs && srcs.length > 0"
@@ -25,7 +25,7 @@
           class="word-list-ext-image"
           v-lazy-load
         />
-      </a>
+      </router-link>
     </div>
     <div class="word-list-ext-item-body">
       <Frequency class="mb-1" v-if="word" :entry="word" />
@@ -38,9 +38,9 @@
         {{ word.pinyin }}
         <Speak :text="word.simplified" />
       </div>
-      <a
+      <router-link
         v-if="word"
-        :href="`/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${word.id}`"
+        :to="`/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${word.id}`"
       >
         <div :data-level="word.hsk" class="word-list-ext-item-word simplified">
           {{ word.simplified }}
@@ -48,7 +48,7 @@
         <div :data-level="word.hsk" class="word-list-ext-item-word traditional">
           {{ word.traditional }}
         </div>
-      </a>
+      </router-link>
 
       <div v-if="word.definitions" class="character-example-english mb-2">
         <div v-for="definition in word.definitions.slice(0, 3)">
@@ -64,24 +64,24 @@
       <div class="character-example-english mt-1">
         {{ word.exampleTranslation }}
       </div>
-      <a
+      <router-link
         v-if="compareWith"
-        :href="`/${$l1.code}/${$l2.code}/compare/${$dictionaryName}/${compareWith.id},${word.id}`"
+        :to="`/${$l1.code}/${$l2.code}/compare/${$dictionaryName}/${compareWith.id},${word.id}`"
         class="btn show-more word-list-ext-compare-btn mt-3"
         :data-bg-level="word.hsk"
       >
         <i class="glyphicon glyphicon-adjust"></i>
         Compare
-      </a>
-      <a
+      </router-link>
+      <router-link
         v-if="compareWith"
-        :href="`/${$l1.code}/${$l2.code}/explore/related/${word.id}`"
+        :to="`/${$l1.code}/${$l2.code}/explore/related/${word.id}`"
         class="btn show-more word-list-ext-related-btn mt-3"
         :data-bg-level="word.hsk"
       >
         <i class="glyphicon glyphicon-fullscreen"></i>
         Related
-      </a>
+      </router-link>
     </div>
   </component>
 </template>

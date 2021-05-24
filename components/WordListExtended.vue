@@ -12,7 +12,7 @@
         tag="li"
         v-for="(word, index) in words"
         :word="word"
-        :compareWith="compareWith"
+        :compareWith="word !== compareWith ? compareWith : false"
         :index="index"
         :key="`word-card-${index}`"
       />

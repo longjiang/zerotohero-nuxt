@@ -108,6 +108,11 @@ export default {
       return `/${this.$store.state.settings.l1.code}/${this.$store.state.settings.l2.code}/explore/related/${entry.id}`;
     },
   },
+  mounted() {
+    if (this.related.length < 2) {
+      this.$fetch();
+    }
+  },
   async fetch() {
     if (this.arg) {
       let word = await (await this.$getDictionary()).get(this.arg);
