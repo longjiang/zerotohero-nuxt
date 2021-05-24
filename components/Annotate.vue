@@ -97,7 +97,7 @@ export default {
       default: "span",
     },
     buttons: {
-      default: true,
+      default: false,
     },
     fullscreen: {
       default: false,

@@ -14,6 +14,11 @@
 </router>
 <template>
   <div class="container main mt-4 mb-4" v-cloak>
+    <SocialHead
+      :title="`HSK Words by Level | Chinese Zero to Hero`"
+      :image="'/img/textbooks-hsk.png'"
+      :description="'All the Chinese words in the HSK curriculum, as covered by the Chinese Zero to Hero courses.'"
+    />
     <div class="row">
       <div class="col-sm-12">
         <div>

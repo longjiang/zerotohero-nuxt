@@ -1,16 +1,7 @@
 <router>
   {
     path: '/:l1/:l2/lesson-videos/:level?/:lesson?',
-    props: true,
-    meta: {
-      title: 'Extra Lesson Videos | Zero to Hero',
-      metaTags: [
-        {
-          name: 'description',
-          content: 'Reinforce the vocabulary you learned in an HSK lesson by watching YouTube videos.'
-        }
-      ]
-    }
+    props: true
   }
 </router>
 <template>
