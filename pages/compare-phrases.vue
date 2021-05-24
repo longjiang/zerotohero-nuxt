@@ -2,19 +2,11 @@
   {
     path: '/:l1/:l2/phrase/compare/:term/:compareTerm',
     props: true,
-    meta: {
-      title: 'Compare Two Phrases | Zero to Hero',
-      metaTags: [
-        {
-          name: 'description',
-          content: 'See how two phrases are different.'
-        }
-      ]
-    }
   }
 </router>
 <template>
   <div class="phrase">
+    <SocialHead :title="title" :description="description" :image="image" />
     <div class="container main mt-5 mb-5">
       <div class="row">
         <div class="col-sm-12">
@@ -50,6 +42,7 @@
               limit="10"
               class="mt-5"
               :key="`${term}-images`"
+              :preloaded="aImages"
             />
         </div>
         <div class="col-md-6">
@@ -59,6 +52,7 @@
               limit="10"
               class="mt-5"
               :key="`${compareTerm}-images`"
+              :preloaded="bImages"
             />
         </div>
       </div>
@@ -76,8 +70,8 @@
           <div
             class="widget mt-5"
             id="search-subs"
-            v-if="term && compareTerm && delayed"
-            :key="`subs-search-${term}`"
+            v-if="term && compareTerm"
+            :key="`compare-subs-search-${term}-${compareTerm}`"
           >
             <div class="widget-title">“{{ term }}” in TV Shows</div>
             <div class="widget-body">
@@ -120,6 +114,7 @@ import CompareCollocations from '@/components/CompareCollocations'
 import SearchCompare from '@/components/SearchCompare'
 import WebImages from '@/components/WebImages'
 import CompareSearchSubs from '@/components/CompareSearchSubs'
+import WordPhotos from '@/lib/word-photos'
 
 export default {
   components: {
@@ -138,15 +133,20 @@ export default {
   },
   data() {
     return {
-      delayed: {
-        default: false,
-      },
+      aImages: [],
+      bImages: []
     }
   },
-  watch: {
-    $route() {
-      this.route()
-    },
+  async fetch() {
+    this.aImages = await WordPhotos.getGoogleImages({
+      term: this.term,
+      lang: this.$l2.code,
+    });
+    this.bImages = await WordPhotos.getGoogleImages({
+      term: this.compareTerm,
+      lang: this.$l2.code,
+    });
+
   },
   computed: {
 
@@ -158,14 +158,37 @@ export default {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
+    title() {
+      if (this.term && this.compareTerm) {
+        return `“${this.term}” vs “${this.compareTerm}” - ${
+          this.$l2 ? this.$l2.name : ""
+        } Phrases Compared | ${this.$l2 ? this.$l2.name : ""} Zero to Hero`;
+      }
+      return `${this.$l2 ? this.$l2.name : ""} Phrases Compared | ${
+        this.$l2 ? this.$l2.name : ""
+      } Zero to Hero`;
+    },
+    description() {
+      if (this.a && this.b) {
+        return `See how the two ${this.$l2 ? this.$l2.name : ""} phrases “${
+          this.term
+        }” and “${
+          this.compareTerm
+        }” are used differently in common collocations and on TV shows.`;
+      }
+      return `Compare two  ${
+        this.$l2 ? this.$l2.name : ""
+      } phrases and see how they are used differently in common collocations and on TV shows.`;
+    },
+    image() {
+      if (this.aImages.length > 0 || this.bImages.length > 0) {
+        return this.bImages.length > 0 ? this.bImages[0].src : this.aImages[0].src;
+      } else {
+        return "/img/zth-share-image.jpg";
+      }
+    },
   },
   methods: {
-    route() {
-      this.delayed = false
-      setTimeout(() => {
-        this.delayed = true
-      }, 1000)
-    },
 
     bindKeys() {
       window.addEventListener('keydown', this.keydown)
@@ -201,9 +224,6 @@ export default {
   },
   deactivated() {
     this.unbindKeys()
-  },
-  mounted() {
-    this.route()
   },
 }
 </script>

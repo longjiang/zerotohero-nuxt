@@ -82,10 +82,10 @@ export default {
   methods: {
     compareHrefFunc(compareEntry) {
       const entry = this.$refs.search.entry || this.entry
-      return `/${this.$l1.code}/${this.$l2.code}/compare/${this.$dictionaryName}/${entry.id},${compareEntry.id}`
+      return `/${this.$l1.code}/${this.$l2.code}/compare/${this.$store.state.settings.dictionaryName}/${entry.id},${compareEntry.id}`
     },
     compareHrefFuncFirst(entry) {
-      return `/${this.$l1.code}/${this.$l2.code}/compare/${this.$dictionaryName}/${entry.id},${this.compareEntry.id}`
+      return `/${this.$l1.code}/${this.$l2.code}/compare/${this.$store.state.settings.dictionaryName}/${entry.id},${this.compareEntry.id}`
     },
     focusOnSearch() {
       console.log('focus on seach')
