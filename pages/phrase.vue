@@ -1,20 +1,16 @@
 <router>
   {
     path: '/:l1/:l2/phrase/search/:term?',
-    props: true,
-    meta: {
-      title: 'Phrase | Zero to Hero',
-      metaTags: [
-        {
-          name: 'description',
-          content: 'See how phrases are used in real context..'
-        }
-      ]
-    }
+    props: true
   }
 </router>
 <template>
   <div class="phrase">
+    <SocialHead 
+      :title="title"
+      :description="description"
+      :image="image"
+    />
     <div class="container main mt-5 mb-5">
       <div class="row">
         <div class="col-sm-12">
@@ -92,6 +88,7 @@ import Collocations from "@/components/Collocations";
 import SearchCompare from "@/components/SearchCompare";
 import WebImages from "@/components/WebImages";
 import SearchSubsComp from "@/components/SearchSubsComp";
+import WordPhotos from '@/lib/word-photos'
 
 export default {
   components: {
@@ -110,15 +107,14 @@ export default {
   },
   data() {
     return {
+      images: [],
       delayed: {
         default: false,
       },
     };
   },
-  watch: {
-    $route() {
-      this.route();
-    },
+  async fetch() {
+    if (this.term) this.images = await WordPhotos.getGoogleImages({term: this.term, lang: this.$l2.code});
   },
   computed: {
     $l1() {
@@ -129,14 +125,27 @@ export default {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
+    title() {
+      if (this.term) {
+        return `Lear the ${this.$l2 ? this.$l2.name : ''} Phrase “${this.term}” | ${this.$l2 ? this.$l2.name : ""} Zero to Hero Dictionary`;
+      }
+      return `Lookup ${this.$l2 ? this.$l2.name : ''} Phrases | ${this.$l2 ? this.$l2.name : ""} Zero to Hero`;
+    },
+    description() {
+      if (this.term) {
+        return `See how “${this.term}” is used in TV shows, how it forms collocations, and other examples.`;
+      }
+      return `Look up ${this.$l2 ? this.$l2.name : ''} phrases. See how ${this.$l2 ? this.$l2.name : ''} words are used in TV shows, how they form collocations, and other examples.`;
+    },
+    image() {
+      if (this.images.length > 0) {
+        return this.images[0].src
+      } else {
+        return "/img/zth-share-image.jpg";
+      }
+    },
   },
   methods: {
-    route() {
-      this.delayed = false;
-      setTimeout(() => {
-        this.delayed = true;
-      }, 1000);
-    },
 
     bindKeys() {
       window.addEventListener("keydown", this.keydown);
@@ -175,9 +184,6 @@ export default {
   },
   deactivated() {
     this.unbindKeys();
-  },
-  mounted() {
-    this.route();
   },
 };
 </script>

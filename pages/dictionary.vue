@@ -6,6 +6,11 @@
 </router>
 <template>
   <div class="main focus" :key="`entry-${entryKey}`">
+    <SocialHead 
+      :title="title"
+      :description="description"
+      :image="image"
+    />
     <div class="jumbotron jumbotron-fluid bg-white pt-4 pb-0 mb-4">
       <div class="container focus-exclude">
         <div class="row">
@@ -49,10 +54,10 @@
       </div>
     </div>
     <article>
-      <SocialHead :title="title" :description="description" :image="image" />
       <DictionaryEntry
         v-if="entry"
         :entry="entry"
+        :images="images"
         ref="dictionaryEntry"
         :key="`dictionary-entry-${entry.id}`"
       />
@@ -64,6 +69,7 @@
 import SearchCompare from "@/components/SearchCompare.vue";
 import Paginator from "@/components/Paginator";
 import DictionaryEntry from "@/components/DictionaryEntry";
+import WordPhotos from '@/lib/word-photos'
 
 export default {
   components: {
@@ -82,6 +88,7 @@ export default {
   data() {
     return {
       entry: undefined,
+      images: [],
       entryKey: 0,
       paginatorKey: 0,
     };
@@ -94,6 +101,7 @@ export default {
         if (args !== "random") {
         let dictionary = await this.$getDictionary();
         this.entry = await dictionary.get(args);
+        this.images = await WordPhotos.getGoogleImages({term: this.entry.bare, lang: this.$l2.code});
           // let dictionary = await this.$getDictionary();
           // this.entry = await (await dictionary).get(params.args);
           // console.log(this.entry)
@@ -104,18 +112,6 @@ export default {
         );
       }
     }
-  },
-  head() {
-    return {
-      title: this.title,
-      meta: [
-        {
-          hid: "description",
-          name: "description",
-          content: this.description,
-        },
-      ],
-    };
   },
   computed: {
     $l1() {
@@ -132,24 +128,22 @@ export default {
           this.entry.pronunciation ? "(" + this.entry.pronunciation + ")" : ""
         } | ${this.$l2 ? this.$l2.name : ""} Zero to Hero Dictionary`;
       }
-      return `Dictionary | ${this.$l2 ? this.$l2.name : ""} Zero to Hero`;
+      return `${this.$l2 ? this.$l2.name : ''} Dictionary | ${this.$l2 ? this.$l2.name : ""} Zero to Hero`;
     },
     description() {
       if (this.entry) {
-        return `"${this.entry.bare}" means ${this.entry.definitions.join(
+        return `"${this.entry.bare}" means: ${this.entry.definitions.join(
           "; "
         )}`;
       }
-      return `Look up  ${this.$l2 ? this.$l2.name : ""} words.`;
+      return `Look up ${this.$l2 ? this.$l2.name : ''} words. See how ${this.$l2 ? this.$l2.name : ''} words are used in TV shows, how they form collocations, and avoid common mistakes.`;
     },
     image() {
-      if (this.entry) {
-        if (this.$refs.dictionaryEntry && this.$refs.dictionaryEntry.webImage) {
-          return this.$refs.dictionaryEntry.webImage;
-        }
-        return this.$languages.logo(this.$l2.code);
+      if (this.images.length > 0) {
+        return this.images[0].src
+      } else {
+        return "/img/zth-share-image.jpg";
       }
-      return "/img/icon-z2h.jpeg";
     },
   },
   methods: {

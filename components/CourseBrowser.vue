@@ -77,6 +77,9 @@ export default {
       browseKey: 0, // used to force re-render this component
     }
   },
+  async fetch() {
+    this.books = await (await this.$getDictionary()).compileBooks()
+  },
   computed: {
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
@@ -86,9 +89,6 @@ export default {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
-  },
-  async mounted() {
-    this.books = await (await this.$getDictionary()).compileBooks()
   },
   methods: {
     saveAllClick: function(e) {

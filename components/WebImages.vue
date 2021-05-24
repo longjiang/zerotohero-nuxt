@@ -47,6 +47,9 @@ export default {
     },
     entry: {
       default: undefined
+    },
+    preloaded: {
+      type: Array
     }
   },
   computed: {
@@ -70,14 +73,16 @@ export default {
     }
   },
   async fetch() {
-    this.images = []
-    let scraped = await WordPhotos.getGoogleImages({
-      term: this.text,
-      lang: this.$l2.code
-    })
-    let images = scraped.slice(0, this.limit)
-    this.images = images
-    this.$emit('loaded', this.images)
+    if (this.preloaded) this.images = this.preloaded
+    else {
+      let scraped = await WordPhotos.getGoogleImages({
+        term: this.text,
+        lang: this.$l2.code
+      })
+      let images = scraped.slice(0, this.limit)
+      this.images = images
+      this.$emit('loaded', this.images)
+    }
   },
   methods: {
     goto(url) {

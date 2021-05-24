@@ -189,6 +189,7 @@
             :entry="entry"
             limit="10"
             ref="images"
+            :preloaded="images"
             @loaded="webImagesLoaded"
           />
           <EntryForms v-if="$l2.code === 'ru'" class="mt-5" :word="entry" />
@@ -335,6 +336,10 @@ export default {
     },
     showImages: {
       default: true,
+    },
+    images: {
+      type: Array,
+      default: []
     },
     showSearchSubs: {
       default: true,

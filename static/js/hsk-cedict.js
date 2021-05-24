@@ -132,21 +132,21 @@ const Dictionary = {
         row.dialog.toString() === dialog.toString()
     )
   },
+  // https://www.consolelog.io/group-by-in-javascript/
+  groupArrayBy(array, prop) {
+    return array.reduce(function (groups, item) {
+      const val = item[prop]
+      groups[val] = groups[val] || []
+      groups[val].push(item)
+      return groups
+    }, {})
+  },
   compileBooks() {
-    // https://www.consolelog.io/group-by-in-javascript/
-    Array.prototype.groupBy = function (prop) {
-      return this.reduce(function (groups, item) {
-        const val = item[prop]
-        groups[val] = groups[val] || []
-        groups[val].push(item)
-        return groups
-      }, {})
-    }
-    var books = this.words.filter(row => row.book).groupBy('book')
+    var books = this.groupArrayBy(this.words.filter(row => row.book), 'book')
     for (var book in books) {
-      books[book] = books[book].groupBy('lesson')
+      books[book] = this.groupArrayBy(books[book], 'lesson')
       for (var lesson in books[book]) {
-        books[book][lesson] = books[book][lesson].groupBy('dialog')
+        books[book][lesson] = this.groupArrayBy(books[book][lesson], 'dialog')
       }
     }
     return books
