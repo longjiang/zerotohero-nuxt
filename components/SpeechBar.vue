@@ -44,7 +44,7 @@
         tag="div"
         :showTranslate="!(lang && lang === $l1.code)"
       >
-        <span v-html="line.trim()" />
+        <div v-html="line.trim()" />
       </Annotate>
     </template>
   </div>

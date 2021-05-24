@@ -73,7 +73,7 @@ export default {
     }
   },
   async fetch() {
-    if (this.preloaded) this.images = this.preloaded
+    if (this.preloaded && this.preloaded.length > 0) this.images = this.preloaded
     else {
       let scraped = await WordPhotos.getGoogleImages({
         term: this.text,

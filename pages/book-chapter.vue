@@ -10,7 +10,7 @@
       v-if="chapter"
       :title="`${$l2.name} Guided Reader: ${book ? book.title + ' - ': ''}${chapter.title} | ${$l2.name} Zero to Hero`"
       :image="`${book.thumbnail ? book.thumbnail : '/img/books-1.png'}`"
-      :description="`Annoated ${$l2.name} book with learning tools. The entire chapter: “${stripTags(chapter.content)}`"
+      :description="`Annoated ${$l2.name} book with learning tools. The entire chapter: “${stripTags(chapter.content).trim()}`"
     />
     <div class="row mb-5">
       <div class="col-sm-12">
@@ -143,6 +143,7 @@ import SimpleSearch from "@/components/SimpleSearch";
 import SpeechBar from "@/components/SpeechBar";
 import Helper from '@/lib/helper'
 import { parse } from "node-html-parser";
+import sanitizeHtml from 'sanitize-html'
 
 export default {
   props: {
@@ -228,7 +229,7 @@ export default {
     let chapter = await Library.getChapter(url);
     if (chapter) {
       let root = parse("<div></div>");
-      root.innerHTML = chapter.content;
+      root.innerHTML = sanitizeHtml(chapter.content);
       for (let a of root.querySelectorAll("a")) {
         if (!a.getAttribute("target")) {
           let url = a.getAttribute("href");
