@@ -1,20 +1,15 @@
 <router>
   {
     path: '/:l1/:l2/characters',
-    meta: {
-      title: 'Characters | Zero to Hero',
-      metaTags: [
-        {
-          name: 'description',
-          content:
-            'Chinese characters by HSK level.'
-        }
-      ]
-    }
   }
 </router>
 <template>
   <div class="main mt-4 mb-4">
+    <SocialHead
+      :title="`Chinese Characters by HSK Level | Chinese Zero to Hero`"
+      :description="`A list of all characters from the simpliest to the most difficult, and the words that include them.`"
+      :image="`/img/placeholder.jpg`"
+    />
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
@@ -35,10 +30,10 @@
               <tbody>
                 <tr v-for="character in characters">
                   <td>{{ character.hsk }}</td>
-                  <td>{{ character.word }}</td>
-                  <td>{{ character.radicals }}</td>
+                  <td><Annotate><span>{{ character.word }}</span></Annotate></td>
+                  <td><Annotate><span>{{ character.radicals }}</span></Annotate></td>
                   <td>{{ character.strokeCount }}</td>
-                  <td>{{ character.examples.replace(/ /g, ', ') }}</td>
+                  <td><Annotate :sticky="true"><span>{{ character.examples.replace(/ /g, '，') }}</span></Annotate></td>
                 </tr>
               </tbody>
             </table>

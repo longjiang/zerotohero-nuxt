@@ -1,20 +1,16 @@
 <router>
   {
     path: '/:l1/:l2/idioms/:method?/:args?',
-    props: true,
-    meta: {
-      title: 'Idioms | Zero to Hero',
-      metaTags: [
-        {
-          name: 'description',
-          content: 'Learn idioms (成语 chéngyǔ).'
-        }
-      ]
-    }
+    props: true
   }
 </router>
 <template>
   <div class="container main mt-5 mb-5">
+    <SocialHead
+      :title="`Learn idioms (成语 chéngyǔ) | Chinese Zero to Hero`"
+      :description="`A list of idioms in the HSK curriculum, and their origins.`"
+      :image="`/img/placeholder.jpg`"
+    />
     <h1 class="mb-5 text-center">
       Idioms (成语) in the HSK
     </h1>

@@ -15,6 +15,11 @@
 </router>
 <template>
   <div class="container main mt-5 mb-5">
+    <SocialHead
+      :title="`Which Chinese Verbs are Separable? (离合词 lí-hé cí) | Chinese Zero to Hero`"
+      :description="`A list all seperable verbs and their various patterns.`"
+      :image="`/img/placeholder.jpg`"
+    />
     <div class="row">
       <div class="col-sm-12">
         <h1 class="text-center">Separable verbs ( 离合词 )</h1>
@@ -23,7 +28,7 @@
             <span>
               A
               <em>separable</em>
-              verb (for example, 唱歌) consists of a verb (唱) and an object
+              verb——for example, 唱歌——consists of a verb (唱) and an object
               (歌). Because of this, they can take the following forms. Note
               that a variety of measure words and complements can be used, not
               just the ones listed in the chart.

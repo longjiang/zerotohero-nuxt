@@ -14,6 +14,11 @@
 </router>
 <template>
   <div class="container main mt-4 mb-4" v-cloak>
+    <SocialHead
+      :title="`Words in the New HSK (9 Levels) | Chinese Zero to Hero`"
+      :description="`Browse through and learn the 11,000 new HSK words.`"
+      :image="`/img/placeholder.jpg`"
+    />
     <div class="row">
       <div class="col-sm-12">
         <div style="overflow: inherit">

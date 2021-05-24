@@ -62,7 +62,7 @@
       :key="`annotate-template-${index}`"
       :template="template"
     />
-    <div>{{ translation }}</div>
+    <div v-if="translation">{{ translation }}</div>
   </component>
 </template>
 

@@ -24,16 +24,19 @@
             <Search :hrefFunc="hrefFunc" class="mb-4" ref="search" />
           </div>
           <Loader class="mt-5" />
-          <div v-if="arg">
-            <div v-if="related && related.length > 1">
-              <h4 class="text-center mt-5">
+          <div>
+            <div>
+              <h4 class="text-center mt-5" v-if="word">
                 Words related to “
                 <span class="simplified">
                   {{ word.simplified }}
                 </span>
+
                 <span class="traditional">{{ word.traditional }}</span>
                 ”
               </h4>
+            </div>
+            <div v-if="related && related.length > 1">
               <Merge direction="bottom" class="h-half mt-5 mb-5" />
               <Loader class="mt-5" />
               <div>
@@ -61,7 +64,6 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
 import WordListExtended from "@/components/WordListExtended.vue";
 import Search from "@/components/Search.vue";
 import SketchEngine from "@/lib/sketch-engine";
@@ -73,19 +75,13 @@ export default {
     Merge,
     Search,
   },
-  beforeMount() {
-    this.route();
-  },
   props: {
     arg: undefined,
   },
   data() {
     return {
-      Helper,
       word: undefined,
       related: [],
-      hrefFunc: (entry) =>
-        `/${this.$store.state.settings.l1.code}/${this.$store.state.settings.l2.code}/explore/related/${entry.id}`,
     };
   },
   computed: {
@@ -101,51 +97,44 @@ export default {
       return this.$store.state.settings.dictionaryName;
     },
   },
-  async fetch() {
-    let word = await (await this.$getDictionary()).get(this.arg);
-    this.word = word;
-    let related = [this.word];
-    let data = await SketchEngine.thesaurus({
-      l2: this.$l2,
-      term: this.word.simplified,
-    });
-    console.log(data, this.word.simplified);
-    if (data) {
-      for (let Word of data.Words) {
-        let words = await (await this.$getDictionary()).lookupSimplified(
-          Word.word
-        );
-        if (words.length > 0) {
-          let word = words[0];
-          related.push(word);
-        }
-        related = related.sort((a, b) => {
-          let ahsk = a.hsk === "outside" ? 7 : parseInt(a.hsk);
-          let bhsk = b.hsk === "outside" ? 7 : parseInt(b.hsk);
-          return ahsk - bhsk;
-        });
-      }
+  updated() {
+    if (this.word) {
+      this.$refs.search.dEntry = this.word;
+      this.$refs.search.text = this.word.simplified;
     }
-    this.related = related;
   },
   methods: {
-    async route() {
-      if (this.$route.params.arg) {
-        this.$fetch();
-        let word = await (await this.$getDictionary()).get(this.arg);
-        this.$refs.search.dEntry = word;
-        this.$refs.search.text = word.simplified;
-      } else {
-        this.arg = "";
-      }
+    hrefFunc(entry) {
+      return `/${this.$store.state.settings.l1.code}/${this.$store.state.settings.l2.code}/explore/related/${entry.id}`;
     },
   },
-  watch: {
-    $route() {
-      if (this.$route.name === "explore-related") {
-        this.route();
+  async fetch() {
+    if (this.arg) {
+      let word = await (await this.$getDictionary()).get(this.arg);
+      let related = [word];
+      let data = await SketchEngine.thesaurus({
+        l2: this.$l2,
+        term: word.simplified,
+      });
+      if (data && data.Words) {
+        for (let Word of data.Words) {
+          let words = await (await this.$getDictionary()).lookupSimplified(
+            Word.word
+          );
+          if (words.length > 0) {
+            let word = words[0];
+            related.push(word);
+          }
+          related = related.sort((a, b) => {
+            let ahsk = a.hsk === "outside" ? 7 : parseInt(a.hsk);
+            let bhsk = b.hsk === "outside" ? 7 : parseInt(b.hsk);
+            return ahsk - bhsk;
+          });
+        }
+        this.word = word;
+        this.related = related;
       }
-    },
+    }
   },
 };
 </script>
