@@ -176,22 +176,6 @@
         <i v-else class="fas fa-pause"></i>
       </span>
     </div>
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-sm-12 p-5" id="comments">
-          <h4 class="mt-5 mb-4">
-            {{ $t("Comments") }}
-          </h4>
-          <div class="comments">
-            <Disqus
-              shortname="zero-to-hero"
-              :identifier="`youtube-view-${args}`"
-              :url="`https://www.zerotohero.ca//${$l1.code}/${$l2.code}/youtube/view/${args}`"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -356,9 +340,10 @@ export default {
       );
       let root = parser.parse(xml, {
         ignoreAttributes: false,
-      });
+      }); 
       console.log(root, 'root')
-      for (let track of root.transcript_list.track) {
+      let tracks = root.transcript_list.track.length > 0 ? root.transcript_list.track : [root.transcript_list.track]
+      for (let track of tracks) {
         let locale = track['@_lang_code'];
         if (locales.includes(locale)) {
           this.l2Locale = locale;
