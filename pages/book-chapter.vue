@@ -8,9 +8,15 @@
   <div class="container main pt-5 pb-5" id="book-chapter">
     <SocialHead
       v-if="chapter"
-      :title="`${$l2.name} Guided Reader: ${book ? book.title + ' - ': ''}${chapter.title} | ${$l2.name} Zero to Hero`"
+      :title="`${$l2.name} Guided Reader: ${book ? book.title + ' - ' : ''}${
+        chapter.title
+      } | ${$l2.name} Zero to Hero`"
       :image="`${book.thumbnail ? book.thumbnail : '/img/books-1.png'}`"
-      :description="`Annoated ${$l2.name} book with learning tools. The entire chapter: “${stripTags(chapter.content).trim()}`"
+      :description="`Annoated ${
+        $l2.name
+      } book with learning tools. The entire chapter: “${stripTags(
+        chapter.content
+      ).trim()}`"
     />
     <div class="row mb-5">
       <div class="col-sm-12">
@@ -63,8 +69,8 @@
         </b-button-group>
       </div>
       <div v-if="book" class="col-md-4 text-center" :key="'book-' + book.title">
-        <a
-          :href="
+        <router-link
+          :to="
             book.url
               ? `/${$l1.code}/${$l2.code}/book/index?url=${encodeURIComponent(
                   book.url
@@ -89,7 +95,7 @@
             </h6>
             <p>{{ book.author }}</p>
           </Annotate>
-        </a>
+        </router-link>
         <div class="bg-light p-4 mb-3 rounded" v-if="source(args)">
           <a :href="args" class="link-unstyled" target="_blank">
             Read the original on
@@ -109,27 +115,29 @@
           </b-button>
         </b-button-group>
         <div class="list-group text-left">
-          <Annotate
-            tag="a"
+          <router-link
             v-for="(chapter, index) in book.chapters"
             :key="`book-chapter-${chapter.title}-${index}`"
-            :class="{
-              'list-group-item': true,
-              'link-unstyled': true,
-              active:
-                $route.fullPath ===
-                `/${$l1.code}/${$l2.code}/book/chapter?url=${encodeURIComponent(
-                  chapter.url
-                )}`,
-            }"
-            :foreign="foreign"
-            :buttons="false"
-            :href="`/${$l1.code}/${
+            :to="`/${$l1.code}/${
               $l2.code
             }/book/chapter?url=${encodeURIComponent(chapter.url)}`"
+            class="link-unstyled"
           >
-            <span>{{ chapter.title }}</span>
-          </Annotate>
+            <Annotate
+              :class="{
+                'list-group-item': true,
+                active:
+                  $route.fullPath ===
+                  `/${$l1.code}/${
+                    $l2.code
+                  }/book/chapter?url=${encodeURIComponent(chapter.url)}`,
+              }"
+              :foreign="foreign"
+              :buttons="false"
+            >
+              <span>{{ chapter.title }}</span>
+            </Annotate>
+          </router-link>
         </div>
       </div>
     </div>
@@ -141,9 +149,9 @@ import Config from "@/lib/config";
 import Library from "@/lib/library";
 import SimpleSearch from "@/components/SimpleSearch";
 import SpeechBar from "@/components/SpeechBar";
-import Helper from '@/lib/helper'
+import Helper from "@/lib/helper";
 import { parse } from "node-html-parser";
-import sanitizeHtml from 'sanitize-html'
+import sanitizeHtml from "sanitize-html";
 
 export default {
   props: {
@@ -166,11 +174,6 @@ export default {
       chapterLang: undefined,
       foreign: true,
     };
-  },
-  watch: {
-    args() {
-      this.updateURL();
-    },
   },
   computed: {
     $l1() {
@@ -216,6 +219,11 @@ export default {
     let url = decodeURIComponent(this.args);
     this.$refs.search.text = url;
   },
+  watch: {
+    args() {
+      this.$fetch()
+    }
+  },
   async fetch() {
     let url = decodeURIComponent(this.args);
     try {
@@ -255,7 +263,7 @@ export default {
   },
   methods: {
     stripTags(t) {
-      return Helper.stripTags(t)
+      return Helper.stripTags(t);
     },
     source(a) {
       return Library.source(a);

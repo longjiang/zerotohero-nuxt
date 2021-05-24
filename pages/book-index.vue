@@ -9,10 +9,15 @@
   <div class="container main pt-5 pb-5" id="book-index">
     <SocialHead
       v-if="book"
-      :title="`${$l2.name} Guided Reader: ${book.title}${book.author ? ' by ' + book.author : ''} | ${$l2.name} Zero to Hero`"
+      :title="`${$l2.name} Guided Reader: ${book.title}${
+        book.author ? ' by ' + book.author : ''
+      } | ${$l2.name} Zero to Hero`"
       :image="`${book.thumbnail ? book.thumbnail : '/img/books-1.png'}`"
-      :description="`Annoated ${$l2.name} book with learning tools. The whole book: ${book.chapters.map(c=>c.title).join(', ')}`"
-      
+      :description="`Annoated ${
+        $l2.name
+      } book with learning tools. The whole book: ${book.chapters
+        .map((c) => c.title)
+        .join(', ')}`"
     />
     <div class="row mb-5">
       <div class="col-sm-12">
@@ -56,26 +61,28 @@
           <p>{{ book.author }}</p>
         </Annotate>
         <div class="list-group text-left">
-          <Annotate
-            tag="a"
+          <router-link
             v-for="(chapter, index) in book.chapters"
+            class="link-unstyled"
             :key="`chapter-${chapter.title}-${index}`"
-            :class="{
-              'list-group-item': true,
-              'link-unstyled': true,
-              active:
-                $route.fullPath ===
-                `/${$l1.code}/${$l2.code}/book/chapter?url=${encodeURIComponent(
-                  chapter.url
-                )}`,
-            }"
-            :href="`/${$l1.code}/${
+            :to="`/${$l1.code}/${
               $l2.code
             }/book/chapter?url=${encodeURIComponent(chapter.url)}`"
-            :buttons="false"
           >
-            <span>{{ chapter.title }}</span>
-          </Annotate>
+            <Annotate
+              :class="{
+                'list-group-item': true,
+                active:
+                  $route.fullPath ===
+                  `/${$l1.code}/${
+                    $l2.code
+                  }/book/chapter?url=${encodeURIComponent(chapter.url)}`,
+              }"
+              :buttons="false"
+            >
+              <span>{{ chapter.title }}</span>
+            </Annotate>
+          </router-link>
         </div>
       </div>
     </div>
