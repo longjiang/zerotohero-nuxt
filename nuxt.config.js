@@ -74,7 +74,6 @@ export default {
   build: {
     extend(config, { isDev, isClient }) {
       config.resolve.alias['vue'] = 'vue/dist/vue.common'
-      config.devtool = isClient ? 'source-map' : 'inline-source-map'
       if (isClient) {
         config.node = {
           fs: 'empty',
