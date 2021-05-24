@@ -6,6 +6,10 @@
 </router>
 <template>
   <div class="main mt-5 mb-5">
+    <SocialHead
+      v-if="subreddits && subreddits.length > 0"
+      :title="`Reddit Posts from r/${subreddits[0].sub} | ${$l2.name} Zero to Hero`"
+    />
     <div v-if="method === 'list'" class="container" :key="`subreddits-${key}`">
       <div class="row">
         <div class="col-sm-12 col-md-8">
@@ -71,7 +75,7 @@
 import Config from "@/lib/config";
 import RedditArticlesList from "@/components/RedditArticlesList.vue";
 import RedditArticle from "@/components/RedditArticle.vue";
-import axios from 'axios'
+import axios from "axios";
 
 export default {
   components: {
@@ -96,13 +100,6 @@ export default {
     $l2() {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
-    },
-  },
-  watch: {
-    $route() {
-      if (this.$route.name === "articles-reddit") {
-        this.route();
-      }
     },
   },
   async fetch() {

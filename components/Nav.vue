@@ -252,6 +252,18 @@ export default {
               show: true,
             },
             {
+              name: 'book-list',
+              show: false,
+            },
+            {
+              name: 'book-index',
+              show: false,
+            },
+            {
+              name: 'book-chapter',
+              show: false,
+            },
+            {
               name: 'pinyin-list',
               title: 'Pinyin List',
               icon: 'fa fa-list',

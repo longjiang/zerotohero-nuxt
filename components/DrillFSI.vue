@@ -35,10 +35,19 @@
 
 <script>
 //:key="`item-${patternIndex}-${partIndex}-${itemIndex}-${itemKey}`"
-import Vue from 'vue'
 export default {
   mounted() {
     this.audio = document.getElementById('drill-audio');
+  },
+  computed: {
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
   },
   methods: {
     playItem(patternIndex, partIndex, itemIndex) {

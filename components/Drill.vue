@@ -50,13 +50,28 @@
 </template>
 
 <script>
-import Vue from 'vue'
 import Speak from '@/components/Speak'
 
 export default {
   props: ['drill'],
   components: {
     Speak
+  },
+  data() {
+    return {
+      itemKey: 0,
+      audio: undefined
+    }
+  },
+  computed: {
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
   },
   mounted() {
     this.audio = document.getElementById('drill-audio')
@@ -114,12 +129,6 @@ export default {
       segmentEnd = endTime
       this.audio.currentTime = startTime
       this.audio.play()
-    }
-  },
-  data() {
-    return {
-      itemKey: 0,
-      audio: undefined
     }
   }
 }

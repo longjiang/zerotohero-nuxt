@@ -1,5 +1,13 @@
 <template>
   <div>
+    <SocialHead
+      v-if="grammar"
+      :title="`HSK 1-9 Chinese Grammar Cheatsheet  | ${$l2.name} Zero to Hero`"
+      :description="`${grammar
+        .slice(0, 10)
+        .map((g) => g.structure + ' (' + g.english + ')')
+        .join(' | ')}`"
+    />
     <div class="text-center">
       <Loader class="mb-5" />
     </div>
@@ -18,7 +26,8 @@
         />
         <div class="input-group-append">
           <button class="btn btn-danger lookup-button" type="button">
-            <i class="glyphicon glyphicon-filter"></i> Filter
+            <i class="glyphicon glyphicon-filter"></i>
+            Filter
           </button>
         </div>
       </div>
@@ -26,8 +35,10 @@
         href="https://server.chinesezerotohero.com/data/zh-grammar/zh-grammar.csv.txt"
         class="ml-2 btn btn-primary"
         download="Chinese Zero to Hero Grammar Chart.csv"
-        ><i class="fa fa-download mr-1" />Download CSV</a
       >
+        <i class="fa fa-download mr-1" />
+        Download CSV
+      </a>
     </div>
     <div class="tabs text-center">
       <button @click="level = undefined" class="tab text-light bg-dark">
@@ -78,36 +89,35 @@
           @click="grammarRowClick(row)"
         >
           <td class="text-center align-middle">
-            <span
-              ><a
+            <span>
+              <a
                 v-if="row.url !== ''"
                 :href="`${row.url}`"
                 class="btn btn-secondary"
                 style="white-space: nowrap"
-                ><i class="glyphicon glyphicon-facetime-video"></i>
-                {{ row.code }}</a
               >
+                <i class="glyphicon glyphicon-facetime-video"></i>
+                {{ row.code }}
+              </a>
               <span v-else>{{ row.code }}</span>
             </span>
           </td>
           <td class="align-middle">
-            <Annotate
-              ><span
-                v-html="
-                  Helper.highlightMultiple(row.structure, row.words, row.book)
-                "
-            /></Annotate>
+            <Annotate>
+              <span
+                v-html="highlightMultiple(row.structure, row.words, row.book)"
+              />
+            </Annotate>
           </td>
           <td class="align-middle">
             <span>{{ row.english }}</span>
           </td>
           <td class="align-middle">
-            <Annotate
-              ><span
-                v-html="
-                  Helper.highlightMultiple(row.example, row.words, row.book)
-                "
-            /></Annotate>
+            <Annotate>
+              <span
+                v-html="highlightMultiple(row.example, row.words, row.book)"
+              />
+            </Annotate>
           </td>
           <td class="align-middle">
             <span>{{ row.exampleTranslation }}</span>
@@ -119,15 +129,18 @@
 </template>
 
 <script>
-import Helper from '@/lib/helper'
+import Helper from "@/lib/helper";
 export default {
   data() {
     return {
-      Helper,
-      search: '',
+      search: "",
       level: undefined,
       grammar: [],
-    }
+    };
+  },
+  async fetch() {
+    let grammar = await this.$getGrammar();
+    this.grammar = grammar._grammarData;
   },
   computed: {
     $l1() {
@@ -140,17 +153,16 @@ export default {
     },
   },
   methods: {
+    highlightMultiple(a, b) {
+      return Helper.highlightMultiple(a, b);
+    },
     grammarRowClick(row) {
       this.$router.push({
         path: `/${this.$l1.code}/${this.$l2.code}/grammar/view/${row.id}`,
-      })
+      });
     },
   },
-  async mounted() {
-    let grammar = await this.$getGrammar()
-    this.grammar = grammar._grammarData
-  },
-}
+};
 </script>
 
 <style lang="scss">

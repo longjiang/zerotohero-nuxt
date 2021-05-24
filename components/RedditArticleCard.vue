@@ -1,11 +1,5 @@
 <template>
   <article class="updown article">
-    <SocialHead
-      v-if="article && article.post_hint === 'image'"
-      :image="`${article.url}`"
-      :title="`Reddit Posts under r/${article.subreddit} | ${$l2.name} Zero to Hero`"
-      :description="`Articles: ${article.title}`"
-    />
     <div class="updown-head">
       <i class="fa fa-arrow-up" />
       <div>{{ article.ups }}</div>
@@ -56,6 +50,9 @@ export default {
   methods: {
     unescape(escapedHTML) {
       return Helper.unescape(escapedHTML)
+    },
+    stripTags(html) {
+      return Helper.stripTags(html)
     }
   },
   created() {}

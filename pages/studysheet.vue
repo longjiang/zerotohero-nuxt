@@ -1,20 +1,14 @@
 <router>
   {
-    path: '/:l1/:l2/studysheet/',
-    meta: {
-      title: 'Language Study Sheet Creator | Zero to Hero',
-      metaTags: [
-        {
-          name: 'description',
-          content:
-            'Generate guided readers for language learning.'
-        }
-      ]
-    }
+    path: '/:l1/:l2/studysheet/'
   }
 </router>
 <template>
   <div class="main pt-3 pb-5">
+    <SocialHead
+      :title="`${$l2.name} Study Sheet (PDF) Creator | ${$l2.name} Zero to Hero`"
+      :description="`Generate ${$l2.name} guided readers for language learning.'`"
+    />
     <div class="container">
       <div class="row mt-4">
         <div class="col-sm-12 col-md-6 mb-4">

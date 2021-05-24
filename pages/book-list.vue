@@ -16,6 +16,21 @@
 </router>
 <template>
   <div class="container main pt-5 pb-5" id="book-list">
+    <SocialHead
+      v-if="booklist"
+      :title="`${$l2.name} Guided Readers: ${booklist
+        .slice(0, 2)
+        .map((b) => b.title)
+        .join(', ')} and more | ${$l2.name} Zero to Hero`"
+      :image="`${
+        booklist[0] && booklist[0].thumbnail ? booklist[0].thumbnail : '/img/books-1.png'
+      }`"
+      :description="`Annoated ${
+        $l2.name
+      } books with learning tools. Other titles including: “${booklist.slice(3)
+        .map((b) => b.title)
+        .join(', ')}`"
+    />
     <h1 class="mb-5">Book List</h1>
     <SimpleSearch
       placeholder="Enter the URL of a book list from a variety of eBook websites"
@@ -33,8 +48,8 @@
     />
     <ul class="list-unstyled booklist">
       <li v-for="book in booklist" class="booklist-item text-center">
-        <a
-          :href="`/${$l1.code}/${$l2.code}/book/index?url=${encodeURIComponent(
+        <router-link
+          :to="`/${$l1.code}/${$l2.code}/book/index?url=${encodeURIComponent(
             book.url
           )}`"
           class="link-unstyled"
@@ -54,7 +69,7 @@
           <Annotate tag="small" v-if="book.author">
             <span>{{ book.author }}</span>
           </Annotate>
-        </a>
+        </router-link>
       </li>
     </ul>
   </div>
@@ -90,33 +105,24 @@ export default {
   data() {
     return {
       Config,
-      libraryL2: undefined,
       booklist: [],
     };
   },
-  watch: {
-    args() {
-      this.updateURL();
-    },
+  async fetch() {
+    let url = decodeURIComponent(this.args);
+    try {
+      let libraryL2 = await (
+        await import(`@/lib/library-l2s/library-${this.$l2["iso639-3"]}.js`)
+      ).default;
+      await Library.setLangSources(libraryL2.sources);
+    } catch (err) {
+      console.log(`Booklists for ${this.$l2["iso639-3"]} is unavailable.`);
+    }
+    this.booklist = await Library.getBooklist(url, this.$l1.code);
   },
-  methods: {
-    async updateURL() {
-      let url = decodeURIComponent(this.args);
-      this.$refs.search.text = url;
-      this.booklist = [];
-      try {
-        this.libraryL2 = await (
-          await import(`@/lib/library-l2s/library-${this.$l2["iso639-3"]}.js`)
-        ).default;
-        await Library.setLangSources(this.libraryL2.sources);
-      } catch (err) {
-        console.log(`Booklists for ${this.$l2["iso639-3"]} is unavailable.`);
-      }
-      this.booklist = await Library.getBooklist(url, this.$l1.code);
-    },
-  },
-  async mounted() {
-    this.updateURL();
+  mounted() {
+    let url = decodeURIComponent(this.args);
+    this.$refs.search.text = url;
   },
 };
 </script>

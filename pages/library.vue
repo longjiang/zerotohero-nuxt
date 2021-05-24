@@ -1,23 +1,26 @@
 <router>
   {
-    path: '/:l1/:l2/library',
-    meta: {
-      title: 'Library | Zero to Hero',
-      metaTags: [
-        {
-          name: 'description',
-          content:
-            'Read free, open books with hover dictionary and save new words for review.'
-        }
-      ]
-    }
+    path: '/:l1/:l2/library'
   }
 </router>
 <template>
   <div class="container pt-5 pb-5 main" id="library">
+    <SocialHead
+      v-if="booklists"
+      :title="`${$l2.name} Guided Readers: ${booklists
+        .slice(0, 1)
+        .map((b) => b.title)
+        .join(', ')} and more | ${$l2.name} Zero to Hero`"
+      image="/img/books-1.png"
+      :description="`Annoated ${
+        $l2.name
+      } books with learning tools: ${booklists.slice(2)
+        .map((b) => b.title)
+        .join(', ')}`"
+    />
     <div class="row">
       <div class="col-sm-12">
-        <h1 class="mb-5 text-center">{{ $t("Library") }}</h1>
+        <h1 class="mb-5 text-center">{{ $l2.name }} Guided Readers</h1>
         <p class="text-center lead" style="margin-bottom: 5rem">
           {{
             $t(
@@ -29,29 +32,26 @@
 
         <ul class="list-unstyled p-0 mb-5 booklists">
           <li v-for="booklist in booklists" class="text-center mb-5">
-            <a
+            <router-link
               class="link-unstyled"
-              :href="`/${$l1.code}/${
-                $l2.code
-              }/book/list?url=${encodeURIComponent(booklist.url)}`"
+              :to="`/${$l1.code}/${$l2.code}/book/list?url=${encodeURIComponent(
+                booklist.url
+              )}`"
             >
               <img
                 :src="`/img/books-${Math.floor(Math.random() * 10)}.png`"
                 class="shadowed book-thumb mb-4"
+                data-not-lazy
               />
               <h5 class="mt-3">
                 <Annotate tag="b">
                   <span>{{ booklist.title }}</span>
                 </Annotate>
               </h5>
-              <p
-                class="mb-0"
-                style="color: #aaa"
-                v-if="Library.source(booklist.url)"
-              >
-                Source: {{ Library.source(booklist.url).name }}
+              <p class="mb-0" style="color: #aaa" v-if="source(booklist.url)">
+                Source: {{ source(booklist.url).name }}
               </p>
-            </a>
+            </router-link>
           </li>
         </ul>
 
@@ -84,9 +84,15 @@
             URLs like the following into the above text box and enjoy reading!
           </p>
           <ul>
-            <li v-for="(source, index) in sources" :key="`library-source-${index}`">
+            <li
+              v-for="(source, index) in sources"
+              :key="`library-source-${index}`"
+            >
               {{ source.name }}, example URL:
-              <code v-if="typeof source.example === 'function'" v-html="`${source.example($l2.code)}`"></code>
+              <code
+                v-if="typeof source.example === 'function'"
+                v-html="`${source.example($l2.code)}`"
+              ></code>
             </li>
           </ul>
         </div>
@@ -110,8 +116,6 @@ export default {
   },
   data() {
     return {
-      Library,
-      libraryL2: undefined,
       booklists: [],
       sources: [],
     };
@@ -126,13 +130,18 @@ export default {
         return this.$store.state.settings.l2;
     },
   },
-  async mounted() {
+  methods: {
+    source(url) {
+      return Library.source(url);
+    },
+  },
+  async fetch() {
     try {
-      this.libraryL2 = await (
+      let libraryL2 = await (
         await import(`@/lib/library-l2s/library-${this.$l2["iso639-3"]}.js`)
       ).default;
-      Library.setLangSources(this.libraryL2.sources);
-      this.booklists = await this.libraryL2.booklists();
+      Library.setLangSources(libraryL2.sources);
+      this.booklists = await libraryL2.booklists();
     } catch (err) {
       console.log(`Booklists for ${this.$l2["iso639-3"]} is unavailable.`);
     }

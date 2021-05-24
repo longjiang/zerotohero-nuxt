@@ -15,6 +15,10 @@
 </router>
 <template>
   <div class="main pt-3 pb-5">
+    <SocialHead
+      :title="`${$l2.name} Text Reader (Annotator) | ${$l2.name} Zero to Hero`"
+      :description="`Read ${$l2.name} text with phonetic annotation dictionary lookup. Save new words for review.`"
+    />
     <div class="container">
       <div class="row">
         <div class="col-sm-12">

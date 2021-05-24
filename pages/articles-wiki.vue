@@ -1,21 +1,16 @@
 <router>
   {
-    path: '/:l1/:l2/articles/wiki/:method?/:args?',
-    meta: {
-      title: 'Learning Wiki Articles | Zero to Hero',
-      metaTags: [
-        {
-          name: 'description',
-          content:
-            'Read Wiki articles about grammar and language.'
-        }
-      ]
-    }
+    path: '/:l1/:l2/articles/wiki/:method?/:args?'
   }
 </router>
 <template>
   <div class="main mt-5 mb-5">
     <div v-if="method === 'list'" class="container">
+      <SocialHead
+        v-if="articles"
+        :title="`Articles from the ${$l2.name} Learning Wiki | ${$l2.name} Zero to Hero`"
+        :description="articles.map(article => article.title).join('. ')"
+      />
       <template v-if="articles && articles.length > 0">
         <div class="row">
           <div class="col-sm-12 col-md-8">
@@ -58,6 +53,11 @@
       </template>
     </div>
     <div v-if="method === 'view' && article" class="container">
+
+      <SocialHead
+        :title="`${article.title} | Wiki | ${$l2.name} Zero to Hero`"
+        :description="`${article.body ? stripTags(unescape(article.body)) : 'Read article'}`"
+      />
       <div class="row">
         <div class="col-sm-12">
           <ArticleCard :article="article" :edit="true" />
@@ -71,7 +71,8 @@
 import Config from "@/lib/config";
 import ArticlesList from "@/components/ArticlesList.vue";
 import ArticleCard from "@/components/ArticleCard.vue";
-import axios from 'axios'
+import axios from "axios";
+import Helper from '@/lib/helper';
 
 export default {
   components: {
@@ -86,13 +87,14 @@ export default {
       args: undefined,
       Config,
     };
-  },
-  watch: {
-    $route() {
-      if (this.$route.name === "articles-wiki") {
-        this.route();
-      }
+  },  
+  methods: {
+    unescape(escapedHTML) {
+      return Helper.unescape(escapedHTML)
     },
+    stripTags(html) {
+      return Helper.stripTags(html)
+    }
   },
   computed: {
     $l1() {
@@ -104,43 +106,36 @@ export default {
         return this.$store.state.settings.l2;
     },
   },
-  methods: {
-    async route() {
-      if (this.$route.params.method) {
-        this.method = this.$route.params.method;
-        if (this.method === "list") {
-          this.articles = [];
-          let response = await axios.get(
-            `${Config.wiki}items/articles?filter[l2][eq]=${this.$l2.id}`
-          );
+  async fetch() {
+    if (this.$route.params.method) {
+      this.method = this.$route.params.method;
+      if (this.method === "list") {
+        this.articles = [];
+        let response = await axios.get(
+          `${Config.wiki}items/articles?filter[l2][eq]=${this.$l2.id}`
+        );
 
-          this.articles = response.data.data.map((article) => {
-            article.url = `/${this.$l1.code}/${
-              this.$l2.code
-            }/articles/wiki/view/${article.id},${encodeURIComponent(
-              article.title
-            )}`;
-            return article;
-          });
-        } else if (this.method === "view" && this.$route.params.args) {
-          this.args = this.$route.params.args.split(",");
-          this.article = undefined;
-          $.getJSON(
-            `${Config.wiki}items/articles/${this.args[0]}`,
-            (response) => {
-              this.article = response.data;
-            }
-          );
-        }
-      } else {
-        this.$router.push({
-          path: `/${this.$l1.code}/${this.$l2.code}/articles/wiki/list`,
+        this.articles = response.data.data.map((article) => {
+          article.url = `/${this.$l1.code}/${
+            this.$l2.code
+          }/articles/wiki/view/${article.id},${encodeURIComponent(
+            article.title
+          )}`;
+          return article;
         });
+      } else if (this.method === "view" && this.$route.params.args) {
+        this.args = this.$route.params.args.split(",");
+        this.article = undefined;
+        let response = await axios.get(
+          `${Config.wiki}items/articles/${this.args[0]}`
+        );
+        this.article = response.data.data;
       }
-    },
-  },
-  created() {
-    this.route();
+    } else {
+      this.$router.push({
+        path: `/${this.$l1.code}/${this.$l2.code}/articles/wiki/list`,
+      });
+    }
   },
 };
 </script>

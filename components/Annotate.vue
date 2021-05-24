@@ -22,7 +22,7 @@
       fullscreen: fullscreenMode,
     }"
   >
-    <div class="annotator-buttons" v-if="!empty()">
+    <div class="annotator-buttons" v-if="!empty() && buttons">
       <b-dropdown no-caret toggle-class="annotator-menu-toggle" dropleft>
         <template #button-content><i class="fas fa-ellipsis-h"></i></template>
         <b-dropdown-item>
@@ -96,8 +96,8 @@ export default {
     tag: {
       default: "span",
     },
-    showTranslate: {
-      default: false,
+    buttons: {
+      default: true,
     },
     fullscreen: {
       default: false,
