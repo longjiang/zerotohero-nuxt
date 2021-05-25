@@ -14,7 +14,6 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.13.1",
     "accounting": "^0.4.1",
-    "aws-sdk": "^2.913.0",
     "bootstrap": "^4.6.0",
     "bootstrap-vue": "^2.21.2",
     "child_process": "^1.0.2",
