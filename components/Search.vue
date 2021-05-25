@@ -9,7 +9,7 @@
         type="text"
         class="form-control lookup"
         ref="lookup"
-        :placeholder="placeholder || $t('Look up words here...')"
+        :placeholder="placeholder || $t('Search')"
       />
       <router-link
         v-if="random"

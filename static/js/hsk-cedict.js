@@ -174,9 +174,10 @@ const Dictionary = {
   lookupFuzzy(text, limit = false) {
     let results = []
     if (this.isChinese(text)) {
+      let reg = new RegExp(text, 'gi')
       results = this.words
         .filter(
-          row => row.simplified.includes(text) || row.traditional.includes(text)
+          row => reg.test(row.simplified) || reg.test(row.traditional)
         )
         .sort((a, b) => b.weight - a.weight)
     } else {

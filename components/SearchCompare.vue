@@ -1,6 +1,6 @@
 <template>
   <div class="search-compare-wrapper" v-if="!loading">
-    <Search ref="search" :defaultURL="urlFunc" :hrefFunc="compareEntry ? compareHrefFuncFirst : undefined" :random="random" :type="type" :entry="searchEntry" :term="term" :placeholder="$t('Look up words here...')"></Search>
+    <Search ref="search" :defaultURL="urlFunc" :hrefFunc="compareEntry ? compareHrefFuncFirst : undefined" :random="random" :type="type" :entry="searchEntry" :term="term" :placeholder="$t($l2.code === 'zh' ? 'Search term or regex' : 'Look up words here...')"></Search>
     <Search
       :class="{ 'ml-2': true, hidden: !showCompare }"
       :entry="compareEntry"
