@@ -294,6 +294,7 @@ export default {
       this.$settings.adminMode,
       this.$l2.continua
     );
+    
     hits = this.updateSaved(hits);
     this.collectContext(hits);
     this.$emit("loaded", hits);

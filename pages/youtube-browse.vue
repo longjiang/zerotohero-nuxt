@@ -15,6 +15,12 @@
 </router>
 <template>
   <div class="youtube-browse container mt-5 mb-5 main">
+    <SocialHead
+      v-if="videos[0]"
+      :title="`Learn ${$l2.name} with YouTube | ${$l2.name} Zero to Hero`"
+      :description="`Watch ${$l2.name} YouTube videos and study the ${$l2.name} subtitles.`"
+      :image="`https://img.youtube.com/vi/${videos[0].youtube_id}/hqdefault.jpg`"
+    />
     <div class="row mt-5">
       <div class="col-sm-12">
         <h3 class="mb-5 text-center">YouTube Video Library</h3>
@@ -81,7 +87,7 @@
               'list-group-item-action': topic === 'all',
               active: topic === 'all',
             }"
-            :to="`/${$l1.code}/${$l2.code}/youtube/browse/all/${level}`"
+            :to="`/${$l1.code}/${$l2.code}/youtube/browse/all/${level}/0`"
           >
             All
           </router-link>
@@ -93,25 +99,25 @@
               'list-group-item-action': topicValue === topic,
               active: topicValue === topic,
             }"
-            :to="`/${$l1.code}/${$l2.code}/youtube/browse/${topicValue}/all`"
+            :to="`/${$l1.code}/${$l2.code}/youtube/browse/${topicValue}/all/0`"
           >
             {{ topicName }}
           </router-link>
         </div>
         <h6 class="mt-4 mb-4 text-center">Filter by Level</h6>
         <div class="list-group">
-          <a
+          <router-link
             :class="{
               'link-unstyled': true,
               'list-group-item': true,
               'list-group-item-action': level === 'all',
               active: level === 'all',
             }"
-            :href="`/${$l1.code}/${$l2.code}/youtube/browse/${topic}/all`"
+            :to="`/${$l1.code}/${$l2.code}/youtube/browse/${topic}/all/0`"
           >
             All
-          </a>
-          <a
+          </router-link>
+          <router-link
             v-for="(levelName, levelValue) in levels"
             :class="{
               'link-unstyled': true,
@@ -119,10 +125,10 @@
               'list-group-item-action': levelValue === level,
               active: levelValue === level,
             }"
-            :href="`/${$l1.code}/${$l2.code}/youtube/browse/all/${levelValue}`"
+            :to="`/${$l1.code}/${$l2.code}/youtube/browse/all/${levelValue}/0`"
           >
             {{ levelName }}
-          </a>
+          </router-link>
         </div>
       </div>
     </div>
@@ -224,7 +230,7 @@ export default {
         videos = await YouTube.checkShows(videos, this.$l2.id);
       }
       videos = Helper.uniqueByValue(videos, "youtube_id");
-      return videos
+      return videos;
     },
     async getChannels() {
       let response = await axios.get(
@@ -248,14 +254,23 @@ export default {
     route() {
       let canonical = `/${this.$l1.code}/${this.$l2.code}/youtube/browse/${this.topic}/${this.level}/${this.start}`;
       if (this.keyword) {
-        canonical = canonical + "/" + this.keyword;
+        canonical = canonical + "/" + encodeURIComponent(this.keyword);
       }
       if (this.$router.currentRoute.path !== canonical) {
+        console.log("pushing");
+        console.log(this.$router.currentRoute.path);
+        console.log(canonical);
         this.$router.push({ path: canonical });
       } else {
         this.$fetch();
       }
     },
+  },
+  beforeRouteEnter(to, from, next) {
+    if (to.path.endsWith(`/youtube/browse`)) {
+      next(`${to.path}/all/all/0`);
+    }
+    next();
   },
   created() {
     this.route();

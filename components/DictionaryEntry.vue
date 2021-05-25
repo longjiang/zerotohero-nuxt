@@ -27,144 +27,11 @@
               class="mb-4"
               :key="`${entry.id}-example`"
             ></EntryExample>
-            <div>
-              <div class="ext-dictionary-buttons p-2 bg-white">
-                <b-button
-                  @click="setExtDict('zdic')"
-                  v-if="['zh', 'yue', 'nan', 'wuu', 'hak'].includes($l2.code)"
-                  class="mr-2 btn btn-small"
-                  :data-bg-level="extDict === 'zdic' ? entry.level : false"
-                  >汉典</b-button
-                >
-                <b-button
-                  @click="setExtDict('wiktionary')"
-                  class="mr-2 btn btn-small"
-                  :data-bg-level="
-                    extDict === 'wiktionary' ? entry.level : false
-                  "
-                  >Wiktionary</b-button
-                >
-                <b-button
-                  @click="setExtDict('etymology')"
-                  v-if="$l2.code === 'en'"
-                  class="mr-2 btn btn-small"
-                  :data-bg-level="extDict === 'etymology' ? entry.level : false"
-                  >Etymology</b-button
-                >
-                <b-button
-                  @click="setExtDict('ngram')"
-                  v-if="
-                    ['en', 'zh', 'fr', 'de', 'he', 'it', 'ru', 'es'].includes(
-                      $l2.code
-                    )
-                  "
-                  class="mr-2 btn btn-small"
-                  :data-bg-level="extDict === 'ngram' ? entry.level : false"
-                  >Ngram</b-button
-                >
-                <b-button
-                  @click="setExtDict('cambridge')"
-                  v-if="$l2.code === 'en'"
-                  class="mr-2 btn btn-small"
-                  :data-bg-level="extDict === 'cambridge' ? entry.level : false"
-                  >Cambridge</b-button
-                >
-                <b-button
-                  @click="setExtDict('moedict')"
-                  v-if="['zh', 'yue', 'nan', 'wuu', 'hak'].includes($l2.code)"
-                  class="mr-2 btn btn-small"
-                  :data-bg-level="extDict === 'moedict' ? entry.level : false"
-                  >萌典</b-button
-                >
-                <b-button
-                  @click="setExtDict('baidu-baike')"
-                  v-if="$l2.code === 'zh'"
-                  class="mr-2 btn btn-small"
-                  :data-bg-level="
-                    extDict === 'baidu-baike' ? entry.level : false
-                  "
-                  >百度百科</b-button
-                >
-                <b-button
-                  @click="setExtDict('naver')"
-                  v-if="['zh', 'ko', 'ja'].includes($l2.code)"
-                  class="mr-2 btn btn-small"
-                  :data-bg-level="extDict === 'naver' ? entry.level : false"
-                  >Naver</b-button
-                >
-                <b-button
-                  @click="setExtDict('grammar-wiki')"
-                  class="mr-2 btn btn-small"
-                  v-if="$l2.code === 'zh'"
-                  :data-bg-level="
-                    extDict === 'grammar-wiki' ? entry.level : false
-                  "
-                  >Grammar Wiki</b-button
-                >
-              </div>
-              <div class="mb-4 pl-2 pr-2">
-                <iframe
-                  v-if="extDict === 'ngram'"
-                  :src="`https://books.google.com/ngrams/graph?content=${
-                    entry.bare
-                  }&year_start=${
-                    $l2.code === 'zh' ? 1900 : 1800
-                  }&year_end=2019&corpus=${
-                    {
-                      en: 26,
-                      zh: 34,
-                      fr: 30,
-                      de: 31,
-                      he: 35,
-                      it: 33,
-                      ru: 36,
-                      es: 32,
-                    }[$l2.code]
-                  }&smoothing=3`"
-                  class="ext-dictinoary-iframe"
-                ></iframe>
-                <iframe
-                  v-if="extDict === 'zdic'"
-                  :src="`https://www.zdic.net/hans/${entry.simplified}`"
-                  class="ext-dictinoary-iframe"
-                ></iframe>
-                <iframe
-                  v-if="extDict === 'wiktionary'"
-                  :src="`https://en.wiktionary.org/wiki/${entry.bare}`"
-                  class="ext-dictinoary-iframe"
-                ></iframe>
-                <iframe
-                  v-if="extDict === 'etymology'"
-                  :src="`https://www.etymonline.com/word/${entry.bare}`"
-                  class="ext-dictinoary-iframe"
-                ></iframe>
-                <iframe
-                  v-if="extDict === 'cambridge'"
-                  :src="`https://dictionary.cambridge.org/dictionary/english-chinese-simplified/${entry.bare}`"
-                  class="ext-dictinoary-iframe"
-                ></iframe>
-                <iframe
-                  v-if="extDict === 'moedict'"
-                  :src="`https://www.moedict.tw/${entry.traditional}`"
-                  class="ext-dictinoary-iframe"
-                ></iframe>
-                <iframe
-                  v-if="extDict === 'baidu-baike'"
-                  :src="`https://baike.baidu.com/item/${entry.simplified}`"
-                  class="ext-dictinoary-iframe"
-                ></iframe>
-                <iframe
-                  v-if="extDict === 'naver'"
-                  :src="`https://korean.dict.naver.com/ko${$l2.code}dict/chinese/#/search?query=${entry.bare}`"
-                  class="ext-dictinoary-iframe"
-                ></iframe>
-                <iframe
-                  v-if="extDict === 'grammar-wiki'"
-                  :src="`https://resources.allsetlearning.com/gramwiki/?search=${entry.simplified}`"
-                  class="ext-dictinoary-iframe"
-                ></iframe>
-              </div>
-            </div>
+            <EntryExternal
+              :term="entry.bare"
+              :traditional="entry.traditional"
+              :level="entry.level"
+            />
           </div>
         </div>
       </div>
@@ -339,7 +206,7 @@ export default {
     },
     images: {
       type: Array,
-      default: []
+      default: [],
     },
     showSearchSubs: {
       default: true,
@@ -350,21 +217,19 @@ export default {
       characters: [],
       character: {},
       unsplashSrcs: [],
-      unsplashSearchTerm: '',
-      extDict: '',
+      unsplashSearchTerm: "",
       searchSubsImage: undefined,
       webImage: undefined,
-      searchSubsExample: '',
+      searchSubsExample: "",
       delayed: false,
       collocationsReady: false,
       mistakesReady: false,
       relatedReady: false,
       concordanceReady: false,
       searchSubsReady: false,
-    }
+    };
   },
   computed: {
-
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -375,43 +240,21 @@ export default {
     },
   },
   methods: {
-    setExtDict(dict) {
-      if (this.extDict === dict) {
-        this.extDict = ''
-      } else {
-        this.extDict = dict
-      }
-    },
     searchSubsLoaded(hits) {
       if (hits.length > 0) {
-        this.searchSubsReady = true
-        this.searchSubsImage = `https://img.youtube.com/vi/${hits[0].video.youtube_id}/hqdefault.jpg`
+        this.searchSubsReady = true;
+        this.searchSubsImage = `https://img.youtube.com/vi/${hits[0].video.youtube_id}/hqdefault.jpg`;
         this.searchSubsExample =
           hits[0].lineIndex > 0
             ? hits[0].video.subs_l2[hits[0].lineIndex - 1].line
-            : '' + ' ' + hits[0].video.subs_l2[hits[0].lineIndex].line
+            : "" + " " + hits[0].video.subs_l2[hits[0].lineIndex].line;
       }
     },
     webImagesLoaded(images) {
       if (images.length > 0) {
-        this.webImage = images[0].src
+        this.webImage = images[0].src;
       }
     },
   },
-}
+};
 </script>
-<style lang="scss" scoped>
-.ext-dictionary-buttons {
-  display: block;
-  position: sticky;
-  top: 0;
-  z-index: 1;
-}
-.ext-dictinoary-iframe {
-  width: 100%;
-  border: 1px solid #eee;
-  height: calc(100vh - 4rem);
-  border-radius: 0.5rem;
-  background: #eee;
-}
-</style>

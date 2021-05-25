@@ -5,106 +5,122 @@
   }
 </router>
 <template>
-  <div class="container main mt-5 mb-5">
-    <div class="row">
-      <div class="col-md-12 text-center">
-        <h3 class="mt-5">
-          Expansion videos for
-          <b-dropdown id="dropdown-1" :text="levels[level]" class="ml-1">
-            <b-dropdown-item
-              v-for="(title, slug) in levels"
-              :key="`level-item-${slug}`"
-              @click="changeLevel(slug)"
+  <div>
+
+    <div class="container main mb-5">
+      <SocialHead
+        v-if="lessonVideos[0]"
+        :title="`Chinese Lesson Expansion Videos | Chinese Zero to Hero`"
+        :description="`After finishing Lesson ${lesson} of the Chinse Zero to Hero HSK ${level} Course, reinforce the vocabulary you have learned in the lesson by watching these ${videos.length} videos:`"
+        :image="`https://img.youtube.com/vi/${lessonVideos[0].youtube_id}/hqdefault.jpg`"
+      />
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <h3 class="mt-5">
+            Expansion videos for
+            <b-dropdown id="dropdown-1" :text="levels[level]" class="ml-1">
+              <b-dropdown-item
+                v-for="(title, slug) in levels"
+                :key="`level-item-${slug}`"
+                @click="changeLevel(slug)"
+              >
+                {{ title }}
+              </b-dropdown-item>
+            </b-dropdown>
+            <b-dropdown id="dropdown-1" :text="`Lesson ${lesson}`" class="ml-1">
+              <b-dropdown-item
+                v-for="(lesson, index) in levelLessons[level]"
+                @click="changeLesson(lesson)"
+                :key="`lesson-item-${index}`"
+              >
+                Lesson {{ lesson }}
+              </b-dropdown-item>
+            </b-dropdown>
+          </h3>
+          <p class="mt-3 mb-5" style="max-width: 35rem; margin: 0 auto">
+            After finishing Lesson {{ lesson }} of the
+            <a
+              :href="`https://courses.chinesezerotohero.com/p/hsk-${level}-course`"
+              target="_blank"
             >
-              {{ title }}
-            </b-dropdown-item>
-          </b-dropdown>
-          <b-dropdown id="dropdown-1" :text="`Lesson ${lesson}`" class="ml-1">
-            <b-dropdown-item
-              v-for="(lesson, index) in levelLessons[level]"
-              @click="changeLesson(lesson)"
-              :key="`lesson-item-${index}`"
-            >
-              Lesson {{ lesson }}
-            </b-dropdown-item>
-          </b-dropdown>
-        </h3>
-        <p class="mt-3 mb-5">
-          After finishing
-          <a
-            :href="`https://courses.chinesezerotohero.com/p/hsk-${level}-course`"
-            target="_blank"
-          >
-            <b>HSK {{ level }} Lesson {{ lesson }}</b>
-          </a>
-          , reinforce the vocabulary you learned in the lesson by watching these
-          {{ lessonVideos.length }} videos:
-        </p>
+              <b>Chinse Zero to Hero HSK {{ level }} Course</b>
+            </a>
+            , reinforce the vocabulary you have learned in the lesson by watching
+            these
+            {{ lessonVideos.length }} videos:
+          </p>
+        </div>
       </div>
-    </div>
-    <div v-if="loading" class="text-center">
-      <Loader :sticky="true" />
-    </div>
-    <div class="row mb-4" v-for="(video, videoIndex) in lessonVideos">
-      <div class="col-lg-2"></div>
-      <div class="col-md-6 col-lg-4">
-        <YouTubeVideoList
-          :checkSubs="false"
-          :lesson="true"
-          :updateVideos="updateLessonVideos"
-          :videos="[video]"
-        />
+      <div v-if="loading" class="text-center">
+        <Loader :sticky="true" />
       </div>
-      <div class="col-md-6 col-lg-4">
-        <h5 class="mt-3">Vocabulary covered</h5>
-        <Loader
-          message="Loading words...<br/>Don't wait. View the video now."
-        />
-        <WordList
-          :words="video.matches"
-          :key="`matched-words-${videoIndex}-${matchedWordsKey}`"
-        ></WordList>
-      </div>
-      <div class="col-lg-2"></div>
-    </div>
-    <div class="row mt-5 mb-5">
-      <div class="col-lg-2"></div>
-      <div class="col-md-12 col-lg-8">
-        <div class="jumbotron pt-4 pb-4" v-if="unmatchedWords.length > 0">
-          <h4 class="mt-3 mb-4 text-center text-danger">
-            Lesson words
-            <em>not</em>
-            covered in the videos
-          </h4>
-          <Loader message="Loading words..." />
+      <div class="row mb-4" v-for="(video, videoIndex) in lessonVideos">
+        <div class="col-lg-2"></div>
+        <div class="col-md-6 col-lg-4">
+          <YouTubeVideoList
+            :checkSubs="false"
+            :lesson="true"
+            :updateVideos="updateLessonVideos"
+            :videos="[video]"
+          />
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <h5 class="mt-3">Vocabulary covered</h5>
+          <Loader
+            message="Loading words...<br/>Don't wait. View the video now."
+          />
           <WordList
-            :words="unmatchedWords"
-            :key="`unmatched-words-${matchedWordsKey}`"
+            :words="video.matches"
+            :key="`matched-words-${videoIndex}-${matchedWordsKey}`"
           ></WordList>
         </div>
-        <div class="col-sm-12 text-center">
-          <router-link
-            v-if="lesson > 1"
-            class="btn btn-gray mr-2"
-            :to="`/${$l1.code}/${$l2.code}/lesson-videos/${level}/${
-              Number(lesson) - 1
-            }`"
-          >
-            Previous Lesson
-          </router-link>
-          <router-link
-            v-if="lesson < levelLessons[level]"
-            class="btn btn-gray"
-            :to="`/${$l1.code}/${$l2.code}/lesson-videos/${level}/${
-              Number(lesson) + 1
-            }`"
-          >
-            Next Lesson
-          </router-link>
+        <div class="col-lg-2"></div>
+      </div>
+      <div class="row mt-5 mb-5">
+        <div class="col-lg-2"></div>
+        <div class="col-md-12 col-lg-8">
+          <div class="jumbotron pt-4 pb-4" v-if="unmatchedWords.length > 0">
+            <h4 class="mt-3 mb-4 text-center text-danger">
+              Lesson words
+              <em>not</em>
+              covered in the videos
+            </h4>
+            <Loader message="Loading words..." />
+            <WordList
+              :words="unmatchedWords"
+              :key="`unmatched-words-${matchedWordsKey}`"
+            ></WordList>
+          </div>
+          <div class="col-sm-12 text-center">
+            <router-link
+              v-if="lesson > 1"
+              class="btn btn-gray mr-2"
+              :to="`/${$l1.code}/${$l2.code}/lesson-videos/${level}/${
+                Number(lesson) - 1
+              }`"
+            >
+              Previous Lesson
+            </router-link>
+            <router-link
+              v-if="lesson < levelLessons[level]"
+              class="btn btn-gray"
+              :to="`/${$l1.code}/${$l2.code}/lesson-videos/${level}/${
+                Number(lesson) + 1
+              }`"
+            >
+              Next Lesson
+            </router-link>
+          </div>
         </div>
       </div>
-      <div class="col-lg-2"></div>
     </div>
+    <EntryCourseAd
+      v-if="words[0]"
+      :entry="words[0]"
+      class="focus-exclude"
+      :key="`${words[0].id}-course-ad`"
+      style="margin-top: 10rem"
+    ></EntryCourseAd>
   </div>
 </template>
 
@@ -113,7 +129,7 @@ import WordList from "@/components/WordList";
 import YouTubeVideoList from "@/components/YouTubeVideoList";
 import Config from "@/lib/config";
 import Helper from "@/lib/helper";
-import axios from 'axios'
+import axios from "axios";
 
 export default {
   data() {
@@ -150,7 +166,7 @@ export default {
   },
   computed: {
     levels() {
-      return Helper.levels(this.$l2)
+      return Helper.levels(this.$l2);
     },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")

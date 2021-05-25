@@ -1,20 +1,15 @@
 <router>
   {
-    path: '/:l1/:l2/hall-of-heroes',
-    meta: {
-      title: 'Hall of Heroes | Zero to Hero',
-      metaTags: [
-        {
-          name: 'description',
-          content:
-            'In this page we showcase some of our students who have successfully passed language exams after taking courses from us! Read their testimonials and reviews.'
-        }
-      ]
-    }
+    path: '/:l1/:l2/hall-of-heroes'
   }
 </router>
 <template>
   <div class="container mb-5">
+    <SocialHead
+      :title="`Hall of Heroes | Chinese Zero To Hero`"
+      description="Here are some of our students who have successfully passed language exams after taking courses from us! Read their testimonials and reviews."
+      :image="`/img/trophy.svg`"
+    />
     <div class="row">
       <div class="col-sm-12">
         <h1 class="text-center mt-5 mb-5">Hall of Heroes</h1>
@@ -31,14 +26,11 @@
           If you have taken our courses and have passed an HSK test (either an
           official test or a self-test), you can add your name to the scoreboard
           by filling out
-          <a href="https://www.chinesezerotohero.com/hoh-submit/">this form</a>.
+          <a href="https://www.chinesezerotohero.com/hoh-submit/">this form</a>
+          .
         </p>
         <div class="text-center mt-5 mb-5 filter">
-          <button
-            @click="hsk = 'all'"
-            class="btn mr-2"
-            data-bg-level="outside"
-          >
+          <button @click="hsk = 'all'" class="btn mr-2" data-bg-level="outside">
             All
           </button>
           <button
@@ -57,18 +49,18 @@
 </template>
 
 <script>
-import HeroesList from '@/components/HeroesList'
+import HeroesList from "@/components/HeroesList";
 
 export default {
   data() {
     return {
-      hsk: 'all'
-    }
+      hsk: "all",
+    };
   },
   components: {
-    HeroesList
-  }
-}
+    HeroesList,
+  },
+};
 </script>
 
 <style scoped>

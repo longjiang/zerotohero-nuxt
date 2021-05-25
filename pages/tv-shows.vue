@@ -1,23 +1,20 @@
 <router>
   {
     path: '/:l1/:l2/tv-shows',
-    props: true,
-    meta: {
-      title: 'Study with TV Shows | Zero to Hero',
-      metaTags: [
-        {
-          name: 'description',
-          content: 'Learn language with TV shows.'
-        }
-      ]
-    }
+    props: true
   }
 </router>
 <template>
   <div class="main container" id="main">
+    <SocialHead
+      v-if="shows[0]"
+      :title="`Learn ${$l2.name} with TV Shows | ${$l2.name} Zero to Hero`"
+      :description="`Learn ${$l2.name} with TV shows.`"
+      :image="`https://img.youtube.com/vi/${shows[0].youtube_id}/hqdefault.jpg`"
+    />
     <div class="row">
       <div class="col-sm-12">
-        <h1 class="text-center mt-5 mb-5">{{ shows.length }} TV Shows</h1>
+        <h3 class="text-center mt-5 mb-5">Study {{ $l2.name }} with {{ shows.length ? shows.length : '' }} TV Shows</h3>
         <div class="tv-shows mb-5">
           <div class="tv-show media rounded shadow" v-for="show of shows">
             <router-link
@@ -51,6 +48,7 @@
 
 <script>
 import Config from '@/lib/config'
+import Helper from '@/lib/helper'
 import axios from 'axios'
 
 export default {
@@ -65,7 +63,8 @@ export default {
         this.$l2.id
       }&limit=500&timestamp=${this.$settings.adminMode ? Date.now() : 0}`
     )
-    this.shows = response.data.data.sort((x,y)=>x.title.localeCompare(y.title, 'zh-CN')) || []
+    let shows = response.data.data.sort((x,y)=>x.title.localeCompare(y.title, 'zh-CN')) || []
+    this.shows = Helper.uniqueByValue(shows, 'youtube_id')
   },
   computed: {
     $l1() {

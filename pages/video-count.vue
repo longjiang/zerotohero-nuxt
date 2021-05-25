@@ -1,21 +1,16 @@
 <router>
   {
     path: '/:l1/:l2/video-count',
-    meta: {
-      title: 'Video Count | Zero To Hero',
-      metaTags: [
-        {
-          name: 'description',
-          content:
-            'See the latest stats on how many videos are there in our courses.'
-        }
-      ]
-    }
   }
 </router>
 <template>
   <div class="container mt-5 mb-5">
-    <div class="row">
+    <SocialHead
+      :title="`Video Count | Chinese Zero To Hero`"
+      description="See the latest stats on how many videos are there in our courses."
+      :image="`/img/courses/bundle-ultimate.jpg`"
+    />
+    <div class="row"> 
       <div class="col-sm-12">
         <h1 class="mb-4">Latest Video Count</h1>
         <p class="mb-5"></p>

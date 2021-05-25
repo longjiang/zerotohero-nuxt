@@ -5,7 +5,7 @@
   }
 </router>
 <template>
-  <div class="main focus" :key="`entry-${entryKey}`">
+  <div class="main focus" :key="`entry-${entryKey}`" @keydown="keydown">
     <SocialHead 
       :title="title"
       :description="description"
@@ -146,6 +146,12 @@ export default {
       }
     },
   },
+  created() {
+    this.bindKeys()
+  },
+  destroyed() {
+    this.unbindKeys()
+  },
   methods: {
     async updateWords() {
       this.sW = [];
@@ -178,10 +184,10 @@ export default {
     },
 
     bindKeys() {
-      window.addEventListener("keydown", this.keydown);
+      if (typeof window !== 'undefined') window.addEventListener("keydown", this.keydown);
     },
     unbindKeys() {
-      window.removeEventListener("keydown", this.keydown);
+      if (typeof window !== 'undefined') window.removeEventListener("keydown", this.keydown);
     },
 
     keydown(e) {
@@ -189,6 +195,7 @@ export default {
         !["INPUT", "TEXTAREA"].includes(e.target.tagName.toUpperCase()) &&
         !e.metaKey
       ) {
+        console.log('dictionary keydown')
         // home
         if (e.keyCode == 36) {
           document
@@ -257,12 +264,6 @@ export default {
         this.random();
       }
     },
-  },
-  activated() {
-    this.bindKeys();
-  },
-  deactivated() {
-    this.unbindKeys();
   },
   mounted() {
     if (

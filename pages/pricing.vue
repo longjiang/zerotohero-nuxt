@@ -1,17 +1,7 @@
 <router>
   {
     path: '/:l1/:l2/pricing/:currency?',
-    props: true,
-    meta: {
-      title: 'Pricing | Zero To Hero',
-      metaTags: [
-        {
-          name: 'description',
-          content:
-            'No subscription required. Pay once, own the courses forever. Wallet Friendly Pricing.'
-        }
-      ]
-    }
+    props: true
   }
 </router>
 <template>

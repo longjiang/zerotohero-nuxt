@@ -4,7 +4,7 @@ export const state = () => {
     l2: undefined,
     dictionary: undefined,
     dictionaryName: undefined,
-    adminMODE: false,
+    adminMode: false,
     settingsLoaded: false,
     l2Settings: {
       showDefinition: false,
@@ -38,7 +38,7 @@ export const mutations = {
     state.settingsLoaded = true
   },
   SET_ADMIN_MODE(state, adminMode) {
-    state.adminMODE = adminMode
+    state.adminMode = adminMode
     if (typeof localStorage !== 'undefined') {
       let settings = JSON.parse(localStorage.getItem('zthSettings'))
       settings.adminMode = adminMode

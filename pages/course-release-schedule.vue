@@ -1,17 +1,7 @@
 <router>
   {
     path: '/:l1/:l2/course-release-schedule',
-    props: true,
-    meta: {
-      title: 'Course Release Schedule | Zero To Hero',
-      metaTags: [
-        {
-          name: 'description',
-          content:
-            'We regularly update our courses. Here’s what we are planning on this year.'
-        }
-      ]
-    }
+    props: true
   }
 </router>
 <template>

@@ -1,6 +1,11 @@
 <template>
   <div class="row">
     <div class="col-sm-12">
+      <SocialHead
+        :title="`Course Pricing | Chinese Zero To Hero`"
+        description="No subscription required. Pay once, own the courses forever. Wallet Friendly Pricing."
+        :image="`/img/courses/bundle-ultimate.jpg`"
+      />
       <h1 class="mb-5">Pricing Chart</h1>
       <!-- <Sale class="mb-5 rounded" /> -->
       <div class="bg-success text-light p-3 text-center mb-5 rounded">

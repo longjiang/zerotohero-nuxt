@@ -107,16 +107,16 @@ export default {
           show: this.hasFeature('youtube'),
           children: [
             {
-              name: 'youtube-browse',
-              title: 'YouTube',
-              icon: 'fab fa-youtube',
-              show: true,
-            },
-            {
               name: 'tv-shows',
               icon: 'fa fa-tv',
               title: 'TV Shows',
               show: ['zh', 'ja'].includes(this.l2.code),
+            },
+            {
+              name: 'youtube-browse',
+              title: 'YouTube',
+              icon: 'fab fa-youtube',
+              show: true,
             },
             {
               name: 'lesson-videos',
