@@ -1,16 +1,7 @@
 <router>
   {
     path: '/:l1/:l2/youtube/browse/:topic?/:level?/:start?/:keyword?',
-    props: true,
-    meta: {
-      title: 'Study YouTube Subtitles | Zero to Hero',
-      metaTags: [
-        {
-          name: 'description',
-          content: 'Watch YouTube videos and study the subtitles.'
-        }
-      ]
-    }
+    props: true
   }
 </router>
 <template>
@@ -216,7 +207,7 @@ export default {
         filters += "&filter[level][eq]=" + this.level;
       }
       if (this.keyword !== "") {
-        filters += "&filter[title][contains]=" + this.keyword + "&sort=title";
+        filters += "&filter[title][contains]=" + encodeURIComponent(this.keyword) + "&sort=title";
       }
       let response = await axios.get(
         `${Config.wiki}items/youtube_videos?sort=-id&filter[l2][eq]=${

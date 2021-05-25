@@ -19,7 +19,7 @@
           <div class="tv-show media rounded shadow" v-for="show of shows">
             <router-link
               class="youtube-thumbnail-wrapper aspect-wrapper d-block"
-              :to="`/${$l1.code}/${$l2.code}/youtube/browse/all/all/0/${show.title}`"
+              :to="`/${$l1.code}/${$l2.code}/youtube/browse/all/all/0/${encodeURIComponent(show.title)}`"
             >
               <img
                 :src="`//img.youtube.com/vi/${show.youtube_id}/hqdefault.jpg`"

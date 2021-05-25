@@ -11,7 +11,7 @@
       <SocialHead
         v-if="lessonVideos[0]"
         :title="`Chinese Lesson Expansion Videos | Chinese Zero to Hero`"
-        :description="`After finishing Lesson ${lesson} of the Chinse Zero to Hero HSK ${level} Course, reinforce the vocabulary you have learned in the lesson by watching these ${videos.length} videos:`"
+        :description="`After finishing Lesson ${lesson} of the Chinse Zero to Hero HSK ${level} Course, reinforce the vocabulary you have learned in the lesson by watching these ${lessonVideos.length} videos:`"
         :image="`https://img.youtube.com/vi/${lessonVideos[0].youtube_id}/hqdefault.jpg`"
       />
       <div class="row">

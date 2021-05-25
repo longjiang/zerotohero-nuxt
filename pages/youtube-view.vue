@@ -2,15 +2,6 @@
   {
     path: '/:l1/:l2/youtube/view/:args?/:lesson?',
     props: true,
-    meta: {
-      title: 'YouTube Reader | Zero to Hero',
-      metaTags: [
-        {
-          name: 'description',
-          content: 'Watch YouTube videos and study the subtitles.'
-        }
-      ]
-    }
   }
 </router>
 <template>
@@ -19,7 +10,7 @@
       v-if="video"
       :title="`Learn Chinese from the video ${video.title} | ${$l2.name} Zero to Hero`"
       :description="`Watch the video -- ${video.title} -- study the subtitles and improve your Chinese! ${this.video.subs_l2 ? 'Full transcript: ' + this.video.subs_l2.map(l => l.line).join(' ') : ''}`"
-      :image="`https://img.youtube.com/vi/${this.video.youtube_id}/maxresdefault.jpg`"
+      :image="`https://img.youtube.com/vi/${this.video.youtube_id}/hqdefault.jpg`"
     />
     <div class="container">
       <div class="row">

@@ -2,7 +2,7 @@
   <div>
     <!-- <Sale class="mb-5 mt-5 rounded" /> -->
     <SocialHead
-      :title="`Chinese Online Courses | Chinese Zero to Hero`"
+      :title="`Chinese Zero to Hero - Online Chinese Courses`"
       :description="`Online Chinese Courses from HSK 1 to HSK 9. Free courses include “Phonetics with Chinese Characteristics”, “Learn Chinese with Songs“, “Learn Chinese with Poems“.`"
       :image="`/img/courses/bundle-ultimate.jpg`"
     />
