@@ -65,6 +65,19 @@ export default {
     '~plugins/main.js'
   ],
 
+  build: {
+    extend(config, { isDev, isClient }) {
+      config.resolve.alias['vue'] = 'vue/dist/vue.common'
+      // if (isClient) {
+      //   config.node = {
+      //     fs: 'empty',
+      //     child_process: 'empty',
+      //     canva: 'empty',
+      //   }
+      // }
+    }
+  },
+
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {},
 
