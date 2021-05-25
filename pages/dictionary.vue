@@ -6,11 +6,7 @@
 </router>
 <template>
   <div class="main focus" :key="`entry-${entryKey}`" @keydown="keydown">
-    <SocialHead 
-      :title="title"
-      :description="description"
-      :image="image"
-    />
+    <SocialHead :title="title" :description="description" :image="image" />
     <div class="jumbotron jumbotron-fluid bg-white pt-4 pb-0 mb-4">
       <div class="container focus-exclude">
         <div class="row">
@@ -69,7 +65,7 @@
 import SearchCompare from "@/components/SearchCompare.vue";
 import Paginator from "@/components/Paginator";
 import DictionaryEntry from "@/components/DictionaryEntry";
-import WordPhotos from '@/lib/word-photos'
+import WordPhotos from "@/lib/word-photos";
 
 export default {
   components: {
@@ -94,22 +90,20 @@ export default {
     };
   },
   async fetch() {
-    let method = this.$route.params.method
-    let args = this.$route.params.args
+    let method = this.$route.params.method;
+    let args = this.$route.params.args;
     if (method && args) {
       if (method === this.$store.state.settings.dictionaryName) {
         if (args !== "random") {
-        let dictionary = await this.$getDictionary();
-        this.entry = await dictionary.get(args);
-        this.images = await WordPhotos.getGoogleImages({term: this.entry.bare, lang: this.$l2.code});
-          // let dictionary = await this.$getDictionary();
-          // this.entry = await (await dictionary).get(params.args);
-          // console.log(this.entry)
+          let dictionary = await this.$getDictionary();
+          this.entry = await dictionary.get(args);
+          this.images = await WordPhotos.getGoogleImages({
+            term: this.entry.bare,
+            lang: this.$l2.code,
+          });
         }
       } else if (method === "hsk") {
-        this.entry = await (await this.$getDictionary()).getByHSKId(
-          args
-        );
+        this.entry = await (await this.$getDictionary()).getByHSKId(args);
       }
     }
   },
@@ -128,7 +122,9 @@ export default {
           this.entry.pronunciation ? "(" + this.entry.pronunciation + ")" : ""
         } | ${this.$l2 ? this.$l2.name : ""} Zero to Hero Dictionary`;
       }
-      return `${this.$l2 ? this.$l2.name : ''} Dictionary | ${this.$l2 ? this.$l2.name : ""} Zero to Hero`;
+      return `${this.$l2 ? this.$l2.name : ""} Dictionary | ${
+        this.$l2 ? this.$l2.name : ""
+      } Zero to Hero`;
     },
     description() {
       if (this.entry) {
@@ -136,21 +132,23 @@ export default {
           "; "
         )}`;
       }
-      return `Look up ${this.$l2 ? this.$l2.name : ''} words. See how ${this.$l2 ? this.$l2.name : ''} words are used in TV shows, how they form collocations, and avoid common mistakes.`;
+      return `Look up ${this.$l2 ? this.$l2.name : ""} words. See how ${
+        this.$l2 ? this.$l2.name : ""
+      } words are used in TV shows, how they form collocations, and avoid common mistakes.`;
     },
     image() {
       if (this.images.length > 0) {
-        return this.images[0].src
+        return this.images[0].src;
       } else {
         return "/img/zth-share-image.jpg";
       }
     },
   },
   created() {
-    this.bindKeys()
+    this.bindKeys();
   },
   destroyed() {
-    this.unbindKeys()
+    this.unbindKeys();
   },
   methods: {
     async updateWords() {
@@ -176,7 +174,7 @@ export default {
       );
     },
     async random() {
-      let randomEntry = await (await this.$getDictionary()).random()
+      let randomEntry = await (await this.$getDictionary()).random();
       let randomId = randomEntry.id;
       this.$router.push({
         path: `/${this.$l1.code}/${this.$l2.code}/dictionary/${this.$store.state.settings.dictionaryName}/${randomId}`,
@@ -184,10 +182,12 @@ export default {
     },
 
     bindKeys() {
-      if (typeof window !== 'undefined') window.addEventListener("keydown", this.keydown);
+      if (typeof window !== "undefined")
+        window.addEventListener("keydown", this.keydown);
     },
     unbindKeys() {
-      if (typeof window !== 'undefined') window.removeEventListener("keydown", this.keydown);
+      if (typeof window !== "undefined")
+        window.removeEventListener("keydown", this.keydown);
     },
 
     keydown(e) {
@@ -195,7 +195,6 @@ export default {
         !["INPUT", "TEXTAREA"].includes(e.target.tagName.toUpperCase()) &&
         !e.metaKey
       ) {
-        console.log('dictionary keydown')
         // home
         if (e.keyCode == 36) {
           document
@@ -256,21 +255,21 @@ export default {
     },
   },
   watch: {
-    args() {
+    '$route.params.args'() {
       if (
         this.$route.name === "dictionary" &&
         this.$route.params.args === "random"
       ) {
+      console.log('args random')
         this.random();
       }
     },
   },
-  created() {
+  mounted() {
     if (
       this.$route.name === "dictionary" &&
       this.$route.params.args === "random"
     ) {
-    console.log('activated random')
       this.random();
     }
     if (this.$route.name === "dictionary") {

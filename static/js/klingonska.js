@@ -11,20 +11,11 @@ const Dictionary = {
   credit() {
     return 'The Klingon dictionary is provided by <a href="http://klingonska.org/dict/">klingonska.org</a>.'
   },
-  loadWords() {
-    return new Promise(resolve => {
-      console.log('Klingonska: Loading words')
-      let xhttp = new XMLHttpRequest()
-      let that = this
-      xhttp.onload = function() {
-        if (this.readyState == 4 && (this.status >= 200 && this.status < 400)) {
-          that.words = that.parseDictionary(this.responseText)
-          resolve()
-        }
-      }
-      xhttp.open('GET', this.file, true)
-      xhttp.send()
-    })
+  async loadWords() {
+    console.log('Klingonska: Loading words')
+    let res = await axios.get(this.file)
+    this.words = this.parseDictionary(res.data)
+    return this
   },
   parseDictionary(text) {
     this.dictionary = text.split('\n\n')

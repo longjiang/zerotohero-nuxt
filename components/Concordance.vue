@@ -133,6 +133,7 @@ export default {
         l1: this.$l1,
         l2: this.$l2,
       })
+      if (!examples) return false
       for (let example of examples) {
         if (this.$l2.code === 'zh') {
           let t = example.l2.replace(/([。！？：]+”?)/g, '$1!!!DELIMITER!!!')

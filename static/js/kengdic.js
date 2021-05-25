@@ -5,34 +5,30 @@ const Dictionary = {
   credit() {
     return 'The Korean dictionary is provided by <a href="https://github.com/garfieldnate/kengdic">kengdic</a> created by Joe Speigle, which is freely available from its GitHub project page.'
   },
-  load() {
-    return new Promise(resolve => {
-      Papa.parse(this.file, {
-        download: true,
-        header: true,
-        complete: results => {
-          let sorted = results.data.sort((a, b) =>
-            a.hangul && b.hangul ? a.hangul.length - b.hangul.length : 0
-          )
-          let data = []
-          for(let row of sorted) {
-            let word = Object.assign(row, {
-              head: row.hangul,
-              bare: row.hangul,
-              accented: row.hangul,
-              definitions: [row.english],
-              cjk: {
-                canonical: row.hanja && row.hanja !== 'NULL' ? row.hanja : undefined,
-                phonetics: row.hungul 
-              }
-            })
-            data.push(word)
-          }
-          this.words = data
-          resolve(this)
+  async load() {
+    let res = await axios.get(this.file)
+    let results = await Papa.parse(res.data, {
+      header: true
+    })
+    let sorted = results.data.sort((a, b) =>
+      a.hangul && b.hangul ? a.hangul.length - b.hangul.length : 0
+    )
+    let data = []
+    for(let row of sorted) {
+      let word = Object.assign(row, {
+        head: row.hangul,
+        bare: row.hangul,
+        accented: row.hangul,
+        definitions: [row.english],
+        cjk: {
+          canonical: row.hanja && row.hanja !== 'NULL' ? row.hanja : undefined,
+          phonetics: row.hungul 
         }
       })
-    })
+      data.push(word)
+    }
+    this.words = data
+    return this
   },
   unique(array) {
     var uniqueArray = []

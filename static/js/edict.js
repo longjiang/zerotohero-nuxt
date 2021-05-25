@@ -5,34 +5,30 @@ const Dictionary = {
   credit() {
     return 'The Japanese dictionary is provided by <a href="http://www.edrdg.org/jmdict/edict.html">EDICT</a>, open-source and distribtued under a <a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 license</a>.'
   },
-  load() {
-    return new Promise(resolve => {
-      Papa.parse(this.file, {
-        download: true,
-        header: true,
-        complete: results => {
-          let sorted = results.data.sort((a, b) =>
-            a.kana && b.kana ? a.kana.length - b.kana.length : 0
-          )
-          let data = []
-          for(let row of sorted) {
-            let word = Object.assign(row, {
-              head: row.kanji || row.kana,
-              bare: row.kanji || row.kana,
-              accented: row.kanji || row.kana,
-              definitions: [row.english],
-              cjk: {
-                canonical: row.kanji && row.kanji !== 'NULL' ? row.kanji : undefined,
-                phonetics: row.kana 
-              }
-            })
-            data.push(word)
-          }
-          this.words = data.sort((a,b) => b.head && a.head ? b.head.length - a.head.length : 0)
-          resolve(this)
+  async load() {
+    let res = await axios.get(this.file)
+    let results = await Papa.parse(res.data, {
+      header: true
+    })
+    let sorted = results.data.sort((a, b) =>
+      a.kana && b.kana ? a.kana.length - b.kana.length : 0
+    )
+    let data = []
+    for (let row of sorted) {
+      let word = Object.assign(row, {
+        head: row.kanji || row.kana,
+        bare: row.kanji || row.kana,
+        accented: row.kanji || row.kana,
+        definitions: [row.english],
+        cjk: {
+          canonical: row.kanji && row.kanji !== 'NULL' ? row.kanji : undefined,
+          phonetics: row.kana
         }
       })
-    })
+      data.push(word)
+    }
+    this.words = data.sort((a, b) => b.head && a.head ? b.head.length - a.head.length : 0)
+    return this
   },
   wordForms(word) {
     let forms = [{
@@ -132,16 +128,16 @@ const Dictionary = {
           // match 'abcdejkl', 'abcdexyz', etc
           words.push(
             Object.assign(
-              { score: text.length - (head.length - text.length)},
+              { score: text.length - (head.length - text.length) },
               word
             )
-          ) 
+          )
         } else if (head && text.startsWith(head)) {
           // matches 'abcde', 'abcd', 'abc', etc
-          words.push(Object.assign({ score: head.length + 1 }, word)) 
+          words.push(Object.assign({ score: head.length + 1 }, word))
         } else if (head && text.includes(head)) {
           // matches 'abc', 'bcd', 'cde', etc
-          words.push(Object.assign({ score: head.length }, word)) 
+          words.push(Object.assign({ score: head.length }, word))
         } else {
           // matches 'abcdxyz', 'abcxyz', 'abxyz', etc
           for (let subtext of subtexts) {
@@ -154,12 +150,12 @@ const Dictionary = {
                   { score: subtext.length - (head.length - subtext.length) + daBonus },
                   word
                 )
-              ) 
+              )
             }
           }
         }
       }
-      return words.sort((a,b) => b.score - a.score).slice(0, limit)
+      return words.sort((a, b) => b.score - a.score).slice(0, limit)
     }
   },
   subdict(data) {
@@ -168,7 +164,7 @@ const Dictionary = {
   },
   subdictFromText(text) {
     return this.subdict(
-      this.words.filter(function(row) {
+      this.words.filter(function (row) {
         return text.includes(row.head)
       })
     )
@@ -178,7 +174,7 @@ const Dictionary = {
     // Only return the *first* seen word and those the same as it
     let first = false
     let matches = this.words
-      .filter(function(word) {
+      .filter(function (word) {
         if (first) {
           return word.head === first
         } else {
@@ -205,7 +201,7 @@ const Dictionary = {
   tokenizeRecursively(text, subdict) {
     const longest = subdict.longest(text)
     if (longest.matches.length > 0) {
-      let result = [] 
+      let result = []
       /* 
       result = [
         '我', 

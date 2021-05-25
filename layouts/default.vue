@@ -82,7 +82,7 @@
           />
         </div>
 
-        <Nuxt keep-alive />
+        <Nuxt />
 
         <ReaderComp v-if="l1 && l2" :iconMode="true" />
 
@@ -306,7 +306,6 @@ export default {
     if (this.l1 && this.l2) this.loadSettings();
     if (this.l1) this.updatei18n();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      console.log(mutation.type);
       if (mutation.type.startsWith("settings")) {
         if (mutation.type === "settings/SET_L1") {
           this.updatei18n();
@@ -327,7 +326,6 @@ export default {
       }
     },
     updateClasses() {
-      console.log("updating classes", this.l2Settings);
       this.classes = {
         "show-pinyin": this.l2Settings.showPinyin,
         "show-pinyin-for-saved":
