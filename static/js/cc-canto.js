@@ -214,14 +214,11 @@ const Dictionary = {
       .replace(/\d/g, '') // pinyinify does not handle 'r5', we remove all digits
   },
   lookupPinyinFuzzy(jyutping) {
-    console.log(jyutping)
-    console.log(this.removeTones(jyutping).replace(/ /g, ''))
     let words = this.words.filter(
       row =>
         (row.cjk.phonetics ? this.removeTones(row.cjk.phonetics).replace(/ /g, '') : '') ===
           this.removeTones(jyutping).replace(/ /g, '')
     )
-    console.log(words)
     return words
   },
   removeTones(pinyin) {

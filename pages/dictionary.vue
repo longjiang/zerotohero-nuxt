@@ -256,7 +256,7 @@ export default {
     },
   },
   watch: {
-    "$route.params"() {
+    args() {
       if (
         this.$route.name === "dictionary" &&
         this.$route.params.args === "random"
@@ -265,11 +265,12 @@ export default {
       }
     },
   },
-  mounted() {
+  created() {
     if (
       this.$route.name === "dictionary" &&
       this.$route.params.args === "random"
     ) {
+    console.log('activated random')
       this.random();
     }
     if (this.$route.name === "dictionary") {
