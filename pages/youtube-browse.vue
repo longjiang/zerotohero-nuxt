@@ -243,11 +243,9 @@ export default {
       }
     },
     route() {
+      console.log(this.topic, 'this.topic')
       let canonical = `/${this.$l1.code}/${this.$l2.code}/youtube/browse/${this.topic}/${this.level}/${this.start}`;
-      if (this.keyword) {
-        canonical = canonical + "/" + encodeURIComponent(this.keyword);
-      }
-      if (this.$router.currentRoute.path !== canonical) {
+      if (!this.$router.currentRoute.path.startsWith(canonical)) {
         console.log("pushing");
         console.log(this.$router.currentRoute.path);
         console.log(canonical);
@@ -263,9 +261,6 @@ export default {
     }
     next();
   },
-  created() {
-    this.route();
-  },
   computed: {
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
@@ -274,13 +269,6 @@ export default {
     $l2() {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
-    },
-  },
-  watch: {
-    $route() {
-      if (this.$route.name === "youtube-browse") {
-        this.route();
-      }
     },
   },
 };

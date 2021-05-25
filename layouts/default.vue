@@ -74,7 +74,7 @@
           <Nav v-if="l1 && l2" :l1="l1" :l2="l2" :key="`nav-${l1.code}-${l2.code}`"/>
         </div>
 
-        <Nuxt />
+        <Nuxt keep-alive />
 
         <ReaderComp v-if="l1 && l2" :iconMode="true" />
 

@@ -140,22 +140,24 @@
             $settings.adminMode && video.subs_l1 && video.subs_l1.length > 0
           "
         >
-          <div v-for="index in [0, 1, 2, 3, 4]">
+          <div v-for="index in Math.min(5, video.subs_l1.length)">
             <b>{{ video.l1Locale }}</b>
             <span
-              @click="matchSubsAndUpdate(index)"
+              @click="matchSubsAndUpdate(index - 1)"
               :class="{
                 btn: true,
                 'btn-small': true,
                 'text-danger':
                   video.subs_l2 &&
                   video.subs_l2.length > 0 &&
-                  video.subs_l1[index].starttime !== video.subs_l2[0].starttime,
+                  video.subs_l1[index - 1] &&
+                  video.subs_l1[index - 1].starttime !==
+                    video.subs_l2[0].starttime,
               }"
             >
-              {{ video.subs_l1[index].starttime }}
+              {{ video.subs_l1[index - 1].starttime }}
             </span>
-            {{ video.subs_l1[index].line }}
+            {{ video.subs_l1[index - 1].line }}
           </div>
         </div>
         <div
@@ -241,15 +243,16 @@ export default {
   async mounted() {
     if (this.checkSubs) {
       await Helper.timeout(this.delay);
-      this.checkSubsFunc(this.video);
+      this.video = await this.checkSubsFunc(this.video);
     }
   },
   watch: {
     firstLineTime() {
       this.shiftSubs();
     },
-    checkSaved() {
-      if (!this.video.id && this.checkSaved) this.checkSubsFunc(this.video);
+    async checkSaved() {
+      if (!this.video.id && this.checkSaved)
+        this.video = await this.checkSubsFunc(this.video);
     },
   },
   computed: {
@@ -299,19 +302,22 @@ export default {
       }
     },
     async remove() {
-      let response = await axios.delete(
-        `${Config.wiki}items/youtube_videos/${this.video.id}`
-      );
-      if (response) {
-        this.video.id = undefined;
-        this.videoInfoKey++;
+      if (this.video.id) {
+        let response = await axios.delete(
+          `${Config.wiki}items/youtube_videos/${this.video.id}`
+        );
+        if (response) {
+          this.video.id = undefined;
+          this.videoInfoKey++;
+        }
       }
     },
     async updateSubs() {
-      let response = await axios.patch( `${Config.wiki}items/youtube_videos/${this.video.id}`,
-        { subs_l2: JSON.stringify(this.video.subs_l2) },
+      let response = await axios.patch(
+        `${Config.wiki}items/youtube_videos/${this.video.id}`,
+        { subs_l2: JSON.stringify(this.video.subs_l2) }
       );
-      response = response.data
+      response = response.data;
       if (response && response.data) {
         this.subsUpdated = true;
       }
@@ -378,7 +384,7 @@ export default {
         subs_l2: JSON.stringify(video.subs_l2),
         channel_id: video.channel_id,
       });
-      response = response.data
+      response = response.data;
       if (response && response.data) {
         video.id = response.data.id;
         this.videoInfoKey++;
@@ -393,16 +399,16 @@ export default {
           this.$settings.adminMode ? Date.now() : 0
         }`
       );
-      response = response.data
+      response = response.data;
       if (response && response.data.length > 0) {
         let subs_l2 = JSON.parse(response.data[0].subs_l2);
         if (subs_l2[0]) {
           video = Object.assign(video, response.data[0]);
           video.subs_l2 = subs_l2;
           this.firstLineTime = video.subs_l2[0].starttime;
-          this.videoInfoKey++;
         }
       }
+      return video;
     },
     async checkSubsFunc(video) {
       video.checkingSubs = true;
@@ -410,21 +416,24 @@ export default {
       if (video.subs_l2 && video.subs_l2.length > 0) {
         video.hasSubs = true;
         video.checkingSubs = false;
-        this.videoInfoKey++;
       } else {
         video = await YouTube.getYouTubeSubsList(video, this.$l1, this.$l2);
         if (this.checkSaved) {
-          await this.checkSavedFunc(video);
+          video = await this.checkSavedFunc(video);
+          video = this.addSubsL1(video);
         }
         video.checkingSubs = false;
       }
+      return video;
+    },
+    async addSubsL1(video) {
       let subs_l1 = await YouTube.getTranscript(
         video,
         video.l1Locale,
         video.l2Name
       );
-      this.video.subs_l1 = subs_l1.filter((line) => !/^[♫♪()]/.test(line.line));
-      this.videoInfoKey++;
+      video.subs_l1 = subs_l1.filter((line) => !/^[♫♪()]/.test(line.line));
+      return video;
     },
   },
 };

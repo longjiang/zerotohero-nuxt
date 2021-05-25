@@ -32,7 +32,7 @@
               "
             />
           </div>
-          <div class="text-center mt-5 mb-3">
+          <div class="text-center mt-5 mb-3" v-if="term">
             <EntryExternal :term="term" />
           </div>
           <div class="focus">

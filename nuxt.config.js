@@ -11,7 +11,9 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/img/icons/favicon.ico' },
-      { rel: 'stylesheet', href: '/vendor/fontawesome/css/all.min.css' }
+      { rel: 'stylesheet', href: '/vendor/fontawesome/css/all.min.css' },
+      { rel: "stylesheet", href: "/vendor/css-spinners/spinner/heartbeat.css" },
+      { rel: "stylesheet", href: "/vendor/colorfilter/colofilter.css" }
     ],
     script: [
       { hid: 'papaparse', src: '/vendor/papaparse/papaparse.min.js', defer: true },

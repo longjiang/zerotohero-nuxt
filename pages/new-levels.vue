@@ -25,9 +25,6 @@
           <h3 class="mt-5 mb-3 text-center">
             New HSK 3.0 Word List (9 Levels)
           </h3>
-          <div class="text-center">
-            <Loader class="mt-5" />
-          </div>
           <div class="text-center mb-5">
             <a
               href="https://server.chinesezerotohero.com/data/hsk-cedict/new_hsk.csv.txt"
@@ -55,7 +52,7 @@
                 v-model="search"
                 type="text"
                 class="form-control lookup"
-                placeholder="Filter by keywords"
+                placeholder="Keyword, or start row number"
               />
               <div class="input-group-append">
                 <button class="btn btn-danger lookup-button" type="button">
@@ -87,12 +84,6 @@
                 {{ title }}
               </b-form-select-option>
             </b-form-select>
-            <b-form-input
-              v-model="start"
-              placeholder="Start Row"
-              class="ml-1"
-              style="max-width: 7rem; margin-left: 0.5rem"
-            ></b-form-input>
           </div>
           <table class="table" v-if="newHSK.length > 0">
             <thead>
@@ -199,12 +190,16 @@ export default {
       }
     },
     applyFilters() {
+      if (/^\d+/.test(this.search)) {
+        this.start = this.search
+      }
+      let search = this.search.replace(/^\d+/, '')
       this.rows = this.newHSK.filter(
         (word) =>
-          (!this.search ||
-            word.num.includes(this.search) ||
-            word.simplified.includes(this.search) ||
-            word.definitions.includes(this.search)) &&
+          (!search ||
+            word.num.includes(search) ||
+            word.simplified.includes(search) ||
+            word.definitions.includes(search)) &&
           (!this.start || Number(word.num) > this.start) &&
           (!this.level || word.level === this.level)
       );

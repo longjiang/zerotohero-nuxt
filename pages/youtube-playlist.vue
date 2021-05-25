@@ -1,16 +1,7 @@
 <router>
   {
     path: '/:l1/:l2/youtube/playlist/:playlist_id?',
-    props: true,
-    meta: {
-      title: 'Study YouTube Subtitles | Zero to Hero',
-      metaTags: [
-        {
-          name: 'description',
-          content: 'Watch YouTube videos and study the subtitles.'
-        }
-      ]
-    }
+    props: true
   }
 </router>
 <template>
@@ -78,7 +69,7 @@ import YouTubeNav from '@/components/YouTubeNav'
 import YouTubeVideoList from '@/components/YouTubeVideoList'
 import YouTube from '@/lib/youtube'
 import { Drag, Drop } from 'vue-drag-drop'
-import { parseSync } from 'subtitle'
+
 export default {
   components: {
     YouTubeNav,
@@ -119,6 +110,7 @@ export default {
       this.title = undefined
       this.videos = []
       let videos = await YouTube.playlistByApi(this.playlist_id)
+      console.log(videos)
       if (videos && videos.length > 0) {
         if (this.checkShows)
           videos = await YouTube.checkShows(

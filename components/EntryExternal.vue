@@ -93,46 +93,55 @@
           }[$l2.code]
         }&smoothing=3`"
         class="ext-dictinoary-iframe"
+        data-not-lazy
       ></iframe>
       <iframe
         v-if="extDict === 'zdic'"
         :src="`https://www.zdic.net/hans/${term}`"
         class="ext-dictinoary-iframe"
+        data-not-lazy
       ></iframe>
       <iframe
         v-if="extDict === 'wiktionary'"
         :src="`https://en.wiktionary.org/wiki/${term}`"
         class="ext-dictinoary-iframe"
+        data-not-lazy
       ></iframe>
       <iframe
         v-if="extDict === 'etymology'"
         :src="`https://www.etymonline.com/word/${term}`"
         class="ext-dictinoary-iframe"
+        data-not-lazy
       ></iframe>
       <iframe
         v-if="extDict === 'cambridge'"
         :src="`https://dictionary.cambridge.org/dictionary/english-chinese-simplified/${term}`"
         class="ext-dictinoary-iframe"
+        data-not-lazy
       ></iframe>
       <iframe
         v-if="extDict === 'moedict'"
         :src="`https://www.moedict.tw/${traditional ? traditional : tify(term)}`"
         class="ext-dictinoary-iframe"
+        data-not-lazy
       ></iframe>
       <iframe
         v-if="extDict === 'baidu-baike'"
         :src="`https://baike.baidu.com/item/${term}`"
         class="ext-dictinoary-iframe"
+        data-not-lazy
       ></iframe>
       <iframe
         v-if="extDict === 'naver'"
         :src="`https://korean.dict.naver.com/ko${$l2.code}dict/chinese/#/search?query=${term}`"
         class="ext-dictinoary-iframe"
+        data-not-lazy
       ></iframe>
       <iframe
         v-if="extDict === 'grammar-wiki'"
         :src="`https://resources.allsetlearning.com/gramwiki/?search=${term}`"
         class="ext-dictinoary-iframe"
+        data-not-lazy
       ></iframe>
     </div>
   </div>

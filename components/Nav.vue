@@ -6,7 +6,9 @@
       (parent = menu.find(
         (item) =>
           $route.name === nameOfSelfOrFirstChild(item) ||
-          $route.path.includes($router.resolve({ name: nameOfSelfOrFirstChild(item) }).href) ||
+          $route.path.includes(
+            $router.resolve({ name: nameOfSelfOrFirstChild(item) }).href
+          ) ||
           (item.children &&
             item.children.map((child) => child.name).includes($route.name))
       ))
@@ -18,7 +20,8 @@
           v-for="(item, index) in menu.filter((item) => item.show)"
           :class="{
             tab: true,
-            'router-link-active': parent && parent.name === nameOfSelfOrFirstChild(item),
+            'router-link-active':
+              parent && parent.name === nameOfSelfOrFirstChild(item),
           }"
           :to="last(item) || { name: nameOfSelfOrFirstChild(item) }"
           :title="item.title"
@@ -31,12 +34,15 @@
     </div>
 
     <div class="row">
-      <nav class="secondary-menu text-center bg-white pt-3" v-if="parent && parent.children">
+      <nav
+        class="secondary-menu text-center bg-white pt-3"
+        v-if="parent && parent.children"
+      >
         <NuxtLink
           class="secondary-menu-item"
           v-for="child in parent.children.filter((child) => child.show)"
           :key="`subnav-${child.name}`"
-          :to="{ name: child.name }"
+          :to="last(child) || { name: child.name }"
         >
           <i :class="child.icon"></i>
           {{ $t(child.title) }}
@@ -44,8 +50,9 @@
             class="saved-words-count"
             v-cloak
             v-if="child.name === 'saved-words'"
-            >{{ savedWordsCount() }}</span
           >
+            {{ savedWordsCount() }}
+          </span>
         </NuxtLink>
       </nav>
     </div>
@@ -59,421 +66,432 @@ export default {
       shortcuts: [],
       menu: [
         {
-          icon: 'fas fa-graduation-cap',
-          title: 'Courses',
-          show: this.hasFeature('courses'),
+          icon: "fas fa-graduation-cap",
+          title: "Courses",
+          show: this.hasFeature("courses"),
           children: [
             {
-              name: 'courses',
-              title: 'Language Courses',
-              icon: 'fas fa-chalkboard-teacher',
-              show: this.l2.code === 'zh',
+              name: "courses",
+              title: "Language Courses",
+              icon: "fas fa-chalkboard-teacher",
+              show: this.l2.code === "zh",
             },
             {
-              name: 'textbooks-workbooks',
-              title: 'Textbooks',
-              icon: 'fas fa-book',
-              show: this.l2.code === 'zh',
+              name: "textbooks-workbooks",
+              title: "Textbooks",
+              icon: "fas fa-book",
+              show: this.l2.code === "zh",
             },
             {
-              name: 'video-count',
-              title: 'Video Count',
-              icon: 'fas fa-list-ol',
-              show: this.l2.code === 'zh',
+              name: "video-count",
+              title: "Video Count",
+              icon: "fas fa-list-ol",
+              show: this.l2.code === "zh",
             },
             {
-              name: 'pricing',
-              title: 'Pricing',
-              icon: 'fas fa-tag',
-              show: this.l2.code === 'zh',
+              name: "pricing",
+              title: "Pricing",
+              icon: "fas fa-tag",
+              show: this.l2.code === "zh",
             },
             {
-              name: 'course-release-schedule',
-              title: 'Schedule',
-              icon: 'fas fa-clock',
-              show: this.l2.code === 'zh',
+              name: "course-release-schedule",
+              title: "Schedule",
+              icon: "fas fa-clock",
+              show: this.l2.code === "zh",
             },
           ],
         },
         {
-          name: 'hall-of-heroes',
-          icon: 'fa fa-trophy',
-          title: 'Heroes',
-          show: this.l1.code === 'en' && this.l2.code === 'zh',
+          name: "hall-of-heroes",
+          icon: "fa fa-trophy",
+          title: "Heroes",
+          show: this.l1.code === "en" && this.l2.code === "zh",
         },
         {
-          icon: 'fas fa-video',
-          title: 'Audio-Visual',
-          show: this.hasFeature('youtube'),
+          icon: "fas fa-video",
+          title: "Audio-Visual",
+          show: this.hasFeature("youtube"),
           children: [
             {
-              name: 'tv-shows',
-              icon: 'fa fa-tv',
-              title: 'TV Shows',
-              show: ['zh', 'ja'].includes(this.l2.code),
+              name: "tv-shows",
+              icon: "fa fa-tv",
+              title: "TV Shows",
+              show: ["zh", "ja"].includes(this.l2.code),
             },
             {
-              name: 'youtube-browse',
-              title: 'YouTube',
-              icon: 'fab fa-youtube',
+              name: "youtube-browse",
+              title: "YouTube",
+              icon: "fab fa-youtube",
               show: true,
             },
             {
-              name: 'lesson-videos',
-              title: 'Lesson Expansion',
-              icon: 'fa fa-chalkboard-teacher',
-              show: this.l2.code === 'zh',
+              name: "lesson-videos",
+              title: "Lesson Expansion",
+              icon: "fa fa-chalkboard-teacher",
+              show: this.l2.code === "zh",
             },
             {
-              name: 'youtube-view',
+              name: "youtube-view",
+              show: false,
+            },
+            {
+              name: "youtube-playlist",
+              show: false,
+            },
+            {
+              name: "youtube-channel",
               show: false,
             },
           ],
         },
         {
-          icon: 'fas fa-book',
-          title: 'Dictionary',
-          show: this.hasFeature('dictionary'),
+          icon: "fas fa-book",
+          title: "Dictionary",
+          show: this.hasFeature("dictionary"),
           children: [
             {
-              name: 'dictionary',
-              icon: 'fas fa-font',
-              title: 'Look Up',
-              show: this.hasFeature('dictionary'),
-              shortcut: (e) => e.code === 'KeyD' && e.metaKey && e.shiftKey,
+              name: "dictionary",
+              icon: "fas fa-font",
+              title: "Look Up",
+              show: this.hasFeature("dictionary"),
+              shortcut: (e) => e.code === "KeyD" && e.metaKey && e.shiftKey,
             },
             {
-              name: 'compare',
+              name: "compare",
               show: false,
             },
             {
-              name: 'saved-words',
-              icon: 'fas fa-star',
-              title: 'Saved',
+              name: "saved-words",
+              icon: "fas fa-star",
+              title: "Saved",
               show: true,
             },
             {
-              name: 'phrase',
-              icon: 'fas fa-quote-left',
-              title: 'Phrase',
+              name: "phrase",
+              icon: "fas fa-quote-left",
+              title: "Phrase",
               show: true,
-              shortcut: (e) => e.code === 'KeyP' && e.metaKey && e.shiftKey,
+              shortcut: (e) => e.code === "KeyP" && e.metaKey && e.shiftKey,
             },
             {
-              name: 'compare-phrases',
+              name: "compare-phrases",
               show: false,
             },
             {
-              name: 'levels',
-              icon: 'fa fa-signal',
-              title: 'HSK',
-              show: this.hasFeature('levels'),
+              name: "levels",
+              icon: "fa fa-signal",
+              title: "HSK",
+              show: this.hasFeature("levels"),
             },
             {
-              name: 'new-levels',
-              icon: 'fa fa-signal',
-              title: 'New HSK',
-              show: this.hasFeature('levels'),
+              name: "new-levels",
+              icon: "fa fa-signal",
+              title: "New HSK",
+              show: this.hasFeature("levels"),
             },
             {
-              name: 'radicals',
-              icon: 'fa fa-code-branch',
-              title: 'Radicals',
-              show: this.hasFeature('radicals'),
+              name: "radicals",
+              icon: "fa fa-code-branch",
+              title: "Radicals",
+              show: this.hasFeature("radicals"),
             },
             {
-              name: 'characters',
-              icon: 'fa fa-pen-alt',
-              title: 'Characters',
-              show: this.hasFeature('characters'),
+              name: "characters",
+              icon: "fa fa-pen-alt",
+              title: "Characters",
+              show: this.hasFeature("characters"),
             },
             {
-              name: 'idioms',
-              icon: 'fa fa-border-all',
-              title: 'Idioms',
-              show: this.l2.code === 'zh',
+              name: "idioms",
+              icon: "fa fa-border-all",
+              title: "Idioms",
+              show: this.l2.code === "zh",
             },
             {
-              name: 'separable',
-              icon: 'fa fa-angle-double-right',
-              title: 'Separables',
-              show: this.l2.code === 'zh',
+              name: "separable",
+              icon: "fa fa-angle-double-right",
+              title: "Separables",
+              show: this.l2.code === "zh",
             },
             {
-              name: 'explore-roots',
-              icon: 'fa fa-wrench',
-              title: 'Word Builder',
-              show: this.hasFeature('roots'),
+              name: "explore-roots",
+              icon: "fa fa-wrench",
+              title: "Word Builder",
+              show: this.hasFeature("roots"),
             },
             {
-              name: 'explore-topics',
-              icon: 'fas fa-certificate',
-              title: 'Topics',
-              show: this.hasFeature('explore-topics'),
+              name: "explore-topics",
+              icon: "fas fa-certificate",
+              title: "Topics",
+              show: this.hasFeature("explore-topics"),
             },
             {
-              name: 'explore-related',
-              icon: 'fas fa-expand-arrows-alt',
-              title: 'Related',
-              show: this.hasFeature('related'),
+              name: "explore-related",
+              icon: "fas fa-expand-arrows-alt",
+              title: "Related",
+              show: this.hasFeature("related"),
             },
             {
-              name: 'learn',
-              icon: 'fa fa-chalkboard',
-              title: 'Learn',
-              show: this.hasFeature('learn'),
+              name: "learn",
+              icon: "fa fa-chalkboard",
+              title: "Learn",
+              show: this.hasFeature("learn"),
             },
           ],
         },
         {
-          icon: 'fas fa-book-open',
-          title: 'Reading',
+          icon: "fas fa-book-open",
+          title: "Reading",
           show:
-            this.hasFeature('dictionary') ||
-            this.hasFeature('transliteration'),
+            this.hasFeature("dictionary") || this.hasFeature("transliteration"),
           children: [
             {
-              name: 'reader',
-              title: 'Text Reader',
-              icon: 'fas fa-file-alt',
+              name: "reader",
+              title: "Text Reader",
+              icon: "fas fa-file-alt",
               show: true,
-              shortcut: (e) => e.code === 'KeyR' && e.metaKey && e.shiftKey,
+              shortcut: (e) => e.code === "KeyR" && e.metaKey && e.shiftKey,
             },
             {
-              name: 'studysheet',
-              title: 'Study Sheet Creator',
-              icon: 'fas fa-print',
-              show: true,
-            },
-            {
-              name: 'library',
-              title: 'Library',
-              icon: 'fas fa-book-open',
+              name: "studysheet",
+              title: "Study Sheet Creator",
+              icon: "fas fa-print",
               show: true,
             },
             {
-              name: 'book-list',
+              name: "library",
+              title: "Library",
+              icon: "fas fa-book-open",
+              show: true,
+            },
+            {
+              name: "book-list",
               show: false,
             },
             {
-              name: 'book-index',
+              name: "book-index",
               show: false,
             },
             {
-              name: 'book-chapter',
+              name: "book-chapter",
               show: false,
             },
             {
-              name: 'pinyin-list',
-              title: 'Pinyin List',
-              icon: 'fa fa-list',
-              show: this.l2.code === 'zh',
+              name: "pinyin-list",
+              title: "Pinyin List",
+              icon: "fa fa-list",
+              show: this.l2.code === "zh",
             },
           ],
         },
         {
-          icon: 'fas fa-list-ul',
-          title: 'Grammar',
-          show: this.hasFeature('grammar'),
-          shortcut: (e) => e.code === 'KeyG' && e.metaKey && e.shiftKey,
+          icon: "fas fa-list-ul",
+          title: "Grammar",
+          show: this.hasFeature("grammar"),
+          shortcut: (e) => e.code === "KeyG" && e.metaKey && e.shiftKey,
           children: [
             {
-              name: 'grammar',
-              icon: 'fas fa-list-ul',
-              title: 'Grammar Cheat Sheet',
-              show: this.hasFeature('grammar'),
+              name: "grammar",
+              icon: "fas fa-list-ul",
+              title: "Grammar Cheat Sheet",
+              show: this.hasFeature("grammar"),
             },
             {
-              name: 'grammar-view',
+              name: "grammar-view",
               show: false,
             },
           ],
         },
         {
-          name: 'noun-cases',
-          icon: 'fas fa-list-ul',
-          title: 'Grammar Tools',
-          show: this.hasFeature('noun-cases'),
+          name: "noun-cases",
+          icon: "fas fa-list-ul",
+          title: "Grammar Tools",
+          show: this.hasFeature("noun-cases"),
         },
         {
-          name: 'keyboard',
-          icon: 'fas fa-keyboard',
-          title: 'Keyboard',
-          show: this.hasFeature('keyboard'),
+          name: "keyboard",
+          icon: "fas fa-keyboard",
+          title: "Keyboard",
+          show: this.hasFeature("keyboard"),
         },
         {
-          name: 'bookmarklet',
-          icon: 'fas fa-bookmark',
-          title: 'Bookmarklet',
-          show: this.hasFeature('bookmarklet'),
+          name: "bookmarklet",
+          icon: "fas fa-bookmark",
+          title: "Bookmarklet",
+          show: this.hasFeature("bookmarklet"),
         },
         {
-          icon: 'fas fa-gem',
-          title: 'Resources',
+          icon: "fas fa-gem",
+          title: "Resources",
           show: true,
           children: [
             {
-              name: 'resources',
-              title: 'Resources',
-              icon: 'fas fa-gem',
+              name: "resources",
+              title: "Resources",
+              icon: "fas fa-gem",
               show: true,
             },
             {
-              name: 'learning-path',
-              title: 'Learning Path',
-              icon: 'fas fa-road',
+              name: "learning-path",
+              title: "Learning Path",
+              icon: "fas fa-road",
               show: true,
             },
             {
-              name: 'tutoring',
-              title: 'Tutoring Kit',
-              icon: 'fas fa-folder',
+              name: "tutoring",
+              title: "Tutoring Kit",
+              icon: "fas fa-folder",
               show: true,
             },
             {
-              name: 'articles-reddit',
-              title: 'Reddit Articles',
-              icon: 'fab fa-reddit',
+              name: "articles-reddit",
+              title: "Reddit Articles",
+              icon: "fab fa-reddit",
               show: true,
             },
             {
-              name: 'articles-wiki',
-              title: 'Wiki',
-              icon: 'fab fa-wikipedia-w',
+              name: "articles-wiki",
+              title: "Wiki",
+              icon: "fab fa-wikipedia-w",
               show: true,
             },
             {
-              name: 'pinyin-squared',
-              title: 'Pinyin Squared',
-              icon: 'fa fa-list',
+              name: "pinyin-squared",
+              title: "Pinyin Squared",
+              icon: "fa fa-list",
               show: false,
             },
           ],
         },
         {
-          icon: 'fas fa-id-card',
-          title: 'Contact',
+          icon: "fas fa-id-card",
+          title: "Contact",
           show: true,
           children: [
             {
-              name: 'contact',
-              icon: 'fas fa-id-card',
+              name: "contact",
+              icon: "fas fa-id-card",
               show: true,
-              title: 'Contact Us',
+              title: "Contact Us",
             },
             {
-              name: 'affiliate-program',
-              icon: 'fas fa-id-card',
+              name: "affiliate-program",
+              icon: "fas fa-id-card",
               show: true,
-              title: 'Affiliate Program',
+              title: "Affiliate Program",
             },
             {
-              name: 'faq',
-              icon: 'fas fa-id-card',
+              name: "faq",
+              icon: "fas fa-id-card",
               show: true,
-              title: 'FAQ',
-            }
-          ]
+              title: "FAQ",
+            },
+          ],
         },
         {
-          name: 'settings',
-          icon: 'fas fa-cog',
-          title: 'Settings',
-          shortcut: (e) => e.code === 'KeyS' && e.metaKey && e.shiftKey,
+          name: "settings",
+          icon: "fas fa-cog",
+          title: "Settings",
+          shortcut: (e) => e.code === "KeyS" && e.metaKey && e.shiftKey,
           show: true,
         },
       ],
       history: [],
-    }
+    };
   },
   props: {
     l1: {
-      type: Object
+      type: Object,
     },
     l2: {
-      type: Object
-    }
+      type: Object,
+    },
   },
   methods: {
     hasFeature(feature) {
-      return this.$hasFeature(feature)
+      return this.$hasFeature(feature);
     },
     nameOfSelfOrFirstChild(item) {
       if (item) {
-        let result = item.name || (item.children && item.children.length > 0 ? item.children[0].name : '')
-        return result
+        let result =
+          item.name ||
+          (item.children && item.children.length > 0
+            ? item.children[0].name
+            : "");
+        return result;
       }
     },
     last(item) {
       if (item) {
         let historyMatches = this.history.filter((path) => {
           if (path) {
-            let r = this.$router.resolve(path)
+            let r = this.$router.resolve(path);
             if (r && r.route) {
               let childNames = item.children
                 ? item.children.map((child) => child.name)
-                : [item.name]
-              return childNames.includes(r.route.name)
+                : [item.name];
+              return childNames.includes(r.route.name);
             }
           }
-        })
-        let path = historyMatches.pop()
-        return path
+        });
+        let path = historyMatches.pop();
+        return path;
       } else {
-        return false
+        return false;
       }
     },
     savedWordsCount() {
-      let count = this.$store.getters['savedWords/count']({ l2: this.l2.code })
+      let count = this.$store.getters["savedWords/count"]({ l2: this.l2.code });
       // eslint-disable-next-line vue/no-parsing-error
-      return count < 100 ? count : '99+'
+      return count < 100 ? count : "99+";
     },
     bindKeys() {
-      window.addEventListener('keydown', this.keydown)
+      window.addEventListener("keydown", this.keydown);
       for (let item of this.menu) {
-        if (item.shortcut) this.shortcuts.push(item)
+        if (item.shortcut) this.shortcuts.push(item);
         if (item.children) {
           for (let child of item.children) {
-            if (child.shortcut) this.shortcuts.push(child)
+            if (child.shortcut) this.shortcuts.push(child);
           }
         }
       }
     },
     unbindKeys() {
-      window.removeEventListener('keydown', this.keydown)
+      window.removeEventListener("keydown", this.keydown);
     },
 
     keydown(e) {
-      if (!['INPUT', 'TEXTAREA'].includes(e.target.tagName.toUpperCase())) {
+      if (!["INPUT", "TEXTAREA"].includes(e.target.tagName.toUpperCase())) {
         for (let shortcutItem of this.shortcuts) {
           if (shortcutItem.shortcut(e)) {
-            let last = this.last(shortcutItem)
+            let last = this.last(shortcutItem);
             this.$router.push(
               last
                 ? {
                     path: last,
                   }
                 : { name: this.nameOfSelfOrFirstChild(shortcutItem) }
-            )
-            e.preventDefault()
-            return false
+            );
+            e.preventDefault();
+            return false;
           }
         }
       }
     },
   },
   mounted() {
-    this.bindKeys()
+    this.bindKeys();
   },
   unmounted() {
-    this.unbindKeys()
+    this.unbindKeys();
   },
   watch: {
     $route() {
-      this.history.push(this.$route.path)
+      this.history.push(this.$route.path);
     },
   },
-}
+};
 </script>
 
 <style lang="scss">

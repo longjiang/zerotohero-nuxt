@@ -107,7 +107,7 @@
                   ></span>
                   <span
                     v-html="
-                      Helper.highlightMultiple(
+                      highlightMultiple(
                         hit.video.subs_l2[Number(hit.lineIndex)].line,
                         terms.map((term) => term),
                         level
@@ -191,7 +191,7 @@
         :hsk="level"
         :speed="speed"
         :startLineIndex="startLineIndex(hit)"
-        :autoload="Helper.iOS() || (!hit.saved && navigated)"
+        :autoload="iOS() || (!hit.saved && navigated)"
         :autoplay="!hit.saved && navigated"
         :key="`youtube-with-transcript-${hit.video.youtube_id}`"
       />
@@ -254,7 +254,6 @@ export default {
       contextRight: [],
       groupIndexLeft: [],
       groupIndexRight: [],
-      Helper,
       fullscreen: false,
       excludeStr: "",
       excludeArr: [],
@@ -280,11 +279,12 @@ export default {
     };
   },
   async mounted() {
-    this.checking;
+    await Helper.timeout(2000)
+    this.checking = true;
     if (this.$l2.code === "zh" && this.terms[0].length === 1) {
-      this.excludeTerms = await (await this.$getDictionary()).getWordsWithCharacter(
-        this.terms[0]
-      );
+      this.excludeTerms = await (
+        await this.$getDictionary()
+      ).getWordsWithCharacter(this.terms[0]);
     }
     let hits = await YouTube.searchSubs(
       this.terms,
@@ -294,7 +294,7 @@ export default {
       this.$settings.adminMode,
       this.$l2.continua
     );
-    
+
     hits = this.updateSaved(hits);
     this.collectContext(hits);
     this.$emit("loaded", hits);
@@ -365,6 +365,12 @@ export default {
     },
   },
   methods: {
+    highlightMultiple(a, b, c) {
+      return Helper.highlightMultiple(a, b, c);
+    },
+    iOS() {
+      return Helper.iOS();
+    },
     collectContext(hits) {
       let contextLeft = [];
       let contextRight = [];

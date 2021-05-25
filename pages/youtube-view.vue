@@ -9,7 +9,14 @@
     <SocialHead
       v-if="video"
       :title="`Learn Chinese from the video ${video.title} | ${$l2.name} Zero to Hero`"
-      :description="`Watch the video -- ${video.title} -- study the subtitles and improve your Chinese! ${this.video.subs_l2 ? 'Full transcript: ' + this.video.subs_l2.map(l => l.line).join(' ') : ''}`"
+      :description="`Watch the video -- ${
+        video.title
+      } -- study the subtitles and improve your Chinese! ${
+        this.video.subs_l2
+          ? 'Full transcript: ' +
+            this.video.subs_l2.map((l) => l.line).join(' ')
+          : ''
+      }`"
       :image="`https://img.youtube.com/vi/${this.video.youtube_id}/hqdefault.jpg`"
     />
     <div class="container">
@@ -41,7 +48,7 @@
           </h5>
           <div>
             <template v-if="video && !video.id">
-              <b-button v-if="!saved" @click="save">
+              <b-button v-if="!(video && video.id)" @click="save">
                 <i class="fas fa-plus mr-2"></i>
                 Add to Library
               </b-button>
@@ -110,7 +117,7 @@
               </drop>
             </template>
           </div>
-          <div v-if="$settings.adminMode && saved" class="mt-2">
+          <div v-if="$settings.adminMode && video && video.id" class="mt-2">
             First line starts at
             <input
               v-model.lazy="firstLineTime"
@@ -179,7 +186,7 @@ import YouTube from "@/lib/youtube";
 import Helper from "@/lib/helper";
 import Config from "@/lib/config";
 import axios from "axios";
-import parser from 'fast-xml-parser'
+import parser from "fast-xml-parser";
 import { Drag, Drop } from "vue-drag-drop";
 import { parseSync } from "subtitle";
 import { parse } from "node-html-parser";
@@ -242,19 +249,21 @@ export default {
   async fetch() {
     // this.$refs.search.url = `https://www.youtube.com/watch?v=${this.args}`
     let video = await this.getSaved();
-    if (this.lesson && this.video.level && this.video.lesson) {
-      this.saveWords(this.video.level, this.video.lesson);
+    if (this.lesson && video.level && video.lesson) {
+      this.saveWords(video.level, video.lesson);
     }
     if (!video || !video.channel_id) {
-      video = Object.assign(video, await YouTube.videoByApi(this.args));
+      let youtube_video = await YouTube.videoByApi(this.args)
+      console.log(youtube_video)
+      if (youtube_video) video = Object.assign(video || {}, youtube_video);
     }
     video.subs_l2 = await this.getTranscript(video);
     if (video.subs_l2 && video.subs_l2.length > 0) {
       this.firstLineTime = video.subs_l2[0].starttime;
     }
-    if (video && !video.channel_id) {
+    if (video && video.id && !video.channel_id) {
       this.addChannelID(video);
-    }    
+    }
     this.video = video;
   },
   methods: {
@@ -276,7 +285,6 @@ export default {
             line: cue.data.text,
           };
         });
-        console.log("loaded");
         this.firstLineTime = this.l2_lines[0].starttime;
         this.hasSubtitles = true;
         this.transcriptKey++;
@@ -331,11 +339,13 @@ export default {
       );
       let root = parser.parse(xml, {
         ignoreAttributes: false,
-      }); 
-      console.log(root, 'root')
-      let tracks = root.transcript_list.track.length > 0 ? root.transcript_list.track : [root.transcript_list.track]
+      });
+      let tracks =
+        root.transcript_list.track.length > 0
+          ? root.transcript_list.track
+          : [root.transcript_list.track];
       for (let track of tracks) {
-        let locale = track['@_lang_code'];
+        let locale = track["@_lang_code"];
         if (locales.includes(locale)) {
           this.l2Locale = locale;
         }
@@ -386,7 +396,7 @@ export default {
     },
     async getTranscript(video) {
       if (Array.isArray(video.subs_l2)) {
-        return video.subs_l2
+        return video.subs_l2;
       }
       if (video.subs_l2 && typeof video.subs_l2 === "string") {
         let savedSubs = JSON.parse(video.subs_l2);
@@ -477,17 +487,9 @@ export default {
       }
     },
     async remove() {
-      let response = await $.ajax({
-        url: `${Config.wiki}items/youtube_videos/${this.video.id}`,
-        type: "DELETE",
-        contentType: "application/json",
-        xhr: function () {
-          return window.XMLHttpRequest == null ||
-            new window.XMLHttpRequest().addEventListener == null
-            ? new window.ActiveXObject("Microsoft.XMLHTTP")
-            : $.ajaxSettings.xhr();
-        },
-      });
+      let response = await axios.delete(
+        `${Config.wiki}items/youtube_videos/${this.video.id}`
+      );
       if (response) {
         this.video = undefined;
       }
