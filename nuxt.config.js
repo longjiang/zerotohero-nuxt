@@ -70,20 +70,6 @@ export default {
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {},
 
-  // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {
-    extend(config, { isDev, isClient }) {
-      config.resolve.alias['vue'] = 'vue/dist/vue.common'
-      if (isClient) {
-        config.node = {
-          fs: 'empty',
-          child_process: 'empty',
-          canva: 'empty',
-        }
-      }
-    }
-  },
-
   generate: {
     routes: [
       // '/en/zh/dictionary/hsk-cedict/%E7%95%99%E5%B0%BE%E5%B7%B4,li%C3%BA_w%C4%9Bi_ba,0',
