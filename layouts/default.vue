@@ -42,7 +42,10 @@
             <div class="container">
               <div class="row">
                 <div class="col-sm-12 text-center">
-                  <router-link v-if="l1.code === 'en' && l2.code === 'zh'" to="/en/zh">
+                  <router-link
+                    v-if="l1.code === 'en' && l2.code === 'zh'"
+                    to="/en/zh"
+                  >
                     <img
                       src="/img/czh-logo-light.png"
                       alt="Chinese Zero to Hero"
@@ -71,7 +74,12 @@
               </div>
             </div>
           </div>
-          <Nav v-if="l1 && l2" :l1="l1" :l2="l2" :key="`nav-${l1.code}-${l2.code}`"/>
+          <Nav
+            v-if="l1 && l2"
+            :l1="l1"
+            :l2="l2"
+            :key="`nav-${l1.code}-${l2.code}`"
+          />
         </div>
 
         <Nuxt keep-alive />
@@ -125,13 +133,27 @@
                       HSK courses
                     </a>
                   </li>
-                  <li><router-link to="/en/zh/dictionary">Dictionary</router-link></li>
-                  <li><router-link to="/en/zh/grammar">Grammar reference</router-link></li>
                   <li>
-                    <router-link to="/en/zh/youtube/browse">Audio-visual tools</router-link>
+                    <router-link to="/en/zh/dictionary">Dictionary</router-link>
                   </li>
-                  <li><router-link to="/en/zh/reader">Reading tools</router-link></li>
-                  <li><router-link to="/en/zh/resource/list/all/all">Resources</router-link></li>
+                  <li>
+                    <router-link to="/en/zh/grammar">
+                      Grammar reference
+                    </router-link>
+                  </li>
+                  <li>
+                    <router-link to="/en/zh/youtube/browse">
+                      Audio-visual tools
+                    </router-link>
+                  </li>
+                  <li>
+                    <router-link to="/en/zh/reader">Reading tools</router-link>
+                  </li>
+                  <li>
+                    <router-link to="/en/zh/resource/list/all/all">
+                      Resources
+                    </router-link>
+                  </li>
                 </ul>
                 <hr />
                 <div
@@ -194,10 +216,22 @@
                       美式口语课程
                     </router-link>
                   </li>
-                  <li><router-link to="/zh/en/dictionary">词典工具</router-link></li>
-                  <li><router-link to="/zh/en/youtube/browse">视听工具</router-link></li>
-                  <li><router-link to="/zh/en/reader">阅读工具</router-link></li>
-                  <li><router-link to="/zh/en/resource/list/all/all">其它资源</router-link></li>
+                  <li>
+                    <router-link to="/zh/en/dictionary">词典工具</router-link>
+                  </li>
+                  <li>
+                    <router-link to="/zh/en/youtube/browse">
+                      视听工具
+                    </router-link>
+                  </li>
+                  <li>
+                    <router-link to="/zh/en/reader">阅读工具</router-link>
+                  </li>
+                  <li>
+                    <router-link to="/zh/en/resource/list/all/all">
+                      其它资源
+                    </router-link>
+                  </li>
                 </ul>
                 <hr />
                 <div
@@ -268,22 +302,32 @@ export default {
     };
   },
   mounted() {
-    if (this.l1 && this.l2) this.updateClasses()
-    if (this.l1 && this.l2) this.loadSettings()
-    if (this.l1) this.updatei18n()
+    if (this.l1 && this.l2) this.updateClasses();
+    if (this.l1 && this.l2) this.loadSettings();
+    if (this.l1) this.updatei18n();
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      console.log(mutation.type);
+      if (mutation.type.startsWith("settings")) {
+        if (mutation.type === "settings/SET_L1") {
+          this.updatei18n();
+        }
+        if (mutation.type === "settings/SET_L2") {
+          this.loadSettings();
+        }
+        this.updateClasses();
+      }
+    });
   },
   methods: {
     updatei18n() {
       this.$i18n.locale = this.l1.code;
       this.$i18n.silentTranslationWarn = true;
       if (this.l1.translations) {
-        this.$i18n.setLocaleMessage(
-          this.l1.code,
-          this.l1.translations
-        )
+        this.$i18n.setLocaleMessage(this.l1.code, this.l1.translations);
       }
     },
     updateClasses() {
+      console.log("updating classes", this.l2Settings);
       this.classes = {
         "show-pinyin": this.l2Settings.showPinyin,
         "show-pinyin-for-saved":
@@ -309,18 +353,6 @@ export default {
       if (!this.$store.state.savedHits.savedHitsLoaded) {
         this.$store.commit("savedHits/LOAD_SAVED_HITS");
       }
-    }
-  },
-  watch: {
-    l1() {
-      this.updatei18n()
-    },
-    l2() {
-      this.updateClasses()
-      this.loadSettings()
-    },
-    l2Settings() {
-      console.log("l2settings changed");
     },
   },
   computed: {

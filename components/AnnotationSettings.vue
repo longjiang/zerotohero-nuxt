@@ -46,7 +46,7 @@
           id="use-traditional"
           class="form-check-input"
           v-model="useTraditional"
-          value="true"
+          :value="true"
         />
         <label for="use-traditional">Use Traditional (正體字/繁體字)</label>
       </div>
@@ -56,7 +56,7 @@
           id="use-simplified"
           class="form-check-input"
           v-model="useTraditional"
-          value="false"
+          :value="false"
         />
         <label for="use-simplified">Use Simplified (简体字)</label>
       </div>

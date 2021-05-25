@@ -204,7 +204,9 @@
             <em
               v-html="
                 word.definitions
-                  .map((definition) => definition.replace(/\[.*\] /g, ''))
+                  .map((definition) =>
+                    definition ? definition.replace(/\[.*\] /g, '') : ''
+                  )
                   .join(', ')
               "
             ></em>
@@ -539,7 +541,9 @@ export default {
           for (let word of words) {
             if (word && word.matches) {
               for (let match of word.matches) {
-                match.form = await (await this.$getDictionary()).accent(match.form);
+                match.form = await (await this.$getDictionary()).accent(
+                  match.form
+                );
                 match.field = await (await this.$getDictionary()).stylize(
                   match.field
                 );

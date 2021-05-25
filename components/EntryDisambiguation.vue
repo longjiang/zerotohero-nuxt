@@ -22,7 +22,7 @@ export default {
       this.getReverse()
       this.getHomonyms()
     } else {
-      this.getOtherPronunciations()
+      this.similarWords = this.getOtherPronunciations()
     }
     // this.getSimilarWords()
   },
@@ -55,12 +55,15 @@ export default {
   },
   methods: {
     async getOtherPronunciations() {
-      let words = this.$l2.code === 'zh' ? await (await this.$getDictionary()).lookupSimplified(this.entry.simplified) : await (await this.$getDictionary()).lookup(this.entry.bare)
+      let similarWords = []
+      let words = ['zh', 'yue'].includes(this.$l2.code) ? await (await this.$getDictionary()).lookupSimplified(this.entry.simplified) : await (await this.$getDictionary()).lookupMultiple(this.entry.bare)
+      console.log(words, 'words')
       for (let word of words) {
         if (word.id !== this.entry.id) {
-          this.similarWords.push(word)
+          similarWords.push(word)
         }
       }
+      return similarWords
     },
     async getReverse() {
       const reverse = this.entry.simplified
@@ -83,7 +86,7 @@ export default {
       }
     },
     async getHomonyms() {
-      let words = await (await this.$getDictionary()).lookupPinyinFuzzy(this.entry.pinyin)
+      let words = await (await this.$getDictionary()).lookupPinyinFuzzy(this.entry.cjk.phonetics)
       for (let word of words) {
         if (word.id !== this.entry.id) {
           this.similarWords.push(word)
