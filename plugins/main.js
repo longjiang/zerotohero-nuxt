@@ -39,6 +39,15 @@ Vue.filter('truncate', function (text, length, clamp) {
 })
 
 export default ({ app, store }, inject) => {
+  app.router.beforeEach((to, from, next) => {
+    // Redirect if fullPath begins with a hash (ignore hashes later in path)
+    if (to.fullPath.substr(0, 2) === '/#') {
+      const path = to.fullPath.substr(2);
+      next(path);
+      return;
+    }
+    next();
+  })
   if (!app.$languages) {
     inject('languages', Languages.load())
   }
