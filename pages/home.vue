@@ -16,7 +16,7 @@
   <div class="main">
     <div class="container pt-5 pb-5">
       <div class="row">
-        <div class="col-sm-12">HOME</div>
+        <div class="col-sm-12"></div>
       </div>
     </div>
   </div>
