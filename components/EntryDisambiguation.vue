@@ -85,7 +85,7 @@ export default {
       }
     },
     async getHomonyms() {
-      let words = await (await this.$getDictionary()).lookupPinyinFuzzy(this.entry.cjk.phonetics)
+      let words = await (await this.$getDictionary()).lookupPinyinFuzzy(this.entry.cjk ? this.entry.cjk.phonetics : this.entry.pinyin)
       for (let word of words) {
         if (word.id !== this.entry.id) {
           this.similarWords.push(word)
