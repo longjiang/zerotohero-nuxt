@@ -317,15 +317,6 @@ export default {
       }
     });
   },
-  head() {
-    let head = {}
-    if (this.l2.code === 'ru') {
-      head.script = [
-        { hid: 'russian-legacy', src: '/js/russian-legacy.js', defer: true },
-      ]
-    }
-    return head
-  },
   methods: {
     updatei18n() {
       this.$i18n.locale = this.l1.code;
