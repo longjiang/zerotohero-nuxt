@@ -16,6 +16,7 @@ export default {
       { rel: "stylesheet", href: "/vendor/colorfilter/colofilter.css" }
     ],
     script: [
+      { hid: 'russian-legacy', src: '/js/russian-legacy.js', defer: true },
       { hid: 'papaparse', src: '/vendor/papaparse/papaparse.min.js', defer: true },
       { hid: 'jquery', src: '/vendor/jquery/jquery.min.js', defer: true },
       { hid: 'axios', src: '/vendor/axios/axios.min.js', defer: true },

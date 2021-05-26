@@ -50,7 +50,6 @@ export const mutations = {
     if (typeof localStorage !== 'undefined') {
       let settings = JSON.parse(localStorage.getItem('zthSettings') || '{}')
       settings[state.l2.code] = state.l2Settings
-      console.log('setting settings', settings)
       localStorage.setItem('zthSettings', JSON.stringify(settings))
     }
   }

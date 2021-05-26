@@ -165,7 +165,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .grammar-table {
   color: #666;
 

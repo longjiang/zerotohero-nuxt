@@ -7,7 +7,9 @@
         v-for="row in data"
         v-if="row[type + ' example']"
       >
-        <button class="speak" @click="speak(row[`${type} example sentence`])"><i class="fas fa-volume-up" /></button>
+        <button class="speak" @click="speak(row[`${type} example sentence`])">
+          <i class="fas fa-volume-up" />
+        </button>
         <div class="declined-word-inner">
           <div class="example-image-wrapper">
             <img
@@ -29,21 +31,22 @@
               v-html="row[type + ' example sentence html']"
             ></p>
             <p class="example-translation">
-              {{ row[type + ' example translation'] }}
+              {{ row[type + " example translation"] }}
             </p>
           </div>
         </div>
         <div class="hint">
-          <b>Hint:</b> A {{ row['gender'] }} -<b>{{
-            row['dictionary form']
-          }}</b>
+          <b>Hint:</b>
+          A {{ row["gender"] }} -
+          <b>{{ row["dictionary form"] }}</b>
           noun
-          <span v-if="row['dictionary form'] == row[type]"
-            >does not change
+          <span v-if="row['dictionary form'] == row[type]">
+            does not change
           </span>
-          <span v-else
-            >changes to -<b>{{ row[type] }}</b></span
-          >
+          <span v-else>
+            changes to -
+            <b>{{ row[type] }}</b>
+          </span>
           in {{ type }}.
         </div>
       </div>
@@ -55,22 +58,32 @@
 export default {
   props: {
     type: {
-      type: String
+      type: String,
     },
     data: {
-      type: Array
-    }
+      type: Array,
+    },
+  },
+  computed: {
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
   },
   methods: {
     speak(sentence) {
-      speakRussian(sentence)
-    }
+      speakRussian(sentence);
+    },
   },
   mounted() {
-    addBlankEventHandlers()
+    addBlankEventHandlers();
   },
   updated() {
-    addBlankEventHandlers()
-  }
-}
+    addBlankEventHandlers();
+  },
+};
 </script>

@@ -47,7 +47,7 @@ export default {
       type: String,
     },
   },
-  created() {
+  mounted() {
     loadAllCsvsThen((files) => {
       const nounFile = files.find((file) => file.pos === "noun");
       this.types = nounFile.dataColumns;
@@ -60,6 +60,16 @@ export default {
       types: [],
       type: undefined,
     };
+  },
+  computed: {
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
   },
   methods: {
     route() {
