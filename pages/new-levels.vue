@@ -1,15 +1,6 @@
 <router>
   {
-    path: '/:l1/:l2/explore/new-levels',
-    meta: {
-      title: 'Words in the New HSK 3.0 | Zero to Hero',
-      metaTags: [
-        {
-          name: 'description',
-          content: 'List words in the New HSK 3.0 (starting 2021–2025?) levels.'
-        }
-      ]
-    }
+    path: '/:l1/:l2/explore/new-levels'
   }
 </router>
 <template>
@@ -47,25 +38,11 @@
             v-if="newHSK && newHSK.length > 0"
             v-cloak
           >
-            <div class="input-group" style="flex: 1">
-              <input
-                v-model="search"
-                type="text"
-                class="form-control lookup"
-                placeholder="Keyword, or start row number"
-              />
-              <div class="input-group-append">
-                <button class="btn btn-danger lookup-button" type="button">
-                  <i class="glyphicon glyphicon-filter"></i>
-                  Filter
-                </button>
-              </div>
-            </div>
             <b-form-select
               style="width: 7rem"
               v-model="level"
               :text="level ? levels[level] : 'Level'"
-              class="ml-1"
+              class="mr-1"
               placeholder="HSK"
             >
               <b-form-select-option
@@ -84,6 +61,20 @@
                 {{ title }}
               </b-form-select-option>
             </b-form-select>
+            <div class="input-group" style="flex: 1">
+              <input
+                v-model="search"
+                type="text"
+                class="form-control lookup"
+                placeholder="Keyword, or start row number"
+              />
+              <div class="input-group-append">
+                <button class="btn btn-danger lookup-button" type="button">
+                  <i class="glyphicon glyphicon-filter"></i>
+                  Filter
+                </button>
+              </div>
+            </div>
           </div>
           <table class="table" v-if="newHSK.length > 0">
             <thead>

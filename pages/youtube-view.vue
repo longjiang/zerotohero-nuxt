@@ -46,13 +46,13 @@
               <span>{{ video.title }}</span>
             </Annotate>
           </h5>
-          <div>
-            <template v-if="video && !video.id">
+          <div :key="`youtube-video-info-${video.youtube_id}-${videoInfoKey}`">
+            <template>
               <b-button v-if="!(video && video.id)" @click="save">
                 <i class="fas fa-plus mr-2"></i>
                 Add to Library
               </b-button>
-              <b-button v-else variant="success">
+              <b-button v-if="video && video.id" variant="success">
                 <i class="fa fa-check mr-2"></i>
                 Added
               </b-button>
@@ -217,6 +217,9 @@ export default {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
+    saved() {
+      return this.video.id
+    }
   },
   watch: {
     firstLineTime() {
@@ -244,8 +247,10 @@ export default {
       over: false,
       paused: false,
       speed: 1,
+      videoInfoKey: 0
     };
   },
+
   async fetch() {
     // this.$refs.search.url = `https://www.youtube.com/watch?v=${this.args}`
     let video = await this.getSaved();
@@ -370,13 +375,18 @@ export default {
     async save() {
       let response = await axios.post(
         `${Config.wiki}items/youtube_videos`,
-        Object.assign(this.video, {
+        Object.assign({
           l2: this.$l2.id,
+          title: this.video.title,
+          youtube_id: this.video.youtube_id,
+          channel_id: this.video.channel ? this.video.channel.id : null,
           subs_l2: JSON.stringify(this.video.subs_l2),
         })
       );
       if (response) {
-        this.video.id = response.data.id;
+        console.log('added', response.data)
+        this.video.id = response.data.data.id;
+        this.videoInfoKey++
       }
     },
     async getL1Transcript() {

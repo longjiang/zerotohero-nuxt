@@ -244,6 +244,7 @@ export default {
     if (this.checkSubs) {
       await Helper.timeout(this.delay);
       this.video = await this.checkSubsFunc(this.video);
+      this.videoInfoKey++
     }
   },
   watch: {
