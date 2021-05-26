@@ -77,21 +77,13 @@ export default {
   methods: {
     async getTables() {
       // https://www.consolelog.io/group-by-in-javascript/
-      Array.prototype.groupBy = function(prop) {
-        return this.reduce(function(groups, item) {
-          const val = item[prop]
-          groups[val] = groups[val] || []
-          groups[val].push(item)
-          return groups
-        }, {})
-      }
       let forms = await (await this.$getDictionary()).wordForms(this.word)
       for (let form of forms) {
         form.form = await (await this.$getDictionary()).accent(form.form)
         form.field = await (await this.$getDictionary()).stylize(form.field)
         form.table = await (await this.$getDictionary()).stylize(form.table)
       }
-      this.tables = forms.groupBy('table')
+      this.tables = Helper.groupArrayBy(forms, 'table')
     }
   },
   mounted() {

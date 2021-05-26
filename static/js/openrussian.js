@@ -57,106 +57,89 @@ const Dictionary = {
     let filename = `https://server.chinesezerotohero.com/data/openrussian/${table}.csv.txt`
     return filename
   },
-  loadDeclensions() {
-    return new Promise(resolve => {
-      console.log(`OpenRussian: Loading declensions`)
-      Papa.parse(this.dictionaryFile('declensions'), {
-        download: true,
-        header: true,
-        complete: results => {
-          let declensions = []
-          for (let row of results.data) {
-            declensions[row.id] = row
-          }
-          for (let word of this.words) {
-            if (word) {
-              word.declensions = {}
-              if (word.nouns) {
-                if (word.nouns.decl_pl_id) {
-                  word.decl_pl = declensions[word.nouns.decl_pl_id]
-                }
-                if (word.nouns.decl_sg_id) {
-                  word.decl_sg = declensions[word.nouns.decl_sg_id]
-                }
-              }
-              if (word.adjectives) {
-                if (word.adjectives.decl_f_id) {
-                  word.decl_f = declensions[word.adjectives.decl_f_id]
-                }
-                if (word.adjectives.decl_m_id) {
-                  word.decl_m = declensions[word.adjectives.decl_m_id]
-                }
-                if (word.adjectives.decl_n_id) {
-                  word.decl_n = declensions[word.adjectives.decl_n_id]
-                }
-                if (word.adjectives.decl_pl_id) {
-                  word.decl_pl = declensions[word.adjectives.decl_pl_id]
-                }
-              }
-            }
-          }
-          resolve(this)
-        }
-      })
+  async loadDeclensions() {
+    console.log(`OpenRussian: Loading declensions`)
+    let res = await axios.get(this.dictionaryFile('declensions'))
+    let results = await Papa.parse(res.data, {
+      header: true
     })
-  },
-  loadTable(table) {
-    return new Promise(resolve => {
-      console.log(`OpenRussian: Loading table "${table}"`)
-      Papa.parse(this.dictionaryFile(table), {
-        download: true,
-        header: true,
-        complete: results => {
-          this[table] = []
-          if (table === 'translations') {
-            results.data = results.data.filter(row => row.lang === 'en')
+
+    let declensions = []
+    for (let row of results.data) {
+      declensions[row.id] = row
+    }
+    for (let word of this.words) {
+      if (word) {
+        word.declensions = {}
+        if (word.nouns) {
+          if (word.nouns.decl_pl_id) {
+            word.decl_pl = declensions[word.nouns.decl_pl_id]
           }
-          for (let row of results.data) {
-            let word = this.words[row.word_id]
-            if (word) {
-              word[table] = row
-              if(table === 'translations')
-              word.definitions = [ row.tl ]
-            }
+          if (word.nouns.decl_sg_id) {
+            word.decl_sg = declensions[word.nouns.decl_sg_id]
           }
-          resolve(this)
         }
-      })
-    })
-  },
-  loadWords() {
-    return new Promise(resolve => {
-      console.log('OpenRussian: Loading words')
-      Papa.parse(this.dictionaryFile('words'), {
-        download: true,
-        header: true,
-        complete: results => {
-          for (let row of results.data) {
-            if (row.accented) {
-              row.accented = this.accent(row.accented)
-            }
-            if (row.bare) row.head = row.bare
-            this.words[row.id] = row
+        if (word.adjectives) {
+          if (word.adjectives.decl_f_id) {
+            word.decl_f = declensions[word.adjectives.decl_f_id]
           }
-          resolve(this)
+          if (word.adjectives.decl_m_id) {
+            word.decl_m = declensions[word.adjectives.decl_m_id]
+          }
+          if (word.adjectives.decl_n_id) {
+            word.decl_n = declensions[word.adjectives.decl_n_id]
+          }
+          if (word.adjectives.decl_pl_id) {
+            word.decl_pl = declensions[word.adjectives.decl_pl_id]
+          }
         }
-      })
-    })
-  },
-  load() {
-    return new Promise(async resolve => {
-      let promises = [this.loadWords()]
-      for (let table of this.tables.filter(
-        table => table.name !== 'declensions'
-      )) {
-        promises.push(this.loadTable(table.name))
       }
-      promises.push(this.loadDeclensions())
-      // promises.push(this.merge())
-      promises.push(this.createIndex())
-      await Promise.all(promises)
-      resolve(this)
+    }
+  },
+  async loadTable(table) {
+    let res = await axios.get(this.dictionaryFile(table))
+    let results = await Papa.parse(res.data, {
+      header: true
     })
+    this[table] = []
+    if (table === 'translations') {
+      results.data = results.data.filter(row => row.lang === 'en')
+    }
+    for (let row of results.data) {
+      let word = this.words[row.word_id]
+      if (word) {
+        word[table] = row
+        if (table === 'translations')
+          word.definitions = [row.tl]
+      }
+    }
+  },
+  async loadWords() {
+    console.log('OpenRussian: Loading words')
+    let res = await axios.get(this.dictionaryFile('words'))
+    let results = await Papa.parse(res.data, {
+      header: true
+    })
+    for (let row of results.data) {
+      if (row.accented) {
+        row.accented = this.accent(row.accented)
+      }
+      if (row.bare) row.head = row.bare
+      this.words[row.id] = row
+    }
+  },
+  async load() {
+    let promises = [this.loadWords()]
+    for (let table of this.tables.filter(
+      table => table.name !== 'declensions'
+    )) {
+      promises.push(this.loadTable(table.name))
+    }
+    promises.push(this.loadDeclensions())
+    // promises.push(this.merge())
+    promises.push(this.createIndex())
+    await Promise.all(promises)
+    return this
   },
   /*
   augment(word) {

@@ -45,6 +45,8 @@
             <span v-else>Hide Other Collocations</span>
           </button>
         </div>
+      </div>
+      <div class="row">
         <div
           class="col-sm-6 col-md-4 col-lg-3"
           v-for="(description, name) in colDesc"
@@ -187,14 +189,14 @@ export default {
         return this.$store.state.settings.l2;
     },
     $dictionary() {
-      return this.$getDictionary()
+      return this.$getDictionary();
     },
     $dictionaryName() {
-      return this.$store.state.settings.dictionaryName
+      return this.$store.state.settings.dictionaryName;
     },
     $hanzi() {
-      return this.$getHanzi()
-    }
+      return this.$getHanzi();
+    },
   },
   mounted() {
     if (!this.updating) {

@@ -128,9 +128,9 @@ export default {
     },
     description() {
       if (this.entry) {
-        return `"${this.entry.bare}" means: ${this.entry.definitions.join(
+        return `"${this.entry.bare}" means ${this.entry.definitions ? this.entry.definitions.join(
           "; "
-        )}`;
+        ) : '...'}`;
       }
       return `Look up ${this.$l2 ? this.$l2.name : ""} words. See how ${
         this.$l2 ? this.$l2.name : ""
