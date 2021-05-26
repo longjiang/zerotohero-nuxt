@@ -5,8 +5,30 @@
         <div class="col-sm-12">
           <LanguageSwitch class="mt-3 mb-4" />
           <ul v-if="languages && languages.length > 0" class="language-list">
-            <li v-for="language in languages" class="language-list-item">
-              <router-link :to="`/en/${language.code}`">{{ language.name }}</router-link>
+            <li
+              v-for="language in languages"
+              class="language-list-item"
+              :set="
+                (base = `/${language.code !== 'en' ? 'en' : 'zh'}/${
+                  language.code
+                }`)
+              "
+            >
+              <router-link
+                :to="`${base}/youtube/browse/all/all/0`"
+                :class="{ 'feature-icon mr-1': true, transparent: !hasYouTube(english, language) }"
+              >
+                <i class="fab fa-youtube" />
+              </router-link>
+              <router-link
+                :to="`${base}/dictionary`"
+                :class="{ 'feature-icon mr-1': true, transparent: !hasDictionary(english, language) }"
+              >
+                <i class="fas fa-book" />
+              </router-link>
+              <router-link :to="base">
+                {{ language.code !== "en" ? language.name.replace(/ \(.*\)/gi, '') : "英语" }}
+              </router-link>
             </li>
           </ul>
         </div>
@@ -61,8 +83,28 @@ export default {
     language(code) {
       return this.languages.find((language) => language.code === code);
     },
+    hasDictionary(l1, l2) {
+      return this.hasFeature(l1, l2, "dictionary");
+    },
+    hasYouTube(l1, l2) {
+      return this.$languages.hasYouTube(l1, l2);
+    },
+    hasFeature(l1, l2, feature) {
+      return this.$languages
+        .getFeatures(
+          {
+            l1,
+            l2,
+          },
+          process.browser
+        )
+        .includes(feature);
+    },
   },
   computed: {
+    english() {
+      return this.$languages.l1s.find((language) => language.code === "en");
+    },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -77,14 +119,11 @@ export default {
     if (dictionary) {
       this.dictionaryCredit = await dictionary.credit();
     }
-    let english = this.$languages.l1s.find(
-      (language) => language.code === "en"
-    );
     this.languages = this.$languages.l1s
       .filter(
         (language) => ["A", "C", "L", "E", "H"].includes(language.type) // Only living, extinct or historical languages (exclusing special codes 'S' and macro languages 'M')
       )
-      .filter((language) => this.$languages.hasYouTube(english, language))
+      .filter((language) => this.$languages.hasYouTube(this.english, language))
       .sort((a, b) => {
         if (a.name < b.name) {
           return -1;
@@ -98,7 +137,11 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.transparent {
+  opacity: 0;
+}
+
 .logo-grid {
   display: flex;
   flex-wrap: wrap;
@@ -118,29 +161,44 @@ export default {
 
 @media (min-width: 576px) {
   .language-list {
-    column-count: 2;
+    column-count: 1;
   }
 }
 
 @media (min-width: 768px) {
   .language-list {
-    column-count: 3;
+    column-count: 2;
   }
 }
 
 @media (min-width: 992px) {
   .language-list {
-    column-count: 4;
+    column-count: 3;
   }
 }
 
 @media (min-width: 1200px) {
   .language-list {
-    column-count: 5;
+    column-count: 4;
   }
 }
 
-.language-list-item {
+.language-list-item a {
   color: #666;
 }
+.language-list-item .feature-icon {
+  color: #ccc;
+}
+
+
+.bg-dark .language-list-item a {
+  color: #b9aba6;
+}
+.bg-dark .language-list-item .feature-icon {
+  color: #726661;
+}
+
+
+
+
 </style>

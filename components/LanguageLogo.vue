@@ -23,7 +23,7 @@
         </template>
         <template v-else>
           <div class="logo-text-language">
-            <span>{{ l2.name.toUpperCase() }}</span>
+            <span>{{ l2.name.replace(/ \(.*\)/gi, '').toUpperCase() }}</span>
           </div>
           <div class="logo-text-zth"><span v-if="!compact">ZERO TO HERO</span><span v-else>&nbsp;</span></div>
         </template>

@@ -477,9 +477,6 @@ export default {
   src: url("/fonts/Klingon-pIqaD-HaSta.ttf") format("truetype");
 }
 
-.bg-dark .language-list a {
-  color: #b9aba6;
-}
 
 .klingon {
   font-family: Constructium, Unifont CSUR, Klingon pIqaD HaSta, Code2000, Horta;
