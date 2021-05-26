@@ -12,8 +12,6 @@
                 :entry="entry"
                 :key="`header-${entry.id}`"
                 ref="entryHeader"
-                @prevWord="prevWord()"
-                @nextWord="nextWord()"
               ></EntryHeader>
               <DefinitionsList
                 :key="`def-list-${entry.id}`"

@@ -128,9 +128,9 @@ export default {
     },
     description() {
       if (this.entry) {
-        return `"${this.entry.bare}" means ${this.entry.definitions ? this.entry.definitions.join(
-          "; "
-        ) : '...'}`;
+        return `"${this.entry.bare}" means ${
+          this.entry.definitions ? this.entry.definitions.join("; ") : "..."
+        }`;
       }
       return `Look up ${this.$l2 ? this.$l2.name : ""} words. See how ${
         this.$l2 ? this.$l2.name : ""
@@ -214,19 +214,21 @@ export default {
         }
         // n = 78
         if (e.keyCode == 78) {
-          this.$refs.dictionaryEntry.$refs.entryHeader.nextWord();
-          document
-            .getElementById("main")
-            .scrollIntoView({ behavior: "smooth" });
+          if (this.$refs.dictionaryEntry.$refs.entryHeader.nextPath) {
+            this.$router.push(
+              this.$refs.dictionaryEntry.$refs.entryHeader.nextPath
+            );
+          }
           e.preventDefault();
           return false;
         }
         // p = 80
         if (e.keyCode == 80) {
-          this.$refs.dictionaryEntry.$refs.entryHeader.prevWord();
-          document
-            .getElementById("main")
-            .scrollIntoView({ behavior: "smooth" });
+          if (this.$refs.dictionaryEntry.$refs.entryHeader.prevPath) {
+            this.$router.push(
+              this.$refs.dictionaryEntry.$refs.entryHeader.prevPath
+            );
+          }
           e.preventDefault();
           return false;
         }
@@ -255,12 +257,12 @@ export default {
     },
   },
   watch: {
-    '$route.params.args'() {
+    "$route.params.args"() {
       if (
         this.$route.name === "dictionary" &&
         this.$route.params.args === "random"
       ) {
-      console.log('args random')
+        console.log("args random");
         this.random();
       }
     },

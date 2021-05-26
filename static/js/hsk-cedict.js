@@ -78,6 +78,8 @@ const Dictionary = {
   getByNewHSK(level, num) {
     let match = this.newHSK.find(word => word.level === level && Number(word.num) === num)
     let words = this.lookupSimplified(match.simplified, match.pinyin, match.definitions)
+    if (words.length === 0) words = this.lookupSimplified(match.simplified, match.pinyin)
+    if (words.length === 0) words = this.lookupSimplified(match.simplified)
     if (words && words.length > 0) {
       return words[0]
     }

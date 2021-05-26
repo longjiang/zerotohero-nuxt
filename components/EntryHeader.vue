@@ -3,52 +3,57 @@
   <div class="entry-head-wrapper" v-if="entry">
     <div>
       <div>
-        <button class="btn btn-small" v-if="entry.newHSK" @click="prevWord()">
+        <router-link v-if="prevPath" class="btn btn-small" :to="prevPath">
           <i class="fa fa-caret-left" />
-        </button>
+        </router-link>
         <span
           v-if="entry.level && entry.level !== 'outside' && $l2.code === 'zh'"
           class="entry-level p-1 rounded font-weight-bold"
           style="position: relative; bottom: 0.5em; font-size: 0.8em"
           :data-level="entry.level"
-          >HSK {{ entry.level }}</span
         >
+          HSK {{ entry.level }}
+        </span>
         <span
           v-if="entry.newHSK"
           class="entry-level p-1 rounded font-weight-bold"
           :style="`position: relative; bottom: 0.5em; font-size: 0.8em; color: ${
             entry.newHSK === '7-9' ? '#00716B' : 'inherit'
           }`"
-          ><i class="fa fa-arrow-right mr-2" />New HSK {{ entry.newHSK }}
+        >
+          <i class="fa fa-arrow-right mr-2" />
+          New HSK {{ entry.newHSK }}
           <span
             v-if="entry.newHSKMatches.length === 1"
             style="color: #999; font-weight: normal"
-            >#{{ entry.newHSKMatches[0].num }}</span
-          ></span
-        >
-        <button class="btn btn-small" v-if="entry.newHSK" @click="nextWord()">
+          >
+            #{{ entry.newHSKMatches[0].num }}
+          </span>
+        </span>
+        <router-link v-if="nextPath" class="btn btn-small" :to="nextPath">
           <i class="fa fa-caret-right" />
-        </button>
+        </router-link>
       </div>
-      <Annotate tag="div" class="mt-1 mb-2" v-if="entry.counters"
-        ><span
-          >一{{
-            entry.counters.map((counter) => counter.simplified).join('、一')
+      <Annotate tag="div" class="mt-1 mb-2" v-if="entry.counters">
+        <span>
+          一{{
+            entry.counters.map((counter) => counter.simplified).join("、一")
           }}
-        </span></Annotate
-      >
+        </span>
+      </Annotate>
       <div class="entry-word-wrapper" style="display: inline-block">
         <div class="mb-2">
           <div class="entry-pinyin">
             <Star :word="entry"></Star>
-            <span v-if="entry.pronunciation && !entry.pinyin" class="ml-2 mr-1"
-              >/{{ entry.pronunciation }}/</span
-            >
+            <span v-if="entry.pronunciation && !entry.pinyin" class="ml-2 mr-1">
+              /{{ entry.pronunciation }}/
+            </span>
             <span
               v-if="['zh', 'ja', 'yue'].includes($l2.code)"
               class="ml-2 mr-1"
-              >{{ entry.cjk.phonetics }}</span
             >
+              {{ entry.cjk.phonetics }}
+            </span>
             <Speak
               class="ml-1"
               :text="entry.bare"
@@ -91,8 +96,9 @@
               class="entry-level p-1 rounded ml-2"
               style="position: relative; bottom: 0.5em"
               :data-bg-level="entry.level"
-              >{{ entry.level }}</span
             >
+              {{ entry.level }}
+            </span>
           </router-link>
         </div>
         <div
@@ -117,8 +123,6 @@
 </template>
 
 <script>
-import Helper from '@/lib/helper'
-
 export default {
   props: {
     entry: {
@@ -126,13 +130,14 @@ export default {
     },
     minimal: {
       type: String,
-      default: '',
+      default: "",
     },
   },
   data() {
     return {
-      Helper,
-    }
+      nextPath: undefined,
+      prevPath: undefined,
+    };
   },
   computed: {
     $l1() {
@@ -144,44 +149,46 @@ export default {
         return this.$store.state.settings.l2;
     },
     $dictionary() {
-      return this.$getDictionary()
+      return this.$getDictionary();
     },
     $dictionaryName() {
-      return this.$store.state.settings.dictionaryName
-    }
+      return this.$store.state.settings.dictionaryName;
+    },
+  },
+  async mounted() {
+    this.prevPath = await this.prevWord();
+    this.nextPath = await this.nextWord();
   },
   methods: {
     async nextWord() {
-      if (this.entry.newHSK && this.entry.newHSK.includes('7-9')) {
-        let match = this.entry.newHSKMatches.find(
-          (match) => match.level === '7-9'
-        )
+      let match = this.entry.newHSKMatches.find(
+        (match) => match.level === "7-9"
+      );
+      if (match) {
         let newEntry = await (await this.$getDictionary()).getByNewHSK(
-          '7-9',
+          "7-9",
           Math.min(Number(match.num) + 1),
           5635
-        )
-        this.$router.push({
-          path: `/${this.$l1.code}/${this.$l2.code}/dictionary/${this.$dictionaryName}/${newEntry.id}`,
-        })
+        );
+        if (newEntry)
+          return `/${this.$l1.code}/${this.$l2.code}/dictionary/${this.$dictionaryName}/${newEntry.id}`;
       }
     },
     async prevWord() {
-      if (this.entry.newHSK && this.entry.newHSK.includes('7-9')) {
-        let match = this.entry.newHSKMatches.find(
-          (match) => match.level === '7-9'
-        )
+      let match = this.entry.newHSKMatches.find(
+        (match) => match.level === "7-9"
+      );
+      if (match) {
         let newEntry = await (await this.$getDictionary()).getByNewHSK(
-          '7-9',
+          "7-9",
           Math.max(0, Number(match.num) - 1)
-        )
-        this.$router.push({
-          path: `/${this.$l1.code}/${this.$l2.code}/dictionary/${this.$dictionaryName}/${newEntry.id}`,
-        })
+        );
+        if (newEntry)
+          return `/${this.$l1.code}/${this.$l2.code}/dictionary/${this.$dictionaryName}/${newEntry.id}`;
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="scss">

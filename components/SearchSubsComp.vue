@@ -563,6 +563,12 @@ export default {
           e.preventDefault();
           return false;
         }
+        // right = 39
+        if (e.code == 'KeyD') {
+          this.nextHit();
+          e.preventDefault();
+          return false;
+        }
         // up = 38, left = 37
         if (e.keyCode == 38 || (e.keyCode == 37 && !e.shiftKey)) {
           this.previousLine();
