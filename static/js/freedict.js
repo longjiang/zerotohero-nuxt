@@ -8,20 +8,9 @@ const Dictionary = {
   credit() {
     return 'The dictionary is provided by <a href="https://freedict.org/">FreeDict</a> dict, open-source and <a href="https://freedict.org/about/">freely distribtued</a>.'
   },
-  loadWords() {
-    return new Promise(resolve => {
-      console.log('FreeDict: Loading words')
-      let xhttp = new XMLHttpRequest()
-      let that = this
-      xhttp.onload = function() {
-        if (this.readyState == 4 && (this.status >= 200 && this.status < 400)) {
-          that.words = that.parseDictionary(this.responseText)
-          resolve()
-        }
-      }
-      xhttp.open('GET', this.file, true)
-      xhttp.send()
-    })
+  async loadWords() {
+    let res = await axios.get(this.file)
+    this.words = this.parseDictionary(res.data)
   },
   parseLines(lines) {
     let words = []
@@ -85,17 +74,14 @@ const Dictionary = {
     let filename = `${server}data/freedict/${options.l2}-${options.l1}.dict.txt`
     return filename
   },
-  load(options) {
+  async load(options) {
     console.log('Loading FreeDict...')
     this.l1 = options.l1
     // let server = 'http://hsk-server.local:8888/'
     // let server = 'https://server.chinesezerotohero.com/'
     this.file = this.dictionaryFile(options)
-    return new Promise(async resolve => {
-      let promises = [this.loadWords()]
-      await Promise.all(promises)
-      resolve(this)
-    })
+    await this.loadWords()
+    return this
   },
   get(id) {
     return this.words[id]
