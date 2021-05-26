@@ -84,7 +84,7 @@ export default {
       return this.languages.find((language) => language.code === code);
     },
     hasDictionary(l1, l2) {
-      return this.hasFeature(l1, l2, "dictionary");
+      return this.hasFeature(l1, l2, "dictionary") || l2.code === 'en';
     },
     hasYouTube(l1, l2) {
       return this.$languages.hasYouTube(l1, l2);
