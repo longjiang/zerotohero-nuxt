@@ -129,16 +129,17 @@ const Dictionary = {
     }
   },
   async load() {
-    let promises = [this.loadWords()]
+    await this.loadWords()
+    let promises = []
     for (let table of this.tables.filter(
       table => table.name !== 'declensions'
     )) {
       promises.push(this.loadTable(table.name))
     }
-    promises.push(this.loadDeclensions())
-    // promises.push(this.merge())
-    promises.push(this.createIndex())
     await Promise.all(promises)
+    await this.loadDeclensions()
+    // promises.push(this.merge())
+    this.createIndex()    
     return this
   },
   /*
