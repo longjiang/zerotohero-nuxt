@@ -126,12 +126,12 @@
                 <hr />
                 <ul class="czh-links">
                   <li>
-                    <a
-                      href="/en/zh/online-courses"
+                    <router-link
+                      to="/en/zh/online-courses"
                       style="color: #fd4f1c; font-weight: bold"
                     >
                       HSK courses
-                    </a>
+                    </router-link>
                   </li>
                   <li>
                     <router-link to="/en/zh/dictionary">Dictionary</router-link>
@@ -313,7 +313,7 @@ export default {
         if (mutation.type === "settings/SET_L2") {
           this.loadSettings();
         }
-        this.updateClasses();
+        if (this.l1 && this.l2) this.updateClasses();
       }
     });
   },
