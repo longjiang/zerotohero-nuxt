@@ -1,4 +1,4 @@
-export default async function ({ route, app, store, params, i18n }) {
+export default async function ({ app, store, params, i18n }) {
   if (params.l1 && params.l2) {
     if (store.state.settings.l1 && store.state.settings.l1.code === params.l1 && store.state.settings.l2 && store.state.settings.l2.code === params.l2) {
       return

@@ -316,6 +316,12 @@ export default {
         if (this.l1 && this.l2) this.updateClasses();
       }
     });
+    this.$ga.page(this.$route.path);
+  },
+  watch: {
+    $route() {
+      this.$ga.page(this.$route.path);
+    },
   },
   methods: {
     updatei18n() {
@@ -476,7 +482,6 @@ export default {
   font-family: "Klingon pIqaD HaSta";
   src: url("/fonts/Klingon-pIqaD-HaSta.ttf") format("truetype");
 }
-
 
 .klingon {
   font-family: Constructium, Unifont CSUR, Klingon pIqaD HaSta, Code2000, Horta;
