@@ -47,16 +47,31 @@
       </div>
       <div class="row">
         <div class="col-sm-12">
-          <WebImages
-            v-if="showImages"
-            class="mt-5"
-            :text="entry.bare"
-            :entry="entry"
-            limit="10"
-            ref="images"
-            :preloaded="images"
-            @loaded="webImagesLoaded"
-          />
+
+          <div class="web-images widget mt-5">
+            <div class="widget-title">{{ $t('Images of “{text}” on the Web', {text: entry.bare}) }}</div>
+            <div class="widget-body jumbotron-fluid p-4">
+              <WebImages
+                v-if="showImages"
+                :text="entry.bare"
+                :entry="entry"
+                limit="10"
+                ref="images"
+                :preloaded="images"
+                @loaded="webImagesLoaded"
+              />
+              <p class="mt-4">
+                See more images of of “{{ entry.bare }}” on
+                <a
+                  :href="
+                    `https://www.google.com/search?q=${entry.bare.replace(/ /g, '+')}&tbm=isch&sout=1#spf=1567955197854`
+                  "
+                >
+                  <img src="/img/logo-google-images.png" alt="Google Images" class="logo-small ml-2" />
+                </a>
+              </p>
+            </div>
+          </div>
           <EntryForms v-if="$l2.code === 'ru'" class="mt-5" :word="entry" />
           <Collocations
             v-if="$l2.code !== 'ja'"

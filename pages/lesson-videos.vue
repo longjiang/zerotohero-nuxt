@@ -43,7 +43,7 @@
               :href="`https://courses.chinesezerotohero.com/p/hsk-${level}-course`"
               target="_blank"
             >
-              <b>Chinse Zero to Hero HSK {{ level }} Course</b>
+              <b>Chinese Zero to Hero HSK {{ level }} Course</b>
             </a>
             , reinforce the vocabulary you have learned in the lesson by watching
             these

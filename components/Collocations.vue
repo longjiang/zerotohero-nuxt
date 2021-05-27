@@ -10,16 +10,20 @@
             <li
               v-for="collocation of sC"
               :key="`collocation-${collocation.term}-${collocation.line}`"
-              class="mb-2 text-center"
+              class="mb-2"
+              style="display: flex"
             >
-              <SmallStar
-                :item="collocation"
-                :saved="(collocation) => collocation.saved"
-                :save="saveLine"
-                :remove="removeSavedLine"
-                style="overflow: hidden; margin-right: 1rem; float: right"
+              <WebImages
+                :text="collocation.line"
+                limit="2"
+                style="flex: 1; margin-right: 2rem"
               />
-              <Annotate tag="span" :checkSaved="false">
+              <Annotate
+                tag="div"
+                :checkSaved="false"
+                :buttons="true"
+                style="flex: 1"
+              >
                 <span
                   v-html="
                     Helper.highlight(
@@ -28,9 +32,21 @@
                       level
                     )
                   "
-                  style="font-size: 1.5em"
+                  style="font-size: 1.2em"
                 />
               </Annotate>
+              <SmallStar
+                :item="collocation"
+                :saved="(collocation) => collocation.saved"
+                :save="saveLine"
+                :remove="removeSavedLine"
+                style="
+                  overflow: hidden;
+                  margin-left: 0.5rem;
+                  margin-right: 1rem;
+                  float: right;
+                "
+              />
             </li>
           </ul>
           <button
@@ -217,18 +233,27 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped>
-.saved-collocations {
-  li {
-    border-radius: 0.2rem;
-    padding-top: 0.5rem;
-    &:hover {
-      background: white;
-      z-index: 5;
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-      transform: scale(1.05);
-      transition: 200ms all ease;
-    }
-  }
+<style scoped>
+.saved-collocations >>> .image-wall {
+  flex-wrap: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+}
+.saved-collocations >>> .image-wall-image {
+  height: 4rem;
+  max-width: 8rem;
+}
+
+.saved-collocations li {
+  border-radius: 0.2rem;
+  padding-top: 0.5rem;
+}
+
+.saved-collocations li:hover {
+  background: white;
+  z-index: 5;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  transform: scale(1.05);
+  transition: 200ms all ease;
 }
 </style>

@@ -1,59 +1,42 @@
 <template>
-  <div class="web-images widget">
-    <div class="widget-title">{{ $t('Images of “{text}” on the Web', {text: text}) }}</div>
-    <div class="widget-body jumbotron-fluid p-4">
-      <div
-        class="image-wall"
-        :key="`web-images-${text}`"
-        v-cloak
-        v-if="images && images.length > 0"
-      >
-        <img
-          alt
-          class="image-wall-image"
-          v-for="(image, index) in images.slice(0, limit)"
-          :key="`web-images-${text}-${index}`"
-          :src="`${Config.imageProxy}?${image.src}`"
-          @click="goto(image.url)"
-        />
-      </div>
-      <p class="mt-4">
-        See more images of of “{{ text }}” on
-        <a
-          :href="
-            `https://www.google.com/search?q=${text.replace(/ /g, '+')}&tbm=isch&sout=1#spf=1567955197854`
-          "
-        >
-          <img src="/img/logo-google-images.png" alt="Google Images" class="logo-small ml-2" />
-        </a>
-      </p>
-    </div>
+  <div
+    class="image-wall"
+    :key="`web-images-${text}`"
+    v-cloak
+    v-if="images && images.length > 0"
+  >
+    <img
+      alt
+      class="image-wall-image"
+      v-for="(image, index) in images.slice(0, limit)"
+      :key="`web-images-${text}-${index}`"
+      :src="`${Config.imageProxy}?${image.src}`"
+      @click="goto(image.url)"
+    />
   </div>
 </template>
 
 <script>
-import WordPhotos from '@/lib/word-photos'
-import Config from '@/lib/config'
-import Vue from 'vue'
+import WordPhotos from "@/lib/word-photos";
+import Config from "@/lib/config";
 
 export default {
   props: {
     text: {
-      type: String
+      type: String,
     },
     limit: {
       type: String,
-      default: '20'
+      default: "20",
     },
     entry: {
-      default: undefined
+      default: undefined,
     },
     preloaded: {
-      type: Array
-    }
+      type: Array,
+    },
   },
   computed: {
-
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -63,42 +46,43 @@ export default {
         return this.$store.state.settings.l2;
     },
     $dictionary() {
-      return this.$getDictionary()
+      return this.$getDictionary();
     },
     $dictionaryName() {
-      return this.$store.state.settings.dictionaryName
+      return this.$store.state.settings.dictionaryName;
     },
     $hanzi() {
-      return this.$getHanzi()
-    }
+      return this.$getHanzi();
+    },
   },
   async fetch() {
-    if (this.preloaded && this.preloaded.length > 0) this.images = this.preloaded
+    if (this.preloaded && this.preloaded.length > 0)
+      this.images = this.preloaded;
     else {
       let scraped = await WordPhotos.getGoogleImages({
         term: this.text,
-        lang: this.$l2.code
-      })
-      let images = scraped.slice(0, this.limit)
-      this.images = images
-      this.$emit('loaded', this.images)
+        lang: this.$l2.code,
+      });
+      let images = scraped.slice(0, this.limit);
+      this.images = images;
+      this.$emit("loaded", this.images);
     }
   },
   methods: {
     goto(url) {
-      window.open(url)
-    }
+      window.open(url);
+    },
   },
   data() {
     return {
       Config,
-      images: []
-    }
-  }
-}
+      images: [],
+    };
+  },
+};
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .image-wall {
   display: flex;
   flex-wrap: wrap;
@@ -110,7 +94,7 @@ export default {
     opacity: 1;
     transform: scale(1.3);
     z-index: 5;
-    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
     transition: 200ms all ease;
   }
 }

@@ -411,14 +411,9 @@ export default {
   }
 }
 
-.annotated:hover .annotator-buttons {
-  visibility: visible;
-}
-
 .annotator-buttons {
   float: right;
   padding: 0 0 0 0.5rem;
-  visibility: hidden;
 }
 
 [dir="rtl"] .annotator-buttons {
@@ -431,7 +426,7 @@ export default {
   border-radius: 0.2rem;
   background: none;
   border: none;
-  color: #aaa;
+  color: #ddd;
 }
 
 .annotator-buttons .dropdown-item {

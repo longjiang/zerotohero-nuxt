@@ -32,7 +32,7 @@
             style="float: right"
             ><i class="fa fa-trash"></i
           ></b-button>
-          <Annotate tag="div" :sticky="sticky" class="transcript-line-chinese">
+          <Annotate tag="div" :sticky="sticky" class="transcript-line-chinese" :buttons="true">
             <span
               v-html="
                 highlight

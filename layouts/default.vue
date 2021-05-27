@@ -82,7 +82,7 @@
           />
         </div>
 
-        <Nuxt />
+        <Nuxt id="main" />
 
         <ReaderComp v-if="l1 && l2" :iconMode="true" />
 

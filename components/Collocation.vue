@@ -18,9 +18,9 @@
             :saved="line => line.saved"
             :save="saveLine"
             :remove="removeSavedLine"
-            style="overflow: hidden"
+            style="overflow: hidden; float: left"
           />
-          <Annotate tag="span" :checkSaved="false">
+          <Annotate tag="div" :checkSaved="false" :buttons="true">
             <span
               v-html="Helper.highlight(line.line, word ? word.bare : text, level)"
             />

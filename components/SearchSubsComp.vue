@@ -544,7 +544,7 @@ export default {
     keydown(e) {
       if (
         !["INPUT", "TEXTAREA"].includes(e.target.tagName.toUpperCase()) &&
-        !e.metaKey
+        !e.metaKey && !e.repeat
       ) {
         // left = 37
         if (e.keyCode == 37 && e.shiftKey) {

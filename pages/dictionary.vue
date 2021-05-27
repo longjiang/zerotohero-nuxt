@@ -193,7 +193,7 @@ export default {
     keydown(e) {
       if (
         !["INPUT", "TEXTAREA"].includes(e.target.tagName.toUpperCase()) &&
-        !e.metaKey
+        !e.metaKey && !e.repeat
       ) {
         // home
         if (e.keyCode == 36) {
