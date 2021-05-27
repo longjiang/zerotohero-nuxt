@@ -8,7 +8,7 @@
       rounded: true,
       shadow: true,
       nosubs: checkSubs && !video.checkingSubs && !video.hasSubs && !video.id,
-      drop: checkSubs && !video.checkingSubs && !video.hasSubs,
+      drop: checkSubs && !video.checkingSubs,
     }"
     @dragover="over = true"
     @dragleave="over = false"

@@ -48,11 +48,11 @@
           </h5>
           <div :key="`youtube-video-info-${video.youtube_id}-${videoInfoKey}`">
             <template>
-              <b-button v-if="!(video && video.id)" @click="save">
+              <b-button v-if="!(video && video.id) && (this.hasSubtitles || this.$settings.adminMode)" @click="save">
                 <i class="fas fa-plus mr-2"></i>
                 Add to Library
               </b-button>
-              <b-button v-if="video && video.id" variant="success">
+              <b-button v-if="(video && video.id) && (this.hasSubtitles || this.$settings.adminMode)" variant="success">
                 <i class="fa fa-check mr-2"></i>
                 Added
               </b-button>
