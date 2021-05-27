@@ -259,7 +259,6 @@ export default {
     }
     if (!video || !video.channel_id) {
       let youtube_video = await YouTube.videoByApi(this.args)
-      console.log(youtube_video)
       if (youtube_video) video = Object.assign(video || {}, youtube_video);
     }
     video.subs_l2 = await this.getTranscript(video);
@@ -345,31 +344,33 @@ export default {
       let root = parser.parse(xml, {
         ignoreAttributes: false,
       });
-      let tracks =
-        root.transcript_list.track.length > 0
-          ? root.transcript_list.track
-          : [root.transcript_list.track];
-      for (let track of tracks) {
-        let locale = track["@_lang_code"];
-        if (locales.includes(locale)) {
-          this.l2Locale = locale;
+      if (root.transcript_list) {
+        let tracks =
+          root.transcript_list.track.length > 0
+            ? root.transcript_list.track
+            : [root.transcript_list.track];
+        for (let track of tracks) {
+          let locale = track["@_lang_code"];
+          if (locales.includes(locale)) {
+            this.l2Locale = locale;
+          }
         }
-      }
-      if (this.l2Locale) {
-        let html = await Helper.proxy(
-          `https://www.youtube.com/api/timedtext?v=${this.args}&lang=${this.l2Locale}&fmt=srv3`
-        );
+        if (this.l2Locale) {
+          let html = await Helper.proxy(
+            `https://www.youtube.com/api/timedtext?v=${this.args}&lang=${this.l2Locale}&fmt=srv3`
+          );
 
-        let lines = [];
-        let root = parse(html);
-        for (let p of root.querySelectorAll("p")) {
-          let line = {
-            line: p.innerText,
-            starttime: parseInt(p.getAttribute("t")) / 1000,
-          };
-          lines.push(line);
+          let lines = [];
+          let root = parse(html);
+          for (let p of root.querySelectorAll("p")) {
+            let line = {
+              line: p.innerText,
+              starttime: parseInt(p.getAttribute("t")) / 1000,
+            };
+            lines.push(line);
+          }
+          return lines.filter((line) => line.line.trim() !== "");
         }
-        return lines.filter((line) => line.line.trim() !== "");
       }
     },
     async save() {
@@ -384,7 +385,6 @@ export default {
         })
       );
       if (response) {
-        console.log('added', response.data)
         this.video.id = response.data.data.id;
         this.videoInfoKey++
       }

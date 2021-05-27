@@ -37,7 +37,7 @@
           <router-link
             v-if="start > 9"
             :to="`/${$l1.code}/${$l2.code}/youtube/browse/${topic}/${level}/${
-              Number(start) - 10
+              Number(start) - 12
             }${keyword ? '/' + keyword : ''}`"
             class="btn btn-default mr-2"
           >
@@ -45,7 +45,7 @@
           </router-link>
           <router-link
             :to="`/${$l1.code}/${$l2.code}/youtube/browse/${topic}/${level}/${
-              Number(start) + 10
+              Number(start) + 12
             }${keyword ? '/' + keyword : ''}`"
             class="btn btn-default"
           >
@@ -56,8 +56,8 @@
       <div class="col-sm-12 col-md-4 col-lg-3">
         <SimpleSearch
           class="mb-3"
-          :placeholder="keyword ? keyword : 'Keyword...'"
-          buttonText="Search"
+          placeholder="Search"
+          ref="searchLibrary"
           :action="
             (url) => {
               this.$router.push({
@@ -207,18 +207,26 @@ export default {
         filters += "&filter[level][eq]=" + this.level;
       }
       if (this.keyword !== "") {
-        filters += "&filter[title][contains]=" + encodeURIComponent(this.keyword) + "&sort=title";
+        filters +=
+          "&filter[title][contains]=" +
+          encodeURIComponent(this.keyword) +
+          "&sort=title";
       }
       let response = await axios.get(
         `${Config.wiki}items/youtube_videos?sort=-id&filter[l2][eq]=${
           this.$l2.id
-        }${filters}&limit=10&offset=${this.start}&timestamp=${
-          this.$settings.adminMode ? Date.now() : 0
-        }`
+        }${filters}&limit=12&offset=${
+          this.start
+        }&fields=channel_id,id,lesson,level,title,topic,youtube_id${
+          this.$settings.adminMode ? ",subs_l2" : ""
+        }&timestamp=${this.$settings.adminMode ? Date.now() : 0}`
       );
       let videos = response.data.data || [];
       if (videos && this.$settings.adminMode) {
         videos = await YouTube.checkShows(videos, this.$l2.id);
+        for (let video of videos) {
+          if (video.subs_l2) video.subs_l2 = JSON.parse(video.subs_l2);
+        }
       }
       videos = Helper.uniqueByValue(videos, "youtube_id");
       return videos;
@@ -243,17 +251,18 @@ export default {
       }
     },
     route() {
-      console.log(this.topic, 'this.topic')
       let canonical = `/${this.$l1.code}/${this.$l2.code}/youtube/browse/${this.topic}/${this.level}/${this.start}`;
       if (!this.$router.currentRoute.path.startsWith(canonical)) {
-        console.log("pushing");
-        console.log(this.$router.currentRoute.path);
-        console.log(canonical);
         this.$router.push({ path: canonical });
       } else {
         this.$fetch();
       }
     },
+  },
+  updated() {
+    if (this.keyword) {
+      this.$refs.searchLibrary.text = this.keyword;
+    }
   },
   beforeRouteEnter(to, from, next) {
     if (to.path.endsWith(`/youtube/browse`)) {

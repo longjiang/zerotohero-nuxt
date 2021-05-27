@@ -30,8 +30,16 @@
         />
       </router-link>
       <div class="media-body">
-        <b>
+        <div class="font-weight-bold">
+          <span
+            contenteditable="true"
+            v-if="$settings.adminMode"
+            @blur="saveTitle"
+          >
+            {{ video.title }}
+          </span>
           <router-link
+            v-else
             :to="`/${$l1.code}/${$l2.code}/youtube/view/${video.youtube_id}/${
               video.lesson ? 'lesson' : ''
             }`"
@@ -39,7 +47,7 @@
           >
             {{ video.title }}
           </router-link>
-        </b>
+        </div>
         <div v-if="video.hasSubs || video.id" class="btn btn-small mt-2 ml-0">
           {{ $l2.name }} CC
           <span v-if="video.l2Locale">({{ video.l2Locale }})</span>
@@ -244,8 +252,11 @@ export default {
     if (this.checkSubs) {
       await Helper.timeout(this.delay);
       this.video = await this.checkSubsFunc(this.video);
-      this.videoInfoKey++
     }
+    if (this.video.id && this.$settings.adminMode) {
+      await this.addSubsL1(this.video);
+    }
+    this.videoInfoKey++;
   },
   watch: {
     firstLineTime() {
@@ -267,6 +278,24 @@ export default {
     },
   },
   methods: {
+    async saveTitle(e) {
+      let newTitle = e.target.innerText;
+      if (this.video.title !== newTitle) {
+        try {
+          let response = await axios.patch(
+            `${Config.wiki}items/youtube_videos/${this.video.id}`,
+            { title: newTitle },
+            { contentType: "application/json" }
+          );
+          response = response.data;
+          if (response && response.data) {
+            this.titleUpdated = true;
+          }
+        } catch(err) {
+          // Direcuts bug
+        }
+      }
+    },
     toggleMakingShow() {
       this.makingShow = !this.makingShow;
     },
@@ -304,12 +333,16 @@ export default {
     },
     async remove() {
       if (this.video.id) {
+        try{
         let response = await axios.delete(
           `${Config.wiki}items/youtube_videos/${this.video.id}`
         );
         if (response) {
           this.video.id = undefined;
           this.videoInfoKey++;
+        }
+        } catch(err) {
+          // Directus bug
         }
       }
     },
@@ -428,6 +461,9 @@ export default {
       return video;
     },
     async addSubsL1(video) {
+      if (!video.l1Locale) {
+        video = await YouTube.getYouTubeSubsList(video, this.$l1, this.$l2);
+      }
       let subs_l1 = await YouTube.getTranscript(
         video,
         video.l1Locale,
