@@ -291,7 +291,7 @@ export default {
           if (response && response.data) {
             this.titleUpdated = true;
           }
-        } catch(err) {
+        } catch (err) {
           // Direcuts bug
         }
       }
@@ -333,15 +333,15 @@ export default {
     },
     async remove() {
       if (this.video.id) {
-        try{
-        let response = await axios.delete(
-          `${Config.wiki}items/youtube_videos/${this.video.id}`
-        );
-        if (response) {
-          this.video.id = undefined;
-          this.videoInfoKey++;
-        }
-        } catch(err) {
+        try {
+          let response = await axios.delete(
+            `${Config.wiki}items/youtube_videos/${this.video.id}`
+          );
+          if (response) {
+            this.video.id = undefined;
+            this.videoInfoKey++;
+          }
+        } catch (err) {
           // Directus bug
         }
       }
@@ -481,10 +481,10 @@ export default {
   border: 2px dashed #ccc;
 }
 .youtube-video {
-  min-width: 15rem;
+  min-width: 10rem;
   max-width: 20rem;
   flex: 1;
-  margin: 1rem;
+  margin: 0.8rem;
 }
 
 .youtube-video.nosubs:not(.over) {

@@ -19,128 +19,24 @@
       }`"
       :image="`https://img.youtube.com/vi/${this.video.youtube_id}/hqdefault.jpg`"
     />
-    <div class="container">
+    <div class="container-fuid">
       <div class="row">
         <div class="col-sm-12">
           <SimpleSearch
-            class="mb-5"
-            :placeholder="$t('Search YouTube', { l2: $l2.name })"
-            buttonText="Search"
+            class="mb-3 pl-3 pr-3"
+            placeholder="Search"
+            ref="searchLibrary"
             :action="
               (url) => {
                 this.$router.push({
                   path: `/${$l1.code}/${
                     $l2.code
-                  }/youtube/search/${encodeURIComponent(url)}`,
+                  }/youtube/browse/all/all/0/${encodeURIComponent(
+                    url
+                  )}`,
                 });
               }
             "
-            ref="search"
-          />
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-12" v-if="video">
-          <h5 :key="`video-title-${video.title}`">
-            <Annotate :showTranslate="true">
-              <span>{{ video.title }}</span>
-            </Annotate>
-          </h5>
-          <div :key="`youtube-video-info-${video.youtube_id}-${videoInfoKey}`">
-            <template>
-              <b-button v-if="!(video && video.id) && (this.hasSubtitles || this.$settings.adminMode)" @click="save">
-                <i class="fas fa-plus mr-2"></i>
-                Add to Library
-              </b-button>
-              <b-button v-if="(video && video.id) && (this.hasSubtitles || this.$settings.adminMode)" variant="success">
-                <i class="fa fa-check mr-2"></i>
-                Added
-              </b-button>
-            </template>
-            <b-dropdown
-              id="dropdown-1"
-              v-if="video && video.id"
-              :text="video.topic ? topics[video.topic] : 'Topic'"
-              :variant="video.topic ? 'success' : undefined"
-              class="ml-1"
-            >
-              <b-dropdown-item
-                v-for="(title, slug) in topics"
-                :key="`change-topic-item-${slug}`"
-                @click="changeTopic(slug)"
-              >
-                {{ title }}
-              </b-dropdown-item>
-            </b-dropdown>
-            <template v-if="video && video.id && !video.lesson">
-              <b-dropdown
-                id="dropdown-1"
-                :text="video.level ? levels[video.level] : 'Level'"
-                :variant="video.level ? 'success' : undefined"
-                class="ml-1"
-              >
-                <b-dropdown-item
-                  v-for="(title, slug) in levels"
-                  :key="`change-level-item-${slug}`"
-                  @click="changeLevel(slug)"
-                >
-                  {{ title }}
-                </b-dropdown-item>
-              </b-dropdown>
-
-              <b-button
-                v-if="$settings.adminMode"
-                variant="danger"
-                @click="remove"
-                class="ml-1"
-              >
-                <i class="fas fa-trash-alt"></i>
-              </b-button>
-
-              <drop
-                v-if="$settings.adminMode"
-                @drop="handleDrop"
-                :class="{
-                  over: over,
-                  'subs-drop': true,
-                  drop: true,
-                  'ml-1': true,
-                  'text-dark': true,
-                  btn: true,
-                  'btn-light': true,
-                }"
-                :key="`drop-${transcriptKey}`"
-                @dragover="over = true"
-                @dragleave="over = false"
-              >
-                Drop Subs Here
-              </drop>
-            </template>
-          </div>
-          <div v-if="$settings.adminMode && video && video.id" class="mt-2">
-            First line starts at
-            <input
-              v-model.lazy="firstLineTime"
-              type="text"
-              placeholder="0"
-              class="d-inline-block ml-1"
-              style="width: 4rem"
-            />
-            <b-button v-if="!subsUpdated" @click="updateSubs" class="ml-2">
-              <i class="fa fa-save mr-2"></i>
-              Update Subs
-            </b-button>
-            <b-button v-else variant="success" class="ml-2">
-              <i class="fa fa-check mr-2"></i>
-              Updated
-            </b-button>
-          </div>
-          <hr class="mt-3" />
-          <YouTubeChannelCard
-            v-if="video.channel"
-            :channel="video.channel"
-            :key="`channel-${video.channel.id}`"
-            class="mb-4 d-inline-block"
           />
         </div>
       </div>
@@ -150,11 +46,10 @@
     </div>
     <YouTubeWithTranscript
       v-if="video"
-      :youtube="video.youtube_id"
+      :video="video"
       ref="youtube"
-      :l2Lines="video.subs_l2 ? video.subs_l2 : []"
       :quiz="true"
-      :key="`transcript-${video.youtube_id}-${transcriptKey}`"
+      :key="`transcript-${video.youtube_id}`"
       :speed="speed"
       @paused="updatePaused"
     />
@@ -179,7 +74,6 @@
 
 <script>
 import YouTubeWithTranscript from "@/components/YouTubeWithTranscript";
-import YouTubeChannelCard from "@/components/YouTubeChannelCard";
 import SimpleSearch from "@/components/SimpleSearch";
 import YouTubeSearchResults from "@/components/YouTubeSearchResults";
 import YouTube from "@/lib/youtube";
@@ -187,18 +81,13 @@ import Helper from "@/lib/helper";
 import Config from "@/lib/config";
 import axios from "axios";
 import parser from "fast-xml-parser";
-import { Drag, Drop } from "vue-drag-drop";
-import { parseSync } from "subtitle";
 import { parse } from "node-html-parser";
 
 export default {
   components: {
     YouTubeSearchResults,
     SimpleSearch,
-    YouTubeChannelCard,
     YouTubeWithTranscript,
-    Drag,
-    Drop,
   },
   props: {
     args: {
@@ -218,36 +107,15 @@ export default {
         return this.$store.state.settings.l2;
     },
     saved() {
-      return this.video.id
-    }
-  },
-  watch: {
-    firstLineTime() {
-      if (this.video.subs_l2 && this.video.subs_l2.length > 0) {
-        let subsShift =
-          Number(this.firstLineTime) - Number(this.video.subs_l2[0].starttime);
-        if (subsShift !== 0) {
-          for (let line of this.video.subs_l2) {
-            line.starttime = Number(line.starttime) + subsShift;
-          }
-        }
-        this.transcriptKey++;
-      }
+      return this.video.id;
     },
   },
   data() {
     return {
       l2Locale: undefined,
       video: undefined,
-      levels: Helper.levels(this.$l2),
-      topics: Helper.topics,
-      transcriptKey: 0,
-      firstLineTime: 0,
-      subsUpdated: false,
-      over: false,
       paused: false,
       speed: 1,
-      videoInfoKey: 0
     };
   },
 
@@ -257,8 +125,8 @@ export default {
     if (this.lesson && video.level && video.lesson) {
       this.saveWords(video.level, video.lesson);
     }
-    if (!video || !video.channel_id) {
-      let youtube_video = await YouTube.videoByApi(this.args)
+    if (!video || !video.channel) {
+      let youtube_video = await YouTube.videoByApi(this.args);
       if (youtube_video) video = Object.assign(video || {}, youtube_video);
     }
     video.subs_l2 = await this.getTranscript(video);
@@ -275,24 +143,6 @@ export default {
       if (paused !== this.paused) {
         this.paused = paused;
       }
-    },
-    handleDrop(data, event) {
-      event.preventDefault();
-      let file = event.dataTransfer.files[0];
-      let reader = new FileReader();
-      reader.readAsText(file);
-      reader.onload = (event) => {
-        let srt = event.target.result;
-        this.video.subs_l2 = parseSync(srt).map((cue) => {
-          return {
-            starttime: cue.data.start / 1000,
-            line: cue.data.text,
-          };
-        });
-        this.firstLineTime = this.l2_lines[0].starttime;
-        this.hasSubtitles = true;
-        this.transcriptKey++;
-      };
     },
     wordSaved(word) {
       let saved = false;
@@ -373,22 +223,6 @@ export default {
         }
       }
     },
-    async save() {
-      let response = await axios.post(
-        `${Config.wiki}items/youtube_videos`,
-        Object.assign({
-          l2: this.$l2.id,
-          title: this.video.title,
-          youtube_id: this.video.youtube_id,
-          channel_id: this.video.channel ? this.video.channel.id : null,
-          subs_l2: JSON.stringify(this.video.subs_l2),
-        })
-      );
-      if (response) {
-        this.video.id = response.data.data.id;
-        this.videoInfoKey++
-      }
-    },
     async getL1Transcript() {
       await Helper.scrape(
         `https://www.youtube.com/api/timedtext?v=${this.args}&lang=${this.l2Locale}&fmt=srv3&tlang=${this.$l1.code}`,
@@ -402,7 +236,6 @@ export default {
           }
         }
       );
-      this.hasSubtitles = true;
     },
     async getTranscript(video) {
       if (Array.isArray(video.subs_l2)) {
@@ -430,23 +263,6 @@ export default {
         }
       }
     },
-    async updateSubs() {
-      let response = await $.ajax({
-        url: `${Config.wiki}items/youtube_videos/${this.video.id}`,
-        data: JSON.stringify({ subs_l2: JSON.stringify(this.video.subs_l2) }),
-        type: "PATCH",
-        contentType: "application/json",
-        xhr: function () {
-          return window.XMLHttpRequest == null ||
-            new window.XMLHttpRequest().addEventListener == null
-            ? new window.ActiveXObject("Microsoft.XMLHTTP")
-            : $.ajaxSettings.xhr();
-        },
-      });
-      if (response && response.data) {
-        this.subsUpdated = true;
-      }
-    },
     async getSaved() {
       let response = await axios.get(
         `${Config.wiki}items/youtube_videos?filter[youtube_id][eq]=${
@@ -460,48 +276,6 @@ export default {
       response = response.data;
       if (response && response.data && response.data.length > 0) {
         return response.data[0];
-      }
-    },
-    async changeLevel(slug) {
-      let response = await $.ajax({
-        url: `${Config.wiki}items/youtube_videos/${this.video.id}`,
-        data: JSON.stringify({ level: slug }),
-        type: "PATCH",
-        contentType: "application/json",
-        xhr: function () {
-          return window.XMLHttpRequest == null ||
-            new window.XMLHttpRequest().addEventListener == null
-            ? new window.ActiveXObject("Microsoft.XMLHTTP")
-            : $.ajaxSettings.xhr();
-        },
-      });
-      if (response && response.data) {
-        this.video = response.data;
-      }
-    },
-    async changeTopic(slug) {
-      let response = await $.ajax({
-        url: `${Config.wiki}items/youtube_videos/${this.video.id}`,
-        data: JSON.stringify({ topic: slug }),
-        type: "PATCH",
-        contentType: "application/json",
-        xhr: function () {
-          return window.XMLHttpRequest == null ||
-            new window.XMLHttpRequest().addEventListener == null
-            ? new window.ActiveXObject("Microsoft.XMLHTTP")
-            : $.ajaxSettings.xhr();
-        },
-      });
-      if (response && response.data) {
-        this.video = response.data;
-      }
-    },
-    async remove() {
-      let response = await axios.delete(
-        `${Config.wiki}items/youtube_videos/${this.video.id}`
-      );
-      if (response) {
-        this.video = undefined;
       }
     },
     scrollToComments() {
@@ -544,9 +318,6 @@ export default {
 };
 </script>
 <style lang="scss">
-.subs-drop.drop.over {
-  border: 2px dashed #ccc;
-}
 .play-pause-wrapper {
   position: sticky;
   bottom: 1rem;
@@ -572,11 +343,5 @@ export default {
   font-size: 1.3em;
   cursor: pointer;
   margin-bottom: 0.2rem;
-}
-.youtube-video-column.sticky {
-  top: 0;
-}
-.youtube-video-wrapper.sticky {
-  top: 0;
 }
 </style>

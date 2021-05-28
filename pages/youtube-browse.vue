@@ -8,13 +8,31 @@
   <div class="youtube-browse container mt-5 mb-5 main">
     <SocialHead
       v-if="videos[0]"
-      :title="`Learn ${$l2.name} with YouTube | ${$l2.name} Zero to Hero`"
-      :description="`Watch ${$l2.name} YouTube videos and study the ${$l2.name} subtitles.`"
+      :title="`Study ${$l2.name} videos with subs | ${$l2.name} Zero to Hero`"
+      :description="`Watch ${$l2.name} YouTube videos and study the ${$l2.code === 'zh' ? 'Pinyin' : $l2.name} subtitles.`"
       :image="`https://img.youtube.com/vi/${videos[0].youtube_id}/hqdefault.jpg`"
     />
     <div class="row mt-5">
-      <div class="col-sm-12">
-        <h3 class="mb-5 text-center">YouTube Video Library</h3>
+      <div class="col-sm-12 mb-4 text-center">
+        <h3>YouTube Video Library</h3>
+        <p class="mt-3">Study {{ $l2.name }} videos with {{ $l2.code === 'zh' ? 'Pinyin' : '' }} subtitles</p>
+
+        <SimpleSearch
+          class="mb-3"
+          placeholder="Search"
+          ref="searchLibrary"
+          :action="
+            (url) => {
+              this.$router.push({
+                path: `/${$l1.code}/${
+                  $l2.code
+                }/youtube/browse/${topic}/${level}/0/${encodeURIComponent(
+                  url
+                )}`,
+              });
+            }
+          "
+        />
       </div>
       <div class="col-sm-12 col-md-8 col-lg-9 pr-4 mb-5">
         <b-button
@@ -27,6 +45,7 @@
         </b-button>
         <template v-if="videos && videos.length > 0">
           <YouTubeVideoList
+            class="row"
             :videos="videos"
             :checkSubs="false"
             ref="youtubeVideoList"
@@ -54,22 +73,6 @@
         </div>
       </div>
       <div class="col-sm-12 col-md-4 col-lg-3">
-        <SimpleSearch
-          class="mb-3"
-          placeholder="Search"
-          ref="searchLibrary"
-          :action="
-            (url) => {
-              this.$router.push({
-                path: `/${$l1.code}/${
-                  $l2.code
-                }/youtube/browse/${topic}/${level}/0/${encodeURIComponent(
-                  url
-                )}`,
-              });
-            }
-          "
-        />
         <div class="list-group">
           <router-link
             :class="{
