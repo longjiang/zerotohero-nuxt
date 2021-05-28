@@ -161,30 +161,34 @@ export default {
   },
   methods: {
     async nextWord() {
-      let match = this.entry.newHSKMatches.find(
-        (match) => match.level === "7-9"
-      );
-      if (match) {
-        let newEntry = await (await this.$getDictionary()).getByNewHSK(
-          "7-9",
-          Math.min(Number(match.num) + 1),
-          5635
+      if (this.entry.newHSKMatches) {
+        let match = this.entry.newHSKMatches.find(
+          (match) => match.level === "7-9"
         );
-        if (newEntry)
-          return `/${this.$l1.code}/${this.$l2.code}/dictionary/${this.$dictionaryName}/${newEntry.id}`;
+        if (match) {
+          let newEntry = await (await this.$getDictionary()).getByNewHSK(
+            "7-9",
+            Math.min(Number(match.num) + 1),
+            5635
+          );
+          if (newEntry)
+            return `/${this.$l1.code}/${this.$l2.code}/dictionary/${this.$dictionaryName}/${newEntry.id}`;
+        }
       }
     },
     async prevWord() {
-      let match = this.entry.newHSKMatches.find(
-        (match) => match.level === "7-9"
-      );
-      if (match) {
-        let newEntry = await (await this.$getDictionary()).getByNewHSK(
-          "7-9",
-          Math.max(0, Number(match.num) - 1)
+      if (this.entry.newHSKMatches) {
+        let match = this.entry.newHSKMatches.find(
+          (match) => match.level === "7-9"
         );
-        if (newEntry)
-          return `/${this.$l1.code}/${this.$l2.code}/dictionary/${this.$dictionaryName}/${newEntry.id}`;
+        if (match) {
+          let newEntry = await (await this.$getDictionary()).getByNewHSK(
+            "7-9",
+            Math.max(0, Number(match.num) - 1)
+          );
+          if (newEntry)
+            return `/${this.$l1.code}/${this.$l2.code}/dictionary/${this.$dictionaryName}/${newEntry.id}`;
+        }
       }
     },
   },
