@@ -183,9 +183,8 @@
     </div>
     <div v-if="hits.length > 0" :set="(hit = currentHit)" class="mb-4">
       <YouTubeWithTranscript
-        :youtube="hit.video.youtube_id"
+        :video="hit.video"
         ref="youtube"
-        :l2Lines="hit.video.subs_l2"
         layout="vertical"
         :highlight="terms"
         :hsk="level"

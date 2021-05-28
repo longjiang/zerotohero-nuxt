@@ -169,7 +169,7 @@
         </div>
       </div>
       <div class="row">
-        <div :key="'transcript-' + youtube.youtube_id" class="mt-2 col-sm-12">
+        <div :key="'transcript-' + video.youtube_id" class="mt-2 col-sm-12">
           <div v-if="video.subs_l2.length > 0" class="text-center">
             <SyncedTranscript
               ref="transcript"
