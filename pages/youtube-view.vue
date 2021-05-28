@@ -14,7 +14,7 @@
       } -- study the subtitles and improve your Chinese! ${
         this.video.subs_l2
           ? 'Full transcript: ' +
-            this.video.subs_l2.map((l) => l.line).join(' ')
+            this.video.subs_l2.slice(0, 10).map((l) => l.line).join(' ')
           : ''
       }`"
       :image="`https://img.youtube.com/vi/${this.video.youtube_id}/hqdefault.jpg`"

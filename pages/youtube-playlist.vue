@@ -110,7 +110,6 @@ export default {
       this.title = undefined
       this.videos = []
       let videos = await YouTube.playlistByApi(this.playlist_id)
-      console.log(videos)
       if (videos && videos.length > 0) {
         if (this.checkShows)
           videos = await YouTube.checkShows(

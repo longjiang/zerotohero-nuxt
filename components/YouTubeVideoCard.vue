@@ -195,7 +195,9 @@
             $settings.adminMode &&
             video.channel_id &&
             Config.approvedChannels[$l2.code] &&
-            !Config.approvedChannels[$l2.code].includes(video.channel_id)
+            !Config.approvedChannels[$l2.code].includes(video.channel_id) &&
+            Config.talkChannels[$l2.code] &&
+            !Config.talkChannels[$l2.code].includes(video.channel_id)
           "
           class="small text-warning mt-1"
         >
@@ -263,8 +265,15 @@ export default {
       this.shiftSubs();
     },
     async checkSaved() {
-      if (!this.video.id && this.checkSaved)
-        this.video = await this.checkSubsFunc(this.video);
+      if (!this.video.id && this.video.hasSubs && this.checkSaved) {
+        let video = await this.checkSavedFunc(this.video);
+        if (this.$l2.code === "zh") {
+          video = this.addSubsL1(video);
+        }
+        video.checkingSubs = false;
+        this.video = video;
+        this.videoInfoKey++;
+      }
     },
   },
   computed: {
@@ -411,21 +420,24 @@ export default {
       return details.channel.id;
     },
     async save(video) {
-      let response = await axios.post(`${Config.wiki}items/youtube_videos`, {
-        youtube_id: video.youtube_id,
-        title: video.title,
-        l2: this.$l2.id,
-        subs_l2: JSON.stringify(video.subs_l2),
-        channel_id: video.channel_id,
-      });
-      response = response.data;
-      if (response && response.data) {
-        video.id = response.data.id;
-        this.videoInfoKey++;
-        return true;
-      }
+      try {
+        let response = await axios.post(`${Config.wiki}items/youtube_videos`, {
+          youtube_id: video.youtube_id,
+          title: video.title,
+          l2: this.$l2.id,
+          subs_l2: JSON.stringify(video.subs_l2),
+          channel_id: video.channel_id,
+        });
+        response = response.data;
+        if (response && response.data) {
+          video.id = response.data.id;
+          this.videoInfoKey++;
+          return true;
+        }
+      } catch (err) {}
     },
     async checkSavedFunc(video) {
+      console.log("checking saved");
       let response = await axios.get(
         `${Config.wiki}items/youtube_videos?filter[youtube_id][eq]=${
           video.youtube_id

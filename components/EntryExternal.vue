@@ -10,6 +10,14 @@
         汉典
       </b-button>
       <b-button
+        @click="setExtDict('cambridge')"
+        v-if="$l2.code === 'en'"
+        class="btn btn-small"
+        :data-bg-level="extDict === 'cambridge' ? level : false"
+      >
+        Cambridge
+      </b-button>
+      <b-button
         @click="setExtDict('wiktionary')"
         class="btn btn-small"
         :data-bg-level="extDict === 'wiktionary' ? level : false"
@@ -33,14 +41,6 @@
         :data-bg-level="extDict === 'ngram' ? level : false"
       >
         Ngram
-      </b-button>
-      <b-button
-        @click="setExtDict('cambridge')"
-        v-if="$l2.code === 'en'"
-        class="btn btn-small"
-        :data-bg-level="extDict === 'cambridge' ? level : false"
-      >
-        Cambridge
       </b-button>
       <b-button
         @click="setExtDict('moedict')"

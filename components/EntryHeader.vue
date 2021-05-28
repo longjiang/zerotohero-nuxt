@@ -30,6 +30,14 @@
             #{{ entry.newHSKMatches[0].num }}
           </span>
         </span>
+        <span
+          v-if="entry.level && entry.level !== 'outside' && $l2.code !== 'zh'"
+          class="entry-level p-1 rounded ml-2 mr-2"
+          style="position: relative; bottom: 0.2em; font-size: 0.8em"
+          :data-bg-level="entry.level"
+        >
+          {{ entry.level }}
+        </span>
         <router-link v-if="nextPath" class="btn btn-small" :to="nextPath">
           <i class="fa fa-caret-right" />
         </router-link>
@@ -89,16 +97,6 @@
                 v-html="entry.accented"
               ></span>
             </template>
-            <span
-              v-if="
-                entry.level && entry.level !== 'outside' && $l2.code !== 'zh'
-              "
-              class="entry-level p-1 rounded ml-2"
-              style="position: relative; bottom: 0.5em"
-              :data-bg-level="entry.level"
-            >
-              {{ entry.level }}
-            </span>
           </router-link>
         </div>
         <div
@@ -175,6 +173,16 @@ export default {
             return `/${this.$l1.code}/${this.$l2.code}/dictionary/${this.$dictionaryName}/${newEntry.id}`;
         }
       }
+      if (this.$dictionaryName === "ecdict") {
+        let ielts1400 = await (await this.$getDictionary()).getIelts1400();
+        let index = ielts1400.findIndex((word) => word === this.entry.bare);
+        if (index !== -1 && ielts1400[index + 1]) {
+          let newEntry = await (await this.$getDictionary()).lookup(
+            ielts1400[index + 1]
+          );
+          return `/${this.$l1.code}/${this.$l2.code}/dictionary/${this.$dictionaryName}/${newEntry.id}`;
+        }
+      }
     },
     async prevWord() {
       if (this.entry.newHSKMatches) {
@@ -188,6 +196,16 @@ export default {
           );
           if (newEntry)
             return `/${this.$l1.code}/${this.$l2.code}/dictionary/${this.$dictionaryName}/${newEntry.id}`;
+        }
+      }
+      if (this.$dictionaryName === "ecdict") {
+        let ielts1400 = await (await this.$getDictionary()).getIelts1400();
+        let index = ielts1400.findIndex((word) => word === this.entry.bare);
+        if (index !== -1 && ielts1400[index - 1]) {
+          let newEntry = await (await this.$getDictionary()).lookup(
+            ielts1400[index - 1]
+          );
+          return `/${this.$l1.code}/${this.$l2.code}/dictionary/${this.$dictionaryName}/${newEntry.id}`;
         }
       }
     },

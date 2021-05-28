@@ -117,7 +117,7 @@ export default {
               name: "tv-shows",
               icon: "fa fa-tv",
               title: "TV Shows",
-              show: ["zh", "ja"].includes(this.l2.code),
+              show: ["zh", "ja", "en"].includes(this.l2.code),
             },
             {
               name: "youtube-browse",
