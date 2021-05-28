@@ -4,7 +4,7 @@
     <div class="text-center mt-3 mb-3" v-if="!checking && hits.length === 0">
       No hits.
     </div>
-    <div class="text-center mt-2" v-if="hits.length > 0">
+    <div class="text-center" v-if="hits.length > 0">
       <button
         :disabled="hitIndex === 0"
         @click="prevHit"
@@ -158,11 +158,11 @@
         v-model.lazy="excludeStr"
         :style="`width: 6em`"
         placeholder="Exclude..."
-        class="ml-1 mr-1 btn-small"
+        class="btn-small"
       />
       <router-link
         :to="`/${$l1.code}/${$l2.code}/youtube/view/${currentHit.video.youtube_id}/`"
-        class="btn btn-small pr-0"
+        class="btn btn-small pr-2"
       >
         <i class="fa fa-window-restore" />
       </router-link>
@@ -611,6 +611,9 @@ export default {
 };
 </script>
 <style lang="scss">
+.search-subs .btn-small {
+  margin: 0
+}
 .hit-thumb {
   width: calc(0.2rem * 16);
   height: calc(0.2rem * 9);
@@ -629,6 +632,7 @@ export default {
   background: white;
   z-index: 10;
   overflow: scroll;
+  padding-top: 0.3rem;
   margin-top: 0 !important;
 }
 .search-subs .playlist-dropdown {

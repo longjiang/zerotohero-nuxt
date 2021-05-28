@@ -10,7 +10,7 @@
             <li
               v-for="collocation of sC"
               :key="`collocation-${collocation.term}-${collocation.line}`"
-              class="mb-2"
+              class="mb-2 p-2"
               style="display: flex"
             >
               <WebImages
