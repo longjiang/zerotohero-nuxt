@@ -111,6 +111,9 @@ export default {
       return nonLatin
     },
     async annotate() {
+      if (this.$dictionaryName === 'ecdict') {
+        await (await this.$getDictionary()).addFrequencyToPhrases()
+      }
       if (this.text) {
         for (let line of this.textLines) {
           let tokenized = await this.tokenize(line, this.batchId++)

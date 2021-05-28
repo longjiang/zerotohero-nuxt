@@ -120,7 +120,7 @@ export default {
       if (this.entry) {
         return `${this.entry.bare} ${
           this.entry.pronunciation ? "(" + this.entry.pronunciation + ")" : ""
-        } | ${this.$l2 ? this.$l2.name : ""} Zero to Hero Dictionary`;
+        } ${ this.entry.definitions ? this.entry.definitions.slice(0, 2).join('; ') : ''} | ${this.$l2 ? this.$l2.name : ""} Zero to Hero Dictionary`;
       }
       return `${this.$l2 ? this.$l2.name : ""} Dictionary | ${
         this.$l2 ? this.$l2.name : ""
@@ -130,7 +130,7 @@ export default {
       if (this.entry) {
         return `"${this.entry.bare}" means ${
           this.entry.definitions ? this.entry.definitions.join("; ") : "..."
-        }`;
+        } Watch examples of this from TV shows.`;
       }
       return `Look up ${this.$l2 ? this.$l2.name : ""} words. See how ${
         this.$l2 ? this.$l2.name : ""

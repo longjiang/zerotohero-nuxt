@@ -3,6 +3,7 @@ const Dictionary = {
   lang: undefined,
   file: undefined,
   frequencyFile: undefined,
+  frequencyAdded: false,
   words: [],
   frequency: [],
   index: {},
@@ -29,7 +30,7 @@ const Dictionary = {
       await Promise.all(promises)
       this.addIdToWords()
       // this.addFrequencyToWords()
-      this.addFrequencyToPhrases()
+      // this.addFrequencyToPhrases()
       this.assignLevels()
       // console.log(Papa.unparse(this.words))
       resolve(this)
@@ -75,20 +76,23 @@ const Dictionary = {
   },
   addFrequencyToPhrases() {
     console.log('adding frequency to phrases')
-    for (let word of this.words.filter(word => word.word.includes(' ') || word.word.includes('-'))) {
-      if (word.word.includes(' ') || word.word.includes('-')) {
-        let ranks = []
-        for (let part of word.word.split(/[ -]/g)) {
-          let partRank = this.findRank(part)
-          if (partRank === -1) {
-            ranks.push(this.frequency.length)
-            break
-          } else {
-            ranks.push(partRank)
+    if (!this.frequencyAdded) {
+      for (let word of this.words.filter(word => word.word.includes(' ') || word.word.includes('-'))) {
+        if (word.word.includes(' ') || word.word.includes('-')) {
+          let ranks = []
+          for (let part of word.word.split(/[ -]/g)) {
+            let partRank = this.findRank(part)
+            if (partRank === -1) {
+              ranks.push(this.frequency.length)
+              break
+            } else {
+              ranks.push(partRank)
+            }
           }
+          word.rank = Math.pow(Math.max(...ranks), 1.3)
         }
-        word.rank = Math.pow(Math.max(...ranks), 1.3)
       }
+      this.frequencyAdded = true
     }
   },
   maxRank() {
