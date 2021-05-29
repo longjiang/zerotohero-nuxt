@@ -98,187 +98,200 @@
       </template>
     </template>
     <template v-else>
-      <div class="container-fluid pt-4">
-        <img src="/img/background-stars.jpg" class="bg-stars" data-not-lazy />
-        <div class="container">
-          <div class="row pt-5">
-            <div class="col-sm-6">
-              <img src="/img/logo-z2h.png" class="z2h-logo" data-not-lazy />
+      <div>
+        <div
+          class="container-fluid pt-4"
+          style="overflow: hidden; position: relative"
+        >
+          <img src="/img/background-stars.jpg" class="bg-stars" data-not-lazy />
+          <div class="container">
+            <div class="row pt-5">
+              <div class="col-sm-6">
+                <img src="/img/logo-z2h.png" class="z2h-logo" data-not-lazy />
+              </div>
+              <div class="col-sm-6">
+                <img
+                  src="/img/language-education-done-right.png"
+                  class="z2h-slogan img-fluid d-none d-sm-block"
+                  data-not-lazy
+                />
+              </div>
             </div>
-            <div class="col-sm-6">
-              <img
-                src="/img/language-education-done-right.png"
-                class="z2h-slogan img-fluid d-none d-sm-block"
-                data-not-lazy
-              />
-            </div>
-          </div>
-          <div class="row pt-5">
-            <div class="col-sm-6">
-              <div class="home-card">
-                <router-link to="/en/zh">
-                  <img
-                    src="/img/czh-logo-dark.png"
-                    class="czh-logo"
-                    data-not-lazy
-                  />
-                </router-link>
-                <hr />
-                <ul class="czh-links">
-                  <li>
-                    <router-link
-                      to="/en/zh/online-courses"
-                      style="color: #fd4f1c; font-weight: bold"
-                    >
-                      HSK courses
-                    </router-link>
-                  </li>
-                  <li>
-                    <router-link to="/en/zh/dictionary">Dictionary</router-link>
-                  </li>
-                  <li>
-                    <router-link to="/en/zh/grammar">
-                      Grammar reference
-                    </router-link>
-                  </li>
-                  <li>
-                    <router-link to="/en/zh/youtube/browse">
-                      Audio-visual tools
-                    </router-link>
-                  </li>
-                  <li>
-                    <router-link to="/en/zh/reader">Reading tools</router-link>
-                  </li>
-                  <li>
-                    <router-link to="/en/zh/resource/list/all/all">
-                      Resources
-                    </router-link>
-                  </li>
-                </ul>
-                <hr />
-                <div
-                  class="home-card-logos text-center"
-                  style="line-height: 2rem"
-                >
-                  <a
-                    href="https://www.youtube.com/channel/UCQ3IlLg5VGeydxtswBoyt6A"
+            <div class="row pt-5">
+              <div class="col-sm-6">
+                <div class="home-card">
+                  <router-link to="/en/zh">
+                    <img
+                      src="/img/czh-logo-dark.png"
+                      class="czh-logo"
+                      data-not-lazy
+                    />
+                  </router-link>
+                  <hr />
+                  <ul class="czh-links">
+                    <li>
+                      <router-link
+                        to="/en/zh/online-courses"
+                        style="color: #fd4f1c; font-weight: bold"
+                      >
+                        HSK courses
+                      </router-link>
+                    </li>
+                    <li>
+                      <router-link to="/en/zh/dictionary">
+                        Dictionary
+                      </router-link>
+                    </li>
+                    <li>
+                      <router-link to="/en/zh/grammar">
+                        Grammar reference
+                      </router-link>
+                    </li>
+                    <li>
+                      <router-link to="/en/zh/youtube/browse">
+                        Audio-visual tools
+                      </router-link>
+                    </li>
+                    <li>
+                      <router-link to="/en/zh/reader">
+                        Reading tools
+                      </router-link>
+                    </li>
+                    <li>
+                      <router-link to="/en/zh/resource/list/all/all">
+                        Resources
+                      </router-link>
+                    </li>
+                  </ul>
+                  <hr />
+                  <div
+                    class="home-card-logos text-center"
+                    style="line-height: 2rem"
                   >
+                    <a
+                      href="https://www.youtube.com/channel/UCQ3IlLg5VGeydxtswBoyt6A"
+                    >
+                      <img
+                        src="/img/logo-youtube.png"
+                        style="height: 1.2rem; padding: 0 0.5rem"
+                      />
+                    </a>
+                    <a href="https://www.instagram.com/chinesezerotohero/">
+                      <img
+                        src="/img/logo-instagram.png"
+                        style="height: 1.4rem; padding: 0 0.5rem"
+                      />
+                    </a>
+                    <a href="http://chinesezerotohero.teachable.com/">
+                      <img
+                        src="/img/logo-teachable.png"
+                        style="height: 1.4rem; padding: 0 0.5rem"
+                      />
+                    </a>
+                    <a href="http://t.me/zerotohero_zh">
+                      <img
+                        src="/img/logo-telegram.png"
+                        style="height: 1.4rem; padding: 0 0.5rem"
+                      />
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="home-card">
+                  <router-link to="/zh/en">
                     <img
-                      src="/img/logo-youtube.png"
-                      style="height: 1.2rem; padding: 0 0.5rem"
+                      src="/img/ezh-logo-dark.png"
+                      class="ezh-logo"
+                      data-not-lazy
                     />
-                  </a>
-                  <a href="https://www.instagram.com/chinesezerotohero/">
-                    <img
-                      src="/img/logo-instagram.png"
-                      style="height: 1.4rem; padding: 0 0.5rem"
-                    />
-                  </a>
-                  <a href="http://chinesezerotohero.teachable.com/">
-                    <img
-                      src="/img/logo-teachable.png"
-                      style="height: 1.4rem; padding: 0 0.5rem"
-                    />
-                  </a>
-                  <a href="http://t.me/zerotohero_zh">
-                    <img
-                      src="/img/logo-telegram.png"
-                      style="height: 1.4rem; padding: 0 0.5rem"
-                    />
-                  </a>
+                  </router-link>
+                  <hr />
+                  <ul class="czh-links">
+                    <li>
+                      <router-link
+                        to="/zh/en/online-courses"
+                        style="color: #1b3e76; font-weight: bold"
+                      >
+                        剑桥英语视频教程
+                      </router-link>
+                    </li>
+                    <li>
+                      <router-link
+                        to="/zh/en/online-courses"
+                        style="color: #1b3e76; font-weight: bold"
+                      >
+                        美式口语课程
+                      </router-link>
+                    </li>
+                    <li>
+                      <router-link to="/zh/en/dictionary">词典工具</router-link>
+                    </li>
+                    <li>
+                      <router-link to="/zh/en/youtube/browse">
+                        视听工具
+                      </router-link>
+                    </li>
+                    <li>
+                      <router-link to="/zh/en/reader">阅读工具</router-link>
+                    </li>
+                    <li>
+                      <router-link to="/zh/en/resource/list/all/all">
+                        其它资源
+                      </router-link>
+                    </li>
+                  </ul>
+                  <hr />
+                  <div
+                    class="home-card-logos text-center"
+                    style="line-height: 2rem"
+                  >
+                    <a href="https://m.cctalk.com/inst/stevmab3">
+                      <img src="/img/logo-cctalk.png" style="height: 1.2rem" />
+                    </a>
+                    &nbsp;&nbsp;
+                    <a href="https://space.bilibili.com/253569339">
+                      <img
+                        src="/img/logo-bilibili.png"
+                        style="height: 1.2rem"
+                      />
+                    </a>
+                    &nbsp;&nbsp;
+                    <a href="https://v.douyin.com/eNJCcD8/">
+                      <img src="/img/logo-douyin.png" style="height: 1.4rem" />
+                    </a>
+                    &nbsp;&nbsp;
+                    <a
+                      href="https://www.xiaohongshu.com/user/profile/5fad77c0000000000100696e"
+                    >
+                      <img
+                        src="/img/logo-xiaohongshu.png"
+                        style="height: 1.4rem"
+                      />
+                    </a>
+                    &nbsp;&nbsp;
+                    <a href="/zh/en/contact-us">
+                      <img src="/img/logo-wechat.png" style="height: 1.4rem" />
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
-            <div class="col-sm-6">
-              <div class="home-card">
-                <router-link to="/zh/en">
-                  <img
-                    src="/img/ezh-logo-dark.png"
-                    class="ezh-logo"
-                    data-not-lazy
-                  />
-                </router-link>
-                <hr />
-                <ul class="czh-links">
-                  <li>
-                    <router-link
-                      to="/zh/en/online-courses"
-                      style="color: #1b3e76; font-weight: bold"
-                    >
-                      剑桥英语视频教程
-                    </router-link>
-                  </li>
-                  <li>
-                    <router-link
-                      to="/zh/en/online-courses"
-                      style="color: #1b3e76; font-weight: bold"
-                    >
-                      美式口语课程
-                    </router-link>
-                  </li>
-                  <li>
-                    <router-link to="/zh/en/dictionary">词典工具</router-link>
-                  </li>
-                  <li>
-                    <router-link to="/zh/en/youtube/browse">
-                      视听工具
-                    </router-link>
-                  </li>
-                  <li>
-                    <router-link to="/zh/en/reader">阅读工具</router-link>
-                  </li>
-                  <li>
-                    <router-link to="/zh/en/resource/list/all/all">
-                      其它资源
-                    </router-link>
-                  </li>
-                </ul>
-                <hr />
-                <div
-                  class="home-card-logos text-center"
-                  style="line-height: 2rem"
-                >
-                  <a href="https://m.cctalk.com/inst/stevmab3">
-                    <img src="/img/logo-cctalk.png" style="height: 1.2rem" />
-                  </a>
-                  &nbsp;&nbsp;
-                  <a href="https://space.bilibili.com/253569339">
-                    <img src="/img/logo-bilibili.png" style="height: 1.2rem" />
-                  </a>
-                  &nbsp;&nbsp;
-                  <a href="https://v.douyin.com/eNJCcD8/">
-                    <img src="/img/logo-douyin.png" style="height: 1.4rem" />
-                  </a>
-                  &nbsp;&nbsp;
-                  <a
-                    href="https://www.xiaohongshu.com/user/profile/5fad77c0000000000100696e"
-                  >
-                    <img
-                      src="/img/logo-xiaohongshu.png"
-                      style="height: 1.4rem"
-                    />
-                  </a>
-                  &nbsp;&nbsp;
-                  <a href="/zh/en/contact-us">
-                    <img src="/img/logo-wechat.png" style="height: 1.4rem" />
-                  </a>
-                </div>
-              </div>
-            </div>
           </div>
-          <div class="row mt-5 mb-4 text-dark">
-            <div class="col-sm-12 text-center">
-              <p style="font-size: 1.5rem">
-                Resources for learning
-                <strong><em>hundreds</em></strong>
-                of languages
-              </p>
-              <p>
-                学习
-                <strong>数百种</strong>
-                语言的资源
-              </p>
-            </div>
+        </div>
+
+        <div class="row mt-5 mb-4 text-dark">
+          <div class="col-sm-12 text-center">
+            <p style="font-size: 1.5rem">
+              Resources for learning
+              <strong><em>hundreds</em></strong>
+              of languages
+            </p>
+            <p>
+              学习
+              <strong>数百种</strong>
+              语言的资源
+            </p>
           </div>
         </div>
       </div>

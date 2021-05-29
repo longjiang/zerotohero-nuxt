@@ -296,11 +296,9 @@ export default {
       let lineOffset = 10 // Show review this number of lines after the first appearance of the word
       if (
         this.quiz &&
-        this.$settings.showQuiz &&
-        this.$root.savedWords &&
-        this.$root.savedWords[this.$l2.code]
+        this.$settings.showQuiz
       ) {
-        for (let savedWord of this.$root.savedWords[this.$l2.code]) {
+        for (let savedWord of this.$store.state.savedWords.savedWords[this.$l2.code]) {
           let word = await (await this.$getDictionary()).get(savedWord.id)
           if (word) {
             let seenLines = []
