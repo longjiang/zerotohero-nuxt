@@ -38,6 +38,12 @@
         >
           {{ entry.level }}
         </span>
+        <span
+          v-if="wordIndex"
+          style="position: relative; bottom: 0.2em; font-size: 0.8em;"
+        >
+          <b>雅思1400词</b> #{{ wordIndex }}
+        </span>
         <router-link v-if="nextPath" class="btn btn-small" :to="nextPath">
           <i class="fa fa-caret-right" />
         </router-link>
@@ -135,6 +141,7 @@ export default {
     return {
       nextPath: undefined,
       prevPath: undefined,
+      wordIndex: undefined,
     };
   },
   computed: {
@@ -156,6 +163,8 @@ export default {
   async mounted() {
     this.prevPath = await this.prevWord();
     this.nextPath = await this.nextWord();
+    if (this.$dictionaryName === "ecdict")
+      this.wordIndex = await this.ielts1400Index();
   },
   methods: {
     async nextWord() {
@@ -206,6 +215,15 @@ export default {
             ielts1400[index - 1]
           );
           return `/${this.$l1.code}/${this.$l2.code}/dictionary/${this.$dictionaryName}/${newEntry.id}`;
+        }
+      }
+    },
+    async ielts1400Index() {
+      if (this.$dictionaryName === "ecdict") {
+        let ielts1400 = await (await this.$getDictionary()).getIelts1400();
+        let index = ielts1400.findIndex((word) => word === this.entry.bare);
+        if (index !== -1) {
+          return index + 1;
         }
       }
     },

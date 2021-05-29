@@ -380,9 +380,6 @@ export default {
     margin-left: 0;
   }
 }
-.annotated {
-  min-height: 2rem;
-}
 .annotated.fullscreen {
   position: fixed;
   left: 0;

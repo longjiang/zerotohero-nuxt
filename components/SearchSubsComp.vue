@@ -1,171 +1,169 @@
 <template>
   <div :class="{ 'search-subs': true, fullscreen }">
-    <div class="text-center mt-3 mb-3" v-if="checking">Checking content...</div>
-    <div class="text-center mt-3 mb-3" v-if="!checking && hits.length === 0">
-      No hits.
-    </div>
-    <div class="text-center" v-if="hits.length > 0">
-      <button
-        :disabled="hitIndex === 0"
-        @click="prevHit"
-        :class="{ btn: true, 'btn-small': true, invisible: hitIndex === 0 }"
-      >
-        <i class="fas fa-step-backward" />
-      </button>
-      <b-button @click="previousLine" class="btn btn-small">
-        <i class="fa fa-chevron-left" />
-      </b-button>
-      <b-button @click="rewind" class="btn btn-small">
-        <i class="fa fa-undo" />
-      </b-button>
-      <span class="ml-0 btn-small mr-0" style="background: none">
-        {{ groupsRight["zthSaved"].length }}
-      </span>
-      <SmallStar
-        :item="currentHit"
-        :saved="(hit) => hit.saved"
-        :save="saveHit"
-        :remove="removeSavedHit"
-        style="overflow: hidden; margin-bottom: -0.2rem"
-        class="ml-0 mr-0"
-      />
-      <span class="ml-0 btn-small mr-0" style="background: none">
-        {{ hitIndex + 1 }} of {{ hits.length }}
-      </span>
-      <b-dropdown
-        class="primary playlist-dropdown"
-        toggle-class="playlist-dropdown-toggle"
-        boundary="viewport"
-        no-caret
-      >
-        <template #button-content><i class="fa fa-stream" /></template>
-        <b-dropdown-item>
-          <button
-            :class="{
-              btn: true,
-              'btn-small': true,
-              'bg-dark': sort === 'left',
-              'text-white': sort === 'left',
-            }"
-            @click.stop.prevent="sort = 'left'"
-          >
-            Sort Left
-          </button>
-          <button
-            :class="{
-              btn: true,
-              'btn-small': true,
-              'bg-dark': sort === 'right',
-              'text-white': sort === 'right',
-            }"
-            @click.stop.prevent="sort = 'right'"
-          >
-            Sort Right
-          </button>
-        </b-dropdown-item>
-        <template
-          v-for="c in sort === 'right' ? groupIndexRight : groupIndexLeft"
+    <div class="text-center">
+      <span v-if="hits.length > 0">
+        <button
+          :disabled="hitIndex === 0"
+          @click="prevHit"
+          :class="{ btn: true, 'btn-small': true, invisible: hitIndex === 0 }"
         >
-          <div
-            :set="
-              (theseHits = sort === 'right' ? groupsRight[c] : groupsLeft[c])
-            "
-            :key="`comp-subs-grouping-${sort}-${c}`"
+          <i class="fas fa-step-backward" />
+        </button>
+        <b-button @click="previousLine" class="btn btn-small">
+          <i class="fa fa-chevron-left" />
+        </b-button>
+        <b-button @click="rewind" class="btn btn-small">
+          <i class="fa fa-undo" />
+        </b-button>
+        <span class="ml-0 btn-small mr-0" style="background: none">
+          {{ groupsRight["zthSaved"].length }}
+        </span>
+        <SmallStar
+          :item="currentHit"
+          :saved="(hit) => hit.saved"
+          :save="saveHit"
+          :remove="removeSavedHit"
+          style="overflow: hidden; margin-bottom: -0.2rem"
+          class="ml-0 mr-0"
+        />
+        <span class="ml-0 btn-small mr-0" style="background: none">
+          {{ hitIndex + 1 }} of {{ hits.length }}
+        </span>
+        <b-dropdown
+          class="primary playlist-dropdown"
+          toggle-class="playlist-dropdown-toggle"
+          boundary="viewport"
+          no-caret
+        >
+          <template #button-content><i class="fa fa-stream" /></template>
+          <b-dropdown-item>
+            <button
+              :class="{
+                btn: true,
+                'btn-small': true,
+                'bg-dark': sort === 'left',
+                'text-white': sort === 'left',
+              }"
+              @click.stop.prevent="sort = 'left'"
+            >
+              Sort Left
+            </button>
+            <button
+              :class="{
+                btn: true,
+                'btn-small': true,
+                'bg-dark': sort === 'right',
+                'text-white': sort === 'right',
+              }"
+              @click.stop.prevent="sort = 'right'"
+            >
+              Sort Right
+            </button>
+          </b-dropdown-item>
+          <template
+            v-for="c in sort === 'right' ? groupIndexRight : groupIndexLeft"
           >
-            <b-dropdown-divider :key="`comp-subs-grouping-${c}-divider`" />
-            <template v-for="(hit, index) in theseHits">
-              <b-dropdown-item
-                @click.stop="goToHit(hit)"
-                :class="{ current: hit === currentHit }"
-                :key="`dropdown-line-${c}-${index}`"
-              >
-                <SmallStar
-                  :item="hit"
-                  :saved="(hit) => hit.saved"
-                  :save="saveHit"
-                  :remove="removeSavedHit"
-                />
-                <img
-                  class="hit-thumb"
-                  :src="`//img.youtube.com/vi/${hit.video.youtube_id}/hqdefault.jpg`"
-                  :alt="hit.video.title"
-                  v-lazy-load
-                />
-                <Annotate
-                  :phonetics="false"
-                  :checkSaved="false"
-                  :sticky="true"
-                  :popup="false"
-                  :key="`dropdown-line-${index}-annotate-${
-                    hit.video.subs_l2[Number(hit.lineIndex)].line
-                  }`"
+            <div
+              :set="
+                (theseHits = sort === 'right' ? groupsRight[c] : groupsLeft[c])
+              "
+              :key="`comp-subs-grouping-${sort}-${c}`"
+            >
+              <b-dropdown-divider :key="`comp-subs-grouping-${c}-divider`" />
+              <template v-for="(hit, index) in theseHits">
+                <b-dropdown-item
+                  @click.stop="goToHit(hit)"
+                  :class="{ current: hit === currentHit }"
+                  :key="`dropdown-line-${c}-${index}`"
                 >
-                  <span
-                    v-if="sort === 'left' && hit.lineIndex > 0"
-                    v-html="hit.video.subs_l2[Number(hit.lineIndex) - 1].line"
-                    style="margin-right: 0.5em; opacity: 0.5"
-                  ></span>
-                  <span
-                    v-html="
-                      highlightMultiple(
-                        hit.video.subs_l2[Number(hit.lineIndex)].line,
-                        terms.map((term) => term),
-                        level
-                      )
-                    "
-                  ></span>
-                  <span
-                    v-if="
-                      sort === 'right' &&
-                      hit.lineIndex < hit.video.subs_l2.length - 1
-                    "
-                    v-html="hit.video.subs_l2[Number(hit.lineIndex) + 1].line"
-                    style="margin-left: 0.5em; opacity: 0.5"
-                  ></span>
-                </Annotate>
-              </b-dropdown-item>
-            </template>
-          </div>
-        </template>
-      </b-dropdown>
-      <b-button @click="nextLine" class="btn btn-small">
-        <i class="fa fa-chevron-right" />
-      </b-button>
-      <button
-        :disabled="hitIndex >= hits.length - 1"
-        @click="nextHit"
-        :class="{
-          btn: true,
-          'btn-small': true,
-          invisible: hitIndex >= hits.length - 1,
-        }"
-      >
-        <i class="fas fa-step-forward" />
-      </button>
-      <b-button
-        :class="{
-          btn: true,
-          'btn-small': true,
-          'bg-secondary text-white': speed === 0.75,
-          'bg-dark text-white': speed === 0.5,
-        }"
-        @click="toggleSpeed()"
-      >
-        {{ speed === 1 ? "慢" : speed + "x" }}
-      </b-button>
+                  <SmallStar
+                    :item="hit"
+                    :saved="(hit) => hit.saved"
+                    :save="saveHit"
+                    :remove="removeSavedHit"
+                  />
+                  <img
+                    class="hit-thumb"
+                    :src="`//img.youtube.com/vi/${hit.video.youtube_id}/hqdefault.jpg`"
+                    :alt="hit.video.title"
+                    v-lazy-load
+                  />
+                  <Annotate
+                    :phonetics="false"
+                    :checkSaved="false"
+                    :sticky="true"
+                    :popup="false"
+                    :key="`dropdown-line-${index}-annotate-${
+                      hit.video.subs_l2[Number(hit.lineIndex)].line
+                    }`"
+                  >
+                    <span
+                      v-if="sort === 'left' && hit.lineIndex > 0"
+                      v-html="hit.video.subs_l2[Number(hit.lineIndex) - 1].line"
+                      style="margin-right: 0.5em; opacity: 0.5"
+                    ></span>
+                    <span
+                      v-html="
+                        highlightMultiple(
+                          hit.video.subs_l2[Number(hit.lineIndex)].line,
+                          terms.map((term) => term),
+                          level
+                        )
+                      "
+                    ></span>
+                    <span
+                      v-if="
+                        sort === 'right' &&
+                        hit.lineIndex < hit.video.subs_l2.length - 1
+                      "
+                      v-html="hit.video.subs_l2[Number(hit.lineIndex) + 1].line"
+                      style="margin-left: 0.5em; opacity: 0.5"
+                    ></span>
+                  </Annotate>
+                </b-dropdown-item>
+              </template>
+            </div>
+          </template>
+        </b-dropdown>
+        <b-button @click="nextLine" class="btn btn-small">
+          <i class="fa fa-chevron-right" />
+        </b-button>
+        <button
+          :disabled="hitIndex >= hits.length - 1"
+          @click="nextHit"
+          :class="{
+            btn: true,
+            'btn-small': true,
+            invisible: hitIndex >= hits.length - 1,
+          }"
+        >
+          <i class="fas fa-step-forward" />
+        </button>
+        <b-button
+          :class="{
+            btn: true,
+            'btn-small': true,
+            'bg-secondary text-white': speed === 0.75,
+            'bg-dark text-white': speed === 0.5,
+          }"
+          @click="toggleSpeed()"
+        >
+          {{ speed === 1 ? "慢" : speed + "x" }}
+        </b-button>
+        <router-link
+          :to="`/${$l1.code}/${$l2.code}/youtube/view/${currentHit.video.youtube_id}/`"
+          class="btn btn-small pr-2"
+        >
+          <i class="fa fa-window-restore" />
+        </router-link>
+      </span>
       <input
         type="text"
-        v-model.lazy="excludeStr"
+        v-model.lazy="regex"
         :style="`width: 6em`"
-        placeholder="Exclude..."
+        placeholder="Regex"
         class="btn-small"
       />
-      <router-link
-        :to="`/${$l1.code}/${$l2.code}/youtube/view/${currentHit.video.youtube_id}/`"
-        class="btn btn-small pr-2"
-      >
-        <i class="fa fa-window-restore" />
-      </router-link>
       <b-button
         class="btn btn-small search-subs-fullscreen"
         @click="toggleFullscreen"
@@ -180,6 +178,10 @@
       >
         <i class="fas fa-times" />
       </b-button>
+    </div>
+    <div class="text-center mt-3 mb-3" v-if="checking">Checking content...</div>
+    <div class="text-center mt-3 mb-3" v-if="!checking && hits.length === 0">
+      No hits.
     </div>
     <div v-if="hits.length > 0" :set="(hit = currentHit)" class="mb-4">
       <YouTubeWithTranscript
@@ -254,7 +256,7 @@ export default {
       groupIndexLeft: [],
       groupIndexRight: [],
       fullscreen: false,
-      excludeStr: "",
+      regex: undefined,
       excludeArr: [],
       speed: 0.75,
       sort: "right",
@@ -278,7 +280,7 @@ export default {
     };
   },
   async mounted() {
-    await Helper.timeout(2000)
+    await Helper.timeout(2000);
     this.checking = true;
     if (this.$l2.code === "zh" && this.terms[0].length === 1) {
       this.excludeTerms = await (
@@ -318,15 +320,16 @@ export default {
     if (this.keyboard) this.bindKeys();
   },
   watch: {
-    excludeStr() {
-      this.excludeArr = this.excludeStr.split(",");
+    regex() {
+      if (!this.unfilteredHits) this.unfilteredHits = this.hits;
+      let r =
+        this.regex.startsWith("!") || this.regex.startsWith("！")
+          ? `^((?!${this.regex.substr(1).replace(/[,，]/gi, "|")}).)*$`
+          : this.regex;
       let hits = [];
-      for (let hit of this.hits) {
-        let regex = new RegExp(this.excludeArr.join("|"));
-        if (
-          !regex.test(hit.video.subs_l2[hit.lineIndex].line) &&
-          !regex.test(hit.video.title)
-        ) {
+      for (let hit of this.unfilteredHits) {
+        let regex = new RegExp(r, "gim");
+        if (regex.test(hit.video.subs_l2[hit.lineIndex].line)) {
           hits.push(hit);
         }
       }
@@ -543,7 +546,8 @@ export default {
     keydown(e) {
       if (
         !["INPUT", "TEXTAREA"].includes(e.target.tagName.toUpperCase()) &&
-        !e.metaKey && !e.repeat
+        !e.metaKey &&
+        !e.repeat
       ) {
         // left = 37
         if (e.keyCode == 37 && e.shiftKey) {
@@ -563,7 +567,7 @@ export default {
           return false;
         }
         // right = 39
-        if (e.code == 'KeyD') {
+        if (e.code == "KeyD") {
           this.nextHit();
           e.preventDefault();
           return false;
@@ -611,7 +615,7 @@ export default {
 </script>
 <style lang="scss">
 .search-subs .btn-small {
-  margin: 0
+  margin: 0;
 }
 .hit-thumb {
   width: calc(0.2rem * 16);

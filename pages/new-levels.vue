@@ -191,7 +191,7 @@ export default {
             word.num.includes(search) ||
             word.simplified.includes(search) ||
             word.definitions.includes(search)) &&
-          (!this.start || Number(word.num) > this.start) &&
+          (!this.start || Number(word.num) >= this.start) &&
           (!this.level || word.level === this.level)
       );
     },

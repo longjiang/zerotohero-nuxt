@@ -15,19 +15,22 @@
         >
           <SmallStar
             :item="line"
-            :saved="line => line.saved"
+            :saved="(line) => line.saved"
             :save="saveLine"
             :remove="removeSavedLine"
             style="overflow: hidden; float: left"
           />
           <Annotate tag="div" :checkSaved="false" :buttons="true">
             <span
-              v-html="Helper.highlight(line.line, word ? word.bare : text, level)"
+              v-html="
+                Helper.highlight(line.line, word ? word.bare : text, level)
+              "
             />
           </Annotate>
         </li>
       </ul>
       <ShowMoreButton
+        class="mt-2"
         :data-bg-level="level"
         :length="collocation.Words.length"
         :min="4"
@@ -38,8 +41,8 @@
 </template>
 
 <script>
-import Helper from '@/lib/helper'
-import { mapState } from 'vuex'
+import Helper from "@/lib/helper";
+import { mapState } from "vuex";
 
 export default {
   props: {
@@ -66,21 +69,23 @@ export default {
     return {
       Helper,
       lines: [],
-    }
+    };
   },
   computed: {
-    ...mapState('savedCollocations', ['savedCollocations']),
+    ...mapState("savedCollocations", ["savedCollocations"]),
     sC() {
-      let cols = this.savedCollocations[this.$l2.code]
-      return cols ? cols
-        .filter((collocation) => collocation.term === this.term)
-        .map((collocation) => {
-          collocation.saved = true
-          return collocation
-        }) : []
+      let cols = this.savedCollocations[this.$l2.code];
+      return cols
+        ? cols
+            .filter((collocation) => collocation.term === this.term)
+            .map((collocation) => {
+              collocation.saved = true;
+              return collocation;
+            })
+        : [];
     },
     term() {
-      return this.word ? this.word.bare : this.text
+      return this.word ? this.word.bare : this.text;
     },
 
     $l1() {
@@ -100,61 +105,65 @@ export default {
     $hanzi() {
       return this.$getHanzi();
     },
-
   },
   watch: {
     collocation() {
-      this.update()
+      this.update();
     },
     word() {
-      this.update()
+      this.update();
     },
     text() {
-      this.update()
+      this.update();
     },
   },
   beforeMount() {
-    this.update()
+    this.update();
   },
   methods: {
     saveLine(line) {
-      this.$store.dispatch('savedCollocations/add', {
+      this.$store.dispatch("savedCollocations/add", {
         term: this.term,
         line: line.line,
         l2: this.$l2.code,
-      })
-      line.saved = true
+      });
+      line.saved = true;
     },
     removeSavedLine(line) {
-      this.$store.dispatch('savedCollocations/remove', {
+      this.$store.dispatch("savedCollocations/remove", {
         term: this.term,
         line: line.line,
         l2: this.$l2.code,
-      })
-      line.saved = false
+      });
+      line.saved = false;
     },
     update() {
-      this.lines = []
+      this.lines = [];
       if (this.collocation && this.collocation.Words) {
         let words = this.collocation.Words.filter((Word) => Word.cm).filter(
           (Word) => !Word.cm.match(/[。？，→]/)
-        )
-        words = Helper.uniqueByValue(words, 'cm').sort(
+        );
+        words = Helper.uniqueByValue(words, "cm").sort(
           (a, b) => a.cm.length - b.cm.length
-        )
-        this.collocation.Words = words.slice(0, 20)
-        let lines = []
+        );
+        this.collocation.Words = words.slice(0, 20);
+        let lines = [];
         for (let Word of this.collocation.Words) {
           if (Word.cm) {
             lines.push({
               line: Word.cm,
-              saved: this.sC.find(line => line.line === Word.cm)
-            })
+              saved: this.sC.find((line) => line.line === Word.cm),
+            });
           }
         }
-        this.lines = lines
+        this.lines = lines;
       }
     },
   },
-}
+};
 </script>
+<style scoped>
+.gramrel-item {
+  line-height: 1.7;
+}
+</style>

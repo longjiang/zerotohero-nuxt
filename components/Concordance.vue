@@ -1,7 +1,7 @@
 <template>
   <div :key="'concordance-' + concordanceKey" class="widget">
     <div class="widget-title">
-      {{ $t('Sentences with “{text}”', { text: term }) }}
+      {{ $t("Sentences with “{text}”", { text: term }) }}
     </div>
     <div class="widget-body jumbotron-fluid p-4">
       <div v-if="examples && examples.length > 0">
@@ -10,21 +10,39 @@
           class="collapsed list-unstyled"
           data-collapse-target
         >
-          <li v-for="example in examples.filter(example => example.sentences.length > 0)">
-            <Annotate tag="div" class="pt-2 pb-2" :showTranslate="true" :checkSaved="false" :buttons="true">
+          <li
+            v-for="example in examples
+              .filter((example) => example.sentences.length > 0)
+              .sort((a, b) => a.sentences[0].length - b.sentences[0].length)"
+          >
+            <Annotate
+              tag="div"
+              class="pt-2 pb-2"
+              :showTranslate="true"
+              :checkSaved="false"
+              :buttons="true"
+            >
               <span
                 v-html="
-                  Helper.highlightMultiple(example.sentences[0], words, level || 'outside')
+                  Helper.highlightMultiple(
+                    example.sentences[0],
+                    words,
+                    level || 'outside'
+                  )
                 "
               />
             </Annotate>
             <div v-if="example.l1">{{ example.l1 }}</div>
-            <div v-if="example.ref" class="concordance-ref">{{ example.ref }}</div>
+            <div v-if="example.ref" class="concordance-ref">
+              {{ example.ref }}
+            </div>
             <hr />
           </li>
         </ul>
         <ShowMoreButton
-          :length="examples.filter(example => example.sentences.length > 0).length"
+          :length="
+            examples.filter((example) => example.sentences.length > 0).length
+          "
           :min="7"
           :data-bg-level="level"
         />
@@ -32,11 +50,12 @@
       <div v-if="!updating && (!examples || examples.length === 0)">
         Sorry, we could not find any “{{ term }}” examples. You can set a
         different corpus in
-        <a :href="`/${$l1.code}/${$l2.code}/settings`">Settings</a>.
+        <a :href="`/${$l1.code}/${$l2.code}/settings`">Settings</a>
+        .
       </div>
       <hr v-if="examples && examples.length === 0" />
       <div class="mt-4">
-        {{ $t('Sentences provided by') }}
+        {{ $t("Sentences provided by") }}
         <a
           :href="`https://app.sketchengine.eu/#concordance?corpname=${encodeURIComponent(
             SketchEngine.corpname
@@ -52,7 +71,7 @@
       </div>
       <hr />
       <div>
-        {{ $t('Search for more sentences at') }}
+        {{ $t("Search for more sentences at") }}
         <a
           :href="`https://tatoeba.org/eng/sentences/search?from=${$l2['iso639-3']}&to=${$l1['iso639-3']}&query=${term}`"
           target="_blank"
@@ -65,8 +84,8 @@
 </template>
 
 <script>
-import Helper from '@/lib/helper'
-import SketchEngine from '@/lib/sketch-engine'
+import Helper from "@/lib/helper";
+import SketchEngine from "@/lib/sketch-engine";
 
 export default {
   props: {
@@ -77,7 +96,7 @@ export default {
       type: String,
     },
     level: {
-      default: 'outside',
+      default: "outside",
     },
   },
   data() {
@@ -87,12 +106,12 @@ export default {
       concordanceKey: 0,
       words: [],
       SketchEngine,
-      updating: false
-    }
+      updating: false,
+    };
   },
   computed: {
     term() {
-      return this.word ? this.word.bare : this.text
+      return this.word ? this.word.bare : this.text;
     },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
@@ -103,65 +122,69 @@ export default {
         return this.$store.state.settings.l2;
     },
     $dictionary() {
-      return this.$getDictionary()
+      return this.$getDictionary();
     },
     $dictionaryName() {
-      return this.$store.state.settings.dictionaryName
+      return this.$store.state.settings.dictionaryName;
     },
     $hanzi() {
-      return this.$getHanzi()
-    }
+      return this.$getHanzi();
+    },
   },
   watch: {
     word() {
-      this.update()
+      this.update();
     },
   },
   methods: {
     async update() {
-      this.updating = true
-      this.examples = undefined
-      let dictionary = await this.$getDictionary()
+      this.updating = true;
+      this.examples = undefined;
+      let dictionary = await this.$getDictionary();
       let forms = this.word
         ? (await dictionary.wordForms(this.word)).map((form) =>
-            form.form.replace(/'/g, '')
+            form.form.replace(/'/g, "")
           )
-        : []
-      this.words = [this.term].concat(forms)
+        : [];
+      this.words = [this.term].concat(forms);
       let examples = await SketchEngine.concordance({
         term: this.term,
         l1: this.$l1,
         l2: this.$l2,
-      })
-      if (!examples) return false
+      });
+      if (!examples) return false;
       for (let example of examples) {
-        if (this.$l2.code === 'zh') {
-          let t = example.l2.replace(/([。！？：]+”?)/g, '$1!!!DELIMITER!!!')
-          let sentences = t.split('!!!DELIMITER!!!')
-          example.sentences = []
+        if (this.$l2.code === "zh") {
+          let t = example.l2.replace(/([。！？：]+”?)/g, "$1!!!DELIMITER!!!");
+          let sentences = t.split("!!!DELIMITER!!!");
+          example.sentences = [];
           for (let sentence of sentences) {
-            let found = this.words.some((word) => new RegExp(word.replace(/\*/g, '[^，。！？,!.?]+?')).test(sentence))
+            let found = this.words.some((word) =>
+              new RegExp(word.replace(/\*/g, "[^，。！？,!.?]+?")).test(
+                sentence
+              )
+            );
             if (found) {
-              if (this.$l2.continua) sentence = sentence.replace(/ /g, '')
-              example.sentences.push(sentence)
+              if (this.$l2.continua) sentence = sentence.replace(/ /g, "");
+              example.sentences.push(sentence);
             }
           }
         } else {
-          example.sentences = [example.l2]
+          example.sentences = [example.l2];
         }
       }
-      this.examples = examples
-      this.updating = false
+      this.examples = examples;
+      this.updating = false;
       if (this.examples && this.examples.length > 0) {
-        this.$emit('concordanceReady')
+        this.$emit("concordanceReady");
       }
-      this.concordanceKey += 1
+      this.concordanceKey += 1;
     },
   },
   async mounted() {
-    this.update()
+    this.update();
   },
-}
+};
 </script>
 <style scoped>
 .concordance-ref {

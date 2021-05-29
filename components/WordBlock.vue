@@ -508,7 +508,7 @@ export default {
       }
     },
     async mouseover() {
-      if (await this.$getDictionary()) {
+      if (this.popup && (await this.$getDictionary())) {
         if (this.loading === true) {
           if (this.words && this.words.length === 0) {
             this.lookup();
@@ -523,13 +523,15 @@ export default {
       }
     },
     mouseout() {
-      setTimeout(() => {
-        // Allow user to interact with popover
-        let $popovers = $(".popover:hover");
-        if ($popovers && $popovers.length === 0) {
-          this.hover = false;
-        }
-      }, 300);
+      if (this.popup) {
+        setTimeout(() => {
+          // Allow user to interact with popover
+          let $popovers = $(".popover:hover");
+          if ($popovers && $popovers.length === 0) {
+            this.hover = false;
+          }
+        }, 300);
+      }
     },
     async lookup() {
       if (this.token && this.$l2.code !== "ja") {
