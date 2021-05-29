@@ -32,11 +32,7 @@
         ></span>
         <span
           class="word-block-pinyin"
-          v-if="
-            phonetics &&
-            transliteration &&
-            transliteration !== token.text
-          "
+          v-if="phonetics && transliteration && transliteration !== token.text"
         >
           {{ savedTransliteration || transliteration }}
         </span>
@@ -88,7 +84,12 @@
           :src="`${Config.imageProxy}?${image.src}`"
         />
       </div>
-      <EntryExternal :term="text" :sticky="false" class="mt-2" />
+      <EntryExternal
+        v-if="text || token"
+        :term="text ? text : token.candidates[0].head"
+        :sticky="false"
+        class="mt-2"
+      />
       <div v-for="word in words" :class="classes">
         <div v-if="word">
           <div v-for="match in word.matches" style="color: #999">
@@ -201,17 +202,16 @@
                 : ""
             }}
           </span>
-          <span class="word-translation" v-if="word.definitions">
-            <em
-              v-html="
-                word.definitions
-                  .map((definition) =>
-                    definition ? definition.replace(/\[.*\] /g, '') : ''
-                  )
-                  .join(', ')
-              "
-            ></em>
-          </span>
+          <ol class="word-translation" v-if="word.definitions">
+            <li
+              v-for="def in word.definitions.filter(def => def.trim() !== '').map((definition) =>
+                definition ? definition.replace(/\[.*\] /g, '') : ''
+              )"
+              class="word-translation-item"
+            >
+              <span>{{ def }}</span>
+            </li>
+          </ol>
           <span class="word-counters" v-if="word.counters">
             <em>:</em>
             {{
@@ -679,6 +679,18 @@ export default {
       display: block;
     }
   }
+}
+
+.word-translation {
+  padding-left: 1rem ;
+}
+
+.word-translation-item {
+  font-style: italic;
+}
+
+.word-translation-item::marker{
+  margin-right: 0;
 }
 
 .tooltip-images {

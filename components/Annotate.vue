@@ -235,73 +235,23 @@ export default {
       let sentences = text.split("SENTENCEENDING!!!");
       return sentences.filter((sentence) => sentence.trim() !== "");
     },
-    async tokenizeJapanese(text) {
-      let t = []
-      let segs = text.split(/\s+/)
-      for (let seg of segs) {
-        let tokenized = (await this.$kuromojiTokenizer).tokenize(seg);
-        for (let index in tokenized) {
-          console.log(token)
-          let token = tokenized[index]
-          let candidates = await (await this.$getDictionary()).lookupMultiple(
-            token.surface_form
-          );
-          if (token.basic_form && token.basic_form !== token.surface_form) {
-            candidates = candidates.concat(
-              await (await this.$getDictionary()).lookupMultiple(
-                token.basic_form
-              )
-            );
-          }
-          t.push({
-            text: token.surface_form,
-            candidates,
-          })
-        }
-        t.push(' ')
-      }
-      t.pop()
-      console.log(t)
-      return t
-    },
     async tokenize(text, batchId) {
       let html = text;
-      if (this.$l2.code === "ja") {
+      if (this.$l2.continua) {
         html = "";
-        this.tokenized[batchId] = await this.tokenizeJapanese(text)
+        this.tokenized[batchId] = await (await this.$getDictionary()).tokenize(text);
         for (let index in this.tokenized[batchId]) {
           let token = this.tokenized[batchId][index];
           if (typeof token === "object") {
             if (token && typeof token === "object") {
               if (token.candidates.length > 0) {
-                html += `<WordBlock :checkSaved="${this.checkSaved}" :phonetics="${this.phonetics}" :popup="${this.popup}" :sticky="${this.sticky}" :explore="explore" :token="tokenized[${batchId}][${index}]"/>`;
+                html += `<WordBlock :checkSaved="${this.checkSaved}" :phonetics="${this.phonetics}" :popup="${this.popup}" :sticky="${this.sticky}" :explore="explore" :token="tokenized[${batchId}][${index}]">${token.text}</WordBlock>`;
               } else {
                 html += `<WordBlock :checkSaved="${this.checkSaved}" :phonetics="${this.phonetics}" :popup="${this.popup}" :sticky="${this.sticky}" :explore="explore">${token.text}</WordBlock>`;
               }
             }
           } else {
             html += `<span>${token.replace(/\s+/, '&nbsp;')}</span>`
-          }
-        }
-      } else if (this.$l2.continua) {
-        html = "";
-        let tokenized = await (await this.$getDictionary()).tokenize(text);
-        this.tokenized[batchId] = tokenized;
-        for (let index in this.tokenized[batchId]) {
-          let item = this.tokenized[batchId][index];
-          if (typeof item === "object") {
-            let token = this.tokenized[batchId];
-            if (token && typeof token === "object") {
-              html += `<WordBlock :checkSaved="${this.checkSaved}" :phonetics="${this.phonetics}" :popup="${this.popup}" :sticky="${this.sticky}" :explore="explore" :token="tokenized[${batchId}][${index}]"/>`;
-            }
-          } else {
-            item = item.trim().replace(/\s+/gi, " ");
-            if (item !== "") {
-              for (let word of item.trim().split(/\s+/)) {
-                html += `<WordBlock :checkSaved="${this.checkSaved}" :phonetics="${this.phonetics}" :popup="${this.popup}" :sticky="${this.sticky}" :explore="explore">${word}</WordBlock> `;
-              }
-              html = html.trim();
-            }
           }
         }
       } else if (this.$l2.code === "en") {

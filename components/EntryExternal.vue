@@ -74,6 +74,13 @@
       >
         Grammar Wiki
       </b-button>
+      <b-button
+        @click="setExtDict('wikipedia')"
+        class="btn btn-small"
+        :data-bg-level="extDict === 'wikipedia' ? level : false"
+      >
+        Wikipedia
+      </b-button>
     </div>
     <div>
       <iframe
@@ -103,7 +110,7 @@
       ></iframe>
       <iframe
         v-if="extDict === 'wiktionary'"
-        :src="`https://en.wiktionary.org/wiki/${term}`"
+        :src="`https://en.m.wiktionary.org/w/index.php?search=${term}`"
         class="ext-dictinoary-iframe"
         data-not-lazy
       ></iframe>
@@ -140,6 +147,12 @@
       <iframe
         v-if="extDict === 'grammar-wiki'"
         :src="`https://resources.allsetlearning.com/gramwiki/?search=${term}`"
+        class="ext-dictinoary-iframe"
+        data-not-lazy
+      ></iframe>
+      <iframe
+        v-if="extDict === 'wikipedia'"
+        :src="`https://${$l2.code}.m.wikipedia.org/w/index.php?search=${term}`"
         class="ext-dictinoary-iframe"
         data-not-lazy
       ></iframe>

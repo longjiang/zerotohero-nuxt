@@ -2,10 +2,16 @@ const Dictionary = {
   file: 'https://server.chinesezerotohero.com/data/edict/edict.tsv.txt',
   words: [],
   name: 'edict',
+  tokenizer: undefined,
   credit() {
     return 'The Japanese dictionary is provided by <a href="http://www.edrdg.org/jmdict/edict.html">EDICT</a>, open-source and distribtued under a <a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 license</a>.'
   },
   async load() {
+    this.tokenizer = await new Promise(resolve => {
+      kuromoji.builder({ dicPath: "/data/kuromoji" }).build((err, tokenizer) => {
+        resolve(tokenizer)
+      })
+    })
     let res = await axios.get(this.file)
     let results = await Papa.parse(res.data, {
       header: true
@@ -19,7 +25,7 @@ const Dictionary = {
         head: row.kanji || row.kana,
         bare: row.kanji || row.kana,
         accented: row.kanji || row.kana,
-        definitions: [row.english],
+        definitions: row.english ? row.english.replace(/\(.*?\)/gi, '').replace('/(P)', '').split('/') : [],
         cjk: {
           canonical: row.kanji && row.kanji !== 'NULL' ? row.kanji : undefined,
           phonetics: row.kana
@@ -197,50 +203,30 @@ const Dictionary = {
     }
   },
   tokenize(text) {
-    return this.tokenizeRecursively(
-      text,
-      this.subdictFromText(text)
-    )
-  },
-  tokenizeRecursively(text, subdict) {
-    const longest = subdict.longest(text)
-    if (longest.matches.length > 0) {
-      let result = []
-      /* 
-      result = [
-        '我', 
-        {
-          text: '是'
-          candidates: [{...}, {...}, {...}
-        ],
-        '中国人。'
-      ]
-      */
-      for (let textFragment of text.split(longest.text)) {
-        result.push(textFragment) // '我'
-        result.push({
-          text: longest.text,
-          candidates: longest.matches
+    let t = []
+    let segs = text.split(/\s+/)
+    for (let seg of segs) {
+      let tokenized = this.tokenizer.tokenize(seg);
+      for (let index in tokenized) {
+        let token = tokenized[index]
+        let candidates = this.lookupMultiple(
+          token.surface_form
+        );
+        if (token.basic_form && token.basic_form !== token.surface_form) {
+          candidates = candidates.concat(
+            this.lookupMultiple(
+              token.basic_form
+            )
+          );
+        }
+        t.push({
+          text: token.surface_form,
+          candidates,
         })
       }
-      result = result.filter(item => item !== '')
-      result.pop() // last item is always useless, remove it
-      var tokens = []
-      for (let item of result) {
-        if (typeof item === 'string') {
-          for (let token of this.tokenizeRecursively(
-            item,
-            subdict
-          )) {
-            tokens.push(token)
-          }
-        } else {
-          tokens.push(item)
-        }
-      }
-      return tokens
-    } else {
-      return [text]
+      t.push(' ')
     }
+    t.pop()
+    return t
   },
 }
