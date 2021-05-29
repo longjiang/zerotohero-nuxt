@@ -152,13 +152,15 @@ export default {
       let text = this.$l2.continua ? this.text.replace(/ /g, "") : this.text;
       if (["ko", "ja"].includes(this.$l2.code)) {
         window.open(
-          `https://papago.naver.com/?sk=auto&st=${encodeURIComponent(text)}`
+          `https://papago.naver.com/?sk=auto&st=${encodeURIComponent(text)}`,
+          "translate"
         );
       } else {
         window.open(
           `https://translate.google.com/#view=home&op=translate&sl=${
             this.$l2.code === "zh" ? "zh-CN" : this.$l2.code
-          }&tl=${this.$l1.code}&text=${encodeURIComponent(text)}`
+          }&tl=${this.$l1.code}&text=${encodeURIComponent(text)}`,
+          "translate"
         );
       }
     },
@@ -239,7 +241,9 @@ export default {
       let html = text;
       if (this.$l2.continua) {
         html = "";
-        this.tokenized[batchId] = await (await this.$getDictionary()).tokenize(text);
+        this.tokenized[batchId] = await (await this.$getDictionary()).tokenize(
+          text
+        );
         for (let index in this.tokenized[batchId]) {
           let token = this.tokenized[batchId][index];
           if (typeof token === "object") {
@@ -251,7 +255,7 @@ export default {
               }
             }
           } else {
-            html += `<span>${token.replace(/\s+/, '&nbsp;')}</span>`
+            html += `<span>${token.replace(/\s+/, "&nbsp;")}</span>`;
           }
         }
       } else if (this.$l2.code === "en") {

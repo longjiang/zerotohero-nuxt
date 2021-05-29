@@ -30,9 +30,15 @@
             class="btn btn-small bg-danger text-white"
             @click="removeLine(lineIndex)"
             style="float: right"
-            ><i class="fa fa-trash"></i
-          ></b-button>
-          <Annotate tag="div" :sticky="sticky" class="transcript-line-chinese" :buttons="true">
+          >
+            <i class="fa fa-trash"></i>
+          </b-button>
+          <Annotate
+            tag="div"
+            :sticky="sticky"
+            class="transcript-line-chinese"
+            :buttons="true"
+          >
             <span
               v-html="
                 highlight
@@ -66,7 +72,10 @@
         </div>
         <template v-if="review[lineIndex] && review[lineIndex].length > 0">
           <div class="review" v-for="reviewItem in review[lineIndex]">
-            <h6>Pop Quiz</h6>
+            <h6>
+              Pop Quiz
+              
+            </h6>
             <div class="review-item mt-2">
               <div
                 v-if="$l2.code !== $l1.code && parallellines"
@@ -86,7 +95,7 @@
                   <span v-html="parallelLine.line" />
                 </template>
               </div>
-              <Annotate tag="div" class="transcript-line-chinese">
+              <Annotate tag="span" :buttons="true" class="transcript-line-chinese">
                 <span
                   v-if="$l2.han && $l2.code !== 'ja'"
                   v-html="
@@ -107,6 +116,7 @@
                   "
                 />
               </Annotate>
+              <Speak :text="reviewItem.line.line" />
               <div class="mt-2">
                 <button
                   v-for="answer in reviewItem.answers"
@@ -121,15 +131,15 @@
                   }"
                   @click="answerClick"
                 >
-                  <template v-if="$l2.code === 'ja' || !$l2.han">{{
-                    answer.text
-                  }}</template>
-                  <template v-else-if="$l2.han && $settings.useTraditional">{{
-                    answer.traditional || answer.simplified
-                  }}</template>
-                  <template v-else-if="$l2.han && !$settings.useTraditional">{{
-                    answer.simplified || answer.traditional
-                  }}</template>
+                  <template v-if="$l2.code === 'ja' || !$l2.han">
+                    {{ answer.text }}
+                  </template>
+                  <template v-else-if="$l2.han && $settings.useTraditional">
+                    {{ answer.traditional || answer.simplified }}
+                  </template>
+                  <template v-else-if="$l2.han && !$settings.useTraditional">
+                    {{ answer.simplified || answer.traditional }}
+                  </template>
                 </button>
               </div>
             </div>
@@ -137,14 +147,14 @@
         </template>
       </template>
     </div>
-    <ShowMoreButton v-if="collapse" :data-bg-level="hsk ? hsk : 'outside'"
-      >Show More</ShowMoreButton
-    >
+    <ShowMoreButton v-if="collapse" :data-bg-level="hsk ? hsk : 'outside'">
+      Show More
+    </ShowMoreButton>
   </div>
 </template>
 
 <script>
-import Helper from '@/lib/helper'
+import Helper from "@/lib/helper";
 
 export default {
   props: {
@@ -176,7 +186,7 @@ export default {
       type: Array,
     },
     hsk: {
-      default: 'outside',
+      default: "outside",
     },
     highlightSavedWords: {
       default: true,
@@ -218,27 +228,27 @@ export default {
       paused: {},
       reviewKey: 0,
       neverPlayed: true,
-    }
+    };
   },
   mounted() {
-    if (this.highlightSavedWords) this.updateReview()
+    if (this.highlightSavedWords) this.updateReview();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type.startsWith("savedWords")){
-        this.updateReview()
+      if (mutation.type.startsWith("savedWords")) {
+        this.updateReview();
       }
-    })
+    });
   },
   beforeDestroy() {
     // you may call unsubscribe to stop the subscription
-    this.unsubscribe()
+    this.unsubscribe();
   },
   watch: {
     $settings() {
-      if (this.highlightSavedWords) this.updateReview()
+      if (this.highlightSavedWords) this.updateReview();
     },
     currentTime() {
       for (let lineIndex = this.lines.length - 1; lineIndex >= 0; lineIndex--) {
-        let line = this.lines[lineIndex]
+        let line = this.lines[lineIndex];
         if (
           parseFloat(line.starttime) <
           this.currentTime + 0.1 // current time marker passed the start time of the line
@@ -250,10 +260,10 @@ export default {
               lineIndex === this.stopLineIndex + 1
             ) {
               if (this.neverPlayed) {
-                this.pauseVideo()
-                this.neverPlayed = false
-                this.seekVideoTo(this.currentTime - 0.1)
-                return
+                this.pauseVideo();
+                this.neverPlayed = false;
+                this.seekVideoTo(this.currentTime - 0.1);
+                return;
               }
             }
             // Pause video if there's a pop quiz
@@ -262,74 +272,75 @@ export default {
             //   this.paused[lineIndex - 1] = true
             //   return
             // }
-            this.scrollTo(lineIndex)
+            this.scrollTo(lineIndex);
           }
-          this.currentLine = line
-          return
+          this.currentLine = line;
+          return;
         }
       }
     },
   },
   methods: {
     removeLine(lineIndex) {
-      this.lines.splice(lineIndex, 1)
-      this.reviewKey++
+      this.lines.splice(lineIndex, 1);
+      this.reviewKey++;
     },
     answerClick(e) {
-      $(e.target).addClass('checked')
-      if ($(e.target).hasClass('review-answer-correct')) {
-        $(e.target).parents('.review').addClass('show-answer')
+      $(e.target).addClass("checked");
+      if ($(e.target).hasClass("review-answer-correct")) {
+        $(e.target).parents(".review").addClass("show-answer");
       }
     },
     async findSimilarWords(text) {
-      let words = await (await this.$getDictionary()).lookupFuzzy(text)
-      words = words.filter((word) => word.head !== text)
-      words = Helper.uniqueByValue(words, 'head')
+      let words = await (await this.$getDictionary()).lookupFuzzy(text);
+      words = words.filter((word) => word.head !== text);
+      words = Helper.uniqueByValue(words, "head");
       return words.sort(
         (a, b) =>
           Math.abs(a.head.length - text.length) -
           Math.abs(b.head.length - text.length)
-      )
+      );
     },
     async updateReview() {
-      let review = {}
-      let lineOffset = 10 // Show review this number of lines after the first appearance of the word
-      if (
-        this.quiz &&
-        this.$settings.showQuiz
-      ) {
-        for (let savedWord of this.$store.state.savedWords.savedWords[this.$l2.code]) {
-          let word = await (await this.$getDictionary()).get(savedWord.id)
+      let review = {};
+      let lineOffset = 10; // Show review this number of lines after the first appearance of the word
+      if (this.quiz && this.$settings.showQuiz) {
+        for (let savedWord of this.$store.state.savedWords.savedWords[
+          this.$l2.code
+        ]) {
+          let word = await (await this.$getDictionary()).get(savedWord.id);
           if (word) {
-            let seenLines = []
+            let seenLines = [];
             for (let form of savedWord.forms
-              .filter((form) => form && form !== '-')
+              .filter((form) => form && form !== "-")
               .sort((a, b) => b.length - a.length)) {
               for (let lineIndex in this.lines) {
                 if (!seenLines.includes(lineIndex)) {
-                  let line = this.lines[lineIndex]
+                  let line = this.lines[lineIndex];
                   if (
                     (this.$l2.continua && line.line.includes(form)) ||
                     (this.$l2.han &&
                       (line.line.includes(word.simplified) ||
                         line.line.includes(word.traditional))) ||
                     (!this.$l2.continua &&
-                      (new RegExp(`[ .,:!?]${form}[ .,:!?]`, 'gi').test(
+                      (new RegExp(`[ .,:!?]${form}[ .,:!?]`, "gi").test(
                         line.line
                       ) ||
-                        new RegExp(`^${form}[ .,:!?]`, 'gi').test()))
+                        new RegExp(`^${form}[ .,:!?]`, "gi").test()))
                   ) {
                     let reviewIndex = Math.min(
                       Number(lineIndex) +
                         lineOffset +
                         Math.floor(form.length / 2),
                       this.lines.length - 1
-                    )
-                    let similarWords = await this.findSimilarWords(form)
+                    );
+                    let similarWords = await this.findSimilarWords(form);
                     if (similarWords.length < 2) {
                       for (let i of [1, 2]) {
-                        let randomWord = await (await this.$getDictionary()).random()
-                        similarWords.push(randomWord)
+                        let randomWord = await (
+                          await this.$getDictionary()
+                        ).random();
+                        similarWords.push(randomWord);
                       }
                     }
                     let answers = similarWords
@@ -339,16 +350,16 @@ export default {
                           simplified: similarWord.simplified,
                           traditional: similarWord.traditional,
                           correct: false,
-                        }
+                        };
                       })
-                      .slice(0, 2)
+                      .slice(0, 2);
                     answers.push({
                       text: form,
                       simplified: word.simplified,
                       traditional: word.traditional,
                       correct: true,
-                    })
-                    review[reviewIndex] = review[reviewIndex] || []
+                    });
+                    review[reviewIndex] = review[reviewIndex] || [];
                     review[reviewIndex].push({
                       line: line,
                       text: form,
@@ -356,8 +367,8 @@ export default {
                       simplified: word.simplified,
                       traditional: word.traditional,
                       answers: Helper.shuffle(answers),
-                    })
-                    seenLines.push(lineIndex)
+                    });
+                    seenLines.push(lineIndex);
                   }
                 }
               }
@@ -365,45 +376,45 @@ export default {
           }
         }
       }
-      this.review = review
-      this.reviewKey++
+      this.review = review;
+      this.reviewKey++;
     },
     seekVideoTo(starttime) {
       if (this.onSeek) {
-        this.onSeek(starttime)
+        this.onSeek(starttime);
       }
     },
     pauseVideo() {
       if (this.onPause) {
-        this.onPause()
+        this.onPause();
       }
     },
     scrollTo(lineIndex) {
       let el = document.getElementById(
         `transcript-line-${this.id}-${lineIndex}`
-      )
-      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+      );
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "nearest" });
     },
     previousLine() {
       let currentLineIndex = this.lines.findIndex(
         (line) => line === this.currentLine
-      )
-      let previousLineIndex = Math.max(currentLineIndex - 1, 0)
-      this.currentLine = this.lines[previousLineIndex]
-      this.seekVideoTo(this.currentLine.starttime)
-      this.scrollTo(previousLineIndex)
+      );
+      let previousLineIndex = Math.max(currentLineIndex - 1, 0);
+      this.currentLine = this.lines[previousLineIndex];
+      this.seekVideoTo(this.currentLine.starttime);
+      this.scrollTo(previousLineIndex);
     },
     nextLine() {
       let currentLineIndex = this.lines.findIndex(
         (line) => line === this.currentLine
-      )
-      let nextLineIndex = Math.min(currentLineIndex + 1, this.lines.length - 1)
-      this.currentLine = this.lines[nextLineIndex]
-      this.seekVideoTo(this.currentLine.starttime)
-      this.scrollTo(nextLineIndex)
+      );
+      let nextLineIndex = Math.min(currentLineIndex + 1, this.lines.length - 1);
+      this.currentLine = this.lines[nextLineIndex];
+      this.seekVideoTo(this.currentLine.starttime);
+      this.scrollTo(nextLineIndex);
     },
   },
-}
+};
 </script>
 
 <style lang="scss">
