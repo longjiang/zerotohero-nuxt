@@ -72,10 +72,7 @@
         </div>
         <template v-if="review[lineIndex] && review[lineIndex].length > 0">
           <div class="review" v-for="reviewItem in review[lineIndex]">
-            <h6>
-              Pop Quiz
-              
-            </h6>
+            <h6>Pop Quiz</h6>
             <div class="review-item mt-2">
               <div
                 v-if="$l2.code !== $l1.code && parallellines"
@@ -95,7 +92,11 @@
                   <span v-html="parallelLine.line" />
                 </template>
               </div>
-              <Annotate tag="span" :buttons="true" class="transcript-line-chinese">
+              <Annotate
+                tag="span"
+                :buttons="true"
+                class="transcript-line-chinese"
+              >
                 <span
                   v-if="$l2.han && $l2.code !== 'ja'"
                   v-html="
@@ -117,6 +118,13 @@
                 />
               </Annotate>
               <Speak :text="reviewItem.line.line" />
+              <button
+                class="btn p-0"
+                style="color: #999"
+                @click="seekVideoTo(reviewItem.line.starttime)"
+              >
+                <i class="fas fa-arrow-up"></i>
+              </button>
               <div class="mt-2">
                 <button
                   v-for="answer in reviewItem.answers"
@@ -304,7 +312,12 @@ export default {
     async updateReview() {
       let review = {};
       let lineOffset = 10; // Show review this number of lines after the first appearance of the word
-      if (this.quiz && this.$settings.showQuiz) {
+      if (
+        this.quiz &&
+        this.$settings.showQuiz &&
+        this.$store.state.savedWords.savedWords &&
+        this.$store.state.savedWords.savedWords[this.$l2.code]
+      ) {
         for (let savedWord of this.$store.state.savedWords.savedWords[
           this.$l2.code
         ]) {
