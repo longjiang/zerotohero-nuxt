@@ -150,11 +150,17 @@ export default {
   methods: {
     async translateClick() {
       let text = this.$l2.continua ? this.text.replace(/ /g, "") : this.text;
-      window.open(
-        `https://translate.google.com/#view=home&op=translate&sl=${
-          this.$l2.code === "zh" ? "zh-CN" : this.$l2.code
-        }&tl=${this.$l1.code}&text=${encodeURIComponent(text)}`
-      );
+      if (["ko", "ja"].includes(this.$l2.code)) {
+        window.open(
+          `https://papago.naver.com/?sk=auto&st=${encodeURIComponent(text)}`
+        );
+      } else {
+        window.open(
+          `https://translate.google.com/#view=home&op=translate&sl=${
+            this.$l2.code === "zh" ? "zh-CN" : this.$l2.code
+          }&tl=${this.$l1.code}&text=${encodeURIComponent(text)}`
+        );
+      }
     },
     // https://stackoverflow.com/questions/2550951/what-regular-expression-do-i-need-to-check-for-some-non-latin-characters
     nonLatin() {
@@ -229,9 +235,55 @@ export default {
       let sentences = text.split("SENTENCEENDING!!!");
       return sentences.filter((sentence) => sentence.trim() !== "");
     },
+    async tokenizeJapanese(text) {
+      let t = []
+      let segs = text.split(/\s+/)
+      for (let seg of segs) {
+        let tokenized = (await this.$kuromojiTokenizer).tokenize(seg);
+        for (let index in tokenized) {
+          console.log(token)
+          let token = tokenized[index]
+          let candidates = await (await this.$getDictionary()).lookupMultiple(
+            token.surface_form
+          );
+          if (token.basic_form && token.basic_form !== token.surface_form) {
+            candidates = candidates.concat(
+              await (await this.$getDictionary()).lookupMultiple(
+                token.basic_form
+              )
+            );
+          }
+          t.push({
+            text: token.surface_form,
+            candidates,
+          })
+        }
+        t.push(' ')
+      }
+      t.pop()
+      console.log(t)
+      return t
+    },
     async tokenize(text, batchId) {
       let html = text;
-      if (this.$l2.continua) {
+      if (this.$l2.code === "ja") {
+        html = "";
+        this.tokenized[batchId] = await this.tokenizeJapanese(text)
+        for (let index in this.tokenized[batchId]) {
+          let token = this.tokenized[batchId][index];
+          if (typeof token === "object") {
+            if (token && typeof token === "object") {
+              if (token.candidates.length > 0) {
+                html += `<WordBlock :checkSaved="${this.checkSaved}" :phonetics="${this.phonetics}" :popup="${this.popup}" :sticky="${this.sticky}" :explore="explore" :token="tokenized[${batchId}][${index}]"/>`;
+              } else {
+                html += `<WordBlock :checkSaved="${this.checkSaved}" :phonetics="${this.phonetics}" :popup="${this.popup}" :sticky="${this.sticky}" :explore="explore">${token.text}</WordBlock>`;
+              }
+            }
+          } else {
+            html += `<span>${token.replace(/\s+/, '&nbsp;')}</span>`
+          }
+        }
+      } else if (this.$l2.continua) {
         html = "";
         let tokenized = await (await this.$getDictionary()).tokenize(text);
         this.tokenized[batchId] = tokenized;
@@ -365,6 +417,9 @@ export default {
 }
 .sentence + .sentence {
   // margin-left: 0.3em;
+}
+.word-block.saved {
+  color: #c59f94;
 }
 .l2-zh {
   .sentence {

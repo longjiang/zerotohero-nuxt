@@ -420,7 +420,6 @@ export default {
 .transcript-line {
   cursor: pointer;
   position: relative;
-  color: #666;
   font-size: 1.2rem;
   padding: 0.5rem;
 }

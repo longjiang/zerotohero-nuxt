@@ -14,7 +14,10 @@
       } -- study the subtitles and improve your Chinese! ${
         this.video.subs_l2
           ? 'Full transcript: ' +
-            this.video.subs_l2.slice(0, 10).map((l) => l.line).join(' ')
+            this.video.subs_l2
+              .slice(0, 10)
+              .map((l) => l.line)
+              .join(' ')
           : ''
       }`"
       :image="`https://img.youtube.com/vi/${this.video.youtube_id}/hqdefault.jpg`"
@@ -31,9 +34,7 @@
                 this.$router.push({
                   path: `/${$l1.code}/${
                     $l2.code
-                  }/youtube/browse/all/all/0/${encodeURIComponent(
-                    url
-                  )}`,
+                  }/youtube/browse/all/all/0/${encodeURIComponent(url)}`,
                 });
               }
             "
@@ -118,7 +119,12 @@ export default {
       speed: 1,
     };
   },
-
+  mounted() {
+    this.bindKeys();
+  },
+  destroyed() {
+    this.unbindKeys();
+  },
   async fetch() {
     // this.$refs.search.url = `https://www.youtube.com/watch?v=${this.args}`
     let video = await this.getSaved();

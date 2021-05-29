@@ -291,6 +291,8 @@
 <script lang="javascript">
 import Config from "@/lib/config";
 import { mapState } from "vuex";
+import kuromoji from "kuromoji";
+import Vue from "vue";
 
 export default {
   data() {
@@ -301,7 +303,7 @@ export default {
       classes: {},
     };
   },
-  mounted() {
+  async mounted() {
     if (this.l1 && this.l2) this.updateClasses();
     if (this.l1 && this.l2) this.loadSettings();
     if (this.l1) this.updatei18n();
@@ -316,6 +318,13 @@ export default {
         if (this.l1 && this.l2) this.updateClasses();
       }
     });
+    if (this.l2 && this.l2.code === "ja") {
+      Vue.prototype.$kuromojiTokenizer = new Promise(resolve => {
+        kuromoji.builder({ dicPath: "/data/kuromoji" }).build((err, tokenizer) => {
+          resolve(tokenizer)
+        })
+      })
+    }
     this.$ga.page(this.$route.path);
   },
   watch: {

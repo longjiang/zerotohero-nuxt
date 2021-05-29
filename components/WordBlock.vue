@@ -35,7 +35,7 @@
           v-if="
             phonetics &&
             transliteration &&
-            transliteration !== token.candidates[0].head
+            transliteration !== token.text
           "
         >
           {{ savedTransliteration || transliteration }}
@@ -88,6 +88,7 @@
           :src="`${Config.imageProxy}?${image.src}`"
         />
       </div>
+      <EntryExternal :term="text" :sticky="false" class="mt-2" />
       <div v-for="word in words" :class="classes">
         <div v-if="word">
           <div v-for="match in word.matches" style="color: #999">
@@ -534,7 +535,7 @@ export default {
       }
     },
     async lookup() {
-      if (this.token && this.$l2.code !== "ja") {
+      if (this.token) {
         this.words = this.token.candidates;
       } else if (this.text) {
         if (!this.text && this.token) this.text = this.token.candidates[0].head;

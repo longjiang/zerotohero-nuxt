@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="ext-dictionary-buttons p-2 bg-white">
+    <div :class="{'ext-dictionary-buttons bg-white': true, sticky}">
       <b-button
         @click="setExtDict('zdic')"
         v-if="['zh', 'yue', 'nan', 'wuu', 'hak'].includes($l2.code)"
@@ -75,7 +75,7 @@
         Grammar Wiki
       </b-button>
     </div>
-    <div class="mb-4 pl-2 pr-2">
+    <div>
       <iframe
         v-if="extDict === 'ngram'"
         :src="`https://books.google.com/ngrams/graph?content=${
@@ -153,7 +153,10 @@ export default {
   props: {
     term: '',
     traditional: '',
-    level: ''
+    level: '',
+    sticky: {
+      default: true
+    }
   },
   data() {
     return {
@@ -186,7 +189,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.ext-dictionary-buttons {
+.ext-dictionary-buttons.sticky {
   display: block;
   position: sticky;
   top: 0;

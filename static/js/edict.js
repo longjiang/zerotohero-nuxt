@@ -53,6 +53,10 @@ const Dictionary = {
     let word = this.words.find(word => word && word.bare === text)
     return word
   },
+  lookupMultiple(text) {
+    let words = this.words.filter(word => word && (word.kanji === text || word.kana === text))
+    return words
+  },
   unique(array) {
     var uniqueArray = []
     for (let i in array) {
