@@ -418,7 +418,19 @@ export default {
       let el = document.getElementById(
         `transcript-line-${this.id}-${lineIndex}`
       );
-      if (el) el.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      // if (el) el.scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+      let offsetTop = Helper.documentOffsetTop(el);
+      let smallScreenYOffset = window.innerWidth < 768 ? window.innerWidth * 9 / 16 : 0
+      if (!Helper.isInViewport(el, smallScreenYOffset)) {
+        let middle = offsetTop - window.innerHeight / 2 - smallScreenYOffset / 2;
+        console.log(middle)
+        window.scrollTo({
+          top: middle,
+          left: 0,
+          behavior: "smooth",
+        });
+      }
     },
     goToPreviousLine() {
       this.seekVideoTo(this.previousLine.starttime);
