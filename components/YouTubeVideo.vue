@@ -1,6 +1,7 @@
 <template>
   <div class="youtube" :key="youtube">
     <div
+      v-if="youtubeIframeID"
       v-bind:style="{
         backgroundImage:
           'url(' + '//img.youtube.com/vi/' + youtube + '/hqdefault.jpg' + ')',
@@ -20,7 +21,7 @@ import $ from "jquery";
 export default {
   data() {
     return {
-      youtubeIframeID: "youtube-" + Helper.uniqueId(),
+      youtubeIframeID: undefined,
       time: 0,
       neverPlayed: true,
       player: undefined,
@@ -49,6 +50,9 @@ export default {
       type: Number,
       default: 1,
     },
+  },
+  created() {
+    this.youtubeIframeID = "youtube-" + Helper.uniqueId()
   },
   mounted() {
     if (this.autoload) {
