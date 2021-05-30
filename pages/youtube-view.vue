@@ -42,33 +42,58 @@
         </div>
       </div>
     </div>
-    <div v-if="!video" class="text-center">
-      <Loader :sticky="true" />
-    </div>
-    <YouTubeWithTranscript
-      v-if="video"
-      :video="video"
-      ref="youtube"
-      :quiz="true"
-      :key="`transcript-${video.youtube_id}`"
-      :speed="speed"
-      @paused="updatePaused"
-    />
-    <div class="play-pause-wrapper">
-      <span
-        class="speed shadow btn-secondary d-inline-block text-center"
-        @click="speed = speed === 1 ? 0.75 : speed === 0.75 ? 0.5 : 1"
-      >
-        <i v-if="speed === 1" class="fas fa-tachometer-alt"></i>
-        <span v-else style="font-size: 0.8em">{{ speed }}x</span>
-      </span>
-      <span
-        class="play-pause shadow btn-primary d-inline-block text-center"
-        @click="togglePaused"
-      >
-        <i v-if="paused" class="fas fa-play"></i>
-        <i v-else class="fas fa-pause"></i>
-      </span>
+    <div
+      :class="{
+        'youtube-view-wrapper pt-1': true,
+        fullscreen: layout === 'vertical',
+      }"
+    >
+      <div class="layout-toggle text-center pt-1 pb-1">
+        <button
+          @click="layout = 'horizontal'"
+          :class="{
+            'btn btn-small': true,
+            'btn-primary': layout === 'horizontal',
+          }"
+        >
+          Transcript Mode
+        </button>
+        <button
+          @click="layout = 'vertical'"
+          :class="{
+            'btn btn-small': true,
+            'btn-primary': layout === 'vertical',
+          }"
+        >
+          Theatre Mode
+        </button>
+      </div>
+      <YouTubeWithTranscript
+        v-if="video"
+        :video="video"
+        :layout="layout"
+        ref="youtube"
+        :quiz="true"
+        :key="`transcript-${video.youtube_id}`"
+        :speed="speed"
+        @paused="updatePaused"
+      />
+      <div class="play-pause-wrapper">
+        <span
+          class="speed shadow btn-secondary d-inline-block text-center"
+          @click="speed = speed === 1 ? 0.75 : speed === 0.75 ? 0.5 : 1"
+        >
+          <i v-if="speed === 1" class="fas fa-tachometer-alt"></i>
+          <span v-else style="font-size: 0.8em">{{ speed }}x</span>
+        </span>
+        <span
+          class="play-pause shadow btn-primary d-inline-block text-center"
+          @click="togglePaused"
+        >
+          <i v-if="paused" class="fas fa-play"></i>
+          <i v-else class="fas fa-pause"></i>
+        </span>
+      </div>
     </div>
   </div>
 </template>
@@ -117,6 +142,7 @@ export default {
       video: undefined,
       paused: false,
       speed: 1,
+      layout: "horizontal",
     };
   },
   mounted() {
@@ -293,8 +319,9 @@ export default {
     bindKeys() {
       window.onkeydown = (e) => {
         if (e.target.tagName.toUpperCase() !== "INPUT") {
-          if (e.code === 'KeyM') {
-            this.speed = this.speed === 1 ? 0.75 : this.speed === 0.75 ? 0.5 : 1
+          if (e.code === "KeyM") {
+            this.speed =
+              this.speed === 1 ? 0.75 : this.speed === 0.75 ? 0.5 : 1;
             return false;
           }
           if (e.keyCode == 32) {
@@ -327,7 +354,7 @@ export default {
   },
 };
 </script>
-<style lang="scss">
+<style scoped>
 .play-pause-wrapper {
   position: sticky;
   bottom: 1rem;
@@ -353,5 +380,36 @@ export default {
   font-size: 1.3em;
   cursor: pointer;
   margin-bottom: 0.2rem;
+}
+
+.youtube-view-wrapper >>> .youtube-video-wrapper  {
+  padding-top: 2rem;
+}
+
+.youtube-view-wrapper .layout-toggle {
+  position: sticky;
+  top: 0;
+  padding: 1rem;
+  z-index: 10;
+  background: white;
+}
+
+.youtube-view-wrapper.fullscreen .layout-toggle {
+  position: fixed;
+  width: 100vw;
+  top: 0.24rem;
+}
+
+.youtube-view-wrapper.fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: white;
+  z-index: 9;
+}
+.youtube-view-wrapper.fullscreen .play-pause-wrapper {
+  position: fixed;
 }
 </style>

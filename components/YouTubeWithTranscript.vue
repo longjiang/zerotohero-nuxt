@@ -1,9 +1,9 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid youtube-with-transcript">
     <div v-if="layout === 'horizontal'" class="row">
       <div class="youtube-video-column col-md-6 mb-2">
         <div
-          class="youtube-video-wrapper pt-3 pb-3 bg-white"
+          class="youtube-video-wrapper"
           :key="'youtube-' + video.youtube_id"
         >
           <YouTubeVideo
@@ -454,6 +454,8 @@ export default {
   position: sticky;
   top: 0;
   background: white;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 .youtube-video-column {
   background: white;

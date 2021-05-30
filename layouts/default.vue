@@ -1028,27 +1028,7 @@ h6,
   border-radius: 0.3rem;
 }
 
-.btn-primary {
-  background-color: #fd4f1c;
-  border-color: #fd4f1c;
-}
 
-.btn-primary:hover,
-.btn-primary:not(:disabled):not(.disabled):active {
-  background-color: #ce3d11;
-  border-color: #ce3d11;
-}
-
-.btn-gray {
-  background: #efefef;
-  color: #8e8e8e;
-}
-
-.btn-gray:hover {
-  color: white;
-  text-decoration: none;
-  background: #989898;
-}
 
 ul.collapsed li:nth-child(n + 5) {
   display: none;
@@ -1117,9 +1097,8 @@ ul.collapse-10.collapsed li:nth-child(-n + 10) {
   font-size: 0.8rem;
   padding: 0.1rem 0.4rem;
   border-radius: 0.2rem;
-  background: #f3f3f3;
+  background-color: #f3f3f3;
   position: relative;
-  margin: 0.2rem;
   display: inline-block;
   bottom: 0.2rem;
   border: none;
@@ -1135,6 +1114,31 @@ ul.collapse-10.collapsed li:nth-child(-n + 10) {
   height: 0.9rem;
   margin-bottom: 0.2rem;
   filter: opacity(0.3);
+}
+
+.btn-primary {
+  background-color: #fd4f1c;
+  border-color: #fd4f1c;
+  color: white;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:not(:disabled):not(.disabled):active {
+  background-color: #ce3d11;
+  border-color: #ce3d11;
+  color: white;
+}
+
+.btn-gray {
+  background: #efefef;
+  color: #8e8e8e;
+}
+
+.btn-gray:hover {
+  color: white;
+  text-decoration: none;
+  background: #989898;
 }
 
 .article {
