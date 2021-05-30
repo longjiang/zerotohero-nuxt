@@ -424,11 +424,10 @@ export default {
       let smallScreenYOffset = window.innerWidth < 768 ? window.innerWidth * 9 / 16 : 0
       if (!Helper.isInViewport(el, smallScreenYOffset)) {
         let middle = offsetTop - window.innerHeight / 2 - smallScreenYOffset / 2;
-        console.log(middle)
         window.scrollTo({
           top: middle,
           left: 0,
-          behavior: "smooth",
+          // behavior: "smooth",
         });
       }
     },

@@ -1,10 +1,10 @@
 <template>
   <v-popover
-    placement="top"
     :open="popup && hover"
-    trigger="manual"
     :open-group="'id' + _uid"
     :id="id"
+    placement="top"
+    trigger="manual"
     style="display: inline-block"
   >
     <span
@@ -22,8 +22,7 @@
       }"
       :data-level="getLevel()"
       v-bind="attributes"
-      @mouseover="mouseover"
-      @mouseout="mouseout"
+      @click.prevent="togglePopup"
     >
       <template v-if="token && token.candidates && token.candidates.length > 0">
         <span
@@ -254,7 +253,6 @@
 import Helper from "@/lib/helper";
 import Config from "@/lib/config";
 import WordPhotos from "@/lib/word-photos";
-import { mapState } from "vuex";
 import { transliterate as tr } from "transliteration";
 
 export default {
@@ -514,7 +512,11 @@ export default {
         ).slice(0, 5);
       }
     },
-    async mouseover() {
+    togglePopup() {
+      if (this.hover) this.closePopup();
+      else this.openPopup();
+    },
+    async openPopup() {
       if (this.popup && (await this.$getDictionary())) {
         if (this.loading === true) {
           if (this.words && this.words.length === 0) {
@@ -529,7 +531,7 @@ export default {
         this.loadImages();
       }
     },
-    mouseout() {
+    closePopup() {
       if (this.popup) {
         setTimeout(() => {
           // Allow user to interact with popover
@@ -568,7 +570,7 @@ export default {
           }
         }
       }
-      this.words = words.sort((a, b) => {
+      words = words.sort((a, b) => {
         let asaved = this.$store.getters["savedWords/has"]({
           id: a.id,
           l2: this.$l2.code,
@@ -580,6 +582,7 @@ export default {
         });
         return asaved === bsaved ? 0 : asaved ? -1 : 1;
       });
+      this.words = Helper.uniqueByValue(words, "id");
       this.loading = false;
     },
     abbreviate(type) {
@@ -711,42 +714,16 @@ export default {
   margin-right: 0;
 }
 
-.tooltip-images {
-  margin-bottom: 0.5rem;
-  display: flex;
-  img {
-    flex: 1;
-    height: 4rem;
-    width: auto;
-    margin: 0 0.2rem;
-  }
-}
-
-.tooltip-entry {
-  color: #666;
-}
-
-.tooltip-entry + .tooltip-entry {
-  margin-top: 1rem;
-  border-top: 1px solid #ccc;
-  padding-top: 1rem;
-}
-
 .tooltip {
   display: block !important;
-
-  .tooltip-inner {
-    border-radius: 1rem;
-    text-align: left;
-  }
-
-  .tooltip-arrow {
-    width: 0;
-    height: 0;
-    border-style: solid;
-    position: absolute;
-    margin: 5px;
-  }
+  $color: white;
+  $height: 15rem;
+  $width: 20rem;
+  border: none;
+  height: $height;
+  width: $width;
+  max-height: $height;
+  max-width: $width;
 
   &[x-placement^="top"] {
     margin-bottom: 1rem;
@@ -820,24 +797,50 @@ export default {
     transition: opacity 0.15s;
   }
 
-  &.popover {
-    $color: white;
-    border: none;
+  .tooltip-arrow {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    position: absolute;
+    margin: 5px;
+    border-color: $color;
+  }
 
-    .popover-inner {
-      overflow: scroll;
-      max-height: 15rem;
-      min-width: 20rem;
-      background: $color;
-      color: black;
-      padding: 1rem;
-      border-radius: 5px;
-      box-shadow: 0 5px 20px rgba(black, 0.2);
+  .tooltip-inner {
+    border-radius: 1rem;
+    text-align: left;
+    overflow: scroll;
+    background: $color;
+    color: black;
+    padding: 1rem;
+    border-radius: 5px;
+    box-shadow: 0 5px 20px rgba(black, 0.2);
+    width: $width;
+    height: $height;
+    max-width: $width;
+    max-height: $height;
+
+    .tooltip-images {
+      margin-bottom: 0.5rem;
+      display: flex;
+      img {
+        flex: 1;
+        height: 4rem;
+        width: auto;
+        margin: 0 0.2rem;
+      }
     }
 
-    .popover-arrow {
-      border-color: $color;
+    .tooltip-entry {
+      color: #666;
+    }
+
+    .tooltip-entry + .tooltip-entry {
+      margin-top: 1rem;
+      border-top: 1px solid #ccc;
+      padding-top: 1rem;
     }
   }
+
 }
 </style>
