@@ -192,6 +192,7 @@ export default {
       if (youtube_video) video = Object.assign(video || {}, youtube_video);
     }
     video.subs_l2 = await this.getTranscript(video);
+    
     if (video.subs_l2 && video.subs_l2.length > 0) {
       this.firstLineTime = video.subs_l2[0].starttime;
     }
@@ -256,7 +257,7 @@ export default {
       let root = parser.parse(xml, {
         ignoreAttributes: false,
       });
-      if (root.transcript_list) {
+      if (typeof root.transcript_list !== 'undefined' && typeof root.transcript_list.track !== 'undefined') {
         let tracks =
           root.transcript_list.track.length > 0
             ? root.transcript_list.track
@@ -300,14 +301,18 @@ export default {
       );
     },
     async getTranscript(video) {
-      if (Array.isArray(video.subs_l2)) {
+      if (video.subs_l2 && Array.isArray(video.subs_l2)) {
         return video.subs_l2;
       }
       if (video.subs_l2 && typeof video.subs_l2 === "string") {
+
         let savedSubs = JSON.parse(video.subs_l2);
+
         if (savedSubs) {
-          return savedSubs.filter((line) => line.starttime);
+          let filtered = savedSubs.filter((line) => line && line.starttime && line.line);
+          return filtered
         }
+        
       }
       if (!video.subs_l2 || video.subs_l2.length === 0) {
         return await this.getL2Transcript();
