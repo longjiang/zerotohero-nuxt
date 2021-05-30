@@ -318,7 +318,7 @@ export default {
     },
     bindKeys() {
       window.onkeydown = (e) => {
-        if (e.target.tagName.toUpperCase() !== "INPUT") {
+        if (e.target.tagName.toUpperCase() !== "INPUT" && !e.metaKey) {
           if (e.code === "KeyM") {
             this.speed =
               this.speed === 1 ? 0.75 : this.speed === 0.75 ? 0.5 : 1;
@@ -334,6 +334,10 @@ export default {
           }
           if (["ArrowDown", "ArrowRight"].includes(e.code)) {
             this.$refs.youtube.$refs.transcript.goToNextLine();
+            return false;
+          }
+          if (["KeyR"].includes(e.code)) {
+            this.$refs.youtube.$refs.transcript.rewind();
             return false;
           }
         }
@@ -354,7 +358,7 @@ export default {
 <style scoped>
 .play-pause-wrapper {
   position: sticky;
-  bottom: 1rem;
+  bottom: 3rem;
   left: calc(100% - 4rem);
   width: 3.2rem;
   z-index: 9;
@@ -408,5 +412,11 @@ export default {
 }
 .youtube-view-wrapper.fullscreen .play-pause-wrapper {
   position: fixed;
+}
+
+@media (orientation: landscape) {
+  .youtube-view-wrapper.fullscreen .play-pause-wrapper {
+    display: none;
+  }
 }
 </style>

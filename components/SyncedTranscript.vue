@@ -441,6 +441,9 @@ export default {
     goToNextLine() {
       this.seekVideoTo(this.nextLine.starttime);
     },
+    rewind() {
+      this.seekVideoTo(this.currentLine.starttime);
+    },
   },
 };
 </script>
