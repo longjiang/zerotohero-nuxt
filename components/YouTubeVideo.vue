@@ -122,6 +122,7 @@ export default {
             onStateChange: () => {
               if (this.player && this.player.getPlayerState) {
                 this.player.setPlaybackRate(this.speed);
+                this.$emit('paused', [-1, 0, 2].includes(this.player.getPlayerState()))
               }
               if (
                 !Helper.iOS() &&

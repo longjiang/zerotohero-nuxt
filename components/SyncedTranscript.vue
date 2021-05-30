@@ -245,10 +245,12 @@ export default {
       sW: [],
       id: Helper.uniqueId(),
       Helper,
+      previousTime: 0,
       currentTime: 0,
       currentLine: undefined,
       review: {},
       paused: true,
+      repeat: false,
       reviewKey: 0,
       neverPlayed: true,
     };
@@ -280,7 +282,11 @@ export default {
       if (this.highlightSavedWords) this.updateReview();
     },
     currentTime() {
-      this.currentLine = this.nearestLine(this.currentTime);
+      let nearestLine = this.nearestLine(this.currentTime);
+      let progress = this.currentTime - this.previousTime
+      if (this.repeat && this.currentLine !== nearestLine && progress > 0 && progress < 0.15) this.rewind()
+      else this.currentLine = nearestLine
+      this.previousTime = this.currentTime
     },
     currentLine() {
       this.scrollTo(this.currentLineIndex);
