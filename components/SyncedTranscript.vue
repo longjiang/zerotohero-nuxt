@@ -224,6 +224,11 @@ export default {
     $hanzi() {
       return this.$getHanzi();
     },
+    currentLineIndex() {
+      return this.lines.findIndex(
+        (line) => line === this.currentLine
+      );
+    }
   },
   data() {
     return {
@@ -245,6 +250,9 @@ export default {
         this.updateReview();
       }
     });
+  },
+  updated() {
+    this.scrollTo(this.currentLineIndex)
   },
   beforeDestroy() {
     // you may call unsubscribe to stop the subscription
@@ -412,19 +420,13 @@ export default {
       if (el) el.scrollIntoView({ behavior: "smooth", block: "nearest" });
     },
     previousLine() {
-      let currentLineIndex = this.lines.findIndex(
-        (line) => line === this.currentLine
-      );
-      let previousLineIndex = Math.max(currentLineIndex - 1, 0);
+      let previousLineIndex = Math.max(this.currentLineIndex - 1, 0);
       this.currentLine = this.lines[previousLineIndex];
       this.seekVideoTo(this.currentLine.starttime);
       this.scrollTo(previousLineIndex);
     },
     nextLine() {
-      let currentLineIndex = this.lines.findIndex(
-        (line) => line === this.currentLine
-      );
-      let nextLineIndex = Math.min(currentLineIndex + 1, this.lines.length - 1);
+      let nextLineIndex = Math.min(this.currentLineIndex + 1, this.lines.length - 1);
       this.currentLine = this.lines[nextLineIndex];
       this.seekVideoTo(this.currentLine.starttime);
       this.scrollTo(nextLineIndex);
