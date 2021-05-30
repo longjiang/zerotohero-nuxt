@@ -223,6 +223,7 @@ export default {
   border-radius: 100%;
   opacity: 0.2;
   z-index: 10;
+  padding: 0;
   &:hover {
     opacity: 1;
   }

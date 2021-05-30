@@ -393,6 +393,7 @@ export default {
   width: 3.2rem;
   z-index: 9;
 }
+
 .quick-access-button {
   border-radius: 100%;
   width: 2.5rem;
@@ -401,6 +402,8 @@ export default {
   border: none;
   font-size: 1.3em;
   cursor: pointer;
+  text-align: center;
+  padding: 0;
 }
 
 .youtube-view-wrapper >>> .youtube-video-wrapper {
