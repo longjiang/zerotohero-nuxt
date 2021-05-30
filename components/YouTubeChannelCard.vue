@@ -3,9 +3,9 @@
     <img v-if="channel.avatar" :src="channel.avatar" class="channel-avatar" alt />
     <div class="channel-body">
       <h6>
-        Channel: <Annotate><span>{{ channel.title }}</span></Annotate>
+        Channel: <span>{{ channel.title }}</span>
       </h6>
-      <Annotate v-if="channel.description"><div>{{ channel.description }}</div></Annotate>
+      <div v-if="channel.description"><div>{{ channel.description }}</div></div>
     </div>
   </router-link>
 </template>

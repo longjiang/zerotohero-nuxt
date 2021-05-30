@@ -84,7 +84,7 @@
 
         <Nuxt id="main" />
 
-        <ReaderComp v-if="l1 && l2" :iconMode="true" />
+        <ReaderComp v-if="l1 && l2 && $route.name !== 'youtube-view'" :iconMode="true" />
 
         <footer class="container-fluid bg-dark text-light pt-4 pb-4">
           <div class="container">

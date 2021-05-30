@@ -90,7 +90,11 @@
         :sticky="false"
         class="mt-2"
       />
-      <div v-for="word in words" :class="classes">
+      <div
+        v-for="word in words"
+        :key="`word-block-word-${word.id}`"
+        :class="classes"
+      >
         <div v-if="word">
           <div v-for="match in word.matches" style="color: #999">
             <b>{{ match.field }} {{ match.number }}</b>
@@ -204,9 +208,11 @@
           </span>
           <ol class="word-translation" v-if="word.definitions">
             <li
-              v-for="def in word.definitions.filter(def => def.trim() !== '').map((definition) =>
-                definition ? definition.replace(/\[.*\] /g, '') : ''
-              )"
+              v-for="def in word.definitions
+                .filter((def) => def.trim() !== '')
+                .map((definition) =>
+                  definition ? definition.replace(/\[.*\] /g, '') : ''
+                )"
               class="word-translation-item"
             >
               <span>{{ def }}</span>
@@ -535,11 +541,12 @@ export default {
       }
     },
     async lookup() {
+      let words = [];
       if (this.token) {
-        this.words = this.token.candidates;
+        words = this.token.candidates;
       } else if (this.text) {
         if (!this.text && this.token) this.text = this.token.candidates[0].head;
-        let words = await (await this.$getDictionary()).lookupFuzzy(this.text);
+        words = await (await this.$getDictionary()).lookupFuzzy(this.text);
         if (words) {
           for (let word of words) {
             if (word && word.matches) {
@@ -560,8 +567,19 @@ export default {
             }
           }
         }
-        this.words = words;
       }
+      this.words = words.sort((a, b) => {
+        let asaved = this.$store.getters["savedWords/has"]({
+          id: a.id,
+          l2: this.$l2.code,
+        });
+
+        let bsaved = this.$store.getters["savedWords/has"]({
+          id: b.id,
+          l2: this.$l2.code,
+        });
+        return asaved === bsaved ? 0 : asaved ? -1 : 1;
+      });
       this.loading = false;
     },
     abbreviate(type) {
@@ -682,14 +700,14 @@ export default {
 }
 
 .word-translation {
-  padding-left: 1rem ;
+  padding-left: 1rem;
 }
 
 .word-translation-item {
   font-style: italic;
 }
 
-.word-translation-item::marker{
+.word-translation-item::marker {
   margin-right: 0;
 }
 

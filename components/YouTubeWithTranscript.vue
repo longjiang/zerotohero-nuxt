@@ -12,136 +12,131 @@
             :speed="speed"
             @paused="updatePaused"
           />
-          <div class="youtube-video-info">
-            <h5 class="mt-3" style="line-height: 1.5">
-              <span
-                v-if="video"
-                :key="`video-title-${video.title}`"
-                class="mt-4"
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="youtube-video-info">
+          <h5 class="mt-3" style="line-height: 1.5">
+            <span v-if="video" :key="`video-title-${video.title}`" class="mt-4">
+              {{ video.title }}
+            </span>
+          </h5>
+          <div :key="`youtube-video-info-${video.youtube_id}-${videoInfoKey}`">
+            <template>
+              <b-button
+                v-if="
+                  !(video && video.id) &&
+                  (this.video.subs_l2 || this.$settings.adminMode)
+                "
+                @click="save"
               >
-                {{ video.title }}
-              </span>
-            </h5>
-            <div
-              :key="`youtube-video-info-${video.youtube_id}-${videoInfoKey}`"
+                <i class="fas fa-plus mr-2"></i>
+                Add to Library
+              </b-button>
+              <b-button
+                v-if="
+                  video &&
+                  video.id &&
+                  (this.video.subs_l2 || this.$settings.adminMode)
+                "
+                variant="success"
+              >
+                <i class="fa fa-check mr-2"></i>
+                Added
+              </b-button>
+            </template>
+            <b-dropdown
+              id="dropdown-1"
+              v-if="$settings.adminMode && video && video.id"
+              :text="video.topic ? topics[video.topic] : 'Topic'"
+              :variant="video.topic ? 'success' : undefined"
+              class="ml-1"
             >
-              <template>
-                <b-button
-                  v-if="
-                    !(video && video.id) &&
-                    (this.video.subs_l2 || this.$settings.adminMode)
-                  "
-                  @click="save"
-                >
-                  <i class="fas fa-plus mr-2"></i>
-                  Add to Library
-                </b-button>
-                <b-button
-                  v-if="
-                    video &&
-                    video.id &&
-                    (this.video.subs_l2 || this.$settings.adminMode)
-                  "
-                  variant="success"
-                >
-                  <i class="fa fa-check mr-2"></i>
-                  Added
-                </b-button>
-              </template>
+              <b-dropdown-item
+                v-for="(title, slug) in topics"
+                :key="`change-topic-item-${slug}`"
+                @click="changeTopic(slug)"
+              >
+                {{ title }}
+              </b-dropdown-item>
+            </b-dropdown>
+            <template
+              v-if="$settings.adminMode && video && video.id && !video.lesson"
+            >
               <b-dropdown
                 id="dropdown-1"
-                v-if="$settings.adminMode && video && video.id"
-                :text="video.topic ? topics[video.topic] : 'Topic'"
-                :variant="video.topic ? 'success' : undefined"
+                :text="video.level ? levels[video.level] : 'Level'"
+                :variant="video.level ? 'success' : undefined"
                 class="ml-1"
               >
                 <b-dropdown-item
-                  v-for="(title, slug) in topics"
-                  :key="`change-topic-item-${slug}`"
-                  @click="changeTopic(slug)"
+                  v-for="(title, slug) in levels"
+                  :key="`change-level-item-${slug}`"
+                  @click="changeLevel(slug)"
                 >
                   {{ title }}
                 </b-dropdown-item>
               </b-dropdown>
-              <template
-                v-if="$settings.adminMode && video && video.id && !video.lesson"
+
+              <b-button
+                v-if="$settings.adminMode"
+                variant="danger"
+                @click="remove"
+                class="ml-1"
               >
-                <b-dropdown
-                  id="dropdown-1"
-                  :text="video.level ? levels[video.level] : 'Level'"
-                  :variant="video.level ? 'success' : undefined"
-                  class="ml-1"
-                >
-                  <b-dropdown-item
-                    v-for="(title, slug) in levels"
-                    :key="`change-level-item-${slug}`"
-                    @click="changeLevel(slug)"
-                  >
-                    {{ title }}
-                  </b-dropdown-item>
-                </b-dropdown>
-
-                <b-button
-                  v-if="$settings.adminMode"
-                  variant="danger"
-                  @click="remove"
-                  class="ml-1"
-                >
-                  <i class="fas fa-trash-alt"></i>
-                </b-button>
-
-                <drop
-                  v-if="$settings.adminMode"
-                  @drop="handleDrop"
-                  :class="{
-                    over: over,
-                    'subs-drop': true,
-                    drop: true,
-                    'ml-1': true,
-                    'text-dark': true,
-                    btn: true,
-                    'btn-light': true,
-                  }"
-                  :key="`drop-${transcriptKey}`"
-                  @dragover="over = true"
-                  @dragleave="over = false"
-                >
-                  Drop Subs Here
-                </drop>
-              </template>
-            </div>
-            <div v-if="$settings.adminMode && video && video.id" class="mt-2">
-              First line starts at
-              <input
-                v-model.lazy="firstLineTime"
-                type="text"
-                placeholder="0"
-                class="d-inline-block ml-1"
-                style="width: 4rem"
-              />
-              <b-button v-if="!subsUpdated" @click="updateSubs" class="ml-2">
-                <i class="fa fa-save mr-2"></i>
-                Update Subs
+                <i class="fas fa-trash-alt"></i>
               </b-button>
-              <b-button v-else variant="success" class="ml-2">
-                <i class="fa fa-check mr-2"></i>
-                Updated
-              </b-button>
-            </div>
-            <hr v-if="video.channel" />
-            <YouTubeChannelCard
-              v-if="video.channel"
-              :channel="video.channel"
-              :key="`channel-${video.channel.id}`"
-              class="d-inline-block"
-            />
+
+              <drop
+                v-if="$settings.adminMode"
+                @drop="handleDrop"
+                :class="{
+                  over: over,
+                  'subs-drop': true,
+                  drop: true,
+                  'ml-1': true,
+                  'text-dark': true,
+                  btn: true,
+                  'btn-light': true,
+                }"
+                :key="`drop-${transcriptKey}`"
+                @dragover="over = true"
+                @dragleave="over = false"
+              >
+                Drop Subs Here
+              </drop>
+            </template>
           </div>
+          <div v-if="$settings.adminMode && video && video.id" class="mt-2">
+            First line starts at
+            <input
+              v-model.lazy="firstLineTime"
+              type="text"
+              placeholder="0"
+              class="d-inline-block ml-1"
+              style="width: 4rem"
+            />
+            <b-button v-if="!subsUpdated" @click="updateSubs" class="ml-2">
+              <i class="fa fa-save mr-2"></i>
+              Update Subs
+            </b-button>
+            <b-button v-else variant="success" class="ml-2">
+              <i class="fa fa-check mr-2"></i>
+              Updated
+            </b-button>
+          </div>
+          <hr v-if="video.channel" />
+          <YouTubeChannelCard
+            v-if="video.channel"
+            :channel="video.channel"
+            :key="`channel-${video.channel.id}`"
+            class="d-inline-block"
+          />
         </div>
-      </div>
-      <div class="col-md-6" :key="'transcript-' + video.youtube_id">
         <div v-if="video.subs_l2.length > 0" class="mt-3">
           <SyncedTranscript
             ref="transcript"
+            :key="'transcript-' + video.youtube_id"
             :onSeek="seekYouTube"
             :onPause="pauseYouTube"
             :lines="video.subs_l2"
@@ -461,5 +456,10 @@ export default {
   position: sticky;
   top: 0;
   z-index: 9;
+}
+
+.youtube-video-info {
+  padding-left: 0.667rem;
+  padding-right: 0.667rem;
 }
 </style>

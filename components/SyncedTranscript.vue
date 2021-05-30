@@ -342,9 +342,12 @@ export default {
                         new RegExp(`^${form}[ .,:!?]`, "gi").test()))
                   ) {
                     let reviewIndex = Math.min(
-                      Number(lineIndex) +
-                        lineOffset +
-                        Math.floor(form.length / 2),
+                      Math.ceil(
+                        (Number(lineIndex) +
+                          lineOffset +
+                          Math.floor(form.length / 2)) /
+                          10
+                      ) * 10,
                       this.lines.length - 1
                     );
                     let similarWords = await this.findSimilarWords(form);
