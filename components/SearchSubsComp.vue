@@ -9,7 +9,7 @@
         >
           <i class="fas fa-step-backward" />
         </button>
-        <b-button @click="previousLine" class="btn btn-small">
+        <b-button @click="goToPreviousLine" class="btn btn-small">
           <i class="fa fa-chevron-left" />
         </b-button>
         <b-button @click="rewind" class="btn btn-small">
@@ -125,7 +125,7 @@
             </div>
           </template>
         </b-dropdown>
-        <b-button @click="nextLine" class="btn btn-small">
+        <b-button @click="goToNextLine" class="btn btn-small">
           <i class="fa fa-chevron-right" />
         </b-button>
         <button
@@ -491,7 +491,7 @@ export default {
       if (this.$refs.youtube) this.$refs.youtube.goToPreviousLine();
     },
     goToNextLine() {
-      if (this.$refs.youtube) this.$refs.youtube.nextLine();
+      if (this.$refs.youtube) this.$refs.youtube.goToNextLine();
     },
     rewind() {
       if (this.$refs.youtube) this.$refs.youtube.rewind();

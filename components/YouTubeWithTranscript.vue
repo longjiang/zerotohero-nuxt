@@ -454,8 +454,6 @@ export default {
   position: sticky;
   top: 0;
   background: white;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
 }
 .youtube-video-column {
   background: white;
