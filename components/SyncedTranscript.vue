@@ -283,10 +283,16 @@ export default {
     },
     currentTime() {
       let nearestLine = this.nearestLine(this.currentTime);
-      let progress = this.currentTime - this.previousTime
-      if (this.repeat && this.currentLine !== nearestLine && progress > 0 && progress < 0.15) this.rewind()
-      else this.currentLine = nearestLine
-      this.previousTime = this.currentTime
+      let progress = this.currentTime - this.previousTime;
+      if (
+        this.repeat &&
+        this.currentLine !== nearestLine &&
+        progress > 0 &&
+        progress < 0.15
+      )
+        this.rewind();
+      else this.currentLine = nearestLine;
+      this.previousTime = this.currentTime;
     },
     currentLine() {
       this.scrollTo(this.currentLineIndex);
@@ -421,12 +427,10 @@ export default {
       }
     },
     scrollTo(lineIndex) {
-      if (this.layout === "horizontal") {
-        let el = document.getElementById(
-          `transcript-line-${this.id}-${lineIndex}`
-        );
-        // if (el) el.scrollIntoView({ behavior: "smooth", block: "nearest" });
-
+      let el = document.getElementById(
+        `transcript-line-${this.id}-${lineIndex}`
+      );
+      if (el) {
         let offsetTop = Helper.documentOffsetTop(el);
         let smallScreenYOffset =
           window.innerWidth < 768 ? (window.innerWidth * 9) / 16 : 0;
