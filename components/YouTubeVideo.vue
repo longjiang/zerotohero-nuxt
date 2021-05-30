@@ -9,7 +9,7 @@
       class="youtube-screen"
       v-on:click="loadYouTubeiFrame()"
     >
-      <div :id="youtubeIframeID"></div>
+      <div :id="youtubeIframeID()" ref="youtubeIframe"></div>
     </div>
   </div>
 </template>
@@ -21,7 +21,6 @@ import $ from "jquery";
 export default {
   data() {
     return {
-      youtubeIframeID: undefined,
       time: 0,
       neverPlayed: true,
       player: undefined,
@@ -50,9 +49,6 @@ export default {
       type: Number,
       default: 1,
     },
-  },
-  created() {
-    this.youtubeIframeID = "youtube-" + Helper.uniqueId()
   },
   mounted() {
     if (this.autoload) {
@@ -87,6 +83,9 @@ export default {
     },
   },
   methods: {
+    youtubeIframeID() {
+      return "youtube-" + Helper.uniqueId()
+    },
     updateCurrentTime() {
       // This cannot be a computed property because the player is not monitored by Vue
       let newTime = this.player && this.player.getCurrentTime
@@ -98,12 +97,14 @@ export default {
       }
     },
     loadYouTubeiFrame() {
+      let elementId = this.$refs.youtubeIframe.getAttribute('id')
+      console.log(elementId)
       let that = this;
       // $('.youtube iframe').remove();
       this.removeYouTubeAPIVars();
       window.onYouTubePlayerAPIReady = () => {
         // eslint-disable-next-line no-undef
-        that.player = new YT.Player(this.youtubeIframeID, {
+        that.player = new YT.Player(elementId, {
           height: "390",
           width: "640",
           videoId: this.youtube,
