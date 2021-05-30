@@ -76,6 +76,8 @@
         :quiz="true"
         :key="`transcript-${video.youtube_id}`"
         :speed="speed"
+        :autoload="true"
+        :autoplay="true"
         @paused="updatePaused"
       />
       <div class="quick-access-buttons">

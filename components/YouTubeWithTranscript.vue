@@ -2,14 +2,13 @@
   <div class="container-fluid youtube-with-transcript">
     <div v-if="layout === 'horizontal'" class="row">
       <div class="youtube-video-column col-md-6 mb-2">
-        <div
-          class="youtube-video-wrapper"
-          :key="'youtube-' + video.youtube_id"
-        >
+        <div class="youtube-video-wrapper" :key="'youtube-' + video.youtube_id">
           <YouTubeVideo
             ref="youtube"
             :youtube="video.youtube_id"
             :speed="speed"
+            :autoload="autoload"
+            :autoplay="autoplay"
             @paused="updatePaused"
             @currentTime="updateCurrentTime"
           />
@@ -167,7 +166,10 @@
       </div>
       <div class="row">
         <div :key="'transcript-' + video.youtube_id" class="mt-2 col-sm-12">
-          <div v-if="video.subs_l2 && video.subs_l2.length > 0" class="text-center">
+          <div
+            v-if="video.subs_l2 && video.subs_l2.length > 0"
+            class="text-center"
+          >
             <SyncedTranscript
               ref="transcript"
               :onSeek="seekYouTube"
@@ -365,14 +367,15 @@ export default {
         this.paused = paused;
         this.$emit("paused", this.paused);
       }
-      if (this.$refs.transcript) this.$refs.transcript.paused = paused
+      if (this.$refs.transcript) this.$refs.transcript.paused = paused;
     },
     updateCurrentTime(currentTime) {
       if (this.currentTime !== currentTime) {
-        this.currentTime = currentTime
-        this.$emit("currentTime", this.currentTime)
+        this.currentTime = currentTime;
+        this.$emit("currentTime", this.currentTime);
       }
-      if (this.$refs.transcript) this.$refs.transcript.currentTime = currentTime
+      if (this.$refs.transcript)
+        this.$refs.transcript.currentTime = currentTime;
     },
     goToPreviousLine() {
       if (this.$refs.transcript) this.$refs.transcript.goToPreviousLine();
@@ -424,7 +427,7 @@ export default {
       }
     },
     repeat() {
-      if (this.$refs.transcript) this.$refs.transcript.repeat = this.repeat
+      if (this.$refs.transcript) this.$refs.transcript.repeat = this.repeat;
     },
     firstLineTime() {
       if (this.video.subs_l2 && this.video.subs_l2.length > 0) {
@@ -441,7 +444,7 @@ export default {
   },
   mounted() {
     if (this.video.subs_l2 && this.video.subs_l2.length > 0) {
-      this.starttime = this.video.subs_l2[this.startLineIndex].starttime
+      this.starttime = this.video.subs_l2[this.startLineIndex].starttime;
     }
   },
 };
