@@ -245,6 +245,7 @@ export default {
       over: false,
       transcriptKey: 0,
       paused: true,
+      repeat: false,
       currentTime: 0,
       videoInfoKey: 0,
       topics: Helper.topics,
@@ -425,7 +426,9 @@ export default {
         this.rewind();
       }
     },
-
+    repeat() {
+      this.$refs.transcript.repeat = this.repeat
+    },
     firstLineTime() {
       if (this.video.subs_l2 && this.video.subs_l2.length > 0) {
         let subsShift =

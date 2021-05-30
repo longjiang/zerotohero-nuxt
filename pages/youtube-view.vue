@@ -78,21 +78,45 @@
         :speed="speed"
         @paused="updatePaused"
       />
-      <div class="play-pause-wrapper">
-        <span
-          class="speed shadow btn-secondary d-inline-block text-center"
+      <div class="quick-access-buttons">
+        <button
+          :class="{
+            'quick-access-button shadow btn-secondary d-inline-block text-center mb-1': true,
+            'btn-primary': speed !== 1,
+          }"
           @click="speed = speed === 1 ? 0.75 : speed === 0.75 ? 0.5 : 1"
         >
           <i v-if="speed === 1" class="fas fa-tachometer-alt"></i>
-          <span v-else style="font-size: 0.8em">{{ speed }}x</span>
-        </span>
-        <span
-          class="play-pause shadow btn-primary d-inline-block text-center"
+          <span v-else style="font-size: 0.6em; display: block; line-height: 2.5em;">{{ speed }}x</span>
+        </button>
+        <button
+          class="quick-access-button shadow btn-secondary d-inline-block text-center mb-1"
+          @click="$refs.youtube.$refs.transcript.goToPreviousLine()"
+        >
+          <i class="fas fa-arrow-up"></i>
+        </button>
+        <button
+          class="quick-access-button shadow btn-primary d-inline-block text-center mb-1"
           @click="togglePaused"
         >
           <i v-if="paused" class="fas fa-play"></i>
           <i v-else class="fas fa-pause"></i>
-        </span>
+        </button>
+        <button
+          class="quick-access-button shadow btn-secondary d-inline-block text-center mb-1"
+          @click="$refs.youtube.$refs.transcript.goToNextLine()"
+        >
+          <i class="fas fa-arrow-down"></i>
+        </button>
+        <button
+          :class="{
+            'quick-access-button shadow btn-secondary d-inline-block text-center mb-1': true,
+            'btn-primary': repeat,
+          }"
+          @click="repeat = !repeat"
+        >
+          <i class="fas fa-undo"></i>
+        </button>
       </div>
     </div>
   </div>
@@ -140,9 +164,10 @@ export default {
     return {
       l2Locale: undefined,
       video: undefined,
-      paused: false,
+      paused: true,
       speed: 1,
       layout: "horizontal",
+      repeat: false,
     };
   },
   mounted() {
@@ -150,6 +175,11 @@ export default {
   },
   destroyed() {
     this.unbindKeys();
+  },
+  watch: {
+    repeat() {
+      this.$refs.youtube.repeat = this.repeat;
+    },
   },
   async fetch() {
     // this.$refs.search.url = `https://www.youtube.com/watch?v=${this.args}`
@@ -356,31 +386,21 @@ export default {
 };
 </script>
 <style scoped>
-.play-pause-wrapper {
+.quick-access-buttons {
   position: sticky;
-  bottom: 3rem;
+  bottom: 1rem;
   left: calc(100% - 4rem);
   width: 3.2rem;
   z-index: 9;
 }
-.play-pause {
+.quick-access-button {
   border-radius: 100%;
-  width: 3.2rem;
-  height: 3.2rem;
-  line-height: 3rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  line-height: 2.5rem;
   border: none;
   font-size: 1.3em;
   cursor: pointer;
-}
-.speed {
-  border-radius: 100%;
-  width: 3.2rem;
-  height: 3.2rem;
-  line-height: 3rem;
-  border: none;
-  font-size: 1.3em;
-  cursor: pointer;
-  margin-bottom: 0.2rem;
 }
 
 .youtube-view-wrapper >>> .youtube-video-wrapper {
@@ -410,12 +430,12 @@ export default {
   background: white;
   z-index: 9;
 }
-.youtube-view-wrapper.fullscreen .play-pause-wrapper {
+.youtube-view-wrapper.fullscreen .quick-access-buttons {
   position: fixed;
 }
 
 @media (orientation: landscape) {
-  .youtube-view-wrapper.fullscreen .play-pause-wrapper {
+  .youtube-view-wrapper.fullscreen .quick-access-buttons {
     display: none;
   }
 }
