@@ -11,7 +11,7 @@
       :title="`Learn ${$l2.name} from the video ${video.title} | ${$l2.name} Zero to Hero`"
       :description="`Watch the video -- ${
         video.title
-      } -- study the subtitles and improve your Chinese! ${
+      } -- study the subtitles and improve your ${$l2.name}! ${
         this.video.subs_l2
           ? 'Full transcript: ' +
             this.video.subs_l2

@@ -571,7 +571,7 @@ export default {
           }
         }
       }
-      words = words.sort((a, b) => {
+      words = words ? words.sort((a, b) => {
         let asaved = this.$store.getters["savedWords/has"]({
           id: a.id,
           l2: this.$l2.code,
@@ -582,7 +582,7 @@ export default {
           l2: this.$l2.code,
         });
         return asaved === bsaved ? 0 : asaved ? -1 : 1;
-      });
+      }) : [];
       this.words = Helper.uniqueByValue(words, "id");
       this.loading = false;
     },

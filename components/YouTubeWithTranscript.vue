@@ -271,14 +271,16 @@ export default {
       let file = event.dataTransfer.files[0];
       let reader = new FileReader();
       reader.readAsText(file);
+      let parsed = []
       reader.onload = (event) => {
         let srt = event.target.result;
-        this.video.subs_l2 = parseSync(srt).map((cue) => {
+        parsed = parseSync(srt).map((cue) => {
           return {
             starttime: cue.data.start / 1000,
             line: cue.data.text,
           };
         });
+        this.video.subs_l2 = Helper.uniqueByValue(parsed, 'starttime')
         this.firstLineTime = this.l2_lines[0].starttime;
         this.transcriptKey++;
       };
