@@ -228,6 +228,12 @@ export default {
     currentLineIndex() {
       return this.lines.findIndex((line) => line === this.currentLine);
     },
+    previousLine() {
+      let previousIndex = Math.max(this.currentLineIndex - 1, 0);
+      return this.lines && this.lines[previousIndex]
+        ? this.lines[previousIndex]
+        : false;
+    },
     nextLine() {
       return this.lines && this.lines[this.currentLineIndex + 1]
         ? this.lines[this.currentLineIndex + 1]
@@ -248,6 +254,9 @@ export default {
     };
   },
   mounted() {
+    this.lines.map((line) => {
+      line.starttime = Number(line.starttime);
+    });
     this.currentLine =
       this.lines && this.lines[this.startLineIndex]
         ? this.lines[this.startLineIndex]
@@ -271,13 +280,24 @@ export default {
       if (this.highlightSavedWords) this.updateReview();
     },
     currentTime() {
-      if (this.currentTime > this.nextLine.starttime) {
-        this.currentLine = this.nextLine;
-        console.log(this.currentLine.starttime);
-      }
+      this.currentLine = this.nearestLine(this.currentTime);
+    },
+    currentLine() {
+      this.scrollTo(this.currentLineIndex);
     },
   },
   methods: {
+    nearestLine(time) {
+      let nearestLine = this.lines[0];
+      for (let line of this.lines) {
+        if (line.starttime > time) {
+          break;
+        } else {
+          nearestLine = line;
+        }
+      }
+      return nearestLine;
+    },
     removeLine(lineIndex) {
       this.lines.splice(lineIndex, 1);
       this.reviewKey++;
@@ -400,20 +420,11 @@ export default {
       );
       if (el) el.scrollIntoView({ behavior: "smooth", block: "nearest" });
     },
-    previousLine() {
-      let previousLineIndex = Math.max(this.currentLineIndex - 1, 0);
-      // this.currentLine = this.lines[previousLineIndex];
-      this.seekVideoTo(this.currentLine.starttime);
-      this.scrollTo(previousLineIndex);
+    goToPreviousLine() {
+      this.seekVideoTo(this.previousLine.starttime);
     },
-    nextLine() {
-      let nextLineIndex = Math.min(
-        this.currentLineIndex + 1,
-        this.lines.length - 1
-      );
-      // this.currentLine = this.lines[nextLineIndex];
-      this.seekVideoTo(this.currentLine.starttime);
-      this.scrollTo(nextLineIndex);
+    goToNextLine() {
+      this.seekVideoTo(this.nextLine.starttime);
     },
   },
 };

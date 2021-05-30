@@ -376,11 +376,11 @@ export default {
       }
       this.$refs.transcript.currentTime = currentTime
     },
-    previousLine() {
-      this.$refs.transcript.previousLine();
+    goToPreviousLine() {
+      this.$refs.transcript.goToPreviousLine();
     },
-    nextLine() {
-      this.$refs.transcript.nextLine();
+    goToNextLine() {
+      this.$refs.transcript.goToNextLine();
     },
     rewind() {
       this.seekYouTube(this.video.subs_l2[this.startLineIndex].starttime);

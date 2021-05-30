@@ -304,12 +304,12 @@ export default {
           }
           if (e.keyCode == 38) {
             // Up arrow
-            this.$refs.youtube.$refs.transcript.previousLine();
+            this.$refs.youtube.$refs.transcript.goToPreviousLine();
             return false;
           }
           if (e.keyCode == 40) {
             // Down arrow
-            this.$refs.youtube.$refs.transcript.nextLine();
+            this.$refs.youtube.$refs.transcript.goToNextLine();
             return false;
           }
         }

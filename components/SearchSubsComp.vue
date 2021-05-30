@@ -487,10 +487,10 @@ export default {
     startLineIndex(hit) {
       return hit.lineIndex;
     },
-    previousLine() {
-      if (this.$refs.youtube) this.$refs.youtube.previousLine();
+    goToPreviousLine() {
+      if (this.$refs.youtube) this.$refs.youtube.goToPreviousLine();
     },
-    nextLine() {
+    goToNextLine() {
       if (this.$refs.youtube) this.$refs.youtube.nextLine();
     },
     rewind() {
@@ -574,13 +574,13 @@ export default {
         }
         // up = 38, left = 37
         if (e.keyCode == 38 || (e.keyCode == 37 && !e.shiftKey)) {
-          this.previousLine();
+          this.goToPreviousLine();
           e.preventDefault();
           return false;
         }
         // down = 40, right = 39
         if (e.keyCode == 40 || (e.keyCode == 39 && !e.shiftKey)) {
-          this.nextLine();
+          this.goToNextLine();
           e.preventDefault();
           return false;
         }
