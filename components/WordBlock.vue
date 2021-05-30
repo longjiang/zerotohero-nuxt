@@ -22,7 +22,8 @@
       }"
       :data-level="getLevel()"
       v-bind="attributes"
-      @click.prevent="togglePopup"
+      @mouseover="openPopup"
+      @mouseout="closePopup"
     >
       <template v-if="token && token.candidates && token.candidates.length > 0">
         <span

@@ -324,18 +324,15 @@ export default {
               this.speed === 1 ? 0.75 : this.speed === 0.75 ? 0.5 : 1;
             return false;
           }
-          if (e.keyCode == 32) {
-            // Spacebar
+          if (e.code === "Space") {
             this.togglePaused();
             return false;
           }
-          if (e.keyCode == 38) {
-            // Up arrow
+          if (["ArrowUp", "ArrowLeft"].includes(e.code)) {
             this.$refs.youtube.$refs.transcript.goToPreviousLine();
             return false;
           }
-          if (e.keyCode == 40) {
-            // Down arrow
+          if (["ArrowDown", "ArrowRight"].includes(e.code)) {
             this.$refs.youtube.$refs.transcript.goToNextLine();
             return false;
           }
@@ -382,7 +379,7 @@ export default {
   margin-bottom: 0.2rem;
 }
 
-.youtube-view-wrapper >>> .youtube-video-wrapper  {
+.youtube-view-wrapper >>> .youtube-video-wrapper {
   padding-top: 2rem;
 }
 
