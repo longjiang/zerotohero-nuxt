@@ -11,6 +11,7 @@
             :youtube="video.youtube_id"
             :speed="speed"
             @paused="updatePaused"
+            @currentTime="updateCurrentTime"
           />
         </div>
       </div>
@@ -154,6 +155,7 @@
             <YouTubeVideo
               ref="youtube"
               @paused="updatePaused"
+              @currentTime="updateCurrentTime"
               :speed="speed"
               :youtube="video.youtube_id"
               :starttime="starttime"
@@ -243,6 +245,7 @@ export default {
       over: false,
       transcriptKey: 0,
       paused: true,
+      currentTime: 0,
       videoInfoKey: 0,
       topics: Helper.topics,
       levels: Helper.levels(this.$l2),
@@ -362,8 +365,16 @@ export default {
     updatePaused(paused) {
       if (paused !== this.paused) {
         this.paused = paused;
-        this.$emit("paused", paused);
+        this.$emit("paused", this.paused);
       }
+      this.$refs.transcript.paused = paused
+    },
+    updateCurrentTime(currentTime) {
+      if (this.currentTime !== currentTime) {
+        this.currentTime = currentTime
+        this.$emit("currentTime", this.currentTime)
+      }
+      this.$refs.transcript.currentTime = currentTime
     },
     previousLine() {
       this.$refs.transcript.previousLine();
@@ -429,13 +440,6 @@ export default {
     },
   },
   mounted() {
-    setInterval(() => {
-      if (this.$refs.transcript) {
-        this.$refs.transcript.currentTime = this.$refs.youtube
-          ? this.$refs.youtube.currentTime()
-          : 0;
-      }
-    }, 100);
   },
 };
 </script>

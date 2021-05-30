@@ -127,7 +127,8 @@
               </button>
               <div class="mt-2">
                 <button
-                  v-for="answer in reviewItem.answers"
+                  v-for="(answer, index) in reviewItem.answers"
+                  :key="`quiz-button-${index}`"
                   :class="{
                     btn: true,
                     'btn-small': true,
@@ -225,10 +226,13 @@ export default {
       return this.$getHanzi();
     },
     currentLineIndex() {
-      return this.lines.findIndex(
-        (line) => line === this.currentLine
-      );
-    }
+      return this.lines.findIndex((line) => line === this.currentLine);
+    },
+    nextLine() {
+      return this.lines && this.lines[this.currentLineIndex + 1]
+        ? this.lines[this.currentLineIndex + 1]
+        : false;
+    },
   },
   data() {
     return {
@@ -236,14 +240,18 @@ export default {
       id: Helper.uniqueId(),
       Helper,
       currentTime: 0,
-      currentLine: this.lines ? this.lines[this.startLineIndex] : undefined,
+      currentLine: undefined,
       review: {},
-      paused: {},
+      paused: true,
       reviewKey: 0,
       neverPlayed: true,
     };
   },
   mounted() {
+    this.currentLine =
+      this.lines && this.lines[this.startLineIndex]
+        ? this.lines[this.startLineIndex]
+        : undefined;
     if (this.highlightSavedWords) this.updateReview();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type.startsWith("savedWords")) {
@@ -252,7 +260,7 @@ export default {
     });
   },
   updated() {
-    this.scrollTo(this.currentLineIndex)
+    this.scrollTo(this.currentLineIndex);
   },
   beforeDestroy() {
     // you may call unsubscribe to stop the subscription
@@ -263,36 +271,9 @@ export default {
       if (this.highlightSavedWords) this.updateReview();
     },
     currentTime() {
-      for (let lineIndex = this.lines.length - 1; lineIndex >= 0; lineIndex--) {
-        let line = this.lines[lineIndex];
-        if (
-          parseFloat(line.starttime) <
-          this.currentTime + 0.1 // current time marker passed the start time of the line
-        ) {
-          if (this.currentLine !== line) {
-            // Pause video if passed stopLineIndex
-            if (
-              this.stopLineIndex > 0 &&
-              lineIndex === this.stopLineIndex + 1
-            ) {
-              if (this.neverPlayed) {
-                this.pauseVideo();
-                this.neverPlayed = false;
-                this.seekVideoTo(this.currentTime - 0.1);
-                return;
-              }
-            }
-            // Pause video if there's a pop quiz
-            // if (this.review[lineIndex - 1] && this.review[lineIndex - 1].length > 0 && !this.paused[lineIndex - 1]) {
-            //   this.pauseVideo()
-            //   this.paused[lineIndex - 1] = true
-            //   return
-            // }
-            this.scrollTo(lineIndex);
-          }
-          this.currentLine = line;
-          return;
-        }
+      if (this.currentTime > this.nextLine.starttime) {
+        this.currentLine = this.nextLine;
+        console.log(this.currentLine.starttime);
       }
     },
   },
@@ -421,13 +402,16 @@ export default {
     },
     previousLine() {
       let previousLineIndex = Math.max(this.currentLineIndex - 1, 0);
-      this.currentLine = this.lines[previousLineIndex];
+      // this.currentLine = this.lines[previousLineIndex];
       this.seekVideoTo(this.currentLine.starttime);
       this.scrollTo(previousLineIndex);
     },
     nextLine() {
-      let nextLineIndex = Math.min(this.currentLineIndex + 1, this.lines.length - 1);
-      this.currentLine = this.lines[nextLineIndex];
+      let nextLineIndex = Math.min(
+        this.currentLineIndex + 1,
+        this.lines.length - 1
+      );
+      // this.currentLine = this.lines[nextLineIndex];
       this.seekVideoTo(this.currentLine.starttime);
       this.scrollTo(nextLineIndex);
     },

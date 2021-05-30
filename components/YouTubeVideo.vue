@@ -14,17 +14,18 @@
 </template>
 
 <script>
-import Helper from '@/lib/helper'
-import $ from 'jquery'
+import Helper from "@/lib/helper";
+import $ from "jquery";
 
 export default {
   data() {
     return {
-      youtubeIframeID: 'youtube-' + Helper.uniqueId(),
+      youtubeIframeID: "youtube-" + Helper.uniqueId(),
       time: 0,
       neverPlayed: true,
       player: undefined,
-    }
+      currentTime: 0,
+    };
   },
   props: {
     youtube: {
@@ -51,19 +52,19 @@ export default {
   },
   mounted() {
     if (this.autoload) {
-      this.loadYouTubeiFrame()
+      this.loadYouTubeiFrame();
     }
-    this.time = this.starttime
+    this.time = this.starttime;
   },
   destroyed() {
     if (this.player) {
-      this.player.destroy()
-      this.player = undefined
+      this.player.destroy();
+      this.player = undefined;
     }
   },
   updated() {
     if (this.autoload) {
-      this.loadYouTubeiFrame()
+      this.loadYouTubeiFrame();
     }
   },
   computed: {
@@ -76,24 +77,31 @@ export default {
         return this.$store.state.settings.l2;
     },
     paused() {
-      return this.player && this.player.getPlayerState ? this.player.getPlayerState()  !== 1 : true
-    }
+      return this.player && this.player.getPlayerState
+        ? this.player.getPlayerState() !== 1
+        : true;
+    },
   },
   methods: {
-    currentTime() {
-      return this.player && this.player.getCurrentTime
-        ? this.player.getCurrentTime()
-        : 0
+    updateCurrentTime() {
+      // This cannot be a computed property because the player is not monitored by Vue
+      let newTime = this.player && this.player.getCurrentTime
+          ? this.player.getCurrentTime()
+          : 0;
+      if (newTime !== this.currentTime) {
+        this.currentTime = newTime
+        this.$emit('currentTime', this.currentTime)
+      }
     },
     loadYouTubeiFrame() {
-      let that = this
+      let that = this;
       // $('.youtube iframe').remove();
-      this.removeYouTubeAPIVars()
+      this.removeYouTubeAPIVars();
       window.onYouTubePlayerAPIReady = () => {
         // eslint-disable-next-line no-undef
         that.player = new YT.Player(this.youtubeIframeID, {
-          height: '390',
-          width: '640',
+          height: "390",
+          width: "640",
           videoId: this.youtube,
           playerVars: {
             start: parseInt(this.starttime),
@@ -108,11 +116,12 @@ export default {
             iv_load_policy: 3,
             modestbranding: 1,
           },
-          onReady: () => {},
+          onReady: () => {
+          },
           events: {
             onStateChange: () => {
               if (this.player && this.player.getPlayerState) {
-                this.player.setPlaybackRate(this.speed)
+                this.player.setPlaybackRate(this.speed);
               }
               if (
                 !Helper.iOS() &&
@@ -120,66 +129,69 @@ export default {
                 this.autoload &&
                 this.neverPlayed
               ) {
-                this.pause()
-                this.neverPlayed = false
+                this.pause();
+                this.neverPlayed = false;
               }
-            }
+            },
           },
-        })
-      }
-      $.getScript('//www.youtube.com/iframe_api')
+        });
+      };
+      $.getScript("//www.youtube.com/iframe_api");
+      setInterval(() => {
+        this.updateCurrentTime();
+      }, 100);
     },
     removeYouTubeAPIVars() {
-      if (window['YT']) {
+      if (window["YT"]) {
         let vars = [
-          'YT',
-          'YTConfig',
-          'onYTReady',
-          'yt',
-          'ytDomDomGetNextId',
-          'ytEventsEventsListeners',
-          'ytEventsEventsCounter',
-        ]
+          "YT",
+          "YTConfig",
+          "onYTReady",
+          "yt",
+          "ytDomDomGetNextId",
+          "ytEventsEventsListeners",
+          "ytEventsEventsCounter",
+        ];
         vars.forEach(function (key) {
-          window[key] = undefined
-        })
+          window[key] = undefined;
+        });
       }
     },
     seek(starttime) {
       if (this.player && this.player.seekTo) {
-        this.player.seekTo(starttime)
+        this.player.seekTo(starttime);
       }
     },
     play() {
       if (this.player && this.player.playVideo) {
-        this.player.playVideo()
+        this.player.playVideo();
       }
     },
     pause() {
       if (this.player && this.player.pauseVideo) {
-        this.player.pauseVideo()
+        this.player.pauseVideo();
       }
     },
     setSpeed(speed) {
-      this.speed = speed
-      if (this.player) this.player.setPlaybackRate(this.speed)
+      this.speed = speed;
+      if (this.player) this.player.setPlaybackRate(this.speed);
     },
     togglePaused() {
       if (this.player && this.player.getPlayerState) {
         this.player.getPlayerState() !== 1
           ? this.player.playVideo()
-          : this.player.pauseVideo()
+          : this.player.pauseVideo();
       } else {
-        this.loadYouTubeiFrame()
+        this.loadYouTubeiFrame();
       }
     },
   },
   watch: {
     speed() {
-      this.setSpeed(this.speed)
+      this.setSpeed(this.speed);
     },
   },
-}
+};
 </script>
 
 <style>
@@ -212,8 +224,8 @@ export default {
 }
 
 .youtube-screen::after {
-  content: '';
-  background: url('/img/youtube-red.svg');
+  content: "";
+  background: url("/img/youtube-red.svg");
   width: 100px;
   height: 100px;
 }
