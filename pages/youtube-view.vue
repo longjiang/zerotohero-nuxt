@@ -90,8 +90,11 @@
             placeholder="Filter"
           ></b-form-input>
           <b-input-group-append>
-            <b-input-group-text>
+            <b-input-group-text v-if="!filterList" class="btn btn-primary">
               <i class="fas fa-filter"></i>
+            </b-input-group-text>
+            <b-input-group-text v-if="filterList" class="btn btn-primary" @click="filterList = ''">
+              <i class="fas fa-times"></i>
             </b-input-group-text>
           </b-input-group-append>
         </b-input-group>
