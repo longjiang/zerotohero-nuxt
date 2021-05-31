@@ -454,20 +454,20 @@ export default {
           for (let word of this.token.candidates) {
             savedWord = this.$store.getters["savedWords/has"]({
               l2: this.$l2.code,
-              text: word.bare,
+              id: word.id,
             });
             if (savedWord) break;
           }
         } else {
-          if (this.$slots.default) {
+          if (
+            this.$slots.default &&
+            this.$slots.default &&
+            this.$slots.default[0] &&
+            this.$slots.default[0].text
+          ) {
             savedWord = this.$store.getters["savedWords/has"]({
               l2: this.$l2.code,
-              text:
-                this.$slots.default &&
-                this.$slots.default[0] &&
-                this.$slots.default[0].text
-                  ? this.$slots.default[0].text.toLowerCase()
-                  : "",
+              text: this.$slots.default[0].text.toLowerCase(),
             });
           }
         }
@@ -571,18 +571,20 @@ export default {
           }
         }
       }
-      words = words ? words.sort((a, b) => {
-        let asaved = this.$store.getters["savedWords/has"]({
-          id: a.id,
-          l2: this.$l2.code,
-        });
+      words = words
+        ? words.sort((a, b) => {
+            let asaved = this.$store.getters["savedWords/has"]({
+              id: a.id,
+              l2: this.$l2.code,
+            });
 
-        let bsaved = this.$store.getters["savedWords/has"]({
-          id: b.id,
-          l2: this.$l2.code,
-        });
-        return asaved === bsaved ? 0 : asaved ? -1 : 1;
-      }) : [];
+            let bsaved = this.$store.getters["savedWords/has"]({
+              id: b.id,
+              l2: this.$l2.code,
+            });
+            return asaved === bsaved ? 0 : asaved ? -1 : 1;
+          })
+        : [];
       this.words = Helper.uniqueByValue(words, "id");
       this.loading = false;
     },
@@ -842,6 +844,5 @@ export default {
       padding-top: 1rem;
     }
   }
-
 }
 </style>
