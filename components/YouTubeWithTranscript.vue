@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid youtube-with-transcript">
     <div v-if="layout === 'horizontal'" class="row">
-      <div class="youtube-video-column col-md-6 mb-2">
+      <div class="youtube-video-column col-md-6 mb-2 p-0">
         <div class="youtube-video-wrapper" :key="'youtube-' + video.youtube_id">
           <YouTubeVideo
             ref="youtube"
@@ -33,17 +33,16 @@
                 <i class="fas fa-plus mr-2"></i>
                 Add to Library
               </b-button>
-              <b-button
+              <span
                 v-if="
                   video &&
                   video.id &&
                   (this.video.subs_l2 || this.$settings.adminMode)
                 "
-                variant="success"
               >
-                <i class="fa fa-check mr-2"></i>
+                <i class="fas fa-check-circle mr-2 text-success"></i>
                 Added
-              </b-button>
+              </span>
             </template>
             <b-dropdown
               id="dropdown-1"
@@ -271,7 +270,7 @@ export default {
       let file = event.dataTransfer.files[0];
       let reader = new FileReader();
       reader.readAsText(file);
-      let parsed = []
+      let parsed = [];
       reader.onload = (event) => {
         let srt = event.target.result;
         parsed = parseSync(srt).map((cue) => {
@@ -280,7 +279,7 @@ export default {
             line: cue.data.text,
           };
         });
-        this.video.subs_l2 = Helper.uniqueByValue(parsed, 'starttime')
+        this.video.subs_l2 = Helper.uniqueByValue(parsed, "starttime");
         this.firstLineTime = this.l2_lines[0].starttime;
         this.transcriptKey++;
       };

@@ -44,30 +44,10 @@
     </div>
     <div
       :class="{
-        'youtube-view-wrapper pt-1': true,
+        'youtube-view-wrapper': true,
         fullscreen: layout === 'vertical',
       }"
     >
-      <div class="layout-toggle text-center pt-1 pb-1">
-        <button
-          @click="layout = 'horizontal'"
-          :class="{
-            'btn btn-small': true,
-            'btn-primary': layout === 'horizontal',
-          }"
-        >
-          Transcript Mode
-        </button>
-        <button
-          @click="layout = 'vertical'"
-          :class="{
-            'btn btn-small': true,
-            'btn-primary': layout === 'vertical',
-          }"
-        >
-          Theatre Mode
-        </button>
-      </div>
       <YouTubeWithTranscript
         v-if="video"
         :video="video"
@@ -128,7 +108,7 @@
       <div class="quick-access-buttons">
         <button
           :class="{
-            'quick-access-button shadow btn-secondary d-inline-block text-center mb-1': true,
+            'quick-access-button shadow btn-secondary d-inline-block text-center': true,
             'btn-primary': showList,
           }"
           @click="showList = !showList"
@@ -137,7 +117,7 @@
         </button>
         <button
           :class="{
-            'quick-access-button shadow btn-secondary d-inline-block text-center mb-1': true,
+            'quick-access-button shadow btn-secondary d-inline-block text-center': true,
             'btn-primary': speed !== 1,
           }"
           @click="speed = speed === 1 ? 0.75 : speed === 0.75 ? 0.5 : 1"
@@ -151,32 +131,41 @@
           </span>
         </button>
         <button
-          class="quick-access-button shadow btn-secondary d-inline-block text-center mb-1"
+          class="quick-access-button shadow btn-secondary d-inline-block text-center"
           @click="$refs.youtube.$refs.transcript.goToPreviousLine()"
         >
           <i class="fas fa-arrow-up"></i>
         </button>
         <button
-          class="quick-access-button shadow btn-primary d-inline-block text-center mb-1"
+          class="quick-access-button shadow btn-primary d-inline-block text-center"
           @click="togglePaused"
         >
           <i v-if="paused" class="fas fa-play"></i>
           <i v-else class="fas fa-pause"></i>
         </button>
         <button
-          class="quick-access-button shadow btn-secondary d-inline-block text-center mb-1"
+          class="quick-access-button shadow btn-secondary d-inline-block text-center"
           @click="$refs.youtube.$refs.transcript.goToNextLine()"
         >
           <i class="fas fa-arrow-down"></i>
         </button>
         <button
           :class="{
-            'quick-access-button shadow btn-secondary d-inline-block text-center mb-1': true,
+            'quick-access-button shadow btn-secondary d-inline-block text-center': true,
             'btn-primary': repeat,
           }"
           @click="repeat = !repeat"
         >
           <i class="fas fa-undo"></i>
+        </button>
+        <button
+          :class="{
+            'quick-access-button shadow btn-secondary d-inline-block text-center': true,
+            'btn-primary': layout === 'vertical',
+          }"
+          @click="layout = layout === 'horizontal' ? 'vertical' : 'horizontal'"
+        >
+          <i class="fas fa-expand"></i>
         </button>
       </div>
     </div>
@@ -459,9 +448,8 @@ export default {
 <style scoped>
 .quick-access-buttons {
   position: sticky;
-  bottom: 1rem;
-  left: calc(100% - 4rem);
-  width: 3.2rem;
+  bottom: 0.5rem;
+  text-align: center;
   z-index: 9;
 }
 
@@ -477,24 +465,6 @@ export default {
   padding: 0;
 }
 
-.youtube-view-wrapper >>> .youtube-video-wrapper {
-  padding-top: 2rem;
-}
-
-.youtube-view-wrapper .layout-toggle {
-  position: sticky;
-  top: 0;
-  padding: 1rem;
-  z-index: 10;
-  background: white;
-}
-
-.youtube-view-wrapper.fullscreen .layout-toggle {
-  position: fixed;
-  width: 100vw;
-  top: 0.24rem;
-}
-
 .youtube-view-wrapper.fullscreen {
   position: fixed;
   top: 0;
@@ -506,25 +476,20 @@ export default {
 }
 .youtube-view-wrapper.fullscreen .quick-access-buttons {
   position: fixed;
-}
-
-@media (orientation: landscape) {
-  .youtube-view-wrapper.fullscreen .quick-access-buttons {
-    display: none;
-  }
+  width: 100%;
 }
 
 .youtube-view-line-list {
   position: fixed;
-  max-width: calc(100vw - 4rem);
-  max-height: calc(100vh - 4rem);
+  width: 25rem;
+  max-height: calc(100vh - 7rem);
   overflow: scroll;
   border-radius: 0.2rem;
   background: white;
   z-index: 10;
-  right: 5rem;
+  left: calc(50vw - 12.5rem);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-  bottom: 1rem;
+  bottom: 4rem;
 }
 
 .youtube-view-line-list .youtube-view-line-list-item {
