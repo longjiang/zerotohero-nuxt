@@ -80,11 +80,27 @@
         :autoplay="true"
         @paused="updatePaused"
       />
-      <div v-if="showList" class="youtube-view-line-list">
+      <div
+        v-if="video"
+        :class="{ 'youtube-view-line-list': true, 'd-none': !showList }"
+      >
+        <b-input-group class="youtube-view-line-list-filter-wrapper">
+          <b-form-input
+            v-model.lazy="filterList"
+            placeholder="Filter"
+          ></b-form-input>
+          <b-input-group-append>
+            <b-input-group-text>
+              <i class="fas fa-filter"></i>
+            </b-input-group-text>
+          </b-input-group-append>
+        </b-input-group>
+
         <div
           v-for="(line, index) in video.subs_l2
             .map((line) => line)
-            .sort((a, b) => a.line.length - b.line.length)"
+            .sort((a, b) => a.line.length - b.line.length)
+            .filter((line) => new RegExp(filterList, 'gi').test(line.line))"
           :class="{
             'youtube-view-line-list-item': true,
             active:
@@ -204,9 +220,9 @@ export default {
       showList: false,
       paused: true,
       speed: 1,
+      filterList: "",
       layout: "horizontal",
       repeat: false,
-      sortedLines: [],
     };
   },
   mounted() {
@@ -500,7 +516,7 @@ export default {
   z-index: 10;
   right: 5rem;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-  top: 3rem;
+  bottom: 1rem;
 }
 
 .youtube-view-line-list .youtube-view-line-list-item {
@@ -513,5 +529,13 @@ export default {
 
 .youtube-view-line-list-item.active {
   background-color: #eee;
+}
+
+.youtube-view-line-list-filter-wrapper {
+  padding: 0.25rem;
+  background: white;
+  width: calc(100% - 0.5rem);
+  position: sticky;
+  top: 0;
 }
 </style>
