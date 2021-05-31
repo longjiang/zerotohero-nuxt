@@ -385,6 +385,9 @@ export default {
     goToNextLine() {
       if (this.$refs.transcript) this.$refs.transcript.goToNextLine();
     },
+    goToLine(line) {
+      if (this.$refs.transcript) this.$refs.transcript.goToLine(line);
+    },
     rewind() {
       this.seekYouTube(this.video.subs_l2[this.startLineIndex].starttime);
     },

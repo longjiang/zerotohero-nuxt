@@ -40,7 +40,7 @@ export const mutations = {
   SET_ADMIN_MODE(state, adminMode) {
     state.adminMode = adminMode
     if (typeof localStorage !== 'undefined') {
-      let settings = JSON.parse(localStorage.getItem('zthSettings'))
+      let settings = JSON.parse(localStorage.getItem('zthSettings') || '{}')
       settings.adminMode = adminMode
       localStorage.setItem('zthSettings', JSON.stringify(settings))
     }

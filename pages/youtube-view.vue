@@ -80,7 +80,37 @@
         :autoplay="true"
         @paused="updatePaused"
       />
+      <div v-if="showList" class="youtube-view-line-list">
+        <div
+          v-for="(line, index) in video.subs_l2
+            .map((line) => line)
+            .sort((a, b) => a.line.length - b.line.length)"
+          :class="{
+            'youtube-view-line-list-item': true,
+            active:
+              $refs.youtube &&
+              $refs.youtube.$refs.transcript &&
+              $refs.youtube.$refs.transcript.currentLine === line,
+          }"
+          :key="`video-line-list-${index}`"
+          @click="
+            $refs.youtube.goToLine(line);
+            showList = !showList;
+          "
+        >
+          {{ line.line }}
+        </div>
+      </div>
       <div class="quick-access-buttons">
+        <button
+          :class="{
+            'quick-access-button shadow btn-secondary d-inline-block text-center mb-1': true,
+            'btn-primary': showList,
+          }"
+          @click="showList = !showList"
+        >
+          <i class="fas fa-align-left"></i>
+        </button>
         <button
           :class="{
             'quick-access-button shadow btn-secondary d-inline-block text-center mb-1': true,
@@ -89,7 +119,12 @@
           @click="speed = speed === 1 ? 0.75 : speed === 0.75 ? 0.5 : 1"
         >
           <i v-if="speed === 1" class="fas fa-tachometer-alt"></i>
-          <span v-else style="font-size: 0.6em; display: block; line-height: 2.5em;">{{ speed }}x</span>
+          <span
+            v-else
+            style="font-size: 0.6em; display: block; line-height: 2.5em"
+          >
+            {{ speed }}x
+          </span>
         </button>
         <button
           class="quick-access-button shadow btn-secondary d-inline-block text-center mb-1"
@@ -166,10 +201,12 @@ export default {
     return {
       l2Locale: undefined,
       video: undefined,
+      showList: false,
       paused: true,
       speed: 1,
       layout: "horizontal",
       repeat: false,
+      sortedLines: [],
     };
   },
   mounted() {
@@ -194,7 +231,7 @@ export default {
       if (youtube_video) video = Object.assign(video || {}, youtube_video);
     }
     video.subs_l2 = await this.getTranscript(video);
-    
+
     if (video.subs_l2 && video.subs_l2.length > 0) {
       this.firstLineTime = video.subs_l2[0].starttime;
     }
@@ -259,7 +296,10 @@ export default {
       let root = parser.parse(xml, {
         ignoreAttributes: false,
       });
-      if (typeof root.transcript_list !== 'undefined' && typeof root.transcript_list.track !== 'undefined') {
+      if (
+        typeof root.transcript_list !== "undefined" &&
+        typeof root.transcript_list.track !== "undefined"
+      ) {
         let tracks =
           root.transcript_list.track.length > 0
             ? root.transcript_list.track
@@ -307,14 +347,14 @@ export default {
         return video.subs_l2;
       }
       if (video.subs_l2 && typeof video.subs_l2 === "string") {
-
         let savedSubs = JSON.parse(video.subs_l2);
 
         if (savedSubs) {
-          let filtered = savedSubs.filter((line) => line && line.starttime && line.line);
-          return filtered
+          let filtered = savedSubs.filter(
+            (line) => line && line.starttime && line.line
+          );
+          return filtered;
         }
-        
       }
       if (!video.subs_l2 || video.subs_l2.length === 0) {
         return await this.getL2Transcript();
@@ -448,5 +488,30 @@ export default {
   .youtube-view-wrapper.fullscreen .quick-access-buttons {
     display: none;
   }
+}
+
+.youtube-view-line-list {
+  position: fixed;
+  max-width: calc(100vw - 4rem);
+  max-height: calc(100vh - 4rem);
+  overflow: scroll;
+  border-radius: 0.2rem;
+  background: white;
+  z-index: 10;
+  right: 5rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+  top: 3rem;
+}
+
+.youtube-view-line-list .youtube-view-line-list-item {
+  padding: 0.2rem 0.7rem;
+}
+
+.youtube-view-line-list-item {
+  cursor: pointer;
+}
+
+.youtube-view-line-list-item.active {
+  background-color: #eee;
 }
 </style>
