@@ -93,7 +93,11 @@
             <b-input-group-text v-if="!filterList" class="btn btn-primary">
               <i class="fas fa-filter"></i>
             </b-input-group-text>
-            <b-input-group-text v-if="filterList" class="btn btn-primary" @click="filterList = ''">
+            <b-input-group-text
+              v-if="filterList"
+              class="btn btn-primary"
+              @click="filterList = ''"
+            >
               <i class="fas fa-times"></i>
             </b-input-group-text>
           </b-input-group-append>
@@ -102,6 +106,7 @@
         <div
           v-for="(line, index) in video.subs_l2
             .map((line) => line)
+            .sort((a, b) => a.line.localeCompare(b.line, $l2.code))
             .sort((a, b) => a.line.length - b.line.length)
             .filter((line) => new RegExp(filterList, 'gi').test(line.line))"
           :class="{

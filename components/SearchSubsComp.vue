@@ -381,7 +381,7 @@ export default {
         contextRight.push(hit.rightContext);
       }
       this.contextLeft = Helper.unique(contextLeft).sort((a, b) =>
-        a.localeCompare(b, "zh-CN")
+        a.Compare(b, "zh-CN")
       );
       this.contextRight = Helper.unique(contextRight).sort((a, b) =>
         a.localeCompare(b, "zh-CN")
