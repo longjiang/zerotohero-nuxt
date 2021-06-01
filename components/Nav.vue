@@ -55,6 +55,8 @@
 </template>
 
 <script>
+import Config from '@/lib/config'
+
 export default {
   data() {
     return {
@@ -112,7 +114,7 @@ export default {
               name: "tv-shows",
               icon: "fa fa-tv",
               title: "TV Shows",
-              show: ["zh", "ja", "en"].includes(this.l2.code),
+              show: this.tvShows(),
             },
             {
               name: "youtube-browse",
@@ -404,6 +406,9 @@ export default {
     },
   },
   methods: {
+    tvShows() {
+      return typeof Config.approvedChannels[this.l2.code] !== 'undefined'
+    },
     hasFeature(feature) {
       return this.$hasFeature(feature);
     },

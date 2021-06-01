@@ -63,7 +63,7 @@ export default {
         this.$l2.id
       }&limit=500&timestamp=${this.$settings.adminMode ? Date.now() : 0}`
     )
-    let shows = response.data.data.sort((x,y)=>x.title.localeCompare(y.title, 'zh-CN')) || []
+    let shows = response.data.data.sort((x,y)=>x.title.localeCompare(y.title, this.$l2.code)) || []
     this.shows = Helper.uniqueByValue(shows, 'youtube_id')
   },
   computed: {

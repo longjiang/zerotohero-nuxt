@@ -76,13 +76,8 @@
             </b-input-group-text>
           </b-input-group-append>
         </b-input-group>
-
         <div
-          v-for="(line, index) in video.subs_l2
-            .map((line) => line)
-            .sort((a, b) => a.line.localeCompare(b.line, $l2.code))
-            .sort((a, b) => a.line.length - b.line.length)
-            .filter((line) => new RegExp(filterList, 'gi').test(line.line))"
+          v-for="(line, index) in sortedLines"
           :class="{
             'youtube-view-line-list-item': true,
             active:
@@ -202,6 +197,20 @@ export default {
     },
     saved() {
       return this.video.id;
+    },
+    sortedLines() {
+      let lines = this.video.subs_l2
+        .map((line) => line)
+        .filter((line) => new RegExp(this.filterList, "gi").test(line.line));
+
+      for (let line of lines) {
+        line.count = lines.filter((l) => l.line === line.line).length;
+      }
+      let sortedLines = lines
+        .sort((a, b) => a.line.localeCompare(b.line, this.$l2.code))
+        .sort((a, b) => a.line.length - b.line.length)
+        .sort((a, b) => b.count - a.count);
+      return sortedLines;
     },
   },
   data() {
