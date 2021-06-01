@@ -1096,7 +1096,6 @@ ul.collapse-10.collapsed li:nth-child(-n + 10) {
   background-color: #f3f3f3;
   position: relative;
   display: inline-block;
-  bottom: 0.2rem;
   border: none;
 }
 
