@@ -80,7 +80,6 @@
           </div>
           <EntryForms v-if="$l2.code === 'ru'" class="mt-5" :word="entry" />
           <Collocations
-            v-if="$l2.code !== 'ja'"
             :class="{ 'mt-5 mb-5': true, hidden: !collocationsReady }"
             :word="entry"
             @collocationsReady="collocationsReady = true"
