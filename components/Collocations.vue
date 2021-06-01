@@ -175,17 +175,13 @@ export default {
       });
 
       if (sketch && sketch.Gramrels && sketch.Gramrels.length > 0) {
-        let colDesc = await SketchEngine.collocationDescription({
-          l2: this.$l2,
-          filter: (gramrel) =>
-            sketch.Gramrels.map((g) => g.name).includes(gramrel),
-        });
-
-        if (colDesc) {
-          this.sketch = sketch;
-          this.colDesc = colDesc;
-          this.$emit("collocationsReady");
+        let colDesc = {};
+        for (let g of sketch.Gramrels) {
+          colDesc[g.name] = g.name.replace("%w", "{word}");
         }
+        this.sketch = sketch;
+        this.colDesc = colDesc;
+        this.$emit("collocationsReady");
       }
       this.updating = false;
     },
