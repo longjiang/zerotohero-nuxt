@@ -250,6 +250,7 @@ export default {
       currentLine: undefined,
       review: {},
       paused: true,
+      ended: false,
       repeat: false,
       reviewKey: 0,
       neverPlayed: true,

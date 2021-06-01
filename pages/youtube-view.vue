@@ -55,6 +55,7 @@
         :autoload="true"
         :autoplay="true"
         @paused="updatePaused"
+        @ended="updateEnded"
       />
       <div
         v-if="video"
@@ -267,6 +268,19 @@ export default {
     updatePaused(paused) {
       if (paused !== this.paused) {
         this.paused = paused;
+      }
+    },
+    updateEnded(ended) {
+      if (ended !== this.ended) {
+        this.ended = ended;
+        console.log(ended, 'ended')
+      }
+      if (this.ended) {
+        setTimeout(() => {
+          if (this.ended) {
+            this.$router.push(`/${this.$l1.code}/${this.$l2.code}/youtube/view/${this.randomEpisodeYouTubeId}`)
+          }
+        }, 5000);
       }
     },
     wordSaved(word) {

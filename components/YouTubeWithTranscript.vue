@@ -11,6 +11,7 @@
             :autoplay="autoplay"
             @paused="updatePaused"
             @currentTime="updateCurrentTime"
+            @ended="updateEnded"
           />
         </div>
       </div>
@@ -154,6 +155,7 @@
               ref="youtube"
               @paused="updatePaused"
               @currentTime="updateCurrentTime"
+              @ended="updateEnded"
               :speed="speed"
               :youtube="video.youtube_id"
               :starttime="starttime"
@@ -362,6 +364,13 @@ export default {
           this.videoInfoKey++;
         }
       } catch (err) {}
+    },
+    updateEnded(ended) {
+      if (ended !== this.ended) {
+        this.ended = ended;
+        this.$emit("ended", this.ended);
+      }
+      if (this.$refs.transcript) this.$refs.transcript.ended = ended;
     },
     updatePaused(paused) {
       if (paused !== this.paused) {
