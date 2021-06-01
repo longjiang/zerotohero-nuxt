@@ -88,7 +88,7 @@
         v-if="text || token"
         :term="text ? text : token.candidates[0].head"
         :sticky="false"
-        class="mt-2"
+        class="mt-3"
       />
       <div
         v-for="word in words"
@@ -720,7 +720,7 @@ export default {
 .tooltip {
   display: block !important;
   $color: white;
-  $height: 15rem;
+  $height: 20rem;
   $width: 20rem;
   border: none;
   height: $height;
@@ -812,7 +812,8 @@ export default {
   .tooltip-inner {
     border-radius: 1rem;
     text-align: left;
-    overflow: scroll;
+    overflow-y: scroll;
+    overflow-x: hidden;
     background: $color;
     color: black;
     padding: 1rem;
@@ -825,6 +826,8 @@ export default {
 
     .tooltip-images {
       margin-bottom: 0.5rem;
+      width: $width;
+      overflow-x: scroll;
       display: flex;
       img {
         flex: 1;

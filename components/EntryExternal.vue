@@ -4,7 +4,7 @@
       <b-button
         @click="setExtDict('zdic')"
         v-if="['zh', 'yue', 'nan', 'wuu', 'hak'].includes($l2.code)"
-        class="btn btn-small"
+        class="btn btn-small mb-1"
         :data-bg-level="extDict === 'zdic' ? level : false"
       >
         汉典
@@ -12,14 +12,14 @@
       <b-button
         @click="setExtDict('cambridge')"
         v-if="$l2.code === 'en'"
-        class="btn btn-small"
+        class="btn btn-small mb-1"
         :data-bg-level="extDict === 'cambridge' ? level : false"
       >
         Cambridge
       </b-button>
       <b-button
         @click="setExtDict('wiktionary')"
-        class="btn btn-small"
+        class="btn btn-small mb-1"
         :data-bg-level="extDict === 'wiktionary' ? level : false"
       >
         Wiktionary
@@ -27,7 +27,7 @@
       <b-button
         @click="setExtDict('etymology')"
         v-if="$l2.code === 'en'"
-        class="btn btn-small"
+        class="btn btn-small mb-1"
         :data-bg-level="extDict === 'etymology' ? level : false"
       >
         Etymology
@@ -37,7 +37,7 @@
         v-if="
           ['en', 'zh', 'fr', 'de', 'he', 'it', 'ru', 'es'].includes($l2.code)
         "
-        class="btn btn-small"
+        class="btn btn-small mb-1"
         :data-bg-level="extDict === 'ngram' ? level : false"
       >
         Ngram
@@ -45,7 +45,7 @@
       <b-button
         @click="setExtDict('moedict')"
         v-if="['zh', 'yue', 'nan', 'wuu', 'hak'].includes($l2.code)"
-        class="btn btn-small"
+        class="btn btn-small mb-1"
         :data-bg-level="extDict === 'moedict' ? level : false"
       >
         萌典
@@ -53,7 +53,7 @@
       <b-button
         @click="setExtDict('baidu-baike')"
         v-if="$l2.code === 'zh'"
-        class="btn btn-small"
+        class="btn btn-small mb-1"
         :data-bg-level="extDict === 'baidu-baike' ? level : false"
       >
         百度百科
@@ -61,14 +61,14 @@
       <b-button
         @click="setExtDict('naver')"
         v-if="['zh', 'ko', 'ja'].includes($l2.code)"
-        class="btn btn-small"
+        class="btn btn-small mb-1"
         :data-bg-level="extDict === 'naver' ? level : false"
       >
         Naver
       </b-button>
       <b-button
         @click="setExtDict('grammar-wiki')"
-        class="btn btn-small"
+        class="btn btn-small mb-1"
         v-if="$l2.code === 'zh'"
         :data-bg-level="extDict === 'grammar-wiki' ? level : false"
       >
@@ -76,7 +76,7 @@
       </b-button>
       <b-button
         @click="setExtDict('wikipedia')"
-        class="btn btn-small"
+        class="btn btn-small mb-1"
         :data-bg-level="extDict === 'wikipedia' ? level : false"
       >
         Wikipedia
