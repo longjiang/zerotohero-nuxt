@@ -99,7 +99,7 @@
           {{ line.line }}
         </div>
       </div>
-      <div class="quick-access-buttons">
+      <div v-if="video" class="quick-access-buttons">
         <button
           :class="{
             'quick-access-button shadow btn-secondary d-inline-block text-center': true,
@@ -442,7 +442,7 @@ export default {
 <style scoped>
 .quick-access-buttons {
   position: sticky;
-  bottom: 1rem;
+  bottom: 2rem;
   text-align: center;
   z-index: 9;
 }
