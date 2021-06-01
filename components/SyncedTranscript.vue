@@ -272,7 +272,7 @@ export default {
     });
   },
   updated() {
-    this.scrollTo(this.currentLineIndex);
+    if (!this.single) this.scrollTo(this.currentLineIndex);
   },
   beforeDestroy() {
     // you may call unsubscribe to stop the subscription
@@ -296,7 +296,7 @@ export default {
       this.previousTime = this.currentTime;
     },
     currentLine() {
-      this.scrollTo(this.currentLineIndex);
+      if (!this.single) this.scrollTo(this.currentLineIndex);
     },
   },
   methods: {
