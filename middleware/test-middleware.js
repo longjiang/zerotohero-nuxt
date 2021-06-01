@@ -3,7 +3,7 @@ export default async function ({ app, store, params, i18n }) {
     if (store.state.settings.l1 && store.state.settings.l1.code === params.l1 && store.state.settings.l2 && store.state.settings.l2.code === params.l2) {
       return
     } else {
-      console.log('changing languages')
+      console.log('Changing languages...')
       let l1 = app.$languages.getSmart(params.l1)
       let l2 = app.$languages.getSmart(params.l2)
       store.commit('settings/SET_L1', l1)
@@ -22,7 +22,7 @@ export default async function ({ app, store, params, i18n }) {
         : undefined;
       
       if (dictionaries) {
-        console.log('setting dictionary name', dictionaries[0])
+        console.log('Setting dictionary name to', dictionaries[0])
         store.commit('settings/SET_DICTIONARY_NAME', dictionaries[0])
       }
     }

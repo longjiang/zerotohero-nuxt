@@ -3,7 +3,10 @@
     <div class="input-group" v-cloak>
       <input
         @keyup.enter="go"
-        @focus="active = true; $event.target.select()"
+        @focus="
+          active = true;
+          $event.target.select();
+        "
         @blur="cancel"
         v-model="text"
         type="text"
@@ -14,10 +17,10 @@
       <router-link
         v-if="random"
         class="btn btn-secondary btn-random ml-2"
-        :to="`/${$l1.code}/${$l2.code}/dictionary/${$store.state.settings.dictionaryName}/random`"
+        :to="random"
       >
         <i class="fas fa-random mr-1"></i>
-        <span>{{ $t('Random') }}</span>
+        <span>{{ $t("Random") }}</span>
       </router-link>
       <div v-if="button" class="input-group-append">
         <button
@@ -30,13 +33,27 @@
         </button>
       </div>
     </div>
-    <div class="suggestions" :key="suggestionsKey" v-cloak v-if="active && text && text.length > 0">
-      <router-link class="suggestion" v-for="(suggestion, index) in suggestions.filter(suggestion => suggestion)" :key="`search-suggestion-${index}-${suggestion ? suggestion.bare : ''}`" :to="hrefFunc(suggestion)">
+    <div
+      class="suggestions"
+      :key="suggestionsKey"
+      v-cloak
+      v-if="active && text && text.length > 0"
+    >
+      <router-link
+        class="suggestion"
+        v-for="(suggestion, index) in suggestions.filter(
+          (suggestion) => suggestion
+        )"
+        :key="`search-suggestion-${index}-${suggestion ? suggestion.bare : ''}`"
+        :to="hrefFunc(suggestion)"
+      >
         <span v-if="suggestion">
           <span
             class="suggestion-word font-weight-bold mr-1"
             :data-level="suggestion.level || 'outside'"
-          >{{ suggestion.bare }}</span>
+          >
+            {{ suggestion.bare }}
+          </span>
           <span class="mr-1" v-if="suggestion.match">
             {{ suggestion.match.field }} of
             <b>{{ suggestion.bare }}</b>
@@ -48,15 +65,25 @@
           ></span>
         </span>
       </router-link>
-      <router-link class="suggestion" v-if="suggestions.length === 0 && type === 'dictionary'" :to="`/${$l1.code}/${$l2.code}/phrase/search/${text}`">
+      <router-link
+        class="suggestion"
+        v-if="suggestions.length === 0 && type === 'dictionary'"
+        :to="`/${$l1.code}/${$l2.code}/phrase/search/${text}`"
+      >
         <span class="suggestion-not-found">
-          <b>&ldquo;{{ text }}&rdquo;</b> is not in {{ $store.state.settings.dictionaryName }}, press Return to look it up as a Phrase.
+          <b>&ldquo;{{ text }}&rdquo;</b>
+          is not in {{ $store.state.settings.dictionaryName }}, press Return to
+          look it up as a Phrase.
         </span>
       </router-link>
-      <div class="suggestion" v-if="suggestions.length === 0 && type === 'generic'">
+      <div
+        class="suggestion"
+        v-if="suggestions.length === 0 && type === 'generic'"
+      >
         <span class="suggestion-not-found">
           Search for
-          <b>“{{ text }}”</b>...
+          <b>“{{ text }}”</b>
+          ...
         </span>
       </div>
     </div>
@@ -64,20 +91,20 @@
 </template>
 
 <script>
-import { setTimeout } from 'timers'
-import Helper from '@/lib/helper'
+import { setTimeout } from "timers";
+import Helper from "@/lib/helper";
 
 export default {
   props: {
     term: {
-      default: '',
+      default: "",
     },
     defaultURL: {
       type: Function,
       default: () => {},
     },
     type: {
-      default: 'dictionary', // can also be 'generic'
+      default: "dictionary", // can also be 'generic'
     },
     button: {
       default: true,
@@ -93,7 +120,7 @@ export default {
       type: Function,
       default: function (entry) {
         if (entry) {
-          return `/${this.$l1.code}/${this.$l2.code}/dictionary/${this.$store.state.settings.dictionaryName}/${entry.id}`
+          return `/${this.$l1.code}/${this.$l2.code}/dictionary/${this.$store.state.settings.dictionaryName}/${entry.id}`;
         }
       },
     },
@@ -112,32 +139,32 @@ export default {
       text: this.entry ? this.entry.bare : this.term,
       active: false,
       suggestionsKey: 0,
-    }
+    };
   },
   watch: {
     $route() {
-      this.active = false
+      this.active = false;
     },
     entry() {
       if (this.entry) {
-        this.dEntry = this.entry
-        this.text = this.dEntry.bare
+        this.dEntry = this.entry;
+        this.text = this.dEntry.bare;
       }
     },
     async text() {
-      if (this.type === 'dictionary') {
-        this.suggestions = []
+      if (this.type === "dictionary") {
+        this.suggestions = [];
         this.suggestions = this.suggestions.concat(
           await (await this.$getDictionary()).lookupByDef(this.text, 10)
-        )
+        );
         this.suggestions = this.suggestions.concat(
           await (await this.$getDictionary()).lookupFuzzy(this.text, 10)
-        )
+        );
         this.suggestions = this.suggestions
           .sort((a, b) => b.bare.length - a.bare.length)
-          .sort((a, b) => (a.bare.startsWith(this.text) ? -1 : 0))
+          .sort((a, b) => (a.bare.startsWith(this.text) ? -1 : 0));
       } else if (this.suggestionsFunc) {
-        this.suggestions = this.suggestionsFunc(this.text)
+        this.suggestions = this.suggestionsFunc(this.text);
       }
     },
   },
@@ -151,29 +178,29 @@ export default {
         return this.$store.state.settings.l2;
     },
     $dictionary() {
-      return this.$getDictionary()
-    }
+      return this.$getDictionary();
+    },
   },
   methods: {
     focusOnInput() {
-      this.$refs.lookup.focus()
+      this.$refs.lookup.focus();
     },
     go() {
       const url =
-        $('.suggestion:first-child').attr('href') || this.defaultURL(this.text)
+        $(".suggestion:first-child").attr("href") || this.defaultURL(this.text);
       if (url) {
-        this.suggestions = []
-        this.$router.push({ path: url })
+        this.suggestions = [];
+        this.$router.push({ path: url });
       }
     },
     cancel() {
       setTimeout(() => {
-        if (this.suggestions[0]) this.dEntry = this.suggestions[0]
-        this.active = false
-      }, 300) // Set time out, otherwise before click event is fired the suggestions are already gone!
+        if (this.suggestions[0]) this.dEntry = this.suggestions[0];
+        this.active = false;
+      }, 300); // Set time out, otherwise before click event is fired the suggestions are already gone!
     },
   },
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -222,5 +249,22 @@ a.suggestion {
 
 .suggestion-l1 >>> .highlight {
   font-weight: bold;
+}
+
+.btn-random {
+  position: absolute;
+  right: 3rem;
+  font-size: 0.8rem;
+  line-height: 0.8rem;
+  height: 1.7rem !important;
+  top: 0.3rem;
+  background: #cacaca;
+  border: none;
+}
+
+@media (max-width: 768px) {
+  .btn-random span {
+    display: none;
+  }
 }
 </style>

@@ -45,4 +45,23 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.btn-random {
+  position: absolute;
+  right: 3rem;
+  font-size: 0.8rem;
+  line-height: 0.8rem;
+  height: 1.7rem !important;
+  top: 0.3rem;
+  background: #cacaca;
+  border: none;
+}
+
+
+@media (max-width: 768px) {
+  .btn-random span {
+    display: none;
+  }
+}
+
+</style>

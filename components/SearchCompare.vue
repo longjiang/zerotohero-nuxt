@@ -1,6 +1,17 @@
 <template>
   <div class="search-compare-wrapper" v-if="!loading">
-    <Search ref="search" :defaultURL="urlFunc" :hrefFunc="compareEntry ? compareHrefFuncFirst : undefined" :random="random" :type="type" :entry="searchEntry" :term="term" :placeholder="$t($l2.code === 'zh' ? 'Search term or regex' : 'Look up words here...')"></Search>
+    <Search
+      ref="search"
+      :defaultURL="urlFunc"
+      :hrefFunc="compareEntry ? compareHrefFuncFirst : undefined"
+      :random="random"
+      :type="type"
+      :entry="searchEntry"
+      :term="term"
+      :placeholder="
+        $t($l2.code === 'zh' ? 'Search term or regex' : 'Look up words here...')
+      "
+    ></Search>
     <Search
       :class="{ 'ml-2': true, hidden: !showCompare }"
       :entry="compareEntry"
@@ -12,18 +23,18 @@
       :hrefFunc="compareHrefFunc"
     ></Search>
     <button class="btn btn-compare ml-2" @click="compareClick">
-      <span v-if="showCompare"><i class="fas fa-times"></i></span
-      ><span v-if="!showCompare"
-        ><i class="fas fa-adjust"></i>
-        <span class="compare-btn-text ml-1">Compare</span></span
-      >
+      <span v-if="showCompare"><i class="fas fa-times"></i></span>
+      <span v-if="!showCompare">
+        <i class="fas fa-adjust"></i>
+        <span class="compare-btn-text ml-1">Compare</span>
+      </span>
     </button>
   </div>
 </template>
 
 <script>
-import Helper from '@/lib/helper'
-import Search from '@/components/Search'
+import Helper from "@/lib/helper";
+import Search from "@/components/Search";
 
 export default {
   props: {
@@ -35,41 +46,40 @@ export default {
       type: Object,
       default: undefined,
     },
-    term: '',
-    compareTerm: '',
+    term: "",
+    compareTerm: "",
     random: {
-      default: false
+      default: false,
     },
     compare: {
-      default: false
+      default: false,
     },
     urlFunc: {
-      type: Function
+      type: Function,
     },
     compareUrlFunc: {
       type: Function,
     },
     type: {
-      default: 'dictionary', // can also be 'generic'
-    }
+      default: "dictionary", // can also be 'generic'
+    },
   },
   components: {
-    Search
+    Search,
   },
   data() {
     return {
       Helper,
       Search,
-      loading: this.type !== 'generic',
-      showCompare: this.compare
-    }
+      loading: this.type !== "generic",
+      showCompare: this.compare,
+    };
   },
   async mounted() {
-    await this.$getDictionary()
-    this.loading = false
+    await this.$getDictionary();
+    this.loading = false;
   },
   computed: {
-
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -81,25 +91,24 @@ export default {
   },
   methods: {
     compareHrefFunc(compareEntry) {
-      const entry = this.$refs.search.entry || this.entry
-      return `/${this.$l1.code}/${this.$l2.code}/compare/${this.$store.state.settings.dictionaryName}/${entry.id},${compareEntry.id}`
+      const entry = this.$refs.search.entry || this.entry;
+      return `/${this.$l1.code}/${this.$l2.code}/compare/${this.$store.state.settings.dictionaryName}/${entry.id},${compareEntry.id}`;
     },
     compareHrefFuncFirst(entry) {
-      return `/${this.$l1.code}/${this.$l2.code}/compare/${this.$store.state.settings.dictionaryName}/${entry.id},${this.compareEntry.id}`
+      return `/${this.$l1.code}/${this.$l2.code}/compare/${this.$store.state.settings.dictionaryName}/${entry.id},${this.compareEntry.id}`;
     },
     focusOnSearch() {
-      console.log('focus on seach')
-      this.$refs.search.focusOnInput()
+      console.log("focus on seach");
+      this.$refs.search.focusOnInput();
     },
     compareClick() {
-      this.showCompare = this.showCompare ? false : true
-    }
-  }
-}
+      this.showCompare = this.showCompare ? false : true;
+    },
+  },
+};
 </script>
 
 <style>
-
 .search-compare-wrapper {
   display: flex;
   position: relative;
@@ -115,26 +124,8 @@ export default {
   height: 2.3rem;
 }
 
-.btn-random {
-  position: absolute;
-  right: 3rem;
-  font-size: 0.8rem;
-  line-height: 0.8rem;
-  height: 1.7rem !important;
-  top: 0.3rem;
-  background: #cacaca;
-  border: none;
-}
-
 @media (max-width: 480px) {
   .compare-btn-text {
-    display: none;
-  }
-}
-
-
-@media (max-width: 768px) {
-  .btn-random span {
     display: none;
   }
 }
@@ -146,4 +137,5 @@ export default {
 .btn-compare:hover {
   color: white;
   background: #fd4f1c;
-}</style>
+}
+</style>

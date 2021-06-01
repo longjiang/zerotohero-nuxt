@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid youtube-with-transcript">
     <div v-if="layout === 'horizontal'" class="row">
-      <div class="youtube-video-column col-md-6 mb-2 p-0">
+      <div class="youtube-video-column col-md-6 mb-4 p-0">
         <div class="youtube-video-wrapper" :key="'youtube-' + video.youtube_id">
           <YouTubeVideo
             ref="youtube"
@@ -17,7 +17,7 @@
       </div>
       <div class="col-md-6">
         <div class="youtube-video-info">
-          <h5 class="mt-3" style="line-height: 1.5">
+          <h5 style="line-height: 1.5">
             <span v-if="video" :key="`video-title-${video.title}`" class="mt-4">
               {{ video.title }}
             </span>

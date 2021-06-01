@@ -3,7 +3,7 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
-          <LanguageSwitch class="mt-3 mb-4" />
+          <LanguageSwitch v-if="languages.length > 0" class="mt-3 mb-4" :preferredLanguages="languages" />
           <ul v-if="languages && languages.length > 0" class="language-list">
             <li
               v-for="language in languages"

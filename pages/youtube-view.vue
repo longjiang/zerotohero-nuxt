@@ -12,7 +12,7 @@
       :description="`Watch the video -- ${
         video.title
       } -- study the subtitles and improve your ${$l2.name}! ${
-        this.video.subs_l2
+        this.video.subs_l2 && this.video.subs_l2.length > 0
           ? 'Full transcript: ' +
             this.video.subs_l2
               .slice(0, 10)
@@ -202,18 +202,20 @@ export default {
       return this.video.id;
     },
     sortedLines() {
-      let lines = this.video.subs_l2
-        .map((line) => line)
-        .filter((line) => new RegExp(this.filterList, "gi").test(line.line));
+      if (this.video && this.video.subs_l2) {
+        let lines = this.video.subs_l2
+          .map((line) => line)
+          .filter((line) => new RegExp(this.filterList, "gi").test(line.line));
 
-      for (let line of lines) {
-        line.count = lines.filter((l) => l.line === line.line).length;
+        for (let line of lines) {
+          line.count = lines.filter((l) => l.line === line.line).length;
+        }
+        let sortedLines = lines
+          .sort((a, b) => a.line.localeCompare(b.line, this.$l2.code))
+          .sort((a, b) => a.line.length - b.line.length)
+          .sort((a, b) => b.count - a.count);
+        return sortedLines;
       }
-      let sortedLines = lines
-        .sort((a, b) => a.line.localeCompare(b.line, this.$l2.code))
-        .sort((a, b) => a.line.length - b.line.length)
-        .sort((a, b) => b.count - a.count);
-      return sortedLines;
     },
   },
   data() {
@@ -273,12 +275,13 @@ export default {
     updateEnded(ended) {
       if (ended !== this.ended) {
         this.ended = ended;
-        console.log(ended, 'ended')
       }
       if (this.ended) {
         setTimeout(() => {
           if (this.ended) {
-            this.$router.push(`/${this.$l1.code}/${this.$l2.code}/youtube/view/${this.randomEpisodeYouTubeId}`)
+            this.$router.push(
+              `/${this.$l1.code}/${this.$l2.code}/youtube/view/${this.randomEpisodeYouTubeId}`
+            );
           }
         }, 5000);
       }
@@ -473,6 +476,8 @@ export default {
 .quick-access-buttons {
   position: sticky;
   bottom: 2rem;
+  margin-top: 5rem;
+  margin-bottom: 4rem;
   text-align: center;
   z-index: 9;
 }
@@ -518,7 +523,7 @@ export default {
   z-index: 10;
   left: calc(50vw - 12.5rem);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-  bottom: 4rem;
+  bottom: 6rem;
 }
 
 .youtube-view-line-list .youtube-view-line-list-item {

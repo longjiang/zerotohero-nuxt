@@ -20,7 +20,7 @@
           class="mt-4 mb-3"
           placeholder="Search"
           ref="searchLibrary"
-          :random="`/${$l1.code}/${$l2.code}/youtube/view/${randomEpisodeYouTubeId}`"
+          :random="undefined !== randomEpisodeYouTubeId ? `/${$l1.code}/${$l2.code}/youtube/view/${randomEpisodeYouTubeId}` : false"
           :action="
             (url) => {
               this.$router.push({

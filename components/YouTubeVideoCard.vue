@@ -106,14 +106,7 @@
             v-model.lazy="showTitle"
             placeholder="Title"
             style="width: 70%; text-align: left"
-            class="btn btn-small ml-0"
-          />
-          <input
-            type="text"
-            v-model.lazy="showYear"
-            placeholder="Year"
-            style="width: 20%; text-align: left"
-            class="btn btn-small ml-0"
+            class="add-show-input ml-0"
           />
           <b-button
             class="btn btn-small mt-2 ml-0 bg-success text-white"

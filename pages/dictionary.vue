@@ -16,7 +16,7 @@
             </div>
             <SearchCompare
               :searchEntry="entry"
-              :random="true"
+              :random="`/${$l1.code}/${$l2.code}/dictionary/${$store.state.settings.dictionaryName}/random`"
               ref="searchCompare"
               :key="`search-${args}`"
               id="search-compare-bar"
