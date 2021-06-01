@@ -47,9 +47,10 @@
       </div>
       <div class="row">
         <div class="col-sm-12">
-
           <div class="web-images widget mt-5">
-            <div class="widget-title">{{ $t('Images of “{text}” on the Web', {text: entry.bare}) }}</div>
+            <div class="widget-title">
+              {{ $t("Images of “{text}” on the Web", { text: entry.bare }) }}
+            </div>
             <div class="widget-body jumbotron-fluid p-4">
               <WebImages
                 v-if="showImages"
@@ -63,11 +64,16 @@
               <p class="mt-4">
                 See more images of of “{{ entry.bare }}” on
                 <a
-                  :href="
-                    `https://www.google.com/search?q=${entry.bare.replace(/ /g, '+')}&tbm=isch&sout=1#spf=1567955197854`
-                  "
+                  :href="`https://www.google.com/search?q=${entry.bare.replace(
+                    / /g,
+                    '+'
+                  )}&tbm=isch&sout=1#spf=1567955197854`"
                 >
-                  <img src="/img/logo-google-images.png" alt="Google Images" class="logo-small ml-2" />
+                  <img
+                    src="/img/logo-google-images.png"
+                    alt="Google Images"
+                    class="logo-small ml-2"
+                  />
                 </a>
               </p>
             </div>
@@ -95,15 +101,7 @@
                   entry.newHSK && entry.newHSK === '7-9' ? '7-9' : entry.hsk
                 "
                 :key="`subs-search-${entry.id}`"
-                :terms="
-                  $l2.code === 'zh'
-                    ? entry.simplified === entry.traditional
-                      ? [entry.simplified]
-                      : [entry.simplified, entry.traditional]
-                    : entry.forms && entry.forms.length > 0
-                    ? entry.forms
-                    : [entry.bare]
-                "
+                :terms="searchTerms"
                 @loaded="searchSubsLoaded"
               />
             </div>
@@ -209,6 +207,8 @@
   </div>
 </template>
 <script>
+import Helper from '@/lib/helper'
+
 export default {
   props: {
     entry: {
@@ -250,6 +250,18 @@ export default {
     $l2() {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
+    },
+    searchTerms() {
+      if (this.$l2.code === "ja") {
+        let unique = Helper.unique([this.entry.bare, this.entry.kana]);
+        return unique
+      } else if (this.$l2.code === "zh") {
+        return Helper.unique([this.entry.simplified, this.entry.traditional]);
+      } else if (this.entry.forms && this.entry.forms.length > 0) {
+        return this.entry.forms;
+      } else {
+        [this.entry.bare];
+      }
     },
   },
   methods: {

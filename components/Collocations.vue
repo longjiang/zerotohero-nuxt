@@ -87,7 +87,10 @@
         </div>
       </div>
       <div
-        v-if="sketch !== undefined && (sketch === false || !sketch.Gramrels)"
+        v-if="
+          !updating &&
+          (!sketch || !sketch.Gramrels || sketch.Gramrels.length === 0)
+        "
       >
         Sorry, we could not find any “{{ term }}” collocations in this corpus
         (dataset). You can set a different corpus in
@@ -165,15 +168,24 @@ export default {
         this.collapsed = true;
         this.$emit("collocationsReady");
       }
-      this.sketch = await SketchEngine.wsketch({
+
+      let sketch = await SketchEngine.wsketch({
         term: this.term,
         l2: this.$l2,
       });
-      this.colDesc = await SketchEngine.collocationDescription({
-        l2: this.$l2,
-      });
-      if (this.sketch && this.sketch.Gramrels) {
-        this.$emit("collocationsReady");
+
+      if (sketch && sketch.Gramrels && sketch.Gramrels.length > 0) {
+        let colDesc = await SketchEngine.collocationDescription({
+          l2: this.$l2,
+          filter: (gramrel) =>
+            sketch.Gramrels.map((g) => g.name).includes(gramrel),
+        });
+
+        if (colDesc) {
+          this.sketch = sketch;
+          this.colDesc = colDesc;
+          this.$emit("collocationsReady");
+        }
       }
       this.updating = false;
     },
