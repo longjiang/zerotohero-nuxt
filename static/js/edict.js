@@ -1,3 +1,6 @@
+importScripts('../vendor/kuromoji/kuromoji.js')
+importScripts('../vendor/wanakana/wanakana.min.js')
+
 const Dictionary = {
   file: 'https://server.chinesezerotohero.com/data/edict/edict.tsv.txt',
   words: [],
@@ -121,12 +124,13 @@ const Dictionary = {
     if (!this.isRoman(text)) {
       let words = []
       let subtexts = []
+      let hiraganaText = wanakana.isKatakana(text) ? wanakana.toHiragana(text) : false
       for (let i = 1; text.length - i > 0; i++) {
         subtexts.push(text.substring(0, text.length - i))
       }
       for (let word of this.words) {
-        let head = word.head ? word.head.toLowerCase() : undefined
-        if (head && head === text) {
+        let head = word.head ? word.head : undefined
+        if (head && head === text || (hiraganaText && (word.kana === hiraganaText))) {
           // match 'abcde' exactly
           words.push(
             Object.assign(
