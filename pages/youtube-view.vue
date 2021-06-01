@@ -22,26 +22,20 @@
       }`"
       :image="`https://img.youtube.com/vi/${this.video.youtube_id}/hqdefault.jpg`"
     />
-    <div class="container-fuid">
-      <div class="row">
-        <div class="col-sm-12">
-          <SimpleSearch
-            class="mb-3 pl-3 pr-3"
-            placeholder="Search"
-            ref="searchLibrary"
-            :action="
-              (url) => {
-                this.$router.push({
-                  path: `/${$l1.code}/${
-                    $l2.code
-                  }/youtube/browse/all/all/0/${encodeURIComponent(url)}`,
-                });
-              }
-            "
-          />
-        </div>
-      </div>
-    </div>
+    <SimpleSearch
+      class="mb-3 pl-3 pr-3"
+      placeholder="Search"
+      ref="searchLibrary"
+      :action="
+        (url) => {
+          this.$router.push({
+            path: `/${$l1.code}/${
+              $l2.code
+            }/youtube/browse/all/all/0/${encodeURIComponent(url)}`,
+          });
+        }
+      "
+    />
     <div
       :class="{
         'youtube-view-wrapper': true,
@@ -137,7 +131,7 @@
           <i class="fas fa-arrow-up"></i>
         </button>
         <button
-          class="quick-access-button shadow btn-primary d-inline-block text-center"
+          class="quick-access-button play-pause shadow btn-primary d-inline-block text-center"
           @click="togglePaused"
         >
           <i v-if="paused" class="fas fa-play"></i>
@@ -448,9 +442,14 @@ export default {
 <style scoped>
 .quick-access-buttons {
   position: sticky;
-  bottom: 0.5rem;
+  bottom: 1rem;
   text-align: center;
   z-index: 9;
+}
+
+.quick-access-button.play-pause {
+  transform: scale(1.5);
+  margin: 0 0.6rem;
 }
 
 .quick-access-button {
@@ -482,9 +481,9 @@ export default {
 .youtube-view-line-list {
   position: fixed;
   width: 25rem;
-  max-height: calc(100vh - 7rem);
+  max-height: calc(100vh - 10rem);
   overflow: scroll;
-  border-radius: 0.2rem;
+  border-radius: 0.3rem;
   background: white;
   z-index: 10;
   left: calc(50vw - 12.5rem);

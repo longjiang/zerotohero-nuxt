@@ -36,7 +36,7 @@
           <Annotate
             tag="div"
             :sticky="sticky"
-            class="transcript-line-chinese"
+            class="transcript-line-chinese pl-3"
             :buttons="true"
           >
             <span

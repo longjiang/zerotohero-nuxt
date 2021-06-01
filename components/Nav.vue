@@ -1,6 +1,6 @@
 <template>
   <div
-    class="container-fluid sticky"
+    class="nav"
     style="z-index: 3"
     :set="
       (parent = menu.find(
@@ -14,48 +14,43 @@
       ))
     "
   >
-    <div class="row">
-      <nav class="site-nav tabs">
-        <NuxtLink
-          v-for="(item, index) in menu.filter((item) => item.show)"
-          :class="{
-            tab: true,
-            'router-link-active':
-              parent && parent.name === nameOfSelfOrFirstChild(item),
-          }"
-          :to="last(item) || { name: nameOfSelfOrFirstChild(item) }"
-          :title="item.title"
-          :key="`nav-${index}`"
-        >
-          <i :class="item.icon"></i>
-          {{ $t(item.title) }}
-        </NuxtLink>
-      </nav>
-    </div>
-
-    <div class="row">
-      <nav
-        class="secondary-menu text-center bg-white pt-3"
-        v-if="parent && parent.children"
+    <nav class="site-nav tabs">
+      <NuxtLink
+        v-for="(item, index) in menu.filter((item) => item.show)"
+        :class="{
+          tab: true,
+          'router-link-active':
+            parent && parent.name === nameOfSelfOrFirstChild(item),
+        }"
+        :to="last(item) || { name: nameOfSelfOrFirstChild(item) }"
+        :title="item.title"
+        :key="`nav-${index}`"
       >
-        <NuxtLink
-          class="secondary-menu-item"
-          v-for="child in parent.children.filter((child) => child.show)"
-          :key="`subnav-${child.name}`"
-          :to="last(child) || { name: child.name }"
+        <i :class="item.icon"></i>
+        {{ $t(item.title) }}
+      </NuxtLink>
+    </nav>
+    <nav
+      class="secondary-menu text-center bg-white pt-3"
+      v-if="parent && parent.children"
+    >
+      <NuxtLink
+        class="secondary-menu-item"
+        v-for="child in parent.children.filter((child) => child.show)"
+        :key="`subnav-${child.name}`"
+        :to="last(child) || { name: child.name }"
+      >
+        <i :class="child.icon"></i>
+        {{ $t(child.title) }}
+        <span
+          class="saved-words-count"
+          v-cloak
+          v-if="child.name === 'saved-words'"
         >
-          <i :class="child.icon"></i>
-          {{ $t(child.title) }}
-          <span
-            class="saved-words-count"
-            v-cloak
-            v-if="child.name === 'saved-words'"
-          >
-            {{ savedWordsCount() }}
-          </span>
-        </NuxtLink>
-      </nav>
-    </div>
+          {{ savedWordsCount() }}
+        </span>
+      </NuxtLink>
+    </nav>
   </div>
 </template>
 
@@ -495,8 +490,16 @@ export default {
 </script>
 
 <style lang="scss">
+.nav {
+  margin-top: -40px;
+  width: 100%;
+}
+
 .site-nav {
   margin: 0 auto;
+  width: 100%;
+  display: block;
+  text-align: center;
 }
 
 .tabs {

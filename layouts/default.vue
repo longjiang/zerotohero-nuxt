@@ -74,17 +74,20 @@
               </div>
             </div>
           </div>
-          <Nav
-            v-if="l1 && l2"
-            :l1="l1"
-            :l2="l2"
-            :key="`nav-${l1.code}-${l2.code}`"
-          />
         </div>
+        <Nav
+          v-if="l1 && l2"
+          :l1="l1"
+          :l2="l2"
+          :key="`nav-${l1.code}-${l2.code}`"
+        />
 
         <Nuxt id="main" />
 
-        <ReaderComp v-if="l1 && l2 && $route.name !== 'youtube-view'" :iconMode="true" />
+        <ReaderComp
+          v-if="l1 && l2 && $route.name !== 'youtube-view'"
+          :iconMode="true"
+        />
 
         <footer class="container-fluid bg-dark text-light pt-4 pb-4">
           <div class="container">
@@ -382,6 +385,7 @@ export default {
 .zth-header {
   background-image: url(/img/background-stars.jpg);
   background-size: cover;
+  padding-bottom: 40px;
 }
 
 .home-card {
@@ -542,12 +546,6 @@ h6,
 .link-unstyled:hover {
   color: inherit;
   text-decoration: none;
-}
-
-.sticky {
-  position: sticky;
-  z-index: 2;
-  top: 0;
 }
 
 .cards {
@@ -1027,8 +1025,6 @@ h6,
   padding: 0.2rem 0.5rem;
   border-radius: 0.3rem;
 }
-
-
 
 ul.collapsed li:nth-child(n + 5) {
   display: none;
