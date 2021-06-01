@@ -16,11 +16,11 @@
       <div class="col-sm-12 mb-4 text-center">
         <h3>YouTube Video Library</h3>
         <p class="mt-3">Study {{ $l2.name }} videos with {{ $l2.code === 'zh' ? 'Pinyin' : '' }} subtitles</p>
-
         <SimpleSearch
-          class="mb-3"
+          class="mt-4 mb-3"
           placeholder="Search"
           ref="searchLibrary"
+          :random="`/${$l1.code}/${$l2.code}/youtube/view/${randomEpisodeYouTubeId}`"
           :action="
             (url) => {
               this.$router.push({
@@ -191,11 +191,13 @@ export default {
       videos: [],
       levels: Helper.levels(this.$l2),
       topics: Helper.topics,
+      randomEpisodeYouTubeId: undefined
     };
   },
   async fetch() {
     this.videos = await this.getVideos();
     this.channels = await this.getChannels();
+    this.randomEpisodeYouTubeId = await YouTube.getRandomEpisodeYouTubeId(this.$l2.code, this.$l2.id)
   },
   methods: {
     removeAll() {
@@ -228,7 +230,11 @@ export default {
       if (videos && this.$settings.adminMode) {
         videos = await YouTube.checkShows(videos, this.$l2.id);
         for (let video of videos) {
-          if (video.subs_l2) video.subs_l2 = JSON.parse(video.subs_l2);
+          try {
+            if (video.subs_l2) video.subs_l2 = JSON.parse(video.subs_l2);
+          } catch(err) {
+
+          }
         }
       }
       videos = Helper.uniqueByValue(videos, "youtube_id");

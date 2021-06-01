@@ -23,7 +23,6 @@
           :saved="(hit) => hit.saved"
           :save="saveHit"
           :remove="removeSavedHit"
-          style="overflow: hidden; margin-bottom: -0.2rem"
           class="ml-0 mr-0"
         />
         <span class="ml-0 btn-small mr-0" style="background: none">
@@ -648,7 +647,6 @@ export default {
     position: relative;
     margin: 0.2rem;
     display: inline-block;
-    bottom: 0.2rem;
     border: none;
     &:hover {
       background-color: #b5b5b5;

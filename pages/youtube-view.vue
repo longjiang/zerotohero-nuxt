@@ -22,20 +22,22 @@
       }`"
       :image="`https://img.youtube.com/vi/${this.video.youtube_id}/hqdefault.jpg`"
     />
-    <SimpleSearch
-      class="mb-3 pl-3 pr-3"
-      placeholder="Search"
-      ref="searchLibrary"
-      :action="
-        (url) => {
-          this.$router.push({
-            path: `/${$l1.code}/${
-              $l2.code
-            }/youtube/browse/all/all/0/${encodeURIComponent(url)}`,
-          });
-        }
-      "
-    />
+    <div class="pl-3 pr-3 mb-5">
+      <SimpleSearch
+        placeholder="Search"
+        ref="searchLibrary"
+        :random="`/${$l1.code}/${$l2.code}/youtube/view/${randomEpisodeYouTubeId}`"
+        :action="
+          (url) => {
+            this.$router.push({
+              path: `/${$l1.code}/${
+                $l2.code
+              }/youtube/browse/all/all/0/${encodeURIComponent(url)}`,
+            });
+          }
+        "
+      />
+    </div>
     <div
       :class="{
         'youtube-view-wrapper': true,
@@ -223,6 +225,7 @@ export default {
       filterList: "",
       layout: "horizontal",
       repeat: false,
+      randomEpisodeYouTubeId: undefined,
     };
   },
   mounted() {
@@ -255,6 +258,10 @@ export default {
       this.addChannelID(video);
     }
     this.video = video;
+    this.randomEpisodeYouTubeId = await YouTube.getRandomEpisodeYouTubeId(
+      this.$l2.code,
+      this.$l2.id
+    );
   },
   methods: {
     updatePaused(paused) {

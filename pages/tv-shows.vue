@@ -14,12 +14,34 @@
     />
     <div class="row">
       <div class="col-sm-12">
-        <h3 class="text-center mt-5 mb-5">Study {{ $l2.name }} with {{ shows.length ? shows.length : '' }} TV Shows</h3>
+        <h3 class="text-center mt-5 mb-5">
+          Study {{ $l2.name }} with {{ shows.length ? shows.length : "" }} TV
+          Shows
+        </h3>
+        <SimpleSearch
+          class="mb-5"
+          placeholder="Search"
+          ref="searchLibrary"
+          :random="`/${$l1.code}/${$l2.code}/youtube/view/${randomEpisodeYouTubeId}`"
+          :action="
+            (url) => {
+              this.$router.push({
+                path: `/${$l1.code}/${
+                  $l2.code
+                }/youtube/browse/${topic}/${level}/0/${encodeURIComponent(
+                  url
+                )}`,
+              });
+            }
+          "
+        />
         <div class="tv-shows mb-5">
           <div class="tv-show media rounded shadow" v-for="show of shows">
             <router-link
               class="youtube-thumbnail-wrapper aspect-wrapper d-block"
-              :to="`/${$l1.code}/${$l2.code}/youtube/browse/all/all/0/${encodeURIComponent(show.title)}`"
+              :to="`/${$l1.code}/${
+                $l2.code
+              }/youtube/browse/all/all/0/${encodeURIComponent(show.title)}`"
             >
               <img
                 :src="`//img.youtube.com/vi/${show.youtube_id}/hqdefault.jpg`"
@@ -47,24 +69,30 @@
 </template>
 
 <script>
-import Config from '@/lib/config'
-import Helper from '@/lib/helper'
-import axios from 'axios'
+import Config from "@/lib/config";
+import Helper from "@/lib/helper";
+import YouTube from '@/lib/youtube'
+import axios from "axios";
 
 export default {
   data() {
     return {
       shows: [],
-    }
+      randomEpisodeYouTubeId: undefined
+    };
   },
   async fetch() {
     let response = await axios.get(
       `${Config.wiki}items/tv_shows?sort=title&filter[l2][eq]=${
         this.$l2.id
       }&limit=500&timestamp=${this.$settings.adminMode ? Date.now() : 0}`
-    )
-    let shows = response.data.data.sort((x,y)=>x.title.localeCompare(y.title, this.$l2.code)) || []
-    this.shows = Helper.uniqueByValue(shows, 'youtube_id')
+    );
+    let shows =
+      response.data.data.sort((x, y) =>
+        x.title.localeCompare(y.title, this.$l2.code)
+      ) || [];
+    this.shows = Helper.uniqueByValue(shows, "youtube_id");
+    this.randomEpisodeYouTubeId = await YouTube.getRandomEpisodeYouTubeId(this.$l2.code, this.$l2.id)
   },
   computed: {
     $l1() {
@@ -76,9 +104,8 @@ export default {
         return this.$store.state.settings.l2;
     },
   },
-  methods: {
-  },
-}
+  methods: {},
+};
 </script>
 
 <style scoped>
