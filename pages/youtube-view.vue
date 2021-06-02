@@ -275,7 +275,7 @@ export default {
     updateCurrentTime(currentTime) {
       this.currentTime = currentTime
       if (typeof window !== 'undefined') {
-        window.history.pushState('', '', `?t=${Math.round(currentTime, 1)}`)
+        window.history.replaceState('', '', `?t=${Math.round(currentTime, 1)}`)
       }
     },
     updatePaused(paused) {
