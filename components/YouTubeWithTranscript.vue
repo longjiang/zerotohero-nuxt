@@ -10,7 +10,7 @@
             @ended="updateEnded"
             :speed="speed"
             :youtube="video.youtube_id"
-            :starttime="starttime"
+            :starttime="start"
             :autoload="autoload"
             :autoplay="autoplay"
           />
@@ -159,7 +159,7 @@
               @ended="updateEnded"
               :speed="speed"
               :youtube="video.youtube_id"
-              :starttime="starttime"
+              :starttime="start"
               :autoload="autoload"
               :autoplay="autoplay"
             />
@@ -236,10 +236,10 @@ export default {
       default: false,
     },
     startLineIndex: {
-      default: 0,
+      default: undefined,
     },
     starttime: {
-      default: 0
+      default: 0,
     },
     stopLineIndex: {
       default: -1,
@@ -267,6 +267,13 @@ export default {
     $l2() {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
+    },
+    start() {
+      let starttime =
+        this.video.subs_l2 && this.video.subs_l2.length > 0 && this.startLineIndex
+          ? this.video.subs_l2[this.startLineIndex].starttime
+          : this.starttime;
+      return starttime
     },
   },
   methods: {
