@@ -41,11 +41,7 @@
             <span
               v-html="
                 highlight
-                  ? highlightMultiple(
-                      line.line,
-                      highlight,
-                      hsk || 'outside'
-                    )
+                  ? highlightMultiple(line.line, highlight, hsk || 'outside')
                   : line.line
               "
             />
@@ -153,18 +149,10 @@ export default {
     $hanzi() {
       return this.$getHanzi();
     },
-    currentLineIndex() {
-      return this.lines.findIndex((line) => line === this.currentLine);
-    },
     previousLine() {
       let previousIndex = Math.max(this.currentLineIndex - 1, 0);
       return this.lines && this.lines[previousIndex]
         ? this.lines[previousIndex]
-        : false;
-    },
-    nextLine() {
-      return this.lines && this.lines[this.currentLineIndex + 1]
-        ? this.lines[this.currentLineIndex + 1]
         : false;
     },
   },
@@ -175,6 +163,8 @@ export default {
       previousTime: 0,
       currentTime: 0,
       currentLine: undefined,
+      currentLineIndex: 0,
+      nextLine: undefined,
       review: {},
       paused: true,
       ended: false,
@@ -211,7 +201,15 @@ export default {
       if (this.highlightSavedWords) this.updateReview();
     },
     currentTime() {
-      let nearestLine = this.nearestLine(this.currentTime);
+      if (
+        this.currentTime > this.currentLine.starttime &&
+        this.nextLine &&
+        this.currentTime < this.nextLine.starttime
+      ) {
+        return;
+      }
+      let nearestLineIndex = this.nearestLineIndex(this.currentTime);
+      let nearestLine = this.lines[nearestLineIndex];
       let progress = this.currentTime - this.previousTime;
       if (
         this.repeat &&
@@ -220,7 +218,11 @@ export default {
         progress < 0.15
       )
         this.rewind();
-      else this.currentLine = nearestLine;
+      else {
+        this.currentLine = nearestLine;
+        this.currentLineIndex = nearestLineIndex;
+        this.nextLine = this.lines[nearestLineIndex + 1];
+      }
       this.previousTime = this.currentTime;
     },
     currentLine() {
@@ -229,7 +231,7 @@ export default {
   },
   methods: {
     highlightMultiple() {
-      return Helper.highlightMultiple(...arguments)
+      return Helper.highlightMultiple(...arguments);
     },
     incrementReviewKeyAfterLine(lineIndex) {
       // for (let index in this.lines) {
@@ -238,16 +240,16 @@ export default {
       //   }
       // }
     },
-    nearestLine(time) {
-      let nearestLine = this.lines[0];
-      for (let line of this.lines) {
-        if (line.starttime > time) {
+    nearestLineIndex(time) {
+      let nearestLineIndex = 0;
+      for (let lineIndex in this.lines) {
+        if (this.lines[lineIndex].starttime > time) {
           break;
         } else {
-          nearestLine = line;
+          nearestLineIndex = lineIndex;
         }
       }
-      return nearestLine;
+      return Number(nearestLineIndex);
     },
     removeLine(lineIndex) {
       this.lines.splice(lineIndex, 1);
@@ -265,7 +267,7 @@ export default {
     async updateReview() {
       let review = Object.assign({}, this.review);
       for (let lineIndex in this.lines) {
-        if (lineIndex >= this.currentLineIndex) delete review[lineIndex]
+        if (lineIndex >= this.currentLineIndex) delete review[lineIndex];
       }
       let lineOffset = 10; // Show review this number of lines after the first appearance of the word
       if (
@@ -283,7 +285,11 @@ export default {
             for (let form of savedWord.forms
               .filter((form) => form && form !== "-")
               .sort((a, b) => b.length - a.length)) {
-              for (let lineIndex = this.currentLineIndex; lineIndex < this.lines.length; lineIndex++) {
+              for (
+                let lineIndex = this.currentLineIndex;
+                lineIndex < this.lines.length;
+                lineIndex++
+              ) {
                 if (!seenLines.includes(lineIndex)) {
                   let line = this.lines[lineIndex];
                   if (
@@ -344,7 +350,7 @@ export default {
                     seenLines.push(lineIndex);
                   }
                 }
-                this.reviewKeys[lineIndex]++
+                this.reviewKeys[lineIndex]++;
               }
             }
           }
