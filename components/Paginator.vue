@@ -1,16 +1,16 @@
 <template>
   <div class="paginator">
     <router-link
-      class="paginator-previous mr-3 btn btn-dark"
+      class="paginator-previous mr-2 btn btn-small mb-1"
       :to="url(previous)"
       title="Previous word"
       v-if="previous"
     >
       <i class="fas fa-chevron-left"></i>
     </router-link>
-    {{ title }} <b>{{ currentIndex + 1 }}</b> of {{ items.length }}
+    <b>{{ title }}</b> {{ currentIndex + 1 }} of {{ items.length }}
     <router-link
-      class="paginator-next ml-3 btn btn-dark"
+      class="paginator-next ml-2 btn btn-small mb-1"
       :to="url(next)"
       title="Next word"
       v-if="next"

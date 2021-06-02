@@ -29,22 +29,16 @@
         </h2>
       </div>
     </div>
-    <div
-      v-if="saved()"
-      class="jumbotron jumbotron-fluid pt-3 pb-3 bg-secondary"
-    >
-      <div class="container focus-exclude text-center text-light">
-        <Paginator
-          :key="`paginator-${args}-${paginatorKey}`"
-          :items="sW"
-          :findCurrent="(item) => item.id === entry.id"
-          :url="
-            (item) =>
-              `/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${item.id}`
-          "
-          title="Saved Words"
-        />
-      </div>
+    <div v-if="saved() && sW.length > 0" class="text-center">
+      <Paginator
+        :items="sW"
+        :findCurrent="(item) => item.id === entry.id"
+        :url="
+          (item) =>
+            `/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${item.id}`
+        "
+        title="Saved Words"
+      />
     </div>
     <article>
       <DictionaryEntry
@@ -84,6 +78,7 @@ export default {
       images: [],
       entryKey: 0,
       paginatorKey: 0,
+      sW: [],
     };
   },
   async fetch() {
@@ -113,11 +108,18 @@ export default {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
+    $dictionaryName() {
+      return this.$store.state.settings.dictionaryName;
+    },
     title() {
       if (this.entry) {
         return `${this.entry.bare} ${
           this.entry.pronunciation ? "(" + this.entry.pronunciation + ")" : ""
-        } ${ this.entry.definitions ? this.entry.definitions.slice(0, 2).join('; ') : ''} | ${this.$l2 ? this.$l2.name : ""} Zero to Hero Dictionary`;
+        } ${
+          this.entry.definitions
+            ? this.entry.definitions.slice(0, 2).join("; ")
+            : ""
+        } | ${this.$l2 ? this.$l2.name : ""} Zero to Hero Dictionary`;
       }
       return `${this.$l2 ? this.$l2.name : ""} Dictionary | ${
         this.$l2 ? this.$l2.name : ""
@@ -149,17 +151,21 @@ export default {
   },
   methods: {
     async updateWords() {
-      this.sW = [];
-      this.savedTexts = [];
-      if (this.$root.savedWords && this.$root.savedWords[this.$l2.code]) {
-        for (let savedWord of this.$root.savedWords[this.$l2.code]) {
+      let sW = [];
+      if (
+        this.$store.state.savedWords.savedWords &&
+        this.$store.state.savedWords.savedWords[this.$l2.code]
+      ) {
+        for (let savedWord of this.$store.state.savedWords.savedWords[
+          this.$l2.code
+        ]) {
           let word = await (await this.$getDictionary()).get(savedWord.id);
           if (word) {
-            this.sW.push(word);
+            sW.push(word);
           }
         }
       }
-      this.paginatorKey++;
+      this.sW = sW;
     },
     saved() {
       return (
@@ -190,7 +196,8 @@ export default {
     keydown(e) {
       if (
         !["INPUT", "TEXTAREA"].includes(e.target.tagName.toUpperCase()) &&
-        !e.metaKey && !e.repeat
+        !e.metaKey &&
+        !e.repeat
       ) {
         // home
         if (e.keyCode == 36) {
@@ -271,14 +278,12 @@ export default {
     ) {
       this.random();
     }
-    if (this.$route.name === "dictionary") {
-      this.updateWords();
-      this.unsubscribe = this.$store.subscribe((mutation, state) => {
-        if (mutation.type.startsWith("savedWords")) {
-          this.updateWords();
-        }
-      });
-    }
+    if(this.sW.length === 0) this.updateWords();
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (mutation.type.startsWith("savedWords")) {
+        this.updateWords();
+      }
+    });
   },
   beforeDestroy() {
     // you may call unsubscribe to stop the subscription
