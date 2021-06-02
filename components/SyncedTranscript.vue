@@ -183,7 +183,7 @@ export default {
       neverPlayed: true,
     };
   },
-  mounted() {
+  created() {
     this.lines.map((line) => {
       line.starttime = Number(line.starttime);
     });
