@@ -150,7 +150,7 @@
           {{ speed === 1 ? "慢" : speed + "x" }}
         </b-button>
         <router-link
-          :to="`/${$l1.code}/${$l2.code}/youtube/view/${currentHit.video.youtube_id}/?t=${hit.video.subs_l2[hit.lineIndex].starttime}`"
+          :to="`/${$l1.code}/${$l2.code}/youtube/view/${currentHit.video.youtube_id}/?t=${currentHit.video.subs_l2[currentHit.lineIndex].starttime}`"
           class="btn btn-small pr-2"
         >
           <i class="fa fa-window-restore" />
