@@ -284,7 +284,6 @@ export default {
               .filter((form) => form && form !== "-")
               .sort((a, b) => b.length - a.length)) {
               for (let lineIndex = this.currentLineIndex; lineIndex < this.lines.length; lineIndex++) {
-                console.log(lineIndex, this.currentLineIndex)
                 if (!seenLines.includes(lineIndex)) {
                   let line = this.lines[lineIndex];
                   if (

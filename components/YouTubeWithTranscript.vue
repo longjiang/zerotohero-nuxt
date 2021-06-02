@@ -5,13 +5,14 @@
         <div class="youtube-video-wrapper" :key="'youtube-' + video.youtube_id">
           <YouTubeVideo
             ref="youtube"
-            :youtube="video.youtube_id"
-            :speed="speed"
-            :autoload="autoload"
-            :autoplay="autoplay"
             @paused="updatePaused"
             @currentTime="updateCurrentTime"
             @ended="updateEnded"
+            :speed="speed"
+            :youtube="video.youtube_id"
+            :starttime="starttime"
+            :autoload="autoload"
+            :autoplay="autoplay"
           />
         </div>
       </div>
@@ -237,6 +238,9 @@ export default {
     startLineIndex: {
       default: 0,
     },
+    starttime: {
+      default: 0
+    },
     stopLineIndex: {
       default: -1,
     },
@@ -253,7 +257,6 @@ export default {
       videoInfoKey: 0,
       topics: Helper.topics,
       levels: Helper.levels(this.$l2),
-      starttime: 0,
     };
   },
   computed: {
@@ -454,11 +457,6 @@ export default {
         this.transcriptKey++;
       }
     },
-  },
-  mounted() {
-    if (this.video.subs_l2 && this.video.subs_l2.length > 0) {
-      this.starttime = this.video.subs_l2[this.startLineIndex].starttime;
-    }
   },
 };
 </script>

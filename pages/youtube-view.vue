@@ -54,8 +54,10 @@
         :speed="speed"
         :autoload="true"
         :autoplay="true"
+        :starttime="starttime"
         @paused="updatePaused"
         @ended="updateEnded"
+        @currentTime="updateCurrentTime"
       />
       <div
         v-if="video"
@@ -225,6 +227,8 @@ export default {
       showList: false,
       paused: true,
       speed: 1,
+      starttime: 0,
+      currentTime: 0,
       filterList: "",
       layout: "horizontal",
       repeat: false,
@@ -260,6 +264,7 @@ export default {
     if (video && video.id && !video.channel_id) {
       this.addChannelID(video);
     }
+    this.starttime = this.$route.query.t ? Number(this.$route.query.t) : 0
     this.video = video;
     this.randomEpisodeYouTubeId = await YouTube.getRandomEpisodeYouTubeId(
       this.$l2.code,
@@ -267,6 +272,12 @@ export default {
     );
   },
   methods: {
+    updateCurrentTime(currentTime) {
+      this.currentTime = currentTime
+      if (typeof window !== 'undefined') {
+        window.history.pushState('', '', `?t=${Math.round(currentTime, 1)}`)
+      }
+    },
     updatePaused(paused) {
       if (paused !== this.paused) {
         this.paused = paused;
