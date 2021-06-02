@@ -307,7 +307,7 @@ export default {
         );
 
         if (response.data && response.data.data) {
-          this.episodes = response.data.data
+          this.episodes = Helper.uniqueByValue(response.data.data, 'youtube_id')
         }
       }
     }
