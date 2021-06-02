@@ -11,9 +11,6 @@
       <div class="container focus-exclude">
         <div class="row">
           <div class="col-sm-12">
-            <div class="text-center">
-              <Loader ref="loader" class="mb-5" />
-            </div>
             <SearchCompare
               :searchEntry="entry"
               :random="`/${$l1.code}/${$l2.code}/dictionary/${$store.state.settings.dictionaryName}/random`"

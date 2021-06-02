@@ -7,7 +7,6 @@
         'single-line': single,
       }"
       data-collapse-target
-      :key="reviewKey"
     >
       <template v-for="(line, lineIndex) in lines">
         <div
@@ -70,7 +69,10 @@
             </template>
           </div>
         </div>
-        <template v-if="review[lineIndex] && review[lineIndex].length > 0">
+        <div
+          v-if="review[lineIndex] && review[lineIndex].length > 0"
+          :key="`review-${reviewKey}-${lineIndex}`"
+        >
           <div class="review" v-for="reviewItem in review[lineIndex]">
             <h6>Pop Quiz</h6>
             <div class="review-item mt-2">
@@ -153,7 +155,7 @@
               </div>
             </div>
           </div>
-        </template>
+        </div>
       </template>
     </div>
     <ShowMoreButton v-if="collapse" :data-bg-level="hsk ? hsk : 'outside'">
@@ -271,12 +273,12 @@ export default {
       }
     });
   },
-  updated() {
-    if (!this.single) this.scrollTo(this.currentLineIndex);
-  },
   beforeDestroy() {
     // you may call unsubscribe to stop the subscription
     this.unsubscribe();
+  },
+  updated() {
+    if (!this.single) this.scrollTo(this.currentLineIndex);
   },
   watch: {
     $settings() {
@@ -453,7 +455,7 @@ export default {
       this.seekVideoTo(this.nextLine.starttime);
     },
     goToLine(line) {
-      this.seekVideoTo(line.starttime)
+      this.seekVideoTo(line.starttime);
     },
     rewind() {
       this.seekVideoTo(this.currentLine.starttime);
