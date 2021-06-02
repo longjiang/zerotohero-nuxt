@@ -29,11 +29,11 @@ export const mutations = {
   SET_DICTIONARY_NAME(state, dictionaryName) {
     state.dictionaryName = dictionaryName
   },
-  LOAD_SETTINGS(state, l2) {
+  LOAD_SETTINGS(state) {
     if (typeof localStorage !== 'undefined') {
       let settings = JSON.parse(localStorage.getItem('zthSettings') || '{}')
       state.adminMode = settings.adminMode
-      state.l2Settings = settings[l2] || state.l2Settings
+      state.l2Settings = settings[state.l2.code] || state.l2Settings
     }
     state.settingsLoaded = true
   },

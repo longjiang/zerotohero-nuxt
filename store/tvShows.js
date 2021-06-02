@@ -3,15 +3,15 @@ import Helper from '@/lib/helper'
 
 export const state = () => {
   return {
-    shows: [],
-    showsLoaded: false
+    shows: {},
+    showsLoaded: {}
   }
 }
 
 export const mutations = {
-  async LOAD_TV_SHOWS(state, shows) {
-    state.shows = shows;
-    state.showsLoaded = true
+  async LOAD_TV_SHOWS(state, {l2, shows}) {
+    state.shows[l2.code] = shows;
+    state.showsLoaded[l2.code] = true
   },
 }
 
@@ -26,6 +26,6 @@ export const actions = {
         x.title.localeCompare(y.title, l2.code)
       ) || [];
     shows = Helper.uniqueByValue(shows, "youtube_id");
-    context.commit('LOAD_TV_SHOWS', shows)
+    context.commit('LOAD_TV_SHOWS', {l2, shows})
   }
 }

@@ -32,8 +32,7 @@ export default {
 
   router: {
     middleware: [
-      // 'language-switch',
-      'test-middleware'
+      'language-switch',
     ]
   },
 

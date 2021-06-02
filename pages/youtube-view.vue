@@ -199,6 +199,7 @@ export default {
       l2Locale: undefined,
       video: undefined,
       showList: false,
+      show: undefined,
       paused: true,
       speed: 1,
       starttime: 0,
@@ -211,11 +212,6 @@ export default {
     };
   },
   computed: {
-    show() {
-      if (this.video) {
-        return this.$store.state.tvShows.shows.find(show => this.video.title.includes(show.title))
-      }
-    },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -244,13 +240,23 @@ export default {
       }
     },
     previousEpisode() {
-      let thisEpisodeIndex = this.episodes.findIndex(episode => episode.id === this.video.id)
-      if (thisEpisodeIndex > 0 && this.episodes[thisEpisodeIndex - 1]) return `/${this.$l1.code}/${this.$l2.code}/youtube/view/${this.episodes[thisEpisodeIndex - 1].youtube_id}/`
+      let thisEpisodeIndex = this.episodes.findIndex(
+        (episode) => episode.id === this.video.id
+      );
+      if (thisEpisodeIndex > 0 && this.episodes[thisEpisodeIndex - 1])
+        return `/${this.$l1.code}/${this.$l2.code}/youtube/view/${
+          this.episodes[thisEpisodeIndex - 1].youtube_id
+        }/`;
     },
     nextEpisode() {
-      let thisEpisodeIndex = this.episodes.findIndex(episode => episode.id === this.video.id)
-      if (this.episodes[thisEpisodeIndex + 1]) return `/${this.$l1.code}/${this.$l2.code}/youtube/view/${this.episodes[thisEpisodeIndex + 1].youtube_id}/`
-    }
+      let thisEpisodeIndex = this.episodes.findIndex(
+        (episode) => episode.id === this.video.id
+      );
+      if (this.episodes[thisEpisodeIndex + 1])
+        return `/${this.$l1.code}/${this.$l2.code}/youtube/view/${
+          this.episodes[thisEpisodeIndex + 1].youtube_id
+        }/`;
+    },
   },
   async fetch() {
     // this.$refs.search.url = `https://www.youtube.com/watch?v=${this.args}`
@@ -270,8 +276,9 @@ export default {
     if (video && video.id && !video.channel_id) {
       this.addChannelID(video);
     }
-    this.starttime = this.$route.query.t ? Number(this.$route.query.t) : 0
+    this.starttime = this.$route.query.t ? Number(this.$route.query.t) : 0;
     this.video = video;
+    this.loadShow();
     this.randomEpisodeYouTubeId = await YouTube.getRandomEpisodeYouTubeId(
       this.$l2.code,
       this.$l2.id
@@ -279,6 +286,11 @@ export default {
   },
   mounted() {
     this.bindKeys();
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (mutation.type === "tvShows/LOAD_TV_SHOWS") {
+        this.loadShow();
+      }
+    });
   },
   destroyed() {
     this.unbindKeys();
@@ -307,16 +319,28 @@ export default {
         );
 
         if (response.data && response.data.data) {
-          this.episodes = Helper.uniqueByValue(response.data.data, 'youtube_id')
+          this.episodes = Helper.uniqueByValue(
+            response.data.data,
+            "youtube_id"
+          );
         }
       }
-    }
+    },
   },
   methods: {
+    loadShow() {
+      if (this.video) {
+        this.show = this.$store.state.tvShows.shows[this.$l2.code]
+          ? this.$store.state.tvShows.shows[this.$l2.code].find((show) =>
+              this.video.title.includes(show.title)
+            )
+          : undefined;
+      }
+    },
     updateCurrentTime(currentTime) {
-      this.currentTime = currentTime
-      if (typeof window !== 'undefined') {
-        window.history.replaceState('', '', `?t=${Math.round(currentTime, 1)}`)
+      this.currentTime = currentTime;
+      if (typeof window !== "undefined") {
+        window.history.replaceState("", "", `?t=${Math.round(currentTime, 1)}`);
       }
     },
     updatePaused(paused) {
@@ -332,7 +356,8 @@ export default {
         setTimeout(() => {
           if (this.ended) {
             this.$router.push(
-              this.nextEpisode || `/${this.$l1.code}/${this.$l2.code}/youtube/view/${this.randomEpisodeYouTubeId}`
+              this.nextEpisode ||
+                `/${this.$l1.code}/${this.$l2.code}/youtube/view/${this.randomEpisodeYouTubeId}`
             );
           }
         }, 5000);

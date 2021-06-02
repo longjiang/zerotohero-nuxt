@@ -5,22 +5,31 @@
   }
 </router>
 <template>
-  <div class="youtube-browse container mt-5 mb-5 main">
+  <div class="youtube-browse container mb-5 main">
     <SocialHead
       v-if="videos[0]"
       :title="`Study ${$l2.name} videos with subs | ${$l2.name} Zero to Hero`"
-      :description="`Watch ${$l2.name} YouTube videos and study the ${$l2.code === 'zh' ? 'Pinyin' : $l2.name} subtitles.`"
+      :description="`Watch ${$l2.name} videos and study the ${
+        $l2.code === 'zh' ? 'Pinyin' : $l2.name
+      } subtitles.`"
       :image="`https://img.youtube.com/vi/${videos[0].youtube_id}/hqdefault.jpg`"
     />
-    <div class="row mt-5">
+    <div class="row">
       <div class="col-sm-12 mb-4 text-center">
-        <h3>YouTube Video Library</h3>
-        <p class="mt-3">Study {{ $l2.name }} videos with {{ $l2.code === 'zh' ? 'Pinyin' : '' }} subtitles</p>
+        <h3 v-if="!keyword" class=" mt-5">{{ $l2.name }} Video Library</h3>
+        <p v-if="!keyword" class="mt-3">
+          Study {{ $l2.name }} videos with
+          {{ $l2.code === "zh" ? "Pinyin" : "" }} subtitles
+        </p>
         <SimpleSearch
           class="mt-4 mb-3"
           placeholder="Search"
           ref="searchLibrary"
-          :random="undefined !== randomEpisodeYouTubeId ? `/${$l1.code}/${$l2.code}/youtube/view/${randomEpisodeYouTubeId}` : false"
+          :random="
+            undefined !== randomEpisodeYouTubeId
+              ? `/${$l1.code}/${$l2.code}/youtube/view/${randomEpisodeYouTubeId}`
+              : false
+          "
           :action="
             (url) => {
               this.$router.push({
@@ -33,8 +42,11 @@
             }
           "
         />
+        <h3 v-if="keyword" class="mt-5 mb-4">{{ keyword }}</h3>
       </div>
-      <div class="col-sm-12 col-md-8 col-lg-9 pr-4 mb-5">
+      <div
+        :class="{ 'col-sm-12 pr-4 mb-5': true, 'col-md-8 col-lg-9': !keyword }"
+      >
         <b-button
           v-if="$settings.adminMode"
           class="btn btn-small bg-danger text-white mt-2 ml-2"
@@ -72,7 +84,7 @@
           </router-link>
         </div>
       </div>
-      <div class="col-sm-12 col-md-4 col-lg-3">
+      <div v-if="!keyword" class="col-sm-12 col-md-4 col-lg-3">
         <div class="list-group">
           <router-link
             :class="{
@@ -191,13 +203,16 @@ export default {
       videos: [],
       levels: Helper.levels(this.$l2),
       topics: Helper.topics,
-      randomEpisodeYouTubeId: undefined
+      randomEpisodeYouTubeId: undefined,
     };
   },
   async fetch() {
     this.videos = await this.getVideos();
     this.channels = await this.getChannels();
-    this.randomEpisodeYouTubeId = await YouTube.getRandomEpisodeYouTubeId(this.$l2.code, this.$l2.id)
+    this.randomEpisodeYouTubeId = await YouTube.getRandomEpisodeYouTubeId(
+      this.$l2.code,
+      this.$l2.id
+    );
   },
   methods: {
     removeAll() {
@@ -217,7 +232,7 @@ export default {
           encodeURIComponent(this.keyword) +
           "&sort=title";
       }
-      let limit = this.keyword ? -1 : 12
+      let limit = this.keyword ? -1 : 12;
       let response = await axios.get(
         `${Config.wiki}items/youtube_videos?sort=-id&filter[l2][eq]=${
           this.$l2.id
@@ -233,9 +248,7 @@ export default {
         for (let video of videos) {
           try {
             if (video.subs_l2) video.subs_l2 = JSON.parse(video.subs_l2);
-          } catch(err) {
-
-          }
+          } catch (err) {}
         }
       }
       videos = Helper.uniqueByValue(videos, "youtube_id");

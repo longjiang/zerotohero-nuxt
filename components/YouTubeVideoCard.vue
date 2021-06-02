@@ -486,8 +486,8 @@ export default {
   border: 2px dashed #ccc;
 }
 .youtube-video {
-  min-width: 10rem;
-  max-width: 20rem;
+  min-width: 12rem;
+  max-width: 15rem;
   flex: 1;
   margin: 0.8rem;
 }
