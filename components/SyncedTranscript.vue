@@ -73,7 +73,7 @@
           v-if="review[lineIndex] && review[lineIndex].length > 0"
           :key="`review-${lineIndex}-${reviewKeys[lineIndex]}`"
         >
-          <h6 class="text-center">Pop Quiz</h6>
+          <h6 class="text-center mt-3">Pop Quiz</h6>
           <Review
             v-for="(reviewItem, reviewItemIndex) in review[lineIndex]"
             :key="`review-${lineIndex}-${reviewKeys[lineIndex]}-${reviewItemIndex}`"
@@ -334,6 +334,7 @@ export default {
                     review[reviewIndex] = review[reviewIndex] || [];
                     review[reviewIndex].push({
                       line: line,
+                      lineIndex: lineIndex,
                       text: form,
                       word: word,
                       simplified: word.simplified,

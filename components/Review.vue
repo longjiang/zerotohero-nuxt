@@ -42,7 +42,7 @@
       <button
         class="btn p-0"
         style="color: #999"
-        @click="seekVideoTo(reviewItem.line.starttime)"
+        @click="$parent.seekVideoTo(reviewItem.line.starttime)"
       >
         <i class="fas fa-arrow-up"></i>
       </button>
