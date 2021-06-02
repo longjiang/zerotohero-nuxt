@@ -41,7 +41,7 @@
             <span
               v-html="
                 highlight
-                  ? Helper.highlightMultiple(
+                  ? highlightMultiple(
                       line.line,
                       highlight,
                       hsk || 'outside'
@@ -71,90 +71,16 @@
         </div>
         <div
           v-if="review[lineIndex] && review[lineIndex].length > 0"
-          :key="`review-${reviewKey}-${lineIndex}`"
+          :key="`review-${lineIndex}-${reviewKeys[lineIndex]}`"
         >
-          <div class="review" v-for="reviewItem in review[lineIndex]">
-            <h6>Pop Quiz</h6>
-            <div class="review-item mt-2">
-              <div
-                v-if="$l2.code !== $l1.code && parallellines"
-                :class="{
-                  'transcript-line-l1': true,
-                  'text-right':
-                    $l2.scripts &&
-                    $l2.scripts.length > 0 &&
-                    $l2.scripts[0].direction === 'rtl',
-                }"
-              >
-                <template
-                  v-for="parallelLine in parallellines.filter(
-                    (l) => l.starttime === reviewItem.line.starttime
-                  )"
-                >
-                  <span v-html="parallelLine.line" />
-                </template>
-              </div>
-              <Annotate
-                tag="span"
-                :buttons="true"
-                class="transcript-line-chinese"
-              >
-                <span
-                  v-if="$l2.han && $l2.code !== 'ja'"
-                  v-html="
-                    Helper.highlightMultiple(
-                      reviewItem.line.line,
-                      Helper.unique([
-                        reviewItem.simplified,
-                        reviewItem.traditional,
-                      ]),
-                      hsk
-                    )
-                  "
-                />
-                <span
-                  v-else
-                  v-html="
-                    Helper.highlight(reviewItem.line.line, reviewItem.text, hsk)
-                  "
-                />
-              </Annotate>
-              <Speak :text="reviewItem.line.line" />
-              <button
-                class="btn p-0"
-                style="color: #999"
-                @click="seekVideoTo(reviewItem.line.starttime)"
-              >
-                <i class="fas fa-arrow-up"></i>
-              </button>
-              <div class="mt-2">
-                <button
-                  v-for="(answer, index) in reviewItem.answers"
-                  :key="`quiz-button-${index}`"
-                  :class="{
-                    btn: true,
-                    'btn-small': true,
-                    'bg-white': true,
-                    'mr-2': true,
-                    'review-answer': true,
-                    checked: false,
-                    'review-answer-correct': answer.correct,
-                  }"
-                  @click="answerClick"
-                >
-                  <template v-if="$l2.code === 'ja' || !$l2.han">
-                    {{ answer.text }}
-                  </template>
-                  <template v-else-if="$l2.han && $settings.useTraditional">
-                    {{ answer.traditional || answer.simplified }}
-                  </template>
-                  <template v-else-if="$l2.han && !$settings.useTraditional">
-                    {{ answer.simplified || answer.traditional }}
-                  </template>
-                </button>
-              </div>
-            </div>
-          </div>
+          <h6 class="text-center">Pop Quiz</h6>
+          <Review
+            v-for="(reviewItem, reviewItemIndex) in review[lineIndex]"
+            :key="`review-${lineIndex}-${reviewKeys[lineIndex]}-${reviewItemIndex}`"
+            :reviewItem="reviewItem"
+            :hsk="hsk"
+            :parallellines="parallellines || []"
+          />
         </div>
       </template>
     </div>
@@ -246,7 +172,6 @@ export default {
     return {
       sW: [],
       id: Helper.uniqueId(),
-      Helper,
       previousTime: 0,
       currentTime: 0,
       currentLine: undefined,
@@ -254,7 +179,7 @@ export default {
       paused: true,
       ended: false,
       repeat: false,
-      reviewKey: 0,
+      reviewKeys: [],
       neverPlayed: true,
     };
   },
@@ -266,6 +191,7 @@ export default {
       this.lines && this.lines[this.startLineIndex]
         ? this.lines[this.startLineIndex]
         : undefined;
+    this.reviewKeys = this.lines.map((line) => 0);
     if (this.highlightSavedWords) this.updateReview();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type.startsWith("savedWords")) {
@@ -277,9 +203,9 @@ export default {
     // you may call unsubscribe to stop the subscription
     this.unsubscribe();
   },
-  updated() {
-    if (!this.single) this.scrollTo(this.currentLineIndex);
-  },
+  // updated() {
+  //   if (!this.single) this.scrollTo(this.currentLineIndex);
+  // },
   watch: {
     $settings() {
       if (this.highlightSavedWords) this.updateReview();
@@ -302,6 +228,16 @@ export default {
     },
   },
   methods: {
+    highlightMultiple() {
+      return Helper.highlightMultiple(...arguments)
+    },
+    incrementReviewKeyAfterLine(lineIndex) {
+      // for (let index in this.lines) {
+      //   if (index >= lineIndex) {
+      //     if (this.reviewKeys[lineIndex]) this.reviewKeys[lineIndex]++
+      //   }
+      // }
+    },
     nearestLine(time) {
       let nearestLine = this.lines[0];
       for (let line of this.lines) {
@@ -315,13 +251,6 @@ export default {
     },
     removeLine(lineIndex) {
       this.lines.splice(lineIndex, 1);
-      this.reviewKey++;
-    },
-    answerClick(e) {
-      $(e.target).addClass("checked");
-      if ($(e.target).hasClass("review-answer-correct")) {
-        $(e.target).parents(".review").addClass("show-answer");
-      }
     },
     async findSimilarWords(text) {
       let words = await (await this.$getDictionary()).lookupFuzzy(text);
@@ -334,7 +263,10 @@ export default {
       );
     },
     async updateReview() {
-      let review = {};
+      let review = Object.assign({}, this.review);
+      for (let lineIndex in this.lines) {
+        if (lineIndex > this.currentLineIndex) delete review[lineIndex]
+      }
       let lineOffset = 10; // Show review this number of lines after the first appearance of the word
       if (
         this.quiz &&
@@ -351,7 +283,7 @@ export default {
             for (let form of savedWord.forms
               .filter((form) => form && form !== "-")
               .sort((a, b) => b.length - a.length)) {
-              for (let lineIndex in this.lines) {
+              for (let lineIndex in this.lines.slice(this.currentLineIndex)) {
                 if (!seenLines.includes(lineIndex)) {
                   let line = this.lines[lineIndex];
                   if (
@@ -417,7 +349,7 @@ export default {
         }
       }
       this.review = review;
-      this.reviewKey++;
+      this.incrementReviewKeyAfterLine(this.currentLineIndex);
     },
     seekVideoTo(starttime) {
       if (this.onSeek) {
@@ -507,42 +439,5 @@ export default {
 }
 .show-translation .transcript-line-l1 {
   display: inherit;
-}
-
-.review {
-  margin: 0.5rem 0;
-  padding: 1rem;
-  background-color: #f3f3f3;
-  border-radius: 0.5rem;
-  &.show-answer {
-    background-color: #d6f5d8;
-  }
-}
-
-.review:not(.show-answer) {
-  .highlight {
-    background-color: #ccc;
-    border-radius: 0.2rem;
-  }
-  .highlight * {
-    opacity: 0;
-    pointer-events: none;
-  }
-}
-
-.review-answer {
-  border: 1px solid #999;
-}
-
-.review-answer.checked:not(.review-answer-correct) {
-  background-color: #dc3838 !important;
-  border-color: #a03030 !important;
-  color: white !important;
-}
-
-.review-answer.checked.review-answer-correct {
-  background-color: #63ab67 !important;
-  border-color: #36823b !important;
-  color: white !important;
 }
 </style>
