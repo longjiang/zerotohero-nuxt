@@ -265,7 +265,7 @@ export default {
     async updateReview() {
       let review = Object.assign({}, this.review);
       for (let lineIndex in this.lines) {
-        if (lineIndex > this.currentLineIndex) delete review[lineIndex]
+        if (lineIndex >= this.currentLineIndex) delete review[lineIndex]
       }
       let lineOffset = 10; // Show review this number of lines after the first appearance of the word
       if (
@@ -283,7 +283,8 @@ export default {
             for (let form of savedWord.forms
               .filter((form) => form && form !== "-")
               .sort((a, b) => b.length - a.length)) {
-              for (let lineIndex in this.lines.slice(this.currentLineIndex)) {
+              for (let lineIndex = this.currentLineIndex; lineIndex < this.lines.length; lineIndex++) {
+                console.log(lineIndex, this.currentLineIndex)
                 if (!seenLines.includes(lineIndex)) {
                   let line = this.lines[lineIndex];
                   if (
