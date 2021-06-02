@@ -52,7 +52,7 @@
             :checkSaved="false"
           />
         </template>
-        <div class="mt-4 text-center">
+        <div class="mt-4 text-center" v-if="!keyword">
           <router-link
             v-if="start > 9"
             :to="`/${$l1.code}/${$l2.code}/youtube/browse/${topic}/${level}/${
@@ -217,10 +217,11 @@ export default {
           encodeURIComponent(this.keyword) +
           "&sort=title";
       }
+      let limit = this.keyword ? -1 : 12
       let response = await axios.get(
         `${Config.wiki}items/youtube_videos?sort=-id&filter[l2][eq]=${
           this.$l2.id
-        }${filters}&limit=12&offset=${
+        }${filters}&limit=${limit}&offset=${
           this.start
         }&fields=channel_id,id,lesson,level,title,topic,youtube_id${
           this.$settings.adminMode ? ",subs_l2" : ""

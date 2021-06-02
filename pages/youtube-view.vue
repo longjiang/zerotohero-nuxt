@@ -55,6 +55,9 @@
         :autoload="true"
         :autoplay="true"
         :starttime="starttime"
+        :show="show"
+        :previousEpisode="previousEpisode"
+        :nextEpisode="nextEpisode"
         @paused="updatePaused"
         @ended="updateEnded"
         @currentTime="updateCurrentTime"
@@ -191,7 +194,28 @@ export default {
       default: false,
     },
   },
+  data() {
+    return {
+      l2Locale: undefined,
+      video: undefined,
+      showList: false,
+      paused: true,
+      speed: 1,
+      starttime: 0,
+      currentTime: 0,
+      episodes: [],
+      filterList: "",
+      layout: "horizontal",
+      repeat: false,
+      randomEpisodeYouTubeId: undefined,
+    };
+  },
   computed: {
+    show() {
+      if (this.video) {
+        return this.$store.state.tvShows.shows.find(show => this.video.title.includes(show.title))
+      }
+    },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -219,32 +243,14 @@ export default {
         return sortedLines;
       }
     },
-  },
-  data() {
-    return {
-      l2Locale: undefined,
-      video: undefined,
-      showList: false,
-      paused: true,
-      speed: 1,
-      starttime: 0,
-      currentTime: 0,
-      filterList: "",
-      layout: "horizontal",
-      repeat: false,
-      randomEpisodeYouTubeId: undefined,
-    };
-  },
-  mounted() {
-    this.bindKeys();
-  },
-  destroyed() {
-    this.unbindKeys();
-  },
-  watch: {
-    repeat() {
-      this.$refs.youtube.repeat = this.repeat;
+    previousEpisode() {
+      let thisEpisodeIndex = this.episodes.findIndex(episode => episode.id === this.video.id)
+      if (thisEpisodeIndex > 0 && this.episodes[thisEpisodeIndex - 1]) return `/${this.$l1.code}/${this.$l2.code}/youtube/view/${this.episodes[thisEpisodeIndex - 1].youtube_id}/`
     },
+    nextEpisode() {
+      let thisEpisodeIndex = this.episodes.findIndex(episode => episode.id === this.video.id)
+      if (this.episodes[thisEpisodeIndex + 1]) return `/${this.$l1.code}/${this.$l2.code}/youtube/view/${this.episodes[thisEpisodeIndex + 1].youtube_id}/`
+    }
   },
   async fetch() {
     // this.$refs.search.url = `https://www.youtube.com/watch?v=${this.args}`
@@ -271,6 +277,41 @@ export default {
       this.$l2.id
     );
   },
+  mounted() {
+    this.bindKeys();
+  },
+  destroyed() {
+    this.unbindKeys();
+  },
+  watch: {
+    repeat() {
+      this.$refs.youtube.repeat = this.repeat;
+    },
+    async show() {
+      if (this.show) {
+        let filters = "";
+
+        filters +=
+          "&filter[title][contains]=" +
+          encodeURIComponent(this.show.title) +
+          "&sort=title";
+
+        let response = await axios.get(
+          `${Config.wiki}items/youtube_videos?sort=-id&filter[l2][eq]=${
+            this.$l2.id
+          }${filters}&offset=${
+            this.start
+          }&fields=channel_id,id,lesson,level,title,topic,youtube_id${
+            this.$settings.adminMode ? ",subs_l2" : ""
+          }&timestamp=${this.$settings.adminMode ? Date.now() : 0}`
+        );
+
+        if (response.data && response.data.data) {
+          this.episodes = response.data.data
+        }
+      }
+    }
+  },
   methods: {
     updateCurrentTime(currentTime) {
       this.currentTime = currentTime
@@ -291,7 +332,7 @@ export default {
         setTimeout(() => {
           if (this.ended) {
             this.$router.push(
-              `/${this.$l1.code}/${this.$l2.code}/youtube/view/${this.randomEpisodeYouTubeId}`
+              this.nextEpisode || `/${this.$l1.code}/${this.$l2.code}/youtube/view/${this.randomEpisodeYouTubeId}`
             );
           }
         }, 5000);

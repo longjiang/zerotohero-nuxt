@@ -39,12 +39,37 @@
                 v-if="
                   video &&
                   video.id &&
+                  !show &&
                   (this.video.subs_l2 || this.$settings.adminMode)
                 "
               >
                 <i class="fas fa-check-circle mr-2 text-success"></i>
                 Added
               </span>
+              <router-link
+                v-if="previousEpisode"
+                :to="previousEpisode"
+                class="btn btn-small btn-primary"
+              >
+                <i class="fa fa-chevron-left"></i>
+                Previous
+              </router-link>
+              <router-link
+                v-if="show"
+                :to="`/${$l1.code}/${$l2.code}/youtube/browse/all/all/0/${show.title}`"
+                class="btn btn-small btn-primary"
+              >
+                <i class="far fa-clone"></i>
+                All Episodes
+              </router-link>
+              <router-link
+                v-if="nextEpisode"
+                :to="nextEpisode"
+                class="btn btn-small btn-primary"
+              >
+                Next
+                <i class="fa fa-chevron-right"></i>
+              </router-link>
             </template>
             <b-dropdown
               id="dropdown-1"
@@ -145,6 +170,32 @@
             :parallellines="video.subs_l1"
             :sticky="sticky"
           />
+          <div class="text-center mt-5">
+            <router-link
+              v-if="previousEpisode"
+              :to="previousEpisode"
+              class="btn btn-primary"
+            >
+              <i class="fa fa-chevron-left"></i>
+              Previous
+            </router-link>
+            <router-link
+              v-if="show"
+              :to="`/${$l1.code}/${$l2.code}/youtube/browse/all/all/0/${show.title}`"
+              class="btn btn-primary"
+            >
+              <i class="far fa-clone"></i>
+              All Episodes
+            </router-link>
+            <router-link
+              v-if="nextEpisode"
+              :to="nextEpisode"
+              class="btn btn-primary"
+            >
+              Next
+              <i class="fa fa-chevron-right"></i>
+            </router-link>
+          </div>
         </div>
       </div>
     </div>
@@ -212,6 +263,15 @@ export default {
     sticky: {
       default: false,
     },
+    show: {
+      type: Object,
+    },
+    previousEpisode: {
+      type: String,
+    },
+    nextEpisode: {
+      type: String,
+    },
     layout: {
       type: String,
       default: "horizontal", // or 'vertical'
@@ -270,10 +330,12 @@ export default {
     },
     start() {
       let starttime =
-        this.video.subs_l2 && this.video.subs_l2.length > 0 && this.startLineIndex
+        this.video.subs_l2 &&
+        this.video.subs_l2.length > 0 &&
+        this.startLineIndex
           ? this.video.subs_l2[this.startLineIndex].starttime
           : this.starttime;
-      return starttime
+      return starttime;
     },
   },
   methods: {

@@ -360,7 +360,7 @@ export default {
       this.classes[`l1-${this.l1.code}`] = true;
       this.classes[`l2-${this.l2.code}`] = true;
     },
-    loadSettings() {
+    async loadSettings() {
       if (!this.$store.state.settings.settingsLoaded) {
         this.$store.commit("settings/LOAD_SETTINGS");
       }
@@ -372,6 +372,12 @@ export default {
       }
       if (!this.$store.state.savedHits.savedHitsLoaded) {
         this.$store.commit("savedHits/LOAD_SAVED_HITS");
+      }
+      if (!this.$store.state.tvShows.showsLoaded) {
+        this.$store.dispatch("tvShows/load", {
+          l2: this.l2,
+          adminMode: this.$store.state.settings.adminMode,
+        });
       }
     },
   },
