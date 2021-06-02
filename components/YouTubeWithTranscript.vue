@@ -429,8 +429,6 @@ export default {
     seekYouTube(starttime) {
       if (this.$refs.youtube.player) {
         this.$refs.youtube.seek(starttime);
-      } else {
-        this.starttime = starttime;
       }
     },
     pauseYouTube() {

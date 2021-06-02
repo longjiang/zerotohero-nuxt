@@ -344,6 +344,7 @@ export default {
                     seenLines.push(lineIndex);
                   }
                 }
+                this.reviewKeys[lineIndex]++
               }
             }
           }
