@@ -46,8 +46,19 @@ export default {
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
-    ['@nuxtjs/router-extras', { /* module options */ }]
+    ['@nuxtjs/router-extras', { /* module options */ }],
+    '@nuxtjs/pwa'
   ],
+
+  pwa: {
+    manifest: {
+      name: 'Zero to Hero Education',
+      short_name: 'Zero to Hero',
+      description: 'Language education done right.',
+      theme_color: '#fd4f1c',
+      useWebmanifestExtension: false
+    }
+  },
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
