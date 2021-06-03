@@ -41,7 +41,11 @@
             <span
               v-html="
                 highlight
-                  ? highlightMultiple(smartquotes(line.line), highlight, hsk || 'outside')
+                  ? highlightMultiple(
+                      smartquotes(line.line),
+                      highlight,
+                      hsk || 'outside'
+                    )
                   : smartquotes(line.line)
               "
             />
@@ -88,7 +92,7 @@
 
 <script>
 import Helper from "@/lib/helper";
-import SmartQuotes from 'smartquotes'
+import SmartQuotes from "smartquotes";
 
 export default {
   props: {
@@ -236,7 +240,7 @@ export default {
       return Helper.highlightMultiple(...arguments);
     },
     smartquotes(text) {
-      return SmartQuotes.string(text.replace(/&#39;/g, '\''))
+      return SmartQuotes.string(text.replace(/&#39;/g, "'"));
     },
     incrementReviewKeyAfterLine(lineIndex) {
       // for (let index in this.lines) {
@@ -298,65 +302,24 @@ export default {
                 lineIndex < this.lines.length;
                 lineIndex++
               ) {
-                if (!seenLines.includes(lineIndex)) {
-                  let line = this.lines[lineIndex];
-                  if (
-                    (this.$l2.continua && line.line.includes(form)) ||
-                    (this.$l2.han &&
-                      (line.line.includes(word.simplified) ||
-                        line.line.includes(word.traditional))) ||
-                    (!this.$l2.continua &&
-                      (new RegExp(`[ .,:!?]${form}[ .,:!?]`, "gi").test(
-                        line.line
-                      ) ||
-                        new RegExp(`^${form}[ .,:!?]`, "gi").test()))
-                  ) {
-                    let reviewIndex = Math.min(
-                      Math.ceil(
-                        (Number(lineIndex) +
-                          lineOffset +
-                          Math.floor(form.length / 2)) /
-                          10
-                      ) * 10,
-                      this.lines.length - 1
-                    );
-                    let similarWords = await this.findSimilarWords(form);
-                    if (similarWords.length < 2) {
-                      for (let i of [1, 2]) {
-                        let randomWord = await (
-                          await this.$getDictionary()
-                        ).random();
-                        similarWords.push(randomWord);
-                      }
-                    }
-                    let answers = similarWords
-                      .map((similarWord) => {
-                        return {
-                          text: similarWord.head,
-                          simplified: similarWord.simplified,
-                          traditional: similarWord.traditional,
-                          correct: false,
-                        };
-                      })
-                      .slice(0, 2);
-                    answers.push({
-                      text: form,
-                      simplified: word.simplified,
-                      traditional: word.traditional,
-                      correct: true,
-                    });
-                    review[reviewIndex] = review[reviewIndex] || [];
-                    review[reviewIndex].push({
-                      line: line,
-                      lineIndex: lineIndex,
-                      text: form,
-                      word: word,
-                      simplified: word.simplified,
-                      traditional: word.traditional,
-                      answers: Helper.shuffle(answers),
-                    });
-                    seenLines.push(lineIndex);
-                  }
+                if (this.reviewConditions(seenLines, lineIndex, form, word)) {
+                  let reviewItem = await this.generateReview(
+                    lineIndex,
+                    form,
+                    word
+                  );
+                  let reviewIndex = Math.min(
+                    Math.ceil(
+                      (Number(lineIndex) +
+                        lineOffset +
+                        Math.floor(form.length / 2)) /
+                        10
+                    ) * 10,
+                    this.lines.length - 1
+                  );
+                  review[reviewIndex] = review[reviewIndex] || [];
+                  review[reviewIndex].push(reviewItem);
+                  seenLines.push(lineIndex);
                 }
                 this.reviewKeys[lineIndex]++;
               }
@@ -366,6 +329,62 @@ export default {
       }
       this.review = review;
       this.incrementReviewKeyAfterLine(this.currentLineIndex);
+    },
+    reviewConditions(seenLines, lineIndex, form, word) {
+      if (!seenLines.includes(lineIndex)) {
+        let line = this.lines[lineIndex];
+        if (['en', 'ru'].includes(this.$l2.code)) {
+          return line.line.includes(form);
+        }
+        if (this.$l2.continua && line.line.includes(form)) return true;
+        if (
+          this.$l2.han &&
+          (line.line.includes(word.simplified) ||
+            line.line.includes(word.traditional))
+        )
+          return true;
+        if (!this.$l2.continua) {
+          return (
+            new RegExp(`[ .,:!?]${form}[ .,:!?]`, "gi").test(line.line) ||
+            new RegExp(`^${form}[ .,:!?]`, "gi").test()
+          );
+        }
+      }
+    },
+    async generateReview(lineIndex, form, word) {
+      let line = this.lines[lineIndex];
+      let similarWords = await this.findSimilarWords(form);
+      if (similarWords.length < 2) {
+        for (let i of [1, 2]) {
+          let randomWord = await (await this.$getDictionary()).random();
+          similarWords.push(randomWord);
+        }
+      }
+      let answers = similarWords
+        .map((similarWord) => {
+          return {
+            text: similarWord.head,
+            simplified: similarWord.simplified,
+            traditional: similarWord.traditional,
+            correct: false,
+          };
+        })
+        .slice(0, 2);
+      answers.push({
+        text: form,
+        simplified: word.simplified,
+        traditional: word.traditional,
+        correct: true,
+      });
+      return {
+        line,
+        lineIndex,
+        text: form,
+        word,
+        simplified: word.simplified,
+        traditional: word.traditional,
+        answers: Helper.shuffle(answers),
+      };
     },
     seekVideoTo(starttime) {
       if (this.onSeek) {
