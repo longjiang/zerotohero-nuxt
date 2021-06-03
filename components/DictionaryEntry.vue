@@ -259,7 +259,7 @@ export default {
       } else if (this.entry.forms && this.entry.forms.length > 0) {
         return this.entry.forms;
       } else {
-        [this.entry.bare];
+        return [this.entry.bare];
       }
     },
   },
