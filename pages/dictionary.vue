@@ -197,7 +197,7 @@ export default {
       if (
         !["INPUT", "TEXTAREA"].includes(e.target.tagName.toUpperCase()) &&
         !e.metaKey &&
-        !e.repeat
+        !e.repeat && !e.target.getAttribute('contenteditable')
       ) {
         // home
         if (e.keyCode == 36) {

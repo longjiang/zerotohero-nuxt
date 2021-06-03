@@ -516,7 +516,7 @@ export default {
     },
     bindKeys() {
       window.onkeydown = (e) => {
-        if (e.target.tagName.toUpperCase() !== "INPUT" && !e.metaKey) {
+        if (e.target.tagName.toUpperCase() !== "INPUT" && !e.metaKey && !e.target.getAttribute('contenteditable')) {
           if (e.code === "KeyM") {
             this.speed =
               this.speed === 1 ? 0.75 : this.speed === 0.75 ? 0.5 : 1;

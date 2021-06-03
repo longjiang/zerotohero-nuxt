@@ -550,7 +550,7 @@ export default {
       if (
         !["INPUT", "TEXTAREA"].includes(e.target.tagName.toUpperCase()) &&
         !e.metaKey &&
-        !e.repeat
+        !e.repeat && !e.target.getAttribute('contenteditable')
       ) {
         // left = 37
         if (e.keyCode == 37 && e.shiftKey) {

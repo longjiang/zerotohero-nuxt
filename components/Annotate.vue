@@ -52,7 +52,7 @@
             }"
             @click="textMode = !textMode"
           >
-            <i class="fas fa-bars"></i>
+            <i class="fas fa-edit"></i>
           </span>
           <span
             @click="copyClick"
@@ -64,13 +64,13 @@
       </b-dropdown>
     </div>
     <span
-      class="annotator-close ml-2 focus-exclude"
-      @click="fullscreenClick"
-      v-if="fullscreen && fullscreenMode"
+      class="annotate-slot"
+      :contenteditable="textMode"
+      @blur="reannotate"
+      :class="{ 'd-none': annotated && !textMode }"
     >
-      <i class="fas fa-times" />
+      <slot></slot>
     </span>
-    <slot v-if="!annotated || textMode"></slot>
     <v-runtime-template
       v-if="annotated && !textMode"
       v-for="(template, index) of annotatedSlots"
@@ -162,6 +162,17 @@ export default {
       return this.$getHanzi();
     },
   },
+  watch: {
+    textMode() {
+      if (this.textMode) {
+        let element = this.$el.querySelector(".annotate-slot");
+        console.log(element.focus());
+        setTimeout(() => {
+          element.focus();
+        }, 0);
+      }
+    },
+  },
   methods: {
     async translateClick() {
       let text = this.$l2.continua ? this.text.replace(/ /g, "") : this.text;
@@ -201,28 +212,36 @@ export default {
       document.execCommand("copy");
       document.body.removeChild(tempInput);
     },
-    async visibilityChanged(isVisible) {
-      if (isVisible && !this.annotating) {
-        this.annotating = true;
-        if (this.$hasFeature("dictionary") || this.nonLatin()) {
-          if (this.$slots.default) {
-            for (let slot of this.$slots.default) {
-              let $slotElems = $(slot.elm);
-              this.convertToSentencesRecursive($slotElems[0]);
-            }
-            for (let slot of this.$slots.default) {
-              let $slotElems = $(slot.elm);
-              this.annotatedSlots.push(
-                $(
-                  await this.annotateRecursive($slotElems[0].cloneNode(true))
-                )[0].outerHTML
-              );
-            }
-            // await Helper.delay(1000)
-            this.annotated = true;
-          }
+    visibilityChanged(isVisible) {
+      if (isVisible) {
+        this.convertToSentencesAndAnnotate(this.$slots.default[0]);
+      }
+    },
+    reannotate(e) {
+      this.textMode = false;
+      e.target.setAttribute("contenteditable", false);
+      this.annotate(e.target);
+    },
+    convertToSentencesAndAnnotate(slot) {
+      if (
+        (!this.annotating && this.$hasFeature("dictionary")) ||
+        this.nonLatin()
+      ) {
+        if (slot) {
+          this.convertToSentencesRecursive(slot.elm);
+          this.annotate(slot.elm);
         }
       }
+    },
+    async annotate(node) {
+      this.annotated = false;
+      this.annotating = true;
+      this.annotatedSlots = [];
+      this.annotatedSlots.push(
+        $(await this.annotateRecursive(node.cloneNode(true)))[0].outerHTML
+      );
+      this.annotating = false;
+      this.annotated = true;
     },
     async annotateRecursive(node) {
       if (node && node.classList && node.classList.contains("sentence")) {
@@ -424,12 +443,18 @@ export default {
     }
   }
   .annotator-button {
-    padding: 0.1rem 0.3rem;
-    border-radius: 0.1rem;
+    padding: 0.3rem 0.3rem;
+    border-radius: 0.2rem;
   }
   .annotator-button.active {
     background-color: #fd4f1c;
     color: white;
   }
+}
+
+.annotate-slot[contenteditable="true"] {
+  border: 1px solid #ccc;
+  padding: 0.5rem 0.7rem;
+  border-radius: 0.2rem;
 }
 </style>
