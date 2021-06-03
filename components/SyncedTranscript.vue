@@ -41,8 +41,8 @@
             <span
               v-html="
                 highlight
-                  ? highlightMultiple(line.line, highlight, hsk || 'outside')
-                  : line.line
+                  ? highlightMultiple(smartquotes(line.line), highlight, hsk || 'outside')
+                  : smartquotes(line.line)
               "
             />
           </Annotate>
@@ -88,6 +88,7 @@
 
 <script>
 import Helper from "@/lib/helper";
+import SmartQuotes from 'smartquotes'
 
 export default {
   props: {
@@ -233,6 +234,9 @@ export default {
   methods: {
     highlightMultiple() {
       return Helper.highlightMultiple(...arguments);
+    },
+    smartquotes(text) {
+      return SmartQuotes.string(text.replace(/&#39;/g, '\''))
     },
     incrementReviewKeyAfterLine(lineIndex) {
       // for (let index in this.lines) {

@@ -1,9 +1,9 @@
 JavaScript Lemmatizer
 ====
 
-JavaScript Lemmatizer is a lemmatization library for JavaScript to retrieve a base form from an inflected form word in English. 
+This library is based on takafumir's library (https://github.com/takafumir/javascript-lemmatizer).
 
-Inspired by [Ruby Lemmatizer](https://github.com/yohasebe/lemmatizer) but the returned values and the algorithm are different from it.
+JavaScript Lemmatizer is a lemmatization library for JavaScript to retrieve a base form from an inflected form word in English. 
 
 ## Requirements
 
@@ -11,64 +11,17 @@ Depends on Underscore.js.
 
 - [Underscore.js](http://underscorejs.org/)
 
-## Demo
-
-A sample html is bundled in this library. The sample html code and the demo page are followings.
-
-- [lemmatizer_sample.html](https://github.com/takafumir/javascript-lemmatizer/blob/master/html/lemmatizer_sample.html)
-- [Demo page](http://takafumir.github.io/javascript-lemmatizer/html/lemmatizer_sample.html)
-
-The sample html code depends on jQuery.
-
-- [jQuery](http://jquery.com/)
-
-## Check
-
-The operation check is conducted in the following web browsers with Mac OS X.
-
-- Firefox 35.0
-- Google Chrome 40.0
-- Safari 6.1.6
-- Opera 25.0
-
 ## Install
-##### 1. Download and unzip JavaScript Lemmatizer, and then put it in your project.
 
-Directories of dict, js in JavaScript Lemmatizer are must, so you can put it in your project like this.
+1. Download JavaScript Lemmatizer and put into your project
 
-```
-your-project
-├ index.html
-├ javascript-lemmatizer
-    ├ dict
-    ├ js
-    ├ bower_components
-        ├ jquery
-        ├ underscore
+2. Import  JavaScript Lemmatizer in your javascript file
+
+```javascript
+import Lemmatizer from 'js/lemmatizer.js'
 ```
 
-##### 2. Load Underscore.js and JavaScript Lemmatizer in your HTML like the following code.
 
-```html
-<script src="javascript-lemmatizer/bower_components/underscore/underscore.js"></script>
-<script src="javascript-lemmatizer/js/lemmatizer.js"></script>
-```
-
-Or you can load Underscore.js the way you like.
-
-As an option, you can load jQuery, if you need it in your project.
-
-```html
-<script src="javascript-lemmatizer/bower_components/jquery/dist/jquery.js"></script>
-<script src="javascript-lemmatizer/bower_components/underscore/underscore.js"></script>
-<script src="javascript-lemmatizer/js/lemmatizer.js"></script>
-```
-
-##### 3. Use JavaScript Lemmatizer in your JavaScript code according to the Usage.
-
-See also.
-- [lemmatizer_sample.html](https://github.com/takafumir/javascript-lemmatizer/blob/master/html/lemmatizer_sample.html)
-- [Demo page](http://takafumir.github.io/javascript-lemmatizer/html/lemmatizer_sample.html)
 
 ## Usage
 
@@ -104,46 +57,17 @@ lemmatizer.only_lemmas('priorities');     // => [ 'priority' ]
 lemmatizer.only_lemmas('leaves');         // => [ 'leave', 'leaf' ]
 ```
 
-See also.
-- [lemmatizer_sample.html](https://github.com/takafumir/javascript-lemmatizer/blob/master/html/lemmatizer_sample.html)
-- [Demo page](http://takafumir.github.io/javascript-lemmatizer/html/lemmatizer_sample.html)
-
 ## Limitations
 ```javascript
 // Lemmatizer leaves alone a word not included in it's dictionary index.
 lemmatizer.lemmas('MacBooks', 'noun');  // => [ ['MacBooks', 'noun'] ]
 ```
 
-## Changelog
-
-##### v0.0.2
-2015/01/30
-With v0.0.2, a returned value includes the input form word, when the input form word is included in the lemma dictionary index like the following.
-```javascript
-lemmatizer.lemmas('matter');  // => [ ['matter', 'verb'], ['matter', 'noun'], ['matte', 'adj'], ['matt', 'adj'], ['mat', 'adj'] ]
-```
-
-With v0.0.1
-```javascript
-lemmatizer.lemmas('matter');  // => [ ['matte', 'adj'], ['matt', 'adj'], ['mat', 'adj'] ]
-```
-
-##### v0.0.1
-2015/01/27
-Released JavaScript Lemmatizer v0.0.1
-
-## Contribution
-
-1. Fork it ( https://github.com/takafumir/javascript-lemmatizer/fork )
-1. Create your feature branch (git checkout -b my-new-feature)
-1. Commit your changes (git commit -am 'Add some feature')
-1. Push to the branch (git push origin my-new-feature)
-1. Create a new Pull Request
-
 ## Licence
 
-[MIT License](https://github.com/takafumir/javascript-lemmatizer/blob/master/LICENSE)
+[MIT License](https://github.com/myabu-dev/javascript-lemmatizer/blob/master/LICENSE)
 
 ## Author
 
-[Takafumi Yamano](https://github.com/takafumir)
+[Takafumi Yamano](https://github.com/takafumir), [myabu](https://github.com/myabu-dev)
+

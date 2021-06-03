@@ -70,7 +70,6 @@
 import wordblock from "@/components/WordBlock";
 import VRuntimeTemplate from "v-runtime-template";
 import Helper from "@/lib/helper";
-import Config from "@/lib/config";
 
 export default {
   components: {
@@ -260,46 +259,9 @@ export default {
         }
       } else if (this.$l2.code === "en") {
         html = "";
-        text = text.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // strip accents e.g. résumé -> resume
-        this.tokenized[batchId] = [];
-        let segs = Helper.splitByReg(text, /([a-zA-Z0-9]+)/gi);
-        var lemmatizer = new Lemmatizer();
-        let reg = new RegExp(
-          `.*([a-z0-9${this.$l2.apostrophe ? "'ʼ" : ""}]+).*`
+        this.tokenized[batchId] = await (await this.$getDictionary()).tokenize(
+          text
         );
-        for (let seg of segs) {
-          let word = seg.toLowerCase();
-          if (
-            reg.test(word) &&
-            (!Config.reject[this.$l2.code] ||
-              !Config.reject[this.$l2.code].includes(word))
-          ) {
-            let lemmas = lemmatizer.lemmas(word);
-            lemmas = [[word, "inflected"]].concat(lemmas);
-            let found = false;
-            let token = {
-              text: seg,
-              candidates: [],
-            };
-            for (let lemma of lemmas) {
-              let candidates = await (
-                await this.$getDictionary()
-              ).lookupMultiple(lemma[0]);
-              if (candidates.length > 0) {
-                found = true;
-                token.candidates = token.candidates.concat(candidates);
-              }
-            }
-            token.candidates = Helper.uniqueByValue(token.candidates, "id");
-            if (found) {
-              this.tokenized[batchId].push(token);
-            } else {
-              this.tokenized[batchId].push(seg);
-            }
-          } else {
-            this.tokenized[batchId].push(seg);
-          }
-        }
         for (let index in this.tokenized[batchId]) {
           let item = this.tokenized[batchId][index];
           if (typeof item === "object") {

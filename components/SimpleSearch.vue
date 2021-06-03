@@ -15,7 +15,8 @@
     </router-link>
     <b-input-group-append>
       <b-button variant="primary" @click="action(text)">
-        {{ $t(buttonText) }}
+        <span v-if="buttonText">{{ $t(buttonText) }}</span>
+        <span v-else><i class="fas fa-search"></i></span>
       </b-button>
     </b-input-group-append>
   </b-input-group>
@@ -31,7 +32,7 @@ export default {
       type: Function,
     },
     buttonText: {
-      default: "Go",
+      type: String,
     },
     random: {
       default: ""

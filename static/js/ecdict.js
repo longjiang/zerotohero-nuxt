@@ -1,3 +1,5 @@
+importScripts('../vendor/javascript-lemmatizer/js/lemmatizer.js')
+
 const Dictionary = {
   name: 'ecdict',
   lang: undefined,
@@ -49,6 +51,61 @@ const Dictionary = {
       this.words.push(word)
     }
     console.log('Words loaded.')
+  },
+  splitByReg(text, reg) {
+    let words = text.replace(reg, '!!!BREAKWORKD!!!$1!!!BREAKWORKD!!!').replace(/^!!!BREAKWORKD!!!/, '').replace(/!!!BREAKWORKD!!!$/, '')
+    return words.split('!!!BREAKWORKD!!!')
+  },
+  tokenize(text) {
+    text = text.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // strip accents e.g. résumé -> resume
+    tokenized = [];
+    let segs = this.splitByReg(text, /([a-zA-Z0-9]+)/gi);
+    var lemmatizer = new Lemmatizer();
+    let reg = new RegExp(
+      `.*([a-z0-9]+).*`
+    );
+    for (let seg of segs) {
+      let word = seg.toLowerCase();
+      if (
+        reg.test(word) &&
+        !['m', 's', 't', 'll', 'd', 're', 'ain', 'don'].includes(word)
+      ) {
+        let lemmas = lemmatizer.lemmas(word);
+        lemmas = [[word, "inflected"]].concat(lemmas);
+        let found = false;
+        let token = {
+          text: seg,
+          candidates: [],
+        };
+        for (let lemma of lemmas) {
+          let candidates = this.lookupMultiple(lemma[0]);
+          if (candidates.length > 0) {
+            found = true;
+            token.candidates = token.candidates.concat(candidates);
+          }
+        }
+        token.candidates = this.uniqueByValue(token.candidates, "id");
+        if (found) {
+          tokenized.push(token);
+        } else {
+          tokenized.push(seg);
+        }
+      } else {
+        tokenized.push(seg);
+      }
+    }
+    return tokenized
+  },
+  uniqueByValue(array, key) {
+    let flags = []
+    let unique = []
+    let l = array.length
+    for (let i = 0; i < l; i++) {
+      if (flags[array[i][key]]) continue
+      flags[array[i][key]] = true
+      unique.push(array[i])
+    }
+    return unique
   },
   async loadFrequency() {
     console.log('Loading word frequency list...')
