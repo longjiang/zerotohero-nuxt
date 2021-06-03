@@ -31,18 +31,33 @@
             style="position: relative; top: 0.08rem; position: relative"
           />
           <span
-            class="annotator-show-translate ml-2 focus-exclude"
+            class="annotator-button annotator-show-translate ml-2 focus-exclude"
             @click="translateClick"
           >
             <i class="fas fa-language"></i>
           </span>
           <span
-            class="annotator-fullscreen ml-2 focus-exclude"
+            :class="{
+              'annotator-button annotator-fullscreen ml-2 focus-exclude': true,
+              active: fullscreenMode,
+            }"
             @click="fullscreenClick"
           >
             <i class="fas fa-expand"></i>
           </span>
-          <span @click="copyClick" class="annotator-copy ml-2 focus-exclude">
+          <span
+            :class="{
+              'annotator-button annotator-text-mode ml-2 focus-exclude': true,
+              active: textMode,
+            }"
+            @click="textMode = !textMode"
+          >
+            <i class="fas fa-bars"></i>
+          </span>
+          <span
+            @click="copyClick"
+            class="annotator-button annotator-copy ml-2 focus-exclude"
+          >
             <i class="fas fa-copy"></i>
           </span>
         </b-dropdown-item>
@@ -55,9 +70,9 @@
     >
       <i class="fas fa-times" />
     </span>
-    <slot v-if="!annotated"></slot>
+    <slot v-if="!annotated || textMode"></slot>
     <v-runtime-template
-      v-if="annotated"
+      v-if="annotated && !textMode"
       v-for="(template, index) of annotatedSlots"
       :key="`annotate-template-${index}`"
       :template="template"
@@ -119,6 +134,7 @@ export default {
       batchId: 0,
       text: "",
       Helper,
+      textMode: false,
       tokenized: [],
       dictionary: undefined,
     };
@@ -406,6 +422,14 @@ export default {
     &:hover {
       color: #666;
     }
+  }
+  .annotator-button {
+    padding: 0.1rem 0.3rem;
+    border-radius: 0.1rem;
+  }
+  .annotator-button.active {
+    background-color: #fd4f1c;
+    color: white;
   }
 }
 </style>
