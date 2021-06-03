@@ -283,8 +283,8 @@
           </div>
         </div>
 
-        <div class="row mt-5 mb-4 text-dark">
-          <div class="col-sm-12 text-center">
+        <div class="mt-4 text-dark p-3">
+          <div class="text-center">
             <p style="font-size: 1.5rem">
               Resources for learning
               <strong><em>hundreds</em></strong>
