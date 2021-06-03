@@ -35,7 +35,6 @@ export const mutations = {
       state.adminMode = settings.adminMode
       state.l2Settings = settings[state.l2.code] || state.l2Settings
     }
-    console.log('😄 settings loaded', state.l2Settings)
     state.settingsLoaded[state.l2.code] = true
   },
   SET_ADMIN_MODE(state, adminMode) {

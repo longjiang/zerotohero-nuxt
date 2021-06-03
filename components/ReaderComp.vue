@@ -32,6 +32,7 @@
             class="mb-3"
             tag="div"
             :key="`reader-${readerKey}-${index}`"
+            :buttons="true"
           >
             <span v-html="line.trim()" />
           </Annotate>

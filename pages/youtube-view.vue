@@ -596,13 +596,13 @@ export default {
 
 .youtube-view-line-list {
   position: fixed;
-  width: 25rem;
-  max-height: calc(100vh - 10rem);
+  width: 20rem;
+  max-height: calc(100vh - 15rem);
   overflow: scroll;
   border-radius: 0.3rem;
   background: white;
   z-index: 10;
-  left: calc(50vw - 12.5rem);
+  left: calc(50vw - 10rem);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
   bottom: 6rem;
 }

@@ -89,7 +89,6 @@ export default {
   },
   methods: {
     answered(answer) {
-      console.log(answer)
       if (answer.correct) {
         this.showAnswer = true
       }

@@ -2,7 +2,6 @@
   <button
     :class="{
       btn: true,
-      'btn-small': true,
       'bg-white': true,
       'mr-2': true,
       'review-answer': true,
@@ -63,6 +62,10 @@ export default {
 <style>
 .review-answer {
   border: 1px solid #999;
+  padding: 0.1rem 0.3rem;
+  font-size: 0.9em;
+  color: #999;
+  min-width: 5rem;
 }
 
 .review-answer.checked:not(.review-answer-correct) {

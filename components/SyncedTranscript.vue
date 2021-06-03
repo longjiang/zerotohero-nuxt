@@ -267,10 +267,14 @@ export default {
     },
     async updateReview() {
       let review = Object.assign({}, this.review);
-      for (let lineIndex in this.lines) {
-        if (lineIndex >= this.currentLineIndex) delete review[lineIndex];
-      }
       let lineOffset = 10; // Show review this number of lines after the first appearance of the word
+      for (let lineIndex in this.lines) {
+        if (
+          lineIndex >=
+          Math.ceil((Number(this.currentLineIndex) + lineOffset) / 10) * 10
+        )
+          delete review[lineIndex];
+      }
       if (
         this.quiz &&
         this.$store.state.savedWords.savedWords &&

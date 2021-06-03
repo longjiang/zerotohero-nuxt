@@ -24,7 +24,7 @@
   >
     <div class="annotator-buttons" v-if="!empty() && buttons">
       <b-dropdown no-caret toggle-class="annotator-menu-toggle" dropleft>
-        <template #button-content><i class="fas fa-ellipsis-h"></i></template>
+        <template #button-content><i class="fas fa-ellipsis-v"></i></template>
         <b-dropdown-item>
           <Speak
             :text="text"
@@ -153,14 +153,14 @@ export default {
       if (["ko", "ja"].includes(this.$l2.code)) {
         window.open(
           `https://papago.naver.com/?sk=auto&st=${encodeURIComponent(text)}`,
-          "translate"
+          Helper.isMobile() ? "_blank" : "translate"
         );
       } else {
         window.open(
           `https://translate.google.com/#view=home&op=translate&sl=${
             this.$l2.code === "zh" ? "zh-CN" : this.$l2.code
           }&tl=${this.$l1.code}&text=${encodeURIComponent(text)}`,
-          "translate"
+          Helper.isMobile() ? "_blank" : "translate"
         );
       }
     },

@@ -359,7 +359,6 @@ export default {
       };
       this.classes[`l1-${this.l1.code}`] = true;
       this.classes[`l2-${this.l2.code}`] = true;
-      console.log('class updated', this.l2Settings)
     },
     async loadSettings() {
       this.$store.commit("settings/LOAD_SETTINGS");
