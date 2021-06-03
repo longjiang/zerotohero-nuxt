@@ -1,12 +1,6 @@
 <template>
   <span>
     <i class="fas fa-volume-up focus-exclude speak" @click="speak"></i>
-    <span
-      v-if="!$hasFeature('speech') && !mp3"
-      class="text-muted ml-1"
-      style="opacity: 0.7; font-size: 0.8em"
-      >Forvo</span
-    >
   </span>
 </template>
 <script>
@@ -17,7 +11,7 @@ export default {
       availableLocales: [],
       preferredLocales: [],
       bestLocale: 'en',
-      bestVoice: undefined,
+      bestVoice: undefined
     }
   },
   props: ['text', 'mp3', 'wiktionary'],
