@@ -14,10 +14,10 @@
     <template v-if="$l2.code === 'ja' || !$l2.han">
       {{ answer.text }}
     </template>
-    <template v-else-if="$l2.han && $settings.useTraditional">
+    <template v-else-if="$l2.han && $useTraditional">
       {{ answer.traditional || answer.simplified }}
     </template>
-    <template v-else-if="$l2.han && !$settings.useTraditional">
+    <template v-else-if="$l2.han && !$useTraditional">
       {{ answer.simplified || answer.traditional }}
     </template>
   </button>
@@ -51,6 +51,11 @@ export default {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
+    $useTraditional() {
+      if (typeof this.$store.state.settings.l2Settings !== "undefined")
+        return this.$store.state.settings.l2Settings.useTraditional;
+
+    }
   },
 };
 </script>

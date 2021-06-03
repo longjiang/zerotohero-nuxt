@@ -201,9 +201,6 @@ export default {
   //   if (!this.single) this.scrollTo(this.currentLineIndex);
   // },
   watch: {
-    $settings() {
-      if (this.highlightSavedWords) this.updateReview();
-    },
     currentTime() {
       if (
         this.currentTime > this.currentLine.starttime &&
@@ -276,7 +273,6 @@ export default {
       let lineOffset = 10; // Show review this number of lines after the first appearance of the word
       if (
         this.quiz &&
-        this.$settings.showQuiz &&
         this.$store.state.savedWords.savedWords &&
         this.$store.state.savedWords.savedWords[this.$l2.code]
       ) {
