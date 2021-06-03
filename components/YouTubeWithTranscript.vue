@@ -28,7 +28,7 @@
               <b-button
                 v-if="
                   !(video && video.id) &&
-                  (this.video.subs_l2 || this.$settings.adminMode)
+                  (this.video.subs_l2 || this.$adminMode)
                 "
                 @click="save"
               >
@@ -40,7 +40,7 @@
                   video &&
                   video.id &&
                   !show &&
-                  (this.video.subs_l2 || this.$settings.adminMode)
+                  (this.video.subs_l2 || this.$adminMode)
                 "
               >
                 <i class="fas fa-check-circle mr-2 text-success"></i>
@@ -73,7 +73,7 @@
             </template>
             <b-dropdown
               id="dropdown-1"
-              v-if="$settings.adminMode && video && video.id"
+              v-if="$adminMode && video && video.id"
               :text="video.topic ? topics[video.topic] : 'Topic'"
               :variant="video.topic ? 'success' : undefined"
               class="ml-1"
@@ -87,7 +87,7 @@
               </b-dropdown-item>
             </b-dropdown>
             <template
-              v-if="$settings.adminMode && video && video.id && !video.lesson"
+              v-if="$adminMode && video && video.id && !video.lesson"
             >
               <b-dropdown
                 id="dropdown-1"
@@ -105,7 +105,7 @@
               </b-dropdown>
 
               <b-button
-                v-if="$settings.adminMode"
+                v-if="$adminMode"
                 variant="danger"
                 @click="remove"
                 class="ml-1"
@@ -114,7 +114,7 @@
               </b-button>
 
               <drop
-                v-if="$settings.adminMode"
+                v-if="$adminMode"
                 @drop="handleDrop"
                 :class="{
                   over: over,
@@ -133,7 +133,7 @@
               </drop>
             </template>
           </div>
-          <div v-if="$settings.adminMode && video && video.id" class="mt-2">
+          <div v-if="$adminMode && video && video.id" class="mt-2">
             First line starts at
             <input
               v-model.lazy="firstLineTime"
@@ -336,6 +336,10 @@ export default {
           ? this.video.subs_l2[this.startLineIndex].starttime
           : this.starttime;
       return starttime;
+    },
+    $adminMode() {
+      if (typeof this.$store.state.settings.adminMode !== "undefined")
+        return this.$store.state.settings.adminMode;
     },
   },
   methods: {

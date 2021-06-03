@@ -318,8 +318,8 @@ export default {
     };
   },
   async mounted() {
-    if (this.l1 && this.l2) this.updateClasses();
     if (this.l1 && this.l2) this.loadSettings();
+    if (this.l1 && this.l2) this.updateClasses();
     if (this.l1) this.updatei18n();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type.startsWith("settings")) {
@@ -359,11 +359,10 @@ export default {
       };
       this.classes[`l1-${this.l1.code}`] = true;
       this.classes[`l2-${this.l2.code}`] = true;
+      console.log('class updated', this.l2Settings)
     },
     async loadSettings() {
-      if (!this.$store.state.settings.settingsLoaded) {
-        this.$store.commit("settings/LOAD_SETTINGS");
-      }
+      this.$store.commit("settings/LOAD_SETTINGS");
       if (!this.$store.state.savedWords.savedWordsLoaded) {
         this.$store.commit("savedWords/LOAD_SAVED_WORDS");
       }

@@ -291,7 +291,7 @@ export default {
       this.excludeTerms,
       this.$l2.code,
       this.$l2.id,
-      this.$settings.adminMode,
+      this.$adminMode,
       this.$l2.continua
     );
 
@@ -350,6 +350,10 @@ export default {
     },
     $dictionaryName() {
       return this.$store.state.settings.dictionaryName;
+    },
+    $adminMode() {
+      if (typeof this.$store.state.settings.adminMode !== "undefined")
+        return this.$store.state.settings.adminMode;
     },
     hitIndex() {
       let hits = this.hits;

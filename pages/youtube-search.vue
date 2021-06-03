@@ -46,19 +46,19 @@
         >All</b-form-radio
       >
       <b-button
-        v-if="$settings.adminMode && !checkSaved"
+        v-if="$adminMode && !checkSaved"
         class="btn btn-small mt-2 ml-3"
         @click="checkSaved = true"
         ><i class="fas fa-question mr-2"></i>Check Saved</b-button
       >
       <b-button
-        v-if="$settings.adminMode && checkSaved"
+        v-if="$adminMode && checkSaved"
         class="btn btn-small mt-2 ml-3"
         @click="addAll()"
         ><i class="fas fa-plus mr-2"></i>Add All</b-button
       >
       <b-button
-        v-if="$settings.adminMode && checkSaved"
+        v-if="$adminMode && checkSaved"
         class="btn btn-small mt-2 ml-3"
         @click="checkSaved = false"
         ><i class="fas fa-question mr-2"></i>Uncheck Saved</b-button
@@ -100,6 +100,11 @@ export default {
     $l2() {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
+    },
+
+    $adminMode() {
+      if (typeof this.$store.state.settings.adminMode !== "undefined")
+        return this.$store.state.settings.adminMode;
     },
   },
   props: {

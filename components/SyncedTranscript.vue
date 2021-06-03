@@ -25,7 +25,7 @@
           v-if="!single || currentLine === line"
         >
           <b-button
-            v-if="$settings.adminMode"
+            v-if="$adminMode"
             class="btn btn-small bg-danger text-white"
             @click="removeLine(lineIndex)"
             style="float: right"
@@ -148,6 +148,10 @@ export default {
     },
     $hanzi() {
       return this.$getHanzi();
+    },
+    $adminMode() {
+      if (typeof this.$store.state.settings.adminMode !== "undefined")
+        return this.$store.state.settings.adminMode;
     },
     previousLine() {
       let previousIndex = Math.max(this.currentLineIndex - 1, 0);

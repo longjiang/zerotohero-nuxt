@@ -48,7 +48,7 @@
         :class="{ 'col-sm-12 pr-4 mb-5': true, 'col-md-8 col-lg-9': !keyword }"
       >
         <b-button
-          v-if="$settings.adminMode"
+          v-if="$adminMode"
           class="btn btn-small bg-danger text-white mt-2 ml-2"
           @click="removeAll()"
         >
@@ -239,11 +239,11 @@ export default {
         }${filters}&limit=${limit}&offset=${
           this.start
         }&fields=channel_id,id,lesson,level,title,topic,youtube_id${
-          this.$settings.adminMode ? ",subs_l2" : ""
-        }&timestamp=${this.$settings.adminMode ? Date.now() : 0}`
+          this.$adminMode ? ",subs_l2" : ""
+        }&timestamp=${this.$adminMode ? Date.now() : 0}`
       );
       let videos = response.data.data || [];
-      if (videos && this.$settings.adminMode) {
+      if (videos && this.$adminMode) {
         videos = await YouTube.checkShows(videos, this.$l2.id);
         for (let video of videos) {
           try {
@@ -301,6 +301,10 @@ export default {
     $l2() {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
+    },
+    $adminMode() {
+      if (typeof this.$store.state.settings.adminMode !== "undefined")
+        return this.$store.state.settings.adminMode;
     },
   },
 };

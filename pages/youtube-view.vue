@@ -220,6 +220,10 @@ export default {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
+    $adminMode() {
+      if (typeof this.$store.state.settings.adminMode !== "undefined")
+        return this.$store.state.settings.adminMode;
+    },
     saved() {
       return this.video.id;
     },
@@ -314,8 +318,8 @@ export default {
           }${filters}&offset=${
             this.start
           }&fields=channel_id,id,lesson,level,title,topic,youtube_id${
-            this.$settings.adminMode ? ",subs_l2" : ""
-          }&timestamp=${this.$settings.adminMode ? Date.now() : 0}`
+            this.$adminMode ? ",subs_l2" : ""
+          }&timestamp=${this.$adminMode ? Date.now() : 0}`
         );
 
         if (response.data && response.data.data) {
@@ -496,7 +500,7 @@ export default {
         }&filter[l2][eq]=${
           this.$l2.id
         }&fields=id,youtube_id,channel_id,l2,title,level,topic,lesson,subs_l2&timestamp=${
-          this.$settings.adminMode ? Date.now() : 0
+          this.$adminMode ? Date.now() : 0
         }`
       );
       response = response.data;

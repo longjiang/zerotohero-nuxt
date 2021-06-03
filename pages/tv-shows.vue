@@ -85,7 +85,7 @@ export default {
     let response = await axios.get(
       `${Config.wiki}items/tv_shows?sort=title&filter[l2][eq]=${
         this.$l2.id
-      }&limit=500&timestamp=${this.$settings.adminMode ? Date.now() : 0}`
+      }&limit=500&timestamp=${this.$adminMode ? Date.now() : 0}`
     );
     let shows =
       response.data.data.sort((x, y) =>
@@ -102,6 +102,11 @@ export default {
     $l2() {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
+    },
+
+    $adminMode() {
+      if (typeof this.$store.state.settings.adminMode !== "undefined")
+        return this.$store.state.settings.adminMode;
     },
   },
   methods: {},

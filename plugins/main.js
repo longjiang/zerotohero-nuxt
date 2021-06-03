@@ -51,18 +51,6 @@ export default ({ app, store }, inject) => {
   if (!app.$languages) {
     inject('languages', Languages.load())
   }
-  if (!app.$settings) {
-    inject('settings', {
-      showDefinition: false,
-      showTranslation: true,
-      showPinyin: true,
-      useTraditional: false,
-      showQuiz: true,
-    })
-  }
-  if (typeof localStorage !== 'undefined') {
-    inject('settings', Object.assign(app.$settings, JSON.parse(localStorage.getItem('zthSettings'))))
-  }
 
   inject('hasFeature', (feature) => {
     return app.$languages

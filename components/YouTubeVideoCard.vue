@@ -33,7 +33,7 @@
         <div class="font-weight-bold">
           <span
             contenteditable="true"
-            v-if="$settings.adminMode"
+            v-if="$adminMode"
             @blur="saveTitle"
           >
             {{ video.title }}
@@ -78,7 +78,7 @@
           Add
         </b-button>
         <b-button
-          v-if="$settings.adminMode && video.id && !video.channel_id"
+          v-if="$adminMode && video.id && !video.channel_id"
           class="btn btn-small mt-2 ml-0"
           @click="addChannelID(video)"
         >
@@ -86,7 +86,7 @@
           Add Channel ID
         </b-button>
         <b-button
-          v-if="$settings.adminMode && video.id && !tvShow"
+          v-if="$adminMode && video.id && !tvShow"
           class="btn btn-small mt-2 ml-0"
           @click="toggleMakingShow()"
         >
@@ -117,7 +117,7 @@
           </b-button>
         </div>
         <b-button
-          v-if="$settings.adminMode && video.id"
+          v-if="$adminMode && video.id"
           class="btn btn-small bg-danger text-white mt-2 ml-0"
           @click="remove()"
         >
@@ -138,7 +138,7 @@
 
         <div
           v-if="
-            $settings.adminMode && video.subs_l1 && video.subs_l1.length > 0
+            $adminMode && video.subs_l1 && video.subs_l1.length > 0
           "
         >
           <div v-for="index in Math.min(5, video.subs_l1.length)">
@@ -163,7 +163,7 @@
         </div>
         <div
           v-if="
-            $settings.adminMode && video.subs_l2 && video.subs_l2.length > 0
+            $adminMode && video.subs_l2 && video.subs_l2.length > 0
           "
         >
           <b>{{ video.l2Locale || $l2.code }}</b>
@@ -185,7 +185,7 @@
 
         <div
           v-if="
-            $settings.adminMode &&
+            $adminMode &&
             video.channel_id &&
             Config.approvedChannels[$l2.code] &&
             !Config.approvedChannels[$l2.code].includes(video.channel_id) &&
@@ -248,7 +248,7 @@ export default {
       await Helper.timeout(this.delay);
       this.video = await this.checkSubsFunc(this.video);
     }
-    if (this.video.id && this.$settings.adminMode) {
+    if (this.video.id && this.$adminMode) {
       await this.addSubsL1(this.video);
     }
     this.videoInfoKey++;
@@ -277,6 +277,10 @@ export default {
     $l2() {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
+    },
+    $adminMode() {
+      if (typeof this.$store.state.settings.adminMode !== "undefined")
+        return this.$store.state.settings.adminMode;
     },
   },
   methods: {
@@ -435,7 +439,7 @@ export default {
         `${Config.wiki}items/youtube_videos?filter[youtube_id][eq]=${
           video.youtube_id
         }&filter[l2][eq]=${this.$l2.id}&timestamp=${
-          this.$settings.adminMode ? Date.now() : 0
+          this.$adminMode ? Date.now() : 0
         }`
       );
       response = response.data;

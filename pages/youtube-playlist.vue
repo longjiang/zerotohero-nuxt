@@ -11,32 +11,32 @@
         <h3 class="text-center">Playlist: {{ playlist_id }}</h3>
         <div>
           <b-button
-            v-if="$settings.adminMode && !checkSaved"
+            v-if="$adminMode && !checkSaved"
             class="btn btn-small mt-2 ml-3"
             @click="checkSaved = true"
             ><i class="fas fa-question mr-2"></i>Check Saved</b-button
           >
           <b-button
-            v-if="$settings.adminMode && checkSaved"
+            v-if="$adminMode && checkSaved"
             class="btn btn-small mt-2 ml-3"
             @click="checkSaved = false"
             ><i class="fas fa-question mr-2"></i>Uncheck Saved</b-button
           >
           <b-button
-            v-if="$settings.adminMode && checkSaved"
+            v-if="$adminMode && checkSaved"
             class="btn btn-small mt-2"
             @click="addAll()"
             ><i class="fas fa-plus mr-2"></i>Add All</b-button
           >
           <b-button
-            v-if="$settings.adminMode"
+            v-if="$adminMode"
             class="btn btn-small bg-danger text-white mt-2 ml-2"
             @click="removeAll()"
             ><i class="fas fa-trash mr-2"></i>Remove All</b-button
           >
 
           <drop
-            v-if="$settings.adminMode"
+            v-if="$adminMode"
             @drop="handleDrop"
             :class="{
               over: over,
@@ -115,10 +115,17 @@ export default {
           videos = await YouTube.checkShows(
             videos,
             this.$l2.id,
-            this.$settings.adminMode
+            this.$adminMode
           )
         this.videos = videos
       }
+    },
+  },
+  computed: {
+
+    $adminMode() {
+      if (typeof this.$store.state.settings.adminMode !== "undefined")
+        return this.$store.state.settings.adminMode;
     },
   },
   watch: {
