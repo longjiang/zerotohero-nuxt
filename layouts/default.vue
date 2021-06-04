@@ -9,33 +9,52 @@
               Home
             </router-link>
           </div>
-          <a
-            v-if="l1.code === 'zh' && l2.code === 'en'"
-            class="btn btn-sign-in text-white ml-1"
-            style="background-color: #2c5aff"
-            href="https://m.cctalk.com/inst/stevmab3"
-            target="_blank"
-          >
-            登陆
-            <img
-              src="/img/logo-cctalk-white.png"
-              class="logo-small ml-1"
-              data-not-lazy
-            />
-          </a>
-          <a
-            v-if="l1.code === 'en' && l2.code === 'zh'"
-            class="btn btn-primary btn-sign-in text-white ml-1"
-            href="https://sso.teachable.com/secure/133035/users/sign_in"
-            target="_blank"
-          >
-            Login to
-            <img
-              src="/img/teachable_light.png"
-              class="logosp-small"
-              data-not-lazy
-            />
-          </a>
+          <div>
+            <button
+              class="btn btn-unstyled"
+              @click="share"
+              v-if="canShare"
+              style="color: #ccc"
+            >
+              <i class="fa fa-share"></i>
+            </button>
+            <button
+              class="btn btn-unstyled"
+              @click="reload"
+              v-if="isPWA"
+              style="color: #ccc"
+            >
+              <i class="fas fa-sync-alt"></i>
+            </button>
+            <a
+              v-if="l1.code === 'zh' && l2.code === 'en'"
+              class="btn btn-sign-in text-white ml-1"
+              style="background-color: #2c5aff"
+              href="https://m.cctalk.com/inst/stevmab3"
+              target="_blank"
+            >
+              登陆
+              <img
+                src="/img/logo-cctalk-white.png"
+                class="logo-small ml-1"
+                data-not-lazy
+              />
+            </a>
+
+            <a
+              v-if="l1.code === 'en' && l2.code === 'zh'"
+              class="btn btn-primary btn-sign-in text-white ml-1"
+              href="https://sso.teachable.com/secure/133035/users/sign_in"
+              target="_blank"
+            >
+              Login to
+              <img
+                src="/img/teachable_light.png"
+                class="logosp-small"
+                data-not-lazy
+              />
+            </a>
+          </div>
         </div>
         <div class="zth-header">
           <div class="container-fluid pl-0 pr-0">
@@ -151,9 +170,7 @@
                       </router-link>
                     </li>
                     <li>
-                      <router-link to="/en/zh/tv-shows">
-                        TV Shows
-                      </router-link>
+                      <router-link to="/en/zh/tv-shows">TV Shows</router-link>
                     </li>
                     <li>
                       <router-link to="/en/zh/reader">
@@ -231,9 +248,7 @@
                       <router-link to="/zh/en/dictionary">词典工具</router-link>
                     </li>
                     <li>
-                      <router-link to="/zh/en/tv-shows">
-                        电视节目
-                      </router-link>
+                      <router-link to="/zh/en/tv-shows">电视节目</router-link>
                     </li>
                     <li>
                       <router-link to="/zh/en/reader">阅读工具</router-link>
@@ -288,7 +303,6 @@
                   class="btn bg-gray btn-small text-gray ml-0 mb-2"
                   @click.stop.prevent="$store.dispatch('history/removeAll')"
                 >
-
                   Clear History
                 </button>
               </div>
@@ -407,6 +421,21 @@ export default {
     },
   },
   methods: {
+    share() {
+      let meta = document.querySelector('[name="description"]');
+      let description = meta ? meta.getAttribute("content") : "";
+      console.log(document.title);
+      if (navigator.share) {
+        navigator.share({
+          url: location.href,
+          // title: document.title,
+          // text: document.title + "\n" + description
+        });
+      }
+    },
+    reload() {
+      location.reload();
+    },
     updatei18n() {
       this.$i18n.locale = this.l1.code;
       this.$i18n.silentTranslationWarn = true;
@@ -447,6 +476,16 @@ export default {
     },
   },
   computed: {
+    isPWA() {
+      return (
+        (typeof navigator !== "undefined" && navigator.standalone) ||
+        (typeof window !== "undefined" &&
+          window.matchMedia("(display-mode: standalone)").matches)
+      );
+    },
+    canShare() {
+      return typeof navigator !== "undefined" && navigator.share;
+    },
     ...mapState("settings", ["l2Settings", "l1", "l2"]),
     ...mapState("history", ["history"]),
   },
