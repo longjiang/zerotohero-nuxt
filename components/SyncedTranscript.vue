@@ -171,7 +171,7 @@ export default {
       id: Helper.uniqueId(),
       previousTime: 0,
       currentTime: 0,
-      currentLine: undefined,
+      currentLine: 0,
       currentLineIndex: 0,
       nextLine: undefined,
       review: {},

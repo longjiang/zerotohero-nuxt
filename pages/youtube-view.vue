@@ -5,7 +5,7 @@
   }
 </router>
 <template>
-  <div class="youtube-view main pt-3 pb-5">
+  <div class="youtube-view pt-3 pb-5">
     <SocialHead
       v-if="video"
       :title="`Learn ${$l2.name} from the video ${video.title} | ${$l2.name} Zero to Hero`"
@@ -40,7 +40,7 @@
     </div>
     <div
       :class="{
-        'youtube-view-wrapper': true,
+        'youtube-view-wrapper main': true,
         fullscreen: layout === 'vertical',
       }"
     >

@@ -24,7 +24,6 @@
       v-bind="attributes"
       @mouseover="mouseOverHandler"
       @mouseout="mouseOutHandler"
-      @click.stop.prevent="openPopup"
     >
       <template v-if="token && token.candidates && token.candidates.length > 0">
         <span
