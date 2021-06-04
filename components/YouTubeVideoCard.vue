@@ -489,9 +489,9 @@ export default {
 }
 .youtube-video {
   min-width: 12rem;
-  max-width: 15rem;
+  max-width: calc(50% - 1rem);
   flex: 1;
-  margin: 0.8rem;
+  margin: 0.5rem;
 }
 
 .youtube-video.nosubs:not(.over) {

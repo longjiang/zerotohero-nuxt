@@ -287,6 +287,7 @@ export default {
       this.$l2.code,
       this.$l2.id
     );
+    this.saveHistory()
   },
   mounted() {
     this.bindKeys();
@@ -295,6 +296,9 @@ export default {
         this.loadShow();
       }
     });
+    if (this.video) {
+      this.saveHistory()
+    }
   },
   destroyed() {
     this.unbindKeys();
@@ -549,6 +553,14 @@ export default {
           }
         }
       };
+    },
+    saveHistory() {
+      this.$store.dispatch("history/add", {
+        path: this.$route.fullPath,
+        title: this.video.title,
+        image: `https://img.youtube.com/vi/${this.video.youtube_id}/hqdefault.jpg`,
+        l2: this.$l2.code,
+      });
     },
     unbindKeys() {
       window.onkeydown = null;

@@ -117,13 +117,13 @@ export default {
 .tv-shows {
   display: flex;
   flex-wrap: wrap;
+  margin: 0 -1rem;
 }
 .tv-show {
-  min-width: 15rem;
-  max-width: 480px;
+  min-width: 12rem;
+  max-width: calc(50% - 1rem);
   flex: 1;
-  margin-right: 1rem;
-  margin-bottom: 1rem;
+  margin: 0.5rem;
 }
 .tv-show-thumbnail {
   width: 100%;

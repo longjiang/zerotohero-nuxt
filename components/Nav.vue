@@ -118,7 +118,7 @@ export default {
             },
             {
               name: "youtube-browse",
-              title: "YouTube",
+              title: "Videos",
               icon: "fab fa-youtube",
               show: true,
             },

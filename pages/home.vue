@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import Config from '@/lib/config'
 export default {
   computed: {
     $l1() {
@@ -43,7 +44,7 @@ export default {
       if (this.$hasFeature('courses')) {
         this.$router.push({ name: 'courses' })
       } else if (this.$hasFeature('youtube')) {
-        this.$router.push({ name: 'youtube-browse' })
+        this.$router.push({ name: Config.approvedChannels[this.$l2.code] ? 'tv-shows' : 'youtube-browse' })
       } else if (
         this.$hasFeature('dictionary') ||
         this.$hasFeature('transliteration')

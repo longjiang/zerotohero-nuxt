@@ -68,5 +68,6 @@ export default {
 .youtube-videos {
   display: flex;
   flex-wrap: wrap;
+  margin: 0 -1rem;
 }
 </style>

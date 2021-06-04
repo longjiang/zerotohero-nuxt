@@ -6,7 +6,7 @@
           <div>
             <router-link to="/" style="color: #ccc; line-height: 2.3rem">
               <i class="fa fa-chevron-left mr-2"></i>
-              Zero to Hero Education
+              Home
             </router-link>
           </div>
           <a
@@ -122,7 +122,7 @@
             </div>
             <div class="row pt-5">
               <div class="col-sm-6">
-                <div class="home-card">
+                <div class="home-card shadow">
                   <router-link to="/en/zh">
                     <img
                       src="/img/czh-logo-dark.png"
@@ -201,7 +201,7 @@
                 </div>
               </div>
               <div class="col-sm-6">
-                <div class="home-card">
+                <div class="home-card shadow">
                   <router-link to="/zh/en">
                     <img
                       src="/img/ezh-logo-dark.png"
@@ -280,6 +280,70 @@
                 </div>
               </div>
             </div>
+
+            <div v-if="history.length > 0">
+              <h5 class="text-center mt-5 mb-2">Your Recently Viewed Items</h5>
+              <div class="text-center mb-4">
+                <button
+                  class="btn bg-gray btn-small text-gray ml-0 mb-2"
+                  @click.stop.prevent="$store.dispatch('history/removeAll')"
+                >
+
+                  Clear History
+                </button>
+              </div>
+              <div
+                class="history d-flex"
+                style="flex-wrap: wrap; margin: 0 -1rem"
+              >
+                <div
+                  class="history-item media shadow"
+                  style="
+                    flex: 1;
+                    margin: 1rem;
+                    margin-bottom: 1rem;
+                    min-width: 10rem;
+                    max-width: calc(50% - 2rem);
+                    position: relative;
+                    border-radius: 1rem;
+                  "
+                  v-for="item of this.history.slice(0, 20)"
+                >
+                  <router-link :to="item.path" class="link-unstyled">
+                    <div class="aspect-wrapper">
+                      <img
+                        :src="item.image"
+                        class="aspect history-item-image img-fluid"
+                        style="width: 100%"
+                      />
+                    </div>
+                    <div class="media-body bg-white">
+                      <h6 style="line-height: 1.5; font-size: 0.9em">
+                        {{ item.title }}
+                      </h6>
+                      <div class="btn btn-small">
+                        {{ $languages.getSmart(item.l2).name }}
+                      </div>
+                      <button
+                        class="btn btn-small bg-white text-secondary ml-0"
+                        @click.stop.prevent="
+                          $store.dispatch('history/remove', item)
+                        "
+                        style="
+                          position: absolute;
+                          top: 0.5rem;
+                          left: 0.5rem;
+                          z-index: 9;
+                          border-radius: 100%;
+                        "
+                      >
+                        <i class="fa fa-times"></i>
+                      </button>
+                    </div>
+                  </router-link>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -332,6 +396,9 @@ export default {
         if (this.l1 && this.l2) this.updateClasses();
       }
     });
+    if (!this.$store.state.history.historyLoaded) {
+      this.$store.commit("history/LOAD_HISTORY");
+    }
     this.$ga.page(this.$route.path);
   },
   watch: {
@@ -381,6 +448,7 @@ export default {
   },
   computed: {
     ...mapState("settings", ["l2Settings", "l1", "l2"]),
+    ...mapState("history", ["history"]),
   },
 };
 </script>
@@ -393,11 +461,10 @@ export default {
 }
 
 .home-card {
-  border-radius: 1rem;
   background-color: white;
-  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
   padding: 2rem;
   margin-bottom: 2rem;
+  border-radius: 1rem;
 }
 
 .sale-card {

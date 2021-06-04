@@ -45,7 +45,7 @@
         <h3 v-if="keyword" class="mt-5 mb-4">{{ keyword }}</h3>
       </div>
       <div
-        :class="{ 'col-sm-12 pr-4 mb-5': true, 'col-md-8 col-lg-9': !keyword }"
+        :class="{ 'col-sm-12 mb-5': true, 'col-md-8 col-lg-9': !keyword }"
       >
         <b-button
           v-if="$adminMode"
