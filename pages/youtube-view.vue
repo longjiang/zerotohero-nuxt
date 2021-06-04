@@ -342,9 +342,14 @@ export default {
       }
     },
     updateCurrentTime(currentTime) {
-      this.currentTime = currentTime;
       if (typeof window !== "undefined") {
-        window.history.replaceState("", "", `?t=${Math.round(currentTime, 1)}`);
+        this.currentTime = currentTime;
+        let t = Math.round(currentTime, 1);
+        const params = new URLSearchParams(window.location.search);
+        const qt = params.get("t") ? Number(params.get("t")) : 0;
+        if (t !== qt) {
+          window.history.replaceState("", "", `?t=${t}`);
+        }
       }
     },
     updatePaused(paused) {
@@ -516,7 +521,11 @@ export default {
     },
     bindKeys() {
       window.onkeydown = (e) => {
-        if (e.target.tagName.toUpperCase() !== "INPUT" && !e.metaKey && !e.target.getAttribute('contenteditable')) {
+        if (
+          e.target.tagName.toUpperCase() !== "INPUT" &&
+          !e.metaKey &&
+          !e.target.getAttribute("contenteditable")
+        ) {
           if (e.code === "KeyM") {
             this.speed =
               this.speed === 1 ? 0.75 : this.speed === 0.75 ? 0.5 : 1;
@@ -617,7 +626,6 @@ export default {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
   bottom: 6rem;
 }
-
 
 .youtube-view-line-list .youtube-view-line-list-item {
   padding: 0.2rem 0.7rem;
