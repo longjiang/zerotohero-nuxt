@@ -141,7 +141,7 @@
             $adminMode && video.subs_l1 && video.subs_l1.length > 0
           "
         >
-          <div v-for="index in Math.min(5, video.subs_l1.length)">
+          <div v-for="index in Math.min(20, video.subs_l1.length)">
             <b>{{ video.l1Locale }}</b>
             <span
               @click="matchSubsAndUpdate(index - 1)"
@@ -246,7 +246,7 @@ export default {
   async mounted() {
     if (this.checkSubs) {
       await Helper.timeout(this.delay);
-      this.video = await this.checkSubsFunc(this.video);
+      await this.checkSubsFunc(this.video);
     }
     if (this.video.id && this.$adminMode) {
       await this.addSubsL1(this.video);
@@ -258,13 +258,10 @@ export default {
       this.shiftSubs();
     },
     async checkSaved() {
-      if (!this.video.id && this.video.hasSubs && this.checkSaved) {
-        let video = await this.checkSavedFunc(this.video);
-        if (this.$l2.code === "zh") {
-          video = this.addSubsL1(video);
-        }
-        video.checkingSubs = false;
-        this.video = video;
+      if (!this.video.id && this.checkSaved) {
+        await this.checkSavedFunc(this.video);
+        if (this.video.id) this.addSubsL1(video);
+        this.video.checkingSubs = false;
         this.videoInfoKey++;
       }
     },
@@ -470,6 +467,7 @@ export default {
       return video;
     },
     async addSubsL1(video) {
+      console.log('adding l1 subs')
       if (!video.l1Locale) {
         video = await YouTube.getYouTubeSubsList(video, this.$l1, this.$l2);
       }

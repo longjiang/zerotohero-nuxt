@@ -20,7 +20,7 @@
               new RegExp(highlight.join('|')).test(line.line),
             'transcript-line-current': currentLine === line,
           }"
-          @click="seekVideoTo(line.starttime)"
+          @click="goToLine(line)"
           :id="`transcript-line-${id}-${lineIndex}`"
           v-if="!single || currentLine === line"
         >
@@ -208,7 +208,7 @@ export default {
   watch: {
     currentTime() {
       if (
-        this.currentTime > this.currentLine.starttime &&
+        this.currentTime > this.currentLine.starttime - 0.15 &&
         this.nextLine &&
         this.currentTime < this.nextLine.starttime
       ) {
@@ -417,16 +417,21 @@ export default {
       }
     },
     goToPreviousLine() {
-      this.seekVideoTo(this.previousLine.starttime);
+      this.goToLine(this.previousLine);
     },
     goToNextLine() {
-      this.seekVideoTo(this.nextLine.starttime);
+      this.goToLine(this.nextLine);
     },
     goToLine(line) {
+      // this.currentLine = line;
+      // this.currentLineIndex = this.lines.findIndex(l => l === line);
+      // this.nextLine = this.lines[this.currentLineIndex + 1];
+      // this.previousTime = this.currentLine.starttime;
+      // if (!this.single) this.scrollTo(this.currentLineIndex);
       this.seekVideoTo(line.starttime);
     },
     rewind() {
-      this.seekVideoTo(this.currentLine.starttime);
+      this.goToLine(this.currentLine);
     },
   },
 };
