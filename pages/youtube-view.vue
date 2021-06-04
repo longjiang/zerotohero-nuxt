@@ -561,11 +561,14 @@ export default {
   margin-bottom: 4rem;
   text-align: center;
   z-index: 9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .quick-access-button.play-pause {
-  transform: scale(1.5);
-  margin: 0 0.6rem;
+  width: 3.7rem;
+  height: 3.7rem;
 }
 
 .quick-access-button {
@@ -574,9 +577,9 @@ export default {
   height: 2.5rem;
   line-height: 2.5rem;
   border: none;
-  font-size: 1.3em;
   cursor: pointer;
   text-align: center;
+  margin: 0 0.2rem;
   padding: 0;
 }
 
@@ -592,6 +595,14 @@ export default {
 .youtube-view-wrapper.fullscreen .quick-access-buttons {
   position: fixed;
   width: 100%;
+  margin-bottom: 0;
+  bottom: 2rem;
+}
+
+@media (orientation: landscape) {
+  .youtube-view-wrapper.fullscreen .quick-access-buttons {
+    bottom: 0.8rem;
+  }
 }
 
 .youtube-view-line-list {
@@ -606,6 +617,7 @@ export default {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
   bottom: 6rem;
 }
+
 
 .youtube-view-line-list .youtube-view-line-list-item {
   padding: 0.2rem 0.7rem;
