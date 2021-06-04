@@ -151,8 +151,8 @@
                       </router-link>
                     </li>
                     <li>
-                      <router-link to="/en/zh/youtube/browse">
-                        Audio-visual tools
+                      <router-link to="/en/zh/tv-shows">
+                        TV Shows
                       </router-link>
                     </li>
                     <li>
@@ -231,8 +231,8 @@
                       <router-link to="/zh/en/dictionary">词典工具</router-link>
                     </li>
                     <li>
-                      <router-link to="/zh/en/youtube/browse">
-                        视听工具
+                      <router-link to="/zh/en/tv-shows">
+                        电视节目
                       </router-link>
                     </li>
                     <li>
