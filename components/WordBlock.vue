@@ -70,11 +70,10 @@
       </template>
     </span>
     <template slot="popover">
-      <button class="word-block-tool-tip-close" @click="hover = false;"><i class="fa fa-times"></i></button>
-      <div
-        class="tooltip-images"
-        :key="`tooltip-images-${text}`"
-      >
+      <button class="word-block-tool-tip-close" @click="hover = false">
+        <i class="fa fa-times"></i>
+      </button>
+      <div class="tooltip-images" :key="`tooltip-images-${text}`">
         <img
           alt
           class="image-wall-image"
@@ -543,14 +542,10 @@ export default {
       }
     },
     mouseOverHandler() {
-      if(!Helper.isMobile()) {
-        this.openPopup()
-      }
+      this.openPopup();
     },
     mouseOutHandler() {
-      if(!Helper.isMobile()) {
-        this.closePopup()
-      }
+      this.closePopup();
     },
     async lookup() {
       let words = [];
@@ -823,7 +818,7 @@ export default {
     padding: 0;
     z-index: 9;
     &:hover {
-      background: rgba(0,0,0,0.4);
+      background: rgba(0, 0, 0, 0.4);
     }
   }
 
