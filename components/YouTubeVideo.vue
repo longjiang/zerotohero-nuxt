@@ -141,7 +141,7 @@ export default {
       $.getScript("//www.youtube.com/iframe_api");
       setInterval(() => {
         this.updateCurrentTime();
-      }, 100);
+      }, 50);
     },
     removeYouTubeAPIVars() {
       if (window["YT"]) {
