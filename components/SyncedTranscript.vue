@@ -207,16 +207,19 @@ export default {
   // },
   watch: {
     currentTime() {
+      // console.log(this.currentTime)
       if (
         this.currentTime > this.currentLine.starttime &&
         this.nextLine &&
         this.currentTime < this.nextLine.starttime
       ) {
+        this.previousTime = this.currentTime;
         return;
       }
       let nearestLineIndex = this.nearestLineIndex(this.currentTime);
       let nearestLine = this.lines[nearestLineIndex];
       let progress = this.currentTime - this.previousTime;
+      console.log(this.repeat, this.currentLine !== nearestLine, progress)
       if (
         this.repeat &&
         this.currentLine !== nearestLine &&
