@@ -11,17 +11,15 @@
           </div>
           <div>
             <button
-              class="btn btn-unstyled"
+              :class="['btn btn-unstyled', {'d-none': !canShare}]"
               @click="share"
-              v-if="canShare"
               style="color: #ccc"
             >
               <i class="fa fa-share"></i>
             </button>
             <button
-              class="btn btn-unstyled"
+              :class="['btn btn-unstyled', {'d-none': !isPWA}]"
               @click="reload"
-              v-if="isPWA"
               style="color: #ccc"
             >
               <i class="fas fa-sync-alt"></i>

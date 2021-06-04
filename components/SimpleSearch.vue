@@ -11,7 +11,7 @@
       :to="random"
     >
       <i class="fas fa-random mr-1"></i>
-      <span>{{ $t("Random") }}</span>
+      <span>Random</span>
     </router-link>
     <b-input-group-append>
       <b-button variant="primary" @click="action(text)">
