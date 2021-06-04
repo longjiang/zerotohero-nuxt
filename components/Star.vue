@@ -4,15 +4,16 @@
       class="star remove-word"
       v-if="saved()"
       v-on:click="removeWordClick"
-      title="Remove word"
+      title='Remove from "Saved Words"'
     >
+      <!-- <i class="fas fa-bookmark"></i> -->
       <i class="fas fa-star"></i>
     </button>
     <button
       class="star add-word"
       v-if="!saved()"
       v-on:click="saveWordClick"
-      title="Add word"
+      title='Add to "Saved Words"'
     >
       <i class="far fa-star"></i>
     </button>
@@ -21,7 +22,7 @@
 
 <script>
 import Helper from "@/lib/helper";
-import {mapState} from 'vuex'
+import { mapState } from "vuex";
 
 export default {
   props: {
@@ -39,7 +40,7 @@ export default {
     };
   },
   computed: {
-    ...mapState('savedWords', ['savedWords']),
+    ...mapState("savedWords", ["savedWords"]),
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -129,5 +130,6 @@ export default {
   border: none;
   color: #f8b61e;
   padding: 0;
+  font-size: 1.4em;
 }
 </style>

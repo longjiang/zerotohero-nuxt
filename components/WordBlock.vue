@@ -70,11 +70,10 @@
       </template>
     </span>
     <template slot="popover">
+      <button class="word-block-tool-tip-close" @click="hover = false;"><i class="fa fa-times"></i></button>
       <div
         class="tooltip-images"
         :key="`tooltip-images-${text}`"
-        v-cloak
-        v-if="images && images.length > 0"
       >
         <img
           alt
@@ -727,6 +726,7 @@ export default {
   width: $width;
   max-height: $height;
   max-width: $width;
+  border-radius: 1rem;
 
   &[x-placement^="top"] {
     margin-bottom: 1rem;
@@ -800,6 +800,20 @@ export default {
     transition: opacity 0.15s;
   }
 
+  .word-block-tool-tip-close {
+    border-radius: 100%;
+    background: rgba(0,0,0,0.2);
+    color: white;
+    border: none;
+    position: fixed;
+    top: 0.5rem;
+    right: 0.5rem;
+    z-index: 9;
+    &:hover {
+      background: rgba(0,0,0,0.4);
+    }
+  }
+
   .tooltip-arrow {
     width: 0;
     height: 0;
@@ -817,7 +831,6 @@ export default {
     background: $color;
     color: black;
     padding: 1rem;
-    border-radius: 5px;
     box-shadow: 0 5px 20px rgba(black, 0.2);
     width: $width;
     height: $height;
@@ -829,6 +842,7 @@ export default {
       width: $width;
       overflow-x: scroll;
       display: flex;
+      height: 4rem;
       img {
         flex: 1;
         height: 4rem;
