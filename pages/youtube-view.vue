@@ -287,7 +287,7 @@ export default {
       this.$l2.code,
       this.$l2.id
     );
-    this.saveHistory()
+    this.saveHistory();
   },
   mounted() {
     this.bindKeys();
@@ -297,7 +297,7 @@ export default {
       }
     });
     if (this.video) {
-      this.saveHistory()
+      this.saveHistory();
     }
   },
   destroyed() {

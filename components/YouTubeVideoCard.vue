@@ -487,11 +487,17 @@ export default {
 .youtube-video.drop.over {
   border: 2px dashed #ccc;
 }
+
 .youtube-video {
-  min-width: 12rem;
-  max-width: calc(50% - 1rem);
+  min-width: 10rem;
+  max-width: calc(100% - 2rem);
   flex: 1;
-  margin: 0.5rem;
+  margin: 1rem;
+}
+@media (min-width: 768px) {
+  .youtube-video {
+    max-width: calc(50% - 2rem);
+  }
 }
 
 .youtube-video.nosubs:not(.over) {

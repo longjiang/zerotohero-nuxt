@@ -233,7 +233,7 @@ export default {
       this.previousTime = this.currentTime;
     },
     currentLine() {
-      if (!this.single) this.scrollTo(this.currentLineIndex);
+      if (!this.single && this.currentLineIndex !== 0) this.scrollTo(this.currentLineIndex);
     },
   },
   methods: {

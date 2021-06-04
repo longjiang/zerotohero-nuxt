@@ -306,21 +306,9 @@
                   Clear History
                 </button>
               </div>
-              <div
-                class="history d-flex"
-                style="flex-wrap: wrap; margin: 0 -1rem"
-              >
+              <div class="history d-flex">
                 <div
                   class="history-item media shadow"
-                  style="
-                    flex: 1;
-                    margin: 1rem;
-                    margin-bottom: 1rem;
-                    min-width: 10rem;
-                    max-width: calc(50% - 2rem);
-                    position: relative;
-                    border-radius: 1rem;
-                  "
                   v-for="item of this.history.slice(0, 20)"
                 >
                   <router-link :to="item.path" class="link-unstyled">
@@ -493,6 +481,26 @@ export default {
 </script>
 
 <style>
+.history {
+  flex-wrap: wrap;
+  margin: 0 -1rem;
+}
+
+.history-item {
+  min-width: 10rem;
+  max-width: calc(100% - 2rem);
+  flex: 1;
+  margin: 1rem;
+  position: relative;
+  border-radius: 1rem;
+}
+
+@media (min-width: 768px) {
+  .history-item {
+    max-width: calc(50% - 2rem);
+  }
+}
+
 .zth-header {
   background-image: url(/img/background-stars.jpg);
   background-size: cover;

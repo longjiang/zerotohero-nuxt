@@ -71,14 +71,14 @@
 <script>
 import Config from "@/lib/config";
 import Helper from "@/lib/helper";
-import YouTube from '@/lib/youtube'
+import YouTube from "@/lib/youtube";
 import axios from "axios";
 
 export default {
   data() {
     return {
       shows: [],
-      randomEpisodeYouTubeId: undefined
+      randomEpisodeYouTubeId: undefined,
     };
   },
   async fetch() {
@@ -92,7 +92,10 @@ export default {
         x.title.localeCompare(y.title, this.$l2.code)
       ) || [];
     this.shows = Helper.uniqueByValue(shows, "youtube_id");
-    this.randomEpisodeYouTubeId = await YouTube.getRandomEpisodeYouTubeId(this.$l2.code, this.$l2.id)
+    this.randomEpisodeYouTubeId = await YouTube.getRandomEpisodeYouTubeId(
+      this.$l2.code,
+      this.$l2.id
+    );
   },
   computed: {
     $l1() {
@@ -120,10 +123,15 @@ export default {
   margin: 0 -1rem;
 }
 .tv-show {
-  min-width: 12rem;
-  max-width: calc(50% - 1rem);
+  min-width: 10rem;
+  max-width: calc(100% - 2rem);
   flex: 1;
-  margin: 0.5rem;
+  margin: 1rem;
+}
+@media (min-width: 768px) {
+  .tv-show {
+    max-width: calc(50% - 2rem);
+  }
 }
 .tv-show-thumbnail {
   width: 100%;
