@@ -802,12 +802,15 @@ export default {
 
   .word-block-tool-tip-close {
     border-radius: 100%;
-    background: rgba(0,0,0,0.2);
-    color: white;
+    background: white;
+    color: #ccc;
     border: none;
     position: fixed;
     top: 0.5rem;
-    right: 0.5rem;
+    left: 0.5rem;
+    height: 1.5rem;
+    width: 1.5rem;
+    padding: 0;
     z-index: 9;
     &:hover {
       background: rgba(0,0,0,0.4);
