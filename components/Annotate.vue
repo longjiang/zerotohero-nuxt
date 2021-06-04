@@ -224,8 +224,9 @@ export default {
     },
     convertToSentencesAndAnnotate(slot) {
       if (
-        (!this.annotating && this.$hasFeature("dictionary")) ||
-        this.nonLatin()
+        !this.annotating &&
+        !this.annotated &&
+        (this.$hasFeature("dictionary") || this.nonLatin())
       ) {
         if (slot) {
           this.convertToSentencesRecursive(slot.elm);
