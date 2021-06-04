@@ -1,5 +1,8 @@
 <template>
-  <div class="search-compare-wrapper" v-if="!loading">
+  <div class="search-compare-wrapper">
+    <div :class="{ 'loader text-center': true, 'd-none': !loading }" style="flex: 1">
+      <div class="heartbeat-loader"></div>
+    </div>
     <Search
       ref="search"
       :defaultURL="urlFunc"
@@ -11,6 +14,7 @@
       :placeholder="
         $t($l2.code === 'zh' ? 'Search term or regex' : 'Look up words here...')
       "
+      v-if="!loading"
     ></Search>
     <Search
       :class="{ 'ml-2': true, hidden: !showCompare }"
@@ -21,8 +25,9 @@
       placeholder="Compare with..."
       :defaultURL="compareUrlFunc"
       :hrefFunc="compareHrefFunc"
+      v-if="!loading"
     ></Search>
-    <button class="btn btn-compare ml-2" @click="compareClick">
+    <button class="btn btn-compare ml-2" @click="compareClick" v-if="!loading">
       <span v-if="showCompare"><i class="fas fa-times"></i></span>
       <span v-if="!showCompare">
         <i class="fas fa-adjust"></i>
@@ -112,6 +117,7 @@ export default {
 .search-compare-wrapper {
   display: flex;
   position: relative;
+  width: 100%;
   max-width: 50rem;
   margin: 0 auto;
 }

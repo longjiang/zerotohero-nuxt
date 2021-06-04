@@ -485,7 +485,7 @@ export default {
 }
 
 .history-item {
-  min-width: 10rem;
+  min-width: 12rem;
   max-width: calc(100% - 2rem);
   flex: 1;
   margin: 1rem;

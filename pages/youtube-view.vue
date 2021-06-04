@@ -44,6 +44,9 @@
         fullscreen: layout === 'vertical',
       }"
     >
+      <div :class="{'loader text-center': true, 'd-none': video}">
+        <div class="heartbeat-loader mb-4"></div>
+      </div>
       <YouTubeWithTranscript
         v-if="video"
         :video="video"

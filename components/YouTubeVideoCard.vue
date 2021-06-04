@@ -489,11 +489,12 @@ export default {
 }
 
 .youtube-video {
-  min-width: 10rem;
+  min-width: 12rem;
   max-width: calc(100% - 2rem);
   flex: 1;
-  margin: 1rem;
+  margin: 0 1rem 2rem 1rem;
 }
+
 @media (min-width: 768px) {
   .youtube-video {
     max-width: calc(50% - 2rem);

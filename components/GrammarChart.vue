@@ -8,9 +8,6 @@
         .map((g) => g.structure + ' (' + g.english + ')')
         .join(' | ')}`"
     />
-    <div class="text-center">
-      <Loader class="mb-5" />
-    </div>
     <div
       class="d-flex"
       style="margin: 0 auto 3rem auto"

@@ -36,6 +36,9 @@
           "
         />
         <div class="tv-shows mb-5">
+          <div :class="{ 'loader text-center': true, 'd-none': shows.length > 1 }" style="flex: 1">
+            <div class="heartbeat-loader"></div>
+          </div>
           <div class="tv-show media rounded shadow" v-for="show of shows">
             <router-link
               class="youtube-thumbnail-wrapper aspect-wrapper d-block"
@@ -123,7 +126,7 @@ export default {
   margin: 0 -1rem;
 }
 .tv-show {
-  min-width: 10rem;
+  min-width: 12rem;
   max-width: calc(100% - 2rem);
   flex: 1;
   margin: 1rem;

@@ -7,7 +7,7 @@
 <template>
   <div class="youtube-browse container mb-5 main">
     <SocialHead
-      v-if="videos[0]"
+      v-if="videos && videos[0]"
       :title="`Study ${$l2.name} videos with subs | ${$l2.name} Zero to Hero`"
       :description="`Watch ${$l2.name} videos and study the ${
         $l2.code === 'zh' ? 'Pinyin' : $l2.name
@@ -16,7 +16,7 @@
     />
     <div class="row">
       <div class="col-sm-12 mb-4 text-center">
-        <h3 v-if="!keyword" class=" mt-5">{{ $l2.name }} Video Library</h3>
+        <h3 v-if="!keyword" class="mt-5">{{ $l2.name }} Video Library</h3>
         <p v-if="!keyword" class="mt-3">
           Study {{ $l2.name }} videos with
           {{ $l2.code === "zh" ? "Pinyin" : "" }} subtitles
@@ -44,9 +44,19 @@
         />
         <h3 v-if="keyword" class="mt-5 mb-4">{{ keyword }}</h3>
       </div>
-      <div
-        :class="{ 'col-sm-12 mb-5': true, 'col-md-8 col-lg-9': !keyword }"
-      >
+      <div :class="{ 'col-sm-12 mb-5': true, 'col-md-8 col-lg-9': !keyword }">
+        <div
+          :class="{
+            'loader text-center mb-4': true,
+            'd-none': videos,
+          }"
+          style="flex: 1"
+        >
+          <div class="heartbeat-loader"></div>
+        </div>
+        <div :class="{'text-center': true, 'd-none': !videos || videos.length > 0}">
+          No more videos.
+        </div>
         <b-button
           v-if="$adminMode"
           class="btn btn-small bg-danger text-white mt-2 ml-2"
@@ -70,17 +80,19 @@
             :to="`/${$l1.code}/${$l2.code}/youtube/browse/${topic}/${level}/${
               Number(start) - 12
             }${keyword ? '/' + keyword : ''}`"
-            class="btn btn-default mr-2"
+            class="btn btn-default"
           >
-            Previous
+            <i class="fa fa-chevron-left"></i>
           </router-link>
+          <span class="ml-3 mr-3">Page {{ start / 12 + 1}}</span>
           <router-link
+            v-if="videos && videos.length > 0"
             :to="`/${$l1.code}/${$l2.code}/youtube/browse/${topic}/${level}/${
               Number(start) + 12
             }${keyword ? '/' + keyword : ''}`"
             class="btn btn-default"
           >
-            Next
+            <i class="fa fa-chevron-right"></i>
           </router-link>
         </div>
       </div>
@@ -200,7 +212,7 @@ export default {
   data() {
     return {
       channels: [],
-      videos: [],
+      videos: undefined,
       levels: Helper.levels(this.$l2),
       topics: Helper.topics,
       randomEpisodeYouTubeId: undefined,
