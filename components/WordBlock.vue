@@ -816,7 +816,7 @@ export default {
     height: 1.5rem;
     width: 1.5rem;
     padding: 0;
-    z-index: 9;
+    z-index: 10;
     &:hover {
       background: rgba(0, 0, 0, 0.4);
     }
