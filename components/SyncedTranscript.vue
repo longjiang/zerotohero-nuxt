@@ -432,7 +432,7 @@ export default {
       // this.nextLine = this.lines[this.currentLineIndex + 1];
       // this.previousTime = this.currentLine.starttime;
       // if (!this.single) this.scrollTo(this.currentLineIndex);
-      this.seekVideoTo(Math.ceil(line.starttime));
+      this.seekVideoTo(Math.ceil(line.starttime / 0.15) * 0.15);
     },
     rewind() {
       this.goToLine(this.currentLine);
