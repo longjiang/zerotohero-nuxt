@@ -4,21 +4,21 @@
       <template>
         <div class="container-fluid p-2 pl-3 site-top-bar">
           <div>
-            <router-link to="/" style="color: #ccc; line-height: 2.3rem">
+            <router-link to="/" style="color: #ccc; line-height: 2.3rem" class="link-unstyled">
               <i class="fa fa-chevron-left mr-2"></i>
               Home
             </router-link>
           </div>
           <div>
             <button
-              :class="['btn btn-unstyled', {'d-none': !canShare}]"
+              :class="['btn btn-unstyled', { 'd-none': !canShare }]"
               @click="share"
               style="color: #ccc"
             >
               <i class="fa fa-share"></i>
             </button>
             <button
-              :class="['btn btn-unstyled', {'d-none': !isPWA}]"
+              :class="['btn btn-unstyled', { 'd-none': !isPWA }]"
               @click="reload"
               style="color: #ccc"
             >
@@ -551,10 +551,16 @@ export default {
 
 .czh-links,
 .ezh-links {
-  column-count: 2;
-  column-gap: 1rem;
   padding: 0;
   list-style: none;
+}
+
+@media (min-width: 768px) {
+  .czh-links,
+  .ezh-links {
+    column-count: 2;
+    column-gap: 1rem;
+  }
 }
 
 .czh-links a,
