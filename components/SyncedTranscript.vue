@@ -395,9 +395,7 @@ export default {
       };
     },
     seekVideoTo(starttime) {
-      if (this.onSeek) {
-        this.onSeek(starttime);
-      }
+      this.$emit('seek', starttime)
     },
     pauseVideo() {
       if (this.onPause) {

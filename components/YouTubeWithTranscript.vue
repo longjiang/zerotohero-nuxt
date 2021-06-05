@@ -161,12 +161,12 @@
           <SyncedTranscript
             ref="transcript"
             :key="'transcript-' + video.youtube_id"
-            :onSeek="seekYouTube"
-            :onPause="pauseYouTube"
             :lines="video.subs_l2"
             :quiz="quiz"
             :parallellines="video.subs_l1"
             :sticky="sticky"
+            @seek="seekYouTube"
+            @pause="pauseYouTube"
           />
           <div class="text-center mt-5">
             <router-link
@@ -223,8 +223,6 @@
           >
             <SyncedTranscript
               ref="transcript"
-              :onSeek="seekYouTube"
-              :onPause="pauseYouTube"
               :lines="video.subs_l2"
               :parallellines="video.subs_l1"
               :single="true"
@@ -235,6 +233,8 @@
               :startLineIndex="startLineIndex"
               :stopLineIndex="stopLineIndex"
               :sticky="sticky"
+              @seek="seekYouTube"
+              @pause="pauseYouTube"
             />
           </div>
         </div>
@@ -486,9 +486,7 @@ export default {
       return this.video.subs_l2.findIndex((line) => line.line.includes(term));
     },
     seekYouTube(starttime) {
-      if (this.$refs.youtube.player) {
-        this.$refs.youtube.seek(starttime);
-      }
+      this.$refs.youtube.seek(starttime);
     },
     pauseYouTube() {
       this.$refs.youtube.pause();
