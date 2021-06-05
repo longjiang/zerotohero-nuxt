@@ -1,7 +1,7 @@
 <template>
-  <span>
-    <i class="fas fa-volume-up focus-exclude speak" @click="speak"></i>
-  </span>
+  <button class="speak focus-exclude" @click="speak">
+    <i class="fas fa-volume-up" ></i>
+  </button>
 </template>
 <script>
 import commons from 'wikimedia-commons-file-path'
@@ -87,7 +87,9 @@ export default {
 .speak {
   cursor: pointer;
   color: #999;
-  position: relative;
+  border: none;
+  background: none;
+  padding: 0;
 }
 
 .speak:hover {

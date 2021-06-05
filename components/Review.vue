@@ -38,10 +38,33 @@
           v-html="highlight(reviewItem.line.line, reviewItem.text, hsk)"
         />
       </Annotate>
-      <Speak :text="reviewItem.line.line" />
+      <Speak
+        :text="reviewItem.line.line"
+        style="
+          background: white;
+          border-radius: 100%;
+          border: 1px solid #ccc;
+          width: 2rem;
+          height: 2rem;
+          display: inline-block;
+          overflow: hidden;
+          margin-bottom: 0;
+          padding: 0;
+        "
+      />
       <button
-        class="btn p-0"
-        style="color: #999"
+        style="
+          background: white;
+          border-radius: 100%;
+          border: 1px solid #ccc;
+          color: #999;
+          width: 2rem;
+          height: 2rem;
+          display: inline-block;
+          overflow: hidden;
+          margin-bottom: 0;
+          padding: 0;
+        "
         @click="$parent.seekVideoTo(reviewItem.line.starttime)"
       >
         <i class="fas fa-arrow-up"></i>
@@ -63,7 +86,7 @@ import Helper from "@/lib/helper";
 export default {
   data() {
     return {
-      showAnswer: false
+      showAnswer: false,
     };
   },
   computed: {
@@ -90,7 +113,7 @@ export default {
   methods: {
     answered(answer) {
       if (answer.correct) {
-        this.showAnswer = true
+        this.showAnswer = true;
       }
     },
     highlightMultiple() {
@@ -103,8 +126,8 @@ export default {
       return Helper.unique(...arguments);
     },
     updated() {
-      this.showAnswer = false
-    }
+      this.showAnswer = false;
+    },
   },
 };
 </script>
