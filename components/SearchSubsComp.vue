@@ -446,7 +446,7 @@ export default {
       return hits;
     },
     saveHit(hit) {
-      console.log("saving", hit);
+      console.log("Saving subs-search hit", hit);
       this.$store.dispatch("savedHits/add", {
         terms: this.terms,
         hit: hit,
@@ -460,7 +460,7 @@ export default {
       this.findAndRemoveHit(this.groupsRight, hit);
     },
     removeSavedHit(hit) {
-      console.log("removing", hit);
+      console.log("Removing subs-search hit", hit);
       this.$store.dispatch("savedHits/remove", {
         terms: this.terms,
         hit: hit,

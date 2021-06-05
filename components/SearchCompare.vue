@@ -103,7 +103,6 @@ export default {
       return `/${this.$l1.code}/${this.$l2.code}/compare/${this.$store.state.settings.dictionaryName}/${entry.id},${this.compareEntry.id}`;
     },
     focusOnSearch() {
-      console.log("focus on seach");
       this.$refs.search.focusOnInput();
     },
     compareClick() {

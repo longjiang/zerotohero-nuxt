@@ -36,10 +36,17 @@
           "
         />
         <div class="tv-shows mb-5">
-          <div :class="{ 'loader text-center': true, 'd-none': shows.length > 1 }" style="flex: 1">
+          <div
+            :class="{ 'loader text-center': true, 'd-none': shows.length > 1 }"
+            style="flex: 1"
+          >
             <div class="heartbeat-loader"></div>
           </div>
-          <div class="tv-show media rounded shadow" v-for="show of shows">
+          <div
+            class="tv-show media rounded shadow"
+            v-for="show of shows"
+            :key="`tv-show-${show.id}`"
+          >
             <router-link
               class="youtube-thumbnail-wrapper aspect-wrapper d-block"
               :to="`/${$l1.code}/${
@@ -62,6 +69,13 @@
                     <span>{{ show.title }}</span>
                   </Annotate>
                 </h6>
+                <b-button
+                  v-if="$adminMode"
+                  class="btn btn-small bg-danger text-white mt-2 ml-0"
+                  @click.stop.prevent="remove(show)"
+                >
+                  <i class="fa fa-trash"></i>
+                </b-button>
               </router-link>
             </div>
           </div>
@@ -109,13 +123,25 @@ export default {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
-
     $adminMode() {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
     },
   },
-  methods: {},
+  methods: {
+    async remove(show) {
+      try {
+        let response = await axios.delete(
+          `${Config.wiki}items/tv_shows/${show.id}`
+        );
+        if (response) {
+          this.shows = this.shows.filter((s) => s !== show);
+        }
+      } catch (err) {
+        // Directus bug
+      }
+    },
+  },
 };
 </script>
 

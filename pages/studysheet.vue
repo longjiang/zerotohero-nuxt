@@ -136,7 +136,6 @@ export default {
         let maxRank = await (await this.$getDictionary()).maxRank()
         let minRankPercentage = this.minRankPercentage
         $('.word-block-dictionary, .word-block').each(function() {
-          // console.log($(this).attr('data-rank'))
           if ($(this).attr('data-rank') < minRankPercentage * maxRank) {
             $(this).addClass('low-rank')
           } else {

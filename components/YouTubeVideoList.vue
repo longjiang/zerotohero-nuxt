@@ -13,7 +13,6 @@
 
 <script>
 import Helper from '@/lib/helper'
-import Config from '@/lib/config'
 import YouTubeVideoCard from '@/components/YouTubeVideoCard'
 
 export default {
@@ -53,7 +52,7 @@ export default {
       for(let videoIndex in this.videos) {
         let card = this.$refs.youTubeVideoCard[videoIndex]
         for (let file of files) {
-          if (card.video.title.includes(file.name.replace(/\..*/, ''))) {
+          if (card.video.title.replace(/\s(\d)\s/, ' 0$1 ').includes(file.name.replace(/[^\d]*(\d+)[^\d]*/, '$1'))) {
             card.importSrt(file)
             break
           }

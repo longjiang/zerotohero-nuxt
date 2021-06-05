@@ -86,7 +86,6 @@ export default {
     getCsv(words) {
       return words
         .map((candidates) => {
-          console.log(candidates);
           return candidates.map((candidate) => candidate.pinyin).join("\t");
         })
         .join("\n");

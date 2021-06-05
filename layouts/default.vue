@@ -412,7 +412,6 @@ export default {
     share() {
       let meta = document.querySelector('[name="description"]');
       let description = meta ? meta.getAttribute("content") : "";
-      console.log(document.title);
       if (navigator.share) {
         navigator.share({
           url: location.href,

@@ -273,7 +273,7 @@ export default {
     }
     if (!video || !video.channel) {
       let youtube_video = await YouTube.videoByApi(this.args);
-      if (youtube_video) video = Object.assign(video || {}, youtube_video);
+      if (youtube_video) video = Object.assign(youtube_video, video || {});
     }
     video.subs_l2 = await this.getTranscript(video);
 

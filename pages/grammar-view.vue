@@ -179,11 +179,6 @@ export default {
           document
             .getElementById("main")
             .scrollIntoView({ behavior: "smooth" });
-          console.log(
-            document
-              .getElementById("main")
-              .scrollIntoView({ behavior: "smooth" })
-          );
           e.preventDefault();
           return false;
         }

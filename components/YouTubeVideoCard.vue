@@ -170,7 +170,7 @@
           <input
             type="text"
             v-model.lazy="firstLineTime"
-            :style="`width: ${String(firstLineTime).length}em`"
+            :style="`width: ${String(firstLineTime).length + 1}em`"
             class="ml-1 mr-1 btn btn-small"
           />
           {{ video.subs_l2[0].line }}
@@ -222,7 +222,7 @@ export default {
       firstLineTime:
         this.video.subs_l2 && this.video.subs_l2[0]
           ? this.video.subs_l2[0].starttime
-          : 0,
+          : undefined,
       subsUpdated: false,
       makingShow: false,
       showTitle: this.video.title,
@@ -254,13 +254,16 @@ export default {
     this.videoInfoKey++;
   },
   watch: {
-    firstLineTime() {
+    firstLineTime(newTime, oldTime) {
       this.shiftSubs();
+      if (oldTime !== undefined) {
+        this.updateSubs();
+      }
     },
     async checkSaved() {
       if (!this.video.id && this.checkSaved) {
         await this.checkSavedFunc(this.video);
-        if (this.video.id) this.addSubsL1(video);
+        if (this.video.id) this.addSubsL1(this.video);
         this.video.checkingSubs = false;
         this.videoInfoKey++;
       }
@@ -431,7 +434,6 @@ export default {
       } catch (err) {}
     },
     async checkSavedFunc(video) {
-      console.log("checking saved");
       let response = await axios.get(
         `${Config.wiki}items/youtube_videos?filter[youtube_id][eq]=${
           video.youtube_id
@@ -467,7 +469,6 @@ export default {
       return video;
     },
     async addSubsL1(video) {
-      console.log('adding l1 subs')
       if (!video.l1Locale) {
         video = await YouTube.getYouTubeSubsList(video, this.$l1, this.$l2);
       }

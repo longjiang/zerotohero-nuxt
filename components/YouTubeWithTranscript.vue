@@ -86,9 +86,7 @@
                 {{ title }}
               </b-dropdown-item>
             </b-dropdown>
-            <template
-              v-if="$adminMode && video && video.id && !video.lesson"
-            >
+            <template v-if="$adminMode && video && video.id && !video.lesson">
               <b-dropdown
                 id="dropdown-1"
                 :text="video.level ? levels[video.level] : 'Level'"
@@ -390,20 +388,15 @@ export default {
       }
     },
     async updateSubs() {
-      let response = await $.ajax({
-        url: `${Config.wiki}items/youtube_videos/${this.video.id}`,
-        data: JSON.stringify({ subs_l2: JSON.stringify(this.video.subs_l2) }),
-        type: "PATCH",
-        contentType: "application/json",
-        xhr: function () {
-          return window.XMLHttpRequest == null ||
-            new window.XMLHttpRequest().addEventListener == null
-            ? new window.ActiveXObject("Microsoft.XMLHTTP")
-            : $.ajaxSettings.xhr();
-        },
-      });
-      if (response && response.data) {
-        this.subsUpdated = true;
+      try {
+        let response = await axios.patch(
+          `${Config.wiki}items/youtube_videos/${this.video.id}`,
+          { subs_l2: JSON.stringify(this.video.subs_l2) }
+        );
+        if (response && response.data) {
+          this.subsUpdated = true;
+        }
+      } catch (err) {
       }
     },
     async changeTopic(slug) {

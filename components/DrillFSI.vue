@@ -77,7 +77,6 @@ export default {
       if (!startTime) startTime = 0
       if (!endTime) endTime = startTime + 10
       var segmentEnd
-      console.log('playAudio', startTime, endTime)
       let timeUpdateEventListener = () => {
         if (segmentEnd && this.audio.currentTime >= segmentEnd) {
           this.audio.pause()

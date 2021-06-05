@@ -241,14 +241,14 @@ export default {
           let hit = this.$refs.dictionaryEntry.$refs.searchSubs.currentHit;
           if (hit.saved) {
             console.log(
-              "key s - removing hit",
+              "Key S - removing hit",
               this.$refs.dictionaryEntry.$refs.searchSubs.terms,
               hit
             );
             this.$refs.dictionaryEntry.$refs.searchSubs.removeSavedHit(hit);
           } else {
             console.log(
-              "key s - saving hit",
+              "Key S - saving hit",
               this.$refs.dictionaryEntry.$refs.searchSubs.terms,
               hit
             );
@@ -266,7 +266,6 @@ export default {
         this.$route.name === "dictionary" &&
         this.$route.params.args === "random"
       ) {
-        console.log("args random");
         this.random();
       }
     },

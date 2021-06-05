@@ -59,7 +59,7 @@
         </div>
         <b-button
           v-if="$adminMode"
-          class="btn btn-small bg-danger text-white mt-2 ml-2"
+          class="btn btn-small bg-danger text-white mb-4 ml-2"
           @click="removeAll()"
         >
           <i class="fas fa-trash mr-2"></i>

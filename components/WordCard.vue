@@ -134,7 +134,6 @@ export default {
     };
   },
   async fetch() {
-    console.log('fetch')
     if (this.srcs.length === 0) {
       let images = await WordPhotos.getWebImages(this.word.simplified);
       this.srcs = this.srcs.concat(images.map((image) => image.img));

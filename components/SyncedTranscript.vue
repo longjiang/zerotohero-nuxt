@@ -10,7 +10,7 @@
     >
       <template v-for="(line, lineIndex) in lines">
         <div
-          :key="lineIndex"
+          :key="`line-${lineIndex}-${line.starttime}-${line.line.substr(0, 10)}`"
           :class="{
             'transcript-line': true,
             matched:
