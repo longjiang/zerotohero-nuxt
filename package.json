@@ -39,6 +39,7 @@
     "sanitize-html": "^2.4.0",
     "sass": "^1.32.13",
     "smartquotes": "^2.3.2",
+    "smoothscroll-polyfill": "^0.4.4",
     "subtitle": "^4.1.0",
     "tls": "^0.0.1",
     "transliteration": "^2.2.0",

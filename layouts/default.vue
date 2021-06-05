@@ -371,6 +371,7 @@
 <script lang="javascript">
 import Config from "@/lib/config";
 import { mapState } from "vuex";
+import smoothscroll from "smoothscroll-polyfill";
 
 export default {
   data() {
@@ -400,6 +401,7 @@ export default {
       this.$store.commit("history/LOAD_HISTORY");
     }
     this.$ga.page(this.$route.path);
+    smoothscroll.polyfill(); // Safari does not support smoothscroll
   },
   watch: {
     $route() {

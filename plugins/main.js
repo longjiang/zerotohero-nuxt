@@ -9,8 +9,7 @@ import ModuleLoader from '~/lib/module-loader'
 import WorkerModuleLoader from '~/lib/worker-module-loader'
 import { i18n } from '~/plugins/i18n.js'
 import Vue2TouchEvents from 'vue2-touch-events'
-
-
+ 
 Vue.config.productionTip = false
 
 Vue.use(VTooltip)

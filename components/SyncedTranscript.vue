@@ -233,7 +233,8 @@ export default {
       this.previousTime = this.currentTime;
     },
     currentLine() {
-      if (!this.single && this.currentLineIndex !== 0) this.scrollTo(this.currentLineIndex);
+      if (!this.single && this.currentLineIndex !== 0)
+        this.scrollTo(this.currentLineIndex);
     },
   },
   methods: {
@@ -334,7 +335,7 @@ export default {
     reviewConditions(seenLines, lineIndex, form, word) {
       if (!seenLines.includes(lineIndex)) {
         let line = this.lines[lineIndex];
-        if (['en', 'ru'].includes(this.$l2.code)) {
+        if (["en", "ru"].includes(this.$l2.code)) {
           return line.line.includes(form);
         }
         if (this.$l2.continua && line.line.includes(form)) return true;
@@ -406,7 +407,7 @@ export default {
         let smallScreenYOffset =
           window.innerWidth < 768 ? (window.innerWidth * 9) / 16 : 0;
         if (!Helper.isInViewport(el, smallScreenYOffset, 90)) {
-          let middle = offsetTop - smallScreenYOffset - 20
+          let middle = offsetTop - smallScreenYOffset - 20;
           window.scrollTo({
             top: middle,
             left: 0,
