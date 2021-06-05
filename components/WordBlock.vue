@@ -135,7 +135,7 @@
             :word="word"
             :text="text"
             class="mr-1"
-            style="position: relative; bottom: 0.1rem"
+            style="position: relative; bottom: 0.2rem; font-size: 1.2rem;"
           ></Star>
           <b :data-level="word.level || 'outside'" style="font-size: 1.5rem">
             {{

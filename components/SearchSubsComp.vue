@@ -96,28 +96,34 @@
                       hit.video.subs_l2[Number(hit.lineIndex)].line
                     }`"
                   >
-                    <span
-                      v-if="sort === 'left' && hit.lineIndex > 0"
-                      v-html="hit.video.subs_l2[Number(hit.lineIndex) - 1].line"
-                      style="margin-right: 0.5em; opacity: 0.5"
-                    ></span>
-                    <span
-                      v-html="
-                        highlightMultiple(
-                          hit.video.subs_l2[Number(hit.lineIndex)].line,
-                          terms.map((term) => term),
-                          level
-                        )
-                      "
-                    ></span>
-                    <span
-                      v-if="
-                        sort === 'right' &&
-                        hit.lineIndex < hit.video.subs_l2.length - 1
-                      "
-                      v-html="hit.video.subs_l2[Number(hit.lineIndex) + 1].line"
-                      style="margin-left: 0.5em; opacity: 0.5"
-                    ></span>
+                    <span>
+                      <span
+                        v-if="sort === 'left' && hit.lineIndex > 0"
+                        v-html="
+                          hit.video.subs_l2[Number(hit.lineIndex) - 1].line
+                        "
+                        style="margin-right: 0.5em; opacity: 0.5"
+                      ></span>
+                      <span
+                        v-html="
+                          highlightMultiple(
+                            hit.video.subs_l2[Number(hit.lineIndex)].line,
+                            terms.map((term) => term),
+                            level
+                          )
+                        "
+                      ></span>
+                      <span
+                        v-if="
+                          sort === 'right' &&
+                          hit.lineIndex < hit.video.subs_l2.length - 1
+                        "
+                        v-html="
+                          hit.video.subs_l2[Number(hit.lineIndex) + 1].line
+                        "
+                        style="margin-left: 0.5em; opacity: 0.5"
+                      ></span>
+                    </span>
                   </Annotate>
                 </b-dropdown-item>
               </template>
@@ -150,7 +156,9 @@
           {{ speed === 1 ? "慢" : speed + "x" }}
         </b-button>
         <router-link
-          :to="`/${$l1.code}/${$l2.code}/youtube/view/${currentHit.video.youtube_id}/?t=${currentHit.video.subs_l2[currentHit.lineIndex].starttime}`"
+          :to="`/${$l1.code}/${$l2.code}/youtube/view/${
+            currentHit.video.youtube_id
+          }/?t=${currentHit.video.subs_l2[currentHit.lineIndex].starttime}`"
           class="btn btn-small pr-2"
         >
           <i class="fa fa-window-restore" />
@@ -550,7 +558,8 @@ export default {
       if (
         !["INPUT", "TEXTAREA"].includes(e.target.tagName.toUpperCase()) &&
         !e.metaKey &&
-        !e.repeat && !e.target.getAttribute('contenteditable')
+        !e.repeat &&
+        !e.target.getAttribute("contenteditable")
       ) {
         // left = 37
         if (e.keyCode == 37 && e.shiftKey) {

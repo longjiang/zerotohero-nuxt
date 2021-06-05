@@ -58,15 +58,6 @@
       </div>
       <div class="row">
         <div class="col-sm-12">
-          <div class="focus">
-            <CompareCollocations
-              v-if="term && compareTerm"
-              :term="term"
-              :compareTerm="compareTerm"
-              class="mt-5"
-              :key="`${term}-${compareTerm}-col`"
-            />
-          </div>
           <div
             class="widget mt-5"
             id="search-subs"
@@ -83,6 +74,15 @@
                 :termsB="[compareTerm]"
               />
             </div>
+          </div>
+          <div class="focus">
+            <CompareCollocations
+              v-if="term && compareTerm"
+              :term="term"
+              :compareTerm="compareTerm"
+              class="mt-5"
+              :key="`${term}-${compareTerm}-col`"
+            />
           </div>
         </div>
       </div>

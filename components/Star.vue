@@ -130,6 +130,6 @@ export default {
   border: none;
   color: #f8b61e;
   padding: 0;
-  font-size: 1.4em;
+  font-size: 1em;
 }
 </style>

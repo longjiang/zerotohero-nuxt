@@ -166,7 +166,6 @@ export default {
     textMode() {
       if (this.textMode) {
         let element = this.$el.querySelector(".annotate-slot");
-        console.log(element.focus());
         setTimeout(() => {
           element.focus();
         }, 0);

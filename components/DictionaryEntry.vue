@@ -79,14 +79,6 @@
             </div>
           </div>
           <EntryForms v-if="$l2.code === 'ru'" class="mt-5" :word="entry" />
-          <Collocations
-            :class="{ 'mt-5 mb-5': true, hidden: !collocationsReady }"
-            :word="entry"
-            @collocationsReady="collocationsReady = true"
-            :level="
-              entry.newHSK && entry.newHSK === '7-9' ? '7-9' : entry.level
-            "
-          />
           <div
             :class="{ 'widget mt-5': true, hidden: !searchSubsReady }"
             id="search-subs"
@@ -105,6 +97,14 @@
               />
             </div>
           </div>
+          <Collocations
+            :class="{ 'mt-5 mb-5': true, hidden: !collocationsReady }"
+            :word="entry"
+            @collocationsReady="collocationsReady = true"
+            :level="
+              entry.newHSK && entry.newHSK === '7-9' ? '7-9' : entry.level
+            "
+          />
           <Mistakes
             :class="{ 'mt-5 mb-5': true, hidden: !mistakesReady }"
             @mistakesReady="mistakesReady = true"

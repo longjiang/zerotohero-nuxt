@@ -24,8 +24,9 @@
         class="mr-2 btn btn-small"
         :data-bg-level="hitAB === 'A' ? levelA : false"
         @click="hitAB = 'A'"
-        >{{ termsA[0] }}</b-button
       >
+        {{ termsA[0] }}
+      </b-button>
 
       <b-dropdown
         class="primary playlist-dropdown"
@@ -34,11 +35,12 @@
         ref="dropdown"
         no-caret
       >
-        <template #button-content
-          ><i class="fa fa-stream" /> Compare Hits</template
-        >
-        <b-dropdown-item class="text-center"
-          ><button
+        <template #button-content>
+          <i class="fa fa-stream" />
+          Compare Hits
+        </template>
+        <b-dropdown-item class="text-center">
+          <button
             :class="{
               btn: true,
               'btn-small': true,
@@ -47,8 +49,9 @@
             }"
             @click.stop.prevent="sort = 'left'"
           >
-            Sort Left</button
-          ><button
+            Sort Left
+          </button>
+          <button
             :class="{
               btn: true,
               'btn-small': true,
@@ -58,8 +61,8 @@
             @click.stop.prevent="sort = 'right'"
           >
             Sort Right
-          </button></b-dropdown-item
-        >
+          </button>
+        </b-dropdown-item>
         <template v-for="group in groups[sort]">
           <div v-if="group" :key="`compare-subs-grouping-${sort}-${group.c}`">
             <b-dropdown-divider
@@ -117,34 +120,36 @@
                           hit.video.subs_l2[Number(hit.lineIndex)].line
                         }`"
                       >
-                        <span
-                          v-if="sort === 'left' && hit.lineIndex > 0"
-                          v-html="
-                            hit.video.subs_l2[Number(hit.lineIndex) - 1].line
-                          "
-                          style="margin-right: 0.5em; opacity: 0.5"
-                        />
-                        <span
-                          v-html="
-                            Helper.highlightMultiple(
-                              hit.video.subs_l2[Number(hit.lineIndex)].line,
-                              ab === 'A'
-                                ? termsA.map((term) => term)
-                                : termsB.map((term) => term),
-                              ab === 'A' ? levelA : levelB
-                            )
-                          "
-                        />
-                        <span
-                          v-if="
-                            sort === 'right' &&
-                            hit.lineIndex < hit.video.subs_l2.length - 1
-                          "
-                          v-html="
-                            hit.video.subs_l2[Number(hit.lineIndex) + 1].line
-                          "
-                          style="margin-left: 0.5em; opacity: 0.5"
-                        ></span>
+                        <span>
+                          <span
+                            v-if="sort === 'left' && hit.lineIndex > 0"
+                            v-html="
+                              hit.video.subs_l2[Number(hit.lineIndex) - 1].line
+                            "
+                            style="margin-right: 0.5em; opacity: 0.5"
+                          />
+                          <span
+                            v-html="
+                              Helper.highlightMultiple(
+                                hit.video.subs_l2[Number(hit.lineIndex)].line,
+                                ab === 'A'
+                                  ? termsA.map((term) => term)
+                                  : termsB.map((term) => term),
+                                ab === 'A' ? levelA : levelB
+                              )
+                            "
+                          />
+                          <span
+                            v-if="
+                              sort === 'right' &&
+                              hit.lineIndex < hit.video.subs_l2.length - 1
+                            "
+                            v-html="
+                              hit.video.subs_l2[Number(hit.lineIndex) + 1].line
+                            "
+                            style="margin-left: 0.5em; opacity: 0.5"
+                          ></span>
+                        </span>
                       </Annotate>
                     </div>
                     <div style="margin-left: 1rem">
@@ -175,8 +180,9 @@
         class="btn btn-small"
         :data-bg-level="hitAB === 'B' ? levelB : false"
         @click="hitAB = 'B'"
-        >{{ termsB[0] }}</b-button
       >
+        {{ termsB[0] }}
+      </b-button>
       <b-button
         class="btn btn-small search-subs-fullscreen"
         @click="toggleFullscreen"
@@ -216,8 +222,8 @@
 </template>
 
 <script>
-import SearchSubsComp from '@/components/SearchSubsComp'
-import Helper from '@/lib/helper'
+import SearchSubsComp from "@/components/SearchSubsComp";
+import Helper from "@/lib/helper";
 
 export default {
   components: {
@@ -237,34 +243,33 @@ export default {
       type: String,
     },
     keyboard: {
-      default: true
-    }
+      default: true,
+    },
   },
   data() {
     return {
-      hitAB: 'A',
+      hitAB: "A",
       checkingA: true,
       checkingB: true,
       Helper,
-      sort: 'right',
+      sort: "right",
       fullscreen: false,
-    }
+    };
   },
   destroyed() {
-    if (this.keyboard) this.unbindKeys()
+    if (this.keyboard) this.unbindKeys();
   },
   unmounted() {
-    if (this.keyboard) this.unbindKeys()
+    if (this.keyboard) this.unbindKeys();
   },
   deactivated() {
-    if (this.keyboard) this.unbindKeys()
+    if (this.keyboard) this.unbindKeys();
   },
   updated() {
-    if (this.keyboard) this.unbindKeys()
-    if (this.keyboard) this.bindKeys()
+    if (this.keyboard) this.unbindKeys();
+    if (this.keyboard) this.bindKeys();
   },
   computed: {
-
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -283,22 +288,22 @@ export default {
           A: this.$refs.searchSubsA.groupsRight,
           B: this.$refs.searchSubsB.groupsRight,
         }),
-      }
+      };
     },
   },
   watch: {
     hitAB() {
-      this.unbindKeys()
-      this.bindKeys()
+      this.unbindKeys();
+      this.bindKeys();
     },
   },
   methods: {
     mergeGroups(groups) {
-      let merged = []
-      for (let letter of ['A', 'B']) {
+      let merged = [];
+      for (let letter of ["A", "B"]) {
         for (let key in groups[letter]) {
-          let hits = groups[letter][key]
-          let group = merged.find((g) => g.c === key)
+          let hits = groups[letter][key];
+          let group = merged.find((g) => g.c === key);
           if (!group) {
             group = {
               c: key,
@@ -306,73 +311,78 @@ export default {
                 A: [],
                 B: [],
               },
-            }
-            merged.push(group)
+            };
+            merged.push(group);
           }
-          group.hits[letter] = hits
+          group.hits[letter] = hits;
         }
       }
-      merged = merged.sort((a, b) => (b.hits.A.length + b.hits.B.length) - (a.hits.A.length + a.hits.B.length))
-      let zthSavedIndex = merged.findIndex(g => g.c === 'zthSaved')
-      let zthSaved = merged[zthSavedIndex]
-      merged.splice(zthSavedIndex, 1)
-      merged = [zthSaved].concat(merged)
-      return merged
+      merged = merged.sort(
+        (a, b) =>
+          b.hits.A.length +
+          b.hits.B.length -
+          (a.hits.A.length + a.hits.B.length)
+      );
+      let zthSavedIndex = merged.findIndex((g) => g.c === "zthSaved");
+      let zthSaved = merged[zthSavedIndex];
+      merged.splice(zthSavedIndex, 1);
+      merged = [zthSaved].concat(merged);
+      return merged;
     },
     bindKeys() {
-      document.addEventListener('keydown', this.keydown)
-      if (this.$refs.searchSubsA) this.$refs.searchSubsA.unbindKeys()
-      if (this.$refs.searchSubsB) this.$refs.searchSubsB.unbindKeys()
-      if (this.hitAB === 'A') this.$refs.searchSubsA.bindKeys()
-      if (this.hitAB === 'B') this.$refs.searchSubsB.bindKeys()
+      document.addEventListener("keydown", this.keydown);
+      if (this.$refs.searchSubsA) this.$refs.searchSubsA.unbindKeys();
+      if (this.$refs.searchSubsB) this.$refs.searchSubsB.unbindKeys();
+      if (this.hitAB === "A") this.$refs.searchSubsA.bindKeys();
+      if (this.hitAB === "B") this.$refs.searchSubsB.bindKeys();
     },
     unbindKeys() {
-      if (this.$refs.searchSubsA) this.$refs.searchSubsA.unbindKeys()
-      if (this.$refs.searchSubsB) this.$refs.searchSubsB.unbindKeys()
-      document.removeEventListener('keydown', this.keydown)
+      if (this.$refs.searchSubsA) this.$refs.searchSubsA.unbindKeys();
+      if (this.$refs.searchSubsB) this.$refs.searchSubsB.unbindKeys();
+      document.removeEventListener("keydown", this.keydown);
     },
     keydown(e) {
       if (
-        !['INPUT', 'TEXTAREA'].includes(e.target.tagName.toUpperCase()) &&
+        !["INPUT", "TEXTAREA"].includes(e.target.tagName.toUpperCase()) &&
         !e.metaKey
       ) {
         // f = 70
         if (e.keyCode == 70) {
-          this.toggleFullscreen()
-          e.preventDefault()
-          return false
+          this.toggleFullscreen();
+          e.preventDefault();
+          return false;
         }
         // escape = 27
         if (e.keyCode == 27) {
-          this.fullscreen = false
-          e.preventDefault()
-          return false
+          this.fullscreen = false;
+          e.preventDefault();
+          return false;
         }
       }
     },
     toggleFullscreen() {
       if (this.hitsA.length > 0 || this.hitsB.length > 0)
-        this.fullscreen = !this.fullscreen
+        this.fullscreen = !this.fullscreen;
     },
     goToHit(hitAB, hit) {
-      this.hitAB = hitAB
-      if (hitAB === 'A') this.$refs.searchSubsA.goToHit(hit)
-      if (hitAB === 'B') this.$refs.searchSubsB.goToHit(hit)
-      this.$refs.dropdown.hide()
+      this.hitAB = hitAB;
+      if (hitAB === "A") this.$refs.searchSubsA.goToHit(hit);
+      if (hitAB === "B") this.$refs.searchSubsB.goToHit(hit);
+      this.$refs.dropdown.hide();
       setTimeout(() => {
-        document.activeElement.blur()
-      }, 100)
+        document.activeElement.blur();
+      }, 100);
     },
     searchSubsALoaded() {
-      this.hitsA = this.$refs.searchSubsA.hits
-      this.checkingA = false
+      this.hitsA = this.$refs.searchSubsA.hits;
+      this.checkingA = false;
     },
     searchSubsBLoaded() {
-      this.hitsB = this.$refs.searchSubsB.hits
-      this.checkingB = false
+      this.hitsB = this.$refs.searchSubsB.hits;
+      this.checkingB = false;
     },
   },
-}
+};
 </script>
 <style lang="scss" scoped>
 .compare-search-subs.fullscreen >>> .search-subs .video-area {

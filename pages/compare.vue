@@ -98,21 +98,6 @@
 
     <div class="container">
       <div class="row">
-        <div class="col-sm-12">
-          <CompareCollocations
-            class="mt-5 focus"
-            v-if="a && b"
-            :term="a.bare"
-            :compareTerm="b.bare"
-            :level="a.level"
-            :compareLevel="b.level"
-          ></CompareCollocations>
-        </div>
-      </div>
-    </div>
-
-    <div class="container">
-      <div class="row">
         <div class="col-md-12 mt-5">
           <div
             class="widget"
@@ -146,6 +131,21 @@
               />
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <CompareCollocations
+            class="mt-5 focus"
+            v-if="a && b"
+            :term="a.bare"
+            :compareTerm="b.bare"
+            :level="a.level"
+            :compareLevel="b.level"
+          ></CompareCollocations>
         </div>
       </div>
     </div>
