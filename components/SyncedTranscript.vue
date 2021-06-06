@@ -10,7 +10,10 @@
     >
       <template v-for="(line, lineIndex) in lines">
         <div
-          :key="`line-${lineIndex}-${line.starttime}-${line.line.substr(0, 10)}`"
+          :key="`line-${lineIndex}-${line.starttime}-${line.line.substr(
+            0,
+            10
+          )}`"
           :class="{
             'transcript-line': true,
             matched:
@@ -69,14 +72,16 @@
             </template>
           </div>
         </div>
-        <div
-          v-if="review[lineIndex] && review[lineIndex].length > 0"
-          :key="`review-${lineIndex}-${reviewKeys[lineIndex]}`"
-        >
-          <h6 class="text-center mt-3">Pop Quiz</h6>
+        <div :key="`review-${lineIndex}-${reviewKeys[lineIndex]}`">
+          <h6
+            class="text-center mt-3"
+            v-if="review[lineIndex] && review[lineIndex].length > 0"
+          >
+            Pop Quiz
+          </h6>
           <Review
             v-for="(reviewItem, reviewItemIndex) in review[lineIndex]"
-            :key="`review-${lineIndex}-${reviewKeys[lineIndex]}-${reviewItemIndex}`"
+            :key="`review-${lineIndex}-${reviewItemIndex}`"
             :reviewItem="reviewItem"
             :hsk="hsk"
             :parallellines="parallellines || []"
@@ -199,12 +204,8 @@ export default {
     });
   },
   beforeDestroy() {
-    // you may call unsubscribe to stop the subscription
     this.unsubscribe();
   },
-  // updated() {
-  //   if (!this.single) this.scrollTo(this.currentLineIndex);
-  // },
   watch: {
     currentTime() {
       if (
@@ -245,11 +246,11 @@ export default {
       return SmartQuotes.string(text.replace(/&#39;/g, "'"));
     },
     incrementReviewKeyAfterLine(lineIndex) {
-      // for (let index in this.lines) {
-      //   if (index >= lineIndex) {
-      //     if (this.reviewKeys[lineIndex]) this.reviewKeys[lineIndex]++
-      //   }
-      // }
+      for (let index in this.lines) {
+        if (index >= lineIndex) {
+          if (this.reviewKeys[lineIndex]) this.reviewKeys[lineIndex]++;
+        }
+      }
     },
     nearestLineIndex(time) {
       let nearestLineIndex = 0;
@@ -313,8 +314,7 @@ export default {
                   let reviewIndex = Math.min(
                     Math.ceil(
                       (Number(lineIndex) +
-                        lineOffset +
-                        Math.floor(form.length / 2)) /
+                        lineOffset) /
                         10
                     ) * 10,
                     this.lines.length - 1
@@ -389,7 +389,7 @@ export default {
       };
     },
     seekVideoTo(starttime) {
-      this.$emit('seek', starttime)
+      this.$emit("seek", starttime);
     },
     scrollTo(lineIndex) {
       let el = document.getElementById(
@@ -416,11 +416,6 @@ export default {
       this.goToLine(this.nextLine);
     },
     goToLine(line) {
-      // this.currentLine = line;
-      // this.currentLineIndex = this.lines.findIndex(l => l === line);
-      // this.nextLine = this.lines[this.currentLineIndex + 1];
-      // this.previousTime = this.currentLine.starttime;
-      // if (!this.single) this.scrollTo(this.currentLineIndex);
       this.seekVideoTo(line.starttime);
     },
     rewind() {
