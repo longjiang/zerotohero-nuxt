@@ -391,11 +391,6 @@ export default {
     seekVideoTo(starttime) {
       this.$emit('seek', starttime)
     },
-    pauseVideo() {
-      if (this.onPause) {
-        this.onPause();
-      }
-    },
     scrollTo(lineIndex) {
       let el = document.getElementById(
         `transcript-line-${this.id}-${lineIndex}`

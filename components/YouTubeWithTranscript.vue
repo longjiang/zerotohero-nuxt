@@ -166,7 +166,6 @@
             :parallellines="video.subs_l1"
             :sticky="sticky"
             @seek="seekYouTube"
-            @pause="pauseYouTube"
           />
           <div class="text-center mt-5">
             <router-link
@@ -234,7 +233,6 @@
               :stopLineIndex="stopLineIndex"
               :sticky="sticky"
               @seek="seekYouTube"
-              @pause="pauseYouTube"
             />
           </div>
         </div>
