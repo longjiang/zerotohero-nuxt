@@ -166,7 +166,8 @@
             :parallellines="video.subs_l1"
             :sticky="sticky"
             @seek="seekYouTube"
-            @pause="pauseYouTube"
+            @pause="pause"
+            @play="play"
           />
           <div class="text-center mt-5">
             <router-link
@@ -234,7 +235,8 @@
               :stopLineIndex="stopLineIndex"
               :sticky="sticky"
               @seek="seekYouTube"
-              @pause="pauseYouTube"
+              @pause="pause"
+              @play="play"
             />
           </div>
         </div>
@@ -489,11 +491,8 @@ export default {
     seekYouTube(starttime) {
       this.$refs.youtube.seek(starttime);
     },
-    pauseYouTube() {
+    pause() {
       this.$refs.youtube.pause();
-    },
-    playYouTube() {
-      this.$refs.youtube.loadYouTubeiFrame();
     },
     togglePaused() {
       this.$refs.youtube.togglePaused();

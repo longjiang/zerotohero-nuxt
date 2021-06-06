@@ -232,26 +232,30 @@ export default {
     if (this.unsubscribe) this.unsubscribe();
   },
   watch: {
-    currentTime() {
+    async currentTime() {
       let progressType = this.checkProgress();
       if (progressType === "within current line") {
         // do nothing
       } else if (progressType === "advance to next line") {
         let progress = this.currentTime - this.previousTime;
         if (this.repeatMode) {
-          if (
-            progress > 0 &&
-            progress < 0.15
-          ) {
+          if (progress > 0 && progress < 0.15) {
             this.rewind();
           }
         } else {
-          if (this.audioMode) {
-            this.$emit('pause')
-          }
           this.currentLine = this.nextLine;
           this.currentLineIndex = this.currentLineIndex + 1;
           this.nextLine = this.lines[this.currentLineIndex + 1];
+          if (this.audioMode) {
+            this.$emit("pause");
+            Helper.speak(
+              await this.decodeHtmlEntities(this.matchedParallelLines[this.currentLineIndex]),
+              this.$l1,
+              1
+            );
+            Helper.speak(await this.decodeHtmlEntities(this.currentLine.line), this.$l2, 1);
+            // this.$emit("play");
+          }
         }
       } else if (progressType === "jump") {
         let nearestLineIndex = this.nearestLineIndex(this.currentTime);
@@ -268,6 +272,11 @@ export default {
     },
   },
   methods: {
+    async decodeHtmlEntities(text) {
+      const HTMLEntities = await import ('html-entities');
+      const allEntities = new HTMLEntities.AllHtmlEntities()
+      return allEntities.decode(text)
+    },
     checkProgress() {
       if (!this.currentLine) {
         return "first play";
