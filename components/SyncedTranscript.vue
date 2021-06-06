@@ -326,10 +326,9 @@ export default {
     nearestLineIndex(time) {
       let nearestLineIndex = undefined;
       for (let lineIndex in this.lines) {
-        if (this.lines[lineIndex].starttime > time) {
-          break;
-        } else {
+        if (this.lines[lineIndex].starttime >= time) {
           nearestLineIndex = Number(lineIndex);
+          break;
         }
       }
       return nearestLineIndex;
