@@ -67,7 +67,6 @@
           ></div>
         </div>
         <div :key="`review-${lineIndex}-${reviewKeys[lineIndex]}`">
-          Review for {{ lineIndex }} {{ review[lineIndex] }}
           <h6
             class="text-center mt-3"
             v-if="review[lineIndex] && review[lineIndex].length > 0"
@@ -296,30 +295,42 @@ export default {
     async updateReview(mutation) {
       console.log("👹", mutation.type, mutation.payload);
       if (mutation.type === "savedWords/ADD_SAVED_WORD") {
-        this.addReviewItemsForWord(
+        let affectedLines = this.addReviewItemsForWord(
           mutation.payload.word,
           mutation.payload.wordForms,
           this.review
         );
+        this.updateKeysForLines(affectedLines) 
       } else if (mutation.type === "savedWords/REMOVE_SAVED_WORD") {
-        this.removeReviewItemsForWord(mutation.payload.word, this.review);
+        let affectedLines = this.removeReviewItemsForWord(mutation.payload.word, this.review);
+        this.updateKeysForLines(affectedLines) 
       }
     },
     async generateReview() {
       let review = {};
+      let affectedLines = []
       for (let savedWord of this.$store.state.savedWords.savedWords[
         this.$l2.code
       ]) {
         let word = await (await this.$getDictionary()).get(savedWord.id);
         if (word) {
-          await this.addReviewItemsForWord(word, savedWord.forms, review);
+          affectedLines = affectedLines.concat(await this.addReviewItemsForWord(word, savedWord.forms, review));
+          
         }
       }
+      this.updateKeysForLines(affectedLines) 
       return review;
+    },
+    updateKeysForLines(affectedLines) {
+      for (let lineIndex of this.reviewKeys) {
+        if (affectedLines.includes(lineIndex)) {
+          this.reviewKeys[lineIndex]++
+        }
+      }
     },
     removeReviewItemsForWord(word, review) {
       for (let reviewIndex in review) {
-        let length = review[reviewIndex].length
+        let length = review[reviewIndex].length;
         review[reviewIndex] = review[reviewIndex].filter(
           (reviewItem) => word.id !== reviewItem.word.id
         );
@@ -328,12 +339,12 @@ export default {
     },
     async addReviewItemsForWord(word, wordForms, review) {
       let lineOffset = this.reviewLineOffset;
-      let seenLines = [];
+      let affectedLines = [];
       for (let form of wordForms
         .filter((form) => form && form !== "-")
         .sort((a, b) => b.length - a.length)) {
         for (let lineIndex in this.lines) {
-          if (this.reviewConditions(seenLines, lineIndex, form, word)) {
+          if (this.reviewConditions(lineIndex, form, word)) {
             let reviewItem = await this.generateReviewItem(
               lineIndex,
               form,
@@ -345,31 +356,30 @@ export default {
             );
             review[reviewIndex] = review[reviewIndex] || [];
             review[reviewIndex].push(reviewItem);
-            seenLines.push(lineIndex);
+            affectedLines.push(lineIndex);
             this.reviewKeys[reviewIndex]++;
           }
         }
       }
+      return affectedLines
     },
-    reviewConditions(seenLines, lineIndex, form, word) {
-      if (!seenLines.includes(lineIndex)) {
-        let line = this.lines[lineIndex];
-        if (["en", "ru"].includes(this.$l2.code)) {
-          return line.line.includes(form);
-        }
-        if (this.$l2.continua && line.line.includes(form)) return true;
-        if (
-          this.$l2.han &&
-          (line.line.includes(word.simplified) ||
-            line.line.includes(word.traditional))
-        )
-          return true;
-        if (!this.$l2.continua) {
-          return (
-            new RegExp(`[ .,:!?]${form}[ .,:!?]`, "gi").test(line.line) ||
-            new RegExp(`^${form}[ .,:!?]`, "gi").test()
-          );
-        }
+    reviewConditions(lineIndex, form, word) {
+      let line = this.lines[lineIndex];
+      if (["en", "ru"].includes(this.$l2.code)) {
+        return line.line.includes(form);
+      }
+      if (this.$l2.continua && line.line.includes(form)) return true;
+      if (
+        this.$l2.han &&
+        (line.line.includes(word.simplified) ||
+          line.line.includes(word.traditional))
+      )
+        return true;
+      if (!this.$l2.continua) {
+        return (
+          new RegExp(`[ .,:!?]${form}[ .,:!?]`, "gi").test(line.line) ||
+          new RegExp(`^${form}[ .,:!?]`, "gi").test()
+        );
       }
     },
     async generateReviewItem(lineIndex, form, word) {
