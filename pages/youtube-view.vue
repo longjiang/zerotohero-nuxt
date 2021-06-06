@@ -180,8 +180,6 @@ import YouTube from "@/lib/youtube";
 import Helper from "@/lib/helper";
 import Config from "@/lib/config";
 import axios from "axios";
-import parser from "fast-xml-parser";
-import { parse } from "node-html-parser";
 
 export default {
   components: {
@@ -266,7 +264,6 @@ export default {
     },
   },
   async fetch() {
-    // this.$refs.search.url = `https://www.youtube.com/watch?v=${this.youtube_id}`
     let video = await this.getSaved();
     if (this.lesson && video.level && video.lesson) {
       this.saveWords(video.level, video.lesson);
@@ -425,24 +422,9 @@ export default {
       let tracks = await YouTube.getSubsList(this.youtube_id)
       for (let track of tracks) {
         if (locales.includes(track.locale)) {
-          this.l2Locale = locale;
+          this.l2Locale = track.locale;
+          return await YouTube.getTranscript(this.youtube_id, track.locale, track.name)
         }
-      }
-      if (this.l2Locale) {
-        let html = await Helper.proxy(
-          `https://www.youtube.com/api/timedtext?v=${this.youtube_id}&lang=${this.l2Locale}&fmt=srv3`
-        );
-
-        let lines = [];
-        let root = parse(html);
-        for (let p of root.querySelectorAll("p")) {
-          let line = {
-            line: p.innerText,
-            starttime: parseInt(p.getAttribute("t")) / 1000,
-          };
-          lines.push(line);
-        }
-        return lines.filter((line) => line.line.trim() !== "");
       }
     },
     async getTranscript(video) {

@@ -473,7 +473,7 @@ export default {
         video = await YouTube.getYouTubeSubsList(video, this.$l1, this.$l2);
       }
       let subs_l1 = await YouTube.getTranscript(
-        video,
+        video.youtube_id,
         video.l1Locale,
         video.l2Name
       );
