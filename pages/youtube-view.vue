@@ -139,7 +139,7 @@
           <i class="fas fa-arrow-up"></i>
         </button>
         <button
-          :class="{'quick-access-button play-pause shadow d-inline-block text-center' : true, 'btn-primary': !speaking}"
+          :class="{'quick-access-button play-pause shadow d-inline-block text-center' : true, 'btn-primary': !speaking, 'btn-gray': speaking}"
           :disabled="speaking"
           @click="togglePaused"
         >

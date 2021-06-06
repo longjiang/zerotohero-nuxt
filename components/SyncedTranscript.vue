@@ -175,7 +175,7 @@ export default {
       previousTime: 0,
       currentTime: 0,
       currentLine: undefined,
-      currentLineIndex: 0,
+      currentLineIndex: undefined,
       reviewLineOffset: 10, // Show review this number of lines after the first appearance of the word
       nextLine: undefined,
       review: {},
@@ -208,12 +208,7 @@ export default {
         .join("&nbsp;");
     }
     this.matchedParallelLines = matchedParallelLines;
-
-    this.currentLine =
-      this.lines && this.lines[this.startLineIndex]
-        ? this.lines[this.startLineIndex]
-        : undefined;
-    this.reviewKeys = this.lines.map((line) => 0);
+    this.reviewKeys = this.lines.map(() => 0);
     if (this.quiz && this.highlightSavedWords) {
       if (
         this.$store.state.savedWords.savedWords &&
@@ -234,9 +229,18 @@ export default {
   watch: {
     async currentTime() {
       let progressType = this.checkProgress();
-      if (progressType === "within current line") {
+      if ((progressType = "first play")) {
+        console.log(progressType);
+        if (this.currentTime > this.lines[0].starttime) {
+          this.currentLine = this.lines[0];
+          this.currentLineIndex = 0;
+          this.nextLine = this.lines[1];
+          this.doAudioModeStuff();
+        }
+      } else if (progressType === "within current line") {
         // do nothing
       } else if (progressType === "advance to next line") {
+        console.log(progressType);
         let progress = this.currentTime - this.previousTime;
         if (this.repeatMode) {
           if (progress > 0 && progress < 0.15) {
@@ -247,14 +251,17 @@ export default {
           this.currentLineIndex = this.currentLineIndex + 1;
           this.nextLine = this.lines[this.currentLineIndex + 1];
         }
-        this.doAudioModeStuff()
+        this.doAudioModeStuff();
       } else if (progressType === "jump") {
+        console.log(progressType);
         let nearestLineIndex = this.nearestLineIndex(this.currentTime);
-        let nearestLine = this.lines[nearestLineIndex];
-        this.currentLine = nearestLine;
-        this.currentLineIndex = nearestLineIndex;
-        this.nextLine = this.lines[nearestLineIndex + 1];
-        this.doAudioModeStuff()
+        if (nearestLineIndex) {
+          let nearestLine = this.lines[nearestLineIndex];
+          this.currentLine = nearestLine;
+          this.currentLineIndex = nearestLineIndex;
+          this.nextLine = this.lines[nearestLineIndex + 1];
+          this.doAudioModeStuff();
+        }
       }
       this.previousTime = this.currentTime;
     },
@@ -317,15 +324,15 @@ export default {
       return SmartQuotes.string(text.replace(/&#39;/g, "'"));
     },
     nearestLineIndex(time) {
-      let nearestLineIndex = 0;
+      let nearestLineIndex = undefined;
       for (let lineIndex in this.lines) {
         if (this.lines[lineIndex].starttime > time) {
           break;
         } else {
-          nearestLineIndex = lineIndex;
+          nearestLineIndex = Number(lineIndex);
         }
       }
-      return Number(nearestLineIndex);
+      return nearestLineIndex;
     },
     removeLine(lineIndex) {
       this.lines.splice(lineIndex, 1);
