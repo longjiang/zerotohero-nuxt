@@ -503,7 +503,7 @@ export default {
       if (el) {
         let offsetTop = Helper.documentOffsetTop(el);
         let smallScreenYOffset =
-          window.innerWidth < 768 ? (window.innerWidth * 9) / 16 : 0;
+          window.innerHeight > window.innerWidth ? (window.innerWidth * 9) / 16 : 0;
         if (!Helper.isInViewport(el, smallScreenYOffset, 90)) {
           let middle = offsetTop - smallScreenYOffset - 20;
           window.scrollTo({
