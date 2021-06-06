@@ -230,14 +230,12 @@ export default {
     async currentTime() {
       let progressType = this.checkProgress();
       if ((progressType === "first play")) {
-        console.log(progressType);
-        if (this.currentTime > this.lines[0].starttime) {
+        if (this.currentTime >= this.lines[0].starttime) {
           this.playNearestLine();
         }
       } else if (progressType === "within current line") {
         // do nothing
       } else if (progressType === "advance to next line") {
-        console.log(progressType);
         let progress = this.currentTime - this.previousTime;
         if (this.repeatMode) {
           if (progress > 0 && progress < 0.15) {
@@ -248,9 +246,8 @@ export default {
           this.currentLineIndex = this.currentLineIndex + 1;
           this.nextLine = this.lines[this.currentLineIndex + 1];
         }
-        this.doAudioModeStuff();
+        if (!this.paused) this.doAudioModeStuff();
       } else if (progressType === "jump") {
-        console.log(progressType);
         this.playNearestLine();
       }
       this.previousTime = this.currentTime;
@@ -263,16 +260,20 @@ export default {
   methods: {
     playNearestLine() {
       let nearestLineIndex = this.nearestLineIndex(this.currentTime);
-      if (nearestLineIndex) {
+      if (typeof nearestLineIndex !== 'undefined') {
         let nearestLine = this.lines[nearestLineIndex];
         this.currentLine = nearestLine;
         this.currentLineIndex = nearestLineIndex;
         this.nextLine = this.lines[nearestLineIndex + 1];
-        this.doAudioModeStuff();
+        if (!this.paused) this.doAudioModeStuff();
+      } else {
+        this.currentLine = undefined;
+        this.currentLineIndex = undefined;
+        this.nextLine = undefined;
       }
     },
     async doAudioModeStuff() {
-      if (this.audioMode && !this.paused) {
+      if (this.audioMode) {
         this.$emit("pause");
         this.$emit("speechStart");
         if (this.matchedParallelLines[this.currentLineIndex]) {
@@ -326,7 +327,7 @@ export default {
     nearestLineIndex(time) {
       let nearestLineIndex = undefined;
       for (let lineIndex in this.lines) {
-        if (this.lines[lineIndex].starttime >= time) {
+        if (this.lines[lineIndex].starttime >= time && (this.lines[lineIndex].starttime - time) < 1) {
           nearestLineIndex = Number(lineIndex);
           break;
         }
