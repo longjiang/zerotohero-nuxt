@@ -183,6 +183,7 @@ export default {
       ended: false,
       audioMode: false,
       repeatMode: false,
+      audioCancelled: false,
       reviewKeys: [],
       neverPlayed: true,
     };
@@ -229,7 +230,7 @@ export default {
   watch: {
     async currentTime() {
       let progressType = this.checkProgress();
-      if ((progressType === "first play")) {
+      if (progressType === "first play") {
         if (this.currentTime >= this.lines[0].starttime) {
           this.playNearestLine();
         }
@@ -260,7 +261,7 @@ export default {
   methods: {
     playNearestLine() {
       let nearestLineIndex = this.nearestLineIndex(this.currentTime);
-      if (typeof nearestLineIndex !== 'undefined') {
+      if (typeof nearestLineIndex !== "undefined") {
         let nearestLine = this.lines[nearestLineIndex];
         this.currentLine = nearestLine;
         this.currentLineIndex = nearestLineIndex;
@@ -276,6 +277,7 @@ export default {
       if (this.audioMode) {
         this.$emit("pause");
         this.$emit("speechStart");
+        this.audioCancelled = false
         if (this.matchedParallelLines[this.currentLineIndex]) {
           await Helper.speak(
             await this.decodeHtmlEntities(
@@ -285,14 +287,22 @@ export default {
             1
           );
         }
-        await Helper.speak(
-          await this.decodeHtmlEntities(this.currentLine.line),
-          this.$l2,
-          1
-        );
-        this.$emit("speechEnd");
-        this.$emit("play");
+        if (!this.audioCancelled) {
+          await Helper.speak(
+            await this.decodeHtmlEntities(this.currentLine.line),
+            this.$l2,
+            1
+          );
+          this.$emit("speechEnd");
+          this.$emit("play");
+        }
       }
+    },
+    stopAudioModeStuff() {
+      this.audioCancelled = true
+      window.speechSynthesis.cancel();
+      this.$emit("speechEnd");
+      this.$emit("pause");
     },
     async decodeHtmlEntities(text) {
       const HTMLEntities = await import("html-entities");
@@ -327,7 +337,10 @@ export default {
     nearestLineIndex(time) {
       let nearestLineIndex = undefined;
       for (let lineIndex in this.lines) {
-        if (this.lines[lineIndex].starttime >= time && (this.lines[lineIndex].starttime - time) < 1) {
+        if (
+          this.lines[lineIndex].starttime >= time &&
+          this.lines[lineIndex].starttime - time < 1
+        ) {
           nearestLineIndex = Number(lineIndex);
           break;
         }

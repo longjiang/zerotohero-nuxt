@@ -507,14 +507,18 @@ export default {
       this.$refs.youtube.pause();
     },
     togglePaused() {
-      if (this.paused) {
+      if (this.paused && !this.speaking) {
         if (this.audioMode) {
           this.$refs.transcript.doAudioModeStuff();
         } else {
           this.$refs.youtube.play();
         }
       } else {
-        this.$refs.youtube.pause();
+        if (this.audioMode) {
+          this.$refs.transcript.stopAudioModeStuff();
+        } else {
+          this.$refs.youtube.pause();
+        }
       }
     },
   },

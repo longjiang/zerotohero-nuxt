@@ -139,13 +139,13 @@
           <i class="fas fa-arrow-up"></i>
         </button>
         <button
-          :class="{'quick-access-button play-pause shadow d-inline-block text-center' : true, 'btn-primary': !speaking, 'btn-gray': speaking}"
-          :disabled="speaking"
+          :class="{
+            'quick-access-button play-pause shadow d-inline-block text-center btn-primary': true,
+          }"
           @click="togglePaused"
         >
           <i v-if="paused && !speaking" class="fas fa-play"></i>
-          <i v-if="paused && speaking" class="fas fa-volume-up"></i>
-          <i v-if="!paused && !speaking" class="fas fa-pause"></i>
+          <i v-if="!paused || speaking" class="fas fa-pause"></i>
         </button>
         <button
           class="quick-access-button shadow btn-secondary d-inline-block text-center"
