@@ -93,7 +93,7 @@
 <script>
 import Helper from "@/lib/helper";
 import SmartQuotes from "smartquotes";
-import Vue from 'vue'
+import Vue from "vue";
 
 export default {
   props: {
@@ -232,30 +232,27 @@ export default {
   },
   watch: {
     currentTime() {
-      if (
-        this.currentTime > this.currentLine.starttime - 0.15 &&
-        this.nextLine &&
-        this.currentTime < this.nextLine.starttime
-      ) {
+      let progressType = this.checkProgress()
+      if (progressType === "within current line") {
         this.previousTime = this.currentTime;
-        return;
+      } else {
+        let nearestLineIndex = this.nearestLineIndex(this.currentTime);
+        let nearestLine = this.lines[nearestLineIndex];
+        let progress = this.currentTime - this.previousTime;
+        if (
+          this.repeat &&
+          this.currentLine !== nearestLine &&
+          progress > 0 &&
+          progress < 0.15
+        )
+          this.rewind();
+        else {
+          this.currentLine = nearestLine;
+          this.currentLineIndex = nearestLineIndex;
+          this.nextLine = this.lines[nearestLineIndex + 1];
+        }
+        this.previousTime = this.currentTime;
       }
-      let nearestLineIndex = this.nearestLineIndex(this.currentTime);
-      let nearestLine = this.lines[nearestLineIndex];
-      let progress = this.currentTime - this.previousTime;
-      if (
-        this.repeat &&
-        this.currentLine !== nearestLine &&
-        progress > 0 &&
-        progress < 0.15
-      )
-        this.rewind();
-      else {
-        this.currentLine = nearestLine;
-        this.currentLineIndex = nearestLineIndex;
-        this.nextLine = this.lines[nearestLineIndex + 1];
-      }
-      this.previousTime = this.currentTime;
     },
     currentLine() {
       if (!this.single && this.currentLineIndex !== 0)
@@ -263,6 +260,23 @@ export default {
     },
   },
   methods: {
+    checkProgress() {
+      if (
+        this.currentTime > this.currentLine.starttime - 0.15 &&
+        this.nextLine &&
+        this.currentTime < this.nextLine.starttime
+      ) {
+        return "within current line";
+      } else if (
+        this.nextLine && 
+        this.currentTime > this.nextLine.starttime &&
+        this.currentTime < this.nextLine.starttime + 0.15
+      ) {
+        return "advance to next line";
+      } else {
+        return "jump";
+      }
+    },
     highlightMultiple() {
       return Helper.highlightMultiple(...arguments);
     },
@@ -300,44 +314,49 @@ export default {
           mutation.payload.wordForms,
           this.review
         );
-        this.updateKeysForLines(affectedLines) 
+        this.updateKeysForLines(affectedLines);
       } else if (mutation.type === "savedWords/REMOVE_SAVED_WORD") {
-        let affectedLines = this.removeReviewItemsForWord(mutation.payload.word, this.review);
-        this.updateKeysForLines(affectedLines) 
+        let affectedLines = this.removeReviewItemsForWord(
+          mutation.payload.word,
+          this.review
+        );
+        this.updateKeysForLines(affectedLines);
       }
     },
     async generateReview() {
       let review = {};
-      let affectedLines = []
+      let affectedLines = [];
       for (let savedWord of this.$store.state.savedWords.savedWords[
         this.$l2.code
       ]) {
         let word = await (await this.$getDictionary()).get(savedWord.id);
         if (word) {
-          affectedLines = affectedLines.concat(await this.addReviewItemsForWord(word, savedWord.forms, review));
-          
+          affectedLines = affectedLines.concat(
+            await this.addReviewItemsForWord(word, savedWord.forms, review)
+          );
         }
       }
-      this.updateKeysForLines(affectedLines) 
+      this.updateKeysForLines(affectedLines);
       return review;
     },
     updateKeysForLines(affectedLines) {
       for (let lineIndex in this.reviewKeys) {
         if (affectedLines.includes(Number(lineIndex))) {
-          Vue.set(this.reviewKeys, lineIndex, this.reviewKeys[lineIndex] + 1)
+          Vue.set(this.reviewKeys, lineIndex, this.reviewKeys[lineIndex] + 1);
         }
       }
     },
     removeReviewItemsForWord(word, review) {
-      let affectedLines = []
+      let affectedLines = [];
       for (let reviewIndex in review) {
         let length = review[reviewIndex].length;
         review[reviewIndex] = review[reviewIndex].filter(
           (reviewItem) => word.id !== reviewItem.word.id
         );
-        if (review[reviewIndex].length < length) affectedLines.push(reviewIndex);
+        if (review[reviewIndex].length < length)
+          affectedLines.push(reviewIndex);
       }
-      return affectedLines
+      return affectedLines;
     },
     async addReviewItemsForWord(word, wordForms, review) {
       let lineOffset = this.reviewLineOffset;
@@ -363,7 +382,7 @@ export default {
           }
         }
       }
-      return affectedLines
+      return affectedLines;
     },
     reviewConditions(lineIndex, form, word) {
       let line = this.lines[lineIndex];

@@ -80,6 +80,12 @@ export default {
   build: {
     extend(config, { isDev, isClient }) {
       config.resolve.alias['vue'] = 'vue/dist/vue.common'
+      // Extend only webpack config for client-bundle
+      if (isDev && isClient) {
+        config.devtool = '#source-map'
+      }
+
+
       // if (isClient) {
       //   config.node = {
       //     fs: 'empty',
