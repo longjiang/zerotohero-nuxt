@@ -66,16 +66,17 @@
             v-html="matchedParallelLines[lineIndex]"
           ></div>
         </div>
-        <div :key="`review-${lineIndex}-${reviewKeys[lineIndex]}`">
+        <div :key="`review-${lineIndex}`">
           <h6
             class="text-center mt-3"
+            :key="`review-title-${lineIndex}-${reviewKeys[lineIndex]}`"
             v-if="review[lineIndex] && review[lineIndex].length > 0"
           >
             Pop Quiz
           </h6>
           <Review
             v-for="(reviewItem, reviewItemIndex) in review[lineIndex]"
-            :key="`review-${lineIndex}-${reviewItemIndex}`"
+            :key="`review-${lineIndex}-${reviewItemIndex}-${reviewKeys[lineIndex]}`"
             :reviewItem="reviewItem"
             :hsk="hsk"
             :parallellines="parallellines || []"
