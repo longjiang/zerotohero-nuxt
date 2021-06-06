@@ -28,7 +28,7 @@
               this.$router.push({
                 path: `/${$l1.code}/${
                   $l2.code
-                }/youtube/browse/${topic}/${level}/0/${encodeURIComponent(
+                }/youtube/browse/all/all/0/${encodeURIComponent(
                   url
                 )}`,
               });
