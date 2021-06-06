@@ -106,9 +106,11 @@ export default {
     },
     lines: {
       type: Array,
+      default: [],
     },
     parallellines: {
-      default: false,
+      type: Array,
+      default: [],
     },
     collapse: {
       default: false,

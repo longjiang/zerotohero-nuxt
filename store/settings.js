@@ -10,7 +10,7 @@ export const state = () => {
       showDefinition: false,
       showPinyin: true,
       useTraditional: false,
-      showTranslation: false,
+      showTranslation: true,
       showQuiz: true
     }
   }
