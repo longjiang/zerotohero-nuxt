@@ -161,6 +161,15 @@
         <button
           :class="{
             'quick-access-button shadow btn-secondary d-inline-block text-center': true,
+            'btn-primary': audioMode,
+          }"
+          @click="audioMode = !audioMode"
+        >
+          <i class="fas fa-headphones"></i>
+        </button>
+        <button
+          :class="{
+            'quick-access-button shadow btn-secondary d-inline-block text-center': true,
             'btn-primary': layout === 'vertical',
           }"
           @click="layout = layout === 'horizontal' ? 'vertical' : 'horizontal'"
@@ -208,6 +217,7 @@ export default {
       filterList: "",
       layout: "horizontal",
       repeatMode: false,
+      audioMode: false,
       randomEpisodeYouTubeId: undefined,
     };
   },
@@ -306,6 +316,9 @@ export default {
   watch: {
     repeatMode() {
       this.$refs.youtube.repeatMode = this.repeatMode;
+    },
+    audioMode() {
+      this.$refs.youtube.audioMode = this.audioMode;
     },
     async show() {
       if (this.show) {

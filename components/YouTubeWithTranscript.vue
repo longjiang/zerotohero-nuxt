@@ -166,6 +166,7 @@
             :parallellines="video.subs_l1"
             :sticky="sticky"
             @seek="seekYouTube"
+            @pause="pauseYouTube"
           />
           <div class="text-center mt-5">
             <router-link
@@ -233,6 +234,7 @@
               :stopLineIndex="stopLineIndex"
               :sticky="sticky"
               @seek="seekYouTube"
+              @pause="pauseYouTube"
             />
           </div>
         </div>
@@ -309,6 +311,7 @@ export default {
       transcriptKey: 0,
       paused: true,
       repeatMode: false,
+      audioMode: false,
       currentTime: 0,
       videoInfoKey: 0,
       topics: Helper.topics,
@@ -504,6 +507,9 @@ export default {
     },
     repeatMode() {
       if (this.$refs.transcript) this.$refs.transcript.repeatMode = this.repeatMode;
+    },
+    audioMode() {
+      if (this.$refs.transcript) this.$refs.transcript.audioMode = this.audioMode;
     },
     firstLineTime() {
       if (this.video.subs_l2 && this.video.subs_l2.length > 0) {

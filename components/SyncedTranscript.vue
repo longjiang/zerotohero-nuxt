@@ -181,6 +181,7 @@ export default {
       review: {},
       paused: true,
       ended: false,
+      audioMode: false,
       repeatMode: false,
       reviewKeys: [],
       neverPlayed: true,
@@ -245,6 +246,9 @@ export default {
             this.rewind();
           }
         } else {
+          if (this.audioMode) {
+            this.$emit('pause')
+          }
           this.currentLine = this.nextLine;
           this.currentLineIndex = this.currentLineIndex + 1;
           this.nextLine = this.lines[this.currentLineIndex + 1];
