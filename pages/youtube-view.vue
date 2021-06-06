@@ -1,6 +1,6 @@
 <router>
   {
-    path: '/:l1/:l2/youtube/view/:args?/:lesson?',
+    path: '/:l1/:l2/youtube/view/:youtube_id?/:lesson?',
     props: true,
   }
 </router>
@@ -190,7 +190,7 @@ export default {
     YouTubeWithTranscript,
   },
   props: {
-    args: {
+    youtube_id: {
       type: String,
     },
     lesson: {
@@ -266,13 +266,13 @@ export default {
     },
   },
   async fetch() {
-    // this.$refs.search.url = `https://www.youtube.com/watch?v=${this.args}`
+    // this.$refs.search.url = `https://www.youtube.com/watch?v=${this.youtube_id}`
     let video = await this.getSaved();
     if (this.lesson && video.level && video.lesson) {
       this.saveWords(video.level, video.lesson);
     }
     if (!video || !video.channel) {
-      let youtube_video = await YouTube.videoByApi(this.args);
+      let youtube_video = await YouTube.videoByApi(this.youtube_id);
       if (youtube_video) video = Object.assign(youtube_video, video || {});
     }
     video.subs_l2 = await this.getTranscript(video);
@@ -422,58 +422,28 @@ export default {
       if (this.$l2.locales) {
         locales = locales.concat(this.$l2.locales);
       }
-
-      let xml = await Helper.proxy(
-        `https://www.youtube.com/api/timedtext?v=${this.args}&type=list`
-      );
-      let root = parser.parse(xml, {
-        ignoreAttributes: false,
-      });
-      if (
-        typeof root.transcript_list !== "undefined" &&
-        typeof root.transcript_list.track !== "undefined"
-      ) {
-        let tracks =
-          root.transcript_list.track.length > 0
-            ? root.transcript_list.track
-            : [root.transcript_list.track];
-        for (let track of tracks) {
-          let locale = track["@_lang_code"];
-          if (locales.includes(locale)) {
-            this.l2Locale = locale;
-          }
-        }
-        if (this.l2Locale) {
-          let html = await Helper.proxy(
-            `https://www.youtube.com/api/timedtext?v=${this.args}&lang=${this.l2Locale}&fmt=srv3`
-          );
-
-          let lines = [];
-          let root = parse(html);
-          for (let p of root.querySelectorAll("p")) {
-            let line = {
-              line: p.innerText,
-              starttime: parseInt(p.getAttribute("t")) / 1000,
-            };
-            lines.push(line);
-          }
-          return lines.filter((line) => line.line.trim() !== "");
+      let tracks = await YouTube.getSubsList(this.youtube_id)
+      for (let track of tracks) {
+        if (locales.includes(track.locale)) {
+          this.l2Locale = locale;
         }
       }
-    },
-    async getL1Transcript() {
-      await Helper.scrape(
-        `https://www.youtube.com/api/timedtext?v=${this.args}&lang=${this.l2Locale}&fmt=srv3&tlang=${this.$l1.code}`,
-        ($html) => {
-          for (let p of $html.find("p")) {
-            let line = {
-              line: $(p).text(),
-              starttime: parseInt($(p).attr("t")) / 1000,
-            };
-            this.l1Lines.push(line);
-          }
+      if (this.l2Locale) {
+        let html = await Helper.proxy(
+          `https://www.youtube.com/api/timedtext?v=${this.youtube_id}&lang=${this.l2Locale}&fmt=srv3`
+        );
+
+        let lines = [];
+        let root = parse(html);
+        for (let p of root.querySelectorAll("p")) {
+          let line = {
+            line: p.innerText,
+            starttime: parseInt(p.getAttribute("t")) / 1000,
+          };
+          lines.push(line);
         }
-      );
+        return lines.filter((line) => line.line.trim() !== "");
+      }
     },
     async getTranscript(video) {
       if (video.subs_l2 && Array.isArray(video.subs_l2)) {
@@ -508,7 +478,7 @@ export default {
     async getSaved() {
       let response = await axios.get(
         `${Config.wiki}items/youtube_videos?filter[youtube_id][eq]=${
-          this.args
+          this.youtube_id
         }&filter[l2][eq]=${
           this.$l2.id
         }&fields=id,youtube_id,channel_id,l2,title,level,topic,lesson,subs_l2&timestamp=${
