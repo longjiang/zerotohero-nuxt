@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid youtube-with-transcript">
     <div v-if="layout === 'horizontal'" class="row">
-      <div class="youtube-video-column col-md-6 mb-4 p-0">
+      <div class="youtube-video-column col-sm-12 mb-4 p-0">
         <div class="youtube-video-wrapper" :key="'youtube-' + video.youtube_id">
           <YouTubeVideo
             ref="youtube"
@@ -16,7 +16,7 @@
           />
         </div>
       </div>
-      <div class="col-md-6">
+      <div class="youtube-transcript-column col-sm-12">
         <div class="youtube-video-info">
           <h5 style="line-height: 1.5">
             <span v-if="video" :key="`video-title-${video.title}`" class="mt-4">
@@ -573,5 +573,12 @@ export default {
 .youtube-video-info {
   padding-left: 0.667rem;
   padding-right: 0.667rem;
+}
+
+@media screen and (orientation: landscape) {
+  .youtube-video-column,
+  .youtube-transcript-column {
+    flex: 1;
+  }
 }
 </style>
