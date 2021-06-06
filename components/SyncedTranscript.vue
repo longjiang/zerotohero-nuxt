@@ -57,7 +57,7 @@
             v-if="$l2.code !== $l1.code && parallellines"
             :class="{
               'transcript-line-l1': true,
-              'pl-3': !single,
+              'pl-4': !single,
               'text-right':
                 $l2.scripts &&
                 $l2.scripts.length > 0 &&
@@ -474,9 +474,8 @@ export default {
 }
 
 .transcript-line-l1 {
-  color: #aaa;
-  font-style: italic;
-  font-size: 0.8em;
+  color: rgb(255 95 32 / 35%);
+  font-size: 0.7em;
   display: none;
 }
 .show-translation .transcript-line-l1 {

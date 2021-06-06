@@ -17,32 +17,7 @@
           v-html="highlight(reviewItem.line.line, reviewItem.text, hsk)"
         />
       </Annotate>
-      <div
-        v-if="$l2.code !== $l1.code && reviewItem.parallelLines"
-        :class="{
-          'transcript-line-l1': true,
-          'text-right':
-            $l2.scripts &&
-            $l2.scripts.length > 0 &&
-            $l2.scripts[0].direction === 'rtl',
-        }"
-      >
-        <template
-          v-for="(parallelLine, parallelLineIndex) in reviewItem.parallelLines"
-        >
-          <span
-            v-html="parallelLine.line"
-            :key="`review-parallel-line-${parallelLineIndex}`"
-          />&nbsp;
-        </template>
-      </div>
-      <div class="mt-2">
-        <ReviewAnswerButton
-          v-for="(answer, index) in reviewItem.answers"
-          :key="`quiz-button-${index}`"
-          :answer="answer"
-          @answered="answered(answer)"
-        />
+      <span class="ml-1">
         <Speak
           :text="reviewItem.line.line"
           style="
@@ -53,9 +28,7 @@
             height: 1.7rem;
             display: inline-block;
             overflow: hidden;
-            margin-bottom: 0;
             padding: 0;
-            margin-right: 0.3rem;
             font-size: 0.8em;
           "
         />
@@ -69,7 +42,6 @@
             height: 1.7rem;
             display: inline-block;
             overflow: hidden;
-            margin-bottom: 0;
             padding: 0;
             font-size: 0.8em;
           "
@@ -77,6 +49,26 @@
         >
           <i class="fas fa-arrow-up"></i>
         </button>
+      </span>
+      <div
+        v-if="$l2.code !== $l1.code && reviewItem.parallelLines"
+        :class="{
+          'transcript-line-l1': true,
+          'text-right':
+            $l2.scripts &&
+            $l2.scripts.length > 0 &&
+            $l2.scripts[0].direction === 'rtl',
+        }"
+      >
+        <span v-html="reviewItem.parallelLines" />
+      </div>
+      <div class="mt-2">
+        <ReviewAnswerButton
+          v-for="(answer, index) in reviewItem.answers"
+          :key="`quiz-button-${index}`"
+          :answer="answer"
+          @answered="answered(answer)"
+        />
       </div>
     </div>
   </div>
@@ -150,5 +142,12 @@ export default {
     opacity: 0;
     pointer-events: none;
   }
+}
+
+
+.review .transcript-line-l1 {
+  color: #999;
+  font-size: 0.7em;
+  padding-left: 0.5rem;
 }
 </style>
