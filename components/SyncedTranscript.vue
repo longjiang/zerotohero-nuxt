@@ -38,7 +38,7 @@
           <Annotate
             tag="div"
             :sticky="sticky"
-            class="transcript-line-chinese pl-3"
+            :class="{'transcript-line-chinese': true, 'pl-3': !single}"
             :buttons="true"
           >
             <span
@@ -56,25 +56,15 @@
           <div
             v-if="$l2.code !== $l1.code && parallellines"
             :class="{
-              'transcript-line-l1 pl-3': true,
+              'transcript-line-l1': true,
+              'pl-3': !single,
               'text-right':
                 $l2.scripts &&
                 $l2.scripts.length > 0 &&
                 $l2.scripts[0].direction === 'rtl',
             }"
-          >
-            <template
-              v-for="parallelLine in parallellines.filter(
-                (l) =>
-                  l.starttime >= line.starttime - 1 &&
-                  (!lines[lineIndex + 1] ||
-                    l.starttime < lines[lineIndex + 1].starttime - 1)
-              )"
-            >
-              <span v-html="parallelLine.line" />
-              &nbsp;
-            </template>
-          </div>
+            v-html="matchedParallelLines[lineIndex]"
+          ></div>
         </div>
         <div :key="`review-${lineIndex}-${reviewKeys[lineIndex]}`">
           <h6
@@ -195,6 +185,25 @@ export default {
     this.lines.map((line) => {
       line.starttime = Number(line.starttime);
     });
+    let matchedParallelLines = [];
+    for (let lineIndex in this.lines) {
+      lineIndex = Number(lineIndex);
+      let line = this.lines[lineIndex];
+      let nextLine = this.lines[lineIndex + 1];
+      if (!nextLine) break;
+      matchedParallelLines[lineIndex] = this.parallellines
+        .filter((l) => {
+          // console.log(l.starttime, line.starttime, nextLine ? nextLine.starttime : false)
+          return (
+            l.starttime >= line.starttime - 1 &&
+            (!nextLine || l.starttime < nextLine.starttime - 1)
+          );
+        })
+        .map((l) => l.line)
+        .join("&nbsp;");
+    }
+    this.matchedParallelLines = matchedParallelLines;
+
     this.currentLine =
       this.lines && this.lines[this.startLineIndex]
         ? this.lines[this.startLineIndex]
@@ -378,12 +387,7 @@ export default {
         traditional: word.traditional,
         correct: true,
       });
-      let parallelLines = this.parallellines.filter(
-        (l) =>
-          l.starttime >= line.starttime - 1 &&
-          (!this.lines[lineIndex + 1] ||
-            l.starttime < this.lines[lineIndex + 1].starttime - 1)
-      );
+      let parallelLines = this.matchedParallelLines[lineIndex];
       return {
         line,
         lineIndex,
