@@ -38,7 +38,7 @@
           <Annotate
             tag="div"
             :sticky="sticky"
-            :class="{'transcript-line-chinese': true, 'pl-3': !single}"
+            :class="{ 'transcript-line-chinese': true, 'pl-3': !single }"
             :buttons="true"
           >
             <span
@@ -183,7 +183,7 @@ export default {
       neverPlayed: true,
     };
   },
-  created() {
+  async created() {
     this.lines.map((line) => {
       line.starttime = Number(line.starttime);
     });
@@ -211,15 +211,22 @@ export default {
         ? this.lines[this.startLineIndex]
         : undefined;
     this.reviewKeys = this.lines.map((line) => 0);
-    if (this.highlightSavedWords) this.updateReview();
-    this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type.startsWith("savedWords")) {
-        this.updateReview();
+    if (this.quiz && this.highlightSavedWords) {
+      if (
+        this.$store.state.savedWords.savedWords &&
+        this.$store.state.savedWords.savedWords[this.$l2.code]
+      ) {
+        this.review = await this.generateReview();
       }
-    });
+      this.unsubscribe = this.$store.subscribe((mutation, state) => {
+        if (mutation.type.startsWith("savedWords")) {
+          this.updateReview(mutation);
+        }
+      });
+    }
   },
   beforeDestroy() {
-    this.unsubscribe();
+    if (this.unsubscribe) this.unsubscribe();
   },
   watch: {
     currentTime() {
@@ -291,57 +298,60 @@ export default {
           Math.abs(b.head.length - text.length)
       );
     },
-    async updateReview() {
-      let review = Object.assign({}, this.review);
-      let lineOffset = 10; // Show review this number of lines after the first appearance of the word
-      for (let lineIndex in this.lines) {
-        if (
-          lineIndex >=
-          Math.ceil((Number(this.currentLineIndex) + lineOffset) / 10) * 10
-        )
-          delete review[lineIndex];
+    async updateReview(mutation) {
+      console.log("👹", mutation.type, mutation.payload);
+      if (mutation.type === "savedWords/ADD_SAVED_WORD") {
+        // this.addReviewItemsForSavedWord();
+        this.incrementReviewKeyAfterLine(this.currentLineIndex);
+      } else if (mutation.type === "savedWords/REMOVE_SAVED_WORD") {
+        this.incrementReviewKeyAfterLine(this.currentLineIndex);
       }
-      if (
-        this.quiz &&
-        this.$store.state.savedWords.savedWords &&
-        this.$store.state.savedWords.savedWords[this.$l2.code]
-      ) {
-        for (let savedWord of this.$store.state.savedWords.savedWords[
-          this.$l2.code
-        ]) {
-          let word = await (await this.$getDictionary()).get(savedWord.id);
-          if (word) {
-            let seenLines = [];
-            for (let form of savedWord.forms
-              .filter((form) => form && form !== "-")
-              .sort((a, b) => b.length - a.length)) {
-              for (
-                let lineIndex = this.currentLineIndex;
-                lineIndex < this.lines.length;
-                lineIndex++
-              ) {
-                if (this.reviewConditions(seenLines, lineIndex, form, word)) {
-                  let reviewItem = await this.generateReview(
-                    lineIndex,
-                    form,
-                    word
-                  );
-                  let reviewIndex = Math.min(
-                    Math.ceil((Number(lineIndex) + lineOffset) / 10) * 10,
-                    this.lines.length - 1
-                  );
-                  review[reviewIndex] = review[reviewIndex] || [];
-                  review[reviewIndex].push(reviewItem);
-                  seenLines.push(lineIndex);
-                }
-                this.reviewKeys[lineIndex]++;
-              }
+    },
+    async generateReview() {
+      let review = {};
+      for (let savedWord of this.$store.state.savedWords.savedWords[
+        this.$l2.code
+      ]) {
+        let word = await (await this.$getDictionary()).get(savedWord.id);
+        review = await this.addReviewItemsForWord(
+          word,
+          savedWord.forms,
+          review
+        );
+      }
+      return review;
+    },
+    async addReviewItemsForWord(word, wordForms, review) {
+      let lineOffset = 10; // Show review this number of lines after the first appearance of the word
+      if (word) {
+        let seenLines = [];
+        for (let form of wordForms
+          .filter((form) => form && form !== "-")
+          .sort((a, b) => b.length - a.length)) {
+          for (
+            let lineIndex = this.currentLineIndex;
+            lineIndex < this.lines.length;
+            lineIndex++
+          ) {
+            if (this.reviewConditions(seenLines, lineIndex, form, word)) {
+              let reviewItem = await this.generateReviewItem(
+                lineIndex,
+                form,
+                word
+              );
+              let reviewIndex = Math.min(
+                Math.ceil((Number(lineIndex) + lineOffset) / 10) * 10,
+                this.lines.length - 1
+              );
+              review[reviewIndex] = review[reviewIndex] || [];
+              review[reviewIndex].push(reviewItem);
+              seenLines.push(lineIndex);
             }
+            this.reviewKeys[lineIndex]++;
           }
         }
       }
-      this.review = review;
-      this.incrementReviewKeyAfterLine(this.currentLineIndex);
+      return review;
     },
     reviewConditions(seenLines, lineIndex, form, word) {
       if (!seenLines.includes(lineIndex)) {
@@ -364,7 +374,7 @@ export default {
         }
       }
     },
-    async generateReview(lineIndex, form, word) {
+    async generateReviewItem(lineIndex, form, word) {
       let line = this.lines[lineIndex];
       let similarWords = await this.findSimilarWords(form);
       if (similarWords.length < 2) {
