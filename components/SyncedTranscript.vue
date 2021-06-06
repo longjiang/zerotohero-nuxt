@@ -106,11 +106,11 @@ export default {
     },
     lines: {
       type: Array,
-      default: [],
+      default: () => [],
     },
     parallellines: {
       type: Array,
-      default: [],
+      default: () => [],
     },
     collapse: {
       default: false,
