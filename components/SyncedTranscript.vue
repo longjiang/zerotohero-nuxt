@@ -67,6 +67,7 @@
           ></div>
         </div>
         <div :key="`review-${lineIndex}-${reviewKeys[lineIndex]}`">
+          Review for {{ lineIndex }} {{ review[lineIndex] }}
           <h6
             class="text-center mt-3"
             v-if="review[lineIndex] && review[lineIndex].length > 0"
@@ -174,6 +175,7 @@ export default {
       currentTime: 0,
       currentLine: 0,
       currentLineIndex: 0,
+      reviewLineOffset: 10, // Show review this number of lines after the first appearance of the word
       nextLine: undefined,
       review: {},
       paused: true,
@@ -267,13 +269,6 @@ export default {
     smartquotes(text) {
       return SmartQuotes.string(text.replace(/&#39;/g, "'"));
     },
-    incrementReviewKeyAfterLine(lineIndex) {
-      for (let index in this.lines) {
-        if (index >= lineIndex) {
-          if (this.reviewKeys[lineIndex]) this.reviewKeys[lineIndex]++;
-        }
-      }
-    },
     nearestLineIndex(time) {
       let nearestLineIndex = 0;
       for (let lineIndex in this.lines) {
@@ -301,10 +296,13 @@ export default {
     async updateReview(mutation) {
       console.log("👹", mutation.type, mutation.payload);
       if (mutation.type === "savedWords/ADD_SAVED_WORD") {
-        // this.addReviewItemsForSavedWord();
-        this.incrementReviewKeyAfterLine(this.currentLineIndex);
+        this.addReviewItemsForWord(
+          mutation.payload.word,
+          mutation.payload.wordForms,
+          this.review
+        );
       } else if (mutation.type === "savedWords/REMOVE_SAVED_WORD") {
-        this.incrementReviewKeyAfterLine(this.currentLineIndex);
+        this.removeReviewItemsForWord(mutation.payload.word, this.review);
       }
     },
     async generateReview() {
@@ -313,45 +311,45 @@ export default {
         this.$l2.code
       ]) {
         let word = await (await this.$getDictionary()).get(savedWord.id);
-        review = await this.addReviewItemsForWord(
-          word,
-          savedWord.forms,
-          review
-        );
-      }
-      return review;
-    },
-    async addReviewItemsForWord(word, wordForms, review) {
-      let lineOffset = 10; // Show review this number of lines after the first appearance of the word
-      if (word) {
-        let seenLines = [];
-        for (let form of wordForms
-          .filter((form) => form && form !== "-")
-          .sort((a, b) => b.length - a.length)) {
-          for (
-            let lineIndex = this.currentLineIndex;
-            lineIndex < this.lines.length;
-            lineIndex++
-          ) {
-            if (this.reviewConditions(seenLines, lineIndex, form, word)) {
-              let reviewItem = await this.generateReviewItem(
-                lineIndex,
-                form,
-                word
-              );
-              let reviewIndex = Math.min(
-                Math.ceil((Number(lineIndex) + lineOffset) / 10) * 10,
-                this.lines.length - 1
-              );
-              review[reviewIndex] = review[reviewIndex] || [];
-              review[reviewIndex].push(reviewItem);
-              seenLines.push(lineIndex);
-            }
-            this.reviewKeys[lineIndex]++;
-          }
+        if (word) {
+          await this.addReviewItemsForWord(word, savedWord.forms, review);
         }
       }
       return review;
+    },
+    removeReviewItemsForWord(word, review) {
+      for (let reviewIndex in review) {
+        let length = review[reviewIndex].length
+        review[reviewIndex] = review[reviewIndex].filter(
+          (reviewItem) => word.id !== reviewItem.word.id
+        );
+        if (review[reviewIndex].length < length) this.reviewKeys[reviewIndex]++;
+      }
+    },
+    async addReviewItemsForWord(word, wordForms, review) {
+      let lineOffset = this.reviewLineOffset;
+      let seenLines = [];
+      for (let form of wordForms
+        .filter((form) => form && form !== "-")
+        .sort((a, b) => b.length - a.length)) {
+        for (let lineIndex in this.lines) {
+          if (this.reviewConditions(seenLines, lineIndex, form, word)) {
+            let reviewItem = await this.generateReviewItem(
+              lineIndex,
+              form,
+              word
+            );
+            let reviewIndex = Math.min(
+              Math.ceil((Number(lineIndex) + lineOffset) / 10) * 10,
+              this.lines.length - 1
+            );
+            review[reviewIndex] = review[reviewIndex] || [];
+            review[reviewIndex].push(reviewItem);
+            seenLines.push(lineIndex);
+            this.reviewKeys[reviewIndex]++;
+          }
+        }
+      }
     },
     reviewConditions(seenLines, lineIndex, form, word) {
       if (!seenLines.includes(lineIndex)) {
