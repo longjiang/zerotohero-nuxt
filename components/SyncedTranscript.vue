@@ -229,13 +229,10 @@ export default {
   watch: {
     async currentTime() {
       let progressType = this.checkProgress();
-      if ((progressType = "first play")) {
+      if ((progressType === "first play")) {
         console.log(progressType);
         if (this.currentTime > this.lines[0].starttime) {
-          this.currentLine = this.lines[0];
-          this.currentLineIndex = 0;
-          this.nextLine = this.lines[1];
-          this.doAudioModeStuff();
+          this.playNearestLine();
         }
       } else if (progressType === "within current line") {
         // do nothing
@@ -254,14 +251,7 @@ export default {
         this.doAudioModeStuff();
       } else if (progressType === "jump") {
         console.log(progressType);
-        let nearestLineIndex = this.nearestLineIndex(this.currentTime);
-        if (nearestLineIndex) {
-          let nearestLine = this.lines[nearestLineIndex];
-          this.currentLine = nearestLine;
-          this.currentLineIndex = nearestLineIndex;
-          this.nextLine = this.lines[nearestLineIndex + 1];
-          this.doAudioModeStuff();
-        }
+        this.playNearestLine();
       }
       this.previousTime = this.currentTime;
     },
@@ -271,6 +261,16 @@ export default {
     },
   },
   methods: {
+    playNearestLine() {
+      let nearestLineIndex = this.nearestLineIndex(this.currentTime);
+      if (nearestLineIndex) {
+        let nearestLine = this.lines[nearestLineIndex];
+        this.currentLine = nearestLine;
+        this.currentLineIndex = nearestLineIndex;
+        this.nextLine = this.lines[nearestLineIndex + 1];
+        this.doAudioModeStuff();
+      }
+    },
     async doAudioModeStuff() {
       if (this.audioMode && !this.paused) {
         this.$emit("pause");
@@ -309,8 +309,8 @@ export default {
         return "within current line";
       } else if (
         this.nextLine &&
-        this.currentTime > this.nextLine.starttime &&
-        this.currentTime < this.nextLine.starttime
+        this.currentTime > this.nextLine.starttime - 0.15 &&
+        this.currentTime < this.nextLine.starttime + 0.15
       ) {
         return "advance to next line";
       } else {
