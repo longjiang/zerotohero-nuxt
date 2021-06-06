@@ -92,6 +92,7 @@
 <script>
 import Helper from "@/lib/helper";
 import SmartQuotes from "smartquotes";
+import Vue from 'vue'
 
 export default {
   props: {
@@ -196,7 +197,6 @@ export default {
       if (!nextLine) break;
       matchedParallelLines[lineIndex] = this.parallellines
         .filter((l) => {
-          // console.log(l.starttime, line.starttime, nextLine ? nextLine.starttime : false)
           return (
             l.starttime >= line.starttime - 1 &&
             (!nextLine || l.starttime < nextLine.starttime - 1)
@@ -293,9 +293,8 @@ export default {
       );
     },
     async updateReview(mutation) {
-      console.log("👹", mutation.type, mutation.payload);
       if (mutation.type === "savedWords/ADD_SAVED_WORD") {
-        let affectedLines = this.addReviewItemsForWord(
+        let affectedLines = await this.addReviewItemsForWord(
           mutation.payload.word,
           mutation.payload.wordForms,
           this.review
@@ -322,20 +321,22 @@ export default {
       return review;
     },
     updateKeysForLines(affectedLines) {
-      for (let lineIndex of this.reviewKeys) {
-        if (affectedLines.includes(lineIndex)) {
-          this.reviewKeys[lineIndex]++
+      for (let lineIndex in this.reviewKeys) {
+        if (affectedLines.includes(Number(lineIndex))) {
+          Vue.set(this.reviewKeys, lineIndex, this.reviewKeys[lineIndex] + 1)
         }
       }
     },
     removeReviewItemsForWord(word, review) {
+      let affectedLines = []
       for (let reviewIndex in review) {
         let length = review[reviewIndex].length;
         review[reviewIndex] = review[reviewIndex].filter(
           (reviewItem) => word.id !== reviewItem.word.id
         );
-        if (review[reviewIndex].length < length) this.reviewKeys[reviewIndex]++;
+        if (review[reviewIndex].length < length) affectedLines.push(reviewIndex);
       }
+      return affectedLines
     },
     async addReviewItemsForWord(word, wordForms, review) {
       let lineOffset = this.reviewLineOffset;
@@ -356,7 +357,7 @@ export default {
             );
             review[reviewIndex] = review[reviewIndex] || [];
             review[reviewIndex].push(reviewItem);
-            affectedLines.push(lineIndex);
+            affectedLines.push(reviewIndex);
             this.reviewKeys[reviewIndex]++;
           }
         }
