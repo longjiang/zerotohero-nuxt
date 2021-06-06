@@ -1223,9 +1223,7 @@ ul.collapse-10.collapsed li:nth-child(-n + 10) {
 }
 
 .btn-small:hover {
-  background-color: #b5b5b5;
   text-decoration: none;
-  color: #868686;
 }
 
 .btn-small img {
@@ -1243,8 +1241,8 @@ ul.collapse-10.collapsed li:nth-child(-n + 10) {
 .btn-primary:hover,
 .btn-primary:focus,
 .btn-primary:not(:disabled):not(.disabled):active {
-  background-color: #ce3d11;
-  border-color: #ce3d11;
+  background-color: #fd4f1c;
+  border-color: #fd4f1c;
   color: white;
 }
 
@@ -1256,7 +1254,7 @@ ul.collapse-10.collapsed li:nth-child(-n + 10) {
 .btn-gray:hover {
   color: white;
   text-decoration: none;
-  background: #989898;
+  color: #8e8e8e;
 }
 
 .article {

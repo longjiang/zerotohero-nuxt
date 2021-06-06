@@ -38,37 +38,6 @@
           v-html="highlight(reviewItem.line.line, reviewItem.text, hsk)"
         />
       </Annotate>
-      <Speak
-        :text="reviewItem.line.line"
-        style="
-          background: white;
-          border-radius: 100%;
-          border: 1px solid #ccc;
-          width: 2rem;
-          height: 2rem;
-          display: inline-block;
-          overflow: hidden;
-          margin-bottom: 0;
-          padding: 0;
-        "
-      />
-      <button
-        style="
-          background: white;
-          border-radius: 100%;
-          border: 1px solid #ccc;
-          color: #999;
-          width: 2rem;
-          height: 2rem;
-          display: inline-block;
-          overflow: hidden;
-          margin-bottom: 0;
-          padding: 0;
-        "
-        @click="$parent.seekVideoTo(reviewItem.line.starttime)"
-      >
-        <i class="fas fa-arrow-up"></i>
-      </button>
       <div class="mt-2">
         <ReviewAnswerButton
           v-for="(answer, index) in reviewItem.answers"
@@ -76,6 +45,40 @@
           :answer="answer"
           @answered="answered(answer)"
         />
+        <Speak
+          :text="reviewItem.line.line"
+          style="
+            background: white;
+            border-radius: 100%;
+            border: 1px solid #999;
+            width: 1.7rem;
+            height: 1.7rem;
+            display: inline-block;
+            overflow: hidden;
+            margin-bottom: 0;
+            padding: 0;
+            margin-right: 0.3rem;
+            font-size: 0.8em;
+          "
+        />
+        <button
+          style="
+            background: white;
+            border-radius: 100%;
+            border: 1px solid #999;
+            color: #999;
+            width: 1.7rem;
+            height: 1.7rem;
+            display: inline-block;
+            overflow: hidden;
+            margin-bottom: 0;
+            padding: 0;
+            font-size: 0.8em;
+          "
+          @click="$parent.seekVideoTo(reviewItem.line.starttime)"
+        >
+          <i class="fas fa-arrow-up"></i>
+        </button>
       </div>
     </div>
   </div>

@@ -3,7 +3,6 @@
     :class="{
       btn: true,
       'bg-white': true,
-      'mr-2': true,
       'review-answer': true,
       checked: checked,
       'review-answer-correct': answer.correct,
@@ -60,12 +59,14 @@ export default {
 </script>
         
 <style>
-.review-answer {
+.review-answer,
+.review-answer:hover {
   border: 1px solid #999;
   padding: 0.1rem 0.3rem;
   font-size: 0.9em;
   color: #999;
   min-width: 5rem;
+  margin-right: 0.5rem;
 }
 
 .review-answer.checked:not(.review-answer-correct) {
