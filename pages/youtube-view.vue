@@ -44,7 +44,7 @@
         fullscreen: layout === 'vertical',
       }"
     >
-      <div :class="{'loader text-center pt-5 pb-5': true, 'd-none': video}">
+      <div :class="{ 'loader text-center pt-5 pb-5': true, 'd-none': video }">
         <div class="heartbeat-loader"></div>
       </div>
       <YouTubeWithTranscript
@@ -64,6 +64,8 @@
         @paused="updatePaused"
         @ended="updateEnded"
         @currentTime="updateCurrentTime"
+        @speechStart="speechStart"
+        @speechEnd="speechEnd"
       />
       <div
         v-if="video"
@@ -137,11 +139,13 @@
           <i class="fas fa-arrow-up"></i>
         </button>
         <button
-          class="quick-access-button play-pause shadow btn-primary d-inline-block text-center"
+          :class="{'quick-access-button play-pause shadow d-inline-block text-center' : true, 'btn-primary': !speaking}"
+          :disabled="speaking"
           @click="togglePaused"
         >
-          <i v-if="paused" class="fas fa-play"></i>
-          <i v-else class="fas fa-pause"></i>
+          <i v-if="paused && !speaking" class="fas fa-play"></i>
+          <i v-if="paused && speaking" class="fas fa-volume-up"></i>
+          <i v-if="!paused && !speaking" class="fas fa-pause"></i>
         </button>
         <button
           class="quick-access-button shadow btn-secondary d-inline-block text-center"
@@ -209,6 +213,7 @@ export default {
       video: undefined,
       showList: false,
       show: undefined,
+      speaking: false,
       paused: true,
       speed: 1,
       starttime: 0,
@@ -369,6 +374,12 @@ export default {
         }
       }
     },
+    speechStart() {
+      this.speaking = true;
+    },
+    speechEnd() {
+      this.speaking = false;
+    },
     updatePaused(paused) {
       if (paused !== this.paused) {
         this.paused = paused;
@@ -432,7 +443,7 @@ export default {
       if (lang.locales) {
         locales = locales.concat(lang.locales);
       }
-      return await YouTube.getTranscriptByLocales(this.youtube_id, locales)
+      return await YouTube.getTranscriptByLocales(this.youtube_id, locales);
     },
     async getL2TranscriptIfNeeded(video) {
       if (video.subs_l2 && Array.isArray(video.subs_l2)) {

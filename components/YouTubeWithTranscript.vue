@@ -168,6 +168,8 @@
             @seek="seekYouTube"
             @pause="pause"
             @play="play"
+            @speechStart="speechStart"
+            @speechEnd="speechEnd"
           />
           <div class="text-center mt-5">
             <router-link
@@ -237,6 +239,8 @@
               @seek="seekYouTube"
               @pause="pause"
               @play="play"
+              @speechStart="speechStart"
+              @speechEnd="speechEnd"
             />
           </div>
         </div>
@@ -309,6 +313,7 @@ export default {
     return {
       firstLineTime: 0,
       subsUpdated: false,
+      speaking: false,
       over: false,
       transcriptKey: 0,
       paused: true,
@@ -399,8 +404,7 @@ export default {
         if (response && response.data) {
           this.subsUpdated = true;
         }
-      } catch (err) {
-      }
+      } catch (err) {}
     },
     async changeTopic(slug) {
       let response = await $.ajax({
@@ -477,6 +481,14 @@ export default {
     play() {
       this.$refs.youtube.play();
     },
+    speechStart() {
+      this.$emit("speechStart");
+      this.speaking = true;
+    },
+    speechEnd() {
+      this.$emit("speechEnd");
+      this.speaking = false;
+    },
     getHighlightStartTime(term) {
       let matchedLines = this.video.subs_l2.filter((line) =>
         line.line.includes(term)
@@ -505,10 +517,12 @@ export default {
       }
     },
     repeatMode() {
-      if (this.$refs.transcript) this.$refs.transcript.repeatMode = this.repeatMode;
+      if (this.$refs.transcript)
+        this.$refs.transcript.repeatMode = this.repeatMode;
     },
     audioMode() {
-      if (this.$refs.transcript) this.$refs.transcript.audioMode = this.audioMode;
+      if (this.$refs.transcript)
+        this.$refs.transcript.audioMode = this.audioMode;
     },
     firstLineTime() {
       if (this.video.subs_l2 && this.video.subs_l2.length > 0) {

@@ -246,23 +246,15 @@ export default {
           this.currentLine = this.nextLine;
           this.currentLineIndex = this.currentLineIndex + 1;
           this.nextLine = this.lines[this.currentLineIndex + 1];
-          if (this.audioMode) {
-            this.$emit("pause");
-            Helper.speak(
-              await this.decodeHtmlEntities(this.matchedParallelLines[this.currentLineIndex]),
-              this.$l1,
-              1
-            );
-            Helper.speak(await this.decodeHtmlEntities(this.currentLine.line), this.$l2, 1);
-            // this.$emit("play");
-          }
         }
+        this.doAudioModeStuff()
       } else if (progressType === "jump") {
         let nearestLineIndex = this.nearestLineIndex(this.currentTime);
         let nearestLine = this.lines[nearestLineIndex];
         this.currentLine = nearestLine;
         this.currentLineIndex = nearestLineIndex;
         this.nextLine = this.lines[nearestLineIndex + 1];
+        this.doAudioModeStuff()
       }
       this.previousTime = this.currentTime;
     },
@@ -272,10 +264,30 @@ export default {
     },
   },
   methods: {
+    async doAudioModeStuff() {
+      if (this.audioMode && !this.paused) {
+        this.$emit("pause");
+        this.$emit("speechStart");
+        await Helper.speak(
+          await this.decodeHtmlEntities(
+            this.matchedParallelLines[this.currentLineIndex]
+          ),
+          this.$l1,
+          1
+        );
+        await Helper.speak(
+          await this.decodeHtmlEntities(this.currentLine.line),
+          this.$l2,
+          1
+        );
+        this.$emit("speechEnd");
+        this.$emit("play");
+      }
+    },
     async decodeHtmlEntities(text) {
-      const HTMLEntities = await import ('html-entities');
-      const allEntities = new HTMLEntities.AllHtmlEntities()
-      return allEntities.decode(text)
+      const HTMLEntities = await import("html-entities");
+      const allEntities = new HTMLEntities.AllHtmlEntities();
+      return allEntities.decode(text);
     },
     checkProgress() {
       if (!this.currentLine) {
