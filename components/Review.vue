@@ -1,27 +1,6 @@
 <template>
   <div :class="{ review: true, 'show-answer': showAnswer }">
-    <div class="review-item mt-2">
-      <div
-        v-if="$l2.code !== $l1.code && parallellines"
-        :class="{
-          'transcript-line-l1': true,
-          'text-right':
-            $l2.scripts &&
-            $l2.scripts.length > 0 &&
-            $l2.scripts[0].direction === 'rtl',
-        }"
-      >
-        <template
-          v-for="(parallelLine, parallelLineIndex) in parallellines.filter(
-            (l) => l.starttime === reviewItem.line.starttime
-          )"
-        >
-          <span
-            v-html="parallelLine.line"
-            :key="`review-parallel-line-${parallelLineIndex}`"
-          />
-        </template>
-      </div>
+    <div class="review-item">
       <Annotate tag="span" :buttons="true" class="transcript-line-chinese">
         <span
           v-if="$l2.han && $l2.code !== 'ja'"
@@ -38,6 +17,25 @@
           v-html="highlight(reviewItem.line.line, reviewItem.text, hsk)"
         />
       </Annotate>
+      <div
+        v-if="$l2.code !== $l1.code && reviewItem.parallelLines"
+        :class="{
+          'transcript-line-l1': true,
+          'text-right':
+            $l2.scripts &&
+            $l2.scripts.length > 0 &&
+            $l2.scripts[0].direction === 'rtl',
+        }"
+      >
+        <template
+          v-for="(parallelLine, parallelLineIndex) in reviewItem.parallelLines"
+        >
+          <span
+            v-html="parallelLine.line"
+            :key="`review-parallel-line-${parallelLineIndex}`"
+          />&nbsp;
+        </template>
+      </div>
       <div class="mt-2">
         <ReviewAnswerButton
           v-for="(answer, index) in reviewItem.answers"
@@ -103,9 +101,6 @@ export default {
     },
   },
   props: {
-    parallellines: {
-      type: Array,
-    },
     reviewItem: {
       type: Object,
     },
@@ -142,7 +137,7 @@ export default {
   background-color: #f3f3f3;
   border-radius: 0.5rem;
   &.show-answer {
-    background-color: #d6f5d8;
+    background-color: #e4f8e5;
   }
 }
 

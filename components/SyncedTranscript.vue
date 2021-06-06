@@ -56,7 +56,7 @@
           <div
             v-if="$l2.code !== $l1.code && parallellines"
             :class="{
-              'transcript-line-l1': true,
+              'transcript-line-l1 pl-3': true,
               'text-right':
                 $l2.scripts &&
                 $l2.scripts.length > 0 &&
@@ -65,10 +65,14 @@
           >
             <template
               v-for="parallelLine in parallellines.filter(
-                (l) => l.starttime === line.starttime
+                (l) =>
+                  l.starttime >= line.starttime - 1 &&
+                  (!lines[lineIndex + 1] ||
+                    l.starttime < lines[lineIndex + 1].starttime - 1)
               )"
             >
               <span v-html="parallelLine.line" />
+              &nbsp;
             </template>
           </div>
         </div>
@@ -312,11 +316,7 @@ export default {
                     word
                   );
                   let reviewIndex = Math.min(
-                    Math.ceil(
-                      (Number(lineIndex) +
-                        lineOffset) /
-                        10
-                    ) * 10,
+                    Math.ceil((Number(lineIndex) + lineOffset) / 10) * 10,
                     this.lines.length - 1
                   );
                   review[reviewIndex] = review[reviewIndex] || [];
@@ -378,9 +378,16 @@ export default {
         traditional: word.traditional,
         correct: true,
       });
+      let parallelLines = this.parallellines.filter(
+        (l) =>
+          l.starttime >= line.starttime - 1 &&
+          (!this.lines[lineIndex + 1] ||
+            l.starttime < this.lines[lineIndex + 1].starttime - 1)
+      );
       return {
         line,
         lineIndex,
+        parallelLines,
         text: form,
         word,
         simplified: word.simplified,

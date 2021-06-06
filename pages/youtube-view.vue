@@ -197,7 +197,6 @@ export default {
   },
   data() {
     return {
-      l2Locale: undefined,
       video: undefined,
       showList: false,
       show: undefined,
@@ -272,7 +271,8 @@ export default {
       let youtube_video = await YouTube.videoByApi(this.youtube_id);
       if (youtube_video) video = Object.assign(youtube_video, video || {});
     }
-    video.subs_l2 = await this.getTranscript(video);
+    video.subs_l2 = await this.getL2TranscriptIfNeeded(video);
+    video.subs_l1 = await this.getTranscriptByLang(this.$l1);
 
     if (video.subs_l2 && video.subs_l2.length > 0) {
       this.firstLineTime = video.subs_l2[0].starttime;
@@ -414,20 +414,14 @@ export default {
         }
       }
     },
-    async getL2Transcript() {
-      let locales = [this.$l2.code];
-      if (this.$l2.locales) {
-        locales = locales.concat(this.$l2.locales);
+    async getTranscriptByLang(lang) {
+      let locales = [lang.code];
+      if (lang.locales) {
+        locales = locales.concat(lang.locales);
       }
-      let tracks = await YouTube.getSubsList(this.youtube_id)
-      for (let track of tracks) {
-        if (locales.includes(track.locale)) {
-          this.l2Locale = track.locale;
-          return await YouTube.getTranscript(this.youtube_id, track.locale, track.name)
-        }
-      }
+      return await YouTube.getTranscriptByLocales(this.youtube_id, locales)
     },
-    async getTranscript(video) {
+    async getL2TranscriptIfNeeded(video) {
       if (video.subs_l2 && Array.isArray(video.subs_l2)) {
         return video.subs_l2;
       }
@@ -442,7 +436,7 @@ export default {
         }
       }
       if (!video.subs_l2 || video.subs_l2.length === 0) {
-        return await this.getL2Transcript();
+        return await this.getTranscriptByLang(this.$l2);
       }
     },
     async addChannelID(video) {
