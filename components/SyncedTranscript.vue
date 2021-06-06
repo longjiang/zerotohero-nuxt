@@ -268,13 +268,15 @@ export default {
       if (this.audioMode && !this.paused) {
         this.$emit("pause");
         this.$emit("speechStart");
-        await Helper.speak(
-          await this.decodeHtmlEntities(
-            this.matchedParallelLines[this.currentLineIndex]
-          ),
-          this.$l1,
-          1
-        );
+        if (this.matchedParallelLines[this.currentLineIndex]) {
+          await Helper.speak(
+            await this.decodeHtmlEntities(
+              this.matchedParallelLines[this.currentLineIndex]
+            ),
+            this.$l1,
+            1
+          );
+        }
         await Helper.speak(
           await this.decodeHtmlEntities(this.currentLine.line),
           this.$l2,
@@ -301,7 +303,7 @@ export default {
       } else if (
         this.nextLine &&
         this.currentTime > this.nextLine.starttime &&
-        this.currentTime < this.nextLine.starttime + 0.15
+        this.currentTime < this.nextLine.starttime
       ) {
         return "advance to next line";
       } else {
