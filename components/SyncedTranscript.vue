@@ -226,7 +226,7 @@ export default {
         this.repeat &&
         this.currentLine !== nearestLine &&
         progress > 0 &&
-        progress < 0.3
+        progress < 0.15
       )
         this.rewind();
       else {
