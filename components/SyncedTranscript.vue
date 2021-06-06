@@ -232,12 +232,10 @@ export default {
   },
   watch: {
     currentTime() {
-      let progressType = this.checkProgress()
+      let progressType = this.checkProgress();
       if (progressType === "within current line") {
-        this.previousTime = this.currentTime;
-      } else {
-        let nearestLineIndex = this.nearestLineIndex(this.currentTime);
-        let nearestLine = this.lines[nearestLineIndex];
+        // do nothing
+      } else if (progressType === "advance to next line") {
         let progress = this.currentTime - this.previousTime;
         if (
           this.repeat &&
@@ -247,12 +245,18 @@ export default {
         )
           this.rewind();
         else {
-          this.currentLine = nearestLine;
-          this.currentLineIndex = nearestLineIndex;
-          this.nextLine = this.lines[nearestLineIndex + 1];
+          this.currentLine = this.nextLine;
+          this.currentLineIndex = this.currentLineIndex + 1;
+          this.nextLine = this.lines[this.currentLineIndex + 1];
         }
-        this.previousTime = this.currentTime;
+      } else if (progressType === "jump") {
+        let nearestLineIndex = this.nearestLineIndex(this.currentTime);
+        let nearestLine = this.lines[nearestLineIndex];
+        this.currentLine = nearestLine;
+        this.currentLineIndex = nearestLineIndex;
+        this.nextLine = this.lines[nearestLineIndex + 1];
       }
+      this.previousTime = this.currentTime;
     },
     currentLine() {
       if (!this.single && this.currentLineIndex !== 0)
@@ -262,7 +266,7 @@ export default {
   methods: {
     checkProgress() {
       if (!this.currentLine) {
-        return 'first play'
+        return "first play";
       } else if (
         this.currentTime > this.currentLine.starttime - 0.15 &&
         this.nextLine &&
@@ -270,7 +274,7 @@ export default {
       ) {
         return "within current line";
       } else if (
-        this.nextLine && 
+        this.nextLine &&
         this.currentTime > this.nextLine.starttime &&
         this.currentTime < this.nextLine.starttime + 0.15
       ) {
