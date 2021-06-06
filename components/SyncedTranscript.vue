@@ -174,7 +174,7 @@ export default {
       id: Helper.uniqueId(),
       previousTime: 0,
       currentTime: 0,
-      currentLine: 0,
+      currentLine: undefined,
       currentLineIndex: 0,
       reviewLineOffset: 10, // Show review this number of lines after the first appearance of the word
       nextLine: undefined,
@@ -261,7 +261,9 @@ export default {
   },
   methods: {
     checkProgress() {
-      if (
+      if (!this.currentLine) {
+        return 'first play'
+      } else if (
         this.currentTime > this.currentLine.starttime - 0.15 &&
         this.nextLine &&
         this.currentTime < this.nextLine.starttime
