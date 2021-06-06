@@ -152,9 +152,9 @@
         <button
           :class="{
             'quick-access-button shadow btn-secondary d-inline-block text-center': true,
-            'btn-primary': repeat,
+            'btn-primary': repeatMode,
           }"
-          @click="repeat = !repeat"
+          @click="repeatMode = !repeatMode"
         >
           <i class="fas fa-undo"></i>
         </button>
@@ -207,7 +207,7 @@ export default {
       episodes: [],
       filterList: "",
       layout: "horizontal",
-      repeat: false,
+      repeatMode: false,
       randomEpisodeYouTubeId: undefined,
     };
   },
@@ -304,8 +304,8 @@ export default {
     this.unbindKeys();
   },
   watch: {
-    repeat() {
-      this.$refs.youtube.repeat = this.repeat;
+    repeatMode() {
+      this.$refs.youtube.repeatMode = this.repeatMode;
     },
     async show() {
       if (this.show) {

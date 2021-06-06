@@ -181,7 +181,7 @@ export default {
       review: {},
       paused: true,
       ended: false,
-      repeat: false,
+      repeatMode: false,
       reviewKeys: [],
       neverPlayed: true,
     };
@@ -237,14 +237,14 @@ export default {
         // do nothing
       } else if (progressType === "advance to next line") {
         let progress = this.currentTime - this.previousTime;
-        if (
-          this.repeat &&
-          this.currentLine !== nearestLine &&
-          progress > 0 &&
-          progress < 0.15
-        )
-          this.rewind();
-        else {
+        if (this.repeatMode) {
+          if (
+            progress > 0 &&
+            progress < 0.15
+          ) {
+            this.rewind();
+          }
+        } else {
           this.currentLine = this.nextLine;
           this.currentLineIndex = this.currentLineIndex + 1;
           this.nextLine = this.lines[this.currentLineIndex + 1];
