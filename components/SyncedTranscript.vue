@@ -10,10 +10,7 @@
     >
       <template v-for="(line, lineIndex) in lines">
         <div
-          :key="`line-${lineIndex}-${line.starttime}-${line.line.substr(
-            0,
-            10
-          )}`"
+          :key="`line-${lineIndex}-${line.starttime}-${line.line.substr(0, 10)}`"
           :class="{
             'transcript-line': true,
             matched:
@@ -73,14 +70,13 @@
           </div>
         </div>
         <div
+          v-if="review[lineIndex] && review[lineIndex].length > 0"
           :key="`review-${lineIndex}-${reviewKeys[lineIndex]}`"
         >
-          <h6 class="text-center mt-3" v-if="review[lineIndex] && review[lineIndex].length > 0">Pop Quiz</h6>
+          <h6 class="text-center mt-3">Pop Quiz</h6>
           <Review
             v-for="(reviewItem, reviewItemIndex) in review[lineIndex]"
-            :key="`review-${lineIndex}-${reviewKeys[lineIndex]}-${reviewItemIndex}-${
-              reviewItem.simplified || reviewItem.traditional || reviewItem.text
-            }`"
+            :key="`review-${lineIndex}-${reviewKeys[lineIndex]}-${reviewItemIndex}`"
             :reviewItem="reviewItem"
             :hsk="hsk"
             :parallellines="parallellines || []"
@@ -249,11 +245,11 @@ export default {
       return SmartQuotes.string(text.replace(/&#39;/g, "'"));
     },
     incrementReviewKeyAfterLine(lineIndex) {
-      for (let index in this.lines) {
-        if (index >= lineIndex) {
-          if (this.reviewKeys[lineIndex]) this.reviewKeys[lineIndex]++
-        }
-      }
+      // for (let index in this.lines) {
+      //   if (index >= lineIndex) {
+      //     if (this.reviewKeys[lineIndex]) this.reviewKeys[lineIndex]++
+      //   }
+      // }
     },
     nearestLineIndex(time) {
       let nearestLineIndex = 0;
@@ -325,7 +321,6 @@ export default {
                   );
                   review[reviewIndex] = review[reviewIndex] || [];
                   review[reviewIndex].push(reviewItem);
-                  // console.log(`adding`, reviewItem, `to line ${reviewIndex}`)
                   seenLines.push(lineIndex);
                 }
                 this.reviewKeys[lineIndex]++;
@@ -335,7 +330,6 @@ export default {
         }
       }
       this.review = review;
-      console.log(review)
       this.incrementReviewKeyAfterLine(this.currentLineIndex);
     },
     reviewConditions(seenLines, lineIndex, form, word) {
