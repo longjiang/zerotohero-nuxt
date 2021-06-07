@@ -515,11 +515,15 @@ export default {
     },
     togglePaused() {
       if (this.audioMode) {
-        if (this.speaking) {
-          this.$refs.transcript.stopAudioModeStuff();
+        if (!this.paused) {
+          this.$refs.youtube.pause();
         } else {
-          this.$refs.transcript.doAudioModeStuff();
-        }        
+          if (this.speaking) {
+            this.$refs.transcript.stopAudioModeStuff();
+          } else {
+            this.$refs.transcript.doAudioModeStuff();
+          }
+        }
       } else {
         this.$refs.youtube.togglePaused();
       }

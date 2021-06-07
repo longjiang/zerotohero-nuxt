@@ -353,7 +353,7 @@ export default {
       }
     },
     stopAudioModeStuff() {
-      console.log("🤚 stopping audio stuff");
+      // console.log("🤚 stopping audio stuff");
       this.audioCancelled = true;
       window.speechSynthesis.cancel();
       this.$emit("speechEnd");
