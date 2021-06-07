@@ -18,12 +18,12 @@
         />
       </Annotate>
       <span class="ml-1">
-        <Speak
-          :text="reviewItem.line.line"
+        <button
           style="
             background: white;
             border-radius: 100%;
             border: 1px solid #999;
+            color: #999;
             width: 1.7rem;
             height: 1.7rem;
             display: inline-block;
@@ -31,7 +31,11 @@
             padding: 0;
             font-size: 0.8em;
           "
-        />
+          @click="speak"
+        >
+          <i class="fas fa-volume-up"></i>
+        </button>
+      </span>
         <button
           style="
             background: white;
@@ -101,6 +105,12 @@ export default {
     },
   },
   methods: {
+    async speak() {
+      await Helper.speak(this.reviewItem.line.line, this.$l2, 1, 0.5)
+      if (this.reviewItem.parallelLines) {
+        await Helper.speak(this.reviewItem.parallelLines, this.$l1, 1.1, 0.3)
+      }
+    },
     answered(answer) {
       if (answer.correct) {
         this.showAnswer = true;
@@ -147,7 +157,7 @@ export default {
 
 .review .transcript-line-l1 {
   color: #999;
-  font-size: 0.7em;
+  font-size: 13.44px;
   padding-left: 0.5rem;
 }
 </style>

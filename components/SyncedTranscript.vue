@@ -326,7 +326,7 @@ export default {
           ),
           this.$l1,
           1.1,
-          0.3
+          0.2
         );
         // console.log(englishPromise, "englishPromise");
         await englishPromise;
@@ -341,14 +341,19 @@ export default {
             await this.decodeHtmlEntities(this.currentLine.line),
             this.$l2,
             1,
-            0.5
+            0.6
           );
           // console.log(japanesePromise, "japanesePromise");
           await japanesePromise;
           // console.log("🇯🇵 japanese finished");
           // console.log("📺 resuming");
+          if(this.quiz && this.review[this.currentLineIndex]) {
+            await Helper.speak('Please complete the pop quiz', this.$l1, 1.1, 0.2)
+          } else {
+            this.$emit("play");
+          }
           this.$emit("speechEnd");
-          this.$emit("play");
+          
         }
       }
     },
