@@ -266,7 +266,7 @@ export default {
       if (!this.currentLine) {
         return "first play";
       } else if (
-        this.currentTime > this.currentLine.starttime - 0.15 &&
+        this.currentTime > this.currentLine.starttime - 0.3 &&
         this.nextLine &&
         this.currentTime < this.nextLine.starttime
       ) {
@@ -284,7 +284,7 @@ export default {
     nearestLineIndex(time) {
       let nearestLineIndex = undefined;
       for (let lineIndex in this.lines) {
-        lineIndex = Number(lineIndex)
+        lineIndex = Number(lineIndex);
         if (
           this.lines[lineIndex].starttime <= time &&
           this.lines[lineIndex + 1] &&
@@ -312,7 +312,7 @@ export default {
     },
     async doAudioModeStuff() {
       if (!this.currentLineIndex) {
-        this.currentTime = this.currentTime + 0.1
+        this.currentTime = this.currentTime + 0.1;
       }
       // console.log("🍉 started do audio stuff");
       this.$emit("pause");
@@ -321,8 +321,9 @@ export default {
         // await Helper.timeout(1000);
         this.$emit("speechStart");
         let englishPromise = Helper.speak(
-          await this.decodeHtmlEntities(
-            this.matchedParallelLines[this.currentLineIndex]
+          this.matchedParallelLines[this.currentLineIndex].replace(
+            /&#39;/g,
+            "’"
           ),
           this.$l1,
           1.1,
@@ -338,7 +339,7 @@ export default {
           // console.log("🇯🇵 japanese finished");
           this.$emit("speechStart");
           let japanesePromise = Helper.speak(
-            await this.decodeHtmlEntities(this.currentLine.line),
+            this.currentLine.line.replace(/&#39;/g, "’"),
             this.$l2,
             1,
             0.6
@@ -347,13 +348,17 @@ export default {
           await japanesePromise;
           // console.log("🇯🇵 japanese finished");
           // console.log("📺 resuming");
-          if(this.quiz && this.review[this.currentLineIndex]) {
-            await Helper.speak('Please complete the pop quiz', this.$l1, 1.1, 0.2)
+          if (this.quiz && this.review[this.currentLineIndex]) {
+            await Helper.speak(
+              "Please complete the pop quiz",
+              this.$l1,
+              1.1,
+              0.2
+            );
           } else {
             this.$emit("play");
           }
           this.$emit("speechEnd");
-          
         }
       }
     },

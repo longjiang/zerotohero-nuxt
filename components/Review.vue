@@ -106,10 +106,10 @@ export default {
   },
   methods: {
     async speak() {
-      await Helper.speak(this.reviewItem.line.line, this.$l2, 1, 0.5)
       if (this.reviewItem.parallelLines) {
-        await Helper.speak(this.reviewItem.parallelLines, this.$l1, 1.1, 0.3)
+        await Helper.speak(this.reviewItem.parallelLines.replace(/&#39;/g, "’"), this.$l1, 1.1, 0.3)
       }
+      await Helper.speak(this.reviewItem.line.line, this.$l2, 1, 0.5)
     },
     answered(answer) {
       if (answer.correct) {
