@@ -247,7 +247,7 @@ export default {
           this.currentLineIndex = this.currentLineIndex + 1;
           this.nextLine = this.lines[this.currentLineIndex + 1];
         }
-        if (!this.paused) this.doAudioModeStuff();
+        if (!this.paused && this.audioMode) this.doAudioModeStuff();
       } else if (progressType === "jump") {
         this.playNearestLine();
       }
@@ -266,7 +266,7 @@ export default {
         this.currentLine = nearestLine;
         this.currentLineIndex = nearestLineIndex;
         this.nextLine = this.lines[nearestLineIndex + 1];
-        if (!this.paused) this.doAudioModeStuff();
+        if (!this.paused && this.audioMode) this.doAudioModeStuff();
       } else {
         this.currentLine = undefined;
         this.currentLineIndex = undefined;
@@ -274,30 +274,36 @@ export default {
       }
     },
     async doAudioModeStuff() {
-      if (this.audioMode) {
-        this.$emit("pause");
-        this.$emit("speechStart");
-        this.audioCancelled = false;
-        if (this.matchedParallelLines[this.currentLineIndex]) {
-          await Helper.speak(
-            await this.decodeHtmlEntities(
-              this.matchedParallelLines[this.currentLineIndex]
-            ),
-            this.$l1,
-            1.1,
-            0.3
-          );
-        }
-        if (!this.audioCancelled) {
+      console.log("🍉 started do audio stuff");
+      this.$emit("pause");
+      this.$emit("speechStart");
+      this.audioCancelled = false;
+      if (this.matchedParallelLines[this.currentLineIndex]) {
+        // await Helper.timeout(1000);
+        await Helper.speak(
+          await this.decodeHtmlEntities(
+            this.matchedParallelLines[this.currentLineIndex]
+          ),
+          this.$l1,
+          1.1,
+          0.3
+        );
+        console.log("🇺🇸 english finished");
+      }
+      if (!this.audioCancelled && !window.speechSynthesis.speaking) {
+        if (this.currentLine) {
+          // await Helper.timeout(1000);
           await Helper.speak(
             await this.decodeHtmlEntities(this.currentLine.line),
             this.$l2,
             1,
             0.5
           );
-          this.$emit("speechEnd");
-          this.$emit("play");
+          console.log("🇯🇵 japanese finished");
         }
+        console.log("📺 resuming");
+        this.$emit("speechEnd");
+        this.$emit("play");
       }
     },
     stopAudioModeStuff() {

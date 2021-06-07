@@ -348,6 +348,13 @@ export default {
         return this.$store.state.settings.adminMode;
     },
   },
+  updated() {
+    if (this.$refs.transcript) {
+      this.$refs.transcript.repeatMode = this.repeatMode;
+      this.$refs.transcript.audioMode = this.audioMode;
+    }
+    if (this.$refs.youtube) this.$refs.youtube.speed = this.speed;
+  },
   methods: {
     handleDrop(data, event) {
       event.preventDefault();
@@ -507,18 +514,14 @@ export default {
       this.$refs.youtube.pause();
     },
     togglePaused() {
-      if (this.paused && !this.speaking) {
-        if (this.audioMode) {
-          this.$refs.transcript.doAudioModeStuff();
-        } else {
-          this.$refs.youtube.play();
-        }
+      console.log('this.audiomode', this.audioMode)
+      if (this.audioMode) {
+        this.$refs.transcript.doAudioModeStuff();
+        this.$refs.youtube.play();
+        this.$refs.transcript.stopAudioModeStuff();
+        this.$refs.youtube.pause();
       } else {
-        if (this.audioMode) {
-          this.$refs.transcript.stopAudioModeStuff();
-        } else {
-          this.$refs.youtube.pause();
-        }
+        this.$refs.youtube.togglePaused();
       }
     },
   },

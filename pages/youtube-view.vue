@@ -318,6 +318,11 @@ export default {
   destroyed() {
     this.unbindKeys();
   },
+  updated() {
+    this.$refs.youtube.repeatMode = this.repeatMode;
+    this.$refs.youtube.audioMode = this.audioMode;
+    this.$refs.youtube.speed = this.speed;
+  },
   watch: {
     repeatMode() {
       this.$refs.youtube.repeatMode = this.repeatMode;
