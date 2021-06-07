@@ -283,7 +283,6 @@ export default {
     },
     nearestLineIndex(time) {
       let nearestLineIndex = undefined;
-      console.log(this.lines[0].starttime, time, this.lines[0 + 1].starttime)
       for (let lineIndex in this.lines) {
         lineIndex = Number(lineIndex)
         if (
@@ -299,7 +298,6 @@ export default {
     },
     playNearestLine() {
       let nearestLineIndex = this.nearestLineIndex(this.currentTime);
-      console.log(nearestLineIndex, "nearestLineIndex");
       if (typeof nearestLineIndex !== "undefined") {
         let nearestLine = this.lines[nearestLineIndex];
         this.currentLine = nearestLine;
@@ -313,12 +311,15 @@ export default {
       }
     },
     async doAudioModeStuff() {
+      if (!this.currentLineIndex) {
+        this.currentTime = this.currentTime + 0.1
+      }
       console.log("🍉 started do audio stuff");
       this.$emit("pause");
-      this.$emit("speechStart");
       this.audioCancelled = false;
       if (this.matchedParallelLines[this.currentLineIndex]) {
         // await Helper.timeout(1000);
+        this.$emit("speechStart");
         let englishPromise = Helper.speak(
           await this.decodeHtmlEntities(
             this.matchedParallelLines[this.currentLineIndex]
@@ -335,6 +336,7 @@ export default {
         if (this.currentLine) {
           // await Helper.timeout(1000);
           // console.log("🇯🇵 japanese finished");
+          this.$emit("speechStart");
           let japanesePromise = Helper.speak(
             await this.decodeHtmlEntities(this.currentLine.line),
             this.$l2,
@@ -344,10 +346,10 @@ export default {
           console.log(japanesePromise, "japanesePromise");
           await japanesePromise;
           console.log("🇯🇵 japanese finished");
+          // console.log("📺 resuming");
+          this.$emit("speechEnd");
+          this.$emit("play");
         }
-        // console.log("📺 resuming");
-        this.$emit("speechEnd");
-        this.$emit("play");
       }
     },
     stopAudioModeStuff() {
