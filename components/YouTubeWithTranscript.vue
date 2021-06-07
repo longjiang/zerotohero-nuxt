@@ -514,12 +514,12 @@ export default {
       this.$refs.youtube.pause();
     },
     togglePaused() {
-      console.log('this.audiomode', this.audioMode)
       if (this.audioMode) {
-        this.$refs.transcript.doAudioModeStuff();
-        this.$refs.youtube.play();
-        this.$refs.transcript.stopAudioModeStuff();
-        this.$refs.youtube.pause();
+        if (this.speaking) {
+          this.$refs.transcript.stopAudioModeStuff();
+        } else {
+          this.$refs.transcript.doAudioModeStuff();
+        }        
       } else {
         this.$refs.youtube.togglePaused();
       }

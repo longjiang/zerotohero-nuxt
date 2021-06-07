@@ -232,11 +232,13 @@ export default {
       let progressType = this.checkProgress();
       if (progressType === "first play") {
         if (this.currentTime >= this.lines[0].starttime) {
+          console.log(progressType, 'getting nearest line...')
           this.playNearestLine();
         }
       } else if (progressType === "within current line") {
         // do nothing
       } else if (progressType === "advance to next line") {
+        console.log(progressType)
         let progress = this.currentTime - this.previousTime;
         if (this.repeatMode) {
           if (progress > 0 && progress < 0.15) {
@@ -249,6 +251,7 @@ export default {
         }
         if (!this.paused && this.audioMode) this.doAudioModeStuff();
       } else if (progressType === "jump") {
+        console.log(progressType, 'getting nearest line...')
         this.playNearestLine();
       }
       this.previousTime = this.currentTime;
@@ -288,7 +291,7 @@ export default {
           1.1,
           0.3
         );
-        console.log("🇺🇸 english finished");
+        // console.log("🇺🇸 english finished");
       }
       if (!this.audioCancelled && !window.speechSynthesis.speaking) {
         if (this.currentLine) {
@@ -299,14 +302,15 @@ export default {
             1,
             0.5
           );
-          console.log("🇯🇵 japanese finished");
+          // console.log("🇯🇵 japanese finished");
         }
-        console.log("📺 resuming");
+        // console.log("📺 resuming");
         this.$emit("speechEnd");
         this.$emit("play");
       }
     },
     stopAudioModeStuff() {
+      console.log("🤚 stopping audio stuff");
       this.audioCancelled = true;
       window.speechSynthesis.cancel();
       this.$emit("speechEnd");
