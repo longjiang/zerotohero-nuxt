@@ -515,7 +515,6 @@ export default {
     },
     togglePaused() {
       if (this.audioMode) {
-        console.log('this.speaking', this.speaking)
         if (this.speaking) {
           this.$refs.transcript.stopAudioModeStuff();
         } else {
