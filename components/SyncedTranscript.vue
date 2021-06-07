@@ -277,29 +277,34 @@ export default {
       if (this.audioMode) {
         this.$emit("pause");
         this.$emit("speechStart");
-        this.audioCancelled = false
+        this.audioCancelled = false;
         if (this.matchedParallelLines[this.currentLineIndex]) {
           await Helper.speak(
             await this.decodeHtmlEntities(
               this.matchedParallelLines[this.currentLineIndex]
             ),
             this.$l1,
-            1
+            1.1,
+            0.3
           );
         }
         if (!this.audioCancelled) {
+          if (this.currentLine) console.log("playing japanese");
+
           await Helper.speak(
             await this.decodeHtmlEntities(this.currentLine.line),
             this.$l2,
-            1
+            1,
+            0.5
           );
           this.$emit("speechEnd");
           this.$emit("play");
+          console.log("play emitted");
         }
       }
     },
     stopAudioModeStuff() {
-      this.audioCancelled = true
+      this.audioCancelled = true;
       window.speechSynthesis.cancel();
       this.$emit("speechEnd");
       this.$emit("pause");
@@ -503,7 +508,9 @@ export default {
       if (el) {
         let offsetTop = Helper.documentOffsetTop(el);
         let smallScreenYOffset =
-          window.innerHeight > window.innerWidth ? (window.innerWidth * 9) / 16 : 0;
+          window.innerHeight > window.innerWidth
+            ? (window.innerWidth * 9) / 16
+            : 0;
         if (!Helper.isInViewport(el, smallScreenYOffset, 90)) {
           let middle = offsetTop - smallScreenYOffset - 20;
           window.scrollTo({
