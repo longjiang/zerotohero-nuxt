@@ -289,8 +289,6 @@ export default {
           );
         }
         if (!this.audioCancelled) {
-          if (this.currentLine) console.log("playing japanese");
-
           await Helper.speak(
             await this.decodeHtmlEntities(this.currentLine.line),
             this.$l2,
@@ -299,7 +297,6 @@ export default {
           );
           this.$emit("speechEnd");
           this.$emit("play");
-          console.log("play emitted");
         }
       }
     },
