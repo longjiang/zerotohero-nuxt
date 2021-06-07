@@ -232,13 +232,13 @@ export default {
       let progressType = this.checkProgress();
       if (progressType === "first play") {
         if (this.currentTime >= this.lines[0].starttime) {
-          console.log(progressType, 'getting nearest line...')
+          console.log(progressType, "getting nearest line...");
           this.playNearestLine();
         }
       } else if (progressType === "within current line") {
         // do nothing
       } else if (progressType === "advance to next line") {
-        console.log(progressType)
+        console.log(progressType);
         let progress = this.currentTime - this.previousTime;
         if (this.repeatMode) {
           if (progress > 0 && progress < 0.15) {
@@ -251,7 +251,7 @@ export default {
         }
         if (!this.paused && this.audioMode) this.doAudioModeStuff();
       } else if (progressType === "jump") {
-        console.log(progressType, 'getting nearest line...')
+        console.log(progressType, "getting nearest line...");
         this.playNearestLine();
       }
       this.previousTime = this.currentTime;
@@ -262,8 +262,44 @@ export default {
     },
   },
   methods: {
+    checkProgress() {
+      if (!this.currentLine) {
+        return "first play";
+      } else if (
+        this.currentTime > this.currentLine.starttime - 0.15 &&
+        this.nextLine &&
+        this.currentTime < this.nextLine.starttime
+      ) {
+        return "within current line";
+      } else if (
+        this.nextLine &&
+        this.currentTime > this.nextLine.starttime - 0.15 &&
+        this.currentTime < this.nextLine.starttime + 0.15
+      ) {
+        return "advance to next line";
+      } else {
+        return "jump";
+      }
+    },
+    nearestLineIndex(time) {
+      let nearestLineIndex = undefined;
+      console.log(this.lines[0].starttime, time, this.lines[0 + 1].starttime)
+      for (let lineIndex in this.lines) {
+        lineIndex = Number(lineIndex)
+        if (
+          this.lines[lineIndex].starttime <= time &&
+          this.lines[lineIndex + 1] &&
+          time < this.lines[lineIndex + 1].starttime
+        ) {
+          nearestLineIndex = lineIndex;
+          break;
+        }
+      }
+      return nearestLineIndex;
+    },
     playNearestLine() {
       let nearestLineIndex = this.nearestLineIndex(this.currentTime);
+      console.log(nearestLineIndex, "nearestLineIndex");
       if (typeof nearestLineIndex !== "undefined") {
         let nearestLine = this.lines[nearestLineIndex];
         this.currentLine = nearestLine;
@@ -291,8 +327,8 @@ export default {
           1.1,
           0.3
         );
-        console.log(englishPromise, 'englishPromise')
-        await englishPromise
+        console.log(englishPromise, "englishPromise");
+        await englishPromise;
         console.log("🇺🇸 english finished");
       }
       if (!this.audioCancelled && !window.speechSynthesis.speaking) {
@@ -305,8 +341,8 @@ export default {
             1,
             0.5
           );
-          console.log(japanesePromise, 'japanesePromise')
-          await japanesePromise
+          console.log(japanesePromise, "japanesePromise");
+          await japanesePromise;
           console.log("🇯🇵 japanese finished");
         }
         // console.log("📺 resuming");
@@ -326,43 +362,11 @@ export default {
       const allEntities = new HTMLEntities.AllHtmlEntities();
       return allEntities.decode(text);
     },
-    checkProgress() {
-      if (!this.currentLine) {
-        return "first play";
-      } else if (
-        this.currentTime > this.currentLine.starttime - 0.15 &&
-        this.nextLine &&
-        this.currentTime < this.nextLine.starttime
-      ) {
-        return "within current line";
-      } else if (
-        this.nextLine &&
-        this.currentTime > this.nextLine.starttime - 0.15 &&
-        this.currentTime < this.nextLine.starttime + 0.15
-      ) {
-        return "advance to next line";
-      } else {
-        return "jump";
-      }
-    },
     highlightMultiple() {
       return Helper.highlightMultiple(...arguments);
     },
     smartquotes(text) {
       return SmartQuotes.string(text.replace(/&#39;/g, "'"));
-    },
-    nearestLineIndex(time) {
-      let nearestLineIndex = undefined;
-      for (let lineIndex in this.lines) {
-        if (
-          this.lines[lineIndex].starttime >= time &&
-          this.lines[lineIndex].starttime - time < 1
-        ) {
-          nearestLineIndex = Number(lineIndex);
-          break;
-        }
-      }
-      return nearestLineIndex;
     },
     removeLine(lineIndex) {
       this.lines.splice(lineIndex, 1);
