@@ -283,7 +283,7 @@ export default {
       this.audioCancelled = false;
       if (this.matchedParallelLines[this.currentLineIndex]) {
         // await Helper.timeout(1000);
-        await Helper.speak(
+        let englishPromise = Helper.speak(
           await this.decodeHtmlEntities(
             this.matchedParallelLines[this.currentLineIndex]
           ),
@@ -291,18 +291,23 @@ export default {
           1.1,
           0.3
         );
-        // console.log("🇺🇸 english finished");
+        console.log(englishPromise, 'englishPromise')
+        await englishPromise
+        console.log("🇺🇸 english finished");
       }
       if (!this.audioCancelled && !window.speechSynthesis.speaking) {
         if (this.currentLine) {
           // await Helper.timeout(1000);
-          await Helper.speak(
+          // console.log("🇯🇵 japanese finished");
+          let japanesePromise = Helper.speak(
             await this.decodeHtmlEntities(this.currentLine.line),
             this.$l2,
             1,
             0.5
           );
-          // console.log("🇯🇵 japanese finished");
+          console.log(japanesePromise, 'japanesePromise')
+          await japanesePromise
+          console.log("🇯🇵 japanese finished");
         }
         // console.log("📺 resuming");
         this.$emit("speechEnd");
