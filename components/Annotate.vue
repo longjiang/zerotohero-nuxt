@@ -63,14 +63,31 @@
         </b-dropdown-item>
       </b-dropdown>
     </div>
-    <span
-      class="annotate-slot"
-      :contenteditable="textMode"
-      @blur="reannotate"
-      :class="{ 'd-none': annotated && !textMode }"
-    >
+    <div :class="{ 'annotate-slot': true, 'd-none': annotated }">
       <slot></slot>
-    </span>
+    </div>
+    <div>
+      <input
+        :class="{ 'annotate-input': true, 'd-none': !textMode || !annotated }"
+        @select="select"
+        @blur="reannotate"
+        @click.stop="dummyFunction"
+        :value="text"
+        style="width: calc(100% - 2rem)"
+      />
+      <div
+        class="selection-lookup-popover d-block mt-1 text-center"
+        style="font-size: 0.8em;"
+        v-if="selectedText !== undefined"
+      >
+        <router-link
+          :to="`/${$l1.code}/${$l2.code}/phrase/search/${selectedText}`"
+          class="link-unstyled"
+        >
+          <i class="fas fa-quote-left"></i> Look up “{{ selectedText }}” as a phrase
+        </router-link>
+      </div>
+    </div>
     <v-runtime-template
       v-if="annotated && !textMode"
       v-for="(template, index) of annotatedSlots"
@@ -131,6 +148,7 @@ export default {
       translate: false,
       translation: undefined,
       fullscreenMode: false,
+      selectedText: undefined,
       batchId: 0,
       text: "",
       Helper,
@@ -165,7 +183,7 @@ export default {
   watch: {
     textMode() {
       if (this.textMode) {
-        let element = this.$el.querySelector(".annotate-slot");
+        let element = this.$el.querySelector(".annotate-input");
         setTimeout(() => {
           element.focus();
         }, 0);
@@ -173,6 +191,15 @@ export default {
     },
   },
   methods: {
+    dummyFunction() {
+      // do nothing
+    },
+    select(event) {
+      this.selectedText = event.target.value.substring(
+        event.target.selectionStart,
+        event.target.selectionEnd
+      );
+    },
     async translateClick() {
       let text = this.$l2.continua ? this.text.replace(/ /g, "") : this.text;
       if (["ko", "ja"].includes(this.$l2.code)) {
@@ -216,10 +243,15 @@ export default {
         this.convertToSentencesAndAnnotate(this.$slots.default[0]);
       }
     },
-    reannotate(e) {
+    async reannotate(e) {
+      console.log(e.explicitOriginalTarget)
+      let node = this.$el.querySelector(".annotate-slot > *");
+      node.innerText = e.target.value;
+      this.convertToSentencesRecursive(node);
+      this.annotate(node);
+      await Helper.timeout(200)
+      this.selectedText = undefined;
       this.textMode = false;
-      e.target.setAttribute("contenteditable", false);
-      this.annotate(e.target);
     },
     convertToSentencesAndAnnotate(slot) {
       if (
@@ -244,6 +276,7 @@ export default {
       this.annotated = true;
     },
     async annotateRecursive(node) {
+      console.log(node);
       if (node && node.classList && node.classList.contains("sentence")) {
         // .sentence node
         let sentence = node.innerText;
@@ -275,9 +308,9 @@ export default {
       let html = text;
       if (this.$l2.continua) {
         html = "";
-        this.tokenized[batchId] = await (await this.$getDictionary()).tokenize(
-          text
-        );
+        this.tokenized[batchId] = await (
+          await this.$getDictionary()
+        ).tokenize(text);
         for (let index in this.tokenized[batchId]) {
           let token = this.tokenized[batchId][index];
           if (typeof token === "object") {
@@ -294,9 +327,9 @@ export default {
         }
       } else if (this.$l2.code === "en") {
         html = "";
-        this.tokenized[batchId] = await (await this.$getDictionary()).tokenize(
-          text
-        );
+        this.tokenized[batchId] = await (
+          await this.$getDictionary()
+        ).tokenize(text);
         for (let index in this.tokenized[batchId]) {
           let item = this.tokenized[batchId][index];
           if (typeof item === "object") {
@@ -457,7 +490,7 @@ export default {
   }
 }
 
-.annotate-slot[contenteditable="true"] {
+.annotate-input {
   border: 1px solid #ccc;
   padding: 0.5rem 0.7rem;
   border-radius: 0.2rem;
