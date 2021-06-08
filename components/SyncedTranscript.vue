@@ -272,7 +272,7 @@ export default {
       if (!this.currentLine) {
         return "first play";
       } else if (
-        this.currentTime > this.currentLine.starttime - 0.3 &&
+        this.currentTime > this.currentLine.starttime - 1 &&
         this.nextLine &&
         this.currentTime < this.nextLine.starttime
       ) {
