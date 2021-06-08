@@ -40,6 +40,17 @@
               :class="{
                 btn: true,
                 'btn-small': true,
+                'bg-dark': sort === 'length',
+                'text-white': sort === 'length',
+              }"
+              @click.stop.prevent="sort = 'length'"
+            >
+              Sort By Length
+            </button>
+            <button
+              :class="{
+                btn: true,
+                'btn-small': true,
                 'bg-dark': sort === 'left',
                 'text-white': sort === 'left',
               }"
@@ -59,13 +70,9 @@
               Sort Right
             </button>
           </b-dropdown-item>
-          <template
-            v-for="c in sort === 'right' ? groupIndexRight : groupIndexLeft"
-          >
+          <template v-for="c in get(`groupIndex${ucFirst(sort)}`)">
             <div
-              :set="
-                (theseHits = sort === 'right' ? groupsRight[c] : groupsLeft[c])
-              "
+              :set="(theseHits = get(`groups${ucFirst(sort)}`)[c])"
               :key="`comp-subs-grouping-${sort}-${c}`"
             >
               <b-dropdown-divider :key="`comp-subs-grouping-${c}-divider`" />
@@ -98,7 +105,7 @@
                   >
                     <span>
                       <span
-                        v-if="sort === 'left' && hit.lineIndex > 0"
+                        v-if="['left', 'length'].includes(sort) && hit.lineIndex > 0"
                         v-html="
                           hit.video.subs_l2[Number(hit.lineIndex) - 1].line
                         "
@@ -254,6 +261,7 @@ export default {
       currentHit: undefined,
       groupsRight: {},
       groupsLeft: {},
+      groupsLength: {},
       excludeTerms: [],
       navigated: false,
       checking: true,
@@ -262,11 +270,12 @@ export default {
       contextRight: [],
       groupIndexLeft: [],
       groupIndexRight: [],
+      groupIndexLength: [],
       fullscreen: false,
       regex: undefined,
       excludeArr: [],
       speed: 0.75,
-      sort: "right",
+      sort: "length",
       youglishLang: {
         zh: "chinese",
         en: "english",
@@ -378,6 +387,12 @@ export default {
     },
   },
   methods: {
+    get(name) {
+      return this[name];
+    },
+    ucFirst() {
+      return Helper.ucFirst(...arguments);
+    },
     highlightMultiple(a, b, c) {
       return Helper.highlightMultiple(a, b, c);
     },
@@ -399,9 +414,32 @@ export default {
       );
       this.groupsLeft = this.groupContext(this.contextLeft, hits, "left");
       this.groupsRight = this.groupContext(this.contextRight, hits, "right");
+      this.groupsLength = this.groupByLength(hits);
       this.groupIndexLeft = this.sortGroupIndex(this.groupsLeft);
       this.groupIndexRight = this.sortGroupIndex(this.groupsRight);
+      this.groupIndexLength = this.sortGroupIndex(this.groupsLength, false);
+      this.Length = this.sortGroupIndex(this.groupsRight);
       this.currentHit = this.hits[0];
+    },
+    groupByLength(hits) {
+      let hitGroups = {};
+      let savedHits = [];
+      let unsavedHits = hits.filter((hit) => {
+        if (hit.saved) savedHits.push(hit);
+        return !hit.saved;
+      });
+      let lengths = hits.map(
+        (hit) => hit.video.subs_l2[hit.lineIndex].line.length
+      );
+      lengths = Helper.unique(lengths);
+      for (let length of lengths) {
+        if (!hitGroups[length]) hitGroups[length] = {};
+        hitGroups[length] = unsavedHits.filter(
+          (hit) => hit.video.subs_l2[hit.lineIndex].line.length === length
+        );
+      }
+      hitGroups = Object.assign({ zthSaved: savedHits }, hitGroups);
+      return hitGroups;
     },
     groupContext(context, hits, leftOrRight) {
       let hitGroups = {};
@@ -426,12 +464,14 @@ export default {
       }
       return hitGroups;
     },
-    sortGroupIndex(group) {
+    sortGroupIndex(group, sort = true) {
       let index = [];
       for (let c in group) {
         index.push({ c, length: group[c].length });
       }
-      index = index.sort((a, b) => b.length - a.length).map((i) => i.c);
+      if (sort)
+        index = index.sort((a, b) => b.length - a.length)
+      index = index.map((i) => i.c);
       index.splice(index.indexOf("zthSaved"), 1);
       return ["zthSaved"].concat(index);
     },
