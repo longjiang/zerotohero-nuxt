@@ -77,14 +77,15 @@
       />
       <div
         class="selection-lookup-popover d-block mt-1 text-center"
-        style="font-size: 0.8em;"
-        v-if="selectedText !== undefined"
+        style="font-size: 0.8em"
+        v-if="textMode"
       >
         <router-link
-          :to="`/${$l1.code}/${$l2.code}/phrase/search/${selectedText}`"
+          :to="`/${$l1.code}/${$l2.code}/phrase/search/${selectedText ? selectedText : ''}`"
           class="link-unstyled"
         >
-          <i class="fas fa-quote-left"></i> Look up “{{ selectedText }}” as a phrase
+          <i class="fas fa-quote-left"></i>
+          Look up {{ selectedText ? `“${selectedText}” as` : '' }} a phrase
         </router-link>
       </div>
     </div>
@@ -248,7 +249,7 @@ export default {
       node.innerText = e.target.value;
       this.convertToSentencesRecursive(node);
       this.annotate(node);
-      await Helper.timeout(200)
+      await Helper.timeout(200);
       this.selectedText = undefined;
       this.textMode = false;
     },
