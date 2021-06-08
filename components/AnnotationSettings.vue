@@ -63,26 +63,33 @@
         />
         <label for="show-quiz">Show pop quiz</label>
       </div>
-      <div class="form-check" v-if="['zh', 'yue'].includes($l2.code)">
-        <input
-          type="radio"
-          id="use-traditional"
-          class="form-check-input"
-          v-model="useTraditional"
-          :value="true"
-        />
-        <label for="use-traditional">Use Traditional (正體字/繁體字)</label>
-      </div>
-      <div class="form-check" v-if="['zh', 'yue'].includes($l2.code)">
-        <input
-          type="radio"
-          id="use-simplified"
-          class="form-check-input"
-          v-model="useTraditional"
-          :value="false"
-        />
-        <label for="use-simplified">Use Simplified (简体字)</label>
-      </div>
+      <b-button-group v-if="['zh', 'yue'].includes($l2.code)" class="d-block mb-2">
+        <b-button
+          :variant="!useTraditional ? 'secondary' : 'outline-secondary'"
+          @click="useTraditional = false"
+        >
+          Use Simplified
+        </b-button><b-button
+          :variant="useTraditional ? 'secondary' : 'outline-secondary'"
+          @click="useTraditional = true"
+        >
+          Use Traditional
+        </b-button>
+      </b-button-group>
+      <b-button-group class="d-block">
+        <b-button
+          :variant="!useSerif ? 'secondary' : 'outline-secondary'"
+          @click="useSerif = false"
+        >
+          Use Sans-Serif
+        </b-button><b-button
+          :variant="useSerif ? 'secondary' : 'outline-secondary'"
+          style="font-family: serif"
+          @click="useSerif = true"
+        >
+          Use Serif
+        </b-button>
+      </b-button-group>
     </div>
     <div class="jumbotron text-center mt-4 p-4">
       <Annotate tag="div" class="mt-4 mb-4 text-left" :showTranslate="true">
@@ -156,6 +163,7 @@ export default {
       showPinyin: undefined,
       useTraditional: undefined,
       showQuiz: undefined,
+      useSerif: undefined,
     };
   },
   mounted() {
@@ -179,11 +187,15 @@ export default {
   },
   methods: {
     loadSettings() {
-      this.showDefinition = this.$store.state.settings.l2Settings.showDefinition;
-      this.showTranslation = this.$store.state.settings.l2Settings.showTranslation;
+      this.showDefinition =
+        this.$store.state.settings.l2Settings.showDefinition;
+      this.showTranslation =
+        this.$store.state.settings.l2Settings.showTranslation;
       this.showPinyin = this.$store.state.settings.l2Settings.showPinyin;
-      this.useTraditional = this.$store.state.settings.l2Settings.useTraditional;
+      this.useTraditional =
+        this.$store.state.settings.l2Settings.useTraditional;
       this.showQuiz = this.$store.state.settings.l2Settings.showQuiz;
+      this.useSerif = this.$store.state.settings.l2Settings.useSerif;
     },
   },
   watch: {
@@ -210,6 +222,11 @@ export default {
     showQuiz() {
       this.$store.commit("settings/SET_L2_SETTINGS", {
         showQuiz: this.showQuiz,
+      });
+    },
+    useSerif() {
+      this.$store.commit("settings/SET_L2_SETTINGS", {
+        useSerif: this.useSerif,
       });
     },
   },

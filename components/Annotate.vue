@@ -386,6 +386,11 @@ export default {
     margin-left: 0;
   }
 }
+
+.use-serif .annotated * {
+  font-family: serif;
+}
+
 .annotated.fullscreen {
   position: fixed;
   left: 0;

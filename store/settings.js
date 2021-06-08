@@ -11,6 +11,7 @@ export const state = () => {
       showPinyin: true,
       useTraditional: false,
       showTranslation: true,
+      useSerif: false,
       showQuiz: true
     }
   }

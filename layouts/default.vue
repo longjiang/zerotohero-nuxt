@@ -439,6 +439,7 @@ export default {
         "show-traditional": this.l2Settings.useTraditional,
         "show-definition": this.l2Settings.showDefinition,
         "show-translation": this.l2Settings.showTranslation,
+        "use-serif": this.l2Settings.useSerif,
       };
       this.classes[`l1-${this.l1.code}`] = true;
       this.classes[`l2-${this.l2.code}`] = true;
