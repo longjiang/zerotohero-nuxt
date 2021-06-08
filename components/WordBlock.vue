@@ -721,154 +721,153 @@ export default {
 .word-translation-item::marker {
   margin-right: 0;
 }
-.word-block-popover {
-  .tooltip {
-    display: block !important;
-    $color: white;
-    $height: 20rem;
-    $width: 20rem;
-    border: none;
-    height: $height;
-    width: $width;
-    max-height: $height;
-    max-width: $width;
-    border-radius: 1rem;
 
-    &[x-placement^="top"] {
-      margin-bottom: 1rem;
+.tooltip {
+  display: block !important;
+  $color: white;
+  $height: 20rem;
+  $width: 20rem;
+  border: none;
+  height: $height;
+  width: $width;
+  max-height: $height;
+  max-width: $width;
+  border-radius: 1rem;
 
-      .tooltip-arrow {
-        border-width: 5px 5px 0 5px;
-        border-left-color: transparent !important;
-        border-right-color: transparent !important;
-        border-bottom-color: transparent !important;
-        bottom: -5px;
-        left: calc(50% - 5px);
-        margin-top: 0;
-        margin-bottom: 0;
-      }
-    }
-
-    &[x-placement^="bottom"] {
-      margin-top: 5px;
-
-      .tooltip-arrow {
-        border-width: 0 5px 5px 5px;
-        border-left-color: transparent !important;
-        border-right-color: transparent !important;
-        border-top-color: transparent !important;
-        top: -5px;
-        left: calc(50% - 5px);
-        margin-top: 0;
-        margin-bottom: 0;
-      }
-    }
-
-    &[x-placement^="right"] {
-      margin-left: 5px;
-
-      .tooltip-arrow {
-        border-width: 5px 5px 5px 0;
-        border-left-color: transparent !important;
-        border-top-color: transparent !important;
-        border-bottom-color: transparent !important;
-        left: -5px;
-        top: calc(50% - 5px);
-        margin-left: 0;
-        margin-right: 0;
-      }
-    }
-
-    &[x-placement^="left"] {
-      margin-right: 5px;
-
-      .tooltip-arrow {
-        border-width: 5px 0 5px 5px;
-        border-top-color: transparent !important;
-        border-right-color: transparent !important;
-        border-bottom-color: transparent !important;
-        right: -5px;
-        top: calc(50% - 5px);
-        margin-left: 0;
-        margin-right: 0;
-      }
-    }
-
-    &[aria-hidden="true"] {
-      visibility: hidden;
-      opacity: 0;
-      transition: opacity 0.15s, visibility 0.15s;
-    }
-
-    &[aria-hidden="false"] {
-      visibility: visible;
-      opacity: 1;
-      transition: opacity 0.15s;
-    }
-
-    .word-block-tool-tip-close {
-      border-radius: 100%;
-      background: white;
-      color: #ccc;
-      border: none;
-      position: fixed;
-      top: 0.5rem;
-      left: 0.5rem;
-      height: 1.5rem;
-      width: 1.5rem;
-      padding: 0;
-      z-index: 10;
-      &:hover {
-        background: rgba(0, 0, 0, 0.4);
-      }
-    }
+  &[x-placement^="top"] {
+    margin-bottom: 1rem;
 
     .tooltip-arrow {
-      width: 0;
-      height: 0;
-      border-style: solid;
-      position: absolute;
-      margin: 5px;
-      border-color: $color;
+      border-width: 5px 5px 0 5px;
+      border-left-color: transparent !important;
+      border-right-color: transparent !important;
+      border-bottom-color: transparent !important;
+      bottom: -5px;
+      left: calc(50% - 5px);
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+
+  &[x-placement^="bottom"] {
+    margin-top: 5px;
+
+    .tooltip-arrow {
+      border-width: 0 5px 5px 5px;
+      border-left-color: transparent !important;
+      border-right-color: transparent !important;
+      border-top-color: transparent !important;
+      top: -5px;
+      left: calc(50% - 5px);
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+
+  &[x-placement^="right"] {
+    margin-left: 5px;
+
+    .tooltip-arrow {
+      border-width: 5px 5px 5px 0;
+      border-left-color: transparent !important;
+      border-top-color: transparent !important;
+      border-bottom-color: transparent !important;
+      left: -5px;
+      top: calc(50% - 5px);
+      margin-left: 0;
+      margin-right: 0;
+    }
+  }
+
+  &[x-placement^="left"] {
+    margin-right: 5px;
+
+    .tooltip-arrow {
+      border-width: 5px 0 5px 5px;
+      border-top-color: transparent !important;
+      border-right-color: transparent !important;
+      border-bottom-color: transparent !important;
+      right: -5px;
+      top: calc(50% - 5px);
+      margin-left: 0;
+      margin-right: 0;
+    }
+  }
+
+  &[aria-hidden="true"] {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.15s, visibility 0.15s;
+  }
+
+  &[aria-hidden="false"] {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.15s;
+  }
+
+  .word-block-tool-tip-close {
+    border-radius: 100%;
+    background: white;
+    color: #ccc;
+    border: none;
+    position: fixed;
+    top: 0.5rem;
+    left: 0.5rem;
+    height: 1.5rem;
+    width: 1.5rem;
+    padding: 0;
+    z-index: 10;
+    &:hover {
+      background: rgba(0, 0, 0, 0.4);
+    }
+  }
+
+  .tooltip-arrow {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    position: absolute;
+    margin: 5px;
+    border-color: $color;
+  }
+
+  .tooltip-inner {
+    border-radius: 1rem;
+    text-align: left;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    background: $color;
+    color: black;
+    padding: 1rem;
+    box-shadow: 0 5px 20px rgba(black, 0.2);
+    width: $width;
+    height: $height;
+    max-width: $width;
+    max-height: $height;
+
+    .tooltip-images {
+      margin-bottom: 0.5rem;
+      width: $width;
+      overflow-x: scroll;
+      display: flex;
+      height: 4rem;
+      img {
+        flex: 1;
+        height: 4rem;
+        width: auto;
+        margin: 0 0.2rem;
+      }
     }
 
-    .tooltip-inner {
-      border-radius: 1rem;
-      text-align: left;
-      overflow-y: scroll;
-      overflow-x: hidden;
-      background: $color;
-      color: black;
-      padding: 1rem;
-      box-shadow: 0 5px 20px rgba(black, 0.2);
-      width: $width;
-      height: $height;
-      max-width: $width;
-      max-height: $height;
+    .tooltip-entry {
+      color: #666;
+    }
 
-      .tooltip-images {
-        margin-bottom: 0.5rem;
-        width: $width;
-        overflow-x: scroll;
-        display: flex;
-        height: 4rem;
-        img {
-          flex: 1;
-          height: 4rem;
-          width: auto;
-          margin: 0 0.2rem;
-        }
-      }
-
-      .tooltip-entry {
-        color: #666;
-      }
-
-      .tooltip-entry + .tooltip-entry {
-        margin-top: 1rem;
-        border-top: 1px solid #ccc;
-        padding-top: 1rem;
-      }
+    .tooltip-entry + .tooltip-entry {
+      margin-top: 1rem;
+      border-top: 1px solid #ccc;
+      padding-top: 1rem;
     }
   }
 }
