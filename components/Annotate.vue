@@ -244,7 +244,6 @@ export default {
       }
     },
     async reannotate(e) {
-      console.log(e.explicitOriginalTarget)
       let node = this.$el.querySelector(".annotate-slot > *");
       node.innerText = e.target.value;
       this.convertToSentencesRecursive(node);
@@ -276,7 +275,6 @@ export default {
       this.annotated = true;
     },
     async annotateRecursive(node) {
-      console.log(node);
       if (node && node.classList && node.classList.contains("sentence")) {
         // .sentence node
         let sentence = node.innerText;
