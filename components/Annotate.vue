@@ -63,10 +63,10 @@
         </b-dropdown-item>
       </b-dropdown>
     </div>
-    <div :class="{ 'annotate-slot': true, 'd-none': annotated }">
+    <div :class="{ 'annotate-slot': true, 'd-none': annotated }" style="display: inline">
       <slot></slot>
     </div>
-    <div>
+    <div :class="{ 'd-none': !textMode }">
       <input
         :class="{ 'annotate-input': true, 'd-none': !textMode || !annotated }"
         @select="select"

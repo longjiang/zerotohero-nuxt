@@ -439,6 +439,11 @@ export default {
         );
       }
       hitGroups = Object.assign({ zthSaved: savedHits }, hitGroups);
+      for (let key in hitGroups) {
+        hitGroups[key] = hitGroups[key].sort((a, b) =>
+          a.leftContext.length - b.leftContext.length
+        );
+      }
       return hitGroups;
     },
     groupContext(context, hits, leftOrRight) {
