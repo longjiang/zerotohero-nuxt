@@ -133,7 +133,7 @@ export default {
       default: true,
     },
     startLineIndex: {
-      default: 0,
+      default: undefined,
     },
     stopLineIndex: {
       default: -1,
@@ -222,6 +222,12 @@ export default {
           this.updateReview(mutation);
         }
       });
+    }
+    if (this.startLineIndex) {
+      let startLineIndex = Number(this.startLineIndex)
+      this.currentLine = this.lines[startLineIndex]
+      this.currentLineIndex = startLineIndex
+      this.nextLine = this.lines[startLineIndex + 1]
     }
   },
   beforeDestroy() {

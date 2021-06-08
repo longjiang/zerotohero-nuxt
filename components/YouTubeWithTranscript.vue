@@ -165,6 +165,8 @@
             :quiz="quiz"
             :parallellines="video.subs_l1"
             :sticky="sticky"
+            :startLineIndex="startLineIndex"
+            :stopLineIndex="stopLineIndex"
             @seek="seekYouTube"
             @pause="pause"
             @play="play"

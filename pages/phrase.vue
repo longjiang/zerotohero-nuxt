@@ -35,21 +35,6 @@
           <div class="text-center mt-5 mb-3" v-if="term">
             <EntryExternal :term="term" />
           </div>
-          <div class="focus">
-            <WebImages
-              v-if="term"
-              :text="term"
-              limit="10"
-              class="mt-5"
-              :key="`${term}-images`"
-            />
-            <Collocations
-              v-if="term"
-              :text="term"
-              class="mt-5"
-              :key="`${term}-col`"
-            />
-          </div>
           <div
             class="widget mt-5"
             id="search-subs"
@@ -66,6 +51,21 @@
                 :terms="[term]"
               />
             </div>
+          </div>
+          <div class="focus mt-5">
+            <WebImages
+              v-if="term"
+              :text="term"
+              limit="10"
+              class="mt-5"
+              :key="`${term}-images`"
+            />
+            <Collocations
+              v-if="term"
+              :text="term"
+              class="mt-5"
+              :key="`${term}-col`"
+            />
           </div>
           <div :key="term" class="focus">
             <Concordance
