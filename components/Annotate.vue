@@ -387,7 +387,7 @@ export default {
   }
 }
 
-.use-serif .annotated * {
+.use-serif .annotated .sentence * {
   font-family: serif;
 }
 
