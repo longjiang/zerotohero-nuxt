@@ -31,11 +31,7 @@
       </router-link>
       <div class="media-body">
         <div class="font-weight-bold">
-          <span
-            contenteditable="true"
-            v-if="$adminMode"
-            @blur="saveTitle"
-          >
+          <span contenteditable="true" v-if="$adminMode" @blur="saveTitle">
             {{ video.title }}
           </span>
           <router-link
@@ -136,11 +132,7 @@
           {{ Helper.level(video.level, $l2) }}
         </div>
 
-        <div
-          v-if="
-            $adminMode && video.subs_l1 && video.subs_l1.length > 0
-          "
-        >
+        <div v-if="$adminMode && video.subs_l1 && video.subs_l1.length > 0">
           <div v-for="index in Math.min(20, video.subs_l1.length)">
             <b>{{ video.l1Locale }}</b>
             <span
@@ -161,11 +153,7 @@
             {{ video.subs_l1[index - 1].line }}
           </div>
         </div>
-        <div
-          v-if="
-            $adminMode && video.subs_l2 && video.subs_l2.length > 0
-          "
-        >
+        <div v-if="$adminMode && video.subs_l2 && video.subs_l2.length > 0">
           <b>{{ video.l2Locale || $l2.code }}</b>
           <input
             type="text"
@@ -363,21 +351,23 @@ export default {
       }
     },
     importSrt(file) {
-      let reader = new FileReader();
-      reader.readAsText(file);
-      reader.onload = (event) => {
-        let srt = event.target.result;
-        this.video.subs_l2 = parseSync(srt).map((cue) => {
-          return {
-            starttime: cue.data.start / 1000,
-            line: cue.data.text,
-          };
-        });
-        this.firstLineTime = this.video.subs_l2[0].starttime;
-        this.video.hasSubs = true;
-        this.srt = file;
-        this.videoInfoKey++;
-      };
+      try {
+        let reader = new FileReader();
+        reader.readAsText(file);
+        reader.onload = (event) => {
+          let srt = event.target.result;
+          this.video.subs_l2 = parseSync(srt).map((cue) => {
+            return {
+              starttime: cue.data.start / 1000,
+              line: cue.data.text,
+            };
+          });
+          this.firstLineTime = this.video.subs_l2[0].starttime;
+          this.video.hasSubs = true;
+          this.srt = file;
+          this.videoInfoKey++;
+        };
+      } catch (err) {}
     },
     handleDrop(data, event) {
       event.preventDefault();

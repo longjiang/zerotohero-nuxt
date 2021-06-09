@@ -52,7 +52,7 @@
         :video="video"
         :layout="layout"
         ref="youtube"
-        :quiz="true"
+        :quiz="$quiz"
         :key="`transcript-${video.youtube_id}`"
         :speed="speed"
         :autoload="true"
@@ -238,6 +238,11 @@ export default {
     $adminMode() {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
+    },
+    $quiz() {
+      if (typeof this.$store.state.settings.l2Settings !== "undefined")
+        return this.$store.state.settings.l2Settings.showQuiz;
+      else return false
     },
     saved() {
       return this.video.id;
