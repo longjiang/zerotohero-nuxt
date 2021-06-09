@@ -11,45 +11,53 @@
         v-for="(word, index) in words"
         :key="`word-list-word-${index}-${word.id}`"
       >
-        <Star v-if="word && star === true" :word="word" class="mr-1" style="overflow: hidden; height: 1.2rem"></Star>
+        <Star
+          v-if="word && star === true"
+          :word="word"
+          class="mr-1"
+          style="overflow: hidden; height: 1.2rem"
+        ></Star>
         <router-link
           v-if="compareWith"
           :to="`/${$l1.code}/${$l2.code}/compare/${$dictionaryName}/${compareWith.id},${word.id}`"
           class="btn btn-small mr-2"
-          ><i class="fas fa-adjust"></i
-        ></router-link>
+        >
+          <i class="fas fa-adjust"></i>
+        </router-link>
         <router-link
           v-if="word"
           :to="`/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${word.id}`"
         >
-          <span class="wordlist-item-word ml-1" :data-level="getLevel(word)">{{
-            word.accented
-          }}</span
-          >&nbsp;
+          <span class="wordlist-item-word ml-1" :data-level="getLevel(word)">{{ word.accented }}</span>
           <span v-if="word.pronunciation" class="wordlist-item-pinyin">
-            <span v-if="$l2.code !== 'zh'">/</span>{{ word.pronunciation
-            }}<span v-if="$l2.code !== 'zh'">/</span>
+            <span v-if="$l2.code !== 'zh'">/</span>
+            {{ word.pronunciation || word.kana }}
+            <span v-if="$l2.code !== 'zh'">/</span>
+          </span><span v-if="word.kana" class="wordlist-item-pinyin">
+            ({{ word.kana }})
           </span>
           <span v-if="word.definitions" class="wordlist-item-l1">
             {{
-              word.definitions.filter((def) => !def.startsWith('CL')).join(', ')
-            }}</span
-          ><span class="wordlist-item-l1" v-if="word.counters"
-            >:<span style="font-style: normal">
+              word.definitions.filter((def) => !def.startsWith("CL")).join(", ")
+            }}
+          </span>
+          <span class="wordlist-item-l1" v-if="word.counters">
+            :
+            <span style="font-style: normal">
               {{
                 word.counters
-                  .map((counter) => '一' + counter.simplified)
-                  .join(word.simplified + '、') + word.simplified
-              }}。</span
-            >
+                  .map((counter) => "一" + counter.simplified)
+                  .join(word.simplified + "、") + word.simplified
+              }}。
+            </span>
           </span>
         </router-link>
       </li>
       <li class="wordlist-item" v-for="text in texts">
         <Star v-if="text && star === true" :text="text" class="mr-1"></Star>
-        <span class="wordlist-item-word ml-1" data-level="outside">{{
-          text
-        }}</span>
+        <span class="wordlist-item-word ml-1" data-level="outside">
+          {{ text }}
+        </span>
       </li>
     </ul>
     <ShowMoreButton
@@ -60,13 +68,13 @@
   </div>
 </template>
 <script>
-import Helper from '@/lib/helper'
+import Helper from "@/lib/helper";
 
 export default {
   data() {
     return {
       Helper,
-    }
+    };
   },
   props: {
     words: {
@@ -118,31 +126,31 @@ export default {
   },
   methods: {
     getLevel(word) {
-      if (this.$l2.code === 'zh' && word) {
-        if (word.newHSK && word.newHSK === '7-9') {
-          return '7-9'
-        } else if (word.hsk !== 'outside') {
-          return word.hsk
-        } else if (word.hsk === 'outside' && word.weight < 750) {
-          return 'outside'
+      if (this.$l2.code === "zh" && word) {
+        if (word.newHSK && word.newHSK === "7-9") {
+          return "7-9";
+        } else if (word.hsk !== "outside") {
+          return word.hsk;
+        } else if (word.hsk === "outside" && word.weight < 750) {
+          return "outside";
         } else {
-          return false
+          return false;
         }
       } else {
-        return word.level
+        return word.level;
       }
     },
     classes() {
       let classes = {
         wordlist: true,
-        'list-unstyled': true,
+        "list-unstyled": true,
         collapsed: this.collapse > 0,
-      }
-      classes[`collapse-${this.collapse}`] = true
-      return classes
+      };
+      classes[`collapse-${this.collapse}`] = true;
+      return classes;
     },
   },
-}
+};
 </script>
 
 <style>
