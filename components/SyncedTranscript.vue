@@ -332,8 +332,7 @@ export default {
             "’"
           ),
           this.$l1,
-          1.1,
-          0.2
+          1.1
         );
         // console.log(englishPromise, "englishPromise");
         await englishPromise;
@@ -347,8 +346,7 @@ export default {
           let japanesePromise = Helper.speak(
             this.currentLine.line.replace(/&#39;/g, "’"),
             this.$l2,
-            1,
-            0.6
+            1
           );
           // console.log(japanesePromise, "japanesePromise");
           await japanesePromise;
