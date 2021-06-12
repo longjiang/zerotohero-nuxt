@@ -38,7 +38,11 @@
           <Annotate
             tag="div"
             :sticky="sticky"
-            :class="{ 'transcript-line-chinese': true, 'pl-3': !single }"
+            :class="{
+              'transcript-line-chinese': true,
+              'pl-3': !single && $l2.direction === 'ltr',
+              'pr-3': !single && $l2.direction === 'rtl',
+            }"
             :buttons="true"
           >
             <span
@@ -224,10 +228,10 @@ export default {
       });
     }
     if (this.startLineIndex) {
-      let startLineIndex = Number(this.startLineIndex)
-      this.currentLine = this.lines[startLineIndex]
-      this.currentLineIndex = startLineIndex
-      this.nextLine = this.lines[startLineIndex + 1]
+      let startLineIndex = Number(this.startLineIndex);
+      this.currentLine = this.lines[startLineIndex];
+      this.currentLineIndex = startLineIndex;
+      this.nextLine = this.lines[startLineIndex + 1];
     }
   },
   beforeDestroy() {
