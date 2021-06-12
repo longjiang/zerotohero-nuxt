@@ -195,7 +195,6 @@ export default {
     };
   },
   mounted() {
-    console.log(this.$l2);
     this.loadSettings();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type === "settings/LOAD_SETTINGS") {

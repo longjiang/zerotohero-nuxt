@@ -2,7 +2,7 @@
   <router-link :to="`/${l1.code}/${l2.code}/`" class="mr-4 mb-4 d-inline-block link-unstyled">
     <div class="logo-constructed">
       <div class="logo-circle-wrapper">
-        <div :class="`${randomBlendClass()} logo-circle`">
+        <div class="logo-circle">
           <img :src="`/img/logo-square/${l2.code}.jpeg`" alt />
         </div>
         <div
@@ -43,10 +43,6 @@ export default {
     }
   },
   methods: {
-    randomBlendClass() {
-      let colors = ['blue-yellow', 'pink-yellow', 'red-blue']
-      return !['en', 'zh', 'jp', 'ko', 'ru', 'fr', 'de'].includes(this.l2.code) ? 'blend-' + colors[this.l2.name.length % 3] : ''
-    }
   }
 }
 </script>
