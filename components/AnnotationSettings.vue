@@ -63,13 +63,17 @@
         />
         <label for="show-quiz">Show pop quiz</label>
       </div>
-      <b-button-group v-if="['zh', 'yue'].includes($l2.code)" class="d-block mb-2">
+      <b-button-group
+        v-if="['zh', 'yue'].includes($l2.code)"
+        class="d-block mb-2"
+      >
         <b-button
           :variant="!useTraditional ? 'secondary' : 'outline-secondary'"
           @click="useTraditional = false"
         >
           Use Simplified
-        </b-button><b-button
+        </b-button>
+        <b-button
           :variant="useTraditional ? 'secondary' : 'outline-secondary'"
           @click="useTraditional = true"
         >
@@ -82,7 +86,8 @@
           @click="useSerif = false"
         >
           Use Sans-Serif
-        </b-button><b-button
+        </b-button>
+        <b-button
           :variant="useSerif ? 'secondary' : 'outline-secondary'"
           style="font-family: serif"
           @click="useSerif = true"
@@ -121,7 +126,30 @@
           </p>
         </div>
         <div v-else>
-          <div v-if="$l2.scripts && $l2.scripts[0].direction === 'rtl'">
+          <div
+            v-if="
+              $l2.scripts && $l2.scripts[0] && $l2.scripts[0].script === 'Hebr'
+            "
+          >
+            חפש שונה דפים ביוני או. על צעד ניהול המשפט אירועים, חשמל טיפול חינוך
+            מתן גם. אחר חינוך משופרות מה. צ'ט אל מאמר העברית. אנא למנוע
+            מיתולוגיה אל, את רבה שאלות מדריכים ביוטכנולוגיה, מה והוא החברה אנא.
+            אל שמו המלצת אנגלית תיקונים, ב צ'ט כימיה העמוד, בה זכר דרכה קישורים
+            סטטיסטיקה. ביולי משפטים הספרות זאת בה. מלא מה ביולי הספרות מבוקשים,
+            לערוך מחליטה את זאת. אם כדור למאמרים מתן, אתה גם יוני טכנולוגיה.
+            יידיש בהשחתה מונחונים כלל גם, סרבול הספרות וכמקובל אל שער. ריקוד
+            ויקיפדיה גם זאת. מה אודות חופשית מדינות שמו, דת משחקים איטליה לעריכה
+            סדר. אל צעד אודות הסביבה, הספרות יוצרים מיוחדים דת ארץ. מלא אל הרוח
+            שדרות גרמנית, ננקטת קלאסיים ממונרכיה את ויש. את לתרום רפואה התפתחות
+            היא. אל זאת שמות העריכהגירסאות, רבה פיסיקה האטמוספירה אם.
+          </div>
+          <div
+            v-else-if="
+              $l2.scripts &&
+              $l2.scripts[0] &&
+              $l2.scripts[0].direction === 'rtl'
+            "
+          >
             أم تلك غرّة، ارتكبها, و ليرتفع بمعارضة انه. ان خطّة اتفاق سنغافورة
             الا, بين مايو وقرى في. لان قد قبضتهم ايطاليا،. وسفن إحكام الجديدة،
             ثم حين, لكون الواقعة الإيطالية فعل أن. به، اعلان أسابيع الوراء ٣٠,
@@ -167,6 +195,7 @@ export default {
     };
   },
   mounted() {
+    console.log(this.$l2);
     this.loadSettings();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type === "settings/LOAD_SETTINGS") {
