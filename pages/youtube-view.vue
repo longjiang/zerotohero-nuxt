@@ -376,7 +376,7 @@ export default {
     updateCurrentTime(currentTime) {
       if (typeof window !== "undefined") {
         this.currentTime = currentTime;
-        let t = Math.round(currentTime, 1);
+        let t = Math.floor(currentTime / 10) * 10;
         const params = new URLSearchParams(window.location.search);
         const qt = params.get("t") ? Number(params.get("t")) : 0;
         if (t !== qt) {
