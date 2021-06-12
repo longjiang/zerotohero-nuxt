@@ -61,7 +61,8 @@
             v-if="$l2.code !== $l1.code && parallellines"
             :class="{
               'transcript-line-l1': true,
-              'pl-3': !single,
+              'pl-3': !single && $l2.direction === 'ltr',
+              'pr-3': !single && $l2.direction === 'rtl',
               'text-right':
                 $l2.scripts &&
                 $l2.scripts.length > 0 &&

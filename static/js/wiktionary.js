@@ -31,7 +31,7 @@ const Dictionary = {
   parseDictionary(data) {
     this.dictionary = data
     let words = []
-    for(let item of this.dictionary) {
+    for (let item of this.dictionary) {
       if (item.word && !item.redirect) {
         let definitions = []
         if (item.senses && item.senses[0]) {
@@ -87,6 +87,7 @@ const Dictionary = {
       .replace('srp', 'hbs') // Croatian uses Serbo-Croatian
       .replace('bos', 'hbs') // Bosnian uses Serbo-Croatian
       .replace('run', 'kin') // Rundi uses Rwanda-Rundi
+      .replace('hbo', 'heb') // Ancient Hebrew uses Hebrew
     const server = 'https://server.chinesezerotohero.com/'
     let filename = `${server}data/wiktionary/${l2}-${options.l1}.json.txt`
     if (['ara', 'fin', 'fra', 'hbs', 'ita', 'lat', 'por', 'spa'].includes(l2)) {
@@ -141,8 +142,8 @@ const Dictionary = {
     let flags = []
     let unique = []
     let l = array.length
-    for(let i = 0; i<l; i++) {
-      if( flags[array[i][key]]) continue
+    for (let i = 0; i < l; i++) {
+      if (flags[array[i][key]]) continue
       flags[array[i][key]] = true
       unique.push(array[i])
     }
@@ -154,7 +155,7 @@ const Dictionary = {
   },
   subdictFromText(text) {
     return this.subdict(
-      this.words.filter(function(row) {
+      this.words.filter(function (row) {
         return text.includes(row.head)
       })
     )
@@ -164,7 +165,7 @@ const Dictionary = {
     // Only return the *first* seen word and those the same as it
     let first = false
     let matches = this.words
-      .filter(function(word) {
+      .filter(function (word) {
         if (first) {
           return word.head === first
         } else {
@@ -191,7 +192,7 @@ const Dictionary = {
   tokenizeRecursively(text, subdict) {
     const longest = subdict.longest(text)
     if (longest.matches.length > 0) {
-      let result = [] 
+      let result = []
       /* 
       result = [
         '我', 
@@ -231,6 +232,7 @@ const Dictionary = {
   },
   lookupFuzzy(text, limit = 30) { // text = 'abcde'
     text = text.toLowerCase()
+    if (['he', 'hbo', 'iw'].includes(this.l2)) text = this.stripHebrewVowels(text)
     let words = []
     let subtexts = []
     for (let i = 1; text.length - i > 2; i++) {
@@ -241,7 +243,7 @@ const Dictionary = {
       if (head && head.startsWith(text)) {
         words.push(
           Object.assign(
-            { score: text.length - (head.length - text.length)},
+            { score: text.length - (head.length - text.length) },
             word
           )
         ) // matches 'abcde', 'abcde...'
@@ -260,7 +262,7 @@ const Dictionary = {
         }
       }
     }
-    return this.uniqueByValue(words, 'id').sort((a,b) => b.score - a.score).slice(0, limit)
+    return this.uniqueByValue(words, 'id').sort((a, b) => b.score - a.score).slice(0, limit)
   },
   randomArrayItem(array, start = 0, length = false) {
     length = length || array.length
@@ -278,5 +280,12 @@ const Dictionary = {
   },
   accent(text) {
     return text.replace(/'/g, '́')
-  }
+  },
+
+  /*
+  * https://gist.github.com/yakovsh/345a71d841871cc3d375
+  /* @shimondoodkin suggested even a much shorter way to do this */
+  stripHebrewVowels(rawString) {
+    return rawString.replace(/[\u0591-\u05C7]/g, "")
+  },
 }
