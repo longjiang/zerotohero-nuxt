@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid youtube-with-transcript">
     <div v-if="layout === 'horizontal'" class="row">
-      <div :class="{'youtube-video-column col-sm-12 mb-4 p-0': true, 'order-2': $l2.direction === 'rtl'}">
+      <div :class="{'youtube-video-column col-sm-12 mb-4 p-0': true, 'order-2': landscape && $l2.direction === 'rtl'}">
         <div class="youtube-video-wrapper" :key="'youtube-' + video.youtube_id">
           <YouTubeVideo
             ref="youtube"
@@ -349,6 +349,10 @@ export default {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
     },
+    landscape() {
+      let landscape = (typeof window !== 'undefined') && window.innerWidth > window.innerHeight
+      return landscape
+    }
   },
   updated() {
     if (this.$refs.transcript) {
