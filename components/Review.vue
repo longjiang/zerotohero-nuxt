@@ -1,6 +1,10 @@
 <template>
   <div :class="{ review: true, 'show-answer': showAnswer }">
-    <div class="review-item" :dir="$l2.direction">
+    <div class="review-item" :dir="$l2.direction" :class="{
+              'text-right':
+                $l2.scripts &&
+                $l2.scripts.length > 0 &&
+                $l2.scripts[0].direction === 'rtl'}">
       <Annotate tag="span" :buttons="true" class="transcript-line-chinese">
         <span
           v-if="$l2.han && $l2.code !== 'ja'"
@@ -107,9 +111,13 @@ export default {
   methods: {
     async speak() {
       if (this.reviewItem.parallelLines) {
-        await Helper.speak(this.reviewItem.parallelLines.replace(/&#39;/g, "’"), this.$l1, 1.1)
+        await Helper.speak(
+          this.reviewItem.parallelLines.replace(/&#39;/g, "’"),
+          this.$l1,
+          1.1
+        );
       }
-      await Helper.speak(this.reviewItem.line.line, this.$l2, 1)
+      await Helper.speak(this.reviewItem.line.line, this.$l2, 1);
     },
     answered(answer) {
       if (answer.correct) {
@@ -153,7 +161,6 @@ export default {
     pointer-events: none;
   }
 }
-
 
 .review .transcript-line-l1 {
   color: #999;
