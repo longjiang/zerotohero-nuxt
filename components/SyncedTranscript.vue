@@ -84,7 +84,6 @@
             :key="`review-${lineIndex}-${reviewItemIndex}-${reviewKeys[lineIndex]}`"
             :reviewItem="reviewItem"
             :hsk="hsk"
-            :parallellines="parallellines || []"
           />
         </div>
       </template>

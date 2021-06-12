@@ -1,6 +1,6 @@
 <template>
   <div :class="{ review: true, 'show-answer': showAnswer }">
-    <div class="review-item">
+    <div class="review-item" :dir="$l2.direction">
       <Annotate tag="span" :buttons="true" class="transcript-line-chinese">
         <span
           v-if="$l2.han && $l2.code !== 'ja'"
