@@ -69,7 +69,7 @@ export const getters = {
         savedWord = state.savedWords[options.l2].find(
           item => item.id && item.id === options.id
         )
-      } else {
+      } else if (options.text) {
         savedWord = state.savedWords[options.l2].find(
           item => item.forms.map(form => form ? form.toLowerCase() : '').includes(options.text.toLowerCase())
         )
