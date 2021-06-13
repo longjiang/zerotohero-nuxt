@@ -160,7 +160,8 @@
           }"
           @click="toggleSpeed()"
         >
-          {{ speed === 1 ? "慢" : speed + "x" }}
+          <i class="fas fa-tachometer-alt" v-if="speed === 1"></i>
+          <span v-else>{{ speed }}x</span>
         </b-button>
         <router-link
           :to="`/${$l1.code}/${$l2.code}/youtube/view/${
@@ -274,7 +275,7 @@ export default {
       fullscreen: false,
       regex: undefined,
       excludeArr: [],
-      speed: 0.75,
+      speed: 1,
       sort: "length",
       youglishLang: {
         zh: "chinese",
