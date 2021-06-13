@@ -79,8 +79,14 @@
             </div>
           </div>
           <EntryForms v-if="$l2.code === 'ru'" class="mt-5" :word="entry" />
+        </div>
+      </div>
+    </div>
+    <div :class="{container: !portrait, 'container-fluid': portrait}">
+      <div class="row">
+        <div :class="{'col-sm-12': true, 'p-0': portrait }">
           <div
-            :class="{ 'widget mt-5': true, hidden: !searchSubsReady }"
+            :class="{ 'widget mt-5': true, hidden: !searchSubsReady }" :style="portrait ? 'border-radius: 0' : ''"
             id="search-subs"
             v-if="entry && showSearchSubs"
           >
@@ -97,6 +103,12 @@
               />
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
           <Collocations
             :class="{ 'mt-5 mb-5': true, hidden: !collocationsReady }"
             :word="entry"
@@ -206,7 +218,7 @@
   </div>
 </template>
 <script>
-import Helper from '@/lib/helper'
+import Helper from "@/lib/helper";
 
 export default {
   props: {
@@ -253,7 +265,7 @@ export default {
     searchTerms() {
       if (this.$l2.code === "ja") {
         let unique = Helper.unique([this.entry.bare, this.entry.kana]);
-        return unique
+        return unique;
       } else if (this.$l2.code === "zh") {
         return Helper.unique([this.entry.simplified, this.entry.traditional]);
       } else if (this.entry.forms && this.entry.forms.length > 0) {
@@ -262,6 +274,10 @@ export default {
         return [this.entry.bare];
       }
     },
+    portrait() {
+      let landscape = (typeof window !== 'undefined') && window.innerWidth < window.innerHeight
+      return landscape
+    }
   },
   methods: {
     searchSubsLoaded(hits) {

@@ -1119,7 +1119,6 @@ h6,
   color: white;
   background: #4e4e4e;
   padding: 0.2rem 1rem;
-  border-radius: 0.3rem 0.3rem 0 0;
 }
 
 .widget-body {
