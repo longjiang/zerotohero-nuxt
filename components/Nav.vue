@@ -444,7 +444,7 @@ export default {
     savedWordsCount() {
       let count = this.$store.getters["savedWords/count"]({ l2: this.l2.code });
       // eslint-disable-next-line vue/no-parsing-error
-      return count < 100 ? count : "99+";
+      return count;
     },
     bindKeys() {
       window.addEventListener("keydown", this.keydown);
@@ -566,17 +566,16 @@ export default {
 
 .saved-words-count {
   background: #666;
-  border-radius: 100%;
+  border-radius: 0.5rem;
   font-size: 0.8rem;
   color: white;
   font-weight: bold;
   display: inline-block;
-  width: 1.3rem;
-  height: 1.3rem;
   line-height: 1.4rem;
   text-align: center;
   position: relative;
   top: -0.1rem;
+  padding: 0 0.35rem;
 }
 
 .nuxt-link-active .saved-words-count {
