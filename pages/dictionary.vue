@@ -197,7 +197,8 @@ export default {
       if (
         !["INPUT", "TEXTAREA"].includes(e.target.tagName.toUpperCase()) &&
         !e.metaKey &&
-        !e.repeat && !e.target.getAttribute('contenteditable')
+        !e.repeat &&
+        !e.target.getAttribute("contenteditable")
       ) {
         // home
         if (e.keyCode == 36) {
@@ -277,10 +278,22 @@ export default {
     ) {
       this.random();
     }
-    if(this.sW.length === 0) this.updateWords();
+    if (this.sW.length === 0) this.updateWords();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type.startsWith("savedWords")) {
         this.updateWords();
+      }
+      if (mutation.type === "savedWords/REMOVE_SAVED_WORD") {
+        if (mutation.payload.word.id === this.entry.id) {
+          let currentIndex = this.sW.findIndex((item) => item.id === this.entry.id);
+          let nextSavedWord = this.sW[currentIndex + 1];
+          if (nextSavedWord) {
+            this.$router.push({
+              name: `dictionary`,
+              params: { method: this.method, args: nextSavedWord.id },
+            });
+          }
+        }
       }
     });
   },
