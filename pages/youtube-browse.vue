@@ -16,7 +16,7 @@
     />
     <div class="row">
       <div class="col-sm-12 mb-4 text-center">
-        <h3 v-if="!keyword" class="mt-5">{{ $l2.name }} Video Library</h3>
+        <h3 v-if="!keyword" class="mt-5">{{$t('{l2} Video Library', {l2: $t($l2.name)})}}</h3>
         <p v-if="!keyword" class="mt-3">
           Study {{ $l2.name }} videos with
           {{ $l2.code === "zh" ? "Pinyin" : "" }} subtitles
