@@ -47,6 +47,13 @@ const Dictionary = {
       form: word.bare
     }]
     let jpForms = JPConjugations.conjugate(word.bare)
+    if (jpForms.length === 0) {
+      let tokenized = this.tokenizer.tokenize(word.bare);
+      if (tokenized.length > 0) {
+        jpForms = JPConjugations.conjugate(tokenized[0].basic_form)
+      }
+    }
+    
     forms = forms.concat(jpForms.map(f => {return {
       table: 'conjugation',
       field: f.name,

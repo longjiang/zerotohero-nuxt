@@ -15,13 +15,13 @@ var conjugationForms = [
   {  name: "polite negative",             forms: ["いませんでした", "きませんでした", "ぎませんでした", "しませんでした", "ちませんでした", "みませんでした", "びませんでした", "にませんでした", "りませんでした", "ませんでした"]  },
 
   // perfect: 10
-  {  name: "negative perfect",            forms: ["わず(に)", "かず(に)", "がず(に)", "さず(に)", "たず(に)", "まず(に)", "ばず(に)", "なず(に)", "らず(に)", "ず(に)"]  },
+  {  name: "negative perfect",            forms: ["わず", "かず", "がず", "さず", "たず", "まず", "ばず", "なず", "らず", "ず"]  },
 
   // ta form: 11
   {  name: "representative",              forms: ["ったり", "いたり", "いだり", "したり", "ったり", "んだり", "んだり", "んだり", "ったり", "たり"]  },
 
   // renyoukei: 12-13
-  {  name: "conjunctive",                 forms: ["い-", "き-", "ぎ-", "し-", "ち-", "み-", "び-", "に-", "り-", "-"]  },
+  {  name: "conjunctive",                 forms: ["い", "き", "ぎ", "し", "ち", "み", "び", "に", "り", ""]  },
   {  name: "way of doing",                forms: ["いかた", "きかた", "ぎかた", "しかた", "ちかた", "みかた", "びかた", "にかた", "りかた", "かた"]  },
 
   // te forms: 14-22
@@ -126,7 +126,7 @@ const JPConjugations = {
     for (i = 0; i < e; i++) {
       form = conjugationForms[i];
       specific = form.forms[index];
-      if (specific) {
+      if (specific !== false && typeof specific !== 'undefined') {
         ret.push({name: form.name, form: verbstem + specific});
       }
     }

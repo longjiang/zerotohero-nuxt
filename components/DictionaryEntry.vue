@@ -78,15 +78,15 @@
               </p>
             </div>
           </div>
-          <EntryForms v-if="['ru', 'ja'].includes($l2.code)" class="mt-5" :word="entry" />
         </div>
       </div>
     </div>
-    <div :class="{container: !portrait, 'container-fluid': portrait}">
+    <div :class="{ container: !portrait, 'container-fluid': portrait }">
       <div class="row">
-        <div :class="{'col-sm-12': true, 'p-0': portrait }">
+        <div :class="{ 'col-sm-12': true, 'p-0': portrait }">
           <div
-            :class="{ 'widget mt-5': true, hidden: !searchSubsReady }" :style="portrait ? 'border-radius: 0' : ''"
+            :class="{ 'widget mt-5': true, hidden: !searchSubsReady }"
+            :style="portrait ? 'border-radius: 0' : ''"
             id="search-subs"
             v-if="entry && showSearchSubs"
           >
@@ -109,6 +109,11 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
+          <EntryForms
+            v-if="['ru', 'ja'].includes($l2.code)"
+            class="mt-5"
+            :word="entry"
+          />
           <Collocations
             :class="{ 'mt-5 mb-5': true, hidden: !collocationsReady }"
             :word="entry"
@@ -239,6 +244,7 @@ export default {
   data() {
     return {
       characters: [],
+      searchTerms: [],
       character: {},
       unsplashSrcs: [],
       unsplashSearchTerm: "",
@@ -262,24 +268,39 @@ export default {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
-    searchTerms() {
-      if (this.$l2.code === "ja") {
-        let unique = Helper.unique([this.entry.bare, this.entry.kana]);
-        return unique;
-      } else if (this.$l2.code === "zh") {
-        return Helper.unique([this.entry.simplified, this.entry.traditional]);
-      } else if (this.entry.forms && this.entry.forms.length > 0) {
-        return this.entry.forms;
-      } else {
-        return [this.entry.bare];
-      }
-    },
     portrait() {
-      let landscape = (typeof window !== 'undefined') && window.innerWidth < window.innerHeight
-      return landscape
-    }
+      let landscape =
+        typeof window !== "undefined" && window.innerWidth < window.innerHeight;
+      return landscape;
+    },
+  },
+  async mounted() {
+    this.searchTerms = await this.getSearchTerms();
   },
   methods: {
+    async getSearchTerms() {
+      let terms = [];
+      if (!this.entry.forms) {
+        this.entry.forms = await (
+          await this.$getDictionary()
+        ).wordForms(this.entry);
+      }
+      let forms = this.entry.forms
+        ? this.entry.forms.map((form) => form.form).filter((s) => s.length > 1)
+        : [];
+      if (this.$l2.code === "ja") {
+        terms = Helper.unique([this.entry.bare, this.entry.kana, ...forms]);
+      } else if (this.$l2.code === "zh") {
+        terms = Helper.unique([this.entry.simplified, this.entry.traditional]);
+      } else if (forms && forms.length > 0) {
+        terms = forms;
+      } else {
+        terms = [this.entry.bare];
+      }
+      terms = terms.sort((a, b) => a.length - b.length).slice(0, 5)
+      console.log(terms)
+      return terms;
+    },
     searchSubsLoaded(hits) {
       if (hits.length > 0) {
         this.searchSubsReady = true;
