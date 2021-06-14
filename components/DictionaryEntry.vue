@@ -78,7 +78,7 @@
               </p>
             </div>
           </div>
-          <EntryForms v-if="$l2.code === 'ru'" class="mt-5" :word="entry" />
+          <EntryForms v-if="['ru', 'ja'].includes($l2.code)" class="mt-5" :word="entry" />
         </div>
       </div>
     </div>

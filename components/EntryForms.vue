@@ -10,7 +10,7 @@
           The word “{{ word.bare }}” seems to only take on one form.
         </div>
         <div
-          class="col-sm-12 col-md-6 col-lg-4 mb-4"
+          class="col-sm-12 form-table"
           v-for="(table, tableName) in tables"
         >
           <h6>
@@ -42,8 +42,8 @@
                 <td>
                   {{ row.field }}
                 </td>
-                <td>
-                  <b :data-level="word.level || 'outside'" class="ml-2"
+                <td  class="pl-3">
+                  <b :data-level="word.level || 'outside'"
                     >{{ row.form || 'n/a'
                     }}{{
                       row.field && row.field.startsWith('imperative') ? '!' : ''
@@ -78,6 +78,7 @@ export default {
     async getTables() {
       // https://www.consolelog.io/group-by-in-javascript/
       let forms = await (await this.$getDictionary()).wordForms(this.word)
+      forms = forms.filter(form => form.table !== 'head')
       for (let form of forms) {
         form.form = await (await this.$getDictionary()).accent(form.form)
         form.field = await (await this.$getDictionary()).stylize(form.field)
@@ -96,3 +97,10 @@ export default {
   }
 }
 </script>
+<style scoped>
+@media screen and (min-width: 768px) {
+  .form-table {
+    columns: 2; column-gap: 2rem;
+  }
+}
+</style>

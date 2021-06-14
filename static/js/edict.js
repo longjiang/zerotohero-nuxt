@@ -1,5 +1,6 @@
 importScripts('../vendor/kuromoji/kuromoji.js')
 importScripts('../vendor/wanakana/wanakana.min.js')
+importScripts('../vendor/jpconjugations.js')
 
 const Dictionary = {
   file: 'https://server.chinesezerotohero.com/data/edict/edict.tsv.txt',
@@ -45,6 +46,12 @@ const Dictionary = {
       field: 'head',
       form: word.bare
     }]
+    let jpForms = JPConjugations.conjugate(word.bare)
+    forms = forms.concat(jpForms.map(f => {return {
+      table: 'conjugation',
+      field: f.name,
+      form: f.form
+    }}))
     return forms
   },
   stylize(name) {
