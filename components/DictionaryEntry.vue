@@ -93,6 +93,7 @@
             <div class="widget-title">“{{ entry.bare }}” in TV Shows</div>
             <div class="widget-body">
               <SearchSubsComp
+                v-if="searchTerms"
                 ref="searchSubs"
                 :level="
                   entry.newHSK && entry.newHSK === '7-9' ? '7-9' : entry.hsk
@@ -244,7 +245,7 @@ export default {
   data() {
     return {
       characters: [],
-      searchTerms: [],
+      searchTerms: undefined,
       character: {},
       unsplashSrcs: [],
       unsplashSearchTerm: "",
@@ -298,7 +299,7 @@ export default {
         terms = [this.entry.bare];
       }
       terms = terms.sort((a, b) => a.length - b.length).slice(0, 5)
-      console.log(terms)
+      console.log(terms, terms)
       return terms;
     },
     searchSubsLoaded(hits) {

@@ -299,7 +299,7 @@ export default {
   async mounted() {
     await Helper.timeout(2000);
     this.checking = true;
-    if (this.$l2.code === "zh" && this.terms[0].length === 1) {
+    if (this.$l2.code === "zh" && this.terms[0] && this.terms[0].length === 1) {
       this.excludeTerms = await (
         await this.$getDictionary()
       ).getWordsWithCharacter(this.terms[0]);
