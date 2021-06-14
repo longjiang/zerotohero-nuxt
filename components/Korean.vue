@@ -6,15 +6,14 @@
         <div v-for="word in words">
           <div>
             The Korean word
-            <a
-              :href="`/en/ko/dictionary/kengdic/${word.kid}`"
+            <router-link
+              :to="`/en/ko/dictionary/kengdic/${word.kid}`"
               class="link-unstyled"
-              target="_blank"
               ><b>{{ word.hangul }}</b> [<b
                 data-level="outside"
                 class="bigger"
                 >{{ word.hanja }}</b
-              >]</a
+              >]</router-link
             >
             means <em>{{ word.english }}</em
             >.
@@ -46,7 +45,7 @@ export default {
   },
   methods: {
     async loadVariants() {
-      let variants = await (await this.$unihan).variants(this.text)
+      let variants = await (await this.$getUnihan()).variants(this.text)
       for (let variant of variants) {
         let response = await axios.get(
           `${Config.wiki}items/kengdic?filter[hanja][eq]=${variant}`

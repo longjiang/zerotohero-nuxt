@@ -175,7 +175,6 @@
         <div class="col-sm-6" v-if="$l2.code !== 'zh'">
           <Chinese
             v-if="
-              delayed &&
               entry.cjk &&
               entry.cjk.canonical &&
               entry.cjk.canonical !== 'NULL'
@@ -188,7 +187,6 @@
         <div class="col-sm-6" v-if="$l2.code !== 'ja'">
           <Japanese
             v-if="
-              delayed &&
               entry.cjk &&
               entry.cjk.canonical &&
               entry.cjk.canonical !== 'NULL'
@@ -201,7 +199,6 @@
         <div class="col-sm-6" v-if="$l2.code !== 'ko'">
           <Korean
             v-if="
-              delayed &&
               entry.cjk &&
               entry.cjk.canonical &&
               entry.cjk.canonical !== 'NULL'
@@ -250,7 +247,6 @@ export default {
       searchSubsImage: undefined,
       webImage: undefined,
       searchSubsExample: "",
-      delayed: false,
       collocationsReady: false,
       mistakesReady: false,
       relatedReady: false,

@@ -6,21 +6,20 @@
         <div v-for="word in words">
           <div>
             The Chinese word
-            <a
-              :href="
-                `/en/zh/view/cedict/${
-                  word.traditional
-                },${word.pinyin.replace(/ /g, '_')},${word.index}`
-              "
-              target="_blank"
+            <router-link
+              :to="`/en/zh/dictionary/hsk-cedict/${
+                word.traditional
+              },${word.pinyin.replace(/ /g, '_')},${word.index}`"
               class="link-unstyled"
             >
               <b class="bigger" :data-level="word.hsk">{{ word.simplified }}</b>
 
-              [{{ word.traditional }}] <span>({{ word.pinyin }})</span></a
-            >
-            means <em>{{ word.definitions }}</em
-            >.
+              [{{ word.traditional }}]
+              <span>({{ word.pinyin }})</span>
+            </router-link>
+            means
+            <em>{{ word.definitions }}</em>
+            .
           </div>
         </div>
       </div>
@@ -33,44 +32,43 @@
 </template>
 
 <script>
-import Config from '@/lib/config'
+import Config from "@/lib/config";
 
 export default {
   props: {
     text: {
-      type: String
-    }
+      type: String,
+    },
   },
   data() {
     return {
-      words: []
-    }
+      words: [],
+    };
   },
   methods: {
     async loadVariants() {
-      let variants = await (await this.$unihan).variants(this.text)
+      let variants = await (await this.$getUnihan()).variants(this.text);
       for (let variant of variants) {
         let response = await axios.get(
-          `${Config.wiki}items/hsk_cedict?filter[traditional][eq]=${variant}`,
-        )
-        this.words = this.words.concat(response.data.data)
+          `${Config.wiki}items/hsk_cedict?filter[traditional][eq]=${variant}`
+        );
+        this.words = this.words.concat(response.data.data);
       }
-
-    }
+    },
   },
   watch: {
     text() {
       if (this.text && this.words.length === 0) {
-        this.loadVariants()
+        this.loadVariants();
       }
-    }
+    },
   },
   mounted() {
     if (this.text && this.words.length === 0) {
-      this.loadVariants()
+      this.loadVariants();
     }
-  }
-}
+  },
+};
 </script>
 
 <style></style>
