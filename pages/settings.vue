@@ -70,9 +70,15 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
-          <b-form-checkbox v-model="adminMode">
-            Enable administrative mode (no cache, more buttons)
+          <b-form-checkbox v-model="adminMode" style="display: inline-block" v-if="adminMode">
+            Admin mode
           </b-form-checkbox>
+          <b-input-group v-else>
+            <b-input v-model.lazy="adminModePasscode" placeholder="Enter passcode to enable admin mode." />
+            <b-input-group-append>
+              <b-button variant="primary">Enable</b-button>
+            </b-input-group-append>
+          </b-input-group>
         </div>
       </div>
     </div>
@@ -100,6 +106,7 @@ export default {
   data() {
     return {
       adminMode: false,
+      adminModePasscode: ''
     };
   },
   computed: {
@@ -117,6 +124,11 @@ export default {
     adminMode() {
       this.$store.commit("settings/SET_ADMIN_MODE", this.adminMode);
     },
+    adminModePasscode() {
+      if (this.adminModePasscode === '5599341') {
+        this.adminMode = true
+      }
+    }
   },
 };
 </script>
