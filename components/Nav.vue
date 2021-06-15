@@ -63,6 +63,25 @@ export default {
       shortcuts: [],
       menu: [
         {
+          icon: 'fas fa-wrench',
+          title: "Admin",
+          show: this.adminMode(),
+          children: [
+            {
+              icon: 'fas fa-wrench',
+              title: "Test",
+              name: 'test',
+              show: this.adminMode()
+            },
+            {
+              icon: 'fas fa-wrench',
+              title: "Assign Lesson Videos",
+              name: 'assign-lesson-videos',
+              show: this.adminMode()
+            },
+          ]
+        },
+        {
           icon: "fas fa-graduation-cap",
           title: "Courses",
           show: this.hasFeature("courses"),
@@ -406,6 +425,9 @@ export default {
     },
   },
   methods: {
+    adminMode() {
+      return this.$store.state.settings.adminMode
+    },
     tvShows() {
       return typeof Config.approvedChannels[this.l2.code] !== 'undefined'
     },
