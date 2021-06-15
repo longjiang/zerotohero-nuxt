@@ -38,7 +38,7 @@
               <router-link
                 :to="{
                   name: 'youtube-view',
-                  params: { 'youtube_id': data.item.youtube_id },
+                  params: { youtube_id: data.item.youtube_id },
                 }"
               >
                 {{ data.item.title }}
@@ -80,7 +80,9 @@
         <div class="mt-4 text-center">
           <router-link
             v-if="start > 9"
-            :to="`/${$l1.code}/${$l2.code}/db-upgrade/${Number(start) - perPage}`"
+            :to="`/${$l1.code}/${$l2.code}/db-upgrade/${
+              Number(start) - perPage
+            }`"
             class="btn btn-default"
           >
             <i class="fa fa-chevron-left"></i>
@@ -88,7 +90,9 @@
           <span class="ml-3 mr-3">Page {{ start / perPage + 1 }}</span>
           <router-link
             v-if="videos && videos.length > 0"
-            :to="`/${$l1.code}/${$l2.code}/db-upgrade/${Number(start) + perPage}`"
+            :to="`/${$l1.code}/${$l2.code}/db-upgrade/${
+              Number(start) + perPage
+            }`"
             class="btn btn-default"
           >
             <i class="fa fa-chevron-right"></i>
@@ -116,6 +120,8 @@ export default {
     return {
       videos: undefined,
       perPage: 100,
+      seenYouTubeIds: [],
+      seenSubs: [],
     };
   },
   async fetch() {
@@ -123,6 +129,8 @@ export default {
   },
   methods: {
     async getVideos() {
+      this.seenYouTubeIds = [];
+      this.seenSubs = [];
       let limit = this.perPage;
       let response = await axios.get(
         `${Config.wiki}items/youtube_videos?sort=-id&limit=${limit}&offset=${
@@ -132,8 +140,18 @@ export default {
         }`
       );
       let videos = response.data.data || [];
-      if (videos && this.$adminMode) {
-        videos = await YouTube.checkShows(videos, this.$l2.id);
+      for (let video of videos) {
+        if (this.seenYouTubeIds.includes(video.youtube_id)) {
+          video._rowVariant = "danger";
+        } else if (this.seenSubs.includes(video.subs_l2)) {
+          videos.filter(v => v.subs_l2 === video.subs_l2).map(v => {
+            v._rowVariant = v._rowVariant === 'danger' ? v._rowVariant : "warning"
+            return v
+          })
+        } else {
+          this.seenYouTubeIds.push(video.youtube_id);
+          this.seenSubs.push(video.subs_l2);
+        }
       }
       return videos;
     },
