@@ -5,7 +5,7 @@
   }
 </router>
 <template>
-  <div class="main container mt-5">
+  <div class="main container-fluid mt-5">
     <div class="row">
       <div :class="{ 'col-sm-12 mb-5': true }">
         <div
@@ -26,14 +26,54 @@
           No more videos.
         </div>
         <template v-if="videos && videos.length > 0">
-          <b-table small striped hover :fields="fields" :items="videos">
-            <template #cell(actions)="data">
-              <button
-                class="btn-small bg-danger text-white"
-                @click="remove(data.item)"
+          <b-table
+            small
+            striped
+            hover
+            :fields="fields"
+            :items="videos"
+            responsive
+          >
+            <template #cell(title)="data">
+              <router-link
+                :to="{
+                  name: 'youtube-view',
+                  params: { 'youtube_id': data.item.youtube_id },
+                }"
               >
-                <i class="fas fa-trash"></i>
-              </button>
+                {{ data.item.title }}
+              </router-link>
+            </template>
+            <template #cell(subs_l2)="data">
+              <div
+                class="text-secondary"
+                style="
+                  font-family: monospace;
+                  font-size: 0.8em;
+                  width: 40rem;
+                  height: 7rem;
+                  overflow: scroll;
+                "
+              >
+                {{ data.item.subs_l2 }}
+              </div>
+            </template>
+            <template #cell(actions)="data">
+              <div style="min-width: 5rem">
+                <button
+                  class="btn-small bg-danger text-white"
+                  @click="remove(data.item)"
+                >
+                  <i class="fas fa-trash"></i>
+                </button>
+                <button
+                  class="btn-small bg-success text-white"
+                  v-if="type(data.item.subs_l2) === 'json'"
+                  @click="csv(data.item)"
+                >
+                  CSV
+                </button>
+              </div>
             </template>
           </b-table>
         </template>
@@ -64,6 +104,7 @@ import Config from "@/lib/config";
 import Helper from "@/lib/helper";
 import YouTube from "@/lib/youtube";
 import axios from "axios";
+import Papa from "papaparse";
 
 export default {
   props: {
@@ -92,11 +133,6 @@ export default {
       let videos = response.data.data || [];
       if (videos && this.$adminMode) {
         videos = await YouTube.checkShows(videos, this.$l2.id);
-        for (let video of videos) {
-          try {
-            if (video.subs_l2) video.subs_l2 = JSON.parse(video.subs_l2);
-          } catch (err) {}
-        }
       }
       return videos;
     },
@@ -106,11 +142,39 @@ export default {
           `${Config.wiki}items/youtube_videos/${video.id}`
         );
         if (response.data) {
-          this.videos = this.videos.filter(v => v !== video)
+          this.videos = this.videos.filter((v) => v !== video);
         }
       } catch (err) {
         // Directus bug
       }
+    },
+    async csv(video) {
+      let json = video.subs_l2;
+      let subs = JSON.parse(json);
+      let csv = Papa.unparse(
+        subs.map((item) => {
+          return { starttime: item.starttime, line: item.line };
+        })
+      );
+      console.log(`Saved ${((json.length - csv.length) / json.length) * 100}%`);
+      try {
+        let response = await axios.patch(
+          `${Config.wiki}items/youtube_videos/${video.id}`,
+          {
+            subs_l2: csv,
+          }
+        );
+        if (response && response.data) {
+          video.id = response.data.data.id;
+          video.subs_l2 = response.data.data.subs_l2;
+          // video.subs_l2 = response.data.subs_l2
+        }
+      } catch (err) {
+        // Directus bug
+      }
+    },
+    type(string) {
+      return string.charAt(0) === "[" ? "json" : "csv";
     },
   },
   computed: {

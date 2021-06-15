@@ -433,7 +433,7 @@ export default {
       );
       response = response.data;
       if (response && response.data.length > 0) {
-        let subs_l2 = JSON.parse(response.data[0].subs_l2);
+        let subs_l2 = YouTube.parseSavedSubs(response.data[0].subs_l2);
         if (subs_l2[0]) {
           video = Object.assign(video, response.data[0]);
           video.subs_l2 = subs_l2;

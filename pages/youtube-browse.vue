@@ -259,7 +259,7 @@ export default {
         videos = await YouTube.checkShows(videos, this.$l2.id);
         for (let video of videos) {
           try {
-            if (video.subs_l2) video.subs_l2 = JSON.parse(video.subs_l2);
+            if (video.subs_l2) video.subs_l2 = YouTube.parseSavedSubs(video.subs_l2);
           } catch (err) {}
         }
       }

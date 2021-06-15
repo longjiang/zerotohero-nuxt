@@ -460,8 +460,8 @@ export default {
         return video.subs_l2;
       }
       if (video.subs_l2 && typeof video.subs_l2 === "string") {
-        let savedSubs = JSON.parse(video.subs_l2);
-
+        let savedSubs = YouTube.parseSavedSubs(video.subs_l2)
+        
         if (savedSubs) {
           let filtered = savedSubs.filter(
             (line) => line && line.starttime && line.line
