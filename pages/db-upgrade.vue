@@ -80,15 +80,15 @@
         <div class="mt-4 text-center">
           <router-link
             v-if="start > 9"
-            :to="`/${$l1.code}/${$l2.code}/db-upgrade/${Number(start) - 12}`"
+            :to="`/${$l1.code}/${$l2.code}/db-upgrade/${Number(start) - perPage}`"
             class="btn btn-default"
           >
             <i class="fa fa-chevron-left"></i>
           </router-link>
-          <span class="ml-3 mr-3">Page {{ start / 12 + 1 }}</span>
+          <span class="ml-3 mr-3">Page {{ start / perPage + 1 }}</span>
           <router-link
             v-if="videos && videos.length > 0"
-            :to="`/${$l1.code}/${$l2.code}/db-upgrade/${Number(start) + 12}`"
+            :to="`/${$l1.code}/${$l2.code}/db-upgrade/${Number(start) + perPage}`"
             class="btn btn-default"
           >
             <i class="fa fa-chevron-right"></i>
@@ -115,6 +115,7 @@ export default {
   data() {
     return {
       videos: undefined,
+      perPage: 100,
     };
   },
   async fetch() {
@@ -122,7 +123,7 @@ export default {
   },
   methods: {
     async getVideos() {
-      let limit = 12;
+      let limit = this.perPage;
       let response = await axios.get(
         `${Config.wiki}items/youtube_videos?sort=-id&limit=${limit}&offset=${
           this.start
