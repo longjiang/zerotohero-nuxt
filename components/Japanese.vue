@@ -6,14 +6,13 @@
         <div v-for="word in words">
           <div>
             The Japanese word
-            <a
-              :href="`/en/ja/dictionary/edict/${word.id}`"
+            <router-link
+              :to="`/en/ja/dictionary/edict/${word.id}`"
               class="link-unstyled"
-              target="_blank"
             >
               <b :data-level="hsk" class="bigger">{{ word.kanji }}</b>
               ({{ word.kana }})
-            </a>
+            </router-link>
             means
             <em>
               {{
@@ -56,7 +55,7 @@ export default {
     };
   },
   async created() {
-    let variants = await (await this.$unihan).variants(this.text);
+    let variants = await (await this.$getUnihan()).variants(this.text);
     for (let variant of variants) {
       let kyujitai = new Kyujitai(async (error) => {
         this.shinjitai = kyujitai.decode(variant);
@@ -65,7 +64,7 @@ export default {
             `${Config.wiki}items/edict?filter[kanji][eq]=${this.shinjitai}`
           );
           if (response.data.data.length > 0) {
-            let data = response.data.filter((row) => {
+            let data = response.data.data.filter((row) => {
               return !this.words.find((word) => word.kanji === row.kanji); // Make sure it's unique (2 kyujitai variants might turn out to be the same shinjitai)
             });
             this.words = this.words.concat(data);

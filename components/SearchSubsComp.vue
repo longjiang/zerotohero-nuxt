@@ -105,7 +105,9 @@
                   >
                     <span>
                       <span
-                        v-if="['left', 'length'].includes(sort) && hit.lineIndex > 0"
+                        v-if="
+                          ['left', 'length'].includes(sort) && hit.lineIndex > 0
+                        "
                         v-html="
                           hit.video.subs_l2[Number(hit.lineIndex) - 1].line
                         "
@@ -174,6 +176,7 @@
       </span>
       <input
         type="text"
+        v-if="!checking && (hits.length > 0 || regex)"
         v-model.lazy="regex"
         :style="`width: 6em`"
         placeholder="Regex"
@@ -182,21 +185,27 @@
       <b-button
         class="btn btn-small search-subs-fullscreen"
         @click="toggleFullscreen"
-        v-if="!fullscreen && fullscreenToggle"
+        v-if="!checking && !fullscreen && fullscreenToggle && (hits.length > 0 || regex)"
       >
         <i class="fas fa-expand"></i>
       </b-button>
       <b-button
         class="btn btn-small search-subs-close"
         @click="toggleFullscreen"
-        v-if="fullscreen && fullscreenToggle"
+        v-if="!checking && fullscreen && fullscreenToggle"
       >
         <i class="fas fa-times" />
       </b-button>
     </div>
-    <div class="text-center mt-3 mb-3" v-if="checking">Checking content...</div>
+    <div
+      :class="{ 'loader text-center mt-4': true, 'd-none': !checking }"
+      style="flex: 1"
+    >
+      <div class="heartbeat-loader"></div>
+      <div class="text-center mt-4 mb-4">Searching through video captions...</div>
+    </div>
     <div class="text-center mt-3 mb-3" v-if="!checking && hits.length === 0">
-      No hits.
+      Sorry, no hits found.
     </div>
     <div v-if="hits.length > 0" :set="(hit = currentHit)" class="mb-4">
       <YouTubeWithTranscript
@@ -441,8 +450,8 @@ export default {
       }
       hitGroups = Object.assign({ zthSaved: savedHits }, hitGroups);
       for (let key in hitGroups) {
-        hitGroups[key] = hitGroups[key].sort((a, b) =>
-          a.leftContext.length - b.leftContext.length
+        hitGroups[key] = hitGroups[key].sort(
+          (a, b) => a.leftContext.length - b.leftContext.length
         );
       }
       return hitGroups;
@@ -475,8 +484,7 @@ export default {
       for (let c in group) {
         index.push({ c, length: group[c].length });
       }
-      if (sort)
-        index = index.sort((a, b) => b.length - a.length)
+      if (sort) index = index.sort((a, b) => b.length - a.length);
       index = index.map((i) => i.c);
       index.splice(index.indexOf("zthSaved"), 1);
       return ["zthSaved"].concat(index);

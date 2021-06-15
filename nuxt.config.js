@@ -20,6 +20,7 @@ export default {
       { hid: 'jquery', src: '/vendor/jquery/jquery.min.js', defer: true },
       { hid: 'axios', src: '/vendor/axios/axios.min.js', defer: true },
       { hid: 'underscore', src: '/vendor/underscore/underscore.js', defer: true },
+      { hid: 'kyujitai', src: '/vendor/kyujitai/kyujitai.js' },
     ]
   },
 

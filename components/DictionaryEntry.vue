@@ -85,10 +85,10 @@
       <div class="row">
         <div :class="{ 'col-sm-12': true, 'p-0': portrait }">
           <div
-            :class="{ 'widget mt-5': true, hidden: !searchSubsReady }"
+            :class="{ 'widget mt-5': true }"
             :style="portrait ? 'border-radius: 0' : ''"
             id="search-subs"
-            v-if="entry && showSearchSubs"
+            v-if="entry && showSearchSubs && searchTerms"
           >
             <div class="widget-title">“{{ entry.bare }}” in TV Shows</div>
             <div class="widget-body">
@@ -100,7 +100,6 @@
                 "
                 :key="`subs-search-${entry.id}`"
                 :terms="searchTerms"
-                @loaded="searchSubsLoaded"
               />
             </div>
           </div>
@@ -177,7 +176,6 @@
         <div class="col-sm-6" v-if="$l2.code !== 'zh'">
           <Chinese
             v-if="
-              delayed &&
               entry.cjk &&
               entry.cjk.canonical &&
               entry.cjk.canonical !== 'NULL'
@@ -190,7 +188,6 @@
         <div class="col-sm-6" v-if="$l2.code !== 'ja'">
           <Japanese
             v-if="
-              delayed &&
               entry.cjk &&
               entry.cjk.canonical &&
               entry.cjk.canonical !== 'NULL'
@@ -203,7 +200,6 @@
         <div class="col-sm-6" v-if="$l2.code !== 'ko'">
           <Korean
             v-if="
-              delayed &&
               entry.cjk &&
               entry.cjk.canonical &&
               entry.cjk.canonical !== 'NULL'
@@ -252,7 +248,6 @@ export default {
       searchSubsImage: undefined,
       webImage: undefined,
       searchSubsExample: "",
-      delayed: false,
       collocationsReady: false,
       mistakesReady: false,
       relatedReady: false,
@@ -299,7 +294,6 @@ export default {
         terms = [this.entry.bare];
       }
       terms = terms.sort((a, b) => a.length - b.length).slice(0, 5)
-      console.log(terms, terms)
       return terms;
     },
     searchSubsLoaded(hits) {

@@ -1,5 +1,8 @@
 <template>
-  <router-link :to="`/${l1.code}/${l2.code}/`" class="mr-4 mb-4 d-inline-block link-unstyled">
+  <router-link
+    :to="`/${l1.code}/${l2.code}/`"
+    class="mr-4 mb-4 d-inline-block link-unstyled"
+  >
     <div class="logo-constructed">
       <div class="logo-circle-wrapper">
         <div class="logo-circle">
@@ -8,24 +11,35 @@
         <div
           class="logo-speech-bubble shadowed"
           :style="`background-image: url(/img/speech-light.png)`"
+          v-if="!['en', 'zh'].includes(l2.code)"
         >
           <b>{{ l2.code }}</b>
         </div>
       </div>
       <div class="logo-text text-white">
         <template v-if="l2['iso639-3'] === 'eng'">
-          <div
-            class="logo-text-language"
-          >{{ l1.translations ? l1.translations['english'] : 'English' }}</div>
-          <div
-            class="logo-text-zth"
-          ><span v-if="!compact">{{ l1.translations ? l1.translations['zerotohero'] : 'Zero to Hero' }}</span><span v-else>&nbsp;</span></div>
+          <div class="logo-text-language">
+            {{ l1.translations ? l1.translations["english"] : "English" }}
+          </div>
+          <div class="logo-text-zth">
+            <span v-if="!compact">
+              {{
+                l1.translations ? l1.translations["zerotohero"] : "Zero to Hero"
+              }}
+            </span>
+            <span v-else>&nbsp;</span>
+          </div>
         </template>
         <template v-else>
           <div class="logo-text-language">
-            <span>{{ l2.name.replace(/ \(.*\)/gi, '').toUpperCase() }}</span>
+            <span>
+              {{ $t(l2.name.replace(/ \(.*\)/gi, "")).toUpperCase() }}
+            </span>
           </div>
-          <div class="logo-text-zth"><span v-if="!compact">ZERO TO HERO</span><span v-else>&nbsp;</span></div>
+          <div class="logo-text-zth">
+            <span v-if="!compact">{{ $t("Zero to Hero") }}</span>
+            <span v-else>&nbsp;</span>
+          </div>
         </template>
       </div>
     </div>
@@ -33,18 +47,17 @@
 </template>
 
 <script>
-import Config from '@/lib/config'
+import Config from "@/lib/config";
 
 export default {
-  props: ['l1', 'l2', 'compact'],
+  props: ["l1", "l2", "compact"],
   data() {
     return {
-      Config
-    }
+      Config,
+    };
   },
-  methods: {
-  }
-}
+  methods: {},
+};
 </script>
 
 <style>
@@ -74,7 +87,7 @@ export default {
   object-position: center;
 }
 .logo-text {
-  font-family: 'Helvetica Neue', Helvetica, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, sans-serif;
   text-align: left;
   margin-bottom: -0.4rem;
 }
