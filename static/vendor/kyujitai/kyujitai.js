@@ -10,13 +10,7 @@ var fs = require('fs');
 var IVS = require('IVS');
 
 if (typeof __dirname === 'undefined') {
-	if (document) {
-		var scripts = document.getElementsByTagName('script');
-		var scriptPath = scripts[scripts.length - 1].src.split('?')[0];
-		var __dirname = scriptPath.split('/').slice(0, -1).join('/');
-	} else {
-		throw new Error('Cannot get current directory');
-	}
+	var __dirname = "/vendor/kyujitai"
 }
 
 // ES6 String.fromCodePoint polyfilling
@@ -298,13 +292,7 @@ var url = require('url');
 var fs = require('fs');
 
 if (typeof __dirname === 'undefined') {
-	if (document) {
-		var scripts = document.getElementsByTagName('script');
-		var scriptPath = scripts[scripts.length - 1].src.split('?')[0];
-		var __dirname = scriptPath.split('/').slice(0, -1).join('/');
-	} else {
-		throw new Error('Cannot get current directory');
-	}
+	var __dirname = "/vendor/kyujitai"
 }
 
 var IVS_REGEX = new RegExp('\uDB40[\uDD00-\uDDEF]');
