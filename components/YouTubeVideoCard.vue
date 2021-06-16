@@ -132,8 +132,8 @@
           {{ Helper.level(video.level, $l2) }}
         </div>
 
-        <div v-if="$adminMode && video.subs_l1 && video.subs_l1.length > 0">
-          <div v-for="index in Math.min(20, video.subs_l1.length)">
+        <div v-if="$adminMode && video.subs_l1 && video.subs_l1.length > 0 && showSubsEditing">
+          <div v-for="index in Math.min(20, video.subs_l1.length)" :key="`l1-subs-${index}`">
             <b>{{ video.l1Locale }}</b>
             <span
               @click="matchSubsAndUpdate(index - 1)"
@@ -153,7 +153,7 @@
             {{ video.subs_l1[index - 1].line }}
           </div>
         </div>
-        <div v-if="$adminMode && video.subs_l2 && video.subs_l2.length > 0">
+        <div v-if="$adminMode && video.subs_l2 && video.subs_l2.length > 0 && showSubsEditing">
           <b>{{ video.l2Locale || $l2.code }}</b>
           <input
             type="text"
@@ -230,6 +230,9 @@ export default {
     checkSubs: {
       default: false,
     },
+    showSubsEditing: {
+      default: false
+    }
   },
   async mounted() {
     if (this.checkSubs) {

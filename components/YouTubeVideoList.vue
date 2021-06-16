@@ -5,6 +5,7 @@
       :video="video"
       :checkSaved="checkSaved"
       :checkSubs="checkSubs"
+      :showSubsEditing="showSubsEditing"
       ref="youTubeVideoCard"
       :key="`youtube-video-${video.youtube_id}-${videoIndex}`"
     />
@@ -34,6 +35,9 @@ export default {
     },
     checkSubs: {
       default: false,
+    },
+    showSubsEditing: {
+      default: false
     }
   },
   methods: {
