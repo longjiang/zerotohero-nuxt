@@ -25,6 +25,45 @@
         >
           No more videos.
         </div>
+        <div class="text-center mb-3">
+          <button
+            class="btn btn-success"
+            @click="csvAll"
+            v-if="videosWithJSONSubs.length > 0"
+          >
+            Convert All Subs to CSV
+          </button>
+          <button
+            class="btn btn-danger"
+            @click="removeAllDupes"
+            v-if="
+              videosWithDupSubs.length > 0 || videosWithDupYouTubeIds.length > 0
+            "
+          >
+            Remove All Dupes
+          </button>
+          
+          <router-link
+            v-if="start > 9"
+            :to="`/${$l1.code}/${$l2.code}/db-upgrade/${
+              Number(start) - perPage
+            }`"
+            class="btn btn-default"
+          >
+            <i class="fa fa-chevron-left"></i>
+          </router-link>
+          <span class="ml-3 mr-3">Page {{ start / perPage + 1 }}</span>
+          <router-link
+            v-if="videos && videos.length > 0"
+            :to="`/${$l1.code}/${$l2.code}/db-upgrade/${
+              Number(start) + perPage
+            }`"
+            class="btn btn-default"
+          >
+            <i class="fa fa-chevron-right"></i>
+          </router-link>
+          <b-progress class="mt-3" variant="success" v-if="videosWithJSONSubs.length > 0" :value="videos.length - videosWithJSONSubs.length" :max="videos.length" animated></b-progress>
+        </div>
         <template v-if="videos && videos.length > 0">
           <b-table
             small
@@ -51,11 +90,11 @@
                   font-family: monospace;
                   font-size: 0.8em;
                   width: 40rem;
-                  height: 7rem;
+                  max-height: 7rem;
                   overflow: scroll;
                 "
               >
-                {{ data.item.subs_l2 }}
+                {{ data.item.subs_l2 ? data.item.subs_l2.substr(0,100) : '' }}
               </div>
             </template>
             <template #cell(actions)="data">
@@ -106,7 +145,6 @@
 <script>
 import Config from "@/lib/config";
 import Helper from "@/lib/helper";
-import YouTube from "@/lib/youtube";
 import axios from "axios";
 import Papa from "papaparse";
 
@@ -119,18 +157,26 @@ export default {
   data() {
     return {
       videos: undefined,
-      perPage: 100,
-      seenYouTubeIds: [],
-      seenSubs: [],
+      perPage: 2000,
+      fields: [
+        "id",
+        "youtube_id",
+        "l2",
+        "title",
+        "channel_id",
+        "topic",
+        "level",
+        "lesson",
+        "subs_l2",
+        "actions",
+      ],
     };
   },
-  async fetch() {
+  async mounted() {
     this.videos = await this.getVideos();
   },
   methods: {
     async getVideos() {
-      this.seenYouTubeIds = [];
-      this.seenSubs = [];
       let limit = this.perPage;
       let response = await axios.get(
         `${Config.wiki}items/youtube_videos?sort=-id&limit=${limit}&offset=${
@@ -140,20 +186,18 @@ export default {
         }`
       );
       let videos = response.data.data || [];
-      for (let video of videos) {
-        if (this.seenYouTubeIds.includes(video.youtube_id)) {
-          video._rowVariant = "danger";
-        } else if (this.seenSubs.includes(video.subs_l2)) {
-          videos.filter(v => v.subs_l2 === video.subs_l2).map(v => {
-            v._rowVariant = v._rowVariant === 'danger' ? v._rowVariant : "warning"
-            return v
-          })
-        } else {
-          this.seenYouTubeIds.push(video.youtube_id);
-          this.seenSubs.push(video.subs_l2);
-        }
-      }
+      this.warnVideos(videos);
       return videos;
+    },
+    async removeAllDupes() {
+      let videos = this.videos.filter((v) =>
+        ["warning", "danger"].includes(v._rowVariant)
+      );
+      for (let video of videos) {
+        await Helper.timeout(150);
+        this.remove(video)
+        console.log(`Removing video: ${video.title}`);
+      }
     },
     async remove(video) {
       try {
@@ -162,9 +206,36 @@ export default {
         );
         if (response.data) {
           this.videos = this.videos.filter((v) => v !== video);
+          warnVideos(this.videos);
         }
       } catch (err) {
         // Directus bug
+      }
+    },
+    warnVideos(videos) {
+      let seenYouTubeIds = [];
+      let seenSubs = [];
+      for (let video of videos) {
+        // if (!video.subs_l2) {
+        //   video._rowVariant = "danger";
+        // }
+        if (seenYouTubeIds.includes(video.youtube_id)) {
+          if (!video.lesson) video._rowVariant = "danger";
+        } 
+        else if (video.subs_l2 && seenSubs.includes(video.subs_l2)) {
+          if (!video.lesson) video._rowVariant = "warning";
+        } 
+        else {
+          seenYouTubeIds.push(video.youtube_id);
+          seenSubs.push(video.subs_l2);
+        }
+      }
+    },
+    async csvAll() {
+      let videos = this.videosWithJSONSubs;
+      for (let video of videos) {
+        await Helper.timeout(450);
+        this.csv(video);
       }
     },
     async csv(video) {
@@ -175,7 +246,6 @@ export default {
           return { starttime: item.starttime, line: item.line };
         })
       );
-      console.log(`Saved ${((json.length - csv.length) / json.length) * 100}%`);
       try {
         let response = await axios.patch(
           `${Config.wiki}items/youtube_videos/${video.id}`,
@@ -187,13 +257,21 @@ export default {
           video.id = response.data.data.id;
           video.subs_l2 = response.data.data.subs_l2;
           // video.subs_l2 = response.data.subs_l2
+          console.log(
+            `Converted to CSV. ${json.length / 1000}k -> ${
+              csv.length / 1000
+            }k, saved ${(
+              ((json.length - csv.length) / json.length) *
+              100
+            ).toFixed(2)}%`
+          );
         }
       } catch (err) {
         // Directus bug
       }
     },
     type(string) {
-      return string.charAt(0) === "[" ? "json" : "csv";
+      return string && string.charAt(0) === "[" ? "json" : "csv";
     },
   },
   computed: {
@@ -209,21 +287,22 @@ export default {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
     },
-    fields() {
-      if (this.videos && this.videos[0]) {
-        return [
-          "id",
-          "youtube_id",
-          "l2",
-          "title",
-          "channel_id",
-          "topic",
-          "level",
-          "lesson",
-          "subs_l2",
-          "actions",
-        ];
+    videosWithJSONSubs() {
+      if (this.videos) {
+        return this.videos.filter((v) => this.type(v.subs_l2) === "json");
+      } else {
+        return [];
       }
+    },
+    videosWithDupYouTubeIds() {
+      return this.videos
+        ? this.videos.filter((v) => v._rowVariant === "danger")
+        : [];
+    },
+    videosWithDupSubs() {
+      return this.videos
+        ? this.videos.filter((v) => v._rowVariant === "warning")
+        : [];
     },
   },
 };

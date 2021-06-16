@@ -349,9 +349,7 @@ export default {
             this.$l2.id
           }${filters}&offset=${
             this.start
-          }&fields=channel_id,id,lesson,level,title,topic,youtube_id${
-            this.$adminMode ? ",subs_l2" : ""
-          }&timestamp=${this.$adminMode ? Date.now() : 0}`
+          }&fields=channel_id,id,lesson,level,title,topic,youtube_id&timestamp=${this.$adminMode ? Date.now() : 0}`
         );
 
         if (response.data && response.data.data) {
