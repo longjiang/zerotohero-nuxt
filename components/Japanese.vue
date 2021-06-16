@@ -55,22 +55,24 @@ export default {
     };
   },
   async created() {
-    let variants = await (await this.$getUnihan()).variants(this.text);
-    for (let variant of variants) {
-      let kyujitai = new Kyujitai(async (error) => {
-        this.shinjitai = kyujitai.decode(variant);
-        if (this.shinjitai) {
-          let response = await axios.get(
-            `${Config.wiki}items/edict?filter[kanji][eq]=${this.shinjitai}`
-          );
-          if (response.data.data.length > 0) {
-            let data = response.data.data.filter((row) => {
-              return !this.words.find((word) => word.kanji === row.kanji); // Make sure it's unique (2 kyujitai variants might turn out to be the same shinjitai)
-            });
-            this.words = this.words.concat(data);
+    if (typeof Kyujitai !== "undefined") {
+      let variants = await (await this.$getUnihan()).variants(this.text);
+      for (let variant of variants) {
+        let kyujitai = new Kyujitai(async (error) => {
+          this.shinjitai = kyujitai.decode(variant);
+          if (this.shinjitai) {
+            let response = await axios.get(
+              `${Config.wiki}items/edict?filter[kanji][eq]=${this.shinjitai}`
+            );
+            if (response.data.data.length > 0) {
+              let data = response.data.data.filter((row) => {
+                return !this.words.find((word) => word.kanji === row.kanji); // Make sure it's unique (2 kyujitai variants might turn out to be the same shinjitai)
+              });
+              this.words = this.words.concat(data);
+            }
           }
-        }
-      });
+        });
+      }
     }
   },
 };
