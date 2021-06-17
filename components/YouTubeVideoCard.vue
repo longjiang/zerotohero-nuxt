@@ -87,8 +87,14 @@
         >
           <i class="fa fa-tv mr-2" />
           {{ video.tv_show.title }}
+          <i class="fas fa-times-circle ml-1" v-if="$adminMode" @click="unassignShow" />
         </span>
-        <AssignTVShow v-if="$adminMode && video.id && !video.tv_show" :defaultYoutubeId="video.youtube_id" :defaultTitle="video.title" />
+        <AssignTVShow
+          @assignTVShow="saveTVShow"
+          v-if="$adminMode && video.id && !video.tv_show"
+          :defaultYoutubeId="video.youtube_id"
+          :defaultTitle="video.title"
+        />
         <b-button
           v-if="$adminMode && video.id"
           class="btn btn-small bg-danger text-white mt-2 ml-0"
@@ -263,20 +269,32 @@ export default {
     $adminMode() {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
-    }
+    },
   },
   methods: {
     async saveTVShow(tvShowID) {
-      let response = await axios.patch(`${Config.wiki}items/youtube_videos/${this.video.id}?fields=tv_show.*`, {
-        tv_show: tvShowID
-      })
+      let response = await axios.patch(
+        `${Config.wiki}items/youtube_videos/${this.video.id}?fields=tv_show.*`,
+        {
+          tv_show: tvShowID,
+        }
+      );
       response = response.data;
       if (response && response.data) {
-        console.log(response.data, 'saveTVShow response.data')
         this.video.tv_show = {
           id: response.data.tv_show.id,
-          title: response.data.tv_show.title
+          title: response.data.tv_show.title,
         };
+      }
+    },
+    async unassignShow() {
+      let response = await axios.patch(
+        `${Config.wiki}items/youtube_videos/${this.video.id}`,
+        { tv_show: null }
+      );
+      if (response && response.data) {
+        this.video.tv_show = undefined;
+        this.videoInfoKey++;
       }
     },
     async saveTitle(e) {

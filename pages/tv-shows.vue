@@ -7,7 +7,7 @@
 <template>
   <div class="main container" id="main">
     <SocialHead
-      v-if="shows[0]"
+      v-if="shows && shows[0]"
       :title="`Learn ${$l2.name} with TV Shows | ${$l2.name} Zero to Hero`"
       :description="`Learn ${$l2.name} with TV shows.`"
       :image="`https://img.youtube.com/vi/${shows[0].youtube_id}/hqdefault.jpg`"
@@ -15,7 +15,7 @@
     <div class="row">
       <div class="col-sm-12">
         <h3 class="text-center mt-5 mb-5">
-          Study {{ $l2.name }} with {{ shows.length ? shows.length : "" }} TV
+          Study {{ $l2.name }} with {{ shows && shows.length ? shows.length : "" }} TV
           Shows
         </h3>
         <SimpleSearch
@@ -28,16 +28,14 @@
               this.$router.push({
                 path: `/${$l1.code}/${
                   $l2.code
-                }/youtube/browse/all/all/0/${encodeURIComponent(
-                  url
-                )}`,
+                }/youtube/browse/all/all/0/${encodeURIComponent(url)}`,
               });
             }
           "
         />
         <div class="tv-shows mb-5">
           <div
-            :class="{ 'loader text-center': true, 'd-none': shows.length > 1 }"
+            :class="{ 'loader text-center': true, 'd-none': shows && shows.length > 1 }"
             style="flex: 1"
           >
             <div class="heartbeat-loader"></div>
@@ -98,21 +96,23 @@ export default {
       randomEpisodeYouTubeId: undefined,
     };
   },
-  async fetch() {
-    let response = await axios.get(
-      `${Config.wiki}items/tv_shows?sort=title&filter[l2][eq]=${
-        this.$l2.id
-      }&limit=500&timestamp=${this.$adminMode ? Date.now() : 0}`
-    );
-    let shows =
-      response.data.data.sort((x, y) =>
-        x.title.localeCompare(y.title, this.$l2.code)
-      ) || [];
-    this.shows = Helper.uniqueByValue(shows, "youtube_id");
+  async mounted() {
+    this.shows = this.$store.state.tvShows.shows
+      ? this.$store.state.tvShows.shows[this.$l2.code]
+      : undefined;
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (mutation.type === "tvShows/LOAD_TV_SHOWS") {
+        this.loadTVShows();
+      }
+    });
     this.randomEpisodeYouTubeId = await YouTube.getRandomEpisodeYouTubeId(
       this.$l2.code,
       this.$l2.id
     );
+  },
+  beforeDestroy() {
+    // you may call unsubscribe to stop the subscription
+    this.unsubscribe();
   },
   computed: {
     $l1() {
@@ -129,6 +129,20 @@ export default {
     },
   },
   methods: {
+    sortShows(shows) {
+      shows =
+        shows.sort((x, y) => x.title.localeCompare(y.title, this.$l2.code)) ||
+        [];
+      return Helper.uniqueByValue(shows, "youtube_id");
+    },
+    loadTVShows() {
+      let shows = this.$store.state.tvShows.shows[this.$l2.code]
+        ? this.$store.state.tvShows.shows[this.$l2.code]
+        : undefined;
+      if (shows) {
+        this.shows = this.sortShows(shows);
+      }
+    },
     async remove(show) {
       try {
         let response = await axios.delete(

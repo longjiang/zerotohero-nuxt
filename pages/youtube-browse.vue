@@ -256,6 +256,8 @@ export default {
         }
       }
       videos = Helper.uniqueByValue(videos, "youtube_id");
+      videos = videos.sort((x, y) => x.title.localeCompare(y.title, this.$l2.code, {numeric: true})) ||
+        [];
       return videos;
     },
     async getChannels() {

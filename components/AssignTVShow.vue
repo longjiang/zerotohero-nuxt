@@ -39,9 +39,8 @@ export default {
         this.loadTVShows();
       }
     });
-    if (this.defaultSelection) {
-      let show = this.tvShows.find(s => s.title === this.defaultSelection)
-      if (show) this.tvShowSelect = show.id
+    if (this.defaultSelection && this.tvShows) {
+      this.makeDefaultSelection()
     }
   },
   beforeDestroy() {
@@ -49,6 +48,9 @@ export default {
     this.unsubscribe();
   },
   watch: {
+    tvShows() {
+      this.makeDefaultSelection()
+    },
     tvShowSelect() {
       if (this.tvShowSelect && this.tvShowSelect !== 'new') {
         this.selectedTVShowID = this.tvShowSelect
@@ -90,6 +92,10 @@ export default {
     },
   },
   methods: {
+    makeDefaultSelection() {
+      let show = this.tvShows.find(s => s.title === this.defaultSelection)
+      if (show) this.tvShowSelect = show.id
+    },
     loadTVShows() {
       this.tvShows = this.$store.state.tvShows.shows[this.$l2.code]
         ? this.$store.state.tvShows.shows[this.$l2.code]
