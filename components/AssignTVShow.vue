@@ -23,7 +23,7 @@
 
 <script>
 export default {
-  props: ["defaultYoutubeId", "defaultTitle"],
+  props: ["defaultYoutubeId", "defaultTitle", "defaultSelection"],
   data() {
     return {
       assignShow: false,
@@ -39,6 +39,10 @@ export default {
         this.loadTVShows();
       }
     });
+    if (this.defaultSelection) {
+      let show = this.tvShows.find(s => s.title === this.defaultSelection)
+      if (show) this.tvShowSelect = show.id
+    }
   },
   beforeDestroy() {
     // you may call unsubscribe to stop the subscription

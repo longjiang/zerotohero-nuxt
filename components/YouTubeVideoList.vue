@@ -31,7 +31,7 @@
           <i class="fas fa-plus mr-2"></i>
           Add All
         </b-button>
-        <AssignTVShow @assignTVShow="assignTVShowToAll" />
+        <AssignTVShow @assignTVShow="assignTVShowToAll" :defaultSelection="keyword" />
       </div>
       <div class="mt-2">
         <drop
@@ -69,10 +69,17 @@
 <script>
 import Helper from "@/lib/helper";
 import YouTubeVideoCard from "@/components/YouTubeVideoCard";
-import Vue from 'vue'
 
 import { Drag, Drop } from "vue-drag-drop";
 export default {
+  props: {
+    videos: {
+      type: Array,
+    },
+    keyword: {
+      type: String
+    }
+  },
   computed: {
     $adminMode() {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
@@ -93,11 +100,6 @@ export default {
       checkSubs: false,
       over: false,
     };
-  },
-  props: {
-    videos: {
-      type: Array,
-    },
   },
   methods: {
     async addAll() {

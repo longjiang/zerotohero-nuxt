@@ -61,6 +61,7 @@
           <YouTubeVideoList
             class="row"
             :videos="videos"
+            :keyword="keyword"
             :checkSubs="false"
             ref="youtubeVideoList"
             :checkSaved="false"
