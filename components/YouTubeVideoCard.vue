@@ -82,21 +82,25 @@
           Add Channel ID
         </b-button>
         <b-button
-          v-if="$adminMode && video.id && !tvShow"
+          v-if="$adminMode && video.id && !video.tv_show"
           class="btn btn-small mt-2 ml-0"
-          @click="toggleMakingShow()"
+          @click="toggleAssignShow()"
         >
           <i class="fa fa-tv mr-2"></i>
-          Make TV Show
+          Assign TV Show
         </b-button>
         <span
           class="btn btn-small mt-2 ml-0 bg-success text-white"
-          v-if="tvShow"
+          v-if="video.tv_show"
         >
           <i class="fa fa-tv mr-2" />
           TV Show
         </span>
-        <div v-if="makingShow && !tvShow">
+        <div v-if="assignShow">
+          <b-form-select
+            v-model="video.tv_show"
+            :options="tvShowOptions"
+          ></b-form-select>
           <input
             type="text"
             v-model.lazy="showTitle"
@@ -106,7 +110,7 @@
           />
           <b-button
             class="btn btn-small mt-2 ml-0 bg-success text-white"
-            v-if="!tvShow"
+            v-if="!video.tv_show"
             @click="addShow()"
           >
             Add Show
@@ -132,8 +136,18 @@
           {{ Helper.level(video.level, $l2) }}
         </div>
 
-        <div v-if="$adminMode && video.subs_l1 && video.subs_l1.length > 0 && showSubsEditing">
-          <div v-for="index in Math.min(20, video.subs_l1.length)" :key="`l1-subs-${index}`">
+        <div
+          v-if="
+            $adminMode &&
+            video.subs_l1 &&
+            video.subs_l1.length > 0 &&
+            showSubsEditing
+          "
+        >
+          <div
+            v-for="index in Math.min(20, video.subs_l1.length)"
+            :key="`l1-subs-${index}`"
+          >
             <b>{{ video.l1Locale }}</b>
             <span
               @click="matchSubsAndUpdate(index - 1)"
@@ -153,7 +167,14 @@
             {{ video.subs_l1[index - 1].line }}
           </div>
         </div>
-        <div v-if="$adminMode && video.subs_l2 && video.subs_l2.length > 0 && showSubsEditing">
+        <div
+          v-if="
+            $adminMode &&
+            video.subs_l2 &&
+            video.subs_l2.length > 0 &&
+            showSubsEditing
+          "
+        >
           <b>{{ video.l2Locale || $l2.code }}</b>
           <input
             type="text"
@@ -171,7 +192,7 @@
           </b-button> -->
         </div>
 
-        <div
+        <!-- <div
           v-if="
             $adminMode &&
             video.channel_id &&
@@ -183,7 +204,7 @@
           class="small text-warning mt-1"
         >
           {{ video.channel_id }}
-        </div>
+        </div> -->
       </div>
     </div>
   </drop>
@@ -212,11 +233,11 @@ export default {
           ? this.video.subs_l2[0].starttime
           : undefined,
       subsUpdated: false,
-      makingShow: false,
+      assignShow: false,
       showTitle: this.video.title,
       showYear: "",
-      tvShow: this.video.show,
       srt: false,
+      tvShows: undefined,
     };
   },
   props: {
@@ -231,8 +252,8 @@ export default {
       default: false,
     },
     showSubsEditing: {
-      default: false
-    }
+      default: false,
+    },
   },
   async mounted() {
     if (this.checkSubs) {
@@ -242,7 +263,16 @@ export default {
     if (this.video.id && this.$adminMode) {
       await this.addSubsL1(this.video);
     }
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (mutation.type === "tvShows/LOAD_TV_SHOWS") {
+        this.loadTVShows();
+      }
+    });
     this.videoInfoKey++;
+  },
+  beforeDestroy() {
+    // you may call unsubscribe to stop the subscription
+    this.unsubscribe();
   },
   watch: {
     firstLineTime(newTime, oldTime) {
@@ -273,8 +303,24 @@ export default {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
     },
+    tvShowOptions() {
+      if (this.tvShows) {
+        let options = this.tvShows.map((s) => {
+          return {
+            value: s.id,
+            text: s.title,
+          };
+        })
+        return options;
+      }
+    },
   },
   methods: {
+    loadTVShows() {
+      this.tvShows = this.$store.state.tvShows.shows[this.$l2.code]
+        ? this.$store.state.tvShows.shows[this.$l2.code]
+        : undefined;
+    },
     async saveTitle(e) {
       let newTitle = e.target.innerText;
       if (this.video.title !== newTitle) {
@@ -293,8 +339,8 @@ export default {
         }
       }
     },
-    toggleMakingShow() {
-      this.makingShow = !this.makingShow;
+    toggleAssignShow() {
+      this.assignShow = !this.assignShow;
     },
     async addShow() {
       let response = await axios.post(`${Config.wiki}items/tv_shows`, {
@@ -305,7 +351,7 @@ export default {
         channel_id: this.video.channel_id,
       });
       if (response && response.data) {
-        this.tvShow = response.data;
+        this.video.tv_show = response.data;
       }
     },
     matchSubsAndUpdate(index) {
