@@ -16,12 +16,14 @@
         v-if="newShow"
         :youtube_id="defaultYoutubeId"
         :defaultTitle="defaultTitle"
+        @newTVShow="newTVShow"
       />
     </div>
   </span>
 </template>
 
 <script>
+
 export default {
   props: ["defaultYoutubeId", "defaultTitle", "defaultSelection"],
   data() {
@@ -100,6 +102,10 @@ export default {
       this.tvShows = this.$store.state.tvShows.shows[this.$l2.code]
         ? this.$store.state.tvShows.shows[this.$l2.code]
         : undefined;
+    },
+    newTVShow(newTVShowID) {
+      this.selectedTVShowID = newTVShowID
+      this.save()
     },
     save() {
       this.$emit('assignTVShow', this.selectedTVShowID)

@@ -1,7 +1,12 @@
 <template>
   <div class="container-fluid youtube-with-transcript">
     <div v-if="layout === 'horizontal'" class="row">
-      <div :class="{'youtube-video-column col-sm-12 mb-4 p-0': true, 'order-2': landscape && $l2.direction === 'rtl'}">
+      <div
+        :class="{
+          'youtube-video-column col-sm-12 mb-4 p-0': true,
+          'order-2': landscape && $l2.direction === 'rtl',
+        }"
+      >
         <div class="youtube-video-wrapper" :key="'youtube-' + video.youtube_id">
           <YouTubeVideo
             ref="youtube"
@@ -256,6 +261,7 @@ import Config from "@/lib/config";
 import Helper from "@/lib/helper";
 import { Drag, Drop } from "vue-drag-drop";
 import { parseSync } from "subtitle";
+import Papa from 'papaparse'
 
 export default {
   components: {
@@ -350,9 +356,10 @@ export default {
         return this.$store.state.settings.adminMode;
     },
     landscape() {
-      let landscape = (typeof window !== 'undefined') && window.innerWidth > window.innerHeight
-      return landscape
-    }
+      let landscape =
+        typeof window !== "undefined" && window.innerWidth > window.innerHeight;
+      return landscape;
+    },
   },
   updated() {
     if (this.$refs.transcript) {
@@ -445,7 +452,11 @@ export default {
             title: this.video.title,
             youtube_id: this.video.youtube_id,
             channel_id: this.video.channel ? this.video.channel.id : null,
-            subs_l2: JSON.stringify(this.video.subs_l2),
+            subs_l2: Papa.unparse(
+              this.video.subs_l2.map((l) => {
+                return { starttime: l.starttime, line: l.line };
+              })
+            ),
           })
         );
         if (response) {

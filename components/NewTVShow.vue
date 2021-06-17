@@ -15,6 +15,8 @@
 </template>
 
 <script>
+import Config from '@/lib/config'
+
 export default {
   props: ['youtube_id', 'defaultTitle'],
   data() {
@@ -45,7 +47,7 @@ export default {
       if (this.newShowYear) show.year = this.newShowYear
       let response = await axios.post(`${Config.wiki}items/tv_shows`, show);
       if (response && response.data) {
-        this.video.tv_show = response.data;
+        this.$emit('newTVShow', response.data.id)
       }
     },
   },
