@@ -45,31 +45,12 @@
       <b-form-radio v-model="captions" class="d-inline-block" value="all"
         >All</b-form-radio
       >
-      <b-button
-        v-if="$adminMode && !checkSaved"
-        class="btn btn-small mt-2 ml-3"
-        @click="checkSaved = true"
-        ><i class="fas fa-question mr-2"></i>Check Saved</b-button
-      >
-      <b-button
-        v-if="$adminMode && checkSaved"
-        class="btn btn-small mt-2 ml-3"
-        @click="addAll()"
-        ><i class="fas fa-plus mr-2"></i>Add All</b-button
-      >
-      <b-button
-        v-if="$adminMode && checkSaved"
-        class="btn btn-small mt-2 ml-3"
-        @click="checkSaved = false"
-        ><i class="fas fa-question mr-2"></i>Uncheck Saved</b-button
-      >
     </b-form-group>
     <YouTubeSearchResults
       :term="term"
       :start="start"
       :captions="captions"
       class="mt-5"
-      :checkSaved="checkSaved"
       :key="searchResultKey"
       ref="youtubeSearchResults"
     />

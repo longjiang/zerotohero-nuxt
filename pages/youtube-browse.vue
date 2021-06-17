@@ -57,23 +57,12 @@
         <div :class="{'text-center': true, 'd-none': !videos || videos.length > 0}">
           No more videos.
         </div>
-        <div v-if="$adminMode" class="mb-4">
-          <b-button
-            variant="danger"
-            @click="removeAll()"
-          >
-            <i class="fas fa-trash mr-2"></i>
-            Remove All
-          </b-button>
-          <b-checkbox class="mt-4" v-model="showSubsEditing">Show Subs Editing</b-checkbox>
-        </div>
         <template v-if="videos && videos.length > 0">
           <YouTubeVideoList
             class="row"
             :videos="videos"
             :checkSubs="false"
             ref="youtubeVideoList"
-            :showSubsEditing="showSubsEditing"
             :checkSaved="false"
           />
         </template>
@@ -220,7 +209,6 @@ export default {
       videos: undefined,
       levels: Helper.levels(this.$l2),
       topics: Helper.topics,
-      showSubsEditing: false,
       randomEpisodeYouTubeId: undefined,
     };
   },
@@ -233,9 +221,6 @@ export default {
     );
   },
   methods: {
-    removeAll() {
-      this.$refs.youtubeVideoList.removeAll();
-    },
     async getVideos() {
       let filters = "";
       if (this.topic !== "all") {
