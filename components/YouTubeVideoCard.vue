@@ -98,23 +98,14 @@
         </span>
         <div v-if="assignShow">
           <b-form-select
-            v-model="video.tv_show"
+            v-model="tvShowSelect"
             :options="tvShowOptions"
           ></b-form-select>
-          <input
-            type="text"
-            v-model.lazy="showTitle"
-            placeholder="Title"
-            style="width: 70%; text-align: left"
-            class="add-show-input ml-0"
+          <NewTVShow
+            v-if="newShow"
+            :youtube_id="this.video.youtube_id"
+            :defaultTitle="this.video.title"
           />
-          <b-button
-            class="btn btn-small mt-2 ml-0 bg-success text-white"
-            v-if="!video.tv_show"
-            @click="addShow()"
-          >
-            Add Show
-          </b-button>
         </div>
         <b-button
           v-if="$adminMode && video.id"
@@ -234,8 +225,7 @@ export default {
           : undefined,
       subsUpdated: false,
       assignShow: false,
-      showTitle: this.video.title,
-      showYear: "",
+      tvShowSelect: undefined,
       srt: false,
       tvShows: undefined,
     };
@@ -291,6 +281,9 @@ export default {
     },
   },
   computed: {
+    newShow() {
+      return this.tvShowSelect === "new";
+    },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -305,12 +298,18 @@ export default {
     },
     tvShowOptions() {
       if (this.tvShows) {
-        let options = this.tvShows.map((s) => {
-          return {
-            value: s.id,
-            text: s.title,
-          };
-        })
+        let options = [
+          {
+            value: "new",
+            text: "New TV Show...",
+          },
+          ...this.tvShows.map((s) => {
+            return {
+              value: s.id,
+              text: s.title,
+            };
+          }),
+        ];
         return options;
       }
     },
@@ -341,18 +340,6 @@ export default {
     },
     toggleAssignShow() {
       this.assignShow = !this.assignShow;
-    },
-    async addShow() {
-      let response = await axios.post(`${Config.wiki}items/tv_shows`, {
-        youtube_id: this.video.youtube_id,
-        title: this.showTitle,
-        year: this.showYear,
-        l2: this.$l2.id,
-        channel_id: this.video.channel_id,
-      });
-      if (response && response.data) {
-        this.video.tv_show = response.data;
-      }
     },
     matchSubsAndUpdate(index) {
       this.firstLineTime = this.video.subs_l1[index].starttime;
