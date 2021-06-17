@@ -1,39 +1,53 @@
 <template>
   <div class="youtube-video-list">
-    <div v-if="$adminMode" class="mb-4 youtube-video-list-admin-bar rounded bg-secondary text-white p-4 w-100">
-      <b-button variant="danger" @click="removeAll()">
-        <i class="fas fa-trash mr-2"></i>
-        Remove All
-      </b-button>
-      <b-button  variant="light" v-if="!checkSaved" @click="checkSaved = true">
-        <i class="fas fa-question mr-2"></i>
-        Check Saved
-      </b-button>
-      <b-button v-if="checkSaved" @click="checkSaved = false">
-        <i class="fas fa-question mr-2"></i>
-        Uncheck Saved
-      </b-button>
-      <b-button v-if="checkSaved" @click="addAll()">
-        <i class="fas fa-plus mr-2"></i>
-        Add All
-      </b-button>
-      <drop
-        @drop="handleDrop"
-        :class="{
-          over: over,
-          'subs-drop': true,
-          drop: true,
-          'ml-1': true,
-          'text-dark': true,
-          btn: true,
-          'btn-light': true,
-        }"
-        :key="`drop-${_uid}`"
-        @dragover="over = true"
-        @dragleave="over = false"
-      >
-        Drop Subs Here
-      </drop>
+    <div
+      v-if="$adminMode"
+      class="
+        mb-4
+        youtube-video-list-admin-bar
+        rounded
+        bg-secondary
+        text-white
+        p-4
+        w-100
+      "
+    >
+      <h4>Bulk Actions</h4>
+      <hr class="bg-light" />
+      <div>
+        <b-button variant="danger" @click="removeAll()">
+          <i class="fas fa-trash mr-2"></i>
+          Remove All
+        </b-button>
+        <b-button variant="gray" v-if="!checkSaved" @click="checkSaved = true">
+          <i class="fas fa-question mr-2"></i>
+          Check Saved
+        </b-button>
+        <b-button v-if="checkSaved" @click="checkSaved = false">
+          <i class="fas fa-question mr-2"></i>
+          Uncheck Saved
+        </b-button>
+        <b-button v-if="checkSaved" @click="addAll()">
+          <i class="fas fa-plus mr-2"></i>
+          Add All
+        </b-button>
+        <AssignTVShow @assignTVShow="assignTVShowToAll" />
+      </div>
+      <div class="mt-2">
+        <drop
+          @drop="handleDrop"
+          :class="{
+            'subs-drop bg-light text-dark rounded w-100 p-2 text-center': true,
+            over: over,
+            drop: true,
+          }"
+          :key="`drop-${_uid}`"
+          @dragover="over = true"
+          @dragleave="over = false"
+        >
+          Drop SRT files here to bulk add subs ...
+        </drop>
+      </div>
       <b-checkbox class="mt-4" v-model="showSubsEditing">
         Show Subs Editing
       </b-checkbox>
@@ -55,8 +69,9 @@
 <script>
 import Helper from "@/lib/helper";
 import YouTubeVideoCard from "@/components/YouTubeVideoCard";
+import Vue from 'vue'
 
-import { Drag, Drop } from 'vue-drag-drop'
+import { Drag, Drop } from "vue-drag-drop";
 export default {
   computed: {
     $adminMode() {
@@ -91,15 +106,20 @@ export default {
         this.$refs.youTubeVideoCard[videoIndex].getSubsAndSave();
       }
     },
+    assignTVShowToAll(tvShowID) {
+      for (let videoIndex in this.videos) {
+        this.$refs.youTubeVideoCard[videoIndex].saveTVShow(tvShowID)
+      }
+    },
     removeAll() {
       for (let videoIndex in this.videos) {
         this.$refs.youTubeVideoCard[videoIndex].remove();
       }
     },
     handleDrop(data, event) {
-      event.preventDefault()
-      let files = event.dataTransfer.files
-      this.$refs.youtubeVideoList.importSrtToAll(files)
+      event.preventDefault();
+      let files = event.dataTransfer.files;
+      this.$refs.youtubeVideoList.importSrtToAll(files);
     },
     importSrtToAll(files) {
       for (let videoIndex in this.videos) {

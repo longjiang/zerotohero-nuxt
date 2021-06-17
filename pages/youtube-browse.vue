@@ -241,7 +241,7 @@ export default {
           this.$l2.id
         }${filters}&limit=${limit}&offset=${
           this.start
-        }&fields=channel_id,id,lesson,level,title,topic,youtube_id${
+        }&fields=channel_id,id,lesson,level,title,topic,youtube_id,tv_show.*${
           this.$adminMode ? ",subs_l2" : ""
         }&timestamp=${this.$adminMode ? Date.now() : 0}`
       );

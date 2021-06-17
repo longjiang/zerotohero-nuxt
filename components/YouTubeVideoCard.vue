@@ -81,32 +81,14 @@
           <i class="fas fa-plus mr-2"></i>
           Add Channel ID
         </b-button>
-        <b-button
-          v-if="$adminMode && video.id && !video.tv_show"
-          class="btn btn-small mt-2 ml-0"
-          @click="toggleAssignShow()"
-        >
-          <i class="fa fa-tv mr-2"></i>
-          Assign TV Show
-        </b-button>
         <span
           class="btn btn-small mt-2 ml-0 bg-success text-white"
           v-if="video.tv_show"
         >
           <i class="fa fa-tv mr-2" />
-          TV Show
+          {{ video.tv_show.title }}
         </span>
-        <div v-if="assignShow">
-          <b-form-select
-            v-model="tvShowSelect"
-            :options="tvShowOptions"
-          ></b-form-select>
-          <NewTVShow
-            v-if="newShow"
-            :youtube_id="this.video.youtube_id"
-            :defaultTitle="this.video.title"
-          />
-        </div>
+        <AssignTVShow v-if="$adminMode && video.id && !video.tv_show" :defaultYoutubeId="video.youtube_id" :defaultTitle="video.title" />
         <b-button
           v-if="$adminMode && video.id"
           class="btn btn-small bg-danger text-white mt-2 ml-0"
@@ -225,9 +207,7 @@ export default {
           : undefined,
       subsUpdated: false,
       assignShow: false,
-      tvShowSelect: undefined,
       srt: false,
-      tvShows: undefined,
     };
   },
   props: {
@@ -253,16 +233,7 @@ export default {
     if (this.video.id && this.$adminMode) {
       await this.addSubsL1(this.video);
     }
-    this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type === "tvShows/LOAD_TV_SHOWS") {
-        this.loadTVShows();
-      }
-    });
     this.videoInfoKey++;
-  },
-  beforeDestroy() {
-    // you may call unsubscribe to stop the subscription
-    this.unsubscribe();
   },
   watch: {
     firstLineTime(newTime, oldTime) {
@@ -281,9 +252,6 @@ export default {
     },
   },
   computed: {
-    newShow() {
-      return this.tvShowSelect === "new";
-    },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -295,30 +263,21 @@ export default {
     $adminMode() {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
-    },
-    tvShowOptions() {
-      if (this.tvShows) {
-        let options = [
-          {
-            value: "new",
-            text: "New TV Show...",
-          },
-          ...this.tvShows.map((s) => {
-            return {
-              value: s.id,
-              text: s.title,
-            };
-          }),
-        ];
-        return options;
-      }
-    },
+    }
   },
   methods: {
-    loadTVShows() {
-      this.tvShows = this.$store.state.tvShows.shows[this.$l2.code]
-        ? this.$store.state.tvShows.shows[this.$l2.code]
-        : undefined;
+    async saveTVShow(tvShowID) {
+      let response = await axios.patch(`${Config.wiki}items/youtube_videos/${this.video.id}?fields=tv_show.*`, {
+        tv_show: tvShowID
+      })
+      response = response.data;
+      if (response && response.data) {
+        console.log(response.data, 'saveTVShow response.data')
+        this.video.tv_show = {
+          id: response.data.tv_show.id,
+          title: response.data.tv_show.title
+        };
+      }
     },
     async saveTitle(e) {
       let newTitle = e.target.innerText;
@@ -337,9 +296,6 @@ export default {
           // Direcuts bug
         }
       }
-    },
-    toggleAssignShow() {
-      this.assignShow = !this.assignShow;
     },
     matchSubsAndUpdate(index) {
       this.firstLineTime = this.video.subs_l1[index].starttime;
