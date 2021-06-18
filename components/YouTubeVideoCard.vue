@@ -257,14 +257,17 @@ export default {
     },
   },
   async mounted() {
+    let changed = false
     if (this.checkSubs) {
       await Helper.timeout(this.delay);
       await this.checkSubsFunc(this.video);
+      changed = true
     }
-    if (this.video.id && this.$adminMode) {
+    if (this.video.id && this.showSubsEditing) {
       await this.addSubsL1(this.video);
+      changed = true
     }
-    this.videoInfoKey++;
+    if (changed) this.videoInfoKey++;
   },
   watch: {
     firstLineTime(newTime, oldTime) {
@@ -298,18 +301,20 @@ export default {
   },
   methods: {
     async saveShow(showID, type) {
-      let data = {};
-      data[type] = showID;
-      let response = await axios.patch(
-        `${Config.wiki}items/youtube_videos/${this.video.id}?fields=${type}.*`, // type is 'tv_show' or 'talk'
-        data
-      );
-      response = response.data;
-      if (response && response.data) {
-        Vue.set(this.video, type, {
-          id: response.data[type].id,
-          title: response.data[type].title,
-        });
+      if (!this.video[type] || (this.video[type].id !== showID)) {
+        let data = {};
+        data[type] = showID;
+        let response = await axios.patch(
+          `${Config.wiki}items/youtube_videos/${this.video.id}?fields=${type}.*`, // type is 'tv_show' or 'talk'
+          data
+        );
+        response = response.data;
+        if (response && response.data) {
+          Vue.set(this.video, type, {
+            id: response.data[type].id,
+            title: response.data[type].title,
+          });
+        }
       }
     },
     async unassignShow(type) {
