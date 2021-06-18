@@ -75,6 +75,12 @@ export default {
             },
             {
               icon: 'fas fa-wrench',
+              title: "Recover Subs",
+              name: 'recover-subs',
+              show: this.adminMode()
+            },
+            {
+              icon: 'fas fa-wrench',
               title: "Test",
               name: 'test',
               show: this.adminMode()

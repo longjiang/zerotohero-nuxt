@@ -1,13 +1,13 @@
 <router>
   {
-    path: '/:l1/:l2/db-upgrade/:start?',
+    path: '/:l1/:l2/recover-subs/:start?',
     props: true
   }
 </router>
 <template>
   <div class="main container-fluid mt-5">
+    <div class="mt-5 mb-5 text-center">Recover subtitles that have been truncated during database upgrade (2021-06-18)</div>
     <div class="row">
-      <div class="text-center mt-5 mb-5">Recover subtitles that have been truncated during database upgrade (2021-06-18)</div>
       <div :class="{ 'col-sm-12 mb-5': true }">
         <div
           :class="{
@@ -29,6 +29,13 @@
         <div class="text-center mb-3">
           <button
             class="btn btn-success"
+            @click="recoverAll"
+            v-if="unRecoveredVideos.length > 0"
+          >
+            Recover All
+          </button>
+          <button
+            class="btn btn-success"
             @click="csvAll"
             v-if="videosWithJSONSubs.length > 0"
           >
@@ -43,7 +50,7 @@
           >
             Remove All Dupes
           </button>
-          
+
           <router-link
             v-if="start > 9"
             :to="`/${$l1.code}/${$l2.code}/db-upgrade/${
@@ -63,7 +70,14 @@
           >
             <i class="fa fa-chevron-right"></i>
           </router-link>
-          <b-progress class="mt-3" variant="success" v-if="videosWithJSONSubs.length > 0" :value="videos.length - videosWithJSONSubs.length" :max="videos.length" animated></b-progress>
+          <b-progress
+            class="mt-3"
+            variant="success"
+            v-if="unRecoveredVideos.length > 0"
+            :value="videos.length - unRecoveredVideos.length"
+            :max="videos.length"
+            animated
+          ></b-progress>
         </div>
         <template v-if="videos && videos.length > 0">
           <b-table
@@ -95,12 +109,12 @@
                   overflow: scroll;
                 "
               >
-                {{ data.item.subs_l2 ? data.item.subs_l2.substr(0,100) : '' }}
+                {{ data.item.subs_l2 ? data.item.subs_l2.substr(0, 100) : "" }}
               </div>
             </template>
             <template #cell(actions)="data">
               <div style="min-width: 5rem">
-                <button
+                <!-- <button
                   class="btn-small bg-danger text-white"
                   @click="remove(data.item)"
                 >
@@ -112,6 +126,13 @@
                   @click="csv(data.item)"
                 >
                   CSV
+                </button> -->
+                <button
+                  class="btn-small bg-success text-white"
+                  v-if="!data.item.recovered"
+                  @click="recover(data.item)"
+                >
+                  Recover
                 </button>
               </div>
             </template>
@@ -148,6 +169,7 @@ import Config from "@/lib/config";
 import Helper from "@/lib/helper";
 import axios from "axios";
 import Papa from "papaparse";
+import Vue from "vue";
 
 export default {
   props: {
@@ -157,8 +179,9 @@ export default {
   },
   data() {
     return {
+      backupVideos: undefined,
       videos: undefined,
-      perPage: 2000,
+      perPage: 1000,
       fields: [
         "id",
         "youtube_id",
@@ -177,12 +200,53 @@ export default {
     this.videos = await this.getVideos();
   },
   methods: {
+    async recoverAll() {
+      let videos = this.unRecoveredVideos;
+      let response = await axios.get(
+        `https://db.zerotohero.ca/_/items/youtube_videos?limit=-1&filter[id][in]=${videos
+          .map((v) => v.id)
+          .join(",")}`
+      );
+      if (response && response.data) this.backupVideos = response.data.data;
+      for (let video of videos) {
+        this.recover(video);
+      }
+    },
+    async recover(video) {
+      let truncatedCSV = video.subs_l2;
+      let backupVideo = this.backupVideos.find((v) => v.id === video.id);
+      if (backupVideo) {
+        if (backupVideo.youtube_id === video.youtube_id) {
+          let recovered = backupVideo;
+          let recoveredSubs = JSON.parse(recovered.subs_l2);
+          recoveredSubs = recoveredSubs.map((l) => {
+            return { starttime: l.starttime, line: l.line };
+          });
+          let recoveredCSV = Papa.unparse(recoveredSubs);
+          let patchResponse = await axios.patch(
+            `${Config.wiki}items/youtube_videos/${video.id}?fields=id`,
+            { subs_l2: recoveredCSV }
+          );
+          if (patchResponse && patchResponse.data) {
+            console.log(
+              `Recovered: (${truncatedCSV.length / 1000}k -> ${
+                recoveredCSV.length / 1000
+              }k) ${video.title}`
+            );
+            Vue.set(video, "recovered", true);
+          }
+        } else {
+          Vue.set(video, "recovered", true);
+          console.log(`YouTube ID mismatch: ${video.title}`);
+        }
+      }
+    },
     async getVideos() {
       let limit = this.perPage;
       let response = await axios.get(
         `${Config.wiki}items/youtube_videos?sort=-id&limit=${limit}&offset=${
           this.start
-        }&fields=id,youtube_id,l2,title,subs_l2,channel_id,topic,level,lesson&timestamp=${
+        }&fields=id,youtube_id,l2,title,channel_id,topic,level,lesson,subs_l2&timestamp=${
           this.$adminMode ? Date.now() : 0
         }`
       );
@@ -195,8 +259,7 @@ export default {
         ["warning", "danger"].includes(v._rowVariant)
       );
       for (let video of videos) {
-        await Helper.timeout(150);
-        this.remove(video)
+        this.remove(video);
         console.log(`Removing video: ${video.title}`);
       }
     },
@@ -220,13 +283,12 @@ export default {
         // if (!video.subs_l2) {
         //   video._rowVariant = "danger";
         // }
+        if (!video.subs_l2 || (video.subs_l2 && video.subs_l2.length !== 2000)) video.recovered = true
         if (seenYouTubeIds.includes(video.youtube_id)) {
           if (!video.lesson) video._rowVariant = "danger";
-        } 
-        else if (video.subs_l2 && seenSubs.includes(video.subs_l2)) {
+        } else if (video.subs_l2 && seenSubs.includes(video.subs_l2)) {
           if (!video.lesson) video._rowVariant = "warning";
-        } 
-        else {
+        } else {
           seenYouTubeIds.push(video.youtube_id);
           seenSubs.push(video.subs_l2);
         }
@@ -235,7 +297,6 @@ export default {
     async csvAll() {
       let videos = this.videosWithJSONSubs;
       for (let video of videos) {
-        await Helper.timeout(450);
         this.csv(video);
       }
     },
@@ -304,6 +365,13 @@ export default {
       return this.videos
         ? this.videos.filter((v) => v._rowVariant === "warning")
         : [];
+    },
+    unRecoveredVideos() {
+      if (this.videos) {
+        return this.videos.filter((v) => !v.recovered);
+      } else {
+        return [];
+      }
     },
   },
 };
