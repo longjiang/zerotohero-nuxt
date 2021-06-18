@@ -35,7 +35,33 @@
       </div>
     </div>
 
-    <div class="container">
+    <div :class="{ container: !portrait, 'container-fluid': portrait }">
+      <div class="row">
+        <div :class="{ 'col-sm-12': true, 'p-0': portrait }">
+          <div
+            :class="{ 'widget mt-5': true }"
+            :style="portrait ? 'border-radius: 0' : ''"
+            id="search-subs"
+            v-if="entry && showSearchSubs && searchTerms"
+          >
+            <div class="widget-title">“{{ entry.bare }}” in TV Shows</div>
+            <div class="widget-body">
+              <SearchSubsComp
+                v-if="searchTerms"
+                ref="searchSubs"
+                :level="
+                  entry.newHSK && entry.newHSK === '7-9' ? '7-9' : entry.hsk
+                "
+                :key="`subs-search-${entry.id}`"
+                :terms="searchTerms"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container mt-5">
       <div class="row d-flex" style="flex-wrap: wrap">
         <!-- <EntryDifficulty :entry="entry" style="flex: 1" class="m-3" /> -->
         <EntryDisambiguation
@@ -76,31 +102,6 @@
                   />
                 </a>
               </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div :class="{ container: !portrait, 'container-fluid': portrait }">
-      <div class="row">
-        <div :class="{ 'col-sm-12': true, 'p-0': portrait }">
-          <div
-            :class="{ 'widget mt-5': true }"
-            :style="portrait ? 'border-radius: 0' : ''"
-            id="search-subs"
-            v-if="entry && showSearchSubs && searchTerms"
-          >
-            <div class="widget-title">“{{ entry.bare }}” in TV Shows</div>
-            <div class="widget-body">
-              <SearchSubsComp
-                v-if="searchTerms"
-                ref="searchSubs"
-                :level="
-                  entry.newHSK && entry.newHSK === '7-9' ? '7-9' : entry.hsk
-                "
-                :key="`subs-search-${entry.id}`"
-                :terms="searchTerms"
-              />
             </div>
           </div>
         </div>
