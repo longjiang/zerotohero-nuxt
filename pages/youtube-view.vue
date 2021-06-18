@@ -364,8 +364,8 @@ export default {
   methods: {
     loadShow() {
       if (this.video) {
-        this.show = this.$store.state.tvShows.shows[this.$l2.code]
-          ? this.$store.state.tvShows.shows[this.$l2.code].find((show) =>
+        this.show = this.$store.state.shows.tvShows[this.$l2.code]
+          ? this.$store.state.shows.tvShows[this.$l2.code].find((show) =>
               this.video.title.includes(show.title)
             )
           : undefined;
