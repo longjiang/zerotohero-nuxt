@@ -60,7 +60,7 @@ export default {
     });
     this.randomEpisodeYouTubeId = await YouTube.getRandomEpisodeYouTubeId(
       this.$l2.id,
-      'tv_show'
+      this.routeType === 'tv-shows' ? 'tv_show' : 'talk',
     );
   },
   beforeDestroy() {
