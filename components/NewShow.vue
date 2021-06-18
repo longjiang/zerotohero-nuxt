@@ -53,7 +53,7 @@ export default {
         show
       );
       if (response && response.data) {
-        this.$emit("newShow", response.data.id);
+        this.$emit("newShow", response.data.data.id);
       }
     },
   },
