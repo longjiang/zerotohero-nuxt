@@ -7,8 +7,8 @@
 <template>
   <div class="main container-fluid mt-5">
     <div class="row">
-      <div class="text-center mt-5 mb-5">Recover subtitles that have been truncated during database upgrade (2021-06-18)</div>
       <div :class="{ 'col-sm-12 mb-5': true }">
+        <div class="text-center mb-5">Convert subs from json to CSV (2021-06-16)</div>
         <div
           :class="{
             'loader text-center mb-4': true,

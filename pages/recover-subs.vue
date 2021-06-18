@@ -6,9 +6,12 @@
 </router>
 <template>
   <div class="main container-fluid mt-5">
-    <div class="mt-5 mb-5 text-center">Recover subtitles that have been truncated during database upgrade (2021-06-18)</div>
     <div class="row">
       <div :class="{ 'col-sm-12 mb-5': true }">
+        <div class="mb-5 text-center">
+          Recover subtitles that have been truncated during database upgrade
+          (2021-06-18)
+        </div>
         <div
           :class="{
             'loader text-center mb-4': true,
@@ -283,7 +286,8 @@ export default {
         // if (!video.subs_l2) {
         //   video._rowVariant = "danger";
         // }
-        if (!video.subs_l2 || (video.subs_l2 && video.subs_l2.length !== 2000)) video.recovered = true
+        if (!video.subs_l2 || (video.subs_l2 && video.subs_l2.length !== 2000))
+          video.recovered = true;
         if (seenYouTubeIds.includes(video.youtube_id)) {
           if (!video.lesson) video._rowVariant = "danger";
         } else if (video.subs_l2 && seenSubs.includes(video.subs_l2)) {
