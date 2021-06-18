@@ -95,11 +95,11 @@ export default {
     };
   },
   async mounted() {
-    this.shows = this.$store.state.shows.shows
-      ? this.$store.state.shows.shows[this.$l2.code]
+    this.shows = this.$store.state.shows.tvShows
+      ? this.$store.state.shows.tvShows[this.$l2.code]
       : undefined;
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type.startWith("shows")) {
+      if (mutation.type.startsWith("shows")) {
         this.loadShows();
       }
     });
@@ -134,8 +134,8 @@ export default {
       return Helper.uniqueByValue(shows, "youtube_id");
     },
     loadShows() {
-      let shows = this.$store.state.shows.shows[this.$l2.code]
-        ? this.$store.state.shows.shows[this.$l2.code]
+      let shows = this.$store.state.shows.tvShows[this.$l2.code]
+        ? this.$store.state.shows.tvShows[this.$l2.code]
         : undefined;
       if (shows) {
         this.shows = this.sortShows(shows);

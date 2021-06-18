@@ -47,15 +47,14 @@ export default {
     return {
       assignShow: false,
       shows: undefined,
-      talks: undefined,
       showSelect: undefined,
       selectedShowID: undefined,
     };
   },
   mounted() {
-    let type = this.type === "talks" ? "talks" : "shows";
+    let type = this.type === "talks" ? "talks" : "tvShows";
 
-    this.shows = this.$store.state.shows[type]
+    this.shows = this.$store.state.shows[type][this.$l2.code]
       ? this.$store.state.shows[type][this.$l2.code]
       : undefined;
 
