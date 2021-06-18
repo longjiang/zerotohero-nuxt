@@ -442,7 +442,6 @@ export default {
       if (mutation.type.startsWith("shows")) {
         this.enableTVShows();
       }
-      console.log(mutation.type, this.tvShows);
     });
     this.bindKeys();
   },

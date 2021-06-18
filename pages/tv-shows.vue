@@ -33,50 +33,8 @@
             }
           "
         />
-        <div class="tv-shows mb-5">
-          <div
-            :class="{ 'loader text-center': true, 'd-none': shows && shows.length > 1 }"
-            style="flex: 1"
-          >
-            <div class="heartbeat-loader"></div>
-          </div>
-          <div
-            class="tv-show media rounded shadow"
-            v-for="show of shows"
-            :key="`tv-show-${show.id}`"
-          >
-            <router-link
-              class="youtube-thumbnail-wrapper aspect-wrapper d-block"
-              :to="`/${$l1.code}/${
-                $l2.code
-              }/youtube/browse/all/all/0/${encodeURIComponent(show.title)}`"
-            >
-              <img
-                :src="`//img.youtube.com/vi/${show.youtube_id}/hqdefault.jpg`"
-                class="youtube-thumbnail aspect"
-                v-lazy-load
-              />
-            </router-link>
-            <div class="media-body">
-              <router-link
-                :to="`/${$l1.code}/${$l2.code}/youtube/browse/all/all/0/${show.title}`"
-                class="link-unstyled"
-              >
-                <h6>
-                  <Annotate>
-                    <span>{{ show.title }}</span>
-                  </Annotate>
-                </h6>
-                <b-button
-                  v-if="$adminMode"
-                  class="btn btn-small bg-danger text-white mt-2 ml-0"
-                  @click.stop.prevent="remove(show)"
-                >
-                  <i class="fa fa-trash"></i>
-                </b-button>
-              </router-link>
-            </div>
-          </div>
+        <div class="mb-5">
+          <ShowList :shows="shows" type="tvShows" />
         </div>
       </div>
     </div>
@@ -141,37 +99,9 @@ export default {
         this.shows = this.sortShows(shows);
       }
     },
-    async remove(show) {
-      this.$store.dispatch("shows/remove", {
-        l2: this.$l2,
-        type: 'tvShows',
-        show
-      })
-    },
   },
 };
 </script>
 
 <style scoped>
-.tv-shows {
-  display: flex;
-  flex-wrap: wrap;
-  margin: 0 -1rem;
-}
-.tv-show {
-  min-width: 12rem;
-  max-width: calc(100% - 2rem);
-  flex: 1;
-  margin: 1rem;
-}
-@media (min-width: 768px) {
-  .tv-show {
-    max-width: calc(50% - 2rem);
-  }
-}
-.tv-show-thumbnail {
-  width: 100%;
-  max-height: 270px;
-  object-fit: cover;
-}
 </style>
