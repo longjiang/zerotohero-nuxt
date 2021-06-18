@@ -1,6 +1,6 @@
 <router>
   {
-    path: '/:l1/:l2/tv-show/:id',
+    path: '/:l1/:l2/show/:type/:id',
     props: true
   }
 </router>
@@ -60,22 +60,24 @@ import axios from "axios";
 export default {
   props: {
     id: String,
+    type: String,
   },
   data() {
     return {
+      collection: this.type === 'tv-show' ? 'tv_show' : 'talk',
       show: undefined,
       videos: undefined,
     };
   },
   async fetch() {
     if (this.id) {
-      this.show = await this.getShow(this.id, "tv_shows");
+      this.show = await this.getShow(this.id, this.collection);
       this.videos = await this.getVideos();
     }
   },
   methods: {
-    async getShow(id, type) {
-      let response = await axios.get(`${Config.wiki}items/${type}/${id}`);
+    async getShow(id, collection) {
+      let response = await axios.get(`${Config.wiki}items/${collection}s/${id}`);
       if (response && response.data) {
         return response.data.data;
       }
@@ -84,7 +86,7 @@ export default {
       let response = await axios.get(
         `${Config.wiki}items/youtube_videos?filter[l2][eq]=${
           this.$l2.id
-        }&filter[tv_show][eq]=${
+        }&filter[${this.collection}][eq]=${
           this.show.id
         }&fields=channel_id,id,lesson,level,title,topic,youtube_id,tv_show.*,talk.*${
           this.$adminMode ? ",subs_l2" : ""

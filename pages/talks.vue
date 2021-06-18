@@ -1,11 +1,11 @@
 <router>
   {
-    path: '/:l1/:l2/tv-shows',
+    path: '/:l1/:l2/talks',
     props: true
   }
 </router>
 <template>
-  <Shows routeType="tv-shows" />
+  <Shows routeType="talks" />
 </template>
 
 <script>

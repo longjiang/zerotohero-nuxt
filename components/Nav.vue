@@ -22,7 +22,7 @@
           'router-link-active':
             parent && parent.name === nameOfSelfOrFirstChild(item),
         }"
-        :to="last(item) || { name: nameOfSelfOrFirstChild(item) }"
+        :to="last(item) || selfOrFirstChild(item)"
         :title="item.title"
         :key="`nav-${index}`"
       >
@@ -36,9 +36,9 @@
     >
       <NuxtLink
         class="secondary-menu-item"
-        v-for="child in parent.children.filter((child) => child.show)"
-        :key="`subnav-${child.name}`"
-        :to="last(child) || { name: child.name }"
+        v-for="(child, index) in parent.children.filter((child) => child.show)"
+        :key="`subnav-${child.name}-${index}`"
+        :to="last(child) || child"
       >
         <i :class="child.icon"></i>
         {{ $t(child.title) }}
@@ -145,6 +145,16 @@ export default {
               name: "tv-shows",
               icon: "fa fa-tv",
               title: "TV Shows",
+              show: false,
+            },
+            {
+              name: "show",
+              show: false,
+            },
+            {
+              name: "talks",
+              icon: "fas fa-graduation-cap",
+              title: "Talks",
               show: false,
             },
             {
@@ -464,8 +474,16 @@ export default {
         this.$store.state.shows.tvShows[this.l2.code]
       ) {
         let av = this.menu.find((i) => i.title === "Audio-Visual");
-        let tvShows = av.children.find((i) => i.name === "tv-shows");
+        let tvShows = av.children.find((i) => i.title === "TV Shows");
         tvShows.show = true;
+      }
+      if (
+        this.$store.state.shows.talks &&
+        this.$store.state.shows.talks[this.l2.code]
+      ) {
+        let av = this.menu.find((i) => i.title === "Audio-Visual");
+        let talks = av.children.find((i) => i.title === "Talks");
+        talks.show = true;
       }
     },
     adminMode() {
@@ -475,13 +493,18 @@ export default {
       return this.$hasFeature(feature);
     },
     nameOfSelfOrFirstChild(item) {
+      let result = this.selfOrFirstChild(item);
+      if (result) {
+        return result.name;
+      }
+    },
+    selfOrFirstChild(item) {
       if (item) {
-        let result =
-          item.name ||
-          (item.children && item.children.length > 0
-            ? item.children[0].name
-            : "");
-        return result;
+        if (item.children && item.children.length > 0) {
+          return item.children[0];
+        } else {
+          return item;
+        }
       }
     },
     last(item) {

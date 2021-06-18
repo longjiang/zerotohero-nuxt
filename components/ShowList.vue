@@ -16,9 +16,7 @@
     >
       <router-link
         class="youtube-thumbnail-wrapper aspect-wrapper d-block"
-        :to="`/${$l1.code}/${
-          $l2.code
-        }/tv-show/${encodeURIComponent(show.id)}`"
+        :to="path(show)"
       >
         <img
           :src="`//img.youtube.com/vi/${show.youtube_id}/hqdefault.jpg`"
@@ -28,7 +26,7 @@
       </router-link>
       <div class="media-body">
         <router-link
-          :to="`/${$l1.code}/${$l2.code}/youtube/browse/all/all/0/${show.title}`"
+          :to="path(show)"
           class="link-unstyled"
         >
           <h6>
@@ -60,8 +58,13 @@ export default {
       this.$store.dispatch("shows/remove", {
         l2: this.$l2,
         type: this.type,
-        show
-      })
+        show,
+      });
+    },
+    path(show) {
+      return `/${this.$l1.code}/${this.$l2.code}/show/${this.type === 'tvShows' ? 'tv-show' : 'talk' }/${encodeURIComponent(
+        show.id
+      )}`;
     },
   },
   computed: {
