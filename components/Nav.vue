@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import Config from '@/lib/config'
+import Config from "@/lib/config";
 
 export default {
   data() {
@@ -63,35 +63,35 @@ export default {
       shortcuts: [],
       menu: [
         {
-          icon: 'fas fa-wrench',
+          icon: "fas fa-wrench",
           title: "Admin",
           show: this.adminMode(),
           children: [
             {
-              icon: 'fas fa-wrench',
+              icon: "fas fa-wrench",
               title: "DB Upgrade",
-              name: 'db-upgrade',
-              show: this.adminMode()
+              name: "db-upgrade",
+              show: this.adminMode(),
             },
             {
-              icon: 'fas fa-wrench',
+              icon: "fas fa-wrench",
               title: "Recover Subs",
-              name: 'recover-subs',
-              show: this.adminMode()
+              name: "recover-subs",
+              show: this.adminMode(),
             },
             {
-              icon: 'fas fa-wrench',
+              icon: "fas fa-wrench",
               title: "Test",
-              name: 'test',
-              show: this.adminMode()
+              name: "test",
+              show: this.adminMode(),
             },
             {
-              icon: 'fas fa-wrench',
+              icon: "fas fa-wrench",
               title: "Assign Lesson Videos",
-              name: 'assign-lesson-videos',
-              show: this.adminMode()
+              name: "assign-lesson-videos",
+              show: this.adminMode(),
             },
-          ]
+          ],
         },
         {
           icon: "fas fa-graduation-cap",
@@ -145,7 +145,7 @@ export default {
               name: "tv-shows",
               icon: "fa fa-tv",
               title: "TV Shows",
-              show: this.tvShows(),
+              show: false,
             },
             {
               name: "youtube-browse",
@@ -436,12 +436,41 @@ export default {
       type: Object,
     },
   },
-  methods: {
-    adminMode() {
-      return this.$store.state.settings.adminMode
+  mounted() {
+    this.enableTVShows();
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (mutation.type.startsWith("shows")) {
+        this.enableTVShows();
+      }
+      console.log(mutation.type, this.tvShows);
+    });
+    this.bindKeys();
+  },
+  beforeDestroy() {
+    // you may call unsubscribe to stop the subscription
+    this.unsubscribe();
+  },
+  unmounted() {
+    this.unbindKeys();
+  },
+  watch: {
+    $route() {
+      this.history.push(this.$route.path);
     },
-    tvShows() {
-      return typeof this.$store.state.shows.tvShows[this.l2.code] !== 'undefined'
+  },
+  methods: {
+    enableTVShows() {
+      if (
+        this.$store.state.shows.tvShows &&
+        this.$store.state.shows.tvShows[this.l2.code]
+      ) {
+        let av = this.menu.find((i) => i.title === "Audio-Visual");
+        let tvShows = av.children.find((i) => i.name === "tv-shows");
+        tvShows.show = true;
+      }
+    },
+    adminMode() {
+      return this.$store.state.settings.adminMode;
     },
     hasFeature(feature) {
       return this.$hasFeature(feature);
@@ -512,17 +541,6 @@ export default {
           }
         }
       }
-    },
-  },
-  mounted() {
-    this.bindKeys();
-  },
-  unmounted() {
-    this.unbindKeys();
-  },
-  watch: {
-    $route() {
-      this.history.push(this.$route.path);
     },
   },
 };
