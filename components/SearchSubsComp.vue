@@ -319,7 +319,8 @@ export default {
       this.$l2.code,
       this.$l2.id,
       this.$adminMode,
-      this.$l2.continua
+      this.$l2.continua,
+      20
     );
 
     hits = this.updateSaved(hits);
