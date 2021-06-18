@@ -312,7 +312,7 @@ export default {
   mounted() {
     this.bindKeys();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type === "tvShows/LOAD_TV_SHOWS") {
+      if (mutation.type === "shows/LOAD_SHOWS") {
         this.loadShow();
       }
     });

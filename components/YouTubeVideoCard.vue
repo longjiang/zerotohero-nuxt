@@ -90,7 +90,7 @@
           <i
             class="fas fa-times-circle ml-1"
             v-if="$adminMode"
-            @click="unassignShow"
+            @click="unassignShow('tv_show')"
           />
         </span>
         <span
@@ -102,7 +102,7 @@
           <i
             class="fas fa-times-circle ml-1"
             v-if="$adminMode"
-            @click="unassignShow"
+            @click="unassignShow('talk')"
           />
         </span>
         <AssignShow
@@ -219,7 +219,7 @@ import Config from "@/lib/config";
 import YouTube from "@/lib/youtube";
 import { Drag, Drop } from "vue-drag-drop";
 import { parseSync } from "subtitle";
-import Vue from 'vue';
+import Vue from "vue";
 
 export default {
   components: {
@@ -298,9 +298,8 @@ export default {
   },
   methods: {
     async saveShow(showID, type) {
-      console.log(showID, type, 'youtubeVideoCard.saveShow')
-      let data = {}
-      data[type] = showID
+      let data = {};
+      data[type] = showID;
       let response = await axios.patch(
         `${Config.wiki}items/youtube_videos/${this.video.id}?fields=${type}.*`, // type is 'tv_show' or 'talk'
         data
@@ -310,16 +309,18 @@ export default {
         Vue.set(this.video, type, {
           id: response.data[type].id,
           title: response.data[type].title,
-        })
+        });
       }
     },
-    async unassignShow() {
+    async unassignShow(type) {
+      let data = {};
+      data[type] = null;
       let response = await axios.patch(
         `${Config.wiki}items/youtube_videos/${this.video.id}`,
-        { tv_show: null }
+        data
       );
       if (response && response.data) {
-        this.video.tv_show = undefined;
+        this.video[type] = undefined;
         this.videoInfoKey++;
       }
     },

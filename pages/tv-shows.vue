@@ -84,10 +84,8 @@
 </template>
 
 <script>
-import Config from "@/lib/config";
 import Helper from "@/lib/helper";
 import YouTube from "@/lib/youtube";
-import axios from "axios";
 
 export default {
   data() {
@@ -97,12 +95,12 @@ export default {
     };
   },
   async mounted() {
-    this.shows = this.$store.state.tvShows.shows
-      ? this.$store.state.tvShows.shows[this.$l2.code]
+    this.shows = this.$store.state.shows.shows
+      ? this.$store.state.shows.shows[this.$l2.code]
       : undefined;
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type === "tvShows/LOAD_TV_SHOWS") {
-        this.loadTVShows();
+      if (mutation.type.startWith("shows")) {
+        this.loadShows();
       }
     });
     this.randomEpisodeYouTubeId = await YouTube.getRandomEpisodeYouTubeId(
@@ -135,25 +133,20 @@ export default {
         [];
       return Helper.uniqueByValue(shows, "youtube_id");
     },
-    loadTVShows() {
-      let shows = this.$store.state.tvShows.shows[this.$l2.code]
-        ? this.$store.state.tvShows.shows[this.$l2.code]
+    loadShows() {
+      let shows = this.$store.state.shows.shows[this.$l2.code]
+        ? this.$store.state.shows.shows[this.$l2.code]
         : undefined;
       if (shows) {
         this.shows = this.sortShows(shows);
       }
     },
     async remove(show) {
-      try {
-        let response = await axios.delete(
-          `${Config.wiki}items/tv_shows/${show.id}`
-        );
-        if (response) {
-          this.shows = this.shows.filter((s) => s !== show);
-        }
-      } catch (err) {
-        // Directus bug
-      }
+      this.$store.dispatch("shows/remove", {
+        l2: this.$l2,
+        type: 'tvShows',
+        show
+      })
     },
   },
 };

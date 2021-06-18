@@ -55,12 +55,12 @@ export default {
   mounted() {
     let type = this.type === "talks" ? "talks" : "shows";
 
-    this.shows = this.$store.state.tvShows[type]
-      ? this.$store.state.tvShows[type][this.$l2.code]
+    this.shows = this.$store.state.shows[type]
+      ? this.$store.state.shows[type][this.$l2.code]
       : undefined;
 
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type === "tvShows/LOAD_TV_SHOWS") {
+      if (mutation.type.startsWith("shows")) {
         this.loadShows();
       }
     });
@@ -119,9 +119,9 @@ export default {
       if (show) this.showSelect = show.id;
     },
     loadShows() {
-      let type = this.type === "talks" ? "talks" : "shows";
-      this.shows = this.$store.state.tvShows[type][this.$l2.code]
-        ? this.$store.state.tvShows[type][this.$l2.code]
+      let type = this.type === "talks" ? "talks" : "tvShows";
+      this.shows = this.$store.state.shows[type][this.$l2.code]
+        ? this.$store.state.shows[type][this.$l2.code]
         : undefined;
     },
     newShow(newShowID) {

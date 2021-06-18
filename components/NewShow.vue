@@ -48,12 +48,13 @@ export default {
         l2: this.$l2.id,
       };
       if (this.newShowYear) show.year = this.newShowYear;
-      let response = await axios.post(
-        `${Config.wiki}items/${this.type === "talks" ? "talks" : "tv_shows"}`,
+      show = await this.$store.dispatch("shows/add", {
+        l2: this.$l2,
+        type: this.type === 'tv-shows' ? 'tvShows' : 'talks',
         show
-      );
-      if (response && response.data) {
-        this.$emit("newShow", response.data.data.id);
+      });
+      if (show) {
+        this.$emit('newShow', show.id)
       }
     },
   },
