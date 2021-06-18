@@ -31,7 +31,8 @@
           <i class="fas fa-plus mr-2"></i>
           Add All
         </b-button>
-        <AssignTVShow @assignTVShow="assignTVShowToAll" :defaultSelection="keyword" />
+        <AssignShow @assignShow="assignShowToAll" :defaultSelection="keyword" type="tv-shows" />
+        <AssignShow @assignShow="assignShowToAll" :defaultSelection="keyword" type="talks" />
       </div>
       <div class="mt-2">
         <drop
@@ -108,9 +109,9 @@ export default {
         this.$refs.youTubeVideoCard[videoIndex].getSubsAndSave();
       }
     },
-    assignTVShowToAll(tvShowID) {
+    assignShowToAll(showID, type) {
       for (let videoIndex in this.videos) {
-        this.$refs.youTubeVideoCard[videoIndex].saveTVShow(tvShowID)
+        this.$refs.youTubeVideoCard[videoIndex].saveShow(showID, type)
       }
     },
     removeAll() {

@@ -73,27 +73,51 @@
           <i class="fas fa-plus mr-2"></i>
           Add
         </b-button>
-        <b-button
+        <!-- <b-button
           v-if="$adminMode && video.id && !video.channel_id"
           class="btn btn-small mt-2 ml-0"
           @click="addChannelID(video)"
         >
           <i class="fas fa-plus mr-2"></i>
           Add Channel ID
-        </b-button>
+        </b-button> -->
         <span
           class="btn btn-small mt-2 ml-0 bg-success text-white"
           v-if="video.tv_show"
         >
           <i class="fa fa-tv mr-2" />
           {{ video.tv_show.title }}
-          <i class="fas fa-times-circle ml-1" v-if="$adminMode" @click="unassignShow" />
+          <i
+            class="fas fa-times-circle ml-1"
+            v-if="$adminMode"
+            @click="unassignShow"
+          />
         </span>
-        <AssignTVShow
-          @assignTVShow="saveTVShow"
-          v-if="$adminMode && video.id && !video.tv_show"
+        <span
+          class="btn btn-small mt-2 ml-0 bg-success text-white"
+          v-if="video.talk"
+        >
+          <i class="fas fa-graduation-cap mr-2"></i>
+          {{ video.talk.title }}
+          <i
+            class="fas fa-times-circle ml-1"
+            v-if="$adminMode"
+            @click="unassignShow"
+          />
+        </span>
+        <AssignShow
+          @assignShow="saveShow"
+          v-if="$adminMode && video.id && !video.tv_show && !video.talk"
           :defaultYoutubeId="video.youtube_id"
           :defaultTitle="video.title"
+          type="tv-shows"
+        />
+        <AssignShow
+          @assignShow="saveShow"
+          v-if="$adminMode && video.id && !video.tv_show && !video.talk"
+          :defaultYoutubeId="video.youtube_id"
+          :defaultTitle="video.title"
+          type="talks"
         />
         <b-button
           v-if="$adminMode && video.id"
@@ -195,6 +219,7 @@ import Config from "@/lib/config";
 import YouTube from "@/lib/youtube";
 import { Drag, Drop } from "vue-drag-drop";
 import { parseSync } from "subtitle";
+import Vue from 'vue';
 
 export default {
   components: {
@@ -272,19 +297,20 @@ export default {
     },
   },
   methods: {
-    async saveTVShow(tvShowID) {
+    async saveShow(showID, type) {
+      console.log(showID, type, 'youtubeVideoCard.saveShow')
+      let data = {}
+      data[type] = showID
       let response = await axios.patch(
-        `${Config.wiki}items/youtube_videos/${this.video.id}?fields=tv_show.*`,
-        {
-          tv_show: tvShowID,
-        }
+        `${Config.wiki}items/youtube_videos/${this.video.id}?fields=${type}.*`, // type is 'tv_show' or 'talk'
+        data
       );
       response = response.data;
       if (response && response.data) {
-        this.video.tv_show = {
-          id: response.data.tv_show.id,
-          title: response.data.tv_show.title,
-        };
+        Vue.set(this.video, type, {
+          id: response.data[type].id,
+          title: response.data[type].title,
+        })
       }
     },
     async unassignShow() {

@@ -1,24 +1,27 @@
 <template>
   <div>
-    <b-input
-      type="text"
-      v-model.lazy="newShowTitle"
-      placeholder="Title"
-    />
+    <b-input type="text" v-model.lazy="newShowTitle" placeholder="Title" />
     <b-button
       class="btn btn-small mt-2 ml-0 bg-success text-white"
       @click="addShow()"
     >
-      Save Show
+      Save {{ type === 'tv-shows' ? 'Show' : 'Talk' }}
     </b-button>
   </div>
 </template>
 
 <script>
-import Config from '@/lib/config'
+import Config from "@/lib/config";
 
 export default {
-  props: ['youtube_id', 'defaultTitle'],
+  props: {
+    youtube_id: String,
+    defaultTitle: String,
+    type: {
+      default: "tv-shows",
+      type: String
+    }
+  },
   data() {
     return {
       newShow: false,
@@ -43,11 +46,14 @@ export default {
         youtube_id: this.youtube_id,
         title: this.newShowTitle,
         l2: this.$l2.id,
-      }
-      if (this.newShowYear) show.year = this.newShowYear
-      let response = await axios.post(`${Config.wiki}items/tv_shows`, show);
+      };
+      if (this.newShowYear) show.year = this.newShowYear;
+      let response = await axios.post(
+        `${Config.wiki}items/${this.type === "talks" ? "talks" : "tv_shows"}`,
+        show
+      );
       if (response && response.data) {
-        this.$emit('newTVShow', response.data.id)
+        this.$emit("newShow", response.data.id);
       }
     },
   },
