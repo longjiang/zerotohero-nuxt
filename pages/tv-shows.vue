@@ -104,8 +104,8 @@ export default {
       }
     });
     this.randomEpisodeYouTubeId = await YouTube.getRandomEpisodeYouTubeId(
-      this.$l2.code,
-      this.$l2.id
+      this.$l2.id,
+      'tv_show'
     );
   },
   beforeDestroy() {

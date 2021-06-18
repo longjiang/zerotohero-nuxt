@@ -441,7 +441,7 @@ export default {
       return this.$store.state.settings.adminMode
     },
     tvShows() {
-      return typeof Config.approvedChannels[this.l2.code] !== 'undefined'
+      return typeof this.$store.state.shows.tvShows[this.l2.code] !== 'undefined'
     },
     hasFeature(feature) {
       return this.$hasFeature(feature);

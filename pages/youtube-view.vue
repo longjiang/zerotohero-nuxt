@@ -304,8 +304,8 @@ export default {
     this.video = video;
     this.loadShow();
     this.randomEpisodeYouTubeId = await YouTube.getRandomEpisodeYouTubeId(
-      this.$l2.code,
-      this.$l2.id
+      this.$l2.id,
+      this.$store.state.shows.tvShows[this.$l2.code] ? 'tv_show' : undefined
     );
     this.saveHistory();
   },
