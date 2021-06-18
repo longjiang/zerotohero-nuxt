@@ -78,7 +78,7 @@ export const getters = {
     if (state.savedHits[options.l2]) {
       let savedHit = false
       savedHit = state.savedHits[options.l2].find(
-        hit => deepEqual(hit, hitToTest)
+        hit => hit.terms[0] === hitToTest.terms[0] && hit.videoId === hitToTest.videoId && hit.lineIndex === hitToTest.lineIndex
       )
       return savedHit
     }
