@@ -1,0 +1,259 @@
+<template>
+  <div>
+    <div>
+      <b-button
+        v-if="
+          !saving &&
+          !(video && video.id) &&
+          (this.video.subs_l2 || this.$adminMode)
+        "
+        @click="save"
+      >
+        <i class="fas fa-plus mr-2"></i>
+        Add to Library
+      </b-button>
+      <span v-if="saving">
+        <i class="fas fa-hourglass mr-2 text-secondary"></i>
+        Adding...
+      </span>
+      <span v-if="video && video.id && isNewVideo">
+        <i class="fas fa-check-circle mr-2 text-success"></i>
+        Added
+      </span>
+      <b-dropdown
+        id="dropdown-1"
+        v-if="$adminMode && video && video.id"
+        :text="video.topic ? topics[video.topic] : 'Topic'"
+        :variant="video.topic ? 'success' : undefined"
+        class="ml-1"
+      >
+        <b-dropdown-item
+          v-for="(title, slug) in topics"
+          :key="`change-topic-item-${slug}`"
+          @click="changeTopic(slug)"
+        >
+          {{ title }}
+        </b-dropdown-item>
+      </b-dropdown>
+      <template v-if="$adminMode && video && video.id && !video.lesson">
+        <b-dropdown
+          id="dropdown-1"
+          :text="video.level ? levels[video.level] : 'Level'"
+          :variant="video.level ? 'success' : undefined"
+          class="ml-1"
+        >
+          <b-dropdown-item
+            v-for="(title, slug) in levels"
+            :key="`change-level-item-${slug}`"
+            @click="changeLevel(slug)"
+          >
+            {{ title }}
+          </b-dropdown-item>
+        </b-dropdown>
+        <b-button
+          v-if="$adminMode"
+          variant="danger"
+          @click="remove"
+          class="ml-1"
+        >
+          <i class="fas fa-trash-alt"></i>
+        </b-button>
+        <drop
+          v-if="$adminMode"
+          @drop="handleDrop"
+          :class="{
+            over: over,
+            'subs-drop': true,
+            drop: true,
+            'ml-1': true,
+            'text-dark': true,
+            btn: true,
+            'btn-light': true,
+          }"
+          :key="`drop-${transcriptKey}`"
+          @dragover="over = true"
+          @dragleave="over = false"
+        >
+          Drop Subs Here
+        </drop>
+      </template>
+    </div>
+    <div>
+      <div v-if="$adminMode && video && video.id" class="mt-2">
+        First line starts at
+        <input
+          v-model.lazy="firstLineTime"
+          type="text"
+          placeholder="0"
+          class="d-inline-block ml-1"
+          style="width: 4rem"
+        />
+        <b-button v-if="!subsUpdated" @click="updateSubs" class="ml-2">
+          <i class="fa fa-save mr-2"></i>
+          Update Subs
+        </b-button>
+        <b-button v-else variant="success" class="ml-2">
+          <i class="fa fa-check mr-2"></i>
+          Updated
+        </b-button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { Drag, Drop } from "vue-drag-drop";
+import Helper from "@/lib/helper";
+
+export default {
+  components: {
+    Drag,
+    Drop,
+  },
+  props: {
+    video: Object,
+  },
+  data() {
+    return {
+      subsUpdated: false,
+      firstLineTime: 0,
+      over: false,
+      saving: false,
+      isNewVideo: false,
+      topics: Helper.topics,
+      levels: Helper.levels(this.$l2),
+      transcriptKey: 0,
+    };
+  },
+  computed: {
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
+    $adminMode() {
+      if (typeof this.$store.state.settings.adminMode !== "undefined")
+        return this.$store.state.settings.adminMode;
+    },
+  },
+  watch: {
+    firstLineTime() {
+      if (this.video.subs_l2 && this.video.subs_l2.length > 0) {
+        let subsShift =
+          Number(this.firstLineTime) - Number(this.video.subs_l2[0].starttime);
+        if (subsShift !== 0) {
+          for (let line of this.video.subs_l2) {
+            line.starttime = Number(line.starttime) + subsShift;
+          }
+        }
+        this.transcriptKey++;
+      }
+    },
+  },
+  methods: {
+    async save() {
+      this.saving = true;
+      try {
+        let response = await axios.post(
+          `${Config.wiki}items/youtube_videos`,
+          Object.assign({
+            l2: this.$l2.id,
+            title: this.video.title,
+            youtube_id: this.video.youtube_id,
+            channel_id: this.video.channel ? this.video.channel.id : null,
+            subs_l2: YouTube.unparseSubs(this.video.subs_l2),
+          })
+        );
+        if (response) {
+          this.video.id = response.data.data.id;
+          this.saving = false;
+          this.isNewVideo = true;
+          this.videoInfoKey++;
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    handleDrop(data, event) {
+      event.preventDefault();
+      let file = event.dataTransfer.files[0];
+      let reader = new FileReader();
+      reader.readAsText(file);
+      let parsed = [];
+      reader.onload = (event) => {
+        let srt = event.target.result;
+        parsed = parseSync(srt).map((cue) => {
+          return {
+            starttime: cue.data.start / 1000,
+            line: cue.data.text,
+          };
+        });
+        this.video.subs_l2 = Helper.uniqueByValue(parsed, "starttime");
+        this.firstLineTime = this.l2_lines[0].starttime;
+        this.transcriptKey++;
+      };
+    },
+    async changeLevel(slug) {
+      let response = await $.ajax({
+        url: `${Config.wiki}items/youtube_videos/${this.video.id}`,
+        data: JSON.stringify({ level: slug }),
+        type: "PATCH",
+        contentType: "application/json",
+        xhr: function () {
+          return window.XMLHttpRequest == null ||
+            new window.XMLHttpRequest().addEventListener == null
+            ? new window.ActiveXObject("Microsoft.XMLHTTP")
+            : $.ajaxSettings.xhr();
+        },
+      });
+      if (response && response.data) {
+        this.video = response.data;
+      }
+    },
+    async updateSubs() {
+      try {
+        let response = await axios.patch(
+          `${Config.wiki}items/youtube_videos/${this.video.id}`,
+          { subs_l2: YouTube.unparseSubs(this.video.subs_l2) }
+        );
+        if (response && response.data) {
+          this.subsUpdated = true;
+        }
+      } catch (err) {}
+    },
+    async changeTopic(slug) {
+      let response = await $.ajax({
+        url: `${Config.wiki}items/youtube_videos/${this.video.id}`,
+        data: JSON.stringify({ topic: slug }),
+        type: "PATCH",
+        contentType: "application/json",
+        xhr: function () {
+          return window.XMLHttpRequest == null ||
+            new window.XMLHttpRequest().addEventListener == null
+            ? new window.ActiveXObject("Microsoft.XMLHTTP")
+            : $.ajaxSettings.xhr();
+        },
+      });
+      if (response && response.data) {
+        this.video = response.data;
+      }
+    },
+    async remove() {
+      try {
+        let response = await axios.delete(
+          `${Config.wiki}items/youtube_videos/${this.video.id}`
+        );
+        if (response) {
+          this.video = undefined;
+        }
+      } catch (err) {}
+    },
+  },
+};
+</script>
+
+<style>
+</style>
