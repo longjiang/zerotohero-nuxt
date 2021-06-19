@@ -94,11 +94,7 @@
                     :alt="hit.video.title"
                     v-lazy-load
                   />
-                  <Annotate
-                    :phonetics="false"
-                    :checkSaved="false"
-                    :sticky="true"
-                    :popup="false"
+                  <span
                     :key="`dropdown-line-${index}-annotate-${
                       hit.video.subs_l2[Number(hit.lineIndex)].line
                     }`"
@@ -133,7 +129,7 @@
                         style="margin-left: 0.5em; opacity: 0.5"
                       ></span>
                     </span>
-                  </Annotate>
+                  </span>
                 </b-dropdown-item>
               </template>
             </div>
@@ -185,7 +181,12 @@
       <b-button
         class="btn btn-small search-subs-fullscreen"
         @click="toggleFullscreen"
-        v-if="!checking && !fullscreen && fullscreenToggle && (hits.length > 0 || regex)"
+        v-if="
+          !checking &&
+          !fullscreen &&
+          fullscreenToggle &&
+          (hits.length > 0 || regex)
+        "
       >
         <i class="fas fa-expand"></i>
       </b-button>
@@ -202,7 +203,9 @@
       style="flex: 1"
     >
       <div class="heartbeat-loader"></div>
-      <div class="text-center mt-4 mb-4">Searching through video captions...</div>
+      <div class="text-center mt-4 mb-4">
+        Searching through video captions...
+      </div>
     </div>
     <div class="text-center mt-3 mb-3" v-if="!checking && hits.length === 0">
       Sorry, no hits found.
@@ -386,7 +389,7 @@ export default {
       if (typeof this.$store.state.settings.subsSearchLimit !== "undefined")
         return this.$store.state.settings.subsSearchLimit;
       else {
-        return 20
+        return 20;
       }
     },
     hitIndex() {
