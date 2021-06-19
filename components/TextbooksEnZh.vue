@@ -66,7 +66,7 @@
         />
       </div>
       <div class="col-12 col-md-7 offset-0 offset-md-1">
-        <Annotate tag="div" class="col-12 mb-4">
+        <div tag="div" class="col-12 mb-4">
           <h3>In China?</h3>
           <p>
             Aside from buying it from a physical bookstore, it may be more
@@ -79,8 +79,9 @@
               data-bg-level="3"
               class="btn mb-3"
               href="https://search.jd.com/Search?keyword=hsk%E6%A0%87%E5%87%86%E6%95%99%E7%A8%8B&amp;enc=utf-8&amp;wq=hsk%E6%A0%87%E5%87%86%E6%95%99%E7%A8%8B&amp;pvid=878ba2b798bb45e581cedb1334e7147e"
+              target="_blank"
             >
-              JINGDONG 京东
+              Jīngdōng 京东
             </a>
           </div>
           <div>
@@ -88,8 +89,9 @@
               data-bg-level="3"
               class="btn mb-3"
               href="https://s.taobao.com/search?q=hsk标准教程&amp;imgfile=&amp;js=1&amp;stats_click=search_radio_all%3A1&amp;initiative_id=staobaoz_20180316&amp;ie=utf8"
+              target="_blank"
             >
-              Taobao 淘宝
+              Táobǎo 淘宝
             </a>
           </div>
           <div>
@@ -97,12 +99,13 @@
               data-bg-level="3"
               class="btn mb-3"
               href="http://search.dangdang.com/?key=HSK%B1%EA%D7%BC%BD%CC%B3%CC&amp;act=input"
+              target="_blank"
             >
-              DANGDANG 当当
+              Dāngdāng 当当
             </a>
           </div>
-        </Annotate>
-        <Annotate tag="div" class="col-12 mb-4">
+        </div>
+        <div tag="div" class="col-12 mb-4">
           <h3>Outside of China?</h3>
           <p>
             If you're outside of China, you'll need to purchase them online. One
@@ -118,6 +121,7 @@
               data-bg-level="3"
               class="btn mb-3"
               href="https://www.purpleculture.net/hsk-standard-course-bs-719/"
+              target="_blank"
             >
               Purple Culture
             </a>
@@ -127,12 +131,13 @@
               data-bg-level="3"
               class="btn"
               href="https://www.amazon.com/s?k=hsk+textbook&crid=19ME84EF729SC&sprefix=hsk+%2Caps%2C206"
+              target="_blank"
             >
               Amazon
             </a>
           </div>
-        </Annotate>
-        <Annotate tag="div" class="col-12">
+        </div>
+        <div tag="div" class="col-12">
           <h3>eBooks available?</h3>
           <p>
             The official publisher (BLCUP) has finally released the
@@ -147,11 +152,12 @@
               data-bg-level="3"
               class="btn mb-3"
               href="https://www.blcup.com/EnSeriesBook/index/8#001"
+              target="_blank"
             >
               Official Publisher
             </a>
           </div>
-        </Annotate>
+        </div>
       </div>
     </div>
   </div>
