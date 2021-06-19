@@ -32,6 +32,7 @@
             <template>
               <b-button
                 v-if="
+                  !saving &&
                   !(video && video.id) &&
                   (this.video.subs_l2 || this.$adminMode)
                 "
@@ -40,12 +41,16 @@
                 <i class="fas fa-plus mr-2"></i>
                 Add to Library
               </b-button>
+              <span v-if="saving">
+                <i class="fas fa-hourglass mr-2 text-secondary"></i>
+                Adding...
+              </span>
               <span
                 v-if="
                   video &&
                   video.id &&
                   !show &&
-                  (this.video.subs_l2 || this.$adminMode)
+                  (video.subs_l2 || this.$adminMode)
                 "
               >
                 <i class="fas fa-check-circle mr-2 text-success"></i>
@@ -261,7 +266,7 @@ import Config from "@/lib/config";
 import Helper from "@/lib/helper";
 import { Drag, Drop } from "vue-drag-drop";
 import { parseSync } from "subtitle";
-import Papa from 'papaparse'
+import Papa from "papaparse";
 
 export default {
   components: {
@@ -319,6 +324,7 @@ export default {
   },
   data() {
     return {
+      saving: false,
       firstLineTime: 0,
       subsUpdated: false,
       speaking: false,
@@ -419,7 +425,7 @@ export default {
       try {
         let response = await axios.patch(
           `${Config.wiki}items/youtube_videos/${this.video.id}`,
-          { subs_l2: JSON.stringify(this.video.subs_l2) }
+          { subs_l2: YouTube.unparseSubs(this.video.subs_l2) }
         );
         if (response && response.data) {
           this.subsUpdated = true;
@@ -444,6 +450,7 @@ export default {
       }
     },
     async save() {
+      this.saving = true;
       try {
         let response = await axios.post(
           `${Config.wiki}items/youtube_videos`,
@@ -452,15 +459,12 @@ export default {
             title: this.video.title,
             youtube_id: this.video.youtube_id,
             channel_id: this.video.channel ? this.video.channel.id : null,
-            subs_l2: Papa.unparse(
-              this.video.subs_l2.map((l) => {
-                return { starttime: l.starttime, line: l.line };
-              })
-            ),
+            subs_l2: YouTube.unparseSubs(this.video.subs_l2)
           })
         );
         if (response) {
           this.video.id = response.data.data.id;
+          this.saving = false;
           this.videoInfoKey++;
         }
       } catch (err) {}

@@ -385,7 +385,7 @@ export default {
     async updateSubs() {
       let response = await axios.patch(
         `${Config.wiki}items/youtube_videos/${this.video.id}`,
-        { subs_l2: JSON.stringify(this.video.subs_l2) }
+        { subs_l2: YouTube.unparseSubs(this.video.subs_l2) }
       );
       response = response.data;
       if (response && response.data) {
@@ -454,7 +454,7 @@ export default {
           youtube_id: video.youtube_id,
           title: video.title,
           l2: this.$l2.id,
-          subs_l2: JSON.stringify(video.subs_l2),
+          subs_l2: YouTube.unparseSubs(video.subs_l2),
           channel_id: video.channel_id,
         });
         response = response.data;

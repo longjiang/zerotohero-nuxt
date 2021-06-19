@@ -258,4 +258,7 @@ export default {
 </script>
 
 <style>
+.youtube-video {
+  max-width: 100%;
+}
 </style>
