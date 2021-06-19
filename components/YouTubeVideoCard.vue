@@ -81,9 +81,10 @@
           <i class="fas fa-plus mr-2"></i>
           Add Channel ID
         </b-button> -->
-        <span
+        <router-link
           class="btn btn-small mt-2 ml-0 bg-success text-white"
           v-if="video.tv_show"
+          :to="{name: 'show', params: {type: 'tv-show', id: String(video.tv_show.id)}}"
         >
           <i class="fa fa-tv mr-2" />
           {{ video.tv_show.title }}
@@ -92,10 +93,11 @@
             v-if="$adminMode"
             @click="unassignShow('tv_show')"
           />
-        </span>
-        <span
+        </router-link>
+        <router-link
           class="btn btn-small mt-2 ml-0 bg-success text-white"
           v-if="video.talk"
+          :to="{name: 'show', params: {type: 'talk', id: String(video.talk.id)}}"
         >
           <i class="fas fa-graduation-cap mr-2"></i>
           {{ video.talk.title }}
@@ -104,7 +106,7 @@
             v-if="$adminMode"
             @click="unassignShow('talk')"
           />
-        </span>
+        </router-link>
         <AssignShow
           @assignShow="saveShow"
           v-if="$adminMode && video.id && !video.tv_show && !video.talk"

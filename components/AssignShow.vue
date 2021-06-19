@@ -1,6 +1,6 @@
 <template>
   <span>
-    <b-button @click="assignShow = !assignShow" variant="gray">
+    <b-button @click="assignShow = !assignShow" :variant="variant">
       <i class="fa fa-tv mr-2"></i>
       Assign {{ type === "talks" ? "Talk" : "Show" }}
     </b-button>
@@ -41,6 +41,10 @@ export default {
     type: {
       type: String,
       default: 'tv-shows'
+    },
+    variant: {
+      type: String,
+      default: 'gray'
     }
   },
   data() {

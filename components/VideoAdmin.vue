@@ -1,23 +1,17 @@
 <template>
-  <div class="video-edit bg-gray rounded p-3 mt-3 mb-3">
+  <div class="video-edit">
     <div class="video-edit-public">
       <b-button
         :class="{
           'd-none': true,
           'd-inline-block':
-            !saving &&
-            !(video && video.id) &&
-            (this.video.subs_l2 || this.$adminMode),
+            !saving && !(video && video.id) && (video.subs_l2 || $adminMode),
         }"
         @click="save"
       >
         <i class="fas fa-plus mr-2"></i>
         Add to Library
       </b-button>
-    </div>
-    <div
-      :class="{ 'video-edit-admin-first-line d-none': true, 'd-block': $adminMode }"
-    >
       <span v-if="saving">
         <i class="fas fa-hourglass mr-2 text-secondary"></i>
         Adding...
@@ -26,84 +20,127 @@
         <i class="fas fa-check-circle mr-2 text-success"></i>
         Added
       </span>
-      <b-dropdown
-        id="dropdown-1"
-        v-if="video && video.id"
-        :text="video.topic ? topics[video.topic] : 'Topic'"
-        :variant="video.topic ? 'success' : undefined"
-        class="ml-1"
+      <router-link
+        class="btn btn-small mt-2 ml-0 bg-success text-white"
+        v-if="video.tv_show"
+        :to="{
+          name: 'show',
+          params: { type: 'tv-show', id: String(video.tv_show.id) },
+        }"
       >
-        <b-dropdown-item
-          v-for="(title, slug) in topics"
-          :key="`change-topic-item-${slug}`"
-          @click="changeTopic(slug)"
-        >
-          {{ title }}
-        </b-dropdown-item>
-      </b-dropdown>
-      <template v-if="video && video.id && !video.lesson">
+        <i class="fa fa-tv mr-2" />
+        {{ video.tv_show.title }}
+        <i
+          class="fas fa-times-circle ml-1"
+          v-if="$adminMode"
+          @click="unassignShow('tv_show')"
+        />
+      </router-link>
+      <router-link
+        class="btn btn-small mt-2 ml-0 bg-success text-white"
+        v-if="video.talk"
+        :to="{
+          name: 'show',
+          params: { type: 'talk', id: String(video.talk.id) },
+        }"
+      >
+        <i class="fas fa-graduation-cap mr-2"></i>
+        {{ video.talk.title }}
+        <i
+          class="fas fa-times-circle ml-1"
+          v-if="$adminMode"
+          @click="unassignShow('talk')"
+        />
+      </router-link>
+    </div>
+    <div
+      :class="{
+        'bg-gray rounded p-3 mt-3 mb-3 d-none': true,
+        'd-block': $adminMode && video && video.id,
+      }"
+    >
+      <div class="video-edit-admin-first-line">
         <b-dropdown
           id="dropdown-1"
-          :text="video.level ? levels[video.level] : 'Level'"
-          :variant="video.level ? 'success' : undefined"
+          :text="video.topic ? topics[video.topic] : 'Topic'"
+          :variant="video.topic ? 'success' : undefined"
           class="ml-1"
         >
           <b-dropdown-item
-            v-for="(title, slug) in levels"
-            :key="`change-level-item-${slug}`"
-            @click="changeLevel(slug)"
+            v-for="(title, slug) in topics"
+            :key="`change-topic-item-${slug}`"
+            @click="changeTopic(slug)"
           >
             {{ title }}
           </b-dropdown-item>
         </b-dropdown>
-        <b-button
-          v-if="$adminMode"
-          variant="danger"
-          @click="remove"
-          class="ml-1"
-        >
-          <i class="fas fa-trash-alt"></i>
-        </b-button>
-        <drop
-          v-if="$adminMode"
-          @drop="handleDrop"
-          :class="{
-            over: over,
-            'subs-drop': true,
-            drop: true,
-            'ml-1': true,
-            'text-dark': true,
-            btn: true,
-            'btn-light': true,
-          }"
-          :key="`drop-${transcriptKey}`"
-          @dragover="over = true"
-          @dragleave="over = false"
-        >
-          Drop Subs Here
-        </drop>
-      </template>
-    </div>
-    <div
-      :class="{ 'video-edit-admin-second-line d-none': true, 'd-block': $adminMode }"
-    >
-      <div v-if="video && video.id" class="mt-2">
-        First line starts at
-        <input
-          v-model.lazy="firstLineTime"
-          type="text"
-          placeholder="0"
-          class="d-inline-block ml-1"
-          style="width: 4rem"
-        />
-        <b-button v-if="!subsUpdated" @click="updateSubs" class="ml-2">
-          <i class="fa fa-save mr-2"></i>
-          Update Subs
-        </b-button>
-        <b-button v-else variant="success" class="ml-2">
-          <i class="fa fa-check mr-2"></i>
-          Updated
-        </b-button>
+        <template v-if="!video.lesson">
+          <b-dropdown
+            id="dropdown-1"
+            :text="video.level ? levels[video.level] : 'Level'"
+            :variant="video.level ? 'success' : undefined"
+          >
+            <b-dropdown-item
+              v-for="(title, slug) in levels"
+              :key="`change-level-item-${slug}`"
+              @click="changeLevel(slug)"
+            >
+              {{ title }}
+            </b-dropdown-item>
+          </b-dropdown>
+          <AssignShow
+            @assignShow="saveShow"
+            v-if="!video.tv_show && !video.talk"
+            :defaultYoutubeId="video.youtube_id"
+            :defaultTitle="video.title"
+            type="tv-shows"
+            variant="secondary"
+          />
+          <AssignShow
+            @assignShow="saveShow"
+            v-if="!video.tv_show && !video.talk"
+            :defaultYoutubeId="video.youtube_id"
+            :defaultTitle="video.title"
+            type="talks"
+            variant="secondary"
+          />
+          <b-button variant="danger" @click="remove">
+            <i class="fas fa-trash-alt"></i>
+            Remove
+          </b-button>
+          <drop
+            @drop="handleDrop"
+            :class="{
+              over: over,
+              'subs-drop drop text-dark btn btn-light w-100 mt-2': true,
+            }"
+            :key="`drop-${transcriptKey}`"
+            @dragover="over = true"
+            @dragleave="over = false"
+          >
+            Drop Subs Here
+          </drop>
+        </template>
+      </div>
+      <div class="video-edit-admin-second-line">
+        <div class="mt-2">
+          First line starts at
+          <input
+            v-model.lazy="firstLineTime"
+            type="text"
+            placeholder="0"
+            class="d-inline-block ml-1"
+            style="width: 4rem"
+          />
+          <b-button v-if="!subsUpdated" @click="updateSubs" class="ml-2">
+            <i class="fa fa-save mr-2"></i>
+            Update Subs
+          </b-button>
+          <b-button v-else variant="success" class="ml-2">
+            <i class="fa fa-check mr-2"></i>
+            Updated
+          </b-button>
+        </div>
       </div>
     </div>
   </div>
@@ -112,6 +149,9 @@
 <script>
 import { Drag, Drop } from "vue-drag-drop";
 import Helper from "@/lib/helper";
+import Config from "@/lib/config";
+import YouTube from "@/lib/youtube";
+import Vue from "vue";
 
 export default {
   components: {
@@ -162,6 +202,18 @@ export default {
     },
   },
   methods: {
+    async unassignShow(type) {
+      let data = {};
+      data[type] = null;
+      let response = await axios.patch(
+        `${Config.wiki}items/youtube_videos/${this.video.id}`,
+        data
+      );
+      if (response && response.data) {
+        this.video[type] = undefined;
+        this.videoInfoKey++;
+      }
+    },
     async save() {
       this.saving = true;
       try {
@@ -183,6 +235,23 @@ export default {
         }
       } catch (err) {
         console.log(err);
+      }
+    },
+    async saveShow(showID, type) {
+      if (!this.video[type] || this.video[type].id !== showID) {
+        let data = {};
+        data[type] = showID;
+        let response = await axios.patch(
+          `${Config.wiki}items/youtube_videos/${this.video.id}?fields=${type}.*`, // type is 'tv_show' or 'talk'
+          data
+        );
+        response = response.data;
+        if (response && response.data) {
+          Vue.set(this.video, type, {
+            id: response.data[type].id,
+            title: response.data[type].title,
+          });
+        }
       }
     },
     handleDrop(data, event) {
