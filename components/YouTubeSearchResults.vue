@@ -140,12 +140,7 @@ export default {
       };
       if (this.captions === "nocaptions") options.captions = false;
       if (this.captions === "captions") options.captions = true;
-      let videos = await YouTube.searchByGoogle(options);
-      this.videos = videos.map((video) => {
-        video.youtube_id = video.id;
-        video.id = undefined;
-        return video;
-      });
+      this.videos = await YouTube.searchByGoogle(options);
       this.updateVideos++;
     },
     addAll() {

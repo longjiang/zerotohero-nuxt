@@ -64,7 +64,7 @@ export default {
   },
   data() {
     return {
-      collection: this.type === 'tv-show' ? 'tv_show' : 'talk',
+      collection: this.type === "tv-show" ? "tv_show" : "talk",
       show: undefined,
       videos: undefined,
     };
@@ -77,7 +77,9 @@ export default {
   },
   methods: {
     async getShow(id, collection) {
-      let response = await axios.get(`${Config.wiki}items/${collection}s/${id}`);
+      let response = await axios.get(
+        `${Config.wiki}items/${collection}s/${id}`
+      );
       if (response && response.data) {
         return response.data.data;
       }
@@ -88,16 +90,24 @@ export default {
           this.$l2.id
         }&filter[${this.collection}][eq]=${
           this.show.id
-        }&fields=channel_id,id,lesson,level,title,topic,youtube_id,tv_show.*,talk.*${
+        }&fields=channel_id,id,lesson,level,title,topic,youtube_id,date,tv_show.*,talk.*${
           this.$adminMode ? ",subs_l2" : ""
         }&timestamp=${this.$adminMode ? Date.now() : 0}`
       );
       let videos = response.data.data || [];
       videos = Helper.uniqueByValue(videos, "youtube_id");
-      videos =
-        videos.sort((x, y) =>
-          x.title.localeCompare(y.title, this.$l2.code, { numeric: true })
-        ) || [];
+      if (this.type === "tv-show") {
+        videos =
+          videos.sort((x, y) =>
+            x.title.localeCompare(y.title, this.$l2.code, { numeric: true })
+          ) || [];
+      } else {
+        videos =
+          videos.sort((y, x) =>
+            x.date ? x.date.localeCompare(y.date, this.$l2.code, { numeric: true }) : -1
+          ) || [];
+      }
+
       return videos;
     },
   },

@@ -30,6 +30,7 @@
         />
       </router-link>
       <div class="media-body">
+        <div class="small mb-2" style="color: #aaa" v-if="video.date">{{ formatDate(video.date) }}</div>
         <div class="font-weight-bold">
           <span contenteditable="true" v-if="$adminMode" @blur="saveTitle">
             {{ video.title }}
@@ -228,6 +229,7 @@ import YouTube from "@/lib/youtube";
 import { Drag, Drop } from "vue-drag-drop";
 import { parseSync } from "subtitle";
 import Vue from "vue";
+import moment from 'moment'
 
 export default {
   components: {
@@ -308,6 +310,9 @@ export default {
     },
   },
   methods: {
+    formatDate(date) {
+      return moment(date).format('LL')
+    },
     async saveShow(showID, type) {
       if (!this.video[type] || this.video[type].id !== showID) {
         let data = {};
@@ -439,7 +444,7 @@ export default {
       if (this.checkSaved && !video.id && video.hasSubs) {
         if (!video.subs_l2 && video.l2Locale) {
           video.subs_l2 = await YouTube.getTranscript(
-            video,
+            video.youtube_id,
             video.l2Locale,
             video.l2Name
           );
@@ -464,6 +469,7 @@ export default {
           l2: this.$l2.id,
           subs_l2: YouTube.unparseSubs(video.subs_l2),
           channel_id: video.channel_id,
+          date: moment(video.date).format('YYYY-MM-DD HH:mm:ss'),
         });
         response = response.data;
         if (response && response.data) {
