@@ -22,7 +22,7 @@
           'router-link-active':
             parent && parent.name === nameOfSelfOrFirstChild(item),
         }"
-        :to="last(item) || { name: nameOfSelfOrFirstChild(item) }"
+        :to="last(item) || selfOrFirstChild(item)"
         :title="item.title"
         :key="`nav-${index}`"
       >
@@ -36,9 +36,9 @@
     >
       <NuxtLink
         class="secondary-menu-item"
-        v-for="child in parent.children.filter((child) => child.show)"
-        :key="`subnav-${child.name}`"
-        :to="last(child) || { name: child.name }"
+        v-for="(child, index) in parent.children.filter((child) => child.show)"
+        :key="`subnav-${child.name}-${index}`"
+        :to="last(child) || child"
       >
         <i :class="child.icon"></i>
         {{ $t(child.title) }}
@@ -55,13 +55,44 @@
 </template>
 
 <script>
-import Config from '@/lib/config'
+import Config from "@/lib/config";
 
 export default {
   data() {
     return {
       shortcuts: [],
       menu: [
+        {
+          icon: "fas fa-wrench",
+          title: "Admin",
+          show: this.adminMode(),
+          children: [
+            {
+              icon: "fas fa-wrench",
+              title: "DB Upgrade",
+              name: "db-upgrade",
+              show: this.adminMode(),
+            },
+            {
+              icon: "fas fa-wrench",
+              title: "Recover Subs",
+              name: "recover-subs",
+              show: this.adminMode(),
+            },
+            {
+              icon: "fas fa-wrench",
+              title: "Test",
+              name: "test",
+              show: this.adminMode(),
+            },
+            {
+              icon: "fas fa-wrench",
+              title: "Assign Lesson Videos",
+              name: "assign-lesson-videos",
+              show: this.adminMode(),
+            },
+          ],
+        },
         {
           icon: "fas fa-graduation-cap",
           title: "Courses",
@@ -114,7 +145,17 @@ export default {
               name: "tv-shows",
               icon: "fa fa-tv",
               title: "TV Shows",
-              show: this.tvShows(),
+              show: false,
+            },
+            {
+              name: "show",
+              show: false,
+            },
+            {
+              name: "talks",
+              icon: "fas fa-graduation-cap",
+              title: "Talks",
+              show: false,
             },
             {
               name: "youtube-browse",
@@ -405,21 +446,65 @@ export default {
       type: Object,
     },
   },
+  mounted() {
+    this.enableTVShows();
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (mutation.type.startsWith("shows")) {
+        this.enableTVShows();
+      }
+    });
+    this.bindKeys();
+  },
+  beforeDestroy() {
+    // you may call unsubscribe to stop the subscription
+    this.unsubscribe();
+  },
+  unmounted() {
+    this.unbindKeys();
+  },
+  watch: {
+    $route() {
+      this.history.push(this.$route.path);
+    },
+  },
   methods: {
-    tvShows() {
-      return typeof Config.approvedChannels[this.l2.code] !== 'undefined'
+    enableTVShows() {
+      if (
+        this.$store.state.shows.tvShows &&
+        this.$store.state.shows.tvShows[this.l2.code]
+      ) {
+        let av = this.menu.find((i) => i.title === "Audio-Visual");
+        let tvShows = av.children.find((i) => i.title === "TV Shows");
+        tvShows.show = true;
+      }
+      if (
+        this.$store.state.shows.talks &&
+        this.$store.state.shows.talks[this.l2.code]
+      ) {
+        let av = this.menu.find((i) => i.title === "Audio-Visual");
+        let talks = av.children.find((i) => i.title === "Talks");
+        talks.show = true;
+      }
+    },
+    adminMode() {
+      return this.$store.state.settings.adminMode;
     },
     hasFeature(feature) {
       return this.$hasFeature(feature);
     },
     nameOfSelfOrFirstChild(item) {
+      let result = this.selfOrFirstChild(item);
+      if (result) {
+        return result.name;
+      }
+    },
+    selfOrFirstChild(item) {
       if (item) {
-        let result =
-          item.name ||
-          (item.children && item.children.length > 0
-            ? item.children[0].name
-            : "");
-        return result;
+        if (item.children && item.children.length > 0) {
+          return item.children[0];
+        } else {
+          return item;
+        }
       }
     },
     last(item) {
@@ -478,17 +563,6 @@ export default {
           }
         }
       }
-    },
-  },
-  mounted() {
-    this.bindKeys();
-  },
-  unmounted() {
-    this.unbindKeys();
-  },
-  watch: {
-    $route() {
-      this.history.push(this.$route.path);
     },
   },
 };

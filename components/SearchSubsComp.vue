@@ -306,9 +306,8 @@ export default {
     };
   },
   async mounted() {
-    await Helper.timeout(2000);
     this.checking = true;
-    if (this.$l2.code === "zh" && this.terms[0].length === 1) {
+    if (this.$l2.code === "zh" && this.terms[0] && this.terms[0].length === 1) {
       this.excludeTerms = await (
         await this.$getDictionary()
       ).getWordsWithCharacter(this.terms[0]);
@@ -319,7 +318,8 @@ export default {
       this.$l2.code,
       this.$l2.id,
       this.$adminMode,
-      this.$l2.continua
+      this.$l2.continua,
+      this.$subsSearchLimit ? 20 : 500
     );
 
     hits = this.updateSaved(hits);
@@ -381,6 +381,13 @@ export default {
     $adminMode() {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
+    },
+    $subsSearchLimit() {
+      if (typeof this.$store.state.settings.subsSearchLimit !== "undefined")
+        return this.$store.state.settings.subsSearchLimit;
+      else {
+        return 20
+      }
     },
     hitIndex() {
       let hits = this.hits;

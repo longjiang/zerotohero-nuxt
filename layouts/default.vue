@@ -455,8 +455,8 @@ export default {
       if (!this.$store.state.savedHits.savedHitsLoaded) {
         this.$store.commit("savedHits/LOAD_SAVED_HITS");
       }
-      if (!this.$store.state.tvShows.showsLoaded[this.l2.code]) {
-        this.$store.dispatch("tvShows/load", {
+      if (!this.$store.state.shows.showsLoaded[this.l2.code]) {
+        this.$store.dispatch("shows/load", {
           l2: this.l2,
           adminMode: this.$store.state.settings.adminMode,
         });

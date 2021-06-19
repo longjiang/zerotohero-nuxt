@@ -13,11 +13,14 @@
   }
 </router>
 <template>
-  <div class="main mt-4 mb-5" v-cloak>
+  <div class="main mt-5 mb-5" v-cloak>
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
-          <div class="jumbotron mt-5 p-4 bg-warning text-dark">
+          <h1 class="page-title">
+            {{ $t("Settings") }}
+          </h1>
+          <div class="jumbotron mt-4 p-4 bg-warning text-dark">
             Settings are
             <b>automatically saved</b>
             as soon as you make the change.
@@ -28,9 +31,10 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
-          <h1 class="page-title mb-4">
-            {{ $t("Settings") }}
-          </h1>
+          <h4>General settings</h4>
+          <b-checkbox v-model="subsSearchLimit">Limit "this word in TV Shows" search result (faster)</b-checkbox>
+          <hr />
+          <h4>Settings specific to {{ $l2.name }}:</h4>
           <AnnotationSettings />
           <div>
             <h4>{{ $t("Text Corpus Settings") }}</h4>
@@ -70,9 +74,15 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
-          <b-form-checkbox v-model="adminMode">
-            Enable administrative mode (no cache, more buttons)
+          <b-form-checkbox v-model="adminMode" style="display: inline-block" v-if="adminMode">
+            Admin mode
           </b-form-checkbox>
+          <b-input-group v-else>
+            <b-input v-model.lazy="adminModePasscode" placeholder="Enter passcode to enable admin mode." />
+            <b-input-group-append>
+              <b-button variant="primary">Enable</b-button>
+            </b-input-group-append>
+          </b-input-group>
         </div>
       </div>
     </div>
@@ -90,16 +100,20 @@ export default {
     AnnotationSettings,
   },
   mounted() {
+    this.subsSearchLimit = this.$store.state.settings.subsSearchLimit
     this.adminMode = this.$store.state.settings.adminMode
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type === "settings/LOAD_SETTINGS") {
+        this.subsSearchLimit = this.$store.state.settings.subsSearchLimit
         this.adminMode = this.$store.state.settings.adminMode;
       }
     });
   },
   data() {
     return {
+      subsSearchLimit: true,
       adminMode: false,
+      adminModePasscode: ''
     };
   },
   computed: {
@@ -114,9 +128,17 @@ export default {
     ...mapState("settings", ["l2Settings", "l1", "l2"]),
   },
   watch: {
+    subsSearchLimit() {
+      this.$store.commit("settings/SET_SUBS_SEARCH_LIMIT", this.subsSearchLimit);
+    },
     adminMode() {
       this.$store.commit("settings/SET_ADMIN_MODE", this.adminMode);
     },
+    adminModePasscode() {
+      if (this.adminModePasscode === '5599341') {
+        this.adminMode = true
+      }
+    }
   },
 };
 </script>

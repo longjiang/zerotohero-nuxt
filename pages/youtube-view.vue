@@ -304,15 +304,15 @@ export default {
     this.video = video;
     this.loadShow();
     this.randomEpisodeYouTubeId = await YouTube.getRandomEpisodeYouTubeId(
-      this.$l2.code,
-      this.$l2.id
+      this.$l2.id,
+      this.$store.state.shows.tvShows[this.$l2.code] ? 'tv_show' : undefined
     );
     this.saveHistory();
   },
   mounted() {
     this.bindKeys();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type === "tvShows/LOAD_TV_SHOWS") {
+      if (mutation.type === "shows/LOAD_SHOWS") {
         this.loadShow();
       }
     });
@@ -349,9 +349,7 @@ export default {
             this.$l2.id
           }${filters}&offset=${
             this.start
-          }&fields=channel_id,id,lesson,level,title,topic,youtube_id${
-            this.$adminMode ? ",subs_l2" : ""
-          }&timestamp=${this.$adminMode ? Date.now() : 0}`
+          }&fields=channel_id,id,lesson,level,title,topic,youtube_id&timestamp=${this.$adminMode ? Date.now() : 0}`
         );
 
         if (response.data && response.data.data) {
@@ -366,8 +364,8 @@ export default {
   methods: {
     loadShow() {
       if (this.video) {
-        this.show = this.$store.state.tvShows.shows[this.$l2.code]
-          ? this.$store.state.tvShows.shows[this.$l2.code].find((show) =>
+        this.show = this.$store.state.shows.tvShows[this.$l2.code]
+          ? this.$store.state.shows.tvShows[this.$l2.code].find((show) =>
               this.video.title.includes(show.title)
             )
           : undefined;
@@ -460,8 +458,8 @@ export default {
         return video.subs_l2;
       }
       if (video.subs_l2 && typeof video.subs_l2 === "string") {
-        let savedSubs = JSON.parse(video.subs_l2);
-
+        let savedSubs = YouTube.parseSavedSubs(video.subs_l2)
+        
         if (savedSubs) {
           let filtered = savedSubs.filter(
             (line) => line && line.starttime && line.line

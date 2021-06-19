@@ -5,15 +5,20 @@
 </router>
 <template>
   <div>
-    {{ entry }}
+    <div v-if="showTestEntry">
+      {{ entry }}
 
-    <DictionaryEntry v-if="entry" :entry="entry" :key="entry.id" />
+      <DictionaryEntry v-if="entry" :entry="entry" :key="entry.id" />
+    </div>
+    <div class="main">
+
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  layout: "test-layout",
+  // layout: "test-layout",
   computed: {
     l1() {
       return this.$store.state.settings.l1;
@@ -24,22 +29,23 @@ export default {
   },
   data() {
     return {
+      showTestEntry: false,
       entry: undefined,
     };
   },
-  async created() {
-    let dictionary = await this.$getDictionary();
-    console.log(await (await dictionary).lookup("你"), "dictionary.lookup");
-  },
-  async mounted() {
-    let dictionary = await this.$getDictionary();
-    console.log(await (await dictionary).random(), "dictionary.random()");
-  },
-  async fetch() {
-    if (true) {
+  methods: {
+    async testDictionary() {
       let dictionary = await this.$getDictionary();
       this.entry = await (await dictionary).lookup("你好");
-    }
+    },
+    async testRandom() {
+      let dictionary = await this.$getDictionary();
+      console.log(await (await dictionary).random(), "dictionary.random()");
+    },
+    async testRandom() {
+      let dictionary = await this.$getDictionary();
+      console.log(await (await dictionary).random(), "dictionary.random()");
+    },
   },
 };
 </script>

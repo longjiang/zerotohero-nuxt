@@ -73,45 +73,52 @@
           <i class="fas fa-plus mr-2"></i>
           Add
         </b-button>
-        <b-button
+        <!-- <b-button
           v-if="$adminMode && video.id && !video.channel_id"
           class="btn btn-small mt-2 ml-0"
           @click="addChannelID(video)"
         >
           <i class="fas fa-plus mr-2"></i>
           Add Channel ID
-        </b-button>
-        <b-button
-          v-if="$adminMode && video.id && !tvShow"
-          class="btn btn-small mt-2 ml-0"
-          @click="toggleMakingShow()"
-        >
-          <i class="fa fa-tv mr-2"></i>
-          Make TV Show
-        </b-button>
+        </b-button> -->
         <span
           class="btn btn-small mt-2 ml-0 bg-success text-white"
-          v-if="tvShow"
+          v-if="video.tv_show"
         >
           <i class="fa fa-tv mr-2" />
-          TV Show
-        </span>
-        <div v-if="makingShow && !tvShow">
-          <input
-            type="text"
-            v-model.lazy="showTitle"
-            placeholder="Title"
-            style="width: 70%; text-align: left"
-            class="add-show-input ml-0"
+          {{ video.tv_show.title }}
+          <i
+            class="fas fa-times-circle ml-1"
+            v-if="$adminMode"
+            @click="unassignShow('tv_show')"
           />
-          <b-button
-            class="btn btn-small mt-2 ml-0 bg-success text-white"
-            v-if="!tvShow"
-            @click="addShow()"
-          >
-            Add Show
-          </b-button>
-        </div>
+        </span>
+        <span
+          class="btn btn-small mt-2 ml-0 bg-success text-white"
+          v-if="video.talk"
+        >
+          <i class="fas fa-graduation-cap mr-2"></i>
+          {{ video.talk.title }}
+          <i
+            class="fas fa-times-circle ml-1"
+            v-if="$adminMode"
+            @click="unassignShow('talk')"
+          />
+        </span>
+        <AssignShow
+          @assignShow="saveShow"
+          v-if="$adminMode && video.id && !video.tv_show && !video.talk"
+          :defaultYoutubeId="video.youtube_id"
+          :defaultTitle="video.title"
+          type="tv-shows"
+        />
+        <AssignShow
+          @assignShow="saveShow"
+          v-if="$adminMode && video.id && !video.tv_show && !video.talk"
+          :defaultYoutubeId="video.youtube_id"
+          :defaultTitle="video.title"
+          type="talks"
+        />
         <b-button
           v-if="$adminMode && video.id"
           class="btn btn-small bg-danger text-white mt-2 ml-0"
@@ -132,8 +139,18 @@
           {{ Helper.level(video.level, $l2) }}
         </div>
 
-        <div v-if="$adminMode && video.subs_l1 && video.subs_l1.length > 0">
-          <div v-for="index in Math.min(20, video.subs_l1.length)">
+        <div
+          v-if="
+            $adminMode &&
+            video.subs_l1 &&
+            video.subs_l1.length > 0 &&
+            showSubsEditing
+          "
+        >
+          <div
+            v-for="index in Math.min(20, video.subs_l1.length)"
+            :key="`l1-subs-${index}`"
+          >
             <b>{{ video.l1Locale }}</b>
             <span
               @click="matchSubsAndUpdate(index - 1)"
@@ -153,7 +170,14 @@
             {{ video.subs_l1[index - 1].line }}
           </div>
         </div>
-        <div v-if="$adminMode && video.subs_l2 && video.subs_l2.length > 0">
+        <div
+          v-if="
+            $adminMode &&
+            video.subs_l2 &&
+            video.subs_l2.length > 0 &&
+            showSubsEditing
+          "
+        >
           <b>{{ video.l2Locale || $l2.code }}</b>
           <input
             type="text"
@@ -171,7 +195,7 @@
           </b-button> -->
         </div>
 
-        <div
+        <!-- <div
           v-if="
             $adminMode &&
             video.channel_id &&
@@ -183,7 +207,7 @@
           class="small text-warning mt-1"
         >
           {{ video.channel_id }}
-        </div>
+        </div> -->
       </div>
     </div>
   </drop>
@@ -195,6 +219,7 @@ import Config from "@/lib/config";
 import YouTube from "@/lib/youtube";
 import { Drag, Drop } from "vue-drag-drop";
 import { parseSync } from "subtitle";
+import Vue from "vue";
 
 export default {
   components: {
@@ -212,10 +237,7 @@ export default {
           ? this.video.subs_l2[0].starttime
           : undefined,
       subsUpdated: false,
-      makingShow: false,
-      showTitle: this.video.title,
-      showYear: "",
-      tvShow: this.video.show,
+      assignShow: false,
       srt: false,
     };
   },
@@ -230,16 +252,22 @@ export default {
     checkSubs: {
       default: false,
     },
+    showSubsEditing: {
+      default: false,
+    },
   },
   async mounted() {
+    let changed = false
     if (this.checkSubs) {
       await Helper.timeout(this.delay);
       await this.checkSubsFunc(this.video);
+      changed = true
     }
-    if (this.video.id && this.$adminMode) {
+    if (this.video.id && this.showSubsEditing) {
       await this.addSubsL1(this.video);
+      changed = true
     }
-    this.videoInfoKey++;
+    if (changed) this.videoInfoKey++;
   },
   watch: {
     firstLineTime(newTime, oldTime) {
@@ -272,6 +300,35 @@ export default {
     },
   },
   methods: {
+    async saveShow(showID, type) {
+      if (!this.video[type] || (this.video[type].id !== showID)) {
+        let data = {};
+        data[type] = showID;
+        let response = await axios.patch(
+          `${Config.wiki}items/youtube_videos/${this.video.id}?fields=${type}.*`, // type is 'tv_show' or 'talk'
+          data
+        );
+        response = response.data;
+        if (response && response.data) {
+          Vue.set(this.video, type, {
+            id: response.data[type].id,
+            title: response.data[type].title,
+          });
+        }
+      }
+    },
+    async unassignShow(type) {
+      let data = {};
+      data[type] = null;
+      let response = await axios.patch(
+        `${Config.wiki}items/youtube_videos/${this.video.id}`,
+        data
+      );
+      if (response && response.data) {
+        this.video[type] = undefined;
+        this.videoInfoKey++;
+      }
+    },
     async saveTitle(e) {
       let newTitle = e.target.innerText;
       if (this.video.title !== newTitle) {
@@ -288,21 +345,6 @@ export default {
         } catch (err) {
           // Direcuts bug
         }
-      }
-    },
-    toggleMakingShow() {
-      this.makingShow = !this.makingShow;
-    },
-    async addShow() {
-      let response = await axios.post(`${Config.wiki}items/tv_shows`, {
-        youtube_id: this.video.youtube_id,
-        title: this.showTitle,
-        year: this.showYear,
-        l2: this.$l2.id,
-        channel_id: this.video.channel_id,
-      });
-      if (response && response.data) {
-        this.tvShow = response.data;
       }
     },
     matchSubsAndUpdate(index) {
@@ -343,7 +385,7 @@ export default {
     async updateSubs() {
       let response = await axios.patch(
         `${Config.wiki}items/youtube_videos/${this.video.id}`,
-        { subs_l2: JSON.stringify(this.video.subs_l2) }
+        { subs_l2: YouTube.unparseSubs(this.video.subs_l2) }
       );
       response = response.data;
       if (response && response.data) {
@@ -412,7 +454,7 @@ export default {
           youtube_id: video.youtube_id,
           title: video.title,
           l2: this.$l2.id,
-          subs_l2: JSON.stringify(video.subs_l2),
+          subs_l2: YouTube.unparseSubs(video.subs_l2),
           channel_id: video.channel_id,
         });
         response = response.data;
@@ -433,7 +475,7 @@ export default {
       );
       response = response.data;
       if (response && response.data.length > 0) {
-        let subs_l2 = JSON.parse(response.data[0].subs_l2);
+        let subs_l2 = YouTube.parseSavedSubs(response.data[0].subs_l2);
         if (subs_l2[0]) {
           video = Object.assign(video, response.data[0]);
           video.subs_l2 = subs_l2;

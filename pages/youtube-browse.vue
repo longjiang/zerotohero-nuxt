@@ -16,7 +16,9 @@
     />
     <div class="row">
       <div class="col-sm-12 mb-4 text-center">
-        <h3 v-if="!keyword" class="mt-5">{{$t('{l2} Video Library', {l2: $t($l2.name)})}}</h3>
+        <h3 v-if="!keyword" class="mt-5">
+          {{ $t("{l2} Video Library", { l2: $t($l2.name) }) }}
+        </h3>
         <p v-if="!keyword" class="mt-3">
           Study {{ $l2.name }} videos with
           {{ $l2.code === "zh" ? "Pinyin" : "" }} subtitles
@@ -54,21 +56,19 @@
         >
           <div class="heartbeat-loader"></div>
         </div>
-        <div :class="{'text-center': true, 'd-none': !videos || videos.length > 0}">
+        <div
+          :class="{
+            'text-center': true,
+            'd-none': !videos || videos.length > 0,
+          }"
+        >
           No more videos.
         </div>
-        <b-button
-          v-if="$adminMode"
-          class="btn btn-small bg-danger text-white mb-4 ml-2"
-          @click="removeAll()"
-        >
-          <i class="fas fa-trash mr-2"></i>
-          Remove All
-        </b-button>
         <template v-if="videos && videos.length > 0">
           <YouTubeVideoList
             class="row"
             :videos="videos"
+            :keyword="keyword"
             :checkSubs="false"
             ref="youtubeVideoList"
             :checkSaved="false"
@@ -84,7 +84,7 @@
           >
             <i class="fa fa-chevron-left"></i>
           </router-link>
-          <span class="ml-3 mr-3">Page {{ start / 12 + 1}}</span>
+          <span class="ml-3 mr-3">Page {{ start / 12 + 1 }}</span>
           <router-link
             v-if="videos && videos.length > 0"
             :to="`/${$l1.code}/${$l2.code}/youtube/browse/${topic}/${level}/${
@@ -111,6 +111,7 @@
           </router-link>
           <router-link
             v-for="(topicName, topicValue) in topics"
+            :key="`topic-${topicValue}`"
             :class="{
               'link-unstyled': true,
               'list-group-item': true,
@@ -137,6 +138,7 @@
           </router-link>
           <router-link
             v-for="(levelName, levelValue) in levels"
+            :key="`level-${levelValue}`"
             :class="{
               'link-unstyled': true,
               'list-group-item': true,
@@ -222,14 +224,11 @@ export default {
     this.videos = await this.getVideos();
     this.channels = await this.getChannels();
     this.randomEpisodeYouTubeId = await YouTube.getRandomEpisodeYouTubeId(
-      this.$l2.code,
-      this.$l2.id
+      this.$l2.id,
+      this.$store.state.shows.tvShows[this.$l2.code] ? 'tv_show' : undefined
     );
   },
   methods: {
-    removeAll() {
-      this.$refs.youtubeVideoList.removeAll();
-    },
     async getVideos() {
       let filters = "";
       if (this.topic !== "all") {
@@ -239,10 +238,12 @@ export default {
         filters += "&filter[level][eq]=" + this.level;
       }
       if (this.keyword !== "") {
-        filters +=
-          "&filter[title][contains]=" +
-          encodeURIComponent(this.keyword) +
-          "&sort=title";
+        if (this.keyword.startsWith("channel:"))
+          filters += "&filter[channel_id][eq]=" + encodeURIComponent(this.keyword.replace('channel:', ''));
+        else
+          filters +=
+            "&filter[title][contains]=" + encodeURIComponent(this.keyword);
+        filters += "&sort=title";
       }
       let limit = this.keyword ? -1 : 12;
       let response = await axios.get(
@@ -250,7 +251,7 @@ export default {
           this.$l2.id
         }${filters}&limit=${limit}&offset=${
           this.start
-        }&fields=channel_id,id,lesson,level,title,topic,youtube_id${
+        }&fields=channel_id,id,lesson,level,title,topic,youtube_id,tv_show.*,talk.*${
           this.$adminMode ? ",subs_l2" : ""
         }&timestamp=${this.$adminMode ? Date.now() : 0}`
       );
@@ -259,11 +260,16 @@ export default {
         videos = await YouTube.checkShows(videos, this.$l2.id);
         for (let video of videos) {
           try {
-            if (video.subs_l2) video.subs_l2 = JSON.parse(video.subs_l2);
+            if (video.subs_l2)
+              video.subs_l2 = YouTube.parseSavedSubs(video.subs_l2);
           } catch (err) {}
         }
       }
       videos = Helper.uniqueByValue(videos, "youtube_id");
+      videos =
+        videos.sort((x, y) =>
+          x.title.localeCompare(y.title, this.$l2.code, { numeric: true })
+        ) || [];
       return videos;
     },
     async getChannels() {

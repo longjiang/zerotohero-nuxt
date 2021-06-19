@@ -5,6 +5,7 @@ export const state = () => {
     dictionary: undefined,
     dictionaryName: undefined,
     adminMode: false,
+    subsSearchLimit: false,
     settingsLoaded: {},
     l2Settings: {
       showDefinition: false,
@@ -34,6 +35,7 @@ export const mutations = {
     if (typeof localStorage !== 'undefined') {
       let settings = JSON.parse(localStorage.getItem('zthSettings') || '{}')
       state.adminMode = settings.adminMode
+      state.subsSearchLimit = settings.subsSearchLimit
       state.l2Settings = settings[state.l2.code] || state.l2Settings
     }
     state.settingsLoaded[state.l2.code] = true
@@ -43,6 +45,14 @@ export const mutations = {
     if (typeof localStorage !== 'undefined') {
       let settings = JSON.parse(localStorage.getItem('zthSettings') || '{}')
       settings.adminMode = adminMode
+      localStorage.setItem('zthSettings', JSON.stringify(settings))
+    }
+  },
+  SET_SUBS_SEARCH_LIMIT(state, subsSearchLimit) {
+    state.subsSearchLimit = subsSearchLimit
+    if (typeof localStorage !== 'undefined') {
+      let settings = JSON.parse(localStorage.getItem('zthSettings') || '{}')
+      settings.subsSearchLimit = subsSearchLimit
       localStorage.setItem('zthSettings', JSON.stringify(settings))
     }
   },
