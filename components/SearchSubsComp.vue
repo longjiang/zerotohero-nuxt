@@ -319,7 +319,7 @@ export default {
       this.$l2.id,
       this.$adminMode,
       this.$l2.continua,
-      20
+      this.$subsSearchLimit ? 20 : 500
     );
 
     hits = this.updateSaved(hits);
@@ -381,6 +381,13 @@ export default {
     $adminMode() {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
+    },
+    $subsSearchLimit() {
+      if (typeof this.$store.state.settings.subsSearchLimit !== "undefined")
+        return this.$store.state.settings.subsSearchLimit;
+      else {
+        return 20
+      }
     },
     hitIndex() {
       let hits = this.hits;
