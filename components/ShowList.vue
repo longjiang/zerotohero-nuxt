@@ -1,15 +1,6 @@
 <template>
   <div class="tv-shows">
     <div
-      :class="{
-        'loader text-center': true,
-        'd-none': shows && shows.length > 1,
-      }"
-      style="flex: 1"
-    >
-      <div class="heartbeat-loader"></div>
-    </div>
-    <div
       class="tv-show media rounded shadow"
       v-for="show of shows"
       :key="`tv-show-${show.id}`"

@@ -27,7 +27,19 @@
           "
         />
         <div class="mb-5">
-          <ShowList :shows="shows" :type="type" />
+          <div
+            :class="{
+              'loader text-center': true,
+              'd-none': shows,
+            }"
+            style="flex: 1"
+          >
+            <div class="heartbeat-loader"></div>
+          </div>
+          <div class="text-center" v-if="shows && shows.length === 0">
+            Sorry, we could not find any {{ routeType === 'tv-shows' ? 'TV shows' : 'talks' }} in {{ $l2.name }} 😭.
+          </div>
+          <ShowList v-if="shows && shows.length > 0" :shows="shows" :type="type" />
         </div>
       </div>
     </div>
@@ -45,7 +57,7 @@ export default {
   data() {
     return {
       type: this.routeType === 'tv-shows' ? 'tvShows' : 'talks',
-      shows: [],
+      shows: undefined,
       randomEpisodeYouTubeId: undefined,
     };
   },

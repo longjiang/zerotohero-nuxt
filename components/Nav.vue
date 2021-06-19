@@ -471,7 +471,8 @@ export default {
     enableTVShows() {
       if (
         this.$store.state.shows.tvShows &&
-        this.$store.state.shows.tvShows[this.l2.code]
+        this.$store.state.shows.tvShows[this.l2.code] &&
+        this.$store.state.shows.tvShows[this.l2.code].length > 0
       ) {
         let av = this.menu.find((i) => i.title === "Audio-Visual");
         let tvShows = av.children.find((i) => i.title === "TV Shows");
@@ -479,7 +480,8 @@ export default {
       }
       if (
         this.$store.state.shows.talks &&
-        this.$store.state.shows.talks[this.l2.code]
+        this.$store.state.shows.talks[this.l2.code] &&
+        this.$store.state.shows.talks[this.l2.code].length > 0
       ) {
         let av = this.menu.find((i) => i.title === "Audio-Visual");
         let talks = av.children.find((i) => i.title === "Talks");

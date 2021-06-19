@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import Config from '@/lib/config'
+import Config from "@/lib/config";
 export default {
   computed: {
     $l1() {
@@ -39,23 +39,41 @@ export default {
     if (
       this.$l1 &&
       this.$route.params.l1 === this.$l1.code &&
-      (this.$l2 && this.$route.params.l2 === this.$l2.code)
+      this.$l2 &&
+      this.$route.params.l2 === this.$l2.code
     ) {
-      if (this.$hasFeature('courses')) {
-        this.$router.push({ name: 'courses' })
-      } else if (this.$hasFeature('youtube')) {
-        this.$router.push({ name: Config.approvedChannels[this.$l2.code] ? 'tv-shows' : 'youtube-browse' })
+      if (this.$hasFeature("courses")) {
+        this.$router.push({ name: "courses" });
+      } else if (this.$hasFeature("youtube")) {
+        let name = "youtube-browse";
+        if (this.hasTalks()) name = "talks";
+        if (this.hasTVShows()) name = "tv-shows";
+        this.$router.push({ name });
       } else if (
-        this.$hasFeature('dictionary') ||
-        this.$hasFeature('transliteration')
+        this.$hasFeature("dictionary") ||
+        this.$hasFeature("transliteration")
       ) {
-        this.$router.push({ name: 'reader' })
+        this.$router.push({ name: "reader" });
       } else {
-        this.$router.push({ name: 'learning-path' })
+        this.$router.push({ name: "learning-path" });
       }
     }
-  }
-}
+  },
+  methods: {
+    hasTalks() {
+      return (
+        this.$store.state.shows.talks &&
+        this.$store.state.shows.talks[this.$l2.code]
+      );
+    },
+    hasTVShows() {
+      return (
+        this.$store.state.shows.tvShows &&
+        this.$store.state.shows.tvShows[this.$l2.code]
+      );
+    },
+  },
+};
 </script>
 
 <style>
