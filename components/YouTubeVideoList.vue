@@ -31,8 +31,16 @@
           <i class="fas fa-plus mr-2"></i>
           Add All
         </b-button>
-        <AssignShow @assignShow="assignShowToAll" :defaultSelection="keyword" type="tv-shows" />
-        <AssignShow @assignShow="assignShowToAll" :defaultSelection="keyword" type="talks" />
+        <AssignShow
+          @assignShow="assignShowToAll"
+          :defaultSelection="keyword"
+          type="tv-shows"
+        />
+        <AssignShow
+          @assignShow="assignShowToAll"
+          :defaultSelection="keyword"
+          type="talks"
+        />
       </div>
       <div class="mt-2">
         <drop
@@ -78,8 +86,16 @@ export default {
       type: Array,
     },
     keyword: {
-      type: String
-    }
+      type: String,
+    },
+    checkSaved: {
+      type: Boolean,
+      default: false,
+    },
+    checkSubs: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     $adminMode() {
@@ -97,8 +113,6 @@ export default {
       Helper,
       videosInfoKey: 0,
       showSubsEditing: false,
-      checkSaved: false,
-      checkSubs: false,
       over: false,
     };
   },
@@ -111,7 +125,7 @@ export default {
     },
     assignShowToAll(showID, type) {
       for (let videoIndex in this.videos) {
-        this.$refs.youTubeVideoCard[videoIndex].saveShow(showID, type)
+        this.$refs.youTubeVideoCard[videoIndex].saveShow(showID, type);
       }
     },
     removeAll() {
