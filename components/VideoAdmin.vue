@@ -1,17 +1,23 @@
 <template>
-  <div>
-    <div>
+  <div class="video-edit bg-gray rounded p-3 mt-3 mb-3">
+    <div class="video-edit-public">
       <b-button
-        v-if="
-          !saving &&
-          !(video && video.id) &&
-          (this.video.subs_l2 || this.$adminMode)
-        "
+        :class="{
+          'd-none': true,
+          'd-inline-block':
+            !saving &&
+            !(video && video.id) &&
+            (this.video.subs_l2 || this.$adminMode),
+        }"
         @click="save"
       >
         <i class="fas fa-plus mr-2"></i>
         Add to Library
       </b-button>
+    </div>
+    <div
+      :class="{ 'video-edit-admin-first-line d-none': true, 'd-block': $adminMode }"
+    >
       <span v-if="saving">
         <i class="fas fa-hourglass mr-2 text-secondary"></i>
         Adding...
@@ -22,7 +28,7 @@
       </span>
       <b-dropdown
         id="dropdown-1"
-        v-if="$adminMode && video && video.id"
+        v-if="video && video.id"
         :text="video.topic ? topics[video.topic] : 'Topic'"
         :variant="video.topic ? 'success' : undefined"
         class="ml-1"
@@ -35,7 +41,7 @@
           {{ title }}
         </b-dropdown-item>
       </b-dropdown>
-      <template v-if="$adminMode && video && video.id && !video.lesson">
+      <template v-if="video && video.id && !video.lesson">
         <b-dropdown
           id="dropdown-1"
           :text="video.level ? levels[video.level] : 'Level'"
@@ -78,8 +84,10 @@
         </drop>
       </template>
     </div>
-    <div>
-      <div v-if="$adminMode && video && video.id" class="mt-2">
+    <div
+      :class="{ 'video-edit-admin-second-line d-none': true, 'd-block': $adminMode }"
+    >
+      <div v-if="video && video.id" class="mt-2">
         First line starts at
         <input
           v-model.lazy="firstLineTime"

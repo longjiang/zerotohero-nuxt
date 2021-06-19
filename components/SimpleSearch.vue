@@ -7,7 +7,7 @@
     />
     <router-link
       v-if="random"
-      class="btn btn-secondary btn-random mr-1"
+      class="btn btn-secondary btn-random mr-1 bg-secondary"
       :to="random"
     >
       <i class="fas fa-random mr-1"></i>
@@ -54,7 +54,6 @@ export default {
   line-height: 0.8rem;
   height: 1.7rem !important;
   top: 0.3rem;
-  background: #cacaca;
   border: none;
 }
 

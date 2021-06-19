@@ -1211,6 +1211,10 @@ ul.collapse-10.collapsed li:nth-child(-n + 10) {
   display: none;
 }
 
+.bg-gray {
+  background-color: #efefef;
+}
+
 .btn-small {
   color: #a7a7a7;
   font-size: 0.8rem;

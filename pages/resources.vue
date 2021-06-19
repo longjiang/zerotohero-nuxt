@@ -43,6 +43,7 @@
             </router-link>
             <router-link
               v-for="(topicName, topicValue) in topics"
+              :key="`topic-${topicValue}`"
               :class="{
                 'link-unstyled': true,
                 'list-group-item': true,
@@ -69,6 +70,7 @@
             </router-link>
             <router-link
               v-for="(typeName, typeValue) in types"
+              :key="`type-${typeValue}`"
               :class="{
                 'link-unstyled': true,
                 'list-group-item': true,

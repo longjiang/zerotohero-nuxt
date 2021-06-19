@@ -16,7 +16,7 @@
       />
       <router-link
         v-if="random"
-        class="btn btn-secondary btn-random ml-2"
+        class="btn btn-secondary btn-random bg-secondary ml-2"
         :to="random"
       >
         <i class="fas fa-random mr-1"></i>
@@ -258,7 +258,6 @@ a.suggestion {
   line-height: 0.8rem;
   height: 1.7rem !important;
   top: 0.3rem;
-  background: #cacaca;
   border: none;
 }
 
