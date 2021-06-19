@@ -59,6 +59,7 @@
         :autoplay="true"
         :starttime="starttime"
         :show="show"
+        :showType="showType"
         :previousEpisode="previousEpisode"
         :nextEpisode="nextEpisode"
         @paused="updatePaused"
@@ -213,6 +214,7 @@ export default {
       video: undefined,
       showList: false,
       show: undefined,
+      showType: undefined,
       speaking: false,
       paused: true,
       speed: 1,
@@ -337,25 +339,18 @@ export default {
     },
     async show() {
       if (this.show) {
-        let filters = "";
-
-        filters +=
-          "&filter[title][contains]=" +
-          encodeURIComponent(this.show.title) +
-          "&sort=title";
 
         let response = await axios.get(
-          `${Config.wiki}items/youtube_videos?sort=-id&filter[l2][eq]=${
+          `${Config.wiki}items/youtube_videos?filter[l2][eq]=${
             this.$l2.id
-          }${filters}&offset=${
-            this.start
-          }&fields=channel_id,id,lesson,level,title,topic,youtube_id&timestamp=${this.$adminMode ? Date.now() : 0}`
+          }&filter[${this.showType}][eq]=${this.show.id}&fields=channel_id,id,lesson,level,title,topic,youtube_id,tv_show.*,talk.*&timestamp=${this.$adminMode ? Date.now() : 0}`
         );
 
         if (response.data && response.data.data) {
-          this.episodes = Helper.uniqueByValue(
+          this.episodes = Helper.uniqueSort(
             response.data.data,
-            "youtube_id"
+            "title",
+            this.$l2.code
           );
         }
       }
@@ -364,11 +359,13 @@ export default {
   methods: {
     loadShow() {
       if (this.video) {
-        this.show = this.$store.state.shows.tvShows[this.$l2.code]
-          ? this.$store.state.shows.tvShows[this.$l2.code].find((show) =>
-              this.video.title.includes(show.title)
-            )
-          : undefined;
+        if (this.video.tv_show) {
+          this.show = this.video.tv_show
+          this.showType = 'tv_show'
+        } else if (this.video.talk) {
+          this.show = this.video.talk
+          this.showType = 'talk'
+        } 
       }
     },
     updateCurrentTime(currentTime) {
@@ -489,7 +486,7 @@ export default {
           this.youtube_id
         }&filter[l2][eq]=${
           this.$l2.id
-        }&fields=id,youtube_id,channel_id,l2,title,level,topic,lesson,subs_l2&timestamp=${
+        }&fields=*,tv_show.*,talk.*&timestamp=${
           this.$adminMode ? Date.now() : 0
         }`
       );

@@ -66,7 +66,7 @@
               </router-link>
               <router-link
                 v-if="show"
-                :to="`/${$l1.code}/${$l2.code}/youtube/browse/all/all/0/${show.title}`"
+                :to="`/${$l1.code}/${$l2.code}/show/${showType === 'tv_show' ? 'tv-show' : 'talk'}/${show.id}`"
                 class="btn btn-small btn-primary"
               >
                 <i class="far fa-clone"></i>
@@ -266,7 +266,6 @@ import Config from "@/lib/config";
 import Helper from "@/lib/helper";
 import { Drag, Drop } from "vue-drag-drop";
 import { parseSync } from "subtitle";
-import Papa from "papaparse";
 
 export default {
   components: {
@@ -282,6 +281,9 @@ export default {
     },
     show: {
       type: Object,
+    },
+    showType: {
+      type: String,
     },
     previousEpisode: {
       type: String,
