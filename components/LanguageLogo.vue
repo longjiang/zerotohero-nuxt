@@ -1,7 +1,7 @@
 <template>
   <router-link
     :to="`/${l1.code}/${l2.code}/`"
-    class="mr-4 mb-4 d-inline-block link-unstyled"
+    class="link-unstyled d-inline-block"
   >
     <div class="logo-constructed">
       <div class="logo-circle-wrapper">
@@ -33,7 +33,13 @@
         <template v-else>
           <div class="logo-text-language">
             <span>
-              {{ $t(l2.name.replace(/ \(.*\)/gi, "")).toUpperCase() }}
+              {{
+                $t(
+                  l2.name
+                    .replace("Yue Chinese", "Cantonese")
+                    .replace(/ \(.*\)/gi, "")
+                ).toUpperCase()
+              }}
             </span>
           </div>
           <div class="logo-text-zth">

@@ -1,12 +1,36 @@
 <template>
   <div>
+    <div class="container mb-4" v-if="languages.length > 0">
+      <div class="row">
+        <div class="col-sm-12">
+          <LanguageSwitch
+            v-if="languages.length > 0"
+            class="mt-3 mb-4"
+            :preferredLanguages="languages"
+          />
+        </div>
+        <div
+          class="col-xl-3 col-lg-4 col-md-6 col-12"
+          v-for="code in ['yue', 'fr', 'he', 'ko', 'ja', 'nan', 'ru', 'es']"
+          :key="`lang-logo-${code}`"
+        >
+          <div class="bg-dark rounded shadow p-4 mt-3 mb-3">
+            <LanguageLogo
+              :l1="language('en')"
+              :l2="language(code)"
+              class="choose-lang-logo"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
-          <LanguageSwitch v-if="languages.length > 0" class="mt-3 mb-4" :preferredLanguages="languages" />
           <ul v-if="languages && languages.length > 0" class="language-list">
             <li
               v-for="language in languages"
+              :key="`lang-${language.code}`"
               class="language-list-item"
               :set="
                 (base = `/${language.code !== 'en' ? 'en' : 'zh'}/${
@@ -16,18 +40,28 @@
             >
               <router-link
                 :to="`${base}/youtube/browse/all/all/0`"
-                :class="{ 'feature-icon mr-1': true, transparent: !hasYouTube(english, language) }"
+                :class="{
+                  'feature-icon mr-1': true,
+                  transparent: !hasYouTube(english, language),
+                }"
               >
                 <i class="fab fa-youtube" />
               </router-link>
               <router-link
                 :to="`${base}/dictionary`"
-                :class="{ 'feature-icon mr-1': true, transparent: !hasDictionary(english, language) }"
+                :class="{
+                  'feature-icon mr-1': true,
+                  transparent: !hasDictionary(english, language),
+                }"
               >
                 <i class="fas fa-book" />
               </router-link>
               <router-link :to="base">
-                {{ language.code !== "en" ? language.name.replace(/ \(.*\)/gi, '') : "英语" }}
+                {{
+                  language.code !== "en"
+                    ? language.name.replace(/ \(.*\)/gi, "")
+                    : "英语"
+                }}
               </router-link>
             </li>
           </ul>
@@ -81,10 +115,10 @@ export default {
   },
   methods: {
     language(code) {
-      return this.languages.find((language) => language.code === code);
+      return this.$languages.l1s.find((language) => language.code === code);
     },
     hasDictionary(l1, l2) {
-      return this.hasFeature(l1, l2, "dictionary") || l2.code === 'en';
+      return this.hasFeature(l1, l2, "dictionary") || l2.code === "en";
     },
     hasYouTube(l1, l2) {
       return this.$languages.hasYouTube(l1, l2);
@@ -124,7 +158,9 @@ export default {
         (language) => ["A", "C", "L", "E", "H"].includes(language.type) // Only living, extinct or historical languages (exclusing special codes 'S' and macro languages 'M')
       )
       .filter((language) => this.$languages.hasYouTube(this.english, language))
-      .filter((language) => this.hasFeature(this.english, language, 'dictionary'))
+      .filter((language) =>
+        this.hasFeature(this.english, language, "dictionary")
+      )
       .sort((a, b) => {
         if (a.name < b.name) {
           return -1;
@@ -191,15 +227,10 @@ export default {
   color: #ccc;
 }
 
-
 .bg-dark .language-list-item a {
   color: #b9aba6;
 }
 .bg-dark .language-list-item .feature-icon {
   color: #726661;
 }
-
-
-
-
 </style>
