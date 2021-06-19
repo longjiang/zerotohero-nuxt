@@ -22,9 +22,9 @@
         (url) => {
           let path = `/${$l1.code}/${
             $l2.code
-          }/youtube/search/${encodeURIComponent(url)}/0`
-          if (this.$router.currentRoute.path === path) this.searchResultKey++
-          else this.$router.push({ path: path })
+          }/youtube/search/${encodeURIComponent(url)}/0`;
+          if (this.$router.currentRoute.path === path) this.searchResultKey++;
+          else this.$router.push({ path: path });
         }
       "
       ref="search"
@@ -34,17 +34,19 @@
         v-model="captions"
         class="d-inline-block mr-3"
         value="captions"
-        >With Captions</b-form-radio
       >
+        With Captions
+      </b-form-radio>
       <b-form-radio
         v-model="captions"
         class="d-inline-block mr-3"
         value="nocaptions"
-        >No Captions</b-form-radio
       >
-      <b-form-radio v-model="captions" class="d-inline-block" value="all"
-        >All</b-form-radio
-      >
+        No Captions
+      </b-form-radio>
+      <b-form-radio v-model="captions" class="d-inline-block" value="all">
+        All
+      </b-form-radio>
     </b-form-group>
     <YouTubeSearchResults
       :term="term"
@@ -58,8 +60,8 @@
 </template>
 
 <script>
-import SimpleSearch from '@/components/SimpleSearch'
-import YouTubeSearchResults from '@/components/YouTubeSearchResults'
+import SimpleSearch from "@/components/SimpleSearch";
+import YouTubeSearchResults from "@/components/YouTubeSearchResults";
 
 export default {
   components: {
@@ -68,10 +70,10 @@ export default {
   },
   data() {
     return {
-      captions: 'all',
+      captions: "all",
       searchResultKey: 0,
       checkSaved: false,
-    }
+    };
   },
   computed: {
     $l1() {
@@ -98,22 +100,24 @@ export default {
   },
   watch: {
     term() {
-      this.updateSearchText()
+      this.updateSearchText();
     },
   },
   mounted() {
-    this.updateSearchText()
+    this.updateSearchText();
   },
   methods: {
     async updateSearchText() {
-      let url = decodeURIComponent(this.term)
-      this.$refs.search.text = url
+      if (this.term) {
+        let url = decodeURIComponent(this.term);
+        this.$refs.search.text = url;
+      }
     },
     addAll() {
-      this.$refs.youtubeSearchResults.addAll()
-    }
+      this.$refs.youtubeSearchResults.addAll();
+    },
   },
-}
+};
 </script>
 
 <style>

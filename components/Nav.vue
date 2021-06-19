@@ -160,7 +160,13 @@ export default {
             {
               name: "youtube-browse",
               title: "Videos",
-              icon: "fab fa-youtube",
+              icon: "fa fa-play",
+              show: true,
+            },
+            {
+              name: "youtube-search",
+              title: "Search YouTube",
+              icon: "fas fa-search",
               show: true,
             },
             {
