@@ -135,7 +135,7 @@ export default {
       this.$store.commit("settings/SET_ADMIN_MODE", this.adminMode);
     },
     adminModePasscode() {
-      if (this.adminModePasscode === '5599341') {
+      if (this.adminModePasscode === 'A lion flies on camera') {
         this.adminMode = true
       }
     }

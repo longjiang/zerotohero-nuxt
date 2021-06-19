@@ -19,15 +19,15 @@
           <i class="fas fa-trash mr-2"></i>
           Remove All
         </b-button>
-        <b-button variant="gray" v-if="!checkSaved" @click="checkSaved = true">
+        <b-button variant="gray" v-if="!checkSavedData" @click="checkSavedData = true">
           <i class="fas fa-question mr-2"></i>
           Check Saved
         </b-button>
-        <b-button v-if="checkSaved" @click="checkSaved = false">
+        <b-button variant="gray" v-if="checkSavedData" @click="checkSavedData = false">
           <i class="fas fa-question mr-2"></i>
           Uncheck Saved
         </b-button>
-        <b-button v-if="checkSaved" @click="addAll()">
+        <b-button variant="gray" v-if="checkSavedData" @click="addAll()">
           <i class="fas fa-plus mr-2"></i>
           Add All
         </b-button>
@@ -65,8 +65,8 @@
       <YouTubeVideoCard
         v-for="(video, videoIndex) in videos"
         :video="video"
-        :checkSaved="checkSaved"
-        :checkSubs="checkSubs"
+        :checkSaved="checkSavedData"
+        :checkSubs="checkSubsData"
         :showSubsEditing="showSubsEditing"
         ref="youTubeVideoCard"
         :key="`youtube-video-${video.youtube_id}-${videoIndex}`"
@@ -81,6 +81,11 @@ import YouTubeVideoCard from "@/components/YouTubeVideoCard";
 
 import { Drag, Drop } from "vue-drag-drop";
 export default {
+  components: {
+    YouTubeVideoCard,
+    Drag,
+    Drop,
+  },
   props: {
     videos: {
       type: Array,
@@ -97,24 +102,21 @@ export default {
       default: false,
     },
   },
-  computed: {
-    $adminMode() {
-      if (typeof this.$store.state.settings.adminMode !== "undefined")
-        return this.$store.state.settings.adminMode;
-    },
-  },
-  components: {
-    YouTubeVideoCard,
-    Drag,
-    Drop,
-  },
   data() {
     return {
       Helper,
       videosInfoKey: 0,
       showSubsEditing: false,
+      checkSavedData: this.checkSaved,
+      checkSubsData: this.checkSubs,
       over: false,
     };
+  },
+  computed: {
+    $adminMode() {
+      if (typeof this.$store.state.settings.adminMode !== "undefined")
+        return this.$store.state.settings.adminMode;
+    },
   },
   methods: {
     async addAll() {

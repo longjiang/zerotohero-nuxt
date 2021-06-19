@@ -84,7 +84,10 @@
         <router-link
           class="btn btn-small mt-2 ml-0 bg-success text-white"
           v-if="video.tv_show"
-          :to="{name: 'show', params: {type: 'tv-show', id: String(video.tv_show.id)}}"
+          :to="{
+            name: 'show',
+            params: { type: 'tv-show', id: String(video.tv_show.id) },
+          }"
         >
           <i class="fa fa-tv mr-2" />
           {{ video.tv_show.title }}
@@ -97,7 +100,10 @@
         <router-link
           class="btn btn-small mt-2 ml-0 bg-success text-white"
           v-if="video.talk"
-          :to="{name: 'show', params: {type: 'talk', id: String(video.talk.id)}}"
+          :to="{
+            name: 'show',
+            params: { type: 'talk', id: String(video.talk.id) },
+          }"
         >
           <i class="fas fa-graduation-cap mr-2"></i>
           {{ video.talk.title }}
@@ -259,15 +265,15 @@ export default {
     },
   },
   async mounted() {
-    let changed = false
+    let changed = false;
     if (this.checkSubs) {
       await Helper.timeout(this.delay);
       await this.checkSubsFunc(this.video);
-      changed = true
+      changed = true;
     }
     if (this.video.id && this.showSubsEditing) {
       await this.addSubsL1(this.video);
-      changed = true
+      changed = true;
     }
     if (changed) this.videoInfoKey++;
   },
@@ -281,7 +287,7 @@ export default {
     async checkSaved() {
       if (!this.video.id && this.checkSaved) {
         await this.checkSavedFunc(this.video);
-        if (this.video.id) this.addSubsL1(this.video);
+        if (this.video.id && this.showSubsEditing) this.addSubsL1(this.video);
         this.video.checkingSubs = false;
         this.videoInfoKey++;
       }
@@ -303,7 +309,7 @@ export default {
   },
   methods: {
     async saveShow(showID, type) {
-      if (!this.video[type] || (this.video[type].id !== showID)) {
+      if (!this.video[type] || this.video[type].id !== showID) {
         let data = {};
         data[type] = showID;
         let response = await axios.patch(
@@ -471,20 +477,25 @@ export default {
       let response = await axios.get(
         `${Config.wiki}items/youtube_videos?filter[youtube_id][eq]=${
           video.youtube_id
+        }&fields=id,title,channel_id,youtube_id,tv_show.*,talk.*${
+          this.showSubsEditing ? ",subs_l2" : ""
         }&filter[l2][eq]=${this.$l2.id}&timestamp=${
           this.$adminMode ? Date.now() : 0
         }`
       );
-      response = response.data;
-      if (response && response.data.length > 0) {
-        let subs_l2 = YouTube.parseSavedSubs(response.data[0].subs_l2);
-        if (subs_l2[0]) {
-          video = Object.assign(video, response.data[0]);
-          video.subs_l2 = subs_l2;
-          this.firstLineTime = video.subs_l2[0].starttime;
+      if (response.data && response.data.data && response.data.data[0]) {
+        let savedVideo = response.data.data[0];
+        this.video.id = savedVideo.id;
+        this.video.tv_show = savedVideo.tv_show;
+        this.video.talk = savedVideo.talk;
+        if (savedVideo.subs_l2) {
+          let subs_l2 = YouTube.parseSavedSubs(savedVideo.subs_l2);
+          if (subs_l2[0]) {
+            this.video.subs_l2 = subs_l2;
+            this.firstLineTime = video.subs_l2[0].starttime;
+          }
         }
       }
-      return video;
     },
     async checkSubsFunc(video) {
       video.checkingSubs = true;
@@ -494,7 +505,7 @@ export default {
         video.checkingSubs = false;
       } else {
         video = await YouTube.getYouTubeSubsList(video, this.$l1, this.$l2);
-        if (this.checkSaved) {
+        if (this.checkSaved && this.showSubsEditing) {
           video = await this.checkSavedFunc(video);
           video = this.addSubsL1(video);
         }
@@ -503,16 +514,18 @@ export default {
       return video;
     },
     async addSubsL1(video) {
-      if (!video.l1Locale) {
-        video = await YouTube.getYouTubeSubsList(video, this.$l1, this.$l2);
+      if (video) {
+        if (!video.l1Locale) {
+          video = await YouTube.getYouTubeSubsList(video, this.$l1, this.$l2);
+        }
+        let subs_l1 = await YouTube.getTranscript(
+          video.youtube_id,
+          video.l1Locale,
+          video.l2Name
+        );
+        video.subs_l1 = subs_l1.filter((line) => !/^[♫♪()]/.test(line.line));
+        return video;
       }
-      let subs_l1 = await YouTube.getTranscript(
-        video.youtube_id,
-        video.l1Locale,
-        video.l2Name
-      );
-      video.subs_l1 = subs_l1.filter((line) => !/^[♫♪()]/.test(line.line));
-      return video;
     },
   },
 };

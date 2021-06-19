@@ -265,7 +265,6 @@ export default {
           } catch (err) {}
         }
       }
-      videos = Helper.uniqueByValue(videos, "youtube_id");
       videos =
         videos.sort((x, y) =>
           x.title.localeCompare(y.title, this.$l2.code, { numeric: true })
