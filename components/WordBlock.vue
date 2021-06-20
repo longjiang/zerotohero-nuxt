@@ -52,7 +52,7 @@
           {{ token.candidates[0].traditional }}
         </span>
         <span v-else class="word-block-text" @click="wordBlockClick()">
-          {{ token.text }}
+          {{ token.text }}<span v-if="$l2.code === 'ko' && token.candidates[0].hanja" class="word-block-text-byeonggi">{{ token.candidates[0].hanja}} </span>
         </span>
       </template>
       <template v-else>
@@ -207,11 +207,12 @@
           </span>
           <ol class="word-translation" v-if="word.definitions">
             <li
-              v-for="def in word.definitions
+              v-for="(def, index) in word.definitions
                 .filter((def) => def.trim() !== '')
                 .map((definition) =>
                   definition ? definition.replace(/\[.*\] /g, '') : ''
                 )"
+              :key="`wordblock-def-${index}`"
               class="word-translation-item"
             >
               <span>{{ def }}</span>
@@ -646,11 +647,17 @@ export default {
       text-indent: 0;
     }
 
+    .word-block-text-byeonggi {
+      color: rgb(143, 158, 172);
+      font-size: 0.7em;
+    }
+
     /* Hide by default */
     .word-block-pinyin,
     .word-block-simplified,
     .word-block-traditional,
-    .word-block-definition {
+    .word-block-definition,
+    .word-block-text-byeonggi {
       display: none;
     }
   }
@@ -663,6 +670,10 @@ export default {
 .show-traditional .word-block .word-block-traditional,
 .show-definition .word-block .word-block-definition {
   display: block;
+}
+
+.show-byeonggi .word-block .word-block-text-byeonggi  {
+  display: inline;
 }
 
 .show-definition .word-block {

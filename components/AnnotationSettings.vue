@@ -1,24 +1,28 @@
 <template>
   <div>
     <div class="mt-3">
+      <b-checkbox v-if="$l2.code === 'ko'" class="mb-2" v-model="showByeonggi">
+        Show hanja next to hanguel (
+        <a
+          href="https://ko.wikipedia.org/wiki/%ED%95%9C%EA%B8%80%EC%A0%84%EC%9A%A9%EA%B3%BC_%EA%B5%AD%ED%95%9C%EB%AC%B8%ED%98%BC%EC%9A%A9#%ED%95%9C%EC%9E%90_%EB%B3%91%EA%B8%B0"
+          target="_blank"
+        >
+          병기, 倂記,
+          <em>byeonggi</em>
+        </a>
+        )
+      </b-checkbox>
       <template v-if="$hasFeature('transliteration')">
-        <div class="form-check">
-          <input
-            type="checkbox"
-            class="form-check-input"
-            id="show-pinyin"
-            v-model="showPinyin"
-          />
-          <label for="show-pinyin">
-            Show
-            <span v-if="$l2.code === 'zh'">pinyin</span>
-            <span v-else-if="$l2.code === 'ja'">furigana</span>
-            <span v-else>romanization</span>
-            above words
-          </label>
-        </div>
-        <div
-          class="form-check"
+        <b-checkbox v-model="showPinyin" class="mb-2">
+          Show
+          <span v-if="$l2.code === 'zh'">pinyin</span>
+          <span v-else-if="$l2.code === 'ja'">furigana</span>
+          <span v-else>romanization</span>
+          above words
+        </b-checkbox>
+
+        <b-checkbox
+          class="mb-2"
           v-if="
             $hasFeature('dictionary') &&
             [
@@ -35,34 +39,15 @@
               'my',
             ].includes(this.$l2.code)
           "
+          v-model="showDefinition"
         >
-          <input
-            type="checkbox"
-            class="form-check-input"
-            id="show-definition"
-            v-model="showDefinition"
-          />
-          <label for="show-definition">Show definition above words</label>
-        </div>
+          Show definition above words
+        </b-checkbox>
       </template>
-      <div class="form-check">
-        <input
-          type="checkbox"
-          class="form-check-input"
-          id="show-translation"
-          v-model="showTranslation"
-        />
-        <label for="show-translation">Show translation</label>
-      </div>
-      <div class="form-check">
-        <input
-          type="checkbox"
-          class="form-check-input"
-          id="show-quiz"
-          v-model="showQuiz"
-        />
-        <label for="show-quiz">Show pop quiz</label>
-      </div>
+      <b-checkbox class="mb-2" v-model="showTranslation">
+        Show translation
+      </b-checkbox>
+      <b-checkbox class="mb-2" v-model="showQuiz">Show pop quiz</b-checkbox>
       <b-button-group
         v-if="['zh', 'yue'].includes($l2.code)"
         class="d-block mb-2"
@@ -98,6 +83,27 @@
     </div>
     <div class="jumbotron text-center mt-4 p-4">
       <Annotate tag="div" class="mt-4 mb-4 text-left" :showTranslate="true">
+        <div v-if="$l2.code === 'ko'">
+          <p>
+            국가원로자문회의의 의장은 직전대통령이 된다. 대법원과 각급법원의
+            조직은 법률로 정한다, 법률과 적법한 절차에 의하지 아니하고는
+            처벌·보안처분 또는 강제노역을 받지 아니한다. 국회는 의장 1인과
+            부의장 2인을 선출한다.
+          </p>
+          <p>
+            이 경우 그 명령에 의하여 개정 또는 폐지되었던 법률은 그 명령이
+            승인을 얻지 못한 때부터 당연히 효력을 회복한다. 국회는 국무총리 또는
+            국무위원의 해임을 대통령에게 건의할 수 있다. 국교는 인정되지
+            아니하며, 이에 필요한 서류의 제출 또는 증인의 출석과 증언이나 의견의
+            진술을 요구할 수 있다.
+          </p>
+          <p>
+            법령의 범위안에서 자치에 관한 규정을 제정할 수 있다, 대통령은 국가의
+            독립·영토의 보전·국가의 계속성과 헌법을 수호할 책무를 진다. 대통령이
+            임시회의 집회를 요구할 때에는 기간과 집회요구의 이유를 명시하여야
+            한다, 국가는 청원에 대하여 심사할 의무를 진다.
+          </p>
+        </div>
         <div v-if="$l2.code === 'zh'">
           <h4>神奇的丝瓜</h4>
           <p>《标准教程 HSK 6》第18课课文</p>
@@ -192,6 +198,7 @@ export default {
       useTraditional: undefined,
       showQuiz: undefined,
       useSerif: undefined,
+      showByeonggi: undefined,
     };
   },
   mounted() {
@@ -224,6 +231,7 @@ export default {
         this.$store.state.settings.l2Settings.useTraditional;
       this.showQuiz = this.$store.state.settings.l2Settings.showQuiz;
       this.useSerif = this.$store.state.settings.l2Settings.useSerif;
+      this.showByeonggi = this.$store.state.settings.l2Settings.showByeonggi;
     },
   },
   watch: {
@@ -255,6 +263,11 @@ export default {
     useSerif() {
       this.$store.commit("settings/SET_L2_SETTINGS", {
         useSerif: this.useSerif,
+      });
+    },
+    showByeonggi() {
+      this.$store.commit("settings/SET_L2_SETTINGS", {
+        showByeonggi: this.showByeonggi,
       });
     },
   },

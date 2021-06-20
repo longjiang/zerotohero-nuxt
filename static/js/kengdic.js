@@ -162,7 +162,7 @@ const Dictionary = {
     return words
   },
   async tokenizeWithOpenKoreanText(seg) {
-    let res = await axios.get(`http://localhost:4567/tokenize?text=${seg}`)
+    let res = await axios.get(`http://py.zerotohero.ca:4567/tokenize?text=${seg}`)
     if (res.data) {
       return res.data.tokens
     }
@@ -174,7 +174,6 @@ const Dictionary = {
       let tokenized = await this.tokenizeWithOpenKoreanText(seg);
       for (let index in tokenized) {
         let token = tokenized[index]
-        console.log(token)
         let candidates = this.lookupMultiple(
           token.text
         );

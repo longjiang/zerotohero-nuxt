@@ -13,7 +13,8 @@ export const state = () => {
       useTraditional: false,
       showTranslation: true,
       useSerif: false,
-      showQuiz: true
+      showQuiz: true,
+      showByeonggi: true
     }
   }
 }
@@ -36,7 +37,7 @@ export const mutations = {
       let settings = JSON.parse(localStorage.getItem('zthSettings') || '{}')
       state.adminMode = settings.adminMode
       state.subsSearchLimit = settings.subsSearchLimit
-      state.l2Settings = settings[state.l2.code] || state.l2Settings
+      state.l2Settings = Object.assign(state.l2Settings, settings[state.l2.code])
     }
     state.settingsLoaded[state.l2.code] = true
   },
