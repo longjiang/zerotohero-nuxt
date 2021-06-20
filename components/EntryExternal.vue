@@ -1,91 +1,44 @@
 <template>
   <div>
     <div :class="{'ext-dictionary-buttons bg-white': true, sticky}">
-      <b-button
-        @click="setExtDict('zdic')"
+      <a
+        @click.prevent="toggleIframe"
+        :href="`https://www.zdic.net/hans/${term}`"
         v-if="['zh', 'yue', 'nan', 'wuu', 'hak'].includes($l2.code)"
         class="btn btn-small mb-1"
-        :data-bg-level="extDict === 'zdic' ? level : false"
+        :data-bg-level="iframe && iframe.startsWith('https://www.zdic.net') ? level : false"
       >
         汉典
-      </b-button>
-      <b-button
-        @click="setExtDict('cambridge')"
+      </a>
+      <a
+        @click.prevent="toggleIframe"
+        :href="`https://dictionary.cambridge.org/dictionary/english-chinese-simplified/${term}`"
         v-if="$l2.code === 'en'"
         class="btn btn-small mb-1"
-        :data-bg-level="extDict === 'cambridge' ? level : false"
+        :data-bg-level="iframe && iframe.startsWith('https://dictionary.cambridge.org') ? level : false"
       >
         Cambridge
-      </b-button>
-      <b-button
-        @click="setExtDict('wiktionary')"
+      </a>
+      <a
+        @click.prevent="toggleIframe"
+        :href="`https://en.m.wiktionary.org/w/index.php?search=${term}`"
         class="btn btn-small mb-1"
-        :data-bg-level="extDict === 'wiktionary' ? level : false"
+        :data-bg-level="iframe && iframe.startsWith('https://en.m.wiktionary.org') ? level : false"
       >
         Wiktionary
-      </b-button>
-      <b-button
-        @click="setExtDict('etymology')"
+      </a>
+      <a
+        @click.prevent="toggleIframe"
+        :href="`https://www.etymonline.com/word/${term}`"
         v-if="$l2.code === 'en'"
         class="btn btn-small mb-1"
-        :data-bg-level="extDict === 'etymology' ? level : false"
+        :data-bg-level="iframe && iframe.startsWith('https://www.etymonline.com') ? level : false"
       >
         Etymology
-      </b-button>
-      <b-button
-        @click="setExtDict('ngram')"
-        v-if="
-          ['en', 'zh', 'fr', 'de', 'he', 'it', 'ru', 'es'].includes($l2.code)
-        "
-        class="btn btn-small mb-1"
-        :data-bg-level="extDict === 'ngram' ? level : false"
-      >
-        Ngram
-      </b-button>
-      <b-button
-        @click="setExtDict('moedict')"
-        v-if="['zh', 'yue', 'nan', 'wuu', 'hak'].includes($l2.code)"
-        class="btn btn-small mb-1"
-        :data-bg-level="extDict === 'moedict' ? level : false"
-      >
-        萌典
-      </b-button>
-      <b-button
-        @click="setExtDict('baidu-baike')"
-        v-if="$l2.code === 'zh'"
-        class="btn btn-small mb-1"
-        :data-bg-level="extDict === 'baidu-baike' ? level : false"
-      >
-        百度百科
-      </b-button>
-      <b-button
-        @click="setExtDict('naver')"
-        v-if="['zh', 'ko', 'ja'].includes($l2.code)"
-        class="btn btn-small mb-1"
-        :data-bg-level="extDict === 'naver' ? level : false"
-      >
-        Naver
-      </b-button>
-      <b-button
-        @click="setExtDict('grammar-wiki')"
-        class="btn btn-small mb-1"
-        v-if="$l2.code === 'zh'"
-        :data-bg-level="extDict === 'grammar-wiki' ? level : false"
-      >
-        Grammar Wiki
-      </b-button>
-      <b-button
-        @click="setExtDict('wikipedia')"
-        class="btn btn-small mb-1"
-        :data-bg-level="extDict === 'wikipedia' ? level : false"
-      >
-        Wikipedia
-      </b-button>
-    </div>
-    <div>
-      <iframe
-        v-if="extDict === 'ngram'"
-        :src="`https://books.google.com/ngrams/graph?content=${
+      </a>
+      <a
+        @click.prevent="toggleIframe"
+        :href="`https://books.google.com/ngrams/graph?content=${
           term
         }&year_start=${$l2.code === 'zh' ? 1900 : 1800}&year_end=2019&corpus=${
           {
@@ -99,60 +52,63 @@
             es: 32,
           }[$l2.code]
         }&smoothing=3`"
-        class="ext-dictinoary-iframe"
-        data-not-lazy
-      ></iframe>
+        v-if="
+          ['en', 'zh', 'fr', 'de', 'he', 'it', 'ru', 'es'].includes($l2.code)
+        "
+        class="btn btn-small mb-1"
+        :data-bg-level="iframe && iframe.startsWith('https://books.google.com/ngrams') ? level : false"
+      >
+        Ngram
+      </a>
+      <a
+        @click.prevent="toggleIframe"
+        :href="`https://www.moedict.tw/${traditional ? traditional : tify(term)}`"
+        v-if="['zh', 'yue', 'nan', 'wuu', 'hak'].includes($l2.code)"
+        class="btn btn-small mb-1"
+        :data-bg-level="iframe && iframe.startsWith('https://www.moedict.tw') ? level : false"
+      >
+        萌典
+      </a>
+      <a
+        @click.prevent="toggleIframe"
+        :href="`https://baike.baidu.com/item/${term}`"
+        v-if="$l2.code === 'zh'"
+        class="btn btn-small mb-1"
+        :data-bg-level="iframe && iframe.startsWith('https://baike.baidu.com') ? level : false"
+      >
+        百度百科
+      </a>
+      <a
+        @click.prevent="toggleIframe"
+        :href="`https://korean.dict.naver.com/ko${$l2.code === 'ko' ? $l1.code : $l2.code}dict/#/search?query=${term}`"
+        v-if="['zh', 'ko', 'ja'].includes($l2.code)"
+        class="btn btn-small mb-1"
+        :data-bg-level="iframe && iframe.startsWith('https://korean.dict.naver.com/ko') ? level : false"
+      >
+        Naver
+      </a>
+      <a
+        @click.prevent="toggleIframe"
+        :href="`https://resources.allsetlearning.com/gramwiki/?search=${term}`"
+        class="btn btn-small mb-1"
+        v-if="$l2.code === 'zh'"
+        :data-bg-level="iframe && iframe.startsWith('https://resources.allsetlearning.com') ? level : false"
+      >
+        Grammar Wiki
+      </a>
+      <a
+        @click.prevent="toggleIframe"
+        :href="`https://${$l2.code}.m.wikipedia.org/w/index.php?search=${term}`"
+        class="btn btn-small mb-1"
+        :data-bg-level="iframe && iframe.startsWith(`https://${$l2.code}.m.wikipedia.org`) ? level : false"
+      >
+        Wikipedia
+      </a>
+    </div>
+    <div>
       <iframe
-        v-if="extDict === 'zdic'"
-        :src="`https://www.zdic.net/hans/${term}`"
-        class="ext-dictinoary-iframe"
-        data-not-lazy
-      ></iframe>
-      <iframe
-        v-if="extDict === 'wiktionary'"
-        :src="`https://en.m.wiktionary.org/w/index.php?search=${term}`"
-        class="ext-dictinoary-iframe"
-        data-not-lazy
-      ></iframe>
-      <iframe
-        v-if="extDict === 'etymology'"
-        :src="`https://www.etymonline.com/word/${term}`"
-        class="ext-dictinoary-iframe"
-        data-not-lazy
-      ></iframe>
-      <iframe
-        v-if="extDict === 'cambridge'"
-        :src="`https://dictionary.cambridge.org/dictionary/english-chinese-simplified/${term}`"
-        class="ext-dictinoary-iframe"
-        data-not-lazy
-      ></iframe>
-      <iframe
-        v-if="extDict === 'moedict'"
-        :src="`https://www.moedict.tw/${traditional ? traditional : tify(term)}`"
-        class="ext-dictinoary-iframe"
-        data-not-lazy
-      ></iframe>
-      <iframe
-        v-if="extDict === 'baidu-baike'"
-        :src="`https://baike.baidu.com/item/${term}`"
-        class="ext-dictinoary-iframe"
-        data-not-lazy
-      ></iframe>
-      <iframe
-        v-if="extDict === 'naver'"
-        :src="`https://korean.dict.naver.com/ko${$l2.code}dict/chinese/#/search?query=${term}`"
-        class="ext-dictinoary-iframe"
-        data-not-lazy
-      ></iframe>
-      <iframe
-        v-if="extDict === 'grammar-wiki'"
-        :src="`https://resources.allsetlearning.com/gramwiki/?search=${term}`"
-        class="ext-dictinoary-iframe"
-        data-not-lazy
-      ></iframe>
-      <iframe
-        v-if="extDict === 'wikipedia'"
-        :src="`https://${$l2.code}.m.wikipedia.org/w/index.php?search=${term}`"
+        v-if="iframe"
+        :src="iframe"
         class="ext-dictinoary-iframe"
         data-not-lazy
       ></iframe>
@@ -174,6 +130,7 @@ export default {
   data() {
     return {
       extDict: "",
+      iframe: "",
     };
   },
   computed: {
@@ -187,6 +144,11 @@ export default {
     },
   },
   methods: {
+    toggleIframe(e) {
+      let href = e.target.getAttribute('href')
+      if (this.iframe === href) this.iframe = undefined
+      else this.iframe = href
+    },
     tify(string) {
       return tify(string)
     },
