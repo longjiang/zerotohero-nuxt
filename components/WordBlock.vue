@@ -52,7 +52,7 @@
           {{ token.candidates[0].traditional }}
         </span>
         <span v-else class="word-block-text" @click="wordBlockClick()">
-          {{ token.text }}<span v-if="$l2.code === 'ko' && token.candidates[0].hanja" class="word-block-text-byeonggi">{{ token.candidates[0].hanja}} </span>
+          {{ token.text }}<span v-if="$l2.code === 'ko' && (saved || token.candidates[0]).hanja" class="word-block-text-byeonggi">{{ (saved || token.candidates[0]).hanja}} </span>
         </span>
       </template>
       <template v-else>
@@ -313,6 +313,16 @@ export default {
     $hanzi() {
       return this.$getHanzi();
     },
+    bestCandidate() {
+      if (this.token && this.token.candidates && this.token.candidates[0]) {
+        let saved = this.token.candidates.find(c => c.saved)
+        if (saved) {
+          console.log(saved)
+          return saved
+        }
+        else return this.token.candidates[0]
+      }
+    },
     attributes() {
       let attributes = {};
       if (this.words && this.words.length > 0) {
@@ -445,18 +455,22 @@ export default {
       if (this.$l1) this.classes[`l1-${this.$l1.code}`] = true;
       if (this.$l2) this.classes[`l2-${this.$l2.code}`] = true;
       if (this.checkSaved) {
+        let savedCandidate = undefined
         let savedWord = false;
         if (
           this.token &&
           this.token.candidates &&
           this.token.candidates.length > 0
         ) {
-          for (let word of this.token.candidates) {
+          for (let candidate of this.token.candidates) {
             savedWord = this.$store.getters["savedWords/has"]({
               l2: this.$l2.code,
-              id: word.id,
+              id: candidate.id,
             });
-            if (savedWord) break;
+            if (savedWord) {
+              savedCandidate = candidate
+              break;
+            }
           }
         } else {
           if (
@@ -474,9 +488,9 @@ export default {
         if (
           savedWord &&
           savedWord.id &&
-          ["ja", "zh", "nan", "hak"].includes(this.$l2.code)
+          ["ja", "zh", "nan", "hak", "en", "ko"].includes(this.$l2.code)
         ) {
-          let word = await (await this.$getDictionary()).get(savedWord.id);
+          let word = savedCandidate || await (await this.$getDictionary()).get(savedWord.id);
           let text =
             this.text ||
             (this.token && this.token.candidates.length > 0
