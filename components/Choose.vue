@@ -11,7 +11,7 @@
         </div>
         <div
           class="col-xl-3 col-lg-4 col-md-6 col-12"
-          v-for="code in ['yue', 'zh', 'fr', 'he', 'ko', 'ja', 'nan', 'fa', 'ru', 'es', 'en', 'lzh']" 
+          v-for="code in ['hbo', 'yue', 'zh', 'fr', 'he', 'ko', 'ja', 'fa', 'ru', 'es', 'en', 'lzh']" 
           :key="`lang-logo-${code}`"
         >
           <div class="bg-dark rounded shadow p-4 mt-3 mb-3">
