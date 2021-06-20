@@ -28,6 +28,9 @@
               {{ video.title }}
             </span>
           </h5>
+          <div style="color: #aaa" v-if="video.date" class="mb-2">
+            {{ formatDate(video.date) }}
+          </div>
           <div :key="`youtube-video-info-${video.youtube_id}-${videoInfoKey}`">
             <router-link
               v-if="previousEpisode"
@@ -160,7 +163,7 @@
 </template>
 
 <script>
-
+import moment from "moment";
 export default {
   props: {
     video: {
@@ -261,6 +264,9 @@ export default {
     if (this.$refs.youtube) this.$refs.youtube.speed = this.speed;
   },
   methods: {
+    formatDate(date) {
+      return moment(date).format("LL");
+    },
     updateEnded(ended) {
       if (ended !== this.ended) {
         this.ended = ended;

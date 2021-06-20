@@ -20,8 +20,10 @@
         <i class="fas fa-check-circle mr-2 text-success"></i>
         Added
       </span>
+    </div>
+    <div class="show-and-date mt-2">
       <router-link
-        class="btn btn-small mt-2 ml-0 bg-success text-white"
+        class="btn btn-small  bg-success text-white"
         v-if="video.tv_show"
         :to="{
           name: 'show',
@@ -37,7 +39,7 @@
         />
       </router-link>
       <router-link
-        class="btn btn-small mt-2 ml-0 bg-success text-white"
+        class="btn btn-small bg-success text-white"
         v-if="video.talk"
         :to="{
           name: 'show',
