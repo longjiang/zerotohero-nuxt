@@ -47,8 +47,10 @@
 </template>
 
 <script>
+import Config from '@/lib/config'
 import Helper from "@/lib/helper";
 import YouTube from "@/lib/youtube";
+import axios from 'axios'
 
 export default {
   props: {
@@ -61,10 +63,20 @@ export default {
       randomEpisodeYouTubeId: undefined,
     };
   },
+  async fetch() {
+    let shows = this.$store.state.shows[this.type][this.$l2.code]
+    console.log(shows)
+    if (shows) {
+      this.shows = shows
+    } else {
+      let response = await axios.get(
+        `${Config.wiki}items/${this.routeType.replace('-', '_')}?filter[l2][eq]=${this.$l2.id
+        }&limit=500&timestamp=${this.$adminMode ? Date.now() : 0}`
+      );
+      if (response && response.data) this.shows = response.data.data
+    }
+  },
   async mounted() {
-    this.shows = this.$store.state.shows[this.type]
-      ? this.$store.state.shows[this.type][this.$l2.code]
-      : undefined;
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type.startsWith("shows")) {
         this.loadShows();
