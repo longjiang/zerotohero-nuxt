@@ -324,7 +324,7 @@ export default {
             html += `<span>${token.replace(/\s+/, "&nbsp;")}</span>`;
           }
         }
-      } else if (this.$l2.code === "en") {
+      } else if (["en", "ko"].includes(this.$l2.code)) {
         html = "";
         this.tokenized[batchId] = await (
           await this.$getDictionary()

@@ -14,7 +14,7 @@ const Dictionary = {
       a.hangul && b.hangul ? a.hangul.length - b.hangul.length : 0
     )
     let data = []
-    for(let row of sorted) {
+    for (let row of sorted) {
       let word = Object.assign(row, {
         head: row.hangul,
         bare: row.hangul,
@@ -22,7 +22,7 @@ const Dictionary = {
         definitions: [row.english],
         cjk: {
           canonical: row.hanja && row.hanja !== 'NULL' ? row.hanja : undefined,
-          phonetics: row.hungul 
+          phonetics: row.hungul
         }
       })
       data.push(word)
@@ -127,16 +127,16 @@ const Dictionary = {
           // match 'abcdejkl', 'abcdexyz', etc
           words.push(
             Object.assign(
-              { score: text.length - (head.length - text.length)},
+              { score: text.length - (head.length - text.length) },
               word
             )
-          ) 
+          )
         } else if (head && text.startsWith(head)) {
           // matches 'abcde', 'abcd', 'abc', etc
-          words.push(Object.assign({ score: head.length + 1 }, word)) 
+          words.push(Object.assign({ score: head.length + 1 }, word))
         } else if (head && text.includes(head)) {
           // matches 'abc', 'bcd', 'cde', etc
-          words.push(Object.assign({ score: head.length }, word)) 
+          words.push(Object.assign({ score: head.length }, word))
         } else {
           // matches 'abcdxyz', 'abcxyz', 'abxyz', etc
           for (let subtext of subtexts) {
@@ -149,12 +149,50 @@ const Dictionary = {
                   { score: subtext.length - (head.length - subtext.length) + daBonus },
                   word
                 )
-              ) 
+              )
             }
           }
         }
       }
-      return words.sort((a,b) => b.score - a.score).slice(0, limit)
+      return words.sort((a, b) => b.score - a.score).slice(0, limit)
     }
-  }
+  },
+  lookupMultiple(text) {
+    let words = this.words.filter(word => word && (word.bare === text || word.hanja === text))
+    return words
+  },
+  async tokenizeWithOpenKoreanText(seg) {
+    let res = await axios.get(`http://localhost:4567/tokenize?text=${seg}`)
+    if (res.data) {
+      return res.data.tokens
+    }
+  },
+  async tokenize(text) {
+    let t = []
+    let segs = text.split(/\s+/)
+    for (let seg of segs) {
+      let tokenized = await this.tokenizeWithOpenKoreanText(seg);
+      for (let index in tokenized) {
+        let token = tokenized[index]
+        console.log(token)
+        let candidates = this.lookupMultiple(
+          token.text
+        );
+        if (token.stem && token.stem !== token.text) {
+          candidates = candidates.concat(
+            this.lookupMultiple(
+              token.stem
+            )
+          );
+        }
+        t.push({
+          text: token.text,
+          candidates,
+        })
+      }
+      t.push(' ')
+    }
+    t.pop()
+    return t
+  },
 }

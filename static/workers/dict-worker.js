@@ -4,7 +4,7 @@ importScripts('../vendor/axios/axios.min.js')
 
 let ready = false
 
-onmessage = function(e) {
+onmessage = async function(e) {
   const id = e.data[0]
   const method = e.data[1]
   const args = e.data[2]
@@ -19,7 +19,7 @@ onmessage = function(e) {
   } else if (method === 'freedictMethods') {
     this.postMessage([id, 'freedictMethods', Object.keys(Dictionary)])
   } else {
-    let data = Dictionary[method](...args)
+    let data = await Dictionary[method](...args)
     this.postMessage([id, method, data])
   }
 }
