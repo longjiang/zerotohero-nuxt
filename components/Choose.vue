@@ -11,12 +11,12 @@
         </div>
         <div
           class="col-xl-3 col-lg-4 col-md-6 col-12"
-          v-for="code in ['yue', 'fr', 'he', 'ko', 'ja', 'nan', 'ru', 'es']"
+          v-for="code in ['yue', 'zh', 'fr', 'he', 'ko', 'ja', 'nan', 'fa', 'ru', 'es', 'en', 'lzh']" 
           :key="`lang-logo-${code}`"
         >
           <div class="bg-dark rounded shadow p-4 mt-3 mb-3">
             <LanguageLogo
-              :l1="language('en')"
+              :l1="language(['en', 'lzh'].includes(code) ? 'zh' : 'en')"
               :l2="language(code)"
               class="choose-lang-logo"
             />

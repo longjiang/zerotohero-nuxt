@@ -11,39 +11,23 @@
         <div
           class="logo-speech-bubble shadowed"
           :style="`background-image: url(/img/speech-light.png)`"
-          v-if="!['en', 'zh'].includes(l2.code)"
         >
           <b>{{ l2.code }}</b>
         </div>
       </div>
       <div class="logo-text text-white">
-        <template v-if="l2['iso639-3'] === 'eng'">
+        <template>
           <div class="logo-text-language">
-            {{ l1.translations ? l1.translations["english"] : "English" }}
+            {{ l1.translations && l1.translations[l2Name] ? l1.translations[l2Name] : l2Name}}
           </div>
           <div class="logo-text-zth">
             <span v-if="!compact">
               {{
-                l1.translations ? l1.translations["zerotohero"] : "Zero to Hero"
+                l1.translations && l1.translations["Zero to Hero"]
+                  ? l1.translations["Zero to Hero"]
+                  : "Zero to Hero"
               }}
             </span>
-            <span v-else>&nbsp;</span>
-          </div>
-        </template>
-        <template v-else>
-          <div class="logo-text-language">
-            <span>
-              {{
-                $t(
-                  l2.name
-                    .replace("Yue Chinese", "Cantonese")
-                    .replace(/ \(.*\)/gi, "")
-                ).toUpperCase()
-              }}
-            </span>
-          </div>
-          <div class="logo-text-zth">
-            <span v-if="!compact">{{ $t("Zero to Hero") }}</span>
             <span v-else>&nbsp;</span>
           </div>
         </template>
@@ -61,6 +45,13 @@ export default {
     return {
       Config,
     };
+  },
+  computed: {
+    l2Name() {
+      return this.l2.name
+        .replace("Yue Chinese", "Cantonese")
+        .replace(/ \(.*\)/gi, "");
+    },
   },
   methods: {},
 };
@@ -106,8 +97,8 @@ export default {
   font-size: 0.7rem;
   color: #555;
   position: absolute;
-  top: -1rem;
-  right: -1rem;
+  top: -0.9rem;
+  right: -0.4rem;
 }
 .logo-speech-bubble b {
   display: block;
