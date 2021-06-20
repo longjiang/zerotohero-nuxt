@@ -22,54 +22,58 @@
               line &&
               new RegExp(highlight.join('|')).test(line.line),
             'transcript-line-current': currentLine === line,
+            'pl-4': !single && $l2.direction !== 'rtl',
+            'pr-4': !single && $l2.direction === 'rtl',
           }"
           @click="goToLine(line)"
           :id="`transcript-line-${id}-${lineIndex}`"
           v-if="!single || currentLine === line"
+          style="display: flex"
         >
-          <b-button
-            v-if="$adminMode"
-            class="btn btn-small bg-danger text-white"
-            @click="removeLine(lineIndex)"
-            style="float: right"
-          >
-            <i class="fa fa-trash"></i>
-          </b-button>
-          <Annotate
-            tag="div"
-            :sticky="sticky"
-            :class="{
-              'transcript-line-chinese': true,
-              'pl-3': !single && $l2.direction === 'ltr',
-              'pr-3': !single && $l2.direction === 'rtl',
-            }"
-            :buttons="true"
-          >
-            <span
-              v-html="
-                highlight
-                  ? highlightMultiple(
-                      smartquotes(line.line),
-                      highlight,
-                      hsk || 'outside'
-                    )
-                  : smartquotes(line.line)
-              "
-            />
-          </Annotate>
-          <div
-            v-if="$l2.code !== $l1.code && parallellines"
-            :class="{
-              'transcript-line-l1': true,
-              'pl-3': !single && $l2.direction === 'ltr',
-              'pr-3': !single && $l2.direction === 'rtl',
-              'text-right':
-                $l2.scripts &&
-                $l2.scripts.length > 0 &&
-                $l2.scripts[0].direction === 'rtl',
-            }"
-            v-html="matchedParallelLines[lineIndex]"
-          ></div>
+          <div>
+            <b-button
+              v-if="showSubsEditing"
+              class="btn btn-small bg-danger text-white mr-3"
+              @click="removeLine(lineIndex)"
+            >
+              <i class="fa fa-trash"></i>
+            </b-button>
+          </div>
+          <div style="flex: 1">
+            <Annotate
+              tag="div"
+              :sticky="sticky"
+              :class="{
+                'transcript-line-chinese': true,
+              }"
+              :buttons="true"
+            >
+              <span
+                v-html="
+                  highlight
+                    ? highlightMultiple(
+                        smartquotes(line.line),
+                        highlight,
+                        hsk || 'outside'
+                      )
+                    : smartquotes(line.line)
+                "
+              />
+            </Annotate>
+            <div
+              v-if="$l2.code !== $l1.code && parallellines"
+              :class="{
+                'transcript-line-l1': true,
+                'pl-3': !single && $l2.direction === 'ltr',
+                'pr-3': !single && $l2.direction === 'rtl',
+                'text-right':
+                  $l2.scripts &&
+                  $l2.scripts.length > 0 &&
+                  $l2.scripts[0].direction === 'rtl',
+              }"
+              v-html="matchedParallelLines[lineIndex]"
+            ></div>
+          </div>
         </div>
         <div :key="`review-${lineIndex}`">
           <h6
@@ -141,6 +145,9 @@ export default {
     },
     stopLineIndex: {
       default: -1,
+    },
+    showSubsEditing: {
+      default: false,
     },
   },
   computed: {

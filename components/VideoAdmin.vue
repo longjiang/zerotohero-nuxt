@@ -110,21 +110,22 @@
             <i class="fas fa-trash-alt"></i>
             Remove
           </b-button>
-          <drop
-            @drop="handleDrop"
-            :class="{
-              over: over,
-              'subs-drop drop text-dark btn btn-light w-100 mt-2': true,
-            }"
-            :key="`drop-${transcriptKey}`"
-            @dragover="over = true"
-            @dragleave="over = false"
-          >
-            Drop Subs Here
-          </drop>
         </template>
+        <b-checkbox v-model="showSubsEditing" class="mt-2">Show Subs Editing</b-checkbox>
       </div>
-      <div class="video-edit-admin-second-line">
+      <div class="video-edit-admin-second-line" v-if="showSubsEditing">
+        <drop
+          @drop="handleDrop"
+          :class="{
+            over: over,
+            'subs-drop drop text-dark btn btn-light w-100 mt-2': true,
+          }"
+          :key="`drop-${transcriptKey}`"
+          @dragover="over = true"
+          @dragleave="over = false"
+        >
+          Drop Subs Here
+        </drop>
         <div class="mt-2">
           First line starts at
           <input
@@ -173,6 +174,7 @@ export default {
       topics: Helper.topics,
       levels: Helper.levels(this.$l2),
       transcriptKey: 0,
+      showSubsEditing: false
     };
   },
   computed: {
@@ -190,6 +192,9 @@ export default {
     },
   },
   watch: {
+    showSubsEditing() {
+      this.$emit('showSubsEditing', this.showSubsEditing)
+    },
     firstLineTime() {
       if (this.video.subs_l2 && this.video.subs_l2.length > 0) {
         let subsShift =
@@ -326,7 +331,7 @@ export default {
           `${Config.wiki}items/youtube_videos/${this.video.id}`
         );
         if (response) {
-          this.video = undefined;
+          Vue.set(video, 'id', undefined)
         }
       } catch (err) {}
     },

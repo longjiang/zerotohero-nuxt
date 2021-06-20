@@ -59,7 +59,7 @@
               <i class="fa fa-chevron-right"></i>
             </router-link>
           </div>
-          <VideoAdmin :video="video" />
+          <VideoAdmin :video="video" @showSubsEditing="toggleShowSubsEditing" />
           <hr v-if="video.channel" />
           <YouTubeChannelCard
             v-if="video.channel"
@@ -78,6 +78,7 @@
             :sticky="sticky"
             :startLineIndex="startLineIndex"
             :stopLineIndex="stopLineIndex"
+            :showSubsEditing="showSubsEditing"
             @seek="seekYouTube"
             @pause="pause"
             @play="play"
@@ -224,6 +225,7 @@ export default {
       paused: true,
       repeatMode: false,
       audioMode: false,
+      showSubsEditing: false,
       currentTime: 0,
       videoInfoKey: 0,
     };
@@ -264,6 +266,9 @@ export default {
     if (this.$refs.youtube) this.$refs.youtube.speed = this.speed;
   },
   methods: {
+    toggleShowSubsEditing(showSubsEditing) {
+      this.showSubsEditing = showSubsEditing
+    },
     formatDate(date) {
       return moment(date).format("LL");
     },
