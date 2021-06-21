@@ -151,6 +151,7 @@
 
 <script>
 import { Drag, Drop } from "vue-drag-drop";
+import { parseSync } from "subtitle";
 import Helper from "@/lib/helper";
 import Config from "@/lib/config";
 import YouTube from "@/lib/youtube";

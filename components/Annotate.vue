@@ -63,7 +63,10 @@
         </b-dropdown-item>
       </b-dropdown>
     </div>
-    <div :class="{ 'annotate-slot': true, 'd-none': annotated }" style="display: inline">
+    <div
+      :class="{ 'annotate-slot': true, 'd-none': annotated }"
+      style="display: inline"
+    >
       <slot></slot>
     </div>
     <div :class="{ 'd-none': !textMode }">
@@ -81,11 +84,13 @@
         v-if="textMode"
       >
         <router-link
-          :to="`/${$l1.code}/${$l2.code}/phrase/search/${selectedText ? selectedText : ''}`"
+          :to="`/${$l1.code}/${$l2.code}/phrase/search/${
+            selectedText ? selectedText : ''
+          }`"
           class="link-unstyled"
         >
           <i class="fas fa-quote-left"></i>
-          Look up {{ selectedText ? `“${selectedText}” as` : '' }} a phrase
+          Look up {{ selectedText ? `“${selectedText}” as` : "" }} a phrase
         </router-link>
       </div>
     </div>
@@ -192,6 +197,9 @@ export default {
     },
   },
   methods: {
+    hasTranslate() {
+      return this.$languages.hasGoogleTranslate(this.$l2);
+    },
     dummyFunction() {
       // do nothing
     },
@@ -203,19 +211,22 @@ export default {
     },
     async translateClick() {
       let text = this.$l2.continua ? this.text.replace(/ /g, "") : this.text;
+
+      let url = undefined;
       if (["ko", "ja"].includes(this.$l2.code)) {
-        window.open(
-          `https://papago.naver.com/?sk=auto&st=${encodeURIComponent(text)}`,
-          Helper.isMobile() ? "_blank" : "translate"
-        );
+        url = `https://papago.naver.com/?sk=auto&st=${encodeURIComponent(
+          text
+        )}`;
+      } else if (this.hasTranslate(this.$l2)) {
+        url = `https://translate.google.com/#view=home&op=translate&sl=${
+          this.$l2.code === "zh" ? "zh-CN" : this.$l2.code
+        }&tl=${this.$l1.code}&text=${encodeURIComponent(text)}`;
       } else {
-        window.open(
-          `https://translate.google.com/#view=home&op=translate&sl=${
-            this.$l2.code === "zh" ? "zh-CN" : this.$l2.code
-          }&tl=${this.$l1.code}&text=${encodeURIComponent(text)}`,
-          Helper.isMobile() ? "_blank" : "translate"
-        );
+        url = `https://translate.panlex.org/?langDe=${this.$l2['iso639-3']}-000&langAl=${this.$l1['iso639-3']}-000&txt=${encodeURIComponent(
+          text
+        )}`;
       }
+      if (url) window.open(url, Helper.isMobile() ? "_blank" : "translate");
     },
     // https://stackoverflow.com/questions/2550951/what-regular-expression-do-i-need-to-check-for-some-non-latin-characters
     nonLatin() {
