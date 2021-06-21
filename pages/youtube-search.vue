@@ -47,6 +47,7 @@
       <b-form-radio v-model="captions" class="d-inline-block" value="all">
         All
       </b-form-radio>
+      <b-button class="btn-small btn-primary ml-3" @click="forceRefresh"><i class="fa fa-sync-alt mr-1"></i>Force Refresh</b-button>
     </b-form-group>
     <YouTubeSearchResults
       :term="term"
@@ -116,6 +117,9 @@ export default {
     addAll() {
       this.$refs.youtubeSearchResults.addAll();
     },
+    forceRefresh() {
+      this.$refs.youtubeSearchResults.forceRefresh()
+    }
   },
 };
 </script>

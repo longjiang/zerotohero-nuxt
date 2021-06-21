@@ -64,7 +64,7 @@ export default {
   },
   mounted() {
     this.bindKeys();
-    this.updateURL();
+    this.loadVideos();
   },
   unmounted() {
     this.unbindKeys();
@@ -77,10 +77,10 @@ export default {
   },
   watch: {
     term() {
-      this.updateURL();
+      this.loadVideos();
     },
     start() {
-      this.updateURL();
+      this.loadVideos();
     },
   },
   computed: {
@@ -131,13 +131,18 @@ export default {
         }
       };
     },
-    async updateURL() {
+    forceRefresh() {
+      this.loadVideos({ forceRefresh: true })
+    },
+    async loadVideos(options) {
       this.videos = [];
-      let options = {
+      options = options || {}
+      options = Object.assign({
         term: this.term,
         start: this.start || 0,
         lang: this.$l2.code,
-      };
+        forceRefresh: false
+      }, options)
       if (this.captions === "nocaptions") options.captions = false;
       if (this.captions === "captions") options.captions = true;
       this.videos = await YouTube.searchByGoogle(options);
