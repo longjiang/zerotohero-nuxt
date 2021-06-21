@@ -343,13 +343,15 @@ export default {
         let response = await axios.get(
           `${Config.wiki}items/youtube_videos?filter[l2][eq]=${
             this.$l2.id
-          }&filter[${this.showType}][eq]=${this.show.id}&fields=channel_id,id,lesson,level,title,topic,youtube_id,tv_show.*,talk.*&timestamp=${this.$adminMode ? Date.now() : 0}`
+          }&filter[${this.showType}][eq]=${this.show.id}&fields=channel_id,id,lesson,level,title,date,topic,youtube_id,tv_show.*,talk.*&timestamp=${this.$adminMode ? Date.now() : 0}`
         );
 
         if (response.data && response.data.data) {
           this.episodes = Helper.uniqueSort(
             response.data.data,
-            "title",
+            "youtube_id",
+            this.showType === 'tv_show' ? "title" : "date",
+            this.showType === 'tv_show' ? "ascending" : "descending",
             this.$l2.code
           );
         }

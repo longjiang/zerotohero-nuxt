@@ -1,6 +1,6 @@
 <router>
   {
-    path: '/:l1/:l2/youtube/playlist/:playlist_id?',
+    path: '/:l1/:l2/youtube/playlist/:playlist_id?/:title?',
     props: true
   }
 </router>
@@ -8,7 +8,8 @@
   <div class="youtube-browse container mt-5 mb-5 main">
     <div class="row">
       <div class="col-sm-12">
-        <h3 class="text-center">Playlist: {{ playlist_id }}</h3>
+        <h3 class="text-center" v-if="title">{{ title }}</h3>
+        <h3 class="text-center" v-else>Playlist: {{ playlist_id }}</h3>
         <YouTubeVideoList
           :videos="videos.filter((video) => video.title !== 'Private video')"
           :checkSubs="true"
@@ -31,10 +32,12 @@ export default {
     playlist_id: {
       type: String,
     },
+    title: {
+      type: String
+    }
   },
   data() {
     return {
-      title: undefined,
       videos: [],
       checkSaved: false,
       checkShows: false,
@@ -45,7 +48,6 @@ export default {
   },
   methods: {
     async update() {
-      this.title = undefined
       this.videos = []
       let videos = await YouTube.playlistByApi(this.playlist_id)
       if (videos && videos.length > 0) {
@@ -60,7 +62,6 @@ export default {
     },
   },
   computed: {
-
     $adminMode() {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
