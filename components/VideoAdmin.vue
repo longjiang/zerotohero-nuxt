@@ -127,14 +127,14 @@
           Drop Subs Here
         </drop>
         <div class="mt-2">
-          First line starts at
+          <!-- First line starts at
           <input
             v-model.lazy="firstLineTime"
             type="text"
             placeholder="0"
             class="d-inline-block ml-1"
             style="width: 4rem"
-          />
+          /> -->
           <b-button v-if="!subsUpdated" @click="updateSubs" class="ml-2">
             <i class="fa fa-save mr-2"></i>
             Update Subs

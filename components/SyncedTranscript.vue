@@ -25,15 +25,17 @@
             'pl-4': !single && $l2.direction !== 'rtl',
             'pr-4': !single && $l2.direction === 'rtl',
           }"
-          @click="goToLine(line)"
+          @click="lineClick(line)"
           :id="`transcript-line-${id}-${lineIndex}`"
           v-if="!single || currentLine === line"
           style="display: flex"
         >
-          <div>
+          <div v-if="showSubsEditing" class="mr-3">
+            <div style="font-size: 0.7em; color: #ccc">
+              {{ Math.round(line.starttime * 100) / 100 }}
+            </div>
             <b-button
-              v-if="showSubsEditing"
-              class="btn btn-small bg-danger text-white mr-3"
+              class="btn btn-small bg-danger text-white"
               @click="removeLine(lineIndex)"
             >
               <i class="fa fa-trash"></i>
@@ -47,19 +49,11 @@
                 'transcript-line-chinese': true,
               }"
               :buttons="true"
+              v-if="!showSubsEditing"
             >
-              <span
-                v-html="
-                  highlight
-                    ? highlightMultiple(
-                        smartquotes(line.line),
-                        highlight,
-                        hsk || 'outside'
-                      )
-                    : smartquotes(line.line)
-                "
-              />
+              <span v-html="lineHtml(line)" />
             </Annotate>
+            <div v-else v-html="lineHtml(line)" />
             <div
               v-if="$l2.code !== $l1.code && parallellines"
               :class="{
@@ -279,6 +273,15 @@ export default {
     },
   },
   methods: {
+    lineHtml(line) {
+      return this.highlight
+        ? this.highlightMultiple(
+            smartquotes(line.line),
+            this.highlight,
+            this.hsk || "outside"
+          )
+        : this.smartquotes(line.line);
+    },
     checkProgress() {
       if (!this.currentLine) {
         return "first play";
@@ -563,6 +566,31 @@ export default {
           });
         }
       }
+    },
+    lineClick(line) {
+      if (this.showSubsEditing) {
+        this.adjustAllLinesBelowToMatchCurrentTime(line);
+      } else {
+        this.goToLine(line);
+      }
+    },
+    adjustAllLinesBelowToMatchCurrentTime(line) {
+      let delta = 0;
+      let currentLine = line;
+      let currentLineIndex = this.lines.findIndex(l => l === line);
+      console.log(line)
+      for (let lineIndex in this.lines) {
+        lineIndex = Number(lineIndex);
+        let line = this.lines[lineIndex];
+        if (lineIndex === currentLineIndex) {
+          delta = this.currentTime - currentLine.starttime;
+          Vue.set(line, "starttime", this.currentTime);
+        } else if (lineIndex > this.currentLineIndex) {
+          Vue.set(line, "starttime", (line.starttime += delta));
+        }
+      }
+      this.currentLine = currentLine
+      this.currentLineIndex = currentLineIndex
     },
     goToPreviousLine() {
       this.goToLine(this.previousLine);
