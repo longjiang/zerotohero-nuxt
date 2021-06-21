@@ -31,7 +31,7 @@
           <div style="color: #aaa" v-if="video.date" class="mb-2">
             {{ formatDate(video.date) }}
           </div>
-          <div :key="`youtube-video-info-${video.youtube_id}-${videoInfoKey}`">
+          <div :key="`youtube-video-info-${video.youtube_id}-${videoInfoKey}`" :class="{'d-none': !video.id }">
             <router-link
               v-if="previousEpisode"
               :to="previousEpisode"

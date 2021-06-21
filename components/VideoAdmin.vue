@@ -33,8 +33,7 @@
         <i class="fa fa-tv mr-2" />
         {{ video.tv_show.title }}
         <i
-          class="fas fa-times-circle ml-1"
-          v-if="$adminMode"
+          :class="{'fas fa-times-circle ml-1': true, 'd-none': !$adminMode}"
           @click="unassignShow('tv_show')"
         />
       </router-link>
@@ -49,8 +48,7 @@
         <i class="fas fa-graduation-cap mr-2"></i>
         {{ video.talk.title }}
         <i
-          class="fas fa-times-circle ml-1"
-          v-if="$adminMode"
+          :class="{'fas fa-times-circle ml-1': true, 'd-none': !$adminMode}"
           @click="unassignShow('talk')"
         />
       </router-link>
@@ -106,14 +104,22 @@
             type="talks"
             variant="secondary"
           />
-          <b-button variant="danger" @click="remove">
+          <b-button variant="danger" v-if="!deleted" @click="remove">
             <i class="fas fa-trash-alt"></i>
             Remove
           </b-button>
+          <span :class="{'d-none': !deleting }">
+            <i class="fas fa-hourglass mr-2 text-secondary"></i>
+            Removing...
+          </span>
+          <span :class="{'d-none': !deleted }">
+            <i class="fas fa-check-circle mr-2 text-success"></i>
+            Removed
+          </span>
         </template>
         <b-checkbox v-model="showSubsEditing" class="mt-2">Show Subs Editing</b-checkbox>
       </div>
-      <div class="video-edit-admin-second-line" v-if="showSubsEditing">
+      <div :class="{'video-edit-admin-second-line': true, 'd-none': !showSubsEditing }">
         <drop
           @drop="handleDrop"
           :class="{
@@ -175,6 +181,8 @@ export default {
       topics: Helper.topics,
       levels: Helper.levels(this.$l2),
       transcriptKey: 0,
+      deleted: false,
+      deleting: false,
       showSubsEditing: false
     };
   },
@@ -332,7 +340,7 @@ export default {
           `${Config.wiki}items/youtube_videos/${this.video.id}`
         );
         if (response) {
-          Vue.set(video, 'id', undefined)
+          this.deleted = true
         }
       } catch (err) {}
     },
