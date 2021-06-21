@@ -158,9 +158,10 @@ export default {
         (language) => ["A", "C", "L", "E", "H"].includes(language.type) // Only living, extinct or historical languages (exclusing special codes 'S' and macro languages 'M')
       )
       .filter((language) => this.$languages.hasYouTube(this.english, language))
-      .filter((language) =>
-        this.hasFeature(this.english, language, "dictionary")
-      )
+      .filter((language) => language.code !== 'fil')
+      // .filter((language) =>
+      //   this.hasFeature(this.english, language, "dictionary")
+      // )
       .sort((a, b) => {
         if (a.name < b.name) {
           return -1;
