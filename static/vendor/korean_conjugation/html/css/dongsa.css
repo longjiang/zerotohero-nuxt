@@ -1,0 +1,58 @@
+html, body {
+    background: black;
+    color: white;
+    margin: 0;
+}
+
+dd, dt {
+    padding-left: 5px;
+}
+
+ul, li {
+    padding-left: 5px;
+    margin: 0;
+}
+
+ul {
+    padding-bottom: 5px;
+}
+
+dd {
+    text-transform: capitalize;
+    display: block;
+    margin: 0;
+    margin-top: 5px;
+}
+
+dt {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.conjugation {
+    border-bottom: 1px solid grey;
+}
+
+.reasons {
+    display: none;
+}
+
+.warning {
+    color: red;
+}
+
+#keyboard {
+    display: none;
+}
+
+button {
+    margin: 0;
+    padding: 0;
+}
+
+#keyboard button {
+    padding: 0;
+    padding-left: 1px;
+    margin: 0;
+    margin-right: 1px;
+}

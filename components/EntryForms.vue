@@ -12,43 +12,51 @@
         <div
           class="col-sm-12 form-table"
           v-for="(table, tableName) in tables"
+          :key="`form-table-${tableName}`"
         >
           <h6>
             {{
-              tableName === 'verbs'
+              tableName === "verbs"
                 ? Helper.ucFirst(
-                    table.find(field => field.field === 'aspect').form
+                    table.find((field) => field.field === "aspect").form
                   )
-                : ''
+                : ""
             }}
             {{ Helper.ucFirst(tableName) }}
             {{
-              tableName === 'adjectives'
+              tableName === "adjectives"
                 ? parseInt(
-                    table.find(field => field.field === 'incomparable').form
+                    table.find((field) => field.field === "incomparable").form
                   ) === 0
-                  ? ' (Comprable)'
-                  : ' (Incomprable)'
-                : ''
+                  ? " (Comprable)"
+                  : " (Incomprable)"
+                : ""
             }}
           </h6>
           <hr class="mt-0 mb-3" />
           <table>
             <tbody>
               <tr
-                v-for="row in table"
-                v-if="row.field !== 'aspect' && row.field !== 'incomparable'"
+                v-for="(row, rowIndex) in table.filter(
+                  (row) =>
+                    row.field !== 'aspect' && row.field !== 'incomparable'
+                )"
+                :key="`form-table-row-${rowIndex}`"
               >
                 <td>
                   {{ row.field }}
                 </td>
-                <td  class="pl-3">
-                  <b :data-level="word.level || 'outside'"
-                    >{{ row.form || 'n/a'
-                    }}{{
-                      row.field && row.field.startsWith('imperative') ? '!' : ''
-                    }}</b
-                  >
+                <td class="pl-3">
+                  <Annotate>
+                    <b :data-level="word.level || 'outside'">
+                      {{ row.form || "n/a"
+                      }}{{
+                        row.field && row.field.startsWith("imperative")
+                          ? "!"
+                          : ""
+                      }}
+                    </b>
+                  </Annotate>
                 </td>
               </tr>
             </tbody>
@@ -60,47 +68,48 @@
 </template>
 
 <script>
-import Helper from '@/lib/helper'
+import Helper from "@/lib/helper";
 
 export default {
   props: {
     word: {
-      type: Object
-    }
+      type: Object,
+    },
   },
   data() {
     return {
       Helper,
-      tables: []
-    }
+      tables: [],
+    };
   },
   methods: {
     async getTables() {
       // https://www.consolelog.io/group-by-in-javascript/
-      let forms = await (await this.$getDictionary()).wordForms(this.word)
-      forms = forms.filter(form => form.table !== 'head')
+      let forms = await (await this.$getDictionary()).wordForms(this.word);
+      forms = forms.filter((form) => form.table !== "head");
       for (let form of forms) {
-        form.form = await (await this.$getDictionary()).accent(form.form)
-        form.field = await (await this.$getDictionary()).stylize(form.field)
-        form.table = await (await this.$getDictionary()).stylize(form.table)
+        form.form = await (await this.$getDictionary()).accent(form.form);
+        form.field = await (await this.$getDictionary()).stylize(form.field);
+        form.table = await (await this.$getDictionary()).stylize(form.table);
       }
-      this.tables = Helper.groupArrayBy(forms, 'table')
-    }
+      this.tables = Helper.groupArrayBy(forms, "table");
+    },
   },
   mounted() {
-    this.getTables()
+    this.getTables();
   },
   watch: {
     word() {
-      this.getTables()
-    }
-  }
-}
+      this.getTables();
+    },
+  },
+};
 </script>
 <style scoped>
 @media screen and (min-width: 768px) {
   .form-table {
-    columns: 2; column-gap: 2rem;
+    columns: 2;
+    column-gap: 2rem;
   }
 }
 </style>

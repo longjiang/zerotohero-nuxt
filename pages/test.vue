@@ -41,6 +41,10 @@ export default {
       entry: undefined,
     };
   },
+  async mounted() {
+    let dictionary = await this.$getDictionary();
+    await (await dictionary).conjugate("하다");
+  },
   methods: {
     async testDictionary() {
       let dictionary = await this.$getDictionary();

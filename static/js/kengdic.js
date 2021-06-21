@@ -1,9 +1,12 @@
+importScripts('../vendor/korean_conjugation/html/korean/hangeul.js')
+importScripts('../vendor/korean_conjugation/html/korean/conjugator.js')
+
 const Dictionary = {
   file: 'https://server.chinesezerotohero.com/data/kengdic/kengdic_2011.tsv.txt',
   words: [],
   name: 'kengdic',
   credit() {
-    return 'The Korean dictionary is provided by <a href="https://github.com/garfieldnate/kengdic">kengdic</a> created by Joe Speigle, which is freely available from its GitHub project page.'
+    return `The Korean dictionary is provided by <a href="https://github.com/garfieldnate/kengdic">kengdic</a> created by Joe Speigle, which is freely available from its GitHub project page. Korean conjugation made possible with <a href="https://github.com/max-christian/korean_conjugation">max-christian/korean_conjugation</a>.`
   },
   async load() {
     let res = await axios.get(this.file)
@@ -61,7 +64,32 @@ const Dictionary = {
       field: 'head',
       form: word.bare
     }]
+    let krForms = this.conjugate(word.bare)
+
+    forms = forms.concat(krForms.map(f => {
+      return {
+        table: 'conjugation',
+        field: f.name,
+        form: f.form
+      }
+    }))
+    forms = forms.sort((a,b) => a.length - b.length)
+    console.log(forms.map(f => f.form))
     return forms
+  },
+  conjugate(text) {
+    let forms = []
+    let regular = true
+    infinitive = conjugator.base(text, regular);
+    conjugator.verb_type(infinitive, regular)
+    for (let key in conjugator) {
+      if (conjugator[key].conjugation) {
+        let conjugationFunc = conjugator[key]
+        forms.push({ name: key.replace(/_/g, ' '), form: conjugationFunc(infinitive, regular) })
+      }
+    }
+    return forms
+
   },
   stylize(name) {
     return name

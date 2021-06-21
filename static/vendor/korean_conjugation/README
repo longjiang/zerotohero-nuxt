@@ -1,0 +1,13 @@
+==Installation==
+
+If you don't have easy_install, search for it on your favorite search engine and install it.
+
+Then, follow these steps to build a self-contained environment for running the development server:
+
+sudo easy_install pip
+sudo easy_install virtualenv
+virtualenv . --no-site-packages
+pip install -E . -r requirements.txt
+source bin/activate
+python test.py
+./dev_server

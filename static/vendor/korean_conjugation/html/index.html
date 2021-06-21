@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html manifest="dongsa.manifest">
+<head>
+<link rel="stylesheet" href="css/dongsa.css" type="text/css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<!--[if lt IE 8]><link rel="stylesheet" href="/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
+<title>dongsa.net</title>
+<meta name="verify-v1" content="nfSbiOgPUnEWsQ8h5APnRPOxK0HWpZtiMMHZZ+oaIZ4=" >
+<script type="text/javascript" src="scripts/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="scripts/johab.js" charset="utf-8"></script>
+<script type="text/javascript" src="korean/hangeul.js" charset="utf-8"></script>
+<script type="text/javascript" src="korean/pronunciation.js" charset="utf-8"></script>
+<script type="text/javascript" src="korean/romanization.js" charset="utf-8"></script>
+<script type="text/javascript" src="korean/conjugator.js" charset="utf-8"></script>
+<script type="text/javascript" src="korean/hangeul-keyboard.js" charset="utf-8"></script>
+<script type="text/javascript">
+//<![CDATA[
+function update(infinitive, regular) {
+    try {
+        // Some older versions of WebKit don't have String.trim...
+        infinitive = infinitive.trim();
+    } catch(c) {}
+    conjugator.display_conjugations(infinitive, regular, function(output) {
+        $('#output').html(output);
+        $('.show-reasons').click(function() {
+            $(this).parent().next().slideToggle();
+            if ($(this).html() == '↰') {
+                $(this).html('↴');
+            } else {
+                $(this).html('↰');
+            }
+        });
+        $('#form-change').click(function() {
+            regular = !regular;
+            update(infinitive, regular);
+        });
+    });
+}
+
+var infinitive = decodeURI(location.search.split('=')[1]);
+if (!infinitive || typeof(infinitive) == 'undefined' || infinitive == 'undefined') {
+    infinitive = '하다';
+}
+
+$(document).ready(function() {
+    $('#show-keyboard').click(function() {
+        $('#keyboard').slideToggle();
+    });
+    $('#infinitive').val(infinitive);
+    update(infinitive);
+    display_keyboard('#keyboard');
+});
+
+//]]>
+</script>
+</head>
+<body>
+<form method="get" onsubmit="update($('#infinitive').val(), false); return false;">
+<label for="infinitive">infinitive</label><input size="7" name="infinitive" id="infinitive" />
+<input type="submit" value="conjugate" /> <button id="show-keyboard">keyboard</button>
+</form>
+<div id="keyboard">
+</div>
+<div id="output">
+</div>
+</body>
+</html>

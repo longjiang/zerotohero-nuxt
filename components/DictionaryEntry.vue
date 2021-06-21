@@ -111,7 +111,7 @@
       <div class="row">
         <div class="col-sm-12">
           <EntryForms
-            v-if="['ru', 'ja'].includes($l2.code)"
+            v-if="['ru', 'ja', 'ko'].includes($l2.code)"
             class="mt-5"
             :word="entry"
           />
@@ -290,7 +290,7 @@ export default {
       } else if (this.$l2.code === "zh") {
         terms = Helper.unique([this.entry.simplified, this.entry.traditional]);
       } else if (forms && forms.length > 0) {
-        terms = forms;
+        terms = Helper.unique(forms);
       } else {
         terms = [this.entry.bare];
       }
