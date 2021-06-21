@@ -64,16 +64,17 @@ const Dictionary = {
       field: 'head',
       form: word.bare
     }]
-    let krForms = this.conjugate(word.bare)
-
-    forms = forms.concat(krForms.map(f => {
-      return {
-        table: `conjugation (${f.regular ? 'regular' : 'irregular'})`,
-        field: f.name,
-        form: f.form
-      }
-    }))
-    forms = forms.sort((a, b) => a.length - b.length)
+    if (word.bare.endsWith('다')) {
+      let krForms = this.conjugate(word.bare)
+      forms = forms.concat(krForms.map(f => {
+        return {
+          table: `conjugation (${f.regular ? 'regular' : 'irregular'})`,
+          field: f.name,
+          form: f.form
+        }
+      }))
+      forms = forms.sort((a, b) => a.length - b.length)
+    }
     return forms
   },
   conjugate(text) {
