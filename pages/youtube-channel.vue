@@ -1,6 +1,6 @@
 <router>
   {
-    path: '/:l1/:l2/youtube/channel/:channel_id?',
+    path: '/:l1/:l2/youtube/channel/:channel_id?/:title?',
     props: true,
     meta: {
       title: 'Study YouTube Subtitles | Zero to Hero',
@@ -17,9 +17,9 @@
   <div class="youtube-browse container mt-5 mb-5 main">
     <div class="row">
       <div class="col-sm-12">
-        <h1 class="mb-4 text-center">
-          YouTube Channel {{ channel_id }}
-        </h1>
+        <h3 class="mb-4 text-center">
+          {{ title || `YouTube Channel ${channel_id}` }}
+        </h3>
         <template v-if="!loading">
           <!--
           <h4 class="text-center mt-5">{{ $t('Videos') }}</h4>
@@ -50,13 +50,14 @@ export default {
     channel_id: {
       type: String,
     },
+    title: {
+      type: String
+    }
   },
   data() {
     return {
-      title: undefined,
       playlists: [],
       videos: [],
-      avatar: undefined,
       loading: true,
       saved: false,
     }
@@ -101,32 +102,13 @@ export default {
       }
     },
     async update() {
-      this.title = undefined
-      this.avatar = undefined
+      this.loading = true
       this.videos = []
-      this.getSaved()
-      // YouTube.channel(
-      //   this.channel_id,
-      //   channel => {
-      //     this.title = channel.title
-      //     this.videos = channel.videos.filter(video => video.cc)
-      //     this.avatar = channel.avatar
-      //     this.loading = false
-      //   },
-      //   3600
-      // )
       let playlists = await YouTube.channelPlayListsByAPI(this.channel_id)
       if (playlists) {
         this.playlists = playlists.sort((a,b) => b.count - a.count)
       }
       this.loading = false
-    },
-  },
-  watch: {
-    channel_id() {
-      if (this.$route.name === 'youtube-channel') {
-        this.update()
-      }
     },
   },
 }
