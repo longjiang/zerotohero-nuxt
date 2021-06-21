@@ -40,6 +40,17 @@ const Dictionary = {
     }
     return uniqueArray
   },
+  uniqueByValue(array, key) {
+    let flags = []
+    let unique = []
+    let l = array.length
+    for (let i = 0; i < l; i++) {
+      if (flags[array[i][key]]) continue
+      flags[array[i][key]] = true
+      unique.push(array[i])
+    }
+    return unique
+  },
   get(id) {
     return this.words.find(row => row.id === id)
   },
@@ -68,19 +79,19 @@ const Dictionary = {
       let krForms = this.conjugate(word.bare)
       forms = forms.concat(krForms.map(f => {
         return {
-          table: `conjugation (${f.regular ? 'regular' : 'irregular'})`,
-          field: f.name,
+          table: `conjugation`,
+          field: f.name + (f.regular ? '' : ' (irregular)'),
           form: f.form
         }
       }))
-      forms = forms.sort((a, b) => a.length - b.length)
+      forms = this.uniqueByValue(forms, 'form').sort((a, b) => a.length - b.length)
     }
     return forms
   },
   conjugate(text) {
     let forms = []
     infinitive = conjugator.base(text, true);
-    for (let regular of conjugator.both_regular_and_irregular ? [false, true] : [true]) {
+    for (let regular of conjugator.both_regular_and_irregular ? [true, false] : [true]) {
       conjugator.verb_type(infinitive, regular)
       for (let key in conjugator) {
         if (conjugator[key].conjugation) {

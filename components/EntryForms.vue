@@ -50,16 +50,14 @@
                     {{ row.field }}
                   </td>
                   <td class="pl-3">
-                    <Annotate>
-                      <b :data-level="word.level || 'outside'">
-                        {{ row.form || "n/a"
-                        }}{{
-                          row.field && row.field.startsWith("imperative")
-                            ? "!"
-                            : ""
-                        }}
-                      </b>
-                    </Annotate>
+                    <b :data-level="word.level || 'outside'">
+                      {{ row.form || "n/a"
+                      }}{{
+                        row.field && row.field.startsWith("imperative")
+                          ? "!"
+                          : ""
+                      }}
+                    </b>
                   </td>
                 </tr>
               </tbody>
