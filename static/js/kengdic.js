@@ -162,7 +162,7 @@ const Dictionary = {
     return words
   },
   async tokenizeWithOpenKoreanText(seg) {
-    let res = await axios.get(`https://server.chinesezerotohero.com/scrape2.php?url=${encodeURIComponent('http://py.zerotohero.ca:4567/tokenize?text=' + seg)}`)
+    let res = await axios.get(`https://server.chinesezerotohero.com/scrape2.php?&cache_life=0&url=${encodeURIComponent('http://py.zerotohero.ca:4567/tokenize?text=' + seg)}`)
     if (res.data) {
       return res.data.tokens
     }
