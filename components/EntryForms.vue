@@ -14,7 +14,7 @@
           v-for="(table, tableName) in tables"
           :key="`form-table-${tableName}`"
         >
-          <h6>
+          <h6 class="mt-2">
             {{
               tableName === "verbs"
                 ? Helper.ucFirst(
@@ -34,33 +34,37 @@
             }}
           </h6>
           <hr class="mt-0 mb-3" />
-          <table>
-            <tbody>
-              <tr
-                v-for="(row, rowIndex) in table.filter(
-                  (row) =>
-                    row.field !== 'aspect' && row.field !== 'incomparable'
-                )"
-                :key="`form-table-row-${rowIndex}`"
-              >
-                <td>
-                  {{ row.field }}
-                </td>
-                <td class="pl-3">
-                  <Annotate>
-                    <b :data-level="word.level || 'outside'">
-                      {{ row.form || "n/a"
-                      }}{{
-                        row.field && row.field.startsWith("imperative")
-                          ? "!"
-                          : ""
-                      }}
-                    </b>
-                  </Annotate>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="form-table-content mb-2">
+            <table>
+              <tbody>
+                <tr
+                  v-for="(row, rowIndex) in table
+                    .filter(
+                      (row) =>
+                        row.field !== 'aspect' && row.field !== 'incomparable'
+                    )
+                    .sort(a, (b) => a.field.localeCompare(b.field))"
+                  :key="`form-table-row-${rowIndex}`"
+                >
+                  <td>
+                    {{ row.field }}
+                  </td>
+                  <td class="pl-3">
+                    <Annotate>
+                      <b :data-level="word.level || 'outside'">
+                        {{ row.form || "n/a"
+                        }}{{
+                          row.field && row.field.startsWith("imperative")
+                            ? "!"
+                            : ""
+                        }}
+                      </b>
+                    </Annotate>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
@@ -107,7 +111,7 @@ export default {
 </script>
 <style scoped>
 @media screen and (min-width: 768px) {
-  .form-table {
+  .form-table-content {
     columns: 2;
     column-gap: 2rem;
   }

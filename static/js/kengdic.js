@@ -68,28 +68,27 @@ const Dictionary = {
 
     forms = forms.concat(krForms.map(f => {
       return {
-        table: 'conjugation',
+        table: `conjugation (${f.regular ? 'regular' : 'irregular'})`,
         field: f.name,
         form: f.form
       }
     }))
-    forms = forms.sort((a,b) => a.length - b.length)
-    console.log(forms.map(f => f.form))
+    forms = forms.sort((a, b) => a.length - b.length)
     return forms
   },
   conjugate(text) {
     let forms = []
-    let regular = true
-    infinitive = conjugator.base(text, regular);
-    conjugator.verb_type(infinitive, regular)
-    for (let key in conjugator) {
-      if (conjugator[key].conjugation) {
-        let conjugationFunc = conjugator[key]
-        forms.push({ name: key.replace(/_/g, ' '), form: conjugationFunc(infinitive, regular) })
+    infinitive = conjugator.base(text, true);
+    for (let regular of conjugator.both_regular_and_irregular ? [false, true] : [true]) {
+      conjugator.verb_type(infinitive, regular)
+      for (let key in conjugator) {
+        if (conjugator[key].conjugation) {
+          let conjugationFunc = conjugator[key]
+          forms.push({ name: key.replace(/_/g, ' '), form: conjugationFunc(infinitive, regular), regular })
+        }
       }
     }
     return forms
-
   },
   stylize(name) {
     return name
