@@ -43,7 +43,7 @@
                       (row) =>
                         row.field !== 'aspect' && row.field !== 'incomparable'
                     )
-                    .sort(a, (b) => a.field.localeCompare(b.field))"
+                    .sort((a, b) => a.field.localeCompare(b.field))"
                   :key="`form-table-row-${rowIndex}`"
                 >
                   <td>
