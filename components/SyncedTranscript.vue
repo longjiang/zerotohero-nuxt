@@ -276,7 +276,7 @@ export default {
     lineHtml(line) {
       return this.highlight
         ? this.highlightMultiple(
-            smartquotes(line.line),
+            this.smartquotes(line.line),
             this.highlight,
             this.hsk || "outside"
           )

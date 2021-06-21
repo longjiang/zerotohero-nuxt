@@ -65,7 +65,6 @@ export default {
   },
   async fetch() {
     let shows = this.$store.state.shows[this.type][this.$l2.code]
-    console.log(shows)
     if (shows) {
       this.shows = shows
     } else {
