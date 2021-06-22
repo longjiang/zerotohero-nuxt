@@ -57,13 +57,16 @@
           Drop SRT files here to bulk add subs ...
         </drop>
       </div>
+      <b-checkbox class="mt-4" v-model="hideVideosWithoutSubs">
+        Hide Videos Without Subs
+      </b-checkbox>
       <b-checkbox class="mt-4" v-model="showSubsEditing">
         Show Subs Editing
       </b-checkbox>
     </div>
     <div class="youtube-videos">
       <YouTubeVideoCard
-        v-for="(video, videoIndex) in videos"
+        v-for="(video, videoIndex) in videos.filter(v => this.hideVideosWithoutSubs ? v.hasSubs : true)"
         :video="video"
         :checkSaved="checkSavedData"
         :checkSubs="checkSubsData"
@@ -110,6 +113,7 @@ export default {
       checkSavedData: this.checkSaved,
       checkSubsData: this.checkSubs,
       over: false,
+      hideVideosWithoutSubs: false
     };
   },
   computed: {
@@ -120,18 +124,18 @@ export default {
   },
   methods: {
     async addAll() {
-      for (let videoIndex in this.videos) {
+      for (let videoIndex in this.$refs.youTubeVideoCard) {
         // await Helper.timeout(500)
         this.$refs.youTubeVideoCard[videoIndex].getSubsAndSave();
       }
     },
     assignShowToAll(showID, type) {
-      for (let videoIndex in this.videos) {
+      for (let videoIndex in this.$refs.youTubeVideoCard) {
         this.$refs.youTubeVideoCard[videoIndex].saveShow(showID, type);
       }
     },
     removeAll() {
-      for (let videoIndex in this.videos) {
+      for (let videoIndex in this.$refs.youTubeVideoCard) {
         this.$refs.youTubeVideoCard[videoIndex].remove();
       }
     },
@@ -141,7 +145,7 @@ export default {
       this.$refs.youtubeVideoList.importSrtToAll(files);
     },
     importSrtToAll(files) {
-      for (let videoIndex in this.videos) {
+      for (let videoIndex in this.$refs.youTubeVideoCard) {
         let card = this.$refs.youTubeVideoCard[videoIndex];
         for (let file of files) {
           if (
