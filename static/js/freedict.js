@@ -136,7 +136,7 @@ const Dictionary = {
     let forms = [{
       table: 'head',
       field: 'head',
-      form: word.bare
+      form: word.head
     }]
     let fields = {
       0: 'je',
