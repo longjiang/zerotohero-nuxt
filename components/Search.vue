@@ -52,11 +52,11 @@
             class="suggestion-word font-weight-bold mr-1"
             :data-level="suggestion.level || 'outside'"
           >
-            {{ suggestion.bare }}
+            {{ suggestion.head }}
           </span>
           <span class="mr-1" v-if="suggestion.match">
             {{ suggestion.match.field }} of
-            <b>{{ suggestion.bare }}</b>
+            <b>{{ suggestion.head }}</b>
           </span>
           <span
             class="suggestion-l1"
@@ -136,7 +136,7 @@ export default {
       Helper,
       suggestions: [],
       dEntry: this.entry,
-      text: this.entry ? this.entry.bare : this.term,
+      text: this.entry ? this.entry.head : this.term,
       active: false,
       suggestionsKey: 0,
     };
@@ -148,7 +148,7 @@ export default {
     entry() {
       if (this.entry) {
         this.dEntry = this.entry;
-        this.text = this.dEntry.bare;
+        this.text = this.dEntry.head;
       }
     },
     async text() {
@@ -161,8 +161,8 @@ export default {
           await (await this.$getDictionary()).lookupFuzzy(this.text, 10)
         );
         this.suggestions = this.suggestions
-          .sort((a, b) => b.bare.length - a.bare.length)
-          .sort((a, b) => (a.bare.startsWith(this.text) ? -1 : 0));
+          .sort((a, b) => b.head.length - a.head.length)
+          .sort((a, b) => (a.head.startsWith(this.text) ? -1 : 0));
       } else if (this.suggestionsFunc) {
         this.suggestions = this.suggestionsFunc(this.text);
       }
