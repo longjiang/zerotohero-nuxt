@@ -4,7 +4,7 @@
       v-for="playlist of playlists"
       class="youtube-playlist media rounded shadow"
     >
-      <router-link :to="`/${$l1.code}/${$l2.code}/youtube/playlist/${playlist.id}/${playlist.title}`" class="playlist-link">
+      <router-link :to="`/${$l1.code}/${$l2.code}/youtube/playlist/${playlist.id}/${encodeURIComponent(playlist.title)}`" class="playlist-link">
         <div class="youtube-thumbnail-wrapper aspect-wrapper">
           <img :src="playlist.thumbnail" class="youtube-thumbnail aspect" />
         </div>
