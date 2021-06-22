@@ -112,7 +112,7 @@
             </span>
             <span
               style="color: #999"
-              v-else-if="word.kana && word.kana !== word.bare"
+              v-else-if="word.kana && word.kana !== word.head"
             >
               {{ word.kana }}
             </span>
@@ -120,13 +120,13 @@
               style="color: #999"
               v-else-if="$hasFeature('transliteration')"
             >
-              {{ tr(word.bare) }}
+              {{ tr(word.head) }}
             </span>
             <span style="color: #999" v-if="word.jyutping && word.pinyin">
               / {{ word.pinyin }}
             </span>
             <Speak
-              :text="word.kana || word.bare"
+              :text="word.kana || word.head"
               :mp3="word.audio"
               :wiktionary="word.wiktionary"
               class="ml-1"

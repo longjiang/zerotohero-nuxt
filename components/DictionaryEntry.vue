@@ -26,7 +26,7 @@
               :key="`${entry.id}-example`"
             ></EntryExample>
             <EntryExternal
-              :term="entry.bare"
+              :term="entry.head"
               :traditional="entry.traditional"
               :level="entry.level"
             />
@@ -44,7 +44,7 @@
             id="search-subs"
             v-if="entry && showSearchSubs && searchTerms"
           >
-            <div class="widget-title">“{{ entry.bare }}” in TV Shows</div>
+            <div class="widget-title">“{{ entry.head }}” in TV Shows</div>
             <div class="widget-body">
               <SearchSubsComp
                 v-if="searchTerms"
@@ -75,12 +75,12 @@
         <div class="col-sm-12">
           <div class="web-images widget mt-5">
             <div class="widget-title">
-              {{ $t("Images of “{text}” on the Web", { text: entry.bare }) }}
+              {{ $t("Images of “{text}” on the Web", { text: entry.head }) }}
             </div>
             <div class="widget-body jumbotron-fluid p-4">
               <WebImages
                 v-if="showImages"
-                :text="entry.bare"
+                :text="entry.head"
                 :entry="entry"
                 limit="10"
                 ref="images"
@@ -88,9 +88,9 @@
                 @loaded="webImagesLoaded"
               />
               <p class="mt-4">
-                See more images of of “{{ entry.bare }}” on
+                See more images of of “{{ entry.head }}” on
                 <a
-                  :href="`https://www.google.com/search?q=${entry.bare.replace(
+                  :href="`https://www.google.com/search?q=${entry.head.replace(
                     / /g,
                     '+'
                   )}&tbm=isch&sout=1#spf=1567955197854`"
@@ -111,7 +111,7 @@
       <div class="row">
         <div class="col-sm-12">
           <EntryForms
-            v-if="['ru', 'ja', 'ko'].includes($l2.code)"
+            v-if="['ru', 'ja', 'ko', 'fr'].includes($l2.code)"
             class="mt-5"
             :word="entry"
           />
@@ -286,13 +286,13 @@ export default {
         ? this.entry.forms.map((form) => form.form).filter((s) => s.length > 1)
         : [];
       if (this.$l2.code === "ja") {
-        terms = Helper.unique([this.entry.bare, this.entry.kana, ...forms]);
+        terms = Helper.unique([this.entry.head, this.entry.kana, ...forms]);
       } else if (this.$l2.code === "zh") {
         terms = Helper.unique([this.entry.simplified, this.entry.traditional]);
       } else if (forms && forms.length > 0) {
         terms = Helper.unique(this.$l2.code !== 'ru' ? forms : forms.map(f => f.replace(/'/gi, '')));
       } else {
-        terms = [this.entry.bare];
+        terms = [this.entry.head];
       }
       terms = terms.sort((a, b) => a.length - b.length).slice(0, 5)
       return terms;

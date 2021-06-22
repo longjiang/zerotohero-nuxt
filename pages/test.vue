@@ -10,12 +10,15 @@
         <div class="col-sm-12">
           <Annotate>
             <span>
-              아버지는 자녀를 소중히 여기고 있다는 것을 어떻게 나타냅니까?
-              아버지라면 분명히 적절한 의식주를 마련해 주려고 희생적으로 일할 뿐
-              아니라 자녀를 위해 많은 일을 하고 있을 것입니다. 자녀를 소중하게
-              여기지 않는다면 그렇게 하지 않을 것입니다. 하지만 자녀와 충분한
-              시간을 함께 보내지 않을 경우, 자녀는 아버지가 직업, 친구, 취미와
-              같은 다른 것을 더 좋아한다고 생각하게 될지 모릅니다.
+              Lorem superposés valise pourparlers rêver chiots rendez-vous
+              naissance Eiffel myrtille. Grèves Arc de Triomphe encore pourquoi
+              sentiments baguette pédiluve une projet sentiments saperlipopette
+              vachement le. Brume éphémère baguette Bordeaux en fait sommet
+              avoir minitel. Nous avoir parole la nous moussant. Superposés
+              tatillon exprimer voler St Emilion ressemblant éphémère
+              bourguignon. Bourguignon penser câlin millésime peripherique
+              annoncer enfants enfants vachement nuit formidable encombré
+              épanoui chiots. Arc truc cacatoès lorem flâner.
             </span>
           </Annotate>
         </div>
@@ -43,7 +46,8 @@ export default {
   },
   async mounted() {
     let dictionary = await this.$getDictionary();
-    await (await dictionary).conjugate("하다");
+    let word = await (await dictionary).lookup("suivre");
+    console.log(await (await dictionary).wordForms(word));
   },
   methods: {
     async testDictionary() {
