@@ -114,4 +114,16 @@ export default {
     column-gap: 2rem;
   }
 }
+@media screen and (min-width: 992px) {
+  .form-table-content {
+    columns: 3;
+    column-gap: 2rem;
+  }
+}
+@media screen and (min-width: 1200px) {
+  .form-table-content {
+    columns: 4;
+    column-gap: 2rem;
+  }
+}
 </style>

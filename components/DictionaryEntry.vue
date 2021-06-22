@@ -290,7 +290,7 @@ export default {
       } else if (this.$l2.code === "zh") {
         terms = Helper.unique([this.entry.simplified, this.entry.traditional]);
       } else if (forms && forms.length > 0) {
-        terms = Helper.unique(forms);
+        terms = Helper.unique(this.$l2.code !== 'ru' ? forms : forms.map(f => f.replace(/'/gi, '')));
       } else {
         terms = [this.entry.bare];
       }
