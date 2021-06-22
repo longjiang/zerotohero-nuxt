@@ -160,7 +160,7 @@ export default {
       Helper,
       textMode: false,
       tokenized: [],
-      dictionary: undefined,
+      dictionary: undefined
     };
   },
   mounted() {
@@ -185,6 +185,9 @@ export default {
     $hanzi() {
       return this.$getHanzi();
     },
+    disableAnnotation() {
+      return this.$store.state.settings.l2Settings.disableAnnotation
+    }
   },
   watch: {
     textMode() {
@@ -251,7 +254,7 @@ export default {
       document.body.removeChild(tempInput);
     },
     visibilityChanged(isVisible) {
-      if (isVisible) {
+      if (isVisible && !this.disableAnnotation) {
         this.convertToSentencesAndAnnotate(this.$slots.default[0]);
       }
     },

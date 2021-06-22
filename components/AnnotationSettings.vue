@@ -48,6 +48,7 @@
         Show translation
       </b-checkbox>
       <b-checkbox class="mb-2" v-model="showQuiz">Show pop quiz</b-checkbox>
+      <b-checkbox class="mb-2" v-model="disableAnnotation">Disable popup dictionary</b-checkbox>
       <b-button-group
         v-if="['zh', 'yue'].includes($l2.code)"
         class="d-block mb-2"
@@ -199,6 +200,7 @@ export default {
       showQuiz: undefined,
       useSerif: undefined,
       showByeonggi: undefined,
+      disableAnnotation: undefined,
     };
   },
   mounted() {
@@ -232,6 +234,7 @@ export default {
       this.showQuiz = this.$store.state.settings.l2Settings.showQuiz;
       this.useSerif = this.$store.state.settings.l2Settings.useSerif;
       this.showByeonggi = this.$store.state.settings.l2Settings.showByeonggi;
+      this.disableAnnotation = this.$store.state.settings.l2Settings.disableAnnotation;
     },
   },
   watch: {
@@ -268,6 +271,11 @@ export default {
     showByeonggi() {
       this.$store.commit("settings/SET_L2_SETTINGS", {
         showByeonggi: this.showByeonggi,
+      });
+    },
+    disableAnnotation() {
+      this.$store.commit("settings/SET_L2_SETTINGS", {
+        disableAnnotation: this.disableAnnotation,
       });
     },
   },

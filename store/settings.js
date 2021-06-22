@@ -14,7 +14,8 @@ export const state = () => {
       showTranslation: true,
       useSerif: false,
       showQuiz: true,
-      showByeonggi: true
+      showByeonggi: true,
+      disableAnnotation: false
     }
   }
 }
