@@ -314,19 +314,21 @@ export default {
       return moment(date).format('LL')
     },
     async saveShow(showID, type) {
-      if (!this.video[type] || this.video[type].id !== showID) {
-        let data = {};
-        data[type] = showID;
-        let response = await axios.patch(
-          `${Config.wiki}items/youtube_videos/${this.video.id}?fields=${type}.*`, // type is 'tv_show' or 'talk'
-          data
-        );
-        response = response.data;
-        if (response && response.data) {
-          Vue.set(this.video, type, {
-            id: response.data[type].id,
-            title: response.data[type].title,
-          });
+      if (this.video.id) {
+        if (!this.video[type] || this.video[type].id !== showID) {
+          let data = {};
+          data[type] = showID;
+          let response = await axios.patch(
+            `${Config.wiki}items/youtube_videos/${this.video.id}?fields=${type}.*`, // type is 'tv_show' or 'talk'
+            data
+          );
+          response = response.data;
+          if (response && response.data) {
+            Vue.set(this.video, type, {
+              id: response.data[type].id,
+              title: response.data[type].title,
+            });
+          }
         }
       }
     },
