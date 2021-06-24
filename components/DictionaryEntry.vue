@@ -177,9 +177,7 @@
         <div class="col-sm-6" v-if="$l2.code !== 'zh'">
           <Chinese
             v-if="
-              entry.cjk &&
-              entry.cjk.canonical &&
-              entry.cjk.canonical !== 'NULL'
+              entry.cjk && entry.cjk.canonical && entry.cjk.canonical !== 'NULL'
             "
             class="mt-5 mb-5"
             :text="entry.cjk.canonical"
@@ -189,9 +187,7 @@
         <div class="col-sm-6" v-if="$l2.code !== 'ja'">
           <Japanese
             v-if="
-              entry.cjk &&
-              entry.cjk.canonical &&
-              entry.cjk.canonical !== 'NULL'
+              entry.cjk && entry.cjk.canonical && entry.cjk.canonical !== 'NULL'
             "
             class="mt-5 mb-5"
             :text="entry.cjk.canonical"
@@ -201,9 +197,7 @@
         <div class="col-sm-6" v-if="$l2.code !== 'ko'">
           <Korean
             v-if="
-              entry.cjk &&
-              entry.cjk.canonical &&
-              entry.cjk.canonical !== 'NULL'
+              entry.cjk && entry.cjk.canonical && entry.cjk.canonical !== 'NULL'
             "
             class="mt-5 mb-5"
             :text="entry.cjk.canonical"
@@ -282,19 +276,25 @@ export default {
           await this.$getDictionary()
         ).wordForms(this.entry);
       }
+
       let forms = this.entry.forms
         ? this.entry.forms.map((form) => form.form).filter((s) => s.length > 1)
         : [];
+      
       if (this.$l2.code === "ja") {
         terms = Helper.unique([this.entry.head, this.entry.kana, ...forms]);
       } else if (this.$l2.code === "zh") {
         terms = Helper.unique([this.entry.simplified, this.entry.traditional]);
-      } else if (forms && forms.length > 0) {
-        terms = Helper.unique(this.$l2.code !== 'ru' ? forms : forms.map(f => f.replace(/'/gi, '')));
+      } else if (forms && forms.length > 0 && this.$l2.code !== "hbo") {
+        terms = Helper.unique(
+          this.$l2.code !== "ru"
+            ? forms
+            : forms.map((f) => f.replace(/'/gi, ""))
+        );
       } else {
         terms = [this.entry.head];
       }
-      terms = terms.sort((a, b) => a.length - b.length).slice(0, 5)
+      terms = terms.sort((a, b) => a.length - b.length).slice(0, 5);
       return terms;
     },
     searchSubsLoaded(hits) {

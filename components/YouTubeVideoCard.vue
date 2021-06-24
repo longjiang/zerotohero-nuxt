@@ -469,7 +469,7 @@ export default {
           youtube_id: video.youtube_id,
           title: video.title,
           l2: this.$l2.id,
-          subs_l2: YouTube.unparseSubs(video.subs_l2),
+          subs_l2: YouTube.unparseSubs(video.subs_l2, this.$l2.code),
           channel_id: video.channel_id,
           date: moment(video.date).format('YYYY-MM-DD HH:mm:ss'),
         });
