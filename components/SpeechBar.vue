@@ -32,17 +32,18 @@
       </b-button-group>
     </div>
     <template
-      v-for="line of html
+      v-for="(line, lineIndex) of html
         .trim()
         .replace(/<(div|p|h1|h2|h3|h4|h5|h6|dd)/g, 'ANNOTATORSEPARATOR!!!<$1')
         .split('ANNOTATORSEPARATOR!!!')"
     >
       <Annotate
         v-if="line.trim().length > 0"
+        :key="`chapter-line-${lineIndex}`"
         :foreign="foreign"
         class="mb-4"
         tag="div"
-        :showTranslate="!(lang && lang === $l1.code)"
+        :buttons="true"
       >
         <div v-html="line.trim()" />
       </Annotate>

@@ -47,7 +47,12 @@
         >
           <Loader :sticky="true" />
         </div>
-        <Annotate tag="h1" :foreign="foreign" :showTranslate="foreign">
+        <Annotate
+          tag="h1"
+          :foreign="foreign"
+          :showTranslate="foreign"
+          :buttons="true"
+        >
           <span>{{ chapter.title }}</span>
         </Annotate>
         <div class="chapter-content" v-if="chapter.content">
@@ -89,7 +94,7 @@
             class="mb-4 shadow book-thumb"
             data-not-lazy
           />
-          <Annotate v-if="book.title" :foreign="foreign">
+          <Annotate v-if="book.title" :foreign="foreign" :buttons="true">
             <h6>
               <em>{{ book.title }}</em>
             </h6>
@@ -221,8 +226,8 @@ export default {
   },
   watch: {
     args() {
-      this.$fetch()
-    }
+      this.$fetch();
+    },
   },
   async fetch() {
     let url = decodeURIComponent(this.args);
