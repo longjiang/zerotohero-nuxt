@@ -13,10 +13,10 @@
   }
 </router>
 <template>
-  <div class="container main mt-4 mb-4" v-cloak>
+  <div class="container main mt-5 mb-5" v-cloak>
     <SocialHead
       :title="`HSK Words by Level | Chinese Zero to Hero`"
-      :image="'/img/textbooks-hsk.png'"
+      :image="'/img/hsk-word-vis.jpg'"
       :description="'All the Chinese words in the HSK curriculum, as covered by the Chinese Zero to Hero courses.'"
     />
     <div class="row">
@@ -28,13 +28,24 @@
             <a
               href="https://en.wikipedia.org/wiki/Hanyu_Shuiping_Kaoshi"
               target="_blank"
-              >HSK <i class="glyphicon glyphicon-new-window"></i
-            ></a>
+            >
+              HSK
+              <i class="glyphicon glyphicon-new-window"></i>
+            </a>
             curriculum.
           </p>
           <hr />
           <Loader class="mt-5" />
           <CourseBrowser />
+        </div>
+        <div>
+          <h5 class="text-center mt-5 mb-3">All HSK words on a big, interactive chart:</h5>
+          <a
+            href="https://www.chinesezerotohero.com/hsk-word-vis/"
+            target="_blank"
+          >
+            <img src="/img/hsk-word-vis.jpg" class="img-fluid shadow p-3" />
+          </a>
         </div>
       </div>
     </div>
@@ -42,19 +53,18 @@
 </template>
 
 <script>
-import CourseBrowser from '@/components/CourseBrowser.vue'
+import CourseBrowser from "@/components/CourseBrowser.vue";
 
 export default {
   components: {
-    CourseBrowser
+    CourseBrowser,
   },
   data() {
-    return {}
+    return {};
   },
   mounted() {},
-  methods: {}
-}
+  methods: {},
+};
 </script>
 <style>
-
 </style>
