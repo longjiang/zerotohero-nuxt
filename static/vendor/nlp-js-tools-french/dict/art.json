@@ -1,0 +1,16 @@
+[
+    	{"word":"au","word_nosc":"au","lemma":"au","pos":"ART:def"} ,
+		{"word":"aux","word_nosc":"aux","lemma":"aux","pos":"ART:def"} ,
+		{"word":"de","word_nosc":"de","lemma":"de","pos":"ART:def"} ,
+		{"word":"des","word_nosc":"des","lemma":"des","pos":"ART:ind"} ,
+		{"word":"du","word_nosc":"du","lemma":"du","pos":"ART:def"} ,
+		{"word":"l","word_nosc":"l","lemma":"l","pos":"ART:def"} ,
+		{"word":"l'","word_nosc":"l'","lemma":"l'","pos":"ART:def"} ,
+		{"word":"la","word_nosc":"la","lemma":"la","pos":"ART:def"} ,
+		{"word":"la-la-la","word_nosc":"la-la-la","lemma":"la-la-la","pos":"ART:def"} ,
+		{"word":"le","word_nosc":"le","lemma":"le","pos":"ART:def"} ,
+		{"word":"les","word_nosc":"les","lemma":"les","pos":"ART:def"} ,
+		{"word":"pa","word_nosc":"pa","lemma":"pa","pos":"ART:ind"} ,
+		{"word":"un","word_nosc":"un","lemma":"un","pos":"ART:ind"} ,
+		{"word":"une","word_nosc":"une","lemma":"une","pos":"ART:ind"}
+	]

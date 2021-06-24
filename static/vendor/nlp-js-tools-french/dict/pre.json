@@ -1,0 +1,482 @@
+[
+  {
+     "word": "a l'instar",
+     "word_nosc": "a l'instar",
+     "lemma": "a l'instar",
+     "pos": "PRE"
+  },
+  {
+     "word": "afin d",
+     "word_nosc": "afin d",
+     "lemma": "afin d",
+     "pos": "PRE"
+  },
+  {
+     "word": "afin de",
+     "word_nosc": "afin de",
+     "lemma": "afin de",
+     "pos": "PRE"
+  },
+  {
+     "word": "après",
+     "word_nosc": "apres",
+     "lemma": "après",
+     "pos": "PRE"
+  },
+  {
+     "word": "au-dessus",
+     "word_nosc": "au-dessus",
+     "lemma": "au-dessus",
+     "pos": "PRE"
+  },
+  {
+     "word": "aube",
+     "word_nosc": "aube",
+     "lemma": "aube",
+     "pos": "PRE"
+  },
+  {
+     "word": "audit",
+     "word_nosc": "audit",
+     "lemma": "audit",
+     "pos": "PRE"
+  },
+  {
+     "word": "auprès",
+     "word_nosc": "aupres",
+     "lemma": "auprès",
+     "pos": "PRE"
+  },
+  {
+     "word": "auxdits",
+     "word_nosc": "auxdits",
+     "lemma": "auxdits",
+     "pos": "PRE"
+  },
+  {
+     "word": "avant",
+     "word_nosc": "avant",
+     "lemma": "avant",
+     "pos": "PRE"
+  },
+  {
+     "word": "avec",
+     "word_nosc": "avec",
+     "lemma": "avec",
+     "pos": "PRE"
+  },
+  {
+     "word": "bicause",
+     "word_nosc": "bicause",
+     "lemma": "bicause",
+     "pos": "PRE"
+  },
+  {
+     "word": "chez",
+     "word_nosc": "chez",
+     "lemma": "chez",
+     "pos": "PRE"
+  },
+  {
+     "word": "concernant",
+     "word_nosc": "concernant",
+     "lemma": "concernant",
+     "pos": "PRE"
+  },
+  {
+     "word": "contre",
+     "word_nosc": "contre",
+     "lemma": "contre",
+     "pos": "PRE"
+  },
+  {
+     "word": "d",
+     "word_nosc": "d",
+     "lemma": "d",
+     "pos": "PRE"
+  },
+  {
+     "word": "d'",
+     "word_nosc": "d'",
+     "lemma": "d'",
+     "pos": "PRE"
+  },
+  {
+     "word": "dans",
+     "word_nosc": "dans",
+     "lemma": "dans",
+     "pos": "PRE"
+  },
+  {
+     "word": "de",
+     "word_nosc": "de",
+     "lemma": "de",
+     "pos": "PRE"
+  },
+  {
+     "word": "depuis",
+     "word_nosc": "depuis",
+     "lemma": "depuis",
+     "pos": "PRE"
+  },
+  {
+     "word": "derrière",
+     "word_nosc": "derriere",
+     "lemma": "derrière",
+     "pos": "PRE"
+  },
+  {
+     "word": "desdites",
+     "word_nosc": "desdites",
+     "lemma": "desdites",
+     "pos": "PRE"
+  },
+  {
+     "word": "desdits",
+     "word_nosc": "desdits",
+     "lemma": "desdits",
+     "pos": "PRE"
+  },
+  {
+     "word": "devant",
+     "word_nosc": "devant",
+     "lemma": "devant",
+     "pos": "PRE"
+  },
+  {
+     "word": "devers",
+     "word_nosc": "devers",
+     "lemma": "devers",
+     "pos": "PRE"
+  },
+  {
+     "word": "dudit",
+     "word_nosc": "dudit",
+     "lemma": "dudit",
+     "pos": "PRE"
+  },
+  {
+     "word": "durant",
+     "word_nosc": "durant",
+     "lemma": "durant",
+     "pos": "PRE"
+  },
+  {
+     "word": "dès",
+     "word_nosc": "des",
+     "lemma": "dès",
+     "pos": "PRE"
+  },
+  {
+     "word": "en",
+     "word_nosc": "en",
+     "lemma": "en",
+     "pos": "PRE"
+  },
+  {
+     "word": "entre",
+     "word_nosc": "entre",
+     "lemma": "entre",
+     "pos": "PRE"
+  },
+  {
+     "word": "envers",
+     "word_nosc": "envers",
+     "lemma": "envers",
+     "pos": "PRE"
+  },
+  {
+     "word": "excepté",
+     "word_nosc": "excepte",
+     "lemma": "excepté",
+     "pos": "PRE"
+  },
+  {
+     "word": "fors",
+     "word_nosc": "fors",
+     "lemma": "fors",
+     "pos": "PRE"
+  },
+  {
+     "word": "grâce",
+     "word_nosc": "grace",
+     "lemma": "grâce",
+     "pos": "PRE"
+  },
+  {
+     "word": "hormis",
+     "word_nosc": "hormis",
+     "lemma": "hormis",
+     "pos": "PRE"
+  },
+  {
+     "word": "hors",
+     "word_nosc": "hors",
+     "lemma": "hors",
+     "pos": "PRE"
+  },
+  {
+     "word": "jouxte",
+     "word_nosc": "jouxte",
+     "lemma": "jouxte",
+     "pos": "PRE"
+  },
+  {
+     "word": "jusqu",
+     "word_nosc": "jusqu",
+     "lemma": "jusqu",
+     "pos": "PRE"
+  },
+  {
+     "word": "jusqu'au",
+     "word_nosc": "jusqu'au",
+     "lemma": "jusqu'au",
+     "pos": "PRE"
+  },
+  {
+     "word": "jusqu'à",
+     "word_nosc": "jusqu'a",
+     "lemma": "jusqu'à",
+     "pos": "PRE"
+  },
+  {
+     "word": "jusque",
+     "word_nosc": "jusque",
+     "lemma": "jusque",
+     "pos": "PRE"
+  },
+  {
+     "word": "lez",
+     "word_nosc": "lez",
+     "lemma": "lez",
+     "pos": "PRE"
+  },
+  {
+     "word": "lès",
+     "word_nosc": "les",
+     "lemma": "lès",
+     "pos": "PRE"
+  },
+  {
+     "word": "malgré",
+     "word_nosc": "malgre",
+     "lemma": "malgré",
+     "pos": "PRE"
+  },
+  {
+     "word": "moyennant",
+     "word_nosc": "moyennant",
+     "lemma": "moyennant",
+     "pos": "PRE"
+  },
+  {
+     "word": "nonobstant",
+     "word_nosc": "nonobstant",
+     "lemma": "nonobstant",
+     "pos": "PRE"
+  },
+  {
+     "word": "outre",
+     "word_nosc": "outre",
+     "lemma": "outre",
+     "pos": "PRE"
+  },
+  {
+     "word": "par",
+     "word_nosc": "par",
+     "lemma": "par",
+     "pos": "PRE"
+  },
+  {
+     "word": "par-dedans",
+     "word_nosc": "par-dedans",
+     "lemma": "par-dedans",
+     "pos": "PRE"
+  },
+  {
+     "word": "par-delà",
+     "word_nosc": "par-dela",
+     "lemma": "par-delà",
+     "pos": "PRE"
+  },
+  {
+     "word": "par-derrière",
+     "word_nosc": "par-derriere",
+     "lemma": "par-derrière",
+     "pos": "PRE"
+  },
+  {
+     "word": "par-dessous",
+     "word_nosc": "par-dessous",
+     "lemma": "par-dessous",
+     "pos": "PRE"
+  },
+  {
+     "word": "par-dessus",
+     "word_nosc": "par-dessus",
+     "lemma": "par-dessus",
+     "pos": "PRE"
+  },
+  {
+     "word": "par-devant",
+     "word_nosc": "par-devant",
+     "lemma": "par-devant",
+     "pos": "PRE"
+  },
+  {
+     "word": "par-devers",
+     "word_nosc": "par-devers",
+     "lemma": "par-devers",
+     "pos": "PRE"
+  },
+  {
+     "word": "parmi",
+     "word_nosc": "parmi",
+     "lemma": "parmi",
+     "pos": "PRE"
+  },
+  {
+     "word": "pendant",
+     "word_nosc": "pendant",
+     "lemma": "pendant",
+     "pos": "PRE"
+  },
+  {
+     "word": "plein",
+     "word_nosc": "plein",
+     "lemma": "plein",
+     "pos": "PRE"
+  },
+  {
+     "word": "pour",
+     "word_nosc": "pour",
+     "lemma": "pour",
+     "pos": "PRE"
+  },
+  {
+     "word": "près",
+     "word_nosc": "pres",
+     "lemma": "près",
+     "pos": "PRE"
+  },
+  {
+     "word": "revoici",
+     "word_nosc": "revoici",
+     "lemma": "revoici",
+     "pos": "PRE"
+  },
+  {
+     "word": "revoilà",
+     "word_nosc": "revoila",
+     "lemma": "revoilà",
+     "pos": "PRE"
+  },
+  {
+     "word": "rez",
+     "word_nosc": "rez",
+     "lemma": "rez",
+     "pos": "PRE"
+  },
+  {
+     "word": "sans",
+     "word_nosc": "sans",
+     "lemma": "sans",
+     "pos": "PRE"
+  },
+  {
+     "word": "sauf",
+     "word_nosc": "sauf",
+     "lemma": "sauf",
+     "pos": "PRE"
+  },
+  {
+     "word": "selon",
+     "word_nosc": "selon",
+     "lemma": "selon",
+     "pos": "PRE"
+  },
+  {
+     "word": "sous",
+     "word_nosc": "sous",
+     "lemma": "sous",
+     "pos": "PRE"
+  },
+  {
+     "word": "sous-prieur",
+     "word_nosc": "sous-prieur",
+     "lemma": "sous-prieur",
+     "pos": "PRE"
+  },
+  {
+     "word": "suivant",
+     "word_nosc": "suivant",
+     "lemma": "suivant",
+     "pos": "PRE"
+  },
+  {
+     "word": "sur",
+     "word_nosc": "sur",
+     "lemma": "sur",
+     "pos": "PRE"
+  },
+  {
+     "word": "vers",
+     "word_nosc": "vers",
+     "lemma": "vers",
+     "pos": "PRE"
+  },
+  {
+     "word": "versus",
+     "word_nosc": "versus",
+     "lemma": "versus",
+     "pos": "PRE"
+  },
+  {
+     "word": "via",
+     "word_nosc": "via",
+     "lemma": "via",
+     "pos": "PRE"
+  },
+  {
+     "word": "vis-à-vis",
+     "word_nosc": "vis-a-vis",
+     "lemma": "vis-à-vis",
+     "pos": "PRE"
+  },
+  {
+     "word": "voici",
+     "word_nosc": "voici",
+     "lemma": "voici",
+     "pos": "PRE"
+  },
+  {
+     "word": "voilà",
+     "word_nosc": "voila",
+     "lemma": "voilà",
+     "pos": "PRE"
+  },
+  {
+     "word": "à",
+     "word_nosc": "a",
+     "lemma": "à",
+     "pos": "PRE"
+  },
+  {
+     "word": "à l'encontre",
+     "word_nosc": "a l'encontre",
+     "lemma": "à l'encontre",
+     "pos": "PRE"
+  },
+  {
+     "word": "à l'instar",
+     "word_nosc": "a l'instar",
+     "lemma": "à l'instar",
+     "pos": "PRE"
+  },
+  {
+     "word": "ès",
+     "word_nosc": "es",
+     "lemma": "ès",
+     "pos": "PRE"
+  }
+]

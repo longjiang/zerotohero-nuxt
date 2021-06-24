@@ -5,6 +5,7 @@ const Dictionary = {
   index: {},
   cache: {},
   tables: [],
+  NlpjsTFrDict: {},
   server: 'https://server.chinesezerotohero.com/',
   l1: undefined,
   l2: undefined,
@@ -33,6 +34,19 @@ const Dictionary = {
       }
       console.log('Loading French tokenizer...')
       importScripts('../vendor/nlp-js-tools-french/nlp-js-tools-french.js')
+      for (let key of ['adj',
+        'adv',
+        'art',
+        'con',
+        'nom',
+        'ono',
+        'pre',
+        'ver',
+        'pro']) {
+        let res = await axios.get(`/vendor/nlp-js-tools-french/dict/${key.replace('con', 'conj')}.json`)
+        let lexi = res.data
+        this.NlpjsTFrDict[key] = { lexi }
+      }
     }
   },
   inflections(sense) {
@@ -210,8 +224,8 @@ const Dictionary = {
           reg.test(word)
         ) {
           var corpus = seg
-          var nlpToolsFr = new NlpjsTFr(corpus);
-          var lemmas = nlpToolsFr.lemmatizer()
+          let tokenizer = new NlpjsTFr(this.NlpjsTFrDict, corpus);
+          var lemmas = tokenizer.lemmatizer()
           lemmas = this.uniqueByValue([{word, lemma: word}].concat(lemmas), 'lemma')
           let found = false;
           let token = {
