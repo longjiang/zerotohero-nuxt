@@ -216,7 +216,9 @@ export default {
       let text = this.$l2.continua ? this.text.replace(/ /g, "") : this.text;
 
       let url = undefined;
-      if (["ko", "ja"].includes(this.$l2.code)) {
+      if ([this.$l2.code, this.$l1.code].includes('zh') || this.$l2.han) {
+        url = `https://fanyi.baidu.com/#${this.$l2.code}/${this.$l1.code}/${text}`;
+      } else if (["ko", "ja"].includes(this.$l2.code)) {
         url = `https://papago.naver.com/?sk=auto&st=${encodeURIComponent(
           text
         )}`;
