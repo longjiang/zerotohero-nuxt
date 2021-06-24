@@ -107,7 +107,6 @@ const Dictionary = {
     return filename
   },
   load(options) {
-    console.log('Loading Wiktionary...')
     this.l1 = options.l1
     this.l2 = options.l2
     this.file = this.dictionaryFile(options)
@@ -241,8 +240,12 @@ const Dictionary = {
       return [text]
     }
   },
+  // https://stackoverflow.com/questions/990904/remove-accents-diacritics-in-a-string-in-javascript
+  stripAccents(str) {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+  },
   lookupFuzzy(text, limit = 30) { // text = 'abcde'
-    text = text.toLowerCase()
+    text = this.stripAccents(text.toLowerCase())
     if (['he', 'hbo', 'iw'].includes(this.l2)) text = this.stripHebrewVowels(text)
     let words = []
     let subtexts = []

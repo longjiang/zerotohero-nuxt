@@ -52,7 +52,7 @@ const Dictionary = {
     let parsed = Papa.parse(data, { header: true })
     let words = parsed.data
     words = words.map(item => {
-      item.bare = item.word
+      item.bare = this.stripAccents(item.word)
       item.head = item.word
       item.accented = item.word
       item.word = undefined
@@ -105,14 +105,47 @@ const Dictionary = {
       field: 'head',
       form: word.bare
     }]
+    if (this.l2 === 'fra') forms = forms.concat(this.frenchWordForms(word))
     return forms
   },
-  lookupByDef(text, limit = 30) {
-    text = text.toLowerCase()
-    let words = this.words
-      .filter(word => word.definitions && word.definitions.join(', ').toLowerCase().includes(text))
-      .slice(0, limit)
-    return words
+  frenchWordForms(word) {
+    let forms = []
+    let fields = {
+      0: 'je',
+      1: 'tu',
+      2: 'il/elle',
+      3: 'nous',
+      4: 'vous',
+      5: 'ils'
+    }
+    let tables = {
+      P: 'présent',
+      S: 'subjonctif',
+      Y: 'Y',
+      I: 'imparfait',
+      G: 'gérondif',
+      K: 'participe passé',
+      J: 'passé simple',
+      T: 'subjonctif imparfait',
+      F: 'futur',
+      C: 'conditionnel présent'
+    }
+    if (this.conjugations) {
+      let conjugations = this.conjugations[word.head]
+      if (conjugations) {
+        for (let key in conjugations) {
+          let conj = conjugations[key]
+          forms = forms.concat(conj.filter(formStr => formStr !== 'NA').map((formStr, index) => {
+            return {
+              table: tables[key],
+              field: fields[index],
+              form: formStr
+            }
+          }))
+        }
+      }
+    }
+    return forms
   },
   uniqueByValue(array, key) {
     let flags = []
@@ -252,8 +285,27 @@ const Dictionary = {
       return [text]
     }
   },
-  lookupFuzzy(text, limit = 30) { // text = 'abcde'
+  // https://stackoverflow.com/questions/990904/remove-accents-diacritics-in-a-string-in-javascript
+  stripAccents(str) {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+  },
+  lookupByDef(text, limit = 30) {
     text = text.toLowerCase()
+    let words = []
+    for (let word of this.words) {
+      if (word.definitions) {
+        let d = word.definitions.find(d => d.includes(text))
+        if (d) words.push(Object.assign({score: 3 - (d.length - text.length)}, word))
+      }
+    }
+    words = words
+      .sort((a, b) => b.score - a.score)
+      .slice(0, limit)
+    return words
+  },
+  lookupFuzzy(text, limit = 30) { // text = 'abcde'
+    console.log('looking up', text)
+    text = this.stripAccents(text.toLowerCase())
     if (['he', 'hbo', 'iw'].includes(this.l2)) text = this.stripHebrewVowels(text)
     let words = []
     let subtexts = []
@@ -261,23 +313,32 @@ const Dictionary = {
       subtexts.push(text.substring(0, text.length - i))
     }
     for (let word of this.words) {
-      let head = word.head ? word.head.toLowerCase() : undefined
-      if (head && head.startsWith(text)) {
+      let bare = word.bare ? word.bare.toLowerCase() : undefined
+      if (bare && bare === text) {
+        console.log(bare, text, 'equal')
         words.push(
           Object.assign(
-            { score: text.length - (head.length - text.length) },
+            { score: 100 },
+            word
+          )
+        ) // matches 'abcde', 'abcde...'
+
+      } else if (bare && bare.startsWith(text)) {
+        words.push(
+          Object.assign(
+            { score: text.length - (bare.length - text.length) },
             word
           )
         ) // matches 'abcde', 'abcde...'
       }
-      if (head && text.includes(head)) {
-        words.push(Object.assign({ score: head.length }, word)) // matches 'cde', 'abc'
+      if (bare && text.includes(bare)) {
+        words.push(Object.assign({ score: bare.length }, word)) // matches 'cde', 'abc'
       }
       for (let subtext of subtexts) {
-        if (head && head.includes(subtext)) {
+        if (bare && bare.includes(subtext)) {
           words.push(
             Object.assign(
-              { score: subtext.length - (head.length - subtext.length) },
+              { score: subtext.length - (bare.length - subtext.length) },
               word
             )
           ) // matches 'abcxyz...'

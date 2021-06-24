@@ -100,7 +100,6 @@ const Dictionary = {
     return words
   },
   get(id) {
-    console.log(this.words[id])
     return this.words[id]
   },
   lookup(text) {
@@ -138,43 +137,43 @@ const Dictionary = {
       field: 'head',
       form: word.head
     }]
-    let fields = {
-      0: 'je',
-      1: 'tu',
-      2: 'il/elle',
-      3: 'nous',
-      4: 'vous',
-      5: 'ils'
-    }
-    let tables = {
-      P: 'présent',
-      S: 'subjonctif',
-      Y: 'Y',
-      I: 'imparfait',
-      G: 'gérondif',
-      K: 'participe passé',
-      J: 'passé simple',
-      T: 'subjonctif imparfait',
-      F: 'futur',
-      C: 'conditionnel présent'
-    }
-    if (this.conjugations) {
-      let conjugations = this.conjugations[word.head]
-      if (conjugations) {
-        console.log(conjugations)
-        for (let key in conjugations) {
-          let conj = conjugations[key]
-          forms = forms.concat(conj.filter(formStr => formStr !== 'NA').map((formStr, index) => {
-            return {
-              table: tables[key],
-              field: fields[index],
-              form: formStr
-            }
-          }))
-        }
+    if (this.l2 === 'fra') {
+      let fields = {
+        0: 'je',
+        1: 'tu',
+        2: 'il/elle',
+        3: 'nous',
+        4: 'vous',
+        5: 'ils'
       }
-      forms = this.uniqueByValue(forms, 'form').sort((a, b) => a.length - b.length)
-
+      let tables = {
+        P: 'présent',
+        S: 'subjonctif',
+        Y: 'Y',
+        I: 'imparfait',
+        G: 'gérondif',
+        K: 'participe passé',
+        J: 'passé simple',
+        T: 'subjonctif imparfait',
+        F: 'futur',
+        C: 'conditionnel présent'
+      }
+      if (this.conjugations) {
+        let conjugations = this.conjugations[word.head]
+        if (conjugations) {
+          for (let key in conjugations) {
+            let conj = conjugations[key]
+            forms = forms.concat(conj.filter(formStr => formStr !== 'NA').map((formStr, index) => {
+              return {
+                table: tables[key],
+                field: fields[index],
+                form: formStr
+              }
+            }))
+          }
+        }
+        forms = this.uniqueByValue(forms, 'form').sort((a, b) => a.length - b.length)
+      }
     }
     return forms
   },

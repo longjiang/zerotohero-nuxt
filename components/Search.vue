@@ -153,16 +153,9 @@ export default {
     },
     async text() {
       if (this.type === "dictionary") {
-        this.suggestions = [];
-        this.suggestions = this.suggestions.concat(
-          await (await this.$getDictionary()).lookupByDef(this.text, 10)
-        );
-        this.suggestions = this.suggestions.concat(
-          await (await this.$getDictionary()).lookupFuzzy(this.text, 10)
-        );
-        this.suggestions = this.suggestions
-          .sort((a, b) => b.head.length - a.head.length)
-          .sort((a, b) => (a.head.startsWith(this.text) ? -1 : 0));
+        let def = await (await this.$getDictionary()).lookupByDef(this.text, 10);
+        let fuzzy = await (await this.$getDictionary()).lookupFuzzy(this.text, 10);
+        this.suggestions = fuzzy.concat(def).sort((a, b) => typeof b.score !== undefined ? b.score - a.score : 0)
       } else if (this.suggestionsFunc) {
         this.suggestions = this.suggestionsFunc(this.text);
       }
