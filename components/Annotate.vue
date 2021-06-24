@@ -254,7 +254,7 @@ export default {
       document.body.removeChild(tempInput);
     },
     visibilityChanged(isVisible) {
-      if (isVisible && !this.disableAnnotation) {
+      if (isVisible) {
         this.convertToSentencesAndAnnotate(this.$slots.default[0]);
       }
     },
@@ -275,7 +275,7 @@ export default {
       ) {
         if (slot) {
           this.convertToSentencesRecursive(slot.elm);
-          this.annotate(slot.elm);
+          if (!this.disableAnnotation) this.annotate(slot.elm);
         }
       }
     },
