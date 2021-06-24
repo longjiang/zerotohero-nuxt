@@ -304,7 +304,6 @@ const Dictionary = {
     return words
   },
   lookupFuzzy(text, limit = 30) { // text = 'abcde'
-    console.log('looking up', text)
     text = this.stripAccents(text.toLowerCase())
     if (['he', 'hbo', 'iw'].includes(this.l2)) text = this.stripHebrewVowels(text)
     let words = []
@@ -315,7 +314,6 @@ const Dictionary = {
     for (let word of this.words) {
       let bare = word.bare ? word.bare.toLowerCase() : undefined
       if (bare && bare === text) {
-        console.log(bare, text, 'equal')
         words.push(
           Object.assign(
             { score: 100 },
