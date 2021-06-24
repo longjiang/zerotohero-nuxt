@@ -333,7 +333,7 @@ const Dictionary = {
             { score: 100 },
             word
           )
-        ) // matches 'abcde', 'abcde...'
+        )
 
       } else if (bare && bare.startsWith(text)) {
         words.push(

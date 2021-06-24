@@ -45,11 +45,17 @@ const Dictionary = {
     for (let item of this.dictionary) {
       if (item.word && !item.redirect) {
         let definitions = []
+        let stems = []
         if (item.senses && item.senses[0]) {
           for (let sense of item.senses) {
             if (sense.glosses) {
               if (!sense.complex_inflection_of) {
                 definitions.push(sense.glosses[0])
+                if (sense.form_of) {
+                  let stem = sense.form_of[0].replace(/ \u000092 .*‎/, '').replace(/ \(.*\)/, '')
+                  if (this.l2 === 'hbo') stem = this.stripHebrewVowels(stem)
+                  stems.push(stem)
+                }
               } else {
                 // definitions.concat(this.inflections(sense)) // Probably not that useful in practice.
               }
@@ -66,13 +72,14 @@ const Dictionary = {
             }
           }
           words.push(Object.assign(item, {
-            bare: item.word,
+            bare: this.stripAccents(item.word),
             head: item.word,
             accented: item.word,
             pronunciation: item.pronunciations && item.pronunciations[0].ipa ? item.pronunciations[0].ipa[0][1].replace(/\//g, '') : undefined,
             audio: audio,
             definitions: definitions,
             pos: item.pos,
+            stems,
             wiktionary: true
           }))
         } else {
@@ -253,23 +260,34 @@ const Dictionary = {
       subtexts.push(text.substring(0, text.length - i))
     }
     for (let word of this.words) {
-      let head = word.head ? word.head.toLowerCase() : undefined
-      if (head && head.startsWith(text)) {
+      let bare = word.bare ? word.bare.toLowerCase() : undefined
+      if (bare && bare === text) {
         words.push(
           Object.assign(
-            { score: text.length - (head.length - text.length) },
+            { score: 100 },
+            word
+          )
+        )
+        if (word.stems.length > 0) {
+          let stemWords = word.stems.map(s => this.lookupMultiple(s))
+          words = words.concat(stemWords.map(w => Object.assign({ score: 99 }, w)))
+        }
+      } else if (bare && bare.startsWith(text)) {
+        words.push(
+          Object.assign(
+            { score: text.length - (bare.length - text.length) },
             word
           )
         ) // matches 'abcde', 'abcde...'
       }
-      if (head && text.includes(head)) {
-        words.push(Object.assign({ score: head.length }, word)) // matches 'cde', 'abc'
+      if (bare && text.includes(bare)) {
+        words.push(Object.assign({ score: bare.length }, word)) // matches 'cde', 'abc'
       }
       for (let subtext of subtexts) {
-        if (head && head.includes(subtext)) {
+        if (bare && bare.includes(subtext)) {
           words.push(
             Object.assign(
-              { score: subtext.length - (head.length - subtext.length) },
+              { score: subtext.length - (bare.length - subtext.length) },
               word
             )
           ) // matches 'abcxyz...'
