@@ -1,3 +1,8 @@
+<router>
+  {
+    path: '/:l1/:l2/wiktionary-csv'
+  }
+</router>
 <template>
   <div>
     <div class="main container mt-5 mb-5">
