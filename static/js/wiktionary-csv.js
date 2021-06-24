@@ -1,7 +1,6 @@
 const Dictionary = {
   name: 'wiktionary',
   file: undefined,
-  dictionary: undefined,
   words: [],
   index: {},
   cache: {},
@@ -14,6 +13,7 @@ const Dictionary = {
   async loadWords() {
     let res = await axios.get(this.file)
     this.words = this.parseDictionary(res.data)
+    console.log(this.words)
   },
   inflections(sense) {
     let definitions = []
@@ -28,59 +28,18 @@ const Dictionary = {
   blankInflection(item) {
     `(inflected form, see <a href="https://en.wiktionary.org/wiki/${item.word}" target="_blank">Wiktionary</a> for details)`
   },
-  exportCSV() {
-    return Papa.unparse(this.words.map(item => {
-      return {
-        word: item.word,
-        pronunciation: item.pronunciations && item.pronunciations[0].ipa ? item.pronunciations[0].ipa[0][1].replace(/\//g, '') : undefined,
-        audio: item.audio,
-        definitions: item.definitions.join('; '),
-        pos: item.pos,
-      }
-    }))
-  },
   parseDictionary(data) {
-    this.dictionary = data
-    let words = []
-    for (let item of this.dictionary) {
-      if (item.word && !item.redirect) {
-        let definitions = []
-        if (item.senses && item.senses[0]) {
-          for (let sense of item.senses) {
-            if (sense.glosses) {
-              if (!sense.complex_inflection_of) {
-                definitions.push(sense.glosses[0])
-              } else {
-                // definitions.concat(this.inflections(sense)) // Probably not that useful in practice.
-              }
-            }
-          }
-        }
-        if (definitions.length > 0) {
-          let audio = undefined
-          if (item.pronunciations) {
-            for (let pronunciation of item.pronunciations) {
-              if (pronunciation.audios && pronunciation.audios[0] && pronunciation.audios[0].length > 0) {
-                audio = pronunciation.audios[0].find(text => text.endsWith('ogg') || text.endsWith('mp3'))
-              }
-            }
-          }
-          words.push(Object.assign(item, {
-            bare: item.word,
-            head: item.word,
-            accented: item.word,
-            pronunciation: item.pronunciations && item.pronunciations[0].ipa ? item.pronunciations[0].ipa[0][1].replace(/\//g, '') : undefined,
-            audio: audio,
-            definitions: definitions,
-            pos: item.pos,
-            wiktionary: true
-          }))
-        } else {
-          // definitions.push(this.blankInflection(item))
-          // probably not that useful in practice
-        }
-      }
-    }
+    let parsed = Papa.parse(data, {header: true})
+    let words = parsed.data
+    words = words.map(item => {
+      item.bare = item.word
+      item.head = item.word
+      item.accented = item.word
+      item.word = undefined
+      item.wiktionary = true
+      item.definitions = item.definitions ? item.definitions.split(';') : undefined
+      return item
+    })
     words = words.sort((a, b) => {
       if (a.head && b.head) {
         return b.head.length - a.head.length
@@ -100,22 +59,16 @@ const Dictionary = {
       .replace('run', 'kin') // Rundi uses Rwanda-Rundi
       .replace('hbo', 'heb') // Ancient Hebrew uses Hebrew
     const server = 'https://server.chinesezerotohero.com/'
-    let filename = `${server}data/wiktionary/${l2}-${options.l1}.json.txt`
-    if (['ara', 'fin', 'fra', 'hbs', 'ita', 'lat', 'por', 'spa'].includes(l2)) {
-      filename = `${server}data/wiktionary/large/${l2}-${options.l1}.json.txt`
-    }
+    let filename = `${server}data/wiktionary-csv/${l2}-${options.l1}.csv.txt`
     return filename
   },
-  load(options) {
+  async load(options) {
     console.log('Loading Wiktionary...')
     this.l1 = options.l1
     this.l2 = options.l2
     this.file = this.dictionaryFile(options)
-    return new Promise(async resolve => {
-      let promises = [this.loadWords()]
-      await Promise.all(promises)
-      resolve(this)
-    })
+    await this.loadWords()
+    return this
   },
   get(id) {
     return this.words[id]
