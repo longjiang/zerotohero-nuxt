@@ -7,9 +7,19 @@
   <div>
     <div class="main container mt-5 mb-5">
       <div class="row">
-        <div class="col-sm-12">
-          CSV Ready. <a :href="href" download="fra-eng.csv.txt">Download</a>
-        </div>
+        <Annotate>
+          <div>
+            Le français est une langue indo-européenne de la famille des langues
+            romanes dont les locuteurs sont appelés francophones. Le français
+            est parlé, en 2018, sur tous les continents par environ 300 millions
+            de personnes5,2 : 235 millions l'emploient quotidiennement, et 90
+            millions3 en sont des locuteurs natifs. En 2018, 80 millions
+            d'élèves et étudiants s'instruisent en français dans le monde6.
+            Selon l'Organisation internationale de la francophonie, il pourrait
+            y avoir 700 millions de francophones sur Terre en 20507. Dans le
+            monde, 29 États ont le français comme langue officielle.
+          </div>
+        </Annotate>
       </div>
     </div>
   </div>
@@ -30,31 +40,17 @@ export default {
     return {
       showTestEntry: false,
       entry: undefined,
-      href: undefined
+      href: undefined,
     };
   },
   async mounted() {
-    this.testWiktionaryCSVExport();
+    this.testFrenchTokenization();
   },
   methods: {
-    makeTextFile(text) {
-      var data = new Blob([text], { type: "text/plain" });
-
-      // If we are replacing a previously generated file we need to
-      // manually revoke the object URL to avoid memory leaks.
-      if (textFile !== null) {
-        window.URL.revokeObjectURL(textFile);
-      }
-
-      var textFile = window.URL.createObjectURL(data);
-
-      // returns a URL you can use as a href
-      return textFile;
-    },
-    async testWiktionaryCSVExport() {
-      let dictionary = await this.$getDictionary();
-      let csv = await (await dictionary).exportCSV();
-      this.href = this.makeTextFile(csv)
+    async testFrenchTokenization() {
+      // let dictionary = await this.$getDictionary();
+      // let word = await (await dictionary).lookup("suivre");
+      // console.log(await (await dictionary).wordForms(word));
     },
     async testFrench() {
       let dictionary = await this.$getDictionary();
