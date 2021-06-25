@@ -241,15 +241,15 @@ export default {
   watch: {
     async currentTime() {
       let progressType = this.checkProgress();
+      console.log(progressType);
       if (progressType === "first play") {
         if (this.currentTime >= this.lines[0].starttime) {
-          // console.log(progressType, "getting nearest line...");
           this.playNearestLine();
         }
       } else if (progressType === "within current line") {
         // do nothing
       } else if (progressType === "advance to next line") {
-        // console.log(progressType);
+        console.log(progressType);
         let progress = this.currentTime - this.previousTime;
         if (this.repeatMode) {
           if (progress > 0 && progress < 0.15) {
@@ -262,7 +262,6 @@ export default {
         }
         if (!this.paused && this.audioMode) this.doAudioModeStuff();
       } else if (progressType === "jump") {
-        // console.log(progressType, "getting nearest line...");
         this.playNearestLine();
       }
       this.previousTime = this.currentTime;
@@ -287,8 +286,8 @@ export default {
         return "first play";
       } else if (
         this.currentTime > this.currentLine.starttime - 1 &&
-        this.nextLine &&
-        this.currentTime < this.nextLine.starttime
+        (!this.nextLine ||
+          (this.nextLine && this.currentTime < this.nextLine.starttime))
       ) {
         return "within current line";
       } else if (
@@ -308,7 +307,8 @@ export default {
         if (
           this.lines[lineIndex].starttime <= time &&
           this.lines[lineIndex + 1] &&
-          time < this.lines[lineIndex + 1].starttime
+          (!this.lines[lineIndex + 1] ||
+            time < this.lines[lineIndex + 1].starttime)
         ) {
           nearestLineIndex = lineIndex;
           break;
@@ -577,8 +577,8 @@ export default {
     adjustAllLinesBelowToMatchCurrentTime(line) {
       let delta = 0;
       let currentLine = line;
-      let currentLineIndex = this.lines.findIndex(l => l === line);
-      console.log(line)
+      let currentLineIndex = this.lines.findIndex((l) => l === line);
+      console.log(line);
       for (let lineIndex in this.lines) {
         lineIndex = Number(lineIndex);
         let line = this.lines[lineIndex];
@@ -589,8 +589,8 @@ export default {
           Vue.set(line, "starttime", (line.starttime += delta));
         }
       }
-      this.currentLine = currentLine
-      this.currentLineIndex = currentLineIndex
+      this.currentLine = currentLine;
+      this.currentLineIndex = currentLineIndex;
     },
     goToPreviousLine() {
       this.goToLine(this.previousLine);
