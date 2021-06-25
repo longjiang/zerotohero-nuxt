@@ -28,17 +28,18 @@
         <b-dropdown-item>
           <Speak
             :text="text"
+            class="ml-1 mr-1"
             style="position: relative; top: 0.08rem; position: relative"
           />
           <span
-            class="annotator-button annotator-show-translate ml-2 focus-exclude"
+            class="annotator-button annotator-show-translate ml-1 mr-1 focus-exclude"
             @click="translateClick"
           >
             <i class="fas fa-language"></i>
           </span>
           <span
             :class="{
-              'annotator-button annotator-fullscreen ml-2 focus-exclude': true,
+              'annotator-button annotator-fullscreen ml-1 mr-1 focus-exclude': true,
               active: fullscreenMode,
             }"
             @click="fullscreenClick"
@@ -47,7 +48,7 @@
           </span>
           <span
             :class="{
-              'annotator-button annotator-text-mode ml-2 focus-exclude': true,
+              'annotator-button annotator-text-mode ml-1 mr-1 focus-exclude': true,
               active: textMode,
             }"
             @click="textMode = !textMode"
@@ -56,7 +57,7 @@
           </span>
           <span
             @click="copyClick"
-            class="annotator-button annotator-copy ml-2 focus-exclude"
+            class="annotator-button annotator-copy ml-1 mr-1 focus-exclude"
           >
             <i class="fas fa-copy"></i>
           </span>
