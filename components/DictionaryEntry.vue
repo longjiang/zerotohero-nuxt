@@ -264,6 +264,9 @@ export default {
         typeof window !== "undefined" && window.innerWidth < window.innerHeight;
       return landscape;
     },
+    $dictionaryName() {
+      return this.$store.state.settings.dictionaryName;
+    },
   },
   async mounted() {
     this.searchTerms = await this.getSearchTerms();
@@ -271,30 +274,22 @@ export default {
   methods: {
     async getSearchTerms() {
       let terms = [];
-      if (!this.entry.forms) {
-        this.entry.forms = await (
-          await this.$getDictionary()
-        ).wordForms(this.entry);
-      }
-
-      let forms = this.entry.forms
-        ? this.entry.forms.map((form) => form.form).filter((s) => s.length > 1)
-        : [];
       
-      if (this.$l2.code === "ja") {
-        terms = Helper.unique([this.entry.head, this.entry.kana, ...forms]);
-      } else if (this.$l2.code === "zh") {
-        terms = Helper.unique([this.entry.simplified, this.entry.traditional]);
-      } else if (forms && forms.length > 0 && this.$l2.code !== "hbo") {
-        terms = Helper.unique(
-          this.$l2.code !== "ru"
-            ? forms
-            : forms.map((f) => f.replace(/'/gi, ""))
-        );
-      } else {
-        terms = [this.entry.head];
+      let forms = (await (
+          await this.$getDictionary()
+        ).wordForms(this.entry)) || []
+
+      forms = forms.map((form) => form.form).filter((s) => s.length > 1);
+      forms = [this.entry.head, ...forms]
+      
+      if (this.$dictionaryName === "edict") {
+        forms = [this.entry.kana, ...forms]
+      } else if (this.$dictionaryName === "hsk-cedict") {
+        forms = [this.entry.simplified, this.entry.traditional]
+      } else if (this.$dictionaryName === "openrussian") {
+        forms = forms.map((f) => f.replace(/'/gi, ""))
       }
-      terms = terms.sort((a, b) => a.length - b.length).slice(0, 5);
+      terms = Helper.unique(forms).sort((a, b) => a.length - b.length).slice(0, 5);
       return terms;
     },
     searchSubsLoaded(hits) {
