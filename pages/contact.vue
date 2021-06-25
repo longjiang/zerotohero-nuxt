@@ -51,9 +51,6 @@
                     <a href="mailto:ken@chinesezerotohero.com">
                       ken@chinesezerotohero.com
                     </a>
-                    (please note that our email server was down from December 10
-                    to December 15, 2020. If you've sent an email during this
-                    period, please send it again)
                   </span>
                 </p>
                 <p>
