@@ -241,7 +241,7 @@ export default {
   watch: {
     async currentTime() {
       let progressType = this.checkProgress();
-      console.log(progressType);
+      // console.log(progressType);
       if (progressType === "first play") {
         if (this.currentTime >= this.lines[0].starttime) {
           this.playNearestLine();
@@ -578,7 +578,7 @@ export default {
       let delta = 0;
       let currentLine = line;
       let currentLineIndex = this.lines.findIndex((l) => l === line);
-      console.log(line);
+      // console.log(line);
       for (let lineIndex in this.lines) {
         lineIndex = Number(lineIndex);
         let line = this.lines[lineIndex];
