@@ -39,6 +39,14 @@ const Dictionary = {
       }
     }))
   },
+  normalizeStem(stemStr) {
+    stemStr = stemStr.replace(/ \(.*\)/, '').replace(/ \[\[.*\]\]/g, '')
+    if (this.l2 === 'hbo') {
+      stemStr = stemStr.split(/ \u000092 /)[0]
+      stemStr = this.stripHebrewVowels(stemStr)
+    }
+    return stemStr
+  },
   parseDictionary(data) {
     this.dictionary = data
     let words = []
@@ -52,8 +60,7 @@ const Dictionary = {
               if (!sense.complex_inflection_of) {
                 definitions.push(sense.glosses[0])
                 if (sense.form_of) {
-                  let stem = sense.form_of[0].replace(/ \u000092 .*‎/, '').replace(/ \(.*\)/, '')
-                  if (this.l2 === 'hbo') stem = this.stripHebrewVowels(stem)
+                  let stem = this.normalizeStem(sense.form_of[0])
                   stems.push(stem)
                 }
               } else {
@@ -62,6 +69,7 @@ const Dictionary = {
             }
           }
         }
+        if (item.forms) stems = stems.concat(item.forms.map(f => this.normalizeStem(f.form)))
         if (definitions.length > 0) {
           let audio = undefined
           if (item.pronunciations) {
@@ -251,6 +259,16 @@ const Dictionary = {
   stripAccents(str) {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
   },
+  stemWords(word, score = undefined) {
+    if (word.stems.length > 0) {
+      let stemWords = []
+      for (let s of word.stems) {
+        stemWords = stemWords.concat(this.lookupMultiple(s))
+      }
+      stemWordsWithScores = stemWords.map(w => Object.assign({ score: score }, w))
+      return stemWordsWithScores
+    } else return []
+  },
   lookupFuzzy(text, limit = 30) { // text = 'abcde'
     text = this.stripAccents(text.toLowerCase())
     if (['he', 'hbo', 'iw'].includes(this.l2)) text = this.stripHebrewVowels(text)
@@ -268,29 +286,32 @@ const Dictionary = {
             word
           )
         )
-        if (word.stems.length > 0) {
-          let stemWords = word.stems.map(s => this.lookupMultiple(s))
-          words = words.concat(stemWords.map(w => Object.assign({ score: 99 }, w)))
-        }
+        words = words.concat(this.stemWords(word, 99))
       } else if (bare && bare.startsWith(text)) {
+        let score = text.length - (bare.length - text.length)
         words.push(
           Object.assign(
-            { score: text.length - (bare.length - text.length) },
+            { score },
             word
           )
         ) // matches 'abcde', 'abcde...'
+        words = words.concat(this.stemWords(word, score - 1))
       }
       if (bare && text.includes(bare)) {
-        words.push(Object.assign({ score: bare.length }, word)) // matches 'cde', 'abc'
+        let score = bare.length
+        words.push(Object.assign({ score }, word)) // matches 'cde', 'abc'
+        words = words.concat(this.stemWords(word, score - 1))
       }
       for (let subtext of subtexts) {
         if (bare && bare.includes(subtext)) {
+          let score = subtext.length - (bare.length - subtext.length)
           words.push(
             Object.assign(
-              { score: subtext.length - (bare.length - subtext.length) },
+              { score },
               word
             )
           ) // matches 'abcxyz...'
+          words = words.concat(this.stemWords(word, score - 1))
         }
       }
     }
