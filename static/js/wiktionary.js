@@ -41,11 +41,11 @@ const Dictionary = {
   },
   normalizeStem(stemStr) {
     stemStr = stemStr.replace(/ \(.*\)/, '').replace(/ \[\[.*\]\]/g, '')
-    if (this.l2 === 'hbo') {
+    if (this.l2 === 'heb') {
       stemStr = stemStr.split(/ \u000092 /)[0]
-      stemStr = this.stripHebrewVowels(stemStr)
+      stemStr = this.stripHebrewVowels(stemStr.replace(/\u200e/gi, ''))
     }
-    return stemStr
+    return stemStr.trim()
   },
   parseDictionary(data) {
     this.dictionary = data
@@ -87,7 +87,7 @@ const Dictionary = {
             audio: audio,
             definitions: definitions,
             pos: item.pos,
-            stems,
+            stems: stems.filter(s => s !== item.word),
             wiktionary: true
           }))
         } else {

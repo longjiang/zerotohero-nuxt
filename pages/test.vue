@@ -8,17 +8,7 @@
     <div class="main container mt-5 mb-5">
       <div class="row">
         <Annotate>
-          <div>
-            Le français est une langue indo-européenne de la famille des langues
-            romanes dont les locuteurs sont appelés francophones. Le français
-            est parlé, en 2018, sur tous les continents par environ 300 millions
-            de personnes5,2 : 235 millions l'emploient quotidiennement, et 90
-            millions3 en sont des locuteurs natifs. En 2018, 80 millions
-            d'élèves et étudiants s'instruisent en français dans le monde6.
-            Selon l'Organisation internationale de la francophonie, il pourrait
-            y avoir 700 millions de francophones sur Terre en 20507. Dans le
-            monde, 29 États ont le français comme langue officielle.
-          </div>
+          <div>אני יוצא לדרך</div>
         </Annotate>
       </div>
     </div>
@@ -44,7 +34,7 @@ export default {
     };
   },
   async mounted() {
-    this.testFrenchTokenization();
+    // this.testFrenchTokenization();
   },
   methods: {
     async testFrenchTokenization() {

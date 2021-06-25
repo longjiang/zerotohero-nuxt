@@ -249,7 +249,7 @@ export default {
       } else if (progressType === "within current line") {
         // do nothing
       } else if (progressType === "advance to next line") {
-        console.log(progressType);
+        // console.log(progressType);
         let progress = this.currentTime - this.previousTime;
         if (this.repeatMode) {
           if (progress > 0 && progress < 0.15) {
