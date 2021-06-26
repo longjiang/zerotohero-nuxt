@@ -1,6 +1,6 @@
 <router>
   {
-    path: '/:l1/:l2/phrasebook/:bookId?/:phraseId?/:phrase?',
+    path: '/:l1/:l2/phrasebook/:bookId/:phraseId/:phrase?',
     props: true
   }
 </router>
@@ -10,14 +10,15 @@
       <div class="col-sm-12">
         <Paginator
           class="text-center mb-4"
-          v-if="phrasebook"
+          v-if="phrasebook && phraseId"
           :items="phrasebook.phrases"
           :findCurrent="findCurrent"
           :url="url"
+          :home="`/${$l1.code}/${$l2.code}/phrasebook/${phrasebook.id}`"
           :title="phrasebook.title"
         />
         <p class="text-center">
-          <span v-if="phraseObj && phraseObj.pronunciation" class="mr-1">{{ phraseObj.pronunciation }}</span><Speak :text="phrase" />
+          <span v-if="phraseObj && phraseObj.pronunciation" class="mr-1">{{ phraseObj.pronunciation }}</span><Speak :text="phrase" v-if="phrase" />
         </p>
         <Annotate
           :class="{'text-center mb-4': true, 'pr-3' : $l2.direction === 'rtl', 'pl-3' : $l2.direction !== 'rtl'}"
@@ -30,8 +31,8 @@
         >
           <div>{{ phrase }}</div>
         </Annotate>
-        <p class="text-center" v-if="phraseObj && phraseObj[this.$l1.code]">
-          {{ phraseObj[this.$l1.code] }}
+        <p class="text-center" v-if="phraseObj && phraseObj[$l1.code]">
+          {{ phraseObj[$l1.code] }}
         </p>
         <PhraseComp v-if="phrase" :term="phrase" />
       </div>
@@ -65,13 +66,14 @@ export default {
   async fetch() {
     let res = await axios.get(`${Config.wiki}items/phrasebook/${this.bookId}`);
     if (res && res.data) {
-      this.phrasebook = res.data.data;
-      this.phrasebook.phrases = Papa.parse(this.phrasebook.phrases, {
+      let phrasebook = res.data.data;
+      phrasebook.phrases = Papa.parse(phrasebook.phrases, {
         header: true,
       }).data.map((p, id) => {
         p.id = id;
         return p;
       });
+      this.phrasebook = phrasebook
       this.phraseObj = this.phrasebook.phrases.find(
         (p) => p.id === Number(this.phraseId)
       );
