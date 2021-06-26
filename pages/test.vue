@@ -8,7 +8,7 @@
     <div class="main container mt-5 mb-5">
       <div class="row">
         <Annotate>
-          <div>אני יוצא לדרך</div>
+          <div>vamos</div>
         </Annotate>
       </div>
     </div>

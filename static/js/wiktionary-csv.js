@@ -71,7 +71,7 @@ const Dictionary = {
       item.accented = item.word
       item.word = undefined
       item.wiktionary = true
-      item.definitions = item.definitions ? item.definitions.split(';') : undefined
+      item.definitions = item.definitions ? item.definitions.split('|') : undefined
       return item
     })
     words = words.sort((a, b) => {

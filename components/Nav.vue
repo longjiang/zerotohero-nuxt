@@ -69,6 +69,18 @@ export default {
           children: [
             {
               icon: "fas fa-wrench",
+              title: "Test",
+              name: "test",
+              show: this.adminMode(),
+            },
+            {
+              icon: "fas fa-wrench",
+              title: "Wiktionary CSV",
+              name: "wiktionary-csv",
+              show: this.adminMode(),
+            },
+            {
+              icon: "fas fa-wrench",
               title: "DB Upgrade",
               name: "db-upgrade",
               show: this.adminMode(),
@@ -83,18 +95,6 @@ export default {
               icon: "fas fa-wrench",
               title: "Assign Lesson Videos",
               name: "assign-lesson-videos",
-              show: this.adminMode(),
-            },
-            {
-              icon: "fas fa-wrench",
-              title: "Wiktionary CSV",
-              name: "wiktionary-csv",
-              show: this.adminMode(),
-            },
-            {
-              icon: "fas fa-wrench",
-              title: "Test",
-              name: "test",
               show: this.adminMode(),
             },
           ],

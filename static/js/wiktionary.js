@@ -6,46 +6,48 @@ const Dictionary = {
   index: {},
   cache: {},
   tables: [],
+  useCSV: ['fra', 'spa'],
   l1: undefined,
   l2: undefined,
   credit() {
     return 'The dictionary is provided by <a href="https://en.wiktionary.org/wiki/Wiktionary:Main_Page">Wiktionary</a>, which is freely distribtued under the <a href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike License</a>. The dictionary is parsed by <a href="https://github.com/tatuylonen/wiktextract">wiktextract</a>.'
   },
+  dictionaryFile(options) {
+    let l2 = options.l2.replace('nor', 'nob') // Default Norwegian to Bokmål
+      .replace('hrv', 'hbs') // Serbian uses Serbo-Croatian
+      .replace('srp', 'hbs') // Croatian uses Serbo-Croatian
+      .replace('bos', 'hbs') // Bosnian uses Serbo-Croatian
+      .replace('run', 'kin') // Rundi uses Rwanda-Rundi
+      .replace('hbo', 'heb') // Ancient Hebrew uses Hebrew
+    const server = 'https://server.chinesezerotohero.com/'
+    let csv = this.useCSV.includes(this.l2)
+    let filename = `${server}data/wiktionary${csv ? '-csv' : ''}/${l2}-${options.l1}.${csv ? 'csv' : 'json'}.txt`
+    if (['ara', 'fin', 'fra', 'hbs', 'ita', 'lat', 'por', 'spa'].includes(l2) && !csv) {
+      filename = `${server}data/wiktionary/large/${l2}-${options.l1}.json.txt`
+    }
+    return filename
+  },
+  async load(options) {
+    this.l1 = options.l1
+    this.l2 = options.l2
+    this.file = this.dictionaryFile(options)
+    await this.loadWords()
+    return this
+  },
   async loadWords() {
     let res = await axios.get(this.file)
-    this.words = this.parseDictionary(res.data)
-  },
-  inflections(sense) {
-    let definitions = []
-    for (let inflection of sense.complex_inflection_of) {
-      let head = inflection['1'] || inflection['2']
-      if (head) {
-        definitions.push(`${inflection['3']} ${inflection['4']} ${inflection['5']} inflection of <a href="https://en.wiktionary.org/wiki/${head}" target="_blank">${head}</a>`)
+    let words = this.useCSV.includes(this.l2) ? this.parseDictionaryCSV(res.data) : this.parseDictionary(res.data)
+
+    words = words.sort((a, b) => {
+      if (a.head && b.head) {
+        return b.head.length - a.head.length
       }
-    }
-    return definitions
-  },
-  blankInflection(item) {
-    `(inflected form, see <a href="https://en.wiktionary.org/wiki/${item.word}" target="_blank">Wiktionary</a> for details)`
-  },
-  exportCSV() {
-    return Papa.unparse(this.words.map(item => {
-      return {
-        word: item.word,
-        pronunciation: item.pronunciations && item.pronunciations[0].ipa ? item.pronunciations[0].ipa[0][1].replace(/\//g, '') : undefined,
-        audio: item.audio,
-        definitions: item.definitions.join('; '),
-        pos: item.pos,
-      }
-    }))
-  },
-  normalizeStem(stemStr) {
-    stemStr = stemStr.replace(/ \(.*\)/, '').replace(/ \[\[.*\]\]/g, '')
-    if (this.l2 === 'heb') {
-      stemStr = stemStr.split(/ \u000092 /)[0]
-      stemStr = this.stripHebrewVowels(stemStr.replace(/\u200e/gi, ''))
-    }
-    return stemStr.trim()
+    })
+    words = words.map((word, index) => {
+      word.id = index
+      return word
+    })
+    this.words = words
   },
   parseDictionary(data) {
     this.dictionary = data
@@ -96,40 +98,54 @@ const Dictionary = {
         }
       }
     }
-    words = words.sort((a, b) => {
-      if (a.head && b.head) {
-        return b.head.length - a.head.length
-      }
-    })
-    words = words.map((word, index) => {
-      word.id = index
-      return word
+    return words
+  },
+  parseDictionaryCSV(data) {
+    let parsed = Papa.parse(data, { header: true })
+    let words = parsed.data
+    words = words.map(item => {
+      item.bare = this.stripAccents(item.word)
+      item.head = item.word
+      item.accented = item.word
+      item.word = undefined
+      item.wiktionary = true
+      item.definitions = item.definitions ? item.definitions.split('|') : undefined
+      return item
     })
     return words
   },
-  dictionaryFile(options) {
-    let l2 = options.l2.replace('nor', 'nob') // Default Norwegian to Bokmål
-      .replace('hrv', 'hbs') // Serbian uses Serbo-Croatian
-      .replace('srp', 'hbs') // Croatian uses Serbo-Croatian
-      .replace('bos', 'hbs') // Bosnian uses Serbo-Croatian
-      .replace('run', 'kin') // Rundi uses Rwanda-Rundi
-      .replace('hbo', 'heb') // Ancient Hebrew uses Hebrew
-    const server = 'https://server.chinesezerotohero.com/'
-    let filename = `${server}data/wiktionary/${l2}-${options.l1}.json.txt`
-    if (['ara', 'fin', 'fra', 'hbs', 'ita', 'lat', 'por', 'spa'].includes(l2)) {
-      filename = `${server}data/wiktionary/large/${l2}-${options.l1}.json.txt`
+  inflections(sense) {
+    let definitions = []
+    for (let inflection of sense.complex_inflection_of) {
+      let head = inflection['1'] || inflection['2']
+      if (head) {
+        definitions.push(`${inflection['3']} ${inflection['4']} ${inflection['5']} inflection of <a href="https://en.wiktionary.org/wiki/${head}" target="_blank">${head}</a>`)
+      }
     }
-    return filename
+    return definitions
   },
-  load(options) {
-    this.l1 = options.l1
-    this.l2 = options.l2
-    this.file = this.dictionaryFile(options)
-    return new Promise(async resolve => {
-      let promises = [this.loadWords()]
-      await Promise.all(promises)
-      resolve(this)
-    })
+  blankInflection(item) {
+    `(inflected form, see <a href="https://en.wiktionary.org/wiki/${item.word}" target="_blank">Wiktionary</a> for details)`
+  },
+  exportCSV() {
+    return Papa.unparse(this.words.map(item => {
+      return {
+        word: item.word,
+        pronunciation: item.pronunciations && item.pronunciations[0].ipa ? item.pronunciations[0].ipa[0][1].replace(/\//g, '') : undefined,
+        audio: item.audio,
+        definitions: item.definitions.join('|'),
+        pos: item.pos,
+        stems: item.stems.join('|'),
+      }
+    }))
+  },
+  normalizeStem(stemStr) {
+    stemStr = stemStr.replace(/ \(.*\)/, '').replace(/ \[\[.*\]\]/g, '')
+    if (this.l2 === 'heb') {
+      stemStr = stemStr.split(/ \u000092 /)[0]
+      stemStr = this.stripHebrewVowels(stemStr.replace(/\u200e/gi, ''))
+    }
+    return stemStr.trim()
   },
   get(id) {
     return this.words[id]
