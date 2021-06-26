@@ -18,18 +18,29 @@
           :title="phrasebook.title"
         />
         <p class="text-center">
-          <span v-if="phraseObj && phraseObj.pronunciation" class="mr-1">{{ phraseObj.pronunciation }}</span><Speak :text="phrase" v-if="phrase" />
+          <span v-if="phraseObj && phraseObj.pronunciation" class="mr-1">
+            {{ phraseObj.pronunciation }}
+          </span>
+          <Speak
+            :text="phraseObj.phrase"
+            v-if="phraseObj && phraseObj.phrase"
+          />
         </p>
         <Annotate
-          :class="{'text-center mb-4': true, 'pr-3' : $l2.direction === 'rtl', 'pl-3' : $l2.direction !== 'rtl'}"
+          :class="{
+            'text-center mb-4': true,
+            'pr-3': $l2.direction === 'rtl',
+            'pl-3': $l2.direction !== 'rtl',
+          }"
           :data-level="
             phraseObj && phraseObj.level ? phraseObj.level : 'outside'
           "
           tag="h2"
           :phonetics="false"
           :buttons="true"
+          v-if="phraseObj && phraseObj.phrase"
         >
-          <div>{{ phrase }}</div>
+          <div>{{ phraseObj.phrase }}</div>
         </Annotate>
         <p class="text-center" v-if="phraseObj && phraseObj[$l1.code]">
           {{ phraseObj[$l1.code] }}
@@ -73,7 +84,7 @@ export default {
         p.id = id;
         return p;
       });
-      this.phrasebook = phrasebook
+      this.phrasebook = phrasebook;
       this.phraseObj = this.phrasebook.phrases.find(
         (p) => p.id === Number(this.phraseId)
       );

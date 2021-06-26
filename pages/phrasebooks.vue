@@ -20,8 +20,15 @@
             <div class="heartbeat-loader"></div>
           </div>
 
-          <ul class="list-unstyled p-0 mb-5 booklists" v-if="phrasebooks && phrasebooks.length > 0">
-            <li v-for="(phrasebook, phrasebookIndex) in phrasebooks" class="text-center mb-5" :key="`phrasebook-${phrasebookIndex}`">
+          <ul
+            class="list-unstyled p-0 mb-5 booklists"
+            v-if="phrasebooks && phrasebooks.length > 0"
+          >
+            <li
+              v-for="(phrasebook, phrasebookIndex) in phrasebooks"
+              class="text-center mb-5"
+              :key="`phrasebook-${phrasebookIndex}`"
+            >
               <router-link
                 class="link-unstyled"
                 :to="`/${$l1.code}/${$l2.code}/phrasebook/${phrasebook.id}/`"
@@ -31,15 +38,14 @@
                   class="shadowed book-thumb mb-4"
                   data-not-lazy
                 />
-                <h5 class="mt-3">
-                  <Annotate tag="b">
-                    <span>{{ phrasebook.title }}</span>
-                  </Annotate>
-                </h5>
+                <h5 class="mt-3">{{ phrasebook.title }}</h5>
               </router-link>
             </li>
           </ul>
-          <div class="text-center" v-if="phrasebooks && phrasebooks.length === 0">
+          <div
+            class="text-center"
+            v-if="phrasebooks && phrasebooks.length === 0"
+          >
             Sorry, we could not find any phrasebooks for {{ $l2.name }} 😭.
           </div>
         </div>
@@ -62,7 +68,9 @@ export default {
     let response = await axios.get(
       `${Config.wiki}items/phrasebook?filter[l2][eq]=${
         this.$l2.id
-      }&fields=id,title,l2&limit=500&timestamp=${this.$adminMode ? Date.now() : 0}`
+      }&fields=id,title,l2&limit=500&timestamp=${
+        this.$adminMode ? Date.now() : 0
+      }`
     );
     if (response && response.data) this.phrasebooks = response.data.data;
   },
@@ -80,8 +88,7 @@ export default {
         return this.$store.state.settings.adminMode;
     },
   },
-  methods: {
-  },
+  methods: {},
 };
 </script>
 
