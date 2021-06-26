@@ -87,12 +87,12 @@ const Dictionary = {
             bare: this.stripAccents(item.word),
             head: item.word,
             accented: item.word,
-            pronunciation: undefined,
             pronunciation: item.sounds && item.sounds.length > 0 ? item.sounds.filter(s => s.ipa).map(s => s.ipa.replace(/[/\[\]]/g, '')).join(', ') : undefined,
             audio: audio,
             definitions: definitions,
             pos: item.pos,
             stems: stems.filter(s => s !== item.word),
+            phrases: item.derived ? item.derived.map(d => d.word) : [],
             wiktionary: true
           }))
         } else {
@@ -115,6 +115,7 @@ const Dictionary = {
       item.wiktionary = true
       item.definitions = item.definitions ? item.definitions.split('|') : []
       item.stems = item.stems ? item.stems.split('|') : []
+      item.phrases = item.phrases ? item.phrases.split('|') : []
       return item
     })
     return words
@@ -142,6 +143,7 @@ const Dictionary = {
         definitions: item.definitions.join('|'),
         pos: item.pos,
         stems: item.stems.join('|'),
+        phrases: item.phrases.join('|')
       }
     }))
     console.log('CSV exported.')
@@ -163,7 +165,7 @@ const Dictionary = {
     return word
   },
   lookupMultiple(text) {
-    let words = this.words.filter(word => word && word.bare.toLowerCase() === text.toLowerCase())
+    let words = this.words.filter(word => word && word.head.toLowerCase() === text.toLowerCase())
     return words
   },
   formTable() {
@@ -176,7 +178,7 @@ const Dictionary = {
     let forms = [{
       table: 'head',
       field: 'head',
-      form: word.bare
+      form: word.head
     }]
     return forms
   },
@@ -293,28 +295,29 @@ const Dictionary = {
       return stemWordsWithScores
     } else return []
   },
+  phrases(word, score = undefined) {
+    if (word.phrases.length > 0) {
+      let phrases = []
+      for (let s of word.phrases) {
+        phrases = phrases.concat(this.lookupMultiple(s))
+      }
+      phrasesWithScores = phrases.map(w => Object.assign({ score: score }, w))
+      return phrasesWithScores
+    } else return []
+  },
   lookupFuzzy(text, limit = 30) { // text = 'abcde'
     text = this.stripAccents(text.toLowerCase())
     if (['he', 'hbo', 'iw'].includes(this.l2)) text = this.stripHebrewVowels(text)
-    let words = this.words.filter(w => w.bare && w.bare === text)
-
-    if (words.length > 0) {
-      let returnWords = []
-      for (let word of words) {
-        returnWords.push(Object.assign(
-          { score: 1 },
-          word
-        ))
-        returnWords = returnWords.concat(this.stemWords(word, 1))
+    let words = []
+    for (let word of this.words) {
+      let bare = word.bare ? word.bare.toLowerCase() : undefined
+      let similarity = stringSimilarity.compareTwoStrings(bare, text);
+      if (similarity > 0.7) {
+        words.push(Object.assign({ score: similarity }, word))
       }
-      words = returnWords
-    } else {
-      for (let word of this.words) {
-        let bare = word.bare ? word.bare.toLowerCase() : undefined
-        let similarity = stringSimilarity.compareTwoStrings(bare, text);
-        if (similarity > 0.5) {
-          words.push(Object.assign({ score: similarity }, word))
-        }
+      if (similarity === 1) {
+        words = words.concat(this.stemWords(word, 1))
+        words = words.concat(this.phrases(word, 1))
       }
     }
     words = this.uniqueByValue(words, 'id').sort((a, b) => b.score - a.score).slice(0, limit)
