@@ -21,12 +21,12 @@
           </div>
 
           <ul
-            class="list-unstyled p-0 mb-5 booklists"
+            class="list-unstyled p-0 mb-5 booklist"
             v-if="phrasebooks && phrasebooks.length > 0"
           >
             <li
               v-for="(phrasebook, phrasebookIndex) in phrasebooks"
-              class="text-center mb-5"
+              class="text-center mb-5 booklist-item"
               :key="`phrasebook-${phrasebookIndex}`"
             >
               <router-link

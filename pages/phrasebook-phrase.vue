@@ -45,7 +45,15 @@
         <p class="text-center" v-if="phraseObj && phraseObj[$l1.code]">
           {{ phraseObj[$l1.code] }}
         </p>
-        <PhraseComp v-if="phrase" :term="phrase" />
+        <PhraseComp
+          v-if="phraseObj && phraseObj.phrase"
+          :term="phraseObj.phrase"
+        />
+        <div
+          v-if="phrasebook && phrasebook.description"
+          v-html="phrasebook.description"
+          class="mt-5 pt-5 text-center"
+        />
       </div>
     </div>
   </div>
