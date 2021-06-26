@@ -289,50 +289,57 @@ const Dictionary = {
   lookupFuzzy(text, limit = 30) { // text = 'abcde'
     text = this.stripAccents(text.toLowerCase())
     if (['he', 'hbo', 'iw'].includes(this.l2)) text = this.stripHebrewVowels(text)
-    let words = []
+    let words = this.words.filter(w => w.bare && w.bare === text)
     let subtexts = []
-    for (let i = 1; text.length - i > 2; i++) {
-      subtexts.push(text.substring(0, text.length - i))
-    }
-    for (let word of this.words) {
-      let bare = word.bare ? word.bare.toLowerCase() : undefined
-      if (bare && bare === text) {
-        words.push(
-          Object.assign(
-            { score: 100 },
-            word
-          )
-        )
-        words = words.concat(this.stemWords(word, 100))
-      } else if (bare && bare.startsWith(text)) {
-        let score = text.length - (bare.length - text.length)
-        words.push(
-          Object.assign(
-            { score },
-            word
-          )
-        ) // matches 'abcde', 'abcde...'
-        words = words.concat(this.stemWords(word, score))
+
+    if (words.length > 0) {
+      let returnWords = []
+      for (let word of words) {
+        returnWords.push(Object.assign(
+          { score: 100 },
+          word
+        ))
+        returnWords.concat(this.stemWords(word, 100))
       }
-      if (bare && text.includes(bare)) {
-        let score = bare.length
-        words.push(Object.assign({ score }, word)) // matches 'cde', 'abc'
-        words = words.concat(this.stemWords(word, score))
+      words = returnWords
+    } else {
+      for (let i = 1; text.length - i > 2; i++) {
+        subtexts.push(text.substring(0, text.length - i))
       }
-      for (let subtext of subtexts) {
-        if (bare && bare.includes(subtext)) {
-          let score = subtext.length - (bare.length - subtext.length)
+      for (let word of this.words) {
+        let bare = word.bare ? word.bare.toLowerCase() : undefined
+        if (bare && bare.startsWith(text)) {
+          let score = text.length - (bare.length - text.length)
           words.push(
             Object.assign(
               { score },
               word
             )
-          ) // matches 'abcxyz...'
+          ) // matches 'abcde', 'abcde...'
           words = words.concat(this.stemWords(word, score))
+        }
+        if (bare && text.includes(bare)) {
+          let score = bare.length
+          words.push(Object.assign({ score }, word)) // matches 'cde', 'abc'
+          words = words.concat(this.stemWords(word, score))
+        }
+  
+        for (let subtext of subtexts) {
+          if (bare && bare.includes(subtext)) {
+            let score = subtext.length - (bare.length - subtext.length)
+            words.push(
+              Object.assign(
+                { score },
+                word
+              )
+            ) // matches 'abcxyz...'
+            words = words.concat(this.stemWords(word, score))
+          }
         }
       }
     }
-    return this.uniqueByValue(words, 'id').sort((a, b) => b.score - a.score).slice(0, limit)
+    words = this.uniqueByValue(words, 'id').sort((a, b) => b.score - a.score).slice(0, limit)
+    return words
   },
   randomArrayItem(array, start = 0, length = false) {
     length = length || array.length

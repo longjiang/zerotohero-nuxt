@@ -569,7 +569,7 @@ export default {
         words = this.token.candidates;
       } else if (this.text) {
         if (!this.text && this.token) this.text = this.token.candidates[0].head;
-        words = await (await this.$getDictionary()).lookupFuzzy(this.text);
+        words = await (await this.$getDictionary()).lookupFuzzy(this.text, 10);
         if (words) {
           for (let word of words) {
             if (word && word.matches) {
