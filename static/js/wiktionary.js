@@ -107,9 +107,10 @@ const Dictionary = {
       item.bare = this.stripAccents(item.word)
       item.head = item.word
       item.accented = item.word
-      item.word = undefined
+      delete item.word
       item.wiktionary = true
-      item.definitions = item.definitions ? item.definitions.split('|') : undefined
+      item.definitions = item.definitions ? item.definitions.split('|') : []
+      item.stems = item.stems ? item.stems.split('|') : []
       return item
     })
     return words
@@ -302,7 +303,7 @@ const Dictionary = {
             word
           )
         )
-        words = words.concat(this.stemWords(word, 99))
+        words = words.concat(this.stemWords(word, 100))
       } else if (bare && bare.startsWith(text)) {
         let score = text.length - (bare.length - text.length)
         words.push(
@@ -311,12 +312,12 @@ const Dictionary = {
             word
           )
         ) // matches 'abcde', 'abcde...'
-        words = words.concat(this.stemWords(word, score - 1))
+        words = words.concat(this.stemWords(word, score))
       }
       if (bare && text.includes(bare)) {
         let score = bare.length
         words.push(Object.assign({ score }, word)) // matches 'cde', 'abc'
-        words = words.concat(this.stemWords(word, score - 1))
+        words = words.concat(this.stemWords(word, score))
       }
       for (let subtext of subtexts) {
         if (bare && bare.includes(subtext)) {
@@ -327,7 +328,7 @@ const Dictionary = {
               word
             )
           ) // matches 'abcxyz...'
-          words = words.concat(this.stemWords(word, score - 1))
+          words = words.concat(this.stemWords(word, score))
         }
       }
     }
