@@ -47,6 +47,9 @@
               :sticky="sticky"
               :class="{
                 'transcript-line-chinese': true,
+                'text-center': single,
+                'pr-3': single && $l2.direction === 'rtl',
+                'pl-3': single && $l2.direction !== 'rtl',
               }"
               :buttons="true"
               v-if="!showSubsEditing"
