@@ -1,3 +1,5 @@
+importScripts('../vendor/string-similarity/string-similarity.js')
+
 const Dictionary = {
   name: 'wiktionary',
   file: undefined,
@@ -6,7 +8,7 @@ const Dictionary = {
   index: {},
   cache: {},
   tables: [],
-  useCSV: ['fra', 'spa'],
+  useCSV: ['fra'],
   l1: undefined,
   l2: undefined,
   credit() {
@@ -22,9 +24,6 @@ const Dictionary = {
     const server = 'https://server.chinesezerotohero.com/'
     let csv = this.useCSV.includes(this.l2)
     let filename = `${server}data/wiktionary${csv ? '-csv' : ''}/${l2}-${options.l1}.${csv ? 'csv' : 'json'}.txt`
-    if (['ara', 'fin', 'fra', 'hbs', 'ita', 'lat', 'por', 'spa'].includes(l2) && !csv) {
-      filename = `${server}data/wiktionary/large/${l2}-${options.l1}.json.txt`
-    }
     return filename
   },
   async load(options) {
@@ -35,6 +34,7 @@ const Dictionary = {
     return this
   },
   async loadWords() {
+    console.log("Wiktionary: loading...")
     let res = await axios.get(this.file)
     let words = this.useCSV.includes(this.l2) ? this.parseDictionaryCSV(res.data) : this.parseDictionary(res.data)
 
@@ -48,8 +48,10 @@ const Dictionary = {
       return word
     })
     this.words = words
+    console.log("Wiktionary: loaded.")
   },
   parseDictionary(data) {
+    console.log("Wiktionary: parsing words from JSON...")
     this.dictionary = data
     let words = []
     for (let item of this.dictionary) {
@@ -74,10 +76,10 @@ const Dictionary = {
         if (item.forms) stems = stems.concat(item.forms.map(f => this.normalizeStem(f.form)))
         if (definitions.length > 0) {
           let audio = undefined
-          if (item.pronunciations) {
-            for (let pronunciation of item.pronunciations) {
-              if (pronunciation.audios && pronunciation.audios[0] && pronunciation.audios[0].length > 0) {
-                audio = pronunciation.audios[0].find(text => text.endsWith('ogg') || text.endsWith('mp3'))
+          if (item.sounds) {
+            for (let pronunciation of item.sounds) {
+              if (pronunciation.audio) {
+                audio = pronunciation.audio
               }
             }
           }
@@ -85,7 +87,8 @@ const Dictionary = {
             bare: this.stripAccents(item.word),
             head: item.word,
             accented: item.word,
-            pronunciation: item.pronunciations && item.pronunciations[0].ipa ? item.pronunciations[0].ipa[0][1].replace(/\//g, '') : undefined,
+            pronunciation: undefined,
+            pronunciation: item.sounds && item.sounds.length > 0 ? item.sounds.filter(s => s.ipa).map(s => s.ipa.replace(/[/\[\]]/g, '')).join(', ') : undefined,
             audio: audio,
             definitions: definitions,
             pos: item.pos,
@@ -101,6 +104,7 @@ const Dictionary = {
     return words
   },
   parseDictionaryCSV(data) {
+    console.log("Wiktionary: parsing words from CSV...")
     let parsed = Papa.parse(data, { header: true })
     let words = parsed.data
     words = words.map(item => {
@@ -129,16 +133,19 @@ const Dictionary = {
     `(inflected form, see <a href="https://en.wiktionary.org/wiki/${item.word}" target="_blank">Wiktionary</a> for details)`
   },
   exportCSV() {
-    return Papa.unparse(this.words.map(item => {
+    console.log('Exporting CSV...')
+    let csv = Papa.unparse(this.words.map(item => {
       return {
         word: item.word,
-        pronunciation: item.pronunciations && item.pronunciations[0].ipa ? item.pronunciations[0].ipa[0][1].replace(/\//g, '') : undefined,
+        pronunciation: item.pronunciation,
         audio: item.audio,
         definitions: item.definitions.join('|'),
         pos: item.pos,
         stems: item.stems.join('|'),
       }
     }))
+    console.log('CSV exported.')
+    return csv
   },
   normalizeStem(stemStr) {
     stemStr = stemStr.replace(/ \(.*\)/, '').replace(/ \[\[.*\]\]/g, '')
@@ -290,51 +297,23 @@ const Dictionary = {
     text = this.stripAccents(text.toLowerCase())
     if (['he', 'hbo', 'iw'].includes(this.l2)) text = this.stripHebrewVowels(text)
     let words = this.words.filter(w => w.bare && w.bare === text)
-    let subtexts = []
 
     if (words.length > 0) {
       let returnWords = []
       for (let word of words) {
         returnWords.push(Object.assign(
-          { score: 100 },
+          { score: 1 },
           word
         ))
-        returnWords = returnWords.concat(this.stemWords(word, 100))
+        returnWords = returnWords.concat(this.stemWords(word, 1))
       }
       words = returnWords
     } else {
-      for (let i = 1; text.length - i > 2; i++) {
-        subtexts.push(text.substring(0, text.length - i))
-      }
       for (let word of this.words) {
         let bare = word.bare ? word.bare.toLowerCase() : undefined
-        if (bare && bare.startsWith(text)) {
-          let score = text.length - (bare.length - text.length)
-          words.push(
-            Object.assign(
-              { score },
-              word
-            )
-          ) // matches 'abcde', 'abcde...'
-          words = words.concat(this.stemWords(word, score))
-        }
-        if (bare && text.includes(bare)) {
-          let score = bare.length
-          words.push(Object.assign({ score }, word)) // matches 'cde', 'abc'
-          words = words.concat(this.stemWords(word, score))
-        }
-  
-        for (let subtext of subtexts) {
-          if (bare && bare.includes(subtext)) {
-            let score = subtext.length - (bare.length - subtext.length)
-            words.push(
-              Object.assign(
-                { score },
-                word
-              )
-            ) // matches 'abcxyz...'
-            words = words.concat(this.stemWords(word, score))
-          }
+        let similarity = stringSimilarity.compareTwoStrings(bare, text);
+        if (similarity > 0.5) {
+          words.push(Object.assign({ score: similarity }, word))
         }
       }
     }

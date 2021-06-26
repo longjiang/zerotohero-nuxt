@@ -9,7 +9,7 @@
       <div class="row">
         <div class="col-sm-12">
           CSV Ready.
-          <a :href="href" download="fra-eng.csv.txt">Download</a>
+          <a :href="href" :download="`${$l2['iso639-3']}-eng.csv.txt`">Download</a>
         </div>
       </div>
     </div>
@@ -19,10 +19,10 @@
 export default {
   // layout: "test-layout",
   computed: {
-    l1() {
+    $l1() {
       return this.$store.state.settings.l1;
     },
-    l2() {
+    $l2() {
       return this.$store.state.settings.l2;
     },
   },

@@ -8,7 +8,7 @@
     <div class="main container mt-5 mb-5">
       <div class="row">
         <Annotate>
-          <div>Despacito</div>
+          <div>♪ SI... SABES QUE YA LLEVOUN RATO MIRÁNDOTE ♪</div>
         </Annotate>
       </div>
     </div>
@@ -19,10 +19,10 @@
 export default {
   // layout: "test-layout",
   computed: {
-    l1() {
+    $l1() {
       return this.$store.state.settings.l1;
     },
-    l2() {
+    $l2() {
       return this.$store.state.settings.l2;
     },
   },
