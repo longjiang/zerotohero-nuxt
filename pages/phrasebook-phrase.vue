@@ -26,22 +26,23 @@
             v-if="phraseObj && phraseObj.phrase"
           />
         </p>
-        <Annotate
-          :class="{
-            'text-center mb-4': true,
-            'pr-3': $l2.direction === 'rtl',
-            'pl-3': $l2.direction !== 'rtl',
-          }"
-          :data-level="
-            phraseObj && phraseObj.level ? phraseObj.level : 'outside'
-          "
-          tag="h2"
-          :phonetics="false"
-          :buttons="true"
-          v-if="phraseObj && phraseObj.phrase"
-        >
-          <div>{{ phraseObj.phrase }}</div>
-        </Annotate>
+        <h2 class="text-center">
+          <Annotate
+            :class="{
+              'mb-4 d-inline-block': true,
+              'pr-3': $l2.direction === 'rtl',
+              'pl-3': $l2.direction !== 'rtl',
+            }"
+            :data-level="
+              phraseObj && phraseObj.level ? phraseObj.level : 'outside'
+            "
+            :phonetics="false"
+            :buttons="true"
+            v-if="phraseObj && phraseObj.phrase"
+          >
+            <span>{{ phraseObj.phrase }}</span>
+          </Annotate>
+        </h2>
         <p class="text-center" v-if="phraseObj && phraseObj[$l1.code]">
           {{ phraseObj[$l1.code] }}
         </p>
