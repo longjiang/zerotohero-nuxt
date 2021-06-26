@@ -8,7 +8,7 @@ const Dictionary = {
   index: {},
   cache: {},
   tables: [],
-  useCSV: ['fra'],
+  useCSV: ['fra', 'spa'],
   l1: undefined,
   l2: undefined,
   credit() {
