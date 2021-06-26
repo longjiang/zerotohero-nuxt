@@ -311,7 +311,6 @@ export default {
       }
     },
     nearestLineIndex(time) {
-      console.log("getting nearest");
       let nearestLineIndex = undefined;
       for (let lineIndex in this.lines) {
         lineIndex = Number(lineIndex);
@@ -325,19 +324,16 @@ export default {
           break;
         }
       }
-      console.log("got", nearestLineIndex);
       return nearestLineIndex;
     },
     playNearestLine() {
       let nearestLineIndex = this.nearestLineIndex(this.currentTime);
       if (typeof nearestLineIndex !== "undefined") {
-        console.log("playing nearestline");
         let nearestLine = this.lines[nearestLineIndex];
         this.currentLine = nearestLine;
         this.currentLineIndex = nearestLineIndex;
         this.nextLine = this.lines[nearestLineIndex + 1];
         if (!this.paused && this.audioMode) this.doAudioModeStuff();
-        console.log("done");
       } else {
         this.currentLine = undefined;
         this.currentLineIndex = undefined;
