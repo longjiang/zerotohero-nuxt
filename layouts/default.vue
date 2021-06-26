@@ -106,7 +106,7 @@
           :iconMode="true"
         />
 
-        <footer class="container-fluid bg-dark text-light pt-4 pb-4">
+        <footer class="container-fluid bg-dark text-light pt-4 pb-4" style="z-index: -1">
           <div class="container">
             <div class="row mb-5">
               <div class="col-sm-12">
@@ -482,6 +482,11 @@ export default {
 </script>
 
 <style>
+
+.__nuxt-error-page {
+  z-index: 99;
+}
+
 .history {
   flex-wrap: wrap;
   margin: 0 -1rem;

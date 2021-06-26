@@ -8,7 +8,7 @@
       }"
       data-collapse-target
     >
-      <template v-for="(line, lineIndex) in lines">
+      <template v-for="(line, lineIndex) in single ? [lines[currentLineIndex || 0]] : lines">
         <div
           :key="`line-${lineIndex}-${line.starttime}-${line.line.substr(
             0,
