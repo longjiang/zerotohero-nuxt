@@ -27,19 +27,19 @@
             }"
           >
             <p>
-              <span v-if="phraseObj && phraseObj.pronunciation" class="mr-1">
+              <span v-if="phraseObj && phraseObj.pronunciation">
                 {{ phraseObj.pronunciation }}
               </span>
-              <Speak :text="phraseObj.phrase" />
             </p>
             <h4
+              class="mb-3"
               :data-level="
                 phraseObj && phraseObj.level ? phraseObj.level : 'outside'
               "
             >
               {{ phraseObj.phrase }}
             </h4>
-            <p v-if="phraseObj && phraseObj[$l1.code]">
+            <p class="mb-0" v-if="phraseObj && phraseObj[$l1.code]">
               {{ phraseObj[$l1.code] }}
             </p>
           </div>

@@ -225,6 +225,20 @@ export default {
               shortcut: (e) => e.code === "KeyP" && e.metaKey && e.shiftKey,
             },
             {
+              name: "phrasebooks",
+              icon: "fa fa-book-open",
+              title: "Phrasebooks",
+              show: false,
+            },
+            {
+              name: "phrasebook",
+              show: false,
+            },
+            {
+              name: "phrasebook-phrase",
+              show: false,
+            },
+            {
               name: "compare-phrases",
               show: false,
             },
@@ -312,7 +326,7 @@ export default {
             {
               name: "library",
               title: "Library",
-              icon: "fas fa-book-open",
+              icon: "fas fa-book-reader",
               show: true,
             },
             {
@@ -447,7 +461,7 @@ export default {
           show: true,
         },
       ],
-      history: [],
+      history: []
     };
   },
   props: {
@@ -460,6 +474,7 @@ export default {
   },
   mounted() {
     this.enableTVShows();
+    this.enablePhrasebooks();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type.startsWith("shows")) {
         this.enableTVShows();
@@ -480,6 +495,23 @@ export default {
     },
   },
   methods: {
+    async enablePhrasebooks() {
+      let response = await axios.get(
+        `${Config.wiki}items/phrasebook?filter[l2][eq]=${
+          this.l2.id
+        }&fields=id,title,l2&limit=500&timestamp=${
+          this.$adminMode ? Date.now() : 0
+        }`
+      );
+      if (response && response.data) {
+        let phrasebooks = response.data.data;
+        if (phrasebooks && phrasebooks.length> 0) {
+          let d = this.menu.find((i) => i.title === "Dictionary");
+          let p = d.children.find((i) => i.name === "phrasebooks");
+          p.show = true;
+        }
+      }
+    },
     enableTVShows() {
       if (
         this.$store.state.shows.tvShows &&
