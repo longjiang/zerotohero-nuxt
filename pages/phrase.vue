@@ -43,12 +43,7 @@ export default {
     compareTerm: "",
   },
   data() {
-    return {
-      images: [],
-      delayed: {
-        default: false,
-      },
-    };
+    return {};
   },
   computed: {
     $l1() {

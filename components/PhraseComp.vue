@@ -57,9 +57,6 @@ export default {
   data() {
     return {
       images: [],
-      delayed: {
-        default: false,
-      },
     };
   },
   async fetch() {

@@ -365,9 +365,9 @@ export default {
           "gi"
         );
         html = text
-          .replace(/\s+/gi, " ")
-          .replace(reg, "<WordBlock>$1</WordBlock>")
-          .replace(/\s+/gi, "<span>&nbsp;</span>");
+          .replace(/\s+/gi, "!!!###!!!")
+          .replace(reg, `<WordBlock :checkSaved="${this.checkSaved}" :phonetics="${this.phonetics}" :popup="${this.popup}" :sticky="${this.sticky}" :explore="${this.explore}">` + "$1</WordBlock>")
+          .replace(/!!!###!!!/gi, "<span>&nbsp;</span>");
       }
       // html = text.replace(/([\S]+)/gi, '<WordBlock>$1</WordBlock>')
       // $(`#sentence-placeholder-${batchId}`).remove()
