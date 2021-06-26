@@ -8,7 +8,7 @@
     <div class="main container mt-5 mb-5">
       <div class="row">
         <Annotate>
-          <div> O simplemente  estar junto a la gente que quieres. </div>
+          <div>Despacito</div>
         </Annotate>
       </div>
     </div>

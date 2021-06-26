@@ -299,7 +299,7 @@ const Dictionary = {
           { score: 100 },
           word
         ))
-        returnWords.concat(this.stemWords(word, 100))
+        returnWords = returnWords.concat(this.stemWords(word, 100))
       }
       words = returnWords
     } else {
