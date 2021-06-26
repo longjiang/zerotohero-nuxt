@@ -22,7 +22,7 @@
           'router-link-active':
             parent && parent.name === nameOfSelfOrFirstChild(item),
         }"
-        :to="last(item) || selfOrFirstChild(item)"
+        :to="last(item) || selfOrFirstChild(item, true)"
         :title="item.title"
         :key="`nav-${index}`"
       >
@@ -544,10 +544,12 @@ export default {
         return result.name;
       }
     },
-    selfOrFirstChild(item) {
+    selfOrFirstChild(item, visibleOnly) {
       if (item) {
         if (item.children && item.children.length > 0) {
-          return item.children[0];
+          let children = item.children
+          if (visibleOnly) children = children.filter(c => c.show)
+          return children[0];
         } else {
           return item;
         }
