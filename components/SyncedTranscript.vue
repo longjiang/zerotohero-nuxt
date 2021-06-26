@@ -21,14 +21,13 @@
               highlight &&
               line &&
               new RegExp(highlight.join('|')).test(line.line),
-            'transcript-line-current': currentLine === line,
             'pl-4': !single && $l2.direction !== 'rtl',
             'pr-4': !single && $l2.direction === 'rtl',
           }"
           @click="lineClick(line)"
           :id="`transcript-line-${id}-${lineIndex}`"
-          v-if="!single || currentLine === line"
           style="display: flex"
+          ref="lines"
         >
           <div v-if="showSubsEditing" class="mr-3">
             <div style="font-size: 0.7em; color: #ccc">
@@ -273,6 +272,14 @@ export default {
       if (!this.single && this.currentLineIndex !== 0)
         this.scrollTo(this.currentLineIndex);
     },
+    currentLineIndex() {
+      for (let lineIndex in this.$refs.lines) {
+        let line = this.$refs.lines[lineIndex];
+        line.classList.remove("transcript-line-current");
+        if (Number(lineIndex) === this.currentLineIndex)
+          line.classList.add("transcript-line-current");
+      }
+    },
   },
   methods: {
     lineHtml(line) {
@@ -304,6 +311,7 @@ export default {
       }
     },
     nearestLineIndex(time) {
+      console.log("getting nearest");
       let nearestLineIndex = undefined;
       for (let lineIndex in this.lines) {
         lineIndex = Number(lineIndex);
@@ -317,16 +325,19 @@ export default {
           break;
         }
       }
+      console.log("got", nearestLineIndex);
       return nearestLineIndex;
     },
     playNearestLine() {
       let nearestLineIndex = this.nearestLineIndex(this.currentTime);
       if (typeof nearestLineIndex !== "undefined") {
+        console.log("playing nearestline");
         let nearestLine = this.lines[nearestLineIndex];
         this.currentLine = nearestLine;
         this.currentLineIndex = nearestLineIndex;
         this.nextLine = this.lines[nearestLineIndex + 1];
         if (!this.paused && this.audioMode) this.doAudioModeStuff();
+        console.log("done");
       } else {
         this.currentLine = undefined;
         this.currentLineIndex = undefined;
