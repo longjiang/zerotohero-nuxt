@@ -209,6 +209,46 @@ const Dictionary = {
       field: 'head',
       form: word.head
     }]
+    if (this.l2 === 'fra') forms = forms.concat(this.frenchWordForms(word))
+    return forms
+  },
+  frenchWordForms(word) {
+    let forms = []
+    let fields = {
+      0: 'je',
+      1: 'tu',
+      2: 'il/elle',
+      3: 'nous',
+      4: 'vous',
+      5: 'ils'
+    }
+    let tables = {
+      P: 'présent',
+      S: 'subjonctif',
+      Y: 'Y',
+      I: 'imparfait',
+      G: 'gérondif',
+      K: 'participe passé',
+      J: 'passé simple',
+      T: 'subjonctif imparfait',
+      F: 'futur',
+      C: 'conditionnel présent'
+    }
+    if (this.conjugations) {
+      let conjugations = this.conjugations[word.head]
+      if (conjugations) {
+        for (let key in conjugations) {
+          let conj = conjugations[key]
+          forms = forms.concat(conj.filter(formStr => formStr !== 'NA').map((formStr, index) => {
+            return {
+              table: tables[key],
+              field: fields[index],
+              form: formStr
+            }
+          }))
+        }
+      }
+    }
     return forms
   },
   lookupByDef(text, limit = 30) {
