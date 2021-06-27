@@ -1,6 +1,7 @@
 <template>
   <button class="speak focus-exclude" @click="speak">
-    <i class="fas fa-volume-up" ></i>
+    <i class="fas fa-volume-up"></i>
+    <span v-if="!(mp3 || (text && $hasFeature('speech')))"><img src="/img/forvo.svg" alt="Forvo" style="height: 0.8rem; width: 4rem; opacity: 0.5; margin-bottom: 0.2rem;" /></span>
   </button>
 </template>
 <script>
