@@ -8,7 +8,7 @@
     <div class="main container mt-5 mb-5">
       <div class="row">
         <Annotate>
-          <div>♪ SI... SABES QUE YA LLEVOUN RATO MIRÁNDOTE ♪</div>
+          <div>¿Desdes?</div>
         </Annotate>
       </div>
     </div>
