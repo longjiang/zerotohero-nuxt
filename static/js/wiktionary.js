@@ -1,4 +1,4 @@
-importScripts('../vendor/string-similarity/string-similarity.js')
+importScripts('../vendor/fastest-levenshtein/fastest-levenshtein.js')
 
 const Dictionary = {
   name: 'wiktionary',
@@ -83,8 +83,10 @@ const Dictionary = {
               }
             }
           }
+          let bare = this.stripAccents(item.word)
           words.push(Object.assign(item, {
-            bare: this.stripAccents(item.word),
+            bare,
+            search: word.bare.toLowerCase(),
             head: item.word,
             accented: item.word,
             pronunciation: item.sounds && item.sounds.length > 0 ? item.sounds.filter(s => s.ipa).map(s => s.ipa.replace(/[/\[\]]/g, '')).join(', ') : undefined,
@@ -109,6 +111,7 @@ const Dictionary = {
     let words = parsed.data
     words = words.map(item => {
       item.bare = this.stripAccents(item.word)
+      item.search = item.bare.toLowerCase(),
       item.head = item.word
       item.accented = item.word
       delete item.word
@@ -310,14 +313,18 @@ const Dictionary = {
     if (['he', 'hbo', 'iw'].includes(this.l2)) text = this.stripHebrewVowels(text)
     let words = []
     for (let word of this.words) {
-      let bare = word.bare ? word.bare.toLowerCase() : undefined
-      let similarity = stringSimilarity.compareTwoStrings(bare, text);
-      if (similarity > 0.7) {
-        words.push(Object.assign({ score: similarity }, word))
-      }
-      if (similarity === 1) {
-        words = words.concat(this.stemWords(word, 1))
-        words = words.concat(this.phrases(word, 1))
+      let search = word.search ? word.search : undefined
+      if (search) {
+        let distance = FastestLevenshtein.distance(search, text);
+        let max = Math.max(text.length, search.length)
+        let similarity = (max - distance) / max
+        if (similarity > 0.5) {
+          words.push(Object.assign({ score: similarity }, word))
+        }
+        if (similarity === 1) {
+          words = words.concat(this.stemWords(word, 1))
+          words = words.concat(this.phrases(word, 1))
+        }
       }
     }
     words = this.uniqueByValue(words, 'id').sort((a, b) => b.score - a.score).slice(0, limit)
