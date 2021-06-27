@@ -90,7 +90,7 @@ export default {
         )
         .map((language) => {
           return {
-            bare: `${language.name} (${
+            head: `${language.name} (${
               language.code !== language["iso639-3"] ? language.code + ", " : ""
             }${language["iso639-3"]})`,
             definitions: this.$languages.getFeatures({
