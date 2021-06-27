@@ -23,7 +23,7 @@
     }"
   >
     <div class="annotator-buttons" v-if="!empty() && buttons">
-      <b-dropdown no-caret toggle-class="annotator-menu-toggle" dropleft>
+      <b-dropdown no-caret toggle-class="annotator-menu-toggle" :dropleft="$l2.direction !== 'rtl'" :dropright="$l2.direction === 'rtl'">
         <template #button-content><i class="fas fa-ellipsis-v"></i></template>
         <b-dropdown-item>
           <Speak
