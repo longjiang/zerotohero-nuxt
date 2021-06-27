@@ -8,7 +8,9 @@ const Dictionary = {
   index: {},
   cache: {},
   tables: [],
+  NlpjsTFrDict: {},
   useCSV: ['fra', 'spa'],
+  server: 'https://server.chinesezerotohero.com/',
   l1: undefined,
   l2: undefined,
   credit() {
@@ -21,9 +23,8 @@ const Dictionary = {
       .replace('bos', 'hbs') // Bosnian uses Serbo-Croatian
       .replace('run', 'kin') // Rundi uses Rwanda-Rundi
       .replace('hbo', 'heb') // Ancient Hebrew uses Hebrew
-    const server = 'https://server.chinesezerotohero.com/'
     let csv = this.useCSV.includes(this.l2)
-    let filename = `${server}data/wiktionary${csv ? '-csv' : ''}/${l2}-${options.l1}.${csv ? 'csv' : 'json'}.txt`
+    let filename = `${this.server}data/wiktionary${csv ? '-csv' : ''}/${l2}-${options.l1}.${csv ? 'csv' : 'json'}.txt`
     return filename
   },
   async load(options) {
@@ -31,6 +32,7 @@ const Dictionary = {
     this.l2 = options.l2
     this.file = this.dictionaryFile(options)
     await this.loadWords()
+    await this.loadConjugations()
     return this
   },
   async loadWords() {
@@ -49,6 +51,30 @@ const Dictionary = {
     })
     this.words = words
     console.log("Wiktionary: loaded.")
+  },
+  async loadConjugations() {
+    if (this.l2 === 'fra') {
+      console.log('Loading French conjugations from "french-verbs-lefff"...')
+      let res = await axios.get(`${this.server}data/french-verbs-lefff/conjugations.json.txt`)
+      if (res && res.data) {
+        this.conjugations = res.data
+      }
+      console.log('Loading French tokenizer...')
+      importScripts('../vendor/nlp-js-tools-french/nlp-js-tools-french.js')
+      for (let key of ['adj',
+        'adv',
+        'art',
+        'con',
+        'nom',
+        'ono',
+        'pre',
+        'ver',
+        'pro']) {
+        let res = await axios.get(`/vendor/nlp-js-tools-french/dict/${key.replace('con', 'conj')}.json`)
+        let lexi = res.data
+        this.NlpjsTFrDict[key] = { lexi }
+      }
+    }
   },
   parseDictionary(data) {
     console.log("Wiktionary: parsing words from JSON...")
@@ -112,7 +138,7 @@ const Dictionary = {
     words = words.map(item => {
       item.bare = this.stripAccents(item.word)
       item.search = item.bare.toLowerCase(),
-      item.head = item.word
+        item.head = item.word
       item.accented = item.word
       delete item.word
       item.wiktionary = true
@@ -238,10 +264,59 @@ const Dictionary = {
     }
   },
   tokenize(text) {
-    return this.tokenizeRecursively(
-      text,
-      this.subdictFromText(text)
-    )
+    if (this.l2 === 'fra') {
+      return this.tokenizeFrench(text)
+    } else {
+      return this.tokenizeRecursively(
+        text,
+        this.subdictFromText(text)
+      )
+
+    }
+  },
+  splitByReg(text, reg) {
+    let words = text.replace(reg, '!!!BREAKWORKD!!!$1!!!BREAKWORKD!!!').replace(/^!!!BREAKWORKD!!!/, '').replace(/!!!BREAKWORKD!!!$/, '')
+    return words.split('!!!BREAKWORKD!!!')
+  },
+  tokenizeFrench(text) {
+    let segs = this.splitByReg(text, /([A-Za-zÀ-ÖØ-öø-ÿ-]+)/gi); // https://stackoverflow.com/questions/20690499/concrete-javascript-regex-for-accented-characters-diacritics
+    tokenized = [];
+    let reg = new RegExp(
+      `.*([A-Za-zÀ-ÖØ-öø-ÿ-]+).*`
+    );
+    for (let seg of segs) {
+      let word = seg.toLowerCase();
+      if (
+        reg.test(word)
+      ) {
+        var corpus = seg
+        let tokenizer = new NlpjsTFr(this.NlpjsTFrDict, corpus);
+        var lemmas = tokenizer.lemmatizer()
+        lemmas = this.uniqueByValue([{ word, lemma: word }].concat(lemmas), 'lemma')
+        let found = false;
+        let token = {
+          text: seg,
+          candidates: [],
+        };
+        for (let lemma of lemmas) {
+          let candidates = this.lookupMultiple(lemma.lemma);
+          if (candidates.length > 0) {
+            found = true;
+            token.candidates = token.candidates.concat(candidates);
+          }
+        }
+        if (found) {
+          token.candidates = this.uniqueByValue(token.candidates, "id");
+          tokenized.push(token);
+        } else {
+          token.candidates = this.lookupFuzzy(seg)
+          tokenized.push(token);
+        }
+      } else {
+        tokenized.push(seg);
+      }
+    }
+    return tokenized
   },
   tokenizeRecursively(text, subdict) {
     const longest = subdict.longest(text)
