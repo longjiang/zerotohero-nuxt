@@ -86,7 +86,7 @@ const Dictionary = {
           let bare = this.stripAccents(item.word)
           words.push(Object.assign(item, {
             bare,
-            search: word.bare.toLowerCase(),
+            search: bare.toLowerCase(),
             head: item.word,
             accented: item.word,
             pronunciation: item.sounds && item.sounds.length > 0 ? item.sounds.filter(s => s.ipa).map(s => s.ipa.replace(/[/\[\]]/g, '')).join(', ') : undefined,
