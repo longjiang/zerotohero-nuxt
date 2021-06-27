@@ -5,34 +5,36 @@
   }
 </router>
 <template>
-  <div class="container main mt-5 mb-5">
-    <div class="row">
-      <div class="col-sm-12">
-        <h2 class="text-center mb-3">Lookup phrases not in the dictionary</h2>
-        <p class="text-center mb-5">
-          and see how they are used in real contexts.
-        </p>
-        <div class="search-compare-wrapper">
-          <SearchCompare
-            placeholder="Enter a word or phrase"
-            type="generic"
-            :term="term"
-            :compareTerm="compareTerm"
-            :random="false"
-            :key="`${term}-${compareTerm}-search`"
-            style="width: 100%"
-            :urlFunc="
-              (text) => `/${$l1.code}/${$l2.code}/phrase/search/${text}`
-            "
-            :compareUrlFunc="
-              (text) =>
-                `/${$l1.code}/${$l2.code}/phrase/compare/${term}/${text}`
-            "
-          />
+  <div>
+    <div class="container mt-5 mb-5">
+      <div class="row">
+        <div class="col-sm-12">
+          <h2 class="text-center mb-3">Lookup phrases not in the dictionary</h2>
+          <p class="text-center mb-5">
+            and see how they are used in real contexts.
+          </p>
+          <div class="search-compare-wrapper">
+            <SearchCompare
+              placeholder="Enter a word or phrase"
+              type="generic"
+              :term="term"
+              :compareTerm="compareTerm"
+              :random="false"
+              :key="`${term}-${compareTerm}-search`"
+              style="width: 100%"
+              :urlFunc="
+                (text) => `/${$l1.code}/${$l2.code}/phrase/search/${text}`
+              "
+              :compareUrlFunc="
+                (text) =>
+                  `/${$l1.code}/${$l2.code}/phrase/compare/${term}/${text}`
+              "
+            />
+          </div>
         </div>
-        <PhraseComp v-if="term" :term="term" />
       </div>
     </div>
+    <PhraseComp v-if="term" :term="term" />
   </div>
 </template>
 

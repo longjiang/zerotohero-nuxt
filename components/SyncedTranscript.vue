@@ -588,7 +588,6 @@ export default {
       let delta = 0;
       let currentLine = line;
       let currentLineIndex = this.lines.findIndex((l) => l === line);
-      // console.log(line);
       for (let lineIndex in this.lines) {
         lineIndex = Number(lineIndex);
         let line = this.lines[lineIndex];

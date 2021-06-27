@@ -1,48 +1,68 @@
 <template>
   <div class="phrase">
-     <SocialHead :title="title" :description="description" :image="image" />
-    <div class="text-center mt-5 mb-3" v-if="term">
-      <EntryExternal :term="term" />
-    </div>
-    <div
-      class="widget mt-5"
-      id="search-subs"
-      v-if="term"
-      :key="`subs-search-${term}`"
-    >
-      <div class="widget-title">“{{ term }}” in TV Shows</div>
-      <div class="widget-body">
-        <SearchSubsComp
-          v-if="term"
-          ref="searchSubs"
-          level="outside"
-          :key="`${term}-search-subs`"
-          :terms="[term]"
-        />
+    <SocialHead :title="title" :description="description" :image="image" />
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="text-center mb-5" v-if="term">
+            <EntryExternal :term="term" />
+          </div>
+        </div>
       </div>
     </div>
-    <div class="focus mt-5">
-      <WebImages
-        v-if="term"
-        :text="term"
-        limit="10"
-        class="mt-5"
-        :key="`${term}-images`"
-      />
-      <Collocations
-        v-if="term"
-        :text="term"
-        class="mt-5"
-        :key="`${term}-col`"
-      />
+
+    <div :class="{ container: !portrait, 'container-fluid': portrait }">
+      <div class="row">
+        <div :class="{ 'col-sm-12': true, 'p-0': portrait }">
+          <div
+            class="widget"
+            id="search-subs"
+            v-if="term"
+            :key="`subs-search-${term}`"
+            :style="portrait ? 'border-radius: 0' : ''"
+          >
+            <div class="widget-title">“{{ term }}” in TV Shows</div>
+            <div class="widget-body">
+              <SearchSubsComp
+                v-if="term"
+                ref="searchSubs"
+                level="outside"
+                :key="`${term}-search-subs`"
+                :terms="[term]"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div :key="term" class="focus">
-      <Concordance
-        v-if="term"
-        :text="term"
-        class="mt-5"
-        :key="`${term}-concordance`"
-      />
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="focus mt-5">
+            <WebImages
+              v-if="term"
+              :text="term"
+              limit="10"
+              class="mt-5"
+              :key="`${term}-images`"
+            />
+            <Collocations
+              v-if="term"
+              :text="term"
+              class="mt-5"
+              :key="`${term}-col`"
+            />
+          </div>
+          <div :key="term" class="focus">
+            <Concordance
+              v-if="term"
+              :text="term"
+              class="mt-5"
+              :key="`${term}-concordance`"
+            />
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -75,6 +95,11 @@ export default {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
+    portrait() {
+      let landscape =
+        typeof window !== "undefined" && window.innerWidth < window.innerHeight;
+      return landscape;
+    },
     title() {
       if (this.term) {
         return `Learn the ${this.$l2 ? this.$l2.name : ""} Phrase “${
@@ -101,8 +126,7 @@ export default {
       }
     },
   },
-  methods: {
-  },
+  methods: {},
 };
 </script>
 
