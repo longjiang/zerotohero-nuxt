@@ -37,9 +37,10 @@
               :data-level="
                 phraseObj && phraseObj.level ? phraseObj.level : 'outside'
               "
-              :phonetics="false"
+              :phonetics="!phraseObj.pronunciation"
               :buttons="true"
               v-if="phraseObj && phraseObj.phrase"
+              @textChanged="textChanged"
             >
               <span>{{ phraseObj.phrase }}</span>
             </Annotate>
@@ -122,6 +123,9 @@ export default {
     url(phraseObj) {
       return `/${this.$l1.code}/${this.$l2.code}/phrasebook/${this.phrasebook.id}/${phraseObj.id}/${phraseObj.phrase}`;
     },
+    textChanged(newText) {
+      this.phraseObj.phrase = newText
+    }
   },
 };
 </script>

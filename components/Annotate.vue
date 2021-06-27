@@ -79,7 +79,7 @@
       <input
         :class="{ 'annotate-input': true, 'd-none': !textMode || !annotated }"
         @select="select"
-        @blur="reannotate"
+        @blur="annotateInputBlur"
         @click.stop="dummyFunction"
         :value="text"
         style="width: calc(100% - 2rem)"
@@ -268,14 +268,19 @@ export default {
         this.convertToSentencesAndAnnotate(this.$slots.default[0]);
       }
     },
-    async reannotate(e) {
-      let node = this.$el.querySelector(".annotate-slot > *");
-      node.innerText = e.target.value;
-      this.convertToSentencesRecursive(node);
-      this.annotate(node);
+    async annotateInputBlur(e) {
+      let newText = e.target.value
+      this.reannotate(newText);
       await Helper.timeout(200);
       this.selectedText = undefined;
       this.textMode = false;
+      this.$emit('textChanged', newText);
+    },
+    reannotate(newText) {
+      let node = this.$el.querySelector(".annotate-slot > *");
+      node.innerText = newText;
+      this.convertToSentencesRecursive(node);
+      this.annotate(node);
     },
     convertToSentencesAndAnnotate(slot) {
       if (
