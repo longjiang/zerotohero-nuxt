@@ -306,57 +306,25 @@ const Dictionary = {
   tokenize(text) {
     if (this.l2 === 'fra') {
       return this.tokenizeFrench(text)
+    } else if (this.l2 === 'spa') {
+      return this.tokenizeSpanish(text)
     } else {
       return this.tokenizeRecursively(
         text,
         this.subdictFromText(text)
       )
-
     }
   },
   splitByReg(text, reg) {
     let words = text.replace(reg, '!!!BREAKWORKD!!!$1!!!BREAKWORKD!!!').replace(/^!!!BREAKWORKD!!!/, '').replace(/!!!BREAKWORKD!!!$/, '')
     return words.split('!!!BREAKWORKD!!!')
   },
-  tokenizeFrench(text) {
-    let segs = this.splitByReg(text, /([A-Za-zÀ-ÖØ-öø-ÿ-]+)/gi); // https://stackoverflow.com/questions/20690499/concrete-javascript-regex-for-accented-characters-diacritics
-    tokenized = [];
-    let reg = new RegExp(
-      `.*([A-Za-zÀ-ÖØ-öø-ÿ-]+).*`
-    );
-    for (let seg of segs) {
-      let word = seg.toLowerCase();
-      if (
-        reg.test(word)
-      ) {
-        var corpus = seg
-        let tokenizer = new NlpjsTFr(this.NlpjsTFrDict, corpus);
-        var lemmas = tokenizer.lemmatizer()
-        lemmas = this.uniqueByValue([{ word, lemma: word }].concat(lemmas), 'lemma')
-        let found = false;
-        let token = {
-          text: seg,
-          candidates: [],
-        };
-        for (let lemma of lemmas) {
-          let candidates = this.lookupMultiple(lemma.lemma);
-          if (candidates.length > 0) {
-            found = true;
-            token.candidates = token.candidates.concat(candidates);
-          }
-        }
-        if (found) {
-          token.candidates = this.uniqueByValue(token.candidates, "id");
-          tokenized.push(token);
-        } else {
-          token.candidates = this.lookupFuzzy(seg)
-          tokenized.push(token);
-        }
-      } else {
-        tokenized.push(seg);
-      }
-    }
-    return tokenized
+  findFrenchStems(text) {
+    let word = text.toLowerCase();
+    let tokenizer = new NlpjsTFr(this.NlpjsTFrDict, text);
+    var lemmas = tokenizer.lemmatizer()
+    var flattend = this.unique([word].concat(lemmas.map(l => l.lemma)))
+    return flattend
   },
   tokenizeRecursively(text, subdict) {
     const longest = subdict.longest(text)
@@ -403,12 +371,16 @@ const Dictionary = {
   stripAccents(str) {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
   },
+  stringsToWords(strings) {
+    let words = []
+    for (let s of strings) {
+      words = words.concat(this.lookupMultiple(s))
+    }
+    return words
+  },
   stemWords(word, score = undefined) {
     if (word.stems.length > 0) {
-      let stemWords = []
-      for (let s of word.stems) {
-        stemWords = stemWords.concat(this.lookupMultiple(s))
-      }
+      let stemWords = this.stringsToWords(word.stems)
       stemWordsWithScores = stemWords.map(w => Object.assign({ score: score }, w))
       return stemWordsWithScores
     } else return []
@@ -423,22 +395,34 @@ const Dictionary = {
       return phrasesWithScores
     } else return []
   },
+  unique(a) {
+    return a.filter((item, i, ar) => ar.indexOf(item) === i);
+  },
   lookupFuzzy(text, limit = 30) { // text = 'abcde'
     text = this.stripAccents(text.toLowerCase())
     if (['he', 'hbo', 'iw'].includes(this.l2)) text = this.stripHebrewVowels(text)
     let words = []
-    for (let word of this.words) {
-      let search = word.search ? word.search : undefined
-      if (search) {
-        let distance = FastestLevenshtein.distance(search, text);
-        let max = Math.max(text.length, search.length)
-        let similarity = (max - distance) / max
-        if (similarity > 0.5) {
-          words.push(Object.assign({ score: similarity }, word))
-        }
-        if (similarity === 1) {
-          words = words.concat(this.stemWords(word, 1))
-          words = words.concat(this.phrases(word, 1))
+    if (this.l2 === 'fra') {
+      words = this.words.filter(word => word.search === text).map(w => Object.assign({ score: 0.9 }, w))
+      let stems = this.findFrenchStems(text)
+      let stemWords = this.stringsToWords(stems)
+      let stemWordsWithScores = stemWords.map(w => Object.assign({ score: 1 }, w))
+      words = words.concat(stemWordsWithScores)
+    }
+    if (words.length === 0) {
+      for (let word of this.words) {
+        let search = word.search ? word.search : undefined
+        if (search) {
+          let distance = FastestLevenshtein.distance(search, text);
+          let max = Math.max(text.length, search.length)
+          let similarity = (max - distance) / max
+          if (similarity > 0.5) {
+            words.push(Object.assign({ score: similarity }, word))
+          }
+          if (similarity === 1) {
+            words = words.concat(this.stemWords(word, 1))
+            words = words.concat(this.phrases(word, 1))
+          }
         }
       }
     }
