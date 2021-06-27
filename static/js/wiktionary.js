@@ -32,7 +32,7 @@ const Dictionary = {
     this.l2 = options.l2
     this.file = this.dictionaryFile(options)
     await this.loadWords()
-    await this.loadConjugations()
+    if (this.l2 === 'fra') await this.loadFrenchConjugationsAndLemmatizer()
     return this
   },
   async loadWords() {
@@ -52,28 +52,26 @@ const Dictionary = {
     this.words = words
     console.log("Wiktionary: loaded.")
   },
-  async loadConjugations() {
-    if (this.l2 === 'fra') {
-      console.log('Loading French conjugations from "french-verbs-lefff"...')
-      let res = await axios.get(`${this.server}data/french-verbs-lefff/conjugations.json.txt`)
-      if (res && res.data) {
-        this.conjugations = res.data
-      }
-      console.log('Loading French tokenizer...')
-      importScripts('../vendor/nlp-js-tools-french/nlp-js-tools-french.js')
-      for (let key of ['adj',
-        'adv',
-        'art',
-        'con',
-        'nom',
-        'ono',
-        'pre',
-        'ver',
-        'pro']) {
-        let res = await axios.get(`/vendor/nlp-js-tools-french/dict/${key.replace('con', 'conj')}.json`)
-        let lexi = res.data
-        this.NlpjsTFrDict[key] = { lexi }
-      }
+  async loadFrenchConjugationsAndLemmatizer() {
+    console.log('Loading French conjugations from "french-verbs-lefff"...')
+    let res = await axios.get(`${this.server}data/french-verbs-lefff/conjugations.json.txt`)
+    if (res && res.data) {
+      this.conjugations = res.data
+    }
+    console.log('Loading French tokenizer...')
+    importScripts('../vendor/nlp-js-tools-french/nlp-js-tools-french.js')
+    for (let key of ['adj',
+      'adv',
+      'art',
+      'con',
+      'nom',
+      'ono',
+      'pre',
+      'ver',
+      'pro']) {
+      let res = await axios.get(`/vendor/nlp-js-tools-french/dict/${key.replace('con', 'conj')}.json`)
+      let lexi = res.data
+      this.NlpjsTFrDict[key] = { lexi }
     }
   },
   parseDictionary(data) {
@@ -319,13 +317,6 @@ const Dictionary = {
     let words = text.replace(reg, '!!!BREAKWORKD!!!$1!!!BREAKWORKD!!!').replace(/^!!!BREAKWORKD!!!/, '').replace(/!!!BREAKWORKD!!!$/, '')
     return words.split('!!!BREAKWORKD!!!')
   },
-  findFrenchStems(text) {
-    let word = text.toLowerCase();
-    let tokenizer = new NlpjsTFr(this.NlpjsTFrDict, text);
-    var lemmas = tokenizer.lemmatizer()
-    var flattend = this.unique([word].concat(lemmas.map(l => l.lemma)))
-    return flattend
-  },
   tokenizeRecursively(text, subdict) {
     const longest = subdict.longest(text)
     if (longest.matches.length > 0) {
@@ -398,16 +389,27 @@ const Dictionary = {
   unique(a) {
     return a.filter((item, i, ar) => ar.indexOf(item) === i);
   },
+  findStems(text) {
+    let word = text.toLowerCase();
+    if (this.l2 === 'fra') {
+      let tokenizer = new NlpjsTFr(this.NlpjsTFrDict, text);
+      var lemmas = tokenizer.lemmatizer()
+      var flattend = this.unique([word].concat(lemmas.map(l => l.lemma)))
+      return flattend
+    } else {
+      return []
+    }
+  },
   lookupFuzzy(text, limit = 30) { // text = 'abcde'
     text = this.stripAccents(text.toLowerCase())
     if (['he', 'hbo', 'iw'].includes(this.l2)) text = this.stripHebrewVowels(text)
     let words = []
-    if (this.l2 === 'fra') {
-      words = this.words.filter(word => word.search === text).map(w => Object.assign({ score: 0.9 }, w))
-      let stems = this.findFrenchStems(text)
+    let stems = this.findStems(text)
+    if (stems.length > 0) {
       let stemWords = this.stringsToWords(stems)
       let stemWordsWithScores = stemWords.map(w => Object.assign({ score: 1 }, w))
       words = words.concat(stemWordsWithScores)
+      words = this.words.filter(word => word.search === text).map(w => Object.assign({ score: 0.9 }, w))
     }
     if (words.length === 0) {
       for (let word of this.words) {
