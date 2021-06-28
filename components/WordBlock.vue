@@ -171,7 +171,7 @@
             class="pl-1 pr-1 ml-1 rounded d-inline-block"
             style="font-size: 0.8em; position: relative; bottom: 0.1rem"
           >
-            {{ $l2.code === "zh" ? "HSK " : "" }}{{ word.level }}
+            {{ $dictionaryName === "hsk-cedict" ? "HSK " : "" }}{{ word.level }}
           </span>
           <span
             v-if="word.newHSK"
@@ -453,6 +453,7 @@ export default {
     async update() {
       if (this.$l1) this.classes[`l1-${this.$l1.code}`] = true;
       if (this.$l2) this.classes[`l2-${this.$l2.code}`] = true;
+      if (this.$l2.han) this.classes['l2-zh'] = true;
       if (this.checkSaved) {
         let savedCandidate = undefined;
         let savedWord = false;

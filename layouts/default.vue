@@ -444,6 +444,7 @@ export default {
       };
       this.classes[`l1-${this.l1.code}`] = true;
       this.classes[`l2-${this.l2.code}`] = true;
+      if (this.l2.han) this.classes['l2-zh'] = true;
     },
     async loadSettings() {
       this.$store.commit("settings/LOAD_SETTINGS");
