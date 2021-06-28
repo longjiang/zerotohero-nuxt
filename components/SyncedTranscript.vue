@@ -8,7 +8,11 @@
       }"
       data-collapse-target
     >
-      <template v-for="(line, lineIndex) in single ? [lines[currentLineIndex || 0]] : lines">
+      <template
+        v-for="(line, lineIndex) in single
+          ? [lines[currentLineIndex || 0]]
+          : lines"
+      >
         <div
           :key="`line-${lineIndex}-${line.starttime}-${line.line.substr(
             0,
@@ -199,23 +203,7 @@ export default {
     this.lines.map((line) => {
       line.starttime = Number(line.starttime);
     });
-    let matchedParallelLines = [];
-    for (let lineIndex in this.lines) {
-      lineIndex = Number(lineIndex);
-      let line = this.lines[lineIndex];
-      let nextLine = this.lines[lineIndex + 1];
-      if (!nextLine) break;
-      matchedParallelLines[lineIndex] = this.parallellines
-        .filter((l) => {
-          return (
-            l.starttime >= line.starttime - 1 &&
-            (!nextLine || l.starttime < nextLine.starttime - 1)
-          );
-        })
-        .map((l) => l.line)
-        .join("&nbsp;");
-    }
-    this.matchedParallelLines = matchedParallelLines;
+    this.matchParallelLines();
     this.reviewKeys = this.lines.map(() => 0);
     if (this.quiz && this.highlightSavedWords) {
       if (
@@ -280,8 +268,30 @@ export default {
           line.classList.add("transcript-line-current");
       }
     },
+    parallellines() {
+      this.matchParallelLines()
+    }
   },
   methods: {
+    matchParallelLines() {
+      let matchedParallelLines = [];
+      for (let lineIndex in this.lines) {
+        lineIndex = Number(lineIndex);
+        let line = this.lines[lineIndex];
+        let nextLine = this.lines[lineIndex + 1];
+        if (!nextLine) break;
+        matchedParallelLines[lineIndex] = this.parallellines
+          .filter((l) => {
+            return (
+              l.starttime >= line.starttime - 1 &&
+              (!nextLine || l.starttime < nextLine.starttime - 1)
+            );
+          })
+          .map((l) => l.line)
+          .join("&nbsp;");
+      }
+      this.matchedParallelLines = matchedParallelLines;
+    },
     lineHtml(line) {
       return this.highlight
         ? this.highlightMultiple(

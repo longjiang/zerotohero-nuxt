@@ -132,6 +132,14 @@
         >
           Drop Subs Here
         </drop>
+        <b-form-textarea
+          v-model="translation"
+          @blur="updateTranslation"
+          placeholder="Translation"
+          rows="3"
+          class="mt-2"
+          max-rows="6"
+        ></b-form-textarea>
         <div class="mt-2">
           <!-- First line starts at
           <input
@@ -183,7 +191,8 @@ export default {
       transcriptKey: 0,
       deleted: false,
       deleting: false,
-      showSubsEditing: false
+      showSubsEditing: false,
+      translation: ''
     };
   },
   computed: {
@@ -218,6 +227,9 @@ export default {
     },
   },
   methods: {
+    updateTranslation() {
+      this.$emit('updateTranslation', this.translation)
+    },
     async unassignShow(type) {
       let data = {};
       data[type] = null;

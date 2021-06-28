@@ -59,7 +59,7 @@
               <i class="fa fa-chevron-right"></i>
             </router-link>
           </div>
-          <VideoAdmin :video="video" @showSubsEditing="toggleShowSubsEditing" />
+          <VideoAdmin :video="video" @showSubsEditing="toggleShowSubsEditing" @updateTranslation="updateTranslation" />
           <hr v-if="video.channel" />
           <YouTubeChannelCard
             v-if="video.channel"
@@ -165,6 +165,8 @@
 
 <script>
 import moment from "moment";
+import Vue from 'vue';
+
 export default {
   props: {
     video: {
@@ -266,6 +268,18 @@ export default {
     if (this.$refs.youtube) this.$refs.youtube.speed = this.speed;
   },
   methods: {
+    updateTranslation(translation) {
+      let translationLines = translation.split("\n")
+      let subs_l1 = this.video.subs_l2.map((line, lineIndex) => {
+        return {
+          starttime: line.starttime,
+          line: translationLines[lineIndex],
+          l1: this.$l1.code
+        }
+      })
+      Vue.set(this.video, 'subs_l1', subs_l1)
+      console.log(this.video.subs_l1)
+    },
     toggleShowSubsEditing(showSubsEditing) {
       this.showSubsEditing = showSubsEditing
     },
