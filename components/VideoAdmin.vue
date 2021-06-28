@@ -156,14 +156,18 @@
             class="d-inline-block ml-1"
             style="width: 4rem"
           /> -->
-          <b-button v-if="!subsUpdated" @click="updateSubs" class="ml-2">
+          <b-button v-if="!updating && !subsUpdated" @click="updateSubs" class="ml-2">
             <i class="fa fa-save mr-2"></i>
             Update Subs
           </b-button>
-          <b-button v-else variant="success" class="ml-2">
-            <i class="fa fa-check mr-2"></i>
+          <span :class="{ 'd-none': !updating }">
+            <i class="fas fa-hourglass mr-2 text-secondary"></i>
+            Updating...
+          </span>
+          <span :class="{ 'd-none': !subsUpdated }">
+            <i class="fas fa-check-circle mr-2 text-success"></i>
             Updated
-          </b-button>
+          </span>
         </div>
       </div>
     </div>
@@ -198,6 +202,7 @@ export default {
       transcriptKey: 0,
       deleted: false,
       deleting: false,
+      updating: false,
       showSubsEditing: false,
       translation: "",
     };
@@ -328,6 +333,7 @@ export default {
       }
     },
     async updateSubs() {
+      this.updating = true
       try {
         let response = await axios.patch(
           `${Config.wiki}items/youtube_videos/${this.video.id}`,
@@ -337,7 +343,10 @@ export default {
           }
         );
         if (response && response.data) {
+          this.updating = false
           this.subsUpdated = true;
+          await Helper.timeout(2000)
+          this.subsUpdated = false;
         }
       } catch (err) {}
     },
