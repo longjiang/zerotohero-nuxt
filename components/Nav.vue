@@ -75,6 +75,12 @@ export default {
             },
             {
               icon: "fas fa-wrench",
+              title: "Break Lines",
+              name: "break-lines",
+              show: this.adminMode(),
+            },
+            {
+              icon: "fas fa-wrench",
               title: "Wiktionary CSV",
               name: "wiktionary-csv",
               show: this.adminMode(),

@@ -1,6 +1,6 @@
 <router>
   {
-    path: '/:l1/:l2/breaklines'
+    path: '/:l1/:l2/break-lines'
   }
 </router>
 <template>
