@@ -84,6 +84,7 @@
             @play="play"
             @speechStart="speechStart"
             @speechEnd="speechEnd"
+            @updateTranslation="updateTranslation"
           />
           <div class="text-center mt-5">
             <router-link
@@ -278,7 +279,6 @@ export default {
         }
       })
       Vue.set(this.video, 'subs_l1', subs_l1)
-      console.log(this.video.subs_l1)
     },
     toggleShowSubsEditing(showSubsEditing) {
       this.showSubsEditing = showSubsEditing

@@ -72,6 +72,9 @@
                   $l2.scripts[0].direction === 'rtl',
               }"
               v-html="matchedParallelLines[single ? currentLineIndex : lineIndex]"
+              :contenteditable="$adminMode"
+              :data-line-index="lineIndex"
+              @keydown.capture="trasnlationLineChanged"
             ></div>
           </div>
         </div>
@@ -274,13 +277,28 @@ export default {
     }
   },
   methods: {
+    async trasnlationLineChanged(e) {
+      if(e.key === 'Enter') {
+        await Helper.timeout(100)
+        let lineIndex = Number(e.target.getAttribute('data-line-index'))
+        for (let line of this.matchedParallelLines) {
+          line = line.replace(/\n/g, ' ')
+        }
+        this.matchedParallelLines[lineIndex] = e.target.innerText
+        let updatedLines = this.matchedParallelLines.join("\n").trim()
+        this.$emit('updateTranslation', updatedLines)
+        this.goToNextLine()
+      }
+    },
     matchParallelLines() {
       let matchedParallelLines = [];
       for (let lineIndex in this.lines) {
+        if (lineIndex === '190') {
+          console.log('cool') 
+        }
         lineIndex = Number(lineIndex);
         let line = this.lines[lineIndex];
         let nextLine = this.lines[lineIndex + 1];
-        if (!nextLine) break;
         matchedParallelLines[lineIndex] = this.parallellines
           .filter((l) => {
             return (
@@ -289,7 +307,8 @@ export default {
             );
           })
           .map((l) => l.line)
-          .join("&nbsp;");
+          .join(" ");
+        if (!nextLine) break;
       }
       this.matchedParallelLines = matchedParallelLines;
     },
