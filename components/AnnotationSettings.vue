@@ -37,6 +37,7 @@
               'ryu',
               'bo',
               'my',
+              'lzh'
             ].includes(this.$l2.code)
           "
           v-model="showDefinition"

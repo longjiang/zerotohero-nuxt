@@ -38,21 +38,27 @@
           {{ savedTransliteration || transliteration }}
         </span>
         <span
-          v-if="['zh', 'yue', 'nan', 'hak'].includes($l2.code)"
+          v-if="$l2.han"
           class="word-block-simplified"
           @click="wordBlockClick()"
         >
           {{ token.candidates[0].simplified }}
         </span>
         <span
-          v-if="['zh', 'yue', 'nan', 'hak'].includes($l2.code)"
+          v-if="$l2.han"
           class="word-block-traditional"
           @click="wordBlockClick()"
         >
           {{ token.candidates[0].traditional }}
         </span>
         <span v-else class="word-block-text" @click="wordBlockClick()">
-          {{ token.text }}<span v-if="$l2.code === 'ko' && (saved || token.candidates[0]).hanja" class="word-block-text-byeonggi">{{ (saved || token.candidates[0]).hanja}} </span>
+          {{ token.text }}
+          <span
+            v-if="$l2.code === 'ko' && (saved || token.candidates[0]).hanja"
+            class="word-block-text-byeonggi"
+          >
+            {{ (saved || token.candidates[0]).hanja }}
+          </span>
         </span>
       </template>
       <template v-else>
@@ -315,12 +321,11 @@ export default {
     },
     bestCandidate() {
       if (this.token && this.token.candidates && this.token.candidates[0]) {
-        let saved = this.token.candidates.find(c => c.saved)
+        let saved = this.token.candidates.find((c) => c.saved);
         if (saved) {
-          console.log(saved)
-          return saved
-        }
-        else return this.token.candidates[0]
+          console.log(saved);
+          return saved;
+        } else return this.token.candidates[0];
       }
     },
     attributes() {
@@ -346,18 +351,12 @@ export default {
         this.token.candidates &&
         this.token.candidates.length > 0
       ) {
-        if (this.$l2.code === "ja" && this.token.candidates[0].kana) {
+        if (this.token.candidates[0].kana) {
           this.transliteration = this.token.candidates[0].kana;
-        } else if (
-          ["zh", "nan", "hak"].includes(this.$l2.code) &&
-          this.token.candidates[0].pinyin
-        ) {
-          this.transliteration = this.token.candidates[0].pinyin;
-        } else if (
-          this.$l2.code === "yue" &&
-          this.token.candidates[0].jyutping
-        ) {
+        } else if (this.token.candidates[0].jyutping) {
           this.transliteration = this.token.candidates[0].jyutping;
+        } else if (this.token.candidates[0].pinyin) {
+          this.transliteration = this.token.candidates[0].pinyin;
         } else {
           this.transliteration = tr(this.token.candidates[0].head);
         }
@@ -455,7 +454,7 @@ export default {
       if (this.$l1) this.classes[`l1-${this.$l1.code}`] = true;
       if (this.$l2) this.classes[`l2-${this.$l2.code}`] = true;
       if (this.checkSaved) {
-        let savedCandidate = undefined
+        let savedCandidate = undefined;
         let savedWord = false;
         if (
           this.token &&
@@ -468,7 +467,7 @@ export default {
               id: candidate.id,
             });
             if (savedWord) {
-              savedCandidate = candidate
+              savedCandidate = candidate;
               break;
             }
           }
@@ -490,7 +489,9 @@ export default {
           savedWord.id &&
           ["ja", "zh", "nan", "hak", "en", "ko"].includes(this.$l2.code)
         ) {
-          let word = savedCandidate || await (await this.$getDictionary()).get(savedWord.id);
+          let word =
+            savedCandidate ||
+            (await (await this.$getDictionary()).get(savedWord.id));
           let text =
             this.text ||
             (this.token && this.token.candidates.length > 0
@@ -686,7 +687,7 @@ export default {
   display: block;
 }
 
-.show-byeonggi .word-block .word-block-text-byeonggi  {
+.show-byeonggi .word-block .word-block-text-byeonggi {
   display: inline;
 }
 
