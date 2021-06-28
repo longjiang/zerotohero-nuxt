@@ -59,7 +59,7 @@
               <i class="fa fa-chevron-right"></i>
             </router-link>
           </div>
-          <VideoAdmin :video="video" @showSubsEditing="toggleShowSubsEditing" @updateTranslation="updateTranslation" />
+          <VideoAdmin :class="{'d-none': !$adminMode}" :video="video" @showSubsEditing="toggleShowSubsEditing" @updateTranslation="updateTranslation" @enableTranslationEditing="toggleEnableTranslationEditing"/>
           <hr v-if="video.channel" />
           <YouTubeChannelCard
             v-if="video.channel"
@@ -79,6 +79,7 @@
             :startLineIndex="startLineIndex"
             :stopLineIndex="stopLineIndex"
             :showSubsEditing="showSubsEditing"
+            :enableTranslationEditing="enableTranslationEditing"
             :notes="video.notes"
             @seek="seekYouTube"
             @pause="pause"
@@ -113,7 +114,7 @@
               <i class="fa fa-chevron-right"></i>
             </router-link>
           </div>
-          <VideoAdmin :class="{'mt-5': true, 'd-none': !$adminMode}" :video="video" @showSubsEditing="toggleShowSubsEditing" @updateTranslation="updateTranslation" />
+          <VideoAdmin :class="{'mt-5': true, 'd-none': !$adminMode}" :video="video" @showSubsEditing="toggleShowSubsEditing" @updateTranslation="updateTranslation" @enableTranslationEditing="toggleEnableTranslationEditing"/>
         </div>
       </div>
     </div>
@@ -232,6 +233,7 @@ export default {
       repeatMode: false,
       audioMode: false,
       showSubsEditing: false,
+      enableTranslationEditing: false,
       currentTime: 0,
       videoInfoKey: 0,
     };
@@ -285,6 +287,9 @@ export default {
     },
     toggleShowSubsEditing(showSubsEditing) {
       this.showSubsEditing = showSubsEditing
+    },
+    toggleEnableTranslationEditing(enableTranslationEditing) {
+      this.enableTranslationEditing = enableTranslationEditing
     },
     formatDate(date) {
       return moment(date).format("LL");

@@ -75,7 +75,7 @@
               v-html="
                 matchedParallelLines[single ? currentLineIndex : lineIndex]
               "
-              :contenteditable="$adminMode"
+              :contenteditable="$adminMode && enableTranslationEditing"
               :data-line-index="lineIndex"
               @blur.capture="trasnlationLineBlur"
               @keydown.capture="trasnlationLineKeydown"
@@ -155,6 +155,9 @@ export default {
       default: -1,
     },
     showSubsEditing: {
+      default: false,
+    },
+    enableTranslationEditing: {
       default: false,
     },
   },

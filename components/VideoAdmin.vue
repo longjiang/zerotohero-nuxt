@@ -117,9 +117,17 @@
             Removed
           </span>
         </template>
-        <b-checkbox v-model="showSubsEditing" class="mt-2">
-          Show Subs Editing
-        </b-checkbox>
+        <div>
+          <b-checkbox v-model="showSubsEditing" class="mt-2 d-inline-block">
+            Show Subs Editing
+          </b-checkbox>
+          <b-checkbox
+            v-model="enableTranslationEditing"
+            class="mt-2 d-inline-block"
+          >
+            Enable Translation Editing
+          </b-checkbox>
+        </div>
       </div>
       <div
         :class="{
@@ -156,7 +164,11 @@
             class="d-inline-block ml-1"
             style="width: 4rem"
           /> -->
-          <b-button v-if="!updating && !subsUpdated" @click="updateSubs" class="ml-2">
+          <b-button
+            v-if="!updating && !subsUpdated"
+            @click="updateSubs"
+            class="ml-2"
+          >
             <i class="fa fa-save mr-2"></i>
             Update Subs
           </b-button>
@@ -204,6 +216,7 @@ export default {
       deleting: false,
       updating: false,
       showSubsEditing: false,
+      enableTranslationEditing: false,
       translation: "",
       mounted: false,
     };
@@ -218,17 +231,20 @@ export default {
         return this.$store.state.settings.l2;
     },
     $adminMode() {
-      this.mounted // So that this component shows up on first load (updates $adminMode)
+      this.mounted; // So that this component shows up on first load (updates $adminMode)
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
     },
   },
   mounted() {
-    this.mounted = true // So that this component shows up on first load (updates $adminMode)
+    this.mounted = true; // So that this component shows up on first load (updates $adminMode)
   },
   watch: {
     showSubsEditing() {
       this.$emit("showSubsEditing", this.showSubsEditing);
+    },
+    enableTranslationEditing() {
+      this.$emit("enableTranslationEditing", this.enableTranslationEditing);
     },
     firstLineTime() {
       if (this.video.subs_l2 && this.video.subs_l2.length > 0) {
@@ -338,19 +354,21 @@ export default {
       }
     },
     async updateSubs() {
-      this.updating = true
+      this.updating = true;
       try {
         let response = await axios.patch(
           `${Config.wiki}items/youtube_videos/${this.video.id}`,
           {
             subs_l2: YouTube.unparseSubs(this.video.subs_l2),
-            subs_l1: this.video.subs_l1 ? YouTube.unparseSubs(this.video.subs_l1) : undefined,
+            subs_l1: this.video.subs_l1
+              ? YouTube.unparseSubs(this.video.subs_l1)
+              : undefined,
           }
         );
         if (response && response.data) {
-          this.updating = false
+          this.updating = false;
           this.subsUpdated = true;
-          await Helper.timeout(2000)
+          await Helper.timeout(2000);
           this.subsUpdated = false;
         }
       } catch (err) {}
