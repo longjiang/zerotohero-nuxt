@@ -74,7 +74,8 @@
               v-html="matchedParallelLines[single ? currentLineIndex : lineIndex]"
               :contenteditable="$adminMode"
               :data-line-index="lineIndex"
-              @keydown.capture="trasnlationLineChanged"
+              @blur.capture="trasnlationLineBlur"
+              @keydown.capture="trasnlationLineKeydown"
             ></div>
           </div>
         </div>
@@ -277,18 +278,24 @@ export default {
     }
   },
   methods: {
-    async trasnlationLineChanged(e) {
-      if(e.key === 'Enter') {
+    trasnlationLineBlur(e) {
+      this.trasnlationLineChanged(e)
+    },
+    async trasnlationLineKeydown(e) {
+      if (e.key === 'Enter') {
         await Helper.timeout(100)
-        let lineIndex = Number(e.target.getAttribute('data-line-index'))
-        for (let line of this.matchedParallelLines) {
-          line = line.replace(/\n/g, ' ')
-        }
-        this.matchedParallelLines[lineIndex] = e.target.innerText
-        let updatedLines = this.matchedParallelLines.join("\n").trim()
-        this.$emit('updateTranslation', updatedLines)
+        this.trasnlationLineChanged(e)
         this.goToNextLine()
       }
+    },
+    trasnlationLineChanged(e) {
+      let lineIndex = Number(e.target.getAttribute('data-line-index'))
+      for (let line of this.matchedParallelLines) {
+        line = line.replace(/\n/g, ' ')
+      }
+      this.matchedParallelLines[lineIndex] = e.target.innerText
+      let updatedLines = this.matchedParallelLines.filter(l => l !== '').join("\n").trim()
+      this.$emit('updateTranslation', updatedLines)
     },
     matchParallelLines() {
       let matchedParallelLines = [];
