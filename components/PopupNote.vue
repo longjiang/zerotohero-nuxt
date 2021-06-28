@@ -15,7 +15,10 @@
       {{ number }}
     </span>
     <template slot="popover">
-      <div>{{ content }}</div>
+      <button class="word-block-tool-tip-close" @click="hover = false">
+        <i class="fa fa-times"></i>
+      </button>
+      <div class="popup-note-content mt-4">{{ content }}</div>
     </template>
   </v-popover>
 </template>
@@ -76,11 +79,8 @@ export default {
   margin-bottom: -0.2rem;
 }
 
-.tooltip {
-  height: inherit;
-}
-
-.tooltip-inner {
-  height: inherit;
+.popup-note-content {
+  font-size: 1rem;
+  color: #666;
 }
 </style>
