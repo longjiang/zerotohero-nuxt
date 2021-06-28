@@ -20,13 +20,19 @@
         <h3 class="mb-4 text-center">
           {{ title || `YouTube Channel ${channel_id}` }}
         </h3>
+        <div class="text-center">
+          <b-button class="btn-small btn-primary d-inline-block" @click="forceRefresh">
+            <i class="fa fa-sync-alt mr-1"></i>
+            Force Refresh
+          </b-button>
+        </div>
         <template v-if="!loading">
           <!--
           <h4 class="text-center mt-5">{{ $t('Videos') }}</h4>
           <hr class="mb-5" />
           <YouTubeVideoList :videos="videos" />
           -->
-          <h4 class="text-center mt-5">{{ $t('Playlists') }}</h4>
+          <h4 class="text-center mt-5">{{ $t("Playlists") }}</h4>
           <hr />
           <YouTubePlaylists :playlists="playlists" />
         </template>
@@ -36,10 +42,9 @@
 </template>
 
 <script>
-import YouTubeVideoList from '@/components/YouTubeVideoList'
-import YouTubePlaylists from '@/components/YouTubePlaylists'
-import YouTube from '@/lib/youtube'
-import Config from '@/lib/config'
+import YouTubeVideoList from "@/components/YouTubeVideoList";
+import YouTubePlaylists from "@/components/YouTubePlaylists";
+import YouTube from "@/lib/youtube";
 
 export default {
   components: {
@@ -51,8 +56,8 @@ export default {
       type: String,
     },
     title: {
-      type: String
-    }
+      type: String,
+    },
   },
   data() {
     return {
@@ -60,10 +65,10 @@ export default {
       videos: [],
       loading: true,
       saved: false,
-    }
+    };
   },
   mounted() {
-    this.update()
+    this.loadChannel();
   },
   computed: {
     $l1() {
@@ -76,42 +81,30 @@ export default {
     },
   },
   methods: {
-    async getSaved() {
-      this.saved = false
-      let response = (
-        await axios.get(
-          `${Config.wiki}items/youtube_channels?filter[channel_id][eq]=${this.channel_id}`
-        )
-      ).data
-      if (response && response.length > 0) {
-        this.saved = response
-      }
+    forceRefresh() {
+      this.loadChannel({ forceRefresh: true });
     },
-    async save() {
-      let file = await $.post(`${Config.wiki}files`, {
-        data: this.avatar,
-      })
-      let success = await $.post(`${Config.wiki}items/youtube_channels`, {
-        channel_id: this.channel_id,
-        name: this.title,
-        language: this.$l2.id,
-        avatar: file.data.id,
-      })
-      if (success) {
-        this.saved = success.data
-      }
-    },
-    async update() {
-      this.loading = true
-      this.videos = []
-      let playlists = await YouTube.channelPlayListsByAPI(this.channel_id)
+    async loadChannel(options) {
+      options = options || {};
+      options = Object.assign(
+        {
+          forceRefresh: false,
+        },
+        options
+      );
+      this.loading = true;
+      this.videos = [];
+      let playlists = await YouTube.channelPlayListsByAPI(
+        this.channel_id,
+        options.forceRefresh ? 0 : -1
+      );
       if (playlists) {
-        this.playlists = playlists.sort((a,b) => b.count - a.count)
+        this.playlists = playlists.sort((a, b) => b.count - a.count);
       }
-      this.loading = false
+      this.loading = false;
     },
   },
-}
+};
 </script>
 
 <style>

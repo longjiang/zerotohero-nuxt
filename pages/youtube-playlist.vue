@@ -10,6 +10,12 @@
       <div class="col-sm-12">
         <h3 class="text-center" v-if="title">{{ title }}</h3>
         <h3 class="text-center" v-else>Playlist: {{ playlist_id }}</h3>
+        <div class="text-center mt-4 mb-4">
+          <b-button class="btn-small btn-primary d-inline-block" @click="forceRefresh">
+            <i class="fa fa-sync-alt mr-1"></i>
+            Force Refresh
+          </b-button>
+        </div>
         <YouTubeVideoList
           :videos="videos.filter((video) => video.title !== 'Private video')"
           :checkSubs="true"
@@ -44,12 +50,22 @@ export default {
     }
   },
   mounted() {
-    this.update()
+    this.loadPlaylist()
   },
   methods: {
-    async update() {
+    forceRefresh() {
+      this.loadPlaylist({ forceRefresh: true });
+    },
+    async loadPlaylist(options) {
       this.videos = []
-      let videos = await YouTube.playlistByApi(this.playlist_id)
+      options = options || {};
+      options = Object.assign(
+        {
+          forceRefresh: false,
+        },
+        options
+      );
+      let videos = await YouTube.playlistByApi(this.playlist_id, false, options.forceRefresh ? 0 : -1)
       if (videos && videos.length > 0) {
         if (this.checkShows)
           videos = await YouTube.checkShows(
@@ -70,7 +86,7 @@ export default {
   watch: {
     playlist_id() {
       if (this.$route.name === 'youtube-playlist') {
-        this.update()
+        this.loadPlaylist()
       }
     },
   },
