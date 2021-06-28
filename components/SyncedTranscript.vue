@@ -29,7 +29,7 @@
             'pr-4': !single && $l2.direction === 'rtl',
           }"
           @click="lineClick(line)"
-          :id="`transcript-line-${id}-${lineIndex}`"
+          :data-line-index="lineIndex"
           style="display: flex"
           ref="lines"
         >
@@ -72,7 +72,9 @@
                   $l2.scripts.length > 0 &&
                   $l2.scripts[0].direction === 'rtl',
               }"
-              v-html="matchedParallelLines[single ? currentLineIndex : lineIndex]"
+              v-html="
+                matchedParallelLines[single ? currentLineIndex : lineIndex]
+              "
               :contenteditable="$adminMode"
               :data-line-index="lineIndex"
               @blur.capture="trasnlationLineBlur"
@@ -202,7 +204,7 @@ export default {
       audioCancelled: false,
       reviewKeys: [],
       neverPlayed: true,
-      matchedParallelLines: undefined 
+      matchedParallelLines: undefined,
     };
   },
   async created() {
@@ -267,49 +269,51 @@ export default {
         this.scrollTo(this.currentLineIndex);
     },
     currentLineIndex() {
-      for (let lineIndex in this.$refs.lines) {
-        let line = this.$refs.lines[lineIndex];
-        line.classList.remove("transcript-line-current");
-        if (Number(lineIndex) === this.currentLineIndex)
-          line.classList.add("transcript-line-current");
-      }
+      let lineEls = this.$el.querySelectorAll(`.transcript-line`);
+      lineEls.forEach((lineEl) =>
+        lineEl.classList.remove("transcript-line-current")
+      );
+      let lineEl = this.$el.querySelector(
+        `.transcript-line[data-line-index="${this.currentLineIndex}"]`
+      );
+      lineEl.classList.add("transcript-line-current");
     },
     parallellines() {
-      this.matchParallelLines()
-    }
+      this.matchParallelLines();
+    },
   },
   methods: {
     lineChanged(line, newText) {
-      line.line = newText
+      line.line = newText;
     },
     trasnlationLineBlur(e) {
-      this.trasnlationLineChanged(e)
+      this.trasnlationLineChanged(e);
     },
     async trasnlationLineKeydown(e) {
-      if (e.key === 'Enter') {
-        await Helper.timeout(100)
-        this.trasnlationLineChanged(e)
-        this.goToNextLine()
+      if (e.key === "Enter") {
+        await Helper.timeout(100);
+        this.trasnlationLineChanged(e);
+        this.goToNextLine();
       }
     },
     trasnlationLineChanged(e) {
-      let lineIndex = Number(e.target.getAttribute('data-line-index'))
+      let lineIndex = Number(e.target.getAttribute("data-line-index"));
       for (let line of this.matchedParallelLines) {
-        line = line.replace(/\n/g, ' ')
+        line = line.replace(/\n/g, " ");
       }
-      this.matchedParallelLines[lineIndex] = e.target.innerText
-      this.emitUpdateTranslation()
+      this.matchedParallelLines[lineIndex] = e.target.innerText;
+      this.emitUpdateTranslation();
     },
     emitUpdateTranslation() {
-      let updatedLines = this.matchedParallelLines.filter(l => l !== '').join("\n").trim()
-      this.$emit('updateTranslation', updatedLines)
+      let updatedLines = this.matchedParallelLines
+        .filter((l) => l !== "")
+        .join("\n")
+        .trim();
+      this.$emit("updateTranslation", updatedLines);
     },
     matchParallelLines() {
       let matchedParallelLines = [];
       for (let lineIndex in this.lines) {
-        if (lineIndex === '190') {
-          console.log('cool') 
-        }
         lineIndex = Number(lineIndex);
         let line = this.lines[lineIndex];
         let nextLine = this.lines[lineIndex + 1];

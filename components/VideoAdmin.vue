@@ -205,6 +205,7 @@ export default {
       updating: false,
       showSubsEditing: false,
       translation: "",
+      mounted: false,
     };
   },
   computed: {
@@ -217,9 +218,13 @@ export default {
         return this.$store.state.settings.l2;
     },
     $adminMode() {
+      this.mounted // So that this component shows up on first load (updates $adminMode)
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
     },
+  },
+  mounted() {
+    this.mounted = true // So that this component shows up on first load (updates $adminMode)
   },
   watch: {
     showSubsEditing() {
