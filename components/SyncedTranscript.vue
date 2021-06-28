@@ -608,8 +608,8 @@ export default {
       this.$emit("seek", starttime);
     },
     scrollTo(lineIndex) {
-      let el = document.getElementById(
-        `transcript-line-${this.id}-${lineIndex}`
+      let el = this.$el.querySelector(
+        `.transcript-line[data-line-index="${lineIndex}"]`
       );
       if (el) {
         let offsetTop = Helper.documentOffsetTop(el);
