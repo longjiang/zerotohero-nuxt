@@ -8,7 +8,7 @@
     style="display: inline-block"
   >
     <span
-      class="popup-note bg-warning rounded text-white"
+      class="popup-note"
       @mouseover="mouseOverHandler"
       @mouseout="mouseOutHandler"
     >
@@ -69,14 +69,18 @@ export default {
 .popup-note {
   display: inline-block;
   font-size: 0.8rem;
-  padding: 0 0.3rem;
-  min-width: 1rem;
-  height: 1.2rem;
+  min-width: 1.3rem;
+  height: 1.3rem;
   line-height: 1.2rem;
   overflow: hidden;
   margin-left: 0.2rem;
   margin-right: 0.2rem;
   margin-bottom: -0.2rem;
+  border-radius: 0.65rem;
+  border: 1px solid #ccc;
+  text-align: center;
+  background-color: #ccc;
+  color: white;
 }
 
 .popup-note-content {
