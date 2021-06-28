@@ -1,0 +1,86 @@
+<template>
+  <v-popover
+    :open="hover"
+    :open-group="'id' + _uid"
+    placement="top"
+    trigger="manual"
+    class="popup-note-popover"
+    style="display: inline-block"
+  >
+    <span
+      class="popup-note bg-warning rounded text-white"
+      @mouseover="mouseOverHandler"
+      @mouseout="mouseOutHandler"
+    >
+      {{ number }}
+    </span>
+    <template slot="popover">
+      <div>{{ content }}</div>
+    </template>
+  </v-popover>
+</template>
+
+<script>
+export default {
+  props: {
+    number: {
+      type: Number,
+    },
+    content: {
+      type: String,
+    },
+  },
+  data() {
+    return {
+      hover: false,
+    };
+  },
+  methods: {
+    mouseOverHandler() {
+      this.openPopup();
+    },
+    mouseOutHandler() {
+      this.closePopup();
+    },
+    async openPopup() {
+      setTimeout(() => {
+        if ($(".popover:hover").length === 0) {
+          this.hover = true;
+        }
+      }, 300); // Allow user to interact with previous popover
+    },
+    closePopup() {
+      setTimeout(() => {
+        // Allow user to interact with popover
+        let $popovers = $(".popover:hover");
+        if ($popovers && $popovers.length === 0) {
+          this.hover = false;
+        }
+      }, 300);
+    },
+  },
+};
+</script>
+
+<style>
+.popup-note {
+  display: inline-block;
+  font-size: 0.8rem;
+  padding: 0 0.3rem;
+  min-width: 1rem;
+  height: 1.2rem;
+  line-height: 1.2rem;
+  overflow: hidden;
+  margin-left: 0.2rem;
+  margin-right: 0.2rem;
+  margin-bottom: -0.2rem;
+}
+
+.tooltip {
+  height: inherit;
+}
+
+.tooltip-inner {
+  height: inherit;
+}
+</style>

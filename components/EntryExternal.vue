@@ -4,7 +4,7 @@
       <a
         @click.prevent="toggleIframe"
         :href="`https://www.zdic.net/hans/${term}`"
-        v-if="['zh', 'yue', 'nan', 'wuu', 'hak'].includes($l2.code)"
+        v-if="$l2.han"
         class="btn btn-small mb-1"
         :data-bg-level="iframe && iframe.startsWith('https://www.zdic.net') ? level : false"
       >
@@ -63,7 +63,7 @@
       <a
         @click.prevent="toggleIframe"
         :href="`https://www.moedict.tw/${traditional ? traditional : tify(term)}`"
-        v-if="['zh', 'yue', 'nan', 'wuu', 'hak'].includes($l2.code)"
+        v-if="$l2.han"
         class="btn btn-small mb-1"
         :data-bg-level="iframe && iframe.startsWith('https://www.moedict.tw') ? level : false"
       >
@@ -72,7 +72,7 @@
       <a
         @click.prevent="toggleIframe"
         :href="`https://baike.baidu.com/item/${term}`"
-        v-if="$l2.code === 'zh'"
+        v-if="$l2.han"
         class="btn btn-small mb-1"
         :data-bg-level="iframe && iframe.startsWith('https://baike.baidu.com') ? level : false"
       >

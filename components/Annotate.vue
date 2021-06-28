@@ -112,12 +112,14 @@
 
 <script>
 import wordblock from "@/components/WordBlock";
+import popupnote from "@/components/PopupNote";
 import VRuntimeTemplate from "v-runtime-template";
 import Helper from "@/lib/helper";
 
 export default {
   components: {
     wordblock,
+    popupnote,
     VRuntimeTemplate,
   },
   props: {

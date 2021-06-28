@@ -123,11 +123,12 @@ export default {
     },
     lines: {
       type: Array,
-      default: () => [],
     },
     parallellines: {
       type: Array,
-      default: () => [],
+    },
+    notes: {
+      type: Array,
     },
     collapse: {
       default: false,
@@ -331,13 +332,18 @@ export default {
       this.matchedParallelLines = matchedParallelLines;
     },
     lineHtml(line) {
-      return this.highlight
-        ? this.highlightMultiple(
-            this.smartquotes(line.line),
-            this.highlight,
-            this.hsk || "outside"
-          )
-        : this.smartquotes(line.line);
+      let html = this.smartquotes(line.line);
+      html = html.replace(/\[(\d+)\]/g, (_, num) => {
+        let note = this.notes.find((note) => note.id === Number(num));
+        return `<PopupNote :number="${num}" content="${note ? note.note : undefined}" />`;
+      });
+      if (this.highlight)
+        html = this.highlightMultiple(
+          html,
+          this.highlight,
+          this.hsk || "outside"
+        );
+      return html;
     },
     checkProgress() {
       if (!this.currentLine) {

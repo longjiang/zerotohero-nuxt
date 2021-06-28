@@ -401,6 +401,7 @@ export default {
             }
           }
         }
+        if (video.notes) video.notes = YouTube.parseNotes(video.notes);
         return video;
       }
     },
