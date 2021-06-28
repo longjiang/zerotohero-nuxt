@@ -49,7 +49,7 @@ export default {
       return this.text
         .replace(new RegExp(`([${this.punctuations}])\n`, "g"), "$1")
         .replace(new RegExp(`([${this.punctuations}])`, "g"), "$1\n")
-        .replace(/\n”/g, "”\n");
+        .replace(/\n([”」’]+)/g, "$1\n");
     },
   },
   data() {
