@@ -33,7 +33,7 @@
           style="display: flex"
           ref="lines"
         >
-          <div v-if="showSubsEditing" class="mr-3">
+          <div v-if="!single && showSubsEditing" class="mr-3">
             <div style="font-size: 0.7em; color: #ccc">
               {{ Math.round(line.starttime * 100) / 100 }}
             </div>
@@ -71,11 +71,11 @@
                   $l2.scripts.length > 0 &&
                   $l2.scripts[0].direction === 'rtl',
               }"
-              v-html="matchedParallelLines[lineIndex]"
+              v-html="matchedParallelLines[single ? currentLineIndex : lineIndex]"
             ></div>
           </div>
         </div>
-        <div :key="`review-${lineIndex}`">
+        <div v-if="!single" :key="`review-${lineIndex}`">
           <h6
             class="text-center mt-3"
             :key="`review-title-${lineIndex}-${reviewKeys[lineIndex]}`"
@@ -197,6 +197,7 @@ export default {
       audioCancelled: false,
       reviewKeys: [],
       neverPlayed: true,
+      matchedParallelLines: undefined 
     };
   },
   async created() {

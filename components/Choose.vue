@@ -16,7 +16,7 @@
         >
           <div class="bg-dark rounded shadow p-4 mt-3 mb-3">
             <LanguageLogo
-              :l1="language(['en', 'lzh'].includes(code) ? 'zh' : 'en')"
+              :l1="language(['en'].includes(code) ? 'zh' : 'en')"
               :l2="language(code)"
               class="choose-lang-logo"
             />
