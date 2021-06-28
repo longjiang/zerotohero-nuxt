@@ -23,7 +23,7 @@
     </div>
     <div class="show-and-date mt-2">
       <router-link
-        class="btn btn-small  bg-success text-white"
+        class="btn btn-small bg-success text-white"
         v-if="video.tv_show"
         :to="{
           name: 'show',
@@ -33,7 +33,7 @@
         <i class="fa fa-tv mr-2" />
         {{ video.tv_show.title }}
         <i
-          :class="{'fas fa-times-circle ml-1': true, 'd-none': !$adminMode}"
+          :class="{ 'fas fa-times-circle ml-1': true, 'd-none': !$adminMode }"
           @click="unassignShow('tv_show')"
         />
       </router-link>
@@ -48,7 +48,7 @@
         <i class="fas fa-graduation-cap mr-2"></i>
         {{ video.talk.title }}
         <i
-          :class="{'fas fa-times-circle ml-1': true, 'd-none': !$adminMode}"
+          :class="{ 'fas fa-times-circle ml-1': true, 'd-none': !$adminMode }"
           @click="unassignShow('talk')"
         />
       </router-link>
@@ -108,18 +108,25 @@
             <i class="fas fa-trash-alt"></i>
             Remove
           </b-button>
-          <span :class="{'d-none': !deleting }">
+          <span :class="{ 'd-none': !deleting }">
             <i class="fas fa-hourglass mr-2 text-secondary"></i>
             Removing...
           </span>
-          <span :class="{'d-none': !deleted }">
+          <span :class="{ 'd-none': !deleted }">
             <i class="fas fa-check-circle mr-2 text-success"></i>
             Removed
           </span>
         </template>
-        <b-checkbox v-model="showSubsEditing" class="mt-2">Show Subs Editing</b-checkbox>
+        <b-checkbox v-model="showSubsEditing" class="mt-2">
+          Show Subs Editing
+        </b-checkbox>
       </div>
-      <div :class="{'video-edit-admin-second-line': true, 'd-none': !showSubsEditing }">
+      <div
+        :class="{
+          'video-edit-admin-second-line': true,
+          'd-none': !showSubsEditing,
+        }"
+      >
         <drop
           @drop="handleDrop"
           :class="{
@@ -192,7 +199,7 @@ export default {
       deleted: false,
       deleting: false,
       showSubsEditing: false,
-      translation: ''
+      translation: "",
     };
   },
   computed: {
@@ -211,7 +218,7 @@ export default {
   },
   watch: {
     showSubsEditing() {
-      this.$emit('showSubsEditing', this.showSubsEditing)
+      this.$emit("showSubsEditing", this.showSubsEditing);
     },
     firstLineTime() {
       if (this.video.subs_l2 && this.video.subs_l2.length > 0) {
@@ -228,7 +235,7 @@ export default {
   },
   methods: {
     updateTranslation() {
-      this.$emit('updateTranslation', this.translation)
+      this.$emit("updateTranslation", this.translation);
     },
     async unassignShow(type) {
       let data = {};
@@ -252,7 +259,9 @@ export default {
             title: this.video.title,
             youtube_id: this.video.youtube_id,
             channel_id: this.video.channel ? this.video.channel.id : null,
-            subs_l2: this.video.subs_l2 ? YouTube.unparseSubs(this.video.subs_l2, this.$l2.code) : undefined,
+            subs_l2: this.video.subs_l2
+              ? YouTube.unparseSubs(this.video.subs_l2, this.$l2.code)
+              : undefined,
           })
         );
         if (response) {
@@ -322,7 +331,10 @@ export default {
       try {
         let response = await axios.patch(
           `${Config.wiki}items/youtube_videos/${this.video.id}`,
-          { subs_l2: YouTube.unparseSubs(this.video.subs_l2) }
+          {
+            subs_l2: YouTube.unparseSubs(this.video.subs_l2),
+            subs_l1: this.video.subs_l1 ? YouTube.unparseSubs(this.video.subs_l1) : undefined,
+          }
         );
         if (response && response.data) {
           this.subsUpdated = true;
@@ -352,7 +364,7 @@ export default {
           `${Config.wiki}items/youtube_videos/${this.video.id}`
         );
         if (response) {
-          this.deleted = true
+          this.deleted = true;
         }
       } catch (err) {}
     },

@@ -134,7 +134,13 @@
           </span>
         </button>
         <button
-          class="quick-access-button shadow btn-secondary d-inline-block text-center"
+          class="
+            quick-access-button
+            shadow
+            btn-secondary
+            d-inline-block
+            text-center
+          "
           @click="$refs.youtube.$refs.transcript.goToPreviousLine()"
         >
           <i class="fas fa-arrow-up"></i>
@@ -149,7 +155,13 @@
           <i v-if="!paused || speaking" class="fas fa-pause"></i>
         </button>
         <button
-          class="quick-access-button shadow btn-secondary d-inline-block text-center"
+          class="
+            quick-access-button
+            shadow
+            btn-secondary
+            d-inline-block
+            text-center
+          "
           @click="$refs.youtube.$refs.transcript.goToNextLine()"
         >
           <i class="fas fa-arrow-down"></i>
@@ -244,7 +256,7 @@ export default {
     $quiz() {
       if (typeof this.$store.state.settings.l2Settings !== "undefined")
         return this.$store.state.settings.l2Settings.showQuiz;
-      else return false
+      else return false;
     },
     saved() {
       return this.video.id;
@@ -293,8 +305,12 @@ export default {
       let youtube_video = await YouTube.videoByApi(this.youtube_id);
       if (youtube_video) video = Object.assign(youtube_video, video || {});
     }
-    video.subs_l2 = await this.getL2TranscriptIfNeeded(video);
-    video.subs_l1 = await this.getTranscriptByLang(this.$l1);
+    if (!video.subs_l2 || video.subs_l2.length === 0) {
+      video.subs_l2 = await this.getTranscriptByLang(this.$l2);
+    }
+    if (!video.subs_l1 || video.subs_l1.length === 0) {
+      video.subs_l1 = await this.getTranscriptByLang(this.$l1);
+    }
 
     if (video.subs_l2 && video.subs_l2.length > 0) {
       this.firstLineTime = video.subs_l2[0].starttime;
@@ -307,7 +323,7 @@ export default {
     this.loadShow();
     this.randomEpisodeYouTubeId = await YouTube.getRandomEpisodeYouTubeId(
       this.$l2.id,
-      this.$store.state.shows.tvShows[this.$l2.code] ? 'tv_show' : undefined
+      this.$store.state.shows.tvShows[this.$l2.code] ? "tv_show" : undefined
     );
     this.saveHistory();
   },
@@ -339,19 +355,22 @@ export default {
     },
     async show() {
       if (this.show) {
-
         let response = await axios.get(
           `${Config.wiki}items/youtube_videos?filter[l2][eq]=${
             this.$l2.id
-          }&filter[${this.showType}][eq]=${this.show.id}&fields=channel_id,id,lesson,level,title,date,topic,youtube_id,tv_show.*,talk.*&timestamp=${this.$adminMode ? Date.now() : 0}`
+          }&filter[${this.showType}][eq]=${
+            this.show.id
+          }&fields=channel_id,id,lesson,level,title,date,topic,youtube_id,tv_show.*,talk.*&timestamp=${
+            this.$adminMode ? Date.now() : 0
+          }`
         );
 
         if (response.data && response.data.data) {
           this.episodes = Helper.uniqueSort(
             response.data.data,
             "youtube_id",
-            this.showType === 'tv_show' ? "title" : "date",
-            this.showType === 'tv_show' ? "ascending" : "descending",
+            this.showType === "tv_show" ? "title" : "date",
+            this.showType === "tv_show" ? "ascending" : "descending",
             this.$l2.code
           );
         }
@@ -359,15 +378,41 @@ export default {
     },
   },
   methods: {
+    async getSaved() {
+      let response = await axios.get(
+        `${Config.wiki}items/youtube_videos?filter[youtube_id][eq]=${
+          this.youtube_id
+        }&filter[l2][eq]=${this.$l2.id}&fields=*,tv_show.*,talk.*&timestamp=${
+          this.$adminMode ? Date.now() : 0
+        }`
+      );
+      response = response.data;
+
+      if (response && response.data && response.data.length > 0) {
+        let video = response.data[0];
+        for (let field of ["subs_l2", "subs_l1"]) {
+          if (video[field] && typeof video[field] === "string") {
+            let savedSubs = YouTube.parseSavedSubs(video[field]);
+            if (savedSubs) {
+              let filtered = savedSubs.filter(
+                (line) => line && line.starttime && line.line
+              );
+              video[field] = filtered;
+            }
+          }
+        }
+        return video;
+      }
+    },
     loadShow() {
       if (this.video) {
         if (this.video.tv_show) {
-          this.show = this.video.tv_show
-          this.showType = 'tv_show'
+          this.show = this.video.tv_show;
+          this.showType = "tv_show";
         } else if (this.video.talk) {
-          this.show = this.video.talk
-          this.showType = 'talk'
-        } 
+          this.show = this.video.talk;
+          this.showType = "talk";
+        }
       }
     },
     updateCurrentTime(currentTime) {
@@ -430,10 +475,9 @@ export default {
       return wordForms;
     },
     async saveWords(level, lesson) {
-      let words = await (await this.$getDictionary()).lookupByLesson(
-        level,
-        lesson
-      );
+      let words = await (
+        await this.$getDictionary()
+      ).lookupByLesson(level, lesson);
       for (let word of words) {
         if (word && !this.wordSaved(word)) {
           let wordForms = await this.allForms(word);
@@ -452,24 +496,6 @@ export default {
       }
       return await YouTube.getTranscriptByLocales(this.youtube_id, locales);
     },
-    async getL2TranscriptIfNeeded(video) {
-      if (video.subs_l2 && Array.isArray(video.subs_l2)) {
-        return video.subs_l2;
-      }
-      if (video.subs_l2 && typeof video.subs_l2 === "string") {
-        let savedSubs = YouTube.parseSavedSubs(video.subs_l2)
-        
-        if (savedSubs) {
-          let filtered = savedSubs.filter(
-            (line) => line && line.starttime && line.line
-          );
-          return filtered;
-        }
-      }
-      if (!video.subs_l2 || video.subs_l2.length === 0) {
-        return await this.getTranscriptByLang(this.$l2);
-      }
-    },
     async addChannelID(video) {
       if (video.channel && video.channel.id) {
         let channelId = video.channel.id;
@@ -480,21 +506,6 @@ export default {
         if (response && response.data) {
           video = response.data;
         }
-      }
-    },
-    async getSaved() {
-      let response = await axios.get(
-        `${Config.wiki}items/youtube_videos?filter[youtube_id][eq]=${
-          this.youtube_id
-        }&filter[l2][eq]=${
-          this.$l2.id
-        }&fields=*,tv_show.*,talk.*&timestamp=${
-          this.$adminMode ? Date.now() : 0
-        }`
-      );
-      response = response.data;
-      if (response && response.data && response.data.length > 0) {
-        return response.data[0];
       }
     },
     scrollToComments() {
