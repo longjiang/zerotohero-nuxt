@@ -112,6 +112,7 @@
               <i class="fa fa-chevron-right"></i>
             </router-link>
           </div>
+          <VideoAdmin :class="{'mt-5': true, 'd-none': !$adminMode}" :video="video" @showSubsEditing="toggleShowSubsEditing" @updateTranslation="updateTranslation" />
         </div>
       </div>
     </div>

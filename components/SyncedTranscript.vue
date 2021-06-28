@@ -56,6 +56,7 @@
               }"
               :buttons="true"
               v-if="!showSubsEditing"
+              @textChanged="lineChanged(line, ...arguments)"
             >
               <span v-html="lineHtml(line)" />
             </Annotate>
@@ -278,6 +279,9 @@ export default {
     }
   },
   methods: {
+    lineChanged(line, newText) {
+      line.line = newText
+    },
     trasnlationLineBlur(e) {
       this.trasnlationLineChanged(e)
     },
@@ -294,6 +298,9 @@ export default {
         line = line.replace(/\n/g, ' ')
       }
       this.matchedParallelLines[lineIndex] = e.target.innerText
+      this.emitUpdateTranslation()
+    },
+    emitUpdateTranslation() {
       let updatedLines = this.matchedParallelLines.filter(l => l !== '').join("\n").trim()
       this.$emit('updateTranslation', updatedLines)
     },
@@ -447,6 +454,8 @@ export default {
     },
     removeLine(lineIndex) {
       this.lines.splice(lineIndex, 1);
+      this.matchedParallelLines.splice(lineIndex, 1);
+      this.emitUpdateTranslation();
     },
     async findSimilarWords(text) {
       let words = await (await this.$getDictionary()).lookupFuzzy(text);
