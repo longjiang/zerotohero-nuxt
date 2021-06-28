@@ -335,7 +335,7 @@ export default {
       let html = this.smartquotes(line.line);
       html = html.replace(/\[(\d+)\]/g, (_, num) => {
         let note = this.notes.find((note) => note.id === Number(num));
-        return `<PopupNote :number="${num}" content="${note ? note.note : undefined}" />`;
+        return `<PopupNote :number="${num}" content="${note ? note.note : undefined}"></PopupNote>`;
       });
       if (this.highlight)
         html = this.highlightMultiple(
