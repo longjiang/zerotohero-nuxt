@@ -215,7 +215,7 @@ export default {
     this.lines.map((line) => {
       line.starttime = Number(line.starttime);
     });
-    this.matchParallelLines();
+    if (this.parallellines) this.matchParallelLines();
     this.reviewKeys = this.lines.map(() => 0);
     if (this.quiz && this.highlightSavedWords) {
       if (
@@ -337,7 +337,10 @@ export default {
     lineHtml(line) {
       let html = this.smartquotes(line.line);
       html = html.replace(/\[(\d+)\]/g, (_, num) => {
-        let note = this.notes.find((note) => note.id === Number(num));
+        let note
+        if (this.notes) {
+          note = this.notes.find((note) => note.id === Number(num));
+        }
         return `<PopupNote :number="${num}" content="${note ? note.note : undefined}"></PopupNote>`;
       });
       if (this.highlight)
@@ -601,7 +604,7 @@ export default {
         traditional: word.traditional,
         correct: true,
       });
-      let parallelLines = this.matchedParallelLines[lineIndex];
+      let parallelLines = this.matchedParallelLines ? this.matchedParallelLines[lineIndex] : undefined;
       return {
         line,
         lineIndex,
