@@ -147,14 +147,6 @@
         >
           Drop Subs Here
         </drop>
-        <b-form-textarea
-          v-model="translation"
-          @blur="updateTranslation"
-          placeholder="Translation"
-          rows="3"
-          class="mt-2"
-          max-rows="6"
-        ></b-form-textarea>
         <div class="mt-2">
           <!-- First line starts at
           <input
@@ -182,6 +174,17 @@
           </span>
         </div>
       </div>
+      <b-form-textarea
+        :class="{
+          'd-none': !enableTranslationEditing,
+        }"
+        v-model="translation"
+        @blur="updateTranslation"
+        placeholder="Translation"
+        rows="3"
+        class="mt-2"
+        max-rows="6"
+      ></b-form-textarea>
     </div>
   </div>
 </template>
@@ -359,7 +362,9 @@ export default {
         let response = await axios.patch(
           `${Config.wiki}items/youtube_videos/${this.video.id}`,
           {
-            subs_l2: YouTube.unparseSubs(this.video.subs_l2),
+            subs_l2: this.video.subs_l2
+              ? YouTube.unparseSubs(this.video.subs_l2)
+              : undefined,
             subs_l1: this.video.subs_l1
               ? YouTube.unparseSubs(this.video.subs_l1)
               : undefined,

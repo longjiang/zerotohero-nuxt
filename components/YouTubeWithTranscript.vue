@@ -31,7 +31,10 @@
           <div style="color: #aaa" v-if="video.date" class="mb-2">
             {{ formatDate(video.date) }}
           </div>
-          <div :key="`youtube-video-info-${video.youtube_id}-${videoInfoKey}`" :class="{'d-none': !video.id }">
+          <div
+            :key="`youtube-video-info-${video.youtube_id}-${videoInfoKey}`"
+            :class="{ 'd-none': !video.id }"
+          >
             <router-link
               v-if="previousEpisode"
               :to="previousEpisode"
@@ -59,7 +62,13 @@
               <i class="fa fa-chevron-right"></i>
             </router-link>
           </div>
-          <VideoAdmin :class="{'d-none': !$adminMode}" :video="video" @showSubsEditing="toggleShowSubsEditing" @updateTranslation="updateTranslation" @enableTranslationEditing="toggleEnableTranslationEditing"/>
+          <VideoAdmin
+            :class="{ 'd-none': !$adminMode }"
+            :video="video"
+            @showSubsEditing="toggleShowSubsEditing"
+            @updateTranslation="updateTranslation"
+            @enableTranslationEditing="toggleEnableTranslationEditing"
+          />
           <hr v-if="video.channel" />
           <YouTubeChannelCard
             v-if="video.channel"
@@ -110,11 +119,17 @@
               :to="nextEpisode"
               class="btn btn-primary"
             >
-              Next
+              Next'
               <i class="fa fa-chevron-right"></i>
             </router-link>
           </div>
-          <VideoAdmin :class="{'mt-5': true, 'd-none': !$adminMode}" :video="video" @showSubsEditing="toggleShowSubsEditing" @updateTranslation="updateTranslation" @enableTranslationEditing="toggleEnableTranslationEditing"/>
+          <VideoAdmin
+            :class="{ 'mt-5': true, 'd-none': !$adminMode }"
+            :video="video"
+            @showSubsEditing="toggleShowSubsEditing"
+            @updateTranslation="updateTranslation"
+            @enableTranslationEditing="toggleEnableTranslationEditing"
+          />
         </div>
       </div>
     </div>
@@ -170,7 +185,7 @@
 
 <script>
 import moment from "moment";
-import Vue from 'vue';
+import Vue from "vue";
 
 export default {
   props: {
@@ -275,21 +290,25 @@ export default {
   },
   methods: {
     updateTranslation(translation) {
-      let translationLines = translation.split("\n")
-      let subs_l1 = this.video.subs_l2.map((line, lineIndex) => {
-        return {
-          starttime: line.starttime,
-          line: translationLines[lineIndex],
-          l1: this.$l1.code
-        }
-      })
-      Vue.set(this.video, 'subs_l1', subs_l1)
+      let translationLines = translation.split("\n").filter((t) => t !== "");
+      let subs_l1;
+      if (translationLines.length > 0) {
+        subs_l1 = this.video.subs_l2.map((line, lineIndex) => {
+          if (translationLines[lineIndex])
+            return {
+              starttime: line.starttime,
+              line: translationLines[lineIndex],
+              l1: this.$l1.code,
+            };
+        });
+      }
+      Vue.set(this.video, "subs_l1", subs_l1);
     },
     toggleShowSubsEditing(showSubsEditing) {
-      this.showSubsEditing = showSubsEditing
+      this.showSubsEditing = showSubsEditing;
     },
     toggleEnableTranslationEditing(enableTranslationEditing) {
-      this.enableTranslationEditing = enableTranslationEditing
+      this.enableTranslationEditing = enableTranslationEditing;
     },
     formatDate(date) {
       return moment(date).format("LL");

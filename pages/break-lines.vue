@@ -46,10 +46,10 @@ export default {
       return this.$store.state.settings.l2;
     },
     output() {
-      return this.text
-        .replace(new RegExp(`([${this.punctuations}])\n`, "g"), "$1")
-        .replace(new RegExp(`([${this.punctuations}])`, "g"), "$1\n")
-        .replace(/\n([”″」’]+)/g, "$1\n");
+      let text = this.text;
+      text = this.normalizeNotes(text);
+      text = this.breaklines(text);
+      return text;
     },
   },
   data() {
@@ -59,7 +59,21 @@ export default {
     };
   },
   async mounted() {},
-  methods: {},
+  methods: {
+    breaklines(text) {
+      return text
+        .replace(new RegExp(`([${this.punctuations}])\n`, "g"), "$1")
+        .replace(new RegExp(`([${this.punctuations}])`, "g"), "$1\n")
+        .replace(/\n([”″」’]+)/g, "$1\n");
+    },
+    normalizeNotes(text) {
+      return text
+        .replace(/\((\d+)\)/g, "[$1]")
+        .replace(/（(\d+)）/g, "[$1]")
+        .replace(/【(\d+)】/g, "[$1]")
+        .replace(/［(\d+)］/g, "[$1]");
+    },
+  },
 };
 </script>
 
