@@ -444,7 +444,7 @@ export default {
       }
       if (this.ended) {
         setTimeout(() => {
-          if (this.ended) {
+          if (this.ended && !this.$refs.youtube.showSubsEditing) {
             this.$router.push(
               this.nextEpisode ||
                 `/${this.$l1.code}/${this.$l2.code}/youtube/view/${this.randomEpisodeYouTubeId}`

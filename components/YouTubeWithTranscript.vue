@@ -119,7 +119,7 @@
               :to="nextEpisode"
               class="btn btn-primary"
             >
-              Next'
+              Next
               <i class="fa fa-chevron-right"></i>
             </router-link>
           </div>

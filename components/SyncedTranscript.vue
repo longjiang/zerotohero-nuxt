@@ -20,6 +20,7 @@
           )}`"
           :class="{
             'transcript-line': true,
+            'transcript-line-abnormal': $adminMode && lines[lineIndex-1] && lines[lineIndex-1].starttime > line.starttime,
             matched:
               !single &&
               highlight &&
@@ -698,6 +699,10 @@ export default {
 .transcript-line-current {
   box-shadow: 0 0 10px rgba(255, 95, 32, 0.301);
   border-radius: 0.25rem;
+}
+
+.transcript-line-abnormal {
+  background-color: lightpink;
 }
 
 .single-line .transcript-line-current {
