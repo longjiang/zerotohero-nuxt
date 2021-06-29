@@ -23,7 +23,12 @@
     }"
   >
     <div class="annotator-buttons" v-if="!empty() && buttons">
-      <b-dropdown no-caret toggle-class="annotator-menu-toggle" :dropleft="$l2.direction !== 'rtl'" :dropright="$l2.direction === 'rtl'">
+      <b-dropdown
+        no-caret
+        toggle-class="annotator-menu-toggle"
+        :dropleft="$l2.direction !== 'rtl'"
+        :dropright="$l2.direction === 'rtl'"
+      >
         <template #button-content><i class="fas fa-ellipsis-v"></i></template>
         <b-dropdown-item>
           <Speak
@@ -226,6 +231,8 @@ export default {
       let url = undefined;
       if ([this.$l2.code, this.$l1.code].includes("zh") || this.$l2.han) {
         url = `https://fanyi.baidu.com/#${this.$l2.code}/${this.$l1.code}/${text}`;
+        if (this.$l2.code === "lzh")
+          url = `https://fanyi.baidu.com/#wyw/en/${text}`;
       } else if (["ko", "ja"].includes(this.$l2.code)) {
         url = `https://papago.naver.com/?sk=auto&st=${encodeURIComponent(
           text
@@ -271,12 +278,12 @@ export default {
       }
     },
     async annotateInputBlur(e) {
-      let newText = e.target.value
+      let newText = e.target.value;
       this.reannotate(newText);
       await Helper.timeout(200);
       this.selectedText = undefined;
       this.textMode = false;
-      this.$emit('textChanged', newText);
+      this.$emit("textChanged", newText);
     },
     reannotate(newText) {
       let node = this.$el.querySelector(".annotate-slot > *");
