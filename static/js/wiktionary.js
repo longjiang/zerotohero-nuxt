@@ -9,7 +9,7 @@ const Dictionary = {
   cache: {},
   tables: [],
   NlpjsTFrDict: {},
-  useCSV: ['fra', 'spa'],
+  useCSV: ['fra', 'spa', 'hbs', 'ita', 'lat', 'por'],
   server: 'https://server.chinesezerotohero.com/',
   l1: undefined,
   l2: undefined,

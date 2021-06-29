@@ -8,8 +8,11 @@
     <div class="main container mt-5 mb-5">
       <div class="row">
         <div class="col-sm-12">
-          CSV Ready.
-          <a :href="href" :download="`${$l2['iso639-3']}-eng.csv.txt`">Download</a>
+          <div v-if="href">
+            CSV Ready.
+            <a :href="href" :download="`${$l2['iso639-3']}-eng.csv.txt`">Download</a>
+          </div>
+          <div v-else>Preparing CSV...</div>
         </div>
       </div>
     </div>
