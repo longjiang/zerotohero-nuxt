@@ -117,7 +117,7 @@
             Removed
           </span>
         </template>
-        <div>
+        <div class="video-admin-checkboxes">
           <b-checkbox v-model="showSubsEditing" class="mt-2 d-inline-block">
             Show Subs Editing
           </b-checkbox>
@@ -147,32 +147,6 @@
         >
           Drop Subs Here
         </drop>
-        <div class="mt-2">
-          <!-- First line starts at
-          <input
-            v-model.lazy="firstLineTime"
-            type="text"
-            placeholder="0"
-            class="d-inline-block ml-1"
-            style="width: 4rem"
-          /> -->
-          <b-button
-            v-if="!updating && !subsUpdated"
-            @click="updateSubs"
-            class="ml-2"
-          >
-            <i class="fa fa-save mr-2"></i>
-            Update Subs
-          </b-button>
-          <span :class="{ 'd-none': !updating }">
-            <i class="fas fa-hourglass mr-2 text-secondary"></i>
-            Updating...
-          </span>
-          <span :class="{ 'd-none': !subsUpdated }">
-            <i class="fas fa-check-circle mr-2 text-success"></i>
-            Updated
-          </span>
-        </div>
       </div>
       <b-form-textarea
         :class="{
@@ -185,6 +159,48 @@
         class="mt-2"
         max-rows="6"
       ></b-form-textarea>
+      <b-form-textarea
+        :class="{
+          'd-none': !enableTranslationEditing,
+        }"
+        v-model="notes"
+        @blur="updateNotes"
+        placeholder="Notes"
+        rows="3"
+        class="mt-2"
+        max-rows="6"
+      ></b-form-textarea>
+      <div
+        :class="{
+          'mt-2': true,
+          'd-none': !showSubsEditing && !enableTranslationEditing,
+        }"
+      >
+        <!-- First line starts at
+        <input
+          v-model.lazy="firstLineTime"
+          type="text"
+          placeholder="0"
+          class="d-inline-block ml-1"
+          style="width: 4rem"
+        /> -->
+        <b-button
+          v-if="!updating && !subsUpdated"
+          @click="updateSubs"
+          class="ml-2"
+        >
+          <i class="fa fa-save mr-2"></i>
+          Update Subs
+        </b-button>
+        <span :class="{ 'd-none': !updating }">
+          <i class="fas fa-hourglass mr-2 text-secondary"></i>
+          Updating...
+        </span>
+        <span :class="{ 'd-none': !subsUpdated }">
+          <i class="fas fa-check-circle mr-2 text-success"></i>
+          Updated
+        </span>
+      </div>
     </div>
   </div>
 </template>
@@ -221,6 +237,7 @@ export default {
       showSubsEditing: false,
       enableTranslationEditing: false,
       translation: "",
+      notes: "",
       mounted: false,
     };
   },
@@ -263,6 +280,22 @@ export default {
     },
   },
   methods: {
+    updateNotes() {
+      let notes = this.normalizeNotes(this.notes);
+      console.log("Notes added:", notes);
+      this.video.notes = notes;
+    },
+    normalizeNotes(text) {
+      let lines = text.split("\n");
+      let notes = lines.map((note, index) => {
+        note = note.trim().replace(/^[\d【】\[\]［］\(\)（）]+\.*\s*/, '')
+        return {
+          id: index + 1,
+          note,
+        };
+      });
+      return notes;
+    },
     updateTranslation() {
       this.$emit("updateTranslation", this.translation);
     },
@@ -357,7 +390,6 @@ export default {
       }
     },
     async updateSubs() {
-      
       this.updating = true;
       try {
         let response = await axios.patch(
@@ -368,6 +400,9 @@ export default {
               : undefined,
             subs_l1: this.video.subs_l1
               ? YouTube.unparseSubs(this.video.subs_l1)
+              : undefined,
+            notes: this.video.notes
+              ? YouTube.unparseNotes(this.video.notes)
               : undefined,
           }
         );

@@ -8,7 +8,7 @@
     style="display: inline-block"
   >
     <span
-      class="popup-note"
+      :class="{'popup-note': true, 'popup-note-disabled': !content}"
       @mouseover="mouseOverHandler"
       @mouseout="mouseOutHandler"
     >
@@ -86,5 +86,9 @@ export default {
 .popup-note-content {
   font-size: 1rem;
   color: #666;
+}
+
+.popup-note-disabled {
+  display: none;
 }
 </style>

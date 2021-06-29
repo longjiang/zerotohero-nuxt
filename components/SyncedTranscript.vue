@@ -342,7 +342,7 @@ export default {
         if (this.notes) {
           note = this.notes.find((note) => note.id === Number(num));
         }
-        return `<PopupNote :number="${num}" content="${note ? note.note : undefined}"></PopupNote>`;
+        return `<PopupNote :number="${num}" content="${note ? note.note : ''}"></PopupNote>`;
       });
       if (this.highlight)
         html = this.highlightMultiple(
