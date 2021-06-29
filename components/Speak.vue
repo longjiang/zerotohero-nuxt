@@ -1,15 +1,21 @@
 <template>
   <button class="speak focus-exclude" @click="speak">
     <i class="fas fa-volume-up"></i>
-    <span v-if="!(mp3 || (text && $hasFeature('speech')))"><img src="/img/forvo.svg" alt="Forvo" style="height: 0.8rem; width: 4rem; opacity: 0.5; margin-bottom: 0.2rem;" /></span>
+    <span v-if="!canSpeak">
+      <img
+        src="/img/forvo.svg"
+        alt="Forvo"
+        style="height: 0.8rem; width: 4rem; opacity: 0.5; margin-bottom: 0.2rem"
+      />
+    </span>
   </button>
 </template>
 <script>
-import commons from 'wikimedia-commons-file-path'
-import Helper from '@/lib/helper'
+import commons from "wikimedia-commons-file-path";
+import Helper from "@/lib/helper";
 
 export default {
-  props: ['text', 'mp3', 'wiktionary'],
+  props: ["text", "mp3", "wiktionary"],
   computed: {
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
@@ -29,22 +35,31 @@ export default {
       return this.$getHanzi();
     },
   },
+  data() {
+    return {
+      canSpeak: false,
+    };
+  },
+  async mounted() {
+    await this.$getDictionary()
+    this.canSpeak = this.mp3 || (this.text && this.$hasFeature("speech"));
+  },
   methods: {
     speak() {
       if (this.mp3) {
-        let url = this.wiktionary ? commons(`File:${this.mp3}`) : this.mp3
-        let audio = new Audio(url)
-        audio.play()
+        let url = this.wiktionary ? commons(`File:${this.mp3}`) : this.mp3;
+        let audio = new Audio(url);
+        audio.play();
       } else if (this.text) {
-        if (this.$hasFeature('speech')) {
-          Helper.speak(this.text, this.$l2, 0.75)
+        if (this.$hasFeature("speech")) {
+          Helper.speak(this.text, this.$l2, 0.75);
         } else {
-          window.open(`https://forvo.com/search/${this.text}/${this.$l2.code}`)
+          window.open(`https://forvo.com/search/${this.text}/${this.$l2.code}`);
         }
       }
     },
   },
-}
+};
 </script>
 
 <style>
