@@ -335,7 +335,7 @@ export default {
           };
         });
         this.video.subs_l2 = Helper.uniqueByValue(parsed, "starttime");
-        this.firstLineTime = this.l2_lines[0].starttime;
+        this.firstLineTime = this.video.subs_l2[0].starttime;
         this.transcriptKey++;
       };
     },
@@ -360,8 +360,6 @@ export default {
       
       this.updating = true;
       try {
-        console.log('patching')
-        console.log(this.video.subs_l1)
         let response = await axios.patch(
           `${Config.wiki}items/youtube_videos/${this.video.id}`,
           {
@@ -373,7 +371,6 @@ export default {
               : undefined,
           }
         );
-        console.log(`${Config.wiki}items/youtube_videos/${this.video.id}`, response)
         if (response && response.data) {
           this.updating = false;
           this.subsUpdated = true;
