@@ -280,10 +280,10 @@ export default {
       let lineEl = this.$el.querySelector(
         `.transcript-line[data-line-index="${this.currentLineIndex}"]`
       );
-      lineEl.classList.add("transcript-line-current");
+      if (lineEl) lineEl.classList.add("transcript-line-current");
     },
     parallellines() {
-      this.matchParallelLines();
+      if (this.parallellines) this.matchParallelLines();
     },
   },
   methods: {
@@ -324,7 +324,7 @@ export default {
         matchedParallelLines[lineIndex] = this.parallellines
           .filter((l) => {
             return (
-              l.starttime >= line.starttime - 1 &&
+              l && l.starttime >= line.starttime - 1 &&
               (!nextLine || l.starttime < nextLine.starttime - 1)
             );
           })

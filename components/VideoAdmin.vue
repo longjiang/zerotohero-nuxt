@@ -357,8 +357,11 @@ export default {
       }
     },
     async updateSubs() {
+      
       this.updating = true;
       try {
+        console.log('patching')
+        console.log(this.video.subs_l1)
         let response = await axios.patch(
           `${Config.wiki}items/youtube_videos/${this.video.id}`,
           {
@@ -370,6 +373,7 @@ export default {
               : undefined,
           }
         );
+        console.log(`${Config.wiki}items/youtube_videos/${this.video.id}`, response)
         if (response && response.data) {
           this.updating = false;
           this.subsUpdated = true;
