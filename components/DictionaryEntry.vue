@@ -150,7 +150,7 @@
           />
         </div>
       </div>
-      <div class="row mt-5" v-if="['zh', 'ja', 'ko'].includes($l2.code)">
+      <div class="row mt-5" v-if="['ja', 'ko'].includes($l2.code) || $l2.han">
         <div class="col-sm-12" v-if="$l2.code !== 'zh'">
           <EntryCharacters
             v-if="entry.cjk && entry.cjk.canonical"
