@@ -15,7 +15,7 @@
       <template v-if="$hasFeature('transliteration')">
         <b-checkbox v-model="showPinyin" class="mb-2">
           Show
-          <span v-if="$l2.code === 'zh'">pinyin</span>
+          <span v-if="['zh', 'lzh'].includes($l2.code)">pinyin</span>
           <span v-else-if="$l2.code === 'ja'">furigana</span>
           <span v-else>romanization</span>
           above words
@@ -51,7 +51,7 @@
       <b-checkbox class="mb-2" v-model="showQuiz">Show pop quiz</b-checkbox>
       <b-checkbox class="mb-2" v-model="disableAnnotation">Disable popup dictionary</b-checkbox>
       <b-button-group
-        v-if="['zh', 'yue'].includes($l2.code)"
+        v-if="$l2.han"
         class="d-block mb-2"
       >
         <b-button
