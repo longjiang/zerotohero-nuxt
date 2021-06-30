@@ -1,36 +1,58 @@
 <template>
-  <div :class="{ 'search-subs': true, fullscreen }">
-    <div class="text-center">
+  <div :class="{ 'search-subs pb-4': true, fullscreen }">
+    <div class="text-center pt-1 pb-1 position-relative">
       <span v-if="hits.length > 0">
-        <button
+        <b-button
+          size="sm"
+          variant="gray"
           :disabled="hitIndex === 0"
           @click="prevHit"
-          :class="{ btn: true, 'btn-small': true, invisible: hitIndex === 0 }"
+          :class="{ invisible: hitIndex === 0 }"
         >
           <i class="fas fa-step-backward" />
-        </button>
-        <b-button @click="goToPreviousLine" class="btn btn-small">
-          <i class="fa fa-chevron-left" />
         </b-button>
-        <b-button @click="rewind" class="btn btn-small">
-          <i class="fa fa-undo" />
+        <b-button
+          variant="gray"
+          size="sm"
+          v-if="!showFilter"
+          @click="showFilter = true"
+        >
+          <i class="fas fa-filter" />
         </b-button>
-        <span class="ml-0 btn-small mr-0" style="background: none">
+        <b-input
+          type="text"
+          size="sm"
+          class="d-inline-block"
+          v-if="!checking && (hits.length > 0 || regex) && showFilter"
+          v-model.lazy="regex"
+          :style="`width: 6em`"
+          placeholder="Filter..."
+          @blur="showFilter = false"
+        />
+        <span
+          v-if="groupsRight['zthSaved'].length > 0"
+          class="ml-0 mr-0"
+          style="background: none"
+        >
           {{ groupsRight["zthSaved"].length }}
         </span>
         <SmallStar
+          v-if="groupsRight['zthSaved'].length > 0"
           :item="currentHit"
           :saved="(hit) => hit.saved"
           :save="saveHit"
           :remove="removeSavedHit"
           class="ml-0 mr-0"
         />
-        <span class="ml-0 btn-small mr-0" style="background: none">
+        <span
+          class="ml-2 mr-2 d-inline-block"
+          style="margin-bottom: -0.52rem; overflow: hidden"
+        >
           {{ hitIndex + 1 }} of {{ hits.length }}
         </span>
         <b-dropdown
           class="primary playlist-dropdown"
-          toggle-class="playlist-dropdown-toggle"
+          toggle-class="btn btn-gray btn-sm border-gray playlist-dropdown-toggle"
           boundary="viewport"
           no-caret
         >
@@ -38,8 +60,7 @@
           <b-dropdown-item>
             <button
               :class="{
-                btn: true,
-                'btn-small': true,
+                'btn btn-small': true,
                 'bg-dark': sort === 'length',
                 'text-white': sort === 'length',
               }"
@@ -49,8 +70,7 @@
             </button>
             <button
               :class="{
-                btn: true,
-                'btn-small': true,
+                'btn btn-small': true,
                 'bg-dark': sort === 'left',
                 'text-white': sort === 'left',
               }"
@@ -60,8 +80,7 @@
             </button>
             <button
               :class="{
-                btn: true,
-                'btn-small': true,
+                'btn btn-small': true,
                 'bg-dark': sort === 'right',
                 'text-white': sort === 'right',
               }"
@@ -135,68 +154,43 @@
             </div>
           </template>
         </b-dropdown>
-        <b-button @click="goToNextLine" class="btn btn-small">
-          <i class="fa fa-chevron-right" />
-        </b-button>
-        <button
+        <b-button
+          variant="gray"
+          size="sm"
           :disabled="hitIndex >= hits.length - 1"
           @click="nextHit"
           :class="{
-            btn: true,
-            'btn-small': true,
             invisible: hitIndex >= hits.length - 1,
           }"
         >
           <i class="fas fa-step-forward" />
-        </button>
-        <b-button
-          :class="{
-            btn: true,
-            'btn-small': true,
-            'bg-secondary text-white': speed === 0.75,
-            'bg-dark text-white': speed === 0.5,
-          }"
-          @click="toggleSpeed()"
-        >
-          <i class="fas fa-tachometer-alt" v-if="speed === 1"></i>
-          <span v-else>{{ speed }}x</span>
         </b-button>
-        <router-link
-          :to="`/${$l1.code}/${$l2.code}/youtube/view/${
-            currentHit.video.youtube_id
-          }/?t=${currentHit.video.subs_l2[currentHit.lineIndex].starttime}`"
-          class="btn btn-small pr-2"
-        >
-          <i class="fa fa-window-restore" />
-        </router-link>
+        <div style="position: absolute; top: 0.25rem; right: 0.25rem;">
+          <b-button
+            variant="gray"
+            class="search-subs-fullscreen"
+            size="sm"
+            @click="toggleFullscreen"
+            v-if="
+              !checking &&
+              !fullscreen &&
+              fullscreenToggle &&
+              (hits.length > 0 || regex)
+            "
+          >
+            <i class="fas fa-expand"></i>
+          </b-button>
+          <b-button
+            variant="gray"
+            size="sm"
+            class="btn search-subs-close"
+            @click="toggleFullscreen"
+            v-if="!checking && fullscreen && fullscreenToggle"
+          >
+            <i class="fas fa-times" />
+          </b-button>
+        </div>
       </span>
-      <input
-        type="text"
-        v-if="!checking && (hits.length > 0 || regex)"
-        v-model.lazy="regex"
-        :style="`width: 6em`"
-        placeholder="Regex"
-        class="btn-small"
-      />
-      <b-button
-        class="btn btn-small search-subs-fullscreen"
-        @click="toggleFullscreen"
-        v-if="
-          !checking &&
-          !fullscreen &&
-          fullscreenToggle &&
-          (hits.length > 0 || regex)
-        "
-      >
-        <i class="fas fa-expand"></i>
-      </b-button>
-      <b-button
-        class="btn btn-small search-subs-close"
-        @click="toggleFullscreen"
-        v-if="!checking && fullscreen && fullscreenToggle"
-      >
-        <i class="fas fa-times" />
-      </b-button>
     </div>
     <div
       :class="{ 'loader text-center mt-4': true, 'd-none': !checking }"
@@ -210,7 +204,7 @@
     <div class="text-center mt-3 mb-3" v-if="!checking && hits.length === 0">
       Sorry, no hits found.
     </div>
-    <div v-if="hits.length > 0" :set="(hit = currentHit)" class="mb-4">
+    <div v-if="hits.length > 0" :set="(hit = currentHit)">
       <YouTubeWithTranscript
         :video="hit.video"
         ref="youtube"
@@ -223,6 +217,47 @@
         :autoplay="!hit.saved && navigated"
         :key="`youtube-with-transcript-${hit.video.youtube_id}`"
       />
+    </div>
+    <div class="text-center mt-2">
+      <b-button
+        variant="gray"
+        size="sm"
+        :class="{
+          'bg-primary border-primary text-white': speed <= 0.75,
+        }"
+        @click="toggleSpeed()"
+      >
+        <i class="fas fa-tachometer-alt" v-if="speed === 1"></i>
+        <span v-else>{{ speed }}x</span>
+      </b-button>
+      <b-button
+        variant="gray"
+        @click="goToPreviousLine"
+        size="sm"
+        title="Go back to previous line"
+      >
+        <i class="fa fa-arrow-up" />
+      </b-button>
+      <b-button variant="gray" @click="rewind" size="sm">
+        <i class="fa fa-undo" />
+      </b-button>
+      <b-button
+        variant="gray"
+        @click="goToNextLine"
+        size="sm"
+        title="Advance to next line"
+      >
+        <i class="fa fa-arrow-down" />
+      </b-button>
+      <router-link
+        v-if="currentHit"
+        :to="`/${$l1.code}/${$l2.code}/youtube/view/${
+          currentHit.video.youtube_id
+        }/?t=${currentHit.video.subs_l2[currentHit.lineIndex].starttime}`"
+        class="btn btn-gray btn-sm pr-2"
+      >
+        <i class="fa fa-window-restore" />
+      </router-link>
     </div>
     <!--
     <p class="mt-1 text-center" v-if="youglishLang[$l2.code]">
@@ -285,6 +320,7 @@ export default {
       groupIndexRight: [],
       groupIndexLength: [],
       fullscreen: false,
+      showFilter: false,
       regex: undefined,
       excludeArr: [],
       speed: 1,
@@ -690,7 +726,7 @@ export default {
 };
 </script>
 <style lang="scss">
-.search-subs .btn-small {
+.search-subs .btn {
   margin: 0;
 }
 .hit-thumb {
@@ -715,22 +751,6 @@ export default {
   margin-top: 0 !important;
 }
 .search-subs .playlist-dropdown {
-  .playlist-dropdown-toggle {
-    color: #a7a7a7;
-    font-size: 0.8rem;
-    padding: 0.1rem 0.4rem;
-    border-radius: 0.2rem;
-    background: #f3f3f3;
-    position: relative;
-    margin: 0.2rem;
-    display: inline-block;
-    border: none;
-    &:hover {
-      background-color: #b5b5b5;
-      text-decoration: none;
-      color: #868686;
-    }
-  }
   .dropdown-menu {
     margin-top: 2.2rem;
     height: calc(100vh - 3rem);

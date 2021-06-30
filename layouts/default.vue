@@ -1218,8 +1218,24 @@ ul.collapse-10.collapsed li:nth-child(-n + 10) {
   display: none;
 }
 
+.bg-primary,
+a.bg-primary:hover,
+button.bg-primary:hover,
+a.bg-primary:focus,
+button.bg-primary:focus {
+  background-color: #fd4f1c !important;
+}
+
+.border-primary {
+  border-color: #fd4f1c !important;
+}
+
 .bg-gray {
-  background-color: #efefef;
+  background-color: #efefef !important;
+}
+
+.border-gray {
+  border-color: #efefef !important;
 }
 
 .btn-small {
