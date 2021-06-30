@@ -20,7 +20,6 @@
               :title="phrasebook.title"
             />
             <b-dropdown
-              class="mb-4"
               v-if="words && words.length > 1"
               size="sm"
               :items="words"
@@ -89,7 +88,7 @@
 import axios from "axios";
 import Config from "@/lib/config";
 import Papa from "papaparse";
-import Helper from '@/lib/helper'
+import Helper from "@/lib/helper";
 
 export default {
   props: {
@@ -126,15 +125,12 @@ export default {
         (p) => p.id === Number(this.phraseId)
       );
       if (
+        process.server &&
         Helper.dictionaryTooLargeAndWillCauseServerCrash(this.$l2["iso639-3"])
       )
         return;
       else await this.matchPhraseToDictionaryEntries();
     }
-  },
-  created() {
-    if (Helper.dictionaryTooLargeAndWillCauseServerCrash(this.$l2["iso639-3"]))
-      this.matchPhraseToDictionaryEntries();
   },
   computed: {
     $l1() {
@@ -153,7 +149,8 @@ export default {
       ).lookupMultiple(this.phraseObj.phrase);
       if (this.words && this.words.length > 0) {
         for (let word of this.words) {
-          if (!word.pronunciation) word.pronunciation = this.phraseObj.pronunciation
+          if (!word.pronunciation)
+            word.pronunciation = this.phraseObj.pronunciation;
         }
         this.word = this.words[0];
       }
