@@ -218,7 +218,7 @@ const Dictionary = {
     }]
     if (this.l2 === 'fra') forms = forms.concat(this.frenchWordForms(word))
     else forms = forms.concat(this.findForms(word))
-    forms = uniqueByValues(forms, ['table', 'field', 'form'])
+    forms = this.uniqueByValues(forms, ['table', 'field', 'form'])
     return forms
   },
   findForms(word) {
@@ -233,7 +233,6 @@ const Dictionary = {
         }
       }))
     }
-    console.log(forms)
     let words = this.words.filter(w => {
       let found = w.stems.filter(s => heads.includes(s))
       return found.length > 0
@@ -252,7 +251,6 @@ const Dictionary = {
         form: w.head
       }
     })
-    console.log(moreForms)
     forms = forms.concat(moreForms)
     return forms
   },

@@ -175,28 +175,32 @@ const Dictionary = {
     console.log('Indexing...')
 
     for (let word of this.words) {
-      let w = {}
-      for (let key in word) {
-        if (typeof word[key] !== 'object' && !Array.isArray(word[key])) {
-          w[key] = word[key]
+      if (word) {
+        let w = {}
+        for (let key in word) {
+          if (typeof word[key] !== 'object' && !Array.isArray(word[key])) {
+            w[key] = word[key]
+          }
         }
-      }
-      for (let form of this.wordForms(word)) {
-        let bareForm = form.form
-          .replace(/ё/gi, 'е')
-          .replace("'", '')
-          .toLowerCase()
-        let match = {
-          word_id: word.id,
-          table: form.table,
-          field: form.field,
-          form: this.accent(form.form) // with accents
+        word.forms = this.wordForms(word)
+        for (let form of word.forms) {
+          let bareForm = form.form
+            .replace(/ё/gi, 'е')
+            .replace("'", '')
+            .toLowerCase()
+          let match = {
+            word_id: word.id,
+            table: form.table,
+            field: form.field,
+            form: this.accent(form.form) // with accents
+          }
+          let indexedForm = this.index[bareForm] || {
+            matches: []
+          }
+          indexedForm.matches.push(match)
+          this.index[bareForm] = indexedForm
         }
-        let indexedForm = this.index[bareForm] || {
-          matches: []
-        }
-        indexedForm.matches.push(match)
-        this.index[bareForm] = indexedForm
+
       }
     }
     console.log('... finished')
@@ -228,8 +232,9 @@ const Dictionary = {
   },
   wordForms(word) {
     let forms = []
+    let tables = this.formTable()
     if (word) {
-      for (let table of this.formTable()) {
+      for (let table of tables) {
         for (let field of table.fields) {
           if (word[table.name] && word[table.name][field]) {
             for (let form of word[table.name][field].split(',')) {
@@ -361,7 +366,7 @@ const Dictionary = {
       inst: 'instrumental',
       nom: 'nominative',
       prep: 'prepositional',
-      verbs: '',
+      verbs: 'verb',
       aspect: 'aspect',
       imperative_pl: 'imperative plural',
       imperative_sg: 'imperative singular',
