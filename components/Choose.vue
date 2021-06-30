@@ -9,12 +9,31 @@
             :preferredLanguages="languages"
           />
         </div>
+      </div>
+      <div class="row m-sm-1 p-3" style="background: url('/img/background-stars-2.jpg'); background-repeat: no-repeat; background-size: cover;">
         <div
           class="col-xl-3 col-lg-4 col-md-6 col-12"
-          v-for="code in ['hbo', 'yue', 'zh', 'fr', 'he', 'ko', 'ja', 'fa', 'ru', 'es', 'en', 'lzh']" 
+          v-for="code in [
+            'hbo',
+            'ar',
+            'yue',
+            'zh',
+            'fr',
+            'de',
+            'he',
+            'it',
+            'ko',
+            'ja',
+            'fa',
+            'pt',
+            'ru',
+            'es',
+            'en',
+            'lzh',
+          ]"
           :key="`lang-logo-${code}`"
         >
-          <div class="bg-dark rounded shadow p-4 mt-3 mb-3">
+          <div class="mt-3 mb-3">
             <LanguageLogo
               :l1="language(['en', 'lzh'].includes(code) ? 'zh' : 'en')"
               :l2="language(code)"
@@ -158,7 +177,7 @@ export default {
         (language) => ["A", "C", "L", "E", "H"].includes(language.type) // Only living, extinct or historical languages (exclusing special codes 'S' and macro languages 'M')
       )
       .filter((language) => this.$languages.hasYouTube(this.english, language))
-      .filter((language) => language.code !== 'fil')
+      .filter((language) => language.code !== "fil")
       // .filter((language) =>
       //   this.hasFeature(this.english, language, "dictionary")
       // )
