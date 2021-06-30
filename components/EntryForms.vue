@@ -33,9 +33,9 @@
                 : ""
             }}
           </h6>
-          <hr class="mt-0 mb-3" />
+          <hr class="mt-0 mb-1" />
           <div class="form-table-content mb-2">
-            <table>
+            <table class="w-100">
               <tbody>
                 <tr
                   v-for="(row, rowIndex) in table
@@ -45,12 +45,13 @@
                     )
                     .sort((a, b) => a.field.localeCompare(b.field))"
                   :key="`form-table-row-${rowIndex}`"
+                   style="border-bottom: 1px solid #eee; vertical-align: top"
                 >
-                  <td :class="{ 'pr-3': row.field }">
+                  <td :class="{ 'pr-1 pt-1 pb-1': row.field }">
                     {{ row.field }}
                   </td>
-                  <td>
-                    <Annotate :buttons="true">
+                  <td class="pt-1 pb-1">
+                    <Annotate :buttons="false">
                       <b :data-level="word.level || 'outside'">
                         {{ row.form || "n/a"
                         }}{{
@@ -112,19 +113,19 @@ export default {
 <style scoped>
 @media screen and (min-width: 768px) {
   .form-table-content {
-    columns: 2;
+    columns: 1;
     column-gap: 2rem;
   }
 }
 @media screen and (min-width: 992px) {
   .form-table-content {
-    columns: 3;
+    columns: 2;
     column-gap: 2rem;
   }
 }
 @media screen and (min-width: 1200px) {
   .form-table-content {
-    columns: 4;
+    columns: 3;
     column-gap: 2rem;
   }
 }
