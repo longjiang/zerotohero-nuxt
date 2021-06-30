@@ -59,7 +59,6 @@
         <div v-if="entry">
           <hr />
           <DictionaryEntry
-            v
             :entry="entry"
             :showSearchSubs="
               !(
