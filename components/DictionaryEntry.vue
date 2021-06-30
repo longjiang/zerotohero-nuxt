@@ -227,7 +227,7 @@ export default {
     },
     images: {
       type: Array,
-      default: [],
+      default: () => [],
     },
     showSearchSubs: {
       default: true,

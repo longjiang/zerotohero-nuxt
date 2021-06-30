@@ -31,7 +31,8 @@
                 :key="`phrase-word-disambiguation-${w.id}`"
                 @click="word = w"
               >
-                <b>{{ w.head }}</b> <em>{{ w.definitions[0] }}</em>
+                <b>{{ w.head }}</b>
+                <em>{{ w.definitions[0] }}</em>
               </b-dropdown-item>
             </b-dropdown>
           </div>
@@ -88,6 +89,7 @@
 import axios from "axios";
 import Config from "@/lib/config";
 import Papa from "papaparse";
+import Helper from '@/lib/helper'
 
 export default {
   props: {
@@ -123,13 +125,16 @@ export default {
       this.phraseObj = this.phrasebook.phrases.find(
         (p) => p.id === Number(this.phraseId)
       );
-      this.words = await (
-        await this.$getDictionary()
-      ).lookupMultiple(this.phraseObj.phrase);
-      if (this.words && this.words.length > 0) {
-        this.word = this.words[0]
-      }
+      if (
+        Helper.dictionaryTooLargeAndWillCauseServerCrash(this.$l2["iso639-3"])
+      )
+        return;
+      else await this.matchPhraseToDictionaryEntries();
     }
+  },
+  created() {
+    if (Helper.dictionaryTooLargeAndWillCauseServerCrash(this.$l2["iso639-3"]))
+      this.matchPhraseToDictionaryEntries();
   },
   computed: {
     $l1() {
@@ -142,6 +147,14 @@ export default {
     },
   },
   methods: {
+    async matchPhraseToDictionaryEntries() {
+      this.words = await (
+        await this.$getDictionary()
+      ).lookupMultiple(this.phraseObj.phrase);
+      if (this.words && this.words.length > 0) {
+        this.word = this.words[0];
+      }
+    },
     findCurrent(phraseObj) {
       return phraseObj.id === Number(this.phraseId);
     },

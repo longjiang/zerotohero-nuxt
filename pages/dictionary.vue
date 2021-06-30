@@ -46,7 +46,7 @@
         :entry="entry"
         :images="images"
         ref="dictionaryEntry"
-        :class="{'mb-5' : $l2.code !== 'zh'}"
+        :class="{ 'mb-5': $l2.code !== 'zh' }"
         :key="`dictionary-entry-${entry.id}`"
       />
     </article>
@@ -58,6 +58,7 @@ import SearchCompare from "@/components/SearchCompare.vue";
 import Paginator from "@/components/Paginator";
 import DictionaryEntry from "@/components/DictionaryEntry";
 import WordPhotos from "@/lib/word-photos";
+import Helper from "@/lib/helper";
 
 export default {
   components: {
@@ -81,24 +82,6 @@ export default {
       paginatorKey: 0,
       sW: [],
     };
-  },
-  async fetch() {
-    let method = this.$route.params.method;
-    let args = this.$route.params.args;
-    if (method && args) {
-      if (method === this.$store.state.settings.dictionaryName) {
-        if (args !== "random") {
-          let dictionary = await this.$getDictionary();
-          this.entry = await dictionary.get(args);
-          this.images = await WordPhotos.getGoogleImages({
-            term: this.entry.bare,
-            lang: this.$l2.code,
-          });
-        }
-      } else if (method === "hsk") {
-        this.entry = await (await this.$getDictionary()).getByHSKId(args);
-      }
-    }
   },
   computed: {
     $l1() {
@@ -144,13 +127,41 @@ export default {
       }
     },
   },
+  async fetch() {
+    if (Helper.dictionaryTooLargeAndWillCauseServerCrash(this.$l2["iso639-3"]))
+      return;
+    else {
+      await this.loadEntry();
+    }
+  },
   created() {
+    if (Helper.dictionaryTooLargeAndWillCauseServerCrash(this.$l2["iso639-3"]))
+      this.loadEntry();
     this.bindKeys();
   },
   destroyed() {
     this.unbindKeys();
   },
   methods: {
+    async loadEntry() {
+      console.log('loading entry')
+      let method = this.$route.params.method;
+      let args = this.$route.params.args;
+      if (method && args) {
+        if (method === this.$store.state.settings.dictionaryName) {
+          if (args !== "random") {
+            let dictionary = await this.$getDictionary();
+            this.entry = await dictionary.get(args);
+            this.images = await WordPhotos.getGoogleImages({
+              term: this.entry.bare,
+              lang: this.$l2.code,
+            });
+          }
+        } else if (method === "hsk") {
+          this.entry = await (await this.$getDictionary()).getByHSKId(args);
+        }
+      }
+    },
     async updateWords() {
       let sW = [];
       if (
@@ -286,7 +297,9 @@ export default {
       }
       if (mutation.type === "savedWords/REMOVE_SAVED_WORD") {
         if (mutation.payload.word.id === this.entry.id) {
-          let currentIndex = this.sW.findIndex((item) => item.id === this.entry.id);
+          let currentIndex = this.sW.findIndex(
+            (item) => item.id === this.entry.id
+          );
           let nextSavedWord = this.sW[currentIndex + 1];
           if (nextSavedWord) {
             this.$router.push({
