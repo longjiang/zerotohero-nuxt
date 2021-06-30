@@ -9,7 +9,14 @@ const Dictionary = {
   cache: {},
   tables: [],
   NlpjsTFrDict: {},
-  useCSV: ['fra', 'spa', 'hbs', 'ita', 'lat', 'por'],
+  useCSV: [
+    'fra',
+    'spa',
+    'hbs',
+    'ita',
+    'lat',
+    'por'
+  ],
   server: 'https://server.chinesezerotohero.com/',
   l1: undefined,
   l2: undefined,
@@ -97,7 +104,6 @@ const Dictionary = {
             }
           }
         }
-        if (item.forms) stems = stems.concat(item.forms.map(f => this.normalizeStem(f.form)))
         if (definitions.length > 0) {
           let audio = undefined
           if (item.sounds) {
@@ -108,7 +114,7 @@ const Dictionary = {
             }
           }
           let bare = this.stripAccents(item.word)
-          words.push(Object.assign(item, {
+          let word = {
             bare,
             search: bare.toLowerCase(),
             head: item.word,
@@ -120,7 +126,8 @@ const Dictionary = {
             stems: stems.filter(s => s !== item.word),
             phrases: item.derived ? item.derived.map(d => d.word) : [],
             wiktionary: true
-          }))
+          }
+          words.push(Object.assign(item, word))
         } else {
           // definitions.push(this.blankInflection(item))
           // probably not that useful in practice
