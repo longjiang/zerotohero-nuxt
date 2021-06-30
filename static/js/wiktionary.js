@@ -448,12 +448,14 @@ const Dictionary = {
     text = this.stripAccents(text.toLowerCase())
     if (['he', 'hbo', 'iw'].includes(this.l2)) text = this.stripHebrewVowels(text)
     let words = []
-    let stems = this.findStems(text)
-    if (stems.length > 0) {
-      let stemWords = this.stringsToWords(stems)
-      let stemWordsWithScores = stemWords.map(w => Object.assign({ score: 1 }, w))
-      words = words.concat(stemWordsWithScores)
-      words = this.words.filter(word => word.search === text).map(w => Object.assign({ score: 0.9 }, w))
+    if (['fra'].includes(this.l2)) {
+      let stems = this.findStems(text)
+      if (stems.length > 0) {
+        let stemWords = this.stringsToWords(stems)
+        let stemWordsWithScores = stemWords.map(w => Object.assign({ score: 1 }, w))
+        words = words.concat(stemWordsWithScores)
+        words = this.words.filter(word => word.search === text).map(w => Object.assign({ score: 0.9 }, w))
+      }
     }
     if (words.length === 0) {
       for (let word of this.words) {
@@ -472,7 +474,8 @@ const Dictionary = {
         }
       }
     }
-    words = this.uniqueByValue(words, 'id').sort((a, b) => b.score - a.score).slice(0, limit)
+    words = words.sort((a, b) => b.score - a.score)
+    words = this.uniqueByValue(words, 'id').slice(0, limit)
     return words
   },
   randomArrayItem(array, start = 0, length = false) {

@@ -8,7 +8,7 @@
     <div class="main container mt-5 mb-5">
       <div class="row">
         <div class="col-sm-12">
-          <iframe src="https://www.aparat.com/video/video/embed/videohash/DF4WC/vt/frame" height="720" width="1080"></iframe>
+          <Annotate><span>Chiede che cosa abbiamo fatto oggi.</span></Annotate>
         </div>
       </div>
     </div>
