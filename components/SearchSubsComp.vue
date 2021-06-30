@@ -1,9 +1,9 @@
 <template>
   <div :class="{ 'search-subs pb-4': true, fullscreen }">
-    <div class="text-center pt-1 pb-1 position-relative">
+    <div class="text-center pt-1 pb-1" style="padding-left: 2.5rem">
       <span v-if="hits.length > 0">
         <b-button
-          size="sm"
+          size="md"
           variant="gray"
           :disabled="hitIndex === 0"
           @click="prevHit"
@@ -13,7 +13,7 @@
         </b-button>
         <b-button
           variant="gray"
-          size="sm"
+          size="md"
           v-if="!showFilter"
           @click="showFilter = true"
         >
@@ -21,7 +21,7 @@
         </b-button>
         <b-input
           type="text"
-          size="sm"
+          size="md"
           class="d-inline-block"
           v-if="!checking && (hits.length > 0 || regex) && showFilter"
           v-model.lazy="regex"
@@ -52,7 +52,7 @@
         </span>
         <b-dropdown
           class="primary playlist-dropdown"
-          toggle-class="btn btn-gray btn-sm border-gray playlist-dropdown-toggle"
+          toggle-class="btn btn-gray btn-md border-gray playlist-dropdown-toggle"
           boundary="viewport"
           no-caret
         >
@@ -156,7 +156,7 @@
         </b-dropdown>
         <b-button
           variant="gray"
-          size="sm"
+          size="md"
           :disabled="hitIndex >= hits.length - 1"
           @click="nextHit"
           :class="{
@@ -165,11 +165,11 @@
         >
           <i class="fas fa-step-forward" />
         </b-button>
-        <div style="position: absolute; top: 0.25rem; right: 0.25rem;">
+        <div class="float-right mr-1">
           <b-button
             variant="gray"
             class="search-subs-fullscreen"
-            size="sm"
+            size="md"
             @click="toggleFullscreen"
             v-if="
               !checking &&
@@ -182,7 +182,7 @@
           </b-button>
           <b-button
             variant="gray"
-            size="sm"
+            size="md"
             class="btn search-subs-close"
             @click="toggleFullscreen"
             v-if="!checking && fullscreen && fullscreenToggle"
@@ -221,7 +221,7 @@
     <div class="text-center mt-2">
       <b-button
         variant="gray"
-        size="sm"
+        size="md"
         :class="{
           'bg-primary border-primary text-white': speed <= 0.75,
         }"
@@ -233,18 +233,18 @@
       <b-button
         variant="gray"
         @click="goToPreviousLine"
-        size="sm"
+        size="md"
         title="Go back to previous line"
       >
         <i class="fa fa-arrow-up" />
       </b-button>
-      <b-button variant="gray" @click="rewind" size="sm">
+      <b-button variant="gray" @click="rewind" size="md">
         <i class="fa fa-undo" />
       </b-button>
       <b-button
         variant="gray"
         @click="goToNextLine"
-        size="sm"
+        size="md"
         title="Advance to next line"
       >
         <i class="fa fa-arrow-down" />
