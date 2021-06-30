@@ -337,6 +337,12 @@ export default {
     },
     lineHtml(line) {
       let html = this.smartquotes(line.line);
+      if (this.highlight)
+        html = this.highlightMultiple(
+          html,
+          this.highlight,
+          this.hsk || "outside"
+        );
       html = html.replace(/\[(\d+)\]/g, (_, num) => {
         let note
         if (this.notes) {
@@ -344,12 +350,6 @@ export default {
         }
         return `<PopupNote :number="${num}" content="${note ? note.note : ''}"></PopupNote>`;
       });
-      if (this.highlight)
-        html = this.highlightMultiple(
-          html,
-          this.highlight,
-          this.hsk || "outside"
-        );
       return html;
     },
     checkProgress() {
