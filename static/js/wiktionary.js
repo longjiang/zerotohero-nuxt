@@ -201,6 +201,15 @@ const Dictionary = {
   stylize(name) {
     return name
   },
+  // https://stackoverflow.com/questions/38613654/javascript-find-unique-objects-in-array-based-on-multiple-properties
+  uniqueByValues(arr, keyProps) {
+    const kvArray = arr.map(entry => {
+      const key = keyProps.map(k => entry[k]).join('|');
+      return [key, entry];
+    });
+    const map = new Map(kvArray);
+    return Array.from(map.values());
+  },
   wordForms(word) {
     let forms = [{
       table: 'head',
@@ -209,26 +218,42 @@ const Dictionary = {
     }]
     if (this.l2 === 'fra') forms = forms.concat(this.frenchWordForms(word))
     else forms = forms.concat(this.findForms(word))
+    forms = uniqueByValues(forms, ['table', 'field', 'form'])
     return forms
   },
   findForms(word) {
     let heads = [word.head]
-    if (word.stems && word.stems[0]) heads.concat(word.stems)
+    let forms = []
+    if (word.stems && word.stems[0]) {
+      forms = forms.concat(word.stems.map(s => {
+        return {
+          table: 'lemma',
+          field: 'lemma',
+          form: s
+        }
+      }))
+    }
+    console.log(forms)
     let words = this.words.filter(w => {
       let found = w.stems.filter(s => heads.includes(s))
       return found.length > 0
     })
-    let forms = words.map(w => {
-      let field = w.definitions ? w.definitions[0].replace(`of ${word.head}`, '').trim() : ''
+    let moreForms = words.map(w => {
+      let field = w.definitions ? w.definitions[0] : ''
+      for (let head of heads) {
+        field = field.replace(`of ${head}`, '').trim()
+      }
       let table = field.replace(/.*?([^\s]+)$/, "$1").trim()
       if (table === '') table = 'inflected'
       else field = field.replace(table, '')
       return {
         table,
-        field,
+        field: field ? field : table,
         form: w.head
       }
     })
+    console.log(moreForms)
+    forms = forms.concat(moreForms)
     return forms
   },
   frenchWordForms(word) {

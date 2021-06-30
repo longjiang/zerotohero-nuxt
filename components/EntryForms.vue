@@ -46,18 +46,20 @@
                     .sort((a, b) => a.field.localeCompare(b.field))"
                   :key="`form-table-row-${rowIndex}`"
                 >
-                  <td :class="{'pr-3': row.field}">
+                  <td :class="{ 'pr-3': row.field }">
                     {{ row.field }}
                   </td>
                   <td>
-                    <b :data-level="word.level || 'outside'">
-                      {{ row.form || "n/a"
-                      }}{{
-                        row.field && row.field.startsWith("imperative")
-                          ? "!"
-                          : ""
-                      }}
-                    </b>
+                    <Annotate :buttons="true">
+                      <b :data-level="word.level || 'outside'">
+                        {{ row.form || "n/a"
+                        }}{{
+                          row.field && row.field.startsWith("imperative")
+                            ? "!"
+                            : ""
+                        }}
+                      </b>
+                    </Annotate>
                   </td>
                 </tr>
               </tbody>
