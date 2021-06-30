@@ -111,7 +111,7 @@
       <div class="row">
         <div class="col-sm-12">
           <EntryForms
-            v-if="['ru', 'ja', 'ko', 'fr'].includes($l2.code)"
+            v-if="['wiktionary', 'kengdic', 'edict', 'openrussian'].includes($dictionaryName)"
             class="mt-5"
             :word="entry"
           />

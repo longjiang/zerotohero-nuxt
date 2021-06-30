@@ -208,6 +208,27 @@ const Dictionary = {
       form: word.head
     }]
     if (this.l2 === 'fra') forms = forms.concat(this.frenchWordForms(word))
+    else forms = forms.concat(this.findForms(word))
+    return forms
+  },
+  findForms(word) {
+    let heads = [word.head]
+    if (word.stems && word.stems[0]) heads.concat(word.stems)
+    let words = this.words.filter(w => {
+      let found = w.stems.filter(s => heads.includes(s))
+      return found.length > 0
+    })
+    let forms = words.map(w => {
+      let field = w.definitions ? w.definitions[0].replace(`of ${word.head}`, '').trim() : ''
+      let table = field.replace(/.*?([^\s]+)$/, "$1").trim()
+      if (table === '') table = 'inflected'
+      else field = field.replace(table, '')
+      return {
+        table,
+        field,
+        form: w.head
+      }
+    })
     return forms
   },
   frenchWordForms(word) {
