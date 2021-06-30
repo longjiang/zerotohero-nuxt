@@ -152,6 +152,9 @@ export default {
         await this.$getDictionary()
       ).lookupMultiple(this.phraseObj.phrase);
       if (this.words && this.words.length > 0) {
+        for (let word of this.words) {
+          if (!word.pronunciation) word.pronunciation = this.phraseObj.pronunciation
+        }
         this.word = this.words[0];
       }
     },
