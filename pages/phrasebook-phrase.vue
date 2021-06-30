@@ -46,22 +46,23 @@
               />
             </p>
             <h2 class="text-center mb-4">
-              <Annotate
-                :class="{
-                  'd-inline-block': true,
-                  'pr-3': $l2.direction === 'rtl',
-                  'pl-3': $l2.direction !== 'rtl',
-                }"
-                :data-level="
-                  phraseObj && phraseObj.level ? phraseObj.level : 'outside'
-                "
-                :phonetics="!phraseObj.pronunciation"
-                :buttons="true"
-                v-if="phraseObj && phraseObj.phrase"
-                @textChanged="textChanged"
-              >
-                <span>{{ phraseObj.phrase }}</span>
-              </Annotate>
+              <div class="d-inline-block">
+                <Annotate
+                  :class="{
+                    'pr-3': $l2.direction === 'rtl',
+                    'pl-3': $l2.direction !== 'rtl',
+                  }"
+                  :data-level="
+                    phraseObj && phraseObj.level ? phraseObj.level : 'outside'
+                  "
+                  :phonetics="!phraseObj.pronunciation"
+                  :buttons="true"
+                  v-if="phraseObj && phraseObj.phrase"
+                  @textChanged="textChanged"
+                >
+                  <span>{{ phraseObj.phrase }}</span>
+                </Annotate>
+              </div>
             </h2>
             <p class="text-center mt-0" v-if="phraseObj && phraseObj[$l1.code]">
               {{ phraseObj[$l1.code] }}
