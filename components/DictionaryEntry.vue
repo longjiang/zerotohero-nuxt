@@ -16,7 +16,7 @@
               <DefinitionsList
                 :key="`def-list-${entry.id}`"
                 v-if="entry.definitions"
-                class="mt-4"
+                class="mt-3"
                 :definitions="entry.definitions"
               ></DefinitionsList>
             </div>

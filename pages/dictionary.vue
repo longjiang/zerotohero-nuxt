@@ -40,6 +40,18 @@
         title="Saved Words"
       />
     </div>
+    <div class="text-center mt-3" v-if="words && words.length > 1">
+      <b-dropdown size="sm" :items="words" text="Disambiguation">
+        <b-dropdown-item
+          v-for="w in words"
+          :key="`phrase-word-disambiguation-${w.id}`"
+          @click="$router.push(`/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${w.id}`)"
+        >
+          <b>{{ w.head }}</b>
+          <em>{{ w.definitions[0] }}</em>
+        </b-dropdown-item>
+      </b-dropdown>
+    </div>
     <article>
       <DictionaryEntry
         v-if="entry"
@@ -77,6 +89,7 @@ export default {
   data() {
     return {
       entry: undefined,
+      words: undefined,
       images: [],
       entryKey: 0,
       paginatorKey: 0,
@@ -144,7 +157,6 @@ export default {
   },
   methods: {
     async loadEntry() {
-      console.log('loading entry')
       let method = this.$route.params.method;
       let args = this.$route.params.args;
       if (method && args) {
@@ -160,6 +172,9 @@ export default {
         } else if (method === "hsk") {
           this.entry = await (await this.$getDictionary()).getByHSKId(args);
         }
+      }
+      if (this.entry) {
+        this.words = await (await this.$getDictionary()).lookupMultiple(this.entry.head, true);
       }
     },
     async updateWords() {
