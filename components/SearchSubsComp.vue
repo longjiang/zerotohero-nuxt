@@ -1,19 +1,25 @@
 <template>
-  <div :class="{ 'search-subs pb-4': true, fullscreen }">
-    <div class="text-center pt-1 pb-1" style="padding-left: 2.5rem">
+  <div :class="{ 'search-subs pb-3': true, fullscreen }">
+    <div
+      class="text-center pt-2 pb-2"
+      :style="fullscreenToggle ? 'padding-left: 2.5rem' : ''"
+    >
       <span v-if="hits.length > 0">
         <b-button
-          size="md"
+          size="sm"
           variant="gray"
           :disabled="hitIndex === 0"
           @click="prevHit"
-          :class="{ invisible: hitIndex === 0 }"
+          :class="{ 'ml-1 mr-1' : true, disabled: hitIndex === 0 }"
         >
           <i class="fas fa-step-backward" />
         </b-button>
+        <b-button variant="gray" @click="rewind" size="sm" class="'ml-1 mr-1">
+          <i class="fa fa-undo" />
+        </b-button>
         <b-button
           variant="gray"
-          size="md"
+          size="sm"
           v-if="!showFilter"
           @click="showFilter = true"
         >
@@ -21,8 +27,8 @@
         </b-button>
         <b-input
           type="text"
-          size="md"
-          class="d-inline-block"
+          size="sm"
+          class="d-inline-block mr-1 ml-1"
           v-if="!checking && (hits.length > 0 || regex) && showFilter"
           v-model.lazy="regex"
           :style="`width: 6em`"
@@ -51,8 +57,8 @@
           {{ hitIndex + 1 }} of {{ hits.length }}
         </span>
         <b-dropdown
-          class="primary playlist-dropdown"
-          toggle-class="btn btn-gray btn-md border-gray playlist-dropdown-toggle"
+          class="playlist-dropdown"
+          toggle-class="btn btn-gray btn-sm border-gray playlist-dropdown-toggle ml-1 mr-1"
           boundary="viewport"
           no-caret
         >
@@ -156,11 +162,12 @@
         </b-dropdown>
         <b-button
           variant="gray"
-          size="md"
+          size="sm"
           :disabled="hitIndex >= hits.length - 1"
           @click="nextHit"
           :class="{
-            invisible: hitIndex >= hits.length - 1,
+            'ml-1 mr-1': true,
+            disabled: hitIndex >= hits.length - 1,
           }"
         >
           <i class="fas fa-step-forward" />
@@ -169,7 +176,7 @@
           <b-button
             variant="gray"
             class="search-subs-fullscreen"
-            size="md"
+            size="sm"
             @click="toggleFullscreen"
             v-if="
               !checking &&
@@ -182,7 +189,7 @@
           </b-button>
           <b-button
             variant="gray"
-            size="md"
+            size="sm"
             class="btn search-subs-close"
             @click="toggleFullscreen"
             v-if="!checking && fullscreen && fullscreenToggle"
@@ -203,7 +210,12 @@
     </div>
     <div class="text-center mt-3 mb-3" v-if="!checking && hits.length === 0">
       Sorry, no hits found.
-      <b-button v-if="$adminMode" size="sm" variant="primary" @click="checkHits">
+      <b-button
+        v-if="$adminMode"
+        size="sm"
+        variant="primary"
+        @click="checkHits"
+      >
         <i class="fa fa-sync-alt"></i>
         Refresh
       </b-button>
@@ -220,13 +232,15 @@
         :autoload="iOS() || (!hit.saved && navigated)"
         :autoplay="!hit.saved && navigated"
         :key="`youtube-with-transcript-${hit.video.youtube_id}`"
+        @paused="updatePaused"
       />
     </div>
-    <div class="text-center mt-2">
+    <div class="text-center mt-0">
       <b-button
         variant="gray"
-        size="md"
+        size="sm"
         :class="{
+          'mr-1 ml-1': true,
           'bg-primary border-primary text-white': speed <= 0.75,
         }"
         @click="toggleSpeed()"
@@ -237,19 +251,28 @@
       <b-button
         variant="gray"
         @click="goToPreviousLine"
-        size="md"
+        size="sm"
         title="Go back to previous line"
+        class="mr-1 ml-1"
       >
         <i class="fa fa-arrow-up" />
       </b-button>
-      <b-button variant="gray" @click="rewind" size="md">
-        <i class="fa fa-undo" />
+      <b-button
+        variant="dark"
+        :class="{
+          'quick-access-button shadow d-inline-block text-center mr-1 ml-1': true,
+        }"
+        @click="togglePaused"
+      >
+        <i v-if="paused" class="fas fa-play"></i>
+        <i v-if="!paused" class="fas fa-pause"></i>
       </b-button>
       <b-button
         variant="gray"
         @click="goToNextLine"
-        size="md"
+        size="sm"
         title="Advance to next line"
+        class="mr-1 ml-1"
       >
         <i class="fa fa-arrow-down" />
       </b-button>
@@ -258,7 +281,7 @@
         :to="`/${$l1.code}/${$l2.code}/youtube/view/${
           currentHit.video.youtube_id
         }/?t=${currentHit.video.subs_l2[currentHit.lineIndex].starttime}`"
-        class="btn btn-gray btn-sm pr-2"
+        class="btn btn-gray btn-sm mr-1 ml-1"
       >
         <i class="fa fa-window-restore" />
       </router-link>
@@ -310,6 +333,7 @@ export default {
   },
   data() {
     return {
+      paused: true,
       currentHit: undefined,
       groupsRight: {},
       groupsLeft: {},
@@ -428,6 +452,14 @@ export default {
     },
   },
   methods: {
+    togglePaused() {
+      this.$refs.youtube.togglePaused();
+    },
+    updatePaused(paused) {
+      if (paused !== this.paused) {
+        this.paused = paused;
+      }
+    },
     async checkHits() {
       this.checking = true;
       if (
@@ -435,7 +467,7 @@ export default {
         this.terms[0] &&
         this.terms[0].length === 1
       ) {
-        this.excludeTerms = await(
+        this.excludeTerms = await (
           await this.$getDictionary()
         ).getWordsWithCharacter(this.terms[0]);
       }
@@ -739,6 +771,9 @@ export default {
 <style lang="scss">
 .search-subs .btn {
   margin: 0;
+}
+.search-subs .btn:disabled {
+  opacity: 0.2;
 }
 .hit-thumb {
   width: calc(0.2rem * 16);

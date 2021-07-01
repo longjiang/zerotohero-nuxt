@@ -1124,7 +1124,7 @@ h6,
   text-align: center;
   font-weight: bold;
   color: white;
-  background: #4e4e4e;
+  background: #343a40;
   padding: 0.2rem 1rem;
 }
 
@@ -1268,8 +1268,8 @@ button.bg-primary:focus {
 .btn-primary:hover,
 .btn-primary:focus,
 .btn-primary:not(:disabled):not(.disabled):active {
-  background-color: #fd4f1c;
-  border-color: #fd4f1c;
+  background-color: #d33e10;
+  border-color: #d33e10;
   color: white;
 }
 
@@ -1278,9 +1278,11 @@ button.bg-primary:focus {
   color: #8e8e8e;
 }
 
-.btn-gray:hover {
-  color: white;
+.btn-gray:hover,
+.btn-gray:focus
+.btn-gray:not(:disabled):not(.disabled):active {
   text-decoration: none;
+  background: #d8d8d8;
   color: #8e8e8e;
 }
 

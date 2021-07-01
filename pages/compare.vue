@@ -127,7 +127,6 @@
                       : [b.simplified, b.traditional]
                     : [b.bare]
                 "
-                class="mt-4 mb-4"
               />
             </div>
           </div>

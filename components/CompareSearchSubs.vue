@@ -13,15 +13,15 @@
     </div>
     <div
       :class="{
-        'mt-2': true,
-        'text-center': true,
-        'search-subs': true,
+        'search-subs text-center pt-1 pb-2 bg-dark': true,
         'd-none': checkingA || checkingB,
       }"
       v-if="this.$refs.searchSubsA && this.$refs.searchSubsB"
     >
       <b-button
-        class="mr-2 btn btn-small"
+        size="sm"
+        class="border-0"
+        variant="gray"
         :data-bg-level="hitAB === 'A' ? levelA : false"
         @click="hitAB = 'A'"
       >
@@ -29,8 +29,8 @@
       </b-button>
 
       <b-dropdown
-        class="primary playlist-dropdown"
-        toggle-class="playlist-dropdown-toggle"
+        class="playlist-dropdown"
+        toggle-class="btn btn-gray btn-sm border-0 playlist-dropdown-toggle"
         boundary="viewport"
         ref="dropdown"
         no-caret
@@ -177,21 +177,25 @@
         </template>
       </b-dropdown>
       <b-button
-        class="btn btn-small"
+        size="sm"
+        class="border-0"
+        variant="gray"
         :data-bg-level="hitAB === 'B' ? levelB : false"
         @click="hitAB = 'B'"
       >
         {{ termsB[0] }}
       </b-button>
       <b-button
-        class="btn btn-small search-subs-fullscreen"
+        class="search-subs-fullscreen border-0"
+        variant="gray"
+        size="sm"
         @click="toggleFullscreen"
         v-if="!fullscreen"
       >
         <i class="fas fa-expand"></i>
       </b-button>
       <b-button
-        class="btn btn-small search-subs-close"
+        class="btn btn-small search-subs-close border-0"
         @click="toggleFullscreen"
         v-if="fullscreen"
       >
