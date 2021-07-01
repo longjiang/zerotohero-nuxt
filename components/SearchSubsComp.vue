@@ -203,6 +203,10 @@
     </div>
     <div class="text-center mt-3 mb-3" v-if="!checking && hits.length === 0">
       Sorry, no hits found.
+      <b-button v-if="$adminMode" size="sm" variant="primary" @click="checkHits">
+        <i class="fa fa-sync-alt"></i>
+        Refresh
+      </b-button>
     </div>
     <div v-if="hits.length > 0" :set="(hit = currentHit)">
       <YouTubeWithTranscript
@@ -345,26 +349,7 @@ export default {
     };
   },
   async mounted() {
-    this.checking = true;
-    if (this.$l2.code === "zh" && this.terms[0] && this.terms[0].length === 1) {
-      this.excludeTerms = await (
-        await this.$getDictionary()
-      ).getWordsWithCharacter(this.terms[0]);
-    }
-    let hits = await YouTube.searchSubs(
-      this.terms,
-      this.excludeTerms,
-      this.$l2.code,
-      this.$l2.id,
-      this.$adminMode,
-      this.$l2.continua,
-      this.$subsSearchLimit ? 20 : 500
-    );
-
-    hits = this.updateSaved(hits);
-    this.collectContext(hits);
-    this.$emit("loaded", hits);
-    this.checking = false;
+    this.checkHits();
   },
   activated() {
     setTimeout(() => {
@@ -443,6 +428,32 @@ export default {
     },
   },
   methods: {
+    async checkHits() {
+      this.checking = true;
+      if (
+        this.$l2.code === "zh" &&
+        this.terms[0] &&
+        this.terms[0].length === 1
+      ) {
+        this.excludeTerms = await(
+          await this.$getDictionary()
+        ).getWordsWithCharacter(this.terms[0]);
+      }
+      let hits = await YouTube.searchSubs(
+        this.terms,
+        this.excludeTerms,
+        this.$l2.code,
+        this.$l2.id,
+        this.$adminMode,
+        this.$l2.continua,
+        this.$subsSearchLimit ? 20 : 500
+      );
+
+      hits = this.updateSaved(hits);
+      this.collectContext(hits);
+      this.$emit("loaded", hits);
+      this.checking = false;
+    },
     get(name) {
       return this[name];
     },

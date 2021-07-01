@@ -8,7 +8,6 @@
 </template>
 
 <script>
-import YouTube from '@/lib/youtube'
 import YouTubeSearchResults from '@/components/YouTubeSearchResults'
 
 export default {

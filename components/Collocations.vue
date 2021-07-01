@@ -94,7 +94,7 @@
       >
         Sorry, we could not find any “{{ term }}” collocations in this corpus
         (dataset). You can set a different corpus in
-        <a :href="`/${$l1.code}/${$l2.code}/settings`">Settings</a>
+        <router-link :to="`/${$l1.code}/${$l2.code}/settings`">Settings</router-link>
         .
       </div>
       <div class="mt-2">

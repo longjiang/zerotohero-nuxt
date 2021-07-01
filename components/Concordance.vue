@@ -50,7 +50,7 @@
       <div v-if="!updating && (!examples || examples.length === 0)">
         Sorry, we could not find any “{{ term }}” examples. You can set a
         different corpus in
-        <a :href="`/${$l1.code}/${$l2.code}/settings`">Settings</a>
+        <router-link :to="`/${$l1.code}/${$l2.code}/settings`">Settings</router-link>
         .
       </div>
       <hr v-if="examples && examples.length === 0" />

@@ -19,7 +19,7 @@
       <div v-if="words && words.length === 0">
         Sorry, we could not find words related to “{{ entry.head }}”. You can
         set a different corpus in
-        <a :href="`/${$l1.code}/${$l2.code}/settings`">Settings</a>.
+        <router-link :to="`/${$l1.code}/${$l2.code}/settings`">Settings</router-link>
       </div>
       <hr v-if="words && words.length === 0" />
       <div class="mt-4">

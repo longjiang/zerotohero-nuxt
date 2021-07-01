@@ -61,7 +61,7 @@
       </div>
     </div>
 
-    <div class="container mt-5">
+    <div class="container">
       <div class="row d-flex" style="flex-wrap: wrap">
         <!-- <EntryDifficulty :entry="entry" style="flex: 1" class="m-3" /> -->
         <EntryDisambiguation
@@ -111,10 +111,15 @@
       <div class="row">
         <div class="col-sm-12">
           <EntryForms
-            v-if="['wiktionary', 'kengdic', 'edict', 'openrussian'].includes($dictionaryName)"
+            v-if="
+              ['wiktionary', 'kengdic', 'edict', 'openrussian'].includes(
+                $dictionaryName
+              )
+            "
             class="mt-5"
             :word="entry"
           />
+          <EntryYouTube :text="entry.head" v-if="$adminMode" class="mt-5" />
           <Collocations
             :class="{ 'mt-5 mb-5': true, hidden: !collocationsReady }"
             :word="entry"
@@ -267,6 +272,10 @@ export default {
     $dictionaryName() {
       return this.$store.state.settings.dictionaryName;
     },
+    $adminMode() {
+      if (typeof this.$store.state.settings.adminMode !== "undefined")
+        return this.$store.state.settings.adminMode;
+    },
   },
   async mounted() {
     this.searchTerms = await this.getSearchTerms();
@@ -274,22 +283,23 @@ export default {
   methods: {
     async getSearchTerms() {
       let terms = [];
-      
-      let forms = (await (
-          await this.$getDictionary()
-        ).wordForms(this.entry)) || []
+
+      let forms =
+        (await (await this.$getDictionary()).wordForms(this.entry)) || [];
 
       forms = forms.map((form) => form.form).filter((s) => s.length > 1);
-      forms = [this.entry.head, ...forms]
-      
+      forms = [this.entry.head, ...forms];
+
       if (this.$dictionaryName === "edict") {
-        forms = [this.entry.kana, ...forms]
+        forms = [this.entry.kana, ...forms];
       } else if (this.$dictionaryName === "hsk-cedict") {
-        forms = [this.entry.simplified, this.entry.traditional]
+        forms = [this.entry.simplified, this.entry.traditional];
       } else if (this.$dictionaryName === "openrussian") {
-        forms = forms.map((f) => f.replace(/'/gi, ""))
+        forms = forms.map((f) => f.replace(/'/gi, ""));
       }
-      terms = Helper.unique(forms).sort((a, b) => a.length - b.length).slice(0, 5);
+      terms = Helper.unique(forms)
+        .sort((a, b) => a.length - b.length)
+        .slice(0, 5);
       return terms;
     },
     searchSubsLoaded(hits) {
