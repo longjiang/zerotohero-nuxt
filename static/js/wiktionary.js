@@ -262,6 +262,9 @@ const Dictionary = {
     forms = forms.concat(moreForms)
     return forms
   },
+  getSize() {
+    return this.words.length
+  },
   frenchWordForms(word) {
     let forms = []
     let fields = {

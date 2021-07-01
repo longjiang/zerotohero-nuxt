@@ -254,6 +254,9 @@ const Dictionary = {
     let entry = this.words.find(row => row.id === id)
     return entry
   },
+  getSize() {
+    return this.words.length
+  },
   isChinese(text) {
     if (this.matchChinese(text)) return true
   },

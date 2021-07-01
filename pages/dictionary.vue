@@ -20,13 +20,13 @@
             />
           </div>
         </div>
-        <h2
+        <h3
           class="mt-5 mb-5 text-center"
-          v-if="$l2 && !entry"
+          v-if="$l2 && !entry && dictionarySize"
           style="min-height: 10rem"
         >
-          {{ $t("For the love of {l2} words.", { l2: $t($l2.name) }) }}
-        </h2>
+          For the love of {{ dictionarySize.toLocaleString("en-US") }} {{ $l2.name }} words.
+        </h3>
       </div>
     </div>
     <div v-if="saved() && sW.length > 0" class="text-center">
@@ -94,6 +94,7 @@ export default {
       entryKey: 0,
       paginatorKey: 0,
       sW: [],
+      dictionarySize: undefined
     };
   },
   computed: {
@@ -147,15 +148,23 @@ export default {
       await this.loadEntry();
     }
   },
-  created() {
+  async created() {
     if (Helper.dictionaryTooLargeAndWillCauseServerCrash(this.$l2["iso639-3"]))
       this.loadEntry();
+    this.dictionarySize = await this.getDictionarySize()
     this.bindKeys();
   },
   destroyed() {
     this.unbindKeys();
   },
   methods: {
+
+    async getDictionarySize() {
+      let dictionary = await this.$getDictionary();
+      let size = await (await dictionary).getSize();
+      console.log(size)
+      return size
+    },
     async loadEntry() {
       let method = this.$route.params.method;
       let args = this.$route.params.args;

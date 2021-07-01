@@ -184,6 +184,9 @@ const Dictionary = {
       .slice(0, limit)
     return words
   },
+  getSize() {
+    return this.words.length
+  },
   lookupFuzzy(text, limit = 30) { // text = 'abcde'
     text = this.stripAccents(text).toLowerCase()
     let words = []

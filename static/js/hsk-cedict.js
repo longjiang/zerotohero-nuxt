@@ -218,6 +218,9 @@ const Dictionary = {
       return results[0]
     }
   },
+  getSize() {
+    return this.words.length
+  },
   uniqueByValue(array, key) {
     let flags = []
     let unique = []

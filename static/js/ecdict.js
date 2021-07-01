@@ -118,6 +118,9 @@ const Dictionary = {
   getIelts1400() {
     return this.ielts1400
   },
+  getSize() {
+    return this.words.length
+  },
   addIdToWords() {
     for (let index in this.words) {
       let word = this.words[index]

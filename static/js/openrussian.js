@@ -338,6 +338,9 @@ const Dictionary = {
   accent(text) {
     return text.replace(/'/g, '́')
   },
+  getSize() {
+    return this.words.length
+  },
   stylize(name) {
     const stylize = {
       adjectives: 'adjective',

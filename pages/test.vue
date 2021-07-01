@@ -34,9 +34,14 @@ export default {
     };
   },
   async mounted() {
-    // this.testFrenchTokenization();
+    this.dictionarySize()
   },
   methods: {
+    async dictionarySize() {
+      let dictionary = await this.$getDictionary();
+      let size = await (await dictionary).getSize();
+      console.log(`The dictionary has ${size} entries.`)
+    },
     async testFrenchTokenization() {
       // let dictionary = await this.$getDictionary();
       // let word = await (await dictionary).lookup("suivre");

@@ -34,6 +34,9 @@ const Dictionary = {
     axios.get('https://py.zerotohero.ca/') // Call index.php to make sure the java open-korean-text process is running (Dreamhost kills it from time to time)
     return this
   },
+  getSize() {
+    return this.words.length
+  },
   unique(array) {
     var uniqueArray = []
     for (let i in array) {

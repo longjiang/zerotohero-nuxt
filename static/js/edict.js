@@ -40,6 +40,9 @@ const Dictionary = {
     this.words = data.sort((a, b) => b.head && a.head ? b.head.length - a.head.length : 0)
     return this
   },
+  getSize() {
+    return this.words.length
+  },
   wordForms(word) {
     let forms = [{
       table: 'head',

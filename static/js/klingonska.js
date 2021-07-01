@@ -17,6 +17,9 @@ const Dictionary = {
     this.words = this.parseDictionary(res.data)
     return this
   },
+  getSize() {
+    return this.words.length
+  },
   parseDictionary(text) {
     this.dictionary = text.split('\n\n')
     let words = []
