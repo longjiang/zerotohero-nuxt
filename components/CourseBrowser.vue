@@ -52,7 +52,7 @@
                   ></span>
                 </div>
                 <ul class="browse-words collapsed">
-                  <WordList :words="dialog" class="ml-2" />
+                  <WordList :words="dialog" class="ml-2" :url="url(bookIndex, lessonIndex, dialogIndex)" />
                   <router-link
                     class="btn btn-sm ml-2 mt-2 mb-2 learn-all-button"
                     :data-bg-level="bookIndex"
@@ -93,6 +93,9 @@ export default {
     },
   },
   methods: {
+    url(bookIndex, lessonIndex, dialogIndex) {
+      return (word, index) => `/${this.$l1.code}/${this.$l2.code}/learn/hsk/${bookIndex},${lessonIndex},${dialogIndex}/${index}`;
+    },
     saveAllClick: function (e) {
       $(e.target).parents(".browse-words").find(".add-word").click();
     },
