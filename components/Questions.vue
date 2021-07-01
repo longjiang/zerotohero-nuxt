@@ -3,7 +3,7 @@
     <div v-if="!started" class="questions-prompt">
       <p>Get familiar with these words by engaging with them.</p>
       <button
-        v-on:click="startClick()"
+        v-on:click="started = true"
         class="btn"
         :data-bg-level="book"
         id="another-set-btn"
@@ -85,6 +85,9 @@ import MakeSentenceQuestion from '@/components/questions/MakeSentenceQuestion.vu
 export default {
   props: {
     words: Array,
+    collapsed: {
+      default: true
+    },
     book: {
       default: 'outside'
     }
@@ -101,14 +104,16 @@ export default {
       wordsKey: 0
     }
   },
+  mounted() {
+    if (!this.collapsed) {
+      this.started = true
+    }
+  },
   methods: {
     randomQuestionType() {
       return this.questionTypes[
         Math.floor(Math.random() * this.questionTypes.length)
       ]
-    },
-    startClick() {
-      this.started = true
     },
     regenQuestions() {
       let words = this.words
