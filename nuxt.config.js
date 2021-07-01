@@ -57,6 +57,18 @@ export default {
       description: 'Language education done right.',
       theme_color: '#fd4f1c',
       useWebmanifestExtension: false
+    },
+    workbox: {
+      runtimeCaching: [{
+        urlPattern: /\.(?:txt|csv|json)$/,
+        handler: 'CacheFirst',
+        options: {
+          cacheName: 'dictionaries',
+          expiration: {
+            maxEntries: 10,
+          },
+        },
+      }],
     }
   },
 
