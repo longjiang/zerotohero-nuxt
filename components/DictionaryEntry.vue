@@ -71,7 +71,7 @@
           style="flex: 1; min-width: 20rem"
         ></EntryDisambiguation>
       </div>
-      <div class="row">
+      <div class="row" v-if="showImages">
         <div class="col-sm-12">
           <div class="web-images widget mt-5">
             <div class="widget-title">
@@ -79,7 +79,7 @@
             </div>
             <div class="widget-body jumbotron-fluid p-4">
               <WebImages
-                v-if="showImages"
+                
                 :text="entry.head"
                 :entry="entry"
                 limit="10"

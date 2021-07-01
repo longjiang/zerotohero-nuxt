@@ -198,8 +198,9 @@ const Dictionary = {
     let word = this.words.find(word => word && word.bare.toLowerCase() === text.toLowerCase())
     return word
   },
-  lookupMultiple(text) {
-    let words = this.words.filter(word => word && word.head.toLowerCase() === text.toLowerCase())
+  lookupMultiple(text, ignoreAccents = false) {
+    if (ignoreAccents) text = this.stripAccents(text)
+    let words = this.words.filter(word => word && word[ignoreAccents ? 'bare' : 'head'].toLowerCase() === text.toLowerCase())
     return words
   },
   formTable() {

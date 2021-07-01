@@ -19,24 +19,9 @@
               :home="`/${$l1.code}/${$l2.code}/phrasebook/${phrasebook.id}`"
               :title="phrasebook.title"
             />
-            <b-dropdown
-              v-if="words && words.length > 1"
-              size="sm"
-              :items="words"
-              text="Disambiguation"
-            >
-              <b-dropdown-item
-                v-for="w in words"
-                :key="`phrase-word-disambiguation-${w.id}`"
-                @click="word = w"
-              >
-                <b>{{ w.head }}</b>
-                <em>{{ w.definitions[0] }}</em>
-              </b-dropdown-item>
-            </b-dropdown>
           </div>
-          <div v-if="!word">
-            <p class="text-center">
+          <div>
+            <div class="text-center">
               <span v-if="phraseObj && phraseObj.pronunciation" class="mr-1">
                 {{ phraseObj.pronunciation }}
               </span>
@@ -44,8 +29,8 @@
                 :text="phraseObj.phrase"
                 v-if="phraseObj && phraseObj.phrase"
               />
-            </p>
-            <h2 class="text-center mb-4">
+            </div>
+            <h2 class="text-center mb-0">
               <div class="d-inline-block">
                 <Annotate
                   :class="{
@@ -68,19 +53,32 @@
               {{ phraseObj[$l1.code] }}
             </p>
           </div>
-          <DictionaryEntry v-if="word" :entry="word" :showImages="false" />
-          <PhraseComp
-            v-else-if="phraseObj && phraseObj.phrase"
-            :term="phraseObj.phrase"
-            class="mt-3"
-          />
-          <div
-            v-if="phrasebook && phrasebook.description"
-            v-html="phrasebook.description"
-            class="mt-5 pt-5 text-center"
-          />
         </div>
       </div>
+    </div>
+    <div>
+      <div class="text-center mt-1" v-if="words && words.length > 0">
+        <i class="fa fa-arrow-down" style="font-size: 2em; color: #ccc"></i>
+      </div>
+      <div class="text-center mt-3" v-if="words && words.length > 1">
+        <b-dropdown size="sm" :items="words" text="Disambiguation">
+          <b-dropdown-item
+            v-for="w in words"
+            :key="`phrase-word-disambiguation-${w.id}`"
+            @click="word = w"
+          >
+            <b>{{ w.head }}</b>
+            <em>{{ w.definitions[0] }}</em>
+          </b-dropdown-item>
+        </b-dropdown>
+      </div>
+
+      <DictionaryEntry v-if="word" :entry="word" />
+      <PhraseComp
+        v-else-if="phraseObj && phraseObj.phrase"
+        :term="phraseObj.phrase"
+        class="mt-3 mb-5"
+      />
     </div>
   </div>
 </template>
@@ -147,7 +145,7 @@ export default {
     async matchPhraseToDictionaryEntries() {
       this.words = await (
         await this.$getDictionary()
-      ).lookupMultiple(this.phraseObj.phrase);
+      ).lookupMultiple(this.phraseObj.phrase, true);
       if (this.words && this.words.length > 0) {
         for (let word of this.words) {
           if (!word.pronunciation)
