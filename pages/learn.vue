@@ -1,31 +1,48 @@
 <router>
   {
-    path: '/:l1/:l2/learn/:method?/:args?',
+    path: '/:l1/:l2/learn/:method?/:argsProp?/:index?',
     props: true,
   }
 </router>
 <template>
-  <div class="main pt-5 pb-5 container" v-cloak>
+  <div class="main pt-4 pb-5 container" v-cloak>
     <div class="row">
       <div class="col-sm-12">
-        <h4 class="page-title mb-4" v-if="method === 'hsk'">
-          <b :data-level="args[0]" class="mr-1">HSK {{ args[0] }}</b>
-          <b>Lesson {{ args[1] }}</b>
-          (Part {{ args[2] }}) Vocabulary
-        </h4>
+        <router-link
+          :to="`/${$l1.code}/${$l2.code}/learn/${method}/${argsProp}`"
+          class="link-unstyled"
+        >
+          <h4 class="page-title text-center mb-4" v-if="method === 'hsk'">
+            <b :data-level="args[0]" class="mr-1">HSK {{ args[0] }}</b>
+            <b>Lesson {{ args[1] }}</b>
+            (Part {{ args[2] }}) Vocabulary
+          </h4>
+        </router-link>
         <Loader class="mt-5" />
-        <div v-if="words.length > 0">
-          <p>Tap on any of the words below, and page through the words:</p>
-          <WordList :words="words" style="column-count: 2"></WordList>
+        <div v-if="!index && words.length > 0">
+          <p class="text-center mb-4">Tap on any of the words below, and page through the words:</p>
+          <WordList :words="words" style="column-count: 2" :url="url"></WordList>
           <router-link
             v-if="words.length > 0"
             class="btn btn-gray btn-sm mt-2"
-            :to="`/${$l1.code}/${$l2.code}/learn-interactive/${method}/${args}`"
+            :to="`/${$l1.code}/${$l2.code}/learn-interactive/${method}/${argsProp}`"
           >
-            <i class="fa fa-chalkboard"></i> Learn These Words (Legacy)
+            <i class="fa fa-chalkboard"></i>
+            Learn These Words (Legacy)
           </router-link>
         </div>
       </div>
+    </div>
+    <div v-if="words && index && words[index]">
+      <Paginator
+        class="mb-4 text-center"
+        :items="words"
+        :findCurrent="findCurrent"
+        :url="url"
+        :home="`/${$l1.code}/${$l2.code}/learn/${method}/${argsProp}`"
+        :title="`Word`"
+      />
+      <DictionaryEntry :entry="words[index]" />
     </div>
   </div>
 </template>
@@ -39,19 +56,11 @@ export default {
     WordList,
     Questions,
   },
+  props: ["method", "argsProp", "index"],
   data() {
     return {
-      started: false,
       words: [],
-      method: false,
       args: [],
-      savedWords: [],
-      questionTypes: [
-        "fill-in-the-blank",
-        "make-a-sentence",
-        "collocation",
-        "decomposition",
-      ],
     };
   },
   computed: {
@@ -69,16 +78,21 @@ export default {
   },
   methods: {
     async route() {
-      if (this.$route.params.method) {
-        this.method = this.$route.params.method;
-        if (this.method == "hsk" && this.$route.params.args) {
-          this.args = this.$route.params.args.split(",");
+      if (this.method) {
+        if (this.method === "hsk" && this.argsProp) {
+          this.args = this.$route.params.argsProp.split(",");
           this.words = await (
             await this.$getDictionary()
           ).getByBookLessonDialog(this.args[0], this.args[1], this.args[2]);
           return;
         }
       }
+    },
+    findCurrent(word) {
+      return word === this.words[this.index];
+    },
+    url(word, index) {
+      return `/${this.$l1.code}/${this.$l2.code}/learn/${this.method}/${this.argsProp}/${index}`;
     },
   },
 };

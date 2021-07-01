@@ -11,7 +11,9 @@
           class="book-title collapsed"
           v-on:click="toggleCollapsed"
           :data-bg-level="bookIndex"
-        >HSK {{ bookIndex }}</div>
+        >
+          HSK {{ bookIndex }}
+        </div>
         <ul class="lessons collapsed">
           <li
             class="lesson"
@@ -36,7 +38,10 @@
                 :data-dialog="dialogIndex"
                 v-bind:key="'dialog-' + dialogIndex"
               >
-                <div class="dialog-title collapsed" v-on:click="toggleCollapsed">
+                <div
+                  class="dialog-title collapsed"
+                  v-on:click="toggleCollapsed"
+                >
                   Part {{ dialogIndex }}
                   <br />
                   <span
@@ -48,16 +53,14 @@
                 </div>
                 <ul class="browse-words collapsed">
                   <WordList :words="dialog" class="ml-2" />
-                  <a
-                    class="btn btn-small ml-2 learn-all-button"
+                  <router-link
+                    class="btn btn-sm ml-2 mt-2 mb-2 learn-all-button"
                     :data-bg-level="bookIndex"
-                    :href="
-                      `/${$l1.code}/${$l2.code}/learn/hsk/${bookIndex},${lessonIndex},${dialogIndex}`
-                    "
+                    :to="`/${$l1.code}/${$l2.code}/learn/hsk/${bookIndex},${lessonIndex},${dialogIndex}`"
                   >
-                    <i class="glyphicon glyphicon-blackboard"></i> Learn These
-                    Words
-                  </a>
+                    <i class="fas fa-chalkboard"></i>
+                    Learn These Words
+                  </router-link>
                 </ul>
               </li>
             </ul>
@@ -69,16 +72,15 @@
 </template>
 
 <script>
-
 export default {
   data() {
     return {
       books: undefined,
       browseKey: 0, // used to force re-render this component
-    }
+    };
   },
   async fetch() {
-    this.books = await (await this.$getDictionary()).compileBooks()
+    this.books = await (await this.$getDictionary()).compileBooks();
   },
   computed: {
     $l1() {
@@ -91,28 +93,22 @@ export default {
     },
   },
   methods: {
-    saveAllClick: function(e) {
-      $(e.target)
-        .parents('.browse-words')
-        .find('.add-word')
-        .click()
+    saveAllClick: function (e) {
+      $(e.target).parents(".browse-words").find(".add-word").click();
     },
     countWordsInLesson(lesson) {
-      var count = 0
+      var count = 0;
       for (var index in lesson) {
-        var dialog = lesson[index]
-        count += dialog.length
+        var dialog = lesson[index];
+        count += dialog.length;
       }
-      return count
+      return count;
     },
     toggleCollapsed(e) {
-      $(e.target)
-        .toggleClass('collapsed')
-        .next('ul')
-        .toggleClass('collapsed')
-    }
-  }
-}
+      $(e.target).toggleClass("collapsed").next("ul").toggleClass("collapsed");
+    },
+  },
+};
 </script>
 <style>
 .tile {
@@ -121,7 +117,7 @@ export default {
   display: inline-block;
   box-shadow: 2px 2px 7px rgba(0, 0, 0, 0.4);
   margin-right: 0.2rem;
-  background-image: url('/img/square.png');
+  background-image: url("/img/square.png");
   background-size: 100%;
 }
 
@@ -152,7 +148,7 @@ export default {
 .dialog-title br {
   margin-top: 0.5rem;
   display: block;
-  content: '';
+  content: "";
 }
 
 .book-title {
@@ -174,37 +170,37 @@ export default {
   overflow: hidden;
   white-space: nowrap;
   /* border-radius: 0.2rem; */
-  background-image: url('/img/square.png');
+  background-image: url("/img/square.png");
 }
 
-.book[data-book='1'] > .book-title.collapsed {
+.book[data-book="1"] > .book-title.collapsed {
   width: 25%;
   background-size: 4% 16.67%;
 }
 
-.book[data-book='2'] > .book-title.collapsed {
+.book[data-book="2"] > .book-title.collapsed {
   width: 25%;
   background-size: 4% 16.67%;
 }
 
-.book[data-book='3'] > .book-title.collapsed {
+.book[data-book="3"] > .book-title.collapsed {
   width: 50%;
   background-size: 2% 16.67%;
 }
 
-.book[data-book='4'] > .book-title.collapsed {
+.book[data-book="4"] > .book-title.collapsed {
   width: 100%;
   background-size: 1% 16.67%;
 }
 
-.book[data-book='5'] > .book-title.collapsed {
+.book[data-book="5"] > .book-title.collapsed {
   width: 100%;
   height: 5rem;
   line-height: 4rem;
   background-size: 1% 8.3%;
 }
 
-.book[data-book='6'] > .book-title.collapsed {
+.book[data-book="6"] > .book-title.collapsed {
   width: 100%;
   height: 10rem;
   line-height: 9rem;

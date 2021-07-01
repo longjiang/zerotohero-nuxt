@@ -304,9 +304,11 @@ export default {
             },
             {
               name: "learn",
-              icon: "fa fa-chalkboard",
-              title: "Learn",
-              show: this.hasFeature("learn"),
+              show: false,
+            },
+            {
+              name: "learn-interactive",
+              show: false,
             },
           ],
         },

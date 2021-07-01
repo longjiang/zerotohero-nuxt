@@ -2,7 +2,7 @@
   <div class="paginator">
     <router-link
       class="paginator-previous mr-2 btn btn-small mb-1"
-      :to="url(previous)"
+      :to="url(previous, currentIndex - 1)"
       title="Previous word"
       v-if="previous"
     >
@@ -11,7 +11,7 @@
     <b><router-link class="link-unstyled" v-if="home" :to="home">{{ title }}</router-link ><span :to="home" v-else>{{ title }}</span ></b> {{ currentIndex + 1 }} of {{ items.length }}
     <router-link
       class="paginator-next ml-2 btn btn-small mb-1"
-      :to="url(next)"
+      :to="url(next, currentIndex + 1)"
       title="Next word"
       v-if="next"
     >

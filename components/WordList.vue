@@ -24,16 +24,16 @@
         >
           <i class="fas fa-adjust"></i>
         </router-link>
-        <router-link
-          v-if="word"
-          :to="`/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${word.id}`"
-        >
-          <span class="wordlist-item-word ml-1" :data-level="getLevel(word)">{{ word.accented }}</span>
+        <router-link v-if="word" :to="getUrl(word, index)">
+          <span class="wordlist-item-word ml-1" :data-level="getLevel(word)">
+            {{ word.accented }}
+          </span>
           <span v-if="word.pronunciation" class="wordlist-item-pinyin">
             <span v-if="$l2.code !== 'zh'">/</span>
             {{ word.pronunciation || word.kana }}
             <span v-if="$l2.code !== 'zh'">/</span>
-          </span><span v-if="word.kana" class="wordlist-item-pinyin">
+          </span>
+          <span v-if="word.kana" class="wordlist-item-pinyin">
             ({{ word.kana }})
           </span>
           <span v-if="word.definitions" class="wordlist-item-l1">
@@ -104,6 +104,9 @@ export default {
     level: {
       default: false,
     },
+    url: {
+      type: Function,
+    },
   },
   computed: {
     $l1() {
@@ -125,6 +128,11 @@ export default {
     },
   },
   methods: {
+    getUrl(word, index) {
+      if (this.url) return this.url(word, index);
+      else
+        return `/${this.$l1.code}/${this.$l2.code}/dictionary/${this.$dictionaryName}/${word.id}`;
+    },
     getLevel(word) {
       if (this.$l2.code === "zh" && word) {
         if (word.newHSK && word.newHSK === "7-9") {
