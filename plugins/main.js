@@ -40,6 +40,8 @@ Vue.filter('truncate', function (text, length, clamp) {
 })
 
 export default ({ app, store }, inject) => {
+  // Make legacy hash URLs work
+  // https://qvault.io/javascript/vue-history-mode-support-legacy-hash-urls/
   app.router.beforeEach((to, from, next) => {
     // Redirect if fullPath begins with a hash (ignore hashes later in path)
     if (to.fullPath.substr(0, 2) === '/#') {

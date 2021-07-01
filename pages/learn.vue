@@ -8,7 +8,14 @@
   <div class="main pt-3 pb-5 container" v-cloak>
     <div class="row">
       <div class="col-sm-12">
-        <router-link :to="{name: 'levels'}" :data-level="args[0]" class="mb-4 d-block text-center ">HSK Standard Course <i class="fa fa-chevron-right"></i></router-link>
+        <router-link
+          :to="{ name: 'levels' }"
+          :data-level="args[0]"
+          class="mb-4 d-block text-center"
+        >
+          HSK Standard Course
+          <i class="fa fa-chevron-right"></i>
+        </router-link>
         <router-link
           :to="`/${$l1.code}/${$l2.code}/learn/${method}/${argsProp}`"
           class="link-unstyled"
@@ -21,24 +28,28 @@
         </router-link>
         <Loader class="mt-5" />
         <div v-if="!index && words.length > 0">
-          <p class="text-center mb-4" >Tap on any of the words below, and page through the words.</p>
+          <p class="text-center mb-4">
+            Tap on any of the words below, and page through the words.
+          </p>
           <WordList :words="words" :url="url"></WordList>
-          <router-link
-            v-if="words.length > 0"
-            :data-bg-level="args[0]"
-            class="btn btn-md mt-4"
-            :to="`/${$l1.code}/${$l2.code}/learn/${method}/${argsProp}/0`"
-          >
-            <i class="fa fa-book mr-1"></i>
-            Start from the first word
-          </router-link>
-          <router-link
-            v-if="words.length > 0"
-            class="btn btn-gray btn-sm mt-2"
-            :to="`/${$l1.code}/${$l2.code}/learn-interactive/${method}/${argsProp}`"
-          >
-            Learn interactively (Legacy)
-          </router-link>
+          <div class="mt-4">
+            <router-link
+              v-if="words.length > 0"
+              :data-bg-level="args[0]"
+              class="btn btn-md m-1"
+              :to="`/${$l1.code}/${$l2.code}/learn/${method}/${argsProp}/0`"
+            >
+              <i class="fa fa-book mr-1"></i>
+              Start from the first word
+            </router-link>
+            <router-link
+              v-if="words.length > 0"
+              class="btn btn-gray btn-sm m-1"
+              :to="`/${$l1.code}/${$l2.code}/learn-interactive/${method}/${argsProp}`"
+            >
+              Learn interactively (Legacy)
+            </router-link>
+          </div>
         </div>
       </div>
     </div>
