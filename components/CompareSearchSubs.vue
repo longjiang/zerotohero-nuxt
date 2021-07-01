@@ -20,7 +20,7 @@
     >
       <b-button
         size="sm"
-        class="border-0"
+        class="border-0 ml-1 mr-1"
         variant="gray"
         :data-bg-level="hitAB === 'A' ? levelA : false"
         @click="hitAB = 'A'"
@@ -30,7 +30,7 @@
 
       <b-dropdown
         class="playlist-dropdown"
-        toggle-class="btn btn-gray btn-sm border-0 playlist-dropdown-toggle"
+        toggle-class="btn btn-gray btn-sm border-0 playlist-dropdown-toggle ml-1 mr-1"
         boundary="viewport"
         ref="dropdown"
         no-caret
@@ -178,7 +178,7 @@
       </b-dropdown>
       <b-button
         size="sm"
-        class="border-0"
+        class="border-0 ml-1 mr-1"
         variant="gray"
         :data-bg-level="hitAB === 'B' ? levelB : false"
         @click="hitAB = 'B'"
@@ -186,7 +186,7 @@
         {{ termsB[0] }}
       </b-button>
       <b-button
-        class="search-subs-fullscreen border-0"
+        class="search-subs-fullscreen border-0 ml-1 mr-1"
         variant="gray"
         size="sm"
         @click="toggleFullscreen"
@@ -195,7 +195,7 @@
         <i class="fas fa-expand"></i>
       </b-button>
       <b-button
-        class="btn btn-small search-subs-close border-0"
+        class="btn btn-small search-subs-close border-0 ml-1 mr-1"
         @click="toggleFullscreen"
         v-if="fullscreen"
       >

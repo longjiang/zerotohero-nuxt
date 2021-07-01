@@ -111,7 +111,7 @@
             <div class="widget-body">
               <CompareSearchSubs
                 :key="`compare-search-subs-${a.id}-${b.id}`"
-                :levelA="a.newHSK && a.newHSK === '7-9' ? '7-9' : a.hsk"
+                :levelA="a.newHSK && a.newHSK === '7-9' ? '7-9' : a.hsk || a.level || 'outside' "
                 :termsA="
                   ['zh', 'yue'].includes($l2.code)
                     ? a.simplified === a.traditional
@@ -119,7 +119,7 @@
                       : [a.simplified, a.traditional]
                     : [a.bare]
                 "
-                :levelB="b.newHSK && b.newHSK === '7-9' ? '7-9' : b.hsk"
+                :levelB="b.newHSK && b.newHSK === '7-9' ? '7-9' : b.hsk || a.level || 'outside'"
                 :termsB="
                   ['zh', 'yue'].includes($l2.code)
                     ? b.simplified === b.traditional

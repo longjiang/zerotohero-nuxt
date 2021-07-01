@@ -10,12 +10,9 @@
           variant="gray"
           :disabled="hitIndex === 0"
           @click="prevHit"
-          :class="{ 'ml-1 mr-1' : true, disabled: hitIndex === 0 }"
+          :class="{ 'ml-1 mr-1': true, disabled: hitIndex === 0 }"
         >
           <i class="fas fa-step-backward" />
-        </b-button>
-        <b-button variant="gray" @click="rewind" size="sm" class="'ml-1 mr-1">
-          <i class="fa fa-undo" />
         </b-button>
         <b-button
           variant="gray"
@@ -160,6 +157,15 @@
             </div>
           </template>
         </b-dropdown>
+        <router-link
+          v-if="currentHit"
+          :to="`/${$l1.code}/${$l2.code}/youtube/view/${
+            currentHit.video.youtube_id
+          }/?t=${currentHit.video.subs_l2[currentHit.lineIndex].starttime}`"
+          class="btn btn-gray btn-sm mr-1 ml-1"
+        >
+          <i class="fa fa-window-restore" />
+        </router-link>
         <b-button
           variant="gray"
           size="sm"
@@ -238,24 +244,24 @@
     <div class="text-center mt-0">
       <b-button
         variant="gray"
-        size="sm"
-        :class="{
-          'mr-1 ml-1': true,
-          'bg-primary border-primary text-white': speed <= 0.75,
-        }"
-        @click="toggleSpeed()"
-      >
-        <i class="fas fa-tachometer-alt" v-if="speed === 1"></i>
-        <span v-else>{{ speed }}x</span>
-      </b-button>
-      <b-button
-        variant="gray"
         @click="goToPreviousLine"
         size="sm"
         title="Go back to previous line"
         class="mr-1 ml-1"
       >
-        <i class="fa fa-arrow-up" />
+        <i class="fa fa-chevron-left" />
+      </b-button>
+      <b-button
+        variant="gray"
+        size="sm"
+        :class="{
+          'mr-1 ml-1': true,
+          'bg-secondary border-secondary text-white': speed <= 0.75,
+        }"
+        @click="toggleSpeed()"
+      >
+        <i class="fas fa-tachometer-alt" v-if="speed === 1"></i>
+        <span v-else>{{ speed }}x</span>
       </b-button>
       <b-button
         variant="dark"
@@ -267,6 +273,9 @@
         <i v-if="paused" class="fas fa-play"></i>
         <i v-if="!paused" class="fas fa-pause"></i>
       </b-button>
+      <b-button variant="gray" @click="rewind" size="sm" class="'ml-1 mr-1">
+        <i class="fa fa-undo" />
+      </b-button>
       <b-button
         variant="gray"
         @click="goToNextLine"
@@ -274,17 +283,8 @@
         title="Advance to next line"
         class="mr-1 ml-1"
       >
-        <i class="fa fa-arrow-down" />
+        <i class="fa fa-chevron-right" />
       </b-button>
-      <router-link
-        v-if="currentHit"
-        :to="`/${$l1.code}/${$l2.code}/youtube/view/${
-          currentHit.video.youtube_id
-        }/?t=${currentHit.video.subs_l2[currentHit.lineIndex].starttime}`"
-        class="btn btn-gray btn-sm mr-1 ml-1"
-      >
-        <i class="fa fa-window-restore" />
-      </router-link>
     </div>
     <!--
     <p class="mt-1 text-center" v-if="youglishLang[$l2.code]">
