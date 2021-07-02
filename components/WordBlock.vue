@@ -51,15 +51,16 @@
         >
           {{ token.candidates[0].traditional }}
         </span>
-        <span v-else class="word-block-text" @click="wordBlockClick()">
-          {{ token.text }}
-          <span
-            v-if="$l2.code === 'ko' && (saved || token.candidates[0]).hanja"
-            class="word-block-text-byeonggi"
-          >
-            {{ (saved || token.candidates[0]).hanja }}
-          </span>
-        </span>
+        <span
+          v-else
+          class="word-block-text d-inline-block"
+          @click="wordBlockClick()"
+          v-html="token.text"
+        /><span
+          v-if="$l2.code === 'ko' && (saved || token.candidates[0]).hanja"
+          class="word-block-text-byeonggi"
+          v-html="(saved || token.candidates[0]).hanja"
+        />
       </template>
       <template v-else>
         <span
@@ -453,7 +454,7 @@ export default {
     async update() {
       if (this.$l1) this.classes[`l1-${this.$l1.code}`] = true;
       if (this.$l2) this.classes[`l2-${this.$l2.code}`] = true;
-      if (this.$l2.han) this.classes['l2-zh'] = true;
+      if (this.$l2.han) this.classes["l2-zh"] = true;
       if (this.checkSaved) {
         let savedCandidate = undefined;
         let savedWord = false;
