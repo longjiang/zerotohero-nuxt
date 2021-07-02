@@ -153,7 +153,6 @@ export default {
       if (this.captions === "nocaptions") options.captions = false;
       if (this.captions === "captions") options.captions = true;
       if (this.long === "true") options.long = true;
-      console.log(options)
       this.videos = await YouTube.searchByGoogle(options);
       this.updateVideos++;
     },

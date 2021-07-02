@@ -120,9 +120,11 @@ export default {
         return p;
       });
       this.phrasebook = phrasebook;
-      this.phraseObj = this.phrasebook.phrases.find(
+      let phrase = this.phrasebook.phrases.find(
         (p) => p.id === Number(this.phraseId)
       );
+      phrase.phrase = this.stripPunctuations(phrase.phrase)
+      this.phraseObj = phrase
       if (
         process.server &&
         Helper.dictionaryTooLargeAndWillCauseServerCrash(this.$l2["iso639-3"])
@@ -153,6 +155,9 @@ export default {
         }
         this.word = this.words[0];
       }
+    },
+    stripPunctuations(text) {
+      return text.replace(/[.!?。！？…]/g, '')
     },
     findCurrent(phraseObj) {
       return phraseObj.id === Number(this.phraseId);

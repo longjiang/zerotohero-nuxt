@@ -29,15 +29,24 @@
             v-model.lazy="csv"
             style="height: calc(100vh - 30rem)"
           ></b-form-textarea>
-          <b-button variant="success" v-if="!saving" class="mt-3" @click="save">Save</b-button>
-          <span v-if="saving">
-            <i class="fas fa-hourglass mr-2 text-secondary"></i>
-            Saving...
-          </span>
-          <span v-if="saved && saved.id">
-            <i class="fas fa-check-circle mr-2 text-success"></i>
-            Saved
-          </span>
+          <div class="mt-3">
+            <b-button variant="success" v-if="!saving && !saved" @click="save">
+              Save
+            </b-button>
+            <span v-if="saving">
+              <i class="fas fa-hourglass mr-2 text-secondary"></i>
+              Saving...
+            </span>
+            <span v-if="saved && saved.id">
+              <i class="fas fa-check-circle mr-2 text-success"></i>
+              Saved
+              <router-link
+                :to="`/${$l1.code}/${$l2.code}/phrasebook/${saved.id}/`"
+              >
+                View {{ saved.title }}
+              </router-link>
+            </span>
+          </div>
         </div>
         <div class="col-md-6">
           <div class="mt-2 mb-2">Data preview:</div>
@@ -71,7 +80,7 @@ export default {
       words: undefined,
       sourceURL: undefined,
       saved: undefined,
-      saving: false
+      saving: false,
     };
   },
   computed: {
@@ -93,23 +102,26 @@ export default {
   },
   methods: {
     async save() {
-      let phrases = Papa.unparse(this.rows)
+      let phrases = Papa.unparse(this.rows);
       let phrasebook = {
         title: this.title,
         description: `Source: <a href="${this.sourceURL}>${this.sourceURL}</a>`,
         phrases,
         l2: this.$l2.id,
       };
-      this.saving = true
+      this.saving = true;
       try {
-        let res = await axios.post(`${Config.wiki}items/phrasebook`, phrasebook);
+        let res = await axios.post(
+          `${Config.wiki}items/phrasebook`,
+          phrasebook
+        );
         if (res && res.data) {
-          this.saved = res.data;
+          this.saved = res.data.data;
         }
-        this.saving = false
+        this.saving = false;
       } catch (err) {
-        this.saving = false
-        console.log(err)
+        this.saving = false;
+        console.log(err);
       }
     },
   },

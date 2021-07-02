@@ -39,6 +39,14 @@
                   data-not-lazy
                 />
                 <h5 class="mt-3">{{ phrasebook.title }}</h5>
+
+                <b-button
+                  v-if="$adminMode"
+                  class="btn btn-small bg-danger text-white mt-2 ml-0"
+                  @click.stop.prevent="remove(phrasebook)"
+                >
+                  <i class="fa fa-trash"></i>
+                </b-button>
               </router-link>
             </li>
           </ul>
@@ -65,14 +73,19 @@ export default {
     };
   },
   async fetch() {
-    let response = await axios.get(
-      `${Config.wiki}items/phrasebook?filter[l2][eq]=${
-        this.$l2.id
-      }&fields=id,title,l2&limit=500&timestamp=${
-        this.$adminMode ? Date.now() : 0
-      }`
-    );
-    if (response && response.data) this.phrasebooks = response.data.data;
+    let phrasebooks = this.$store.state.phrasebooks[this.$l2.code];
+    if (phrasebooks) {
+      this.phrasebooks = phrasebooks;
+    } else {
+      let response = await axios.get(
+        `${Config.wiki}items/phrasebook?filter[l2][eq]=${
+          this.$l2.id
+        }&fields=id,title,l2&limit=500&timestamp=${
+          this.$adminMode ? Date.now() : 0
+        }`
+      );
+      if (response && response.data) this.phrasebooks = response.data.data;
+    }
   },
   computed: {
     $l1() {
@@ -88,7 +101,14 @@ export default {
         return this.$store.state.settings.adminMode;
     },
   },
-  methods: {},
+  methods: {
+    async remove(phrasebook) {
+      this.$store.dispatch("phrasebooks/remove", {
+        l2: this.$l2,
+        phrasebook,
+      });
+    },
+  },
 };
 </script>
 
