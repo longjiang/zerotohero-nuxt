@@ -162,7 +162,6 @@ export default {
     async getDictionarySize() {
       let dictionary = await this.$getDictionary();
       let size = await (await dictionary).getSize();
-      console.log(size)
       return size
     },
     async loadEntry() {
