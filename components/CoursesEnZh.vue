@@ -12,10 +12,9 @@
     >
       <div class="container">
         <div class="row">
-          <div class="col-md-3"></div>
-          <div class="col-sm-12 col-md-6">
+          <div class="col-sm-12 text-center">
             <video
-              class="intro-video"
+              class="intro-video d-inline-block"
               width="500"
               poster="/img/intro-video-thumbnail.jpeg"
               controls
@@ -27,7 +26,6 @@
               Your browser does not support the video tag.
             </video>
           </div>
-          <div class="col-md-3"></div>
         </div>
       </div>
     </div>
