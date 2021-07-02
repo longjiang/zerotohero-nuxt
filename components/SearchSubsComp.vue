@@ -2,9 +2,14 @@
   <div :class="{ 'search-subs pb-3': true, fullscreen }">
     <div
       class="text-center pt-2 pb-2"
-      :style="fullscreenToggle ? 'padding-left: 2.5rem' : ''"
+      :style="fullscreenToggle && !$adminMode ? 'padding-left: 2.5rem' : ''"
     >
       <span v-if="hits.length > 0">
+        <div class="float-left ml-1">
+          <b-button variant="danger" size="sm" @click="remove">
+            <i class="fas fa-trash"></i>
+          </b-button>
+        </div>
         <b-button
           size="sm"
           variant="gray"
@@ -337,6 +342,7 @@ export default {
       currentHit: undefined,
       groupsRight: {},
       groupsLeft: {},
+      foundHits: [],
       groupsLength: {},
       excludeTerms: [],
       navigated: false,
@@ -452,6 +458,25 @@ export default {
     },
   },
   methods: {
+    async remove() {
+      let id = this.currentHit.video.id;
+      let index = this.hitIndex;
+      let response;
+      try {
+        response = await axios.delete(
+          `${Config.wiki}items/youtube_videos/${id}`
+        );
+      } catch (err) {}
+      let hits = [];
+      for (let hit of this.hits) {
+        if (hit !== this.currentHit && hit.video.id !== id) {
+          hits.push(hit);
+        }
+      }
+      this.collectContext(hits);
+      this.$emit("updated", hits);
+      this.goToHitIndex(index);
+    },
     togglePaused() {
       this.$refs.youtube.togglePaused();
     },
@@ -650,15 +675,6 @@ export default {
     rewind() {
       if (this.$refs.youtube) this.$refs.youtube.rewind();
     },
-    async remove() {
-      let id = this.hits[this.hitIndex].video.id;
-      let response = await axios.delete(
-        `${Config.wiki}items/youtube_videos/${id}`
-      );
-      if (response) {
-        this.hits = this.hits.filter((hit) => hit.video.id !== id);
-      }
-    },
     prevHit() {
       let index = Math.max(this.hitIndex - 1, 0);
       this.currentHit = this.hits[index];
@@ -675,6 +691,12 @@ export default {
       setTimeout(() => {
         document.activeElement.blur();
       }, 100);
+    },
+    goToHitIndex(index) {
+      index = Math.min(index, this.hits.length - 1);
+      index = Math.max(index, 0);
+      this.currentHit = this.hits[index];
+      this.navigated = true;
     },
     seekYouTube(starttime) {
       this.$refs.youtube.seek(starttime);
