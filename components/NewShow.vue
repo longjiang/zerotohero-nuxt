@@ -17,7 +17,6 @@
 </template>
 
 <script>
-import Config from "@/lib/config";
 
 export default {
   props: {

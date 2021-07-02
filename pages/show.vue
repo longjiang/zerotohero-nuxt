@@ -85,6 +85,7 @@ export default {
       }
     },
     async getVideos() {
+      let sort = this.type === 'tv-show' ? 'title' : 'date'
       let response = await axios.get(
         `${Config.wiki}items/youtube_videos?filter[l2][eq]=${
           this.$l2.id
@@ -92,7 +93,7 @@ export default {
           this.show.id
         }&fields=channel_id,id,lesson,level,title,topic,youtube_id,date,tv_show.*,talk.*${
           this.$adminMode ? ",subs_l2" : ""
-        }&timestamp=${this.$adminMode ? Date.now() : 0}`
+        }&sort=${sort}&limit=500&timestamp=${this.$adminMode ? Date.now() : 0}`
       );
       let videos = response.data.data || [];
       videos = Helper.uniqueByValue(videos, "youtube_id");
