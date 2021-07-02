@@ -9,14 +9,7 @@ const Dictionary = {
   cache: {},
   tables: [],
   NlpjsTFrDict: {},
-  useCSV: [
-    'fra',
-    'spa',
-    'hbs',
-    'ita',
-    'lat',
-    'por'
-  ],
+  useJSON: [],
   server: 'https://server.chinesezerotohero.com/',
   l1: undefined,
   l2: undefined,
@@ -31,7 +24,7 @@ const Dictionary = {
       .replace('run', 'kin') // Rundi uses Rwanda-Rundi
       .replace('hbo', 'heb') // Ancient Hebrew uses Hebrew
       .replace('grc', 'ell') // Ancient Greek uses Greek
-    let csv = this.useCSV.includes(this.l2)
+    let csv = !this.useJSON.includes(this.l2)
     let filename = `${this.server}data/wiktionary${csv ? '-csv' : ''}/${l2}-${options.l1}.${csv ? 'csv' : 'json'}.txt`
     return filename
   },
@@ -46,7 +39,7 @@ const Dictionary = {
   async loadWords() {
     console.log("Wiktionary: loading...")
     let res = await axios.get(this.file)
-    let words = this.useCSV.includes(this.l2) ? this.parseDictionaryCSV(res.data) : this.parseDictionary(res.data)
+    let words = !this.useJSON.includes(this.l2) ? this.parseDictionaryCSV(res.data) : this.parseDictionary(res.data)
 
     words = words.sort((a, b) => {
       if (a.head && b.head) {
