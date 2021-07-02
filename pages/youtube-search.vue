@@ -61,7 +61,7 @@
       :captions="captions"
       class="mt-5"
       :key="searchResultKey"
-      :long="long === 'true'"
+      :long="long"
       ref="youtubeSearchResults"
     />
   </div>
@@ -81,7 +81,7 @@ export default {
       captions: "all",
       searchResultKey: 0,
       checkSaved: false,
-      long: 'false',
+      long: false,
     };
   },
   computed: {
@@ -114,7 +114,7 @@ export default {
   },
   mounted() {
     this.updateSearchText();
-    this.long = this.$route.query.long || 'false'
+    this.long = this.$route.query.long === 'true' ? true : false
     this.captions = this.$route.query.captions || 'all'
   },
   methods: {

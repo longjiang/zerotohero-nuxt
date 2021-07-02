@@ -66,7 +66,6 @@
         </div>
         <template v-if="videos && videos.length > 0">
           <YouTubeVideoList
-            class="row"
             :videos="videos"
             :keyword="keyword"
             :checkSubs="false"

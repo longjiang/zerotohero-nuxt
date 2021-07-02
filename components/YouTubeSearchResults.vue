@@ -86,6 +86,12 @@ export default {
     start() {
       this.loadVideos();
     },
+    long() {
+      this.loadVideos();
+    },
+    captions() {
+      this.loadVideos();
+    }
   },
   computed: {
     $l1() {
@@ -152,7 +158,7 @@ export default {
       );
       if (this.captions === "nocaptions") options.captions = false;
       if (this.captions === "captions") options.captions = true;
-      if (this.long === "true") options.long = true;
+      if (this.long) options.long = true;
       this.videos = await YouTube.searchByGoogle(options);
       this.updateVideos++;
     },
