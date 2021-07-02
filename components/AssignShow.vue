@@ -1,20 +1,28 @@
 <template>
   <span>
-    <b-button @click="assignShow = !assignShow" :variant="variant">
+    <b-button
+      class="mt-1 mb-1"
+      @click="assignShow = !assignShow"
+      :variant="variant"
+      :size="size"
+    >
       <i class="fa fa-tv mr-2"></i>
       Assign {{ type === "talks" ? "Talk" : "Show" }}
     </b-button>
     <div
       v-if="assignShow"
-      class="mt-2 rounded p-2"
-      style="border: 1px solid #ccc"
+      :size="size"
+      class="mt-2 mb-2 p-2 rounded"
+      style="border: 1px solid #666"
     >
       <b-form-select
+        :size="size"
         v-model="showSelect"
         :options="showOptions"
       ></b-form-select>
       <b-button
         v-if="selectedShowID"
+        :size="size"
         @click="save"
         variant="success"
         class="mt-2 w-100"
@@ -23,6 +31,7 @@
       </b-button>
       <NewShow
         v-if="showSelect === 'new'"
+        class="mt-1"
         :youtube_id="defaultYoutubeId"
         :type="type"
         :defaultTitle="defaultTitle"
@@ -40,12 +49,16 @@ export default {
     defaultSelection: String,
     type: {
       type: String,
-      default: 'tv-shows'
+      default: "tv-shows",
     },
     variant: {
       type: String,
-      default: 'gray'
-    }
+      default: "gray",
+    },
+    size: {
+      type: String,
+      default: "md",
+    },
   },
   data() {
     return {
@@ -132,7 +145,11 @@ export default {
       this.save();
     },
     save() {
-      this.$emit("assignShow", this.selectedShowID, this.type === 'talks' ? 'talk' : 'tv_show');
+      this.$emit(
+        "assignShow",
+        this.selectedShowID,
+        this.type === "talks" ? "talk" : "tv_show"
+      );
     },
   },
 };

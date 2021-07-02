@@ -61,7 +61,7 @@
       :captions="captions"
       class="mt-5"
       :key="searchResultKey"
-      :long="long"
+      :long="long === 'true'"
       ref="youtubeSearchResults"
     />
   </div>

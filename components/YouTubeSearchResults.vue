@@ -147,12 +147,13 @@ export default {
           start: this.start || 0,
           lang: this.$l2.code,
           forceRefresh: false,
-          long: this.long,
         },
         options
       );
       if (this.captions === "nocaptions") options.captions = false;
       if (this.captions === "captions") options.captions = true;
+      if (this.long === "true") options.long = true;
+      console.log(options)
       this.videos = await YouTube.searchByGoogle(options);
       this.updateVideos++;
     },

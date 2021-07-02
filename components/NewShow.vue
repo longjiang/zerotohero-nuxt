@@ -1,11 +1,17 @@
 <template>
   <div>
-    <b-input type="text" v-model.lazy="newShowTitle" placeholder="Title" />
+    <b-input
+      type="text"
+      v-model.lazy="newShowTitle"
+      placeholder="Title"
+      size="sm"
+    />
     <b-button
       class="btn btn-small mt-2 ml-0 bg-success text-white"
+      size="sm"
       @click="addShow()"
     >
-      Save {{ type === 'tv-shows' ? 'Show' : 'Talk' }}
+      Save {{ type === "tv-shows" ? "Show" : "Talk" }}
     </b-button>
   </div>
 </template>
@@ -19,8 +25,8 @@ export default {
     defaultTitle: String,
     type: {
       default: "tv-shows",
-      type: String
-    }
+      type: String,
+    },
   },
   data() {
     return {
@@ -50,11 +56,11 @@ export default {
       if (this.newShowYear) show.year = this.newShowYear;
       show = await this.$store.dispatch("shows/add", {
         l2: this.$l2,
-        type: this.type === 'tv-shows' ? 'tvShows' : 'talks',
-        show
+        type: this.type === "tv-shows" ? "tvShows" : "talks",
+        show,
       });
       if (show) {
-        this.$emit('newShow', show.id)
+        this.$emit("newShow", show.id);
       }
     },
   },

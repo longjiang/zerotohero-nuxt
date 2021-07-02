@@ -2,51 +2,64 @@
   <div class="youtube-video-list">
     <div
       v-if="$adminMode"
-      class="
-        mb-4
-        youtube-video-list-admin-bar
-        rounded
-        bg-secondary
-        text-white
-        p-4
-        w-100
-      "
+      class="mb-4 youtube-video-list-admin-bar rounded p-4 w-100"
     >
-      <h4>Bulk Actions</h4>
-      <hr class="bg-light" />
       <div>
-        <b-button variant="danger" @click="removeAll()">
+        <b-button
+          class="mt-1 mb-1"
+          variant="danger"
+          @click="removeAll()"
+          size="sm"
+        >
           <i class="fas fa-trash mr-2"></i>
           Remove All
         </b-button>
-        <b-button variant="gray" v-if="!checkSavedData" @click="checkSavedData = true">
+        <b-button
+          class="mt-1 mb-1"
+          variant="gray"
+          v-if="!checkSavedData"
+          size="sm"
+          @click="checkSavedData = true"
+        >
           <i class="fas fa-question mr-2"></i>
           Check Saved
         </b-button>
-        <b-button variant="gray" v-if="checkSavedData" @click="checkSavedData = false">
+        <b-button
+          class="mt-1 mb-1"
+          variant="gray"
+          v-if="checkSavedData"
+          size="sm"
+          @click="checkSavedData = false"
+        >
           <i class="fas fa-question mr-2"></i>
           Uncheck Saved
         </b-button>
-        <b-button variant="gray" v-if="checkSavedData" @click="addAll()">
+        <b-button
+          class="mt-1 mb-1"
+          variant="gray"
+          v-if="checkSavedData"
+          size="sm"
+          @click="addAll()"
+        >
           <i class="fas fa-plus mr-2"></i>
           Add All
         </b-button>
         <AssignShow
+          size="sm"
           @assignShow="assignShowToAll"
           :defaultSelection="keyword"
           type="tv-shows"
         />
         <AssignShow
+          size="sm"
           @assignShow="assignShowToAll"
           :defaultSelection="keyword"
           type="talks"
         />
-      </div>
-      <div class="mt-2">
         <drop
           @drop="handleDrop"
           :class="{
-            'subs-drop bg-light text-dark rounded w-100 p-2 text-center': true,
+            'subs-drop text-secondary rounded d-inline-block text-center mt-1': true,
             over: over,
             drop: true,
           }"
@@ -57,16 +70,20 @@
           Drop SRT files here to bulk add subs ...
         </drop>
       </div>
-      <b-checkbox class="mt-4" v-model="hideVideosWithoutSubs">
-        Hide Videos Without Subs
-      </b-checkbox>
-      <b-checkbox class="mt-4" v-model="showSubsEditing">
-        Show Subs Editing
-      </b-checkbox>
+      <div class="mt-1">
+        <b-checkbox class="mt-2 d-inline-block" v-model="hideVideosWithoutSubs">
+          Hide Videos Without Subs
+        </b-checkbox>
+        <b-checkbox class="mt-2 d-inline-block" v-model="showSubsEditing">
+          Show Subs Editing
+        </b-checkbox>
+      </div>
     </div>
     <div class="youtube-videos">
       <YouTubeVideoCard
-        v-for="(video, videoIndex) in videos.filter(v => this.hideVideosWithoutSubs ? v.hasSubs : true)"
+        v-for="(video, videoIndex) in videos.filter((v) =>
+          this.hideVideosWithoutSubs ? v.hasSubs : true
+        )"
         :video="video"
         :checkSaved="checkSavedData"
         :checkSubs="checkSubsData"
@@ -113,7 +130,7 @@ export default {
       checkSavedData: this.checkSaved,
       checkSubsData: this.checkSubs,
       over: false,
-      hideVideosWithoutSubs: false
+      hideVideosWithoutSubs: false,
     };
   },
   computed: {
@@ -168,5 +185,14 @@ export default {
   display: flex;
   flex-wrap: wrap;
   margin: 0 -1rem;
+}
+
+.youtube-video-list-admin-bar {
+  background: rgb(205, 207, 212);
+}
+
+.subs-drop {
+  border: 1px #666 dashed;
+  padding: 0.2rem 0.6rem;
 }
 </style>
