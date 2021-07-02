@@ -30,6 +30,7 @@ const Dictionary = {
       .replace('bos', 'hbs') // Bosnian uses Serbo-Croatian
       .replace('run', 'kin') // Rundi uses Rwanda-Rundi
       .replace('hbo', 'heb') // Ancient Hebrew uses Hebrew
+      .replace('grc', 'ell') // Ancient Greek uses Greek
     let csv = this.useCSV.includes(this.l2)
     let filename = `${this.server}data/wiktionary${csv ? '-csv' : ''}/${l2}-${options.l1}.${csv ? 'csv' : 'json'}.txt`
     return filename

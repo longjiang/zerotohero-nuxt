@@ -22,7 +22,6 @@ export default async function ({ app, store, params, i18n }) {
         : undefined;
       
       if (dictionaries) {
-        console.log(dictionaries)
         console.log('Setting dictionary name to', dictionaries[0])
         store.commit('settings/SET_DICTIONARY_NAME', dictionaries[0])
       }
