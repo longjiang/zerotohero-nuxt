@@ -12,7 +12,7 @@
         v-if="start > 9"
         :to="`/${$l1.code}/${$l2.code}/youtube/search/${encodeURIComponent(
           term
-        )}/${Number(start) - 10}`"
+        )}/${Number(start) - 10}?long=${long}&captions=${captions}`"
         class="btn btn-primary"
       >
         <i class="fa fa-chevron-left"></i>
@@ -21,7 +21,7 @@
       <router-link
         :to="`/${$l1.code}/${$l2.code}/youtube/search/${encodeURIComponent(
           term
-        )}/${Number(start) + 10}`"
+        )}/${Number(start) + 10}?long=${long}&captions=${captions}`"
         class="btn btn-primary"
       >
         <i class="fa fa-chevron-right"></i>
@@ -48,6 +48,10 @@ export default {
     captions: {
       type: String,
       default: "all", // or 'nocaptions' or 'all'
+    },
+    long: {
+      type: Boolean,
+      default: false,
     },
     checkSubs: {
       default: false,
@@ -132,17 +136,21 @@ export default {
       };
     },
     forceRefresh() {
-      this.loadVideos({ forceRefresh: true })
+      this.loadVideos({ forceRefresh: true });
     },
     async loadVideos(options) {
       this.videos = [];
-      options = options || {}
-      options = Object.assign({
-        term: this.term,
-        start: this.start || 0,
-        lang: this.$l2.code,
-        forceRefresh: false
-      }, options)
+      options = options || {};
+      options = Object.assign(
+        {
+          term: this.term,
+          start: this.start || 0,
+          lang: this.$l2.code,
+          forceRefresh: false,
+          long: this.long,
+        },
+        options
+      );
       if (this.captions === "nocaptions") options.captions = false;
       if (this.captions === "captions") options.captions = true;
       this.videos = await YouTube.searchByGoogle(options);

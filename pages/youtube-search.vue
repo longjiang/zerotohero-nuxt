@@ -44,10 +44,16 @@
       >
         No Captions
       </b-form-radio>
-      <b-form-radio v-model="captions" class="d-inline-block" value="all">
+      <b-form-radio v-model="captions" class="d-inline-block mr-3" value="all">
         All
       </b-form-radio>
-      <b-button class="btn-small btn-primary ml-3" @click="forceRefresh"><i class="fa fa-sync-alt mr-1"></i>Force Refresh</b-button>
+      <b-checkbox v-model="long" class="d-inline-block mr-3">
+        Only long videos (20m+)
+      </b-checkbox>
+      <b-button class="btn-small btn-primary ml-3" @click="forceRefresh">
+        <i class="fa fa-sync-alt mr-1"></i>
+        Force Refresh
+      </b-button>
     </b-form-group>
     <YouTubeSearchResults
       :term="term"
@@ -55,6 +61,7 @@
       :captions="captions"
       class="mt-5"
       :key="searchResultKey"
+      :long="long"
       ref="youtubeSearchResults"
     />
   </div>
@@ -74,6 +81,7 @@ export default {
       captions: "all",
       searchResultKey: 0,
       checkSaved: false,
+      long: 'false',
     };
   },
   computed: {
@@ -106,6 +114,8 @@ export default {
   },
   mounted() {
     this.updateSearchText();
+    this.long = this.$route.query.long || 'false'
+    this.captions = this.$route.query.captions || 'all'
   },
   methods: {
     async updateSearchText() {
@@ -118,8 +128,8 @@ export default {
       this.$refs.youtubeSearchResults.addAll();
     },
     forceRefresh() {
-      this.$refs.youtubeSearchResults.forceRefresh()
-    }
+      this.$refs.youtubeSearchResults.forceRefresh();
+    },
   },
 };
 </script>
