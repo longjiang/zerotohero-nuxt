@@ -194,6 +194,7 @@ const Dictionary = {
   },
   lookupMultiple(text, ignoreAccents = false) {
     if (ignoreAccents) text = this.stripAccents(text)
+    console.log(text)
     let words = this.words.filter(word => word && word[ignoreAccents ? 'bare' : 'head'].toLowerCase() === text.toLowerCase())
     return words
   },
@@ -302,6 +303,7 @@ const Dictionary = {
     text = text.toLowerCase()
     let words = this.words
       .filter(word => word.definitions && word.definitions.join(', ').toLowerCase().includes(text))
+      .sort((a, b) => a.bare.length - b.bare.length)
       .slice(0, limit)
     return words
   },
@@ -409,9 +411,11 @@ const Dictionary = {
   },
   // https://stackoverflow.com/questions/990904/remove-accents-diacritics-in-a-string-in-javascript
   stripAccents(str) {
-    return str.normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "") // Accents
-    .replace(/[\u0600-\u0620\u064b-\u0655]/g, "") // Arabic diacritics
+    str = str.normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "") // Accents
+      .replace(/[\u0600-\u0620\u064b-\u0655]/g, "") // Arabic diacritics
+    if (['hbo', 'heb'].includes(this.l2)) str = this.stripHebrewVowels(str)
+    return str
   },
   stringsToWords(strings) {
     let words = []
