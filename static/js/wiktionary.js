@@ -409,7 +409,9 @@ const Dictionary = {
   },
   // https://stackoverflow.com/questions/990904/remove-accents-diacritics-in-a-string-in-javascript
   stripAccents(str) {
-    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    return str.normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "") // Accents
+    .replace(/[\u0610-\u061a\u064b-\u065f]/g, "") // Arabic diacritics
   },
   stringsToWords(strings) {
     let words = []
