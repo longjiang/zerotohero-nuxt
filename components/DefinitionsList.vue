@@ -42,7 +42,6 @@ export default {
       definition.html = await this.definitionHtml(definition.text);
       augmentedDefinitions.push(definition);
     }
-    console.log(augmentedDefinitions);
     this.augmentedDefinitions = augmentedDefinitions;
   },
   computed: {
@@ -75,7 +74,7 @@ export default {
         let stringAfter = m[3];
         let lemmaWord = await this.getWord(lemma);
         if (lemmaWord) {
-          return `${stringBefore}<router-link to="/${this.$l1.code}/${this.$l2.code}/dictionary/${this.$dictionaryName}/${lemmaWord.id}">${lemma}</router-link>${stringAfter}`;
+          return `${stringBefore}<router-link data-level="${lemmaWord.level || 'outside'}" to="/${this.$l1.code}/${this.$l2.code}/dictionary/${this.$dictionaryName}/${lemmaWord.id}">${lemma}</router-link>${stringAfter}`;
         } else {
           return text;
         }
