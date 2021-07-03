@@ -414,7 +414,7 @@ const Dictionary = {
     str = str.normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "") // Accents
       .replace(/[\u0600-\u0620\u064b-\u0655]/g, "") // Arabic diacritics
-    if (['hbo', 'heb'].includes(this.l2)) str = this.stripHebrewVowels(str)
+    if (['he', 'hbo', 'iw'].includes(this.l2)) str = this.stripHebrewVowels(str)
     return str
   },
   stringsToWords(strings) {
@@ -457,7 +457,6 @@ const Dictionary = {
   },
   lookupFuzzy(text, limit = 30) { // text = 'abcde'
     text = this.stripAccents(text.toLowerCase())
-    if (['he', 'hbo', 'iw'].includes(this.l2)) text = this.stripHebrewVowels(text)
     let words = []
     if (['fra'].includes(this.l2)) {
       let stems = this.findStems(text)
