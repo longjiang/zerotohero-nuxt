@@ -78,7 +78,6 @@ export default {
         let lemma = m[2].replace(/\u200e/g, ""); // Left-to-Right Mark
         let stringAfter = m[3];
         let lemmaWord = await this.getWord(lemma);
-        console.log(lemmaWord, lemma)
         if (lemmaWord) {
           return `${stringBefore}<router-link data-level="${
             lemmaWord.level || "outside"

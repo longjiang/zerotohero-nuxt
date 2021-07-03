@@ -130,6 +130,13 @@ const Dictionary = {
     }
     return words
   },
+  lemmaFromDefinition(definition) {
+    let m = definition.match(/(.* of )([^\s]+)(.*)/);
+    if (m) {
+      let lemma = m[2].replace(/\u200e/g, ""); // Left-to-Right Mark
+      return lemma
+    }
+  },
   parseDictionaryCSV(data) {
     console.log("Wiktionary: parsing words from CSV...")
     let parsed = Papa.parse(data, { header: true })
@@ -143,6 +150,11 @@ const Dictionary = {
       item.wiktionary = true
       item.definitions = item.definitions ? item.definitions.split('|') : []
       item.stems = item.stems ? item.stems.split('|') : []
+      for (let definition of item.definitions.filter(d => d.includes(' of '))) {
+        let lemma = this.lemmaFromDefinition(definition)
+        if (lemma) item.stems.push(lemma)
+      }
+      item.stems = this.unique(item.stems)
       item.phrases = item.phrases ? item.phrases.split('|') : []
       return item
     })
@@ -194,7 +206,6 @@ const Dictionary = {
   },
   lookupMultiple(text, ignoreAccents = false) {
     if (ignoreAccents) text = this.stripAccents(text)
-    console.log(text)
     let words = this.words.filter(word => word && word[ignoreAccents ? 'bare' : 'head'].toLowerCase() === text.toLowerCase())
     return words
   },
