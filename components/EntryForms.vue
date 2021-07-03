@@ -4,7 +4,16 @@
     <div class="widget-body jumbotron-fluid p-4">
       <div class="row">
         <div
-          v-if="Helper.isEmpty(tables) || tables.length === 0"
+          :class="{ 'loader text-center mt-4': true, 'd-none': !checking }"
+          style="flex: 1"
+        >
+          <div class="heartbeat-loader"></div>
+          <div class="text-center mt-4 mb-4">
+            Searching for word forms...
+          </div>
+        </div>
+        <div
+          v-if="!checking && (Helper.isEmpty(tables) || tables.length === 0)"
           class="pl-4 pr-4 text-center"
         >
           The word “{{ word.bare }}” seems to only take on one form.
@@ -85,11 +94,13 @@ export default {
     return {
       Helper,
       tables: [],
+      checking: true
     };
   },
   methods: {
     async getTables() {
       // https://www.consolelog.io/group-by-in-javascript/
+      this.checking = true
       let forms = await (await this.$getDictionary()).wordForms(this.word);
       forms = forms.filter((form) => form.table !== "head");
       for (let form of forms) {
@@ -98,6 +109,7 @@ export default {
         form.table = await (await this.$getDictionary()).stylize(form.table);
       }
       this.tables = Helper.groupArrayBy(forms, "table");
+      this.checking = false
     },
   },
   mounted() {
