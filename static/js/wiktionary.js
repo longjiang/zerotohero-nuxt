@@ -411,7 +411,7 @@ const Dictionary = {
   stripAccents(str) {
     return str.normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "") // Accents
-    .replace(/[\u0610-\u061a\u064b-\u065f]/g, "") // Arabic diacritics
+    .replace(/[\u0600-\u0620\u064b-\u0655]/g, "") // Arabic diacritics
   },
   stringsToWords(strings) {
     let words = []

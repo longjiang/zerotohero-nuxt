@@ -157,7 +157,7 @@ export default {
       }
     },
     stripPunctuations(text) {
-      return text.replace(/[.!?。！？…]/g, '')
+      return text.replace(/[.!?。！？…؟\*]/g, '').trim()
     },
     findCurrent(phraseObj) {
       return phraseObj.id === Number(this.phraseId);

@@ -1,13 +1,18 @@
 <template>
   <div class="definitions-list" style="max-width: 50rem; margin: 0 auto">
     <template v-if="augmentedDefinitions.length > 0">
-      <ul class="definitions mb-2 list-unstyled">
+      <ul
+        :class="{
+          'definitions mb-2': true,
+          'definitions-many': augmentedDefinitions.length > 3,
+        }"
+      >
         <li
           v-for="(definition, index) in augmentedDefinitions"
           :key="`definition-${index}`"
           class="definition-list-item"
         >
-          <v-runtime-template :template="`<span>${definition.html}</span>`" /><span v-if="index < augmentedDefinitions.length - 1">; </span>
+          <v-runtime-template :template="`<span>${definition.html}</span>`" />
         </li>
       </ul>
     </template>
@@ -21,7 +26,7 @@
 import VRuntimeTemplate from "v-runtime-template";
 export default {
   components: {
-    VRuntimeTemplate
+    VRuntimeTemplate,
   },
   props: {
     definitions: Array,
@@ -74,7 +79,11 @@ export default {
         let stringAfter = m[3];
         let lemmaWord = await this.getWord(lemma);
         if (lemmaWord) {
-          return `${stringBefore}<router-link data-level="${lemmaWord.level || 'outside'}" to="/${this.$l1.code}/${this.$l2.code}/dictionary/${this.$dictionaryName}/${lemmaWord.id}">${lemma}</router-link>${stringAfter}`;
+          return `${stringBefore}<router-link data-level="${
+            lemmaWord.level || "outside"
+          }" to="/${this.$l1.code}/${this.$l2.code}/dictionary/${
+            this.$dictionaryName
+          }/${lemmaWord.id}">${lemma}</router-link>${stringAfter}`;
         } else {
           return text;
         }
@@ -87,9 +96,35 @@ export default {
 </script>
 
 <style lang="scss">
-.definition-list-item {
-  display: inline;
-  font-size: 1.1rem;
-  font-style: italic;
+.definitions {
+  padding-left: 0;
+  list-style: none;
+
+  .definition-list-item {
+    font-size: 1.1rem;
+    display: inline;
+  }
+  .definition-list-item:not(:last-child)::after {
+    content: "; ";
+  }
+  &.definitions-many {
+    padding-left: inherit;
+    list-style: inherit;
+    .definition-list-item {
+      text-align: left;
+      display: list-item;
+      .definition-list-item-separator {
+        display: none;
+      }
+    }
+  }
+}
+@media (min-width: 768px) {
+  .definitions-many {
+    text-align: left;
+    columns: 2;
+    column-gap: 3rem;
+    display: inline-block;
+  }
 }
 </style>
