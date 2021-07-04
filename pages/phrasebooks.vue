@@ -33,11 +33,22 @@
                 class="link-unstyled"
                 :to="`/${$l1.code}/${$l2.code}/phrasebook/${phrasebook.id}/`"
               >
-                <img
-                  :src="`/img/book-thumb-${phrasebook.id % 10}.jpg`"
-                  class="shadowed book-thumb mb-4"
-                  data-not-lazy
-                />
+                <div class="phrasebook-cover shadowed  mb-4">
+                  <WebImages
+                    class="phrasebook-cover-image"
+                    :text="
+                      phrasebook.title.replace(/phrases/gi, '') + ' scenery'
+                    "
+                    :link="false"
+                    :hover="false"
+                    limit="2"
+                  />
+                  <img
+                    :src="`/img/book-thumb-${phrasebook.id % 10}.jpg`"
+                    class="book-thumb"
+                    data-not-lazy
+                  />
+                </div>
                 <h5 class="mt-3">{{ phrasebook.title }}</h5>
 
                 <b-button
@@ -113,5 +124,24 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.phrasebook-cover {
+  position: relative;
+  width: 109px;
+  height: 160px;
+  overflow: hidden;
+  margin: 0 auto;
+}
+.phrasebook-cover-image {
+  position: absolute;
+  z-index: 2;
+  top: 0.25rem;
+  left: 1.85rem;
+  width: 4.5rem;
+  overflow: hidden;
+  ::v-deep .image-wall-image {
+    width: 4.5rem;
+    height: 4.45rem;
+  }
+}
 </style>

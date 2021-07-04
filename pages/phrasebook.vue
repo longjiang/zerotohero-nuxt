@@ -14,12 +14,15 @@
     </div>
     <div class="row" v-if="phrasebook">
       <router-link
-        v-for="(phraseObj, phraseIndex) in phrasebook.phrases"
+        v-for="(phraseObj, phraseIndex) in phrasebook.phrases.slice(0, numRowsVisible)"
         :key="`phrasebook-phrase-${phraseIndex}`"
         class="link-unstyled col-sm-12 col-md-6 col-lg-4"
         :to="`/${$l1.code}/${$l2.code}/phrasebook/${phrasebook.id}/${
           phraseObj.id
         }/${encodeURIComponent(phraseObj.phrase)}`"
+        v-observe-visibility="
+          phraseIndex === numRowsVisible - 1 ? visibilityChanged : false
+        "
       >
         <div
           :class="{
@@ -48,7 +51,7 @@
             :text="phraseObj.phrase"
             :link="false"
             :hover="false"
-            limit="3"
+            limit="5"
           />
         </div>
       </router-link>
@@ -57,7 +60,6 @@
 </template>
 
 <script>
-
 export default {
   props: {
     bookId: {
@@ -67,6 +69,7 @@ export default {
   data() {
     return {
       phrasebook: undefined,
+      numRowsVisible: 24,
     };
   },
   computed: {
@@ -101,18 +104,24 @@ export default {
       let phrasebook = phrasebooks.find((pb) => pb.id === Number(this.bookId));
       return phrasebook;
     },
+    visibilityChanged(isVisible) {
+      if (isVisible) {
+        this.numRowsVisible = this.numRowsVisible + 24;
+      }
+    },
   },
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .phrasebook-phrase-images {
   height: 3rem;
   white-space: nowrap;
   overflow: hidden;
-  .image-wall-image {
+  ::v-deep .image-wall-image {
     height: 3rem;
     width: auto;
+    object-fit: cover;
   }
 }
 </style>
