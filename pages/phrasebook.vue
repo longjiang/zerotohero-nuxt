@@ -17,7 +17,7 @@
         v-for="(phraseObj, phraseIndex) in phrasebook.phrases"
         :key="`phrasebook-phrase-${phraseIndex}`"
         class="link-unstyled col-sm-12 col-md-6 col-lg-4"
-        :to="`/${$l1.code}/${$l2.code}/phrasebook/${phrasebook.id}/${phraseObj.id}/${phraseObj.phrase}`"
+        :to="`/${$l1.code}/${$l2.code}/phrasebook/${phrasebook.id}/${phraseObj.id}/${encodeURIComponent(phraseObj.phrase)}`"
       >
         <div
           :class="{

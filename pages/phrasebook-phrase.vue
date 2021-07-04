@@ -123,8 +123,8 @@ export default {
       let phrase = this.phrasebook.phrases.find(
         (p) => p.id === Number(this.phraseId)
       );
-      phrase.phrase = this.stripPunctuations(phrase.phrase)
-      this.phraseObj = phrase
+      phrase.phrase = this.stripPunctuations(phrase.phrase);
+      this.phraseObj = phrase;
       if (
         process.server &&
         Helper.dictionaryTooLargeAndWillCauseServerCrash(this.$l2["iso639-3"])
@@ -157,13 +157,16 @@ export default {
       }
     },
     stripPunctuations(text) {
-      return text.replace(/[.!?。！？…؟\*]/g, '').trim()
+      text = text.replace(/[.!?。！？…؟\*]/g, "").trim();
+      text = text.replace(/\/[^\s]+/, "").trim();
+      text = text.replace(/[（(].*[)）]/g, "").trim();
+      return text;
     },
     findCurrent(phraseObj) {
       return phraseObj.id === Number(this.phraseId);
     },
     url(phraseObj) {
-      return `/${this.$l1.code}/${this.$l2.code}/phrasebook/${this.phrasebook.id}/${phraseObj.id}/${phraseObj.phrase}`;
+      return `/${this.$l1.code}/${this.$l2.code}/phrasebook/${this.phrasebook.id}/${phraseObj.id}/${encodeURIComponent(phraseObj.phrase)}`;
     },
     textChanged(newText) {
       this.phraseObj.phrase = newText;
