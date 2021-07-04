@@ -523,9 +523,9 @@ export default {
       }
       if (mutation.type.startsWith("phrasebooks")) {
         this.hasPhrasebooks =
-          this.$store.state.phrasebooks &&
-          this.$store.state.phrasebooks[this.l2.code] &&
-          this.$store.state.phrasebooks[this.l2.code].length > 0;
+          this.$store.state.phrasebooks.phrasebooks &&
+          this.$store.state.phrasebooks.phrasebooks[this.l2.code] &&
+          this.$store.state.phrasebooks.phrasebooks[this.l2.code].length > 0;
       }
     });
   },

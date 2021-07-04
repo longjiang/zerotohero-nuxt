@@ -17,7 +17,9 @@
         v-for="(phraseObj, phraseIndex) in phrasebook.phrases"
         :key="`phrasebook-phrase-${phraseIndex}`"
         class="link-unstyled col-sm-12 col-md-6 col-lg-4"
-        :to="`/${$l1.code}/${$l2.code}/phrasebook/${phrasebook.id}/${phraseObj.id}/${encodeURIComponent(phraseObj.phrase)}`"
+        :to="`/${$l1.code}/${$l2.code}/phrasebook/${phrasebook.id}/${
+          phraseObj.id
+        }/${encodeURIComponent(phraseObj.phrase)}`"
       >
         <div
           :class="{
@@ -63,19 +65,6 @@ export default {
       phrasebook: undefined,
     };
   },
-  async fetch() {
-    let res = await axios.get(`${Config.wiki}items/phrasebook/${this.bookId}`);
-    if (res && res.data) {
-      let phrasebook = res.data.data;
-      phrasebook.phrases = Papa.parse(phrasebook.phrases, {
-        header: true,
-      }).data.map((p, id) => {
-        p.id = id;
-        return p;
-      });
-      this.phrasebook = phrasebook;
-    }
-  },
   computed: {
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
@@ -86,7 +75,29 @@ export default {
         return this.$store.state.settings.l2;
     },
   },
-  methods: {},
+  async fetch() {
+    this.phrasebook = this.getPhrasebookFromStore();
+  },
+  mounted() {
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (mutation.type.startsWith("phrasebooks")) {
+        this.phrasebook = this.getPhrasebookFromStore();
+      }
+    });
+  },
+  beforeDestroy() {
+    // you may call unsubscribe to stop the subscription
+    this.unsubscribe();
+  },
+  methods: {
+    getPhrasebookFromStore() {
+      let phrasebooks =
+        this.$store.state.phrasebooks.phrasebooks[this.$l2.code];
+      if (!phrasebooks) return;
+      let phrasebook = phrasebooks.find((pb) => pb.id === Number(this.bookId));
+      return phrasebook;
+    },
+  },
 };
 </script>
 

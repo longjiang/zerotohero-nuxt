@@ -1,4 +1,5 @@
 import Config from '@/lib/config'
+import Papa from 'papaparse'
 
 export const state = () => {
   return {
@@ -27,10 +28,18 @@ export const actions = {
       }&limit=500&timestamp=${adminMode ? Date.now() : 0}`
     );
     let phrasebooks =
-      response.data.data.sort((x, y) =>
-        x.title.localeCompare(y.title, l2.code)
-      ) || [];
-
+      response.data.data
+    for (let phrasebook of phrasebooks) {
+      phrasebook.phrases = Papa.parse(phrasebook.phrases, {
+        header: true,
+      }).data.map((p, id) => {
+        p.id = id;
+        return p;
+      });
+    }
+    phrasebooks = phrasebooks.sort((x, y) =>
+      x.title.localeCompare(y.title, l2.code)
+    ) || [];
     context.commit('LOAD_PHRASEBOOKS', { l2, phrasebooks })
   },
   async add(context, { l2, phrasebook }) {

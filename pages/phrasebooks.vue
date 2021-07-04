@@ -63,29 +63,11 @@
 </template>
 
 <script>
-import Config from "@/lib/config";
-import axios from "axios";
-
 export default {
   data() {
     return {
       phrasebooks: undefined,
     };
-  },
-  async fetch() {
-    let phrasebooks = this.$store.state.phrasebooks[this.$l2.code];
-    if (phrasebooks) {
-      this.phrasebooks = phrasebooks;
-    } else {
-      let response = await axios.get(
-        `${Config.wiki}items/phrasebook?filter[l2][eq]=${
-          this.$l2.id
-        }&fields=id,title,l2&limit=500&timestamp=${
-          this.$adminMode ? Date.now() : 0
-        }`
-      );
-      if (response && response.data) this.phrasebooks = response.data.data;
-    }
   },
   computed: {
     $l1() {
@@ -101,7 +83,26 @@ export default {
         return this.$store.state.settings.adminMode;
     },
   },
+  async fetch() {
+    this.phrasebooks = this.getPhrasebooksFromStore();
+  },
+  mounted() {
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (mutation.type.startsWith("phrasebooks")) {
+        this.phrasebooks = this.getPhrasebooksFromStore();
+      }
+    });
+  },
+  beforeDestroy() {
+    // you may call unsubscribe to stop the subscription
+    this.unsubscribe();
+  },
   methods: {
+    getPhrasebooksFromStore() {
+      let phrasebooks =
+        this.$store.state.phrasebooks.phrasebooks[this.$l2.code];
+      return phrasebooks;
+    },
     async remove(phrasebook) {
       this.$store.dispatch("phrasebooks/remove", {
         l2: this.$l2,

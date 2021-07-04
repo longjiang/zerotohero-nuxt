@@ -110,28 +110,19 @@ export default {
     };
   },
   async fetch() {
-    let res = await axios.get(`${Config.wiki}items/phrasebook/${this.bookId}`);
-    if (res && res.data) {
-      let phrasebook = res.data.data;
-      phrasebook.phrases = Papa.parse(phrasebook.phrases, {
-        header: true,
-      }).data.map((p, id) => {
-        p.id = id;
-        return p;
-      });
-      this.phrasebook = phrasebook;
-      let phrase = this.phrasebook.phrases.find(
-        (p) => p.id === Number(this.phraseId)
-      );
-      phrase.phrase = this.stripPunctuations(phrase.phrase);
-      this.phraseObj = phrase;
-      if (
-        process.server &&
-        Helper.dictionaryTooLargeAndWillCauseServerCrash(this.$l2["iso639-3"])
-      )
-        return;
-      else await this.matchPhraseToDictionaryEntries();
-    }
+    this.getPhrasebookFromStore();
+  },
+  mounted() {
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (mutation.type.startsWith("phrasebooks")) {
+        
+        this.getPhrasebookFromStore();
+      }
+    });
+  },
+  beforeDestroy() {
+    // you may call unsubscribe to stop the subscription
+    this.unsubscribe();
   },
   computed: {
     $l1() {
@@ -144,6 +135,26 @@ export default {
     },
   },
   methods: {
+    async getPhrasebookFromStore() {
+      let phrasebooks =
+        this.$store.state.phrasebooks.phrasebooks[this.$l2.code];
+      if (!phrasebooks) return;
+      let phrasebook = phrasebooks.find((pb) => pb.id === Number(this.bookId));
+      if (!phrasebook) return;
+
+      this.phrasebook = phrasebook;
+      let phrase = this.phrasebook.phrases.find(
+        (p) => p.id === Number(this.phraseId)
+      );
+      phrase.phrase = this.stripPunctuations(phrase.phrase);
+      this.phraseObj = phrase;
+      if (
+        process.server &&
+        Helper.dictionaryTooLargeAndWillCauseServerCrash(this.$l2["iso639-3"])
+      )
+        return;
+      else await this.matchPhraseToDictionaryEntries();
+    },
     async matchPhraseToDictionaryEntries() {
       this.words = await (
         await this.$getDictionary()
@@ -166,7 +177,9 @@ export default {
       return phraseObj.id === Number(this.phraseId);
     },
     url(phraseObj) {
-      return `/${this.$l1.code}/${this.$l2.code}/phrasebook/${this.phrasebook.id}/${phraseObj.id}/${encodeURIComponent(phraseObj.phrase)}`;
+      return `/${this.$l1.code}/${this.$l2.code}/phrasebook/${
+        this.phrasebook.id
+      }/${phraseObj.id}/${encodeURIComponent(phraseObj.phrase)}`;
     },
     textChanged(newText) {
       this.phraseObj.phrase = newText;
