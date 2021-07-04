@@ -5,7 +5,7 @@
       :style="fullscreenToggle && !$adminMode ? 'padding-left: 2.5rem' : ''"
     >
       <span v-if="hits.length > 0">
-        <div class="float-left ml-1">
+        <div :class="{'float-left ml-1': true, 'd-none': !$adminMode}">
           <b-button variant="danger" size="sm" @click="remove">
             <i class="fas fa-trash"></i>
           </b-button>
