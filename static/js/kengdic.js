@@ -31,7 +31,7 @@ const Dictionary = {
       data.push(word)
     }
     this.words = data
-    axios.get('https://py.zerotohero.ca/') // Call index.php to make sure the java open-korean-text process is running (Dreamhost kills it from time to time)
+    axios.get('https://py.zerotohero.ca/start-open-korean-text.php') // Call index.php to make sure the java open-korean-text process is running (Dreamhost kills it from time to time)
     return this
   },
   getSize() {
