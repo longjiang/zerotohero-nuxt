@@ -76,7 +76,7 @@
       <DictionaryEntry v-if="word" :entry="word" />
       <PhraseComp
         v-else-if="phraseObj && phraseObj.phrase"
-        :term="phraseObj.phrase"
+        :term="phraseObj.phrase.toLowerCase()"
         class="mt-3 mb-5"
       />
     </div>
@@ -84,9 +84,6 @@
 </template>
 
 <script>
-import axios from "axios";
-import Config from "@/lib/config";
-import Papa from "papaparse";
 import Helper from "@/lib/helper";
 
 export default {

@@ -349,9 +349,10 @@ const Dictionary = {
     return Object.assign(newDict, { words: data })
   },
   subdictFromText(text) {
+    let search = text.toLowerCase()
     return this.subdict(
       this.words.filter(function (row) {
-        return text.includes(row.head)
+        return text.includes(row.head) || search.includes(row.head)
       })
     )
   },
@@ -359,13 +360,22 @@ const Dictionary = {
   longest(text) {
     // Only return the *first* seen word and those the same as it
     let first = false
+    let search = text.toLowerCase()
+
+    let matchedText
+
     let matches = this.words
       .filter(function (word) {
         if (first) {
           return word.head === first
         } else {
-          if (text.includes(word.head)) {
+          let matchedIndex = search.indexOf(word.search)
+
+
+          if (matchedIndex !== -1) {
             first = word.head
+
+            matchedText = text.slice(matchedIndex, matchedIndex + word.search.length)
             return true
           }
         }
@@ -375,7 +385,7 @@ const Dictionary = {
       })
     return {
       matches: matches,
-      text: matches && matches.length > 0 ? matches[0].head : ''
+      text: matchedText
     }
   },
   tokenize(text) {
@@ -384,10 +394,11 @@ const Dictionary = {
     } else if (this.l2 === 'spa') {
       return this.tokenizeSpanish(text)
     } else {
-      return this.tokenizeRecursively(
+      let tokenized = this.tokenizeRecursively(
         text,
         this.subdictFromText(text)
       )
+      return tokenized
     }
   },
   splitByReg(text, reg) {
@@ -419,7 +430,7 @@ const Dictionary = {
       result.pop() // last item is always useless, remove it
       var tokens = []
       for (let item of result) {
-        if (typeof item === 'string') {
+        if (typeof item === 'string' && item !== text) {
           for (let token of this.tokenizeRecursively(
             item,
             subdict

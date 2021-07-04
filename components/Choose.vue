@@ -15,11 +15,10 @@
           class="col-xl-3 col-lg-4 col-md-6 col-12"
           v-for="code in [
             'hbo',
-            'ar',
             'yue',
             'zh',
+            'fi',
             'fr',
-            'de',
             'he',
             'it',
             'ko',
@@ -28,6 +27,7 @@
             'pt',
             'ru',
             'es',
+            'vi',
             'en',
             'lzh',
           ]"
