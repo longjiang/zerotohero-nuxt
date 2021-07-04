@@ -107,7 +107,7 @@ const Dictionary = {
               }
             }
           }
-          let bare = this.stripAccents(item.word)
+          let bare = this.l2 !== 'vie' ? this.stripAccents(item.word) : item.word
           let word = {
             bare,
             search: bare.toLowerCase(),
@@ -135,7 +135,7 @@ const Dictionary = {
     let parsed = Papa.parse(data, { header: true })
     let words = parsed.data
     words = words.map(item => {
-      item.bare = this.stripAccents(item.word)
+      item.bare = this.l2 !== 'vie' ? this.stripAccents(item.word) : item.word
       item.search = item.bare.toLowerCase(),
         item.head = item.word
       item.accented = item.word
@@ -198,7 +198,7 @@ const Dictionary = {
     return word
   },
   lookupMultiple(text, ignoreAccents = false) {
-    if (ignoreAccents) text = this.stripAccents(text)
+    if (ignoreAccents && this.l2 !== 'vie') text = this.stripAccents(text)
     let words = this.words.filter(word => word && word[ignoreAccents ? 'bare' : 'head'].toLowerCase() === text.toLowerCase())
     return words
   },
@@ -224,7 +224,7 @@ const Dictionary = {
       form: word.head
     }]
     if (this.l2 === 'fra') forms = forms.concat(this.frenchWordForms(word))
-    else forms = forms.concat(this.findForms(word))
+    else if (this.l2 !== 'vie') forms = forms.concat(this.findForms(word))
     forms = this.uniqueByValues(forms, ['table', 'field', 'form'])
     return forms
   },
@@ -482,7 +482,8 @@ const Dictionary = {
     }
   },
   lookupFuzzy(text, limit = 30) { // text = 'abcde'
-    text = this.stripAccents(text.toLowerCase())
+    if (this.l2 !== 'vie') text = this.stripAccents(text)
+    text = text.toLowerCase()
     let words = []
     if (['fra'].includes(this.l2)) {
       let stems = this.findStems(text)

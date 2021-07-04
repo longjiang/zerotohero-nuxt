@@ -49,7 +49,7 @@
           </div>
         </div>
         <div class="col-md-6">
-          <div class="mt-2 mb-2">Data preview:</div>
+          <div class="mt-2 mb-2">Data preview (<a href="#" @click.prevent="flip = !flip">flip</a>):</div>
           <b-table
             v-if="rows"
             small
@@ -68,7 +68,6 @@
 import axios from "axios";
 import Config from "@/lib/config";
 import Papa from "papaparse";
-import Helper from "@/lib/helper";
 
 export default {
   props: {},
@@ -81,6 +80,7 @@ export default {
       sourceURL: undefined,
       saved: undefined,
       saving: false,
+      flip: false
     };
   },
   computed: {
@@ -95,6 +95,7 @@ export default {
     rows() {
       if (this.csv) {
         let headerRow = "phrase\t" + this.$l1.code + "\tpronunciation\n";
+        if (this.flip) headerRow = this.$l1.code + "\tphrase\tpronunciation\n";
         let csv = headerRow + this.csv;
         return Papa.parse(csv, { header: true }).data;
       }
