@@ -8,7 +8,7 @@
     <div class="main container mt-5 mb-5">
       <div class="row">
         <div class="col-sm-12">
-          <Annotate><span>Trời ơi....Da của chị Nghi càng ngày càng đẹp nha</span></Annotate>
+          <Annotate><span>Dafür müssen Sie eine Sprachprüfung machen.</span></Annotate>
         </div>
       </div>
     </div>

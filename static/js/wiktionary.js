@@ -257,7 +257,6 @@ const Dictionary = {
         let lemma = this.lemmaFromDefinition(d)
         for (let head of heads) {
           if (head === lemma) {
-            console.log(head, lemma)
             field = d.replace(new RegExp(`of ${head}.*`), '').trim()
             field = field.replace(/form$/, '').trim()
             let table = field.replace(/.*?([^\s]+)$/, "$1").trim()
@@ -274,7 +273,6 @@ const Dictionary = {
               field: field ? field : table,
               form: w.head
             }
-            console.log(lemma, table, field)
             moreForms.push(form)
           }
         }
@@ -350,17 +348,22 @@ const Dictionary = {
   },
   subdictFromText(text) {
     let search = text.toLowerCase()
-    return this.subdict(
-      this.words.filter(function (row) {
+    if (this.l2 !== 'vie') search = this.stripAccents(search)
+    let words = this.words.filter(function (row) {
+      if (this.l2 === 'vie') {
         return text.includes(row.head) || search.includes(row.head)
-      })
-    )
+      } else {
+        return text.includes(row.head) || search.includes(row.search)
+      }
+    })
+    return this.subdict(words)
   },
   /* Returns the longest word in the dictionary that is inside `text` */
   longest(text) {
     // Only return the *first* seen word and those the same as it
     let first = false
     let search = text.toLowerCase()
+    if (this.l2 !== 'vie') search = this.stripAccents(search)
 
     let matchedText
 
