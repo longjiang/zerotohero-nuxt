@@ -408,7 +408,7 @@ export default {
       // console.log("🍉 started do audio stuff");
       this.$emit("pause");
       this.audioCancelled = false;
-      if (this.matchedParallelLines[this.currentLineIndex]) {
+      if (this.matchedParallelLines && this.matchedParallelLines[this.currentLineIndex]) {
         // await Helper.timeout(1000);
         this.$emit("speechStart");
         let englishPromise = Helper.speak(

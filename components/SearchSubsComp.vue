@@ -5,7 +5,7 @@
       :style="fullscreenToggle && !$adminMode ? 'padding-left: 2.5rem' : ''"
     >
       <span v-if="hits.length > 0">
-        <div :class="{'float-left ml-1': true, 'd-none': !$adminMode}">
+        <div :class="{ 'float-left ml-1': true, 'd-none': !$adminMode }">
           <b-button variant="danger" size="sm" @click="remove">
             <i class="fas fa-trash"></i>
           </b-button>
@@ -415,6 +415,12 @@ export default {
       }
       this.collectContext(hits);
       this.$emit("updated", hits);
+    },
+    currentHit() {
+      if (this.$hasFeature('speech')) {
+        window.speechSynthesis.cancel()
+        Helper.speak(this.currentHit.line, this.$l2, 1)
+      };
     },
   },
   computed: {

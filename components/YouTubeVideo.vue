@@ -85,17 +85,18 @@ export default {
   methods: {
     updateCurrentTime() {
       // This cannot be a computed property because the player is not monitored by Vue
-      let newTime = this.player && this.player.getCurrentTime
+      let newTime =
+        this.player && this.player.getCurrentTime
           ? this.player.getCurrentTime()
           : 0;
       if (newTime !== this.currentTime) {
-        this.currentTime = newTime
-        this.$emit('currentTime', this.currentTime)
+        this.currentTime = newTime;
+        this.$emit("currentTime", this.currentTime);
       }
     },
     loadYouTubeiFrame() {
       let that = this;
-      let id = this.$el.querySelector('.youtube-iframe').getAttribute('id')
+      let id = this.$el.querySelector(".youtube-iframe").getAttribute("id");
       this.removeYouTubeAPIVars();
       window.onYouTubePlayerAPIReady = () => {
         // eslint-disable-next-line no-undef
@@ -116,14 +117,19 @@ export default {
             iv_load_policy: 3,
             modestbranding: 1,
           },
-          onReady: () => {
-          },
+          onReady: () => {},
           events: {
             onStateChange: () => {
               if (this.player && this.player.getPlayerState) {
                 this.player.setPlaybackRate(this.speed);
-                this.$emit('paused', [-1, 2].includes(this.player.getPlayerState()))
-                this.$emit('ended', [0].includes(this.player.getPlayerState()))
+                this.$emit(
+                  "paused",
+                  [-1, 2].includes(this.player.getPlayerState())
+                );
+                this.$emit("ended", [0].includes(this.player.getPlayerState()));
+                if (this.player.getPlayerState() === 1) {
+                  window.speechSynthesis.cancel();
+                }
               }
               if (
                 !Helper.iOS() &&
