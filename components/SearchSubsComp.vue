@@ -417,7 +417,7 @@ export default {
       this.$emit("updated", hits);
     },
     currentHit() {
-      if (this.$hasFeature('speech')) {
+      if (this.navigated && this.$hasFeature('speech')) {
         window.speechSynthesis.cancel()
         Helper.speak(this.currentHit.line, this.$l2, 1)
       };

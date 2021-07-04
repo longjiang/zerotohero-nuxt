@@ -213,7 +213,7 @@ export default {
           children: [
             {
               name: "dictionary",
-              icon: "fas fa-font",
+              icon: "fas fa-search",
               title: "Look Up",
               show: this.hasFeature("dictionary"),
               shortcut: (e) => e.code === "KeyD" && e.metaKey && e.shiftKey,

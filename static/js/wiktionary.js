@@ -87,11 +87,15 @@ const Dictionary = {
           for (let sense of item.senses) {
             if (sense.glosses) {
               if (!sense.complex_inflection_of) {
-                definitions.push(sense.glosses[0])
+                let definition = sense.glosses[0]
                 if (sense.form_of) {
                   let stem = this.normalizeStem(sense.form_of[0])
                   stems.push(stem)
+                  if (!definition.includes(' of ')) {
+                    definition = definition + ' of ' + stem
+                  }
                 }
+                definitions.push(definition)
               } else {
                 // definitions.concat(this.inflections(sense)) // Probably not that useful in practice.
               }
