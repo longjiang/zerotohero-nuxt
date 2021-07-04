@@ -1,6 +1,6 @@
 <template>
   <div
-    class="image-wall"
+    :class="{'image-wall': true, 'image-wall-hover': hover}"
     :key="`web-images-${text}`"
     v-cloak
     v-if="images && images.length > 0"
@@ -35,6 +35,14 @@ export default {
     preloaded: {
       type: Array,
     },
+    link: {
+      type: Boolean,
+      default: true
+    },
+    hover: {
+      type: Boolean,
+      default: true
+    }
   },
   computed: {
     $l1() {
@@ -70,7 +78,7 @@ export default {
   },
   methods: {
     goto(url) {
-      window.open(url);
+      if (this.link) window.open(url);
     },
   },
   data() {
@@ -88,7 +96,7 @@ export default {
   flex-wrap: wrap;
 }
 
-.image-wall:hover img {
+.image-wall-hover:hover img {
   opacity: 0.5;
   &:hover {
     opacity: 1;

@@ -27,22 +27,29 @@
             'text-right': $l2.direction === 'rtl',
           }"
         >
-          <p>
+          <div>
             <span v-if="phraseObj && phraseObj.pronunciation">
               {{ phraseObj.pronunciation }}
             </span>
-          </p>
+          </div>
           <h4
-            class="mb-3"
             :data-level="
               phraseObj && phraseObj.level ? phraseObj.level : 'outside'
             "
+            class="mb-2"
           >
             {{ phraseObj.phrase }}
           </h4>
-          <p class="mb-0" v-if="phraseObj && phraseObj[$l1.code]">
+          <div class="mb-0" v-if="phraseObj && phraseObj[$l1.code]">
             {{ phraseObj[$l1.code] }}
-          </p>
+          </div>
+          <WebImages
+            class="phrasebook-phrase-images mt-3"
+            :text="phraseObj.phrase"
+            :link="false"
+            :hover="false"
+            limit="3"
+          />
         </div>
       </router-link>
     </div>
@@ -50,9 +57,6 @@
 </template>
 
 <script>
-import axios from "axios";
-import Config from "@/lib/config";
-import Papa from "papaparse";
 
 export default {
   props: {
@@ -101,4 +105,14 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss">
+.phrasebook-phrase-images {
+  height: 3rem;
+  white-space: nowrap;
+  overflow: hidden;
+  .image-wall-image {
+    height: 3rem;
+    width: auto;
+  }
+}
+</style>
