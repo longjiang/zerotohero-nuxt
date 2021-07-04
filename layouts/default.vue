@@ -463,6 +463,12 @@ export default {
           adminMode: this.$store.state.settings.adminMode,
         });
       }
+      if (!this.$store.state.phrasebooks.phrasebooksLoaded[this.l2.code]) {
+        this.$store.dispatch("phrasebooks/load", {
+          l2: this.l2,
+          adminMode: this.$store.state.settings.adminMode,
+        });
+      }
     },
   },
   computed: {

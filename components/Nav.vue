@@ -58,56 +58,55 @@
 import Config from "@/lib/config";
 
 export default {
-  data() {
-    return {
-      shortcuts: [],
-      menu: [
+  computed: {
+    menu() {
+      return [
         {
           icon: "fas fa-wrench",
           title: "Admin",
-          show: this.adminMode(),
+          show: this.$adminMode,
           children: [
             {
               icon: "fas fa-wrench",
               title: "Test",
               name: "test",
-              show: this.adminMode(),
+              show: this.$adminMode,
             },
             {
               icon: "fas fa-wrench",
               title: "Add Phrasebook",
               name: "phrasebook-creator",
-              show: this.adminMode(),
+              show: this.$adminMode,
             },
             {
               icon: "fas fa-wrench",
               title: "Break Lines",
               name: "break-lines",
-              show: this.adminMode(),
+              show: this.$adminMode,
             },
             {
               icon: "fas fa-wrench",
               title: "Wiktionary CSV",
               name: "wiktionary-csv",
-              show: this.adminMode(),
+              show: this.$adminMode,
             },
             {
               icon: "fas fa-wrench",
               title: "DB Upgrade",
               name: "db-upgrade",
-              show: this.adminMode(),
+              show: this.$adminMode,
             },
             {
               icon: "fas fa-wrench",
               title: "Recover Subs",
               name: "recover-subs",
-              show: this.adminMode(),
+              show: this.$adminMode,
             },
             {
               icon: "fas fa-wrench",
               title: "Assign Lesson Videos",
               name: "assign-lesson-videos",
-              show: this.adminMode(),
+              show: this.$adminMode,
             },
           ],
         },
@@ -163,7 +162,7 @@ export default {
               name: "tv-shows",
               icon: "fa fa-tv",
               title: "TV Shows",
-              show: false,
+              show: this.hasTVShows,
             },
             {
               name: "show",
@@ -173,7 +172,7 @@ export default {
               name: "talks",
               icon: "fas fa-graduation-cap",
               title: "Talks",
-              show: false,
+              show: this.hasTalks,
             },
             {
               name: "youtube-browse",
@@ -240,7 +239,7 @@ export default {
               name: "phrasebooks",
               icon: "fa fa-book-open",
               title: "Phrasebooks",
-              show: false,
+              show: this.hasPhrasebooks,
             },
             {
               name: "phrasebook",
@@ -474,9 +473,20 @@ export default {
           shortcut: (e) => e.code === "KeyS" && e.metaKey && e.shiftKey,
           show: true,
         },
-      ],
-      history: []
-    };
+      ];
+    },
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
+    $adminMode() {
+      if (typeof this.$store.state.settings.adminMode !== "undefined")
+        return this.$store.state.settings.adminMode;
+    },
   },
   props: {
     l1: {
@@ -486,15 +496,38 @@ export default {
       type: Object,
     },
   },
+
+  data() {
+    return {
+      shortcuts: [],
+      history: [],
+      hasTVShows: false,
+      hasTalks: false,
+      hasPhrasebooks: false
+    };
+  },
   mounted() {
-    this.enableTVShows();
-    this.enablePhrasebooks();
+    this.bindKeys();
+  },
+  created() {
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type.startsWith("shows")) {
-        this.enableTVShows();
+        this.hasTVShows =
+          this.$store.state.shows.tvShows &&
+          this.$store.state.shows.tvShows[this.l2.code] &&
+          this.$store.state.shows.tvShows[this.l2.code].length > 0;
+        this.hasTalks =
+          this.$store.state.shows.talks &&
+          this.$store.state.shows.talks[this.l2.code] &&
+          this.$store.state.shows.talks[this.l2.code].length > 0;
+      }
+      if (mutation.type.startsWith("phrasebooks")) {
+        this.hasPhrasebooks =
+          this.$store.state.phrasebooks &&
+          this.$store.state.phrasebooks[this.l2.code] &&
+          this.$store.state.phrasebooks[this.l2.code].length > 0;
       }
     });
-    this.bindKeys();
   },
   beforeDestroy() {
     // you may call unsubscribe to stop the subscription
@@ -509,46 +542,6 @@ export default {
     },
   },
   methods: {
-    async enablePhrasebooks() {
-      let response = await axios.get(
-        `${Config.wiki}items/phrasebook?filter[l2][eq]=${
-          this.l2.id
-        }&fields=id,title,l2&limit=500&timestamp=${
-          this.$adminMode ? Date.now() : 0
-        }`
-      );
-      if (response && response.data) {
-        let phrasebooks = response.data.data;
-        if (phrasebooks && phrasebooks.length> 0) {
-          let d = this.menu.find((i) => i.title === "Dictionary");
-          let p = d.children.find((i) => i.name === "phrasebooks");
-          p.show = true;
-        }
-      }
-    },
-    enableTVShows() {
-      if (
-        this.$store.state.shows.tvShows &&
-        this.$store.state.shows.tvShows[this.l2.code] &&
-        this.$store.state.shows.tvShows[this.l2.code].length > 0
-      ) {
-        let av = this.menu.find((i) => i.title === "Audio-Visual");
-        let tvShows = av.children.find((i) => i.title === "TV Shows");
-        tvShows.show = true;
-      }
-      if (
-        this.$store.state.shows.talks &&
-        this.$store.state.shows.talks[this.l2.code] &&
-        this.$store.state.shows.talks[this.l2.code].length > 0
-      ) {
-        let av = this.menu.find((i) => i.title === "Audio-Visual");
-        let talks = av.children.find((i) => i.title === "Talks");
-        talks.show = true;
-      }
-    },
-    adminMode() {
-      return this.$store.state.settings.adminMode;
-    },
     hasFeature(feature) {
       return this.$hasFeature(feature);
     },
@@ -561,8 +554,8 @@ export default {
     selfOrFirstChild(item, visibleOnly) {
       if (item) {
         if (item.children && item.children.length > 0) {
-          let children = item.children
-          if (visibleOnly) children = children.filter(c => c.show)
+          let children = item.children;
+          if (visibleOnly) children = children.filter((c) => c.show);
           return children[0];
         } else {
           return item;
