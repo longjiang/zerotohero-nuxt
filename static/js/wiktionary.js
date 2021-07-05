@@ -412,8 +412,20 @@ const Dictionary = {
     let words = text.replace(reg, '!!!BREAKWORKD!!!$1!!!BREAKWORKD!!!').replace(/^!!!BREAKWORKD!!!/, '').replace(/!!!BREAKWORKD!!!$/, '')
     return words.split('!!!BREAKWORKD!!!')
   },
+  isThai(text) {
+    let match = text.match(
+      /[\u0E00-\u0E7F]+/g
+    )
+    return match
+  },
   tokenizeRecursively(text, subdict) {
     const longest = subdict.longest(text)
+    if (this.l2 === 'tha') {
+      const isThai = subdict.isThai(text)
+      if (!isThai) {
+        return [text]
+      }
+    }
     if (longest.matches.length > 0) {
       let result = []
       /* 

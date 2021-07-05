@@ -8,7 +8,9 @@
     <div class="main container mt-5 mb-5">
       <div class="row">
         <div class="col-sm-12">
-          <Annotate><span>nehme</span></Annotate>
+          <Annotate><p>โอเคบ่เรารักภาษาถิ่น</p></Annotate>
+          <Annotate><p>บักโพธิ์ ทริปวัดใจ</p></Annotate>
+          <Annotate><p>Hometown's Embrace</p></Annotate>
         </div>
       </div>
     </div>
