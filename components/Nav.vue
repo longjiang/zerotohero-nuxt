@@ -16,13 +16,13 @@
   >
     <nav class="site-nav tabs">
       <NuxtLink
-        v-for="(item, index) in menu.filter((item) => item.show)"
+        v-for="(item, index) in menu.filter((item) => item.show && to(item))"
         :class="{
           tab: true,
           'router-link-active':
             parent && parent.name === nameOfSelfOrFirstChild(item),
         }"
-        :to="last(item) || selfOrFirstChild(item, true)"
+        :to="to(item)"
         :title="item.title"
         :key="`nav-${index}`"
       >
@@ -119,13 +119,13 @@ export default {
               name: "courses",
               title: "Language Courses",
               icon: "fas fa-chalkboard-teacher",
-              show: this.l2.code === "zh",
+              show: ["zh", "en"].includes(this.l2.code),
             },
             {
               name: "textbooks-workbooks",
               title: "Textbooks",
               icon: "fas fa-book",
-              show: this.l2.code === "zh",
+              show: ["zh", "en"].includes(this.l2.code),
             },
             {
               name: "video-count",
@@ -542,6 +542,10 @@ export default {
     },
   },
   methods: {
+    to(item) {
+      let to = this.last(item) || this.selfOrFirstChild(item, true)
+      return to
+    },
     hasFeature(feature) {
       return this.$hasFeature(feature);
     },
