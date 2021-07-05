@@ -9,8 +9,10 @@
       <div class="row">
         <div class="col-sm-12">
           <!-- <Annotate><p>โอเคบ่เรารักภาษาถิ่น</p></Annotate> -->
-          <Annotate><p>บักโพธิ์</p></Annotate>
+          <Annotate><p>บักโพธิ์ บักโพธิ์</p></Annotate>
           <!-- ทริปวัดใจ -->
+          <Annotate><p>และก็ไม่ให้มาชวนน้าดาวทะเลาะอีกพี่จะทำให้ทุกอย่างดีขึ้นพี่สัญญา</p></Annotate>
+          <!-- และก็ไม่ให้มาชวนน้าดาวทะเลาะอีกพี่จะทำให้ทุกอย่างดีขึ้นพี่สัญญา -->
           <!-- <Annotate><p>Hometown's Embrace</p></Annotate> -->
         </div>
       </div>
