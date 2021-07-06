@@ -55,8 +55,6 @@
 </template>
 
 <script>
-import Config from "@/lib/config";
-
 export default {
   computed: {
     menu() {
@@ -76,6 +74,12 @@ export default {
               icon: "fas fa-wrench",
               title: "Add Phrasebook",
               name: "phrasebook-creator",
+              show: this.$adminMode,
+            },
+            {
+              icon: "fas fa-wrench",
+              title: "Phrase Survey",
+              name: "phrase-survey",
               show: this.$adminMode,
             },
             {
