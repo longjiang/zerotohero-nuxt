@@ -29,6 +29,7 @@
                 level="outside"
                 :key="`${term}-search-subs`"
                 :terms="[term]"
+                :tvShow="tvShow"
               />
             </div>
           </div>
@@ -72,7 +73,12 @@ import WordPhotos from "@/lib/word-photos";
 
 export default {
   props: {
-    term: "",
+    term: {
+      default: ''
+    },
+    tvShow: {
+      default: undefined
+    }
   },
   data() {
     return {

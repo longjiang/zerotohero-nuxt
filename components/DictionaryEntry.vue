@@ -44,7 +44,7 @@
             id="search-subs"
             v-if="entry && showSearchSubs && searchTerms"
           >
-            <div class="widget-title">“{{ entry.head }}” in TV Shows</div>
+            <div class="widget-title">“{{ entry.head }}” in {{ tvShow ? `the TV Show "${tvShow.title}"` : 'TV Shows' }}</div>
             <div class="widget-body">
               <SearchSubsComp
                 v-if="searchTerms"
@@ -54,6 +54,7 @@
                 "
                 :key="`subs-search-${entry.id}`"
                 :terms="searchTerms"
+                :tvShow="tvShow"
               />
             </div>
           </div>
@@ -237,6 +238,9 @@ export default {
     showSearchSubs: {
       default: true,
     },
+    tvShow: {
+      default: undefined
+    }
   },
   data() {
     return {

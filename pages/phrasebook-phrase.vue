@@ -69,11 +69,11 @@
           </b-dropdown-item>
         </b-dropdown>
       </div>
-
-      <DictionaryEntry v-if="word" :entry="word" />
+      <DictionaryEntry v-if="word && phrasebook" :entry="word" :tvShow="phrasebook.tv_show" />
       <PhraseComp
-        v-else-if="phraseObj && phraseObj.phrase"
+        v-else-if="phraseObj && phraseObj.phrase && phrasebook"
         :term="phraseObj.phrase.toLowerCase()"
+        :tvShow="phrasebook.tv_show"
         class="mt-3 mb-5"
       />
     </div>

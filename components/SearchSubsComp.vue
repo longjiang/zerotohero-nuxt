@@ -335,6 +335,9 @@ export default {
     fullscreenToggle: {
       default: true,
     },
+    tvShow: {
+      default: undefined
+    }
   },
   data() {
     return {
@@ -509,7 +512,8 @@ export default {
         this.$l2.id,
         this.$adminMode,
         this.$l2.continua,
-        this.$subsSearchLimit ? 20 : 500
+        this.$subsSearchLimit ? 20 : 500,
+        this.tvShow ? this.tvShow.id : undefined
       );
 
       hits = this.updateSaved(hits);

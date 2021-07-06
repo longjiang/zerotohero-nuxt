@@ -14,7 +14,7 @@
           <b-form-select
             v-model="showSelect"
             :options="showOptions"
-            style="display: inline-block; width: 20rem; margin-left: 1rem;"
+            style="display: inline-block; width: 20rem; margin-left: 1rem"
           ></b-form-select>
         </div>
         <div class="text-center mb-4">
@@ -96,7 +96,7 @@ export default {
       numRowsVisible: 20,
       showSelect: "all",
       shows: undefined,
-      gettingPhrases: false
+      gettingPhrases: false,
     };
   },
   mounted() {
@@ -119,10 +119,10 @@ export default {
         : undefined;
     },
     async getPhrases() {
-      this.gettingPhrases = true
+      this.gettingPhrases = true;
       this.videos = await this.getVideos(this.showSelect);
       this.lines = this.crunchPhrases(this.videos);
-      this.gettingPhrases = false
+      this.gettingPhrases = false;
     },
     visibilityChanged(isVisible) {
       if (isVisible) {
@@ -155,7 +155,10 @@ export default {
     async getVideos(show) {
       console.log(`Getting ${this.perPage} videos...`);
       let limit = this.perPage;
-      let showFilter = show === 'all' ? '&filter[tv_show][nnull]=1' : `&filter[tv_show][eq]=${show}`
+      let showFilter =
+        show === "all"
+          ? "&filter[tv_show][nnull]=1"
+          : `&filter[tv_show][eq]=${show}`;
       let response = await axios.get(
         `${Config.wiki}items/youtube_videos?sort=-id&limit=${limit}&offset=${this.start}&filter[l2][eq]=${this.$l2.id}${showFilter}&fields=*,tv_show.*`
       );
@@ -175,7 +178,9 @@ export default {
         line.count = lines.filter((l) => l.line === line.line).length;
       }
       console.log(`Sorting ${lines.length} lines by count...`);
-      let sortedLines = lines.sort((a, b) => b.count - a.count);
+      let sortedLines = lines
+        .sort((a, b) => a.line.length - b.line.length)
+        .sort((a, b) => b.count - a.count);
       return sortedLines;
     },
   },

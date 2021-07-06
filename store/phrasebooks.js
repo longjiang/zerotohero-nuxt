@@ -25,7 +25,7 @@ export const actions = {
   async load(context, { l2, adminMode }) {
     let response = await axios.get(
       `${Config.wiki}items/phrasebook?sort=title&filter[l2][eq]=${l2.id
-      }&limit=500&timestamp=${adminMode ? Date.now() : 0}`
+      }&fields=*,tv_show.*&limit=500&timestamp=${adminMode ? Date.now() : 0}`
     );
     let phrasebooks =
       response.data.data
