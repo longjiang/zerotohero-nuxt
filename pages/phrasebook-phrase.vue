@@ -6,6 +6,7 @@
 </router>
 <template>
   <div>
+    <SocialHead :title="title" :description="description" :image="image" />
     <div class="container mt-4">
       <div class="row">
         <div class="col-sm-12">
@@ -82,6 +83,7 @@
 
 <script>
 import Helper from "@/lib/helper";
+import WordPhotos from '@/lib/word-photos'
 
 export default {
   props: {
@@ -101,10 +103,16 @@ export default {
       phraseObj: undefined,
       words: undefined,
       word: undefined,
+      images: []
     };
   },
   async fetch() {
     this.getPhrasebookFromStore();
+    if (this.phrase)
+      this.images = await WordPhotos.getGoogleImages({
+        term: this.phrase,
+        lang: this.$l2.code,
+      });
   },
   mounted() {
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
@@ -126,6 +134,31 @@ export default {
     $l2() {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
+    },
+    title() {
+      if (this.phrase) {
+        return `Learn the ${this.$l2 ? this.$l2.name : ""} Phrase “${
+          this.phrase
+        }” | ${this.$l2 ? this.$l2.name : ""} Zero to Hero Dictionary`;
+      }
+      return `Lookup ${this.$l2 ? this.$l2.name : ""} Phrases | ${
+        this.$l2 ? this.$l2.name : ""
+      } Zero to Hero`;
+    },
+    description() {
+      if (this.phrase) {
+        return `See how “${this.phrase}” is used in TV shows, how it forms collocations, and other examples.`;
+      }
+      return `Look up ${this.$l2 ? this.$l2.name : ""} phrases. See how ${
+        this.$l2 ? this.$l2.name : ""
+      } words are used in TV shows, how they form collocations, and other examples.`;
+    },
+    image() {
+      if (this.images.length > 0) {
+        return this.images[0].src;
+      } else {
+        return "/img/zth-share-image.jpg";
+      }
     },
   },
   methods: {
