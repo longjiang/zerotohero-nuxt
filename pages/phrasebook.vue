@@ -6,6 +6,7 @@
 </router>
 <template>
   <div class="container main mt-5 mb-5">
+    <SocialHead :title="title" :description="description" :image="image" />
     <div class="row">
       <div class="col-sm-12" v-if="phrasebook">
         <h4 class="text-center">{{ phrasebook.title }}</h4>
@@ -14,7 +15,10 @@
     </div>
     <div class="row" v-if="phrasebook">
       <router-link
-        v-for="(phraseObj, phraseIndex) in phrasebook.phrases.slice(0, numRowsVisible)"
+        v-for="(phraseObj, phraseIndex) in phrasebook.phrases.slice(
+          0,
+          numRowsVisible
+        )"
         :key="`phrasebook-phrase-${phraseIndex}`"
         class="link-unstyled col-sm-12 col-md-6 col-lg-4"
         :to="`/${$l1.code}/${$l2.code}/phrasebook/${phrasebook.id}/${
@@ -60,6 +64,11 @@
 </template>
 
 <script>
+import Config from "@/lib/config";
+import axios from "axios";
+import Papa from "papaparse";
+import WordPhotos from '@/lib/word-photos'
+
 export default {
   props: {
     bookId: {
@@ -70,6 +79,7 @@ export default {
     return {
       phrasebook: undefined,
       numRowsVisible: 24,
+      images: []
     };
   },
   computed: {
@@ -81,9 +91,41 @@ export default {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
+    title() {
+      if (this.phrasebook) {
+        return `${this.phrasebook.title} | ${
+          this.$l2 ? this.$l2.name : ""
+        } Zero to Hero`;
+      }
+      return `${this.$l2 ? this.$l2.name : ""} Phrasebook | ${
+        this.$l2 ? this.$l2.name : ""
+      } Zero to Hero`;
+    },
+    description() {
+      if (this.phrasebook) {
+        return `Learn ${this.phrasebook.phrases.length} ${this.$l2.name} phrases from the phrasebook “${this.phrasebook.title}”. See how each phrase is used in TV shows, movies, music, etc.`;
+      }
+      return `See how each phrase is used in TV shows, movies, music, etc.`;
+    },
+    image() {
+      if (this.images.length > 0) {
+        return this.images[0].src;
+      } else {
+        return "/img/zth-share-image.jpg";
+      }
+    },
   },
   async fetch() {
-    this.phrasebook = this.getPhrasebookFromStore();
+    let phrasebook = this.getPhrasebookFromStore();
+    if (!phrasebook) {
+      phrasebook = await this.loadPhrasebook(this.bookId);
+    }
+    this.phrasebook = phrasebook;
+    if (this.phrasebook)
+      this.images = await WordPhotos.getGoogleImages({
+        term: this.phrasebook.phrases[0].phrase,
+        lang: this.$l2.code,
+      });
   },
   mounted() {
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
@@ -97,6 +139,21 @@ export default {
     this.unsubscribe();
   },
   methods: {
+    async loadPhrasebook(bookId) {
+      let url = `${Config.wiki}items/phrasebook/${bookId}?fields=*,tv_show.*`;
+      console.log(url);
+      let response = await axios.get(url);
+      if (response.data && response.data.data) {
+        let phrasebook = response.data.data;
+        phrasebook.phrases = Papa.parse(phrasebook.phrases, {
+          header: true,
+        }).data.map((p, id) => {
+          p.id = id;
+          return p;
+        });
+        return phrasebook;
+      }
+    },
     getPhrasebookFromStore() {
       let phrasebooks =
         this.$store.state.phrasebooks.phrasebooks[this.$l2.code];
