@@ -21,7 +21,7 @@
             :key="`subs-search-${term}`"
             :style="portrait ? 'border-radius: 0' : ''"
           >
-            <div class="widget-title">“{{ term }}” in TV Shows</div>
+            <div class="widget-title">“{{ term }}” in {{ tvShow ? `the TV Show "${tvShow.title}"` : 'TV Shows' }}</div>
             <div class="widget-body">
               <SearchSubsComp
                 v-if="term"
