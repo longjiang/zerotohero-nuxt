@@ -73,11 +73,12 @@
             :checkSaved="false"
           />
         </template>
+        <div v-observe-visibility="visibilityChanged"></div>
         <div class="mt-4 text-center" v-if="!keyword">
           <router-link
             v-if="start > 9"
             :to="`/${$l1.code}/${$l2.code}/youtube/browse/${topic}/${level}/${
-              Number(start) - 12
+              Math.max(Number(start) - this.perPage - this.moreVideos, 0)
             }${keyword ? '/' + keyword : ''}`"
             class="btn btn-default"
           >
@@ -87,7 +88,7 @@
           <router-link
             v-if="videos && videos.length > 0"
             :to="`/${$l1.code}/${$l2.code}/youtube/browse/${topic}/${level}/${
-              Number(start) + 12
+              Number(start) + this.perPage + this.moreVideos
             }${keyword ? '/' + keyword : ''}`"
             class="btn btn-default"
           >
@@ -217,18 +218,27 @@ export default {
       levels: Helper.levels(this.$l2),
       topics: Helper.topics,
       randomEpisodeYouTubeId: undefined,
+      moreVideos: 0,
+      perPage: 12
     };
   },
   async fetch() {
-    this.videos = await this.getVideos();
+    this.videos = await this.getVideos(this.start);
     this.channels = await this.getChannels();
     this.randomEpisodeYouTubeId = await YouTube.getRandomEpisodeYouTubeId(
       this.$l2.id,
-      this.$store.state.shows.tvShows[this.$l2.code] ? 'tv_show' : undefined
+      this.$store.state.shows.tvShows[this.$l2.code] ? "tv_show" : undefined
     );
   },
   methods: {
-    async getVideos() {
+    async visibilityChanged(isVisible) {
+      if (this.videos && isVisible) {
+        this.moreVideos = this.moreVideos + this.perPage;
+        let newVideos = await this.getVideos(Number(this.start) + this.moreVideos);
+        this.videos = this.videos.concat(newVideos);
+      }
+    },
+    async getVideos(start) {
       let filters = "";
       if (this.topic !== "all") {
         filters += "&filter[topic][eq]=" + this.topic;
@@ -238,19 +248,19 @@ export default {
       }
       if (this.keyword !== "") {
         if (this.keyword.startsWith("channel:"))
-          filters += "&filter[channel_id][eq]=" + encodeURIComponent(this.keyword.replace('channel:', ''));
+          filters +=
+            "&filter[channel_id][eq]=" +
+            encodeURIComponent(this.keyword.replace("channel:", ""));
         else
           filters +=
             "&filter[title][contains]=" + encodeURIComponent(this.keyword);
         filters += "&sort=title";
       }
-      let limit = this.keyword ? -1 : 12;
+      let limit = this.keyword ? -1 : this.perPage;
       let response = await axios.get(
         `${Config.wiki}items/youtube_videos?sort=-id&filter[l2][eq]=${
           this.$l2.id
-        }${filters}&limit=${limit}&offset=${
-          this.start
-        }&fields=channel_id,id,lesson,level,title,topic,youtube_id,tv_show.*,talk.*${
+        }${filters}&limit=${limit}&offset=${start}&fields=channel_id,id,lesson,level,title,topic,youtube_id,tv_show.*,talk.*${
           this.$adminMode ? ",subs_l2" : ""
         }&timestamp=${this.$adminMode ? Date.now() : 0}`
       );
@@ -266,7 +276,9 @@ export default {
       }
       videos =
         videos.sort((x, y) =>
-          x.title ? x.title.localeCompare(y.title, this.$l2.code, { numeric: true }) : 0
+          x.title
+            ? x.title.localeCompare(y.title, this.$l2.code, { numeric: true })
+            : 0
         ) || [];
       return videos;
     },
