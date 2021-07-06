@@ -6,6 +6,7 @@
 </router>
 <template>
   <div class="main container" id="main">
+    <SocialHead :title="title" :description="description" :image="image" />
     <div class="row">
       <div class="col-sm-12">
         <h3 class="text-center mt-5 mb-5">{{ $l2.name }} Phrasebooks</h3>
@@ -74,10 +75,13 @@
 </template>
 
 <script>
+import WordPhotos from '@/lib/word-photos'
+
 export default {
   data() {
     return {
       phrasebooks: undefined,
+      images: []
     };
   },
   computed: {
@@ -93,9 +97,26 @@ export default {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
     },
+    title() {
+      return `${this.$l2.name} Phrasebooks with Videos | ${this.$l2.name} Zero to Hero`
+    },
+    description() {
+      return `Learn ${this.$l2.name} phrases with multimedia phrasebooks! See how each phrase is used in TV shows, movies, music, etc.`;
+    },
+    image() {
+      if (this.images.length > 0) {
+        return this.images[0].src;
+      } else {
+        return "/img/zth-share-image.jpg";
+      }
+    },
   },
   async fetch() {
     this.phrasebooks = this.getPhrasebooksFromStore();
+    this.images = await WordPhotos.getGoogleImages({
+      term: `${this.$l2.name} scenery`,
+      lang: this.$l2.code,
+    });
   },
   mounted() {
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
