@@ -80,11 +80,7 @@ export default {
     };
   },
   async mounted() {
-    this.bindKeys();
     this.videos = await this.getVideos();
-  },
-  unmounted() {
-    this.unbindKeys();
   },
   activated() {
     this.bindKeys();
@@ -146,22 +142,6 @@ export default {
     },
     unbindKeys() {
       window.onkeydown = null;
-    },
-    bindKeys() {
-      window.onkeydown = (e) => {
-        if (e.target.tagName.toUpperCase() !== "INPUT") {
-          // left = 37
-          if (e.keyCode == 37) {
-            this.prevPage();
-            return false;
-          }
-          // right = 39
-          if (e.keyCode == 39) {
-            this.nextPage();
-            return false;
-          }
-        }
-      };
     },
     async forceRefresh() {
       this.videos = await this.getVideos({ forceRefresh: true });

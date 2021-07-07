@@ -51,6 +51,7 @@
                   />
                 </div>
                 <h5 class="mt-3">{{ phrasebook.title }}</h5>
+                <div style="color: #999">({{ phrasebook.phrases.length }} phrases)</div>
 
                 <b-button
                   v-if="$adminMode"

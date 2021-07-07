@@ -10,6 +10,9 @@
     <div class="row">
       <div class="col-sm-12" v-if="phrasebook">
         <h4 class="text-center">{{ phrasebook.title }}</h4>
+        <div class="mt-2 text-center">
+          ({{ phrasebook.phrases.length }} phrases)
+        </div>
         <div v-html="phrasebook.description" class="mt-5 mb-5 text-center" />
       </div>
     </div>
@@ -67,7 +70,7 @@
 import Config from "@/lib/config";
 import axios from "axios";
 import Papa from "papaparse";
-import WordPhotos from '@/lib/word-photos'
+import WordPhotos from "@/lib/word-photos";
 
 export default {
   props: {
@@ -79,7 +82,7 @@ export default {
     return {
       phrasebook: undefined,
       numRowsVisible: 24,
-      images: []
+      images: [],
     };
   },
   computed: {
