@@ -90,7 +90,7 @@ export default {
     return {
       videos: undefined,
       lines: undefined,
-      perPage: 200,
+      perPage: 2000,
       punctuations: "。！？；：!?;:,.",
       fields: ["line", "count", "actions"],
       numRowsVisible: 20,
@@ -139,7 +139,7 @@ export default {
       console.log(`Splitting and joining ${lines.length} lines...`);
       lines = lines
         .join("\n")
-        .replace(new RegExp(`[${this.punctuations}]`, 'g'), "\n")
+        .replace(new RegExp(`[${this.punctuations}]`, "g"), "\n")
         .split("\n")
         .map((line) => line.trim())
         .filter((line) => line && line !== "")
@@ -147,7 +147,7 @@ export default {
           return { line: line };
         });
       console.log(`Turned into ${lines.length} lines.`);
-      lines = this.sortLines(lines);
+      lines = this.sortLines2(lines);
       console.log(`Applying "unique" to all ${lines.length} lines...`);
       lines = Helper.uniqueByValue(lines, "line");
       return lines;
@@ -183,6 +183,31 @@ export default {
         .sort((a, b) => a.line.length - b.line.length)
         .sort((a, b) => b.count - a.count);
       return sortedLines;
+    },
+
+    sortLines2(lines) {
+      console.log(`Sorting ${lines.length} lines by localeCompare()...`);
+      let sortedLines = lines.sort((a, b) =>
+        a.line.localeCompare(b.line, this.$l2.code)
+      );
+      let foldedLines = [];
+      if (sortedLines.length > 0) {
+        let lastSeen = sortedLines[0];
+        for (let line of sortedLines) {
+          if (line.line === lastSeen.line) {
+            lastSeen.count++;
+          } else {
+            foldedLines.push(lastSeen);
+            lastSeen = line;
+            lastSeen.count = 1;
+          }
+        }
+      }
+      console.log(`Sorting ${lines.length} lines by length then by count...`);
+      foldedLines = foldedLines
+        .sort((a, b) => a.line.length - b.line.length)
+        .sort((a, b) => b.count - a.count);
+      return foldedLines;
     },
   },
   computed: {
