@@ -51,7 +51,7 @@
         <div class="mt-4 text-center">
           <router-link
             v-if="start > 9"
-            :to="`/${$l1.code}/${$l2.code}/db-upgrade/${
+            :to="`/${$l1.code}/${$l2.code}/phrase-survey/${
               Number(start) - perPage
             }`"
             class="btn btn-default"
@@ -61,7 +61,7 @@
           <span class="ml-3 mr-3">Page {{ start / perPage + 1 }}</span>
           <router-link
             v-if="videos && videos.length > 0"
-            :to="`/${$l1.code}/${$l2.code}/db-upgrade/${
+            :to="`/${$l1.code}/${$l2.code}/phrase-survey/${
               Number(start) + perPage
             }`"
             class="btn btn-default"
@@ -94,7 +94,7 @@ export default {
       perPage: 2000,
       chunkSize: 200, // Number of videos stored in each localStorage item in getAllLinesFromLocalStorage
       punctuations: "。！？；：!?;:,.",
-      fields: ["line", "count", "actions"],
+      fields: ["line", "count"],
       numRowsVisible: 20,
       showSelect: "all",
       shows: undefined,
@@ -280,6 +280,7 @@ export default {
       let foldedLines = [];
       if (sortedLines.length > 0) {
         let lastSeen = sortedLines[0];
+        lastSeen.count = 0
         for (let line of sortedLines) {
           if (line.line === lastSeen.line) {
             lastSeen.count++;
