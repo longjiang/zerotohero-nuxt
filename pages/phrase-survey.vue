@@ -90,7 +90,9 @@ export default {
     return {
       videos: undefined,
       lines: undefined,
+      maxVideos: 2000, // False = infinite number of videos
       perPage: 2000,
+      chunkSize: 200, // Number of videos stored in each localStorage item in getAllLinesFromLocalStorage
       punctuations: "。！？；：!?;:,.",
       fields: ["line", "count", "actions"],
       numRowsVisible: 20,
@@ -120,7 +122,8 @@ export default {
     },
     async getPhrases() {
       this.gettingPhrases = true;
-      this.videos = await this.getVideos(this.showSelect);
+      this.videos = await this.getAllVideos();
+      console.log(`Got ${this.videos.length} videos in total.`);
       this.lines = this.crunchPhrases(this.videos);
       this.gettingPhrases = false;
     },
@@ -128,6 +131,25 @@ export default {
       if (isVisible) {
         this.numRowsVisible = this.numRowsVisible + 100;
       }
+    },
+    async getAllVideos() {
+      let start = this.start;
+      let videos = await this.getVideos(this.showSelect, start, this.perPage);
+      let allVideos = [];
+      let page = 0;
+      while (
+        videos.length > 0 &&
+        (!this.maxVideos || allVideos.length < this.maxVideos)
+      ) {
+        allVideos = allVideos.concat(videos);
+        page++;
+        videos = await this.getVideos(
+          this.showSelect,
+          start + this.perPage * page,
+          this.perPage
+        );
+      }
+      return allVideos;
     },
     crunchPhrases(videos) {
       console.log(`Collecting lines...`);
@@ -152,15 +174,80 @@ export default {
       lines = Helper.uniqueByValue(lines, "line");
       return lines;
     },
-    async getVideos(show) {
-      console.log(`Getting ${this.perPage} videos...`);
-      let limit = this.perPage;
+    // https://stackoverflow.com/questions/8495687/split-array-into-chunks
+    chunkArray(array, chunk = 10) {
+      var i, j, temparray;
+      let chunks = [];
+      for (i = 0, j = array.length; i < j; i += chunk) {
+        temparray = array.slice(i, i + chunk);
+        // do whatever
+        chunks.push(temparray);
+      }
+      return chunks;
+    },
+    unsetLocalStorage() {
+      let index = 0;
+      while (localStorage.getItem(`zthPhraseSurveyLines${index}`) !== null) {
+        console.log(
+          `Removing localStorage item "zthPhraseSurveyLines${index}"`
+        );
+        localStorage.removeItem(`zthPhraseSurveyLines${index}`);
+        index++;
+      }
+    },
+    getAllLinesFromLocalStorage() {
+      let index = 0;
+      let allLines = [];
+      while (localStorage.getItem(`zthPhraseSurveyLines${index}`) !== null) {
+        let lines = localStorage
+          .getItem(`zthPhraseSurveyLines${index}`)
+          .split("\n")
+          .map((line) => {
+            return { line: line };
+          });
+        allLines = allLines.concat(lines);
+        index++;
+      }
+      return allLines;
+    },
+    crunchPhrasesWithLocalStorage(allVideos) {
+      let chunkSize = this.chunkSize;
+      let chunks = this.chunkArray(allVideos, chunkSize);
+      this.unsetLocalStorage();
+      console.log(`Putting all videos into ${chunks.length} chunks`);
+      for (let index in chunks) {
+        let videos = chunks[index];
+        let lines = videos.reduce(
+          (allLines, video) =>
+            allLines.concat(video.subs_l2.map((line) => line.line)),
+          []
+        );
+        console.log(`Splitting and joining ${lines.length} lines...`);
+        lines = lines
+          .join("\n")
+          .replace(new RegExp(`[${this.punctuations}]`, "g"), "\n")
+          .split("\n")
+          .map((line) => line.trim())
+          .filter((line) => line && line !== "");
+        localStorage.setItem(`zthPhraseSurveyLines${index}`, lines.join("\n"));
+        console.log(
+          `Turned into ${lines.length} lines, stored in localStorage item "zthPhraseSurveyLines${index}"`
+        );
+      }
+      let lines = this.getAllLinesFromLocalStorage();
+      `Retrieved ${lines.length} from localStorage. Clearing localStorage.`;
+      this.unsetLocalStorage();
+      lines = this.sortLines2(lines);
+      return lines;
+    },
+    async getVideos(show, start, limit) {
+      console.log(`Getting ${limit} videos...`);
       let showFilter =
         show === "all"
           ? "&filter[tv_show][nnull]=1"
           : `&filter[tv_show][eq]=${show}`;
       let response = await axios.get(
-        `${Config.wiki}items/youtube_videos?sort=-id&limit=${limit}&offset=${this.start}&filter[l2][eq]=${this.$l2.id}${showFilter}&fields=*,tv_show.*`
+        `${Config.wiki}items/youtube_videos?sort=-id&limit=${limit}&offset=${start}&filter[l2][eq]=${this.$l2.id}${showFilter}&fields=*,tv_show.*`
       );
       let videos = response.data.data || [];
       console.log(`Got ${videos.length} videos.`);
