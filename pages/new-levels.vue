@@ -17,13 +17,15 @@
             New HSK 3.0 Word List (9 Levels)
           </h3>
           <div class="text-center mb-5">
+            <i class="fa fa-download mr-1" />
+            Download CSV: 👉&nbsp;
             <a
               href="https://server.chinesezerotohero.com/data/hsk-cedict/new_hsk.csv.txt"
               download
             >
-              <i class="fa fa-download mr-1" />
-              Download CSV
+              Right click on me and choose "Save Link As..."
             </a>
+            &nbsp;👈
           </div>
           <div
             class="d-flex"
@@ -182,9 +184,9 @@ export default {
     },
     applyFilters() {
       if (/^\d+/.test(this.search)) {
-        this.start = this.search
+        this.start = this.search;
       }
-      let search = this.search.replace(/^\d+/, '')
+      let search = this.search.replace(/^\d+/, "");
       this.rows = this.newHSK.filter(
         (word) =>
           (!search ||
