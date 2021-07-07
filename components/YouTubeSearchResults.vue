@@ -7,21 +7,29 @@
       :updateVideos="updateVideos"
       :checkSaved="checkSaved"
     />
+    <div v-observe-visibility="infinite ? visibilityChanged : undefined"></div>
     <div class="mt-4 text-center" v-if="term">
       <router-link
         v-if="start > 9"
         :to="`/${$l1.code}/${$l2.code}/youtube/search/${encodeURIComponent(
           term
-        )}/${Number(start) - 10}?long=${long}&captions=${captions}`"
+        )}/${Math.max(
+          0,
+          Number(start) - perPage - moreVideos
+        )}?long=${long}&captions=${captions}`"
         class="btn btn-primary"
       >
         <i class="fa fa-chevron-left"></i>
       </router-link>
-      <span class="ml-3 mr-3">Page {{ start / 10 + 1 }}</span>
+      <span class="ml-3 mr-3">
+        Page {{ Math.ceil(start / (perPage + moreVideos) + 1) }}
+      </span>
       <router-link
         :to="`/${$l1.code}/${$l2.code}/youtube/search/${encodeURIComponent(
           term
-        )}/${Number(start) + 10}?long=${long}&captions=${captions}`"
+        )}/${
+          Number(start) + perPage + moreVideos
+        }?long=${long}&captions=${captions}`"
         class="btn btn-primary"
       >
         <i class="fa fa-chevron-right"></i>
@@ -59,16 +67,21 @@ export default {
     checkSaved: {
       default: false,
     },
+    infinite: {
+      default: false,
+    }
   },
   data() {
     return {
       videos: [],
+      moreVideos: 0,
       updateVideos: 0,
+      perPage: 10,
     };
   },
-  mounted() {
+  async mounted() {
     this.bindKeys();
-    this.loadVideos();
+    this.videos = await this.getVideos();
   },
   unmounted() {
     this.unbindKeys();
@@ -80,18 +93,18 @@ export default {
     this.unbindKeys();
   },
   watch: {
-    term() {
-      this.loadVideos();
+    async term() {
+      this.videos = await this.getVideos();
     },
-    start() {
-      this.loadVideos();
+    async start() {
+      this.videos = await this.getVideos();
     },
-    long() {
-      this.loadVideos();
+    async long() {
+      this.videos = await this.getVideos();
     },
-    captions() {
-      this.loadVideos();
-    }
+    async captions() {
+      this.videos = await this.getVideos();
+    },
   },
   computed: {
     $l1() {
@@ -104,12 +117,21 @@ export default {
     },
   },
   methods: {
+    async visibilityChanged(isVisible) {
+      if (this.videos && isVisible) {
+        this.moreVideos = this.moreVideos + this.perPage;
+        let newVideos = await this.getVideos({
+          start: Number(this.start) + this.moreVideos,
+        });
+        this.videos = this.videos.concat(newVideos);
+      }
+    },
     prevPage() {
       this.$router.push({
         path: `/${this.$l1.code}/${
           this.$l2.code
         }/youtube/search/${encodeURIComponent(this.term)}/${
-          Number(this.start) - 10
+          Number(this.start) - this.perPage
         }`,
       });
     },
@@ -118,7 +140,7 @@ export default {
         path: `/${this.$l1.code}/${
           this.$l2.code
         }/youtube/search/${encodeURIComponent(this.term)}/${
-          Number(this.start) + 10
+          Number(this.start) + this.perPage
         }`,
       });
     },
@@ -141,11 +163,10 @@ export default {
         }
       };
     },
-    forceRefresh() {
-      this.loadVideos({ forceRefresh: true });
+    async forceRefresh() {
+      this.videos = await this.getVideos({ forceRefresh: true });
     },
-    async loadVideos(options) {
-      this.videos = [];
+    async getVideos(options) {
       options = options || {};
       options = Object.assign(
         {
@@ -159,8 +180,8 @@ export default {
       if (this.captions === "nocaptions") options.captions = false;
       if (this.captions === "captions") options.captions = true;
       if (this.long) options.long = true;
-      this.videos = await YouTube.searchByGoogle(options);
-      this.updateVideos++;
+      let videos = await YouTube.searchByGoogle(options);
+      return videos;
     },
     addAll() {
       this.$refs.youTubeVideoList.addAll();

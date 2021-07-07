@@ -62,6 +62,7 @@
       class="mt-5"
       :key="searchResultKey"
       :long="long"
+      :infinite="true"
       ref="youtubeSearchResults"
     />
   </div>
