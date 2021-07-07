@@ -22,6 +22,7 @@
             <a
               href="https://server.chinesezerotohero.com/data/hsk-cedict/new_hsk.csv.txt"
               download
+              charset="utf-8"
             >
               Right click on me and choose "Save Link As..."
             </a>
