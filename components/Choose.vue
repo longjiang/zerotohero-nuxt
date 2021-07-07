@@ -56,11 +56,11 @@
               :set="
                 (base = `/${language.code !== 'en' ? 'en' : 'zh'}/${
                   language.code
-                }`)
+                }/`)
               "
             >
               <router-link
-                :to="`${base}/youtube/browse/all/all/0`"
+                :to="`${base}youtube/browse/all/all/0`"
                 :class="{
                   'feature-icon mr-1': true,
                   transparent: !hasYouTube(english, language),
@@ -69,7 +69,7 @@
                 <i class="fab fa-youtube" />
               </router-link>
               <router-link
-                :to="`${base}/dictionary`"
+                :to="`${base}dictionary`"
                 :class="{
                   'feature-icon mr-1': true,
                   transparent: !hasDictionary(english, language),
