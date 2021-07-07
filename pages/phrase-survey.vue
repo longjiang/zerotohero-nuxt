@@ -90,8 +90,8 @@ export default {
     return {
       videos: undefined,
       lines: undefined,
-      perPage: 100,
-      punctuations: "。！？；：!?;:",
+      perPage: 200,
+      punctuations: "。！？；：!?;:,.",
       fields: ["line", "count", "actions"],
       numRowsVisible: 20,
       showSelect: "all",
@@ -139,7 +139,7 @@ export default {
       console.log(`Splitting and joining ${lines.length} lines...`);
       lines = lines
         .join("\n")
-        .replace(new RegExp(`[${this.punctuations}]`), "\n")
+        .replace(new RegExp(`[${this.punctuations}]`, 'g'), "\n")
         .split("\n")
         .map((line) => line.trim())
         .filter((line) => line && line !== "")
@@ -163,6 +163,7 @@ export default {
         `${Config.wiki}items/youtube_videos?sort=-id&limit=${limit}&offset=${this.start}&filter[l2][eq]=${this.$l2.id}${showFilter}&fields=*,tv_show.*`
       );
       let videos = response.data.data || [];
+      console.log(`Got ${videos.length} videos.`);
       for (let video of videos) {
         video.subs_l2 = YouTube.parseSavedSubs(video.subs_l2);
       }
