@@ -79,6 +79,7 @@ import Config from "@/lib/config";
 import axios from "axios";
 import YouTube from "@/lib/youtube";
 import Helper from "@/lib/helper";
+import he from 'he'
 
 export default {
   props: {
@@ -155,7 +156,7 @@ export default {
       console.log(`Collecting lines...`);
       let lines = videos.reduce(
         (allLines, video) =>
-          allLines.concat(video.subs_l2.map((line) => line.line)),
+          allLines.concat(video.subs_l2.map((line) => he.decode(line.line))),
         []
       );
       console.log(`Splitting and joining ${lines.length} lines...`);
@@ -163,7 +164,7 @@ export default {
         .join("\n")
         .replace(new RegExp(`[${this.punctuations}]`, "g"), "\n")
         .split("\n")
-        .map((line) => line.trim())
+        .map((line) => line.replace(/^\s*-\s*/, '').trim())
         .filter((line) => line && line !== "")
         .map((line) => {
           return { line: line };
