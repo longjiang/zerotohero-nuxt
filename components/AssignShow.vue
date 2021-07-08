@@ -140,8 +140,9 @@ export default {
         ? this.$store.state.shows[type][this.$l2.code]
         : undefined;
     },
-    newShow(newShowID) {
-      this.selectedShowID = newShowID;
+    newShow(newShow) {
+      this.selectedShowID = newShow.id;
+      this.$emit('newShow', newShow)
       this.save();
     },
     save() {

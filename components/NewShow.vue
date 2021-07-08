@@ -59,7 +59,7 @@ export default {
         show,
       });
       if (show) {
-        this.$emit("newShow", show.id);
+        this.$emit("newShow", show);
       }
     },
   },

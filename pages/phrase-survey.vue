@@ -164,7 +164,7 @@ export default {
         .join("\n")
         .replace(new RegExp(`[${this.punctuations}]`, "g"), "\n")
         .split("\n")
-        .map((line) => line.replace(/^\s*-\s*/, '').trim())
+        .map((line) => line.replace(/^\s*[-–]\s*/, '').trim())
         .filter((line) => line && line !== "")
         .map((line) => {
           return { line: line };

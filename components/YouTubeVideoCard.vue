@@ -116,6 +116,7 @@
         </router-link>
         <AssignShow
           @assignShow="saveShow"
+          @newShow="newShow"
           v-if="$adminMode && video.id && !video.tv_show && !video.talk"
           :defaultYoutubeId="video.youtube_id"
           :defaultTitle="video.title"
@@ -123,6 +124,7 @@
         />
         <AssignShow
           @assignShow="saveShow"
+          @newShow="newShow"
           v-if="$adminMode && video.id && !video.tv_show && !video.talk"
           :defaultYoutubeId="video.youtube_id"
           :defaultTitle="video.title"
@@ -313,6 +315,9 @@ export default {
     formatDate(date) {
       return moment(date).format('LL')
     },
+    newShow(show) {
+      this.$emit('newShow', show)
+    },
     async saveShow(showID, type) {
       if (this.video.id) {
         if (!this.video[type] || this.video[type].id !== showID) {
@@ -324,10 +329,11 @@ export default {
           );
           response = response.data;
           if (response && response.data) {
-            Vue.set(this.video, type, {
+            let show = {
               id: response.data[type].id,
               title: response.data[type].title,
-            });
+            }
+            Vue.set(this.video, type, show);
           }
         }
       }

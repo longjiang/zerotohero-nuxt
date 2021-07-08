@@ -88,6 +88,7 @@
         :checkSaved="checkSavedData"
         :checkSubs="checkSubsData"
         :showSubsEditing="showSubsEditing"
+        @newShow="newShow"
         ref="youTubeVideoCard"
         :key="`youtube-video-${video.youtube_id}-${videoIndex}`"
       />
@@ -140,6 +141,9 @@ export default {
     },
   },
   methods: {
+    newShow(show) {
+      this.$emit('newShow', show)
+    },
     async addAll() {
       for (let videoIndex in this.$refs.youTubeVideoCard) {
         // await Helper.timeout(500)
@@ -147,6 +151,7 @@ export default {
       }
     },
     assignShowToAll(showID, type) {
+      // type: 'tv_show' or 'talk'
       for (let videoIndex in this.$refs.youTubeVideoCard) {
         this.$refs.youTubeVideoCard[videoIndex].saveShow(showID, type);
       }

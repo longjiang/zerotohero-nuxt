@@ -18,6 +18,7 @@
         </div>
         <YouTubeVideoList
           :videos="videos.filter((video) => video.title !== 'Private video')"
+          @newShow="newShow"
           :checkSubs="true"
           ref="youtubeVideoList"
         />
@@ -55,6 +56,9 @@ export default {
   methods: {
     forceRefresh() {
       this.loadPlaylist({ forceRefresh: true });
+    },
+    newShow(show) {
+      this.$refs.youtubeVideoList.assignShowToAll(show.id, show.type)
     },
     async loadPlaylist(options) {
       this.videos = []
