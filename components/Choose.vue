@@ -10,7 +10,7 @@
           />
         </div>
       </div>
-      <div class="row m-sm-1 p-3" style="background: url('/img/background-stars-2.jpg'); background-repeat: no-repeat; background-size: cover;">
+      <div class="row language-icons p-3">
         <div
           class="col-xl-3 col-lg-4 col-md-6 col-12"
           v-for="code in [
@@ -259,5 +259,18 @@ export default {
 }
 .bg-dark .language-list-item .feature-icon {
   color: #726661;
+}
+
+.language-icons {
+  background: url('/img/background-stars-2.jpg'); background-repeat: no-repeat; background-size: cover;
+  
+}
+
+
+@media (min-width: 576px) {
+  .language-icons {
+    border-radius: 0.5rem;
+    margin: 0;
+  }
 }
 </style>

@@ -14,9 +14,12 @@
 </router>
 <template>
   <div class="main">
-    <div class="container pt-5 pb-5">
+    <div class="container pt-5 pb-5 pl-4 pr-4">
       <div class="row">
-        <div class="col-sm-12"></div>
+        <div class="col-sm-12 text-center">
+          <h3>For the love of the {{ $l2.name }} language.</h3>
+        </div>
+        <Nav :l1="$l1" :l2="$l2" variant="page" />
       </div>
     </div>
   </div>
@@ -33,6 +36,15 @@ export default {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
+    features() {
+      return [
+        {
+          title: 'TV Shows',
+          icon: 'fas fa-tv',
+          name: 'tv-shows'
+        }
+      ]
+    }
   },
   created() {
     if (
@@ -43,18 +55,6 @@ export default {
     ) {
       if (this.$hasFeature("courses")) {
         this.$router.push({ name: "courses" });
-      } else if (this.$hasFeature("youtube")) {
-        let name = "youtube-browse";
-        if (this.hasTalks()) name = "talks";
-        if (this.hasTVShows()) name = "tv-shows";
-        this.$router.push({ name });
-      } else if (
-        this.$hasFeature("dictionary") ||
-        this.$hasFeature("transliteration")
-      ) {
-        this.$router.push({ name: "reader" });
-      } else {
-        this.$router.push({ name: "learning-path" });
       }
     }
   },
@@ -71,9 +71,24 @@ export default {
         this.$store.state.shows.tvShows[this.$l2.code]
       );
     },
+    f() {
+      if (this.$hasFeature("youtube")) {
+        let name = "youtube-browse";
+        if (this.hasTalks()) name = "talks";
+        if (this.hasTVShows()) name = "tv-shows";
+        this.$router.push({ name });
+      } else if (
+        this.$hasFeature("dictionary") ||
+        this.$hasFeature("transliteration")
+      ) {
+        this.$router.push({ name: "reader" });
+      } else {
+        this.$router.push({ name: "learning-path" });
+      }
+    },
   },
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 </style>

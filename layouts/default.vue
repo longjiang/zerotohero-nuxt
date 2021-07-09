@@ -4,7 +4,11 @@
       <template>
         <div class="container-fluid p-2 pl-3 site-top-bar">
           <div>
-            <router-link to="/" style="color: #ccc; line-height: 2.3rem" class="link-unstyled">
+            <router-link
+              to="/"
+              style="color: #ccc; line-height: 2.3rem"
+              class="link-unstyled"
+            >
               <i class="fa fa-chevron-left mr-2"></i>
               Home
             </router-link>
@@ -106,14 +110,8 @@
           :iconMode="true"
         />
 
-        <footer class="container-fluid bg-dark text-light pt-4 pb-4" style="z-index: -1">
-          <div class="container">
-            <div class="row mb-5">
-              <div class="col-sm-12">
-                <Choose :compact="true" />
-              </div>
-            </div>
-          </div>
+        <footer class="bg-dark text-light pt-4 pb-4" style="z-index: -1">
+          <Choose :compact="true" />
         </footer>
       </template>
     </template>
@@ -444,7 +442,7 @@ export default {
       };
       this.classes[`l1-${this.l1.code}`] = true;
       this.classes[`l2-${this.l2.code}`] = true;
-      if (this.l2.han) this.classes['l2-zh'] = true;
+      if (this.l2.han) this.classes["l2-zh"] = true;
     },
     async loadSettings() {
       this.$store.commit("settings/LOAD_SETTINGS");
@@ -489,7 +487,6 @@ export default {
 </script>
 
 <style>
-
 .__nuxt-error-page {
   z-index: 99;
 }
@@ -1285,8 +1282,7 @@ button.bg-primary:focus {
 }
 
 .btn-gray:hover,
-.btn-gray:focus
-.btn-gray:not(:disabled):not(.disabled):active {
+.btn-gray:focus .btn-gray:not(:disabled):not(.disabled):active {
   text-decoration: none;
   background: #d8d8d8;
   color: #8e8e8e;

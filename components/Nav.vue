@@ -1,6 +1,6 @@
 <template>
   <div
-    class="nav"
+    :class="`${variant === 'menu-bar' ? 'nav' : ''}`"
     style="z-index: 3"
     :set="
       (parent = menu.find(
@@ -14,43 +14,91 @@
       ))
     "
   >
-    <nav class="site-nav tabs">
-      <NuxtLink
-        v-for="(item, index) in menu.filter((item) => item.show && to(item))"
-        :class="{
-          tab: true,
-          'router-link-active':
-            parent && parent.name === nameOfSelfOrFirstChild(item),
-        }"
-        :to="to(item)"
-        :title="item.title"
-        :key="`nav-${index}`"
-      >
-        <i :class="item.icon"></i>
-        {{ $t(item.title) }}
-      </NuxtLink>
-    </nav>
-    <nav
-      class="secondary-menu text-center bg-white pt-3"
-      v-if="parent && parent.children"
-    >
-      <NuxtLink
-        class="secondary-menu-item"
-        v-for="(child, index) in parent.children.filter((child) => child.show)"
-        :key="`subnav-${child.name}-${index}`"
-        :to="last(child) || child"
-      >
-        <i :class="child.icon"></i>
-        {{ $t(child.title) }}
-        <span
-          class="saved-words-count"
-          v-cloak
-          v-if="child.name === 'saved-words'"
+    <template v-if="variant === 'menu-bar'">
+      <nav class="site-nav tabs">
+        <NuxtLink
+          v-for="(item, index) in menu.filter((item) => item.show && to(item))"
+          :class="{
+            tab: true,
+            'router-link-active':
+              parent && parent.name === nameOfSelfOrFirstChild(item),
+          }"
+          :to="to(item)"
+          :title="item.title"
+          :key="`nav-${index}`"
         >
-          {{ savedWordsCount() }}
-        </span>
-      </NuxtLink>
-    </nav>
+          <i :class="item.icon"></i>
+          {{ $t(item.title) }}
+        </NuxtLink>
+      </nav>
+      <nav
+        class="secondary-menu text-center bg-white pt-3"
+        v-if="parent && parent.children"
+      >
+        <NuxtLink
+          class="secondary-menu-item"
+          v-for="(child, index) in parent.children.filter(
+            (child) => child.show
+          )"
+          :key="`subnav-${child.name}-${index}`"
+          :to="last(child) || child"
+        >
+          <i :class="child.icon"></i>
+          {{ $t(child.title) }}
+          <span
+            class="saved-words-count"
+            v-cloak
+            v-if="child.name === 'saved-words'"
+          >
+            {{ savedWordsCount() }}
+          </span>
+        </NuxtLink>
+      </nav>
+    </template>
+    <template v-if="variant === 'page'">
+      <div class="container">
+        <div class="row mt-5">
+          <template
+            v-for="(item, index) in menu.filter(
+              (item) =>
+                item.show &&
+                to(item) &&
+                !['Admin', 'Contact', 'Settings'].includes(item.title)
+            )"
+          >
+            <template v-if="item.children">
+              <div
+                v-for="(child, index) in item.children.filter(
+                  (child) => child.show
+                )"
+                :key="`subnav-${child.name}-${index}`"
+                class="col-sm-6 col-lg-4 mb-4"
+              >
+                <NuxtLink
+                  class="feature-card link-unstyled"
+                  :to="last(child) || child"
+                  style="height: 100%"
+                >
+                  <div class="feature-card-icon">
+                    <i :class="child.icon"></i>
+                  </div>
+                  <div class="feature-card-title">
+                    {{ $t(child.title) }}
+                    <span
+                      class="saved-words-count"
+                      v-cloak
+                      v-if="child.name === 'saved-words'"
+                    >
+                      {{ savedWordsCount() }}
+                    </span>
+                  </div>
+                </NuxtLink>
+              </div>
+            </template>
+          </template>
+        </div>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -165,7 +213,7 @@ export default {
             {
               name: "tv-shows",
               icon: "fa fa-tv",
-              title: "TV Shows",
+              title: `${this.$l2.name} TV Shows`,
               show: this.hasTVShows,
             },
             {
@@ -175,18 +223,18 @@ export default {
             {
               name: "talks",
               icon: "fas fa-graduation-cap",
-              title: "Talks",
+              title: `${this.$l2.name} Talks`,
               show: this.hasTalks,
             },
             {
               name: "youtube-browse",
-              title: "Videos",
+              title: `${this.$l2.name} Videos`,
               icon: "fa fa-play",
               show: true,
             },
             {
               name: "youtube-search",
-              title: "Search YouTube",
+              title: `Search ${this.$l2.name} YouTube`,
               icon: "fas fa-search",
               show: true,
             },
@@ -218,7 +266,7 @@ export default {
             {
               name: "dictionary",
               icon: "fas fa-search",
-              title: "Look Up",
+              title: "Look Up Words",
               show: this.hasFeature("dictionary"),
               shortcut: (e) => e.code === "KeyD" && e.metaKey && e.shiftKey,
             },
@@ -229,13 +277,13 @@ export default {
             {
               name: "saved-words",
               icon: "fas fa-star",
-              title: "Saved",
+              title: "Saved Words",
               show: true,
             },
             {
               name: "phrase",
               icon: "fas fa-quote-left",
-              title: "Phrase",
+              title: "Look Up Phrases",
               show: true,
               shortcut: (e) => e.code === "KeyP" && e.metaKey && e.shiftKey,
             },
@@ -338,7 +386,7 @@ export default {
               name: "studysheet",
               title: "Study Sheet Creator",
               icon: "fas fa-print",
-              show: true,
+              show: ["ru", "en", "zh"].includes(this.$l2.code),
             },
             {
               name: "library",
@@ -499,6 +547,9 @@ export default {
     l2: {
       type: Object,
     },
+    variant: {
+      default: "menu-bar", // or 'page'
+    },
   },
 
   data() {
@@ -507,7 +558,7 @@ export default {
       history: [],
       hasTVShows: false,
       hasTalks: false,
-      hasPhrasebooks: false
+      hasPhrasebooks: false,
     };
   },
   mounted() {
@@ -547,8 +598,8 @@ export default {
   },
   methods: {
     to(item) {
-      let to = this.last(item) || this.selfOrFirstChild(item, true)
-      return to
+      let to = this.last(item) || this.selfOrFirstChild(item, true);
+      return to;
     },
     hasFeature(feature) {
       return this.$hasFeature(feature);
@@ -737,5 +788,23 @@ export default {
 .secondary-menu-item.nuxt-link-active {
   background: #fd4f1c;
   color: white;
+}
+.feature-card {
+  padding: 2rem;
+  display: flex;
+  flex-direction: row;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+  border-radius: 0.5rem;
+  .feature-card-icon {
+    padding-right: 1rem;
+    font-size: 1.5em;
+    color: #fd4f1c;
+  }
+  .feature-card-title {
+    font-size: 1em;
+    line-height: 1.5em;
+    padding: 0.25em 0;
+    flex: 1;
+  }
 }
 </style>
