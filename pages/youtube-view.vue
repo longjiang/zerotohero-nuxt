@@ -311,56 +311,59 @@ export default {
     },
   },
   async fetch() {
-    console.log(`YouTube View: Getting saved video...`);
-    let video = await this.getSaved();
-    if (this.lesson && video.level && video.lesson) {
-      this.saveWords(video.level, video.lesson);
-    }
-    if (!video || !video.channel) {
-      console.log(
-        `YouTube View: Getting channel information with youtube api...`
-      );
-      let youtube_video = await YouTube.videoByApi(this.youtube_id);
-      if (youtube_video) video = Object.assign(youtube_video, video || {});
-    }
-    if (!video.subs_l2 || video.subs_l2.length === 0) {
-      console.log(`YouTube View: Getting ${this.$l2.name} transcript`);
-      video.subs_l2 = await this.getTranscriptByLang(this.$l2);
-    }
-    if (!video.subs_l1 || video.subs_l1.length === 0) {
-      console.log(`YouTube View: Getting ${this.$l1.name} transcript`);
-      video.subs_l1 = await this.getTranscriptByLang(this.$l1);
-    }
+    try {
+      console.log(`YouTube View: Getting saved video...`);
+      let video = await this.getSaved();
+      if (this.lesson && video.level && video.lesson) {
+        this.saveWords(video.level, video.lesson);
+      }
+      if (!video || !video.channel) {
+        console.log(
+          `YouTube View: Getting channel information with youtube api...`
+        );
+        let youtube_video = await YouTube.videoByApi(this.youtube_id);
+        if (youtube_video) video = Object.assign(youtube_video, video || {});
+      }
+      if (!video.subs_l2 || video.subs_l2.length === 0) {
+        console.log(`YouTube View: Getting ${this.$l2.name} transcript`);
+        video.subs_l2 = await this.getTranscriptByLang(this.$l2);
+      }
+      if (!video.subs_l1 || video.subs_l1.length === 0) {
+        console.log(`YouTube View: Getting ${this.$l1.name} transcript`);
+        video.subs_l1 = await this.getTranscriptByLang(this.$l1);
+      }
 
-    if (video.subs_l2 && video.subs_l2.length > 0) {
-      this.firstLineTime = video.subs_l2[0].starttime;
+      if (video.subs_l2 && video.subs_l2.length > 0) {
+        this.firstLineTime = video.subs_l2[0].starttime;
+      }
+      if (video && video.id && !video.channel_id) {
+        console.log(`YouTube View: Adding channel id...`);
+        this.addChannelID(video);
+      }
+      this.starttime = this.$route.query.t ? Number(this.$route.query.t) : 0;
+      this.video = video;
+      console.log(`YouTube View: this.video assigned.`);
+      console.log(`YouTube View: Loading show...`);
+      this.loadShow();
+      if (!this.video.tv_show) {
+        console.log(`YouTube View: Getting random episode youtube_id...`);
+        this.randomEpisodeYouTubeId = await YouTube.getRandomEpisodeYouTubeId(
+          this.$l2.id,
+          this.$store.state.shows.tvShows[this.$l2.code] ? "tv_show" : undefined
+        );
+        console.log(
+          `YouTube View: Got random episode youtube_id ${this.randomEpisodeYouTubeId}`
+        );
+      }
+      console.log(`YouTube View: Saving history...`);
+      this.saveHistory();
+      console.log(`YouTube View: All done.`);
+    } catch (e) {
+      console.log(e);
     }
-    if (video && video.id && !video.channel_id) {
-      console.log(`YouTube View: Adding channel id...`);
-      this.addChannelID(video);
-    }
-    this.starttime = this.$route.query.t ? Number(this.$route.query.t) : 0;
-    this.video = video;
-    console.log(`YouTube View: this.video assigned.`, this.video);
-    return
-    console.log(`YouTube View: Loading show...`);
-    this.loadShow();
-    if (!this.video.tv_show) {
-      console.log(`YouTube View: Getting random episode youtube_id...`);
-      this.randomEpisodeYouTubeId = await YouTube.getRandomEpisodeYouTubeId(
-        this.$l2.id,
-        this.$store.state.shows.tvShows[this.$l2.code] ? "tv_show" : undefined
-      );
-      console.log(
-        `YouTube View: Got random episode youtube_id ${this.randomEpisodeYouTubeId}`
-      );
-    }
-    console.log(`YouTube View: Saving history...`);
-    this.saveHistory();
-    console.log(`YouTube View: All done.`);
   },
   mounted() {
-    console.log('binding keys...')
+    console.log("binding keys...");
     this.bindKeys();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type === "shows/LOAD_SHOWS") {
@@ -375,11 +378,9 @@ export default {
     this.unbindKeys();
   },
   updated() {
-    console.log('Updating...')
     this.$refs.youtube.repeatMode = this.repeatMode;
     this.$refs.youtube.audioMode = this.audioMode;
     this.$refs.youtube.speed = this.speed;
-    console.log('Updated')
   },
   watch: {
     repeatMode() {
