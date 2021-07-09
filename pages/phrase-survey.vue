@@ -79,7 +79,7 @@ import Config from "@/lib/config";
 import axios from "axios";
 import YouTube from "@/lib/youtube";
 import Helper from "@/lib/helper";
-import he from 'he'
+import he from "he";
 
 export default {
   props: {
@@ -164,7 +164,7 @@ export default {
         .join("\n")
         .replace(new RegExp(`[${this.punctuations}]`, "g"), "\n")
         .split("\n")
-        .map((line) => line.replace(/^\s*[-–]\s*/, '').trim())
+        .map((line) => line.replace(/^\s*[-–]\s*/, "").trim())
         .filter((line) => line && line !== "")
         .map((line) => {
           return { line: line };
@@ -278,12 +278,15 @@ export default {
       let sortedLines = lines.sort((a, b) =>
         a.line.localeCompare(b.line, this.$l2.code)
       );
+      console.log(`Folding ${lines.length} lines by uppercasing each one`);
       let foldedLines = [];
       if (sortedLines.length > 0) {
         let lastSeen = sortedLines[0];
-        lastSeen.count = 0
+        lastSeen.count = 0;
         for (let line of sortedLines) {
-          if (line.line === lastSeen.line) {
+          if (
+            line.line.toUpperCase() === lastSeen.line.toUpperCase()
+          ) {
             lastSeen.count++;
           } else {
             foldedLines.push(lastSeen);

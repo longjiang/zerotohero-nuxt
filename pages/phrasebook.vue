@@ -37,6 +37,9 @@
             'text-right': $l2.direction === 'rtl',
           }"
         >
+          <div :class="`${$l2.direction === 'rtl' ? 'float-left' : 'float-right'}`" style="color: #ccc">
+            #{{ phraseIndex + 1 }}
+          </div>
           <div>
             <span v-if="phraseObj && phraseObj.pronunciation">
               {{ phraseObj.pronunciation }}
