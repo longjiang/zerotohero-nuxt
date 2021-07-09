@@ -59,6 +59,9 @@ export default {
       type: String,
       default: "md",
     },
+    enableNewShow: {
+      default: true,
+    },
   },
   data() {
     return {
@@ -113,18 +116,20 @@ export default {
     },
     showOptions() {
       if (this.shows) {
-        let options = [
-          {
+        let options = [];
+        if (this.enableNewShow)
+          options.push({
             value: "new",
             text: this.type === "talks" ? "New Talk..." : "New TV Show...",
-          },
-          ...this.shows.map((s) => {
+          });
+        options = options.concat(
+          this.shows.map((s) => {
             return {
               value: s.id,
               text: s.title,
             };
-          }),
-        ];
+          })
+        );
         return options;
       }
     },
@@ -142,10 +147,11 @@ export default {
     },
     newShow(newShow) {
       this.selectedShowID = newShow.id;
-      this.$emit('newShow', newShow)
+      this.$emit("newShow", newShow);
       this.save();
     },
     save() {
+      this.assignShow = false
       this.$emit(
         "assignShow",
         this.selectedShowID,

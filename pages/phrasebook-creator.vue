@@ -20,6 +20,12 @@
             class="mt-2 mb-2"
             placeholder="Source URL"
           ></b-form-input>
+          <AssignShow
+            @assignShow="assignShow"
+            :enableNewShow="false"
+            type="tv-shows"
+          />
+          <div v-if="this.showID">Associated with show id {{ this.showID }}</div>
         </div>
       </div>
       <div class="row">
@@ -80,7 +86,9 @@ export default {
       sourceURL: undefined,
       saved: undefined,
       saving: false,
-      flip: false
+      flip: false,
+      showID: undefined,
+      showType: undefined
     };
   },
   computed: {
@@ -102,6 +110,10 @@ export default {
     },
   },
   methods: {
+    assignShow(showID, type) {
+      this.showID = showID
+      this.showType = type
+    },
     async save() {
       let phrases = Papa.unparse(this.rows);
       let phrasebook = {
@@ -110,6 +122,9 @@ export default {
         phrases,
         l2: this.$l2.id,
       };
+      if (this.showID && this.showType) {
+        phrasebook[this.showType] = this.showID
+      }
       this.saving = true;
       try {
         let res = await axios.post(
