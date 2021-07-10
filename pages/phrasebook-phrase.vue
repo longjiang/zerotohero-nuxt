@@ -70,11 +70,17 @@
           </b-dropdown-item>
         </b-dropdown>
       </div>
-      <DictionaryEntry v-if="word && phrasebook" :entry="word" :tvShow="phrasebook.tv_show" />
+      <DictionaryEntry
+        v-if="word && phrasebook"
+        :entry="word"
+        :tvShow="phrasebook.tv_show"
+        :exact="phrasebook.exact"
+      />
       <PhraseComp
         v-else-if="phraseObj && phraseObj.phrase && phrasebook"
         :term="phraseObj.phrase.toLowerCase()"
         :tvShow="phrasebook.tv_show"
+        :exact="phrasebook.exact"
         class="mt-3 mb-5"
       />
     </div>
@@ -83,7 +89,7 @@
 
 <script>
 import Helper from "@/lib/helper";
-import WordPhotos from '@/lib/word-photos'
+import WordPhotos from "@/lib/word-photos";
 
 export default {
   props: {
@@ -103,7 +109,7 @@ export default {
       phraseObj: undefined,
       words: undefined,
       word: undefined,
-      images: []
+      images: [],
     };
   },
   async fetch() {
@@ -117,7 +123,6 @@ export default {
   mounted() {
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type.startsWith("phrasebooks")) {
-        
         this.getPhrasebookFromStore();
       }
     });

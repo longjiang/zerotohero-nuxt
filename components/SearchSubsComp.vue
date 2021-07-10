@@ -337,6 +337,9 @@ export default {
     },
     tvShow: {
       default: undefined
+    },
+    exact: {
+      default: false
     }
   },
   data() {
@@ -513,7 +516,8 @@ export default {
         this.$adminMode,
         this.$l2.continua,
         this.$subsSearchLimit ? 20 : 500,
-        this.tvShow ? this.tvShow.id : undefined
+        this.tvShow ? this.tvShow.id : undefined,
+        this.exact
       );
 
       hits = this.updateSaved(hits);
