@@ -49,8 +49,6 @@ export default {
   computed: {
     l2Name() {
       return this.l2.name
-        .replace("Yue Chinese", "Cantonese")
-        .replace("Modern Greek", "Greek")
         .replace(/ \(.*\)/gi, "");
     },
   },
