@@ -30,6 +30,7 @@
                 :key="`${term}-search-subs`"
                 :terms="[term]"
                 :tvShow="tvShow"
+                :exact="exact"
               />
             </div>
           </div>
@@ -78,6 +79,9 @@ export default {
     },
     tvShow: {
       default: undefined
+    },
+    exact: {
+      default: false
     }
   },
   data() {
