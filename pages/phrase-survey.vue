@@ -156,7 +156,11 @@ export default {
       console.log(`Collecting lines...`);
       let lines = videos.reduce(
         (allLines, video) =>
-          allLines.concat(video.subs_l2.map((line) => he.decode(line.line))),
+          allLines.concat(video.subs_l2.map((line) => {
+            let str = line.line
+            str = he.decode(str)
+            return str
+          })),
         []
       );
       console.log(`Splitting and joining ${lines.length} lines...`);
@@ -170,77 +174,12 @@ export default {
           return { line: line };
         });
       console.log(`Turned into ${lines.length} lines.`);
-      lines = this.sortLines2(lines);
+      lines = this.sortLines(lines);
       console.log(`Applying "unique" to all ${lines.length} lines...`);
       lines = Helper.uniqueByValue(lines, "line");
       return lines;
     },
-    // https://stackoverflow.com/questions/8495687/split-array-into-chunks
-    chunkArray(array, chunk = 10) {
-      var i, j, temparray;
-      let chunks = [];
-      for (i = 0, j = array.length; i < j; i += chunk) {
-        temparray = array.slice(i, i + chunk);
-        // do whatever
-        chunks.push(temparray);
-      }
-      return chunks;
-    },
-    unsetLocalStorage() {
-      let index = 0;
-      while (localStorage.getItem(`zthPhraseSurveyLines${index}`) !== null) {
-        console.log(
-          `Removing localStorage item "zthPhraseSurveyLines${index}"`
-        );
-        localStorage.removeItem(`zthPhraseSurveyLines${index}`);
-        index++;
-      }
-    },
-    getAllLinesFromLocalStorage() {
-      let index = 0;
-      let allLines = [];
-      while (localStorage.getItem(`zthPhraseSurveyLines${index}`) !== null) {
-        let lines = localStorage
-          .getItem(`zthPhraseSurveyLines${index}`)
-          .split("\n")
-          .map((line) => {
-            return { line: line };
-          });
-        allLines = allLines.concat(lines);
-        index++;
-      }
-      return allLines;
-    },
-    crunchPhrasesWithLocalStorage(allVideos) {
-      let chunkSize = this.chunkSize;
-      let chunks = this.chunkArray(allVideos, chunkSize);
-      this.unsetLocalStorage();
-      console.log(`Putting all videos into ${chunks.length} chunks`);
-      for (let index in chunks) {
-        let videos = chunks[index];
-        let lines = videos.reduce(
-          (allLines, video) =>
-            allLines.concat(video.subs_l2.map((line) => line.line)),
-          []
-        );
-        console.log(`Splitting and joining ${lines.length} lines...`);
-        lines = lines
-          .join("\n")
-          .replace(new RegExp(`[${this.punctuations}]`, "g"), "\n")
-          .split("\n")
-          .map((line) => line.trim())
-          .filter((line) => line && line !== "");
-        localStorage.setItem(`zthPhraseSurveyLines${index}`, lines.join("\n"));
-        console.log(
-          `Turned into ${lines.length} lines, stored in localStorage item "zthPhraseSurveyLines${index}"`
-        );
-      }
-      let lines = this.getAllLinesFromLocalStorage();
-      `Retrieved ${lines.length} from localStorage. Clearing localStorage.`;
-      this.unsetLocalStorage();
-      lines = this.sortLines2(lines);
-      return lines;
-    },
+
     async getVideos(show, start, limit) {
       console.log(`Getting ${limit} videos...`);
       let showFilter =
@@ -258,22 +197,8 @@ export default {
       return videos;
     },
 
-    sortLines(lines) {
-      console.log(
-        `Counting each of the ${lines.length} lines for occurences...`
-      );
-      // Extremely slow!!!
-      for (let line of lines) {
-        line.count = lines.filter((l) => l.line === line.line).length;
-      }
-      console.log(`Sorting ${lines.length} lines by count...`);
-      let sortedLines = lines
-        .sort((a, b) => a.line.length - b.line.length)
-        .sort((a, b) => b.count - a.count);
-      return sortedLines;
-    },
 
-    sortLines2(lines) {
+    sortLines(lines) {
       console.log(`Sorting ${lines.length} lines by localeCompare()...`);
       let sortedLines = lines.sort((a, b) =>
         a.line.localeCompare(b.line, this.$l2.code)
