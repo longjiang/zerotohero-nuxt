@@ -220,7 +220,8 @@
       </div>
     </div>
     <div class="text-center mt-3 mb-3" v-if="!checking && hits.length === 0">
-      Sorry, no hits found.
+      <p>Sorry, no hits found.</p>
+      <p v-if="$store.state.settings.subsSearchLimit">Try turning off ‘Limit “this word in TV Shows” search result (faster)’ in <router-link :to="{name: 'settings'}">Settings</router-link></p>
       <b-button
         v-if="$adminMode"
         size="sm"

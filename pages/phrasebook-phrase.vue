@@ -185,7 +185,7 @@ export default {
         Helper.dictionaryTooLargeAndWillCauseServerCrash(this.$l2["iso639-3"])
       )
         return;
-      else if (!this.phrasebook.exact) await this.matchPhraseToDictionaryEntries();
+      else await this.matchPhraseToDictionaryEntries();
     },
     async matchPhraseToDictionaryEntries() {
       this.words = await (

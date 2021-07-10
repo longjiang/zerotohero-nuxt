@@ -291,7 +291,7 @@ export default {
   methods: {
     async getSearchTerms() {
       let terms = [];
-
+      if (this.exact) return [this.entry.head]
       let forms =
         (await (await this.$getDictionary()).wordForms(this.entry)) || [];
 
