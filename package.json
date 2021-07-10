@@ -37,6 +37,7 @@
     "nuxt": "^2.15.3",
     "nuxt-i18n": "^6.27.0",
     "nuxt-lazy-load": "^1.2.6",
+    "ogv": "^1.8.4",
     "papaparse": "^5.3.0",
     "raw-loader": "^4.0.2",
     "sanitize-html": "^2.4.0",

@@ -8,6 +8,7 @@
         style="height: 0.8rem; width: 4rem; opacity: 0.5; margin-bottom: 0.2rem"
       />
     </span>
+    <div ref="player" class="hidden"></div>
   </button>
 </template>
 <script>
@@ -41,15 +42,28 @@ export default {
     };
   },
   async mounted() {
-    await this.$getDictionary()
+    await this.$getDictionary();
     this.canSpeak = this.mp3 || (this.text && this.$hasFeature("speech"));
   },
   methods: {
+    
+    // https://www.npmjs.com/package/ogv
+    f(url) {
+      // Create a new player with the constructor
+      var ogv = require('ogv');
+      ogv.OGVLoader.base = '/vendor/ogv';
+      var player = new ogv.OGVPlayer();
+      
+
+      // Now treat it just like a video or audio element
+      this.$refs.player.appendChild(player);
+      player.src = url;
+      player.play();
+    },
     speak() {
       if (this.mp3) {
         let url = this.wiktionary ? commons(`File:${this.mp3}`) : this.mp3;
-        let audio = new Audio(url);
-        audio.play();
+        this.f(url)
       } else if (this.text) {
         if (this.$hasFeature("speech")) {
           Helper.speak(this.text, this.$l2, 0.75);
