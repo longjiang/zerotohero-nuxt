@@ -14,7 +14,7 @@
           size="sm"
           variant="gray"
           :disabled="hitIndex === 0"
-          @click="prevHit"
+          @click="goToPrevHit"
           :class="{ 'ml-1 mr-1': true, disabled: hitIndex === 0 }"
         >
           <i class="fas fa-step-backward" />
@@ -175,7 +175,7 @@
           variant="gray"
           size="sm"
           :disabled="hitIndex >= hits.length - 1"
-          @click="nextHit"
+          @click="goToNextHit"
           :class="{
             'ml-1 mr-1': true,
             disabled: hitIndex >= hits.length - 1,
@@ -221,7 +221,11 @@
     </div>
     <div class="text-center mt-3 mb-3" v-if="!checking && hits.length === 0">
       <p>Sorry, no hits found.</p>
-      <p v-if="$store.state.settings.subsSearchLimit">Try turning off ‘Limit “this word in TV Shows” search result (faster)’ in <router-link :to="{name: 'settings'}">Settings</router-link></p>
+      <p v-if="$store.state.settings.subsSearchLimit">
+        Try turning off ‘Limit “this word in TV Shows” search result (faster)’
+        in
+        <router-link :to="{ name: 'settings' }">Settings</router-link>
+      </p>
       <b-button
         v-if="$adminMode"
         size="sm"
@@ -337,11 +341,11 @@ export default {
       default: true,
     },
     tvShow: {
-      default: undefined
+      default: undefined,
     },
     exact: {
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
@@ -424,10 +428,12 @@ export default {
       this.$emit("updated", hits);
     },
     currentHit() {
-      if (this.navigated && this.$hasFeature('speech')) {
-        window.speechSynthesis.cancel()
-        Helper.speak(this.currentHit.line, this.$l2, 1)
-      };
+      if (this.navigated && this.$hasFeature("speech")) {
+        if (this.prevHit && this.prevHit.video.id === this.currentHit.video.id)
+          return;
+        window.speechSynthesis.cancel();
+        Helper.speak(this.currentHit.line, this.$l2, 1);
+      }
     },
   },
   computed: {
@@ -468,6 +474,14 @@ export default {
         }
       }
       return hits;
+    },
+    prevHit() {
+      let index = Math.max(this.hitIndex - 1, 0);
+      return this.hits[index];
+    },
+    nextHit() {
+      let index = Math.min(this.hitIndex + 1, this.hits.length - 1);
+      return this.hits[index];
     },
   },
   methods: {
@@ -690,14 +704,12 @@ export default {
     rewind() {
       if (this.$refs.youtube) this.$refs.youtube.rewind();
     },
-    prevHit() {
-      let index = Math.max(this.hitIndex - 1, 0);
-      this.currentHit = this.hits[index];
+    goToPrevHit() {
+      this.currentHit = this.prevHit;
       this.navigated = true;
     },
-    nextHit() {
-      let index = Math.min(this.hitIndex + 1, this.hits.length - 1);
-      this.currentHit = this.hits[index];
+    goToNextHit() {
+      this.currentHit = this.nextHit;
       this.navigated = true;
     },
     goToHit(hit) {
@@ -743,7 +755,7 @@ export default {
       ) {
         // left = 37
         if (e.keyCode == 37 && e.shiftKey) {
-          this.prevHit();
+          this.goToPrevHit();
           e.preventDefault();
           return false;
         }
@@ -754,13 +766,13 @@ export default {
         }
         // right = 39
         if (e.keyCode == 39 && e.shiftKey) {
-          this.nextHit();
+          this.goToNextHit();
           e.preventDefault();
           return false;
         }
         // right = 39
         if (e.code == "KeyD") {
-          this.nextHit();
+          this.goToNextHit();
           e.preventDefault();
           return false;
         }
