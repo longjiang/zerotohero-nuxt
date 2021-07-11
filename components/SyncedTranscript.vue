@@ -46,6 +46,7 @@
             </b-button>
           </div>
           <div style="flex: 1">
+            
             <Annotate
               tag="div"
               :sticky="sticky"

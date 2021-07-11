@@ -89,7 +89,7 @@
         :value="text"
         style="width: calc(100% - 2rem)"
       />
-      <div
+      <!-- <div
         class="selection-lookup-popover d-block mt-1 text-center"
         style="font-size: 0.8em"
         v-if="textMode"
@@ -103,7 +103,7 @@
           <i class="fas fa-quote-left"></i>
           Look up {{ selectedText ? `“${selectedText}” as` : "" }} a phrase
         </router-link>
-      </div>
+      </div> -->
     </div>
     <v-runtime-template
       v-if="annotated && !textMode"
@@ -403,6 +403,7 @@ export default {
         // textNode
         // break setnences
         let text = node.nodeValue;
+        text = text.replace(/\n\u200e/g, '\n') // Fix error when \n and a left-to-right mark are found together and mess up with the order of words.
         let sentences = this.breakSentences(text);
         for (let sentence of sentences) {
           // $(node).before(`<span id="sentence-placeholder-${this.batchId}">${sentence}</span>`)
