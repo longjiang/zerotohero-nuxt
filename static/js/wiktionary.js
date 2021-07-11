@@ -74,7 +74,7 @@ const Dictionary = {
       }
     })
     words = words.map((word, index) => {
-      word.id = index
+      word.id = String(index)
       return word
     })
     console.log(`Wiktionary: ${file} loaded.`)
@@ -223,7 +223,7 @@ const Dictionary = {
     return stemStr.trim()
   },
   get(id) {
-    return this.words[id]
+    return this.words.find(word => word.id === id)
   },
   lookup(text) {
     let word = this.words.find(word => word && word.bare.toLowerCase() === text.toLowerCase())

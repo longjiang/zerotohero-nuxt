@@ -121,6 +121,13 @@
           <span class="ml-2 entry-cjk simplified">{{ entry.traditional }}</span>
           <span class="ml-2 entry-cjk traditional">{{ entry.simplified }}</span>
         </div>
+
+        <span
+          v-if="entry.supplementalLang"
+          class="pl-1 pr-1 mt-3 rounded d-inline-block bg-warning text-white"
+        >
+          {{ $languages.getSmart(entry.supplementalLang).name }}
+        </span>
       </div>
     </div>
   </div>
