@@ -16,29 +16,56 @@ const Dictionary = {
   credit() {
     return 'The dictionary is provided by <a href="https://en.wiktionary.org/wiki/Wiktionary:Main_Page">Wiktionary</a>, which is freely distribtued under the <a href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike License</a>. The dictionary is parsed by <a href="https://github.com/tatuylonen/wiktextract">wiktextract</a>.'
   },
-  dictionaryFile(options) {
-    let l2 = options.l2.replace('nor', 'nob') // Default Norwegian to Bokmål
-      .replace('hrv', 'hbs') // Serbian uses Serbo-Croatian
-      .replace('srp', 'hbs') // Croatian uses Serbo-Croatian
-      .replace('bos', 'hbs') // Bosnian uses Serbo-Croatian
-      .replace('run', 'kin') // Rundi uses Rwanda-Rundi
-      .replace('hbo', 'heb') // Ancient Hebrew uses Hebrew
-      .replace('grc', 'ell') // Ancient Greek uses Greek
-    let csv = !this.useJSON.includes(this.l2)
-    let filename = `${this.server}data/wiktionary${csv ? '-csv' : ''}/${l2}-${options.l1}.${csv ? 'csv' : 'json'}.txt`
-    return filename
+  dictionaryFile({
+    l1 = undefined,
+    l2 = undefined
+  } = {}) {
+    if (l1 && l2) {
+      l2 = l2.replace('nor', 'nob') // Default Norwegian to Bokmål
+        .replace('hrv', 'hbs') // Serbian uses Serbo-Croatian
+        .replace('srp', 'hbs') // Croatian uses Serbo-Croatian
+        .replace('bos', 'hbs') // Bosnian uses Serbo-Croatian
+        .replace('run', 'kin') // Rundi uses Rwanda-Rundi
+        .replace('hbo', 'heb') // Ancient Hebrew uses Hebrew
+        .replace('grc', 'ell') // Ancient Greek uses Greek
+      let csv = !this.useJSON.includes(this.l2)
+      let filename = `${this.server}data/wiktionary${csv ? '-csv' : ''}/${l2}-${l1}.${csv ? 'csv' : 'json'}.txt`
+      return filename
+    }
   },
-  async load(options) {
-    this.l1 = options.l1
-    this.l2 = options.l2
-    this.file = this.dictionaryFile(options)
-    await this.loadWords()
-    if (this.l2 === 'fra') await this.loadFrenchConjugationsAndLemmatizer()
-    return this
+  async load({
+    l1 = undefined,
+    l2 = undefined
+  } = {}) {
+    if (l1 && l2) {
+      this.l1 = l1
+      this.l2 = l2
+      this.file = this.dictionaryFile({ l1, l2 })
+      let words = await this.loadWords(this.file)
+      if (l1 === 'eng' && l2 === 'msa') {
+        // Append indonesian words to malay dictionary so we get more words
+        let indonesianWords = await this.loadWords(this.dictionaryFile({ l1, l2: 'ind' }))
+        for (let w of indonesianWords) {
+          w.id = 'ind-' + w.id
+          w.supplementalLang = 'ind'
+        }
+        words = words.concat(indonesianWords)
+        words = words.sort((a, b) => {
+          if (a.head && b.head) {
+            return b.head.length - a.head.length
+          }
+        })
+      }
+      this.words = words
+      if (this.l2 === 'fra') await this.loadFrenchConjugationsAndLemmatizer()
+      console.log("Wiktionary: loaded.")
+      return this
+
+    }
   },
-  async loadWords() {
-    console.log("Wiktionary: loading...")
-    let res = await axios.get(this.file)
+  async loadWords(file) {
+    console.log(`Wiktionary: loading ${file}`)
+    let res = await axios.get(file)
     let words = !this.useJSON.includes(this.l2) ? this.parseDictionaryCSV(res.data) : this.parseDictionary(res.data)
 
     words = words.sort((a, b) => {
@@ -50,8 +77,8 @@ const Dictionary = {
       word.id = index
       return word
     })
-    this.words = words
-    console.log("Wiktionary: loaded.")
+    console.log(`Wiktionary: ${file} loaded.`)
+    return words
   },
   async loadFrenchConjugationsAndLemmatizer() {
     console.log('Loading French conjugations from "french-verbs-lefff"...')

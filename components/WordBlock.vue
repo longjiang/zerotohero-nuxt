@@ -56,7 +56,8 @@
           class="word-block-text d-inline-block"
           @click="wordBlockClick()"
           v-html="token.text"
-        /><span
+        />
+        <span
           v-if="$l2.code === 'ko' && (saved || token.candidates[0]).hanja"
           class="word-block-text-byeonggi"
           v-html="(saved || token.candidates[0]).hanja"
@@ -211,6 +212,13 @@
                 ? word.heads[0][1]
                 : ""
             }}
+          </span>
+          <span
+            v-if="word.supplementalLang"
+            class="pl-1 pr-1 ml-1 rounded d-inline-block bg-warning text-white"
+            style="font-size: 0.8em; position: relative; bottom: 0.1rem"
+          >
+            {{ $languages.getSmart(word.supplementalLang).name }}
           </span>
           <ol class="word-translation" v-if="word.definitions">
             <li
