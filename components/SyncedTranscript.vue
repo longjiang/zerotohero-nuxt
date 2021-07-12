@@ -413,10 +413,7 @@ export default {
         // await Helper.timeout(1000);
         this.$emit("speechStart");
         let englishPromise = Helper.speak(
-          this.matchedParallelLines[this.currentLineIndex].replace(
-            /&#39;/g,
-            "’"
-          ),
+          this.matchedParallelLines[this.currentLineIndex],
           this.$l1,
           1.1
         );
@@ -430,7 +427,7 @@ export default {
           // console.log("🇯🇵 japanese finished");
           this.$emit("speechStart");
           let japanesePromise = Helper.speak(
-            this.currentLine.line.replace(/&#39;/g, "’"),
+            this.currentLine.line,
             this.$l2,
             1
           );
@@ -468,7 +465,7 @@ export default {
       return Helper.highlightMultiple(...arguments);
     },
     smartquotes(text) {
-      return SmartQuotes.string(text.replace(/&#39;/g, "'"));
+      return SmartQuotes.string(text);
     },
     removeLine(lineIndex) {
       this.lines.splice(lineIndex, 1);

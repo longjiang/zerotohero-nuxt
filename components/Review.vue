@@ -112,7 +112,7 @@ export default {
     async speak() {
       if (this.reviewItem.parallelLines) {
         await Helper.speak(
-          this.reviewItem.parallelLines.replace(/&#39;/g, "’"),
+          this.reviewItem.parallelLines,
           this.$l1,
           1.1
         );

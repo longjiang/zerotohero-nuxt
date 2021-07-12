@@ -152,6 +152,16 @@
         :class="{
           'd-none': !enableTranslationEditing,
         }"
+        v-model="text"
+        placeholder="Original text"
+        rows="3"
+        class="mt-2"
+        max-rows="6"
+      ></b-form-textarea>
+      <b-form-textarea
+        :class="{
+          'd-none': !enableTranslationEditing,
+        }"
         v-model="translation"
         @blur="updateTranslation"
         placeholder="Translation"
@@ -255,6 +265,9 @@ export default {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
     },
+    text() {
+      return this.video.subs_l2.map(line => line.line.replace(/\n/g, ' ')).join("\n")
+    }
   },
   mounted() {
     this.mounted = true; // So that this component shows up on first load (updates $adminMode)
