@@ -19,6 +19,7 @@
         <h3 v-if="show">
           {{ show.title }}
         </h3>
+        <p v-if="count">({{ count }} Videos)</p>
       </div>
       <div class="col-sm-12 mb-5">
         <div
@@ -70,6 +71,7 @@ export default {
       show: undefined,
       videos: undefined,
       perPage: 24,
+      count: undefined
     };
   },
   async fetch() {
@@ -105,9 +107,10 @@ export default {
           this.$adminMode ? ",subs_l2" : ""
         }&sort=${sort}&limit=${limit}&offset=${offset}&timestamp=${
           this.$adminMode ? Date.now() : 0
-        }`
+        }&meta=filter_count`
       );
       let videos = response.data.data || [];
+      this.count = response.data.meta.filter_count
       videos = Helper.uniqueByValue(videos, "youtube_id");
       if (this.type === "tv-show") {
         videos =
