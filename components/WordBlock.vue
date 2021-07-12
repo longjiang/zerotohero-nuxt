@@ -56,10 +56,9 @@
           class="word-block-text d-inline-block"
           @click="wordBlockClick()"
           v-html="token.text"
-        />
-        <span
+        /><span
           v-if="$l2.code === 'ko' && (saved || token.candidates[0]).hanja"
-          class="word-block-text-byeonggi"
+          class="word-block-text-byeonggi d-inline-block"
           v-html="(saved || token.candidates[0]).hanja"
         />
       </template>
