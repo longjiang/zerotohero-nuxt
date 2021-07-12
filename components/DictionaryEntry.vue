@@ -44,7 +44,10 @@
             id="search-subs"
             v-if="entry && showSearchSubs && searchTerms"
           >
-            <div class="widget-title">“{{ entry.head }}” in {{ tvShow ? `the TV Show "${tvShow.title}"` : 'TV Shows' }}</div>
+            <div class="widget-title">
+              “{{ entry.head }}” in
+              {{ tvShow ? `the TV Show "${tvShow.title}"` : "TV Shows" }}
+            </div>
             <div class="widget-body">
               <SearchSubsComp
                 v-if="searchTerms"
@@ -81,7 +84,6 @@
             </div>
             <div class="widget-body jumbotron-fluid p-4">
               <WebImages
-                
                 :text="entry.head"
                 :entry="entry"
                 limit="10"
@@ -240,11 +242,11 @@ export default {
       default: true,
     },
     tvShow: {
-      default: undefined
+      default: undefined,
     },
     exact: {
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
@@ -291,24 +293,27 @@ export default {
   methods: {
     async getSearchTerms() {
       let terms = [];
-      if (this.exact) return [this.entry.head]
-      let forms =
-        (await (await this.$getDictionary()).wordForms(this.entry)) || [];
-
-      forms = forms.map((form) => form.form).filter((s) => s.length > 1);
-      forms = [this.entry.head, ...forms];
 
       if (this.$dictionaryName === "edict") {
-        forms = [this.entry.kana, ...forms];
+        terms = [this.entry.kana, ...terms];
       } else if (this.$dictionaryName === "hsk-cedict") {
-        forms = [this.entry.simplified, this.entry.traditional];
-      } else if (this.$dictionaryName === "openrussian") {
-        forms = forms.map((f) => f.replace(/'/gi, ""));
+        terms = [this.entry.simplified, this.entry.traditional];
+      } else {
+        terms = [this.entry.head];
       }
-      terms = Helper.unique(forms)
-        .sort((a, b) => a.length - b.length)
-        .slice(0, 5);
-      return terms;
+      if (this.exact) return terms;
+      else {
+        let forms = (await (await this.$getDictionary()).wordForms(this.entry)) || []
+        terms = terms.concat(forms.map((form) => form.form).filter((s) => s.length > 1));
+
+        if (this.$dictionaryName === "openrussian") {
+          terms = terms.map((t) => t.replace(/'/gi, ""));
+        }
+        terms = Helper.unique(terms)
+          .sort((a, b) => a.length - b.length)
+          .slice(0, 5);
+        return terms;
+      }
     },
     searchSubsLoaded(hits) {
       if (hits.length > 0) {
