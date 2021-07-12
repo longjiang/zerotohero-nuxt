@@ -391,12 +391,13 @@ export default {
     },
     async show() {
       if (this.show) {
+        let sort = this.showType === "tv-show" ? "title" : "-date";
         let response = await axios.get(
           `${Config.wiki}items/youtube_videos?filter[l2][eq]=${
             this.$l2.id
           }&filter[${this.showType}][eq]=${
             this.show.id
-          }&fields=channel_id,id,lesson,level,title,date,topic,youtube_id,tv_show.*,talk.*&timestamp=${
+          }&sort=${sort}&fields=channel_id,id,lesson,level,title,date,topic,youtube_id,tv_show.*,talk.*&timestamp=${
             this.$adminMode ? Date.now() : 0
           }`
         );
