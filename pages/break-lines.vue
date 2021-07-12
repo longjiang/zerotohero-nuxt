@@ -55,7 +55,7 @@ export default {
   data() {
     return {
       text: "",
-      punctuations: "。！？；：!?;:",
+      punctuations: "。！？；：!?;:♪",
     };
   },
   async mounted() {},

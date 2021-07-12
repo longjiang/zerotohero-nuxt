@@ -118,12 +118,15 @@ export default {
       let phrases = Papa.unparse(this.rows);
       let phrasebook = {
         title: this.title,
-        description: `Source: <a href="${this.sourceURL}">${this.sourceURL}</a>`,
         phrases,
         l2: this.$l2.id,
       };
       if (this.showID && this.showType) {
         phrasebook[this.showType] = this.showID
+        phrasebook.exact = true
+      }
+      if (this.sourceURL) {
+        phrasebook.description = `Source: <a href="${this.sourceURL}">${this.sourceURL}</a>`
       }
       this.saving = true;
       try {

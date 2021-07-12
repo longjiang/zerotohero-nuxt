@@ -200,7 +200,7 @@ export default {
       }
     },
     stripPunctuations(text) {
-      text = text.replace(/[.!?。！？…؟\*]/g, "").trim();
+      text = text.replace(/[.!?。！？…؟♪\*]/g, "").trim();
       text = text.replace(/\/[^\s]+/, "").trim();
       text = text.replace(/[（(].*[)）]/g, "").trim();
       return text;
