@@ -261,7 +261,8 @@ const Dictionary = {
     return forms
   },
   lemmaFromDefinition(definition) {
-    let m = definition.match(/(.* of )([^\s\.]+)(.*)/);
+    definition = definition.replace(/\(.*\)/g, '').trim()
+    let m = definition.match(/(.* of )([^\s\.]+)$/);
     if (m) {
       let lemma = m[2].replace(/\u200e/g, ""); // Left-to-Right Mark
       return lemma
