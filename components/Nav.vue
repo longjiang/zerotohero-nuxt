@@ -221,6 +221,12 @@ export default {
               show: false,
             },
             {
+              path: this.musicPath,
+              icon: "fa fa-music",
+              title: `${this.$l2.name} Music`,
+              show: this.musicPath,
+            },
+            {
               name: "talks",
               icon: "fas fa-graduation-cap",
               title: `${this.$l2.name} Talks`,
@@ -558,6 +564,7 @@ export default {
       history: [],
       hasTVShows: false,
       hasTalks: false,
+      musicPath: false,
       hasPhrasebooks: false,
     };
   },
@@ -575,6 +582,12 @@ export default {
           this.$store.state.shows.talks &&
           this.$store.state.shows.talks[this.l2.code] &&
           this.$store.state.shows.talks[this.l2.code].length > 0;
+        if (this.hasTVShows) {
+          let musicShow = this.$store.state.shows.tvShows[this.l2.code].find(s => s.title === 'Music')
+          if (musicShow) {
+            this.musicPath = `/${this.$l1.code}/${this.$l2.code}/show/tv-show/${musicShow.id}`
+          }
+        }
       }
       if (mutation.type.startsWith("phrasebooks")) {
         this.hasPhrasebooks =
