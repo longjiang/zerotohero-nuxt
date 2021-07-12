@@ -46,6 +46,7 @@
             ref="youtubeVideoList"
             :checkSaved="false"
           />
+          <div v-observe-visibility="visibilityChanged"></div>
         </template>
       </div>
     </div>
@@ -65,17 +66,26 @@ export default {
   data() {
     return {
       collection: this.type === "tv-show" ? "tv_show" : "talk",
+      moreVideos: 0,
       show: undefined,
       videos: undefined,
+      perPage: 24,
     };
   },
   async fetch() {
     if (this.id) {
       this.show = await this.getShow(this.id, this.collection);
-      this.videos = await this.getVideos();
+      this.videos = await this.getVideos({limit: this.perPage, offset: this.moreVideos});
     }
   },
   methods: {
+    async visibilityChanged(isVisible) {
+      if (this.videos && isVisible) {
+        this.moreVideos = 1 + this.moreVideos + this.perPage;
+        let newVideos = await this.getVideos({limit: this.perPage, offset: this.moreVideos});
+        this.videos = this.videos.concat(newVideos);
+      }
+    },
     async getShow(id, collection) {
       let response = await axios.get(
         `${Config.wiki}items/${collection}s/${id}`
@@ -84,8 +94,8 @@ export default {
         return response.data.data;
       }
     },
-    async getVideos() {
-      let sort = this.type === 'tv-show' ? 'title' : 'date'
+    async getVideos({ limit = 500, offset = 0 } = {}) {
+      let sort = this.type === "tv-show" ? "title" : "-date";
       let response = await axios.get(
         `${Config.wiki}items/youtube_videos?filter[l2][eq]=${
           this.$l2.id
@@ -93,7 +103,9 @@ export default {
           this.show.id
         }&fields=channel_id,id,lesson,level,title,topic,youtube_id,date,tv_show.*,talk.*${
           this.$adminMode ? ",subs_l2" : ""
-        }&sort=${sort}&limit=500&timestamp=${this.$adminMode ? Date.now() : 0}`
+        }&sort=${sort}&limit=${limit}&offset=${offset}&timestamp=${
+          this.$adminMode ? Date.now() : 0
+        }`
       );
       let videos = response.data.data || [];
       videos = Helper.uniqueByValue(videos, "youtube_id");
@@ -105,10 +117,11 @@ export default {
       } else {
         videos =
           videos.sort((y, x) =>
-            x.date ? x.date.localeCompare(y.date, this.$l2.code, { numeric: true }) : -1
+            x.date
+              ? x.date.localeCompare(y.date, this.$l2.code, { numeric: true })
+              : -1
           ) || [];
       }
-
       return videos;
     },
   },
