@@ -362,7 +362,11 @@ export default {
             html += `<span>${token.replace(/\s+/, "&nbsp;")}</span>`;
           }
         }
-      } else if (["en", "ko", "vi", "de", "id", "ms", "tr", "ta"].includes(this.$l2.code)) {
+      } else if (
+        ["en", "ko", "vi", "de", "id", "ms", "tr", "ta", "tl", "ceb"].includes(
+          this.$l2.code
+        )
+      ) {
         html = "";
         this.tokenized[batchId] = await (
           await this.$getDictionary()
@@ -403,7 +407,7 @@ export default {
         // textNode
         // break setnences
         let text = node.nodeValue;
-        text = text.replace(/\n\u200e/g, '\n') // Fix error when \n and a left-to-right mark are found together and mess up with the order of words.
+        text = text.replace(/\n\u200e/g, "\n"); // Fix error when \n and a left-to-right mark are found together and mess up with the order of words.
         let sentences = this.breakSentences(text);
         for (let sentence of sentences) {
           // $(node).before(`<span id="sentence-placeholder-${this.batchId}">${sentence}</span>`)

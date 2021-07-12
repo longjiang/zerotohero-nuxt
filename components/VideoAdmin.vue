@@ -338,7 +338,6 @@ export default {
             ? YouTube.unparseSubs(this.video.subs_l2, this.$l2.code)
             : undefined,
         });
-        console.log(data)
         let response = await axios.post(
           `${Config.wiki}items/youtube_videos`,
           data
