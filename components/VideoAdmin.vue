@@ -266,8 +266,10 @@ export default {
         return this.$store.state.settings.adminMode;
     },
     text() {
-      return this.video.subs_l2.map(line => line.line.replace(/\n/g, ' ')).join("\n")
-    }
+      return this.video.subs_l2
+        .map((line) => line.line.replace(/\n/g, " "))
+        .join("\n");
+    },
   },
   mounted() {
     this.mounted = true; // So that this component shows up on first load (updates $adminMode)
@@ -301,7 +303,7 @@ export default {
     normalizeNotes(text) {
       let lines = text.split("\n");
       let notes = lines.map((note, index) => {
-        note = note.trim().replace(/^[\d【】\[\]［］\(\)（）]+\.*\s*/, '')
+        note = note.trim().replace(/^[\d【】\[\]［］\(\)（）]+\.*\s*/, "");
         return {
           id: index + 1,
           note,
@@ -327,17 +329,19 @@ export default {
     async save() {
       this.saving = true;
       try {
+        let data = Object.assign({
+          l2: this.$l2.id,
+          title: this.video.title,
+          youtube_id: this.video.youtube_id,
+          channel_id: this.video.channel ? this.video.channel.id : null,
+          subs_l2: this.video.subs_l2
+            ? YouTube.unparseSubs(this.video.subs_l2, this.$l2.code)
+            : undefined,
+        });
+        console.log(data)
         let response = await axios.post(
           `${Config.wiki}items/youtube_videos`,
-          Object.assign({
-            l2: this.$l2.id,
-            title: this.video.title,
-            youtube_id: this.video.youtube_id,
-            channel_id: this.video.channel ? this.video.channel.id : null,
-            subs_l2: this.video.subs_l2
-              ? YouTube.unparseSubs(this.video.subs_l2, this.$l2.code)
-              : undefined,
-          })
+          data
         );
         if (response) {
           this.video.id = response.data.data.id;
