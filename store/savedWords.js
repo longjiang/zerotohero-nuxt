@@ -33,7 +33,7 @@ export const mutations = {
   REMOVE_SAVED_WORD(state, options) {
     if (typeof localStorage !== 'undefined' && state.savedWords[options.l2]) {
       const keepers = state.savedWords[options.l2].filter(
-        item => item.id !== options.word.id
+        item => item.id != options.word.id
       )
       let savedWords = Object.assign({}, state.savedWords)
       savedWords[options.l2] = keepers
@@ -67,7 +67,7 @@ export const getters = {
       let savedWord = false
       if (options.id) {
         savedWord = state.savedWords[options.l2].find(
-          item => item.id && item.id === options.id
+          item => item.id && item.id == options.id
         )
       } else if (options.text) {
         savedWord = state.savedWords[options.l2].find(

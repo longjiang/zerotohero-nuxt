@@ -223,7 +223,7 @@ const Dictionary = {
     return stemStr.trim()
   },
   get(id) {
-    return this.words.find(word => word.id === id)
+    return this.words.find(word => word.id == id)
   },
   lookup(text) {
     let word = this.words.find(word => word && word.bare.toLowerCase() === text.toLowerCase())
