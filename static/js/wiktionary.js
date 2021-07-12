@@ -13,6 +13,12 @@ const Dictionary = {
   server: 'https://server.chinesezerotohero.com/',
   l1: undefined,
   l2: undefined,
+  supplementalLangs: {
+    msa: 'ind',
+    ind: 'msa',
+    ceb: 'tgl',
+    tgl: 'ceb'
+  },
   credit() {
     return 'The dictionary is provided by <a href="https://en.wiktionary.org/wiki/Wiktionary:Main_Page">Wiktionary</a>, which is freely distribtued under the <a href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike License</a>. The dictionary is parsed by <a href="https://github.com/tatuylonen/wiktextract">wiktextract</a>.'
   },
@@ -42,14 +48,15 @@ const Dictionary = {
       this.l2 = l2
       this.file = this.dictionaryFile({ l1, l2 })
       let words = await this.loadWords(this.file)
-      if (l1 === 'eng' && l2 === 'msa') {
+      let supplementalLang = this.supplementalLangs[l2]
+      if (l1 === 'eng' && supplementalLang) {
         // Append indonesian words to malay dictionary so we get more words
-        let indonesianWords = await this.loadWords(this.dictionaryFile({ l1, l2: 'ind' }))
-        for (let w of indonesianWords) {
-          w.id = 'ind-' + w.id
-          w.supplementalLang = 'ind'
+        let supplWords = await this.loadWords(this.dictionaryFile({ l1, l2: supplementalLang }))
+        for (let w of supplWords) {
+          w.id = supplementalLang + '-' + w.id
+          w.supplementalLang = supplementalLang
         }
-        words = words.concat(indonesianWords)
+        words = words.concat(supplWords)
         words = words.sort((a, b) => {
           if (a.head && b.head) {
             return b.head.length - a.head.length
