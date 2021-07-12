@@ -69,7 +69,7 @@
         <EntryDisambiguation
           v-if="['zh', 'yue'].includes($l2.code)"
           :entry="entry"
-          class="m-3"
+          class="ml-3 mr-3 mt-5"
           style="flex: 1; min-width: 20rem"
         ></EntryDisambiguation>
       </div>
