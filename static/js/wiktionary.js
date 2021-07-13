@@ -577,9 +577,7 @@ const Dictionary = {
           let distance = FastestLevenshtein.distance(search, text);
           let max = Math.max(text.length, search.length)
           let similarity = (max - distance) / max
-          if (similarity > 0.5) {
-            words.push(Object.assign({ score: similarity }, word))
-          }
+          words.push(Object.assign({ score: similarity }, word))
           if (similarity === 1) {
             words = words.concat(this.stemWords(word, 1))
             words = words.concat(this.phrases(word, 1))
