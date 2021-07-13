@@ -469,13 +469,17 @@ export default {
       video.channel_id = details.channel.id;
       return details.channel.id;
     },
-    async save(video) {
+    async save(video, limit = false) {
       try {
+        let lines = video.subs_l2
+        if (limit) lines = lines.slice(0, limit)
+        console.log(lines.length)
+        let csv = YouTube.unparseSubs(lines, this.$l2.code)
         let response = await axios.post(`${Config.wiki}items/youtube_videos`, {
           youtube_id: video.youtube_id,
           title: video.title,
           l2: this.$l2.id,
-          subs_l2: YouTube.unparseSubs(video.subs_l2, this.$l2.code),
+          subs_l2: csv,
           channel_id: video.channel_id,
           date: moment(video.date).format('YYYY-MM-DD HH:mm:ss'),
         });
@@ -485,7 +489,12 @@ export default {
           this.videoInfoKey++;
           return true;
         }
-      } catch (err) {}
+      } catch (err) {
+        if (!limit) limit = video.subs_l2.length
+        if (limit > 0) {
+          return this.save(video, limit - 100)
+        }
+      }
     },
     async checkSavedFunc(video) {
       let response = await axios.get(
