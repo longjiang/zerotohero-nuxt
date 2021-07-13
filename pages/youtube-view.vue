@@ -361,7 +361,6 @@ export default {
     }
   },
   mounted() {
-    console.log("binding keys...");
     this.bindKeys();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type === "shows/LOAD_SHOWS") {
