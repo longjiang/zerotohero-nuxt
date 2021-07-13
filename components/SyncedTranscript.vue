@@ -664,10 +664,10 @@ export default {
       this.currentLineIndex = currentLineIndex;
     },
     goToPreviousLine() {
-      this.goToLine(this.previousLine);
+      this.goToLine(this.previousLine || this.lines[0]);
     },
     goToNextLine() {
-      this.goToLine(this.nextLine);
+      this.goToLine(this.nextLine || this.lines[0]);
     },
     goToLine(line) {
       this.seekVideoTo(line.starttime);
