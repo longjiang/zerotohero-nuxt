@@ -393,7 +393,7 @@ const Dictionary = {
       if (this.l2 === 'vie') {
         return text.includes(row.head) || search.includes(row.head)
       } else {
-        return text.includes(row.head) || search.includes(row.search)
+        return text.includes(row.head) || (row.search.length > 0 && search.includes(row.search))
       }
     })
     return this.subdict(words)
@@ -465,10 +465,7 @@ const Dictionary = {
     return match
   },
   tokenizeRecursively(text, subdict) {
-    if (text === ' itu?') console.log(text)
     const longest = subdict.longest(text)
-    if (text === ' itu?') console.log(longest)
-    if (text === ' itu?') console.log(this.isCombining('?'))
     if (this.l2 === 'tha') {
       const isThai = subdict.isThai(text)
       if (!isThai) {

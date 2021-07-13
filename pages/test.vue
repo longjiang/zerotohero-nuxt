@@ -9,11 +9,12 @@
       <div class="row">
         <div class="col-sm-12">
           <!-- <Annotate><p>โอเคบ่เรารักภาษาถิ่น</p></Annotate> -->
-          <Annotate><p>บักโพธิ์</p></Annotate>
+          <!-- <Annotate><p>บักโพธิ์</p></Annotate>
           <Annotate><p>ཡང་དེའི་ནང་ང་རང་ཚོས་ལེ་ཚན་གསར་པ་ཞིག་བཟོ་རོགས་ཟེར་གི་འདུག་ག</p></Annotate>
           <Annotate><p> Ich wollte unbedingt Kühe. </p></Annotate>
           <Annotate><p>Còn ai đau ai đau xe sắp chạy rồi nha bà con..... nhanh</p></Annotate>
-          <Annotate><p>Dengan bantal dan rambut palsu itu?</p></Annotate>
+          <Annotate><p>Dengan bantal dan rambut palsu itu?</p></Annotate> -->
+          <Annotate :buttons="true"><p>ميگى چيزى نمونده</p></Annotate>
           
           <!-- ทริปวัดใจ -->
           <!-- <Annotate><p>Hometown's Embrace</p></Annotate> -->
