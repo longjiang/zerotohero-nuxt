@@ -97,7 +97,7 @@ export default {
       punctuations: "。！？；：!?;:,.♪",
       fields: ["line", "count"],
       numRowsVisible: 20,
-      showSelect: "all",
+      showSelect: "all-tv-shows",
       shows: undefined,
       gettingPhrases: false,
     };
@@ -182,14 +182,23 @@ export default {
 
     async getVideos(show, start, limit) {
       console.log(`Getting ${limit} videos...`);
-      let showFilter =
-        show === "all"
-          ? "&filter[tv_show][nnull]=1"
-          : `&filter[tv_show][eq]=${show}`;
+      let showFilter
+      if (show === "all-tv-shows") {
+        showFilter = "&filter[tv_show][nnull]=1"
+      } else if (show === 'all-talks') {
+        showFilter = "&filter[talk][nnull]=1"
+      } else if (show === 'all-videos') {
+        showFilter = ""
+      } else {
+        showFilter = `&filter[tv_show][eq]=${show}`
+      }
       let response = await axios.get(
         `${Config.wiki}items/youtube_videos?sort=-id&limit=${limit}&offset=${start}&filter[l2][eq]=${this.$l2.id}${showFilter}&fields=*,tv_show.*`
       );
       let videos = response.data.data || [];
+      if (["all-tv-shows", "all-videos"].includes(show)) {
+        videos = videos.filter(v => !v.tv_show || v.tv_show.title !== "Music")
+      }
       console.log(`Got ${videos.length} videos.`);
       for (let video of videos) {
         video.subs_l2 = YouTube.parseSavedSubs(video.subs_l2);
@@ -244,7 +253,7 @@ export default {
       if (this.shows) {
         let options = [
           {
-            value: "all",
+            value: "all-tv-shows",
             text: "All TV Shows",
           },
           ...this.shows.map((s) => {
@@ -253,6 +262,14 @@ export default {
               text: s.title,
             };
           }),
+          {
+            value: "all-talks",
+            text: "All Talks",
+          },
+          {
+            value: "all-videos",
+            text: "All Videos",
+          },
         ];
         return options;
       }
