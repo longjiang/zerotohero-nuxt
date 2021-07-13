@@ -363,7 +363,7 @@ export default {
           }
         }
       } else if (
-        ["en", "ko", "vi", "de", "id", "ms", "tr", "ta", "tl", "ceb"].includes(
+        ["en", "ko", "vi", "de", "id", "ms", "tr", "ta", "hi", "tl", "ceb"].includes(
           this.$l2.code
         )
       ) {
