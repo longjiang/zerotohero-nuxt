@@ -266,9 +266,10 @@ export default {
         return this.$store.state.settings.adminMode;
     },
     text() {
-      return this.video.subs_l2
-        .map((line) => line.line.replace(/\n/g, " "))
-        .join("\n");
+      if (this.video.subs_l2)
+        return this.video.subs_l2
+          .map((line) => line.line.replace(/\n/g, " "))
+          .join("\n");
     },
   },
   mounted() {
