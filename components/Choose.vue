@@ -1,42 +1,49 @@
 <template>
   <div>
     <div class="container mb-4" v-if="languages.length > 0">
-      <div class="row">
-        <div class="col-sm-12">
-          <LanguageSwitch
-            v-if="languages.length > 0"
-            class="mt-3 mb-4"
-            :preferredLanguages="languages"
-          />
+      <div class="mt-4 text-dark p-3">
+        <div class="text-center">
+          <p style="font-size: 1.5rem">
+            Learn the top
+            <strong><em>business</em></strong>
+            languages of the world
+          </p>
+          <p class="small">
+            Ranked by % GDP (PPP 2018) according to the IMF. (
+            <a
+              href="https://www.reddit.com/r/languagelearning/comments/9i72xd/the_20_languages_that_produce_86_of_the_worlds/"
+              target="_blank"
+            >
+              Source
+            </a>
+            )
+          </p>
         </div>
       </div>
       <div class="row language-icons p-3">
         <div
           class="col-xl-3 col-lg-4 col-md-6 col-12"
           v-for="code in [
-            'hbo',
-            'ar',
-            'yue',
-            'zh',
-            'nl',
-            'fi',
-            'fr',
-            'de',
-            'el',
-            'he',
-            'it',
-            'ko',
-            'ja',
-            'fa',
-            'pl',
-            'pt',
-            'ru',
-            'es',
-            'th',
-            'tr',
-            'vi',
             'en',
-            'lzh',
+            'zh',
+            'es',
+            'ar',
+            'ja',
+            'de',
+            'ru',
+            'hi',
+            'pt',
+            'id',
+            'fr',
+            'it',
+            'tr',
+            'ko',
+            'fa',
+            'bn',
+            'nl',
+            'th',
+            'pl',
+            'pa',
           ]"
           :key="`lang-logo-${code}`"
         >
@@ -49,10 +56,77 @@
           </div>
         </div>
       </div>
+      <div class="mt-5 text-dark">
+        <div class="text-center">
+          <p style="font-size: 1.5rem">
+            Learn
+            <strong><em>Ancient</em></strong>
+            languages
+          </p>
+        </div>
+      </div>
+      <div class="row language-icons p-3">
+        <div
+          class="col-xl-3 col-lg-4 col-md-6 col-12"
+          v-for="code in ['hbo', 'lzh']"
+          :key="`lang-logo-${code}`"
+        >
+          <div class="mt-3 mb-3">
+            <LanguageLogo
+              :l1="language(['en', 'lzh'].includes(code) ? 'zh' : 'en')"
+              :l2="language(code)"
+              class="choose-lang-logo"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-5 text-dark">
+        <div class="text-center">
+          <p style="font-size: 1.5rem">
+            Learn languages of the
+            <strong><em>Sinosphere</em></strong>
+          </p>
+        </div>
+      </div>
+      <div class="row language-icons p-3">
+        <div
+          class="col-xl-3 col-lg-4 col-md-6 col-12"
+          v-for="code in ['zh', 'yue', 'nan', 'hak', 'lzh', 'ko', 'ja', 'vi']"
+          :key="`lang-logo-${code}`"
+        >
+          <div class="mt-3 mb-3">
+            <LanguageLogo
+              :l1="language(['en', 'lzh'].includes(code) ? 'zh' : 'en')"
+              :l2="language(code)"
+              class="choose-lang-logo"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mt-5 text-dark p-3">
+      <div class="text-center">
+        <p style="font-size: 1.5rem">
+          Resources for learning
+          <strong><em>hundreds</em></strong>
+          of languages
+        </p>
+        <p>
+          学习
+          <strong>数百种</strong>
+          语言的资源
+        </p>
+      </div>
     </div>
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
+          <LanguageSwitch
+            v-if="languages.length > 0"
+            class="mt-3 mb-4"
+            :preferredLanguages="languages"
+          />
           <ul v-if="languages && languages.length > 0" class="language-list">
             <li
               v-for="language in languages"
@@ -262,10 +336,10 @@ export default {
 }
 
 .language-icons {
-  background: url('/img/background-stars-2.jpg'); background-repeat: no-repeat; background-size: cover;
-  
+  background: url("/img/background-stars-2.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
 }
-
 
 @media (min-width: 576px) {
   .language-icons {
