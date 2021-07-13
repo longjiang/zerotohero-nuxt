@@ -335,6 +335,10 @@ export default {
   color: #726661;
 }
 
+.bg-dark .text-dark {
+  color: white !important;
+}
+
 .language-icons {
   background: url("/img/background-stars-2.jpg");
   background-repeat: no-repeat;
