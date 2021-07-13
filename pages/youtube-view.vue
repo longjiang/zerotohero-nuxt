@@ -400,13 +400,23 @@ export default {
         );
 
         if (response.data && response.data.data) {
-          this.episodes = Helper.uniqueSort(
-            response.data.data,
-            "youtube_id",
-            this.showType === "tv_show" ? "title" : "date",
-            this.showType === "tv_show" ? "ascending" : "descending",
-            this.$l2.code
-          );
+          let videos = response.data.data
+
+          videos = Helper.uniqueByValue(videos, "youtube_id");
+          if (this.showType === "tv_show") {
+            videos =
+              videos.sort((x, y) =>
+                x.title.localeCompare(y.title, this.$l2.code, { numeric: true })
+              ) || [];
+          } else {
+            videos =
+              videos.sort((y, x) =>
+                x.date
+                  ? x.date.localeCompare(y.date, this.$l2.code, { numeric: true })
+                  : -1
+              ) || [];
+          }
+          this.episodes = videos
         }
       }
     },
