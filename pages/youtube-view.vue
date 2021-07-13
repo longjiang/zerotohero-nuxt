@@ -26,7 +26,7 @@
       <SimpleSearch
         placeholder="Search"
         ref="searchLibrary"
-        :random="`/${$l1.code}/${$l2.code}/youtube/view/${randomEpisodeYouTubeId}`"
+        :random="randomEpisodeYouTubeId ? `/${$l1.code}/${$l2.code}/youtube/view/${randomEpisodeYouTubeId}` : false"
         :action="
           (url) => {
             this.$router.push({
@@ -345,16 +345,14 @@ export default {
       console.log(`YouTube View: this.video assigned.`);
       console.log(`YouTube View: Loading show...`);
       this.loadShow();
-      if (!this.video.tv_show) {
-        console.log(`YouTube View: Getting random episode youtube_id...`);
-        this.randomEpisodeYouTubeId = await YouTube.getRandomEpisodeYouTubeId(
-          this.$l2.id,
-          this.$store.state.shows.tvShows[this.$l2.code] ? "tv_show" : undefined
-        );
-        console.log(
-          `YouTube View: Got random episode youtube_id ${this.randomEpisodeYouTubeId}`
-        );
-      }
+      console.log(`YouTube View: Getting random episode youtube_id...`);
+      this.randomEpisodeYouTubeId = await YouTube.getRandomEpisodeYouTubeId(
+        this.$l2.id,
+        this.$store.state.shows.tvShows[this.$l2.code] ? "tv_show" : undefined
+      );
+      console.log(
+        `YouTube View: Got random episode youtube_id ${this.randomEpisodeYouTubeId}`
+      );
       console.log(`YouTube View: Saving history...`);
       this.saveHistory();
       console.log(`YouTube View: All done.`);
