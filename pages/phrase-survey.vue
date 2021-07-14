@@ -133,7 +133,7 @@ export default {
       maxVideos: 2000, // False = infinite number of videos
       perPage: 2000,
       chunkSize: 200, // Number of videos stored in each localStorage item in getAllLinesFromLocalStorage
-      punctuations: Helper.characterClass("Punctuation"),
+      punctuations: Helper.characterClass('Punctuation'),
       fields: ["line", "count", "actions"],
       numRowsVisible: 20,
       showSelect: "all-tv-shows",
