@@ -574,7 +574,7 @@ export default {
     },
     async lookup() {
       let words = [];
-      if (this.token) {
+      if (this.token && this.token.candidates && this.token.candidates.length > 0) {
         words = this.token.candidates;
       } else if (this.text) {
         if (!this.text && this.token) this.text = this.token.candidates[0].head;

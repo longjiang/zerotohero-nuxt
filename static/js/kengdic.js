@@ -1,5 +1,6 @@
 importScripts('../vendor/korean_conjugation/html/korean/hangeul.js')
 importScripts('../vendor/korean_conjugation/html/korean/conjugator.js')
+importScripts('../vendor/fastest-levenshtein/fastest-levenshtein.js')
 
 const Dictionary = {
   file: 'https://server.chinesezerotohero.com/data/kengdic/kengdic_2011.tsv.txt',
@@ -149,60 +150,20 @@ const Dictionary = {
     }
     return results
   },
-  lookupFuzzy(text, limit = 30) { // text = 'abcde'
-    text = text.toLowerCase().trim()
-    if (this.isChinese(text)) {
-      let results = this.words.filter(row => row.hanja && row.hanja.includes(text))
-      return results
-    } else {
-      let words = []
-      let subtexts = []
-      for (let i = 1; text.length - i > 0; i++) {
-        subtexts.push(text.substring(0, text.length - i))
+  lookupFuzzy(text, limit = 30) {
+    let words = []
+    for (let word of this.words) {
+      let search = word.bare
+      if (search && search.length > 0) {
+        let distance = FastestLevenshtein.distance(search, text);
+        let max = Math.max(text.length, search.length)
+        let similarity = (max - distance) / max
+        words.push(Object.assign({ score: similarity }, word))
       }
-      for (let word of this.words) {
-        let head = word.head ? word.head.toLowerCase() : undefined
-        if (head && head === text) {
-          // match 'abcde' exactly
-          words.push(
-            Object.assign(
-              { score: 99999 },
-              word
-            )
-          )
-        } else if (head && head.startsWith(text)) {
-          // match 'abcdejkl', 'abcdexyz', etc
-          words.push(
-            Object.assign(
-              { score: text.length - (head.length - text.length) },
-              word
-            )
-          )
-        } else if (head && text.startsWith(head)) {
-          // matches 'abcde', 'abcd', 'abc', etc
-          words.push(Object.assign({ score: head.length + 1 }, word))
-        } else if (head && text.includes(head)) {
-          // matches 'abc', 'bcd', 'cde', etc
-          words.push(Object.assign({ score: head.length }, word))
-        } else {
-          // matches 'abcdxyz', 'abcxyz', 'abxyz', etc
-          for (let subtext of subtexts) {
-            if (head && head.startsWith(subtext)) {
-              let daBonus = 0
-              if (head.length > 1 && head.endsWith('다')) daBonus++
-              if (head.length > 1 && head.endsWith('하다')) daBonus++
-              words.push(
-                Object.assign(
-                  { score: subtext.length - (head.length - subtext.length) + daBonus },
-                  word
-                )
-              )
-            }
-          }
-        }
-      }
-      return words.sort((a, b) => b.score - a.score).slice(0, limit)
     }
+    words = words.sort((a, b) => b.score - a.score)
+    words = this.uniqueByValue(words, 'id').slice(0, limit)
+    return words
   },
   lookupMultiple(text) {
     let words = this.words.filter(word => word && (word.bare === text || word.hanja === text))
