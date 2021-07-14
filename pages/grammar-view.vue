@@ -31,7 +31,6 @@
           id="search-subs"
           v-if="
             grammar.pattern &&
-            delayed &&
             (!entry || grammar.pattern !== entry.simplified)
           "
           :key="`subs-search-${grammar.pattern}`"
@@ -63,7 +62,6 @@
             :showSearchSubs="
               !(
                 grammar.pattern &&
-                delayed &&
                 (!entry || grammar.pattern !== entry.simplified)
               )
             "
