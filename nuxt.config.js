@@ -60,7 +60,7 @@ export default {
     },
     workbox: {
       runtimeCaching: [{
-        urlPattern: /\.(?:txt|csv|json)$/,
+        urlPattern: 'http://server.chinesezerotohero.com/.*',
         handler: 'CacheFirst',
         options: {
           cacheName: 'dictionaries',
