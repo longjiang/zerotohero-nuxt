@@ -282,6 +282,21 @@ const Dictionary = {
   lookupByCharacter(char) {
     return this.words.filter(row => row.traditional && row.traditional.includes(char))
   },
+  uniqueByValue(array, key) {
+    let flags = []
+    let unique = []
+    let l = array.length
+    for (let i = 0; i < l; i++) {
+      if (flags[array[i][key]]) continue
+      flags[array[i][key]] = true
+      unique.push(array[i])
+    }
+    return unique
+  },
+  lookupMultiple(text) {
+    let results = this.lookupSimplified(text).concat(this.lookupTraditional(text))
+    return this.uniqueByValue(results, 'id')
+  },
   lookupSimplified(simplified, pinyin = false) {
     const candidates = this.words
       .filter(row => {
