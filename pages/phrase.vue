@@ -5,8 +5,8 @@
   }
 </router>
 <template>
-  <div>
-    <div class="container mt-5 mb-5">
+  <div class="mt-5 mb-5">
+    <div class="container">
       <div class="row">
         <div class="col-sm-12">
           <h2 class="text-center mb-3">Lookup phrases not in the dictionary</h2>
@@ -34,7 +34,7 @@
         </div>
       </div>
     </div>
-    <PhraseComp v-if="term" :term="term" />
+    <PhraseComp v-if="term" :term="term" class="mt-5" />
   </div>
 </template>
 
