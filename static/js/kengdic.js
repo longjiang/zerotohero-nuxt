@@ -244,7 +244,7 @@ const Dictionary = {
           })
         }
       } else {
-        t.push(text)
+        t.push(seg)
       }
       t.push(' ')
     }

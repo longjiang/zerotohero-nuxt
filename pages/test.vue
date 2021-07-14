@@ -16,6 +16,7 @@
           <Annotate><p>Dengan bantal dan rambut palsu itu?</p></Annotate> -->
           <!-- <Annotate :buttons="true"><p>ميگى چيزى نمونده</p></Annotate> -->
           <Annotate :buttons="true"><p>75%</p></Annotate>
+          <Annotate :buttons="true"><p>내 립스틱이 불편하면 그만 노려봐</p></Annotate>
           <!-- ทริปวัดใจ -->
           <!-- <Annotate><p>Hometown's Embrace</p></Annotate> -->
         </div>
