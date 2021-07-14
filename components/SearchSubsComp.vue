@@ -459,7 +459,7 @@ export default {
       if (typeof this.$store.state.settings.subsSearchLimit !== "undefined")
         return this.$store.state.settings.subsSearchLimit;
       else {
-        return 20;
+        return true;
       }
     },
     hitIndex() {
@@ -530,7 +530,7 @@ export default {
         this.$l2.id,
         this.$adminMode,
         this.$l2.continua,
-        this.$subsSearchLimit ? 20 : 500,
+        this.$subsSearchLimit ? this.exact ? 40 : 20 : 500,
         this.tvShow ? this.tvShow.id : undefined,
         this.exact
       );
