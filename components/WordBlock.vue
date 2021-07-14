@@ -56,7 +56,8 @@
           class="word-block-text d-inline-block"
           @click="wordBlockClick()"
           v-html="token.text"
-        /><span
+        />
+        <span
           v-if="$l2.code === 'ko' && (saved || token.candidates[0]).hanja"
           class="word-block-text-byeonggi d-inline-block"
           v-html="(saved || token.candidates[0]).hanja"
@@ -243,22 +244,20 @@
         </div>
       </div>
       <div v-if="loading === true">💭 Thinking...</div>
-      <div v-if="words && words.length === 0 && loading === false">
-        🤷‍ No clue.
-        <br />
-        <a
-          :href="`https://www.google.com/search?q=${this.text}`"
-          target="_blank"
-        >
-          Google
-        </a>
-        |
-        <a
-          :href="`https://en.wiktionary.org/wiki/${this.text}`"
-          target="_blank"
-        >
-          Wiktionary
-        </a>
+      <div v-if="words && words.length === 0 && loading === false" class="mt-3">
+        <span style="color: #999" v-if="$hasFeature('transliteration')">
+          {{ tr(text) }}
+          <Speak
+            :text="text"
+            class="ml-1"
+          />
+        </span>
+        <div data-level="outside" style="font-size: 1.5rem; font-weight: bold">
+          {{ text }}
+        </div>
+        <span style="color: #999">
+          Sorry, no definition found for “{{ text }}”.
+        </span>
       </div>
     </template>
   </v-popover>
