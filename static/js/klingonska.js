@@ -111,6 +111,10 @@ const Dictionary = {
       .slice(0, limit)
     return words
   },
+  lookupMultiple(text) {
+    let words = this.words.filter(word => word && word.bare === text)
+    return words
+  },
   uniqueByValue(array, key) {
     let flags = []
     let unique = []

@@ -171,6 +171,10 @@ const Dictionary = {
     let word = this.words.find(word => word && word.bare === text)
     return word
   },
+  lookupMultiple(text) {
+    let words = this.words.filter(word => word && word.bare.toLowerCase() === text.toLowerCase())
+    return words
+  },
   createIndex() {
     console.log('Indexing...')
 

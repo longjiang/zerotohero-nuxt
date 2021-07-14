@@ -118,6 +118,10 @@ const Dictionary = {
     let results = this.words.filter(row => row.english && row.english.toLowerCase().includes(text)).slice(0, limit)
     return results
   },
+  lookupMultiple(text) {
+    let words = this.words.filter(word => word && word.bare === text)
+    return words
+  },
   random() {
     return this.randomArrayItem(this.words)
   },
