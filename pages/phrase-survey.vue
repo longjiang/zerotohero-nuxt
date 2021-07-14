@@ -55,6 +55,7 @@
                   <router-link
                     :to="`/${$l1.code}/${$l2.code}/youtube/view/${phrase.youtube_id}/?t=${phrase.starttime}`"
                     class="link-unstyled d-flex mt-1 mb-1"
+                    target="_blank"
                   >
                     <img
                       :src="`//img.youtube.com/vi/${phrase.youtube_id}/hqdefault.jpg`"
@@ -202,11 +203,15 @@ export default {
       for (let video of videos) {
         for (let line of video.subs_l2) {
           let regex = new RegExp(`[${this.punctuations}]+`, "g");
-          let segs = he.decode(line.line).split(regex);
+          let segs = he
+            .decode(line.line)
+            .split(regex)
+            .map((seg) => seg.trim())
+            .filter((seg) => seg !== "");
 
           for (let seg of segs) {
             let phrase = {
-              phrase: seg,
+              phrase: seg.trim(),
               youtube_id: video.youtube_id,
               title: video.title,
               tv_show: video.tv_show,
@@ -218,31 +223,29 @@ export default {
           }
         }
       }
-      let foldedPhrases = this.sortLines(phrases);
+      let foldedPhrases = this.sortPhrases(phrases);
       return foldedPhrases;
     },
 
-    sortLines(lines) {
-      console.log(`Sorting ${lines.length} lines by localeCompare()...`);
-      let sortedLines = lines.sort((a, b) =>
-        a.line.localeCompare(b.line, this.$l2.code)
+    sortPhrases(phrases) {
+      let sortedPhrases = phrases.sort((a, b) =>
+        a.phrase.localeCompare(b.phrase, this.$l2.code)
       );
-      console.log(`Folding ${lines.length} lines by uppercasing each one`);
       let groups = [];
-      if (sortedLines.length > 0) {
+      if (sortedPhrases.length > 0) {
         let group = {
-          phrase: sortedLines[0].phrase,
-          instances: [sortedLines[0]],
+          phrase: sortedPhrases[0].phrase,
+          instances: [sortedPhrases[0]],
         };
-        for (let line of sortedLines) {
-          if (line.line.toUpperCase() === group.phrase.toUpperCase()) {
-            group.instances.push(line);
+        for (let phrase of sortedPhrases) {
+          if (phrase.phrase.toUpperCase() === group.phrase.toUpperCase()) {
+            group.instances.push(phrase);
           } else {
             groups.push(group);
             // Start a new group
             group = {
-              phrase: line.phrase,
-              instances: [line],
+              phrase: phrase.phrase,
+              instances: [phrase],
             };
           }
         }
