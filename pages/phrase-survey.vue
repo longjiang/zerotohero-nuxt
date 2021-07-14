@@ -45,7 +45,43 @@
             :items="lines.slice(0, numRowsVisible)"
             :fields="fields"
             responsive
-          ></b-table>
+          >
+            <template #cell(line)="data">
+              <div>
+                {{ data.item.phrase }}
+              </div>
+              <div v-if="expand[data.index]" class="mt-2 mb-2 ml-2">
+                <div v-for="phrase of data.item.instances">
+                  <router-link
+                    :to="`/${$l1.code}/${$l2.code}/youtube/view/${phrase.youtube_id}/?t=${phrase.starttime}`"
+                    class="link-unstyled d-flex mt-1 mb-1"
+                  >
+                    <img
+                      :src="`//img.youtube.com/vi/${phrase.youtube_id}/hqdefault.jpg`"
+                      :alt="phrase.title"
+                      class="video-thumb"
+                      v-lazy-load
+                    />
+                    <div style="flex: 1">
+                      <span v-html="highlight(phrase.line, data.item.phrase)" />
+                    </div>
+                  </router-link>
+                </div>
+              </div>
+            </template>
+            <template #cell(count)="data">
+              {{ data.item.instances.length }}
+              <b-button
+                size="sm"
+                variant="success"
+                class="float-right"
+                @click="toggle(data.index)"
+              >
+                <span v-if="expand[data.index]">Collapse</span>
+                <span v-if="!expand[data.index]">Expand</span>
+              </b-button>
+            </template>
+          </b-table>
         </template>
         <div v-observe-visibility="visibilityChanged"></div>
         <div class="mt-4 text-center">
@@ -80,6 +116,7 @@ import axios from "axios";
 import YouTube from "@/lib/youtube";
 import Helper from "@/lib/helper";
 import he from "he";
+import Vue from "vue";
 
 export default {
   props: {
@@ -94,12 +131,13 @@ export default {
       maxVideos: 2000, // False = infinite number of videos
       perPage: 2000,
       chunkSize: 200, // Number of videos stored in each localStorage item in getAllLinesFromLocalStorage
-      punctuations: "。！？；：!?;:,.♪",
+      punctuations: Helper.characterClass("Punctuation"),
       fields: ["line", "count"],
       numRowsVisible: 20,
       showSelect: "all-tv-shows",
       shows: undefined,
       gettingPhrases: false,
+      expand: {},
     };
   },
   mounted() {
@@ -116,6 +154,12 @@ export default {
     this.unsubscribe();
   },
   methods: {
+    highlight() {
+      return Helper.highlight(...arguments);
+    },
+    toggle(index) {
+      Vue.set(this.expand, index, this.expand[index] ? false : true);
+    },
     loadShows() {
       this.shows = this.$store.state.shows.tvShows[this.$l2.code]
         ? this.$store.state.shows.tvShows[this.$l2.code]
@@ -154,58 +198,29 @@ export default {
     },
     crunchPhrases(videos) {
       console.log(`Collecting lines...`);
-      let lines = videos.reduce(
-        (allLines, video) =>
-          allLines.concat(video.subs_l2.map((line) => {
-            let str = line.line
-            str = he.decode(str)
-            return str
-          })),
-        []
-      );
-      console.log(`Splitting and joining ${lines.length} lines...`);
-      lines = lines
-        .join("\n")
-        .replace(new RegExp(`[${this.punctuations}]`, "g"), "\n")
-        .split("\n")
-        .map((line) => line.replace(/^\s*[-–]\s*/, "").trim())
-        .filter((line) => line && line !== "")
-        .map((line) => {
-          return { line: line };
-        });
-      console.log(`Turned into ${lines.length} lines.`);
-      lines = this.sortLines(lines);
-      console.log(`Applying "unique" to all ${lines.length} lines...`);
-      lines = Helper.uniqueByValue(lines, "line");
-      return lines;
-    },
-
-    async getVideos(show, start, limit) {
-      console.log(`Getting ${limit} videos...`);
-      let showFilter
-      if (show === "all-tv-shows") {
-        showFilter = "&filter[tv_show][nnull]=1"
-      } else if (show === 'all-talks') {
-        showFilter = "&filter[talk][nnull]=1"
-      } else if (show === 'all-videos') {
-        showFilter = ""
-      } else {
-        showFilter = `&filter[tv_show][eq]=${show}`
-      }
-      let response = await axios.get(
-        `${Config.wiki}items/youtube_videos?sort=-id&limit=${limit}&offset=${start}&filter[l2][eq]=${this.$l2.id}${showFilter}&fields=*,tv_show.*`
-      );
-      let videos = response.data.data || [];
-      if (["all-tv-shows", "all-videos"].includes(show)) {
-        videos = videos.filter(v => !v.tv_show || v.tv_show.title !== "Music")
-      }
-      console.log(`Got ${videos.length} videos.`);
+      let phrases = [];
       for (let video of videos) {
-        video.subs_l2 = YouTube.parseSavedSubs(video.subs_l2);
-      }
-      return videos;
-    },
+        for (let line of video.subs_l2) {
+          let regex = new RegExp(`[${this.punctuations}]+`, "g");
+          let segs = he.decode(line.line).split(regex);
 
+          for (let seg of segs) {
+            let phrase = {
+              phrase: seg,
+              youtube_id: video.youtube_id,
+              title: video.title,
+              tv_show: video.tv_show,
+              talk: video.talk,
+              line: line.line,
+              starttime: line.starttime,
+            };
+            phrases.push(phrase);
+          }
+        }
+      }
+      let foldedPhrases = this.sortLines(phrases);
+      return foldedPhrases;
+    },
 
     sortLines(lines) {
       console.log(`Sorting ${lines.length} lines by localeCompare()...`);
@@ -213,29 +228,59 @@ export default {
         a.line.localeCompare(b.line, this.$l2.code)
       );
       console.log(`Folding ${lines.length} lines by uppercasing each one`);
-      let foldedLines = [];
+      let groups = [];
       if (sortedLines.length > 0) {
-        let lastSeen = sortedLines[0];
-        lastSeen.count = 0;
+        let group = {
+          phrase: sortedLines[0].phrase,
+          instances: [sortedLines[0]],
+        };
         for (let line of sortedLines) {
-          if (
-            line.line.toUpperCase() === lastSeen.line.toUpperCase()
-          ) {
-            lastSeen.count++;
+          if (line.line.toUpperCase() === group.phrase.toUpperCase()) {
+            group.instances.push(line);
           } else {
-            foldedLines.push(lastSeen);
-            lastSeen = line;
-            lastSeen.count = 1;
+            groups.push(group);
+            // Start a new group
+            group = {
+              phrase: line.phrase,
+              instances: [line],
+            };
           }
         }
       }
-      console.log(`Sorting ${lines.length} lines by length then by count...`);
-      foldedLines = foldedLines
-        .sort((a, b) => a.line.length - b.line.length)
-        .sort((a, b) => b.count - a.count);
-      return foldedLines;
+      groups = groups
+        .sort((a, b) => a.phrase.length - b.phrase.length)
+        .sort((a, b) => b.instances.length - a.instances.length);
+      return groups;
+    },
+    async getVideos(show, start, limit) {
+      console.log(`Getting ${limit} videos...`);
+      let showFilter;
+      if (show === "all-tv-shows") {
+        showFilter = "&filter[tv_show][nnull]=1";
+      } else if (show === "all-talks") {
+        showFilter = "&filter[talk][nnull]=1";
+      } else if (show === "all-videos") {
+        showFilter = "";
+      } else {
+        showFilter = `&filter[tv_show][eq]=${show}`;
+      }
+      let response = await axios.get(
+        `${Config.wiki}items/youtube_videos?sort=-id&limit=${limit}&offset=${start}&filter[l2][eq]=${this.$l2.id}${showFilter}&fields=*,tv_show.*,talk.*`
+      );
+      let videos = response.data.data || [];
+      if (["all-tv-shows", "all-videos"].includes(show)) {
+        videos = videos.filter(
+          (v) => !v.tv_show || v.tv_show.title !== "Music"
+        );
+      }
+      console.log(`Got ${videos.length} videos.`);
+      for (let video of videos) {
+        video.subs_l2 = YouTube.parseSavedSubs(video.subs_l2);
+      }
+      return videos;
     },
   },
+
   computed: {
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
@@ -277,3 +322,11 @@ export default {
   },
 };
 </script>
+<style scoped>
+.video-thumb {
+  width: calc(0.2rem * 16);
+  height: calc(0.2rem * 9);
+  object-fit: cover;
+  margin-right: 1rem;
+}
+</style>
