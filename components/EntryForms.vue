@@ -8,9 +8,7 @@
           style="flex: 1"
         >
           <div class="heartbeat-loader"></div>
-          <div class="text-center mt-4 mb-4">
-            Searching for word forms...
-          </div>
+          <div class="text-center mt-4 mb-4">Searching for word forms...</div>
         </div>
         <div
           v-if="!checking && (Helper.isEmpty(tables) || tables.length === 0)"
@@ -54,13 +52,13 @@
                     )
                     .sort((a, b) => a.field.localeCompare(b.field))"
                   :key="`form-table-row-${rowIndex}`"
-                   style="border-bottom: 1px solid #eee; vertical-align: top"
+                  style="border-bottom: 1px solid #eee; vertical-align: top"
                 >
                   <td :class="{ 'pr-1 pt-1 pb-1': row.field }">
                     {{ row.field }}
                   </td>
                   <td class="pt-1 pb-1">
-                    <Annotate :buttons="false">
+                    <Annotate :buttons="false" :disableAnnotation="$l2.code === 'ko'">
                       <b :data-level="word.level || 'outside'">
                         {{ row.form || "n/a"
                         }}{{
@@ -94,13 +92,13 @@ export default {
     return {
       Helper,
       tables: [],
-      checking: true
+      checking: true,
     };
   },
   methods: {
     async getTables() {
       // https://www.consolelog.io/group-by-in-javascript/
-      this.checking = true
+      this.checking = true;
       let forms = await (await this.$getDictionary()).wordForms(this.word);
       forms = forms.filter((form) => form.table !== "head");
       for (let form of forms) {
@@ -109,7 +107,7 @@ export default {
         form.table = await (await this.$getDictionary()).stylize(form.table);
       }
       this.tables = Helper.groupArrayBy(forms, "table");
-      this.checking = false
+      this.checking = false;
     },
   },
   mounted() {
@@ -118,6 +116,16 @@ export default {
   watch: {
     word() {
       this.getTables();
+    },
+  },
+  computed: {
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
     },
   },
 };

@@ -85,7 +85,7 @@ const Dictionary = {
       forms = forms.concat(krForms.map(f => {
         return {
           table: `conjugation`,
-          field: f.name + (f.regular ? '' : ' (irregular)'),
+          field: f.name,
           form: f.form
         }
       }))
@@ -95,8 +95,8 @@ const Dictionary = {
   },
   conjugate(text) {
     let forms = []
-    infinitive = conjugator.base(text, true);
-    for (let regular of conjugator.both_regular_and_irregular ? [true, false] : [true]) {
+    let infinitive = conjugator.base(text, true);
+    for (let regular of conjugator.both_regular_and_irregular ? [false] : [true]) {
       conjugator.verb_type(infinitive, regular)
       for (let key in conjugator) {
         if (conjugator[key].conjugation) {

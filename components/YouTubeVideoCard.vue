@@ -473,7 +473,6 @@ export default {
       try {
         let lines = video.subs_l2
         if (limit) lines = lines.slice(0, limit)
-        console.log(lines.length)
         let csv = YouTube.unparseSubs(lines, this.$l2.code)
         let response = await axios.post(`${Config.wiki}items/youtube_videos`, {
           youtube_id: video.youtube_id,
