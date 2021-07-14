@@ -14,8 +14,8 @@
           <Annotate><p> Ich wollte unbedingt Kühe. </p></Annotate>
           <Annotate><p>Còn ai đau ai đau xe sắp chạy rồi nha bà con..... nhanh</p></Annotate>
           <Annotate><p>Dengan bantal dan rambut palsu itu?</p></Annotate> -->
-          <Annotate :buttons="true"><p>ميگى چيزى نمونده</p></Annotate>
-          
+          <!-- <Annotate :buttons="true"><p>ميگى چيزى نمونده</p></Annotate> -->
+          <Annotate :buttons="true"><p>75%</p></Annotate>
           <!-- ทริปวัดใจ -->
           <!-- <Annotate><p>Hometown's Embrace</p></Annotate> -->
         </div>

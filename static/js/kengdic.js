@@ -214,27 +214,37 @@ const Dictionary = {
       return res.data.tokens
     }
   },
+  isHangul(text) {
+    let regex = /[\u1100-\u11FF\u302E\u302F\u3131-\u318E\u3200-\u321E\u3260-\u327E\uA960-\uA97C\uAC00-\uD7A3\uD7B0-\uD7C6\uD7CB-\uD7FB\uFFA0-\uFFBE\uFFC2-\uFFC7\uFFCA-\uFFCF\uFFD2-\uFFD7\uFFDA-\uFFDC]+/
+    let isHangul = regex.test(text)
+    return isHangul
+  },
   async tokenize(text) {
     let t = []
     let segs = text.split(/\s+/)
     for (let seg of segs) {
-      let tokenized = await this.tokenizeWithOpenKoreanText(seg);
-      for (let index in tokenized) {
-        let token = tokenized[index]
-        let candidates = this.lookupMultiple(
-          token.text
-        );
-        if (token.stem && token.stem !== token.text) {
-          candidates = candidates.concat(
-            this.lookupMultiple(
-              token.stem
-            )
+      let tokenized
+      if (this.isHangul(seg)) tokenized = await this.tokenizeWithOpenKoreanText(seg);
+      if (tokenized) {
+        for (let index in tokenized) {
+          let token = tokenized[index]
+          let candidates = this.lookupMultiple(
+            token.text
           );
+          if (token.stem && token.stem !== token.text) {
+            candidates = candidates.concat(
+              this.lookupMultiple(
+                token.stem
+              )
+            );
+          }
+          t.push({
+            text: token.text,
+            candidates,
+          })
         }
-        t.push({
-          text: token.text,
-          candidates,
-        })
+      } else {
+        t.push(text)
       }
       t.push(' ')
     }
