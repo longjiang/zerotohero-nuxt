@@ -72,10 +72,11 @@
             </template>
             <template #cell(count)="data">
               {{ data.item.instances.length }}
+            </template>
+            <template #cell(actions)="data">
               <b-button
                 size="sm"
                 variant="success"
-                class="float-right"
                 @click="toggle(data.index)"
               >
                 <span v-if="expand[data.index]">Collapse</span>
@@ -133,7 +134,7 @@ export default {
       perPage: 2000,
       chunkSize: 200, // Number of videos stored in each localStorage item in getAllLinesFromLocalStorage
       punctuations: Helper.characterClass("Punctuation"),
-      fields: ["line", "count"],
+      fields: ["line", "count", "actions"],
       numRowsVisible: 20,
       showSelect: "all-tv-shows",
       shows: undefined,
