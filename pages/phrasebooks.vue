@@ -38,11 +38,11 @@
                   <WebImages
                     class="phrasebook-cover-image"
                     :text="
-                      phrasebook.title.replace(/phrases/gi, '') + ' scenery'
+                      phrasebook.title.replace(/top|phrases/gi, '') + ' drama photo'
                     "
                     :link="false"
                     :hover="false"
-                    limit="2"
+                    limit="1"
                   />
                   <img
                     :src="`/img/book-thumb-${phrasebook.id % 10}.jpg`"
@@ -115,7 +115,7 @@ export default {
   async fetch() {
     this.phrasebooks = this.getPhrasebooksFromStore();
     this.images = await WordPhotos.getGoogleImages({
-      term: `${this.$l2.name} scenery`,
+      term: `${this.$l2.name} drama photo`,
       lang: this.$l2.code,
     });
   },
@@ -157,13 +157,14 @@ export default {
 .phrasebook-cover-image {
   position: absolute;
   z-index: 2;
-  top: 0.25rem;
-  left: 1.85rem;
+  top: 1.5rem;
+  left: 1.9rem;
   width: 4.5rem;
   overflow: hidden;
   ::v-deep .image-wall-image {
     width: 4.5rem;
-    height: 4.45rem;
+    height: 3rem;
+    flex: 1 !important;
   }
 }
 </style>
