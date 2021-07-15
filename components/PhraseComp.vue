@@ -48,6 +48,7 @@
               class="mt-5"
               :key="`${term}-images`"
             />
+            <EntryYouTube :text="term" v-if="$adminMode" class="mt-5" />
             <Collocations
               v-if="term"
               :text="term"
@@ -104,6 +105,10 @@ export default {
     $l2() {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
+    },
+    $adminMode() {
+      if (typeof this.$store.state.settings.adminMode !== "undefined")
+        return this.$store.state.settings.adminMode;
     },
     portrait() {
       let landscape =
