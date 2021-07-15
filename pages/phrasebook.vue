@@ -8,13 +8,18 @@
   <div class="container main mt-5 mb-5">
     <SocialHead :title="title" :description="description" :image="image" />
 
-    <div class="row">
+    <div class="row mb-5">
       <div class="col-sm-12" v-if="phrasebook">
         <h4 class="text-center">{{ phrasebook.title }}</h4>
         <div class="mt-2 text-center">
           ({{ phrasebook.phrases.length }} phrases)
         </div>
-        <div v-html="phrasebook.description" class="mt-5 mb-5 text-center" />
+        <div v-html="phrasebook.description" class="mt-5 text-center" />
+        <div class="text-center">
+          <a :href="csvHref" :download="`${phrasebook.title}.csv`" v-if="csvHref" class="btn btn-secondary">
+            <i class="fa fa-download"></i> Download CSV
+          </a>
+        </div>
       </div>
     </div>
     <div class="row" v-if="phrasebook">
@@ -87,6 +92,7 @@ export default {
       numRowsVisible: 24,
       images: [],
       initId: undefined,
+      csvHref: undefined,
     };
   },
   computed: {
@@ -140,6 +146,7 @@ export default {
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type.startsWith("phrasebooks")) {
         this.phrasebook = this.getPhrasebookFromStore();
+        this.genCSV();
         this.f();
       }
     });
@@ -149,6 +156,24 @@ export default {
     this.unsubscribe();
   },
   methods: {
+    makeTextFile(text) {
+      var data = new Blob([text], { type: "text/plain" });
+
+      // If we are replacing a previously generated file we need to
+      // manually revoke the object URL to avoid memory leaks.
+      if (textFile !== null) {
+        window.URL.revokeObjectURL(textFile);
+      }
+
+      var textFile = window.URL.createObjectURL(data);
+
+      // returns a URL you can use as a href
+      return textFile;
+    },
+    genCSV() {
+      let csv = Papa.unparse(this.phrasebook.phrases);
+      this.csvHref = this.makeTextFile(csv);
+    },
     async f() {
       if (this.$route.hash) {
         let initId = Number(this.$route.hash.replace("#", ""));
