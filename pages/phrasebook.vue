@@ -25,7 +25,7 @@
         )"
         :key="`phrasebook-phrase-${phraseIndex}`"
         :id="`phrasebook-phrase-${phraseIndex}`"
-        class="link-unstyled col-sm-12 col-md-6 col-lg-4"
+        class="link-unstyled col-sm-12 col-md-6 col-lg-4 mb-3 mt-3"
         :to="`/${$l1.code}/${$l2.code}/phrasebook/${phrasebook.id}/${
           phraseObj.id
         }/${encodeURIComponent(phraseObj.phrase)}`"
@@ -35,7 +35,7 @@
       >
         <div
           :class="{
-            'rounded p-4 mt-3 mb-3 phrasebook-card': true,
+            'rounded p-4 phrasebook-card': true,
             'text-right': $l2.direction === 'rtl',
             'phrasebook-card-current': initId && phraseIndex === initId,
           }"
@@ -218,6 +218,7 @@ export default {
 .phrasebook-card {
   background-color: white;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2) !important;
+  height: 100%;
 }
 .phrasebook-card-current {
   box-shadow: 0 0 40px rgba(255, 95, 32, 0.301) !important;
