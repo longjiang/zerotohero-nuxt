@@ -7,6 +7,7 @@
 <template>
   <div class="container main mt-5 mb-5">
     <SocialHead :title="title" :description="description" :image="image" />
+
     <div class="row">
       <div class="col-sm-12" v-if="phrasebook">
         <h4 class="text-center">{{ phrasebook.title }}</h4>
@@ -23,6 +24,7 @@
           numRowsVisible
         )"
         :key="`phrasebook-phrase-${phraseIndex}`"
+        :id="`phrasebook-phrase-${phraseIndex}`"
         class="link-unstyled col-sm-12 col-md-6 col-lg-4"
         :to="`/${$l1.code}/${$l2.code}/phrasebook/${phrasebook.id}/${
           phraseObj.id
@@ -33,11 +35,15 @@
       >
         <div
           :class="{
-            'rounded p-4 mt-3 mb-3 shadow': true,
+            'rounded p-4 mt-3 mb-3 phrasebook-card': true,
             'text-right': $l2.direction === 'rtl',
+            'phrasebook-card-current': initId && phraseIndex === initId
           }"
         >
-          <div :class="`${$l2.direction === 'rtl' ? 'float-left' : 'float-right'}`" style="color: #ccc">
+          <div
+            :class="`${$l2.direction === 'rtl' ? 'float-left' : 'float-right'}`"
+            style="color: #ccc"
+          >
             #{{ phraseIndex + 1 }}
           </div>
           <div>
@@ -58,6 +64,7 @@
           </div>
           <WebImages
             class="phrasebook-phrase-images mt-3"
+            v-if="!$route.hash"
             :text="phraseObj.phrase"
             :link="false"
             :hover="false"
@@ -74,6 +81,7 @@ import Config from "@/lib/config";
 import axios from "axios";
 import Papa from "papaparse";
 import WordPhotos from "@/lib/word-photos";
+import Helper from '@/lib/helper'
 
 export default {
   props: {
@@ -86,6 +94,7 @@ export default {
       phrasebook: undefined,
       numRowsVisible: 24,
       images: [],
+      initId: undefined,
     };
   },
   computed: {
@@ -127,16 +136,19 @@ export default {
       phrasebook = await this.loadPhrasebook(this.bookId);
     }
     this.phrasebook = phrasebook;
-    if (this.phrasebook)
+    if (this.phrasebook) {
       this.images = await WordPhotos.getGoogleImages({
         term: this.phrasebook.phrases[0].phrase,
         lang: this.$l2.code,
       });
+      this.f();
+    }
   },
   mounted() {
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type.startsWith("phrasebooks")) {
         this.phrasebook = this.getPhrasebookFromStore();
+        this.f();
       }
     });
   },
@@ -145,6 +157,29 @@ export default {
     this.unsubscribe();
   },
   methods: {
+    async f() {
+      if (this.$route.hash) {
+        let initId = Number(this.$route.hash.replace("#", ""));
+        if (this.phrasebook.phrases[initId]) this.initId = initId;
+        this.numRowsVisible = this.numRowsVisible + initId;
+        await Helper.timeout(1000)
+        this.scrollTo(initId);
+      }
+    },
+    scrollTo(index) {
+      let el = document.getElementById(`phrasebook-phrase-${index}`);
+      if (el) {
+        let offsetTop = Helper.documentOffsetTop(el);
+        let elHeight = Helper.elementHeight(el)
+        let viewportHeight = window.innerHeight || document.documentElement.clientHeight
+        let middle = offsetTop - viewportHeight / 2 + elHeight / 2
+        window.scrollTo({
+          top: middle,
+          left: 0,
+          behavior: 'smooth'
+        });
+      }
+    },
     async loadPhrasebook(bookId) {
       let url = `${Config.wiki}items/phrasebook/${bookId}?fields=*,tv_show.*`;
       console.log(url);
@@ -186,5 +221,17 @@ export default {
     width: auto;
     object-fit: cover;
   }
+}
+.phrasebook-card {
+  background-color: white;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2) !important;
+}
+.phrasebook-card-current {
+  box-shadow: 0 0 40px rgba(255, 95, 32, 0.301) !important;
+  transform: scale(1.2);
+  position: relative;
+  z-index: 2;
+  padding: 3rem !important;
+  // background-color: rgb(250, 244, 241);
 }
 </style>

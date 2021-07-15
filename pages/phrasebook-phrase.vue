@@ -17,7 +17,7 @@
               :items="phrasebook.phrases"
               :findCurrent="findCurrent"
               :url="url"
-              :home="`/${$l1.code}/${$l2.code}/phrasebook/${phrasebook.id}`"
+              :home="`/${$l1.code}/${$l2.code}/phrasebook/${phrasebook.id}#${this.phraseId}`"
               :title="phrasebook.title"
             />
           </div>
