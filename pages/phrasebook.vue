@@ -37,7 +37,7 @@
           :class="{
             'rounded p-4 mt-3 mb-3 phrasebook-card': true,
             'text-right': $l2.direction === 'rtl',
-            'phrasebook-card-current': initId && phraseIndex === initId
+            'phrasebook-card-current': initId && phraseIndex === initId,
           }"
         >
           <div
@@ -62,14 +62,6 @@
           <div class="mb-0" v-if="phraseObj && phraseObj[$l1.code]">
             {{ phraseObj[$l1.code] }}
           </div>
-          <WebImages
-            class="phrasebook-phrase-images mt-3"
-            v-if="!$route.hash"
-            :text="phraseObj.phrase"
-            :link="false"
-            :hover="false"
-            limit="5"
-          />
         </div>
       </router-link>
     </div>
@@ -81,7 +73,7 @@ import Config from "@/lib/config";
 import axios from "axios";
 import Papa from "papaparse";
 import WordPhotos from "@/lib/word-photos";
-import Helper from '@/lib/helper'
+import Helper from "@/lib/helper";
 
 export default {
   props: {
@@ -162,7 +154,7 @@ export default {
         let initId = Number(this.$route.hash.replace("#", ""));
         if (this.phrasebook.phrases[initId]) this.initId = initId;
         this.numRowsVisible = this.numRowsVisible + initId;
-        await Helper.timeout(1000)
+        await Helper.timeout(1000);
         this.scrollTo(initId);
       }
     },
@@ -170,13 +162,14 @@ export default {
       let el = document.getElementById(`phrasebook-phrase-${index}`);
       if (el) {
         let offsetTop = Helper.documentOffsetTop(el);
-        let elHeight = Helper.elementHeight(el)
-        let viewportHeight = window.innerHeight || document.documentElement.clientHeight
-        let middle = offsetTop - viewportHeight / 2 + elHeight / 2
+        let elHeight = Helper.elementHeight(el);
+        let viewportHeight =
+          window.innerHeight || document.documentElement.clientHeight;
+        let middle = offsetTop - viewportHeight / 2 + elHeight / 2;
         window.scrollTo({
           top: middle,
           left: 0,
-          behavior: 'smooth'
+          behavior: "smooth",
         });
       }
     },
