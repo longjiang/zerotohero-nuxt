@@ -236,10 +236,17 @@
         Refresh
       </b-button>
     </div>
-    <div v-if="hits.length > 0">
-      <VueSlickCarousel :arrows="false" :dots="false" @afterChange="vueSlickCarouselAfterChange" lazyLoad="progressive">
-        <!-- <div v-for="(hit, index) of hits" :class="`test-div test-div-${index}`" :key="`search-subs-slide-${index}`">{{ index }}</div> -->
-        <YouTubeWithTranscript
+
+    <VueSlickCarousel
+      v-if="hits && hits.length > 0"
+      :arrows="false"
+      :dots="false"
+      @afterChange="vueSlickCarouselAfterChange"
+    >
+      <div :class="`test-div test-div-0`" v-if="hitIndex > 0">0<br />Hit {{ hitIndexFromSlideIndex(0) + 1 }}</div>
+      <div :class="`test-div test-div-1`">1<br />Hit {{ hitIndexFromSlideIndex(1) + 1 }}</div>
+      <div :class="`test-div test-div-2`">2<br />Hit {{ hitIndexFromSlideIndex(2) + 1 }}</div>
+      <!-- <YouTubeWithTranscript
           v-for="(hit, index) of hits"
           :video="hit.video"
           ref="youtube"
@@ -250,9 +257,8 @@
           :startLineIndex="startLineIndex(hit)"
           :autoload="iOS() || (!hit.saved && navigated)"
           :key="`youtube-with-transcript-${hit.id}-${index}`"
-        />
-      </VueSlickCarousel>
-    </div>
+        /> -->
+    </VueSlickCarousel>
     <div class="text-center mt-0">
       <b-button
         variant="gray"
@@ -321,8 +327,8 @@ import SmallStar from "@/components/SmallStar";
 import Config from "@/lib/config";
 import Helper from "@/lib/helper";
 import YouTube from "@/lib/youtube";
-import VueSlickCarousel from 'vue-slick-carousel'
-import 'vue-slick-carousel/dist/vue-slick-carousel.css'
+import VueSlickCarousel from "vue-slick-carousel";
+import "vue-slick-carousel/dist/vue-slick-carousel.css";
 
 export default {
   components: {
@@ -330,7 +336,7 @@ export default {
     YouTubeWithTranscript,
     SyncedTranscript,
     SmallStar,
-    VueSlickCarousel
+    VueSlickCarousel,
   },
   props: {
     terms: {
@@ -374,6 +380,7 @@ export default {
       regex: undefined,
       excludeArr: [],
       speed: 1,
+      slideIndex: 0,
       sort: "length",
       youglishLang: {
         zh: "chinese",
@@ -433,12 +440,12 @@ export default {
       this.$emit("updated", hits);
     },
     currentHit() {
-      if (this.navigated && this.$hasFeature("speech")) {
-        if (this.prevHit && this.prevHit.video.id === this.currentHit.video.id)
-          return;
-        window.speechSynthesis.cancel();
-        Helper.speak(this.currentHit.line, this.$l2, 1);
-      }
+      // if (this.navigated && this.$hasFeature("speech")) {
+      //   if (this.prevHit && this.prevHit.video.id === this.currentHit.video.id)
+      //     return;
+      //   window.speechSynthesis.cancel();
+      //   Helper.speak(this.currentHit.line, this.$l2, 1);
+      // }
     },
   },
   computed: {
@@ -489,8 +496,19 @@ export default {
     },
   },
   methods: {
+    hitIndexFromSlideIndex(slideIndex) {
+      let currentSlideIndex = this.slideIndex
+      if (this.hitIndex === 0) currentSlideIndex = currentSlideIndex + 1
+      let s
+      let i = this.hitIndex
+      if (currentSlideIndex === 0) s = [i, i + 1, i - 1]
+      else if (currentSlideIndex === 1) s = [i - 1, i, i + 1]
+      else if (currentSlideIndex === 2) s = [i + 1, i - 1, i]
+      return s[slideIndex]
+    },
     vueSlickCarouselAfterChange(slideIndex) {
-      this.goToHitIndex(slideIndex)
+      this.goToHitIndex(this.hitIndexFromSlideIndex(slideIndex));
+      this.slideIndex = slideIndex
     },
     async remove() {
       let id = this.currentHit.video.id;
@@ -831,16 +849,14 @@ export default {
   font-size: 4em;
   color: white;
   background: #ccc;
-  &.test-div-1 {
+  &.test-div-0 {
     background-color: pink;
   }
-  &.test-div-2 {
+  &.test-div-1 {
     background-color: aquamarine;
-    
   }
-  &.test-div-3 {
+  &.test-div-2 {
     background-color: antiquewhite;
-    
   }
 }
 .search-subs .btn {
