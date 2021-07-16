@@ -503,7 +503,10 @@ export default {
       if (currentSlideIndex === 0) s = [i, i + 1, i - 1]
       else if (currentSlideIndex === 1) s = [i - 1, i, i + 1]
       else if (currentSlideIndex === 2) s = [i + 1, i - 1, i]
-      return s[slideIndex]
+      let hitIndex = s[slideIndex]
+      if (hitIndex > this.hits.length - 1) hitIndex = 0
+      if (hitIndex < 0) hitIndex = this.hits.length - 1
+      return hitIndex
     },
     vueSlickCarouselAfterChange(slideIndex) {
       this.goToHitIndex(this.hitIndexFromSlideIndex(slideIndex));
