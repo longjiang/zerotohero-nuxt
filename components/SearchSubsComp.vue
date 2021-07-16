@@ -237,18 +237,21 @@
       </b-button>
     </div>
     <div v-if="hits.length > 0">
-      <YouTubeWithTranscript
-        v-if="currentHit"
-        :video="currentHit.video"
-        ref="youtube"
-        layout="vertical"
-        :highlight="terms"
-        :hsk="level"
-        :speed="speed"
-        :startLineIndex="startLineIndex(currentHit)"
-        :autoload="iOS() || (!currentHit.saved && navigated)"
-        :key="`youtube-with-transcript-${currentHit.id}`"
-      />
+      <VueSlickCarousel :arrows="false" :dots="false" @afterChange="vueSlickCarouselAfterChange" lazyLoad="progressive">
+        <!-- <div v-for="(hit, index) of hits" :class="`test-div test-div-${index}`" :key="`search-subs-slide-${index}`">{{ index }}</div> -->
+        <YouTubeWithTranscript
+          v-for="(hit, index) of hits"
+          :video="hit.video"
+          ref="youtube"
+          layout="vertical"
+          :highlight="terms"
+          :hsk="level"
+          :speed="speed"
+          :startLineIndex="startLineIndex(hit)"
+          :autoload="iOS() || (!hit.saved && navigated)"
+          :key="`youtube-with-transcript-${hit.id}-${index}`"
+        />
+      </VueSlickCarousel>
     </div>
     <div class="text-center mt-0">
       <b-button
@@ -318,6 +321,8 @@ import SmallStar from "@/components/SmallStar";
 import Config from "@/lib/config";
 import Helper from "@/lib/helper";
 import YouTube from "@/lib/youtube";
+import VueSlickCarousel from 'vue-slick-carousel'
+import 'vue-slick-carousel/dist/vue-slick-carousel.css'
 
 export default {
   components: {
@@ -325,6 +330,7 @@ export default {
     YouTubeWithTranscript,
     SyncedTranscript,
     SmallStar,
+    VueSlickCarousel
   },
   props: {
     terms: {
@@ -483,6 +489,9 @@ export default {
     },
   },
   methods: {
+    vueSlickCarouselAfterChange(slideIndex) {
+      this.goToHitIndex(slideIndex)
+    },
     async remove() {
       let id = this.currentHit.video.id;
       let index = this.hitIndex;
@@ -815,7 +824,25 @@ export default {
   },
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
+.test-div {
+  text-align: center;
+  padding: 10rem;
+  font-size: 4em;
+  color: white;
+  background: #ccc;
+  &.test-div-1 {
+    background-color: pink;
+  }
+  &.test-div-2 {
+    background-color: aquamarine;
+    
+  }
+  &.test-div-3 {
+    background-color: antiquewhite;
+    
+  }
+}
 .search-subs .btn {
   margin: 0;
 }
