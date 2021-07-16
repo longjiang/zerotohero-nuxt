@@ -236,19 +236,18 @@
         Refresh
       </b-button>
     </div>
-    <div v-if="hits.length > 0" :set="(hit = currentHit)">
+    <div v-if="hits.length > 0">
       <YouTubeWithTranscript
-        :video="hit.video"
+        v-if="currentHit"
+        :video="currentHit.video"
         ref="youtube"
         layout="vertical"
         :highlight="terms"
         :hsk="level"
         :speed="speed"
-        :startLineIndex="startLineIndex(hit)"
-        :autoload="iOS() || (!hit.saved && navigated)"
-        :autoplay="!hit.saved && navigated"
-        :key="`youtube-with-transcript-${hit.video.youtube_id}`"
-        @paused="updatePaused"
+        :startLineIndex="startLineIndex(currentHit)"
+        :autoload="iOS() || (!currentHit.saved && navigated)"
+        :key="`youtube-with-transcript-${currentHit.id}`"
       />
     </div>
     <div class="text-center mt-0">
@@ -476,12 +475,11 @@ export default {
       return hits;
     },
     prevHit() {
-      let index = Math.max(this.hitIndex - 1, 0);
-      return this.hits[index];
+      if (this.hitIndex > 0) return this.hits[this.hitIndex - 1];
     },
     nextHit() {
-      let index = Math.min(this.hitIndex + 1, this.hits.length - 1);
-      return this.hits[index];
+      if (this.hitIndex < this.hits.length - 1)
+        return this.hits[this.hitIndex + 1];
     },
   },
   methods: {
@@ -530,7 +528,7 @@ export default {
         this.$l2.id,
         this.$adminMode,
         this.$l2.continua,
-        this.$subsSearchLimit ? this.exact ? 40 : 20 : 500,
+        this.$subsSearchLimit ? (this.exact ? 40 : 20) : 500,
         this.tvShow ? this.tvShow.id : undefined,
         this.exact
       );
