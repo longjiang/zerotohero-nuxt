@@ -26,7 +26,11 @@
       <SimpleSearch
         placeholder="Search"
         ref="searchLibrary"
-        :random="randomEpisodeYouTubeId ? `/${$l1.code}/${$l2.code}/youtube/view/${randomEpisodeYouTubeId}` : false"
+        :random="
+          randomEpisodeYouTubeId
+            ? `/${$l1.code}/${$l2.code}/youtube/view/${randomEpisodeYouTubeId}`
+            : false
+        "
         :action="
           (url) => {
             this.$router.push({
@@ -98,15 +102,12 @@ export default {
       video: undefined,
       show: undefined,
       showType: undefined,
-      speaking: false,
       paused: true,
       starttime: 0,
       currentTime: 0,
       episodes: [],
-      filterList: "",
-      audioMode: false,
       randomEpisodeYouTubeId: undefined,
-      layout: 'horizontal'
+      layout: "horizontal",
     };
   },
   computed: {
@@ -228,7 +229,7 @@ export default {
         );
 
         if (response.data && response.data.data) {
-          let videos = response.data.data
+          let videos = response.data.data;
 
           videos = Helper.uniqueByValue(videos, "youtube_id");
           if (this.showType === "tv_show") {
@@ -240,11 +241,13 @@ export default {
             videos =
               videos.sort((y, x) =>
                 x.date
-                  ? x.date.localeCompare(y.date, this.$l2.code, { numeric: true })
+                  ? x.date.localeCompare(y.date, this.$l2.code, {
+                      numeric: true,
+                    })
                   : -1
               ) || [];
           }
-          this.episodes = videos
+          this.episodes = videos;
         }
       }
     },
@@ -439,35 +442,6 @@ export default {
 };
 </script>
 <style scoped>
-.quick-access-buttons {
-  position: sticky;
-  bottom: 2rem;
-  margin-top: 5rem;
-  margin-bottom: 4rem;
-  text-align: center;
-  z-index: 9;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.quick-access-button.play-pause {
-  width: 3.7rem;
-  height: 3.7rem;
-}
-
-.quick-access-button {
-  border-radius: 100%;
-  width: 2.5rem;
-  height: 2.5rem;
-  line-height: 2.5rem;
-  border: none;
-  cursor: pointer;
-  text-align: center;
-  margin: 0 0.2rem;
-  padding: 0;
-}
-
 .youtube-view-wrapper.fullscreen {
   position: fixed;
   top: 0;
@@ -476,50 +450,5 @@ export default {
   height: 100vh;
   background: white;
   z-index: 9;
-}
-.youtube-view-wrapper.fullscreen .quick-access-buttons {
-  position: fixed;
-  width: 100%;
-  margin-bottom: 0;
-  bottom: 2rem;
-}
-
-@media (orientation: landscape) {
-  .youtube-view-wrapper.fullscreen .quick-access-buttons {
-    bottom: 0.8rem;
-  }
-}
-
-.youtube-view-line-list {
-  position: fixed;
-  width: 20rem;
-  max-height: calc(100vh - 15rem);
-  overflow: scroll;
-  border-radius: 0.3rem;
-  background: white;
-  z-index: 10;
-  left: calc(50vw - 10rem);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-  bottom: 6rem;
-}
-
-.youtube-view-line-list .youtube-view-line-list-item {
-  padding: 0.2rem 0.7rem;
-}
-
-.youtube-view-line-list-item {
-  cursor: pointer;
-}
-
-.youtube-view-line-list-item.active {
-  background-color: #eee;
-}
-
-.youtube-view-line-list-filter-wrapper {
-  padding: 0.25rem;
-  background: white;
-  width: calc(100% - 0.5rem);
-  position: sticky;
-  top: 0;
 }
 </style>

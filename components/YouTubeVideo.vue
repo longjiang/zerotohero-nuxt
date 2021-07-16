@@ -214,8 +214,7 @@ export default {
       }
     },
     setSpeed(speed) {
-      this.speed = speed;
-      if (this.player) this.player.setPlaybackRate(this.speed);
+      if (this.player) this.player.setPlaybackRate(speed);
     },
     togglePaused() {
       if (this.player && this.player.getPlayerState) {

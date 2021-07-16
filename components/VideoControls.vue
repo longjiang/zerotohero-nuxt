@@ -14,7 +14,7 @@
         'quick-access-button shadow btn-secondary d-inline-block text-center': true,
         'btn-primary': speed !== 1,
       }"
-      @click="speed = speed === 1 ? 0.75 : speed === 0.75 ? 0.5 : 1"
+      @click="toggleSpeed"
     >
       <i v-if="speed === 1" class="fas fa-tachometer-alt"></i>
       <span v-else style="font-size: 0.6em; display: block; line-height: 2.5em">
@@ -130,6 +130,9 @@ export default {
   props: {
     video: {
       default: undefined,
+    },
+    paused: {
+      default: true
     }
   },
   data() {
@@ -138,7 +141,10 @@ export default {
       layout: "horizontal",
       repeatMode: false,
       speed: 1,
-    }
+      filterList: "",
+      speaking: false,
+      audioMode: false,
+    };
   },
   computed: {
     $l1() {
@@ -184,9 +190,92 @@ export default {
         return foldedLines;
       }
     },
+  },
+  methods: {
+    togglePaused() {
+      this.$emit('togglePaused')
+    },
+    toggleSpeed() {
+      this.speed = this.speed === 1 ? 0.75 : this.speed === 0.75 ? 0.5 : 1
+      this.$emit('updateSpeed', this.speed)
+    }
   }
 };
 </script>
 
 <style>
+.quick-access-buttons {
+  position: sticky;
+  bottom: 2rem;
+  margin-top: 5rem;
+  margin-bottom: 4rem;
+  text-align: center;
+  z-index: 9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.quick-access-button.play-pause {
+  width: 3.7rem;
+  height: 3.7rem;
+}
+
+.quick-access-button {
+  border-radius: 100%;
+  width: 2.5rem;
+  height: 2.5rem;
+  line-height: 2.5rem;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  margin: 0 0.2rem;
+  padding: 0;
+}
+
+.youtube-view-wrapper.fullscreen .quick-access-buttons {
+  position: fixed;
+  width: 100%;
+  margin-bottom: 0;
+  bottom: 2rem;
+}
+
+@media (orientation: landscape) {
+  .youtube-view-wrapper.fullscreen .quick-access-buttons {
+    bottom: 0.8rem;
+  }
+}
+
+.youtube-view-line-list {
+  position: fixed;
+  width: 20rem;
+  max-height: calc(100vh - 15rem);
+  overflow: scroll;
+  border-radius: 0.3rem;
+  background: white;
+  z-index: 10;
+  left: calc(50vw - 10rem);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+  bottom: 6rem;
+}
+
+.youtube-view-line-list .youtube-view-line-list-item {
+  padding: 0.2rem 0.7rem;
+}
+
+.youtube-view-line-list-item {
+  cursor: pointer;
+}
+
+.youtube-view-line-list-item.active {
+  background-color: #eee;
+}
+
+.youtube-view-line-list-filter-wrapper {
+  padding: 0.25rem;
+  background: white;
+  width: calc(100% - 0.5rem);
+  position: sticky;
+  top: 0;
+}
 </style>

@@ -19,6 +19,7 @@
             :autoload="autoload"
             :autoplay="autoplay"
           />
+          <VideoControls v-if="video" :video="video" :paused="paused" @togglePaused="togglePaused" @updateSpeed="(s) => speed = s"/>
         </div>
       </div>
       <div class="youtube-transcript-column col-sm-12">
@@ -211,10 +212,6 @@ export default {
       type: String,
       default: "horizontal", // or 'vertical'
     },
-    speed: {
-      type: Number,
-      default: 1,
-    },
     highlight: {
       type: Array,
     },
@@ -251,6 +248,7 @@ export default {
       enableTranslationEditing: false,
       currentTime: 0,
       videoInfoKey: 0,
+      speed: 1
     };
   },
   computed: {
