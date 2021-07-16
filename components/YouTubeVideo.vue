@@ -237,13 +237,11 @@ export default {
 
 <style>
 .touch-dummy {
-  background: greenyellow;
   position: absolute;
   width: 100%;
   padding-top: 38%;
   top: 14%;
   z-index: 1;
-  opacity: 0.5;
 }
 
 .youtube {
