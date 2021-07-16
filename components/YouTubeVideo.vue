@@ -1,7 +1,13 @@
 <template>
   <div class="youtube" :key="youtube">
     <div
-      v-bind:style="{
+      class="touch-dummy"
+      @mousedown="() => (drag = false)"
+      @mousemove="() => (drag = true)"
+      @mouseup="() => (drag ? false : togglePaused())"
+    ></div>
+    <div
+      :style="{
         backgroundImage:
           'url(' + '//img.youtube.com/vi/' + youtube + '/hqdefault.jpg' + ')',
       }"
@@ -92,12 +98,12 @@ export default {
       return playing;
     },
     loadYouTubeiFrame() {
-      let that = this;
       let id = this.$el.querySelector(".youtube-iframe").getAttribute("id");
+      console.log(this.youtubeIframeID, id)
       this.removeYouTubeAPIVars();
       window.onYouTubePlayerAPIReady = () => {
         // eslint-disable-next-line no-undef
-        that.player = new YT.Player(id, {
+        this.player = new YT.Player(id, {
           height: "390",
           width: "640",
           videoId: this.youtube,
@@ -230,6 +236,16 @@ export default {
 </script>
 
 <style>
+.touch-dummy {
+  background: greenyellow;
+  position: absolute;
+  width: 100%;
+  padding-top: 38%;
+  top: 14%;
+  z-index: 1;
+  opacity: 0.5;
+}
+
 .youtube {
   padding-bottom: 56.25%;
   position: relative;

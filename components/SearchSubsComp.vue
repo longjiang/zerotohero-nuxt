@@ -252,12 +252,6 @@
         :key="`subs-search-slide-${slide}`"
         class="subs-search-slide"
       >
-        <div
-          class="touch-dummy"
-          @mousedown="() => (drag = false)"
-          @mousemove="() => (drag = true)"
-          @mouseup="() => (drag ? false : togglePaused())"
-        ></div>
         <YouTubeWithTranscript
           :video="hit.video"
           :ref="`youtube-${hitIndexFromSlideIndex(slide)}`"
@@ -270,7 +264,7 @@
         />
       </div>
     </VueSlickCarousel>
-    <div class="text-center mt-0">
+    <!-- <div class="text-center mt-0">
       <b-button
         variant="gray"
         @click="goToPreviousLine"
@@ -314,7 +308,7 @@
       >
         <i class="fa fa-chevron-right" />
       </b-button>
-    </div>
+    </div> -->
     <!--
     <p class="mt-1 text-center" v-if="youglishLang[$l2.code]">
       See examples of “{{ terms[0] }}” on
@@ -543,7 +537,6 @@ export default {
       this.goToHitIndex(index);
     },
     updatePaused(paused) {
-      console.log('up')
       if (paused !== this.paused) {
         this.paused = paused;
       }
@@ -771,6 +764,7 @@ export default {
       this.$refs.youtube.play();
     },
     togglePaused() {
+      console.log(this.$refs[`youtube-${this.hitIndex}`].$el)
       this.$refs[`youtube-${this.hitIndex}`].togglePaused();
     },
     toggleFullscreen() {
@@ -856,15 +850,6 @@ export default {
 <style lang="scss" scoped>
 .subs-search-slide {
   position: relative;
-}
-.touch-dummy {
-  background: greenyellow;
-  position: absolute;
-  width: 100%;
-  padding-top: 38%;
-  top: 14%;
-  z-index: 1;
-  opacity: 0.5;
 }
 .test-div {
   text-align: center;
