@@ -243,11 +243,15 @@
       :dots="false"
       @afterChange="vueSlickCarouselAfterChange"
     >
-      <div :class="`test-div test-div-0`">0<br />Hit {{ hitIndexFromSlideIndex(0) + 1 }}</div>
+      <!-- <div :class="`test-div test-div-0`">0<br />Hit {{ hitIndexFromSlideIndex(0) + 1 }}</div>
       <div :class="`test-div test-div-1`">1<br />Hit {{ hitIndexFromSlideIndex(1) + 1 }}</div>
-      <div :class="`test-div test-div-2`">2<br />Hit {{ hitIndexFromSlideIndex(2) + 1 }}</div>
-      <!-- <YouTubeWithTranscript
-          v-for="(hit, index) of hits"
+      <div :class="`test-div test-div-2`">2<br />Hit {{ hitIndexFromSlideIndex(2) + 1 }}</div> -->
+      <div
+        v-for="slide in [0, 1, 2]"
+        :set="(hit = hits[hitIndexFromSlideIndex(slide)])"
+        :key="`subs-search-slide-${slide}`"
+      >
+        <YouTubeWithTranscript
           :video="hit.video"
           ref="youtube"
           layout="vertical"
@@ -256,8 +260,8 @@
           :speed="speed"
           :startLineIndex="startLineIndex(hit)"
           :autoload="iOS() || (!hit.saved && navigated)"
-          :key="`youtube-with-transcript-${hit.id}-${index}`"
-        /> -->
+        />
+      </div>
     </VueSlickCarousel>
     <div class="text-center mt-0">
       <b-button
@@ -497,20 +501,20 @@ export default {
   },
   methods: {
     hitIndexFromSlideIndex(slideIndex) {
-      let currentSlideIndex = this.slideIndex
-      let s
-      let i = this.hitIndex
-      if (currentSlideIndex === 0) s = [i, i + 1, i - 1]
-      else if (currentSlideIndex === 1) s = [i - 1, i, i + 1]
-      else if (currentSlideIndex === 2) s = [i + 1, i - 1, i]
-      let hitIndex = s[slideIndex]
-      if (hitIndex > this.hits.length - 1) hitIndex = 0
-      if (hitIndex < 0) hitIndex = this.hits.length - 1
-      return hitIndex
+      let currentSlideIndex = this.slideIndex;
+      let s;
+      let i = this.hitIndex;
+      if (currentSlideIndex === 0) s = [i, i + 1, i - 1];
+      else if (currentSlideIndex === 1) s = [i - 1, i, i + 1];
+      else if (currentSlideIndex === 2) s = [i + 1, i - 1, i];
+      let hitIndex = s[slideIndex];
+      if (hitIndex > this.hits.length - 1) hitIndex = 0;
+      if (hitIndex < 0) hitIndex = this.hits.length - 1;
+      return hitIndex;
     },
     vueSlickCarouselAfterChange(slideIndex) {
       this.goToHitIndex(this.hitIndexFromSlideIndex(slideIndex));
-      this.slideIndex = slideIndex
+      this.slideIndex = slideIndex;
     },
     async remove() {
       let id = this.currentHit.video.id;
