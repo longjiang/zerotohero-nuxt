@@ -250,16 +250,22 @@
         v-for="slide in [0, 1, 2]"
         :set="(hit = hits[hitIndexFromSlideIndex(slide)])"
         :key="`subs-search-slide-${slide}`"
+        class="subs-search-slide"
       >
+        <div
+          class="touch-dummy"
+          @mousedown="() => (drag = false)"
+          @mousemove="() => (drag = true)"
+          @mouseup="() => (drag ? false : togglePaused())"
+        ></div>
         <YouTubeWithTranscript
           :video="hit.video"
-          ref="youtube"
+          :ref="`youtube-${hitIndexFromSlideIndex(slide)}`"
           layout="vertical"
           :highlight="terms"
           :hsk="level"
           :speed="speed"
           :startLineIndex="startLineIndex(hit)"
-          :autoload="iOS() || (!hit.saved && navigated)"
         />
       </div>
     </VueSlickCarousel>
@@ -535,9 +541,6 @@ export default {
       this.$emit("updated", hits);
       this.goToHitIndex(index);
     },
-    togglePaused() {
-      this.$refs.youtube.togglePaused();
-    },
     updatePaused(paused) {
       if (paused !== this.paused) {
         this.paused = paused;
@@ -766,7 +769,11 @@ export default {
       this.$refs.youtube.play();
     },
     togglePaused() {
-      if (this.$refs.youtube) this.$refs.youtube.togglePaused();
+      console.log(
+        `youtube-${this.hitIndex}`,
+        this.$refs[`youtube-${this.hitIndex}`]
+      );
+      // this.$refs[`youtube-${this.hitIndex}`].togglePaused();
     },
     toggleFullscreen() {
       if (this.hits.length > 0) this.fullscreen = !this.fullscreen;
@@ -849,6 +856,18 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.subs-search-slide {
+  position: relative;
+}
+.touch-dummy {
+  background: greenyellow;
+  position: absolute;
+  width: 100%;
+  padding-top: 38%;
+  top: 14%;
+  z-index: 1;
+  opacity: 0.5;
+}
 .test-div {
   text-align: center;
   padding: 10rem;

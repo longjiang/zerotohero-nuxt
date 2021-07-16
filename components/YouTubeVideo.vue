@@ -133,7 +133,6 @@ export default {
                   window.speechSynthesis.cancel();
                   if (this.playerIsThisPlayerNotSomeOtherPlayer() && !this.interval) {
                     this.interval = setInterval(() => {
-                      // console.log('interval', this.youtubeIframeID)
                       this.updateCurrentTime();
                     }, 50);
                   }
