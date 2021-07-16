@@ -21,7 +21,10 @@
             :key="`subs-search-${term}`"
             :style="portrait ? 'border-radius: 0' : ''"
           >
-            <div class="widget-title">“{{ term }}” in {{ tvShow ? `the TV Show "${tvShow.title}"` : 'TV Shows' }}</div>
+            <div class="widget-title">
+              “{{ term }}” in
+              {{ tvShow ? `the TV Show "${tvShow.title}"` : "TV Shows" }}
+            </div>
             <div class="widget-body">
               <SearchSubsComp
                 v-if="term"
@@ -48,7 +51,9 @@
               class="mt-5"
               :key="`${term}-images`"
             />
-            <EntryYouTube :text="term" v-if="$adminMode" class="mt-5" />
+            <no-ssr>
+              <EntryYouTube :text="term" v-if="$adminMode" class="mt-5" />
+            </no-ssr>
             <Collocations
               v-if="term"
               :text="term"
@@ -76,14 +81,14 @@ import WordPhotos from "@/lib/word-photos";
 export default {
   props: {
     term: {
-      default: ''
+      default: "",
     },
     tvShow: {
-      default: undefined
+      default: undefined,
     },
     exact: {
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
