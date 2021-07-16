@@ -266,6 +266,7 @@
           :hsk="level"
           :speed="speed"
           :startLineIndex="startLineIndex(hit)"
+          @paused="hitIndex ===  hitIndexFromSlideIndex(slide) ? updatePaused(...arguments) : false"
         />
       </div>
     </VueSlickCarousel>
@@ -542,6 +543,7 @@ export default {
       this.goToHitIndex(index);
     },
     updatePaused(paused) {
+      console.log('up')
       if (paused !== this.paused) {
         this.paused = paused;
       }
@@ -769,11 +771,7 @@ export default {
       this.$refs.youtube.play();
     },
     togglePaused() {
-      console.log(
-        `youtube-${this.hitIndex}`,
-        this.$refs[`youtube-${this.hitIndex}`]
-      );
-      // this.$refs[`youtube-${this.hitIndex}`].togglePaused();
+      this.$refs[`youtube-${this.hitIndex}`].togglePaused();
     },
     toggleFullscreen() {
       if (this.hits.length > 0) this.fullscreen = !this.fullscreen;
