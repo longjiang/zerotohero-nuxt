@@ -243,7 +243,7 @@
       :dots="false"
       @afterChange="vueSlickCarouselAfterChange"
     >
-      <div :class="`test-div test-div-0`" v-if="hitIndex > 0">0<br />Hit {{ hitIndexFromSlideIndex(0) + 1 }}</div>
+      <div :class="`test-div test-div-0`">0<br />Hit {{ hitIndexFromSlideIndex(0) + 1 }}</div>
       <div :class="`test-div test-div-1`">1<br />Hit {{ hitIndexFromSlideIndex(1) + 1 }}</div>
       <div :class="`test-div test-div-2`">2<br />Hit {{ hitIndexFromSlideIndex(2) + 1 }}</div>
       <!-- <YouTubeWithTranscript
@@ -498,7 +498,6 @@ export default {
   methods: {
     hitIndexFromSlideIndex(slideIndex) {
       let currentSlideIndex = this.slideIndex
-      if (this.hitIndex === 0) currentSlideIndex = currentSlideIndex + 1
       let s
       let i = this.hitIndex
       if (currentSlideIndex === 0) s = [i, i + 1, i - 1]
