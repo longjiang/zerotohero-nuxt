@@ -246,25 +246,19 @@
       <!-- <div :class="`test-div test-div-0`">0<br />Hit {{ hitIndexFromSlideIndex(0) + 1 }}</div>
       <div :class="`test-div test-div-1`">1<br />Hit {{ hitIndexFromSlideIndex(1) + 1 }}</div>
       <div :class="`test-div test-div-2`">2<br />Hit {{ hitIndexFromSlideIndex(2) + 1 }}</div> -->
-      <div
-        v-for="slide in [0, 1, 2]"
-        :set="(hit = hits[hitIndexFromSlideIndex(slide)])"
-        :key="`subs-search-slide-${slide}`"
-        class="subs-search-slide"
-      >
-        <YouTubeWithTranscript
-          :video="hit.video"
-          :ref="`youtube-${hitIndexFromSlideIndex(slide)}`"
-          initialLayout="vertical"
-          :highlight="terms"
-          :hsk="level"
-          :speed="speed"
-          :startLineIndex="startLineIndex(hit)"
-          :showFullscreenToggle="false"
-          @paused="hitIndex ===  hitIndexFromSlideIndex(slide) ? updatePaused(...arguments) : false"
-          :autoload="iOS()"
-        />
-      </div>
+      
+      <YouTubeWithTranscript
+        v-for="(hit, index) in hits"
+        :key="`subs-search-youtube-with-transcript-${index}`"
+        :video="hit.video"
+        initialLayout="vertical"
+        :highlight="terms"
+        :hsk="level"
+        :speed="speed"
+        :startLineIndex="startLineIndex(hit)"
+        :showFullscreenToggle="false"
+        :autoload="iOS()"
+      />
     </VueSlickCarousel>
     <!-- <div class="text-center mt-0">
       <b-button
@@ -516,7 +510,7 @@ export default {
       return hitIndex;
     },
     vueSlickCarouselAfterChange(slideIndex) {
-      this.goToHitIndex(this.hitIndexFromSlideIndex(slideIndex));
+      this.goToHitIndex(slideIndex);
       this.slideIndex = slideIndex;
     },
     async remove() {
