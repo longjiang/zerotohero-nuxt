@@ -442,9 +442,7 @@ const Dictionary = {
     }
   },
   tokenize(text) {
-    if (this.l2 === 'fra') {
-      return this.tokenizeFrench(text)
-    } else if (this.l2 === 'spa') {
+    if (this.l2 === 'spa') {
       return this.tokenizeSpanish(text)
     } else {
       let tokenized = this.tokenizeRecursively(
@@ -562,12 +560,12 @@ const Dictionary = {
     text = text.toLowerCase()
     let words = []
     if (['fra'].includes(this.l2)) {
+      words = this.words.filter(word => word.search === text).map(w => Object.assign({ score: 1 }, w))
       let stems = this.findStems(text)
       if (stems.length > 0) {
         let stemWords = this.stringsToWords(stems)
         let stemWordsWithScores = stemWords.map(w => Object.assign({ score: 1 }, w))
         words = words.concat(stemWordsWithScores)
-        words = this.words.filter(word => word.search === text).map(w => Object.assign({ score: 0.9 }, w))
       }
     }
     if (words.length === 0) {
