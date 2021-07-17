@@ -297,6 +297,9 @@
                   <h5 class="text-center mt-4">Popular Languages to Learn</h5>
                   <LanguageList
                     :codes="[
+                      'hbo',
+                      'tlh',
+                      'msa',
                       'en',
                       'lat',
                       'fin',
