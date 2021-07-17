@@ -18,8 +18,10 @@
           <!-- <Annotate :buttons="true"><p>75%</p></Annotate>
           <Annotate :buttons="true"><p>내 립스틱이 불편하면 그만 노려봐</p></Annotate>
           <Annotate :buttons="true"><p>누구보다 시크하게 도도하게 빨간 립스틱</p></Annotate> -->
-          <Annotate :buttons="true"><p>Ils sont tous de ta mère … je peux?</p></Annotate>
-          <Annotate :buttons="true"><p>Qu’est-ce qu’elle dit?</p></Annotate>
+          <!-- <Annotate :buttons="true"><p>Ils sont tous de ta mère … je peux?</p></Annotate>
+          <Annotate :buttons="true"><p>Qu’est-ce qu’elle dit?</p></Annotate> -->
+          
+          <Annotate :buttons="true"><p>pīnyīn yuèdu</p></Annotate>
           <!-- ทริปวัดใจ -->
           <!-- <Annotate><p>Hometown's Embrace</p></Annotate> -->
         </div>

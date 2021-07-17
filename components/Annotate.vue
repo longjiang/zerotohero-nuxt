@@ -363,7 +363,7 @@ export default {
           }
         }
       } else if (
-        ["en", "ko", "vi", "de", "id", "ms", "tr", "ta", "hi", "tl", "ceb"].includes(
+        ["en", "ko", "vi", "de", "id", "ms", "tr", "ta", "hi", "tl", "ceb", "cmn"].includes(
           this.$l2.code
         )
       ) {
@@ -374,7 +374,6 @@ export default {
         for (let index in this.tokenized[batchId]) {
           let item = this.tokenized[batchId][index];
           if (typeof item === "object") {
-            let text = item.text.toLowerCase();
             html += `<WordBlock :checkSaved="${this.checkSaved}" :phonetics="${this.phonetics}" :popup="${this.popup}" :sticky="${this.sticky}" :explore="${this.explore}" :token="tokenized[${batchId}][${index}]">${item.text}</WordBlock>`;
           } else {
             html += `<span>${item

@@ -17,7 +17,8 @@ const Dictionary = {
     msa: 'ind',
     ind: 'msa',
     ceb: 'tgl',
-    tgl: 'ceb'
+    tgl: 'ceb',
+    cmn: 'zho'
   },
   credit() {
     return 'The dictionary is provided by <a href="https://en.wiktionary.org/wiki/Wiktionary:Main_Page">Wiktionary</a>, which is freely distribtued under the <a href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike License</a>. The dictionary is parsed by <a href="https://github.com/tatuylonen/wiktextract">wiktextract</a>.'
@@ -74,7 +75,6 @@ const Dictionary = {
     console.log(`Wiktionary: loading ${file}`)
     let res = await axios.get(file)
     let words = !this.useJSON.includes(this.l2) ? this.parseDictionaryCSV(res.data) : this.parseDictionary(res.data)
-
     words = words.sort((a, b) => {
       if (a.head && b.head) {
         return b.head.length - a.head.length
@@ -414,6 +414,7 @@ const Dictionary = {
     let matchedText
     let matches = this.words
       .filter((word) => {
+        if (word.head.trim() === '') return false
         if (first) {
           return word.head === first
         } else {
@@ -489,7 +490,14 @@ const Dictionary = {
           candidates: longest.matches
         })
       }
-      result = result.filter(item => item !== '')
+      result = result.filter(item => { 
+        if (typeof item === 'string') {
+          return item !== ''
+        }
+        else {
+          return item.text !== ''
+        }
+      })
       result.pop() // last item is always useless, remove it
       var tokens = []
       for (let item of result) {
