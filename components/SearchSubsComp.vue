@@ -255,7 +255,7 @@
         <YouTubeWithTranscript
           :video="hit.video"
           :ref="`youtube-${hitIndexFromSlideIndex(slide)}`"
-          layout="vertical"
+          initialLayout="vertical"
           :highlight="terms"
           :hsk="level"
           :speed="speed"

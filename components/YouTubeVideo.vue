@@ -99,7 +99,6 @@ export default {
     },
     loadYouTubeiFrame() {
       let id = this.$el.querySelector(".youtube-iframe").getAttribute("id");
-      console.log(this.youtubeIframeID, id)
       this.removeYouTubeAPIVars();
       window.onYouTubePlayerAPIReady = () => {
         // eslint-disable-next-line no-undef

@@ -29,7 +29,7 @@
         d-inline-block
         text-center
       "
-      @click="$refs.youtube.$refs.transcript.goToPreviousLine()"
+      @click="$emit('goToPreviousLine')"
     >
       <i class="fas fa-arrow-up"></i>
     </button>
@@ -50,7 +50,7 @@
         d-inline-block
         text-center
       "
-      @click="$refs.youtube.$refs.transcript.goToNextLine()"
+      @click="$emit('goToNextLine')"
     >
       <i class="fas fa-arrow-down"></i>
     </button>
@@ -59,7 +59,7 @@
         'quick-access-button shadow btn-secondary d-inline-block text-center': true,
         'btn-primary': repeatMode,
       }"
-      @click="repeatMode = !repeatMode"
+      @click="toggleRepeatMode"
     >
       <i class="fas fa-undo"></i>
     </button>
@@ -68,7 +68,7 @@
         'quick-access-button shadow btn-secondary d-inline-block text-center': true,
         'btn-primary': audioMode,
       }"
-      @click="audioMode = !audioMode"
+      @click="toggleAudioMode"
     >
       <i class="fas fa-headphones"></i>
     </button>
@@ -77,7 +77,7 @@
         'quick-access-button shadow btn-secondary d-inline-block text-center': true,
         'btn-primary': layout === 'vertical',
       }"
-      @click="layout = layout === 'horizontal' ? 'vertical' : 'horizontal'"
+      @click="toggleFullscreenMode"
     >
       <i class="fas fa-expand"></i>
     </button>
@@ -133,12 +133,14 @@ export default {
     },
     paused: {
       default: true
+    },
+    layout: {
+      default: 'horizontal'
     }
   },
   data() {
     return {
       showList: false,
-      layout: "horizontal",
       repeatMode: false,
       speed: 1,
       filterList: "",
@@ -198,6 +200,17 @@ export default {
     toggleSpeed() {
       this.speed = this.speed === 1 ? 0.75 : this.speed === 0.75 ? 0.5 : 1
       this.$emit('updateSpeed', this.speed)
+    },
+    toggleRepeatMode() {
+      this.repeatMode = !this.repeatMode
+      this.$emit('updateRepeatMode', this.repeatMode)
+    },
+    toggleAudioMode() {
+      this.audioMode = !this.audioMode
+      this.$emit('updateAudioMode', this.audioMode)
+    },
+    toggleFullscreenMode() {
+      this.$emit('toggleFullscreenMode')
     }
   }
 };
