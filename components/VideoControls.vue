@@ -2,8 +2,8 @@
   <div v-if="video" class="quick-access-buttons">
     <button
       :class="{
-        'quick-access-button shadow btn-secondary d-inline-block text-center': true,
-        'btn-primary': showList,
+        'quick-access-button   d-inline-block text-center': true,
+        'quick-access-button-active': showList,
       }"
       @click="showList = !showList"
     >
@@ -11,31 +11,25 @@
     </button>
     <button
       :class="{
-        'quick-access-button shadow btn-secondary d-inline-block text-center': true,
-        'btn-primary': speed !== 1,
+        'quick-access-button   d-inline-block text-center': true,
+        'quick-access-button-active': speed !== 1,
       }"
       @click="toggleSpeed"
     >
       <i v-if="speed === 1" class="fas fa-tachometer-alt"></i>
-      <span v-else style="font-size: 0.6em; display: block; line-height: 2.5em">
+      <span v-else>
         {{ speed }}x
       </span>
     </button>
     <button
-      class="
-        quick-access-button
-        shadow
-        btn-secondary
-        d-inline-block
-        text-center
-      "
+      class="quick-access-button d-inline-block text-center"
       @click="$emit('goToPreviousLine')"
     >
       <i class="fas fa-arrow-up"></i>
     </button>
     <button
       :class="{
-        'quick-access-button play-pause shadow d-inline-block text-center btn-primary': true,
+        'quick-access-button play-pause d-inline-block text-center': true,
       }"
       @click="togglePaused"
     >
@@ -43,21 +37,15 @@
       <i v-if="!paused || speaking" class="fas fa-pause"></i>
     </button>
     <button
-      class="
-        quick-access-button
-        shadow
-        btn-secondary
-        d-inline-block
-        text-center
-      "
+      class="quick-access-button d-inline-block text-center"
       @click="$emit('goToNextLine')"
     >
       <i class="fas fa-arrow-down"></i>
     </button>
     <button
       :class="{
-        'quick-access-button shadow btn-secondary d-inline-block text-center': true,
-        'btn-primary': repeatMode,
+        'quick-access-button   d-inline-block text-center': true,
+        'quick-access-button-active': repeatMode,
       }"
       @click="toggleRepeatMode"
     >
@@ -65,8 +53,8 @@
     </button>
     <button
       :class="{
-        'quick-access-button shadow btn-secondary d-inline-block text-center': true,
-        'btn-primary': audioMode,
+        'quick-access-button   d-inline-block text-center': true,
+        'quick-access-button-active': audioMode,
       }"
       @click="toggleAudioMode"
     >
@@ -75,8 +63,8 @@
     <button
       v-if="showFullscreenToggle"
       :class="{
-        'quick-access-button shadow btn-secondary d-inline-block text-center': true,
-        'btn-primary': layout === 'vertical',
+        'quick-access-button   d-inline-block text-center': true,
+        'quick-access-button-active': layout === 'vertical',
       }"
       @click="toggleFullscreenMode"
     >
@@ -93,12 +81,12 @@
           placeholder="Filter"
         ></b-form-input>
         <b-input-group-append>
-          <b-input-group-text v-if="!filterList" class="btn btn-primary">
+          <b-input-group-text v-if="!filterList" class="btn quick-access-button-active">
             <i class="fas fa-filter"></i>
           </b-input-group-text>
           <b-input-group-text
             v-if="filterList"
-            class="btn btn-primary"
+            class="btn quick-access-button-active"
             @click="filterList = ''"
           >
             <i class="fas fa-times"></i>
@@ -133,14 +121,14 @@ export default {
       default: undefined,
     },
     paused: {
-      default: true
+      default: true,
     },
     layout: {
-      default: 'horizontal'
+      default: "horizontal",
     },
     showFullscreenToggle: {
-      default: true
-    }
+      default: true,
+    },
   },
   data() {
     return {
@@ -199,24 +187,24 @@ export default {
   },
   methods: {
     togglePaused() {
-      this.$emit('togglePaused')
+      this.$emit("togglePaused");
     },
     toggleSpeed() {
-      this.speed = this.speed === 1 ? 0.75 : this.speed === 0.75 ? 0.5 : 1
-      this.$emit('updateSpeed', this.speed)
+      this.speed = this.speed === 1 ? 0.75 : this.speed === 0.75 ? 0.5 : 1;
+      this.$emit("updateSpeed", this.speed);
     },
     toggleRepeatMode() {
-      this.repeatMode = !this.repeatMode
-      this.$emit('updateRepeatMode', this.repeatMode)
+      this.repeatMode = !this.repeatMode;
+      this.$emit("updateRepeatMode", this.repeatMode);
     },
     toggleAudioMode() {
-      this.audioMode = !this.audioMode
-      this.$emit('updateAudioMode', this.audioMode)
+      this.audioMode = !this.audioMode;
+      this.$emit("updateAudioMode", this.audioMode);
     },
     toggleFullscreenMode() {
-      this.$emit('toggleFullscreenMode')
-    }
-  }
+      this.$emit("toggleFullscreenMode");
+    },
+  },
 };
 </script>
 
@@ -231,21 +219,20 @@ export default {
   padding: 0.5rem;
 }
 
-.quick-access-button.play-pause {
-  width: 3.7rem;
-  height: 3.7rem;
+.quick-access-button {
+  border: none;
+  padding: 0.5rem;
+  background: none;
+  margin: 0 0.5rem;
+  color: white;
 }
 
-.quick-access-button {
-  border-radius: 100%;
-  width: 2.5rem;
-  height: 2.5rem;
-  line-height: 2.5rem;
-  border: none;
-  cursor: pointer;
-  text-align: center;
-  margin: 0 0.2rem;
-  padding: 0;
+.quick-access-button-active {
+  color: #fd4f1c;
+}
+
+.quick-access-button.play-pause {
+  font-size: 1.5em;
 }
 
 @media (orientation: landscape) {
