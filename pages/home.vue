@@ -61,13 +61,13 @@ export default {
   methods: {
     hasTalks() {
       return (
-        this.$store.state.shows.talks &&
+        typeof this.$store.state.shows.talks !== 'undefined' &&
         this.$store.state.shows.talks[this.$l2.code]
       );
     },
     hasTVShows() {
       return (
-        this.$store.state.shows.tvShows &&
+        typeof this.$store.state.shows.tvShows !== 'undefined'  &&
         this.$store.state.shows.tvShows[this.$l2.code]
       );
     },
