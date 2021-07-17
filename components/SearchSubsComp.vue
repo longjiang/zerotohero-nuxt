@@ -242,6 +242,7 @@
       :arrows="false"
       :dots="false"
       lazyLoad="ondemand"
+      ref="carousel"
       @afterChange="vueSlickCarouselAfterChange"
     >
       <!-- <div :class="`test-div test-div-0`">0<br />Hit {{ hitIndexFromSlideIndex(0) + 1 }}</div>
@@ -734,14 +735,17 @@ export default {
     goToPrevHit() {
       this.currentHit = this.prevHit;
       this.navigated = true;
+      this.$refs.carousel.goTo(this.hitIndex)
     },
     goToNextHit() {
       this.currentHit = this.nextHit;
       this.navigated = true;
+      this.$refs.carousel.goTo(this.hitIndex)
     },
     goToHit(hit) {
       this.currentHit = hit;
       this.navigated = true;
+      this.$refs.carousel.goTo(this.hitIndex)
       setTimeout(() => {
         document.activeElement.blur();
       }, 100);
@@ -893,7 +897,7 @@ export default {
   margin-top: 0 !important;
 }
 .search-subs .playlist-dropdown {
-  .dropdown-menu {
+  ::v-deep .dropdown-menu {
     margin-top: 2.2rem;
     height: calc(100vh - 3rem);
     border: none;
