@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-input
+    <b-form-input
       type="text"
       v-model.lazy="newShowTitle"
       placeholder="Title"

@@ -47,9 +47,9 @@
       <b-form-radio v-model="captions" class="d-inline-block mr-3" value="all">
         All
       </b-form-radio>
-      <b-checkbox v-model="long" class="d-inline-block mr-3">
+      <b-form-checkbox v-model="long" class="d-inline-block mr-3">
         Only long videos (20m+)
-      </b-checkbox>
+      </b-form-checkbox>
       <b-button class="btn-small btn-primary ml-3" @click="forceRefresh">
         <i class="fa fa-sync-alt mr-1"></i>
         Force Refresh

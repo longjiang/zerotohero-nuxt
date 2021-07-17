@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="mt-3">
-      <b-checkbox v-if="$l2.code === 'ko'" class="mb-2" v-model="showByeonggi">
+      <b-form-checkbox v-if="$l2.code === 'ko'" class="mb-2" v-model="showByeonggi">
         Show hanja next to hanguel (
         <a
           href="https://ko.wikipedia.org/wiki/%ED%95%9C%EA%B8%80%EC%A0%84%EC%9A%A9%EA%B3%BC_%EA%B5%AD%ED%95%9C%EB%AC%B8%ED%98%BC%EC%9A%A9#%ED%95%9C%EC%9E%90_%EB%B3%91%EA%B8%B0"
@@ -11,17 +11,17 @@
           <em>byeonggi</em>
         </a>
         )
-      </b-checkbox>
+      </b-form-checkbox>
       <template v-if="$hasFeature('transliteration')">
-        <b-checkbox v-model="showPinyin" class="mb-2">
+        <b-form-checkbox v-model="showPinyin" class="mb-2">
           Show
           <span v-if="['zh', 'lzh'].includes($l2.code)">pinyin</span>
           <span v-else-if="$l2.code === 'ja'">furigana</span>
           <span v-else>romanization</span>
           above words
-        </b-checkbox>
+        </b-form-checkbox>
 
-        <b-checkbox
+        <b-form-checkbox
           class="mb-2"
           v-if="
             $hasFeature('dictionary') &&
@@ -43,13 +43,13 @@
           v-model="showDefinition"
         >
           Show definition above words
-        </b-checkbox>
+        </b-form-checkbox>
       </template>
-      <b-checkbox class="mb-2" v-model="showTranslation">
+      <b-form-checkbox class="mb-2" v-model="showTranslation">
         Show translation
-      </b-checkbox>
-      <b-checkbox class="mb-2" v-model="showQuiz">Show pop quiz</b-checkbox>
-      <b-checkbox class="mb-2" v-model="disableAnnotation">Disable popup dictionary</b-checkbox>
+      </b-form-checkbox>
+      <b-form-checkbox class="mb-2" v-model="showQuiz">Show pop quiz</b-form-checkbox>
+      <b-form-checkbox class="mb-2" v-model="disableAnnotation">Disable popup dictionary</b-form-checkbox>
       <b-button-group
         v-if="$l2.han"
         class="d-block mb-2"

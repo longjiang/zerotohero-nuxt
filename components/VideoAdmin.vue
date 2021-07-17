@@ -118,15 +118,15 @@
           </span>
         </template>
         <div class="video-admin-checkboxes">
-          <b-checkbox v-model="showSubsEditing" class="mt-2 d-inline-block">
+          <b-form-checkbox v-model="showSubsEditing" class="mt-2 d-inline-block">
             Show Subs Editing
-          </b-checkbox>
-          <b-checkbox
+          </b-form-checkbox>
+          <b-form-checkbox
             v-model="enableTranslationEditing"
             class="mt-2 d-inline-block"
           >
             Enable Translation Editing
-          </b-checkbox>
+          </b-form-checkbox>
         </div>
       </div>
       <div

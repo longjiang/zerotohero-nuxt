@@ -83,6 +83,10 @@ export default {
       defaultImage: '/img/placeholder.jpg'
     }]
   ],
+  bootstrapVue: {
+    components: ['BFormInput', 'BFormGroup', 'BFormSelect', 'BFormTextarea', 'BFormSelectOption', 'BButton', 'BProgress', 'BTable', 
+    'BDropdown', 'BDropdownItem', 'BFormCheckbox', 'BFormRadio', 'BButtonGroup', 'BInputGroup', 'BInputGroupAppend'],
+  },
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [

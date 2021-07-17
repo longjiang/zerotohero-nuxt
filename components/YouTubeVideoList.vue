@@ -71,12 +71,12 @@
         </drop>
       </div>
       <div class="mt-1">
-        <b-checkbox class="mt-2 d-inline-block" v-model="hideVideosWithoutSubs">
+        <b-form-checkbox class="mt-2 d-inline-block" v-model="hideVideosWithoutSubs">
           Hide Videos Without Subs
-        </b-checkbox>
-        <b-checkbox class="mt-2 d-inline-block" v-model="showSubsEditing">
+        </b-form-checkbox>
+        <b-form-checkbox class="mt-2 d-inline-block" v-model="showSubsEditing">
           Show Subs Editing
-        </b-checkbox>
+        </b-form-checkbox>
       </div>
     </div>
     <div class="youtube-videos">

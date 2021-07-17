@@ -32,9 +32,9 @@
       <div class="row">
         <div class="col-sm-12">
           <h4>General settings</h4>
-          <b-checkbox v-model="subsSearchLimit">
+          <b-form-checkbox v-model="subsSearchLimit">
             Limit "this word in TV Shows" search result (faster)
-          </b-checkbox>
+          </b-form-checkbox>
           <hr />
           <h4>Settings specific to {{ $l2.name }}:</h4>
           <AnnotationSettings />
@@ -84,7 +84,7 @@
             Admin mode
           </b-form-checkbox>
           <b-input-group v-else>
-            <b-input
+            <b-form-input
               v-model.lazy="adminModePasscode"
               placeholder="Enter passcode to enable admin mode."
             />

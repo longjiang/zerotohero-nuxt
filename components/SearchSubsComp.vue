@@ -27,7 +27,7 @@
         >
           <i class="fas fa-filter" />
         </b-button>
-        <b-input
+        <b-form-input
           type="text"
           size="sm"
           class="d-inline-block mr-1 ml-1"
