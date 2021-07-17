@@ -69,6 +69,7 @@
         @currentTime="updateCurrentTime"
         @speechStart="speechStart"
         @speechEnd="speechEnd"
+        @updateLayout="(l) => layout = l"
       />
     </div>
   </div>
@@ -450,5 +451,9 @@ export default {
   height: 100vh;
   background: white;
   z-index: 9;
+}
+
+>>> .video-area {
+  background: black;
 }
 </style>

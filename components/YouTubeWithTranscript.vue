@@ -24,11 +24,12 @@
             :video="video"
             :paused="paused"
             :layout="layout"
+            :showFullscreenToggle="showFullscreenToggle"
             @togglePaused="togglePaused"
-            @updateAudioMode="(a) => this.audioMode = a"
+            @updateAudioMode="(a) => (this.audioMode = a)"
             @updateSpeed="(s) => (speed = s)"
             @toggleFullscreenMode="toggleFullscreenMode"
-            @updateRepeatMode="(r) => this.repeatMode = r"
+            @updateRepeatMode="(r) => (this.repeatMode = r)"
             @goToPreviousLine="$refs.transcript.goToPreviousLine()"
             @goToNextLine="$refs.transcript.goToNextLine()"
           />
@@ -161,20 +162,21 @@
               :autoload="autoload"
               :autoplay="autoplay"
             />
+            <VideoControls
+              v-if="video"
+              :video="video"
+              :paused="paused"
+              :layout="layout"
+              :showFullscreenToggle="showFullscreenToggle"
+              @togglePaused="togglePaused"
+              @updateAudioMode="(a) => (this.audioMode = a)"
+              @updateSpeed="(s) => (speed = s)"
+              @toggleFullscreenMode="toggleFullscreenMode"
+              @updateRepeatMode="(r) => (this.repeatMode = r)"
+              @goToPreviousLine="$refs.transcript.goToPreviousLine()"
+              @goToNextLine="$refs.transcript.goToNextLine()"
+            />
           </div>
-          <VideoControls
-            v-if="video"
-            :video="video"
-            :paused="paused"
-            :layout="layout"
-            @togglePaused="togglePaused"
-            @updateAudioMode="(a) => this.audioMode = a"
-            @updateSpeed="(s) => (speed = s)"
-            @toggleFullscreenMode="toggleFullscreenMode"
-            @updateRepeatMode="(r) => this.repeatMode = r"
-            @goToPreviousLine="$refs.transcript.goToPreviousLine()"
-            @goToNextLine="$refs.transcript.goToNextLine()"
-          />
         </div>
       </div>
       <div class="row">
@@ -261,6 +263,9 @@ export default {
     stopLineIndex: {
       default: -1,
     },
+    showFullscreenToggle: {
+      default: true,
+    }
   },
   data() {
     return {
@@ -274,7 +279,7 @@ export default {
       currentTime: 0,
       videoInfoKey: 0,
       speed: 1,
-      layout: 'horizontal'
+      layout: this.initialLayout,
     };
   },
   computed: {
@@ -418,8 +423,9 @@ export default {
       }
     },
     toggleFullscreenMode() {
-      this.layout = this.layout === 'horizontal' ? 'vertical' : 'horizontal'
-    }
+      this.layout = this.layout === "horizontal" ? "vertical" : "horizontal";
+      this.$emit("updateLayout", this.layout);
+    },
   },
   watch: {
     startLineIndex() {

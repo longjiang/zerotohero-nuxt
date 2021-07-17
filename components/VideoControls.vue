@@ -73,6 +73,7 @@
       <i class="fas fa-headphones"></i>
     </button>
     <button
+      v-if="showFullscreenToggle"
       :class="{
         'quick-access-button shadow btn-secondary d-inline-block text-center': true,
         'btn-primary': layout === 'vertical',
@@ -136,6 +137,9 @@ export default {
     },
     layout: {
       default: 'horizontal'
+    },
+    showFullscreenToggle: {
+      default: true
     }
   },
   data() {
@@ -219,14 +223,12 @@ export default {
 <style>
 .quick-access-buttons {
   position: sticky;
-  bottom: 2rem;
-  margin-top: 5rem;
-  margin-bottom: 4rem;
   text-align: center;
-  z-index: 9;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: black;
+  padding: 0.5rem;
 }
 
 .quick-access-button.play-pause {
@@ -244,13 +246,6 @@ export default {
   text-align: center;
   margin: 0 0.2rem;
   padding: 0;
-}
-
-.youtube-view-wrapper.fullscreen .quick-access-buttons {
-  position: fixed;
-  width: 100%;
-  margin-bottom: 0;
-  bottom: 2rem;
 }
 
 @media (orientation: landscape) {

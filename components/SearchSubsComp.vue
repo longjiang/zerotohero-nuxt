@@ -260,6 +260,7 @@
           :hsk="level"
           :speed="speed"
           :startLineIndex="startLineIndex(hit)"
+          :showFullscreenToggle="false"
           @paused="hitIndex ===  hitIndexFromSlideIndex(slide) ? updatePaused(...arguments) : false"
         />
       </div>
