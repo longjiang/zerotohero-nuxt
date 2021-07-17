@@ -262,6 +262,7 @@
           :startLineIndex="startLineIndex(hit)"
           :showFullscreenToggle="false"
           @paused="hitIndex ===  hitIndexFromSlideIndex(slide) ? updatePaused(...arguments) : false"
+          :autoload="iOS()"
         />
       </div>
     </VueSlickCarousel>
