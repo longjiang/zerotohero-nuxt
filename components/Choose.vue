@@ -1,124 +1,5 @@
 <template>
   <div>
-    <div class="container mb-4" v-if="languages.length > 0">
-      <div class="mt-4 text-dark p-3">
-        <div class="text-center">
-          <p style="font-size: 1.5rem">
-            Learn the top
-            <strong><em>business</em></strong>
-            languages of the world
-          </p>
-          <p class="small">
-            Ranked by % GDP (PPP 2018) according to the IMF. (
-            <a
-              href="https://www.reddit.com/r/languagelearning/comments/9i72xd/the_20_languages_that_produce_86_of_the_worlds/"
-              target="_blank"
-            >
-              Source
-            </a>
-            )
-          </p>
-        </div>
-      </div>
-      <div class="row language-icons p-3">
-        <div
-          class="col-xl-3 col-lg-4 col-md-6 col-12"
-          v-for="code in [
-            'en',
-            'zh',
-            'es',
-            'ar',
-            'ja',
-            'de',
-            'ru',
-            'hi',
-            'pt',
-            'id',
-            'fr',
-            'it',
-            'tr',
-            'ko',
-            'fa',
-            'bn',
-            'nl',
-            'th',
-            'pl',
-            'pa',
-          ]"
-          :key="`lang-logo-${code}`"
-        >
-          <div class="mt-3 mb-3">
-            <LanguageLogo
-              :l1="language(['en', 'lzh'].includes(code) ? 'zh' : 'en')"
-              :l2="language(code)"
-              class="choose-lang-logo"
-            />
-          </div>
-        </div>
-      </div>
-      <div class="mt-5 text-dark">
-        <div class="text-center">
-          <p style="font-size: 1.5rem">
-            Learn
-            <strong><em>Ancient</em></strong>
-            languages
-          </p>
-        </div>
-      </div>
-      <div class="row language-icons p-3">
-        <div
-          class="col-xl-3 col-lg-4 col-md-6 col-12"
-          v-for="code in ['hbo', 'lzh']"
-          :key="`lang-logo-${code}`"
-        >
-          <div class="mt-3 mb-3">
-            <LanguageLogo
-              :l1="language(['en', 'lzh'].includes(code) ? 'zh' : 'en')"
-              :l2="language(code)"
-              class="choose-lang-logo"
-            />
-          </div>
-        </div>
-      </div>
-
-      <div class="mt-5 text-dark">
-        <div class="text-center">
-          <p style="font-size: 1.5rem">
-            Learn languages of the
-            <strong><em>Sinosphere</em></strong>
-          </p>
-        </div>
-      </div>
-      <div class="row language-icons p-3">
-        <div
-          class="col-xl-3 col-lg-4 col-md-6 col-12"
-          v-for="code in ['zh', 'yue', 'nan', 'hak', 'lzh', 'ko', 'ja', 'vi']"
-          :key="`lang-logo-${code}`"
-        >
-          <div class="mt-3 mb-3">
-            <LanguageLogo
-              :l1="language(['en', 'lzh'].includes(code) ? 'zh' : 'en')"
-              :l2="language(code)"
-              class="choose-lang-logo"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="mt-5 text-dark p-3">
-      <div class="text-center">
-        <p style="font-size: 1.5rem">
-          Resources for learning
-          <strong><em>hundreds</em></strong>
-          of languages
-        </p>
-        <p>
-          学习
-          <strong>数百种</strong>
-          语言的资源
-        </p>
-      </div>
-    </div>
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
@@ -127,44 +8,7 @@
             class="mt-3 mb-4"
             :preferredLanguages="languages"
           />
-          <ul v-if="languages && languages.length > 0" class="language-list">
-            <li
-              v-for="language in languages"
-              :key="`lang-${language.code}`"
-              class="language-list-item"
-              :set="
-                (base = `/${language.code !== 'en' ? 'en' : 'zh'}/${
-                  language.code
-                }/`)
-              "
-            >
-              <router-link
-                :to="`${base}youtube/browse/all/all/0`"
-                :class="{
-                  'feature-icon mr-1': true,
-                  transparent: !hasYouTube(english, language),
-                }"
-              >
-                <i class="fab fa-youtube" />
-              </router-link>
-              <router-link
-                :to="`${base}dictionary`"
-                :class="{
-                  'feature-icon mr-1': true,
-                  transparent: !hasDictionary(english, language),
-                }"
-              >
-                <i class="fas fa-book" />
-              </router-link>
-              <router-link :to="base">
-                {{
-                  language.code !== "en"
-                    ? language.name.replace(/ \(.*\)/gi, "")
-                    : "英语"
-                }}
-              </router-link>
-            </li>
-          </ul>
+          <LanguageList :langs="languages" />
         </div>
       </div>
       <div class="row">
@@ -217,28 +61,8 @@ export default {
     language(code) {
       return this.$languages.l1s.find((language) => language.code === code);
     },
-    hasDictionary(l1, l2) {
-      return this.hasFeature(l1, l2, "dictionary") || l2.code === "en";
-    },
-    hasYouTube(l1, l2) {
-      return this.$languages.hasYouTube(l1, l2);
-    },
-    hasFeature(l1, l2, feature) {
-      return this.$languages
-        .getFeatures(
-          {
-            l1,
-            l2,
-          },
-          process.browser
-        )
-        .includes(feature);
-    },
   },
   computed: {
-    english() {
-      return this.$languages.l1s.find((language) => language.code === "en");
-    },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -246,6 +70,10 @@ export default {
     $l2() {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
+    },
+
+    english() {
+      return this.$languages.l1s.find((language) => language.code === "en");
     },
   },
   async mounted() {
@@ -288,51 +116,6 @@ export default {
 
 .logo-grid > * {
   width: 13rem;
-}
-
-.language-list {
-  color: #666;
-  list-style: none;
-  padding: 0;
-  column-gap: 2rem;
-}
-
-@media (min-width: 576px) {
-  .language-list {
-    column-count: 1;
-  }
-}
-
-@media (min-width: 768px) {
-  .language-list {
-    column-count: 2;
-  }
-}
-
-@media (min-width: 992px) {
-  .language-list {
-    column-count: 3;
-  }
-}
-
-@media (min-width: 1200px) {
-  .language-list {
-    column-count: 4;
-  }
-}
-
-.language-list-item a {
-  color: #666;
-}
-.language-list-item .feature-icon {
-  color: #ccc;
-}
-
-.bg-dark .language-list-item a {
-  color: #b9aba6;
-}
-.bg-dark .language-list-item .feature-icon {
-  color: #726661;
 }
 
 .bg-dark .text-dark {

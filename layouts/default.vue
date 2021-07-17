@@ -137,7 +137,7 @@
             </div>
             <div class="row pt-5">
               <div class="col-sm-6">
-                <div class="home-card shadow">
+                <div class="home-card">
                   <router-link to="/en/zh">
                     <img
                       src="/img/czh-logo-dark.png"
@@ -214,7 +214,7 @@
                 </div>
               </div>
               <div class="col-sm-6">
-                <div class="home-card shadow">
+                <div class="home-card">
                   <router-link to="/zh/en">
                     <img
                       src="/img/ezh-logo-dark.png"
@@ -291,6 +291,70 @@
                 </div>
               </div>
             </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="home-card">
+                  <h5 class="text-center mt-4">Popular Languages to Learn</h5>
+                  <LanguageList
+                    :codes="[
+                      'en',
+                      'lat',
+                      'fin',
+                      'hbs',
+                      'lav',
+                      'cat',
+                      'el',
+                      'hun',
+                      'epo',
+                      'swe',
+                      'ron',
+                      'hye',
+                      'nob',
+                      'cmn',
+                      'bul',
+                      'nno',
+                      'gle',
+                      'dan',
+                      'ces',
+                      'grc',
+                      'lit',
+                      'glg',
+                      'isl',
+                      'enm',
+                      'zh',
+                      'es',
+                      'ar',
+                      'ja',
+                      'de',
+                      'ru',
+                      'hi',
+                      'pt',
+                      'id',
+                      'fr',
+                      'it',
+                      'tr',
+                      'ko',
+                      'fa',
+                      'bn',
+                      'nl',
+                      'th',
+                      'pl',
+                      'pa',
+                      'yue',
+                      'nan',
+                      'hak',
+                      'lzh',
+                      'ko',
+                      'ja',
+                      'vi',
+                      'lzh',
+                    ]"
+                    class="mt-4"
+                    :sort="true"
+                  />
+                </div>
+              </div>
+            </div>
 
             <div v-if="history.length > 0">
               <h5 class="text-center mt-5 mb-2">Your Recently Viewed Items</h5>
@@ -343,6 +407,20 @@
               </div>
             </div>
           </div>
+        </div>
+      </div>
+      <div class="mt-5 text-dark p-3">
+        <div class="text-center">
+          <p style="font-size: 1.5rem">
+            Resources for learning
+            <strong><em>hundreds</em></strong>
+            of languages
+          </p>
+          <p>
+            学习
+            <strong>数百种</strong>
+            语言的资源
+          </p>
         </div>
       </div>
       <Choose :compact="true" />
@@ -507,6 +585,7 @@ export default {
   padding: 2rem;
   margin-bottom: 2rem;
   border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(68, 75, 134, 0.2);
 }
 
 .sale-card {
