@@ -24,16 +24,6 @@ import Helper from "@/lib/helper";
 import $ from "jquery";
 
 export default {
-  data() {
-    return {
-      youtubeIframeID: "youtube-" + Helper.uniqueId(),
-      time: 0,
-      neverPlayed: true,
-      player: undefined,
-      currentTime: 0,
-      interval: undefined,
-    };
-  },
   props: {
     youtube: {
       type: String,
@@ -56,6 +46,16 @@ export default {
       type: Number,
       default: 1,
     },
+  },
+  data() {
+    return {
+      youtubeIframeID: "youtube-" + this.youtube,
+      time: 0,
+      neverPlayed: true,
+      player: undefined,
+      currentTime: 0,
+      interval: undefined,
+    };
   },
   mounted() {
     if (this.autoload) {

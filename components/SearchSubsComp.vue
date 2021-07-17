@@ -236,8 +236,20 @@
         Refresh
       </b-button>
     </div>
-
-    <VueSlickCarousel
+    <YouTubeWithTranscript
+      v-if="currentHit"
+      :video="currentHit.video"
+      :ref="`youtube-${hitIndex}`"
+      initialLayout="vertical"
+      :highlight="terms"
+      :hsk="level"
+      :speed="speed"
+      :startLineIndex="startLineIndex(currentHit)"
+      :showFullscreenToggle="false"
+      :autoload="iOS() || navigated"
+      :autoplay="navigated"
+    />
+    <!-- <VueSlickCarousel
       v-if="hits && hits.length > 0"
       :arrows="false"
       :dots="false"
@@ -245,81 +257,34 @@
       ref="carousel"
       @afterChange="vueSlickCarouselAfterChange"
     >
-      <!-- <div :class="`test-div test-div-0`">0<br />Hit {{ hitIndexFromSlideIndex(0) + 1 }}</div>
-      <div :class="`test-div test-div-1`">1<br />Hit {{ hitIndexFromSlideIndex(1) + 1 }}</div>
-      <div :class="`test-div test-div-2`">2<br />Hit {{ hitIndexFromSlideIndex(2) + 1 }}</div> -->
-      
-      <YouTubeWithTranscript
-        v-for="(hit, index) in hits"
-        :key="`subs-search-youtube-with-transcript-${index}`"
-        :video="hit.video"
-        initialLayout="vertical"
-        :highlight="terms"
-        :hsk="level"
-        :speed="speed"
-        :startLineIndex="startLineIndex(hit)"
-        :showFullscreenToggle="false"
-        :autoload="iOS()"
-        :showLineList="false"
-      />
-    </VueSlickCarousel>
-    <!-- <div class="text-center mt-0">
-      <b-button
-        variant="gray"
-        @click="goToPreviousLine"
-        size="sm"
-        title="Go back to previous line"
-        class="mr-1 ml-1"
+      <div
+        v-for="slide in [0, 1, 2]"
+        :set1="(index = hitIndexFromSlideIndex(slide))"
+        :key="`test-div-${slide}`"
       >
-        <i class="fa fa-chevron-left" />
-      </b-button>
-      <b-button
-        variant="gray"
-        size="sm"
-        :class="{
-          'mr-1 ml-1': true,
-          'bg-secondary border-secondary text-white': speed <= 0.75,
-        }"
-        @click="toggleSpeed()"
-      >
-        <i class="fas fa-tachometer-alt" v-if="speed === 1"></i>
-        <span v-else>{{ speed }}x</span>
-      </b-button>
-      <b-button
-        variant="dark"
-        :class="{
-          'quick-access-button shadow d-inline-block text-center mr-1 ml-1': true,
-        }"
-        @click="togglePaused"
-      >
-        <i v-if="paused" class="fas fa-play"></i>
-        <i v-if="!paused" class="fas fa-pause"></i>
-      </b-button>
-      <b-button variant="gray" @click="rewind" size="sm" class="'ml-1 mr-1">
-        <i class="fa fa-undo" />
-      </b-button>
-      <b-button
-        variant="gray"
-        @click="goToNextLine"
-        size="sm"
-        title="Advance to next line"
-        class="mr-1 ml-1"
-      >
-        <i class="fa fa-chevron-right" />
-      </b-button>
-    </div> -->
-    <!--
-    <p class="mt-1 text-center" v-if="youglishLang[$l2.code]">
-      See examples of “{{ terms[0] }}” on
-      <a
-        :href="`https://youglish.com/pronounce/${terms[0]}/${
-          youglishLang[$l2.code]
-        }`"
-        target="youglish"
-        >YouGlish</a
-      >
-    </p>
-    -->
+        <div
+          :class="`test-div test-div-${slide}`"
+        >
+          {{ slide }}
+          <br />
+          Hit {{ index + 1 }}
+        </div>
+
+        <YouTubeWithTranscript
+          :video="hits[index].video"
+          :ref="`youtube-${index}`"
+          initialLayout="vertical"
+          :highlight="terms"
+          :hsk="level"
+          :speed="speed"
+          :startLineIndex="startLineIndex(hits[index])"
+          :showFullscreenToggle="false"
+          @paused="hitIndex ===  index ? updatePaused(...arguments) : false"
+          :key="`slide-${slide}-hit-${index}`"
+          :autoload="iOS()"
+        />
+      </div>
+    </VueSlickCarousel> -->
   </div>
 </template>
 
@@ -510,10 +475,11 @@ export default {
       let hitIndex = s[slideIndex];
       if (hitIndex > this.hits.length - 1) hitIndex = 0;
       if (hitIndex < 0) hitIndex = this.hits.length - 1;
+      console.log(slideIndex, hitIndex)
       return hitIndex;
     },
     vueSlickCarouselAfterChange(slideIndex) {
-      this.goToHitIndex(slideIndex);
+      this.goToHitIndex(this.hitIndexFromSlideIndex(slideIndex));
       this.slideIndex = slideIndex;
     },
     async remove() {
@@ -735,17 +701,14 @@ export default {
     goToPrevHit() {
       this.currentHit = this.prevHit;
       this.navigated = true;
-      this.$refs.carousel.goTo(this.hitIndex)
     },
     goToNextHit() {
       this.currentHit = this.nextHit;
       this.navigated = true;
-      this.$refs.carousel.goTo(this.hitIndex)
     },
     goToHit(hit) {
       this.currentHit = hit;
       this.navigated = true;
-      this.$refs.carousel.goTo(this.hitIndex)
       setTimeout(() => {
         document.activeElement.blur();
       }, 100);
@@ -766,7 +729,7 @@ export default {
       this.$refs.youtube.play();
     },
     togglePaused() {
-      console.log(this.$refs[`youtube-${this.hitIndex}`].$el)
+      console.log(this.$refs[`youtube-${this.hitIndex}`].$el);
       this.$refs[`youtube-${this.hitIndex}`].togglePaused();
     },
     toggleFullscreen() {
@@ -855,8 +818,8 @@ export default {
 }
 .test-div {
   text-align: center;
-  padding: 10rem;
-  font-size: 4em;
+  padding: 2rem;
+  font-size: 2em;
   color: white;
   background: #ccc;
   &.test-div-0 {
