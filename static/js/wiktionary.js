@@ -577,7 +577,8 @@ const Dictionary = {
         words = words.concat(stemWordsWithScores)
       }
     }
-    if (words.length === 0) {
+    words = this.words.filter(word => word.search === text).map(w => Object.assign({ score: 1 }, w))
+    if (words.length === 0 && this.words.length > 200000) {
       for (let word of this.words) {
         let search = word.search ? word.search : undefined
         if (search) {
