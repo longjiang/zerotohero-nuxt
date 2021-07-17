@@ -19,7 +19,7 @@
   </div>
 </template>
 <script>
-import SketchEngineCorpora from '@/lib/sketch-engine-corpora'
+import axios from 'axios'
 export default {
   data() {
     return {
@@ -46,17 +46,21 @@ export default {
       return textFile;
     },
     async exportCorporaCSV() {
-      let data = SketchEngineCorpora.map(corpus => {
-        let o = {}
-        for (let f of this.fields) {
-          let info = corpus[f]
-          if (f === 'wordcount') info = corpus.sizes.wordcount
-          o[f] = info
-        }
-        return o
-      })
-      let csv = Papa.unparse(data);
-      this.href = this.makeTextFile(csv);
+      let res = await axios.get('/data/sketch-engine/sketch-engine-corpora.json.txt')
+      if (res && res.data) {
+        let SketchEngineCorpora = res.data
+        let data = SketchEngineCorpora.map(corpus => {
+          let o = {}
+          for (let f of this.fields) {
+            let info = corpus[f]
+            if (f === 'wordcount') info = corpus.sizes.wordcount
+            o[f] = info
+          }
+          return o
+        })
+        let csv = Papa.unparse(data);
+        this.href = this.makeTextFile(csv);
+      }
     },
   },
 }

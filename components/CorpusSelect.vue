@@ -58,6 +58,7 @@ export default {
     return {
       SketchEngine,
       corpname: SketchEngine.corpname(this.$l2),
+      corpora: undefined
     };
   },
   computed: {
@@ -69,17 +70,9 @@ export default {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
-    corpora() {
-      let corpora = SketchEngine.getCorpora();
-      corpora = corpora
-        .filter(
-          (corpus) =>
-            [this.$l2.code].concat(this.$l2.locales || []).includes(corpus.language_id) &&
-            !(corpus.tags && corpus.tags.includes("learner"))
-        )
-        .sort((a, b) => b['wordcount'] - a['wordcount']);
-      return corpora;
-    },
+  },
+  async mounted() {
+    this.corpora = await this.getCorpora()
   },
   watch: {
     corpname() {
@@ -89,6 +82,19 @@ export default {
       location.reload(); // Otherwise users won't see the new collocations and example sentences, leaving them confused.
     },
   },
+  methods: {
+    async getCorpora() {
+      let corpora = await SketchEngine.getCorpora();
+      corpora = corpora
+        .filter(
+          (corpus) =>
+            [this.$l2.code].concat(this.$l2.locales || []).includes(corpus.language_id) &&
+            !(corpus.tags && corpus.tags.includes("learner"))
+        )
+        .sort((a, b) => b['wordcount'] - a['wordcount']);
+      return corpora;
+    },
+  }
 };
 </script>
 
