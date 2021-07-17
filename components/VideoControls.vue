@@ -21,6 +21,14 @@
       <span v-else>{{ speed }}x</span>
     </button>
     <button
+      :class="{
+        'quick-access-button d-inline-block text-center': true
+      }"
+      @click="rewind"
+    >
+      <i class="fas fa-undo"></i>
+    </button>
+    <button
       class="quick-access-button d-inline-block text-center"
       @click="$emit('goToPreviousLine')"
     >
@@ -48,7 +56,7 @@
       }"
       @click="toggleRepeatMode"
     >
-      <i class="fas fa-undo"></i>
+      <i class="fas fa-sync-alt"></i>
     </button>
     <button
       :class="{
@@ -184,6 +192,9 @@ export default {
     toggleFullscreenMode() {
       this.$emit("toggleFullscreenMode");
     },
+    rewind() {
+      this.$emit("rewind");
+    },
     getSortedLines() {
       if (this.video && this.video.subs_l2) {
         console.log(
@@ -232,7 +243,7 @@ export default {
   border: none;
   padding: 0.5rem;
   background: none;
-  margin: 0 0.5rem;
+  margin: 0 0.3rem;
   color: white;
 }
 

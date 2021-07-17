@@ -238,9 +238,9 @@
     </div>
     <YouTubeWithTranscript
       v-if="currentHit"
+      initialLayout="vertical"
       :video="currentHit.video"
       :ref="`youtube-${hitIndex}`"
-      initialLayout="vertical"
       :highlight="terms"
       :hsk="level"
       :speed="speed"
@@ -248,6 +248,7 @@
       :showFullscreenToggle="false"
       :autoload="iOS() || navigated"
       :autoplay="navigated"
+      :showLineList="false"
     />
     <!-- <VueSlickCarousel
       v-if="hits && hits.length > 0"
