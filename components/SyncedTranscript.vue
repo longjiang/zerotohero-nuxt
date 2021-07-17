@@ -20,7 +20,10 @@
           )}`"
           :class="{
             'transcript-line': true,
-            'transcript-line-abnormal': $adminMode && lines[lineIndex-1] && lines[lineIndex-1].starttime > line.starttime,
+            'transcript-line-abnormal':
+              $adminMode &&
+              lines[lineIndex - 1] &&
+              lines[lineIndex - 1].starttime > line.starttime,
             matched:
               !single &&
               highlight &&
@@ -46,7 +49,6 @@
             </b-button>
           </div>
           <div style="flex: 1">
-            
             <Annotate
               tag="div"
               :sticky="sticky"
@@ -327,7 +329,8 @@ export default {
         matchedParallelLines[lineIndex] = this.parallellines
           .filter((l) => {
             return (
-              l && l.starttime >= line.starttime - 1 &&
+              l &&
+              l.starttime >= line.starttime - 1 &&
               (!nextLine || l.starttime < nextLine.starttime - 1)
             );
           })
@@ -346,11 +349,13 @@ export default {
           this.hsk || "outside"
         );
       html = html.replace(/\[(\d+)\]/g, (_, num) => {
-        let note
+        let note;
         if (this.notes) {
           note = this.notes.find((note) => note.id === Number(num));
         }
-        return `<PopupNote :number="${num}" content="${note ? note.note : ''}"></PopupNote>`;
+        return `<PopupNote :number="${num}" content="${
+          note ? note.note : ""
+        }"></PopupNote>`;
       });
       return html;
     },
@@ -410,7 +415,10 @@ export default {
       // console.log("🍉 started do audio stuff");
       this.$emit("pause");
       this.audioCancelled = false;
-      if (this.matchedParallelLines && this.matchedParallelLines[this.currentLineIndex]) {
+      if (
+        this.matchedParallelLines &&
+        this.matchedParallelLines[this.currentLineIndex]
+      ) {
         // await Helper.timeout(1000);
         this.$emit("speechStart");
         let englishPromise = Helper.speak(
@@ -604,7 +612,9 @@ export default {
         traditional: word.traditional,
         correct: true,
       });
-      let parallelLines = this.matchedParallelLines ? this.matchedParallelLines[lineIndex] : undefined;
+      let parallelLines = this.matchedParallelLines
+        ? this.matchedParallelLines[lineIndex]
+        : undefined;
       return {
         line,
         lineIndex,
@@ -624,13 +634,13 @@ export default {
         `.transcript-line[data-line-index="${lineIndex}"]`
       );
       if (el) {
-        let offsetTop = Helper.documentOffsetTop(el);
         let smallScreenYOffset =
           window.innerHeight > window.innerWidth
-            ? (window.innerWidth * 9) / 16
+            ? (window.innerWidth * 9) / 16 + 52 // controller height
             : 0;
-        if (!Helper.isInViewport(el, smallScreenYOffset, 90)) {
-          let middle = offsetTop - smallScreenYOffset - 20;
+        if (!Helper.isInViewport(el, smallScreenYOffset, 0)) {
+          let offsetTop = Helper.documentOffsetTop(el);
+          let middle = offsetTop - smallScreenYOffset - 10;
           window.scrollTo({
             top: middle,
             left: 0,
