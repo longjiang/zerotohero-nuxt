@@ -14,12 +14,18 @@
         <div class="mt-2 text-center">
           ({{ phrasebook.phrases.length }} phrases)
         </div>
-        <div v-html="phrasebook.description" class="mt-5 text-center" />
-        <div class="text-center">
-          <a :href="csvHref" :download="`${phrasebook.title}.csv`" v-if="csvHref" class="btn btn-secondary">
-            <i class="fa fa-download"></i> Download CSV
+        <div class="text-center mt-3">
+          <a
+            :href="csvHref"
+            :download="`${phrasebook.title}.csv`"
+            v-if="csvHref"
+            class="btn btn-secondary btn-sm"
+          >
+            <i class="fa fa-download"></i>
+            Download CSV
           </a>
         </div>
+        <div v-html="phrasebook.description" class="mt-3 text-center" />
       </div>
     </div>
     <div class="row" v-if="phrasebook">
@@ -143,11 +149,15 @@ export default {
     }
   },
   mounted() {
+    if (this.phrasebook) {
+      this.genCSV();
+      this.goToLastSeenPhrase();
+    }
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type.startsWith("phrasebooks")) {
         this.phrasebook = this.getPhrasebookFromStore();
         this.genCSV();
-        this.f();
+        this.goToLastSeenPhrase();
       }
     });
   },
@@ -174,7 +184,7 @@ export default {
       let csv = Papa.unparse(this.phrasebook.phrases);
       this.csvHref = this.makeTextFile(csv);
     },
-    async f() {
+    async goToLastSeenPhrase() {
       if (this.$route.hash) {
         let initId = Number(this.$route.hash.replace("#", ""));
         if (this.phrasebook.phrases[initId]) this.initId = initId;
