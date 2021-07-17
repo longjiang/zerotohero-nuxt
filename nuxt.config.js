@@ -26,7 +26,9 @@ export default {
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
-    'css-percentage-circle'
+    'css-percentage-circle',
+    'bootstrap/dist/css/bootstrap.css',
+    'bootstrap-vue/dist/bootstrap-vue.css'
   ],
 
   router: {
@@ -75,7 +77,7 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     // https://go.nuxtjs.dev/bootstrap
-    'bootstrap-vue/nuxt',
+    // 'bootstrap-vue/nuxt',
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     'nuxt-i18n',
@@ -83,10 +85,10 @@ export default {
       defaultImage: '/img/placeholder.jpg'
     }]
   ],
-  bootstrapVue: {
-    components: ['BFormInput', 'BFormGroup', 'BFormSelect', 'BFormTextarea', 'BFormSelectOption', 'BButton', 'BProgress', 'BTable', 
-    'BDropdown', 'BDropdownItem', 'BFormCheckbox', 'BFormRadio', 'BButtonGroup', 'BInputGroup', 'BInputGroupAppend'],
-  },
+  // bootstrapVue: {
+  //   components: ['BFormInput', 'BFormGroup', 'BFormSelect', 'BFormTextarea', 'BFormSelectOption', 'BButton', 'BProgress', 'BTable', 
+  //   'BDropdown', 'BDropdownItem', 'BFormCheckbox', 'BFormRadio', 'BButtonGroup', 'BInputGroup', 'BInputGroupAppend'],
+  // },
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [

@@ -1,3 +1,5 @@
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 import Vue from 'vue'
 import VTooltip from 'v-tooltip'
 import VueObserveVisibility from 'vue-observe-visibility'
@@ -8,8 +10,11 @@ import Languages from '@/lib/languages'
 import ModuleLoader from '~/lib/module-loader'
 import WorkerModuleLoader from '~/lib/worker-module-loader'
 import { i18n } from '~/plugins/i18n.js'
-import Vue2TouchEvents from 'vue2-touch-events'
- 
+import {
+  BootstrapVue, BFormInput, BFormGroup, BFormSelect, BFormTextarea, BFormSelectOption, BButton, BProgress, BTable,
+  BDropdown, BDropdownItem, BFormCheckbox, BFormRadio, BButtonGroup, BInputGroup, BInputGroupAppend
+} from 'bootstrap-vue'
+
 Vue.config.productionTip = false
 
 Vue.use(VTooltip)
@@ -20,7 +25,8 @@ Vue.use(i18n)
 Vue.use(VueAnalytics, {
   id: 'UA-1846573-21'
 })
-Vue.use(Vue2TouchEvents)
+Vue.use(BootstrapVue, BFormInput, BFormGroup, BFormSelect, BFormTextarea, BFormSelectOption, BButton, BProgress, BTable,
+  BDropdown, BDropdownItem, BFormCheckbox, BFormRadio, BButtonGroup, BInputGroup, BInputGroupAppend)
 
 // https://stackoverflow.com/questions/44371639/how-to-remove-html-tags-from-rendered-text
 Vue.filter('striphtml', function (value) {
