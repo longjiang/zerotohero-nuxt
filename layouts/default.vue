@@ -2,7 +2,7 @@
   <div id="zerotohero" :class="classes">
     <template v-if="$route.path !== '/'">
       <template>
-        <div class="container-fluid p-2 pl-3 site-top-bar">
+        <div class="container-fluid p-2 pl-3 site-top-bar" v-if="l1 && l2">
           <div>
             <router-link
               to="/"
@@ -58,7 +58,7 @@
             </a>
           </div>
         </div>
-        <div class="zth-header">
+        <div class="zth-header" v-if="l1 && l2">
           <div class="container-fluid pl-0 pr-0">
             <div class="container">
               <div class="row">
