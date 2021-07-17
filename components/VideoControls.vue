@@ -1,5 +1,5 @@
 <template>
-  <div v-if="video" class="quick-access-buttons">
+  <div v-if="video" class="quick-access-buttons ">
     <button
       :class="{
         'quick-access-button   d-inline-block text-center': true,
@@ -216,7 +216,6 @@ export default {
   align-items: center;
   justify-content: center;
   background: black;
-  padding: 0.5rem;
 }
 
 .quick-access-button {
