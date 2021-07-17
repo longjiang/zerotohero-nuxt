@@ -241,6 +241,7 @@
       v-if="hits && hits.length > 0"
       :arrows="false"
       :dots="false"
+      lazyLoad="ondemand"
       @afterChange="vueSlickCarouselAfterChange"
     >
       <!-- <div :class="`test-div test-div-0`">0<br />Hit {{ hitIndexFromSlideIndex(0) + 1 }}</div>
@@ -258,6 +259,7 @@
         :startLineIndex="startLineIndex(hit)"
         :showFullscreenToggle="false"
         :autoload="iOS()"
+        :showLineList="false"
       />
     </VueSlickCarousel>
     <!-- <div class="text-center mt-0">

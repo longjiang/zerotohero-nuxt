@@ -25,6 +25,7 @@
             :paused="paused"
             :layout="layout"
             :showFullscreenToggle="showFullscreenToggle"
+            :showLineList="showLineList"
             @togglePaused="togglePaused"
             @updateAudioMode="(a) => (this.audioMode = a)"
             @updateSpeed="(s) => (speed = s)"
@@ -168,6 +169,7 @@
               :paused="paused"
               :layout="layout"
               :showFullscreenToggle="showFullscreenToggle"
+              :showLineList="showLineList"
               @togglePaused="togglePaused"
               @updateAudioMode="(a) => (this.audioMode = a)"
               @updateSpeed="(s) => (speed = s)"
@@ -265,6 +267,9 @@ export default {
     },
     showFullscreenToggle: {
       default: true,
+    },
+    showLineList: {
+      default: true
     }
   },
   data() {

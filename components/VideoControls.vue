@@ -1,6 +1,7 @@
 <template>
-  <div v-if="video" class="quick-access-buttons ">
+  <div v-if="video" class="quick-access-buttons">
     <button
+      v-if="showLineList"
       :class="{
         'quick-access-button   d-inline-block text-center': true,
         'quick-access-button-active': showList,
@@ -17,9 +18,7 @@
       @click="toggleSpeed"
     >
       <i v-if="speed === 1" class="fas fa-tachometer-alt"></i>
-      <span v-else>
-        {{ speed }}x
-      </span>
+      <span v-else>{{ speed }}x</span>
     </button>
     <button
       class="quick-access-button d-inline-block text-center"
@@ -72,7 +71,7 @@
     </button>
 
     <div
-      v-if="video"
+      v-if="video && showLineList"
       :class="{ 'youtube-view-line-list': true, 'd-none': !showList }"
     >
       <b-input-group class="youtube-view-line-list-filter-wrapper">
@@ -81,7 +80,10 @@
           placeholder="Filter"
         ></b-form-input>
         <b-input-group-append>
-          <b-input-group-text v-if="!filterList" class="btn quick-access-button-active">
+          <b-input-group-text
+            v-if="!filterList"
+            class="btn quick-access-button-active"
+          >
             <i class="fas fa-filter"></i>
           </b-input-group-text>
           <b-input-group-text
@@ -129,6 +131,9 @@ export default {
     showFullscreenToggle: {
       default: true,
     },
+    showLineList: {
+      default: true,
+    },
   },
   data() {
     return {
@@ -138,6 +143,7 @@ export default {
       filterList: "",
       speaking: false,
       audioMode: false,
+      sortedLines: undefined
     };
   },
   computed: {
@@ -153,8 +159,32 @@ export default {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
     },
-
-    sortedLines() {
+  },
+  mounted() {
+    if (this.showLineList) {
+      this.sortedLines = this.getSortedLines()
+    }
+  },
+  methods: {
+    togglePaused() {
+      this.$emit("togglePaused");
+    },
+    toggleSpeed() {
+      this.speed = this.speed === 1 ? 0.75 : this.speed === 0.75 ? 0.5 : 1;
+      this.$emit("updateSpeed", this.speed);
+    },
+    toggleRepeatMode() {
+      this.repeatMode = !this.repeatMode;
+      this.$emit("updateRepeatMode", this.repeatMode);
+    },
+    toggleAudioMode() {
+      this.audioMode = !this.audioMode;
+      this.$emit("updateAudioMode", this.audioMode);
+    },
+    toggleFullscreenMode() {
+      this.$emit("toggleFullscreenMode");
+    },
+    getSortedLines() {
       if (this.video && this.video.subs_l2) {
         console.log(
           `YouTube View: Sorting ${this.video.subs_l2.length} lines...`
@@ -183,26 +213,6 @@ export default {
         console.log(`YouTube View: Lines sorted.`);
         return foldedLines;
       }
-    },
-  },
-  methods: {
-    togglePaused() {
-      this.$emit("togglePaused");
-    },
-    toggleSpeed() {
-      this.speed = this.speed === 1 ? 0.75 : this.speed === 0.75 ? 0.5 : 1;
-      this.$emit("updateSpeed", this.speed);
-    },
-    toggleRepeatMode() {
-      this.repeatMode = !this.repeatMode;
-      this.$emit("updateRepeatMode", this.repeatMode);
-    },
-    toggleAudioMode() {
-      this.audioMode = !this.audioMode;
-      this.$emit("updateAudioMode", this.audioMode);
-    },
-    toggleFullscreenMode() {
-      this.$emit("toggleFullscreenMode");
     },
   },
 };
