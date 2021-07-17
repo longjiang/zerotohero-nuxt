@@ -145,7 +145,7 @@ export default {
         term: this.phrasebook.phrases[0].phrase,
         lang: this.$l2.code,
       });
-      this.f();
+      this.goToLastSeenPhrase();
     }
   },
   mounted() {

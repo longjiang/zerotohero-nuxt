@@ -272,6 +272,7 @@ const Dictionary = {
     let m = definition.match(/(.* of )([^\s\.]+)$/);
     if (m) {
       let lemma = m[2].replace(/\u200e/g, ""); // Left-to-Right Mark
+      if (this.l2 === 'lat') lemma = this.stripAccents(lemma)
       return lemma
     }
   },
