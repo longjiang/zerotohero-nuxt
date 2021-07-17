@@ -237,38 +237,35 @@
       </b-button>
     </div>
 
-    <Carousel
+    <VueSlickCarousel
       v-if="hits && hits.length > 0"
-      :per-page="1"
-      @page-change="vueSlickCarouselAfterChange"
-      loop="true"
+      :arrows="false"
+      :dots="false"
+      @afterChange="vueSlickCarouselAfterChange"
     >
       <!-- <div :class="`test-div test-div-0`">0<br />Hit {{ hitIndexFromSlideIndex(0) + 1 }}</div>
       <div :class="`test-div test-div-1`">1<br />Hit {{ hitIndexFromSlideIndex(1) + 1 }}</div>
       <div :class="`test-div test-div-2`">2<br />Hit {{ hitIndexFromSlideIndex(2) + 1 }}</div> -->
-      <Slide
+      <div
         v-for="slide in [0, 1, 2]"
-        :set1="(index = hitIndexFromSlideIndex(slide))"
-        :set2="(hit = hits[index])"
+        :set="(hit = hits[hitIndexFromSlideIndex(slide)])"
         :key="`subs-search-slide-${slide}`"
         class="subs-search-slide"
       >
-        Slide {{ slide }}
         <YouTubeWithTranscript
           :video="hit.video"
-          :ref="`youtube-${index}`"
+          :ref="`youtube-${hitIndexFromSlideIndex(slide)}`"
           initialLayout="vertical"
           :highlight="terms"
           :hsk="level"
           :speed="speed"
           :startLineIndex="startLineIndex(hit)"
           :showFullscreenToggle="false"
+          @paused="hitIndex ===  hitIndexFromSlideIndex(slide) ? updatePaused(...arguments) : false"
           :autoload="iOS()"
-          :id="`youtube-${hit.id.replace('#', '@')}-${uniqueId()}`"
-          @paused="hitIndex ===  index ? updatePaused(...arguments) : false"
         />
-      </Slide>
-    </Carousel>
+      </div>
+    </VueSlickCarousel>
     <!-- <div class="text-center mt-0">
       <b-button
         variant="gray"
@@ -337,7 +334,8 @@ import SmallStar from "@/components/SmallStar";
 import Config from "@/lib/config";
 import Helper from "@/lib/helper";
 import YouTube from "@/lib/youtube";
-import { Carousel, Slide } from 'vue-carousel'
+import VueSlickCarousel from "vue-slick-carousel";
+import "vue-slick-carousel/dist/vue-slick-carousel.css";
 
 export default {
   components: {
@@ -345,8 +343,7 @@ export default {
     YouTubeWithTranscript,
     SyncedTranscript,
     SmallStar,
-    Carousel,
-    Slide
+    VueSlickCarousel,
   },
   props: {
     terms: {
@@ -506,9 +503,6 @@ export default {
     },
   },
   methods: {
-    uniqueId() {
-      return Helper.uniqueId()
-    },
     hitIndexFromSlideIndex(slideIndex) {
       let currentSlideIndex = this.slideIndex;
       let s;

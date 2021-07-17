@@ -1,6 +1,5 @@
 <template>
-  <div class="youtube" :key="`youtube-video-${youtubeIframeID}`">
-    <div class="text-white youtube-debug-tag">Youtube: {{ youtubeIframeID }}</div>
+  <div class="youtube" :key="youtube">
     <div
       class="touch-dummy"
       @mousedown="() => (drag = false)"
@@ -27,7 +26,7 @@ import $ from "jquery";
 export default {
   data() {
     return {
-      youtubeIframeID: undefined,
+      youtubeIframeID: "youtube-" + Helper.uniqueId(),
       time: 0,
       neverPlayed: true,
       player: undefined,
@@ -36,9 +35,6 @@ export default {
     };
   },
   props: {
-    id: {
-      type: String,
-    },
     youtube: {
       type: String,
     },
@@ -62,7 +58,6 @@ export default {
     },
   },
   mounted() {
-    this.youtubeIframeID = this.youtubeIframeID || this.id || "youtube-" + Helper.uniqueId()
     if (this.autoload) {
       this.loadYouTubeiFrame();
     }
@@ -171,7 +166,6 @@ export default {
       if (this.player && this.player.getVideoData && this.player.h) {
         let video_id = this.player.getVideoData().video_id;
         let playerIsThisPlayerNotSomeOtherPlayer = this.youtube === video_id;
-        console.log(this.youtube, video_id)
         return playerIsThisPlayerNotSomeOtherPlayer;
       }
     },
@@ -222,13 +216,11 @@ export default {
       if (this.player) this.player.setPlaybackRate(speed);
     },
     togglePaused() {
-      console.log('TOGGLE', this.player)
       if (this.player && this.player.getPlayerState) {
         this.player.getPlayerState() !== 1
           ? this.player.playVideo()
           : this.player.pauseVideo();
       } else {
-      console.log('LOADING IFRAME')
         this.loadYouTubeiFrame();
       }
     },
@@ -242,14 +234,6 @@ export default {
 </script>
 
 <style>
-.youtube-debug-tag {
-  position: absolute;
-  background: green;
-  padding: 0.2rem;
-  z-index: 999;
-  left: 0;
-  top: 0;
-}
 .touch-dummy {
   position: absolute;
   width: 100%;

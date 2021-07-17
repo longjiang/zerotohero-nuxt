@@ -1,6 +1,5 @@
 <template>
   <div class="container-fluid youtube-with-transcript">
-    YouTubeWithTranscript: {{ youtubeIframeID }}
     <div v-if="layout === 'horizontal'" class="row">
       <div
         :class="{
@@ -19,7 +18,6 @@
             :starttime="start"
             :autoload="autoload"
             :autoplay="autoplay"
-            :id="youtubeIframeID"
           />
           <VideoControls
             v-if="video"
@@ -163,7 +161,6 @@
               :starttime="start"
               :autoload="autoload"
               :autoplay="autoplay"
-              :id="youtubeIframeID"
             />
             <VideoControls
               v-if="video"
@@ -217,13 +214,9 @@
 <script>
 import moment from "moment";
 import Vue from "vue";
-import Helper from '@/lib/helper';
 
 export default {
   props: {
-    id: {
-      type: String,
-    },
     video: {
       type: Object,
     },
@@ -287,7 +280,6 @@ export default {
       videoInfoKey: 0,
       speed: 1,
       layout: this.initialLayout,
-      youtubeIframeID: undefined
     };
   },
   computed: {
@@ -324,9 +316,6 @@ export default {
       this.$refs.transcript.audioMode = this.audioMode;
     }
     if (this.$refs.youtube) this.$refs.youtube.speed = this.speed;
-  },
-  created() {
-    this.youtubeIframeID = this.youtubeIframeID || this.id || "youtube-" + Helper.uniqueId()
   },
   methods: {
     updateTranslation(translation) {
