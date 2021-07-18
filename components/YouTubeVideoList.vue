@@ -179,7 +179,7 @@ export default {
           if (numsInFileName && numsInVideoTitle) {
             for (let n of numsInFileName) {
               for (let m of numsInVideoTitle) {
-                if (n === m) {
+                if (Number(n) === Number(m)) {
                   found = true;
                 }
               }
