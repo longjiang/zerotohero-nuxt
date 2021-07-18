@@ -30,7 +30,9 @@
         />
       </router-link>
       <div class="media-body">
-        <div class="small mb-2" style="color: #aaa" v-if="video.date">{{ formatDate(video.date) }}</div>
+        <div class="small mb-2" style="color: #aaa" v-if="video.date">
+          {{ formatDate(video.date) }}
+        </div>
         <div class="font-weight-bold">
           <span contenteditable="true" v-if="$adminMode" @blur="saveTitle">
             {{ video.title }}
@@ -48,7 +50,7 @@
         <div v-if="video.hasSubs || video.id" class="btn btn-small mt-2 ml-0">
           {{ $l2.name }} CC
           <span v-if="video.l2Locale">({{ video.l2Locale }})</span>
-          <span v-if="srt">- {{ srt.name }}</span>
+          <span v-if="subsFile">- {{ subsFile.name }}</span>
         </div>
         <div
           v-if="
@@ -231,7 +233,8 @@ import YouTube from "@/lib/youtube";
 import { Drag, Drop } from "vue-drag-drop";
 import { parseSync } from "subtitle";
 import Vue from "vue";
-import moment from 'moment'
+import moment from "moment";
+import assParser from "ass-parser";
 
 export default {
   components: {
@@ -250,7 +253,7 @@ export default {
           : undefined,
       subsUpdated: false,
       assignShow: false,
-      srt: false,
+      subsFile: false,
     };
   },
   props: {
@@ -313,10 +316,10 @@ export default {
   },
   methods: {
     formatDate(date) {
-      return moment(date).format('LL')
+      return moment(date).format("LL");
     },
     newShow(show) {
-      this.$emit('newShow', show)
+      this.$emit("newShow", show);
     },
     async saveShow(showID, type) {
       if (this.video.id) {
@@ -332,7 +335,7 @@ export default {
             let show = {
               id: response.data[type].id,
               title: response.data[type].title,
-            }
+            };
             Vue.set(this.video, type, show);
           }
         }
@@ -414,23 +417,52 @@ export default {
       }
     },
     importSrt(file) {
+      let extension = file.name.split(".").pop().toLowerCase();
       try {
         let reader = new FileReader();
         reader.readAsText(file);
         reader.onload = (event) => {
-          let srt = event.target.result;
-          this.video.subs_l2 = parseSync(srt).map((cue) => {
-            return {
-              starttime: cue.data.start / 1000,
-              line: cue.data.text,
-            };
-          });
-          this.firstLineTime = this.video.subs_l2[0].starttime;
-          this.video.hasSubs = true;
-          this.srt = file;
-          this.videoInfoKey++;
+          let str = event.target.result;
+          let subs_l2;
+          if (extension === "srt") {
+            subs_l2 = parseSync(str).map((cue) => {
+              return {
+                starttime: cue.data.start / 1000,
+                line: cue.data.text,
+              };
+            });
+          }
+          if (extension === "ass") {
+            let data = assParser(str);
+            let events = data.find((section) => section.section === "Events");
+            if (events) {
+              subs_l2 = events.body
+                .filter((item) => item.key === "Dialogue" && !item.value.Text.startsWith('{\\'))
+                .map((cue) => {
+                  return {
+                    starttime: this.parseTime(cue.value.Start),
+                    line: cue.value.Text,
+                  };
+                });
+            }
+          console.log(data, subs_l2)
+          }
+          if (subs_l2) {
+            subs_l2 = subs_l2.sort((a, b) => a.starttime - b.starttime)
+            this.video.subs_l2 = subs_l2;
+            this.firstLineTime = this.video.subs_l2[0].starttime;
+            this.video.hasSubs = true;
+            this.subsFile = file;
+            this.videoInfoKey++;
+          }
         };
       } catch (err) {}
+    },
+    parseTime(hms) {
+      // 0:00:57.28
+      let ms = moment(hms, 'HH:mm:ss.SS').diff(moment().startOf('day'), 'milliseconds');
+      let s = ms / 1000
+      return s
     },
     handleDrop(data, event) {
       event.preventDefault();
@@ -471,16 +503,16 @@ export default {
     },
     async save(video, limit = false) {
       try {
-        let lines = video.subs_l2
-        if (limit) lines = lines.slice(0, limit)
-        let csv = YouTube.unparseSubs(lines, this.$l2.code)
+        let lines = video.subs_l2;
+        if (limit) lines = lines.slice(0, limit);
+        let csv = YouTube.unparseSubs(lines, this.$l2.code);
         let response = await axios.post(`${Config.wiki}items/youtube_videos`, {
           youtube_id: video.youtube_id,
           title: video.title,
           l2: this.$l2.id,
           subs_l2: csv,
           channel_id: video.channel_id,
-          date: moment(video.date).format('YYYY-MM-DD HH:mm:ss'),
+          date: moment(video.date).format("YYYY-MM-DD HH:mm:ss"),
         });
         response = response.data;
         if (response && response.data) {
@@ -489,9 +521,9 @@ export default {
           return true;
         }
       } catch (err) {
-        if (!limit) limit = video.subs_l2.length
+        if (!limit) limit = video.subs_l2.length;
         if (limit > 0) {
-          return this.save(video, limit - 100)
+          return this.save(video, limit - 100);
         }
       }
     },

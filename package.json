@@ -16,6 +16,7 @@
     "@nuxtjs/axios": "^5.13.1",
     "@nuxtjs/pwa": "^3.3.5",
     "accounting": "^0.4.1",
+    "ass-parser": "^0.2.0",
     "bootstrap": "^4.6.0",
     "bootstrap-vue": "^2.21.2",
     "child_process": "^1.0.2",
