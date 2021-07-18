@@ -437,7 +437,7 @@ export default {
             let events = data.find((section) => section.section === "Events");
             if (events) {
               subs_l2 = events.body
-                .filter((item) => item.key === "Dialogue" && !item.value.Text.startsWith('{\\'))
+                .filter((item) => item.key === "Dialogue" && !item.value.Text.startsWith('{\\') && !item.value.Style.includes('CN'))
                 .map((cue) => {
                   return {
                     starttime: this.parseTime(cue.value.Start),

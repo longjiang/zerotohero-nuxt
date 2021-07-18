@@ -186,7 +186,6 @@ export default {
             }
             if (found !== false) {
               card.importSrt(file);
-              break;
             }
           }
         }
