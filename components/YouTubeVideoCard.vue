@@ -50,7 +50,7 @@
         <div v-if="video.hasSubs || video.id" class="btn btn-small mt-2 ml-0">
           {{ $l2.name }} CC
           <span v-if="video.l2Locale">({{ video.l2Locale }})</span>
-          <span v-if="subsFile">- {{ subsFile.name }}</span>
+          <span v-if="subsFile">- {{ subsFile.name.replace(/[_.]/g, ' ') }}</span>
         </div>
         <div
           v-if="
