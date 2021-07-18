@@ -445,7 +445,6 @@ export default {
                   };
                 });
             }
-          console.log(data, subs_l2)
           }
           if (subs_l2) {
             subs_l2 = subs_l2.sort((a, b) => a.starttime - b.starttime)

@@ -71,7 +71,10 @@
         </drop>
       </div>
       <div class="mt-1">
-        <b-form-checkbox class="mt-2 d-inline-block" v-model="hideVideosWithoutSubs">
+        <b-form-checkbox
+          class="mt-2 d-inline-block"
+          v-model="hideVideosWithoutSubs"
+        >
           Hide Videos Without Subs
         </b-form-checkbox>
         <b-form-checkbox class="mt-2 d-inline-block" v-model="showSubsEditing">
@@ -142,7 +145,7 @@ export default {
   },
   methods: {
     newShow(show) {
-      this.$emit('newShow', show)
+      this.$emit("newShow", show);
     },
     async addAll() {
       for (let videoIndex in this.$refs.youTubeVideoCard) {
@@ -170,19 +173,21 @@ export default {
       for (let file of files) {
         for (let videoIndex in this.$refs.youTubeVideoCard) {
           let card = this.$refs.youTubeVideoCard[videoIndex];
-          let numsInFileName = file.name.match(/\d+/g)
-          let numsInVideoTitle = card.video.title.match(/\d+/g)
-          let found = false
-          for (let n of numsInFileName) {
-            for (let m of numsInVideoTitle) {
-              if (n === m) {
-                found = true
+          let numsInFileName = file.name.match(/\d+/g);
+          let numsInVideoTitle = card.video.title.match(/\d+/g);
+          let found = false;
+          if (numsInFileName && numsInVideoTitle) {
+            for (let n of numsInFileName) {
+              for (let m of numsInVideoTitle) {
+                if (n === m) {
+                  found = true;
+                }
               }
             }
-          }
-          if (found !== false) {
-            card.importSrt(file);
-            break;
+            if (found !== false) {
+              card.importSrt(file);
+              break;
+            }
           }
         }
       }
