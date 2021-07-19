@@ -239,7 +239,7 @@ export default {
       }
     },
     async getVideos(start) {
-      let filters = "";
+      let filters = "&filter[tv_show][null]=1&filter[talk][null]=1";
       if (this.topic !== "all") {
         filters += "&filter[topic][eq]=" + this.topic;
       }
@@ -256,7 +256,7 @@ export default {
             "&filter[title][contains]=" + encodeURIComponent(this.keyword);
         filters += "&sort=title";
       }
-      let limit = this.keyword ? -1 : this.perPage;
+      let limit = this.perPage;
       let response = await axios.get(
         `${Config.wiki}items/youtube_videos?sort=-id&filter[l2][eq]=${
           this.$l2.id

@@ -70,7 +70,7 @@ export default {
       moreVideos: 0,
       show: undefined,
       videos: undefined,
-      perPage: 24,
+      perPage: 96,
       count: undefined,
     };
   },
