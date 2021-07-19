@@ -507,11 +507,17 @@ export default {
         this.paused = paused;
       }
     },
+    simplifyExcludeTerms(excludeTerms) {
+      excludeTerms = excludeTerms.map(t => t.replace(new RegExp(`.*?((${this.terms.join("|")}).).*`), "$1").replace(new RegExp(`.*?(.(${this.terms.join("|")})).*`), "$1").trim())
+      return excludeTerms
+    },
     async checkHits() {
       this.checking = true;
       if (this.terms[0] && this.terms[0].length < 4) {
         let excludeTerms = await (await this.$getDictionary())
           .getWordsThatContain(this.terms[0])
+        excludeTerms = this.simplifyExcludeTerms(excludeTerms)
+        excludeTerms = Helper.unique(excludeTerms)
         excludeTerms = excludeTerms.filter((s) => !this.terms.includes(s));
         this.excludeTerms = excludeTerms
       }
