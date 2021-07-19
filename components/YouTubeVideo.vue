@@ -1,12 +1,6 @@
 <template>
   <div class="youtube" :key="youtube">
     <div
-      class="touch-dummy"
-      @mousedown="() => (drag = false)"
-      @mousemove="() => (drag = true)"
-      @mouseup="() => (drag ? false : togglePaused())"
-    ></div>
-    <div
       :style="{
         backgroundImage:
           'url(' + '//img.youtube.com/vi/' + youtube + '/hqdefault.jpg' + ')',
@@ -234,14 +228,6 @@ export default {
 </script>
 
 <style>
-.touch-dummy {
-  position: absolute;
-  width: 100%;
-  padding-top: 38%;
-  top: 14%;
-  z-index: 1;
-}
-
 .youtube {
   padding-bottom: 56.25%;
   position: relative;
