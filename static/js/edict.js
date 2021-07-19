@@ -43,6 +43,15 @@ const Dictionary = {
   getSize() {
     return this.words.length
   },
+  getWordsThatContain(text) {
+    let words = this.words.filter(w => (w.kanji && w.kanji.includes(text)) || (w.kana && w.kana.includes(text)))
+    let strings = this.unique(
+      words
+        .map((word) => word.kana)
+        .concat(words.map((word) => word.kanji))
+    )
+    return strings
+  },
   wordForms(word) {
     let forms = [{
       table: 'head',
@@ -56,12 +65,14 @@ const Dictionary = {
         jpForms = JPConjugations.conjugate(tokenized[0].basic_form)
       }
     }
-    
-    forms = forms.concat(jpForms.map(f => {return {
-      table: 'conjugation',
-      field: f.name,
-      form: f.form
-    }}))
+
+    forms = forms.concat(jpForms.map(f => {
+      return {
+        table: 'conjugation',
+        field: f.name,
+        form: f.form
+      }
+    }))
     return forms
   },
   stylize(name) {

@@ -476,7 +476,7 @@ export default {
       let hitIndex = s[slideIndex];
       if (hitIndex > this.hits.length - 1) hitIndex = 0;
       if (hitIndex < 0) hitIndex = this.hits.length - 1;
-      console.log(slideIndex, hitIndex)
+      console.log(slideIndex, hitIndex);
       return hitIndex;
     },
     vueSlickCarouselAfterChange(slideIndex) {
@@ -509,14 +509,11 @@ export default {
     },
     async checkHits() {
       this.checking = true;
-      if (
-        this.$l2.code === "zh" &&
-        this.terms[0] &&
-        this.terms[0].length === 1
-      ) {
-        this.excludeTerms = await (
-          await this.$getDictionary()
-        ).getWordsWithCharacter(this.terms[0]);
+      if (this.terms[0] && this.terms[0].length < 4) {
+        let excludeTerms = await (await this.$getDictionary())
+          .getWordsThatContain(this.terms[0])
+        excludeTerms = excludeTerms.filter((s) => !this.terms.includes(s));
+        this.excludeTerms = excludeTerms
       }
       let hits = await YouTube.searchSubs(
         this.terms,

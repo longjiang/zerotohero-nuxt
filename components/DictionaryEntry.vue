@@ -292,14 +292,12 @@ export default {
   },
   methods: {
     async getSearchTerms() {
-      let terms = [];
-
+      let terms = [this.entry.head];
       if (this.$dictionaryName === "edict") {
         terms = [this.entry.kana, ...terms];
-      } else if (this.$dictionaryName === "hsk-cedict") {
+      }
+      if (this.$dictionaryName === "hsk-cedict") {
         terms = [this.entry.simplified, this.entry.traditional];
-      } else {
-        terms = [this.entry.head];
       }
       if (this.exact) return terms;
       else {
