@@ -248,7 +248,6 @@ export default {
   watch: {
     async currentTime() {
       let progressType = this.checkProgress();
-      // console.log(progressType);
       if (progressType === "first play") {
         if (this.currentTime >= this.lines[0].starttime) {
           this.playNearestLine();
@@ -669,7 +668,7 @@ export default {
         if (lineIndex === currentLineIndex) {
           delta = this.currentTime - currentLine.starttime;
           Vue.set(line, "starttime", this.currentTime);
-        } else if (lineIndex > this.currentLineIndex) {
+        } else if (lineIndex > currentLineIndex) {
           Vue.set(line, "starttime", (line.starttime += delta));
         }
       }
@@ -683,6 +682,7 @@ export default {
       this.goToLine(this.nextLine || this.lines[0]);
     },
     goToLine(line) {
+      this.currentLineIndex = this.lines.findIndex(l => l === line)
       this.seekVideoTo(line.starttime);
     },
     rewind() {

@@ -186,14 +186,14 @@
           'd-none': !showSubsEditing && !enableTranslationEditing,
         }"
       >
-        <!-- First line starts at
-        <input
+        First line starts at
+        <b-form-input
           v-model.lazy="firstLineTime"
           type="text"
           placeholder="0"
           class="d-inline-block ml-1"
           style="width: 4rem"
-        /> -->
+        />
         <b-button
           v-if="!updating && !subsUpdated"
           @click="updateSubs"
