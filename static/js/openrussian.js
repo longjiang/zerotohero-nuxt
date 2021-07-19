@@ -171,6 +171,16 @@ const Dictionary = {
     let word = this.words.find(word => word && word.bare === text)
     return word
   },
+  unique(a) {
+    return a.filter((item, i, ar) => ar.indexOf(item) === i);
+  },
+  getWordsThatContain(text) {
+    let words = this.words.filter(w => (w.head.includes(text)) || (w.bare.includes(text)))
+    let strings = words
+      .map((word) => word.bare)
+      .concat(words.map((word) => word.head))
+    return this.unique(strings)
+  },
   lookupMultiple(text) {
     let words = this.words.filter(word => word && word.bare.toLowerCase() === text.toLowerCase())
     return words
