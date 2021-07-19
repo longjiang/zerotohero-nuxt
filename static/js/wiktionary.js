@@ -241,6 +241,13 @@ const Dictionary = {
     let words = this.words.filter(word => word && word[ignoreAccents ? 'bare' : 'head'].toLowerCase() === text.toLowerCase())
     return words
   },
+  getWordsThatContain(text) {
+    let words = this.words.filter(w => (w.head.includes(text)) || (w.bare.includes(text)))
+    let strings = words
+      .map((word) => word.bare)
+      .concat(words.map((word) => word.head))
+    return this.unique(strings)
+  },
   formTable() {
     return this.tables
   },
@@ -491,7 +498,7 @@ const Dictionary = {
           candidates: longest.matches
         })
       }
-      result = result.filter(item => { 
+      result = result.filter(item => {
         if (typeof item === 'string') {
           return item !== ''
         }
