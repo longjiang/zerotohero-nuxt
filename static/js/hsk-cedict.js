@@ -47,6 +47,15 @@ const Dictionary = {
       Promise.all([wordsPromise, characterPromise, newHSKPromise]).then(() => resolve(this))
     })
   },
+  getWordsThatContain(text) {
+    let words = this.words.filter(w => (w.simplified && w.simplified.includes(text)) || (w.traditional && w.traditional.includes(text)))
+    let strings = this.unique(
+      words
+        .map((word) => word.simplified)
+        .concat(words.map((word) => word.traditional))
+    )
+    return strings
+  },
   getWordsWithCharacter(term) {
     let words = this.lookupFuzzySimple(term)
     words = words.filter((word) => word.simplified.length > 1)
