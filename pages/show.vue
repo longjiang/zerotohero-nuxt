@@ -71,20 +71,26 @@ export default {
       show: undefined,
       videos: undefined,
       perPage: 24,
-      count: undefined
+      count: undefined,
     };
   },
   async fetch() {
     if (this.id) {
       this.show = await this.getShow(this.id, this.collection);
-      this.videos = await this.getVideos({limit: this.perPage, offset: this.moreVideos});
+      this.videos = await this.getVideos({
+        limit: this.perPage,
+        offset: this.moreVideos,
+      });
     }
   },
   methods: {
     async visibilityChanged(isVisible) {
       if (this.videos && isVisible) {
         this.moreVideos = 1 + this.moreVideos + this.perPage;
-        let newVideos = await this.getVideos({limit: this.perPage, offset: this.moreVideos});
+        let newVideos = await this.getVideos({
+          limit: this.perPage,
+          offset: this.moreVideos,
+        });
         this.videos = this.videos.concat(newVideos);
       }
     },
@@ -103,14 +109,12 @@ export default {
           this.$l2.id
         }&filter[${this.collection}][eq]=${
           this.show.id
-        }&fields=channel_id,id,lesson,level,title,topic,youtube_id,date,tv_show.*,talk.*${
-          this.$adminMode ? ",subs_l2" : ""
-        }&sort=${sort}&limit=${limit}&offset=${offset}&timestamp=${
+        }&fields=channel_id,id,lesson,level,title,topic,youtube_id,date,tv_show.*,talk.*&sort=${sort}&limit=${limit}&offset=${offset}&timestamp=${
           this.$adminMode ? Date.now() : 0
         }&meta=filter_count`
       );
       let videos = response.data.data || [];
-      this.count = response.data.meta.filter_count
+      this.count = response.data.meta.filter_count;
       videos = Helper.uniqueByValue(videos, "youtube_id");
       if (this.type === "tv-show") {
         videos =

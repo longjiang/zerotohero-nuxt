@@ -299,6 +299,11 @@ export default {
         this.videoInfoKey++;
       }
     },
+    showSubsEditing() {
+      if (this.showSubsEditing && !this.video.subs_l2) {
+        this.checkSavedFunc(this.video)
+      }
+    }
   },
   computed: {
     $l1() {
