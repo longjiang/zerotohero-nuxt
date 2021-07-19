@@ -41,7 +41,7 @@
         <div class="youtube-video-info">
           <h5 style="line-height: 1.5">
             <span v-if="video" :key="`video-title-${video.title}`" class="mt-4">
-              {{ video.title }}
+              <Annotate :phonetics="false" :buttons="true"><span>{{ video.title }}</span></Annotate>
             </span>
           </h5>
           <div style="color: #aaa" v-if="video.date" class="mb-2">

@@ -8,10 +8,17 @@
   <div class="youtube-browse container mt-5 mb-5 main">
     <div class="row">
       <div class="col-sm-12">
-        <h3 class="text-center" v-if="title">{{ title }}</h3>
+        <h3 class="text-center" v-if="title">
+          <Annotate :phonetics="false" :buttons="true">
+            <span>{{ title }}</span>
+          </Annotate>
+        </h3>
         <h3 class="text-center" v-else>Playlist: {{ playlist_id }}</h3>
         <div class="text-center mt-4 mb-4">
-          <b-button class="btn-small btn-primary d-inline-block" @click="forceRefresh">
+          <b-button
+            class="btn-small btn-primary d-inline-block"
+            @click="forceRefresh"
+          >
             <i class="fa fa-sync-alt mr-1"></i>
             Force Refresh
           </b-button>
@@ -28,8 +35,8 @@
 </template>
 
 <script>
-import YouTubeVideoList from '@/components/YouTubeVideoList'
-import YouTube from '@/lib/youtube'
+import YouTubeVideoList from "@/components/YouTubeVideoList";
+import YouTube from "@/lib/youtube";
 
 export default {
   components: {
@@ -40,28 +47,28 @@ export default {
       type: String,
     },
     title: {
-      type: String
-    }
+      type: String,
+    },
   },
   data() {
     return {
       videos: [],
       checkSaved: false,
       checkShows: false,
-    }
+    };
   },
   mounted() {
-    this.loadPlaylist()
+    this.loadPlaylist();
   },
   methods: {
     forceRefresh() {
       this.loadPlaylist({ forceRefresh: true });
     },
     newShow(show) {
-      this.$refs.youtubeVideoList.assignShowToAll(show.id, show.type)
+      this.$refs.youtubeVideoList.assignShowToAll(show.id, show.type);
     },
     async loadPlaylist(options) {
-      this.videos = []
+      this.videos = [];
       options = options || {};
       options = Object.assign(
         {
@@ -69,15 +76,19 @@ export default {
         },
         options
       );
-      let videos = await YouTube.playlistByApi(this.playlist_id, false, options.forceRefresh ? 0 : -1)
+      let videos = await YouTube.playlistByApi(
+        this.playlist_id,
+        false,
+        options.forceRefresh ? 0 : -1
+      );
       if (videos && videos.length > 0) {
         if (this.checkShows)
           videos = await YouTube.checkShows(
             videos,
             this.$l2.id,
             this.$adminMode
-          )
-        this.videos = videos
+          );
+        this.videos = videos;
       }
     },
   },
@@ -89,10 +100,10 @@ export default {
   },
   watch: {
     playlist_id() {
-      if (this.$route.name === 'youtube-playlist') {
-        this.loadPlaylist()
+      if (this.$route.name === "youtube-playlist") {
+        this.loadPlaylist();
       }
     },
   },
-}
+};
 </script>

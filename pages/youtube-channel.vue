@@ -18,10 +18,16 @@
     <div class="row">
       <div class="col-sm-12">
         <h3 class="mb-4 text-center">
-          {{ title || `YouTube Channel ${channel_id}` }}
+          <Annotate :phonetics="false" :buttons="true" v-if="title">
+            <span>{{ title }}</span>
+          </Annotate>
+          <span v-else>YouTube Channel {{ channel_id }}</span>
         </h3>
         <div class="text-center">
-          <b-button class="btn-small btn-primary d-inline-block" @click="forceRefresh">
+          <b-button
+            class="btn-small btn-primary d-inline-block"
+            @click="forceRefresh"
+          >
             <i class="fa fa-sync-alt mr-1"></i>
             Force Refresh
           </b-button>

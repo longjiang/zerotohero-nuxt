@@ -17,7 +17,7 @@
     <div class="row">
       <div class="col-sm-12 mb-4 text-center">
         <h3 v-if="show">
-          {{ show.title }}
+          <Annotate :phonetics="false" :buttons="true"><span>{{ show.title }}</span></Annotate>
         </h3>
         <p v-if="count">({{ count }} Videos)</p>
       </div>
