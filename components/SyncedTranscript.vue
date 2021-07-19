@@ -314,11 +314,13 @@ export default {
       this.emitUpdateTranslation();
     },
     emitUpdateTranslation() {
-      let updatedLines = this.matchedParallelLines
-        .filter((l) => l !== "")
-        .join("\n")
-        .trim();
-      this.$emit("updateTranslation", updatedLines);
+      if (this.matchedParallelLines) {
+        let updatedLines = this.matchedParallelLines
+          .filter((l) => l !== "")
+          .join("\n")
+          .trim();
+        this.$emit("updateTranslation", updatedLines);
+      }
     },
     matchParallelLines() {
       let matchedParallelLines = [];
@@ -478,7 +480,8 @@ export default {
     },
     removeLine(lineIndex) {
       this.lines.splice(lineIndex, 1);
-      this.matchedParallelLines.splice(lineIndex, 1);
+      if (this.matchedParallelLines)
+        this.matchedParallelLines.splice(lineIndex, 1);
       this.emitUpdateTranslation();
     },
     async findSimilarWords(text) {
