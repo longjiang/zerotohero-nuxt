@@ -16,14 +16,9 @@
         />
       </router-link>
       <div class="media-body">
-        <router-link
-          :to="path(show)"
-          class="link-unstyled"
-        >
+        <router-link :to="path(show)" class="link-unstyled">
           <h6>
-            <Annotate>
-              <span>{{ show.title }}</span>
-            </Annotate>
+            {{ show.title }}
           </h6>
           <b-button
             v-if="$adminMode"
@@ -53,9 +48,9 @@ export default {
       });
     },
     path(show) {
-      return `/${this.$l1.code}/${this.$l2.code}/show/${this.type === 'tvShows' ? 'tv-show' : 'talk' }/${encodeURIComponent(
-        show.id
-      )}`;
+      return `/${this.$l1.code}/${this.$l2.code}/show/${
+        this.type === "tvShows" ? "tv-show" : "talk"
+      }/${encodeURIComponent(show.id)}`;
     },
   },
   computed: {
