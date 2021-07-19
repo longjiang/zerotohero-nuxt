@@ -59,7 +59,7 @@
         <div class="mb-2">
           <div class="entry-pinyin">
             <Star :word="entry"></Star>
-            <span v-if="entry.pronunciation && !entry.pinyin" class="ml-2 mr-1">
+            <span v-if="entry.pronunciation && !entry.cjk" class="ml-2 mr-1">
               /{{ entry.pronunciation }}/
             </span>
             <span
