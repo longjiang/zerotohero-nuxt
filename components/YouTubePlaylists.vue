@@ -10,8 +10,11 @@
         </div>
         <div class="media-body">
           <div class="playlist-title">{{ playlist.title }}</div>
-          <div class="playlist-description">
+          <div class="playlist-video-count" v-if="playlist.count">
             {{ playlist.count }} video{{ playlist.count > 1 ? 's' : '' }}
+          </div>
+          <div class="playlist-description" v-if="playlist.description">
+            {{ playlist.description.substring(0, 50) + (playlist.description.length > 50 ? '...' : '') }}
           </div>
         </div>
       </router-link>
@@ -56,8 +59,14 @@ a.playlist-link:hover {
   .playlist-title {
     font-weight: bold;
   }
+  .playlist-video-count {
+    color: #999;
+    text-decoration: none;
+    margin: 0.5rem 0;
+  }
   .playlist-description {
     color: #999;
+    font-size: 0.8em;
     text-decoration: none;
   }
 }

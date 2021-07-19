@@ -105,7 +105,14 @@ export default {
         options.forceRefresh ? 0 : -1
       );
       if (playlists) {
-        this.playlists = playlists.sort((a, b) => b.count - a.count);
+        playlists = playlists.sort((a, b) => b.count - a.count);
+        let allVideosPlaylist = {
+          id: this.channel_id.replace('UC', 'UU'),
+          title: "All Uploaded Videos",
+        }
+        if (playlists[0]) allVideosPlaylist.thumbnail = playlists[0].thumbnail
+        playlists = [allVideosPlaylist, ...playlists]
+        this.playlists = playlists
       }
       this.loading = false;
     },
