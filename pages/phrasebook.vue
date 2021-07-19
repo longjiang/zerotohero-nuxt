@@ -62,14 +62,16 @@
               {{ phraseObj.pronunciation }}
             </span>
           </div>
-          <h4
-            :data-level="
-              phraseObj && phraseObj.level ? phraseObj.level : 'outside'
-            "
-            class="mb-2"
-          >
-            {{ phraseObj.phrase }}
-          </h4>
+          <Annotate :phonetics="false">
+            <h4
+              :data-level="
+                phraseObj && phraseObj.level ? phraseObj.level : 'outside'
+              "
+              class="mb-0"
+              v-html="phraseObj.phrase"
+            />
+          </Annotate>
+
           <div class="mb-0" v-if="phraseObj && phraseObj[$l1.code]">
             {{ phraseObj[$l1.code] }}
           </div>
