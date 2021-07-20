@@ -38,13 +38,6 @@ const Dictionary = {
   getSize() {
     return this.words.length
   },
-  unique(array) {
-    var uniqueArray = []
-    for (let i in array) {
-      if (!uniqueArray.includes(array[i])) uniqueArray.push(array[i])
-    }
-    return uniqueArray
-  },
   uniqueByValue(array, key) {
     let flags = []
     let unique = []
@@ -55,6 +48,15 @@ const Dictionary = {
       unique.push(array[i])
     }
     return unique
+  },
+  unique(a) {
+    return a.filter((item, i, ar) => ar.indexOf(item) === i);
+  },
+  getWordsThatContain(text) {
+    let words = this.words.filter(w => w.head && w.head.includes(text))
+    let strings = words
+      .map((word) => word.head)
+    return this.unique(strings)
   },
   get(id) {
     return this.words.find(row => row.id === id)
