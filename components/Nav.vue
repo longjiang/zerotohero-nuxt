@@ -806,7 +806,7 @@ export default {
   padding: 2rem;
   display: flex;
   flex-direction: row;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 5px 20px #5517041c !important;
   border-radius: 0.5rem;
   .feature-card-icon {
     padding-right: 1rem;
