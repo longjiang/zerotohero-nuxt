@@ -508,19 +508,26 @@ export default {
       }
     },
     simplifyExcludeTerms(excludeTerms) {
-      excludeTerms = excludeTerms.map(t => t.replace(new RegExp(`.*?((${this.terms.join("|")}).).*`), "$1").replace(new RegExp(`.*?(.(${this.terms.join("|")})).*`), "$1").trim())
-      return excludeTerms
+      excludeTerms = excludeTerms.map((t) =>
+        t
+          .replace(new RegExp(`.*?((${this.terms.join("|")}).).*`), "$1")
+          .replace(new RegExp(`.*?(.(${this.terms.join("|")})).*`), "$1")
+          .trim()
+      );
+      return excludeTerms;
     },
     async checkHits() {
       this.checking = true;
-      if (this.terms[0] && this.terms[0].length < 4) {
-        let excludeTerms = await (await this.$getDictionary())
-          .getWordsThatContain(this.terms[0])
-        excludeTerms = this.simplifyExcludeTerms(excludeTerms)
-        excludeTerms = Helper.unique(excludeTerms)
-        excludeTerms = excludeTerms.filter((s) => !this.terms.includes(s));
-        this.excludeTerms = excludeTerms
+      let excludeTerms = [];
+      if (this.terms.length > 0) {
+        for (let term of this.terms) {
+          let t = await (await this.$getDictionary()).getWordsThatContain(term);
+          t = this.simplifyExcludeTerms(t);
+          excludeTerms = excludeTerms.concat(t);
+        }
+        excludeTerms = Helper.unique(excludeTerms);
       }
+      this.excludeTerms = excludeTerms.filter((s) => !this.terms.includes(s));
       let hits = await YouTube.searchSubs(
         this.terms,
         this.excludeTerms,
