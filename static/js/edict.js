@@ -44,12 +44,15 @@ const Dictionary = {
     return this.words.length
   },
   getWordsThatContain(text) {
-    let words = this.words.filter(w => (w.kanji && w.kanji.includes(text)) || (w.kana && w.kana.includes(text)))
-    let strings = this.unique(
-      words
-        .map((word) => word.kana)
-        .concat(words.map((word) => word.kanji))
-    )
+    let strings = []
+    let words = this.words.filter(w => {
+      if (w.kanji && w.kanji.includes(text)) {
+        strings.push(w.kanji)
+      }
+      if (w.kana && w.kana.includes(text)) {
+        strings.push(w.kana)
+      }
+    })
     return strings
   },
   wordForms(word) {
