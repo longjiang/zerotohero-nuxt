@@ -526,7 +526,7 @@ export default {
         }
         excludeTerms = Helper.unique(excludeTerms);
       }
-      this.excludeTerms = excludeTerms.filter((s) => !this.terms.includes(s));
+      this.excludeTerms = excludeTerms.filter((s) => s !== '' && !this.terms.includes(s));
       let hits = await YouTube.searchSubs(
         this.terms,
         this.excludeTerms,
