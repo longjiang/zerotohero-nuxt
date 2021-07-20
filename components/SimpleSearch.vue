@@ -2,6 +2,7 @@
   <b-input-group>
     <b-form-input
       v-model="text"
+      @compositionend.prevent.stop="() => false"
       @keyup.enter="action(text)"
       :placeholder="placeholder"
     />
@@ -35,8 +36,8 @@ export default {
       type: String,
     },
     random: {
-      default: ""
-    }
+      default: "",
+    },
   },
   data() {
     return {
@@ -57,11 +58,9 @@ export default {
   border: none;
 }
 
-
 @media (max-width: 768px) {
   .btn-random span {
     display: none;
   }
 }
-
 </style>
