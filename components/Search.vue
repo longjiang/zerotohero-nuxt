@@ -2,6 +2,7 @@
   <div class="search-wrapper">
     <div class="input-group" v-cloak>
       <input
+        @compositionend.prevent.stop="() => false"
         @keyup.enter="go"
         @focus="
           active = true;
