@@ -96,6 +96,14 @@ const Dictionary = {
     }
     return tokenized
   },
+  unique(a) {
+    return a.filter((item, i, ar) => ar.indexOf(item) === i);
+  },
+  getWordsThatContain(text) {
+    let words = this.words.filter(w => w.head && w.head.includes(text))
+    let strings = words.map((word) => word.head)
+    return this.unique(strings)
+  },
   uniqueByValue(array, key) {
     let flags = []
     let unique = []
