@@ -29,7 +29,7 @@ const Dictionary = {
         head: row.kanji || row.kana,
         bare: row.kanji || row.kana,
         accented: row.kanji || row.kana,
-        definitions: row.english ? row.english.replace(/\(.*?\)/gi, '').replace('/(P)', '').split('/') : [],
+        definitions: row.english ? row.english.replace(/\(.*?\)/gi, '').replace('/(P)', '').split('/').filter(d => d !== '') : [],
         cjk: {
           canonical: row.kanji && row.kanji !== 'NULL' ? row.kanji : undefined,
           phonetics: row.kana
