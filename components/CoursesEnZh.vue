@@ -13,18 +13,20 @@
       <div class="container">
         <div class="row">
           <div class="col-sm-12 text-center">
-            <video
-              class="intro-video d-inline-block"
-              width="500"
-              poster="/img/intro-video-thumbnail.jpeg"
-              controls
-            >
-              <source
-                src="https://www.chinesezerotohero.com/wp-content/uploads/2021/01/Intro-2021-small.mp4"
-                type="video/mp4"
-              />
-              Your browser does not support the video tag.
-            </video>
+            <client-only>
+              <video
+                class="intro-video d-inline-block"
+                width="500"
+                poster="/img/intro-video-thumbnail.jpeg"
+                controls
+              >
+                <source
+                  src="https://www.chinesezerotohero.com/wp-content/uploads/2021/01/Intro-2021-small.mp4"
+                  type="video/mp4"
+                />
+                Your browser does not support the video tag.
+              </video>
+            </client-only>
           </div>
         </div>
       </div>
@@ -188,7 +190,8 @@
                 />
               </a>
               <p class="mt-3">
-                <b>Teachable</b> is an online platform that hosts video courses.
+                <b>Teachable</b>
+                is an online platform that hosts video courses.
               </p>
             </div>
           </div>
@@ -285,36 +288,41 @@
               designed our courses to be concise yet fun and engaging.
             </strong>
             &nbsp;We use instruction design principles proposed by
-            <a href="https://en.wikipedia.org/wiki/Robert_M._Gagn%C3%A9"
-              >Robert M. Gagné</a
-            >, as well as multimedia learning guidelines by
-            <a href="https://en.wikipedia.org/wiki/Richard_E._Mayer"
-              >Richard E. Mayer</a
-            >.&nbsp; The instructional designs are so successful that we have
+            <a href="https://en.wikipedia.org/wiki/Robert_M._Gagn%C3%A9">
+              Robert M. Gagné
+            </a>
+            , as well as multimedia learning guidelines by
+            <a href="https://en.wikipedia.org/wiki/Richard_E._Mayer">
+              Richard E. Mayer
+            </a>
+            .&nbsp; The instructional designs are so successful that we have
             received many raving reviews from our students.
           </p>
           <h5>Communicative</h5>
           <p class>
             <strong>
               All of our
-              <a href="https://courses.chinesezerotohero.com/courses/"
-                >courses</a
-              >
-              focus on communication and function </strong
-            >. &nbsp;We strive to help students use the language by providing
+              <a href="https://courses.chinesezerotohero.com/courses/">
+                courses
+              </a>
+              focus on communication and function
+            </strong>
+            . &nbsp;We strive to help students use the language by providing
             plenty of practice, both written and oral. &nbsp;We help and
             encourage students to practice with a language exchange partner via
-            sites such as <a href="https://www.italki.com/">iTalki</a>.&nbsp;
-            This way students learn to use the language in real life, not just
-            to pass tests.
+            sites such as
+            <a href="https://www.italki.com/">iTalki</a>
+            .&nbsp; This way students learn to use the language in real life,
+            not just to pass tests.
           </p>
           <h5>Standardized</h5>
           <p class>
-            <strong
-              >All of our courses use the standardized HSK curriculum</strong
-            >. &nbsp;When you complete a course, you will be able to pass the
-            HSK test for that level so you can measure your progress and prove
-            your ability.&nbsp; Carefully designed lessons following a well
+            <strong>
+              All of our courses use the standardized HSK curriculum
+            </strong>
+            . &nbsp;When you complete a course, you will be able to pass the HSK
+            test for that level so you can measure your progress and prove your
+            ability.&nbsp; Carefully designed lessons following a well
             established program delivers real, measurable results. All courses
             follow the
             <strong>HSK Standard Course textbook by Jiang Liping.</strong>
@@ -331,15 +339,19 @@
           </p>
           <p>
             First of all, our courses aim to form a
-            <strong>complete</strong> suit with <strong>progressive</strong> and
-            <strong>interconnecting units</strong>. Rather than littering the
-            collection with disjointed one-shot lessons, our material forms a
-            complete whole – a series of step-by-step video-based instructional
-            units that take a beginner beyond the highest level, progressing
-            from HSK level 1 all the way through HSK level 6 and beyond. Such an
-            integrated approach reassures the students that once they sign up
-            with us they will be shown a clear path to success, thus saving them
-            considerable amount of time and uncertainty.
+            <strong>complete</strong>
+            suit with
+            <strong>progressive</strong>
+            and
+            <strong>interconnecting units</strong>
+            . Rather than littering the collection with disjointed one-shot
+            lessons, our material forms a complete whole – a series of
+            step-by-step video-based instructional units that take a beginner
+            beyond the highest level, progressing from HSK level 1 all the way
+            through HSK level 6 and beyond. Such an integrated approach
+            reassures the students that once they sign up with us they will be
+            shown a clear path to success, thus saving them considerable amount
+            of time and uncertainty.
           </p>
           <p>
             Granted, to be successful in acquiring Chinese as a second language,
@@ -347,32 +359,35 @@
             willing to make use of a variety of resources and expose themselves
             to large amounts of the target language through reading and
             listening.
-            <span data-offset-key="e61re-0-0"
-              >Nevertheless, our courses can form the</span
-            >
+            <span data-offset-key="e61re-0-0">
+              Nevertheless, our courses can form the
+            </span>
             <span data-offset-key="e61re-0-1">
               “
-              <strong>backbone</strong>“
+              <strong>backbone</strong>
+              “
             </span>
             <span data-offset-key="e61re-0-2">
               of their learning, providing the structure students can base their
-              learning on. </span
-            >&nbsp;Learners will find unparalleled success if they take our
+              learning on.
+            </span>
+            &nbsp;Learners will find unparalleled success if they take our
             courses in conjunction with the vast array of learning options out
             there.
           </p>
           <p>
             Second, our courses put the spotlight on what many students struggle
             with –
-            <strong>grammar</strong>. Without proper knowledge of grammar,
-            learners cannot accurately understand what they read or hear. In
-            this regard, dictionaries are not particularly helpful because they
-            do not explain sentence formation, at least not in a way that is
-            clear to students at varying levels. Learning sentence formation is
-            especially critical at the beginning stages where learners are
-            utterly oblivious of even the most basic sentence patterns. As a
-            result, many learners often resort to “guessing” by applying English
-            grammar to Chinese sentences and misconstrue their meaning.&nbsp;
+            <strong>grammar</strong>
+            . Without proper knowledge of grammar, learners cannot accurately
+            understand what they read or hear. In this regard, dictionaries are
+            not particularly helpful because they do not explain sentence
+            formation, at least not in a way that is clear to students at
+            varying levels. Learning sentence formation is especially critical
+            at the beginning stages where learners are utterly oblivious of even
+            the most basic sentence patterns. As a result, many learners often
+            resort to “guessing” by applying English grammar to Chinese
+            sentences and misconstrue their meaning.&nbsp;
             <span>
               Therefore, to learn Chinese effectively, grammar instruction
               cannot be overlooked.
@@ -390,9 +405,9 @@
               made familiar to the students, especially at the beginning stages.
               Our grammar instruction strives to be&nbsp;
             </span>
-            <strong class="s570a4-14 kYTLgH"
-              >simple and clear with ample examples&nbsp;</strong
-            >
+            <strong class="s570a4-14 kYTLgH">
+              simple and clear with ample examples&nbsp;
+            </strong>
             <span>
               so that the learners can form sentences correctly without being
               unduly concerned with jargons and terms.
@@ -415,15 +430,15 @@
 </template>
 
 <script>
-import Testimonials from '@/components/Testimonials'
-import TelegramPrompt from '@/components/TelegramPrompt'
+import Testimonials from "@/components/Testimonials";
+import TelegramPrompt from "@/components/TelegramPrompt";
 
 export default {
   components: {
     Testimonials,
     TelegramPrompt,
   },
-}
+};
 </script>
 
 <style>
