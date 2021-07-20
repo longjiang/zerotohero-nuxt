@@ -149,8 +149,8 @@ const Dictionary = {
   },
   lookupFuzzy(text, limit = 30) {
     text = text.trim()
+    let words = []
     if (!this.isRoman(text)) {
-      let words = []
       let subtexts = []
       let hiraganaText = wanakana.isKatakana(text) ? wanakana.toHiragana(text) : false
       for (let i = 1; text.length - i > 0; i++) {
@@ -197,8 +197,8 @@ const Dictionary = {
           }
         }
       }
-      return words.sort((a, b) => b.score - a.score).slice(0, limit)
     }
+    return words.sort((a, b) => b.score - a.score).slice(0, limit)
   },
   subdict(data) {
     let newDict = Object.assign({}, this)
