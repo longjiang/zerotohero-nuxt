@@ -376,7 +376,7 @@ export default {
   },
   activated() {
     setTimeout(() => {
-      if (this.$refs.youtube) this.$refs.youtube.pause();
+      if (this.$refs[`youtube-${this.hitIndex}`]) this.$refs[`youtube-${this.hitIndex}`].pause();
     }, 800);
   },
   destroyed() {
@@ -476,7 +476,6 @@ export default {
       let hitIndex = s[slideIndex];
       if (hitIndex > this.hits.length - 1) hitIndex = 0;
       if (hitIndex < 0) hitIndex = this.hits.length - 1;
-      console.log(slideIndex, hitIndex);
       return hitIndex;
     },
     vueSlickCarouselAfterChange(slideIndex) {
@@ -701,13 +700,13 @@ export default {
       return hit.lineIndex;
     },
     goToPreviousLine() {
-      if (this.$refs.youtube) this.$refs.youtube.goToPreviousLine();
+      if (this.$refs[`youtube-${this.hitIndex}`]) this.$refs[`youtube-${this.hitIndex}`].goToPreviousLine();
     },
     goToNextLine() {
-      if (this.$refs.youtube) this.$refs.youtube.goToNextLine();
+      if (this.$refs[`youtube-${this.hitIndex}`]) this.$refs[`youtube-${this.hitIndex}`].goToNextLine();
     },
     rewind() {
-      if (this.$refs.youtube) this.$refs.youtube.rewind();
+      if (this.$refs[`youtube-${this.hitIndex}`]) this.$refs[`youtube-${this.hitIndex}`].rewind();
     },
     goToPrevHit() {
       this.currentHit = this.prevHit;
@@ -731,16 +730,15 @@ export default {
       this.navigated = true;
     },
     seekYouTube(starttime) {
-      this.$refs.youtube.seek(starttime);
+      this.$refs[`youtube-${this.hitIndex}`].seek(starttime);
     },
     pauseYouTube() {
-      this.$refs.youtube.pause();
+      this.$refs[`youtube-${this.hitIndex}`].pause();
     },
     playYouTube() {
-      this.$refs.youtube.play();
+      this.$refs[`youtube-${this.hitIndex}`].play();
     },
     togglePaused() {
-      console.log(this.$refs[`youtube-${this.hitIndex}`].$el);
       this.$refs[`youtube-${this.hitIndex}`].togglePaused();
     },
     toggleFullscreen() {
