@@ -293,9 +293,6 @@ export default {
   methods: {
     async getSearchTerms() {
       let terms = [this.entry.head];
-      if (this.$dictionaryName === "edict") {
-        terms = [this.entry.kana, ...terms];
-      }
       if (this.$dictionaryName === "hsk-cedict") {
         terms = [this.entry.simplified, this.entry.traditional];
       }
@@ -310,8 +307,12 @@ export default {
         terms = Helper.unique(terms)
           .sort((a, b) => a.length - b.length)
           .slice(0, 5);
-        return terms;
       }
+      if (this.$dictionaryName === "edict") {
+        terms.push(this.entry.kana);
+        terms = Helper.unique(terms)
+      }
+      return terms;
     },
     searchSubsLoaded(hits) {
       if (hits.length > 0) {
