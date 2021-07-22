@@ -29,6 +29,7 @@
           :checkSubs="true"
           ref="youtubeVideoList"
         />
+        <div v-observe-visibility="visibilityChanged"></div>
       </div>
     </div>
   </div>
@@ -62,6 +63,11 @@ export default {
     this.loadPlaylistPage();
   },
   methods: {
+    visibilityChanged(isVisible) {
+      if (this.nextPageToken && isVisible) {
+        this.loadPlaylistPage({ pageToken: this.nextPageToken })
+      }
+    },
     forceRefresh() {
       this.loadPlaylist({ forceRefresh: true });
     },
