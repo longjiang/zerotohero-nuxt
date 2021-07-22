@@ -227,6 +227,12 @@ export default {
               show: this.musicPath,
             },
             {
+              path: this.newsPath,
+              icon: "fa fa-newspaper",
+              title: `${this.$l2.name} News`,
+              show: this.newsPath,
+            },
+            {
               name: "talks",
               icon: "fas fa-graduation-cap",
               title: `${this.$l2.name} Talks`,
@@ -565,6 +571,7 @@ export default {
       hasTVShows: false,
       hasTalks: false,
       musicPath: false,
+      newsPath: false,
       hasPhrasebooks: false,
     };
   },
@@ -586,6 +593,12 @@ export default {
           let musicShow = this.$store.state.shows.tvShows[this.l2.code].find(s => s.title === 'Music')
           if (musicShow) {
             this.musicPath = `/${this.$l1.code}/${this.$l2.code}/show/tv-show/${musicShow.id}`
+          }
+        }
+        if (this.hasTalks) {
+          let newsShow = this.$store.state.shows.talks[this.l2.code].find(s => s.title === 'News')
+          if (newsShow) {
+            this.newsPath = `/${this.$l1.code}/${this.$l2.code}/show/talk/${newsShow.id}`
           }
         }
       }
