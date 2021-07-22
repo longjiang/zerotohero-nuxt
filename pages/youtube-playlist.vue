@@ -67,19 +67,12 @@ export default {
     newShow(show) {
       this.$refs.youtubeVideoList.assignShowToAll(show.id, show.type);
     },
-    async loadPlaylist(options) {
+    async loadPlaylist({forceRefresh = false} = {}) {
       this.videos = [];
-      options = options || {};
-      options = Object.assign(
-        {
-          forceRefresh: false,
-        },
-        options
-      );
       let videos = await YouTube.playlistByApi(
         this.playlist_id,
         false,
-        options.forceRefresh ? 0 : -1
+        forceRefresh ? 0 : -1
       );
       if (videos && videos.length > 0) {
         if (this.checkShows)
