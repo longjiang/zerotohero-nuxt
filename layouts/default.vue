@@ -161,6 +161,11 @@
                       </router-link>
                     </li>
                     <li>
+                      <router-link to="/en/zh/phrasebooks">
+                        Phrasebooks
+                      </router-link>
+                    </li>
+                    <li>
                       <router-link to="/en/zh/grammar">
                         Grammar reference
                       </router-link>
@@ -242,6 +247,11 @@
                     </li>
                     <li>
                       <router-link to="/zh/en/dictionary">词典工具</router-link>
+                    </li>
+                    <li>
+                      <router-link to="/zh/en/phrasebooks">
+                        单词表
+                      </router-link>
                     </li>
                     <li>
                       <router-link to="/zh/en/tv-shows">电视节目</router-link>
