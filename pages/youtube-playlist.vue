@@ -22,6 +22,20 @@
             <i class="fa fa-sync-alt mr-1"></i>
             Force Refresh
           </b-button>
+          <b-button
+            class="btn-small btn-secondary d-inline-block"
+            v-if="entire === false"
+            @click="entire = true"
+          >
+            Load Entire List
+          </b-button>
+          <b-button
+            class="btn-small btn-secondary d-inline-block"
+            v-if="entire === true"
+            @click="entire = false"
+          >
+            Load Paritially Over Infinite Scroll
+          </b-button>
         </div>
         <YouTubeVideoList
           :videos="videos.filter((video) => video.title !== 'Private video')"
@@ -29,7 +43,7 @@
           :checkSubs="true"
           ref="youtubeVideoList"
         />
-        <div v-observe-visibility="visibilityChanged"></div>
+        <div v-if="!entire" v-observe-visibility="visibilityChanged"></div>
       </div>
     </div>
   </div>
@@ -57,24 +71,32 @@ export default {
       checkSaved: false,
       checkShows: false,
       nextPageToken: undefined,
+      entire: false,
     };
   },
   mounted() {
-    this.loadPlaylistPage();
+    this.load();
   },
   methods: {
+    load({ forceRefresh = false } = {}) {
+      if (this.entire) {
+        this.loadEntirePlaylist({ forceRefresh });
+      } else {
+        this.loadPlaylistPage({ forceRefresh });
+      }
+    },
     visibilityChanged(isVisible) {
-      if (this.nextPageToken && isVisible) {
-        this.loadPlaylistPage({ pageToken: this.nextPageToken })
+      if (this.nextPageToken && isVisible && !this.entire) {
+        this.loadPlaylistPage({ pageToken: this.nextPageToken });
       }
     },
     forceRefresh() {
-      this.loadPlaylist({ forceRefresh: true });
+      this.load({ forceRefresh: true });
     },
     newShow(show) {
       this.$refs.youtubeVideoList.assignShowToAll(show.id, show.type);
     },
-    async loadPlaylist({ forceRefresh = false } = {}) {
+    async loadEntirePlaylist({ forceRefresh = false } = {}) {
       this.videos = [];
       let videos = await YouTube.playlistByApi(
         this.playlist_id,
@@ -92,12 +114,12 @@ export default {
         pageToken,
         forceRefresh ? 0 : -1
       );
-      let videos = playlistItems
+      let videos = playlistItems;
       if (videos && videos.length > 0) {
         videos = await this.checkShowsFunc(videos);
         this.videos = this.videos.concat(videos);
       }
-      this.nextPageToken = nextPageToken
+      this.nextPageToken = nextPageToken;
     },
     async checkShowsFunc(videos) {
       if (this.checkShows)
@@ -112,9 +134,12 @@ export default {
     },
   },
   watch: {
+    entire() {
+      this.load()
+    },
     playlist_id() {
       if (this.$route.name === "youtube-playlist") {
-        this.loadPlaylist();
+        this.load();
       }
     },
   },
