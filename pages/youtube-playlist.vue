@@ -67,7 +67,7 @@ export default {
     newShow(show) {
       this.$refs.youtubeVideoList.assignShowToAll(show.id, show.type);
     },
-    async loadPlaylist({forceRefresh = false} = {}) {
+    async loadPlaylist({ forceRefresh = false } = {}) {
       this.videos = [];
       let videos = await YouTube.playlistByApi(
         this.playlist_id,
@@ -75,14 +75,14 @@ export default {
         forceRefresh ? 0 : -1
       );
       if (videos && videos.length > 0) {
-        if (this.checkShows)
-          videos = await YouTube.checkShows(
-            videos,
-            this.$l2.id,
-            this.$adminMode
-          );
+        videos = await this.checkShowsFunc(videos);
         this.videos = videos;
       }
+    },
+    async checkShowsFunc(videos) {
+      if (this.checkShows)
+        videos = await YouTube.checkShows(videos, this.$l2.id, this.$adminMode);
+      return videos;
     },
   },
   computed: {
