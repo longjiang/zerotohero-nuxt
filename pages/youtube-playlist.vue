@@ -82,6 +82,8 @@ export default {
       if (this.entire) {
         this.loadEntirePlaylist({ forceRefresh });
       } else {
+        this.videos = []
+        this.nextPageToken = undefined
         this.loadPlaylistPage({ forceRefresh });
       }
     },
