@@ -13,6 +13,7 @@
             <span>{{ title }}</span>
           </Annotate>
         </h3>
+        <p v-if="totalResults" class="text-center">({{ totalResults }} Videos)</p>
         <h3 class="text-center" v-else>Playlist: {{ playlist_id }}</h3>
         <div class="text-center mt-4 mb-4">
           <b-button
@@ -72,6 +73,7 @@ export default {
       checkShows: false,
       nextPageToken: undefined,
       entire: false,
+      totalResults: undefined,
     };
   },
   mounted() {
@@ -96,8 +98,8 @@ export default {
       if (this.entire) {
         this.loadEntirePlaylist({ forceRefresh });
       } else {
-        this.videos = []
-        this.nextPageToken = undefined
+        this.videos = [];
+        this.nextPageToken = undefined;
         this.loadPlaylistPage({ forceRefresh });
       }
     },
@@ -125,17 +127,19 @@ export default {
       }
     },
     async loadPlaylistPage({ pageToken, forceRefresh = false } = {}) {
-      let { playlistItems, nextPageToken } = await YouTube.playlistPageByApi(
-        this.playlist_id,
-        pageToken,
-        forceRefresh ? 0 : -1
-      );
+      let { playlistItems, nextPageToken, totalResults } =
+        await YouTube.playlistPageByApi(
+          this.playlist_id,
+          pageToken,
+          forceRefresh ? 0 : -1
+        );
       let videos = playlistItems;
       if (videos && videos.length > 0) {
         videos = await this.checkShowsFunc(videos);
         this.videos = this.videos.concat(videos);
       }
       this.nextPageToken = nextPageToken;
+      this.totalResults = totalResults;
     },
     async checkShowsFunc(videos) {
       if (this.checkShows)
@@ -151,7 +155,7 @@ export default {
   },
   watch: {
     entire() {
-      this.load()
+      this.load();
     },
     playlist_id() {
       if (this.$route.name === "youtube-playlist") {
