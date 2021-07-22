@@ -115,16 +115,17 @@ export default {
       this.$refs.youtubeVideoList.assignShowToAll(show.id, show.type);
     },
     async loadEntirePlaylist({ forceRefresh = false } = {}) {
-      this.videos = [];
-      let videos = await YouTube.playlistByApi(
+      let {playlistItems, totalResults} = await YouTube.playlistByApi(
         this.playlist_id,
         false,
         forceRefresh ? 0 : -1
       );
+      let videos = playlistItems
       if (videos && videos.length > 0) {
         videos = await this.checkShowsFunc(videos);
         this.videos = videos;
       }
+      this.totalResults = totalResults
     },
     async loadPlaylistPage({ pageToken, forceRefresh = false } = {}) {
       let { playlistItems, nextPageToken, totalResults } =
