@@ -55,10 +55,11 @@ export default {
       videos: [],
       checkSaved: false,
       checkShows: false,
+      nextPageToken: undefined,
     };
   },
   mounted() {
-    this.loadPlaylist();
+    this.loadPlaylistPage();
   },
   methods: {
     forceRefresh() {
@@ -78,6 +79,19 @@ export default {
         videos = await this.checkShowsFunc(videos);
         this.videos = videos;
       }
+    },
+    async loadPlaylistPage({ pageToken, forceRefresh = false } = {}) {
+      let { playlistItems, nextPageToken } = await YouTube.playlistPageByApi(
+        this.playlist_id,
+        pageToken,
+        forceRefresh ? 0 : -1
+      );
+      let videos = playlistItems
+      if (videos && videos.length > 0) {
+        videos = await this.checkShowsFunc(videos);
+        this.videos = this.videos.concat(videos);
+      }
+      this.nextPageToken = nextPageToken
     },
     async checkShowsFunc(videos) {
       if (this.checkShows)
