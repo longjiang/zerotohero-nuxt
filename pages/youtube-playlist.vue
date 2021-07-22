@@ -24,14 +24,14 @@
           </b-button>
           <b-button
             class="btn-small btn-secondary d-inline-block"
-            v-if="entire === false"
+            v-if="$adminMode && entire === false"
             @click="entire = true"
           >
             Load Entire List
           </b-button>
           <b-button
             class="btn-small btn-secondary d-inline-block"
-            v-if="entire === true"
+            v-if="$adminMode && entire === true"
             @click="entire = false"
           >
             Load Paritially Over Infinite Scroll
@@ -76,6 +76,20 @@ export default {
   },
   mounted() {
     this.load();
+  },
+  computed: {
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
+    $adminMode() {
+      if (typeof this.$store.state.settings.adminMode !== "undefined")
+        return this.$store.state.settings.adminMode;
+    },
   },
   methods: {
     load({ forceRefresh = false } = {}) {
