@@ -8,33 +8,39 @@
   <div class="container main mt-5 mb-5">
     <SocialHead :title="title" :description="description" :image="image" />
 
-    <div class="row mb-5">
+    <div class="row mb-3">
       <div class="col-sm-12" v-if="phrasebook">
         <h4 class="text-center">{{ phrasebook.title }}</h4>
         <div class="mt-2 text-center">
           ({{ phrasebook.phrases.length }} phrases)
         </div>
+        <div v-html="phrasebook.description" class="mt-1 text-center" />
         <div class="text-center mt-3">
-          <a
-            :href="csvHref"
-            :download="`${phrasebook.title}.csv`"
-            v-if="csvHref"
-            class="btn btn-secondary btn-sm"
-          >
-            <i class="fa fa-download"></i>
-            Download CSV
-          </a>
+          <b-input-group prepend="Start from #">
+            <b-form-input v-model.lazy="startRow"></b-form-input>
+            <b-input-group-append>
+              <b-button variant="primary">OK</b-button>
+            </b-input-group-append>
+            <a
+              :href="csvHref"
+              :download="`${phrasebook.title}.csv`"
+              v-if="csvHref"
+              class="btn btn-secondary ml-1"
+            >
+              <i class="fa fa-download"></i>
+              CSV
+            </a>
+          </b-input-group>
         </div>
-        <div v-html="phrasebook.description" class="mt-3 text-center" />
       </div>
     </div>
     <div class="row" v-if="phrasebook">
       <router-link
         v-for="(phraseObj, phraseIndex) in phrasebook.phrases.slice(
-          0,
-          numRowsVisible
+          Number(startRow) - 1,
+          Number(startRow) + 1 + Number(numRowsVisible)
         )"
-        :key="`phrasebook-phrase-${phraseIndex}`"
+        :key="`phrasebook-phrase-${phraseObj.id}`"
         :id="`phrasebook-phrase-${phraseIndex}`"
         class="link-unstyled col-sm-12 col-md-6 col-lg-4 mb-3 mt-3"
         :to="`/${$l1.code}/${$l2.code}/phrasebook/${phrasebook.id}/${
@@ -55,7 +61,7 @@
             :class="`${$l2.direction === 'rtl' ? 'float-left' : 'float-right'}`"
             style="color: #ccc"
           >
-            #{{ phraseIndex + 1 }}
+            #{{ phraseObj.id + 1 }}
           </div>
           <div>
             <span v-if="phraseObj && phraseObj.pronunciation">
@@ -101,6 +107,7 @@ export default {
       images: [],
       initId: undefined,
       csvHref: undefined,
+      startRow: 1,
     };
   },
   computed: {
