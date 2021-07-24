@@ -263,7 +263,7 @@ export default {
       subsUpdated: false,
       assignShow: false,
       subsFile: false,
-      showSaved: false,
+      showSaved: true,
     };
   },
   props: {
@@ -320,10 +320,11 @@ export default {
       this.$emit("newShow", show);
     },
     async saveShow(show, type) {
-      this.showSaved = false;
-      Vue.set(this.video, type, show);
-      if (this.video.id) {
-        if (!this.video[type] || this.video[type].id !== show.id) {
+      let s = this.video[type]
+      if (!s || s.id !== show.id) {
+        this.showSaved = false;
+        Vue.set(this.video, type, show);
+        if (this.video.id) {
           let data = {};
           data[type] = show.id;
           let response = await axios.patch(
