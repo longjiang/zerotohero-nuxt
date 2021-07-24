@@ -83,17 +83,19 @@
       </div>
     </div>
     <div class="youtube-videos">
-      <YouTubeVideoCard
-        v-for="(video, videoIndex) in videos.filter((v) =>
-          this.hideVideosWithoutSubs ? v.hasSubs : true
-        )"
-        :video="video"
-        :checkSubs="checkSubsData"
-        :showSubsEditing="showSubsEditing"
-        @newShow="newShow"
-        ref="youTubeVideoCard"
-        :key="`youtube-video-${video.youtube_id}-${videoIndex}`"
-      />
+      <template
+        v-for="(video, videoIndex) in videos"
+      >
+        <YouTubeVideoCard
+          v-if="hideVideosWithoutSubs ? video.hasSubs : true"
+          :video="video"
+          :checkSubs="checkSubsData"
+          :showSubsEditing="showSubsEditing"
+          @newShow="newShow"
+          ref="youTubeVideoCard"
+          :key="`youtube-video-${video.youtube_id}-${videoIndex}`"
+        />
+      </template>
     </div>
   </div>
 </template>
@@ -158,7 +160,7 @@ export default {
         for (let video of this.videos) {
           delete video.tv_show;
           delete video.talk;
-          Vue.delete(video, 'id')
+          Vue.delete(video, "id");
         }
       }
     },
