@@ -433,11 +433,10 @@ export default {
           }
           if (subs_l2) {
             subs_l2 = subs_l2.sort((a, b) => a.starttime - b.starttime)
-            this.video.subs_l2 = subs_l2;
             this.firstLineTime = this.video.subs_l2[0].starttime;
-            this.video.hasSubs = true;
             this.subsFile = file;
-            Vue.set(this, 'subsFile', file)
+            Vue.set(video, 'subs_l2', subs_l2)
+            Vue.set(video, 'hasSubs', true)
           }
         };
       } catch (err) {}
@@ -534,18 +533,18 @@ export default {
       }
     },
     async checkSubsFunc(video) {
-      video.checkingSubs = true;
-      video.hasSubs = false;
+      Vue.set(video, 'checkingSubs', true)
+      Vue.set(video, 'hasSubs', false)
       if (video.subs_l2 && video.subs_l2.length > 0) {
-        video.hasSubs = true;
-        video.checkingSubs = false;
+        Vue.set(video, 'hasSubs', true)
+        Vue.set(video, 'checkingSubs', false)
       } else {
         video = await YouTube.getYouTubeSubsList(video, this.$l1, this.$l2);
         if (this.checkSaved && this.showSubsEditing) {
           video = await this.checkSavedFunc(video);
           video = this.addSubsL1(video);
         }
-        video.checkingSubs = false;
+        Vue.set(video, 'checkingSubs', false)
       }
       return video;
     },
