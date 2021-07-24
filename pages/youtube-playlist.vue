@@ -96,6 +96,7 @@ export default {
   methods: {
     load({ forceRefresh = false } = {}) {
       if (this.entire) {
+        this.videos = [];
         this.loadEntirePlaylist({ forceRefresh });
       } else {
         this.videos = [];
