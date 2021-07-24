@@ -401,6 +401,7 @@ export default {
           // Directus bug
         }
       }
+      return true
     },
     async updateSubs() {
       let response = await axios.patch(
@@ -518,7 +519,7 @@ export default {
         }
         if (this.video.tv_show) data.tv_show = this.video.tv_show
         if (this.video.talk) data.talk = this.video.talk
-        let response = await axios.post(`${Config.wiki}items/youtube_videos`, data);
+        let response = await axios.post(`${Config.wiki}items/youtube_videos?fields=id,tv_show.*,talk.*`, data);
         response = response.data;
         if (response && response.data) {
           Vue.set(video, "id", response.data.id);

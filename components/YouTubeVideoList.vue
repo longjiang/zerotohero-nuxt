@@ -206,21 +206,27 @@ export default {
     newShow(show) {
       this.$emit("newShow", show);
     },
-    async addAll() {
-      for (let videoIndex in this.$refs.youTubeVideoCard) {
-        await this.$refs.youTubeVideoCard[videoIndex].getSubsAndSave();
+    async batch(f) {
+      let indices = Object.keys(this.$refs.youTubeVideoCard)
+      let chunks = Helper.arrayChunk(indices, 3)
+      for (let chunk of chunks) {
+        let promises = []
+        for (let videoIndex of chunk) {
+          promises.push(f(videoIndex))
+        }
+        await Promise.all(promises)
       }
+    },
+    async addAll() {
+      this.batch(videoIndex => this.$refs.youTubeVideoCard[videoIndex].getSubsAndSave())
     },
     async assignShowToAll(showID, type) {
       // type: 'tv_show' or 'talk'
-      for (let videoIndex in this.$refs.youTubeVideoCard) {
-        await this.$refs.youTubeVideoCard[videoIndex].saveShow(showID, type);
-      }
+      this.batch(videoIndex => this.$refs.youTubeVideoCard[videoIndex].saveShow(showID, type))
     },
     async removeAll() {
       for (let videoIndex in this.$refs.youTubeVideoCard) {
-        await Helper.timeout(200);
-        this.$refs.youTubeVideoCard[videoIndex].remove();
+        await this.$refs.youTubeVideoCard[videoIndex].remove();
       }
     },
     handleDrop(data, event) {
