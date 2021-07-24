@@ -20,8 +20,9 @@
           <Annotate :buttons="true"><p>누구보다 시크하게 도도하게 빨간 립스틱</p></Annotate> -->
           <!-- <Annotate :buttons="true"><p>Ils sont tous de ta mère … je peux?</p></Annotate>
           <Annotate :buttons="true"><p>Qu’est-ce qu’elle dit?</p></Annotate> -->
-          
-          <Annotate :buttons="true"><p>pīnyīn yuèdu</p></Annotate>
+          <!-- <Annotate :buttons="true"><p>pīnyīn yuèdu</p></Annotate> -->
+          <Annotate :buttons="true"><p>Ջրեր</p></Annotate>
+          <!-- վարարուն Կարկաչում էր սարերում: -->
           <!-- ทริปวัดใจ -->
           <!-- <Annotate><p>Hometown's Embrace</p></Annotate> -->
         </div>

@@ -480,6 +480,10 @@ const Dictionary = {
       }
     }
     if (longest.matches.length > 0) {
+      for (let word of longest.matches) {
+        longest.matches = longest.matches.concat(this.stemWords(word, 1))
+        longest.matches = longest.matches.concat(this.phrases(word, 1))
+      }
       let result = []
       /* 
       result = [
@@ -585,6 +589,10 @@ const Dictionary = {
       }
     }
     words = this.words.filter(word => word.search === text).map(w => Object.assign({ score: 1 }, w))
+    for (let word of words) {
+      words = words.concat(this.stemWords(word, 1))
+      words = words.concat(this.phrases(word, 1))
+    }
     if (words.length === 0 && this.words.length < 200000) {
       for (let word of this.words) {
         let search = word.search ? word.search : undefined
