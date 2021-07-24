@@ -88,7 +88,6 @@
           this.hideVideosWithoutSubs ? v.hasSubs : true
         )"
         :video="video"
-        :checkSaved="checkSavedData"
         :checkSubs="checkSubsData"
         :showSubsEditing="showSubsEditing"
         @newShow="newShow"
@@ -101,12 +100,12 @@
 
 <script>
 import Helper from "@/lib/helper";
-import YouTubeVideoCard from "@/components/YouTubeVideoCard";
-
+import Config from "@/lib/config";
 import { Drag, Drop } from "vue-drag-drop";
+import Vue from "vue";
+
 export default {
   components: {
-    YouTubeVideoCard,
     Drag,
     Drop,
   },
@@ -138,29 +137,85 @@ export default {
     };
   },
   computed: {
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
     $adminMode() {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
     },
   },
+  watch: {
+    async checkSavedData() {
+      if (this.checkSavedData) {
+        await this.checkSavedFunc(this.videos);
+      } else {
+        for (let video of this.videos) {
+          delete video.tv_show;
+          delete video.talk;
+          Vue.delete(video, 'id')
+        }
+      }
+    },
+  },
   methods: {
+    async checkSavedFunc(videos) {
+      videos = videos.filter((v) => !v.id); // Only check those that are not saved
+      let youtube_ids = videos.map((v) => v.youtube_id);
+      let response = await axios.get(
+        `${
+          Config.wiki
+        }items/youtube_videos?filter[youtube_id][in]=${youtube_ids}&fields=id,title,channel_id,youtube_id,tv_show.*,talk.*${
+          this.showSubsEditing ? ",subs_l2" : ""
+        }&filter[l2][eq]=${this.$l2.id}&timestamp=${
+          this.$adminMode ? Date.now() : 0
+        }`
+      );
+      if (response.data && response.data.data && response.data.data[0]) {
+        let savedVideos = response.data.data;
+        for (let video of videos) {
+          let savedVideo = savedVideos.find(
+            (v) => v.youtube_id === video.youtube_id
+          );
+          if (savedVideo) {
+            video.tv_show = savedVideo.tv_show;
+            video.talk = savedVideo.talk;
+            if (savedVideo.subs_l2) {
+              let subs_l2 = YouTube.parseSavedSubs(savedVideo.subs_l2);
+              if (subs_l2[0]) {
+                video.subs_l2 = subs_l2;
+                this.firstLineTime = video.subs_l2[0].starttime;
+              }
+            }
+            Vue.set(video, "id", savedVideo.id);
+          }
+        }
+      }
+    },
     newShow(show) {
       this.$emit("newShow", show);
     },
     async addAll() {
       for (let videoIndex in this.$refs.youTubeVideoCard) {
-        // await Helper.timeout(500)
+        await Helper.timeout(500);
         this.$refs.youTubeVideoCard[videoIndex].getSubsAndSave();
       }
     },
-    assignShowToAll(showID, type) {
+    async assignShowToAll(showID, type) {
       // type: 'tv_show' or 'talk'
       for (let videoIndex in this.$refs.youTubeVideoCard) {
+        await Helper.timeout(300);
         this.$refs.youTubeVideoCard[videoIndex].saveShow(showID, type);
       }
     },
-    removeAll() {
+    async removeAll() {
       for (let videoIndex in this.$refs.youTubeVideoCard) {
+        await Helper.timeout(200);
         this.$refs.youTubeVideoCard[videoIndex].remove();
       }
     },
