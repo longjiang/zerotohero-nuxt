@@ -112,7 +112,7 @@ export default {
       this.load({ forceRefresh: true });
     },
     newShow(show) {
-      this.$refs.youtubeVideoList.assignShowToAll(show.id, show.type);
+      this.$refs.youtubeVideoList.assignShowToAll(show, show.type);
     },
     async loadEntirePlaylist({ forceRefresh = false } = {}) {
       let {playlistItems, totalResults} = await YouTube.playlistByApi(

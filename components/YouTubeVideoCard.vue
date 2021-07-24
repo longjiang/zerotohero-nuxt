@@ -317,6 +317,7 @@ export default {
       return moment(date).format("LL");
     },
     newShow(show) {
+      this.saveShow(show, show.type);
       this.$emit("newShow", show);
     },
     async saveShow(show, type) {
