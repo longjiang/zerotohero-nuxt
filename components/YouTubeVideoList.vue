@@ -170,32 +170,35 @@ export default {
     async checkSavedFunc(videos) {
       videos = videos.filter((v) => !v.id); // Only check those that are not saved
       let youtube_ids = videos.map((v) => v.youtube_id);
-      let response = await axios.get(
-        `${
-          Config.wiki
-        }items/youtube_videos?filter[youtube_id][in]=${youtube_ids}&fields=id,title,channel_id,youtube_id,tv_show.*,talk.*${
-          this.showSubsEditing ? ",subs_l2" : ""
-        }&filter[l2][eq]=${this.$l2.id}&timestamp=${
-          this.$adminMode ? Date.now() : 0
-        }`
-      );
-      if (response.data && response.data.data && response.data.data[0]) {
-        let savedVideos = response.data.data;
-        for (let video of videos) {
-          let savedVideo = savedVideos.find(
-            (v) => v.youtube_id === video.youtube_id
-          );
-          if (savedVideo) {
-            video.tv_show = savedVideo.tv_show;
-            video.talk = savedVideo.talk;
-            if (savedVideo.subs_l2) {
-              let subs_l2 = YouTube.parseSavedSubs(savedVideo.subs_l2);
-              if (subs_l2[0]) {
-                video.subs_l2 = subs_l2;
-                this.firstLineTime = video.subs_l2[0].starttime;
+      let chunks = Helper.arrayChunk(youtube_ids, 100)
+      for (let youtube_ids of chunks) {
+        let response = await axios.get(
+          `${
+            Config.wiki
+          }items/youtube_videos?filter[youtube_id][in]=${youtube_ids}&fields=id,title,channel_id,youtube_id,tv_show.*,talk.*${
+            this.showSubsEditing ? ",subs_l2" : ""
+          }&filter[l2][eq]=${this.$l2.id}&timestamp=${
+            this.$adminMode ? Date.now() : 0
+          }`
+        );
+        if (response.data && response.data.data && response.data.data[0]) {
+          let savedVideos = response.data.data;
+          for (let video of videos) {
+            let savedVideo = savedVideos.find(
+              (v) => v.youtube_id === video.youtube_id
+            );
+            if (savedVideo) {
+              video.tv_show = savedVideo.tv_show;
+              video.talk = savedVideo.talk;
+              if (savedVideo.subs_l2) {
+                let subs_l2 = YouTube.parseSavedSubs(savedVideo.subs_l2);
+                if (subs_l2[0]) {
+                  video.subs_l2 = subs_l2;
+                  this.firstLineTime = video.subs_l2[0].starttime;
+                }
               }
+              Vue.set(video, "id", savedVideo.id);
             }
-            Vue.set(video, "id", savedVideo.id);
           }
         }
       }
