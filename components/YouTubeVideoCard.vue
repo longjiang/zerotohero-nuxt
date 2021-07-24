@@ -517,8 +517,8 @@ export default {
           channel_id: video.channel_id,
           date: moment(video.date).format("YYYY-MM-DD HH:mm:ss"),
         }
-        if (this.video.tv_show) data.tv_show = this.video.tv_show
-        if (this.video.talk) data.talk = this.video.talk
+        if (this.video.tv_show) data.tv_show = this.video.tv_show.id
+        if (this.video.talk) data.talk = this.video.talk.id
         let response = await axios.post(`${Config.wiki}items/youtube_videos?fields=id,tv_show.*,talk.*`, data);
         response = response.data;
         if (response && response.data) {

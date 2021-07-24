@@ -220,9 +220,9 @@ export default {
     async addAll() {
       this.batch(videoIndex => this.$refs.youTubeVideoCard[videoIndex].getSubsAndSave())
     },
-    async assignShowToAll(showID, type) {
+    async assignShowToAll(show, type) {
       // type: 'tv_show' or 'talk'
-      this.batch(videoIndex => this.$refs.youTubeVideoCard[videoIndex].saveShow(showID, type))
+      this.batch(videoIndex => this.$refs.youTubeVideoCard[videoIndex].saveShow(show, type))
     },
     async removeAll() {
       for (let videoIndex in this.$refs.youTubeVideoCard) {
