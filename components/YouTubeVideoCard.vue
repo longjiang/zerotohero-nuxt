@@ -12,7 +12,7 @@
     }"
     @dragover="over = true"
     @dragleave="over = false"
-    :key="`video-${video.youtube_id}-${videoInfoKey}`"
+    :key="`video-${video.youtube_id}`"
   >
     <div class="youtube-link">
       <router-link
@@ -245,7 +245,6 @@ export default {
     return {
       Helper,
       Config,
-      videoInfoKey: 0,
       over: false,
       firstLineTime:
         this.video.subs_l2 && this.video.subs_l2[0]
@@ -272,17 +271,13 @@ export default {
     },
   },
   async mounted() {
-    let changed = false;
     if (this.checkSubs) {
       await Helper.timeout(this.delay);
       await this.checkSubsFunc(this.video);
-      changed = true;
     }
     if (this.video.id && this.showSubsEditing) {
       await this.addSubsL1(this.video);
-      changed = true;
     }
-    if (changed) this.videoInfoKey++;
   },
   watch: {
     firstLineTime(newTime, oldTime) {
@@ -291,19 +286,6 @@ export default {
         this.updateSubs();
       }
     },
-    async checkSaved() {
-      if (!this.video.id && this.checkSaved) {
-        await this.checkSavedFunc(this.video);
-        if (this.video.id && this.showSubsEditing) this.addSubsL1(this.video);
-        this.video.checkingSubs = false;
-        this.videoInfoKey++;
-      }
-    },
-    showSubsEditing() {
-      if (this.showSubsEditing && !this.video.subs_l2) {
-        this.checkSavedFunc(this.video)
-      }
-    }
   },
   computed: {
     $l1() {
@@ -354,8 +336,7 @@ export default {
         data
       );
       if (response && response.data) {
-        this.video[type] = undefined;
-        this.videoInfoKey++;
+        Vue.delete(this.video, type);
       }
     },
     async saveTitle(e) {
@@ -403,8 +384,7 @@ export default {
             `${Config.wiki}items/youtube_videos/${this.video.id}`
           );
           if (response) {
-            this.video.id = undefined;
-            this.videoInfoKey++;
+            Vue.delete(this.video, 'id');
           }
         } catch (err) {
           // Directus bug
@@ -457,7 +437,7 @@ export default {
             this.firstLineTime = this.video.subs_l2[0].starttime;
             this.video.hasSubs = true;
             this.subsFile = file;
-            this.videoInfoKey++;
+            Vue.set(this, 'subsFile', file)
           }
         };
       } catch (err) {}
@@ -480,8 +460,7 @@ export default {
         { channel_id: channelId }
       );
       if (response && response.data) {
-        video.channel_id = response.data.channel_id;
-        this.videoInfoKey++;
+        Vue.set(video, 'channel_id', response.data.channel_id);
       }
     },
     async getSubsAndSave(video = this.video) {
@@ -520,8 +499,7 @@ export default {
         });
         response = response.data;
         if (response && response.data) {
-          video.id = response.data.id;
-          this.videoInfoKey++;
+          Vue.set(video, 'id', response.data.id);
           return true;
         }
       } catch (err) {
