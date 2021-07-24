@@ -508,17 +508,21 @@ export default {
         let lines = video.subs_l2;
         if (limit) lines = lines.slice(0, limit);
         let csv = YouTube.unparseSubs(lines, this.$l2.code);
-        let response = await axios.post(`${Config.wiki}items/youtube_videos`, {
+        let data = {
           youtube_id: video.youtube_id,
           title: video.title,
           l2: this.$l2.id,
           subs_l2: csv,
           channel_id: video.channel_id,
           date: moment(video.date).format("YYYY-MM-DD HH:mm:ss"),
-        });
+        }
+        if (this.video.tv_show) data.tv_show = this.video.tv_show
+        if (this.video.talk) data.talk = this.video.talk
+        let response = await axios.post(`${Config.wiki}items/youtube_videos`, data);
         response = response.data;
         if (response && response.data) {
           Vue.set(video, "id", response.data.id);
+          this.showSaved = true
           return true;
         }
       } catch (err) {
