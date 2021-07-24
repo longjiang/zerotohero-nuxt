@@ -50,7 +50,9 @@
         <div v-if="video.hasSubs || video.id" class="btn btn-small mt-2 ml-0">
           {{ $l2.name }} CC
           <span v-if="video.l2Locale">({{ video.l2Locale }})</span>
-          <span v-if="subsFile">- {{ subsFile.name.replace(/[_.]/g, ' ') }}</span>
+          <span v-if="subsFile">
+            - {{ subsFile.name.replace(/[_.]/g, " ") }}
+          </span>
         </div>
         <div
           v-if="
@@ -85,7 +87,11 @@
           Add Channel ID
         </b-button> -->
         <router-link
-          class="btn btn-small mt-2 ml-0 bg-success text-white"
+          :class="{
+            'btn btn-small mt-2 ml-0': true,
+            'text-white bg-success': showSaved,
+            'text-success border-dashed border-success': !showSaved,
+          }"
           v-if="video.tv_show"
           :to="{
             name: 'show',
@@ -101,7 +107,11 @@
           />
         </router-link>
         <router-link
-          class="btn btn-small mt-2 ml-0 bg-success text-white"
+          :class="{
+            'btn btn-small mt-2 ml-0': true,
+            'text-white bg-success': showSaved,
+            'bg-none text-success border-dashed': !showSaved,
+          }"
           v-if="video.talk"
           :to="{
             name: 'show',
@@ -253,6 +263,7 @@ export default {
       subsUpdated: false,
       assignShow: false,
       subsFile: false,
+      showSaved: false,
     };
   },
   props: {
@@ -308,25 +319,24 @@ export default {
     newShow(show) {
       this.$emit("newShow", show);
     },
-    async saveShow(showID, type) {
+    async saveShow(show, type) {
+      this.showSaved = false;
+      Vue.set(this.video, type, show);
       if (this.video.id) {
-        if (!this.video[type] || this.video[type].id !== showID) {
+        if (!this.video[type] || this.video[type].id !== show.id) {
           let data = {};
-          data[type] = showID;
+          data[type] = show.id;
           let response = await axios.patch(
             `${Config.wiki}items/youtube_videos/${this.video.id}?fields=${type}.*`, // type is 'tv_show' or 'talk'
             data
           );
           response = response.data;
           if (response && response.data) {
-            let show = {
-              id: response.data[type].id,
-              title: response.data[type].title,
-            };
-            Vue.set(this.video, type, show);
+            this.showSaved = true;
           }
         }
       }
+      return true;
     },
     async unassignShow(type) {
       let data = {};
@@ -384,7 +394,7 @@ export default {
             `${Config.wiki}items/youtube_videos/${this.video.id}`
           );
           if (response) {
-            Vue.delete(this.video, 'id');
+            Vue.delete(this.video, "id");
           }
         } catch (err) {
           // Directus bug
@@ -422,30 +432,38 @@ export default {
             let events = data.find((section) => section.section === "Events");
             if (events) {
               subs_l2 = events.body
-                .filter((item) => item.key === "Dialogue" && !item.value.Style.includes('CN') && !item.value.Style.includes('STAFF'))
+                .filter(
+                  (item) =>
+                    item.key === "Dialogue" &&
+                    !item.value.Style.includes("CN") &&
+                    !item.value.Style.includes("STAFF")
+                )
                 .map((cue) => {
                   return {
                     starttime: this.parseTime(cue.value.Start),
-                    line: cue.value.Text.replace(/{.*}/g, ''),
+                    line: cue.value.Text.replace(/{.*}/g, ""),
                   };
                 });
             }
           }
           if (subs_l2) {
-            subs_l2 = subs_l2.sort((a, b) => a.starttime - b.starttime)
+            subs_l2 = subs_l2.sort((a, b) => a.starttime - b.starttime);
             this.firstLineTime = this.video.subs_l2[0].starttime;
             this.subsFile = file;
-            Vue.set(video, 'subs_l2', subs_l2)
-            Vue.set(video, 'hasSubs', true)
+            Vue.set(video, "subs_l2", subs_l2);
+            Vue.set(video, "hasSubs", true);
           }
         };
       } catch (err) {}
     },
     parseTime(hms) {
       // 0:00:57.28
-      let ms = moment(hms, 'HH:mm:ss.SS').diff(moment().startOf('day'), 'milliseconds');
-      let s = ms / 1000
-      return s
+      let ms = moment(hms, "HH:mm:ss.SS").diff(
+        moment().startOf("day"),
+        "milliseconds"
+      );
+      let s = ms / 1000;
+      return s;
     },
     handleDrop(data, event) {
       event.preventDefault();
@@ -459,7 +477,7 @@ export default {
         { channel_id: channelId }
       );
       if (response && response.data) {
-        Vue.set(video, 'channel_id', response.data.channel_id);
+        Vue.set(video, "channel_id", response.data.channel_id);
       }
     },
     async getSubsAndSave(video = this.video) {
@@ -477,6 +495,7 @@ export default {
           await this.save(video);
         }
       }
+      return true;
     },
     async getChannelID(video) {
       let details = await YouTube.videoByApi(video.youtube_id);
@@ -498,7 +517,7 @@ export default {
         });
         response = response.data;
         if (response && response.data) {
-          Vue.set(video, 'id', response.data.id);
+          Vue.set(video, "id", response.data.id);
           return true;
         }
       } catch (err) {
@@ -509,17 +528,17 @@ export default {
       }
     },
     async checkSubsFunc(video) {
-      Vue.set(video, 'checkingSubs', true)
-      Vue.set(video, 'hasSubs', false)
+      Vue.set(video, "checkingSubs", true);
+      Vue.set(video, "hasSubs", false);
       if (video.subs_l2 && video.subs_l2.length > 0) {
-        Vue.set(video, 'hasSubs', true)
-        Vue.set(video, 'checkingSubs', false)
+        Vue.set(video, "hasSubs", true);
+        Vue.set(video, "checkingSubs", false);
       } else {
         video = await YouTube.getYouTubeSubsList(video, this.$l1, this.$l2);
         if (this.checkSaved && this.showSubsEditing) {
           video = this.addSubsL1(video);
         }
-        Vue.set(video, 'checkingSubs', false)
+        Vue.set(video, "checkingSubs", false);
       }
       return video;
     },

@@ -208,15 +208,13 @@ export default {
     },
     async addAll() {
       for (let videoIndex in this.$refs.youTubeVideoCard) {
-        await Helper.timeout(500);
-        this.$refs.youTubeVideoCard[videoIndex].getSubsAndSave();
+        await this.$refs.youTubeVideoCard[videoIndex].getSubsAndSave();
       }
     },
     async assignShowToAll(showID, type) {
       // type: 'tv_show' or 'talk'
       for (let videoIndex in this.$refs.youTubeVideoCard) {
-        await Helper.timeout(300);
-        this.$refs.youTubeVideoCard[videoIndex].saveShow(showID, type);
+        await this.$refs.youTubeVideoCard[videoIndex].saveShow(showID, type);
       }
     },
     async removeAll() {

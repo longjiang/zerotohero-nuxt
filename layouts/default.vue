@@ -1306,6 +1306,11 @@ button.bg-primary:focus {
   background-color: #fd4f1c !important;
 }
 
+.border-dashed {
+  border-style: dashed !important;
+  border-width: 2px !important;
+}
+
 .border-primary {
   border-color: #fd4f1c !important;
 }

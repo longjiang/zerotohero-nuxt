@@ -152,9 +152,10 @@ export default {
     },
     save() {
       this.assignShow = false
+      let show = this.shows.find(s => s.id === this.selectedShowID)
       this.$emit(
         "assignShow",
-        this.selectedShowID,
+        show,
         this.type === "talks" ? "talk" : "tv_show"
       );
     },
