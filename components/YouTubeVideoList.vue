@@ -91,6 +91,7 @@
           :video="video"
           :checkSubs="checkSubsData"
           :showSubsEditing="showSubsEditing"
+          :checkSaved="checkSavedData"
           @newShow="newShow"
           ref="youTubeVideoCard"
           :key="`youtube-video-${video.youtube_id}-${videoIndex}`"

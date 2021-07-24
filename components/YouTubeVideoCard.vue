@@ -508,30 +508,6 @@ export default {
         }
       }
     },
-    async checkSavedFunc(video) {
-      let response = await axios.get(
-        `${Config.wiki}items/youtube_videos?filter[youtube_id][eq]=${
-          video.youtube_id
-        }&fields=id,title,channel_id,youtube_id,tv_show.*,talk.*${
-          this.showSubsEditing ? ",subs_l2" : ""
-        }&filter[l2][eq]=${this.$l2.id}&timestamp=${
-          this.$adminMode ? Date.now() : 0
-        }`
-      );
-      if (response.data && response.data.data && response.data.data[0]) {
-        let savedVideo = response.data.data[0];
-        this.video.id = savedVideo.id;
-        this.video.tv_show = savedVideo.tv_show;
-        this.video.talk = savedVideo.talk;
-        if (savedVideo.subs_l2) {
-          let subs_l2 = YouTube.parseSavedSubs(savedVideo.subs_l2);
-          if (subs_l2[0]) {
-            this.video.subs_l2 = subs_l2;
-            this.firstLineTime = video.subs_l2[0].starttime;
-          }
-        }
-      }
-    },
     async checkSubsFunc(video) {
       Vue.set(video, 'checkingSubs', true)
       Vue.set(video, 'hasSubs', false)
@@ -541,7 +517,6 @@ export default {
       } else {
         video = await YouTube.getYouTubeSubsList(video, this.$l1, this.$l2);
         if (this.checkSaved && this.showSubsEditing) {
-          video = await this.checkSavedFunc(video);
           video = this.addSubsL1(video);
         }
         Vue.set(video, 'checkingSubs', false)
