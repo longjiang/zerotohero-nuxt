@@ -138,6 +138,10 @@ export default {
           this.saved = res.data.data;
         }
         this.saving = false;
+        this.$store.dispatch("phrasebooks/load", {
+          l2: this.$l2,
+          adminMode: this.$store.state.settings.adminMode,
+        });
       } catch (err) {
         this.saving = false;
         console.log(err);
