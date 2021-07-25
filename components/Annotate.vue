@@ -28,6 +28,7 @@
         toggle-class="annotator-menu-toggle"
         :dropleft="$l2.direction !== 'rtl'"
         :dropright="$l2.direction === 'rtl'"
+        @hide="onMenuHide"
       >
         <template #button-content><i class="fas fa-ellipsis-v"></i></template>
         <b-dropdown-item>
@@ -213,6 +214,10 @@ export default {
     },
   },
   methods: {
+    async onMenuHide() {
+      await Helper.timeout(300)
+      document.activeElement.blur();
+    },
     hasTranslate() {
       return this.$languages.hasGoogleTranslate(this.$l2);
     },
