@@ -1,6 +1,6 @@
 <template>
   <v-popover
-    :open="popup && hover"
+    :open="popup && open"
     :open-group="'id' + _uid"
     :id="id"
     placement="top"
@@ -23,8 +23,9 @@
       }"
       :data-level="getLevel()"
       v-bind="attributes"
-      @mouseover="mouseOverHandler"
-      @mouseout="mouseOutHandler"
+      @click.stop.prevent="wordBlockClick"
+      @mouseover="wordblockHover = true"
+      @mouseout="wordblockHover = false"
     >
       <template v-if="token && token.candidates && token.candidates.length > 0">
         <span
@@ -78,185 +79,199 @@
       </template>
     </span>
     <template slot="popover">
-      <button class="word-block-tool-tip-close" @click="hover = false">
-        <i class="fa fa-times"></i>
-      </button>
-      <div class="tooltip-images" :key="`tooltip-images-${text}`">
-        <img
-          alt
-          class="image-wall-image"
-          v-for="(image, index) in images"
-          :key="`web-images-${text}-${index}`"
-          :src="`${Config.imageProxy}?${image.src}`"
+      <div @mouseover="tooltipHover = true" @mouseout="tooltipHover = false">
+        <button class="word-block-tool-tip-close" @click="closePopup">
+          <i class="fa fa-times"></i>
+        </button>
+        <div class="tooltip-images" :key="`tooltip-images-${text}`">
+          <img
+            alt
+            class="image-wall-image"
+            v-for="(image, index) in images"
+            :key="`web-images-${text}-${index}`"
+            :src="`${Config.imageProxy}?${image.src}`"
+          />
+        </div>
+        <EntryExternal
+          v-if="text || token"
+          :term="text ? text : token.candidates[0].head"
+          :sticky="false"
+          class="mt-3"
         />
-      </div>
-      <EntryExternal
-        v-if="text || token"
-        :term="text ? text : token.candidates[0].head"
-        :sticky="false"
-        class="mt-3"
-      />
-      <div
-        v-for="word in words"
-        :key="`word-block-word-${word.id}`"
-        :class="classes"
-      >
-        <div v-if="word">
-          <div v-for="match in word.matches" style="color: #999">
-            <b>{{ match.field }} {{ match.number }}</b>
-            {{ match.table !== "declension" ? match.table : "" }}
-            of
+        <div
+          v-for="word in words"
+          :key="`word-block-word-${word.id}`"
+          :class="classes"
+        >
+          <div v-if="word">
+            <div v-for="match in word.matches" style="color: #999">
+              <b>{{ match.field }} {{ match.number }}</b>
+              {{ match.table !== "declension" ? match.table : "" }}
+              of
+            </div>
+            <div>
+              <span style="color: #999" v-if="word.jyutping">
+                {{ word.jyutping }}
+              </span>
+              <span style="color: #999" v-else-if="word.pinyin">
+                {{ word.pinyin }}
+              </span>
+              <span style="color: #999" v-else-if="word.pronunciation">
+                /{{ word.pronunciation }}/
+              </span>
+              <span
+                style="color: #999"
+                v-else-if="word.kana && word.kana !== word.head"
+              >
+                {{ word.kana }}
+              </span>
+              <span
+                style="color: #999"
+                v-else-if="$hasFeature('transliteration')"
+              >
+                {{ tr(word.head) }}
+              </span>
+              <span style="color: #999" v-if="word.jyutping && word.pinyin">
+                / {{ word.pinyin }}
+              </span>
+              <Speak
+                :text="word.kana || word.head"
+                :mp3="word.audio"
+                :wiktionary="word.wiktionary"
+                class="ml-1"
+              />
+            </div>
+            <Star
+              :word="word"
+              :text="text"
+              class="mr-1"
+              style="position: relative; bottom: 0.2rem; font-size: 1.2rem"
+            ></Star>
+            <b :data-level="word.level || 'outside'" style="font-size: 1.5rem">
+              {{
+                $l2.code === "ru" && text.length > 9
+                  ? segment(word.accented)
+                  : word.accented
+              }}
+            </b>
+            <span
+              v-if="word.traditional && word.traditional !== word.simplified"
+              class="ml-1"
+              style="font-size: 1.2em; color: #999"
+            >
+              {{ word.traditional }}
+            </span>
+            <span
+              v-if="$l2.code === 'ko' && word.cjk && word.cjk.canonical"
+              class="ml-1"
+              style="font-size: 1.2em; color: #999"
+            >
+              [{{ word.cjk.canonical }}]
+            </span>
+            <span
+              v-if="word.level && word.level !== 'outside'"
+              :data-bg-level="word.level"
+              class="pl-1 pr-1 ml-1 rounded d-inline-block"
+              style="font-size: 0.8em; position: relative; bottom: 0.1rem"
+            >
+              {{ $dictionaryName === "hsk-cedict" ? "HSK " : ""
+              }}{{ word.level }}
+            </span>
+            <span
+              v-if="word.newHSK"
+              class="ml-1"
+              :style="`position: relative; bottom: 0.2em; font-size: 0.8em; color: ${
+                word.newHSK === '7-9' ? '#00716B' : 'inherit'
+              }`"
+            >
+              <i class="fa fa-arrow-right mr-1" />
+              新 HSK {{ word.newHSK }}
+            </span>
+            <span v-if="word.unit" style="font-size: 0.8em" class="ml-1">
+              Unit {{ word.unit }}
+            </span>
+            <router-link
+              :to="`/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${word.id}`"
+              class="ml-1 link-unstyled"
+              style="color: #999"
+            >
+              <i class="fas fa-book"></i>
+            </router-link>
           </div>
           <div>
-            <span style="color: #999" v-if="word.jyutping">
-              {{ word.jyutping }}
+            <span
+              class="word-type"
+              v-if="word.type !== 'other'"
+              style="color: #999"
+            >
+              {{ word.verbs ? abbreviate(word.verbs.aspect) : "" }}
+              {{ abbreviate(word.type) }}
             </span>
-            <span style="color: #999" v-else-if="word.pinyin">
-              {{ word.pinyin }}
-            </span>
-            <span style="color: #999" v-else-if="word.pronunciation">
-              /{{ word.pronunciation }}/
+            <span class="word-type" v-if="word.pos" style="color: #999">
+              {{ word.pos }}
+              {{
+                word.heads && word.heads[0] && word.heads[0][1]
+                  ? word.heads[0][1]
+                  : ""
+              }}
             </span>
             <span
-              style="color: #999"
-              v-else-if="word.kana && word.kana !== word.head"
+              v-if="word.supplementalLang"
+              class="
+                pl-1
+                pr-1
+                ml-1
+                rounded
+                d-inline-block
+                bg-warning
+                text-white
+              "
+              style="font-size: 0.8em; position: relative; bottom: 0.1rem"
             >
-              {{ word.kana }}
+              {{ $languages.getSmart(word.supplementalLang).name }}
             </span>
-            <span
-              style="color: #999"
-              v-else-if="$hasFeature('transliteration')"
-            >
-              {{ tr(word.head) }}
+            <ol class="word-translation" v-if="word.definitions">
+              <li
+                v-for="(def, index) in word.definitions
+                  .filter((def) => def.trim() !== '')
+                  .map((definition) =>
+                    definition ? definition.replace(/\[.*\] /g, '') : ''
+                  )"
+                :key="`wordblock-def-${index}`"
+                class="word-translation-item"
+              >
+                <span>{{ def }}</span>
+              </li>
+            </ol>
+            <span class="word-counters" v-if="word.counters">
+              <em>:</em>
+              {{
+                word.counters
+                  .map((counter) => "一" + counter.simplified)
+                  .join(word.simplified + "、") + word.simplified
+              }}。
             </span>
-            <span style="color: #999" v-if="word.jyutping && word.pinyin">
-              / {{ word.pinyin }}
-            </span>
-            <Speak
-              :text="word.kana || word.head"
-              :mp3="word.audio"
-              :wiktionary="word.wiktionary"
-              class="ml-1"
-            />
           </div>
-          <Star
-            :word="word"
-            :text="text"
-            class="mr-1"
-            style="position: relative; bottom: 0.2rem; font-size: 1.2rem"
-          ></Star>
-          <b :data-level="word.level || 'outside'" style="font-size: 1.5rem">
-            {{
-              $l2.code === "ru" && text.length > 9
-                ? segment(word.accented)
-                : word.accented
-            }}
-          </b>
-          <span
-            v-if="word.traditional && word.traditional !== word.simplified"
-            class="ml-1"
-            style="font-size: 1.2em; color: #999"
-          >
-            {{ word.traditional }}
-          </span>
-          <span
-            v-if="$l2.code === 'ko' && word.cjk && word.cjk.canonical"
-            class="ml-1"
-            style="font-size: 1.2em; color: #999"
-          >
-            [{{ word.cjk.canonical }}]
-          </span>
-          <span
-            v-if="word.level && word.level !== 'outside'"
-            :data-bg-level="word.level"
-            class="pl-1 pr-1 ml-1 rounded d-inline-block"
-            style="font-size: 0.8em; position: relative; bottom: 0.1rem"
-          >
-            {{ $dictionaryName === "hsk-cedict" ? "HSK " : "" }}{{ word.level }}
-          </span>
-          <span
-            v-if="word.newHSK"
-            class="ml-1"
-            :style="`position: relative; bottom: 0.2em; font-size: 0.8em; color: ${
-              word.newHSK === '7-9' ? '#00716B' : 'inherit'
-            }`"
-          >
-            <i class="fa fa-arrow-right mr-1" />
-            新 HSK {{ word.newHSK }}
-          </span>
-          <span v-if="word.unit" style="font-size: 0.8em" class="ml-1">
-            Unit {{ word.unit }}
-          </span>
-          <router-link
-            :to="`/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${word.id}`"
-            class="ml-1 link-unstyled"
-            style="color: #999"
-          >
-            <i class="fas fa-book"></i>
-          </router-link>
         </div>
-        <div>
-          <span
-            class="word-type"
-            v-if="word.type !== 'other'"
-            style="color: #999"
+        <div v-if="loading === true">💭 Thinking...</div>
+        <div
+          v-if="words && words.length === 0 && loading === false"
+          class="mt-3"
+        >
+          <span style="color: #999" v-if="$hasFeature('transliteration')">
+            {{ tr(text) }}
+            <Speak :text="text" class="ml-1" />
+          </span>
+          <div
+            data-level="outside"
+            style="font-size: 1.5rem; font-weight: bold"
           >
-            {{ word.verbs ? abbreviate(word.verbs.aspect) : "" }}
-            {{ abbreviate(word.type) }}
-          </span>
-          <span class="word-type" v-if="word.pos" style="color: #999">
-            {{ word.pos }}
-            {{
-              word.heads && word.heads[0] && word.heads[0][1]
-                ? word.heads[0][1]
-                : ""
-            }}
-          </span>
-          <span
-            v-if="word.supplementalLang"
-            class="pl-1 pr-1 ml-1 rounded d-inline-block bg-warning text-white"
-            style="font-size: 0.8em; position: relative; bottom: 0.1rem"
-          >
-            {{ $languages.getSmart(word.supplementalLang).name }}
-          </span>
-          <ol class="word-translation" v-if="word.definitions">
-            <li
-              v-for="(def, index) in word.definitions
-                .filter((def) => def.trim() !== '')
-                .map((definition) =>
-                  definition ? definition.replace(/\[.*\] /g, '') : ''
-                )"
-              :key="`wordblock-def-${index}`"
-              class="word-translation-item"
-            >
-              <span>{{ def }}</span>
-            </li>
-          </ol>
-          <span class="word-counters" v-if="word.counters">
-            <em>:</em>
-            {{
-              word.counters
-                .map((counter) => "一" + counter.simplified)
-                .join(word.simplified + "、") + word.simplified
-            }}。
+            {{ text }}
+          </div>
+          <span style="color: #999">
+            Sorry, no definition found for “{{ text }}”.
           </span>
         </div>
-      </div>
-      <div v-if="loading === true">💭 Thinking...</div>
-      <div v-if="words && words.length === 0 && loading === false" class="mt-3">
-        <span style="color: #999" v-if="$hasFeature('transliteration')">
-          {{ tr(text) }}
-          <Speak
-            :text="text"
-            class="ml-1"
-          />
-        </span>
-        <div data-level="outside" style="font-size: 1.5rem; font-weight: bold">
-          {{ text }}
-        </div>
-        <span style="color: #999">
-          Sorry, no definition found for “{{ text }}”.
-        </span>
       </div>
     </template>
   </v-popover>
@@ -294,7 +309,7 @@ export default {
       transliteration: undefined,
       savedTransliteration: undefined,
       id: `wordblock-${Helper.uniqueId()}`,
-      hover: false,
+      open: false,
       loading: true,
       text: this.$slots.default ? this.$slots.default[0].text : undefined,
       saved: false,
@@ -304,6 +319,8 @@ export default {
         "tooltip-entry": true,
       },
       checkSaved: true,
+      wordblockHover: false,
+      tooltipHover: false,
       Config,
     };
   },
@@ -388,6 +405,16 @@ export default {
     // you may call unsubscribe to stop the subscription
     this.unsubscribe();
   },
+  watch: {
+    async wordblockHover() {
+      await Helper.timeout(1000)
+      this.updateOpen()
+    },
+    async tooltipHover() {
+      await Helper.timeout(300)
+      this.updateOpen()
+    }
+  },
   methods: {
     getLevel() {
       if (
@@ -435,6 +462,8 @@ export default {
         this.$router.push({
           path: `/${this.$l1.code}/${this.$l2.code}/explore/related/${this.token.candidates[0].id}`,
         });
+      } else {
+        this.togglePopup()
       }
     },
     tr(text) {
@@ -536,8 +565,15 @@ export default {
       }
     },
     togglePopup() {
-      if (this.hover) this.closePopup();
-      else this.openPopup();
+      if (this.open) this.closePopup();
+      else if (this.popup) this.openPopup();
+    },
+    updateOpen() {
+      if (this.wordblockHover || this.tooltipHover) {
+        this.openPopup()
+      } else {
+        this.closePopup()
+      }
     },
     async openPopup() {
       if (this.popup && (await this.$getDictionary())) {
@@ -546,34 +582,20 @@ export default {
             this.lookup();
           }
         }
-        setTimeout(() => {
-          if ($(".popover:hover").length === 0) {
-            this.hover = true;
-          }
-        }, 300); // Allow user to interact with previous popover
         this.loadImages();
+        this.open = true;
       }
     },
-    closePopup() {
-      if (this.popup) {
-        setTimeout(() => {
-          // Allow user to interact with popover
-          let $popovers = $(".popover:hover");
-          if ($popovers && $popovers.length === 0) {
-            this.hover = false;
-          }
-        }, 300);
-      }
-    },
-    mouseOverHandler() {
-      this.openPopup();
-    },
-    mouseOutHandler() {
-      this.closePopup();
+    async closePopup() {
+      this.open = false;
     },
     async lookup() {
       let words = [];
-      if (this.token && this.token.candidates && this.token.candidates.length > 0) {
+      if (
+        this.token &&
+        this.token.candidates &&
+        this.token.candidates.length > 0
+      ) {
         words = this.token.candidates;
       } else if (this.text) {
         if (!this.text && this.token) this.text = this.token.candidates[0].head;
