@@ -25,7 +25,7 @@
             :enableNewShow="false"
             type="tv-shows"
           />
-          <div v-if="this.showID">Associated with show id {{ this.showID }}</div>
+          <div v-if="this.show">Associated with show {{ this.show.title }} (ID: {{ this.show.id }})</div>
         </div>
       </div>
       <div class="row">
@@ -87,7 +87,7 @@ export default {
       saved: undefined,
       saving: false,
       flip: false,
-      showID: undefined,
+      show: undefined,
       showType: undefined
     };
   },
@@ -110,8 +110,8 @@ export default {
     },
   },
   methods: {
-    assignShow(showID, type) {
-      this.showID = showID
+    assignShow(show, type) {
+      this.show = show
       this.showType = type
     },
     async save() {
@@ -121,8 +121,8 @@ export default {
         phrases,
         l2: this.$l2.id,
       };
-      if (this.showID && this.showType) {
-        phrasebook[this.showType] = this.showID
+      if (this.show && this.showType) {
+        phrasebook[this.showType] = this.show.id
         phrasebook.exact = true
       }
       if (this.sourceURL) {

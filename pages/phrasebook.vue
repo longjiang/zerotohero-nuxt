@@ -219,7 +219,6 @@ export default {
     },
     async loadPhrasebook(bookId) {
       let url = `${Config.wiki}items/phrasebook/${bookId}?fields=*,tv_show.*`;
-      console.log(url);
       let response = await axios.get(url);
       if (response.data && response.data.data) {
         let phrasebook = response.data.data;
