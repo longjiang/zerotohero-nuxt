@@ -38,24 +38,25 @@
           @blur="showFilter = false"
         />
         <span
-          v-if="groupsRight['zthSaved'].length > 0"
-          class="ml-0 mr-0"
-          style="background: none"
-        >
-          {{ groupsRight["zthSaved"].length }}
-        </span>
-        <SmallStar
-          v-if="groupsRight['zthSaved'].length > 0"
-          :item="currentHit"
-          :saved="(hit) => hit.saved"
-          :save="saveHit"
-          :remove="removeSavedHit"
-          class="ml-0 mr-0"
-        />
-        <span
           class="ml-2 mr-2 d-inline-block"
           style="margin-bottom: -0.52rem; overflow: hidden"
         >
+          <span
+            v-if="groupsRight['zthSaved'].length > 0"
+            class="ml-0 mr-0"
+            style="background: none;"
+          >
+            {{ groupsRight["zthSaved"].length }}
+          </span>
+          <SmallStar
+            v-if="groupsRight['zthSaved'].length > 0"
+            :item="currentHit"
+            :saved="(hit) => hit.saved"
+            :save="saveHit"
+            :remove="removeSavedHit"
+            class="ml-0 mr-0"
+            style="position: relative; bottom: 0.1rem;"
+          />
           {{ hitIndex + 1 }} of {{ hits.length }}
         </span>
         <b-dropdown
@@ -376,7 +377,8 @@ export default {
   },
   activated() {
     setTimeout(() => {
-      if (this.$refs[`youtube-${this.hitIndex}`]) this.$refs[`youtube-${this.hitIndex}`].pause();
+      if (this.$refs[`youtube-${this.hitIndex}`])
+        this.$refs[`youtube-${this.hitIndex}`].pause();
     }, 800);
   },
   destroyed() {
@@ -526,7 +528,9 @@ export default {
         }
         excludeTerms = Helper.unique(excludeTerms);
       }
-      this.excludeTerms = excludeTerms.filter((s) => s !== '' && !this.terms.includes(s));
+      this.excludeTerms = excludeTerms.filter(
+        (s) => s !== "" && !this.terms.includes(s)
+      );
       let hits = await YouTube.searchSubs(
         this.terms,
         this.excludeTerms,
@@ -700,13 +704,16 @@ export default {
       return hit.lineIndex;
     },
     goToPreviousLine() {
-      if (this.$refs[`youtube-${this.hitIndex}`]) this.$refs[`youtube-${this.hitIndex}`].goToPreviousLine();
+      if (this.$refs[`youtube-${this.hitIndex}`])
+        this.$refs[`youtube-${this.hitIndex}`].goToPreviousLine();
     },
     goToNextLine() {
-      if (this.$refs[`youtube-${this.hitIndex}`]) this.$refs[`youtube-${this.hitIndex}`].goToNextLine();
+      if (this.$refs[`youtube-${this.hitIndex}`])
+        this.$refs[`youtube-${this.hitIndex}`].goToNextLine();
     },
     rewind() {
-      if (this.$refs[`youtube-${this.hitIndex}`]) this.$refs[`youtube-${this.hitIndex}`].rewind();
+      if (this.$refs[`youtube-${this.hitIndex}`])
+        this.$refs[`youtube-${this.hitIndex}`].rewind();
     },
     goToPrevHit() {
       this.currentHit = this.prevHit;
@@ -755,8 +762,8 @@ export default {
         !["INPUT", "TEXTAREA"].includes(e.target.tagName.toUpperCase()) &&
         !e.metaKey &&
         !e.repeat &&
-        !e.target.getAttribute("contenteditable")
-        && this.$refs[`youtube-${this.hitIndex}`]
+        !e.target.getAttribute("contenteditable") &&
+        this.$refs[`youtube-${this.hitIndex}`]
       ) {
         // left = 37
         if (e.keyCode == 37 && e.shiftKey) {
