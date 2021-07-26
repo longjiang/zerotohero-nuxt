@@ -73,32 +73,10 @@
         </div>
       </div>
     </div>
-    <div class="container">
-      <div class="row mt-4">
-        <div class="col-sm-6">
-          <WebImages
-            v-if="a"
-            :text="a.bare"
-            limit="10"
-            :preloaded="aImages"
-            :key="`${a.id}-images`"
-          ></WebImages>
-        </div>
-        <div class="col-sm-6">
-          <WebImages
-            v-if="b"
-            :text="b.bare"
-            limit="10"
-            :preloaded="bImages"
-            :key="`${b.id}-images`"
-          ></WebImages>
-        </div>
-      </div>
-    </div>
 
     <div class="container">
       <div class="row">
-        <div class="col-md-12 mt-5">
+        <div class="col-md-12">
           <div
             class="widget"
             v-if="a && b"
@@ -130,6 +108,29 @@
               />
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="row mt-5">
+        <div class="col-sm-6">
+          <WebImages
+            v-if="a"
+            :text="a.bare"
+            limit="10"
+            :preloaded="aImages"
+            :key="`${a.id}-images`"
+          ></WebImages>
+        </div>
+        <div class="col-sm-6">
+          <WebImages
+            v-if="b"
+            :text="b.bare"
+            limit="10"
+            :preloaded="bImages"
+            :key="`${b.id}-images`"
+          ></WebImages>
         </div>
       </div>
     </div>
