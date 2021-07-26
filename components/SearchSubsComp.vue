@@ -756,6 +756,7 @@ export default {
         !e.metaKey &&
         !e.repeat &&
         !e.target.getAttribute("contenteditable")
+        && this.$refs[`youtube-${this.hitIndex}`]
       ) {
         // left = 37
         if (e.keyCode == 37 && e.shiftKey) {
