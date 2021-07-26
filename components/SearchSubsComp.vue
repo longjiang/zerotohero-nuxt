@@ -857,7 +857,6 @@ export default {
   background: white;
   z-index: 10;
   overflow: scroll;
-  padding-top: 0.3rem;
   margin-top: 0 !important;
 }
 .playlist-dropdown {
