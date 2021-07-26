@@ -58,9 +58,9 @@
           @click="wordBlockClick()"
           v-html="token.text"
         /><span
-          v-if="$l2.code === 'ko' && (saved || token.candidates[0]).hanja"
+          v-if="hanja"
           class="word-block-text-byeonggi d-inline-block"
-          v-html="(saved || token.candidates[0]).hanja"
+          v-html="hanja"
         />
       </template>
       <template v-else>
@@ -342,6 +342,17 @@ export default {
     $hanzi() {
       return this.$getHanzi();
     },
+    hanja() {
+      if (this.$l2.code === "ko") {
+        if (this.saved) return this.saved.hanja;
+        else {
+          let hanjas = this.token.candidates
+            .map((c) => c.hanja);
+          hanjas = Helper.unique(hanjas);
+          if (hanjas.length === 1) return hanjas[0];
+        }
+      }
+    },
     bestCandidate() {
       if (this.token && this.token.candidates && this.token.candidates[0]) {
         let saved = this.token.candidates.find((c) => c.saved);
@@ -407,13 +418,13 @@ export default {
   },
   watch: {
     async wordblockHover() {
-      await Helper.timeout(1000)
-      this.updateOpen()
+      await Helper.timeout(1000);
+      this.updateOpen();
     },
     async tooltipHover() {
-      await Helper.timeout(300)
-      this.updateOpen()
-    }
+      await Helper.timeout(300);
+      this.updateOpen();
+    },
   },
   methods: {
     getLevel() {
@@ -463,7 +474,7 @@ export default {
           path: `/${this.$l1.code}/${this.$l2.code}/explore/related/${this.token.candidates[0].id}`,
         });
       } else {
-        this.togglePopup()
+        this.togglePopup();
       }
     },
     tr(text) {
@@ -570,9 +581,9 @@ export default {
     },
     updateOpen() {
       if (this.wordblockHover || this.tooltipHover) {
-        this.openPopup()
+        this.openPopup();
       } else {
-        this.closePopup()
+        this.closePopup();
       }
     },
     async openPopup() {
