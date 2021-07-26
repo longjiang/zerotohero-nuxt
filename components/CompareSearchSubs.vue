@@ -13,24 +13,33 @@
     </div>
     <div
       :class="{
-        'search-subs text-center pt-1 pb-2 bg-dark': true,
+        'search-subs text-center pt-1 bg-dark': true,
         'd-none': checkingA || checkingB,
       }"
       v-if="this.$refs.searchSubsA && this.$refs.searchSubsB"
     >
       <b-button
         size="sm"
-        class="border-0 ml-1 mr-1"
-        variant="gray"
+        class="tab border-0 ml-1 mr-1"
+        variant="none"
         :data-bg-level="hitAB === 'A' ? levelA : false"
         @click="hitAB = 'A'"
       >
         {{ termsA[0] }}
       </b-button>
+      <b-button
+        class="tab border-0 ml-1 mr-1"
+        variant="none"
+        size="sm"
+        :data-bg-level="hitAB === 'B' ? levelB : false"
+        @click="hitAB = 'B'"
+      >
+        {{ termsB[0] }}
+      </b-button>
 
       <b-dropdown
         class="playlist-dropdown"
-        toggle-class="btn btn-gray btn-sm border-0 playlist-dropdown-toggle ml-1 mr-1"
+        toggle-class="btn btn-sm btn-dark text-white border-0 playlist-dropdown-toggle ml-1 mr-1"
         boundary="viewport"
         ref="dropdown"
         no-caret
@@ -176,31 +185,30 @@
           </div>
         </template>
       </b-dropdown>
-      <b-button
-        size="sm"
-        class="border-0 ml-1 mr-1"
-        variant="gray"
-        :data-bg-level="hitAB === 'B' ? levelB : false"
-        @click="hitAB = 'B'"
-      >
-        {{ termsB[0] }}
-      </b-button>
-      <b-button
-        class="search-subs-fullscreen border-0 ml-1 mr-1"
-        variant="gray"
-        size="sm"
-        @click="toggleFullscreen"
-        v-if="!fullscreen"
-      >
-        <i class="fas fa-expand"></i>
-      </b-button>
-      <b-button
-        class="btn btn-small search-subs-close border-0 ml-1 mr-1"
-        @click="toggleFullscreen"
-        v-if="fullscreen"
-      >
-        <i class="fas fa-times" />
-      </b-button>
+      <div class="float-right mr-1">
+        <b-button
+          class="search-subs-fullscreen border-0 ml-1"
+          variant="dark"
+          size="sm"
+          @click="toggleFullscreen"
+          v-if="!fullscreen"
+        >
+          <i class="fas fa-expand"></i>
+        </b-button>
+        <b-button
+          class="search-subs-close border-0 ml-1 mr-1"
+          variant="dark"
+          size="sm"
+          @click="toggleFullscreen"
+          v-if="fullscreen"
+        >
+          <i class="fas fa-times" />
+        </b-button>
+      </div>
+      <div
+        style="height: 0.5rem"
+        :data-bg-level="hitAB === 'A' ? levelA : levelB"
+      ></div>
     </div>
     <SearchSubsComp
       :class="{ 'd-none': hitAB === 'B' }"
