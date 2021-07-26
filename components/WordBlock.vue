@@ -349,7 +349,7 @@ export default {
           let hanjas = this.token.candidates
             .map((c) => c.hanja);
           hanjas = Helper.unique(hanjas);
-          if (hanjas.length === 1) return hanjas[0];
+          if (hanjas.length === 1) return hanjas[0].split(/,-/)[0];
         }
       }
     },
