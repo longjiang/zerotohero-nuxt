@@ -48,10 +48,6 @@ export default {
   data() {
     return {
       specials: {
-        en: {
-          name: "英语",
-          l1: "zh",
-        },
         lzh: {
           name: "文言文",
           l1: "zh",
