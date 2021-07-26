@@ -34,7 +34,7 @@
         {{ video.tv_show.title }}
         <i
           :class="{ 'fas fa-times-circle ml-1': true, 'd-none': !$adminMode }"
-          @click="unassignShow('tv_show')"
+          @click.stop.prevent="unassignShow('tv_show')"
         />
       </router-link>
       <router-link
