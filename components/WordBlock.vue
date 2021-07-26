@@ -344,13 +344,14 @@ export default {
     },
     hanja() {
       if (this.$l2.code === "ko") {
-        if (this.saved) return this.saved.hanja;
+        let hanja = "";
+        if (this.saved) hanja = this.saved.hanja;
         else {
-          let hanjas = this.token.candidates
-            .map((c) => c.hanja);
+          let hanjas = this.token.candidates.map((c) => c.hanja);
           hanjas = Helper.unique(hanjas);
-          if (hanjas.length === 1) return hanjas[0].split(/,-/)[0];
+          if (hanjas.length === 1) hanja = hanjas[0];
         }
+        return hanja.split(/[,\-]/)[0];
       }
     },
     bestCandidate() {
