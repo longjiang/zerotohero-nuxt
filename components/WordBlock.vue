@@ -581,7 +581,7 @@ export default {
       else if (this.popup) this.openPopup();
     },
     updateOpen() {
-      if (this.wordblockHover || this.tooltipHover) {
+      if (!Helper.isMobile() && (this.wordblockHover || this.tooltipHover)) {
         this.openPopup();
       } else {
         this.closePopup();
