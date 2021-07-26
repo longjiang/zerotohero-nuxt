@@ -305,6 +305,8 @@ export default {
   },
   watch: {
     hitAB() {
+      this.$refs.searchSubsA.pauseYouTube(),
+      this.$refs.searchSubsB.pauseYouTube(),
       this.unbindKeys();
       this.bindKeys();
     },
