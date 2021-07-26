@@ -12,7 +12,7 @@
           :key="`definition-${index}`"
           class="definition-list-item"
         >
-          <v-runtime-template :template="`<span>${definition.html}</span>`" />
+          <v-runtime-template :template="`<span>${definition.html}</span>`" /><span v-if="augmentedDefinitions.length < 4 && index < augmentedDefinitions.length - 1">; </span>
         </li>
       </ul>
     </template>
@@ -103,9 +103,6 @@ export default {
   .definition-list-item {
     font-size: 1.1rem;
     display: inline;
-  }
-  :not(.definitions-many) > .definition-list-item:not(:last-child)::after {
-    content: "; ";
   }
   &.definitions-many {
     padding-left: inherit;
