@@ -125,7 +125,7 @@ export default {
       });
       let colDesc = {};
       for (let g of Helper.uniqueByValue(
-        this.aSketch.Gramrels.concat(this.bSketch.Gramrels),
+        (this.aSketch.Gramrels || []).concat(this.bSketch.Gramrels || []),
         "name"
       )) {
         colDesc[g.name] = g.name.replace("%w", "{word}");
