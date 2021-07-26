@@ -658,7 +658,7 @@ export default {
         l2: this.$l2.code,
       });
       hit.saved = true;
-      if (this.currentHit === hit) this.nextHit();
+      if (this.currentHit === hit) this.goToNextHit();
       this.groupsLeft["zthSaved"].push(hit);
       this.groupsRight["zthSaved"].push(hit);
       this.findAndRemoveHit(this.groupsLeft, hit);
@@ -672,7 +672,7 @@ export default {
         l2: this.$l2.code,
       });
       hit.saved = false;
-      if (this.currentHit === hit) this.nextHit();
+      if (this.currentHit === hit) this.goToNextHit();
       let index = this.groupsLeft["zthSaved"].findIndex((h) => h === hit);
       if (index !== -1) this.groupsLeft["zthSaved"].splice(index, 1);
       index = this.groupsRight["zthSaved"].findIndex((h) => h === hit);
