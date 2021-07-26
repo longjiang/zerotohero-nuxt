@@ -821,25 +821,9 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .subs-search-slide {
   position: relative;
-}
-.test-div {
-  text-align: center;
-  padding: 2rem;
-  font-size: 2em;
-  color: white;
-  background: #ccc;
-  &.test-div-0 {
-    background-color: pink;
-  }
-  &.test-div-1 {
-    background-color: aquamarine;
-  }
-  &.test-div-2 {
-    background-color: antiquewhite;
-  }
 }
 .search-subs .btn {
   margin: 0;
@@ -868,8 +852,8 @@ export default {
   padding-top: 0.3rem;
   margin-top: 0 !important;
 }
-.search-subs .playlist-dropdown {
-  ::v-deep .dropdown-menu {
+.playlist-dropdown {
+  .dropdown-menu {
     margin-top: 2.2rem;
     height: calc(100vh - 3rem);
     border: none;
