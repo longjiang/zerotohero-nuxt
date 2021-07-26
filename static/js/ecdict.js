@@ -28,8 +28,8 @@ const Dictionary = {
     this.touchstoneFile = `${server}data/ecdict/touchstone.csv.txt`
     this.frequencyFile = `${server}data/ecdict/frequency.csv.txt`
     return new Promise(async resolve => {
-      let promises = [this.loadWords(), this.loadFrequency()]
-      await Promise.all(promises)
+      await this.loadWords()
+      // await this.loadFrequency() // Frequency is now built in the csv
       this.addIdToWords()
       // this.addFrequencyToWords()
       // this.addFrequencyToPhrases()
