@@ -73,7 +73,7 @@ export default {
     },
     async definitionHtml(text) {
       let m = text.match(/(.* of )([^\s]+)(.*)/);
-      if (m) {
+      if (m && this.$l2.code !== 'en') {
         let stringBefore = m[1];
         let lemma = m[2].replace(/\u200e/g, ""); // Left-to-Right Mark
         let stringAfter = m[3];
@@ -104,7 +104,7 @@ export default {
     font-size: 1.1rem;
     display: inline;
   }
-  .definition-list-item:not(:last-child)::after {
+  :not(.definitions-many) > .definition-list-item:not(:last-child)::after {
     content: "; ";
   }
   &.definitions-many {
