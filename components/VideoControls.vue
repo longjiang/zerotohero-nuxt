@@ -32,7 +32,8 @@
       class="quick-access-button d-inline-block text-center"
       @click="$emit('goToPreviousLine')"
     >
-      <i class="fas fa-arrow-up"></i>
+      <i v-if="layout === 'horizontal'" class="fas fa-arrow-up"></i>
+      <i v-if="layout === 'vertical'" class="fas fa-chevron-left"></i>
     </button>
     <button
       :class="{
@@ -47,7 +48,8 @@
       class="quick-access-button d-inline-block text-center"
       @click="$emit('goToNextLine')"
     >
-      <i class="fas fa-arrow-down"></i>
+      <i v-if="layout === 'horizontal'" class="fas fa-arrow-down"></i>
+      <i v-if="layout === 'vertical'" class="fas fa-chevron-right"></i>
     </button>
     <button
       :class="{
