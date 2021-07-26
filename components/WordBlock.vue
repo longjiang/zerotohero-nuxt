@@ -419,12 +419,14 @@ export default {
   },
   watch: {
     async wordblockHover() {
-      await Helper.timeout(1000);
+      if(!Helper.isMobile()) await Helper.timeout(1000);
       this.updateOpen();
     },
     async tooltipHover() {
-      await Helper.timeout(300);
-      this.updateOpen();
+      if(!Helper.isMobile()) {
+        await Helper.timeout(300);
+        this.updateOpen();
+      }
     },
   },
   methods: {
@@ -581,7 +583,7 @@ export default {
       else if (this.popup) this.openPopup();
     },
     updateOpen() {
-      if (!Helper.isMobile() && (this.wordblockHover || this.tooltipHover)) {
+      if (this.wordblockHover || (!Helper.isMobile() && this.tooltipHover)) {
         this.openPopup();
       } else {
         this.closePopup();
