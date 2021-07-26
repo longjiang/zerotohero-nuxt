@@ -3,67 +3,61 @@
     <div class="row">
       <div class="col-sm-12 text-center definitions">
         <Merge direction="top" class="h-half d-none d-sm-block" />
-        <DefinitionsList :definitions="defCommon" nodef="(no common definitions)" class="mt-2 mb-2"></DefinitionsList>
+        <DefinitionsList
+          v-if="defCommon"
+          :definitions="defCommon"
+          nodef="(no common definitions)"
+          class="mt-2 mb-2"
+        ></DefinitionsList>
         <Merge direction="bottom" class="h-half d-none d-sm-block" />
       </div>
     </div>
     <div class="row mt-3">
       <div class="col-6 text-center">
-        <DefinitionsList :definitions="defDistinct.a"></DefinitionsList>
+        <DefinitionsList
+          v-if="defDistinctA"
+          :definitions="defDistinctA"
+        ></DefinitionsList>
       </div>
       <div class="col-6 text-center">
-        <DefinitionsList :definitions="defDistinct.b"></DefinitionsList>
+        <DefinitionsList
+          v-if="defDistinctB"
+          :definitions="defDistinctB"
+        ></DefinitionsList>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import DefinitionsList from '@/components/DefinitionsList.vue'
-import Merge from '@/components/Merge'
+import DefinitionsList from "@/components/DefinitionsList.vue";
+import Merge from "@/components/Merge";
 
 export default {
   components: {
     DefinitionsList,
-    Merge
+    Merge,
   },
-  props: ['a', 'b'],
+  props: ["a", "b"],
   data() {
     return {
-      defCommon: [],
-      defDistinct: {
-        a: [],
-        b: []
-      }
-    }
+      defCommon: undefined,
+      defDistinctA: undefined,
+      defDistinctB: undefined,
+    };
   },
   mounted() {
-    this.common(this.a, this.b)
+    this.common(this.a, this.b);
   },
   methods: {
     defListIncludes(defList, def) {
-      return defList.find(d => def.includes(d))
+      return defList.find((d) => def.includes(d));
     },
     common(a, b) {
-      for (let adef of a.definitions) {
-        for (let bdef of b.definitions) {
-          if (bdef && bdef.includes(adef)) {
-            this.defCommon.push(bdef)
-          } else if (adef && adef.includes(bdef)) {
-            this.defCommon.push(adef)
-          }
-        }
-      }
-      for (let adef of a.definitions) {
-        if (!this.defListIncludes(this.defCommon, adef))
-          this.defDistinct.a.push(adef)
-      }
-      for (let adef of b.definitions) {
-        if (!this.defListIncludes(this.defCommon, adef))
-          this.defDistinct.b.push(adef)
-      }
-      // not in this.defCommon
-    }
-  }
-}
+      this.defCommon = a.definitions.filter(def => b.definitions.includes(def));
+      this.defDistinctA = a.definitions.filter(def => !b.definitions.includes(def));
+      this.defDistinctB = b.definitions.filter(def => !a.definitions.includes(def));
+    },
+  },
+};
 </script>
