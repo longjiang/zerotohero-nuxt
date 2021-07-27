@@ -319,7 +319,6 @@ export default {
           .join("\n")
           .replace(/\n+/gm, "\n")
           .trim();
-        console.log(updatedLines)
         this.$emit("updateTranslation", updatedLines);
       }
     },

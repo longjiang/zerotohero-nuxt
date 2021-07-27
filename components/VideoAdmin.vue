@@ -298,7 +298,6 @@ export default {
   methods: {
     updateNotes() {
       let notes = this.normalizeNotes(this.notes);
-      console.log("Notes added:", notes);
       this.video.notes = notes;
     },
     normalizeNotes(text) {
