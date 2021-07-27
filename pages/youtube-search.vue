@@ -54,6 +54,10 @@
         <i class="fa fa-sync-alt mr-1"></i>
         Force Refresh
       </b-button>
+      <b-button v-if="!moreLoaded" class="btn-small btn-secondary ml-1" @click="loadMore">
+        <i class="fa fa-cloud mr-1"></i>
+        Load {{ maxPages }} pages
+      </b-button>
     </b-form-group>
     <YouTubeSearchResults
       :term="term"
@@ -83,6 +87,8 @@ export default {
       searchResultKey: 0,
       checkSaved: false,
       long: false,
+      maxPages: 34,
+      moreLoaded: false
     };
   },
   computed: {
@@ -131,6 +137,12 @@ export default {
     forceRefresh() {
       this.$refs.youtubeSearchResults.forceRefresh();
     },
+    async loadMore() {
+      this.moreLoaded = true
+      for (let i = 0; i < this.maxPages; i++) {
+        await this.$refs.youtubeSearchResults.loadMore();
+      }
+    }
   },
 };
 </script>

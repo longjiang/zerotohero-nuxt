@@ -124,6 +124,7 @@ export default {
         start: Number(this.start) + this.moreVideos,
       });
       this.videos = this.videos.concat(newVideos);
+      return true
     },
     prevPage() {
       this.$router.push({
