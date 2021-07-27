@@ -538,7 +538,7 @@ export default {
         this.$l2.id,
         this.$adminMode,
         this.$l2.continua,
-        this.$subsSearchLimit ? (this.exact ? 250 : 20) : 500,
+        this.$subsSearchLimit ? (this.exact ? 100 : 20) : 500,
         this.tvShow ? this.tvShow.id : undefined,
         this.exact
       );
