@@ -317,7 +317,9 @@ export default {
         let updatedLines = this.matchedParallelLines
           .filter((l) => l !== "")
           .join("\n")
+          .replace(/\n+/gm, "\n")
           .trim();
+        console.log(updatedLines)
         this.$emit("updateTranslation", updatedLines);
       }
     },
@@ -331,8 +333,8 @@ export default {
           .filter((l) => {
             return (
               l &&
-              l.starttime >= line.starttime - 1 &&
-              (!nextLine || l.starttime < nextLine.starttime - 1)
+              l.starttime >= line.starttime - 0.5 &&
+              (!nextLine || l.starttime < nextLine.starttime - 0.5)
             );
           })
           .map((l) => l.line)
