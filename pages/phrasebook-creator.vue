@@ -52,6 +52,7 @@
                 View {{ saved.title }}
               </router-link>
             </span>
+            <b-form-checkbox v-model="exact" class="d-inline-block ml-2">Exact</b-form-checkbox>
           </div>
         </div>
         <div class="col-md-6">
@@ -125,6 +126,7 @@ export default {
         phrasebook[this.showType] = this.show.id
         phrasebook.exact = true
       }
+      if (this.exact) phrasebook.exact = true
       if (this.sourceURL) {
         phrasebook.description = `Source: <a href="${this.sourceURL}">${this.sourceURL}</a>`
       }
