@@ -118,7 +118,10 @@
           </span>
         </template>
         <div class="video-admin-checkboxes">
-          <b-form-checkbox v-model="showSubsEditing" class="mt-2 d-inline-block">
+          <b-form-checkbox
+            v-model="showSubsEditing"
+            class="mt-2 d-inline-block"
+          >
             Show Subs Editing
           </b-form-checkbox>
           <b-form-checkbox
@@ -303,6 +306,7 @@ export default {
     normalizeNotes(text) {
       let lines = text.split("\n");
       let notes = lines.map((note, index) => {
+        note = Helper.normalizeCircleNumbers(note);
         note = note.trim().replace(/^[\d【】\[\]［］\(\)（）]+\.*\s*/, "");
         return {
           id: index + 1,
