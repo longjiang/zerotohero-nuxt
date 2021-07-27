@@ -353,10 +353,10 @@ export default {
         console.log(err);
       }
     },
-    async saveShow(showID, type) {
-      if (!this.video[type] || this.video[type].id !== showID) {
+    async saveShow(show, type) {
+      if (!this.video[type] || this.video[type].id !== show.id) {
         let data = {};
-        data[type] = showID;
+        data[type] = show.id;
         let response = await axios.patch(
           `${Config.wiki}items/youtube_videos/${this.video.id}?fields=${type}.*`, // type is 'tv_show' or 'talk'
           data
