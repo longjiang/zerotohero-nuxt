@@ -113,14 +113,17 @@ export default {
     },
   },
   methods: {
-    async visibilityChanged(isVisible) {
+    visibilityChanged(isVisible) {
       if (this.videos && isVisible) {
-        this.moreVideos = this.moreVideos + this.perPage;
-        let newVideos = await this.getVideos({
-          start: Number(this.start) + this.moreVideos,
-        });
-        this.videos = this.videos.concat(newVideos);
+        this.loadMore()
       }
+    },
+    async loadMore() {
+      this.moreVideos = this.moreVideos + this.perPage;
+      let newVideos = await this.getVideos({
+        start: Number(this.start) + this.moreVideos,
+      });
+      this.videos = this.videos.concat(newVideos);
     },
     prevPage() {
       this.$router.push({
