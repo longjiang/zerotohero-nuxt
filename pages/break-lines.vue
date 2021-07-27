@@ -64,14 +64,12 @@ export default {
       return text
         .replace(new RegExp(`([${this.punctuations}])\n`, "g"), "$1")
         .replace(new RegExp(`([${this.punctuations}])`, "g"), "$1\n")
-        .replace(/\n([”″」’]+)/g, "$1\n");
+        .replace(/\n([”″」’]+)/g, "$1\n")
+        .replace(/^\s*\n/gm, "")
+        .replace(/\n$/m, "");
     },
     normalizeNotes(text) {
-      return text
-        .replace(/\((\d+)\)/g, "[$1]")
-        .replace(/（(\d+)）/g, "[$1]")
-        .replace(/【(\d+)】/g, "[$1]")
-        .replace(/［(\d+)］/g, "[$1]");
+      return text.replace(/[(（【［\[]*(\d+)[)）】］\]]*/g, "[$1]");
     },
   },
 };
