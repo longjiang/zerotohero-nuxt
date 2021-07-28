@@ -233,7 +233,7 @@ export default {
           let videos = response.data.data;
 
           videos = Helper.uniqueByValue(videos, "youtube_id");
-          if (this.showType === "tv_show") {
+          if (!this.show.title === "News") {
             videos =
               videos.sort((x, y) =>
                 x.title.localeCompare(y.title, this.$l2.code, { numeric: true })

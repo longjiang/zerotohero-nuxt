@@ -103,7 +103,7 @@ export default {
       }
     },
     async getVideos({ limit = 500, offset = 0 } = {}) {
-      let sort = this.type === "tv-show" ? "title" : "-date";
+      let sort = this.show.title === "News" ? "-date": "title";
       let response = await axios.get(
         `${Config.wiki}items/youtube_videos?filter[l2][eq]=${
           this.$l2.id
@@ -116,7 +116,7 @@ export default {
       let videos = response.data.data || [];
       this.count = response.data.meta.filter_count;
       videos = Helper.uniqueByValue(videos, "youtube_id");
-      if (this.type === "tv-show") {
+      if (this.show.title !== "News") {
         videos =
           videos.sort((x, y) =>
             x.title.localeCompare(y.title, this.$l2.code, { numeric: true })
