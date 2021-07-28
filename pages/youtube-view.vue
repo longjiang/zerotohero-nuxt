@@ -314,19 +314,18 @@ export default {
         this.paused = paused;
       }
     },
-    updateEnded(ended) {
+    async updateEnded(ended) {
       if (ended !== this.ended) {
         this.ended = ended;
       }
       if (this.ended) {
-        setTimeout(() => {
-          if (this.ended && !this.$refs.youtube.showSubsEditing) {
-            this.$router.push(
-              this.nextEpisode ||
-                `/${this.$l1.code}/${this.$l2.code}/youtube/view/${this.randomEpisodeYouTubeId}`
-            );
-          }
-        }, 5000);
+        await Helper.timeout(5000)
+        if (this.ended && !this.$refs.youtube.showSubsEditing && !this.$refs.youtube.enableTranslationEditing) {
+          this.$router.push(
+            this.nextEpisode ||
+              `/${this.$l1.code}/${this.$l2.code}/youtube/view/${this.randomEpisodeYouTubeId}`
+          );
+        }
       }
     },
     wordSaved(word) {
