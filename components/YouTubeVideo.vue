@@ -84,6 +84,12 @@ export default {
     },
   },
   methods: {
+    getDuration() {
+      if (this.player) {
+        let duration = this.player.getDuration()
+        return duration
+      }
+    },
     isPlaying() {
       let playing =
         this.player &&

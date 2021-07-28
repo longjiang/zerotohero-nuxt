@@ -347,13 +347,15 @@ export default {
     updateOriginalText(text) {
       let textLines = text.split("\n").filter((t) => t !== "");
       let subs_l2;
+      let duration = this.$refs.youtube.getDuration()
+      let increment = duration / textLines.length
       if (
         textLines.length > 0 &&
         (!this.video.subs_l2 || this.video.subs_l2.length === 0)
       ) {
         subs_l2 = textLines.map((line, lineIndex) => {
           return {
-            starttime: 3 * lineIndex,
+            starttime: increment * lineIndex,
             line,
           };
         });
