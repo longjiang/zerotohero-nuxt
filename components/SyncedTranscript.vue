@@ -655,7 +655,7 @@ export default {
     lineClick(line) {
       if (this.showSubsEditing) {
         this.adjustAllLinesBelowToMatchCurrentTime(line);
-      } else {
+      } else if (!this.enableTranslationEditing) {
         this.goToLine(line);
       }
     },
