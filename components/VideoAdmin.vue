@@ -153,13 +153,14 @@
       </div>
       <b-form-textarea
         :class="{
-          'd-none': !enableTranslationEditing,
+          'd-none': !enableTranslationEditing && !showSubsEditing,
         }"
-        v-model="text"
+        v-model="originalText"
         placeholder="Original text"
         rows="3"
         class="mt-2"
         max-rows="6"
+        @blur="updateOriginalText"
       ></b-form-textarea>
       <b-form-textarea
         :class="{
@@ -252,6 +253,7 @@ export default {
       translation: "",
       notes: "",
       mounted: false,
+      originalText: "",
     };
   },
   computed: {
@@ -277,6 +279,7 @@ export default {
   },
   mounted() {
     this.mounted = true; // So that this component shows up on first load (updates $adminMode)
+    this.originalText = this.text
   },
   watch: {
     showSubsEditing() {
@@ -314,6 +317,9 @@ export default {
         };
       });
       return notes;
+    },
+    updateOriginalText() {
+      this.$emit("updateOriginalText", this.originalText);
     },
     updateTranslation() {
       this.$emit("updateTranslation", this.translation);

@@ -85,6 +85,7 @@
             :video="video"
             @showSubsEditing="toggleShowSubsEditing"
             @updateTranslation="updateTranslation"
+            @updateOriginalText="updateOriginalText"
             @enableTranslationEditing="toggleEnableTranslationEditing"
           />
           <hr v-if="video.channel" />
@@ -146,6 +147,7 @@
             :video="video"
             @showSubsEditing="toggleShowSubsEditing"
             @updateTranslation="updateTranslation"
+            @updateOriginalText="updateOriginalText"
             @enableTranslationEditing="toggleEnableTranslationEditing"
           />
         </div>
@@ -341,6 +343,22 @@ export default {
         });
       }
       Vue.set(this.video, "subs_l1", subs_l1);
+    },
+    updateOriginalText(text) {
+      let textLines = text.split("\n").filter((t) => t !== "");
+      let subs_l2;
+      if (
+        textLines.length > 0 &&
+        (!this.video.subs_l2 || this.video.subs_l2.length === 0)
+      ) {
+        subs_l2 = textLines.map((line, lineIndex) => {
+          return {
+            starttime: 3 * lineIndex,
+            line,
+          };
+        });
+      }
+      Vue.set(this.video, "subs_l2", subs_l2);
     },
     toggleShowSubsEditing(showSubsEditing) {
       this.showSubsEditing = showSubsEditing;
