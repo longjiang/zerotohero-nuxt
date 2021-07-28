@@ -254,6 +254,7 @@ export default {
       notes: "",
       mounted: false,
       originalText: "",
+      punctuations: "。！？；：!?;:♪",
     };
   },
   computed: {
@@ -302,27 +303,44 @@ export default {
     },
   },
   methods: {
+    breaklines(text) {
+      return text
+        .replace(new RegExp(`([${this.punctuations}])\n`, "g"), "$1")
+        .replace(new RegExp(`([${this.punctuations}])`, "g"), "$1\n")
+        .replace(/\n([”″」’]+)/g, "$1\n")
+        .replace(/^\s*\n/gm, "")
+        .replace(/\n$/m, "");
+    },
     updateNotes() {
-      let notes = this.normalizeNotes(this.notes);
+      let notesStr = this.normalizeNotes(this.notes);
+      let lines = notesStr.split("\n");
+      let notes = lines.map((line, index) => {
+        return {
+          id: index + 1,
+          note: this.normalizeNoteStart(line),
+        };
+      });
       this.video.notes = notes;
     },
     normalizeNotes(text) {
-      let lines = text.split("\n");
-      let notes = lines.map((note, index) => {
-        note = Helper.normalizeCircleNumbers(note);
-        note = note.trim().replace(/^[\d【】\[\]［］\(\)（）]+\.*\s*/, "");
-        return {
-          id: index + 1,
-          note,
-        };
-      });
+      let normalized = text.replace(/[(（【［\[]*(\d+)[)）】］\]]*/g, "[$1]");
+      normalized = Helper.normalizeCircleNumbers(normalized);
+      return normalized;
+    },
+    normalizeNoteStart(line) {
+      let notes = line
+      notes = Helper.normalizeCircleNumbers(notes);
+      notes = notes.trim().replace(/^[\d【】\[\]［］\(\)（）]+\.*\s*/, "");
       return notes;
     },
     updateOriginalText() {
-      this.$emit("updateOriginalText", this.originalText);
+      let text = this.originalText
+      text= this.breaklines(text)
+      text= this.normalizeNotes(text)
+      this.$emit("updateOriginalText", text);
     },
     updateTranslation() {
-      this.$emit("updateTranslation", this.translation);
+      this.$emit("updateTranslation", this.breaklines(this.translation));
     },
     async unassignShow(type) {
       let data = {};
