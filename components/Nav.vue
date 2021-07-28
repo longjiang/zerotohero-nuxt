@@ -28,7 +28,7 @@
           :key="`nav-${index}`"
         >
           <i :class="item.icon"></i>
-          {{ $t(item.title) }}
+          {{ $t(item.title, {l2: $t($l2.name)}) }}
         </NuxtLink>
       </nav>
       <nav
@@ -44,7 +44,7 @@
           :to="last(child) || child"
         >
           <i :class="child.icon"></i>
-          {{ $t(child.title) }}
+          {{ $t(child.title, {l2: $t($l2.name)}) }}
           <span
             class="saved-words-count"
             v-cloak
@@ -83,7 +83,7 @@
                     <i :class="child.icon"></i>
                   </div>
                   <div class="feature-card-title">
-                    {{ $t(child.title) }}
+                    {{ $t(child.title, {l2: $t($l2.name)}) }}
                     <span
                       class="saved-words-count"
                       v-cloak
@@ -213,7 +213,7 @@ export default {
             {
               name: "tv-shows",
               icon: "fa fa-tv",
-              title: `${this.$l2.name} TV Shows`,
+              title: '{l2} TV Shows',
               show: this.hasTVShows,
             },
             {
@@ -223,36 +223,36 @@ export default {
             {
               path: this.musicPath,
               icon: "fa fa-music",
-              title: `${this.$l2.name} Music`,
+              title: `{l2} Music`,
               show: this.musicPath,
             },
             {
               path: this.moviesPath,
               icon: "fa fa-film",
-              title: `${this.$l2.name} Movies`,
+              title: `{l2} Movies`,
               show: this.moviesPath,
             },
             {
               path: this.newsPath,
               icon: "fa fa-newspaper",
-              title: `${this.$l2.name} News`,
+              title: `{l2} News`,
               show: this.newsPath,
             },
             {
               name: "talks",
               icon: "fas fa-graduation-cap",
-              title: `${this.$l2.name} Talks`,
+              title: `{l2} Talks`,
               show: this.hasTalks,
             },
             {
               name: "youtube-browse",
-              title: `${this.$l2.name} Videos`,
+              title: `{l2} Videos`,
               icon: "fa fa-play",
               show: true,
             },
             {
               name: "youtube-search",
-              title: `Search ${this.$l2.name} YouTube`,
+              title: `Search {l2} YouTube`,
               icon: "fas fa-search",
               show: true,
             },
