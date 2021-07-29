@@ -371,13 +371,13 @@ export default {
     },
     toggleShowSubsEditing(showSubsEditing) {
       this.showSubsEditing = showSubsEditing;
-      this.$refs.videoAdmin1.showSubsEditing = showSubsEditing;
-      this.$refs.videoAdmin2.showSubsEditing = showSubsEditing;
+      if (this.$refs.videoAdmin1) this.$refs.videoAdmin1.showSubsEditing = showSubsEditing;
+      if (this.$refs.videoAdmin2) this.$refs.videoAdmin2.showSubsEditing = showSubsEditing;
     },
     toggleEnableTranslationEditing(enableTranslationEditing) {
       this.enableTranslationEditing = enableTranslationEditing;
-      this.$refs.videoAdmin1.enableTranslationEditing = enableTranslationEditing;
-      this.$refs.videoAdmin2.enableTranslationEditing = enableTranslationEditing;
+      if (this.$refs.videoAdmin1) this.$refs.videoAdmin1.enableTranslationEditing = enableTranslationEditing;
+      if (this.$refs.videoAdmin2) this.$refs.videoAdmin2.enableTranslationEditing = enableTranslationEditing;
     },
     formatDate(date) {
       return moment(date).format("LL");
