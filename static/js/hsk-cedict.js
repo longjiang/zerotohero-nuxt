@@ -397,7 +397,8 @@ const Dictionary = {
   variants(word) {
     let variants = []
     for (let def of word.definitions) {
-      let matches = def.match(/of (?<traditional>[^\s|]+)(\|(?<simplified>[^\s|]+))?\[(?<pinyin>[^\s|]+)\]/)
+      let matches = def.match(/of (?<traditional>[^\s|]+)(\|(?<simplified>[^\s|]+))?\[(?<pinyin>.+?)\]/)
+      console.log(matches)
       if (matches && matches.groups) {
         let {traditional, simplified, pinyin} = matches.groups
         let words = this.lookupTraditional(traditional, pinyin)

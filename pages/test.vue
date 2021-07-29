@@ -21,7 +21,8 @@
           <!-- <Annotate :buttons="true"><p>Ils sont tous de ta mère … je peux?</p></Annotate>
           <Annotate :buttons="true"><p>Qu’est-ce qu’elle dit?</p></Annotate> -->
           <!-- <Annotate :buttons="true"><p>pīnyīn yuèdu</p></Annotate> -->
-          <Annotate :buttons="true"><p>Ջրեր</p></Annotate>
+          <!-- <Annotate :buttons="true"><p>Ջրեր</p></Annotate> -->
+          <Annotate :buttons="true"><p>鸾凤伏窜兮，鸱枭翱翔。</p></Annotate>
           <!-- վարարուն Կարկաչում էր սարերում: -->
           <!-- ทริปวัดใจ -->
           <!-- <Annotate><p>Hometown's Embrace</p></Annotate> -->
