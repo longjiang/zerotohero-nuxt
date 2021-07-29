@@ -255,7 +255,6 @@ export default {
       } else if (progressType === "within current line") {
         // do nothing
       } else if (progressType === "advance to next line") {
-        // console.log(progressType);
         let progress = this.currentTime - this.previousTime;
         if (this.repeatMode) {
           if (progress > 0 && progress < 0.15) {
@@ -386,8 +385,7 @@ export default {
         lineIndex = Number(lineIndex);
         if (
           this.lines[lineIndex].starttime <= time &&
-          this.lines[lineIndex + 1] &&
-          (!this.lines[lineIndex + 1] ||
+          (typeof this.lines[lineIndex + 1] === 'undefined' ||
             time < this.lines[lineIndex + 1].starttime)
         ) {
           nearestLineIndex = lineIndex;
