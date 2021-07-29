@@ -7,7 +7,7 @@
           <i class="fa fa-caret-left" />
         </router-link>
         <span
-          v-if="entry.level && entry.level !== 'outside' && $l2.code === 'zh'"
+          v-if="entry.level && entry.level !== 'outside' && $dictionaryName === 'hsk-cedict'"
           class="entry-level p-1 rounded font-weight-bold"
           style="position: relative; bottom: 0.5em; font-size: 0.8em"
           :data-level="entry.level"
@@ -31,7 +31,7 @@
           </span>
         </span>
         <span
-          v-if="entry.level && entry.level !== 'outside' && $l2.code !== 'zh'"
+          v-if="entry.level && entry.level !== 'outside' && $dictionaryName !== 'hsk-cedict'"
           class="entry-level p-1 rounded ml-2 mr-2"
           style="position: relative; bottom: 0.2em; font-size: 0.8em"
           :data-bg-level="entry.level"
@@ -63,7 +63,7 @@
               /{{ entry.pronunciation }}/
             </span>
             <span
-              v-if="['zh', 'ja', 'yue'].includes($l2.code)"
+              v-if="entry.cjk"
               class="ml-2 mr-1"
             >
               {{ entry.cjk.phonetics }}
@@ -80,7 +80,7 @@
           <router-link
             :to="`/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${entry.id}`"
           >
-            <template v-if="['zh', 'yue'].includes($l2.code)">
+            <template v-if="['hsk-cedict', 'cc-canto'].includes($dictionaryName)">
               <span
                 class="entry-word simplified"
                 :data-level="
@@ -113,7 +113,7 @@
         </div>
         <div
           v-if="
-            ['zh', 'yue'].includes($l2.code) &&
+            ['hsk-cedict', 'cc-canto'].includes($dictionaryName) &&
             entry.simplified !== entry.traditional
           "
           class="mt-1"
