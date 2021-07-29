@@ -127,7 +127,9 @@
             </router-link>
             <router-link
               v-if="show"
-              :to="`/${$l1.code}/${$l2.code}/youtube/browse/all/all/0/${show.title}`"
+              :to="`/${$l1.code}/${$l2.code}/show/${
+                showType === 'tv_show' ? 'tv-show' : 'talk'
+              }/${show.id}`"
               class="btn btn-primary"
             >
               <i class="far fa-clone"></i>
@@ -347,8 +349,8 @@ export default {
     updateOriginalText(text) {
       let textLines = text.split("\n").filter((t) => t !== "");
       let subs_l2;
-      let duration = this.$refs.youtube.getDuration()
-      let increment = duration / textLines.length
+      let duration = this.$refs.youtube.getDuration();
+      let increment = duration / textLines.length;
       if (
         textLines.length > 0 &&
         (!this.video.subs_l2 || this.video.subs_l2.length === 0)
