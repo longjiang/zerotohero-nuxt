@@ -474,15 +474,15 @@ export default {
           show: true,
           children: [
             {
-              name: "resources",
-              title: "Resources",
-              icon: "fas fa-gem",
-              show: true,
-            },
-            {
               name: "learning-path",
               title: "Learning Path",
               icon: "fas fa-road",
+              show: true,
+            },
+            {
+              name: "resources",
+              title: "Resources",
+              icon: "fas fa-gem",
               show: true,
             },
             {
