@@ -45,6 +45,9 @@
                 <span>{{ video.title }}</span>
               </Annotate>
             </span>
+            <a class="btn-small" :href="`https://www.google.com/search?q=${encodeURIComponent(video.title)}`" target="google">
+              <i class="fas fa-info-circle"></i>
+            </a>
           </h5>
           <div style="color: #aaa" v-if="video.date" class="mb-2">
             {{ formatDate(video.date) }}
