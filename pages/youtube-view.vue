@@ -320,7 +320,7 @@ export default {
       }
       if (this.ended) {
         await Helper.timeout(5000)
-        if (this.ended && !this.$refs.youtube.showSubsEditing && !this.$refs.youtube.enableTranslationEditing) {
+        if (this.ended && this.$refs.youtube && !this.$refs.youtube.showSubsEditing && !this.$refs.youtube.enableTranslationEditing) {
           this.$router.push(
             this.nextEpisode ||
               `/${this.$l1.code}/${this.$l2.code}/youtube/view/${this.randomEpisodeYouTubeId}`

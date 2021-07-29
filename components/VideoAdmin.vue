@@ -281,7 +281,7 @@ export default {
   },
   mounted() {
     this.mounted = true; // So that this component shows up on first load (updates $adminMode)
-    this.originalText = this.text
+    this.originalText = this.text;
   },
   watch: {
     showSubsEditing() {
@@ -326,20 +326,22 @@ export default {
     normalizeNotes(text) {
       let normalized = text.replace(/[(（【［\[]*(\d+)[)）】］\]]*/g, "[$1]");
       normalized = Helper.normalizeCircleNumbers(normalized);
-      normalized = SmartQuotes.string(normalized)
+      normalized = SmartQuotes.string(normalized);
       return normalized;
     },
     normalizeNoteStart(line) {
-      let notes = line
+      let notes = line;
       notes = Helper.normalizeCircleNumbers(notes);
       notes = notes.trim().replace(/^[\d【】\[\]［］\(\)（）]+\.*\s*/, "");
       return notes;
     },
     updateOriginalText() {
-      let text = this.originalText
-      text= this.breaklines(text)
-      text= this.normalizeNotes(text)
-      this.$emit("updateOriginalText", text);
+      if (this.originalText) {
+        let text = this.originalText;
+        text = this.breaklines(text);
+        text = this.normalizeNotes(text);
+        this.$emit("updateOriginalText", text);
+      }
     },
     updateTranslation() {
       this.$emit("updateTranslation", this.breaklines(this.translation));
