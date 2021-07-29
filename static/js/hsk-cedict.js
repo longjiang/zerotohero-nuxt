@@ -394,6 +394,18 @@ const Dictionary = {
       this.isTraditional(text)
     )
   },
+  variants(word) {
+    let variants = []
+    for (let def of word.definitions) {
+      let matches = def.match(/of (?<traditional>[^\s|]+)(\|(?<simplified>[^\s|]+))?\[(?<pinyin>[^\s|]+)\]/)
+      if (matches && matches.groups) {
+        let {traditional, simplified, pinyin} = matches.groups
+        let words = this.lookupTraditional(traditional, pinyin))
+        variants = variants.concat(words)
+      }
+    }
+    return variants
+  },
   tokenizeRecursively(text, subdict, traditional = false) {
     const isChinese = subdict.isChinese(text)
     if (!isChinese) {
@@ -401,6 +413,9 @@ const Dictionary = {
     }
     const longest = subdict.longest(text, traditional)
     if (longest.matches.length > 0) {
+      for (let word of longest.matches) {
+        longest.matches = longest.matches.concat(this.variants(word))
+      }
       let result = []
       /* 
       result = [
