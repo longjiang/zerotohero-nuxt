@@ -180,7 +180,13 @@ export default {
       this.$emit("togglePaused");
     },
     toggleSpeed() {
-      this.speed = this.speed === 1 ? 0.75 : this.speed === 0.75 ? 0.5 : 1;
+      let speeds = [1, 0.75, 0.5, 1.5, 2]
+      let index = speeds.findIndex(s => s === this.speed)
+      if (index > -1) {
+        index = index + 1
+        if (index === speeds.length) index = 0
+      }
+      this.speed = speeds[index]
       this.$emit("updateSpeed", this.speed);
     },
     toggleRepeatMode() {
