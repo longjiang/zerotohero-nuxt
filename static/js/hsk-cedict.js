@@ -400,7 +400,7 @@ const Dictionary = {
       let matches = def.match(/of (?<traditional>[^\s|]+)(\|(?<simplified>[^\s|]+))?\[(?<pinyin>[^\s|]+)\]/)
       if (matches && matches.groups) {
         let {traditional, simplified, pinyin} = matches.groups
-        let words = this.lookupTraditional(traditional, pinyin))
+        let words = this.lookupTraditional(traditional, pinyin)
         variants = variants.concat(words)
       }
     }
