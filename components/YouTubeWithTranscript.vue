@@ -333,9 +333,8 @@ export default {
   methods: {
     updateTranslation(translation) {
       let translationLines = translation.split("\n").filter((t) => t !== "");
-      let subs_l1;
       if (translationLines.length > 0 && this.video.subs_l2) {
-        subs_l1 = this.video.subs_l2.map((line, lineIndex) => {
+        let subs_l1 = this.video.subs_l2.map((line, lineIndex) => {
           if (translationLines[lineIndex])
             return {
               starttime: line.starttime,
@@ -343,26 +342,25 @@ export default {
               l1: this.$l1.code,
             };
         });
-      }
       Vue.set(this.video, "subs_l1", subs_l1);
+      }
     },
     updateOriginalText(text) {
       let textLines = text.split("\n").filter((t) => t !== "");
-      let subs_l2;
-      let duration = this.$refs.youtube.getDuration();
-      let increment = duration / textLines.length;
       if (
         textLines.length > 0 &&
         (!this.video.subs_l2 || this.video.subs_l2.length === 0)
       ) {
-        subs_l2 = textLines.map((line, lineIndex) => {
+        let duration = this.$refs.youtube.getDuration();
+        let increment = duration / textLines.length;
+        let subs_l2 = textLines.map((line, lineIndex) => {
           return {
             starttime: increment * lineIndex,
             line,
           };
         });
+        Vue.set(this.video, "subs_l2", subs_l2);
       }
-      Vue.set(this.video, "subs_l2", subs_l2);
     },
     toggleShowSubsEditing(showSubsEditing) {
       this.showSubsEditing = showSubsEditing;
