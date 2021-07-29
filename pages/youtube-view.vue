@@ -271,7 +271,7 @@ export default {
             let savedSubs = YouTube.parseSavedSubs(video[field]);
             if (savedSubs) {
               let filtered = savedSubs.filter(
-                (line) => line && line.starttime && line.line
+                (line) => line && typeof line.starttime !== 'undefined' && line.line
               );
               video[field] = filtered;
             }
