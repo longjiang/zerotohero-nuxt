@@ -226,6 +226,7 @@ import Helper from "@/lib/helper";
 import Config from "@/lib/config";
 import YouTube from "@/lib/youtube";
 import Vue from "vue";
+import SmartQuotes from "smartquotes";
 
 export default {
   components: {
@@ -325,6 +326,7 @@ export default {
     normalizeNotes(text) {
       let normalized = text.replace(/[(（【［\[]*(\d+)[)）】］\]]*/g, "[$1]");
       normalized = Helper.normalizeCircleNumbers(normalized);
+      normalized = SmartQuotes.string(normalized)
       return normalized;
     },
     normalizeNoteStart(line) {
