@@ -398,8 +398,8 @@ export default {
           !e.target.getAttribute("contenteditable")
         ) {
           if (e.code === "KeyM") {
-            this.speed =
-              this.speed === 1 ? 0.75 : this.speed === 0.75 ? 0.5 : 1;
+            if (this.$refs.youtube && this.$refs.youtube.$refs.videoControls)
+              this.$refs.youtube.$refs.videoControls.toggleSpeed()
             return false;
           }
           if (e.code === "Space") {
