@@ -82,9 +82,12 @@
         </b-form-checkbox>
       </div>
     </div>
-    <div class="youtube-videos">
-      <template
+    <div class="youtube-videos row">
+      <div
+        class="col-sm-12 col-md-4 col-lg-3"
+        style="padding-bottom: 2rem"
         v-for="(video, videoIndex) in videos"
+        :key="`youtube-video-wrapper-${video.youtube_id}-${videoIndex}`"
       >
         <YouTubeVideoCard
           v-if="hideVideosWithoutSubs ? video.hasSubs : true"
@@ -96,7 +99,7 @@
           ref="youTubeVideoCard"
           :key="`youtube-video-${video.youtube_id}-${videoIndex}`"
         />
-      </template>
+      </div>
     </div>
   </div>
 </template>
@@ -170,7 +173,7 @@ export default {
     async checkSavedFunc(videos) {
       videos = videos.filter((v) => !v.id); // Only check those that are not saved
       let youtube_ids = videos.map((v) => v.youtube_id);
-      let chunks = Helper.arrayChunk(youtube_ids, 100)
+      let chunks = Helper.arrayChunk(youtube_ids, 100);
       for (let youtube_ids of chunks) {
         let response = await axios.get(
           `${
@@ -207,22 +210,26 @@ export default {
       this.$emit("newShow", show);
     },
     async batch(f) {
-      let indices = Object.keys(this.$refs.youTubeVideoCard)
-      let chunks = Helper.arrayChunk(indices, 3)
+      let indices = Object.keys(this.$refs.youTubeVideoCard);
+      let chunks = Helper.arrayChunk(indices, 3);
       for (let chunk of chunks) {
-        let promises = []
+        let promises = [];
         for (let videoIndex of chunk) {
-          promises.push(f(videoIndex))
+          promises.push(f(videoIndex));
         }
-        await Promise.all(promises)
+        await Promise.all(promises);
       }
     },
     async addAll() {
-      this.batch(videoIndex => this.$refs.youTubeVideoCard[videoIndex].getSubsAndSave())
+      this.batch((videoIndex) =>
+        this.$refs.youTubeVideoCard[videoIndex].getSubsAndSave()
+      );
     },
     async assignShowToAll(show, type) {
       // type: 'tv_show' or 'talk'
-      this.batch(videoIndex => this.$refs.youTubeVideoCard[videoIndex].saveShow(show, type))
+      this.batch((videoIndex) =>
+        this.$refs.youTubeVideoCard[videoIndex].saveShow(show, type)
+      );
     },
     async removeAll() {
       for (let videoIndex in this.$refs.youTubeVideoCard) {
@@ -262,9 +269,6 @@ export default {
 
 <style lang="scss">
 .youtube-videos {
-  display: flex;
-  flex-wrap: wrap;
-  margin: 0 -1rem;
 }
 
 .youtube-video-list-admin-bar {

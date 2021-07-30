@@ -1,33 +1,36 @@
 <template>
-  <div class="tv-shows">
+  <div class="tv-shows row">
     <div
-      class="tv-show media rounded shadow"
+      class="col-sm-12 col-md-4 col-lg-3"
       v-for="show of shows"
-      :key="`tv-show-${show.id}`"
+      :key="`tv-show-wrapper-${show.id}`"
+      style="padding-bottom: 2rem"
     >
-      <router-link
-        class="youtube-thumbnail-wrapper aspect-wrapper d-block"
-        :to="path(show)"
-      >
-        <img
-          :src="`//img.youtube.com/vi/${show.youtube_id}/hqdefault.jpg`"
-          class="youtube-thumbnail aspect"
-          v-lazy-load
-        />
-      </router-link>
-      <div class="media-body">
-        <router-link :to="path(show)" class="link-unstyled">
-          <h6>
-            {{ show.title }}
-          </h6>
-          <b-button
-            v-if="$adminMode"
-            class="btn btn-small bg-danger text-white mt-2 ml-0"
-            @click.stop.prevent="remove(show)"
-          >
-            <i class="fa fa-trash"></i>
-          </b-button>
+      <div class="tv-show media rounded shadow">
+        <router-link
+          class="youtube-thumbnail-wrapper aspect-wrapper d-block"
+          :to="path(show)"
+        >
+          <img
+            :src="`//img.youtube.com/vi/${show.youtube_id}/hqdefault.jpg`"
+            class="youtube-thumbnail aspect"
+            v-lazy-load
+          />
         </router-link>
+        <div class="media-body">
+          <router-link :to="path(show)" class="link-unstyled">
+            <h6>
+              {{ show.title }}
+            </h6>
+            <b-button
+              v-if="$adminMode"
+              class="btn btn-small bg-danger text-white mt-2 ml-0"
+              @click.stop.prevent="remove(show)"
+            >
+              <i class="fa fa-trash"></i>
+            </b-button>
+          </router-link>
+        </div>
       </div>
     </div>
   </div>
@@ -72,19 +75,12 @@ export default {
 
 <style>
 .tv-shows {
-  display: flex;
-  flex-wrap: wrap;
-  margin: 0 -1rem;
 }
 .tv-show {
-  min-width: 12rem;
-  max-width: calc(100% - 2rem);
-  flex: 1;
-  margin: 1rem;
+  height: 100%;
 }
 @media (min-width: 768px) {
   .tv-show {
-    max-width: calc(50% - 2rem);
   }
 }
 .tv-show-thumbnail {
