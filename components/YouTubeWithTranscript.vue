@@ -101,8 +101,9 @@
             class="d-inline-block"
           />
         </div>
-        <div v-if="video.subs_l2 && video.subs_l2.length > 0" class="mt-3">
+        <div  class="mt-3">
           <SyncedTranscript
+            v-if="video.subs_l2 && video.subs_l2.length > 0"
             ref="transcript"
             :key="'transcript-' + video.youtube_id"
             :lines="video.subs_l2"

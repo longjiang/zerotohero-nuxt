@@ -324,7 +324,7 @@ export default {
       this.video.notes = notes;
     },
     normalizeNotes(text) {
-      let normalized = text.replace(/[(（【［\[]*(\d+)[)）】］\]]*/g, "[$1]");
+      let normalized = text.replace(/[(（【［\[〔]*(\d+)[)）〕】］\]]*/g, "[$1]");
       normalized = Helper.normalizeCircleNumbers(normalized);
       normalized = SmartQuotes.string(normalized);
       return normalized;
@@ -332,7 +332,7 @@ export default {
     normalizeNoteStart(line) {
       let notes = line;
       notes = Helper.normalizeCircleNumbers(notes);
-      notes = notes.trim().replace(/^[\d【】\[\]［］\(\)（）]+\.*\s*/, "");
+      notes = notes.trim().replace(/^[\d【】\[\]〔〕［］\(\)（）]+\.*\s*/, "");
       return notes;
     },
     updateOriginalText() {
