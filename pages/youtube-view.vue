@@ -16,6 +16,7 @@
           ? 'Full transcript: ' +
             this.video.subs_l2
               .slice(0, 10)
+              .filter(l => l)
               .map((l) => l.line)
               .join(' ')
           : ''

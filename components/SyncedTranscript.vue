@@ -14,6 +14,7 @@
           : lines"
       >
         <div
+          v-if="line"
           :key="`line-${lineIndex}-${line.starttime}-${line.line.substr(
             0,
             10

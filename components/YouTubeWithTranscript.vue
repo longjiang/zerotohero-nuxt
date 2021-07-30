@@ -349,7 +349,7 @@ export default {
       let translationLines = translation.split("\n").filter((t) => t !== "");
       if (translationLines.length > 0 && this.video.subs_l2) {
         let subs_l1 = this.video.subs_l2.map((line, lineIndex) => {
-          if (translationLines[lineIndex])
+          if (line && translationLines[lineIndex])
             return {
               starttime: line.starttime,
               line: translationLines[lineIndex],

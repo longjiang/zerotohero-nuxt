@@ -336,12 +336,10 @@ export default {
       return notes;
     },
     updateOriginalText() {
-      if (this.originalText) {
-        let text = this.originalText;
-        text = this.breaklines(text);
-        text = this.normalizeNotes(text);
-        this.$emit("updateOriginalText", text);
-      }
+      let text = this.originalText || "";
+      text = this.breaklines(text);
+      text = this.normalizeNotes(text);
+      this.$emit("updateOriginalText", text);
     },
     updateTranslation() {
       this.$emit("updateTranslation", this.breaklines(SmartQuotes.string(this.translation)));
