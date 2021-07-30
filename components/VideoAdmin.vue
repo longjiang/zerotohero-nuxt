@@ -332,7 +332,7 @@ export default {
     normalizeNoteStart(line) {
       let notes = line;
       notes = Helper.normalizeCircleNumbers(notes);
-      notes = notes.trim().replace(/^[\d【】\[\]〔〕［］\(\)（）]+\.*\s*/, "");
+      notes = notes.trim().replace(/^[\d【】\[\]〔〕［］\(\)（）]+[.．、]*\s*/, "");
       return notes;
     },
     updateOriginalText() {
@@ -344,7 +344,7 @@ export default {
       }
     },
     updateTranslation() {
-      this.$emit("updateTranslation", this.breaklines(this.translation));
+      this.$emit("updateTranslation", this.breaklines(SmartQuotes.string(this.translation)));
     },
     async unassignShow(type) {
       let data = {};
