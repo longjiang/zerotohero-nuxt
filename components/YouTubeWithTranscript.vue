@@ -46,7 +46,13 @@
                 <span>{{ video.title }}</span>
               </Annotate>
             </span>
-            <a class="btn-small" :href="`https://www.google.com/search?q=${encodeURIComponent(video.title)}`" target="google">
+            <a
+              class="btn-small"
+              :href="`https://www.google.com/search?q=${encodeURIComponent(
+                video.title
+              )}`"
+              target="google"
+            >
               <i class="fas fa-info-circle"></i>
             </a>
           </h5>
@@ -101,7 +107,7 @@
             class="d-inline-block"
           />
         </div>
-        <div  class="mt-3">
+        <div class="mt-3">
           <SyncedTranscript
             v-if="video.subs_l2 && video.subs_l2.length > 0"
             ref="transcript"
@@ -350,35 +356,51 @@ export default {
               l1: this.$l1.code,
             };
         });
-      Vue.set(this.video, "subs_l1", subs_l1);
+        Vue.set(this.video, "subs_l1", subs_l1);
       }
     },
     updateOriginalText(text) {
       let textLines = text.split("\n").filter((t) => t !== "");
+      let subs_l2;
       if (
         textLines.length > 0 &&
         (!this.video.subs_l2 || this.video.subs_l2.length === 0)
       ) {
         let duration = this.$refs.youtube.getDuration();
         let increment = duration / textLines.length;
-        let subs_l2 = textLines.map((line, lineIndex) => {
+        subs_l2 = textLines.map((line, lineIndex) => {
           return {
             starttime: increment * lineIndex,
             line,
           };
         });
-        Vue.set(this.video, "subs_l2", subs_l2);
+      } else {
+        subs_l2 = textLines.map((line, lineIndex) => {
+          if (this.video.subs_l2[lineIndex]) {
+            return {
+              starttime: this.video.subs_l2[lineIndex].starttime,
+              line,
+            };
+          }
+        });
       }
+      Vue.set(this.video, "subs_l2", subs_l2);
     },
     toggleShowSubsEditing(showSubsEditing) {
       this.showSubsEditing = showSubsEditing;
-      if (this.$refs.videoAdmin1) this.$refs.videoAdmin1.showSubsEditing = showSubsEditing;
-      if (this.$refs.videoAdmin2) this.$refs.videoAdmin2.showSubsEditing = showSubsEditing;
+      if (this.$refs.videoAdmin1)
+        this.$refs.videoAdmin1.showSubsEditing = showSubsEditing;
+      if (this.$refs.videoAdmin2)
+        this.$refs.videoAdmin2.showSubsEditing = showSubsEditing;
     },
     toggleEnableTranslationEditing(enableTranslationEditing) {
       this.enableTranslationEditing = enableTranslationEditing;
-      if (this.$refs.videoAdmin1) this.$refs.videoAdmin1.enableTranslationEditing = enableTranslationEditing;
-      if (this.$refs.videoAdmin2) this.$refs.videoAdmin2.enableTranslationEditing = enableTranslationEditing;
+      if (this.$refs.videoAdmin1)
+        this.$refs.videoAdmin1.enableTranslationEditing =
+          enableTranslationEditing;
+      if (this.$refs.videoAdmin2)
+        this.$refs.videoAdmin2.enableTranslationEditing =
+          enableTranslationEditing;
     },
     formatDate(date) {
       return moment(date).format("LL");
