@@ -20,6 +20,7 @@
       'add-pinyin': $hasFeature('transliteration'),
       phonetics,
       fullscreen: fullscreenMode,
+      'with-buttons': buttons
     }"
   >
     <div class="annotator-buttons" v-if="!empty() && buttons">
@@ -111,6 +112,7 @@
       v-for="(template, index) of annotatedSlots"
       :key="`annotate-template-${index}`"
       :template="template"
+      class="annotate-template"
     />
     <div v-if="translation">{{ translation }}</div>
   </component>
@@ -500,6 +502,14 @@ export default {
   .annotator-close:hover {
     opacity: 1;
   }
+}
+
+.text-center .annotated[dir=ltr].with-buttons .annotate-template {
+  padding-left: 3rem;
+}
+
+.text-center .annotated[dir=rtl].with-buttons .annotate-template {
+  padding-right: 3rem;
 }
 
 .annotator-buttons {
