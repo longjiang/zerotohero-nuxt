@@ -732,8 +732,8 @@ export default {
 }
 
 .transcript-line-l1 {
-  color: #bbb;
-  font-size: 0.7em;
+  color: rgb(173, 159, 153);
+  font-size: 0.75em;
   display: none;
 }
 
