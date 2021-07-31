@@ -144,6 +144,12 @@ export default {
             },
             {
               icon: "fas fa-wrench",
+              title: "DB Audit",
+              name: "db-audit",
+              show: this.$adminMode,
+            },
+            {
+              icon: "fas fa-wrench",
               title: "DB Upgrade",
               name: "db-upgrade",
               show: this.$adminMode,
