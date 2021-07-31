@@ -34,10 +34,6 @@
             <h2 class="text-center mb-0 font-weight-normal">
               <div class="d-inline-block">
                 <Annotate
-                  :class="{
-                    'pr-3': $l2.direction === 'rtl',
-                    'pl-3': $l2.direction !== 'rtl',
-                  }"
                   :phonetics="!phraseObj.pronunciation"
                   :buttons="true"
                   v-if="phraseObj && phraseObj.phrase"
