@@ -84,7 +84,10 @@
     </div>
     <div class="youtube-videos row">
       <div
-        class="col-sm-12 col-md-4 col-lg-3"
+        :class="{
+          'col-sm-12 col-md-4 col-lg-3': true,
+          'd-none': hideVideosWithoutSubs ? !video.hasSubs : false,
+        }"
         style="padding-bottom: 2rem"
         v-for="(video, videoIndex) in videos"
         :key="`youtube-video-wrapper-${video.youtube_id}-${videoIndex}`"
