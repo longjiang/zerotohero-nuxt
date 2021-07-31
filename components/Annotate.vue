@@ -206,12 +206,11 @@ export default {
     },
   },
   watch: {
-    textMode() {
-      if (this.textMode) {
+    async textMode() {
+      if (Helper.isMobile() && this.textMode) {
         let element = this.$el.querySelector(".annotate-input");
-        setTimeout(() => {
-          element.focus();
-        }, 0);
+        await Helper.timeout(30)
+        element.focus();
       }
     },
   },
