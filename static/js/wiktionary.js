@@ -18,7 +18,8 @@ const Dictionary = {
     ind: 'msa',
     ceb: 'tgl',
     tgl: 'ceb',
-    cmn: 'zho'
+    cmn: 'zho',
+    nor: 'nno'
   },
   credit() {
     return 'The dictionary is provided by <a href="https://en.wiktionary.org/wiki/Wiktionary:Main_Page">Wiktionary</a>, which is freely distribtued under the <a href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike License</a>. The dictionary is parsed by <a href="https://github.com/tatuylonen/wiktextract">wiktextract</a>.'
@@ -28,8 +29,8 @@ const Dictionary = {
     l2 = undefined
   } = {}) {
     if (l1 && l2) {
-      l2 = l2.replace('nor', 'nob') // Default Norwegian to Bokmål
-        .replace('hrv', 'hbs') // Serbian uses Serbo-Croatian
+      l2 = l2.replace('hrv', 'hbs') // Serbian uses Serbo-Croatian
+        .replace('nor', 'nob') // Default Norwegian to Bokmål
         .replace('srp', 'hbs') // Croatian uses Serbo-Croatian
         .replace('bos', 'hbs') // Bosnian uses Serbo-Croatian
         .replace('run', 'kin') // Rundi uses Rwanda-Rundi
