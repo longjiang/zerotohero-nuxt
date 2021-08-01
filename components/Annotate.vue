@@ -504,11 +504,11 @@ export default {
 }
 
 .text-center .annotated[dir=ltr].with-buttons .annotate-template {
-  padding-left: 3rem;
+  padding-left: 1.5rem;
 }
 
 .text-center .annotated[dir=rtl].with-buttons .annotate-template {
-  padding-right: 3rem;
+  padding-right: 1.5rem;
 }
 
 .annotator-buttons {
