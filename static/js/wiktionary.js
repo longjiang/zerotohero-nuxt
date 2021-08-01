@@ -591,8 +591,9 @@ const Dictionary = {
     }
     words = this.words.filter(word => word.search === text).map(w => Object.assign({ score: 1 }, w))
     for (let word of words) {
-      words = words.concat(this.stemWords(word, 1))
-      words = words.concat(this.phrases(word, 1))
+      let stemWords = this.stemWords(word, 1)
+      let phrases = this.phrases(word, 1)
+      words = words.concat(stemWords).concat(phrases)
     }
     if (words.length === 0 && this.words.length < 200000) {
       for (let word of this.words) {
@@ -610,7 +611,8 @@ const Dictionary = {
       }
     }
     words = words.sort((a, b) => b.score - a.score)
-    words = this.uniqueByValue(words, 'id').slice(0, limit)
+    words = this.uniqueByValue(words, 'id')
+    words = words.slice(0, limit)
     return words
   },
   randomArrayItem(array, start = 0, length = false) {
