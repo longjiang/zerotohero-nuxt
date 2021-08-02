@@ -117,7 +117,6 @@ import Config from "@/lib/config";
 import axios from "axios";
 import YouTube from "@/lib/youtube";
 import Helper from "@/lib/helper";
-import he from "he";
 import Vue from "vue";
 
 export default {

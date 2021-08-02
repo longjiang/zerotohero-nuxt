@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import VTooltip from 'v-tooltip'
 import VueObserveVisibility from 'vue-observe-visibility'
-import VueDisqus from 'vue-disqus'
 import VueSimpleSVG from 'vue-simple-svg'
 import VueAnalytics from 'vue-analytics'
 import Languages from '@/lib/languages'
@@ -14,7 +13,6 @@ Vue.config.productionTip = false
 Vue.use(VTooltip)
 Vue.use(VueSimpleSVG)
 Vue.use(VueObserveVisibility)
-Vue.use(VueDisqus)
 Vue.use(i18n)
 Vue.use(VueAnalytics, {
   id: 'UA-1846573-21'
