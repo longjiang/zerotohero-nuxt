@@ -24,7 +24,7 @@
           </button>
         </h6>
 
-        <GrammarPoint :grammar="grammar" :key="id" class="mb-5" />
+        <LazyGrammarPoint :grammar="grammar" :key="id" class="mb-5" />
 
         <div
           class="widget mt-5 mb-5"
@@ -37,7 +37,7 @@
         >
           <div class="widget-title">“{{ grammar.pattern }}” in TV Shows</div>
           <div class="widget-body">
-            <SearchSubsComp
+            <LazySearchSubsComp
               v-if="grammar.pattern"
               ref="searchSubs"
               :level="grammar.level"
@@ -49,7 +49,7 @@
         <div class="text-left mt-5" v-if="drills && drills.length > 0">
           <hr />
           <h4 class="text-center">Practice Drills</h4>
-          <Drill
+          <LazyDrill
             v-for="drill in drills"
             :drill="drill"
             :key="`drill-${grammar.id}-${drill.id}`"
@@ -57,7 +57,7 @@
         </div>
         <div v-if="entry">
           <hr />
-          <DictionaryEntry
+          <LazyDictionaryEntry
             :entry="entry"
             :showSearchSubs="
               !(
@@ -76,11 +76,8 @@
 </template>
 
 <script>
-import GrammarPoint from "@/components/GrammarPoint";
 import Grammar from "@/lib/grammar";
 import Drill from "@/components/Drill";
-import SearchSubsComp from "@/components/SearchSubsComp";
-import DictionaryEntry from "@/components/DictionaryEntry";
 import Config from "@/lib/config";
 import Helper from "@/lib/helper";
 import WordPhotos from "@/lib/word-photos";

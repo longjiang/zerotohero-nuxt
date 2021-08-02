@@ -101,6 +101,8 @@ export default {
       // Extend only webpack config for client-bundle
       if (isDev && isClient) {
         config.devtool = '#source-map'
+      } else {
+        config.devtool = false
       }
 
 

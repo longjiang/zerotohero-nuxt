@@ -68,14 +68,7 @@
 </template>
 
 <script>
-import WordList from "@/components/WordList.vue";
-import Questions from "@/components/Questions.vue";
-
 export default {
-  components: {
-    WordList,
-    Questions,
-  },
   props: ["method", "argsProp", "index"],
   data() {
     return {

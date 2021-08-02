@@ -53,7 +53,7 @@
       </b-dropdown>
     </div>
     <article>
-      <DictionaryEntry
+      <LazyDictionaryEntry
         v-if="entry"
         :entry="entry"
         :images="images"
@@ -66,18 +66,10 @@
 </template>
 
 <script>
-import SearchCompare from "@/components/SearchCompare.vue";
-import Paginator from "@/components/Paginator";
-import DictionaryEntry from "@/components/DictionaryEntry";
 import WordPhotos from "@/lib/word-photos";
 import Helper from "@/lib/helper";
 
 export default {
-  components: {
-    SearchCompare,
-    DictionaryEntry,
-    Paginator,
-  },
   props: {
     method: {
       type: String,
