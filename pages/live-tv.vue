@@ -43,7 +43,7 @@
             :data-url="channel.url"
             @click="setChannel(channel)"
           >
-            <img v-if="channel.logo" :src="channel.logo" :alt="channel.name" />
+            <img v-if="channel.logo" :src="channel.logo" :alt="channel.name" @error="logoLoadError" />
             <span>{{ channel.name }}</span>
           </b-button>
         </div>
@@ -129,6 +129,9 @@ export default {
     setChannel(channel) {
       this.currentChannel = channel;
     },
+    logoLoadError(event) {
+      event.target.src = "/img/tv.png";
+    }
   },
 };
 </script>
