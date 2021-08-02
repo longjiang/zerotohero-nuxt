@@ -34,7 +34,7 @@
             @click="setChannel(channel)"
           >
             <img v-if="channel.logo" :src="channel.logo" :alt="channel.name" />
-            <span v-else>{{ channel.name }}</span>
+            <span>{{ channel.name }}</span>
           </b-button>
         </div>
       </div>
@@ -76,6 +76,7 @@ export default {
     if (res && res.data) {
       let channels = Papa.parse(res.data, { header: true }).data;
       channels = Helper.uniqueByValue(channels, "tvgID");
+      channels = channels.filter(c => c.url)
       channels = channels.sort((a, b) =>
         a.name.localeCompare(b.name, this.$l2.code)
       );
@@ -109,13 +110,28 @@ export default {
 }
 .channel-button {
   &.channel-button-current {
-    background-color: red;
+    background-color: #fd4f1c;
+    color: white;
   }
   img {
     height: 2rem;
+    width: 4rem;
     object-fit: contain;
+    margin-right: 0.5rem;
   }
+  width: 100%;
+  text-align: left;
   margin-bottom: 0.5rem;
   margin-right: 0.5rem;
+  padding-left: 0.2;
+}
+@media (min-width: 768px) and (max-width: 992px) {
+  .channel-button {
+    width: calc(50% - 0.25rem),
+  }
+  .channel-button:nth-child(even) {
+    margin-right: 0;
+  }
+  
 }
 </style>
