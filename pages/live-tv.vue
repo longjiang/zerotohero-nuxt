@@ -97,7 +97,7 @@ export default {
       let channels = Papa.parse(res.data, { header: true }).data;
       channels = Helper.uniqueByValue(channels, "url");
       channels = channels
-        .filter((c) => c.url)
+        .filter((c) => c.url && c.url.startsWith('https://'))
         .filter((c) => c.category !== "XXX")
         .filter((c) => !c.name.includes("新唐人"));
       if (this.$l2.code in this.bannedChannels) {
