@@ -9,7 +9,9 @@
     <div class="row">
       <div class="col-sm-12 mb-4">
         <h4 class="text-center">Learn {{ $l2.name }} with Live TV</h4>
-        <div v-if="channels" class="text-center">{{ channels.length }} Channel(s)</div>
+        <div v-if="channels" class="text-center">
+          {{ channels.length }} Channel(s)
+        </div>
       </div>
     </div>
     <div class="row">
@@ -22,7 +24,8 @@
             ref="liveVideo"
           />
           <div v-if="currentChannel" class="pt-2 pb-2">
-            <b>Channel:</b> {{ currentChannel.name }}
+            <b>Channel:</b>
+            {{ currentChannel.name }}
           </div>
         </div>
       </div>
@@ -61,8 +64,15 @@ export default {
       channels: undefined,
       currentChannel: undefined,
       bannedChannels: {
-        'zh': ['CGTNZhongGuo.cn', 'CGTNDocumentaryZhongGuo.cn', 'CGTN.cn', 'JinRiELuoSi.cn', 'XinTangRenMeiXiPinDao.cn', 'YaTaiTai.cn']
-      }
+        zh: [
+          "CGTNZhongGuo.cn",
+          "CGTNDocumentaryZhongGuo.cn",
+          "CGTN.cn",
+          "JinRiELuoSi.cn",
+          "XinTangRenMeiXiPinDao.cn",
+          "YaTaiTai.cn",
+        ],
+      },
     };
   },
   computed: {
@@ -86,9 +96,13 @@ export default {
     if (res && res.data) {
       let channels = Papa.parse(res.data, { header: true }).data;
       channels = Helper.uniqueByValue(channels, "tvgID");
-      channels = channels.filter(c => c.url)
+      channels = channels
+        .filter((c) => c.url)
+        .filter((c) => c.category !== "XXX");
       if (this.$l2.code in this.bannedChannels) {
-        channels = channels.filter(c => !this.bannedChannels[this.$l2.code].includes(c.tvgID))
+        channels = channels.filter(
+          (c) => !this.bannedChannels[this.$l2.code].includes(c.tvgID)
+        );
       }
       channels = channels.sort((a, b) =>
         a.name.localeCompare(b.name, this.$l2.code)
@@ -140,11 +154,10 @@ export default {
 }
 @media (min-width: 768px) and (max-width: 992px) {
   .channel-button {
-    width: calc(50% - 0.25rem),
+    width: calc(50% - 0.25rem);
   }
   .channel-button:nth-child(even) {
     margin-right: 0;
   }
-  
 }
 </style>
