@@ -17,7 +17,7 @@
     <div class="row">
       <div class="col-lg-8 live-video-column">
         <div class="live-tv-wrapper">
-          <LiveVideo
+          <LazyLiveVideo
             v-if="currentChannel"
             :url="currentChannel.url"
             :key="`live-video-${currentChannel.url}`"

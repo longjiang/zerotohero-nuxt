@@ -26,8 +26,7 @@
           <!-- <Annotate :buttons="true"><p>skal</p></Annotate> -->
           <!-- վարարուն Կարկաչում էր սարերում: -->
           <!-- ทริปวัดใจ -->
-          <!-- <Annotate><p>Hometown's Embrace</p></Annotate> -->
-          <client-only><LiveVideo url="http://ivi.neu6.edu.cn/hls/cctv13.m3u8" /></client-only>
+          <LazyAnnotate><p>Hometown's Embrace</p></LazyAnnotate>
         </div>
       </div>
     </div>
