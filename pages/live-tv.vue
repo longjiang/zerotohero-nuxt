@@ -20,7 +20,7 @@
           <LiveVideo
             v-if="currentChannel"
             :url="currentChannel.url"
-            :key="`live-video-${currentChannel.tvgID}`"
+            :key="`live-video-${currentChannel.url}`"
             ref="liveVideo"
           />
           <div v-if="currentChannel" class="pt-2 pb-2">
@@ -39,8 +39,8 @@
               'channel-button-current': currentChannel === channel,
             }"
             v-for="channel in channels"
-            :key="`channel-button-${channel.tvgID}`"
-            :data-tvg-id="channel.tvgID"
+            :key="`channel-button-${channel.url}`"
+            :data-url="channel.url"
             @click="setChannel(channel)"
           >
             <img v-if="channel.logo" :src="channel.logo" :alt="channel.name" />
@@ -65,12 +65,19 @@ export default {
       currentChannel: undefined,
       bannedChannels: {
         zh: [
-          "CGTNZhongGuo.cn",
-          "CGTNDocumentaryZhongGuo.cn",
-          "CGTN.cn",
-          "JinRiELuoSi.cn",
-          "XinTangRenMeiXiPinDao.cn",
-          "YaTaiTai.cn",
+          "http://amdlive.ctnd.com.edgesuite.net/arirang_1ch/smil:arirang_1ch.smil/chunklist_b3256000_sleng.m3u8",
+          "http://183.207.249.14/PLTV/3/224/3221225588/index.m3u8",
+          "https://cctvcnch5ca.v.wscdns.com/live/cctveurope_2/index.m3u8",
+          "http://223.110.243.171/PLTV/3/224/3221227204/index.m3u8",
+          "http://117.169.120.140:8080/live/cctv-10/.m3u8",
+          "http://117.169.120.140:8080/live/cctv-10/.m3u8",
+          "http://live.cgtn.com/500/prog_index.m3u8",
+          "https://livedoc.cgtn.com/1000d/prog_index.m3u8",
+          "https://live.cgtn.com/1000/prog_index.m3u8",
+          "https://rt-news-gd.secure2.footprint.net/1103_2500Kb.m3u8",
+          "http://117.169.120.140:8080/live/cctv-3/.m3u8",
+          "http://117.169.120.140:8080/live/cctv-6/.m3u8",
+          "http://174.127.67.246/live330/playlist.m3u8",
         ],
       },
     };
@@ -95,17 +102,18 @@ export default {
     );
     if (res && res.data) {
       let channels = Papa.parse(res.data, { header: true }).data;
-      channels = Helper.uniqueByValue(channels, "tvgID");
+      channels = Helper.uniqueByValue(channels, "url");
       channels = channels
         .filter((c) => c.url)
-        .filter((c) => c.category !== "XXX");
+        .filter((c) => c.category !== "XXX")
+        .filter((c) => !c.name.includes("新唐人"));
       if (this.$l2.code in this.bannedChannels) {
         channels = channels.filter(
-          (c) => !this.bannedChannels[this.$l2.code].includes(c.tvgID)
+          (c) => !this.bannedChannels[this.$l2.code].includes(c.url)
         );
       }
       channels = channels.sort((a, b) =>
-        a.name.localeCompare(b.name, this.$l2.code)
+        b.name.localeCompare(a.name, this.$l2.code)
       );
       channels = channels.sort((a, b) =>
         a.logo === b.logo ? 0 : a.logo ? -1 : 1
