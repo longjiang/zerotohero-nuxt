@@ -23,10 +23,11 @@
           <!-- <Annotate :buttons="true"><p>pīnyīn yuèdu</p></Annotate> -->
           <!-- <Annotate :buttons="true"><p>Ջրեր</p></Annotate> -->
           <!-- <Annotate :buttons="true"><p>鸾凤伏窜兮，鸱枭翱翔。</p></Annotate> -->
-          <Annotate :buttons="true"><p>skal</p></Annotate>
+          <!-- <Annotate :buttons="true"><p>skal</p></Annotate> -->
           <!-- վարարուն Կարկաչում էր սարերում: -->
           <!-- ทริปวัดใจ -->
           <!-- <Annotate><p>Hometown's Embrace</p></Annotate> -->
+          <client-only><LiveVideo url="http://ivi.neu6.edu.cn/hls/cctv13.m3u8" /></client-only>
         </div>
       </div>
     </div>

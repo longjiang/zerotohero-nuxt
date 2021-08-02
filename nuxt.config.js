@@ -26,7 +26,8 @@ export default {
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
-    'css-percentage-circle'
+    'css-percentage-circle',
+    'video.js/dist/video-js.css'
   ],
 
   router: {
@@ -90,7 +91,8 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    '~plugins/main.js'
+    '~plugins/main.js',
+    { src: '~plugins/nuxt-video-player-plugin.js', ssr: false }
   ],
 
   build: {
