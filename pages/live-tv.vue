@@ -9,9 +9,9 @@
     <LiveVideo v-if="currentChannel" :url="currentChannel.url" :key="`live-video-${currentChannel.tvgID}`"/>
     <div class="pt-2 pb-2" v-if="channels">
       <b-button
-        variant="secondary"
+        variant="gray"
         size="sm"
-        class="channel-button"
+        :class="{'channel-button': true, 'channel-button-current': currentChannel === channel}"
         v-for="channel in channels"
         :key="`channel-button-${channel.tvgID}`"
         @click="setChannel(channel)"
@@ -75,6 +75,9 @@ export default {
 
 <style lang="scss" scoped>
 .channel-button {
+  &.channel-button-current {
+    background-color: red;
+  }
   img {
     height: 2rem;
     object-fit: contain;
