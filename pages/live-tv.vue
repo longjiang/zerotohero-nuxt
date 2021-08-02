@@ -5,7 +5,13 @@
   }
 </router>
 <template>
-  <div class="container main mt-5 mb-5">
+  <div class="container main mt-4 mb-5">
+    <div class="row">
+      <div class="col-sm-12 mb-4">
+        <h4 class="text-center">Learn {{ $l2.name }} with Live TV</h4>
+        <div v-if="channels" class="text-center">{{ channels.length }} Channel(s)</div>
+      </div>
+    </div>
     <div class="row">
       <div class="col-lg-8 live-video-column">
         <div class="live-tv-wrapper">
