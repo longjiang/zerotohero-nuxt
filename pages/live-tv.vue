@@ -37,6 +37,7 @@
             }"
             v-for="channel in channels"
             :key="`channel-button-${channel.tvgID}`"
+            :data-tvg-id="channel.tvgID"
             @click="setChannel(channel)"
           >
             <img v-if="channel.logo" :src="channel.logo" :alt="channel.name" />
@@ -59,6 +60,9 @@ export default {
     return {
       channels: undefined,
       currentChannel: undefined,
+      bannedChannels: {
+        'zh': ['CGTNZhongGuo.cn', 'CGTNDocumentaryZhongGuo.cn', 'CGTN.cn', 'JinRiELuoSi.cn', 'XinTangRenMeiXiPinDao.cn', 'YaTaiTai.cn']
+      }
     };
   },
   computed: {
@@ -83,6 +87,9 @@ export default {
       let channels = Papa.parse(res.data, { header: true }).data;
       channels = Helper.uniqueByValue(channels, "tvgID");
       channels = channels.filter(c => c.url)
+      if (this.$l2.code in this.bannedChannels) {
+        channels = channels.filter(c => !this.bannedChannels[this.$l2.code].includes(c.tvgID))
+      }
       channels = channels.sort((a, b) =>
         a.name.localeCompare(b.name, this.$l2.code)
       );
