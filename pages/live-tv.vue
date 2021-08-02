@@ -44,6 +44,7 @@
             @click="setChannel(channel)"
           >
             <img v-if="channel.logo" :src="channel.logo" :alt="channel.name" @error="logoLoadError" />
+            <img v-else src="/img/tv.png" :alt="channel.name" />
             <span>{{ channel.name }}</span>
           </b-button>
         </div>
@@ -116,10 +117,7 @@ export default {
         );
       }
       channels = channels.sort((a, b) =>
-        b.name.localeCompare(a.name, this.$l2.code)
-      );
-      channels = channels.sort((a, b) =>
-        a.logo === b.logo ? 0 : a.logo ? -1 : 1
+        a.name.localeCompare(b.name, this.$l2.code)
       );
       this.channels = channels;
       if (channels[0]) this.currentChannel = channels[0];
