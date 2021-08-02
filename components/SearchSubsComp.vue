@@ -298,8 +298,6 @@ import SmallStar from "@/components/SmallStar";
 import Config from "@/lib/config";
 import Helper from "@/lib/helper";
 import YouTube from "@/lib/youtube";
-import VueSlickCarousel from "vue-slick-carousel";
-import "vue-slick-carousel/dist/vue-slick-carousel.css";
 
 export default {
   components: {
@@ -307,7 +305,6 @@ export default {
     YouTubeWithTranscript,
     SyncedTranscript,
     SmallStar,
-    VueSlickCarousel,
   },
   props: {
     terms: {
