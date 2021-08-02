@@ -22,6 +22,11 @@
 <script>
 import '@videojs/http-streaming'
 export default {
+  props: {
+    url: {
+      type: String
+    }
+  },
   data() {
     return {
       // component options
@@ -37,15 +42,17 @@ export default {
           {
             withCredentials: false,
             type: 'application/x-mpegURL',
-            src: "http://ivi.neu6.edu.cn/hls/cctv13.m3u8",
+            src: this.url,
           },
         ],
         // poster: "/static/images/author.jpg",
       },
+
+      myVideoPlayer: undefined
     };
   },
   mounted() {
-    console.log("this is current player instance object", this.myVideoPlayer);
+
   },
   methods: {
     // listen event
@@ -78,11 +85,11 @@ export default {
     },
     // or listen state event
     playerStateChanged(playerCurrentState) {
-      console.log("player current update state", playerCurrentState);
+      
     },
     // player is ready
     playerReadied(player) {
-      console.log("example 01: the player is readied", player);
+
     },
   },
 };

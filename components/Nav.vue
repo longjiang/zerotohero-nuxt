@@ -217,6 +217,12 @@ export default {
           show: this.hasFeature("youtube"),
           children: [
             {
+              name: "live-tv",
+              icon: "fa fa-tv",
+              title: 'Live TV',
+              show: this.hasLiveTV,
+            },
+            {
               name: "tv-shows",
               icon: "fa fa-tv",
               title: '{l2} TV Shows',
@@ -581,6 +587,7 @@ export default {
       shortcuts: [],
       history: [],
       hasTVShows: false,
+      hasLiveTV: false,
       hasTalks: false,
       musicPath: false,
       moviePath: false,
@@ -628,6 +635,9 @@ export default {
           this.$store.state.phrasebooks.phrasebooks[this.l2.code].length > 0;
       }
     });
+    if (this.$l2.code === 'zh') {
+      this.hasLiveTV = true
+    }
   },
   beforeDestroy() {
     // you may call unsubscribe to stop the subscription
