@@ -171,6 +171,9 @@
                       </router-link>
                     </li>
                     <li>
+                      <router-link to="/en/zh/live-tv">Live TV</router-link>
+                    </li>
+                    <li>
                       <router-link to="/en/zh/tv-shows">TV Shows</router-link>
                     </li>
                     <li>
@@ -252,6 +255,9 @@
                       <router-link to="/zh/en/phrasebooks">
                         单词表
                       </router-link>
+                    </li>
+                    <li>
+                      <router-link to="/zh/en/live-tv">电视直播</router-link>
                     </li>
                     <li>
                       <router-link to="/zh/en/tv-shows">电视节目</router-link>

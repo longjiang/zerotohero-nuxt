@@ -7,6 +7,15 @@
       :set="(base = languagePath(language))"
     >
       <router-link
+        :to="`${base}live-tv`"
+        :class="{
+          'feature-icon mr-1': true,
+          transparent: !hasLiveTV(english, language),
+        }"
+      >
+        <i class="fa fa-tv" />
+      </router-link>
+      <router-link
         :to="`${base}youtube/browse/all/all/0`"
         :class="{
           'feature-icon mr-1': true,
@@ -113,6 +122,9 @@ export default {
     },
     hasYouTube(l1, l2) {
       return this.$languages.hasYouTube(l1, l2);
+    },
+    hasLiveTV(l1, l2) {
+      return this.hasFeature(l1, l2, 'live-tv');
     },
   },
 };
