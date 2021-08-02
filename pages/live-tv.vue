@@ -6,7 +6,7 @@
 </router>
 <template>
   <div class="container main mt-5 mb-5">
-    <LiveVideo v-if="currentChannel" :url="currentChannel.url" :key="`live-video-${currentChannel.tvgID}`"/>
+    <LiveVideo v-if="currentChannel" :url="currentChannel.url" :key="`live-video-${currentChannel.tvgID}`" ref="liveVideo"/>
     <div class="pt-2 pb-2" v-if="channels">
       <b-button
         variant="gray"

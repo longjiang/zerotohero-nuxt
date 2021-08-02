@@ -635,7 +635,7 @@ export default {
           this.$store.state.phrasebooks.phrasebooks[this.l2.code].length > 0;
       }
     });
-    if (this.$l2.code === 'zh') {
+    if (this.$hasFeature('live-tv')) {
       this.hasLiveTV = true
     }
   },

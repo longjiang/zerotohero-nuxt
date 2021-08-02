@@ -38,6 +38,7 @@ export default {
         playbackRates: [0.7, 1.0, 1.5, 2.0],
         responsive: true,
         aspectRatio: '16:9',
+        autoplay: true,
         sources: [
           {
             withCredentials: false,
@@ -91,6 +92,9 @@ export default {
     playerReadied(player) {
 
     },
+    play() {
+      this.myVideoPlayer.play()
+    }
   },
 };
 </script>
