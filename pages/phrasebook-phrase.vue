@@ -66,13 +66,13 @@
           </b-dropdown-item>
         </b-dropdown>
       </div>
-      <DictionaryEntry
+      <LazyDictionaryEntry
         v-if="word && phrasebook"
         :entry="word"
         :tvShow="phrasebook.tv_show"
         :exact="phrasebook.exact"
       />
-      <PhraseComp
+      <LazyPhraseComp
         v-else-if="phraseObj && phraseObj.phrase && phrasebook"
         :term="phraseObj.phrase.toLowerCase()"
         :tvShow="phrasebook.tv_show"

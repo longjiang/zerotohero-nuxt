@@ -14,7 +14,7 @@
             and see how they are used in real contexts.
           </p>
           <div class="search-compare-wrapper">
-            <SearchCompare
+            <LazySearchCompare
               placeholder="Enter a word or phrase"
               type="generic"
               :term="term"
@@ -34,7 +34,7 @@
         </div>
       </div>
     </div>
-    <PhraseComp v-if="term" :term="term" class="mt-5" />
+    <LazyPhraseComp v-if="term" :term="term" class="mt-5" />
   </div>
 </template>
 

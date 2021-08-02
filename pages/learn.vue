@@ -62,7 +62,7 @@
         :home="`/${$l1.code}/${$l2.code}/learn/${method}/${argsProp}`"
         :title="`Word`"
       />
-      <DictionaryEntry :entry="words[index]" />
+      <LazyDictionaryEntry :entry="words[index]" />
     </div>
   </div>
 </template>

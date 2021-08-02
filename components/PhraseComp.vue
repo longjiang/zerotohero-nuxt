@@ -26,7 +26,7 @@
               {{ tvShow ? `the TV Show "${tvShow.title}"` : "TV Shows" }}
             </div>
             <div class="widget-body">
-              <SearchSubsComp
+              <LazySearchSubsComp
                 v-if="term"
                 ref="searchSubs"
                 level="outside"

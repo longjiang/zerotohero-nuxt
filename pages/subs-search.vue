@@ -35,7 +35,7 @@
       </div>
       <div class="row">
         <div class="col-sm-12">
-          <SearchSubsComp :term="term" />
+          <LazySearchSubsComp :term="term" />
         </div>
       </div>
     </div>
@@ -43,15 +43,8 @@
 </template>
 
 <script>
-import SimpleSearch from '@/components/SimpleSearch'
-import SearchSubsComp from '@/components/SearchSubsComp'
-import Config from '@/lib/config'
 
 export default {
-  components: {
-    SimpleSearch,
-    SearchSubsComp
-  },
   props: {
     term: {
       type: String,

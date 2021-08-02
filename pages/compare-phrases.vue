@@ -66,7 +66,7 @@
           >
             <div class="widget-title">“{{ term }}” in TV Shows</div>
             <div class="widget-body">
-              <CompareSearchSubs
+              <LazyCompareSearchSubs
                 ref="searchSubs"
                 level="outside"
                 :key="`${term}-${compareTerm}-compare-search-subs`"

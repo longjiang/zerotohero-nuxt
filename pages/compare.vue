@@ -17,36 +17,36 @@
           <div class="text-center">
             <Loader v-if="!a" class="mt-5" />
           </div>
-          <EntryHeader
+          <LazyEntryHeader
             v-if="a"
             :entry="a"
             class="text-center"
             :key="`${a.id}-header`"
             @prevWord="prevWord()"
             @nextWord="nextWord()"
-          ></EntryHeader>
+          />
         </div>
         <div class="col-6">
           <div class="text-center">
             <Loader v-if="!b" class="mt-5" />
           </div>
-          <EntryHeader
+          <LazyEntryHeader
             v-if="b"
             :entry="b"
             class="text-center"
             :key="`${b.id}-header`"
-          ></EntryHeader>
+          />
         </div>
       </div>
 
       <div class="row">
         <div class="col-sm-12">
-          <CompareDefs
+          <LazyCompareDefs
             v-if="a && b"
             :a="a"
             :b="b"
             :key="`${a.id}-${b.id}-defs`"
-          ></CompareDefs>
+          />
         </div>
       </div>
     </div>
@@ -57,18 +57,18 @@
       <div class="container">
         <div class="row">
           <div class="col-sm-6 mt-5 mb-5">
-            <EntryExample
+            <LazyEntryExample
               :key="`${a.id}-example`"
               :entry="a"
               id="compare-example-a"
-            ></EntryExample>
+            />
           </div>
           <div class="col-sm-6 mt-5 mb-5">
-            <EntryExample
+            <LazyEntryExample
               :key="`${b.id}-example`"
               :entry="b"
               id="compare-example-b"
-            ></EntryExample>
+            />
           </div>
         </div>
       </div>
@@ -87,7 +87,7 @@
               “{{ a.bare }}” and “{{ b.bare }}” in TV Shows
             </div>
             <div class="widget-body">
-              <CompareSearchSubs
+              <LazyCompareSearchSubs
                 :key="`compare-search-subs-${a.id}-${b.id}`"
                 :levelA="a.newHSK && a.newHSK === '7-9' ? '7-9' : a.hsk || a.level || 'outside' "
                 :termsA="
@@ -115,22 +115,22 @@
     <div class="container">
       <div class="row mt-5">
         <div class="col-sm-6">
-          <WebImages
+          <LazyWebImages
             v-if="a"
             :text="a.bare"
             limit="10"
             :preloaded="aImages"
             :key="`${a.id}-images`"
-          ></WebImages>
+          />
         </div>
         <div class="col-sm-6">
-          <WebImages
+          <LazyWebImages
             v-if="b"
             :text="b.bare"
             limit="10"
             :preloaded="bImages"
             :key="`${b.id}-images`"
-          ></WebImages>
+          />
         </div>
       </div>
     </div>
@@ -138,14 +138,14 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
-          <CompareCollocations
+          <LazyCompareCollocations
             class="mt-5 focus"
             v-if="a && b"
             :term="a.bare"
             :compareTerm="b.bare"
             :level="a.level"
             :compareLevel="b.level"
-          ></CompareCollocations>
+          />
         </div>
       </div>
     </div>
@@ -153,10 +153,10 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12 mt-5" v-if="a">
-          <EntryRelated :key="`${a.id}-related`" :entry="a"></EntryRelated>
+          <LazyEntryRelated :key="`${a.id}-related`" :entry="a" />
         </div>
         <div class="col-sm-12 mt-5" v-if="b">
-          <EntryRelated :key="`${a.id}-related`" :entry="b"></EntryRelated>
+          <LazyEntryRelated :key="`${a.id}-related`" :entry="b" />
         </div>
       </div>
     </div>
@@ -165,68 +165,36 @@
     <div class="container mt-5 mb-5 focus">
       <div class="row">
         <div class="col-sm-6">
-          <Concordance
+          <LazyConcordance
             v-if="a"
             :text="a.bare"
             :level="a.hsk"
             :key="`${a.id}-concordance`"
-          ></Concordance>
+          />
         </div>
         <div class="col-sm-6">
-          <Concordance
+          <LazyConcordance
             v-if="b"
             :text="b.bare"
             :level="b.hsk"
             :key="`${b.id}-concordance`"
-          ></Concordance>
+          />
         </div>
       </div>
     </div>
 
-    <EntryCourseAd
+    <LazyEntryCourseAd
       v-if="$l2 === 'zh' && a && b"
       :entry="b.hsk > a.hsk ? b : a"
       :key="`${a.id}-${b.id}-ad`"
-    ></EntryCourseAd>
+    />
   </div>
 </template>
 
 <script>
-import Concordance from "@/components/Concordance.vue";
-import EntryCourseAd from "@/components/EntryCourseAd.vue";
-import EntryExample from "@/components/EntryExample.vue";
-import Grammar from "@/components/Grammar.vue";
-import EntryHeader from "@/components/EntryHeader.vue";
-import Mistakes from "@/components/Mistakes.vue";
-import WebImages from "@/components/WebImages.vue";
-import CompareCollocations from "@/components/CompareCollocations.vue";
-import CompareDefs from "@/components/CompareDefs.vue";
-import SearchCompare from "@/components/SearchCompare.vue";
-import Korean from "@/components/Korean";
-import Japanese from "@/components/Japanese";
-import Chinese from "@/components/Chinese";
-import EntryRelated from "@/components/EntryRelated";
-import CompareSearchSubs from "@/components/CompareSearchSubs";
 import WordPhotos from '@/lib/word-photos'
 
 export default {
-  components: {
-    SearchCompare,
-    Concordance,
-    EntryCourseAd,
-    EntryExample,
-    Grammar,
-    EntryHeader,
-    Mistakes,
-    CompareCollocations,
-    WebImages,
-    Korean,
-    Japanese,
-    Chinese,
-    CompareDefs,
-    EntryRelated,
-    CompareSearchSubs,
-  },
   data() {
     return {
       a: undefined,

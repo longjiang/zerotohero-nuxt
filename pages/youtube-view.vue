@@ -52,7 +52,7 @@
       <div :class="{ 'loader text-center pt-5 pb-5': true, 'd-none': video }">
         <div class="heartbeat-loader"></div>
       </div>
-      <YouTubeWithTranscript
+      <LazyYouTubeWithTranscript
         v-if="video"
         :video="video"
         ref="youtube"
@@ -77,20 +77,12 @@
 </template>
 
 <script>
-import YouTubeWithTranscript from "@/components/YouTubeWithTranscript";
-import SimpleSearch from "@/components/SimpleSearch";
-import YouTubeSearchResults from "@/components/YouTubeSearchResults";
 import YouTube from "@/lib/youtube";
 import Helper from "@/lib/helper";
 import Config from "@/lib/config";
 import axios from "axios";
 
 export default {
-  components: {
-    YouTubeSearchResults,
-    SimpleSearch,
-    YouTubeWithTranscript,
-  },
   props: {
     youtube_id: {
       type: String,

@@ -49,7 +49,7 @@
               {{ tvShow ? `the TV Show "${tvShow.title}"` : "TV Shows" }}
             </div>
             <div class="widget-body">
-              <SearchSubsComp
+              <LazySearchSubsComp
                 v-if="searchTerms"
                 ref="searchSubs"
                 :level="

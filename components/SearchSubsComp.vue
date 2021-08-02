@@ -237,7 +237,7 @@
         Refresh
       </b-button>
     </div>
-    <YouTubeWithTranscript
+    <LazyYouTubeWithTranscript
       v-if="currentHit"
       initialLayout="vertical"
       :video="currentHit.video"
@@ -291,21 +291,11 @@
 </template>
 
 <script>
-import YouTubeWithTranscript from "@/components/YouTubeWithTranscript";
-import SyncedTranscript from "@/components/SyncedTranscript";
-import SimpleSearch from "@/components/SimpleSearch";
-import SmallStar from "@/components/SmallStar";
 import Config from "@/lib/config";
 import Helper from "@/lib/helper";
 import YouTube from "@/lib/youtube";
 
 export default {
-  components: {
-    SimpleSearch,
-    YouTubeWithTranscript,
-    SyncedTranscript,
-    SmallStar,
-  },
   props: {
     terms: {
       type: Array,
