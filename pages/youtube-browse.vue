@@ -15,11 +15,11 @@
       :image="`https://img.youtube.com/vi/${videos[0].youtube_id}/hqdefault.jpg`"
     />
     <div class="row">
-      <div class="col-sm-12 mb-4 text-center">
-        <h3 v-if="!keyword" class="mt-5">
+      <div class="col-sm-12 mb-4">
+        <h3 v-if="!keyword" class="mt-5 text-center">
           {{ $t("{l2} Video Library", { l2: $t($l2.name) }) }}
         </h3>
-        <p v-if="!keyword" class="mt-3">
+        <p v-if="!keyword" class="mt-3 text-center">
           Study {{ $l2.name }} videos with
           {{ $l2.code === "zh" ? "Pinyin" : "" }} subtitles
         </p>
@@ -44,7 +44,9 @@
             }
           "
         />
-        <h3 v-if="keyword" class="mt-5 mb-4">{{ keyword }}</h3>
+        <b-form-checkbox v-model="includeShows">
+          Include videos in TV shows and talks
+        </b-form-checkbox>
       </div>
       <div :class="{ 'col-sm-12 mb-5': true, 'col-md-8 col-lg-9': !keyword }">
         <div
@@ -77,9 +79,12 @@
         <div class="mt-4 text-center" v-if="!keyword">
           <router-link
             v-if="start > 9"
-            :to="`/${$l1.code}/${$l2.code}/youtube/browse/${topic}/${level}/${
-              Math.max(Number(start) - this.perPage - this.moreVideos, 0)
-            }${keyword ? '/' + keyword : ''}`"
+            :to="`/${$l1.code}/${
+              $l2.code
+            }/youtube/browse/${topic}/${level}/${Math.max(
+              Number(start) - this.perPage - this.moreVideos,
+              0
+            )}${keyword ? '/' + keyword : ''}`"
             class="btn btn-default"
           >
             <i class="fa fa-chevron-left"></i>
@@ -219,7 +224,8 @@ export default {
       topics: Helper.topics,
       randomEpisodeYouTubeId: undefined,
       moreVideos: 0,
-      perPage: 12
+      perPage: 12,
+      includeShows: true,
     };
   },
   async fetch() {
@@ -234,12 +240,16 @@ export default {
     async visibilityChanged(isVisible) {
       if (this.videos && isVisible) {
         this.moreVideos = this.moreVideos + this.perPage;
-        let newVideos = await this.getVideos(Number(this.start) + this.moreVideos);
+        let newVideos = await this.getVideos(
+          Number(this.start) + this.moreVideos
+        );
         this.videos = this.videos.concat(newVideos);
       }
     },
     async getVideos(start) {
-      let filters = "&filter[tv_show][null]=1&filter[talk][null]=1";
+      let filters = "";
+      if (!this.includeShows)
+        filters = "&filter[tv_show][null]=1&filter[talk][null]=1";
       if (this.topic !== "all") {
         filters += "&filter[topic][eq]=" + this.topic;
       }
