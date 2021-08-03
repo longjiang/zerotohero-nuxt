@@ -5,11 +5,14 @@
   }
 </router>
 <template>
-  <div class="container-fluid main mt-4 mb-5">
+  <div class="main mt-4 mb-5 container-xl">
     <SocialHead
       v-if="channels"
       :title="`Learn ${$l2.name} from Live ${$l2.name} TV | ${$l2.name} Zero to Hero`"
-      :description="`Watch ${$l2.name} TV Channels: ${channels.slice(0,5).map(c => c.name).join(', ')} ...`"
+      :description="`Watch ${$l2.name} TV Channels: ${channels
+        .slice(0, 5)
+        .map((c) => c.name)
+        .join(', ')} ...`"
       :image="image"
     />
     <div class="row">
@@ -21,7 +24,13 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-8 live-video-column pl-0 pr-0">
+      <div
+        :class="{
+          'live-video-column pl-0 pr-0': true,
+          'col-sm-12': portrait,
+          'col-sm-7 col-md-8': !portrait,
+        }"
+      >
         <div class="live-tv-wrapper">
           <LazyLiveVideo
             v-if="currentChannel"
@@ -35,11 +44,17 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-4 pl-0 pr-0">
+      <div
+        :class="{
+          'pl-0 pr-0': true,
+          'col-sm-12': portrait,
+          'col-sm-5 col-md-4': !portrait,
+        }"
+      >
         <div
           v-if="channels"
           class="tabs text-center channel-category-tabs pl-3 pr-3"
-          style="border-bottom: 0.5rem solid #fd4f1c;"
+          style="border-bottom: 0.5rem solid #fd4f1c"
         >
           <button
             v-if="hasFeatured"
@@ -49,7 +64,10 @@
               'text-dark': !featured,
               'bg-primary text-white': featured,
             }"
-            @click="category = undefined; featured = true"
+            @click="
+              category = undefined;
+              featured = true;
+            "
           >
             Featured
           </button>
@@ -58,9 +76,13 @@
             :class="{
               tab: true,
               'text-dark': typeof category !== 'undefined' || featured,
-              'bg-primary text-white': typeof category === 'undefined' && !featured,
+              'bg-primary text-white':
+                typeof category === 'undefined' && !featured,
             }"
-            @click="category = undefined; featured = false"
+            @click="
+              category = undefined;
+              featured = false;
+            "
           >
             All
           </button>
@@ -77,7 +99,14 @@
             {{ cat }}
           </button>
         </div>
-        <div class="p-3" v-if="channels">
+        <div
+          class="p-3"
+          v-if="channels"
+          :class="{
+            'channel-buttons': true,
+            'channel-buttons-portrait': portrait,
+          }"
+        >
           <b-button
             variant="gray"
             size="sm"
@@ -120,6 +149,7 @@ export default {
       currentChannel: undefined,
       category: undefined,
       featured: false,
+      portrait: true,
       bannedChannels: {
         zh: [
           "http://174.127.67.246/live330/playlist.m3u8", // NTD
@@ -145,14 +175,23 @@ export default {
         return this.$store.state.settings.adminMode;
     },
     image() {
-      let channelsWithLogos = this.channels.filter(c => c.logo)
+      let channelsWithLogos = this.channels.filter((c) => c.logo);
       if (channelsWithLogos.length > 0) {
-        return channelsWithLogos[0].logo
+        return channelsWithLogos[0].logo;
       }
     },
     hasFeatured() {
-      return this.channels.find(c => c.featured)
-    }
+      return this.channels.find((c) => c.featured);
+    },
+  },
+  created() {
+    if (typeof window !== "undefined")
+      window.addEventListener("resize", this.onResize);
+    this.portrait = Helper.portrait();
+  },
+  destroyed() {
+    if (typeof window !== "undefined")
+      window.removeEventListener("resize", this.onResize);
   },
   async fetch() {
     let res = await axios.get(
@@ -187,10 +226,11 @@ export default {
       );
       this.channels = channels;
       if (channels[0]) {
-        if (this.hasFeatured) this.currentChannel = channels.find(c => c.featured);
+        if (this.hasFeatured)
+          this.currentChannel = channels.find((c) => c.featured);
         else this.currentChannel = channels[0];
       }
-      if (this.hasFeatured) this.featured = true
+      if (this.hasFeatured) this.featured = true;
       let categories = this.channels.map((c) => {
         if (!c.category) c.category = "Misc";
         return c.category;
@@ -205,6 +245,10 @@ export default {
     },
     logoLoadError(event) {
       event.target.src = "/img/tv.png";
+    },
+    onResize() {
+      console.log("resize");
+      this.portrait = Helper.portrait();
     },
   },
 };
@@ -241,12 +285,13 @@ export default {
   padding-left: 0.2;
 }
 @media (min-width: 768px) and (max-width: 992px) {
-  .channel-button {
-    width: calc(50% - 0.25rem);
-  }
-  .channel-button:nth-child(even) {
-    margin-right: 0;
+  .channel-buttons-portrait {
+    .channel-button {
+      width: calc(50% - 0.25rem);
+    }
+    .channel-button:nth-child(even) {
+      margin-right: 0;
+    }
   }
 }
-
 </style>
