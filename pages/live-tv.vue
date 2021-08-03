@@ -5,7 +5,7 @@
   }
 </router>
 <template>
-  <div class="container main mt-4 mb-5">
+  <div class="container-fluid main mt-4 mb-5">
     <div class="row">
       <div class="col-sm-12 mb-4">
         <h4 class="text-center">Learn {{ $l2.name }} with Live TV</h4>
@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-8 live-video-column">
+      <div class="col-lg-8 live-video-column pl-0 pr-0 pr-lg-3">
         <div class="live-tv-wrapper">
           <LazyLiveVideo
             v-if="currentChannel"
@@ -29,36 +29,37 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-4">
-        <div class="pt-2 pb-2" v-if="channels">
-          <div
-            class="tabs text-center mb-2"
-            style="border-bottom: 0.5rem solid #fd4f1c"
+      <div class="col-lg-4 pl-0 pr-0">
+        <div
+          v-if="channels"
+          class="tabs text-center sticky-top bg-white pt-2"
+          style="border-bottom: 0.5rem solid #fd4f1c; z-index: 1"
+        >
+          <button
+            :key="`live-tv-cat-tab-all`"
+            :class="{
+              tab: true,
+              'text-dark': typeof category !== 'undefined',
+              'bg-primary text-white': typeof category === 'undefined',
+            }"
+            @click="category = undefined"
           >
-            <button
-              :key="`live-tv-cat-tab-all`"
-              :class="{
-                tab: true,
-                'text-dark': typeof category !== 'undefined',
-                'bg-primary text-white': typeof category === 'undefined',
-              }"
-              @click="category = undefined"
-            >
-              All
-            </button>
-            <button
-              v-for="cat in categories"
-              :key="`live-tv-cat-tab-${cat}`"
-              :class="{
-                tab: true,
-                'text-dark': category !== cat,
-                'bg-primary text-white': category === cat,
-              }"
-              @click="category = cat"
-            >
-              {{ cat }}
-            </button>
-          </div>
+            All
+          </button>
+          <button
+            v-for="cat in categories"
+            :key="`live-tv-cat-tab-${cat}`"
+            :class="{
+              tab: true,
+              'text-dark': category !== cat,
+              'bg-primary text-white': category === cat,
+            }"
+            @click="category = cat"
+          >
+            {{ cat }}
+          </button>
+        </div>
+        <div class="p-2" v-if="channels">
           <b-button
             variant="gray"
             size="sm"
