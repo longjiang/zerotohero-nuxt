@@ -17,7 +17,7 @@
     />
     <div class="row">
       <div class="col-sm-12 mb-4">
-        <h4 class="text-center">Learn {{ $l2.name }} with Live TV</h4>
+        <h4 class="text-center">Learn {{ $l2.name }} from Live TV</h4>
         <div v-if="channels" class="text-center">
           {{ channels.length }} Channel(s)
         </div>
@@ -127,7 +127,12 @@
               :alt="channel.name"
               @error="logoLoadError"
             />
-            <img v-else src="/img/tv.png" :alt="channel.name" />
+            <div
+              style="display: inline-block; width: 4rem; line-height: 2rem; text-align: center; font-size: 1.5em; opacity: 0.5;"
+              v-else
+            >
+              <i class="fa fa-tv"></i>
+            </div>
             <span>{{ channel.name }}</span>
           </b-button>
         </div>
