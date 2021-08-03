@@ -8,9 +8,10 @@
     />
     <div class="row">
       <div class="col-sm-12">
-        <h3 class="text-center mt-5 mb-5">
-          Study {{ $l2.name }} with {{ shows && shows.length ? shows.length : "" }} {{ routeType === 'tv-shows' ? 'TV Shows' : 'Talks' }}
+        <h3 class="text-center mt-5">
+          Study {{ $l2.name }} with {{ routeType === 'tv-shows' ? 'TV Shows' : 'Talks' }}
         </h3>
+        <p class="text-center mb-5" v-if="shows && shows.length">({{ shows.length }} show{{ shows.length > 1 ? 's' : '' }})</p>
         <SimpleSearch
           class="mb-5"
           placeholder="Search"
