@@ -25,18 +25,28 @@
       </div>
       <div class="col-sm-12 mb-5">
         <div class="youtube-video-list-wrapper">
-          <b-input-group class="mb-5">
-            <b-form-input
-              v-model="keyword"
-              @compositionend.prevent.stop="() => false"
-              placeholder="Filter by video title..."
-            />
-            <b-input-group-append>
-              <b-button variant="primary">
-                <i class="fas fa-filter"></i>
+          <div class="d-flex mb-5">
+            <b-input-group class="flex-1">
+              <b-form-input
+                v-model="keyword"
+                @compositionend.prevent.stop="() => false"
+                placeholder="Filter by video title..."
+              />
+              <b-input-group-append>
+                <b-button variant="primary">
+                  <i class="fas fa-filter"></i>
+                </b-button>
+              </b-input-group-append>
+            </b-input-group>
+            <b-button-group>
+              <b-button :variant="view === 'grid' ? 'primary' : secondary" class="ml-2" @click="view = 'grid'">
+                <i class="fas fa-th"></i>
               </b-button>
-            </b-input-group-append>
-          </b-input-group>
+              <b-button :variant="view === 'list' ? 'primary' : secondary"  @click="view = 'list'">
+                <i class="fas fa-list"></i>
+              </b-button>
+            </b-button-group>
+          </div>
           <div
             :class="{
               'loader text-center mb-4': true,
@@ -90,6 +100,7 @@ export default {
       perPage: 96,
       count: undefined,
       keyword: "",
+      view: 'grid'
     };
   },
   async fetch() {
@@ -167,10 +178,10 @@ export default {
       if (this.videos) {
         if (this.keyword) {
           let k = this.$l2.han ? tify(this.keyword) : this.keyword;
-          k = k.toLowerCase()
+          k = k.toLowerCase();
           return this.videos.filter((v) => {
             let title = this.$l2.han ? tify(v.title) : v.title;
-            title = title.toLowerCase()
+            title = title.toLowerCase();
             return title.includes(k);
           });
         } else {
