@@ -320,6 +320,7 @@
                       'lat',
                       'fin',
                       'hbs',
+                      'he',
                       'lav',
                       'cat',
                       'el',
