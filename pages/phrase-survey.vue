@@ -118,6 +118,7 @@ import axios from "axios";
 import YouTube from "@/lib/youtube";
 import Helper from "@/lib/helper";
 import Vue from "vue";
+import he from 'he';
 
 export default {
   props: {
