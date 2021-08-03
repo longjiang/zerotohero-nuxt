@@ -3,10 +3,8 @@
     <div
       :class="{
         transcript: true,
-        collapsed: collapse,
         'single-line': single,
       }"
-      data-collapse-target
     >
       <template
         v-for="(line, lineIndex) in single
@@ -105,9 +103,6 @@
         </div>
       </template>
     </div>
-    <ShowMoreButton v-if="collapse" :data-bg-level="hsk ? hsk : 'outside'">
-      Show More
-    </ShowMoreButton>
   </div>
 </template>
 
@@ -136,9 +131,6 @@ export default {
     notes: {
       type: Array,
     },
-    collapse: {
-      default: false,
-    },
     onSeek: {
       default: false,
     },
@@ -164,6 +156,9 @@ export default {
       default: false,
     },
     enableTranslationEditing: {
+      default: false,
+    },
+    collapsed: {
       default: false,
     },
   },
@@ -386,7 +381,7 @@ export default {
         lineIndex = Number(lineIndex);
         if (
           this.lines[lineIndex].starttime <= time &&
-          (typeof this.lines[lineIndex + 1] === 'undefined' ||
+          (typeof this.lines[lineIndex + 1] === "undefined" ||
             time < this.lines[lineIndex + 1].starttime)
         ) {
           nearestLineIndex = lineIndex;
@@ -631,15 +626,21 @@ export default {
     seekVideoTo(starttime) {
       this.$emit("seek", starttime);
     },
+    getSmallScreenOffset() {
+      let smallScreenOffset = 0;
+      if (window.innerHeight > window.innerWidth) {
+        smallScreenOffset = 52; // controller height
+        if (!this.collapsed)
+          smallScreenOffset = smallScreenOffset + (window.innerWidth * 9) / 16; // video height, hidden if collapsed
+      }
+      return smallScreenOffset;
+    },
     scrollTo(lineIndex) {
       let el = this.$el.querySelector(
         `.transcript-line[data-line-index="${lineIndex}"]`
       );
       if (el) {
-        let smallScreenYOffset =
-          window.innerHeight > window.innerWidth
-            ? (window.innerWidth * 9) / 16 + 52 // controller height
-            : 0;
+        let smallScreenYOffset = this.getSmallScreenOffset();
         if (!Helper.isInViewport(el, smallScreenYOffset, 0)) {
           let offsetTop = Helper.documentOffsetTop(el);
           let middle = offsetTop - smallScreenYOffset - 10;
@@ -682,7 +683,7 @@ export default {
       this.goToLine(this.nextLine || this.lines[0]);
     },
     goToLine(line) {
-      this.currentLineIndex = this.lines.findIndex(l => l === line)
+      this.currentLineIndex = this.lines.findIndex((l) => l === line);
       this.seekVideoTo(line.starttime);
     },
     rewind() {
@@ -693,9 +694,6 @@ export default {
 </script>
 
 <style lang="scss">
-.transcript.collapsed .transcript-line:nth-child(n + 6) {
-  display: none;
-}
 
 .transcript.single-line .transcript-line:not(.transcript-line-current) {
   display: none;

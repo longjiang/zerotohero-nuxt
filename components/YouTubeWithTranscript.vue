@@ -123,6 +123,7 @@
             :showSubsEditing="showSubsEditing"
             :enableTranslationEditing="enableTranslationEditing"
             :notes="video.notes"
+            :collapsed="collapsed"
             @seek="seekYouTube"
             @pause="pause"
             @play="play"
