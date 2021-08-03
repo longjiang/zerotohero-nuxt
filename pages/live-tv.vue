@@ -6,6 +6,12 @@
 </router>
 <template>
   <div class="container-fluid main mt-4 mb-5">
+    <SocialHead
+      v-if="channels"
+      :title="`Learn ${$l2.name} from Live ${$l2.name} TV | ${$l2.name} Zero to Hero`"
+      :description="`Watch ${$l2.name} TV Channels: ${channels.slice(0,5).map(c => c.name).join(', ')} ...`"
+      :image="image"
+    />
     <div class="row">
       <div class="col-sm-12 mb-4">
         <h4 class="text-center">Learn {{ $l2.name }} with Live TV</h4>
@@ -125,6 +131,12 @@ export default {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
     },
+    image() {
+      let channelsWithLogos = this.channels.filter(c => c.logo)
+      if (channelsWithLogos.length > 0) {
+        return channelsWithLogos[0].logo
+      }
+    }
   },
   async fetch() {
     let res = await axios.get(
