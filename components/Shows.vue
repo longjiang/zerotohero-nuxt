@@ -73,6 +73,7 @@ import Config from "@/lib/config";
 import Helper from "@/lib/helper";
 import YouTube from "@/lib/youtube";
 import axios from "axios";
+import { tify } from 'chinese-conv'
 
 export default {
   props: {
@@ -133,8 +134,10 @@ export default {
     filteredShows() {
       if (this.shows) {
         if (this.keyword) {
+          let k = this.$l2.han ? tify(this.keyword) : this.keyword
           return this.shows.filter(s => {
-            return s.title.includes(this.keyword)
+            let title = this.$l2.han ? tify(s.title) : tshis.title
+            return title.includes(k)
           })
         } else {
           return this.shows
