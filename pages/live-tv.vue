@@ -125,10 +125,17 @@
               v-if="channel.logo"
               :src="channel.logo"
               :alt="channel.name"
-              @error="logoLoadError"
+              @error="logoLoadError(channel)"
             />
             <div
-              style="display: inline-block; width: 4rem; line-height: 2rem; text-align: center; font-size: 1.5em; opacity: 0.5;"
+              style="
+                display: inline-block;
+                width: 4rem;
+                line-height: 2rem;
+                text-align: center;
+                font-size: 1.5em;
+                opacity: 0.5;
+              "
               v-else
             >
               <i class="fa fa-tv"></i>
@@ -248,8 +255,10 @@ export default {
     setChannel(channel) {
       this.currentChannel = channel;
     },
-    logoLoadError(event) {
-      event.target.src = "/img/tv.png";
+    logoLoadError(channel) {
+      return function (event) {
+        delete channel.logo
+      };
     },
     onResize() {
       console.log("resize");
