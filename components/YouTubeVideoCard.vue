@@ -3,10 +3,9 @@
     @drop="handleDrop"
     :class="{
       over: over,
-      'youtube-video': true,
+      'youtube-video-card-wrapper': true,
       media: true,
       rounded: true,
-      shadow: true,
       nosubs: checkSubs && !video.checkingSubs && !video.hasSubs && !video.id,
       drop: checkSubs && !video.checkingSubs,
     }"
@@ -14,7 +13,13 @@
     @dragleave="over = false"
     :key="`video-${video.youtube_id}`"
   >
-    <div class="youtube-link">
+    <div
+      :class="{
+        'youtube-video-card': true,
+        'youtube-video-card-grid': view === 'grid',
+        'youtube-video-card-list': view === 'list',
+      }"
+    >
       <router-link
         :to="`/${$l1.code}/${$l2.code}/youtube/view/${video.youtube_id}/${
           video.lesson ? 'lesson' : ''
@@ -30,11 +35,11 @@
         />
       </router-link>
       <div class="media-body">
-        <div class="small mb-2" style="color: #aaa" v-if="video.date">
+        <div class="small mb-2" style="color: #aaa" v-if="video.date && view !== 'list'">
           {{ formatDate(video.date) }}
         </div>
         <div class="font-weight-bold">
-          <span contenteditable="true" v-if="$adminMode" @blur="saveTitle">
+          <span contenteditable="true" v-if="$adminMode && view !== 'list'" @blur="saveTitle">
             {{ video.title }}
           </span>
           <router-link
@@ -47,38 +52,41 @@
             {{ video.title }}
           </router-link>
         </div>
-        <div v-if="video.hasSubs || video.id" class="btn btn-small mt-2 ml-0">
-          {{ $l2.name }} CC
-          <span v-if="video.l2Locale">({{ video.l2Locale }})</span>
-          <span v-if="subsFile">
-            - {{ subsFile.name.replace(/[_.]/g, " ") }}
-          </span>
-        </div>
-        <div
-          v-if="
-            video.checkingSubs === false && video.hasSubs === false && !video.id
-          "
-          class="btn btn-small mt-2 ml-0"
-        >
-          <span v-if="!over">No {{ $l2.name }} CC</span>
-          <span v-else>Drop SRT to Add Subs</span>
-        </div>
-        <div
-          v-if="checkSaved && video.id"
-          class="btn btn-small bg-success text-white mt-2 ml-0"
-        >
-          <i class="fa fa-check mr-2"></i>
-          Added
-        </div>
-        <b-button
-          v-if="checkSaved && !video.id && video.hasSubs"
-          class="btn btn-small mt-2 ml-0"
-          @click="getSubsAndSave(video)"
-        >
-          <i class="fas fa-plus mr-2"></i>
-          Add
-        </b-button>
-        <!-- <b-button
+        <div class="youtube-video-card-badges" v-if="view !== 'list'">
+          <div v-if="video.hasSubs || video.id" class="btn btn-small mt-2 ml-0">
+            {{ $l2.name }} CC
+            <span v-if="video.l2Locale">({{ video.l2Locale }})</span>
+            <span v-if="subsFile">
+              - {{ subsFile.name.replace(/[_.]/g, " ") }}
+            </span>
+          </div>
+          <div
+            v-if="
+              video.checkingSubs === false &&
+              video.hasSubs === false &&
+              !video.id
+            "
+            class="btn btn-small mt-2 ml-0"
+          >
+            <span v-if="!over">No {{ $l2.name }} CC</span>
+            <span v-else>Drop SRT to Add Subs</span>
+          </div>
+          <div
+            v-if="checkSaved && video.id"
+            class="btn btn-small bg-success text-white mt-2 ml-0"
+          >
+            <i class="fa fa-check mr-2"></i>
+            Added
+          </div>
+          <b-button
+            v-if="checkSaved && !video.id && video.hasSubs"
+            class="btn btn-small mt-2 ml-0"
+            @click="getSubsAndSave(video)"
+          >
+            <i class="fas fa-plus mr-2"></i>
+            Add
+          </b-button>
+          <!-- <b-button
           v-if="$adminMode && video.id && !video.channel_id"
           class="btn btn-small mt-2 ml-0"
           @click="addChannelID(video)"
@@ -86,139 +94,139 @@
           <i class="fas fa-plus mr-2"></i>
           Add Channel ID
         </b-button> -->
-        <router-link
-          :class="{
-            'btn btn-small mt-2 ml-0': true,
-            'text-white bg-success': showSaved,
-            'text-success border-dashed border-success': !showSaved,
-          }"
-          v-if="video.tv_show"
-          :to="{
-            name: 'show',
-            params: { type: 'tv-show', id: String(video.tv_show.id) },
-          }"
-        >
-          <i class="fa fa-tv mr-2" />
-          {{ video.tv_show.title }}
-          <i
-            class="fas fa-times-circle ml-1"
-            v-if="$adminMode"
-            @click.stop.prevent="unassignShow('tv_show')"
-          />
-        </router-link>
-        <router-link
-          :class="{
-            'btn btn-small mt-2 ml-0': true,
-            'text-white bg-success': showSaved,
-            'bg-none text-success border-dashed': !showSaved,
-          }"
-          v-if="video.talk"
-          :to="{
-            name: 'show',
-            params: { type: 'talk', id: String(video.talk.id) },
-          }"
-        >
-          <i class="fas fa-graduation-cap mr-2"></i>
-          {{ video.talk.title }}
-          <i
-            class="fas fa-times-circle ml-1"
-            v-if="$adminMode"
-            @click="unassignShow('talk')"
-          />
-        </router-link>
-        <AssignShow
-          @assignShow="saveShow"
-          @newShow="newShow"
-          v-if="$adminMode && video.id && !video.tv_show && !video.talk"
-          :defaultYoutubeId="video.youtube_id"
-          :defaultTitle="video.title"
-          type="tv-shows"
-        />
-        <AssignShow
-          @assignShow="saveShow"
-          @newShow="newShow"
-          v-if="$adminMode && video.id && !video.tv_show && !video.talk"
-          :defaultYoutubeId="video.youtube_id"
-          :defaultTitle="video.title"
-          type="talks"
-        />
-        <b-button
-          v-if="$adminMode && video.id"
-          class="btn btn-small bg-danger text-white mt-2 ml-0"
-          @click="remove()"
-        >
-          <i class="fa fa-trash"></i>
-        </b-button>
-        <div
-          v-if="video.id && video.topic"
-          class="btn btn-small btn-gray mt-2 ml-0"
-        >
-          {{ Helper.topics[video.topic] }}
-        </div>
-        <div
-          v-if="video.id && video.level"
-          class="btn btn-small btn-gray mt-2 ml-0"
-        >
-          {{ Helper.level(video.level, $l2) }}
-        </div>
-
-        <div
-          v-if="
-            $adminMode &&
-            video.subs_l1 &&
-            video.subs_l1.length > 0 &&
-            showSubsEditing
-          "
-        >
-          <div
-            v-for="index in Math.min(20, video.subs_l1.length)"
-            :key="`l1-subs-${index}`"
+          <router-link
+            :class="{
+              'btn btn-small mt-2 ml-0': true,
+              'text-white bg-success': showSaved,
+              'text-success border-dashed border-success': !showSaved,
+            }"
+            v-if="video.tv_show"
+            :to="{
+              name: 'show',
+              params: { type: 'tv-show', id: String(video.tv_show.id) },
+            }"
           >
-            <b>{{ video.l1Locale }}</b>
-            <span
-              @click="matchSubsAndUpdate(index - 1)"
-              :class="{
-                btn: true,
-                'btn-small': true,
-                'text-danger':
-                  video.subs_l2 &&
-                  video.subs_l2.length > 0 &&
-                  video.subs_l1[index - 1] &&
-                  video.subs_l1[index - 1].starttime !==
-                    video.subs_l2[0].starttime,
-              }"
-            >
-              {{ video.subs_l1[index - 1].starttime }}
-            </span>
-            {{ video.subs_l1[index - 1].line }}
-          </div>
-        </div>
-        <div
-          v-if="
-            $adminMode &&
-            video.subs_l2 &&
-            video.subs_l2.length > 0 &&
-            showSubsEditing
-          "
-        >
-          <b>{{ video.l2Locale || $l2.code }}</b>
-          <input
-            type="text"
-            v-model.lazy="firstLineTime"
-            :style="`width: ${String(firstLineTime).length + 1}em`"
-            class="ml-1 mr-1 btn btn-small"
+            <i class="fa fa-tv mr-2" />
+            {{ video.tv_show.title }}
+            <i
+              class="fas fa-times-circle ml-1"
+              v-if="$adminMode"
+              @click.stop.prevent="unassignShow('tv_show')"
+            />
+          </router-link>
+          <router-link
+            :class="{
+              'btn btn-small mt-2 ml-0': true,
+              'text-white bg-success': showSaved,
+              'bg-none text-success border-dashed': !showSaved,
+            }"
+            v-if="video.talk"
+            :to="{
+              name: 'show',
+              params: { type: 'talk', id: String(video.talk.id) },
+            }"
+          >
+            <i class="fas fa-graduation-cap mr-2"></i>
+            {{ video.talk.title }}
+            <i
+              class="fas fa-times-circle ml-1"
+              v-if="$adminMode"
+              @click="unassignShow('talk')"
+            />
+          </router-link>
+          <AssignShow
+            @assignShow="saveShow"
+            @newShow="newShow"
+            v-if="$adminMode && video.id && !video.tv_show && !video.talk"
+            :defaultYoutubeId="video.youtube_id"
+            :defaultTitle="video.title"
+            type="tv-shows"
           />
-          {{ video.subs_l2[0].line }}
+          <AssignShow
+            @assignShow="saveShow"
+            @newShow="newShow"
+            v-if="$adminMode && video.id && !video.tv_show && !video.talk"
+            :defaultYoutubeId="video.youtube_id"
+            :defaultTitle="video.title"
+            type="talks"
+          />
+          <b-button
+            v-if="$adminMode && video.id"
+            class="btn btn-small bg-danger text-white mt-2 ml-0"
+            @click="remove()"
+          >
+            <i class="fa fa-trash"></i>
+          </b-button>
+          <div
+            v-if="video.id && video.topic"
+            class="btn btn-small btn-gray mt-2 ml-0"
+          >
+            {{ Helper.topics[video.topic] }}
+          </div>
+          <div
+            v-if="video.id && video.level"
+            class="btn btn-small btn-gray mt-2 ml-0"
+          >
+            {{ Helper.level(video.level, $l2) }}
+          </div>
 
-          <!-- <b-button v-if="!subsUpdated" @click="updateSubs" class="mt-2 btn btn-small"
+          <div
+            v-if="
+              $adminMode &&
+              video.subs_l1 &&
+              video.subs_l1.length > 0 &&
+              showSubsEditing
+            "
+          >
+            <div
+              v-for="index in Math.min(20, video.subs_l1.length)"
+              :key="`l1-subs-${index}`"
+            >
+              <b>{{ video.l1Locale }}</b>
+              <span
+                @click="matchSubsAndUpdate(index - 1)"
+                :class="{
+                  btn: true,
+                  'btn-small': true,
+                  'text-danger':
+                    video.subs_l2 &&
+                    video.subs_l2.length > 0 &&
+                    video.subs_l1[index - 1] &&
+                    video.subs_l1[index - 1].starttime !==
+                      video.subs_l2[0].starttime,
+                }"
+              >
+                {{ video.subs_l1[index - 1].starttime }}
+              </span>
+              {{ video.subs_l1[index - 1].line }}
+            </div>
+          </div>
+          <div
+            v-if="
+              $adminMode &&
+              video.subs_l2 &&
+              video.subs_l2.length > 0 &&
+              showSubsEditing
+            "
+          >
+            <b>{{ video.l2Locale || $l2.code }}</b>
+            <input
+              type="text"
+              v-model.lazy="firstLineTime"
+              :style="`width: ${String(firstLineTime).length + 1}em`"
+              class="ml-1 mr-1 btn btn-small"
+            />
+            {{ video.subs_l2[0].line }}
+
+            <!-- <b-button v-if="!subsUpdated" @click="updateSubs" class="mt-2 btn btn-small"
             ><i class="fa fa-save mr-2"></i>Update Subs</b-button
           >
           <b-button v-else variant="success" class="mt-2 btn btn-small">
             <i class="fa fa-check mr-2"></i>Updated
           </b-button> -->
-        </div>
+          </div>
 
-        <!-- <div
+          <!-- <div
           v-if="
             $adminMode &&
             video.channel_id &&
@@ -231,6 +239,7 @@
         >
           {{ video.channel_id }}
         </div> -->
+        </div>
       </div>
     </div>
   </drop>
@@ -280,6 +289,10 @@ export default {
     showSubsEditing: {
       default: false,
     },
+    view: {
+      type: String,
+      default: "grid",
+    },
   },
   async mounted() {
     if (this.checkSubs) {
@@ -321,7 +334,7 @@ export default {
       this.$emit("newShow", show);
     },
     async saveShow(show, type) {
-      let s = this.video[type]
+      let s = this.video[type];
       if (!s || s.id !== show.id) {
         this.showSaved = false;
         Vue.set(this.video, type, show);
@@ -402,7 +415,7 @@ export default {
           // Directus bug
         }
       }
-      return true
+      return true;
     },
     async updateSubs() {
       let response = await axios.patch(
@@ -517,14 +530,17 @@ export default {
           subs_l2: csv,
           channel_id: video.channel_id,
           date: moment(video.date).format("YYYY-MM-DD HH:mm:ss"),
-        }
-        if (this.video.tv_show) data.tv_show = this.video.tv_show.id
-        if (this.video.talk) data.talk = this.video.talk.id
-        let response = await axios.post(`${Config.wiki}items/youtube_videos?fields=id,tv_show.*,talk.*`, data);
+        };
+        if (this.video.tv_show) data.tv_show = this.video.tv_show.id;
+        if (this.video.talk) data.talk = this.video.talk.id;
+        let response = await axios.post(
+          `${Config.wiki}items/youtube_videos?fields=id,tv_show.*,talk.*`,
+          data
+        );
         response = response.data;
         if (response && response.data) {
           Vue.set(video, "id", response.data.id);
-          this.showSaved = true
+          this.showSaved = true;
           return true;
         }
       } catch (err) {
@@ -568,29 +584,30 @@ export default {
 </script>
 
 <style lang="scss">
-.youtube-video.drop.over {
+.youtube-video-card-wrapper {
+  height: 100%;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+}
+
+.youtube-video-card-wrapper.nosubs:not(.over) {
+  opacity: 0.2;
+}
+.youtube-video-card-wrapper.drop.over {
   border: 2px dashed #ccc;
 }
 
-.youtube-video {
-  height: 100%;
-}
-
-@media (min-width: 768px) {
-  .youtube-video {
-  }
-}
-
-.youtube-video.nosubs:not(.over) {
-  opacity: 0.2;
-}
-
-a.youtube-link,
-a.youtube-link:hover {
+a.youtube-video-card,
+a.youtube-video-card:hover {
   color: #666;
   text-decoration: none;
   .youtube-title {
     font-weight: bold;
+  }
+}
+
+.youtube-video-card-list {
+  .youtube-thumbnail-wrapper {
+    display: none !important;
   }
 }
 </style>

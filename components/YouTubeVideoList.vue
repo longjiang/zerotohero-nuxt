@@ -85,10 +85,11 @@
     <div class="youtube-videos row">
       <div
         :class="{
-          'col-xs-12 col-sm-6 col-md-4 col-lg-3': true,
+          'col-sm-12': view === 'list',
+          'col-xs-12 col-sm-6 col-md-4 col-lg-3': view === 'grid',
           'd-none': hideVideosWithoutSubs ? !video.hasSubs : false,
         }"
-        style="padding-bottom: 2rem"
+        :style="`padding-bottom: ${view === 'list' ? '1rem' : '2rem'}`"
         v-for="(video, videoIndex) in videos"
         :key="`youtube-video-wrapper-${video.youtube_id}-${videoIndex}`"
       >
@@ -101,6 +102,7 @@
           @newShow="newShow"
           ref="youTubeVideoCard"
           :key="`youtube-video-${video.youtube_id}-${videoIndex}`"
+          :view="view"
         />
       </div>
     </div>
@@ -133,6 +135,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    view: {
+      type: String,
+      default: 'grid'
+    }
   },
   data() {
     return {

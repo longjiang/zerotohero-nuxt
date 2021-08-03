@@ -39,10 +39,10 @@
               </b-input-group-append>
             </b-input-group>
             <b-button-group>
-              <b-button :variant="view === 'grid' ? 'primary' : secondary" class="ml-2" @click="view = 'grid'">
+              <b-button :variant="view === 'grid' ? 'primary' : 'secondary'" class="ml-2" @click="view = 'grid'">
                 <i class="fas fa-th"></i>
               </b-button>
-              <b-button :variant="view === 'list' ? 'primary' : secondary"  @click="view = 'list'">
+              <b-button :variant="view === 'list' ? 'primary' : 'secondary'"  @click="view = 'list'">
                 <i class="fas fa-list"></i>
               </b-button>
             </b-button-group>
@@ -71,6 +71,7 @@
               ref="youtubeVideoList"
               :checkSaved="false"
               :key="`videos-filtered-${this.keyword}`"
+              :view="view"
             />
             <div v-observe-visibility="visibilityChanged"></div>
           </template>
