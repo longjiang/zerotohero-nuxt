@@ -7,24 +7,33 @@
   <div>
     <div class="main container mt-5 mb-5">
       <h4>Check if URLs are blocked by CORS policy</h4>
-      <b-progress class="mt-3" variant="success" v-if="totalURLCount > 0 && checkedURLCount < totalURLCount" :value="checkedURLCount" :max="totalURLCount" animated></b-progress>
-      <span v-if="totalURLCount > 0 && totalURLCount === checkedURLCount">All done! 🍺</span>
+      <b-progress
+        class="mt-3"
+        variant="success"
+        v-if="totalURLCount > 0 && checkedURLCount < totalURLCount"
+        :value="checkedURLCount"
+        :max="totalURLCount"
+        animated
+      ></b-progress>
+      <span v-if="totalURLCount > 0 && totalURLCount === checkedURLCount">
+        All done! 🍺
+      </span>
       <div class="row mt-4">
         <div class="col-md-6">
-          Enter a list of URLs to check:
+          Enter a list of URLs to check ({{ urls.split("\n").filter(l => l !== '').length}}):
           <b-form-textarea
             v-model.lazy="urls"
             style="height: calc(100vh - 10rem)"
           ></b-form-textarea>
         </div>
         <div class="col-md-6">
-          Allowed URLs:
+          Allowed URLs ({{ allowed.split("\n").filter(l => l !== '').length}}):
           <b-form-textarea
             v-model.lazy="allowed"
             style="height: calc(48vh - 5rem)"
             class="mb-3"
           ></b-form-textarea>
-          Blocked URLs:
+          Blocked URLs ({{ blocked.split("\n").filter(l => l !== '').length}}):
           <b-form-textarea
             v-model.lazy="blocked"
             style="height: calc(48vh - 5rem)"
@@ -36,6 +45,7 @@
 </template>
 
 <script>
+import Helper from '@/lib/helper'
 export default {
   computed: {
     $l1() {
@@ -51,11 +61,12 @@ export default {
       allowed: "",
       blocked: "",
       totalURLCount: undefined,
-      checkedURLCount: undefined
+      checkedURLCount: undefined,
+      timeout: 3000,
+      threads: 3,
     };
   },
-  async mounted() {
-  },
+  async mounted() {},
   watch: {
     urls() {
       this.allowed = "";
@@ -64,18 +75,27 @@ export default {
     },
   },
   methods: {
-    async checkURLs() {
-      let urls = this.urls.split("\n")
-      this.totalURLCount = urls.length
-      this.checkedURLCount = 0
+    async checkURL(url) {
+      try {
+        let res = await axios.get(url, { timeout: this.timeout });
+        if (res && res.data) this.allowed = this.allowed + url + "\n";
+      } catch (err) {
+        this.blocked = this.blocked + url + "\n";
+      }
+      this.checkedURLCount++;
+    },
+    async checkURLBatch(urls) {
       for (let url of urls) {
-        try {
-          let res = await axios.get(url);
-          if (res && res.data) this.allowed = this.allowed + url + "\n";
-        } catch (err) {
-          this.blocked = this.blocked + url + "\n";
-        }
-        this.checkedURLCount++
+        await this.checkURL(url)
+      }
+    },
+    async checkURLs() {
+      let urls = this.urls.split("\n");
+      this.totalURLCount = urls.length;
+      this.checkedURLCount = 0;
+      let chunks = Helper.arrayChunk(urls, Math.ceil(urls.length / this.threads));
+      for (let urls of chunks) {
+        this.checkURLBatch(urls)
       }
     },
   },
