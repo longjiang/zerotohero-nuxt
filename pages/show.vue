@@ -17,37 +17,54 @@
     <div class="row">
       <div class="col-sm-12 mb-4 text-center">
         <h3 v-if="show">
-          <Annotate :phonetics="false" :buttons="true"><span>{{ show.title }}</span></Annotate>
+          <Annotate :phonetics="false" :buttons="true">
+            <span>{{ show.title }}</span>
+          </Annotate>
         </h3>
         <p v-if="count">({{ count }} Videos)</p>
       </div>
       <div class="col-sm-12 mb-5">
-        <div
-          :class="{
-            'loader text-center mb-4': true,
-            'd-none': videos,
-          }"
-          style="flex: 1"
-        >
-          <div class="heartbeat-loader"></div>
+        <div class="youtube-video-list-wrapper">
+          <b-input-group class="mb-5">
+            <b-form-input
+              v-model="keyword"
+              @compositionend.prevent.stop="() => false"
+              placeholder="Filter by video title..."
+            />
+            <b-input-group-append>
+              <b-button variant="primary">
+                <i class="fas fa-filter"></i>
+              </b-button>
+            </b-input-group-append>
+          </b-input-group>
+          <div
+            :class="{
+              'loader text-center mb-4': true,
+              'd-none': videos,
+            }"
+            style="flex: 1"
+          >
+            <div class="heartbeat-loader"></div>
+          </div>
+          <div
+            :class="{
+              'text-center': true,
+              'd-none': !videos || videos.length > 0,
+            }"
+          >
+            No more videos.
+          </div>
+          <template v-if="videos && videos.length > 0">
+            <YouTubeVideoList
+              :videos="filteredVideos"
+              :checkSubs="false"
+              ref="youtubeVideoList"
+              :checkSaved="false"
+              :key="`videos-filtered-${this.keyword}`"
+            />
+            <div v-observe-visibility="visibilityChanged"></div>
+          </template>
         </div>
-        <div
-          :class="{
-            'text-center': true,
-            'd-none': !videos || videos.length > 0,
-          }"
-        >
-          No more videos.
-        </div>
-        <template v-if="videos && videos.length > 0">
-          <YouTubeVideoList
-            :videos="videos"
-            :checkSubs="false"
-            ref="youtubeVideoList"
-            :checkSaved="false"
-          />
-          <div v-observe-visibility="visibilityChanged"></div>
-        </template>
       </div>
     </div>
   </div>
@@ -57,6 +74,7 @@
 import Config from "@/lib/config";
 import Helper from "@/lib/helper";
 import axios from "axios";
+import { tify } from "chinese-conv";
 
 export default {
   props: {
@@ -71,6 +89,7 @@ export default {
       videos: undefined,
       perPage: 96,
       count: undefined,
+      keyword: "",
     };
   },
   async fetch() {
@@ -102,7 +121,7 @@ export default {
       }
     },
     async getVideos({ limit = 500, offset = 0 } = {}) {
-      let sort = this.show.title === "News" ? "-date": "title";
+      let sort = this.show.title === "News" ? "-date" : "title";
       let response = await axios.get(
         `${Config.wiki}items/youtube_videos?filter[l2][eq]=${
           this.$l2.id
@@ -144,9 +163,30 @@ export default {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
     },
+    filteredVideos() {
+      if (this.videos) {
+        if (this.keyword) {
+          let k = this.$l2.han ? tify(this.keyword) : this.keyword;
+          k = k.toLowerCase()
+          return this.videos.filter((v) => {
+            let title = this.$l2.han ? tify(v.title) : v.title;
+            title = title.toLowerCase()
+            return title.includes(k);
+          });
+        } else {
+          return this.videos;
+        }
+      }
+    },
   },
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
+@media (max-width: 576px) {
+  .youtube-video-list-wrapper {
+    max-width: 423px;
+    margin: 0 auto;
+  }
+}
 </style>

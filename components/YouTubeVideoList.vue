@@ -271,13 +271,6 @@ export default {
 </script>
 
 <style lang="scss">
-@media (max-width: 576px) {
-  .youtube-video-list {
-    max-width: 423px;
-    margin: 0 auto;
-  }
-}
-
 .youtube-video-list-admin-bar {
   background: rgb(205, 207, 212);
 }

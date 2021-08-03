@@ -138,7 +138,7 @@ export default {
         if (this.keyword) {
           let k = this.$l2.han ? tify(this.keyword) : this.keyword;
           return this.shows.filter((s) => {
-            let title = this.$l2.han ? tify(s.title) : tshis.title;
+            let title = this.$l2.han ? tify(s.title) : s.title;
             return title.includes(k);
           });
         } else {
