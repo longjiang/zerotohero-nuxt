@@ -42,13 +42,25 @@
           style="border-bottom: 0.5rem solid #fd4f1c;"
         >
           <button
+            v-if="hasFeatured"
+            :key="`live-tv-cat-tab-featured`"
+            :class="{
+              tab: true,
+              'text-dark': !featured,
+              'bg-primary text-white': featured,
+            }"
+            @click="category = undefined; featured = true"
+          >
+            Featured
+          </button>
+          <button
             :key="`live-tv-cat-tab-all`"
             :class="{
               tab: true,
-              'text-dark': typeof category !== 'undefined',
-              'bg-primary text-white': typeof category === 'undefined',
+              'text-dark': typeof category !== 'undefined' || featured,
+              'bg-primary text-white': typeof category === 'undefined' && !featured,
             }"
-            @click="category = undefined"
+            @click="category = undefined; featured = false"
           >
             All
           </button>
@@ -74,7 +86,7 @@
               'channel-button-current': currentChannel === channel,
             }"
             v-for="channel in channels.filter((c) =>
-              category ? c.category === category : true
+              category ? c.category === category : featured ? c.featured : true
             )"
             :key="`channel-button-${channel.url}`"
             :data-url="channel.url"
@@ -107,6 +119,7 @@ export default {
       channels: undefined,
       currentChannel: undefined,
       category: undefined,
+      featured: false,
       bannedChannels: {
         zh: [
           "http://174.127.67.246/live330/playlist.m3u8", // NTD
@@ -136,6 +149,9 @@ export default {
       if (channelsWithLogos.length > 0) {
         return channelsWithLogos[0].logo
       }
+    },
+    hasFeatured() {
+      return this.channels.find(c => c.featured)
     }
   },
   async fetch() {
@@ -170,7 +186,11 @@ export default {
         a.name.localeCompare(b.name, this.$l2.code)
       );
       this.channels = channels;
-      if (channels[0]) this.currentChannel = channels[0];
+      if (channels[0]) {
+        if (this.hasFeatured) this.currentChannel = channels.find(c => c.featured);
+        else this.currentChannel = channels[0];
+      }
+      if (this.hasFeatured) this.featured = true
       let categories = this.channels.map((c) => {
         if (!c.category) c.category = "Misc";
         return c.category;
