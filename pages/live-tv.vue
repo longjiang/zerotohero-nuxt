@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-8 live-video-column pl-0 pr-0 pr-lg-3">
+      <div class="col-lg-8 live-video-column pl-0 pr-0">
         <div class="live-tv-wrapper">
           <LazyLiveVideo
             v-if="currentChannel"
@@ -23,7 +23,7 @@
             :key="`live-video-${currentChannel.url}`"
             ref="liveVideo"
           />
-          <div v-if="currentChannel" class="pt-2 pb-2">
+          <div v-if="currentChannel" class="p-3">
             <b>Channel:</b>
             {{ currentChannel.name }}
           </div>
@@ -32,8 +32,8 @@
       <div class="col-lg-4 pl-0 pr-0">
         <div
           v-if="channels"
-          class="tabs text-center sticky-top bg-white pt-2"
-          style="border-bottom: 0.5rem solid #fd4f1c; z-index: 1"
+          class="tabs text-center channel-category-tabs pl-3 pr-3"
+          style="border-bottom: 0.5rem solid #fd4f1c;"
         >
           <button
             :key="`live-tv-cat-tab-all`"
@@ -59,7 +59,7 @@
             {{ cat }}
           </button>
         </div>
-        <div class="p-2" v-if="channels">
+        <div class="p-3" v-if="channels">
           <b-button
             variant="gray"
             size="sm"
@@ -216,4 +216,5 @@ export default {
     margin-right: 0;
   }
 }
+
 </style>
