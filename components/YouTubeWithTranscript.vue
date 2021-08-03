@@ -520,7 +520,7 @@ export default {
   margin: 0 auto;
   position: sticky;
   top: 0;
-  background: white;
+  background: black;
 }
 .youtube-video-column {
   background: white;
