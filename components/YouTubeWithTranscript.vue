@@ -18,6 +18,7 @@
             :starttime="start"
             :autoload="autoload"
             :autoplay="autoplay"
+            :class="{'d-none': collapsed}"
           />
           <VideoControls
             v-if="video"
@@ -29,6 +30,7 @@
             ref="videoControls"
             @togglePaused="togglePaused"
             @rewind="rewind"
+            @updateCollapsed="(c) => (this.collapsed = c)"
             @updateAudioMode="(a) => (this.audioMode = a)"
             @updateSpeed="(s) => (speed = s)"
             @toggleFullscreenMode="toggleFullscreenMode"
@@ -190,7 +192,9 @@
               :layout="layout"
               :showFullscreenToggle="showFullscreenToggle"
               :showLineList="showLineList"
+              :showCollapse="false"
               ref="videoControls"
+              @updateCollapsed="(c) => (this.collapsed = c)"
               @togglePaused="togglePaused"
               @rewind="rewind"
               @updateAudioMode="(a) => (this.audioMode = a)"
@@ -307,6 +311,7 @@ export default {
       videoInfoKey: 0,
       speed: 1,
       layout: this.initialLayout,
+      collapsed: false
     };
   },
   computed: {

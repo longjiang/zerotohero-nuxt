@@ -22,7 +22,7 @@
     </button>
     <button
       :class="{
-        'quick-access-button d-inline-block text-center': true
+        'quick-access-button d-inline-block text-center': true,
       }"
       @click="rewind"
     >
@@ -78,6 +78,16 @@
       @click="toggleFullscreenMode"
     >
       <i class="fas fa-expand"></i>
+    </button>
+    <button
+      v-if="showCollapse"
+      :class="{
+        'quick-access-button   d-inline-block text-center': true,
+      }"
+      @click="toggleCollapsed"
+    >
+      <i class="fas fa-angle-double-up" v-if="!collapsed"></i>
+      <i class="fas fa-angle-double-down" v-if="collapsed"></i>
     </button>
 
     <div
@@ -144,6 +154,9 @@ export default {
     showLineList: {
       default: true,
     },
+    showCollapse: {
+      default: true,
+    },
   },
   data() {
     return {
@@ -153,7 +166,8 @@ export default {
       filterList: "",
       speaking: false,
       audioMode: false,
-      sortedLines: undefined
+      sortedLines: undefined,
+      collapsed: false,
     };
   },
   computed: {
@@ -172,7 +186,7 @@ export default {
   },
   mounted() {
     if (this.showLineList) {
-      this.sortedLines = this.getSortedLines()
+      this.sortedLines = this.getSortedLines();
     }
   },
   methods: {
@@ -180,13 +194,13 @@ export default {
       this.$emit("togglePaused");
     },
     toggleSpeed() {
-      let speeds = [1, 0.75, 0.5, 1.5, 2]
-      let index = speeds.findIndex(s => s === this.speed)
+      let speeds = [1, 0.75, 0.5, 1.5, 2];
+      let index = speeds.findIndex((s) => s === this.speed);
       if (index > -1) {
-        index = index + 1
-        if (index === speeds.length) index = 0
+        index = index + 1;
+        if (index === speeds.length) index = 0;
       }
-      this.speed = speeds[index]
+      this.speed = speeds[index];
       this.$emit("updateSpeed", this.speed);
     },
     toggleRepeatMode() {
@@ -196,6 +210,10 @@ export default {
     toggleAudioMode() {
       this.audioMode = !this.audioMode;
       this.$emit("updateAudioMode", this.audioMode);
+    },
+    toggleCollapsed() {
+      this.collapsed = !this.collapsed;
+      this.$emit("updateCollapsed", this.collapsed);
     },
     toggleFullscreenMode() {
       this.$emit("toggleFullscreenMode");
