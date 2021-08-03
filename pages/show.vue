@@ -41,7 +41,6 @@
         </div>
         <template v-if="videos && videos.length > 0">
           <YouTubeVideoList
-            class="row"
             :videos="videos"
             :checkSubs="false"
             ref="youtubeVideoList"

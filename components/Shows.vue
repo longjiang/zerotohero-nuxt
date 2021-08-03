@@ -29,39 +29,41 @@
             Watch in random
           </NuxtLink>
         </div>
-        <b-input-group class="mb-5">
-          <b-form-input
-            v-model="keyword"
-            @compositionend.prevent.stop="() => false"
-            placeholder="Filter by show title..."
-          />
-          <b-input-group-append>
-            <b-button variant="primary">
-              <i class="fas fa-filter"></i>
-            </b-button>
-          </b-input-group-append>
-        </b-input-group>
-        <div class="mb-5">
-          <div
-            :class="{
-              'loader text-center': true,
-              'd-none': shows,
-            }"
-            style="flex: 1"
-          >
-            <div class="heartbeat-loader"></div>
+        <div class="show-list-wrapper">
+          <b-input-group class="mb-5">
+            <b-form-input
+              v-model="keyword"
+              @compositionend.prevent.stop="() => false"
+              placeholder="Filter by show title..."
+            />
+            <b-input-group-append>
+              <b-button variant="primary">
+                <i class="fas fa-filter"></i>
+              </b-button>
+            </b-input-group-append>
+          </b-input-group>
+          <div class="mb-5">
+            <div
+              :class="{
+                'loader text-center': true,
+                'd-none': shows,
+              }"
+              style="flex: 1"
+            >
+              <div class="heartbeat-loader"></div>
+            </div>
+            <div class="text-center" v-if="shows && shows.length === 0">
+              Sorry, we could not find any
+              {{ routeType === "tv-shows" ? "TV shows" : "talks" }} in
+              {{ $l2.name }} 😭.
+            </div>
+            <ShowList
+              v-if="shows && shows.length > 0"
+              :shows="filteredShows"
+              :type="type"
+              :key="`shows-filtered-${this.keyword}`"
+            />
           </div>
-          <div class="text-center" v-if="shows && shows.length === 0">
-            Sorry, we could not find any
-            {{ routeType === "tv-shows" ? "TV shows" : "talks" }} in
-            {{ $l2.name }} 😭.
-          </div>
-          <ShowList
-            v-if="shows && shows.length > 0"
-            :shows="filteredShows"
-            :type="type"
-            :key="`shows-filtered-${this.keyword}`"
-          />
         </div>
       </div>
     </div>
@@ -73,7 +75,7 @@ import Config from "@/lib/config";
 import Helper from "@/lib/helper";
 import YouTube from "@/lib/youtube";
 import axios from "axios";
-import { tify } from 'chinese-conv'
+import { tify } from "chinese-conv";
 
 export default {
   props: {
@@ -84,7 +86,7 @@ export default {
       type: this.routeType === "tv-shows" ? "tvShows" : "talks",
       shows: undefined,
       randomEpisodeYouTubeId: undefined,
-      keyword: ''
+      keyword: "",
     };
   },
   async fetch() {
@@ -134,16 +136,16 @@ export default {
     filteredShows() {
       if (this.shows) {
         if (this.keyword) {
-          let k = this.$l2.han ? tify(this.keyword) : this.keyword
-          return this.shows.filter(s => {
-            let title = this.$l2.han ? tify(s.title) : tshis.title
-            return title.includes(k)
-          })
+          let k = this.$l2.han ? tify(this.keyword) : this.keyword;
+          return this.shows.filter((s) => {
+            let title = this.$l2.han ? tify(s.title) : tshis.title;
+            return title.includes(k);
+          });
         } else {
-          return this.shows
+          return this.shows;
         }
       }
-    }
+    },
   },
   methods: {
     sortShows(shows) {
@@ -165,4 +167,10 @@ export default {
 </script>
 
 <style scoped>
+@media (max-width: 576px) {
+  .show-list-wrapper {
+    max-width: 423px;
+    margin: 0 auto;
+  }
+}
 </style>

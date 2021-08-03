@@ -85,7 +85,7 @@
     <div class="youtube-videos row">
       <div
         :class="{
-          'col-sm-12 col-md-4 col-lg-3': true,
+          'col-xs-12 col-sm-6 col-md-4 col-lg-3': true,
           'd-none': hideVideosWithoutSubs ? !video.hasSubs : false,
         }"
         style="padding-bottom: 2rem"
@@ -271,7 +271,11 @@ export default {
 </script>
 
 <style lang="scss">
-.youtube-videos {
+@media (max-width: 576px) {
+  .youtube-video-list {
+    max-width: 423px;
+    margin: 0 auto;
+  }
 }
 
 .youtube-video-list-admin-bar {
