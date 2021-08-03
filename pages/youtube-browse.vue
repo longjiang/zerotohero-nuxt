@@ -229,6 +229,7 @@ export default {
     };
   },
   async fetch() {
+    if (!this.keyword) this.includeShows = false
     this.videos = await this.getVideos(this.start);
     this.channels = await this.getChannels();
     this.randomEpisodeYouTubeId = await YouTube.getRandomEpisodeYouTubeId(
