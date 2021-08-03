@@ -31,6 +31,34 @@
       </div>
       <div class="col-lg-4">
         <div class="pt-2 pb-2" v-if="channels">
+          <div
+            class="tabs text-center mb-2"
+            style="border-bottom: 0.5rem solid #fd4f1c"
+          >
+            <button
+              :key="`live-tv-cat-tab-all`"
+              :class="{
+                tab: true,
+                'text-dark': typeof category !== 'undefined',
+                'bg-primary text-white': typeof category === 'undefined',
+              }"
+              @click="category = undefined"
+            >
+              All
+            </button>
+            <button
+              v-for="cat in categories"
+              :key="`live-tv-cat-tab-${cat}`"
+              :class="{
+                tab: true,
+                'text-dark': category !== cat,
+                'bg-primary text-white': category === cat,
+              }"
+              @click="category = cat"
+            >
+              {{ cat }}
+            </button>
+          </div>
           <b-button
             variant="gray"
             size="sm"
@@ -38,12 +66,19 @@
               'channel-button': true,
               'channel-button-current': currentChannel === channel,
             }"
-            v-for="channel in channels"
+            v-for="channel in channels.filter((c) =>
+              category ? c.category === category : true
+            )"
             :key="`channel-button-${channel.url}`"
             :data-url="channel.url"
             @click="setChannel(channel)"
           >
-            <img v-if="channel.logo" :src="channel.logo" :alt="channel.name" @error="logoLoadError" />
+            <img
+              v-if="channel.logo"
+              :src="channel.logo"
+              :alt="channel.name"
+              @error="logoLoadError"
+            />
             <img v-else src="/img/tv.png" :alt="channel.name" />
             <span>{{ channel.name }}</span>
           </b-button>
@@ -64,16 +99,16 @@ export default {
     return {
       channels: undefined,
       currentChannel: undefined,
+      category: undefined,
       bannedChannels: {
         zh: [
           "http://174.127.67.246/live330/playlist.m3u8", // NTD
         ],
       },
       bannedKeywords: {
-        zh: [
-          'arirang', 'cgtn', 'rt', "新唐人"
-        ]
-      }
+        zh: ["arirang", "cgtn", "rt", "新唐人"],
+      },
+      categories: [],
     };
   },
   computed: {
@@ -98,7 +133,7 @@ export default {
       let channels = Papa.parse(res.data, { header: true }).data;
       channels = Helper.uniqueByValue(channels, "url");
       channels = channels
-        .filter((c) => c.url && c.url.startsWith('https://'))
+        .filter((c) => c.url && c.url.startsWith("https://"))
         .filter((c) => c.category !== "XXX")
         .filter((c) => !c.name.includes("新唐人"));
       if (this.$l2.code in this.bannedChannels) {
@@ -107,20 +142,28 @@ export default {
         );
       }
       if (this.$l2.code in this.bannedKeywords) {
-        channels = channels.filter(
-          (c) => {
-            for(let keyword of this.bannedKeywords[this.$l2.code]) {
-              if (c.url.includes(keyword) || c.name.toLowerCase().includes(keyword)) return false
-            }
-            return true
+        channels = channels.filter((c) => {
+          for (let keyword of this.bannedKeywords[this.$l2.code]) {
+            if (
+              c.url.includes(keyword) ||
+              c.name.toLowerCase().includes(keyword)
+            )
+              return false;
           }
-        );
+          return true;
+        });
       }
       channels = channels.sort((a, b) =>
         a.name.localeCompare(b.name, this.$l2.code)
       );
       this.channels = channels;
       if (channels[0]) this.currentChannel = channels[0];
+      let categories = this.channels.map((c) => {
+        if (!c.category) c.category = "Misc";
+        return c.category;
+      });
+      categories = Helper.unique(categories);
+      this.categories = categories;
     }
   },
   methods: {
@@ -129,7 +172,7 @@ export default {
     },
     logoLoadError(event) {
       event.target.src = "/img/tv.png";
-    }
+    },
   },
 };
 </script>
