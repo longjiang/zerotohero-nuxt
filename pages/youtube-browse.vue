@@ -51,7 +51,7 @@
       <div :class="{ 'col-sm-12 mb-5': true, 'col-md-8 col-lg-9': !keyword }">
         <div
           :class="{
-            'loader text-center mb-4': true,
+            'loader text-center mt-5 mb-5': true,
             'd-none': videos,
           }"
           style="flex: 1"
@@ -235,6 +235,11 @@ export default {
       this.$l2.id,
       this.$store.state.shows.tvShows[this.$l2.code] ? "tv_show" : undefined
     );
+  },
+  watch: {
+    async includeShows() {
+      this.videos = await this.getVideos(this.start);
+    }
   },
   methods: {
     async visibilityChanged(isVisible) {
