@@ -16,7 +16,7 @@
           Study {{ $l2.name }} with
           {{ routeType === "tv-shows" ? "TV Shows" : "Talks" }}
         </h3>
-        <p class="text-center mb-4" v-if="shows && shows.length">
+        <p class="text-center mb-5" v-if="shows && shows.length">
           ({{ shows.length }} show{{ shows.length > 1 ? "s" : "" }})
         </p>
         <div class="text-center mb-5">
@@ -29,6 +29,18 @@
             Watch in random
           </NuxtLink>
         </div>
+        <b-input-group class="mb-5">
+          <b-form-input
+            v-model="keyword"
+            @compositionend.prevent.stop="() => false"
+            placeholder="Filter by show title..."
+          />
+          <b-input-group-append>
+            <b-button variant="primary">
+              <i class="fas fa-filter"></i>
+            </b-button>
+          </b-input-group-append>
+        </b-input-group>
         <div class="mb-5">
           <div
             :class="{
@@ -46,8 +58,9 @@
           </div>
           <ShowList
             v-if="shows && shows.length > 0"
-            :shows="shows"
+            :shows="filteredShows"
             :type="type"
+            :key="`shows-filtered-${this.keyword}`"
           />
         </div>
       </div>
@@ -70,6 +83,7 @@ export default {
       type: this.routeType === "tv-shows" ? "tvShows" : "talks",
       shows: undefined,
       randomEpisodeYouTubeId: undefined,
+      keyword: ''
     };
   },
   async fetch() {
@@ -116,6 +130,17 @@ export default {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
     },
+    filteredShows() {
+      if (this.shows) {
+        if (this.keyword) {
+          return this.shows.filter(s => {
+            return s.title.includes(this.keyword)
+          })
+        } else {
+          return this.shows
+        }
+      }
+    }
   },
   methods: {
     sortShows(shows) {
