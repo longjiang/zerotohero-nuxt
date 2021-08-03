@@ -41,7 +41,6 @@ export default {
         autoplay: true,
         sources: [
           {
-            withCredentials: false,
             type: 'application/x-mpegURL',
             src: this.url,
           },
