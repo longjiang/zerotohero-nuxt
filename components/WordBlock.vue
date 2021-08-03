@@ -689,7 +689,7 @@ export default {
 
 .add-pinyin {
   &.phonetics {
-    line-height: 2;
+    // line-height: 2;
   }
 
   .word-block {
