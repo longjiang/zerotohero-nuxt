@@ -772,11 +772,16 @@ export default {
   border: none;
 }
 
+.nav .tab {
+  text-shadow: 0 0 10px rgba(0,0,0,1);
+}
+
 .tab.nuxt-link-active,
 .tab:hover {
   color: #fd4f1c;
   background: white;
   text-decoration: none;
+  text-shadow: none;
 }
 
 .tab-saved-words.nuxt-link-active,

@@ -594,9 +594,10 @@ export default {
 }
 
 .zth-header {
-  background-image: url(/img/background-stars.jpg);
+  background-image: url(/img/background-branch.jpg);
   background-size: cover;
   padding-bottom: 40px;
+  padding-top: 52px;
 }
 
 .home-card {
@@ -640,9 +641,12 @@ export default {
 }
 
 .site-top-bar {
-  background-color: rgb(29, 29, 29);
+  background-color: rgba(29, 29, 29, 0.5);
   display: flex;
   justify-content: space-between;
+  position: absolute;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
 }
 
 .logo {
