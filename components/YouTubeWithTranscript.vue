@@ -526,10 +526,8 @@ export default {
   margin: 0 auto;
   position: sticky;
   top: 0;
-  background: black;
 }
 .youtube-video-column {
-  background: white;
   position: sticky;
   top: 0;
   z-index: 9;

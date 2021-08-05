@@ -261,15 +261,17 @@ export default {
   text-align: center;
   display: flex;
   align-items: center;
-  justify-content: center;
-  background: black;
+  justify-content: space-around;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  background: rgba(0,0,0,0.55);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
 }
 
 .quick-access-button {
   border: none;
   padding: 0.5rem;
   background: none;
-  margin: 0 0.3rem;
   color: white;
 }
 
