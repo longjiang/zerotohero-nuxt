@@ -261,7 +261,7 @@ export default {
   text-align: center;
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: center;
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
   background: rgba(0,0,0,0.45);
@@ -272,6 +272,7 @@ export default {
   padding: 0.5rem;
   background: none;
   color: white;
+  margin: 0 0.2rem;
 }
 
 .quick-access-button-active {
