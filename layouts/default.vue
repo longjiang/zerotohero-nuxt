@@ -604,14 +604,18 @@ export default {
 }
 
 .home-card {
-  background-color: hsla(0, 100%, 100%, 0.87);
-  border: 1px solid white;
+  background-color: hsla(0, 100%, 100%, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   padding: 2rem;
   margin-bottom: 2rem;
   border-radius: 1rem;
   box-shadow: 0 10px 30px rgba(68, 75, 134, 0.2);
+  color: #444;
+  .language-list .language-list-item a {
+    color: #444;
+  }
 }
 
 .sale-card {
@@ -639,7 +643,7 @@ export default {
   top: 0;
   object-fit: cover;
   min-height: 50vh;
-  min-width: calc(50vh * 1.5);
+  max-height: 80vh;
   clip-path: ellipse(66% 68% at 42% 31%);
 }
 
@@ -674,7 +678,7 @@ export default {
 
 .czh-links a,
 .ezh-links a {
-  color: #666;
+  color: #333;
   font-size: 0.8em;
 }
 
