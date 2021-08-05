@@ -18,7 +18,7 @@
         <div class="text-center mt-4 mb-4">
           <b-button
             class="btn-small btn-primary d-inline-block"
-            @click="forceRefresh"
+            @click="enableForceRefresh"
           >
             <i class="fa fa-sync-alt mr-1"></i>
             Force Refresh
@@ -74,6 +74,7 @@ export default {
       nextPageToken: undefined,
       entire: false,
       totalResults: undefined,
+      forceRefresh: false,
     };
   },
   mounted() {
@@ -94,14 +95,14 @@ export default {
     },
   },
   methods: {
-    load({ forceRefresh = false } = {}) {
+    load() {
       if (this.entire) {
         this.videos = [];
-        this.loadEntirePlaylist({ forceRefresh });
+        this.loadEntirePlaylist();
       } else {
         this.videos = [];
         this.nextPageToken = undefined;
-        this.loadPlaylistPage({ forceRefresh });
+        this.loadPlaylistPage();
       }
     },
     visibilityChanged(isVisible) {
@@ -109,17 +110,18 @@ export default {
         this.loadPlaylistPage({ pageToken: this.nextPageToken });
       }
     },
-    forceRefresh() {
-      this.load({ forceRefresh: true });
+    enableForceRefresh() {
+      this.forceRefresh = true
+      this.load();
     },
     newShow(show) {
       this.$refs.youtubeVideoList.assignShowToAll(show, show.type);
     },
-    async loadEntirePlaylist({ forceRefresh = false } = {}) {
+    async loadEntirePlaylist() {
       let {playlistItems, totalResults} = await YouTube.playlistByApi(
         this.playlist_id,
         false,
-        forceRefresh ? 0 : -1
+        this.forceRefresh ? 0 : -1
       );
       let videos = playlistItems
       if (videos && videos.length > 0) {
@@ -128,12 +130,12 @@ export default {
       }
       this.totalResults = totalResults
     },
-    async loadPlaylistPage({ pageToken, forceRefresh = false } = {}) {
+    async loadPlaylistPage({ pageToken } = {}) {
       let { playlistItems, nextPageToken, totalResults } =
         await YouTube.playlistPageByApi(
           this.playlist_id,
           pageToken,
-          forceRefresh ? 0 : -1
+          this.forceRefresh ? 0 : -1
         );
       let videos = playlistItems;
       if (videos && videos.length > 0) {
