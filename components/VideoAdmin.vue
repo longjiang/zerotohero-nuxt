@@ -227,6 +227,7 @@ import Config from "@/lib/config";
 import YouTube from "@/lib/youtube";
 import Vue from "vue";
 import SmartQuotes from "smartquotes";
+import moment from "moment";
 
 export default {
   components: {
@@ -324,7 +325,10 @@ export default {
       this.video.notes = notes;
     },
     normalizeNotes(text) {
-      let normalized = text.replace(/[(（【［\[〔]*(\d+)[)）〕】］\]]*/g, "[$1]");
+      let normalized = text.replace(
+        /[(（【［\[〔]*(\d+)[)）〕】］\]]*/g,
+        "[$1]"
+      );
       normalized = Helper.normalizeCircleNumbers(normalized);
       normalized = SmartQuotes.string(normalized);
       return normalized;
@@ -332,7 +336,9 @@ export default {
     normalizeNoteStart(line) {
       let notes = line;
       notes = Helper.normalizeCircleNumbers(notes);
-      notes = notes.trim().replace(/^[\d【】\[\]〔〕［］\(\)（）]+[.．、]*\s*/, "");
+      notes = notes
+        .trim()
+        .replace(/^[\d【】\[\]〔〕［］\(\)（）]+[.．、]*\s*/, "");
       return notes;
     },
     updateOriginalText() {
@@ -342,7 +348,10 @@ export default {
       this.$emit("updateOriginalText", text);
     },
     updateTranslation() {
-      this.$emit("updateTranslation", this.breaklines(SmartQuotes.string(this.translation)));
+      this.$emit(
+        "updateTranslation",
+        this.breaklines(SmartQuotes.string(this.translation))
+      );
     },
     async unassignShow(type) {
       let data = {};
@@ -359,7 +368,7 @@ export default {
     async save() {
       this.saving = true;
       try {
-        let data = Object.assign({
+        let data = {
           l2: this.$l2.id,
           title: this.video.title,
           youtube_id: this.video.youtube_id,
@@ -367,7 +376,8 @@ export default {
           subs_l2: this.video.subs_l2
             ? YouTube.unparseSubs(this.video.subs_l2, this.$l2.code)
             : undefined,
-        });
+          date: moment(this.video.date).format("YYYY-MM-DD HH:mm:ss"),
+        };
         let response = await axios.post(
           `${Config.wiki}items/youtube_videos`,
           data
