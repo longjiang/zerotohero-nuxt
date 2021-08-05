@@ -2,17 +2,7 @@
   <div
     :class="`${variant === 'menu-bar' ? 'nav' : ''}`"
     style="z-index: 3"
-    :set="
-      (parent = menu.find(
-        (item) =>
-          $route.name === nameOfSelfOrFirstChild(item) ||
-          $route.path.includes(
-            $router.resolve({ name: nameOfSelfOrFirstChild(item) }).href
-          ) ||
-          (item.children &&
-            item.children.map((child) => child.name).includes($route.name))
-      ))
-    "
+    :set="(parent = getParent())"
   >
     <template v-if="variant === 'menu-bar'">
       <nav class="site-nav tabs">
@@ -28,11 +18,11 @@
           :key="`nav-${index}`"
         >
           <i :class="item.icon"></i>
-          {{ $t(item.title, {l2: $t($l2.name)}) }}
+          {{ $t(item.title, { l2: $t($l2.name) }) }}
         </NuxtLink>
       </nav>
       <nav
-        class="secondary-menu text-center bg-white pt-3"
+        class="secondary-menu text-center pt-3"
         v-if="parent && parent.children"
       >
         <NuxtLink
@@ -44,7 +34,7 @@
           :to="last(child) || child"
         >
           <i :class="child.icon"></i>
-          {{ $t(child.title, {l2: $t($l2.name)}) }}
+          {{ $t(child.title, { l2: $t($l2.name) }) }}
           <span
             class="saved-words-count"
             v-cloak
@@ -83,7 +73,7 @@
                     <i :class="child.icon"></i>
                   </div>
                   <div class="feature-card-title">
-                    {{ $t(child.title, {l2: $t($l2.name)}) }}
+                    {{ $t(child.title, { l2: $t($l2.name) }) }}
                     <span
                       class="saved-words-count"
                       v-cloak
@@ -219,13 +209,13 @@ export default {
             {
               name: "live-tv",
               icon: "fa fa-tv",
-              title: 'Live TV',
+              title: "Live TV",
               show: this.hasLiveTV,
             },
             {
               name: "tv-shows",
               icon: "fa fa-tv",
-              title: '{l2} TV Shows',
+              title: "{l2} TV Shows",
               show: this.hasTVShows,
             },
             {
@@ -291,6 +281,7 @@ export default {
         {
           icon: "fas fa-book",
           title: "Dictionary",
+          name: "dictionary",
           show: this.hasFeature("dictionary"),
           children: [
             {
@@ -610,21 +601,27 @@ export default {
           this.$store.state.shows.talks[this.l2.code] &&
           this.$store.state.shows.talks[this.l2.code].length > 0;
         if (this.hasTVShows) {
-          let musicShow = this.$store.state.shows.tvShows[this.l2.code].find(s => s.title === 'Music')
+          let musicShow = this.$store.state.shows.tvShows[this.l2.code].find(
+            (s) => s.title === "Music"
+          );
           if (musicShow) {
-            this.musicPath = `/${this.$l1.code}/${this.$l2.code}/show/tv-show/${musicShow.id}`
+            this.musicPath = `/${this.$l1.code}/${this.$l2.code}/show/tv-show/${musicShow.id}`;
           }
         }
         if (this.hasTVShows) {
-          let moviesShow = this.$store.state.shows.tvShows[this.l2.code].find(s => s.title === 'Movies')
+          let moviesShow = this.$store.state.shows.tvShows[this.l2.code].find(
+            (s) => s.title === "Movies"
+          );
           if (moviesShow) {
-            this.moviesPath = `/${this.$l1.code}/${this.$l2.code}/show/tv-show/${moviesShow.id}`
+            this.moviesPath = `/${this.$l1.code}/${this.$l2.code}/show/tv-show/${moviesShow.id}`;
           }
         }
         if (this.hasTalks) {
-          let newsShow = this.$store.state.shows.talks[this.l2.code].find(s => s.title === 'News')
+          let newsShow = this.$store.state.shows.talks[this.l2.code].find(
+            (s) => s.title === "News"
+          );
           if (newsShow) {
-            this.newsPath = `/${this.$l1.code}/${this.$l2.code}/show/talk/${newsShow.id}`
+            this.newsPath = `/${this.$l1.code}/${this.$l2.code}/show/talk/${newsShow.id}`;
           }
         }
       }
@@ -635,8 +632,8 @@ export default {
           this.$store.state.phrasebooks.phrasebooks[this.l2.code].length > 0;
       }
     });
-    if (this.$hasFeature('live-tv')) {
-      this.hasLiveTV = true
+    if (this.$hasFeature("live-tv")) {
+      this.hasLiveTV = true;
     }
   },
   beforeDestroy() {
@@ -652,6 +649,21 @@ export default {
     },
   },
   methods: {
+    getParent() {
+      let parent = this.menu.find((item) => {
+        if (this.$route.name === this.nameOfSelfOrFirstChild(item)) return true;
+        let href = this.$router.resolve({
+          name: this.nameOfSelfOrFirstChild(item),
+        }).href;
+        if (this.$route.path.includes(href)) return true;
+        if (item.children) {
+          let childrenNames = item.children.map((child) => child.name);
+          if (childrenNames.includes(this.$route.name)) return true;
+        }
+      });
+      console.log(parent);
+      return parent;
+    },
     to(item) {
       let to = this.last(item) || this.selfOrFirstChild(item, true);
       return to;
@@ -739,49 +751,33 @@ export default {
 
 <style lang="scss">
 .nav {
-  margin-top: -40px;
+  margin-top: -102px;
   width: 100%;
-}
 
-.site-nav {
-  margin: 0 auto;
-  width: 100%;
-  display: block;
-  text-align: center;
-}
-
-.tabs {
-  a svg,
-  a i {
-    margin-right: 0.5rem;
+  .site-nav {
+    margin: 0 auto;
+    width: 100%;
+    display: block;
+    text-align: center;
+    .tab {
+      text-shadow: 0 0 10px rgba(0, 0, 0, 1);
+      border-top: 1px solid rgba(255, 255, 255, 0);
+      border-left: 1px solid rgba(255, 255, 255, 0);
+      border-right: 1px solid rgba(255, 255, 255, 0);
+      &.nuxt-link-active,
+      &:hover {
+        color: #fd4f1c;
+        background: hsla(0deg, 100%, 100%, 0.75);
+        border-top: 1px solid rgba(255, 255, 255, 0.5);
+        border-left: 1px solid rgba(255, 255, 255, 0.5);
+        border-right: 1px solid rgba(255, 255, 255, 0.5);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        text-decoration: none;
+        text-shadow: none;
+      }
+    }
   }
-}
-
-.tabs {
-  white-space: nowrap;
-  overflow: scroll;
-  overflow-y: hidden;
-}
-
-.tab {
-  padding: 0.5rem 1rem;
-  border-radius: 0.3rem 0.3rem 0 0;
-  color: white;
-  display: inline-block;
-  margin-right: 0.2rem;
-  border: none;
-}
-
-.nav .tab {
-  text-shadow: 0 0 10px rgba(0,0,0,1);
-}
-
-.tab.nuxt-link-active,
-.tab:hover {
-  color: #fd4f1c;
-  background: white;
-  text-decoration: none;
-  text-shadow: none;
 }
 
 .tab-saved-words.nuxt-link-active,
@@ -800,6 +796,9 @@ export default {
 }
 
 .secondary-menu {
+  background: linear-gradient(180deg, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0.75) 10%, rgba(255,255,255,1) 100%);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
   white-space: nowrap;
   overflow: scroll;
   overflow-y: hidden;

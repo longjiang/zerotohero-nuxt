@@ -599,8 +599,9 @@ export default {
 .zth-header {
   background-image: url(/img/background-branch.jpg);
   background-attachment: fixed;
+  background-position: center;
   background-size: cover;
-  padding-bottom: 40px;
+  padding-bottom: 102px;
   padding-top: 52px;
 }
 
@@ -1633,5 +1634,27 @@ button.bg-primary:focus {
   align-items: center;
   border: 1px solid white;
   font-weight: bold;
+}
+
+.tabs {
+  a svg,
+  a i {
+    margin-right: 0.5rem;
+  }
+}
+
+.tabs {
+  white-space: nowrap;
+  overflow: scroll;
+  overflow-y: hidden;
+}
+
+.tab {
+  padding: 0.5rem 1rem;
+  border-radius: 0.3rem 0.3rem 0 0;
+  color: white;
+  display: inline-block;
+  margin-right: 0.2rem;
+  border: none;
 }
 </style>
