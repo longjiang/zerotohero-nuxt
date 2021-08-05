@@ -3,7 +3,7 @@
     <template v-if="$route.path !== '/'">
       <template>
         <div class="container-fluid p-2 pl-3 site-top-bar" v-if="l1 && l2">
-          <div class="container">
+          <div class="container-fluid">
             <div
               class="row"
               style="display: flex; justify-content: space-between"
@@ -15,7 +15,7 @@
                   class="link-unstyled"
                 >
                   <i class="fa fa-chevron-left mr-2"></i>
-                  Home
+                  All Languages
                 </router-link>
               </div>
               <div>
@@ -35,22 +35,20 @@
                 </button>
                 <a
                   v-if="l1.code === 'zh' && l2.code === 'en'"
-                  class="btn btn-sign-in text-white ml-1"
-                  style="background-color: #2c5aff"
+                  class="btn btn-sign-in text-light ml-1"
                   href="https://m.cctalk.com/inst/stevmab3"
                   target="_blank"
                 >
-                  登陆
+                  登录
                   <img
                     src="/img/logo-cctalk-white.png"
                     class="logo-small ml-1"
                     data-not-lazy
                   />
                 </a>
-
                 <a
                   v-if="l1.code === 'en' && l2.code === 'zh'"
-                  class="btn btn-primary btn-sign-in text-white ml-1"
+                  class="btn btn-sign-in text-light ml-1"
                   href="https://sso.teachable.com/secure/133035/users/sign_in"
                   target="_blank"
                 >

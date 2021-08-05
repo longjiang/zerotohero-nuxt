@@ -772,7 +772,7 @@ export default {
       border-right: 1px solid rgba(255, 255, 255, 0);
       &.nuxt-link-active,
       &:hover {
-        color: #fd4f1c;
+        color: #444;
         background: hsla(0deg, 100%, 100%, 0.75);
         border-top: 1px solid rgba(255, 255, 255, 0.5);
         border-left: 1px solid rgba(255, 255, 255, 0.5);
@@ -856,7 +856,7 @@ export default {
 }
 
 .secondary-menu-item.nuxt-link-active {
-  background: #fd4f1c;
+  background: #666;
   color: white;
 }
 .feature-card {
