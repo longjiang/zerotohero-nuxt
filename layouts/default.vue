@@ -71,6 +71,7 @@
                       src="/img/czh-logo-light.png"
                       alt="Chinese Zero to Hero"
                       style="max-width: 11rem; margin: 1.5rem 0"
+                      class="logo"
                       data-not-lazy
                     />
                   </router-link>
@@ -82,6 +83,7 @@
                       src="/img/ezh-logo-light.png"
                       alt="Chinese Zero to Hero"
                       style="max-width: 11rem; margin: 1.5rem 0"
+                      class="logo"
                       data-not-lazy
                     />
                   </router-link>
@@ -595,6 +597,7 @@ export default {
 
 .zth-header {
   background-image: url(/img/background-branch.jpg);
+  background-attachment: fixed;
   background-size: cover;
   padding-bottom: 40px;
   padding-top: 52px;
@@ -649,8 +652,10 @@ export default {
   -webkit-backdrop-filter: blur(15px);
 }
 
-.logo {
-  height: 6rem;
+.logo, .logo-constructed {
+  -webkit-filter: drop-shadow(0 0 10px rgba(0, 0, 0, 1));
+  filter: drop-shadow(0 0 10px rgba(0, 0, 0, 1));
+  text-shadow: 0 0 10px rgba(0, 0, 0, 1);
 }
 
 .czh-links,
