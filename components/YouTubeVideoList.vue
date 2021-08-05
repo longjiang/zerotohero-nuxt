@@ -85,8 +85,8 @@
     <div class="youtube-videos row">
       <div
         :class="{
-          'col-sm-12': view === 'list',
-          'col-xs-12 col-sm-6 col-md-4 col-lg-3': view === 'grid',
+          'col-sm-12': view === 'list' || singleColumn,
+          'col-xs-12 col-sm-6 col-md-4 col-lg-3': view === 'grid' && !singleColumn,
           'd-none': hideVideosWithoutSubs ? !video.hasSubs : false,
         }"
         :style="`padding-bottom: ${view === 'list' ? '1rem' : '2rem'}`"
@@ -138,6 +138,10 @@ export default {
     view: {
       type: String,
       default: 'grid'
+    },
+    singleColumn: {
+      type: Boolean,
+      default: false
     }
   },
   data() {

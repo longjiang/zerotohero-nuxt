@@ -258,7 +258,6 @@ export default {
       };
     },
     onResize() {
-      console.log("resize");
       this.portrait = Helper.portrait();
     },
   },

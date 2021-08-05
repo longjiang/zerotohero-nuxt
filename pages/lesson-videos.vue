@@ -6,7 +6,6 @@
 </router>
 <template>
   <div>
-
     <div class="container main mb-5">
       <SocialHead
         v-if="lessonVideos[0]"
@@ -45,8 +44,8 @@
             >
               <b>Chinese Zero to Hero HSK {{ level }} Course</b>
             </a>
-            , reinforce the vocabulary you have learned in the lesson by watching
-            these
+            , reinforce the vocabulary you have learned in the lesson by
+            watching these
             {{ lessonVideos.length }} videos:
           </p>
         </div>
@@ -54,7 +53,11 @@
       <div v-if="loading" class="text-center">
         <Loader :sticky="true" />
       </div>
-      <div class="row mb-4" v-for="(video, videoIndex) in lessonVideos">
+      <div
+        class="row mb-4"
+        v-for="(video, videoIndex) in lessonVideos"
+        :key="`lesson-video-${videoIndex}`"
+      >
         <div class="col-lg-2"></div>
         <div class="col-md-6 col-lg-4">
           <YouTubeVideoList
@@ -62,6 +65,7 @@
             :lesson="true"
             :updateVideos="updateLessonVideos"
             :videos="[video]"
+            :singleColumn="true"
           />
         </div>
         <div class="col-md-6 col-lg-4">
@@ -126,7 +130,7 @@
 
 <script>
 import WordList from "@/components/WordList";
-import YouTube from '@/lib/youtube'
+import YouTube from "@/lib/youtube";
 import YouTubeVideoList from "@/components/YouTubeVideoList";
 import Config from "@/lib/config";
 import Helper from "@/lib/helper";
@@ -201,10 +205,9 @@ export default {
     }
     this.loading = false;
     this.lessonVideos = Helper.uniqueByValue(videos, "youtube_id");
-    let words = await (await this.$getDictionary()).lookupByLesson(
-      this.level,
-      this.lesson
-    );
+    let words = await (
+      await this.$getDictionary()
+    ).lookupByLesson(this.level, this.lesson);
     words = words.filter((word) => !word.oofc || !word.oofc === "");
     if (this.$l2.han && this.$l2.code !== "ja") {
       this.words = Helper.uniqueByValue(words, "simplified");

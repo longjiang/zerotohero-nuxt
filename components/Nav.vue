@@ -660,7 +660,6 @@ export default {
           if (childrenNames.includes(this.$route.name)) return true;
         }
       });
-      console.log(parent);
       return parent;
     },
     to(item) {
