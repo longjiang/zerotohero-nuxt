@@ -77,19 +77,12 @@
 
 <script>
 import Grammar from "@/lib/grammar";
-import Drill from "@/components/Drill";
 import Config from "@/lib/config";
 import Helper from "@/lib/helper";
 import WordPhotos from "@/lib/word-photos";
 import axios from "axios";
 
 export default {
-  components: {
-    DictionaryEntry,
-    GrammarPoint,
-    Drill,
-    SearchSubsComp,
-  },
   props: {
     id: {
       type: String,
