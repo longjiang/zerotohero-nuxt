@@ -166,13 +166,15 @@ export default {
   color: #666;
 }
 .language-list-item .feature-icon {
-  color: #ccc;
+  color: hsl(14deg 98% 10%);
+  opacity: 0.3;
 }
 
 .bg-dark .language-list-item a {
   color: #b9aba6;
 }
 .bg-dark .language-list-item .feature-icon {
-  color: #726661;
+  color: hsl(16deg 12% 69%);
+  opacity: 0.5;
 }
 </style>

@@ -121,7 +121,11 @@
           class="container-fluid pt-4"
           style="overflow: hidden; position: relative"
         >
-          <img src="/img/background-stars.jpg" class="bg-stars" data-not-lazy />
+          <img
+            src="/img/background-branch.jpg"
+            class="bg-stars"
+            data-not-lazy
+          />
           <div class="container">
             <div class="row pt-5">
               <div class="col-sm-6">
@@ -252,9 +256,7 @@
                       <router-link to="/zh/en/dictionary">词典工具</router-link>
                     </li>
                     <li>
-                      <router-link to="/zh/en/phrasebooks">
-                        单词表
-                      </router-link>
+                      <router-link to="/zh/en/phrasebooks">单词表</router-link>
                     </li>
                     <li>
                       <router-link to="/zh/en/live-tv">电视直播</router-link>
@@ -375,7 +377,7 @@
               </div>
             </div>
 
-            <div v-if="history.length > 0">
+            <div v-if="history.length > 0" class="home-card">
               <h5 class="text-center mt-5 mb-2">Your Recently Viewed Items</h5>
               <div class="text-center mb-4">
                 <button
@@ -425,25 +427,23 @@
                 </div>
               </div>
             </div>
+          <div class="home-card">
+            <p style="font-size: 1.5rem" class="text-center">
+              Resources for learning
+              <strong><em>hundreds</em></strong>
+              of languages
+            </p>
+            <p class="text-center">
+              学习
+              <strong>数百种</strong>
+              语言的资源
+            </p>
+            <Choose :compact="true" />
+            <SocialHead />
+          </div>
           </div>
         </div>
       </div>
-      <div class="mt-5 text-dark p-3">
-        <div class="text-center">
-          <p style="font-size: 1.5rem">
-            Resources for learning
-            <strong><em>hundreds</em></strong>
-            of languages
-          </p>
-          <p>
-            学习
-            <strong>数百种</strong>
-            语言的资源
-          </p>
-        </div>
-      </div>
-      <Choose :compact="true" />
-      <SocialHead />
     </template>
   </div>
 </template>
@@ -568,7 +568,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 .__nuxt-error-page {
   z-index: 99;
 }
@@ -600,7 +600,10 @@ export default {
 }
 
 .home-card {
-  background-color: white;
+  background-color: hsla(0, 100%, 100%, 0.87);
+  border: 1px solid white;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
   padding: 2rem;
   margin-bottom: 2rem;
   border-radius: 1rem;
@@ -626,11 +629,14 @@ export default {
 
 .bg-stars {
   z-index: -1;
-  position: absolute;
+  position: fixed;
   width: 100%;
-  min-height: 30rem;
   left: 0;
   top: 0;
+  object-fit: cover;
+  min-height: 50vh;
+  min-width: calc(50vh * 1.5);
+  clip-path: ellipse(66% 68% at 42% 31%);
 }
 
 .site-top-bar {
@@ -666,12 +672,16 @@ export default {
 .z2h-logo {
   height: 10rem;
   display: block;
+  -webkit-filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.7));
+  filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.7));
 }
 
 .z2h-slogan {
   max-height: 10rem;
   position: absolute;
   right: 1rem;
+  -webkit-filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.7));
+  filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.7));
 }
 
 .czh-logo,
