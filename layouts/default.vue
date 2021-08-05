@@ -227,6 +227,7 @@
                   </div>
                 </div>
               </div>
+              <div class="col-sm-12 d-sm-none mt-4">&nbsp;</div>
               <div class="col-sm-6">
                 <div class="home-card">
                   <router-link to="/zh/en">
