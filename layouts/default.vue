@@ -9,18 +9,14 @@
               style="display: flex; justify-content: space-between"
             >
               <div>
-                <router-link
-                  to="/"
-                  style="color: #ccc; line-height: 2.3rem"
-                  class="link-unstyled"
-                >
+                <router-link to="/" class="link-unstyled">
                   <i class="fa fa-chevron-left mr-2"></i>
                   All Languages
                 </router-link>
               </div>
               <div>
                 <button
-                  :class="['btn btn-unstyled', { 'd-none': !canShare }]"
+                  :class="['btn btn-unstyled', { 'd-none': !isPWA }]"
                   @click="share"
                   style="color: #ccc"
                 >
@@ -35,7 +31,7 @@
                 </button>
                 <a
                   v-if="l1.code === 'zh' && l2.code === 'en'"
-                  class="btn btn-sign-in text-light ml-1"
+                  class="link-unstyled nuxt-link-active btn-sign-in mr-1"
                   href="https://m.cctalk.com/inst/stevmab3"
                   target="_blank"
                 >
@@ -48,7 +44,7 @@
                 </a>
                 <a
                   v-if="l1.code === 'en' && l2.code === 'zh'"
-                  class="btn btn-sign-in text-light ml-1"
+                  class="link-unstyled nuxt-link-active btn-sign-in mr-1"
                   href="https://sso.teachable.com/secure/133035/users/sign_in"
                   target="_blank"
                 >
@@ -611,6 +607,12 @@ export default {
   padding-top: 52px;
 }
 
+@media screen and (max-device-width: 1024px) {
+  .zth-header {
+    background-attachment: scroll;
+  }
+}
+
 .home-card {
   background-color: hsla(0, 100%, 100%, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.9);
@@ -660,6 +662,10 @@ export default {
   position: absolute;
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
+  a {
+    color: #ccc;
+    line-height: 2.3rem;
+  }
 }
 
 .logo,

@@ -262,10 +262,9 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-around;
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  background: rgba(0,0,0,0.55);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  background: rgba(0,0,0,0.45);
 }
 
 .quick-access-button {
