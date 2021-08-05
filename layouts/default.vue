@@ -141,7 +141,7 @@
                 />
               </div>
             </div>
-            <div class="row pt-5">
+            <div class="row pt-5 mb-5">
               <div class="col-sm-6">
                 <div class="home-card">
                   <router-link to="/en/zh">
@@ -311,10 +311,10 @@
                 </div>
               </div>
             </div>
-            <div class="row">
+            <div class="row mb-5">
               <div class="col-sm-12">
                 <div class="home-card">
-                  <h5 class="text-center mt-4">Popular Languages to Learn</h5>
+                  <h5 class="text-center">Popular Languages to Learn</h5>
                   <LanguageList
                     :codes="[
                       'hbo',
@@ -379,7 +379,7 @@
               </div>
             </div>
 
-            <div v-if="history.length > 0" class="home-card">
+            <div v-if="history.length > 0" class="home-card mb-5">
               <h5 class="text-center mt-5 mb-2">Your Recently Viewed Items</h5>
               <div class="text-center mb-4">
                 <button
@@ -429,7 +429,7 @@
                 </div>
               </div>
             </div>
-          <div class="home-card">
+          <div class="home-card mb-5">
             <p style="font-size: 1.5rem" class="text-center">
               Resources for learning
               <strong><em>hundreds</em></strong>
@@ -609,9 +609,9 @@ export default {
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   padding: 2rem;
-  margin-bottom: 2rem;
   border-radius: 1rem;
   box-shadow: 0 10px 30px rgba(68, 75, 134, 0.2);
+  height: 100%;
   color: #444;
   .language-list .language-list-item a {
     color: #444;
