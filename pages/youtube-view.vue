@@ -156,7 +156,13 @@ export default {
           `YouTube View: Getting channel information with youtube api...`
         );
         let youtube_video = await YouTube.videoByApi(this.youtube_id);
-        if (youtube_video) video = Object.assign(youtube_video, video || {});
+        if (youtube_video) {
+          if (!video) video = {}
+          let merged = {}
+          for (var attrname in video) { merged[attrname] = video[attrname] || youtube_video[attrname] }
+          for (var attrname in youtube_video) { merged[attrname] = video[attrname] || youtube_video[attrname] }
+          video = merged
+        }
       }
       if (!video.subs_l2 || video.subs_l2.length === 0) {
         console.log(`YouTube View: Getting ${this.$l2.name} transcript`);
