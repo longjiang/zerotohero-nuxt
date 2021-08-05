@@ -151,6 +151,7 @@ import axios from "axios";
 import Config from "@/lib/config";
 import Papa from "papaparse";
 import Helper from "@/lib/helper";
+import Vue from 'vue';
 
 export default {
   data() {
@@ -254,9 +255,7 @@ export default {
       this.currentChannel = channel;
     },
     logoLoadError(channel) {
-      return function (event) {
-        delete channel.logo;
-      };
+      Vue.delete(channel, 'logo')
     },
     onResize() {
       this.portrait = Helper.portrait();
