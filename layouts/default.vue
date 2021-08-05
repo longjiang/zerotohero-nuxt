@@ -65,7 +65,7 @@
                 <div class="col-sm-12 text-center">
                   <router-link
                     v-if="l1.code === 'en' && l2.code === 'zh'"
-                    to="/en/zh"
+                    to="/en/zh/online-courses"
                   >
                     <img
                       src="/img/czh-logo-light.png"
@@ -77,7 +77,7 @@
                   </router-link>
                   <router-link
                     v-else-if="l1.code === 'zh' && l2.code === 'en'"
-                    to="/zh/en"
+                    to="/zh/en/online-courses"
                   >
                     <img
                       src="/img/ezh-logo-light.png"

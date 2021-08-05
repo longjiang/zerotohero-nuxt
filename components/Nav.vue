@@ -22,7 +22,7 @@
         </NuxtLink>
       </nav>
       <nav class="secondary-menu text-center pt-3" style="min-height: 102px">
-        <template v-if="parent.children">
+        <template v-if="parent && parent.children">
           <NuxtLink
             class="secondary-menu-item"
             v-for="(child, index) in parent.children.filter(
@@ -48,14 +48,14 @@
       <div class="container">
         <div class="row mt-5">
           <template
-            v-for="(item, index) in menu.filter(
+            v-for="item in menu.filter(
               (item) =>
                 item.show &&
                 to(item) &&
                 !['Admin', 'Contact', 'Settings'].includes(item.title)
             )"
           >
-            <template v-if="item.children">
+            <template v-if="typeof item !== 'undefined' && item.children">
               <div
                 v-for="(child, index) in item.children.filter(
                   (child) => child.show
