@@ -393,7 +393,8 @@
               <div class="history d-flex">
                 <div
                   class="history-item media shadow"
-                  v-for="item of this.history.slice(0, 20)"
+                  v-for="(item, itemIndex) of this.history.slice(0, 20)"
+                  :key="`history-item-${itemIndex}`"
                 >
                   <router-link :to="item.path" class="link-unstyled">
                     <div class="aspect-wrapper">
