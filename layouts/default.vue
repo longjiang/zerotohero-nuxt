@@ -3,59 +3,66 @@
     <template v-if="$route.path !== '/'">
       <template>
         <div class="container-fluid p-2 pl-3 site-top-bar" v-if="l1 && l2">
-          <div>
-            <router-link
-              to="/"
-              style="color: #ccc; line-height: 2.3rem"
-              class="link-unstyled"
+          <div class="container">
+            <div
+              class="row"
+              style="display: flex; justify-content: space-between"
             >
-              <i class="fa fa-chevron-left mr-2"></i>
-              Home
-            </router-link>
-          </div>
-          <div>
-            <button
-              :class="['btn btn-unstyled', { 'd-none': !canShare }]"
-              @click="share"
-              style="color: #ccc"
-            >
-              <i class="fa fa-share"></i>
-            </button>
-            <button
-              :class="['btn btn-unstyled', { 'd-none': !isPWA }]"
-              @click="reload"
-              style="color: #ccc"
-            >
-              <i class="fas fa-sync-alt"></i>
-            </button>
-            <a
-              v-if="l1.code === 'zh' && l2.code === 'en'"
-              class="btn btn-sign-in text-white ml-1"
-              style="background-color: #2c5aff"
-              href="https://m.cctalk.com/inst/stevmab3"
-              target="_blank"
-            >
-              登陆
-              <img
-                src="/img/logo-cctalk-white.png"
-                class="logo-small ml-1"
-                data-not-lazy
-              />
-            </a>
+              <div>
+                <router-link
+                  to="/"
+                  style="color: #ccc; line-height: 2.3rem"
+                  class="link-unstyled"
+                >
+                  <i class="fa fa-chevron-left mr-2"></i>
+                  Home
+                </router-link>
+              </div>
+              <div>
+                <button
+                  :class="['btn btn-unstyled', { 'd-none': !canShare }]"
+                  @click="share"
+                  style="color: #ccc"
+                >
+                  <i class="fa fa-share"></i>
+                </button>
+                <button
+                  :class="['btn btn-unstyled', { 'd-none': !isPWA }]"
+                  @click="reload"
+                  style="color: #ccc"
+                >
+                  <i class="fas fa-sync-alt"></i>
+                </button>
+                <a
+                  v-if="l1.code === 'zh' && l2.code === 'en'"
+                  class="btn btn-sign-in text-white ml-1"
+                  style="background-color: #2c5aff"
+                  href="https://m.cctalk.com/inst/stevmab3"
+                  target="_blank"
+                >
+                  登陆
+                  <img
+                    src="/img/logo-cctalk-white.png"
+                    class="logo-small ml-1"
+                    data-not-lazy
+                  />
+                </a>
 
-            <a
-              v-if="l1.code === 'en' && l2.code === 'zh'"
-              class="btn btn-primary btn-sign-in text-white ml-1"
-              href="https://sso.teachable.com/secure/133035/users/sign_in"
-              target="_blank"
-            >
-              Login to
-              <img
-                src="/img/teachable_light.png"
-                class="logosp-small"
-                data-not-lazy
-              />
-            </a>
+                <a
+                  v-if="l1.code === 'en' && l2.code === 'zh'"
+                  class="btn btn-primary btn-sign-in text-white ml-1"
+                  href="https://sso.teachable.com/secure/133035/users/sign_in"
+                  target="_blank"
+                >
+                  Login to
+                  <img
+                    src="/img/teachable_light.png"
+                    class="logosp-small"
+                    data-not-lazy
+                  />
+                </a>
+              </div>
+            </div>
           </div>
         </div>
         <div class="zth-header" v-if="l1 && l2">
@@ -431,20 +438,20 @@
                 </div>
               </div>
             </div>
-          <div class="home-card mb-5">
-            <p style="font-size: 1.5rem" class="text-center">
-              Resources for learning
-              <strong><em>hundreds</em></strong>
-              of languages
-            </p>
-            <p class="text-center">
-              学习
-              <strong>数百种</strong>
-              语言的资源
-            </p>
-            <Choose :compact="true" />
-            <SocialHead />
-          </div>
+            <div class="home-card mb-5">
+              <p style="font-size: 1.5rem" class="text-center">
+                Resources for learning
+                <strong><em>hundreds</em></strong>
+                of languages
+              </p>
+              <p class="text-center">
+                学习
+                <strong>数百种</strong>
+                语言的资源
+              </p>
+              <Choose :compact="true" />
+              <SocialHead />
+            </div>
           </div>
         </div>
       </div>
@@ -652,14 +659,13 @@ export default {
 
 .site-top-bar {
   background-color: rgba(29, 29, 29, 0.5);
-  display: flex;
-  justify-content: space-between;
   position: absolute;
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
 }
 
-.logo, .logo-constructed {
+.logo,
+.logo-constructed {
   -webkit-filter: drop-shadow(0 0 10px rgba(0, 0, 0, 1));
   filter: drop-shadow(0 0 10px rgba(0, 0, 0, 1));
   text-shadow: 0 0 10px rgba(0, 0, 0, 1);

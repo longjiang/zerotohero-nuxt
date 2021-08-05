@@ -69,7 +69,8 @@
             "
           >
             Featured
-          </button><button
+          </button>
+          <button
             :key="`live-tv-cat-tab-all`"
             :class="{
               'btn btn-gray mr-1': true,
@@ -83,7 +84,8 @@
             "
           >
             All
-          </button><button
+          </button>
+          <button
             v-for="cat in categories"
             :key="`live-tv-cat-tab-${cat}`"
             :class="{
@@ -97,7 +99,6 @@
           </button>
         </div>
         <div
-          class="p-3"
           v-if="channels"
           :class="{
             'channel-buttons': true,
@@ -254,7 +255,7 @@ export default {
     },
     logoLoadError(channel) {
       return function (event) {
-        delete channel.logo
+        delete channel.logo;
       };
     },
     onResize() {
@@ -293,6 +294,15 @@ export default {
   margin-bottom: 0.5rem;
   margin-right: 0.5rem;
   padding-left: 0.2;
+}
+.channel-buttons {
+  padding: 1rem 0 0 1rem;
+}
+
+@media (max-width: 992px) {
+  .channel-buttons {
+    padding-right: 1rem;
+  }
 }
 @media (min-width: 768px) and (max-width: 992px) {
   .channel-buttons-portrait {
