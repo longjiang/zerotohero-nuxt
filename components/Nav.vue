@@ -21,28 +21,27 @@
           {{ $t(item.title, { l2: $t($l2.name) }) }}
         </NuxtLink>
       </nav>
-      <nav
-        class="secondary-menu text-center pt-3"
-        v-if="parent && parent.children"
-      >
-        <NuxtLink
-          class="secondary-menu-item"
-          v-for="(child, index) in parent.children.filter(
-            (child) => child.show
-          )"
-          :key="`subnav-${child.name}-${index}`"
-          :to="last(child) || child"
-        >
-          <i :class="child.icon"></i>
-          {{ $t(child.title, { l2: $t($l2.name) }) }}
-          <span
-            class="saved-words-count"
-            v-cloak
-            v-if="child.name === 'saved-words'"
+      <nav class="secondary-menu text-center pt-3" style="min-height: 102px">
+        <template v-if="parent.children">
+          <NuxtLink
+            class="secondary-menu-item"
+            v-for="(child, index) in parent.children.filter(
+              (child) => child.show
+            )"
+            :key="`subnav-${child.name}-${index}`"
+            :to="last(child) || child"
           >
-            {{ savedWordsCount() }}
-          </span>
-        </NuxtLink>
+            <i :class="child.icon"></i>
+            {{ $t(child.title, { l2: $t($l2.name) }) }}
+            <span
+              class="saved-words-count"
+              v-cloak
+              v-if="child.name === 'saved-words'"
+            >
+              {{ savedWordsCount() }}
+            </span>
+          </NuxtLink>
+        </template>
       </nav>
     </template>
     <template v-if="variant === 'page'">
@@ -796,7 +795,12 @@ export default {
 }
 
 .secondary-menu {
-  background: linear-gradient(180deg, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0.75) 10%, rgba(255,255,255,1) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.75) 0%,
+    rgba(255, 255, 255, 0.75) 10%,
+    rgba(255, 255, 255, 1) 100%
+  );
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   white-space: nowrap;

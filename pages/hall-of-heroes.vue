@@ -12,7 +12,7 @@
     />
     <div class="row">
       <div class="col-sm-12">
-        <h1 class="text-center mt-5 mb-5">Hall of Heroes</h1>
+        <h1 class="text-center mb-5">Hall of Heroes</h1>
         <p class="lead text-center">
           <b>Every “hero” was a “zero” at some point.</b>
         </p>
