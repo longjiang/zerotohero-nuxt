@@ -21,7 +21,7 @@
           {{ $t(item.title, { l2: $t($l2.name) }) }}
         </NuxtLink>
       </nav>
-      <nav class="secondary-menu text-center pt-3" style="min-height: 102px">
+      <nav class="secondary-menu text-center pt-3" style="min-height: 61px">
         <template v-if="parent && parent.children">
           <NuxtLink
             class="secondary-menu-item"
@@ -589,46 +589,14 @@ export default {
     this.bindKeys();
   },
   created() {
+    this.checkShows()
+    this.checkPhrasebooks();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type.startsWith("shows")) {
-        this.hasTVShows =
-          this.$store.state.shows.tvShows &&
-          this.$store.state.shows.tvShows[this.l2.code] &&
-          this.$store.state.shows.tvShows[this.l2.code].length > 0;
-        this.hasTalks =
-          this.$store.state.shows.talks &&
-          this.$store.state.shows.talks[this.l2.code] &&
-          this.$store.state.shows.talks[this.l2.code].length > 0;
-        if (this.hasTVShows) {
-          let musicShow = this.$store.state.shows.tvShows[this.l2.code].find(
-            (s) => s.title === "Music"
-          );
-          if (musicShow) {
-            this.musicPath = `/${this.$l1.code}/${this.$l2.code}/show/tv-show/${musicShow.id}`;
-          }
-        }
-        if (this.hasTVShows) {
-          let moviesShow = this.$store.state.shows.tvShows[this.l2.code].find(
-            (s) => s.title === "Movies"
-          );
-          if (moviesShow) {
-            this.moviesPath = `/${this.$l1.code}/${this.$l2.code}/show/tv-show/${moviesShow.id}`;
-          }
-        }
-        if (this.hasTalks) {
-          let newsShow = this.$store.state.shows.talks[this.l2.code].find(
-            (s) => s.title === "News"
-          );
-          if (newsShow) {
-            this.newsPath = `/${this.$l1.code}/${this.$l2.code}/show/talk/${newsShow.id}`;
-          }
-        }
+        this.checkShows();
       }
       if (mutation.type.startsWith("phrasebooks")) {
-        this.hasPhrasebooks =
-          this.$store.state.phrasebooks.phrasebooks &&
-          this.$store.state.phrasebooks.phrasebooks[this.l2.code] &&
-          this.$store.state.phrasebooks.phrasebooks[this.l2.code].length > 0;
+        this.checkPhrasebooks();
       }
     });
     if (this.$hasFeature("live-tv")) {
@@ -648,6 +616,46 @@ export default {
     },
   },
   methods: {
+    checkPhrasebooks() {
+      this.hasPhrasebooks =
+        this.$store.state.phrasebooks.phrasebooks &&
+        this.$store.state.phrasebooks.phrasebooks[this.l2.code] &&
+        this.$store.state.phrasebooks.phrasebooks[this.l2.code].length > 0;
+    },
+    checkShows() {
+      this.hasTVShows =
+        this.$store.state.shows.tvShows &&
+        this.$store.state.shows.tvShows[this.l2.code] &&
+        this.$store.state.shows.tvShows[this.l2.code].length > 0;
+      this.hasTalks =
+        this.$store.state.shows.talks &&
+        this.$store.state.shows.talks[this.l2.code] &&
+        this.$store.state.shows.talks[this.l2.code].length > 0;
+      if (this.hasTVShows) {
+        let musicShow = this.$store.state.shows.tvShows[this.l2.code].find(
+          (s) => s.title === "Music"
+        );
+        if (musicShow) {
+          this.musicPath = `/${this.$l1.code}/${this.$l2.code}/show/tv-show/${musicShow.id}`;
+        }
+      }
+      if (this.hasTVShows) {
+        let moviesShow = this.$store.state.shows.tvShows[this.l2.code].find(
+          (s) => s.title === "Movies"
+        );
+        if (moviesShow) {
+          this.moviesPath = `/${this.$l1.code}/${this.$l2.code}/show/tv-show/${moviesShow.id}`;
+        }
+      }
+      if (this.hasTalks) {
+        let newsShow = this.$store.state.shows.talks[this.l2.code].find(
+          (s) => s.title === "News"
+        );
+        if (newsShow) {
+          this.newsPath = `/${this.$l1.code}/${this.$l2.code}/show/talk/${newsShow.id}`;
+        }
+      }
+    },
     getParent() {
       let parent = this.menu.find((item) => {
         if (this.$route.name === this.nameOfSelfOrFirstChild(item)) return true;
