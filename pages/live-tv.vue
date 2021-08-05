@@ -54,13 +54,12 @@
         <div
           v-if="channels"
           class="tabs text-center channel-category-tabs pl-3 pr-3"
-          style="border-bottom: 0.5rem solid #fd4f1c"
         >
           <button
             v-if="hasFeatured"
             :key="`live-tv-cat-tab-featured`"
             :class="{
-              tab: true,
+              'btn btn-gray mr-1': true,
               'text-dark': !featured,
               'bg-primary text-white': featured,
             }"
@@ -70,11 +69,10 @@
             "
           >
             Featured
-          </button>
-          <button
+          </button><button
             :key="`live-tv-cat-tab-all`"
             :class="{
-              tab: true,
+              'btn btn-gray mr-1': true,
               'text-dark': typeof category !== 'undefined' || featured,
               'bg-primary text-white':
                 typeof category === 'undefined' && !featured,
@@ -85,12 +83,11 @@
             "
           >
             All
-          </button>
-          <button
+          </button><button
             v-for="cat in categories"
             :key="`live-tv-cat-tab-${cat}`"
             :class="{
-              tab: true,
+              'btn btn-gray mr-1': true,
               'text-dark': category !== cat,
               'bg-primary text-white': category === cat,
             }"
