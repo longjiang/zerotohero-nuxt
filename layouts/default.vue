@@ -131,15 +131,31 @@
           />
           <div class="container">
             <div class="row pt-5">
-              <div class="col-sm-6">
-                <img src="/img/logo-z2h.png" class="z2h-logo" data-not-lazy />
+              <div class="col-sm-12">
+                <div class="z2h-logo" style="line-height: 1.2; font-size: 2em">
+                  <strong>ZERO TO HERO</strong>
+                  <br />
+                  <span style="font-weight: 300">LANGUAGES</span>
+                </div>
               </div>
-              <div class="col-sm-6">
-                <img
-                  src="/img/language-education-done-right.png"
-                  class="z2h-slogan img-fluid d-none d-sm-block"
-                  data-not-lazy
-                />
+              <div class="col-sm-12 mt-5">
+                <div class="intro-text">
+                  <h5 class="mb-3" style="line-height: 1.5">
+                    A one-stop resource to help you learn
+                    <em>any</em>
+                    language by comprehensible input.
+                  </h5>
+                  <hr class="border-light" style="opacity: 0.2" />
+                  <p>
+                    We provide you with TV shows with subtitles, music with
+                    lyrics, phrasebooks with video examples... everything that
+                    can help you to learn a language “by osmosis.”
+                  </p>
+                  <p class="mb-0">
+                    We are also known for our “Chinese Zero to Hero” and
+                    “English Zero to Hero” online language courses.
+                  </p>
+                </div>
               </div>
             </div>
             <div class="row pt-5 mb-5">
@@ -628,6 +644,17 @@ export default {
   }
 }
 
+.intro-text {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  padding: 2rem;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid hsla(0deg, 0%, 30%, 0.7);
+  border-radius: 1rem;
+  text-align: left;
+}
+
 .sale-card {
   border-radius: 1rem;
   background-image: url(/img/background-spring-sale.png);
@@ -696,10 +723,12 @@ export default {
 }
 
 .z2h-logo {
-  height: 10rem;
+  color: white;
+  text-align: center;
   display: block;
   -webkit-filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.7));
   filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.7));
+  text-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
 }
 
 .z2h-slogan {
@@ -712,8 +741,8 @@ export default {
 
 .czh-logo,
 .ezh-logo {
-  max-width: 70%;
-  margin: 0 auto;
+  width: 12rem;
+  max-width: 75%;
   display: block;
 }
 
