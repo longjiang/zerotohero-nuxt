@@ -20,7 +20,7 @@
         <router-link
           v-if="compareWith"
           :to="`/${$l1.code}/${$l2.code}/compare/${$dictionaryName}/${compareWith.id},${word.id}`"
-          class="btn btn-small mr-2"
+          class="btn btn-small" style="margin-bottom: 0.4rem"
         >
           <i class="fas fa-adjust"></i>
         </router-link>
