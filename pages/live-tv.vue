@@ -237,8 +237,10 @@ export default {
       window.removeEventListener("resize", this.onResize);
   },
   async fetch() {
+    let code = this.$l2["iso639-3"]
+    if (code === 'nor') code = 'nob' // Use 'Bokmal' for Norwegian.
     let res = await axios.get(
-      `${Config.server}data/live-tv-channels/${this.$l2["iso639-3"]}.csv.txt`
+      `${Config.server}data/live-tv-channels/${code}.csv.txt`
     );
     if (res && res.data) {
       let channels = Papa.parse(res.data, { header: true }).data;
