@@ -448,10 +448,14 @@ export default {
     },
     prevHit() {
       if (this.hitIndex > 0) return this.hits[this.hitIndex - 1];
+      else 
+        return this.hits[this.hits.length - 1]
     },
     nextHit() {
       if (this.hitIndex < this.hits.length - 1)
         return this.hits[this.hitIndex + 1];
+      else 
+        return this.hits[0]
     },
   },
   methods: {
