@@ -140,16 +140,17 @@
               </div>
               <div class="col-sm-12 mt-5">
                 <div class="intro-text">
-                  <h5 class="mb-3" style="line-height: 1.5">
+                  <h5 class="mb-3" style="line-height: 1.5; font-weight: 600">
                     A one-stop resource to help you learn
                     <em>any</em>
                     language by comprehensible input.
                   </h5>
                   <hr class="border-light" style="opacity: 0.2" />
                   <p>
-                    We provide you with TV shows with subtitles, music with
-                    lyrics, phrasebooks with video examples... everything that
-                    can help you to learn a language “by osmosis.”
+                    We provide you with live TV channels, TV shows with
+                    subtitles, music with lyrics, phrasebooks with video
+                    examples... everything that can help you to learn a language
+                    “by osmosis.”
                   </p>
                   <p class="mb-0">
                     We are also known for our “Chinese Zero to Hero” and
@@ -332,7 +333,7 @@
             <div class="row mb-5">
               <div class="col-sm-12">
                 <div class="home-card">
-                  <h5 class="text-center">Popular Languages to Learn</h5>
+                  <h5 class="text-center">More Languages</h5>
                   <LanguageList
                     :codes="[
                       'hbo',
@@ -449,18 +450,12 @@
               </div>
             </div>
             <div class="home-card mb-5">
-              <p style="font-size: 1.5rem" class="text-center">
-                Resources for learning
-                <strong><em>hundreds</em></strong>
-                of languages
-              </p>
-              <p class="text-center">
-                学习
-                <strong>数百种</strong>
-                语言的资源
-              </p>
+              <h5 class="text-center">Even More Languages</h5>
               <Choose :compact="true" />
-              <SocialHead />
+              <SocialHead
+                title="Zero to Hero Languages | Master any language by comprehensible input."
+                description="We provide live TV channels in the target language, TV shows with subtitles, music with lyrics, phrasebooks with video examples... everything that can help you to learn a language “by osmosis.” We are also known for our “Chinese Zero to Hero” and “English Zero to Hero” online language courses."
+              />
             </div>
           </div>
         </div>

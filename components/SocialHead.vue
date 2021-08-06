@@ -9,15 +9,15 @@ export default {
   props: {
     title: {
       type: String,
-      default: 'Zero to Hero Education'
+      default: "Zero to Hero Languages",
     },
     description: {
       type: String,
-      default: 'Language education done right.'
+      default: "Language education done right.",
     },
     image: {
       type: String,
-      default: '/img/zth-share-image.jpg'
+      default: "/img/zth-share-image.jpg",
     },
   },
   computed: {
@@ -34,70 +34,81 @@ export default {
     return {
       title: this.title,
       htmlAttrs: {
-        lang: this.$l1 ? this.$l1.code : 'en'
+        lang: this.$l1 ? this.$l1.code : "en",
       },
       link: [
-        { rel: 'icon', type: 'image/x-icon', href: this.$l2 ? this.$languages.logo(this.$l2.code) : '/img/icons/favicon.ico' },
+        {
+          rel: "icon",
+          type: "image/x-icon",
+          href: this.$l2
+            ? this.$languages.logo(this.$l2.code)
+            : "/img/icons/favicon.ico",
+        },
       ],
       meta: [
-        { hid: 'description', name: 'description', content: this.description },
+        { hid: "description", name: "description", content: this.description },
         { name: "twitter:card", content: "summary_large_image" },
         {
-          hid: 'twitter:title',
-          name: 'twitter:title',
-          content: this.title
+          hid: "twitter:title",
+          name: "twitter:title",
+          content: this.title,
         },
         {
-          hid: 'twitter:description',
-          name: 'twitter:description',
-          content: this.description
+          hid: "twitter:description",
+          name: "twitter:description",
+          content: this.description,
         },
         {
-          hid: 'twitter:image',
-          name: 'twitter:image',
-          content: this.image
+          hid: "twitter:image",
+          name: "twitter:image",
+          content: this.image,
         },
         {
-          hid: 'twitter:image:alt',
-          name: 'twitter:image:alt',
-          content: this.title
+          hid: "twitter:image:alt",
+          name: "twitter:image:alt",
+          content: this.title,
         },
-        { property: "og:site_name", content: this.$l2 ? `${this.$l2.name} Zero to Hero` : "Zero to Hero Education" },
+        {
+          property: "og:site_name",
+          content: this.$l2
+            ? `${this.$l2.name} Zero to Hero`
+            : "Zero to Hero Languages",
+        },
         { hid: "og:type", property: "og:type", content: "website" },
         {
-          hid: 'og:title',
-          property: 'og:title',
-          content: this.title
+          hid: "og:title",
+          property: "og:title",
+          content: this.title,
         },
         {
-          hid: 'og:url',
-          property: 'og:url',
-          content: `https://www.zerotohero.ca/${this.$route.fullPath}`
+          hid: "og:url",
+          property: "og:url",
+          content: `https://www.zerotohero.ca/${this.$route.fullPath}`,
         },
         {
-          hid: 'og:description',
-          property: 'og:description',
-          content: this.description
+          hid: "og:description",
+          property: "og:description",
+          content: this.description,
         },
         {
-          hid: 'og:image',
-          property: 'og:image',
-          content: this.image
+          hid: "og:image",
+          property: "og:image",
+          content: this.image,
         },
         { property: "og:image:width", content: "1280" },
         { property: "og:image:height", content: "720" },
         {
-          hid: 'og:image:secure_url',
-          property: 'og:image:secure_url',
-          content: this.image
+          hid: "og:image:secure_url",
+          property: "og:image:secure_url",
+          content: this.image,
         },
         {
-          hid: 'og:image:alt',
-          property: 'og:image:alt',
-          content: this.title
-        }
-      ]
-    }
-  }
-}
+          hid: "og:image:alt",
+          property: "og:image:alt",
+          content: this.title,
+        },
+      ],
+    };
+  },
+};
 </script>

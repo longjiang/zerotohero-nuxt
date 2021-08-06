@@ -1,7 +1,7 @@
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'Zero to Hero Education',
+    title: 'Zero to Hero Languages',
     htmlAttrs: {
       lang: 'en'
     },

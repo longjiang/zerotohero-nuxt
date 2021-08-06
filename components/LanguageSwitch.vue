@@ -1,7 +1,7 @@
 <template>
   <div>
     <Search
-      placeholder="Search languages"
+      placeholder="Search by language name or code..."
       :hrefFunc="hrefFunc"
       :button="true"
       :suggestionsFunc="suggestionsFunc"
