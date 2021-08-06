@@ -64,6 +64,7 @@
               'bg-primary text-white': featured,
             }"
             @click="
+              country = undefined;
               category = undefined;
               featured = true;
             "
@@ -76,14 +77,31 @@
               'btn btn-gray mr-1': true,
               'text-dark': typeof category !== 'undefined' || featured,
               'bg-primary text-white':
-                typeof category === 'undefined' && !featured,
+                typeof category === 'undefined' && typeof country === 'undefined' && !featured,
             }"
             @click="
+              country = undefined;
               category = undefined;
               featured = false;
             "
           >
             All
+          </button>
+          <button
+            v-for="c in countries"
+            :key="`live-tv-cat-tab-${c}`"
+            :class="{
+              'btn btn-gray mr-1': true,
+              'text-dark': country !== c,
+              'bg-primary text-white': country === c,
+            }"
+            @click="
+              category = undefined;
+              country = c;
+              featured = false;
+            "
+          >
+            {{ c ? countryNameFromCode(c) : "Other countries" }}
           </button>
           <button
             v-for="cat in categories"
@@ -93,7 +111,10 @@
               'text-dark': category !== cat,
               'bg-primary text-white': category === cat,
             }"
-            @click="category = cat"
+            @click="
+              country = undefined;
+              category = cat;
+            "
           >
             {{ cat }}
           </button>
@@ -112,9 +133,7 @@
               'channel-button': true,
               'channel-button-current': currentChannel === channel,
             }"
-            v-for="channel in channels.filter((c) =>
-              category ? c.category === category : featured ? c.featured : true
-            )"
+            v-for="channel in filteredChannels"
             :key="`channel-button-${channel.url}`"
             :data-url="channel.url"
             @click="setChannel(channel)"
@@ -151,7 +170,8 @@ import axios from "axios";
 import Config from "@/lib/config";
 import Papa from "papaparse";
 import Helper from "@/lib/helper";
-import Vue from 'vue';
+import Vue from "vue";
+import CountryCodeLookup from "country-code-lookup";
 
 export default {
   data() {
@@ -159,6 +179,7 @@ export default {
       channels: undefined,
       currentChannel: undefined,
       category: undefined,
+      country: undefined,
       featured: false,
       portrait: true,
       bannedChannels: {
@@ -170,6 +191,7 @@ export default {
         zh: ["arirang", "cgtn", "rt", "新唐人"],
       },
       categories: [],
+      countries: [],
     };
   },
   computed: {
@@ -193,6 +215,16 @@ export default {
     },
     hasFeatured() {
       return this.channels.find((c) => c.featured);
+    },
+    filteredChannels() {
+      let channels = this.channels;
+      channels = channels.filter((c) => {
+        if (this.featured) return c.featured;
+        if (this.category) return c.category === this.category;
+        if (this.country) return c.countries.includes(this.country);
+        return true
+      });
+      return channels;
     },
   },
   created() {
@@ -242,12 +274,8 @@ export default {
         else this.currentChannel = channels[0];
       }
       if (this.hasFeatured) this.featured = true;
-      let categories = this.channels.map((c) => {
-        if (!c.category) c.category = "Misc";
-        return c.category;
-      });
-      categories = Helper.unique(categories);
-      this.categories = categories;
+      this.loadCategories();
+      this.loadCountries();
     }
   },
   methods: {
@@ -255,10 +283,34 @@ export default {
       this.currentChannel = channel;
     },
     logoLoadError(channel) {
-      Vue.delete(channel, 'logo')
+      Vue.delete(channel, "logo");
+    },
+    loadCategories() {
+      let categories = this.channels.map((c) => {
+        if (!c.category) c.category = "Misc";
+        return c.category;
+      });
+      categories = Helper.unique(categories);
+      this.categories = categories;
+    },
+    loadCountries() {
+      let countries = [];
+      for (let c of this.channels) {
+        if (!c.countries) c.countries = [];
+        else c.countries = c.countries.split("|");
+        countries = countries.concat(c.countries);
+      }
+      countries = Helper.unique(countries);
+      this.countries = countries;
     },
     onResize() {
       this.portrait = Helper.portrait();
+    },
+    countryNameFromCode(code) {
+      if (code === 'cn') return 'China (Mainland)'
+      let country = CountryCodeLookup.byInternet(code.toUpperCase());
+      if (country) return country.country;
+      else return code;
     },
   },
 };
