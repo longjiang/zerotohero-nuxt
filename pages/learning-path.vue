@@ -47,22 +47,12 @@
       <div class="level">
         <h4 class="level-title">Getting to know {{ $l2.name }}</h4>
         <div v-if="$l2.omniglot" class="level-activity">
-          <Resource
-            :resource="{
-              title: `Basic information, useful phrases`,
-              url: `/${$l1.code}/${
-                $l2.code
-              }/book/chapter?url=https%3A%2F%2Fwww.omniglot.com%2Fwriting%2F${encodeURIComponent(
-                $l2.omniglot
-              )}`,
-              thumbnail: '/img/omniglot-banner.jpg',
-            }"
-            :internal="true"
-          />
+          <Resource :resource="omniglot" :internal="false" />
         </div>
       </div>
       <div
         v-for="(level, index) in levels"
+        :key="`learning-path-level-${index}`"
         class="level"
         :data-learning-path-level="level.cefr"
       >
@@ -148,10 +138,7 @@
           />
         </div>
         <template
-          v-if="
-            resources[level.cefr] &&
-            resources[level.cefr].length > 0
-          "
+          v-if="resources[level.cefr] && resources[level.cefr].length > 0"
         >
           <div class="level-activity">
             <p>
@@ -227,7 +214,7 @@
 <script>
 import Resource from "@/components/Resource";
 import Config from "@/lib/config";
-import axios from 'axios'
+import axios from "axios";
 
 export default {
   components: {
@@ -286,6 +273,15 @@ export default {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
+    omniglot() {
+      let url = "https://www.omniglot.com/writing/" + this.$l2.omniglot;
+      url = url.replace(/[^/]+\/\.\./, "");
+      return {
+        title: `Basic information, useful phrases`,
+        url,
+        thumbnail: "/img/omniglot-banner.jpg",
+      };
+    },
   },
   async fetch() {
     await this.loadHours();
@@ -298,9 +294,9 @@ export default {
       let response = await axios.get(
         `${Config.wiki}items/exams?filter[l2][eq]=${this.$l2.id}`
       );
-      response = response.data
+      response = response.data;
       let exams = response.data || [];
-      let result = {}
+      let result = {};
       for (let exam of exams) {
         for (let level of this.levels) {
           if (exam.level && ["all", level.number].includes(exam.level)) {
@@ -309,15 +305,15 @@ export default {
           }
         }
       }
-      return result
+      return result;
     },
     async loadCourses() {
       let response = await axios.get(
         `${Config.wiki}items/resources?filter[l2][eq]=${this.$l2.id}&filter[type][eq]=courses&filter[featured][eq]=1&fields=*,thumbnail.*`
       );
-      response = response.data
+      response = response.data;
       let courses = response.data || [];
-      let result = {}
+      let result = {};
       for (let course of courses) {
         for (let level of this.levels) {
           if (course.level && course.level.includes(level.number)) {
@@ -326,14 +322,14 @@ export default {
           }
         }
       }
-      return result
+      return result;
     },
     async loadResources() {
       let response = await axios.get(
         `${Config.wiki}items/resources?filter[l2][eq]=${this.$l2.id}&filter[type][neq]=courses&filter[featured][eq]=1&fields=*,thumbnail.*`
       );
-      response = response.data
-      let result = {}
+      response = response.data;
+      let result = {};
       let resources = response.data || [];
       for (let resource of resources) {
         for (let level of this.levels) {
@@ -343,7 +339,7 @@ export default {
           }
         }
       }
-      return result
+      return result;
     },
     loadHours() {
       let hours = this.$l2.hours || 1100;
