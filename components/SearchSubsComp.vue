@@ -368,19 +368,6 @@ export default {
         this.$refs[`youtube-${this.hitIndex}`].pause();
     }, 800);
   },
-  destroyed() {
-    if (this.keyboard) this.unbindKeys();
-  },
-  unmounted() {
-    if (this.keyboard) this.unbindKeys();
-  },
-  deactivated() {
-    if (this.keyboard) this.unbindKeys();
-  },
-  updated() {
-    if (this.keyboard) this.unbindKeys();
-    if (this.keyboard) this.bindKeys();
-  },
   watch: {
     regex() {
       if (!this.unfilteredHits) this.unfilteredHits = this.hits;
@@ -397,14 +384,6 @@ export default {
       }
       this.collectContext(hits);
       this.$emit("updated", hits);
-    },
-    currentHit() {
-      // if (this.navigated && this.$hasFeature("speech")) {
-      //   if (this.prevHit && this.prevHit.video.id === this.currentHit.video.id)
-      //     return;
-      //   window.speechSynthesis.cancel();
-      //   Helper.speak(this.currentHit.line, this.$l2, 1);
-      // }
     },
   },
   computed: {
@@ -741,81 +720,6 @@ export default {
     },
     toggleFullscreen() {
       if (this.hits.length > 0) this.fullscreen = !this.fullscreen;
-    },
-    bindKeys() {
-      document.addEventListener("keydown", this.keydown);
-    },
-    unbindKeys() {
-      document.removeEventListener("keydown", this.keydown);
-    },
-    keydown(e) {
-      if (
-        !["INPUT", "TEXTAREA"].includes(e.target.tagName.toUpperCase()) &&
-        !e.metaKey &&
-        !e.repeat &&
-        !e.target.getAttribute("contenteditable") &&
-        this.$refs[`youtube-${this.hitIndex}`]
-      ) {
-        // left = 37
-        if (e.keyCode == 37 && e.shiftKey) {
-          this.goToPrevHit();
-          e.preventDefault();
-          return false;
-        }
-        if (e.code == "KeyM") {
-          this.toggleSpeed();
-          e.preventDefault();
-          return false;
-        }
-        // right = 39
-        if (e.keyCode == 39 && e.shiftKey) {
-          this.goToNextHit();
-          e.preventDefault();
-          return false;
-        }
-        // right = 39
-        if (e.code == "KeyD") {
-          this.goToNextHit();
-          e.preventDefault();
-          return false;
-        }
-        // up = 38, left = 37
-        if (e.keyCode == 38 || (e.keyCode == 37 && !e.shiftKey)) {
-          this.goToPreviousLine();
-          e.preventDefault();
-          return false;
-        }
-        // down = 40, right = 39
-        if (e.keyCode == 40 || (e.keyCode == 39 && !e.shiftKey)) {
-          this.goToNextLine();
-          e.preventDefault();
-          return false;
-        }
-        // r = 82
-        if (e.keyCode == 82) {
-          this.rewind();
-          e.preventDefault();
-          return false;
-        }
-        // spacebar = 32
-        if (e.keyCode == 32) {
-          this.togglePaused();
-          e.preventDefault();
-          return false;
-        }
-        // f = 70
-        if (e.keyCode == 70) {
-          if (this.fullscreenToggle) this.toggleFullscreen();
-          e.preventDefault();
-          return false;
-        }
-        // escape = 27
-        if (e.keyCode == 27) {
-          if (this.fullscreenToggle) this.fullscreen = false;
-          e.preventDefault();
-          return false;
-        }
-      }
     },
   },
 };
