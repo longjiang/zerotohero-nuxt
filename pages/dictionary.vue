@@ -86,7 +86,8 @@ export default {
       entryKey: 0,
       paginatorKey: 0,
       sW: [],
-      dictionarySize: undefined
+      dictionarySize: undefined,
+      keysBound: false
     };
   },
   computed: {
@@ -150,7 +151,6 @@ export default {
     this.unbindKeys();
   },
   methods: {
-
     async getDictionarySize() {
       let dictionary = await this.$getDictionary();
       let size = await (await dictionary).getSize();
@@ -212,14 +212,15 @@ export default {
     },
 
     bindKeys() {
-      if (typeof window !== "undefined")
+      if (typeof window !== "undefined" && !this.keysBound) {
+        this.keysBound = true // bind only once!
         window.addEventListener("keydown", this.keydown);
+      }
     },
     unbindKeys() {
       if (typeof window !== "undefined")
         window.removeEventListener("keydown", this.keydown);
     },
-
     keydown(e) {
       if (
         !["INPUT", "TEXTAREA"].includes(e.target.tagName.toUpperCase()) &&
@@ -227,8 +228,7 @@ export default {
         !e.repeat &&
         !e.target.getAttribute("contenteditable")
       ) {
-        // home
-        if (e.keyCode == 36) {
+        if (e.code == 'Home') {
           document
             .getElementById("main")
             .scrollIntoView({ behavior: "smooth" });
@@ -236,16 +236,14 @@ export default {
           e.preventDefault();
           return false;
         }
-        // end
-        if (e.keyCode == 35) {
+        if (e.code == 'End') {
           document
             .getElementById("search-subs")
             .scrollIntoView({ behavior: "smooth" });
           e.preventDefault();
           return false;
         }
-        // n = 78
-        if (e.keyCode == 78) {
+        if (e.code == 'KeyN') {
           if (this.$refs.dictionaryEntry.$refs.entryHeader.nextPath) {
             this.$router.push(
               this.$refs.dictionaryEntry.$refs.entryHeader.nextPath
@@ -254,8 +252,7 @@ export default {
           e.preventDefault();
           return false;
         }
-        // p = 80
-        if (e.keyCode == 80) {
+        if (e.code == 'KeyP') {
           if (this.$refs.dictionaryEntry.$refs.entryHeader.prevPath) {
             this.$router.push(
               this.$refs.dictionaryEntry.$refs.entryHeader.prevPath
@@ -269,14 +266,14 @@ export default {
           let hit = this.$refs.dictionaryEntry.$refs.searchSubs.currentHit;
           if (hit.saved) {
             console.log(
-              "Key S - removing hit",
+              "Dictionary: Key S - removing hit",
               this.$refs.dictionaryEntry.$refs.searchSubs.terms,
               hit
             );
             this.$refs.dictionaryEntry.$refs.searchSubs.removeSavedHit(hit);
           } else {
             console.log(
-              "Key S - saving hit",
+              "Dictionary: Key S - saving hit",
               this.$refs.dictionaryEntry.$refs.searchSubs.terms,
               hit
             );
