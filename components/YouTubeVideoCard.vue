@@ -465,10 +465,10 @@ export default {
           }
           if (subs_l2) {
             subs_l2 = subs_l2.sort((a, b) => a.starttime - b.starttime);
-            this.firstLineTime = this.video.subs_l2[0].starttime;
+            this.firstLineTime = subs_l2[0].starttime;
             this.subsFile = file;
-            Vue.set(video, "subs_l2", subs_l2);
-            Vue.set(video, "hasSubs", true);
+            Vue.set(this.video, "subs_l2", subs_l2);
+            Vue.set(this.video, "hasSubs", true);
           }
         };
       } catch (err) {}
