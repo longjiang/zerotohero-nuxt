@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid youtube-with-transcript">
-    <div v-if="layout === 'horizontal'" class="row">
+    <div v-if="layout === 'horizontal'" :class="`row youtube-with-transcript-${layout}`">
       <div
         :class="{
           'youtube-video-column col-sm-12 mb-4 p-0': true,
@@ -432,8 +432,12 @@ export default {
         this.currentTime = currentTime;
         this.$emit("currentTime", this.currentTime);
       }
-      if (this.$refs.transcript)
+      if (this.$refs.transcript) {
         this.$refs.transcript.currentTime = currentTime;
+        this.$refs.videoControls.currentLine = this.$refs.transcript.currentLine
+      }
+        
+      
     },
     goToPreviousLine() {
       if (this.$refs.transcript) this.$refs.transcript.goToPreviousLine();

@@ -119,10 +119,7 @@
         v-for="(line, index) in sortedLines"
         :class="{
           'youtube-view-line-list-item': true,
-          active:
-            $refs.youtube &&
-            $refs.youtube.$refs.transcript &&
-            $refs.youtube.$refs.transcript.currentLine === line,
+          active: currentLine === line,
         }"
         :key="`video-line-list-${index}`"
         @click="
@@ -168,6 +165,7 @@ export default {
       audioMode: false,
       sortedLines: undefined,
       collapsed: false,
+      currentLine: undefined
     };
   },
   computed: {
@@ -293,17 +291,24 @@ export default {
 }
 
 .youtube-view-line-list {
-  position: fixed;
-  width: 20rem;
-  max-height: calc(100vh - 15rem);
   overflow: scroll;
   border-radius: 0.3rem;
   background: white;
   z-index: 10;
-  left: calc(50vw - 10rem);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-  bottom: 6rem;
+  position: fixed;
+  top: 0;
+  left: calc(50% - 9rem);
+  max-width: calc(100vw - 50% + 9rem - 1rem);
+  max-height: calc(100vh - 100vw * 9 / 16 - 2rem);
 }
+
+@media screen and (orientation: landscape) {
+  .youtube-view-line-list {
+    max-height: calc(100vh - 50vw * 9 / 16 - 2rem);
+  }
+}
+
 
 .youtube-view-line-list .youtube-view-line-list-item {
   padding: 0.2rem 0.7rem;
