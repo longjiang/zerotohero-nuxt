@@ -50,6 +50,7 @@ export default {
 }
 .video-wrapper video {
   width: 100%;
+  display: block;
 }
 .play-button {
   background: rgba(0, 0, 0, 0.5);
