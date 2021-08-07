@@ -126,7 +126,7 @@
         }"
         :key="`video-line-list-${index}`"
         @click="
-          $refs.youtube.goToLine(line);
+          goToLine(line)
           showList = !showList;
         "
       >
@@ -217,6 +217,9 @@ export default {
     },
     toggleFullscreenMode() {
       this.$emit("toggleFullscreenMode");
+    },
+    goToLine(line) {
+      this.$emit("goToLine", line);
     },
     rewind() {
       this.$emit("rewind");
