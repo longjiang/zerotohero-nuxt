@@ -12,8 +12,9 @@
           'feature-icon mr-1': true,
           transparent: !hasLiveTV(english, language),
         }"
+        title="Live TV"
       >
-        <i class="fa fa-tv" />
+        <i class="fa fa-broadcast-tower" />
       </router-link>
       <router-link
         :to="`${base}youtube/browse/all/all/0`"
@@ -21,8 +22,9 @@
           'feature-icon mr-1': true,
           transparent: !hasYouTube(english, language),
         }"
+        title="Videos"
       >
-        <i class="fab fa-youtube" />
+        <i class="fa fa-play-circle" />
       </router-link>
       <router-link
         :to="`${base}dictionary`"
@@ -30,6 +32,7 @@
           'feature-icon mr-1': true,
           transparent: !hasDictionary(english, language),
         }"
+        title="Dictionary"
       >
         <i class="fas fa-book" />
       </router-link>

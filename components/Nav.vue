@@ -207,14 +207,14 @@ export default {
           children: [
             {
               name: "live-tv",
-              icon: "fa fa-tv",
+              icon: "fa fa-broadcast-tower",
               title: "Live TV",
               show: this.hasLiveTV,
             },
             {
               name: "tv-shows",
               icon: "fa fa-tv",
-              title: "{l2} TV Shows",
+              title: "TV Shows",
               show: this.hasTVShows,
             },
             {
@@ -224,36 +224,36 @@ export default {
             {
               path: this.musicPath,
               icon: "fa fa-music",
-              title: `{l2} Music`,
+              title: `Music`,
               show: this.musicPath,
             },
             {
               path: this.moviesPath,
               icon: "fa fa-film",
-              title: `{l2} Movies`,
+              title: `Movies`,
               show: this.moviesPath,
             },
             {
               path: this.newsPath,
               icon: "fa fa-newspaper",
-              title: `{l2} News`,
+              title: `News`,
               show: this.newsPath,
             },
             {
               name: "talks",
               icon: "fas fa-graduation-cap",
-              title: `{l2} Talks`,
+              title: `Talks`,
               show: this.hasTalks,
             },
             {
               name: "youtube-browse",
-              title: `{l2} Videos`,
+              title: `Videos`,
               icon: "fa fa-play",
               show: true,
             },
             {
               name: "youtube-search",
-              title: `Search {l2} YouTube`,
+              title: `Search YouTube`,
               icon: "fas fa-search",
               show: true,
             },
