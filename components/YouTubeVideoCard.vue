@@ -35,11 +35,19 @@
         />
       </router-link>
       <div class="media-body">
-        <div class="small mb-2" style="color: #aaa" v-if="video.date && view !== 'list'">
+        <div
+          class="small mb-2"
+          style="color: #aaa"
+          v-if="video.date && view !== 'list'"
+        >
           {{ formatDate(video.date) }}
         </div>
         <div class="font-weight-bold">
-          <span contenteditable="true" v-if="$adminMode && view !== 'list'" @blur="saveTitle">
+          <span
+            contenteditable="true"
+            v-if="$adminMode && view !== 'list'"
+            @blur="saveTitle"
+          >
             {{ video.title }}
           </span>
           <router-link
@@ -255,6 +263,7 @@ import { parseSync } from "subtitle";
 import Vue from "vue";
 import moment from "moment";
 import assParser from "ass-parser";
+import languageEncoding from "detect-file-encoding-and-language";
 
 export default {
   components: {
@@ -428,11 +437,14 @@ export default {
         this.subsUpdated = true;
       }
     },
-    importSrt(file) {
+    async importSrt(file) {
       let extension = file.name.split(".").pop().toLowerCase();
       try {
         let reader = new FileReader();
-        reader.readAsText(file);
+        let encoding = "UTF-8";
+        let fileInfo = await languageEncoding(file);
+        if (fileInfo) encoding = fileInfo.encoding;
+        reader.readAsText(file, encoding);
         reader.onload = (event) => {
           let str = event.target.result;
           let subs_l2;
