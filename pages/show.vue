@@ -29,6 +29,7 @@
             <b-input-group class="flex-1">
               <b-form-input
                 v-model="keyword"
+                :lazy="true"
                 @compositionend.prevent.stop="() => false"
                 placeholder="Filter by video title..."
               />
@@ -39,10 +40,17 @@
               </b-input-group-append>
             </b-input-group>
             <b-button-group>
-              <b-button :variant="view === 'grid' ? 'primary' : 'secondary'" class="ml-2" @click="view = 'grid'">
+              <b-button
+                :variant="view === 'grid' ? 'primary' : 'secondary'"
+                class="ml-2"
+                @click="view = 'grid'"
+              >
                 <i class="fas fa-th"></i>
               </b-button>
-              <b-button :variant="view === 'list' ? 'primary' : 'secondary'"  @click="view = 'list'">
+              <b-button
+                :variant="view === 'list' ? 'primary' : 'secondary'"
+                @click="view = 'list'"
+              >
                 <i class="fas fa-list"></i>
               </b-button>
             </b-button-group>
@@ -66,7 +74,7 @@
           </div>
           <template v-if="videos && videos.length > 0">
             <YouTubeVideoList
-              :videos="filteredVideos"
+              :videos="videos"
               :checkSubs="false"
               ref="youtubeVideoList"
               :checkSaved="false"
@@ -85,7 +93,7 @@
 import Config from "@/lib/config";
 import Helper from "@/lib/helper";
 import axios from "axios";
-import { tify } from "chinese-conv";
+import { tify, sify } from "chinese-conv";
 
 export default {
   props: {
@@ -101,7 +109,7 @@ export default {
       perPage: 96,
       count: undefined,
       keyword: "",
-      view: 'grid'
+      view: "grid",
     };
   },
   async fetch() {
@@ -113,9 +121,29 @@ export default {
       });
     }
   },
+  watch: {
+    async keyword() {
+      let keywords = [this.keyword];
+      if (this.$l2.han) {
+        keywords.push(tify(this.keyword));
+        keywords.push(sify(this.keyword));
+      }
+      keywords = Helper.unique(keywords);
+      let videos = [];
+
+      for (let keyword of keywords) {
+        videos = videos.concat(
+          await this.getVideos({
+            keyword,
+          })
+        );
+      }
+      this.videos = videos;
+    },
+  },
   methods: {
     async visibilityChanged(isVisible) {
-      if (this.videos && isVisible) {
+      if (this.videos && isVisible && !this.keyword) {
         this.moreVideos = 1 + this.moreVideos + this.perPage;
         let newVideos = await this.getVideos({
           limit: this.perPage,
@@ -132,14 +160,15 @@ export default {
         return response.data.data;
       }
     },
-    async getVideos({ limit = 500, offset = 0 } = {}) {
+    async getVideos({ keyword, limit = 500, offset = 0 } = {}) {
       let sort = this.show.title === "News" ? "-date" : "title";
+      let keywordFilter = keyword ? `&filter[title][contains]=${keyword}` : "";
       let response = await axios.get(
         `${Config.wiki}items/youtube_videos?filter[l2][eq]=${
           this.$l2.id
         }&filter[${this.collection}][eq]=${
           this.show.id
-        }&fields=channel_id,id,lesson,level,title,topic,youtube_id,date,tv_show.*,talk.*&sort=${sort}&limit=${limit}&offset=${offset}&timestamp=${
+        }${keywordFilter}&fields=channel_id,id,lesson,level,title,topic,youtube_id,date,tv_show.*,talk.*&sort=${sort}&limit=${limit}&offset=${offset}&timestamp=${
           this.$adminMode ? Date.now() : 0
         }&meta=filter_count`
       );
@@ -174,21 +203,6 @@ export default {
     $adminMode() {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
-    },
-    filteredVideos() {
-      if (this.videos) {
-        if (this.keyword) {
-          let k = this.$l2.han ? tify(this.keyword) : this.keyword;
-          k = k.toLowerCase();
-          return this.videos.filter((v) => {
-            let title = this.$l2.han ? tify(v.title) : v.title;
-            title = title.toLowerCase();
-            return title.includes(k);
-          });
-        } else {
-          return this.videos;
-        }
-      }
     },
   },
 };
