@@ -16,7 +16,8 @@
             v-model="title"
           ></b-form-input>
           <b-form-input
-            v-model.lazy="sourceURL"
+            v-model="sourceURL"
+            :lazy="true"
             class="mt-2 mb-2"
             placeholder="Source URL"
           ></b-form-input>
@@ -32,7 +33,8 @@
         <div class="col-md-6">
           <div class="mt-2 mb-2">Input CSV:</div>
           <b-form-textarea
-            v-model.lazy="csv"
+            v-model="csv"
+            :lazy="true"
             style="height: calc(100vh - 30rem)"
           ></b-form-textarea>
           <div class="mt-3">

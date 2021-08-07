@@ -212,7 +212,8 @@
             <b>{{ video.l2Locale || $l2.code }}</b>
             <input
               type="text"
-              v-model.lazy="firstLineTime"
+              v-model="firstLineTime"
+              :lazy="true"
               :style="`width: ${String(firstLineTime).length + 1}em`"
               class="ml-1 mr-1 btn btn-small"
             />

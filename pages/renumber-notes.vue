@@ -10,14 +10,16 @@
         <div class="col-md-6">
           Input text:
           <b-form-textarea
-            v-model.lazy="text"
+            v-model="text"
+            :lazy="true"
             style="height: calc(100vh - 10rem)"
           ></b-form-textarea>
         </div>
         <div class="col-md-6">
           Output text:
           <b-form-textarea
-            v-model.lazy="output"
+            v-model="output"
+            :lazy="true"
             style="height: calc(100vh - 10rem)"
           ></b-form-textarea>
         </div>

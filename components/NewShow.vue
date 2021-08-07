@@ -2,7 +2,8 @@
   <div>
     <b-form-input
       type="text"
-      v-model.lazy="newShowTitle"
+      v-model="newShowTitle"
+      :lazy="true"
       placeholder="Title"
       size="sm"
     />

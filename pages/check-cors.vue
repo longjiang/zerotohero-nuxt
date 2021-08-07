@@ -22,20 +22,23 @@
         <div class="col-md-6">
           Enter a list of URLs to check ({{ urls.split("\n").filter(l => l !== '').length}}):
           <b-form-textarea
-            v-model.lazy="urls"
+            v-model="urls"
+            :lazy="true"
             style="height: calc(100vh - 10rem)"
           ></b-form-textarea>
         </div>
         <div class="col-md-6">
           Allowed URLs ({{ allowed.split("\n").filter(l => l !== '').length}}):
           <b-form-textarea
-            v-model.lazy="allowed"
+            v-model="allowed"
+            :lazy="true"
             style="height: calc(48vh - 5rem)"
             class="mb-3"
           ></b-form-textarea>
           Blocked URLs ({{ blocked.split("\n").filter(l => l !== '').length}}):
           <b-form-textarea
-            v-model.lazy="blocked"
+            v-model="blocked"
+            :lazy="true"
             style="height: calc(48vh - 5rem)"
           ></b-form-textarea>
         </div>

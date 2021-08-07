@@ -192,7 +192,8 @@
       >
         First line starts at
         <b-form-input
-          v-model.lazy="firstLineTime"
+          v-model="firstLineTime"
+          :lazy="true"
           type="text"
           placeholder="0"
           class="d-inline-block ml-1"
