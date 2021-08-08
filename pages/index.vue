@@ -5,6 +5,10 @@
 </router>
 <template>
   <div>
+    <SocialHead
+      title="Zero to Hero Languages | Master any language by comprehensible input."
+      description="We provide live TV channels in the target language, TV shows with subtitles, music with lyrics, phrasebooks with video examples... everything that can help you to learn a language “by osmosis.” We are also known for our “Chinese Zero to Hero” and “English Zero to Hero” online language courses."
+    />
     <div
       class="container-fluid pt-4"
       style="overflow: hidden; position: relative"
@@ -320,10 +324,14 @@
         <div class="home-card mb-5">
           <h5 class="text-center">Even More Languages</h5>
           <Choose :compact="true" />
-          <SocialHead
-            title="Zero to Hero Languages | Master any language by comprehensible input."
-            description="We provide live TV channels in the target language, TV shows with subtitles, music with lyrics, phrasebooks with video examples... everything that can help you to learn a language “by osmosis.” We are also known for our “Chinese Zero to Hero” and “English Zero to Hero” online language courses."
-          />
+        </div>
+        <div class="row mb-5">
+          <div class="col-sm-12">
+            <div class="home-card">
+              <h5 class="text-center">Languages by World GDP</h5>
+              <LazyLanguagesGDP />
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -331,7 +339,6 @@
 </template>
 
 <script>
-
 import { mapState } from "vuex";
 export default {
   mounted() {
@@ -365,7 +372,6 @@ export default {
     max-width: calc(50% - 2rem);
   }
 }
-
 
 .logo,
 .logo-constructed {
@@ -417,7 +423,6 @@ export default {
   max-width: 75%;
   display: block;
 }
-
 
 .home-card {
   background-color: hsla(0, 100%, 100%, 0.7);

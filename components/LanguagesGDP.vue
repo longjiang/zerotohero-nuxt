@@ -1,8 +1,7 @@
 <template>
   <div class="lang-gdp">
-    <h5 class="text-center">Top Languages by % of World GDP (PPP 2018)</h5>
-    <p class="text-center">
-      (
+    <p class="text-center text-secondary">
+      Languages by % of World GDP PPP 2018 (
       <a
         href="https://www.reddit.com/r/languagelearning/comments/9i72xd/the_20_languages_that_produce_86_of_the_worlds/"
         target="_blank"
@@ -11,6 +10,7 @@
       </a>
       )
     </p>
+
     <div
       v-for="lang of langs"
       :key="`lang-gdp-item-${lang.code}`"
@@ -18,12 +18,21 @@
       style="max-width: 30rem"
       :set="(path = `/${lang.code !== 'en' ? 'en' : 'zh'}/${lang.code}/`)"
     >
-      <div style="width: 7rem">
-        <NuxtLink :to="path" v-if="lang.code" class="text-primary link-unstyled">{{ lang.name }}</NuxtLink>
+      <div style="width: 7rem; color: #666">
+        <NuxtLink :to="path" v-if="lang.code" class="link-unstyled">
+          {{ lang.name }}
+        </NuxtLink>
         <div v-else>{{ lang.name }}</div>
       </div>
-      <b-progress :max="langs[0].gdp * 100" variant="success" style="flex: 1">
-        <b-progress-bar :value="lang.gdp * 100"></b-progress-bar>
+      <b-progress
+        :max="langs[0].gdp * 100"
+        variant="success"
+        style="flex: 1; background: none"
+      >
+        <b-progress-bar
+          :value="lang.gdp * 100"
+          class="gdp-progress-bar"
+        ></b-progress-bar>
       </b-progress>
       <div style="width: 3rem" class="ml-2 small">
         {{ Number(lang.gdp * 100).toFixed(2) }}%
@@ -41,7 +50,6 @@ export default {
       csv: `code	gdp
 en	0.206
 zh	0.2
-others	0.143
 es	0.064
 ar	0.047
 ja	0.042
@@ -59,7 +67,8 @@ bn	0.012
 nl	0.011
 th	0.01
 pl	0.009
-pa	0.008`,
+pa	0.008
+others	0.143`,
     };
   },
   props: {},
@@ -70,7 +79,7 @@ pa	0.008`,
         let language = this.$languages.getSmart(lang.code);
         lang.name = language.name;
       } else {
-        lang.name = "Others";
+        lang.name = "All others";
         delete lang.code;
       }
     }
@@ -80,5 +89,11 @@ pa	0.008`,
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
+.gdp-progress-bar {
+  background-color: #f4d03f;
+  background-image: linear-gradient(228deg, #f4d03f 0%, #16a085 100%);
+  background-size: 50vw;
+  border-radius: 0.5rem;
+}
 </style>

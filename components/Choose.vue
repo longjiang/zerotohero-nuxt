@@ -11,33 +11,6 @@
           <LanguageList :langs="languages" />
         </div>
       </div>
-      <div class="row">
-        <div class="col-sm-12">
-          <div class="mt-5">
-            <p>
-              <strong>This is an open-source project.</strong>
-              This website is built on
-              <code>Vue.js</code>
-              and is fully open source. Check out the code on GitHub at
-              <a href="https://github.com/longjiang/zerotohero-cli">
-                https://github.com/longjiang/zerotohero-cli
-              </a>
-              .
-            </p>
-          </div>
-          <div class="mt-5">
-            <p class="mb-4">
-              <strong>Credits:</strong>
-              <span v-html="dictionaryCredit"></span>
-              The collocations and example sentences are provided by
-              <a target="_blank" href="https://www.sketchengine.eu/">
-                SketchEngine
-              </a>
-              .
-            </p>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </template>

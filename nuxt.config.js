@@ -88,7 +88,7 @@ export default {
   ],
   bootstrapVue: {
     components: ['BFormInput', 'BFormGroup', 'BFormSelect', 'BFormTextarea', 'BFormSelectOption', 'BButton', 'BProgress', 'BTable', 
-    'BDropdown', 'BDropdownItem', 'BFormCheckbox', 'BFormRadio', 'BButtonGroup', 'BInputGroup', 'BInputGroupAppend', 'BInputGroupText', 'BDropdownDivider'],
+    'BDropdown', 'BDropdownItem', 'BFormCheckbox', 'BFormRadio', 'BButtonGroup', 'BInputGroup', 'BInputGroupAppend', 'BInputGroupText', 'BDropdownDivider', 'BProgressBar'],
   },
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
