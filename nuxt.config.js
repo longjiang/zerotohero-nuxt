@@ -28,7 +28,8 @@ export default {
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     'css-percentage-circle',
-    'video.js/dist/video-js.css'
+    'video.js/dist/video-js.css',
+    '@/assets/css/zerotohero.scss',
   ],
 
   router: {

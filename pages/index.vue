@@ -367,6 +367,58 @@ export default {
 }
 
 
+.logo,
+.logo-constructed {
+  -webkit-filter: drop-shadow(0 0 10px rgba(0, 0, 0, 1));
+  filter: drop-shadow(0 0 10px rgba(0, 0, 0, 1));
+  text-shadow: 0 0 10px rgba(0, 0, 0, 1);
+}
+
+.czh-links,
+.ezh-links {
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 768px) {
+  .czh-links,
+  .ezh-links {
+    column-count: 2;
+    column-gap: 1rem;
+  }
+}
+
+.czh-links a,
+.ezh-links a {
+  color: #333;
+  font-size: 0.8em;
+}
+
+.z2h-logo {
+  color: white;
+  text-align: center;
+  display: block;
+  -webkit-filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.7));
+  filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.7));
+  text-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+}
+
+.z2h-slogan {
+  max-height: 10rem;
+  position: absolute;
+  right: 1rem;
+  -webkit-filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.7));
+  filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.7));
+}
+
+.czh-logo,
+.ezh-logo {
+  width: 12rem;
+  max-width: 75%;
+  display: block;
+}
+
+
 .home-card {
   background-color: hsla(0, 100%, 100%, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.9);
