@@ -115,30 +115,32 @@
 
         <footer class="bg-dark text-light pt-4 pb-4" style="z-index: -1">
           <Choose :compact="true" />
-          <div class="row">
-            <div class="col-sm-12">
-              <div class="mt-5">
-                <p>
-                  <strong>This is an open-source project.</strong>
-                  This website is built on
-                  <code>Vue.js</code>
-                  and is fully open source. Check out the code on GitHub at
-                  <a href="https://github.com/longjiang/zerotohero-cli">
-                    https://github.com/longjiang/zerotohero-cli
-                  </a>
-                  .
-                </p>
-              </div>
-              <div class="mt-5">
-                <p class="mb-4">
-                  <strong>Credits:</strong>
-                  <span v-html="dictionaryCredit"></span>
-                  The collocations and example sentences are provided by
-                  <a target="_blank" href="https://www.sketchengine.eu/">
-                    SketchEngine
-                  </a>
-                  .
-                </p>
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="mt-5">
+                  <p>
+                    <strong>This is an open-source project.</strong>
+                    This website is built on
+                    <code>Vue.js</code>
+                    and is fully open source. Check out the code on GitHub at
+                    <a href="https://github.com/longjiang/zerotohero-nuxt">
+                      https://github.com/longjiang/zerotohero-nuxt
+                    </a>
+                    .
+                  </p>
+                </div>
+                <div class="mt-5">
+                  <p class="mb-4">
+                    <strong>Credits:</strong>
+                    <span v-html="dictionaryCredit"></span>
+                    The collocations and example sentences are provided by
+                    <a target="_blank" href="https://www.sketchengine.eu/">
+                      SketchEngine
+                    </a>
+                    .
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -163,6 +165,7 @@ export default {
       focus: false,
       loaded: false,
       classes: {},
+      dictionaryCredit: "",
     };
   },
   async mounted() {
@@ -182,6 +185,10 @@ export default {
     });
     this.$ga.page(this.$route.path);
     smoothscroll.polyfill(); // Safari does not support smoothscroll
+    let dictionary = await this.$getDictionary();
+    if (dictionary) {
+      this.dictionaryCredit = await dictionary.credit();
+    }
   },
   watch: {
     $route() {
@@ -272,7 +279,6 @@ export default {
   z-index: 99;
 }
 
-
 .zth-header {
   background-image: url(/img/background-branch.jpg);
   background-attachment: fixed;
@@ -288,7 +294,6 @@ export default {
   }
 }
 
-
 .site-top-bar {
   background-color: rgba(29, 29, 29, 0.5);
   position: absolute;
@@ -300,7 +305,6 @@ export default {
   }
 }
 
-
 .btn-sign-in {
   font-size: 0.8rem;
   text-decoration: none;
@@ -310,5 +314,4 @@ export default {
   height: 1.2rem;
   margin-bottom: 0.2rem;
 }
-
 </style>

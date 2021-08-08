@@ -27,7 +27,6 @@ export default {
   data() {
     return {
       languages: [],
-      dictionaryCredit: "",
     };
   },
   methods: {
@@ -50,10 +49,6 @@ export default {
     },
   },
   async mounted() {
-    let dictionary = await this.$getDictionary();
-    if (dictionary) {
-      this.dictionaryCredit = await dictionary.credit();
-    }
     this.languages = this.$languages.l1s
       .filter(
         (language) => ["A", "C", "L", "E", "H"].includes(language.type) // Only living, extinct or historical languages (exclusing special codes 'S' and macro languages 'M')

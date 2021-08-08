@@ -16,7 +16,7 @@
       :key="`lang-gdp-item-${lang.code}`"
       class="d-flex mt-1 mb-1 ml-auto mr-auto"
       style="max-width: 30rem"
-      :set="(path = `/${lang.code !== 'en' ? 'en' : 'zh'}/${lang.code}/`)"
+      :set="(path = `/en/${lang.code}/`)"
     >
       <div style="width: 7rem; color: #666">
         <NuxtLink :to="path" v-if="lang.code" class="link-unstyled">
