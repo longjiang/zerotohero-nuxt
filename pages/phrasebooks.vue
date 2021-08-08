@@ -38,18 +38,11 @@
       >
         <div class="media rounded shadow phrasebook">
           <router-link
-            class="link-unstyled"
+            :class="`link-unstyled bg-gradient-${phrasebook.title.length.toString().split('').pop()}`"
             :to="`/${$l1.code}/${$l2.code}/phrasebook/${phrasebook.id}/`"
+            style="width: 100%; display: block; padding: 1rem 0 0.5rem 2rem; color: rgba(255,255,255,0.4); font-size: 5em; overflow: hidden;"
           >
-            <WebImages
-              class="phrasebook-cover-image"
-              :text="
-                phrasebook.title.replace(/top|phrases/gi, '') + ' drama photo'
-              "
-              :link="false"
-              :hover="false"
-              limit="1"
-            />
+            <i class="fas fa-book"></i>
           </router-link>
           <div class="media-body">
             <router-link
@@ -160,5 +153,51 @@ export default {
     margin: 0;
     max-width: 100%;
   }
+}
+.bg-gradient-0 {
+  background-color: #faaca8;
+  background-image: linear-gradient(45deg, #faaca8 0%, #ddd6f3 100%);
+}
+
+.bg-gradient-1 {
+  background-color: #4158d0;
+  background-image: linear-gradient(
+    43deg,
+    #4158d0 0%,
+    #c850c0 46%,
+    #ffcc70 100%
+  );
+}
+.bg-gradient-2 {
+  background-color: #0093e9;
+  background-image: linear-gradient(43deg, #0093e9 0%, #80d0c7 100%);
+}
+.bg-gradient-3 {
+  background-color: #0093e9;
+  background-image: linear-gradient(43deg, #0093e9 0%, #80d0c7 100%);
+}
+.bg-gradient-4 {
+  background-color: #0093e9;
+  background-image: linear-gradient(43deg, #0093e9 0%, #80d0c7 100%);
+}
+.bg-gradient-5 {
+  background-color: #0093e9;
+  background-image: linear-gradient(43deg, #0093e9 0%, #80d0c7 100%);
+}
+.bg-gradient-6 {
+  background-color: #ffe53b;
+  background-image: linear-gradient(43deg, #ffe53b 0%, #ff2525 74%);
+}
+.bg-gradient-7 {
+  background-color: #fbda61;
+  background-image: linear-gradient(43deg, #fbda61 0%, #ff5acd 100%);
+}
+.bg-gradient-8 {
+  background-color: #fbda61;
+  background-image: linear-gradient(43deg, #fbda61 0%, #ff5acd 100%);
+}
+.bg-gradient-9 {
+  background-color: #faaca8;
+  background-image: linear-gradient(45deg, #faaca8 0%, #ddd6f3 100%);
 }
 </style>
