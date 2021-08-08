@@ -23,7 +23,7 @@
     </div>
     <div class="show-and-date mt-2">
       <router-link
-        class="btn btn-small bg-success text-white"
+        class="btn btn-small bg-secondary text-white"
         v-if="video.tv_show"
         :to="{
           name: 'show',

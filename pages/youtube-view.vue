@@ -65,6 +65,8 @@
         :showType="showType"
         :previousEpisode="previousEpisode"
         :nextEpisode="nextEpisode"
+        :episodes="episodes"
+        :episodeIndex="thisEpisodeIndex"
         @paused="updatePaused"
         @ended="updateEnded"
         @currentTime="updateCurrentTime"
@@ -126,18 +128,19 @@ export default {
       return this.video.id;
     },
     previousEpisode() {
-      let thisEpisodeIndex = this.episodes.findIndex(
-        (episode) => episode.id === this.video.id
-      );
+      let thisEpisodeIndex = this.thisEpisodeIndex
       if (thisEpisodeIndex > 0 && this.episodes[thisEpisodeIndex - 1])
         return `/${this.$l1.code}/${this.$l2.code}/youtube/view/${
           this.episodes[thisEpisodeIndex - 1].youtube_id
         }/`;
     },
-    nextEpisode() {
-      let thisEpisodeIndex = this.episodes.findIndex(
+    thisEpisodeIndex() {
+      return this.episodes.findIndex(
         (episode) => episode.id === this.video.id
       );
+    },
+    nextEpisode() {
+      let thisEpisodeIndex = this.thisEpisodeIndex
       if (this.episodes[thisEpisodeIndex + 1])
         return `/${this.$l1.code}/${this.$l2.code}/youtube/view/${
           this.episodes[thisEpisodeIndex + 1].youtube_id

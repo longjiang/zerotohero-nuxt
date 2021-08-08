@@ -1,6 +1,9 @@
 <template>
   <div class="container-fluid youtube-with-transcript">
-    <div v-if="layout === 'horizontal'" :class="`row youtube-with-transcript-${layout}`">
+    <div
+      v-if="layout === 'horizontal'"
+      :class="`row youtube-with-transcript-${layout}`"
+    >
       <div
         :class="{
           'youtube-video-column col-sm-12 mb-4 p-0': true,
@@ -18,7 +21,7 @@
             :starttime="start"
             :autoload="autoload"
             :autoplay="autoplay"
-            :class="{'d-none': collapsed}"
+            :class="{ 'd-none': collapsed }"
           />
           <VideoControls
             v-if="video"
@@ -59,8 +62,11 @@
               <i class="fas fa-info-circle"></i>
             </a>
           </h5>
-          <div style="color: #aaa" v-if="video.date" class="mb-2">
-            {{ formatDate(video.date) }}
+          <div style="color: #aaa" class="mb-2">
+            <span v-if="video.date">{{ formatDate(video.date) }}</span>
+            <span v-if="episodes.length">
+              · Video {{ episodeIndex + 1 }} of {{ episodes.length }}
+            </span>
           </div>
           <div
             :key="`youtube-video-info-${video.youtube_id}-${videoInfoKey}`"
@@ -91,6 +97,14 @@
             >
               Next
               <i class="fa fa-chevron-right"></i>
+            </router-link>
+            <router-link
+              v-if="episodes.length > 0"
+              :to="`/${this.$l1.code}/${this.$l2.code}/youtube/view/${this.randomEpisodeYouTubeId}`"
+              class="btn btn-small bg-secondary text-white"
+            >
+              <i class="fa fa-random"></i>
+              Random
             </router-link>
           </div>
           <VideoAdmin
@@ -151,6 +165,7 @@
               <i class="far fa-clone"></i>
               All Episodes
             </router-link>
+            {{ episodes.length }}
             <router-link
               v-if="nextEpisode"
               :to="nextEpisode"
@@ -245,6 +260,7 @@
 <script>
 import moment from "moment";
 import Vue from "vue";
+import Helper from "@/lib/helper";
 
 export default {
   props: {
@@ -265,6 +281,12 @@ export default {
     },
     nextEpisode: {
       type: String,
+    },
+    episodes: {
+      type: Array,
+    },
+    episodeIndex: {
+      type: Number,
     },
     initialLayout: {
       type: String,
@@ -314,7 +336,7 @@ export default {
       videoInfoKey: 0,
       speed: 1,
       layout: this.initialLayout,
-      collapsed: false
+      collapsed: false,
     };
   },
   computed: {
@@ -343,6 +365,10 @@ export default {
       let landscape =
         typeof window !== "undefined" && window.innerWidth > window.innerHeight;
       return landscape;
+    },
+    randomEpisodeYouTubeId() {
+      let episode = Helper.randomArrayItem(this.episodes);
+      return episode.youtube_id;
     },
   },
   updated() {
@@ -434,10 +460,9 @@ export default {
       }
       if (this.$refs.transcript) {
         this.$refs.transcript.currentTime = currentTime;
-        this.$refs.videoControls.currentLine = this.$refs.transcript.currentLine
+        this.$refs.videoControls.currentLine =
+          this.$refs.transcript.currentLine;
       }
-        
-      
     },
     goToPreviousLine() {
       if (this.$refs.transcript) this.$refs.transcript.goToPreviousLine();
