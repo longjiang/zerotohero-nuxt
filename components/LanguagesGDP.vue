@@ -27,14 +27,14 @@
       <b-progress
         :max="langs[0].gdp * 100"
         variant="success"
-        style="flex: 1; background: none"
+        style="flex: 1; background: none; margin-top: 0.2rem;"
       >
         <b-progress-bar
           :value="lang.gdp * 100"
           class="gdp-progress-bar"
         ></b-progress-bar>
       </b-progress>
-      <div style="width: 3rem" class="ml-2 small">
+      <div style="width: 3rem; margin-top: 0.15rem" class="ml-2 small">
         {{ Number(lang.gdp * 100).toFixed(2) }}%
       </div>
     </div>
