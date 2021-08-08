@@ -62,31 +62,22 @@
           </button>
         </div>
       </div>
-      <div class="row">
+      <div class="row" v-if="sketch && sketch.Gramrels">
         <div
+          v-for="(description, index) in colDescArray"
           class="col-sm-6 col-md-4 col-lg-3"
-          v-for="(description, name) in colDesc"
-          :key="`collocations-${name}`"
+          :key="`collocations-${index}`"
         >
-          <template
-            v-if="
-              !collapsed &&
-              sketch &&
-              sketch.Gramrels &&
-              getGramrelsByName(sketch.Gramrels, name)
-            "
-          >
-            <Collocation
-              class="mb-4"
-              :word="word"
-              :text="text"
-              :level="level"
-              :title="colDesc[name]"
-              :type="name"
-              :id="`collocation-${name}`"
-              :collocation="getGramrelsByName(sketch.Gramrels, name)"
-            ></Collocation>
-          </template>
+          <Collocation
+            class="mb-4"
+            :word="word"
+            :text="text"
+            :level="level"
+            :title="description.title"
+            :type="description.name"
+            :id="`collocation-${description.name}`"
+            :collocation="description.gramrel"
+          ></Collocation>
         </div>
       </div>
       <div
@@ -113,9 +104,13 @@
           <img
             src="/img/logo-sketch-engine.png"
             alt="Sketch Engine"
-            class="ml-2 logo-small"
+            class="ml-2 mr-2 logo-small"
           />
         </a>
+        <span v-if="corpname">
+          Corpus:
+          <code>{{ corpname.replace("preloaded/", "") }}</code>
+        </span>
       </div>
     </div>
   </div>
@@ -144,6 +139,7 @@ export default {
       sketch: undefined,
       collapsed: false,
       updating: false,
+      corpname: undefined,
       SketchEngine,
       Helper,
     };
@@ -226,11 +222,26 @@ export default {
     $hanzi() {
       return this.$getHanzi();
     },
+    colDescArray() {
+      let colDescArray = [];
+      for (let name in this.colDesc) {
+        let title = this.colDesc[name];
+        let description = {
+          title,
+          name,
+          gramrel: this.getGramrelsByName(this.sketch.Gramrels, name),
+        };
+        colDescArray.push(description);
+      }
+      colDescArray = colDescArray.filter((d) => d.gramrel);
+      return colDescArray;
+    },
   },
-  mounted() {
+  async mounted() {
     if (!this.updating) {
       this.update();
     }
+    this.corpname = await SketchEngine.corpname(this.$l2);
   },
   watch: {
     word() {

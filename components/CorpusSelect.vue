@@ -12,12 +12,10 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="corpus in corpora">
+        <tr v-for="(corpus, index) in corpora" :key="`corpora-select-row-${index}`">
           <td>
-            <input
-              type="radio"
+            <b-form-radio
               :value="corpus.corpname"
-              :checked="corpus.corpname === SketchEngine.corpname($l2)"
               v-model="corpname"
             />
           </td>
@@ -27,7 +25,7 @@
           </td>
           <td>{{ corpus.language_name }}</td>
           <td class="text-right">
-            {{ Intl.NumberFormat("en-US").format(corpus['wordcount']) }}
+            {{ Intl.NumberFormat("en-US").format(corpus.sizes.wordcount) }}
           </td>
           <td>
             {{ corpus.info }}
@@ -57,7 +55,7 @@ export default {
   data() {
     return {
       SketchEngine,
-      corpname: SketchEngine.corpname(this.$l2),
+      corpname: undefined,
       corpora: undefined
     };
   },
@@ -73,13 +71,13 @@ export default {
   },
   async mounted() {
     this.corpora = await this.getCorpora()
+    this.corpname = await SketchEngine.corpname(this.$l2)
   },
   watch: {
     corpname() {
       let corpnames = JSON.parse(localStorage.getItem("zthCorpnames")) || {};
       corpnames[this.$l2.code] = this.corpname;
       localStorage.setItem("zthCorpnames", JSON.stringify(corpnames));
-      location.reload(); // Otherwise users won't see the new collocations and example sentences, leaving them confused.
     },
   },
   methods: {
