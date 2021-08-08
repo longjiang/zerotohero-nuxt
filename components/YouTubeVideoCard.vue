@@ -68,6 +68,7 @@
               - {{ subsFile.name.replace(/[_.]/g, " ") }}
             </span>
           </div>
+          <span class="btn btn-small bg-danger text-white" v-if="video.youtube_id.includes('0x')">ID含`0x`，无法添加</span>
           <div
             v-if="
               video.checkingSubs === false &&
@@ -87,21 +88,13 @@
             Added
           </div>
           <b-button
-            v-if="checkSaved && !video.id && video.hasSubs"
+            v-if="checkSaved && !video.id && video.hasSubs && !video.youtube_id.includes('0x')"
             class="btn btn-small mt-2 ml-0"
             @click="getSubsAndSave(video)"
           >
             <i class="fas fa-plus mr-2"></i>
             Add
           </b-button>
-          <!-- <b-button
-          v-if="$adminMode && video.id && !video.channel_id"
-          class="btn btn-small mt-2 ml-0"
-          @click="addChannelID(video)"
-        >
-          <i class="fas fa-plus mr-2"></i>
-          Add Channel ID
-        </b-button> -->
           <router-link
             :class="{
               'btn btn-small mt-2 ml-0': true,

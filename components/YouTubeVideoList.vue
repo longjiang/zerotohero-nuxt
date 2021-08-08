@@ -185,7 +185,7 @@ export default {
   methods: {
     async checkSavedFunc(videos) {
       videos = videos.filter((v) => !v.id); // Only check those that are not saved
-      let youtube_ids = videos.map((v) => v.youtube_id);
+      let youtube_ids = videos.map((v) => v.youtube_id).filter(id => !id.includes('0x'));
       let chunks = Helper.arrayChunk(youtube_ids, 100);
       for (let youtube_ids of chunks) {
         let response = await axios.get(
