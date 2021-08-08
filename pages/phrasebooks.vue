@@ -20,49 +20,6 @@
           >
             <div class="heartbeat-loader"></div>
           </div>
-
-          <ul
-            class="list-unstyled p-0 mb-5 booklist"
-            v-if="phrasebooks && phrasebooks.length > 0"
-          >
-            <li
-              v-for="(phrasebook, phrasebookIndex) in phrasebooks"
-              class="text-center mb-5 booklist-item"
-              :key="`phrasebook-${phrasebookIndex}`"
-            >
-              <router-link
-                class="link-unstyled"
-                :to="`/${$l1.code}/${$l2.code}/phrasebook/${phrasebook.id}/`"
-              >
-                <div class="phrasebook-cover shadowed  mb-4">
-                  <WebImages
-                    class="phrasebook-cover-image"
-                    :text="
-                      phrasebook.title.replace(/top|phrases/gi, '') + ' drama photo'
-                    "
-                    :link="false"
-                    :hover="false"
-                    limit="1"
-                  />
-                  <img
-                    :src="`/img/book-thumb-${phrasebook.id % 10}.jpg`"
-                    class="book-thumb"
-                    data-not-lazy
-                  />
-                </div>
-                <h5 class="mt-3">{{ phrasebook.title }}</h5>
-                <div style="color: #999">({{ phrasebook.phrases.length }} phrases)</div>
-
-                <b-button
-                  v-if="$adminMode"
-                  class="btn btn-small bg-danger text-white mt-2 ml-0"
-                  @click.stop.prevent="remove(phrasebook)"
-                >
-                  <i class="fa fa-trash"></i>
-                </b-button>
-              </router-link>
-            </li>
-          </ul>
           <div
             class="text-center"
             v-if="phrasebooks && phrasebooks.length === 0"
@@ -72,17 +29,61 @@
         </div>
       </div>
     </div>
+    <div class="row mb-5" v-if="phrasebooks && phrasebooks.length > 0">
+      <div
+        v-for="(phrasebook, phrasebookIndex) in phrasebooks"
+        class="col-xs-12 col-sm-6 col-md-4 col-lg-3"
+        :key="`phrasebook-${phrasebookIndex}`"
+        style="padding-bottom: 2rem"
+      >
+        <div class="media rounded shadow phrasebook">
+          <router-link
+            class="link-unstyled"
+            :to="`/${$l1.code}/${$l2.code}/phrasebook/${phrasebook.id}/`"
+          >
+            <WebImages
+              class="phrasebook-cover-image"
+              :text="
+                phrasebook.title.replace(/top|phrases/gi, '') + ' drama photo'
+              "
+              :link="false"
+              :hover="false"
+              limit="1"
+            />
+          </router-link>
+          <div class="media-body">
+            <router-link
+              class="link-unstyled"
+              :to="`/${$l1.code}/${$l2.code}/phrasebook/${phrasebook.id}/`"
+            >
+              <h5 class="mt-3">{{ phrasebook.title }}</h5>
+            </router-link>
+            <div style="color: #999">
+              ({{ phrasebook.phrases.length }} phrases)
+            </div>
+
+            <b-button
+              v-if="$adminMode"
+              class="btn btn-small bg-danger text-white mt-2 ml-0"
+              @click.stop.prevent="remove(phrasebook)"
+            >
+              <i class="fa fa-trash"></i>
+            </b-button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import WordPhotos from '@/lib/word-photos'
+import WordPhotos from "@/lib/word-photos";
 
 export default {
   data() {
     return {
       phrasebooks: undefined,
-      images: []
+      images: [],
     };
   },
   computed: {
@@ -99,7 +100,7 @@ export default {
         return this.$store.state.settings.adminMode;
     },
     title() {
-      return `${this.$l2.name} Phrasebooks with Videos | ${this.$l2.name} Zero to Hero`
+      return `${this.$l2.name} Phrasebooks with Videos | ${this.$l2.name} Zero to Hero`;
     },
     description() {
       return `Learn ${this.$l2.name} phrases with multimedia phrasebooks! See how each phrase is used in TV shows, movies, music, etc.`;
@@ -147,24 +148,17 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.phrasebook-cover {
-  position: relative;
-  width: 109px;
-  height: 160px;
-  overflow: hidden;
-  margin: 0 auto;
+.phrasebook {
+  height: 100%;
 }
 .phrasebook-cover-image {
-  position: absolute;
-  z-index: 2;
-  top: 1.5rem;
-  left: 1.9rem;
-  width: 4.5rem;
-  overflow: hidden;
+  display: block;
   ::v-deep .image-wall-image {
-    width: 4.5rem;
-    height: 3rem;
     flex: 1 !important;
+    width: 100%;
+    margin-right: 0;
+    margin: 0;
+    max-width: 100%;
   }
 }
 </style>
