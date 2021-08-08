@@ -1269,9 +1269,9 @@ h6,
   display: block;
   text-align: center;
   font-weight: bold;
-  color: white;
-  background: #343a40;
-  padding: 0.2rem 1rem;
+  color: #203c44b0;
+  padding: 0.5rem 1rem;
+  background-image: linear-gradient(180deg, #cde1e7 0%, #d3f5ff00 100%);
 }
 
 .widget-body {
@@ -1280,7 +1280,7 @@ h6,
 }
 
 .widget {
-  box-shadow: 0px 5px 20px rgb(0 0 0 / 10%);
+  box-shadow: 0px 5px 30px #203c4433;
   border-radius: 0.3rem;
   overflow: hidden;
   background: #f6f6f6;
