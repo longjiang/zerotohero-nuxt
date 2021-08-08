@@ -162,19 +162,17 @@
         max-rows="6"
         @blur="updateOriginalText"
       ></b-form-textarea>
-      <a
-        :href="translationURL"
-        target="_blank"
+      <div
         :class="{
-          'link-unstyled mt-2 ml-1 d-block': true,
+          'mt-2 ml-1': true,
           'd-none': !enableTranslationEditing && !showSubsEditing,
         }"
       >
-        <a  target="_blank">
+        <a :href="translationURL" target="_blank" class="link-unstyled">
           <i class="fa fa-language"></i>
+          Get Translation
         </a>
-        Get Translation
-      </a>
+      </div>
       <b-form-textarea
         :class="{
           'd-none': !enableTranslationEditing,
