@@ -233,27 +233,7 @@ export default {
     },
     async translateClick() {
       let text = this.$l2.continua ? this.text.replace(/ /g, "") : this.text;
-
-      let url = undefined;
-      if ([this.$l2.code, this.$l1.code].includes("zh") || this.$l2.han) {
-        url = `https://fanyi.baidu.com/#${this.$l2.code}/${this.$l1.code}/${text}`;
-        if (this.$l2.code === "lzh")
-          url = `https://fanyi.baidu.com/#wyw/en/${text}`;
-      } else if (["ko", "ja"].includes(this.$l2.code)) {
-        url = `https://papago.naver.com/?sk=auto&st=${encodeURIComponent(
-          text
-        )}`;
-      } else if (this.hasTranslate(this.$l2)) {
-        url = `https://translate.google.com/#view=home&op=translate&sl=${
-          this.$l2.code === "zh" ? "zh-CN" : this.$l2.code
-        }&tl=${this.$l1.code}&text=${encodeURIComponent(text)}`;
-      } else {
-        url = `https://translate.panlex.org/?langDe=${
-          this.$l2["iso639-3"]
-        }-000&langAl=${this.$l1["iso639-3"]}-000&txt=${encodeURIComponent(
-          text
-        )}`;
-      }
+      let url = Helper.translationURL(text, this.$l1, this.$l2)
       if (url) window.open(url, Helper.isMobile() ? "_blank" : "translate");
     },
     // https://stackoverflow.com/questions/2550951/what-regular-expression-do-i-need-to-check-for-some-non-latin-characters

@@ -162,6 +162,19 @@
         max-rows="6"
         @blur="updateOriginalText"
       ></b-form-textarea>
+      <a
+        :href="translationURL"
+        target="_blank"
+        :class="{
+          'link-unstyled mt-2 ml-1 d-block': true,
+          'd-none': !enableTranslationEditing && !showSubsEditing,
+        }"
+      >
+        <a  target="_blank">
+          <i class="fa fa-language"></i>
+        </a>
+        Get Translation
+      </a>
       <b-form-textarea
         :class="{
           'd-none': !enableTranslationEditing,
@@ -279,6 +292,12 @@ export default {
         return this.video.subs_l2
           .map((line) => line.line.replace(/\n/g, " "))
           .join("\n");
+    },
+    translationURL() {
+      if (typeof this.$l2 !== "undefined") {
+        let url = Helper.translationURL(this.originalText, this.$l1, this.$l2);
+        return url;
+      }
     },
   },
   mounted() {
