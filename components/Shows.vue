@@ -17,7 +17,7 @@
           {{ routeType === "tv-shows" ? "TV Shows" : "Talks" }}
         </h3>
         <p class="text-center mb-5" v-if="shows && shows.length">
-          ({{ shows.length }} show{{ shows.length > 1 ? "s" : "" }})
+          ({{ filteredShows.length }} show{{ filteredShows.length > 1 ? "s" : "" }})
         </p>
         <div class="text-center mb-5">
           <NuxtLink
@@ -142,7 +142,7 @@ export default {
             return title.includes(k);
           });
         } else {
-          return this.shows;
+          return this.shows.filter(show => !['News', 'Music', 'Movies'].includes(show.title));
         }
       }
     },

@@ -8,7 +8,7 @@
   <div class="youtube-browse container mt-5 mb-5 main">
     <SocialHead
       v-if="show"
-      :title="`Learn ${$l2.name} with the TV Show ${show.title} | ${$l2.name} Zero to Hero`"
+      :title="`Learn ${$l2.name} with the ${this.type === 'tv-show' ? 'TV show' : 'talk series'} “${show.title}” | ${$l2.name} Zero to Hero`"
       :description="`Watch the full episode and study the ${
         $l2.code === 'zh' ? 'Pinyin' : $l2.name
       } subtitles.`"
