@@ -8,7 +8,7 @@
             class="mt-3 mb-4"
             :preferredLanguages="languages"
           />
-          <LanguageList :langs="languages" />
+          <LanguageList v-if="languages.length > 0" :langs="languages" />
         </div>
       </div>
     </div>
