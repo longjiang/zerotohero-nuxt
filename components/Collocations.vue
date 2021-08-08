@@ -66,24 +66,27 @@
         <div
           class="col-sm-6 col-md-4 col-lg-3"
           v-for="(description, name) in colDesc"
-          v-if="
-            !collapsed &&
-            sketch &&
-            sketch.Gramrels &&
-            getGramrelsByName(sketch.Gramrels, name)
-          "
+          :key="`collocations-${name}`"
         >
-          <Collocation
-            v-if="sketch && sketch.Gramrels"
-            class="mb-4"
-            :word="word"
-            :text="text"
-            :level="level"
-            :title="colDesc[name]"
-            :type="name"
-            :id="`collocation-${name}`"
-            :collocation="getGramrelsByName(sketch.Gramrels, name)"
-          ></Collocation>
+          <template
+            v-if="
+              !collapsed &&
+              sketch &&
+              sketch.Gramrels &&
+              getGramrelsByName(sketch.Gramrels, name)
+            "
+          >
+            <Collocation
+              class="mb-4"
+              :word="word"
+              :text="text"
+              :level="level"
+              :title="colDesc[name]"
+              :type="name"
+              :id="`collocation-${name}`"
+              :collocation="getGramrelsByName(sketch.Gramrels, name)"
+            ></Collocation>
+          </template>
         </div>
       </div>
       <div
@@ -94,7 +97,9 @@
       >
         Sorry, we could not find any “{{ term }}” collocations in this corpus
         (dataset). You can set a different corpus in
-        <router-link :to="`/${$l1.code}/${$l2.code}/settings`">Settings</router-link>
+        <router-link :to="`/${$l1.code}/${$l2.code}/settings`">
+          Settings
+        </router-link>
         .
       </div>
       <div class="mt-2">
