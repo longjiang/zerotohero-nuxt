@@ -183,7 +183,6 @@ export default {
       const url =
         $(".suggestion:first-child").attr("href") || this.defaultURL(this.text);
       if (url) {
-        this.suggestions = [];
         this.$router.push({ path: url });
       }
     },

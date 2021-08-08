@@ -51,9 +51,9 @@
               class="mt-5"
               :key="`${term}-images`"
             />
-            <no-ssr>
+            <client-only>
               <EntryYouTube :text="term" v-if="$adminMode" class="mt-5" />
-            </no-ssr>
+            </client-only>
             <Collocations
               v-if="term"
               :text="term"
