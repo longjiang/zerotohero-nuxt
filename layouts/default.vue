@@ -169,6 +169,12 @@ export default {
 .__nuxt-error-page {
   z-index: 99;
 }
+.zth-nav {
+  background-image: url(/img/background-branch.jpg);
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
+}
 
 .zerotohero-wide {
   display: flex;
@@ -176,10 +182,6 @@ export default {
   align-items: stretch;
   .zth-nav {
     overflow: hidden;
-    background-image: url(/img/background-branch.jpg);
-    background-attachment: fixed;
-    background-position: center;
-    background-size: cover;
     position: fixed;
     top: 0;
     left: 0;

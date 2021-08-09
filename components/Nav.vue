@@ -1,31 +1,29 @@
 <template>
   <div>
-    <div
-      class="site-top-bar"
-      style="display: flex; justify-content: space-between"
-      v-if="variant === 'menu-bar'"
-    >
+    <div class="site-top-bar" v-if="variant === 'menu-bar'">
       <div>
         <router-link to="/" class="link-unstyled">
           <i class="fa fa-chevron-left mr-2"></i>
           All Languages
         </router-link>
       </div>
-      <button
-        :class="['btn btn-unstyled', { 'd-none': !isPWA }]"
-        @click="share"
-        style="color: #ccc"
-      >
-        <i class="fa fa-share"></i>
-      </button>
-      <button
-        :class="['btn btn-unstyled', { 'd-none': !isPWA }]"
-        @click="reload"
-        style="color: #ccc"
-      >
-        <i class="fas fa-sync-alt"></i>
-      </button>
-      <LoginButton />
+      <div>
+        <button
+          :class="['btn btn-unstyled', { 'd-none': !isPWA }]"
+          @click="share"
+          style="color: #ccc"
+        >
+          <i class="fa fa-share"></i>
+        </button>
+        <button
+          :class="['btn btn-unstyled', { 'd-none': !isPWA }]"
+          @click="reload"
+          style="color: #ccc"
+        >
+          <i class="fas fa-sync-alt"></i>
+        </button>
+        <LoginButton class="d-inline-block ml-2" />
+      </div>
     </div>
     <div
       :class="{
@@ -73,28 +71,27 @@
               style="margin: 2rem"
             />
           </div>
-          <div class="main-nav-items">
-            <div
+          <div
+            :class="{ 'main-nav-items': true, tabs: variant === 'menu-bar' }"
+          >
+            <NuxtLink
               v-for="(item, index) in menu.filter(
                 (item) => item.show && to(item)
               )"
               :key="`nav-${index}`"
+              :class="{
+                'main-nav-item': true,
+                tab: variant === 'menu-bar',
+                'd-block': variant === 'side-bar',
+                'router-link-active':
+                  parent && parent.name === nameOfSelfOrFirstChild(item),
+              }"
+              :to="to(item)"
+              :title="item.title"
             >
-              <NuxtLink
-                :class="{
-                  'main-nav-item': true,
-                  tab: variant === 'menu-bar',
-                  'd-block': variant === 'side-bar',
-                  'router-link-active':
-                    parent && parent.name === nameOfSelfOrFirstChild(item),
-                }"
-                :to="to(item)"
-                :title="item.title"
-              >
-                <i :class="item.icon"></i>
-                {{ $t(item.title, { l2: $t($l2.name) }) }}
-              </NuxtLink>
-            </div>
+              <i :class="item.icon"></i>
+              {{ $t(item.title, { l2: $t($l2.name) }) }}
+            </NuxtLink>
           </div>
           <div
             style="position: absolute; width: 14rem; bottom: 1rem; left: 1rem"
@@ -897,18 +894,6 @@ export default {
 </script>
 
 <style lang="scss">
-.site-top-bar {
-  z-index: 2;
-  background-color: rgba(29, 29, 29, 0.5);
-  position: absolute;
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  a {
-    color: #ccc;
-    line-height: 2.3rem;
-  }
-}
-
 .logo,
 .logo-constructed {
   -webkit-filter: drop-shadow(0 0 10px rgba(0, 0, 0, 1));
@@ -919,6 +904,7 @@ export default {
 .main-nav {
   margin: 0 auto;
   width: 100%;
+  overflow: hidden;
   display: block;
   .main-nav-item {
     padding: 0.5rem 1rem;
@@ -955,9 +941,27 @@ export default {
   height: 100%;
 }
 
+.site-top-bar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100vw;
+  z-index: 2;
+  background-color: rgba(29, 29, 29, 0.5);
+  position: absolute;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  padding: 0.25rem 1rem;
+  a {
+    color: #ccc;
+    line-height: 2.3rem;
+  }
+}
+
 .nav-menu-bar {
   .main-nav {
     text-align: center;
+    padding-top: 52px;
     .main-nav-item {
       border-radius: 0.3rem 0.3rem 0 0;
       border-bottom: none;
