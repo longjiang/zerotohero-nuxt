@@ -86,10 +86,6 @@ export default {
   width: 13rem;
 }
 
-.bg-dark .text-dark {
-  color: white !important;
-}
-
 .language-icons {
   background: url("/img/background-stars-2.jpg");
   background-repeat: no-repeat;

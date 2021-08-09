@@ -15,7 +15,7 @@
   }
 </router>
 <template>
-  <div class="main mt-4 mb-4">
+  <div class="main pt-4 mb-4">
     <div class="container">
       <div class="row">
         <div class="col-sm-12">

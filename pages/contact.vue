@@ -13,7 +13,7 @@
   }
 </router>
 <template>
-  <div class="container main mt-5 mb-5">
+  <div class="container main pt-5 mb-5">
     <SocialHead :title="`Contact Us | ${$l2.name} Zero to Hero`" />
     <template v-if="this.$l1.code && this.$l2.code === 'en'">
       <div class="row">

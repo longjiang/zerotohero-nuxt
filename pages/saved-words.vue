@@ -13,7 +13,7 @@
   }
 </router>
 <template>
-  <div class="main container mt-4 mb-4" v-cloak>
+  <div class="main container pt-4 mb-4" v-cloak>
     <div class="row">
       <div class="col-sm-12">
         <h4>{{ $t("My Words") }}</h4>

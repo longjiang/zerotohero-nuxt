@@ -9,7 +9,7 @@
       title="Pinyin List Tool | Chinese Zero to Hero"
       description="Enter a list of Chinese words and convert them into a list of pinyin transcriptions."
     />
-    <div class="container main mt-4 mb-4">
+    <div class="container main pt-4 mb-4">
       <div class="row">
         <div class="col-sm-12">
           <h4>Get pinyin for a list of words</h4>

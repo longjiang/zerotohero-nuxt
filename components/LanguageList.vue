@@ -155,13 +155,13 @@ export default {
 
 @media (min-width: 992px) {
   .language-list {
-    column-count: 3;
+    column-count: 2;
   }
 }
 
 @media (min-width: 1200px) {
   .language-list {
-    column-count: 4;
+    column-count: 3;
   }
 }
 
@@ -173,10 +173,10 @@ export default {
   opacity: 0.3;
 }
 
-.bg-dark .language-list-item a {
+.zth-footer .language-list-item a {
   color: #b9aba6;
 }
-.bg-dark .language-list-item .feature-icon {
+.zth-footer .language-list-item .feature-icon {
   color: hsl(16deg 12% 69%);
   opacity: 0.5;
 }

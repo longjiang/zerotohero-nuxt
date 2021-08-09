@@ -5,7 +5,7 @@
   }
 </router>
 <template>
-  <div class="main container mt-5">
+  <div class="main container pt-5">
     <div class="row">
       <div :class="{ 'col-sm-12 mb-5': true }">
         <h4 class="text-center mb-5">Phrase Survey</h4>

@@ -4,7 +4,7 @@
   }
 </router>
 <template>
-  <div class="main mt-5 mb-5">
+  <div class="main pt-5 mb-5">
     <div v-if="method === 'list'" class="container">
       <SocialHead
         v-if="articles"

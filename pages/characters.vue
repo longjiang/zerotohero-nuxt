@@ -4,7 +4,7 @@
   }
 </router>
 <template>
-  <div class="main mt-4 mb-4">
+  <div class="main pt-4 mb-4">
     <SocialHead
       :title="`Chinese Characters by HSK Level | Chinese Zero to Hero`"
       :description="`A list of all characters from the simpliest to the most difficult, and the words that include them.`"

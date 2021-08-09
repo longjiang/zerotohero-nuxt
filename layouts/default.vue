@@ -169,11 +169,22 @@ export default {
 .__nuxt-error-page {
   z-index: 99;
 }
-.zth-nav {
+
+#zerotohero {
   background-image: url(/img/background-branch.jpg);
   background-attachment: fixed;
   background-position: center;
   background-size: cover;
+}
+
+.zth-content {
+  background: white;
+}
+
+.zth-nav {
+  background: #002d4433;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
 }
 
 .zerotohero-wide {
@@ -191,13 +202,30 @@ export default {
   }
   .zth-content {
     flex: 1;
-    margin-left: 30rem;
+    margin-left: 29rem;
+    overflow: visible;
   }
 }
 
 @media screen and (max-device-width: 1024px) {
   .zth-nav {
     background-attachment: scroll;
+  }
+}
+
+.zth-footer {
+  background-color: #403f4e;
+  color: white;
+}
+.zerotohero-wide {
+  .zth-footer {
+    margin-left: -29rem;
+    width: calc(100% + 29rem);
+    padding: 3rem;
+    padding-left: 32rem;
+  }
+  #main {
+    padding: 0 3rem;
   }
 }
 </style>

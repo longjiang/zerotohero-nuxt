@@ -5,7 +5,7 @@
   }
 </router>
 <template>
-  <div class="container mt-5 mb-5 pt-4 main" id="main">
+  <div class="container pt-5 mb-5 pt-4 main" id="main">
     <SocialHead
       v-if="grammar && images && images[0]"
       :title="`Chinese Grammar Pattern “${grammar.structure}” (HSK${grammar.code}) | ${$l2.name} Zero to Hero`"

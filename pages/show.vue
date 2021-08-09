@@ -5,7 +5,7 @@
   }
 </router>
 <template>
-  <div class="youtube-browse container mt-5 mb-5 main">
+  <div class="youtube-browse container pt-4 pb-5 main">
     <SocialHead
       v-if="show"
       :title="`Learn ${$l2.name} with the ${this.type === 'tv-show' ? 'TV show' : 'talk series'} “${show.title}” | ${$l2.name} Zero to Hero`"

@@ -5,7 +5,7 @@
 </router>
 <template>
   <div>
-    <div class="main container mt-5 mb-5">
+    <div class="main container pt-5 mb-5">
       <div class="row">
         <div class="col-sm-12">
           <!-- <Annotate><p>โอเคบ่เรารักภาษาถิ่น</p></Annotate> -->

@@ -5,7 +5,7 @@
   }
 </router>
 <template>
-  <div class="main mt-5 mb-5">
+  <div class="main pt-5 mb-5">
     <SocialHead
       v-if="subreddits && subreddits.length > 0"
       :title="`Reddit Posts from r/${subreddits[0].sub} | ${$l2.name} Zero to Hero`"

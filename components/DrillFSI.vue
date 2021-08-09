@@ -1,5 +1,5 @@
 <template>
-  <div class="container main mt-5 mb-5">
+  <div class="container main pt-5 mb-5">
     <audio id="drill-audio">
       <source :src="drill.file" type="audio/mpeg">
     </audio>

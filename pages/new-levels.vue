@@ -4,7 +4,7 @@
   }
 </router>
 <template>
-  <div class="container main mt-4 mb-4" v-cloak>
+  <div class="container main pt-4 mb-4" v-cloak>
     <SocialHead
       :title="`Words in the New HSK (9 Levels) | Chinese Zero to Hero`"
       :description="`Browse through and learn the 11,000 new HSK words.`"

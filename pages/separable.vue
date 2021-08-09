@@ -14,7 +14,7 @@
   }
 </router>
 <template>
-  <div class="container main mt-5 mb-5">
+  <div class="container main pt-5 mb-5">
     <SocialHead
       :title="`Which Chinese Verbs are Separable? (离合词 lí-hé cí) | Chinese Zero to Hero`"
       :description="`A list all seperable verbs and their various patterns.`"

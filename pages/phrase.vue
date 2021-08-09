@@ -5,7 +5,7 @@
   }
 </router>
 <template>
-  <div class="mt-5 mb-5">
+  <div class="pt-5 mb-5">
     <div class="container">
       <div class="row">
         <div class="col-sm-12">

@@ -13,7 +13,7 @@
   }
 </router>
 <template>
-  <div class="container main mt-5 mb-5" v-cloak>
+  <div class="container main pt-5 mb-5" v-cloak>
     <SocialHead
       :title="`HSK Words by Level | Chinese Zero to Hero`"
       :image="'/img/hsk-word-vis.jpg'"

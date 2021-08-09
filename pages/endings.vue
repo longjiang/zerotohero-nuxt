@@ -14,7 +14,7 @@
 </router>
 <template>
   <div>
-    <div class="container main mt-5 mb-5">
+    <div class="container main pt-5 mb-5">
       <div class="row">
         <div class="col-sm-12">
           <h3>Lookup Russian Case Ending</h3>

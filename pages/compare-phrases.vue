@@ -7,7 +7,7 @@
 <template>
   <div class="phrase">
     <SocialHead :title="title" :description="description" :image="image" />
-    <div class="container main mt-5 mb-5">
+    <div class="container main pt-5 mb-5">
       <div class="row">
         <div class="col-sm-12">
           <h2 class="text-center mb-3">Lookup phrases not in the dictionary</h2>

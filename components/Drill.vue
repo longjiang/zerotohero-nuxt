@@ -1,5 +1,5 @@
 <template>
-  <div class="container main mt-5 mb-5">
+  <div class="container main pt-5 mb-5">
     <audio v-if="drill.file" id="drill-audio">
       <source :src="drill.file.data.full_url" type="audio/mpeg" />
     </audio>

@@ -14,7 +14,7 @@
   }
 </router>
 <template>
-  <div class="main mt-5 mb-5">
+  <div class="main pt-5 mb-5">
     <SocialHead
       v-if="resources[0]"
       :title="`${resources.length} Resources to Help You Learn ${$l2.name} | ${$l2.name} Zero to Hero`"

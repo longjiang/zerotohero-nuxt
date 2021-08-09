@@ -5,7 +5,7 @@
 </router>
 <template>
   <div>
-    <div class="main container mt-5 mb-5">
+    <div class="main container pt-5 mb-5">
       <h4>Check if URLs are blocked by CORS policy</h4>
       <b-progress
         class="mt-3"

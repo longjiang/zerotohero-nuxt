@@ -7,7 +7,7 @@
       :image="`/img/courses/bundle-ultimate.jpg`"
     />
 
-    <div class="container mt-5">
+    <div class="container pt-5">
       <div class="row">
         <div class="col-sm-12 text-center">
           <h2 class="mb-5">Online Chinese Courses from HSK 1 to HSK 6</h2>

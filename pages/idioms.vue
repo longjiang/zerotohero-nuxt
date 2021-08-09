@@ -5,7 +5,7 @@
   }
 </router>
 <template>
-  <div class="container main mt-5 mb-5">
+  <div class="container main pt-5 mb-5">
     <SocialHead
       :title="`Learn idioms (成语 chéngyǔ) | Chinese Zero to Hero`"
       :description="`A list of idioms in the HSK curriculum, and their origins.`"

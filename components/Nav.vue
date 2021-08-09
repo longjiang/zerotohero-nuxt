@@ -95,6 +95,7 @@
           </div>
           <div
             style="position: absolute; width: 14rem; bottom: 1rem; left: 1rem"
+            v-if="variant === 'side-bar'"
           >
             <router-link
               to="/"
@@ -287,6 +288,12 @@ export default {
               show: ["zh", "en"].includes(this.l2.code),
             },
             {
+              name: "hall-of-heroes",
+              icon: "fa fa-trophy",
+              title: "Heroes",
+              show: this.l1.code === "en" && this.l2.code === "zh",
+            },
+            {
               name: "textbooks-workbooks",
               title: "Textbooks",
               icon: "fas fa-book",
@@ -311,12 +318,6 @@ export default {
               show: this.l2.code === "zh",
             },
           ],
-        },
-        {
-          name: "hall-of-heroes",
-          icon: "fa fa-trophy",
-          title: "Heroes",
-          show: this.l1.code === "en" && this.l2.code === "zh",
         },
         {
           icon: "fas fa-video",
@@ -1010,12 +1011,7 @@ export default {
   }
   .secondary-nav {
     width: 14rem;
-    background: linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0.75) 0%,
-      rgba(255, 255, 255, 0.75) 10%,
-      rgba(255, 255, 255, 1) 100%
-    );
+    background: rgba(255, 255, 255, 0.75);
   }
 }
 

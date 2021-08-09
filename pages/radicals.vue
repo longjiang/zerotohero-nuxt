@@ -14,7 +14,7 @@
   }
 </router>
 <template>
-  <div class="main mt-4 mb-4">
+  <div class="main pt-4 mb-4">
     <SocialHead
       :title="`Chinese Radicals | Chinese Zero to Hero`"
       :description="`The most common Chinese radicals, and characters that use them.`"

@@ -13,7 +13,7 @@
   }
 </router>
 <template>
-  <div class="container main mt-4 mb-4" v-cloak>
+  <div class="container main pt-4 mb-4" v-cloak>
     <div class="row">
       <div class="col-sm-12">
         <div>
