@@ -1,5 +1,5 @@
 <template>
-  <div class="nav-wrapper">
+  <div>
     <div
       class="container-fluid p-2 pl-3 site-top-bar"
       style="display: flex; justify-content: space-between"
@@ -73,15 +73,15 @@
     </div>
     <div
       :class="{
-        'nav nav-menu-bar': variant === 'menu-bar',
-        'nav nav-sidebar': variant === 'side-bar',
-        'nav-page': variant === 'side-bar',
+        'nav-menu-bar': variant === 'menu-bar',
+        'nav-sidebar': variant === 'side-bar',
+        'nav-page': variant === 'page',
       }"
       style="z-index: 3"
       :set="(parent = getParent())"
     >
       <template v-if="variant === 'menu-bar' || variant === 'side-bar'">
-        <nav class="site-nav tabs">
+        <nav class="main-nav tabs">
           <div
             v-for="(item, index) in menu.filter(
               (item) => item.show && to(item)
@@ -103,11 +103,11 @@
             </NuxtLink>
           </div>
         </nav>
-        <nav class="secondary-menu">
+        <nav class="secondary-nav">
           <template v-if="parent && parent.children">
             <NuxtLink
               :class="{
-                'secondary-menu-item': true,
+                'secondary-nav-item': true,
                 'd-block': variant === 'side-bar',
               }"
               v-for="(child, index) in parent.children.filter(
@@ -842,10 +842,8 @@ export default {
 </script>
 
 <style lang="scss">
-
-
 @media screen and (max-device-width: 1024px) {
-  .nav-wrapper {
+  .zth-nav {
     background-attachment: scroll;
   }
 }
@@ -868,36 +866,32 @@ export default {
   text-shadow: 0 0 10px rgba(0, 0, 0, 1);
 }
 
-.nav {
+.main-nav {
+  padding: 1rem;
+  margin: 0 auto;
   width: 100%;
-
-  .site-nav {
-    padding: 1rem;
-    margin: 0 auto;
-    width: 100%;
-    display: block;
-    .tab {
-      text-shadow: 0 0 10px rgba(0, 0, 0, 1);
-      border-top: 1px solid rgba(255, 255, 255, 0);
-      border-left: 1px solid rgba(255, 255, 255, 0);
-      border-right: 1px solid rgba(255, 255, 255, 0);
-      &.nuxt-link-active,
-      &:hover {
-        color: #444;
-        background: hsla(0deg, 100%, 100%, 0.75);
-        border-top: 1px solid rgba(255, 255, 255, 0.5);
-        border-left: 1px solid rgba(255, 255, 255, 0.5);
-        border-right: 1px solid rgba(255, 255, 255, 0.5);
-        backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px);
-        text-decoration: none;
-        text-shadow: none;
-      }
+  display: block;
+  .tab {
+    text-shadow: 0 0 10px rgba(0, 0, 0, 1);
+    border-top: 1px solid rgba(255, 255, 255, 0);
+    border-left: 1px solid rgba(255, 255, 255, 0);
+    border-right: 1px solid rgba(255, 255, 255, 0);
+    &.nuxt-link-active,
+    &:hover {
+      color: #444;
+      background: hsla(0deg, 100%, 100%, 0.75);
+      border-top: 1px solid rgba(255, 255, 255, 0.5);
+      border-left: 1px solid rgba(255, 255, 255, 0.5);
+      border-right: 1px solid rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      text-decoration: none;
+      text-shadow: none;
     }
   }
 }
 
-.secondary-menu {
+.secondary-nav {
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   padding: 1rem;
@@ -908,10 +902,10 @@ export default {
 }
 
 .nav-menu-bar {
-  .site-nav {
+  .main-nav {
     text-align: center;
   }
-  .secondary-menu {
+  .secondary-nav {
     width: 100vw;
     white-space: nowrap;
     overflow: scroll;
@@ -932,7 +926,7 @@ export default {
   flex-wrap: nowrap;
   top: 0;
   left: 0;
-  .secondary-menu {
+  .secondary-nav {
     background: linear-gradient(
       90deg,
       rgba(255, 255, 255, 0.75) 0%,
@@ -976,7 +970,7 @@ export default {
   background: white;
 }
 
-.secondary-menu-item {
+.secondary-nav-item {
   padding: 0.5rem 1rem;
   margin: 0.2rem;
   border-radius: 0.3rem;
@@ -985,13 +979,13 @@ export default {
   white-space: nowrap;
 }
 
-.secondary-menu-item:hover {
+.secondary-nav-item:hover {
   text-decoration: none;
   color: inherit;
   background-color: #f7f7f7;
 }
 
-.secondary-menu-item.nuxt-link-active {
+.secondary-nav-item.nuxt-link-active {
   background: #666;
   color: white;
 }
@@ -1013,5 +1007,4 @@ export default {
     flex: 1;
   }
 }
-
 </style>

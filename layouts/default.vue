@@ -1,7 +1,7 @@
 <template>
   <div id="zerotohero" :class="classes">
     <template v-if="$route.path !== '/'">
-      <template>
+      <div class="zth-nav">
         <Nav
           v-if="l1 && l2"
           :l1="l1"
@@ -9,47 +9,47 @@
           :key="`nav-${l1.code}-${l2.code}`"
           :variant="wide ? 'side-bar' : 'menu-bar'"
         />
-        <div class="zth-content">
-          <Nuxt id="main" />
-          <footer class="bg-dark text-light pt-4 pb-4" style="z-index: -1">
-            <Choose :compact="true" />
-            <div class="container">
-              <div class="row">
-                <div class="col-sm-12">
-                  <div class="mt-5">
-                    <p>
-                      <strong>This is an open-source project.</strong>
-                      This website is built on
-                      <code>Vue.js</code>
-                      and is fully open source. Check out the code on GitHub at
-                      <a href="https://github.com/longjiang/zerotohero-nuxt">
-                        https://github.com/longjiang/zerotohero-nuxt
-                      </a>
-                      .
-                    </p>
-                  </div>
-                  <div class="mt-5">
-                    <p class="mb-4">
-                      <strong>Credits:</strong>
-                      <span v-html="dictionaryCredit"></span>
-                      The collocations and example sentences are provided by
-                      <a target="_blank" href="https://www.sketchengine.eu/">
-                        SketchEngine
-                      </a>
-                      .
-                    </p>
-                  </div>
+      </div>
+      <div class="zth-content">
+        <Nuxt id="main" />
+        <footer class="zth-footer" style="z-index: -1">
+          <Choose :compact="true" />
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="mt-5">
+                  <p>
+                    <strong>This is an open-source project.</strong>
+                    This website is built on
+                    <code>Vue.js</code>
+                    and is fully open source. Check out the code on GitHub at
+                    <a href="https://github.com/longjiang/zerotohero-nuxt">
+                      https://github.com/longjiang/zerotohero-nuxt
+                    </a>
+                    .
+                  </p>
+                </div>
+                <div class="mt-5">
+                  <p class="mb-4">
+                    <strong>Credits:</strong>
+                    <span v-html="dictionaryCredit"></span>
+                    The collocations and example sentences are provided by
+                    <a target="_blank" href="https://www.sketchengine.eu/">
+                      SketchEngine
+                    </a>
+                    .
+                  </p>
                 </div>
               </div>
             </div>
-          </footer>
-        </div>
+          </div>
+        </footer>
+      </div>
 
-        <ReaderComp
-          v-if="l1 && l2 && $route.name !== 'youtube-view'"
-          :iconMode="true"
-        />
-      </template>
+      <ReaderComp
+        v-if="l1 && l2 && $route.name !== 'youtube-view'"
+        :iconMode="true"
+      />
     </template>
     <template v-else>
       <Nuxt id="main" />
@@ -187,7 +187,7 @@ export default {
   display: flex;
   height: 100%;
   align-items: stretch;
-  .nav-wrapper {
+  .zth-nav {
     overflow: hidden;
     background-image: url(/img/background-branch.jpg);
     background-attachment: fixed;
