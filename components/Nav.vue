@@ -68,7 +68,7 @@
               v-else-if="l1 && l2"
               :l1="l1"
               :l2="l2"
-              style="margin: 2rem"
+              style="margin: 1.5rem 0"
             />
           </div>
           <div
