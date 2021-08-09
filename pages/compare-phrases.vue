@@ -35,28 +35,6 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-md-6">
-            <WebImages
-              v-if="term"
-              :text="term"
-              limit="10"
-              class="mt-5"
-              :key="`${term}-images`"
-              :preloaded="aImages"
-            />
-        </div>
-        <div class="col-md-6">
-            <WebImages
-              v-if="compareTerm"
-              :text="compareTerm"
-              limit="10"
-              class="mt-5"
-              :key="`${compareTerm}-images`"
-              :preloaded="bImages"
-            />
-        </div>
-      </div>
-      <div class="row">
         <div class="col-sm-12">
           <div
             class="widget mt-5"
@@ -84,6 +62,28 @@
               :key="`${term}-${compareTerm}-col`"
             />
           </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+            <WebImages
+              v-if="term"
+              :text="term"
+              limit="10"
+              class="mt-5"
+              :key="`${term}-images`"
+              :preloaded="aImages"
+            />
+        </div>
+        <div class="col-md-6">
+            <WebImages
+              v-if="compareTerm"
+              :text="compareTerm"
+              limit="10"
+              class="mt-5"
+              :key="`${compareTerm}-images`"
+              :preloaded="bImages"
+            />
         </div>
       </div>
       <div class="row">
