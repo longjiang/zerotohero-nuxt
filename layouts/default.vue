@@ -143,23 +143,25 @@ export default {
   computed: {
     ...mapState("settings", ["l2Settings", "l1", "l2"]),
     classes() {
-      this.l1, this.l2;
-      let classes = {
-        "show-pinyin": this.l2Settings.showPinyin,
-        "show-pinyin-for-saved":
-          !this.l2Settings.showPinyin && this.l2 && this.l2.han,
-        "show-simplified": !this.l2Settings.useTraditional,
-        "show-traditional": this.l2Settings.useTraditional,
-        "show-definition": this.l2Settings.showDefinition,
-        "show-translation": this.l2Settings.showTranslation,
-        "show-byeonggi": this.l2Settings.showByeonggi,
-        "use-serif": this.l2Settings.useSerif,
-        "zerotohero-wide": this.wide,
-      };
-      classes[`l1-${this.l1.code}`] = true;
-      classes[`l2-${this.l2.code}`] = true;
-      if (this.l2.han) classes["l2-zh"] = true;
-      return classes;
+      if (this.l1 && this.l2) {
+        this.l1, this.l2;
+        let classes = {
+          "show-pinyin": this.l2Settings.showPinyin,
+          "show-pinyin-for-saved":
+            !this.l2Settings.showPinyin && this.l2 && this.l2.han,
+          "show-simplified": !this.l2Settings.useTraditional,
+          "show-traditional": this.l2Settings.useTraditional,
+          "show-definition": this.l2Settings.showDefinition,
+          "show-translation": this.l2Settings.showTranslation,
+          "show-byeonggi": this.l2Settings.showByeonggi,
+          "use-serif": this.l2Settings.useSerif,
+          "zerotohero-wide": this.wide,
+        };
+        classes[`l1-${this.l1.code}`] = true;
+        classes[`l2-${this.l2.code}`] = true;
+        if (this.l2.han) classes["l2-zh"] = true;
+        return classes;
+      }
     },
   },
 };
