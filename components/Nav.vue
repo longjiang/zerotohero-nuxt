@@ -1,93 +1,137 @@
 <template>
-  <div
-    :class="`${variant === 'menu-bar' ? 'nav' : ''}`"
-    style="z-index: 3"
-    :set="(parent = getParent())"
-  >
-    <template v-if="variant === 'menu-bar'">
-      <nav class="site-nav tabs">
-        <NuxtLink
-          v-for="(item, index) in menu.filter((item) => item.show && to(item))"
-          :class="{
-            tab: true,
-            'router-link-active':
-              parent && parent.name === nameOfSelfOrFirstChild(item),
-          }"
-          :to="to(item)"
-          :title="item.title"
-          :key="`nav-${index}`"
-        >
-          <i :class="item.icon"></i>
-          {{ $t(item.title, { l2: $t($l2.name) }) }}
-        </NuxtLink>
-      </nav>
-      <nav class="secondary-menu text-center pt-3" style="min-height: 61px">
-        <template v-if="parent && parent.children">
-          <NuxtLink
-            class="secondary-menu-item"
-            v-for="(child, index) in parent.children.filter(
-              (child) => child.show
-            )"
-            :key="`subnav-${child.name}-${index}`"
-            :to="last(child) || child"
-          >
-            <i :class="child.icon"></i>
-            {{ $t(child.title, { l2: $t($l2.name) }) }}
-            <span
-              class="saved-words-count"
-              v-cloak
-              v-if="child.name === 'saved-words'"
-            >
-              {{ savedWordsCount() }}
-            </span>
-          </NuxtLink>
-        </template>
-      </nav>
-    </template>
-    <template v-if="variant === 'page'">
-      <div class="container">
-        <div class="row mt-5">
-          <template
-            v-for="item in menu.filter(
-              (item) =>
-                item.show &&
-                to(item) &&
-                !['Admin', 'Contact', 'Settings'].includes(item.title)
-            )"
-          >
-            <template v-if="typeof item !== 'undefined' && item.children">
-              <div
-                v-for="(child, index) in item.children.filter(
-                  (child) => child.show
-                )"
-                :key="`subnav-${child.name}-${index}`"
-                class="col-sm-6 col-lg-4 mb-4"
+  <div>
+    <div class="zth-header" v-if="l1 && l2">
+      <div class="container-fluid pl-0 pr-0">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12 text-center">
+              <router-link
+                v-if="l1.code === 'en' && l2.code === 'zh'"
+                to="/en/zh/online-courses"
               >
-                <NuxtLink
-                  class="feature-card link-unstyled"
-                  :to="last(child) || child"
-                  style="height: 100%"
-                >
-                  <div class="feature-card-icon">
-                    <i :class="child.icon"></i>
-                  </div>
-                  <div class="feature-card-title">
-                    {{ $t(child.title, { l2: $t($l2.name) }) }}
-                    <span
-                      class="saved-words-count"
-                      v-cloak
-                      v-if="child.name === 'saved-words'"
-                    >
-                      {{ savedWordsCount() }}
-                    </span>
-                  </div>
-                </NuxtLink>
-              </div>
-            </template>
-          </template>
+                <img
+                  src="/img/czh-logo-light.png"
+                  alt="Chinese Zero to Hero"
+                  style="max-width: 11rem; margin: 1.5rem 0"
+                  class="logo"
+                  data-not-lazy
+                />
+              </router-link>
+              <router-link
+                v-else-if="l1.code === 'zh' && l2.code === 'en'"
+                to="/zh/en/online-courses"
+              >
+                <img
+                  src="/img/ezh-logo-light.png"
+                  alt="Chinese Zero to Hero"
+                  style="max-width: 11rem; margin: 1.5rem 0"
+                  class="logo"
+                  data-not-lazy
+                />
+              </router-link>
+              <LanguageLogo
+                v-else-if="l1 && l2"
+                :l1="l1"
+                :l2="l2"
+                style="margin: 2rem"
+              />
+            </div>
+          </div>
         </div>
       </div>
-    </template>
+    </div>
+    <div
+      :class="`${variant === 'menu-bar' ? 'nav' : ''}`"
+      style="z-index: 3"
+      :set="(parent = getParent())"
+    >
+      <template v-if="variant === 'menu-bar'">
+        <nav class="site-nav tabs">
+          <NuxtLink
+            v-for="(item, index) in menu.filter(
+              (item) => item.show && to(item)
+            )"
+            :class="{
+              tab: true,
+              'router-link-active':
+                parent && parent.name === nameOfSelfOrFirstChild(item),
+            }"
+            :to="to(item)"
+            :title="item.title"
+            :key="`nav-${index}`"
+          >
+            <i :class="item.icon"></i>
+            {{ $t(item.title, { l2: $t($l2.name) }) }}
+          </NuxtLink>
+        </nav>
+        <nav class="secondary-menu text-center pt-3" style="min-height: 61px">
+          <template v-if="parent && parent.children">
+            <NuxtLink
+              class="secondary-menu-item"
+              v-for="(child, index) in parent.children.filter(
+                (child) => child.show
+              )"
+              :key="`subnav-${child.name}-${index}`"
+              :to="last(child) || child"
+            >
+              <i :class="child.icon"></i>
+              {{ $t(child.title, { l2: $t($l2.name) }) }}
+              <span
+                class="saved-words-count"
+                v-cloak
+                v-if="child.name === 'saved-words'"
+              >
+                {{ savedWordsCount() }}
+              </span>
+            </NuxtLink>
+          </template>
+        </nav>
+      </template>
+      <template v-if="variant === 'page'">
+        <div class="container">
+          <div class="row mt-5">
+            <template
+              v-for="item in menu.filter(
+                (item) =>
+                  item.show &&
+                  to(item) &&
+                  !['Admin', 'Contact', 'Settings'].includes(item.title)
+              )"
+            >
+              <template v-if="typeof item !== 'undefined' && item.children">
+                <div
+                  v-for="(child, index) in item.children.filter(
+                    (child) => child.show
+                  )"
+                  :key="`subnav-${child.name}-${index}`"
+                  class="col-sm-6 col-lg-4 mb-4"
+                >
+                  <NuxtLink
+                    class="feature-card link-unstyled"
+                    :to="last(child) || child"
+                    style="height: 100%"
+                  >
+                    <div class="feature-card-icon">
+                      <i :class="child.icon"></i>
+                    </div>
+                    <div class="feature-card-title">
+                      {{ $t(child.title, { l2: $t($l2.name) }) }}
+                      <span
+                        class="saved-words-count"
+                        v-cloak
+                        v-if="child.name === 'saved-words'"
+                      >
+                        {{ savedWordsCount() }}
+                      </span>
+                    </div>
+                  </NuxtLink>
+                </div>
+              </template>
+            </template>
+          </div>
+        </div>
+      </template>
+    </div>
   </div>
 </template>
 
@@ -589,7 +633,7 @@ export default {
     this.bindKeys();
   },
   created() {
-    this.checkShows()
+    this.checkShows();
     this.checkPhrasebooks();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type.startsWith("shows")) {

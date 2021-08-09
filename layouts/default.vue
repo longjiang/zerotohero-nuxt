@@ -32,46 +32,6 @@
             </div>
           </div>
         </div>
-        <div class="zth-header" v-if="l1 && l2">
-          <div class="container-fluid pl-0 pr-0">
-            <div class="container">
-              <div class="row">
-                <div class="col-sm-12 text-center">
-                  <router-link
-                    v-if="l1.code === 'en' && l2.code === 'zh'"
-                    to="/en/zh/online-courses"
-                  >
-                    <img
-                      src="/img/czh-logo-light.png"
-                      alt="Chinese Zero to Hero"
-                      style="max-width: 11rem; margin: 1.5rem 0"
-                      class="logo"
-                      data-not-lazy
-                    />
-                  </router-link>
-                  <router-link
-                    v-else-if="l1.code === 'zh' && l2.code === 'en'"
-                    to="/zh/en/online-courses"
-                  >
-                    <img
-                      src="/img/ezh-logo-light.png"
-                      alt="Chinese Zero to Hero"
-                      style="max-width: 11rem; margin: 1.5rem 0"
-                      class="logo"
-                      data-not-lazy
-                    />
-                  </router-link>
-                  <LanguageLogo
-                    v-else-if="l1 && l2"
-                    :l1="l1"
-                    :l2="l2"
-                    style="margin: 2rem"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
         <Nav
           v-if="l1 && l2"
           :l1="l1"
