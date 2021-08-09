@@ -14,7 +14,7 @@
 </router>
 <template>
   <div class="main">
-    <div class="container pb-5 pl-4 pr-4">
+    <div class="container pt-5 pb-5 pl-4 pr-4">
       <div class="row">
         <div class="col-sm-12 text-center">
           <h3>{{$t('For the love of the {l2} language.', { l2: $t($l2.name) })}}</h3>

@@ -133,6 +133,10 @@
                 color: white;
                 cursor: pointer;
               "
+              v-if="
+                ($l1.code === 'zh' && $l2.code === 'en') ||
+                ($l1.code === 'en' && $l2.code === 'zh')
+              "
             />
           </div>
         </nav>
@@ -149,7 +153,7 @@
               :key="`subnav-${child.name}-${index}`"
               :to="last(child) || child"
             >
-              <i :class="child.icon"></i>
+              <i :class="child.icon" style="width: 1.5rem"></i>
               {{ $t(child.title, { l2: $t($l2.name) }) }}
               <span
                 class="saved-words-count"
@@ -1070,10 +1074,11 @@ export default {
   color: white;
 }
 .feature-card {
-  padding: 2rem;
+  padding: 1rem 2rem;
   display: flex;
   flex-direction: row;
-  box-shadow: 0 5px 20px #5517041c !important;
+  align-items: center;
+  box-shadow: 0 5px 20px #4913032f !important;
   border-radius: 0.5rem;
   .feature-card-icon {
     padding-right: 1rem;

@@ -75,6 +75,12 @@ export default {
     }
   },
 
+  googleFonts: {
+    families: {
+      Lato: [100, 300, 700]
+    }
+  },
+
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     // https://go.nuxtjs.dev/bootstrap
@@ -82,6 +88,7 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     'nuxt-i18n',
+    '@nuxtjs/google-fonts',
     ['nuxt-lazy-load', {
       defaultImage: '/img/placeholder.jpg'
     }]

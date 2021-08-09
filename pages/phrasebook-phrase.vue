@@ -7,7 +7,7 @@
 <template>
   <div class="main">
     <SocialHead :title="title" :description="description" :image="image" />
-    <div class="container mt-4">
+    <div class="container pt-4">
       <div class="row">
         <div class="col-sm-12">
           <div class="text-center">
