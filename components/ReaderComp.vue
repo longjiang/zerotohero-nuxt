@@ -220,7 +220,7 @@ export default {
   height: 2rem;
   position: fixed;
   bottom: 1rem;
-  left: 1rem;
+  right: 1rem;
   border-radius: 100%;
   opacity: 0.2;
   z-index: 10;
