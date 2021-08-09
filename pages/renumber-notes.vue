@@ -4,8 +4,8 @@
   }
 </router>
 <template>
-  <div>
-    <div class="main container pt-5 mb-5">
+  <div class="main">
+    <div class="container pt-5 mb-5">
       <div class="row mt-4">
         <div class="col-md-6">
           Input text:

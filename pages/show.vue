@@ -5,84 +5,88 @@
   }
 </router>
 <template>
-  <div class="youtube-browse container pt-4 pb-5 main">
-    <SocialHead
-      v-if="show"
-      :title="`Learn ${$l2.name} with the ${this.type === 'tv-show' ? 'TV show' : 'talk series'} “${show.title}” | ${$l2.name} Zero to Hero`"
-      :description="`Watch the full episode and study the ${
-        $l2.code === 'zh' ? 'Pinyin' : $l2.name
-      } subtitles.`"
-      :image="`https://img.youtube.com/vi/${show.youtube_id}/hqdefault.jpg`"
-    />
-    <div class="row">
-      <div class="col-sm-12 mb-4 text-center">
-        <h3 v-if="show">
-          <Annotate :phonetics="false" :buttons="true">
-            <span>{{ show.title }}</span>
-          </Annotate>
-        </h3>
-        <p v-if="count">({{ count }} Videos)</p>
-      </div>
-      <div class="col-sm-12 mb-5">
-        <div class="youtube-video-list-wrapper">
-          <div class="d-flex mb-5">
-            <b-input-group class="flex-1">
-              <b-form-input
-                v-model="keyword"
-                :lazy="true"
-                @compositionend.prevent.stop="() => false"
-                placeholder="Filter by video title..."
-              />
-              <b-input-group-append>
-                <b-button variant="primary">
-                  <i class="fas fa-filter"></i>
+  <div class="main">
+    <div class="youtube-browse pt-4 pb-5 main">
+      <SocialHead
+        v-if="show"
+        :title="`Learn ${$l2.name} with the ${
+          this.type === 'tv-show' ? 'TV show' : 'talk series'
+        } “${show.title}” | ${$l2.name} Zero to Hero`"
+        :description="`Watch the full episode and study the ${
+          $l2.code === 'zh' ? 'Pinyin' : $l2.name
+        } subtitles.`"
+        :image="`https://img.youtube.com/vi/${show.youtube_id}/hqdefault.jpg`"
+      />
+      <div class="row">
+        <div class="col-sm-12 mb-4 text-center">
+          <h3 v-if="show">
+            <Annotate :phonetics="false" :buttons="true">
+              <span>{{ show.title }}</span>
+            </Annotate>
+          </h3>
+          <p v-if="count">({{ count }} Videos)</p>
+        </div>
+        <div class="col-sm-12 mb-5">
+          <div class="youtube-video-list-wrapper">
+            <div class="d-flex mb-5">
+              <b-input-group class="flex-1">
+                <b-form-input
+                  v-model="keyword"
+                  :lazy="true"
+                  @compositionend.prevent.stop="() => false"
+                  placeholder="Filter by video title..."
+                />
+                <b-input-group-append>
+                  <b-button variant="primary">
+                    <i class="fas fa-filter"></i>
+                  </b-button>
+                </b-input-group-append>
+              </b-input-group>
+              <b-button-group>
+                <b-button
+                  :variant="view === 'grid' ? 'primary' : 'secondary'"
+                  class="ml-2"
+                  @click="view = 'grid'"
+                >
+                  <i class="fas fa-th"></i>
                 </b-button>
-              </b-input-group-append>
-            </b-input-group>
-            <b-button-group>
-              <b-button
-                :variant="view === 'grid' ? 'primary' : 'secondary'"
-                class="ml-2"
-                @click="view = 'grid'"
-              >
-                <i class="fas fa-th"></i>
-              </b-button>
-              <b-button
-                :variant="view === 'list' ? 'primary' : 'secondary'"
-                @click="view = 'list'"
-              >
-                <i class="fas fa-list"></i>
-              </b-button>
-            </b-button-group>
+                <b-button
+                  :variant="view === 'list' ? 'primary' : 'secondary'"
+                  @click="view = 'list'"
+                >
+                  <i class="fas fa-list"></i>
+                </b-button>
+              </b-button-group>
+            </div>
+            <div
+              :class="{
+                'loader text-center mb-4': true,
+                'd-none': videos,
+              }"
+              style="flex: 1"
+            >
+              <div class="heartbeat-loader"></div>
+            </div>
+            <div
+              :class="{
+                'text-center': true,
+                'd-none': !videos || videos.length > 0,
+              }"
+            >
+              No more videos.
+            </div>
+            <template v-if="videos && videos.length > 0">
+              <YouTubeVideoList
+                :videos="videos"
+                :checkSubs="false"
+                ref="youtubeVideoList"
+                :checkSaved="false"
+                :key="`videos-filtered-${this.keyword}`"
+                :view="view"
+              />
+              <div v-observe-visibility="visibilityChanged"></div>
+            </template>
           </div>
-          <div
-            :class="{
-              'loader text-center mb-4': true,
-              'd-none': videos,
-            }"
-            style="flex: 1"
-          >
-            <div class="heartbeat-loader"></div>
-          </div>
-          <div
-            :class="{
-              'text-center': true,
-              'd-none': !videos || videos.length > 0,
-            }"
-          >
-            No more videos.
-          </div>
-          <template v-if="videos && videos.length > 0">
-            <YouTubeVideoList
-              :videos="videos"
-              :checkSubs="false"
-              ref="youtubeVideoList"
-              :checkSaved="false"
-              :key="`videos-filtered-${this.keyword}`"
-              :view="view"
-            />
-            <div v-observe-visibility="visibilityChanged"></div>
-          </template>
         </div>
       </div>
     </div>

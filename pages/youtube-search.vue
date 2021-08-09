@@ -14,61 +14,71 @@
   }
 </router>
 <template>
-  <div class="container pt-5 pb-5 main youtube-search">
-    <h1 class="text-center mb-5">Study YouTube Subtitles</h1>
-    <SimpleSearch
-      :placeholder="$t('Enter a search term in {l2}...', { l2: $l2.name })"
-      :action="
-        (url) => {
-          let path = `/${$l1.code}/${
-            $l2.code
-          }/youtube/search/${encodeURIComponent(url)}/0`;
-          if (this.$router.currentRoute.path === path) this.searchResultKey++;
-          else this.$router.push({ path: path });
-        }
-      "
-      ref="search"
-    />
-    <b-form-group class="mt-3">
-      <b-form-radio
-        v-model="captions"
-        class="d-inline-block mr-3"
-        value="captions"
-      >
-        With Captions
-      </b-form-radio>
-      <b-form-radio
-        v-model="captions"
-        class="d-inline-block mr-3"
-        value="nocaptions"
-      >
-        No Captions
-      </b-form-radio>
-      <b-form-radio v-model="captions" class="d-inline-block mr-3" value="all">
-        All
-      </b-form-radio>
-      <b-form-checkbox v-model="long" class="d-inline-block mr-3">
-        Only long videos (20m+)
-      </b-form-checkbox>
-      <b-button class="btn-small btn-primary ml-3" @click="forceRefresh">
-        <i class="fa fa-sync-alt mr-1"></i>
-        Force Refresh
-      </b-button>
-      <b-button v-if="!moreLoaded" class="btn-small btn-secondary ml-1" @click="loadMore">
-        <i class="fa fa-cloud mr-1"></i>
-        Load {{ maxPages }} pages
-      </b-button>
-    </b-form-group>
-    <YouTubeSearchResults
-      :term="term"
-      :start="start"
-      :captions="captions"
-      class="mt-5"
-      :key="searchResultKey"
-      :long="long"
-      :infinite="true"
-      ref="youtubeSearchResults"
-    />
+  <div class="main">
+    <div class="container pt-5 pb-5 youtube-search">
+      <h1 class="text-center mb-5">Study YouTube Subtitles</h1>
+      <SimpleSearch
+        :placeholder="$t('Enter a search term in {l2}...', { l2: $l2.name })"
+        :action="
+          (url) => {
+            let path = `/${$l1.code}/${
+              $l2.code
+            }/youtube/search/${encodeURIComponent(url)}/0`;
+            if (this.$router.currentRoute.path === path) this.searchResultKey++;
+            else this.$router.push({ path: path });
+          }
+        "
+        ref="search"
+      />
+      <b-form-group class="mt-3">
+        <b-form-radio
+          v-model="captions"
+          class="d-inline-block mr-3"
+          value="captions"
+        >
+          With Captions
+        </b-form-radio>
+        <b-form-radio
+          v-model="captions"
+          class="d-inline-block mr-3"
+          value="nocaptions"
+        >
+          No Captions
+        </b-form-radio>
+        <b-form-radio
+          v-model="captions"
+          class="d-inline-block mr-3"
+          value="all"
+        >
+          All
+        </b-form-radio>
+        <b-form-checkbox v-model="long" class="d-inline-block mr-3">
+          Only long videos (20m+)
+        </b-form-checkbox>
+        <b-button class="btn-small btn-primary ml-3" @click="forceRefresh">
+          <i class="fa fa-sync-alt mr-1"></i>
+          Force Refresh
+        </b-button>
+        <b-button
+          v-if="!moreLoaded"
+          class="btn-small btn-secondary ml-1"
+          @click="loadMore"
+        >
+          <i class="fa fa-cloud mr-1"></i>
+          Load {{ maxPages }} pages
+        </b-button>
+      </b-form-group>
+      <YouTubeSearchResults
+        :term="term"
+        :start="start"
+        :captions="captions"
+        class="mt-5"
+        :key="searchResultKey"
+        :long="long"
+        :infinite="true"
+        ref="youtubeSearchResults"
+      />
+    </div>
   </div>
 </template>
 
@@ -88,7 +98,7 @@ export default {
       checkSaved: false,
       long: false,
       maxPages: 34,
-      moreLoaded: false
+      moreLoaded: false,
     };
   },
   computed: {
@@ -121,8 +131,8 @@ export default {
   },
   mounted() {
     this.updateSearchText();
-    this.long = this.$route.query.long === 'true' ? true : false
-    this.captions = this.$route.query.captions || 'all'
+    this.long = this.$route.query.long === "true" ? true : false;
+    this.captions = this.$route.query.captions || "all";
   },
   methods: {
     async updateSearchText() {
@@ -138,11 +148,11 @@ export default {
       this.$refs.youtubeSearchResults.forceRefresh();
     },
     async loadMore() {
-      this.moreLoaded = true
+      this.moreLoaded = true;
       for (let i = 0; i < this.maxPages; i++) {
         await this.$refs.youtubeSearchResults.loadMore();
       }
-    }
+    },
   },
 };
 </script>

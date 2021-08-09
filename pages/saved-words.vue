@@ -13,85 +13,84 @@
   }
 </router>
 <template>
-  <div class="main container pt-4 mb-4" v-cloak>
-    <div class="row">
-      <div class="col-sm-12">
-        <h4>{{ $t("My Words") }}</h4>
-        <p>
-          {{
-            $t(
-              "These words are stored in your browser's local storage, which persists unless you clear your browsing data."
-            )
-          }}
-        </p>
-        <hr />
-        <div class="my-words-tools mt-2 mb-2 text-right">
-          <div class="export-wrapper text-left mt-4" v-if="showExport">
-            <p v-html="$t('copyPasteCSV')" />
-            <b-form-group :label="$t('Include:')">
-              <b-form-checkbox-group
-                v-model="selectedCsvOptions"
-                :options="csvOptions"
-                @click="updateCSVText()"
-              ></b-form-checkbox-group>
-            </b-form-group>
-            <textarea
-              id="export-textarea"
-              class="mt-2 mb-2 form-control"
-              cols="30"
-              rows="10"
-              v-model="csvText"
-            ></textarea>
+  <div class="main pt-4 pb-4" v-cloak>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <h4>{{ $t("My Words") }}</h4>
+          <p>
+            {{
+              $t(
+                "These words are stored in your browser's local storage, which persists unless you clear your browsing data."
+              )
+            }}
+          </p>
+          <hr />
+          <div class="my-words-tools mt-2 mb-2 text-right">
+            <div class="export-wrapper text-left mt-4" v-if="showExport">
+              <p v-html="$t('copyPasteCSV')" />
+              <b-form-group :label="$t('Include:')">
+                <b-form-checkbox-group
+                  v-model="selectedCsvOptions"
+                  :options="csvOptions"
+                  @click="updateCSVText()"
+                ></b-form-checkbox-group>
+              </b-form-group>
+              <textarea
+                id="export-textarea"
+                class="mt-2 mb-2 form-control"
+                cols="30"
+                rows="10"
+                v-model="csvText"
+              ></textarea>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <!-- .row -->
-    <div class="row">
-      <div class="col-sm-12">
-        <p
-          v-if="loaded && sW.length <= 0"
-          class="alert alert-warning no-saved-words"
-        >
-          You don't have any words saved yet. Save words by clicking on the
-          <i class="glyphicon glyphicon-star-empty"></i>
-          icon next to it.
-        </p>
-        <div>
-          <b-button
-            class="upload-list"
-            variant="primary"
-            v-on:click="showExportClick"
-            :disabled="this.sW.length <= 0"
+      <div class="row">
+        <div class="col-sm-12">
+          <p
+            v-if="loaded && sW.length <= 0"
+            class="alert alert-warning no-saved-words"
           >
-            <i class="fa fa-download mr-1"></i>
-            {{ $t("Export CSV") }}
-          </b-button>
-          <b-button
-            class="remove-all"
-            variant="danger"
-            v-on:click="removeAllClick"
-            :disabled="this.sW.length <= 0"
-          >
-            <i class="glyphicon glyphicon-trash"></i>
-            {{ $t("Clear") }}
-          </b-button>
-          <router-link
-            v-if="sW.length > 0"
-            class="btn btn-gray"
-            :to="`/${$l1.code}/${$l2.code}/learn-interactive/saved`"
-          >
-            <i class="fa fa-chalkboard"></i>
-            Learn (Legacy)
-          </router-link>
+            You don't have any words saved yet. Save words by clicking on the
+            <i class="glyphicon glyphicon-star-empty"></i>
+            icon next to it.
+          </p>
+          <div>
+            <b-button
+              class="upload-list"
+              variant="primary"
+              v-on:click="showExportClick"
+              :disabled="this.sW.length <= 0"
+            >
+              <i class="fa fa-download mr-1"></i>
+              {{ $t("Export CSV") }}
+            </b-button>
+            <b-button
+              class="remove-all"
+              variant="danger"
+              v-on:click="removeAllClick"
+              :disabled="this.sW.length <= 0"
+            >
+              <i class="glyphicon glyphicon-trash"></i>
+              {{ $t("Clear") }}
+            </b-button>
+            <router-link
+              v-if="sW.length > 0"
+              class="btn btn-gray"
+              :to="`/${$l1.code}/${$l2.code}/learn-interactive/saved`"
+            >
+              <i class="fa fa-chalkboard"></i>
+              Learn (Legacy)
+            </router-link>
+          </div>
+          <Loader class="mt-4" />
+          <WordList :words="sW" class="mt-4"></WordList>
         </div>
-        <Loader class="mt-4" />
-        <WordList :words="sW" class="mt-4"></WordList>
       </div>
     </div>
-    <!-- .row -->
   </div>
-  <!-- .container -->
 </template>
 
 <script>

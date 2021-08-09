@@ -5,16 +5,20 @@
   }
 </router>
 <template>
-  <div>
+  <div :class="{ 'bg-white': !wide }">
     <SocialHead :title="title" :description="description" :image="image" />
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-xl-4 p-4 content-pane-left">
-          <div class="text-center">
-            <router-link class="link-unstyled mb-4 d-block" :to="`/${$l1.code}/${$l2.code}/phrasebook/${phrasebook.id}#${phraseId}`"><h5>{{ phrasebook.title }}</h5></router-link>
+    <div :class="{ container: !wide }">
+      <div :class="{'row': !wide, 'content-panes': wide }">
+        <div :class="{'p-4 content-pane-left': wide, 'col-sm-12': !wide}">
+          <div class="text-center" v-if="phrasebook && phraseId">
+            <router-link
+              class="link-unstyled mb-4 d-block"
+              :to="`/${$l1.code}/${$l2.code}/phrasebook/${phrasebook.id}#${phraseId}`"
+            >
+              <h5>{{ phrasebook.title }}</h5>
+            </router-link>
             <Paginator
               class="mb-4"
-              v-if="phrasebook && phraseId"
               :items="phrasebook.phrases"
               :findCurrent="findCurrent"
               :url="url"
@@ -57,7 +61,7 @@
             </div>
           </div>
         </div>
-        <div class="col-xl-8 content-pane-right">
+        <div :class="{'content-pane-right pl-3 pr-3': wide}">
           <div>
             <div class="text-center mt-3" v-if="words && words.length > 1">
               <b-dropdown size="sm" :items="words" text="Disambiguation">
@@ -118,6 +122,7 @@ export default {
       phraseObj: undefined,
       words: undefined,
       word: undefined,
+      wide: false,
       images: [],
     };
   },
@@ -135,6 +140,14 @@ export default {
         this.getPhrasebookFromStore();
       }
     });
+  },
+  created() {
+    if (typeof window !== "undefined")
+      window.addEventListener("resize", this.onResize);
+  },
+  destroyed() {
+    if (typeof window !== "undefined")
+      window.removeEventListener("resize", this.onResize);
   },
   beforeDestroy() {
     // you may call unsubscribe to stop the subscription
@@ -176,6 +189,9 @@ export default {
     },
   },
   methods: {
+    onResize() {
+      this.wide = Helper.setWide();
+    },
     async getPhrasebookFromStore() {
       let phrasebooks =
         this.$store.state.phrasebooks.phrasebooks[this.$l2.code];
@@ -230,17 +246,31 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.content-pane-left {
-  background: #ffffffdd;
-  backdrop-filter: blur(20px);
-  height: 100vh;
-  position: sticky;
-  top: 0;
-}
-.content-pane-right {
-  background: white;
-}
-::v-deep .entry-word {
-  font-size: 2rem;
+.zerotohero-wide {
+  .content-panes {
+    display: flex;
+    flex-wrap: nowrap;
+    .content-pane-left {
+      width: 21rem;
+      background: #ffffffdd;
+      backdrop-filter: blur(20px);
+      height: 100vh;
+      position: sticky;
+      top: 0;
+      ::v-deep .entry-word {
+        font-size: 2rem;
+      }
+      ::v-deep .definitions-many {
+        columns: 1;
+        margin-top: 1rem;
+      }
+    }
+    .content-pane-right {
+      background: white;
+      padding: 0 1rem;
+      width: 100%;
+      overflow: hidden;
+    }
+  }
 }
 </style>

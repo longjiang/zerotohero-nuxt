@@ -4,13 +4,15 @@
   }
 </router>
 <template>
-  <div>
-    <div class="main container pt-5 mb-5">
+  <div class="main">
+    <div class="container pt-5 mb-5">
       <div class="row">
         <div class="col-sm-12">
           <div v-if="href">
             CSV Ready.
-            <a :href="href" :download="`sketch-engine-corpora.csv.txt`">Download</a>
+            <a :href="href" :download="`sketch-engine-corpora.csv.txt`">
+              Download
+            </a>
           </div>
           <div v-else>Preparing CSV...</div>
         </div>
@@ -19,13 +21,24 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
+import axios from "axios";
 export default {
   data() {
     return {
       href: undefined,
-      fields: ['language_id','is_featured','corpname','wordcount','aligned','diachronic','tags','language_name','info','name']
-    }
+      fields: [
+        "language_id",
+        "is_featured",
+        "corpname",
+        "wordcount",
+        "aligned",
+        "diachronic",
+        "tags",
+        "language_name",
+        "info",
+        "name",
+      ],
+    };
   },
   async mounted() {
     this.exportCorporaCSV();
@@ -46,26 +59,27 @@ export default {
       return textFile;
     },
     async exportCorporaCSV() {
-      let res = await axios.get('/data/sketch-engine/sketch-engine-corpora.json.txt')
+      let res = await axios.get(
+        "/data/sketch-engine/sketch-engine-corpora.json.txt"
+      );
       if (res && res.data) {
-        let SketchEngineCorpora = res.data
-        let data = SketchEngineCorpora.map(corpus => {
-          let o = {}
+        let SketchEngineCorpora = res.data;
+        let data = SketchEngineCorpora.map((corpus) => {
+          let o = {};
           for (let f of this.fields) {
-            let info = corpus[f]
-            if (f === 'wordcount') info = corpus.sizes.wordcount
-            o[f] = info
+            let info = corpus[f];
+            if (f === "wordcount") info = corpus.sizes.wordcount;
+            o[f] = info;
           }
-          return o
-        })
+          return o;
+        });
         let csv = Papa.unparse(data);
         this.href = this.makeTextFile(csv);
       }
     },
   },
-}
+};
 </script>
 
 <style>
-
 </style>

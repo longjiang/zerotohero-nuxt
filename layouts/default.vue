@@ -62,6 +62,7 @@
 import Config from "@/lib/config";
 import { mapState } from "vuex";
 import smoothscroll from "smoothscroll-polyfill";
+import Helper from '@/lib/helper'
 
 export default {
   data() {
@@ -69,11 +70,12 @@ export default {
       Config,
       focus: false,
       loaded: false,
+      wide: false,
       dictionaryCredit: "",
-      wide: typeof window !== "undefined" && window.innerWidth > 991,
     };
   },
   async mounted() {
+    this.wide = Helper.setWide();
     if (this.l1 && this.l2) this.loadSettings();
     if (this.l1) this.updatei18n();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
@@ -108,7 +110,7 @@ export default {
   },
   methods: {
     onResize() {
-      this.wide = typeof window !== "undefined" && window.innerWidth > 991;
+      this.wide = Helper.setWide();
     },
     updatei18n() {
       this.$i18n.locale = this.l1.code;

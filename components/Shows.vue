@@ -1,68 +1,72 @@
 <template>
-  <div class="main container" id="main">
-    <SocialHead
-      v-if="shows && shows[0]"
-      :title="`Learn ${$l2.name} with ${
-        routeType === 'tv-shows' ? 'TV Shows' : 'Talks'
-      } | ${$l2.name} Zero to Hero`"
-      :description="`Learn ${$l2.name} with ${
-        routeType === 'tv-shows' ? 'TV Shows' : 'Talks'
-      }.`"
-      :image="`https://img.youtube.com/vi/${shows[0].youtube_id}/hqdefault.jpg`"
-    />
-    <div class="row">
-      <div class="col-sm-12">
-        <h3 class="text-center mt-5">
-          Study {{ $l2.name }} with
-          {{ routeType === "tv-shows" ? "TV Shows" : "Talks" }}
-        </h3>
-        <p class="text-center mb-5" v-if="shows && shows.length">
-          ({{ filteredShows.length }} show{{ filteredShows.length > 1 ? "s" : "" }})
-        </p>
-        <div class="text-center mb-5">
-          <NuxtLink
-            :to="`/${$l1.code}/${$l2.code}/youtube/view/${randomEpisodeYouTubeId}`"
-            class="btn btn-success d-inline-block text-large pl-4 pr-4"
-            style="font-size: 1.3em"
-          >
-            <i class="fa fa-random"></i>
-            Watch in random
-          </NuxtLink>
-        </div>
-        <div class="show-list-wrapper">
-          <b-input-group class="mb-5">
-            <b-form-input
-              v-model="keyword"
-              @compositionend.prevent.stop="() => false"
-              placeholder="Filter by show title..."
-            />
-            <b-input-group-append>
-              <b-button variant="primary">
-                <i class="fas fa-filter"></i>
-              </b-button>
-            </b-input-group-append>
-          </b-input-group>
-          <div class="mb-5">
-            <div
-              :class="{
-                'loader text-center': true,
-                'd-none': shows,
-              }"
-              style="flex: 1"
+  <div class="main">
+    <div class="container">
+      <SocialHead
+        v-if="shows && shows[0]"
+        :title="`Learn ${$l2.name} with ${
+          routeType === 'tv-shows' ? 'TV Shows' : 'Talks'
+        } | ${$l2.name} Zero to Hero`"
+        :description="`Learn ${$l2.name} with ${
+          routeType === 'tv-shows' ? 'TV Shows' : 'Talks'
+        }.`"
+        :image="`https://img.youtube.com/vi/${shows[0].youtube_id}/hqdefault.jpg`"
+      />
+      <div class="row">
+        <div class="col-sm-12">
+          <h3 class="text-center mt-5">
+            Study {{ $l2.name }} with
+            {{ routeType === "tv-shows" ? "TV Shows" : "Talks" }}
+          </h3>
+          <p class="text-center mb-5" v-if="shows && shows.length">
+            ({{ filteredShows.length }} show{{
+              filteredShows.length > 1 ? "s" : ""
+            }})
+          </p>
+          <div class="text-center mb-5">
+            <NuxtLink
+              :to="`/${$l1.code}/${$l2.code}/youtube/view/${randomEpisodeYouTubeId}`"
+              class="btn btn-success d-inline-block text-large pl-4 pr-4"
+              style="font-size: 1.3em"
             >
-              <div class="heartbeat-loader"></div>
+              <i class="fa fa-random"></i>
+              Watch in random
+            </NuxtLink>
+          </div>
+          <div class="show-list-wrapper">
+            <b-input-group class="mb-5">
+              <b-form-input
+                v-model="keyword"
+                @compositionend.prevent.stop="() => false"
+                placeholder="Filter by show title..."
+              />
+              <b-input-group-append>
+                <b-button variant="primary">
+                  <i class="fas fa-filter"></i>
+                </b-button>
+              </b-input-group-append>
+            </b-input-group>
+            <div class="mb-5">
+              <div
+                :class="{
+                  'loader text-center': true,
+                  'd-none': shows,
+                }"
+                style="flex: 1"
+              >
+                <div class="heartbeat-loader"></div>
+              </div>
+              <div class="text-center" v-if="shows && shows.length === 0">
+                Sorry, we could not find any
+                {{ routeType === "tv-shows" ? "TV shows" : "talks" }} in
+                {{ $l2.name }} 😭.
+              </div>
+              <ShowList
+                v-if="shows && shows.length > 0"
+                :shows="filteredShows"
+                :type="type"
+                :key="`shows-filtered-${this.keyword}`"
+              />
             </div>
-            <div class="text-center" v-if="shows && shows.length === 0">
-              Sorry, we could not find any
-              {{ routeType === "tv-shows" ? "TV shows" : "talks" }} in
-              {{ $l2.name }} 😭.
-            </div>
-            <ShowList
-              v-if="shows && shows.length > 0"
-              :shows="filteredShows"
-              :type="type"
-              :key="`shows-filtered-${this.keyword}`"
-            />
           </div>
         </div>
       </div>
@@ -142,7 +146,9 @@ export default {
             return title.includes(k);
           });
         } else {
-          return this.shows.filter(show => !['News', 'Music', 'Movies'].includes(show.title));
+          return this.shows.filter(
+            (show) => !["News", "Music", "Movies"].includes(show.title)
+          );
         }
       }
     },

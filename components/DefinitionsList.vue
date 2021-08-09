@@ -105,7 +105,7 @@ export default {
     display: inline;
   }
   &.definitions-many {
-    padding-left: inherit;
+    padding-left: 1rem;
     list-style: inherit;
     .definition-list-item {
       text-align: left;

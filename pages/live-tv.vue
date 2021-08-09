@@ -5,160 +5,164 @@
   }
 </router>
 <template>
-  <div class="pt-4 pb-5 container-xl bg-white">
-    <SocialHead
-      v-if="channels"
-      :title="`Learn ${$l2.name} from Live ${$l2.name} TV | ${$l2.name} Zero to Hero`"
-      :description="`Watch ${$l2.name} TV Channels: ${channels
-        .slice(0, 5)
-        .map((c) => c.name)
-        .join(', ')} ...`"
-      :image="image"
-    />
-    <div class="row">
-      <div class="col-sm-12 mb-4">
-        <h4 class="text-center">Learn {{ $l2.name }} from Live TV</h4>
-        <div v-if="channels" class="text-center">
-          {{ channels.length }} Channel(s)
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div
-        :class="{
-          'live-video-column pl-0 pr-0': true,
-          'col-sm-12': portrait,
-          'col-sm-7 col-md-8': !portrait,
-        }"
-      >
-        <div class="live-tv-wrapper">
-          <LazyLiveVideo
-            v-if="currentChannel"
-            :url="currentChannel.url"
-            :key="`live-video-${currentChannel.url}`"
-            ref="liveVideo"
-          />
-          <div v-if="currentChannel" class="p-3">
-            <b>Channel:</b>
-            {{ currentChannel.name }}
+  <div class="bg-white">
+    <div class="pt-4 pb-5 container-xl">
+      <SocialHead
+        v-if="channels"
+        :title="`Learn ${$l2.name} from Live ${$l2.name} TV | ${$l2.name} Zero to Hero`"
+        :description="`Watch ${$l2.name} TV Channels: ${channels
+          .slice(0, 5)
+          .map((c) => c.name)
+          .join(', ')} ...`"
+        :image="image"
+      />
+      <div class="row">
+        <div class="col-sm-12 mb-4">
+          <h4 class="text-center">Learn {{ $l2.name }} from Live TV</h4>
+          <div v-if="channels" class="text-center">
+            {{ channels.length }} Channel(s)
           </div>
         </div>
       </div>
-      <div
-        :class="{
-          'pl-0 pr-0': true,
-          'col-sm-12': portrait,
-          'col-sm-5 col-md-4': !portrait,
-        }"
-      >
+      <div class="row">
         <div
-          v-if="channels"
-          class="tabs text-center channel-category-tabs pl-3 pr-3"
-        >
-          <button
-            v-if="hasFeatured"
-            :key="`live-tv-cat-tab-featured`"
-            :class="{
-              'btn btn-gray mr-1': true,
-              'text-dark': !featured,
-              'bg-primary text-white': featured,
-            }"
-            @click="
-              country = undefined;
-              category = undefined;
-              featured = true;
-            "
-          >
-            Featured
-          </button>
-          <button
-            :key="`live-tv-cat-tab-all`"
-            :class="{
-              'btn btn-gray mr-1': true,
-              'text-dark': typeof category !== 'undefined' || featured,
-              'bg-primary text-white':
-                typeof category === 'undefined' && typeof country === 'undefined' && !featured,
-            }"
-            @click="
-              country = undefined;
-              category = undefined;
-              featured = false;
-            "
-          >
-            All
-          </button>
-          <button
-            v-for="c in countries"
-            :key="`live-tv-cat-tab-${c}`"
-            :class="{
-              'btn btn-gray mr-1': true,
-              'text-dark': country !== c,
-              'bg-primary text-white': country === c,
-            }"
-            @click="
-              category = undefined;
-              country = c;
-              featured = false;
-            "
-          >
-            {{ c ? countryNameFromCode(c) : "Other countries" }}
-          </button>
-          <button
-            v-for="cat in categories"
-            :key="`live-tv-cat-tab-${cat}`"
-            :class="{
-              'btn btn-gray mr-1': true,
-              'text-dark': category !== cat,
-              'bg-primary text-white': category === cat,
-            }"
-            @click="
-              country = undefined;
-              category = cat;
-            "
-          >
-            {{ cat }}
-          </button>
-        </div>
-        <div
-          v-if="channels"
           :class="{
-            'channel-buttons': true,
-            'channel-buttons-portrait': portrait,
+            'live-video-column pl-0 pr-0': true,
+            'col-sm-12': portrait,
+            'col-sm-7 col-md-8': !portrait,
           }"
         >
-          <b-button
-            variant="gray"
-            size="sm"
-            :class="{
-              'channel-button': true,
-              'channel-button-current': currentChannel === channel,
-            }"
-            v-for="channel in filteredChannels"
-            :key="`channel-button-${channel.url}`"
-            :data-url="channel.url"
-            @click="setChannel(channel)"
-          >
-            <img
-              v-if="channel.logo"
-              :src="channel.logo"
-              :alt="channel.name"
-              @error="logoLoadError(channel)"
+          <div class="live-tv-wrapper">
+            <LazyLiveVideo
+              v-if="currentChannel"
+              :url="currentChannel.url"
+              :key="`live-video-${currentChannel.url}`"
+              ref="liveVideo"
             />
-            <div
-              style="
-                display: inline-block;
-                width: 4rem;
-                line-height: 2rem;
-                text-align: center;
-                font-size: 1.5em;
-                opacity: 0.5;
-              "
-              v-else
-            >
-              <i class="fa fa-tv"></i>
+            <div v-if="currentChannel" class="p-3">
+              <b>Channel:</b>
+              {{ currentChannel.name }}
             </div>
-            <span>{{ channel.name }}</span>
-          </b-button>
+          </div>
+        </div>
+        <div
+          :class="{
+            'pl-0 pr-0': true,
+            'col-sm-12': portrait,
+            'col-sm-5 col-md-4': !portrait,
+          }"
+        >
+          <div
+            v-if="channels"
+            class="tabs text-center channel-category-tabs pl-3 pr-3"
+          >
+            <button
+              v-if="hasFeatured"
+              :key="`live-tv-cat-tab-featured`"
+              :class="{
+                'btn btn-gray mr-1': true,
+                'text-dark': !featured,
+                'bg-primary text-white': featured,
+              }"
+              @click="
+                country = undefined;
+                category = undefined;
+                featured = true;
+              "
+            >
+              Featured
+            </button>
+            <button
+              :key="`live-tv-cat-tab-all`"
+              :class="{
+                'btn btn-gray mr-1': true,
+                'text-dark': typeof category !== 'undefined' || featured,
+                'bg-primary text-white':
+                  typeof category === 'undefined' &&
+                  typeof country === 'undefined' &&
+                  !featured,
+              }"
+              @click="
+                country = undefined;
+                category = undefined;
+                featured = false;
+              "
+            >
+              All
+            </button>
+            <button
+              v-for="c in countries"
+              :key="`live-tv-cat-tab-${c}`"
+              :class="{
+                'btn btn-gray mr-1': true,
+                'text-dark': country !== c,
+                'bg-primary text-white': country === c,
+              }"
+              @click="
+                category = undefined;
+                country = c;
+                featured = false;
+              "
+            >
+              {{ c ? countryNameFromCode(c) : "Other countries" }}
+            </button>
+            <button
+              v-for="cat in categories"
+              :key="`live-tv-cat-tab-${cat}`"
+              :class="{
+                'btn btn-gray mr-1': true,
+                'text-dark': category !== cat,
+                'bg-primary text-white': category === cat,
+              }"
+              @click="
+                country = undefined;
+                category = cat;
+              "
+            >
+              {{ cat }}
+            </button>
+          </div>
+          <div
+            v-if="channels"
+            :class="{
+              'channel-buttons': true,
+              'channel-buttons-portrait': portrait,
+            }"
+          >
+            <b-button
+              variant="gray"
+              size="sm"
+              :class="{
+                'channel-button': true,
+                'channel-button-current': currentChannel === channel,
+              }"
+              v-for="channel in filteredChannels"
+              :key="`channel-button-${channel.url}`"
+              :data-url="channel.url"
+              @click="setChannel(channel)"
+            >
+              <img
+                v-if="channel.logo"
+                :src="channel.logo"
+                :alt="channel.name"
+                @error="logoLoadError(channel)"
+              />
+              <div
+                style="
+                  display: inline-block;
+                  width: 4rem;
+                  line-height: 2rem;
+                  text-align: center;
+                  font-size: 1.5em;
+                  opacity: 0.5;
+                "
+                v-else
+              >
+                <i class="fa fa-tv"></i>
+              </div>
+              <span>{{ channel.name }}</span>
+            </b-button>
+          </div>
         </div>
       </div>
     </div>
@@ -222,7 +226,7 @@ export default {
         if (this.featured) return c.featured;
         if (this.category) return c.category === this.category;
         if (this.country) return c.countries.includes(this.country);
-        return true
+        return true;
       });
       return channels;
     },
@@ -237,8 +241,8 @@ export default {
       window.removeEventListener("resize", this.onResize);
   },
   async fetch() {
-    let code = this.$l2["iso639-3"]
-    if (code === 'nor') code = 'nob' // Use 'Bokmal' for Norwegian.
+    let code = this.$l2["iso639-3"];
+    if (code === "nor") code = "nob"; // Use 'Bokmal' for Norwegian.
     let res = await axios.get(
       `${Config.server}data/live-tv-channels/${code}.csv.txt`
     );
@@ -309,7 +313,7 @@ export default {
       this.portrait = Helper.portrait();
     },
     countryNameFromCode(code) {
-      if (code === 'cn') return 'China (Mainland)'
+      if (code === "cn") return "China (Mainland)";
       let country = CountryCodeLookup.byInternet(code.toUpperCase());
       if (country) return country.country;
       else return code;

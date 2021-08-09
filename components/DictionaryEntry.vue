@@ -44,7 +44,6 @@
         <div :class="{ 'col-sm-12': true, 'p-0': portrait }">
           <div
             :class="{ 'widget': true }"
-            :style="portrait ? 'border-radius: 0' : ''"
             id="search-subs"
             v-if="entry && showSearchSubs && searchTerms"
           >
