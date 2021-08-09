@@ -153,7 +153,7 @@
               :key="`subnav-${child.name}-${index}`"
               :to="last(child) || child"
             >
-              <i :class="child.icon" style="width: 1.5rem"></i>
+              <i :class="child.icon"></i>
               {{ $t(child.title, { l2: $t($l2.name) }) }}
               <span
                 class="saved-words-count"
@@ -401,15 +401,15 @@ export default {
           ],
         },
         {
-          icon: "fas fa-book",
+          icon: "fa fa-book",
           title: "Dictionary",
           name: "dictionary",
           show: this.hasFeature("dictionary"),
           children: [
             {
               name: "dictionary",
-              icon: "fas fa-search",
-              title: "Look Up Words",
+              icon: "fa fa-book",
+              title: "Look Up Words",  
               show: this.hasFeature("dictionary"),
               shortcut: (e) => e.code === "KeyD" && e.metaKey && e.shiftKey,
             },
@@ -1011,12 +1011,19 @@ export default {
       margin: 0.3rem 0;
       i {
         width: 2rem;
+        text-align: center;
       }
     }
   }
   .secondary-nav {
     width: 14rem;
     background: rgba(255, 255, 255, 0.75);
+    .secondary-nav-item {
+      i {
+        width: 1.5rem;
+        text-align: center;
+      }
+    }
   }
 }
 

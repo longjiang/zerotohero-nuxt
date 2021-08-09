@@ -262,6 +262,7 @@
                   'ja',
                   'vi',
                   'lzh',
+                  'cy'
                 ]"
                 class="mt-4"
                 :sort="true"
