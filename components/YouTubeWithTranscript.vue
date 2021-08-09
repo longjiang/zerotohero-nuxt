@@ -165,7 +165,6 @@
               <i class="far fa-clone"></i>
               All Episodes
             </router-link>
-            {{ episodes.length }}
             <router-link
               v-if="nextEpisode"
               :to="nextEpisode"
