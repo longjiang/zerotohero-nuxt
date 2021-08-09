@@ -188,9 +188,7 @@ export default {
 }
 
 .zerotohero-wide {
-  display: flex;
   height: 100%;
-  align-items: stretch;
   .zth-nav {
     overflow: hidden;
     position: fixed;
