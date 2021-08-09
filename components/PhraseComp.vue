@@ -4,8 +4,8 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
-          <div class="text-center mb-5" v-if="term">
-            <EntryExternal :term="term" />
+          <div class="text-center" v-if="term">
+            <EntryExternal :term="term" v-if="showExternal" />
           </div>
         </div>
       </div>
@@ -43,29 +43,22 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
-          <div class="focus mt-5">
+          <div class="focus">
             <WebImages
               v-if="term"
               :text="term"
               limit="10"
-              class="mt-5"
               :key="`${term}-images`"
             />
             <client-only>
-              <EntryYouTube :text="term" v-if="$adminMode" class="mt-5" />
+              <EntryYouTube :text="term" v-if="$adminMode" />
             </client-only>
-            <Collocations
-              v-if="term"
-              :text="term"
-              class="mt-5"
-              :key="`${term}-col`"
-            />
+            <Collocations v-if="term" :text="term" :key="`${term}-col`" />
           </div>
           <div :key="term" class="focus">
             <Concordance
               v-if="term"
               :text="term"
-              class="mt-5"
               :key="`${term}-concordance`"
             />
           </div>
@@ -87,6 +80,9 @@ export default {
       default: undefined,
     },
     exact: {
+      default: false,
+    },
+    showExternal: {
       default: false,
     },
   },
@@ -150,4 +146,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+::v-deep .widget {
+  margin-bottom: 3rem;
+}
+</style>

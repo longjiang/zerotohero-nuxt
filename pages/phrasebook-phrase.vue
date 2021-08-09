@@ -11,14 +11,13 @@
       <div class="row">
         <div class="col-xl-4 p-4 content-pane-left">
           <div class="text-center">
+            <router-link class="link-unstyled mb-4 d-block" :to="`/${$l1.code}/${$l2.code}/phrasebook/${phrasebook.id}#${phraseId}`"><h5>{{ phrasebook.title }}</h5></router-link>
             <Paginator
               class="mb-4"
               v-if="phrasebook && phraseId"
               :items="phrasebook.phrases"
               :findCurrent="findCurrent"
               :url="url"
-              :home="`/${$l1.code}/${$l2.code}/phrasebook/${phrasebook.id}#${this.phraseId}`"
-              :title="phrasebook.title"
             />
           </div>
           <div>
@@ -87,7 +86,8 @@
               :term="phraseObj.phrase.toLowerCase()"
               :tvShow="phrasebook.tv_show"
               :exact="phrasebook.exact"
-              class="mt-3 mb-5"
+              :showExternal="false"
+              class="mt-4 mb-4"
             />
           </div>
         </div>
