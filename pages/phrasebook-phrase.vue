@@ -135,6 +135,7 @@ export default {
       });
   },
   mounted() {
+    this.wide = Helper.wide();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type.startsWith("phrasebooks")) {
         this.getPhrasebookFromStore();
@@ -190,7 +191,7 @@ export default {
   },
   methods: {
     onResize() {
-      this.wide = Helper.setWide();
+      this.wide = Helper.wide();
     },
     async getPhrasebookFromStore() {
       let phrasebooks =

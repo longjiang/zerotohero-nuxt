@@ -5,84 +5,87 @@
   }
 </router>
 <template>
-  <div class="container main pt-5 mb-5">
-    <SocialHead :title="title" :description="description" :image="image" />
-
-    <div class="row mb-3">
-      <div class="col-sm-12" v-if="phrasebook">
-        <h4 class="text-center">{{ phrasebook.title }}</h4>
-        <div class="mt-2 text-center">
-          ({{ phrasebook.phrases.length }} phrases)
-        </div>
-        <div v-html="phrasebook.description" class="mt-1 text-center" />
-        <div class="text-center mt-3">
-          <b-input-group prepend="Start from #">
-            <b-form-input v-model.lazy="startRow"></b-form-input>
-            <b-input-group-append>
-              <b-button variant="primary">OK</b-button>
-            </b-input-group-append>
-            <a
-              :href="csvHref"
-              :download="`${phrasebook.title}.csv`"
-              v-if="csvHref"
-              class="btn btn-secondary ml-1"
-            >
-              <i class="fa fa-download"></i>
-              CSV
-            </a>
-          </b-input-group>
+  <div class="main">
+    <div class="container pt-5 mb-5">
+      <SocialHead :title="title" :description="description" :image="image" />
+      <div class="row mb-3">
+        <div class="col-sm-12" v-if="phrasebook">
+          <h4 class="text-center">{{ phrasebook.title }}</h4>
+          <div class="mt-2 text-center">
+            ({{ phrasebook.phrases.length }} phrases)
+          </div>
+          <div v-html="phrasebook.description" class="mt-1 text-center" />
+          <div class="text-center mt-3">
+            <b-input-group prepend="Start from #">
+              <b-form-input v-model.lazy="startRow"></b-form-input>
+              <b-input-group-append>
+                <b-button variant="primary">OK</b-button>
+              </b-input-group-append>
+              <a
+                :href="csvHref"
+                :download="`${phrasebook.title}.csv`"
+                v-if="csvHref"
+                class="btn btn-secondary ml-1"
+              >
+                <i class="fa fa-download"></i>
+                CSV
+              </a>
+            </b-input-group>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="row" v-if="phrasebook">
-      <router-link
-        v-for="(phraseObj, phraseIndex) in phrasebook.phrases.slice(
-          Number(startRow) - 1,
-          Number(startRow) + 1 + Number(numRowsVisible)
-        )"
-        :key="`phrasebook-phrase-${phraseObj.id}`"
-        :id="`phrasebook-phrase-${phraseIndex}`"
-        class="link-unstyled col-sm-12 col-md-6 col-lg-4 mb-3 mt-3"
-        :to="`/${$l1.code}/${$l2.code}/phrasebook/${phrasebook.id}/${
-          phraseObj.id
-        }/${encodeURIComponent(phraseObj.phrase)}`"
-        v-observe-visibility="
-          phraseIndex === numRowsVisible - 1 ? visibilityChanged : false
-        "
-      >
-        <div
-          :class="{
-            'rounded p-4 phrasebook-card': true,
-            'text-right': $l2.direction === 'rtl',
-            'phrasebook-card-current': initId && phraseIndex === initId,
-          }"
+      <div class="row" v-if="phrasebook">
+        <router-link
+          v-for="(phraseObj, phraseIndex) in phrasebook.phrases.slice(
+            Number(startRow) - 1,
+            Number(startRow) + 1 + Number(numRowsVisible)
+          )"
+          :key="`phrasebook-phrase-${phraseObj.id}`"
+          :id="`phrasebook-phrase-${phraseIndex}`"
+          class="link-unstyled col-sm-12 col-md-6 col-lg-4 mb-3 mt-3"
+          :to="`/${$l1.code}/${$l2.code}/phrasebook/${phrasebook.id}/${
+            phraseObj.id
+          }/${encodeURIComponent(phraseObj.phrase)}`"
+          v-observe-visibility="
+            phraseIndex === numRowsVisible - 1 ? visibilityChanged : false
+          "
         >
           <div
-            :class="`${$l2.direction === 'rtl' ? 'float-left' : 'float-right'}`"
-            style="color: #ccc"
+            :class="{
+              'rounded p-4 phrasebook-card': true,
+              'text-right': $l2.direction === 'rtl',
+              'phrasebook-card-current': initId && phraseIndex === initId,
+            }"
           >
-            #{{ phraseObj.id + 1 }}
-          </div>
-          <div>
-            <span v-if="phraseObj && phraseObj.pronunciation">
-              {{ phraseObj.pronunciation }}
-            </span>
-          </div>
-          <Annotate :phonetics="false">
-            <h4
-              :data-level="
-                phraseObj && phraseObj.level ? phraseObj.level : 'outside'
-              "
-              class="mb-0"
-              v-html="phraseObj.phrase"
-            />
-          </Annotate>
+            <div
+              :class="`${
+                $l2.direction === 'rtl' ? 'float-left' : 'float-right'
+              }`"
+              style="color: #ccc"
+            >
+              #{{ phraseObj.id + 1 }}
+            </div>
+            <div>
+              <span v-if="phraseObj && phraseObj.pronunciation">
+                {{ phraseObj.pronunciation }}
+              </span>
+            </div>
+            <Annotate :phonetics="false">
+              <h4
+                :data-level="
+                  phraseObj && phraseObj.level ? phraseObj.level : 'outside'
+                "
+                class="mb-0"
+                v-html="phraseObj.phrase"
+              />
+            </Annotate>
 
-          <div class="mb-0" v-if="phraseObj && phraseObj[$l1.code]">
-            {{ phraseObj[$l1.code] }}
+            <div class="mb-0" v-if="phraseObj && phraseObj[$l1.code]">
+              {{ phraseObj[$l1.code] }}
+            </div>
           </div>
-        </div>
-      </router-link>
+        </router-link>
+      </div>
     </div>
   </div>
 </template>

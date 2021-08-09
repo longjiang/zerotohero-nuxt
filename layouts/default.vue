@@ -75,7 +75,7 @@ export default {
     };
   },
   async mounted() {
-    this.wide = Helper.setWide();
+    this.wide = Helper.wide();
     if (this.l1 && this.l2) this.loadSettings();
     if (this.l1) this.updatei18n();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
@@ -110,7 +110,7 @@ export default {
   },
   methods: {
     onResize() {
-      this.wide = Helper.setWide();
+      this.wide = Helper.wide();
     },
     updatei18n() {
       this.$i18n.locale = this.l1.code;
