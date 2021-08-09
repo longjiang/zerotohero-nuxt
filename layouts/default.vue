@@ -181,7 +181,7 @@ export default {
   background-size: cover;
 }
 
-.zth-content {
+.main {
   background: white;
 }
 

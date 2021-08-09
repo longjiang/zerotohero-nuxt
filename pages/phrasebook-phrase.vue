@@ -5,11 +5,11 @@
   }
 </router>
 <template>
-  <div class="main">
+  <div>
     <SocialHead :title="title" :description="description" :image="image" />
-    <div class="container pt-4">
+    <div class="container-fluid">
       <div class="row">
-        <div class="col-sm-12">
+        <div class="col-xl-4 p-4 content-pane-left">
           <div class="text-center">
             <Paginator
               class="mb-4"
@@ -43,42 +43,55 @@
                 </Annotate>
               </div>
             </h2>
-            <p class="text-center mt-0" v-if="phraseObj && phraseObj[$l1.code]">
+            <p class="text-center mt-1" v-if="phraseObj && phraseObj[$l1.code]">
               {{ phraseObj[$l1.code] }}
             </p>
+            <hr v-if="word" />
+            <div v-if="word" class="text-center">
+              <LazyEntryHeader :entry="word" />
+              <DefinitionsList
+                :key="`def-list-${word.id}`"
+                v-if="word.definitions"
+                class="mt-1"
+                :definitions="word.definitions"
+              ></DefinitionsList>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-8 bg-white" style="height: 100vh; overflow: scroll">
+          <div>
+            <div class="text-center mt-3" v-if="words && words.length > 1">
+              <b-dropdown size="sm" :items="words" text="Disambiguation">
+                <b-dropdown-item
+                  v-for="w in words"
+                  :key="`phrase-word-disambiguation-${w.id}`"
+                  @click="word = w"
+                >
+                  <b>{{ w.head }}</b>
+                  <em>{{ w.definitions[0] }}</em>
+                </b-dropdown-item>
+              </b-dropdown>
+            </div>
+            <LazyDictionaryEntry
+              v-if="word && phrasebook"
+              :entry="word"
+              :tvShow="phrasebook.tv_show"
+              :exact="phrasebook.exact"
+              :showHeader="false"
+              :showDefinitions="false"
+              :showExternal="false"
+              :showExample="false"
+            />
+            <LazyPhraseComp
+              v-else-if="phraseObj && phraseObj.phrase && phrasebook"
+              :term="phraseObj.phrase.toLowerCase()"
+              :tvShow="phrasebook.tv_show"
+              :exact="phrasebook.exact"
+              class="mt-3 mb-5"
+            />
           </div>
         </div>
       </div>
-    </div>
-    <div>
-      <div class="text-center mt-1" v-if="words && words.length > 0">
-        <i class="fa fa-arrow-down" style="font-size: 2em; color: #ccc"></i>
-      </div>
-      <div class="text-center mt-3" v-if="words && words.length > 1">
-        <b-dropdown size="sm" :items="words" text="Disambiguation">
-          <b-dropdown-item
-            v-for="w in words"
-            :key="`phrase-word-disambiguation-${w.id}`"
-            @click="word = w"
-          >
-            <b>{{ w.head }}</b>
-            <em>{{ w.definitions[0] }}</em>
-          </b-dropdown-item>
-        </b-dropdown>
-      </div>
-      <LazyDictionaryEntry
-        v-if="word && phrasebook"
-        :entry="word"
-        :tvShow="phrasebook.tv_show"
-        :exact="phrasebook.exact"
-      />
-      <LazyPhraseComp
-        v-else-if="phraseObj && phraseObj.phrase && phrasebook"
-        :term="phraseObj.phrase.toLowerCase()"
-        :tvShow="phrasebook.tv_show"
-        :exact="phrasebook.exact"
-        class="mt-3 mb-5"
-      />
     </div>
   </div>
 </template>
@@ -216,4 +229,14 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+.content-pane-left {
+  background: #ffffffdd;
+  backdrop-filter: blur(20px);
+  height: 100vh;
+  overflow: scroll;
+}
+::v-deep .entry-word {
+  font-size: 2rem;
+}
+</style>

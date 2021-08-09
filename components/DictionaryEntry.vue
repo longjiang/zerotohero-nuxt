@@ -1,31 +1,35 @@
 <template>
   <div>
     <div class="text-center">
-      <!-- <Loader class="mt-5" /> -->
+      <!-- <Loader class=" " /> -->
     </div>
     <div class="container">
       <div class="row">
         <div class="col-sm-12 text-center">
           <div>
-            <div class="p-4">
+            <div>
               <EntryHeader
+                v-if="showHeader"
+                class="p-4"
                 :entry="entry"
                 :key="`header-${entry.id}`"
                 ref="entryHeader"
               ></EntryHeader>
               <DefinitionsList
                 :key="`def-list-${entry.id}`"
-                v-if="entry.definitions"
+                v-if="entry.definitions && showDefinitions"
                 class="mt-3"
                 :definitions="entry.definitions"
               ></DefinitionsList>
             </div>
             <EntryExample
+              v-if="showExample"
               :entry="entry"
-              class="mb-4"
+              class=""
               :key="`${entry.id}-example`"
             ></EntryExample>
             <EntryExternal
+              v-if="showExternal"
               :term="entry.head"
               :traditional="entry.traditional"
               :level="entry.level"
@@ -39,7 +43,7 @@
       <div class="row">
         <div :class="{ 'col-sm-12': true, 'p-0': portrait }">
           <div
-            :class="{ 'widget mt-5': true }"
+            :class="{ 'widget': true }"
             :style="portrait ? 'border-radius: 0' : ''"
             id="search-subs"
             v-if="entry && showSearchSubs && searchTerms"
@@ -72,13 +76,13 @@
         <EntryDisambiguation
           v-if="['zh', 'yue'].includes($l2.code)"
           :entry="entry"
-          class="ml-3 mr-3 mt-5"
+          class="ml-3 mr-3  "
           style="flex: 1; min-width: 20rem"
         ></EntryDisambiguation>
       </div>
       <div class="row" v-if="showImages">
         <div class="col-sm-12">
-          <div class="web-images widget mt-5">
+          <div class="web-images widget  ">
             <div class="widget-title">
               {{ $t("Images of “{text}” on the Web", { text: entry.head }) }}
             </div>
@@ -91,7 +95,7 @@
                 :preloaded="images"
                 @loaded="webImagesLoaded"
               />
-              <p class="mt-4">
+              <p class="">
                 See more images of of “{{ entry.head }}” on
                 <a
                   :href="`https://www.google.com/search?q=${entry.head.replace(
@@ -120,12 +124,12 @@
                 $dictionaryName
               )
             "
-            class="mt-5"
+            class=""
             :word="entry"
           />
-          <EntryYouTube :text="entry.head" v-if="$adminMode" class="mt-5" />
+          <EntryYouTube :text="entry.head" v-if="$adminMode" class="" />
           <Collocations
-            :class="{ 'mt-5 mb-5': true, hidden: !collocationsReady }"
+            :class="{ '': true, hidden: !collocationsReady }"
             :word="entry"
             @collocationsReady="collocationsReady = true"
             :level="
@@ -133,14 +137,14 @@
             "
           />
           <Mistakes
-            :class="{ 'mt-5 mb-5': true, hidden: !mistakesReady }"
+            :class="{ '': true, hidden: !mistakesReady }"
             @mistakesReady="mistakesReady = true"
             v-if="$l2.code === 'zh'"
             :text="entry.simplified"
             :key="`mistakes-${entry.id}`"
           ></Mistakes>
           <EntryRelated
-            :class="{ 'mt-5': true, hidden: !relatedReady }"
+            :class="{ '': true, hidden: !relatedReady }"
             @relatedReady="relatedReady = true"
             :entry="entry"
             :key="`related-${entry.id}`"
@@ -152,32 +156,32 @@
       <div class="row">
         <div class="col-sm-12">
           <Concordance
-            :class="{ 'mt-5 mb-5': true, hidden: !concordanceReady }"
+            :class="{ ' ': true, hidden: !concordanceReady }"
             @concordanceReady="concordanceReady = true"
             :word="entry"
             :level="entry.level"
           />
         </div>
       </div>
-      <div class="row mt-5" v-if="['ja', 'ko'].includes($l2.code) || $l2.han">
+      <div class="row  " v-if="['ja', 'ko'].includes($l2.code) || $l2.han">
         <div class="col-sm-12" v-if="$l2.code !== 'zh'">
           <EntryCharacters
             v-if="entry.cjk && entry.cjk.canonical"
             :key="`${entry.id}-characters`"
-            class="mb-4"
+            class=""
             :text="entry.cjk.canonical"
             :pinyin="entry.cjk.phonetics ? entry.cjk.phonetics : undefined"
           ></EntryCharacters>
         </div>
         <div class="col-sm-12" v-else>
           <EntryCharacters
-            class="mb-4 simplified"
+            class=" simplified"
             :text="entry.simplified"
             :pinyin="entry.pinyin"
             :key="`${entry.id}-characters-simplified`"
           ></EntryCharacters>
           <EntryCharacters
-            class="mb-4 traditional"
+            class=" traditional"
             :text="entry.traditional"
             :pinyin="entry.pinyin"
             :key="`${entry.id}-characters-traditional`"
@@ -188,7 +192,7 @@
             v-if="
               entry.cjk && entry.cjk.canonical && entry.cjk.canonical !== 'NULL'
             "
-            class="mt-5 mb-5"
+            class=" "
             :text="entry.cjk.canonical"
             :key="`${entry.id}-chinese`"
           />
@@ -198,7 +202,7 @@
             v-if="
               entry.cjk && entry.cjk.canonical && entry.cjk.canonical !== 'NULL'
             "
-            class="mt-5 mb-5"
+            class=" "
             :text="entry.cjk.canonical"
             :key="`${entry.id}-japanese`"
           />
@@ -208,7 +212,7 @@
             v-if="
               entry.cjk && entry.cjk.canonical && entry.cjk.canonical !== 'NULL'
             "
-            class="mt-5 mb-5"
+            class=" "
             :text="entry.cjk.canonical"
             :key="`${entry.id}-korean`"
           />
@@ -230,6 +234,18 @@ export default {
   props: {
     entry: {
       type: Object,
+    },
+    showHeader: {
+      default: true,
+    },
+    showDefinitions: {
+      default: true,
+    },
+    showExternal: {
+      default: true,
+    },
+    showExample: {
+      default: true,
     },
     showImages: {
       default: true,
@@ -332,3 +348,9 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.widget {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+</style>
