@@ -968,7 +968,7 @@ export default {
   .main-nav {
     width: 13rem;
     padding-left: 1rem;
-    padding-top: 7rem;
+    padding-top: 8rem;
     margin: 0;
     position: relative;
     .zth-header {
@@ -1024,7 +1024,7 @@ export default {
     width: 13rem;
     background: rgba(255, 255, 255, 0.75);
     padding: 0.5rem;
-    padding-top: 7rem;
+    padding-top: 8rem;
     .secondary-nav-item {
       padding: 0.5rem;
       margin: 0.5rem;
