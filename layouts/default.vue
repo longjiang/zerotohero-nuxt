@@ -1,15 +1,14 @@
 <template>
   <div id="zerotohero" :class="classes">
     <template v-if="$route.path !== '/'">
-      <div class="zth-nav">
-        <Nav
-          v-if="l1 && l2"
-          :l1="l1"
-          :l2="l2"
-          :key="`nav-${l1.code}-${l2.code}`"
-          :variant="wide ? 'side-bar' : 'menu-bar'"
-        />
-      </div>
+      <Nav
+        v-if="l1 && l2"
+        :l1="l1"
+        :l2="l2"
+        :key="`nav-${l1.code}-${l2.code}`"
+        :variant="wide ? 'side-bar' : 'menu-bar'"
+        class="zth-nav"
+      />
       <div class="zth-content">
         <Nuxt id="main" />
         <footer class="zth-footer" style="z-index: -1">
@@ -193,9 +192,22 @@ export default {
     background-attachment: fixed;
     background-position: center;
     background-size: cover;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 25rem;
+    height: 100vh;
+    z-index: 2;
   }
   .zth-content {
     flex: 1;
+    margin-left: 30rem;
+  }
+}
+
+@media screen and (max-device-width: 1024px) {
+  .zth-nav {
+    background-attachment: scroll;
   }
 }
 </style>

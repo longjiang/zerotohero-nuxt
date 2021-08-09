@@ -81,7 +81,7 @@
       :set="(parent = getParent())"
     >
       <template v-if="variant === 'menu-bar' || variant === 'side-bar'">
-        <nav class="main-nav tabs">
+        <nav :class="{ 'main-nav': true, tabs: variant === 'menu-bar' }">
           <div
             v-for="(item, index) in menu.filter(
               (item) => item.show && to(item)
@@ -90,7 +90,8 @@
           >
             <NuxtLink
               :class="{
-                tab: true,
+                'main-nav-item': true,
+                tab: variant === 'menu-bar',
                 'd-block': variant === 'side-bar',
                 'router-link-active':
                   parent && parent.name === nameOfSelfOrFirstChild(item),
@@ -250,7 +251,7 @@ export default {
           children: [
             {
               name: "courses",
-              title: "Language Courses",
+              title: "Courses",
               icon: "fas fa-chalkboard-teacher",
               show: ["zh", "en"].includes(this.l2.code),
             },
@@ -490,7 +491,7 @@ export default {
             },
             {
               name: "studysheet",
-              title: "Study Sheet Creator",
+              title: "Study Sheet",
               icon: "fas fa-print",
               show: ["ru", "en", "zh"].includes(this.$l2.code),
             },
@@ -530,7 +531,7 @@ export default {
               name: "grammar",
               icon: "fas fa-list-ul",
               title: "Grammar Cheat Sheet",
-              show: this.hasFeature("grammar"),
+              show: false,
             },
             {
               name: "grammar-view",
@@ -842,12 +843,6 @@ export default {
 </script>
 
 <style lang="scss">
-@media screen and (max-device-width: 1024px) {
-  .zth-nav {
-    background-attachment: scroll;
-  }
-}
-
 .site-top-bar {
   background-color: rgba(29, 29, 29, 0.5);
   position: absolute;
@@ -867,15 +862,18 @@ export default {
 }
 
 .main-nav {
-  padding: 1rem;
   margin: 0 auto;
   width: 100%;
   display: block;
-  .tab {
+  .main-nav-item {
+    padding: 0.5rem 1rem;
+    color: white;
+    display: inline-block;
+    border: none;
     text-shadow: 0 0 10px rgba(0, 0, 0, 1);
-    border-top: 1px solid rgba(255, 255, 255, 0);
-    border-left: 1px solid rgba(255, 255, 255, 0);
-    border-right: 1px solid rgba(255, 255, 255, 0);
+    border: 1px solid rgba(255, 255, 255, 0);
+    border-radius: 0.3rem;
+    white-space: nowrap;
     &.nuxt-link-active,
     &:hover {
       color: #444;
@@ -899,11 +897,17 @@ export default {
   a i {
     margin-right: 0.5rem;
   }
+  height: 100%;
 }
 
 .nav-menu-bar {
   .main-nav {
     text-align: center;
+    .main-nav-item {
+      border-radius: 0.3rem 0.3rem 0 0;
+      border-bottom: none;
+      margin-right: 0.2rem;
+    }
   }
   .secondary-nav {
     width: 100vw;
@@ -926,7 +930,20 @@ export default {
   flex-wrap: nowrap;
   top: 0;
   left: 0;
+  height: 100%;
+  .main-nav {
+    width: 11rem;
+    padding-left: 1rem;
+    .main-nav-item {
+      border-radius: 0.3rem 0 0 0.3rem;
+      border-right: 0;
+      i {
+        width: 2rem;
+      }
+    }
+  }
   .secondary-nav {
+    width: 14rem;
     background: linear-gradient(
       90deg,
       rgba(255, 255, 255, 0.75) 0%,
