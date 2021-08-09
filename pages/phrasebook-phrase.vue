@@ -58,7 +58,7 @@
             </div>
           </div>
         </div>
-        <div class="col-xl-8 bg-white" style="height: 100vh; overflow: scroll">
+        <div class="col-xl-8 content-pane-right">
           <div>
             <div class="text-center mt-3" v-if="words && words.length > 1">
               <b-dropdown size="sm" :items="words" text="Disambiguation">
@@ -234,7 +234,11 @@ export default {
   background: #ffffffdd;
   backdrop-filter: blur(20px);
   height: 100vh;
-  overflow: scroll;
+  position: sticky;
+  top: 0;
+}
+.content-pane-right {
+  background: white;
 }
 ::v-deep .entry-word {
   font-size: 2rem;
