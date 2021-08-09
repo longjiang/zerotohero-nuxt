@@ -1,17 +1,13 @@
 <template>
   <div>
+    <i class="fas fa-key" style="width: 1.5rem;"></i>
     <a
       v-if="$l1.code === 'zh' && $l2.code === 'en'"
       class="link-unstyled nuxt-link-active btn-sign-in mr-1"
       href="https://m.cctalk.com/inst/stevmab3"
       target="_blank"
     >
-      登录
-      <img
-        src="/img/logo-cctalk-white.png"
-        class="logo-small ml-1"
-        data-not-lazy
-      />
+      登录CCTalk
     </a>
     <a
       v-if="$l1.code === 'en' && $l2.code === 'zh'"
@@ -19,8 +15,7 @@
       href="https://sso.teachable.com/secure/133035/users/sign_in"
       target="_blank"
     >
-      Login to
-      <img src="/img/teachable_light.png" class="logosp-small" data-not-lazy />
+      Login to Teachable
     </a>
   </div>
 </template>

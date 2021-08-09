@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      class="container-fluid p-2 pl-3 site-top-bar"
+      class="site-top-bar"
       style="display: flex; justify-content: space-between"
       v-if="variant === 'menu-bar'"
     >
@@ -27,50 +27,6 @@
       </button>
       <LoginButton />
     </div>
-
-    <div
-      class="zth-header"
-      v-if="variant === 'menu-bar' || variant === 'side-bar'"
-    >
-      <div class="container-fluid pl-0 pr-0">
-        <div class="container">
-          <div class="row">
-            <div class="col-sm-12 text-center">
-              <router-link
-                v-if="l1.code === 'en' && l2.code === 'zh'"
-                to="/en/zh/online-courses"
-              >
-                <img
-                  src="/img/czh-logo-light.png"
-                  alt="Chinese Zero to Hero"
-                  style="max-width: 11rem; margin: 1.5rem 0"
-                  class="logo"
-                  data-not-lazy
-                />
-              </router-link>
-              <router-link
-                v-else-if="l1.code === 'zh' && l2.code === 'en'"
-                to="/zh/en/online-courses"
-              >
-                <img
-                  src="/img/ezh-logo-light.png"
-                  alt="Chinese Zero to Hero"
-                  style="max-width: 11rem; margin: 1.5rem 0"
-                  class="logo"
-                  data-not-lazy
-                />
-              </router-link>
-              <LanguageLogo
-                v-else-if="l1 && l2"
-                :l1="l1"
-                :l2="l2"
-                style="margin: 2rem"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
     <div
       :class="{
         'nav-menu-bar': variant === 'menu-bar',
@@ -83,25 +39,103 @@
       <template v-if="variant === 'menu-bar' || variant === 'side-bar'">
         <nav :class="{ 'main-nav': true, tabs: variant === 'menu-bar' }">
           <div
-            v-for="(item, index) in menu.filter(
-              (item) => item.show && to(item)
-            )"
-            :key="`nav-${index}`"
+            class="zth-header"
+            v-if="variant === 'menu-bar' || variant === 'side-bar'"
           >
-            <NuxtLink
-              :class="{
-                'main-nav-item': true,
-                tab: variant === 'menu-bar',
-                'd-block': variant === 'side-bar',
-                'router-link-active':
-                  parent && parent.name === nameOfSelfOrFirstChild(item),
-              }"
-              :to="to(item)"
-              :title="item.title"
+            <router-link
+              v-if="l1.code === 'en' && l2.code === 'zh'"
+              to="/en/zh/online-courses"
             >
-              <i :class="item.icon"></i>
-              {{ $t(item.title, { l2: $t($l2.name) }) }}
-            </NuxtLink>
+              <img
+                src="/img/czh-logo-light.png"
+                alt="Chinese Zero to Hero"
+                style="max-width: 11rem; margin: 1.5rem 0"
+                class="logo"
+                data-not-lazy
+              />
+            </router-link>
+            <router-link
+              v-else-if="l1.code === 'zh' && l2.code === 'en'"
+              to="/zh/en/online-courses"
+            >
+              <img
+                src="/img/ezh-logo-light.png"
+                alt="Chinese Zero to Hero"
+                style="max-width: 11rem; margin: 1.5rem 0"
+                class="logo"
+                data-not-lazy
+              />
+            </router-link>
+            <LanguageLogo
+              v-else-if="l1 && l2"
+              :l1="l1"
+              :l2="l2"
+              style="margin: 2rem"
+            />
+          </div>
+          <div class="main-nav-items">
+            <div
+              v-for="(item, index) in menu.filter(
+                (item) => item.show && to(item)
+              )"
+              :key="`nav-${index}`"
+            >
+              <NuxtLink
+                :class="{
+                  'main-nav-item': true,
+                  tab: variant === 'menu-bar',
+                  'd-block': variant === 'side-bar',
+                  'router-link-active':
+                    parent && parent.name === nameOfSelfOrFirstChild(item),
+                }"
+                :to="to(item)"
+                :title="item.title"
+              >
+                <i :class="item.icon"></i>
+                {{ $t(item.title, { l2: $t($l2.name) }) }}
+              </NuxtLink>
+            </div>
+          </div>
+          <div
+            style="position: absolute; width: 14rem; bottom: 1rem; left: 1rem"
+          >
+            <router-link
+              to="/"
+              class="link-unstyled"
+              style="
+                border-radius: 0.25rem;
+                background-color: rgba(29, 29, 29, 0.5);
+                backdrop-filter: blur(15px);
+                -webkit-backdrop-filter: blur(15px);
+                padding: 0.5rem 1rem;
+                margin-top: 1rem;
+                margin-right: 1rem;
+                margin-bottom: 0.25rem;
+                text-align: left;
+                display: block;
+                color: white;
+                cursor: pointer;
+                font-size: 0.85em;
+              "
+            >
+              <i class="fas fa-language" style="width: 1.5rem"></i>
+              All languages
+            </router-link>
+            <LoginButton
+              style="
+                border-radius: 0.25rem;
+                background-color: rgba(29, 29, 29, 0.5);
+                backdrop-filter: blur(15px);
+                -webkit-backdrop-filter: blur(15px);
+                padding: 0.5rem 1rem;
+                margin-right: 1rem;
+                margin-bottom: 1rem;
+                text-align: left;
+                display: block;
+                color: white;
+                cursor: pointer;
+              "
+            />
           </div>
         </nav>
         <nav class="secondary-nav">
@@ -709,6 +743,26 @@ export default {
         this.$store.state.phrasebooks.phrasebooks[this.l2.code] &&
         this.$store.state.phrasebooks.phrasebooks[this.l2.code].length > 0;
     },
+    isPWA() {
+      return (
+        (typeof navigator !== "undefined" && navigator.standalone) ||
+        (typeof window !== "undefined" &&
+          window.matchMedia("(display-mode: standalone)").matches)
+      );
+    },
+    canShare() {
+      return typeof navigator !== "undefined" && navigator.share;
+    },
+    share() {
+      if (navigator.share) {
+        navigator.share({
+          url: location.href,
+        });
+      }
+    },
+    reload() {
+      location.reload();
+    },
     checkShows() {
       this.hasTVShows =
         this.$store.state.shows.tvShows &&
@@ -844,6 +898,7 @@ export default {
 
 <style lang="scss">
 .site-top-bar {
+  z-index: 2;
   background-color: rgba(29, 29, 29, 0.5);
   position: absolute;
   backdrop-filter: blur(15px);
@@ -908,6 +963,9 @@ export default {
       border-bottom: none;
       margin-right: 0.2rem;
     }
+    .zth-header {
+      text-align: center;
+    }
   }
   .secondary-nav {
     width: 100vw;
@@ -932,11 +990,15 @@ export default {
   left: 0;
   height: 100%;
   .main-nav {
-    width: 11rem;
+    width: 15rem;
     padding-left: 1rem;
+    .zth-header {
+      padding-left: 1rem;
+    }
     .main-nav-item {
       border-radius: 0.3rem 0 0 0.3rem;
       border-right: 0;
+      padding-left: 1.5rem;
       i {
         width: 2rem;
       }

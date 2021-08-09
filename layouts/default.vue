@@ -67,13 +67,12 @@ export default {
       Config,
       focus: false,
       loaded: false,
-      classes: {},
       dictionaryCredit: "",
+      wide: typeof window !== "undefined" && window.innerWidth > 991,
     };
   },
   async mounted() {
     if (this.l1 && this.l2) this.loadSettings();
-    if (this.l1 && this.l2) this.updateClasses();
     if (this.l1) this.updatei18n();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type.startsWith("settings")) {
@@ -83,7 +82,6 @@ export default {
         if (mutation.type === "settings/SET_L2") {
           this.loadSettings();
         }
-        if (this.l1 && this.l2) this.updateClasses();
       }
     });
     this.$ga.page(this.$route.path);
@@ -93,21 +91,22 @@ export default {
       this.dictionaryCredit = await dictionary.credit();
     }
   },
+  created() {
+    if (typeof window !== "undefined")
+      window.addEventListener("resize", this.onResize);
+  },
+  destroyed() {
+    if (typeof window !== "undefined")
+      window.removeEventListener("resize", this.onResize);
+  },
   watch: {
     $route() {
       this.$ga.page(this.$route.path);
     },
   },
   methods: {
-    share() {
-      if (navigator.share) {
-        navigator.share({
-          url: location.href,
-        });
-      }
-    },
-    reload() {
-      location.reload();
+    onResize() {
+      this.wide = typeof window !== "undefined" && window.innerWidth > 991;
     },
     updatei18n() {
       this.$i18n.locale = this.l1.code;
@@ -115,23 +114,6 @@ export default {
       if (this.l1.translations) {
         this.$i18n.setLocaleMessage(this.l1.code, this.l1.translations);
       }
-    },
-    updateClasses() {
-      this.classes = {
-        "show-pinyin": this.l2Settings.showPinyin,
-        "show-pinyin-for-saved":
-          !this.l2Settings.showPinyin && this.l2 && this.l2.han,
-        "show-simplified": !this.l2Settings.useTraditional,
-        "show-traditional": this.l2Settings.useTraditional,
-        "show-definition": this.l2Settings.showDefinition,
-        "show-translation": this.l2Settings.showTranslation,
-        "show-byeonggi": this.l2Settings.showByeonggi,
-        "use-serif": this.l2Settings.useSerif,
-        "zerotohero-wide": this.wide,
-      };
-      this.classes[`l1-${this.l1.code}`] = true;
-      this.classes[`l2-${this.l2.code}`] = true;
-      if (this.l2.han) this.classes["l2-zh"] = true;
     },
     async loadSettings() {
       this.$store.commit("settings/LOAD_SETTINGS");
@@ -159,19 +141,25 @@ export default {
     },
   },
   computed: {
-    isPWA() {
-      return (
-        (typeof navigator !== "undefined" && navigator.standalone) ||
-        (typeof window !== "undefined" &&
-          window.matchMedia("(display-mode: standalone)").matches)
-      );
-    },
-    canShare() {
-      return typeof navigator !== "undefined" && navigator.share;
-    },
     ...mapState("settings", ["l2Settings", "l1", "l2"]),
-    wide() {
-      return typeof screen !== "undefined" && screen.width > 991;
+    classes() {
+      this.l1, this.l2;
+      let classes = {
+        "show-pinyin": this.l2Settings.showPinyin,
+        "show-pinyin-for-saved":
+          !this.l2Settings.showPinyin && this.l2 && this.l2.han,
+        "show-simplified": !this.l2Settings.useTraditional,
+        "show-traditional": this.l2Settings.useTraditional,
+        "show-definition": this.l2Settings.showDefinition,
+        "show-translation": this.l2Settings.showTranslation,
+        "show-byeonggi": this.l2Settings.showByeonggi,
+        "use-serif": this.l2Settings.useSerif,
+        "zerotohero-wide": this.wide,
+      };
+      classes[`l1-${this.l1.code}`] = true;
+      classes[`l2-${this.l2.code}`] = true;
+      if (this.l2.han) classes["l2-zh"] = true;
+      return classes;
     },
   },
 };
@@ -195,7 +183,7 @@ export default {
     position: fixed;
     top: 0;
     left: 0;
-    width: 25rem;
+    width: 29rem;
     height: 100vh;
     z-index: 2;
   }
