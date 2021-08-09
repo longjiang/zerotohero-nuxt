@@ -2,82 +2,53 @@
   <div id="zerotohero" :class="classes">
     <template v-if="$route.path !== '/'">
       <template>
-        <div class="container-fluid p-2 pl-3 site-top-bar" v-if="l1 && l2">
-          <div class="container-fluid">
-            <div
-              class="row"
-              style="display: flex; justify-content: space-between"
-            >
-              <div>
-                <router-link to="/" class="link-unstyled">
-                  <i class="fa fa-chevron-left mr-2"></i>
-                  All Languages
-                </router-link>
-              </div>
-              <button
-                :class="['btn btn-unstyled', { 'd-none': !isPWA }]"
-                @click="share"
-                style="color: #ccc"
-              >
-                <i class="fa fa-share"></i>
-              </button>
-              <button
-                :class="['btn btn-unstyled', { 'd-none': !isPWA }]"
-                @click="reload"
-                style="color: #ccc"
-              >
-                <i class="fas fa-sync-alt"></i>
-              </button>
-              <LoginButton />
-            </div>
-          </div>
-        </div>
         <Nav
           v-if="l1 && l2"
           :l1="l1"
           :l2="l2"
           :key="`nav-${l1.code}-${l2.code}`"
+          :variant="wide ? 'side-bar' : 'menu-bar'"
         />
-
-        <Nuxt id="main" />
+        <div class="zth-content">
+          <Nuxt id="main" />
+          <footer class="bg-dark text-light pt-4 pb-4" style="z-index: -1">
+            <Choose :compact="true" />
+            <div class="container">
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="mt-5">
+                    <p>
+                      <strong>This is an open-source project.</strong>
+                      This website is built on
+                      <code>Vue.js</code>
+                      and is fully open source. Check out the code on GitHub at
+                      <a href="https://github.com/longjiang/zerotohero-nuxt">
+                        https://github.com/longjiang/zerotohero-nuxt
+                      </a>
+                      .
+                    </p>
+                  </div>
+                  <div class="mt-5">
+                    <p class="mb-4">
+                      <strong>Credits:</strong>
+                      <span v-html="dictionaryCredit"></span>
+                      The collocations and example sentences are provided by
+                      <a target="_blank" href="https://www.sketchengine.eu/">
+                        SketchEngine
+                      </a>
+                      .
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </footer>
+        </div>
 
         <ReaderComp
           v-if="l1 && l2 && $route.name !== 'youtube-view'"
           :iconMode="true"
         />
-
-        <footer class="bg-dark text-light pt-4 pb-4" style="z-index: -1">
-          <Choose :compact="true" />
-          <div class="container">
-            <div class="row">
-              <div class="col-sm-12">
-                <div class="mt-5">
-                  <p>
-                    <strong>This is an open-source project.</strong>
-                    This website is built on
-                    <code>Vue.js</code>
-                    and is fully open source. Check out the code on GitHub at
-                    <a href="https://github.com/longjiang/zerotohero-nuxt">
-                      https://github.com/longjiang/zerotohero-nuxt
-                    </a>
-                    .
-                  </p>
-                </div>
-                <div class="mt-5">
-                  <p class="mb-4">
-                    <strong>Credits:</strong>
-                    <span v-html="dictionaryCredit"></span>
-                    The collocations and example sentences are provided by
-                    <a target="_blank" href="https://www.sketchengine.eu/">
-                      SketchEngine
-                    </a>
-                    .
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </footer>
       </template>
     </template>
     <template v-else>
@@ -130,13 +101,9 @@ export default {
   },
   methods: {
     share() {
-      let meta = document.querySelector('[name="description"]');
-      let description = meta ? meta.getAttribute("content") : "";
       if (navigator.share) {
         navigator.share({
           url: location.href,
-          // title: document.title,
-          // text: document.title + "\n" + description
         });
       }
     },
@@ -161,6 +128,7 @@ export default {
         "show-translation": this.l2Settings.showTranslation,
         "show-byeonggi": this.l2Settings.showByeonggi,
         "use-serif": this.l2Settings.useSerif,
+        "zerotohero-wide": this.wide,
       };
       this.classes[`l1-${this.l1.code}`] = true;
       this.classes[`l2-${this.l2.code}`] = true;
@@ -203,6 +171,9 @@ export default {
       return typeof navigator !== "undefined" && navigator.share;
     },
     ...mapState("settings", ["l2Settings", "l1", "l2"]),
+    wide() {
+      return typeof screen !== "undefined" && screen.width > 991;
+    },
   },
 };
 </script>
@@ -212,30 +183,19 @@ export default {
   z-index: 99;
 }
 
-.zth-header {
-  background-image: url(/img/background-branch.jpg);
-  background-attachment: fixed;
-  background-position: center;
-  background-size: cover;
-  padding-bottom: 102px;
-  padding-top: 52px;
-}
-
-@media screen and (max-device-width: 1024px) {
-  .zth-header {
-    background-attachment: scroll;
+.zerotohero-wide {
+  display: flex;
+  height: 100%;
+  align-items: stretch;
+  .nav-wrapper {
+    overflow: hidden;
+    background-image: url(/img/background-branch.jpg);
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
+  }
+  .zth-content {
+    flex: 1;
   }
 }
-
-.site-top-bar {
-  background-color: rgba(29, 29, 29, 0.5);
-  position: absolute;
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  a {
-    color: #ccc;
-    line-height: 2.3rem;
-  }
-}
-
 </style>

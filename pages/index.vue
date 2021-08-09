@@ -373,13 +373,6 @@ export default {
   }
 }
 
-.logo,
-.logo-constructed {
-  -webkit-filter: drop-shadow(0 0 10px rgba(0, 0, 0, 1));
-  filter: drop-shadow(0 0 10px rgba(0, 0, 0, 1));
-  text-shadow: 0 0 10px rgba(0, 0, 0, 1);
-}
-
 .czh-links,
 .ezh-links {
   padding: 0;

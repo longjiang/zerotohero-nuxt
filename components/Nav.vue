@@ -1,6 +1,37 @@
 <template>
-  <div>
-    <div class="zth-header" v-if="l1 && l2">
+  <div class="nav-wrapper">
+    <div
+      class="container-fluid p-2 pl-3 site-top-bar"
+      style="display: flex; justify-content: space-between"
+      v-if="variant === 'menu-bar'"
+    >
+      <div>
+        <router-link to="/" class="link-unstyled">
+          <i class="fa fa-chevron-left mr-2"></i>
+          All Languages
+        </router-link>
+      </div>
+      <button
+        :class="['btn btn-unstyled', { 'd-none': !isPWA }]"
+        @click="share"
+        style="color: #ccc"
+      >
+        <i class="fa fa-share"></i>
+      </button>
+      <button
+        :class="['btn btn-unstyled', { 'd-none': !isPWA }]"
+        @click="reload"
+        style="color: #ccc"
+      >
+        <i class="fas fa-sync-alt"></i>
+      </button>
+      <LoginButton />
+    </div>
+
+    <div
+      class="zth-header"
+      v-if="variant === 'menu-bar' || variant === 'side-bar'"
+    >
       <div class="container-fluid pl-0 pr-0">
         <div class="container">
           <div class="row">
@@ -41,33 +72,44 @@
       </div>
     </div>
     <div
-      :class="`${variant === 'menu-bar' ? 'nav' : ''}`"
+      :class="{
+        'nav nav-menu-bar': variant === 'menu-bar',
+        'nav nav-sidebar': variant === 'side-bar',
+        'nav-page': variant === 'side-bar',
+      }"
       style="z-index: 3"
       :set="(parent = getParent())"
     >
-      <template v-if="variant === 'menu-bar'">
+      <template v-if="variant === 'menu-bar' || variant === 'side-bar'">
         <nav class="site-nav tabs">
-          <NuxtLink
+          <div
             v-for="(item, index) in menu.filter(
               (item) => item.show && to(item)
             )"
-            :class="{
-              tab: true,
-              'router-link-active':
-                parent && parent.name === nameOfSelfOrFirstChild(item),
-            }"
-            :to="to(item)"
-            :title="item.title"
             :key="`nav-${index}`"
           >
-            <i :class="item.icon"></i>
-            {{ $t(item.title, { l2: $t($l2.name) }) }}
-          </NuxtLink>
+            <NuxtLink
+              :class="{
+                tab: true,
+                'd-block': variant === 'side-bar',
+                'router-link-active':
+                  parent && parent.name === nameOfSelfOrFirstChild(item),
+              }"
+              :to="to(item)"
+              :title="item.title"
+            >
+              <i :class="item.icon"></i>
+              {{ $t(item.title, { l2: $t($l2.name) }) }}
+            </NuxtLink>
+          </div>
         </nav>
-        <nav class="secondary-menu text-center pt-3" style="min-height: 61px">
+        <nav class="secondary-menu">
           <template v-if="parent && parent.children">
             <NuxtLink
-              class="secondary-menu-item"
+              :class="{
+                'secondary-menu-item': true,
+                'd-block': variant === 'side-bar',
+              }"
               v-for="(child, index) in parent.children.filter(
                 (child) => child.show
               )"
@@ -612,7 +654,7 @@ export default {
       type: Object,
     },
     variant: {
-      default: "menu-bar", // or 'page'
+      default: "menu-bar", // or 'page', or 'side-bar'
     },
   },
 
@@ -800,15 +842,40 @@ export default {
 </script>
 
 <style lang="scss">
+
+
+@media screen and (max-device-width: 1024px) {
+  .nav-wrapper {
+    background-attachment: scroll;
+  }
+}
+
+.site-top-bar {
+  background-color: rgba(29, 29, 29, 0.5);
+  position: absolute;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  a {
+    color: #ccc;
+    line-height: 2.3rem;
+  }
+}
+
+.logo,
+.logo-constructed {
+  -webkit-filter: drop-shadow(0 0 10px rgba(0, 0, 0, 1));
+  filter: drop-shadow(0 0 10px rgba(0, 0, 0, 1));
+  text-shadow: 0 0 10px rgba(0, 0, 0, 1);
+}
+
 .nav {
-  margin-top: -102px;
   width: 100%;
 
   .site-nav {
+    padding: 1rem;
     margin: 0 auto;
     width: 100%;
     display: block;
-    text-align: center;
     .tab {
       text-shadow: 0 0 10px rgba(0, 0, 0, 1);
       border-top: 1px solid rgba(255, 255, 255, 0);
@@ -830,6 +897,51 @@ export default {
   }
 }
 
+.secondary-menu {
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  padding: 1rem;
+  a svg,
+  a i {
+    margin-right: 0.5rem;
+  }
+}
+
+.nav-menu-bar {
+  .site-nav {
+    text-align: center;
+  }
+  .secondary-menu {
+    width: 100vw;
+    white-space: nowrap;
+    overflow: scroll;
+    overflow-y: hidden;
+    text-align: center;
+    min-height: 61px;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.75) 0%,
+      rgba(255, 255, 255, 0.75) 10%,
+      rgba(255, 255, 255, 1) 100%
+    );
+  }
+}
+
+.nav-sidebar {
+  display: flex;
+  flex-wrap: nowrap;
+  top: 0;
+  left: 0;
+  .secondary-menu {
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.75) 0%,
+      rgba(255, 255, 255, 0.75) 10%,
+      rgba(255, 255, 255, 1) 100%
+    );
+  }
+}
+
 .tab-saved-words.nuxt-link-active,
 .tab-saved-words:hover {
   color: #f8b61e;
@@ -843,27 +955,6 @@ export default {
 .tab-saved-words:hover .tab-saved-words-count {
   background: #f8b61e;
   color: white;
-}
-
-.secondary-menu {
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.75) 0%,
-    rgba(255, 255, 255, 0.75) 10%,
-    rgba(255, 255, 255, 1) 100%
-  );
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  white-space: nowrap;
-  overflow: scroll;
-  overflow-y: hidden;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  width: 100vw;
-  a svg,
-  a i {
-    margin-right: 0.5rem;
-  }
 }
 
 .saved-words-count {
@@ -891,6 +982,7 @@ export default {
   border-radius: 0.3rem;
   color: #666;
   display: inline-block;
+  white-space: nowrap;
 }
 
 .secondary-menu-item:hover {
@@ -921,4 +1013,5 @@ export default {
     flex: 1;
   }
 }
+
 </style>
