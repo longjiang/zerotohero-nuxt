@@ -4,7 +4,7 @@
   }
 </router>
 <template>
-  <div class="container pt-5 mb-5">
+  <div class="container main pt-5 mb-5">
     <SocialHead
       :title="`Video Count | Chinese Zero To Hero`"
       description="See the latest stats on how many videos are there in our courses."

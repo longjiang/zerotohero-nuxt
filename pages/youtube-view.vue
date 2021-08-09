@@ -45,7 +45,7 @@
     </div>
     <div
       :class="{
-        'youtube-view-wrapper main': true,
+        'youtube-view-wrapper': true,
         fullscreen: layout === 'vertical',
       }"
     >

@@ -4,7 +4,7 @@
   }
 </router>
 <template>
-  <div class="main" v-cloak>
+  <div class="main main" v-cloak>
     <SocialHead :title="title" :description="description" :image="image" />
     <div class="container mt-4 mb-4 focus">
       <div class="row">

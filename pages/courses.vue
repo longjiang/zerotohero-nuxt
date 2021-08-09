@@ -4,7 +4,7 @@
   }
 </router>
 <template>
-  <div>
+  <div class="main">
     <CoursesEnZh v-if="$l1.code === 'en' && $l2.code === 'zh'" />
     <CoursesZhEn v-if="$l1.code === 'zh' && $l2.code === 'en'" />
   </div>

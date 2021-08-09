@@ -5,7 +5,7 @@
   }
 </router>
 <template>
-  <div class="phrase">
+  <div class="phrase main">
     <SocialHead :title="title" :description="description" :image="image" />
     <div class="container main pt-5 mb-5">
       <div class="row">

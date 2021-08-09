@@ -222,7 +222,7 @@ export default {
     padding: 3rem;
     padding-left: 32rem;
   }
-  #main {
+  .main {
     padding: 0 3rem;
   }
 }

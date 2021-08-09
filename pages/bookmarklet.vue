@@ -13,7 +13,7 @@
   }
 </router>
 <template>
-  <div class="bookmarklet-view">
+  <div class="bookmarklet-view main">
     <div class="container mt-5 mb-5">
       <div class="row">
         <div class="col-md-8">

@@ -5,7 +5,7 @@
   }
 </router>
 <template>
-  <div class="container pt-5 mb-5">
+  <div class="container main pt-5 mb-5">
     <div v-if="$l1.code === 'en' && $l2.code === 'zh'">
       <PricingEnZh :currency="currency" />
     </div>

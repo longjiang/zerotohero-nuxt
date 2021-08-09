@@ -4,7 +4,7 @@
   }
 </router>
 <template>
-  <div class="container mb-5">
+  <div class="container main mb-5 pt-5">
     <SocialHead
       :title="`Hall of Heroes | Chinese Zero To Hero`"
       description="Here are some of our students who have successfully passed language exams after taking courses from us! Read their testimonials and reviews."

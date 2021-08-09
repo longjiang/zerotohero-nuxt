@@ -4,7 +4,7 @@
   }
 </router>
 <template>
-  <div class="faq container mt-5 mb-5">
+  <div class="faq container main mt-5 mb-5">
     <SocialHead :title="`Frequently Asked Questions | ${$l2.name} Zero to Hero`" />
     <div class="row" v-if="$l1.code === 'en' && $l2.code === 'zh'">
       <FAQEnZh />

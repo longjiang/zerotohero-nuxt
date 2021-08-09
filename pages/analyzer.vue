@@ -13,7 +13,7 @@
   }
 </router>
 <template>
-  <div class="analyzer">
+  <div class="analyzer main">
     <div class="container mb-5">
       <div class="row">
         <div class="col-sm-12">

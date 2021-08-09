@@ -5,32 +5,30 @@
   }
 </router>
 <template>
-  <div class="pt-5 mb-5">
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-12">
-          <h2 class="text-center mb-3">Lookup phrases not in the dictionary</h2>
-          <p class="text-center mb-5">
-            and see how they are used in real contexts.
-          </p>
-          <div class="search-compare-wrapper">
-            <LazySearchCompare
-              placeholder="Enter a word or phrase"
-              type="generic"
-              :term="term"
-              :compareTerm="compareTerm"
-              :random="false"
-              :key="`${term}-${compareTerm}-search`"
-              style="width: 100%"
-              :urlFunc="
-                (text) => `/${$l1.code}/${$l2.code}/phrase/search/${text}`
-              "
-              :compareUrlFunc="
-                (text) =>
-                  `/${$l1.code}/${$l2.code}/phrase/compare/${term}/${text}`
-              "
-            />
-          </div>
+  <div class="pt-5 mb-5 main container">
+    <div class="row">
+      <div class="col-sm-12">
+        <h2 class="text-center mb-3">Lookup phrases not in the dictionary</h2>
+        <p class="text-center mb-5">
+          and see how they are used in real contexts.
+        </p>
+        <div class="search-compare-wrapper">
+          <LazySearchCompare
+            placeholder="Enter a word or phrase"
+            type="generic"
+            :term="term"
+            :compareTerm="compareTerm"
+            :random="false"
+            :key="`${term}-${compareTerm}-search`"
+            style="width: 100%"
+            :urlFunc="
+              (text) => `/${$l1.code}/${$l2.code}/phrase/search/${text}`
+            "
+            :compareUrlFunc="
+              (text) =>
+                `/${$l1.code}/${$l2.code}/phrase/compare/${term}/${text}`
+            "
+          />
         </div>
       </div>
     </div>
