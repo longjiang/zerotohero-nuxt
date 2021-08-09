@@ -6,7 +6,7 @@
 </router>
 <template>
   <div class="main">
-    <div class="youtube-browse pt-4 pb-5 main">
+    <div class="youtube-browse pt-5 pb-5 main">
       <SocialHead
         v-if="show"
         :title="`Learn ${$l2.name} with the ${

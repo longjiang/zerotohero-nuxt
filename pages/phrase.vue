@@ -9,7 +9,7 @@
     <div class="pt-5 pb-5 container">
       <div class="row">
         <div class="col-sm-12">
-          <h2 class="text-center mb-3">Lookup phrases not in the dictionary</h2>
+          <h3 class="text-center mb-3">Lookup phrases not in the dictionary</h3>
           <p class="text-center mb-5">
             and see how they are used in real contexts.
           </p>

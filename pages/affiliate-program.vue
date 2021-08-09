@@ -4,13 +4,13 @@
   }
 </router>
 <template>
-  <div class="affiliate container mt-5 mb-5 main">
+  <div class="affiliate container pt-5 pb-5 main">
     <SocialHead
       :title="`Affiliate Program | ${$l2.name} Zero to Hero`"
       :description="`Affiliates are our partners and we want them to make money too! Do you
       have a social media following?`"
     />
-    <h1 class="mb-2 text-center">Join Our Affiliate Program</h1>
+    <h3 class="mb-2 text-center">Join Our Affiliate Program</h3>
     <p class="lead text-center mb-5">
       Let more people benefit from {{ $l2.name }} Zero to Hero.
     </p>

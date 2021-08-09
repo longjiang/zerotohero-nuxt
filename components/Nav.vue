@@ -616,14 +616,14 @@ export default {
             },
             {
               name: "affiliate-program",
-              icon: "fas fa-id-card",
+              icon: "fas fa-money-check-alt",
               show: true,
               title: "Affiliate Program",
             },
             {
               name: "faq",
-              icon: "fas fa-id-card",
-              show: true,
+              icon: "fas fa-question-circle",
+              show: this.$hasFeature("courses"),
               title: "FAQ",
             },
           ],
@@ -1070,10 +1070,11 @@ export default {
   position: relative;
   top: -0.1rem;
   padding: 0 0.35rem;
+  min-width: 1.5rem;
 }
 
 .nuxt-link-active .saved-words-count {
-  color: #fd4f1c;
+  color: rgba(1,65,97,0.78039);
   background: white;
 }
 

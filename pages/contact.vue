@@ -29,9 +29,9 @@
     <template v-else>
       <div class="row">
         <div class="col-sm-12">
-          <h1 class="mb-5 text-center">
+          <h3 class="mb-5 text-center">
             {{ $t("Contact {l2} Zero to Hero", { l2: $l2.name }) }}
-          </h1>
+          </h3>
         </div>
       </div>
       <div class="row">

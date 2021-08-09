@@ -16,7 +16,7 @@
 <template>
   <div class="main">
     <div class="container pt-5 pb-5 youtube-search">
-      <h1 class="text-center mb-5">Study YouTube Subtitles</h1>
+      <h3 class="text-center mb-5">Search YouTube for videos with {{ $l2.name }} CC</h3>
       <SimpleSearch
         :placeholder="$t('Enter a search term in {l2}...', { l2: $l2.name })"
         :action="

@@ -17,9 +17,9 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
-          <h1 class="page-title">
+          <h3 class="page-title">
             {{ $t("Settings") }}
-          </h1>
+          </h3>
           <div class="jumbotron mt-4 p-4 bg-warning text-dark">
             Settings are
             <b>automatically saved</b>
@@ -31,15 +31,15 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
-          <h4>General settings</h4>
+          <h5>General settings</h5>
           <b-form-checkbox v-model="subsSearchLimit">
             Limit "this word in TV Shows" search result (faster)
           </b-form-checkbox>
           <hr />
-          <h4>Settings specific to {{ $l2.name }}:</h4>
+          <h5>Settings specific to {{ $l2.name }}:</h5>
           <AnnotationSettings />
           <div>
-            <h4>{{ $t("Text Corpus Settings") }}</h4>
+            <h5>{{ $t("Text Corpus Settings") }}</h5>
             <p v-if="$l1.code === 'zh'">
               <a
                 href="https://baike.baidu.com/item/%E8%AF%AD%E6%96%99%E5%BA%93"

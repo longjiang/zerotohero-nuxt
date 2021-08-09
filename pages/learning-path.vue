@@ -31,7 +31,7 @@
         .toString()
         .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} hours`"
     />
-    <h2>{{ $l2.name }} Learning Path</h2>
+    <h3>{{ $l2.name }} Learning Path</h3>
     <p class="mb-5">
       From zero to mastery in
       <b>

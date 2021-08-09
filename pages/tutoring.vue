@@ -22,7 +22,7 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
-          <h1 class="mb-5">Online Tutoring Lesson Kit</h1>
+          <h3 class="mb-5">Online Tutoring Lesson Kit</h3>
           <div>
             <p>
               <b>About this kit:</b>

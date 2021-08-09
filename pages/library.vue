@@ -20,7 +20,7 @@
     />
     <div class="row">
       <div class="col-sm-12">
-        <h1 class="mb-5 text-center">{{ $l2.name }} Guided Readers</h1>
+        <h3 class="mb-5 text-center">{{ $l2.name }} Guided Readers</h3>
         <p class="text-center lead" style="margin-bottom: 5rem">
           {{
             $t(

@@ -6,7 +6,7 @@
 </router>
 <template>
   <div class="bg-white">
-    <div class="pt-4 pb-5 container-xl">
+    <div class="pt-5 pb-5 container-xl">
       <SocialHead
         v-if="channels"
         :title="`Learn ${$l2.name} from Live ${$l2.name} TV | ${$l2.name} Zero to Hero`"
@@ -18,7 +18,7 @@
       />
       <div class="row">
         <div class="col-sm-12 mb-4">
-          <h4 class="text-center">Learn {{ $l2.name }} from Live TV</h4>
+          <h3 class="text-center">Learn {{ $l2.name }} from Live TV</h3>
           <div v-if="channels" class="text-center">
             {{ channels.length }} Channel(s)
           </div>

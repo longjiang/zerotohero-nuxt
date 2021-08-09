@@ -13,19 +13,18 @@
   }
 </router>
 <template>
-  <div class="main pt-4 pb-4" v-cloak>
+  <div class="main pt-5 pb-4" v-cloak>
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
-          <h4>{{ $t("My Words") }}</h4>
-          <p>
+          <h3 class="text-center">{{ $t("Saved Words") }}</h3>
+          <p class="text-center mb-5">
             {{
               $t(
                 "These words are stored in your browser's local storage, which persists unless you clear your browsing data."
               )
             }}
           </p>
-          <hr />
           <div class="my-words-tools mt-2 mb-2 text-right">
             <div class="export-wrapper text-left mt-4" v-if="showExport">
               <p v-html="$t('copyPasteCSV')" />
@@ -62,7 +61,7 @@
               class="upload-list"
               variant="primary"
               v-on:click="showExportClick"
-              :disabled="this.sW.length <= 0"
+              v-if="this.sW.length > 0"
             >
               <i class="fa fa-download mr-1"></i>
               {{ $t("Export CSV") }}
@@ -71,7 +70,7 @@
               class="remove-all"
               variant="danger"
               v-on:click="removeAllClick"
-              :disabled="this.sW.length <= 0"
+              v-if="this.sW.length > 0"
             >
               <i class="glyphicon glyphicon-trash"></i>
               {{ $t("Clear") }}
@@ -87,6 +86,9 @@
           </div>
           <Loader class="mt-4" />
           <WordList :words="sW" class="mt-4"></WordList>
+          <div v-if="this.sW.length <= 0" class="text-center">
+            (You do not have any saved words yet.)
+          </div>
         </div>
       </div>
     </div>
