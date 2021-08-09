@@ -1,14 +1,16 @@
 <template>
   <div id="zerotohero" :class="classes">
     <template v-if="$route.path !== '/'">
-      <Nav
-        v-if="l1 && l2"
-        :l1="l1"
-        :l2="l2"
-        :key="`nav-${l1.code}-${l2.code}`"
-        :variant="wide ? 'side-bar' : 'menu-bar'"
-        class="zth-nav"
-      />
+      <client-only>
+        <Nav
+          v-if="l1 && l2"
+          :l1="l1"
+          :l2="l2"
+          :key="`nav-${l1.code}-${l2.code}`"
+          :variant="wide ? 'side-bar' : 'menu-bar'"
+          class="zth-nav"
+        />
+      </client-only>
       <div class="zth-content">
         <Nuxt id="main" />
         <footer class="zth-footer" style="z-index: -1">
