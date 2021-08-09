@@ -198,13 +198,13 @@ export default {
     position: fixed;
     top: 0;
     left: 0;
-    width: 24rem;
+    width: 25rem;
     height: 100vh;
     z-index: 2;
   }
   .zth-content {
     flex: 1;
-    margin-left: 24rem;
+    margin-left: 25rem;
     overflow: visible;
   }
 }
