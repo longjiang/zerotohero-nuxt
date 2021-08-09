@@ -562,8 +562,8 @@ export default {
             {
               name: "grammar",
               icon: "fas fa-list-ul",
-              title: "Grammar Cheat Sheet",
-              show: false,
+              title: "Grammar",
+              show: true,
             },
             {
               name: "grammar-view",
@@ -895,12 +895,12 @@ export default {
 </script>
 
 <style lang="scss">
-.logo,
-.logo-constructed {
-  -webkit-filter: drop-shadow(0 0 10px rgba(0, 0, 0, 1));
-  filter: drop-shadow(0 0 10px rgba(0, 0, 0, 1));
-  text-shadow: 0 0 10px rgba(0, 0, 0, 1);
-}
+// .logo,
+// .logo-constructed {
+//   -webkit-filter: drop-shadow(0 0 10px rgba(0, 0, 0, 1));
+//   filter: drop-shadow(0 0 10px rgba(0, 0, 0, 1));
+//   text-shadow: 0 0 10px rgba(0, 0, 0, 1);
+// }
 
 .main-nav {
   margin: 0 auto;
@@ -1004,6 +1004,7 @@ export default {
       border-radius: 0.3rem 0 0 0.3rem;
       border-right: 0;
       padding-left: 1.5rem;
+      margin: 0.3rem 0;
       i {
         width: 2rem;
       }
