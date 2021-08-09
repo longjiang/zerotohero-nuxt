@@ -968,13 +968,19 @@ export default {
   .main-nav {
     width: 50%;
     padding-left: 1rem;
-    padding-top: 7.5rem;
     margin: 0;
     position: relative;
     .zth-header {
+      .logo,
+      .logo-constructed {
+        transform: scale(0.9);
+      }
+      margin-left: -0.2rem;
+    }
+    .zth-header-glass {
       position: fixed;
       top: 0;
-      left: 0;
+      left: 1rem;
       text-align: center;
       background-image: linear-gradient(
         45deg,
@@ -983,9 +989,10 @@ export default {
       );
       backdrop-filter: blur(30px);
       -webkit-backdrop-filter: blur(30px);
-      width: 25rem;
+      width: 23rem;
       z-index: 9;
       box-shadow: 0 5px 20px rgb(0 0 0 / 20%);
+      border-radius: 0.25rem;
     }
     .main-nav-item {
       border-radius: 0.3rem 0 0 0.3rem;
@@ -1022,7 +1029,6 @@ export default {
     width: 50%;
     background: rgba(255, 255, 255, 0.75);
     padding: 0.5rem;
-    padding-top: 7.5rem;
     .secondary-nav-item {
       padding: 0.5rem;
       margin: 0.5rem;

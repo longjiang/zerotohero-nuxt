@@ -5,7 +5,7 @@
   }
 </router>
 <template>
-  <div class="youtube-browse container mb-5 main">
+  <div class="youtube-browse container pb-5 main">
     <SocialHead
       v-if="videos && videos[0]"
       :title="`Study ${$l2.name} videos with subs | ${$l2.name} Zero to Hero`"

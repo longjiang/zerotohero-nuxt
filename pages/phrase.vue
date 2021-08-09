@@ -5,7 +5,7 @@
   }
 </router>
 <template>
-  <div class="pt-5 mb-5 main container">
+  <div class="pt-5 pb-5 main container">
     <div class="row">
       <div class="col-sm-12">
         <h2 class="text-center mb-3">Lookup phrases not in the dictionary</h2>

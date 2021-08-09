@@ -29,7 +29,7 @@
         </div>
       </div>
     </div>
-    <div class="row mb-5" v-if="phrasebooks && phrasebooks.length > 0">
+    <div class="row pb-5" v-if="phrasebooks && phrasebooks.length > 0">
       <div
         v-for="(phrasebook, phrasebookIndex) in phrasebooks"
         class="col-xs-12 col-sm-6 col-md-4 col-lg-3"

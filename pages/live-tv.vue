@@ -5,7 +5,7 @@
   }
 </router>
 <template>
-  <div class="pt-4 mb-5 container-xl">
+  <div class="pt-4 pb-5 container-xl bg-white">
     <SocialHead
       v-if="channels"
       :title="`Learn ${$l2.name} from Live ${$l2.name} TV | ${$l2.name} Zero to Hero`"
