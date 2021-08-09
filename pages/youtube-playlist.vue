@@ -5,7 +5,7 @@
   }
 </router>
 <template>
-  <div class="youtube-browse container mt-5 mb-5 main">
+  <div class="youtube-browse container pt-5 mb-5 main">
     <div class="row">
       <div class="col-sm-12">
         <h3 class="text-center" v-if="title">
