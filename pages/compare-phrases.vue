@@ -25,10 +25,14 @@
               :key="`${term}-${compareTerm}-search`"
               style="width: 100%"
               :urlFunc="
-                (text) => `/${$l1.code}/${$l2.code}/phrase/${compareTerm ? 'compare' : 'search'}/${text}/${compareTerm ? compareTerm : '' }`
+                (text) =>
+                  `/${$l1.code}/${$l2.code}/phrase/${
+                    compareTerm ? 'compare' : 'search'
+                  }/${text}/${compareTerm ? compareTerm : ''}`
               "
               :compareUrlFunc="
-                (text) => `/${$l1.code}/${$l2.code}/phrase/compare/${term}/${text}`
+                (text) =>
+                  `/${$l1.code}/${$l2.code}/phrase/compare/${term}/${text}`
               "
             />
           </div>
@@ -53,6 +57,32 @@
               />
             </div>
           </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <WebImages
+            v-if="term"
+            :text="term"
+            limit="10"
+            class="mt-5"
+            :key="`${term}-images`"
+            :preloaded="aImages"
+          />
+        </div>
+        <div class="col-md-6">
+          <WebImages
+            v-if="compareTerm"
+            :text="compareTerm"
+            limit="10"
+            class="mt-5"
+            :key="`${compareTerm}-images`"
+            :preloaded="bImages"
+          />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
           <div class="focus">
             <CompareCollocations
               v-if="term && compareTerm"
@@ -62,28 +92,6 @@
               :key="`${term}-${compareTerm}-col`"
             />
           </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6">
-            <WebImages
-              v-if="term"
-              :text="term"
-              limit="10"
-              class="mt-5"
-              :key="`${term}-images`"
-              :preloaded="aImages"
-            />
-        </div>
-        <div class="col-md-6">
-            <WebImages
-              v-if="compareTerm"
-              :text="compareTerm"
-              limit="10"
-              class="mt-5"
-              :key="`${compareTerm}-images`"
-              :preloaded="bImages"
-            />
         </div>
       </div>
       <div class="row">
@@ -109,12 +117,12 @@
 </template>
 
 <script>
-import Concordance from '@/components/Concordance'
-import CompareCollocations from '@/components/CompareCollocations'
-import SearchCompare from '@/components/SearchCompare'
-import WebImages from '@/components/WebImages'
-import CompareSearchSubs from '@/components/CompareSearchSubs'
-import WordPhotos from '@/lib/word-photos'
+import Concordance from "@/components/Concordance";
+import CompareCollocations from "@/components/CompareCollocations";
+import SearchCompare from "@/components/SearchCompare";
+import WebImages from "@/components/WebImages";
+import CompareSearchSubs from "@/components/CompareSearchSubs";
+import WordPhotos from "@/lib/word-photos";
 
 export default {
   components: {
@@ -128,14 +136,14 @@ export default {
     method: {
       type: String,
     },
-    term: '',
-    compareTerm: '',
+    term: "",
+    compareTerm: "",
   },
   data() {
     return {
       aImages: [],
-      bImages: []
-    }
+      bImages: [],
+    };
   },
   async fetch() {
     this.aImages = await WordPhotos.getGoogleImages({
@@ -146,10 +154,8 @@ export default {
       term: this.compareTerm,
       lang: this.$l2.code,
     });
-
   },
   computed: {
-
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -182,50 +188,54 @@ export default {
     },
     image() {
       if (this.aImages.length > 0 || this.bImages.length > 0) {
-        return this.bImages.length > 0 ? this.bImages[0].src : this.aImages[0].src;
+        return this.bImages.length > 0
+          ? this.bImages[0].src
+          : this.aImages[0].src;
       } else {
         return "/img/zth-share-image.jpg";
       }
     },
   },
   methods: {
-
     bindKeys() {
-      window.addEventListener('keydown', this.keydown)
+      window.addEventListener("keydown", this.keydown);
     },
     unbindKeys() {
-      window.removeEventListener('keydown', this.keydown)
+      window.removeEventListener("keydown", this.keydown);
     },
 
     keydown(e) {
-      if (!['INPUT', 'TEXTAREA'].includes(e.target.tagName.toUpperCase()) && !e.metaKey) {
+      if (
+        !["INPUT", "TEXTAREA"].includes(e.target.tagName.toUpperCase()) &&
+        !e.metaKey
+      ) {
         // home
         if (e.keyCode == 36) {
           document
-            .getElementById('main')
-            .scrollIntoView({ behavior: 'smooth' })
+            .getElementById("main")
+            .scrollIntoView({ behavior: "smooth" });
           // this.$refs.searchCompare.focusOnSearch()
-          e.preventDefault()
-          return false
+          e.preventDefault();
+          return false;
         }
         // end
         if (e.keyCode == 35) {
           document
-            .getElementById('search-subs')
-            .scrollIntoView({ behavior: 'smooth' })
-          e.preventDefault()
-          return false
+            .getElementById("search-subs")
+            .scrollIntoView({ behavior: "smooth" });
+          e.preventDefault();
+          return false;
         }
       }
     },
   },
   activated() {
-    this.bindKeys()
+    this.bindKeys();
   },
   deactivated() {
-    this.unbindKeys()
+    this.unbindKeys();
   },
-}
+};
 </script>
 
 <style></style>
