@@ -28,7 +28,7 @@
     <div
       :class="{
         'nav-menu-bar': variant === 'menu-bar',
-        'nav-sidebar': variant === 'side-bar',
+        'nav-side-bar': variant === 'side-bar',
         'nav-page': variant === 'page',
       }"
       style="z-index: 3"
@@ -959,7 +959,7 @@ export default {
   }
 }
 
-.nav-sidebar {
+.nav-side-bar {
   display: flex;
   flex-wrap: nowrap;
   top: 0;
@@ -968,8 +968,27 @@ export default {
   .main-nav {
     width: 13rem;
     padding-left: 1rem;
+    padding-top: 7rem;
     margin: 0;
     position: relative;
+    .zth-header {
+      position: fixed;
+      top: -1rem;
+      padding-top: 1rem;
+      left: 1rem;
+      text-align: center;
+      background-image: linear-gradient(
+        45deg,
+        rgba(35, 86, 48, 0.47) 0%,
+        rgba(0, 0, 0, 0.78039) 74%
+      );
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      border-radius: 0.25rem;
+      width: 22rem;
+      z-index: 9;
+      box-shadow: 0 5px 20px rgb(0 0 0 / 20%);
+    }
     .main-nav-item {
       border-radius: 0.3rem 0 0 0.3rem;
       border-right: 0;
@@ -1004,7 +1023,8 @@ export default {
   .secondary-nav {
     width: 13rem;
     background: rgba(255, 255, 255, 0.75);
-    padding: 1rem 0 0 0;
+    padding: 0.5rem;
+    padding-top: 7rem;
     .secondary-nav-item {
       padding: 0.5rem;
       margin: 0.5rem;
@@ -1013,8 +1033,7 @@ export default {
         text-align: center;
       }
       &.nuxt-link-active {
-        background: none;
-        background-image: linear-gradient(166deg, rgb(35 86 48 / 47%) 0%, #014161c7 74%);
+        background: #014161c7;
       }
     }
   }
