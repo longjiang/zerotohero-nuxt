@@ -93,46 +93,13 @@
               {{ $t(item.title, { l2: $t($l2.name) }) }}
             </NuxtLink>
           </div>
-          <div
-            style="position: absolute; width: 14rem; bottom: 1rem; left: 1rem"
-            v-if="variant === 'side-bar'"
-          >
-            <router-link
-              to="/"
-              class="link-unstyled"
-              style="
-                border-radius: 0.25rem;
-                background-color: rgba(29, 29, 29, 0.5);
-                backdrop-filter: blur(15px);
-                -webkit-backdrop-filter: blur(15px);
-                padding: 0.5rem 1rem;
-                margin-top: 1rem;
-                margin-right: 1rem;
-                margin-bottom: 0.25rem;
-                text-align: left;
-                display: block;
-                color: white;
-                cursor: pointer;
-                font-size: 0.85em;
-              "
-            >
+          <div v-if="variant === 'side-bar'" class="end-nav">
+            <router-link to="/" class="link-unstyled end-nav-item">
               <i class="fas fa-language" style="width: 1.5rem"></i>
               All languages
             </router-link>
             <LoginButton
-              style="
-                border-radius: 0.25rem;
-                background-color: rgba(29, 29, 29, 0.5);
-                backdrop-filter: blur(15px);
-                -webkit-backdrop-filter: blur(15px);
-                padding: 0.5rem 1rem;
-                margin-right: 1rem;
-                margin-bottom: 1rem;
-                text-align: left;
-                display: block;
-                color: white;
-                cursor: pointer;
-              "
+              class="end-nav-item"
               v-if="
                 ($l1.code === 'zh' && $l2.code === 'en') ||
                 ($l1.code === 'en' && $l2.code === 'zh')
@@ -409,7 +376,7 @@ export default {
             {
               name: "dictionary",
               icon: "fa fa-book",
-              title: "Look Up Words",  
+              title: "Look Up Words",
               show: this.hasFeature("dictionary"),
               shortcut: (e) => e.code === "KeyD" && e.metaKey && e.shiftKey,
             },
@@ -999,29 +966,55 @@ export default {
   left: 0;
   height: 100%;
   .main-nav {
-    width: 15rem;
+    width: 13rem;
     padding-left: 1rem;
-    .zth-header {
-      padding-left: 1rem;
-    }
+    margin: 0;
+    position: relative;
     .main-nav-item {
       border-radius: 0.3rem 0 0 0.3rem;
       border-right: 0;
-      padding-left: 1.5rem;
+      padding-left: 0.5rem;
       margin: 0.3rem 0;
       i {
         width: 2rem;
         text-align: center;
       }
     }
+    .end-nav {
+      position: absolute;
+      width: calc(100% - 1rem);
+      bottom: 1rem;
+      left: 1rem;
+      .end-nav-item {
+        border-radius: 0.25rem;
+        background-color: rgba(29, 29, 29, 0.5);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        padding: 0.5rem 1rem;
+        margin-top: 0.5rem;
+        margin-right: 1rem;
+        text-align: left;
+        display: block;
+        color: white;
+        cursor: pointer;
+        font-size: 0.85em;
+      }
+    }
   }
   .secondary-nav {
-    width: 14rem;
+    width: 13rem;
     background: rgba(255, 255, 255, 0.75);
+    padding: 1rem 0 0 0;
     .secondary-nav-item {
+      padding: 0.5rem;
+      margin: 0.5rem;
       i {
         width: 1.5rem;
         text-align: center;
+      }
+      &.nuxt-link-active {
+        background: none;
+        background-image: linear-gradient(166deg, rgb(35 86 48 / 47%) 0%, #014161c7 74%);
       }
     }
   }
