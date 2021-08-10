@@ -48,19 +48,19 @@ export default {
       ];
     },
   },
-  created() {
-    if (
-      this.$l1 &&
-      this.$route.params.l1 === this.$l1.code &&
-      this.$l2 &&
-      this.$route.params.l2 === this.$l2.code
-    ) {
-      if (this.$hasFeature("courses")) {
-        this.$router.push({ name: "courses" });
-      }
-    }
-  },
   methods: {
+    redirectToCourses() {
+      if (
+        this.$l1 &&
+        this.$route.params.l1 === this.$l1.code &&
+        this.$l2 &&
+        this.$route.params.l2 === this.$l2.code
+      ) {
+        if (this.$hasFeature("courses")) {
+          this.$router.push({ name: "courses" });
+        }
+      }
+    },
     hasTalks() {
       return (
         typeof this.$store.state.shows.talks !== "undefined" &&
@@ -98,6 +98,5 @@ h3 {
   text-shadow: 0 2px 10px rgba(0, 0, 0, 1);
 }
 .home {
-  
 }
 </style>

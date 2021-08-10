@@ -14,13 +14,15 @@
   }
 </router>
 <template>
-  <div class="main pt-4 mb-4">
+  <div class="main pt-5 pb-4">
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
           <div>
-            <h4>Explore Related Words</h4>
-            <p>Search for a word, and see words associated with it.</p>
+            <h3 class="text-center">Explore Related Words</h3>
+            <p class="text-center mb-5">
+              Search for a word, and see words associated with it.
+            </p>
             <Search :hrefFunc="hrefFunc" class="mb-4" ref="search" />
           </div>
           <Loader class="mt-5" />
@@ -123,9 +125,9 @@ export default {
       });
       if (data && data.Words) {
         for (let Word of data.Words) {
-          let words = await (await this.$getDictionary()).lookupSimplified(
-            Word.word
-          );
+          let words = await (
+            await this.$getDictionary()
+          ).lookupSimplified(Word.word);
           if (words.length > 0) {
             let word = words[0];
             related.push(word);

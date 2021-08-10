@@ -14,7 +14,7 @@
   }
 </router>
 <template>
-  <div class="main pt-4 mb-4">
+  <div class="main pt-5 pb-4">
     <SocialHead
       :title="`Chinese Radicals | Chinese Zero to Hero`"
       :description="`The most common Chinese radicals, and characters that use them.`"
@@ -24,7 +24,7 @@
       <div class="row">
         <div class="col-sm-12">
           <div>
-            <h2 class="text-center mb-4">Chinese Radicals</h2>
+            <h3 class="text-center mb-4">Chinese Radicals</h3>
             <p class="text-center mb-4">This will take a minute to load...</p>
             <div class="mb-4">
               <b-form-checkbox id="hskOnly" v-model="hskOnly" name="hskOnly">

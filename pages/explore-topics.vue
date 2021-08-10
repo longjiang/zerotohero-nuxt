@@ -13,15 +13,17 @@
   }
 </router>
 <template>
-  <div class="container main pt-4 mb-4" v-cloak>
-    <div class="row">
-      <div class="col-sm-12">
-        <div>
-          <h4>Browse Words by Theme</h4>
-          <p>Themes are as classified under the Dewey decimal system.</p>
-          <hr />
-          <Loader class="mt-5" />
-          <ThemeBrowser />
+  <div class="main">
+    <div class="container pt-4 pb-4" v-cloak>
+      <div class="row">
+        <div class="col-sm-12">
+          <div>
+            <h4>Browse Words by Theme</h4>
+            <p>Themes are as classified under the Dewey decimal system.</p>
+            <hr />
+            <Loader class="mt-5" />
+            <ThemeBrowser />
+          </div>
         </div>
       </div>
     </div>
@@ -29,16 +31,16 @@
 </template>
 
 <script>
-import ThemeBrowser from '@/components/ThemeBrowser.vue'
+import ThemeBrowser from "@/components/ThemeBrowser.vue";
 
 export default {
   components: {
-    ThemeBrowser
+    ThemeBrowser,
   },
   data() {
-    return {}
+    return {};
   },
   mounted() {},
-  methods: {}
-}
+  methods: {},
+};
 </script>

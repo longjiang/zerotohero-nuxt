@@ -14,110 +14,114 @@
   }
 </router>
 <template>
-  <div class="container main pt-5 mb-5">
-    <SocialHead
-      :title="`Which Chinese Verbs are Separable? (离合词 lí-hé cí) | Chinese Zero to Hero`"
-      :description="`A list all seperable verbs and their various patterns.`"
-      :image="`/img/placeholder.jpg`"
-    />
-    <div class="row">
-      <div class="col-sm-12">
-        <h1 class="text-center">Separable verbs ( 离合词 )</h1>
-        <p class="text-center mb-5">
-          <Annotate>
-            <span>
-              A
-              <em>separable</em>
-              verb——for example, 唱歌——consists of a verb (唱) and an object
-              (歌). Because of this, they can take the following forms. Note
-              that a variety of measure words and complements can be used, not
-              just the ones listed in the chart.
-            </span>
-          </Annotate>
-        </p>
-        <table
-          class="table table-responsive separable-table"
-          style="color: #666"
-        >
-          <thead>
-            <tr>
-              <th>HSK</th>
-              <th>VO</th>
-              <th>V 不 V O?</th>
-              <th>V 了 O</th>
-              <th>V 了 一 M O</th>
-              <th>V 没 V O?</th>
-              <th>
-                <a :href="`/${$l1.code}/${$l2.code}/grammar/view/259`">V V O</a>
-              </th>
-              <th>
-                <a :href="`/${$l1.code}/${$l2.code}/grammar/view/260`">
-                  V 了 V O
-                </a>
-              </th>
-              <th>V Complement O</th>
-              <th>V 得 Complement O</th>
-              <th>V 不 Complement O</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="s in separables">
-              <th>
-                {{ s.hsk }}
-              </th>
-              <th>
-                <Annotate>
-                  <span>{{ s.v }}{{ s.o }}</span>
-                </Annotate>
-              </th>
-              <td>
-                <Annotate>
-                  <span>{{ s.v }}不{{ s.v }}{{ s.o }}？</span>
-                </Annotate>
-              </td>
-              <td>
-                <Annotate>
-                  <span>{{ s.v }}了{{ s.o }}</span>
-                </Annotate>
-              </td>
-              <td>
-                <Annotate>
-                  <span>{{ s.v }}了一{{ s.measure }}{{ s.o }}</span>
-                </Annotate>
-              </td>
-              <td>
-                <Annotate>
-                  <span>{{ s.v }}没{{ s.v }}{{ s.o }}？</span>
-                </Annotate>
-              </td>
-              <td>
-                <Annotate>
-                  <span>{{ s.v }}{{ s.v }}{{ s.o }}</span>
-                </Annotate>
-              </td>
-              <td>
-                <Annotate>
-                  <span>{{ s.v }}了{{ s.v }}{{ s.o }}</span>
-                </Annotate>
-              </td>
-              <td>
-                <Annotate>
-                  <span>{{ s.v }}完{{ s.o }}</span>
-                </Annotate>
-              </td>
-              <td>
-                <Annotate>
-                  <span>{{ s.v }}得了{{ s.o }}</span>
-                </Annotate>
-              </td>
-              <td>
-                <Annotate>
-                  <span>{{ s.v }}不了{{ s.o }}</span>
-                </Annotate>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+  <div class="main">
+    <div class="container-fluid pt-5 pb-5">
+      <SocialHead
+        :title="`Which Chinese Verbs are Separable? (离合词 lí-hé cí) | Chinese Zero to Hero`"
+        :description="`A list all seperable verbs and their various patterns.`"
+        :image="`/img/placeholder.jpg`"
+      />
+      <div class="row">
+        <div class="col-sm-12">
+          <h3 class="text-center">Separable verbs ( 离合词 )</h3>
+          <p class="text-center mt-4 mb-5">
+            <Annotate>
+              <span>
+                A
+                <em>separable</em>
+                verb——for example, 唱歌——consists of a verb (唱) and an object
+                (歌). Because of this, they can take the following forms. Note
+                that a variety of measure words and complements can be used, not
+                just the ones listed in the chart.
+              </span>
+            </Annotate>
+          </p>
+          <table
+            class="table table-responsive separable-table"
+            style="color: #666"
+          >
+            <thead>
+              <tr>
+                <th>HSK</th>
+                <th>VO</th>
+                <th>V 不 V O?</th>
+                <th>V 了 O</th>
+                <th>V 了 一 M O</th>
+                <th>V 没 V O?</th>
+                <th>
+                  <a :href="`/${$l1.code}/${$l2.code}/grammar/view/259`">
+                    V V O
+                  </a>
+                </th>
+                <th>
+                  <a :href="`/${$l1.code}/${$l2.code}/grammar/view/260`">
+                    V 了 V O
+                  </a>
+                </th>
+                <th>V Complement O</th>
+                <th>V 得 Complement O</th>
+                <th>V 不 Complement O</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="s in separables">
+                <th>
+                  {{ s.hsk }}
+                </th>
+                <th>
+                  <Annotate>
+                    <span>{{ s.v }}{{ s.o }}</span>
+                  </Annotate>
+                </th>
+                <td>
+                  <Annotate>
+                    <span>{{ s.v }}不{{ s.v }}{{ s.o }}？</span>
+                  </Annotate>
+                </td>
+                <td>
+                  <Annotate>
+                    <span>{{ s.v }}了{{ s.o }}</span>
+                  </Annotate>
+                </td>
+                <td>
+                  <Annotate>
+                    <span>{{ s.v }}了一{{ s.measure }}{{ s.o }}</span>
+                  </Annotate>
+                </td>
+                <td>
+                  <Annotate>
+                    <span>{{ s.v }}没{{ s.v }}{{ s.o }}？</span>
+                  </Annotate>
+                </td>
+                <td>
+                  <Annotate>
+                    <span>{{ s.v }}{{ s.v }}{{ s.o }}</span>
+                  </Annotate>
+                </td>
+                <td>
+                  <Annotate>
+                    <span>{{ s.v }}了{{ s.v }}{{ s.o }}</span>
+                  </Annotate>
+                </td>
+                <td>
+                  <Annotate>
+                    <span>{{ s.v }}完{{ s.o }}</span>
+                  </Annotate>
+                </td>
+                <td>
+                  <Annotate>
+                    <span>{{ s.v }}得了{{ s.o }}</span>
+                  </Annotate>
+                </td>
+                <td>
+                  <Annotate>
+                    <span>{{ s.v }}不了{{ s.o }}</span>
+                  </Annotate>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>

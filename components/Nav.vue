@@ -41,7 +41,7 @@
           >
             <router-link
               v-if="l1.code === 'en' && l2.code === 'zh'"
-              to="/en/zh/online-courses"
+              to="/en/zh/"
             >
               <img
                 src="/img/czh-logo-light.png"
@@ -53,7 +53,7 @@
             </router-link>
             <router-link
               v-else-if="l1.code === 'zh' && l2.code === 'en'"
-              to="/zh/en/online-courses"
+              to="/zh/en/"
             >
               <img
                 src="/img/ezh-logo-light.png"
@@ -435,6 +435,13 @@ export default {
               show: false,
             },
             {
+              name: "explore-related",
+              icon: "fas fa-project-diagram",
+              title: "Word Explorer",
+              params: {arg: '中國,zhōng_guó,0'},
+              show: this.hasFeature("related"),
+            },
+            {
               name: "levels",
               icon: "fa fa-signal",
               title: "HSK",
@@ -481,12 +488,6 @@ export default {
               icon: "fas fa-certificate",
               title: "Topics",
               show: this.hasFeature("explore-topics"),
-            },
-            {
-              name: "explore-related",
-              icon: "fas fa-expand-arrows-alt",
-              title: "Related",
-              show: this.hasFeature("related"),
             },
             {
               name: "learn",
