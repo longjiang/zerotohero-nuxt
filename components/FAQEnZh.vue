@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="col-sm-12">
-        <h1>Frequently Asked Questions</h1>
+        <h3 class="text-center">Frequently Asked Questions</h3>
         <p class="mb-5"></p>
         <div>
           <h5>How long do I have access to the course?</h5>

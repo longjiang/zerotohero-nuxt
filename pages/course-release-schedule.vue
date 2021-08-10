@@ -5,9 +5,11 @@
   }
 </router>
 <template>
-  <div class="container main pt-5 mb-5">
-    <ReleaseScheduleEnZh v-if="$l1.code === 'en' && $l2.code === 'zh'" />
-    <ReleaseScheduleZhEn v-if="$l1.code === 'zh' && $l2.code === 'en'" />
+  <div class="main">
+    <div class="container pt-5 pb-5">
+      <ReleaseScheduleEnZh v-if="$l1.code === 'en' && $l2.code === 'zh'" />
+      <ReleaseScheduleZhEn v-if="$l1.code === 'zh' && $l2.code === 'en'" />
+    </div>
   </div>
 </template>
 
@@ -29,7 +31,7 @@ export default {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
-  }
+  },
 };
 </script>
 
