@@ -185,7 +185,7 @@ export default {
 }
 
 #zerotohero {
-  background: url(/img/background-branch.jpg);
+  background-color: #000;
   background-attachment: fixed;
   background-position: center;
   background-size: cover;
