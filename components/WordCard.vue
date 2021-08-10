@@ -21,8 +21,9 @@
       >
         <img
           v-if="srcs && srcs.length > 0"
-          :src="srcs[0]"
+          :src="srcs[srcIndex]"
           class="word-list-ext-image"
+          @error="logoLoadError(srcIndex)"
           v-lazy-load
         />
       </router-link>
@@ -51,7 +52,10 @@
       </router-link>
 
       <div v-if="word.definitions" class="character-example-english mb-2">
-        <div v-for="definition in word.definitions.slice(0, 3)">
+        <div
+          v-for="(definition, index) in word.definitions.slice(0, 3)"
+          :key="`word-card-definition-${index}`"
+        >
           <span v-if="definition.text">
             {{ definition.text.replace(/\(.*\)/, "") }}
           </span>
@@ -131,6 +135,7 @@ export default {
       Config,
       removed: false,
       srcs: [],
+      srcIndex: undefined,
     };
   },
   async fetch() {
@@ -147,10 +152,15 @@ export default {
       this.removed = true;
     },
     imgPrev() {
-      this.srcs.push(this.srcs.shift());
+      this.srcIndex =
+        this.srcIndex === 0 ? this.srcs.length : this.srcIndex - 1;
     },
     imgNext() {
-      this.srcs.unshift(this.srcs.pop());
+      this.srcIndex =
+        this.srcIndex === this.srcs.length - 1 ? 0 : this.srcIndex + 1;
+    },
+    logoLoadError(srcIndex) {
+      this.srcs.splice(srcIndex, 1)
     },
   },
 };

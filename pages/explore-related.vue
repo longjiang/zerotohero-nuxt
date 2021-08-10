@@ -19,9 +19,9 @@
       <div class="row">
         <div class="col-sm-12">
           <div>
-            <h3 class="text-center">Explore Related Words</h3>
+            <h3 class="text-center">Word Explorer</h3>
             <p class="text-center mb-5">
-              Search for a word, and see words associated with it.
+              Explore related words. Search for any word, and see words associated with it.
             </p>
             <Search :hrefFunc="hrefFunc" class="mb-4" ref="search" />
           </div>

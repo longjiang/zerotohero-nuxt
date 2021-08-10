@@ -20,7 +20,8 @@
         <router-link
           v-if="compareWith"
           :to="`/${$l1.code}/${$l2.code}/compare/${$dictionaryName}/${compareWith.id},${word.id}`"
-          class="btn btn-small" style="margin-bottom: 0.4rem"
+          class="btn btn-small"
+          style="margin-bottom: 0.4rem"
         >
           <i class="fas fa-adjust"></i>
         </router-link>
@@ -53,7 +54,11 @@
           </span>
         </router-link>
       </li>
-      <li class="wordlist-item" v-for="text in texts">
+      <li
+        class="wordlist-item"
+        v-for="(text, index) in texts"
+        :key="`word-list-item-${index}`"
+      >
         <Star v-if="text && star === true" :text="text" class="mr-1"></Star>
         <span class="wordlist-item-word ml-1" data-level="outside">
           {{ text }}
