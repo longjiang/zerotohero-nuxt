@@ -15,7 +15,7 @@
 </router>
 <template>
   <div class="main">
-    <div class="youtube-browse container pt-5 mb-5">
+    <div class="youtube-browse container pt-5 pb-5">
       <div class="row">
         <div class="col-sm-12">
           <h3 class="mb-4 text-center">
