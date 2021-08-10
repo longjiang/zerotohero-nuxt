@@ -421,8 +421,8 @@ export default {
 .home-card {
   background-color: hsla(0, 100%, 100%, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(15px) brightness(150%);
-  -webkit-backdrop-filter: blur(15px) brightness(150%);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
   padding: 2rem;
   border-radius: 1rem;
   box-shadow: 0 10px 30px rgba(68, 75, 134, 0.2);

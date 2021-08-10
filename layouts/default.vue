@@ -3,7 +3,7 @@
     id="zerotohero"
     :class="classes"
     :style="`background-image: url(${
-      $route.path !== '/' && l2
+      l2
         ? 'https://source.unsplash.com/1600x900/?' + l2.name
         : '/img/background-branch.jpg'
     })`"
@@ -185,7 +185,7 @@ export default {
 }
 
 #zerotohero {
-  background-color: black;
+  background: url(/img/background-branch.jpg);
   background-attachment: fixed;
   background-position: center;
   background-size: cover;
@@ -232,7 +232,7 @@ export default {
 }
 
 .zth-footer {
-  background-color: #403f4e;
+  background-color: #25242cfa;
   color: white;
 }
 .zerotohero-wide {
