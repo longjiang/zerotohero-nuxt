@@ -13,21 +13,27 @@
   >
     <SocialHead :title="title" :description="description" :image="image" />
     <div class="dictionary-search-bar">
-      <SearchCompare
-        :searchEntry="entry"
-        :random="`/${$l1.code}/${$l2.code}/dictionary/${$store.state.settings.dictionaryName}/random`"
-        ref="searchCompare"
-        :key="`search-${args}`"
-        id="search-compare-bar"
-      />
-      <h3
-        class="pt-5 pb-5 text-center"
-        style="min-height: 10rem"
-        v-if="$l2 && !entry && dictionarySize"
-      >
-        For the love of {{ dictionarySize.toLocaleString("en-US") }}
-        {{ $l2.name }} words.
-      </h3>
+      <div :class="{ 'container pt-2 pb-5': !wide }">
+        <div :class="{ row: !wide }">
+          <div :class="{ 'col-sm-12': !wide }">
+            <SearchCompare
+              :searchEntry="entry"
+              :random="`/${$l1.code}/${$l2.code}/dictionary/${$store.state.settings.dictionaryName}/random`"
+              ref="searchCompare"
+              :key="`search-${args}`"
+              id="search-compare-bar"
+            />
+            <h3
+              class="pt-5 pb-5 text-center"
+              style="min-height: 10rem"
+              v-if="$l2 && !entry && dictionarySize"
+            >
+              For the love of {{ dictionarySize.toLocaleString("en-US") }}
+              {{ $l2.name }} words.
+            </h3>
+          </div>
+        </div>
+      </div>
     </div>
     <div :class="{ 'focus-exclude': true, container: !wide }">
       <div :class="{ row: !wide, 'content-panes': wide }">

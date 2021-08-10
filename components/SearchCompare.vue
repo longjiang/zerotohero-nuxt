@@ -27,7 +27,7 @@
       :hrefFunc="compareHrefFunc"
       v-if="!loading"
     ></Search>
-    <button class="btn btn-primary ml-2" @click="compareClick" v-if="!loading">
+    <button class="btn btn-primary ml-2" @click="compareClick" v-if="!loading" style="height: 37px;">
       <span v-if="showCompare"><i class="fas fa-times"></i></span>
       <span v-if="!showCompare">
         <i class="fas fa-adjust"></i>
