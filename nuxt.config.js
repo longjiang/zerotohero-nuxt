@@ -77,7 +77,7 @@ export default {
 
   googleFonts: {
     families: {
-      Lato: [100, 300, 700]
+      Lato: [400, 700]
     }
   },
 

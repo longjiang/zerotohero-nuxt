@@ -18,7 +18,11 @@
       <div class="logo-text text-white">
         <template>
           <div class="logo-text-language">
-            {{ l1.translations && l1.translations[l2Name] ? l1.translations[l2Name] : l2Name}}
+            {{
+              l1.translations && l1.translations[l2Name]
+                ? l1.translations[l2Name]
+                : l2Name
+            }}
           </div>
           <div class="logo-text-zth">
             <span v-if="!compact">
@@ -48,15 +52,14 @@ export default {
   },
   computed: {
     l2Name() {
-      return this.l2.name
-        .replace(/ \(.*\)/gi, "");
+      return this.l2.name.replace(/ \(.*\)/gi, "");
     },
   },
   methods: {},
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 .logo-image {
   height: 4rem;
 }
@@ -64,54 +67,57 @@ export default {
   display: flex;
   align-items: flex-end;
   padding-top: 0.8rem;
-}
-.logo-circle-wrapper {
-  position: relative;
-  margin-right: 0.7rem;
-}
-.logo-circle {
-  height: 2.75rem;
-  width: 2.75rem;
-  border-radius: 100%;
-  overflow: hidden;
-  position: relative;
-}
-.logo-circle img {
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-  object-position: center;
-}
-.logo-text {
-  font-family: "Helvetica Neue", Helvetica, sans-serif;
-  text-align: left;
-  margin-bottom: -0.4rem;
-}
-.logo-speech-bubble {
-  height: 2rem;
-  width: 2rem;
-  background-size: cover;
-  line-height: 2rem;
-  text-align: center;
-  font-size: 0.7rem;
-  color: #555;
-  position: absolute;
-  top: -0.9rem;
-  right: -0.4rem;
-}
-.logo-speech-bubble b {
-  display: block;
-  position: relative;
-  bottom: 0.1em;
-}
-.logo-text-language {
-  font-weight: 100;
-  margin-bottom: -0.2em;
-  text-transform: uppercase;
-  line-height: 1.15;
-}
-.logo-text-zth {
-  font-weight: bold;
-  text-transform: uppercase;
+  .logo-circle-wrapper {
+    position: relative;
+    margin-right: 0.7rem;
+  }
+  .logo-circle {
+    height: 2.75rem;
+    width: 2.75rem;
+    border-radius: 100%;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+  }
+  .logo-circle img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+  .logo-text * {
+    font-family: "Helvetica Neue", Helvetica, sans-serif !important;
+    text-align: left;
+    margin-bottom: -0.4rem;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+  }
+  .logo-speech-bubble {
+    height: 2rem;
+    width: 2rem;
+    background-size: cover;
+    line-height: 2rem;
+    text-align: center;
+    font-size: 0.7rem;
+    color: #555;
+    position: absolute;
+    top: -0.9rem;
+    right: -0.4rem;
+  }
+  .logo-speech-bubble b {
+    display: block;
+    position: relative;
+    bottom: 0.1em;
+  }
+  .logo-text-language {
+    font-weight: 200;
+    letter-spacing: 0.1em;
+    margin-bottom: -0.2em;
+    text-transform: uppercase;
+    line-height: 1.15;
+  }
+  .logo-text-zth {
+    font-weight: bold;
+    text-transform: uppercase;
+  }
 }
 </style>

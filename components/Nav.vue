@@ -1074,7 +1074,7 @@ export default {
 }
 
 .nuxt-link-active .saved-words-count {
-  color: rgba(1,65,97,0.78039);
+  color: rgba(1, 65, 97, 0.78039);
   background: white;
 }
 
@@ -1102,8 +1102,13 @@ export default {
   display: flex;
   flex-direction: row;
   align-items: center;
-  box-shadow: 0 5px 20px #4913032f !important;
   border-radius: 0.5rem;
+  background: #ffffffaa;
+  color: #444;
+  backdrop-filter: blur(15px) brightness(130%);
+  -webkit-backdrop-filter: blur(15px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  border: 1px solid #ffffffaa;
   .feature-card-icon {
     padding-right: 1rem;
     font-size: 1.5em;

@@ -13,7 +13,7 @@
   }
 </router>
 <template>
-  <div class="main">
+  <div>
     <div class="container pt-5 pb-5 pl-4 pr-4">
       <div class="row">
         <div class="col-sm-12 text-center">
