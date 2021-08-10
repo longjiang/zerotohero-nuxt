@@ -5,63 +5,84 @@
   }
 </router>
 <template>
-  <div class="main focus" :key="`entry-${entryKey}`" @keydown="keydown">
+  <div class="focus" :key="`entry-${entryKey}`" @keydown="keydown">
     <SocialHead :title="title" :description="description" :image="image" />
-    <div class="pt-4 pb-4">
-      <div class="container focus-exclude">
-        <div class="row">
-          <div class="col-sm-12">
-            <SearchCompare
-              :searchEntry="entry"
-              :random="`/${$l1.code}/${$l2.code}/dictionary/${$store.state.settings.dictionaryName}/random`"
-              ref="searchCompare"
-              :key="`search-${args}`"
-              id="search-compare-bar"
+    <div v-if="$l2 && !entry && dictionarySize">
+      <SearchCompare
+        :searchEntry="entry"
+        :random="`/${$l1.code}/${$l2.code}/dictionary/${$store.state.settings.dictionaryName}/random`"
+        ref="searchCompare"
+        :key="`search-${args}`"
+        id="search-compare-bar"
+      />
+      <h3 class="pt-5 pb-5 text-center" style="min-height: 10rem">
+        For the love of {{ dictionarySize.toLocaleString("en-US") }}
+        {{ $l2.name }} words.
+      </h3>
+    </div>
+    <div :class="{ 'focus-exclude': true, container: !wide }">
+      <div :class="{ row: !wide, 'content-panes': wide }">
+        <div :class="{ 'p-4 content-pane-left': wide, 'col-sm-12': !wide }">
+          <div v-if="saved() && sW.length > 0" class="text-center mb-4">
+            <router-link
+              class="link-unstyled mb-2 d-block"
+              :to="`/${$l1.code}/${$l2.code}/saved-words`"
+            >
+              <h5>Saved {{ $l2.name }} Words</h5>
+            </router-link>
+            <Paginator
+              :items="sW"
+              :findCurrent="(item) => item.id === entry.id"
+              :url="
+                (item) =>
+                  `/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${item.id}`
+              "
             />
           </div>
+          <div v-if="entry" class="text-center">
+            <div class="text-center mb-4" v-if="words && words.length > 1">
+              <b-dropdown size="sm" :items="words" text="Disambiguation">
+                <b-dropdown-item
+                  v-for="w in words"
+                  :key="`phrase-word-disambiguation-${w.id}`"
+                  @click="
+                    $router.push(
+                      `/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${w.id}`
+                    )
+                  "
+                >
+                  <b>{{ w.head }}</b>
+                  <em>{{ w.definitions[0] }}</em>
+                </b-dropdown-item>
+              </b-dropdown>
+            </div>
+            <LazyEntryHeader :entry="entry" />
+            <DefinitionsList
+              :key="`def-list-${entry.id}`"
+              v-if="entry.definitions"
+              class="mt-1"
+              :definitions="entry.definitions"
+            ></DefinitionsList>
+          </div>
         </div>
-        <h3
-          class="pt-5 pb-5 text-center"
-          v-if="$l2 && !entry && dictionarySize"
-          style="min-height: 10rem"
-        >
-          For the love of {{ dictionarySize.toLocaleString("en-US") }} {{ $l2.name }} words.
-        </h3>
+
+        <div :class="{ 'content-pane-right pl-3 pr-3': wide }">
+          <article>
+            <LazyDictionaryEntry
+              v-if="entry"
+              :entry="entry"
+              :images="images"
+              ref="dictionaryEntry"
+              :class="{ 'pb-5': $l2.code !== 'zh' }"
+              :key="`dictionary-entry-${entry.id}`"
+              :showHeader="false"
+              :showDefinitions="false"
+              :showExample="false"
+            />
+          </article>
+        </div>
       </div>
     </div>
-    <div v-if="saved() && sW.length > 0" class="text-center">
-      <Paginator
-        :items="sW"
-        :findCurrent="(item) => item.id === entry.id"
-        :url="
-          (item) =>
-            `/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${item.id}`
-        "
-        title="Saved Words"
-      />
-    </div>
-    <div class="text-center mt-3" v-if="words && words.length > 1">
-      <b-dropdown size="sm" :items="words" text="Disambiguation">
-        <b-dropdown-item
-          v-for="w in words"
-          :key="`phrase-word-disambiguation-${w.id}`"
-          @click="$router.push(`/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${w.id}`)"
-        >
-          <b>{{ w.head }}</b>
-          <em>{{ w.definitions[0] }}</em>
-        </b-dropdown-item>
-      </b-dropdown>
-    </div>
-    <article>
-      <LazyDictionaryEntry
-        v-if="entry"
-        :entry="entry"
-        :images="images"
-        ref="dictionaryEntry"
-        :class="{ 'pb-5': $l2.code !== 'zh' }"
-        :key="`dictionary-entry-${entry.id}`"
-      />
-    </article>
   </div>
 </template>
 
@@ -87,7 +108,8 @@ export default {
       paginatorKey: 0,
       sW: [],
       dictionarySize: undefined,
-      keysBound: false
+      keysBound: false,
+      wide: false,
     };
   },
   computed: {
@@ -144,17 +166,26 @@ export default {
   async created() {
     if (Helper.dictionaryTooLargeAndWillCauseServerCrash(this.$l2["iso639-3"]))
       this.loadEntry();
-    this.dictionarySize = await this.getDictionarySize()
+    this.dictionarySize = await this.getDictionarySize();
     this.bindKeys();
   },
   destroyed() {
     this.unbindKeys();
+    if (typeof window !== "undefined")
+      window.removeEventListener("resize", this.onResize);
+  },
+  created() {
+    if (typeof window !== "undefined")
+      window.addEventListener("resize", this.onResize);
   },
   methods: {
+    onResize() {
+      this.wide = Helper.wide();
+    },
     async getDictionarySize() {
       let dictionary = await this.$getDictionary();
       let size = await (await dictionary).getSize();
-      return size
+      return size;
     },
     async loadEntry() {
       let method = this.$route.params.method;
@@ -174,7 +205,9 @@ export default {
         }
       }
       if (this.entry) {
-        this.words = await (await this.$getDictionary()).lookupMultiple(this.entry.head, true);
+        this.words = await (
+          await this.$getDictionary()
+        ).lookupMultiple(this.entry.head, true);
       }
     },
     async updateWords() {
@@ -213,7 +246,7 @@ export default {
 
     bindKeys() {
       if (typeof window !== "undefined" && !this.keysBound) {
-        this.keysBound = true // bind only once!
+        this.keysBound = true; // bind only once!
         window.addEventListener("keydown", this.keydown);
       }
     },
@@ -228,7 +261,7 @@ export default {
         !e.repeat &&
         !e.target.getAttribute("contenteditable")
       ) {
-        if (e.code == 'Home') {
+        if (e.code == "Home") {
           document
             .getElementById("main")
             .scrollIntoView({ behavior: "smooth" });
@@ -236,14 +269,14 @@ export default {
           e.preventDefault();
           return false;
         }
-        if (e.code == 'End') {
+        if (e.code == "End") {
           document
             .getElementById("search-subs")
             .scrollIntoView({ behavior: "smooth" });
           e.preventDefault();
           return false;
         }
-        if (e.code == 'KeyN') {
+        if (e.code == "KeyN") {
           if (this.$refs.dictionaryEntry.$refs.entryHeader.nextPath) {
             this.$router.push(
               this.$refs.dictionaryEntry.$refs.entryHeader.nextPath
@@ -252,7 +285,7 @@ export default {
           e.preventDefault();
           return false;
         }
-        if (e.code == 'KeyP') {
+        if (e.code == "KeyP") {
           if (this.$refs.dictionaryEntry.$refs.entryHeader.prevPath) {
             this.$router.push(
               this.$refs.dictionaryEntry.$refs.entryHeader.prevPath
@@ -296,6 +329,7 @@ export default {
     },
   },
   mounted() {
+    this.wide = Helper.wide();
     if (
       this.$route.name === "dictionary" &&
       this.$route.params.args === "random"

@@ -930,3 +930,42 @@ button.bg-primary:focus {
   margin-right: 0.2rem;
   border: none;
 }
+
+
+.zerotohero-wide {
+  .content-panes {
+    display: flex;
+    flex-wrap: nowrap;
+    .content-pane-left {
+      width: 21rem;
+      background: #ffffffdd;
+      backdrop-filter: blur(20px);
+      height: 100vh;
+      position: sticky;
+      top: 0;
+      ::v-deep .entry-word {
+        font-size: 2rem;
+      }
+      ::v-deep .definitions-many {
+        columns: 1;
+        margin-top: 1rem;
+      }
+      ::v-deep .disambiguation-dropdown {
+        max-width: 12rem;
+        overflow: hidden;
+        left: 0;
+        position: fixed;
+        .dropdown-item {
+          white-space: normal;
+          padding: 0.2rem 1rem;
+        }
+      }
+    }
+    .content-pane-right {
+      background: white;
+      padding: 0 1rem;
+      width: 100%;
+      overflow: hidden;
+    }
+  }
+}

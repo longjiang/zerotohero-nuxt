@@ -28,12 +28,6 @@
               class=""
               :key="`${entry.id}-example`"
             ></EntryExample>
-            <EntryExternal
-              v-if="showExternal"
-              :term="entry.head"
-              :traditional="entry.traditional"
-              :level="entry.level"
-            />
           </div>
         </div>
       </div>
@@ -72,6 +66,14 @@
     <div class="container">
       <div class="row d-flex" style="flex-wrap: wrap">
         <!-- <EntryDifficulty :entry="entry" style="flex: 1" class="m-3" /> -->
+        <EntryExternal
+          v-if="showExternal"
+          :term="entry.head"
+          :traditional="entry.traditional"
+          :level="entry.level"
+          class="mt-4 mb-4"
+          style="margin: 0 auto;"
+        />
         <EntryDisambiguation
           v-if="['zh', 'yue'].includes($l2.code)"
           :entry="entry"
