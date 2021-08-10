@@ -14,34 +14,36 @@
   }
 </router>
 <template>
-  <div class="youtube-browse container pt-5 mb-5 main">
-    <div class="row">
-      <div class="col-sm-12">
-        <h3 class="mb-4 text-center">
-          <Annotate :phonetics="false" :buttons="true" v-if="title">
-            <span>{{ title }}</span>
-          </Annotate>
-          <span v-else>YouTube Channel {{ channel_id }}</span>
-        </h3>
-        <div class="text-center">
-          <b-button
-            class="btn-small btn-primary d-inline-block"
-            @click="forceRefresh"
-          >
-            <i class="fa fa-sync-alt mr-1"></i>
-            Force Refresh
-          </b-button>
-        </div>
-        <template v-if="!loading">
-          <!--
+  <div class="main">
+    <div class="youtube-browse container pt-5 mb-5">
+      <div class="row">
+        <div class="col-sm-12">
+          <h3 class="mb-4 text-center">
+            <Annotate :phonetics="false" :buttons="true" v-if="title">
+              <span>{{ title }}</span>
+            </Annotate>
+            <span v-else>YouTube Channel {{ channel_id }}</span>
+          </h3>
+          <div class="text-center">
+            <b-button
+              class="btn-small btn-primary d-inline-block"
+              @click="forceRefresh"
+            >
+              <i class="fa fa-sync-alt mr-1"></i>
+              Force Refresh
+            </b-button>
+          </div>
+          <template v-if="!loading">
+            <!--
           <h4 class="text-center mt-5">{{ $t('Videos') }}</h4>
           <hr class="mb-5" />
           <YouTubeVideoList :videos="videos" />
           -->
-          <h4 class="text-center mt-5">{{ $t("Playlists") }}</h4>
-          <hr />
-          <YouTubePlaylists :playlists="playlists" />
-        </template>
+            <h4 class="text-center mt-5">{{ $t("Playlists") }}</h4>
+            <hr />
+            <YouTubePlaylists :playlists="playlists" />
+          </template>
+        </div>
       </div>
     </div>
   </div>
@@ -107,12 +109,12 @@ export default {
       if (playlists) {
         playlists = playlists.sort((a, b) => b.count - a.count);
         let allVideosPlaylist = {
-          id: this.channel_id.replace('UC', 'UU'),
+          id: this.channel_id.replace("UC", "UU"),
           title: "All Uploaded Videos of " + this.title || this.channel_id,
-        }
-        if (playlists[0]) allVideosPlaylist.thumbnail = playlists[0].thumbnail
-        playlists = [allVideosPlaylist, ...playlists]
-        this.playlists = playlists
+        };
+        if (playlists[0]) allVideosPlaylist.thumbnail = playlists[0].thumbnail;
+        playlists = [allVideosPlaylist, ...playlists];
+        this.playlists = playlists;
       }
       this.loading = false;
     },
