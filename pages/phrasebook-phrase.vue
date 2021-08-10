@@ -8,8 +8,8 @@
   <div :class="{ 'bg-white': !wide }">
     <SocialHead :title="title" :description="description" :image="image" />
     <div :class="{ container: !wide }">
-      <div :class="{'row': !wide, 'content-panes': wide }">
-        <div :class="{'p-4 content-pane-left': wide, 'col-sm-12': !wide}">
+      <div :class="{ row: !wide, 'content-panes': wide }">
+        <div :class="{ 'p-4 content-pane-left': wide, 'col-sm-12': !wide }">
           <div class="text-center" v-if="phrasebook && phraseId">
             <router-link
               class="link-unstyled mb-4 d-block"
@@ -50,6 +50,23 @@
               {{ phraseObj[$l1.code] }}
             </p>
             <hr v-if="word" />
+            <div class="text-center mt-3 mb-3" v-if="words && words.length > 1">
+              <b-dropdown
+                size="sm"
+                :items="words"
+                text="Disambiguation"
+                menu-class="disambiguation-dropdown"
+              >
+                <b-dropdown-item
+                  v-for="w in words"
+                  :key="`phrase-word-disambiguation-${w.id}`"
+                  @click="word = w"
+                >
+                  <b>{{ w.head }}</b>
+                  <em>{{ w.definitions[0] }}</em>
+                </b-dropdown-item>
+              </b-dropdown>
+            </div>
             <div v-if="word" class="text-center">
               <LazyEntryHeader :entry="word" />
               <DefinitionsList
@@ -61,20 +78,8 @@
             </div>
           </div>
         </div>
-        <div :class="{'content-pane-right pl-3 pr-3': wide}">
+        <div :class="{ 'content-pane-right pl-3 pr-3': wide }">
           <div>
-            <div class="text-center mt-3" v-if="words && words.length > 1">
-              <b-dropdown size="sm" :items="words" text="Disambiguation">
-                <b-dropdown-item
-                  v-for="w in words"
-                  :key="`phrase-word-disambiguation-${w.id}`"
-                  @click="word = w"
-                >
-                  <b>{{ w.head }}</b>
-                  <em>{{ w.definitions[0] }}</em>
-                </b-dropdown-item>
-              </b-dropdown>
-            </div>
             <LazyDictionaryEntry
               v-if="word && phrasebook"
               :entry="word"
@@ -264,6 +269,16 @@ export default {
       ::v-deep .definitions-many {
         columns: 1;
         margin-top: 1rem;
+      }
+      ::v-deep .disambiguation-dropdown {
+        max-width: 12rem;
+        overflow: hidden;
+        left: 0;
+        position: fixed;
+        .dropdown-item {
+          white-space: normal;
+          padding: 0.2rem 1rem;
+        }
       }
     }
     .content-pane-right {
