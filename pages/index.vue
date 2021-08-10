@@ -14,7 +14,7 @@
       style="overflow: hidden; position: relative"
     >
       <div class="container">
-        <div class="row pt-5">
+        <div class="row pt-5 mb-5">
           <div class="col-sm-12">
             <div class="z2h-logo" style="line-height: 1.2; font-size: 2em">
               <strong>ZERO TO HERO</strong>
@@ -22,8 +22,18 @@
               <span style="font-weight: 300">LANGUAGES</span>
             </div>
           </div>
-          <div class="col-sm-12 mt-5">
-            <div class="intro-text">
+        </div>
+        <div :class="{'row mb-5': true, 'd-none': history.length === 0}">
+          <div class="col-sm-12">
+            <div class="home-card">
+              <h5 class="text-center">Your Dashboard</h5>
+              <LazyDashboard @historyUpdate="historyUpdate" />
+            </div>
+          </div>
+        </div>
+        <div class="row" v-if="history.length === 0">
+          <div class="col-sm-12">
+            <div class="intro-text mb-5">
               <h5 class="mb-3" style="line-height: 1.5; font-weight: 600">
                 A one-stop resource to help you learn
                 <em>any</em>
@@ -42,8 +52,8 @@
             </div>
           </div>
         </div>
-        <div class="row pt-5 mb-5">
-          <div class="col-sm-6">
+        <div class="row">
+          <div class="col-sm-6 mb-5">
             <div class="home-card">
               <router-link to="/en/zh">
                 <img
@@ -122,8 +132,7 @@
               </div>
             </div>
           </div>
-          <div class="col-sm-12 d-sm-none mt-4">&nbsp;</div>
-          <div class="col-sm-6">
+          <div class="col-sm-6 mb-5">
             <div class="home-card">
               <router-link to="/zh/en">
                 <img
@@ -261,63 +270,11 @@
                   'ja',
                   'vi',
                   'lzh',
-                  'cy'
+                  'cy',
                 ]"
                 class="mt-4"
                 :sort="true"
               />
-            </div>
-          </div>
-        </div>
-
-        <div v-if="history.length > 0" class="home-card mb-5">
-          <h5 class="text-center mt-5 mb-2">Your Recently Viewed Items</h5>
-          <div class="text-center mb-4">
-            <button
-              class="btn bg-gray btn-small text-gray ml-0 mb-2"
-              @click.stop.prevent="$store.dispatch('history/removeAll')"
-            >
-              Clear History
-            </button>
-          </div>
-          <div class="history d-flex">
-            <div
-              class="history-item media shadow"
-              v-for="(item, itemIndex) of this.history.slice(0, 20)"
-              :key="`history-item-${itemIndex}`"
-            >
-              <router-link :to="item.path" class="link-unstyled">
-                <div class="aspect-wrapper">
-                  <img
-                    :src="item.image"
-                    class="aspect history-item-image img-fluid"
-                    style="width: 100%"
-                  />
-                </div>
-                <div class="media-body bg-white">
-                  <h6 style="line-height: 1.5; font-size: 0.9em">
-                    {{ item.title }}
-                  </h6>
-                  <div class="btn btn-small">
-                    {{ $languages.getSmart(item.l2).name }}
-                  </div>
-                  <button
-                    class="btn btn-small bg-white text-secondary ml-0"
-                    @click.stop.prevent="
-                      $store.dispatch('history/remove', item)
-                    "
-                    style="
-                      position: absolute;
-                      top: 0.5rem;
-                      left: 0.5rem;
-                      z-index: 9;
-                      border-radius: 100%;
-                    "
-                  >
-                    <i class="fa fa-times"></i>
-                  </button>
-                </div>
-              </router-link>
             </div>
           </div>
         </div>
@@ -339,40 +296,21 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
 export default {
-  mounted() {
-    if (!this.$store.state.history.historyLoaded) {
-      this.$store.commit("history/LOAD_HISTORY");
-    }
+  data() {
+    return {
+      history: [],
+    };
   },
-  computed: {
-    ...mapState("history", ["history"]),
+  methods: {
+    historyUpdate(history) {
+      this.history = history;
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.history {
-  flex-wrap: wrap;
-  margin: 0 -1rem;
-}
-
-.history-item {
-  min-width: 12rem;
-  max-width: calc(100% - 2rem);
-  flex: 1;
-  margin: 1rem;
-  position: relative;
-  border-radius: 1rem;
-}
-
-@media (min-width: 768px) {
-  .history-item {
-    max-width: calc(50% - 2rem);
-  }
-}
-
 .czh-links,
 .ezh-links {
   padding: 0;
