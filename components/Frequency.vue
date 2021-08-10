@@ -2,7 +2,8 @@
   <div :class="{'frequency-wrapper': true, 'd-inline-block': true, mini: mini}">
     <div
       class="frequency-level text-center"
-      v-bind:data-bg-level="entry.hsk"
+      :data-bg-level="entry.hsk"
+      v-if="showHsk"
     >
       {{ entry.hsk === 'outside' ? 'Non-HSK' : 'HSK ' + entry.hsk }}
     </div>
@@ -30,6 +31,9 @@ export default {
     },
     mini: {
       default: false
+    },
+    showHsk: {
+      default: true
     }
   }
 }

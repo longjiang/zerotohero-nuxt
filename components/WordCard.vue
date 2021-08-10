@@ -29,8 +29,8 @@
       </router-link>
     </div>
     <div class="word-list-ext-item-body">
-      <Frequency class="mb-1" v-if="word" :entry="word" />
-      <div class="character-example-pinyin">
+      <Frequency class="mb-1" v-if="showFrequency && word" :entry="word" />
+      <div class="character-example-pinyin mb-2">
         <Star
           class="word-list-ext-item-head-star"
           v-if="word && star === true"
@@ -61,13 +61,21 @@
           </span>
         </div>
       </div>
-      <div
-        v-html="highlight(word.example, word.simplified, word.hsk)"
-        class="word-list-ext-example"
-      ></div>
-      <div class="character-example-english mt-1">
-        {{ word.exampleTranslation }}
+      <div v-if="showExample">
+        <div
+          v-html="highlight(word.example, word.simplified, word.hsk)"
+          class="word-list-ext-example"
+        ></div>
+        <div class="character-example-english mt-1">
+          {{ word.exampleTranslation }}
+        </div>
       </div>
+      <LazyDefinitionsList
+        :key="`def-list-${word.id}`"
+        v-if="showDefinitions && word && word.definitions"
+        class="mt-1"
+        :definitions="word.definitions.slice(0, 1)"
+      ></LazyDefinitionsList>
       <router-link
         v-if="compareWith"
         :to="`/${$l1.code}/${$l2.code}/compare/${$dictionaryName}/${compareWith.id},${word.id}`"
@@ -115,6 +123,15 @@ export default {
     },
     index: {
       default: 0,
+    },
+    showFrequency: {
+      default: true,
+    },
+    showExample: {
+      default: true,
+    },
+    showDefinitions: {
+      default: false,
     },
   },
   computed: {
@@ -176,7 +193,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 .word-list-ext-item {
   margin: 2rem;
   width: 20rem;

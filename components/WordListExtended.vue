@@ -15,6 +15,9 @@
         :compareWith="word !== compareWith ? compareWith : false"
         :index="index"
         :key="`word-card-${index}`"
+        :showFrequency="false"
+        :showExample="false"
+        :showDefinitions="true"
       />
     </ul>
     <ShowMoreButton
