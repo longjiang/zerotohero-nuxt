@@ -127,13 +127,9 @@ export default {
           ).lookupSimplified(Word.word);
           if (words.length > 0) {
             let word = words[0];
+            if (word.hsk === "") word.hsk = "outside";
             related.push(word);
           }
-          related = related.sort((a, b) => {
-            let ahsk = a.hsk === "outside" ? 7 : parseInt(a.hsk);
-            let bhsk = b.hsk === "outside" ? 7 : parseInt(b.hsk);
-            return ahsk - bhsk;
-          });
         }
         this.word = word;
         this.related = related;
