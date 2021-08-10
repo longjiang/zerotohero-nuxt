@@ -23,12 +23,19 @@
               :key="`search-${args}`"
               id="search-compare-bar"
             />
-            <h3
-              class="pt-5 pb-5 text-center"
-              style="min-height: 10rem"
-              v-if="$l2 && !entry && dictionarySize"
-            >
-              For the love of {{ dictionarySize.toLocaleString("en-US") }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container" v-if="!entry">
+      <div class="row">
+        <div class="col-sm-12 bg-white">
+          <div class="for-the-love-of">
+            <h3 class="text-center">
+              For the love of
+              <span v-if="dictionarySize">
+                {{ dictionarySize.toLocaleString("en-US") }}
+              </span>
               {{ $l2.name }} words.
             </h3>
           </div>
@@ -36,7 +43,7 @@
       </div>
     </div>
     <div :class="{ 'focus-exclude': true, container: !wide }">
-      <div :class="{ row: !wide, 'content-panes': wide }">
+      <div :class="{ row: !wide, 'content-panes': wide }" v-if="entry">
         <div :class="{ 'content-pane-left': wide, 'col-sm-12': !wide }">
           <div v-if="saved() && sW.length > 0" class="text-center mb-4">
             <router-link
@@ -183,15 +190,13 @@ export default {
       this.loadEntry();
     this.dictionarySize = await this.getDictionarySize();
     this.bindKeys();
+    if (typeof window !== "undefined")
+      window.addEventListener("resize", this.onResize);
   },
   destroyed() {
     this.unbindKeys();
     if (typeof window !== "undefined")
       window.removeEventListener("resize", this.onResize);
-  },
-  created() {
-    if (typeof window !== "undefined")
-      window.addEventListener("resize", this.onResize);
   },
   methods: {
     onResize() {
@@ -400,5 +405,14 @@ export default {
     padding: 1rem;
     padding-top: 4rem;
   }
+  .for-the-love-of {
+    padding-top: 9rem;
+    padding-bottom: 20rem;
+  }
+}
+
+.for-the-love-of {
+  padding-top: 1rem;
+  padding-bottom: 10rem;
 }
 </style>
