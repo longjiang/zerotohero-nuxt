@@ -17,7 +17,7 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
-          <h3 class="text-center">{{ $t("Saved Words") }}</h3>
+          <h3 class="text-center">Saved {{ $l2.name }} Words</h3>
           <p class="text-center mb-5">
             {{
               $t(

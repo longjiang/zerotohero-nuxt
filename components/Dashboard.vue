@@ -1,5 +1,25 @@
 <template>
   <div>
+    <div v-if="savedWords">
+      <div class="dashboard-saved-words-list mt-4 mb-4">
+        <router-link
+          :to="`/${savedWordsLang.l2.code === 'lzh' ? 'zh' : 'en'}/${
+            savedWordsLang.l2.code
+          }/saved-words`"
+          class="link-unstyled d-block"
+          v-for="(savedWordsLang, index) in savedWordsSorted"
+          :key="`dashboard-saved-words-${index}`"
+        >
+          <i class="fa fa-star mr-1" style="opacity: 0.5"></i>
+          <span style="min-width: 1.7rem; display: inline-block; text-align: center">
+            {{ savedWordsLang.words.length }}
+          </span>
+          saved word{{ savedWordsLang.words.length > 1 ? "s" : "" }}
+          in
+          <strong>{{ savedWordsLang.l2.name }}</strong>
+        </router-link>
+      </div>
+    </div>
     <div class="text-center mb-3">
       <button
         class="btn bg-gray btn-small text-gray ml-0 mb-2"
@@ -59,6 +79,20 @@ export default {
   },
   computed: {
     ...mapState("history", ["history"]),
+    ...mapState("savedWords", ["savedWords"]),
+    savedWordsSorted() {
+      let savedWordsSorted = [];
+      for (let l2 in this.savedWords) {
+        savedWordsSorted.push({
+          l2: this.$languages.getSmart(l2),
+          words: this.savedWords[l2],
+        });
+      }
+      savedWordsSorted = savedWordsSorted
+        .sort((a, b) => b.words.length - a.words.length)
+        .filter((s) => s.words.length > 0);
+      return savedWordsSorted;
+    },
   },
   watch: {
     history() {
@@ -90,6 +124,16 @@ export default {
 @media (min-width: 768px) {
   .history-item {
     max-width: calc(50% - 2rem);
+  }
+}
+@media (min-width: 768px) {
+  .dashboard-saved-words-list {
+    column-count: 2;
+  }
+}
+@media (min-width: 992px) {
+  .dashboard-saved-words-list {
+    column-count: 3;
   }
 }
 </style>

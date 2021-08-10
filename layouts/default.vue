@@ -96,6 +96,9 @@ export default {
         }
       }
     });
+    if (!this.$store.state.savedWords.savedWordsLoaded) {
+      this.$store.commit("savedWords/LOAD_SAVED_WORDS");
+    }
     this.$ga.page(this.$route.path);
     smoothscroll.polyfill(); // Safari does not support smoothscroll
     let dictionary = await this.$getDictionary();
@@ -129,9 +132,6 @@ export default {
     },
     async loadSettings() {
       this.$store.commit("settings/LOAD_SETTINGS");
-      if (!this.$store.state.savedWords.savedWordsLoaded) {
-        this.$store.commit("savedWords/LOAD_SAVED_WORDS");
-      }
       if (!this.$store.state.savedCollocations.savedCollocationsLoaded) {
         this.$store.commit("savedCollocations/LOAD_SAVED_COLLOCATIONS");
       }
