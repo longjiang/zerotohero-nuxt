@@ -1,13 +1,13 @@
 <template>
-  <div
-    id="zerotohero"
-    :class="classes"
-    :style="`background-image: url(${
-      l2
-        ? 'https://source.unsplash.com/1600x900/?' + l2.name
-        : '/img/background-branch.jpg'
-    })`"
-  >
+  <div id="zerotohero" :class="classes">
+    <div
+      class="zerotohero-background"
+      :style="`background-image: url(${
+        l2
+          ? 'https://source.unsplash.com/1600x900/?' + l2.name + '+dark'
+          : '/img/background-branch.jpg'
+      })`"
+    />
     <template v-if="$route.path !== '/'">
       <client-only>
         <Nav
@@ -185,10 +185,18 @@ export default {
 }
 
 #zerotohero {
-  background-color: #000;
-  background-attachment: fixed;
-  background-position: center;
-  background-size: cover;
+  .zerotohero-background {
+    height: 100vh;
+    width: 100vw;
+    background-color: #000;
+    background-attachment: initial;
+    background-position: center;
+    background-size: cover;
+    z-index: -1;
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
 }
 
 .main {

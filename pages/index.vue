@@ -13,7 +13,6 @@
       class="container-fluid pt-4"
       style="overflow: hidden; position: relative"
     >
-      <img src="/img/background-branch.jpg" class="bg-stars" data-not-lazy />
       <div class="container">
         <div class="row pt-5">
           <div class="col-sm-12">
@@ -459,17 +458,5 @@ export default {
   color: #004a5c;
   background-color: #fcddc1;
   font-weight: bold;
-}
-
-.bg-stars {
-  z-index: -1;
-  position: fixed;
-  width: 100%;
-  left: 0;
-  top: 0;
-  object-fit: cover;
-  min-height: 50vh;
-  max-height: 80vh;
-  clip-path: ellipse(66% 68% at 42% 31%);
 }
 </style>
