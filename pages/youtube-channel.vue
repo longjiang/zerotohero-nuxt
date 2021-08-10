@@ -110,7 +110,7 @@ export default {
         playlists = playlists.sort((a, b) => b.count - a.count);
         let allVideosPlaylist = {
           id: this.channel_id.replace("UC", "UU"),
-          title: "All Uploaded Videos of " + this.title || this.channel_id,
+          title: "All uploaded videos of " + (this.title ? this.title : 'this channel'),
         };
         if (playlists[0]) allVideosPlaylist.thumbnail = playlists[0].thumbnail;
         playlists = [allVideosPlaylist, ...playlists];

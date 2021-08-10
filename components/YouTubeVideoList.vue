@@ -80,13 +80,27 @@
         <b-form-checkbox class="mt-2 d-inline-block" v-model="showSubsEditing">
           Show Subs Editing
         </b-form-checkbox>
+        <b-button variant="gray" size="small" @click="surveyChannels">
+          Survey Channels
+        </b-button>
+      </div>
+      <div v-if="channels">
+        <router-link
+          v-for="(channel, index) in channels"
+          :key="`video-list-channel-${index}`"
+          :to="{ name: 'youtube-channel', params: { channel_id: channel } }"
+          class="d-block"
+        >
+          {{ channel }}
+        </router-link>
       </div>
     </div>
     <div class="youtube-videos row">
       <div
         :class="{
           'col-sm-12': view === 'list' || singleColumn,
-          'col-xs-12 col-sm-6 col-md-4 col-lg-3': view === 'grid' && !singleColumn,
+          'col-xs-12 col-sm-6 col-md-4 col-lg-3':
+            view === 'grid' && !singleColumn,
           'd-none': hideVideosWithoutSubs ? !video.hasSubs : false,
         }"
         :style="`padding-bottom: ${view === 'list' ? '1rem' : '2rem'}`"
@@ -137,22 +151,24 @@ export default {
     },
     view: {
       type: String,
-      default: 'grid'
+      default: "grid",
     },
     singleColumn: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
       Helper,
       videosInfoKey: 0,
+      channels: undefined,
       showSubsEditing: false,
       checkSavedData: this.checkSaved,
       checkSubsData: this.checkSubs,
       over: false,
       hideVideosWithoutSubs: false,
+      showChannels: false,
     };
   },
   computed: {
@@ -183,9 +199,16 @@ export default {
     },
   },
   methods: {
+    surveyChannels() {
+      let channels = this.videos.map((v) => v.channel_id);
+      channels = Helper.unique(channels);
+      this.channels = channels;
+    },
     async checkSavedFunc(videos) {
       videos = videos.filter((v) => !v.id); // Only check those that are not saved
-      let youtube_ids = videos.map((v) => v.youtube_id).filter(id => !id.includes('0x'));
+      let youtube_ids = videos
+        .map((v) => v.youtube_id)
+        .filter((id) => !id.includes("0x"));
       let chunks = Helper.arrayChunk(youtube_ids, 100);
       for (let youtube_ids of chunks) {
         let response = await axios.get(
