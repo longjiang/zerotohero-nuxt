@@ -60,6 +60,7 @@
             <b-button
               class="upload-list"
               variant="primary"
+              size="sm"
               v-on:click="showExportClick"
               v-if="this.sW.length > 0"
             >
@@ -69,6 +70,7 @@
             <b-button
               class="remove-all"
               variant="danger"
+              size="sm"
               v-on:click="removeAllClick"
               v-if="this.sW.length > 0"
             >
@@ -77,7 +79,7 @@
             </b-button>
             <router-link
               v-if="sW.length > 0"
-              class="btn btn-gray"
+              class="btn btn-gray btn-sm"
               :to="`/${$l1.code}/${$l2.code}/learn-interactive/saved`"
             >
               <i class="fa fa-chalkboard"></i>

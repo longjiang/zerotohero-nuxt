@@ -1104,20 +1104,34 @@ export default {
   flex-direction: row;
   align-items: center;
   border-radius: 0.5rem;
-  background: #ffffff;
-  color: #444;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-  border: 1px solid #ffffffaa;
+  background: hsl(0deg 0% 0% / 50%);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
+  border: 1px solid hsl(0deg 0% 50% / 50%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  &:hover {
+    transform: scale(115%);
+    transition: 200ms ease-in-out;
+    background: hsl(0deg 0% 20% / 50%);
+  }
   .feature-card-icon {
     padding-right: 1rem;
     font-size: 1.5em;
-    color: #fd4f1c;
+    color: #ddd;
+    opacity: 0.8;
+    &:hover {
+      color: white;
+    }
   }
   .feature-card-title {
     font-size: 1em;
     line-height: 1.5em;
     padding: 0.25em 0;
     flex: 1;
+    color: #ddd;
+    &:hover {
+      color: white;
+    }
   }
 }
 </style>

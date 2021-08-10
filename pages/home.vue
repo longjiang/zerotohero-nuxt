@@ -98,7 +98,6 @@ h3 {
   text-shadow: 0 2px 10px rgba(0, 0, 0, 1);
 }
 .home {
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
+  
 }
 </style>
