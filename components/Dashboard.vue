@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="savedWords">
-      <div class="dashboard-saved-words-list mt-4 mb-4">
+      <div class="dashboard-saved-words-list mt-4">
         <router-link
           :to="`/${savedWordsLang.l2.code === 'lzh' ? 'zh' : 'en'}/${
             savedWordsLang.l2.code
@@ -11,7 +11,9 @@
           :key="`dashboard-saved-words-${index}`"
         >
           <i class="fa fa-star mr-1" style="opacity: 0.5"></i>
-          <span style="min-width: 1.7rem; display: inline-block; text-align: center">
+          <span
+            style="min-width: 1.7rem; display: inline-block; text-align: center"
+          >
             {{ savedWordsLang.words.length }}
           </span>
           saved word{{ savedWordsLang.words.length > 1 ? "s" : "" }}
@@ -20,7 +22,7 @@
         </router-link>
       </div>
     </div>
-    <div class="text-center mb-3">
+    <div class="text-center mt-4 mb-3" v-if="history && history.length > 0">
       <button
         class="btn bg-gray btn-small text-gray ml-0 mb-2"
         @click.stop.prevent="$store.dispatch('history/removeAll')"
@@ -73,6 +75,7 @@
 import { mapState } from "vuex";
 export default {
   mounted() {
+    this.emitHasDashboard();
     if (!this.$store.state.history.historyLoaded) {
       this.$store.commit("history/LOAD_HISTORY");
     }
@@ -96,8 +99,19 @@ export default {
   },
   watch: {
     history() {
-      console.log("updating history", this.history);
-      this.$emit("historyUpdate", this.history);
+      this.emitHasDashboard();
+    },
+    savedWords() {
+      this.emitHasDashboard();
+    },
+  },
+  methods: {
+    emitHasDashboard() {
+      this.$emit(
+        "hasDashboard",
+        (this.history && this.history.length > 0) ||
+          (this.savedWordsSorted && this.savedWordsSorted.length > 0)
+      );
     },
   },
 };

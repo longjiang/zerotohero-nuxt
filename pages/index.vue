@@ -23,15 +23,15 @@
             </div>
           </div>
         </div>
-        <div :class="{'row mb-5': true, 'd-none': history.length === 0}">
+        <div :class="{ 'row mb-5': true, 'd-none': !hasDashboard }">
           <div class="col-sm-12">
             <div class="home-card">
-              <h5 class="text-center">Your Dashboard</h5>
-              <LazyDashboard @historyUpdate="historyUpdate" />
+              <h5 class="text-center">Welcome back!</h5>
+              <LazyDashboard @hasDashboard="hasDashboardUpdate" />
             </div>
           </div>
         </div>
-        <div class="row" v-if="history.length === 0">
+        <div class="row" v-if="!hasDashboard">
           <div class="col-sm-12">
             <div class="intro-text mb-5">
               <h5 class="mb-3" style="line-height: 1.5; font-weight: 600">
@@ -299,12 +299,12 @@
 export default {
   data() {
     return {
-      history: [],
+      hasDashboard: false,
     };
   },
   methods: {
-    historyUpdate(history) {
-      this.history = history;
+    hasDashboardUpdate(hasDashboard) {
+      this.hasDashboard = hasDashboard;
     },
   },
 };
