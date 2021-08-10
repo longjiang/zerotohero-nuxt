@@ -27,7 +27,7 @@
       :hrefFunc="compareHrefFunc"
       v-if="!loading"
     ></Search>
-    <button class="btn btn-compare ml-2" @click="compareClick" v-if="!loading">
+    <button class="btn btn-primary ml-2" @click="compareClick" v-if="!loading">
       <span v-if="showCompare"><i class="fas fa-times"></i></span>
       <span v-if="!showCompare">
         <i class="fas fa-adjust"></i>
@@ -133,14 +133,5 @@ export default {
   .compare-btn-text {
     display: none;
   }
-}
-
-.btn-compare {
-  color: #fd4f1c;
-}
-
-.btn-compare:hover {
-  color: white;
-  background: #fd4f1c;
 }
 </style>

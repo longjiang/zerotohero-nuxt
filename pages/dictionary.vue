@@ -12,7 +12,7 @@
     @keydown="keydown"
   >
     <SocialHead :title="title" :description="description" :image="image" />
-    <div v-if="$l2 && !entry && dictionarySize">
+    <div class="dictionary-search-bar">
       <SearchCompare
         :searchEntry="entry"
         :random="`/${$l1.code}/${$l2.code}/dictionary/${$store.state.settings.dictionaryName}/random`"
@@ -20,14 +20,18 @@
         :key="`search-${args}`"
         id="search-compare-bar"
       />
-      <h3 class="pt-5 pb-5 text-center" style="min-height: 10rem">
+      <h3
+        class="pt-5 pb-5 text-center"
+        style="min-height: 10rem"
+        v-if="$l2 && !entry && dictionarySize"
+      >
         For the love of {{ dictionarySize.toLocaleString("en-US") }}
         {{ $l2.name }} words.
       </h3>
     </div>
     <div :class="{ 'focus-exclude': true, container: !wide }">
       <div :class="{ row: !wide, 'content-panes': wide }">
-        <div :class="{ 'p-4 content-pane-left': wide, 'col-sm-12': !wide }">
+        <div :class="{ 'content-pane-left': wide, 'col-sm-12': !wide }">
           <div v-if="saved() && sW.length > 0" class="text-center mb-4">
             <router-link
               class="link-unstyled mb-2 d-block"
@@ -369,5 +373,26 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
+.zerotohero-wide {
+  .dictionary-search-bar {
+    padding: 1rem;
+    background: hsl(0deg 0% 0% / 23%);
+    position: fixed;
+    top: 0;
+    left: 26rem;
+    width: calc(100vw - 26rem);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: 9;
+  }
+  .content-pane-left {
+    padding: 1rem;
+    padding-top: 6rem;
+  }
+  .content-pane-right {
+    padding: 1rem;
+    padding-top: 4rem;
+  }
+}
 </style>
