@@ -7,7 +7,7 @@
 <template>
   <div class="main focus" :key="`entry-${entryKey}`" @keydown="keydown">
     <SocialHead :title="title" :description="description" :image="image" />
-    <div class="jumbotron jumbotron-fluid bg-white pt-4 pb-0 mb-4">
+    <div class="pt-4 pb-4">
       <div class="container focus-exclude">
         <div class="row">
           <div class="col-sm-12">
@@ -21,7 +21,7 @@
           </div>
         </div>
         <h3
-          class="mt-5 mb-5 text-center"
+          class="pt-5 pb-5 text-center"
           v-if="$l2 && !entry && dictionarySize"
           style="min-height: 10rem"
         >
