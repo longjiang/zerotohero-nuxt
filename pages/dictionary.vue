@@ -5,7 +5,12 @@
   }
 </router>
 <template>
-  <div class="focus" :key="`entry-${entryKey}`" @keydown="keydown">
+  <div
+    :class="{ focus: true, 'bg-white': !wide }"
+    class="focus'"
+    :key="`entry-${entryKey}`"
+    @keydown="keydown"
+  >
     <SocialHead :title="title" :description="description" :image="image" />
     <div v-if="$l2 && !entry && dictionarySize">
       <SearchCompare
