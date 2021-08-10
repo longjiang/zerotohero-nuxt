@@ -13,11 +13,13 @@
   }
 </router>
 <template>
-  <div>
+  <div class="pl-4 pr-4 home">
     <div class="container pt-5 pb-5 pl-4 pr-4">
       <div class="row">
         <div class="col-sm-12 text-center">
-          <h3>{{$t('For the love of the {l2} language.', { l2: $t($l2.name) })}}</h3>
+          <h3>
+            {{ $t("For the love of the {l2} language.", { l2: $t($l2.name) }) }}
+          </h3>
         </div>
         <Nav :l1="$l1" :l2="$l2" variant="page" />
       </div>
@@ -39,12 +41,12 @@ export default {
     features() {
       return [
         {
-          title: 'TV Shows',
-          icon: 'fas fa-tv',
-          name: 'tv-shows'
-        }
-      ]
-    }
+          title: "TV Shows",
+          icon: "fas fa-tv",
+          name: "tv-shows",
+        },
+      ];
+    },
   },
   created() {
     if (
@@ -61,13 +63,13 @@ export default {
   methods: {
     hasTalks() {
       return (
-        typeof this.$store.state.shows.talks !== 'undefined' &&
+        typeof this.$store.state.shows.talks !== "undefined" &&
         this.$store.state.shows.talks[this.$l2.code]
       );
     },
     hasTVShows() {
       return (
-        typeof this.$store.state.shows.tvShows !== 'undefined'  &&
+        typeof this.$store.state.shows.tvShows !== "undefined" &&
         this.$store.state.shows.tvShows[this.$l2.code]
       );
     },
@@ -91,4 +93,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+h3 {
+  color: white;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 1);
+}
+.home {
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
 </style>

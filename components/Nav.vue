@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="{ 'has-secondary-nav': parent && parent.children }">
     <div class="site-top-bar" v-if="variant === 'menu-bar'">
       <div>
         <router-link to="/" class="link-unstyled">
@@ -32,7 +32,6 @@
         'nav-page': variant === 'page',
       }"
       style="z-index: 3"
-      :set="(parent = getParent())"
     >
       <template v-if="variant === 'menu-bar' || variant === 'side-bar'">
         <nav :class="{ 'main-nav': true, tabs: variant === 'menu-bar' }">
@@ -107,30 +106,28 @@
             />
           </div>
         </nav>
-        <nav class="secondary-nav">
-          <template v-if="parent && parent.children">
-            <NuxtLink
-              :class="{
-                'secondary-nav-item': true,
-                'd-block': variant === 'side-bar',
-              }"
-              v-for="(child, index) in parent.children.filter(
-                (child) => child.show
-              )"
-              :key="`subnav-${child.name}-${index}`"
-              :to="last(child) || child"
+        <nav class="secondary-nav" v-if="parent && parent.children">
+          <NuxtLink
+            :class="{
+              'secondary-nav-item': true,
+              'd-block': variant === 'side-bar',
+            }"
+            v-for="(child, index) in parent.children.filter(
+              (child) => child.show
+            )"
+            :key="`subnav-${child.name}-${index}`"
+            :to="last(child) || child"
+          >
+            <i :class="child.icon"></i>
+            {{ $t(child.title, { l2: $t($l2.name) }) }}
+            <span
+              class="saved-words-count"
+              v-cloak
+              v-if="child.name === 'saved-words'"
             >
-              <i :class="child.icon"></i>
-              {{ $t(child.title, { l2: $t($l2.name) }) }}
-              <span
-                class="saved-words-count"
-                v-cloak
-                v-if="child.name === 'saved-words'"
-              >
-                {{ savedWordsCount() }}
-              </span>
-            </NuxtLink>
-          </template>
+              {{ savedWordsCount() }}
+            </span>
+          </NuxtLink>
         </nav>
       </template>
       <template v-if="variant === 'page'">
@@ -190,6 +187,21 @@ export default {
         (typeof window !== "undefined" &&
           window.matchMedia("(display-mode: standalone)").matches)
       );
+    },
+
+    parent() {
+      let parent = this.menu.find((item) => {
+        if (this.$route.name === this.nameOfSelfOrFirstChild(item)) return true;
+        let href = this.$router.resolve({
+          name: this.nameOfSelfOrFirstChild(item),
+        }).href;
+        if (this.$route.path.includes(href)) return true;
+        if (item.children) {
+          let childrenNames = item.children.map((child) => child.name);
+          if (childrenNames.includes(this.$route.name)) return true;
+        }
+      });
+      return parent;
     },
     menu() {
       return [
@@ -766,20 +778,6 @@ export default {
         }
       }
     },
-    getParent() {
-      let parent = this.menu.find((item) => {
-        if (this.$route.name === this.nameOfSelfOrFirstChild(item)) return true;
-        let href = this.$router.resolve({
-          name: this.nameOfSelfOrFirstChild(item),
-        }).href;
-        if (this.$route.path.includes(href)) return true;
-        if (item.children) {
-          let childrenNames = item.children.map((child) => child.name);
-          if (childrenNames.includes(this.$route.name)) return true;
-        }
-      });
-      return parent;
-    },
     to(item) {
       let to = this.last(item) || this.selfOrFirstChild(item, true);
       return to;
@@ -966,7 +964,10 @@ export default {
   left: 0;
   height: 100%;
   .main-nav {
-    width: 50%;
+    width: 100%;
+    .has-secondary-nav & {
+      width: 50%;
+    }
     padding-left: 1rem;
     margin: 0;
     position: relative;
@@ -1103,10 +1104,8 @@ export default {
   flex-direction: row;
   align-items: center;
   border-radius: 0.5rem;
-  background: #ffffffaa;
+  background: #ffffff;
   color: #444;
-  backdrop-filter: blur(15px) brightness(130%);
-  -webkit-backdrop-filter: blur(15px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
   border: 1px solid #ffffffaa;
   .feature-card-icon {

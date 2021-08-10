@@ -1,5 +1,13 @@
 <template>
-  <div id="zerotohero" :class="classes" :style="`background-image: url(${$route.path !== '/' && l2 ? 'https://source.unsplash.com/1600x900/?' + l2.name : '/img/background-branch.jpg'})`">
+  <div
+    id="zerotohero"
+    :class="classes"
+    :style="`background-image: url(${
+      $route.path !== '/' && l2
+        ? 'https://source.unsplash.com/1600x900/?' + l2.name
+        : '/img/background-branch.jpg'
+    })`"
+  >
     <template v-if="$route.path !== '/'">
       <client-only>
         <Nav
@@ -62,7 +70,7 @@
 import Config from "@/lib/config";
 import { mapState } from "vuex";
 import smoothscroll from "smoothscroll-polyfill";
-import Helper from '@/lib/helper'
+import Helper from "@/lib/helper";
 
 export default {
   data() {
@@ -177,6 +185,7 @@ export default {
 }
 
 #zerotohero {
+  background-color: black;
   background-attachment: fixed;
   background-position: center;
   background-size: cover;
@@ -199,14 +208,20 @@ export default {
     position: fixed;
     top: 0;
     left: 0;
-    width: 26rem;
+    width: 13rem;
     height: 100vh;
     z-index: 2;
+    &.has-secondary-nav {
+      width: 26rem;
+    }
   }
   .zth-content {
     flex: 1;
-    margin-left: 26rem;
+    margin-left: 13rem;
     overflow: visible;
+  }
+  .zth-nav.has-secondary-nav + .zth-content {
+    margin-left: 26rem;
   }
 }
 
