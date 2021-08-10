@@ -10,7 +10,7 @@
     <div class="container pt-5">
       <div class="row">
         <div class="col-sm-12 text-center">
-          <h2 class="mb-5">Online Chinese Courses from HSK 1 to HSK 6</h2>
+          <h3 class="mb-5">Online Chinese Courses from HSK 1 to HSK 6</h3>
         </div>
       </div>
     </div>

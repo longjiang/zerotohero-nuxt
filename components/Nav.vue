@@ -184,6 +184,13 @@
 <script>
 export default {
   computed: {
+    isPWA() {
+      return (
+        (typeof navigator !== "undefined" && navigator.standalone) ||
+        (typeof window !== "undefined" &&
+          window.matchMedia("(display-mode: standalone)").matches)
+      );
+    },
     menu() {
       return [
         {
@@ -711,13 +718,6 @@ export default {
         this.$store.state.phrasebooks.phrasebooks &&
         this.$store.state.phrasebooks.phrasebooks[this.l2.code] &&
         this.$store.state.phrasebooks.phrasebooks[this.l2.code].length > 0;
-    },
-    isPWA() {
-      return (
-        (typeof navigator !== "undefined" && navigator.standalone) ||
-        (typeof window !== "undefined" &&
-          window.matchMedia("(display-mode: standalone)").matches)
-      );
     },
     canShare() {
       return typeof navigator !== "undefined" && navigator.share;

@@ -1,5 +1,5 @@
 <template>
-  <div id="zerotohero" :class="classes" :style="`background-image: url(${l2 ? 'https://source.unsplash.com/1600x900/?' + l2.name : '/img/background-branch.jpg'})`">
+  <div id="zerotohero" :class="classes" :style="`background-image: url(${$route.path !== '/' && l2 ? 'https://source.unsplash.com/1600x900/?' + l2.name : '/img/background-branch.jpg'})`">
     <template v-if="$route.path !== '/'">
       <client-only>
         <Nav
