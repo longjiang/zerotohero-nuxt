@@ -58,7 +58,7 @@
         :entry="entry"
         :images="images"
         ref="dictionaryEntry"
-        :class="{ 'mb-5': $l2.code !== 'zh' }"
+        :class="{ 'pb-5': $l2.code !== 'zh' }"
         :key="`dictionary-entry-${entry.id}`"
       />
     </article>
