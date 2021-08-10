@@ -5,28 +5,30 @@
   }
 </router>
 <template>
-  <div class="container main pt-5 mb-5">
-    <div v-if="$l1.code === 'en' && $l2.code === 'zh'">
-      <PricingEnZh :currency="currency" />
-    </div>
-    <div v-if="$l1.code === 'zh' && $l2.code === 'en'">
-      <PricingZhEn :currency="currency" />
+  <div class="main">
+    <div class="container pt-5 pb-5">
+      <div v-if="$l1.code === 'en' && $l2.code === 'zh'">
+        <PricingEnZh :currency="currency" />
+      </div>
+      <div v-if="$l1.code === 'zh' && $l2.code === 'en'">
+        <PricingZhEn :currency="currency" />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import PricingZhEn from '@/components/PricingZhEn'
-import PricingEnZh from '@/components/PricingEnZh'
+import PricingZhEn from "@/components/PricingZhEn";
+import PricingEnZh from "@/components/PricingEnZh";
 export default {
   components: {
     PricingZhEn,
-    PricingEnZh
+    PricingEnZh,
   },
   props: {
     currency: {
-      default: 'USD'
-    }
+      default: "USD",
+    },
   },
   computed: {
     $l1() {
@@ -37,8 +39,8 @@ export default {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
-  }
-}
+  },
+};
 </script>
 
 <style>

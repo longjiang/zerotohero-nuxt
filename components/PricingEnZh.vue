@@ -6,7 +6,7 @@
         description="No subscription required. Pay once, own the courses forever. Wallet Friendly Pricing."
         :image="`/img/courses/bundle-ultimate.jpg`"
       />
-      <h1 class="mb-5">Pricing Chart</h1>
+      <h3 class="mb-5 text-center">Pricing Chart</h3>
       <!-- <Sale class="mb-5 rounded" /> -->
       <div class="bg-success text-light p-3 text-center mb-5 rounded">
         <h4 class="mb-0">No subscriptions! 😊 Pay once, enjoy forever!</h4>
@@ -24,6 +24,7 @@
         <select v-if="rates" name id v-model="currency" class="mb-3">
           <option
             v-for="(rate, symbol) in rates"
+            :key="`currency-select-${symbol}`"
             :value="symbol"
             :selected="currency === symbol"
           >

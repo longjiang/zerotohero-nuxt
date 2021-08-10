@@ -4,20 +4,22 @@
   }
 </router>
 <template>
-  <div class="container main pt-5 mb-5">
-    <TextbooksEnZh id="7" v-if="$l1.code === 'en' && $l2.code === 'zh'" />
-    <TextbooksZhEn id="8" v-if="$l1.code === 'zh' && $l2.code === 'en'" />
+  <div class="main">
+    <div class="container pt-5 pb-5">
+      <TextbooksEnZh id="7" v-if="$l1.code === 'en' && $l2.code === 'zh'" />
+      <TextbooksZhEn id="8" v-if="$l1.code === 'zh' && $l2.code === 'en'" />
+    </div>
   </div>
 </template>
 
 <script>
-import TextbooksEnZh from '@/components/TextbooksEnZh'
-import TextbooksZhEn from '@/components/TextbooksZhEn'
+import TextbooksEnZh from "@/components/TextbooksEnZh";
+import TextbooksZhEn from "@/components/TextbooksZhEn";
 
 export default {
   components: {
     TextbooksEnZh,
-    TextbooksZhEn
+    TextbooksZhEn,
   },
   computed: {
     $l1() {
@@ -28,8 +30,8 @@ export default {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
-  }
-}
+  },
+};
 </script>
 
 <style></style>

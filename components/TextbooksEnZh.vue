@@ -7,12 +7,12 @@
     />
     <div class="row">
       <div class="col-sm-12">
-        <h1 class="mb-5">Textbooks and Workbooks</h1>
+        <h3 class="mb-5 text-center">Textbooks and Workbooks</h3>
       </div>
     </div>
     <div class="row">
       <div class="col-sm-12">
-        <h3>HSK Standard Course (Author: Jiang Liping)</h3>
+        <h4>HSK Standard Course (Author: Jiang Liping)</h4>
         <Annotate tag="p">
           <strong>《HSK 标准教程》 （作者：姜丽萍）</strong>
         </Annotate>
@@ -67,7 +67,7 @@
       </div>
       <div class="col-12 col-md-7 offset-0 offset-md-1">
         <div tag="div" class="col-12 mb-4">
-          <h3>In China?</h3>
+          <h4>In China?</h4>
           <p>
             Aside from buying it from a physical bookstore, it may be more
             convenient to just order them online and have them delivered to your
@@ -106,7 +106,7 @@
           </div>
         </div>
         <div tag="div" class="col-12 mb-4">
-          <h3>Outside of China?</h3>
+          <h4>Outside of China?</h4>
           <p>
             If you're outside of China, you'll need to purchase them online. One
             option would be PurpleCulture.net, it's a Hong Kong based online
@@ -138,7 +138,7 @@
           </div>
         </div>
         <div tag="div" class="col-12">
-          <h3>eBooks available?</h3>
+          <h4>eBooks available?</h4>
           <p>
             The official publisher (BLCUP) has finally released the
             textbooks/workbooks in eBook format (flipviewer only for Windows PC
