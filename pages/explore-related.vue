@@ -21,11 +21,12 @@
           <div>
             <h3 class="text-center">Word Explorer</h3>
             <p class="text-center mb-5">
-              Explore related words. Search for any word, and see words associated with it.
+              Explore related words. Search for any word, and see words
+              associated with it.
             </p>
             <Search :hrefFunc="hrefFunc" class="mb-4" ref="search" />
           </div>
-          <Loader class="mt-5" />
+          <Loader class="mt-5 d-block" style="margin: 0 auto" />
           <div>
             <div>
               <h4 class="text-center mt-5" v-if="word">
@@ -39,15 +40,11 @@
               </h4>
             </div>
             <div v-if="related && related.length > 1">
-              <Merge direction="bottom" class="h-half mt-5 mb-5" />
-              <Loader class="mt-5" />
-              <div>
-                <WordListExtended
-                  class="focus"
-                  :words="related.slice(0, 30)"
-                  :compareWith="word"
-                />
-              </div>
+              <WordListExtended
+                class="focus"
+                :words="related.slice(0, 30)"
+                :compareWith="word"
+              />
               <h4 v-if="related.length > 30" class="text-center mb-5">
                 More Related Words
               </h4>

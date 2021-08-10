@@ -135,12 +135,19 @@ export default {
       Config,
       removed: false,
       srcs: [],
-      srcIndex: undefined,
+      srcIndex: 0,
     };
   },
   async fetch() {
     if (this.srcs.length === 0) {
-      let images = await WordPhotos.getWebImages(this.word.simplified);
+      let images = await WordPhotos.getWebImages(this.word.simplified, {
+        cacheLife: -1,
+      });
+      if (images.length === 0) {
+        images = await WordPhotos.getWebImages(this.word.simplified, {
+          cacheLife: 0,
+        });
+      }
       this.srcs = this.srcs.concat(images.map((image) => image.img));
     }
   },
@@ -160,7 +167,10 @@ export default {
         this.srcIndex === this.srcs.length - 1 ? 0 : this.srcIndex + 1;
     },
     logoLoadError(srcIndex) {
-      this.srcs.splice(srcIndex, 1)
+      console.log(
+        `Word card ${this.word.head}: Removing image ${this.srcIndex}`
+      );
+      this.srcs.splice(srcIndex, 1);
     },
   },
 };
