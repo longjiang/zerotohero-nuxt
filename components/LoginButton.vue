@@ -4,7 +4,6 @@
       v-if="$l1.code === 'zh' && $l2.code === 'en'"
       class="link-unstyled nuxt-link-active btn-sign-in mr-1"
       href="https://m.cctalk.com/inst/stevmab3"
-      target="_blank"
     >
       <i class="fas fa-key" style="width: 1.5rem"></i>
       登录CCTalk
@@ -13,7 +12,6 @@
       v-if="$l1.code === 'en' && $l2.code === 'zh'"
       class="link-unstyled nuxt-link-active btn-sign-in mr-1"
       href="https://sso.teachable.com/secure/133035/users/sign_in"
-      target="_blank"
     >
       <i class="fas fa-key" style="width: 1.5rem"></i>
       Login to Teachable
