@@ -5,107 +5,113 @@
   }
 </router>
 <template>
-  <div class="main container pt-5">
-    <div class="row">
-      <div :class="{ 'col-sm-12 mb-5': true }">
-        <h4 class="text-center mb-5">Phrase Survey</h4>
-        <div class="text-center mb-4">
-          Get phrases from up to {{ perPage }} episodes from:
-          <b-form-select
-            v-model="showSelect"
-            :options="showOptions"
-            style="display: inline-block; width: 20rem; margin-left: 1rem"
-          ></b-form-select>
-        </div>
-        <div class="text-center mb-4">
-          <b-button variant="primary" @click="getPhrases">Get Phrases</b-button>
-        </div>
-        <div
-          :class="{
-            'loader text-center mb-4': true,
-            'd-none': !gettingPhrases,
-          }"
-          style="flex: 1"
-        >
-          <div class="heartbeat-loader"></div>
-        </div>
-        <div
-          :class="{
-            'text-center': true,
-            'd-none': !videos || videos.length > 0,
-          }"
-        >
-          No more videos to survey.
-        </div>
-        <template v-if="lines && lines.length > 0">
-          <b-table
-            small
-            striped
-            hover
-            :items="lines.slice(0, numRowsVisible)"
-            :fields="fields"
-            responsive
+  <div class="main">
+    <div class="container pt-5">
+      <div class="row">
+        <div :class="{ 'col-sm-12 mb-5': true }">
+          <h4 class="text-center mb-5">Phrase Survey</h4>
+          <div class="text-center mb-4">
+            Get phrases from up to {{ perPage }} episodes from:
+            <b-form-select
+              v-model="showSelect"
+              :options="showOptions"
+              style="display: inline-block; width: 20rem; margin-left: 1rem"
+            ></b-form-select>
+          </div>
+          <div class="text-center mb-4">
+            <b-button variant="primary" @click="getPhrases">
+              Get Phrases
+            </b-button>
+          </div>
+          <div
+            :class="{
+              'loader text-center mb-4': true,
+              'd-none': !gettingPhrases,
+            }"
+            style="flex: 1"
           >
-            <template #cell(line)="data">
-              <div>
-                {{ data.item.phrase }}
-              </div>
-              <div v-if="expand[data.index]" class="mt-2 mb-2 ml-2">
-                <div v-for="phrase of data.item.instances">
-                  <router-link
-                    :to="`/${$l1.code}/${$l2.code}/youtube/view/${phrase.youtube_id}/?t=${phrase.starttime}`"
-                    class="link-unstyled d-flex mt-1 mb-1"
-                    target="_blank"
-                  >
-                    <img
-                      :src="`//img.youtube.com/vi/${phrase.youtube_id}/hqdefault.jpg`"
-                      :alt="phrase.title"
-                      class="video-thumb"
-                      v-lazy-load
-                    />
-                    <div style="flex: 1">
-                      <span v-html="highlight(phrase.line, data.item.phrase)" />
-                    </div>
-                  </router-link>
+            <div class="heartbeat-loader"></div>
+          </div>
+          <div
+            :class="{
+              'text-center': true,
+              'd-none': !videos || videos.length > 0,
+            }"
+          >
+            No more videos to survey.
+          </div>
+          <template v-if="lines && lines.length > 0">
+            <b-table
+              small
+              striped
+              hover
+              :items="lines.slice(0, numRowsVisible)"
+              :fields="fields"
+              responsive
+            >
+              <template #cell(line)="data">
+                <div>
+                  {{ data.item.phrase }}
                 </div>
-              </div>
-            </template>
-            <template #cell(count)="data">
-              {{ data.item.instances.length }}
-            </template>
-            <template #cell(actions)="data">
-              <b-button
-                size="sm"
-                variant="success"
-                @click="toggle(data.index)"
-              >
-                <span v-if="expand[data.index]">Collapse</span>
-                <span v-if="!expand[data.index]">Expand</span>
-              </b-button>
-            </template>
-          </b-table>
-        </template>
-        <div v-observe-visibility="visibilityChanged"></div>
-        <div class="mt-4 text-center">
-          <router-link
-            v-if="start > 9"
-            :to="`/${$l1.code}/${$l2.code}/phrase-survey/${
-              Number(start) - perPage
-            }`"
-            class="btn btn-default"
-          >
-            <i class="fa fa-chevron-left"></i>
-          </router-link>
-          <span class="ml-3 mr-3">Page {{ start / perPage + 1 }}</span>
-          <router-link
-            v-if="videos && videos.length > 0"
-            :to="`/${$l1.code}/${$l2.code}/phrase-survey/${
-              Number(start) + perPage
-            }`"
-            class="btn btn-default"
-          >
-            <i class="fa fa-chevron-right"></i>
-          </router-link>
+                <div v-if="expand[data.index]" class="mt-2 mb-2 ml-2">
+                  <div v-for="phrase of data.item.instances">
+                    <router-link
+                      :to="`/${$l1.code}/${$l2.code}/youtube/view/${phrase.youtube_id}/?t=${phrase.starttime}`"
+                      class="link-unstyled d-flex mt-1 mb-1"
+                      target="_blank"
+                    >
+                      <img
+                        :src="`//img.youtube.com/vi/${phrase.youtube_id}/hqdefault.jpg`"
+                        :alt="phrase.title"
+                        class="video-thumb"
+                        v-lazy-load
+                      />
+                      <div style="flex: 1">
+                        <span
+                          v-html="highlight(phrase.line, data.item.phrase)"
+                        />
+                      </div>
+                    </router-link>
+                  </div>
+                </div>
+              </template>
+              <template #cell(count)="data">
+                {{ data.item.instances.length }}
+              </template>
+              <template #cell(actions)="data">
+                <b-button
+                  size="sm"
+                  variant="success"
+                  @click="toggle(data.index)"
+                >
+                  <span v-if="expand[data.index]">Collapse</span>
+                  <span v-if="!expand[data.index]">Expand</span>
+                </b-button>
+              </template>
+            </b-table>
+          </template>
+          <div v-observe-visibility="visibilityChanged"></div>
+          <div class="mt-4 text-center">
+            <router-link
+              v-if="start > 9"
+              :to="`/${$l1.code}/${$l2.code}/phrase-survey/${
+                Number(start) - perPage
+              }`"
+              class="btn btn-default"
+            >
+              <i class="fa fa-chevron-left"></i>
+            </router-link>
+            <span class="ml-3 mr-3">Page {{ start / perPage + 1 }}</span>
+            <router-link
+              v-if="videos && videos.length > 0"
+              :to="`/${$l1.code}/${$l2.code}/phrase-survey/${
+                Number(start) + perPage
+              }`"
+              class="btn btn-default"
+            >
+              <i class="fa fa-chevron-right"></i>
+            </router-link>
+          </div>
         </div>
       </div>
     </div>
@@ -118,7 +124,7 @@ import axios from "axios";
 import YouTube from "@/lib/youtube";
 import Helper from "@/lib/helper";
 import Vue from "vue";
-import he from 'he';
+import he from "he";
 
 export default {
   props: {
@@ -149,7 +155,7 @@ export default {
         this.loadShows();
       }
     });
-    this.punctuations = Helper.characterClass(this.$l2.apostrophe ? 'PunctuationNoApostrophe' : 'Punctuation')
+    this.punctuations = Helper.characterClass("PunctuationNoApostrophe");
     console.log(`All done. Displaying table...`);
   },
   beforeDestroy() {

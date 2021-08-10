@@ -524,7 +524,7 @@ export default {
         this.$subsSearchLimit ? (this.exact ? 100 : 20) : 500,
         this.tvShow ? this.tvShow.id : undefined,
         this.exact,
-        this.$l2.apostrophe
+        true
       );
 
       hits = this.updateSaved(hits);

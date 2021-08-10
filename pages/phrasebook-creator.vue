@@ -5,8 +5,8 @@
   }
 </router>
 <template>
-  <div>
-    <div class="container main pt-5 mb-5">
+  <div class="main">
+    <div class="container pt-5 pb-5">
       <div class="row">
         <div class="col-sm-12">
           <h4 class="mb-4">New phrasebook</h4>
@@ -26,7 +26,9 @@
             :enableNewShow="false"
             type="tv-shows"
           />
-          <div v-if="this.show">Associated with show {{ this.show.title }} (ID: {{ this.show.id }})</div>
+          <div v-if="this.show">
+            Associated with show {{ this.show.title }} (ID: {{ this.show.id }})
+          </div>
         </div>
       </div>
       <div class="row">
@@ -54,11 +56,17 @@
                 View {{ saved.title }}
               </router-link>
             </span>
-            <b-form-checkbox v-model="exact" class="d-inline-block ml-2">Exact</b-form-checkbox>
+            <b-form-checkbox v-model="exact" class="d-inline-block ml-2">
+              Exact
+            </b-form-checkbox>
           </div>
         </div>
         <div class="col-md-6">
-          <div class="mt-2 mb-2">Data preview (<a href="#" @click.prevent="flip = !flip">flip</a>):</div>
+          <div class="mt-2 mb-2">
+            Data preview (
+            <a href="#" @click.prevent="flip = !flip">flip</a>
+            ):
+          </div>
           <b-table
             v-if="rows"
             small
@@ -91,7 +99,7 @@ export default {
       saving: false,
       flip: false,
       show: undefined,
-      showType: undefined
+      showType: undefined,
     };
   },
   computed: {
@@ -114,8 +122,8 @@ export default {
   },
   methods: {
     assignShow(show, type) {
-      this.show = show
-      this.showType = type
+      this.show = show;
+      this.showType = type;
     },
     async save() {
       let phrases = Papa.unparse(this.rows);
@@ -125,12 +133,12 @@ export default {
         l2: this.$l2.id,
       };
       if (this.show && this.showType) {
-        phrasebook[this.showType] = this.show.id
-        phrasebook.exact = true
+        phrasebook[this.showType] = this.show.id;
+        phrasebook.exact = true;
       }
-      if (this.exact) phrasebook.exact = true
+      if (this.exact) phrasebook.exact = true;
       if (this.sourceURL) {
-        phrasebook.description = `Source: <a href="${this.sourceURL}">${this.sourceURL}</a>`
+        phrasebook.description = `Source: <a href="${this.sourceURL}">${this.sourceURL}</a>`;
       }
       this.saving = true;
       try {
