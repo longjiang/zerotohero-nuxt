@@ -7,7 +7,7 @@
       :set="(base = languagePath(language))"
     >
       <router-link
-        :to="`${base}live-tv`"
+        :to="`${base}live-tv/`"
         :class="{
           'feature-icon mr-1': true,
           transparent: !hasLiveTV(english, language),
