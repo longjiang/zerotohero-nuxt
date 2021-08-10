@@ -5,7 +5,7 @@
   }
 </router>
 <template>
-  <div class="youtube-view pt-3 pb-5">
+  <div class="youtube-view pt-3 pb-5 bg-white">
     <SocialHead
       v-if="video"
       :title="`Learn ${$l2.name} from the video ${video.title} | ${$l2.name} Zero to Hero`"
