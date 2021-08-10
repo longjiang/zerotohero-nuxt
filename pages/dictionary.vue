@@ -27,17 +27,19 @@
         </div>
       </div>
     </div>
-    <div class="container" v-if="!entry">
-      <div class="row">
-        <div class="col-sm-12 bg-white">
-          <div class="for-the-love-of">
-            <h3 class="text-center">
-              For the love of
-              <span v-if="dictionarySize">
-                {{ dictionarySize.toLocaleString("en-US") }}
-              </span>
-              {{ $l2.name }} words.
-            </h3>
+    <div class="bg-white">
+      <div class="container" v-if="!entry">
+        <div class="row">
+          <div class="col-sm-12 bg-white">
+            <div class="for-the-love-of">
+              <h3 class="text-center">
+                For the love of
+                <span v-if="dictionarySize">
+                  {{ dictionarySize.toLocaleString("en-US") }}
+                </span>
+                {{ $l2.name }} words.
+              </h3>
+            </div>
           </div>
         </div>
       </div>
