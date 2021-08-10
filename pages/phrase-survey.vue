@@ -133,7 +133,7 @@ export default {
       maxVideos: 2000, // False = infinite number of videos
       perPage: 2000,
       chunkSize: 200, // Number of videos stored in each localStorage item in getAllLinesFromLocalStorage
-      punctuations: Helper.characterClass('Punctuation'),
+      punctuations: undefined,
       fields: ["line", "count", "actions"],
       numRowsVisible: 20,
       showSelect: "all-tv-shows",
@@ -149,6 +149,7 @@ export default {
         this.loadShows();
       }
     });
+    this.punctuations = Helper.characterClass(this.$l2.apostrophe ? 'PunctuationNoApostrophe' : 'Punctuation')
     console.log(`All done. Displaying table...`);
   },
   beforeDestroy() {
