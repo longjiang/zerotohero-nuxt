@@ -75,10 +75,13 @@
           class="mt-2 d-inline-block"
           v-model="hideVideosWithoutSubs"
         >
-          Hide Videos Without Subs
+          Hide Videos without Subs
         </b-form-checkbox>
-        <b-form-checkbox class="mt-2 d-inline-block" v-model="hideSaved">
-          Hide Saved
+        <b-form-checkbox
+          class="mt-2 d-inline-block"
+          v-model="hideVideosInShows"
+        >
+          Hide Videos in Shows
         </b-form-checkbox>
         <b-form-checkbox class="mt-2 d-inline-block" v-model="showSubsEditing">
           Show Subs Editing
@@ -169,7 +172,7 @@ export default {
       over: false,
       hideVideosWithoutSubs: false,
       showChannels: false,
-      hideSaved: false,
+      hideVideosInShows: false,
     };
   },
   computed: {
@@ -188,7 +191,12 @@ export default {
     filteredVideos() {
       return this.videos.filter((video) => {
         if (this.hideVideosWithoutSubs && !video.hasSubs) return false;
-        if (this.hideSaved && video.id) return false;
+        if (
+          this.hideVideosInShows &&
+          video.id &&
+          ((video.tv_show && video.tv_show.id) || (video.talk && video.talk.id))
+        )
+          return false;
         return true;
       });
     },
@@ -253,27 +261,29 @@ export default {
     newShow(show) {
       this.$emit("newShow", show);
     },
-    async batch(f) {
+    async batch(action) {
       let indices = Object.keys(this.$refs.youTubeVideoCard);
       let chunks = Helper.arrayChunk(indices, 3);
       for (let chunk of chunks) {
         let promises = [];
         for (let videoIndex of chunk) {
-          promises.push(f(videoIndex));
+          promises.push(action(videoIndex));
         }
         await Promise.all(promises);
       }
     },
     async addAll() {
-      this.batch((videoIndex) =>
-        this.$refs.youTubeVideoCard[videoIndex].getSubsAndSave()
-      );
+      this.batch((videoIndex) => {
+        if (this.$refs.youTubeVideoCard[videoIndex])
+          this.$refs.youTubeVideoCard[videoIndex].getSubsAndSave();
+      });
     },
     async assignShowToAll(show, type) {
       // type: 'tv_show' or 'talk'
-      this.batch((videoIndex) =>
-        this.$refs.youTubeVideoCard[videoIndex].saveShow(show, type)
-      );
+      this.batch((videoIndex) => {
+        if (this.$refs.youTubeVideoCard[videoIndex])
+          this.$refs.youTubeVideoCard[videoIndex].saveShow(show, type);
+      });
     },
     async removeAll() {
       for (let videoIndex in this.$refs.youTubeVideoCard) {
