@@ -72,7 +72,7 @@
               <DefinitionsList
                 :key="`def-list-${word.id}`"
                 v-if="word.definitions"
-                class="mt-1"
+                class="mt-3"
                 :definitions="word.definitions"
               ></DefinitionsList>
             </div>
