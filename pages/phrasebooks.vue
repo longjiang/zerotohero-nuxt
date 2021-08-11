@@ -6,89 +6,123 @@
 </router>
 <template>
   <div class="main">
-    <div class="container" id="main">
-      <SocialHead :title="title" :description="description" :image="image" />
-      <div class="row">
-        <div class="col-sm-12">
-          <h3 class="text-center mt-5 mb-5">{{ $l2.name }} Phrasebooks</h3>
-          <div class="mb-5">
-            <div
-              :class="{
-                'loader text-center': true,
-                'd-none': phrasebooks,
-              }"
-              style="flex: 1"
-            >
-              <div class="heartbeat-loader"></div>
-            </div>
-            <div
-              class="text-center"
-              v-if="phrasebooks && phrasebooks.length === 0"
-            >
-              Sorry, we could not find any phrasebooks for {{ $l2.name }} 😭.
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row pb-5" v-if="phrasebooks && phrasebooks.length > 0">
-        <div
-          v-for="(phrasebook, phrasebookIndex) in phrasebooks"
-          class="col-xs-12 col-sm-6 col-md-4 col-lg-3"
-          :key="`phrasebook-${phrasebookIndex}`"
-          style="padding-bottom: 2rem"
-        >
-          <div class="media rounded shadow phrasebook">
-            <router-link
-              :class="`link-unstyled bg-gradient-${phrasebook.title.length
-                .toString()
-                .split('')
-                .pop()}`"
-              :to="`/${$l1.code}/${$l2.code}/phrasebook/${phrasebook.id}/`"
-              style="
-                width: 100%;
-                display: block;
-                padding: 1rem 0 0.5rem 2rem;
-                color: rgba(255, 255, 255, 0.4);
-                font-size: 5em;
-                overflow: hidden;
-              "
-            >
-              <i class="fas fa-book"></i>
-            </router-link>
-            <div class="media-body">
-              <router-link
-                class="link-unstyled"
-                :to="`/${$l1.code}/${$l2.code}/phrasebook/${phrasebook.id}/`"
+    <container-query :query="query" v-model="params">
+      <div class="container" id="main">
+        <SocialHead :title="title" :description="description" :image="image" />
+        <div class="row">
+          <div class="col-sm-12">
+            <h3 class="text-center mt-5 mb-5">{{ $l2.name }} Phrasebooks</h3>
+            <div class="mb-5">
+              <div
+                :class="{
+                  'loader text-center': true,
+                  'd-none': phrasebooks,
+                }"
+                style="flex: 1"
               >
-                <h5 class="mt-3">{{ phrasebook.title }}</h5>
-              </router-link>
-              <div style="color: #999">
-                ({{ phrasebook.phrases.length }} phrases)
+                <div class="heartbeat-loader"></div>
               </div>
-
-              <b-button
-                v-if="$adminMode"
-                class="btn btn-small bg-danger text-white mt-2 ml-0"
-                @click.stop.prevent="remove(phrasebook)"
+              <div
+                class="text-center"
+                v-if="phrasebooks && phrasebooks.length === 0"
               >
-                <i class="fa fa-trash"></i>
-              </b-button>
+                Sorry, we could not find any phrasebooks for {{ $l2.name }} 😭.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row pb-5" v-if="phrasebooks && phrasebooks.length > 0">
+          <div
+            v-for="(phrasebook, phrasebookIndex) in phrasebooks"
+            :class="{
+              'col-12': params.xs,
+              'col-6': params.sm,
+              'col-4': params.md,
+              'col-3': params.lg,
+            }"
+            :key="`phrasebook-${phrasebookIndex}`"
+            style="padding-bottom: 2rem"
+          >
+            <div class="media rounded shadow phrasebook">
+              <router-link
+                :class="`link-unstyled bg-gradient-${phrasebook.title.length
+                  .toString()
+                  .split('')
+                  .pop()}`"
+                :to="`/${$l1.code}/${$l2.code}/phrasebook/${phrasebook.id}/`"
+                style="
+                  width: 100%;
+                  display: block;
+                  padding: 1rem 0 0.5rem 2rem;
+                  color: rgba(255, 255, 255, 0.4);
+                  font-size: 5em;
+                  overflow: hidden;
+                "
+              >
+                <i class="fas fa-book"></i>
+              </router-link>
+              <div class="media-body">
+                <router-link
+                  class="link-unstyled"
+                  :to="`/${$l1.code}/${$l2.code}/phrasebook/${phrasebook.id}/`"
+                >
+                  <h5 class="mt-3">{{ phrasebook.title }}</h5>
+                </router-link>
+                <div style="color: #999">
+                  ({{ phrasebook.phrases.length }} phrases)
+                </div>
+
+                <b-button
+                  v-if="$adminMode"
+                  class="btn btn-small bg-danger text-white mt-2 ml-0"
+                  @click.stop.prevent="remove(phrasebook)"
+                >
+                  <i class="fa fa-trash"></i>
+                </b-button>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </container-query>
   </div>
 </template>
 
 <script>
 import WordPhotos from "@/lib/word-photos";
+import { ContainerQuery } from "vue-container-query";
 
 export default {
+  components: {
+    ContainerQuery,
+  },
   data() {
     return {
       phrasebooks: undefined,
       images: [],
+
+      params: {},
+      query: {
+        xs: {
+          minWidth: 0,
+          maxWidth: 540,
+        },
+        sm: {
+          minWidth: 540,
+          maxWidth: 720,
+        },
+        md: {
+          minWidth: 720,
+          maxWidth: 960,
+        },
+        lg: {
+          minWidth: 960,
+          maxWidth: 1140,
+        },
+        xl: {
+          minWidth: 1140,
+        },
+      },
     };
   },
   computed: {
