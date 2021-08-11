@@ -2,9 +2,15 @@
   <div class="col-sm-12" v-if="article">
     <SocialHead
       v-if="article"
-      :image="`${article.post_hint === 'image' ? article.url : '/img/zth-share-image.jpg'}`"
+      :image="`${
+        article.post_hint === 'image' ? article.url : '/img/zth-share-image.jpg'
+      }`"
       :title="`Reddit Post: ${article.title} | from r/${article.subreddit} | ${$l2.name} Zero to Hero`"
-      :description="`${article.selftext_html ? stripTags(unescape(article.selftext_html)) : 'Read article'}`"
+      :description="`${
+        article.selftext_html
+          ? stripTags(unescape(article.selftext_html))
+          : 'Read article'
+      }`"
     />
     <RedditArticleCard :article="article" />
     <div>
@@ -19,14 +25,14 @@
           directly.
         </p>
         <a
-          :href="`https://www.reddit.com/r/ChineseLanguage/comments/cpdv8t`"
-          class="btn btn-danger"
+          :href="`https://www.reddit.com/${article.subreddit_name_prefixed}/comments/cpdv8t`"
+          class="btn btn-success"
         >
-          Go to r/ChineseLanguage
+          Go to {{ article.subreddit_name_prefixed }}
         </a>
       </div>
 
-      <div v-for="comment in comments">
+      <div v-for="(comment, index) in comments" :key="`comment-item-${index}`">
         <h6>{{ comment.author }}</h6>
         <Annotate :showTranslate="true">
           <div v-html="unescape(comment.body_html)"></div>
@@ -71,8 +77,8 @@ export default {
       return Helper.unescape(escapedHTML);
     },
     stripTags(html) {
-      return Helper.stripTags(html)
-    }
+      return Helper.stripTags(html);
+    },
   },
 
   async fetch() {
