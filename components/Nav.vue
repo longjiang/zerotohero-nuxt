@@ -486,7 +486,7 @@ export default {
             {
               name: "explore-topics",
               icon: "fas fa-certificate",
-              title: "Topics",
+              title: "Words by Topic",
               show: this.hasFeature("explore-topics"),
             },
             {

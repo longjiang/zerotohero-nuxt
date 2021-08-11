@@ -14,14 +14,19 @@
 </router>
 <template>
   <div class="main">
-    <div class="container pt-4 pb-4" v-cloak>
+    <div class="container pt-5 pb-5" v-cloak>
       <div class="row">
         <div class="col-sm-12">
           <div>
-            <h4>Browse Words by Theme</h4>
-            <p>Themes are as classified under the Dewey decimal system.</p>
-            <hr />
-            <Loader class="mt-5" />
+            <div class="text-center">
+              <h3>Words by Topic</h3>
+              <p>
+                Browse Words by Theme. Themes are as classified under the Dewey
+                decimal system.
+              </p>
+              <hr />
+              <Loader class="mt-5" />
+            </div>
             <ThemeBrowser />
           </div>
         </div>

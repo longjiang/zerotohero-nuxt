@@ -1,8 +1,8 @@
 <template>
   <div class="dewey" v-cloak :key="browseKey">
     <ul class="dewey-l1">
-      <li v-for="(l1, i) of l1s">
-        <h4>
+      <li v-for="(l1, i) of l1s" :key="`dewey-l1-item-${i}`">
+        <h5 class="mt-3 mb-3">
           <i
             v-if="!showL1[i]"
             @click="toggleL1(i)"
@@ -24,11 +24,11 @@
           >
             <span>{{ l1.title }}</span>
           </Annotate>
-        </h4>
+        </h5>
         <div :key="l1Key + i * 1000">
           <ul class="dewey-l2" v-if="showL1[i]">
-            <li v-for="(l2, j) of l1.children">
-              <h5>
+            <li v-for="(l2, j) of l1.children" :key="`dewey-l2-item-${j}`">
+              <h6 class="mt-3 mb-3">
                 <i
                   @click="toggleL2(i, j)"
                   class="fas fa-plus expand-btn"
@@ -49,11 +49,14 @@
                 >
                   <span>{{ l2.title }}</span>
                 </Annotate>
-              </h5>
+              </h6>
               <div :key="l2Key + i + j * 1000">
                 <ul class="dewey-l3" v-if="showL2[i][j]">
-                  <li v-for="l3 of l2.children">
-                    <h6>
+                  <li
+                    v-for="(l3, i) of l2.children"
+                    :key="`dewey-l3-item-${i}`"
+                  >
+                    <div class="mt-3 mb-3">
                       <span class="dewey-code ml-3">{{ l3.code }}</span>
                       <Annotate
                         tag="span"
@@ -64,7 +67,7 @@
                       >
                         <span>{{ l3.title }}</span>
                       </Annotate>
-                    </h6>
+                    </div>
                   </li>
                 </ul>
               </div>
