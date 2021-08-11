@@ -97,7 +97,7 @@ export default {
       searchResultKey: 0,
       checkSaved: false,
       long: false,
-      maxPages: 34,
+      maxPages: 30,
       moreLoaded: false,
     };
   },
