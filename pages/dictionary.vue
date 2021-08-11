@@ -47,22 +47,24 @@
     <div :class="{ 'focus-exclude': true, container: !wide }">
       <div :class="{ row: !wide, 'content-panes': wide }" v-if="entry">
         <div :class="{ 'content-pane-left': wide, 'col-sm-12': !wide }">
-          <div v-if="saved() && sW.length > 0" class="text-center mb-4">
-            <router-link
-              class="link-unstyled mb-2 d-block"
-              :to="`/${$l1.code}/${$l2.code}/saved-words`"
-            >
-              <h5>Saved {{ $l2.name }} Words</h5>
-            </router-link>
-            <Paginator
-              :items="sW"
-              :findCurrent="(item) => item.id === entry.id"
-              :url="
-                (item) =>
-                  `/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${item.id}`
-              "
-            />
-          </div>
+          <client-only>
+            <div v-if="saved() && sW.length > 0" class="text-center mb-4">
+              <router-link
+                class="link-unstyled mb-2 d-block"
+                :to="`/${$l1.code}/${$l2.code}/saved-words`"
+              >
+                <h5>Saved {{ $l2.name }} Words</h5>
+              </router-link>
+              <Paginator
+                :items="sW"
+                :findCurrent="(item) => item.id === entry.id"
+                :url="
+                  (item) =>
+                    `/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${item.id}`
+                "
+              />
+            </div>
+          </client-only>
           <div v-if="entry" class="text-center">
             <div class="text-center mb-4" v-if="words && words.length > 1">
               <b-dropdown size="sm" :items="words" text="Disambiguation">
