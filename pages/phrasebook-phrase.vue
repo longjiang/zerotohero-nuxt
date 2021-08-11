@@ -256,6 +256,9 @@ export default {
     ::v-deep .entry-word {
       font-size: 2rem;
     }
+    ::v-deep .entry-cjk {
+      font-size: 1.2rem;
+    }
     ::v-deep .definitions-many {
       columns: 1;
       margin-top: 1rem;

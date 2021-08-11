@@ -37,7 +37,7 @@
       <div class="row">
         <div :class="{ 'col-sm-12': true, 'p-0': portrait }">
           <div
-            :class="{ 'widget': true }"
+            :class="{ widget: true }"
             id="search-subs"
             v-if="entry && showSearchSubs && searchTerms"
           >
@@ -64,26 +64,29 @@
     </div>
 
     <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <EntryExternal
+            v-if="showExternal"
+            :term="entry.head"
+            :traditional="entry.traditional"
+            :level="entry.level"
+            class="mt-4 mb-4 text-center"
+          />
+        </div>
+      </div>
       <div class="row d-flex" style="flex-wrap: wrap">
         <!-- <EntryDifficulty :entry="entry" style="flex: 1" class="m-3" /> -->
-        <EntryExternal
-          v-if="showExternal"
-          :term="entry.head"
-          :traditional="entry.traditional"
-          :level="entry.level"
-          class="mt-4 mb-4"
-          style="margin: 0 auto;"
-        />
         <EntryDisambiguation
           v-if="['zh', 'yue'].includes($l2.code)"
           :entry="entry"
-          class="ml-3 mr-3  "
+          class="ml-3 mr-3"
           style="flex: 1; min-width: 20rem"
         ></EntryDisambiguation>
       </div>
       <div class="row" v-if="showImages">
         <div class="col-sm-12">
-          <div class="web-images widget  ">
+          <div class="web-images widget">
             <div class="widget-title">
               {{ $t("Images of “{text}” on the Web", { text: entry.head }) }}
             </div>
@@ -164,7 +167,7 @@
           />
         </div>
       </div>
-      <div class="row  " v-if="['ja', 'ko'].includes($l2.code) || $l2.han">
+      <div class="row" v-if="['ja', 'ko'].includes($l2.code) || $l2.han">
         <div class="col-sm-12" v-if="$l2.code !== 'zh'">
           <EntryCharacters
             v-if="entry.cjk && entry.cjk.canonical"
@@ -176,13 +179,13 @@
         </div>
         <div class="col-sm-12" v-else>
           <EntryCharacters
-            class=" simplified"
+            class="simplified"
             :text="entry.simplified"
             :pinyin="entry.pinyin"
             :key="`${entry.id}-characters-simplified`"
           ></EntryCharacters>
           <EntryCharacters
-            class=" traditional"
+            class="traditional"
             :text="entry.traditional"
             :pinyin="entry.pinyin"
             :key="`${entry.id}-characters-traditional`"
@@ -193,7 +196,7 @@
             v-if="
               entry.cjk && entry.cjk.canonical && entry.cjk.canonical !== 'NULL'
             "
-            class=" "
+            class=""
             :text="entry.cjk.canonical"
             :key="`${entry.id}-chinese`"
           />
@@ -203,7 +206,7 @@
             v-if="
               entry.cjk && entry.cjk.canonical && entry.cjk.canonical !== 'NULL'
             "
-            class=" "
+            class=""
             :text="entry.cjk.canonical"
             :key="`${entry.id}-japanese`"
           />
@@ -213,7 +216,7 @@
             v-if="
               entry.cjk && entry.cjk.canonical && entry.cjk.canonical !== 'NULL'
             "
-            class=" "
+            class=""
             :text="entry.cjk.canonical"
             :key="`${entry.id}-korean`"
           />
@@ -315,8 +318,11 @@ export default {
       }
       if (this.exact) return terms;
       else {
-        let forms = (await (await this.$getDictionary()).wordForms(this.entry)) || []
-        terms = terms.concat(forms.map((form) => form.form).filter((s) => s.length > 1));
+        let forms =
+          (await (await this.$getDictionary()).wordForms(this.entry)) || [];
+        terms = terms.concat(
+          forms.map((form) => form.form).filter((s) => s.length > 1)
+        );
 
         if (this.$dictionaryName === "openrussian") {
           terms = terms.map((t) => t.replace(/'/gi, ""));
@@ -327,7 +333,7 @@ export default {
       }
       if (this.$dictionaryName === "edict") {
         terms.push(this.entry.kana);
-        terms = Helper.unique(terms)
+        terms = Helper.unique(terms);
       }
       return terms;
     },

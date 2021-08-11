@@ -2,12 +2,21 @@
   <!-- ANCHOR img/anchors/entry.png  -->
   <div class="entry-head-wrapper" v-if="entry">
     <div>
-      <div>
+      <!-- <div class="text-center">
         <router-link v-if="prevPath" class="btn btn-small" :to="prevPath">
           <i class="fa fa-caret-left" />
         </router-link>
+        <router-link v-if="nextPath" class="btn btn-small" :to="nextPath">
+          <i class="fa fa-caret-right" />
+        </router-link>
+      </div> -->
+      <div>
         <span
-          v-if="entry.level && entry.level !== 'outside' && $dictionaryName === 'hsk-cedict'"
+          v-if="
+            entry.level &&
+            entry.level !== 'outside' &&
+            $dictionaryName === 'hsk-cedict'
+          "
           class="entry-level p-1 rounded font-weight-bold"
           style="position: relative; bottom: 0.5em; font-size: 0.8em"
           :data-level="entry.level"
@@ -31,16 +40,17 @@
           </span>
         </span>
         <span
-          v-if="entry.level && entry.level !== 'outside' && $dictionaryName !== 'hsk-cedict'"
+          v-if="
+            entry.level &&
+            entry.level !== 'outside' &&
+            $dictionaryName !== 'hsk-cedict'
+          "
           class="entry-level p-1 rounded ml-2 mr-2"
           style="position: relative; bottom: 0.2em; font-size: 0.8em"
           :data-bg-level="entry.level"
         >
           {{ entry.level }}
         </span>
-        <router-link v-if="nextPath" class="btn btn-small" :to="nextPath">
-          <i class="fa fa-caret-right" />
-        </router-link>
       </div>
       <Annotate tag="div" class="mt-1 mb-2" v-if="entry.counters">
         <span>
@@ -56,10 +66,7 @@
             <span v-if="entry.pronunciation && !entry.cjk" class="ml-2 mr-1">
               /{{ entry.pronunciation }}/
             </span>
-            <span
-              v-if="entry.cjk"
-              class="ml-2 mr-1"
-            >
+            <span v-if="entry.cjk" class="ml-2 mr-1">
               {{ entry.cjk.phonetics }}
             </span>
             <Speak
@@ -74,7 +81,9 @@
           <router-link
             :to="`/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${entry.id}`"
           >
-            <template v-if="['hsk-cedict', 'cc-canto'].includes($dictionaryName)">
+            <template
+              v-if="['hsk-cedict', 'cc-canto'].includes($dictionaryName)"
+            >
               <span
                 class="entry-word simplified"
                 :data-level="
@@ -172,11 +181,9 @@ export default {
           (match) => match.level === "7-9"
         );
         if (match) {
-          let newEntry = await (await this.$getDictionary()).getByNewHSK(
-            "7-9",
-            Math.min(Number(match.num) + 1),
-            5635
-          );
+          let newEntry = await (
+            await this.$getDictionary()
+          ).getByNewHSK("7-9", Math.min(Number(match.num) + 1), 5635);
           if (newEntry)
             return `/${this.$l1.code}/${this.$l2.code}/dictionary/${this.$dictionaryName}/${newEntry.id}`;
         }
@@ -188,10 +195,9 @@ export default {
           (match) => match.level === "7-9"
         );
         if (match) {
-          let newEntry = await (await this.$getDictionary()).getByNewHSK(
-            "7-9",
-            Math.max(0, Number(match.num) - 1)
-          );
+          let newEntry = await (
+            await this.$getDictionary()
+          ).getByNewHSK("7-9", Math.max(0, Number(match.num) - 1));
           if (newEntry)
             return `/${this.$l1.code}/${this.$l2.code}/dictionary/${this.$dictionaryName}/${newEntry.id}`;
         }
