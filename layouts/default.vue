@@ -4,7 +4,7 @@
       class="zerotohero-background"
       :style="`background-image: url(${
         l2
-          ? 'https://source.unsplash.com/1600x900/?' + l2.name + '+dark'
+          ? 'https://source.unsplash.com/1600x900/?' + l2.name
           : '/img/background-branch.jpg'
       })`"
     />

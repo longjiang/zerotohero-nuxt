@@ -147,7 +147,7 @@
                     (child) => child.show
                   )"
                   :key="`subnav-${child.name}-${index}`"
-                  class="col-sm-6 col-xl-4 mb-4"
+                  class="col-sm-6 col-xl-4 mb-1 p-1 feature-card-column"
                 >
                   <NuxtLink
                     class="feature-card link-unstyled"
@@ -1099,13 +1099,17 @@ export default {
   background: #666;
   color: white;
 }
+.feature-card-column:hover {
+  z-index: 1;
+}
 .feature-card {
   padding: 1rem 2rem;
+  font-size: 1.2em;
   display: flex;
   flex-direction: row;
   align-items: center;
   border-radius: 0.5rem;
-  background: hsl(0deg 0% 0% / 50%);
+  background: hsl(0deg 0% 0% / 70%);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
   border: 1px solid hsl(0deg 0% 50% / 50%);
   backdrop-filter: blur(20px);
@@ -1113,13 +1117,12 @@ export default {
   &:hover {
     transform: scale(115%);
     transition: 200ms ease-in-out;
-    background: hsl(0deg 0% 20% / 50%);
+    background: hsl(0deg 0% 10% / 60%);
   }
   .feature-card-icon {
     padding-right: 1rem;
-    font-size: 1.5em;
     color: #ddd;
-    opacity: 0.8;
+    opacity: 0.85;
     &:hover {
       color: white;
     }
@@ -1134,5 +1137,9 @@ export default {
       color: white;
     }
   }
+}
+
+.logo {
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.5));
 }
 </style>

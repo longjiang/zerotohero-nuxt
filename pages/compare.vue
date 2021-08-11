@@ -4,9 +4,9 @@
   }
 </router>
 <template>
-  <div class="main main" v-cloak>
+  <div class="main" v-cloak>
     <SocialHead :title="title" :description="description" :image="image" />
-    <div class="container mt-4 mb-4 focus">
+    <div class="container pt-4 pb-4 focus">
       <div class="row">
         <div class="col-12">
           <SearchCompare :searchEntry="a" :compareEntry="b" :compare="true" />
@@ -51,19 +51,19 @@
       </div>
     </div>
     <div
-      class="jumbotron-fluid bg-light mt-5 focus"
+      class="jumbotron-fluid bg-light focus"
       v-if="a && b && a.example && b.example"
     >
       <div class="container">
         <div class="row">
-          <div class="col-sm-6 mt-5 mb-5">
+          <div class="col-sm-6 mb-5">
             <LazyEntryExample
               :key="`${a.id}-example`"
               :entry="a"
               id="compare-example-a"
             />
           </div>
-          <div class="col-sm-6 mt-5 mb-5">
+          <div class="col-sm-6 mb-5">
             <LazyEntryExample
               :key="`${b.id}-example`"
               :entry="b"
