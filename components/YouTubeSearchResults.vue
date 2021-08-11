@@ -7,8 +7,12 @@
       :updateVideos="updateVideos"
       :checkSaved="checkSaved"
     />
-    <div v-observe-visibility="infinite ? visibilityChanged : undefined"></div>
-    <div class="mt-4 text-center" v-if="term">
+    <div v-if="infinite && !noMoreVideos" v-observe-visibility="infinite ? visibilityChanged : undefined"></div>
+    <div v-if="infinite && noMoreVideos" class="text-center mt-4">
+      <h6>No more videos.</h6>
+      <p>{{ perPage + moreVideos }} videos loaded.</p>
+    </div>
+    <div class="mt-4 text-center" v-if="term && !infinite">
       <router-link
         v-if="start > 9"
         :to="`/${$l1.code}/${$l2.code}/youtube/search/${encodeURIComponent(
@@ -69,7 +73,7 @@ export default {
     },
     infinite: {
       default: false,
-    }
+    },
   },
   data() {
     return {
@@ -77,6 +81,7 @@ export default {
       moreVideos: 0,
       updateVideos: 0,
       perPage: 10,
+      noMoreVideos: false,
     };
   },
   async mounted() {
@@ -115,7 +120,7 @@ export default {
   methods: {
     visibilityChanged(isVisible) {
       if (this.videos && isVisible) {
-        this.loadMore()
+        this.loadMore();
       }
     },
     async loadMore() {
@@ -123,8 +128,13 @@ export default {
       let newVideos = await this.getVideos({
         start: Number(this.start) + this.moreVideos,
       });
-      this.videos = this.videos.concat(newVideos);
-      return true
+      if (newVideos && newVideos.length > 0) {
+        this.videos = this.videos.concat(newVideos);
+        return true;
+      } else {
+        this.noMoreVideos = true;
+        return false;
+      }
     },
     prevPage() {
       this.$router.push({
