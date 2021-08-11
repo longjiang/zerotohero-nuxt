@@ -10,7 +10,7 @@
     <div v-if="infinite && !noMoreVideos" v-observe-visibility="infinite ? visibilityChanged : undefined"></div>
     <div v-if="infinite && noMoreVideos" class="text-center mt-4">
       <h6>No more videos.</h6>
-      <p>{{ perPage + moreVideos }} videos loaded.</p>
+      <p>{{ moreVideos }} videos loaded.</p>
     </div>
     <div class="mt-4 text-center" v-if="term && !infinite">
       <router-link
