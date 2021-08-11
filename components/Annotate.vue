@@ -91,21 +91,6 @@
         :value="text"
         style="width: calc(100% - 2rem)"
       />
-      <!-- <div
-        class="selection-lookup-popover d-block mt-1 text-center"
-        style="font-size: 0.8em"
-        v-if="textMode"
-      >
-        <router-link
-          :to="`/${$l1.code}/${$l2.code}/phrase/search/${
-            selectedText ? selectedText : ''
-          }`"
-          class="link-unstyled"
-        >
-          <i class="fas fa-quote-left"></i>
-          Look up {{ selectedText ? `“${selectedText}” as` : "" }} a phrase
-        </router-link>
-      </div> -->
     </div>
     <v-runtime-template
       v-if="annotated && !textMode"

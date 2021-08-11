@@ -1,6 +1,10 @@
 <template>
   <ul class="articles list-unstyled">
-    <li v-for="article in articles" class="article-list-item collapsed">
+    <li
+      v-for="(article, index) in articles"
+      :key="`article-list-item-${index}`"
+      class="article-list-item collapsed"
+    >
       <router-link :to="article.url">
         <ArticleCard :article="article" :edit="edit" />
       </router-link>

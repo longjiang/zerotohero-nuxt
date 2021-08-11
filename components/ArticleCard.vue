@@ -6,12 +6,16 @@
       class="mr-2"
     />
     <div class="media-body">
-      <Annotate tag="h5" class="article-title" :showTranslate="true">
-        <span>{{ article.title }}</span>
-      </Annotate>
-      <Annotate tag="div" class="article-body" :showTranslate="true">
-        <div v-html="article.body" />
-      </Annotate>
+      <client-only>
+        <h5 class="article-title">
+          <Annotate :buttons="true">
+            <span>{{ article.title }}</span>
+          </Annotate>
+        </h5>
+        <div class="article-body">
+          <Annotate :buttons="true"><div v-html="article.body" /></Annotate>
+        </div>
+      </client-only>
       <a
         v-if="edit"
         :href="`${Config.wikiAdmin}collections/articles/${article.id}`"
@@ -26,7 +30,7 @@
 
 <script>
 import Config from "@/lib/config";
-import Helper from '@/lib/helper'
+import Helper from "@/lib/helper";
 
 export default {
   props: ["article", "edit", "social"],
@@ -47,11 +51,11 @@ export default {
   },
   methods: {
     unescape(escapedHTML) {
-      return Helper.unescape(escapedHTML)
+      return Helper.unescape(escapedHTML);
     },
     stripTags(html) {
-      return Helper.stripTags(html)
-    }
+      return Helper.stripTags(html);
+    },
   },
 };
 </script>

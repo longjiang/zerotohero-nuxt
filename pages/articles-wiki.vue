@@ -4,12 +4,12 @@
   }
 </router>
 <template>
-  <div class="main pt-5 mb-5">
+  <div class="main pt-5 pb-5">
     <div v-if="method === 'list'" class="container">
       <SocialHead
         v-if="articles"
         :title="`Articles from the ${$l2.name} Learning Wiki | ${$l2.name} Zero to Hero`"
-        :description="articles.map(article => article.title).join('. ')"
+        :description="articles.map((article) => article.title).join('. ')"
       />
       <template v-if="articles && articles.length > 0">
         <div class="row">
@@ -53,10 +53,11 @@
       </template>
     </div>
     <div v-if="method === 'view' && article" class="container">
-
       <SocialHead
         :title="`${article.title} | Wiki | ${$l2.name} Zero to Hero`"
-        :description="`${article.body ? stripTags(unescape(article.body)) : 'Read article'}`"
+        :description="`${
+          article.body ? stripTags(unescape(article.body)) : 'Read article'
+        }`"
       />
       <div class="row">
         <div class="col-sm-12">
@@ -72,7 +73,7 @@ import Config from "@/lib/config";
 import ArticlesList from "@/components/ArticlesList.vue";
 import ArticleCard from "@/components/ArticleCard.vue";
 import axios from "axios";
-import Helper from '@/lib/helper';
+import Helper from "@/lib/helper";
 
 export default {
   components: {
@@ -87,14 +88,14 @@ export default {
       args: undefined,
       Config,
     };
-  },  
+  },
   methods: {
     unescape(escapedHTML) {
-      return Helper.unescape(escapedHTML)
+      return Helper.unescape(escapedHTML);
     },
     stripTags(html) {
-      return Helper.stripTags(html)
-    }
+      return Helper.stripTags(html);
+    },
   },
   computed: {
     $l1() {
