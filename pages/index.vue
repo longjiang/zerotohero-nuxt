@@ -216,6 +216,7 @@
               <h5 class="text-center">More Languages</h5>
               <LanguageList
                 :codes="[
+                  'br',
                   'hbo',
                   'tlh',
                   'msa',
