@@ -132,7 +132,7 @@
       </template>
       <template v-if="variant === 'page'">
         <div class="container">
-          <div class="row mt-5">
+          <div class="row">
             <template
               v-for="item in menu.filter(
                 (item) =>
@@ -438,7 +438,7 @@ export default {
               name: "explore-related",
               icon: "fas fa-project-diagram",
               title: "Word Explorer",
-              params: {arg: '中國,zhōng_guó,0'},
+              params: { arg: "中國,zhōng_guó,0" },
               show: this.hasFeature("related"),
             },
             {
@@ -1109,37 +1109,34 @@ export default {
   flex-direction: row;
   align-items: center;
   border-radius: 0.5rem;
-  background: hsl(0deg 0% 0% / 70%);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
-  border: 1px solid hsl(0deg 0% 50% / 50%);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 10px 30px rgba(68, 75, 134, 0.2);
+  background-color: hsla(0, 100%, 100%, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
   &:hover {
     transform: scale(115%);
     transition: 200ms ease-in-out;
-    background: hsl(0deg 0% 10% / 60%);
+    background-color: hsla(0, 100%, 100%, 0.8);
   }
   .feature-card-icon {
     padding-right: 1rem;
-    color: #ddd;
+    color: #333;
     opacity: 0.85;
-    &:hover {
-      color: white;
-    }
   }
   .feature-card-title {
     font-size: 1em;
     line-height: 1.5em;
     padding: 0.25em 0;
     flex: 1;
-    color: #ddd;
+    color: #333;
     &:hover {
-      color: white;
+      color: #444;
     }
   }
 }
 
 .logo {
-  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.5));
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.5));
 }
 </style>

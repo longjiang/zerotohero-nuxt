@@ -16,12 +16,16 @@
   <div class="pl-4 pr-4 home">
     <div class="container pt-5 pb-5 pl-4 pr-4">
       <div class="row">
-        <div class="col-sm-12 text-center">
-          <h3>
-            {{ $t("For the love of the {l2} language.", { l2: $t($l2.name) }) }}
-          </h3>
+        <div class="col-sm-12">
+          <div class="p-1">
+            <h3 class="home-intro-text">
+              {{
+                $t("For the love of the {l2} language.", { l2: $t($l2.name) })
+              }}
+            </h3>
+          </div>
+          <Nav :l1="$l1" :l2="$l2" variant="page" />
         </div>
-        <Nav :l1="$l1" :l2="$l2" variant="page" />
       </div>
     </div>
   </div>
@@ -98,7 +102,17 @@ h3 {
   text-shadow: 0 2px 10px rgba(0, 0, 0, 1);
 }
 .home {
-  backdrop-filter: blur(2px) brightness(85%);
-  -webkit-backdrop-filter: blur(2px) brightness(85%);
+  // backdrop-filter: blur(2px) brightness(85%);
+  // -webkit-backdrop-filter: blur(2px) brightness(85%);
+}
+.home-intro-text {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  padding: 4rem 2rem;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid hsla(0deg, 0%, 50%, 0.7);
+  border-radius: 0.5rem;
+  text-align: center;
 }
 </style>
