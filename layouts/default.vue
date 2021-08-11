@@ -2,11 +2,7 @@
   <div id="zerotohero" :class="classes">
     <div
       class="zerotohero-background"
-      :style="`background-image: url(${
-        l2
-          ? 'https://source.unsplash.com/1600x900/?' + l2.name
-          : '/img/background-branch.jpg'
-      })`"
+      :style="`background-image: url(${background})`"
     />
     <template v-if="$route.path !== '/'">
       <client-only>
@@ -174,6 +170,12 @@ export default {
         if (this.l2.han) classes["l2-zh"] = true;
         return classes;
       }
+    },
+    background() {
+      if (!this.l2) return "/img/background-branch.jpg";
+      else if (this.l2.code === "zh")
+        return `/img/backgrounds/bg-zh-${Math.ceil(Math.random() * 10)}.jpg`;
+      else return `https://source.unsplash.com/1600x900/?${this.l2.name}`;
     },
   },
 };
