@@ -32,14 +32,22 @@
     </div>
     <div class="history d-flex">
       <div
-        class="history-item media shadow"
         v-for="(item, itemIndex) of this.history.slice(0, 20)"
         :key="`history-item-${itemIndex}`"
       >
-        <router-link :to="item.path" class="link-unstyled">
+        <router-link
+          v-if="item.type === 'video'"
+          :to="{
+            name: 'youtube-view',
+            l1: 'en',
+            l2: item.l2,
+            youtube_id: item.youtube_id,
+          }"
+          class="link-unstyled history-item media shadow"
+        >
           <div class="aspect-wrapper">
             <img
-              :src="item.image"
+              :src="`//img.youtube.com/vi/${item.youtube_id}/hqdefault.jpg`"
               class="aspect history-item-image img-fluid"
               style="width: 100%"
             />
