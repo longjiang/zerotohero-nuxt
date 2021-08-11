@@ -49,7 +49,6 @@
                 .replace(/ /g, '-')}-saved-words.csv`"
               variant="primary"
               size="sm"
-              v-on:click="showExportClick"
               v-if="this.sW.length > 0"
             >
               <i class="fa fa-download mr-1"></i>
@@ -91,6 +90,14 @@ export default {
   components: {
     WordList,
   },
+  data() {
+    return {
+      dictionaryLoaded: false,
+      sWLoaded: false,
+      showExport: false,
+      sW: [],
+    };
+  },
   computed: {
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
@@ -101,21 +108,38 @@ export default {
         return this.$store.state.settings.l2;
     },
     csvHref() {
-      return Helper.makeTextFile(this.csvText);
+      return Helper.makeTextFile(this.csv);
     },
-
     $dictionaryName() {
       return this.$store.state.settings.dictionaryName;
     },
-  },
-  data() {
-    return {
-      dictionaryLoaded: false,
-      sWLoaded: false,
-      csvText: undefined,
-      showExport: false,
-      sW: [],
-    };
+    csv() {
+      let csvWords = this.sW.map((word) => {
+        let mapped = { id: word.id, head: word.head };
+        mapped = Object.assign(mapped, word);
+        mapped.definitions = word.definitions.join("; ");
+        if (word.simplified || word.kana || word.hangul) delete mapped.head;
+        delete mapped.cjk;
+        delete mapped.search;
+        delete mapped.newHSKMatches;
+        delete mapped.saved;
+        delete mapped.phrase;
+        delete mapped.bare;
+        delete mapped.username;
+        delete mapped.created;
+        delete mapped.c;
+        delete mapped.e;
+        delete mapped.f;
+        delete mapped.i;
+        delete mapped.k;
+        delete mapped.l;
+        if (this.$dictionaryName !== "openrussian") delete mapped.accented;
+        delete mapped.wiktionary;
+        return mapped;
+      });
+      let csv = Papa.unparse(csvWords);
+      return csv;
+    },
   },
   mounted() {
     this.updateWords();
@@ -131,7 +155,7 @@ export default {
   },
   methods: {
     updateLoaded(loaded) {
-      this.dictionaryLoaded = loaded
+      this.dictionaryLoaded = loaded;
     },
     async updateWords() {
       let sW = [];
@@ -151,27 +175,8 @@ export default {
       this.sW = sW;
       this.sWLoaded = true;
     },
-    async csv() {
-      let csvWords = this.sW.map((word) => {
-        let mapped = Object.assign({id: word.id}, word);
-        mapped.definitions = Helper.ucFirst(word.definitions.join(";") + ".");
-        delete mapped.search;
-        delete mapped.newHSKMatches;
-        delete mapped.saved;
-        return mapped;
-      });
-      let csv = Papa.unparse(csvWords);
-      return csv;
-    },
     showImportClick() {
       $(".import-wrapper").toggleClass("hidden");
-    },
-    async updateCSVText() {
-      this.csvText = await this.csv();
-    },
-    showExportClick() {
-      this.showExport = !this.showExport;
-      this.updateCSVText();
     },
     removeAllClick() {
       const confirmed = confirm(

@@ -37,6 +37,9 @@
           <span v-if="word.kana" class="wordlist-item-pinyin">
             ({{ word.kana }})
           </span>
+          <span v-if="word.hanja" class="wordlist-item-byeonggi">
+            {{ word.hanja }}
+          </span>
           <span v-if="word.definitions" class="wordlist-item-l1">
             {{
               word.definitions.filter((def) => !def.startsWith("CL")).join(", ")
@@ -181,11 +184,14 @@ export default {
 }
 
 .wordlist-item-l1 {
-  font-style: italic;
-  color: #aaa;
+  color: #666;
 }
 
 .wordlist-item.matched {
   opacity: 0.2;
+}
+
+.wordlist-item-byeonggi {
+  color: rgb(143, 158, 172);
 }
 </style>
