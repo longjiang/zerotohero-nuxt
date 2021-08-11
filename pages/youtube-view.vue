@@ -16,7 +16,7 @@
           ? 'Full transcript: ' +
             this.video.subs_l2
               .slice(0, 10)
-              .filter(l => l)
+              .filter((l) => l)
               .map((l) => l.line)
               .join(' ')
           : ''
@@ -72,7 +72,7 @@
         @currentTime="updateCurrentTime"
         @speechStart="speechStart"
         @speechEnd="speechEnd"
-        @updateLayout="(l) => layout = l"
+        @updateLayout="(l) => (layout = l)"
       />
     </div>
   </div>
@@ -81,6 +81,7 @@
 <script>
 import YouTube from "@/lib/youtube";
 import Helper from "@/lib/helper";
+import DateHelper from "@/lib/helper";
 import Config from "@/lib/config";
 import axios from "axios";
 
@@ -128,19 +129,17 @@ export default {
       return this.video.id;
     },
     previousEpisode() {
-      let thisEpisodeIndex = this.thisEpisodeIndex
+      let thisEpisodeIndex = this.thisEpisodeIndex;
       if (thisEpisodeIndex > 0 && this.episodes[thisEpisodeIndex - 1])
         return `/${this.$l1.code}/${this.$l2.code}/youtube/view/${
           this.episodes[thisEpisodeIndex - 1].youtube_id
         }/`;
     },
     thisEpisodeIndex() {
-      return this.episodes.findIndex(
-        (episode) => episode.id === this.video.id
-      );
+      return this.episodes.findIndex((episode) => episode.id === this.video.id);
     },
     nextEpisode() {
-      let thisEpisodeIndex = this.thisEpisodeIndex
+      let thisEpisodeIndex = this.thisEpisodeIndex;
       if (this.episodes[thisEpisodeIndex + 1])
         return `/${this.$l1.code}/${this.$l2.code}/youtube/view/${
           this.episodes[thisEpisodeIndex + 1].youtube_id
@@ -160,11 +159,15 @@ export default {
         );
         let youtube_video = await YouTube.videoByApi(this.youtube_id);
         if (youtube_video) {
-          if (!video) video = {}
-          let merged = {}
-          for (var attrname in video) { merged[attrname] = video[attrname] || youtube_video[attrname] }
-          for (var attrname in youtube_video) { merged[attrname] = video[attrname] || youtube_video[attrname] }
-          video = merged
+          if (!video) video = {};
+          let merged = {};
+          for (var attrname in video) {
+            merged[attrname] = video[attrname] || youtube_video[attrname];
+          }
+          for (var attrname in youtube_video) {
+            merged[attrname] = video[attrname] || youtube_video[attrname];
+          }
+          video = merged;
         }
       }
       if (!video.subs_l2 || video.subs_l2.length === 0) {
@@ -271,7 +274,8 @@ export default {
             let savedSubs = YouTube.parseSavedSubs(video[field]);
             if (savedSubs) {
               let filtered = savedSubs.filter(
-                (line) => line && typeof line.starttime !== 'undefined' && line.line
+                (line) =>
+                  line && typeof line.starttime !== "undefined" && line.line
               );
               video[field] = filtered;
             }
@@ -319,8 +323,13 @@ export default {
         this.ended = ended;
       }
       if (this.ended) {
-        await Helper.timeout(5000)
-        if (this.ended && this.$refs.youtube && !this.$refs.youtube.showSubsEditing && !this.$refs.youtube.enableTranslationEditing) {
+        await Helper.timeout(5000);
+        if (
+          this.ended &&
+          this.$refs.youtube &&
+          !this.$refs.youtube.showSubsEditing &&
+          !this.$refs.youtube.enableTranslationEditing
+        ) {
           this.$router.push(
             this.nextEpisode ||
               `/${this.$l1.code}/${this.$l2.code}/youtube/view/${this.randomEpisodeYouTubeId}`
@@ -399,7 +408,7 @@ export default {
         ) {
           if (e.code === "KeyM") {
             if (this.$refs.youtube && this.$refs.youtube.$refs.videoControls)
-              this.$refs.youtube.$refs.videoControls.toggleSpeed()
+              this.$refs.youtube.$refs.videoControls.toggleSpeed();
             return false;
           }
           if (e.code === "Space") {
@@ -423,7 +432,7 @@ export default {
     },
     saveHistory() {
       this.$store.dispatch("history/add", {
-        type: 'video',
+        type: "video",
         title: this.video.title,
         youtube_id: this.video.youtube_id,
         date: DateHelper.unparseDate(new Date()),
