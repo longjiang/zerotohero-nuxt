@@ -1,142 +1,161 @@
 <template>
-  <div class="youtube-video-list">
-    <div
-      v-if="$adminMode"
-      class="mb-4 youtube-video-list-admin-bar rounded p-4 w-100"
-    >
-      <div>
-        <b-button
-          class="mt-1 mb-1"
-          variant="danger"
-          @click="removeAll()"
-          size="sm"
+  <container-query :query="query" v-model="params">
+    <div class="youtube-video-list">
+      <client-only>
+        <div
+          v-if="$adminMode"
+          class="mb-4 youtube-video-list-admin-bar rounded p-4 w-100"
         >
-          <i class="fas fa-trash mr-2"></i>
-          Remove All
-        </b-button>
-        <b-button
-          class="mt-1 mb-1"
-          variant="gray"
-          v-if="!checkSavedData"
-          size="sm"
-          @click="checkSavedData = true"
-        >
-          <i class="fas fa-question mr-2"></i>
-          Check Saved
-        </b-button>
-        <b-button
-          class="mt-1 mb-1"
-          variant="gray"
-          v-if="checkSavedData"
-          size="sm"
-          @click="checkSavedData = false"
-        >
-          <i class="fas fa-question mr-2"></i>
-          Uncheck Saved
-        </b-button>
-        <b-button
-          class="mt-1 mb-1"
-          variant="gray"
-          v-if="checkSavedData"
-          size="sm"
-          @click="addAll()"
-        >
-          <i class="fas fa-plus mr-2"></i>
-          Add All
-        </b-button>
-        <AssignShow
-          size="sm"
-          @assignShow="assignShowToAll"
-          :defaultSelection="keyword"
-          type="tv-shows"
-        />
-        <AssignShow
-          size="sm"
-          @assignShow="assignShowToAll"
-          :defaultSelection="keyword"
-          type="talks"
-        />
-        <drop
-          @drop="handleDrop"
+          <div>
+            <b-button
+              class="mt-1 mb-1"
+              variant="danger"
+              @click="removeAll()"
+              size="sm"
+            >
+              <i class="fas fa-trash mr-2"></i>
+              Remove All
+            </b-button>
+            <b-button
+              class="mt-1 mb-1"
+              variant="gray"
+              v-if="!checkSavedData"
+              size="sm"
+              @click="checkSavedData = true"
+            >
+              <i class="fas fa-question mr-2"></i>
+              Check Saved
+            </b-button>
+            <b-button
+              class="mt-1 mb-1"
+              variant="gray"
+              v-if="checkSavedData"
+              size="sm"
+              @click="checkSavedData = false"
+            >
+              <i class="fas fa-question mr-2"></i>
+              Uncheck Saved
+            </b-button>
+            <b-button
+              class="mt-1 mb-1"
+              variant="gray"
+              v-if="checkSavedData"
+              size="sm"
+              @click="addAll()"
+            >
+              <i class="fas fa-plus mr-2"></i>
+              Add All
+            </b-button>
+            <AssignShow
+              size="sm"
+              @assignShow="assignShowToAll"
+              :defaultSelection="keyword"
+              type="tv-shows"
+            />
+            <AssignShow
+              size="sm"
+              @assignShow="assignShowToAll"
+              :defaultSelection="keyword"
+              type="talks"
+            />
+            <drop
+              @drop="handleDrop"
+              :class="{
+                'subs-drop text-secondary rounded d-inline-block text-center mt-1': true,
+                over: over,
+                drop: true,
+              }"
+              :key="`drop-${_uid}`"
+              @dragover="over = true"
+              @dragleave="over = false"
+            >
+              Drop SRT files here to bulk add subs ...
+            </drop>
+          </div>
+          <div class="mt-1">
+            <b-form-checkbox
+              class="mt-2 d-inline-block"
+              v-model="hideVideosWithoutSubs"
+            >
+              Hide Videos without Subs
+            </b-form-checkbox>
+            <b-form-checkbox
+              class="mt-2 d-inline-block"
+              v-model="hideVideosInShows"
+            >
+              Hide Videos in Shows
+            </b-form-checkbox>
+            <b-form-checkbox
+              class="mt-2 d-inline-block"
+              v-model="showSubsEditing"
+            >
+              Show Subs Editing
+            </b-form-checkbox>
+            <b-button
+              variant="gray"
+              size="small"
+              class="ml-1 mb-1"
+              @click="surveyChannels"
+            >
+              Survey Channels
+            </b-button>
+          </div>
+          <div v-if="uniqueVideosByChannel">
+            <h6 class="mt-2">Unique videos by channel:</h6>
+            <router-link
+              v-for="(video, index) in uniqueVideosByChannel"
+              :key="`video-list-unique-by-channel-${index}`"
+              :to="{
+                name: 'youtube-view',
+                params: { youtube_id: video.youtube_id },
+              }"
+              class="d-block"
+            >
+              {{ video.title }}
+            </router-link>
+          </div>
+        </div>
+      </client-only>
+      <div class="youtube-videos row">
+        <div
           :class="{
-            'subs-drop text-secondary rounded d-inline-block text-center mt-1': true,
-            over: over,
-            drop: true,
+            'col-sm-12': view === 'list' || singleColumn,
+            'col-12': params.xs && view === 'grid' && !singleColumn,
+            'col-6': params.sm && view === 'grid' && !singleColumn,
+            'col-4': params.md && view === 'grid' && !singleColumn,
+            'col-3': params.lg && view === 'grid' && !singleColumn,
           }"
-          :key="`drop-${_uid}`"
-          @dragover="over = true"
-          @dragleave="over = false"
+          :style="`padding-bottom: ${view === 'list' ? '1rem' : '2rem'}`"
+          v-for="(video, videoIndex) in filteredVideos"
+          :key="`youtube-video-wrapper-${video.youtube_id}-${videoIndex}`"
         >
-          Drop SRT files here to bulk add subs ...
-        </drop>
-      </div>
-      <div class="mt-1">
-        <b-form-checkbox
-          class="mt-2 d-inline-block"
-          v-model="hideVideosWithoutSubs"
-        >
-          Hide Videos without Subs
-        </b-form-checkbox>
-        <b-form-checkbox
-          class="mt-2 d-inline-block"
-          v-model="hideVideosInShows"
-        >
-          Hide Videos in Shows
-        </b-form-checkbox>
-        <b-form-checkbox class="mt-2 d-inline-block" v-model="showSubsEditing">
-          Show Subs Editing
-        </b-form-checkbox>
-        <b-button variant="gray" size="small" class="ml-1 mb-1" @click="surveyChannels">
-          Survey Channels
-        </b-button>
-      </div>
-      <div v-if="uniqueVideosByChannel">
-        <h6 class="mt-2">Unique videos by channel:</h6>
-        <router-link
-          v-for="(video, index) in uniqueVideosByChannel"
-          :key="`video-list-unique-by-channel-${index}`"
-          :to="{ name: 'youtube-view', params: { youtube_id: video.youtube_id } }"
-          class="d-block"
-        >
-          {{ video.title }}
-        </router-link>
+          <YouTubeVideoCard
+            :video="video"
+            :checkSubs="checkSubsData"
+            :showSubsEditing="showSubsEditing"
+            :checkSaved="checkSavedData"
+            @newShow="newShow"
+            ref="youTubeVideoCard"
+            :view="view"
+          />
+        </div>
       </div>
     </div>
-    <div class="youtube-videos row">
-      <div
-        :class="{
-          'col-sm-12': view === 'list' || singleColumn,
-          'col-xs-12 col-sm-6 col-md-4 col-lg-3':
-            view === 'grid' && !singleColumn,
-        }"
-        :style="`padding-bottom: ${view === 'list' ? '1rem' : '2rem'}`"
-        v-for="(video, videoIndex) in filteredVideos"
-        :key="`youtube-video-wrapper-${video.youtube_id}-${videoIndex}`"
-      >
-        <YouTubeVideoCard
-          :video="video"
-          :checkSubs="checkSubsData"
-          :showSubsEditing="showSubsEditing"
-          :checkSaved="checkSavedData"
-          @newShow="newShow"
-          ref="youTubeVideoCard"
-          :view="view"
-        />
-      </div>
-    </div>
-  </div>
+  </container-query>
 </template>
 
 <script>
 import Helper from "@/lib/helper";
 import Config from "@/lib/config";
 import { Drag, Drop } from "vue-drag-drop";
+import { ContainerQuery } from "vue-container-query";
 import Vue from "vue";
 
 export default {
   components: {
     Drag,
     Drop,
+    ContainerQuery,
   },
   props: {
     videos: {
@@ -162,6 +181,7 @@ export default {
       default: false,
     },
   },
+
   data() {
     return {
       Helper,
@@ -174,7 +194,29 @@ export default {
       hideVideosWithoutSubs: false,
       showChannels: false,
       hideVideosInShows: false,
-      uniqueVideosByChannel: undefined
+      uniqueVideosByChannel: undefined,
+      params: {},
+      query: {
+        xs: {
+          minWidth: 0,
+          maxWidth: 540,
+        },
+        sm: {
+          minWidth: 540,
+          maxWidth: 720,
+        },
+        md: {
+          minWidth: 720,
+          maxWidth: 960,
+        },
+        lg: {
+          minWidth: 960,
+          maxWidth: 1140,
+        },
+        xl: {
+          minWidth: 1140,
+        },
+      },
     };
   },
   computed: {
@@ -218,11 +260,14 @@ export default {
   },
   methods: {
     surveyChannels() {
-      let uniqueVideosByChannel = Helper.uniqueByValue(this.videos, 'channel_id')
+      let uniqueVideosByChannel = Helper.uniqueByValue(
+        this.videos,
+        "channel_id"
+      );
       let channels = this.videos.map((v) => v.channel_id);
       channels = Helper.unique(channels);
       this.channels = channels;
-      this.uniqueVideosByChannel = uniqueVideosByChannel
+      this.uniqueVideosByChannel = uniqueVideosByChannel;
     },
     async checkSavedFunc(videos) {
       videos = videos.filter((v) => !v.id); // Only check those that are not saved
