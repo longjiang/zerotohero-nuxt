@@ -82,6 +82,14 @@ export default {
         ? this.player.getPlayerState() !== 1
         : true;
     },
+    langPref() {
+      // Sometimes a language (such as Breton) are mostly subtitles in French, and
+      // English subtitles are not available. In this case use the best available subtitles
+      let preferences = {
+        br: 'fr'
+      }
+      return preferences[this.$l2.code] || this.$l1.code 
+    }
   },
   methods: {
     getDuration() {
@@ -110,7 +118,7 @@ export default {
             start: parseInt(this.starttime),
             autoplay: 1,
             cc_load_policy: 1,
-            cc_lang_pref: this.$l1.code,
+            cc_lang_pref: this.langPref,
             showinfo: 0,
             playsinline: 1,
             rel: 0,
