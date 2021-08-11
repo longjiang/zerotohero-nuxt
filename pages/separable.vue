@@ -25,16 +25,14 @@
         <div class="col-sm-12">
           <h3 class="text-center">Separable verbs ( 离合词 )</h3>
           <p class="text-center mt-4 mb-5">
-            <Annotate>
-              <span>
-                A
-                <em>separable</em>
-                verb——for example, 唱歌——consists of a verb (唱) and an object
-                (歌). Because of this, they can take the following forms. Note
-                that a variety of measure words and complements can be used, not
-                just the ones listed in the chart.
-              </span>
-            </Annotate>
+            <span>
+              A
+              <strong>separable verb</strong>
+              —for example, 唱歌 (chànggē, to sing a song)—consists of a verb (唱) and an object (歌).
+              Because of this, they can take the following forms. Note that a
+              variety of measure words and complements can be used, not just the
+              ones listed in the chart.
+            </span>
           </p>
           <table
             class="table table-responsive separable-table"
@@ -49,14 +47,18 @@
                 <th>V 了 一 M O</th>
                 <th>V 没 V O?</th>
                 <th>
-                  <a :href="`/${$l1.code}/${$l2.code}/grammar/view/259`">
+                  <router-link
+                    :to="`/${$l1.code}/${$l2.code}/grammar/view/259`"
+                  >
                     V V O
-                  </a>
+                  </router-link>
                 </th>
                 <th>
-                  <a :href="`/${$l1.code}/${$l2.code}/grammar/view/260`">
+                  <router-link
+                    :to="`/${$l1.code}/${$l2.code}/grammar/view/260`"
+                  >
                     V 了 V O
-                  </a>
+                  </router-link>
                 </th>
                 <th>V Complement O</th>
                 <th>V 得 Complement O</th>
@@ -64,7 +66,10 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="s in separables">
+              <tr
+                v-for="(s, index) in separables"
+                :key="`seperable-row-${index}`"
+              >
                 <th>
                   {{ s.hsk }}
                 </th>

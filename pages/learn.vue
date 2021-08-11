@@ -5,64 +5,66 @@
   }
 </router>
 <template>
-  <div class="main pt-3 pb-5 container" v-cloak>
-    <div class="row">
-      <div class="col-sm-12">
-        <router-link
-          :to="{ name: 'levels' }"
-          :data-level="args[0]"
-          class="mb-4 d-block text-center"
-        >
-          HSK Standard Course
-          <i class="fa fa-chevron-right"></i>
-        </router-link>
-        <router-link
-          :to="`/${$l1.code}/${$l2.code}/learn/${method}/${argsProp}`"
-          class="link-unstyled"
-        >
-          <h4 class="page-title text-center mb-4" v-if="method === 'hsk'">
-            <b :data-level="args[0]" class="mr-1">HSK {{ args[0] }}</b>
-            <b>Lesson {{ args[1] }}</b>
-            (Part {{ args[2] }}) Vocabulary
-          </h4>
-        </router-link>
-        <Loader class="mt-5" />
-        <div v-if="!index && words.length > 0">
-          <p class="text-center mb-4">
-            Tap on any of the words below, and page through the words.
-          </p>
-          <WordList :words="words" :url="url"></WordList>
-          <div class="mt-4">
-            <router-link
-              v-if="words.length > 0"
-              :data-bg-level="args[0]"
-              class="btn btn-md m-1"
-              :to="`/${$l1.code}/${$l2.code}/learn/${method}/${argsProp}/0`"
-            >
-              <i class="fa fa-book mr-1"></i>
-              Start from the first word
-            </router-link>
-            <router-link
-              v-if="words.length > 0"
-              class="btn btn-gray btn-sm m-1"
-              :to="`/${$l1.code}/${$l2.code}/learn-interactive/${method}/${argsProp}`"
-            >
-              Learn interactively (Legacy)
-            </router-link>
+  <div class="main">
+    <div class="pt-3 pb-5 container" v-cloak>
+      <div class="row">
+        <div class="col-sm-12">
+          <router-link
+            :to="{ name: 'levels' }"
+            :data-level="args[0]"
+            class="mb-4 d-block text-center"
+          >
+            HSK Standard Course
+            <i class="fa fa-chevron-right"></i>
+          </router-link>
+          <router-link
+            :to="`/${$l1.code}/${$l2.code}/learn/${method}/${argsProp}`"
+            class="link-unstyled"
+          >
+            <h4 class="page-title text-center mb-4" v-if="method === 'hsk'">
+              <b :data-level="args[0]" class="mr-1">HSK {{ args[0] }}</b>
+              <b>Lesson {{ args[1] }}</b>
+              (Part {{ args[2] }}) Vocabulary
+            </h4>
+          </router-link>
+          <Loader class="mt-5" />
+          <div v-if="!index && words.length > 0">
+            <p class="text-center mb-4">
+              Tap on any of the words below, and page through the words.
+            </p>
+            <WordList :words="words" :url="url"></WordList>
+            <div class="mt-4">
+              <router-link
+                v-if="words.length > 0"
+                :data-bg-level="args[0]"
+                class="btn btn-md m-1"
+                :to="`/${$l1.code}/${$l2.code}/learn/${method}/${argsProp}/0`"
+              >
+                <i class="fa fa-book mr-1"></i>
+                Start from the first word
+              </router-link>
+              <router-link
+                v-if="words.length > 0"
+                class="btn btn-gray btn-sm m-1"
+                :to="`/${$l1.code}/${$l2.code}/learn-interactive/${method}/${argsProp}`"
+              >
+                Learn interactively (Legacy)
+              </router-link>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div v-if="words && index && words[index]">
-      <Paginator
-        class="mb-4 text-center"
-        :items="words"
-        :findCurrent="findCurrent"
-        :url="url"
-        :home="`/${$l1.code}/${$l2.code}/learn/${method}/${argsProp}`"
-        :title="`Word`"
-      />
-      <LazyDictionaryEntry :entry="words[index]" />
+      <div v-if="words && index && words[index]">
+        <Paginator
+          class="mb-4 text-center"
+          :items="words"
+          :findCurrent="findCurrent"
+          :url="url"
+          :home="`/${$l1.code}/${$l2.code}/learn/${method}/${argsProp}`"
+          :title="`Word`"
+        />
+        <LazyDictionaryEntry :entry="words[index]" />
+      </div>
     </div>
   </div>
 </template>
