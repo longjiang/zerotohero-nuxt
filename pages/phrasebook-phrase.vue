@@ -13,7 +13,7 @@
           <div
             :class="{
               'p-4 content-pane-left': wide,
-              'col-sm-12': !wide,
+              'col-sm-12 pt-4': !wide,
             }"
           >
             <div class="text-center" v-if="phrasebook && phraseId">
