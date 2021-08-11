@@ -7,16 +7,20 @@
 <template>
   <container-query :query="query" v-model="params">
     <div
-      :class="{ 'dictionary focus': true, 'bg-white': !params.wide, 'dictionary-wide': params.wide }"
+      :class="{
+        'dictionary focus': true,
+        'bg-white': !wide,
+        'dictionary-wide': wide,
+      }"
       class="focus'"
       :key="`entry-${entryKey}`"
       @keydown="keydown"
     >
       <SocialHead :title="title" :description="description" :image="image" />
       <div class="dictionary-search-bar">
-        <div :class="{ 'container pt-2 pb-5': !params.wide }">
-          <div :class="{ row: !params.wide }">
-            <div :class="{ 'col-sm-12': !params.wide }">
+        <div :class="{ 'container pt-2 pb-5': !wide }">
+          <div :class="{ row: !wide }">
+            <div :class="{ 'col-sm-12': !wide }">
               <SearchCompare
                 :searchEntry="entry"
                 :random="`/${$l1.code}/${$l2.code}/dictionary/${$store.state.settings.dictionaryName}/random`"
@@ -45,9 +49,9 @@
           </div>
         </div>
       </div>
-      <div :class="{ 'focus-exclude': true, container: !params.wide }">
-        <div :class="{ row: !params.wide, 'content-panes': params.wide }" v-if="entry">
-          <div :class="{ 'content-pane-left': params.wide, 'col-sm-12': !params.wide }">
+      <div :class="{ 'focus-exclude': true, container: !wide }">
+        <div :class="{ row: !wide, 'content-panes': wide }" v-if="entry">
+          <div :class="{ 'content-pane-left': wide, 'col-sm-12': !wide }">
             <client-only>
               <div v-if="saved() && sW.length > 0" class="text-center mb-4">
                 <router-link
@@ -93,7 +97,7 @@
             </div>
           </div>
 
-          <div :class="{ 'content-pane-right pl-3 pr-3': params.wide }">
+          <div :class="{ 'content-pane-right pl-3 pr-3': wide }">
             <article>
               <LazyDictionaryEntry
                 v-if="entry"
@@ -142,7 +146,6 @@ export default {
       sW: [],
       dictionarySize: undefined,
       keysBound: false,
-      wide: false,
       params: {},
       query: {
         wide: {
@@ -193,6 +196,9 @@ export default {
       } else {
         return "/img/zth-share-image.jpg";
       }
+    },
+    wide() {
+      return this.params.wide && ["lg", "xl", "xxl"].includes(this.$mq);
     },
   },
   async fetch() {

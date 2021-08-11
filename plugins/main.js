@@ -7,6 +7,8 @@ import Languages from '@/lib/languages'
 import ModuleLoader from '~/lib/module-loader'
 import WorkerModuleLoader from '~/lib/worker-module-loader'
 import { i18n } from '~/plugins/i18n.js'
+import VueMq from 'vue-mq'
+ 
 
 Vue.config.productionTip = false
 
@@ -17,6 +19,18 @@ Vue.use(i18n)
 Vue.use(VueAnalytics, {
   id: 'UA-1846573-21'
 })
+Vue.use(VueMq, {
+  breakpoints: { // default breakpoints - customize this
+    xs: 576,
+    sm: 768,
+    md: 992,
+    lg: 1200,
+    xl: 1400,
+    xxl: Infinity
+  },
+  defaultBreakpoint: 'sm' // customize this for SSR
+})
+
 
 // https://stackoverflow.com/questions/44371639/how-to-remove-html-tags-from-rendered-text
 Vue.filter('striphtml', function (value) {

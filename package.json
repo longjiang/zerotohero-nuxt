@@ -57,6 +57,7 @@
     "vue-analytics": "^5.22.1",
     "vue-container-query": "^0.1.0",
     "vue-drag-drop": "^1.1.4",
+    "vue-mq": "^1.0.1",
     "vue-observe-visibility": "^1.0.0",
     "vue-simple-svg": "^2.0.2",
     "vue-video-player": "^5.0.2",
