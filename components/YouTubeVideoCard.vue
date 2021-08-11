@@ -558,7 +558,6 @@ export default {
     },
     async checkSubsFunc(video) {
       Vue.set(video, "checkingSubs", true);
-      Vue.set(video, "hasSubs", false);
       if (video.subs_l2 && video.subs_l2.length > 0) {
         Vue.set(video, "hasSubs", true);
         Vue.set(video, "checkingSubs", false);

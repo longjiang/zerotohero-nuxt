@@ -77,6 +77,9 @@
         >
           Hide Videos Without Subs
         </b-form-checkbox>
+        <b-form-checkbox class="mt-2 d-inline-block" v-model="hideSaved">
+          Hide Saved
+        </b-form-checkbox>
         <b-form-checkbox class="mt-2 d-inline-block" v-model="showSubsEditing">
           Show Subs Editing
         </b-form-checkbox>
@@ -101,21 +104,18 @@
           'col-sm-12': view === 'list' || singleColumn,
           'col-xs-12 col-sm-6 col-md-4 col-lg-3':
             view === 'grid' && !singleColumn,
-          'd-none': hideVideosWithoutSubs ? !video.hasSubs : false,
         }"
         :style="`padding-bottom: ${view === 'list' ? '1rem' : '2rem'}`"
-        v-for="(video, videoIndex) in videos"
+        v-for="(video, videoIndex) in filteredVideos"
         :key="`youtube-video-wrapper-${video.youtube_id}-${videoIndex}`"
       >
         <YouTubeVideoCard
-          v-if="hideVideosWithoutSubs ? video.hasSubs : true"
           :video="video"
           :checkSubs="checkSubsData"
           :showSubsEditing="showSubsEditing"
           :checkSaved="checkSavedData"
           @newShow="newShow"
           ref="youTubeVideoCard"
-          :key="`youtube-video-${video.youtube_id}-${videoIndex}`"
           :view="view"
         />
       </div>
@@ -169,6 +169,7 @@ export default {
       over: false,
       hideVideosWithoutSubs: false,
       showChannels: false,
+      hideSaved: false,
     };
   },
   computed: {
@@ -183,6 +184,13 @@ export default {
     $adminMode() {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
+    },
+    filteredVideos() {
+      return this.videos.filter((video) => {
+        if (this.hideVideosWithoutSubs && !video.hasSubs) return false;
+        if (this.hideSaved && video.id) return false;
+        return true;
+      });
     },
   },
   watch: {
