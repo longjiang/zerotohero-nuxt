@@ -45,19 +45,11 @@
           >
             <div class="media rounded shadow phrasebook">
               <router-link
-                :class="`link-unstyled bg-gradient-${phrasebook.title.length
+                :class="`phrasebook-thumb link-unstyled bg-gradient-${phrasebook.title.length
                   .toString()
                   .split('')
                   .pop()}`"
                 :to="`/${$l1.code}/${$l2.code}/phrasebook/${phrasebook.id}/`"
-                style="
-                  width: 100%;
-                  display: block;
-                  padding: 1rem 0 0.5rem 2rem;
-                  color: rgba(255, 255, 255, 0.4);
-                  font-size: 5em;
-                  overflow: hidden;
-                "
               >
                 <i class="fas fa-book"></i>
               </router-link>
@@ -66,7 +58,7 @@
                   class="link-unstyled"
                   :to="`/${$l1.code}/${$l2.code}/phrasebook/${phrasebook.id}/`"
                 >
-                  <h5 class="mt-3">{{ phrasebook.title }}</h5>
+                  <h5>{{ phrasebook.title }}</h5>
                 </router-link>
                 <div style="color: #999">
                   ({{ phrasebook.phrases.length }} phrases)
@@ -190,16 +182,16 @@ export default {
 .phrasebook {
   height: 100%;
 }
-.phrasebook-cover-image {
+
+.phrasebook-thumb {
+  width: 100%;
   display: block;
-  ::v-deep .image-wall-image {
-    flex: 1 !important;
-    width: 100%;
-    margin-right: 0;
-    margin: 0;
-    max-width: 100%;
-  }
+  padding: 0.5rem 0 0.5rem 1rem;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 2em;
+  overflow: hidden;
 }
+
 .bg-gradient-0 {
   background-color: #faaca8;
   background-image: linear-gradient(45deg, #faaca8 0%, #ddd6f3 100%);
