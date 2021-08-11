@@ -423,9 +423,10 @@ export default {
     },
     saveHistory() {
       this.$store.dispatch("history/add", {
-        path: this.$route.fullPath,
+        type: 'video',
         title: this.video.title,
-        image: `https://img.youtube.com/vi/${this.video.youtube_id}/hqdefault.jpg`,
+        youtube_id: this.video.youtube_id,
+        date: DateHelper.unparseDate(new Date()),
         l2: this.$l2.code,
       });
     },

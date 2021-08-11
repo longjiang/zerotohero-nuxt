@@ -257,8 +257,8 @@
 </template>
 
 <script>
-import moment from "moment";
 import Vue from "vue";
+import DateHelper from "@/lib/date-helper";
 import Helper from "@/lib/helper";
 
 export default {
@@ -436,7 +436,7 @@ export default {
           enableTranslationEditing;
     },
     formatDate(date) {
-      return moment(date).format("LL");
+      return DateHelper.formatDate(date);
     },
     updateEnded(ended) {
       if (ended !== this.ended) {

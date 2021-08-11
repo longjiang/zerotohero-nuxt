@@ -243,12 +243,12 @@
 
 <script>
 import Helper from "@/lib/helper";
+import DateHelper from "@/lib/date-helper";
 import Config from "@/lib/config";
 import YouTube from "@/lib/youtube";
 import { Drag, Drop } from "vue-drag-drop";
 import { parseSync } from "subtitle";
 import Vue from "vue";
-import moment from "moment";
 import assParser from "ass-parser";
 import languageEncoding from "detect-file-encoding-and-language";
 
@@ -324,7 +324,7 @@ export default {
   },
   methods: {
     formatDate(date) {
-      return moment(date).format("LL");
+      return DateHelper.formatDate(date);
     },
     newShow(show) {
       this.saveShow(show, show.type);
@@ -456,7 +456,7 @@ export default {
                 )
                 .map((cue) => {
                   return {
-                    starttime: this.parseTime(cue.value.Start),
+                    starttime: DateHelper.parseHMSTime(cue.value.Start),
                     line: cue.value.Text.replace(/{.*}/g, ""),
                   };
                 });
@@ -471,15 +471,6 @@ export default {
           }
         };
       } catch (err) {}
-    },
-    parseTime(hms) {
-      // 0:00:57.28
-      let ms = moment(hms, "HH:mm:ss.SS").diff(
-        moment().startOf("day"),
-        "milliseconds"
-      );
-      let s = ms / 1000;
-      return s;
     },
     handleDrop(data, event) {
       event.preventDefault();
@@ -529,7 +520,7 @@ export default {
           l2: this.$l2.id,
           subs_l2: csv,
           channel_id: video.channel_id,
-          date: moment(video.date).format("YYYY-MM-DD HH:mm:ss"),
+          date: DateHelper.unparseDate(video.date),
         };
         if (this.video.tv_show) data.tv_show = this.video.tv_show.id;
         if (this.video.talk) data.talk = this.video.talk.id;

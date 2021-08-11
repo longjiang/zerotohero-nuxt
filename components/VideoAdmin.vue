@@ -235,11 +235,11 @@
 import { Drag, Drop } from "vue-drag-drop";
 import { parseSync } from "subtitle";
 import Helper from "@/lib/helper";
+import DateHelper from "@/lib/date-helper";
 import Config from "@/lib/config";
 import YouTube from "@/lib/youtube";
 import Vue from "vue";
 import SmartQuotes from "smartquotes";
-import moment from "moment";
 
 export default {
   components: {
@@ -394,7 +394,7 @@ export default {
           subs_l2: this.video.subs_l2
             ? YouTube.unparseSubs(this.video.subs_l2, this.$l2.code)
             : undefined,
-          date: moment(this.video.date).format("YYYY-MM-DD HH:mm:ss"),
+          date: DateHelper.unparseDate(this.video.date),
         };
         let response = await axios.post(
           `${Config.wiki}items/youtube_videos`,
