@@ -142,7 +142,7 @@
                 />
               </router-link>
               <hr />
-              <ul class="czh-links">
+              <ul class="ezh-links">
                 <li>
                   <router-link
                     to="/zh/en/online-courses"
@@ -329,7 +329,10 @@ export default {
 .czh-links a,
 .ezh-links a {
   color: #333;
-  font-size: 0.8em;
+}
+
+.ezh-links a {
+  font-size: 0.9em;
 }
 
 .z2h-logo {
