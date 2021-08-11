@@ -86,18 +86,19 @@
         <b-form-checkbox class="mt-2 d-inline-block" v-model="showSubsEditing">
           Show Subs Editing
         </b-form-checkbox>
-        <b-button variant="gray" size="small" @click="surveyChannels">
+        <b-button variant="gray" size="small" class="ml-1 mb-1" @click="surveyChannels">
           Survey Channels
         </b-button>
       </div>
-      <div v-if="channels">
+      <div v-if="uniqueVideosByChannel">
+        <h6 class="mt-2">Unique videos by channel:</h6>
         <router-link
-          v-for="(channel, index) in channels"
-          :key="`video-list-channel-${index}`"
-          :to="{ name: 'youtube-channel', params: { channel_id: channel } }"
+          v-for="(video, index) in uniqueVideosByChannel"
+          :key="`video-list-unique-by-channel-${index}`"
+          :to="{ name: 'youtube-view', params: { youtube_id: video.youtube_id } }"
           class="d-block"
         >
-          {{ channel }}
+          {{ video.title }}
         </router-link>
       </div>
     </div>
@@ -173,6 +174,7 @@ export default {
       hideVideosWithoutSubs: false,
       showChannels: false,
       hideVideosInShows: false,
+      uniqueVideosByChannel: undefined
     };
   },
   computed: {
@@ -216,9 +218,11 @@ export default {
   },
   methods: {
     surveyChannels() {
+      let uniqueVideosByChannel = Helper.uniqueByValue(this.videos, 'channel_id')
       let channels = this.videos.map((v) => v.channel_id);
       channels = Helper.unique(channels);
       this.channels = channels;
+      this.uniqueVideosByChannel = uniqueVideosByChannel
     },
     async checkSavedFunc(videos) {
       videos = videos.filter((v) => !v.id); // Only check those that are not saved
