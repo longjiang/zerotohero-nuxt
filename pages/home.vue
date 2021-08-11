@@ -106,13 +106,13 @@ h3 {
   // -webkit-backdrop-filter: blur(2px) brightness(85%);
 }
 .home-intro-text {
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
-  padding: 4rem 2rem;
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border: 1px solid hsla(0deg, 0%, 50%, 0.7);
-  border-radius: 0.5rem;
+  // background-color: rgba(0, 0, 0, 0.5);
+  // color: white;
+  padding: 0 2rem 2rem 2rem;
+  // backdrop-filter: blur(15px);
+  // -webkit-backdrop-filter: blur(15px);
+  // border: 1px solid hsla(0deg, 0%, 50%, 0.7);
+  // border-radius: 0.5rem;
   text-align: center;
 }
 </style>
