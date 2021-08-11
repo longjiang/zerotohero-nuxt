@@ -17,10 +17,10 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
-          <h3 class="page-title">
+          <h3 class="page-title text-center">
             {{ $t("Settings") }}
           </h3>
-          <div class="jumbotron mt-4 p-4 bg-warning text-dark">
+          <div class="jumbotron mt-4 p-4 bg-warning text-dark text-center">
             Settings are
             <b>automatically saved</b>
             as soon as you make the change.

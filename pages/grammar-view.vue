@@ -5,70 +5,72 @@
   }
 </router>
 <template>
-  <div class="container pt-5 mb-5 pt-4 main" id="main">
-    <SocialHead
-      v-if="grammar && images && images[0]"
-      :title="`Chinese Grammar Pattern “${grammar.structure}” (HSK${grammar.code}) | ${$l2.name} Zero to Hero`"
-      :description="`Example: ${grammar.example} ${grammar.exampleTranslation}`"
-      :image="images[0].src"
-    />
-    <div class="row">
-      <div class="col-sm-12" v-if="grammar">
-        <h6 class="mb-2 text-center">
-          <button class="btn btn-small mr-1" v-if="id > 1" @click="prevClick">
-            <i class="fa fa-caret-left" />
-          </button>
-          Grammar HSK{{ grammar.code }}
-          <button class="btn btn-small" @click="nextClick">
-            <i class="fa fa-caret-right" />
-          </button>
-        </h6>
+  <div class="main">
+    <div class="container pt-5 mb-5 pt-4" id="main">
+      <SocialHead
+        v-if="grammar && images && images[0]"
+        :title="`Chinese Grammar Pattern “${grammar.structure}” (HSK${grammar.code}) | ${$l2.name} Zero to Hero`"
+        :description="`Example: ${grammar.example} ${grammar.exampleTranslation}`"
+        :image="images[0].src"
+      />
+      <div class="row">
+        <div class="col-sm-12" v-if="grammar">
+          <h6 class="mb-2 text-center">
+            <button class="btn btn-small mr-1" v-if="id > 1" @click="prevClick">
+              <i class="fa fa-caret-left" />
+            </button>
+            Grammar HSK{{ grammar.code }}
+            <button class="btn btn-small" @click="nextClick">
+              <i class="fa fa-caret-right" />
+            </button>
+          </h6>
 
-        <LazyGrammarPoint :grammar="grammar" :key="id" class="mb-5" />
+          <LazyGrammarPoint :grammar="grammar" :key="id" class="mb-5" />
 
-        <div
-          class="widget mt-5 mb-5"
-          id="search-subs"
-          v-if="
-            grammar.pattern &&
-            (!entry || grammar.pattern !== entry.simplified)
-          "
-          :key="`subs-search-${grammar.pattern}`"
-        >
-          <div class="widget-title">“{{ grammar.pattern }}” in TV Shows</div>
-          <div class="widget-body">
-            <LazySearchSubsComp
-              v-if="grammar.pattern"
-              ref="searchSubs"
-              :level="grammar.level"
-              :terms="[grammar.pattern]"
+          <div
+            class="widget mt-5 mb-5"
+            id="search-subs"
+            v-if="
+              grammar.pattern &&
+              (!entry || grammar.pattern !== entry.simplified)
+            "
+            :key="`subs-search-${grammar.pattern}`"
+          >
+            <div class="widget-title">“{{ grammar.pattern }}” in TV Shows</div>
+            <div class="widget-body">
+              <LazySearchSubsComp
+                v-if="grammar.pattern"
+                ref="searchSubs"
+                :level="grammar.level"
+                :terms="[grammar.pattern]"
+              />
+            </div>
+          </div>
+
+          <div class="text-left mt-5" v-if="drills && drills.length > 0">
+            <hr />
+            <h4 class="text-center">Practice Drills</h4>
+            <LazyDrill
+              v-for="drill in drills"
+              :drill="drill"
+              :key="`drill-${grammar.id}-${drill.id}`"
             />
           </div>
-        </div>
-
-        <div class="text-left mt-5" v-if="drills && drills.length > 0">
-          <hr />
-          <h4 class="text-center">Practice Drills</h4>
-          <LazyDrill
-            v-for="drill in drills"
-            :drill="drill"
-            :key="`drill-${grammar.id}-${drill.id}`"
-          />
-        </div>
-        <div v-if="entry">
-          <hr />
-          <LazyDictionaryEntry
-            :entry="entry"
-            :showSearchSubs="
-              !(
-                grammar.pattern &&
-                (!entry || grammar.pattern !== entry.simplified)
-              )
-            "
-            :showImages="false"
-            ref="dictionaryEntry"
-            :key="`dictionary-entry-${entry.id}`"
-          />
+          <div v-if="entry">
+            <hr />
+            <LazyDictionaryEntry
+              :entry="entry"
+              :showSearchSubs="
+                !(
+                  grammar.pattern &&
+                  (!entry || grammar.pattern !== entry.simplified)
+                )
+              "
+              :showImages="false"
+              ref="dictionaryEntry"
+              :key="`dictionary-entry-${entry.id}`"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -114,7 +116,10 @@ export default {
   async fetch() {
     this.grammar = await this.loadGrammar();
     this.drills = await this.getDrill(this.grammar.id);
-    this.images = await WordPhotos.getGoogleImages({term: this.term, lang: this.$l2.code});
+    this.images = await WordPhotos.getGoogleImages({
+      term: this.term,
+      lang: this.$l2.code,
+    });
     this.entry = await this.loadEntry();
   },
   methods: {
@@ -137,9 +142,9 @@ export default {
       let entry = await (await this.$getDictionary()).lookup(this.term);
       entry =
         entry ||
-        (await (await this.$getDictionary()).lookup(
-          this.grammar.pattern.replace(/\*.*/, "")
-        ));
+        (await (
+          await this.$getDictionary()
+        ).lookup(this.grammar.pattern.replace(/\*.*/, "")));
       return entry;
     },
     prevClick() {
