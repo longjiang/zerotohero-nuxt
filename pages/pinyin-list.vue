@@ -4,16 +4,16 @@
   }
 </router>
 <template>
-  <div>
+  <div class="main">
     <SocialHead
       title="Pinyin List Tool | Chinese Zero to Hero"
       description="Enter a list of Chinese words and convert them into a list of pinyin transcriptions."
     />
-    <div class="container main pt-4 mb-4">
+    <div class="container pt-5 pb-5">
       <div class="row">
         <div class="col-sm-12">
-          <h4>Get pinyin for a list of words</h4>
-          <p>
+          <h3 class="text-center">Get pinyin for a list of words</h3>
+          <p class="text-center">
             Paste your list into the text box and get a table of all pinyin
             variations for each word.
           </p>
@@ -95,9 +95,9 @@ export default {
       let words = [];
       for (let line of lines) {
         let seen = [];
-        let candidates = await (await this.$getDictionary()).lookupSimplified(
-          line
-        );
+        let candidates = await (
+          await this.$getDictionary()
+        ).lookupSimplified(line);
         candidates = candidates.filter((candidate) => {
           const keep = !seen.includes(candidate.pinyin);
           seen.push(candidate.pinyin);

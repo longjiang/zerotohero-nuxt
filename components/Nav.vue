@@ -520,7 +520,7 @@ export default {
             },
             {
               name: "library",
-              title: "Library",
+              title: "Guided Readers",
               icon: "fas fa-book-reader",
               show: true,
             },
