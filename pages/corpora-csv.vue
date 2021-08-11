@@ -22,6 +22,8 @@
 </template>
 <script>
 import axios from "axios";
+import Helper from "@/lib/helper";
+
 export default {
   data() {
     return {
@@ -44,20 +46,6 @@ export default {
     this.exportCorporaCSV();
   },
   methods: {
-    makeTextFile(text) {
-      var data = new Blob([text], { type: "text/plain" });
-
-      // If we are replacing a previously generated file we need to
-      // manually revoke the object URL to avoid memory leaks.
-      if (textFile !== null) {
-        window.URL.revokeObjectURL(textFile);
-      }
-
-      var textFile = window.URL.createObjectURL(data);
-
-      // returns a URL you can use as a href
-      return textFile;
-    },
     async exportCorporaCSV() {
       let res = await axios.get(
         "/data/sketch-engine/sketch-engine-corpora.json.txt"
@@ -74,7 +62,7 @@ export default {
           return o;
         });
         let csv = Papa.unparse(data);
-        this.href = this.makeTextFile(csv);
+        this.href = Helper.makeTextFile(csv);
       }
     },
   },

@@ -1063,16 +1063,19 @@ export default {
 .saved-words-count {
   background: #666;
   border-radius: 0.5rem;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   color: white;
   font-weight: bold;
   display: inline-block;
-  line-height: 1.4rem;
+  line-height: 1.2rem;
   text-align: center;
   position: relative;
   top: -0.1rem;
-  padding: 0 0.35rem;
-  min-width: 1.5rem;
+  position: relative;
+  min-width: 1.3rem;
+  margin-left: 0.2rem;
+  opacity: 0.7;
+  display: inline-block;
 }
 
 .nuxt-link-active .saved-words-count {

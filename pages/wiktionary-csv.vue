@@ -10,7 +10,9 @@
         <div class="col-sm-12">
           <div v-if="href">
             CSV Ready.
-            <a :href="href" :download="`${$l2['iso639-3']}-eng.csv.txt`">Download</a>
+            <a :href="href" :download="`${$l2['iso639-3']}-eng.csv.txt`">
+              Download
+            </a>
           </div>
           <div v-else>Preparing CSV...</div>
         </div>
@@ -19,8 +21,8 @@
   </div>
 </template>
 <script>
+import Helper from "@/lib/helper";
 export default {
-  // layout: "test-layout",
   computed: {
     $l1() {
       return this.$store.state.settings.l1;
@@ -38,24 +40,10 @@ export default {
     this.testWiktionaryCSVExport();
   },
   methods: {
-    makeTextFile(text) {
-      var data = new Blob([text], { type: "text/plain" });
-
-      // If we are replacing a previously generated file we need to
-      // manually revoke the object URL to avoid memory leaks.
-      if (textFile !== null) {
-        window.URL.revokeObjectURL(textFile);
-      }
-
-      var textFile = window.URL.createObjectURL(data);
-
-      // returns a URL you can use as a href
-      return textFile;
-    },
     async testWiktionaryCSVExport() {
       let dictionary = await this.$getDictionary();
       let csv = await (await dictionary).exportCSV();
-      this.href = this.makeTextFile(csv);
+      this.href = Helper.makeTextFile(csv);
     },
   },
 };

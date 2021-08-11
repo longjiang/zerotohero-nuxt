@@ -23,6 +23,7 @@ export default {
   async mounted() {
     await this.$getDictionary()
     this.loading = false
+    this.$emit('loaded', true)
   }
 }
 </script>

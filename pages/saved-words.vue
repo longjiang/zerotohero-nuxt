@@ -25,40 +25,28 @@
               )
             }}
           </p>
-          <div class="my-words-tools mt-2 mb-2 text-right">
-            <div class="export-wrapper text-left mt-4" v-if="showExport">
-              <p v-html="$t('copyPasteCSV')" />
-              <b-form-group :label="$t('Include:')">
-                <b-form-checkbox-group
-                  v-model="selectedCsvOptions"
-                  :options="csvOptions"
-                  @click="updateCSVText()"
-                ></b-form-checkbox-group>
-              </b-form-group>
-              <textarea
-                id="export-textarea"
-                class="mt-2 mb-2 form-control"
-                cols="30"
-                rows="10"
-                v-model="csvText"
-              ></textarea>
-            </div>
+          <div class="text-center">
+            <Loader class="mt-4" @loaded="updateLoaded" />
           </div>
         </div>
       </div>
       <div class="row">
         <div class="col-sm-12">
           <p
-            v-if="loaded && sW.length <= 0"
-            class="alert alert-warning no-saved-words"
+            v-if="dictionaryLoaded && sWLoaded && sW.length <= 0"
+            class="alert alert-warning no-saved-words text-center p-5"
           >
-            You don't have any words saved yet. Save words by clicking on the
-            <i class="glyphicon glyphicon-star-empty"></i>
+            You don't have any words saved yet. Save words by tapping on the
+            <i class="far fa-star"></i>
             icon next to it.
           </p>
           <div>
-            <b-button
-              class="upload-list"
+            <a
+              class="download-csv btn btn-primary btn-sm"
+              :href="csvHref"
+              :download="`${$l2.name
+                .toLowerCase()
+                .replace(/ /g, '-')}-saved-words.csv`"
               variant="primary"
               size="sm"
               v-on:click="showExportClick"
@@ -66,7 +54,7 @@
             >
               <i class="fa fa-download mr-1"></i>
               {{ $t("Export CSV") }}
-            </b-button>
+            </a>
             <b-button
               class="remove-all"
               variant="danger"
@@ -86,11 +74,7 @@
               Learn (Legacy)
             </router-link>
           </div>
-          <Loader class="mt-4" />
           <WordList :words="sW" class="mt-4"></WordList>
-          <div v-if="this.sW.length <= 0" class="text-center">
-            (You do not have any saved words yet.)
-          </div>
         </div>
       </div>
     </div>
@@ -99,6 +83,8 @@
 
 <script>
 import WordList from "@/components/WordList.vue";
+import Helper from "@/lib/helper";
+import Papa from "papaparse";
 
 export default {
   template: "#saved-words-template",
@@ -114,28 +100,22 @@ export default {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
+    csvHref() {
+      return Helper.makeTextFile(this.csvText);
+    },
+
+    $dictionaryName() {
+      return this.$store.state.settings.dictionaryName;
+    },
   },
   data() {
     return {
-      loaded: false,
-      csvText: "",
+      dictionaryLoaded: false,
+      sWLoaded: false,
+      csvText: undefined,
       showExport: false,
       sW: [],
-      selectedCsvOptions: ["en", "definitions"],
-      csvOptions: [
-        {
-          text: this.$t(this.$store.state.settings.l2.name),
-          value: this.$store.state.settings.l2.code,
-        },
-        { text: this.$t("Pronunciation"), value: "pronunciation" },
-        { text: this.$t("Definitions"), value: "definitions" },
-      ],
     };
-  },
-  watch: {
-    async selectedCsvOptions() {
-      this.csvText = await this.csv();
-    },
   },
   mounted() {
     this.updateWords();
@@ -150,6 +130,9 @@ export default {
     this.unsubscribe();
   },
   methods: {
+    updateLoaded(loaded) {
+      this.dictionaryLoaded = loaded
+    },
     async updateWords() {
       let sW = [];
       if (
@@ -166,27 +149,18 @@ export default {
         }
       }
       this.sW = sW;
+      this.sWLoaded = true;
     },
     async csv() {
-      if (this.sW.length <= 0) {
-        return "";
-      }
-
-      let csv = "";
-      for (let word of this.sW) {
-        if (this.selectedCsvOptions.includes("en")) {
-          let a = word.accented;
-          csv += `${a}\t`;
-        }
-        if (this.selectedCsvOptions.includes("pronunciation")) {
-          csv += `${word.pronunciation ? word.pronunciation : ""}\t`;
-        }
-
-        if (this.selectedCsvOptions.includes("definitions")) {
-          csv += `${word.definitions ? word.definitions.join(", ") : ""}\t`;
-        }
-        csv += "\n";
-      }
+      let csvWords = this.sW.map((word) => {
+        let mapped = Object.assign({id: word.id}, word);
+        mapped.definitions = Helper.ucFirst(word.definitions.join(";") + ".");
+        delete mapped.search;
+        delete mapped.newHSKMatches;
+        delete mapped.saved;
+        return mapped;
+      });
+      let csv = Papa.unparse(csvWords);
       return csv;
     },
     showImportClick() {
