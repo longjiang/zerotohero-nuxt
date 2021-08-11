@@ -1,15 +1,22 @@
 <template>
-  <button class="speak focus-exclude" @click="speak">
-    <i class="fas fa-volume-up"></i>
-    <span v-if="!canSpeak">
-      <img
-        src="/img/forvo.svg"
-        alt="Forvo"
-        style="height: 0.8rem; width: 4rem; opacity: 0.5; margin-bottom: 0.2rem"
-      />
-    </span>
-    <div ref="player" class="hidden"></div>
-  </button>
+  <client-only>
+    <button class="speak focus-exclude" @click="speak">
+      <i class="fas fa-volume-up"></i>
+      <span v-if="!canSpeak">
+        <img
+          src="/img/forvo.svg"
+          alt="Forvo"
+          style="
+            height: 0.8rem;
+            width: 4rem;
+            opacity: 0.5;
+            margin-bottom: 0.2rem;
+          "
+        />
+      </span>
+      <div ref="player" class="hidden"></div>
+    </button>
+  </client-only>
 </template>
 <script>
 import commons from "wikimedia-commons-file-path";
@@ -46,14 +53,12 @@ export default {
     this.canSpeak = this.mp3 || (this.text && this.$hasFeature("speech"));
   },
   methods: {
-    
     // https://www.npmjs.com/package/ogv
     f(url) {
       // Create a new player with the constructor
-      var ogv = require('ogv');
-      ogv.OGVLoader.base = '/vendor/ogv';
+      var ogv = require("ogv");
+      ogv.OGVLoader.base = "/vendor/ogv";
       var player = new ogv.OGVPlayer();
-      
 
       // Now treat it just like a video or audio element
       this.$refs.player.appendChild(player);
@@ -63,7 +68,7 @@ export default {
     speak() {
       if (this.mp3) {
         let url = this.wiktionary ? commons(`File:${this.mp3}`) : this.mp3;
-        this.f(url)
+        this.f(url);
       } else if (this.text) {
         if (this.$hasFeature("speech")) {
           Helper.speak(this.text, this.$l2, 0.75);

@@ -1,23 +1,25 @@
 <template>
-  <div class="toggle-saved-word focus-exclude">
-    <button
-      class="star remove-word"
-      v-if="saved()"
-      v-on:click="removeWordClick"
-      title='Remove from "Saved Words"'
-    >
-      <!-- <i class="fas fa-bookmark"></i> -->
-      <i class="fas fa-star"></i>
-    </button>
-    <button
-      class="star add-word"
-      v-if="!saved()"
-      v-on:click="saveWordClick"
-      title='Add to "Saved Words"'
-    >
-      <i class="far fa-star"></i>
-    </button>
-  </div>
+  <client-only>
+    <div class="toggle-saved-word focus-exclude">
+      <button
+        class="star remove-word"
+        v-if="saved()"
+        v-on:click="removeWordClick"
+        title='Remove from "Saved Words"'
+      >
+        <!-- <i class="fas fa-bookmark"></i> -->
+        <i class="fas fa-star"></i>
+      </button>
+      <button
+        class="star add-word"
+        v-if="!saved()"
+        v-on:click="saveWordClick"
+        title='Add to "Saved Words"'
+      >
+        <i class="far fa-star"></i>
+      </button>
+    </div>
+  </client-only>
 </template>
 
 <script>
