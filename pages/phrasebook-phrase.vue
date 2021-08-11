@@ -5,110 +5,127 @@
   }
 </router>
 <template>
-  <div :class="{ 'bg-white': !wide }">
-    <SocialHead :title="title" :description="description" :image="image" />
-    <div :class="{ container: !wide }">
-      <div :class="{ row: !wide, 'content-panes': wide }">
-        <div :class="{ 'p-4 content-pane-left': wide, 'col-sm-12': !wide }">
-          <div class="text-center" v-if="phrasebook && phraseId">
-            <router-link
-              class="link-unstyled mb-4 d-block"
-              :to="`/${$l1.code}/${$l2.code}/phrasebook/${phrasebook.id}#${phraseId}`"
-            >
-              <h5>{{ phrasebook.title }}</h5>
-            </router-link>
-            <Paginator
-              class="mb-4"
-              :items="phrasebook.phrases"
-              :findCurrent="findCurrent"
-              :url="url"
-            />
-          </div>
-          <div>
-            <div class="text-center">
-              <span v-if="phraseObj && phraseObj.pronunciation" class="mr-1">
-                {{ phraseObj.pronunciation }}
-              </span>
-              <Speak
-                :text="phraseObj.phrase"
-                v-if="phraseObj && phraseObj.phrase"
+  <container-query :query="query" v-model="params">
+    <div :class="{ 'bg-white': !wide }">
+      <SocialHead :title="title" :description="description" :image="image" />
+      <div :class="{ container: !wide }">
+        <div :class="{ row: !wide, 'content-panes': wide }">
+          <div
+            :class="{
+              'p-4 content-pane-left': wide,
+              'col-sm-12': !wide,
+            }"
+          >
+            <div class="text-center" v-if="phrasebook && phraseId">
+              <router-link
+                class="link-unstyled mb-4 d-block"
+                :to="`/${$l1.code}/${$l2.code}/phrasebook/${phrasebook.id}#${phraseId}`"
+              >
+                <h5>{{ phrasebook.title }}</h5>
+              </router-link>
+              <Paginator
+                class="mb-4"
+                :items="phrasebook.phrases"
+                :findCurrent="findCurrent"
+                :url="url"
               />
             </div>
-            <h2 class="text-center mb-0 font-weight-normal">
-              <div class="d-inline-block">
-                <Annotate
-                  :phonetics="!phraseObj.pronunciation"
-                  :buttons="true"
+            <div>
+              <div class="text-center">
+                <span v-if="phraseObj && phraseObj.pronunciation" class="mr-1">
+                  {{ phraseObj.pronunciation }}
+                </span>
+                <Speak
+                  :text="phraseObj.phrase"
                   v-if="phraseObj && phraseObj.phrase"
-                  @textChanged="textChanged"
-                >
-                  <span>{{ phraseObj.phrase }}</span>
-                </Annotate>
+                />
               </div>
-            </h2>
-            <p class="text-center mt-1" v-if="phraseObj && phraseObj[$l1.code]">
-              {{ phraseObj[$l1.code] }}
-            </p>
-            <hr v-if="word" />
-            <div class="text-center mt-3 mb-3" v-if="words && words.length > 1">
-              <b-dropdown
-                size="sm"
-                :items="words"
-                text="Disambiguation"
-                menu-class="disambiguation-dropdown"
+              <h2 class="text-center mb-0 font-weight-normal">
+                <div class="d-inline-block">
+                  <Annotate
+                    :phonetics="!phraseObj.pronunciation"
+                    :buttons="true"
+                    v-if="phraseObj && phraseObj.phrase"
+                    @textChanged="textChanged"
+                  >
+                    <span>{{ phraseObj.phrase }}</span>
+                  </Annotate>
+                </div>
+              </h2>
+              <p
+                class="text-center mt-1"
+                v-if="phraseObj && phraseObj[$l1.code]"
               >
-                <b-dropdown-item
-                  v-for="w in words"
-                  :key="`phrase-word-disambiguation-${w.id}`"
-                  @click="word = w"
+                {{ phraseObj[$l1.code] }}
+              </p>
+              <hr v-if="word" />
+              <div
+                class="text-center mt-3 mb-3"
+                v-if="words && words.length > 1"
+              >
+                <b-dropdown
+                  size="sm"
+                  :items="words"
+                  text="Disambiguation"
+                  menu-class="disambiguation-dropdown"
                 >
-                  <b>{{ w.head }}</b>
-                  <em>{{ w.definitions[0] }}</em>
-                </b-dropdown-item>
-              </b-dropdown>
-            </div>
-            <div v-if="word" class="text-center">
-              <LazyEntryHeader :entry="word" />
-              <DefinitionsList
-                :key="`def-list-${word.id}`"
-                v-if="word.definitions"
-                class="mt-3"
-                :definitions="word.definitions"
-              ></DefinitionsList>
+                  <b-dropdown-item
+                    v-for="w in words"
+                    :key="`phrase-word-disambiguation-${w.id}`"
+                    @click="word = w"
+                  >
+                    <b>{{ w.head }}</b>
+                    <em>{{ w.definitions[0] }}</em>
+                  </b-dropdown-item>
+                </b-dropdown>
+              </div>
+              <div v-if="word" class="text-center">
+                <LazyEntryHeader :entry="word" />
+                <DefinitionsList
+                  :key="`def-list-${word.id}`"
+                  v-if="word.definitions"
+                  class="mt-3"
+                  :definitions="word.definitions"
+                ></DefinitionsList>
+              </div>
             </div>
           </div>
-        </div>
-        <div :class="{ 'content-pane-right pl-3 pr-3': wide }">
-          <div>
-            <LazyDictionaryEntry
-              v-if="word && phrasebook"
-              :entry="word"
-              :tvShow="phrasebook.tv_show"
-              :exact="phrasebook.exact"
-              :showHeader="false"
-              :showDefinitions="false"
-              :showExample="false"
-            />
-            <LazyPhraseComp
-              v-else-if="phraseObj && phraseObj.phrase && phrasebook"
-              :term="phraseObj.phrase.toLowerCase()"
-              :tvShow="phrasebook.tv_show"
-              :exact="phrasebook.exact"
-              :showExternal="false"
-              class="mt-4 mb-4"
-            />
+          <div :class="{ 'content-pane-right pl-3 pr-3': wide }">
+            <div>
+              <LazyDictionaryEntry
+                v-if="word && phrasebook"
+                :entry="word"
+                :tvShow="phrasebook.tv_show"
+                :exact="phrasebook.exact"
+                :showHeader="false"
+                :showDefinitions="false"
+                :showExample="false"
+              />
+              <LazyPhraseComp
+                v-else-if="phraseObj && phraseObj.phrase && phrasebook"
+                :term="phraseObj.phrase.toLowerCase()"
+                :tvShow="phrasebook.tv_show"
+                :exact="phrasebook.exact"
+                :showExternal="false"
+                class="mt-4 mb-4"
+              />
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </container-query>
 </template>
 
 <script>
 import Helper from "@/lib/helper";
 import WordPhotos from "@/lib/word-photos";
+import { ContainerQuery } from "vue-container-query";
 
 export default {
+  components: {
+    ContainerQuery,
+  },
   props: {
     bookId: {
       type: String,
@@ -126,8 +143,13 @@ export default {
       phraseObj: undefined,
       words: undefined,
       word: undefined,
-      wide: false,
       images: [],
+      params: {},
+      query: {
+        wide: {
+          minWidth: 991,
+        },
+      },
     };
   },
   async fetch() {
@@ -191,6 +213,9 @@ export default {
       } else {
         return "/img/zth-share-image.jpg";
       }
+    },
+    wide() {
+      return this.params.wide && ["lg", "xl", "xxl"].includes(this.$mq);
     },
   },
   methods: {
