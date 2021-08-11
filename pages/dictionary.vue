@@ -5,118 +5,125 @@
   }
 </router>
 <template>
-  <div
-    :class="{ focus: true, 'bg-white': !wide }"
-    class="focus'"
-    :key="`entry-${entryKey}`"
-    @keydown="keydown"
-  >
-    <SocialHead :title="title" :description="description" :image="image" />
-    <div class="dictionary-search-bar">
-      <div :class="{ 'container pt-2 pb-5': !wide }">
-        <div :class="{ row: !wide }">
-          <div :class="{ 'col-sm-12': !wide }">
-            <SearchCompare
-              :searchEntry="entry"
-              :random="`/${$l1.code}/${$l2.code}/dictionary/${$store.state.settings.dictionaryName}/random`"
-              ref="searchCompare"
-              :key="`search-${args}`"
-              id="search-compare-bar"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="bg-white">
-      <div class="container" v-if="!entry">
-        <div class="row">
-          <div class="col-sm-12 bg-white">
-            <div class="for-the-love-of">
-              <h3 class="text-center">
-                For the love of
-                <span v-if="dictionarySize">
-                  {{ dictionarySize.toLocaleString("en-US") }}
-                </span>
-                {{ $l2.name }} words.
-              </h3>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div :class="{ 'focus-exclude': true, container: !wide }">
-      <div :class="{ row: !wide, 'content-panes': wide }" v-if="entry">
-        <div :class="{ 'content-pane-left': wide, 'col-sm-12': !wide }">
-          <client-only>
-            <div v-if="saved() && sW.length > 0" class="text-center mb-4">
-              <router-link
-                class="link-unstyled mb-2 d-block"
-                :to="`/${$l1.code}/${$l2.code}/saved-words`"
-              >
-                <h5>Saved {{ $l2.name }} Words</h5>
-              </router-link>
-              <Paginator
-                :items="sW"
-                :findCurrent="(item) => item.id === entry.id"
-                :url="
-                  (item) =>
-                    `/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${item.id}`
-                "
+  <container-query :query="query" v-model="params">
+    <div
+      :class="{ 'dictionary focus': true, 'bg-white': !params.wide, 'dictionary-wide': params.wide }"
+      class="focus'"
+      :key="`entry-${entryKey}`"
+      @keydown="keydown"
+    >
+      <SocialHead :title="title" :description="description" :image="image" />
+      <div class="dictionary-search-bar">
+        <div :class="{ 'container pt-2 pb-5': !params.wide }">
+          <div :class="{ row: !params.wide }">
+            <div :class="{ 'col-sm-12': !params.wide }">
+              <SearchCompare
+                :searchEntry="entry"
+                :random="`/${$l1.code}/${$l2.code}/dictionary/${$store.state.settings.dictionaryName}/random`"
+                ref="searchCompare"
+                :key="`search-${args}`"
+                id="search-compare-bar"
               />
             </div>
-          </client-only>
-          <div v-if="entry" class="text-center">
-            <div class="text-center mb-4" v-if="words && words.length > 1">
-              <b-dropdown size="sm" :items="words" text="Disambiguation">
-                <b-dropdown-item
-                  v-for="w in words"
-                  :key="`phrase-word-disambiguation-${w.id}`"
-                  @click="
-                    $router.push(
-                      `/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${w.id}`
-                    )
-                  "
-                >
-                  <b>{{ w.head }}</b>
-                  <em>{{ w.definitions[0] }}</em>
-                </b-dropdown-item>
-              </b-dropdown>
-            </div>
-            <LazyEntryHeader :entry="entry" />
-            <DefinitionsList
-              :key="`def-list-${entry.id}`"
-              v-if="entry.definitions"
-              class="mt-3"
-              :definitions="entry.definitions"
-            ></DefinitionsList>
           </div>
         </div>
+      </div>
+      <div class="bg-white">
+        <div class="container" v-if="!entry">
+          <div class="row">
+            <div class="col-sm-12 bg-white">
+              <div class="for-the-love-of">
+                <h3 class="text-center">
+                  For the love of
+                  <span v-if="dictionarySize">
+                    {{ dictionarySize.toLocaleString("en-US") }}
+                  </span>
+                  {{ $l2.name }} words.
+                </h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div :class="{ 'focus-exclude': true, container: !params.wide }">
+        <div :class="{ row: !params.wide, 'content-panes': params.wide }" v-if="entry">
+          <div :class="{ 'content-pane-left': params.wide, 'col-sm-12': !params.wide }">
+            <client-only>
+              <div v-if="saved() && sW.length > 0" class="text-center mb-4">
+                <router-link
+                  class="link-unstyled mb-2 d-block"
+                  :to="`/${$l1.code}/${$l2.code}/saved-words`"
+                >
+                  <h5>Saved {{ $l2.name }} Words</h5>
+                </router-link>
+                <Paginator
+                  :items="sW"
+                  :findCurrent="(item) => item.id === entry.id"
+                  :url="
+                    (item) =>
+                      `/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${item.id}`
+                  "
+                />
+              </div>
+            </client-only>
+            <div v-if="entry" class="text-center">
+              <div class="text-center mb-4" v-if="words && words.length > 1">
+                <b-dropdown size="sm" :items="words" text="Disambiguation">
+                  <b-dropdown-item
+                    v-for="w in words"
+                    :key="`phrase-word-disambiguation-${w.id}`"
+                    @click="
+                      $router.push(
+                        `/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${w.id}`
+                      )
+                    "
+                  >
+                    <b>{{ w.head }}</b>
+                    <em>{{ w.definitions[0] }}</em>
+                  </b-dropdown-item>
+                </b-dropdown>
+              </div>
+              <LazyEntryHeader :entry="entry" />
+              <DefinitionsList
+                :key="`def-list-${entry.id}`"
+                v-if="entry.definitions"
+                class="mt-3"
+                :definitions="entry.definitions"
+              ></DefinitionsList>
+            </div>
+          </div>
 
-        <div :class="{ 'content-pane-right pl-3 pr-3': wide }">
-          <article>
-            <LazyDictionaryEntry
-              v-if="entry"
-              :entry="entry"
-              :images="images"
-              ref="dictionaryEntry"
-              :class="{ 'pb-5': $l2.code !== 'zh' }"
-              :key="`dictionary-entry-${entry.id}`"
-              :showHeader="false"
-              :showDefinitions="false"
-              :showExample="false"
-            />
-          </article>
+          <div :class="{ 'content-pane-right pl-3 pr-3': params.wide }">
+            <article>
+              <LazyDictionaryEntry
+                v-if="entry"
+                :entry="entry"
+                :images="images"
+                ref="dictionaryEntry"
+                :class="{ 'pb-5': $l2.code !== 'zh' }"
+                :key="`dictionary-entry-${entry.id}`"
+                :showHeader="false"
+                :showDefinitions="false"
+                :showExample="false"
+              />
+            </article>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </container-query>
 </template>
 
 <script>
 import WordPhotos from "@/lib/word-photos";
 import Helper from "@/lib/helper";
 
+import { ContainerQuery } from "vue-container-query";
+
 export default {
+  components: {
+    ContainerQuery,
+  },
   props: {
     method: {
       type: String,
@@ -136,6 +143,12 @@ export default {
       dictionarySize: undefined,
       keysBound: false,
       wide: false,
+      params: {},
+      query: {
+        wide: {
+          minWidth: 768,
+        },
+      },
     };
   },
   computed: {
@@ -194,18 +207,11 @@ export default {
       this.loadEntry();
     this.dictionarySize = await this.getDictionarySize();
     this.bindKeys();
-    if (typeof window !== "undefined")
-      window.addEventListener("resize", this.onResize);
   },
   destroyed() {
     this.unbindKeys();
-    if (typeof window !== "undefined")
-      window.removeEventListener("resize", this.onResize);
   },
   methods: {
-    onResize() {
-      this.wide = Helper.wide();
-    },
     async getDictionarySize() {
       let dictionary = await this.$getDictionary();
       let size = await (await dictionary).getSize();
@@ -353,7 +359,6 @@ export default {
     },
   },
   mounted() {
-    this.wide = Helper.wide();
     if (
       this.$route.name === "dictionary" &&
       this.$route.params.args === "random"
@@ -389,7 +394,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.zerotohero-wide {
+.dictionary-wide {
   .dictionary-search-bar {
     padding: 1rem;
     background: hsl(0deg 0% 0% / 23%);
