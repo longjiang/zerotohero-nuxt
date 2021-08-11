@@ -251,4 +251,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.zerotohero-wide {
+  .content-pane-left {
+    ::v-deep .entry-word {
+      font-size: 2rem;
+    }
+    ::v-deep .definitions-many {
+      columns: 1;
+      margin-top: 1rem;
+    }
+    ::v-deep .disambiguation-dropdown {
+      max-width: 12rem;
+      overflow: hidden;
+      left: 0;
+      position: fixed;
+      .dropdown-item {
+        white-space: normal;
+        padding: 0.2rem 1rem;
+      }
+    }
+  }
+}
 </style>

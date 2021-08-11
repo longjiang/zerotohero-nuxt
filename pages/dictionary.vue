@@ -84,7 +84,7 @@
             <DefinitionsList
               :key="`def-list-${entry.id}`"
               v-if="entry.definitions"
-              class="mt-1"
+              class="mt-3"
               :definitions="entry.definitions"
             ></DefinitionsList>
           </div>
@@ -402,6 +402,23 @@ export default {
   .content-pane-left {
     padding: 1rem;
     padding-top: 6rem;
+    ::v-deep .entry-word {
+      font-size: 2rem;
+    }
+    ::v-deep .definitions-many {
+      columns: 1;
+      margin-top: 1rem;
+    }
+    ::v-deep .disambiguation-dropdown {
+      max-width: 12rem;
+      overflow: hidden;
+      left: 0;
+      position: fixed;
+      .dropdown-item {
+        white-space: normal;
+        padding: 0.2rem 1rem;
+      }
+    }
   }
   .content-pane-right {
     padding: 1rem;

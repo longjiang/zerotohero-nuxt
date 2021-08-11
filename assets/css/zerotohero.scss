@@ -943,23 +943,6 @@ button.bg-primary:focus {
       height: 100vh;
       position: sticky;
       top: 0;
-      ::v-deep .entry-word {
-        font-size: 2rem;
-      }
-      ::v-deep .definitions-many {
-        columns: 1;
-        margin-top: 1rem;
-      }
-      ::v-deep .disambiguation-dropdown {
-        max-width: 12rem;
-        overflow: hidden;
-        left: 0;
-        position: fixed;
-        .dropdown-item {
-          white-space: normal;
-          padding: 0.2rem 1rem;
-        }
-      }
     }
     .content-pane-right {
       background: white;
