@@ -6,7 +6,7 @@
 </router>
 <template>
   <div class="main">
-    <div class="container pt-5 mb-5">
+    <div class="container pt-5 pb-5">
       <SocialHead :title="title" :description="description" :image="image" />
       <div class="row mb-3">
         <div class="col-sm-12" v-if="phrasebook">

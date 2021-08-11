@@ -155,7 +155,7 @@ export default {
         this.loadShows();
       }
     });
-    this.punctuations = Helper.characterClass("PunctuationNoApostrophe");
+    this.punctuations = Helper.characterClass("PunctuationNoApostropheNoHyphen");
     console.log(`All done. Displaying table...`);
   },
   beforeDestroy() {
