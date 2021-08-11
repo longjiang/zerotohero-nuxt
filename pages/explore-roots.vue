@@ -15,14 +15,16 @@
   }
 </router>
 <template>
-  <div class="main pt-4 pb-4">
+  <div class="main pt-5 pb-4">
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
           <div v-if="!arg" class="focus">
-            <h4>Explore Words Endings</h4>
-            <p>See how words are built.</p>
-            <Loader class="mt-5" />
+            <div class="text-center">
+              <h3>Word Builder</h3>
+              <p class="mb-5">Explore word patterns. See how words are built.</p>
+              <Loader class="mt-5 mb-5" />
+            </div>
             <table class="table">
               <thead>
                 <tr>
@@ -31,7 +33,10 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(root, index) in rootsAugmented" :key="`root=${index}`">
+                <tr
+                  v-for="(root, index) in rootsAugmented"
+                  :key="`root=${index}`"
+                >
                   <td class="root">
                     <router-link
                       :to="`/${$l1.code}/${$l2.code}/explore/roots/${root.pattern}`"
@@ -97,7 +102,7 @@
 <script>
 import WordListExtended from "@/components/WordListExtended.vue";
 import EntryCharacters from "@/components/EntryCharacters.vue";
-import Helper from '@/lib/helper'
+import Helper from "@/lib/helper";
 
 export default {
   components: {
@@ -105,7 +110,7 @@ export default {
     WordListExtended,
   },
   props: {
-    arg: undefined
+    arg: undefined,
   },
   computed: {
     $l1() {
@@ -119,7 +124,7 @@ export default {
   },
   methods: {
     highlight(a, b, c) {
-      return Helper.highlight(a,b,c)
+      return Helper.highlight(a, b, c);
     },
     currentIndex() {
       return this.roots.findIndex((root) => root.pattern === this.arg);
@@ -145,27 +150,24 @@ export default {
       }
     },
   },
+  async mounted() {
+    let rootsAugmented = [];
+    for (let root of this.roots) {
+      let words = await (
+        await this.$getDictionary()
+      ).lookupSimplified(root.pattern.replace(/～/g, ""));
+      root.word = words[0];
+      rootsAugmented.push(root);
+    }
+    this.rootsAugmented = rootsAugmented;
+  },
   async fetch() {
     if (this.arg) {
       let words = await (await this.$getDictionary()).lookupByPattern(this.arg);
-      let rootWords = words 
+      let rootWords = words
         .sort((a, b) => a.simplified.length - b.simplified.length)
         .sort((a, b) => a.hsk - b.hsk);
-      let rootCharacter = (await this.$getHanzi()).lookup(
-        this.arg.replace(/～/g, "")
-      );
-      this.rootWords = rootWords
-      
-    } else {
-      let rootsAugmented = [];
-      for (let root of this.roots) {
-        let words = await (await this.$getDictionary()).lookupSimplified(
-          root.pattern.replace(/～/g, "")
-        );
-        root.word = words[0];
-        rootsAugmented.push(root);
-      }
-      this.rootsAugmented = rootsAugmented;
+      this.rootWords = rootWords;
     }
   },
   data() {
