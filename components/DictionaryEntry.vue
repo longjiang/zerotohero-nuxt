@@ -37,7 +37,7 @@
       <div class="row">
         <div :class="{ 'col-sm-12': true, 'p-0': portrait }">
           <div
-            :class="{ widget: true }"
+            :class="{ 'widget widget-dark': true }"
             id="search-subs"
             v-if="entry && showSearchSubs && searchTerms"
           >
@@ -49,6 +49,7 @@
               <LazySearchSubsComp
                 v-if="searchTerms"
                 ref="searchSubs"
+                skin="dark"
                 :level="
                   entry.newHSK && entry.newHSK === '7-9' ? '7-9' : entry.hsk
                 "

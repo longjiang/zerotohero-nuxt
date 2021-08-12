@@ -28,7 +28,7 @@
           <LazyGrammarPoint :grammar="grammar" :key="id" class="mb-5" />
 
           <div
-            class="widget mt-5 mb-5"
+            class="widget widget-dark mt-5 mb-5"
             id="search-subs"
             v-if="
               grammar.pattern &&
@@ -41,6 +41,7 @@
               <LazySearchSubsComp
                 v-if="grammar.pattern"
                 ref="searchSubs"
+                skin="dark"
                 :level="grammar.level"
                 :terms="[grammar.pattern]"
               />

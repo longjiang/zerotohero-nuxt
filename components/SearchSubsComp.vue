@@ -1,18 +1,29 @@
 <template>
-  <div :class="{ 'search-subs pb-3': true, fullscreen }">
+  <div
+    :class="{
+      'search-subs pb-3': true,
+      'search-subs-light': skin === 'dark',
+      'search-subs-dark': skin === 'dark',
+      fullscreen,
+    }"
+  >
     <div
       class="text-center pt-2 pb-2"
       :style="fullscreenToggle && !$adminMode ? 'padding-left: 2.5rem' : ''"
     >
       <span v-if="hits.length > 0">
         <div :class="{ 'float-left ml-1': true, 'd-none': !$adminMode }">
-          <b-button variant="danger" size="sm" @click="remove">
+          <b-button
+            :variant="skin === 'dark' ? 'ghost-dark-no-bg' : 'gray'"
+            size="sm"
+            @click="remove"
+          >
             <i class="fas fa-trash"></i>
           </b-button>
         </div>
         <b-button
           size="sm"
-          variant="gray"
+          :variant="skin === 'light' ? 'gray' : 'ghost-dark-no-bg'"
           :disabled="hitIndex === 0"
           @click="goToPrevHit"
           :class="{ 'ml-1 mr-1': true, disabled: hitIndex === 0 }"
@@ -20,7 +31,7 @@
           <i class="fas fa-step-backward" />
         </b-button>
         <b-button
-          variant="gray"
+          :variant="skin === 'light' ? 'gray' : 'ghost-dark-no-bg'"
           size="sm"
           v-if="!showFilter"
           @click="showFilter = true"
@@ -29,6 +40,7 @@
         </b-button>
         <b-form-input
           type="text"
+          :variant="skin === 'light' ? 'gray' : 'ghost-dark-no-bg'"
           size="sm"
           class="d-inline-block mr-1 ml-1"
           v-if="!checking && (hits.length > 0 || regex) && showFilter"
@@ -37,14 +49,11 @@
           placeholder="Filter..."
           @blur="showFilter = false"
         />
-        <span
-          class="ml-2 mr-2 d-inline-block"
-          style="margin-bottom: -0.52rem; overflow: hidden"
-        >
+        <span class="search-subs-hit-index ml-2 mr-2 d-inline-block">
           <span
             v-if="groupsRight['zthSaved'].length > 0"
             class="ml-0 mr-0"
-            style="background: none;"
+            style="background: none"
           >
             {{ groupsRight["zthSaved"].length }}
           </span>
@@ -55,13 +64,16 @@
             :save="saveHit"
             :remove="removeSavedHit"
             class="ml-0 mr-0"
-            style="position: relative; bottom: 0.1rem;"
+            style="position: relative; bottom: 0.1rem"
           />
           {{ hitIndex + 1 }} of {{ hits.length }}
         </span>
         <b-dropdown
           class="playlist-dropdown"
-          toggle-class="btn btn-gray btn-sm border-gray playlist-dropdown-toggle ml-1 mr-1"
+          :variant="skin === 'dark' ? 'ghost-dark-no-bg' : 'gray'"
+          :toggle-class="`btn btn-sm playlist-dropdown-toggle ml-1 mr-1 ${
+            skin === 'dark' ? 'btn-ghost-dark-no-bg' : 'border-gray'
+          }`"
           boundary="viewport"
           no-caret
         >
@@ -168,14 +180,16 @@
           :to="`/${$l1.code}/${$l2.code}/youtube/view/${
             currentHit.video.youtube_id
           }/?t=${currentHit.video.subs_l2[currentHit.lineIndex].starttime}`"
-          class="btn btn-gray btn-sm mr-1 ml-1"
+          :class="`btn btn-${
+            skin === 'light' ? 'gray' : 'ghost-dark-no-bg'
+          } btn-sm mr-1 ml-1`"
         >
           <i class="fa fa-window-restore" />
         </router-link>
         <b-button
-          variant="gray"
           size="sm"
           :disabled="hitIndex >= hits.length - 1"
+          :variant="skin === 'light' ? 'gray' : 'ghost-dark-no-bg'"
           @click="goToNextHit"
           :class="{
             'ml-1 mr-1': true,
@@ -186,7 +200,7 @@
         </b-button>
         <div class="float-right mr-1">
           <b-button
-            variant="gray"
+            :variant="skin === 'light' ? 'gray' : 'ghost-dark-no-bg'"
             class="search-subs-fullscreen"
             size="sm"
             @click="toggleFullscreen"
@@ -200,7 +214,7 @@
             <i class="fas fa-expand"></i>
           </b-button>
           <b-button
-            variant="gray"
+            :variant="skin === 'light' ? 'gray' : 'ghost-dark-no-bg'"
             size="sm"
             class="btn search-subs-close"
             @click="toggleFullscreen"
@@ -314,6 +328,9 @@ export default {
     },
     exact: {
       default: false,
+    },
+    skin: {
+      default: "light",
     },
   },
   data() {
@@ -440,14 +457,12 @@ export default {
     },
     prevHit() {
       if (this.hitIndex > 0) return this.hits[this.hitIndex - 1];
-      else 
-        return this.hits[this.hits.length - 1]
+      else return this.hits[this.hits.length - 1];
     },
     nextHit() {
       if (this.hitIndex < this.hits.length - 1)
         return this.hits[this.hitIndex + 1];
-      else 
-        return this.hits[0]
+      else return this.hits[0];
     },
   },
   methods: {
@@ -749,7 +764,7 @@ export default {
         !e.target.getAttribute("contenteditable") &&
         this.$refs[`youtube-${this.hitIndex}`]
       ) {
-        if (e.code == 'ArrowLeft' && e.shiftKey) {
+        if (e.code == "ArrowLeft" && e.shiftKey) {
           this.goToPrevHit();
           e.preventDefault();
           return false;
@@ -759,7 +774,7 @@ export default {
           e.preventDefault();
           return false;
         }
-        if (e.code == 'ArrowRight' && e.shiftKey) {
+        if (e.code == "ArrowRight" && e.shiftKey) {
           this.goToNextHit();
           e.preventDefault();
           return false;
@@ -769,32 +784,32 @@ export default {
           e.preventDefault();
           return false;
         }
-        if (e.code == 'ArrowUp' || (e.code == 'ArrowLeft' && !e.shiftKey)) {
+        if (e.code == "ArrowUp" || (e.code == "ArrowLeft" && !e.shiftKey)) {
           this.goToPreviousLine();
           e.preventDefault();
           return false;
         }
-        if (e.code == 'ArrowDown' || (e.code == 'ArrowRight' && !e.shiftKey)) {
+        if (e.code == "ArrowDown" || (e.code == "ArrowRight" && !e.shiftKey)) {
           this.goToNextLine();
           e.preventDefault();
           return false;
         }
-        if (e.code == 'KeyR') {
+        if (e.code == "KeyR") {
           this.rewind();
           e.preventDefault();
           return false;
         }
-        if (e.code == 'Space') {
+        if (e.code == "Space") {
           this.togglePaused();
           e.preventDefault();
           return false;
         }
-        if (e.code == 'KeyF') {
+        if (e.code == "KeyF") {
           if (this.fullscreenToggle) this.toggleFullscreen();
           e.preventDefault();
           return false;
         }
-        if (e.code == 'Escape') {
+        if (e.code == "Escape") {
           if (this.fullscreenToggle) this.fullscreen = false;
           e.preventDefault();
           return false;
@@ -804,56 +819,69 @@ export default {
   },
 };
 </script>
-<style lang="scss">
-.subs-search-slide {
-  position: relative;
-}
-.search-subs .btn {
-  margin: 0;
-}
-.search-subs .btn:disabled {
-  opacity: 0.2;
-}
-.hit-thumb {
-  width: calc(0.2rem * 16);
-  height: calc(0.2rem * 9);
-  object-fit: cover;
-  margin-right: 1rem;
-}
-.search-subs.fullscreen .video-area {
-  background: black;
-}
-.search-subs.fullscreen {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100vw;
-  height: 100vh;
-  background: white;
-  z-index: 10;
-  overflow: scroll;
-  margin-top: 0 !important;
-}
-.playlist-dropdown {
-  .dropdown-menu {
-    margin-top: 2.2rem;
-    height: calc(100vh - 3rem);
-    border: none;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+<style lang="scss" scoped>
+.search-subs {
+  .search-subs-hit-index {
+    margin-bottom: -0.52rem;
+    overflow: hidden;
+  }
+  .btn {
+    margin: 0;
+  }
+  .btn:disabled {
+    opacity: 0.2;
+  }
+  .hit-thumb {
+    width: calc(0.2rem * 16);
+    height: calc(0.2rem * 9);
+    object-fit: cover;
+    margin-right: 1rem;
+  }
+  .video-area {
+    background: black;
+  }
+  &.fullscreen {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 10;
     overflow: scroll;
-    .current {
-      .dropdown-item {
-        background: #f3f3f3;
-      }
+    margin-top: 0 !important;
+  }
+  &.search-subs-light.fullscreen {
+    background: white;
+  }
+  &.search-subs-dark {
+    &.fullscreen {
+      background: black;
     }
-    .dropdown-item {
-      max-width: 98vw;
-      white-space: normal;
-      padding: 0.25rem 1rem;
-      color: #666;
-      &:hover {
-        background-color: #f3f3f3;
-        cursor: pointer;
+    .search-subs-hit-index {
+      color: rgba(255, 255, 255, 0.877);
+    }
+  }
+  ::v-deep .playlist-dropdown {
+    .dropdown-menu {
+      margin-top: 2.2rem;
+      height: calc(100vh - 3rem);
+      border: none;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      overflow: scroll;
+      .current {
+        .dropdown-item {
+          background: #f3f3f3;
+        }
+      }
+      .dropdown-item {
+        max-width: 98vw;
+        white-space: normal;
+        padding: 0.25rem 1rem;
+        color: #666;
+        &:hover {
+          background-color: #f3f3f3;
+          cursor: pointer;
+        }
       }
     }
   }

@@ -67,7 +67,7 @@ export default {
     },
     type: {
       default: "dictionary", // can also be 'generic'
-    },
+    }
   },
   components: {
     Search,

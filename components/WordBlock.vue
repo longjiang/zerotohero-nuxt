@@ -687,6 +687,7 @@ export default {
   }
 }
 
+.widget-dark .word-block.with-popup:hover,
 .main-dark .word-block.with-popup:hover {
   background-color: #00000066;
 }

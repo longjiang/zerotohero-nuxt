@@ -15,7 +15,7 @@
       <div class="row">
         <div :class="{ 'col-sm-12': true, 'p-0': portrait }">
           <div
-            class="widget"
+            class="widget widget-dark"
             id="search-subs"
             v-if="term"
             :key="`subs-search-${term}`"
@@ -30,6 +30,7 @@
                 v-if="term"
                 ref="searchSubs"
                 level="outside"
+                skin="dark"
                 :key="`${term}-search-subs`"
                 :terms="[term]"
                 :tvShow="tvShow"
