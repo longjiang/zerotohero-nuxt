@@ -5,7 +5,7 @@
   }
 </router>
 <template>
-  <div class="main">
+  <div class="main-dark">
     <div class="youtube-browse container pb-5">
       <SocialHead
         v-if="videos && videos[0]"
@@ -15,6 +15,7 @@
         } subtitles.`"
         :image="`https://img.youtube.com/vi/${videos[0].youtube_id}/hqdefault.jpg`"
       />
+
       <div class="row">
         <div class="col-sm-12 mb-4">
           <h3 v-if="!keyword" class="mt-5 text-center">
@@ -24,32 +25,35 @@
             Study {{ $l2.name }} videos with
             {{ $l2.code === "zh" ? "Pinyin" : "" }} subtitles
           </p>
-          <SimpleSearch
-            class="mt-4 mb-3"
-            placeholder="Search"
-            ref="searchLibrary"
-            :random="
-              undefined !== randomEpisodeYouTubeId
-                ? `/${$l1.code}/${$l2.code}/youtube/view/${randomEpisodeYouTubeId}`
-                : false
-            "
-            :action="
-              (url) => {
-                this.$router.push({
-                  path: `/${$l1.code}/${
-                    $l2.code
-                  }/youtube/browse/${topic}/${level}/0/${encodeURIComponent(
-                    url
-                  )}`,
-                });
-              }
-            "
-          />
-          <b-form-checkbox v-model="includeShows">
-            Include videos in TV shows and talks
-          </b-form-checkbox>
+          <client-only>
+            <SimpleSearch
+              class="mt-4 mb-3"
+              placeholder="Search"
+              ref="searchLibrary"
+              skin="dark"
+              :random="
+                undefined !== randomEpisodeYouTubeId
+                  ? `/${$l1.code}/${$l2.code}/youtube/view/${randomEpisodeYouTubeId}`
+                  : false
+              "
+              :action="
+                (url) => {
+                  this.$router.push({
+                    path: `/${$l1.code}/${
+                      $l2.code
+                    }/youtube/browse/${topic}/${level}/0/${encodeURIComponent(
+                      url
+                    )}`,
+                  });
+                }
+              "
+            />
+            <b-form-checkbox v-model="includeShows" v-if="$adminMode">
+              Include videos in TV shows and talks
+            </b-form-checkbox>
+          </client-only>
         </div>
-        <div :class="{ 'col-sm-12 mb-5': true, 'col-md-8 col-lg-9': !keyword }">
+        <div class="col-sm-12 mb-5">
           <div
             :class="{
               'loader text-center mt-5 mb-5': true,
@@ -69,6 +73,7 @@
           </div>
           <template v-if="videos && videos.length > 0">
             <YouTubeVideoList
+              skin="dark"
               :videos="videos"
               :keyword="keyword"
               :checkSubs="false"
@@ -77,85 +82,6 @@
             />
           </template>
           <div v-observe-visibility="visibilityChanged"></div>
-          <div class="mt-4 text-center" v-if="!keyword">
-            <router-link
-              v-if="start > 9"
-              :to="`/${$l1.code}/${
-                $l2.code
-              }/youtube/browse/${topic}/${level}/${Math.max(
-                Number(start) - this.perPage - this.moreVideos,
-                0
-              )}${keyword ? '/' + keyword : ''}`"
-              class="btn btn-default"
-            >
-              <i class="fa fa-chevron-left"></i>
-            </router-link>
-            <span class="ml-3 mr-3">Page {{ start / 12 + 1 }}</span>
-            <router-link
-              v-if="videos && videos.length > 0"
-              :to="`/${$l1.code}/${$l2.code}/youtube/browse/${topic}/${level}/${
-                Number(start) + this.perPage + this.moreVideos
-              }${keyword ? '/' + keyword : ''}`"
-              class="btn btn-default"
-            >
-              <i class="fa fa-chevron-right"></i>
-            </router-link>
-          </div>
-        </div>
-        <div v-if="!keyword" class="col-sm-12 col-md-4 col-lg-3">
-          <div class="list-group">
-            <router-link
-              :class="{
-                'link-unstyled': true,
-                'list-group-item': true,
-                'list-group-item-action': topic === 'all',
-                active: topic === 'all',
-              }"
-              :to="`/${$l1.code}/${$l2.code}/youtube/browse/all/${level}/0`"
-            >
-              All
-            </router-link>
-            <router-link
-              v-for="(topicName, topicValue) in topics"
-              :key="`topic-${topicValue}`"
-              :class="{
-                'link-unstyled': true,
-                'list-group-item': true,
-                'list-group-item-action': topicValue === topic,
-                active: topicValue === topic,
-              }"
-              :to="`/${$l1.code}/${$l2.code}/youtube/browse/${topicValue}/all/0`"
-            >
-              {{ topicName }}
-            </router-link>
-          </div>
-          <h6 class="mt-4 mb-4 text-center">Filter by Level</h6>
-          <div class="list-group">
-            <router-link
-              :class="{
-                'link-unstyled': true,
-                'list-group-item': true,
-                'list-group-item-action': level === 'all',
-                active: level === 'all',
-              }"
-              :to="`/${$l1.code}/${$l2.code}/youtube/browse/${topic}/all/0`"
-            >
-              All
-            </router-link>
-            <router-link
-              v-for="(levelName, levelValue) in levels"
-              :key="`level-${levelValue}`"
-              :class="{
-                'link-unstyled': true,
-                'list-group-item': true,
-                'list-group-item-action': levelValue === level,
-                active: levelValue === level,
-              }"
-              :to="`/${$l1.code}/${$l2.code}/youtube/browse/all/${levelValue}/0`"
-            >
-              {{ levelName }}
-            </router-link>
-          </div>
         </div>
       </div>
       <div class="row">
@@ -166,6 +92,7 @@
           </h3>
           <SimpleSearch
             class="mb-3"
+            skin="dark"
             :placeholder="
               $t('Search the entire YouTube for {l2} videos with CC', {
                 l2: $l2.name,
