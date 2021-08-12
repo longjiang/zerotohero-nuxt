@@ -8,8 +8,8 @@
   <container-query :query="query" v-model="params">
     <div :class="{ 'bg-white': !wide }">
       <SocialHead :title="title" :description="description" :image="image" />
-      <div :class="{ container: !wide }">
-        <div :class="{ row: !wide, 'content-panes': wide }">
+      <div :class="{ 'container': !wide }">
+        <div :class="{ 'row': !wide, 'content-panes': wide }">
           <div
             :class="{
               'p-4 content-pane-left': wide,
@@ -166,14 +166,6 @@ export default {
         this.getPhrasebookFromStore();
       }
     });
-  },
-  created() {
-    if (typeof window !== "undefined")
-      window.addEventListener("resize", this.onResize);
-  },
-  destroyed() {
-    if (typeof window !== "undefined")
-      window.removeEventListener("resize", this.onResize);
   },
   beforeDestroy() {
     // you may call unsubscribe to stop the subscription
