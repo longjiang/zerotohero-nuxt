@@ -78,6 +78,7 @@
         :key="searchResultKey"
         :long="long"
         :infinite="true"
+        :showProgress="false"
         ref="youtubeSearchResults"
       />
     </div>

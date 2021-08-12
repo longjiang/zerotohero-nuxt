@@ -140,6 +140,7 @@
             :showBadges="showBadges"
             :showDate="showDate"
             :skin="skin"
+            :showProgress="showProgress"
           />
         </div>
       </div>
@@ -192,6 +193,9 @@ export default {
     skin: {
       default: "card", // or 'dark'
     },
+    showProgress: {
+      default: true
+    }
   },
 
   data() {

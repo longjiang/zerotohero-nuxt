@@ -45,6 +45,7 @@
             :videos="videos.filter((video) => video.title !== 'Private video')"
             @newShow="newShow"
             :checkSubs="true"
+            :showProgress="false"
             ref="youtubeVideoList"
           />
           <div v-if="!entire" v-observe-visibility="visibilityChanged"></div>

@@ -69,11 +69,10 @@
             {{ video.title }}
           </span>
           <router-link
-            :class="{ 'd-none': $adminMode || view === 'list' }"
+            :class="{ 'youtube-title d-block link-unstyled': true, 'd-none': $adminMode || view === 'list' }"
             :to="`/${$l1.code}/${$l2.code}/youtube/view/${video.youtube_id}/${
               video.lesson ? 'lesson' : ''
             }`"
-            class="youtube-title d-block link-unstyled"
           >
             {{ video.title }}
           </router-link>
@@ -95,7 +94,7 @@
             </div>
             <span
               class="btn btn-small bg-danger text-white"
-              v-if="video.youtube_id.includes('0x')"
+              v-if="$adminMode && video.youtube_id.includes('0x')"
             >
               ID含`0x`，无法添加
             </span>
@@ -321,6 +320,9 @@ export default {
     skin: {
       default: "card", // or 'dark'
     },
+    showProgress: {
+      default: true,
+    },
   },
   async mounted() {
     if (this.checkSubs) {
@@ -344,16 +346,18 @@ export default {
   },
   computed: {
     $l1() {
-      let l1 = this.$languages.getSmart(this.video.l1)
-      if (l1) return l1
-      else if (typeof this.$store.state.settings.l1 !== "undefined")
+      if (this.video.l2) {
+        let l1 = this.$languages.getSmart(this.video.l1);
+        if (l1) return l1;
+      } else if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
       else return this.$languages.getSmart("en");
     },
     $l2() {
-      let l2 = this.$languages.getSmart(this.video.l2);
-      if (l2) return l2
-      else if (typeof this.$store.state.settings.l2 !== "undefined")
+      if (this.video.l2) {
+        let l2 = this.$languages.getSmart(this.video.l2);
+        if (l2) return l2;
+      } else if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
     $adminMode() {
@@ -365,7 +369,7 @@ export default {
       return `${this.$l2.code}-video-${this.video.youtube_id}`;
     },
     progress() {
-      if (this.history) {
+      if (this.showProgress && this.history) {
         let historyItem = this.history.find((i) => i.id === this.historyId);
         if (historyItem) {
           return historyItem.progress;
