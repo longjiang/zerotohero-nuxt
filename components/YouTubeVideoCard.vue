@@ -38,7 +38,7 @@
         <div
           class="small mb-2"
           style="color: #aaa"
-          v-if="video.date && view !== 'list'"
+          v-if="video.date && view !== 'list' && (showDate || $adminMode)"
         >
           {{ formatDate(video.date) }}
         </div>
@@ -61,7 +61,10 @@
           </router-link>
         </div>
         <client-only>
-          <div class="youtube-video-card-badges" v-if="view !== 'list'">
+          <div
+            class="youtube-video-card-badges"
+            v-if="view !== 'list' && (showBadges || $adminMode)"
+          >
             <div
               v-if="video.hasSubs || video.id"
               class="btn btn-small mt-2 ml-0"
@@ -289,6 +292,12 @@ export default {
     view: {
       type: String,
       default: "grid",
+    },
+    showBadges: {
+      default: false,
+    },
+    showDate: {
+      default: false,
     },
   },
   async mounted() {

@@ -83,6 +83,8 @@
                 :checkSaved="false"
                 :key="`videos-filtered-${this.keyword}`"
                 :view="view"
+                :showBadges="false"
+                :showDate="false"
               />
               <div v-observe-visibility="visibilityChanged"></div>
             </template>

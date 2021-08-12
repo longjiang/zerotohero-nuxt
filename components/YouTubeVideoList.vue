@@ -137,6 +137,8 @@
             @newShow="newShow"
             ref="youTubeVideoCard"
             :view="view"
+            :showBadges="showBadges"
+            :showDate="showDate"
           />
         </div>
       </div>
@@ -180,6 +182,12 @@ export default {
       type: Boolean,
       default: false,
     },
+    showBadges: {
+      default: false,
+    },
+    showDate: {
+      default: false,
+    }
   },
 
   data() {
