@@ -28,11 +28,11 @@
         <div
           :class="{
             'live-video-column': true,
-            'col-sm-12': portrait,
-            'col-sm-7 col-md-8  pl-4': !portrait,
+            'col-sm-12 pl-0 pr-0': portrait,
+            'col-sm-7 col-md-8 pl-4': !portrait,
           }"
         >
-          <div class="live-tv-wrapper rounded shadow" style="overflow: hidden;">
+          <div class="live-tv-wrapper rounded shadow pb-3" style="overflow: hidden;">
             <LazyLiveVideo
               v-if="currentChannel"
               :url="currentChannel.url"
@@ -356,7 +356,7 @@ export default {
     padding-right: 1rem;
   }
 }
-@media (min-width: 768px) and (max-width: 992px) {
+@media (min-width: 540px) and (max-width: 992px) {
   .channel-buttons-portrait {
     .channel-button {
       width: calc(50% - 0.25rem);
