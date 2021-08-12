@@ -206,7 +206,7 @@ export default {
 }
 
 .main-dark {
-  background-color: hsl(0deg 0% 0% / 75%);
+  background-color: hsl(0deg 0% 0% / 63%);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
 }
