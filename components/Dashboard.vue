@@ -54,13 +54,13 @@
               'col-4': params.md,
               'col-3': params.lg,
             }"
-            :set="l1 = $languages.getSmart(item.l1)"
-            :set2="l2 = $languages.getSmart(item.l2)"
+            :set="videoL1 = $languages.getSmart(item.l1)"
+            :set2="videoL2 = $languages.getSmart(item.l2)"
           >
             <div class="history-item-language-badge">
-              {{ l2.name }}
+              {{ videoL2.name }}
             </div>
-            <YouTubeVideoCard :video="item" skin="light" :l1="l1" :l2="l2" />
+            <YouTubeVideoCard :video="item" skin="light" :l1="videoL1" :l2="videoL2" />
             <button
               class="
                 btn btn-small

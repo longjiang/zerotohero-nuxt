@@ -280,8 +280,8 @@ export default {
     Drop,
   },
   props: {
-    l1Code: undefined,
-    l2Code: undefined,
+    l1: undefined,
+    l2: undefined,
     delay: 0,
     checkSaved: {
       default: false,
@@ -336,11 +336,11 @@ export default {
       if (this.video.lesson) {
         to.params.lesson = "lesson";
       }
-      if (typeof this.l1Code !== "undefined") {
-        to.params.l1 = this.l1Code;
+      if (typeof this.l1 !== "undefined") {
+        to.params.l1 = this.l1;
       }
-      if (typeof this.l2Code !== "undefined") {
-        to.params.l2 = this.l2Code;
+      if (typeof this.l2 !== "undefined") {
+        to.params.l2 = this.l2;
       }
       return to;
     },
