@@ -226,7 +226,7 @@
       </span>
     </div>
     <div
-      :class="{ 'loader text-center mt-4': true, 'd-none': !checking }"
+      :class="{ 'loader text-center pb-5 pt-3': true, 'd-none': !checking }"
       style="flex: 1"
     >
       <Loader :sticky="true" message="Searching through video captions..." />
