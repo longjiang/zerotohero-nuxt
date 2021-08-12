@@ -6,85 +6,85 @@
 </router>
 <template>
   <container-query :query="query" v-model="params">
-  <div
-    :class="{
-      'youtube-view pt-3 pb-5 ': true,
-      'main-dark': layout !== 'vertical',
-    }"
-  >
-    <SocialHead
-      v-if="video"
-      :title="`Learn ${$l2.name} from the video ${video.title} | ${$l2.name} Zero to Hero`"
-      :description="`Watch the video -- ${
-        video.title
-      } -- study the subtitles and improve your ${$l2.name}! ${
-        this.video.subs_l2 && this.video.subs_l2.length > 0
-          ? 'Full transcript: ' +
-            this.video.subs_l2
-              .slice(0, 10)
-              .filter((l) => l)
-              .map((l) => l.line)
-              .join(' ')
-          : ''
-      }`"
-      :image="`https://img.youtube.com/vi/${this.video.youtube_id}/hqdefault.jpg`"
-    />
-    <div class="pl-3 pr-3 mb-4">
-      <SimpleSearch
-        placeholder="Search"
-        ref="searchLibrary"
-        :random="
-          randomEpisodeYouTubeId
-            ? `/${$l1.code}/${$l2.code}/youtube/view/${randomEpisodeYouTubeId}`
-            : false
-        "
-        skin="dark"
-        :action="
-          (url) => {
-            this.$router.push({
-              path: `/${$l1.code}/${
-                $l2.code
-              }/youtube/browse/all/all/0/${encodeURIComponent(url)}`,
-            });
-          }
-        "
-      />
-    </div>
     <div
       :class="{
-        'youtube-view-wrapper': true,
-        fullscreen: layout === 'vertical',
+        'youtube-view pt-3 pb-5 ': true,
+        'main-dark': layout !== 'vertical',
       }"
     >
-      <div :class="{ 'loader text-center pt-5 pb-5': true, 'd-none': video }">
-        <Loader :sticky="true" message="Preparing video and subtitles..." />
-      </div>
-      <LazyYouTubeWithTranscript
+      <SocialHead
         v-if="video"
-        :video="video"
-        ref="youtube"
-        :quiz="$quiz"
-        :key="`transcript-${video.youtube_id}`"
-        :autoload="true"
-        :autoplay="true"
-        :starttime="starttime"
-        :show="show"
-        :showType="showType"
-        :previousEpisode="previousEpisode"
-        :nextEpisode="nextEpisode"
-        :episodes="episodes"
-        :episodeIndex="thisEpisodeIndex"
-        skin="dark"
-        :forcePortrait="params.narrow"
-        @paused="updatePaused"
-        @ended="updateEnded"
-        @currentTime="updateCurrentTime"
-        @speechStart="speechStart"
-        @speechEnd="speechEnd"
-        @updateLayout="(l) => (layout = l)"
+        :title="`Learn ${$l2.name} from the video ${video.title} | ${$l2.name} Zero to Hero`"
+        :description="`Watch the video -- ${
+          video.title
+        } -- study the subtitles and improve your ${$l2.name}! ${
+          this.video.subs_l2 && this.video.subs_l2.length > 0
+            ? 'Full transcript: ' +
+              this.video.subs_l2
+                .slice(0, 10)
+                .filter((l) => l)
+                .map((l) => l.line)
+                .join(' ')
+            : ''
+        }`"
+        :image="`https://img.youtube.com/vi/${this.video.youtube_id}/hqdefault.jpg`"
       />
+      <div class="pl-3 pr-3 mb-4">
+        <SimpleSearch
+          placeholder="Search"
+          ref="searchLibrary"
+          :random="
+            randomEpisodeYouTubeId
+              ? `/${$l1.code}/${$l2.code}/youtube/view/${randomEpisodeYouTubeId}`
+              : false
+          "
+          skin="dark"
+          :action="
+            (url) => {
+              this.$router.push({
+                path: `/${$l1.code}/${
+                  $l2.code
+                }/youtube/browse/all/all/0/${encodeURIComponent(url)}`,
+              });
+            }
+          "
+        />
+      </div>
+      <div
+        :class="{
+          'youtube-view-wrapper': true,
+          fullscreen: layout === 'vertical',
+        }"
+      >
+        <div :class="{ 'loader text-center pt-5 pb-5': true, 'd-none': video }">
+          <Loader :sticky="true" message="Preparing video and subtitles..." />
+        </div>
+        <LazyYouTubeWithTranscript
+          v-if="video"
+          :video="video"
+          ref="youtube"
+          :quiz="$quiz"
+          :key="`transcript-${video.youtube_id}`"
+          :autoload="true"
+          :autoplay="true"
+          :starttime="starttime"
+          :show="show"
+          :showType="showType"
+          :previousEpisode="previousEpisode"
+          :nextEpisode="nextEpisode"
+          :episodes="episodes"
+          :episodeIndex="thisEpisodeIndex"
+          skin="dark"
+          :forcePortrait="params.narrow"
+          @paused="updatePaused"
+          @ended="updateEnded"
+          @currentTime="updateCurrentTime"
+          @speechStart="speechStart"
+          @speechEnd="speechEnd"
+          @updateLayout="(l) => (layout = l)"
+        />
+      </div>
     </div>
-  </div>
   </container-query>
 </template>
 
@@ -488,19 +488,32 @@ export default {
   },
 };
 </script>
-<style scoped>
-.youtube-view-wrapper.fullscreen {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: black;
-  color: #ffffffaa;
-  z-index: 9;
-}
-
->>> .video-area {
-  background: black;
+<style lang="scss" scoped >
+.zerotohero-wide {
+  .youtube-view-wrapper {
+    ::v-deep .youtube-with-transcript-landscape {
+      padding-left: 2rem;
+      .youtube {
+        border-radius: 0.3rem 0.3rem 0 0;
+        overflow: hidden;
+        .video-area {
+          background: black;
+        }
+      }
+      .quick-access-buttons {
+        border-radius: 0 0 0.3rem 0.3rem;
+      }
+    }
+    &.fullscreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: black;
+      color: #ffffffaa;
+      z-index: 9;
+    }
+  }
 }
 </style>
