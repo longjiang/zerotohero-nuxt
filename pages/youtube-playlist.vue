@@ -49,6 +49,10 @@
             ref="youtubeVideoList"
           />
           <div v-if="!entire" v-observe-visibility="visibilityChanged"></div>
+          <div v-if="noMoreVideos" class="text-center mt-4">
+            <h6>No more videos.</h6>
+            <p>{{ videos.length }} videos loaded.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -80,6 +84,7 @@ export default {
       entire: false,
       totalResults: undefined,
       forceRefresh: false,
+      noMoreVideos: false,
     };
   },
   mounted() {
@@ -136,19 +141,24 @@ export default {
       this.totalResults = totalResults;
     },
     async loadPlaylistPage({ pageToken } = {}) {
-      let { playlistItems, nextPageToken, totalResults } =
-        await YouTube.playlistPageByApi(
-          this.playlist_id,
-          pageToken,
-          this.forceRefresh ? 0 : -1
-        );
-      let videos = playlistItems;
-      if (videos && videos.length > 0) {
-        videos = await this.checkShowsFunc(videos);
-        this.videos = this.videos.concat(videos);
+      this.noMoreVideos = false;
+      let response = await YouTube.playlistPageByApi(
+        this.playlist_id,
+        pageToken,
+        this.forceRefresh ? 0 : -1
+      );
+      if (response) {
+        let { playlistItems, nextPageToken, totalResults } = response;
+        let videos = playlistItems;
+        if (videos && videos.length > 0) {
+          videos = await this.checkShowsFunc(videos);
+          this.videos = this.videos.concat(videos);
+        }
+        this.nextPageToken = nextPageToken;
+        this.totalResults = totalResults;
+      } else {
+        this.noMoreVideos = true;
       }
-      this.nextPageToken = nextPageToken;
-      this.totalResults = totalResults;
     },
     async checkShowsFunc(videos) {
       if (this.checkShows)
