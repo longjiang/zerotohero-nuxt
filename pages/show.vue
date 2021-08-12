@@ -24,7 +24,9 @@
               <span>{{ show.title }}</span>
             </Annotate>
           </h3>
-          <p v-if="count" class="text-white" style="opacity: 0.6">{{ count }} Episodes</p>
+          <p v-if="count" class="text-white" style="opacity: 0.6">
+            {{ count }} Episodes
+          </p>
         </div>
         <div class="col-sm-12 mb-5">
           <div class="youtube-video-list-wrapper">
@@ -38,21 +40,25 @@
                   class="input-ghost-dark"
                 />
                 <b-input-group-append>
-                  <b-button variant="ghost-dark" >
+                  <b-button variant="ghost-dark">
                     <i class="fas fa-filter"></i>
                   </b-button>
                 </b-input-group-append>
               </b-input-group>
               <b-button-group>
                 <b-button
-                  :variant="view === 'grid' ? 'ghost-dark' : 'ghost-dark-outline'"
+                  :variant="
+                    view === 'grid' ? 'ghost-dark' : 'ghost-dark-outline'
+                  "
                   class="ml-2"
                   @click="view = 'grid'"
                 >
                   <i class="fas fa-th"></i>
                 </b-button>
                 <b-button
-                  :variant="view === 'list' ? 'ghost-dark' : 'ghost-dark-outline'"
+                  :variant="
+                    view === 'list' ? 'ghost-dark' : 'ghost-dark-outline'
+                  "
                   @click="view = 'list'"
                   style="border-left: none"
                 >
@@ -87,7 +93,7 @@
                 :key="`videos-filtered-${this.keyword}`"
                 :view="view"
                 :showBadges="false"
-                :showDate="false"
+                :showDate="showDate"
               />
               <div v-observe-visibility="visibilityChanged"></div>
             </template>
@@ -212,6 +218,9 @@ export default {
     $adminMode() {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
+    },
+    showDate() {
+      return this.type === "talk";
     },
   },
 };
