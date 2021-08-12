@@ -5,8 +5,8 @@
   }
 </router>
 <template>
-  <div class="bg-white">
-    <div class="pt-5 pb-5 container-xl">
+  <div class="main-dark">
+    <div class="pt-5 pb-5 container-fluid">
       <SocialHead
         v-if="channels"
         :title="`Learn ${$l2.name} from Live ${$l2.name} TV | ${$l2.name} Zero to Hero`"
@@ -27,22 +27,18 @@
       <div class="row">
         <div
           :class="{
-            'live-video-column pl-0 pr-0': true,
+            'live-video-column': true,
             'col-sm-12': portrait,
-            'col-sm-7 col-md-8': !portrait,
+            'col-sm-7 col-md-8  pl-4': !portrait,
           }"
         >
-          <div class="live-tv-wrapper">
+          <div class="live-tv-wrapper rounded shadow" style="overflow: hidden;">
             <LazyLiveVideo
               v-if="currentChannel"
               :url="currentChannel.url"
               :key="`live-video-${currentChannel.url}`"
               ref="liveVideo"
             />
-            <div v-if="currentChannel" class="p-3">
-              <b>Channel:</b>
-              {{ currentChannel.name }}
-            </div>
           </div>
         </div>
         <div
@@ -60,9 +56,9 @@
               v-if="hasFeatured"
               :key="`live-tv-cat-tab-featured`"
               :class="{
-                'btn btn-gray mr-1': true,
-                'text-dark': !featured,
-                'bg-primary text-white': featured,
+                'btn btn-secondary mr-1': true,
+                'text-white': !featured,
+                'btn-primary': featured,
               }"
               @click="
                 country = undefined;
@@ -75,9 +71,9 @@
             <button
               :key="`live-tv-cat-tab-all`"
               :class="{
-                'btn btn-gray mr-1': true,
-                'text-dark': typeof category !== 'undefined' || featured,
-                'bg-primary text-white':
+                'btn btn-secondary mr-1': true,
+                'text-white': typeof category !== 'undefined' || featured,
+                'btn-primary':
                   typeof category === 'undefined' &&
                   typeof country === 'undefined' &&
                   !featured,
@@ -94,9 +90,9 @@
               v-for="c in countries"
               :key="`live-tv-cat-tab-${c}`"
               :class="{
-                'btn btn-gray mr-1': true,
-                'text-dark': country !== c,
-                'bg-primary text-white': country === c,
+                'btn btn-secondary mr-1': true,
+                'text-white': country !== c,
+                'btn-primary': country === c,
               }"
               @click="
                 category = undefined;
@@ -110,9 +106,9 @@
               v-for="cat in categories"
               :key="`live-tv-cat-tab-${cat}`"
               :class="{
-                'btn btn-gray mr-1': true,
-                'text-dark': category !== cat,
-                'bg-primary text-white': category === cat,
+                'btn btn-secondary mr-1': true,
+                'text-white': category !== cat,
+                'btn-primary text-white': category === cat,
               }"
               @click="
                 country = undefined;
@@ -130,7 +126,7 @@
             }"
           >
             <b-button
-              variant="gray"
+              variant="secondary"
               size="sm"
               :class="{
                 'channel-button': true,
@@ -155,6 +151,7 @@
                   text-align: center;
                   font-size: 1.5em;
                   opacity: 0.5;
+                  margin-right: 0.5rem;
                 "
                 v-else
               >
@@ -327,12 +324,10 @@ export default {
   position: sticky;
   top: 0;
   z-index: 1;
-  background: white;
   .live-tv-wrapper {
     position: sticky;
     top: 0;
     z-index: 1;
-    background: white;
   }
 }
 .channel-button {

@@ -19,12 +19,12 @@
       />
       <div class="row">
         <div class="col-sm-12 mb-4 text-center">
-          <h3 v-if="show" class="text-white">
+          <h3 v-if="show">
             <Annotate :phonetics="false" :buttons="true">
               <span>{{ show.title }}</span>
             </Annotate>
           </h3>
-          <p v-if="count" class="text-white" style="opacity: 0.6">
+          <p v-if="count" style="opacity: 0.6">
             {{ count }} Episodes
           </p>
         </div>

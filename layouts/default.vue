@@ -181,7 +181,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .__nuxt-error-page {
   z-index: 99;
 }
@@ -201,15 +201,7 @@ export default {
   }
 }
 
-.main {
-  background: white;
-}
 
-.main-dark {
-  background-color: hsl(0deg 0% 0% / 63%);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-}
 
 .zth-nav {
   background: #002d4433;
@@ -257,9 +249,6 @@ export default {
     width: calc(100% + 29rem);
     padding: 3rem;
     padding-left: 32rem;
-  }
-  .main {
-    padding: 0 3rem;
   }
 }
 </style>
