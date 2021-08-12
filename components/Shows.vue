@@ -1,6 +1,6 @@
 <template>
   <div class="main-dark">
-    <div class="container">
+    <div class="container pl-5 pr-5">
       <SocialHead
         v-if="shows && shows[0]"
         :title="`Learn ${$l2.name} with ${

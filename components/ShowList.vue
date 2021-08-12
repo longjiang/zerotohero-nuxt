@@ -3,27 +3,32 @@
     <div class="tv-shows row">
       <div
         :class="{
-          'col-12': params.xs,
-          'col-6': params.sm,
-          'col-4': params.md,
-          'col-3': params.lg,
+          'col-6': params.xs,
+          'col-4': params.sm,
+          'col-3': params.md,
+          'col-2': params.lg,
         }"
         v-for="show of shows"
-        :key="`tv-show-wrapper-${show.id}`"
+        :key="`tv-show-card-wrapper-${show.id}`"
         style="padding-bottom: 2rem"
       >
-        <div class="tv-show media rounded shadow">
+        <div class="tv-show-card media">
           <router-link
-            class="youtube-thumbnail-wrapper aspect-wrapper d-block"
+            class="
+              youtube-thumbnail-wrapper
+              eight-to-nine-aspect-wrapper
+              d-block
+            "
             :to="path(show)"
           >
             <img
               :src="`//img.youtube.com/vi/${show.youtube_id}/hqdefault.jpg`"
               class="youtube-thumbnail aspect"
+              style="transform: scale(1.4)"
               v-lazy-load
             />
           </router-link>
-          <div class="media-body">
+          <div class="tv-show-card-title">
             <router-link :to="path(show)" class="link-unstyled">
               <h6>
                 {{ show.title }}
@@ -110,19 +115,49 @@ export default {
 };
 </script>
 
-<style>
-.tv-shows {
-}
-.tv-show {
+<style lang="scss" scoped>
+.tv-show-card {
   height: 100%;
-}
-@media (min-width: 768px) {
-  .tv-show {
+  box-shadow: 0 5px 25px #fd89662f;
+  border-radius: 0.25rem;
+  &:hover {
+    transform: scale(110%) rotate(-3deg);
+    transition: all 200ms ease-out;
   }
-}
-.tv-show-thumbnail {
-  width: 100%;
-  max-height: 270px;
-  object-fit: cover;
+  .tv-show-thumbnail {
+    width: 100%;
+    max-height: 270px;
+    object-fit: cover;
+  }
+  .tv-show-card-title {
+    overflow: hidden;
+    padding: 44% 1.5rem;
+    position: relative;
+    height: 5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(78, 75, 75);
+    background: radial-gradient(
+      circle,
+      rgb(44, 43, 43) 0%,
+      rgb(10, 10, 10) 100%
+    );
+    a {
+      z-index: 1;
+      width: 100%;
+      text-align: center;
+    }
+    .tv-show-card-title-image {
+      object-fit: cover;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      filter: blur(15px);
+      z-index: 0;
+      opacity: 0.25;
+      transform: scale(1.5);
+    }
+  }
 }
 </style>
