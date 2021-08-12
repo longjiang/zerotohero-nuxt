@@ -26,28 +26,47 @@
       />
       <div class="row">
         <div class="col-sm-12">
+          <h6>
+            <router-link
+              class="link-unstyled"
+              :to="`/${$l1.code}/${$l2.code}/tutoring/`"
+            >
+              {{ $l2.name }} Tutoring Kit
+            </router-link>
+            /
+            <router-link
+              class="link-unstyled"
+              :to="`/${$l1.code}/${$l2.code}/tutoring/${lesson.level}`"
+              v-if="lesson"
+            >
+              <span :data-level="level(lesson.level).replace('-', '')">
+                {{ level(lesson.level) }} Level
+              </span>
+            </router-link>
+            <div style="float: right">
+              <router-link
+                v-if="Number(id) > 1"
+                :to="{
+                  name: 'tutoring-lesson',
+                  params: { id: Number(id) - 1 },
+                }"
+                class="btn btn-sm btn-gray mb-1"
+              >
+                <i class="fa fa-chevron-left"></i>
+              </router-link>
+              <router-link
+                :to="{
+                  name: 'tutoring-lesson',
+                  params: { id: Number(id) + 1 },
+                }"
+                class="btn btn-sm btn-gray mb-1"
+              >
+                <i class="fa fa-chevron-right"></i>
+              </router-link>
+            </div>
+          </h6>
+          <hr />
           <div v-if="lesson">
-            <h6>
-              <a
-                class="link-unstyled"
-                :href="`/${$l1.code}/${$l2.code}/tutoring/`"
-              >
-                {{ $l2.name }} Tutoring Kit
-              </a>
-              /
-              <a
-                class="link-unstyled"
-                :href="`/${$l1.code}/${$l2.code}/tutoring/${level(
-                  lesson.level
-                ).replace('-', '')}`"
-              >
-                <span :data-level="level(lesson.level).replace('-', '')">
-                  {{ level(lesson.level) }} Level
-                </span>
-              </a>
-            </h6>
-            <hr />
-
             <h1 class="mt-5 mb-5 text-center">{{ lesson.name }}</h1>
             <div
               class="
@@ -71,6 +90,13 @@
               <h4>Pre-Study</h4>
               <p>Watch any one of the videos and study the subtitles:</p>
               <YouTubeVideoList :videos="lesson.youtubeVideos" />
+              <YouTubeSearchResults
+                v-if="lesson.youtubeVideos.length === 0"
+                :term="`${$l2.name} ${lesson.name}`"
+                :start="0"
+                :hideVideosWithoutSubs="true"
+                :showPaginator="false"
+              />
             </div>
             <div class="lesson-section">
               <h4>Activity 1: Read Together</h4>
@@ -85,8 +111,9 @@
               <div v-if="!lesson.readings" v-html="lesson.reading"></div>
               <div v-else>
                 <div
-                  v-for="reading in lesson.readings"
+                  v-for="(reading, index) in lesson.readings"
                   class="reading-card rounded shadow p-3 mb-4"
+                  :key="`lesson-readings-${index}`"
                 >
                   <a class="link-unstyled" :href="reading.url" target="_blank">
                     <h6>{{ reading.title }}</h6>

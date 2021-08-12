@@ -279,21 +279,6 @@ export default {
     Drag,
     Drop,
   },
-  data() {
-    return {
-      Helper,
-      Config,
-      over: false,
-      firstLineTime:
-        this.video.subs_l2 && this.video.subs_l2[0]
-          ? this.video.subs_l2[0].starttime
-          : undefined,
-      subsUpdated: false,
-      assignShow: false,
-      subsFile: false,
-      showSaved: true,
-    };
-  },
   props: {
     l1Code: undefined,
     l2Code: undefined,
@@ -327,25 +312,20 @@ export default {
       default: true,
     },
   },
-  async mounted() {
-    if (this.checkSubs) {
-      await Helper.timeout(this.delay);
-      await this.checkSubsFunc(this.video);
-    }
-    if (this.video.id && this.showSubsEditing) {
-      await this.addSubsL1(this.video);
-    }
-    if (!this.$store.state.history.historyLoaded) {
-      this.$store.commit("history/LOAD_HISTORY");
-    }
-  },
-  watch: {
-    firstLineTime(newTime, oldTime) {
-      this.shiftSubs();
-      if (oldTime !== undefined) {
-        this.updateSubs();
-      }
-    },
+  data() {
+    return {
+      Helper,
+      Config,
+      over: false,
+      firstLineTime:
+        this.video.subs_l2 && this.video.subs_l2[0]
+          ? this.video.subs_l2[0].starttime
+          : undefined,
+      subsUpdated: false,
+      assignShow: false,
+      subsFile: false,
+      showSaved: true,
+    };
   },
   computed: {
     to() {
@@ -392,6 +372,33 @@ export default {
           return historyItem.progress;
         }
       }
+    },
+  },
+  async mounted() {
+    if (this.checkSubs) {
+      await Helper.timeout(this.delay);
+      await this.checkSubsFunc(this.video);
+    }
+    if (this.video.id && this.showSubsEditing) {
+      await this.addSubsL1(this.video);
+    }
+    if (!this.$store.state.history.historyLoaded) {
+      this.$store.commit("history/LOAD_HISTORY");
+    }
+  },
+  watch: {
+    firstLineTime(newTime, oldTime) {
+      this.shiftSubs();
+      if (oldTime !== undefined) {
+        this.updateSubs();
+      }
+    },
+    'video.hasSubs'() {
+      let hasSubs;
+      if (!this.video.checkingSubs && !this.video.hasSubs) hasSubs = false;
+      if (this.video.hasSubs) hasSubs = true;
+      console.log('has subs changed', hasSubs)
+      this.$emit('hasSubs', hasSubs)
     },
   },
   methods: {
@@ -540,6 +547,7 @@ export default {
             this.subsFile = file;
             Vue.set(this.video, "subs_l2", subs_l2);
             Vue.set(this.video, "hasSubs", true);
+            this.$emit('hasSubs', true)
           }
         };
       } catch (err) {}
@@ -618,8 +626,10 @@ export default {
       if (video.subs_l2 && video.subs_l2.length > 0) {
         Vue.set(video, "hasSubs", true);
         Vue.set(video, "checkingSubs", false);
+        this.$emit('hasSubs', true)
       } else {
         video = await YouTube.getYouTubeSubsList(video, this.$l1, this.$l2);
+        this.$emit('hasSubs', video.hasSubs)
         if (this.checkSaved && this.showSubsEditing) {
           video = this.addSubsL1(video);
         }

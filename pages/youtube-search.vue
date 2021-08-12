@@ -32,44 +32,50 @@
         "
         ref="search"
       />
-      <b-form-group class="mt-3">
-        <b-form-radio
-          v-model="captions"
-          class="d-inline-block mr-3"
-          value="captions"
-        >
-          With Captions
-        </b-form-radio>
-        <b-form-radio
-          v-model="captions"
-          class="d-inline-block mr-3"
-          value="nocaptions"
-        >
-          No Captions
-        </b-form-radio>
-        <b-form-radio
-          v-model="captions"
-          class="d-inline-block mr-3"
-          value="all"
-        >
-          All
-        </b-form-radio>
-        <b-form-checkbox v-model="long" class="d-inline-block mr-3">
-          Only long videos (20m+)
-        </b-form-checkbox>
-        <b-button class="btn-small btn-primary ml-3" @click="forceRefresh">
-          <i class="fa fa-sync-alt mr-1"></i>
-          Force Refresh
-        </b-button>
-        <b-button
-          v-if="!moreLoaded"
-          class="btn-small btn-secondary ml-1"
-          @click="loadMore"
-        >
-          <i class="fa fa-cloud mr-1"></i>
-          Load {{ maxPages }} pages
-        </b-button>
-      </b-form-group>
+      <client-only>
+        <b-form-group class="mt-3">
+          <b-form-radio
+            v-model="captions"
+            class="d-inline-block mr-3"
+            value="captions"
+          >
+            With Captions
+          </b-form-radio>
+          <b-form-radio
+            v-model="captions"
+            class="d-inline-block mr-3"
+            value="nocaptions"
+          >
+            No Captions
+          </b-form-radio>
+          <b-form-radio
+            v-model="captions"
+            class="d-inline-block mr-3"
+            value="all"
+          >
+            All
+          </b-form-radio>
+          <b-form-checkbox v-model="long" class="d-inline-block mr-3">
+            Only long videos (20m+)
+          </b-form-checkbox>
+          <b-button
+            v-if="$adminMode"
+            class="btn-small btn-primary ml-3"
+            @click="forceRefresh"
+          >
+            <i class="fa fa-sync-alt mr-1"></i>
+            Force Refresh
+          </b-button>
+          <b-button
+            v-if="!moreLoaded && $adminMode"
+            class="btn-small btn-secondary ml-1"
+            @click="loadMore"
+          >
+            <i class="fa fa-cloud mr-1"></i>
+            Load {{ maxPages }} pages
+          </b-button>
+        </b-form-group>
+      </client-only>
       <YouTubeSearchResults
         :term="term"
         :start="start"

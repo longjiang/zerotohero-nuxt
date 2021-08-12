@@ -261,6 +261,7 @@ h6,
   display: none;
 }
 
+.show-level-1 .word-block-dictionary[data-level="PreA1"]:not(.seen),
 .show-level-1 .word-block-dictionary[data-level="Pre-A1"]:not(.seen),
 .show-level-2 .word-block-dictionary[data-level="A1"]:not(.seen),
 .show-level-3 .word-block-dictionary[data-level="A2"]:not(.seen),
@@ -274,6 +275,7 @@ h6,
 }
 
 .levelPreA1,
+[data-level="PreA1"],
 [data-level="Pre-A1"],
 [data-hover-level="Pre-A1"]:hover,
 [data-hover-level="Pre-A1"].saved {
@@ -330,6 +332,7 @@ h6,
 }
 
 .bg-levelPreA1,
+[data-bg-level="PreA1"],
 [data-bg-level="Pre-A1"] {
   background-color: #b51700 !important;
   color: white !important;
@@ -931,6 +934,7 @@ button.bg-primary:focus {
 }
 
 /* for the text column */
+.show-level-1 .study-sheet-table [data-hover-level="PreA1"].sticky:not(.seen),
 .show-level-1 .study-sheet-table [data-hover-level="Pre-A1"].sticky:not(.seen),
 .show-level-2 .study-sheet-table [data-hover-level="A1"].sticky:not(.seen),
 .show-level-3 .study-sheet-table [data-hover-level="A2"].sticky:not(.seen),
@@ -944,6 +948,7 @@ button.bg-primary:focus {
 }
 
 /* for the definition column */
+.show-level-1 .study-sheet-table [data-level="PreA1"]:not(.seen),
 .show-level-1 .study-sheet-table [data-level="Pre-A1"]:not(.seen),
 .show-level-2 .study-sheet-table [data-level="A1"]:not(.seen),
 .show-level-3 .study-sheet-table [data-level="A2"]:not(.seen),

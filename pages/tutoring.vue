@@ -55,31 +55,33 @@
       <div class="row">
         <div class="col-sm-12">
           <div class="tabs text-center">
-            <a
-              :href="`/${$l1.code}/${$l2.code}/tutoring/`"
+            <router-link
+              :to="`/${$l1.code}/${$l2.code}/tutoring/`"
               class="link-unstyled tab bg-dark"
             >
               All
-            </a>
+            </router-link>
             <template v-if="$l2.code === 'zh'">
-              <a
+              <router-link
                 v-for="n in 7"
-                :href="`/${$l1.code}/${$l2.code}/tutoring/${n}`"
+                :key="`level-tab-${n}`"
+                :to="`/${$l1.code}/${$l2.code}/tutoring/${n}`"
                 class="tab link-unstyled"
                 :data-bg-level="n < 7 ? n : 'outside'"
               >
                 {{ Helper.level(n, $l2) }}
-              </a>
+              </router-link>
             </template>
             <template v-else>
-              <a
+              <router-link
                 v-for="n in 7"
-                :href="`/${$l1.code}/${$l2.code}/tutoring/${n}`"
+                :key="`level-tab-${n}`"
+                :to="`/${$l1.code}/${$l2.code}/tutoring/${n}`"
                 class="tab link-unstyled"
                 :data-bg-level="Helper.level(n).replace('-', '')"
               >
                 {{ Helper.level(n, $l2) }}
-              </a>
+              </router-link>
             </template>
             <div
               v-if="$l2.code === 'zh'"

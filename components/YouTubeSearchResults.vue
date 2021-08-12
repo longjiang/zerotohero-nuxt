@@ -6,13 +6,14 @@
       :checkSubs="true"
       :updateVideos="updateVideos"
       :checkSaved="checkSaved"
+      :hideVideosWithoutSubsProp="hideVideosWithoutSubs"
     />
     <div v-if="infinite && !noMoreVideos" v-observe-visibility="infinite ? visibilityChanged : undefined"></div>
     <div v-if="infinite && noMoreVideos" class="text-center mt-4">
       <h6>No more videos.</h6>
       <p>{{ moreVideos }} videos loaded.</p>
     </div>
-    <div class="mt-4 text-center" v-if="term && !infinite">
+    <div class="mt-4 text-center" v-if="term && !infinite && showPaginator">
       <router-link
         v-if="start > 9"
         :to="`/${$l1.code}/${$l2.code}/youtube/search/${encodeURIComponent(
@@ -74,6 +75,12 @@ export default {
     infinite: {
       default: false,
     },
+    hideVideosWithoutSubs: {
+      default: false
+    },
+    showPaginator: {
+      default: true
+    }
   },
   data() {
     return {
