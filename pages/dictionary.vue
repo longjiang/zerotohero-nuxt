@@ -440,14 +440,20 @@ export default {
     padding: 1rem;
     padding-top: 4rem;
   }
+
   .for-the-love-of {
-    padding-top: 9rem;
-    padding-bottom: 20rem;
+    padding-top: 15rem;
   }
 }
 
 .for-the-love-of {
-  padding-top: 1rem;
-  padding-bottom: 10rem;
+  padding: 10rem 3rem;
+  h3 {
+    transform: scale(1.3);
+  }
+  h3,
+  h3 * {
+    font-family: pacifico !important;
+  }
 }
 </style>

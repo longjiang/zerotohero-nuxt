@@ -27,7 +27,7 @@
           <client-only>
             <div :class="{'pl-1 pr-1 pb-2': true, 'd-none': !hasDashboard}">
               <div class="home-card">
-                <h5 class="text-center">Welcome back!</h5>
+                <h5 class="text-center">Welcome Back!</h5>
                 <LazyDashboard :l2="$l2" @hasDashboard="hasDashboardUpdate" />
               </div>
             </div>
@@ -114,15 +114,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-h3 {
-  color: white;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 1);
-}
 .home {
   // backdrop-filter: blur(2px) brightness(85%);
   // -webkit-backdrop-filter: blur(2px) brightness(85%);
 }
 .home-intro-text {
+  font-family: pacifico; 
+  font-size: 2.5em;
+  text-shadow: 0 0 20px rgba(0,0,0,0.3);
+  color: white;
   // background-color: rgba(0, 0, 0, 0.5);
   // color: white;
   padding: 0 2rem 2rem 2rem;
