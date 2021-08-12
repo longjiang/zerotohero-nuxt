@@ -359,21 +359,6 @@ export default {
   display: block;
 }
 
-.home-card {
-  background-color: hsla(0, 100%, 100%, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  padding: 2rem;
-  border-radius: 1rem;
-  box-shadow: 0 10px 30px rgba(68, 75, 134, 0.2);
-  height: 100%;
-  color: #444;
-  ::v-deep .language-list .language-list-item a {
-    color: #000000cc !important;
-  }
-}
-
 .intro-text {
   background-color: rgba(0, 0, 0, 0.5);
   color: white;

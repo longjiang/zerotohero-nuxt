@@ -24,6 +24,15 @@
               }}
             </h3>
           </div>
+          <client-only>
+            <div :class="{'pl-1 pr-1 pb-2': true, 'd-none': !hasDashboard}">
+              <div class="home-card">
+                <h5 class="text-center">Welcome back!</h5>
+                <LazyDashboard :l2="$l2" @hasDashboard="hasDashboardUpdate" />
+              </div>
+            </div>
+          </client-only>
+
           <Nav :l1="$l1" :l2="$l2" variant="page" />
         </div>
       </div>
@@ -33,6 +42,11 @@
 
 <script>
 export default {
+  data() {
+    return {
+      hasDashboard: false,
+    };
+  },
   computed: {
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
@@ -53,6 +67,9 @@ export default {
     },
   },
   methods: {
+    hasDashboardUpdate(hasDashboard) {
+      this.hasDashboard = hasDashboard;
+    },
     redirectToCourses() {
       if (
         this.$l1 &&

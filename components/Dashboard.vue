@@ -2,7 +2,14 @@
   <container-query :query="query" v-model="params">
     <div>
       <div v-if="savedWords">
-        <div class="dashboard-saved-words-list mt-4">
+        <div
+          :class="{
+            'mt-4': true,
+            'text-center': l2,
+            'dashboard-saved-words-list': !l2,
+            'mb-4': videosFiltered && videosFiltered.length > 0,
+          }"
+        >
           <router-link
             :to="`/${savedWordsLang.l2.code === 'lzh' ? 'zh' : 'en'}/${
               savedWordsLang.l2.code
@@ -22,25 +29,19 @@
               {{ savedWordsLang.words.length }}
             </span>
             saved word{{ savedWordsLang.words.length > 1 ? "s" : "" }}
-            in
-            <strong>{{ savedWordsLang.l2.name }}</strong>
+            <span v-if="!l2">
+              in
+              <strong>{{ savedWordsLang.l2.name }}</strong>
+            </span>
           </router-link>
         </div>
       </div>
-      <div class="text-center mt-4 mb-3" v-if="history && history.length > 0">
-        <button
-          class="btn bg-gray btn-small text-gray ml-0 mb-2"
-          @click.stop.prevent="$store.dispatch('history/removeAll')"
-        >
-          Clear History
-        </button>
-      </div>
+
+      <h5 class="text-center mt-5 mb-5">Continue watching</h5>
       <div class="history container">
         <div class="youtube-videos row">
           <div
-            v-for="(item, itemIndex) of this.history
-              .filter((i) => i.type === 'video')
-              .slice(0, 20)"
+            v-for="(item, itemIndex) of this.videosFiltered.slice(0, 24)"
             :key="`history-item-${itemIndex}`"
             :class="{
               'pb-4 history-item-column': true,
@@ -67,6 +68,17 @@
               <i class="fa fa-times"></i>
             </button>
           </div>
+        </div>
+        <div
+          class="text-center mb-3"
+          v-if="videosFiltered && videosFiltered.length > 0"
+        >
+          <button
+            class="btn bg-gray btn-small text-gray ml-0 mb-2"
+            @click.stop.prevent="$store.dispatch('history/removeAll')"
+          >
+            Clear History
+          </button>
         </div>
       </div>
     </div>
@@ -107,6 +119,9 @@ export default {
       },
     };
   },
+  props: {
+    l2: undefined,
+  },
   mounted() {
     this.emitHasDashboard();
     if (!this.$store.state.history.historyLoaded) {
@@ -127,7 +142,17 @@ export default {
       savedWordsSorted = savedWordsSorted
         .sort((a, b) => b.words.length - a.words.length)
         .filter((s) => s.words.length > 0);
+      if (this.l2)
+        savedWordsSorted = savedWordsSorted.filter(
+          (s) => s.l2.code === this.l2.code
+        );
       return savedWordsSorted;
+    },
+    videosFiltered() {
+      return this.history.filter((i) => {
+        if (this.l2 && i.l2 !== this.l2.code) return false;
+        return i.type === "video";
+      });
     },
   },
   watch: {
