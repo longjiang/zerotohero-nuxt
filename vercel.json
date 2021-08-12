@@ -6,7 +6,12 @@
       "use": "@nuxtjs/vercel-builder"
     }
   ],
+  "config": {
+    "serverFiles": [
+      "./runtime/providers/log"
+    ]
+  },
   "github": {
-      "silent": true
+    "silent": true
   }
 }
