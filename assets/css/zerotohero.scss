@@ -701,13 +701,13 @@ button.bg-primary:focus {
 
 .input-group-ghost-dark {
   .input-ghost-dark {
-    background: hsla(0deg 0 100% / 10%);
+    background: hsla(0deg 0% 100% / 10%);
     border-radius: 0.25rem;
     border: none;
-    color: hsla(0deg 0 100% / 90%);
+    color: hsla(0deg 0% 100% / 90%);
     height: 40px;
     &::placeholder {
-      color: hsla(0deg 0 100% / 40%);
+      color: hsla(0deg 0% 100% / 40%);
     }
   }
 }
@@ -1016,7 +1016,7 @@ button.bg-primary:focus {
 
 
 .home-card {
-  background-color: hsla(0, 100%, 100%, 0.7);
+  background-color: hsla(0deg 100% 100% / 0.7);
   border: 1px solid rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
@@ -1045,5 +1045,5 @@ button.bg-primary:focus {
   background-color: hsl(0deg 0% 0% / 72%);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  color: hsla(0, 100%, 100%, 0.8);
+  color: hsla(0deg 100% 100% / 0.8);
 }

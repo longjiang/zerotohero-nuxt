@@ -1113,14 +1113,14 @@ export default {
   align-items: center;
   border-radius: 0.5rem;
   box-shadow: 0 10px 30px rgba(68, 75, 134, 0.2);
-  background-color: hsla(0, 100%, 100%, 0.7);
+  background-color: hsla(0deg, 100%, 100%, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   &:hover {
     transform: scale(115%);
     transition: 200ms ease-in-out;
-    background-color: hsla(0, 100%, 100%, 0.8);
+    background-color: hsla(0deg, 100%, 100%, 0.8);
   }
   .feature-card-icon {
     padding-right: 1rem;

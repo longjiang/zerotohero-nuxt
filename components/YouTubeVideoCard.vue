@@ -660,7 +660,7 @@ export default {
       box-shadow: 0 5px 25px #fd89662f;
     }
     .media-body {
-      color: hsla(0deg 0 100% / 75%);
+      color: hsla(0deg 0% 100% / 75%);
     }
   }
   &.youtube-video-card-wrapper-card {
@@ -688,7 +688,7 @@ export default {
       top: calc(100% - 0.5rem);
       width: calc(100% - 1rem);
       left: 0.5rem;
-      background-color: hsla(0deg 0 100% / 25%);
+      background-color: hsla(0deg 0% 100% / 25%);
       -webkit-backdrop-filter: blur(5px);
       backdrop-filter: blur(5px);
       ::v-deep .progress-bar {
