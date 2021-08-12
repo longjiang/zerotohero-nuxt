@@ -1,7 +1,7 @@
 <template>
   <div class="search-compare-wrapper">
     <div :class="{ 'loader text-center': true, 'd-none': !loading }" style="flex: 1">
-      <div class="heartbeat-loader"></div>
+      <Loader />
     </div>
     <Search
       ref="search"

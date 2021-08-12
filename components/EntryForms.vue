@@ -7,8 +7,7 @@
           :class="{ 'loader text-center mt-4': true, 'd-none': !checking }"
           style="flex: 1"
         >
-          <div class="heartbeat-loader"></div>
-          <div class="text-center mt-4 mb-4">Searching for word forms...</div>
+          <Loader :sticky="true" message="Searching for word forms..." />
         </div>
         <div
           v-if="!checking && (Helper.isEmpty(tables) || tables.length === 0)"

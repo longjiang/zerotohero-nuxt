@@ -229,10 +229,7 @@
       :class="{ 'loader text-center mt-4': true, 'd-none': !checking }"
       style="flex: 1"
     >
-      <div class="heartbeat-loader"></div>
-      <div class="text-center mt-4 mb-4">
-        Searching through video captions...
-      </div>
+      <Loader :sticky="true" message="Searching through video captions..." />
     </div>
     <div class="text-center p-3" v-if="!checking && hits.length === 0">
       <p>Sorry, no hits found.</p>

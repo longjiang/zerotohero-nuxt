@@ -54,7 +54,7 @@
                 }"
                 style="flex: 1"
               >
-                <div class="heartbeat-loader"></div>
+                <Loader :sticky="true" message="Getting shows..." />
               </div>
               <div class="text-center" v-if="shows && shows.length === 0">
                 Sorry, we could not find any

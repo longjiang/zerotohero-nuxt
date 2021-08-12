@@ -27,6 +27,9 @@
           <!-- վարարուն Կարկաչում էր սարերում: -->
           <!-- ทริปวัดใจ -->
           <LazyAnnotate><p>Hometown's Embrace</p></LazyAnnotate>
+          <div class="text-center">
+            <Loader :sticky="true" />
+          </div>
         </div>
       </div>
     </div>

@@ -20,7 +20,7 @@
                 }"
                 style="flex: 1"
               >
-                <div class="heartbeat-loader"></div>
+                <Loader :sticky="true" message="Loading phrasebooks..." />
               </div>
               <div
                 class="text-center"

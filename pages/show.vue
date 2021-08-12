@@ -24,9 +24,7 @@
               <span>{{ show.title }}</span>
             </Annotate>
           </h3>
-          <p v-if="count" style="opacity: 0.6">
-            {{ count }} Episodes
-          </p>
+          <p v-if="count" style="opacity: 0.6">{{ count }} Episodes</p>
         </div>
         <div class="col-sm-12 mb-5">
           <div class="youtube-video-list-wrapper">
@@ -73,7 +71,7 @@
               }"
               style="flex: 1"
             >
-              <div class="heartbeat-loader"></div>
+              <Loader :sticky="true" message="Loading episodes..." />
             </div>
             <div
               :class="{

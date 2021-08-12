@@ -88,8 +88,8 @@
             </div>
           </div>
         </div>
-        <div>
-          <Loader class="mt-5" />
+        <div class="text-center p-5">
+          <Loader />
         </div>
       </div>
     </div>

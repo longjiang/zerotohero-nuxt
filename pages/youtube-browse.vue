@@ -57,7 +57,7 @@
             }"
             style="flex: 1"
           >
-            <div class="heartbeat-loader"></div>
+            <Loader :sticky="true" message="Loading videos in our library..." />
           </div>
           <div
             :class="{

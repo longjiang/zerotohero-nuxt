@@ -16,7 +16,7 @@
           }"
           style="flex: 1"
         >
-          <div class="heartbeat-loader"></div>
+          <Loader :sticky="true" />
         </div>
         <div
           :class="{

@@ -30,7 +30,7 @@
             }"
             style="flex: 1"
           >
-            <div class="heartbeat-loader"></div>
+            <Loader :sticky="true" message="Getting phrases..." />
           </div>
           <div
             :class="{
