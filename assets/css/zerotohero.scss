@@ -612,6 +612,10 @@ ul.collapse-10.collapsed li:nth-child(-n + 10) {
   display: none;
 }
 
+.text-primary {
+  color: #fd4f1c !important;
+}
+
 .bg-primary,
 a.bg-primary:hover,
 button.bg-primary:hover,
@@ -694,8 +698,9 @@ button.bg-primary:focus {
 }
 
 .btn-ghost-dark {
-  background-color: hsla(0deg 0% 100% / 30%);
+  background-color: hsla(0deg 0% 100% / 35%);
   border: none;
+  color: black;
   &:hover {
     background-color: hsla(0deg 0% 100% / 70%);
   }

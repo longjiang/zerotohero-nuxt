@@ -5,8 +5,8 @@
   }
 </router>
 <template>
-  <div>
-    <div class="container main mb-5">
+  <div class="main-dark">
+    <div class="container pb-5">
       <SocialHead
         v-if="lessonVideos[0]"
         :title="`Chinese Lesson Expansion Videos | Chinese Zero to Hero`"
@@ -40,6 +40,7 @@
             After finishing Lesson {{ lesson }} of the
             <a
               :href="`https://courses.chinesezerotohero.com/p/hsk-${level}-course`"
+              class="link-unstyled text-primary"
               target="_blank"
             >
               <b>Chinese Zero to Hero HSK {{ level }} Course</b>
@@ -61,6 +62,7 @@
         <div class="col-lg-2"></div>
         <div class="col-md-6 col-lg-4">
           <YouTubeVideoList
+            skin="dark"
             :checkSubs="false"
             :lesson="true"
             :updateVideos="updateLessonVideos"
@@ -69,13 +71,14 @@
           />
         </div>
         <div class="col-md-6 col-lg-4">
-          <h5 class="mt-3">Vocabulary covered</h5>
+          <h5>Vocabulary covered</h5>
           <Loader
             message="Loading words...<br/>Don't wait. View the video now."
           />
           <WordList
             :words="video.matches"
             :key="`matched-words-${videoIndex}-${matchedWordsKey}`"
+            skin="dark"
           ></WordList>
         </div>
         <div class="col-lg-2"></div>
@@ -83,7 +86,7 @@
       <div class="row mt-5 mb-5">
         <div class="col-lg-2"></div>
         <div class="col-md-12 col-lg-8">
-          <div class="jumbotron pt-4 pb-4" v-if="unmatchedWords.length > 0">
+          <div class="pt-4 pb-4" v-if="unmatchedWords.length > 0">
             <h4 class="mt-3 mb-4 text-center text-danger">
               Lesson words
               <em>not</em>
@@ -93,27 +96,30 @@
             <WordList
               :words="unmatchedWords"
               :key="`unmatched-words-${matchedWordsKey}`"
+              skin="dark"
             ></WordList>
           </div>
           <div class="col-sm-12 text-center">
-            <router-link
-              v-if="lesson > 1"
-              class="btn btn-gray mr-2"
-              :to="`/${$l1.code}/${$l2.code}/lesson-videos/${level}/${
-                Number(lesson) - 1
-              }`"
-            >
-              Previous Lesson
-            </router-link>
-            <router-link
-              v-if="lesson < levelLessons[level]"
-              class="btn btn-gray"
-              :to="`/${$l1.code}/${$l2.code}/lesson-videos/${level}/${
-                Number(lesson) + 1
-              }`"
-            >
-              Next Lesson
-            </router-link>
+            <client-only>
+              <router-link
+                v-if="lesson > 1"
+                :class="`btn btn-${skin === 'light' ? 'gray' : 'ghost-dark'} mr-2`"
+                :to="`/${$l1.code}/${$l2.code}/lesson-videos/${level}/${
+                  Number(lesson) - 1
+                }`"
+              >
+                Previous Lesson
+              </router-link>
+              <router-link
+                v-if="lesson < levelLessons[level]"
+                :class="`btn btn-${skin === 'light' ? 'gray' : 'ghost-dark'}`"
+                :to="`/${$l1.code}/${$l2.code}/lesson-videos/${level}/${
+                  Number(lesson) + 1
+                }`"
+              >
+                Next Lesson
+              </router-link>
+            </client-only>
           </div>
         </div>
       </div>

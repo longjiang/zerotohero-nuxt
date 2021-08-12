@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ul :class="classes()" data-collapse-target>
+    <ul :class="classes" data-collapse-target>
       <li
         :class="{
           'wordlist-item': true,
@@ -26,13 +26,15 @@
           <i class="fas fa-adjust"></i>
         </router-link>
         <router-link v-if="word" :to="getUrl(word, index)">
-          <span class="wordlist-item-word ml-1" :data-level="getLevel(word)">
+          <span class="wordlist-item-word ml-1" :data-level="skin !== 'dark' ? getLevel(word) : undefined">
             {{ word.accented }}
           </span>
           <span v-if="word.pronunciation" class="wordlist-item-pinyin">
             <span v-if="$l2.code !== 'zh'">/</span>
+            <span v-else>(</span>
             {{ word.pronunciation || word.kana }}
             <span v-if="$l2.code !== 'zh'">/</span>
+            <span v-else>)</span>
           </span>
           <span v-if="word.kana" class="wordlist-item-pinyin">
             ({{ word.kana }})
@@ -115,6 +117,9 @@ export default {
     url: {
       type: Function,
     },
+    skin: {
+      default: "light",
+    },
   },
   computed: {
     $l1() {
@@ -133,6 +138,16 @@ export default {
     },
     $hanzi() {
       return this.$getHanzi();
+    },
+    classes() {
+      let classes = {
+        wordlist: true,
+        "wordlist-dark": this.skin === "dark",
+        "list-unstyled": true,
+        collapsed: this.collapse > 0,
+      };
+      classes[`collapse-${this.collapse}`] = true;
+      return classes;
     },
   },
   methods: {
@@ -156,42 +171,45 @@ export default {
         return word.level;
       }
     },
-    classes() {
-      let classes = {
-        wordlist: true,
-        "list-unstyled": true,
-        collapsed: this.collapse > 0,
-      };
-      classes[`collapse-${this.collapse}`] = true;
-      return classes;
-    },
   },
 };
 </script>
 
-<style>
-.wordlist-item a {
-  color: inherit;
-}
+<style lang="scss" scoped>
+.wordlist {
+  .wordlist-item {
+    a {
+      color: inherit;
+    }
 
-.wordlist-item a:hover {
-  text-decoration: none;
-}
+    a:hover {
+      text-decoration: none;
+    }
 
-.wordlist-item-word {
-  font-weight: bold;
-  font-size: 1.4em;
-}
+    .wordlist-item-word {
+      font-weight: bold;
+      font-size: 1.4em;
+    }
 
-.wordlist-item-l1 {
-  color: #666;
-}
+    .wordlist-item-l1 {
+      color: #666;
+    }
 
-.wordlist-item.matched {
-  opacity: 0.2;
-}
+    .wordlist-item-byeonggi {
+      color: rgb(143, 158, 172);
+    }
 
-.wordlist-item-byeonggi {
-  color: rgb(143, 158, 172);
+    &.matched {
+      opacity: 0.2;
+    }
+  }
+  &.wordlist-dark {
+    .wordlist-item-pinyin {
+      color: rgba(255, 255, 255, 0.589);
+    }
+    .wordlist-item-l1 {
+      color: rgba(255, 255, 255, 0.781);
+    }
+  }
 }
 </style>
