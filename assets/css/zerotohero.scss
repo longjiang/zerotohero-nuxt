@@ -700,8 +700,9 @@ button.bg-primary:focus {
     border-radius: 0.25rem;
     border: none;
     color: hsla(0deg 0 100% / 90%);
+    height: 40px;
     &::placeholder {
-      color: hsla(0deg 0 100% / 70%);
+      color: hsla(0deg 0 100% / 40%);
     }
   }
 }

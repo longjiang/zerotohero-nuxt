@@ -1,5 +1,5 @@
 <template>
-  <div class="main">
+  <div class="main-dark">
     <div class="container">
       <SocialHead
         v-if="shows && shows[0]"
@@ -25,22 +25,23 @@
           <div class="text-center mb-5">
             <NuxtLink
               :to="`/${$l1.code}/${$l2.code}/youtube/view/${randomEpisodeYouTubeId}`"
-              class="btn btn-success d-inline-block text-large pl-4 pr-4"
+              class="btn btn-ghost-dark text-large pl-4 pr-4"
               style="font-size: 1.3em"
             >
-              <i class="fa fa-random"></i>
-              Watch in random
+              <i class="fa fa-random mr-1"></i>
+              Surprise me
             </NuxtLink>
           </div>
           <div class="show-list-wrapper">
-            <b-input-group class="mb-5">
+            <b-input-group class="mb-5 input-group-ghost-dark">
               <b-form-input
                 v-model="keyword"
                 @compositionend.prevent.stop="() => false"
                 placeholder="Filter by show title..."
+                class="input-ghost-dark"
               />
               <b-input-group-append>
-                <b-button variant="primary">
+                <b-button variant="ghost-dark">
                   <i class="fas fa-filter"></i>
                 </b-button>
               </b-input-group-append>
