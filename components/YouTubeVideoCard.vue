@@ -69,7 +69,7 @@
             {{ video.title }}
           </span>
           <router-link
-            :class="{ 'youtube-title d-block link-unstyled': true, 'd-none': $adminMode || view === 'list' }"
+            :class="{ 'youtube-title link-unstyled': true, 'd-none': $adminMode || view === 'list' }"
             :to="`/${$l1.code}/${$l2.code}/youtube/view/${video.youtube_id}/${
               video.lesson ? 'lesson' : ''
             }`"
