@@ -118,24 +118,20 @@
       </client-only>
       <div class="youtube-videos row">
         <div
-          v-for="video in uniqueByValue(videos, 'youtube_id')"
-          :key="`youtube-video-wrapper-${video.youtube_id}`"
           :class="{
             'col-sm-12': view === 'list' || singleColumn,
             'col-12': params.xs && view === 'grid' && !singleColumn,
             'col-6': params.sm && view === 'grid' && !singleColumn,
             'col-4': params.md && view === 'grid' && !singleColumn,
             'col-3': params.lg && view === 'grid' && !singleColumn,
-            'd-none': filteredVideos.findIndex(
-              (v) => video.youtube_id === v.youtube_id
-            ) === -1,
           }"
           :style="`padding-bottom: ${view === 'list' ? '1rem' : '2rem'}`"
+          v-for="(video, videoIndex) in filteredVideos"
+          :key="`youtube-video-wrapper-${video.youtube_id}-${videoIndex}`"
         >
           <YouTubeVideoCard
             ref="youTubeVideoCard"
             @newShow="newShow"
-            @hasSubs="update"
             :video="video"
             :checkSubs="checkSubsData"
             :showSubsEditing="showSubsEditing"
@@ -198,11 +194,8 @@ export default {
       default: "card", // or 'dark'
     },
     showProgress: {
-      default: true,
-    },
-    hideVideosWithoutSubsProp: {
-      default: false,
-    },
+      default: true
+    }
   },
 
   data() {
@@ -214,12 +207,11 @@ export default {
       checkSavedData: this.checkSaved,
       checkSubsData: this.checkSubs,
       over: false,
-      hideVideosWithoutSubs: this.hideVideosWithoutSubsProp,
+      hideVideosWithoutSubs: false,
       showChannels: false,
       hideVideosInShows: false,
       uniqueVideosByChannel: undefined,
       params: {},
-      filteredVideos: [],
       query: {
         xs: {
           minWidth: 0,
@@ -256,6 +248,18 @@ export default {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
     },
+    filteredVideos() {
+      return this.videos.filter((video) => {
+        if (this.hideVideosWithoutSubs && !video.hasSubs) return false;
+        if (
+          this.hideVideosInShows &&
+          video.id &&
+          ((video.tv_show && video.tv_show.id) || (video.talk && video.talk.id))
+        )
+          return false;
+        return true;
+      });
+    },
   },
   watch: {
     async checkSavedData() {
@@ -269,34 +273,8 @@ export default {
         }
       }
     },
-    hideVideosWithoutSubs() {
-      this.filterVideos()
-    },
-    hideVideosInShows() {
-      this.filterVideos()
-    },
   },
   methods: {
-    uniqueByValue() {
-      return Helper.uniqueByValue(...arguments);
-    },
-    update() {
-      console.log("😄😄updating");
-      this.filterVideos();
-    },
-    filterVideos() {
-      let filteredVideos = this.videos.filter((video) => {
-        if (this.hideVideosWithoutSubs && !video.hasSubs) return false;
-        if (
-          this.hideVideosInShows &&
-          video.id &&
-          ((video.tv_show && video.tv_show.id) || (video.talk && video.talk.id))
-        )
-          return false;
-        return true;
-      });
-      this.filteredVideos = filteredVideos;
-    },
     surveyChannels() {
       let uniqueVideosByChannel = Helper.uniqueByValue(
         this.videos,
