@@ -33,7 +33,7 @@ export const mutations = {
   REMOVE_HISTORY_ITEM(state, historyItem) {
     if (typeof localStorage !== 'undefined' && state.history) {
       const keepers = state.history.filter(
-        item => item.path !== historyItem.path
+        item => item.id !== historyItem.id
       )
       let history = [].concat(state.history)
       history = keepers
