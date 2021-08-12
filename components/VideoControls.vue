@@ -263,9 +263,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  background: rgba(0,0,0,0.45);
+  background: rgba(15, 15, 15, 0.884);
 }
 
 .quick-access-button {

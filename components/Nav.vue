@@ -882,7 +882,7 @@ export default {
     color: white;
     display: inline-block;
     border: none;
-    text-shadow: 0 0 10px rgba(0, 0, 0, 1);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 1);
     border: 1px solid rgba(255, 255, 255, 0);
     border-radius: 0.3rem;
     white-space: nowrap;

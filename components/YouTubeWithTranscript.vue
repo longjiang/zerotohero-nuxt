@@ -54,7 +54,10 @@
               </Annotate>
             </span>
             <a
-              class="btn-small"
+              :class="{
+                'btn btn-small ml-2 mb-1': true,
+                'btn-ghost-dark': skin === 'dark',
+              }"
               :href="`https://www.google.com/search?q=${encodeURIComponent(
                 video.title
               )}`"
@@ -76,7 +79,11 @@
             <router-link
               v-if="previousEpisode"
               :to="previousEpisode"
-              class="btn btn-small btn-primary"
+              :class="{
+                'btn btn-small': true,
+                'btn-primary': skin === 'light',
+                'btn-ghost-dark': skin === 'dark',
+              }"
             >
               <i class="fa fa-chevron-left"></i>
               Previous
@@ -86,7 +93,11 @@
               :to="`/${$l1.code}/${$l2.code}/show/${
                 showType === 'tv_show' ? 'tv-show' : 'talk'
               }/${show.id}`"
-              class="btn btn-small btn-primary"
+              :class="{
+                'btn btn-small': true,
+                'btn-primary': skin === 'light',
+                'btn-ghost-dark': skin === 'dark',
+              }"
             >
               <i class="far fa-clone"></i>
               All Episodes
@@ -94,7 +105,11 @@
             <router-link
               v-if="nextEpisode"
               :to="nextEpisode"
-              class="btn btn-small btn-primary"
+              :class="{
+                'btn btn-small': true,
+                'btn-primary': skin === 'light',
+                'btn-ghost-dark': skin === 'dark',
+              }"
             >
               Next
               <i class="fa fa-chevron-right"></i>
@@ -102,7 +117,11 @@
             <router-link
               v-if="episodes.length > 0"
               :to="`/${this.$l1.code}/${this.$l2.code}/youtube/view/${this.randomEpisodeYouTubeId}`"
-              class="btn btn-small bg-secondary text-white"
+              :class="{
+                'btn btn-small': true,
+                'bg-secondary': skin === 'light',
+                'btn-ghost-dark': skin === 'dark',
+              }"
             >
               <i class="fa fa-random"></i>
               Random
@@ -323,6 +342,9 @@ export default {
     showLineList: {
       default: true,
     },
+    skin: {
+      default: "light",
+    },
   },
   data() {
     return {
@@ -338,7 +360,7 @@ export default {
       speed: 1,
       layout: this.initialLayout,
       collapsed: false,
-      duration: undefined
+      duration: undefined,
     };
   },
   computed: {
@@ -382,7 +404,7 @@ export default {
   },
   methods: {
     updateDuration(duration) {
-      this.duration = duration
+      this.duration = duration;
     },
     updateTranslation(translation) {
       let translationLines = translation.split("\n").filter((t) => t !== "");

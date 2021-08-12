@@ -5,7 +5,7 @@
   }
 </router>
 <template>
-  <div class="youtube-view pt-3 pb-5 bg-white">
+  <div class="youtube-view pt-3 pb-5 main-dark">
     <SocialHead
       v-if="video"
       :title="`Learn ${$l2.name} from the video ${video.title} | ${$l2.name} Zero to Hero`"
@@ -23,7 +23,7 @@
       }`"
       :image="`https://img.youtube.com/vi/${this.video.youtube_id}/hqdefault.jpg`"
     />
-    <div class="pl-3 pr-3 mb-5">
+    <div class="pl-3 pr-3 mb-4">
       <SimpleSearch
         placeholder="Search"
         ref="searchLibrary"
@@ -32,6 +32,7 @@
             ? `/${$l1.code}/${$l2.code}/youtube/view/${randomEpisodeYouTubeId}`
             : false
         "
+        skin="dark"
         :action="
           (url) => {
             this.$router.push({
@@ -67,6 +68,7 @@
         :nextEpisode="nextEpisode"
         :episodes="episodes"
         :episodeIndex="thisEpisodeIndex"
+        skin="dark"
         @paused="updatePaused"
         @ended="updateEnded"
         @currentTime="updateCurrentTime"
