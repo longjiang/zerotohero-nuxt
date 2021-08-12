@@ -23,9 +23,7 @@
       }"
     >
       <router-link
-        :to="`/${$l1.code}/${$l2.code}/youtube/view/${video.youtube_id}/${
-          video.lesson ? 'lesson' : ''
-        }`"
+        :to="to"
         class="
           youtube-thumbnail-wrapper
           aspect-wrapper
@@ -69,7 +67,10 @@
             {{ video.title }}
           </span>
           <router-link
-            :class="{ 'youtube-title link-unstyled': true, 'd-none': $adminMode || view === 'list' }"
+            :class="{
+              'youtube-title link-unstyled': true,
+              'd-none': $adminMode || view === 'list',
+            }"
             :to="`/${$l1.code}/${$l2.code}/youtube/view/${video.youtube_id}/${
               video.lesson ? 'lesson' : ''
             }`"
@@ -294,6 +295,8 @@ export default {
     };
   },
   props: {
+    l1Code: undefined,
+    l2Code: undefined,
     delay: 0,
     checkSaved: {
       default: false,
@@ -345,18 +348,32 @@ export default {
     },
   },
   computed: {
+    to() {
+      let to = {
+        name: "youtube-view",
+        params: { youtube_id: this.video.youtube_id },
+      };
+      if (this.video.lesson) {
+        to.params.lesson = "lesson";
+      }
+      if (typeof this.l1Code !== "undefined") {
+        to.params.l1 = this.l1Code;
+      }
+      if (typeof this.l2Code !== "undefined") {
+        to.params.l2 = this.l2Code;
+      }
+      return to;
+    },
     $l1() {
-      if (this.video.l2) {
-        let l1 = this.$languages.getSmart(this.video.l1);
-        if (l1) return l1;
+      if (typeof this.l1 !== "undefined") {
+        return this.l1;
       } else if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
       else return this.$languages.getSmart("en");
     },
     $l2() {
-      if (this.video.l2) {
-        let l2 = this.$languages.getSmart(this.video.l2);
-        if (l2) return l2;
+      if (typeof this.l2 !== "undefined") {
+        return this.l2;
       } else if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
