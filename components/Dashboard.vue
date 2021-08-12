@@ -1,7 +1,7 @@
 <template>
   <container-query :query="query" v-model="params">
     <div>
-      <div v-if="savedWords">
+      <div v-if="savedWords" class="dashboard-saved-words">
         <div
           :class="{
             'mt-4': true,
@@ -35,15 +35,8 @@
           </router-link>
         </div>
       </div>
-      <h5
-        class="text-center"
-        style="margin-top: 2rem; margin-bottom: 3rem"
-        v-if="videosFiltered && videosFiltered.length > 0"
-      >
-        Continue watching
-      </h5>
-      <div class="history container">
-        <div class="youtube-videos row">
+      <div class="history container" v-if="this.videosFiltered.length > 0">
+        <div class="youtube-videos row justify-content-md-center">
           <div
             v-for="(item, itemIndex) of this.videosFiltered.slice(0, 24)"
             :key="`history-item-${itemIndex}`"
@@ -76,11 +69,11 @@
           </div>
         </div>
         <div
-          class="text-center mb-3"
+          class="text-center"
           v-if="videosFiltered && videosFiltered.length > 0"
         >
           <button
-            class="btn bg-gray btn-small text-gray ml-0 mb-2"
+            class="btn btn-ghost-dark text-secondary btn-sm ml-0 mb-2"
             @click.stop.prevent="$store.dispatch('history/removeAll')"
           >
             Clear History
@@ -192,6 +185,9 @@ export default {
     column-count: 3;
   }
 }
+.dashboard-saved-words + .history {
+  margin-top: 2rem;
+}
 .history-item-column {
   position: relative;
 
@@ -223,5 +219,10 @@ export default {
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
   }
+}
+
+::v-deep .youtube-title {
+  font-size: 0.9em;
+  line-height: 0.9em !important;
 }
 </style>

@@ -466,8 +466,8 @@ export default {
         youtube_id: this.video.youtube_id,
         date: DateHelper.unparseDate(new Date()),
         starttime: this.currentTimeInSeconds,
-        l2: this.$l1.code,
-        l1: this.$l2.code,
+        l1: this.$l1.code,
+        l2: this.$l2.code,
       };
       if (this.$refs.youtube && this.$refs.youtube.duration) {
         data.duration = this.$refs.youtube.duration;
