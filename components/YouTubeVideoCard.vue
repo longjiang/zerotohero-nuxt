@@ -33,7 +33,7 @@
           play-button-wrapper
         "
       >
-        <button class="btn btn-unstyled play-button" v-if="skin === 'dark'">
+        <button class="btn btn-unstyled play-button" v-if="skin !== 'card'">
           <i class="fa fa-play"></i>
         </button>
         <client-only>
