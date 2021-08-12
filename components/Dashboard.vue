@@ -1,86 +1,112 @@
 <template>
-  <div>
-    <div v-if="savedWords">
-      <div class="dashboard-saved-words-list mt-4">
-        <router-link
-          :to="`/${savedWordsLang.l2.code === 'lzh' ? 'zh' : 'en'}/${
-            savedWordsLang.l2.code
-          }/saved-words`"
-          class="link-unstyled d-block"
-          v-for="(savedWordsLang, index) in savedWordsSorted"
-          :key="`dashboard-saved-words-${index}`"
-        >
-          <i class="fa fa-star mr-1" style="opacity: 0.5"></i>
-          <span
-            style="min-width: 1.7rem; display: inline-block; text-align: center"
+  <container-query :query="query" v-model="params">
+    <div>
+      <div v-if="savedWords">
+        <div class="dashboard-saved-words-list mt-4">
+          <router-link
+            :to="`/${savedWordsLang.l2.code === 'lzh' ? 'zh' : 'en'}/${
+              savedWordsLang.l2.code
+            }/saved-words`"
+            class="link-unstyled d-block"
+            v-for="(savedWordsLang, index) in savedWordsSorted"
+            :key="`dashboard-saved-words-${index}`"
           >
-            {{ savedWordsLang.words.length }}
-          </span>
-          saved word{{ savedWordsLang.words.length > 1 ? "s" : "" }}
-          in
-          <strong>{{ savedWordsLang.l2.name }}</strong>
-        </router-link>
+            <i class="fa fa-star mr-1" style="opacity: 0.5"></i>
+            <span
+              style="
+                min-width: 1.7rem;
+                display: inline-block;
+                text-align: center;
+              "
+            >
+              {{ savedWordsLang.words.length }}
+            </span>
+            saved word{{ savedWordsLang.words.length > 1 ? "s" : "" }}
+            in
+            <strong>{{ savedWordsLang.l2.name }}</strong>
+          </router-link>
+        </div>
       </div>
-    </div>
-    <div class="text-center mt-4 mb-3" v-if="history && history.length > 0">
-      <button
-        class="btn bg-gray btn-small text-gray ml-0 mb-2"
-        @click.stop.prevent="$store.dispatch('history/removeAll')"
-      >
-        Clear History
-      </button>
-    </div>
-    <div class="history d-flex">
-      <div
-        v-for="(item, itemIndex) of this.history.slice(0, 20)"
-        :key="`history-item-${itemIndex}`"
-      >
-        <router-link
-          v-if="item.type === 'video'"
-          :to="{
-            name: 'youtube-view',
-            params: { l1: 'en', l2: item.l2, youtube_id: item.youtube_id },
-            query: { t: item.starttime },
-          }"
-          class="link-unstyled history-item media shadow"
+      <div class="text-center mt-4 mb-3" v-if="history && history.length > 0">
+        <button
+          class="btn bg-gray btn-small text-gray ml-0 mb-2"
+          @click.stop.prevent="$store.dispatch('history/removeAll')"
         >
-          <div class="aspect-wrapper">
-            <img
-              :src="`//img.youtube.com/vi/${item.youtube_id}/hqdefault.jpg`"
-              class="aspect history-item-image img-fluid"
-              style="width: 100%"
-            />
-          </div>
-          <div class="media-body bg-white">
-            <h6 style="line-height: 1.5; font-size: 0.9em">
-              {{ item.title }}
-            </h6>
-            <div class="btn btn-small">
+          Clear History
+        </button>
+      </div>
+      <div class="history container">
+        <div class="youtube-videos row">
+          <div
+            v-for="(item, itemIndex) of this.history
+              .filter((i) => i.type === 'video')
+              .slice(0, 20)"
+            :key="`history-item-${itemIndex}`"
+            :class="{
+              'pb-4 history-item-column': true,
+              'col-12': params.xs,
+              'col-6': params.sm,
+              'col-4': params.md,
+              'col-3': params.lg,
+            }"
+          >
+            <div class="history-item-language-badge">
               {{ $languages.getSmart(item.l2).name }}
             </div>
+            <YouTubeVideoCard :video="item" skin="light" />
             <button
-              class="btn btn-small bg-white text-secondary ml-0"
-              @click.stop.prevent="$store.dispatch('history/remove', item)"
-              style="
-                position: absolute;
-                top: 0.5rem;
-                left: 0.5rem;
-                z-index: 9;
-                border-radius: 100%;
+              class="
+                btn btn-small
+                bg-white
+                text-secondary
+                ml-0
+                history-item-remove-btn
               "
+              @click.stop.prevent="$store.dispatch('history/remove', item)"
             >
               <i class="fa fa-times"></i>
             </button>
           </div>
-        </router-link>
+        </div>
       </div>
     </div>
-  </div>
+  </container-query>
 </template>
 
 <script>
+import { ContainerQuery } from "vue-container-query";
 import { mapState } from "vuex";
+
 export default {
+  components: {
+    ContainerQuery,
+  },
+  data() {
+    return {
+      params: {},
+      query: {
+        xs: {
+          minWidth: 0,
+          maxWidth: 423,
+        },
+        sm: {
+          minWidth: 423,
+          maxWidth: 720,
+        },
+        md: {
+          minWidth: 720,
+          maxWidth: 960,
+        },
+        lg: {
+          minWidth: 960,
+          maxWidth: 1140,
+        },
+        xl: {
+          minWidth: 1140,
+        },
+      },
+    };
+  },
   mounted() {
     this.emitHasDashboard();
     if (!this.$store.state.history.historyLoaded) {
@@ -125,28 +151,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.history {
-  flex-wrap: wrap;
-  margin: 0 -1rem;
-}
-
-.history-item {
-  min-width: 12rem;
-  max-width: calc(100% - 2rem);
-  flex: 1;
-  margin: 1rem;
-  position: relative;
-  border-radius: 1rem;
-  .media-body {
-    height: 100%;
-  }
-}
-
-@media (min-width: 768px) {
-  .history-item {
-    max-width: calc(50% - 2rem);
-  }
-}
 @media (min-width: 768px) {
   .dashboard-saved-words-list {
     column-count: 2;
@@ -155,6 +159,38 @@ export default {
 @media (min-width: 992px) {
   .dashboard-saved-words-list {
     column-count: 3;
+  }
+}
+.history-item-column {
+  position: relative;
+
+  .history-item-remove-btn {
+    position: absolute;
+    top: 0.25rem;
+    right: 1.2rem;
+    z-index: 9;
+    border-radius: 0.2rem;
+    background: rgba(0, 0, 0, 0.2) !important;
+    color: rgba(255, 255, 255, 0.384) !important;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    &:hover {
+      color: rgba(255, 255, 255, 0.6) !important;
+      background: rgba(0, 0, 0, 0.4) !important;
+    }
+  }
+  .history-item-language-badge {
+    position: absolute;
+    top: 0.25rem;
+    left: 1.2rem;
+    z-index: 9;
+    border-radius: 0.2rem;
+    background: rgba(0, 0, 0, 0.2) !important;
+    color: rgba(255, 255, 255, 0.5) !important;
+    font-size: 0.85em;
+    padding: 0.1rem 0.3rem;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
   }
 }
 </style>

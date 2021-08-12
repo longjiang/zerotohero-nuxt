@@ -5,6 +5,7 @@
       over: over,
       'youtube-video-card-wrapper': true,
       'youtube-video-card-wrapper-dark': skin === 'dark',
+      'youtube-video-card-wrapper-light': skin === 'light',
       'youtube-video-card-wrapper-card': skin === 'card',
       media: true,
       nosubs: checkSubs && !video.checkingSubs && !video.hasSubs && !video.id,
@@ -620,30 +621,42 @@ export default {
 
 <style lang="scss" scoped>
 .youtube-video-card-wrapper {
-  height: 100%;
   overflow: hidden;
-  background: white;
   &.nosubs:not(.over) {
     opacity: 0.2;
   }
-  &.youtube-video-card-wrapper-dark {
+  &.youtube-video-card-wrapper-dark,
+  &.youtube-video-card-wrapper-light {
     background: none;
     overflow: visible;
+    .media-body {
+      padding: 1rem 0 0 0;
+    }
+    .youtube-thumbnail-wrapper {
+      border-radius: 0.25rem;
+      overflow: hidden;
+    }
+  }
+  &.youtube-video-card-wrapper-light {
+    .youtube-thumbnail-wrapper {
+      box-shadow: 0 5px 25px #0000002f;
+    }
+  }
+  &.youtube-video-card-wrapper-dark {
     &:hover {
       transform: scale(110%);
       transition: 200ms ease-in-out;
     }
     .youtube-thumbnail-wrapper {
-      border-radius: 0.5rem;
-      overflow: hidden;
       box-shadow: 0 5px 25px #fd89662f;
     }
     .media-body {
-      padding: 1rem 0 0 0;
       color: hsla(0deg 0 100% / 75%);
     }
   }
   &.youtube-video-card-wrapper-card {
+    height: 100%;
+    background: white;
     border-radius: 0.25rem;
     box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
   }

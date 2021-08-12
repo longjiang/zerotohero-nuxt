@@ -156,9 +156,9 @@ import Vue from "vue";
 
 export default {
   components: {
+    ContainerQuery,
     Drag,
     Drop,
-    ContainerQuery,
   },
   props: {
     videos: {
