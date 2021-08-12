@@ -130,15 +130,16 @@
           :key="`youtube-video-wrapper-${video.youtube_id}-${videoIndex}`"
         >
           <YouTubeVideoCard
+            ref="youTubeVideoCard"
+            @newShow="newShow"
             :video="video"
             :checkSubs="checkSubsData"
             :showSubsEditing="showSubsEditing"
             :checkSaved="checkSavedData"
-            @newShow="newShow"
-            ref="youTubeVideoCard"
             :view="view"
             :showBadges="showBadges"
             :showDate="showDate"
+            :skin="skin"
           />
         </div>
       </div>
@@ -187,7 +188,10 @@ export default {
     },
     showDate: {
       default: false,
-    }
+    },
+    skin: {
+      default: "card", // or 'dark'
+    },
   },
 
   data() {

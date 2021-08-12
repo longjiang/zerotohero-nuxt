@@ -5,7 +5,7 @@
   }
 </router>
 <template>
-  <div class="main-dark">
+  <div class="main main-dark">
     <div class="youtube-browse container pt-5 pb-5">
       <SocialHead
         v-if="show"
@@ -77,9 +77,10 @@
             </div>
             <template v-if="videos && videos.length > 0">
               <YouTubeVideoList
+                ref="youtubeVideoList"
+                skin="dark"
                 :videos="videos"
                 :checkSubs="false"
-                ref="youtubeVideoList"
                 :checkSaved="false"
                 :key="`videos-filtered-${this.keyword}`"
                 :view="view"
