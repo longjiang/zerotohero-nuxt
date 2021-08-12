@@ -78,7 +78,7 @@
       <div class="row">
         <div class="col-md-12">
           <div
-            class="widget"
+            class="widget widget-dark"
             v-if="a && b"
             :key="`${a.id}-subs`"
             id="compare-search-subs"
@@ -88,6 +88,7 @@
             </div>
             <div class="widget-body">
               <LazyCompareSearchSubs
+                skin="dark"
                 :key="`compare-search-subs-${a.id}-${b.id}`"
                 :levelA="a.newHSK && a.newHSK === '7-9' ? '7-9' : a.hsk || a.level || 'outside' "
                 :termsA="

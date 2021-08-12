@@ -20,7 +20,11 @@
     >
       <b-button
         size="sm"
-        class="tab text-secondary bg-gray  ml-1 mr-1"
+        :class="{
+          'tab': true,
+          'btn-gray text-secondary': hitAB !== 'A' && skin === 'light',
+          'btn-ghost-dark': hitAB !== 'A' && skin === 'dark',
+        }"
         variant="none"
         :data-bg-level="hitAB === 'A' ? levelA || 'outside' : false"
         @click="hitAB = 'A'"
@@ -30,7 +34,10 @@
 
       <b-dropdown
         class="playlist-dropdown"
-        toggle-class="btn btn-sm btn-gray border-0 playlist-dropdown-toggle ml-1 mr-1"
+        :toggle-class="{'btn btn-sm border-0 playlist-dropdown-toggle mr-1': true,
+          'btn-gray text-secondary': skin === 'light',
+          'btn-ghost-dark': skin === 'dark',
+        }"
         boundary="viewport"
         ref="dropdown"
         no-caret
@@ -177,7 +184,11 @@
         </template>
       </b-dropdown>
       <b-button
-        class="tab bg-gray text-secondary border-0 ml-1 mr-1"
+        :class="{
+          'tab': true,
+          'btn-gray text-secondary': hitAB !== 'B' && skin === 'light',
+          'btn-ghost-dark': hitAB !== 'B' && skin === 'dark',
+        }"
         variant="none"
         size="sm"
         :data-bg-level="hitAB === 'B' ? levelB || 'outside' : false"
@@ -188,7 +199,7 @@
       <div class="float-right mr-1">
         <b-button
           class="search-subs-fullscreen border-0 ml-1"
-          variant="gray"
+          :variant="skin === 'dark' ? 'ghost-dark' : 'gray'"
           size="sm"
           @click="toggleFullscreen"
           v-if="!fullscreen"
@@ -207,7 +218,9 @@
       </div>
       <div
         style="height: 0.5rem"
-        :data-bg-level="hitAB === 'A' ? levelA || 'outside' : levelB || 'outside'"
+        :data-bg-level="
+          hitAB === 'A' ? levelA || 'outside' : levelB || 'outside'
+        "
       ></div>
     </div>
     <SearchSubsComp
@@ -219,6 +232,7 @@
       @loaded="searchSubsALoaded"
       :keyboard="false"
       :fullscreenToggle="false"
+      :skin="skin"
     />
     <SearchSubsComp
       :class="{ 'd-none': hitAB === 'A' }"
@@ -229,6 +243,7 @@
       @loaded="searchSubsBLoaded"
       :keyboard="false"
       :fullscreenToggle="false"
+      :skin="skin"
     />
   </div>
 </template>
@@ -256,6 +271,9 @@ export default {
     },
     keyboard: {
       default: true,
+    },
+    skin: {
+      default: 'light',
     },
   },
   data() {
@@ -306,8 +324,8 @@ export default {
   watch: {
     hitAB() {
       this.$refs.searchSubsA.pauseYouTube(),
-      this.$refs.searchSubsB.pauseYouTube(),
-      this.unbindKeys();
+        this.$refs.searchSubsB.pauseYouTube(),
+        this.unbindKeys();
       this.bindKeys();
     },
   },

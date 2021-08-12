@@ -828,12 +828,6 @@ export default {
   .btn:disabled {
     opacity: 0.2;
   }
-  .hit-thumb {
-    width: calc(0.2rem * 16);
-    height: calc(0.2rem * 9);
-    object-fit: cover;
-    margin-right: 1rem;
-  }
   .video-area {
     background: black;
   }
@@ -858,29 +852,6 @@ export default {
       color: rgba(255, 255, 255, 0.877);
     }
   }
-  ::v-deep .playlist-dropdown {
-    .dropdown-menu {
-      margin-top: 2.2rem;
-      height: calc(100vh - 3rem);
-      border: none;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-      overflow: scroll;
-      .current {
-        .dropdown-item {
-          background: #f3f3f3;
-        }
-      }
-      .dropdown-item {
-        max-width: 98vw;
-        white-space: normal;
-        padding: 0.25rem 1rem;
-        color: #666;
-        &:hover {
-          background-color: #f3f3f3;
-          cursor: pointer;
-        }
-      }
-    }
-  }
 }
+
 </style>
