@@ -577,6 +577,8 @@ export default {
 .youtube-video-card-wrapper {
   height: 100%;
   box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  background: white;
 }
 
 .youtube-video-card-wrapper.nosubs:not(.over) {
@@ -586,8 +588,8 @@ export default {
   border: 2px dashed #ccc;
 }
 
-a.youtube-video-card,
-a.youtube-video-card:hover {
+.youtube-video-card,
+.youtube-video-card:hover {
   color: #666;
   text-decoration: none;
   .youtube-title {

@@ -205,6 +205,12 @@ export default {
   background: white;
 }
 
+.main-dark {
+  background-color: hsl(0deg 0% 0% / 75%);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+}
+
 .zth-nav {
   background: #002d4433;
   backdrop-filter: blur(15px);

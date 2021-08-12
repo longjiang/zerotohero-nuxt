@@ -5,7 +5,7 @@
   }
 </router>
 <template>
-  <div class="main">
+  <div class="main-dark">
     <div class="youtube-browse container pt-5 pb-5">
       <SocialHead
         v-if="show"
@@ -19,12 +19,12 @@
       />
       <div class="row">
         <div class="col-sm-12 mb-4 text-center">
-          <h3 v-if="show">
+          <h3 v-if="show" class="text-white">
             <Annotate :phonetics="false" :buttons="true">
               <span>{{ show.title }}</span>
             </Annotate>
           </h3>
-          <p v-if="count">({{ count }} Videos)</p>
+          <p v-if="count" class="text-white" style="opacity: 0.6">{{ count }} Episodes</p>
         </div>
         <div class="col-sm-12 mb-5">
           <div class="youtube-video-list-wrapper">
