@@ -14,132 +14,146 @@
   }
 </router>
 <template>
-  <div class="container main pt-5 pb-5">
-    <SocialHead
-      v-if="lesson && images && images[0]"
-      :title="`${level(lesson.level)} ${$l2.name} Lesson Kit: “${lesson.name}” | ${$l2.name} Zero to Hero`"
-      :description="`Topic focus: ${lesson.subjects.replace(/<.*?>/gi, '')}`"
-      :image="images[0].src"
-    />
-    <div class="row">
-      <div class="col-sm-12">
-        <div v-if="lesson">
-          <h6>
-            <a
-              class="link-unstyled"
-              :href="`/${$l1.code}/${$l2.code}/tutoring/`"
-            >
-              {{ $l2.name }} Tutoring Kit
-            </a>
-            /
-            <a
-              class="link-unstyled"
-              :href="`/${$l1.code}/${$l2.code}/tutoring/${level(lesson.level).replace('-', '')}`"
-            >
-              <span
-                :data-level="level(lesson.level).replace('-', '')"
+  <div class="main">
+    <div class="container pt-5 pb-5">
+      <SocialHead
+        v-if="lesson && images && images[0]"
+        :title="`${level(lesson.level)} ${$l2.name} Lesson Kit: “${
+          lesson.name
+        }” | ${$l2.name} Zero to Hero`"
+        :description="`Topic focus: ${lesson.subjects.replace(/<.*?>/gi, '')}`"
+        :image="images[0].src"
+      />
+      <div class="row">
+        <div class="col-sm-12">
+          <div v-if="lesson">
+            <h6>
+              <a
+                class="link-unstyled"
+                :href="`/${$l1.code}/${$l2.code}/tutoring/`"
               >
-                {{ level(lesson.level) }} Level
-              </span>
-            </a>
-          </h6>
-          <hr />
-
-          <h1 class="mt-5 mb-5 text-center">{{ lesson.name }}</h1>
-          <div
-            class="jumbotron shadow rounded mt-5 mb-5 pt-5 pb-3 bg-white topics"
-          >
-            <h6 class="mb-4">Topic focus:</h6>
-            <div v-html="lesson.subjects"></div>
-            <h6 class="mt-5 mb-4">Vocabulary focus:</h6>
-            <div v-html="lesson.vocabulary"></div>
-          </div>
-          <div class="lesson-section" v-if="lesson.youtubeVideos">
-            <h4>Pre-Study</h4>
-            <p>Watch any one of the videos and study the subtitles:</p>
-            <YouTubeVideoList :videos="lesson.youtubeVideos" />
-          </div>
-          <div class="lesson-section">
-            <h4>Activity 1: Read Together</h4>
-            <p>
-              Read any one of the following articles with the help of your
-              tutor. Use the
-              <a target="_blank" :href="`/${$l1.code}/${$l2.code}/reader`">
-                Text Reader
+                {{ $l2.name }} Tutoring Kit
               </a>
-              for word lookup.
-            </p>
-            <div v-if="!lesson.readings" v-html="lesson.reading"></div>
-            <div v-else>
-              <div
-                v-for="reading in lesson.readings"
-                class="reading-card rounded shadow p-3 mb-4"
+              /
+              <a
+                class="link-unstyled"
+                :href="`/${$l1.code}/${$l2.code}/tutoring/${level(
+                  lesson.level
+                ).replace('-', '')}`"
               >
-                <a class="link-unstyled" :href="reading.url" target="_blank">
-                  <h6>{{ reading.title }}</h6>
-                  <div>
-                    {{ reading.body | striphtml | truncate(150, "...") }}
-                  </div>
+                <span :data-level="level(lesson.level).replace('-', '')">
+                  {{ level(lesson.level) }} Level
+                </span>
+              </a>
+            </h6>
+            <hr />
+
+            <h1 class="mt-5 mb-5 text-center">{{ lesson.name }}</h1>
+            <div
+              class="
+                jumbotron
+                shadow
+                rounded
+                mt-5
+                mb-5
+                pt-5
+                pb-3
+                bg-white
+                topics
+              "
+            >
+              <h6 class="mb-4">Topic focus:</h6>
+              <div v-html="lesson.subjects"></div>
+              <h6 class="mt-5 mb-4">Vocabulary focus:</h6>
+              <div v-html="lesson.vocabulary"></div>
+            </div>
+            <div class="lesson-section" v-if="lesson.youtubeVideos">
+              <h4>Pre-Study</h4>
+              <p>Watch any one of the videos and study the subtitles:</p>
+              <YouTubeVideoList :videos="lesson.youtubeVideos" />
+            </div>
+            <div class="lesson-section">
+              <h4>Activity 1: Read Together</h4>
+              <p>
+                Read any one of the following articles with the help of your
+                tutor. Use the
+                <a target="_blank" :href="`/${$l1.code}/${$l2.code}/reader`">
+                  Text Reader
                 </a>
+                for word lookup.
+              </p>
+              <div v-if="!lesson.readings" v-html="lesson.reading"></div>
+              <div v-else>
+                <div
+                  v-for="reading in lesson.readings"
+                  class="reading-card rounded shadow p-3 mb-4"
+                >
+                  <a class="link-unstyled" :href="reading.url" target="_blank">
+                    <h6>{{ reading.title }}</h6>
+                    <div>
+                      {{ reading.body | striphtml | truncate(150, "...") }}
+                    </div>
+                  </a>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="lesson-section">
-            <h4>Activity 2: Free Talk</h4>
-            <div v-html="lesson.free_talk"></div>
-            <p>
-              • Describe one of the pictures to your tutor, and ask him or her
-              to guess which picture you are talking about.
-            </p>
-            <div
-              class="image-wall"
-              :key="`web-images-${lesson.name}`"
-              v-cloak
-              v-if="images && images.length > 0"
-            >
-              <img
-                alt
-                class="image-wall-image"
-                v-for="(image, index) in images"
-                :key="`web-images-${lesson.name}-${index}`"
-                :src="`${Config.imageProxy}?${image.src}`"
-                @click="goto(image.url)"
-              />
+            <div class="lesson-section">
+              <h4>Activity 2: Free Talk</h4>
+              <div v-html="lesson.free_talk"></div>
+              <p>
+                • Describe one of the pictures to your tutor, and ask him or her
+                to guess which picture you are talking about.
+              </p>
+              <div
+                class="image-wall"
+                :key="`web-images-${lesson.name}`"
+                v-cloak
+                v-if="images && images.length > 0"
+              >
+                <img
+                  alt
+                  class="image-wall-image"
+                  v-for="(image, index) in images"
+                  :key="`web-images-${lesson.name}-${index}`"
+                  :src="`${Config.imageProxy}?${image.src}`"
+                  @click="goto(image.url)"
+                />
+              </div>
+            </div>
+            <div class="lesson-section">
+              <h4>Homework: Writing</h4>
+              <p>
+                Complete the following task as homework, and go over with your
+                tutor at the next session.
+              </p>
+              <div v-html="lesson.writing"></div>
             </div>
           </div>
-          <div class="lesson-section">
-            <h4>Homework: Writing</h4>
-            <p>
-              Complete the following task as homework, and go over with your
-              tutor at the next session.
-            </p>
-            <div v-html="lesson.writing"></div>
-          </div>
+          <hr class="mt-5 mb-5" />
+          <p>
+            <b>About this kit:</b>
+            When you are having a lesson with either a free language exchange
+            partner or a paid tutor through services such as
+            <a href="https://www.tandem.net/">Tandem</a>
+            ,
+            <a href="https://amikumu.com/">Amikumu</a>
+            ,
+            <a href="https://www.italki.com/">iTalki</a>
+            ,
+            <a href="https://www.hellotalk.com/">HelloTalk</a>
+            or
+            <a href="https://preply.com/">Preply</a>
+            , you can make use of this lesson kit to give structure and content
+            to your lesson.
+          </p>
+          <p>
+            The kit is based around the Cambridge
+            <em>Touchstone</em>
+            and
+            <em>Viewpoint</em>
+            series of American English textbooks.
+          </p>
         </div>
-        <hr class="mt-5 mb-5" />
-        <p>
-          <b>About this kit:</b>
-          When you are having a lesson with either a free language exchange
-          partner or a paid tutor through services such as
-          <a href="https://www.tandem.net/">Tandem</a>
-          ,
-          <a href="https://amikumu.com/">Amikumu</a>
-          ,
-          <a href="https://www.italki.com/">iTalki</a>
-          ,
-          <a href="https://www.hellotalk.com/">HelloTalk</a>
-          or
-          <a href="https://preply.com/">Preply</a>
-          , you can make use of this lesson kit to give structure and content to
-          your lesson.
-        </p>
-        <p>
-          The kit is based around the Cambridge
-          <em>Touchstone</em>
-          and
-          <em>Viewpoint</em>
-          series of American English textbooks.
-        </p>
       </div>
     </div>
   </div>
