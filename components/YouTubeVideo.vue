@@ -2,13 +2,18 @@
   <div class="youtube" :key="youtube">
     <div
       :style="{
-        backgroundImage:
-          'url(' + '//img.youtube.com/vi/' + youtube + '/hqdefault.jpg' + ')',
+        backgroundImage: !autoplay && !loading
+          ? `url(//img.youtube.com/vi/${youtube}/hqdefault.jpg)`
+          : 'none',
+        'background-repeat': 'no-repeat',
+        'background-size': 'cover',
+        'background-position': 'center',
       }"
       class="youtube-screen"
-      v-on:click="loadYouTubeiFrame()"
+      @click="loadYouTubeiFrame()"
     >
       <div :id="youtubeIframeID" class="youtube-iframe"></div>
+      <div class="youtube-icon" v-if="!autoplay && !loading"></div>
     </div>
   </div>
 </template>
@@ -50,6 +55,7 @@ export default {
       currentTime: 0,
       interval: undefined,
       duration: undefined,
+      loading: false,
     };
   },
   mounted() {
@@ -91,6 +97,13 @@ export default {
       };
       return preferences[this.$l2.code] || this.$l1.code;
     },
+    isPlaying() {
+      let playing =
+        this.player &&
+        this.player.getPlayerState &&
+        this.player.getPlayerState() === 1;
+      return playing;
+    },
   },
   methods: {
     getDuration() {
@@ -99,14 +112,8 @@ export default {
         return duration;
       }
     },
-    isPlaying() {
-      let playing =
-        this.player &&
-        this.player.getPlayerState &&
-        this.player.getPlayerState() === 1;
-      return playing;
-    },
     loadYouTubeiFrame() {
+      this.loading = true;
       let id = this.$el.querySelector(".youtube-iframe").getAttribute("id");
       this.removeYouTubeAPIVars();
       window.onYouTubePlayerAPIReady = () => {
@@ -154,7 +161,7 @@ export default {
                     }, 50);
                   }
                   if (!this.duration) this.duration = this.player.getDuration();
-                  this.$emit('duration', this.duration)
+                  this.$emit("duration", this.duration);
                 } else {
                   clearInterval(this.interval);
                   this.interval = undefined;
@@ -247,39 +254,36 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 .youtube {
   padding-bottom: 56.25%;
   position: relative;
-}
-
-.youtube iframe,
-.youtube-screen {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-}
-
-.youtube-screen {
-  background-size: cover;
-  background-position: center;
-  color: white;
-  font-size: 1.3rem;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
-}
-
-.youtube-screen::after {
-  content: "";
-  background: url("/img/youtube-red.svg");
-  width: 100px;
-  height: 100px;
+  ::v-deep iframe,
+  .youtube-screen {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+  }
+  .youtube-screen {
+    color: white;
+    font-size: 1.3rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    background: black;
+  }
+  .youtube-icon {
+    content: "";
+    background: url("/img/youtube-red.svg");
+    width: 100px;
+    height: 100px;
+    position: absolute;
+  }
 }
 </style>
