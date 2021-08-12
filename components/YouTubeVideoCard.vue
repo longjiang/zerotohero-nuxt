@@ -25,15 +25,24 @@
         :to="`/${$l1.code}/${$l2.code}/youtube/view/${video.youtube_id}/${
           video.lesson ? 'lesson' : ''
         }`"
-        class="youtube-thumbnail-wrapper aspect-wrapper d-block play-button-wrapper"
+        class="
+          youtube-thumbnail-wrapper
+          aspect-wrapper
+          d-block
+          play-button-wrapper
+        "
       >
-        <button
-          class="btn btn-unstyled play-button"
-          v-if="!active"
-          @click="active = true"
-        >
+        <button class="btn btn-unstyled play-button">
           <i class="fa fa-play"></i>
         </button>
+        <client-only>
+          <b-progress
+            class="youtube-video-card-progress"
+            v-if="progress"
+            :value="progress"
+            :max="1"
+          ></b-progress>
+        </client-only>
         <img
           :src="
             video.thumbnail ||
@@ -257,11 +266,12 @@ import Helper from "@/lib/helper";
 import DateHelper from "@/lib/date-helper";
 import Config from "@/lib/config";
 import YouTube from "@/lib/youtube";
-import { Drag, Drop } from "vue-drag-drop";
-import { parseSync } from "subtitle";
 import Vue from "vue";
 import assParser from "ass-parser";
 import languageEncoding from "detect-file-encoding-and-language";
+import { Drag, Drop } from "vue-drag-drop";
+import { parseSync } from "subtitle";
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -319,6 +329,9 @@ export default {
     if (this.video.id && this.showSubsEditing) {
       await this.addSubsL1(this.video);
     }
+    if (!this.$store.state.history.historyLoaded) {
+      this.$store.commit("history/LOAD_HISTORY");
+    }
   },
   watch: {
     firstLineTime(newTime, oldTime) {
@@ -340,6 +353,18 @@ export default {
     $adminMode() {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
+    },
+    ...mapState("history", ["history"]),
+    historyId() {
+      return `${this.$l2.code}-video-${this.video.youtube_id}`;
+    },
+    progress() {
+      if (this.history) {
+        let historyItem = this.history.find((i) => i.id === this.historyId);
+        if (historyItem) {
+          return historyItem.progress;
+        }
+      }
     },
   },
   methods: {
@@ -598,12 +623,12 @@ export default {
   height: 100%;
   overflow: hidden;
   background: white;
-
   &.nosubs:not(.over) {
     opacity: 0.2;
   }
   &.youtube-video-card-wrapper-dark {
     background: none;
+    overflow: visible;
     &:hover {
       transform: scale(110%);
       transition: 200ms ease-in-out;
@@ -611,11 +636,11 @@ export default {
     .youtube-thumbnail-wrapper {
       border-radius: 0.5rem;
       overflow: hidden;
-      box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 5px 25px #fd89662f;
     }
     .media-body {
       padding: 1rem 0 0 0;
-      color: hsla(0deg 0 100% / 85%);
+      color: hsla(0deg 0 100% / 75%);
     }
   }
   &.youtube-video-card-wrapper-card {
@@ -627,17 +652,33 @@ export default {
   }
   .youtube-video-card,
   .youtube-video-card:hover {
+    position: relative;
     color: #666;
     text-decoration: none;
     .youtube-title {
       font-weight: bold;
     }
+    .youtube-video-card-progress {
+      height: 0.3rem;
+      border-radius: 0.15rem;
+      position: absolute;
+      z-index: 9;
+      top: calc(100% - 0.5rem);
+      width: calc(100% - 1rem);
+      left: 0.5rem;
+      background-color: hsla(0deg 0 100% / 25%);
+      -webkit-backdrop-filter: blur(5px);
+      backdrop-filter: blur(5px);
+      ::v-deep .progress-bar {
+        background-color: #fd4f1c;
+      }
+    }
   }
+
   .youtube-video-card-list {
     .youtube-thumbnail-wrapper {
       display: none !important;
     }
   }
 }
-
 </style>
