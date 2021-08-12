@@ -5,7 +5,12 @@
   }
 </router>
 <template>
-  <div class="youtube-view pt-3 pb-5 main-dark">
+  <div
+    :class="{
+      'youtube-view pt-3 pb-5 ': true,
+      'main-dark': layout !== 'vertical',
+    }"
+  >
     <SocialHead
       v-if="video"
       :title="`Learn ${$l2.name} from the video ${video.title} | ${$l2.name} Zero to Hero`"
@@ -455,7 +460,7 @@ export default {
         data.duration = this.$refs.youtube.duration;
         data.progress = data.starttime / data.duration;
       }
-        
+
       this.$store.dispatch("history/add", data);
     },
     unbindKeys() {
@@ -477,7 +482,8 @@ export default {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: white;
+  background-color: black;
+  color: #ffffffaa;
   z-index: 9;
 }
 
