@@ -25,8 +25,15 @@
         :to="`/${$l1.code}/${$l2.code}/youtube/view/${video.youtube_id}/${
           video.lesson ? 'lesson' : ''
         }`"
-        class="youtube-thumbnail-wrapper aspect-wrapper d-block"
+        class="youtube-thumbnail-wrapper aspect-wrapper d-block play-button-wrapper"
       >
+        <button
+          class="btn btn-unstyled play-button"
+          v-if="!active"
+          @click="active = true"
+        >
+          <i class="fa fa-play"></i>
+        </button>
         <img
           :src="
             video.thumbnail ||
@@ -597,6 +604,10 @@ export default {
   }
   &.youtube-video-card-wrapper-dark {
     background: none;
+    &:hover {
+      transform: scale(110%);
+      transition: 200ms ease-in-out;
+    }
     .youtube-thumbnail-wrapper {
       border-radius: 0.5rem;
       overflow: hidden;
@@ -628,4 +639,5 @@ export default {
     }
   }
 }
+
 </style>

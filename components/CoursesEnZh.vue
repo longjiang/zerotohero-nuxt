@@ -411,7 +411,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 .courses a:not(.btn) {
   color: inherit;
 }
@@ -442,6 +442,10 @@ export default {
   border-radius: 1rem;
   overflow: hidden;
   margin: 0 auto;
+  &:hover {
+    transform: scale(1.1);
+    transition: 200ms ease-in-out;
+  }
 }
 
 @media (max-width: 576px) {

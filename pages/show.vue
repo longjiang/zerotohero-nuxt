@@ -29,30 +29,32 @@
         <div class="col-sm-12 mb-5">
           <div class="youtube-video-list-wrapper">
             <div class="d-flex mb-5">
-              <b-input-group class="flex-1">
+              <b-input-group class="flex-1 input-group-ghost-dark">
                 <b-form-input
                   v-model="keyword"
                   :lazy="true"
                   @compositionend.prevent.stop="() => false"
                   placeholder="Filter by video title..."
+                  class="input-ghost-dark"
                 />
                 <b-input-group-append>
-                  <b-button variant="primary">
+                  <b-button variant="ghost-dark" >
                     <i class="fas fa-filter"></i>
                   </b-button>
                 </b-input-group-append>
               </b-input-group>
               <b-button-group>
                 <b-button
-                  :variant="view === 'grid' ? 'primary' : 'secondary'"
+                  :variant="view === 'grid' ? 'ghost-dark' : 'ghost-dark-outline'"
                   class="ml-2"
                   @click="view = 'grid'"
                 >
                   <i class="fas fa-th"></i>
                 </b-button>
                 <b-button
-                  :variant="view === 'list' ? 'primary' : 'secondary'"
+                  :variant="view === 'list' ? 'ghost-dark' : 'ghost-dark-outline'"
                   @click="view = 'list'"
+                  style="border-left: none"
                 >
                   <i class="fas fa-list"></i>
                 </b-button>

@@ -533,12 +533,6 @@ h6,
   font-weight: bold;
 }
 
-.btn-medium {
-  display: inline-block;
-  border: none;
-  padding: 0.2rem 0.5rem;
-  border-radius: 0.3rem;
-}
 
 ul.collapsed li:nth-child(n + 5) {
   display: none;
@@ -672,6 +666,44 @@ button.bg-primary:focus {
   text-decoration: none;
   background: #d8d8d8;
   color: #8e8e8e;
+}
+
+.btn-ghost-dark-outline {
+  color: hsla(0deg 0% 100% / 50%);
+  border: 2px solid #666;
+  &:hover {
+    background-color: hsla(0deg 0% 100% / 70%);
+    border: 2px solid #aaa;
+  }
+}
+
+.btn-ghost-dark {
+  background-color: hsla(0deg 0% 100% / 30%);
+  border: none;
+  &:hover {
+    background-color: hsla(0deg 0% 100% / 70%);
+  }
+}
+
+
+.btn-medium {
+  display: inline-block;
+  border: none;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.3rem;
+}
+
+
+.input-group-ghost-dark {
+  .input-ghost-dark {
+    background: hsla(0deg 0 100% / 10%);
+    border-radius: 0.25rem;
+    border: none;
+    color: hsla(0deg 0 100% / 90%);
+    &::placeholder {
+      color: hsla(0deg 0 100% / 70%);
+    }
+  }
 }
 
 .article {
@@ -950,5 +982,28 @@ button.bg-primary:focus {
       width: 100%;
       overflow: hidden;
     }
+  }
+}
+
+
+.play-button-wrapper {
+  .play-button {
+    background: rgba(0, 0, 0, 0.3);
+    color: rgba(255, 255, 255, 0.384);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    position: absolute;
+    top: calc(50% - 20px);
+    left: calc(50% - 20px);
+    border-radius: 100%;
+    width: 40px;
+    height: 40px;
+    transform: scale(1.5);
+    z-index: 1;
+  }
+  &:hover .play-button {
+    color: rgba(255, 255, 255, 0.616);
+    transform: scale(1.8);
+    transition: 200ms ease-in-out;
   }
 }

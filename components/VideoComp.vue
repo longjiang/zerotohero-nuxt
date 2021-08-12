@@ -1,5 +1,5 @@
 <template>
-  <div class="video-wrapper">
+  <div class="video-wrapper play-button-wrapper">
     <button
       class="btn btn-unstyled play-button"
       v-if="!active"
@@ -51,18 +51,5 @@ export default {
 .video-wrapper video {
   width: 100%;
   display: block;
-}
-.play-button {
-  background: rgba(0, 0, 0, 0.5);
-  color: white;
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  position: absolute;
-  top: calc(50% - 20px);
-  left: calc(50% - 20px);
-  border-radius: 100%;
-  width: 40px;
-  height: 40px;
-  transform: scale(2);
 }
 </style>
