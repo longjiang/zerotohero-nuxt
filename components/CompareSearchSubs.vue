@@ -1,8 +1,5 @@
 <template>
   <div :class="{ 'compare-search-subs': true, fullscreen }">
-    <div v-if="checkingA || checkingB" class="text-center mb-3 mt-3">
-      Searching...
-    </div>
     <div
       v-if="
         !checkingA && !checkingB && hitsA.length === 0 && hitsB.length === 0
