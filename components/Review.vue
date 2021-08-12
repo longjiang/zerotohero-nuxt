@@ -1,10 +1,22 @@
 <template>
-  <div :class="{ review: true, 'show-answer': showAnswer }">
-    <div class="review-item" :dir="$l2.direction" :class="{
-              'text-right':
-                $l2.scripts &&
-                $l2.scripts.length > 0 &&
-                $l2.scripts[0].direction === 'rtl'}">
+  <div
+    :class="{
+      review: true,
+      'show-answer': showAnswer,
+      'review-light': skin === 'light',
+      'review-dark': skin === 'dark',
+    }"
+  >
+    <div
+      class="review-item"
+      :dir="$l2.direction"
+      :class="{
+        'text-right':
+          $l2.scripts &&
+          $l2.scripts.length > 0 &&
+          $l2.scripts[0].direction === 'rtl',
+      }"
+    >
       <Annotate tag="span" :buttons="true" class="transcript-line-chinese">
         <span
           v-if="$l2.han && $l2.code !== 'ja'"
@@ -23,36 +35,21 @@
       </Annotate>
       <span class="ml-1">
         <button
-          style="
-            background: white;
-            border-radius: 100%;
-            border: 1px solid #999;
-            color: #999;
-            width: 1.7rem;
-            height: 1.7rem;
-            display: inline-block;
-            overflow: hidden;
-            padding: 0;
-            font-size: 0.8em;
-          "
+          :class="{
+            'review-speak-button': true,
+            'btn-ghost-dark': skin === 'dark',
+          }"
           @click="speak"
         >
           <i class="fas fa-volume-up"></i>
         </button>
       </span>
+      <span>
         <button
-          style="
-            background: white;
-            border-radius: 100%;
-            border: 1px solid #999;
-            color: #999;
-            width: 1.7rem;
-            height: 1.7rem;
-            display: inline-block;
-            overflow: hidden;
-            padding: 0;
-            font-size: 0.8em;
-          "
+          :class="{
+            'review-seek-button': true,
+            'btn-ghost-dark': skin === 'dark',
+          }"
           @click="$parent.seekVideoTo(reviewItem.line.starttime)"
         >
           <i class="fas fa-arrow-up"></i>
@@ -75,6 +72,7 @@
           v-for="(answer, index) in reviewItem.answers"
           :key="`quiz-button-${index}`"
           :answer="answer"
+          :skin="skin"
           @answered="answered(answer)"
         />
       </div>
@@ -107,15 +105,14 @@ export default {
     hsk: {
       default: "outside",
     },
+    skin: {
+      default: "light",
+    },
   },
   methods: {
     async speak() {
       if (this.reviewItem.parallelLines) {
-        await Helper.speak(
-          this.reviewItem.parallelLines,
-          this.$l1,
-          1.1
-        );
+        await Helper.speak(this.reviewItem.parallelLines, this.$l1, 1.1);
       }
       await Helper.speak(this.reviewItem.line.line, this.$l2, 1);
     },
@@ -144,27 +141,60 @@ export default {
 .review {
   margin: 0.5rem 0;
   padding: 1rem;
-  background-color: #f3f3f3;
   border-radius: 0.5rem;
-  &.show-answer {
-    background-color: #e4f8e5;
+  .review-speak-button,
+  .review-seek-button {
+    border-radius: 100%;
+    width: 1.7rem;
+    height: 1.7rem;
+    display: inline-block;
+    overflow: hidden;
+    padding: 0;
+    font-size: 0.8em;
   }
-}
-
-.review:not(.show-answer) {
-  .highlight {
-    background-color: #ccc;
-    border-radius: 0.2rem;
+  .transcript-line-l1 {
+    font-size: 13.44px;
+    padding-left: 0.5rem;
   }
-  .highlight * {
-    opacity: 0;
-    pointer-events: none;
+  &.review-light {
+    background-color: #f3f3f3;
+    .review-speak-button,
+    .review-seek-button {
+      background: white;
+      border: 1px solid #999;
+      color: #999;
+    }
+    .transcript-line-l1 {
+      color: #999;
+    }
+    &:not(.show-answer) {
+      .highlight {
+        background-color: #ccc;
+      }
+    }
+    &.show-answer {
+      background-color: #e4f8e5;
+    }
   }
-}
-
-.review .transcript-line-l1 {
-  color: #999;
-  font-size: 13.44px;
-  padding-left: 0.5rem;
+  &.review-dark {
+    background: #00000055;
+    &:not(.show-answer) {
+      .highlight {
+        background: #444;
+      }
+    }
+    &.show-answer {
+      background-color: #4070433f;
+    }
+  }
+  &:not(.show-answer) {
+    .highlight {
+      border-radius: 0.2rem;
+      * {
+        opacity: 0;
+        pointer-events: none;
+      }
+    }
+  }
 }
 </style>

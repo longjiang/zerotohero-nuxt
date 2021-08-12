@@ -1,9 +1,12 @@
 <template>
   <button
     :class="{
-      btn: true,
-      'bg-white': true,
       'review-answer': true,
+      'review-answer-light': skin === 'light',
+      'review-answer-dark': skin === 'dark',
+      btn: true,
+      'bg-white': skin === 'light',
+      'btn-ghost-dark': skin === 'dark',
       checked: checked,
       'review-answer-correct': answer.correct,
     }"
@@ -28,6 +31,9 @@ export default {
     answer: {
       type: Object,
     },
+    skin: {
+      default: "light",
+    },
   },
   data() {
     return {
@@ -36,9 +42,9 @@ export default {
   },
   methods: {
     answered() {
-      this.checked = true
-      this.$emit('answered')
-    }
+      this.checked = true;
+      this.$emit("answered");
+    },
   },
   computed: {
     $l1() {
@@ -52,19 +58,20 @@ export default {
     $useTraditional() {
       if (typeof this.$store.state.settings.l2Settings !== "undefined")
         return this.$store.state.settings.l2Settings.useTraditional;
-
-    }
+    },
   },
 };
 </script>
         
-<style>
+<style lang="scss" scoped>
 .review-answer,
 .review-answer:hover {
-  border: 1px solid #999;
+  &.review-answer-light {
+    border: 1px solid #999;
+    color: #999;
+  }
   padding: 0.1rem 0.3rem;
   font-size: 0.9em;
-  color: #999;
   min-width: 5rem;
   margin-right: 0.5rem;
 }

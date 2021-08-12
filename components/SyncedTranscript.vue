@@ -99,6 +99,7 @@
             :key="`review-${lineIndex}-${reviewItemIndex}-${reviewKeys[lineIndex]}`"
             :reviewItem="reviewItem"
             :hsk="hsk"
+            :skin="skin"
           />
         </div>
       </template>
@@ -113,6 +114,9 @@ import Vue from "vue";
 
 export default {
   props: {
+    skin: {
+      default: "light",
+    },
     quiz: {
       default: false,
     },
