@@ -3,14 +3,14 @@
   "builds": [
     {
       "src": "nuxt.config.js",
-      "use": "@nuxtjs/vercel-builder"
+      "use": "@nuxtjs/vercel-builder",
+      "config": {
+        "serverFiles": [
+          "./runtime/providers/log"
+        ]
+      }
     }
   ],
-  "config": {
-    "serverFiles": [
-      "./runtime/providers/log"
-    ]
-  },
   "github": {
     "silent": true
   }
