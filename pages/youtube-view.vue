@@ -439,7 +439,7 @@ export default {
       };
     },
     saveHistory() {
-      this.$store.dispatch("history/add", {
+      let data = {
         type: "video",
         id: `${this.$l2.code}-video-${this.video.youtube_id}`,
         title: this.video.title,
@@ -447,7 +447,13 @@ export default {
         date: DateHelper.unparseDate(new Date()),
         starttime: this.currentTimeInSeconds,
         l2: this.$l2.code,
-      });
+      };
+      if (this.$refs.youtube && this.$refs.youtube.duration) {
+        data.duration = this.$refs.youtube.duration;
+        data.progress = data.starttime / data.duration;
+      }
+        
+      this.$store.dispatch("history/add", data);
     },
     unbindKeys() {
       window.onkeydown = null;

@@ -16,6 +16,7 @@
             @paused="updatePaused"
             @currentTime="updateCurrentTime"
             @ended="updateEnded"
+            @duration="updateDuration"
             :speed="speed"
             :youtube="video.youtube_id"
             :starttime="start"
@@ -195,6 +196,7 @@
               @paused="updatePaused"
               @currentTime="updateCurrentTime"
               @ended="updateEnded"
+              @duration="updateDuration"
               :speed="speed"
               :youtube="video.youtube_id"
               :starttime="start"
@@ -336,6 +338,7 @@ export default {
       speed: 1,
       layout: this.initialLayout,
       collapsed: false,
+      duration: undefined
     };
   },
   computed: {
@@ -378,6 +381,9 @@ export default {
     if (this.$refs.youtube) this.$refs.youtube.speed = this.speed;
   },
   methods: {
+    updateDuration(duration) {
+      this.duration = duration
+    },
     updateTranslation(translation) {
       let translationLines = translation.split("\n").filter((t) => t !== "");
       if (translationLines.length > 0 && this.video.subs_l2) {

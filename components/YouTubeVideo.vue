@@ -49,6 +49,7 @@ export default {
       player: undefined,
       currentTime: 0,
       interval: undefined,
+      duration: undefined,
     };
   },
   mounted() {
@@ -86,16 +87,16 @@ export default {
       // Sometimes a language (such as Breton) are mostly subtitles in French, and
       // English subtitles are not available. In this case use the best available subtitles
       let preferences = {
-        br: 'fr'
-      }
-      return preferences[this.$l2.code] || this.$l1.code 
-    }
+        br: "fr",
+      };
+      return preferences[this.$l2.code] || this.$l1.code;
+    },
   },
   methods: {
     getDuration() {
       if (this.player) {
-        let duration = this.player.getDuration()
-        return duration
+        let duration = this.player.getDuration();
+        return duration;
       }
     },
     isPlaying() {
@@ -144,14 +145,19 @@ export default {
                 this.$emit("ended", [ENDED].includes(state));
                 if (state === PLAYING) {
                   window.speechSynthesis.cancel();
-                  if (this.playerIsThisPlayerNotSomeOtherPlayer() && !this.interval) {
+                  if (
+                    this.playerIsThisPlayerNotSomeOtherPlayer() &&
+                    !this.interval
+                  ) {
                     this.interval = setInterval(() => {
                       this.updateCurrentTime();
                     }, 50);
                   }
+                  if (!this.duration) this.duration = this.player.getDuration();
+                  this.$emit('duration', this.duration)
                 } else {
                   clearInterval(this.interval);
-                  this.interval = undefined
+                  this.interval = undefined;
                 }
               }
               if (
