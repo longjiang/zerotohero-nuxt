@@ -447,6 +447,7 @@ export default {
         date: DateHelper.unparseDate(new Date()),
         starttime: this.currentTimeInSeconds,
         l2: this.$l2.code,
+        l1: this.$l2.code,
       };
       if (this.$refs.youtube && this.$refs.youtube.duration) {
         data.duration = this.$refs.youtube.duration;
