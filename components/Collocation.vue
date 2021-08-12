@@ -164,6 +164,6 @@ export default {
 </script>
 <style scoped>
 .gramrel-item {
-  line-height: 1.7;
+  line-height: 1.8;
 }
 </style>
