@@ -1,5 +1,11 @@
 <template>
-  <div class="container-fluid youtube-with-transcript">
+  <div
+    :class="{
+      'container-fluid youtube-with-transcript': true,
+      'youtube-with-transcript-landscape': landscape,
+      'youtube-with-transcript-portrait': !landscape,
+    }"
+  >
     <div
       v-if="layout === 'horizontal'"
       :class="`row youtube-with-transcript-${layout}`"
@@ -171,7 +177,11 @@
             <router-link
               v-if="previousEpisode"
               :to="previousEpisode"
-              class="btn btn-primary"
+              :class="{
+                btn: true,
+                'btn-primary': skin === 'light',
+                'btn-ghost-dark': skin === 'dark',
+              }"
             >
               <i class="fa fa-chevron-left"></i>
               Previous
@@ -181,7 +191,11 @@
               :to="`/${$l1.code}/${$l2.code}/show/${
                 showType === 'tv_show' ? 'tv-show' : 'talk'
               }/${show.id}`"
-              class="btn btn-primary"
+              :class="{
+                btn: true,
+                'btn-primary': skin === 'light',
+                'btn-ghost-dark': skin === 'dark',
+              }"
             >
               <i class="far fa-clone"></i>
               All Episodes
@@ -189,7 +203,11 @@
             <router-link
               v-if="nextEpisode"
               :to="nextEpisode"
-              class="btn btn-primary"
+              :class="{
+                btn: true,
+                'btn-primary': skin === 'light',
+                'btn-ghost-dark': skin === 'dark',
+              }"
             >
               Next
               <i class="fa fa-chevron-right"></i>
@@ -347,6 +365,9 @@ export default {
     skin: {
       default: "light",
     },
+    forcePortrait: {
+      default: false,
+    },
   },
   data() {
     return {
@@ -388,6 +409,7 @@ export default {
         return this.$store.state.settings.adminMode;
     },
     landscape() {
+      if (this.forcePortrait) return false;
       let landscape =
         typeof window !== "undefined" && window.innerWidth > window.innerHeight;
       return landscape;
@@ -577,7 +599,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .subs-drop.drop.over {
   border: 2px dashed #ccc;
 }
@@ -598,7 +620,7 @@ export default {
   padding-right: 0.667rem;
 }
 
-@media screen and (orientation: landscape) {
+.youtube-with-transcript-landscape {
   .youtube-video-column,
   .youtube-transcript-column {
     flex: 1;

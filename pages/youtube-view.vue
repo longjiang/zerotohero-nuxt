@@ -5,6 +5,7 @@
   }
 </router>
 <template>
+  <container-query :query="query" v-model="params">
   <div
     :class="{
       'youtube-view pt-3 pb-5 ': true,
@@ -74,6 +75,7 @@
         :episodes="episodes"
         :episodeIndex="thisEpisodeIndex"
         skin="dark"
+        :forcePortrait="params.narrow"
         @paused="updatePaused"
         @ended="updateEnded"
         @currentTime="updateCurrentTime"
@@ -83,6 +85,7 @@
       />
     </div>
   </div>
+  </container-query>
 </template>
 
 <script>
@@ -91,8 +94,12 @@ import Helper from "@/lib/helper";
 import DateHelper from "@/lib/date-helper";
 import Config from "@/lib/config";
 import axios from "axios";
+import { ContainerQuery } from "vue-container-query";
 
 export default {
+  components: {
+    ContainerQuery,
+  },
   props: {
     youtube_id: {
       type: String,
@@ -112,6 +119,12 @@ export default {
       episodes: [],
       randomEpisodeYouTubeId: undefined,
       layout: "horizontal",
+      params: {},
+      query: {
+        narrow: {
+          maxWidth: 900,
+        },
+      },
     };
   },
   computed: {

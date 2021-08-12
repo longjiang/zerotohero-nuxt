@@ -698,7 +698,6 @@ export default {
 </script>
 
 <style lang="scss">
-
 .transcript.single-line .transcript-line:not(.transcript-line-current) {
   display: none;
 }
@@ -711,7 +710,7 @@ export default {
 }
 
 .transcript-line-current {
-  box-shadow: 0 0 10px rgba(255, 95, 32, 0.301);
+  box-shadow: 0 0 15px 2px #fd511299;
   border-radius: 0.25rem;
 }
 
