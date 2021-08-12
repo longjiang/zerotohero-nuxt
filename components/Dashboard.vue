@@ -39,9 +39,8 @@
           v-if="item.type === 'video'"
           :to="{
             name: 'youtube-view',
-            l1: 'en',
-            l2: item.l2,
-            youtube_id: item.youtube_id,
+            params: { l1: 'en', l2: item.l2, youtube_id: item.youtube_id },
+            query: { t: item.starttime },
           }"
           class="link-unstyled history-item media shadow"
         >

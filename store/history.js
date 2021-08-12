@@ -10,7 +10,7 @@ export const mutations = {
   LOAD_HISTORY(state) {
     if (typeof localStorage !== 'undefined') {
       let history = JSON.parse(localStorage.getItem('zthHistory') || '[]')
-      history = Helper.uniqueByValue(history, 'path')
+      history = Helper.uniqueByValue(history, 'id')
       state.history = history || state.history
       state.historyLoaded = true
     }
@@ -20,9 +20,12 @@ export const mutations = {
       if (!state.history) {
         state.history = []
       }
-      let history = [].concat(state.history) 
-      history.push(historyItem)
-      history = Helper.uniqueByValue(history, 'path')
+      let history = [].concat(state.history)
+      let prevVersionOfSameItemIndex = history.findIndex(i => i.id === historyItem.id)
+      if (prevVersionOfSameItemIndex !== -1)
+        history[prevVersionOfSameItemIndex] = historyItem
+      else history.push(historyItem)
+      history = Helper.uniqueByValue(history, 'id')
       localStorage.setItem('zthHistory', JSON.stringify(history))
       this._vm.$set(state, 'history', history)
     }

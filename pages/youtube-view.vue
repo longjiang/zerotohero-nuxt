@@ -145,6 +145,10 @@ export default {
           this.episodes[thisEpisodeIndex + 1].youtube_id
         }/`;
     },
+    currentTimeInSeconds() {
+      let t = Math.floor(this.currentTime / 10) * 10;
+      return t;
+    },
   },
   async fetch() {
     try {
@@ -299,11 +303,15 @@ export default {
     updateCurrentTime(currentTime) {
       if (typeof window !== "undefined") {
         this.currentTime = currentTime;
-        let t = Math.floor(currentTime / 10) * 10;
         const params = new URLSearchParams(window.location.search);
         const qt = params.get("t") ? Number(params.get("t")) : 0;
-        if (t !== qt) {
-          window.history.replaceState("", "", `?t=${t}`);
+        if (this.currentTimeInSeconds !== qt) {
+          window.history.replaceState(
+            "",
+            "",
+            `?t=${this.currentTimeInSeconds}`
+          );
+          this.saveHistory();
         }
       }
     },
@@ -433,9 +441,11 @@ export default {
     saveHistory() {
       this.$store.dispatch("history/add", {
         type: "video",
+        id: `${this.$l2.code}-video-${this.video.youtube_id}`,
         title: this.video.title,
         youtube_id: this.video.youtube_id,
         date: DateHelper.unparseDate(new Date()),
+        starttime: this.currentTimeInSeconds,
         l2: this.$l2.code,
       });
     },
