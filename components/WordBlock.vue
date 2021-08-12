@@ -21,7 +21,6 @@
         seen: seen,
         saved: saved,
       }"
-      :data-level="getLevel()"
       v-bind="attributes"
       @click.stop.prevent="wordBlockClick"
       @mouseover="wordblockHover = true"
@@ -430,7 +429,7 @@ export default {
     },
   },
   methods: {
-    getLevel() {
+    highlightHardWords() {
       if (
         this.$l2.code === "zh" &&
         this.token &&
@@ -684,7 +683,12 @@ export default {
   }
   &:hover {
     background-color: rgba(250, 248, 195, 0.5);
+    border-radius: 0.25rem;
   }
+}
+
+.main-dark .word-block.with-popup:hover {
+  background-color: #00000066;
 }
 
 .add-pinyin {
