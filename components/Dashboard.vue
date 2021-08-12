@@ -29,15 +29,19 @@
               {{ savedWordsLang.words.length }}
             </span>
             saved word{{ savedWordsLang.words.length > 1 ? "s" : "" }}
-            <span v-if="!l2">
-              in
-              <strong>{{ savedWordsLang.l2.name }}</strong>
-            </span>
+
+            in
+            <strong>{{ savedWordsLang.l2.name }}</strong>
           </router-link>
         </div>
       </div>
-
-      <h5 class="text-center mt-5 mb-5">Continue watching</h5>
+      <h5
+        class="text-center"
+        style="margin-top: 2rem; margin-bottom: 3rem"
+        v-if="videosFiltered && videosFiltered.length > 0"
+      >
+        Continue watching
+      </h5>
       <div class="history container">
         <div class="youtube-videos row">
           <div

@@ -344,14 +344,17 @@ export default {
   },
   computed: {
     $l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
+      let l1 = this.$languages.getSmart(this.video.l1)
+      if (l1) return l1
+      else if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
-      else return this.$languages.getSmart(this.video.l1) || this.$languages.getSmart("en");
+      else return this.$languages.getSmart("en");
     },
     $l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
+      let l2 = this.$languages.getSmart(this.video.l2);
+      if (l2) return l2
+      else if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
-      else return this.$languages.getSmart(this.video.l2);
     },
     $adminMode() {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
