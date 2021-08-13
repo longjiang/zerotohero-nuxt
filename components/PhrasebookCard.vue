@@ -109,6 +109,8 @@ export default {
 <style lang="scss" scoped>
 .phrasebook {
   height: 100%;
+  display: flex;
+  flex-direction: column;
   .phrasebook-thumb {
     width: 100%;
     padding-top: 56.25%;
@@ -127,7 +129,9 @@ export default {
   }
   .media-body {
     background: white;
-    height: 100%;
+    position: relative;
+    width: 100%;
+    flex: 1;
   }
   .phrasebook-card-progress {
     height: 0.3rem;
