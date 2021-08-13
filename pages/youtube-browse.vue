@@ -80,6 +80,7 @@
               :checkSubs="false"
               :checkSaved="false"
               :showProgress="true"
+              :showPlayButton="true"
             />
           </template>
           <div v-observe-visibility="visibilityChanged"></div>

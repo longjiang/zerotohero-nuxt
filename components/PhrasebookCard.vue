@@ -1,5 +1,5 @@
 <template>
-  <div class="media rounded shadow phrasebook">
+  <div :class="`media rounded shadow phrasebook phrasebook-${size}`">
     <router-link
       :class="`phrasebook-thumb link-unstyled bg-gradient-${phrasebook.title.length
         .toString()
@@ -9,7 +9,7 @@
     >
       <i class="fas fa-comment-alt phrasebook-icon"></i>
     </router-link>
-    <div class="media-body" style="position: relative;">
+    <div class="media-body" style="position: relative">
       <router-link class="link-unstyled" :to="to">
         <h5>{{ phrasebook.title }}</h5>
       </router-link>
@@ -47,6 +47,9 @@ export default {
     l2: undefined,
     showProgress: {
       default: true,
+    },
+    size: {
+      default: "md", // or 'lg
     },
   },
   computed: {
@@ -97,7 +100,7 @@ export default {
     progress() {
       if (this.showProgress && this.history) {
         let historyItem = this.history.find((i) => i.id === this.historyId);
-        if (historyItem) {
+        if (historyItem && historyItem.phrasebook) {
           return historyItem.phrasebook.progress;
         }
       }
@@ -113,18 +116,17 @@ export default {
   flex-direction: column;
   .phrasebook-thumb {
     width: 100%;
-    padding-top: 56.25%;
+    padding-top: 25%;
+    padding-left: 1.5rem;
     display: block;
     color: rgba(255, 255, 255, 0.4);
     overflow: hidden;
     position: relative;
     .phrasebook-icon {
-      display: block;
+      font-size: 2em;
       position: absolute;
-      font-size: 4em;
       top: calc(50% - 0.5em);
-      width: 100%;
-      text-align: center;
+      text-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     }
   }
   .media-body {
@@ -146,6 +148,25 @@ export default {
     backdrop-filter: blur(5px);
     ::v-deep .progress-bar {
       background-color: #fd4f1c;
+    }
+  }
+  &.phrasebook-lg {
+    .phrasebook-thumb {
+      padding-top: 56.25%;
+      text-align: center;
+      .phrasebook-icon {
+        left: calc(50% - 0.5em);
+        padding-left: 1.5rem;
+        font-size: 4em;
+        padding-left: 0;
+      }
+    }
+  }
+  &:hover {
+    .phrasebook-icon {
+      transform: scale(1.3) rotate(-4deg);
+      color: rgba(255, 255, 255, 0.5);
+      transition: 200ms all ease-in-out;
     }
   }
 }

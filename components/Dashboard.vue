@@ -1,101 +1,105 @@
 <template>
   <container-query :query="query" v-model="params">
-    <div>
-      <div v-if="savedWords" class="dashboard-saved-words">
-        <div
-          :class="{
-            'mt-4': true,
-            'text-center': l2,
-            'dashboard-saved-words-list': !l2,
-            'mb-4': videosFiltered && videosFiltered.length > 0,
-          }"
-        >
-          <router-link
-            :to="`/${savedWordsLang.l2.code === 'lzh' ? 'zh' : 'en'}/${
-              savedWordsLang.l2.code
-            }/saved-words`"
-            class="link-unstyled d-block"
-            v-for="(savedWordsLang, index) in savedWordsSorted"
-            :key="`dashboard-saved-words-${index}`"
-          >
-            <i class="fa fa-star mr-1" style="opacity: 0.5"></i>
-            <span
-              style="
-                min-width: 1.7rem;
-                display: inline-block;
-                text-align: center;
-              "
-            >
-              {{ savedWordsLang.words.length }}
-            </span>
-            saved word{{ savedWordsLang.words.length > 1 ? "s" : "" }}
-
-            in
-            <strong>{{ savedWordsLang.l2.name }}</strong>
-          </router-link>
-        </div>
-      </div>
-      <div class="history container">
-        <div
-          class="history-items row justify-content-md-center"
-          v-if="this.videosFiltered.length > 0"
-        >
+    <div class="container">
+      <div class="row dashboard-saved-words" v-if="savedWords">
+        <div class="col-12">
           <div
-            v-for="(item, itemIndex) of this.itemsFiltered.slice(0, 12)"
-            :key="`history-item-${itemIndex}`"
             :class="{
-              'pb-4 history-item-column': true,
-              'col-12': params.xs,
-              'col-6': params.sm,
-              'col-4': params.md,
-              'col-3': params.lg,
+              'mt-4': true,
+              'text-center': l2,
+              'dashboard-saved-words-list': !l2,
+              'mb-4': videosFiltered && videosFiltered.length > 0,
             }"
-            :set="(itemL1 = $languages.getSmart(item.l1))"
-            :set2="(itemL2 = $languages.getSmart(item.l2))"
           >
-            <div class="history-item-language-badge">
-              {{ itemL2.name }}
-            </div>
-            <YouTubeVideoCard
-              v-if="item.type === 'video'"
-              :video="item.video"
-              skin="card"
-              :l1="itemL1"
-              :l2="itemL2"
-            />
-
-            <PhrasebookCard
-              v-if="item.type === 'phrasebook'"
-              :phrasebook="item.phrasebook"
-              skin="light"
-              :l1="itemL1"
-              :l2="itemL2"
-            />
-            <button
-              class="
-                btn btn-small
-                bg-white
-                text-secondary
-                ml-0
-                history-item-remove-btn
-              "
-              @click.stop.prevent="$store.dispatch('history/remove', item)"
+            <router-link
+              :to="`/${savedWordsLang.l2.code === 'lzh' ? 'zh' : 'en'}/${
+                savedWordsLang.l2.code
+              }/saved-words`"
+              class="link-unstyled d-block"
+              v-for="(savedWordsLang, index) in savedWordsSorted"
+              :key="`dashboard-saved-words-${index}`"
             >
-              <i class="fa fa-times"></i>
-            </button>
+              <i class="fa fa-star mr-1" style="opacity: 0.5"></i>
+              <span
+                style="
+                  min-width: 1.7rem;
+                  display: inline-block;
+                  text-align: center;
+                "
+              >
+                {{ savedWordsLang.words.length }}
+              </span>
+              saved word{{ savedWordsLang.words.length > 1 ? "s" : "" }}
+
+              in
+              <strong>{{ savedWordsLang.l2.name }}</strong>
+            </router-link>
           </div>
         </div>
       </div>
       <div
-        class="text-center"
-        v-if="videosFiltered && videosFiltered.length > 0"
+        class="history-items row justify-content-md-center"
+        v-if="this.itemsFiltered.length > 0"
       >
-        <button
-          class="btn btn-ghost-dark text-secondary btn-sm ml-0 mb-2"
-          @click.stop.prevent="$store.dispatch('history/removeAll')"
+        <div
+          v-for="(item, itemIndex) of this.itemsFiltered.slice(0, 12)"
+          :key="`history-item-${itemIndex}`"
+          :class="{
+            'pb-4 history-item-column': true,
+            'col-12': params.xs,
+            'col-6': params.sm,
+            'col-4': params.md,
+            'col-3': params.lg,
+          }"
+          :set="(itemL1 = $languages.getSmart(item.l1))"
+          :set2="(itemL2 = $languages.getSmart(item.l2))"
         >
-          Clear History
-        </button>
+          <div class="history-item-language-badge">
+            {{ itemL2.name }}
+          </div>
+          <YouTubeVideoCard
+            v-if="item.type === 'video'"
+            skin="card"
+            :video="item.video"
+            :l1="itemL1"
+            :l2="itemL2"
+            :showProgress="true"
+            :showPlayButton="true"
+          />
+          <PhrasebookCard
+            v-if="item.type === 'phrasebook'"
+            skin="light"
+            size="lg"
+            :l1="itemL1"
+            :l2="itemL2"
+            :phrasebook="item.phrasebook"
+          />
+          <button
+            class="
+              btn btn-small
+              bg-white
+              text-secondary
+              ml-0
+              history-item-remove-btn
+            "
+            @click.stop.prevent="$store.dispatch('history/remove', item)"
+          >
+            <i class="fa fa-times"></i>
+          </button>
+        </div>
+      </div>
+      <div class="row">
+        <div
+          class="col-12 text-center"
+          v-if="videosFiltered && videosFiltered.length > 0"
+        >
+          <button
+            class="btn btn-ghost-dark text-secondary btn-sm ml-0 mb-2"
+            @click.stop.prevent="$store.dispatch('history/removeAll')"
+          >
+            Clear History
+          </button>
+        </div>
       </div>
     </div>
   </container-query>
@@ -220,47 +224,45 @@ export default {
     column-count: 3;
   }
 }
-.dashboard-saved-words + .history {
+.dashboard-saved-words + .history-items {
   margin-top: 2rem;
 }
-.history.container {
-  .history-items.row {
-    .history-item-column {
-      position: relative;
-      .history-item-remove-btn {
-        position: absolute;
-        top: 0.25rem;
-        right: 1.2rem;
-        z-index: 9;
-        border-radius: 0.2rem;
-        background: rgba(0, 0, 0, 0.2) !important;
-        color: rgba(255, 255, 255, 0.384) !important;
-        backdrop-filter: blur(5px);
-        -webkit-backdrop-filter: blur(5px);
-        &:hover {
-          color: rgba(255, 255, 255, 0.6) !important;
-          background: rgba(0, 0, 0, 0.4) !important;
-        }
-      }
-      .history-item-language-badge {
-        position: absolute;
-        top: 0.25rem;
-        left: 1.2rem;
-        z-index: 9;
-        border-radius: 0.2rem;
-        background: rgba(0, 0, 0, 0.2) !important;
-        color: rgba(255, 255, 255, 0.5) !important;
-        font-size: 0.85em;
-        padding: 0.1rem 0.3rem;
-        backdrop-filter: blur(5px);
-        -webkit-backdrop-filter: blur(5px);
-      }
-      .phrasebook {
 
+.history-items.row {
+  perspective: 800px;
+  .history-item-column {
+    position: relative;
+    .history-item-remove-btn {
+      position: absolute;
+      top: 0.25rem;
+      right: 1.2rem;
+      z-index: 9;
+      border-radius: 0.2rem;
+      background: rgba(0, 0, 0, 0.2) !important;
+      color: rgba(255, 255, 255, 0.384) !important;
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      &:hover {
+        color: rgba(255, 255, 255, 0.6) !important;
+        background: rgba(0, 0, 0, 0.4) !important;
       }
-      .youtube-video-card {
-        
-      }
+    }
+    .history-item-language-badge {
+      position: absolute;
+      top: 0.25rem;
+      left: 1.2rem;
+      z-index: 9;
+      border-radius: 0.2rem;
+      background: rgba(0, 0, 0, 0.2) !important;
+      color: rgba(255, 255, 255, 0.5) !important;
+      font-size: 0.85em;
+      padding: 0.1rem 0.3rem;
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+    }
+    .phrasebook {
+    }
+    .youtube-video-card {
     }
   }
 }
@@ -268,5 +270,10 @@ export default {
 ::v-deep .youtube-title {
   font-size: 0.9em;
   line-height: 0.9em !important;
+}
+
+.history-item-column:hover {
+  transform: scale(1.1) rotate(2deg);
+  transition: 200ms all ease-in-out;
 }
 </style>

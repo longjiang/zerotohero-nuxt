@@ -1,16 +1,16 @@
 <template>
   <drop
     @drop="handleDrop"
-    :class="{
-      over: over,
-      'youtube-video-card-wrapper': true,
-      'youtube-video-card-wrapper-dark': skin === 'dark',
-      'youtube-video-card-wrapper-light': skin === 'light',
-      'youtube-video-card-wrapper-card': skin === 'card',
-      media: true,
-      nosubs: checkSubs && !video.checkingSubs && !video.hasSubs && !video.id,
-      drop: checkSubs && !video.checkingSubs,
-    }"
+    :class="[
+      `youtube-video-card-wrapper-${skin}`,
+      {
+        over: over,
+        'youtube-video-card-wrapper': true,
+        media: true,
+        nosubs: checkSubs && !video.checkingSubs && !video.hasSubs && !video.id,
+        drop: checkSubs && !video.checkingSubs,
+      },
+    ]"
     @dragover="over = true"
     @dragleave="over = false"
     :key="`video-${video.youtube_id}`"
@@ -31,13 +31,13 @@
           play-button-wrapper
         "
       >
-        <button class="btn btn-unstyled play-button" v-if="skin !== 'card'">
+        <button class="btn btn-unstyled play-button" v-if="showPlayButton">
           <i class="fa fa-play"></i>
         </button>
         <client-only>
           <b-progress
             class="youtube-video-card-progress"
-            v-if="progress"
+            v-if="progress && skin !== 'card'"
             :value="progress"
             :max="1"
           ></b-progress>
@@ -257,6 +257,14 @@
             </div>
           </div>
         </client-only>
+        <client-only>
+          <b-progress
+            class="youtube-video-card-progress"
+            v-if="progress && skin === 'card'"
+            :value="progress"
+            :max="1"
+          ></b-progress>
+        </client-only>
       </div>
     </div>
   </drop>
@@ -311,6 +319,9 @@ export default {
     showProgress: {
       default: false,
     },
+    showPlayButton: {
+      default: false
+    }
   },
   data() {
     return {
@@ -393,12 +404,12 @@ export default {
         this.updateSubs();
       }
     },
-    'video.hasSubs'() {
+    "video.hasSubs"() {
       let hasSubs;
       if (!this.video.checkingSubs && !this.video.hasSubs) hasSubs = false;
       if (this.video.hasSubs) hasSubs = true;
-      console.log('has subs changed', hasSubs)
-      this.$emit('hasSubs', hasSubs)
+      console.log("has subs changed", hasSubs);
+      this.$emit("hasSubs", hasSubs);
     },
   },
   methods: {
@@ -547,7 +558,7 @@ export default {
             this.subsFile = file;
             Vue.set(this.video, "subs_l2", subs_l2);
             Vue.set(this.video, "hasSubs", true);
-            this.$emit('hasSubs', true)
+            this.$emit("hasSubs", true);
           }
         };
       } catch (err) {}
@@ -626,10 +637,10 @@ export default {
       if (video.subs_l2 && video.subs_l2.length > 0) {
         Vue.set(video, "hasSubs", true);
         Vue.set(video, "checkingSubs", false);
-        this.$emit('hasSubs', true)
+        this.$emit("hasSubs", true);
       } else {
         video = await YouTube.getYouTubeSubsList(video, this.$l1, this.$l2);
-        this.$emit('hasSubs', video.hasSubs)
+        this.$emit("hasSubs", video.hasSubs);
         if (this.checkSaved && this.showSubsEditing) {
           video = this.addSubsL1(video);
         }
@@ -672,6 +683,16 @@ export default {
       border-radius: 0.25rem;
       overflow: hidden;
     }
+    .youtube-video-card-progress {
+      top: calc(100% - 0.5rem);
+      width: calc(100% - 1rem);
+      left: 0.5rem;
+      position: absolute;
+      z-index: 9;
+      background-color: hsla(0deg 0% 100% / 25%);
+      -webkit-backdrop-filter: blur(5px);
+      backdrop-filter: blur(5px);
+    }
   }
   &.youtube-video-card-wrapper-light {
     .youtube-thumbnail-wrapper {
@@ -695,6 +716,16 @@ export default {
     background: white;
     border-radius: 0.25rem;
     box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+    .media-body {
+      padding-bottom: 2rem;
+      .youtube-video-card-progress {
+        bottom: 0.5rem;
+        left: 0.5rem;
+        width: calc(100% - 1rem);
+        position: absolute;
+        background-color: hsla(0deg 0% 50% / 30%);
+      }
+    }
   }
   &.drop.over {
     border: 2px dashed #ccc;
@@ -710,14 +741,6 @@ export default {
     .youtube-video-card-progress {
       height: 0.3rem;
       border-radius: 0.15rem;
-      position: absolute;
-      z-index: 9;
-      top: calc(100% - 0.5rem);
-      width: calc(100% - 1rem);
-      left: 0.5rem;
-      background-color: hsla(0deg 0% 100% / 25%);
-      -webkit-backdrop-filter: blur(5px);
-      backdrop-filter: blur(5px);
       ::v-deep .progress-bar {
         background-color: #fd4f1c;
       }

@@ -93,6 +93,7 @@
                 :showBadges="false"
                 :showDate="showDate"
                 :showProgress="true"
+                :showPlayButton="true"
               />
               <div v-observe-visibility="visibilityChanged"></div>
             </template>

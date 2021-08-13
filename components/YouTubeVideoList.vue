@@ -195,7 +195,10 @@ export default {
     },
     showProgress: {
       default: false
-    }
+    },
+    showPlayButton: {
+      default: false
+    },
   },
 
   data() {

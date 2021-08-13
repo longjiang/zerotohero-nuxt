@@ -150,6 +150,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
-
+.phrasebook:hover {
+  transform: scale(1.1);
+  transition: 200ms all ease-in-out;
+}
 </style>

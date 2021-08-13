@@ -69,6 +69,7 @@
             :videos="[video]"
             :singleColumn="true"
             :showProgress="true"
+            :showPlayButton="true"
           />
         </div>
         <div class="col-md-6 col-lg-4">
@@ -104,7 +105,9 @@
             <client-only>
               <router-link
                 v-if="lesson > 1"
-                :class="`btn btn-${skin === 'light' ? 'gray' : 'ghost-dark'} mr-2`"
+                :class="`btn btn-${
+                  skin === 'light' ? 'gray' : 'ghost-dark'
+                } mr-2`"
                 :to="`/${$l1.code}/${$l2.code}/lesson-videos/${level}/${
                   Number(lesson) - 1
                 }`"

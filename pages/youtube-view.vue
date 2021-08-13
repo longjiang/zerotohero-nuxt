@@ -474,7 +474,7 @@ export default {
       };
       if (this.$refs.youtube && this.$refs.youtube.duration) {
         data.video.duration = this.$refs.youtube.duration;
-        data.video.progress = data.starttime / data.duration;
+        data.video.progress = data.video.starttime / data.video.duration;
       }
       this.$store.dispatch("history/add", data);
     },
