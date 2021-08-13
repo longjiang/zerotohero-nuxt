@@ -11,82 +11,38 @@
           ? [lines[currentLineIndex || 0]]
           : lines"
       >
-        <div
-          v-if="line"
+        <TranscriptLine
+          :line="line"
+          :parallelLine="$l2.code !== $l1.code && parallellines ? matchedParallelLines[single ? currentLineIndex : lineIndex] : undefined"
+          :lineIndex="lineIndex"
           :key="`line-${lineIndex}-${line.starttime}-${line.line.substr(
             0,
             10
           )}`"
-          :class="{
-            'transcript-line': true,
-            'transcript-line-abnormal':
-              $adminMode &&
-              lines[lineIndex - 1] &&
-              lines[lineIndex - 1].starttime > line.starttime,
-            matched:
-              !single &&
-              highlight &&
-              line &&
-              new RegExp(highlight.join('|')).test(line.line),
-            'pl-4': !single && $l2.direction !== 'rtl',
-            'pr-4': !single && $l2.direction === 'rtl',
-          }"
+          :abnormal="
+            $adminMode &&
+            lines[lineIndex - 1] &&
+            lines[lineIndex - 1].starttime > line.starttime
+          "
+          :matched="
+            !single &&
+            highlight &&
+            line &&
+            new RegExp(highlight.join('|')).test(line.line)
+          "
+          :showSubsEditing="showSubsEditing"
+          :sticky="sticky"
+          :single="single"
+          :highlight="highlight"
+          :hsk="hsk"
+          :notes="notes"
+          :enableTranslationEditing="$adminMode && enableTranslationEditing"
           @click="lineClick(line)"
-          :data-line-index="lineIndex"
-          style="display: flex"
-          ref="lines"
-        >
-          <div v-if="!single && showSubsEditing" class="mr-3">
-            <div style="font-size: 0.7em; color: #ccc">
-              {{ Math.round(line.starttime * 100) / 100 }}
-            </div>
-            <b-button
-              class="btn btn-small bg-danger text-white"
-              @click="removeLine(lineIndex)"
-            >
-              <i class="fa fa-trash"></i>
-            </b-button>
-          </div>
-          <div style="flex: 1">
-            <Annotate
-              tag="div"
-              :sticky="sticky"
-              :class="{
-                'transcript-line-chinese': true,
-                'text-center': single,
-                'pr-3': single && $l2.direction === 'rtl',
-                'pl-3': single && $l2.direction !== 'rtl',
-              }"
-              :buttons="true"
-              v-if="!showSubsEditing"
-              @textChanged="lineChanged(line, ...arguments)"
-            >
-              <span v-html="lineHtml(line)" />
-            </Annotate>
-            <div v-else v-html="lineHtml(line)" />
-            <div
-              v-if="$l2.code !== $l1.code && parallellines"
-              :class="{
-                'transcript-line-l1': true,
-                'pl-3': !single && $l2.direction === 'ltr',
-                'pr-3': !single && $l2.direction === 'rtl',
-                'text-right':
-                  $l2.scripts &&
-                  $l2.scripts.length > 0 &&
-                  $l2.scripts[0].direction === 'rtl',
-                'text-center': single,
-              }"
-              v-html="
-                matchedParallelLines[single ? currentLineIndex : lineIndex]
-              "
-              :contenteditable="$adminMode && enableTranslationEditing"
-              :data-line-index="lineIndex"
-              @blur.capture="trasnlationLineBlur"
-              @keydown.capture="trasnlationLineKeydown"
-            ></div>
-          </div>
-        </div>
-        <div v-if="!single" :key="`review-${lineIndex}`">
+          @removeLineClick="removeLine(lineIndex)"
+          @trasnlationLineBlur="trasnlationLineBlur"
+          @trasnlationLineKeydown="trasnlationLineKeydown"
+        />
+        <div v-if="!single" :key="`line-${lineIndex}-review`">
           <h6
             class="text-center mt-3"
             :key="`review-title-${lineIndex}-${reviewKeys[lineIndex]}`"
@@ -109,7 +65,6 @@
 
 <script>
 import Helper from "@/lib/helper";
-import SmartQuotes from "smartquotes";
 import Vue from "vue";
 
 export default {
@@ -290,9 +245,6 @@ export default {
     },
   },
   methods: {
-    lineChanged(line, newText) {
-      line.line = newText;
-    },
     trasnlationLineBlur(e) {
       this.trasnlationLineChanged(e);
     },
@@ -340,25 +292,6 @@ export default {
         if (!nextLine) break;
       }
       this.matchedParallelLines = matchedParallelLines;
-    },
-    lineHtml(line) {
-      let html = this.smartquotes(line.line);
-      if (this.highlight)
-        html = this.highlightMultiple(
-          html,
-          this.highlight,
-          this.hsk || "outside"
-        );
-      html = html.replace(/\[(\d+)\]/g, (_, num) => {
-        let note;
-        if (this.notes) {
-          note = this.notes.find((note) => note.id === Number(num));
-        }
-        return `<PopupNote :number="${num}" content="${
-          note ? note.note : ""
-        }"></PopupNote>`;
-      });
-      return html;
     },
     checkProgress() {
       if (!this.currentLine) {
@@ -469,12 +402,6 @@ export default {
       const HTMLEntities = await import("html-entities");
       const allEntities = new HTMLEntities.AllHtmlEntities();
       return allEntities.decode(text);
-    },
-    highlightMultiple() {
-      return Helper.highlightMultiple(...arguments);
-    },
-    smartquotes(text) {
-      return SmartQuotes.string(text);
     },
     removeLine(lineIndex) {
       this.lines.splice(lineIndex, 1);
@@ -722,7 +649,7 @@ export default {
   box-shadow: none;
 }
 
-.transcript-line.matched {
+.transcript-line-matched {
   color: #616161;
   font-weight: bold;
 }
