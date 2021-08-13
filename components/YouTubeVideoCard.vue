@@ -2,7 +2,7 @@
   <drop
     @drop="handleDrop"
     :class="[
-      `youtube-video-card-wrapper-${skin}`,
+      `youtube-video-card-wrapper-${skin} play-button-wrapper`,
       {
         over: over,
         'youtube-video-card-wrapper': true,
@@ -24,12 +24,7 @@
     >
       <router-link
         :to="to"
-        class="
-          youtube-thumbnail-wrapper
-          aspect-wrapper
-          d-block
-          play-button-wrapper
-        "
+        class="youtube-thumbnail-wrapper aspect-wrapper d-block"
       >
         <button class="btn btn-unstyled play-button" v-if="showPlayButton">
           <i class="fa fa-play"></i>

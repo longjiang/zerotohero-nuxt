@@ -141,6 +141,7 @@
             :showDate="showDate"
             :skin="skin"
             :showProgress="showProgress"
+            :showPlayButton="showPlayButton"
           />
         </div>
       </div>
