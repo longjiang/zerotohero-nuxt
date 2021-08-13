@@ -14,7 +14,7 @@
   }
 </router>
 <template>
-  <div class="main pt-5 mb-5">
+  <div class="main pt-5 pb-5">
     <SocialHead
       v-if="resources[0]"
       :title="`${resources.length} Resources to Help You Learn ${$l2.name} | ${$l2.name} Zero to Hero`"
@@ -23,12 +23,16 @@
     />
     <div class="container">
       <div class="row">
+        <div class="col-12">
+          <h3 class="mb-5 text-center">Resources for learning {{ $l2.name }}</h3>
+        </div>
+      </div>
+      <div class="row">
         <div class="col-sm-12 col-md-8 pr-4 mb-5">
-          <h3 class="mb-5">Resources for learning {{ $l2.name }}</h3>
           <ResourceList :resources="resources" />
         </div>
         <div class="col-sm-12 col-md-4">
-          <h6 class="text-center mb-4">Topic</h6>
+          <h6 class="text-center mb-4">Filter by Topic</h6>
           <div class="list-group">
             <router-link
               :class="{
@@ -55,7 +59,7 @@
               {{ topicName }}
             </router-link>
           </div>
-          <h6 class="mt-4 mb-4 text-center">Type</h6>
+          <h6 class="mt-4 mb-4 text-center">Filter by Type</h6>
           <div class="list-group">
             <router-link
               :class="{

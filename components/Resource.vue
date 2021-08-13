@@ -36,8 +36,7 @@ export default {
   min-width: 15rem;
   max-width: 480px;
   flex: 1;
-  margin-right: 1rem;
-  margin-bottom: 1rem;
+  margin: 1rem;
 }
 .resource-thumbnail {
   width: 100%;
