@@ -2,18 +2,18 @@
   <div>
     <a
       v-if="$l1.code === 'zh' && $l2.code === 'en'"
-      class="link-unstyled nuxt-link-active btn-sign-in mr-1"
+      class="link-unstyled nuxt-link-active btn-sign-in"
       href="https://m.cctalk.com/inst/stevmab3"
     >
-      <i class="fas fa-key" style="width: 1.5rem"></i>
+      <i v-if="icon" class="fas fa-key" style="width: 1.5rem"></i>
       登录CCTalk
     </a>
     <a
       v-if="$l1.code === 'en' && $l2.code === 'zh'"
-      class="link-unstyled nuxt-link-active btn-sign-in mr-1"
+      class="link-unstyled nuxt-link-active btn-sign-in"
       href="https://sso.teachable.com/secure/133035/users/sign_in"
     >
-      <i class="fas fa-key" style="width: 1.5rem"></i>
+      <i v-if="icon" class="fas fa-key" style="width: 1.5rem"></i>
       Login to Teachable
     </a>
   </div>
@@ -29,6 +29,11 @@ export default {
     $l2() {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
+    },
+  },
+  props: {
+    icon: {
+      default: true,
     },
   },
 };

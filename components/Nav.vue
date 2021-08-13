@@ -9,20 +9,20 @@
       </div>
       <div>
         <button
-          :class="['btn btn-unstyled', { 'd-none': !isPWA }]"
+          :class="['btn btn-sm btn-unstyled', { 'd-none': !canShare() }]"
           @click="share"
           style="color: #ccc"
         >
           <i class="fa fa-share"></i>
         </button>
         <button
-          :class="['btn btn-unstyled', { 'd-none': !isPWA }]"
+          :class="['btn btn-sm btn-unstyled', { 'd-none': !isPWA }]"
           @click="reload"
           style="color: #ccc"
         >
           <i class="fas fa-sync-alt"></i>
         </button>
-        <LoginButton class="d-inline-block ml-2" />
+        <LoginButton class="d-inline-block ml-2" :icon="false" />
       </div>
     </div>
     <div
