@@ -11,7 +11,7 @@
     </router-link>
     <div class="media-body" style="position: relative">
       <router-link class="link-unstyled" :to="to">
-        <h5>{{ phrasebook.title }}</h5>
+        <h5 class="phrasebook-title">{{ phrasebook.title }}</h5>
       </router-link>
       <div style="color: #999" v-if="phrasebook.phrases">
         ({{ phrasebook.phrases.length }} phrases)
@@ -164,7 +164,7 @@ export default {
   }
   &:hover {
     .phrasebook-icon {
-      transform: scale(1.3) rotate(-4deg);
+      transform: scale(1.3) rotate(-2deg);
       color: rgba(255, 255, 255, 0.5);
       transition: 200ms all ease-in-out;
     }

@@ -260,16 +260,13 @@ export default {
       backdrop-filter: blur(5px);
       -webkit-backdrop-filter: blur(5px);
     }
-    .phrasebook {
-    }
-    .youtube-video-card {
-    }
   }
 }
 
-::v-deep .youtube-title {
-  font-size: 0.9em;
-  line-height: 0.9em !important;
+::v-deep .youtube-title,
+::v-deep .phrasebook-title {
+  font-size: 1rem;
+  line-height: 1.33rem !important;
 }
 
 .history-item-column:hover {

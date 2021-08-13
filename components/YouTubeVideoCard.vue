@@ -58,7 +58,7 @@
         >
           {{ formatDate(video.date) }}
         </div>
-        <div class="font-weight-bold">
+        <div class="youtube-title">
           <span
             contenteditable="true"
             :class="{ 'd-none': !$adminMode || view === 'list' }"
@@ -68,7 +68,7 @@
           </span>
           <router-link
             :class="{
-              'youtube-title link-unstyled': true,
+              'link-unstyled': true,
               'd-none': $adminMode || view === 'list',
             }"
             :to="`/${$l1.code}/${$l2.code}/youtube/view/${video.youtube_id}/${
@@ -320,8 +320,8 @@ export default {
       default: false,
     },
     showPlayButton: {
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {

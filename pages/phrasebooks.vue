@@ -151,7 +151,7 @@ export default {
 
 <style scoped lang="scss">
 .phrasebook:hover {
-  transform: scale(1.1);
+  transform: scale(1.1) rotate(2deg);
   transition: 200ms all ease-in-out;
 }
 </style>
