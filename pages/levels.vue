@@ -35,8 +35,12 @@
               </a>
               curriculum.
             </p>
-            <Loader class="mt-5" />
-            <CourseBrowser class="mt-5 mb-5" />
+            <client-only>
+              <div class="text-center">
+                <Loader class="mt-5" />
+              </div>
+              <CourseBrowser class="mt-5 mb-5" />
+            </client-only>
           </div>
           <div>
             <h5 class="text-center mt-5 mb-3">
