@@ -68,6 +68,7 @@
             :updateVideos="updateLessonVideos"
             :videos="[video]"
             :singleColumn="true"
+            :showProgress="true"
           />
         </div>
         <div class="col-md-6 col-lg-4">

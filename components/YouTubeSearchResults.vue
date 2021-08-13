@@ -8,6 +8,7 @@
       :checkSaved="checkSaved"
       :hideVideosWithoutSubsProp="hideVideosWithoutSubs"
       :showBadges="true"
+      :showProgress="false"
     />
     <div v-if="infinite && !noMoreVideos" v-observe-visibility="infinite ? visibilityChanged : undefined"></div>
     <div v-if="infinite && noMoreVideos" class="text-center mt-4">

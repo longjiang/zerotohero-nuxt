@@ -34,11 +34,6 @@
             </b-button>
           </div>
           <template v-if="!loading">
-            <!--
-          <h4 class="text-center mt-5">{{ $t('Videos') }}</h4>
-          <hr class="mb-5" />
-          <YouTubeVideoList :videos="videos" />
-          -->
             <h4 class="text-center mt-5">{{ $t("Playlists") }}</h4>
             <hr />
             <YouTubePlaylists :playlists="playlists" />
@@ -50,15 +45,9 @@
 </template>
 
 <script>
-import YouTubeVideoList from "@/components/YouTubeVideoList";
-import YouTubePlaylists from "@/components/YouTubePlaylists";
 import YouTube from "@/lib/youtube";
 
 export default {
-  components: {
-    YouTubeVideoList,
-    YouTubePlaylists,
-  },
   props: {
     channel_id: {
       type: String,

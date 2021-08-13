@@ -89,13 +89,14 @@
             <div class="lesson-section" v-if="lesson.youtubeVideos">
               <h4>Pre-Study</h4>
               <p>Watch any one of the videos and study the subtitles:</p>
-              <YouTubeVideoList :videos="lesson.youtubeVideos" />
+              <YouTubeVideoList :videos="lesson.youtubeVideos" :showProgress="true" />
               <YouTubeSearchResults
                 v-if="lesson.youtubeVideos.length === 0"
                 :term="`${$l2.name} ${lesson.name}`"
                 :start="0"
                 :hideVideosWithoutSubs="true"
                 :showPaginator="false"
+                :showProgress="true"
               />
             </div>
             <div class="lesson-section">

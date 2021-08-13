@@ -309,7 +309,7 @@ export default {
       default: "card", // or 'dark'
     },
     showProgress: {
-      default: true,
+      default: false,
     },
   },
   data() {

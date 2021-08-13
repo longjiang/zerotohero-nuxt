@@ -74,11 +74,12 @@
           <template v-if="videos && videos.length > 0">
             <YouTubeVideoList
               skin="dark"
+              ref="youtubeVideoList"
               :videos="videos"
               :keyword="keyword"
               :checkSubs="false"
-              ref="youtubeVideoList"
               :checkSaved="false"
+              :showProgress="true"
             />
           </template>
           <div v-observe-visibility="visibilityChanged"></div>

@@ -92,6 +92,7 @@
                 :view="view"
                 :showBadges="false"
                 :showDate="showDate"
+                :showProgress="true"
               />
               <div v-observe-visibility="visibilityChanged"></div>
             </template>
