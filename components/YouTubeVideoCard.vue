@@ -714,18 +714,25 @@ export default {
     }
   }
   &.youtube-video-card-wrapper-card {
-    height: 100%;
-    background: white;
     border-radius: 0.25rem;
     box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
-    .media-body {
-      padding-bottom: 2rem;
-      .youtube-video-card-progress {
-        bottom: 0.5rem;
-        left: 0.5rem;
-        width: calc(100% - 1rem);
-        position: absolute;
-        background-color: hsla(0deg 0% 50% / 30%);
+    height: 100%;
+    .youtube-video-card {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      height: 100%;
+      .media-body {
+        background: white;
+        padding-bottom: 2rem;
+        flex: 1;
+        .youtube-video-card-progress {
+          bottom: 0.5rem;
+          left: 0.5rem;
+          width: calc(100% - 1rem);
+          position: absolute;
+          background-color: hsla(0deg 0% 50% / 30%);
+        }
       }
     }
   }
