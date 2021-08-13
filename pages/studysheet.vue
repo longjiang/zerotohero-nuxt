@@ -4,7 +4,7 @@
   }
 </router>
 <template>
-  <div class="main pt-5 pb-5">
+  <div class="main pt-4 pb-5">
     <SocialHead
       :title="`${$l2.name} Study Sheet (PDF) Creator | ${$l2.name} Zero to Hero`"
       :description="`Generate ${$l2.name} guided readers for language learning.'`"

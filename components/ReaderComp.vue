@@ -8,7 +8,9 @@
       <i class="fas fa-pencil-alt" />
     </button>
     <div :class="{ reader: true, fullscreen }" v-else>
-      <Loader class="mb-5" />
+      <div class="text-center">
+        <Loader class="mb-5" />
+      </div>
       <p
         v-if="text.length > 0 && !fullscreen"
         class="mt-2 mb-5 hide-for-present"
