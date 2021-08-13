@@ -12,7 +12,7 @@
           :l2="l2"
           :key="`nav-${l1.code}-${l2.code}`"
           :variant="wide ? 'side-bar' : 'menu-bar'"
-          class="zth-nav"
+          :skin="skin"
         />
       </client-only>
       <div class="zth-content">
@@ -75,8 +75,39 @@ export default {
       focus: false,
       loaded: false,
       wide: false,
+      skin: 'light',
       dictionaryCredit: "",
     };
+  },
+  computed: {
+    ...mapState("settings", ["l2Settings", "l1", "l2"]),
+    classes() {
+      if (this.l1 && this.l2) {
+        this.l1, this.l2;
+        let classes = {
+          "show-pinyin": this.l2Settings.showPinyin,
+          "show-pinyin-for-saved":
+            !this.l2Settings.showPinyin && this.l2 && this.l2.han,
+          "show-simplified": !this.l2Settings.useTraditional,
+          "show-traditional": this.l2Settings.useTraditional,
+          "show-definition": this.l2Settings.showDefinition,
+          "show-translation": this.l2Settings.showTranslation,
+          "show-byeonggi": this.l2Settings.showByeonggi,
+          "use-serif": this.l2Settings.useSerif,
+          "zerotohero-wide": this.wide,
+        };
+        classes[`l1-${this.l1.code}`] = true;
+        classes[`l2-${this.l2.code}`] = true;
+        if (this.l2.han) classes["l2-zh"] = true;
+        return classes;
+      }
+    },
+    background() {
+      if (!this.l2) return "/img/background-branch.jpg";
+      else if (this.l2.code === "zh")
+        return `/img/backgrounds/bg-zh-${Math.ceil(Math.random() * 10)}.jpg`;
+      else return `https://source.unsplash.com/1600x900/?${this.l2.name}`;
+    },
   },
   async mounted() {
     this.wide = Helper.wide();
@@ -103,6 +134,7 @@ export default {
     }
   },
   created() {
+    this.$nuxt.$on('skin', this.onSkin)
     if (typeof window !== "undefined")
       window.addEventListener("resize", this.onResize);
   },
@@ -116,6 +148,9 @@ export default {
     },
   },
   methods: {
+    onSkin(skin) {
+      this.skin = skin
+    },
     onResize() {
       this.wide = Helper.wide();
     },
@@ -148,36 +183,6 @@ export default {
       }
     },
   },
-  computed: {
-    ...mapState("settings", ["l2Settings", "l1", "l2"]),
-    classes() {
-      if (this.l1 && this.l2) {
-        this.l1, this.l2;
-        let classes = {
-          "show-pinyin": this.l2Settings.showPinyin,
-          "show-pinyin-for-saved":
-            !this.l2Settings.showPinyin && this.l2 && this.l2.han,
-          "show-simplified": !this.l2Settings.useTraditional,
-          "show-traditional": this.l2Settings.useTraditional,
-          "show-definition": this.l2Settings.showDefinition,
-          "show-translation": this.l2Settings.showTranslation,
-          "show-byeonggi": this.l2Settings.showByeonggi,
-          "use-serif": this.l2Settings.useSerif,
-          "zerotohero-wide": this.wide,
-        };
-        classes[`l1-${this.l1.code}`] = true;
-        classes[`l2-${this.l2.code}`] = true;
-        if (this.l2.han) classes["l2-zh"] = true;
-        return classes;
-      }
-    },
-    background() {
-      if (!this.l2) return "/img/background-branch.jpg";
-      else if (this.l2.code === "zh")
-        return `/img/backgrounds/bg-zh-${Math.ceil(Math.random() * 10)}.jpg`;
-      else return `https://source.unsplash.com/1600x900/?${this.l2.name}`;
-    },
-  },
 };
 </script>
 
@@ -203,11 +208,6 @@ export default {
 
 
 
-.zth-nav {
-  background: #002d4433;
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-}
 
 .zerotohero-wide {
   height: 100%;

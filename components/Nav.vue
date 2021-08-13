@@ -1,5 +1,12 @@
 <template>
-  <div :class="{ 'has-secondary-nav': parent && parent.children }">
+  <div
+    :class="{
+      'zth-nav': true,
+      'zth-nav-light': skin === 'light',
+      'zth-nav-dark': skin === 'dark',
+      'has-secondary-nav': parent && parent.children,
+    }"
+  >
     <div class="site-top-bar" v-if="variant === 'menu-bar'">
       <div>
         <router-link to="/" class="link-unstyled">
@@ -180,6 +187,33 @@
 
 <script>
 export default {
+  props: {
+    l1: {
+      type: Object,
+    },
+    l2: {
+      type: Object,
+    },
+    variant: {
+      default: "menu-bar", // or 'page', or 'side-bar'
+    },
+    skin: {
+      default: "light", // or 'dark'
+    },
+  },
+  data() {
+    return {
+      shortcuts: [],
+      history: [],
+      hasTVShows: false,
+      hasLiveTV: false,
+      hasTalks: false,
+      musicPath: false,
+      moviePath: false,
+      newsPath: false,
+      hasPhrasebooks: false,
+    };
+  },
   computed: {
     isPWA() {
       return (
@@ -188,7 +222,6 @@ export default {
           window.matchMedia("(display-mode: standalone)").matches)
       );
     },
-
     parent() {
       let parent = this.menu.find((item) => {
         if (this.$route.name === this.nameOfSelfOrFirstChild(item)) return true;
@@ -676,31 +709,6 @@ export default {
         return this.$store.state.settings.adminMode;
     },
   },
-  props: {
-    l1: {
-      type: Object,
-    },
-    l2: {
-      type: Object,
-    },
-    variant: {
-      default: "menu-bar", // or 'page', or 'side-bar'
-    },
-  },
-
-  data() {
-    return {
-      shortcuts: [],
-      history: [],
-      hasTVShows: false,
-      hasLiveTV: false,
-      hasTalks: false,
-      musicPath: false,
-      moviePath: false,
-      newsPath: false,
-      hasPhrasebooks: false,
-    };
-  },
   mounted() {
     this.bindKeys();
   },
@@ -871,12 +879,11 @@ export default {
 </script>
 
 <style lang="scss">
-// .logo,
-// .logo-constructed {
-//   -webkit-filter: drop-shadow(0 0 10px rgba(0, 0, 0, 1));
-//   filter: drop-shadow(0 0 10px rgba(0, 0, 0, 1));
-//   text-shadow: 0 0 10px rgba(0, 0, 0, 1);
-// }
+.zth-nav {
+  // background: #002d4433;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
 
 .main-nav {
   margin: 0 auto;
@@ -894,22 +901,68 @@ export default {
     white-space: nowrap;
     &.nuxt-link-active,
     &:hover {
-      color: #444;
-      background: hsla(0deg, 100%, 100%, 0.75);
-      border-top: 1px solid rgba(255, 255, 255, 0.5);
-      border-left: 1px solid rgba(255, 255, 255, 0.5);
-      border-right: 1px solid rgba(255, 255, 255, 0.5);
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
       text-decoration: none;
       text-shadow: none;
     }
   }
 }
 
+.zth-nav-light {
+  .main-nav-item {
+    &.nuxt-link-active,
+    &:hover {
+      color: #444;
+      background: hsla(0deg, 100%, 100%, 0.75);
+      border-top: 1px solid rgba(255, 255, 255, 0.5);
+      border-left: 1px solid rgba(255, 255, 255, 0.5);
+      border-right: 1px solid rgba(255, 255, 255, 0.5);
+    }
+  }
+  .nav-menu-bar {
+    .secondary-nav {
+      background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.75) 0%,
+        rgba(255, 255, 255, 0.75) 10%,
+        rgba(255, 255, 255, 1) 100%
+      );
+    }
+  }
+}
+
+.zth-nav-dark {
+  .main-nav-item {
+    &.nuxt-link-active,
+    &:hover {
+      color: white;
+      background: rgba(65, 65, 65, 0.74);
+      border-top: 1px solid rgba(255, 255, 255, 0.4);
+    }
+  }
+  .nav-menu-bar {
+    .secondary-nav {
+      background: linear-gradient(
+        180deg,
+        rgba(65, 65, 65, 0.74) 0%,
+        rgba(0, 0, 0, 0.72) 100%
+      );
+      .secondary-nav-item {
+        color: white;
+        &.nuxt-link-active,
+        &:hover {
+          background: linear-gradient(
+            180deg,
+            rgba(148, 148, 148, 0) 0%,
+            rgba(122, 122, 122, 0.4) 75%,
+          );
+          border-top: 1px solid rgba(255, 255, 255, 0.4);
+        }
+      }
+    }
+  }
+}
+
 .secondary-nav {
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
   padding: 1rem;
   a svg,
   a i {
@@ -926,8 +979,6 @@ export default {
   z-index: 2;
   background-color: rgba(29, 29, 29, 0.5);
   position: absolute;
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
   padding: 0.25rem 1rem;
   a {
     color: #ccc;
@@ -955,12 +1006,6 @@ export default {
     overflow-y: hidden;
     text-align: center;
     min-height: 61px;
-    background: linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.75) 0%,
-      rgba(255, 255, 255, 0.75) 10%,
-      rgba(255, 255, 255, 1) 100%
-    );
   }
 }
 
@@ -1020,8 +1065,6 @@ export default {
       .end-nav-item {
         border-radius: 0.25rem;
         background-color: rgba(29, 29, 29, 0.5);
-        backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px);
         padding: 0.5rem 1rem;
         margin-top: 0.5rem;
         margin-right: 1rem;

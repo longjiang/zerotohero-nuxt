@@ -10,7 +10,9 @@
 
 <script>
 export default {
-
+  mounted() {
+    this.$nuxt.$emit('skin', 'dark')
+  }
 }
 </script>
 
