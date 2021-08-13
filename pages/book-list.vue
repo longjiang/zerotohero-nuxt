@@ -15,63 +15,72 @@
   }
 </router>
 <template>
-  <div class="container main pt-5 pb-5" id="book-list">
-    <SocialHead
-      v-if="booklist"
-      :title="`${$l2.name} Guided Readers: ${booklist
-        .slice(0, 2)
-        .map((b) => b.title)
-        .join(', ')} and more | ${$l2.name} Zero to Hero`"
-      :image="`${
-        booklist[0] && booklist[0].thumbnail ? booklist[0].thumbnail : '/img/books-1.png'
-      }`"
-      :description="`Annoated ${
-        $l2.name
-      } books with learning tools. Other titles including: “${booklist.slice(3)
-        .map((b) => b.title)
-        .join(', ')}`"
-    />
-    <h1 class="mb-5">Book List</h1>
-    <SimpleSearch
-      placeholder="Enter the URL of a book list from a variety of eBook websites"
-      :action="
-        (url) => {
-          this.$router.push({
-            path: `/${this.$l1.code}/${
-              this.$l2.code
-            }/book/list?url=${encodeURIComponent(url)}`,
-          });
-        }
-      "
-      ref="search"
-      class="mb-5"
-    />
-    <ul class="list-unstyled booklist">
-      <li v-for="book in booklist" class="booklist-item text-center">
-        <router-link
-          :to="`/${$l1.code}/${$l2.code}/book/index?url=${encodeURIComponent(
-            book.url
-          )}`"
-          class="link-unstyled"
+  <div class="main">
+    <div class="container pt-5 pb-5" id="book-list">
+      <SocialHead
+        v-if="booklist"
+        :title="`${$l2.name} Guided Readers: ${booklist
+          .slice(0, 2)
+          .map((b) => b.title)
+          .join(', ')} and more | ${$l2.name} Zero to Hero`"
+        :image="`${
+          booklist[0] && booklist[0].thumbnail
+            ? booklist[0].thumbnail
+            : '/img/books-1.png'
+        }`"
+        :description="`Annoated ${
+          $l2.name
+        } books with learning tools. Other titles including: “${booklist
+          .slice(3)
+          .map((b) => b.title)
+          .join(', ')}`"
+      />
+      <h1 class="mb-5">Book List</h1>
+      <SimpleSearch
+        placeholder="Enter the URL of a book list from a variety of eBook websites"
+        :action="
+          (url) => {
+            this.$router.push({
+              path: `/${this.$l1.code}/${
+                this.$l2.code
+              }/book/list?url=${encodeURIComponent(url)}`,
+            });
+          }
+        "
+        ref="search"
+        class="mb-5"
+      />
+      <ul class="list-unstyled booklist">
+        <li
+          v-for="(book, index) in booklist"
+          class="booklist-item text-center"
+          :key="`book-${index}`"
         >
-          <img
-            :src="
-              book.thumbnail
-                ? `${Config.imageProxy}?${book.thumbnail}`
-                : `/img/book-thumb-${Math.floor(Math.random() * 10)}.jpg`
-            "
-            alt="Book cover"
-            class="mb-4 shadow book-thumb"
-          />
-          <Annotate tag="h6">
-            <b>{{ book.title }}</b>
-          </Annotate>
-          <Annotate tag="small" v-if="book.author">
-            <span>{{ book.author }}</span>
-          </Annotate>
-        </router-link>
-      </li>
-    </ul>
+          <router-link
+            :to="`/${$l1.code}/${$l2.code}/book/index?url=${encodeURIComponent(
+              book.url
+            )}`"
+            class="link-unstyled"
+          >
+            <img
+              :src="
+                book.thumbnail
+                  ? `${Config.imageProxy}?${book.thumbnail}`
+                  : `/img/book-thumb-${Math.floor(Math.random() * 10)}.jpg`
+              "
+              alt="Book cover"
+              class="mb-4 shadow book-thumb"
+            />
+            <Annotate tag="h6">
+              <b>{{ book.title }}</b>
+            </Annotate>
+            <Annotate tag="small" v-if="book.author">
+              <span>{{ book.author }}</span>
+            </Annotate>
+          </router-link>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 

@@ -5,144 +5,150 @@
   }
 </router>
 <template>
-  <div class="container main pt-5 pb-5" id="book-chapter">
-    <SocialHead
-      v-if="chapter"
-      :title="`${$l2.name} Guided Reader: ${book ? book.title + ' - ' : ''}${
-        chapter.title
-      } | ${$l2.name} Zero to Hero`"
-      :image="`${book.thumbnail ? book.thumbnail : '/img/books-1.png'}`"
-      :description="`Annoated ${
-        $l2.name
-      } book with learning tools. The entire chapter: “${stripTags(
-        chapter.content
-      ).trim()}`"
-    />
-    <div class="row mb-5">
-      <div class="col-sm-12">
-        <SimpleSearch
-          placeholder="Enter the URL of a book chapter from a variety of eBook websites"
-          :action="
-            (url) => {
-              this.$router.push({
-                path: `/${$l1.code}/${
-                  $l2.code
-                }/book/chapter?url=${encodeURIComponent(url)}`,
-              });
-            }
-          "
-          ref="search"
-        />
-      </div>
-    </div>
-    <div class="row">
-      <div
+  <div class="main">
+    <div class="container pt-5 pb-5" id="book-chapter">
+      <SocialHead
         v-if="chapter"
-        class="col-md-8"
-        :key="'chapter-' + encodeURIComponent(chapter.title)"
-      >
-        <div
-          v-if="!(chapter.content && chapter.content.length > 0)"
-          class="text-center"
-        >
-          <Loader :sticky="true" />
-        </div>
-        <Annotate
-          tag="h1"
-          :foreign="foreign"
-          :showTranslate="foreign"
-          :buttons="true"
-        >
-          <span>{{ chapter.title }}</span>
-        </Annotate>
-        <div class="chapter-content" v-if="chapter.content">
-          <SpeechBar
-            :lang="chapterLang ? chapterLang : $l2.code"
-            :html="chapter.content"
-            :foreign="foreign"
-          />
-        </div>
-        <b-button-group class="d-flex mb-5">
-          <b-button variant="light" v-if="previous" @click="previousClick">
-            <i class="fas fachevron-up mr-2"></i>
-            Previous
-          </b-button>
-          <b-button variant="light" v-if="next" @click="nextClick">
-            Next
-            <i class="fas fachevron-down ml-2"></i>
-          </b-button>
-        </b-button-group>
-      </div>
-      <div v-if="book" class="col-md-4 text-center" :key="'book-' + book.title">
-        <router-link
-          :to="
-            book.url
-              ? `/${$l1.code}/${$l2.code}/book/index?url=${encodeURIComponent(
-                  book.url
-                )}`
-              : false
-          "
-          class="link-unstyled"
-        >
-          <img
-            :src="
-              book.thumbnail
-                ? `${Config.imageProxy}?${book.thumbnail}`
-                : `/img/book-thumb-${Math.floor(Math.random() * 10)}.jpg`
+        :title="`${$l2.name} Guided Reader: ${book ? book.title + ' - ' : ''}${
+          chapter.title
+        } | ${$l2.name} Zero to Hero`"
+        :image="`${book.thumbnail ? book.thumbnail : '/img/books-1.png'}`"
+        :description="`Annoated ${
+          $l2.name
+        } book with learning tools. The entire chapter: “${stripTags(
+          chapter.content
+        ).trim()}`"
+      />
+      <div class="row mb-5">
+        <div class="col-sm-12">
+          <SimpleSearch
+            placeholder="Enter the URL of a book chapter from a variety of eBook websites"
+            :action="
+              (url) => {
+                this.$router.push({
+                  path: `/${$l1.code}/${
+                    $l2.code
+                  }/book/chapter?url=${encodeURIComponent(url)}`,
+                });
+              }
             "
-            alt="Book cover"
-            class="mb-4 shadow book-thumb"
-            data-not-lazy
+            ref="search"
           />
-          <Annotate v-if="book.title" :foreign="foreign" :buttons="true">
-            <h6>
-              <em>{{ book.title }}</em>
-            </h6>
-            <p>{{ book.author }}</p>
-          </Annotate>
-        </router-link>
-        <div class="bg-light p-4 mb-3 rounded" v-if="source(args)">
-          <a :href="args" class="link-unstyled" target="_blank">
-            Read the original on
-            <img
-              class="logo-small ml-2"
-              :src="source(args).logo($l2.code)"
-              :alt="source(args).name"
-            />
-          </a>
         </div>
-        <b-button-group class="d-flex mb-3">
-          <b-button variant="light" v-if="previous" @click="previousClick">
-            <i class="fas fachevron-up mr-2"></i>
-          </b-button>
-          <b-button variant="light" v-if="next" @click="nextClick">
-            <i class="fas fachevron-down ml-2"></i>
-          </b-button>
-        </b-button-group>
-        <div class="list-group text-left">
+      </div>
+      <div class="row">
+        <div
+          v-if="chapter"
+          class="col-md-8"
+          :key="'chapter-' + encodeURIComponent(chapter.title)"
+        >
+          <div
+            v-if="!(chapter.content && chapter.content.length > 0)"
+            class="text-center"
+          >
+            <Loader :sticky="true" />
+          </div>
+          <Annotate
+            tag="h1"
+            :foreign="foreign"
+            :showTranslate="foreign"
+            :buttons="true"
+          >
+            <span>{{ chapter.title }}</span>
+          </Annotate>
+          <div class="chapter-content" v-if="chapter.content">
+            <SpeechBar
+              :lang="chapterLang ? chapterLang : $l2.code"
+              :html="chapter.content"
+              :foreign="foreign"
+            />
+          </div>
+          <b-button-group class="d-flex mb-5">
+            <b-button variant="light" v-if="previous" @click="previousClick">
+              <i class="fas fachevron-up mr-2"></i>
+              Previous
+            </b-button>
+            <b-button variant="light" v-if="next" @click="nextClick">
+              Next
+              <i class="fas fachevron-down ml-2"></i>
+            </b-button>
+          </b-button-group>
+        </div>
+        <div
+          v-if="book"
+          class="col-md-4 text-center"
+          :key="'book-' + book.title"
+        >
           <router-link
-            v-for="(chapter, index) in book.chapters"
-            :key="`book-chapter-${chapter.title}-${index}`"
-            :to="`/${$l1.code}/${
-              $l2.code
-            }/book/chapter?url=${encodeURIComponent(chapter.url)}`"
+            :to="
+              book.url
+                ? `/${$l1.code}/${$l2.code}/book/index?url=${encodeURIComponent(
+                    book.url
+                  )}`
+                : false
+            "
             class="link-unstyled"
           >
-            <Annotate
-              :class="{
-                'list-group-item': true,
-                active:
-                  $route.fullPath ===
-                  `/${$l1.code}/${
-                    $l2.code
-                  }/book/chapter?url=${encodeURIComponent(chapter.url)}`,
-              }"
-              :foreign="foreign"
-              :buttons="false"
-            >
-              <span>{{ chapter.title }}</span>
+            <img
+              :src="
+                book.thumbnail
+                  ? `${Config.imageProxy}?${book.thumbnail}`
+                  : `/img/book-thumb-${Math.floor(Math.random() * 10)}.jpg`
+              "
+              alt="Book cover"
+              class="mb-4 shadow book-thumb"
+              data-not-lazy
+            />
+            <Annotate v-if="book.title" :foreign="foreign" :buttons="true">
+              <h6>
+                <em>{{ book.title }}</em>
+              </h6>
+              <p>{{ book.author }}</p>
             </Annotate>
           </router-link>
+          <div class="bg-light p-4 mb-3 rounded" v-if="source(args)">
+            <a :href="args" class="link-unstyled" target="_blank">
+              Read the original on
+              <img
+                class="logo-small ml-2"
+                :src="source(args).logo($l2.code)"
+                :alt="source(args).name"
+              />
+            </a>
+          </div>
+          <b-button-group class="d-flex mb-3">
+            <b-button variant="light" v-if="previous" @click="previousClick">
+              <i class="fas fachevron-up mr-2"></i>
+            </b-button>
+            <b-button variant="light" v-if="next" @click="nextClick">
+              <i class="fas fachevron-down ml-2"></i>
+            </b-button>
+          </b-button-group>
+          <div class="list-group text-left">
+            <router-link
+              v-for="(chapter, index) in book.chapters"
+              :key="`book-chapter-${chapter.title}-${index}`"
+              :to="`/${$l1.code}/${
+                $l2.code
+              }/book/chapter?url=${encodeURIComponent(chapter.url)}`"
+              class="link-unstyled"
+            >
+              <Annotate
+                :class="{
+                  'list-group-item': true,
+                  active:
+                    $route.fullPath ===
+                    `/${$l1.code}/${
+                      $l2.code
+                    }/book/chapter?url=${encodeURIComponent(chapter.url)}`,
+                }"
+                :foreign="foreign"
+                :buttons="false"
+              >
+                <span>{{ chapter.title }}</span>
+              </Annotate>
+            </router-link>
+          </div>
         </div>
       </div>
     </div>
