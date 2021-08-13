@@ -337,10 +337,10 @@ export default {
         to.params.lesson = "lesson";
       }
       if (typeof this.l1 !== "undefined") {
-        to.params.l1 = this.l1;
+        to.params.l1 = this.l1.code;
       }
       if (typeof this.l2 !== "undefined") {
-        to.params.l2 = this.l2;
+        to.params.l2 = this.l2.code;
       }
       return to;
     },
