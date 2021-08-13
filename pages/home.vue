@@ -27,7 +27,7 @@
           <client-only>
             <div :class="{ 'pl-1 pr-1 pb-2': true, 'd-none': !hasDashboard }">
               <div class="home-card">
-                <h5 class="text-center">Welcome Back!</h5>
+                <h3 class="text-center">Continue where you left off</h3>
                 <LazyDashboard
                   :l2="$l2"
                   @hasDashboardLang="hasDashboardUpdate"

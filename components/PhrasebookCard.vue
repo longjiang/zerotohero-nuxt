@@ -7,7 +7,7 @@
         .pop()}`"
       :to="to"
     >
-      <i class="fas fa-book"></i>
+      <i class="fas fa-comment-alt phrasebook-icon"></i>
     </router-link>
     <div class="media-body" style="position: relative;">
       <router-link class="link-unstyled" :to="to">
@@ -111,14 +111,23 @@ export default {
   height: 100%;
   .phrasebook-thumb {
     width: 100%;
+    padding-top: 56.25%;
     display: block;
-    padding: 0.5rem 0 0.5rem 1rem;
     color: rgba(255, 255, 255, 0.4);
-    font-size: 2em;
     overflow: hidden;
+    position: relative;
+    .phrasebook-icon {
+      display: block;
+      position: absolute;
+      font-size: 4em;
+      top: calc(50% - 0.5em);
+      width: 100%;
+      text-align: center;
+    }
   }
   .media-body {
     background: white;
+    height: 100%;
   }
   .phrasebook-card-progress {
     height: 0.3rem;

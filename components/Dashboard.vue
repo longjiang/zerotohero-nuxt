@@ -37,12 +37,12 @@
       </div>
       <div class="history container">
         <div
-          class="history-videos row justify-content-md-center"
+          class="history-items row justify-content-md-center"
           v-if="this.videosFiltered.length > 0"
         >
           <div
-            v-for="(item, itemIndex) of this.videosFiltered.slice(0, 6)"
-            :key="`history-video-${itemIndex}`"
+            v-for="(item, itemIndex) of this.itemsFiltered.slice(0, 12)"
+            :key="`history-item-${itemIndex}`"
             :class="{
               'pb-4 history-item-column': true,
               'col-12': params.xs,
@@ -50,57 +50,26 @@
               'col-4': params.md,
               'col-3': params.lg,
             }"
-            :set="(videoL1 = $languages.getSmart(item.l1))"
-            :set2="(videoL2 = $languages.getSmart(item.l2))"
-          >
-            <div class="history-video-item-language-badge">
-              {{ videoL2.name }}
-            </div>
-            <YouTubeVideoCard
-              :video="item.video"
-              skin="light"
-              :l1="videoL1"
-              :l2="videoL2"
-            />
-            <button
-              class="
-                btn btn-small
-                bg-white
-                text-secondary
-                ml-0
-                history-item-remove-btn
-              "
-              @click.stop.prevent="$store.dispatch('history/remove', item)"
-            >
-              <i class="fa fa-times"></i>
-            </button>
-          </div>
-        </div>
-        <div
-          class="history-phrasebooks row justify-content-md-center"
-          v-if="this.phrasebooksFiltered.length > 0"
-        >
-          <div
-            v-for="(item, itemIndex) of this.phrasebooksFiltered.slice(0, 6)"
-            :key="`history-phrasebook-${itemIndex}`"
-            :class="{
-              'pb-4 history-item-column': true,
-              'col-12': params.xs,
-              'col-6': params.sm,
-              'col-4': params.md,
-              'col-3': params.lg,
-            }"
-            :set="(phrasebookL1 = $languages.getSmart(item.l1))"
-            :set2="(phrasebookL2 = $languages.getSmart(item.l2))"
+            :set="(itemL1 = $languages.getSmart(item.l1))"
+            :set2="(itemL2 = $languages.getSmart(item.l2))"
           >
             <div class="history-item-language-badge">
-              {{ phrasebookL2.name }}
+              {{ itemL2.name }}
             </div>
+            <YouTubeVideoCard
+              v-if="item.type === 'video'"
+              :video="item.video"
+              skin="card"
+              :l1="itemL1"
+              :l2="itemL2"
+            />
+
             <PhrasebookCard
+              v-if="item.type === 'phrasebook'"
               :phrasebook="item.phrasebook"
               skin="light"
-              :l1="phrasebookL1"
-              :l2="phrasebookL2"
+              :l1="itemL1"
+              :l2="itemL2"
             />
             <button
               class="
@@ -195,6 +164,13 @@ export default {
         );
       return savedWordsSorted;
     },
+    itemsFiltered() {
+      return this.history.filter((i) => {
+        if (this.l2 && i.l2 !== this.l2.code) return false;
+        if (i.type === "video") return typeof i.video !== "undefined";
+        if (i.type === "phrasebook") return typeof i.phrasebook !== "undefined";
+      });
+    },
     videosFiltered() {
       return this.history.filter((i) => {
         if (this.l2 && i.l2 !== this.l2.code) return false;
@@ -204,7 +180,7 @@ export default {
     phrasebooksFiltered() {
       return this.history.filter((i) => {
         if (this.l2 && i.l2 !== this.l2.code) return false;
-        return i.type === "phrasebook"  && i.phrasebook;
+        return i.type === "phrasebook" && i.phrasebook;
       });
     },
   },
@@ -247,36 +223,45 @@ export default {
 .dashboard-saved-words + .history {
   margin-top: 2rem;
 }
-.history-item-column {
-  position: relative;
+.history.container {
+  .history-items.row {
+    .history-item-column {
+      position: relative;
+      .history-item-remove-btn {
+        position: absolute;
+        top: 0.25rem;
+        right: 1.2rem;
+        z-index: 9;
+        border-radius: 0.2rem;
+        background: rgba(0, 0, 0, 0.2) !important;
+        color: rgba(255, 255, 255, 0.384) !important;
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        &:hover {
+          color: rgba(255, 255, 255, 0.6) !important;
+          background: rgba(0, 0, 0, 0.4) !important;
+        }
+      }
+      .history-item-language-badge {
+        position: absolute;
+        top: 0.25rem;
+        left: 1.2rem;
+        z-index: 9;
+        border-radius: 0.2rem;
+        background: rgba(0, 0, 0, 0.2) !important;
+        color: rgba(255, 255, 255, 0.5) !important;
+        font-size: 0.85em;
+        padding: 0.1rem 0.3rem;
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+      }
+      .phrasebook {
 
-  .history-item-remove-btn {
-    position: absolute;
-    top: 0.25rem;
-    right: 1.2rem;
-    z-index: 9;
-    border-radius: 0.2rem;
-    background: rgba(0, 0, 0, 0.2) !important;
-    color: rgba(255, 255, 255, 0.384) !important;
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-    &:hover {
-      color: rgba(255, 255, 255, 0.6) !important;
-      background: rgba(0, 0, 0, 0.4) !important;
+      }
+      .youtube-video-card {
+        
+      }
     }
-  }
-  .history-item-language-badge {
-    position: absolute;
-    top: 0.25rem;
-    left: 1.2rem;
-    z-index: 9;
-    border-radius: 0.2rem;
-    background: rgba(0, 0, 0, 0.2) !important;
-    color: rgba(255, 255, 255, 0.5) !important;
-    font-size: 0.85em;
-    padding: 0.1rem 0.3rem;
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
   }
 }
 
