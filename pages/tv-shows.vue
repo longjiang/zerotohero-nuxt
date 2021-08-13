@@ -1,7 +1,10 @@
 <router>
   {
     path: '/:l1/:l2/tv-shows',
-    props: true
+    props: true,
+    meta: {
+      skin: 'dark'
+    }
   }
 </router>
 <template>
@@ -10,9 +13,6 @@
 
 <script>
 export default {
-  mounted() {
-    this.$nuxt.$emit('skin', 'dark')
-  }
 }
 </script>
 

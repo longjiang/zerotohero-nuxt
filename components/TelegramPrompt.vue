@@ -1,7 +1,6 @@
 <template>
   <div :class="bodyClasses" class="container">
-    <h6 v-if="headerType == 'small'">{{ $t('Join our Telegram discussion group') }}</h6>
-    <h3 v-else>{{ $t('Join our Telegram discussion group') }}</h3>
+    <h5>{{ $t('Join our Telegram discussion group') }}</h5>
     <ul class="pl-3 mt-3">
       <li> {{ $t('Share learning resources.') }}</li>
       <li> {{ $t('Interact with fellow learners.') }}</li>

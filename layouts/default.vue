@@ -12,7 +12,7 @@
           :l2="l2"
           :key="`nav-${l1.code}-${l2.code}`"
           :variant="wide ? 'side-bar' : 'menu-bar'"
-          :skin="skin"
+          :skin="$route.meta.skin ? $route.meta.skin : 'light'"
         />
       </client-only>
       <div class="zth-content">

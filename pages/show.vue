@@ -1,7 +1,10 @@
 <router>
   {
     path: '/:l1/:l2/show/:type/:id',
-    props: true
+    props: true,
+    meta: {
+      skin: 'dark'
+    }
   }
 </router>
 <template>
