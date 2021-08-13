@@ -169,23 +169,30 @@ export default {
       return savedWordsSorted;
     },
     itemsFiltered() {
-      return this.history.filter((i) => {
-        if (this.l2 && i.l2 !== this.l2.code) return false;
-        if (i.type === "video") return typeof i.video !== "undefined";
-        if (i.type === "phrasebook") return typeof i.phrasebook !== "undefined";
-      });
+      if (typeof this.history !== "undefined") {
+        return this.history.filter((i) => {
+          if (this.l2 && i.l2 !== this.l2.code) return false;
+          if (i.type === "video") return typeof i.video !== "undefined";
+          if (i.type === "phrasebook")
+            return typeof i.phrasebook !== "undefined";
+        });
+      }
     },
     videosFiltered() {
-      return this.history.filter((i) => {
-        if (this.l2 && i.l2 !== this.l2.code) return false;
-        return i.type === "video" && i.video;
-      });
+      if (typeof this.history !== "undefined") {
+        return this.history.filter((i) => {
+          if (this.l2 && i.l2 !== this.l2.code) return false;
+          return i.type === "video" && i.video;
+        });
+      }
     },
     phrasebooksFiltered() {
-      return this.history.filter((i) => {
-        if (this.l2 && i.l2 !== this.l2.code) return false;
-        return i.type === "phrasebook" && i.phrasebook;
-      });
+      if (typeof this.history !== "undefined") {
+        return this.history.filter((i) => {
+          if (this.l2 && i.l2 !== this.l2.code) return false;
+          return i.type === "phrasebook" && i.phrasebook;
+        });
+      }
     },
   },
   watch: {
@@ -198,16 +205,17 @@ export default {
   },
   methods: {
     emitHasDashboard() {
-      this.$emit(
-        "hasDashboard",
-        (this.history && this.history.length > 0) ||
-          (this.savedWordsSorted && this.savedWordsSorted.length > 0)
-      );
-      let languageCodes = this.history.map((i) => i.l2);
-      for (let l2 in this.savedWords) {
-        if (this.savedWords[l2].length > 0) languageCodes.push(l2);
+      let hasDashboard = false;
+      if (typeof this.l2 === "undefined") {
+        if (this.savedWordsSorted && this.savedWordsSorted.length > 0)
+          hasDashboard = true;
+        if (this.itemsFiltered > 0) hasDashboard = true;
+      } else {
+        if (this.savedWordsSorted && this.savedWordsSorted.length > 0)
+          hasDashboard = true;
+        if (this.itemsFiltered && this.itemsFiltered.length > 0) hasDashboard = true;
       }
-      this.$emit("hasDashboardLang", languageCodes);
+      this.$emit("hasDashboard", hasDashboard);
     },
   },
 };

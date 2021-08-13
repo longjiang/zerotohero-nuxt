@@ -28,10 +28,7 @@
             <div :class="{ 'pl-1 pr-1 pb-2': true, 'd-none': !hasDashboard }">
               <div class="home-card">
                 <h3 class="text-center">Continue where you left off</h3>
-                <LazyDashboard
-                  :l2="$l2"
-                  @hasDashboardLang="hasDashboardUpdate"
-                />
+                <LazyDashboard :l2="$l2" @hasDashboard="hasDashboardUpdate" />
               </div>
             </div>
           </client-only>
@@ -70,8 +67,8 @@ export default {
     },
   },
   methods: {
-    hasDashboardUpdate(languageCodes) {
-      if (languageCodes.includes(this.$l2.code)) this.hasDashboard = true;
+    hasDashboardUpdate(hasDashboard) {
+      this.hasDashboard = hasDashboard;
     },
     redirectToCourses() {
       if (
