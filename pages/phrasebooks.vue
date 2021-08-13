@@ -43,36 +43,7 @@
             :key="`phrasebook-${phrasebookIndex}`"
             style="padding-bottom: 2rem"
           >
-            <div class="media rounded shadow phrasebook">
-              <router-link
-                :class="`phrasebook-thumb link-unstyled bg-gradient-${phrasebook.title.length
-                  .toString()
-                  .split('')
-                  .pop()}`"
-                :to="`/${$l1.code}/${$l2.code}/phrasebook/${phrasebook.id}/`"
-              >
-                <i class="fas fa-book"></i>
-              </router-link>
-              <div class="media-body">
-                <router-link
-                  class="link-unstyled"
-                  :to="`/${$l1.code}/${$l2.code}/phrasebook/${phrasebook.id}/`"
-                >
-                  <h5>{{ phrasebook.title }}</h5>
-                </router-link>
-                <div style="color: #999">
-                  ({{ phrasebook.phrases.length }} phrases)
-                </div>
-
-                <b-button
-                  v-if="$adminMode"
-                  class="btn btn-small bg-danger text-white mt-2 ml-0"
-                  @click.stop.prevent="remove(phrasebook)"
-                >
-                  <i class="fa fa-trash"></i>
-                </b-button>
-              </div>
-            </div>
+            <PhrasebookCard :phrasebook="phrasebook" />
           </div>
         </div>
       </div>
@@ -179,63 +150,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.phrasebook {
-  height: 100%;
-}
 
-.phrasebook-thumb {
-  width: 100%;
-  display: block;
-  padding: 0.5rem 0 0.5rem 1rem;
-  color: rgba(255, 255, 255, 0.4);
-  font-size: 2em;
-  overflow: hidden;
-}
 
-.bg-gradient-0 {
-  background-color: #faaca8;
-  background-image: linear-gradient(45deg, #faaca8 0%, #ddd6f3 100%);
-}
-
-.bg-gradient-1 {
-  background-color: #4158d0;
-  background-image: linear-gradient(
-    43deg,
-    #4158d0 0%,
-    #c850c0 46%,
-    #ffcc70 100%
-  );
-}
-.bg-gradient-2 {
-  background-color: #0093e9;
-  background-image: linear-gradient(43deg, #0093e9 0%, #80d0c7 100%);
-}
-.bg-gradient-3 {
-  background-color: #0093e9;
-  background-image: linear-gradient(43deg, #0093e9 0%, #80d0c7 100%);
-}
-.bg-gradient-4 {
-  background-color: #0093e9;
-  background-image: linear-gradient(43deg, #0093e9 0%, #80d0c7 100%);
-}
-.bg-gradient-5 {
-  background-color: #0093e9;
-  background-image: linear-gradient(43deg, #0093e9 0%, #80d0c7 100%);
-}
-.bg-gradient-6 {
-  background-color: #ffe53b;
-  background-image: linear-gradient(43deg, #ffe53b 0%, #ff2525 74%);
-}
-.bg-gradient-7 {
-  background-color: #fbda61;
-  background-image: linear-gradient(43deg, #fbda61 0%, #ff5acd 100%);
-}
-.bg-gradient-8 {
-  background-color: #fbda61;
-  background-image: linear-gradient(43deg, #fbda61 0%, #ff5acd 100%);
-}
-.bg-gradient-9 {
-  background-color: #faaca8;
-  background-image: linear-gradient(45deg, #faaca8 0%, #ddd6f3 100%);
-}
 </style>
