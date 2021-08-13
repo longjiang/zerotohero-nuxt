@@ -338,6 +338,7 @@ export default {
       let to = {
         name: "youtube-view",
         params: { youtube_id: this.video.youtube_id },
+        query: {}
       };
       if (this.video.lesson) {
         to.params.lesson = "lesson";
@@ -347,6 +348,9 @@ export default {
       }
       if (typeof this.l2 !== "undefined") {
         to.params.l2 = this.l2.code;
+      }
+      if (this.video.starttime) {
+        to.query.t = this.video.starttime
       }
       return to;
     },
