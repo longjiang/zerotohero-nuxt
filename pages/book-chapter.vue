@@ -56,13 +56,17 @@
           >
             <span>{{ chapter.title }}</span>
           </Annotate>
+
           <div class="chapter-content" v-if="chapter.content">
-            <LazyTextWithSpeechBar
-              :lang="chapterLang ? chapterLang : $l2.code"
-              :html="chapter.content"
-              :foreign="foreign"
-            />
+            <client-only :placeholder="chapter.content">
+              <LazyTextWithSpeechBar
+                :lang="chapterLang ? chapterLang : $l2.code"
+                :html="chapter.content"
+                :foreign="foreign"
+              />
+            </client-only>
           </div>
+
           <b-button-group class="d-flex mb-5">
             <b-button variant="light" v-if="previous" @click="previousClick">
               <i class="fas fachevron-up mr-2"></i>
@@ -74,48 +78,54 @@
             </b-button>
           </b-button-group>
         </div>
+
         <div
           v-if="book"
           class="col-md-4 text-center"
           :key="'book-' + book.title"
         >
-          <router-link
-            :to="
-              book.url
-                ? `/${$l1.code}/${$l2.code}/book/index?url=${encodeURIComponent(
-                    book.url
-                  )}`
-                : false
-            "
-            class="link-unstyled"
-          >
-            <img
-              :src="
-                book.thumbnail
-                  ? `${Config.imageProxy}?${book.thumbnail}`
-                  : `/img/book-thumb-${Math.floor(Math.random() * 10)}.jpg`
+          <client-only :placeholder="book.title">
+            <router-link
+              v-if="book.url"
+              :to="
+                book.url
+                  ? `/${$l1.code}/${
+                      $l2.code
+                    }/book/index?url=${encodeURIComponent(book.url)}`
+                  : false
               "
-              alt="Book cover"
-              class="mb-4 shadow book-thumb"
-              data-not-lazy
-            />
-            <Annotate v-if="book.title" :foreign="foreign" :buttons="true">
-              <h6>
-                <em>{{ book.title }}</em>
-              </h6>
-              <p>{{ book.author }}</p>
-            </Annotate>
-          </router-link>
-          <div class="bg-light p-4 mb-3 rounded" v-if="source(args)">
-            <a :href="args" class="link-unstyled" target="_blank">
-              Read the original on
+              class="link-unstyled"
+            >
               <img
-                class="logo-small ml-2"
-                :src="source(args).logo($l2.code)"
-                :alt="source(args).name"
+                :src="
+                  book.thumbnail
+                    ? `${Config.imageProxy}?${book.thumbnail}`
+                    : `/img/book-thumb-${Math.floor(Math.random() * 10)}.jpg`
+                "
+                alt="Book cover"
+                class="mb-4 shadow book-thumb"
+                data-not-lazy
               />
-            </a>
-          </div>
+              <Annotate v-if="book.title" :foreign="foreign" :buttons="false">
+                <h6>
+                  <em>{{ book.title }}</em>
+                </h6>
+                <p>{{ book.author }}</p>
+              </Annotate>
+            </router-link>
+          </client-only>
+          <client-only placeholder="Read the original">
+            <div class="bg-light p-4 mb-3 rounded" v-if="source(args)">
+              <a :href="args" class="link-unstyled" target="_blank">
+                Read the original on
+                <img
+                  class="logo-small ml-2"
+                  :src="source(args).logo($l2.code)"
+                  :alt="source(args).name"
+                />
+              </a>
+            </div>
+          </client-only>
           <b-button-group class="d-flex mb-3">
             <b-button variant="light" v-if="previous" @click="previousClick">
               <i class="fas fachevron-up mr-2"></i>
