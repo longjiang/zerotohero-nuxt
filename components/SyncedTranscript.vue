@@ -71,7 +71,7 @@
           />
         </div>
       </template>
-      <div v-observe-visibility="visibilityChanged" style="height: 100vh">
+      <div v-observe-visibility="visibilityChanged" style="height: 100vh" v-if="lines.length > visibleMax">
         &nbsp;
       </div>
     </div>
