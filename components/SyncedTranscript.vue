@@ -15,14 +15,15 @@
           :line="line"
           :parallelLine="
             $l2.code !== $l1.code && parallellines
-              ? matchedParallelLines[single ? currentLineIndex : index + visibleMin]
+              ? matchedParallelLines[
+                  single ? currentLineIndex : index + visibleMin
+                ]
               : undefined
           "
           :lineIndex="index + visibleMin"
-          :key="`line-${index + visibleMin}-${line.starttime}-${line.line.substr(
-            0,
-            10
-          )}`"
+          :key="`line-${index + visibleMin}-${
+            line.starttime
+          }-${line.line.substr(0, 10)}`"
           :abnormal="
             $adminMode &&
             lines[index + visibleMin - 1] &&
@@ -49,14 +50,21 @@
         <div v-if="!single" :key="`line-${index + visibleMin}-review`">
           <h6
             class="text-center mt-3"
-            :key="`review-title-${index + visibleMin}-${reviewKeys[index + visibleMin]}`"
-            v-if="review[index + visibleMin] && review[index + visibleMin].length > 0"
+            :key="`review-title-${index + visibleMin}-${
+              reviewKeys[index + visibleMin]
+            }`"
+            v-if="
+              review[index + visibleMin] &&
+              review[index + visibleMin].length > 0
+            "
           >
             Pop Quiz
           </h6>
           <Review
             v-for="(reviewItem, reviewItemIndex) in review[index + visibleMin]"
-            :key="`review-${index + visibleMin}-${reviewItemIndex}-${reviewKeys[index + visibleMin]}`"
+            :key="`review-${index + visibleMin}-${reviewItemIndex}-${
+              reviewKeys[index + visibleMin]
+            }`"
             :reviewItem="reviewItem"
             :hsk="hsk"
             :skin="skin"
@@ -144,8 +152,9 @@ export default {
       reviewKeys: [],
       neverPlayed: true,
       matchedParallelLines: undefined,
-      visibleMin: 5,
-      visibleMax: 15,
+      visibleMin: 0,
+      visibleMax: this.startLineIndex ? Number(this.startLineIndex) + 15 : 15,
+      visibleRange: 15,
     };
   },
   computed: {
