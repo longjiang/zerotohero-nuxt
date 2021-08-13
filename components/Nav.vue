@@ -1127,10 +1127,8 @@ export default {
 }
 
 .saved-words-count {
-  background: #666;
   border-radius: 0.5rem;
   font-size: 0.7rem;
-  color: white;
   font-weight: bold;
   display: inline-block;
   line-height: 1.2rem;
@@ -1142,6 +1140,20 @@ export default {
   margin-left: 0.2rem;
   opacity: 0.7;
   display: inline-block;
+}
+
+.zth-nav-light {
+  .saved-words-count {
+    background: #666;
+    color: white;
+  }
+}
+
+.zth-nav-dark {
+  .saved-words-count {
+    background: white;
+    color: black;
+  }
 }
 
 .nuxt-link-active .saved-words-count {
