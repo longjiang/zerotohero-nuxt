@@ -21,7 +21,7 @@
       </p>
       <p>
         Currency:
-        <select v-if="rates" name id v-model="currency" class="mb-3">
+        <select v-if="rates" name id v-model="selectedCurrency" class="mb-3">
           <option
             v-for="(rate, symbol) in rates"
             :key="`currency-select-${symbol}`"
@@ -260,6 +260,7 @@
 import fx from "money";
 import accounting from "accounting";
 import Sale from "@/components/Sale";
+import axios from "axios";
 
 export default {
   components: {
@@ -275,20 +276,64 @@ export default {
       accounting,
       key: "USD",
       rates: undefined,
+      selectedCurrency: this.currency,
     };
+  },
+  computed: {
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
+  },
+  async fetch() {
+    let response;
+    try {
+      // Load exchange rates data via AJAX:
+      response = await axios.get(
+        // NB: using Open Exchange Rates here, but you can use any source!
+        "https://api.exchangerate.host/latest"
+      );
+    } catch (err) {
+      console.log(err);
+    }
+    if (response && response.data) {
+      let data = response.data;
+      // Check money.js has finished loading:
+      this.rates = data.rates;
+      this.key = this.currency;
+      if (typeof fx !== "undefined" && fx.rates) {
+        fx.rates = data.rates;
+        fx.base = data.base;
+      }
+    }
+  },
+  watch: {
+    selectedCurrency() {
+      this.$router.push({
+        name: "pricing",
+        params: { currency: this.selectedCurrency },
+      });
+    },
   },
   methods: {
     money(n) {
-      if (this.rates) {
-        return accounting
-          .formatMoney(
-            Math.round(fx.convert(n, { from: "USD", to: this.currency })),
-            { symbol: this.currency, format: "%v %s", precision: 0 }
-          )
-          .replace("CNY", "RMB");
-      } else {
-        return n + " USD";
+      let formatted;
+      if (typeof this.rates !== "undefined") {
+        try {
+          formatted = accounting
+            .formatMoney(
+              Math.round(fx.convert(n, { from: "USD", to: this.currency })),
+              { symbol: this.currency, format: "%v %s", precision: 0 }
+            )
+            .replace("CNY", "RMB");
+        } catch (err) {}
       }
+      if (typeof formatted === "undefined") formatted = n + " USD";
+      return formatted;
     },
     price(n, options) {
       if (options.sale === true) {
@@ -301,28 +346,6 @@ export default {
         return `<b>${this.money(n)}</b>`;
       }
     },
-  },
-  watch: {
-    currency() {
-      this.$router.push({
-        path: `/${this.$l1.code}/${this.$l2.code}/pricing/${this.currency}`,
-      });
-    },
-  },
-  async fetch() {
-    // Load exchange rates data via AJAX:
-    let response = await axios.get(
-      // NB: using Open Exchange Rates here, but you can use any source!
-      "https://api.exchangeratesapi.io/latest"
-    );
-    let data = response.data;
-    // Check money.js has finished loading:
-    this.rates = data.rates;
-    this.key = this.currency;
-    if (typeof fx !== "undefined" && fx.rates) {
-      fx.rates = data.rates;
-      fx.base = data.base;
-    }
   },
 };
 </script>

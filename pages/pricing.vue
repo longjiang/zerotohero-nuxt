@@ -18,13 +18,7 @@
 </template>
 
 <script>
-import PricingZhEn from "@/components/PricingZhEn";
-import PricingEnZh from "@/components/PricingEnZh";
 export default {
-  components: {
-    PricingZhEn,
-    PricingEnZh,
-  },
   props: {
     currency: {
       default: "USD",
