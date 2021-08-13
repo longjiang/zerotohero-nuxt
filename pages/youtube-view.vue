@@ -2,6 +2,9 @@
   {
     path: '/:l1/:l2/youtube/view/:youtube_id?/:lesson?',
     props: true,
+    meta: {
+      skin: 'dark'
+    }
   }
 </router>
 <template>
