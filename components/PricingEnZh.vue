@@ -289,7 +289,7 @@ export default {
         return this.$store.state.settings.l2;
     },
   },
-  async fetch() {
+  async created() {
     let response;
     try {
       // Load exchange rates data via AJAX:
