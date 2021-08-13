@@ -462,18 +462,20 @@ export default {
       let data = {
         type: "video",
         id: `${this.$l2.code}-video-${this.video.youtube_id}`,
-        title: this.video.title,
-        youtube_id: this.video.youtube_id,
         date: DateHelper.unparseDate(new Date()),
-        starttime: this.currentTimeInSeconds,
         l1: this.$l1.code,
         l2: this.$l2.code,
+        video: {
+          id: this.video.id,
+          title: this.video.title,
+          youtube_id: this.video.youtube_id,
+          starttime: this.currentTimeInSeconds,
+        },
       };
       if (this.$refs.youtube && this.$refs.youtube.duration) {
-        data.duration = this.$refs.youtube.duration;
-        data.progress = data.starttime / data.duration;
+        data.video.duration = this.$refs.youtube.duration;
+        data.video.progress = data.starttime / data.duration;
       }
-
       this.$store.dispatch("history/add", data);
     },
     unbindKeys() {

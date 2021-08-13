@@ -8,8 +8,8 @@
   <container-query :query="query" v-model="params">
     <div :class="{ 'bg-white': !wide }">
       <SocialHead :title="title" :description="description" :image="image" />
-      <div :class="{ 'container': !wide }">
-        <div :class="{ 'row': !wide, 'content-panes': wide }">
+      <div :class="{ container: !wide }">
+        <div :class="{ row: !wide, 'content-panes': wide }">
           <div
             :class="{
               'p-4 content-pane-left': wide,
@@ -121,6 +121,7 @@
 import Helper from "@/lib/helper";
 import WordPhotos from "@/lib/word-photos";
 import { ContainerQuery } from "vue-container-query";
+import DateHelper from '@/lib/date-helper'
 
 export default {
   components: {
@@ -151,25 +152,6 @@ export default {
         },
       },
     };
-  },
-  async fetch() {
-    this.getPhrasebookFromStore();
-    if (this.phrase)
-      this.images = await WordPhotos.getGoogleImages({
-        term: this.phrase,
-        lang: this.$l2.code,
-      });
-  },
-  mounted() {
-    this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type.startsWith("phrasebooks")) {
-        this.getPhrasebookFromStore();
-      }
-    });
-  },
-  beforeDestroy() {
-    // you may call unsubscribe to stop the subscription
-    this.unsubscribe();
   },
   computed: {
     $l1() {
@@ -209,7 +191,50 @@ export default {
       return this.params.wide && ["lg", "xl", "xxl"].includes(this.$mq);
     },
   },
+  async fetch() {
+    this.getPhrasebookFromStore();
+    if (this.phrase)
+      this.images = await WordPhotos.getGoogleImages({
+        term: this.phrase,
+        lang: this.$l2.code,
+      });
+  },
+  mounted() {
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (mutation.type.startsWith("phrasebooks")) {
+        this.getPhrasebookFromStore();
+      }
+    });
+  },
+  beforeDestroy() {
+    // you may call unsubscribe to stop the subscription
+    this.unsubscribe();
+  },
+  beforeRouteUpdate(to, from, next) {
+    // called when the route that renders this component is about to
+    // be navigated away from.
+    // has access to `this` component instance.
+    this.savePhrasebookHistory(Number(to.params.phraseId));
+    next();
+  },
   methods: {
+    savePhrasebookHistory(index) {
+      let data = {
+        type: "phrasebook",
+        id: `${this.$l2.code}-phrasebook-${this.phrasebook.id}`,
+        date: DateHelper.unparseDate(new Date()),
+        l1: this.$l1.code,
+        l2: this.$l2.code,
+        phrasebook: {
+          id: this.phrasebook.id,
+          title: this.phrasebook.title,
+          index,
+          length: this.phrasebook.phrases.length,
+        },
+      };
+      data.phrasebook.progress = data.index / data.length;
+      this.$store.dispatch("history/add", data);
+    },
     async getPhrasebookFromStore() {
       let phrasebooks =
         this.$store.state.phrasebooks.phrasebooks[this.$l2.code];

@@ -35,11 +35,14 @@
           </router-link>
         </div>
       </div>
-      <div class="history container" v-if="this.videosFiltered.length > 0">
-        <div class="youtube-videos row justify-content-md-center">
+      <div class="history container">
+        <div
+          class="history-videos row justify-content-md-center"
+          v-if="this.videosFiltered.length > 0"
+        >
           <div
-            v-for="(item, itemIndex) of this.videosFiltered.slice(0, 24)"
-            :key="`history-item-${itemIndex}`"
+            v-for="(item, itemIndex) of this.videosFiltered.slice(0, 6)"
+            :key="`history-video-${itemIndex}`"
             :class="{
               'pb-4 history-item-column': true,
               'col-12': params.xs,
@@ -50,11 +53,11 @@
             :set="(videoL1 = $languages.getSmart(item.l1))"
             :set2="(videoL2 = $languages.getSmart(item.l2))"
           >
-            <div class="history-item-language-badge">
+            <div class="history-video-item-language-badge">
               {{ videoL2.name }}
             </div>
             <YouTubeVideoCard
-              :video="item"
+              :video="item.video"
               skin="light"
               :l1="videoL1"
               :l2="videoL2"
@@ -74,16 +77,56 @@
           </div>
         </div>
         <div
-          class="text-center"
-          v-if="videosFiltered && videosFiltered.length > 0"
+          class="history-phrasebooks row justify-content-md-center"
+          v-if="this.phrasebooksFiltered.length > 0"
         >
-          <button
-            class="btn btn-ghost-dark text-secondary btn-sm ml-0 mb-2"
-            @click.stop.prevent="$store.dispatch('history/removeAll')"
+          <div
+            v-for="(item, itemIndex) of this.phrasebooksFiltered.slice(0, 6)"
+            :key="`history-phrasebook-${itemIndex}`"
+            :class="{
+              'pb-4 history-item-column': true,
+              'col-12': params.xs,
+              'col-6': params.sm,
+              'col-4': params.md,
+              'col-3': params.lg,
+            }"
+            :set="(phrasebookL1 = $languages.getSmart(item.l1))"
+            :set2="(phrasebookL2 = $languages.getSmart(item.l2))"
           >
-            Clear History
-          </button>
+            <div class="history-item-language-badge">
+              {{ phrasebookL2.name }}
+            </div>
+            <PhrasebookCard
+              :phrasebook="item.phrasebook"
+              skin="light"
+              :l1="phrasebookL1"
+              :l2="phrasebookL2"
+            />
+            <button
+              class="
+                btn btn-small
+                bg-white
+                text-secondary
+                ml-0
+                history-item-remove-btn
+              "
+              @click.stop.prevent="$store.dispatch('history/remove', item)"
+            >
+              <i class="fa fa-times"></i>
+            </button>
+          </div>
         </div>
+      </div>
+      <div
+        class="text-center"
+        v-if="videosFiltered && videosFiltered.length > 0"
+      >
+        <button
+          class="btn btn-ghost-dark text-secondary btn-sm ml-0 mb-2"
+          @click.stop.prevent="$store.dispatch('history/removeAll')"
+        >
+          Clear History
+        </button>
       </div>
     </div>
   </container-query>
@@ -155,7 +198,13 @@ export default {
     videosFiltered() {
       return this.history.filter((i) => {
         if (this.l2 && i.l2 !== this.l2.code) return false;
-        return i.type === "video";
+        return i.type === "video" && i.video;
+      });
+    },
+    phrasebooksFiltered() {
+      return this.history.filter((i) => {
+        if (this.l2 && i.l2 !== this.l2.code) return false;
+        return i.type === "phrasebook"  && i.phrasebook;
       });
     },
   },
