@@ -74,7 +74,7 @@
       <div
         v-observe-visibility="visibilityChanged"
         style="height: 100vh"
-        v-if="lines.length > visibleMax"
+        v-if="!single && lines.length > visibleMax"
       >
         &nbsp;
       </div>
@@ -261,7 +261,7 @@ export default {
         this.currentLineIndex + this.visibleRange
       );
       if (visibleMax > this.visibleMax + this.visibleRange / 2) {
-        this.visibleMax = visibleMax
+        this.visibleMax = visibleMax;
       }
       let lineEls = this.$el.querySelectorAll(`.transcript-line`);
       lineEls.forEach((lineEl) =>
