@@ -1,5 +1,5 @@
 <template>
-  <div class="synced-transcript">
+  <div class="synced-transcript pl-3 pr-3">
     <div
       :class="{
         transcript: true,
@@ -71,6 +71,9 @@
           />
         </div>
       </template>
+      <div v-observe-visibility="visibilityChanged" style="height: 100vh">
+        &nbsp;
+      </div>
     </div>
   </div>
 </template>
@@ -132,6 +135,9 @@ export default {
     collapsed: {
       default: false,
     },
+    landscape: {
+      default: false,
+    },
   },
   data() {
     return {
@@ -153,8 +159,8 @@ export default {
       neverPlayed: true,
       matchedParallelLines: undefined,
       visibleMin: 0,
-      visibleMax: this.startLineIndex ? Number(this.startLineIndex) + 15 : 15,
-      visibleRange: 15,
+      visibleMax: this.startLineIndex ? Number(this.startLineIndex) + 30 : 30,
+      visibleRange: 30,
     };
   },
   computed: {
@@ -260,6 +266,11 @@ export default {
     },
   },
   methods: {
+    visibilityChanged(isVisible) {
+      if (isVisible) {
+        this.visibleMax = this.visibleMax + this.visibleRange;
+      }
+    },
     trasnlationLineBlur(e) {
       this.trasnlationLineChanged(e);
     },
@@ -573,11 +584,18 @@ export default {
       this.$emit("seek", starttime);
     },
     getSmallScreenOffset() {
-      let smallScreenOffset = 0;
-      if (window.innerHeight > window.innerWidth) {
-        smallScreenOffset = 52; // controller height
-        if (!this.collapsed)
-          smallScreenOffset = smallScreenOffset + (window.innerWidth * 9) / 16; // video height, hidden if collapsed
+      let smallScreenOffset;
+      if (!this.landscape) {
+        let controllerHeight = 52;
+        if (this.collapsed) {
+          smallScreenOffset = videoHeight;
+        } else {
+          let transcriptContainerWidth = this.$el.clientWidth;
+          let videoHeight = (transcriptContainerWidth * 9) / 16; // video height, hidden if collapsed
+          smallScreenOffset = videoHeight + controllerHeight;
+        }
+      } else {
+        smallScreenOffset = 0;
       }
       return smallScreenOffset;
     },

@@ -51,7 +51,7 @@
           />
         </div>
       </div>
-      <div class="youtube-transcript-column col-sm-12">
+      <div class="youtube-transcript-column">
         <div class="youtube-video-info">
           <h5 style="line-height: 1.5">
             <span v-if="video" :key="`video-title-${video.title}`" class="mt-4">
@@ -166,6 +166,7 @@
             :notes="video.notes"
             :collapsed="collapsed"
             :skin="skin"
+            :landscape="landscape"
             @seek="seekYouTube"
             @pause="pause"
             @play="play"
@@ -626,6 +627,5 @@ export default {
     flex: 1;
   }
 }
-
 
 </style>
