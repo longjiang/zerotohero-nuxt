@@ -338,7 +338,7 @@ export default {
       let to = {
         name: "youtube-view",
         params: { youtube_id: this.video.youtube_id },
-        query: {}
+        query: {},
       };
       if (this.video.lesson) {
         to.params.lesson = "lesson";
@@ -350,7 +350,9 @@ export default {
         to.params.l2 = this.l2.code;
       }
       if (this.video.starttime) {
-        to.query.t = this.video.starttime
+        to.query.t = this.video.starttime;
+      } else if (this.showProgress && this.historyItem) {
+        to.query.t = this.historyItem.video.starttime;
       }
       return to;
     },
@@ -375,12 +377,13 @@ export default {
     historyId() {
       return `${this.$l2.code}-video-${this.video.youtube_id}`;
     },
+    historyItem() {
+      if (this.history)
+        return this.history.find((i) => i.id === this.historyId);
+    },
     progress() {
-      if (this.showProgress && this.history) {
-        let historyItem = this.history.find((i) => i.id === this.historyId);
-        if (historyItem) {
-          return historyItem.video.progress;
-        }
+      if (this.showProgress && this.historyItem) {
+        return this.historyItem.video.progress;
       }
     },
   },
