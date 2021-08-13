@@ -1,12 +1,15 @@
 <router>
   {
     path: '/:l1/:l2/lesson-videos/:level?/:lesson?',
-    props: true
+    props: true,
+    meta: {
+      skin: 'dark'
+    }
   }
 </router>
 <template>
   <div class="main-dark">
-    <div class="container pb-5">
+    <div class="container pb-5 lesson-videos">
       <SocialHead
         v-if="lessonVideos[0]"
         :title="`Chinese Lesson Expansion Videos | Chinese Zero to Hero`"
@@ -59,8 +62,7 @@
         v-for="(video, videoIndex) in lessonVideos"
         :key="`lesson-video-${videoIndex}`"
       >
-        <div class="col-lg-2"></div>
-        <div class="col-md-6 col-lg-4">
+        <div class="col-md-6">
           <YouTubeVideoList
             skin="dark"
             :checkSubs="false"
@@ -72,7 +74,7 @@
             :showPlayButton="true"
           />
         </div>
-        <div class="col-md-6 col-lg-4">
+        <div class="col-md-6">
           <h5>Vocabulary covered</h5>
           <Loader
             message="Loading words...<br/>Don't wait. View the video now."
@@ -83,7 +85,6 @@
             skin="dark"
           ></WordList>
         </div>
-        <div class="col-lg-2"></div>
       </div>
       <div class="row mt-5 mb-5">
         <div class="col-lg-2"></div>
@@ -165,6 +166,7 @@ export default {
       updateLessonVideos: 0,
       updateVideos: 0,
       matchedWordsKey: 0,
+      skin: 'dark'
     };
   },
   components: {
@@ -270,8 +272,20 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 .youtube-video {
   max-width: 100%;
+}
+.zerotohero-wide {
+  .lesson-videos {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+@media (max-width: 576px) {
+  .lesson-videos {
+    max-width: 423px;
+    margin: 0 auto;
+  }
 }
 </style>
