@@ -1,6 +1,6 @@
 <template>
-  <div class="main-dark">
-    <div class="container pl-5 pr-5">
+  <div class="main-dark shows">
+    <div class="container">
       <SocialHead
         v-if="shows && shows[0]"
         :title="`Learn ${$l2.name} with ${
@@ -173,7 +173,13 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.zerotohero-wide {
+  .shows {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
 @media (max-width: 576px) {
   .show-list-wrapper {
     max-width: 423px;
