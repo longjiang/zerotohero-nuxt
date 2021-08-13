@@ -628,4 +628,7 @@ export default {
   }
 }
 
+.youtube-transcript-column {
+  width: 100%;
+}
 </style>
