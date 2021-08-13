@@ -7,22 +7,26 @@
       }"
     >
       <template
-        v-for="(line, lineIndex) in single
+        v-for="(line, index) in single
           ? [lines[currentLineIndex || 0]]
-          : lines"
+          : lines.slice(visibleMin, visibleMax - visibleMin)"
       >
         <TranscriptLine
           :line="line"
-          :parallelLine="$l2.code !== $l1.code && parallellines ? matchedParallelLines[single ? currentLineIndex : lineIndex] : undefined"
-          :lineIndex="lineIndex"
-          :key="`line-${lineIndex}-${line.starttime}-${line.line.substr(
+          :parallelLine="
+            $l2.code !== $l1.code && parallellines
+              ? matchedParallelLines[single ? currentLineIndex : index + visibleMin]
+              : undefined
+          "
+          :lineIndex="index + visibleMin"
+          :key="`line-${index + visibleMin}-${line.starttime}-${line.line.substr(
             0,
             10
           )}`"
           :abnormal="
             $adminMode &&
-            lines[lineIndex - 1] &&
-            lines[lineIndex - 1].starttime > line.starttime
+            lines[index + visibleMin - 1] &&
+            lines[index + visibleMin - 1].starttime > line.starttime
           "
           :matched="
             !single &&
@@ -38,21 +42,21 @@
           :notes="notes"
           :enableTranslationEditing="$adminMode && enableTranslationEditing"
           @click="lineClick(line)"
-          @removeLineClick="removeLine(lineIndex)"
+          @removeLineClick="removeLine(index + visibleMin)"
           @trasnlationLineBlur="trasnlationLineBlur"
           @trasnlationLineKeydown="trasnlationLineKeydown"
         />
-        <div v-if="!single" :key="`line-${lineIndex}-review`">
+        <div v-if="!single" :key="`line-${index + visibleMin}-review`">
           <h6
             class="text-center mt-3"
-            :key="`review-title-${lineIndex}-${reviewKeys[lineIndex]}`"
-            v-if="review[lineIndex] && review[lineIndex].length > 0"
+            :key="`review-title-${index + visibleMin}-${reviewKeys[index + visibleMin]}`"
+            v-if="review[index + visibleMin] && review[index + visibleMin].length > 0"
           >
             Pop Quiz
           </h6>
           <Review
-            v-for="(reviewItem, reviewItemIndex) in review[lineIndex]"
-            :key="`review-${lineIndex}-${reviewItemIndex}-${reviewKeys[lineIndex]}`"
+            v-for="(reviewItem, reviewItemIndex) in review[index + visibleMin]"
+            :key="`review-${index + visibleMin}-${reviewItemIndex}-${reviewKeys[index + visibleMin]}`"
             :reviewItem="reviewItem"
             :hsk="hsk"
             :skin="skin"
@@ -121,6 +125,29 @@ export default {
       default: false,
     },
   },
+  data() {
+    return {
+      sW: [],
+      id: Helper.uniqueId(),
+      previousTime: 0,
+      currentTime: 0,
+      currentLine: undefined,
+      currentLineIndex: undefined,
+      reviewLineOffset: 10, // Show review this number of lines after the first appearance of the word
+      nextLine: undefined,
+      review: {},
+      paused: true,
+      ended: false,
+      audioMode: false,
+      repeatMode: false,
+      audioCancelled: false,
+      reviewKeys: [],
+      neverPlayed: true,
+      matchedParallelLines: undefined,
+      visibleMin: 5,
+      visibleMax: 15,
+    };
+  },
   computed: {
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
@@ -149,27 +176,6 @@ export default {
         ? this.lines[previousIndex]
         : false;
     },
-  },
-  data() {
-    return {
-      sW: [],
-      id: Helper.uniqueId(),
-      previousTime: 0,
-      currentTime: 0,
-      currentLine: undefined,
-      currentLineIndex: undefined,
-      reviewLineOffset: 10, // Show review this number of lines after the first appearance of the word
-      nextLine: undefined,
-      review: {},
-      paused: true,
-      ended: false,
-      audioMode: false,
-      repeatMode: false,
-      audioCancelled: false,
-      reviewKeys: [],
-      neverPlayed: true,
-      matchedParallelLines: undefined,
-    };
   },
   async created() {
     this.lines.map((line) => {
