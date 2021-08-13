@@ -117,22 +117,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.home {
-  // backdrop-filter: blur(2px) brightness(85%);
-  // -webkit-backdrop-filter: blur(2px) brightness(85%);
-}
 .home-intro-text {
   font-family: pacifico;
   font-size: 2.5em;
   text-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
   color: white;
-  // background-color: rgba(0, 0, 0, 0.5);
-  // color: white;
   padding: 0 2rem 2rem 2rem;
-  // backdrop-filter: blur(15px);
-  // -webkit-backdrop-filter: blur(15px);
-  // border: 1px solid hsla(0deg, 0%, 50%, 0.7);
-  // border-radius: 0.5rem;
   text-align: center;
 }
 </style>
