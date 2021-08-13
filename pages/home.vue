@@ -25,10 +25,13 @@
             </h3>
           </div>
           <client-only>
-            <div :class="{'pl-1 pr-1 pb-2': true, 'd-none': !hasDashboard}">
+            <div :class="{ 'pl-1 pr-1 pb-2': true, 'd-none': !hasDashboard }">
               <div class="home-card">
                 <h5 class="text-center">Welcome Back!</h5>
-                <LazyDashboard :l2="$l2" @hasDashboard="hasDashboardUpdate" />
+                <LazyDashboard
+                  :l2="$l2"
+                  @hasDashboardLang="hasDashboardUpdate"
+                />
               </div>
             </div>
           </client-only>
@@ -67,8 +70,8 @@ export default {
     },
   },
   methods: {
-    hasDashboardUpdate(hasDashboard) {
-      this.hasDashboard = hasDashboard;
+    hasDashboardUpdate(languageCodes) {
+      if (languageCodes.includes(this.$l2.code)) this.hasDashboard = true;
     },
     redirectToCourses() {
       if (
@@ -119,9 +122,9 @@ export default {
   // -webkit-backdrop-filter: blur(2px) brightness(85%);
 }
 .home-intro-text {
-  font-family: pacifico; 
+  font-family: pacifico;
   font-size: 2.5em;
-  text-shadow: 0 0 20px rgba(0,0,0,0.3);
+  text-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
   color: white;
   // background-color: rgba(0, 0, 0, 0.5);
   // color: white;

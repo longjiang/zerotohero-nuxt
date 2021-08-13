@@ -47,13 +47,18 @@
               'col-4': params.md,
               'col-3': params.lg,
             }"
-            :set="videoL1 = $languages.getSmart(item.l1)"
-            :set2="videoL2 = $languages.getSmart(item.l2)"
+            :set="(videoL1 = $languages.getSmart(item.l1))"
+            :set2="(videoL2 = $languages.getSmart(item.l2))"
           >
             <div class="history-item-language-badge">
               {{ videoL2.name }}
             </div>
-            <YouTubeVideoCard :video="item" skin="light" :l1="videoL1" :l2="videoL2" />
+            <YouTubeVideoCard
+              :video="item"
+              skin="light"
+              :l1="videoL1"
+              :l2="videoL2"
+            />
             <button
               class="
                 btn btn-small
@@ -169,6 +174,11 @@ export default {
         (this.history && this.history.length > 0) ||
           (this.savedWordsSorted && this.savedWordsSorted.length > 0)
       );
+      let languageCodes = this.history.map((i) => i.l2);
+      for (let l2 in this.savedWords) {
+        if (this.savedWords[l2].length > 0) languageCodes.push(l2);
+      }
+      this.$emit("hasDashboardLang", languageCodes);
     },
   },
 };
