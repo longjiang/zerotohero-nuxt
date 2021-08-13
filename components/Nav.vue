@@ -312,7 +312,7 @@ export default {
         {
           icon: "fas fa-pencil-alt",
           title: "Study Material",
-          show: this.hasPhrasebooks,
+          show: true,
           children: [
             {
               name: "phrasebooks",
