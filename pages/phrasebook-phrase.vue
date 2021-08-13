@@ -232,7 +232,7 @@ export default {
           length: this.phrasebook.phrases.length,
         },
       };
-      data.phrasebook.progress = data.index / data.length;
+      data.phrasebook.progress = data.phrasebook.index / data.phrasebook.length;
       this.$store.dispatch("history/add", data);
     },
     async getPhrasebookFromStore() {

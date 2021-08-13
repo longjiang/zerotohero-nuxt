@@ -369,7 +369,7 @@ export default {
       if (this.showProgress && this.history) {
         let historyItem = this.history.find((i) => i.id === this.historyId);
         if (historyItem) {
-          return historyItem.progress;
+          return historyItem.video.progress;
         }
       }
     },
