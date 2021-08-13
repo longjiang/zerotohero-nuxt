@@ -1,6 +1,6 @@
 <template>
   <div class="widget mistakes">
-    <div class="widget-title mistakes-label">
+    <div class="widget-title widget-title-mistakes">
       Common mistakes containing “{{ text }}”
     </div>
     <div class="widget-body jumbotron-fluid p-4">
@@ -8,13 +8,14 @@
         <ul class="collapsed pl-0" data-collapse-target>
           <li
             class="list-unstyled mistake-item mt-4 mb-4"
-            v-for="mistake in mistakes"
+            v-for="(mistake, index) in mistakes"
+            :key="`mistake-${index}`"
           >
             <i class="fas fa-times mistake-item-icon"></i>
             <span class="mistake-context collapsed" data-collapse-target>
-              <Annotate :showTranslate="true" :checkSaved="false"
-                ><span>{{ mistake.leftContext }}</span></Annotate
-              >
+              <Annotate :showTranslate="true" :checkSaved="false">
+                <span>{{ mistake.leftContext }}</span>
+              </Annotate>
             </span>
             <Annotate
               class="mistake-sentence"
@@ -34,8 +35,9 @@
                 :checkSaved="false"
                 :fullscreen="true"
                 :showTranslate="true"
-                ><span>{{ mistake.rightContext }}</span></Annotate
               >
+                <span>{{ mistake.rightContext }}</span>
+              </Annotate>
             </span>
             <ShowMoreButton class="mb-2 btn-small ml-2">Context</ShowMoreButton>
             <div>
@@ -56,16 +58,16 @@
                   Mistake with
                   <b>
                     {{ mistake.errorLevel }}
-                    <span v-if="mistake.errorType !== 'anomaly'"
-                      >({{ mistake.errorType }})</span
-                    >
+                    <span v-if="mistake.errorType !== 'anomaly'">
+                      ({{ mistake.errorType }})
+                    </span>
                   </b>
                 </span>
               </div>
               <div class="mistake-description">
                 <span v-if="mistake.proficiency">
-                  <b>{{ Helper.ucFirst(mistake.proficiency) }}</b> Chinese
-                  proficiency
+                  <b>{{ Helper.ucFirst(mistake.proficiency) }}</b>
+                  Chinese proficiency
                 </span>
               </div>
             </div>
@@ -113,34 +115,34 @@
 </template>
 
 <script>
-import SketchEngine from '@/lib/sketch-engine'
-import Helper from '@/lib/helper'
+import SketchEngine from "@/lib/sketch-engine";
+import Helper from "@/lib/helper";
 
 export default {
-  props: ['text'],
+  props: ["text"],
   data() {
     return {
       Helper,
       show: false,
       SketchEngine,
       mistakes: undefined,
-    }
+    };
   },
   methods: {
     showClick() {
-      this.show = true
+      this.show = true;
     },
   },
   async created() {
     let results = await SketchEngine.mistakes({
       term: this.text,
-    })
-    this.mistakes = results
+    });
+    this.mistakes = results;
     if (this.mistakes && this.mistakes.length > 0) {
-      this.$emit('mistakesReady')
+      this.$emit("mistakesReady");
     }
   },
-}
+};
 </script>
 <style>
 .mistake-word {
@@ -154,8 +156,9 @@ export default {
   font-size: 1.2rem;
 }
 
-.mistakes-label {
-  background: red;
+.widget-title.widget-title-mistakes {
+  background-image: linear-gradient(180deg, #f8a7a7 0%, #dcdcdc00 100%);
+  color: #442b2bb0;
 }
 
 .mistake-flag {

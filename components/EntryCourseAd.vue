@@ -1,10 +1,11 @@
 <template>
   <!-- ANCHOR img/anchors/learn-this.png -->
-  <div id="hey">
+  <div>
     <div
       class="container-fluid learn-this-bar"
       v-cloak
       v-if="entry.hsk !== 'outside'"
+      style="overflow: visible"
     >
       <div class="container">
         <div class="row">
@@ -18,21 +19,30 @@
               />
             </a>
             <br />
-            Learn how to use
+            The word
             <b :data-level="entry.level">“{{ entry.simplified }}”</b>
-            in
+            is covered in
             <b>
               Unit {{ entry.lesson }}
               <span v-if="entry.hsk < 5">, Text {{ entry.dialog }}</span>
             </b>
-            of our
+            of our HSK {{ entry.hsk }} Video Course.
+            <br />
             <a
               :href="`https://courses.chinesezerotohero.com/p/hsk-${entry.hsk}-course`"
-              class="video-course"
-              :data-level="entry.level"
+              class="btn video-course d-inline-block mt-3"
+              :data-bg-level="entry.level"
             >
-              HSK {{ entry.hsk }} Video Course
+              <i class="fa fa-check mr-1"></i>
+              Take the Course
             </a>
+            <router-link
+              :to="`/en/zh/hall-of-heroes`"
+              class="btn btn-outline-secondary d-inline-block mt-3"
+            >
+              <i class="fa fa-trophy mr-1"></i>
+              See Our Top Students
+            </router-link>
           </div>
         </div>
       </div>
@@ -77,17 +87,16 @@ export default {
 </script>
 
 <style lang="scss">
-
 .learn-this-bar {
   padding: 1rem 1rem;
   margin-top: 8rem;
   font-size: 1.2rem;
-  background: #e6e6e6;
+  background: #00000010;
+  border-radius: 0.5rem;
   margin-bottom: 0;
   padding-bottom: 2rem;
-  a {
+  a:not(.link-unstyled) {
     font-weight: bold;
-    color: #004d81;
   }
   .course-cover {
     box-shadow: 4px 6px 19px #00000091;

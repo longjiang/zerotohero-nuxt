@@ -120,6 +120,20 @@
         </div>
       </div>
     </div>
+
+    <div class="container pb-4">
+      <div class="row">
+        <div class="col-12">
+          <EntryCourseAd
+            v-if="$l2.code === 'zh'"
+            :entry="entry"
+            class="focus-exclude"
+            :key="`${entry.id}-course-ad`"
+          ></EntryCourseAd>
+        </div>
+      </div>
+    </div>
+    
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
@@ -224,12 +238,6 @@
         </div>
       </div>
     </div>
-    <EntryCourseAd
-      v-if="$l2.code === 'zh'"
-      :entry="entry"
-      class="focus-exclude"
-      :key="`${entry.id}-course-ad`"
-    ></EntryCourseAd>
   </div>
 </template>
 <script>
