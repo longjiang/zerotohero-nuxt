@@ -1048,6 +1048,11 @@ button.bg-primary:focus {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   color: hsla(0deg 100% 100% / 0.8);
+  &.main-dark-performant {
+    background-color: black;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
 }
 
 .search-subs,

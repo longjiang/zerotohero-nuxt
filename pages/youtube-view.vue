@@ -13,6 +13,7 @@
       :class="{
         'youtube-view pt-3 pb-5 ': true,
         'main-dark': layout !== 'vertical',
+        'main-dark-performant': isMobile,
       }"
     >
       <SocialHead
@@ -174,6 +175,9 @@ export default {
       let t = Math.floor(this.currentTime / 10) * 10;
       return t;
     },
+    isMobile() {
+      return Helper.isMobile()
+    }
   },
   async fetch() {
     try {
