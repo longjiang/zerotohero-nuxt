@@ -11,7 +11,7 @@
       :showProgress="false"
     />
     <div v-if="infinite && !noMoreVideos" v-observe-visibility="infinite ? visibilityChanged : undefined"></div>
-    <div v-if="infinite && noMoreVideos" class="text-center mt-4">
+    <div v-if="term && infinite && noMoreVideos" class="text-center mt-4">
       <h6>No more videos.</h6>
       <p>{{ moreVideos }} videos loaded.</p>
     </div>
