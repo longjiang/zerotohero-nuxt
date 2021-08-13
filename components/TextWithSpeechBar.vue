@@ -1,35 +1,34 @@
 <template>
-  <div
-    v-if="html"
-    id="speech-container"
-  >
+  <div v-if="html" id="speech-container">
     <div
       v-if="$hasFeature('speech') || !foreign || browser()"
       class="speech-bar mb-4 sticky bg-white pt-2 pb-2"
     >
-      <b-button-group class="d-flex">
-        <b-button @click="previous()">
-          <i class="fas fa-chevron-left"></i>
-        </b-button>
-        <b-button v-if="!speaking" @click="play()">
-          <i class="fas fa-play"></i>
-        </b-button>
-        <b-button v-if="speaking" @click="pause()">
-          <i class="fas fa-pause"></i>
-        </b-button>
-        <b-button @click="next()">
-          <i class="fas fa-chevron-right"></i>
-        </b-button>
-        <b-dropdown right text="Switch Voice" style="flex: 1">
-          <b-dropdown-item
-            v-for="(voice, index) in voices"
-            :key="`speech-bar-voice-${index}-${voice.name}`"
-            @click="setvoice(index)"
-          >
-            {{ voice.name }}
-          </b-dropdown-item>
-        </b-dropdown>
-      </b-button-group>
+      <client-only>
+        <b-button-group class="d-flex">
+          <b-button @click="previous()">
+            <i class="fas fa-chevron-left"></i>
+          </b-button>
+          <b-button v-if="!speaking" @click="play()">
+            <i class="fas fa-play"></i>
+          </b-button>
+          <b-button v-if="speaking" @click="pause()">
+            <i class="fas fa-pause"></i>
+          </b-button>
+          <b-button @click="next()">
+            <i class="fas fa-chevron-right"></i>
+          </b-button>
+          <b-dropdown right text="Switch Voice" style="flex: 1">
+            <b-dropdown-item
+              v-for="(voice, index) in voices"
+              :key="`speech-bar-voice-${index}-${voice.name}`"
+              @click="setvoice(index)"
+            >
+              {{ voice.name }}
+            </b-dropdown-item>
+          </b-dropdown>
+        </b-button-group>
+      </client-only>
     </div>
     <template
       v-for="(line, lineIndex) of html
@@ -88,7 +87,7 @@ export default {
   },
   methods: {
     browser() {
-      return typeof document !== 'undefined'
+      return typeof document !== "undefined";
     },
     getSentences() {
       let sentences = [];

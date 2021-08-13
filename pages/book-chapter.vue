@@ -57,7 +57,7 @@
             <span>{{ chapter.title }}</span>
           </Annotate>
           <div class="chapter-content" v-if="chapter.content">
-            <SpeechBar
+            <LazyTextWithSpeechBar
               :lang="chapterLang ? chapterLang : $l2.code"
               :html="chapter.content"
               :foreign="foreign"
@@ -158,8 +158,6 @@
 <script>
 import Config from "@/lib/config";
 import Library from "@/lib/library";
-import SimpleSearch from "@/components/SimpleSearch";
-import SpeechBar from "@/components/SpeechBar";
 import Helper from "@/lib/helper";
 import { parse } from "node-html-parser";
 import sanitizeHtml from "sanitize-html";
@@ -172,10 +170,6 @@ export default {
     args: {
       type: String,
     },
-  },
-  components: {
-    SimpleSearch,
-    SpeechBar,
   },
   data() {
     return {
@@ -228,7 +222,7 @@ export default {
   },
   mounted() {
     let url = decodeURIComponent(this.args);
-    this.$refs.search.text = url;
+    if (this.$refs.search) this.$refs.search.text = url;
   },
   watch: {
     args() {
