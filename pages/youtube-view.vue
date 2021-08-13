@@ -64,8 +64,9 @@
         </div>
         <LazyYouTubeWithTranscript
           v-if="video"
-          :video="video"
           ref="youtube"
+          skin="dark"
+          :video="video"
           :quiz="$quiz"
           :key="`transcript-${video.youtube_id}`"
           :autoload="true"
@@ -77,8 +78,8 @@
           :nextEpisode="nextEpisode"
           :episodes="episodes"
           :episodeIndex="thisEpisodeIndex"
-          skin="dark"
           :forcePortrait="params.narrow"
+          :startLineIndex="startLineIndex"
           @paused="updatePaused"
           @ended="updateEnded"
           @currentTime="updateCurrentTime"
@@ -118,6 +119,7 @@ export default {
       showType: undefined,
       paused: true,
       starttime: 0,
+      startLineIndex: 0,
       currentTime: 0,
       episodes: [],
       randomEpisodeYouTubeId: undefined,
@@ -214,6 +216,7 @@ export default {
         this.addChannelID(video);
       }
       this.starttime = this.$route.query.t ? Number(this.$route.query.t) : 0;
+      this.startLineIndex = video.subs_l2.findIndex(l => Number(l.starttime) > this.starttime) || 0
       this.video = video;
       console.log(`YouTube View: this.video assigned.`);
       console.log(`YouTube View: Loading show...`);

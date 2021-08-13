@@ -71,7 +71,11 @@
           />
         </div>
       </template>
-      <div v-observe-visibility="visibilityChanged" style="height: 100vh" v-if="lines.length > visibleMax">
+      <div
+        v-observe-visibility="visibilityChanged"
+        style="height: 100vh"
+        v-if="lines.length > visibleMax"
+      >
         &nbsp;
       </div>
     </div>
@@ -252,6 +256,13 @@ export default {
         this.scrollTo(this.currentLineIndex);
     },
     currentLineIndex() {
+      let visibleMax = Math.max(
+        this.visibleMax,
+        this.currentLineIndex + this.visibleRange
+      );
+      if (visibleMax > this.visibleMax + this.visibleRange / 2) {
+        this.visibleMax = visibleMax
+      }
       let lineEls = this.$el.querySelectorAll(`.transcript-line`);
       lineEls.forEach((lineEl) =>
         lineEl.classList.remove("transcript-line-current")
