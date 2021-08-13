@@ -37,7 +37,7 @@
           <div class="row">
             <div class="col-sm-12 bg-white">
               <div class="for-the-love-of">
-                <h3 class="text-center">
+                <h3 class="text-center font-weight-normal">
                   For the love of
                   <span v-if="dictionarySize">
                     {{ dictionarySize.toLocaleString("en-US") }}

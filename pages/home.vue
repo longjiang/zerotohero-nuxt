@@ -18,7 +18,7 @@
       <div class="row">
         <div class="col-sm-12">
           <div class="p-1">
-            <h3 class="home-intro-text">
+            <h3 class="home-intro-text font-weight-normal">
               {{
                 $t("For the love of the {l2} language.", { l2: $t($l2.name) })
               }}
