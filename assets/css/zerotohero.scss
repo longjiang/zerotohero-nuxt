@@ -1090,7 +1090,6 @@ button.bg-primary:focus {
   }
 }
 
-
 .bg-gradient-0 {
   background-color: #faaca8;
   background-image: linear-gradient(45deg, #faaca8 0%, #ddd6f3 100%);
@@ -1098,12 +1097,7 @@ button.bg-primary:focus {
 
 .bg-gradient-1 {
   background-color: #4158d0;
-  background-image: linear-gradient(
-    43deg,
-    #4158d0 0%,
-    #c850c0 46%,
-    #ffcc70 100%
-  );
+  background-image: linear-gradient(43deg, #4158d0 0%, #c850c0 46%, #ffcc70 100%);
 }
 .bg-gradient-2 {
   background-color: #0093e9;
@@ -1136,4 +1130,18 @@ button.bg-primary:focus {
 .bg-gradient-9 {
   background-color: #faaca8;
   background-image: linear-gradient(45deg, #faaca8 0%, #ddd6f3 100%);
+}
+
+.admin-remove-button {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #88888855;
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.5rem;
+  &:hover {
+    background: none;
+    color: #88888877;
+  }
 }

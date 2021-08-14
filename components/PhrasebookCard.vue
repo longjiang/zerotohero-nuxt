@@ -26,7 +26,7 @@
       </client-only>
       <b-button
         v-if="$adminMode"
-        class="btn btn-small bg-danger text-white mt-2 ml-0"
+        class="admin-remove-button"
         @click.stop.prevent="remove(phrasebook)"
       >
         <i class="fa fa-trash"></i>

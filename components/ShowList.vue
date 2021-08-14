@@ -36,15 +36,7 @@
               <b-button
                 v-if="$adminMode"
                 size="sm"
-                style="
-                  background: none;
-                  border: none;
-                  padding: 0;
-                  color: #ffffff55;
-                  position: absolute;
-                  bottom: 0.5rem;
-                  right: 0.5rem; ;
-                "
+                class="admin-remove-button"
                 @click.stop.prevent="remove(show)"
               >
                 <i class="fa fa-trash"></i>
