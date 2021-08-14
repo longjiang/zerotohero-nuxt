@@ -410,7 +410,6 @@ export default {
       let hasSubs;
       if (!this.video.checkingSubs && !this.video.hasSubs) hasSubs = false;
       if (this.video.hasSubs) hasSubs = true;
-      console.log("has subs changed", hasSubs);
       this.$emit("hasSubs", hasSubs);
     },
   },

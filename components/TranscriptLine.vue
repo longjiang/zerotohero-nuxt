@@ -90,7 +90,7 @@ export default {
       type: Boolean
     },
     highlight: {
-      type: Boolean
+      type: Array
     },
     hsk: {
       type: String
