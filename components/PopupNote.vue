@@ -65,22 +65,29 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 .popup-note {
   display: inline-block;
   font-size: 0.8rem;
   min-width: 1.3rem;
   height: 1.3rem;
-  line-height: 1.2rem;
+  line-height: 1.25rem;
   overflow: hidden;
   margin-left: 0.2rem;
   margin-right: 0.2rem;
   margin-bottom: -0.2rem;
   border-radius: 0.65rem;
-  border: 1px solid #ccc;
+  border: none;
   text-align: center;
   background-color: #ccc;
   color: white;
+}
+
+.main-dark {
+  .popup-note {
+    background-color: rgb(255 255 255 / 38%);
+    color: black;
+  }
 }
 
 .popup-note-content {
