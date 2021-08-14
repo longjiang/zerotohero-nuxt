@@ -344,7 +344,7 @@ export default {
         },
         {
           icon: "fas fa-pencil-alt",
-          title: "Study Material",
+          title: "Study Aid",
           show: true,
           children: [
             {
@@ -383,6 +383,12 @@ export default {
               icon: "fas fa-list-ul",
               title: "Grammar Tools",
               show: this.hasFeature("noun-cases"),
+            },
+            {
+              name: "learning-path",
+              title: "Learning Path",
+              icon: "fas fa-road",
+              show: true,
             },
             {
               name: "keyboard",
@@ -458,6 +464,18 @@ export default {
             {
               name: "learn-interactive",
               show: false,
+            },
+            {
+              name: "pinyin-squared",
+              title: "Pinyin Squared",
+              icon: "fa fa-list",
+              show: false,
+            },
+            {
+              name: "tutoring",
+              title: "Tutoring Kit",
+              icon: "fas fa-folder",
+              show: true,
             },
           ],
         },
@@ -619,21 +637,9 @@ export default {
           show: true,
           children: [
             {
-              name: "learning-path",
-              title: "Learning Path",
-              icon: "fas fa-road",
-              show: true,
-            },
-            {
               name: "resources",
               title: "Resources",
               icon: "fas fa-gem",
-              show: true,
-            },
-            {
-              name: "tutoring",
-              title: "Tutoring Kit",
-              icon: "fas fa-folder",
               show: true,
             },
             {
@@ -647,12 +653,6 @@ export default {
               title: "Wiki",
               icon: "fab fa-wikipedia-w",
               show: true,
-            },
-            {
-              name: "pinyin-squared",
-              title: "Pinyin Squared",
-              icon: "fa fa-list",
-              show: false,
             },
           ],
         },
