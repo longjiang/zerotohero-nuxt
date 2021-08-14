@@ -2,9 +2,10 @@
   <div class="youtube" :key="youtube">
     <div
       :style="{
-        backgroundImage: !autoplay && !loading
-          ? `url(//img.youtube.com/vi/${youtube}/hqdefault.jpg)`
-          : 'none',
+        backgroundImage:
+          !autoplay && !loading
+            ? `url(//img.youtube.com/vi/${youtube}/hqdefault.jpg)`
+            : 'none',
         'background-repeat': 'no-repeat',
         'background-size': 'cover',
         'background-position': 'center',
@@ -58,23 +59,6 @@ export default {
       loading: false,
     };
   },
-  mounted() {
-    if (this.autoload) {
-      this.loadYouTubeiFrame();
-    }
-    this.time = this.starttime;
-  },
-  destroyed() {
-    if (this.player) {
-      this.player.destroy();
-      this.player = undefined;
-    }
-  },
-  updated() {
-    if (this.autoload) {
-      this.loadYouTubeiFrame();
-    }
-  },
   computed: {
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
@@ -103,6 +87,28 @@ export default {
         this.player.getPlayerState &&
         this.player.getPlayerState() === 1;
       return playing;
+    },
+  },
+  mounted() {
+    if (this.autoload) {
+      this.loadYouTubeiFrame();
+    }
+    this.time = this.starttime;
+  },
+  destroyed() {
+    if (this.player) {
+      this.player.destroy();
+      this.player = undefined;
+    }
+  },
+  watch: {
+    speed() {
+      this.setSpeed(this.speed);
+    },
+    youtube() {
+      if (this.autoload) {
+        this.loadYouTubeiFrame();
+      }
     },
   },
   methods: {
@@ -244,11 +250,6 @@ export default {
       } else {
         this.loadYouTubeiFrame();
       }
-    },
-  },
-  watch: {
-    speed() {
-      this.setSpeed(this.speed);
     },
   },
 };
