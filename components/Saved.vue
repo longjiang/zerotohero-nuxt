@@ -1,20 +1,20 @@
 <template>
-  <div class="toggle-small-star d-inline-block focus-exclude">
+  <div class="btn-saved-wrapper d-inline-block focus-exclude">
     <button
-      class="small-star remove-hit"
+      class="btn-saved btn-saved-saved"
       v-if="saved"
       @click.stop.prevent="remove"
-      title="Remove Hit"
+      title="Remove"
     >
-      <i class="fas fa-star"></i>
+      <i :class="`fas fa-${icon}`"></i>
     </button>
     <button
-      class="small-star add-hit"
+      class="btn-saved btn-saved-not-saved add-hit"
       v-if="!saved"
       @click.stop.prevent="save"
       title="Add"
     >
-      <i class="far fa-star"></i>
+      <i :class="`far fa-${icon}`"></i>
     </button>
   </div>
 </template>
@@ -22,10 +22,15 @@
 <script>
 export default {
   props: {
-    item: undefined,
+    item: {
+      type: Object
+    },
     store: {
       type: String,
     },
+    icon: {
+      default: 'star'
+    }
   },
   data() {
     return {
@@ -63,7 +68,22 @@ export default {
 </script>
 
 <style scoped>
-.toggle-small-star {
-  margin-right: 0.5rem;
+.btn-saved {
+  display: inline-block;
+  position: relative;
+  padding: 0;
+  margin: 0;
+  background: none;
+  border: none;
+  color: #ffe597;
+}
+
+.btn-saved-saved {
+  background: none;
+  border: none;
+  color: #f8b61e;
+  padding: 0;
+  font-size: 1em;
 }
 </style>
+

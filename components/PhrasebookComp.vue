@@ -56,7 +56,7 @@
             #{{ (phraseObj.id || phraseIndex) + 1 }}
           </div>
           <div>
-            <Saved :item="phraseItem(phraseObj)" store="savedPhrases" />
+            <Saved :item="phraseItem(phraseObj)" store="savedPhrases" icon="bookmark" class="saved-button" />
             <span v-if="phraseObj && phraseObj.pronunciation">
               {{ phraseObj.pronunciation }}
             </span>
@@ -166,15 +166,21 @@ export default {
 }
 .phrasebook-card {
   background-color: white;
-  box-shadow: 0 5px 20px #5517041c !important;
+  box-shadow: 0 5px 25px #55170435 !important;
   height: 100%;
 }
 .phrasebook-card-current {
-  box-shadow: 0 0 40px rgba(255, 95, 32, 0.301) !important;
+  box-shadow: 0 0 30px rgba(255, 95, 32, 0.212) !important;
   transform: scale(1.2);
   position: relative;
   z-index: 2;
   padding: 3rem !important;
   // background-color: rgb(250, 244, 241);
+}
+
+.saved-button {
+  position: absolute !important;
+  top: -8px;
+  font-size: 1.3em;
 }
 </style>

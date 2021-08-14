@@ -29,7 +29,7 @@
             </div>
             <div>
               <div class="text-center" v-if="phraseObj && phraseObj.phrase">
-                <Saved :item="phraseItem" store="savedPhrases" />
+                <Saved :item="phraseItem" store="savedPhrases" icon="bookmark" class="mr-1" />
                 <span v-if="phraseObj && phraseObj.pronunciation" class="mr-1">
                   {{ phraseObj.pronunciation }}
                 </span>
