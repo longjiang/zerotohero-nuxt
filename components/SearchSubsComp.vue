@@ -463,7 +463,6 @@ export default {
     },
     startLineIndex() {
       let startLineIndex = this.currentHit.lineIndex;
-      console.log('startLineIndex', startLineIndex)
       return startLineIndex
     },
   },
