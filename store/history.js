@@ -52,10 +52,10 @@ export const mutations = {
 }
 export const actions = {
   add({ commit, dispatch }, historyItem) {
-    commit('ADD_HISTORY_ITEM', historyItem)
+    commit('ADD_HISTORY_ITEM', Object.assign({}, historyItem))
   },
   remove({ commit, dispatch }, historyItem) {
-    commit('REMOVE_HISTORY_ITEM', historyItem)
+    commit('REMOVE_HISTORY_ITEM', Object.assign({}, historyItem))
   },
   removeAll({ commit, dispatch }) {
     commit('REMOVE_ALL_HISTORY')

@@ -31,14 +31,12 @@
               />
             </div>
             <div>
-              <div class="text-center">
+              <div class="text-center" v-if="phraseObj && phraseObj.phrase">
+                <Saved :item="phraseItem" store="savedPhrases" />
                 <span v-if="phraseObj && phraseObj.pronunciation" class="mr-1">
                   {{ phraseObj.pronunciation }}
                 </span>
-                <Speak
-                  :text="phraseObj.phrase"
-                  v-if="phraseObj && phraseObj.phrase"
-                />
+                <Speak :text="phraseObj.phrase" />
               </div>
               <h2 class="text-center mb-0 font-weight-normal">
                 <div class="d-inline-block">
@@ -92,7 +90,7 @@
           </div>
           <div :class="{ 'content-pane-right pl-3 pr-3': wide }">
             <div>
-              <LazyDictionaryEntry
+              <!-- <LazyDictionaryEntry
                 v-if="word && phrasebook"
                 :entry="word"
                 :tvShow="phrasebook.tv_show"
@@ -108,7 +106,7 @@
                 :exact="phrasebook.exact"
                 :showExternal="false"
                 class="mt-4 mb-4"
-              />
+              /> -->
             </div>
           </div>
         </div>
@@ -120,8 +118,8 @@
 <script>
 import Helper from "@/lib/helper";
 import WordPhotos from "@/lib/word-photos";
+import DateHelper from "@/lib/date-helper";
 import { ContainerQuery } from "vue-container-query";
-import DateHelper from '@/lib/date-helper'
 
 export default {
   components: {
@@ -154,6 +152,20 @@ export default {
     };
   },
   computed: {
+    phraseItem() {
+      if (typeof this.phraseObj !== "undefined") {
+        let phraseItem = {
+          l2: this.$l2.code,
+          phrase: this.phraseObj.phrase,
+          phrasebookId: this.phrasebook.phrasebookId,
+          pronunciation: this.phraseObj.pronunciation,
+          translations: {},
+        };
+        if (this.phraseObj[this.$l1.code])
+          phraseItem.translations[this.$l1.code] = this.phraseObj[this.$l1.code];
+        return phraseItem
+      }
+    },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;

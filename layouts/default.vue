@@ -163,6 +163,9 @@ export default {
     },
     async loadSettings() {
       this.$store.commit("settings/LOAD_SETTINGS");
+      if (!this.$store.state.savedPhrases.savedPhrasesLoaded) {
+        this.$store.commit("savedPhrases/LOAD_SAVED_PHRASES");
+      }
       if (!this.$store.state.savedCollocations.savedCollocationsLoaded) {
         this.$store.commit("savedCollocations/LOAD_SAVED_COLLOCATIONS");
       }
