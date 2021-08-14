@@ -8,22 +8,24 @@ export default async function ({ app, store, params, i18n }) {
       let l2 = app.$languages.getSmart(params.l2)
       store.commit('settings/SET_L1', l1)
       store.commit('settings/SET_L2', l2)
-      i18n.locale = l1.code;
-      i18n.silentTranslationWarn = true;
-      if (l1.translations) {
-        i18n.setLocaleMessage(
-          l1.code,
-          l1.translations
-        )
-      }
+      if (l1) {
+        i18n.locale = l1.code;
+        i18n.silentTranslationWarn = true;
+        if (l1.translations) {
+          i18n.setLocaleMessage(
+            l1.code,
+            l1.translations
+          )
+        }
 
-      let dictionaries = l1.dictionaries // ['freedict']
-        ? l1.dictionaries[l2["iso639-3"]]
-        : undefined;
-      
-      if (dictionaries) {
-        console.log('Setting dictionary name to', dictionaries[0])
-        store.commit('settings/SET_DICTIONARY_NAME', dictionaries[0])
+        let dictionaries = l1.dictionaries // ['freedict']
+          ? l1.dictionaries[l2["iso639-3"]]
+          : undefined;
+
+        if (dictionaries) {
+          console.log('Setting dictionary name to', dictionaries[0])
+          store.commit('settings/SET_DICTIONARY_NAME', dictionaries[0])
+        }
       }
     }
   }

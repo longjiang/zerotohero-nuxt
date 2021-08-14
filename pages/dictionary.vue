@@ -17,38 +17,40 @@
       @keydown="keydown"
     >
       <SocialHead :title="title" :description="description" :image="image" />
-      <div class="dictionary-search-bar">
-        <div :class="{ 'container pt-2 pb-5': !wide }">
-          <div :class="{ row: !wide }">
-            <div :class="{ 'col-sm-12': !wide }">
-              <SearchCompare
-                :searchEntry="entry"
-                :random="`/${$l1.code}/${$l2.code}/dictionary/${$store.state.settings.dictionaryName}/random`"
-                ref="searchCompare"
-                :key="`search-${args}`"
-                id="search-compare-bar"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="bg-white">
-        <div class="container" v-if="!entry">
-          <div class="row">
-            <div class="col-sm-12 bg-white">
-              <div class="for-the-love-of">
-                <h3 class="text-center font-weight-normal">
-                  For the love of
-                  <span v-if="dictionarySize">
-                    {{ dictionarySize.toLocaleString("en-US") }}
-                  </span>
-                  {{ $l2.name }} words.
-                </h3>
+      <client-only>
+        <div class="dictionary-search-bar">
+          <div :class="{ 'container pt-2 pb-5': !wide }">
+            <div :class="{ row: !wide }">
+              <div :class="{ 'col-sm-12': !wide }">
+                <SearchCompare
+                  :searchEntry="entry"
+                  :random="`/${$l1.code}/${$l2.code}/dictionary/${$store.state.settings.dictionaryName}/random`"
+                  ref="searchCompare"
+                  :key="`search-${args}`"
+                  id="search-compare-bar"
+                />
               </div>
             </div>
           </div>
         </div>
-      </div>
+        <div class="bg-white">
+          <div class="container" v-if="!entry">
+            <div class="row">
+              <div class="col-sm-12 bg-white">
+                <div class="for-the-love-of">
+                  <h3 class="text-center font-weight-normal">
+                    For the love of
+                    <span v-if="dictionarySize">
+                      {{ dictionarySize.toLocaleString("en-US") }}
+                    </span>
+                    {{ $l2.name }} words.
+                  </h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </client-only>
       <div :class="{ 'focus-exclude': true, container: !wide }">
         <div :class="{ row: !wide, 'content-panes': wide }" v-if="entry">
           <div :class="{ 'content-pane-left': wide, 'col-sm-12': !wide }">
