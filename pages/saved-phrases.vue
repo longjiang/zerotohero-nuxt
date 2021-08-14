@@ -64,7 +64,7 @@ export default {
   },
   async fetch() {
     let phrasebook = {
-      title: `Saved ${this.$l2.code} Phrases`,
+      title: `Saved ${this.$l2.name} Phrases`,
       phrases: this.savedPhrases[this.$l2.code] || [],
       l2: this.$l2,
       id: "saved",
