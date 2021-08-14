@@ -89,10 +89,10 @@
               </span>
             </div>
             <span
-              class="btn btn-small bg-danger text-white"
+              class="youtube-video-card-badge"
               v-if="$adminMode && video.youtube_id.includes('0x')"
             >
-              ID含`0x`，无法添加
+              ID含`0x`，或许无法添加
             </span>
             <div
               v-if="
@@ -113,12 +113,7 @@
               Added
             </div>
             <b-button
-              v-if="
-                checkSaved &&
-                !video.id &&
-                video.hasSubs &&
-                !video.youtube_id.includes('0x')
-              "
+              v-if="checkSaved && !video.id && video.hasSubs"
               class="btn btn-small mt-2 ml-0"
               @click="getSubsAndSave(video)"
             >
@@ -178,7 +173,7 @@
               {{ Helper.level(video.level, $l2) }}
             </div>
             <b-button
-              v-if="$adminMode && video.id"
+              v-if="showAdmin && $adminMode && video.id"
               class="youtube-video-card-badge border-0"
               @click="remove()"
             >
@@ -189,7 +184,13 @@
             <AssignShow
               @assignShow="saveShow"
               @newShow="newShow"
-              v-if="$adminMode && video.id && !video.tv_show && !video.talk"
+              v-if="
+                showAdmin &&
+                $adminMode &&
+                video.id &&
+                !video.tv_show &&
+                !video.talk
+              "
               :defaultYoutubeId="video.youtube_id"
               :defaultTitle="video.title"
               type="tv-shows"
@@ -197,7 +198,13 @@
             <AssignShow
               @assignShow="saveShow"
               @newShow="newShow"
-              v-if="$adminMode && video.id && !video.tv_show && !video.talk"
+              v-if="
+                showAdmin &&
+                $adminMode &&
+                video.id &&
+                !video.tv_show &&
+                !video.talk
+              "
               :defaultYoutubeId="video.youtube_id"
               :defaultTitle="video.title"
               type="talks"
@@ -292,6 +299,9 @@ export default {
     },
     video: {
       type: Object,
+    },
+    showAdmin: {
+      default: true,
     },
     checkSubs: {
       default: false,
@@ -764,6 +774,7 @@ export default {
 }
 
 .youtube-video-card-badges {
+  margin-top: 0.5rem;
   .youtube-video-card-badge {
     background-color: #88888833;
     display: inline-block;
@@ -771,8 +782,13 @@ export default {
     border-radius: 0.25rem;
     font-size: 0.8em;
     line-height: 1em;
-    color: #ffffff88;
+    color: #666;
   }
   padding-bottom: 0.25rem;
+}
+.main-dark {
+  .youtube-video-card-badge {
+    color: #ffffff88;
+  }
 }
 </style>

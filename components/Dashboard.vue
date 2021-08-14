@@ -65,6 +65,7 @@
             :l2="itemL2"
             :showProgress="true"
             :showPlayButton="true"
+            :showAdmin="false"
           />
           <PhrasebookCard
             v-if="item.type === 'phrasebook'"
@@ -73,6 +74,7 @@
             :l1="itemL1"
             :l2="itemL2"
             :phrasebook="item.phrasebook"
+            :showAdmin="false"
           />
           <button
             class="
