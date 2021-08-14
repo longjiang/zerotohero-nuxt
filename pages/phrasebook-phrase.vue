@@ -16,11 +16,8 @@
               'col-sm-12 pt-4': !wide,
             }"
           >
-            <div class="text-center" v-if="phrasebook && phraseId">
-              <router-link
-                class="link-unstyled mb-4 d-block"
-                :to="`/${$l1.code}/${$l2.code}/phrasebook/${phrasebook.id}#${phraseId}`"
-              >
+            <div class="text-center" v-if="phrasebook && phraseId && phraseObj">
+              <router-link class="link-unstyled mb-4 d-block" :to="homeRoute">
                 <h5>{{ phrasebook.title }}</h5>
               </router-link>
               <Paginator
@@ -160,6 +157,22 @@ export default {
   },
   computed: {
     ...mapState("savedPhrases", ["savedPhrases"]),
+    homeRoute() {
+      let route;
+      if (this.bookId === "saved")
+        route = {
+          name: "saved-phrases",
+          hash: '#' + this.phraseId,
+        };
+      else {
+        route = {
+          name: "phrasebook",
+          params: { bookId: this.phrasebook.id },
+          hash: '#' + this.phraseId,
+        };
+      }
+      return route;
+    },
     phraseItem() {
       if (typeof this.phraseObj !== "undefined") {
         let phraseItem = {
@@ -226,11 +239,11 @@ export default {
       if (mutation.type.startsWith("phrasebooks")) {
         this.getPhrasebookFromStore();
       }
-      if (this.bookId === 'saved' || mutation.type.startsWith("savedPhrases")) {
-        if (this.phrasebook) this.phrasebook.phrases = this.savedPhrases[this.$l2.code] || [];
+      if (this.bookId === "saved" && mutation.type.startsWith("savedPhrases")) {
+        if (this.phrasebook)
+          this.phrasebook.phrases = this.savedPhrases[this.$l2.code] || [];
       }
     });
-
   },
   beforeDestroy() {
     // you may call unsubscribe to stop the subscription
@@ -262,8 +275,8 @@ export default {
       this.$store.dispatch("history/add", data);
     },
     async getPhrasebookFromStore() {
-      let phrasebooks, phrasebook
-      if (this.bookId === 'saved') {
+      let phrasebooks, phrasebook;
+      if (this.bookId === "saved") {
         phrasebook = {
           title: `Saved ${this.$l2.name} Phrases`,
           phrases: this.savedPhrases[this.$l2.code] || [],
@@ -271,16 +284,16 @@ export default {
           id: "saved",
         };
       } else {
-        phrasebooks =
-          this.$store.state.phrasebooks.phrasebooks[this.$l2.code];
+        phrasebooks = this.$store.state.phrasebooks.phrasebooks[this.$l2.code];
         if (!phrasebooks) return;
         phrasebook = phrasebooks.find((pb) => pb.id === Number(this.bookId));
         if (!phrasebook) return;
       }
       this.phrasebook = phrasebook;
-      let phrase = this.phrasebook.phrases.find(
-        (p, index) => (p.id || index + 1) === Number(this.phraseId + 1)
-      );
+      let phrase = this.phrasebook.phrases.find((p, index) => {
+        if (p.id === Number(this.phraseId + 1)) return true;
+        if (index === Number(this.phraseId)) return true;
+      });
       phrase.phrase = this.stripPunctuations(phrase.phrase);
       this.phraseObj = phrase;
       if (
@@ -309,15 +322,16 @@ export default {
       return text;
     },
     findCurrent(phraseObj) {
-      if (phraseObj.id)
-        return phraseObj.id === Number(this.phraseId);
-      else
-        return phraseObj.phrase === this.phraseObj.phrase
+      if (phraseObj.id) return phraseObj.id === Number(this.phraseId);
+      else return phraseObj.phrase === this.phraseObj.phrase;
     },
     url(phraseObj) {
       return `/${this.$l1.code}/${this.$l2.code}/phrasebook/${
         this.phrasebook.id
-      }/${phraseObj.id || this.phrasebook.phrases.findIndex(p => p.phrase === phraseObj.phrase)}/${encodeURIComponent(phraseObj.phrase)}`;
+      }/${
+        phraseObj.id ||
+        this.phrasebook.phrases.findIndex((p) => p.phrase === phraseObj.phrase)
+      }/${encodeURIComponent(phraseObj.phrase)}`;
     },
     textChanged(newText) {
       this.phraseObj.phrase = newText;

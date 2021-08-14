@@ -36,7 +36,7 @@
         :id="`phrasebook-phrase-${phraseIndex}`"
         class="link-unstyled col-sm-12 col-md-6 col-lg-4 mb-3 mt-3"
         :to="`/${$l1.code}/${$l2.code}/phrasebook/${phrasebook.id}/${
-          phraseObj.id  || phraseIndex 
+          phraseObj.id || phraseIndex
         }/${encodeURIComponent(phraseObj.phrase)}`"
         v-observe-visibility="
           phraseIndex === numRowsVisible - 1 ? visibilityChanged : false
@@ -85,13 +85,15 @@ export default {
     phrasebook: {
       type: Object,
     },
+    initId: {
+      default: undefined,
+    },
   },
   data() {
     return {
       csvHref: undefined,
       numRowsVisible: 24,
       startRow: 1,
-      initId: undefined,
     };
   },
   mounted() {

@@ -8,14 +8,20 @@
   <div class="main">
     <div class="container pt-5 pb-5">
       <SocialHead :title="title" :description="description" :image="image" />
-      <PhrasebookComp v-if="phrasebook" :phrasebook="phrasebook" />
+      <PhrasebookComp
+        v-if="phrasebook"
+        :phrasebook="phrasebook"
+        :initId="initId"
+      />
     </div>
   </div>
 </template>
 
 <script>
 import Helper from "@/lib/helper";
+import WordPhotos from "@/lib/word-photos";
 import { mapState } from "vuex";
+
 export default {
   props: {
     bookId: {
@@ -26,6 +32,7 @@ export default {
     return {
       phrasebook: undefined,
       images: [],
+      initId: undefined,
     };
   },
   computed: {
@@ -70,7 +77,11 @@ export default {
       id: "saved",
     };
     this.phrasebook = phrasebook;
-    if (this.phrasebook && this.phrasebook.phrases[0]) {
+    if (
+      this.phrasebook &&
+      this.phrasebook.phrases &&
+      this.phrasebook.phrases[0]
+    ) {
       this.images = await WordPhotos.getGoogleImages({
         term: this.phrasebook.phrases[0].phrase,
         lang: this.$l2.code,

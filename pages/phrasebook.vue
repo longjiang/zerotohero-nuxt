@@ -8,7 +8,7 @@
   <div class="main">
     <div class="container pt-5 pb-5">
       <SocialHead :title="title" :description="description" :image="image" />
-      <PhrasebookComp v-if="phrasebook" :phrasebook="phrasebook" />
+      <PhrasebookComp v-if="phrasebook" :phrasebook="phrasebook" :initId="initId" />
     </div>
   </div>
 </template>
@@ -30,6 +30,7 @@ export default {
     return {
       phrasebook: undefined,
       images: [],
+      initId: undefined
     };
   },
   computed: {
@@ -96,7 +97,7 @@ export default {
   },
   methods: {
     async goToLastSeenPhrase() {
-      if (this.$route.hash) {
+      if (this.phrasebook && this.$route.hash) {
         let initId = Number(this.$route.hash.replace("#", ""));
         if (this.phrasebook.phrases[initId]) this.initId = initId;
         this.numRowsVisible = this.numRowsVisible + initId;
