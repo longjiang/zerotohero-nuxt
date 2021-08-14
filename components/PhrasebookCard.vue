@@ -106,6 +106,14 @@ export default {
       }
     },
   },
+  methods: {
+    async remove(phrasebook) {
+      this.$store.dispatch("phrasebooks/remove", {
+        l2: this.$l2,
+        phrasebook,
+      });
+    },
+  },
 };
 </script>
 

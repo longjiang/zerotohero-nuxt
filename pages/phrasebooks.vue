@@ -139,12 +139,6 @@ export default {
         this.$store.state.phrasebooks.phrasebooks[this.$l2.code];
       return phrasebooks;
     },
-    async remove(phrasebook) {
-      this.$store.dispatch("phrasebooks/remove", {
-        l2: this.$l2,
-        phrasebook,
-      });
-    },
   },
 };
 </script>
