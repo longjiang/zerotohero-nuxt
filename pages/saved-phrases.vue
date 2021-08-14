@@ -1,6 +1,6 @@
 <router>
   {
-    path: '/:l1/:l2/phrasebook/:bookId',
+    path: '/:l1/:l2/saved-phrases',
     props: true
   }
 </router>
@@ -14,12 +14,8 @@
 </template>
 
 <script>
-import Config from "@/lib/config";
-import axios from "axios";
-import Papa from "papaparse";
-import WordPhotos from "@/lib/word-photos";
 import Helper from "@/lib/helper";
-
+import { mapState } from "vuex";
 export default {
   props: {
     bookId: {
@@ -33,6 +29,7 @@ export default {
     };
   },
   computed: {
+    ...mapState("savedPhrases", ["savedPhrases"]),
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -66,10 +63,12 @@ export default {
     },
   },
   async fetch() {
-    let phrasebook = this.getPhrasebookFromStore();
-    if (!phrasebook) {
-      phrasebook = await this.loadPhrasebook(this.bookId);
-    }
+    let phrasebook = {
+      title: `Saved ${this.$l2.code} Phrases`,
+      phrases: this.savedPhrases[this.$l2.code] || [],
+      l2: this.$l2,
+      id: "saved",
+    };
     this.phrasebook = phrasebook;
     if (this.phrasebook && this.phrasebook.phrases[0]) {
       this.images = await WordPhotos.getGoogleImages({
@@ -84,8 +83,8 @@ export default {
       this.goToLastSeenPhrase();
     }
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type.startsWith("phrasebooks")) {
-        this.phrasebook = this.getPhrasebookFromStore();
+      if (mutation.type.startsWith("savedPhrases")) {
+        this.phrasebook.phrases = this.savedPhrases[this.$l2.code] || [];
         this.goToLastSeenPhrase();
       }
     });
@@ -118,27 +117,6 @@ export default {
           behavior: "smooth",
         });
       }
-    },
-    async loadPhrasebook(bookId) {
-      let url = `${Config.wiki}items/phrasebook/${bookId}?fields=*,tv_show.*`;
-      let response = await axios.get(url);
-      if (response.data && response.data.data) {
-        let phrasebook = response.data.data;
-        phrasebook.phrases = Papa.parse(phrasebook.phrases, {
-          header: true,
-        }).data.map((p, id) => {
-          p.id = id;
-          return p;
-        });
-        return phrasebook;
-      }
-    },
-    getPhrasebookFromStore() {
-      let phrasebooks =
-        this.$store.state.phrasebooks.phrasebooks[this.$l2.code];
-      if (!phrasebooks) return;
-      let phrasebook = phrasebooks.find((pb) => pb.id === Number(this.bookId));
-      return phrasebook;
     },
   },
 };

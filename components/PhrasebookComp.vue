@@ -32,11 +32,11 @@
           Number(startRow) - 1,
           Number(startRow) + 1 + Number(numRowsVisible)
         )"
-        :key="`phrasebook-phrase-${phraseObj.id}`"
+        :key="`phrasebook-phrase-${phraseIndex}`"
         :id="`phrasebook-phrase-${phraseIndex}`"
         class="link-unstyled col-sm-12 col-md-6 col-lg-4 mb-3 mt-3"
         :to="`/${$l1.code}/${$l2.code}/phrasebook/${phrasebook.id}/${
-          phraseObj.id
+          phraseObj.id || phraseIndex + 1
         }/${encodeURIComponent(phraseObj.phrase)}`"
         v-observe-visibility="
           phraseIndex === numRowsVisible - 1 ? visibilityChanged : false
@@ -53,7 +53,7 @@
             :class="`${$l2.direction === 'rtl' ? 'float-left' : 'float-right'}`"
             style="color: #ccc"
           >
-            #{{ phraseObj.id + 1 }}
+            #{{ (phraseObj.id || phraseIndex) + 1 }}
           </div>
           <div>
             <Saved :item="phraseItem(phraseObj)" store="savedPhrases" />
@@ -61,15 +61,14 @@
               {{ phraseObj.pronunciation }}
             </span>
           </div>
-          <Annotate :phonetics="false">
-            <h4
-              :data-level="
-                phraseObj && phraseObj.level ? phraseObj.level : 'outside'
-              "
-              class="mb-0"
-              v-html="phraseObj.phrase"
-            />
-          </Annotate>
+
+          <h4
+            :data-level="
+              phraseObj && phraseObj.level ? phraseObj.level : 'outside'
+            "
+            class="mb-0"
+            v-html="phraseObj.phrase"
+          />
 
           <div class="mb-0" v-if="phraseObj && phraseObj[$l1.code]">
             {{ phraseObj[$l1.code] }}
