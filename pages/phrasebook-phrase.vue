@@ -77,6 +77,9 @@
                   </b-dropdown-item>
                 </b-dropdown>
               </div>
+              <div class="text-center">
+                <Loader class="pt-5 pb-5" />
+              </div>
               <div v-if="word" class="text-center">
                 <LazyEntryHeader :entry="word" />
                 <DefinitionsList
@@ -89,8 +92,11 @@
             </div>
           </div>
           <div :class="{ 'content-pane-right pl-3 pr-3': wide }">
+            <div class="text-center">
+              <Loader class="pt-5 pb-5" />
+            </div>
             <div>
-              <!-- <LazyDictionaryEntry
+              <LazyDictionaryEntry
                 v-if="word && phrasebook"
                 :entry="word"
                 :tvShow="phrasebook.tv_show"
@@ -106,7 +112,7 @@
                 :exact="phrasebook.exact"
                 :showExternal="false"
                 class="mt-4 mb-4"
-              /> -->
+              />
             </div>
           </div>
         </div>
@@ -159,11 +165,13 @@ export default {
           phrase: this.phraseObj.phrase,
           phrasebookId: this.phrasebook.phrasebookId,
           pronunciation: this.phraseObj.pronunciation,
+          exact: this.phrasebook.exact,
           translations: {},
         };
         if (this.phraseObj[this.$l1.code])
-          phraseItem.translations[this.$l1.code] = this.phraseObj[this.$l1.code];
-        return phraseItem
+          phraseItem.translations[this.$l1.code] =
+            this.phraseObj[this.$l1.code];
+        return phraseItem;
       }
     },
     $l1() {

@@ -12,10 +12,10 @@ export const mutations = {
       state.savedPhrasesLoaded = true
     }
   },
-  ADD_SAVED_PHRASE(state, { l2, phrase, phrasebookId, pronunciation, translations = {} } = {}) {
+  ADD_SAVED_PHRASE(state, { l2, phrase, phrasebookId, pronunciation, exact, translations = {} } = {}) {
     if (typeof localStorage !== 'undefined') {
       let phraseToSave = {
-        phrase, phrasebookId, pronunciation, translations
+        phrase, phrasebookId, pronunciation, exact, translations
       }
       if (!state.savedPhrases[l2]) {
         state.savedPhrases[l2] = []
@@ -30,10 +30,10 @@ export const mutations = {
       }
     }
   },
-  REMOVE_SAVED_PHRASE(state, { l2, phrase, phrasebookId, pronunciation, translations = {} } = {}) {
+  REMOVE_SAVED_PHRASE(state, { l2, phrase, phrasebookId, pronunciation, exact, translations = {} } = {}) {
     if (typeof localStorage !== 'undefined' && state.savedPhrases[l2]) {
       let phraseToRemove = {
-        phrase, phrasebookId, pronunciation, translations
+        phrase, phrasebookId, pronunciation, exact, translations
       }
       let phrases = state.savedPhrases[l2]
       if (phrases) {
@@ -71,9 +71,9 @@ export const actions = {
   }
 }
 export const getters = {
-  has: state => ({ l2, phrase, phrasebookId, pronunciation, translations = {} } = {}) => {
+  has: state => ({ l2, phrase, phrasebookId, pronunciation, exact, translations = {} } = {}) => {
     let phraseToTest = {
-      phrase, phrasebookId, pronunciation, translations
+      phrase, phrasebookId, pronunciation, exact, translations
     }
     if (state.savedPhrases[l2]) {
       let savedphrase = false
