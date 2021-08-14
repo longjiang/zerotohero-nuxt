@@ -494,6 +494,12 @@ export default {
   color: #ddd;
 }
 
+.main-dark {
+  .annotator-menu-toggle {
+    color: #ffffff55;
+  }
+}
+
 .annotator-buttons .dropdown-item {
   &:hover {
     background: none;

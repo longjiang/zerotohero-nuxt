@@ -53,7 +53,7 @@
       </div>
       <div class="youtube-transcript-column">
         <div class="youtube-video-info">
-          <h5 style="line-height: 1.5">
+          <h3 :class="{ h4: video.title.length > 30, h5: video.title.length > 60 }" style="line-height: 1.5">
             <span v-if="video" :key="`video-title-${video.title}`" class="mt-4">
               <Annotate :phonetics="false" :buttons="true">
                 <span>{{ video.title }}</span>
@@ -71,7 +71,7 @@
             >
               <i class="fas fa-info-circle"></i>
             </a>
-          </h5>
+          </h3>
           <div style="color: #aaa" class="mb-2">
             <span v-if="video.date">{{ formatDate(video.date) }}</span>
             <span v-if="episodes.length">
@@ -630,5 +630,10 @@ export default {
 
 .youtube-transcript-column {
   width: 100%;
+}
+
+.youtube-video-info {
+  padding-left: 2.5rem;
+  padding-right: 1.5rem;
 }
 </style>
