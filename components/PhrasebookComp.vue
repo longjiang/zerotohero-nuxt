@@ -36,7 +36,7 @@
         :id="`phrasebook-phrase-${phraseIndex}`"
         class="link-unstyled col-sm-12 col-md-6 col-lg-4 mb-3 mt-3"
         :to="`/${$l1.code}/${$l2.code}/phrasebook/${phrasebook.id}/${
-          phraseObj.id || phraseIndex + 1
+          phraseObj.id  || phraseIndex 
         }/${encodeURIComponent(phraseObj.phrase)}`"
         v-observe-visibility="
           phraseIndex === numRowsVisible - 1 ? visibilityChanged : false

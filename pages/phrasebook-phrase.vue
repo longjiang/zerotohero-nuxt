@@ -226,8 +226,8 @@ export default {
       if (mutation.type.startsWith("phrasebooks")) {
         this.getPhrasebookFromStore();
       }
-      if (mutation.type.startsWith("savedPhrases")) {
-        this.phrasebook.phrases = this.savedPhrases[this.$l2.code] || [];
+      if (this.bookId === 'saved' || mutation.type.startsWith("savedPhrases")) {
+        if (this.phrasebook) this.phrasebook.phrases = this.savedPhrases[this.$l2.code] || [];
       }
     });
 
@@ -279,7 +279,7 @@ export default {
       }
       this.phrasebook = phrasebook;
       let phrase = this.phrasebook.phrases.find(
-        (p, index) => p.id || (index + 1) === Number(this.phraseId)
+        (p, index) => (p.id || index + 1) === Number(this.phraseId + 1)
       );
       phrase.phrase = this.stripPunctuations(phrase.phrase);
       this.phraseObj = phrase;
@@ -317,7 +317,7 @@ export default {
     url(phraseObj) {
       return `/${this.$l1.code}/${this.$l2.code}/phrasebook/${
         this.phrasebook.id
-      }/${phraseObj.id || this.phrasebook.phrases.findIndex(p => p.phrase === phraseObj.phrase) + 1}/${encodeURIComponent(phraseObj.phrase)}`;
+      }/${phraseObj.id || this.phrasebook.phrases.findIndex(p => p.phrase === phraseObj.phrase)}/${encodeURIComponent(phraseObj.phrase)}`;
     },
     textChanged(newText) {
       this.phraseObj.phrase = newText;
