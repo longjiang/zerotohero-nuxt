@@ -566,12 +566,6 @@ export default {
               name: "compare-phrases",
               show: false,
             },
-            {
-              name: "saved-words",
-              icon: "fas fa-star",
-              title: "Saved Words",
-              show: true,
-            },
           ],
         },
         {
