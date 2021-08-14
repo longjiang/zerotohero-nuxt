@@ -122,7 +122,7 @@
             </b-button>
             <router-link
               :class="{
-                'btn btn-small mt-2 ml-0': true,
+                'youtube-video-card-badge ml-0': true,
                 'text-white bg-success': showSaved,
                 'text-success border-dashed border-success': !showSaved,
               }"
