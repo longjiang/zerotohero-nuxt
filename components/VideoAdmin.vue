@@ -206,27 +206,32 @@
         First line starts at
         <b-form-input
           v-model="firstLineTime"
-          :lazy="true"
+          size="sm"
           type="text"
           placeholder="0"
           class="d-inline-block ml-1"
           style="width: 4rem"
+          :lazy="true"
         />
         <b-button
           v-if="!updating && !subsUpdated"
+          size="sm"
           @click="updateSubs"
           class="ml-2"
+          style="margin-bottom: 0.2rem"
         >
           <i class="fa fa-save mr-2"></i>
           Update Subs
         </b-button>
-        <span :class="{ 'd-none': !updating }">
-          <i class="fas fa-hourglass mr-2 text-secondary"></i>
-          Updating...
-        </span>
-        <span :class="{ 'd-none': !subsUpdated }">
-          <i class="fas fa-check-circle mr-2 text-success"></i>
-          Updated
+        <span class="ml-2">
+          <span :class="{ 'd-none': !updating }">
+            <i class="fas fa-hourglass mr-2 text-secondary"></i>
+            Updating...
+          </span>
+          <span :class="{ 'd-none': !subsUpdated }">
+            <i class="fas fa-check-circle mr-2 text-success"></i>
+            Updated
+          </span>
         </span>
       </div>
     </div>
