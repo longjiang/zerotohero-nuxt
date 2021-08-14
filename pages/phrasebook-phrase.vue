@@ -100,7 +100,7 @@
                 v-if="word && phrasebook"
                 :entry="word"
                 :tvShow="phrasebook.tv_show"
-                :exact="phrasebook.exact"
+                :exact="phraseObj.exact || phrasebook.exact"
                 :showHeader="false"
                 :showDefinitions="false"
                 :showExample="false"
@@ -109,7 +109,7 @@
                 v-else-if="phraseObj && phraseObj.phrase && phrasebook"
                 :term="phraseObj.phrase.toLowerCase()"
                 :tvShow="phrasebook.tv_show"
-                :exact="phrasebook.exact"
+                :exact="phraseObj.exact || phrasebook.exact"
                 :showExternal="false"
                 class="mt-4 mb-4"
               />
