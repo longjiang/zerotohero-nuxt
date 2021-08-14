@@ -52,8 +52,14 @@
         </div>
       </div>
       <div class="youtube-transcript-column">
-        <div class="youtube-video-info">
-          <h3 :class="{ h4: video.title.length > 30, h5: video.title.length > 60 }" style="line-height: 1.5">
+        <div class="youtube-video-info youtube-video-info-top">
+          <h3
+            :class="{
+              h4: video.title.length > 30,
+              h5: video.title.length > 60,
+            }"
+            style="line-height: 1.5"
+          >
             <span v-if="video" :key="`video-title-${video.title}`" class="mt-4">
               <Annotate :phonetics="false" :buttons="true">
                 <span>{{ video.title }}</span>
@@ -174,55 +180,57 @@
             @speechEnd="speechEnd"
             @updateTranslation="updateTranslation"
           />
-          <div class="text-center mt-5">
-            <router-link
-              v-if="previousEpisode"
-              :to="previousEpisode"
-              :class="{
-                btn: true,
-                'btn-primary': skin === 'light',
-                'btn-ghost-dark': skin === 'dark',
-              }"
-            >
-              <i class="fa fa-chevron-left"></i>
-              Previous
-            </router-link>
-            <router-link
-              v-if="show"
-              :to="`/${$l1.code}/${$l2.code}/show/${
-                showType === 'tv_show' ? 'tv-show' : 'talk'
-              }/${show.id}`"
-              :class="{
-                btn: true,
-                'btn-primary': skin === 'light',
-                'btn-ghost-dark': skin === 'dark',
-              }"
-            >
-              <i class="far fa-clone"></i>
-              All Episodes
-            </router-link>
-            <router-link
-              v-if="nextEpisode"
-              :to="nextEpisode"
-              :class="{
-                btn: true,
-                'btn-primary': skin === 'light',
-                'btn-ghost-dark': skin === 'dark',
-              }"
-            >
-              Next
-              <i class="fa fa-chevron-right"></i>
-            </router-link>
+          <div class="mt-5 youtube-video-info youtube-video-info-bottom">
+            <div class="youtube-view-bottom-navigation text-center">
+              <router-link
+                v-if="previousEpisode"
+                :to="previousEpisode"
+                :class="{
+                  btn: true,
+                  'btn-primary': skin === 'light',
+                  'btn-ghost-dark': skin === 'dark',
+                }"
+              >
+                <i class="fa fa-chevron-left"></i>
+                Previous
+              </router-link>
+              <router-link
+                v-if="show"
+                :to="`/${$l1.code}/${$l2.code}/show/${
+                  showType === 'tv_show' ? 'tv-show' : 'talk'
+                }/${show.id}`"
+                :class="{
+                  btn: true,
+                  'btn-primary': skin === 'light',
+                  'btn-ghost-dark': skin === 'dark',
+                }"
+              >
+                <i class="far fa-clone"></i>
+                All Episodes
+              </router-link>
+              <router-link
+                v-if="nextEpisode"
+                :to="nextEpisode"
+                :class="{
+                  btn: true,
+                  'btn-primary': skin === 'light',
+                  'btn-ghost-dark': skin === 'dark',
+                }"
+              >
+                Next
+                <i class="fa fa-chevron-right"></i>
+              </router-link>
+            </div>
+            <VideoAdmin
+              :class="{ 'mt-5': true, 'd-none': !$adminMode }"
+              :video="video"
+              ref="videoAdmin2"
+              @showSubsEditing="toggleShowSubsEditing"
+              @updateTranslation="updateTranslation"
+              @updateOriginalText="updateOriginalText"
+              @enableTranslationEditing="toggleEnableTranslationEditing"
+            />
           </div>
-          <VideoAdmin
-            :class="{ 'mt-5': true, 'd-none': !$adminMode }"
-            :video="video"
-            ref="videoAdmin2"
-            @showSubsEditing="toggleShowSubsEditing"
-            @updateTranslation="updateTranslation"
-            @updateOriginalText="updateOriginalText"
-            @enableTranslationEditing="toggleEnableTranslationEditing"
-          />
         </div>
       </div>
     </div>
