@@ -66,6 +66,7 @@
               #{{ phraseObj.id + 1 }}
             </div>
             <div>
+              <Saved :item="phraseItem(phraseObj)" store="savedPhrases" />
               <span v-if="phraseObj && phraseObj.pronunciation">
                 {{ phraseObj.pronunciation }}
               </span>
@@ -178,6 +179,21 @@ export default {
     this.unsubscribe();
   },
   methods: {
+    phraseItem(phrase) {
+      if (typeof phrase !== "undefined") {
+        let phraseItem = {
+          l2: this.$l2.code,
+          phrase: phrase.phrase,
+          phrasebookId: this.phrasebook.phrasebookId,
+          pronunciation: phrase.pronunciation,
+          exact: this.phrasebook.exact,
+          translations: {},
+        };
+        if (phrase[this.$l1.code])
+          phraseItem.translations[this.$l1.code] = phrase[this.$l1.code];
+        return phraseItem;
+      }
+    },
     makeTextFile(text) {
       var data = new Blob([text], { type: "text/plain" });
 
