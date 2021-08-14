@@ -13,6 +13,12 @@
         :phrasebook="phrasebook"
         :initId="initId"
       />
+      <div class="text-center mt-4" v-if="phrasebook.phrases.length > 0">
+        <b-button variant="danger" @click="removeAll">
+          <i class="fa fa-trash mr-1"></i>
+          Remove All Saved Phrases
+        </b-button>
+      </div>
     </div>
   </div>
 </template>
@@ -105,6 +111,11 @@ export default {
     this.unsubscribe();
   },
   methods: {
+    removeAll() {
+      this.$store.dispatch("savedPhrases/removeAll", {
+        l2: this.$l2.code,
+      });
+    },
     async goToLastSeenPhrase() {
       if (this.$route.hash) {
         let initId = Number(this.$route.hash.replace("#", ""));
