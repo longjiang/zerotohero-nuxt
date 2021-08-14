@@ -135,7 +135,14 @@
               v-cloak
               v-if="child.name === 'saved-words'"
             >
-              {{ savedWordsCount() }}
+              {{ savedWordsCount }}
+            </span>
+            <span
+              class="saved-words-count"
+              v-cloak
+              v-if="child.name === 'saved-phrases'"
+            >
+              {{ savedPhrasesCount }}
             </span>
           </NuxtLink>
         </nav>
@@ -218,6 +225,16 @@ export default {
     };
   },
   computed: {
+    savedWordsCount() {
+      let count = this.$store.getters["savedWords/count"]({ l2: this.l2.code });
+      // eslint-disable-next-line vue/no-parsing-error
+      return count;
+    },
+    savedPhrasesCount() {
+      let count = this.$store.getters["savedPhrases/count"]({ l2: this.l2.code });
+      // eslint-disable-next-line vue/no-parsing-error
+      return count;
+    },
     isPWA() {
       return (
         (typeof navigator !== "undefined" && navigator.standalone) ||
@@ -368,6 +385,12 @@ export default {
               name: "saved-words",
               icon: "fas fa-star",
               title: "Saved Words",
+              show: true,
+            },
+            {
+              name: "saved-phrases",
+              icon: "fas fa-bookmark",
+              title: "Saved Phrases",
               show: true,
             },
             {
@@ -832,11 +855,6 @@ export default {
       } else {
         return false;
       }
-    },
-    savedWordsCount() {
-      let count = this.$store.getters["savedWords/count"]({ l2: this.l2.code });
-      // eslint-disable-next-line vue/no-parsing-error
-      return count;
     },
     bindKeys() {
       window.addEventListener("keydown", this.keydown);

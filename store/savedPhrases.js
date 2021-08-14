@@ -82,5 +82,12 @@ export const getters = {
       )
       return savedphrase ? true : false
     }
+  },
+  count: state => ({ l2 }) => {
+    if (state.savedPhrases[l2]) {
+      return state.savedPhrases[l2].length
+    } else {
+      return 0
+    }
   }
 }
