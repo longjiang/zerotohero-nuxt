@@ -107,14 +107,14 @@
             </div>
             <div
               v-if="checkSaved && video.id"
-              class="btn btn-small bg-success text-white mt-2 ml-0"
+              class="youtube-video-card-badge bg-success text-white ml-0"
             >
               <i class="fa fa-check mr-2"></i>
               Added
             </div>
             <b-button
               v-if="checkSaved && !video.id && video.hasSubs"
-              class="btn btn-small mt-2 ml-0"
+              class="btn btn-small"
               @click="getSubsAndSave(video)"
             >
               <i class="fas fa-plus mr-2"></i>
@@ -142,8 +142,8 @@
             </router-link>
             <router-link
               :class="{
-                'btn btn-small mt-2 ml-0': true,
-                'text-white bg-success': showSaved,
+                'youtube-video-card-badge ml-0': true,
+                'text-white bg-success border-0': showSaved,
                 'bg-none text-success border-dashed': !showSaved,
               }"
               v-if="video.talk"
@@ -781,7 +781,7 @@ export default {
     padding: 0.3rem 0.5rem;
     border-radius: 0.25rem;
     font-size: 0.8em;
-    line-height: 1em;
+    line-height: 0.9rem;
     color: #666;
   }
   padding-bottom: 0.25rem;
@@ -789,6 +789,12 @@ export default {
 .main-dark {
   .youtube-video-card-badge {
     color: #ffffff88;
+    &.bg-success {
+      background-color: rgba(0, 128, 0, 0.562) !important;
+    }
+    &.text-white {
+      color: #ffffffaa !important;
+    }
   }
 }
 </style>
