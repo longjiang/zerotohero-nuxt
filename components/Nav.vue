@@ -181,7 +181,7 @@
                         v-cloak
                         v-if="child.name === 'saved-words'"
                       >
-                        {{ savedWordsCount() }}
+                        {{ savedWordsCount }}
                       </span>
                     </div>
                   </NuxtLink>
