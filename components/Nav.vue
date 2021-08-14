@@ -4,6 +4,9 @@
       'zth-nav': true,
       'zth-nav-light': skin === 'light',
       'zth-nav-dark': skin === 'dark',
+      'zth-nav-menu-bar': variant === 'menu-bar',
+      'zth-nav-side-bar': variant === 'side-bar',
+      'zth-nav-page': variant === 'page',
       'has-secondary-nav': parent && parent.children,
     }"
   >
@@ -873,7 +876,8 @@ export default {
 </script>
 
 <style lang="scss">
-.zth-nav {
+.zth-nav.zth-nav-menu-bar,
+.zth-nav.zth-nav-side-bar {
   // background: #002d4433;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
