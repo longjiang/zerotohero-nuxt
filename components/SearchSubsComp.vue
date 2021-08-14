@@ -256,7 +256,7 @@
       :highlight="terms"
       :hsk="level"
       :speed="speed"
-      :startLineIndex="startLineIndex(currentHit)"
+      :startLineIndex="startLineIndex"
       :showFullscreenToggle="false"
       :autoload="iOS() || navigated"
       :autoplay="navigated"
@@ -460,6 +460,11 @@ export default {
       if (this.hitIndex < this.hits.length - 1)
         return this.hits[this.hitIndex + 1];
       else return this.hits[0];
+    },
+    startLineIndex() {
+      let startLineIndex = this.currentHit.lineIndex;
+      console.log('startLineIndex', startLineIndex)
+      return startLineIndex
     },
   },
   methods: {
@@ -695,9 +700,6 @@ export default {
     },
     toggleSpeed() {
       this.speed = this.speed === 1 ? 0.75 : this.speed === 0.75 ? 0.5 : 1;
-    },
-    startLineIndex(hit) {
-      return hit.lineIndex;
     },
     goToPreviousLine() {
       if (this.$refs[`youtube-${this.hitIndex}`])
