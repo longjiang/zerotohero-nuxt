@@ -15,7 +15,10 @@ export const mutations = {
   ADD_SAVED_PHRASE(state, { l2, phrase, phrasebookId, pronunciation, exact, translations = {} } = {}) {
     if (typeof localStorage !== 'undefined') {
       let phraseToSave = {
-        phrase, phrasebookId, pronunciation, exact, translations
+        phrase, phrasebookId, pronunciation, exact, 
+      }
+      for (let key in translations) {
+        phraseToSave[key] = translations[key]
       }
       if (!state.savedPhrases[l2]) {
         state.savedPhrases[l2] = []
