@@ -75,7 +75,7 @@ export default {
       focus: false,
       loaded: false,
       wide: false,
-      skin: 'light',
+      skin: "light",
       dictionaryCredit: "",
     };
   },
@@ -105,7 +105,9 @@ export default {
     background() {
       if (!this.l2) return "/img/background-branch.jpg";
       else if (["zh", "lzh"].includes(this.l2.code))
-        return `/img/backgrounds/bg-${this.l2.code}-${Math.ceil(Math.random() * 10)}.jpg`;
+        return `/img/backgrounds/bg-${this.l2.code}-${Math.ceil(
+          Math.random() * 10
+        )}.jpg`;
       else return `https://source.unsplash.com/1600x900/?${this.l2.name}`;
     },
   },
@@ -126,6 +128,9 @@ export default {
     if (!this.$store.state.savedWords.savedWordsLoaded) {
       this.$store.commit("savedWords/LOAD_SAVED_WORDS");
     }
+    if (!this.$store.state.savedPhrases.savedPhrasesLoaded) {
+      this.$store.commit("savedPhrases/LOAD_SAVED_PHRASES");
+    }
     this.$ga.page(this.$route.path);
     smoothscroll.polyfill(); // Safari does not support smoothscroll
     let dictionary = await this.$getDictionary();
@@ -134,7 +139,7 @@ export default {
     }
   },
   created() {
-    this.$nuxt.$on('skin', this.onSkin)
+    this.$nuxt.$on("skin", this.onSkin);
     if (typeof window !== "undefined")
       window.addEventListener("resize", this.onResize);
   },
@@ -149,7 +154,7 @@ export default {
   },
   methods: {
     onSkin(skin) {
-      this.skin = skin
+      this.skin = skin;
     },
     onResize() {
       this.wide = Helper.wide();
@@ -163,9 +168,6 @@ export default {
     },
     async loadSettings() {
       this.$store.commit("settings/LOAD_SETTINGS");
-      if (!this.$store.state.savedPhrases.savedPhrasesLoaded) {
-        this.$store.commit("savedPhrases/LOAD_SAVED_PHRASES");
-      }
       if (!this.$store.state.savedCollocations.savedCollocationsLoaded) {
         this.$store.commit("savedCollocations/LOAD_SAVED_COLLOCATIONS");
       }
@@ -208,9 +210,6 @@ export default {
     left: 0;
   }
 }
-
-
-
 
 .zerotohero-wide {
   height: 100%;

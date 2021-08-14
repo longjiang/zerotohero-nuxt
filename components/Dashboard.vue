@@ -8,18 +8,19 @@
               'mt-4': true,
               'text-center': l2,
               'dashboard-saved-words-list': !l2,
-              'mb-4': videosFiltered && videosFiltered.length > 0,
+              'mb-5': savedPhrases && savedPhrases.length > 0,
             }"
+
           >
             <router-link
+              v-for="(savedWordsLang, index) in savedWordsSorted"
               :to="`/${savedWordsLang.l2.code === 'lzh' ? 'zh' : 'en'}/${
                 savedWordsLang.l2.code
               }/saved-words`"
               class="link-unstyled d-block"
-              v-for="(savedWordsLang, index) in savedWordsSorted"
               :key="`dashboard-saved-words-${index}`"
             >
-              <i class="fa fa-star mr-1" style="opacity: 0.5"></i>
+              <i class="fa fa-star" style="opacity: 0.5; width: 1.2rem; text-align: center"></i>
               <span
                 style="
                   min-width: 1.7rem;
@@ -33,6 +34,42 @@
 
               in
               <strong>{{ savedWordsLang.l2.name }}</strong>
+            </router-link>
+          </div>
+        </div>
+      </div>
+      <div class="row dashboard-saved-phrases" v-if="savedPhrases">
+        <div class="col-12">
+          <div
+            :class="{
+              'mt-4': true,
+              'text-center': l2,
+              'dashboard-saved-words-list': !l2,
+              'mb-5': itemsFiltered && itemsFiltered.length > 0,
+            }"
+          >
+            <router-link
+              v-for="(savedPhrasesLang, index) in savedPhrasesSorted"
+              :to="`/${savedPhrasesLang.l2.code === 'lzh' ? 'zh' : 'en'}/${
+                savedPhrasesLang.l2.code
+              }/saved-phrases`"
+              class="link-unstyled d-block"
+              :key="`dashboard-saved-phrases-${index}`"
+            >
+              <i class="fa fa-bookmark mr-1" style="opacity: 0.5; width: 1.2rem; text-align: center"></i>
+              <span
+                style="
+                  min-width: 1.7rem;
+                  display: inline-block;
+                  text-align: center;
+                "
+              >
+                {{ savedPhrasesLang.phrases.length }}
+              </span>
+              saved phrase{{ savedPhrasesLang.phrases.length > 1 ? "s" : "" }}
+
+              in
+              <strong>{{ savedPhrasesLang.l2.name }}</strong>
             </router-link>
           </div>
         </div>
@@ -153,6 +190,7 @@ export default {
   computed: {
     ...mapState("history", ["history"]),
     ...mapState("savedWords", ["savedWords"]),
+    ...mapState("savedPhrases", ["savedPhrases"]),
     savedWordsSorted() {
       let savedWordsSorted = [];
       for (let l2 in this.savedWords) {
@@ -163,12 +201,30 @@ export default {
       }
       savedWordsSorted = savedWordsSorted
         .sort((a, b) => b.words.length - a.words.length)
-        .filter((s) => s.words.length > 0);
+        .filter((s) => s.l2 && s.words.length > 0);
       if (this.l2)
         savedWordsSorted = savedWordsSorted.filter(
           (s) => s.l2.code === this.l2.code
         );
       return savedWordsSorted;
+    },
+    savedPhrasesSorted() {
+      let savedPhrasesSorted = [];
+      for (let l2 in this.savedPhrases) {
+        savedPhrasesSorted.push({
+          l2: this.$languages.getSmart(l2),
+          phrases: this.savedPhrases[l2],
+        });
+      }
+      savedPhrasesSorted = savedPhrasesSorted
+        .sort((a, b) => b.phrases.length - a.phrases.length)
+        .filter((s) => s.l2 && s.phrases.length > 0);
+      if (this.l2)
+        savedPhrasesSorted = savedPhrasesSorted.filter(
+          (s) => s.l2.code === this.l2.code
+        );
+      console.log(savedPhrasesSorted)
+      return savedPhrasesSorted;
     },
     itemsFiltered() {
       if (typeof this.history !== "undefined") {
