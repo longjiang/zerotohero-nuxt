@@ -408,7 +408,7 @@ export default {
       let starttime =
         this.video.subs_l2 &&
         this.video.subs_l2.length > 0 &&
-        this.startLineIndex
+        this.startLineIndex && this.video.subs_l2 && this.video.subs_l2[this.startLineIndex]
           ? this.video.subs_l2[this.startLineIndex].starttime
           : this.starttime;
       return starttime;
