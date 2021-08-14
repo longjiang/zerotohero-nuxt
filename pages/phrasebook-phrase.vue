@@ -126,6 +126,7 @@ import Helper from "@/lib/helper";
 import WordPhotos from "@/lib/word-photos";
 import DateHelper from "@/lib/date-helper";
 import { ContainerQuery } from "vue-container-query";
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -158,6 +159,7 @@ export default {
     };
   },
   computed: {
+    ...mapState("savedPhrases", ["savedPhrases"]),
     phraseItem() {
       if (typeof this.phraseObj !== "undefined") {
         let phraseItem = {
@@ -224,7 +226,11 @@ export default {
       if (mutation.type.startsWith("phrasebooks")) {
         this.getPhrasebookFromStore();
       }
+      if (mutation.type.startsWith("savedPhrases")) {
+        this.phrasebook.phrases = this.savedPhrases[this.$l2.code] || [];
+      }
     });
+
   },
   beforeDestroy() {
     // you may call unsubscribe to stop the subscription
@@ -256,15 +262,24 @@ export default {
       this.$store.dispatch("history/add", data);
     },
     async getPhrasebookFromStore() {
-      let phrasebooks =
-        this.$store.state.phrasebooks.phrasebooks[this.$l2.code];
-      if (!phrasebooks) return;
-      let phrasebook = phrasebooks.find((pb) => pb.id === Number(this.bookId));
-      if (!phrasebook) return;
-
+      let phrasebooks, phrasebook
+      if (this.bookId === 'saved') {
+        phrasebook = {
+          title: `Saved ${this.$l2.name} Phrases`,
+          phrases: this.savedPhrases[this.$l2.code] || [],
+          l2: this.$l2,
+          id: "saved",
+        };
+      } else {
+        phrasebooks =
+          this.$store.state.phrasebooks.phrasebooks[this.$l2.code];
+        if (!phrasebooks) return;
+        phrasebook = phrasebooks.find((pb) => pb.id === Number(this.bookId));
+        if (!phrasebook) return;
+      }
       this.phrasebook = phrasebook;
       let phrase = this.phrasebook.phrases.find(
-        (p) => p.id === Number(this.phraseId)
+        (p, index) => p.id || (index + 1) === Number(this.phraseId)
       );
       phrase.phrase = this.stripPunctuations(phrase.phrase);
       this.phraseObj = phrase;
@@ -294,12 +309,15 @@ export default {
       return text;
     },
     findCurrent(phraseObj) {
-      return phraseObj.id === Number(this.phraseId);
+      if (phraseObj.id)
+        return phraseObj.id === Number(this.phraseId);
+      else
+        return phraseObj.phrase === this.phraseObj.phrase
     },
     url(phraseObj) {
       return `/${this.$l1.code}/${this.$l2.code}/phrasebook/${
         this.phrasebook.id
-      }/${phraseObj.id}/${encodeURIComponent(phraseObj.phrase)}`;
+      }/${phraseObj.id || this.phrasebook.phrases.findIndex(p => p.phrase === phraseObj.phrase) + 1}/${encodeURIComponent(phraseObj.phrase)}`;
     },
     textChanged(newText) {
       this.phraseObj.phrase = newText;
