@@ -80,7 +80,7 @@
           >
             <div
               v-if="video.hasSubs || video.id"
-              class="btn btn-small mt-2 ml-0"
+              class="youtube-video-card-badge"
             >
               {{ $l2.name }} CC
               <span v-if="video.l2Locale">({{ video.l2Locale }})</span>
@@ -165,6 +165,27 @@
                 @click="unassignShow('talk')"
               />
             </router-link>
+            <div
+              v-if="video.id && video.topic"
+              class="youtube-video-card-badge"
+            >
+              {{ Helper.topics[video.topic] }}
+            </div>
+            <div
+              v-if="video.id && video.level"
+              class="youtube-video-card-badge"
+            >
+              {{ Helper.level(video.level, $l2) }}
+            </div>
+            <b-button
+              v-if="$adminMode && video.id"
+              class="youtube-video-card-badge border-0"
+              @click="remove()"
+            >
+              <i class="fa fa-trash"></i>
+            </b-button>
+          </div>
+          <div>
             <AssignShow
               @assignShow="saveShow"
               @newShow="newShow"
@@ -181,26 +202,6 @@
               :defaultTitle="video.title"
               type="talks"
             />
-            <b-button
-              v-if="$adminMode && video.id"
-              class="btn btn-small bg-danger text-white mt-2 ml-0"
-              @click="remove()"
-            >
-              <i class="fa fa-trash"></i>
-            </b-button>
-            <div
-              v-if="video.id && video.topic"
-              class="btn btn-small btn-gray mt-2 ml-0"
-            >
-              {{ Helper.topics[video.topic] }}
-            </div>
-            <div
-              v-if="video.id && video.level"
-              class="btn btn-small btn-gray mt-2 ml-0"
-            >
-              {{ Helper.level(video.level, $l2) }}
-            </div>
-
             <div
               v-if="
                 $adminMode &&
@@ -760,5 +761,18 @@ export default {
       display: none !important;
     }
   }
+}
+
+.youtube-video-card-badges {
+  .youtube-video-card-badge {
+    background-color: #88888833;
+    display: inline-block;
+    padding: 0.3rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.8em;
+    line-height: 1em;
+    color: #ffffff88;
+  }
+  padding-bottom: 0.25rem;
 }
 </style>

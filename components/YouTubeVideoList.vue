@@ -7,18 +7,12 @@
           class="mb-4 youtube-video-list-admin-bar rounded p-4 w-100"
         >
           <div>
-            <b-button
-              class="mt-1 mb-1"
-              variant="danger"
-              @click="removeAll()"
-              size="sm"
-            >
+            <b-button class="mt-1 mb-1" @click="removeAll()" size="sm">
               <i class="fas fa-trash mr-2"></i>
               Remove All
             </b-button>
             <b-button
               class="mt-1 mb-1"
-              variant="gray"
               v-if="!checkSavedData"
               size="sm"
               @click="checkSavedData = true"
@@ -28,13 +22,15 @@
             </b-button>
             <b-button
               class="mt-1 mb-1"
-              variant="gray"
               v-if="checkSavedData"
               size="sm"
               @click="checkSavedData = false"
             >
               <i class="fas fa-question mr-2"></i>
               Uncheck Saved
+            </b-button>
+            <b-button size="sm" @click="surveyChannels">
+              Survey Channels
             </b-button>
             <b-button
               class="mt-1 mb-1"
@@ -91,14 +87,6 @@
             >
               Show Subs Editing
             </b-form-checkbox>
-            <b-button
-              variant="gray"
-              size="small"
-              class="ml-1 mb-1"
-              @click="surveyChannels"
-            >
-              Survey Channels
-            </b-button>
           </div>
           <div v-if="uniqueVideosByChannel">
             <h6 class="mt-2">Unique videos by channel:</h6>
@@ -195,10 +183,10 @@ export default {
       default: "card", // or 'dark'
     },
     showProgress: {
-      default: false
+      default: false,
     },
     showPlayButton: {
-      default: false
+      default: false,
     },
   },
 
@@ -393,6 +381,12 @@ export default {
 <style lang="scss">
 .youtube-video-list-admin-bar {
   background: rgb(205, 207, 212);
+}
+
+.main-dark {
+  .youtube-video-list-admin-bar {
+    background-color: #88888822;
+  }
 }
 
 .subs-drop {

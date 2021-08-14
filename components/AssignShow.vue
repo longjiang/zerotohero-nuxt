@@ -1,10 +1,9 @@
 <template>
   <span>
     <b-button
-      class="mt-1 mb-1"
+      size="sm"
       @click="assignShow = !assignShow"
-      :variant="variant"
-      :size="size"
+      variant="ghost-dark"
     >
       <i class="fa fa-tv mr-2"></i>
       Assign {{ type === "talks" ? "Talk" : "Show" }}
@@ -22,10 +21,10 @@
       ></b-form-select>
       <b-button
         v-if="selectedShowID"
-        :size="size"
-        @click="save"
+        size="sm"
         variant="success"
         class="mt-2 w-100"
+        @click="save"
       >
         Save {{ type === "talks" ? "Talk" : "Show" }}
       </b-button>

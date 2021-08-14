@@ -35,7 +35,16 @@
               </h6>
               <b-button
                 v-if="$adminMode"
-                class="btn btn-small bg-danger text-white mt-2 ml-0"
+                size="sm"
+                style="
+                  background: none;
+                  border: none;
+                  padding: 0;
+                  color: #ffffff55;
+                  position: absolute;
+                  bottom: 0.5rem;
+                  right: 0.5rem; ;
+                "
                 @click.stop.prevent="remove(show)"
               >
                 <i class="fa fa-trash"></i>

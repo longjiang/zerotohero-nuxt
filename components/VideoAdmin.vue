@@ -55,12 +55,13 @@
     </div>
     <div
       :class="{
-        'bg-gray rounded p-3 mt-3 mb-3 d-none': true,
+        'video-edit-admin rounded p-3 mt-3 mb-3 d-none': true,
         'd-block': $adminMode && video && video.id,
       }"
     >
       <div class="video-edit-admin-first-line">
         <b-dropdown
+          size="sm"
           id="dropdown-1"
           :text="video.topic ? topics[video.topic] : 'Topic'"
           :variant="video.topic ? 'success' : undefined"
@@ -77,6 +78,7 @@
         <template v-if="!video.lesson">
           <b-dropdown
             id="dropdown-1"
+            size="sm"
             :text="video.level ? levels[video.level] : 'Level'"
             :variant="video.level ? 'success' : undefined"
           >
@@ -104,7 +106,7 @@
             type="talks"
             variant="secondary"
           />
-          <b-button variant="danger" v-if="!deleted" @click="remove">
+          <b-button v-if="!deleted" @click="remove" size="sm">
             <i class="fas fa-trash-alt"></i>
             Remove
           </b-button>
@@ -142,7 +144,7 @@
           @drop="handleDrop"
           :class="{
             over: over,
-            'subs-drop drop text-dark btn btn-light w-100 mt-2': true,
+            'subs-drop drop text-dark btn btn-sm btn-light w-100 mt-2': true,
           }"
           :key="`drop-${transcriptKey}`"
           @dragover="over = true"
@@ -520,4 +522,7 @@ export default {
 </script>
 
 <style>
+.main-dark .video-edit-admin {
+  background-color: #88888822;
+}
 </style>
