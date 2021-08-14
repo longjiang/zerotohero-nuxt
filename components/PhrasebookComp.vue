@@ -56,7 +56,12 @@
             #{{ (phraseObj.id || phraseIndex) + 1 }}
           </div>
           <div>
-            <Saved :item="phraseItem(phraseObj)" store="savedPhrases" icon="bookmark" class="saved-button" />
+            <Saved
+              :item="phraseItem(phraseObj)"
+              store="savedPhrases"
+              icon="bookmark"
+              class="saved-button"
+            />
             <span v-if="phraseObj && phraseObj.pronunciation">
               {{ phraseObj.pronunciation }}
             </span>
@@ -125,7 +130,13 @@ export default {
       return textFile;
     },
     genCSV() {
-      let csv = Papa.unparse(this.phrasebook.phrases);
+      let csv = Papa.unparse(
+        this.phrasebook.phrases.map((p) => {
+          let op = Object.assign({}, p);
+          delete op.exact;
+          return op
+        })
+      );
       this.csvHref = this.makeTextFile(csv);
     },
     visibilityChanged(isVisible) {
