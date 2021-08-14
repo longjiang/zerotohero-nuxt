@@ -75,7 +75,7 @@ export default {
   margin: 0;
   background: none;
   border: none;
-  color: #ffe597;
+  color: #f8b61e;
 }
 
 .btn-saved-saved {
