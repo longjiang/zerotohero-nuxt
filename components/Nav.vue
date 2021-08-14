@@ -502,7 +502,7 @@ export default {
             },
             {
               name: "youtube-browse",
-              title: `YouTube`,
+              title: `Other Videos`,
               icon: "fa fa-play",
               show: true,
             },
