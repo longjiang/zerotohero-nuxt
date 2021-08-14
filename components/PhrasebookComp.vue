@@ -32,7 +32,7 @@
           Number(startRow) - 1,
           Number(startRow) + 1 + Number(numRowsVisible)
         )"
-        :key="`phrasebook-phrase-${phraseIndex}`"
+        :key="`phrasebook-phrase-${phraseObj.phrase}-${phraseIndex}`"
         :id="`phrasebook-phrase-${phraseIndex}`"
         class="link-unstyled col-sm-12 col-md-6 col-lg-4 mb-3 mt-3"
         :to="`/${$l1.code}/${$l2.code}/phrasebook/${phrasebook.id}/${
