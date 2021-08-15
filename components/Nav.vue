@@ -399,12 +399,6 @@ export default {
               show: false,
             },
             {
-              name: "saved-words",
-              icon: "fas fa-star",
-              title: "Saved Words",
-              show: true,
-            },
-            {
               name: "saved-phrases",
               icon: "fas fa-bookmark",
               title: "Saved Phrases",
@@ -523,6 +517,42 @@ export default {
           ],
         },
         {
+          icon: "fa fa-book",
+          title: "Dictionary",
+          name: "dictionary",
+          show: this.hasFeature("dictionary"),
+          children: [
+            {
+              name: "dictionary",
+              icon: "fa fa-book",
+              title: "Look Up Words",
+              show: this.hasFeature("dictionary"),
+              shortcut: (e) => e.code === "KeyD" && e.metaKey && e.shiftKey,
+            },
+            {
+              name: "saved-words",
+              icon: "fas fa-star",
+              title: "Saved Words",
+              show: true,
+            },
+            {
+              name: "compare",
+              show: false,
+            },
+            {
+              name: "phrase",
+              icon: "fas fa-quote-left",
+              title: "Look Up Phrases",
+              show: true,
+              shortcut: (e) => e.code === "KeyP" && e.metaKey && e.shiftKey,
+            },
+            {
+              name: "compare-phrases",
+              show: false,
+            },
+          ],
+        },
+        {
           icon: "fas fa-photo-video",
           title: "Media",
           show: this.hasFeature("youtube"),
@@ -595,36 +625,6 @@ export default {
             },
             {
               name: "youtube-channel",
-              show: false,
-            },
-          ],
-        },
-        {
-          icon: "fa fa-book",
-          title: "Dictionary",
-          name: "dictionary",
-          show: this.hasFeature("dictionary"),
-          children: [
-            {
-              name: "dictionary",
-              icon: "fa fa-book",
-              title: "Look Up Words",
-              show: this.hasFeature("dictionary"),
-              shortcut: (e) => e.code === "KeyD" && e.metaKey && e.shiftKey,
-            },
-            {
-              name: "compare",
-              show: false,
-            },
-            {
-              name: "phrase",
-              icon: "fas fa-quote-left",
-              title: "Look Up Phrases",
-              show: true,
-              shortcut: (e) => e.code === "KeyP" && e.metaKey && e.shiftKey,
-            },
-            {
-              name: "compare-phrases",
               show: false,
             },
           ],
