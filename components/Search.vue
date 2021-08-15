@@ -2,8 +2,8 @@
   <div class="search-wrapper">
     <div class="input-group" v-cloak>
       <input
-        @compositionend.prevent.stop="() => false"
-        @keyup.enter="go"
+        @compositionend.prevent.stop="compositionEnd"
+        @keyup.enter="enterKeyUp"
         @focus="
           active = true;
           $event.target.select();
@@ -139,6 +139,7 @@ export default {
       dEntry: this.entry,
       text: this.entry ? this.entry.head : this.term,
       active: false,
+      preventEnter: false,
       suggestionsKey: 0,
     };
   },
@@ -154,9 +155,17 @@ export default {
     },
     async text() {
       if (this.type === "dictionary") {
-        let def = await (await this.$getDictionary()).lookupByDef(this.text, 10);
-        let fuzzy = await (await this.$getDictionary()).lookupFuzzy(this.text, 10);
-        this.suggestions = fuzzy.concat(def).sort((a, b) => typeof b.score !== undefined ? b.score - a.score : 0)
+        let def = await (
+          await this.$getDictionary()
+        ).lookupByDef(this.text, 10);
+        let fuzzy = await (
+          await this.$getDictionary()
+        ).lookupFuzzy(this.text, 10);
+        this.suggestions = fuzzy
+          .concat(def)
+          .sort((a, b) =>
+            typeof b.score !== undefined ? b.score - a.score : 0
+          );
       } else if (this.suggestionsFunc) {
         this.suggestions = this.suggestionsFunc(this.text);
       }
@@ -178,6 +187,17 @@ export default {
   methods: {
     focusOnInput() {
       this.$refs.lookup.focus();
+    },
+    compositionEnd() {
+      this.preventEnter = true
+    },
+    async enterKeyUp() {
+      // Wait for composition to finish
+      if (!this.preventEnter) this.go();
+      else {
+        await Helper.timeout(500);
+        this.preventEnter = false
+      }
     },
     go() {
       const url =
