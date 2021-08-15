@@ -23,11 +23,30 @@
       <div class="row">
         <div class="col-sm-12 mb-4 text-center">
           <h3 v-if="show">
-            <Annotate :phonetics="false" :buttons="true">
+            <Annotate :phonetics="false" :buttons="true" v-if="!$adminMode">
               <span>{{ show.title }}</span>
             </Annotate>
+            <span v-else contenteditable="true" @blur="saveTitle">
+              {{ show.title }}
+            </span>
+            <i
+              class="fas fa-check-circle text-success ml-2"
+              v-if="titleUpdated"
+            ></i>
           </h3>
-          <p v-if="count" style="opacity: 0.6">{{ count }} Episodes</p>
+          <p v-if="count" style="opacity: 0.6">
+            {{ count }} Episodes
+            <span v-if="$adminMode">
+              · Cover youtube_id:
+              <span contenteditable="true" @blur="saveCover">
+                {{ show.youtube_id }}
+              </span>
+              <i
+                class="fas fa-check-circle text-success ml-2"
+                v-if="coverUpdated"
+              ></i>
+            </span>
+          </p>
         </div>
         <div class="col-sm-12 mb-5">
           <div class="youtube-video-list-wrapper">
@@ -128,6 +147,8 @@ export default {
       count: undefined,
       keyword: "",
       view: "grid",
+      titleUpdated: false,
+      coverUpdated: false,
     };
   },
   async fetch() {
@@ -160,6 +181,48 @@ export default {
     },
   },
   methods: {
+    async saveTitle(e) {
+      let newTitle = e.target.innerText;
+      if (this.show.title !== newTitle) {
+        try {
+          let response = await axios.patch(
+            `${Config.wiki}items/${this.collection}s/${this.show.id}`,
+            { title: newTitle },
+            { contentType: "application/json" }
+          );
+          response = response.data;
+          if (response && response.data) {
+            this.show.title = newTitle
+            this.titleUpdated = true;
+            await Helper.timeout(3000);
+            this.titleUpdated = false;
+          }
+        } catch (err) {
+          // Direcuts bug
+        }
+      }
+    },
+    async saveCover(e) {
+      let newCover = e.target.innerText;
+      if (this.show.title !== newCover) {
+        try {
+          let response = await axios.patch(
+            `${Config.wiki}items/${this.collection}s/${this.show.id}`,
+            { youtube_id: newCover },
+            { contentType: "application/json" }
+          );
+          response = response.data;
+          if (response && response.data) {
+            this.show.youtube_id = newCover
+            this.coverUpdated = true;
+            await Helper.timeout(3000);
+            this.coverUpdated = false;
+          }
+        } catch (err) {
+          // Direcuts bug
+        }
+      }
+    },
     async visibilityChanged(isVisible) {
       if (this.videos && isVisible && !this.keyword) {
         this.moreVideos = 1 + this.moreVideos + this.perPage;
