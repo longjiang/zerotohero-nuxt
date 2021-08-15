@@ -389,6 +389,11 @@ export default {
               name: `dictionary`,
               params: { method: this.method, args: nextSavedWord.id },
             });
+          } else if (this.sW.length > 0) {
+            this.$router.push({
+              name: `dictionary`,
+              params: { method: this.method, args: this.sW[0].id },
+            });
           }
         }
       }
