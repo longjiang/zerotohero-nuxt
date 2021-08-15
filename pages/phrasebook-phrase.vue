@@ -113,6 +113,7 @@
                 :tvShow="phrasebook.tv_show"
                 :exact="phraseObj.exact || phrasebook.exact"
                 :showExternal="false"
+                :showHeader="false"
                 class="mt-4 mb-4"
               />
             </div>

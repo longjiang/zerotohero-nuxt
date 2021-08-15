@@ -4,7 +4,7 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
-          <div class="text-center" v-if="term">
+          <div class="text-center" v-if="term && showHeader">
             <Saved
               :item="phraseItem()"
               store="savedPhrases"
@@ -13,7 +13,7 @@
             />
             <Speak :text="term" />
           </div>
-          <h2 class="text-center mb-5 font-weight-normal" v-if="term">
+          <h2 class="text-center mb-5 font-weight-normal" v-if="term && showHeader">
             <div class="d-inline-block">
               <Annotate
                 :phonetics="true"
@@ -104,6 +104,9 @@ export default {
     },
     showExternal: {
       default: false,
+    },
+    showHeader: {
+      default: true,
     },
   },
   data() {
