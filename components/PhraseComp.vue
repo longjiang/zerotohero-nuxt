@@ -4,25 +4,7 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
-          <div class="text-center" v-if="term && showHeader">
-            <Saved
-              :item="phraseItem()"
-              store="savedPhrases"
-              icon="bookmark"
-              class="mr-2"
-            />
-            <Speak :text="term" />
-          </div>
-          <h2 class="text-center mb-5 font-weight-normal" v-if="term && showHeader">
-            <div class="d-inline-block">
-              <Annotate
-                :phonetics="true"
-                :buttons="true"
-              >
-                <span>{{ term }}</span>
-              </Annotate>
-            </div>
-          </h2>
+          <PhraseHeader v-if="term && showHeader" />
           <div class="text-center" v-if="term">
             <EntryExternal :term="term" v-if="showExternal" />
           </div>
@@ -166,15 +148,6 @@ export default {
     },
   },
   methods: {
-    phraseItem() {
-      if (typeof this.term !== "undefined") {
-        let phraseItem = {
-          l2: this.$l2.code,
-          phrase: this.term,
-        };
-        return phraseItem;
-      }
-    },
   },
 };
 </script>

@@ -122,7 +122,6 @@
 <script>
 import WordPhotos from "@/lib/word-photos";
 import Helper from "@/lib/helper";
-
 import { ContainerQuery } from "vue-container-query";
 
 export default {
