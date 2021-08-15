@@ -12,7 +12,6 @@
         'bg-white': !wide,
         'dictionary-wide': wide,
       }"
-      class="focus'"
       :key="`entry-${entryKey}`"
       @keydown="keydown"
     >
