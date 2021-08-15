@@ -1,5 +1,5 @@
 <template>
-  <div :class="{'d-none': !loading}">
+  <div :class="{'d-none': !sticky && !loading}">
     <client-only>
       <div v-if="loading || sticky" class="loader d-inline-block text-center">
         <svg
