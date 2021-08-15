@@ -138,11 +138,12 @@
 </template>
 
 <script>
+import Vue from "vue";
+import YouTube from '@/lib/youtube'
 import Helper from "@/lib/helper";
 import Config from "@/lib/config";
 import { Drag, Drop } from "vue-drag-drop";
 import { ContainerQuery } from "vue-container-query";
-import Vue from "vue";
 
 export default {
   components: {
