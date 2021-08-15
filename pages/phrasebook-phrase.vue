@@ -29,7 +29,12 @@
             </div>
             <div>
               <div class="text-center" v-if="phraseObj && phraseObj.phrase">
-                <Saved :item="phraseItem" store="savedPhrases" icon="bookmark" class="mr-1" />
+                <Saved
+                  :item="phraseItem"
+                  store="savedPhrases"
+                  icon="bookmark"
+                  class="mr-3"
+                />
                 <span v-if="phraseObj && phraseObj.pronunciation" class="mr-1">
                   {{ phraseObj.pronunciation }}
                 </span>
@@ -162,13 +167,13 @@ export default {
       if (this.bookId === "saved")
         route = {
           name: "saved-phrases",
-          hash: '#' + this.phraseId,
+          hash: "#" + this.phraseId,
         };
       else {
         route = {
           name: "phrasebook",
           params: { bookId: this.phrasebook.id },
-          hash: '#' + this.phraseId,
+          hash: "#" + this.phraseId,
         };
       }
       return route;
@@ -240,8 +245,38 @@ export default {
         this.getPhrasebookFromStore();
       }
       if (this.bookId === "saved" && mutation.type.startsWith("savedPhrases")) {
-        if (this.phrasebook)
-          this.phrasebook.phrases = this.savedPhrases[this.$l2.code] || [];
+        let savedPhrases = this.savedPhrases[this.$l2.code];
+        if (this.phrasebook) this.phrasebook.phrases = savedPhrases || [];
+        if (mutation.type === "savedPhrases/REMOVE_SAVED_PHRASE") {
+          if (mutation.payload.phrase === this.phrase) {
+            let nextSavedPhrase = savedPhrases[Number(this.phraseId)];
+            let phrasedId = this.phraseId;
+            if (nextSavedPhrase) {
+              let route = {
+                name: 'phrasebook-phrase',
+                params: {
+                  bookId: "saved",
+                  phrasedId,
+                  phrase: nextSavedPhrase.phrase,
+                },
+              };
+              this.$router.push(route);
+            } else if (savedPhrases.length > 0) {
+              this.$router.push({
+                name: 'phrasebook-phrase',
+                params: {
+                  bookId: "saved",
+                  phraseId: '0',
+                  phrase: savedPhrases[0].phrase,
+                },
+              });
+            } else {
+              this.$router.push({
+                name: 'home',
+              });
+            }
+          }
+        }
       }
     });
   },

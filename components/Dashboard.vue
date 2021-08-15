@@ -223,7 +223,6 @@ export default {
         savedPhrasesSorted = savedPhrasesSorted.filter(
           (s) => s.l2.code === this.l2.code
         );
-      console.log(savedPhrasesSorted)
       return savedPhrasesSorted;
     },
     itemsFiltered() {
@@ -232,7 +231,7 @@ export default {
           if (this.l2 && i.l2 !== this.l2.code) return false;
           if (i.type === "video") return typeof i.video !== "undefined";
           if (i.type === "phrasebook")
-            return typeof i.phrasebook !== "undefined";
+            return typeof i.phrasebook !== "undefined" && i.phrasebook.id !== 'saved';
         });
       }
     },
