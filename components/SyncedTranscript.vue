@@ -73,10 +73,10 @@
       </template>
       <div
         v-observe-visibility="visibilityChanged"
-        style="height: 100vh"
+        style="height: 100vh; display: flex; align-items: center; justify-content: center;"
         v-if="!single && lines.length > visibleMax"
       >
-        &nbsp;
+        <Loader :sticky="true"  />
       </div>
     </div>
   </div>

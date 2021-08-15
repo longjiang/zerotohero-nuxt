@@ -111,7 +111,7 @@
                 'btn-ghost-dark': skin === 'dark',
               }"
             >
-              <i class="far fa-tv mr-1" v-if="show.title !== 'Music'"></i>
+              <i class="fa fa-tv mr-1" v-if="show.title !== 'Music'"></i>
               <i class="fas fa-music mr-1" v-if="show.title === 'Music'"></i>
               <i class="fas fa-film mr-1" v-if="show.title === 'Movies'"></i>
               <i class="fas fa-news mr-1" v-if="show.title === 'News'"></i>
@@ -223,7 +223,7 @@
                   'btn-ghost-dark': skin === 'dark',
                 }"
               >
-                <i class="far fa-tv mr-1" v-if="show.title !== 'Music'"></i>
+                <i class="fa fa-tv mr-1" v-if="show.title !== 'Music'"></i>
                 <i class="fas fa-music mr-1" v-if="show.title === 'Music'"></i>
                 <i class="fas fa-film mr-1" v-if="show.title === 'Movies'"></i>
                 <i class="fas fa-news mr-1" v-if="show.title === 'News'"></i>
