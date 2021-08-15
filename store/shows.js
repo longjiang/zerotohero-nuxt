@@ -25,24 +25,36 @@ export const mutations = {
 
 export const actions = {
   async load(context, { l2, adminMode }) {
+    let tvShows = []
     let response = await axios.get(
       `${Config.wiki}items/tv_shows?sort=title&filter[l2][eq]=${l2.id
       }&limit=500&timestamp=${adminMode ? Date.now() : 0}`
     );
-    let tvShows =
-      response.data.data.sort((x, y) =>
-        x.title.localeCompare(y.title, l2.code)
-      ) || [];
+
+    if (response.data.data) {
+      tvShows = response.data.data.sort((x, y) => {
+        let sort = 0
+        if (x.title && y.title)
+          sort = x.title.localeCompare(y.title, l2.code)
+        return sort
+      });
+    }
+
     tvShows = Helper.uniqueByValue(tvShows, "youtube_id");
 
     response = await axios.get(
       `${Config.wiki}items/talks?sort=title&filter[l2][eq]=${l2.id
       }&limit=500&timestamp=${adminMode ? Date.now() : 0}`
     );
-    let talks =
-      response.data.data.sort((x, y) =>
-        x.title.localeCompare(y.title, l2.code)
-      ) || [];
+    let talks = []
+    if (response.data.data) {
+      talks = response.data.data.sort((x, y) => {
+        let sort = 0
+        if (x.title && y.title)
+          sort = x.title.localeCompare(y.title, l2.code)
+        return sort
+      });
+    }
     talks = Helper.uniqueByValue(talks, "youtube_id");
     context.commit('LOAD_SHOWS', { l2, tvShows, talks })
   },
