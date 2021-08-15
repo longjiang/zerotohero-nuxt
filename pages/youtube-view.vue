@@ -176,8 +176,8 @@ export default {
       return t;
     },
     isMobile() {
-      return Helper.isMobile()
-    }
+      return Helper.isMobile();
+    },
   },
   async fetch() {
     try {
@@ -211,7 +211,6 @@ export default {
         console.log(`YouTube View: Getting ${this.$l1.name} transcript`);
         video.subs_l1 = await this.getTranscriptByLang(this.$l1);
       }
-
       if (video.subs_l2 && video.subs_l2.length > 0) {
         this.firstLineTime = video.subs_l2[0].starttime;
       }
@@ -220,7 +219,11 @@ export default {
         this.addChannelID(video);
       }
       this.starttime = this.$route.query.t ? Number(this.$route.query.t) : 0;
-      this.startLineIndex = video.subs_l2.findIndex(l => Number(l.starttime) > this.starttime) || 0
+      if (video.subs_l2)
+        this.startLineIndex =
+          video.subs_l2.findIndex(
+            (l) => Number(l.starttime) > this.starttime
+          ) || 0;
       this.video = video;
       console.log(`YouTube View: this.video assigned.`);
       console.log(`YouTube View: Loading show...`);
