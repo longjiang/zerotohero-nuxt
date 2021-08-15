@@ -11,7 +11,7 @@
     }"
   >
     <div class="site-top-bar" v-if="variant === 'menu-bar'">
-      <div>
+      <div class="text-center">
         <router-link to="/" class="link-unstyled">
           <i class="fa fa-chevron-left mr-2"></i>
           All Languages
@@ -49,6 +49,13 @@
             class="zth-header"
             v-if="variant === 'menu-bar' || variant === 'side-bar'"
           >
+            <div class="site-top-bar" v-if="variant === 'side-bar'">
+              <router-link to="/" class="link-unstyled">
+                <i class="fas fa-chevron-left mr-2"></i>
+                All languages
+              </router-link>
+            </div>
+
             <router-link
               v-if="l1.code === 'en' && l2.code === 'zh'"
               to="/en/zh/"
@@ -56,7 +63,7 @@
               <img
                 src="/img/czh-logo-light.png"
                 alt="Chinese Zero to Hero"
-                style="max-width: 11rem; margin: 1.5rem 0"
+                style="max-width: 11rem; margin: 2rem 0 1rem 0"
                 class="logo"
                 data-not-lazy
               />
@@ -103,10 +110,6 @@
             </NuxtLink>
           </div>
           <div v-if="variant === 'side-bar'" class="end-nav">
-            <router-link to="/" class="link-unstyled end-nav-item">
-              <i class="fas fa-language" style="width: 1.5rem"></i>
-              All languages
-            </router-link>
             <LoginButton
               class="end-nav-item"
               v-if="
@@ -179,14 +182,19 @@
                       <span
                         class="saved-words-count"
                         v-cloak
-                        v-if="child.name === 'saved-words' && savedWordsCount > 0"
+                        v-if="
+                          child.name === 'saved-words' && savedWordsCount > 0
+                        "
                       >
                         {{ savedWordsCount }}
                       </span>
                       <span
                         class="saved-words-count"
                         v-cloak
-                        v-if="child.name === 'saved-phrases' && savedPhrasesCount > 0"
+                        v-if="
+                          child.name === 'saved-phrases' &&
+                          savedPhrasesCount > 0
+                        "
                       >
                         {{ savedPhrasesCount }}
                       </span>
@@ -238,7 +246,9 @@ export default {
       return count;
     },
     savedPhrasesCount() {
-      let count = this.$store.getters["savedPhrases/count"]({ l2: this.l2.code });
+      let count = this.$store.getters["savedPhrases/count"]({
+        l2: this.l2.code,
+      });
       // eslint-disable-next-line vue/no-parsing-error
       return count;
     },
@@ -1027,6 +1037,9 @@ export default {
   a {
     color: #ccc;
     line-height: 2.3rem;
+    &:hover {
+      color: white;
+    }
   }
 }
 
@@ -1072,7 +1085,13 @@ export default {
       .logo-constructed {
         transform: scale(0.9);
       }
+      .site-top-bar {
+        margin-left: -1rem;
+        padding-left: 1.5rem;
+        margin-top: -2.6rem;
+      }
       margin-left: -0.2rem;
+      padding-top: 2.6rem;
     }
     .zth-header-glass {
       position: fixed;
@@ -1106,18 +1125,18 @@ export default {
       width: calc(100% - 1rem);
       bottom: 1rem;
       left: 1rem;
-      .end-nav-item {
-        border-radius: 0.25rem;
-        background-color: rgba(29, 29, 29, 0.5);
-        padding: 0.5rem 1rem;
-        margin-top: 0.5rem;
-        margin-right: 1rem;
-        text-align: left;
-        display: block;
-        color: white;
-        cursor: pointer;
-        font-size: 0.85em;
-      }
+    }
+    .end-nav-item {
+      border-radius: 0.25rem;
+      background-color: rgba(29, 29, 29, 0.5);
+      padding: 0.5rem 1rem;
+      margin-top: 0.5rem;
+      margin-right: 1rem;
+      text-align: left;
+      display: block;
+      color: white;
+      cursor: pointer;
+      font-size: 0.85em;
     }
   }
   .secondary-nav {
