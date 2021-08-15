@@ -72,9 +72,8 @@
         :to="`/${$l1.code}/${$l2.code}/phrase/search/${text}`"
       >
         <span class="suggestion-not-found">
-          <b>&ldquo;{{ text }}&rdquo;</b>
-          is not in {{ $store.state.settings.dictionaryName }}, press Return to
-          look it up as a Phrase.
+          <b class="suggestion-word mr-1" data-level="outside">{{ text }}</b>
+          (Tap here or press Return to look up)
         </span>
       </router-link>
       <div

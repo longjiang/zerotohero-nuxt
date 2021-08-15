@@ -28,7 +28,7 @@
                 <div class="search-compare-wrapper">
                   <LazySearchCompare
                     placeholder="Enter a word or phrase"
-                    type="generic"
+                    type="dictionary"
                     :term="term"
                     :compareTerm="compareTerm"
                     :random="false"

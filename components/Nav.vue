@@ -380,9 +380,10 @@ export default {
           ],
         },
         {
-          icon: "fas fa-pencil-alt",
-          title: "Study Aid",
-          show: true,
+          icon: "fa fa-book",
+          title: "Dictionary",
+          name: "dictionary",
+          show: this.hasFeature("dictionary"),
           children: [
             {
               name: "phrasebooks",
@@ -399,11 +400,47 @@ export default {
               show: false,
             },
             {
+              name: "dictionary",
+              icon: "fa fa-search",
+              
+              title: "Look Up",
+              show: this.hasFeature("dictionary"),
+              shortcut: (e) => e.code === "KeyD" && e.metaKey && e.shiftKey,
+            },
+            {
+              name: "phrase",
+              icon: "fas fa-search",
+              title: "Look Up Phrases",
+              show: false,
+              shortcut: (e) => e.code === "KeyP" && e.metaKey && e.shiftKey,
+            },
+            {
               name: "saved-phrases",
               icon: "fas fa-bookmark",
               title: "Saved Phrases",
               show: true,
             },
+            {
+              name: "saved-words",
+              icon: "fas fa-star",
+              title: "Saved Words",
+              show: true,
+            },
+            {
+              name: "compare",
+              show: false,
+            },
+            {
+              name: "compare-phrases",
+              show: false,
+            },
+          ],
+        },
+        {
+          icon: "fas fa-pencil-alt",
+          title: "Study Aid",
+          show: true,
+          children: [
             {
               name: "grammar",
               icon: "fas fa-list-ul",
@@ -513,42 +550,6 @@ export default {
               title: "Tutoring Kit",
               icon: "fas fa-folder",
               show: true,
-            },
-          ],
-        },
-        {
-          icon: "fa fa-book",
-          title: "Dictionary",
-          name: "dictionary",
-          show: this.hasFeature("dictionary"),
-          children: [
-            {
-              name: "dictionary",
-              icon: "fa fa-book",
-              title: "Look Up Words",
-              show: this.hasFeature("dictionary"),
-              shortcut: (e) => e.code === "KeyD" && e.metaKey && e.shiftKey,
-            },
-            {
-              name: "saved-words",
-              icon: "fas fa-star",
-              title: "Saved Words",
-              show: true,
-            },
-            {
-              name: "compare",
-              show: false,
-            },
-            {
-              name: "phrase",
-              icon: "fas fa-quote-left",
-              title: "Look Up Phrases",
-              show: true,
-              shortcut: (e) => e.code === "KeyP" && e.metaKey && e.shiftKey,
-            },
-            {
-              name: "compare-phrases",
-              show: false,
             },
           ],
         },
