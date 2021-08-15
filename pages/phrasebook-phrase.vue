@@ -233,7 +233,7 @@ export default {
     },
   },
   async fetch() {
-    this.getPhrasebookFromStore();
+    if (this.bookId !== "saved") this.getPhrasebookFromStore();
     if (this.phrase)
       this.images = await WordPhotos.getGoogleImages({
         term: this.phrase,
@@ -241,6 +241,7 @@ export default {
       });
   },
   mounted() {
+    if (this.bookId === "saved") this.getPhrasebookFromStore();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type.startsWith("phrasebooks")) {
         this.getPhrasebookFromStore();
@@ -254,7 +255,7 @@ export default {
             let phrasedId = this.phraseId;
             if (nextSavedPhrase) {
               let route = {
-                name: 'phrasebook-phrase',
+                name: "phrasebook-phrase",
                 params: {
                   bookId: "saved",
                   phrasedId,
@@ -264,16 +265,16 @@ export default {
               this.$router.push(route);
             } else if (savedPhrases.length > 0) {
               this.$router.push({
-                name: 'phrasebook-phrase',
+                name: "phrasebook-phrase",
                 params: {
                   bookId: "saved",
-                  phraseId: '0',
+                  phraseId: "0",
                   phrase: savedPhrases[0].phrase,
                 },
               });
             } else {
               this.$router.push({
-                name: 'home',
+                name: "home",
               });
             }
           }
@@ -330,14 +331,23 @@ export default {
         if (p.id === Number(this.phraseId + 1)) return true;
         if (index === Number(this.phraseId)) return true;
       });
-      phrase.phrase = this.stripPunctuations(phrase.phrase);
-      this.phraseObj = phrase;
-      if (
-        process.server &&
-        Helper.dictionaryTooLargeAndWillCauseServerCrash(this.$l2["iso639-3"])
-      )
-        return;
-      else await this.matchPhraseToDictionaryEntries();
+      if (typeof phrase !== "undefined") {
+        phrase.phrase = this.stripPunctuations(phrase.phrase);
+        this.phraseObj = phrase;
+        if (
+          process.server &&
+          Helper.dictionaryTooLargeAndWillCauseServerCrash(this.$l2["iso639-3"])
+        )
+          return;
+        else await this.matchPhraseToDictionaryEntries();
+      } else {
+        this.$router.push({
+          name: "phrase",
+          params: {
+            term: this.phrase,
+          },
+        });
+      }
     },
     async matchPhraseToDictionaryEntries() {
       this.words = await (

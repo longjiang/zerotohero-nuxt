@@ -8,17 +8,19 @@
   <div class="main">
     <div class="container pt-5 pb-5">
       <SocialHead :title="title" :description="description" :image="image" />
-      <PhrasebookComp
-        v-if="phrasebook"
-        :phrasebook="phrasebook"
-        :initId="initId"
-      />
-      <div class="text-center mt-4" v-if="phrasebook.phrases.length > 0">
-        <b-button variant="danger" @click="removeAll">
-          <i class="fa fa-trash mr-1"></i>
-          Remove All Saved Phrases
-        </b-button>
-      </div>
+      <client-only>
+        <PhrasebookComp
+          v-if="phrasebook"
+          :phrasebook="phrasebook"
+          :initId="initId"
+        />
+        <div class="text-center mt-4" v-if="phrasebook.phrases.length > 0">
+          <b-button variant="danger" @click="removeAll">
+            <i class="fa fa-trash mr-1"></i>
+            Remove All Saved Phrases
+          </b-button>
+        </div>
+      </client-only>
     </div>
   </div>
 </template>
@@ -75,7 +77,7 @@ export default {
       }
     },
   },
-  async fetch() {
+  async mounted() {
     let phrasebook = {
       title: `Saved ${this.$l2.name} Phrases`,
       phrases: this.savedPhrases[this.$l2.code] || [],
@@ -94,8 +96,6 @@ export default {
       });
       this.goToLastSeenPhrase();
     }
-  },
-  mounted() {
     if (this.phrasebook) {
       this.goToLastSeenPhrase();
     }
