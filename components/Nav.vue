@@ -133,14 +133,14 @@
             <span
               class="saved-words-count"
               v-cloak
-              v-if="child.name === 'saved-words'"
+              v-if="child.name === 'saved-words' && savedWordsCount > 0"
             >
               {{ savedWordsCount }}
             </span>
             <span
               class="saved-words-count"
               v-cloak
-              v-if="child.name === 'saved-phrases'"
+              v-if="child.name === 'saved-phrases' && savedPhrasesCount > 0"
             >
               {{ savedPhrasesCount }}
             </span>
