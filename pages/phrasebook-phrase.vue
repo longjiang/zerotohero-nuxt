@@ -33,7 +33,7 @@
                   :item="phraseItem"
                   store="savedPhrases"
                   icon="bookmark"
-                  class="mr-3"
+                  class="mr-2"
                 />
                 <span v-if="phraseObj && phraseObj.pronunciation" class="mr-1">
                   {{ phraseObj.pronunciation }}
