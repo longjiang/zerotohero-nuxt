@@ -402,7 +402,7 @@ export default {
             {
               name: "dictionary",
               icon: "fa fa-search",
-              
+
               title: "Look Up",
               show: this.hasFeature("dictionary"),
               shortcut: (e) => e.code === "KeyD" && e.metaKey && e.shiftKey,
@@ -432,6 +432,83 @@ export default {
             },
             {
               name: "compare-phrases",
+              show: false,
+            },
+          ],
+        },
+        {
+          icon: "fas fa-photo-video",
+          title: "Media",
+          show: this.hasFeature("youtube"),
+          children: [
+            {
+              name: "tv-shows",
+              icon: "fa fa-tv",
+              title: "TV Shows",
+              show: this.hasTVShows,
+            },
+            {
+              name: "show",
+              show: false,
+            },
+            {
+              path: this.musicPath,
+              icon: "fa fa-music",
+              title: `Music`,
+              show: this.musicPath,
+            },
+            {
+              path: this.moviesPath,
+              icon: "fa fa-film",
+              title: `Movies`,
+              show: this.moviesPath,
+            },
+            {
+              path: this.newsPath,
+              icon: "fa fa-newspaper",
+              title: `News`,
+              show: this.newsPath,
+            },
+            {
+              name: "talks",
+              icon: "fas fa-graduation-cap",
+              title: `Talks`,
+              show: this.hasTalks,
+            },
+            {
+              name: "youtube-browse",
+              title: `Other Videos`,
+              icon: "fa fa-play",
+              show: true,
+            },
+            {
+              name: "live-tv",
+              icon: "fa fa-broadcast-tower",
+              title: "Live TV",
+              show: this.hasLiveTV,
+            },
+            {
+              name: "lesson-videos",
+              title: "Lesson Expansion",
+              icon: "fa fa-chalkboard-teacher",
+              show: this.l2.code === "zh",
+            },
+            {
+              name: "youtube-search",
+              title: `Search YouTube`,
+              icon: "fas fa-search",
+              show: true,
+            },
+            {
+              name: "youtube-view",
+              show: false,
+            },
+            {
+              name: "youtube-playlist",
+              show: false,
+            },
+            {
+              name: "youtube-channel",
               show: false,
             },
           ],
@@ -550,83 +627,6 @@ export default {
               title: "Tutoring Kit",
               icon: "fas fa-folder",
               show: true,
-            },
-          ],
-        },
-        {
-          icon: "fas fa-photo-video",
-          title: "Media",
-          show: this.hasFeature("youtube"),
-          children: [
-            {
-              name: "tv-shows",
-              icon: "fa fa-tv",
-              title: "TV Shows",
-              show: this.hasTVShows,
-            },
-            {
-              name: "show",
-              show: false,
-            },
-            {
-              path: this.musicPath,
-              icon: "fa fa-music",
-              title: `Music`,
-              show: this.musicPath,
-            },
-            {
-              path: this.moviesPath,
-              icon: "fa fa-film",
-              title: `Movies`,
-              show: this.moviesPath,
-            },
-            {
-              path: this.newsPath,
-              icon: "fa fa-newspaper",
-              title: `News`,
-              show: this.newsPath,
-            },
-            {
-              name: "talks",
-              icon: "fas fa-graduation-cap",
-              title: `Talks`,
-              show: this.hasTalks,
-            },
-            {
-              name: "youtube-browse",
-              title: `Other Videos`,
-              icon: "fa fa-play",
-              show: true,
-            },
-            {
-              name: "live-tv",
-              icon: "fa fa-broadcast-tower",
-              title: "Live TV",
-              show: this.hasLiveTV,
-            },
-            {
-              name: "lesson-videos",
-              title: "Lesson Expansion",
-              icon: "fa fa-chalkboard-teacher",
-              show: this.l2.code === "zh",
-            },
-            {
-              name: "youtube-search",
-              title: `Search YouTube`,
-              icon: "fas fa-search",
-              show: true,
-            },
-            {
-              name: "youtube-view",
-              show: false,
-            },
-            {
-              name: "youtube-playlist",
-              show: false,
-            },
-            {
-              name: "youtube-channel",
-              show: false,
             },
           ],
         },
