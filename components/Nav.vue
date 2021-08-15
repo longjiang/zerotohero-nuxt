@@ -276,67 +276,6 @@ export default {
     menu() {
       return [
         {
-          icon: "fas fa-wrench",
-          title: "Admin",
-          show: this.$adminMode,
-          children: [
-            {
-              icon: "fas fa-wrench",
-              title: "Test",
-              name: "test",
-              show: this.$adminMode,
-            },
-            {
-              icon: "fas fa-wrench",
-              title: "Add Phrasebook",
-              name: "phrasebook-creator",
-              show: this.$adminMode,
-            },
-            {
-              icon: "fas fa-wrench",
-              title: "Phrase Survey",
-              name: "phrase-survey",
-              show: this.$adminMode,
-            },
-            {
-              icon: "fas fa-wrench",
-              title: "Break Lines",
-              name: "break-lines",
-              show: this.$adminMode,
-            },
-            {
-              icon: "fas fa-wrench",
-              title: "Wiktionary CSV",
-              name: "wiktionary-csv",
-              show: this.$adminMode,
-            },
-            {
-              icon: "fas fa-wrench",
-              title: "DB Audit",
-              name: "db-audit",
-              show: this.$adminMode,
-            },
-            {
-              icon: "fas fa-wrench",
-              title: "DB Upgrade",
-              name: "db-upgrade",
-              show: this.$adminMode,
-            },
-            {
-              icon: "fas fa-wrench",
-              title: "Recover Subs",
-              name: "recover-subs",
-              show: this.$adminMode,
-            },
-            {
-              icon: "fas fa-wrench",
-              title: "Assign Lesson Videos",
-              name: "assign-lesson-videos",
-              show: this.$adminMode,
-            },
-          ],
-        },
-        {
           icon: "fas fa-graduation-cap",
           title: "Courses",
           show: this.hasFeature("courses"),
@@ -731,6 +670,68 @@ export default {
           title: "Settings",
           shortcut: (e) => e.code === "KeyS" && e.metaKey && e.shiftKey,
           show: true,
+        },
+
+        {
+          icon: "fas fa-wrench",
+          title: "Admin",
+          show: this.$adminMode,
+          children: [
+            {
+              icon: "fas fa-wrench",
+              title: "Test",
+              name: "test",
+              show: this.$adminMode,
+            },
+            {
+              icon: "fas fa-wrench",
+              title: "Add Phrasebook",
+              name: "phrasebook-creator",
+              show: this.$adminMode,
+            },
+            {
+              icon: "fas fa-wrench",
+              title: "Phrase Survey",
+              name: "phrase-survey",
+              show: this.$adminMode,
+            },
+            {
+              icon: "fas fa-wrench",
+              title: "Break Lines",
+              name: "break-lines",
+              show: this.$adminMode,
+            },
+            {
+              icon: "fas fa-wrench",
+              title: "Wiktionary CSV",
+              name: "wiktionary-csv",
+              show: this.$adminMode,
+            },
+            {
+              icon: "fas fa-wrench",
+              title: "DB Audit",
+              name: "db-audit",
+              show: this.$adminMode,
+            },
+            {
+              icon: "fas fa-wrench",
+              title: "DB Upgrade",
+              name: "db-upgrade",
+              show: this.$adminMode,
+            },
+            {
+              icon: "fas fa-wrench",
+              title: "Recover Subs",
+              name: "recover-subs",
+              show: this.$adminMode,
+            },
+            {
+              icon: "fas fa-wrench",
+              title: "Assign Lesson Videos",
+              name: "assign-lesson-videos",
+              show: this.$adminMode,
+            },
+          ],
         },
       ];
     },
