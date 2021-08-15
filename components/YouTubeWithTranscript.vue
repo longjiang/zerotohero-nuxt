@@ -111,8 +111,16 @@
                 'btn-ghost-dark': skin === 'dark',
               }"
             >
-              <i class="far fa-clone"></i>
-              All Episodes
+              <i class="far fa-tv mr-1" v-if="show.title !== 'Music'"></i>
+              <i class="fas fa-music mr-1" v-if="show.title === 'Music'"></i>
+              <i class="fas fa-film mr-1" v-if="show.title === 'Movies'"></i>
+              <i class="fas fa-news mr-1" v-if="show.title === 'News'"></i>
+              All
+              {{
+                ["Music", "News", "Movies"].includes(show.title)
+                  ? show.title
+                  : "Episodes"
+              }}
             </router-link>
             <router-link
               v-if="nextEpisode"
@@ -205,8 +213,16 @@
                   'btn-ghost-dark': skin === 'dark',
                 }"
               >
-                <i class="far fa-clone"></i>
-                All Episodes
+                <i class="far fa-tv mr-1" v-if="show.title !== 'Music'"></i>
+                <i class="fas fa-music mr-1" v-if="show.title === 'Music'"></i>
+                <i class="fas fa-film mr-1" v-if="show.title === 'Movies'"></i>
+                <i class="fas fa-news mr-1" v-if="show.title === 'News'"></i>
+                All
+                {{
+                  ["Music", "News", "Movies"].includes(show.title)
+                    ? show.title
+                    : "Episodes"
+                }}
               </router-link>
               <router-link
                 v-if="nextEpisode"
@@ -408,7 +424,9 @@ export default {
       let starttime =
         this.video.subs_l2 &&
         this.video.subs_l2.length > 0 &&
-        this.startLineIndex && this.video.subs_l2 && this.video.subs_l2[this.startLineIndex]
+        this.startLineIndex &&
+        this.video.subs_l2 &&
+        this.video.subs_l2[this.startLineIndex]
           ? this.video.subs_l2[this.startLineIndex].starttime
           : this.starttime;
       return starttime;
