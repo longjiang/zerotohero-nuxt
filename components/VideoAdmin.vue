@@ -38,7 +38,7 @@
         />
       </router-link>
       <router-link
-        class="btn btn-small bg-success text-white"
+        class="btn btn-small bg-secondary text-white"
         v-if="video.talk"
         :to="{
           name: 'show',
@@ -49,7 +49,7 @@
         {{ video.talk.title }}
         <i
           :class="{ 'fas fa-times-circle ml-1': true, 'd-none': !$adminMode }"
-          @click="unassignShow('talk')"
+          @click.stop.prevent="unassignShow('talk')"
         />
       </router-link>
     </div>
