@@ -66,13 +66,11 @@
             </div>
           </h6>
           <hr />
-          <h3 class="mt-3 mb-3 text-center" v-if="lesson">{{ lesson.name }}</h3>
+          <h3 class="text-center" style="margin-top: 2rem; margin-bottom: 0; text-transform: uppercase;" v-if="lesson">{{ lesson.name }}</h3>
         </div>
         <div class="col-sm-12 col-xl-6" v-if="lesson">
-          <div
-            class="jumbotron shadow rounded mt-5 mb-5 pt-5 pb-3 bg-white topics"
-          >
-            <h6 class="mb-4">Topic focus:</h6>
+          <div class="lesson-section">
+            <h4>Topic Focus</h4>
             <div v-html="lesson.subjects"></div>
             <h6 class="mt-5 mb-4">Vocabulary focus:</h6>
             <div v-html="lesson.vocabulary"></div>
@@ -275,7 +273,7 @@ export default {
   margin-bottom: 1rem;
 }
 .lesson-section {
-  margin-top: 3rem;
+  margin-top: 2.5rem;
   h4 {
     border-bottom: 1px solid #ddd;
     padding-bottom: 1rem;
