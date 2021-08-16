@@ -122,7 +122,6 @@
             'col-6': params.sm && view === 'grid' && !singleColumn,
             'col-4': params.md && view === 'grid' && !singleColumn,
             'col-3': params.lg && view === 'grid' && !singleColumn,
-            'd-none': !$adminMode && video.unavailable
           }"
           :style="`padding-bottom: ${view === 'list' ? '1rem' : '2rem'}`"
           :key="`youtube-video-wrapper-${video.youtube_id}-${videoIndex}`"
@@ -262,6 +261,7 @@ export default {
           ((video.tv_show && video.tv_show.id) || (video.talk && video.talk.id))
         )
           return false;
+        if (!this.$adminMode && video.unavailable) return false;
         return true;
       });
     },
@@ -364,9 +364,7 @@ export default {
       }
     },
     async removeAllUnavailable() {
-      this.unavailableYouTubeIds = Helper.unique(
-        this.unavailableYouTubeIds
-      );
+      this.unavailableYouTubeIds = Helper.unique(this.unavailableYouTubeIds);
       for (let videoIndex in this.$refs.youTubeVideoCard) {
         let videoCard = this.$refs.youTubeVideoCard[videoIndex];
         if (this.unavailableYouTubeIds.includes(videoCard.video.youtube_id)) {
