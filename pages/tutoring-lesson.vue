@@ -103,7 +103,7 @@
                 class="image-wall-image"
                 v-for="(image, index) in images"
                 :key="`web-images-${lesson.name}-${index}`"
-                :src="`${Config.imageProxy}?${image.src}`"
+                :src="`${imageProxy}?${image.src}`"
                 @click="goto(image.url)"
               />
             </div>
@@ -212,10 +212,9 @@ export default {
   props: ["id"],
   data() {
     return {
-      Config,
-      Helper,
       lesson: undefined,
       images: [],
+      imageProxy: Config.imageProxy
     };
   },
   async fetch() {
