@@ -66,30 +66,48 @@
             </div>
           </h6>
           <hr />
-          <div v-if="lesson">
-            <h1 class="mt-5 mb-5 text-center">{{ lesson.name }}</h1>
+          <h3 class="mt-3 mb-3 text-center" v-if="lesson">{{ lesson.name }}</h3>
+        </div>
+        <div class="col-sm-12 col-xl-6" v-if="lesson">
+          <div
+            class="jumbotron shadow rounded mt-5 mb-5 pt-5 pb-3 bg-white topics"
+          >
+            <h6 class="mb-4">Topic focus:</h6>
+            <div v-html="lesson.subjects"></div>
+            <h6 class="mt-5 mb-4">Vocabulary focus:</h6>
+            <div v-html="lesson.vocabulary"></div>
+          </div>
+          <div class="lesson-section">
+            <h4>Free Talk</h4>
+            <div v-html="lesson.free_talk"></div>
+            <p>
+              • Describe one of the pictures to your tutor, and ask him or her
+              to guess which picture you are talking about.
+            </p>
             <div
-              class="
-                jumbotron
-                shadow
-                rounded
-                mt-5
-                mb-5
-                pt-5
-                pb-3
-                bg-white
-                topics
-              "
+              class="image-wall"
+              :key="`web-images-${lesson.name}`"
+              v-cloak
+              v-if="images && images.length > 0"
             >
-              <h6 class="mb-4">Topic focus:</h6>
-              <div v-html="lesson.subjects"></div>
-              <h6 class="mt-5 mb-4">Vocabulary focus:</h6>
-              <div v-html="lesson.vocabulary"></div>
+              <img
+                alt
+                class="image-wall-image"
+                v-for="(image, index) in images"
+                :key="`web-images-${lesson.name}-${index}`"
+                :src="`${Config.imageProxy}?${image.src}`"
+                @click="goto(image.url)"
+              />
             </div>
+          </div>
+        </div>
+        <div class="col-sm-12 col-xl-6">
+          <div v-if="lesson">
             <div class="lesson-section" v-if="lesson.youtubeVideos">
-              <h4>Pre-Study</h4>
+              <h4>Watch and Learn</h4>
               <p>Watch any one of the videos and study the subtitles:</p>
               <YouTubeVideoList
+                v-if="lesson.youtubeVideos.length > 0"
                 :videos="lesson.youtubeVideos"
                 :showProgress="true"
                 :showPlayButton="true"
@@ -105,7 +123,7 @@
               />
             </div>
             <div class="lesson-section">
-              <h4>Activity 1: Read Together</h4>
+              <h4>Read Together</h4>
               <p>
                 Read any one of the following articles with the help of your
                 tutor. Use the
@@ -131,29 +149,6 @@
               </div>
             </div>
             <div class="lesson-section">
-              <h4>Activity 2: Free Talk</h4>
-              <div v-html="lesson.free_talk"></div>
-              <p>
-                • Describe one of the pictures to your tutor, and ask him or her
-                to guess which picture you are talking about.
-              </p>
-              <div
-                class="image-wall"
-                :key="`web-images-${lesson.name}`"
-                v-cloak
-                v-if="images && images.length > 0"
-              >
-                <img
-                  alt
-                  class="image-wall-image"
-                  v-for="(image, index) in images"
-                  :key="`web-images-${lesson.name}-${index}`"
-                  :src="`${Config.imageProxy}?${image.src}`"
-                  @click="goto(image.url)"
-                />
-              </div>
-            </div>
-            <div class="lesson-section">
               <h4>Homework: Writing</h4>
               <p>
                 Complete the following task as homework, and go over with your
@@ -162,6 +157,8 @@
               <div v-html="lesson.writing"></div>
             </div>
           </div>
+        </div>
+        <div class="col-sm-12">
           <hr class="mt-5 mb-5" />
           <p>
             <b>About this kit:</b>
