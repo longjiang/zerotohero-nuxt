@@ -96,8 +96,8 @@
             </span>
             <div
               v-if="
-                video.checkingSubs === false &&
-                video.hasSubs === false &&
+                !video.checkingSubs &&
+                !video.hasSubs &&
                 !video.id
               "
               class="btn btn-small mt-2 ml-0"

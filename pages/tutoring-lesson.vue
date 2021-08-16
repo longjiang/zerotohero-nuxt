@@ -66,7 +66,17 @@
             </div>
           </h6>
           <hr />
-          <h3 class="text-center" style="margin-top: 2rem; margin-bottom: 0; text-transform: uppercase;" v-if="lesson">{{ lesson.name }}</h3>
+          <h3
+            class="text-center"
+            style="
+              margin-top: 2rem;
+              margin-bottom: 0;
+              text-transform: uppercase;
+            "
+            v-if="lesson"
+          >
+            {{ lesson.name }}
+          </h3>
         </div>
         <div class="col-sm-12 col-xl-6" v-if="lesson">
           <div class="lesson-section">
@@ -118,6 +128,7 @@
                 :showPaginator="false"
                 :showProgress="true"
                 :showPlayButton="true"
+                :showBadges="true"
               />
             </div>
             <div class="lesson-section">
