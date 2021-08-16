@@ -1,6 +1,5 @@
 <template>
   <container-query :query="query" v-model="params">
-    
     <div class="youtube-video-list">
       <client-only>
         <div
@@ -26,12 +25,9 @@
               <i class="fas fa-question mr-2"></i>
               Uncheck Saved
             </b-button>
-            <b-button size="sm" @click="surveyChannels">
-              Survey Channels
-            </b-button>
             <b-button
               class="mt-1 mb-1"
-              variant="gray"
+              variant="secondary"
               v-if="checkSavedData"
               size="sm"
               @click="addAll()"
@@ -39,6 +35,25 @@
               <i class="fas fa-plus mr-2"></i>
               Add All
             </b-button>
+            <b-button size="sm" @click="surveyChannels">
+              Survey Channels
+            </b-button>
+            <b-button class="mt-1 mb-1" @click="removeAll()" size="sm">
+              <i class="fas fa-trash mr-2"></i>
+              Remove All
+            </b-button>
+            <b-button
+              class="mt-1 mb-1"
+              @click="removeAllUnavailable()"
+              size="sm"
+              v-if="isLocalHost()"
+            >
+              <i class="fas fa-times mr-2"></i>
+              Remove Unavailable
+            </b-button>
+            <br />
+          </div>
+          <div>
             <AssignShow
               size="sm"
               @assignShow="assignShowToAll"
@@ -51,20 +66,6 @@
               :defaultSelection="keyword"
               type="talks"
             />
-
-            <b-button class="mt-1 mb-1" @click="removeAll()" size="sm">
-              <i class="fas fa-trash mr-2"></i>
-              Remove All
-            </b-button>
-            <b-button
-              class="mt-1 mb-1"
-              @click="removeAllUnavailable()"
-              size="sm"
-              v-if="isLocalHost"
-            >
-              <i class="fas fa-times mr-2"></i>
-              Remove Unavailable
-            </b-button>
             <drop
               @drop="handleDrop"
               :class="{
@@ -263,16 +264,16 @@ export default {
           ((video.tv_show && video.tv_show.id) || (video.talk && video.talk.id))
         )
           return false;
-        
+
         return true;
       });
       if (this.isLocalHost()) {
-        filteredVideos = filteredVideos.filter(video => {
+        filteredVideos = filteredVideos.filter((video) => {
           if (!this.$adminMode && video.unavailable) return false;
-          return true
-        })
+          return true;
+        });
       }
-      return filteredVideos
+      return filteredVideos;
     },
   },
   watch: {
