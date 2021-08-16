@@ -415,11 +415,16 @@ export default {
     if (!this.$store.state.history.historyLoaded) {
       this.$store.commit("history/LOAD_HISTORY");
     }
-    try {
-      await axios.get(this.thumbnail);
-    } catch (e) {
-      Vue.set(this.video, 'unavailable', true)
-      this.$emit('unavailable', this.video.youtube_id)
+    if (
+      typeof window !== "undefined" &&
+      window.location.href.startsWith("http://localhost")
+    ) {
+      try {
+        await axios.get(this.thumbnail);
+      } catch (e) {
+        Vue.set(this.video, "unavailable", true);
+        this.$emit("unavailable", this.video.youtube_id);
+      }
     }
   },
   watch: {

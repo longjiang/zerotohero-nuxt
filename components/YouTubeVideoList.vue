@@ -1,5 +1,6 @@
 <template>
   <container-query :query="query" v-model="params">
+    
     <div class="youtube-video-list">
       <client-only>
         <div
@@ -59,6 +60,7 @@
               class="mt-1 mb-1"
               @click="removeAllUnavailable()"
               size="sm"
+              v-if="isLocalHost"
             >
               <i class="fas fa-times mr-2"></i>
               Remove Unavailable
@@ -253,7 +255,7 @@ export default {
         return this.$store.state.settings.adminMode;
     },
     filteredVideos() {
-      return this.videos.filter((video) => {
+      let filteredVideos = this.videos.filter((video) => {
         if (this.hideVideosWithoutSubs && !video.hasSubs) return false;
         if (
           this.hideVideosInShows &&
@@ -261,9 +263,16 @@ export default {
           ((video.tv_show && video.tv_show.id) || (video.talk && video.talk.id))
         )
           return false;
-        // if (!this.$adminMode && video.unavailable) return false;
+        
         return true;
       });
+      if (this.isLocalHost()) {
+        filteredVideos = filteredVideos.filter(video => {
+          if (!this.$adminMode && video.unavailable) return false;
+          return true
+        })
+      }
+      return filteredVideos
     },
   },
   watch: {
@@ -280,6 +289,12 @@ export default {
     },
   },
   methods: {
+    isLocalHost() {
+      return (
+        typeof window !== "undefined" &&
+        window.location.href.startsWith("http://localhost")
+      );
+    },
     onVideoUnavailable(youtube_id) {
       this.unavailableYouTubeIds.push(youtube_id);
     },
