@@ -43,6 +43,13 @@
           ref="thumbnail"
           @load="thumbnailLoaded"
           @error="thumbnailError"
+          v-if="!video.unavailable"
+        />
+        <img
+          src="/img/placeholder-unavailable.jpg"
+          class="youtube-thumbnail aspect"
+          ref="thumbnail"
+          v-if="video.unavailable"
         />
       </router-link>
       <div class="media-body">
@@ -342,7 +349,6 @@ export default {
       assignShow: false,
       subsFile: false,
       showSaved: true,
-      unavailable: false
     };
   },
   computed: {
@@ -419,7 +425,7 @@ export default {
     try {
       await axios.get(this.thumbnail);
     } catch (e) {
-      this.unavailable = true
+      Vue.set(this.video, 'unavailable', true)
       this.$emit('unavailable', this.video.youtube_id)
     }
   },

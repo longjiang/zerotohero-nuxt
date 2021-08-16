@@ -91,7 +91,7 @@ export default {
     'nuxt-i18n',
     '@nuxtjs/google-fonts',
     ['nuxt-lazy-load', {
-      defaultImage: '/img/placeholder.jpg'
+      defaultImage: '/img/placeholder-faded.png'
     }]
   ],
   bootstrapVue: {

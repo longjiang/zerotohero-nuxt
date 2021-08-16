@@ -115,15 +115,16 @@
       </client-only>
       <div class="youtube-videos row">
         <div
+          v-for="(video, videoIndex) in filteredVideos"
           :class="{
             'col-sm-12': view === 'list' || singleColumn,
             'col-12': params.xs && view === 'grid' && !singleColumn,
             'col-6': params.sm && view === 'grid' && !singleColumn,
             'col-4': params.md && view === 'grid' && !singleColumn,
             'col-3': params.lg && view === 'grid' && !singleColumn,
+            'd-none': !$adminMode && video.unavailable
           }"
           :style="`padding-bottom: ${view === 'list' ? '1rem' : '2rem'}`"
-          v-for="(video, videoIndex) in filteredVideos"
           :key="`youtube-video-wrapper-${video.youtube_id}-${videoIndex}`"
         >
           <YouTubeVideoCard
