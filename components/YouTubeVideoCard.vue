@@ -38,11 +38,11 @@
           ></b-progress>
         </client-only>
         <img
-          :src="
-            video.thumbnail ||
-            `//img.youtube.com/vi/${video.youtube_id}/hqdefault.jpg`
-          "
+          :src="thumbnail"
           class="youtube-thumbnail aspect"
+          ref="thumbnail"
+          @load="thumbnailLoaded"
+          @error="thumbnailError"
         />
       </router-link>
       <div class="media-body">
@@ -342,6 +342,7 @@ export default {
       assignShow: false,
       subsFile: false,
       showSaved: true,
+      unavailable: false
     };
   },
   computed: {
@@ -397,6 +398,12 @@ export default {
         return this.historyItem.video.progress;
       }
     },
+    thumbnail() {
+      return (
+        this.video.thumbnail ||
+        `//img.youtube.com/vi/${this.video.youtube_id}/hqdefault.jpg`
+      );
+    },
   },
   async mounted() {
     if (this.checkSubs) {
@@ -408,6 +415,12 @@ export default {
     }
     if (!this.$store.state.history.historyLoaded) {
       this.$store.commit("history/LOAD_HISTORY");
+    }
+    try {
+      await axios.get(this.thumbnail);
+    } catch (e) {
+      this.unavailable = true
+      this.$emit('unavailable', this.video.youtube_id)
     }
   },
   watch: {
@@ -425,6 +438,10 @@ export default {
     },
   },
   methods: {
+    thumbnailError(e) {
+      console.log("❌ ERROR", this.video.title);
+    },
+    async thumbnailLoaded(e) {},
     formatDate(date) {
       return DateHelper.formatDate(date);
     },

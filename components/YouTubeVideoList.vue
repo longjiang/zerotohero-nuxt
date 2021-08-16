@@ -7,10 +7,6 @@
           class="mb-4 youtube-video-list-admin-bar rounded p-4 w-100"
         >
           <div>
-            <b-button class="mt-1 mb-1" @click="removeAll()" size="sm">
-              <i class="fas fa-trash mr-2"></i>
-              Remove All
-            </b-button>
             <b-button
               class="mt-1 mb-1"
               v-if="!checkSavedData"
@@ -54,6 +50,19 @@
               :defaultSelection="keyword"
               type="talks"
             />
+
+            <b-button class="mt-1 mb-1" @click="removeAll()" size="sm">
+              <i class="fas fa-trash mr-2"></i>
+              Remove All
+            </b-button>
+            <b-button
+              class="mt-1 mb-1"
+              @click="removeAllUnavailable()"
+              size="sm"
+            >
+              <i class="fas fa-times mr-2"></i>
+              Remove Unavailable
+            </b-button>
             <drop
               @drop="handleDrop"
               :class="{
@@ -120,6 +129,7 @@
           <YouTubeVideoCard
             ref="youTubeVideoCard"
             @newShow="newShow"
+            @unavailable="onVideoUnavailable"
             :video="video"
             :checkSubs="checkSubsData"
             :showSubsEditing="showSubsEditing"
@@ -139,7 +149,7 @@
 
 <script>
 import Vue from "vue";
-import YouTube from '@/lib/youtube'
+import YouTube from "@/lib/youtube";
 import Helper from "@/lib/helper";
 import Config from "@/lib/config";
 import { Drag, Drop } from "vue-drag-drop";
@@ -205,6 +215,7 @@ export default {
       hideVideosInShows: false,
       uniqueVideosByChannel: undefined,
       params: {},
+      unavailableYouTubeIds: [],
       query: {
         xs: {
           minWidth: 0,
@@ -268,6 +279,9 @@ export default {
     },
   },
   methods: {
+    onVideoUnavailable(youtube_id) {
+      this.unavailableYouTubeIds.push(youtube_id);
+    },
     surveyChannels() {
       let uniqueVideosByChannel = Helper.uniqueByValue(
         this.videos,
@@ -346,6 +360,17 @@ export default {
     async removeAll() {
       for (let videoIndex in this.$refs.youTubeVideoCard) {
         await this.$refs.youTubeVideoCard[videoIndex].remove();
+      }
+    },
+    async removeAllUnavailable() {
+      this.unavailableYouTubeIds = Helper.unique(
+        this.unavailableYouTubeIds
+      );
+      for (let videoIndex in this.$refs.youTubeVideoCard) {
+        let videoCard = this.$refs.youTubeVideoCard[videoIndex];
+        if (this.unavailableYouTubeIds.includes(videoCard.video.youtube_id)) {
+          await videoCard.remove();
+        }
       }
     },
     handleDrop(data, event) {
