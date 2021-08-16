@@ -4,7 +4,7 @@
       <client-only>
         <div
           v-if="$adminMode"
-          class="mb-4 youtube-video-list-admin-bar rounded p-4 w-100"
+          class="mb-4 youtube-video-list-admin-bar rounded p-3 w-100"
         >
           <div>
             <b-button
@@ -42,15 +42,6 @@
               <i class="fas fa-trash mr-2"></i>
               Remove All
             </b-button>
-            <b-button
-              class="mt-1 mb-1"
-              @click="removeAllUnavailable()"
-              size="sm"
-              v-if="isLocalHost()"
-            >
-              <i class="fas fa-times mr-2"></i>
-              Remove Unavailable
-            </b-button>
             <br />
           </div>
           <div>
@@ -76,29 +67,37 @@
               :key="`drop-${_uid}`"
               @dragover="over = true"
               @dragleave="over = false"
+              style="font-size: 0.9em"
             >
               Drop SRT files here to bulk add subs ...
             </drop>
           </div>
-          <div class="mt-1">
+          <div class="mt-1" style="font-size: 0.9em;">
             <b-form-checkbox
-              class="mt-2 d-inline-block"
+              class="mr-1 d-inline-block"
               v-model="hideVideosWithoutSubs"
             >
               Hide Videos without Subs
             </b-form-checkbox>
             <b-form-checkbox
-              class="mt-2 d-inline-block"
+              class="mr-1 d-inline-block"
               v-model="hideVideosInShows"
             >
               Hide Videos in Shows
             </b-form-checkbox>
             <b-form-checkbox
-              class="mt-2 d-inline-block"
+              class="mr-1 d-inline-block"
               v-model="showSubsEditing"
             >
               Show Subs Editing
             </b-form-checkbox>
+            <a
+              class="link-unstyled"
+              @click="removeAllUnavailable()"
+              v-if="isLocalHost()"
+            >
+              Remove unavailable videos
+            </a>
           </div>
           <div v-if="uniqueVideosByChannel">
             <h6 class="mt-2">Unique videos by channel:</h6>
