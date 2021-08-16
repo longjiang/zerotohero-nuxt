@@ -43,13 +43,6 @@
           ref="thumbnail"
           @load="thumbnailLoaded"
           @error="thumbnailError"
-          v-if="!video.unavailable"
-        />
-        <img
-          src="/img/placeholder-unavailable.jpg"
-          class="youtube-thumbnail aspect"
-          ref="thumbnail"
-          v-if="video.unavailable"
         />
       </router-link>
       <div class="media-body">

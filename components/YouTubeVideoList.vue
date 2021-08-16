@@ -261,7 +261,7 @@ export default {
           ((video.tv_show && video.tv_show.id) || (video.talk && video.talk.id))
         )
           return false;
-        if (!this.$adminMode && video.unavailable) return false;
+        // if (!this.$adminMode && video.unavailable) return false;
         return true;
       });
     },
