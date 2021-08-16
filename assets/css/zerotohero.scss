@@ -691,13 +691,18 @@ button.bg-primary:focus {
   }
 }
 
-.btn-ghost-dark {
+.btn-ghost-dark,
+.select-ghost-dark {
   background-color: hsla(0deg 0% 100% / 42%);
   border: none;
   color: black;
   &:hover {
     background-color: hsla(0deg 0% 100% / 70%);
   }
+}
+
+.select-ghost-dark {
+  height: 40px;
 }
 
 .btn-ghost-dark-no-bg {
@@ -716,16 +721,14 @@ button.bg-primary:focus {
   border-radius: 0.3rem;
 }
 
-.input-group-ghost-dark {
-  .input-ghost-dark {
-    background: hsla(0deg 0% 100% / 10%);
-    border-radius: 0.25rem;
-    border: none;
-    color: hsla(0deg 0% 100% / 90%);
-    height: 40px;
-    &::placeholder {
-      color: hsla(0deg 0% 100% / 40%);
-    }
+.input-ghost-dark {
+  background: hsla(0deg 0% 100% / 10%);
+  border-radius: 0.25rem;
+  border: none;
+  color: hsla(0deg 0% 100% / 75%);
+  height: 40px;
+  &::placeholder {
+    color: hsla(0deg 0% 100% / 40%);
   }
 }
 

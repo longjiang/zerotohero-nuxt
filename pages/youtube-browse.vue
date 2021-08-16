@@ -29,28 +29,39 @@
             {{ $l2.code === "zh" ? "Pinyin" : "" }} subtitles
           </p>
           <client-only>
-            <SimpleSearch
-              class="mt-4 mb-3"
-              placeholder="Search"
-              ref="searchLibrary"
-              skin="dark"
-              :random="
-                undefined !== randomEpisodeYouTubeId
-                  ? `/${$l1.code}/${$l2.code}/youtube/view/${randomEpisodeYouTubeId}`
-                  : false
-              "
-              :action="
-                (url) => {
-                  this.$router.push({
-                    path: `/${$l1.code}/${
-                      $l2.code
-                    }/youtube/browse/${topic}/${level}/0/${encodeURIComponent(
-                      url
-                    )}`,
-                  });
-                }
-              "
-            />
+            <div class="d-flex mt-4 mb-3">
+              <SimpleSearch
+                placeholder="Search"
+                ref="searchLibrary"
+                skin="dark"
+                class="mr-1"
+                style="flex: 1"
+                :random="
+                  undefined !== randomEpisodeYouTubeId
+                    ? `/${$l1.code}/${$l2.code}/youtube/view/${randomEpisodeYouTubeId}`
+                    : false
+                "
+                :action="
+                  (url) => {
+                    this.$router.push({
+                      path: `/${$l1.code}/${
+                        $l2.code
+                      }/youtube/browse/${topic}/${level}/0/${encodeURIComponent(
+                        url
+                      )}`,
+                    });
+                  }
+                "
+              />
+              <b-form-select
+                v-model="topicData"
+                :options="topics"
+                class="select-ghost-dark"
+                style="width: 7rem"
+              >
+                Category
+              </b-form-select>
+            </div>
             <b-form-checkbox v-model="includeShows" v-if="$adminMode">
               Include videos in TV shows and talks
             </b-form-checkbox>
@@ -153,6 +164,12 @@ export default {
     },
   },
   data() {
+    let topics = [
+      { value: "all", text: "All" },
+      ...Object.entries(Helper.topics).map(([value, text]) => {
+        return { value, text };
+      }),
+    ];
     return {
       channels: [],
       videos: undefined,
@@ -162,6 +179,8 @@ export default {
       moreVideos: 0,
       perPage: 12,
       includeShows: true,
+      topicData: this.topic,
+      topics,
     };
   },
   async fetch() {
@@ -176,6 +195,16 @@ export default {
   watch: {
     async includeShows() {
       this.videos = await this.getVideos(this.start);
+    },
+    topicData() {
+      this.$router.push({
+        name: "youtube-browse",
+        params: {
+          topic: this.topicData,
+          level: "all",
+          start: 0,
+        },
+      });
     },
   },
   methods: {
