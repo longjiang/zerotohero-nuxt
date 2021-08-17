@@ -67,7 +67,7 @@
                 Watch in Player
               </router-link>
               <b-button
-                class="btn btn-ghost-dark-no-bg"
+                variant="ghost-dark-no-bg"
                 @click="loadRandomShow"
               >
                 <i class="fas fa-step-forward mr-1"></i>

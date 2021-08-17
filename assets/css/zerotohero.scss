@@ -697,7 +697,8 @@ button.bg-primary:focus {
   background-color: hsla(0deg 0% 100% / 42%);
   border: none;
   color: black;
-  &:hover {
+  &:hover,
+  &:active {
     background-color: hsla(0deg 0% 100% / 70%);
     color: black;
   }
@@ -711,7 +712,8 @@ button.bg-primary:focus {
   background: none;
   color: hsla(0deg 0% 100% / 60%);
   border: none;
-  &:hover {
+  &:hover,
+  &:active {
     color: white;
     background-color: hsla(0deg 0% 100% / 15%);
   }
