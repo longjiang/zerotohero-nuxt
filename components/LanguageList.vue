@@ -68,6 +68,10 @@ export default {
           name: "客家话",
           l1: "zh",
         },
+        nan: {
+          name: "闽南语",
+          l1: "zh",
+        },
         cmn: {
           name: "Mandarin (Pinyin)",
           l1: "en",

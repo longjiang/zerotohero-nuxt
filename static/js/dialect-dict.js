@@ -181,15 +181,17 @@ const Dictionary = {
   server: '/data',
   files: {
     yue: 'cc-canto/cccanto-webdist.tsv.txt',
-    hak: 'dict-hakka/dict-hakka.csv.txt'
+    hak: 'dict-hakka/dict-hakka.csv.txt',
+    nan: 'dict-twblg/dict-twblg.csv.txt'
   },
   words: [],
   name: 'dialect-dict',
   credit() {
     return `The Cantonese dictionary is provided by <a href="http://cantonese.org/download.html">cc-canto</a> dict, 
     open-source and distribtued under a <a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 license</a>. 
-    The Hakka dictionary is provided by <a href="https://github.com/g0v/moedict-data-hakka">g0v/moedict-data-hakka</a> dict, 
-    distrubuted under the conditoin <a href="http://hakka.dict.edu.tw/hakkadict/qa.htm">citation, no modification, no commercial use</a>. `
+    The Hakka and Min Nan dictionaries are provided by <a href="https://github.com/g0v/moedict-data-hakka">g0v/moedict-data-hakka</a> 
+    and <a href="https://github.com/g0v/moedict-data-twblg">g0v/moedict-data-twblg</a>, 
+    distrubuted under the condition <a href="http://hakka.dict.edu.tw/hakkadict/qa.htm">citation, no modification, no commercial use</a>. `
   },
   dictionaryFile({
     l1 = undefined,
@@ -207,7 +209,8 @@ const Dictionary = {
       this.file = this.dictionaryFile({ l1, l2 })
       let res = await axios.get(this.file)
       let results = await Papa.parse(res.data, {
-        header: true
+        header: true,
+        delimiter: ','
       })
       let sorted = results.data.sort((a, b) =>
         a.traditional && b.traditional ? a.traditional.length - b.traditional.length : 0
@@ -229,12 +232,9 @@ const Dictionary = {
           },
           traditional: row.traditional,
           simplified: row.simplified,
-
         }
         data.push(word)
       }
-      
-      
       this.words = data.sort((a, b) => b.head && a.head ? b.head.length - a.head.length : 0)
       return this
     }
