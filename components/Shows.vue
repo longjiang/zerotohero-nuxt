@@ -50,7 +50,7 @@
               :showControls="false"
               @currentTime="updateCurrentTime"
             />
-            <div class="text-center pb-3" v-if="randomShowFirstEpisode">
+            <div class="text-center pt-3 pb-3" v-if="randomShowFirstEpisode">
               <router-link
                 :to="{
                   name: 'youtube-view',
@@ -71,7 +71,7 @@
                 @click="loadRandomShow"
               >
                 <i class="fas fa-step-forward mr-1"></i>
-                Play Another
+                Another One
               </b-button>
             </div>
           </div>

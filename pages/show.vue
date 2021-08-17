@@ -48,30 +48,32 @@
             </span>
           </p>
         </div>
-        <div
-          class="col-sm-12"
-          v-if="show && ['Music', 'Movies', 'News'].includes(show.title)"
-        >
-          <div v-if="randomEpisode">
+        <div class="col-sm-12" v-if="show">
+          <div
+            class="widget widget-dark mb-5"
+            style="max-width: 70vh; margin: 0 auto"
+          >
+            <div class="widget-title">
+              Discover {{ $l2.name }}
+              {{ show.title }}
+            </div>
+            <div class="text-center pt-5 pb-5" v-if="!randomEpisode">
+              <Loader :sticky="true" message="Getting shows..." />
+            </div>
             <LazyYouTubeWithTranscript
+              v-if="randomEpisode"
               initialLayout="vertical"
               :video="randomEpisode"
-              :ref="`discover-${randomEpisode.youtube_id}`"
+              :ref="`youtube`"
               :autoload="true"
               :autoplay="true"
               :showLineList="false"
               :showFullscreenToggle="false"
               :startAtRandomTime="true"
+              :showControls="false"
               @currentTime="updateCurrentTime"
-              style="
-                background: black;
-                max-width: 70vh;
-                border-radius: 0.5rem;
-                overflow: hidden;
-                box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
-              "
             />
-            <div class="text-center mt-3 mb-5">
+            <div class="text-center pt-3 pb-3" v-if="randomEpisode">
               <router-link
                 :to="{
                   name: 'youtube-view',
@@ -79,38 +81,20 @@
                     youtube_id: randomEpisode.youtube_id,
                   },
                   query: {
-                    t: currentTime
-                  }
+                    t: currentTime,
+                  },
                 }"
                 class="btn btn-ghost-dark-no-bg"
               >
                 <i class="fa fa-play mr-1"></i>
-                Watch Full
-                {{
-                  this.show.title === "Music"
-                    ? "Music Video"
-                    : this.show.title === "Movies"
-                    ? "Movie"
-                    : this.show.title === "News"
-                    ? "News Story"
-                    : "Video"
-                }}
+                Watch in Player
               </router-link>
               <b-button
                 class="btn btn-ghost-dark-no-bg"
                 @click="loadRandomEpisode"
               >
-                <i class="fa fa-sync-alt mr-1"></i>
-                Try Another
-                {{
-                  this.show.title === "Music"
-                    ? "Song"
-                    : this.show.title === "Movies"
-                    ? "Movie"
-                    : this.show.title === "News"
-                    ? "News Story"
-                    : "Video"
-                }}
+                <i class="fas fa-step-forward mr-1"></i>
+                Another One
               </b-button>
             </div>
           </div>
@@ -281,18 +265,14 @@ export default {
       this.randomEpisode = await this.getRandomEpisode();
     },
     async getRandomEpisode() {
-      let url = `${Config.wiki}items/youtube_videos?filter[l2][eq]=${this.$l2.id}&filter[${this.collection}][eq]=${this.show.id}&fields=youtube_id,id`;
-      let response = await axios.get(url);
-      if (response.data && response.data.data.length > 0) {
-        let videos = response.data.data;
-        let randomVideo = videos[Math.floor(Math.random() * videos.length)];
-        let videoUrl = `${Config.wiki}items/youtube_videos/${randomVideo.id}`;
-        let res = await axios.get(videoUrl);
-        if (res && res.data.data) {
-          let video = res.data.data;
-          video.subs_l2 = YouTube.parseSavedSubs(video.subs_l2);
-          return video;
-        }
+      let videos = this.videos;
+      let randomVideo = videos[Math.floor(Math.random() * videos.length)];
+      let videoUrl = `${Config.wiki}items/youtube_videos/${randomVideo.id}`;
+      let res = await axios.get(videoUrl);
+      if (res && res.data.data) {
+        let video = res.data.data;
+        video.subs_l2 = YouTube.parseSavedSubs(video.subs_l2);
+        return video;
       }
     },
     async saveTitle(e) {
