@@ -176,39 +176,57 @@ var pinyinify = function (str) {
 }
 
 const Dictionary = {
-  file: 'https://server.chinesezerotohero.com/data/cc-canto/cccanto-webdist.tsv.txt',
+  file: undefined,
+  server: 'https://server.chinesezerotohero.com/data',
+  files: {
+    yue: 'cc-canto/cccanto-webdist.tsv.txt'
+  },
   words: [],
   name: 'dialect-dict',
   credit() {
     return 'The Cantonese dictionary is provided by <a href="http://cantonese.org/download.html">cc-canto</a> dict, open-source and distribtued under a <a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 license</a>.'
   },
-  async load() {
-    let res = await axios.get(this.file)
-    let results = await Papa.parse(res.data, {
-      header: true
-    })
-    let sorted = results.data.sort((a, b) =>
-      a.traditional && b.traditional ? a.traditional.length - b.traditional.length : 0
-    )
-    let data = []
-    for (let [index, row] of sorted.entries()) {
-      let definitions = row.english ? row.english.split('/').map(d => d.trim()) : []
-      let word = Object.assign(row, {
-        id: index.toString(),
-        head: row.traditional,
-        bare: row.traditional,
-        pinyin: row.pinyin ? this.parsePinyin(row.pinyin) : '',
-        accented: row.traditional,
-        definitions,
-        cjk: {
-          canonical: row.traditional && row.traditional !== 'NULL' ? row.traditional : undefined,
-          phonetics: row.jyutping
-        }
-      })
-      data.push(word)
+  dictionaryFile({
+    l1 = undefined,
+    l2 = undefined
+  } = {}) {
+    if (l1 && l2) {
+      return `${this.server}/${this.files[l2]}`
     }
-    this.words = data.sort((a, b) => b.head && a.head ? b.head.length - a.head.length : 0)
-    return this
+  },
+  async load({
+    l1 = undefined,
+    l2 = undefined
+  } = {}) {
+    if (l1 && l2) {
+      this.file = this.dictionaryFile({ l1, l2 })
+      let res = await axios.get(this.file)
+      let results = await Papa.parse(res.data, {
+        header: true
+      })
+      let sorted = results.data.sort((a, b) =>
+        a.traditional && b.traditional ? a.traditional.length - b.traditional.length : 0
+      )
+      let data = []
+      for (let [index, row] of sorted.entries()) {
+        let definitions = row.english ? row.english.split('/').map(d => d.trim()) : []
+        let word = Object.assign(row, {
+          id: index.toString(),
+          head: row.traditional,
+          bare: row.traditional,
+          pinyin: row.pinyin ? this.parsePinyin(row.pinyin) : '',
+          accented: row.traditional,
+          definitions,
+          cjk: {
+            canonical: row.traditional && row.traditional !== 'NULL' ? row.traditional : undefined,
+            phonetics: row.jyutping
+          }
+        })
+        data.push(word)
+      }
+      this.words = data.sort((a, b) => b.head && a.head ? b.head.length - a.head.length : 0)
+      return this
+    }
   },
   parsePinyin(pinyin) {
     return pinyinify(pinyin.replace(/u:/gi, 'ü')) // use the pinyinify library to parse tones
@@ -218,7 +236,7 @@ const Dictionary = {
     let words = this.words.filter(
       row =>
         (row.cjk.phonetics ? this.removeTones(row.cjk.phonetics).replace(/ /g, '') : '') ===
-          this.removeTones(jyutping).replace(/ /g, '')
+        this.removeTones(jyutping).replace(/ /g, '')
     )
     return words
   },
