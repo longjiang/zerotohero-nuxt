@@ -177,14 +177,19 @@ var pinyinify = function (str) {
 
 const Dictionary = {
   file: undefined,
-  server: 'https://server.chinesezerotohero.com/data',
+  // server: 'https://server.chinesezerotohero.com/data',
+  server: '/data',
   files: {
-    yue: 'cc-canto/cccanto-webdist.tsv.txt'
+    yue: 'cc-canto/cccanto-webdist.tsv.txt',
+    hak: 'dict-hakka/dict-hakka.csv.txt'
   },
   words: [],
   name: 'dialect-dict',
   credit() {
-    return 'The Cantonese dictionary is provided by <a href="http://cantonese.org/download.html">cc-canto</a> dict, open-source and distribtued under a <a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 license</a>.'
+    return `The Cantonese dictionary is provided by <a href="http://cantonese.org/download.html">cc-canto</a> dict, 
+    open-source and distribtued under a <a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 license</a>. 
+    The Hakka dictionary is provided by <a href="https://github.com/g0v/moedict-data-hakka">g0v/moedict-data-hakka</a> dict, 
+    distrubuted under the conditoin <a href="http://hakka.dict.edu.tw/hakkadict/qa.htm">citation, no modification, no commercial use</a>. `
   },
   dictionaryFile({
     l1 = undefined,
@@ -209,21 +214,27 @@ const Dictionary = {
       )
       let data = []
       for (let [index, row] of sorted.entries()) {
-        let definitions = row.english ? row.english.split('/').map(d => d.trim()) : []
-        let word = Object.assign(row, {
+        let definitions = row.english ? row.english.split('/').map(d => d.trim()) : row.definitions ? row.definitions.split('|').map(d => d.trim()) : []
+        let word = {
           id: index.toString(),
           head: row.traditional,
           bare: row.traditional,
           pinyin: row.pinyin ? this.parsePinyin(row.pinyin) : '',
           accented: row.traditional,
+          pronunciation: row.pronunciation || row.jyutping,
           definitions,
           cjk: {
             canonical: row.traditional && row.traditional !== 'NULL' ? row.traditional : undefined,
-            phonetics: row.jyutping
-          }
-        })
+            phonetics: row.pronunciation || row.jyutping
+          },
+          traditional: row.traditional,
+          simplified: row.simplified,
+
+        }
         data.push(word)
       }
+      
+      
       this.words = data.sort((a, b) => b.head && a.head ? b.head.length - a.head.length : 0)
       return this
     }
@@ -351,9 +362,9 @@ const Dictionary = {
     if (pattern.includes('～')) {
       const regexPattern = '^' + pattern.replace(/～/gi, '.+') + '$'
       const regex = new RegExp(regexPattern)
-      results = this.words.filter(word => regex.test(word.jyutping))
+      results = this.words.filter(word => regex.test(word.pronunciation))
     } else {
-      results = this.words.filter(word => word.jyutping.includes(pattern))
+      results = this.words.filter(word => word.pronunciation.includes(pattern))
     }
     return results
   },

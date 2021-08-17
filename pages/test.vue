@@ -26,10 +26,8 @@
           <!-- <Annotate :buttons="true"><p>skal</p></Annotate> -->
           <!-- վարարուն Կարկաչում էր սարերում: -->
           <!-- ทริปวัดใจ -->
-          <LazyAnnotate><p>Hometown's Embrace</p></LazyAnnotate>
-          <div class="text-center">
-            <Loader :sticky="true" />
-          </div>
+          <LazyAnnotate><p>客家</p></LazyAnnotate>
+          <LazyAnnotate><p>客家话</p></LazyAnnotate>
         </div>
       </div>
     </div>

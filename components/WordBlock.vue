@@ -109,14 +109,11 @@
               of
             </div>
             <div>
-              <span style="color: #999" v-if="word.jyutping">
-                {{ word.jyutping }}
+              <span style="color: #999" v-if="word.pronunciation">
+                {{ word.pronunciation }}
               </span>
               <span style="color: #999" v-else-if="word.pinyin">
                 {{ word.pinyin }}
-              </span>
-              <span style="color: #999" v-else-if="word.pronunciation">
-                /{{ word.pronunciation }}/
               </span>
               <span
                 style="color: #999"
@@ -305,7 +302,6 @@ export default {
   },
   data() {
     return {
-      transliteration: undefined,
       savedTransliteration: undefined,
       id: `wordblock-${Helper.uniqueId()}`,
       open: false,
@@ -377,31 +373,32 @@ export default {
       }
       return attributes;
     },
-  },
-  mounted() {
-    if (!this.transliteration && this.$hasFeature("transliteration")) {
-      if (
-        this.token &&
-        this.token.candidates &&
-        this.token.candidates.length > 0
-      ) {
-        if (this.token.candidates[0].kana) {
-          this.transliteration = this.token.candidates[0].kana;
-        } else if (this.token.candidates[0].jyutping) {
-          this.transliteration = this.token.candidates[0].jyutping;
-        } else if (this.token.candidates[0].pinyin) {
-          this.transliteration = this.token.candidates[0].pinyin;
-        } else {
-          this.transliteration = tr(this.token.candidates[0].head);
+    transliteration() {
+      if (this.$hasFeature("transliteration")) {
+        if (
+          this.token &&
+          this.token.candidates &&
+          this.token.candidates.length > 0
+        ) {
+          if (this.token.candidates[0].kana) {
+            return this.token.candidates[0].kana;
+          } else if (this.token.candidates[0].pronunciation) {
+            return this.token.candidates[0].pronunciation;
+          } else if (this.token.candidates[0].pinyin) {
+            return this.token.candidates[0].pinyin;
+          } else {
+            return tr(this.token.candidates[0].head);
+          }
+        }
+        if (
+          !["ja", "zh", "nan", "hak"].includes(this.$l2.code)
+        ) {
+          return tr(this.text);
         }
       }
-      if (
-        !this.transliteration &&
-        !["ja", "zh", "nan", "hak"].includes(this.$l2.code)
-      ) {
-        this.transliteration = tr(this.text);
-      }
     }
+  },
+  mounted() {
     if (this.sticky) {
       this.lookup();
     }
