@@ -417,11 +417,12 @@ const Dictionary = {
     return trad > simp
   },
   subdictFromText(text) {
-    return this.subdict(
+    let subict = this.subdict(
       this.words.filter(function (row) {
         return text.includes(row.simplified) || text.includes(row.traditional)
       })
     )
+    return subict
   },
   /* Returns the longest word in the dictionary that is inside `text` */
   longest(text, traditional = false) {
