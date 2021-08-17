@@ -48,7 +48,7 @@
             </span>
           </p>
         </div>
-        <div class="col-sm-12" v-if="show">
+        <div class="col-sm-12" v-if="show && ['Music', 'News', 'Movies'].includes(show.title)">
           <div
             class="widget widget-dark mb-5"
             style="max-width: 70vh; margin: 0 auto"
