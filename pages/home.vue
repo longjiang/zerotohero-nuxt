@@ -1,19 +1,17 @@
 <router>
   {
     path: '/:l1/:l2',
-    meta: {
-      title: 'Zero to Hero',
-      metaTags: [
-        {
-          name: 'description',
-          content: 'Learn from Zero and progress to Fluency.'
-        }
-      ]
-    }
   }
 </router>
 <template>
   <div class="pl-4 pr-4 home">
+    <SocialHead
+      :title="`${$l2.name} Zero to Hero`"
+      :description="`Learn ${$l2.name} language from zero to fluency with ${
+        ['zh', 'en'].includes($l2.code) ? 'online courses and ' : ''
+      } comprehensible input.`"
+      :image="image"
+    />
     <div class="container pt-5 pb-5 pl-4 pr-4">
       <div class="row">
         <div class="col-sm-12">
@@ -64,6 +62,14 @@ export default {
           name: "tv-shows",
         },
       ];
+    },
+    image() {
+      if (!this.$l2) return "/img/background-branch.jpg";
+      else if (["zh", "lzh"].includes(this.$l2.code))
+        return `/img/backgrounds/bg-${this.$l2.code}-${Math.ceil(
+          Math.random() * 10
+        )}.jpg`;
+      else return `https://source.unsplash.com/1600x900/?${this.$l2.name}`;
     },
   },
   methods: {

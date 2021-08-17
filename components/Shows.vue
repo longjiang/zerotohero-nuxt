@@ -9,7 +9,7 @@
         :description="`Learn ${$l2.name} with ${
           routeType === 'tv-shows' ? 'TV Shows' : 'Talks'
         }.`"
-        :image="`https://img.youtube.com/vi/${shows[0].youtube_id}/hqdefault.jpg`"
+        :image="routeType === 'tv-shows' && $l2.code === 'zh' ? '/img/tv-shows.jpg' : `https://img.youtube.com/vi/${shows[0].youtube_id}/hqdefault.jpg`"
       />
       <div class="row">
         <div class="col-sm-12">
