@@ -77,7 +77,7 @@
       }"
       @click="toggleFullscreenMode"
     >
-      <i class="fas fa-expand"></i>
+      <i class="fas fa-arrows-alt-h"></i>
     </button>
     <button
       v-if="showCollapse"

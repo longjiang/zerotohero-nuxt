@@ -142,7 +142,7 @@ export default {
             showinfo: 0,
             playsinline: 1,
             rel: 0,
-            fs: 0,
+            fs: 1,
             hl: this.$l1.code,
             iv_load_policy: 3,
             modestbranding: 1,
