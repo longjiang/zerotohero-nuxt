@@ -685,6 +685,7 @@ button.bg-primary:focus {
 .btn-ghost-dark-outline {
   color: hsla(0deg 0% 100% / 50%);
   border: 2px solid #666;
+  background: none;
   &:hover {
     background-color: hsla(0deg 0% 100% / 70%);
     border: 2px solid #aaa;
@@ -698,6 +699,7 @@ button.bg-primary:focus {
   color: black;
   &:hover {
     background-color: hsla(0deg 0% 100% / 70%);
+    color: black;
   }
 }
 
@@ -706,11 +708,12 @@ button.bg-primary:focus {
 }
 
 .btn-ghost-dark-no-bg {
-  background-color: none;
-  color: white;
+  background: none;
+  color: hsla(0deg 0% 100% / 70%);
   border: none;
   &:hover {
-    background-color: hsla(0deg 0% 100% / 70%);
+    color: white;
+    background-color: hsla(0deg 0% 100% / 15%);
   }
 }
 

@@ -22,21 +22,43 @@
               filteredShows.length > 1 ? "s" : ""
             }})
           </p>
-          <div class="text-center mb-5">
-            <NuxtLink
-              :to="{
-                name: 'show',
-                params: {
-                  type: routeType.replace(/s$/, ''),
-                  id: String(randomShowId),
-                },
-              }"
-              class="btn btn-ghost-dark text-large pl-4 pr-4"
-              style="font-size: 1.3em"
-            >
-              <i class="fa fa-random mr-1"></i>
-              Surprise me
-            </NuxtLink>
+          <div v-if="randomShowFirstEpisode">
+            <LazyYouTubeWithTranscript
+              initialLayout="vertical"
+              :video="randomShowFirstEpisode"
+              :ref="`discover-${randomShowFirstEpisode.youtube_id}`"
+              :autoload="true"
+              :autoplay="true"
+              :showLineList="false"
+              style="
+                background: black;
+                max-width: 70vh;
+                border-radius: 0.5rem;
+                overflow: hidden;
+                box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
+              "
+            />
+            <div class="text-center mt-3 mb-5">
+              <router-link
+                :to="{
+                  name: 'youtube-view',
+                  params: {
+                    youtube_id: randomShowFirstEpisode.youtube_id,
+                  },
+                }"
+                class="btn btn-ghost-dark"
+              >
+                <i class="fa fa-play mr-1"></i>
+                Watch Full Episode
+              </router-link>
+              <b-button
+                class="btn btn-ghost-dark-no-bg"
+                @click="loadRandomShow"
+              >
+                <i class="fa fa-sync-alt mr-1"></i>
+                Try Another Show
+              </b-button>
+            </div>
           </div>
           <div class="show-list-wrapper">
             <b-input-group class="mb-5 input-group-ghost-dark">
@@ -85,6 +107,7 @@
 import Config from "@/lib/config";
 import Helper from "@/lib/helper";
 import axios from "axios";
+import YouTube from "@/lib/youtube";
 import { tify } from "chinese-conv";
 
 export default {
@@ -96,6 +119,7 @@ export default {
       type: this.routeType === "tv-shows" ? "tvShows" : "talks",
       shows: undefined,
       randomShowId: undefined,
+      randomShowFirstEpisode: undefined,
       keyword: "",
     };
   },
@@ -121,7 +145,7 @@ export default {
         this.loadShows();
       }
     });
-    this.randomShowId = await this.getRandomShowId();
+    this.loadRandomShow();
   },
   beforeDestroy() {
     // you may call unsubscribe to stop the subscription
@@ -157,7 +181,32 @@ export default {
     },
   },
   methods: {
-    async getRandomShowId() {
+    async loadRandomShow() {
+      let randomShow = await this.getRandomShow();
+      let randomShowFirstEpisode = await this.getFirstEpisodeOfShow(
+        randomShow.id,
+        this.routeType.replace(/s$/, "").replace("-", "_")
+      );
+      this.randomShow = randomShow;
+      this.randomShowFirstEpisode = randomShowFirstEpisode;
+    },
+    async getFirstEpisodeOfShow(showId, showType) {
+      let url = `${Config.wiki}items/youtube_videos?filter[l2][eq]=${this.$l2.id}&filter[${showType}][eq]=${showId}&fields=youtube_id,id`;
+      let response = await axios.get(url);
+
+      if (response.data && response.data.data.length > 0) {
+        let videos = response.data.data;
+        let firstEpisode = videos[0];
+        let videoUrl = `${Config.wiki}items/youtube_videos/${firstEpisode.id}`;
+        let res = await axios.get(videoUrl);
+        if (res && res.data.data) {
+          let video = res.data.data;
+          video.subs_l2 = YouTube.parseSavedSubs(video.subs_l2);
+          return video;
+        }
+      }
+    },
+    async getRandomShow() {
       let langId = this.$l2.id;
       let type = this.routeType.replace("-", "_");
       let url = `${Config.wiki}items/${type}?filter[l2][eq]=${langId}&fields=id,title`;
@@ -174,9 +223,8 @@ export default {
             return false;
           return true;
         });
-
         let randomShow = shows[Math.floor(Math.random() * shows.length)];
-        return randomShow.id;
+        return randomShow;
       }
     },
     sortShows(shows) {
@@ -209,5 +257,10 @@ export default {
     max-width: 423px;
     margin: 0 auto;
   }
+}
+
+::v-deep .synced-transcript {
+  height: 4.5rem;
+  overflow: none;
 }
 </style>

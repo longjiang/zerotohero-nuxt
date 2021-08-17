@@ -165,10 +165,15 @@
           />
           <div
             class="p-4 mt-4 rounded"
-            style="border: 2px dashed rgba(136, 136, 136, 0.5); color: rgba(136, 136, 136, 0.85)"
+            style="
+              border: 2px dashed rgba(136, 136, 136, 0.5);
+              color: rgba(136, 136, 136, 0.85);
+            "
             v-if="!video.subs_l2"
           >
-            <h6>This video does not have closed captions (CC) in {{ $l2.name }}.</h6>
+            <h6>
+              This video does not have closed captions (CC) in {{ $l2.name }}.
+            </h6>
             <div class="mt-3">
               Otherwise, video trancript will show up here.
             </div>
@@ -299,12 +304,9 @@
           </div>
         </div>
       </div>
-      <div class="row">
+      <div class="row" v-if="video.subs_l2 && video.subs_l2.length > 0">
         <div :key="'transcript-' + video.youtube_id" class="mt-2 col-sm-12">
-          <div
-            v-if="video.subs_l2 && video.subs_l2.length > 0"
-            class="text-center"
-          >
+          <div class="text-center">
             <SyncedTranscript
               ref="transcript"
               :lines="video.subs_l2"
