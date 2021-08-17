@@ -27,7 +27,6 @@
             }})
           </p>
           <div
-            v-if="randomShowFirstEpisode"
             class="widget widget-dark mb-5"
             style="max-width: 70vh; margin: 0 auto"
           >
@@ -35,7 +34,11 @@
               Discover {{ $l2.name }}
               {{ routeType === "tv-shows" ? "TV Shows" : "Talks" }}
             </div>
+            <div class="text-center pt-5 pb-5" v-if="!randomShowFirstEpisode">
+              <Loader :sticky="true" message="Getting shows..." />
+            </div>
             <LazyYouTubeWithTranscript
+              v-if="randomShowFirstEpisode"
               initialLayout="vertical"
               :video="randomShowFirstEpisode"
               :ref="`youtube`"
@@ -47,7 +50,7 @@
               :showControls="false"
               @currentTime="updateCurrentTime"
             />
-            <div class="text-center pb-3">
+            <div class="text-center pb-3" v-if="randomShowFirstEpisode">
               <router-link
                 :to="{
                   name: 'youtube-view',
