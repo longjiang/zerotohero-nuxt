@@ -48,6 +48,65 @@
             </span>
           </p>
         </div>
+        <div class="col-sm-12" v-if="this.show && ['Music', 'Movies', 'News'].includes(this.show.title)">
+          <div v-if="randomEpisode">
+            <LazyYouTubeWithTranscript
+              initialLayout="vertical"
+              :video="randomEpisode"
+              :ref="`discover-${randomEpisode.youtube_id}`"
+              :autoload="true"
+              :autoplay="true"
+              :showLineList="false"
+              style="
+                background: black;
+                max-width: 70vh;
+                border-radius: 0.5rem;
+                overflow: hidden;
+                box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
+              "
+            />
+            <div class="text-center mt-3 mb-5">
+              <router-link
+                :to="{
+                  name: 'youtube-view',
+                  params: {
+                    youtube_id: randomEpisode.youtube_id,
+                  },
+                }"
+                class="btn btn-ghost-dark"
+              >
+                <i class="fa fa-play mr-1"></i>
+                Watch Full
+                {{
+                  this.show.title === "Music"
+                    ? "Song"
+                    : this.show.title === "Movies"
+                    ? "Movie"
+                    : this.show.title === "News"
+                    ? "News Story"
+                    : "Video"
+                }}
+              </router-link>
+              <b-button
+                class="btn btn-ghost-dark-no-bg"
+                @click="loadRandomEpisode"
+              >
+                <i class="fa fa-sync-alt mr-1"></i>
+                Try Another
+                {{
+                  this.show.title === "Music"
+                    ? "Song"
+                    : this.show.title === "Movies"
+                    ? "Movie"
+                    : this.show.title === "News"
+                    ? "News Story"
+                    : "Video"
+                }}
+              </b-button>
+            </div>
+          </div>
+        </div>
+
         <div class="col-sm-12 mb-5">
           <div class="youtube-video-list-wrapper">
             <div class="d-flex mb-5">
@@ -130,6 +189,7 @@
 import Config from "@/lib/config";
 import Helper from "@/lib/helper";
 import axios from "axios";
+import YouTube from "@/lib/youtube";
 import { tify, sify } from "chinese-conv";
 
 export default {
@@ -149,16 +209,18 @@ export default {
       view: "grid",
       titleUpdated: false,
       coverUpdated: false,
+      randomEpisode: undefined,
     };
   },
-  async fetch() {
-    if (this.id) {
-      this.show = await this.getShow(this.id, this.collection);
-      this.videos = await this.getVideos({
-        limit: this.perPage,
-        offset: this.moreVideos,
-      });
-    }
+  computed: {
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
   },
   watch: {
     async keyword() {
@@ -180,7 +242,37 @@ export default {
       this.videos = videos;
     },
   },
+  async fetch() {
+    if (this.id) {
+      this.show = await this.getShow(this.id, this.collection);
+      if (this.show) {
+        this.videos = await this.getVideos({
+          limit: this.perPage,
+          offset: this.moreVideos,
+        });
+        this.loadRandomEpisode();
+      }
+    }
+  },
   methods: {
+    async loadRandomEpisode() {
+      this.randomEpisode = await this.getRandomEpisode();
+    },
+    async getRandomEpisode() {
+      let url = `${Config.wiki}items/youtube_videos?filter[l2][eq]=${this.$l2.id}&filter[${this.collection}][eq]=${this.show.id}&fields=youtube_id,id`;
+      let response = await axios.get(url);
+      if (response.data && response.data.data.length > 0) {
+        let videos = response.data.data;
+        let randomVideo = videos[Math.floor(Math.random() * videos.length)];
+        let videoUrl = `${Config.wiki}items/youtube_videos/${randomVideo.id}`;
+        let res = await axios.get(videoUrl);
+        if (res && res.data.data) {
+          let video = res.data.data;
+          video.subs_l2 = YouTube.parseSavedSubs(video.subs_l2);
+          return video;
+        }
+      }
+    },
     async saveTitle(e) {
       let newTitle = e.target.innerText;
       if (this.show.title !== newTitle) {
@@ -192,7 +284,7 @@ export default {
           );
           response = response.data;
           if (response && response.data) {
-            this.show.title = newTitle
+            this.show.title = newTitle;
             this.titleUpdated = true;
             await Helper.timeout(3000);
             this.titleUpdated = false;
@@ -213,7 +305,7 @@ export default {
           );
           response = response.data;
           if (response && response.data) {
-            this.show.youtube_id = newCover
+            this.show.youtube_id = newCover;
             this.coverUpdated = true;
             await Helper.timeout(3000);
             this.coverUpdated = false;
@@ -298,5 +390,9 @@ export default {
     max-width: 423px;
     margin: 0 auto;
   }
+}
+::v-deep .synced-transcript {
+  height: 4.5rem;
+  overflow: none;
 }
 </style>
