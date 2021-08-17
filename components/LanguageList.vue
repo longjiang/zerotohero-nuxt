@@ -64,6 +64,10 @@ export default {
           name: "文言文",
           l1: "zh",
         },
+        hak: {
+          name: "客家话",
+          l1: "zh",
+        },
         cmn: {
           name: "Mandarin (Pinyin)",
           l1: "en",
