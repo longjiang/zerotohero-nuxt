@@ -40,8 +40,6 @@ export const actions = {
       });
     }
 
-    tvShows = Helper.uniqueByValue(tvShows, "youtube_id");
-
     response = await axios.get(
       `${Config.wiki}items/talks?sort=title&filter[l2][eq]=${l2.id
       }&limit=500&timestamp=${adminMode ? Date.now() : 0}`
@@ -55,7 +53,7 @@ export const actions = {
         return sort
       });
     }
-    talks = Helper.uniqueByValue(talks, "youtube_id");
+    
     context.commit('LOAD_SHOWS', { l2, tvShows, talks })
   },
   async add(context, { l2, type, show }) {

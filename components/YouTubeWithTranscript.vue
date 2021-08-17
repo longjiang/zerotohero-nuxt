@@ -32,7 +32,7 @@
             :class="{ 'd-none': collapsed }"
           />
           <VideoControls
-            v-if="video"
+            v-if="showControls && video"
             :video="video"
             :paused="paused"
             :layout="layout"
@@ -285,7 +285,7 @@
             />
             <VideoControls
               v-if="video"
-              :video="video"
+              :video="showControls && video"
               :paused="paused"
               :layout="layout"
               :showFullscreenToggle="showFullscreenToggle"
@@ -398,18 +398,21 @@ export default {
     stopLineIndex: {
       default: -1,
     },
-    showFullscreenToggle: {
-      default: true,
-    },
-    showLineList: {
-      default: true,
-    },
     skin: {
       default: "light",
     },
     forcePortrait: {
       default: false,
     },
+    showFullscreenToggle: {
+      default: true,
+    },
+    showLineList: {
+      default: true,
+    },
+    showControls: {
+      default: true,
+    }
   },
   data() {
     return {

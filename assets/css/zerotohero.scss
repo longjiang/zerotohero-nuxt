@@ -526,7 +526,7 @@ h6,
     background: black;
     color: rgba(255, 255, 255, 0.8);
     .widget-title {
-      background-image: linear-gradient(180deg, #ffffff4b 0%, #ffffff00 100%);
+      background-image: linear-gradient(180deg, #ffffff33 0%, #ffffff00 100%);
       color: #ffffffc5;
     }
     .quick-access-buttons {
@@ -709,7 +709,7 @@ button.bg-primary:focus {
 
 .btn-ghost-dark-no-bg {
   background: none;
-  color: hsla(0deg 0% 100% / 50%);
+  color: hsla(0deg 0% 100% / 60%);
   border: none;
   &:hover {
     color: white;

@@ -9,7 +9,11 @@
         :description="`Learn ${$l2.name} with ${
           routeType === 'tv-shows' ? 'TV Shows' : 'Talks'
         }.`"
-        :image="routeType === 'tv-shows' && $l2.code === 'zh' ? '/img/tv-shows.jpg' : `https://img.youtube.com/vi/${shows[0].youtube_id}/hqdefault.jpg`"
+        :image="
+          routeType === 'tv-shows' && $l2.code === 'zh'
+            ? '/img/tv-shows.jpg'
+            : `https://img.youtube.com/vi/${shows[0].youtube_id}/hqdefault.jpg`
+        "
       />
       <div class="row">
         <div class="col-sm-12">
@@ -22,7 +26,15 @@
               filteredShows.length > 1 ? "s" : ""
             }})
           </p>
-          <div v-if="randomShowFirstEpisode">
+          <div
+            v-if="randomShowFirstEpisode"
+            class="widget widget-dark mb-5"
+            style="max-width: 70vh; margin: 0 auto"
+          >
+            <div class="widget-title">
+              Discover {{ $l2.name }}
+              {{ routeType === "tv-shows" ? "TV Shows" : "Talks" }}
+            </div>
             <LazyYouTubeWithTranscript
               initialLayout="vertical"
               :video="randomShowFirstEpisode"
@@ -32,16 +44,10 @@
               :showLineList="false"
               :showFullscreenToggle="false"
               :startAtRandomTime="true"
+              :showControls="false"
               @currentTime="updateCurrentTime"
-              style="
-                background: black;
-                max-width: 70vh;
-                border-radius: 0.5rem;
-                overflow: hidden;
-                box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
-              "
             />
-            <div class="text-center mt-3 mb-5">
+            <div class="text-center pb-3">
               <router-link
                 :to="{
                   name: 'youtube-view',
@@ -49,20 +55,20 @@
                     youtube_id: randomShowFirstEpisode.youtube_id,
                   },
                   query: {
-                    t: currentTime
-                  }
+                    t: currentTime,
+                  },
                 }"
                 class="btn btn-ghost-dark-no-bg"
               >
                 <i class="fa fa-play mr-1"></i>
-                Watch Full Episode
+                Watch in Player
               </router-link>
               <b-button
                 class="btn btn-ghost-dark-no-bg"
                 @click="loadRandomShow"
               >
-                <i class="fa fa-sync-alt mr-1"></i>
-                Try Another Show
+                <i class="fas fa-step-forward mr-1"></i>
+                Play Another
               </b-button>
             </div>
           </div>
@@ -243,7 +249,7 @@ export default {
       shows =
         shows.sort((x, y) => x.title.localeCompare(y.title, this.$l2.code)) ||
         [];
-      return Helper.uniqueByValue(shows, "youtube_id");
+      return shows;
     },
     loadShows() {
       let shows = this.$store.state.shows[this.type][this.$l2.code]
