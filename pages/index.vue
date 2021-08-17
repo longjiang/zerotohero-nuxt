@@ -25,18 +25,8 @@
         </div>
         <div :class="{ 'row mb-5': true, 'd-none': !hasDashboard }">
           <div class="col-sm-12">
-            <div class="home-card">
-              <h5
-                class="text-center"
-                style="
-                  font-family: pacifico;
-                  font-size: 1.6em;
-                  font-weight: normal;
-                "
-              >
-                Welcome Back!
-              </h5>
-              <LazyDashboard @hasDashboard="hasDashboardUpdate" />
+            <div class="home-card mb-0" style="padding: 1rem">
+              <LazyDashboard @hasDashboard="hasDashboardUpdate" style="padding-top: 0.5rem;"/>
             </div>
           </div>
         </div>

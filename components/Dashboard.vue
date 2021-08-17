@@ -5,7 +5,6 @@
         <div class="col-12">
           <div
             :class="{
-              'mt-4': true,
               'text-center': l2,
               'dashboard-saved-words-list': !l2,
               'mb-5': savedPhrases && savedPhrases.length > 0,
@@ -17,7 +16,7 @@
               :to="`/${savedWordsLang.l2.code === 'lzh' ? 'zh' : 'en'}/${
                 savedWordsLang.l2.code
               }/saved-words`"
-              class="link-unstyled d-block"
+              class="link-unstyled d-block dashboard-saved-words-list-item"
               :key="`dashboard-saved-words-${index}`"
             >
               <i class="fa fa-star" style="opacity: 0.5; width: 1.2rem; text-align: center"></i>
@@ -35,28 +34,15 @@
               in
               <strong>{{ savedWordsLang.l2.name }}</strong>
             </router-link>
-          </div>
-        </div>
-      </div>
-      <div class="row dashboard-saved-phrases" v-if="savedPhrases">
-        <div class="col-12">
-          <div
-            :class="{
-              'mt-4': true,
-              'text-center': l2,
-              'dashboard-saved-words-list': !l2,
-              'mb-5': itemsFiltered && itemsFiltered.length > 0,
-            }"
-          >
             <router-link
               v-for="(savedPhrasesLang, index) in savedPhrasesSorted"
               :to="`/${savedPhrasesLang.l2.code === 'lzh' ? 'zh' : 'en'}/${
                 savedPhrasesLang.l2.code
               }/saved-phrases`"
-              class="link-unstyled d-block"
+              class="link-unstyled d-block dashboard-saved-words-list-item"
               :key="`dashboard-saved-phrases-${index}`"
             >
-              <i class="fa fa-bookmark mr-1" style="opacity: 0.5; width: 1.2rem; text-align: center"></i>
+              <i class="fa fa-bookmark" style="opacity: 0.5; width: 1.2rem; text-align: center"></i>
               <span
                 style="
                   min-width: 1.7rem;
@@ -75,7 +61,7 @@
         </div>
       </div>
       <div
-        class="history-items row justify-content-md-center"
+        class="history-items row"
         v-if="this.itemsFiltered.length > 0"
       >
         <div
@@ -337,5 +323,9 @@ export default {
 .history-item-column:hover {
   transform: scale(1.1) rotate(2deg);
   transition: 200ms all ease-in-out;
+}
+
+.dashboard-saved-words-list-item {
+  padding: 0.125rem 0;
 }
 </style>
