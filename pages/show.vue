@@ -78,7 +78,7 @@
                     youtube_id: randomEpisode.youtube_id,
                   },
                 }"
-                class="btn btn-ghost-dark"
+                class="btn btn-ghost-dark-no-bg"
               >
                 <i class="fa fa-play mr-1"></i>
                 Watch Full
