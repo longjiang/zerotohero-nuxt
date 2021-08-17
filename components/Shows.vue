@@ -26,12 +26,13 @@
             <LazyYouTubeWithTranscript
               initialLayout="vertical"
               :video="randomShowFirstEpisode"
-              :ref="`discover-${randomShowFirstEpisode.youtube_id}`"
+              :ref="`youtube`"
               :autoload="true"
               :autoplay="true"
               :showLineList="false"
               :showFullscreenToggle="false"
               :startAtRandomTime="true"
+              @currentTime="updateCurrentTime"
               style="
                 background: black;
                 max-width: 70vh;
@@ -47,6 +48,9 @@
                   params: {
                     youtube_id: randomShowFirstEpisode.youtube_id,
                   },
+                  query: {
+                    t: currentTime
+                  }
                 }"
                 class="btn btn-ghost-dark-no-bg"
               >
@@ -123,6 +127,7 @@ export default {
       randomShowId: undefined,
       randomShowFirstEpisode: undefined,
       keyword: "",
+      currentTime: 0,
     };
   },
   async fetch() {
@@ -183,6 +188,11 @@ export default {
     },
   },
   methods: {
+    updateCurrentTime(currentTime) {
+      if (typeof window !== "undefined") {
+        this.currentTime = currentTime;
+      }
+    },
     async loadRandomShow() {
       let randomShow = await this.getRandomShow();
       let randomShowFirstEpisode = await this.getFirstEpisodeOfShow(
@@ -262,6 +272,7 @@ export default {
 }
 
 ::v-deep .synced-transcript {
-  min-height: 4.5rem;
+  height: 5rem;
+  overflow: hidden;
 }
 </style>

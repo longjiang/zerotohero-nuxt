@@ -62,6 +62,7 @@
               :showLineList="false"
               :showFullscreenToggle="false"
               :startAtRandomTime="true"
+              @currentTime="updateCurrentTime"
               style="
                 background: black;
                 max-width: 70vh;
@@ -77,6 +78,9 @@
                   params: {
                     youtube_id: randomEpisode.youtube_id,
                   },
+                  query: {
+                    t: currentTime
+                  }
                 }"
                 class="btn btn-ghost-dark-no-bg"
               >
@@ -215,6 +219,7 @@ export default {
       titleUpdated: false,
       coverUpdated: false,
       randomEpisode: undefined,
+      currentTime: 0,
     };
   },
   computed: {
@@ -267,6 +272,11 @@ export default {
     }
   },
   methods: {
+    updateCurrentTime(currentTime) {
+      if (typeof window !== "undefined") {
+        this.currentTime = currentTime;
+      }
+    },
     async loadRandomEpisode() {
       this.randomEpisode = await this.getRandomEpisode();
     },
@@ -387,6 +397,7 @@ export default {
   }
 }
 ::v-deep .synced-transcript {
-  min-height: 4.5rem;
+  height: 5rem;
+  overflow: hidden;
 }
 </style>

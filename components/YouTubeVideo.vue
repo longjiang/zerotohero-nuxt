@@ -178,7 +178,7 @@ export default {
                   ) {
                     this.interval = setInterval(() => {
                       this.updateCurrentTime();
-                    }, 50);
+                    }, 250);
                   }
                 } else {
                   clearInterval(this.interval);
