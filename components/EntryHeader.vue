@@ -82,7 +82,7 @@
             :to="`/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${entry.id}`"
           >
             <template
-              v-if="['hsk-cedict', 'cc-canto'].includes($dictionaryName)"
+              v-if="['hsk-cedict', 'dialect-dict'].includes($dictionaryName)"
             >
               <span
                 class="entry-word simplified"
@@ -116,7 +116,7 @@
         </div>
         <div
           v-if="
-            ['hsk-cedict', 'cc-canto'].includes($dictionaryName) &&
+            ['hsk-cedict', 'dialect-dict'].includes($dictionaryName) &&
             entry.simplified !== entry.traditional
           "
           class="mt-1"
