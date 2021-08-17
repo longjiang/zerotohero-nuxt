@@ -61,7 +61,7 @@
         }"
       >
         <div :class="{ 'loader text-center pt-5 pb-5': true, 'd-none': video }">
-          <Loader :sticky="true" message="Preparing video and subtitles..." />
+          <Loader :sticky="true" message="Preparing video and transcript..." />
         </div>
         <LazyYouTubeWithTranscript
           v-if="video"

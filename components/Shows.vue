@@ -37,17 +37,14 @@
             <div class="text-center pt-5 pb-5" v-if="!randomShowFirstEpisode">
               <Loader :sticky="true" message="Getting shows..." />
             </div>
-            <LazyYouTubeWithTranscript
+            <LazyYouTubeVideo
               v-if="randomShowFirstEpisode"
               initialLayout="vertical"
-              :video="randomShowFirstEpisode"
+              :youtube="randomShowFirstEpisode.youtube_id"
               :ref="`youtube`"
               :autoload="true"
               :autoplay="true"
-              :showLineList="false"
-              :showFullscreenToggle="false"
               :startAtRandomTime="true"
-              :showControls="false"
               @currentTime="updateCurrentTime"
             />
             <div class="text-center pt-3 pb-3" v-if="randomShowFirstEpisode">
@@ -63,11 +60,12 @@
                 }"
                 class="btn btn-ghost-dark-no-bg"
               >
-                <i class="fa fa-play mr-1"></i>
-                Watch in Player
+                <i class="fas fa-align-left mr-1"></i>
+                Transcript
               </router-link>
               <b-button
                 variant="ghost-dark-no-bg"
+                v-if="filteredShows.length > 1"
                 @click="loadRandomShow"
               >
                 <i class="fas fa-step-forward mr-1"></i>
