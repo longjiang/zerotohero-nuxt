@@ -24,7 +24,13 @@
           </p>
           <div class="text-center mb-5">
             <NuxtLink
-              :to="`/${$l1.code}/${$l2.code}/youtube/view/${randomEpisodeYouTubeId}`"
+              :to="{
+                name: 'show',
+                params: {
+                  type: routeType.replace(/s$/, ''),
+                  id: String(randomShowId),
+                },
+              }"
               class="btn btn-ghost-dark text-large pl-4 pr-4"
               style="font-size: 1.3em"
             >
@@ -78,7 +84,6 @@
 <script>
 import Config from "@/lib/config";
 import Helper from "@/lib/helper";
-import YouTube from "@/lib/youtube";
 import axios from "axios";
 import { tify } from "chinese-conv";
 
@@ -90,7 +95,7 @@ export default {
     return {
       type: this.routeType === "tv-shows" ? "tvShows" : "talks",
       shows: undefined,
-      randomEpisodeYouTubeId: undefined,
+      randomShowId: undefined,
       keyword: "",
     };
   },
@@ -116,10 +121,7 @@ export default {
         this.loadShows();
       }
     });
-    this.randomEpisodeYouTubeId = await YouTube.getRandomEpisodeYouTubeId(
-      this.$l2.id,
-      this.routeType === "tv-shows" ? "tv_show" : "talk"
-    );
+    this.randomShowId = await this.getRandomShowId();
   },
   beforeDestroy() {
     // you may call unsubscribe to stop the subscription
@@ -155,6 +157,28 @@ export default {
     },
   },
   methods: {
+    async getRandomShowId() {
+      let langId = this.$l2.id;
+      let type = this.routeType.replace("-", "_");
+      let url = `${Config.wiki}items/${type}?filter[l2][eq]=${langId}&fields=id,title`;
+      let response = await axios.get(url);
+      if (response.data && response.data.data.length > 0) {
+        let shows = response.data.data;
+        shows = shows.filter((s) => {
+          if (
+            this.routeType === "tv-shows" &&
+            ["Music", "Movies"].includes(s.title)
+          )
+            return false;
+          if (this.routeType === "talks" && ["News"].includes(s.title))
+            return false;
+          return true;
+        });
+
+        let randomShow = shows[Math.floor(Math.random() * shows.length)];
+        return randomShow.id;
+      }
+    },
     sortShows(shows) {
       shows =
         shows.sort((x, y) => x.title.localeCompare(y.title, this.$l2.code)) ||
