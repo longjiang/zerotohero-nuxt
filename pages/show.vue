@@ -48,7 +48,10 @@
             </span>
           </p>
         </div>
-        <div class="col-sm-12" v-if="this.show && ['Music', 'Movies', 'News'].includes(this.show.title)">
+        <div
+          class="col-sm-12"
+          v-if="show && ['Music', 'Movies', 'News'].includes(show.title)"
+        >
           <div v-if="randomEpisode">
             <LazyYouTubeWithTranscript
               initialLayout="vertical"
@@ -57,6 +60,8 @@
               :autoload="true"
               :autoplay="true"
               :showLineList="false"
+              :showFullscreenToggle="false"
+              :startAtRandomTime="true"
               style="
                 background: black;
                 max-width: 70vh;
@@ -79,7 +84,7 @@
                 Watch Full
                 {{
                   this.show.title === "Music"
-                    ? "Song"
+                    ? "Music Video"
                     : this.show.title === "Movies"
                     ? "Movie"
                     : this.show.title === "News"
@@ -221,6 +226,13 @@ export default {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
+    $adminMode() {
+      if (typeof this.$store.state.settings.adminMode !== "undefined")
+        return this.$store.state.settings.adminMode;
+    },
+    showDate() {
+      return this.type === "talk";
+    },
   },
   watch: {
     async keyword() {
@@ -250,8 +262,8 @@ export default {
           limit: this.perPage,
           offset: this.moreVideos,
         });
-        this.loadRandomEpisode();
       }
+      await this.loadRandomEpisode();
     }
   },
   methods: {
@@ -364,23 +376,6 @@ export default {
       return videos;
     },
   },
-  computed: {
-    $l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-    },
-    $l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
-    },
-    $adminMode() {
-      if (typeof this.$store.state.settings.adminMode !== "undefined")
-        return this.$store.state.settings.adminMode;
-    },
-    showDate() {
-      return this.type === "talk";
-    },
-  },
 };
 </script>
 
@@ -392,7 +387,6 @@ export default {
   }
 }
 ::v-deep .synced-transcript {
-  height: 4.5rem;
-  overflow: none;
+  min-height: 4.5rem;
 }
 </style>

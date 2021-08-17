@@ -46,6 +46,9 @@ export default {
       type: Number,
       default: 1,
     },
+    startAtRandomTime: {
+      default: false,
+    },
   },
   data() {
     return {
@@ -57,6 +60,7 @@ export default {
       interval: undefined,
       duration: undefined,
       loading: false,
+      randomSeeked: false,
     };
   },
   computed: {
@@ -109,6 +113,8 @@ export default {
       if (this.autoload) {
         this.loadYouTubeiFrame();
       }
+      this.duration = undefined
+      this.randomSeeked = false;
     },
   },
   methods: {
@@ -144,7 +150,6 @@ export default {
           },
           events: {
             onStateChange: () => {
-              // console.log("state change", this.youtubeIframeID);
               const UNSTARTED = -1;
               const ENDED = 0;
               const PLAYING = 1;
@@ -156,6 +161,15 @@ export default {
                 this.player.setPlaybackRate(this.speed);
                 this.$emit("paused", [UNSTARTED, PAUSED].includes(state));
                 this.$emit("ended", [ENDED].includes(state));
+                if (!this.duration) {
+                  this.duration = this.player.getDuration();
+                  this.$emit("duration", this.duration);
+                }
+                if (this.startAtRandomTime && !this.randomSeeked) {
+                  this.randomSeeked = true;
+                  let startAtRandomTime = Math.random() * this.duration;
+                  this.seek(startAtRandomTime);
+                }
                 if (state === PLAYING) {
                   window.speechSynthesis.cancel();
                   if (
@@ -166,8 +180,6 @@ export default {
                       this.updateCurrentTime();
                     }, 50);
                   }
-                  if (!this.duration) this.duration = this.player.getDuration();
-                  this.$emit("duration", this.duration);
                 } else {
                   clearInterval(this.interval);
                   this.interval = undefined;

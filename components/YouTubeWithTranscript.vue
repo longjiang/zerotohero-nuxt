@@ -28,6 +28,7 @@
             :starttime="start"
             :autoload="autoload"
             :autoplay="autoplay"
+            :startAtRandomTime="startAtRandomTime"
             :class="{ 'd-none': collapsed }"
           />
           <VideoControls
@@ -280,6 +281,7 @@
               :starttime="start"
               :autoload="autoload"
               :autoplay="autoplay"
+              :startAtRandomTime="startAtRandomTime"
             />
             <VideoControls
               v-if="video"
@@ -388,6 +390,9 @@ export default {
       default: undefined,
     },
     starttime: {
+      default: 0,
+    },
+    startAtRandomTime: {
       default: 0,
     },
     stopLineIndex: {

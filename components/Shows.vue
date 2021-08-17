@@ -30,6 +30,8 @@
               :autoload="true"
               :autoplay="true"
               :showLineList="false"
+              :showFullscreenToggle="false"
+              :startAtRandomTime="true"
               style="
                 background: black;
                 max-width: 70vh;
@@ -260,7 +262,6 @@ export default {
 }
 
 ::v-deep .synced-transcript {
-  height: 4.5rem;
-  overflow: none;
+  min-height: 4.5rem;
 }
 </style>
