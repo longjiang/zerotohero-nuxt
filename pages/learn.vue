@@ -51,6 +51,14 @@
                 class="mt-3"
                 :definitions="words[index].definitions"
               ></DefinitionsList>
+              <EntryExternal
+                :term="words[index].head"
+                :traditional="words[index].traditional"
+                :level="words[index].level"
+                :sticky="false"
+                class="mt-4 mb-4 text-center"
+                style="margin-bottom: 0"
+              />
             </div>
           </div>
           <div
@@ -92,6 +100,7 @@
                 :showHeader="false"
                 :showDefinitions="false"
                 :showExample="false"
+                :showExternal="false"
               />
             </div>
           </div>

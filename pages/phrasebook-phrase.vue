@@ -85,11 +85,18 @@
               <div v-if="word" class="text-center">
                 <LazyEntryHeader :entry="word" />
                 <DefinitionsList
-                  :key="`def-list-${word.id}`"
                   v-if="word.definitions"
                   class="mt-3"
                   :definitions="word.definitions"
                 ></DefinitionsList>
+                <EntryExternal
+                  :term="word.head"
+                  :traditional="word.traditional"
+                  :level="word.level"
+                  :sticky="false"
+                  class="mt-4 mb-4 text-center"
+                  style="margin-bottom: 0;"
+                />
               </div>
             </div>
           </div>
@@ -111,6 +118,7 @@
               :showHeader="false"
               :showDefinitions="false"
               :showExample="false"
+              :showExternal="false"
             />
             <LazyPhraseComp
               v-else-if="phraseObj && phraseObj.phrase && phrasebook"
@@ -393,6 +401,7 @@ export default {
 <style lang="scss" scoped>
 .zerotohero-wide {
   .content-pane-left {
+    overflow-y: scroll;
     ::v-deep .entry-word {
       font-size: 2rem;
     }

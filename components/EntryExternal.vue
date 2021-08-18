@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div :class="{'ext-dictionary-buttons bg-white': true, sticky}">
+    <div :class="{'ext-dictionary-buttons': true, 'bg-white sticky': sticky}">
       <a
         @click.prevent="toggleIframe"
         :href="`https://www.zdic.net/hans/${term}`"

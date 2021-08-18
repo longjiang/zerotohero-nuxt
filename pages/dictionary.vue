@@ -103,6 +103,14 @@
                 class="mt-3"
                 :definitions="entry.definitions"
               ></DefinitionsList>
+                <EntryExternal
+                  :term="entry.head"
+                  :traditional="entry.traditional"
+                  :level="entry.level"
+                  :sticky="false"
+                  class="mt-4 mb-4 text-center"
+                  style="margin-bottom: 0;"
+                />
             </div>
           </div>
 
@@ -120,6 +128,7 @@
               :showHeader="false"
               :showDefinitions="false"
               :showExample="false"
+              :showExternal="false"
             />
           </div>
         </div>
