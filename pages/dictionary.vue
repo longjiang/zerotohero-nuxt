@@ -38,11 +38,7 @@
               <div class="col-sm-12 bg-white">
                 <div class="for-the-love-of">
                   <h3 class="text-center font-weight-normal">
-                    For the love of
-                    <span v-if="dictionarySize">
-                      {{ dictionarySize.toLocaleString("en-US") }}
-                    </span>
-                    {{ $l2.name }} words.
+                    {{ $t('For the love of {count} {l2} words.', {count: $n(dictionarySize), l2: $t($l2.name)})}}
                   </h3>
                 </div>
               </div>

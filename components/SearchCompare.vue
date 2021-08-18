@@ -1,6 +1,9 @@
 <template>
   <div class="search-compare-wrapper">
-    <div :class="{ 'loader text-center': true, 'd-none': !loading }" style="flex: 1">
+    <div
+      :class="{ 'loader text-center': true, 'd-none': !loading }"
+      style="flex: 1"
+    >
       <Loader />
     </div>
     <Search
@@ -11,9 +14,7 @@
       :type="type"
       :entry="searchEntry"
       :term="term"
-      :placeholder="
-        $t($l2.code === 'zh' ? 'Search term or regex' : 'Look up words here...')
-      "
+      :placeholder="$t('{l2} word or phrase', { l2: $t($l2.name) })"
       v-if="!loading"
     ></Search>
     <Search
@@ -27,7 +28,12 @@
       :hrefFunc="compareHrefFunc"
       v-if="!loading"
     ></Search>
-    <button class="btn btn-primary ml-2" @click="compareClick" v-if="!loading" style="height: 37px;">
+    <button
+      class="btn btn-primary ml-2"
+      @click="compareClick"
+      v-if="!loading"
+      style="height: 37px"
+    >
       <span v-if="showCompare"><i class="fas fa-times"></i></span>
       <span v-if="!showCompare">
         <i class="fas fa-adjust"></i>
@@ -67,7 +73,7 @@ export default {
     },
     type: {
       default: "dictionary", // can also be 'generic'
-    }
+    },
   },
   components: {
     Search,
