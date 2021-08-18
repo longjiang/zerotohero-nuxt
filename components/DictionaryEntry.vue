@@ -32,12 +32,12 @@
         </div>
       </div>
     </div>
-    <div class="container">
+    <div class="container section-nav-wrapper">
       <div class="row">
         <div class="col">
           <div class="section-nav">
             <div
-              v-for="(section, index) in sections.filter(s => s.visible)"
+              v-for="(section, index) in sections.filter((s) => s.visible)"
               :key="`section-nav-item-${index}`"
               :class="{
                 'section-nav-item': true,
@@ -108,11 +108,11 @@
             />
           </div>
         </div>
-            <div class="row">
-              <div class="col-sm-12">
-                <EntryYouTube :text="entry.head" v-if="$adminMode" class="" />
-              </div>
-            </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <EntryYouTube :text="entry.head" v-if="$adminMode" class="" />
+          </div>
+        </div>
       </div>
 
       <div class="container" v-if="showImages">
@@ -367,7 +367,7 @@ export default {
         },
         {
           title: "Collocations",
-          visible: true
+          visible: true,
         },
         {
           title: "Examples",
@@ -468,26 +468,33 @@ export default {
 .widget {
   margin-bottom: 2rem;
 }
-
-.section-nav {
-  white-space: nowrap;
-  padding: 1rem 0;
-  text-align: center;
-  overflow: scroll;
-  overflow-y: hidden;
-  max-width: 100%;
-  .section-nav-item {
-    display: inline-block;
-    padding: 0.5rem 0;
-    margin: 0 0.7rem;
-    cursor: pointer;
-    font-weight: bold;
-    &:hover,
-    &.section-nav-item-current {
-      background-image: linear-gradient(#fd4f1c44, #fd4f1c44);
-      background-position: 50% 100%;
-      background-size: 70% 0.35rem;
-      background-repeat: no-repeat;
+.dictionary-entry {
+  .section-nav-wrapper {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: white;
+    .section-nav {
+      white-space: nowrap;
+      padding: 0.5rem 0 0.75rem 0;
+      text-align: center;
+      overflow: scroll;
+      overflow-y: hidden;
+      max-width: 100%;
+      .section-nav-item {
+        display: inline-block;
+        padding: 0.5rem 0;
+        margin: 0 0.7rem;
+        cursor: pointer;
+        font-weight: bold;
+        &:hover,
+        &.section-nav-item-current {
+          background-image: linear-gradient(#fd4f1c44, #fd4f1c44);
+          background-position: 50% 100%;
+          background-size: 70% 0.35rem;
+          background-repeat: no-repeat;
+        }
+      }
     }
   }
 }

@@ -94,33 +94,33 @@
             </div>
           </div>
           <div
-            :class="{ 'content-pane-right pl-3 pr-3': wide }"
-            style="position: relative; overflow: hidden"
+            :class="{
+              'content-pane-right pl-3 pr-3': wide,
+              'col-sm-12 pt-4': !wide,
+            }"
           >
             <div class="text-center">
               <Loader class="pt-5 pb-5" />
             </div>
-            <div>
-              <LazyDictionaryEntry
-                v-if="word && phrasebook"
-                :entry="word"
-                :tvShow="phrasebook.tv_show"
-                :exact="phraseObj.exact || phrasebook.exact"
-                :exactPhrase="phraseObj.phrase"
-                :showHeader="false"
-                :showDefinitions="false"
-                :showExample="false"
-              />
-              <LazyPhraseComp
-                v-else-if="phraseObj && phraseObj.phrase && phrasebook"
-                :term="phraseObj.phrase.toLowerCase()"
-                :tvShow="phrasebook.tv_show"
-                :exact="phraseObj.exact || phrasebook.exact"
-                :showExternal="false"
-                :showHeader="false"
-                class="mt-4 mb-4"
-              />
-            </div>
+            <LazyDictionaryEntry
+              v-if="word && phrasebook"
+              :entry="word"
+              :tvShow="phrasebook.tv_show"
+              :exact="phraseObj.exact || phrasebook.exact"
+              :exactPhrase="phraseObj.phrase"
+              :showHeader="false"
+              :showDefinitions="false"
+              :showExample="false"
+            />
+            <LazyPhraseComp
+              v-else-if="phraseObj && phraseObj.phrase && phrasebook"
+              :term="phraseObj.phrase.toLowerCase()"
+              :tvShow="phrasebook.tv_show"
+              :exact="phraseObj.exact || phrasebook.exact"
+              :showExternal="false"
+              :showHeader="false"
+              class="mt-4 mb-4"
+            />
           </div>
         </div>
       </div>

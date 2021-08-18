@@ -53,7 +53,12 @@
               ></DefinitionsList>
             </div>
           </div>
-          <div :class="{ 'content-pane-right pl-3 pr-3': wide }">
+          <div
+            :class="{
+              'content-pane-right pl-3 pr-3': wide,
+              'col-sm-12 pt-4': !wide,
+            }"
+          >
             <div v-if="!index && words.length > 0" :class="{ 'p-4': wide }">
               <p class="text-center mb-4">
                 Tap on any of the words below, and page through the words.

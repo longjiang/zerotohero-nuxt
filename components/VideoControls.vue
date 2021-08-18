@@ -258,7 +258,6 @@ export default {
 
 <style>
 .quick-access-buttons {
-  position: sticky;
   text-align: center;
   display: flex;
   align-items: center;
