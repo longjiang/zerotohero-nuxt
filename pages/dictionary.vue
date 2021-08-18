@@ -38,7 +38,19 @@
               <div class="col-sm-12 bg-white">
                 <div class="for-the-love-of">
                   <h3 class="text-center font-weight-normal">
-                    {{ $t('For the love of {count} {l2} words.', {count: $n(dictionarySize), l2: $t($l2.name)})}}
+                    <span v-if="!dictionarySize">
+                      {{
+                        $t("For the love of {l2} words.", { l2: $t($l2.name) })
+                      }}
+                    </span>
+                    <span v-else>
+                      {{
+                        $t("For the love of {count} {l2} words.", {
+                          count: $n(dictionarySize),
+                          l2: $t($l2.name),
+                        })
+                      }}
+                    </span>
                   </h3>
                 </div>
               </div>
