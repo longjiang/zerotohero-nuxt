@@ -370,11 +370,11 @@ export default {
         },
         {
           title: "Collocations",
-          visible: this.hasForms || this.collocationsReady,
+          visible: true
         },
         {
           title: "Examples",
-          visible: this.mistakesReady || this.concordanceReady,
+          visible: true,
         },
         {
           title: "Characters",
