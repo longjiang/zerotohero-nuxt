@@ -103,6 +103,7 @@ export default {
   plugins: [
     '~plugins/main.js',
     { src: '~plugins/nuxt-video-player-plugin.js', ssr: false }
+    { src: '~/plugins/pwa-update.js', mode: 'client' },
   ],
 
   build: {
