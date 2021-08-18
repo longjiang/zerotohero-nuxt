@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="dictionary-entry">
     <div class="text-center">
       <!-- <Loader class=" " /> -->
     </div>
