@@ -177,10 +177,9 @@ var pinyinify = function (str) {
 
 const Dictionary = {
   file: undefined,
-  // server: 'https://server.chinesezerotohero.com/data',
-  server: '/data',
+  server: 'https://server.chinesezerotohero.com/data',
   files: {
-    yue: 'cc-canto/cccanto-webdist.tsv.txt',
+    yue: 'cc-canto/cccanto-webdist.csv.txt',
     hak: 'dict-hakka/dict-hakka.csv.txt',
     nan: 'dict-twblg/dict-twblg.csv.txt'
   },

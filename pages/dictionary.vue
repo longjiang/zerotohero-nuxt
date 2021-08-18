@@ -275,6 +275,7 @@ export default {
     saved() {
       return (
         this.entry &&
+        this.entry.bare &&
         this.$store.getters["savedWords/has"]({
           text: this.entry.bare.toLowerCase(),
           l2: this.$l2.code,

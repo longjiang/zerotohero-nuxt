@@ -417,7 +417,7 @@ export default {
         let forms =
           (await (await this.$getDictionary()).wordForms(this.entry)) || [];
         terms = terms.concat(
-          forms.map((form) => form.form).filter((s) => s.length > 1)
+          forms.map((form) => form.form).filter((s) => typeof s !== 'undefined' && s.length > 1)
         );
 
         if (this.$dictionaryName === "openrussian") {
