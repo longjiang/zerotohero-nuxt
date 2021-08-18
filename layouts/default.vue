@@ -64,9 +64,10 @@
 
 <script lang="javascript">
 import Config from "@/lib/config";
-import { mapState } from "vuex";
 import smoothscroll from "smoothscroll-polyfill";
 import Helper from "@/lib/helper";
+import axios from 'axios';
+import { mapState } from "vuex";
 
 export default {
   data() {
@@ -120,6 +121,11 @@ export default {
       else return `https://source.unsplash.com/1600x900/?${this.l2.name}`;
     },
   },
+  created() {
+    this.$nuxt.$on("skin", this.onSkin);
+    if (typeof window !== "undefined")
+      window.addEventListener("resize", this.onResize);
+  },
   async mounted() {
     this.wide = Helper.wide();
     if (this.l1 && this.l2) this.loadSettings();
@@ -146,11 +152,6 @@ export default {
     if (dictionary) {
       this.dictionaryCredit = await dictionary.credit();
     }
-  },
-  created() {
-    this.$nuxt.$on("skin", this.onSkin);
-    if (typeof window !== "undefined")
-      window.addEventListener("resize", this.onResize);
   },
   destroyed() {
     if (typeof window !== "undefined")

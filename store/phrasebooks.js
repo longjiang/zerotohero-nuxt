@@ -1,5 +1,6 @@
 import Config from '@/lib/config'
 import Papa from 'papaparse'
+import axios from 'axios'
 
 export const state = () => {
   return {
