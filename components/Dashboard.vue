@@ -7,7 +7,7 @@
             :class="{
               'text-center': l2,
               'dashboard-saved-words-list': !l2,
-              'mb-5': savedPhrases && savedPhrases.length > 0,
+              'mb-5': itemsFiltered && itemsFiltered.length > 0,
             }"
 
           >
@@ -62,10 +62,10 @@
       </div>
       <div
         class="history-items row"
-        v-if="this.itemsFiltered.length > 0"
+        v-if="itemsFiltered.length > 0"
       >
         <div
-          v-for="(item, itemIndex) of this.itemsFiltered.slice(0, 12)"
+          v-for="(item, itemIndex) of itemsFiltered.slice(0, 12)"
           :key="`history-item-${itemIndex}`"
           :class="{
             'pb-4 history-item-column': true,

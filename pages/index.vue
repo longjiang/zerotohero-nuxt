@@ -23,13 +23,18 @@
             </div>
           </div>
         </div>
-        <div :class="{ 'row mb-5': true, 'd-none': !hasDashboard }">
-          <div class="col-sm-12">
-            <div class="home-card mb-0" style="padding: 1rem">
-              <LazyDashboard @hasDashboard="hasDashboardUpdate" style="padding-top: 0.5rem;"/>
+        <client-only>
+          <div :class="{ 'row mb-5': true, 'd-none': !hasDashboard }">
+            <div class="col-sm-12">
+              <div class="home-card mb-0" style="padding: 1rem">
+                <LazyDashboard
+                  @hasDashboard="hasDashboardUpdate"
+                  style="padding-top: 0.5rem"
+                />
+              </div>
             </div>
           </div>
-        </div>
+        </client-only>
         <div class="row" v-if="!hasDashboard">
           <div class="col-sm-12">
             <div class="intro-text mb-5">
