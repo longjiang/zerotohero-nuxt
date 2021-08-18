@@ -216,8 +216,8 @@ export default {
       showChannels: false,
       hideVideosInShows: false,
       uniqueVideosByChannel: undefined,
-      params: {},
       unavailableYouTubeIds: [],
+      params: {},
       query: {
         xs: {
           minWidth: 0,
