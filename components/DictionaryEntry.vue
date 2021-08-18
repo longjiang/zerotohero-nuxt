@@ -276,6 +276,9 @@ export default {
     exact: {
       default: false,
     },
+    exactPhrase: {
+      type: String
+    }
   },
   data() {
     return {
@@ -321,11 +324,15 @@ export default {
   },
   methods: {
     async getSearchTerms() {
-      let terms = [this.entry.head];
       if (this.$dictionaryName === "hsk-cedict") {
-        terms = [this.entry.simplified, this.entry.traditional];
+        return [this.entry.simplified, this.entry.traditional];
       }
-      if (this.exact) return terms;
+      if (this.exact && this.exactPhrase) return [this.exactPhrase];      
+      let terms = [this.entry.head];
+      if (this.$dictionaryName === "edict") {
+        terms.push(this.entry.kana);
+        terms = Helper.unique(terms);
+      }
       else {
         let forms =
           (await (await this.$getDictionary()).wordForms(this.entry)) || [];
@@ -339,10 +346,6 @@ export default {
         terms = Helper.unique(terms)
           .sort((a, b) => a.length - b.length)
           .slice(0, 5);
-      }
-      if (this.$dictionaryName === "edict") {
-        terms.push(this.entry.kana);
-        terms = Helper.unique(terms);
       }
       return terms;
     },
