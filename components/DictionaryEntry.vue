@@ -42,10 +42,11 @@
               :class="{
                 'section-nav-item': true,
                 'section-nav-item-current': currentSection === index,
+                'd-none': !section.visible,
               }"
               @click="goToSection(index)"
             >
-              {{ section }}
+              {{ section.title }}
             </div>
           </div>
         </div>
@@ -154,15 +155,7 @@
       <div class="container">
         <div class="row">
           <div class="col-sm-12">
-            <EntryForms
-              v-if="
-                ['wiktionary', 'kengdic', 'edict', 'openrussian'].includes(
-                  $dictionaryName
-                )
-              "
-              class=""
-              :word="entry"
-            />
+            <EntryForms v-if="hasForms" class="" :word="entry" />
           </div>
         </div>
         <div class="row">
@@ -271,14 +264,14 @@
         </div>
       </div>
       <div class="container">
-        <div class="row d-flex" style="flex-wrap: wrap">
-          <!-- <EntryDifficulty :entry="entry" style="flex: 1" class="m-3" /> -->
-          <EntryDisambiguation
-            v-if="['zh', 'yue'].includes($l2.code)"
-            :entry="entry"
-            class="ml-3 mr-3"
-            style="flex: 1; min-width: 20rem"
-          ></EntryDisambiguation>
+        <div class="row">
+          <div class="col">
+            <!-- <EntryDifficulty :entry="entry" style="flex: 1" class="m-3" /> -->
+            <EntryDisambiguation
+              v-if="['zh', 'yue'].includes($l2.code)"
+              :entry="entry"
+            ></EntryDisambiguation>
+          </div>
         </div>
         <div class="row">
           <div class="col">
@@ -353,6 +346,7 @@ export default {
       relatedReady: false,
       concordanceReady: false,
       searchSubsReady: false,
+      currentSection: 0,
       vueSlickCarouselSettings: {
         lazyLoad: "ondemand",
         dots: true,
@@ -361,18 +355,37 @@ export default {
         slidesToShow: 1,
         slidesToScroll: 1,
       },
-      sections: [
-        "TV Shows",
-        "Images",
-        "Collocations",
-        "Examples",
-        "Characters",
-        "Related",
-      ],
-      currentSection: 0,
     };
   },
   computed: {
+    sections() {
+      return [
+        {
+          title: "TV Shows",
+          visible: this.entry && this.showSearchSubs && this.searchTerms,
+        },
+        {
+          title: "Images",
+          visible: this.showImages || this.$adminMode,
+        },
+        {
+          title: "Collocations",
+          visible: this.hasForms || this.collocationsReady,
+        },
+        {
+          title: "Examples",
+          visible: this.mistakesReady || this.concordanceReady,
+        },
+        {
+          title: "Characters",
+          visible: this.entry.cjk && this.entry.cjk.canonical,
+        },
+        {
+          title: "Related",
+          visible: ["zh", "yue"].includes(this.$l2.code) || this.relatedReady,
+        },
+      ];
+    },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -392,6 +405,11 @@ export default {
     $adminMode() {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
+    },
+    hasForms() {
+      return ["wiktionary", "kengdic", "edict", "openrussian"].includes(
+        this.$dictionaryName
+      );
     },
   },
   async mounted() {
@@ -417,7 +435,9 @@ export default {
         let forms =
           (await (await this.$getDictionary()).wordForms(this.entry)) || [];
         terms = terms.concat(
-          forms.map((form) => form.form).filter((s) => typeof s !== 'undefined' && s.length > 1)
+          forms
+            .map((form) => form.form)
+            .filter((s) => typeof s !== "undefined" && s.length > 1)
         );
 
         if (this.$dictionaryName === "openrussian") {
