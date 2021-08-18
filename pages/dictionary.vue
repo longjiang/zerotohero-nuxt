@@ -103,6 +103,12 @@
                 class="mt-3"
                 :definitions="entry.definitions"
               ></DefinitionsList>
+                <EntryCourseAd
+                  v-if="$l2.code === 'zh'"
+                  variant="compact"
+                  class="focus-exclude mt-4 mb-5"
+                  :entry="entry"
+                ></EntryCourseAd>
                 <EntryExternal
                   :term="entry.head"
                   :traditional="entry.traditional"

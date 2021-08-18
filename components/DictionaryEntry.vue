@@ -88,16 +88,6 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-12">
-            <EntryCourseAd
-              v-if="$l2.code === 'zh'"
-              :entry="entry"
-              class="focus-exclude"
-              :key="`${entry.id}-course-ad`"
-            ></EntryCourseAd>
-          </div>
-        </div>
-        <div class="row">
           <div class="col-sm-12">
             <EntryExternal
               v-if="showExternal"
@@ -278,6 +268,16 @@
               :entry="entry"
               :key="`related-${entry.id}`"
             />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <EntryCourseAd
+              v-if="$l2.code === 'zh'"
+              :entry="entry"
+              class="focus-exclude"
+              :key="`${entry.id}-course-ad`"
+            ></EntryCourseAd>
           </div>
         </div>
       </div>
