@@ -32,7 +32,31 @@
         </div>
       </div>
     </div>
-    <VueSlickCarousel v-bind="vueSlickCarouselSettings">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="section-nav">
+            <div
+              v-for="(section, index) in sections"
+              :key="`section-nav-item-${index}`"
+              :class="{
+                'section-nav-item': true,
+                'section-nav-item-current': currentSection === index,
+              }"
+              @click="goToSection(index)"
+            >
+              {{ section }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <VueSlickCarousel
+      v-bind="vueSlickCarouselSettings"
+      ref="carousel"
+      class="mb-5"
+      @beforeChange="beforeCarouselChange"
+    >
       <div :class="{ container: !portrait, 'container-fluid': portrait }">
         <div class="row">
           <div :class="{ 'col-sm-12': true, 'p-0': portrait }">
@@ -337,6 +361,8 @@ export default {
         slidesToShow: 1,
         slidesToScroll: 1,
       },
+      sections: ["TV Shows", "Images", "Collocations", "Examples", "Characters", "Related"],
+      currentSection: 0,
     };
   },
   computed: {
@@ -365,6 +391,12 @@ export default {
     this.searchTerms = await this.getSearchTerms();
   },
   methods: {
+    goToSection(index) {
+      this.$refs.carousel.goTo(index);
+    },
+    beforeCarouselChange(oldIndex, newIndex) {
+      this.currentSection = newIndex;
+    },
     async getSearchTerms() {
       if (this.$dictionaryName === "hsk-cedict") {
         return [this.entry.simplified, this.entry.traditional];
@@ -410,7 +442,27 @@ export default {
 </script>
 <style lang="scss" scoped>
 .widget {
-  margin-top: 2rem;
   margin-bottom: 2rem;
+}
+
+.section-nav {
+  overflow: scroll;
+  white-space: nowrap;
+  padding: 1rem 0;
+  text-align: center;
+  .section-nav-item {
+    display: inline-block;
+    padding: 0.5rem 0;
+    margin: 0 0.7rem;
+    cursor: pointer;
+    font-weight: bold;
+    &:hover,
+    &.section-nav-item-current {
+      background-image: linear-gradient(#fd4f1c44, #fd4f1c44);
+      background-position: 50% 100%;
+      background-size: 70% 0.35rem;
+      background-repeat: no-repeat;
+    }
+  }
 }
 </style>
