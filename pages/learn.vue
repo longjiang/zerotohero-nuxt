@@ -78,7 +78,10 @@
                 </router-link>
               </div>
             </div>
-            <div v-if="words && index && words[index]">
+            <div
+              v-if="words && index && words[index]"
+              style="position: relative; overflow: hidden"
+            >
               <LazyDictionaryEntry
                 :entry="words[index]"
                 :showHeader="false"

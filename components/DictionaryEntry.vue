@@ -37,7 +37,7 @@
         <div class="col">
           <div class="section-nav">
             <div
-              v-for="(section, index) in sections"
+              v-for="(section, index) in sections.filter(s => s.visible)"
               :key="`section-nav-item-${index}`"
               :class="{
                 'section-nav-item': true,
@@ -108,10 +108,15 @@
             />
           </div>
         </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <EntryYouTube :text="entry.head" v-if="$adminMode" class="" />
+              </div>
+            </div>
       </div>
 
-      <div class="container">
-        <div class="row" v-if="showImages">
+      <div class="container" v-if="showImages">
+        <div class="row">
           <div class="col-sm-12">
             <div class="web-images widget">
               <div class="widget-title">
@@ -143,11 +148,6 @@
                 </p>
               </div>
             </div>
-            <div class="row">
-              <div class="col-sm-12">
-                <EntryYouTube :text="entry.head" v-if="$adminMode" class="" />
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -161,7 +161,6 @@
         <div class="row">
           <div class="col">
             <Collocations
-              :class="{ '': true, hidden: !collocationsReady }"
               :word="entry"
               @collocationsReady="collocationsReady = true"
               :level="
@@ -186,7 +185,6 @@
         <div class="row">
           <div class="col-sm-12">
             <Concordance
-              :class="{ ' ': true, hidden: !concordanceReady }"
               @concordanceReady="concordanceReady = true"
               :word="entry"
               :level="entry.level"
@@ -276,7 +274,6 @@
         <div class="row">
           <div class="col">
             <EntryRelated
-              :class="{ '': true, hidden: !relatedReady }"
               @relatedReady="relatedReady = true"
               :entry="entry"
               :key="`related-${entry.id}`"
@@ -366,7 +363,7 @@ export default {
         },
         {
           title: "Images",
-          visible: this.showImages || this.$adminMode,
+          visible: this.showImages,
         },
         {
           title: "Collocations",

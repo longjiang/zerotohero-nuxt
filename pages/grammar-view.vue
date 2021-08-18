@@ -57,7 +57,7 @@
               :key="`drill-${grammar.id}-${drill.id}`"
             />
           </div>
-          <div v-if="entry">
+          <div v-if="entry" style="position: relative; overflow: hidden">
             <hr />
             <LazyDictionaryEntry
               :entry="entry"

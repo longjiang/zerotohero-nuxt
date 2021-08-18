@@ -93,7 +93,10 @@
               </div>
             </div>
           </div>
-          <div :class="{ 'content-pane-right pl-3 pr-3': wide }">
+          <div
+            :class="{ 'content-pane-right pl-3 pr-3': wide }"
+            style="position: relative; overflow: hidden"
+          >
             <div class="text-center">
               <Loader class="pt-5 pb-5" />
             </div>
