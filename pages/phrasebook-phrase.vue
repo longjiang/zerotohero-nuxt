@@ -89,13 +89,19 @@
                   class="mt-3"
                   :definitions="word.definitions"
                 ></DefinitionsList>
+                <EntryCourseAd
+                  v-if="$l2.code === 'zh'"
+                  variant="compact"
+                  class="focus-exclude mt-4 mb-5"
+                  :entry="word"
+                ></EntryCourseAd>
                 <EntryExternal
                   :term="word.head"
                   :traditional="word.traditional"
                   :level="word.level"
                   :sticky="false"
                   class="mt-4 mb-4 text-center"
-                  style="margin-bottom: 0;"
+                  style="margin-bottom: 0"
                 />
               </div>
             </div>

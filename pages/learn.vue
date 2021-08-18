@@ -51,6 +51,12 @@
                 class="mt-3"
                 :definitions="words[index].definitions"
               ></DefinitionsList>
+              <EntryCourseAd
+                v-if="$l2.code === 'zh'"
+                variant="compact"
+                class="focus-exclude mt-4 mb-5"
+                :entry="words[index]"
+              ></EntryCourseAd>
               <EntryExternal
                 :term="words[index].head"
                 :traditional="words[index].traditional"
