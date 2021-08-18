@@ -4,7 +4,7 @@
       <div class="widget-title">
         {{ $t("Collocations with “{text}”", { text: term }) }}
       </div>
-      <div class="widget-body jumbotron-fluid p-4">
+      <div class="widget-body container jumbotron-fluid p-4">
         <div class="row">
           <div class="col-sm-12" v-if="sC.length > 0">
             <ul class="list-unstyled mb-4 saved-collocations">
@@ -70,7 +70,7 @@
               'col-12': params.xs,
               'col-6': params.sm,
               'col-4': params.md,
-              'col-3': params.lg,
+              'col-3': params.lg || params.xl || params.xxl,
             }"
             :key="`collocations-${index}`"
           >
