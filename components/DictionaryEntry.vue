@@ -32,218 +32,252 @@
         </div>
       </div>
     </div>
-
-    <div :class="{ container: !portrait, 'container-fluid': portrait }">
-      <div class="row">
-        <div :class="{ 'col-sm-12': true, 'p-0': portrait }">
-          <div
-            :class="{ 'widget widget-dark': true }"
-            id="search-subs"
-            v-if="entry && showSearchSubs && searchTerms"
-          >
-            <div class="widget-title">
-              “{{ entry.head }}” in
-              {{ tvShow ? `the TV Show "${tvShow.title}"` : "TV Shows" }}
+    <VueSlickCarousel v-bind="vueSlickCarouselSettings">
+      <div :class="{ container: !portrait, 'container-fluid': portrait }">
+        <div class="row">
+          <div :class="{ 'col-sm-12': true, 'p-0': portrait }">
+            <div
+              :class="{ 'widget widget-dark': true }"
+              id="search-subs"
+              v-if="entry && showSearchSubs && searchTerms"
+            >
+              <div class="widget-title">
+                “{{ entry.head }}” in
+                {{ tvShow ? `the TV Show "${tvShow.title}"` : "TV Shows" }}
+              </div>
+              <div class="widget-body">
+                <LazySearchSubsComp
+                  v-if="searchTerms"
+                  ref="searchSubs"
+                  skin="dark"
+                  :level="
+                    entry.newHSK && entry.newHSK === '7-9' ? '7-9' : entry.hsk
+                  "
+                  :key="`subs-search-${entry.id}`"
+                  :terms="searchTerms"
+                  :tvShow="tvShow"
+                  :exact="exact"
+                />
+              </div>
             </div>
-            <div class="widget-body">
-              <LazySearchSubsComp
-                v-if="searchTerms"
-                ref="searchSubs"
-                skin="dark"
-                :level="
-                  entry.newHSK && entry.newHSK === '7-9' ? '7-9' : entry.hsk
-                "
-                :key="`subs-search-${entry.id}`"
-                :terms="searchTerms"
-                :tvShow="tvShow"
-                :exact="exact"
-              />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <EntryCourseAd
+              v-if="$l2.code === 'zh'"
+              :entry="entry"
+              class="focus-exclude"
+              :key="`${entry.id}-course-ad`"
+            ></EntryCourseAd>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <EntryExternal
+              v-if="showExternal"
+              :term="entry.head"
+              :traditional="entry.traditional"
+              :level="entry.level"
+              class="mt-4 mb-4 text-center"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="row" v-if="showImages">
+          <div class="col-sm-12">
+            <div class="web-images widget">
+              <div class="widget-title">
+                {{ $t("Images of “{text}” on the Web", { text: entry.head }) }}
+              </div>
+              <div class="widget-body jumbotron-fluid p-4">
+                <WebImages
+                  :text="entry.head"
+                  :entry="entry"
+                  limit="10"
+                  ref="images"
+                  :preloaded="images"
+                  @loaded="webImagesLoaded"
+                />
+                <p class="">
+                  See more images of of “{{ entry.head }}” on
+                  <a
+                    :href="`https://www.google.com/search?q=${entry.head.replace(
+                      / /g,
+                      '+'
+                    )}&tbm=isch&sout=1#spf=1567955197854`"
+                  >
+                    <img
+                      src="/img/logo-google-images.png"
+                      alt="Google Images"
+                      class="logo-small ml-2"
+                    />
+                  </a>
+                </p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <EntryYouTube :text="entry.head" v-if="$adminMode" class="" />
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-12">
-          <EntryExternal
-            v-if="showExternal"
-            :term="entry.head"
-            :traditional="entry.traditional"
-            :level="entry.level"
-            class="mt-4 mb-4 text-center"
-          />
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-12">
+            <EntryForms
+              v-if="
+                ['wiktionary', 'kengdic', 'edict', 'openrussian'].includes(
+                  $dictionaryName
+                )
+              "
+              class=""
+              :word="entry"
+            />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <Collocations
+              :class="{ '': true, hidden: !collocationsReady }"
+              :word="entry"
+              @collocationsReady="collocationsReady = true"
+              :level="
+                entry.newHSK && entry.newHSK === '7-9' ? '7-9' : entry.level
+              "
+            />
+          </div>
         </div>
       </div>
-      <div class="row d-flex" style="flex-wrap: wrap">
-        <!-- <EntryDifficulty :entry="entry" style="flex: 1" class="m-3" /> -->
-        <EntryDisambiguation
-          v-if="['zh', 'yue'].includes($l2.code)"
-          :entry="entry"
-          class="ml-3 mr-3"
-          style="flex: 1; min-width: 20rem"
-        ></EntryDisambiguation>
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            <Mistakes
+              :class="{ '': true, hidden: !mistakesReady }"
+              @mistakesReady="mistakesReady = true"
+              v-if="$l2.code === 'zh'"
+              :text="entry.simplified"
+              :key="`mistakes-${entry.id}`"
+            ></Mistakes>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <Concordance
+              :class="{ ' ': true, hidden: !concordanceReady }"
+              @concordanceReady="concordanceReady = true"
+              :word="entry"
+              :level="entry.level"
+            />
+          </div>
+        </div>
       </div>
-      <div class="row" v-if="showImages">
-        <div class="col-sm-12">
-          <div class="web-images widget">
-            <div class="widget-title">
-              {{ $t("Images of “{text}” on the Web", { text: entry.head }) }}
-            </div>
-            <div class="widget-body jumbotron-fluid p-4">
-              <WebImages
-                :text="entry.head"
-                :entry="entry"
-                limit="10"
-                ref="images"
-                :preloaded="images"
-                @loaded="webImagesLoaded"
-              />
-              <p class="">
-                See more images of of “{{ entry.head }}” on
-                <a
-                  :href="`https://www.google.com/search?q=${entry.head.replace(
-                    / /g,
-                    '+'
-                  )}&tbm=isch&sout=1#spf=1567955197854`"
-                >
-                  <img
-                    src="/img/logo-google-images.png"
-                    alt="Google Images"
-                    class="logo-small ml-2"
-                  />
-                </a>
-              </p>
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            <div class="row" v-if="['ja', 'ko'].includes($l2.code) || $l2.han">
+              <div class="col-sm-12" v-if="$l2.code !== 'zh'">
+                <EntryCharacters
+                  v-if="entry.cjk && entry.cjk.canonical"
+                  :key="`${entry.id}-characters`"
+                  class=""
+                  :text="entry.cjk.canonical"
+                  :pinyin="
+                    entry.cjk.phonetics ? entry.cjk.phonetics : undefined
+                  "
+                ></EntryCharacters>
+              </div>
+              <div class="col-sm-12" v-else>
+                <EntryCharacters
+                  class="simplified"
+                  :text="entry.simplified"
+                  :pinyin="entry.pinyin"
+                  :key="`${entry.id}-characters-simplified`"
+                ></EntryCharacters>
+                <EntryCharacters
+                  class="traditional"
+                  :text="entry.traditional"
+                  :pinyin="entry.pinyin"
+                  :key="`${entry.id}-characters-traditional`"
+                ></EntryCharacters>
+              </div>
+              <div class="col-sm-6" v-if="$l2.code !== 'zh'">
+                <Chinese
+                  v-if="
+                    entry.cjk &&
+                    entry.cjk.canonical &&
+                    entry.cjk.canonical !== 'NULL'
+                  "
+                  class=""
+                  :text="entry.cjk.canonical"
+                  :key="`${entry.id}-chinese`"
+                />
+              </div>
+              <div class="col-sm-6" v-if="$l2.code !== 'ja'">
+                <Japanese
+                  v-if="
+                    entry.cjk &&
+                    entry.cjk.canonical &&
+                    entry.cjk.canonical !== 'NULL'
+                  "
+                  class=""
+                  :text="entry.cjk.canonical"
+                  :key="`${entry.id}-japanese`"
+                />
+              </div>
+              <div class="col-sm-6" v-if="$l2.code !== 'ko'">
+                <Korean
+                  v-if="
+                    entry.cjk &&
+                    entry.cjk.canonical &&
+                    entry.cjk.canonical !== 'NULL'
+                  "
+                  class=""
+                  :text="entry.cjk.canonical"
+                  :key="`${entry.id}-korean`"
+                />
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-
-    <div class="container pb-4">
-      <div class="row">
-        <div class="col-12">
-          <EntryCourseAd
-            v-if="$l2.code === 'zh'"
+      <div class="container">
+        <div class="row d-flex" style="flex-wrap: wrap">
+          <!-- <EntryDifficulty :entry="entry" style="flex: 1" class="m-3" /> -->
+          <EntryDisambiguation
+            v-if="['zh', 'yue'].includes($l2.code)"
             :entry="entry"
-            class="focus-exclude"
-            :key="`${entry.id}-course-ad`"
-          ></EntryCourseAd>
+            class="ml-3 mr-3"
+            style="flex: 1; min-width: 20rem"
+          ></EntryDisambiguation>
+        </div>
+        <div class="row">
+          <div class="col">
+            <EntryRelated
+              :class="{ '': true, hidden: !relatedReady }"
+              @relatedReady="relatedReady = true"
+              :entry="entry"
+              :key="`related-${entry.id}`"
+            />
+          </div>
         </div>
       </div>
-    </div>
-    
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-12">
-          <EntryForms
-            v-if="
-              ['wiktionary', 'kengdic', 'edict', 'openrussian'].includes(
-                $dictionaryName
-              )
-            "
-            class=""
-            :word="entry"
-          />
-          <EntryYouTube :text="entry.head" v-if="$adminMode" class="" />
-          <Collocations
-            :class="{ '': true, hidden: !collocationsReady }"
-            :word="entry"
-            @collocationsReady="collocationsReady = true"
-            :level="
-              entry.newHSK && entry.newHSK === '7-9' ? '7-9' : entry.level
-            "
-          />
-          <Mistakes
-            :class="{ '': true, hidden: !mistakesReady }"
-            @mistakesReady="mistakesReady = true"
-            v-if="$l2.code === 'zh'"
-            :text="entry.simplified"
-            :key="`mistakes-${entry.id}`"
-          ></Mistakes>
-          <EntryRelated
-            :class="{ '': true, hidden: !relatedReady }"
-            @relatedReady="relatedReady = true"
-            :entry="entry"
-            :key="`related-${entry.id}`"
-          />
-        </div>
-      </div>
-    </div>
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-12">
-          <Concordance
-            :class="{ ' ': true, hidden: !concordanceReady }"
-            @concordanceReady="concordanceReady = true"
-            :word="entry"
-            :level="entry.level"
-          />
-        </div>
-      </div>
-      <div class="row" v-if="['ja', 'ko'].includes($l2.code) || $l2.han">
-        <div class="col-sm-12" v-if="$l2.code !== 'zh'">
-          <EntryCharacters
-            v-if="entry.cjk && entry.cjk.canonical"
-            :key="`${entry.id}-characters`"
-            class=""
-            :text="entry.cjk.canonical"
-            :pinyin="entry.cjk.phonetics ? entry.cjk.phonetics : undefined"
-          ></EntryCharacters>
-        </div>
-        <div class="col-sm-12" v-else>
-          <EntryCharacters
-            class="simplified"
-            :text="entry.simplified"
-            :pinyin="entry.pinyin"
-            :key="`${entry.id}-characters-simplified`"
-          ></EntryCharacters>
-          <EntryCharacters
-            class="traditional"
-            :text="entry.traditional"
-            :pinyin="entry.pinyin"
-            :key="`${entry.id}-characters-traditional`"
-          ></EntryCharacters>
-        </div>
-        <div class="col-sm-6" v-if="$l2.code !== 'zh'">
-          <Chinese
-            v-if="
-              entry.cjk && entry.cjk.canonical && entry.cjk.canonical !== 'NULL'
-            "
-            class=""
-            :text="entry.cjk.canonical"
-            :key="`${entry.id}-chinese`"
-          />
-        </div>
-        <div class="col-sm-6" v-if="$l2.code !== 'ja'">
-          <Japanese
-            v-if="
-              entry.cjk && entry.cjk.canonical && entry.cjk.canonical !== 'NULL'
-            "
-            class=""
-            :text="entry.cjk.canonical"
-            :key="`${entry.id}-japanese`"
-          />
-        </div>
-        <div class="col-sm-6" v-if="$l2.code !== 'ko'">
-          <Korean
-            v-if="
-              entry.cjk && entry.cjk.canonical && entry.cjk.canonical !== 'NULL'
-            "
-            class=""
-            :text="entry.cjk.canonical"
-            :key="`${entry.id}-korean`"
-          />
-        </div>
-      </div>
-    </div>
+    </VueSlickCarousel>
   </div>
 </template>
 <script>
 import Helper from "@/lib/helper";
+import VueSlickCarousel from "vue-slick-carousel";
+import "vue-slick-carousel/dist/vue-slick-carousel.css";
+import "vue-slick-carousel/dist/vue-slick-carousel-theme.css";
 
 export default {
+  components: { VueSlickCarousel },
   props: {
     entry: {
       type: Object,
@@ -277,8 +311,8 @@ export default {
       default: false,
     },
     exactPhrase: {
-      type: String
-    }
+      type: String,
+    },
   },
   data() {
     return {
@@ -295,6 +329,14 @@ export default {
       relatedReady: false,
       concordanceReady: false,
       searchSubsReady: false,
+      vueSlickCarouselSettings: {
+        lazyLoad: "ondemand",
+        dots: true,
+        infinite: false,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+      },
     };
   },
   computed: {
@@ -327,13 +369,12 @@ export default {
       if (this.$dictionaryName === "hsk-cedict") {
         return [this.entry.simplified, this.entry.traditional];
       }
-      if (this.exact && this.exactPhrase) return [this.exactPhrase];      
+      if (this.exact && this.exactPhrase) return [this.exactPhrase];
       let terms = [this.entry.head];
       if (this.$dictionaryName === "edict") {
         terms.push(this.entry.kana);
         terms = Helper.unique(terms);
-      }
-      else {
+      } else {
         let forms =
           (await (await this.$getDictionary()).wordForms(this.entry)) || [];
         terms = terms.concat(
