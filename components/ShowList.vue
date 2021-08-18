@@ -12,7 +12,12 @@
         :key="`tv-show-card-wrapper-${show.id}`"
         style="padding-bottom: 2rem"
       >
-        <div class="tv-show-card media">
+        <div
+          :class="{
+            'tv-show-card media': true,
+            'tv-show-card-hidden': show.hidden,
+          }"
+        >
           <router-link
             class="
               youtube-thumbnail-wrapper
@@ -36,6 +41,15 @@
               <b-button
                 v-if="$adminMode"
                 size="sm"
+                class="admin-hide-button"
+                @click.stop.prevent="toggleHidden(show)"
+              >
+                <i class="far fa-eye" v-if="show.hidden"></i>
+                <i class="far fa-eye-slash" v-else></i>
+              </b-button>
+              <b-button
+                v-if="$adminMode"
+                size="sm"
                 class="admin-remove-button"
                 @click.stop.prevent="remove(show)"
               >
@@ -51,6 +65,9 @@
 
 <script>
 import { ContainerQuery } from "vue-container-query";
+import Config from "@/lib/config";
+import Vue from "vue";
+
 export default {
   components: {
     ContainerQuery,
@@ -61,6 +78,8 @@ export default {
   },
   data() {
     return {
+      field: this.type === "tvShows" ? "tv_show" : "talk",
+      slug: this.type === "tvShows" ? "tv-show" : "talk",
       params: {},
       query: {
         xs: {
@@ -85,20 +104,6 @@ export default {
       },
     };
   },
-  methods: {
-    async remove(show) {
-      this.$store.dispatch("shows/remove", {
-        l2: this.$l2,
-        type: this.type,
-        show,
-      });
-    },
-    path(show) {
-      return `/${this.$l1.code}/${this.$l2.code}/show/${
-        this.type === "tvShows" ? "tv-show" : "talk"
-      }/${encodeURIComponent(show.id)}`;
-    },
-  },
   computed: {
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
@@ -113,6 +118,36 @@ export default {
         return this.$store.state.settings.adminMode;
     },
   },
+  methods: {
+    async remove(show) {
+      this.$store.dispatch("shows/remove", {
+        l2: this.$l2,
+        type: this.type,
+        show,
+      });
+    },
+    path(show) {
+      return `/${this.$l1.code}/${this.$l2.code}/show/${
+        this.slug
+      }/${encodeURIComponent(show.id)}`;
+    },
+    async toggleHidden(show) {
+      let hidden = !show.hidden;
+      try {
+        let url = `${Config.wiki}items/${this.field}s/${show.id}`;
+        let response = await axios.patch(
+          url,
+          { hidden },
+          { contentType: "application/json" }
+        );
+        if (response && response.data.data) {
+          Vue.set(show, "hidden", hidden);
+        }
+      } catch (err) {
+        // Direcuts bug
+      }
+    },
+  },
 };
 </script>
 
@@ -121,6 +156,9 @@ export default {
   height: 100%;
   box-shadow: 0 5px 25px #fd89662f;
   border-radius: 0.25rem;
+  &.tv-show-card-hidden {
+    opacity: 0.3;
+  }
   &:hover {
     transform: scale(110%) rotate(-3deg);
     transition: all 200ms ease-out;
@@ -166,5 +204,10 @@ export default {
   position: absolute;
   bottom: 0.5rem;
   right: 0.5rem;
+}
+.admin-hide-button {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 0.5rem;
 }
 </style>
