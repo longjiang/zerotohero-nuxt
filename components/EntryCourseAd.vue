@@ -14,19 +14,20 @@
         >
           <img :src="`/img/courses/hsk${entry.hsk}.jpg`" class="course-cover" />
         </a>
-        This word is covered in
-        <b>
-          Unit {{ entry.lesson }}
-          <span v-if="entry.hsk < 5">, Text {{ entry.dialog }}</span>
-        </b>
-        of our
-        <a
-          :href="`https://courses.chinesezerotohero.com/p/hsk-${entry.hsk}-course`"
-          :data-level="entry.level"
-        >
-          HSK {{ entry.hsk }} Video Course.
-        </a>
-        <br />
+        <div>
+          This word is covered in
+          <b>
+            Unit {{ entry.lesson }}
+            <span v-if="entry.hsk < 5">, Text {{ entry.dialog }}</span>
+          </b>
+          of our
+          <a
+            :href="`https://courses.chinesezerotohero.com/p/hsk-${entry.hsk}-course`"
+            :data-level="entry.level"
+          >
+            HSK {{ entry.hsk }} Video Course.
+          </a>
+        </div>
         <div class="mt-3" v-if="variant !== 'compact'">
           <a
             :href="`https://courses.chinesezerotohero.com/p/hsk-${entry.hsk}-course`"
@@ -47,19 +48,26 @@
       </div>
     </div>
     <div v-if="entry.hsk === 'outside'">
-      <a href="https://chinesezerotohero.teachable.com/p/path-to-fluency">
-        <img src="/img/courses/fluency.jpg" class="course-cover" />
-      </a>
-      <br />
-      Learn how to progress
-      <em>beyond the HSK</em>
-      toward fluency with our
-      <a
-        href="https://chinesezerotohero.teachable.com/p/path-to-fluency"
-        class="video-course"
-      >
-        Path to Fluency Video Course
-      </a>
+      <div class="text-center">
+        <a
+          href="https://chinesezerotohero.teachable.com/p/path-to-fluency"
+          v-if="variant !== 'compact'"
+          class="d-block"
+        >
+          <img src="/img/courses/fluency.jpg" class="course-cover" />
+        </a>
+        <div>
+          Learn how to progress
+          <em>beyond the HSK</em>
+          toward fluency with our
+          <a
+            href="https://chinesezerotohero.teachable.com/p/path-to-fluency"
+            class="video-course"
+          >
+            Path to Fluency Video Course
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </template>
