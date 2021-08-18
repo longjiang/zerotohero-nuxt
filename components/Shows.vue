@@ -22,7 +22,7 @@
             {{ routeType === "tv-shows" ? "TV Shows" : "Talks" }}
           </h3>
           <p class="text-center mb-5" v-if="shows && shows.length">
-            ({{ filteredShows.length }} show{{
+            ({{ filteredShows && filteredShows.length }} show{{
               filteredShows.length > 1 ? "s" : ""
             }})
           </p>
@@ -65,7 +65,7 @@
               </router-link>
               <b-button
                 variant="ghost-dark-no-bg"
-                v-if="filteredShows.length > 1"
+                v-if="filteredShows && filteredShows.length > 1"
                 @click="loadRandomShow"
               >
                 <i class="fas fa-step-forward mr-1"></i>
@@ -142,14 +142,14 @@ export default {
     if (shows) {
       this.shows = shows;
     } else {
-      let response = await axios.get(
-        `${Config.wiki}items/${this.routeType.replace(
-          "-",
-          "_"
-        )}?filter[l2][eq]=${this.$l2.id}&limit=500&timestamp=${
-          this.$adminMode ? Date.now() : 0
-        }`
-      );
+      let url = `${Config.wiki}items/${this.routeType.replace(
+        "-",
+        "_"
+      )}?filter[l2][eq]=${this.$l2.id}${
+        this.$adminMode ? "" : "&filter[hidden][empty]=true"
+      }&limit=500&timestamp=${this.$adminMode ? Date.now() : 0}`;
+      console.log(url);
+      let response = await axios.get(url);
       if (response && response.data) this.shows = response.data.data;
     }
   },

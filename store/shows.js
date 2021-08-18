@@ -1,5 +1,5 @@
 import Config from '@/lib/config'
-import Helper from '@/lib/helper'
+import axios from 'axios'
 
 export const state = () => {
   return {
@@ -28,7 +28,7 @@ export const actions = {
     let tvShows = []
     let response = await axios.get(
       `${Config.wiki}items/tv_shows?sort=title&filter[l2][eq]=${l2.id
-      }&limit=500&timestamp=${adminMode ? Date.now() : 0}`
+      }${adminMode ? '' : '&filter[hidden][empty]=true'}&limit=500&timestamp=${adminMode ? Date.now() : 0}`
     );
 
     if (response.data.data) {
@@ -42,7 +42,7 @@ export const actions = {
 
     response = await axios.get(
       `${Config.wiki}items/talks?sort=title&filter[l2][eq]=${l2.id
-      }&limit=500&timestamp=${adminMode ? Date.now() : 0}`
+      }${adminMode ? '' : '&filter[hidden][empty]=true'}&limit=500&timestamp=${adminMode ? Date.now() : 0}`
     );
     let talks = []
     if (response.data.data) {
