@@ -361,7 +361,14 @@ export default {
         slidesToShow: 1,
         slidesToScroll: 1,
       },
-      sections: ["TV Shows", "Images", "Collocations", "Examples", "Characters", "Related"],
+      sections: [
+        "TV Shows",
+        "Images",
+        "Collocations",
+        "Examples",
+        "Characters",
+        "Related",
+      ],
       currentSection: 0,
     };
   },
@@ -446,10 +453,12 @@ export default {
 }
 
 .section-nav {
-  overflow: scroll;
   white-space: nowrap;
   padding: 1rem 0;
   text-align: center;
+  overflow: scroll;
+  overflow-y: hidden;
+  max-width: 100%;
   .section-nav-item {
     display: inline-block;
     padding: 0.5rem 0;

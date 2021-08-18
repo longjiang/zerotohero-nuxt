@@ -106,20 +106,21 @@
             </div>
           </div>
 
-          <div :class="{ 'content-pane-right pl-3 pr-3': wide }">
-            <article>
-              <LazyDictionaryEntry
-                v-if="entry"
-                :entry="entry"
-                :images="images"
-                ref="dictionaryEntry"
-                :class="{ 'pb-5': $l2.code !== 'zh' }"
-                :key="`dictionary-entry-${entry.id}`"
-                :showHeader="false"
-                :showDefinitions="false"
-                :showExample="false"
-              />
-            </article>
+          <div
+            :class="{ 'content-pane-right pl-3 pr-3': wide }"
+            style="position: relative; overflow: hidden"
+          >
+            <LazyDictionaryEntry
+              v-if="entry"
+              :entry="entry"
+              :images="images"
+              ref="dictionaryEntry"
+              :class="{ 'pb-5': $l2.code !== 'zh' }"
+              :key="`dictionary-entry-${entry.id}`"
+              :showHeader="false"
+              :showDefinitions="false"
+              :showExample="false"
+            />
           </div>
         </div>
       </div>
