@@ -188,14 +188,18 @@ export default {
       this.$refs.lookup.focus();
     },
     compositionEnd() {
-      this.preventEnter = true
+      this.preventEnter = true;
     },
     async enterKeyUp() {
-      // Wait for composition to finish
-      if (!this.preventEnter) this.go();
-      else {
-        await Helper.timeout(500);
-        this.preventEnter = false
+      if (["ko", "ja"].includes(this.$l2.code)) {
+        // Wait for composition to finish
+        if (!this.preventEnter) this.go();
+        else {
+          await Helper.timeout(500);
+          this.preventEnter = false;
+        }
+      } else {
+        this.go()
       }
     },
     go() {
