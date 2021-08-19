@@ -1,6 +1,10 @@
 <router>
   {
+    name: 'index',
     path: '/',
+    meta: {
+      layout: 'full'
+    }
   }
 </router>
 <template>

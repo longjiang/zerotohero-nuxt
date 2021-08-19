@@ -4,7 +4,10 @@
       class="zerotohero-background"
       :style="`background-image: url(${background})`"
     />
-    <template v-if="$route.path !== '/'">
+    <template v-if="$route.meta.layout === 'full'">
+      <Nuxt id="main" />
+    </template>
+    <template v-else>
       <client-only>
         <Nav
           v-if="l1 && l2"
@@ -17,7 +20,7 @@
       </client-only>
       <div class="zth-content">
         <Nuxt id="main" />
-        <footer class="zth-footer" style="z-index: -1">
+        <footer class="zth-footer" style="z-index: -1" v-if="showFooter">
           <Choose :compact="true" />
           <div class="container">
             <div class="row">
@@ -56,9 +59,6 @@
         :iconMode="true"
       />
     </template>
-    <template v-else>
-      <Nuxt id="main" />
-    </template>
   </div>
 </template>
 
@@ -66,7 +66,6 @@
 import Config from "@/lib/config";
 import smoothscroll from "smoothscroll-polyfill";
 import Helper from "@/lib/helper";
-import axios from 'axios';
 import { mapState } from "vuex";
 
 export default {
@@ -78,6 +77,7 @@ export default {
       wide: false,
       skin: "light",
       dictionaryCredit: "",
+      fullPageRoutes: ['index', 'sale'],
     };
   },
   computed: {
@@ -120,6 +120,9 @@ export default {
         )}.jpg`;
       else return `https://source.unsplash.com/1600x900/?${this.l2.name}`;
     },
+    fullPage() {
+      return $
+    }
   },
   created() {
     this.$nuxt.$on("skin", this.onSkin);
