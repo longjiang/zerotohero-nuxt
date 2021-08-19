@@ -652,10 +652,22 @@ export default {
           ],
         },
         {
-          icon: "fas fa-gem",
-          title: "Resources",
+          icon: "fas fa-users",
+          title: "Community",
           show: true,
           children: [
+            {
+              name: "updates",
+              title: "Updates",
+              icon: "fas fa-bell",
+              show: true,
+            },
+            {
+              name: "discussions",
+              title: "Discussions",
+              icon: "fas fa-comments",
+              show: true,
+            },
             {
               name: "resources",
               title: "Resources",
@@ -663,15 +675,15 @@ export default {
               show: true,
             },
             {
-              name: "articles-reddit",
-              title: "Reddit Articles",
-              icon: "fab fa-reddit",
+              name: "articles-wiki",
+              title: "Blog",
+              icon: "fas fa-copy",
               show: true,
             },
             {
-              name: "articles-wiki",
-              title: "Wiki",
-              icon: "fab fa-wikipedia-w",
+              name: "articles-reddit",
+              title: "Reddit",
+              icon: "fab fa-reddit",
               show: true,
             },
           ],
