@@ -31,6 +31,12 @@ export default {
   components: {
     Disqus,
   },
+  data: () => ({
+    pageConfig: {
+      title: 'All discussions',
+      identifier: '/'
+    }
+  })
 };
 </script>
 
