@@ -73,7 +73,7 @@ export default {
 }
 </script>
 
-<style>
+<style style="scss" scoped>
 .avatar {
   border-radius: 100%;
   width: 6rem;

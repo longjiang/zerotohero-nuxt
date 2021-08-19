@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="row">
+    <div class="row justify-content-center">
       <div
         class="col-md-6 col-lg-4 mb-5"
         v-for="(hero, index) in heroes.filter(filter)"
@@ -15,7 +15,7 @@
 <script>
 import Config from "@/lib/config";
 import Hero from "@/components/Hero";
-import axios from 'axios'
+import axios from "axios";
 
 export default {
   components: {
@@ -43,27 +43,29 @@ export default {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
+    count() {
+      if (this.heroes) {
+        return this.heroes.length;
+      }
+    },
   },
   async fetch() {
-    let response = await axios.get(`${Config.wiki}items/heroes?fields=*,avatar.*`);
+    let response = await axios.get(
+      `${Config.wiki}items/heroes?fields=*,avatar.*`
+    );
     this.heroes = response.data.data
-      .map((hero) => {
-        hero.url = `/${this.$l1.code}/${this.$l2.code}/hall-of-heroes/view/${
-          hero.id
-        },${encodeURIComponent(hero.name)}`;
-        return hero;
-      })
       .sort((a, b) => {
         return b.score - a.score;
       })
       .sort((a, b) => {
         return b.hsk - a.hsk;
       });
+    this.$emit('heroes', this.heroes)
   },
   methods: {
     filter(hero) {
       if (this.category === "featured") {
-        return hero.featured === true;
+        return hero.featured === 1;
       } else if (this.category === "hsk") {
         return this.hsk === "all" || hero.hsk === this.hsk;
       } else {
