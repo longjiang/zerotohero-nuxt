@@ -20,7 +20,7 @@
       </client-only>
       <div class="zth-content">
         <Nuxt id="main" />
-        <footer class="zth-footer" style="z-index: -1" v-if="showFooter">
+        <footer class="zth-footer" style="z-index: -1">
           <Choose :compact="true" />
           <div class="container">
             <div class="row">
