@@ -319,8 +319,8 @@ export default {
             },
             {
               href: "https://chinesezerotohero.teachable.com/",
-              title: "Teachable",
-              icon: "fa fa-window-restore",
+              title: "Course Directory",
+              icon: "fa fa-folder-open",
               show: ["zh"].includes(this.l2.code),
             },
             {
