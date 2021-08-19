@@ -5,6 +5,9 @@
         {{ $t("Collocations with “{text}”", { text: term }) }}
       </div>
       <div class="widget-body container jumbotron-fluid p-4">
+        <div class="text-center p-5" v-if="updating">
+          <Loader :sticky="true" message="Loading collocations..." />
+        </div>
         <div class="row">
           <div class="col-sm-12" v-if="sC.length > 0">
             <ul class="list-unstyled mb-4 saved-collocations">

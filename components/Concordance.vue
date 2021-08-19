@@ -4,6 +4,9 @@
       {{ $t("Sentences with “{text}”", { text: term }) }}
     </div>
     <div class="widget-body jumbotron-fluid p-4">
+      <div class="text-center p-5" v-if="updating">
+        <Loader :sticky="true" message="Loading sentences..." />
+      </div>
       <div v-if="examples && examples.length > 0">
         <ul
           v-if="examples"
@@ -11,9 +14,10 @@
           data-collapse-target
         >
           <li
-            v-for="example in examples
+            v-for="(example, index) in examples
               .filter((example) => example.sentences.length > 0)
               .sort((a, b) => a.sentences[0].length - b.sentences[0].length)"
+            :key="`example-item-${index}`"
           >
             <Annotate
               tag="div"
@@ -50,7 +54,9 @@
       <div v-if="!updating && (!examples || examples.length === 0)">
         Sorry, we could not find any “{{ term }}” examples. You can set a
         different corpus in
-        <router-link :to="`/${$l1.code}/${$l2.code}/settings`">Settings</router-link>
+        <router-link :to="`/${$l1.code}/${$l2.code}/settings`">
+          Settings
+        </router-link>
         .
       </div>
       <hr v-if="examples && examples.length === 0" />
