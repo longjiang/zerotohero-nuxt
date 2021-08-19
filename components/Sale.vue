@@ -9,7 +9,7 @@
     </video>
     <div class="foreground text-center">
       <div class="p-4 d-inline-block">
-        <div style="font-weight: 700; font-size: 3rem">SUMMER SALE</div>
+        <div style="font-weight: 700; font-size: 3rem; line-height: 1">SUMMER SALE</div>
         <div style="font-size: 1.2rem; font-weight: bold">ALL COURSES 30% OFF</div>
         <div style="font-size: 1.2rem; font-weight: bold">
           <span>USE COUPON CODE</span>

@@ -154,7 +154,7 @@
             <a
               v-else
               :href="child.href"
-              :key="`subnav-${child.name}-${index}`"
+              :key="`subnav-${child.name || child.href}-${index}`"
               target="_blank"
               :class="{
                 'secondary-nav-item': true,
