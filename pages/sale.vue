@@ -29,7 +29,7 @@
       <div class="row">
         <div class="col">
           <div class="text-center">
-            <h1 class="text-center mt-5 mb-4" style="font-size: 6rem">SALE</h1>
+            <h1 class="text-center mt-5 mb-4 sale-heading">SUMMER SALE</h1>
           </div>
           <h2 class="text-center mt-4" style="margin-bottom: 2rem">
             ALL HSK COURSES 30% OFF
@@ -125,7 +125,10 @@
       </div>
       <div class="row mt-5 text-center" style="margin-bottom: 5rem">
         <div class="col">
-          <a href="https://chinesezerotohero.teachable.com/" class="btn btn-lg btn-success">
+          <a
+            href="https://chinesezerotohero.teachable.com/"
+            class="btn btn-lg btn-success"
+          >
             TAKE THIS OFFER NOW
           </a>
         </div>
@@ -197,5 +200,15 @@ export default {
   color: white;
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
+}
+
+.sale-heading {
+  font-size: 7rem;
+}
+
+@media (max-width: 540px) {
+  .sale-heading {
+    font-size: 4rem;
+  }
 }
 </style>
