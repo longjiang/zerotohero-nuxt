@@ -22,6 +22,7 @@
               }}
             </h3>
           </div>
+          <Sale class="mt-4 mb-4" v-if="$l2.code === 'zh'"/>
           <client-only>
             <div :class="{ 'pl-1 pr-1 pb-2': true, 'd-none': !hasDashboard }">
               <div class="home-card">
