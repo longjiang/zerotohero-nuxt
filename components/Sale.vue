@@ -1,31 +1,58 @@
 <template>
-  <div class="jumbotron-fluid bg-dark p-5 text-light mb-0 text-center" style="position: relative">
+  <div
+    class="jumbotron-fluid bg-dark text-light mb-0 text-center rounded"
+    style="position: relative; overflow: hidden; cursor: pointer"
+    @click="go"
+  >
+    <video autoplay muted loop>
+      <source src="/video/backgrounds/vbg-waves-480p.mp4" type="video/mp4" />
+    </video>
     <div class="foreground text-center">
-      <h2 style="margin-bottom: -1rem">
-        <span
-          style="display: inline-block; background-color: orange; transform: rotate(-6deg);"
-          class="p-3 shadow"
-        >BLACK FRIDAY WEEKEND SALE</span>
-      </h2>
-      <div data-bg-level="5" class="p-4 d-inline-block">
-        <div style="font-size: 1.5rem; font-weight: 100;">ALL COURSES</div>
-        <div style="font-weight: 700; font-size: 3rem">30% OFF</div>
-        <div>Ends: November 30, 2020</div>
-        <div class="mt-3">
-          <span class="mr-2">Coupon Code</span>
-          <code class="coupon-code">BF30</code>
+      <div class="p-4 d-inline-block">
+        <div style="font-weight: 700; font-size: 3rem">SUMMER SALE</div>
+        <div style="font-size: 1.2rem; font-weight: bold">ALL COURSES 30% OFF</div>
+        <div style="font-size: 1.2rem; font-weight: bold">
+          <span>USE COUPON CODE</span>
+          <code class="coupon-code">SUMMER</code>
         </div>
+        <div style="font-size: 1.2rem; font-weight: bold">DEAL ENDS AUG 25</div>
       </div>
     </div>
-    <img src="/img/sale-bg.jpg" alt class="img-background" style="opacity: 0.15" />
   </div>
 </template>
 
 <script>
 export default {
-
-}
+  methods: {
+    go() {
+      this.$router.push({ name: "sale" });
+    },
+  },
+};
 </script>
 
-<style>
+<style lang="scss" scoped>
+.vidContain {
+  position: relative;
+  margin: 10px;
+  width: 100%;
+  height: 20rem;
+  overflow: hidden;
+}
+video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.coupon-code {
+  background: #00000066;
+  backdrop-filter: blur(30px);
+  font-size: 1em;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+}
 </style>

@@ -12,6 +12,7 @@
         <div class="row">
           <div class="col-sm-12">
             <h3 class="text-center mt-5 mb-5">{{ $l2.name }} Phrasebooks</h3>
+            <Sale class="mb-5" />
             <div class="mb-5">
               <div
                 :class="{

@@ -131,7 +131,7 @@
                 'd-block': variant === 'side-bar',
               }"
               v-if="!child.href"
-              :key="`subnav-${child.name}-${index}`"
+              :key="`subnav-${child.name || child.href}-${index}`"
               :to="last(child) || child"
             >
               <i :class="child.icon"></i>

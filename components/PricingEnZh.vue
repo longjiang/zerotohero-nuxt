@@ -7,7 +7,7 @@
         :image="`/img/courses/bundle-ultimate.jpg`"
       />
       <h3 class="mb-5 text-center">Pricing Chart</h3>
-      <!-- <Sale class="mb-5 rounded" /> -->
+      <Sale class="mb-5 rounded" />
       <div class="bg-success text-light p-3 text-center mb-5 rounded">
         <h4 class="mb-0">No subscriptions! 😊 Pay once, enjoy forever!</h4>
       </div>
@@ -50,17 +50,17 @@
               </a>
             </td>
             <td class="text-center">
-              <span v-html="price(29, { sale: false })"></span>
+              <span v-html="price(29, { sale: true })"></span>
             </td>
             <td class="text-center align-middle" rowspan="4">
-              <span v-html="price(134, { sale: false })"></span>
+              <span v-html="price(134, { sale: true })"></span>
               <br />
               <span style="color: rgb(26, 148, 6); font-size: 12px">
                 Save {{ money(24) }}
               </span>
             </td>
             <td class="text-center align-middle" rowspan="9">
-              <span v-html="price(219, { sale: false })"></span>
+              <span v-html="price(219, { sale: true })"></span>
               <br />
               <span style="color: rgb(26, 148, 6); font-size: 12px">
                 Save {{ money(67) }}
@@ -75,7 +75,7 @@
               </a>
             </td>
             <td class="text-center">
-              <span v-html="price(29, { sale: false })"></span>
+              <span v-html="price(29, { sale: true })"></span>
             </td>
           </tr>
 
@@ -86,7 +86,7 @@
               </a>
             </td>
             <td class="text-center">
-              <span v-html="price(36, { sale: false })"></span>
+              <span v-html="price(36, { sale: true })"></span>
             </td>
           </tr>
 
@@ -97,7 +97,7 @@
               </a>
             </td>
             <td class="text-center">
-              <span v-html="price(64, { sale: false })"></span>
+              <span v-html="price(64, { sale: true })"></span>
             </td>
           </tr>
 
@@ -109,10 +109,10 @@
               <br />
             </td>
             <td class="text-center">
-              <span v-html="price(64, { sale: false })"></span>
+              <span v-html="price(64, { sale: true })"></span>
             </td>
             <td class="text-center align-middle" rowspan="5">
-              <span v-html="price(109, { sale: false })"></span>
+              <span v-html="price(109, { sale: true })"></span>
               <br />
               <span style="color: rgb(26, 148, 6); font-size: 12px">
                 Save {{ money(48) }}
@@ -133,7 +133,7 @@
               </div>
             </td>
             <td class="text-center align-middle">
-              <span v-html="price(9, { sale: false })"></span>
+              <span v-html="price(9, { sale: true })"></span>
               ea.
               <br />
               <span>
@@ -150,7 +150,7 @@
               </a>
             </td>
             <td class="text-center">
-              <span v-html="price(64, { sale: false })"></span>
+              <span v-html="price(64, { sale: true })"></span>
             </td>
           </tr>
 
@@ -167,7 +167,7 @@
               </div>
             </td>
             <td class="text-center align-middle">
-              <span v-html="price(9, { sale: false })"></span>
+              <span v-html="price(9, { sale: true })"></span>
               ea.
               <br />
               <span>
@@ -188,7 +188,7 @@
               </div>
             </td>
             <td class="text-center">
-              <span v-html="price(29, { sale: false })"></span>
+              <span v-html="price(29, { sale: true })"></span>
               <br />
               <span>
                 <b>FREE</b>
@@ -204,7 +204,7 @@
               </a>
             </td>
             <td class="text-center" colspan="3">
-              <span v-html="price(9, { sale: false })"></span>
+              <span v-html="price(9, { sale: true })"></span>
             </td>
           </tr>
           <tr>
