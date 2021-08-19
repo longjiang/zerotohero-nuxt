@@ -120,34 +120,51 @@
           </div>
         </nav>
         <nav class="secondary-nav" v-if="parent && parent.children">
-          <NuxtLink
-            :class="{
-              'secondary-nav-item': true,
-              'd-block': variant === 'side-bar',
-            }"
+          <template
             v-for="(child, index) in parent.children.filter(
               (child) => child.show
             )"
-            :key="`subnav-${child.name}-${index}`"
-            :to="last(child) || child"
           >
-            <i :class="child.icon"></i>
-            {{ $t(child.title, { l2: $t($l2.name) }) }}
-            <span
-              class="saved-words-count"
-              v-cloak
-              v-if="child.name === 'saved-words' && savedWordsCount > 0"
+            <NuxtLink
+              :class="{
+                'secondary-nav-item': true,
+                'd-block': variant === 'side-bar',
+              }"
+              v-if="!child.href"
+              :key="`subnav-${child.name}-${index}`"
+              :to="last(child) || child"
             >
-              {{ savedWordsCount }}
-            </span>
-            <span
-              class="saved-words-count"
-              v-cloak
-              v-if="child.name === 'saved-phrases' && savedPhrasesCount > 0"
+              <i :class="child.icon"></i>
+              {{ $t(child.title, { l2: $t($l2.name) }) }}
+              <span
+                class="saved-words-count"
+                v-cloak
+                v-if="child.name === 'saved-words' && savedWordsCount > 0"
+              >
+                {{ savedWordsCount }}
+              </span>
+              <span
+                class="saved-words-count"
+                v-cloak
+                v-if="child.name === 'saved-phrases' && savedPhrasesCount > 0"
+              >
+                {{ savedPhrasesCount }}
+              </span>
+            </NuxtLink>
+            <a
+              v-else
+              :href="child.href"
+              :key="`subnav-${child.name}-${index}`"
+              target="_blank"
+              :class="{
+                'secondary-nav-item': true,
+                'd-block': variant === 'side-bar',
+              }"
             >
-              {{ savedPhrasesCount }}
-            </span>
-          </NuxtLink>
+              <i :class="child.icon"></i>
+              {{ $t(child.title, { l2: $t($l2.name) }) }}
+            </a>
+          </template>
         </nav>
       </template>
       <template v-if="variant === 'page'">
@@ -170,9 +187,10 @@
                   class="col-sm-6 col-xl-4 mb-1 p-1 feature-card-column"
                 >
                   <NuxtLink
-                    class="feature-card link-unstyled"
+                    v-if="!child.href"
                     :to="last(child) || child"
                     style="height: 100%"
+                    class="feature-card link-unstyled"
                   >
                     <div class="feature-card-icon">
                       <i :class="child.icon"></i>
@@ -200,6 +218,19 @@
                       </span>
                     </div>
                   </NuxtLink>
+                  <a
+                    v-else
+                    :href="child.href"
+                    class="feature-card link-unstyled"
+                    target="_blank"
+                  >
+                    <div class="feature-card-icon">
+                      <i :class="child.icon"></i>
+                    </div>
+                    <div class="feature-card-title">
+                      {{ $t(child.title, { l2: $t($l2.name) }) }}
+                    </div>
+                  </a>
                 </div>
               </template>
             </template>
@@ -285,6 +316,12 @@ export default {
               title: "Courses",
               icon: "fas fa-graduation-cap",
               show: ["zh", "en"].includes(this.l2.code),
+            },
+            {
+              href: "https://chinesezerotohero.teachable.com/",
+              title: "Teachable",
+              icon: "fa fa-window-restore",
+              show: ["zh"].includes(this.l2.code),
             },
             {
               name: "hall-of-heroes",
@@ -833,6 +870,7 @@ export default {
       }
     },
     to(item) {
+      if (item.to) return item.to;
       let to = this.last(item) || this.selfOrFirstChild(item, true);
       return to;
     },
@@ -858,6 +896,7 @@ export default {
     },
     last(item) {
       if (item) {
+        if (item.to) return item.to;
         let historyMatches = this.history.filter((path) => {
           if (path) {
             let r = this.$router.resolve(path);
