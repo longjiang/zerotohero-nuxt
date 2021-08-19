@@ -30,10 +30,10 @@
         </li>
       </ul>
       <ShowMoreButton
-        class="mt-2"
-        :data-bg-level="level"
+        class="mt-2 font-weight-bold"
         :length="collocation.Words.length"
         :min="4"
+        style="font-size: 0.8em"
       />
     </div>
     <div v-else>–</div>

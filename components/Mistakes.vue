@@ -1,9 +1,12 @@
 <template>
   <div class="widget mistakes">
     <div class="widget-title widget-title-mistakes">
-      Common mistakes containing “{{ text }}”
+      Student Mistakes with “{{ text }}”
     </div>
     <div class="widget-body jumbotron-fluid p-4">
+      <div class="text-center p-5" v-if="updating">
+        <Loader :sticky="true" message="Loading student mistakes..." />
+      </div>
       <div v-if="mistakes && mistakes.length > 0">
         <ul class="collapsed pl-0" data-collapse-target>
           <li
@@ -76,7 +79,7 @@
         <ShowMoreButton
           :length="mistakes.length"
           min="4"
-          data-bg-hsk="outside"
+          style="background-color: red; color: white"
         ></ShowMoreButton>
       </div>
       <div v-if="mistakes && mistakes.length === 0">
@@ -126,6 +129,7 @@ export default {
       show: false,
       SketchEngine,
       mistakes: undefined,
+      updating: true
     };
   },
   methods: {
@@ -137,6 +141,7 @@ export default {
     let results = await SketchEngine.mistakes({
       term: this.text,
     });
+    this.updating = false
     this.mistakes = results;
     if (this.mistakes && this.mistakes.length > 0) {
       this.$emit("mistakesReady");
