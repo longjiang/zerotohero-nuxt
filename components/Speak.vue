@@ -1,14 +1,13 @@
 <template>
   <client-only>
-    <button class="speak focus-exclude" @click="speak">
-      <i class="fas fa-volume-up"></i>
-      <span v-if="!canSpeak">
+    <button class="speak focus-exclude" @click.stop.prevent="speak">
+      <i class="fas fa-volume-up" v-if="canSpeak"></i>
+      <span v-else>
         <img
-          src="/img/forvo.svg"
+          src="/img/logo-forvo-circle.png"
           alt="Forvo"
           style="
-            height: 0.8rem;
-            width: 4rem;
+            height: 1rem;
             opacity: 0.5;
             margin-bottom: 0.2rem;
           "
@@ -23,13 +22,27 @@ import commons from "wikimedia-commons-file-path";
 import Helper from "@/lib/helper";
 
 export default {
-  props: ["text", "mp3", "wiktionary"],
+  props: {
+    text: {
+      type: String,
+    },
+    mp3: {
+      type: String,
+    },
+    wiktionary: {
+      type: Boolean,
+    },
+    l2: {
+      type: Object,
+    },
+  },
   computed: {
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
     },
     $l2() {
+      if (this.l2) return this.l2;
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
@@ -50,7 +63,9 @@ export default {
   },
   async mounted() {
     await this.$getDictionary();
-    this.canSpeak = this.mp3 || (this.text && this.$hasFeature("speech"));
+    this.canSpeak =
+      this.mp3 ||
+      (this.text && this.$languages.hasFeature(this.$l1, this.$l2, "speech"));
   },
   methods: {
     // https://www.npmjs.com/package/ogv
@@ -70,7 +85,7 @@ export default {
         let url = this.wiktionary ? commons(`File:${this.mp3}`) : this.mp3;
         this.f(url);
       } else if (this.text) {
-        if (this.$hasFeature("speech")) {
+        if (this.$languages.hasFeature(this.$l1, this.$l2, "speech")) {
           Helper.speak(this.text, this.$l2, 0.75);
         } else {
           window.open(`https://forvo.com/search/${this.text}/${this.$l2.code}`);

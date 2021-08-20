@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-button @click="getSimilarPhrases" v-if="showButton">
-      <i class="fa fa-language mr-1" />Compare Languages
+      <i class="fas fa-comment-alt mr-1" /> Compare Languages
     </b-button>
     <div v-if="youInOtherLangs.length > 0">
       <h5>“{{ phraseObj[$l1.code] }}” in all languages</h5>
@@ -13,7 +13,7 @@
         :key="`you-in-other-langs-${index}`"
         class="d-block link-unstyled text-left"
       >
-        <span class="similar-phrase-l2">{{ phrase.phrase }}</span>
+        <span class="similar-phrase-l2">{{ phrase.phrase }}</span> <Speak :text="phrase.phrase" :l2="phrase.l2" />
         <span class="similar-phrase-language">
           —
           <em>{{ phrase[$l1.code] }}</em>

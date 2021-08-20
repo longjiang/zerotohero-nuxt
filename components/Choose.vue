@@ -55,9 +55,6 @@ export default {
       )
       .filter((language) => this.$languages.hasYouTube(this.english, language))
       .filter((language) => language.code !== "fil")
-      // .filter((language) =>
-      //   this.hasFeature(this.english, language, "dictionary")
-      // )
       .sort((a, b) => {
         if (a.name < b.name) {
           return -1;

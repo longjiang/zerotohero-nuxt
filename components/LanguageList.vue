@@ -92,50 +92,41 @@ export default {
       return this.$languages.l1s.find((language) => language.code === "en");
     },
     languages() {
-      let languages = this.langs
+      let languages = this.langs;
       if (!languages && this.codes) {
         languages = this.codes.map((c) => this.$languages.getSmart(c));
       }
       if (this.sort) {
-        languages = Helper.uniqueByValue(languages, "iso639-3").sort(
-          (a, b) => this.languageName(a).localeCompare(this.languageName(b), "en")
+        languages = Helper.uniqueByValue(languages, "iso639-3").sort((a, b) =>
+          this.languageName(a).localeCompare(this.languageName(b), "en")
         );
       }
-      return languages
+      return languages;
     },
   },
   methods: {
     languagePath(language) {
-      let l1 = 'en'
-      let special = this.specials[language.code]
-      if (special) l1 = special.l1
+      let l1 = "en";
+      let special = this.specials[language.code];
+      if (special) l1 = special.l1;
       return `/${l1}/${language.code}/`;
     },
     languageName(language) {
-      let name = language.name.replace(/ \(.*\)/gi, "")
-      let special = this.specials[language.code]
-      if (special) name = special.name
-      return name
-    },
-    hasFeature(l1, l2, feature) {
-      return this.$languages
-        .getFeatures(
-          {
-            l1,
-            l2,
-          },
-          process.browser
-        )
-        .includes(feature);
+      let name = language.name.replace(/ \(.*\)/gi, "");
+      let special = this.specials[language.code];
+      if (special) name = special.name;
+      return name;
     },
     hasDictionary(l1, l2) {
-      return this.hasFeature(l1, l2, "dictionary") || l2.code === "en";
+      return (
+        this.$languages.hasFeature(l1, l2, "dictionary") || l2.code === "en"
+      );
     },
     hasYouTube(l1, l2) {
       return this.$languages.hasYouTube(l1, l2);
     },
     hasLiveTV(l1, l2) {
-      return this.hasFeature(l1, l2, 'live-tv');
+      return this.$languages.hasFeature(l1, l2, "live-tv");
     },
   },
 };

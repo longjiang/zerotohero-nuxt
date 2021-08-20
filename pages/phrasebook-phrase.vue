@@ -110,9 +110,13 @@
                   class="mt-4 mb-4 text-center"
                   style="margin-bottom: 0"
                 />
-                <hr />
-                <SimilarPhrases v-if="phraseObj" :phraseObj="phraseObj" />
               </div>
+              <hr />
+              <SimilarPhrases
+                v-if="phraseObj"
+                :phraseObj="phraseObj"
+                class="text-center"
+              />
             </div>
           </div>
           <div
@@ -301,8 +305,7 @@ export default {
     next();
   },
   methods: {
-    async phraseReady() {
-    },
+    async phraseReady() {},
     changeWordTo(w) {
       this.word = w;
     },
