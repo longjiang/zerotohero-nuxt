@@ -71,6 +71,9 @@
                 <i class="fas fa-step-forward mr-1"></i>
                 Another One
               </b-button>
+              <b-button variant="ghost-dark-no-bg" v-if="$adminMode" @click="removeEpisode(randomShowFirstEpisode)">
+                <i class="fas fa-trash"></i>
+              </b-button>
             </div>
           </div>
           <div class="show-list-wrapper">
@@ -195,6 +198,12 @@ export default {
     },
   },
   methods: {
+    async removeEpisode(randomShowFirstEpisode) {
+      let response = await axios.delete(`${Config.wiki}items/youtube_videos/${randomShowFirstEpisode.id}`)
+      if (response) {
+        this.loadRandomShow()
+      }
+    },
     updateCurrentTime(currentTime) {
       if (typeof window !== "undefined") {
         this.currentTime = currentTime;
@@ -216,7 +225,7 @@ export default {
       if (response.data && response.data.data.length > 0) {
         let videos = response.data.data;
         let firstEpisode = videos[0];
-        return firstEpisode
+        return firstEpisode;
       }
     },
     async getRandomShow() {
