@@ -264,7 +264,7 @@ export default {
     async getRandomEpisode() {
       let videos = this.videos;
       let randomVideo = videos[Math.floor(Math.random() * videos.length)];
-      let videoUrl = `${Config.wiki}items/youtube_videos/${randomVideo.id}`;
+      let videoUrl = `${Config.wiki}items/youtube_videos/${randomVideo.id}?fields=youtube_id`;
       let res = await axios.get(videoUrl);
       if (res && res.data.data) {
         let video = res.data.data;

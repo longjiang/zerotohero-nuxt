@@ -216,13 +216,7 @@ export default {
       if (response.data && response.data.data.length > 0) {
         let videos = response.data.data;
         let firstEpisode = videos[0];
-        let videoUrl = `${Config.wiki}items/youtube_videos/${firstEpisode.id}`;
-        let res = await axios.get(videoUrl);
-        if (res && res.data.data) {
-          let video = res.data.data;
-          video.subs_l2 = YouTube.parseSavedSubs(video.subs_l2);
-          return video;
-        }
+        return firstEpisode
       }
     },
     async getRandomShow() {
