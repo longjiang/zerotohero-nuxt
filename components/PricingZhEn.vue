@@ -2,7 +2,6 @@
   <div class="row">
     <div class="col-sm-12">
       <h1 class="mb-5">{{ $t("Pricing Chart") }}</h1>
-      <!-- <Sale class="mb-5 rounded" /> -->
       <div class="bg-success text-light p-3 text-center mb-5 rounded">
         <h4 class="mb-0">购买一次，永远享有! 😊 （没有月费年费）</h4>
       </div>
@@ -19,6 +18,7 @@
         <select v-if="rates" name id v-model="currency" class="mb-3">
           <option
             v-for="(rate, symbol) in rates"
+            :key="`rate-option-${symbol}`"
             :value="symbol"
             :selected="currency === symbol"
           >

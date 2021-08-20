@@ -27,6 +27,7 @@
             </div>
           </div>
         </div>
+        <Sale class="mb-5" />
         <client-only>
           <div :class="{ 'row mb-5': true, 'd-none': !hasDashboard }">
             <div class="col-sm-12">

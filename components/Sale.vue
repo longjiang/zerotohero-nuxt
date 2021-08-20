@@ -10,12 +10,12 @@
     <div class="foreground text-center">
       <div class="p-4 d-inline-block">
         <div style="font-weight: 700; font-size: 3rem; line-height: 1">SUMMER SALE</div>
-        <div style="font-size: 1.2rem; font-weight: bold">ALL COURSES 30% OFF</div>
-        <div style="font-size: 1.2rem; font-weight: bold">
+        <div class="mt-3" style="font-size: 1.2rem; font-weight: bold; opacity: 0.8">CHINESE COURSES 30% OFF</div>
+        <div style="font-size: 1.2rem; font-weight: bold; opacity: 0.8">
           <span>USE COUPON CODE</span>
           <code class="coupon-code">SUMMER</code>
         </div>
-        <div style="font-size: 1.2rem; font-weight: bold">DEAL ENDS AUG 25</div>
+        <div style="font-size: 1.2rem; font-weight: bold; opacity: 0.8">DEAL ENDS AUG 25</div>
       </div>
     </div>
   </div>
