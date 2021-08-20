@@ -110,6 +110,7 @@
                   class="mt-4 mb-4 text-center"
                   style="margin-bottom: 0"
                 />
+                <hr />
                 <SimilarPhrases v-if="phraseObj" :phraseObj="phraseObj" />
               </div>
             </div>
