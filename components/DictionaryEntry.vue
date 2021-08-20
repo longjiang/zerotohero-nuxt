@@ -37,13 +37,11 @@
         </div>
       </div>
     </div>
-    <VueSlickCarousel
-      v-bind="vueSlickCarouselSettings"
-      ref="carousel"
-      class="mb-5"
-      @beforeChange="beforeCarouselChange"
-    >
-      <div class="dictionary-entry-section">
+    <div class="dictionary-entry-sections">
+      <div
+        class="dictionary-entry-section"
+        v-if="sections[currentSection].title === 'TV Shows'"
+      >
         <div
           :class="{ 'widget widget-dark': true }"
           id="search-subs"
@@ -78,7 +76,10 @@
         <EntryYouTube :text="entry.head" v-if="$adminMode" class="" />
       </div>
 
-      <div class="dictionary-entry-section" v-if="showImages">
+      <div
+        class="dictionary-entry-section"
+        v-if="sections[currentSection].title === 'Images' && showImages"
+      >
         <div class="web-images widget">
           <div class="widget-title">
             {{ $t("Images of “{text}” on the Web", { text: entry.head }) }}
@@ -111,7 +112,10 @@
         </div>
       </div>
 
-      <div class="dictionary-entry-section">
+      <div
+        class="dictionary-entry-section"
+        v-if="sections[currentSection].title === 'Collocations'"
+      >
         <EntryForms v-if="hasForms" class="" :word="entry" />
         <Collocations
           :word="entry"
@@ -119,7 +123,10 @@
           :level="entry.newHSK && entry.newHSK === '7-9' ? '7-9' : entry.level"
         />
       </div>
-      <div class="dictionary-entry-section">
+      <div
+        class="dictionary-entry-section"
+        v-if="sections[currentSection].title === 'Examples'"
+      >
         <Mistakes
           :class="{ '': true, hidden: !mistakesReady }"
           @mistakesReady="mistakesReady = true"
@@ -135,7 +142,10 @@
       </div>
       <div
         class="dictionary-entry-section"
-        v-if="['ja', 'ko'].includes($l2.code) || $l2.han"
+        v-if="
+          ['ja', 'ko'].includes($l2.code) ||
+          ($l2.han && sections[currentSection].title === 'Characters')
+        "
       >
         <div v-if="$l2.code !== 'zh'">
           <EntryCharacters
@@ -199,7 +209,10 @@
           </div>
         </div>
       </div>
-      <div class="dictionary-entry-section">
+      <div
+        class="dictionary-entry-section"
+        v-if="sections[currentSection].title === 'Related'"
+      >
         <!-- <EntryDifficulty :entry="entry" style="flex: 1" class="m-3" /> -->
         <EntryDisambiguation
           v-if="['zh', 'yue'].includes($l2.code)"
@@ -217,7 +230,7 @@
           :key="`${entry.id}-course-ad`"
         ></EntryCourseAd>
       </div>
-    </VueSlickCarousel>
+    </div>
   </div>
 </template>
 <script>
@@ -280,14 +293,6 @@ export default {
       concordanceReady: false,
       searchSubsReady: false,
       currentSection: 0,
-      vueSlickCarouselSettings: {
-        lazyLoad: "ondemand",
-        dots: true,
-        infinite: false,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-      },
     };
   },
   computed: {
@@ -350,7 +355,7 @@ export default {
   },
   methods: {
     goToSection(index) {
-      this.$refs.carousel.goTo(index);
+      this.currentSection = index;
     },
     beforeCarouselChange(oldIndex, newIndex) {
       this.currentSection = newIndex;
