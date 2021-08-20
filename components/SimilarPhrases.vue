@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div v-if="youInOtherLangs && youInOtherLangs.length > 0">
+    <b-button @click="getSimilarPhrases" v-if="showButton">
+      <i class="fa fa-language mr-1" />Compare Languages
+    </b-button>
+    <div v-if="youInOtherLangs.length > 0">
       <h5>“{{ phraseObj[$l1.code] }}” in all languages</h5>
       <router-link
         v-for="(phrase, index) of youInOtherLangs"
@@ -18,7 +21,7 @@
         </span>
       </router-link>
     </div>
-    <div v-if="vousInOtherLangs && vousInOtherLangs.length > 0">
+    <div v-if="vousInOtherLangs.length > 0">
       <h5 class="mt-3">
         <em>{{ phraseObj.phrase }}</em>
         in all languages
@@ -39,6 +42,21 @@
         </span>
       </router-link>
     </div>
+    <Loader
+      :sticky="true"
+      message="Looking for similar phrases in other languages"
+      v-if="updating"
+    />
+    <div
+      v-if="
+        !showButton &&
+        !updating &&
+        vousInOtherLangs.length === 0 &&
+        youInOtherLangs.length === 0
+      "
+    >
+      No similar phrases found in other languages.
+    </div>
   </div>
 </template>
 
@@ -52,10 +70,12 @@ export default {
     },
   },
   data: () => ({
-    allPhrases: undefined,
-    youInOtherLangs: undefined,
-    vousInOtherLangs: undefined,
-    youInSameLang: undefined,
+    allPhrases: [],
+    youInOtherLangs: [],
+    vousInOtherLangs: [],
+    updating: false,
+    loaded: false,
+    showButton: true,
   }),
   computed: {
     $l1() {
@@ -70,9 +90,6 @@ export default {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
     },
-  },
-  mounted() {
-    this.getSimilarPhrases();
   },
   methods: {
     async f() {
@@ -146,9 +163,12 @@ export default {
       );
     },
     async getSimilarPhrases() {
+      this.updating = true;
+      this.showButton = false;
       let phrasebooks = [].concat(await this.f()).concat(await this.g());
       this.allPhrases = this.h(phrasebooks);
       this.separatePhrases(this.allPhrases);
+      this.updating = false;
     },
   },
 };
