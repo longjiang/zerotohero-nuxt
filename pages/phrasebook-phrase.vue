@@ -72,9 +72,10 @@
                   <b-dropdown-item
                     v-for="w in words"
                     :key="`phrase-word-disambiguation-${w.id}`"
-                    @click="word = w"
+                    @click="changeWordTo(w)"
                   >
                     <b>{{ w.head }}</b>
+                    <b v-if="w.pronunciation || w.kana">({{ w.pronunciation || w.kana }})</b>
                     <em>{{ w.definitions[0] }}</em>
                   </b-dropdown-item>
                 </b-dropdown>
@@ -82,7 +83,7 @@
               <div class="text-center">
                 <Loader class="pt-5 pb-5" />
               </div>
-              <div v-if="word" class="text-center">
+              <div v-if="word" class="text-center" :key="`word-heading-${word.id}`">
                 <LazyEntryHeader :entry="word" />
                 <DefinitionsList
                   v-if="word.definitions"
@@ -125,6 +126,7 @@
               :showDefinitions="false"
               :showExample="false"
               :showExternal="false"
+              :key="`dictionary-entry-${word.id}`"
             />
             <LazyPhraseComp
               v-else-if="phraseObj && phraseObj.phrase && phrasebook"
@@ -312,6 +314,9 @@ export default {
     next();
   },
   methods: {
+    changeWordTo(w) {
+      this.word = w
+    },
     savePhrasebookHistory(index) {
       let data = {
         type: "phrasebook",
