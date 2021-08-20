@@ -157,7 +157,7 @@
               <i
                 class="fas fa-times-circle ml-1"
                 v-if="$adminMode"
-                @click="unassignShow('talk')"
+                @click.stop.prevent="unassignShow('talk')"
               />
             </router-link>
             <div
