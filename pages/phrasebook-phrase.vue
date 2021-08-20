@@ -205,7 +205,7 @@ export default {
       else {
         route = {
           name: "phrasebook",
-          params: { bookId: this.phrasebook.id },
+          params: { bookId: String(this.phrasebook.id) },
           hash: "#" + this.phraseId,
         };
       }
@@ -339,6 +339,7 @@ export default {
       }
     },
     savePhrasebookHistory(index) {
+      if (!this.phrasebook) return
       let data = {
         type: "phrasebook",
         id: `${this.$l2.code}-phrasebook-${this.phrasebook.id}`,
