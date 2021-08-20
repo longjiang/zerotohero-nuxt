@@ -75,7 +75,9 @@
                     @click="changeWordTo(w)"
                   >
                     <b>{{ w.head }}</b>
-                    <b v-if="w.pronunciation || w.kana">({{ w.pronunciation || w.kana }})</b>
+                    <b v-if="w.pronunciation || w.kana">
+                      ({{ w.pronunciation || w.kana }})
+                    </b>
                     <em>{{ w.definitions[0] }}</em>
                   </b-dropdown-item>
                 </b-dropdown>
@@ -83,7 +85,11 @@
               <div class="text-center">
                 <Loader class="pt-5 pb-5" />
               </div>
-              <div v-if="word" class="text-center" :key="`word-heading-${word.id}`">
+              <div
+                v-if="word"
+                class="text-center"
+                :key="`word-heading-${word.id}`"
+              >
                 <LazyEntryHeader :entry="word" />
                 <DefinitionsList
                   v-if="word.definitions"
@@ -271,32 +277,7 @@ export default {
         if (this.phrasebook) this.phrasebook.phrases = savedPhrases || [];
         if (mutation.type === "savedPhrases/REMOVE_SAVED_PHRASE") {
           if (mutation.payload.phrase === this.phrase) {
-            let nextSavedPhrase = savedPhrases[Number(this.phraseId)];
-            let phrasedId = this.phraseId;
-            if (nextSavedPhrase) {
-              let route = {
-                name: "phrasebook-phrase",
-                params: {
-                  bookId: "saved",
-                  phrasedId,
-                  phrase: nextSavedPhrase.phrase,
-                },
-              };
-              this.$router.push(route);
-            } else if (savedPhrases.length > 0) {
-              this.$router.push({
-                name: "phrasebook-phrase",
-                params: {
-                  bookId: "saved",
-                  phraseId: "0",
-                  phrase: savedPhrases[0].phrase,
-                },
-              });
-            } else {
-              this.$router.push({
-                name: "home",
-              });
-            }
+            this.phraseUnsaved();
           }
         }
       }
@@ -315,7 +296,36 @@ export default {
   },
   methods: {
     changeWordTo(w) {
-      this.word = w
+      this.word = w;
+    },
+    phraseUnsaved() {
+      let savedPhrases = this.savedPhrases[this.$l2.code];
+      let nextSavedPhrase = savedPhrases[Number(this.phraseId)];
+      let phrasedId = this.phraseId;
+      if (nextSavedPhrase) {
+        let route = {
+          name: "phrasebook-phrase",
+          params: {
+            bookId: "saved",
+            phrasedId,
+            phrase: nextSavedPhrase.phrase,
+          },
+        };
+        this.$router.push(route);
+      } else if (savedPhrases.length > 0) {
+        this.$router.push({
+          name: "phrasebook-phrase",
+          params: {
+            bookId: "saved",
+            phraseId: "0",
+            phrase: savedPhrases[0].phrase,
+          },
+        });
+      } else {
+        this.$router.push({
+          name: "home",
+        });
+      }
     },
     savePhrasebookHistory(index) {
       let data = {
