@@ -77,7 +77,7 @@ export default {
       wide: false,
       skin: "light",
       dictionaryCredit: "",
-      fullPageRoutes: ['index', 'sale'],
+      fullPageRoutes: ["index", "sale"],
     };
   },
   computed: {
@@ -109,20 +109,15 @@ export default {
         return `/img/backgrounds/bg-${this.l2.code}-${Math.ceil(
           Math.random() * 10
         )}.jpg`;
-      else if (['gan',
-        'hak',
-        'hsn',
-        'nan',
-        'wuu',
-        'zha'].includes(this.l2.code))
-        return `/img/backgrounds/bg-zh-${Math.ceil(
-          Math.random() * 10
-        )}.jpg`;
+      else if (
+        ["gan", "hak", "hsn", "nan", "wuu", "zha"].includes(this.l2.code)
+      )
+        return `/img/backgrounds/bg-zh-${Math.ceil(Math.random() * 10)}.jpg`;
       else return `https://source.unsplash.com/1600x900/?${this.l2.name}`;
     },
     fullPage() {
-      return $
-    }
+      return $;
+    },
   },
   created() {
     this.$nuxt.$on("skin", this.onSkin);
@@ -131,30 +126,9 @@ export default {
   },
   async mounted() {
     this.wide = Helper.wide();
-    if (this.l1 && this.l2) this.loadSettings();
-    if (this.l1) this.updatei18n();
-    this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type.startsWith("settings")) {
-        if (mutation.type === "settings/SET_L1") {
-          this.updatei18n();
-        }
-        if (mutation.type === "settings/SET_L2") {
-          this.loadSettings();
-        }
-      }
-    });
-    if (!this.$store.state.savedWords.savedWordsLoaded) {
-      this.$store.commit("savedWords/LOAD_SAVED_WORDS");
-    }
-    if (!this.$store.state.savedPhrases.savedPhrasesLoaded) {
-      this.$store.commit("savedPhrases/LOAD_SAVED_PHRASES");
-    }
     this.$ga.page(this.$route.path);
     smoothscroll.polyfill(); // Safari does not support smoothscroll
-    let dictionary = await this.$getDictionary();
-    if (dictionary) {
-      this.dictionaryCredit = await dictionary.credit();
-    }
+    this.onLanguageChange()
   },
   destroyed() {
     if (typeof window !== "undefined")
@@ -164,6 +138,9 @@ export default {
     $route() {
       this.$ga.page(this.$route.path);
     },
+    l2() {
+      this.onLanguageChange()
+    }
   },
   methods: {
     onSkin(skin) {
@@ -177,6 +154,30 @@ export default {
       this.$i18n.silentTranslationWarn = true;
       if (this.l1.translations) {
         this.$i18n.setLocaleMessage(this.l1.code, this.l1.translations);
+      }
+    },
+    async onLanguageChange() {
+      if (this.l1 && this.l2) this.loadSettings();
+      if (this.l1) this.updatei18n();
+      this.unsubscribe = this.$store.subscribe((mutation, state) => {
+        if (mutation.type.startsWith("settings")) {
+          if (mutation.type === "settings/SET_L1") {
+            this.updatei18n();
+          }
+          if (mutation.type === "settings/SET_L2") {
+            this.loadSettings();
+          }
+        }
+      });
+      if (!this.$store.state.savedWords.savedWordsLoaded) {
+        this.$store.commit("savedWords/LOAD_SAVED_WORDS");
+      }
+      if (!this.$store.state.savedPhrases.savedPhrasesLoaded) {
+        this.$store.commit("savedPhrases/LOAD_SAVED_PHRASES");
+      }
+      let dictionary = await this.$getDictionary();
+      if (dictionary) {
+        this.dictionaryCredit = await dictionary.credit();
       }
     },
     async loadSettings() {

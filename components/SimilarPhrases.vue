@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="youInOtherLangs && youInOtherLangs.length > 0">
-      <h5>Say “{{ phraseObj[$l1.code] }}” across languages</h5>
+      <h5>“{{ phraseObj[$l1.code] }}” in all languages</h5>
       <router-link
         v-for="(phrase, index) of youInOtherLangs"
         :to="`/${$l1.code}/${phrase.l2.code}/phrasebook/${phrase.bookId}/${
@@ -11,13 +11,17 @@
         class="d-block link-unstyled text-left"
       >
         <span class="similar-phrase-l2">{{ phrase.phrase }}</span>
-        <span class="similar-phrase-language">— {{ phrase.l2.name }}</span>
+        <span class="similar-phrase-language">
+          —
+          <em>{{ phrase[$l1.code] }}</em>
+          in {{ phrase.l2.name }}
+        </span>
       </router-link>
     </div>
     <div v-if="vousInOtherLangs && vousInOtherLangs.length > 0">
       <h5 class="mt-3">
         <em>{{ phraseObj.phrase }}</em>
-        across languages
+        in all languages
       </h5>
       <router-link
         v-for="(phrase, index) of vousInOtherLangs"
@@ -27,9 +31,11 @@
           phrase.id
         }/${encodeURIComponent(phrase.phrase)}`"
       >
-        <em class="similar-phrase-l2">{{ phrase.phrase }}</em>
+        <span class="similar-phrase-l2">{{ phrase.phrase }}</span>
         <span class="similar-phrase-language">
-          – “{{ phrase[$l1.code] }}” in {{ phrase.l2.name }}
+          –
+          <em>{{ phrase[$l1.code] }}</em>
+          in {{ phrase.l2.name }}
         </span>
       </router-link>
     </div>
