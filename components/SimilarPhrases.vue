@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div v-if="youInOtherLangs">
-      <h5>Say “{{ phraseObj[$l1.code] }}” in other languages</h5>
+    <div v-if="youInOtherLangs && youInOtherLangs.length > 0">
+      <h5>Say “{{ phraseObj[$l1.code] }}” across languages</h5>
       <router-link
         v-for="(phrase, index) of youInOtherLangs"
         :to="`/${$l1.code}/${phrase.l2.code}/phrasebook/${phrase.bookId}/${
@@ -14,8 +14,11 @@
         <span class="similar-phrase-language">— {{ phrase.l2.name }}</span>
       </router-link>
     </div>
-    <div v-if="vousInOtherLangs">
-      <h5 class="mt-3"><em>{{ phraseObj.phrase }}</em> in other languages</h5>
+    <div v-if="vousInOtherLangs && vousInOtherLangs.length > 0">
+      <h5 class="mt-3">
+        <em>{{ phraseObj.phrase }}</em>
+        across languages
+      </h5>
       <router-link
         v-for="(phrase, index) of vousInOtherLangs"
         :key="`vous-in-other-langs-${index}`"
@@ -25,7 +28,9 @@
         }/${encodeURIComponent(phrase.phrase)}`"
       >
         <em class="similar-phrase-l2">{{ phrase.phrase }}</em>
-        <span class="similar-phrase-language"> – “{{ phrase[$l1.code] }}” in {{ phrase.l2.name }}</span>
+        <span class="similar-phrase-language">
+          – “{{ phrase[$l1.code] }}” in {{ phrase.l2.name }}
+        </span>
       </router-link>
     </div>
   </div>
@@ -122,10 +127,16 @@ export default {
     separatePhrases(phrases) {
       let l1Code = this.$l1.code;
       this.youInOtherLangs = phrases
-        .filter((p) => p[l1Code] === this.phraseObj[l1Code])
+        .filter(
+          (p) =>
+            p[l1Code] === this.phraseObj[l1Code] &&
+            (p.l2.code !== this.$l2.code || p.phrase !== this.phraseObj.phrase)
+        )
         .sort((a, b) => a.phrase.localeCompare(b.phrase));
       this.vousInOtherLangs = phrases.filter(
-        (p) => p.phrase === this.phraseObj.phrase
+        (p) =>
+          p.phrase === this.phraseObj.phrase &&
+          (p.l2.code !== this.$l2.code || p[l1Code] !== this.phraseObj[l1Code])
       );
     },
     async getSimilarPhrases() {
