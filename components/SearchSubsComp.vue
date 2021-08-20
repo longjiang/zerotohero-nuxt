@@ -39,14 +39,15 @@
           <i class="fas fa-filter" />
         </b-button>
         <b-form-input
-          type="text"
-          :variant="skin === 'light' ? 'gray' : 'ghost-dark-no-bg'"
-          size="sm"
-          class="d-inline-block mr-1 ml-1"
           v-if="!checking && (hits.length > 0 || regex) && showFilter"
-          v-model.lazy="regex"
-          :style="`width: 6em`"
+          type="text"
+          class="d-inline-block mr-1 ml-1"
+          size="sm"
+          v-model="regex"
           placeholder="Filter..."
+          :variant="skin === 'light' ? 'gray' : 'ghost-dark-no-bg'"
+          :lazy="true"
+          :style="`width: 6em`"
           @blur="showFilter = false"
         />
         <span class="search-subs-hit-index ml-2 mr-2 d-inline-block">
@@ -463,7 +464,7 @@ export default {
     },
     startLineIndex() {
       let startLineIndex = this.currentHit.lineIndex;
-      return startLineIndex
+      return startLineIndex;
     },
   },
   methods: {
@@ -854,5 +855,4 @@ export default {
     }
   }
 }
-
 </style>
