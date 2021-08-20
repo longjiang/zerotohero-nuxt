@@ -47,8 +47,8 @@ export default {
   max-width: 10rem;
 }
 
-.pricing-table a,
-.pricing-table a:hover {
+.pricing-table td:first-child a,
+.pricing-table td:first-child a:hover {
   color: white;
 }
 </style>

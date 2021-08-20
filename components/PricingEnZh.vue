@@ -34,14 +34,6 @@
       </p>
 
       <table class="table table-bordered pricing-table" :key="key">
-        <thead>
-          <tr class="table-secondary">
-            <th class="text-left">Course</th>
-            <th class="text-center">Single</th>
-            <th class="text-center">Bundle</th>
-            <th class="text-center">Course Bundle</th>
-          </tr>
-        </thead>
         <tbody class="table-hover">
           <tr>
             <td class="text-left text-light" data-bg-level="1">
@@ -53,13 +45,17 @@
               <span v-html="price(29, { sale: true })"></span>
             </td>
             <td class="text-center align-middle" rowspan="4">
+              <a href="https://chinesezerotohero.teachable.com/p/hsk-1-4-bundle/" class="link-unstyled font-weight-bold">HSK 1-4 Bundle</a>
+              <br />
               <span v-html="price(134, { sale: true })"></span>
               <br />
               <span style="color: rgb(26, 148, 6); font-size: 12px">
                 Save {{ money(24) }}
               </span>
             </td>
-            <td class="text-center align-middle" rowspan="9">
+            <td class="text-center align-middle" rowspan="10">
+              <a href="https://chinesezerotohero.teachable.com/p/ultimate-bundle/" class="link-unstyled font-weight-bold">Ultimate Bundle</a>
+              <br />
               <span v-html="price(219, { sale: true })"></span>
               <br />
               <span style="color: rgb(26, 148, 6); font-size: 12px">
@@ -112,6 +108,8 @@
               <span v-html="price(64, { sale: true })"></span>
             </td>
             <td class="text-center align-middle" rowspan="5">
+              <a href="https://chinesezerotohero.teachable.com/p/hsk-5-6-bundle/" class="link-unstyled font-weight-bold">HSK 5-6 Bundle</a>
+              <br />
               <span v-html="price(109, { sale: true })"></span>
               <br />
               <span style="color: rgb(26, 148, 6); font-size: 12px">
@@ -176,6 +174,7 @@
               </span>
             </td>
           </tr>
+
           <tr>
             <td class="text-left text-light" style="background-color: #0076ba">
               <a
@@ -194,6 +193,17 @@
                 <b>FREE</b>
                 with HSK 5 or HSK 6
               </span>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="text-left text-light" data-bg-level="7-9">
+              <a href="https://courses.chinesezerotohero.com/p/hsk-7-9-words">
+                HSK 7-9 Words
+              </a>
+            </td>
+            <td class="text-center" colspan="2">
+              <span v-html="price(22, { sale: true })"></span>
             </td>
           </tr>
 
