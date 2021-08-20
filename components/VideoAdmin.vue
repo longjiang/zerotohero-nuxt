@@ -133,6 +133,26 @@
             Enable Translation Editing
           </b-form-checkbox>
         </div>
+        <div
+          :class="{
+            'mt-2 ml-1': true,
+            'd-none': !enableTranslationEditing && !showSubsEditing,
+          }"
+        >
+          <a :href="translationURL" target="_blank" class="link-unstyled mr-1">
+            <i class="fa fa-language"></i>
+            Get Translation
+          </a>
+          <a
+            :href="originalTextHref"
+            :download="`${video.title}.txt`"
+            target="_blank"
+            class="link-unstyled"
+          >
+            <i class="fa fa-download"></i>
+            Download Text
+          </a>
+        </div>
       </div>
       <div
         :class="{
@@ -164,17 +184,6 @@
         max-rows="6"
         @blur="updateOriginalText"
       ></b-form-textarea>
-      <div
-        :class="{
-          'mt-2 ml-1': true,
-          'd-none': !enableTranslationEditing && !showSubsEditing,
-        }"
-      >
-        <a :href="translationURL" target="_blank" class="link-unstyled">
-          <i class="fa fa-language"></i>
-          Get Translation
-        </a>
-      </div>
       <b-form-textarea
         :class="{
           'd-none': !enableTranslationEditing,
@@ -303,6 +312,9 @@ export default {
         let url = Helper.translationURL(this.originalText, this.$l1, this.$l2);
         return url;
       }
+    },
+    originalTextHref() {
+      return Helper.makeTextFile(this.originalText);
     },
   },
   mounted() {

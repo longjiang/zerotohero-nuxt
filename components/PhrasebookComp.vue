@@ -85,6 +85,7 @@
 </template>
 
 <script>
+import Helper from "@/lib/helper";
 export default {
   props: {
     phrasebook: {
@@ -115,20 +116,6 @@ export default {
     },
   },
   methods: {
-    makeTextFile(text) {
-      var data = new Blob([text], { type: "text/plain" });
-
-      // If we are replacing a previously generated file we need to
-      // manually revoke the object URL to avoid memory leaks.
-      if (textFile !== null) {
-        window.URL.revokeObjectURL(textFile);
-      }
-
-      var textFile = window.URL.createObjectURL(data);
-
-      // returns a URL you can use as a href
-      return textFile;
-    },
     genCSV() {
       let csv = Papa.unparse(
         this.phrasebook.phrases.map((p) => {
@@ -137,7 +124,7 @@ export default {
           return op
         })
       );
-      this.csvHref = this.makeTextFile(csv);
+      this.csvHref = Helper.makeTextFile(csv);
     },
     visibilityChanged(isVisible) {
       if (isVisible) {
