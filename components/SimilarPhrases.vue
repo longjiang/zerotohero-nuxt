@@ -44,8 +44,7 @@ export default {
     this.getSimilarPhrases();
   },
   methods: {
-    async getSimilarPhrases() {
-      let phrasebooks = [];
+    async f() {
       let l1Code = this.$l1.code;
       let url = `${
         Config.wiki
@@ -56,19 +55,26 @@ export default {
       }`;
       let res = await axios.get(url);
       if (res && res.data) {
-        phrasebooks = phrasebooks.concat(res.data.data);
+        return res.data.data;
       }
-      url = `${
+      return [];
+    },
+    async g() {
+      let url = `${
         Config.wiki
       }items/phrasebook?sort=title&filter[phrases][contains]=${encodeURIComponent(
         "\n" + this.phraseObj.phrase + ","
       )}&fields=*,tv_show.*&limit=500&timestamp=${
         this.$adminMode ? Date.now() : 0
       }`;
-      res = await axios.get(url);
+      let res = await axios.get(url);
       if (res && res.data) {
-        phrasebooks = phrasebooks.concat(res.data.data);
+        return res.data.data;
       }
+      return [];
+    },
+    h(phrasebooks) {
+      let l1Code = this.$l1.code;
       phrasebooks = Helper.uniqueByValue(phrasebooks, "id");
       let phrases = [];
       for (let phrasebook of phrasebooks) {
@@ -89,7 +95,12 @@ export default {
           }
         }
       }
-      this.phrases = phrases
+      phrases = Helper.uniqueByValues(phrases, ['phrase', this.$l1.code, 'l2'])
+      return phrases
+    },
+    async getSimilarPhrases() {
+      let phrasebooks = [].concat(await this.f()).concat(await this.g());
+      this.phrases = this.h(phrasebooks);
     },
   },
 };
@@ -101,6 +112,5 @@ export default {
   color: #c59f94;
 }
 .similar-phrase-language {
-
 }
 </style>
