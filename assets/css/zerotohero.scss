@@ -1067,10 +1067,12 @@ button.bg-primary:focus {
   .playlist-dropdown {
     .dropdown-menu {
       margin-top: 2.2rem;
-      height: calc(100vh - 3rem);
       border: none;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
       overflow: scroll;
+      max-height: calc(100vh - 3rem);
+      max-width: calc(100% - 3rem);
+      transform: translate3d(1.5rem, 8rem, 1.5rem) !important;
       .current {
         .dropdown-item {
           background: #f3f3f3;
