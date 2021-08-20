@@ -103,7 +103,7 @@
           :class="classes"
         >
           <div v-if="word">
-            <div v-for="match in word.matches" style="color: #999">
+            <div v-for="(match, index) in word.matches" style="color: #999" :key="`match-${index}`">
               <b>{{ match.field }} {{ match.number }}</b>
               {{ match.table !== "declension" ? match.table : "" }}
               of
@@ -383,7 +383,7 @@ export default {
           if (this.token.candidates[0].kana) {
             return this.token.candidates[0].kana;
           } else if (this.token.candidates[0].pronunciation) {
-            return this.token.candidates[0].pronunciation;
+            return this.token.candidates[0].pronunciation.split(',')[0];
           } else if (this.token.candidates[0].pinyin) {
             return this.token.candidates[0].pinyin;
           } else {
