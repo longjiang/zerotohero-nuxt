@@ -44,7 +44,7 @@
                 <div class="d-inline-block">
                   <Annotate
                     :phonetics="!phraseObj.pronunciation"
-                    :buttons="true"
+                    :buttons="false"
                     v-if="phraseObj && phraseObj.phrase"
                     @textChanged="textChanged"
                   >
@@ -58,6 +58,12 @@
               >
                 {{ phraseObj[$l1.code] }}
               </p>
+              <hr />
+              <SimilarPhrases
+                v-if="phraseObj"
+                :phraseObj="phraseObj"
+                class="text-center"
+              />
               <hr v-if="word" />
               <div
                 class="text-center mt-3 mb-3"
@@ -96,12 +102,6 @@
                   class="mt-3"
                   :definitions="word.definitions"
                 ></DefinitionsList>
-                <EntryCourseAd
-                  v-if="$l2.code === 'zh'"
-                  variant="compact"
-                  class="focus-exclude mt-4 mb-5"
-                  :entry="word"
-                ></EntryCourseAd>
                 <EntryExternal
                   :term="word.head"
                   :traditional="word.traditional"
@@ -110,13 +110,13 @@
                   class="mt-4 mb-4 text-center"
                   style="margin-bottom: 0"
                 />
+                <EntryCourseAd
+                  v-if="$l2.code === 'zh'"
+                  variant="compact"
+                  class="focus-exclude mt-4 mb-5"
+                  :entry="word"
+                ></EntryCourseAd>
               </div>
-              <hr />
-              <SimilarPhrases
-                v-if="phraseObj"
-                :phraseObj="phraseObj"
-                class="text-center"
-              />
             </div>
           </div>
           <div
