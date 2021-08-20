@@ -165,6 +165,7 @@ export default {
       visibleMin: 0,
       visibleMax: this.startLineIndex ? Number(this.startLineIndex) + 30 : 30,
       visibleRange: 30,
+      preventJumpingAtStart: typeof this.startLineIndex !== 'undefined'
     };
   },
   computed: {
@@ -227,7 +228,11 @@ export default {
   },
   watch: {
     async currentTime() {
+      if (this.preventJumpingAtStart) {
+        this.turnOffPreventJumptingAtStartAfter3Seconds()
+      }
       let progressType = this.checkProgress();
+      if (progressType === 'jump' && typeof this.startLineIndex !== 'undefined' && this.preventJumpingAtStart) return
       if (progressType === "first play") {
         if (this.currentTime >= this.lines[0].starttime) {
           this.playNearestLine();
@@ -277,6 +282,10 @@ export default {
     },
   },
   methods: {
+    async turnOffPreventJumptingAtStartAfter3Seconds() {
+      await Helper.timeout(3000)
+      this.preventJumpingAtStart = false
+    },
     visibilityChanged(isVisible) {
       if (isVisible) {
         this.visibleMax = this.visibleMax + this.visibleRange;

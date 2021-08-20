@@ -113,7 +113,7 @@ export default {
       if (this.autoload) {
         this.loadYouTubeiFrame();
       }
-      this.duration = undefined
+      this.duration = undefined;
       this.randomSeeked = false;
     },
   },
@@ -210,14 +210,17 @@ export default {
     },
     updateCurrentTime() {
       // This cannot be a computed property because the player is not monitored by Vue
-      let newTime =
-        this.player && this.player.getCurrentTime
-          ? this.player.getCurrentTime()
-          : 0;
-      if (newTime !== this.currentTime) {
-        this.currentTime = newTime;
-        // console.log(newTime, this.youtubeIframeID, this.player);
-        this.$emit("currentTime", this.currentTime);
+      if (this.player && this.player.getCurrentTime) {
+        let newTime = this.player.getCurrentTime();
+        
+        if (newTime !== this.currentTime) {
+          this.currentTime = newTime;
+          if (this.currentTime === 0 && this.neverPlayed) {
+            return
+          }
+          // console.log(newTime, this.youtubeIframeID, this.player);
+          this.$emit("currentTime", this.currentTime);
+        }
       }
     },
     removeYouTubeAPIVars() {
