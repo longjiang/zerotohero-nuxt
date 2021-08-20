@@ -110,6 +110,7 @@
                   class="mt-4 mb-4 text-center"
                   style="margin-bottom: 0"
                 />
+                <SimilarPhrases v-if="phraseObj" :phraseObj="phraseObj" />
               </div>
             </div>
           </div>
@@ -229,6 +230,10 @@ export default {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
+    $adminMode() {
+      if (typeof this.$store.state.settings.adminMode !== "undefined")
+        return this.$store.state.settings.adminMode;
+    },
     title() {
       if (this.phrase) {
         return `Learn the ${this.$l2 ? this.$l2.name : ""} Phrase “${
@@ -295,6 +300,8 @@ export default {
     next();
   },
   methods: {
+    async phraseReady() {
+    },
     changeWordTo(w) {
       this.word = w;
     },
@@ -381,6 +388,7 @@ export default {
           },
         });
       }
+      this.phraseReady();
     },
     async matchPhraseToDictionaryEntries() {
       this.words = await (
