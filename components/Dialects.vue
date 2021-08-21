@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <div class="dialects">
     <div
       v-for="(dialect, index) in dialects"
       :key="`dialect-${index}`"
       class="dialect-item"
     >
       <div class="dialect-languages">
-        <LanguageList :langs="dialect.languages" :singleColumn="true" />
+        <LanguageList :langs="dialect.languages" :singleColumn="true" :skin="skin" />
       </div>
       <div class="dialect-simplified">
         <Annotate :buttons="false">
@@ -23,7 +23,7 @@
           class="progress-bar"
         ></b-progress-bar>
       </b-progress>
-      <div style="width: 5rem; margin-top: 0.15rem" class="ml-2 small">
+      <div style="width: 5rem; margin-top: 0.15rem; white-space: nowrap;" class="ml-2 small">
         {{ $n(Number(Math.ceil(dialect.population / 1000))) }} K
       </div>
     </div>
@@ -34,6 +34,11 @@
 import Papa from "papaparse";
 
 export default {
+  props: {
+    skin: {
+      default: 'light'
+    }
+  },
   data: () => ({
     csv: `english	simplified	population	iso639-3
 Mandarin	官话	920	zho|cmn
@@ -72,10 +77,13 @@ Pinghua	平话	7	csp|cnp`,
 </script>
 
 <style lang="scss" scoped>
+.dialects {
+  overflow-x: scroll;
+}
 .dialect-item {
   display: flex;
   padding: 0.5rem 0;
-  max-width: 40rem;
+  width: 35rem;
   margin: 0 auto;
   &:not(:last-child) {
     border-bottom: 1px solid #00000022;
@@ -85,9 +93,10 @@ Pinghua	平话	7	csp|cnp`,
   }
   .dialect-simplified {
     width: 7rem;
+    white-space: nowrap;
   }
   .dialect-languages {
-    width: 15rem;
+    width: 16rem;
     margin-left: 1rem;
   }
   .progress-bar-wrapper {

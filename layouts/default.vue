@@ -21,7 +21,7 @@
       <div class="zth-content">
         <Nuxt id="main" />
         <footer class="zth-footer" style="z-index: -1">
-          <Choose :compact="true" />
+          <Choose :compact="true" skin="dark" />
           <div class="container">
             <div class="row">
               <div class="col-sm-12">

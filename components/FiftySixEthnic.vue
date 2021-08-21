@@ -6,7 +6,7 @@
       class="ethnic-group-item"
     >
       <div class="ethnic-group-languages">
-        <LanguageList :langs="group.languages" :singleColumn="true" />
+        <LanguageList :langs="group.languages" :singleColumn="true" :skin="skin" />
       </div>
       <div class="ethnic-group-simplified">
         <Annotate :buttons="false">
@@ -36,6 +36,11 @@ import Config from "@/lib/config";
 import axios from "axios";
 
 export default {
+  props: {
+    skin: {
+      default: 'light'
+    }
+  },
   data: () => ({
     groups: undefined,
     population:

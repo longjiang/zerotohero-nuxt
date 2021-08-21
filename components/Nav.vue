@@ -105,7 +105,7 @@
               :to="to(item)"
               :title="item.title"
             >
-              <i :class="item.icon"></i>
+              <i :class="`${item.icon}`"></i>
               {{ $t(item.title, { l2: $t($l2.name) }) }}
             </NuxtLink>
           </div>
@@ -134,7 +134,7 @@
               :key="`subnav-${child.name || child.href}-${index}`"
               :to="last(child) || child"
             >
-              <i :class="child.icon"></i>
+              <i :class="`${child.icon}`"></i>
               {{ $t(child.title, { l2: $t($l2.name) }) }}
               <span
                 class="saved-words-count"
@@ -161,7 +161,7 @@
                 'd-block': variant === 'side-bar',
               }"
             >
-              <i :class="child.icon"></i>
+              <i :class="`${child.icon}`"></i>
               {{ $t(child.title, { l2: $t($l2.name) }) }}
             </a>
           </template>
@@ -195,10 +195,17 @@
                     v-if="!child.href"
                     :to="last(child) || child"
                     style="height: 100%"
-                    class="feature-card link-unstyled"
+                    :class="`feature-card feature-card-${
+                      item.title === 'Media' ? 'dark' : 'dark'
+                    } link-unstyled`"
                   >
                     <div class="feature-card-icon">
-                      <i :class="child.icon"></i>
+                      <i
+                        :class="`${child.icon} bg-gradient-${item.title.length
+                          .toString()
+                          .split('')
+                          .pop()} gradient-text`"
+                      ></i>
                     </div>
                     <div class="feature-card-title">
                       {{ $t(child.title, { l2: $t($l2.name) }) }}
@@ -226,11 +233,18 @@
                   <a
                     v-else
                     :href="child.href"
-                    class="feature-card link-unstyled"
+                    :class="`feature-card feature-card-${
+                      item.title === 'Media' ? 'dark' : 'dark'
+                    } link-unstyled`"
                     target="_blank"
                   >
                     <div class="feature-card-icon">
-                      <i :class="child.icon"></i>
+                      <i
+                        :class="`${child.icon} bg-gradient-${item.title.length
+                          .toString()
+                          .split('')
+                          .pop()} gradient-text`"
+                      ></i>
                     </div>
                     <div class="feature-card-title">
                       {{ $t(child.title, { l2: $t($l2.name) }) }}
@@ -993,7 +1007,6 @@ export default {
     &.nuxt-link-active,
     &:hover {
       text-decoration: none;
-      text-shadow: none;
     }
   }
 }
@@ -1290,8 +1303,6 @@ export default {
     font-size: 1.2em;
     border-radius: 0.5rem;
     box-shadow: 0 10px 30px rgba(68, 75, 134, 0.2);
-    background-color: hsla(0deg, 100%, 100%, 0.7);
-    border: 1px solid rgba(255, 255, 255, 0.9);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     display: block;
@@ -1301,24 +1312,37 @@ export default {
       transition: 200ms ease-in-out;
       background-color: hsla(0deg, 100%, 100%, 0.8);
     }
+    &.feature-card-light {
+      background-color: hsla(0deg, 100%, 100%, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      color: #333;
+      &:hover {
+        color: #444;
+      }
+    }
+    &.feature-card-dark {
+      background-color: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.226);
+      border-top: 1px solid rgba(255, 255, 255, 0.5);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+      color: rgba(255, 255, 255, 0.8);
+      &:hover {
+        color: white;
+      }
+    }
     .feature-card-icon {
       font-size: 2rem;
-      color: #000000aa;
-      opacity: 0.85;
+      opacity: 1;
       display: block;
     }
     .feature-card-title {
       font-size: 0.9em;
       line-height: 1;
       display: block;
-      color: #333;
       height: 2rem;
       display: flex;
       align-items: center;
       justify-content: center;
-      &:hover {
-        color: #444;
-      }
     }
   }
 }

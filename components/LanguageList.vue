@@ -1,7 +1,7 @@
 <template>
   <ul
     v-if="languages && languages.length > 0"
-    :class="`language-list ${
+    :class="`language-list language-list-${skin} ${
       singleColumn ? 'language-list-single-column' : ''
     }`"
   >
@@ -63,6 +63,9 @@ export default {
     },
     singleColumn: {
       default: false,
+    },
+    skin: {
+      default: "light",
     },
   },
   data() {
@@ -143,13 +146,32 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .language-list {
-  color: #666;
   list-style: none;
   padding: 0;
   column-gap: 2rem;
   margin-bottom: 0;
+  &.language-list-light {
+    .language-list-item {
+      a {
+        color: #666;
+      }
+      .feature-icon {
+        color: hsla(14deg 98% 10% / 60%);
+      }
+    }
+  }
+  &.language-list-dark {
+    .language-list-item {
+      a {
+        color: rgba(255, 255, 255, 0.8);
+      }
+      .feature-icon {
+        color: rgba(255, 255, 255, 0.6);
+      }
+    }
+  }
 }
 
 @media (min-width: 576px) {
@@ -174,21 +196,5 @@ export default {
   .language-list:not(.language-list-single-column) {
     column-count: 3;
   }
-}
-
-.language-list-item a {
-  color: #666;
-}
-.language-list-item .feature-icon {
-  color: hsl(14deg 98% 10%);
-  opacity: 0.3;
-}
-
-.zth-footer .language-list-item a {
-  color: #b9aba6;
-}
-.zth-footer .language-list-item .feature-icon {
-  color: hsl(16deg 12% 69%);
-  opacity: 0.5;
 }
 </style>

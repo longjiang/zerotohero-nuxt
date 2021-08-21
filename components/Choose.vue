@@ -8,7 +8,7 @@
             class="mt-3 mb-4"
             :preferredLanguages="languages"
           />
-          <LanguageList v-if="languages.length > 0" :langs="languages" />
+          <LanguageList v-if="languages.length > 0" :langs="languages" :skin="skin" />
         </div>
       </div>
     </div>
@@ -23,6 +23,11 @@ export default {
   components: {
     LanguageLogo,
     LanguageSwitch,
+  },
+  props: {
+    skin: {
+      default: 'light'
+    }
   },
   data() {
     return {

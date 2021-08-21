@@ -27,7 +27,11 @@
             <div :class="{ 'pl-1 pr-1 pb-2': true, 'd-none': !hasDashboard }">
               <div class="home-card">
                 <h4 class="text-center mb-4">Continue where you left off</h4>
-                <LazyDashboard :l2="$l2" @hasDashboard="hasDashboardUpdate" />
+                <LazyDashboard
+                  :l2="$l2"
+                  @hasDashboard="hasDashboardUpdate"
+                  skin="dark"
+                />
               </div>
             </div>
           </client-only>
@@ -37,14 +41,14 @@
           <div :class="{ 'pl-1 pr-1 pb-2': true }" v-if="$l2.han">
             <div class="home-card">
               <h4 class="text-center mb-4">Dialects of Chinese</h4>
-              <Dialects />
+              <Dialects skin="dark" />
             </div>
           </div>
           <div :class="{ 'pl-1 pr-1 pb-2': true }" v-if="$l2.han">
             <div class="home-card">
               <h4 class="text-center">56 Ethnic Groups of China</h4>
               <p class="text-center mb-4">(2010 Numbers)</p>
-              <FiftySixEthnic />
+              <FiftySixEthnic skin="dark" />
             </div>
           </div>
         </div>
@@ -143,6 +147,23 @@ export default {
   .home {
     padding-left: 2rem;
     padding-right: 2rem;
+  }
+}
+.home-card {
+  border-radius: 0.5rem;
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.226);
+  border-top: 1px solid rgba(255, 255, 255, 0.5);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+  color: rgba(255, 255, 255, 0.8);
+}
+@media (max-width: 540px) {
+  .home-card {
+    padding: 2rem 1rem;
+    ::v-deep .history-item-column.col-12 {
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+    }
   }
 }
 .home-intro-text {

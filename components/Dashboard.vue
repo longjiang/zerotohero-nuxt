@@ -1,13 +1,12 @@
 <template>
   <container-query :query="query" v-model="params">
     <div class="container">
-      <div class="row dashboard-saved-words" v-if="savedWords">
+      <div class="row dashboard-saved-words" v-if="savedWordsSorted && savedWordsSorted.length > 0">
         <div class="col-12">
           <div
             :class="{
               'text-center': l2,
-              'dashboard-saved-words-list': !l2,
-              'mb-5': itemsFiltered && itemsFiltered.length > 0,
+              'dashboard-saved-words-list': !l2
             }"
 
           >
@@ -119,7 +118,7 @@
           v-if="videosFiltered && videosFiltered.length > 0"
         >
           <button
-            class="btn btn-ghost-dark text-secondary btn-sm ml-0 mb-2"
+            :class="`btn btn-ghost-dark btn-sm ml-0 mb-2 ${skin === 'light' ? 'text-secondary' : ''}`"
             @click.stop.prevent="$store.dispatch('history/removeAll')"
           >
             Clear History
@@ -166,6 +165,9 @@ export default {
   },
   props: {
     l2: undefined,
+    skin: {
+      default: 'light'
+    }
   },
   mounted() {
     this.emitHasDashboard();
