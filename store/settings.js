@@ -16,16 +16,21 @@ export const state = () => {
       showQuiz: true,
       showByeonggi: true,
       disableAnnotation: false
-    }
+    },
+    romanizationOffByDefault: ['ko', 'bod', 'ru', 'th']
   }
 }
 
 export const mutations = {
   SET_L1(state, l1) {
     state.l1 = l1
+
   },
   SET_L2(state, l2) {
     state.l2 = l2
+    if (romanizationOffByDefault.includes(l2.code)) {
+      state.l2Settings.showPinyin = false
+    }
   },
   SET_DICTIONARY(state, dictionary) {
     state.dictionary = dictionary

@@ -83,7 +83,7 @@
           <YouTubeVideoCard
             v-if="item.type === 'video'"
             skin="card"
-            :video="item.video"
+            :video="Object.assign({}, item.video)"
             :l1="itemL1"
             :l2="itemL2"
             :showProgress="true"
@@ -96,7 +96,7 @@
             size="lg"
             :l1="itemL1"
             :l2="itemL2"
-            :phrasebook="item.phrasebook"
+            :phrasebook="Object.assign({}, item.phrasebook)"
             :showAdmin="false"
           />
           <button
