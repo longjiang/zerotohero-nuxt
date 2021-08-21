@@ -4,7 +4,7 @@
   }
 </router>
 <template>
-  <div class="pl-4 pr-4 home">
+  <div class="home">
     <SocialHead
       :title="`${$l2.name} Zero to Hero`"
       :description="`Learn ${$l2.name} language from zero to fluency with ${
@@ -12,7 +12,7 @@
       } comprehensible input.`"
       :image="image"
     />
-    <div class="container pt-5 pb-5 pl-4 pr-4">
+    <div class="container pt-5 pb-5">
       <div class="row">
         <div class="col-sm-12">
           <div class="p-1">
@@ -139,6 +139,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.zerotohero-wide {
+  .home {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
 .home-intro-text {
   font-family: pacifico;
   font-size: 2.5em;
