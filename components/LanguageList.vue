@@ -1,5 +1,10 @@
 <template>
-  <ul v-if="languages && languages.length > 0" :class="`language-list ${singleColumn ? 'language-list-single-column' : ''}`">
+  <ul
+    v-if="languages && languages.length > 0"
+    :class="`language-list ${
+      singleColumn ? 'language-list-single-column' : ''
+    }`"
+  >
     <li
       v-for="(language, index) in languages"
       :key="`lang-${language.code}-${index}`"
@@ -57,8 +62,8 @@ export default {
       default: false,
     },
     singleColumn: {
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
@@ -95,7 +100,10 @@ export default {
       return this.$languages.l1s.find((language) => language.code === "en");
     },
     languages() {
-      let languages = this.langs.filter(l => l);
+      let languages;
+      if (this.langs) {
+        languages = this.langs.filter((l) => l);
+      }
       if (!languages && this.codes) {
         languages = this.codes.map((c) => this.$languages.getSmart(c));
       }
