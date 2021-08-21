@@ -1,10 +1,13 @@
 <template>
   <div>
-    <b-button @click="getSimilarPhrases" v-if="showButton">
-      <i class="fas fa-comment-alt mr-1" /> Compare Languages
+    <b-button @click="getSimilarPhrases" v-if="showButton" size="sm">
+      <i class="fas fa-comment-alt mr-1" />
+      Compare Languages
     </b-button>
-    <div v-if="youInOtherLangs.length > 0">
-      <h5>“{{ phraseObj[$l1.code] }}” in all languages</h5>
+    <div v-if="youInOtherLangs.length > 0" class="text-left">
+      <h5>
+        <em>{{ phraseObj[$l1.code] }}</em>
+      </h5>
       <router-link
         v-for="(phrase, index) of youInOtherLangs"
         :to="`/${$l1.code}/${phrase.l2.code}/phrasebook/${phrase.bookId}/${
@@ -13,18 +16,17 @@
         :key="`you-in-other-langs-${index}`"
         class="d-block link-unstyled text-left"
       >
-        <span class="similar-phrase-l2">{{ phrase.phrase }}</span> <Speak :text="phrase.phrase" :l2="phrase.l2" />
+        <span class="similar-phrase-l2">{{ phrase.phrase }}</span>
+        <Speak :text="phrase.phrase" :l2="phrase.l2" />
         <span class="similar-phrase-language">
-          —
           <em>{{ phrase[$l1.code] }}</em>
           in {{ phrase.l2.name }}
         </span>
       </router-link>
     </div>
-    <div v-if="vousInOtherLangs.length > 0">
+    <div v-if="vousInOtherLangs.length > 0" class="text-left">
       <h5 class="mt-3">
         <em>{{ phraseObj.phrase }}</em>
-        in all languages
       </h5>
       <router-link
         v-for="(phrase, index) of vousInOtherLangs"
@@ -36,7 +38,6 @@
       >
         <span class="similar-phrase-l2">{{ phrase.phrase }}</span>
         <span class="similar-phrase-language">
-          –
           <em>{{ phrase[$l1.code] }}</em>
           in {{ phrase.l2.name }}
         </span>
