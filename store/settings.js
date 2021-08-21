@@ -17,7 +17,7 @@ export const state = () => {
       showByeonggi: true,
       disableAnnotation: false
     },
-    romanizationOffByDefault: ['ko', 'bod', 'ru', 'th']
+    romanizationOffByDefault: ['ru', 'ko', 'bod', 'ru', 'th', 'my']
   }
 }
 
@@ -28,7 +28,7 @@ export const mutations = {
   },
   SET_L2(state, l2) {
     state.l2 = l2
-    if (romanizationOffByDefault.includes(l2.code)) {
+    if (state.romanizationOffByDefault.includes(l2.code)) {
       state.l2Settings.showPinyin = false
     }
   },
