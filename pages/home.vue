@@ -31,8 +31,16 @@
               </div>
             </div>
           </client-only>
-
-          <Nav :l1="$l1" :l2="$l2" variant="page" />
+          <client-only>
+            <Nav :l1="$l1" :l2="$l2" variant="page" />
+          </client-only>
+          <div :class="{ 'pl-1 pr-1 pb-2': true }">
+            <div class="home-card" v-if="$l2.han">
+              <h4 class="text-center">56 Ethnic Groups of China</h4>
+              <p class="text-center mb-4">(2020 Numbers)</p>
+              <FiftySixEthnic />
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -70,15 +78,10 @@ export default {
         return `/img/backgrounds/bg-${this.$l2.code}-${Math.ceil(
           Math.random() * 10
         )}.jpg`;
-      else if (['gan',
-        'hak',
-        'hsn',
-        'nan',
-        'wuu',
-        'zha'].includes(this.$l2.code))
-        return `/img/backgrounds/bg-zh-${Math.ceil(
-          Math.random() * 10
-        )}.jpg`;
+      else if (
+        ["gan", "hak", "hsn", "nan", "wuu", "zha"].includes(this.$l2.code)
+      )
+        return `/img/backgrounds/bg-zh-${Math.ceil(Math.random() * 10)}.jpg`;
       else return `https://source.unsplash.com/1600x900/?${this.$l2.name}`;
     },
   },

@@ -1,8 +1,8 @@
 <template>
-  <ul v-if="languages && languages.length > 0" class="language-list">
+  <ul v-if="languages && languages.length > 0" :class="`language-list ${singleColumn ? 'language-list-single-column' : ''}`">
     <li
-      v-for="language in languages"
-      :key="`lang-${language.code}`"
+      v-for="(language, index) in languages"
+      :key="`lang-${language.code}-${index}`"
       class="language-list-item"
       :set="(base = languagePath(language))"
     >
@@ -56,6 +56,9 @@ export default {
     sort: {
       default: false,
     },
+    singleColumn: {
+      default: false
+    }
   },
   data() {
     return {
@@ -92,7 +95,7 @@ export default {
       return this.$languages.l1s.find((language) => language.code === "en");
     },
     languages() {
-      let languages = this.langs;
+      let languages = this.langs.filter(l => l);
       if (!languages && this.codes) {
         languages = this.codes.map((c) => this.$languages.getSmart(c));
       }
@@ -138,28 +141,29 @@ export default {
   list-style: none;
   padding: 0;
   column-gap: 2rem;
+  margin-bottom: 0;
 }
 
 @media (min-width: 576px) {
-  .language-list {
+  .language-list:not(.language-list-single-column) {
     column-count: 1;
   }
 }
 
 @media (min-width: 768px) {
-  .language-list {
+  .language-list:not(.language-list-single-column) {
     column-count: 2;
   }
 }
 
 @media (min-width: 992px) {
-  .language-list {
+  .language-list:not(.language-list-single-column) {
     column-count: 2;
   }
 }
 
 @media (min-width: 1200px) {
-  .language-list {
+  .language-list:not(.language-list-single-column) {
     column-count: 3;
   }
 }

@@ -183,7 +183,7 @@
                   v-for="(child, index) in item.children.filter(
                     (child) => child.show
                   )"
-                  :key="`subnav-${child.name}-${index}`"
+                  :key="`subnav-${child.name || child.href}-${index}`"
                   class="col-sm-6 col-xl-4 mb-1 p-1 feature-card-column"
                 >
                   <NuxtLink
