@@ -1,14 +1,19 @@
 <template>
   <container-query :query="query" v-model="params">
     <div class="container">
-      <div class="row dashboard-saved-words" v-if="savedWordsSorted && savedWordsSorted.length > 0">
+      <div
+        class="row dashboard-saved-words"
+        v-if="
+          (savedWordsSorted && savedWordsSorted.length > 0) ||
+          (savedPhrasesSorted && savedPhrasesSorted.length > 0)
+        "
+      >
         <div class="col-12">
           <div
             :class="{
               'text-center': l2,
-              'dashboard-saved-words-list': !l2
+              'dashboard-saved-words-list': !l2,
             }"
-
           >
             <router-link
               v-for="(savedWordsLang, index) in savedWordsSorted"
@@ -18,7 +23,10 @@
               class="link-unstyled d-block dashboard-saved-words-list-item"
               :key="`dashboard-saved-words-${index}`"
             >
-              <i class="fa fa-star" style="opacity: 0.5; width: 1.2rem; text-align: center"></i>
+              <i
+                class="fa fa-star"
+                style="opacity: 0.5; width: 1.2rem; text-align: center"
+              ></i>
               <span
                 style="
                   min-width: 1.7rem;
@@ -41,7 +49,10 @@
               class="link-unstyled d-block dashboard-saved-words-list-item"
               :key="`dashboard-saved-phrases-${index}`"
             >
-              <i class="fa fa-bookmark" style="opacity: 0.5; width: 1.2rem; text-align: center"></i>
+              <i
+                class="fa fa-bookmark"
+                style="opacity: 0.5; width: 1.2rem; text-align: center"
+              ></i>
               <span
                 style="
                   min-width: 1.7rem;
@@ -59,10 +70,7 @@
           </div>
         </div>
       </div>
-      <div
-        class="history-items row"
-        v-if="itemsFiltered.length > 0"
-      >
+      <div class="history-items row" v-if="itemsFiltered.length > 0">
         <div
           v-for="(item, itemIndex) of itemsFiltered.slice(0, 12)"
           :key="`history-item-${itemIndex}`"
@@ -118,7 +126,9 @@
           v-if="videosFiltered && videosFiltered.length > 0"
         >
           <button
-            :class="`btn btn-ghost-dark btn-sm ml-0 mb-2 ${skin === 'light' ? 'text-secondary' : ''}`"
+            :class="`btn btn-ghost-dark btn-sm ml-0 mb-2 ${
+              skin === 'light' ? 'text-secondary' : ''
+            }`"
             @click.stop.prevent="$store.dispatch('history/removeAll')"
           >
             Clear History
@@ -166,8 +176,8 @@ export default {
   props: {
     l2: undefined,
     skin: {
-      default: 'light'
-    }
+      default: "light",
+    },
   },
   mounted() {
     this.emitHasDashboard();
@@ -219,7 +229,9 @@ export default {
           if (this.l2 && i.l2 !== this.l2.code) return false;
           if (i.type === "video") return typeof i.video !== "undefined";
           if (i.type === "phrasebook")
-            return typeof i.phrasebook !== "undefined" && i.phrasebook.id !== 'saved';
+            return (
+              typeof i.phrasebook !== "undefined" && i.phrasebook.id !== "saved"
+            );
         });
       }
     },
@@ -251,15 +263,12 @@ export default {
   methods: {
     emitHasDashboard() {
       let hasDashboard = false;
-      if (typeof this.l2 === "undefined") {
-        if (this.savedWordsSorted && this.savedWordsSorted.length > 0)
-          hasDashboard = true;
-        if (this.itemsFiltered > 0) hasDashboard = true;
-      } else {
-        if (this.savedWordsSorted && this.savedWordsSorted.length > 0)
-          hasDashboard = true;
-        if (this.itemsFiltered && this.itemsFiltered.length > 0) hasDashboard = true;
-      }
+      if (this.savedWordsSorted && this.savedWordsSorted.length > 0)
+        hasDashboard = true;
+      if (this.savedPhrasesSorted && this.savedPhrasesSorted.length > 0)
+        hasDashboard = true;
+      if (this.itemsFiltered && this.itemsFiltered.length > 0)
+        hasDashboard = true;
       this.$emit("hasDashboard", hasDashboard);
     },
   },
