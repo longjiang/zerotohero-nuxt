@@ -48,7 +48,7 @@
           </div>
         </div>
       </client-only>
-      <div class="bg-white">
+      <div class="for-the-love-of-wrapper bg-white">
         <div class="container" v-if="!term">
           <div class="row">
             <div class="col-sm-12 bg-white">
@@ -62,28 +62,38 @@
           </div>
         </div>
       </div>
-      <div :class="{ 'focus-exclude': true, container: !wide }">
+      <div
+        :class="{
+          'content-panes-wrapepr focus-exclude': true,
+          container: !wide,
+        }"
+      >
         <div :class="{ row: !wide, 'content-panes': wide }" v-if="term">
-          <div :class="{ 'content-pane-left': wide, 'col-sm-12': !wide }">
-            <div v-if="term" class="text-center">
-              <PhraseHeader v-if="term" :term="term" />
-            </div>
+          <div
+            :class="{
+              'content-pane-left': wide,
+              'col-sm-12': !wide,
+              'text-center': true,
+            }"
+          >
+            <PhraseHeader
+              v-if="term"
+              :term="term"
+              :class="{ 'mt-4': !wide }"
+            />
           </div>
-
           <div
             :class="{
               'col-sm-12': !wide,
               'content-pane-right pl-3 pr-3': wide,
             }"
           >
-            <article>
-              <LazyPhraseComp
-                v-if="term"
-                :term="term"
-                class="mt-5"
-                :showHeader="false"
-              />
-            </article>
+            <LazyPhraseComp
+              v-if="term"
+              :term="term"
+              class="mt-4"
+              :showHeader="false"
+            />
           </div>
         </div>
       </div>

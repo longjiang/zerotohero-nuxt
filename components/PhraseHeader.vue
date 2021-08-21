@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div class="text-center">
+  <div class="phrase-header">
+    <div class="phrase-header-pronunciation text-center">
       <Saved
         :item="phraseItem()"
         store="savedPhrases"
@@ -9,7 +9,7 @@
       />
       <Speak :text="term" />
     </div>
-    <h2 class="text-center mb-5 font-weight-normal">
+    <h2 class="phrase-header-phrase text-center font-weight-normal">
       <div class="d-inline-block">
         <Annotate :phonetics="true" :buttons="true">
           <span>{{ term }}</span>

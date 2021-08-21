@@ -1,5 +1,5 @@
 <template>
-  <div class="phrase">
+  <article class="phrase">
     <SocialHead :title="title" :description="description" :image="image" />
     <div class="container">
       <div class="row">
@@ -67,7 +67,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </article>
 </template>
 
 <script>
