@@ -195,6 +195,15 @@
         class="mt-2"
         max-rows="6"
       ></b-form-textarea>
+      <b-form-checkbox
+        :class="{
+          'mt-2': true,
+          'd-none': !enableTranslationEditing,
+        }"
+        v-model="autoBreakTranslationLines"
+      >
+        Auto Break Translation Lines
+      </b-form-checkbox>
       <b-form-textarea
         :class="{
           'd-none': !enableTranslationEditing,
@@ -283,6 +292,7 @@ export default {
       translation: "",
       notes: "",
       mounted: false,
+      autoBreakTranslationLines: false,
       originalText: "",
       punctuations: "。！？；：!?;:♪",
     };
@@ -385,10 +395,10 @@ export default {
       this.$emit("updateOriginalText", text);
     },
     updateTranslation() {
-      this.$emit(
-        "updateTranslation",
-        this.breaklines(SmartQuotes.string(this.translation))
-      );
+      let translation = SmartQuotes.string(this.translation);
+      if (this.autoBreakTranslationLines)
+        translation = this.breaklines(translation);
+      this.$emit("updateTranslation", translation);
     },
     async unassignShow(type) {
       let data = {};
