@@ -71,7 +71,11 @@
                 <i class="fas fa-step-forward mr-1"></i>
                 Another One
               </b-button>
-              <b-button variant="ghost-dark-no-bg" v-if="$adminMode" @click="removeEpisode(randomShowFirstEpisode)">
+              <b-button
+                variant="ghost-dark-no-bg"
+                v-if="$adminMode"
+                @click="removeEpisode(randomShowFirstEpisode)"
+              >
                 <i class="fas fa-trash"></i>
               </b-button>
             </div>
@@ -199,9 +203,11 @@ export default {
   },
   methods: {
     async removeEpisode(randomShowFirstEpisode) {
-      let response = await axios.delete(`${Config.wiki}items/youtube_videos/${randomShowFirstEpisode.id}`)
+      let response = await axios.delete(
+        `${Config.wiki}items/youtube_videos/${randomShowFirstEpisode.id}`
+      );
       if (response) {
-        this.loadRandomShow()
+        this.loadRandomShow();
       }
     },
     updateCurrentTime(currentTime) {
@@ -211,12 +217,14 @@ export default {
     },
     async loadRandomShow() {
       let randomShow = await this.getRandomShow();
-      let randomShowFirstEpisode = await this.getFirstEpisodeOfShow(
-        randomShow.id,
-        this.routeType.replace(/s$/, "").replace("-", "_")
-      );
-      this.randomShow = randomShow;
-      this.randomShowFirstEpisode = randomShowFirstEpisode;
+      if (randomShow) {
+        let randomShowFirstEpisode = await this.getFirstEpisodeOfShow(
+          randomShow.id,
+          this.routeType.replace(/s$/, "").replace("-", "_")
+        );
+        this.randomShow = randomShow;
+        this.randomShowFirstEpisode = randomShowFirstEpisode;
+      }
     },
     async getFirstEpisodeOfShow(showId, showType) {
       let url = `${Config.wiki}items/youtube_videos?filter[l2][eq]=${this.$l2.id}&filter[${showType}][eq]=${showId}&fields=youtube_id,id`;
