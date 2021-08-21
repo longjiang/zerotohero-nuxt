@@ -70,7 +70,12 @@
             </div>
           </div>
 
-          <div :class="{ 'content-pane-right pl-3 pr-3': wide }">
+          <div
+            :class="{
+              'col-sm-12': !wide,
+              'content-pane-right pl-3 pr-3': wide,
+            }"
+          >
             <article>
               <LazyPhraseComp
                 v-if="term"

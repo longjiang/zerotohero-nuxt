@@ -121,7 +121,10 @@
           </div>
 
           <div
-            :class="{ 'content-pane-right pl-3 pr-3': wide }"
+            :class="{
+              'col-sm-12': !wide,
+              'content-pane-right pl-3 pr-3': wide,
+            }"
             style="position: relative; overflow: hidden"
           >
             <LazyDictionaryEntry
