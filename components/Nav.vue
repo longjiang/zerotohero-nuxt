@@ -184,7 +184,12 @@
                     (child) => child.show
                   )"
                   :key="`subnav-${child.name || child.href}-${index}`"
-                  class="col-sm-6 col-xl-4 mb-1 p-1 feature-card-column"
+                  class="
+                    col-6 col-sm-4 col-lg-3 col-xl-2
+                    mb-1
+                    p-1
+                    feature-card-column
+                  "
                 >
                   <NuxtLink
                     v-if="!child.href"
@@ -1278,36 +1283,42 @@ export default {
 .feature-card-column:hover {
   z-index: 1;
 }
-.feature-card {
-  padding: 1rem 2rem;
-  font-size: 1.2em;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  border-radius: 0.5rem;
-  box-shadow: 0 10px 30px rgba(68, 75, 134, 0.2);
-  background-color: hsla(0deg, 100%, 100%, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  &:hover {
-    transform: scale(115%);
-    transition: 200ms ease-in-out;
-    background-color: hsla(0deg, 100%, 100%, 0.8);
-  }
-  .feature-card-icon {
-    padding-right: 1rem;
-    color: #333;
-    opacity: 0.85;
-  }
-  .feature-card-title {
-    font-size: 1em;
-    line-height: 1.5em;
-    padding: 0.25em 0;
-    flex: 1;
-    color: #333;
+
+.feature-card-column {
+  .feature-card {
+    padding: 0.75rem;
+    font-size: 1.2em;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 30px rgba(68, 75, 134, 0.2);
+    background-color: hsla(0deg, 100%, 100%, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    display: block;
+    text-align: center;
     &:hover {
-      color: #444;
+      transform: scale(115%);
+      transition: 200ms ease-in-out;
+      background-color: hsla(0deg, 100%, 100%, 0.8);
+    }
+    .feature-card-icon {
+      font-size: 2rem;
+      color: #000000aa;
+      opacity: 0.85;
+      display: block;
+    }
+    .feature-card-title {
+      font-size: 0.9em;
+      line-height: 1;
+      display: block;
+      color: #333;
+      height: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      &:hover {
+        color: #444;
+      }
     }
   }
 }
