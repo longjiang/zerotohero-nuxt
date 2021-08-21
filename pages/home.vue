@@ -34,8 +34,14 @@
           <client-only>
             <Nav :l1="$l1" :l2="$l2" variant="page" />
           </client-only>
-          <div :class="{ 'pl-1 pr-1 pb-2': true }">
-            <div class="home-card" v-if="$l2.han">
+          <div :class="{ 'pl-1 pr-1 pb-2': true }" v-if="$l2.han">
+            <div class="home-card">
+              <h4 class="text-center mb-4">Dialects of Chinese</h4>
+              <Dialects />
+            </div>
+          </div>
+          <div :class="{ 'pl-1 pr-1 pb-2': true }" v-if="$l2.han">
+            <div class="home-card">
               <h4 class="text-center">56 Ethnic Groups of China</h4>
               <p class="text-center mb-4">(2010 Numbers)</p>
               <FiftySixEthnic />

@@ -69,19 +69,19 @@ export default {
     return {
       specials: {
         lzh: {
-          name: "文言文",
+          name: "Classical Chinese",
           l1: "zh",
         },
         hak: {
-          name: "客家话",
+          name: "Hakka Chinese",
           l1: "zh",
         },
         nan: {
-          name: "闽南语",
+          name: "Min Nan Chinese",
           l1: "zh",
         },
         cmn: {
-          name: "Mandarin (Pinyin)",
+          name: "Mandarin Chinese (Pinyin Only)",
           l1: "en",
         },
       },
