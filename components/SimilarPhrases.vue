@@ -6,7 +6,7 @@
     </b-button>
     <div v-if="youInOtherLangs.length > 0" class="text-left">
       <h5>
-        <em>{{ phraseObj[$l1.code] }}</em>
+        <em>{{ phraseObj.en }}</em>
       </h5>
       <router-link
         v-for="(phrase, index) of youInOtherLangs"
@@ -19,7 +19,7 @@
         <span class="similar-phrase-l2">{{ phrase.phrase }}</span>
         <Speak :text="phrase.phrase" :l2="phrase.l2" />
         <span class="similar-phrase-language">
-          <em>{{ phrase[$l1.code] }}</em>
+          <em>{{ phrase.en }}</em>
           in {{ phrase.l2.name }}
         </span>
       </router-link>
@@ -37,8 +37,9 @@
         }/${encodeURIComponent(phrase.phrase)}`"
       >
         <span class="similar-phrase-l2">{{ phrase.phrase }}</span>
+        <Speak :text="phrase.phrase" :l2="phrase.l2" />
         <span class="similar-phrase-language">
-          <em>{{ phrase[$l1.code] }}</em>
+          <em>{{ phrase.en }}</em>
           in {{ phrase.l2.name }}
         </span>
       </router-link>
@@ -94,17 +95,19 @@ export default {
   },
   methods: {
     async f() {
-      let l1Code = this.$l1.code;
-      let url = `${
-        Config.wiki
-      }items/phrasebook?sort=title&filter[phrases][contains]=${encodeURIComponent(
-        this.phraseObj[l1Code] + "\r"
-      )}&fields=*,tv_show.*&limit=500&timestamp=${
-        this.$adminMode ? Date.now() : 0
-      }`;
-      let res = await axios.get(url);
-      if (res && res.data) {
-        return res.data.data;
+      let l1Code = 'en';
+      if (this.phraseObj[l1Code]) {
+        let url = `${
+          Config.wiki
+        }items/phrasebook?sort=title&filter[phrases][contains]=${encodeURIComponent(
+          this.phraseObj[l1Code] + "\r"
+        )}&fields=*,tv_show.*&limit=500&timestamp=${
+          this.$adminMode ? Date.now() : 0
+        }`;
+        let res = await axios.get(url);
+        if (res && res.data) {
+          return res.data.data;
+        }
       }
       return [];
     },
@@ -123,7 +126,7 @@ export default {
       return [];
     },
     h(phrasebooks) {
-      let l1Code = this.$l1.code;
+      let l1Code = 'en';
       phrasebooks = Helper.uniqueByValue(phrasebooks, "id");
       let phrases = [];
       for (let phrasebook of phrasebooks) {
@@ -145,18 +148,21 @@ export default {
           }
         }
       }
-      phrases = Helper.uniqueByValues(phrases, ["phrase", this.$l1.code, "l2"]);
+      phrases = Helper.uniqueByValues(phrases, ["phrase", 'en', "l2"]);
       return phrases;
     },
     separatePhrases(phrases) {
-      let l1Code = this.$l1.code;
-      this.youInOtherLangs = phrases
-        .filter(
-          (p) =>
-            p[l1Code] === this.phraseObj[l1Code] &&
-            (p.l2.code !== this.$l2.code || p.phrase !== this.phraseObj.phrase)
-        )
-        .sort((a, b) => a.phrase.localeCompare(b.phrase));
+      let l1Code = 'en';
+      if (this.phraseObj[l1Code]) {
+        this.youInOtherLangs = phrases
+          .filter(
+            (p) =>
+              p[l1Code] === this.phraseObj[l1Code] &&
+              (p.l2.code !== this.$l2.code ||
+                p.phrase !== this.phraseObj.phrase)
+          )
+          .sort((a, b) => a.phrase.localeCompare(b.phrase));
+      }
       this.vousInOtherLangs = phrases.filter(
         (p) =>
           p.phrase === this.phraseObj.phrase &&

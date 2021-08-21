@@ -52,18 +52,22 @@
                   </Annotate>
                 </div>
               </h2>
-              <p
-                class="text-center mt-1"
-                v-if="phraseObj && phraseObj[$l1.code]"
-              >
+              <p class="text-center mt-1" v-if="phraseObj">
                 {{ phraseObj[$l1.code] }}
               </p>
-              <hr />
-              <SimilarPhrases
-                v-if="phraseObj"
-                :phraseObj="phraseObj"
-                class="text-center"
-              />
+              <div
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                "
+              >
+                <SimilarPhrases
+                  v-if="phraseObj"
+                  :phraseObj="phraseObj"
+                  class="text-center"
+                />
+              </div>
               <hr v-if="word" />
               <div
                 class="text-center mt-3 mb-3"
@@ -339,7 +343,7 @@ export default {
       }
     },
     savePhrasebookHistory(index) {
-      if (!this.phrasebook) return
+      if (!this.phrasebook) return;
       let data = {
         type: "phrasebook",
         id: `${this.$l2.code}-phrasebook-${this.phrasebook.id}`,
