@@ -37,7 +37,7 @@
           <div :class="{ 'pl-1 pr-1 pb-2': true }">
             <div class="home-card" v-if="$l2.han">
               <h4 class="text-center">56 Ethnic Groups of China</h4>
-              <p class="text-center mb-4">(2020 Numbers)</p>
+              <p class="text-center mb-4">(2010 Numbers)</p>
               <FiftySixEthnic />
             </div>
           </div>
