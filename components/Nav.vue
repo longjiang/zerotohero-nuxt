@@ -1016,6 +1016,7 @@ export default {
     &.nuxt-link-active,
     &:hover {
       color: #444;
+      text-shadow: none;
       background: hsla(0deg, 100%, 100%, 0.75);
       border-top: 1px solid rgba(255, 255, 255, 0.5);
       border-left: 1px solid rgba(255, 255, 255, 0.5);
