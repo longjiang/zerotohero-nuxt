@@ -81,7 +81,7 @@
             </client-only>
             <div v-if="entry" class="text-center">
               <div class="text-center mb-4" v-if="words && words.length > 1">
-                <b-dropdown size="sm" :items="words" text="Disambiguation">
+                <b-dropdown size="sm" variant="gray" :items="words" text="Disambiguation">
                   <b-dropdown-item
                     v-for="w in words"
                     :key="`phrase-word-disambiguation-${w.id}`"

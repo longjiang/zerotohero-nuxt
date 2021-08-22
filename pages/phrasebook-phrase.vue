@@ -78,6 +78,7 @@
                   :items="words"
                   text="Disambiguation"
                   menu-class="disambiguation-dropdown"
+                  variant="gray"
                 >
                   <b-dropdown-item
                     v-for="w in words"

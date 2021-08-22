@@ -307,29 +307,30 @@
         </div>
       </div>
       <div class="row" v-if="video.subs_l2 && video.subs_l2.length > 0">
-        <div :key="'transcript-' + video.youtube_id" class="mt-2 col-sm-12">
-          <div class="text-center">
-            <SyncedTranscript
-              ref="transcript"
-              :lines="video.subs_l2"
-              :parallellines="video.subs_l1"
-              :single="true"
-              :quiz="false"
-              :highlight="highlight"
-              :hsk="hsk"
-              :highlight-saved-words="false"
-              :startLineIndex="startLineIndex"
-              :stopLineIndex="stopLineIndex"
-              :sticky="sticky"
-              :notes="video.notes"
-              :skin="skin"
-              @seek="seekYouTube"
-              @pause="pause"
-              @play="play"
-              @speechStart="speechStart"
-              @speechEnd="speechEnd"
-            />
-          </div>
+        <div
+          :key="'transcript-' + video.youtube_id"
+          class="col-sm-12 text-center mt-2 synced-transcript-wrapper"
+        >
+          <SyncedTranscript
+            ref="transcript"
+            :lines="video.subs_l2"
+            :parallellines="video.subs_l1"
+            :single="true"
+            :quiz="false"
+            :highlight="highlight"
+            :hsk="hsk"
+            :highlight-saved-words="false"
+            :startLineIndex="startLineIndex"
+            :stopLineIndex="stopLineIndex"
+            :sticky="sticky"
+            :notes="video.notes"
+            :skin="skin"
+            @seek="seekYouTube"
+            @pause="pause"
+            @play="play"
+            @speechStart="speechStart"
+            @speechEnd="speechEnd"
+          />
         </div>
       </div>
     </template>
@@ -412,7 +413,7 @@ export default {
     },
     showControls: {
       default: true,
-    }
+    },
   },
   data() {
     return {

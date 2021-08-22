@@ -1,7 +1,6 @@
 <template>
   <div>
-    <b-button @click="getSimilarPhrases" v-if="showButton" size="sm">
-      <i class="fas fa-comment-alt mr-1" />
+    <b-button @click="getSimilarPhrases" v-if="showButton" size="sm" variant="gray">
       Compare Languages
     </b-button>
     <div v-if="youInOtherLangs.length > 0" class="text-left">
