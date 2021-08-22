@@ -11,6 +11,7 @@ export const mutations = {
     if (typeof localStorage !== 'undefined') {
       let savedHits = JSON.parse(localStorage.getItem('zthSavedHits') || '{}')
       state.savedHits = savedHits || state.savedHits
+      console.log(state.savedHits)
       state.savedHitsLoaded = true
     }
   },
@@ -30,19 +31,22 @@ export const mutations = {
       this._vm.$set(state, 'savedHits', savedHits)
     }
   },
-  REMOVE_SAVED_HIT(state, options) {
+  REMOVE_SAVED_HIT(state, { terms, hit, l2 } = {}) {
     let hitToRemove = {
-      terms: options.terms,
-      videoId: options.hit.video.id,
-      lineIndex: options.hit.lineIndex
+      terms: terms,
+      videoId: hit.video.id,
+      lineIndex: hit.lineIndex
     }
-    if (typeof localStorage !== 'undefined' && state.savedHits[options.l2]) {
+    console.log('hitToRemove', hitToRemove)
+    if (typeof localStorage !== 'undefined' && state.savedHits[l2]) {
       let savedHits = Object.assign({}, state.savedHits)
-      savedHits[options.l2] = savedHits[options.l2].filter(
-        hit =>
-          !(hit.terms.join(',') === hitToRemove.terms.join(',')
-            && hit.videoId === hitToRemove.videoId
-            && hit.lineIndex === hitToRemove.lineIndex)
+      savedHits[l2] = savedHits[l2].filter(
+        hit => {
+          let remove = (hit.terms[0] === hitToRemove.terms[0])
+            && (hit.videoId === hitToRemove.videoId)
+            && (hit.lineIndex === hitToRemove.lineIndex)
+          return !remove
+        }
       )
       localStorage.setItem('zthSavedHits', JSON.stringify(savedHits))
       this._vm.$set(state, 'savedHits', savedHits)
