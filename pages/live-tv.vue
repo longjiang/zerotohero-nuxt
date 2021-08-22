@@ -281,10 +281,19 @@ export default {
         a.name.localeCompare(b.name, this.$l2.code)
       );
       this.channels = channels;
+
       if (channels[0]) {
-        if (this.hasFeatured)
-          this.currentChannel = channels.find((c) => c.featured);
-        else this.currentChannel = channels[0];
+        if (this.$route.query.tvgID) {
+          let channel = this.channels.find(
+            (c) => c.tvgID === this.$route.query.tvgID
+          );
+          this.setChannel(channel);
+        } else {
+          if (this.hasFeatured) {
+            let featuredChannel = channels.find((c) => c.featured);
+            this.setChannel(featuredChannel);
+          } else this.setChannel(channels[0]);
+        }
       }
       if (this.hasFeatured) this.featured = true;
       this.loadCategories();
@@ -294,6 +303,7 @@ export default {
   methods: {
     setChannel(channel) {
       this.currentChannel = channel;
+      window.history.replaceState("", "", `?tvgID=${channel.tvgID}`);
     },
     logoLoadError(channel) {
       Vue.delete(channel, "logo");
