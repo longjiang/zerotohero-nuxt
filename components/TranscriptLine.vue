@@ -69,41 +69,41 @@ import Helper from "@/lib/helper";
 export default {
   props: {
     line: {
-      type: Object
+      type: Object,
     },
     lineIndex: {
-      type: Number
+      type: Number,
     },
     abnormal: {
-      type: Boolean
+      type: Boolean,
     },
     matched: {
-      type: Boolean
+      type: Boolean,
     },
     showSubsEditing: {
-      type: Boolean
+      type: Boolean,
     },
     sticky: {
-      type: Boolean
+      type: Boolean,
     },
     single: {
-      type: Boolean
+      type: Boolean,
     },
     highlight: {
-      type: Array
+      type: Array,
     },
     hsk: {
-      type: String
+      type: String,
     },
     notes: {
-      type: Array
+      type: Array,
     },
     parallelLine: {
-      type: String
+      type: String,
     },
     enableTranslationEditing: {
-      type: Boolean
-    }
+      type: Boolean,
+    },
   },
   computed: {
     $l1() {
@@ -117,13 +117,13 @@ export default {
   },
   methods: {
     trasnlationLineKeydown(e) {
-      this.$emit('trasnlationLineKeydown', e)
+      this.$emit("trasnlationLineKeydown", e);
     },
     trasnlationLineBlur(e) {
-      this.$emit('trasnlationLineBlur', e)
+      this.$emit("trasnlationLineBlur", e);
     },
     removeLineClick() {
-      this.$emit('removeLineClick')
+      this.$emit("removeLineClick");
     },
     lineChanged(line, newText) {
       line.line = newText;
@@ -153,9 +153,50 @@ export default {
     highlightMultiple() {
       return Helper.highlightMultiple(...arguments);
     },
-  }
+  },
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
+.transcript.single-line .transcript-line:not(.transcript-line-current) {
+  display: none;
+}
+
+.transcript-line {
+  cursor: pointer;
+  position: relative;
+  font-size: 1.2rem;
+  padding: 0.5rem;
+  &.transcript-line-current {
+    box-shadow: 0 0 15px 2px #fd511299;
+    border-radius: 0.25rem;
+  }
+  &.transcript-line-abnormal {
+    background-color: lightpink;
+  }
+  &.transcript-line-matched {
+    color: #616161;
+    font-weight: bold;
+  }
+  .transcript-line-l1 {
+    color: rgb(173, 159, 153);
+    font-size: 0.75em;
+    display: none;
+  }
+}
+
+.synced-transcript-single-line {
+  .transcript-line {
+    padding: 0;
+    .transcript-line-current {
+      box-shadow: none;
+    }
+  }
+}
+
+.show-translation {
+  .transcript-line-l1 {
+    display: inherit;
+  }
+}
 </style>

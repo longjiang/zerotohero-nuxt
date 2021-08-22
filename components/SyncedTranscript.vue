@@ -1,83 +1,87 @@
 <template>
-  <div class="synced-transcript pl-3 pr-3">
-    <div
-      :class="{
-        transcript: true,
-        'single-line': single,
-      }"
+  <div
+    :class="{
+      'synced-transcript': true,
+      'synced-transcript-multi-line': !single,
+      'synced-transcript-single-line': single,
+    }"
+  >
+    <template
+      v-for="(line, index) in single
+        ? [lines[currentLineIndex || 0]]
+        : lines.slice(visibleMin, visibleMax - visibleMin)"
     >
-      <template
-        v-for="(line, index) in single
-          ? [lines[currentLineIndex || 0]]
-          : lines.slice(visibleMin, visibleMax - visibleMin)"
-      >
-        <TranscriptLine
-          :line="line"
-          :parallelLine="
-            $l2.code !== $l1.code && parallellines
-              ? matchedParallelLines[
-                  single ? currentLineIndex : index + visibleMin
-                ]
-              : undefined
+      <TranscriptLine
+        :line="line"
+        :parallelLine="
+          $l2.code !== $l1.code && parallellines
+            ? matchedParallelLines[
+                single ? currentLineIndex : index + visibleMin
+              ]
+            : undefined
+        "
+        :lineIndex="index + visibleMin"
+        :key="`line-${index + visibleMin}-${line.starttime}-${line.line.substr(
+          0,
+          10
+        )}`"
+        :abnormal="
+          $adminMode &&
+          lines[index + visibleMin - 1] &&
+          lines[index + visibleMin - 1].starttime > line.starttime
+        "
+        :matched="
+          !single &&
+          highlight &&
+          line &&
+          new RegExp(highlight.join('|')).test(line.line)
+        "
+        :showSubsEditing="showSubsEditing"
+        :sticky="sticky"
+        :single="single"
+        :highlight="highlight"
+        :hsk="hsk"
+        :notes="notes"
+        :enableTranslationEditing="$adminMode && enableTranslationEditing"
+        @click="lineClick(line)"
+        @removeLineClick="removeLine(index + visibleMin)"
+        @trasnlationLineBlur="trasnlationLineBlur"
+        @trasnlationLineKeydown="trasnlationLineKeydown"
+      />
+      <div v-if="!single" :key="`line-${index + visibleMin}-review`">
+        <h6
+          class="text-center mt-3"
+          :key="`review-title-${index + visibleMin}-${
+            reviewKeys[index + visibleMin]
+          }`"
+          v-if="
+            review[index + visibleMin] && review[index + visibleMin].length > 0
           "
-          :lineIndex="index + visibleMin"
-          :key="`line-${index + visibleMin}-${
-            line.starttime
-          }-${line.line.substr(0, 10)}`"
-          :abnormal="
-            $adminMode &&
-            lines[index + visibleMin - 1] &&
-            lines[index + visibleMin - 1].starttime > line.starttime
-          "
-          :matched="
-            !single &&
-            highlight &&
-            line &&
-            new RegExp(highlight.join('|')).test(line.line)
-          "
-          :showSubsEditing="showSubsEditing"
-          :sticky="sticky"
-          :single="single"
-          :highlight="highlight"
+        >
+          Pop Quiz
+        </h6>
+        <Review
+          v-for="(reviewItem, reviewItemIndex) in review[index + visibleMin]"
+          :key="`review-${index + visibleMin}-${reviewItemIndex}-${
+            reviewKeys[index + visibleMin]
+          }`"
+          :reviewItem="reviewItem"
           :hsk="hsk"
-          :notes="notes"
-          :enableTranslationEditing="$adminMode && enableTranslationEditing"
-          @click="lineClick(line)"
-          @removeLineClick="removeLine(index + visibleMin)"
-          @trasnlationLineBlur="trasnlationLineBlur"
-          @trasnlationLineKeydown="trasnlationLineKeydown"
+          :skin="skin"
         />
-        <div v-if="!single" :key="`line-${index + visibleMin}-review`">
-          <h6
-            class="text-center mt-3"
-            :key="`review-title-${index + visibleMin}-${
-              reviewKeys[index + visibleMin]
-            }`"
-            v-if="
-              review[index + visibleMin] &&
-              review[index + visibleMin].length > 0
-            "
-          >
-            Pop Quiz
-          </h6>
-          <Review
-            v-for="(reviewItem, reviewItemIndex) in review[index + visibleMin]"
-            :key="`review-${index + visibleMin}-${reviewItemIndex}-${
-              reviewKeys[index + visibleMin]
-            }`"
-            :reviewItem="reviewItem"
-            :hsk="hsk"
-            :skin="skin"
-          />
-        </div>
-      </template>
-      <div
-        v-observe-visibility="visibilityChanged"
-        style="height: 100vh; display: flex; align-items: center; justify-content: center;"
-        v-if="!single && lines.length > visibleMax"
-      >
-        <Loader :sticky="true"  />
       </div>
+    </template>
+    <div
+      v-observe-visibility="visibilityChanged"
+      style="
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      "
+      v-if="!single && lines.length > visibleMax"
+    >
+      <Loader :sticky="true" />
     </div>
   </div>
 </template>
@@ -165,7 +169,7 @@ export default {
       visibleMin: 0,
       visibleMax: this.startLineIndex ? Number(this.startLineIndex) + 30 : 30,
       visibleRange: 30,
-      preventJumpingAtStart: typeof this.startLineIndex !== 'undefined'
+      preventJumpingAtStart: typeof this.startLineIndex !== "undefined",
     };
   },
   computed: {
@@ -229,10 +233,15 @@ export default {
   watch: {
     async currentTime() {
       if (this.preventJumpingAtStart) {
-        this.turnOffPreventJumptingAtStartAfter3Seconds()
+        this.turnOffPreventJumptingAtStartAfter3Seconds();
       }
       let progressType = this.checkProgress();
-      if (progressType === 'jump' && typeof this.startLineIndex !== 'undefined' && this.preventJumpingAtStart) return
+      if (
+        progressType === "jump" &&
+        typeof this.startLineIndex !== "undefined" &&
+        this.preventJumpingAtStart
+      )
+        return;
       if (progressType === "first play") {
         if (this.currentTime >= this.lines[0].starttime) {
           this.playNearestLine();
@@ -283,8 +292,8 @@ export default {
   },
   methods: {
     async turnOffPreventJumptingAtStartAfter3Seconds() {
-      await Helper.timeout(3000)
-      this.preventJumpingAtStart = false
+      await Helper.timeout(3000);
+      this.preventJumpingAtStart = false;
     },
     visibilityChanged(isVisible) {
       if (isVisible) {
@@ -677,48 +686,15 @@ export default {
 };
 </script>
 
-<style lang="scss">
-.transcript.single-line .transcript-line:not(.transcript-line-current) {
-  display: none;
-}
-
-.transcript-line {
-  cursor: pointer;
-  position: relative;
-  font-size: 1.2rem;
-  padding: 0.5rem;
-}
-
-.transcript-line-current {
-  box-shadow: 0 0 15px 2px #fd511299;
-  border-radius: 0.25rem;
-}
-
-.transcript-line-abnormal {
-  background-color: lightpink;
-}
-
-.single-line .transcript-line-current {
-  box-shadow: none;
-}
-
-.transcript-line-matched {
-  color: #616161;
-  font-weight: bold;
-}
-
-.transcript-title {
-  font-weight: bold;
-  font-size: 1.5rem;
-}
-
-.transcript-line-l1 {
-  color: rgb(173, 159, 153);
-  font-size: 0.75em;
-  display: none;
-}
-
-.show-translation .transcript-line-l1 {
-  display: inherit;
+<style lang="scss" scoped>
+.synced-transcript {
+  .transcript-title {
+    font-weight: bold;
+    font-size: 1.5rem;
+  }
+  &.synced-transcript-multi-line {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
 }
 </style>

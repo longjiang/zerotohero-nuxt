@@ -222,13 +222,19 @@ export default {
   height: 2rem;
   position: fixed;
   bottom: 1rem;
-  right: 1rem;
+  left: 1rem;
   border-radius: 100%;
   opacity: 0.2;
   z-index: 10;
   padding: 0;
   &:hover {
     opacity: 1;
+  }
+}
+
+.zerotohero-wide {
+  .reader-icon {
+    left: calc(416px + 1rem)
   }
 }
 

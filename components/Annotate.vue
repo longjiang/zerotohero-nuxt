@@ -494,7 +494,8 @@ export default {
   color: #ddd;
 }
 
-.main-dark {
+.main-dark,
+.widget-dark {
   .annotator-menu-toggle {
     color: #ffffff55;
   }
