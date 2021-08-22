@@ -20,11 +20,30 @@
         :image="image"
       />
       <div class="row">
-        <div class="col-sm-12 mb-4">
+        <div
+          :class="{
+            'col-sm-12 mb-4': true,
+            'pl-0 pr-0': portrait,
+            'pl-4': !portrait,
+          }"
+        >
           <h3 class="text-center">Learn {{ $l2.name }} from Live TV</h3>
           <div v-if="channels" class="text-center">
             {{ channels.length }} Channel(s)
           </div>
+          <b-input-group class=" mt-5 mb-3 input-group-ghost-dark">
+            <b-form-input
+              v-model="keyword"
+              @compositionend.prevent.stop="() => false"
+              placeholder="Filter channels..."
+              class="input-ghost-dark"
+            />
+            <b-input-group-append>
+              <b-button variant="ghost-dark">
+                <i class="fas fa-filter"></i>
+              </b-button>
+            </b-input-group-append>
+          </b-input-group>
         </div>
       </div>
       <div class="row">
@@ -35,10 +54,7 @@
             'col-sm-7 col-md-8 pl-4': !portrait,
           }"
         >
-          <div
-            class="live-tv-wrapper rounded shadow pb-3"
-            style="overflow: hidden"
-          >
+          <div class="live-tv-wrapper rounded shadow" style="overflow: hidden">
             <LazyLiveVideo
               v-if="currentChannel"
               :url="currentChannel.url"
@@ -196,6 +212,7 @@ export default {
       },
       categories: [],
       countries: [],
+      keyword: undefined,
     };
   },
   computed: {
@@ -223,6 +240,11 @@ export default {
     filteredChannels() {
       let channels = this.channels;
       channels = channels.filter((c) => {
+        if (this.keyword)
+          return (
+            c.name &&
+            c.name.match(new RegExp(Helper.escapeRegExp(this.keyword), "i"))
+          );
         if (this.featured) return c.featured;
         if (this.category) return c.category === this.category;
         if (this.country) return c.countries.includes(this.country);
@@ -303,7 +325,8 @@ export default {
   methods: {
     setChannel(channel) {
       this.currentChannel = channel;
-      window.history.replaceState("", "", `?tvgID=${channel.tvgID}`);
+      if (typeof window !== "undefined")
+        window.history.replaceState("", "", `?tvgID=${channel.tvgID}`);
     },
     logoLoadError(channel) {
       Vue.delete(channel, "logo");
