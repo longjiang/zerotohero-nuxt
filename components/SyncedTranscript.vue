@@ -677,6 +677,7 @@ export default {
     },
     goToLine(line) {
       this.currentLineIndex = this.lines.findIndex((l) => l === line);
+      this.nextLine = this.lines[this.currentLineIndex + 1]
       this.seekVideoTo(line.starttime);
     },
     rewind() {

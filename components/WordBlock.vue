@@ -322,7 +322,7 @@ export default {
       checkSaved: true,
       wordblockHover: false,
       tooltipHover: false,
-      highlightHardWords: true,
+      highlightHardWords: false,
       Config,
     };
   },

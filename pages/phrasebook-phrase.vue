@@ -145,6 +145,7 @@
               :showExample="false"
               :showExternal="false"
               :key="`dictionary-entry-${word.id}`"
+              ref="dictionaryEntry"
             />
             <LazyPhraseComp
               v-else-if="phraseObj && phraseObj.phrase && phrasebook"
@@ -154,6 +155,7 @@
               :showExternal="false"
               :showHeader="false"
               class="mt-4 mb-4"
+              ref="phrase"
             />
           </div>
         </div>
