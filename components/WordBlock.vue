@@ -40,6 +40,7 @@
         <span
           v-if="$l2.han"
           class="word-block-simplified"
+          :data-level="level"
           @click="wordBlockClick()"
         >
           {{ token.candidates[0].simplified }}
@@ -56,7 +57,8 @@
           class="word-block-text d-inline-block"
           @click="wordBlockClick()"
           v-html="token.text"
-        /><span
+        />
+        <span
           v-if="hanja"
           class="word-block-text-byeonggi d-inline-block"
           v-html="hanja"
@@ -103,7 +105,11 @@
           :class="classes"
         >
           <div v-if="word">
-            <div v-for="(match, index) in word.matches" style="color: #999" :key="`match-${index}`">
+            <div
+              v-for="(match, index) in word.matches"
+              style="color: #999"
+              :key="`match-${index}`"
+            >
               <b>{{ match.field }} {{ match.number }}</b>
               {{ match.table !== "declension" ? match.table : "" }}
               of
@@ -316,6 +322,7 @@ export default {
       checkSaved: true,
       wordblockHover: false,
       tooltipHover: false,
+      highlightHardWords: false,
       Config,
     };
   },
@@ -383,20 +390,54 @@ export default {
           if (this.token.candidates[0].kana) {
             return this.token.candidates[0].kana;
           } else if (this.token.candidates[0].pronunciation) {
-            return this.token.candidates[0].pronunciation.split(',')[0];
+            return this.token.candidates[0].pronunciation.split(",")[0];
           } else if (this.token.candidates[0].pinyin) {
             return this.token.candidates[0].pinyin;
           } else {
             return tr(this.token.candidates[0].head);
           }
         }
-        if (
-          !["ja", "zh", "nan", "hak"].includes(this.$l2.code)
-        ) {
+        if (!["ja", "zh", "nan", "hak"].includes(this.$l2.code)) {
           return tr(this.text);
         }
       }
-    }
+    },
+    level() {
+      if (this.highlightHardWords) {
+        if (
+          this.$l2.code === "zh" &&
+          this.token &&
+          this.token.candidates &&
+          this.token.candidates.length > 0
+        ) {
+          if (
+            this.token.candidates[0].newHSK &&
+            this.token.candidates[0].newHSK === "7-9"
+          ) {
+            return "7-9";
+          } else if (
+            this.token.candidates[0].hsk === "outside" &&
+            !this.token.candidates[0].newHSK &&
+            this.token.candidates[0].weight < 750
+          ) {
+            return "outside";
+          } else {
+            return false;
+          }
+        } else if (
+          this.$l2.code === "en" &&
+          this.token &&
+          this.token.candidates &&
+          this.token.candidates.length > 0
+        ) {
+          if (this.token.candidates[0].level === "C2") {
+            return "C2";
+          } else {
+            return false;
+          }
+        }
+      }
+    },
   },
   mounted() {
     if (this.sticky) {
@@ -415,53 +456,17 @@ export default {
   },
   watch: {
     async wordblockHover() {
-      if(!Helper.isMobile()) await Helper.timeout(1000);
+      if (!Helper.isMobile()) await Helper.timeout(1000);
       this.updateOpen();
     },
     async tooltipHover() {
-      if(!Helper.isMobile()) {
+      if (!Helper.isMobile()) {
         await Helper.timeout(300);
         this.updateOpen();
       }
     },
   },
   methods: {
-    highlightHardWords() {
-      if (
-        this.$l2.code === "zh" &&
-        this.token &&
-        this.token.candidates &&
-        this.token.candidates.length > 0
-      ) {
-        if (
-          this.token.candidates[0].newHSK &&
-          this.token.candidates[0].newHSK === "7-9"
-        ) {
-          return "7-9";
-        } else if (
-          this.token.candidates[0].hsk === "outside" &&
-          !this.token.candidates[0].newHSK &&
-          this.token.candidates[0].weight < 750
-        ) {
-          return "outside";
-        } else {
-          return false;
-        }
-      } else if (
-        this.$l2.code === "en" &&
-        this.token &&
-        this.token.candidates &&
-        this.token.candidates.length > 0
-      ) {
-        if (this.token.candidates[0].level === "C2") {
-          return "C2";
-        } else {
-          return false;
-        }
-      } else {
-        return false;
-      }
-    },
     wordBlockClick() {
       if (
         this.explore &&
