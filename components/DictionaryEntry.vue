@@ -412,7 +412,7 @@ export default {
 .dictionary-entry {
   .dictionary-entry-section {
     overflow: visible;
-    padding: 1rem;
+    padding: 1rem 0;
   }
   .section-nav-wrapper {
     position: sticky;
