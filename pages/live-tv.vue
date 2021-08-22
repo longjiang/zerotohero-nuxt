@@ -12,38 +12,21 @@
     <div class="pt-5 pb-5 container-fluid">
       <SocialHead
         v-if="channels"
-        :title="`Learn ${$l2.name} from Live ${$l2.name} TV | ${$l2.name} Zero to Hero`"
-        :description="`Watch ${$l2.name} TV Channels: ${channels
-          .slice(0, 5)
-          .map((c) => c.name)
-          .join(', ')} ...`"
+        :title="title"
+        :description="description"
         :image="image"
       />
       <div class="row">
         <div
           :class="{
-            'col-sm-12 mb-4': true,
+            'col-sm-12 mb-5': true,
             'pl-0 pr-0': portrait,
-            'pl-4': !portrait,
           }"
         >
           <h3 class="text-center">Learn {{ $l2.name }} from Live TV</h3>
           <div v-if="channels" class="text-center">
             {{ channels.length }} Channel(s)
           </div>
-          <b-input-group class=" mt-5 mb-3 input-group-ghost-dark">
-            <b-form-input
-              v-model="keyword"
-              @compositionend.prevent.stop="() => false"
-              placeholder="Filter channels..."
-              class="input-ghost-dark"
-            />
-            <b-input-group-append>
-              <b-button variant="ghost-dark">
-                <i class="fas fa-filter"></i>
-              </b-button>
-            </b-input-group-append>
-          </b-input-group>
         </div>
       </div>
       <div class="row">
@@ -51,7 +34,7 @@
           :class="{
             'live-video-column': true,
             'col-sm-12 pl-0 pr-0': portrait,
-            'col-sm-7 col-md-8 pl-4': !portrait,
+            'col-sm-7 col-md-8': !portrait,
           }"
         >
           <div class="live-tv-wrapper rounded shadow" style="overflow: hidden">
@@ -65,15 +48,28 @@
         </div>
         <div
           :class="{
-            'pl-0 pr-0': true,
+            'channel-switch-wrapper': true,
             'col-sm-12': portrait,
-            'col-sm-5 col-md-4': !portrait,
+            'col-sm-5 col-md-4 pl-0': !portrait,
           }"
         >
-          <div
-            v-if="channels"
-            class="tabs text-center channel-category-tabs pl-3 pr-3"
+          <b-input-group
+            :class="`${portrait ? 'mt-3' : ''} mb-3 input-group-ghost-dark`"
+            style="z-index: -1"
           >
+            <b-form-input
+              v-model="keyword"
+              @compositionend.prevent.stop="() => false"
+              placeholder="Filter channels..."
+              class="input-ghost-dark"
+            />
+            <b-input-group-append>
+              <b-button variant="ghost-dark">
+                <i class="fas fa-filter"></i>
+              </b-button>
+            </b-input-group-append>
+          </b-input-group>
+          <div v-if="channels" class="tabs text-center channel-category-tabs">
             <button
               v-if="hasFeatured"
               :key="`live-tv-cat-tab-featured`"
@@ -140,7 +136,7 @@
           <div
             v-if="channels"
             :class="{
-              'channel-buttons': true,
+              'channel-buttons pt-2': true,
               'channel-buttons-portrait': portrait,
             }"
           >
@@ -258,6 +254,24 @@ export default {
         typeof this.country === "undefined" &&
         !this.featured;
       return all;
+    },
+    title() {
+      let title = `Learn ${this.$l2.name} from Live ${this.$l2.name} TV`;
+      if (this.currentChannel) {
+        title = `Watch Live: ${this.currentChannel.name}`;
+      }
+      title = `${title} | ${this.$l2.name} Zero to Hero`;
+      return title;
+    },
+    description() {
+      let description = `Watch ${this.$l2.name} TV Channels: ${this.channels
+        .slice(0, 5)
+        .map((c) => c.name)
+        .join(", ")} ...`;
+      if (this.channel) {
+        description = `Learn English by watching live ${this.$l2.name} TV right in your browser.`
+      }
+      return description
     },
   },
   created() {
@@ -390,15 +404,7 @@ export default {
   margin-right: 0.5rem;
   padding-left: 0.2;
 }
-.channel-buttons {
-  padding: 1rem 0 0 1rem;
-}
 
-@media (max-width: 992px) {
-  .channel-buttons {
-    padding-right: 1rem;
-  }
-}
 @media (min-width: 540px) and (max-width: 992px) {
   .channel-buttons-portrait {
     .channel-button {
