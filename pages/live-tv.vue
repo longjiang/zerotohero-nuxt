@@ -79,6 +79,7 @@
                 'btn-primary': featured,
               }"
               @click="
+                keyword = undefined;
                 country = undefined;
                 category = undefined;
                 featured = true;
@@ -94,6 +95,7 @@
                 'btn-primary': all,
               }"
               @click="
+                keyword = undefined;
                 country = undefined;
                 category = undefined;
                 featured = false;
@@ -110,6 +112,7 @@
                 'btn-primary': country === c,
               }"
               @click="
+                keyword = undefined;
                 category = undefined;
                 country = c;
                 featured = false;
@@ -126,6 +129,7 @@
                 'btn-primary text-white': category === cat,
               }"
               @click="
+                keyword = undefined;
                 country = undefined;
                 category = cat;
               "
@@ -224,19 +228,13 @@ export default {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
     },
-    image() {
-      let channelsWithLogos = this.channels.filter((c) => c.logo);
-      if (channelsWithLogos.length > 0) {
-        return channelsWithLogos[0].logo;
-      }
-    },
     hasFeatured() {
       return this.channels.find((c) => c.featured);
     },
     filteredChannels() {
       let channels = this.channels;
       channels = channels.filter((c) => {
-        if (this.keyword)
+        if (this.keyword && this.keyword !== '')
           return (
             c.name &&
             c.name.match(new RegExp(Helper.escapeRegExp(this.keyword), "i"))
@@ -269,9 +267,19 @@ export default {
         .map((c) => c.name)
         .join(", ")} ...`;
       if (this.currentChannel) {
-        description = `Learn English by watching live ${this.$l2.name} TV right in your browser.`
+        description = `Learn English by watching live ${this.$l2.name} TV right in your browser.`;
       }
-      return description
+      return description;
+    },
+    image() {
+      if (this.currentChannel) {
+        if (this.currentChannel.logo) return this.currentChannel.logo;
+        else return undefined;
+      }
+      let channelsWithLogos = this.channels.filter((c) => c.logo);
+      if (channelsWithLogos.length > 0) {
+        return channelsWithLogos[0].logo;
+      }
     },
   },
   created() {
