@@ -35,7 +35,10 @@
             'col-sm-7 col-md-8 pl-4': !portrait,
           }"
         >
-          <div class="live-tv-wrapper rounded shadow pb-3" style="overflow: hidden;">
+          <div
+            class="live-tv-wrapper rounded shadow pb-3"
+            style="overflow: hidden"
+          >
             <LazyLiveVideo
               v-if="currentChannel"
               :url="currentChannel.url"
@@ -59,8 +62,8 @@
               v-if="hasFeatured"
               :key="`live-tv-cat-tab-featured`"
               :class="{
-                'btn btn-secondary mr-1': true,
-                'text-white': !featured,
+                'btn mr-1': true,
+                'btn-ghost-dark text-white': !featured,
                 'btn-primary': featured,
               }"
               @click="
@@ -74,12 +77,9 @@
             <button
               :key="`live-tv-cat-tab-all`"
               :class="{
-                'btn btn-secondary mr-1': true,
-                'text-white': typeof category !== 'undefined' || featured,
-                'btn-primary':
-                  typeof category === 'undefined' &&
-                  typeof country === 'undefined' &&
-                  !featured,
+                'btn mr-1': true,
+                'btn-ghost-dark text-white': !all,
+                'btn-primary': all,
               }"
               @click="
                 country = undefined;
@@ -93,8 +93,8 @@
               v-for="c in countries"
               :key="`live-tv-cat-tab-${c}`"
               :class="{
-                'btn btn-secondary mr-1': true,
-                'text-white': country !== c,
+                'btn mr-1': true,
+                'btn-ghost-dark text-white': country !== c,
                 'btn-primary': country === c,
               }"
               @click="
@@ -109,7 +109,7 @@
               v-for="cat in categories"
               :key="`live-tv-cat-tab-${cat}`"
               :class="{
-                'btn btn-secondary mr-1': true,
+                'btn btn-ghost-dark mr-1': true,
                 'text-white': category !== cat,
                 'btn-primary text-white': category === cat,
               }"
@@ -129,7 +129,7 @@
             }"
           >
             <b-button
-              variant="secondary"
+              variant="ghost-dark"
               size="sm"
               :class="{
                 'channel-button': true,
@@ -229,6 +229,13 @@ export default {
         return true;
       });
       return channels;
+    },
+    all() {
+      let all =
+        typeof this.category === "undefined" &&
+        typeof this.country === "undefined" &&
+        !this.featured;
+      return all;
     },
   },
   created() {
