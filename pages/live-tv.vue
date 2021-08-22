@@ -268,7 +268,7 @@ export default {
         .slice(0, 5)
         .map((c) => c.name)
         .join(", ")} ...`;
-      if (this.channel) {
+      if (this.currentChannel) {
         description = `Learn English by watching live ${this.$l2.name} TV right in your browser.`
       }
       return description
