@@ -278,9 +278,9 @@ export default {
   watch: {
     async checkSavedData() {
       if (this.checkSavedData) {
-        await this.checkSavedFunc(this.videos);
+        await this.checkSavedFunc(this.filteredVideos);
       } else {
-        for (let video of this.videos) {
+        for (let video of this.filteredVideos) {
           delete video.tv_show;
           delete video.talk;
           Vue.delete(video, "id");
