@@ -51,10 +51,7 @@
               >
                 HSK 1-4 Bundle
               </a>
-              <Price :price="price(134, { sale: true })"></Price>
-              <span style="color: rgb(26, 148, 6); font-size: 12px">
-                Save {{ money(24) }}
-              </span>
+              <Price :price="price(134, { sale: true })" :save="money(24)"></Price>
             </td>
             <td
               class="text-center align-middle"
@@ -67,10 +64,7 @@
               >
                 Ultimate Bundle
               </a>
-              <Price :price="price(219, { sale: true })"></Price>
-              <span style="color: rgb(26, 148, 6); font-size: 12px">
-                Save {{ money(67) }}
-              </span>
+              <Price :price="price(219, { sale: true })" :save="money(67)"></Price>
               <p style="font-size: 0.8em">
                 This bundles includes all of our paid courses with a total of
                 <router-link :to="{ name: 'video-count' }">
@@ -136,10 +130,7 @@
               >
                 HSK 5-6 Bundle
               </a>
-              <Price :price="price(109, { sale: true })"></Price>
-              <span style="color: rgb(26, 148, 6); font-size: 12px">
-                Save {{ money(48) }}
-              </span>
+              <Price :price="price(109, { sale: true })" :save="money(48)"></Price>
             </td>
           </tr>
 
@@ -393,5 +384,15 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
+.pricing-table td:first-child,
+.pricing-table th:first-child {
+  font-weight: bold;
+  max-width: 10rem;
+}
+
+.pricing-table td:first-child a,
+.pricing-table td:first-child a:hover {
+  color: white;
+}
 </style>

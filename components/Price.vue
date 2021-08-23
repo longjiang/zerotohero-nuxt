@@ -6,6 +6,9 @@
       <span v-if="!compact">SALE:</span>
       <b>{{ price.salePrice }}</b>
     </span>
+    <div style="color: rgb(26, 148, 6); font-size: 12px" v-if="save && !price.salePrice">
+      Save {{ save }} over individual courses.
+    </div>
   </div>
 </template>
 
@@ -18,9 +21,15 @@ export default {
     compact: {
       default: false,
     },
+    save: {
+      type: String
+    }
   },
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
+.sale-price {
+  color: green;
+}
 </style>

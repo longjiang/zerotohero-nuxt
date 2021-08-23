@@ -38,17 +38,4 @@ export default {
 </script>
 
 <style>
-.sale-price {
-  color: red;
-}
-.pricing-table td:first-child,
-.pricing-table th:first-child {
-  font-weight: bold;
-  max-width: 10rem;
-}
-
-.pricing-table td:first-child a,
-.pricing-table td:first-child a:hover {
-  color: white;
-}
 </style>
