@@ -5,24 +5,26 @@
   }
 </router>
 <template>
-  <div class="main pt-5 pb-5 container" v-cloak>
-    <div class="row">
-      <div class="col-sm-12">
-        <h4 class="page-title mb-4" v-if="method === 'saved'">
-          Learning saved words
-        </h4>
-        <h4 class="page-title mb-4" v-if="method === 'hsk'">
-          <b :data-level="args[0]" class="mr-1">HSK {{ args[0] }}</b>
-          <b>Learning Lesson {{ args[1] }}</b>
-          (Part {{ args[2] }}) Vocabulary
-        </h4>
-        <Loader class="mt-5" />
-        <div v-if="words.length > 0">
-          <Questions
-            :words="words"
-            :collapsed="false"
-            :book="args[0] ? args[0] : words[0].hsk"
-          ></Questions>
+  <div class="main">
+    <div class="pt-5 pb-5 container" v-cloak>
+      <div class="row">
+        <div class="col-sm-12">
+          <h4 class="page-title mb-4" v-if="method === 'saved'">
+            Learning saved words
+          </h4>
+          <h4 class="page-title mb-4" v-if="method === 'hsk'">
+            <b :data-level="args[0]" class="mr-1">HSK {{ args[0] }}</b>
+            <b>Learning Lesson {{ args[1] }}</b>
+            (Part {{ args[2] }}) Vocabulary
+          </h4>
+          <Loader class="mt-5" />
+          <div v-if="words.length > 0">
+            <Questions
+              :words="words"
+              :collapsed="false"
+              :book="args[0] ? args[0] : words[0].hsk"
+            ></Questions>
+          </div>
         </div>
       </div>
     </div>
@@ -84,16 +86,21 @@ export default {
   },
   methods: {
     async updateWords() {
-      let sW = []
-      if(this.$store.state.savedWords.savedWords && this.$store.state.savedWords.savedWords[this.$l2.code]) {
-        for (let savedWord of this.$store.state.savedWords.savedWords[this.$l2.code]) {
-          let word = await (await this.$getDictionary()).get(savedWord.id)
+      let sW = [];
+      if (
+        this.$store.state.savedWords.savedWords &&
+        this.$store.state.savedWords.savedWords[this.$l2.code]
+      ) {
+        for (let savedWord of this.$store.state.savedWords.savedWords[
+          this.$l2.code
+        ]) {
+          let word = await (await this.$getDictionary()).get(savedWord.id);
           if (word) {
-            sW.push(word)
+            sW.push(word);
           }
         }
       }
-      this.savedWords = sW
+      this.savedWords = sW;
       this.words = sW;
     },
     async route() {
@@ -104,11 +111,9 @@ export default {
           return;
         } else if (this.method == "hsk" && this.$route.params.args) {
           this.args = this.$route.params.args.split(",");
-          this.words = await (await this.$getDictionary()).getByBookLessonDialog(
-            this.args[0],
-            this.args[1],
-            this.args[2]
-          );
+          this.words = await (
+            await this.$getDictionary()
+          ).getByBookLessonDialog(this.args[0], this.args[1], this.args[2]);
           return;
         }
       } else {
