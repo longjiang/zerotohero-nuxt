@@ -29,16 +29,17 @@
       <template v-if="token && token.candidates && token.candidates.length > 0">
         <span
           class="word-block-definition"
+          v-if="l2Settings.showDefinition"
           v-html="token.candidates[0].definitions[0]"
         ></span>
         <span
           class="word-block-pinyin"
-          v-if="phonetics && transliteration && transliteration !== token.text"
+          v-if="l2Settings.showPinyin && phonetics && transliteration && transliteration !== token.text"
         >
           {{ savedTransliteration || transliteration }}
         </span>
         <span
-          v-if="token.candidates[0].simplified"
+          v-if="!l2Settings.useTraditional && token.candidates[0].simplified"
           class="word-block-simplified"
           :data-level="level"
           @click="wordBlockClick()"
@@ -46,7 +47,7 @@
           {{ token.candidates[0].simplified }}
         </span>
         <span
-          v-if="token.candidates[0].traditional"
+          v-else-if="l2Settings.useTraditional && token.candidates[0].traditional"
           class="word-block-traditional"
           @click="wordBlockClick()"
         >
@@ -59,7 +60,7 @@
           v-html="token.text"
         />
         <span
-          v-if="hanja"
+          v-if="l2Settings.showByeonggi && hanja"
           class="word-block-text-byeonggi d-inline-block"
           v-html="hanja"
         />
@@ -67,7 +68,7 @@
       <template v-else>
         <span
           class="word-block-pinyin"
-          v-if="phonetics && transliteration && transliteration !== text"
+          v-if="l2Settings.showPinyin && phonetics && transliteration && transliteration !== text"
         >
           {{ savedTransliteration || transliteration }}
         </span>
@@ -284,6 +285,7 @@ import Helper from "@/lib/helper";
 import Config from "@/lib/config";
 import WordPhotos from "@/lib/word-photos";
 import { transliterate as tr } from "transliteration";
+import { mapState } from 'vuex'
 
 export default {
   props: {
@@ -327,6 +329,7 @@ export default {
     };
   },
   computed: {
+    ...mapState("settings", ["l2Settings"]),
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
