@@ -38,7 +38,7 @@
           {{ savedTransliteration || transliteration }}
         </span>
         <span
-          v-if="$l2.han"
+          v-if="token.candidates[0].simplified"
           class="word-block-simplified"
           :data-level="level"
           @click="wordBlockClick()"
@@ -46,7 +46,7 @@
           {{ token.candidates[0].simplified }}
         </span>
         <span
-          v-if="$l2.han"
+          v-if="token.candidates[0].traditional"
           class="word-block-traditional"
           @click="wordBlockClick()"
         >
