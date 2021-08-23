@@ -68,6 +68,9 @@ export default {
           name: "phrasebook",
           params: { bookId: String(this.phrasebook.id) },
         };
+      if (this.progress) {
+        to.hash = `#${this.historyItem.phrasebook.index}`;
+      }
       if (typeof this.l1 !== "undefined") {
         to.params.l1 = this.l1.code;
       }
@@ -99,10 +102,15 @@ export default {
     ...mapState("history", ["history"]),
     progress() {
       if (this.showProgress && this.history) {
-        let historyItem = this.history.find((i) => i.id === this.historyId);
-        if (historyItem && historyItem.phrasebook) {
-          return historyItem.phrasebook.progress;
+        if (this.historyItem && this.historyItem.phrasebook) {
+          return this.historyItem.phrasebook.progress;
         }
+      }
+    },
+    historyItem() {
+      if (this.history) {
+        let historyItem = this.history.find((i) => i.id === this.historyId);
+        return historyItem;
       }
     },
   },
