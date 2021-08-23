@@ -20,7 +20,7 @@
       'add-pinyin': $hasFeature('transliteration'),
       phonetics,
       fullscreen: fullscreenMode,
-      'with-buttons': buttons
+      'with-buttons': buttons,
     }"
   >
     <div class="annotator-buttons" v-if="!empty() && buttons">
@@ -194,14 +194,14 @@ export default {
     async textMode() {
       if (Helper.isMobile() && this.textMode) {
         let element = this.$el.querySelector(".annotate-input");
-        await Helper.timeout(30)
+        await Helper.timeout(30);
         element.focus();
       }
     },
   },
   methods: {
     async onMenuHide() {
-      await Helper.timeout(300)
+      await Helper.timeout(300);
       document.activeElement.blur();
     },
     hasTranslate() {
@@ -218,7 +218,7 @@ export default {
     },
     async translateClick() {
       let text = this.$l2.continua ? this.text.replace(/ /g, "") : this.text;
-      let url = Helper.translationURL(text, this.$l1, this.$l2)
+      let url = Helper.translationURL(text, this.$l1, this.$l2);
       if (url) window.open(url, Helper.isMobile() ? "_blank" : "translate");
     },
     // https://stackoverflow.com/questions/2550951/what-regular-expression-do-i-need-to-check-for-some-non-latin-characters
@@ -334,9 +334,21 @@ export default {
           }
         }
       } else if (
-        ["en", "ko", "vi", "de", "id", "ms", "tr", "ta", "hi", "tl", "ceb", "cmn", "hy"].includes(
-          this.$l2.code
-        )
+        [
+          "en",
+          "ko",
+          "vi",
+          "de",
+          "id",
+          "ms",
+          "tr",
+          "ta",
+          "hi",
+          "tl",
+          "ceb",
+          "cmn",
+          "hy",
+        ].includes(this.$l2.code)
       ) {
         html = "";
         this.tokenized[batchId] = await (
@@ -468,11 +480,11 @@ export default {
   }
 }
 
-.text-center .annotated[dir=ltr].with-buttons .annotate-template {
+.text-center .annotated[dir="ltr"].with-buttons .annotate-template {
   padding-left: 1.5rem;
 }
 
-.text-center .annotated[dir=rtl].with-buttons .annotate-template {
+.text-center .annotated[dir="rtl"].with-buttons .annotate-template {
   padding-right: 1.5rem;
 }
 

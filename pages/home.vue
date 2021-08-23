@@ -88,9 +88,7 @@ export default {
         return `/img/backgrounds/bg-${this.$l2.code}-${Math.ceil(
           Math.random() * 10
         )}.jpg`;
-      else if (
-        ["gan", "hak", "hsn", "nan", "wuu", "zha"].includes(this.$l2.code)
-      )
+      else if (this.$l2.han)
         return `/img/backgrounds/bg-zh-${Math.ceil(Math.random() * 10)}.jpg`;
       else return `https://source.unsplash.com/1600x900/?${this.$l2.name}`;
     },

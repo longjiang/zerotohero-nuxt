@@ -100,6 +100,7 @@ export default {
         classes[`l1-${this.l1.code}`] = true;
         classes[`l2-${this.l2.code}`] = true;
         if (this.l2.han) classes["l2-zh"] = true;
+        if (this.l2.han) classes["l2-zh"] = true;
         return classes;
       }
     },
@@ -109,9 +110,7 @@ export default {
         return `/img/backgrounds/bg-${this.l2.code}-${Math.ceil(
           Math.random() * 10
         )}.jpg`;
-      else if (
-        ["gan", "hak", "hsn", "nan", "wuu", "zha"].includes(this.l2.code)
-      )
+      else if (this.l2.han)
         return `/img/backgrounds/bg-zh-${Math.ceil(Math.random() * 10)}.jpg`;
       else return `https://source.unsplash.com/1600x900/?${this.l2.name}`;
     },
@@ -128,7 +127,7 @@ export default {
     this.wide = Helper.wide();
     this.$ga.page(this.$route.path);
     smoothscroll.polyfill(); // Safari does not support smoothscroll
-    this.onLanguageChange()
+    this.onLanguageChange();
   },
   destroyed() {
     if (typeof window !== "undefined")
@@ -139,8 +138,8 @@ export default {
       this.$ga.page(this.$route.path);
     },
     l2() {
-      this.onLanguageChange()
-    }
+      this.onLanguageChange();
+    },
   },
   methods: {
     onSkin(skin) {
