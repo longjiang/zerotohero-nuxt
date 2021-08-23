@@ -9,7 +9,7 @@
         <div v-html="phrasebook.description" class="mt-1 text-center" />
         <div class="text-center mt-3">
           <b-input-group prepend="Start from #">
-            <b-form-input v-model.lazy="startRow"></b-form-input>
+            <b-form-input v-model.lazy="startRow" type="number"></b-form-input>
             <b-input-group-append>
               <b-button variant="primary">OK</b-button>
             </b-input-group-append>
@@ -46,7 +46,7 @@
           :class="{
             'rounded p-4 phrasebook-card': true,
             'text-right': $l2.direction === 'rtl',
-            'phrasebook-card-current': initId && phraseIndex === initId,
+            'phrasebook-card-current': initId && ((phraseObj.id || phraseIndex) + 1) == initId,
           }"
         >
           <div
@@ -99,7 +99,7 @@ export default {
     return {
       csvHref: undefined,
       numRowsVisible: 24,
-      startRow: 1,
+      startRow: this.initId ? this.initId : 1,
     };
   },
   mounted() {
@@ -114,6 +114,13 @@ export default {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
+  },
+  watch: {
+    startRow() {
+      if (!this.startRow || this.startRow < 1) {
+        this.startRow = 1
+      }
+    }
   },
   methods: {
     genCSV() {
@@ -172,8 +179,6 @@ export default {
   transform: scale(1.2);
   position: relative;
   z-index: 2;
-  padding: 3rem !important;
-  // background-color: rgb(250, 244, 241);
 }
 
 .saved-button {

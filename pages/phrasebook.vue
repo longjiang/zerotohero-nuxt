@@ -99,6 +99,7 @@ export default {
     async goToLastSeenPhrase() {
       if (this.phrasebook && this.$route.hash) {
         let initId = Number(this.$route.hash.replace("#", ""));
+        console.log('going to', initId)
         if (this.phrasebook.phrases[initId]) this.initId = initId;
         this.numRowsVisible = this.numRowsVisible + initId;
         await Helper.timeout(1000);
