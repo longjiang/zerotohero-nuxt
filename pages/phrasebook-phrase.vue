@@ -208,13 +208,14 @@ export default {
       if (this.bookId === "saved")
         route = {
           name: "saved-phrases",
-          hash: "#" + this.phraseId,
         };
       else {
         route = {
           name: "phrasebook",
-          params: { bookId: String(this.phrasebook.id) },
-          hash: "#" + this.phraseId,
+          params: {
+            bookId: String(this.phrasebook.id),
+            initId: Number(this.phraseId) + 1,
+          },
         };
       }
       return route;

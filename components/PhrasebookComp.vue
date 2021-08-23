@@ -32,8 +32,8 @@
           Number(startRow) - 1,
           Number(startRow) + 1 + Number(numRowsVisible)
         )"
-        :key="`phrasebook-phrase-${phraseObj.phrase}-${phraseIndex}`"
-        :id="`phrasebook-phrase-${phraseIndex}`"
+        :key="`phrasebook-phrase-${phraseObj.phrase}-${(phraseObj.id || phraseIndex) + 1}`"
+        :id="`phrasebook-phrase-${(phraseObj.id || phraseIndex) + 1}`"
         class="link-unstyled col-sm-12 col-md-6 col-lg-4 mb-3 mt-3"
         :to="`/${$l1.code}/${$l2.code}/phrasebook/${phrasebook.id}/${
           phraseObj.id || phraseIndex
@@ -46,7 +46,8 @@
           :class="{
             'rounded p-4 phrasebook-card': true,
             'text-right': $l2.direction === 'rtl',
-            'phrasebook-card-current': initId && ((phraseObj.id || phraseIndex) + 1) == initId,
+            'phrasebook-card-current':
+              initId && (phraseObj.id || phraseIndex) + 1 == initId,
           }"
         >
           <div
@@ -120,7 +121,7 @@ export default {
       if (!this.startRow || this.startRow < 1) {
         this.startRow = 1
       }
-    }
+    },
   },
   methods: {
     genCSV() {
@@ -128,7 +129,7 @@ export default {
         this.phrasebook.phrases.map((p) => {
           let op = Object.assign({}, p);
           delete op.exact;
-          return op
+          return op;
         })
       );
       this.csvHref = Helper.makeTextFile(csv);

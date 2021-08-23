@@ -1,6 +1,6 @@
 <router>
   {
-    path: '/:l1/:l2/saved-phrases',
+    path: '/:l1/:l2/saved-phrases/:initId?',
     props: true
   }
 </router>
@@ -35,12 +35,14 @@ export default {
     bookId: {
       type: String,
     },
+    initId: {
+      default: undefined,
+    },
   },
   data() {
     return {
       phrasebook: undefined,
       images: [],
-      initId: undefined,
     };
   },
   computed: {
@@ -94,15 +96,10 @@ export default {
         term: this.phrasebook.phrases[0].phrase,
         lang: this.$l2.code,
       });
-      this.goToLastSeenPhrase();
-    }
-    if (this.phrasebook) {
-      this.goToLastSeenPhrase();
     }
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type.startsWith("savedPhrases")) {
         this.phrasebook.phrases = this.savedPhrases[this.$l2.code] || [];
-        this.goToLastSeenPhrase();
       }
     });
   },
@@ -115,15 +112,6 @@ export default {
       this.$store.dispatch("savedPhrases/removeAll", {
         l2: this.$l2.code,
       });
-    },
-    async goToLastSeenPhrase() {
-      if (this.$route.hash) {
-        let initId = Number(this.$route.hash.replace("#", ""));
-        if (this.phrasebook.phrases[initId]) this.initId = initId;
-        this.numRowsVisible = this.numRowsVisible + initId;
-        await Helper.timeout(1000);
-        this.scrollTo(initId);
-      }
     },
     scrollTo(index) {
       let el = document.getElementById(`phrasebook-phrase-${index}`);

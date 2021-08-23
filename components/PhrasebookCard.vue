@@ -69,7 +69,7 @@ export default {
           params: { bookId: String(this.phrasebook.id) },
         };
       if (this.progress) {
-        to.hash = `#${this.historyItem.phrasebook.index}`;
+        to.params.initId = this.historyItem.phrasebook.index;
       }
       if (typeof this.l1 !== "undefined") {
         to.params.l1 = this.l1.code;

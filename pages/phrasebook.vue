@@ -1,6 +1,6 @@
 <router>
   {
-    path: '/:l1/:l2/phrasebook/:bookId',
+    path: '/:l1/:l2/phrasebook/:bookId/:initId?',
     props: true
   }
 </router>
@@ -8,7 +8,11 @@
   <div class="main">
     <div class="container pt-5 pb-5">
       <SocialHead :title="title" :description="description" :image="image" />
-      <PhrasebookComp v-if="phrasebook" :phrasebook="phrasebook" :initId="initId" />
+      <PhrasebookComp
+        v-if="phrasebook"
+        :phrasebook="phrasebook"
+        :initId="initId"
+      />
     </div>
   </div>
 </template>
@@ -25,12 +29,14 @@ export default {
     bookId: {
       type: String,
     },
+    initId: {
+      default: undefined,
+    },
   },
   data() {
     return {
       phrasebook: undefined,
       images: [],
-      initId: undefined
     };
   },
   computed: {
@@ -77,17 +83,12 @@ export default {
         term: this.phrasebook.phrases[0].phrase,
         lang: this.$l2.code,
       });
-      this.goToLastSeenPhrase();
     }
   },
   mounted() {
-    if (this.phrasebook) {
-      this.goToLastSeenPhrase();
-    }
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type.startsWith("phrasebooks")) {
         this.phrasebook = this.getPhrasebookFromStore();
-        this.goToLastSeenPhrase();
       }
     });
   },
@@ -96,16 +97,6 @@ export default {
     this.unsubscribe();
   },
   methods: {
-    async goToLastSeenPhrase() {
-      if (this.phrasebook && this.$route.hash) {
-        let initId = Number(this.$route.hash.replace("#", ""));
-        console.log('going to', initId)
-        if (this.phrasebook.phrases[initId]) this.initId = initId;
-        this.numRowsVisible = this.numRowsVisible + initId;
-        await Helper.timeout(1000);
-        this.scrollTo(initId);
-      }
-    },
     scrollTo(index) {
       let el = document.getElementById(`phrasebook-phrase-${index}`);
       if (el) {
