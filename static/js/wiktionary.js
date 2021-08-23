@@ -536,6 +536,7 @@ const Dictionary = {
     str = str.normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "") // Accents
       .replace(/[\u0600-\u0620\u064b-\u0655]/g, "") // Arabic diacritics
+      .replace(/[\u0559-\u055F]/g, "") // Armenian diacritics
     if (['he', 'hbo', 'iw'].includes(this.l2)) str = this.stripHebrewVowels(str)
     return str
   },
@@ -579,6 +580,7 @@ const Dictionary = {
   },
   lookupFuzzy(text, limit = 30) { // text = 'abcde'
     if (this.l2 !== 'vie') text = this.stripAccents(text)
+    console.log('lookupFuzzy', text)
     text = text.toLowerCase()
     let words = []
     if (['fra'].includes(this.l2)) {
