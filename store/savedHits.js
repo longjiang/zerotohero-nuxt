@@ -11,7 +11,6 @@ export const mutations = {
     if (typeof localStorage !== 'undefined') {
       let savedHits = JSON.parse(localStorage.getItem('zthSavedHits') || '{}')
       state.savedHits = savedHits || state.savedHits
-      console.log(state.savedHits)
       state.savedHitsLoaded = true
     }
   },
