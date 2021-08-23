@@ -51,7 +51,7 @@
       </div>
     </div>
     <div
-      class="jumbotron-fluid bg-light focus"
+      class="jumbotron-fluid focus"
       v-if="a && b && a.example && b.example"
     >
       <div class="container">
@@ -163,7 +163,7 @@
     </div>
 
     <!-- <EntryCharacters :entry="entry"></EntryCharacters> -->
-    <div class="container mt-5 mb-5 focus">
+    <div class="container pt-5 pb-5 focus">
       <div class="row">
         <div class="col-sm-6">
           <LazyConcordance
