@@ -14,7 +14,7 @@
       <div class="row">
         <div class="col-sm-12">
           <h3 class="mb-5 text-center">Latest Video Count</h3>
-          <div style="max-width: 40rem; margin: 0 auto;">
+          <div style="max-width: 40rem; margin: 0 auto">
             <table class="table">
               <thead>
                 <tr>
@@ -82,17 +82,6 @@
                 <tr>
                   <td
                     class="text-left text-white"
-                    style="background-color: #091b3b"
-                  >
-                    HSK 5 Expansions*
-                  </td>
-                  <td class="text-left">(259)</td>
-                  <td class="text-left">(70h)</td>
-                </tr>
-
-                <tr>
-                  <td
-                    class="text-left text-white"
                     style="background-color: #6a3368"
                   >
                     HSK 6
@@ -104,12 +93,12 @@
                 <tr>
                   <td
                     class="text-left text-white"
-                    style="background-color: #451943"
+                    style="background-color: #005f58"
                   >
-                    HSK 6 Expansions*
+                    HSK 7-9
                   </td>
-                  <td class="text-left">(204)</td>
-                  <td class="text-left">(200h)</td>
+                  <td class="text-left">1,064</td>
+                  <td class="text-left">84h 32m</td>
                 </tr>
 
                 <tr>
@@ -151,24 +140,21 @@
                   >
                     <strong>Total</strong>
                   </td>
-                  <td class="text-left"><strong>1058+</strong></td>
-                  <td class="text-left"><strong>104h 58m</strong></td>
+                  <td class="text-left"><strong>2,146</strong></td>
+                  <td class="text-left"><strong>189h 30m</strong></td>
                 </tr>
               </tbody>
             </table>
-            <p class="mt-5">
-              * Videos from the expansion courses are from external resources,
-              we provide PDF study sheets.
-            </p>
             <p class="mt-5">
               If you purchase the
               <a href="https://courses.chinesezerotohero.com/p/ultimate-bundle">
                 Ultimate Bundle
               </a>
-              , which contain all videos from HSK 1 to 6, each video would cost
+              , which includes all of our paid courses, each video would cost
               about
-              <strong>20 cents.</strong>
+              <strong>10 cents.</strong>
             </p>
+            <p>Updated on August 22, 2021.</p>
           </div>
         </div>
       </div>

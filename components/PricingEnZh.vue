@@ -42,25 +42,48 @@
               </a>
             </td>
             <td class="text-center">
-              <span v-html="price(29, { sale: true })"></span>
+              <Price :price="price(29, { sale: true })"></Price>
             </td>
             <td class="text-center align-middle" rowspan="4">
-              <a href="https://chinesezerotohero.teachable.com/p/hsk-1-4-bundle/" class="link-unstyled font-weight-bold">HSK 1-4 Bundle</a>
-              <br />
-              <span v-html="price(134, { sale: true })"></span>
-              <br />
+              <a
+                href="https://chinesezerotohero.teachable.com/p/hsk-1-4-bundle/"
+                class="link-unstyled font-weight-bold"
+              >
+                HSK 1-4 Bundle
+              </a>
+              <Price :price="price(134, { sale: true })"></Price>
               <span style="color: rgb(26, 148, 6); font-size: 12px">
                 Save {{ money(24) }}
               </span>
             </td>
-            <td class="text-center align-middle" rowspan="10">
-              <a href="https://chinesezerotohero.teachable.com/p/ultimate-bundle/" class="link-unstyled font-weight-bold">Ultimate Bundle</a>
-              <br />
-              <span v-html="price(219, { sale: true })"></span>
-              <br />
+            <td
+              class="text-center align-middle"
+              rowspan="11"
+              style="max-width: 10rem"
+            >
+              <a
+                href="https://chinesezerotohero.teachable.com/p/ultimate-bundle/"
+                class="link-unstyled font-weight-bold"
+              >
+                Ultimate Bundle
+              </a>
+              <Price :price="price(219, { sale: true })"></Price>
               <span style="color: rgb(26, 148, 6); font-size: 12px">
                 Save {{ money(67) }}
               </span>
+              <p style="font-size: 0.8em">
+                This bundles includes all of our paid courses with a total of
+                <router-link :to="{ name: 'video-count' }">
+                  2,146 videos
+                </router-link>
+                , on average each video costs about
+                <Price
+                  :price="
+                    price(0.102, { sale: true, precision: 2, compact: true })
+                  "
+                  :compact="true"
+                />.
+              </p>
             </td>
           </tr>
 
@@ -71,7 +94,7 @@
               </a>
             </td>
             <td class="text-center">
-              <span v-html="price(29, { sale: true })"></span>
+              <Price :price="price(29, { sale: true })"></Price>
             </td>
           </tr>
 
@@ -82,7 +105,7 @@
               </a>
             </td>
             <td class="text-center">
-              <span v-html="price(36, { sale: true })"></span>
+              <Price :price="price(36, { sale: true })"></Price>
             </td>
           </tr>
 
@@ -93,7 +116,7 @@
               </a>
             </td>
             <td class="text-center">
-              <span v-html="price(64, { sale: true })"></span>
+              <Price :price="price(64, { sale: true })"></Price>
             </td>
           </tr>
 
@@ -102,16 +125,18 @@
               <a href="https://courses.chinesezerotohero.com/p/hsk-5-course">
                 HSK 5
               </a>
-              <br />
             </td>
             <td class="text-center">
-              <span v-html="price(64, { sale: true })"></span>
+              <Price :price="price(64, { sale: true })"></Price>
             </td>
             <td class="text-center align-middle" rowspan="5">
-              <a href="https://chinesezerotohero.teachable.com/p/hsk-5-6-bundle/" class="link-unstyled font-weight-bold">HSK 5-6 Bundle</a>
-              <br />
-              <span v-html="price(109, { sale: true })"></span>
-              <br />
+              <a
+                href="https://chinesezerotohero.teachable.com/p/hsk-5-6-bundle/"
+                class="link-unstyled font-weight-bold"
+              >
+                HSK 5-6 Bundle
+              </a>
+              <Price :price="price(109, { sale: true })"></Price>
               <span style="color: rgb(26, 148, 6); font-size: 12px">
                 Save {{ money(48) }}
               </span>
@@ -125,15 +150,13 @@
               >
                 HSK 5 Expansion Courses
               </a>
-              <br />
               <div style="font-weight: normal; margin-left: 1rem">
                 6 comprehensible input courses for HSK 5
               </div>
             </td>
             <td class="text-center align-middle">
-              <span v-html="price(9, { sale: true })"></span>
+              <Price :price="price(9, { sale: true })"></Price>
               ea.
-              <br />
               <span>
                 <b>FREE</b>
                 with HSK 5
@@ -148,7 +171,7 @@
               </a>
             </td>
             <td class="text-center">
-              <span v-html="price(64, { sale: true })"></span>
+              <Price :price="price(64, { sale: true })"></Price>
             </td>
           </tr>
 
@@ -159,15 +182,13 @@
               >
                 HSK 6 Expansion Courses
               </a>
-              <br />
               <div style="font-weight: normal; margin-left: 1rem">
                 8 comprehensible input courses for HSK 6
               </div>
             </td>
             <td class="text-center align-middle">
-              <span v-html="price(9, { sale: true })"></span>
+              <Price :price="price(9, { sale: true })"></Price>
               ea.
-              <br />
               <span>
                 <b>FREE</b>
                 with HSK 6
@@ -187,8 +208,7 @@
               </div>
             </td>
             <td class="text-center">
-              <span v-html="price(29, { sale: true })"></span>
-              <br />
+              <Price :price="price(29, { sale: true })"></Price>
               <span>
                 <b>FREE</b>
                 with HSK 5 or HSK 6
@@ -199,11 +219,11 @@
           <tr>
             <td class="text-left text-light" data-bg-level="7-9">
               <a href="https://courses.chinesezerotohero.com/p/hsk-7-9-words">
-                HSK 7-9 Words
+                New HSK 7-9
               </a>
             </td>
             <td class="text-center" colspan="2">
-              <span v-html="price(22, { sale: true })"></span>
+              <Price :price="price(22, { sale: true })"></Price>
             </td>
           </tr>
 
@@ -213,8 +233,8 @@
                 Word Builder: Ci Shifu
               </a>
             </td>
-            <td class="text-center" colspan="3">
-              <span v-html="price(9, { sale: true })"></span>
+            <td class="text-center" colspan="2">
+              <Price :price="price(9, { sale: true })"></Price>
             </td>
           </tr>
           <tr>
@@ -255,7 +275,7 @@
           </tr>
         </tbody>
       </table>
-      <p>
+      <p class="mt-5">
         <b>VAT</b>
         applies to any merchant selling a product or service (including digital
         products like an online course) to a customer based in Europe. So if
@@ -330,31 +350,44 @@ export default {
     },
   },
   methods: {
-    money(n) {
+    money(n, { precision = 0 } = {}) {
       let formatted;
       if (typeof this.rates !== "undefined") {
         try {
+          let amount =
+            Math.round(
+              fx.convert(n, { from: "USD", to: this.currency }) *
+                Math.pow(10, precision)
+            ) / Math.pow(10, precision);
           formatted = accounting
-            .formatMoney(
-              Math.round(fx.convert(n, { from: "USD", to: this.currency })),
-              { symbol: this.currency, format: "%v %s", precision: 0 }
-            )
+            .formatMoney(amount, {
+              symbol: this.currency,
+              format: "%v %s",
+              precision,
+            })
             .replace("CNY", "RMB");
         } catch (err) {}
       }
       if (typeof formatted === "undefined") formatted = n + " USD";
       return formatted;
     },
-    price(n, options) {
-      if (options.sale === true) {
-        return `<strike>${this.money(
-          n
-        )}</strike><br/><span class="sale-price">SALE: <b>${this.money(
-          n * 0.7
-        )}</b></span>`;
+    price(n, { sale, compact = false, precision = 0 } = {}) {
+      let price;
+      if (sale === true) {
+        price = {
+          price: this.money(n, {
+            precision,
+          }),
+          salePrice: this.money(n * 0.7, { precision }),
+        };
       } else {
-        return `<b>${this.money(n)}</b>`;
+        price = {
+          price: this.money(n, {
+            precision,
+          }),
+        };
       }
+      return price;
     },
   },
 };
