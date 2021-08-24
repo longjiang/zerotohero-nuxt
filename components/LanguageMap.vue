@@ -14,7 +14,7 @@
           <l-icon class-name="country-marker-icon">
             <div class="country-marker-languages">
               <LanguageList
-                :langs="country.languages"
+                :langs="country.languages.slice(0,1)"
                 skin="dark"
                 :singleColumn="true"
               />
@@ -42,6 +42,18 @@ export default {
       if (parsed && parsed.data) {
         let countries = parsed.data.map((row) => {
           row.languages = row.languages ? row.languages.split(",") : [];
+          if (row.languages.length > 1)
+            row.languages = row.languages.filter((l) => l !== "en");
+          if (row.languages.length > 1 && row.code !== "FR")
+            row.languages = row.languages.filter((l) => l !== "fr");
+          if (row.languages.length > 1 && row.code !== "ES")
+            row.languages = row.languages.filter((l) => l !== "es");
+          if (row.languages.length > 1)
+            row.languages = row.languages.filter((l) => l !== "ar");
+          if (row.languages.length > 1 && row.code !== "RU")
+            row.languages = row.languages.filter((l) => l !== "ru");
+          if (row.languages.length > 1 && row.code !== "DE")
+            row.languages = row.languages.filter((l) => l !== "de");
           row.languages = row.languages.map((code) =>
             this.$languages.getSmart(code)
           );
