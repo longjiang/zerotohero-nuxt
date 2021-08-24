@@ -288,6 +288,9 @@
             </div>
           </div>
         </div>
+        <div class="home-card mb-5" style="padding: 0; overflow: hidden">
+          <LazyLanguageMap />
+        </div>
         <div class="home-card mb-5">
           <h5 class="text-center">Even More Languages</h5>
           <Choose :compact="true" />
