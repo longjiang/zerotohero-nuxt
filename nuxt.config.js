@@ -82,21 +82,20 @@ export default {
     }
   },
 
-  // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
-    // https://go.nuxtjs.dev/bootstrap
     'bootstrap-vue/nuxt',
-    // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     'nuxt-i18n',
     '@nuxtjs/google-fonts',
+    'nuxt-leaflet',
     ['nuxt-lazy-load', {
       defaultImage: '/img/placeholder-faded.png'
-    }]
+    }],
   ],
+
   bootstrapVue: {
-    components: ['BFormInput', 'BFormGroup', 'BFormSelect', 'BFormTextarea', 'BFormSelectOption', 'BButton', 'BProgress', 'BTable', 
-    'BDropdown', 'BDropdownItem', 'BFormCheckbox', 'BFormRadio', 'BButtonGroup', 'BInputGroup', 'BInputGroupAppend', 'BInputGroupText', 'BDropdownDivider', 'BProgressBar'],
+    components: ['BFormInput', 'BFormGroup', 'BFormSelect', 'BFormTextarea', 'BFormSelectOption', 'BButton', 'BProgress', 'BTable',
+      'BDropdown', 'BDropdownItem', 'BFormCheckbox', 'BFormRadio', 'BButtonGroup', 'BInputGroup', 'BInputGroupAppend', 'BInputGroupText', 'BDropdownDivider', 'BProgressBar'],
   },
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
