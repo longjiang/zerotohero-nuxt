@@ -23,7 +23,17 @@
               Get Phrases
             </b-button>
           </div>
-          <div class="text-center pt-2 pb-2" v-if="videos">{{ videos.length }} videos surveyed</div>
+          <div class="text-center pt-2 pb-2" v-if="videos">
+            {{ videos.length }} videos surveyed.
+            <router-link
+              :to="{
+                name: 'phrasebook-creator',
+                params: { csvProp: lines.map((l) => l.phrase).join('\n') },
+              }"
+            >
+              Make Phrasebook
+            </router-link>
+          </div>
           <div
             :class="{
               'loader text-center mb-4': true,
@@ -156,7 +166,9 @@ export default {
         this.loadShows();
       }
     });
-    this.punctuations = Helper.characterClass("PunctuationNoApostropheNoHyphen");
+    this.punctuations = Helper.characterClass(
+      "PunctuationNoApostropheNoHyphen"
+    );
     console.log(`All done. Displaying table...`);
   },
   beforeDestroy() {
@@ -311,7 +323,7 @@ export default {
         let options = [
           {
             value: "all-tv-shows",
-            text: "All TV Shows",
+            text: "All TV Shows (Except Music)",
           },
           ...this.shows.map((s) => {
             return {
@@ -325,7 +337,7 @@ export default {
           },
           {
             value: "all-videos",
-            text: "All Videos",
+            text: "All Videos (Except Music)",
           },
         ];
         return options;
