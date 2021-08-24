@@ -95,11 +95,7 @@
               ID含`0x`，或许无法添加
             </span>
             <div
-              v-if="
-                !video.checkingSubs &&
-                !video.hasSubs &&
-                !video.id
-              "
+              v-if="!video.checkingSubs && !video.hasSubs && !video.id"
               class="btn btn-small mt-2 ml-0"
             >
               <span v-if="!over">No {{ $l2.name }} CC</span>
@@ -633,7 +629,7 @@ export default {
       video.channel_id = details.channel.id;
       return details.channel.id;
     },
-    async save(video, limit = false) {
+    async save(video, limit = false, tries = 0) {
       try {
         let lines = video.subs_l2;
         if (limit) lines = lines.slice(0, limit);
@@ -659,9 +655,10 @@ export default {
           return true;
         }
       } catch (err) {
+        if (tries > 1) return; // Only 2 tries
         if (!limit) limit = video.subs_l2.length;
         if (limit > 0) {
-          return this.save(video, limit - 100);
+          return this.save(video, Math.floor(limit / 2), tries + 1); // Try with half the lines each time
         }
       }
     },
