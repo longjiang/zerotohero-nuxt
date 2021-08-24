@@ -867,27 +867,32 @@ export default {
       location.reload();
     },
     checkShows() {
-      this.hasTVShows =
+      let hasTVShows =
         this.$store.state.shows.tvShows &&
         this.$store.state.shows.tvShows[this.l2.code] &&
+        this.$store.state.shows.tvShows[this.l2.code].length > 0;
+      let hasTalks =
+        this.$store.state.shows.talks &&
+        this.$store.state.shows.talks[this.l2.code] &&
+        this.$store.state.shows.talks[this.l2.code].length > 0;
+
+      this.hasTVShows =
+        hasTVShows &&
         this.$store.state.shows.tvShows[this.l2.code].filter(
           (s) => !["Music", "Movies"].includes(s.title)
         ).length > 0;
       this.hasTalks =
-        this.$store.state.shows.talks &&
-        this.$store.state.shows.talks[this.l2.code] &&
+        hasTalks &&
         this.$store.state.shows.talks[this.l2.code].filter(
           (s) => !["News"].includes(s.title)
         ).length > 0;
-      if (this.hasTVShows) {
+      if (hasTVShows) {
         let musicShow = this.$store.state.shows.tvShows[this.l2.code].find(
           (s) => s.title === "Music"
         );
         if (musicShow) {
           this.musicPath = `/${this.$l1.code}/${this.$l2.code}/show/tv-show/${musicShow.id}`;
         }
-      }
-      if (this.hasTVShows) {
         let moviesShow = this.$store.state.shows.tvShows[this.l2.code].find(
           (s) => s.title === "Movies"
         );
@@ -895,7 +900,7 @@ export default {
           this.moviesPath = `/${this.$l1.code}/${this.$l2.code}/show/tv-show/${moviesShow.id}`;
         }
       }
-      if (this.hasTalks) {
+      if (hasTalks) {
         let newsShow = this.$store.state.shows.talks[this.l2.code].find(
           (s) => s.title === "News"
         );
