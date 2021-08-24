@@ -143,7 +143,7 @@ export default {
   },
   head() {
     let head = { script: [] };
-    if (this.l2.code === "my") {
+    if (typeof this.l2 !== 'undefined' && this.l2.code === "my") {
       head.script.push({
         src: "/vendor/myanmar-tools/zawgyi_converter.min.js",
         body: true,
