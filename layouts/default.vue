@@ -105,14 +105,7 @@ export default {
       }
     },
     background() {
-      if (!this.l2) return "/img/background-branch.jpg";
-      else if (["zh", "lzh"].includes(this.l2.code))
-        return `/img/backgrounds/bg-${this.l2.code}-${Math.ceil(
-          Math.random() * 10
-        )}.jpg`;
-      else if (this.l2.han)
-        return `/img/backgrounds/bg-zh-${Math.ceil(Math.random() * 10)}.jpg`;
-      else return `https://source.unsplash.com/1600x900/?${this.l2.name}`;
+      return Helper.background(this.l2)
     },
     fullPage() {
       return $;
