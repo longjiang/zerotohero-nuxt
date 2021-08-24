@@ -34,7 +34,12 @@
         ></span>
         <span
           class="word-block-pinyin"
-          v-if="l2Settings.showPinyin && phonetics && transliteration && transliteration !== token.text"
+          v-if="
+            l2Settings.showPinyin &&
+            phonetics &&
+            transliteration &&
+            transliteration !== token.text
+          "
         >
           {{ savedTransliteration || transliteration }}
         </span>
@@ -47,7 +52,9 @@
           {{ token.candidates[0].simplified }}
         </span>
         <span
-          v-else-if="l2Settings.useTraditional && token.candidates[0].traditional"
+          v-else-if="
+            l2Settings.useTraditional && token.candidates[0].traditional
+          "
           class="word-block-traditional"
           @click="wordBlockClick()"
         >
@@ -58,8 +65,7 @@
           class="word-block-text d-inline-block"
           @click="wordBlockClick()"
           v-html="token.text"
-        />
-        <span
+        /><span
           v-if="l2Settings.showByeonggi && hanja"
           class="word-block-text-byeonggi d-inline-block"
           v-html="hanja"
@@ -68,7 +74,12 @@
       <template v-else>
         <span
           class="word-block-pinyin"
-          v-if="l2Settings.showPinyin && phonetics && transliteration && transliteration !== text"
+          v-if="
+            l2Settings.showPinyin &&
+            phonetics &&
+            transliteration &&
+            transliteration !== text
+          "
         >
           {{ savedTransliteration || transliteration }}
         </span>
@@ -285,7 +296,7 @@ import Helper from "@/lib/helper";
 import Config from "@/lib/config";
 import WordPhotos from "@/lib/word-photos";
 import { transliterate as tr } from "transliteration";
-import { mapState } from 'vuex'
+import { mapState } from "vuex";
 
 export default {
   props: {
@@ -459,7 +470,10 @@ export default {
   },
   watch: {
     async wordblockHover() {
-      if (!Helper.isMobile()) await Helper.timeout(1000);
+      if (this.words && this.words.length === 0) {
+        this.lookup();
+      }
+      if (!Helper.isMobile()) await Helper.timeout(750);
       this.updateOpen();
     },
     async tooltipHover() {
