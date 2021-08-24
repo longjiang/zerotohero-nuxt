@@ -1,7 +1,7 @@
 <template>
   <div class="language-map">
     <client-only>
-      <l-map :zoom="4" :center="[35, 105]">
+      <l-map :zoom="4" :minZoom="5" :maxZoom="7" :center="[35, 105]">
         <l-tile-layer
           url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
         ></l-tile-layer>
@@ -78,6 +78,7 @@ export default {
     padding: 0.3rem 0.6rem;
     border-radius: 0.3rem;
     border: 1px solid #88888888;
+    margin-top: -100%;
   }
 }
 </style>
