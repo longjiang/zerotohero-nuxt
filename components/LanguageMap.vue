@@ -14,7 +14,7 @@
           <l-icon class-name="country-marker-icon">
             <div class="country-marker-languages">
               <LanguageList
-                :langs="country.languages.slice(0,1)"
+                :langs="country.languages.slice(0, 1)"
                 skin="dark"
                 :singleColumn="true"
               />
@@ -78,19 +78,23 @@ export default {
     font-size: 1.2em;
     text-transform: uppercase;
     font-weight: bold;
+    background-color: #00000088;
+    padding: 0.3rem 0.6rem;
+    border-radius: 0.3rem;
+    border: 1px solid #88888888;
+    margin-top: -100%;
+    text-align: center;
     ::v-deep .language-list.language-list-dark .language-list-item {
       a {
         color: white;
       }
       .feature-icon {
         color: white;
+        &.transparent {
+          display: none;
+        }
       }
     }
-    background-color: #00000088;
-    padding: 0.3rem 0.6rem;
-    border-radius: 0.3rem;
-    border: 1px solid #88888888;
-    margin-top: -100%;
   }
 }
 </style>
