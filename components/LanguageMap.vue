@@ -72,8 +72,8 @@ export default {
   height: 40rem;
   max-height: 100vh;
   .country-marker-languages {
-    width: 15rem;
-    margin-left: -7.5rem;
+    width: 12rem;
+    margin-left: -6rem;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
     font-size: 1.2em;
     text-transform: uppercase;
