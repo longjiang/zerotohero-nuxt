@@ -870,11 +870,15 @@ export default {
       this.hasTVShows =
         this.$store.state.shows.tvShows &&
         this.$store.state.shows.tvShows[this.l2.code] &&
-        this.$store.state.shows.tvShows[this.l2.code].length > 0;
+        this.$store.state.shows.tvShows[this.l2.code].filter(
+          (s) => !["Music", "Movies"].includes(s.title)
+        ).length > 0;
       this.hasTalks =
         this.$store.state.shows.talks &&
         this.$store.state.shows.talks[this.l2.code] &&
-        this.$store.state.shows.talks[this.l2.code].length > 0;
+        this.$store.state.shows.talks[this.l2.code].filter(
+          (s) => !["News"].includes(s.title)
+        ).length > 0;
       if (this.hasTVShows) {
         let musicShow = this.$store.state.shows.tvShows[this.l2.code].find(
           (s) => s.title === "Music"
