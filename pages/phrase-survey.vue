@@ -23,6 +23,7 @@
               Get Phrases
             </b-button>
           </div>
+          <div class="text-center pt-2 pb-2" v-if="videos">{{ videos.length }} videos surveyed</div>
           <div
             :class="{
               'loader text-center mb-4': true,

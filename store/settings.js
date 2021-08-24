@@ -17,7 +17,7 @@ export const state = () => {
       showByeonggi: true,
       disableAnnotation: false
     },
-    romanizationOffByDefault: ['ru', 'ko', 'bod', 'ru', 'th', 'my', 'hy']
+    romanizationOffByDefault: ['ru', 'ko', 'bod', 'ru', 'th', 'my', 'hy', 'uk']
   }
 }
 
