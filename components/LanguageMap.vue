@@ -1,22 +1,23 @@
 <template>
-  <div id="map-wrap" style="height: 100vh">
+  <div class="language-map">
     <client-only>
-      <l-map :zoom="13" :center="[55.9464418, 8.1277591]">
+      <l-map :zoom="3" :center="[0, 0]">
         <l-tile-layer
-          url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
+          url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
         ></l-tile-layer>
-        <l-marker :lat-lng="[55.9464418, 8.1277591]"></l-marker>
       </l-map>
     </client-only>
   </div>
 </template>
 
 <script>
-
-export default {
-
-};
+export default {};
 </script>
 
-<style>
+<style lang="scss" scoped>
+.language-map {
+  width: 100%;
+  height: 40rem;
+  max-height: 100vh;
+}
 </style>
