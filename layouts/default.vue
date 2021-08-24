@@ -141,6 +141,20 @@ export default {
       this.onLanguageChange();
     },
   },
+  head() {
+    let head = { script: [] };
+    if (this.l2.code === "my") {
+      head.script.push({
+        src: "/vendor/myanmar-tools/zawgyi_converter.min.js",
+        body: true,
+      });
+      head.script.push({
+        src: "/vendor/myanmar-tools/zawgyi_detector.min.js",
+        body: true,
+      });
+    }
+    return head;
+  },
   methods: {
     onSkin(skin) {
       this.skin = skin;

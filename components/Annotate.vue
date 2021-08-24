@@ -162,6 +162,8 @@ export default {
       textMode: false,
       tokenized: [],
       dictionary: undefined,
+      myanmarZawgyiDetector: undefined,
+      myanmarZawgyiConverter: undefined,
     };
   },
   mounted() {
@@ -169,6 +171,10 @@ export default {
       for (let slot of this.$slots.default) {
         this.text += $(slot.elm).text();
       }
+    }
+    if (this.$l2.code === "my" && typeof google_myanmar_tools !== "undefined") {
+      this.myanmarZawgyiDetector = new google_myanmar_tools.ZawgyiDetector();
+      this.myanmarZawgyiConverter = new google_myanmar_tools.ZawgyiConverter();
     }
   },
   computed: {
@@ -288,6 +294,11 @@ export default {
       if (node && node.classList && node.classList.contains("sentence")) {
         // .sentence node
         let sentence = node.innerText;
+        if (this.$l2.code === "my" && this.myanmarZawgyiDetector && this.myanmarZawgyiConverter) {
+          let score = this.myanmarZawgyiDetector.getZawgyiProbability(sentence);
+          if (score > 0.8)
+            sentence = this.myanmarZawgyiConverter.zawgyiToUnicode(sentence);
+        }
         let html = await this.tokenize(sentence, this.batchId);
         let $tokenizedSentenceSpan = $(`<span class="sentence">${html}</span>`);
         this.batchId = this.batchId + 1;
