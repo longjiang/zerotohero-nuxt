@@ -1,18 +1,28 @@
 <template>
   <div class="language-map">
     <client-only>
-      <l-map :zoom="4" :minZoom="3" :maxZoom="9" :center="[35, 105]">
+      <l-map
+        :zoom="4"
+        :minZoom="3"
+        :maxZoom="9"
+        :center="[35, 105]"
+        @update:zoom="updateZoom"
+      >
         <l-tile-layer
           url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
         ></l-tile-layer>
+        <l-control-scale
+          position="topright"
+          :imperial="false"
+          :metric="true"
+        ></l-control-scale>
         <l-marker
-          v-for="(language, index) in languages"
+          v-for="(language, index) in filteredLanguages"
           :lat-lng="[language.lat, language.long]"
           :key="`language-marker-${index}`"
-          class="language-marker"
         >
-          <l-icon class-name="language-marker-icon">
-            <div class="language-marker-languages">
+          <l-icon>
+            <div :class="`language-marker-languages`">
               <LanguageList
                 :langs="[language]"
                 skin="dark"
@@ -33,19 +43,147 @@ import Papa from "papaparse";
 export default {
   data: () => ({
     languages: [],
+    filteredLanguages: [],
     countries: [],
-    chinaEthnicLangs: ['acn', 'adi', 'ami', 'aou', 'bca', 'bfc', 'bfs', 'blr', 'blt', 'bnn', 'bod', 'clk', 'cng', 'cov', 'cuq', 'cuu', 'dka', 'dng', 'doc', 'dta', 'duu', 'evn', 'giq', 'gir', 'giw', 'gld', 'gqu', 'hmn', 'hni', 'iii', 'jiu', 'jiy', 'kac', 'kaz', 'khb', 'kir', 'kkf', 'kmc', 'kor', 'lay', 'lhi', 'lhu', 'lic', 'lis', 'lkc', 'lsh', 'mjg', 'mlm', 'mmd', 'mnc', 'mon', 'nru', 'nuf', 'nun', 'nxq', 'onp', 'orh', 'pcc', 'pce', 'peh', 'pll', 'pmi', 'pmj', 'prk', 'pwn', 'qxs', 'raw', 'rbb', 'rus', 'sce', 'sdp', 'sgp', 'shx', 'sjo', 'slr', 'stu', 'swi', 'tat', 'tay', 'tcl', 'tdd', 'tgk', 'thi', 'tji', 'tjs', 'tsj', 'twm', 'uig', 'uzb', 'vie', 'vwa', 'wbm', 'yao', 'ybe', 'yuy', 'zal', 'zha', 'zho'],
-    chineseDialects: ['cdo', 'cjy', 'cnp', 'cpx', 'csp', 'czo', 'hak', 'hsn', 'leiz1236', 'mnp', 'nan', 'wuu', 'yue']
+    overlapped: [],
+    currentZoom: 4,
+    chinaEthnicLangs: [
+      "acn",
+      "adi",
+      "ami",
+      "aou",
+      "bca",
+      "bfc",
+      "bfs",
+      "blr",
+      "blt",
+      "bnn",
+      "bod",
+      "clk",
+      "cng",
+      "cov",
+      "cuq",
+      "cuu",
+      "dka",
+      "dng",
+      "doc",
+      "dta",
+      "duu",
+      "evn",
+      "giq",
+      "gir",
+      "giw",
+      "gld",
+      "gqu",
+      "hmn",
+      "hni",
+      "iii",
+      "jiu",
+      "jiy",
+      "kac",
+      "kaz",
+      "khb",
+      "kir",
+      "kkf",
+      "kmc",
+      "kor",
+      "lay",
+      "lhi",
+      "lhu",
+      "lic",
+      "lis",
+      "lkc",
+      "lsh",
+      "mjg",
+      "mlm",
+      "mmd",
+      "mnc",
+      "mon",
+      "nru",
+      "nuf",
+      "nun",
+      "nxq",
+      "onp",
+      "orh",
+      "pcc",
+      "pce",
+      "peh",
+      "pll",
+      "pmi",
+      "pmj",
+      "prk",
+      "pwn",
+      "qxs",
+      "raw",
+      "rbb",
+      "rus",
+      "sce",
+      "sdp",
+      "sgp",
+      "shx",
+      "sjo",
+      "slr",
+      "stu",
+      "swi",
+      "tat",
+      "tay",
+      "tcl",
+      "tdd",
+      "tgk",
+      "thi",
+      "tji",
+      "tjs",
+      "tsj",
+      "twm",
+      "uig",
+      "uzb",
+      "vie",
+      "vwa",
+      "wbm",
+      "yao",
+      "ybe",
+      "yuy",
+      "zal",
+      "zha",
+      "zho",
+    ],
+    chineseDialects: [
+      "cdo",
+      "cjy",
+      "cnp",
+      "cpx",
+      "csp",
+      "czo",
+      "hak",
+      "hsn",
+      "leiz1236",
+      "mnp",
+      "nan",
+      "wuu",
+      "yue",
+    ],
   }),
   async created() {
-    this.languages = this.$languages.l1s.filter((l) => {
-      if (!(l.lat && l.long)) return false;
-      if (!this.hasDictionary(this.english, l)) return false
-      if (l["iso639-1"]) return true;
-      if (this.chinaEthnicLangs.includes(l['iso639-3'])) return true
-      if (this.chineseDialects.includes(l['iso639-3']) || this.chineseDialects.includes(l['glottologId'])) return true
-    });
+    let languages = this.$languages.l1s
+      .filter((l) => {
+        if (!(l.lat && l.long)) return false;
+        if (!this.hasDictionary(this.english, l)) return false;
+        if (l["iso639-1"]) return true;
+        if (this.chinaEthnicLangs.includes(l["iso639-3"])) return true;
+        if (
+          this.chineseDialects.includes(l["iso639-3"]) ||
+          this.chineseDialects.includes(l["glottologId"])
+        )
+          return true;
+      })
+      .map((l) => {
+        l.lat = Number(l.lat);
+        l.long = Number(l.long);
+        return l;
+      });
+    this.languages = languages;
     // this.countries = await this.loadCountries();
+    this.filterLanguages();
   },
   computed: {
     english() {
@@ -56,6 +194,36 @@ export default {
     },
   },
   methods: {
+    filterLanguages() {
+      console.log(this.currentZoom)
+      let filteredLanguages = this.languages;
+      for (let language of this.languages) {
+        let magicNumbers = {
+          1: 8,
+          2: 4,
+          3: 2,
+          4: 1,
+          5: 0.5,
+          6: 0.25,
+          7: 0.125,
+          8: 0.0625,
+          9: 0.0375,
+        }
+        let magicScale = 1.1
+        filteredLanguages = filteredLanguages.filter((l) => {
+          let overlapped =
+            l !== language &&
+            Math.abs(l.lat - language.lat) < magicNumbers[this.currentZoom] * magicScale &&
+            Math.abs(l.long - language.long) < magicNumbers[this.currentZoom] * magicScale  * 6;
+          return !overlapped;
+        });
+      }
+      this.filteredLanguages = filteredLanguages;
+    },
+    updateZoom(zoom) {
+      this.currentZoom = zoom;
+      this.filterLanguages();
+    },
     hasDictionary(l1, l2) {
       return (
         this.$languages.hasFeature(l1, l2, "dictionary") || l2.code === "en"
@@ -97,6 +265,9 @@ export default {
     border: 1px solid #88888888;
     margin-top: -100%;
     text-align: center;
+    &.language-marker-languages-overlap {
+      background-color: red;
+    }
     ::v-deep .language-list.language-list-dark .language-list-item {
       a {
         color: white;
