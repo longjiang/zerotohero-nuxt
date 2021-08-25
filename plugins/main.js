@@ -8,7 +8,7 @@ import ModuleLoader from '~/lib/module-loader'
 import WorkerModuleLoader from '~/lib/worker-module-loader'
 import { i18n } from '~/plugins/i18n.js'
 import VueMq from 'vue-mq'
- 
+
 
 Vue.config.productionTip = false
 
@@ -49,7 +49,7 @@ Vue.filter('truncate', function (text, length, clamp) {
   return content.length > length ? content.slice(0, length) + clamp : content
 })
 
-export default ({ app, store }, inject) => {
+export default async ({ app, store }, inject) => {
   // Make legacy hash URLs work
   // https://qvault.io/javascript/vue-history-mode-support-legacy-hash-urls/
   app.router.beforeEach((to, from, next) => {
@@ -62,7 +62,8 @@ export default ({ app, store }, inject) => {
     next();
   })
   if (!app.$languages) {
-    inject('languages', Languages.load())
+    let languages = await Languages.load()
+    inject('languages', languages)
   }
 
   inject('hasFeature', (feature) => {
