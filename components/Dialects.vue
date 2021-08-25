@@ -50,7 +50,7 @@ Northern Min	闽北语	2.191	mnp	Nanping	26.6415	118.1779	zh
 Central Min	闽中语	0.683	czo	Sanming	26.263	117.639	zh
 Pu-Xian Min	莆仙话	2.6	cpx	Putian	25.4526	119.0078	zh
 Southern Min	闽南语	48	nan	Chaozhou	23.658	116.622	zh
-Leizhou Min	雷州话	2.8		Leizhou	20.9143	110.0967	zh
+Leizhou Min	雷州话	2.8	leiz1236	Leizhou	20.9143	110.0967	zh
 Hakka	客家话	47.8	hak	Meizhou	24.289	116.122	zh
 Yue	粤语	84	yue	Guangzhou	23.132	113.266	zh
 Pinghua	平话	7	csp|cnp	Guilin	25.275	110.296	zh`,
@@ -67,7 +67,7 @@ Pinghua	平话	7	csp|cnp	Guilin	25.275	110.296	zh`,
       delimiter: "	",
     });
     let dialects = parsed.data.map((g) => {
-      g.languages = g["iso639-3"].split("|").map((l) => this.$languages.get(l));
+      g.languages = g["iso639-3"].split("|").map((l) => this.$languages.getSmart(l));
       g.population = Number(g.population) * 1000000
       return g;
     });

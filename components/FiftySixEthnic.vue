@@ -61,7 +61,7 @@ export default {
       let groups = parsed.data.map((g) => {
         g.languages = g["iso639-3"]
           .split("|")
-          .map((l) => this.$languages.get(l));
+          .map((l) => this.$languages.getSmart(l));
         if (g.english === "Han Chinese")
           g.population = Math.floor(
             Number(g.population) +
