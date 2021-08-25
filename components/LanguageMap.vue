@@ -7,6 +7,9 @@
         :maxZoom="9"
         :center="[35, 105]"
         @update:zoom="updateZoom"
+        @update:bounds="updateBounds"
+        @ready="ready"
+        ref="myMap"
       >
         <l-tile-layer
           url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
@@ -167,14 +170,14 @@ export default {
     let languages = this.$languages.l1s
       .filter((l) => {
         if (!(l.lat && l.long)) return false;
-        if (!this.hasDictionary(this.english, l)) return false;
-        if (l["iso639-1"]) return true;
         if (this.chinaEthnicLangs.includes(l["iso639-3"])) return true;
         if (
           this.chineseDialects.includes(l["iso639-3"]) ||
           this.chineseDialects.includes(l["glottologId"])
         )
           return true;
+        if (l["iso639-1"]) return true;
+        if (this.hasDictionary(this.english, l)) return true;
       })
       .map((l) => {
         l.lat = Number(l.lat);
@@ -183,7 +186,7 @@ export default {
       });
     this.languages = languages;
     // this.countries = await this.loadCountries();
-    this.filterLanguages();
+    // this.updateBounds(bounds)
   },
   computed: {
     english() {
@@ -194,9 +197,23 @@ export default {
     },
   },
   methods: {
+    ready(obj) {
+      let bounds = obj.getBounds();
+      this.updateBounds(bounds)
+    },
+    updateBounds(bounds) {
+      this.filteredLanguages = this.languages.filter((l) => {
+        return (
+          l.lat < bounds._northEast.lat &&
+          l.lat > bounds._southWest.lat &&
+          l.long > bounds._southWest.lng &&
+          l.long < bounds._northEast.lng
+        );
+      });
+      this.filterLanguages();
+    },
     filterLanguages() {
-      console.log(this.currentZoom)
-      let filteredLanguages = this.languages;
+      let filteredLanguages = this.filteredLanguages;
       for (let language of this.languages) {
         let magicNumbers = {
           1: 8,
@@ -208,13 +225,15 @@ export default {
           7: 0.125,
           8: 0.0625,
           9: 0.0375,
-        }
-        let magicScale = 1.1
+        };
+        let magicScale = 1.1;
         filteredLanguages = filteredLanguages.filter((l) => {
           let overlapped =
             l !== language &&
-            Math.abs(l.lat - language.lat) < magicNumbers[this.currentZoom] * magicScale &&
-            Math.abs(l.long - language.long) < magicNumbers[this.currentZoom] * magicScale  * 6;
+            Math.abs(l.lat - language.lat) <
+              magicNumbers[this.currentZoom] * magicScale &&
+            Math.abs(l.long - language.long) <
+              magicNumbers[this.currentZoom] * magicScale * 6;
           return !overlapped;
         });
       }
@@ -222,7 +241,6 @@ export default {
     },
     updateZoom(zoom) {
       this.currentZoom = zoom;
-      this.filterLanguages();
     },
     hasDictionary(l1, l2) {
       return (
