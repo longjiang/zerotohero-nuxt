@@ -170,6 +170,9 @@ export default {
     let languages = this.$languages.l1s
       .filter((l) => {
         if (!(l.lat && l.long)) return false;
+        if (l.name.includes('Sign Language')) return false;
+        if (['A', 'E', 'H'].includes(l.type)) return false;
+        if (!this.hasDictionary(this.english, l)) return false;
         if (this.chinaEthnicLangs.includes(l["iso639-3"])) return true;
         if (
           this.chineseDialects.includes(l["iso639-3"]) ||
@@ -177,7 +180,6 @@ export default {
         )
           return true;
         if (l["iso639-1"]) return true;
-        if (this.hasDictionary(this.english, l)) return true;
       })
       .sort((x, y) => y.speakers - x.speakers);
     this.languages = languages;
