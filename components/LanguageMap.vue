@@ -27,19 +27,32 @@
 </template>
 
 <script>
+import axios from "axios";
+import Config from "@/lib/config";
+import Papa from "papaparse";
 export default {
   data: () => ({
     languages: [],
+    countries: [],
+    chinaEthnicLangs: ['acn', 'adi', 'ami', 'aou', 'bca', 'bfc', 'bfs', 'blr', 'blt', 'bnn', 'bod', 'clk', 'cng', 'cov', 'cuq', 'cuu', 'dka', 'dng', 'doc', 'dta', 'duu', 'evn', 'giq', 'gir', 'giw', 'gld', 'gqu', 'hmn', 'hni', 'iii', 'jiu', 'jiy', 'kac', 'kaz', 'khb', 'kir', 'kkf', 'kmc', 'kor', 'lay', 'lhi', 'lhu', 'lic', 'lis', 'lkc', 'lsh', 'mjg', 'mlm', 'mmd', 'mnc', 'mon', 'nru', 'nuf', 'nun', 'nxq', 'onp', 'orh', 'pcc', 'pce', 'peh', 'pll', 'pmi', 'pmj', 'prk', 'pwn', 'qxs', 'raw', 'rbb', 'rus', 'sce', 'sdp', 'sgp', 'shx', 'sjo', 'slr', 'stu', 'swi', 'tat', 'tay', 'tcl', 'tdd', 'tgk', 'thi', 'tji', 'tjs', 'tsj', 'twm', 'uig', 'uzb', 'vie', 'vwa', 'wbm', 'yao', 'ybe', 'yuy', 'zal', 'zha', 'zho'],
+    chineseDialects: ['cdo', 'cjy', 'cnp', 'cpx', 'csp', 'czo', 'hak', 'hsn', 'leiz1236', 'mnp', 'nan', 'wuu', 'yue']
   }),
-  created() {
+  async created() {
     this.languages = this.$languages.l1s.filter((l) => {
       if (!(l.lat && l.long)) return false;
+      if (!this.hasDictionary(this.english, l)) return false
       if (l["iso639-1"]) return true;
+      if (this.chinaEthnicLangs.includes(l['iso639-3'])) return true
+      if (this.chineseDialects.includes(l['iso639-3']) || this.chineseDialects.includes(l['glottologId'])) return true
     });
+    // this.countries = await this.loadCountries();
   },
   computed: {
     english() {
       return this.$languages.l1s.find((language) => language.code === "en");
+    },
+    arabic() {
+      return this.$languages.l1s.find((language) => language.code === "ar");
     },
   },
   methods: {
@@ -47,6 +60,20 @@ export default {
       return (
         this.$languages.hasFeature(l1, l2, "dictionary") || l2.code === "en"
       );
+    },
+    async loadCountries() {
+      let res = await axios.get(`${Config.server}data/countries/countries.csv`);
+      if (res && res.data) {
+        let csv = res.data;
+        let parsed = Papa.parse(csv, { header: true });
+        if (parsed && parsed.data) {
+          let countries = parsed.data.map((row) => {
+            row.languages = row.languages ? row.languages.split(",") : [];
+            return row;
+          });
+          return countries;
+        }
+      }
     },
   },
 };
