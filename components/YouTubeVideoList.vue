@@ -123,7 +123,7 @@
             'col-12': params.xs && view === 'grid' && !singleColumn,
             'col-6': params.sm && view === 'grid' && !singleColumn,
             'col-4': params.md && view === 'grid' && !singleColumn,
-            'col-3': params.lg && view === 'grid' && !singleColumn,
+            'col-3': (params.lg || params.xl) && view === 'grid' && !singleColumn,
           }"
           :style="`padding-bottom: ${view === 'list' ? '1rem' : '2rem'}`"
           :key="`youtube-video-wrapper-${video.youtube_id}-${videoIndex}`"

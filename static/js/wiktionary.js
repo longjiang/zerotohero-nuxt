@@ -580,7 +580,6 @@ const Dictionary = {
   },
   lookupFuzzy(text, limit = 30) { // text = 'abcde'
     if (this.l2 !== 'vie') text = this.stripAccents(text)
-    console.log('lookupFuzzy', text)
     text = text.toLowerCase()
     let words = []
     if (['fra'].includes(this.l2)) {
