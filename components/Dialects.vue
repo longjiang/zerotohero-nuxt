@@ -40,20 +40,20 @@ export default {
     }
   },
   data: () => ({
-    csv: `english	simplified	population	iso639-3
-Mandarin	官话	920	zho|cmn
-Jin	晋语	63.05	cjy
-Wu	吴语	80	wuu
-Xiang	湘语	38	hsn
-Eastern Min	闽东语	9.5	cdo
-Northern Min	闽北语	2.191	mnp
-Central Min	闽中语	0.683	czo
-Pu-Xian Min	莆仙话	2.6	cpx
-Southern Min	闽南语	48	nan
-Leizhou Min	雷州话	2.8	
-Hakka	客家话	47.8	hak
-Yue	粤语	84	yue
-Pinghua	平话	7	csp|cnp`,
+    csv: `english	simplified	population	iso639-3	city	lat	long	dialectOf
+Mandarin	官话	920	zho|cmn	Beijing	39.906667	116.3975	zh
+Jin	晋语	63.05	cjy	Taiyuan	37.8704	112.5497	zh
+Wu	吴语	80	wuu	Shanghai	31.228611	121.474722	zh
+Xiang	湘语	38	hsn	Changsha	28.228	112.939	zh
+Eastern Min	闽东语	9.5	cdo	Fuzhou	26.15	119.283333	zh
+Northern Min	闽北语	2.191	mnp	Nanping	26.6415	118.1779	zh
+Central Min	闽中语	0.683	czo	Sanming	26.263	117.639	zh
+Pu-Xian Min	莆仙话	2.6	cpx	Putian	25.4526	119.0078	zh
+Southern Min	闽南语	48	nan	Chaozhou	23.658	116.622	zh
+Leizhou Min	雷州话	2.8		Leizhou	20.9143	110.0967	zh
+Hakka	客家话	47.8	hak	Meizhou	24.289	116.122	zh
+Yue	粤语	84	yue	Guangzhou	23.132	113.266	zh
+Pinghua	平话	7	csp|cnp	Guilin	25.275	110.296	zh`,
     dialects: undefined,
     population:
       1339724852 + // PRC
