@@ -30,7 +30,7 @@ export default {
     return {
       languages: [],
       enLanguages: [],
-      random: undefined
+      random: undefined,
     };
   },
   mounted() {
@@ -50,12 +50,12 @@ export default {
     this.enLanguages = this.languages.filter(
       (language) => !["E", "H"].includes(language.type)
     );
-    this.random = this.getRandom()
+    this.random = this.getRandom();
   },
   watch: {
-    '$route.params.l2'() {
-      this.random = this.getRandom()
-    }
+    "$route.params.l2"() {
+      this.random = this.getRandom();
+    },
   },
   methods: {
     getRandom() {
@@ -89,10 +89,13 @@ export default {
             : -1
         )
         .map((language) => {
+          let codes = [
+            language["iso639-1"],
+            language["iso639-3"],
+            language["glottologId"],
+          ].filter((c) => c);
           return {
-            head: `${language.name} (${
-              language.code !== language["iso639-3"] ? language.code + ", " : ""
-            }${language["iso639-3"]})`,
+            head: `${language.name} (${codes.join(", ")})`,
             definitions: this.$languages.getFeatures({
               l1: english,
               l2: language,
