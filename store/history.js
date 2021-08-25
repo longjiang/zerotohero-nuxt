@@ -25,7 +25,6 @@ export const mutations = {
       if (prevVersionOfSameItemIndex !== -1)
         history[prevVersionOfSameItemIndex] = historyItem
       else history.push(historyItem)
-      history = Helper.uniqueByValue(history, 'id')
       localStorage.setItem('zthHistory', JSON.stringify(history))
       this._vm.$set(state, 'history', history)
     }
