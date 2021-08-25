@@ -108,7 +108,9 @@ export default {
         languages = this.langs.filter((l) => l);
       }
       if (!languages && this.codes) {
-        languages = this.codes.map((c) => this.$languages.getSmart(c));
+        languages = this.codes
+          .map((c) => this.$languages.getSmart(c))
+          .filter((l) => l);
       }
       if (this.sort) {
         languages = Helper.uniqueByValue(languages, "iso639-3").sort((a, b) =>

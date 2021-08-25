@@ -84,11 +84,11 @@
           :set="(itemL1 = $languages.getSmart(item.l1))"
           :set2="(itemL2 = $languages.getSmart(item.l2))"
         >
-          <div class="history-item-language-badge">
+          <div class="history-item-language-badge" v-if="itemL1 && itemL2">
             {{ itemL2.name }}
           </div>
           <YouTubeVideoCard
-            v-if="item.type === 'video'"
+            v-if="itemL1 && itemL2 && item.type === 'video'"
             skin="card"
             :video="Object.assign({}, item.video)"
             :l1="itemL1"
@@ -98,7 +98,7 @@
             :showAdmin="false"
           />
           <PhrasebookCard
-            v-if="item.type === 'phrasebook'"
+            v-if="itemL1 && itemL2 && item.type === 'phrasebook'"
             skin="light"
             size="lg"
             :l1="itemL1"
@@ -192,10 +192,13 @@ export default {
     savedWordsSorted() {
       let savedWordsSorted = [];
       for (let l2 in this.savedWords) {
-        savedWordsSorted.push({
-          l2: this.$languages.getSmart(l2),
-          words: this.savedWords[l2],
-        });
+        let lang = this.$languages.getSmart(l2);
+        if (lang) {
+          savedWordsSorted.push({
+            l2: lang,
+            words: this.savedWords[l2],
+          });
+        }
       }
       savedWordsSorted = savedWordsSorted
         .sort((a, b) => b.words.length - a.words.length)

@@ -292,7 +292,7 @@
           <LazyLanguageMap />
         </div>
         <div class="home-card mb-5">
-          <h5 class="text-center">Even More Languages</h5>
+          <h5 class="text-center">All {{ $languages.l1s.length }} Languages</h5>
           <Choose :compact="true" />
         </div>
         <div class="row mb-5">

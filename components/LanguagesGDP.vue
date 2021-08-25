@@ -77,7 +77,7 @@ others	0.143`,
     for (let lang of langs) {
       if (lang.code !== "others") {
         let language = this.$languages.getSmart(lang.code);
-        lang.name = language.name;
+        if (language) lang.name = language.name;
       } else {
         lang.name = "All others";
         delete lang.code;
