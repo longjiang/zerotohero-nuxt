@@ -179,11 +179,7 @@ export default {
         if (l["iso639-1"]) return true;
         if (this.hasDictionary(this.english, l)) return true;
       })
-      .map((l) => {
-        l.lat = Number(l.lat);
-        l.long = Number(l.long);
-        return l;
-      });
+      .sort((x, y) => y.speakers - x.speakers);
     this.languages = languages;
     // this.countries = await this.loadCountries();
     // this.updateBounds(bounds)
@@ -199,7 +195,7 @@ export default {
   methods: {
     ready(obj) {
       let bounds = obj.getBounds();
-      this.updateBounds(bounds)
+      this.updateBounds(bounds);
     },
     updateBounds(bounds) {
       this.filteredLanguages = this.languages.filter((l) => {
@@ -226,16 +222,18 @@ export default {
           8: 0.0625,
           9: 0.0375,
         };
-        let magicScale = 1.1;
-        filteredLanguages = filteredLanguages.filter((l) => {
-          let overlapped =
-            l !== language &&
-            Math.abs(l.lat - language.lat) <
-              magicNumbers[this.currentZoom] * magicScale &&
-            Math.abs(l.long - language.long) <
-              magicNumbers[this.currentZoom] * magicScale * 6;
-          return !overlapped;
-        });
+        let magicScale = 3;
+        if (filteredLanguages.includes(language)) {
+          filteredLanguages = filteredLanguages.filter((l) => {
+            let overlapped =
+              l !== language &&
+              Math.abs(l.lat - language.lat) <
+                magicNumbers[this.currentZoom] * magicScale &&
+              Math.abs(l.long - language.long) <
+                magicNumbers[this.currentZoom] * magicScale * 6;
+            return !overlapped;
+          });
+        }
       }
       this.filteredLanguages = filteredLanguages;
     },
