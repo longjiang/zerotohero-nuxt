@@ -216,7 +216,7 @@ export default {
           8: 0.0625,
           9: 0.0375,
         };
-        let magicScale = 3;
+        let magicScale = 2;
         if (filteredLanguages.includes(language)) {
           filteredLanguages = filteredLanguages.filter((l) => {
             let overlapped =
@@ -226,7 +226,7 @@ export default {
               Math.abs(l.long - language.long) <
                 magicNumbers[this.currentZoom] * magicScale * 6;
             return !overlapped;
-          });
+          }).slice(0, 20);
         }
       }
       this.filteredLanguages = filteredLanguages;
