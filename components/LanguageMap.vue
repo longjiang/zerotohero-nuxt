@@ -27,6 +27,14 @@
         >
           <l-icon>
             <div :class="`language-marker-languages`">
+              <div
+                class="language-marker-languages-size"
+                :style="`width: ${diameter(language)}px; height: ${diameter(
+                  language
+                )}px; left: calc(50% - ${diameter(
+                  language
+                )}px / 2); top: calc(50% - ${diameter(language)}px / 2);`"
+              ></div>
               <LanguageList
                 :langs="[language]"
                 skin="dark"
@@ -171,16 +179,21 @@ export default {
   }),
   async created() {
     this.initialZoom = this.$route.query.z ? Number(this.$route.query.z) : 3;
-    this.currentZoom = this.initialZoom
+    this.currentZoom = this.initialZoom;
     this.initialCenter = this.$route.query.c
       ? this.$route.query.c.split(",")
       : [35, 105];
-    let languages = this.$languages.l1s
-    languages = languages.filter((l) => {
+    let languages = this.$languages.l1s;
+    languages = languages
+      .filter((l) => {
         if (!(l.lat && l.long)) return false;
         if (l.name.includes("Sign Language")) return false;
         if (["A", "E", "H"].includes(l.type)) return false;
-        if (!this.hasDictionary(this.english, l) && !this.hasYouTube(this.english, l)) return false;
+        if (
+          !this.hasDictionary(this.english, l) &&
+          !this.hasYouTube(this.english, l)
+        )
+          return false;
         return true;
       })
       .sort((x, y) => y.speakers - x.speakers);
@@ -221,6 +234,9 @@ export default {
       });
       this.filterLanguages();
     },
+    diameter(language) {
+      return Math.sqrt(language.speakers / Math.PI) / Math.pow(10, 3) * Math.pow(this.currentZoom, 2.5) / 2.5;
+    },
     filterLanguages() {
       let filteredLanguages = this.filteredLanguages;
       for (let language of this.languages) {
@@ -244,7 +260,7 @@ export default {
                 Math.abs(l.lat - language.lat) <
                   magicNumbers[this.currentZoom] * magicScale &&
                 Math.abs(l.long - language.long) <
-                  magicNumbers[this.currentZoom] * magicScale * 6;
+                  magicNumbers[this.currentZoom] * magicScale * 3;
               return !overlapped;
             })
             .slice(0, 20);
@@ -261,9 +277,7 @@ export default {
       );
     },
     hasYouTube(l1, l2) {
-      return (
-        this.$languages.hasYouTube(l1, l2) || l2.code === "en"
-      );
+      return this.$languages.hasYouTube(l1, l2) || l2.code === "en";
     },
     async loadCountries() {
       let res = await axios.get(`${Config.server}data/countries/countries.csv`);
@@ -289,20 +303,25 @@ export default {
   height: 40rem;
   max-height: 100vh;
   .language-marker-languages {
-    width: 12rem;
-    margin-left: -6rem;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    width: 10rem;
+    margin-left: -5rem;
+    text-shadow: 0 1px 10px rgba(0, 0, 0, 1);
     font-size: 1.2em;
     text-transform: uppercase;
     font-weight: bold;
-    background-color: #00000088;
+    // background-color: #00000088;
     padding: 0.3rem 0.6rem;
     border-radius: 0.3rem;
-    border: 1px solid #88888888;
+    // border: 1px solid #88888888;
     margin-top: -100%;
     text-align: center;
-    &.language-marker-languages-overlap {
-      background-color: red;
+    position: relative;
+    .language-marker-languages-size {
+      background-color: #00000088;
+      // background-color: #fd4f1c;
+      position: absolute;
+      z-index: -1;
+      border-radius: 100%;
     }
     ::v-deep .language-list.language-list-dark .language-list-item {
       a {
