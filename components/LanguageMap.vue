@@ -2,8 +2,8 @@
   <div class="language-map">
     <client-only>
       <l-map
-        :zoom="4"
-        :minZoom="initialZoom"
+        :zoom="initialZoom"
+        :minZoom="3"
         :maxZoom="9"
         :center="initialCenter"
         @update:zoom="updateZoom"
