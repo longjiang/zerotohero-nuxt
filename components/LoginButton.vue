@@ -6,7 +6,7 @@
       href="https://m.cctalk.com/inst/stevmab3"
     >
       <i v-if="icon" class="fas fa-key" style="width: 1.5rem"></i>
-      登录CCTalk
+      我的课程
     </a>
     <a
       v-if="$l1.code === 'en' && $l2.code === 'zh'"
@@ -14,7 +14,7 @@
       href="https://sso.teachable.com/secure/133035/users/sign_in"
     >
       <i v-if="icon" class="fas fa-key" style="width: 1.5rem"></i>
-      Login to Teachable
+      My Courses
     </a>
   </div>
 </template>

@@ -33,6 +33,9 @@
           <i class="fas fa-sync-alt"></i>
         </button>
         <LoginButton class="d-inline-block ml-2" :icon="false" />
+        <router-link to="/language-map" class="ml-2 link-unstyled">
+          <i class="fas fa-globe-asia"></i>
+        </router-link>
       </div>
     </div>
     <div
@@ -53,6 +56,9 @@
               <router-link to="/" class="link-unstyled">
                 <i class="fas fa-chevron-left mr-2"></i>
                 All languages
+              </router-link>
+              <router-link to="/language-map" class="link-unstyled">
+                <i class="fas fa-globe-asia"></i>
               </router-link>
             </div>
 
@@ -1110,7 +1116,7 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 100vw;
+  width: 100%;
   z-index: 2;
   background-color: rgba(29, 29, 29, 0.5);
   position: absolute;
@@ -1128,6 +1134,11 @@ export default {
   .main-nav {
     text-align: center;
     padding-top: 52px;
+    .zth-header {
+      .site-top-bar {
+        width: 100vw;
+      }
+    }
     .main-nav-item {
       border-radius: 0.3rem 0.3rem 0 0;
       border-bottom: none;
