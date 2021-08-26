@@ -248,7 +248,7 @@ export default {
     diameter(language) {
       return (
         ((Math.sqrt(language.speakers / Math.PI) / Math.pow(10, 3)) *
-          Math.pow(this.currentZoom, 2.5)) /
+          Math.pow(this.currentZoom, 3 - this.currentZoom * 0.14)) /
         2.5
       );
     },
@@ -344,6 +344,7 @@ export default {
       position: absolute;
       z-index: -1;
       border-radius: 100%;
+      pointer-events: none;
     }
     ::v-deep .language-list.language-list-dark .language-list-item {
       a {
