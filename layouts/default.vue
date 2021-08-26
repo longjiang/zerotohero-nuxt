@@ -51,7 +51,7 @@
                     <a target="_blank" href="https://www.sketchengine.eu/">
                       SketchEngine
                     </a>
-                    .
+                    . Languages population size from <a href="https://github.com/wooorm/speakers">github.com/wooorm/speakers</a>.
                   </p>
                 </div>
               </div>
