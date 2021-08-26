@@ -26,7 +26,12 @@
               Home
             </router-link>
           </div>
-          <LanguageSwitch style="flex: 1; z-index: 999" :nav="false" @nav="onNav" />
+          <LanguageSwitch
+            style="flex: 1; z-index: 999"
+            :nav="false"
+            @nav="onNav"
+            :langs="$languages.l1s.filter((l) => l.lat && l.long)"
+          />
         </div>
       </div>
       <div class="row">
@@ -41,9 +46,6 @@
 <script>
 export default {
   methods: {
-    focus() {
-      console.log('focus')
-    },
     onNav(url, suggestion = undefined) {
       let l2;
       if (suggestion) {

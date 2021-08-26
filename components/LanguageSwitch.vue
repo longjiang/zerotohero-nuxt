@@ -30,6 +30,9 @@ export default {
     nav: {
       default: true,
     },
+    langs: {
+      type: Array,
+    },
   },
   data() {
     return {
@@ -39,19 +42,23 @@ export default {
     };
   },
   mounted() {
-    this.languages = this.$languages.l1s
-      .filter(
-        (language) => ["A", "C", "L", "E", "H"].includes(language.type) // Only living, extinct or historical languages (exclusing special codes 'S' and macro languages 'M')
-      )
-      .sort((a, b) => {
-        if (a.name < b.name) {
-          return -1;
-        }
-        if (a.name > b.name) {
-          return 1;
-        }
-        return 0;
-      });
+    if (this.langs) {
+      this.languages = this.langs;
+    } else {
+      this.languages = this.$languages.l1s
+        .filter(
+          (language) => ["A", "C", "L", "E", "H"].includes(language.type) // Only living, extinct or historical languages (exclusing special codes 'S' and macro languages 'M')
+        )
+        .sort((a, b) => {
+          if (a.name < b.name) {
+            return -1;
+          }
+          if (a.name > b.name) {
+            return 1;
+          }
+          return 0;
+        });
+    }
     this.enLanguages = this.languages.filter(
       (language) => !["E", "H"].includes(language.type)
     );
@@ -64,8 +71,8 @@ export default {
   },
   methods: {
     onNav(url, suggestion = undefined) {
-      this.$emit('nav', url, suggestion)
-      this.random = this.getRandom()
+      this.$emit("nav", url, suggestion);
+      this.random = this.getRandom();
     },
     getRandom() {
       if (this.languages) {
