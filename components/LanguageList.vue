@@ -44,6 +44,12 @@
       <router-link :to="base">
         {{ languageName(language) }}
       </router-link>
+      <span
+        v-if="language.speakers && language.speakers > 0"
+        class="language-list-item-speakers"
+      >
+       <i class="fas fa-user"></i> {{ speakers(language.speakers) }}
+      </span>
     </li>
   </ul>
 </template>
@@ -121,6 +127,9 @@ export default {
     },
   },
   methods: {
+    speakers(number) {
+      return Helper.formatK(number, 1);
+    },
     languagePath(language) {
       let l1 = "en";
       let special = this.specials[language.code];
@@ -154,13 +163,24 @@ export default {
   padding: 0;
   column-gap: 2rem;
   margin-bottom: 0;
+  .language-list-item {
+    .language-list-item-speakers {
+      font-size: 0.8em;
+      white-space: nowrap;
+      margin-left: 0.25rem;
+    }
+  }
+
   &.language-list-light {
     .language-list-item {
       a {
-        color: #666;
+        color: hsla(14deg 98% 10% / 80%);
       }
       .feature-icon {
         color: hsla(14deg 98% 10% / 60%);
+      }
+      .language-list-item-speakers {
+        color: hsla(14deg 98% 10% / 40%);
       }
     }
   }
@@ -171,6 +191,9 @@ export default {
       }
       .feature-icon {
         color: rgba(255, 255, 255, 0.6);
+      }
+      .language-list-item-speakers {
+        color: rgba(255, 255, 255, 0.7);
       }
     }
   }
