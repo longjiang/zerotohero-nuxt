@@ -1,14 +1,16 @@
 <template>
   <div>
     <Search
-      placeholder="Search by language name or code..."
       :hrefFunc="hrefFunc"
       :button="true"
       :suggestionsFunc="suggestionsFunc"
-      type="generic"
+      :nav="nav"
       :defaultURL="(text) => `/en/${text}/`"
       :random="random ? random : false"
+      @nav="onNav"
+      placeholder="Search by language name or code..."
       ref="l1"
+      type="generic"
     />
   </div>
 </template>
@@ -24,6 +26,9 @@ export default {
   props: {
     preferredLanguages: {
       type: Array,
+    },
+    nav: {
+      default: true,
     },
   },
   data() {
@@ -58,9 +63,13 @@ export default {
     },
   },
   methods: {
+    onNav(url, suggestion = undefined) {
+      this.$emit('nav', url, suggestion)
+      this.random = this.getRandom()
+    },
     getRandom() {
-      if (this.preferredLanguages) {
-        let preferredLanguages = this.preferredLanguages;
+      if (this.languages) {
+        let preferredLanguages = this.preferredLanguages || this.languages;
         if (this.$l2)
           preferredLanguages = preferredLanguages.filter(
             (lang) => lang.code !== this.$l2.code

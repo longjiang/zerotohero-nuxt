@@ -15,18 +15,19 @@
         ref="lookup"
         :placeholder="placeholder || $t('Search')"
       />
-      <router-link
+      <a
         v-if="random"
         class="btn btn-secondary btn-random bg-secondary ml-2"
-        :to="random"
+        :href="random"
+        @click.stop.prevent="go(random)"
       >
         <i class="fas fa-random mr-1"></i>
         <span>{{ $t("Random") }}</span>
-      </router-link>
+      </a>
       <div v-if="button" class="input-group-append">
         <button
           class="btn btn-primary lookup-button"
-          v-on:click="go"
+          @click="go(hrefFunc(suggestions[0]), suggestions[0])"
           type="button"
           title="Search"
         >
@@ -40,13 +41,14 @@
       v-cloak
       v-if="active && text && text.length > 0"
     >
-      <router-link
+      <a
         class="suggestion"
         v-for="(suggestion, index) in suggestions.filter(
           (suggestion) => suggestion
         )"
         :key="`search-suggestion-${index}-${suggestion ? suggestion.bare : ''}`"
-        :to="hrefFunc(suggestion)"
+        :href="hrefFunc(suggestion)"
+        @click.stop.prevent="go(hrefFunc(suggestion), suggestion)"
       >
         <span v-if="suggestion">
           <span
@@ -65,17 +67,18 @@
             v-html="Helper.highlight(suggestion.definitions.join(', '), text)"
           ></span>
         </span>
-      </router-link>
-      <router-link
+      </a>
+      <a
         class="suggestion"
         v-if="suggestions.length === 0 && type === 'dictionary'"
-        :to="`/${$l1.code}/${$l2.code}/phrase/search/${text}`"
+        :href="`/${$l1.code}/${$l2.code}/phrase/search/${text}`"
+        @click.stop.prevent="go(hrefFunc(suggestion), suggestion)"
       >
         <span class="suggestion-not-found">
           <b class="suggestion-word mr-1" data-level="outside">{{ text }}</b>
           (Tap here or press Return to look up)
         </span>
-      </router-link>
+      </a>
       <div
         class="suggestion"
         v-if="suggestions.length === 0 && type === 'generic'"
@@ -115,6 +118,9 @@ export default {
     suggestionsFunc: {
       type: Function,
       default: undefined,
+    },
+    nav: {
+      default: true,
     },
     hrefFunc: {
       type: Function,
@@ -199,15 +205,15 @@ export default {
           this.preventEnter = false;
         }
       } else {
-        this.go()
+        this.go();
       }
     },
-    go() {
-      const url =
-        $(".suggestion:first-child").attr("href") || this.defaultURL(this.text);
-      if (url) {
+    go(url, suggestion = undefined) {
+      this.$emit("nav", url, suggestion);
+      if (this.nav && url) {
         this.$router.push({ path: url });
       }
+      return false;
     },
     cancel() {
       setTimeout(() => {

@@ -61,6 +61,7 @@ export default {
     countries: [],
     overlapped: [],
     currentZoom: 4,
+    map: undefined,
     chinaEthnicLangs: [
       "acn",
       "adi",
@@ -208,8 +209,9 @@ export default {
     },
   },
   methods: {
-    ready(obj) {
-      let bounds = obj.getBounds();
+    ready(mapObj) {
+      this.map = mapObj;
+      let bounds = mapObj.getBounds();
       this.updateBounds(bounds);
     },
     updateCenter(center) {
@@ -235,7 +237,11 @@ export default {
       this.filterLanguages();
     },
     diameter(language) {
-      return Math.sqrt(language.speakers / Math.PI) / Math.pow(10, 3) * Math.pow(this.currentZoom, 2.5) / 2.5;
+      return (
+        ((Math.sqrt(language.speakers / Math.PI) / Math.pow(10, 3)) *
+          Math.pow(this.currentZoom, 2.5)) /
+        2.5
+      );
     },
     filterLanguages() {
       let filteredLanguages = this.filteredLanguages;
@@ -292,6 +298,12 @@ export default {
           return countries;
         }
       }
+    },
+    goToLang(lang) {
+      let zoomLevel = 3 + 1 / Math.log10(lang.speakers) * 42;
+      this.map.flyTo([lang.lat, lang.long], zoomLevel, {
+        animation: true,
+      });
     },
   },
 };

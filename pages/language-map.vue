@@ -15,7 +15,10 @@
       image="/img/thumbnail-language-map.jpg"
     />
     <div class="container-fluid">
-      <div class="row bg-dark text-white pt-2 pb-2 text-left" style="overflow: visible">
+      <div
+        class="row bg-dark text-white pt-2 pb-2 text-left"
+        style="overflow: visible"
+      >
         <div class="col-sm-12 d-flex" style="overflow: visible">
           <div class="mr-3 d-flex align-items-center">
             <router-link to="/" class="link-unstyled">
@@ -23,12 +26,12 @@
               Home
             </router-link>
           </div>
-          <LanguageSwitch style="flex: 1" />
+          <LanguageSwitch style="flex: 1" :nav="false" @nav="onNav" />
         </div>
       </div>
       <div class="row">
         <div class="col-12" style="height: calc(100vh - 54px); padding: 0">
-          <LanguageMap style="height: 100%" />
+          <LanguageMap style="height: 100%" ref="languageMap" />
         </div>
       </div>
     </div>
@@ -36,7 +39,20 @@
 </template>
 
 <script>
-export default {};
+export default {
+  methods: {
+    onNav(url, suggestion = undefined) {
+      let l2;
+      if (suggestion) {
+        l2 = suggestion.l2;
+      } else if (url) {
+        let code = url.split("/")[2];
+        l2 = this.$languages.getSmart(code);
+      }
+      if (l2) this.$refs.languageMap.goToLang(l2);
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
