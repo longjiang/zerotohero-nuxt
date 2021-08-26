@@ -148,6 +148,19 @@ export default {
       suggestionsKey: 0,
     };
   },
+  computed: {
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
+    $dictionary() {
+      return this.$getDictionary();
+    },
+  },
   watch: {
     $route() {
       this.active = false;
@@ -159,6 +172,7 @@ export default {
       }
     },
     async text() {
+      this.active = true;
       if (this.type === "dictionary") {
         let def = await (
           await this.$getDictionary()
@@ -176,19 +190,6 @@ export default {
       }
     },
   },
-  computed: {
-    $l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-    },
-    $l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
-    },
-    $dictionary() {
-      return this.$getDictionary();
-    },
-  },
   methods: {
     focusOnInput() {
       this.$refs.lookup.focus();
@@ -203,9 +204,10 @@ export default {
         else {
           await Helper.timeout(500);
           this.preventEnter = false;
+          this.go(this.hrefFunc(this.suggestions[0]), this.suggestions[0]);
         }
       } else {
-        this.go();
+        this.go(this.hrefFunc(this.suggestions[0]), this.suggestions[0]);
       }
     },
     go(url, suggestion = undefined) {
@@ -213,6 +215,7 @@ export default {
       if (this.nav && url) {
         this.$router.push({ path: url });
       }
+      this.active = false;
       return false;
     },
     cancel() {

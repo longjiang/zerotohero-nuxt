@@ -56,7 +56,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::v-deep .vue2leaflet-map {
+::v-deep .suggestions-active .vue2leaflet-map {
   z-index: -1;
 }
 </style>

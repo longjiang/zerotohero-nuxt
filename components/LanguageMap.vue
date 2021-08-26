@@ -300,7 +300,8 @@ export default {
       }
     },
     goToLang(lang) {
-      let zoomLevel = 3 + 1 / Math.log10(lang.speakers) * 42;
+      let zoomLevel = 4 + 1 / Math.log10(lang.speakers) * 7;
+      if (!lang.speakers) zoomLevel = 9
       this.map.flyTo([lang.lat, lang.long], zoomLevel, {
         animation: true,
       });
