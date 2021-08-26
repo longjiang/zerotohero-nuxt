@@ -191,7 +191,7 @@ export default {
       this.preventEnter = true;
     },
     async enterKeyUp() {
-      if (["ko", "ja"].includes(this.$l2.code)) {
+      if (this.$l2 && ["ko", "ja"].includes(this.$l2.code)) {
         // Wait for composition to finish
         if (!this.preventEnter) this.go();
         else {
@@ -219,11 +219,10 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style lang="scss" scoped>
 .suggestions {
   position: absolute;
-  z-index: 4;
+  z-index: 9;
   border-radius: 0.3rem;
   overflow: hidden;
   border: 1px solid #ccc;
