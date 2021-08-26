@@ -8,7 +8,7 @@
   }
 </router>
 <template>
-  <div class="main">
+  <div>
     <SocialHead
       title="Map of World Languages | Zero to Hero Languages"
       description="Tap on any language label to learn the language! Live TV channels, TV shows with subtitles, music with lyrics, phrasebooks with video examples... everything that can help you to learn a language “by osmosis.”"
