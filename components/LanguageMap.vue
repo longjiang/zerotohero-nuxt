@@ -170,6 +170,11 @@ export default {
     ],
   }),
   async created() {
+    this.initialZoom = this.$route.query.z ? Number(this.$route.query.z) : 3;
+    this.currentZoom = this.initialZoom
+    this.initialCenter = this.$route.query.c
+      ? this.$route.query.c.split(",")
+      : [35, 105];
     let languages = this.$languages.l1s
       .filter((l) => {
         if (!(l.lat && l.long)) return false;
@@ -180,10 +185,6 @@ export default {
       })
       .sort((x, y) => y.speakers - x.speakers);
     this.languages = languages;
-    this.initialZoom = this.$route.query.z ? Number(this.$route.query.z) : 3;
-    this.initialCenter = this.$route.query.c
-      ? this.$route.query.c.split(",")
-      : [35, 105];
   },
   computed: {
     english() {
