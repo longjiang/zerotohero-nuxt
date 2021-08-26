@@ -10,7 +10,7 @@
     <template v-else>
       <client-only>
         <Nav
-          v-if="l1 && l2"
+          v-if="$route.params.l1 && $route.params.l1 && l1 && l2"
           :l1="l1"
           :l2="l2"
           :key="`nav-${l1.code}-${l2.code}`"

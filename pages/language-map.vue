@@ -1,7 +1,10 @@
 <router>
   {
     path: '/language-map',
-    props: true
+    props: true,
+    meta: {
+      layout: 'full'
+    }
   }
 </router>
 <template>
@@ -12,8 +15,16 @@
       image="/img/thumbnail-language-map.jpg"
     />
     <div class="container-fluid">
+      <div class="row bg-dark text-white pt-2 pb-2 text-left">
+        <div class="col-sm-12">
+          <router-link to="/" class="link-unstyled">
+            <i class="fa fa-chevron-left mr-2"></i>
+            Home Page (List of Languages)
+          </router-link>
+        </div>
+      </div>
       <div class="row">
-        <div class="col-12" style="height: calc(100vh - 10rem); padding: 0">
+        <div class="col-12" style="height: calc(100vh - 40px); padding: 0">
           <LanguageMap style="height: 100%" />
         </div>
       </div>
