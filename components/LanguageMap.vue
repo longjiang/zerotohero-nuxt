@@ -3,11 +3,12 @@
     <client-only>
       <l-map
         :zoom="4"
-        :minZoom="3"
+        :minZoom="initialZoom"
         :maxZoom="9"
-        :center="[35, 105]"
+        :center="initialCenter"
         @update:zoom="updateZoom"
         @update:bounds="updateBounds"
+        @update:center="updateCenter"
         @ready="ready"
         ref="myMap"
       >
@@ -45,6 +46,8 @@ import Config from "@/lib/config";
 import Papa from "papaparse";
 export default {
   data: () => ({
+    initialZoom: 3,
+    initialCenter: [35, 105],
     languages: [],
     filteredLanguages: [],
     countries: [],
@@ -170,13 +173,17 @@ export default {
     let languages = this.$languages.l1s
       .filter((l) => {
         if (!(l.lat && l.long)) return false;
-        if (l.name.includes('Sign Language')) return false;
-        if (['A', 'E', 'H'].includes(l.type)) return false;
+        if (l.name.includes("Sign Language")) return false;
+        if (["A", "E", "H"].includes(l.type)) return false;
         if (!this.hasDictionary(this.english, l)) return false;
-        return true
+        return true;
       })
       .sort((x, y) => y.speakers - x.speakers);
     this.languages = languages;
+    this.initialZoom = this.$route.query.z ? Number(this.$route.query.z) : 3;
+    this.initialCenter = this.$route.query.c
+      ? this.$route.query.c.split(",")
+      : [35, 105];
   },
   computed: {
     english() {
@@ -190,6 +197,18 @@ export default {
     ready(obj) {
       let bounds = obj.getBounds();
       this.updateBounds(bounds);
+    },
+    updateCenter(center) {
+      console.log(center);
+      if (typeof window !== "undefined") {
+        window.history.replaceState(
+          "",
+          "",
+          `?c=${Math.round(center.lat * 100) / 100},${
+            Math.round(center.lng * 100) / 100
+          }&z=${this.currentZoom}`
+        );
+      }
     },
     updateBounds(bounds) {
       this.filteredLanguages = this.languages.filter((l) => {
@@ -218,15 +237,17 @@ export default {
         };
         let magicScale = 2;
         if (filteredLanguages.includes(language)) {
-          filteredLanguages = filteredLanguages.filter((l) => {
-            let overlapped =
-              l !== language &&
-              Math.abs(l.lat - language.lat) <
-                magicNumbers[this.currentZoom] * magicScale &&
-              Math.abs(l.long - language.long) <
-                magicNumbers[this.currentZoom] * magicScale * 6;
-            return !overlapped;
-          }).slice(0, 20);
+          filteredLanguages = filteredLanguages
+            .filter((l) => {
+              let overlapped =
+                l !== language &&
+                Math.abs(l.lat - language.lat) <
+                  magicNumbers[this.currentZoom] * magicScale &&
+                Math.abs(l.long - language.long) <
+                  magicNumbers[this.currentZoom] * magicScale * 6;
+              return !overlapped;
+            })
+            .slice(0, 20);
         }
       }
       this.filteredLanguages = filteredLanguages;
