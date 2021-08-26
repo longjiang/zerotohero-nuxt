@@ -14,20 +14,21 @@
     <div
       v-for="lang of langs"
       :key="`lang-gdp-item-${lang.code}`"
-      class="d-flex mt-1 mb-1 ml-auto mr-auto"
-      style="max-width: 30rem"
+      class="lang-gdp-item"
       :set="(path = `/en/${lang.code}/`)"
     >
-      <div style="width: 7rem; color: #666">
-        <NuxtLink :to="path" v-if="lang.code" class="link-unstyled">
-          {{ lang.name }}
-        </NuxtLink>
+      <div class="lang-gdp-item-lang">
+        <LazyLanguageList
+          v-if="lang && lang.lang"
+          :langs="[lang.lang]"
+          :singleColumn="true"
+        />
         <div v-else>{{ lang.name }}</div>
       </div>
       <b-progress
         :max="langs[0].gdp * 100"
         variant="success"
-        style="flex: 1; background: none; margin-top: 0.2rem;"
+        style="flex: 1; background: none; margin-top: 0.2rem"
       >
         <b-progress-bar
           :value="lang.gdp * 100"
@@ -77,7 +78,10 @@ others	0.143`,
     for (let lang of langs) {
       if (lang.code !== "others") {
         let language = this.$languages.getSmart(lang.code);
-        if (language) lang.name = language.name;
+        if (language) {
+          lang.name = language.name;
+          lang.lang = language;
+        }
       } else {
         lang.name = "All others";
         delete lang.code;
@@ -90,10 +94,20 @@ others	0.143`,
 </script>
 
 <style lang="scss" scoped>
-.gdp-progress-bar {
-  background-color: #f4d03f;
-  background-image: linear-gradient(228deg, #f4d03f 0%, #16a085 100%);
-  background-size: 50vw;
-  border-radius: 0.5rem;
+.lang-gdp-item {
+  display: flex;
+  margin: 1rem auto;
+  max-width: 37rem;
+  .lang-gdp-item-lang {
+    width: 14rem;
+    color: #666;
+    display: block;
+  }
+  .gdp-progress-bar {
+    background-color: #f4d03f;
+    background-image: linear-gradient(228deg, #f4d03f 0%, #16a085 100%);
+    background-size: 50vw;
+    border-radius: 0.5rem;
+  }
 }
 </style>
