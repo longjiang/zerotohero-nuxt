@@ -26,7 +26,7 @@
               Home
             </router-link>
           </div>
-          <LanguageSwitch style="flex: 1" :nav="false" @nav="onNav" />
+          <LanguageSwitch style="flex: 1; z-index: 999" :nav="false" @nav="onNav" />
         </div>
       </div>
       <div class="row">
@@ -41,6 +41,9 @@
 <script>
 export default {
   methods: {
+    focus() {
+      console.log('focus')
+    },
     onNav(url, suggestion = undefined) {
       let l2;
       if (suggestion) {
@@ -56,7 +59,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::v-deep .suggestions-active .vue2leaflet-map {
-  z-index: -1;
-}
 </style>
