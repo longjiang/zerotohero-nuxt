@@ -70,12 +70,6 @@
         </div>
       </div>
     </div>
-    <div class="text-center">
-      <hr />
-      <b>SUMMER SALE IS ON.</b>
-      All courses 30% off until Aug 25.
-      <router-link to="/sale">Learn More</router-link>
-    </div>
   </div>
 </template>
 

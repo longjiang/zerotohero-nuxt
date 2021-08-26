@@ -9,7 +9,7 @@
     <div class="container pt-5">
       <div class="row">
         <div class="col-sm-12 text-center">
-          <Sale class="mb-5" />
+          <!-- <Sale class="mb-5" /> -->
           <h3 class="mb-5">Online Chinese Courses from HSK 1 to HSK 6</h3>
           <VideoComp
             class="intro-video mb-5"

@@ -10,7 +10,7 @@
         <div class="col-sm-12">
           <div class="focus text-center">
             <h3 class="mb-3">Ultimate Chinese Grammar Cheatsheet</h3>
-            <Sale class="mt-4 mb-4" />
+            <!-- <Sale class="mt-4 mb-4" /> -->
             <p>
               Here is a list of all grammar notes from HSK 1 to 6 included in
               the

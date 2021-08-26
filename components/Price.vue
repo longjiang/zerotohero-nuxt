@@ -1,6 +1,7 @@
 <template>
   <div>
-    <strike>{{ price.price }}</strike>
+    <strike v-if="price.salePrice">{{ price.price }}</strike>
+    <b v-else>{{ price.price }}</b>
     <br v-if="!compact" />
     <span class="sale-price" v-if="price.salePrice">
       <span v-if="!compact">SALE:</span>

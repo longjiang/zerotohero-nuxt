@@ -58,7 +58,7 @@
                   </span>
                 </template>
                 <template v-slot:finish>
-                  <span>Done!</span>
+                  <span>The sale has ended.</span>
                 </template>
               </vac>
             </div>

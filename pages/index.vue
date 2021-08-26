@@ -27,7 +27,7 @@
             </div>
           </div>
         </div>
-        <Sale class="mb-5" style="border-radius: 1rem !important" />
+        <!-- <Sale class="mb-5" style="border-radius: 1rem !important" /> -->
         <client-only>
           <div :class="{ 'row mb-5': true, 'd-none': !hasDashboard }">
             <div class="col-sm-12">
@@ -289,7 +289,8 @@
           </div>
         </div>
         <div class="home-card mb-5 pb-5 text-center">
-          <h5 class="mb-4">Map of World Languages</h5>
+          <h5>Interactive Map of {{ $languages.l1s.length }} Languages</h5>
+          <p class="mb-4">Tap to open.</p>
           <router-link to="/language-map">
             <div>
               <img
