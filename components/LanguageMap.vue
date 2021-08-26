@@ -200,7 +200,6 @@ export default {
       this.updateBounds(bounds);
     },
     updateCenter(center) {
-      console.log(center);
       if (typeof window !== "undefined") {
         window.history.replaceState(
           "",

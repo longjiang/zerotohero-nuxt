@@ -289,7 +289,7 @@
           </div>
         </div>
         <div class="home-card mb-5 pb-5 text-center">
-          <h5>Interactive Map of {{ $languages.l1s.length }} Languages</h5>
+          <h5>Interactive Map of 5,842 Languages</h5>
           <p class="mb-4">Tap to open.</p>
           <router-link to="/language-map">
             <div>
