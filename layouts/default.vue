@@ -21,6 +21,12 @@
       <div class="zth-content">
         <Nuxt id="main" />
         <footer class="zth-footer" style="z-index: -1">
+          <div class="text-center pt-4 pb-3" style="line-height: 1.2; font-size: 1.1em">
+            <router-link class="link-unstyled text-white" to="/">
+              <strong>ZERO TO HERO</strong>
+              <span style="font-weight: 300">LANGUAGES</span>
+            </router-link>
+          </div>
           <Choose :compact="true" skin="dark" />
           <div class="container">
             <div class="row">
@@ -105,7 +111,7 @@ export default {
       }
     },
     background() {
-      return Helper.background(this.l2)
+      return Helper.background(this.l2);
     },
     fullPage() {
       return $;
@@ -136,7 +142,7 @@ export default {
   },
   head() {
     let head = { script: [] };
-    if (typeof this.l2 !== 'undefined' && this.l2.code === "my") {
+    if (typeof this.l2 !== "undefined" && this.l2.code === "my") {
       head.script.push({
         src: "/vendor/myanmar-tools/zawgyi_converter.min.js",
         body: true,

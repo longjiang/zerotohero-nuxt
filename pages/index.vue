@@ -288,8 +288,17 @@
             </div>
           </div>
         </div>
-        <div class="home-card mb-5" style="padding: 0; overflow: hidden">
-          <LazyLanguageMap />
+        <div class="home-card mb-5 pb-5 text-center">
+          <h5 class="mb-4">Map of World Languages</h5>
+          <router-link to="/language-map">
+            <div>
+              <img
+                src="/img/thumbnail-language-map.jpg"
+                alt="Worl Language Map"
+                class="rounded shadow img-fluid"
+              />
+            </div>
+          </router-link>
         </div>
         <div class="home-card mb-5">
           <h5 class="text-center">All {{ $languages.l1s.length }} Languages</h5>
