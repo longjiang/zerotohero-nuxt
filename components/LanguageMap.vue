@@ -176,11 +176,11 @@ export default {
       ? this.$route.query.c.split(",")
       : [35, 105];
     let languages = this.$languages.l1s
-      .filter((l) => {
+    languages = languages.filter((l) => {
         if (!(l.lat && l.long)) return false;
         if (l.name.includes("Sign Language")) return false;
         if (["A", "E", "H"].includes(l.type)) return false;
-        if (!this.hasDictionary(this.english, l)) return false;
+        if (!this.hasDictionary(this.english, l) && !this.hasYouTube(this.english, l)) return false;
         return true;
       })
       .sort((x, y) => y.speakers - x.speakers);
@@ -259,6 +259,11 @@ export default {
     hasDictionary(l1, l2) {
       return (
         this.$languages.hasFeature(l1, l2, "dictionary") || l2.code === "en"
+      );
+    },
+    hasYouTube(l1, l2) {
+      return (
+        this.$languages.hasYouTube(l1, l2) || l2.code === "en"
       );
     },
     async loadCountries() {
