@@ -45,7 +45,7 @@
         {{ languageName(language) }}
       </router-link>
       <span
-        v-if="language.speakers && language.speakers > 0"
+        v-if="showSpeakers && language.speakers && language.speakers > 0"
         class="language-list-item-speakers"
       >
        <i class="fas fa-user"></i> {{ speakers(language.speakers) }}
@@ -69,6 +69,9 @@ export default {
     },
     singleColumn: {
       default: false,
+    },
+    showSpeakers: {
+      default: true,
     },
     skin: {
       default: "light",

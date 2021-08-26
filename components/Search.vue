@@ -172,7 +172,6 @@ export default {
       }
     },
     async text() {
-      this.active = true;
       if (this.type === "dictionary") {
         let def = await (
           await this.$getDictionary()
