@@ -53,6 +53,11 @@ import axios from "axios";
 import Config from "@/lib/config";
 import Papa from "papaparse";
 export default {
+  props: {
+    langs: {
+      type: Array,
+    },
+  },
   data: () => ({
     initialZoom: 3,
     initialCenter: [35, 105],
@@ -184,21 +189,25 @@ export default {
     this.initialCenter = this.$route.query.c
       ? this.$route.query.c.split(",")
       : [35, 105];
-    let languages = this.$languages.l1s;
-    languages = languages
-      .filter((l) => {
-        if (!(l.lat && l.long)) return false;
-        if (l.name.includes("Sign Language")) return false;
-        if (["A", "E", "H"].includes(l.type)) return false;
-        if (
-          !this.hasDictionary(this.english, l) &&
-          !this.hasYouTube(this.english, l)
-        )
-          return false;
-        return true;
-      })
-      .sort((x, y) => y.speakers - x.speakers);
-    this.languages = languages;
+    if (this.langs) {
+      this.languages = this.langs;
+    } else {
+      let languages = this.$languages.l1s;
+      languages = languages
+        .filter((l) => {
+          if (!(l.lat && l.long)) return false;
+          if (l.name.includes("Sign Language")) return false;
+          if (["A", "E", "H"].includes(l.type)) return false;
+          if (
+            !this.hasDictionary(this.english, l) &&
+            !this.hasYouTube(this.english, l)
+          )
+            return false;
+          return true;
+        })
+        .sort((x, y) => y.speakers - x.speakers);
+      this.languages = languages;
+    }
   },
   computed: {
     english() {
@@ -300,8 +309,8 @@ export default {
       }
     },
     goToLang(lang) {
-      let zoomLevel = 5 + 1 / Math.log10(lang.speakers) * 6;
-      if (!lang.speakers) zoomLevel = 9
+      let zoomLevel = 5 + (1 / Math.log10(lang.speakers)) * 6;
+      if (!lang.speakers) zoomLevel = 9;
       this.map.flyTo([lang.lat, lang.long], zoomLevel, {
         animation: true,
       });

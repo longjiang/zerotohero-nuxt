@@ -30,13 +30,17 @@
             style="flex: 1; z-index: 999"
             :nav="false"
             @nav="onNav"
-            :langs="$languages.l1s.filter((l) => l.lat && l.long)"
+            :langs="filteredLangs"
           />
         </div>
       </div>
       <div class="row">
         <div class="col-12" style="height: calc(100vh - 54px); padding: 0">
-          <LanguageMap style="height: 100%" ref="languageMap" />
+          <LanguageMap
+            style="height: 100%"
+            ref="languageMap"
+            :langs="filteredLangs"
+          />
         </div>
       </div>
     </div>
@@ -45,7 +49,37 @@
 
 <script>
 export default {
+  computed: {
+    english() {
+      return this.$languages.l1s.find((language) => language.code === "en");
+    },
+    filteredLangs() {
+      let languages = this.$languages.l1s;
+      languages = languages
+        .filter((l) => {
+          if (!(l.lat && l.long)) return false;
+          if (l.name.includes("Sign Language")) return false;
+          if (["A", "E", "H"].includes(l.type)) return false;
+          if (
+            !this.hasDictionary(this.english, l) &&
+            !this.hasYouTube(this.english, l)
+          )
+            return false;
+          return true;
+        })
+        .sort((x, y) => y.speakers - x.speakers);
+      return languages;
+    },
+  },
   methods: {
+    hasDictionary(l1, l2) {
+      return (
+        this.$languages.hasFeature(l1, l2, "dictionary") || l2.code === "en"
+      );
+    },
+    hasYouTube(l1, l2) {
+      return this.$languages.hasYouTube(l1, l2) || l2.code === "en";
+    },
     onNav(url, suggestion = undefined) {
       let l2;
       if (suggestion) {
