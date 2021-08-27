@@ -118,8 +118,19 @@ const Dictionary = {
   },
   lookupByDef(text, limit = 30) {
     text = text.toLowerCase()
-    let results = this.words.filter(row => row.english && row.english.toLowerCase().includes(text)).slice(0, limit)
-    return results
+    let results = []
+    for (let word of this.words) {
+      for (let d of word.definitions) {
+        if (d) {
+          let found = d.toLowerCase().includes(text)
+          if (found) {
+            results.push(Object.assign({ score: 1 / (d.length - text.length + 1) }, word))
+          }
+        }
+      }
+    }
+    results = results.sort((a, b) => b.score - a.score)
+    return results.slice(0, limit)
   },
   lookupMultiple(text) {
     let words = this.words.filter(word => word && word.bare === text)
