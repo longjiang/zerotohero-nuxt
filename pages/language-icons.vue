@@ -56,7 +56,7 @@ export default {
       let languages = this.$languages.l1s;
       languages = languages
         .filter((l) => {
-          if (l.logo !== "FALSE") return true;
+          if (l.logo && l.logo !== "") return true;
         })
         .sort((a, b) => a.logo.localeCompare(b.logo));
       return languages;
@@ -64,7 +64,7 @@ export default {
   },
   methods: {
     googleImagesURL(l2) {
-      return `https://www.google.com/searchbyimage?q=${l2.name}&image_url=https://www.zerotohero.ca/img/logo-square/${l2.code}.jpeg`;
+      return `https://www.google.com/searchbyimage?q=${l2.name}+language&image_url=https://www.zerotohero.ca/img/logo-square/${l2.code}.jpeg`;
     },
 
     logoDescription(l2) {
