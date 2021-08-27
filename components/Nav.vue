@@ -1182,7 +1182,6 @@ export default {
         padding-left: 1.5rem;
         margin-top: -2.6rem;
       }
-      margin-left: -0.2rem;
       padding-top: 2.6rem;
     }
     .zth-header-glass {
