@@ -6,7 +6,11 @@
     <div class="logo-constructed">
       <div class="logo-circle-wrapper">
         <div class="logo-circle">
-          <img :src="`/img/logo-square/${l2.code}.jpeg`" alt />
+          <img
+            :src="`/img/logo-square/${l2.code}.jpeg`"
+            :alt="logoDescription"
+            :title="logoDescription"
+          />
         </div>
         <div
           class="logo-speech-bubble shadowed"
@@ -53,6 +57,11 @@ export default {
   computed: {
     l2Name() {
       return this.l2.name.replace(/ \(.*\)/gi, "");
+    },
+    logoDescription() {
+      return this.l2.logoDesc
+        ? `${this.l2.logoDesc}, a ${this.l2.name} speaker.`
+        : this.l2.name;
     },
   },
   methods: {},
