@@ -26,10 +26,12 @@
           :key="`lang-${lang.id}`"
         >
           <div class="lang-item">
-            <img
-              :src="`/img/logo-square/${lang.code}.jpeg`"
-              class="lang-item-logo"
-            />
+            <a :href="googleImagesURL(lang)" target="_blank">
+              <img
+                :src="`/img/logo-square/${lang.code}.jpeg`"
+                class="lang-item-logo"
+              />
+            </a>
             <div
               class="lang-item-description mt-2"
               v-html="logoDescription(lang)"
@@ -43,6 +45,9 @@
 
 <script>
 export default {
+  data: () => ({
+    googleImagesURLs: {},
+  }),
   computed: {
     english() {
       return this.$languages.l1s.find((language) => language.code === "en");
@@ -58,6 +63,10 @@ export default {
     },
   },
   methods: {
+    googleImagesURL(l2) {
+      return `https://www.google.com/searchbyimage?q=${l2.name}&image_url=https://www.zerotohero.ca/img/logo-square/${l2.code}.jpeg`;
+    },
+
     logoDescription(l2) {
       let description = l2.logoDesc
         ? `${l2.logoDesc.replace(/ /g, " ")}, a speaker of <b>${l2.name}</b>.`
