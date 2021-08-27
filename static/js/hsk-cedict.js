@@ -111,15 +111,6 @@ const Dictionary = {
       newHSK
     })
   },
-  lookupByDef(text, limit = 30) {
-    let preferred = this.words
-      .filter(row => row.search && row.search.startsWith(text))
-      .sort((a, b) => b.weight - a.weight) // row.search is already in lower case
-    let others = this.words
-      .filter(row => row.search && row.search.includes('/' + text))
-      .sort((a, b) => b.weight - a.weight) // definitions are separated by '/'
-    return preferred.concat(others).slice(0, limit)
-  },
   unique(array) {
     var uniqueArray = []
     for (let i in array) {
@@ -182,6 +173,20 @@ const Dictionary = {
   lookupFuzzySimple(text) {
     return this.words.filter(word => word.bare.includes(text))
   },
+  lookupByDef(text, limit = 30) {
+    text = text.toLowerCase()
+    let results = []
+    for (let word of this.words) {
+      for (let d of word.definitions) {
+        let found = d.toLowerCase().includes(text)
+        if (found) {
+          results.push(Object.assign({ score: 1 / (d.length - text.length + 1) }, word))
+        }
+      }
+    }
+    results = results.sort((a, b) => b.score - a.score)
+    return results.slice(0, limit)
+  },
   lookupFuzzy(text, limit = false) {
     let results = []
     if (this.isChinese(text)) {
@@ -190,35 +195,29 @@ const Dictionary = {
         .filter(
           row => reg.test(row.simplified) || reg.test(row.traditional)
         )
-        .sort((a, b) => b.weight - a.weight)
     } else {
       text = text.toLowerCase().trim()
       results = this.words
         .filter(row =>
-          this.removeTones(row.pinyin.replace(/ /g, '')).includes(
+          row.search.includes(
             text.replace(/ /g, '')
           )
         )
-        .slice(0, 1000)
-        .sort((a, b) => b.weight - a.weight)
-        .slice(0, 100)
-        .sort((a, b) => {
-          let am = a.search.match(new RegExp('^' + text + '\\b'))
-          let bm = b.search.match(new RegExp('^' + text + '\\b'))
-          if (!am && bm) {
-            return 1
-          } else if (am && !bm) {
-            return -1
-          } else {
-            return 0
-          }
-        })
     }
     if (results) {
+      results = results.sort((a, b) => b.weight - a.weight)
+        .sort((a, b) => a.simplified.length - b.simplified.length)
       if (limit) {
         results = results.slice(0, limit)
       }
-      return results.map(word => this.addNewHSK(word))
+      let maxWeight = Math.max(...results.map(w => w.weight))
+      let shortest = Math.min(...results.map(r => r.simplified.length))
+      results = results.map(word => this.addNewHSK(word))
+      results = results.map(word => {
+        let score = shortest / word.simplified.length - 0.1 + (word.weight / maxWeight * 0.1)
+        return Object.assign({ score }, word)
+      })
+      return results
     }
   },
   lookup(text) {
@@ -327,6 +326,7 @@ const Dictionary = {
       bare: row.simplified,
       head: row.simplified,
       accented: row.simplified,
+      weight: Number(row.weight),
       cjk: {
         canonical:
           row.traditional && row.traditional !== 'NULL'
@@ -336,7 +336,7 @@ const Dictionary = {
       },
       pronunciation: row.pinyin,
       definitions: row.definitions.split('/'),
-      search: row.definitions.toLowerCase(),
+      search: this.removeTones(row.pinyin.replace(/ /g, '')),
       level: row.hsk
     })
     for (let definition of augmented.definitions) {
@@ -399,7 +399,7 @@ const Dictionary = {
     for (let def of word.definitions) {
       let matches = def.match(/of (?<traditional>[^\s|]+)(\|(?<simplified>[^\s|]+))?\[(?<pinyin>.+?)\]/)
       if (matches && matches.groups) {
-        let {traditional, simplified, pinyin} = matches.groups
+        let { traditional, simplified, pinyin } = matches.groups
         let words = this.lookupTraditional(traditional, pinyin)
         variants = variants.concat(words)
       }

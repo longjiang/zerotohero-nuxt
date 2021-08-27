@@ -375,11 +375,17 @@ const Dictionary = {
   },
   lookupByDef(text, limit = 30) {
     text = text.toLowerCase()
-    let words = this.words
-      .filter(word => word.definitions && word.definitions.join(', ').toLowerCase().includes(text))
-      .sort((a, b) => a.bare.length - b.bare.length)
-      .slice(0, limit)
-    return words
+    let results = []
+    for (let word of this.words) {
+      for (let d of word.definitions) {
+        let found = d.toLowerCase().includes(text)
+        if (found) {
+          results.push(Object.assign({ score: 1 / (d.length - text.length + 1) }, word))
+        }
+      }
+    }
+    results = results.sort((a, b) => b.score - a.score)
+    return results.slice(0, limit)
   },
   uniqueByValue(array, key) {
     let flags = []
