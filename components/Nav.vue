@@ -122,6 +122,14 @@
             </NuxtLink>
           </div>
           <div v-if="variant === 'side-bar'" class="end-nav">
+            <div
+              v-if="$l2 && !['en', 'zh'].includes($l2.code) && $l2.logo"
+              class="icon-description"
+            >
+              <b>ICON IMAGE:</b>
+              <span v-if="$l2.logoDesc">{{ $l2.logoDesc }},</span>
+              a user of {{ $l2.name }}.
+            </div>
             <LoginButton
               class="end-nav-item"
               v-if="
@@ -1225,6 +1233,13 @@ export default {
       width: calc(100% - 1rem);
       bottom: 1rem;
       left: 1rem;
+
+      .icon-description {
+        color: #ffffffcc;
+        font-size: 0.7rem;
+        padding-right: 1rem;
+        z-index: -9;
+      }
     }
     .end-nav-item {
       border-radius: 0.25rem;

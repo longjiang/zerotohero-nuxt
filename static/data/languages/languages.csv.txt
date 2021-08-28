@@ -930,7 +930,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 929,Brao,lave1249,aust1305,nucl1299,language,14.5994,107.008,brb,KH LA VN,,I,L,,,,
 930,Berbice Creole Dutch,berb1259,indo1319,zeeu1239,language,5.3829,-58.0002,brc,GY,,I,E,,,,
 931,Baraamu,bara1357,sino1245,than1258,language,28.3768,85.0584,brd,CN NP,,I,L,,8140,,
-932,Breton,bret1244,indo1319,sout3176,language,48.2452,-3.78934,bre,FR,br,I,L,WIKI,210000,,"Abeozen (1896 – 1963), a Breton nationalist, novelist and dramatist who wrote in the Breton language"
+932,Breton,bret1244,indo1319,sout3176,language,48.2452,-3.78934,bre,FR,br,I,L,WIKI,210000,br,"Abeozen (1896 – 1963), a Breton nationalist, novelist and dramatist who wrote in the Breton language"
 933,Bera,bera1259,atla1278,komo1265,language,1.50054,30.0293,brf,CD,,I,L,,,,
 934,Baure,baur1253,araw1281,boli1260,language,-13.61,-63.68,brg,BO,,I,L,,,,
 935,Brahui,brah1256,drav1251,nort2698,language,29.04,66.56,brh,AF IR PK,,I,L,,,,
@@ -1010,7 +1010,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 1009,Bongili,bong1284,atla1278,moki1244,language,0.37063,16.6079,bui,CG,,I,L,,,,
 1010,Basa-Gurmana,basa1281,atla1278,kont1247,language,10.2488,6.74865,buj,NG,,I,L,,,,
 1011,Bugawac,buga1250,aust1307,nort2858,language,-6.67519,147.32,buk,PG,,I,L,,,,
-1012,Bulgarian,bulg1262,indo1319,mace1252,language,43.3646,25.047,bul,BG GR MD MK RO RS TR UA,bg,I,L,WIKI,8000000,,"Elin Pelin (1877 – 1949), arguably considered Bulgaria’s best narrator of country life"
+1012,Bulgarian,bulg1262,indo1319,mace1252,language,43.3646,25.047,bul,BG GR MD MK RO RS TR UA,bg,I,L,WIKI,8000000,bg,"Elin Pelin (1877 – 1949), arguably considered Bulgaria’s best narrator of country life"
 1013,Bulu (Cameroon),bulu1251,atla1278,yaun1239,language,3.16141,11.6365,bum,CM,,I,L,,2000000,,
 1014,Sherbro,sher1258,atla1278,bull1246,language,7.77585,-12.7405,bun,SL,,I,L,,,,
 1015,Terei,tere1278,sout2948,buin1248,language,-6.70051,155.745,buo,PG,,I,L,,,,
@@ -1220,7 +1220,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 1219,Chamacoco,cham1315,zamu1243,zamu1243,language,-20.5899,-58.2005,ceg,BO BR PY,,I,L,,,,
 1220,Eastern Khumi Chin,east2779,sino1245,khom1240,language,21.3425,93.155,cek,MM,,I,L,,,,
 1221,Cen,cenn1238,atla1278,izer1242,language,9.6896,9.0218,cen,NG,,I,L,,,,
-1222,Czech,czec1258,indo1319,czec1261,language,49.873398,15.10437,ces,AT CZ PL SK,cs,I,L,WIKI,14000000,,"Jan Neruda (1834 – 1891), a Czech journalist, writer, poet and art critic"
+1222,Czech,czec1258,indo1319,czec1261,language,49.873398,15.10437,ces,AT CZ PL SK,cs,I,L,WIKI,14000000,cs,"Jan Neruda (1834 – 1891), a Czech journalist, writer, poet and art critic"
 1223,Jalaa,cent2045,,,language,9.59433,11.5853,cet,NG,,I,L,,,,
 1224,Ekai Chin,,,,,,,cey,,,I,L,,,,
 1225,Dijim-Bwilim,diji1241,atla1278,tula1251,language,9.67567,11.5201,cfa,NG,,I,L,,,,
@@ -1462,7 +1462,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 1461,Kuwaataay,kuwa1246,atla1278,kwat1245,language,12.48255,-16.74835,cwt,SN,,I,L,,,,
 1462,Nopala Chatino,nopa1235,otom1299,east2736,language,16.0954,-97.1339,cya,MX,,I,L,,,,
 1463,Cayubaba,cayu1262,,,language,-13.2482,-65.4822,cyb,BO,,I,E,,,,
-1464,Welsh,wels1247,indo1319,oldm1247,language,52.0,-4.0,cym,GB,cy,I,L,WIKI,993600,,"Alun Lewis (1915 – 1944), a Welsh poet"
+1464,Welsh,wels1247,indo1319,oldm1247,language,52.0,-4.0,cym,GB,cy,I,L,WIKI,993600,cy,"Alun Lewis (1915 – 1944), a Welsh poet"
 1465,Cuyonon,cuyo1237,aust1307,kuya1251,language,10.3201,119.3,cyo,PH,,I,L,,,,
 1466,Hui Chinese,huiz1242,sino1245,wuhu1234,language,29.7646,118.232,czh,CN,,I,L,,,,
 1467,Knaanic,,,,,,,czk,,,I,E,,,,
@@ -1859,7 +1859,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 1857,Estonian Sign Language,esto1238,sign1238,lsfi1234,language,58.947,24.566,eso,EE,,I,L,,,,
 1858,Esselen,esse1238,,,language,36.5473,-121.867,esq,US,,I,E,,,,
 1859,Central Siberian Yupik,cent2128,eski1264,yupi1267,language,63.4308,-170.272,ess,RU US,,I,L,,,,
-1860,Estonian,esto1258,ural1272,cent2329,language,58.55,25.82,est,EE LV RU,et,M,L,WIKI,1100000,,"Marie Under (1883 – 1980), one of the greatest Estonian poets"
+1860,Estonian,esto1258,ural1272,cent2329,language,58.55,25.82,est,EE LV RU,et,M,L,WIKI,1100000,et,"Marie Under (1883 – 1980), one of the greatest Estonian poets"
 1861,Central Alaskan Yupik,cent2127,eski1264,yupi1267,language,60.3062,-161.486,esu,US,,I,L,,,esu,
 1862,Eskayan,eska1234,arti1236,arti1236,language,,,esy,PH,,I,L,,,,
 1863,Etebi,eteb1238,atla1278,ekit1245,language,4.79059,7.97357,etb,NG,,I,L,,,,
@@ -1873,7 +1873,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 1871,Ejagham,ejag1239,atla1278,ejag1240,language,5.54442,8.90959,etu,CM NG,,I,L,,,,
 1872,Eten,eten1239,atla1278,iten1244,language,9.73073,8.61443,etx,NG,,I,L,,,,
 1873,Semimi,semi1264,mair1253,mair1253,language,-3.71553,134.454,etz,ID,,I,L,,,,
-1874,Basque,basq1248,,,language,43.2787,-1.31622,eus,ES FR,eu,I,L,WIKI,750000,,"Salbatore Mitxelena (1919 – 1965), a friar and a writer in the Basque language
+1874,Basque,basq1248,,,language,43.2787,-1.31622,eus,ES FR,eu,I,L,WIKI,750000,eu,"Salbatore Mitxelena (1919 – 1965), a friar and a writer in the Basque language
 "
 1875,Even,even1260,tung1282,nort3147,language,70.6687,130.914,eve,RU,,I,L,,7170,,
 1876,Uvbie,uvbi1238,atla1278,sout2805,language,5.44263,5.77303,evh,NG,,I,L,,,,
@@ -1914,9 +1914,9 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 1911,Fongoro,fong1243,cent2225,ferg1237,language,11.3179,22.5611,fgr,CF SD TD,,I,L,,,,
 1912,Nobiin,nobi1240,nubi1251,nobi1239,language,22.8142,31.8376,fia,EG SD,,I,L,,,,
 1913,Fyer,fyer1241,afro1255,fyer1240,language,9.49936,9.29503,fie,NG,,I,L,,,,
-1914,Fijian,fiji1243,aust1307,east2446,language,-18.0,178.33,fij,FJ,fj,I,L,WIKI,339210,,"Totaram Sanadhya (1876 – 1947), a Fiji Indian Hindu priest and writer"
+1914,Fijian,fiji1243,aust1307,east2446,language,-18.0,178.33,fij,FJ,fj,I,L,WIKI,339210,fj,"Totaram Sanadhya (1876 – 1947), a Fiji Indian Hindu priest and writer"
 1915,Filipino,fili1244,aust1307,taga1269,language,12.265,123.464,fil,PH,,I,L,,,fil,"José Rizal (1861 – 1896), a Filipino nationalist and polymath during the tail end of the Spanish colonial period of the Philippines"
-1916,Finnish,finn1318,ural1272,nucl1717,language,64.7628,25.5577,fin,EE FI NO RU SE,fi,I,L,WIKI,5800000,,"Aleksis Kivi (1834 – 1872), one of the greatest Finnish authors"
+1916,Finnish,finn1318,ural1272,nucl1717,language,64.7628,25.5577,fin,EE FI NO RU SE,fi,I,L,WIKI,5800000,fi,"Aleksis Kivi (1834 – 1872), one of the greatest Finnish authors"
 1917,Fipa,fipa1238,atla1278,fipa1240,language,-7.88963,31.3442,fip,MW TZ,,I,L,,,,
 1918,Firan,fira1238,atla1278,izer1242,language,9.65245,8.69095,fir,NG,,I,L,,,,
 1919,Tornedalen Finnish,torn1244,ural1272,nucl1717,language,67.2527,23.066,fit,FI SE,,I,L,,,,
@@ -2129,7 +2129,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 2126,Kok-Nar,kokn1236,pama1250,norm1247,language,-16.181,141.608,gko,AU,,I,E,,,,
 2127,Guinea Kpelle,guin1254,mand1469,kpel1252,language,7.93196,-8.98843,gkp,GN LR,,I,L,,808000,,
 2128,/=Ungkue,kxau1242,tuuu1241,dans1240,dialect,-29.4046,22.2901,gku,ZA,,I,E,,,,
-2129,Scottish Gaelic,scot1245,indo1319,east2734,language,56.7574,-5.24366,gla,GB,gd,I,L,WIKI,57000,,"Sorley MacLean (1911 – 1996), a Scottish Gaelic poet,"
+2129,Scottish Gaelic,scot1245,indo1319,east2734,language,56.7574,-5.24366,gla,GB,gd,I,L,WIKI,57000,gd,"Sorley MacLean (1911 – 1996), a Scottish Gaelic poet,"
 2130,Bon Gula,bong1282,atla1278,goul1244,language,10.6577,19.5774,glc,TD,,I,L,,,,
 2131,Nanai,nana1257,tung1282,orok1264,language,48.4343,134.797,gld,CN RU,,I,L,,12003,,
 2132,Irish,iris1253,indo1319,mode1265,language,53.2186,-7.61509,gle,GB IE,ga,I,L,WIKI,170000,ga,"Francis Bacon (1909 – 1992), an Irish-born British figurative painter known for his raw, unsettling imagery"
@@ -2343,7 +2343,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 2340,Huba,huba1236,afro1255,kilb1234,language,10.3544,13.139,hbb,NG,,I,L,,,,
 2341,Ebang,heib1243,heib1242,eban1242,language,11.2908,30.5282,hbn,SD,,I,L,,,,
 2342,Ancient Hebrew,anci1244,afro1255,hebr1246,language,31.7761,35.1725,hbo,IL,,I,H,,,hbo,"Moses, the most important prophet in Judaism"
-2343,Serbian-Croatian-Bosnian,sout1528,indo1319,west2804,language,44.15,18.81,hbs,RS,sh,M,L,WIKI,21000000,,"Ivo Andrić (1892 – 1975), a Yugoslav novelist, poet, and short story writer who won the Nobel Prize in Literature in 1961"
+2343,Serbian-Croatian-Bosnian,sout1528,indo1319,west2804,language,44.15,18.81,hbs,RS,sh,M,L,WIKI,21000000,sh,"Ivo Andrić (1892 – 1975), a Yugoslav novelist, poet, and short story writer who won the Nobel Prize in Literature in 1961"
 2344,Habu,habu1241,aust1307,cent2079,language,-8.76565,125.965,hbu,TL,,I,L,,,,
 2345,Andaman Creole Hindi,anda1280,indo1319,hind1270,language,11.676,92.738,hca,IN,,I,L,,,,
 2346,Huichol,huic1243,utoa1244,cora1259,language,21.954,-104.062,hch,MX,,I,L,,,,
@@ -2456,7 +2456,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 2453,Nhirrpi,nhir1234,pama1250,yand1253,dialect,-28.62911,141.27596,hrp,AU,,I,E,,,,
 2454,Hertevin,hert1241,afro1255,boht1239,language,37.373,42.5192,hrt,TR,,I,L,,,,
 2455,Hruso,hrus1242,,,language,27.27,92.63,hru,IN,,I,L,,,,
-2456,Croatian,croa1245,indo1319,east2821,dialect,45.555,15.982,hrv,AT BA HR HU IT ME RS SI,hr,I,L,WIKI,5600000,,"Dubravka Ugrešić (born 1949), a Yugoslav and later Croatian writer"
+2456,Croatian,croa1245,indo1319,east2821,dialect,45.555,15.982,hrv,AT BA HR HU IT ME RS SI,hr,I,L,WIKI,5600000,hr,"Dubravka Ugrešić (born 1949), a Yugoslav and later Croatian writer"
 2457,Warwar Feni,anir1237,aust1307,niwe1235,dialect,,,hrw,PG,,I,L,,,,
 2458,Hunsrik,riog1239,indo1319,rhin1244,language,-29.3255,-51.7219,hrx,BR,,I,L,,,,
 2459,Harzani-Kilit,harz1239,indo1319,nort2642,language,38.4341,48.2848,hrz,IR,,I,L,,,,
@@ -2504,7 +2504,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 2501,Hawai'i Creole English,hawa1247,indo1319,paci1280,language,19.6287,-155.437,hwc,US,,I,L,,,,
 2502,Hwana,hwan1240,afro1255,east2649,language,10.3633,12.7683,hwo,NG,,I,L,,,,
 2503,Hya,hyaa1239,afro1255,higi1241,language,10.4814,13.526,hya,CM NG,,I,L,,,,
-2504,Armenian,nucl1235,indo1319,east2768,language,40.0,45.0,hye,AM AZ GE IR SY TR,hy,I,L,WIKI,6700000,,"Louise Aslanian (1904 – 1945), a French-Armenian communist and anti-fascist activist, writer, novelist, poet, a prominent figure in the French Resistance"
+2504,Armenian,nucl1235,indo1319,east2768,language,40.0,45.0,hye,AM AZ GE IR SY TR,hy,I,L,WIKI,6700000,hy,"Louise Aslanian (1904 – 1945), a French-Armenian communist and anti-fascist activist, writer, novelist, poet, a prominent figure in the French Resistance"
 2505,Western Armenian,homs1234,indo1319,east2768,language,40.1897,44.4839,hyw,AM,,I,L,,,,
 2506,Iaai,iaai1238,aust1307,loya1239,language,-20.6301,166.59,iai,NC,,I,L,,,,
 2507,Iatmul,iatm1242,nduu1242,sawo1234,language,-4.30064,143.316,ian,PG,,I,L,,,,
@@ -2599,7 +2599,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 2596,Imroing,imro1237,aust1307,sout2882,language,-7.96772,129.651,imr,ID,,I,L,,,,
 2597,Marsian,,,,,,,ims,,,I,A,,,,
 2598,Milyan,mily1238,indo1319,lyci1242,language,36.356111,29.318611,imy,TR,,I,A,,,,
-2599,Interlingua (International Auxiliary Language Association),inte1239,arti1236,arti1236,language,48.203,2.615,ina,FR,ia,I,C,WIKI,,,"Alice Vanderbilt Morris (1874 – 1950), co-founder of the International Auxiliary Language Association (IALA),"
+2599,Interlingua (International Auxiliary Language Association),inte1239,arti1236,arti1236,language,48.203,2.615,ina,FR,ia,I,C,WIKI,,ia,"Alice Vanderbilt Morris (1874 – 1950), co-founder of the International Auxiliary Language Association (IALA),"
 2600,Colombian Inga,inga1252,quec1387,colo1258,language,1.00313,-76.8606,inb,CO VE,,I,L,,,,
 2601,Indonesian,indo1316,aust1307,stan1327,language,-7.33458,109.716,ind,ID NL PH SA SG US,id,I,L,WIKI,43000000,id,"Pramoedya Ananta Toer (1925 – 2006), an Indonesian author of novels, short stories, essays, polemics and histories of his homeland and its people"
 2602,Degexit'an,dege1248,atha1245,koyu1238,language,62.0697,-160.044,ing,US,,I,L,,,,
@@ -3474,14 +3474,14 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 3471,Lalia,lali1242,atla1278,ngan1302,dialect,-1.11711,23.3634,lal,CD,,I,L,,,,
 3472,Lamba,lamb1271,atla1278,bisa1262,language,-12.3366,27.9026,lam,CD ZM,,I,L,,,,
 3473,Laru (Nigeria),laru1238,atla1278,uppe1457,language,10.5756,4.43514,lan,NG,,I,L,,,,
-3474,Lao,laoo1244,taik1256,laot1235,language,19.0,102.46,lao,KH LA TH,lo,I,L,WIKI,30000000,,"Kaysone Phomvihane (1920 – 1992), the first leader of the Communist Lao People’s Revolutionary Party"
+3474,Lao,laoo1244,taik1256,laot1235,language,19.0,102.46,lao,KH LA TH,lo,I,L,WIKI,30000000,lo,"Kaysone Phomvihane (1920 – 1992), the first leader of the Communist Lao People’s Revolutionary Party"
 3475,Laka (Chad),laka1254,cent2225,gore1234,language,7.78997,16.0193,lap,CF TD,,I,L,,,,
 3476,Pubiao-Qabiao,qabi1235,taik1256,east2365,language,23.2384,104.812,laq,CN VN,,I,L,,,,
 3477,Larteh,lart1238,atla1278,hill1256,language,5.9367,-0.07822,lar,GH,,I,L,,,,
 3478,Lama (Togo),lama1275,atla1278,kabi1265,language,8.66954,0.833293,las,BJ GH TG,,I,L,,,,
 3479,Latin,lati1261,indo1319,impe1234,language,41.9026,12.4502,lat,VA,la,I,A,WIKI,,la,"Ovid (43 BC – 17/18 AD), a Roman poet who lived during the reign of Augustus"
 3480,Laba,laba1241,book1242,book1242,language,1.66675,127.583,lau,ID,,I,L,,,,
-3481,Latvian,latv1249,indo1319,east2280,language,56.826108,24.309118,lav,BY EE LT LV RU,lv,M,L,WIKI,1750000,,"Aspazija (1865 – 1943), a Latvian poet and playwright"
+3481,Latvian,latv1249,indo1319,east2280,language,56.826108,24.309118,lav,BY EE LT LV RU,lv,M,L,WIKI,1750000,lv,"Aspazija (1865 – 1943), a Latvian poet and playwright"
 3482,Lauje,lauj1238,aust1307,nort2897,language,0.50708,120.262,law,ID,,I,L,,,,
 3483,Tiwa (India),tiwa1253,sino1245,tiwa1256,language,26.0667,92.2583,lax,IN,,I,L,,,,
 3484,Lama (Myanmar),lama1289,book1242,book1242,language,27.6237,98.4694,lay,CN,,I,L,,,,
@@ -4247,7 +4247,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 4244,Maremgi,mare1261,toro1256,tora1268,language,-2.31915,139.673,mrx,ID,,I,L,,,,
 4245,Mandaya,kara1489,aust1307,east2477,language,7.50481,126.409,mry,PH,,I,L,,,,
 4246,Marind,nucl1622,anim1240,nucl1621,language,-8.15651,140.009,mrz,ID PG,,I,L,,,,
-4247,Malay (macrolanguage),indo1326,,,,4.5,114.6667,msa,BN CX MY SG,ms,M,L,WIKI,77000000,,"Abdullah Hussain (1920 – 2014), a Malaysian novelist and writer"
+4247,Malay (macrolanguage),indo1326,,,,4.5,114.6667,msa,BN CX MY SG,ms,M,L,WIKI,77000000,ms,"Abdullah Hussain (1920 – 2014), a Malaysian novelist and writer"
 4248,Masbatenyo,masb1238,aust1307,masb1239,language,12.21453,123.63579,msb,PH,,I,L,,,,
 4249,Sankaran Maninka,sank1253,mand1469,mane1267,language,10.0962,-10.569,msc,GN SL,,I,L,,,,
 4250,Yucatec Maya Sign Language,yuca1236,sign1238,vill1244,language,20.5,-89.0,msd,MX,,I,L,,,,
@@ -4677,7 +4677,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 4674,Nkari,nkar1238,atla1278,ibuo1241,language,5.43898,7.76345,nkz,NG,,I,L,,,,
 4675,Ngombale,ngom1271,atla1278,west2958,language,5.70306,10.1446,nla,CM,,I,L,,,,
 4676,Nalca,nalc1240,nucl1709,west2585,language,-4.26068,139.883,nlc,ID,,I,L,,,,
-4677,Dutch,dutc1256,indo1319,glob1241,language,52.0,5.0,nld,AW BE BQ BR CW DE GF GY NL SR SX,nl,I,L,WIKI,25000000,,"Joseph Albert Alberdingk Thijm (1820 – 1889), a Dutch writer, art critic, philologist, poet"
+4677,Dutch,dutc1256,indo1319,glob1241,language,52.0,5.0,nld,AW BE BQ BR CW DE GF GY NL SR SX,nl,I,L,WIKI,25000000,nl,"Joseph Albert Alberdingk Thijm (1820 – 1889), a Dutch writer, art critic, philologist, poet"
 4678,East Nyala,east2409,atla1278,cent2288,language,0.38163,34.6626,nle,KE,,I,L,,,,
 4679,Gela,gela1263,aust1307,ngge1240,language,-9.04587,160.186,nlg,SB,,I,L,,,,
 4680,Grangali,gran1245,indo1319,gawa1246,language,34.945491,70.703334,nli,AF,,I,L,,,,
@@ -4733,7 +4733,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 4730,Northern Rengma Naga,nort2725,sino1245,poch1242,language,26.4492,94.5683,nnl,IN,,I,L,,,,
 4731,Namia,nami1256,sepi1257,yell1247,language,-3.85538,141.788,nnm,PG,,I,L,,,,
 4732,Ngete,nget1241,afro1255,sout3146,language,9.31902,15.29053,nnn,TD,,I,L,,,,
-4733,Norwegian Nynorsk,norw1262,indo1319,norw1258,dialect,,,nno,,nn,I,L,WIKI,,,"Tarjei Vesaas (1897 – 1970), a Norwegian poet and novelist considered to be one of Norway’s greatest writers of the twentieth century"
+4733,Norwegian Nynorsk,norw1262,indo1319,norw1258,dialect,,,nno,,nn,I,L,WIKI,,nn,"Tarjei Vesaas (1897 – 1970), a Norwegian poet and novelist considered to be one of Norway’s greatest writers of the twentieth century"
 4734,Wancho Naga,wanc1238,sino1245,kony1247,language,26.2581,94.8936,nnp,IN,,I,L,,,,
 4735,Ngindo,ngin1244,atla1278,nden1251,language,-9.78145,37.9832,nnq,TZ,,I,L,,,,
 4736,Narungga,naru1238,pama1250,sout2760,language,-34.69,137.535,nnr,AU,,I,E,,,,
@@ -4759,7 +4759,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 4756,Old Norse,oldn1244,indo1319,west2805,language,63.42,10.38,non,NO,,I,H,,,non,"Rasmus Rask (1787–1832), a Danish linguist and philologist"
 4757,Numanggang,numa1254,nucl1709,boan1245,language,-6.39311,146.719,nop,PG,,I,L,,,,
 4758,Ngongo,ngon1267,atla1278,nson1239,language,-5.5,18.2,noq,CD,,I,L,,,,
-4759,Norwegian,norw1258,indo1319,west2805,language,59.92,10.71,nor,FI NO RU SE SJ,no,M,L,WIKI,5320000,,"Knut Hamsun (1859 – 1952), a Norwegian writer who was awarded the Nobel Prize in Literature in 1920"
+4759,Norwegian,norw1258,indo1319,west2805,language,59.92,10.71,nor,FI NO RU SE SJ,no,M,L,WIKI,5320000,no,"Knut Hamsun (1859 – 1952), a Norwegian writer who was awarded the Nobel Prize in Literature in 1920"
 4760,Eastern Nisu,east2349,sino1245,nort2717,language,23.9843,102.694,nos,CN VN,,I,L,,,,
 4761,Nomatsiguenga,noma1263,araw1281,prea1240,language,-11.5349,-74.4371,not,PE,,I,L,,4000,,
 4762,Ewage-Notu,ewag1241,nucl1709,coas1297,language,-8.68756,148.405,nou,PG,,I,L,,,,
@@ -5613,7 +5613,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 5610,Romansh,roma1326,indo1319,gall1280,language,46.5538,9.92812,roh,AT CH IT,rm,I,L,WIKI,40074,rm,"Arno Camenisch (born 1978), a Swiss writer"
 5611,Romblomanon,romb1245,aust1307,cent2263,language,12.4047,122.56,rol,PH,,I,L,,,,
 5612,Romani,roma1329,indo1319,indo1322,family,,,rom,RO,,M,L,,,,
-5613,Romanian,roma1327,indo1319,east2865,language,46.3913,24.2256,ron,BG HU MD RO RS UA,ro,I,L,WIKI,26000000,,"Mircea Eliade (1907 – 1986), a Romanian historian of religion, fiction writer, philosopher, and professor at the University of Chicago"
+5613,Romanian,roma1327,indo1319,east2865,language,46.3913,24.2256,ron,BG HU MD RO RS UA,ro,I,L,WIKI,26000000,ro,"Mircea Eliade (1907 – 1986), a Romanian historian of religion, fiction writer, philosopher, and professor at the University of Chicago"
 5614,Rotokas,roto1249,nort2933,roto1248,language,-5.94339,155.154,roo,PG,,I,L,,,,
 5615,Kriol,krio1252,indo1319,paci1280,language,-18.135,137.669,rop,AU,,I,L,,,,
 5616,Rongga,rong1269,aust1307,ngad1267,language,-8.84604,120.702,ror,ID,,I,L,,,,
@@ -5892,7 +5892,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 5889,Southern Puget Sound Salish,sout2965,sali1255,lush1251,language,47.263,-122.141,slh,US,,I,L,,,,
 5890,Lower Silesian,lowe1388,indo1319,schl1237,language,50.6963,15.9667,sli,CZ PL,,I,L,,,,
 5891,Salumá,salu1254,book1242,book1242,language,1.74782,-56.5107,slj,BR,,I,L,,,,
-5892,Slovak,slov1269,indo1319,czec1260,language,48.545705,18.78479,slk,AT CZ HU PL RS SK UA,sk,I,L,WIKI,5200000,,"Pavol Országh Hviezdoslav (1849 – 1921), a Slovak poet, dramatist, translator"
+5892,Slovak,slov1269,indo1319,czec1260,language,48.545705,18.78479,slk,AT CZ HU PL RS SK UA,sk,I,L,WIKI,5200000,sk,"Pavol Országh Hviezdoslav (1849 – 1921), a Slovak poet, dramatist, translator"
 5893,Salt-Yui,salt1242,nucl1709,goli1246,language,-6.26519,145.021,sll,PG,,I,L,,,,
 5894,Pangutaran Sama,pang1291,aust1307,sulu1242,language,6.27167,120.536,slm,PH,,I,L,,,,
 5895,Salinan,sali1253,,,language,37.6646,-121.718,sln,US,,I,E,,,,
@@ -5902,7 +5902,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 5899,Singapore Sign Language,sing1237,book1242,book1242,language,1.33069,103.864,sls,SG,,I,L,,,,
 5900,Sila,sila1247,sino1245,sila1251,language,21.6888,102.134,slt,CN LA VN,,I,L,,,,
 5901,Selaru,sela1259,aust1307,sout2890,language,-8.18376,130.961,slu,ID,,I,L,,,,
-5902,Slovenian,slov1268,indo1319,west2804,language,46.2543,14.7766,slv,AT HR HU IT SI,sl,I,L,WIKI,2500000,,"Ivan Cankar (1876 – 1918), a Slovene writer, playwright, essayist, poet, and political activist"
+5902,Slovenian,slov1268,indo1319,west2804,language,46.2543,14.7766,slv,AT HR HU IT SI,sl,I,L,WIKI,2500000,sl,"Ivan Cankar (1876 – 1918), a Slovene writer, playwright, essayist, poet, and political activist"
 5903,Sialum,sial1240,nucl1709,kala1410,language,-6.07688,147.574,slw,PG,,I,L,,,,
 5904,Salampasu,sala1268,atla1278,ruun1239,language,-5.44937,23.1502,slx,AO CD,,I,L,,,,
 5905,Selayar,sela1260,aust1307,maka1310,language,-6.10145,120.496,sly,ID,,I,L,,,,
@@ -6016,7 +6016,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 6013,Saruga,saru1243,nucl1709,silo1242,language,-5.08824,145.578,sra,PG,,I,L,,,,
 6014,Sora,sora1254,aust1305,sora1256,language,19.1213,84.19,srb,IN,,I,L,,,,
 6015,Logudorese Sardinian,logu1236,indo1319,sard1257,language,40.49,9.09957,src,IT,,I,L,,1500000,,
-6016,Sardinian,sard1257,indo1319,sard1256,family,42.8333,12.8333,srd,IT,sc,M,L,WIKI,1350000,,"Grazia Deledda (1871 – 1936), an Italian writer who received the Nobel Prize for Literature in 1926"
+6016,Sardinian,sard1257,indo1319,sard1256,family,42.8333,12.8333,srd,IT,sc,M,L,WIKI,1350000,sc,"Grazia Deledda (1871 – 1936), an Italian writer who received the Nobel Prize for Literature in 1926"
 6017,Sara Bakati',sara1329,aust1307,rara1236,language,1.20403,109.6155,sre,ID,,I,L,,,,
 6018,Nafi,nafi1237,aust1307,muso1239,language,-6.43306,146.815,srf,PG,,I,L,,,,
 6019,Sulod,sulo1237,aust1307,kina1255,language,11.2473,122.551,srg,PH,,I,L,,,,
@@ -6027,7 +6027,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 6024,Saramaccan,sara1340,indo1319,suri1275,language,4.54729,-54.0238,srm,GF SR,,I,L,,,,
 6025,Sranan Tongo,sran1240,indo1319,sran1241,language,5.83,-55.33,srn,NL SR,,I,L,,,,
 6026,Campidanese Sardinian,camp1261,indo1319,sard1257,language,39.0566,9.03935,sro,IT,,I,L,,,,
-6027,Serbian,serb1264,indo1319,east2821,dialect,44.3238,21.9192,srp,AL BA BG HR HU ME MK RO RS,sr,I,L,WIKI,12000000,,"Borislav Pekić (1930 – 1992), a Serbian and Yugoslav writer and political activist"
+6027,Serbian,serb1264,indo1319,east2821,dialect,44.3238,21.9192,srp,AL BA BG HR HU ME MK RO RS,sr,I,L,WIKI,12000000,sr,"Borislav Pekić (1930 – 1992), a Serbian and Yugoslav writer and political activist"
 6028,Sirionó,siri1273,tupi1275,siri1279,language,-15.5298,-63.9688,srq,BO,,I,L,,400,,
 6029,Sereer,sere1260,atla1278,peul1234,language,13.8941,-16.3916,srr,GM SN,,I,L,,868800,,
 6030,Sarsi,sars1236,atha1245,atha1247,language,50.8822,-114.301,srs,CA,,I,L,,,,
@@ -6112,7 +6112,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 6109,Slavomolisano,slav1254,indo1319,west2804,language,41.89,14.7,svm,IT,,I,L,,,,
 6110,Savosavo,savo1255,,,language,-9.12853,159.814,svs,SB,,I,L,,,,
 6111,Skalvian,,,,,,,svx,,,I,H,,,,
-6112,Swahili,swah1254,atla1278,saba1282,family,0,25,swa,CD KE TZ UG,sw,M,L,WIKI,18000000,,"Ali Mazrui (1933 – 2014), a Kenyan-born American academic, professor, and political writer on African and Islamic studies"
+6112,Swahili,swah1254,atla1278,saba1282,family,0,25,swa,CD KE TZ UG,sw,M,L,WIKI,18000000,sw,"Ali Mazrui (1933 – 2014), a Kenyan-born American academic, professor, and political writer on African and Islamic studies"
 6113,Maore Comorian,maor1244,atla1278,shin1269,language,-12.830306,45.154942,swb,YT,,I,L,,97300,,
 6114,Congo Swahili,cong1236,atla1278,momb1256,language,-7.2692,27.4196,swc,CD,,I,L,,,,
 6115,Swedish,swed1254,indo1319,east2781,language,59.800634,17.389526,swe,AX DK FI NO SE,sv,I,L,WIKI,10000000,sv,"Anna Greta Wide (1920 – 1965), a Swedish poet"
@@ -6736,7 +6736,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 6733,Ukrainian Sign Language,ukra1235,sign1238,russ1270,language,50.4111,30.553,ukl,UA,,I,L,,,,
 6734,Ukpe-Bayobiri,ukpe1247,atla1278,bukp1239,language,6.52883,9.02603,ukp,NG,,I,L,,,,
 6735,Ukwa,ukwa1238,atla1278,efik1244,language,5.59913,7.96002,ukq,NG,,I,L,,,,
-6736,Ukrainian,ukra1253,indo1319,ukra1257,language,49.796,29.945,ukr,BY HU MD PL RO RU SK UA,uk,I,L,WIKI,35000000,,"Taras Shevchenko (1814 – 1861), a Ukrainian poet, writer, artist"
+6736,Ukrainian,ukra1253,indo1319,ukra1257,language,49.796,29.945,ukr,BY HU MD PL RO RU SK UA,uk,I,L,WIKI,35000000,uk,"Taras Shevchenko (1814 – 1861), a Ukrainian poet, writer, artist"
 6737,Urubú-Kaapor Sign Language,urub1243,sign1238,vill1244,language,-2.54091,-46.4213,uks,BR,,I,L,,,,
 6738,Ukue,ukue1238,atla1278,ukue1239,language,7.41643,5.85139,uku,NG,,I,L,,,,
 6739,Ukwuani-Aboh-Ndoni,ukwu1241,atla1278,igbo1259,language,5.78892,6.48559,ukw,NG,,I,L,,,,
@@ -6824,7 +6824,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 6821,Lote,lote1237,aust1307,meng1266,language,-5.954,150.911,uvl,PG,,I,L,,,,
 6822,Kuku-Uwanh,kuku1280,pama1250,pama1253,language,-14.0756,141.724,uwa,AU,,I,L,,,,
 6823,Doko-Uyanga,doko1243,atla1278,agoi1245,language,5.39961,8.26925,uya,NG,,I,L,,,,
-6824,Uzbek,uzbe1247,turk1311,uygh1240,family,41,64,uzb,UZ,uz,M,L,WIKI,34000000,,"Hamza Hakimzade Niyazi (1889 – 1929), an Uzbek author, composer, playwright, poet, scholar, political activist"
+6824,Uzbek,uzbe1247,turk1311,uygh1240,family,41,64,uzb,UZ,uz,M,L,WIKI,34000000,uz,"Hamza Hakimzade Niyazi (1889 – 1929), an Uzbek author, composer, playwright, poet, scholar, political activist"
 6825,Northern Uzbek,nort2690,turk1311,uzbe1247,language,40.886,69.211,uzn,AF CN KG KZ TJ TM UZ,,I,L,,18386000,,
 6826,Southern Uzbek,sout2699,turk1311,uzbe1247,language,36.6099,60.6907,uzs,AF PK TJ TR UZ,,I,L,,,,
 6827,Vaagri Booli,vaag1238,indo1319,bhil1254,language,12.215,79.5335,vaa,IN,,I,L,,,,
