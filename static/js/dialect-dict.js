@@ -225,6 +225,7 @@ const Dictionary = {
           accented: row.traditional,
           pronunciation: row.pronunciation || row.jyutping,
           definitions,
+          search: this.removeTones(((row.pronunciation || row.jyutping) + row.pinyin).replace(/ /g, '')),
           cjk: {
             canonical: row.traditional && row.traditional !== 'NULL' ? row.traditional : undefined,
             phonetics: row.pronunciation || row.jyutping
@@ -367,36 +368,36 @@ const Dictionary = {
     }
     return results
   },
-  lookupFuzzy(text, limit = 30) {
-    text = text.trim()
-    if (!this.isRoman(text)) {
-      let results = []
-      if (this.isChinese(text)) {
-        let words = this.words.filter(row => row.traditional && (row.traditional === text || row.simplified === text))
-        let moreWords = this.words.filter(row => {
-          if (row.traditional && row.traditional !== text) {
-            if ((row.traditional && row.traditional.includes(text)) || (row.simplified && row.simplified.includes(text))) {
-              return true
-            }
-          }
-        })
-        results = results.concat(words).concat(moreWords)
-      } else {
-        let words = this.words
-          .filter(word => word.bare && word.bare.startsWith(text))
-        if (words.length === 0) {
-          words = this.words
-            .filter(word => text.includes(word.bare))
-            .sort((a, b) => b.bare.length - a.bare.length)
-        }
-        results = words
+  lookupFuzzy(text, limit = false) {
+    let results = []
+    if (this.isChinese(text)) {
+      let reg = new RegExp(text, 'gi')
+      results = this.words
+        .filter(
+          row => reg.test(row.simplified) || reg.test(row.traditional)
+        )
+    } else {
+      text = text.toLowerCase().trim()
+      results = this.words
+        .filter(row =>
+          row.search.includes(
+            text.replace(/ /g, '')
+          )
+        )
+    }
+    if (results) {
+      results = results.sort((a, b) => b.weight - a.weight)
+        .sort((a, b) => a.simplified.length - b.simplified.length)
+      if (limit) {
+        results = results.slice(0, limit)
       }
-      if (results) {
-        if (limit) {
-          results = results.slice(0, limit)
-        }
-        return results
-      }
+      let maxWeight = Math.max(...results.map(w => w.weight))
+      let shortest = Math.min(...results.map(r => r.simplified.length))
+      results = results.map(word => {
+        let score = shortest / word.simplified.length - 0.1 + (word.weight / maxWeight * 0.1)
+        return Object.assign({ score }, word)
+      })
+      return results
     }
   },
   subdict(data) {
