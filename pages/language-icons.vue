@@ -19,7 +19,10 @@
         style="overflow: visible"
       >
         <div class="col-sm-12 d-flex" style="overflow: visible">
-          <div class="d-flex align-items-center" style="width: 100%; justify-content: space-between;">
+          <div
+            class="d-flex align-items-center"
+            style="width: 100%; justify-content: space-between"
+          >
             <router-link to="/" class="link-unstyled d-block">
               <i class="fa fa-chevron-left mr-2"></i>
               Zero to Hero Languages
@@ -40,6 +43,19 @@
         <div class="col-sm-12 pt-5 pb-5 text-center">
           <h3>Face of the Language</h3>
           <p>{{ filteredLangs.length }} languages are listed.</p>
+
+          <b-input-group class="mt-5 mb-3 input-group-ghost-dark">
+            <b-form-input
+              v-model="keyword"
+              @compositionend.prevent.stop="() => false"
+              placeholder="Filter by speaker, language or country"
+            />
+            <b-input-group-append>
+              <b-button variant="gray">
+                <i class="fas fa-filter"></i>
+              </b-button>
+            </b-input-group-append>
+          </b-input-group>
         </div>
       </div>
       <div class="row">
@@ -96,6 +112,7 @@
 export default {
   data: () => ({
     googleImagesURLs: {},
+    keyword: undefined,
   }),
   computed: {
     english() {
@@ -105,7 +122,23 @@ export default {
       let languages = this.$languages.l1s;
       languages = languages
         .filter((l) => {
-          if (l.logo && l.logo !== "") return true;
+          if (!(l.logo && l.logo !== "")) return false;
+          if (this.keyword) {
+            let keyword = this.keyword.toLowerCase();
+            if (l["iso639-1"].includes(keyword)) return true;
+            if (l["iso639-3"].includes(keyword)) return true;
+            if (l["glottologId"].includes(keyword)) return true;
+            if (l["glottologFamilyId"].includes(keyword)) return true;
+            if (l["glottologParentId"].includes(keyword)) return true;
+            if (l.name.toLowerCase().includes(keyword)) return true;
+            if (l.logoDesc.toLowerCase().includes(keyword)) return true;
+            let countries = l.country.filter((c) =>
+              c.name.toLowerCase().includes(keyword)
+            );
+            if (countries.length > 0) return true;
+            return false;
+          }
+          return true;
         })
         .sort((a, b) => a.name.localeCompare(b.name));
       return languages;
