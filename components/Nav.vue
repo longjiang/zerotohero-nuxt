@@ -127,7 +127,7 @@
               class="icon-description"
             >
               <b>ICON IMAGE:</b>
-              <span v-if="$l2.logoDesc">{{ $l2.logoDesc }},</span>
+              <span v-if="$l2.logoDesc">{{ $l2.logoDesc.replace(/\s/g, ' ') }},</span>
               a user of {{ $l2.name }}.
             </div>
             <LoginButton
