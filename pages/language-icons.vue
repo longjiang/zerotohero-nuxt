@@ -85,7 +85,7 @@ export default {
         .filter((l) => {
           if (l.logo && l.logo !== "") return true;
         })
-        .sort((a, b) => a.logo.localeCompare(b.logo));
+        .sort((a, b) => a.name.localeCompare(b.name));
       return languages;
     },
   },
