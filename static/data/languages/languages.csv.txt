@@ -88,7 +88,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 87,Aduge,adug1238,book1242,book1242,language,7.64567,6.13085,adu,NG,,I,L,,,
 88,Amundava,amun1246,tupi1275,amon1240,language,-9.04023,-62.3064,adw,BR,,I,L,,,
 89,Amdo Tibetan,amdo1237,sino1245,tibe1276,language,34.5177,100.485,adx,CN,,I,L,,,
-90,Adyghe,adyg1241,abkh1242,circ1239,language,44.0,39.33,ady,IL JO RU SY TR,,I,L,117500,ady,"Tevfik Esenç, a Circassian in Turkey"
+90,Adyghe,adyg1241,abkh1242,circ1239,language,44.0,39.33,ady,IL JO RU SY TR,,I,L,117500,ady,"Tevfik Esenç (1904 – 1992), a Circassian in Turkey, the last known speaker of Ubykh"
 91,Adzera,adze1240,aust1307,uppe1423,language,-6.39394,146.294,adz,PG,,I,L,,,
 92,Areba,areb1238,pama1250,ribg1235,language,-16.63548,142.63107,aea,AU,,I,E,,,
 93,Tunisian Arabic,tuni1259,afro1255,nort3191,language,33.7966,9.56156,aeb,DZ LY TN,,I,L,,,

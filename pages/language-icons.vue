@@ -16,7 +16,7 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12 pt-5 pb-5 text-center">
-          <h3>Faces of the World’s Languages</h3>
+          <h3>Face of the Language</h3>
           <p>{{ filteredLangs.length }} languages are listed.</p>
         </div>
       </div>
@@ -27,16 +27,42 @@
           :key="`lang-${lang.id}`"
         >
           <div class="lang-item">
-            <a :href="wikipedia(lang)" target="_blank">
+            <router-link :to="`/en/${lang.code}/`">
               <img
                 :src="`/img/logo-square/${lang.code}.jpeg`"
                 class="lang-item-logo"
               />
-            </a>
-            <div
-              class="lang-item-description mt-2"
-              v-html="logoDescription(lang)"
-            ></div>
+            </router-link>
+            <div class="lang-item-description mt-2">
+              <span v-if="lang.logoDesc">
+                {{ lang.logoDesc.replace(/ /g, " ") }}, a user of
+                <router-link
+                  :to="`/en/${lang.code}/`"
+                  class="link-unstyled font-weight-bold"
+                >
+                  {{ lang.name }} ({{ lang.code }})
+                </router-link>
+                .
+              </span>
+              <span v-else>
+                A user of
+                <router-link
+                  :to="`/en/${lang.code}/`"
+                  class="link-unstyled font-weight-bold"
+                >
+                  {{ lang.name }} ({{ lang.code }})
+                </router-link>
+                .
+              </span>
+              <a
+                v-if="wikipedia(lang)"
+                :href="wikipedia(lang)"
+                target="_blank"
+                class="lang-item-code link-unstyled"
+              >
+                <i class="fab fa-wikipedia-w"></i>
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -72,14 +98,6 @@ export default {
         let term = l2.logoDesc.replace(/,.*/, "").replace(/ \(.*\)/, "");
         return `https://en.wikipedia.org/wiki/${term.replace(/\s/g, "_")}`;
       }
-    },
-    logoDescription(l2) {
-      let description = l2.logoDesc
-        ? `${l2.logoDesc.replace(/ /g, " ")}, a user of <b>${l2.name}</b>.`
-        : `A user of <b>${l2.name}</b>.`;
-      return `${description} <span
-              class="lang-item-code"
-            >${l2.code}</span>`;
     },
     hasDictionary(l1, l2) {
       return (
