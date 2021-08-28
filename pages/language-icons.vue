@@ -16,7 +16,8 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12 pt-5 pb-5 text-center">
-          <h3>Language Icons</h3>
+          <h3>Faces of the World’s Languages</h3>
+          <p>{{ filteredLangs.length }} languages are listed.</p>
         </div>
       </div>
       <div class="row">
@@ -26,7 +27,7 @@
           :key="`lang-${lang.id}`"
         >
           <div class="lang-item">
-            <a :href="googleImagesURL(lang)" target="_blank">
+            <a :href="wikipedia(lang)" target="_blank">
               <img
                 :src="`/img/logo-square/${lang.code}.jpeg`"
                 class="lang-item-logo"
@@ -66,7 +67,12 @@ export default {
     googleImagesURL(l2) {
       return `https://www.google.com/searchbyimage?q=${l2.name}+language&image_url=https://www.zerotohero.ca/img/logo-square/${l2.code}.jpeg`;
     },
-
+    wikipedia(l2) {
+      if (l2.logoDesc && l2.logoDesc.includes("(")) {
+        let term = l2.logoDesc.replace(/,.*/, "").replace(/ \(.*\)/, "");
+        return `https://en.wikipedia.org/wiki/${term.replace(/\s/g, "_")}`;
+      }
+    },
     logoDescription(l2) {
       let description = l2.logoDesc
         ? `${l2.logoDesc.replace(/ /g, " ")}, a user of <b>${l2.name}</b>.`
