@@ -13,6 +13,28 @@
       title="Icons of World Languages | Zero to Hero Languages"
       description="Tap on any language label to learn the language! Live TV channels, TV shows with subtitles, music with lyrics, phrasebooks with video examples... everything that can help you to learn a language “by osmosis.”"
     />
+    <div class="container-fluid">
+      <div
+        class="row bg-dark text-white pt-2 pb-2 text-left"
+        style="overflow: visible"
+      >
+        <div class="col-sm-12 d-flex" style="overflow: visible">
+          <div class="d-flex align-items-center" style="width: 100%; justify-content: space-between;">
+            <router-link to="/" class="link-unstyled d-block">
+              <i class="fa fa-chevron-left mr-2"></i>
+              Zero to Hero Languages
+            </router-link>
+            <router-link
+              to="/language-map"
+              class="btn btn-unstyled link-unstyled d-block"
+            >
+              <i class="fas fa-globe-asia"></i>
+            </router-link>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="container">
       <div class="row">
         <div class="col-sm-12 pt-5 pb-5 text-center">

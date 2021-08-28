@@ -288,18 +288,35 @@
             </div>
           </div>
         </div>
-        <div class="home-card mb-5 pb-5 text-center">
-          <h5>Interactive Map of 5,842 Languages</h5>
-          <p class="mb-4">Tap to open.</p>
-          <router-link to="/language-map">
-            <div>
-              <img
-                src="/img/thumbnail-language-map.jpg"
-                alt="Worl Language Map"
-                class="rounded shadow img-fluid"
-              />
+        <div class="row">
+          <div class="col-sm-6 mb-5">
+            <div class="home-card text-center">
+              <h5 class="mb-3">Map of Languages</h5>
+              <router-link to="/language-map">
+                <div>
+                  <img
+                    src="/img/thumbnail-language-map.jpg"
+                    alt="World Language Map"
+                    class="rounded shadow img-fluid"
+                  />
+                </div>
+              </router-link>
             </div>
-          </router-link>
+          </div>
+          <div class="col-sm-6 mb-5">
+            <div class="home-card text-center">
+              <h5 class="mb-3">Faces of Languages</h5>
+              <router-link to="/language-icons">
+                <div>
+                  <img
+                    src="/img/thumbnail-language-icons.jpg"
+                    alt="Faces of Languages"
+                    class="rounded shadow img-fluid"
+                  />
+                </div>
+              </router-link>
+            </div>
+          </div>
         </div>
         <div class="home-card mb-5">
           <h5 class="text-center">All {{ $languages.l1s.length }} Languages</h5>
