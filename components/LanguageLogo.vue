@@ -60,7 +60,7 @@ export default {
     },
     logoDescription() {
       return this.l2.logoDesc
-        ? `${this.l2.logoDesc}, a ${this.l2.name} speaker.`
+        ? `${this.l2.logoDesc}, a user of ${this.l2.name}.`
         : this.l2.name;
     },
   },
