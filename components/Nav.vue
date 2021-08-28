@@ -18,24 +18,30 @@
         </router-link>
       </div>
       <div>
+        <router-link
+          to="/language-map"
+          class="btn top-bar-button btn-unstyled link-unstyled"
+        >
+          <i class="fas fa-globe-asia"></i>
+        </router-link>
         <button
-          :class="['btn btn-sm btn-unstyled', { 'd-none': !canShare() }]"
+          :class="[
+            'btn top-bar-button btn-unstyled',
+            { 'd-none': !canShare() },
+          ]"
           @click="share"
           style="color: #ccc"
         >
           <i class="fa fa-share"></i>
         </button>
         <button
-          :class="['btn btn-sm btn-unstyled', { 'd-none': !isPWA }]"
+          :class="['btn top-bar-button btn-unstyled', { 'd-none': !isPWA }]"
           @click="reload"
           style="color: #ccc"
         >
           <i class="fas fa-sync-alt"></i>
         </button>
-        <LoginButton class="d-inline-block ml-2" :icon="false" />
-        <router-link to="/language-map" class="ml-2 link-unstyled">
-          <i class="fas fa-globe-asia"></i>
-        </router-link>
+        <LoginButton class="d-inline-block" :icon="false" />
       </div>
     </div>
     <div
@@ -753,8 +759,8 @@ export default {
           children: [
             {
               icon: "fas fa-wrench",
-              title: "Test",
-              name: "test",
+              title: "Phrase Survey",
+              name: "phrase-survey",
               show: this.$adminMode,
             },
             {
@@ -765,8 +771,8 @@ export default {
             },
             {
               icon: "fas fa-wrench",
-              title: "Phrase Survey",
-              name: "phrase-survey",
+              title: "Test",
+              name: "test",
               show: this.$adminMode,
             },
             {
@@ -1127,6 +1133,9 @@ export default {
     &:hover {
       color: white;
     }
+  }
+  .btn {
+    padding: 0 0.5rem 0 0;
   }
 }
 
