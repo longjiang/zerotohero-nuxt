@@ -12,6 +12,7 @@
     <SocialHead
       title="Icons of World Languages | Zero to Hero Languages"
       description="Tap on any language label to learn the language! Live TV channels, TV shows with subtitles, music with lyrics, phrasebooks with video examples... everything that can help you to learn a language “by osmosis.”"
+      image="/img/thumbnail-language-icons.jpg"
     />
     <div class="container-fluid">
       <div
@@ -104,7 +105,33 @@
           </div>
         </div>
       </div>
+      <div class="row mt-5 mb-5">
+        <div class="col-sm-12 text-center">
+          <h4 class="mb-3">World Map of Languages</h4>
+          <router-link to="/language-map">
+            <div>
+              <img
+                src="/img/thumbnail-language-map.jpg"
+                alt="World Language Map"
+                class="rounded shadow img-fluid"
+                style="max-width: 40rem"
+              />
+            </div>
+          </router-link>
+        </div>
+      </div>
     </div>
+    <footer class="bg-dark mt-5 p-5" style="z-index: -1">
+      <div
+        class="text-center"
+        style="line-height: 1.2; font-size: 1.1em"
+      >
+        <router-link class="link-unstyled text-white" to="/">
+          <strong>ZERO TO HERO</strong>
+          <span style="font-weight: 300">LANGUAGES</span>
+        </router-link>
+      </div>
+    </footer>
   </div>
 </template>
 
