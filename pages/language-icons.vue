@@ -69,8 +69,8 @@ export default {
 
     logoDescription(l2) {
       let description = l2.logoDesc
-        ? `${l2.logoDesc.replace(/ /g, " ")}, a speaker of <b>${l2.name}</b>.`
-        : `A speaker of <b>${l2.name}</b>.`;
+        ? `${l2.logoDesc.replace(/ /g, " ")}, a user of <b>${l2.name}</b>.`
+        : `A user of <b>${l2.name}</b>.`;
       return `${description} <span
               class="lang-item-code"
             >${l2.code}</span>`;

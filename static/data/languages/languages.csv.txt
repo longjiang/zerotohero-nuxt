@@ -14,9 +14,9 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 221,Aleut,aleu1260,eski1264,aleu1261,language,52.1228,-174.29,ale,RU US,,I,L,,,
 235,Southern Altai,sout2694,turk1311,east2791,language,50.1347,86.8705,alt,CN KZ MN RU,,I,L,68000,,
 247,Amharic,amha1245,afro1255,amha1244,language,11.708182,39.543456,amh,DJ ET,am,I,L,23000000,am,"Tewodros II, Emperor of Ethiopia from 1855 until his death in 1868"
-351,Aragonese,arag1245,indo1319,unsh1234,language,42.4669,-0.00919,arg,ES FR,an,I,L,,an,"Francisco Goya (1746-1828), a Spanish romantic painter and printmaker"
-272,Old English (ca. 450-1100),olde1238,indo1319,angl1265,language,51.06,-1.31,ang,GB,,I,H,,ang,"William the Conqueror (1028-1087), the first Norman monarch of England"
-281,Angika,angi1238,indo1319,mait1254,language,26.0047,85.534,anp,IN NP,,I,L,743600,anp,"Nagarjun (1911-1998), a poet who has also penned a number of novels, short stories"
+351,Aragonese,arag1245,indo1319,unsh1234,language,42.4669,-0.00919,arg,ES FR,an,I,L,,an,"Francisco Goya (1746 – 1828), a Spanish romantic painter and printmaker"
+272,Old English (ca. 450-1100),olde1238,indo1319,angl1265,language,51.06,-1.31,ang,GB,,I,H,,ang,"William the Conqueror (1028 – 1087), the first Norman monarch of England"
+281,Angika,angi1238,indo1319,mait1254,language,26.0047,85.534,anp,IN NP,,I,L,743600,anp,"Nagarjun (1911 – 1998), a poet who has also penned a number of novels, short stories"
 346,Arabic,arab1395,afro1255,arab1394,family,24,54,ara,AE BH DJ DZ EG EH ER GM IL IQ JO KM KW LB LY MA MR OM PS QA SA SD SO SY TD TN YE,ar,M,L,274000000,ar,"Ibn al-Haytham (c. 965 – c. 1040), a Muslim Arab mathematician, astronomer, and physicist of the Islamic Golden Age"
 348,Imperial Aramaic (700-300 BCE),impe1235,afro1255,impe1236,language,33.905,42.185,arc,IQ,,I,A,,arc,"Eliezer Ben‑Yehuda (1858 – 1922), a Hebrew lexicographer and newspaper editor"
 357,Mapudungun,mapu1245,arau1255,arau1255,language,-38.7392,-71.277,arn,AR CL,,I,L,440000,arn,A women protester in Chile
@@ -25,10 +25,10 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 380,Assamese,assa1263,indo1319,assa1262,language,26.0876,91.2932,asm,BD BT IN,as,I,L,14604000,as,"Lakshminath Bezbaroa, a writer from Assam"
 387,Asturian-Leonese-Cantabrian,astu1245,indo1319,astu1244,language,42.4181,-6.02227,ast,ES PT,,I,L,100000,,
 440,Avar,avar1256,nakh1245,avar1255,language,41.7047,46.558,ava,AZ GE RU TR,av,I,L,,,
-454,Awadhi,awad1243,indo1319,awad1245,language,27.5907,82.4663,awa,IN NP,,I,L,38261000,awa,"Malik Muhammad Jayasi (1477– 1542), an Indian Sufi poet and pir"
+454,Awadhi,awad1243,indo1319,awad1245,language,27.5907,82.4663,awa,IN NP,,I,L,38261000,awa,"Malik Muhammad Jayasi (1477 –  1542), an Indian Sufi poet and pir"
 490,Central-Southern Aymara,nucl1667,ayma1253,ayma1253,family,-17,-65,aym,BO,ay,M,L,,ay,"David Choquehuanca, the 39th Vice President of Bolivia"
-504,Azerbaijani,mode1262,turk1311,azer1255,family,24,54,aze,,az,M,L,,az,"Huseyn Javid (1882-1941), a prominent Azerbaijani poet and playwright"
-520,Bashkir,bash1264,turk1311,nort2696,language,53.5967,56.5594,bak,KZ RU UA,ba,I,L,,ba,"Maksud Syundyukle (1904-1981), Tatar and Bashkir poet, translator"
+504,Azerbaijani,mode1262,turk1311,azer1255,family,24,54,aze,,az,M,L,,az,"Huseyn Javid (1882 – 1941), a prominent Azerbaijani poet and playwright"
+520,Bashkir,bash1264,turk1311,nort2696,language,53.5967,56.5594,bak,KZ RU UA,ba,I,L,,ba,"Maksud Syundyukle (1904 – 1981), Tatar and Bashkir poet, translator"
 521,Baluchi,,,,,,,bal,,,M,L,,bal,"Naziha Syed Ali, a Pakistani investigative journalist"
 523,Balinese,bali1278,aust1307,bali1277,language,-8.35714,115.075,ban,ID,,I,L,3800000,,
 527,Basa (Cameroon),basa1284,atla1278,basa1290,language,3.80765,10.4213,bas,CM,,I,L,,,
@@ -43,75 +43,76 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 720,Bini,bini1246,atla1278,cent2259,language,6.40701,5.70426,bin,NG,,I,L,1000000,,
 781,Siksika,siks1238,algi1248,algo1256,language,49.0669,-113.109,bla,CA US,,I,L,,bla,"Sahpo Muxika, also known as Crowfoot, Head Chief of the Siksika,"
 522,Bambara,bamb1269,mand1469,east2425,language,12.9,-7.65,bam,CI GN ML SN,bm,I,L,3000000,bm,
-623,Bengali,beng1280,indo1319,gaud1238,language,24.0,90.0,ben,BD IN NP,bn,I,L,196000000,bn,
-857,Tibetan,tibe1272,sino1245,cent2346,language,28.3681,90.1872,bod,BT CN IN NP,bo,I,L,6150000,bo,"Gendün Chöphel (1903–1951), a Tibetan scholar, thinker, writer, poet, linguist, and artist"
+623,Bengali,beng1280,indo1319,gaud1238,language,24.0,90.0,ben,BD IN NP,bn,I,L,196000000,bn,"Rabindranath Tagore (1861 – 1941), a Bengali polymath – poet, writer, playwright, composer, philosopher, social reformer and painter"
+857,Tibetan,tibe1272,sino1245,cent2346,language,28.3681,90.1872,bod,BT CN IN NP,bo,I,L,6150000,bo,"Gendün Chöphel (1903 – 1951), a Tibetan scholar, thinker, writer, poet, linguist, and artist"
 932,Breton,bret1244,indo1319,sout3176,language,48.2452,-3.78934,bre,FR,br,I,L,500000,,
 928,Braj,braj1242,indo1319,west2812,language,26.4758,78.0813,bra,IN,,I,L,,,
 872,Bosnian Standard,bosn1245,indo1319,east2821,dialect,43.859,17.046,bos,BA HR ME RS,bs,I,L,21000000,bs,"Safvet-beg Bašagić (1870 – 1934), a a Bosnian writer"
 1001,Buriat,buri1258,mong1349,khal1273,family,,,bua,RU,,M,L,,,
 1007,Buginese,bugi1244,aust1307,bugi1245,language,-4.47,119.977,bug,ID,,I,L,3500000,,
 1112,Bilin,bili1260,afro1255,nort3163,language,15.7833,38.3917,byn,ER,,I,L,,,
-1167,Catalan,stan1289,indo1319,sout3183,language,41.453,1.569,cat,AD ES FR IT,ca,I,L,4353000,ca,
+1167,Catalan,stan1289,indo1319,sout3183,language,41.453,1.569,cat,AD ES FR IT,ca,I,L,4353000,ca,"Àngel Guimerà (1845 – 1924), a Spanish Nobel-nominated writer in the Catalan language"
 1152,Caddo,cadd1256,cadd1255,cadd1255,language,33.33,-93.5,cad,US,,I,L,,cad,
-1165,Galibi Carib,gali1262,cari1283,guia1242,language,5.83772,-56.8323,car,BR GF GY SR VE,,I,L,,car,
-1212,Min Dong Chinese,mind1253,sino1245,coas1318,language,26.0,119.5,cdo,CN,,I,L,,cdo,
-1237,Chechen,chec1245,nakh1245,chec1244,language,43.5,45.5,che,GE KZ RU,ce,I,L,,ce,
-1218,Cebuano,cebu1242,aust1307,bisa1268,language,8.38799,124.367,ceb,PH,,I,L,15230000,ceb,
-1233,Chamorro,cham1312,aust1307,mala1545,language,13.438011,144.74474,cha,GU MP,ch,I,L,78000,ch,
+1165,Galibi Carib,gali1262,cari1283,guia1242,language,5.83772,-56.8323,car,BR GF GY SR VE,,I,L,,,
+1212,Min Dong Chinese,mind1253,sino1245,coas1318,language,26.0,119.5,cdo,CN,,I,L,,cdo,"Bing Xin (1900 – 1999), one of the most prolific Chinese women writers of the 20th century"
+1237,Chechen,chec1245,nakh1245,chec1244,language,43.5,45.5,che,GE KZ RU,ce,I,L,,ce,"Akhmad Kadyrov (1951 – 2004), the Chief Mufti of the Chechen Republic of Ichkeria in the 1990s"
+1218,Cebuano,cebu1242,aust1307,bisa1268,language,8.38799,124.367,ceb,PH,,I,L,15230000,ceb,"Vicente Sotto (1877 – 1950), a Filipino politician who served as a Senator, the main author of the Press Freedom Law"
+1233,Chamorro,cham1312,aust1307,mala1545,language,13.438011,144.74474,cha,GU MP,ch,I,L,78000,,
 1234,Chibcha,chib1270,chib1249,chib1269,language,6.24999,-74.1666,chb,CO,,I,E,,chb,
-1239,Chagatai,chag1247,turk1311,uygh1241,language,38.21146,57.88758,chg,TM,,I,E,,chg,
-1242,Chuukese,chuu1238,aust1307,mort1238,language,7.346993,151.598607,chk,FM,,I,L,45000,chk,
-1244,Mari,mari1278,ural1272,ural1272,family,,,chm,RU,,M,L,,chm,
-1245,Creolized Grand Ronde Chinook Jargon,chin1272,chin1490,lowe1438,language,55.0,-125.0,chn,CA US,,I,L,,chn,
-1246,Choctaw,choc1276,musk1252,west2614,language,32.25,-88.5,cho,US,,I,L,,cho,
-1247,Chipewyan,chip1261,atha1245,nort3354,language,58.98,-104.44,chp,CA,,I,L,,chp,
-1249,Cherokee,cher1273,iroq1247,iroq1247,language,35.4664,-83.163,chr,US,,I,L,,chr,
+1239,Chagatai,chag1247,turk1311,uygh1241,language,38.21146,57.88758,chg,TM,,I,E,,,
+1242,Chuukese,chuu1238,aust1307,mort1238,language,7.346993,151.598607,chk,FM,,I,L,45000,,
+1244,Mari,mari1278,ural1272,ural1272,family,,,chm,RU,,M,L,,,
+1245,Creolized Grand Ronde Chinook Jargon,chin1272,chin1490,lowe1438,language,55.0,-125.0,chn,CA US,,I,L,,chn,"Joshua Green (1869 – 1975), an American sternwheeler captain, businessman, and banker"
+1246,Choctaw,choc1276,musk1252,west2614,language,32.25,-88.5,cho,US,,I,L,,cho,"Samuel Garland (1803 - 1870), Chief to the Choctaw Nation"
+1247,Chipewyan,chip1261,atha1245,nort3354,language,58.98,-104.44,chp,CA,,I,L,,chp,"A young Chipewyan woman, circa 1900"
+1249,Cherokee,cher1273,iroq1247,iroq1247,language,35.4664,-83.163,chr,US,,I,L,,,
 1255,Cheyenne,chey1247,algi1248,algo1257,language,45.5321,-106.659,chy,US,,I,L,,chy,
-1281,Jinyu Chinese,jiny1235,sino1245,nort3155,language,38.8284,111.278,cjy,CN,,I,L,63000000,cjy,
-1317,Mandarin Chinese,mand1415,sino1245,mand1471,language,40.0209,116.228,cmn,CN KP LA MM MN RU TW VN,,I,L,885000000,cmn,
-7865,Northern Pinghua,nort3268,sino1245,ping1245,language,25.218,110.045,cnp,CN,,I,L,,cnp,
-1331,Montenegrin Standard,mont1282,indo1319,east2821,dialect,,,cnr,ME,,I,L,,cnr,
-1354,Corsican,cors1241,indo1319,cors1242,language,41.7,9.25537,cos,FR IT,co,I,L,341000,co,
-1351,Coptic,copt1239,afro1255,egyp1245,language,29.472,31.2053,cop,EG,,I,E,,cop,
-1370,Pu-Xian Chinese,puxi1243,sino1245,coas1318,language,25.37,118.68,cpx,CN,,I,L,,cpx,
-1377,Cree,cree1272,algi1248,cree1271,family,60,-95,cre,CA,cr,M,L,,cr,
-1380,Crimean Tatar,crim1257,turk1311,crim1259,language,45.0,34.08,crh,BG MD RO UA UZ,,I,L,,crh,
-1222,Czech,czec1258,indo1319,czec1261,language,49.873398,15.10437,ces,AT CZ PL SK,cs,I,L,12000000,cs,
-1398,Kashubian,kash1274,indo1319,lech1241,language,54.2996,18.6163,csb,PL,,I,L,,csb,
-7864,Southern Pinghua,sout3250,sino1245,ping1245,language,23.011,108.093,csp,CN,,I,L,,csp,
-1251,Church Slavic,chur1257,indo1319,east2269,language,43.7171,22.8442,chu,RU,cu,I,A,,cu,
-1252,Chuvash,chuv1255,turk1311,bolg1249,language,55.487,47.163,chv,EE KZ RU,cv,I,L,,cv,
-1464,Welsh,wels1247,indo1319,oldm1247,language,52.0,-4.0,cym,GB,cy,I,L,580000,cy,
-1469,Min Zhong Chinese,minz1235,sino1245,inla1267,language,26.0686,117.376,czo,CN,,I,L,,czo,
-1482,Danish,dani1285,indo1319,sout3248,language,54.8655,9.36284,dan,DE DK FO GL,da,I,L,5292000,da,
-1479,Dakota,dako1258,siou1252,siou1253,language,47.6857,-102.12,dak,CA US,,I,L,,dak,
-1485,North-Central Dargwa,darg1241,nakh1245,darg1242,language,42.4257,47.4388,dar,AZ KZ RU UA,,I,L,,dar,
-1540,German,stan1295,indo1319,glob1243,language,48.649,12.4676,deu,AT BE CH CZ DE DK FR HU IT LI LU NL PL RO SI SK,de,I,L,121000000,de,
-1533,Common Delaware,comm1246,algi1248,dela1253,family,,,del,US,,M,L,,del,
-1535,Slave,slav1253,atha1245,hare1243,family,,,den,CA,,M,L,,den,
-1555,Dogrib,dogr1252,atha1245,hare1243,language,62.3823,-114.193,dgr,CA,,I,L,,dgr,
+1281,Jinyu Chinese,jiny1235,sino1245,nort3155,language,38.8284,111.278,cjy,CN,,I,L,63000000,cjy,"Hua Guofeng (1921 – 2008), Chairman of the Communist Party of China"
+1317,Mandarin Chinese,mand1415,sino1245,mand1471,language,40.0209,116.228,cmn,CN KP LA MM MN RU TW VN,,I,L,885000000,,
+7865,Northern Pinghua,nort3268,sino1245,ping1245,language,25.218,110.045,cnp,CN,,I,L,,cnp,"Li Zongren (1890 – 1969), a prominent Guangxi warlord and Kuomintang military commander"
+1331,Montenegrin Standard,mont1282,indo1319,east2821,dialect,,,cnr,ME,,I,L,,cnr,"Vuk Vrčević (1811–1882), a Montenegrin Serb collector of lyric poetry"
+1354,Corsican,cors1241,indo1319,cors1242,language,41.7,9.25537,cos,FR IT,co,I,L,341000,co,"Constantin ""Tino"" Rossi (29 April 1907 – 26 September 1983), a French singer and film actor"
+1351,Coptic,copt1239,afro1255,egyp1245,language,29.472,31.2053,cop,EG,,I,E,,cop,"Amelia Edwards (1831 – 1892), an English novelist, journalist, traveller and Egyptologist"
+1370,Pu-Xian Chinese,puxi1243,sino1245,coas1318,language,25.37,118.68,cpx,CN,,I,L,,cpx,"Lin Yuanpei (1936 – ), native of Putian County, Fujian Province, Chinese bridge expert of the Chinese Academy of Engineering"
+1377,Cree,cree1272,algi1248,cree1271,family,60,-95,cre,CA,cr,M,L,,cr,"Charles “Checker” Tomkins, Métis, Second World War veteran and translator"
+1380,Crimean Tatar,crim1257,turk1311,crim1259,language,45.0,34.08,crh,BG MD RO UA UZ,,I,L,,crh,Bekir Çoban-zade (1893 – 1937) was a Crimean Tatar poet and professor of Turkic languages
+1222,Czech,czec1258,indo1319,czec1261,language,49.873398,15.10437,ces,AT CZ PL SK,cs,I,L,12000000,,
+1398,Kashubian,kash1274,indo1319,lech1241,language,54.2996,18.6163,csb,PL,,I,L,,csb,"Jozef Cieminski (1867 – 1959), a Polish-born Roman Catholic priest"
+7864,Southern Pinghua,sout3250,sino1245,ping1245,language,23.011,108.093,csp,CN,,I,L,,csp,"Li Ning (1963 –), Chinese gymnast"
+1251,Church Slavic,chur1257,indo1319,east2269,language,43.7171,22.8442,chu,RU,cu,I,A,,cu,"Ivan the Terrible (1530 – 1584), the grand prince of Moscow and the first tsar of all Russia"
+1252,Chuvash,chuv1255,turk1311,bolg1249,language,55.487,47.163,chv,EE KZ RU,cv,I,L,,,
+1464,Welsh,wels1247,indo1319,oldm1247,language,52.0,-4.0,cym,GB,cy,I,L,580000,,
+1469,Min Zhong Chinese,minz1235,sino1245,inla1267,language,26.0686,117.376,czo,CN,,I,L,,czo,"Zou Taofen (1895 – 1944), a native of Yongan, Fujian, Chinese journalist and publisher
+"
+1482,Danish,dani1285,indo1319,sout3248,language,54.8655,9.36284,dan,DE DK FO GL,da,I,L,5292000,da,"Hans Peter Holst (1811 – 1893), a Danish poet"
+1479,Dakota,dako1258,siou1252,siou1253,language,47.6857,-102.12,dak,CA US,,I,L,,dak,"Charles Eastman (1858 – 1939), a physician and the first Native American to be certified in western medicine"
+1485,North-Central Dargwa,darg1241,nakh1245,darg1242,language,42.4257,47.4388,dar,AZ KZ RU UA,,I,L,,,
+1540,German,stan1295,indo1319,glob1243,language,48.649,12.4676,deu,AT BE CH CZ DE DK FR HU IT LI LU NL PL RO SI SK,de,I,L,121000000,de,"Johann Wolfgang von Goethe (1749 – 1832) a German poet, playwright, novelist, scientist, statesman, theatre director, and critic"
+1533,Common Delaware,comm1246,algi1248,dela1253,family,,,del,US,,M,L,,,
+1535,Slave,slav1253,atha1245,hare1243,family,,,den,CA,,M,L,,,
+1555,Dogrib,dogr1252,atha1245,hare1243,language,62.3823,-114.193,dgr,CA,,I,L,,,
 1587,Dinka,dink1262,nilo1247,dink1261,family,,,din,SS,,M,L,,din,
-1663,Doso,doso1239,doso1238,doso1238,language,-7.85806,142.656,dol,PG,,I,L,,dol,
-1692,Lower Sorbian,lowe1385,indo1319,sorb1249,language,51.6621,13.9407,dsb,DE,,I,L,,dsb,
-1715,Duala,dual1243,atla1278,dual1245,language,4.10208,9.61877,dua,CM,,I,L,,dua,
-1725,Middle Dutch,midd1321,indo1319,midd1347,language,51.656,5.34,dum,NL,,I,H,,dum,
-1594,Dhivehi,dhiv1236,indo1319,sinh1245,language,1.928498,73.54433,div,IN MV,dv,I,L,287000,dv,
+1663,Doso,doso1239,doso1238,doso1238,language,-7.85806,142.656,dol,PG,,I,L,,,
+1692,Lower Sorbian,lowe1385,indo1319,sorb1249,language,51.6621,13.9407,dsb,DE,,I,L,,dsb,"Mato Kósyk (1853 – 1940), a Sorbian poet and minister"
+1715,Duala,dual1243,atla1278,dual1245,language,4.10208,9.61877,dua,CM,,I,L,,,
+1725,Middle Dutch,midd1321,indo1319,midd1347,language,51.656,5.34,dum,NL,,I,H,,dum,"Hieronymus Bosch (c. 1450 – 1516), a Dutch/Netherlandish painter from Brabant"
+1594,Dhivehi,dhiv1236,indo1319,sinh1245,language,1.928498,73.54433,div,IN MV,dv,I,L,287000,,
 1754,Dyula,dyul1238,mand1469,east2425,language,10.4536,-4.72007,dyu,BF CI ML,,I,L,2700000,dyu,
-1761,Dzongkha,dzon1239,sino1245,nucl1307,language,27.410786,89.581604,dzo,BT CN IN NP,dz,I,L,400000,dz,
-1878,Ewe,ewee1241,atla1278,ewei1234,language,6.46061,0.814975,ewe,GH TG,ee,I,L,2477600,ee,
-1774,Efik,efik1245,atla1278,efik1244,language,4.89379,8.38121,efi,CM NG,,I,L,,efi,
-1778,Egyptian (Ancient),egyp1246,afro1255,egyp1245,language,28.381735,30.834959,egy,EG,,I,A,,egy,
-1784,Ekajuk,ekaj1238,atla1278,nnam1239,language,6.45731,8.55058,eka,NG,,I,L,,eka,
-1800,Modern Greek,mode1248,indo1319,nucl1783,language,38.36,23.13,ell,AL BG CY EG GR IT MK RO TR UA,el,I,L,12258540,el,
+1761,Dzongkha,dzon1239,sino1245,nucl1307,language,27.410786,89.581604,dzo,BT CN IN NP,dz,I,L,400000,dz,"Ugyen Wangchuck (1862 – 1926), the first Druk Gyalpo (King of Bhutan)"
+1878,Ewe,ewee1241,atla1278,ewei1234,language,6.46061,0.814975,ewe,GH TG,ee,I,L,2477600,,
+1774,Efik,efik1245,atla1278,efik1244,language,4.89379,8.38121,efi,CM NG,,I,L,,,
+1778,Egyptian (Ancient),egyp1246,afro1255,egyp1245,language,28.381735,30.834959,egy,EG,,I,A,,egy,"Ramesses II (1303 BC – 1213 BC), the third pharaoh of the Nineteenth Dynasty of Egypt"
+1784,Ekajuk,ekaj1238,atla1278,nnam1239,language,6.45731,8.55058,eka,NG,,I,L,,,
+1800,Modern Greek,mode1248,indo1319,nucl1783,language,38.36,23.13,ell,AL BG CY EG GR IT MK RO TR UA,el,I,L,12258540,el,"Otto Friedrich Ludwig (1 June 1815 – 26 July 1867), a Bavarian prince who ruled as King of Greece"
 1804,Elamite,elam1244,,,language,31.1833,48.2333,elx,IR,,I,A,,elx,
-1824,English,stan1293,indo1319,macr1271,language,53.0,-1.0,eng,AU BM BR BZ CA CC CK CU CX DO FK GB GG GI GP GS GT GY HN IE IM IO JE KY LR MX NF PN SH SR UM US VE ZA,en,I,L,322000000,en,
-1827,Middle English,midd1317,indo1319,merc1242,language,51.65,-1.11,enm,GB,,I,H,,enm,
-1838,Esperanto,espe1235,arti1236,espe1236,language,49.3273,2.81045,epo,PL,eo,I,C,2000000,eo,
-5980,Spanish,stan1288,indo1319,cast1243,language,40.4414,-1.11788,spa,AD AR BO BR BZ CL CO CR CU DO EC ES FR GI GT GY HN HT MA MX NI PA PE PR PT PY SV US UY VE,es,I,L,332000000,es,
-1860,Estonian,esto1258,ural1272,cent2329,language,58.55,25.82,est,EE LV RU,et,M,L,1100000,et,
-1874,Basque,basq1248,,,language,43.2787,-1.31622,eus,ES FR,eu,I,L,588000,eu,
-1879,Ewondo,ewon1239,atla1278,ewon1241,language,4.21141,11.93646,ewo,CM,,I,L,,ewo,
-1900,Persian,fars1254,indo1319,mode1259,family,32,53,fas,IR,fa,M,L,33000000,fa,
+1824,English,stan1293,indo1319,macr1271,language,53.0,-1.0,eng,AU BM BR BZ CA CC CK CU CX DO FK GB GG GI GP GS GT GY HN IE IM IO JE KY LR MX NF PN SH SR UM US VE ZA,en,I,L,322000000,en,"Jon and Ken, founders of English Zero to Hero"
+1827,Middle English,midd1317,indo1319,merc1242,language,51.65,-1.11,enm,GB,,I,H,,enm,"John Lydgate (c. 1370 – c. 1451), English monk and poet"
+1838,Esperanto,espe1235,arti1236,espe1236,language,49.3273,2.81045,epo,PL,eo,I,C,2000000,eo,"L. L. Zamenhof (15 December 1859 – 14 April 1917),  an ophthalmologist who lived for most of his life in Warsaw"
+5980,Spanish,stan1288,indo1319,cast1243,language,40.4414,-1.11788,spa,AD AR BO BR BZ CL CO CR CU DO EC ES FR GI GT GY HN HT MA MX NI PA PE PR PT PY SV US UY VE,es,I,L,332000000,es,"Ricky Martin (1971–), a Puerto Rican singer, songwriter, actor, author, record producer, and humanitarian who is known as the ""King of Latin Pop”"
+1860,Estonian,esto1258,ural1272,cent2329,language,58.55,25.82,est,EE LV RU,et,M,L,1100000,,
+1874,Basque,basq1248,,,language,43.2787,-1.31622,eus,ES FR,eu,I,L,588000,,
+1879,Ewondo,ewon1239,atla1278,ewon1241,language,4.21141,11.93646,ewo,CM,,I,L,,,
+1900,Persian,fars1254,indo1319,mode1259,family,32,53,fas,IR,fa,M,L,33000000,fa,"Ruhollah Khomeini (1900 – 1989), an Iranian political and religious leader and the founder of the Islamic Republic of Iran"
 1,Ghotuo,ghot1243,atla1278,afen1234,language,7.11551,5.95663,aaa,NG,,I,L,,,
 2,Alumu-Tesu,alum1246,atla1278,alum1251,language,9.01513,8.55956,aab,NG,,I,L,,,
 3,Ari,arii1243,suki1244,ariw1234,language,-7.95526,142.4,aac,PG,,I,L,,,
@@ -1865,7 +1866,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 1857,Estonian Sign Language,esto1238,sign1238,lsfi1234,language,58.947,24.566,eso,EE,,I,L,,,
 1858,Esselen,esse1238,,,language,36.5473,-121.867,esq,US,,I,E,,,
 1859,Central Siberian Yupik,cent2128,eski1264,yupi1267,language,63.4308,-170.272,ess,RU US,,I,L,,,
-1861,Central Alaskan Yupik,cent2127,eski1264,yupi1267,language,60.3062,-161.486,esu,US,,I,L,,,
+1861,Central Alaskan Yupik,cent2127,eski1264,yupi1267,language,60.3062,-161.486,esu,US,,I,L,,esu,
 1862,Eskayan,eska1234,arti1236,arti1236,language,,,esy,PH,,I,L,,,
 1863,Etebi,eteb1238,atla1278,ekit1245,language,4.79059,7.97357,etb,NG,,I,L,,,
 1864,Etchemin,,,,,,,etc,,,I,E,,,
@@ -3997,7 +3998,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 4137,Southern Mnong,sout2692,aust1305,sout2691,language,12.06354,107.65424,mnn,VN,,I,L,,,
 4139,Minriq,minr1238,aust1305,menr1235,language,5.01108,102.047,mnq,MY,,I,L,,,
 4140,Mono (USA),mono1275,utoa1244,west2621,language,37.1935,-119.347,mnr,US,,I,L,,,
-4141,Northern Mansi,mans1258,ural1272,nort3271,language,64.4118,61.344,mns,RU,,I,L,,,
+4141,Northern Mansi,mans1258,ural1272,nort3271,language,64.4118,61.344,mns,RU,,I,L,,mns,"Matrena Vakhrusheva (1918 – 2000), a Mansi linguist, philologist and writer"
 4142,Mer,merr1239,mair1253,mair1253,language,-3.3828,134.731,mnu,ID,,I,L,,,
 4143,Rennell-Bellona,renn1242,aust1307,nucl1485,language,-11.6237,160.265,mnv,SB,,I,L,,,
 4144,Mon,monn1252,aust1305,moni1258,language,15.49394,98.122465,mnw,MM TH,,I,L,,,
@@ -25737,247 +25738,247 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 26054,Zuwadza,zuwa1238,koia1260,omie1241,dialect,,,,,,,,,,
 26055,Zwall,zwal1238,atla1278,shal1242,dialect,,,,,,,,,,
 26056,Zyuzdin,zyud1238,ural1272,komi1269,dialect,,,,,,,,,,
-1896,Fang (Equatorial Guinea),fang1246,atla1278,yaun1239,language,1.723965,11.61454,fan,CG CM GA GQ,,I,L,,fan,
+1896,Fang (Equatorial Guinea),fang1246,atla1278,yaun1239,language,1.723965,11.61454,fan,CG CM GA GQ,,I,L,,,
 1901,Fante,fant1241,atla1278,akan1250,dialect,,,fat,,,I,L,,fat,
-1966,Fula,fula1264,atla1278,peul1234,family,14,-14,ful,SN,ff,M,L,,ff,
-1916,Finnish,finn1318,ural1272,nucl1717,language,64.7628,25.5577,fin,EE FI NO RU SE,fi,I,L,6000000,fi,
-1915,Filipino,fili1244,aust1307,taga1269,language,12.265,123.464,fil,PH,,I,L,,fil,
-1914,Fijian,fiji1243,aust1307,east2446,language,-18.0,178.33,fij,FJ,fj,I,L,650000,fj,
-1897,Faroese,faro1244,indo1319,icel1246,language,62.0732,-6.88497,fao,DK FO,fo,I,L,47000,fo,
-1938,Fon,fonn1241,atla1278,fong1244,language,7.15484,1.66495,fon,BJ TG,,I,L,1436000,fon,
-1943,French,stan1290,indo1319,glob1239,language,48.0,2.0,fra,AD BE CA CH FR GF IT LU MC PM TF US,fr,I,L,124000000,fr,
-1947,Middle French,midd1316,indo1319,stan1290,dialect,,,frm,,,I,H,,frm,
-1948,Old French (842-ca. 1400),oldf1239,indo1319,oila1234,language,48.8,1.11,fro,FR,,I,H,,fro,
-1951,Northern Frisian,nort2626,indo1319,fris1239,language,54.6409,8.58489,frr,DE DK,,I,L,,frr,
-1952,German Northern Low Saxon,nort2628,indo1319,ostf1234,language,52.97134,8.36,frs,DE,,I,L,,frs,
-1970,Friulian,friu1240,indo1319,gall1280,language,46.1473,13.0493,fur,AT IT,,I,L,600000,fur,
-1954,Western Frisian,west2354,indo1319,west2902,language,53.143,5.86091,fry,NL,fy,I,L,730000,fy,
-2132,Irish,iris1253,indo1319,mode1265,language,53.2186,-7.61509,gle,GB IE,ga,I,L,260000,ga,
-1978,Ga,gaaa1244,atla1278,gada1257,language,5.65488,-0.18598,gaa,GH,,I,L,1000000,gaa,
-2001,Gayo,gayo1244,aust1307,nort2829,language,4.3733,97.3456,gay,ID,,I,L,,gay,
-2129,Scottish Gaelic,scot1245,indo1319,east2734,language,56.7574,-5.24366,gla,GB,gd,I,L,63653,gd,
-2072,Geez,geez1241,afro1255,ethi1244,language,10.1342,40.6821,gez,ER ET,,I,A,,gez,
-2103,Gilbertese,gilb1244,aust1307,cent2276,language,0.179,173.64,gil,FJ KI SB TV,,I,L,,gil,
-2133,Galician,gali1258,indo1319,gali1263,language,42.2446,-7.5343,glg,ES PT,gl,I,L,4000000,gl,
-2149,Middle High German,midd1343,indo1319,midd1349,language,48.254,10.599,gmh,DE,,I,H,,gmh,
+1966,Fula,fula1264,atla1278,peul1234,family,14,-14,ful,SN,ff,M,L,,,
+1916,Finnish,finn1318,ural1272,nucl1717,language,64.7628,25.5577,fin,EE FI NO RU SE,fi,I,L,6000000,,
+1915,Filipino,fili1244,aust1307,taga1269,language,12.265,123.464,fil,PH,,I,L,,fil,"José Rizal (1861 – 1896), a Filipino nationalist and polymath during the tail end of the Spanish colonial period of the Philippines"
+1914,Fijian,fiji1243,aust1307,east2446,language,-18.0,178.33,fij,FJ,fj,I,L,650000,,
+1897,Faroese,faro1244,indo1319,icel1246,language,62.0732,-6.88497,fao,DK FO,fo,I,L,47000,fo,"Andrias Høgenni (born 1988), a Faroese film director from Tórshavn"
+1938,Fon,fonn1241,atla1278,fong1244,language,7.15484,1.66495,fon,BJ TG,,I,L,1436000,,
+1943,French,stan1290,indo1319,glob1239,language,48.0,2.0,fra,AD BE CA CH FR GF IT LU MC PM TF US,fr,I,L,124000000,fr,"Louis XVIII (1755 – 1824), King of France during the French Revolution"
+1947,Middle French,midd1316,indo1319,stan1290,dialect,,,frm,,,I,H,,frm,"Margaret of France  (c. 1279 – 1318), Queen of England as the second wife of King Edward I"
+1948,Old French (842-ca. 1400),oldf1239,indo1319,oila1234,language,48.8,1.11,fro,FR,,I,H,,fro,"Louis VI (1081 – 1137), King of the Franks"
+1951,Northern Frisian,nort2626,indo1319,fris1239,language,54.6409,8.58489,frr,DE DK,,I,L,,,
+1952,German Northern Low Saxon,nort2628,indo1319,ostf1234,language,52.97134,8.36,frs,DE,,I,L,,,
+1970,Friulian,friu1240,indo1319,gall1280,language,46.1473,13.0493,fur,AT IT,,I,L,600000,fur,"Amedeo Giacomini (1939 – 2006), a contemporary Italian writer and poet"
+1954,Western Frisian,west2354,indo1319,west2902,language,53.143,5.86091,fry,NL,fy,I,L,730000,fy,"Recha Freier (1892 – 1984), who saved the lives of 7,000 Jewish children"
+2132,Irish,iris1253,indo1319,mode1265,language,53.2186,-7.61509,gle,GB IE,ga,I,L,260000,ga,"Francis Bacon (1909 – 1992), an Irish-born British figurative painter known for his raw, unsettling imagery"
+1978,Ga,gaaa1244,atla1278,gada1257,language,5.65488,-0.18598,gaa,GH,,I,L,1000000,,
+2001,Gayo,gayo1244,aust1307,nort2829,language,4.3733,97.3456,gay,ID,,I,L,,,
+2129,Scottish Gaelic,scot1245,indo1319,east2734,language,56.7574,-5.24366,gla,GB,gd,I,L,63653,,
+2072,Geez,geez1241,afro1255,ethi1244,language,10.1342,40.6821,gez,ER ET,,I,A,,,
+2103,Gilbertese,gilb1244,aust1307,cent2276,language,0.179,173.64,gil,FJ KI SB TV,,I,L,,,
+2133,Galician,gali1258,indo1319,gali1263,language,42.2446,-7.5343,glg,ES PT,gl,I,L,4000000,gl,"Rosalía de Castro (1837 – 1885), a Galician poet, strongly identified with her native Galicia and the celebration of the Galician language"
+2149,Middle High German,midd1343,indo1319,midd1349,language,48.254,10.599,gmh,DE,,I,H,,gmh,"Heinrich Frauenlob (1250 – 1318), a Middle High German poet"
 2220,Guarani,para1311,,,,-34,-64,grn,AR PY,gn,M,L,7000,gn,
-2185,Old High German (ca. 750-1050),oldh1241,indo1319,high1286,language,52.0,10.0,goh,DE,,I,H,,goh,
-2191,Northwest Gondi,nort3258,drav1251,gond1265,family,,,gon,IN,,M,L,,gon,
-2195,Gorontalo,goro1259,aust1307,goro1273,language,0.62689,122.288,gor,ID,,I,L,,gor,
-2197,Gothic,goth1244,indo1319,east2805,language,46.9304,29.9786,got,UA,,I,A,,got,
-2212,Liberian Grebo,greb1256,krua1234,greb1257,family,,,grb,LR,,M,L,,grb,
-2213,Ancient Greek,anci1242,indo1319,east2798,language,39.8155,21.9129,grc,GR,,I,H,,grc,
-2240,Central Alemannic,swis1247,indo1319,sout3294,language,47.0516,8.46419,gsw,AT CH DE FR IT LI,,I,L,,gsw,
-2252,Gujarati,guja1252,indo1319,guja1256,language,22.687,71.0962,guj,BD IN PK,gu,I,L,44000000,gu,
-2142,Manx,manx1243,indo1319,east2734,language,54.2604,-4.45437,glv,IM,gv,I,L,,gv,
-2287,Gwich'in,gwic1235,atha1245,gwic1236,language,67.4307,-142.963,gwi,CA US,,I,L,,gwi,
-2333,Hausa,haus1257,afro1255,west2718,language,11.1513,8.7804,hau,BF BJ CM NE NG TD,ha,I,L,22000000,ha,
-2321,Haida,haid1248,,,family,,,hai,CA,,M,L,,hai,
-2323,Hakka Chinese,hakk1236,sino1245,midd1354,language,25.0,116.0,hak,CN TW,,I,L,40000000,hak,
-2335,Hawaiian,hawa1245,aust1307,cent2062,language,19.6297,-155.43,haw,US,,I,L,8000,haw,
-2342,Ancient Hebrew,anci1244,afro1255,hebr1246,language,31.7761,35.1725,hbo,IL,,I,H,,hbo,
-2351,Modern Hebrew,hebr1245,afro1255,hebr1246,language,31.1056,35.0179,heb,IL JO LB PS SY,he,I,L,4612000,he,
-2373,Hindi,hind1269,indo1319,hind1270,language,25.0,77.0,hin,BD BT IN NP,hi,I,L,182000000,hi,
-2372,Hiligaynon,hili1240,aust1307,capi1240,language,10.4018,122.974,hil,PH,,I,L,7000000,hil,
-2376,Hittite,hitt1242,indo1319,anat1257,language,40.0,35.0,hit,TR,,I,A,,hit,
+2185,Old High German (ca. 750-1050),oldh1241,indo1319,high1286,language,52.0,10.0,goh,DE,,I,H,,goh,"Otto I (912 – 973), an East Francian king and Holy Roman Emperor"
+2191,Northwest Gondi,nort3258,drav1251,gond1265,family,,,gon,IN,,M,L,,,
+2195,Gorontalo,goro1259,aust1307,goro1273,language,0.62689,122.288,gor,ID,,I,L,,,
+2197,Gothic,goth1244,indo1319,east2805,language,46.9304,29.9786,got,UA,,I,A,,,
+2212,Liberian Grebo,greb1256,krua1234,greb1257,family,,,grb,LR,,M,L,,,
+2213,Ancient Greek,anci1242,indo1319,east2798,language,39.8155,21.9129,grc,GR,,I,H,,grc,"Epicurus (341–270 BC), an ancient Greek philosopher and sage who founded Epicureanism, a highly influential school of philosophy"
+2240,Central Alemannic,swis1247,indo1319,sout3294,language,47.0516,8.46419,gsw,AT CH DE FR IT LI,,I,L,,,
+2252,Gujarati,guja1252,indo1319,guja1256,language,22.687,71.0962,guj,BD IN PK,gu,I,L,44000000,gu,"Keshavram Kashiram Shastri (born 1905), the founding leader of the Vishwa Hindu Parishad"
+2142,Manx,manx1243,indo1319,east2734,language,54.2604,-4.45437,glv,IM,gv,I,L,,gv,"Doug Fargher (1926 – 1987), a Manx language activist, author, and radio personality who was involved with the revival of the Manx language on the Isle of Man in the 20th century"
+2287,Gwich'in,gwic1235,atha1245,gwic1236,language,67.4307,-142.963,gwi,CA US,,I,L,,gwi,"Timothy M. ""Tim"" Wallis (born 1940), a Gwich'in and American politician involved in indigenous activism"
+2333,Hausa,haus1257,afro1255,west2718,language,11.1513,8.7804,hau,BF BJ CM NE NG TD,ha,I,L,22000000,ha,"Balaraba Ramat Yakubu (born 1959), a Nigerian author who writes in Hausa"
+2321,Haida,haid1248,,,family,,,hai,CA,,M,L,,,
+2323,Hakka Chinese,hakk1236,sino1245,midd1354,language,25.0,116.0,hak,CN TW,,I,L,40000000,hak,"Sun Yat-sen (1866 – 1925), a Chinese statesman, physician, and political philosopher, who served as the provisional first president of the Republic of China"
+2335,Hawaiian,hawa1245,aust1307,cent2062,language,19.6297,-155.43,haw,US,,I,L,8000,haw,"Edward Kahale (1891 – 1989), an American clergyman, and the third Kahu (pastor) of Hawaiian ancestry at Kawaiahaʻo Church"
+2342,Ancient Hebrew,anci1244,afro1255,hebr1246,language,31.7761,35.1725,hbo,IL,,I,H,,hbo,"Moses, the most important prophet in Judaism"
+2351,Modern Hebrew,hebr1245,afro1255,hebr1246,language,31.1056,35.0179,heb,IL JO LB PS SY,he,I,L,4612000,he,"David Ben-Gurion (1886 – 1973), the primary national founder of the State of Israel and the first Prime Minister of Israel"
+2373,Hindi,hind1269,indo1319,hind1270,language,25.0,77.0,hin,BD BT IN NP,hi,I,L,182000000,hi,"Mahatma Gandhi (1869 – 1948), an Indian lawyer, anti-colonial nationalist and political ethicist"
+2372,Hiligaynon,hili1240,aust1307,capi1240,language,10.4018,122.974,hil,PH,,I,L,7000000,,
+2376,Hittite,hitt1242,indo1319,anat1257,language,40.0,35.0,hit,TR,,I,A,,hit,"Harold Williams (1876 – 1928), a New Zealand journalist, foreign editor of The Times and polyglot"
 2404,Hmong,,,,,,,hmn,,,M,L,,hmn,
 2405,Hiri Motu,hiri1237,pidg1258,motu1248,language,-9.33333,147.083,hmo,PG,ho,I,L,,ho,
-2456,Croatian Standard,croa1245,indo1319,east2821,dialect,45.555,15.982,hrv,AT BA HR HU IT ME RS SI,hr,I,L,21000000,hr,
-2460,Upper Sorbian,uppe1395,indo1319,sorb1249,language,51.2403,14.4098,hsb,DE,,I,L,70000,hsb,
-2463,Xiang Chinese,xian1251,sino1245,midd1354,language,27.66847,111.47112,hsn,CN,,I,L,45000000,hsn,
-2332,Haitian,hait1244,indo1319,circ1240,language,18.795135,-72.136115,hat,DO HT,ht,I,L,7382000,ht,
-2482,Hungarian,hung1274,ural1272,ural1272,language,46.9068585714,19.6555271429,hun,AT HR HU RO RS SI SK UA,hu,I,L,14500000,hu,
+2456,Croatian Standard,croa1245,indo1319,east2821,dialect,45.555,15.982,hrv,AT BA HR HU IT ME RS SI,hr,I,L,21000000,,
+2460,Upper Sorbian,uppe1395,indo1319,sorb1249,language,51.2403,14.4098,hsb,DE,,I,L,70000,hsb,"John Kilian (1811 – 1884), a Lutheran pastor and leader of the colony known as the Wends of Texas"
+2463,Xiang Chinese,xian1251,sino1245,midd1354,language,27.66847,111.47112,hsn,CN,,I,L,45000000,hsn,"Mao Zedong (1893 – 1976), a Chinese communist revolutionary who was the founding father of the People's Republic of China"
+2332,Haitian,hait1244,indo1319,circ1240,language,18.795135,-72.136115,hat,DO HT,ht,I,L,7382000,ht,"Félix Morisseau-Leroy (1912 – 1998), a Haitian writer who used Haitian Creole to write poetry and plays"
+2482,Hungarian,hung1274,ural1272,ural1272,language,46.9068585714,19.6555271429,hun,AT HR HU RO RS SI SK UA,hu,I,L,14500000,hu,"Ernő Szép (1884 – 1953), a Hungarian poet, novelist, journalist, playwright, narrator"
 2484,Hupa-Chilula,hupa1239,atha1245,cali1245,language,41.0982,-123.68,hup,US,,I,L,,hup,
-2504,Eastern Armenian,nucl1235,indo1319,east2768,language,40.0,45.0,hye,AM AZ GE IR SY TR,hy,I,L,6836000,hy,
-2357,Herero,here1253,atla1278,here1252,language,-21.0231,20.5655,her,BW NA,hz,I,L,,hz,
-2509,Iban,iban1264,aust1307,nort3387,language,2.09041,112.934,iba,BN ID MY,,I,L,,iba,
-2601,Indonesian,indo1316,aust1307,stan1327,language,-7.33458,109.716,ind,ID NL PH SA SG US,id,I,L,140000000,id,
-2581,Interlingue (Occidental),inte1260,arti1236,arti1236,language,62,10,ile,,ie,I,C,,ie,
+2504,Eastern Armenian,nucl1235,indo1319,east2768,language,40.0,45.0,hye,AM AZ GE IR SY TR,hy,I,L,6836000,,
+2357,Herero,here1253,atla1278,here1252,language,-21.0231,20.5655,her,BW NA,hz,I,L,,,
+2509,Iban,iban1264,aust1307,nort3387,language,2.09041,112.934,iba,BN ID MY,,I,L,,,
+2601,Indonesian,indo1316,aust1307,stan1327,language,-7.33458,109.716,ind,ID NL PH SA SG US,id,I,L,140000000,id,"Pramoedya Ananta Toer (1925 – 2006), an Indonesian author of novels, short stories, essays, polemics and histories of his homeland and its people"
+2581,Interlingue (Occidental),inte1260,arti1236,arti1236,language,62,10,ile,,ie,I,C,,ie,"Edgar de Wahl (1867 – 1948), a Baltic German teacher, mathematician and linguist"
 2518,Igbo,nucl1417,atla1278,igbo1259,language,4.62705,7.23441,ibo,NG,ig,I,L,17000000,ig,
 2558,Sichuan Yi,sich1238,sino1245,nasu1236,language,28.1947,102.121,iii,CN,ii,I,L,1600000,ii,
-2617,Alaskan Inupiaq,inup1234,eski1264,inui1246,family,64.0685,-152.2782,ipk,US,ik,M,L,,ik,
-2586,Iloko,ilok1237,aust1307,nort3238,language,15.9361,120.993,ilo,PH,,I,L,8000000,ilo,
-2603,Ingush,ingu1240,nakh1245,chec1244,language,43.11,45.03,inh,GE RU,,I,L,,inh,
-2532,Ido,idoo1234,arti1236,espe1236,language,46,2,ido,FR,io,I,C,,io,
-2638,Icelandic,icel1247,indo1319,icel1246,language,63.4837,-19.0212,isl,IS,is,I,L,282845,is,
-2645,Italian,ital1282,indo1319,ital1287,language,43.0464,12.6489,ita,AT CH FR HR IT SI SM VA,it,I,L,63000000,it,
+2617,Alaskan Inupiaq,inup1234,eski1264,inui1246,family,64.0685,-152.2782,ipk,US,ik,M,L,,ik,"Ticasuk Brown (1904 – 1982), an Iñupiaq educator, poet and writer"
+2586,Iloko,ilok1237,aust1307,nort3238,language,15.9361,120.993,ilo,PH,,I,L,8000000,,
+2603,Ingush,ingu1240,nakh1245,chec1244,language,43.11,45.03,inh,GE RU,,I,L,,,
+2532,Ido,idoo1234,arti1236,espe1236,language,46,2,ido,FR,io,I,C,,io,"Jens Otto Harry Jespersen (1860 – 1943), Danish linguist who specialized in the grammar of the English language"
+2638,Icelandic,icel1247,indo1319,icel1246,language,63.4837,-19.0212,isl,IS,is,I,L,282845,is,"Jón Árnason (1819 — 1888),  an Icelandic author, librarian, and museum director who made the first collection of Icelandic folktales"
+2645,Italian,ital1282,indo1319,ital1287,language,43.0464,12.6489,ita,AT CH FR HR IT SI SM VA,it,I,L,63000000,it,"Oriana Fallaci (1929 – 2006), an Italian journalist, author, and political interviewer."
 2574,Inuktitut,east2534,,,,69.500278,-121.502222,iku,CA US,iu,M,L,,iu,
-2780,Japanese,nucl1643,japo1237,japa1258,language,35.0,135.0,jpn,JP,ja,I,L,125000000,ja,
-2703,Lojban,lojb1234,arti1236,arti1236,language,,,jbo,US,,I,C,,jbo,
-2781,Judeo-Persian,jude1257,indo1319,fars1255,language,31.45071,43.57147,jpr,IL IR,,I,L,,jpr,
-2784,Judeo-Arabic,,,,,,,jrb,,,M,L,,jrb,
-2694,Javanese,java1254,aust1307,mode1251,language,-7.001,109.287,jav,ID MY,jv,I,L,75500800,jv,
-2831,Georgian,nucl1302,kart1248,geor1253,language,41.850397,43.78613,kat,AM AZ GE IR RU TR,ka,I,L,4103000,ka,
-2813,Kara-Kalpak,kara1467,turk1311,sout2701,language,39.98,63.3223,kaa,AF KG KZ TM UZ,,I,L,,kaa,
-2814,Kabyle,kaby1243,afro1255,kaby1244,language,36.4103,4.76137,kab,DZ,,I,L,,kab,
-2815,Southern Jinghpaw,kach1280,sino1245,jing1260,language,25.4634,97.3278,kac,CN MM,,I,L,,kac,
+2780,Japanese,nucl1643,japo1237,japa1258,language,35.0,135.0,jpn,JP,ja,I,L,125000000,ja,"Egaku or Hui’E, a well-connected 9th century Japanese scholar-monk who made frequent trips to Tang China for pilgrimage and bringing back Buddhist teachings to Japan"
+2703,Lojban,lojb1234,arti1236,arti1236,language,,,jbo,US,,I,C,,,
+2781,Judeo-Persian,jude1257,indo1319,fars1255,language,31.45071,43.57147,jpr,IL IR,,I,L,,jpr,"Elkan Nathan Adler (1861 – 1946), an English author, lawyer, historian, and collector of Jewish books and manuscripts"
+2784,Judeo-Arabic,,,,,,,jrb,,,M,L,,jrb,A Yemenite Jew
+2694,Javanese,java1254,aust1307,mode1251,language,-7.001,109.287,jav,ID MY,jv,I,L,75500800,jv,"Kartini (1879 – 1904), a prominent Indonesian activist who advocated for women's rights and female education"
+2831,Georgian,nucl1302,kart1248,geor1253,language,41.850397,43.78613,kat,AM AZ GE IR RU TR,ka,I,L,4103000,ka,"Giya Kancheli (1935 – 2019), a Georgian composer"
+2813,Kara-Kalpak,kara1467,turk1311,sout2701,language,39.98,63.3223,kaa,AF KG KZ TM UZ,,I,L,,kaa,"Ałłajar Dosnazarow (1896 – 1937), a Soviet politician"
+2814,Kabyle,kaby1243,afro1255,kaby1244,language,36.4103,4.76137,kab,DZ,,I,L,,,
+2815,Southern Jinghpaw,kach1280,sino1245,jing1260,language,25.4634,97.3278,kac,CN MM,,I,L,,,
 2825,Kamba (Kenya),kamb1297,atla1278,east2749,language,-1.60827,37.9532,kam,KE,,I,L,,kam,
-2834,Kawi,kawi1241,aust1307,java1253,language,-7.0,111.0,kaw,ID,,I,A,,kaw,
-2841,Kabardian,kaba1278,abkh1242,circ1239,language,43.5082,43.3918,kbd,RU TR,,I,L,1628500,kbd,
-3175,Kongo,core1256,,,,0,25,kon,CD,kg,M,L,,kg,
-2985,Khasi,khas1269,aust1305,khas1275,language,24.977,91.9998,kha,BD IN,,I,L,865000,kha,
-2998,Khotanese,khot1251,indo1319,saka1298,language,38.33,79.04,kho,CN,,I,A,,kho,
+2834,Kawi,kawi1241,aust1307,java1253,language,-7.0,111.0,kaw,ID,,I,A,,kaw,"Chit Phumisak (1930 – 1966), a Thai author, philologist, historian, poet, songwriter, and communist revolutionary"
+2841,Kabardian,kaba1278,abkh1242,circ1239,language,43.5082,43.3918,kbd,RU TR,,I,L,1628500,kbd,"Amirkhan Kamizovich Shomakhov (1910 − 1988), a Soviet Kabardian lyrics, prose, and play writer, primarily known as one of the founders of the Kabardian children's literature"
+3175,Kongo,core1256,,,,0,25,kon,CD,kg,M,L,,,
+2985,Khasi,khas1269,aust1305,khas1275,language,24.977,91.9998,kha,BD IN,,I,L,865000,,
+2998,Khotanese,khot1251,indo1319,saka1298,language,38.33,79.04,kho,CN,,I,A,,kho,"Walter Bruno Henning (1908 – 1967),  a German scholar of Middle Iranian languages and literature"
 3020,Kikuyu,kiku1240,atla1278,kiku1241,language,-0.29005,36.719,kik,KE,ki,I,L,,ki,
-3311,Kuanyama,kuan1247,atla1278,ndon1253,language,-17.7176,16.58,kua,AO NA,kj,I,L,,kj,
-2837,Kazakh,kaza1248,turk1311,sout2701,language,41.8729,65.7709,kaz,AF CN IR KG KZ MN RU TJ TM UZ,kk,I,L,8000000,kk,
+3311,Kuanyama,kuan1247,atla1278,ndon1253,language,-17.7176,16.58,kua,AO NA,kj,I,L,,,
+2837,Kazakh,kaza1248,turk1311,sout2701,language,41.8729,65.7709,kaz,AF CN IR KG KZ MN RU TJ TM UZ,kk,I,L,8000000,kk,"Balzhan Bultrikova (1921 – 1998), a Soviet and Kazakh teacher and stateswoman who helped establish the diplomatic corps in the Kazakh Soviet Socialist Republic"
 2824,Kalaallisut,kala1399,eski1264,gree1280,language,69.3761,-52.864,kal,DK GL,kl,I,L,47000,kl,
-2996,Central Khmer,cent1989,aust1305,khme1253,language,12.0515,105.015,khm,KH LA TH VN,km,I,L,7063200,km,
-3114,Kimbundu,kimb1241,atla1278,mbun1247,language,-8.97835,14.8893,kmb,AO CD,,I,L,3000000,kmb,
-2826,Kannada,nucl1305,drav1251,kann1255,language,13.5878,76.1198,kan,IN,kn,I,L,38000000,kn,
-3179,Korean,kore1280,kore1284,kore1284,language,37.5,128.0,kor,CN KP KR RU,ko,I,L,75000000,ko,
-3172,Konkani (macrolanguage),,,,,15.27,74.21,kok,,,M,L,2300000,kok,
-3180,Kosraean,kosr1238,aust1307,micr1244,language,5.31,162.98,kos,FM,,I,L,,kos,
+2996,Central Khmer,cent1989,aust1305,khme1253,language,12.0515,105.015,khm,KH LA TH VN,km,I,L,7063200,km,"Chuon Nath (1883 – 1969), the late Kana Mahanikaya Supreme Patriarch of Cambodia"
+3114,Kimbundu,kimb1241,atla1278,mbun1247,language,-8.97835,14.8893,kmb,AO CD,,I,L,3000000,kmb,Nzinga (1583–1663) was Queen of the Ambundu Kingdoms of Ndongo and Matamba (in present-day northern Angola)
+2826,Kannada,nucl1305,drav1251,kann1255,language,13.5878,76.1198,kan,IN,kn,I,L,38000000,kn,"Ferdinand Kittel, a priest and indologist with the Basel Mission in south India, famous for his studies of the Kannada language"
+3179,Korean,kore1280,kore1284,kore1284,language,37.5,128.0,kor,CN KP KR RU,ko,I,L,75000000,ko,"Sejong the Great (1397 – 1450), the fourth king of the Joseon dynasty of Korea"
+3172,Konkani (macrolanguage),,,,,15.27,74.21,kok,,,M,L,2300000,,
+3180,Kosraean,kosr1238,aust1307,micr1244,language,5.31,162.98,kos,FM,,I,L,,,
 3191,Kpelle,,,,,,,kpe,,,M,L,,kpe,
-2832,Kanuri,kanu1279,saha1256,west2505,family,25,17,kau,LY,kr,M,L,,kr,
-3240,Karachay-Balkar,kara1465,turk1311,kauk1241,language,43.565,42.2606,krc,AZ GE KZ RU,,I,L,,krc,
-3248,Karelian,kare1335,ural1272,lado1234,language,65.1691,30.8655,krl,FI RU,,I,L,80000,krl,
-3254,Kurukh,kuru1301,drav1251,kuru1300,language,24.46442,86.46568,kru,IN,,I,L,,kru,
-2830,Kashmiri,kash1277,indo1319,kash1285,language,34.166825,74.330455,kas,IN PK,ks,I,L,4381000,ks,
-3328,Kurdish,kurd1259,indo1319,laki1246,family,33,44,kur,IQ,ku,M,L,,ku,
-3323,Kumyk,kumy1244,turk1311,kauk1241,language,43.0,47.0,kum,KZ RU,,I,L,,kum,
-3330,Kutenai,kute1249,,,language,48.7892,-115.065,kut,CA US,,I,L,,kut,
-3174,Komi,komi1267,ural1272,perm1256,family,60,100,kom,RU,kv,M,L,,kv,
-1353,Cornish,corn1251,indo1319,sout3176,language,50.5233,-4.18619,cor,GB,kw,I,L,,kw,
-3027,Kirghiz,kirg1245,turk1311,east2791,language,42.0,74.0,kir,AF CN KG KZ TJ UZ,ky,I,L,2631420,ky,
-3479,Latin,lati1261,indo1319,impe1234,language,41.9026,12.4502,lat,VA,la,I,A,,la,
-3463,Ladino,ladi1251,indo1319,sout3200,language,41.205,28.6632,lad,GR TR,,I,L,120000,lad,
-3467,Lahnda,,,,,,,lah,,,M,L,,lah,
-3472,Lamba,lamb1271,atla1278,bisa1262,language,-12.3366,27.9026,lam,CD ZM,,I,L,,lam,
-3756,Moselle Franconian,luxe1241,indo1319,midd1319,language,49.6839,6.14931,ltz,BE DE FR LU,lb,I,L,335518,lb,
-3556,Lezgian,lezg1247,nakh1245,aghu1259,language,41.5157,47.8951,lez,AZ GE KZ RU UA,,I,L,,lez,
-3763,Ganda,gand1255,atla1278,nort3220,language,0.66884,32.15153,lug,UG,lg,I,L,3015980,lg,
-3594,Limburgan,limb1263,indo1319,ripu1236,language,51.015,5.87705,lim,BE DE NL,li,I,L,,li,
-3595,Kinshasa Lingala,ling1263,atla1278,ling1269,language,-4.409174,15.28532,lin,CD CF CG,ln,I,L,8400000,ln,
-3474,Lao,laoo1244,taik1256,laot1235,language,19.0,102.46,lao,KH LA TH,lo,I,L,30000000,lo,
+2832,Kanuri,kanu1279,saha1256,west2505,family,25,17,kau,LY,kr,M,L,,,
+3240,Karachay-Balkar,kara1465,turk1311,kauk1241,language,43.565,42.2606,krc,AZ GE KZ RU,,I,L,,,
+3248,Karelian,kare1335,ural1272,lado1234,language,65.1691,30.8655,krl,FI RU,,I,L,80000,krl,"Liisi Beckmann (1924 – 2004), a Finnish designer and artist primarily active in Italy from the late 1950s to the late 1970s"
+3254,Kurukh,kuru1301,drav1251,kuru1300,language,24.46442,86.46568,kru,IN,,I,L,,,
+2830,Kashmiri,kash1277,indo1319,kash1285,language,34.166825,74.330455,kas,IN PK,ks,I,L,4381000,,
+3328,Kurdish,kurd1259,indo1319,laki1246,family,33,44,kur,IQ,ku,M,L,,ku,"Celadet Alî Bedirxan (1893 – 1951), also known as Mîr Celadet, a Kurdish diplomat, writer, linguist, journalist and political activist"
+3323,Kumyk,kumy1244,turk1311,kauk1241,language,43.0,47.0,kum,KZ RU,,I,L,,,
+3330,Kutenai,kute1249,,,language,48.7892,-115.065,kut,CA US,,I,L,,,
+3174,Komi,komi1267,ural1272,perm1256,family,60,100,kom,RU,kv,M,L,,kv,"Pyotr Subbotin-Permyak (1886 – 1923), a Russian avant-gardist painter, the professor of decorative painting"
+1353,Cornish,corn1251,indo1319,sout3176,language,50.5233,-4.18619,cor,GB,kw,I,L,,,
+3027,Kirghiz,kirg1245,turk1311,east2791,language,42.0,74.0,kir,AF CN KG KZ TJ UZ,ky,I,L,2631420,ky,"Iasyr Shivaza, (1906 – 1988), a famous Soviet Dungan poet, writer, editor, linguist, translator, scholar and social activist"
+3479,Latin,lati1261,indo1319,impe1234,language,41.9026,12.4502,lat,VA,la,I,A,,la,"Ovid (43 BC – 17/18 AD), a Roman poet who lived during the reign of Augustus"
+3463,Ladino,ladi1251,indo1319,sout3200,language,41.205,28.6632,lad,GR TR,,I,L,120000,,
+3467,Lahnda,,,,,,,lah,,,M,L,,,
+3472,Lamba,lamb1271,atla1278,bisa1262,language,-12.3366,27.9026,lam,CD ZM,,I,L,,,
+3756,Moselle Franconian,luxe1241,indo1319,midd1319,language,49.6839,6.14931,ltz,BE DE FR LU,lb,I,L,335518,,
+3556,Lezgian,lezg1247,nakh1245,aghu1259,language,41.5157,47.8951,lez,AZ GE KZ RU UA,,I,L,,,
+3763,Ganda,gand1255,atla1278,nort3220,language,0.66884,32.15153,lug,UG,lg,I,L,3015980,,
+3594,Limburgan,limb1263,indo1319,ripu1236,language,51.015,5.87705,lim,BE DE NL,li,I,L,,,
+3595,Kinshasa Lingala,ling1263,atla1278,ling1269,language,-4.409174,15.28532,lin,CD CF CG,ln,I,L,8400000,ln,"Franco Luambo (1938 – 1989), a musician from Congo"
+3474,Lao,laoo1244,taik1256,laot1235,language,19.0,102.46,lao,KH LA TH,lo,I,L,30000000,,
 3699,Mongo,mong1338,atla1278,lomo1242,language,-1.54228,20.4259,lol,CD,,I,L,,lol,
-3713,Lozi,lozi1239,atla1278,seso1234,language,-17.7052,24.7398,loz,BW NA ZM ZW,,I,L,71841,loz,
-3601,Lithuanian,lith1251,indo1319,east2280,language,55.1429,23.9601,lit,BY LT LV PL RU,lt,I,L,4000000,lt,
+3713,Lozi,lozi1239,atla1278,seso1234,language,-17.7052,24.7398,loz,BW NA ZM ZW,,I,L,71841,,
+3601,Lithuanian,lith1251,indo1319,east2280,language,55.1429,23.9601,lit,BY LT LV PL RU,lt,I,L,4000000,lt,"Kazys Puida (1883 – 1945), a Lithuanian writer, playwright, press worker, translator"
 3758,Luba-Katanga,luba1250,atla1278,kaon1242,language,-8.2816,25.8918,lub,CD,lu,I,L,,lu,
-3757,Luba-Lulua,luba1249,atla1278,bang1371,language,-5.72717,22.4422,lua,AO CD,,I,L,6300000,lua,
-3764,Luiseno-Juaneño,luis1253,utoa1244,cupa1239,language,33.3184,-116.939,lui,US,,I,E,,lui,
-3769,Lunda,lund1266,atla1278,lund1275,language,-11.1793,23.8662,lun,AO CD ZM,,I,L,3000000,lun,
+3757,Luba-Lulua,luba1249,atla1278,bang1371,language,-5.72717,22.4422,lua,AO CD,,I,L,6300000,,
+3764,Luiseno-Juaneño,luis1253,utoa1244,cupa1239,language,33.3184,-116.939,lui,US,,I,E,,,
+3769,Lunda,lund1266,atla1278,lund1275,language,-11.1793,23.8662,lun,AO CD ZM,,I,L,3000000,,
 3770,Luo (Kenya and Tanzania),luok1236,nilo1247,adho1242,language,-0.93296,34.4896,luo,KE TZ,,I,L,,luo,
-3774,Mizo,lush1249,sino1245,mizo1244,language,22.6138,92.6247,lus,BD IN MM,,I,L,541750,lus,
-3481,Latvian,latv1249,indo1319,east2280,language,56.826108,24.309118,lav,BY EE LT LV RU,lv,M,L,1550000,lv,
-3800,Literary Chinese,lite1248,sino1245,clas1255,language,34.09,109.05,lzh,CN,,I,H,,lzh,
-3806,Madurese,nucl1460,aust1307,madu1247,language,-7.0,113.0,mad,ID,,I,L,10000000,mad,
-3809,Magahi,maga1260,indo1319,mait1254,language,25.0915,85.3335,mag,IN,,I,L,10821000,mag,
-3811,Maithili,mait1250,indo1319,mait1254,language,26.3817,86.2211,mai,IN NP,,I,L,34700000,mai,
-3813,Makasar,maka1311,aust1307,nucl1727,language,-5.65551,119.838,mak,ID,,I,L,,mak,
+3774,Mizo,lush1249,sino1245,mizo1244,language,22.6138,92.6247,lus,BD IN MM,,I,L,541750,,
+3481,Latvian,latv1249,indo1319,east2280,language,56.826108,24.309118,lav,BY EE LT LV RU,lv,M,L,1550000,,
+3800,Literary Chinese,lite1248,sino1245,clas1255,language,34.09,109.05,lzh,CN,,I,H,,lzh,"Confucius (511 – 479 BCE), a Chinese philosopher and politician of the Sprig and Autumn period"
+3806,Madurese,nucl1460,aust1307,madu1247,language,-7.0,113.0,mad,ID,,I,L,10000000,,
+3809,Magahi,maga1260,indo1319,mait1254,language,25.0915,85.3335,mag,IN,,I,L,10821000,,
+3811,Maithili,mait1250,indo1319,mait1254,language,26.3817,86.2211,mai,IN NP,,I,L,34700000,,
+3813,Makasar,maka1311,aust1307,nucl1727,language,-5.65551,119.838,mak,ID,,I,L,,,
 3816,Mandingo,,,,,,,man,,,M,L,,man,
 3819,Masai,masa1300,nilo1247,nucl1431,language,-3.1419,36.4573,mas,KE TZ,,I,L,,mas,
 3882,Moksha,moks1248,ural1272,mord1256,language,54.1855,42.6728,mdf,RU,,I,L,,mdf,
-3893,Mandar,mand1442,aust1307,nort2894,language,-3.34717,119.068,mdr,ID,,I,L,,mdr,
-3914,Mende (Sierra Leone),mend1266,mand1469,mend1265,language,7.90935,-10.9926,men,GN LR SL,,I,L,1480000,men,
-4080,Malagasy,mala1537,aust1307,sout2919,family,-20,47,mlg,MG,mg,M,L,,mg,
-3952,Middle Irish (10-12th century),midd1360,indo1319,oldi1245,dialect,,,mga,,,I,H,219880,mga,
+3893,Mandar,mand1442,aust1307,nort2894,language,-3.34717,119.068,mdr,ID,,I,L,,,
+3914,Mende (Sierra Leone),mend1266,mand1469,mend1265,language,7.90935,-10.9926,men,GN LR SL,,I,L,1480000,,
+4080,Malagasy,mala1537,aust1307,sout2919,family,-20,47,mlg,MG,mg,M,L,,mg,"Dox (1913 – 1978), a Malagasy writer and poet considered one of the most important literary figures in the country’s history"
+3952,Middle Irish (10-12th century),midd1360,indo1319,oldi1245,dialect,,,mga,,,I,H,219880,,
 3810,Marshallese,mars1254,aust1307,west2844,language,8.72,167.73,mah,MH,mh,I,L,43900,mh,
 4229,Maori,maor1246,aust1307,cent2062,language,-38.2881,176.541,mri,NZ,mi,I,L,70000,mi,
-4003,Mi'kmaq,mikm1235,algi1248,east2700,language,45.9941,-65.5766,mic,CA US,,I,L,8100,mic,
-4014,Minangkabau,mina1268,aust1307,mina1280,language,-0.896,100.44,min,ID,,I,L,6500000,min,
-4053,Macedonian,mace1250,indo1319,mace1252,language,41.5957,21.7932,mkd,AL BG GR MK RS,mk,I,L,2500000,mk,
-3814,Malayalam,mala1464,drav1251,mala1541,language,9.59208,76.7651,mal,IN,ml,I,L,34014000,ml,
-4158,Mongolian,mong1331,mong1349,khal1273,family,46,105,mon,MN,mn,M,L,,mn,
-4126,Manchu,manc1252,tung1282,manc1251,language,47.3122,126.557,mnc,CN RU,,I,L,,mnc,
+4003,Mi'kmaq,mikm1235,algi1248,east2700,language,45.9941,-65.5766,mic,CA US,,I,L,8100,,
+4014,Minangkabau,mina1268,aust1307,mina1280,language,-0.896,100.44,min,ID,,I,L,6500000,min,"Tuanku Imam Bonjol (1772 – 1864), one of the most popular leaders of the Padri movement in Central Sumatra"
+4053,Macedonian,mace1250,indo1319,mace1252,language,41.5957,21.7932,mkd,AL BG GR MK RS,mk,I,L,2500000,mk,"Krste Misirkov, a philologist, journalist, historian and ethnographer"
+3814,Malayalam,mala1464,drav1251,mala1541,language,9.59208,76.7651,mal,IN,ml,I,L,34014000,ml,"Thilakan (1935 – 2012), a veteran Indian film and stage actor who appeared in over 200 Malayalam films"
+4158,Mongolian,mong1331,mong1349,khal1273,family,46,105,mon,MN,mn,M,L,,mn,"Peljidiin Genden (1892 – 1937), a prominent political leader of the Mongolian People’s Republic who served as the country’s first President"
+4126,Manchu,manc1252,tung1282,manc1251,language,47.3122,126.557,mnc,CN RU,,I,L,,mnc,"Prince Gong (1833 – 1898), an imperial prince of the Aisin Gioro clan and an important statesman of the Manchu-led Qing dynasty in China"
 4132,Manipuri,mani1292,sino1245,kuki1245,language,24.4409,93.3426,mni,BD IN MM,,I,L,1500000,mni,
-4138,Min Bei Chinese,minb1244,sino1245,inla1267,language,27.05,118.32,mnp,CN,,I,L,,mnp,
+4138,Min Bei Chinese,minb1244,sino1245,inla1267,language,27.05,118.32,mnp,CN,,I,L,,mnp,"Sun Keji (1917–2005), a native of Wuyishan City and a general of the People’s Liberation Army"
 4153,Mohawk,moha1258,iroq1247,moha1257,language,43.72,-74.66836,moh,CA US,,I,L,,moh,
-4163,Mossi,moss1236,atla1278,moss1238,language,11.95,-1.32,mos,BF CI GH ML TG,,I,L,4600000,mos,
-3818,Marathi,mara1378,indo1319,mode1268,language,17.9344,76.6665,mar,IN,mr,I,L,64783000,mr,
-4247,Malay (macrolanguage),indo1326,,,,4.5,114.6667,msa,BN CX MY SG,ms,M,L,,ms,
-4093,Maltese,malt1254,afro1255,nort3191,language,35.8884,14.4508,mlt,MT,mt,I,L,330000,mt,
-4313,Creek,cree1270,musk1252,musk1252,language,31.0,-87.5,mus,US,,I,L,,mus,
-4353,Mirandese,mira1251,indo1319,astu1244,language,41.5375,-6.38371,mwl,ES PT,,I,L,,mwl,
-4359,Marwari,,,,,,,mwr,,,M,L,,mwr,
-4392,Burmese,nucl1310,sino1245,oldm1246,language,20.7926,93.9665,mya,BD MM TH,my,I,L,31000000,my,
-4408,Erzya,erzy1239,ural1272,mord1256,language,52.8548,45.3901,myv,AZ BY EE KZ LT LV RU UA,,I,L,,myv,
-4455,Nauru,naur1243,aust1307,micr1243,language,-0.52957,166.922,nau,NR,na,I,L,,na,
-4448,Min Nan Chinese,minn1241,sino1245,coas1318,language,24.5,118.17,nan,CN TW,,I,L,,nan,
-4450,Continental Southern Italian,neap1235,indo1319,ital1287,language,39.2288,16.4225,nap,IT,,I,L,,nap,
-4744,Norwegian Bokmål,norw1259,indo1319,norw1258,dialect,61.112,8.886,nob,NO,nb,I,L,5000000,nb,
-4510,Zimbabwean Ndebele,nort2795,atla1278,ngun1267,language,-20.2513,27.4096,nde,BW ZM ZW,nd,I,L,,nd,
-4524,Eastern Low German,nort2627,indo1319,east2291,language,53.115373,12.391439,nds,DE,,I,L,2600000,nds,
-4546,Eastern Pahari,east1436,indo1319,indo1310,family,27.5947033333,87.6200833333,nep,NP,ne,M,L,16200000,ne,
-4553,Kathmandu Valley Newari,newa1246,sino1245,newa1247,language,27.67,85.326,new,IN NP,,I,L,846557,new,
-4520,Ndonga,ndon1254,atla1278,kwam1257,language,-17.22,17.35,ndo,AO NA,ng,I,L,1000000,ng,
+4163,Mossi,moss1236,atla1278,moss1238,language,11.95,-1.32,mos,BF CI GH ML TG,,I,L,4600000,,
+3818,Marathi,mara1378,indo1319,mode1268,language,17.9344,76.6665,mar,IN,mr,I,L,64783000,mr,"Kusumagraj (1912 – 1999), an eminent Marathi poet, playwright, novelist, short story writer"
+4247,Malay (macrolanguage),indo1326,,,,4.5,114.6667,msa,BN CX MY SG,ms,M,L,,,
+4093,Maltese,malt1254,afro1255,nort3191,language,35.8884,14.4508,mlt,MT,mt,I,L,330000,mt,"Fortunato Mizzi (1844 – 1905), the founder of the Anti-Reform Party and the one who started the process which eventually led to Malta’s independence"
+4313,Creek,cree1270,musk1252,musk1252,language,31.0,-87.5,mus,US,,I,L,,mus,"Lilah Denton Lindsey (1860 – 1943), an American philanthropist, civic leader, women’s community organizer, temperance worker, and teacher"
+4353,Mirandese,mira1251,indo1319,astu1244,language,41.5375,-6.38371,mwl,ES PT,,I,L,,,
+4359,Marwari,,,,,,,mwr,,,M,L,,,
+4392,Burmese,nucl1310,sino1245,oldm1246,language,20.7926,93.9665,mya,BD MM TH,my,I,L,31000000,my,"May Shin (1917 – 2008), a Burmese actress and singer"
+4408,Erzya,erzy1239,ural1272,mord1256,language,52.8548,45.3901,myv,AZ BY EE KZ LT LV RU UA,,I,L,,,
+4455,Nauru,naur1243,aust1307,micr1243,language,-0.52957,166.922,nau,NR,na,I,L,,na,"Hammer DeRoburt (1922 – 1992), the first President of the Republic of Nauru who ruled the country for most of its first twenty years of independence"
+4448,Min Nan Chinese,minn1241,sino1245,coas1318,language,24.5,118.17,nan,CN TW,,I,L,,,
+4450,Continental Southern Italian,neap1235,indo1319,ital1287,language,39.2288,16.4225,nap,IT,,I,L,,nap,"Enrico Caruso (1873 – 1921), an Italian operatic tenor"
+4744,Norwegian Bokmål,norw1259,indo1319,norw1258,dialect,61.112,8.886,nob,NO,nb,I,L,5000000,nb,"Ivar Aasen (1813 – 1896), a Norwegian philologist, lexicographer, playwright, and poet"
+4510,Zimbabwean Ndebele,nort2795,atla1278,ngun1267,language,-20.2513,27.4096,nde,BW ZM ZW,nd,I,L,,nd,"Bernard Mizeki (1861 – 1896), an African Christian missionary and martyr"
+4524,Eastern Low German,nort2627,indo1319,east2291,language,53.115373,12.391439,nds,DE,,I,L,2600000,,
+4546,Eastern Pahari,east1436,indo1319,indo1310,family,27.5947033333,87.6200833333,nep,NP,ne,M,L,16200000,ne,"Siddhicharan Shrestha (1912 – 1992), one of the most prominent writers of Nepal"
+4553,Kathmandu Valley Newari,newa1246,sino1245,newa1247,language,27.67,85.326,new,IN NP,,I,L,846557,new,"Chittadhar Hridaya (1906 – 1982), a Nepalese poet"
+4520,Ndonga,ndon1254,atla1278,kwam1257,language,-17.22,17.35,ndo,AO NA,ng,I,L,1000000,,
 4610,Nias,nias1242,aust1307,nias1241,language,0.90691,97.4961,nia,ID,,I,L,,nia,
-4628,Niuean,niue1239,aust1307,tong1324,language,-19.06,-169.86,niu,NU,,I,L,,niu,
-4677,Dutch,dutc1256,indo1319,glob1241,language,52.0,5.0,nld,AW BE BQ BR CW DE GF GY NL SR SX,nl,I,L,21000000,nl,
-4733,Norwegian Nynorsk,norw1262,indo1319,norw1258,dialect,,,nno,,nn,I,L,4700000,nn,
-4759,Norwegian,norw1258,indo1319,west2805,language,59.92,10.71,nor,FI NO RU SE SJ,no,M,L,,no,
+4628,Niuean,niue1239,aust1307,tong1324,language,-19.06,-169.86,niu,NU,,I,L,,niu,"Robert Rex (1909 – 1992), the first Premier of the Pacific island state of Niue"
+4677,Dutch,dutc1256,indo1319,glob1241,language,52.0,5.0,nld,AW BE BQ BR CW DE GF GY NL SR SX,nl,I,L,21000000,,
+4733,Norwegian Nynorsk,norw1262,indo1319,norw1258,dialect,,,nno,,nn,I,L,4700000,,
+4759,Norwegian,norw1258,indo1319,west2805,language,59.92,10.71,nor,FI NO RU SE SJ,no,M,L,,,
 4749,Nogai,noga1249,turk1311,sout2701,language,43.5917,46.6618,nog,KZ RU,,I,L,,nog,
-4756,Old Norse,oldn1244,indo1319,west2805,language,63.42,10.38,non,NO,,I,H,,non,
+4756,Old Norse,oldn1244,indo1319,west2805,language,63.42,10.38,non,NO,,I,H,,non,"Rasmus Rask (1787–1832), a Danish linguist and philologist"
 4784,N'Ko,nkoa1234,arti1236,arti1236,language,,,nqo,BF CI GM GN GW LR ML SL SN,,I,L,,nqo,
-4471,South Transvaal Ndebele,sout3270,atla1278,zulu1248,dialect,-29,24,nbl,ZA,nr,I,L,588000,nr,
-4816,Pedi,pedi1238,atla1278,sepe1241,language,-24.7993,29.4718,nso,BW ZA,,I,L,3851000,nso,
-4456,Navajo,nava1243,atha1245,west2810,language,36.33,-109.38,nav,US,nv,I,L,148530,nv,
-4873,Classical Newari,,,,,,,nwc,,,I,H,,nwc,
-4896,Nyanja,nyan1308,atla1278,nyan1319,language,-14.8047,32.8108,nya,MW MZ SZ TZ ZM ZW,ny,I,L,10000000,ny,
-4908,Nyamwezi,nyam1276,atla1278,nyam1286,language,-5.08559,32.94452,nym,TZ,,I,L,926000,nym,
-4909,Nyankole,nyan1307,atla1278,nkor1241,language,-0.46364,30.548,nyn,RW TZ UG,,I,L,1643193,nyn,
-4910,Nyoro,nyor1246,atla1278,nyor1247,language,0.95294,31.3493,nyo,UG,,I,L,,nyo,
-4924,Nzima,nzim1238,atla1278,jwir1243,language,5.1785,-2.81123,nzi,CI GH,,I,L,352500,nzi,
-4945,Occitan,occi1239,indo1319,occi1240,language,44.1415,6.82979,oci,AD ES FR IT MC,oc,I,L,854500,oc,
-4968,Ojibwa,ojib1241,algi1248,ojib1240,family,49.25,-84.5,oji,CA US,oj,M,L,,oj,
-5048,Oromo,nucl1736,afro1255,nucl1701,family,8,38,orm,ET KE,om,M,L,,om,
-5047,Oriya (macrolanguage),oriy1255,,,,20.27,85.82,ori,IN,or,M,L,31000000,or,
-5065,Iron Ossetian,iron1242,indo1319,osse1243,language,42.98,44.61,oss,RU,os,I,L,588000,os,
-5060,Osage,osag1243,siou1252,osag1244,language,36.7828,-96.2949,osa,US,,I,L,,osa,
-5069,Ottoman Turkish,otto1234,turk1311,nucl1301,dialect,,,ota,,,I,H,,ota,
-5111,Eastern Panjabi,panj1256,indo1319,east2727,language,30.0368,75.6702,pan,BD IN PK,pa,I,L,25700000,pa,
-5105,Pangasinan,pang1290,aust1307,west2550,language,15.9377,120.365,pag,PH,,I,L,,pag,
-5109,Pahlavi,pahl1241,indo1319,midd1352,language,30.06,52.7,pal,IR,,I,A,,pal,
-5110,Pampanga,pamp1243,aust1307,cent2080,language,14.9603,120.502,pam,PH,,I,L,2000000,pam,
-5113,Papiamento,papi1253,indo1319,uppe1458,language,12.48485,-69.93988,pap,AW BQ CW NL,,I,L,263200,pap,
+4471,South Transvaal Ndebele,sout3270,atla1278,zulu1248,dialect,-29,24,nbl,ZA,nr,I,L,588000,,
+4816,Pedi,pedi1238,atla1278,sepe1241,language,-24.7993,29.4718,nso,BW ZA,,I,L,3851000,,
+4456,Navajo,nava1243,atha1245,west2810,language,36.33,-109.38,nav,US,nv,I,L,148530,,
+4873,Classical Newari,,,,,,,nwc,,,I,H,,nwc,"Amritananda Mahasthavir, a Buddhist author in India"
+4896,Nyanja,nyan1308,atla1278,nyan1319,language,-14.8047,32.8108,nya,MW MZ SZ TZ ZM ZW,ny,I,L,10000000,ny,"William Percival Johnson (1854 – 1928), an Anglican missionary to Nyasaland"
+4908,Nyamwezi,nyam1276,atla1278,nyam1286,language,-5.08559,32.94452,nym,TZ,,I,L,926000,,
+4909,Nyankole,nyan1307,atla1278,nkor1241,language,-0.46364,30.548,nyn,RW TZ UG,,I,L,1643193,,
+4910,Nyoro,nyor1246,atla1278,nyor1247,language,0.95294,31.3493,nyo,UG,,I,L,,,
+4924,Nzima,nzim1238,atla1278,jwir1243,language,5.1785,-2.81123,nzi,CI GH,,I,L,352500,,
+4945,Occitan,occi1239,indo1319,occi1240,language,44.1415,6.82979,oci,AD ES FR IT MC,oc,I,L,854500,oc,"Frédéric Mistral (1830 – 1914), a French writer of Occitan literature and lexicographer of the Provençal form of the language"
+4968,Ojibwa,ojib1241,algi1248,ojib1240,family,49.25,-84.5,oji,CA US,oj,M,L,,,
+5048,Oromo,nucl1736,afro1255,nucl1701,family,8,38,orm,ET KE,om,M,L,,,
+5047,Oriya (macrolanguage),oriy1255,,,,20.27,85.82,ori,IN,or,M,L,31000000,or,"Madhusudan Rao (1853 – 1912), an Odia poet and writer from India"
+5065,Iron Ossetian,iron1242,indo1319,osse1243,language,42.98,44.61,oss,RU,os,I,L,588000,os,"Georgi Maliev (1886 – 1942), an Ossetian poet"
+5060,Osage,osag1243,siou1252,osag1244,language,36.7828,-96.2949,osa,US,,I,L,,,
+5069,Ottoman Turkish,otto1234,turk1311,nucl1301,dialect,,,ota,,,I,H,,ota,"Dürrüşehvar Sultan (1914 – 2006), an Ottoman princess, the only daughter of Abdulmjid II and the last heir apparent to the Ottoman Imperial throne"
+5111,Eastern Panjabi,panj1256,indo1319,east2727,language,30.0368,75.6702,pan,BD IN PK,pa,I,L,25700000,pa,"Amrita Pritam (1919 – 2005), an Indian novelist, essayist and poet"
+5105,Pangasinan,pang1290,aust1307,west2550,language,15.9377,120.365,pag,PH,,I,L,,pag,"Pedro Orata (1899 – 1989), a Filipino educator known as the Father of Barrio High Schools"
+5109,Pahlavi,pahl1241,indo1319,midd1352,language,30.06,52.7,pal,IR,,I,A,,,
+5110,Pampanga,pamp1243,aust1307,cent2080,language,14.9603,120.502,pam,PH,,I,L,2000000,,
+5113,Papiamento,papi1253,indo1319,uppe1458,language,12.48485,-69.93988,pap,AW BQ CW NL,,I,L,263200,,
 5118,Palauan,pala1344,aust1307,mala1545,language,7.34138,134.476678,pau,PW,,I,L,15000,pau,
-5177,Old Persian (ca. 600-400 B.C.),oldp1254,indo1319,sout3157,language,32.0,54.0,peo,IR,,I,H,,peo,
-5205,Phoenician,phoe1239,afro1255,phoe1238,language,34.12,35.65,phn,LB,,I,A,,phn,
-5257,Pali,pali1273,indo1319,biha1245,language,24.5271,82.251,pli,IN MM,pi,I,A,,pi,
-5326,Polish,poli1260,indo1319,lech1241,language,51.8439,18.6255,pol,BY CZ DE LT PL RU SK UA,pl,I,L,44000000,pl,
-5328,Pohnpeian,pohn1238,aust1307,pona1248,language,6.87212,158.223,pon,FM,,I,L,27700,pon,
-5364,Old Provençal,oldp1253,indo1319,occi1240,language,43.5,0.6,pro,FR,,I,H,,pro,
-5420,Nuclear Pashto,nucl1276,indo1319,pash1269,family,30,70,pus,PK,ps,M,L,,ps,
-5332,Portuguese,port1283,indo1319,braz1247,language,39.91,-8.1,por,AD AR BO BR CO ES FR GF GY PE PT PY SR UY VE,pt,I,L,250000000,pt,
-5448,Quechua,quec1387,,,family,-2,-77.5,que,BO EC PE,qu,M,L,8000000,qu,
-5510,Rajasthani,,,,,,,raj,,,M,L,12370010,raj,
-5516,Rapanui,rapa1244,aust1307,east2449,language,-27.113,-109.342,rap,CL,,I,L,,rap,
-5518,Southern Cook Island Maori,raro1241,aust1307,cent2062,language,-21.23,-159.78,rar,CK,,I,L,43000,rar,
-5610,Romansh,roma1326,indo1319,gall1280,language,46.5538,9.92812,roh,AT CH IT,rm,I,L,500000,rm,
-5640,Rundi,rund1242,atla1278,rwan1241,language,-2.94,29.97,run,BI CD RW TZ UG,rn,I,L,10661000,rn,
-5613,Romanian,roma1327,indo1319,east2865,language,46.3913,24.2256,ron,BG HU MD RO RS UA,ro,I,L,26000000,ro,
-5612,Romani,roma1329,indo1319,indo1322,family,,,rom,RO,,M,L,,rom,
-5644,Russian,russ1263,indo1319,east1426,language,59.0,50.0,rus,BY CN EE FI GE KG KP KZ LT LV MD MN NO PL RO RU SJ TM UA UZ,ru,I,L,288000000,ru,
-5642,Aromanian,arom1237,indo1319,east2714,language,40.616,21.2,rup,AL BG GR MK RS,,I,L,1500000,rup,
-3023,Kinyarwanda,kiny1244,atla1278,rwan1241,language,-1.56771,29.6441,kin,BI CD RW TZ UG,rw,I,L,9306800,rw,
-5671,Sanskrit,sans1269,indo1319,indo1321,language,20.0,77.0,san,IN,sa,I,A,194433,sa,
+5177,Old Persian (ca. 600-400 B.C.),oldp1254,indo1319,sout3157,language,32.0,54.0,peo,IR,,I,H,,,
+5205,Phoenician,phoe1239,afro1255,phoe1238,language,34.12,35.65,phn,LB,,I,A,,phn,"Thales of Miletus (624 – 545 BC), a Greek mathematician, astronomer and pre-Socratic philosopher"
+5257,Pali,pali1273,indo1319,biha1245,language,24.5271,82.251,pli,IN MM,pi,I,A,,,
+5326,Polish,poli1260,indo1319,lech1241,language,51.8439,18.6255,pol,BY CZ DE LT PL RU SK UA,pl,I,L,44000000,pl,"Stefan Żeromski (1864 – 1925), a Polish novelist and dramatist belonging to the Young Poland movement at the turn of the 20th century"
+5328,Pohnpeian,pohn1238,aust1307,pona1248,language,6.87212,158.223,pon,FM,,I,L,27700,,
+5364,Old Provençal,oldp1253,indo1319,occi1240,language,43.5,0.6,pro,FR,,I,H,,,
+5420,Nuclear Pashto,nucl1276,indo1319,pash1269,family,30,70,pus,PK,ps,M,L,,,
+5332,Portuguese,port1283,indo1319,braz1247,language,39.91,-8.1,por,AD AR BO BR CO ES FR GF GY PE PT PY SR UY VE,pt,I,L,250000000,pt,"Raul Brandão (1867 – 1930), a Portuguese writer, journalist and military officer"
+5448,Quechua,quec1387,,,family,-2,-77.5,que,BO EC PE,qu,M,L,8000000,,
+5510,Rajasthani,,,,,,,raj,,,M,L,12370010,,
+5516,Rapanui,rapa1244,aust1307,east2449,language,-27.113,-109.342,rap,CL,,I,L,,,
+5518,Southern Cook Island Maori,raro1241,aust1307,cent2062,language,-21.23,-159.78,rar,CK,,I,L,43000,,
+5610,Romansh,roma1326,indo1319,gall1280,language,46.5538,9.92812,roh,AT CH IT,rm,I,L,500000,rm,"Arno Camenisch (born 1978), a Swiss writer"
+5640,Rundi,rund1242,atla1278,rwan1241,language,-2.94,29.97,run,BI CD RW TZ UG,rn,I,L,10661000,,
+5613,Romanian,roma1327,indo1319,east2865,language,46.3913,24.2256,ron,BG HU MD RO RS UA,ro,I,L,26000000,,
+5612,Romani,roma1329,indo1319,indo1322,family,,,rom,RO,,M,L,,,
+5644,Russian,russ1263,indo1319,east1426,language,59.0,50.0,rus,BY CN EE FI GE KG KP KZ LT LV MD MN NO PL RO RU SJ TM UA UZ,ru,I,L,288000000,ru,"Vladimir Putin (born 1952), President of Russia"
+5642,Aromanian,arom1237,indo1319,east2714,language,40.616,21.2,rup,AL BG GR MK RS,,I,L,1500000,,
+3023,Kinyarwanda,kiny1244,atla1278,rwan1241,language,-1.56771,29.6441,kin,BI CD RW TZ UG,rw,I,L,9306800,,
+5671,Sanskrit,sans1269,indo1319,indo1321,language,20.0,77.0,san,IN,sa,I,A,194433,sa,"Sher Shah Suri (1472 – 1545), the founder of the Suri Empire in India"
 5663,Sandawe,sand1273,,,language,-5.26918,35.4808,sad,TZ,,I,L,,sad,
-5667,Sakha,yaku1245,turk1311,nort2688,language,61.6974,133.98,sah,RU,,I,L,363000,sah,
-5670,Samaritan Aramaic,sama1314,afro1255,sama1316,dialect,32.3107,35.258,sam,IL PS,,I,E,,sam,
-5675,Sasak,sasa1249,aust1307,sasa1248,language,-8.58349,116.284,sas,ID,,I,L,,sas,
-5676,Santali,sant1410,aust1305,sant1457,language,25.0317,87.8185,sat,BD BT IN NP,,I,L,6218900,sat,
-6016,Sardinian,sard1257,indo1319,sard1256,family,42.8333,12.8333,srd,IT,sc,M,L,,sc,
-5717,Sicilian,sici1248,indo1319,ital1287,language,37.5735,14.0414,scn,IT,,I,L,,scn,
-5718,Scots,scot1243,indo1319,late1254,language,55.886945,-3.710133,sco,GB,,I,L,1500000,sco,
-5935,Sindhi,sind1272,indo1319,sind1279,language,26.0,69.0,snd,IN PK,sd,I,L,19675000,sd,
-5911,North Saami,nort2671,ural1272,cent2240,language,68.725,22.1113,sme,FI NO SE,se,I,L,4000,se,
-5758,Selkup,selk1253,ural1272,kama1376,language,59.9409,82.3004,sel,RU,,I,L,,sel,
+5667,Sakha,yaku1245,turk1311,nort2688,language,61.6974,133.98,sah,RU,,I,L,363000,,
+5670,Samaritan Aramaic,sama1314,afro1255,sama1316,dialect,32.3107,35.258,sam,IL PS,,I,E,,,
+5675,Sasak,sasa1249,aust1307,sasa1248,language,-8.58349,116.284,sas,ID,,I,L,,,
+5676,Santali,sant1410,aust1305,sant1457,language,25.0317,87.8185,sat,BD BT IN NP,,I,L,6218900,,
+6016,Sardinian,sard1257,indo1319,sard1256,family,42.8333,12.8333,srd,IT,sc,M,L,,,
+5717,Sicilian,sici1248,indo1319,ital1287,language,37.5735,14.0414,scn,IT,,I,L,,,
+5718,Scots,scot1243,indo1319,late1254,language,55.886945,-3.710133,sco,GB,,I,L,1500000,sco,"David Hume (1711 – 1776), a Scottish Enlightenment philosopher, historian, economist, librarian and essayist"
+5935,Sindhi,sind1272,indo1319,sind1279,language,26.0,69.0,snd,IN PK,sd,I,L,19675000,,
+5911,North Saami,nort2671,ural1272,cent2240,language,68.725,22.1113,sme,FI NO SE,se,I,L,4000,se,"Nils Vibe Stockfleth (1787 – 1866), a Norwegian cleric who was instrumental in the first development of the written form of the Northern Sami language"
+5758,Selkup,selk1253,ural1272,kama1376,language,59.9409,82.3004,sel,RU,,I,L,,,
 5666,Sango,sang1328,atla1278,sang1327,language,6.78584,20.1702,sag,CD CF CG TD,sg,I,L,4900000,sg,
-5776,Early Irish,oldi1245,indo1319,goid1240,language,53.0,-8.0,sga,IE,,I,H,,sga,
-5808,Shan,shan1277,taik1256,nort2739,language,21.5995,98.0342,shn,CN MM TH,,I,L,3000000,shn,
-5833,Sinhala,sinh1246,indo1319,sinh1247,language,8.0,81.0,sin,LK,si,I,L,13218000,si,
+5776,Early Irish,oldi1245,indo1319,goid1240,language,53.0,-8.0,sga,IE,,I,H,,,
+5808,Shan,shan1277,taik1256,nort2739,language,21.5995,98.0342,shn,CN MM TH,,I,L,3000000,,
+5833,Sinhala,sinh1246,indo1319,sinh1247,language,8.0,81.0,sin,LK,si,I,L,13218000,si,"S. W. R. D. Bandaranaike (1899 – 1959), the fourth Prime Minister of the Dominion of Ceylon (now Sri Lanka)"
 5823,Sidamo,sida1246,afro1255,sida1248,language,6.74176,38.3729,sid,ET,,I,L,,sid,
-5892,Slovak,slov1269,indo1319,czec1260,language,48.545705,18.78479,slk,AT CZ HU PL RS SK UA,sk,I,L,5606000,sk,
-5902,Slovenian,slov1268,indo1319,west2804,language,46.2543,14.7766,slv,AT HR HU IT SI,sl,I,L,2218000,sl,
-5920,Samoan,samo1305,aust1307,samo1310,language,-13.92,-171.83,smo,AS WS,sm,I,L,362000,sm,
-5907,South Saami,sout2674,ural1272,sout3150,language,62.8801,13.7006,sma,NO SE,,I,L,,sma,
-5915,Lule Saami,lule1254,ural1272,cent2240,language,67.2759,17.8057,smj,NO SE,,I,L,,smj,
-5919,Inari Saami,inar1241,ural1272,main1280,language,69.4229,27.8658,smn,FI NO,,I,L,,smn,
-5924,Skolt Saami,skol1241,ural1272,main1280,language,68.8326,29.7204,sms,FI NO RU,,I,L,,sms,
-5932,Shona,shon1251,atla1278,cent2310,language,-17.20849,29.75725,sna,BW ZA ZM ZW,sn,I,L,7000000,sn,
+5892,Slovak,slov1269,indo1319,czec1260,language,48.545705,18.78479,slk,AT CZ HU PL RS SK UA,sk,I,L,5606000,,
+5902,Slovenian,slov1268,indo1319,west2804,language,46.2543,14.7766,slv,AT HR HU IT SI,sl,I,L,2218000,,
+5920,Samoan,samo1305,aust1307,samo1310,language,-13.92,-171.83,smo,AS WS,sm,I,L,362000,,
+5907,South Saami,sout2674,ural1272,sout3150,language,62.8801,13.7006,sma,NO SE,,I,L,,,
+5915,Lule Saami,lule1254,ural1272,cent2240,language,67.2759,17.8057,smj,NO SE,,I,L,,,
+5919,Inari Saami,inar1241,ural1272,main1280,language,69.4229,27.8658,smn,FI NO,,I,L,,,
+5924,Skolt Saami,skol1241,ural1272,main1280,language,68.8326,29.7204,sms,FI NO RU,,I,L,,,
+5932,Shona,shon1251,atla1278,cent2310,language,-17.20849,29.75725,sna,BW ZA ZM ZW,sn,I,L,7000000,,
 5941,Soninke,soni1259,mand1469,soni1258,language,13.1273,-11.7178,snk,GM GN GW ML MR SN,,I,L,1067000,snk,
-5967,Somali,soma1255,afro1255,east2653,language,4.778704,45.152856,som,DJ ET KE SO,so,I,L,8335000,so,
-5961,Sogdian,sogd1245,indo1319,sogd1246,language,39.7,66.983,sog,UZ,,I,A,,sog,
-6003,Albanian,alba1267,indo1319,clas1257,family,41,20,sqi,AL,sq,M,L,,sq,
+5967,Somali,soma1255,afro1255,east2653,language,4.778704,45.152856,som,DJ ET KE SO,so,I,L,8335000,so,"Sheikh Ali Ayanle Samatar, a prominent Somali Islamic scholar"
+5961,Sogdian,sogd1245,indo1319,sogd1246,language,39.7,66.983,sog,UZ,,I,A,,,
+6003,Albanian,alba1267,indo1319,clas1257,family,41,20,sqi,AL,sq,M,L,,sq,"Hysni Kapo (1915 – 1979), an Albanian military commander and leading member of the Party of Labour of Albania"
 6027,Serbian Standard,serb1264,indo1319,east2821,dialect,44.3238,21.9192,srp,AL BA BG HR HU ME MK RO RS,sr,I,L,21000000,sr,
 6025,Sranan Tongo,sran1240,indo1319,sran1241,language,5.83,-55.33,srn,NL SR,,I,L,,srn,
 6029,Sereer,sere1260,atla1278,peul1234,language,13.8941,-16.3916,srr,GM SN,,I,L,868800,srr,
