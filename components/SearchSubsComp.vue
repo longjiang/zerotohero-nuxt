@@ -520,9 +520,10 @@ export default {
     async checkHits() {
       this.checking = true;
       let excludeTerms = [];
-      if (this.terms.length > 0) {
+      let dictionary = await this.$getDictionary();
+      if (dictionary && this.terms.length > 0) {
         for (let term of this.terms) {
-          let t = await (await this.$getDictionary()).getWordsThatContain(term);
+          let t = await dictionary.getWordsThatContain(term);
           t = this.simplifyExcludeTerms(t);
           excludeTerms = excludeTerms.concat(t);
         }

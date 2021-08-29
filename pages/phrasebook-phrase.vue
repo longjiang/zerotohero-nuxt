@@ -411,15 +411,19 @@ export default {
       this.phraseReady();
     },
     async matchPhraseToDictionaryEntries() {
-      this.words = await (
-        await this.$getDictionary()
-      ).lookupMultiple(this.phraseObj.phrase, true);
-      if (this.words && this.words.length > 0) {
-        for (let word of this.words) {
-          if (!word.pronunciation)
-            word.pronunciation = this.phraseObj.pronunciation;
+      let dictionary = await this.$getDictionary();
+      if (dictionary) {
+        this.words = await dictionary.lookupMultiple(
+          this.phraseObj.phrase,
+          true
+        );
+        if (this.words && this.words.length > 0) {
+          for (let word of this.words) {
+            if (!word.pronunciation)
+              word.pronunciation = this.phraseObj.pronunciation;
+          }
+          this.word = this.words[0];
         }
-        this.word = this.words[0];
       }
     },
     stripPunctuations(text) {

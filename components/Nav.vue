@@ -398,7 +398,7 @@ export default {
           icon: "fa fa-book",
           title: "Dictionary",
           name: "dictionary",
-          show: this.hasFeature("dictionary"),
+          show: this.hasFeature("dictionary") || this.hasPhrasebooks,
           children: [
             {
               name: "phrasebooks",
