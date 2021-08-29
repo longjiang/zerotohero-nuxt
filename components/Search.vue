@@ -172,6 +172,9 @@ export default {
       }
     },
     async text() {
+      if (!this.nav && this.text !== '') {
+        this.active = true
+      }
       if (this.type === "dictionary") {
         let def = await (
           await this.$getDictionary()

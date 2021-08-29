@@ -309,8 +309,10 @@ export default {
       }
     },
     goToLang(lang) {
-      let zoomLevel = 5 + (1 / Math.log10(lang.speakers)) * 6;
-      if (!lang.speakers) zoomLevel = 9;
+      let x = lang.speakers ? Math.max(Math.log10(lang.speakers), 0) : 0
+      let minZoom = 6
+      let maxZoom = 11
+      let zoomLevel = maxZoom - (maxZoom - minZoom) / 9 * x;
       this.map.flyTo([lang.lat, lang.long], zoomLevel, {
         animation: true,
       });
