@@ -97,8 +97,8 @@
                   >
                     HSK 7-9
                   </td>
-                  <td class="text-left">1,064</td>
-                  <td class="text-left">84h 32m</td>
+                  <td class="text-left">1,235</td>
+                  <td class="text-left">84h 25m</td>
                 </tr>
 
                 <tr>
@@ -140,8 +140,8 @@
                   >
                     <strong>Total</strong>
                   </td>
-                  <td class="text-left"><strong>2,146</strong></td>
-                  <td class="text-left"><strong>189h 30m</strong></td>
+                  <td class="text-left"><strong>2,317</strong></td>
+                  <td class="text-left"><strong>189h 23m</strong></td>
                 </tr>
               </tbody>
             </table>
@@ -154,7 +154,7 @@
               about
               <strong>10 cents.</strong>
             </p>
-            <p>Updated on August 22, 2021.</p>
+            <p>Updated on August 29, 2021.</p>
           </div>
         </div>
       </div>
