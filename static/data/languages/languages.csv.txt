@@ -1799,7 +1799,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 1797,El Hugeirat,elhu1238,nubi1251,west2807,language,11.948,28.5901,elh,SD,,I,L,,,
 1798,Nding,ndin1245,narr1279,ndin1246,language,10.2741,30.7306,eli,SD,,I,E,,,
 1799,Elkei,elke1240,nucl1708,oloe1234,language,-3.45544,142.093,elk,PG,,I,L,,,
-1800,Modern Greek,mode1248,indo1319,nucl1783,language,38.36,23.13,ell,AL BG CY EG GR IT MK RO TR UA,el,I,L,13400000,el,"Otto Friedrich Ludwig (1 June 1815 – 26 July 1867), a Bavarian prince who ruled as King of Greece"
+1800,Modern Greek,mode1248,indo1319,nucl1783,language,38.36,23.13,ell,AL BG CY EG GR IT MK RO TR UA,el,I,L,13400000,el,"Constantine P. Cavafy (1863 – 1933), a Greek poet, journalist and civil servant from Alexandria"
 1801,Eleme,elem1253,atla1278,west2469,language,4.72964,7.267,elm,NG,,I,L,,,
 1802,El Molo,elmo1238,afro1255,west2723,language,2.79312,36.7619,elo,KE,,I,L,,,
 1803,Elu,eluu1241,aust1307,kurt1252,language,-1.99841,147.101,elu,PG,,I,L,,,
