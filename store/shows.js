@@ -35,7 +35,7 @@ export const actions = {
       tvShows = response.data.data.sort((x, y) => {
         let sort = 0
         if (x.title && y.title)
-          sort = x.title.localeCompare(y.title, l2.code)
+          sort = (x.title || '').localeCompare(y.title, l2.code)
         return sort
       });
     }
@@ -49,7 +49,7 @@ export const actions = {
       talks = response.data.data.sort((x, y) => {
         let sort = 0
         if (x.title && y.title)
-          sort = x.title.localeCompare(y.title, l2.code)
+          sort = (x.title || "").localeCompare(y.title, l2.code)
         return sort
       });
     }
