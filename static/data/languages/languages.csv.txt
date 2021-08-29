@@ -5644,7 +5644,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 5641,Istro Romanian,istr1245,indo1319,nort3361,language,45.433,14.2,ruo,HR,,I,L,,,
 5642,Aromanian,arom1237,indo1319,east2714,language,40.616,21.2,rup,AL BG GR MK RS,,I,L,1500000,,
 5643,Megleno Romanian,megl1237,indo1319,east2865,language,41.1174,22.3782,ruq,GR MK,,I,L,,,
-5644,Russian,russ1263,indo1319,east1426,language,59.0,50.0,rus,BY CN EE FI GE KG KP KZ LT LV MD MN NO PL RO RU SJ TM UA UZ,ru,I,L,150000000,ru,"Vladimir Putin (born 1952), President of Russia"
+5644,Russian,russ1263,indo1319,east1426,language,59.0,50.0,rus,BY CN EE FI GE KG KP KZ LT LV MD MN NO PL RO RU SJ TM UA UZ,ru,I,L,150000000,ru,"Peter the Great (1672 – 1725), the ruler of the Tsardom of Russia and later the Russian Empire"
 5645,Rutul,rutu1240,nakh1245,west2428,language,41.6187,47.3244,rut,AZ RU,,I,L,,,
 5646,Lanas Lobu,lana1236,aust1307,uppe1426,language,5.39196,116.577,ruu,MY,,I,L,,,
 5647,Mala (Nigeria),mala1471,unat1236,atla1280,language,10.5776,8.09838,ruy,NG,,I,L,,,
