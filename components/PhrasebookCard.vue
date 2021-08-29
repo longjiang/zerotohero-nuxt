@@ -1,7 +1,9 @@
 <template>
   <div :class="`media rounded shadow phrasebook phrasebook-${size}`">
     <router-link
-      :class="`phrasebook-thumb link-unstyled bg-gradient-${phrasebook.title.length
+      :class="`phrasebook-thumb link-unstyled bg-gradient-${(
+        phrasebook.title || ''
+      ).length
         .toString()
         .split('')
         .pop()}`"

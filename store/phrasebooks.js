@@ -39,7 +39,7 @@ export const actions = {
       });
     }
     phrasebooks = phrasebooks.sort((x, y) =>
-      x.title.localeCompare(y.title, l2.code)
+      (x.title || "").localeCompare(y.title, l2.code)
     ) || [];
     context.commit('LOAD_PHRASEBOOKS', { l2, phrasebooks })
   },
