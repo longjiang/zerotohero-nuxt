@@ -417,8 +417,7 @@ export default {
             {
               name: "dictionary",
               icon: "fa fa-search",
-
-              title: "Look Up",
+              title: "Look Up Words",
               show: this.hasFeature("dictionary"),
               shortcut: (e) => e.code === "KeyD" && e.metaKey && e.shiftKey,
             },

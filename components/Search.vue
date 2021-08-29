@@ -41,6 +41,20 @@
       v-cloak
       v-if="active && text && text.length > 0"
     >
+      <router-link
+        class="suggestion"
+        v-if="
+          suggestions.filter((s) => s.score === 1).length === 0 &&
+          type === 'dictionary'
+        "
+        :to="`/${$l1.code}/${$l2.code}/phrase/search/${text}`"
+      >
+        <span class="suggestion-not-found">
+          Look up “
+          <b data-level="outside">{{ text }}</b>
+          ” as a phrase
+        </span>
+      </router-link>
       <a
         class="suggestion"
         v-for="(suggestion, index) in suggestions.filter(
@@ -66,17 +80,6 @@
             v-if="suggestion.definitions"
             v-html="Helper.highlight(suggestion.definitions.join(', '), text)"
           ></span>
-        </span>
-      </a>
-      <a
-        class="suggestion"
-        v-if="suggestions.length === 0 && type === 'dictionary'"
-        :href="`/${$l1.code}/${$l2.code}/phrase/search/${text}`"
-        @click.stop.prevent="go(hrefFunc(suggestion), suggestion)"
-      >
-        <span class="suggestion-not-found">
-          <b class="suggestion-word mr-1" data-level="outside">{{ text }}</b>
-          (Tap here or press Return to look up)
         </span>
       </a>
       <div
@@ -172,8 +175,8 @@ export default {
       }
     },
     async text() {
-      if (!this.nav && this.text !== '') {
-        this.active = true
+      if (!this.nav && this.text !== "") {
+        this.active = true;
       }
       if (this.type === "dictionary") {
         let def = await (
@@ -206,8 +209,20 @@ export default {
         else {
           await Helper.timeout(500);
           this.preventEnter = false;
-          this.go(this.hrefFunc(this.suggestions[0]), this.suggestions[0]);
+          this.act();
         }
+      } else {
+        this.act();
+      }
+    },
+    act() {
+      if (
+        this.suggestions.filter((s) => s.score === 1).length === 0 &&
+        this.type === "dictionary"
+      ) {
+        this.$router.push(
+          `/${this.$l1.code}/${this.$l2.code}/phrase/search/${this.text}`
+        );
       } else {
         this.go(this.hrefFunc(this.suggestions[0]), this.suggestions[0]);
       }

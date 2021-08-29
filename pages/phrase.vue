@@ -22,7 +22,7 @@
       />
       <client-only>
         <div class="phrase-search-bar">
-          <div class="container">
+          <div class="container pt-2">
             <div class="row">
               <div class="col-sm-12">
                 <div class="search-compare-wrapper">
