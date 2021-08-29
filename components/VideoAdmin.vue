@@ -202,7 +202,7 @@
         }"
         v-model="autoBreakTranslationLines"
       >
-        Auto Break Translation Lines
+        Auto Break Lines
       </b-form-checkbox>
       <b-form-textarea
         :class="{
@@ -390,7 +390,8 @@ export default {
     },
     updateOriginalText() {
       let text = this.originalText || "";
-      text = this.breaklines(text);
+      if (this.autoBreakTranslationLines)
+        text = this.breaklines(text);
       text = this.normalizeNotes(text);
       this.$emit("updateOriginalText", text);
     },
