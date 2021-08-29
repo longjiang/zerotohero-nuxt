@@ -4229,7 +4229,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 4226,Elseng,else1239,,,language,-3.00176,140.418,mrf,ID,,I,L,,,
 4227,Mising-Padam-Miri-Minyong,misi1242,sino1245,east2361,language,27.418,94.69,mrg,IN,,I,L,,,
 4228,Mara Chin,mara1382,sino1245,nucl1757,language,22.1138,93.0387,mrh,IN MM,,I,L,,,
-4229,Maori,maor1246,aust1307,cent2062,language,-38.2881,176.541,mri,NZ,mi,I,L,149000,mi,
+4229,Maori,maor1246,aust1307,cent2062,language,-38.2881,176.541,mri,NZ,mi,I,L,149000,mi,"Āpirana Ngata (1874 – 1950), a prominent New Zealand statesman known for his work in promoting and protecting Māori culture and language"
 4230,Western Mari,west2392,ural1272,mari1278,language,56.22,46.569,mrj,RU,,I,L,,,
 4231,Hmwaveke,hmwa1243,aust1307,vohk1234,language,-20.9246,164.768,mrk,NC,,I,L,,,
 4232,Mortlockese,mort1237,aust1307,mort1238,language,5.50735,153.710778,mrl,FM,,I,L,,,
