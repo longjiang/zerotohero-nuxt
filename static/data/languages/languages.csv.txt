@@ -2372,7 +2372,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 2369,Hinduri,hind1267,indo1319,nucl1728,language,31.016,77.144,hii,IN,,I,L,,,
 2370,Hijuk,hiju1238,atla1278,basa1290,language,4.39641,10.9081,hij,CM,,I,L,,,
 2371,Seit-Kaitetu,seit1239,aust1307,cent2289,language,-3.6111,128.068,hik,ID,,I,L,,,
-2372,Hiligaynon,hili1240,aust1307,capi1240,language,10.4018,122.974,hil,PH,,I,L,7000000,,"Antonio Ledesma Jayme (1854 – 1937), a Filipino layer, revolutionary hero, Governor of Negros Occidental, and assemblyman"
+2372,Hiligaynon,hili1240,aust1307,capi1240,language,10.4018,122.974,hil,PH,,I,L,7000000,hil,"Antonio Ledesma Jayme (1854 – 1937), a Filipino layer, revolutionary hero, Governor of Negros Occidental, and assemblyman"
 2373,Hindi,hind1269,indo1319,hind1270,language,25.0,77.0,hin,BD BT IN NP,hi,I,L,322000000,hi,"Mahatma Gandhi (1869 – 1948), an Indian lawyer, anti-colonial nationalist and political ethicist"
 2374,Northern Tshwa,tsoa1238,khoe1240,tshw1239,language,-19.7974,26.9638,hio,BW ZW,,I,L,,,
 2375,Himarimã,hima1247,unat1236,araw1289,language,-6.25217,-64.70047,hir,BR,,I,L,,,
