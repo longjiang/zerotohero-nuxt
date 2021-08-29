@@ -636,7 +636,7 @@ export default {
         let csv = YouTube.unparseSubs(lines, this.$l2.code);
         let data = {
           youtube_id: video.youtube_id,
-          title: video.title,
+          title: video.title || "Untitled",
           l2: this.$l2.id,
           subs_l2: csv,
           channel_id: video.channel_id,

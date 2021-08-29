@@ -417,7 +417,7 @@ export default {
       try {
         let data = {
           l2: this.$l2.id,
-          title: this.video.title,
+          title: this.video.title || "Untitled",
           youtube_id: this.video.youtube_id,
           channel_id: this.video.channel ? this.video.channel.id : null,
           subs_l2: this.video.subs_l2
