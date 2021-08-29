@@ -228,7 +228,7 @@ export default {
             .decode(line.line)
             .split(regex)
             .map((seg) => seg.trim())
-            .filter((seg) => seg !== "");
+            .filter((seg) => seg !== "" && !seg.match(/^\s*[-–—]+/));
 
           for (let seg of segs) {
             let phrase = {
