@@ -33,9 +33,10 @@ const Dictionary = {
         cjk: {
           canonical: row.kanji && row.kanji !== 'NULL' ? row.kanji : undefined,
           phonetics: row.kana
-        }
+        },
+        romaji: wanakana.toRomaji(row.kana)
       })
-      data.push(word)
+      if (word.id) data.push(word)
     }
     this.words = data.sort((a, b) => b.head && a.head ? b.head.length - a.head.length : 0)
     return this
@@ -150,58 +151,38 @@ const Dictionary = {
     }
     return results
   },
-  lookupFuzzy(text, limit = 30) {
-    text = text.trim()
-    let words = []
+  lookupFuzzy(text, limit = false) {
+    let results = []
     if (!this.isRoman(text)) {
-      let subtexts = []
-      let hiraganaText = wanakana.isKatakana(text) ? wanakana.toHiragana(text) : false
-      for (let i = 1; text.length - i > 0; i++) {
-        subtexts.push(text.substring(0, text.length - i))
-      }
-      for (let word of this.words) {
-        let head = word.head ? word.head : undefined
-        if (head && head === text || (hiraganaText && (word.kana === hiraganaText))) {
-          // match 'abcde' exactly
-          words.push(
-            Object.assign(
-              { score: 99999 },
-              word
-            )
+      let reg = new RegExp(text, 'gi')
+      results = this.words
+        .filter(
+          row => reg.test(row.kanji) || reg.test(row.kana)
+        )
+    } else {
+      text = text.toLowerCase().trim()
+      results = this.words
+        .filter(row =>
+          row.romaji.includes(
+            text.replace(/ /g, '')
           )
-        } else if (head && head.startsWith(text)) {
-          // match 'abcdejkl', 'abcdexyz', etc
-          words.push(
-            Object.assign(
-              { score: text.length - (head.length - text.length) },
-              word
-            )
-          )
-        } else if (head && text.startsWith(head)) {
-          // matches 'abcde', 'abcd', 'abc', etc
-          words.push(Object.assign({ score: head.length + 1 }, word))
-        } else if (head && text.includes(head)) {
-          // matches 'abc', 'bcd', 'cde', etc
-          words.push(Object.assign({ score: head.length }, word))
-        } else {
-          // matches 'abcdxyz', 'abcxyz', 'abxyz', etc
-          for (let subtext of subtexts) {
-            if (head && head.startsWith(subtext)) {
-              let daBonus = 0
-              if (head.length > 1 && head.endsWith('る')) daBonus++
-              if (head.length > 1 && head.endsWith('する')) daBonus++
-              words.push(
-                Object.assign(
-                  { score: subtext.length - (head.length - subtext.length) + daBonus },
-                  word
-                )
-              )
-            }
-          }
-        }
-      }
+        )
     }
-    return words.sort((a, b) => b.score - a.score).slice(0, limit)
+    if (results) {
+      results = results
+        .sort((a, b) => {
+          return a.kana.length - b.kana.length
+        })
+      if (limit) {
+        results = results.slice(0, limit)
+      }
+      let shortest = Math.min(...results.map(r => r.kana.length))
+      results = results.map(word => {
+        let score = shortest / word.kana.length - 0.1 * Math.min(word.kana.replace(text, '').length, word.kanji.replace(text, '').length)
+        return Object.assign({ score }, word)
+      })
+      return results
+    }
   },
   subdict(data) {
     let newDict = Object.assign({}, this)

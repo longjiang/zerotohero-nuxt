@@ -82,6 +82,20 @@
           ></span>
         </span>
       </a>
+      <router-link
+        class="suggestion"
+        v-if="
+          suggestions.filter((s) => s.score === 1).length > 0 &&
+          type === 'dictionary'
+        "
+        :to="`/${$l1.code}/${$l2.code}/phrase/search/${text}`"
+      >
+        <span class="suggestion-not-found">
+          Look up “
+          <b data-level="outside">{{ text }}</b>
+          ” as a phrase
+        </span>
+      </router-link>
       <div
         class="suggestion"
         v-if="suggestions.length === 0 && type === 'generic'"
@@ -205,14 +219,14 @@ export default {
     async enterKeyUp() {
       if (this.$l2 && ["ko", "ja"].includes(this.$l2.code)) {
         // Wait for composition to finish
-        if (!this.preventEnter) this.go();
+        if (!this.preventEnter) this.act();
         else {
           await Helper.timeout(500);
           this.preventEnter = false;
-          this.act();
         }
       } else {
         this.act();
+        this.preventEnter = true
       }
     },
     act() {
