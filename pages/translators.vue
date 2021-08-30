@@ -152,7 +152,7 @@ export default {
     filteredTranslators() {
       return this.translators.translators
         .filter((t) => t.id !== "panlex")
-        .sort((a, b) => a.langs.length - b.langs.length);
+        .sort((a, b) => b.langs.length - a.langs.length);
     },
     languages() {
       let langs = [];
