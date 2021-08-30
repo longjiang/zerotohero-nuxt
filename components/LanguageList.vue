@@ -1,62 +1,64 @@
 <template>
-  <ul
-    v-if="languages && languages.length > 0"
-    :class="`language-list language-list-${skin} ${
-      singleColumn ? 'language-list-single-column' : ''
-    }`"
-  >
-    <li
-      v-for="(language, index) in languages"
-      :key="`lang-${language.code}-${index}`"
-      class="language-list-item"
-      :set="(base = languagePath(language))"
-    >
-      <router-link
-        :to="`${base}live-tv/`"
-        :class="{
-          'feature-icon mr-1': true,
-          transparent: !hasLiveTV(english, language),
-        }"
-        title="Live TV"
+  <container-query :query="query" v-model="params">
+    <ul v-if="languages && languages.length > 0" :class="classes">
+      <li
+        v-for="(language, index) in languages"
+        :key="`lang-${language.code}-${index}`"
+        class="language-list-item"
+        :set="(base = languagePath(language))"
       >
-        <i class="fa fa-broadcast-tower" />
-      </router-link>
-      <router-link
-        :to="`${base}youtube/browse/all/all/0`"
-        :class="{
-          'feature-icon mr-1': true,
-          transparent: !hasYouTube(english, language),
-        }"
-        title="Videos"
-      >
-        <i class="fa fa-play-circle" />
-      </router-link>
-      <router-link
-        :to="`${base}dictionary`"
-        :class="{
-          'feature-icon mr-1': true,
-          transparent: !hasDictionary(english, language),
-        }"
-        title="Dictionary"
-      >
-        <i class="fas fa-book" />
-      </router-link>
-      <router-link :to="base">
-        {{ languageName(language) }}
-      </router-link>
-      <span
-        v-if="showSpeakers && language.speakers && language.speakers > 0"
-        class="language-list-item-speakers"
-      >
-       <i class="fas fa-user"></i> {{ speakers(language.speakers) }}
-      </span>
-    </li>
-  </ul>
+        <router-link
+          :to="`${base}live-tv/`"
+          :class="{
+            'feature-icon mr-1': true,
+            transparent: !hasLiveTV(english, language),
+          }"
+          title="Live TV"
+        >
+          <i class="fa fa-broadcast-tower" />
+        </router-link>
+        <router-link
+          :to="`${base}youtube/browse/all/all/0`"
+          :class="{
+            'feature-icon mr-1': true,
+            transparent: !hasYouTube(english, language),
+          }"
+          title="Videos"
+        >
+          <i class="fa fa-play-circle" />
+        </router-link>
+        <router-link
+          :to="`${base}dictionary`"
+          :class="{
+            'feature-icon mr-1': true,
+            transparent: !hasDictionary(english, language),
+          }"
+          title="Dictionary"
+        >
+          <i class="fas fa-book" />
+        </router-link>
+        <router-link :to="base">
+          {{ languageName(language) }}
+        </router-link>
+        <span
+          v-if="showSpeakers && language.speakers && language.speakers > 0"
+          class="language-list-item-speakers"
+        >
+          <i class="fas fa-user"></i>
+          {{ speakers(language.speakers) }}
+        </span>
+      </li>
+    </ul>
+  </container-query>
 </template>
 
 <script>
 import Helper from "@/lib/helper";
+import { ContainerQuery } from "vue-container-query";
 export default {
+  components: {
+    ContainerQuery,
+  },
   props: {
     langs: {
       default: undefined,
@@ -97,6 +99,28 @@ export default {
           l1: "en",
         },
       },
+      params: {},
+      query: {
+        xs: {
+          minWidth: 0,
+          maxWidth: 423,
+        },
+        sm: {
+          minWidth: 423,
+          maxWidth: 720,
+        },
+        md: {
+          minWidth: 720,
+          maxWidth: 960,
+        },
+        lg: {
+          minWidth: 960,
+          maxWidth: 1140,
+        },
+        xl: {
+          minWidth: 1140,
+        },
+      },
     };
   },
   computed: {
@@ -107,6 +131,18 @@ export default {
     $l2() {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
+    },
+    classes() {
+      let classes = {
+        "language-list": true,
+        "language-list-single-column": this.singleColumn,
+        "language-list-1-col": this.params.xs || this.params.sm,
+        "language-list-2-cols": this.params.md,
+        "language-list-3-cols": this.params.lg,
+        "language-list-4-cols": this.params.xl
+      };
+      classes[`language-list-${this.skin}`] = true;
+      return classes;
     },
     english() {
       return this.$languages.l1s.find((language) => language.code === "en");
@@ -196,33 +232,24 @@ export default {
         color: rgba(255, 255, 255, 0.6);
       }
       .language-list-item-speakers {
-        color: rgba(255, 255, 255, 0.7);
+        color: rgba(255, 255, 255, 0.4);
       }
     }
   }
 }
 
-@media (min-width: 576px) {
-  .language-list:not(.language-list-single-column) {
+.language-list:not(.language-list-single-column) {
+  &.language-list-1-col {
     column-count: 1;
   }
-}
-
-@media (min-width: 768px) {
-  .language-list:not(.language-list-single-column) {
+  &.language-list-2-cols {
     column-count: 2;
   }
-}
-
-@media (min-width: 992px) {
-  .language-list:not(.language-list-single-column) {
-    column-count: 2;
-  }
-}
-
-@media (min-width: 1200px) {
-  .language-list:not(.language-list-single-column) {
+  &.language-list-3-cols {
     column-count: 3;
+  }
+  &.language-list-4-cols {
+    column-count: 4;
   }
 }
 </style>
