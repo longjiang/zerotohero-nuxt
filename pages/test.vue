@@ -8,10 +8,16 @@
     <div class="container pt-5 pb-5">
       <div class="row">
         <div class="col-sm-12">
-          <h4>Unicode</h4>
+          <h4>Chinese (zh)</h4>
           <Annotate :buttons="true">
             <div>
               中国人，你会说广东话吗
+            </div>
+          </Annotate>
+          <h4>Berber (tzm)</h4>
+          <Annotate :buttons="true">
+            <div>
+              ⴰⵎⴷⴷⴰⴽⴽⵯⵍ
             </div>
           </Annotate>
         </div>
