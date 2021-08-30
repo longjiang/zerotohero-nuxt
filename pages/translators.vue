@@ -43,7 +43,10 @@
       <div class="row">
         <div class="col-sm-12 pt-5 pb-5 text-center">
           <h3>Online Translators</h3>
-          <p>{{ filteredTranslators.length }} translators, {{ filteredLangs.length }} languages.</p>
+          <p>
+            {{ filteredTranslators.length }} translators,
+            {{ filteredLangs.length }} languages.
+          </p>
 
           <b-input-group class="mt-5 mb-3 input-group-ghost-dark">
             <b-form-input
@@ -65,7 +68,7 @@
         <div class="col-sm-12 pl-0 pr-0">
           <table
             class="table table-responsive"
-            style="margin: 0 auto; max-width: 50rem"
+            style="margin: 0 auto; max-width: 55rem"
           >
             <thead style="position: sticky; top: 0; background: #eee">
               <tr>
@@ -80,7 +83,13 @@
             </thead>
             <tbody>
               <tr v-for="(lang, index) in filteredLangs" :key="`lang-${index}`">
-                <th>{{ lang.name }} ({{ lang.code }})</th>
+                <th style="width: 19rem">
+                  <LanguageList
+                    :langs="[lang]"
+                    :singleColumn="true"
+                    :showCode="true"
+                  />
+                </th>
                 <td
                   v-for="(t, i) in filteredTranslators"
                   :key="`translator-${index}-${i}`"
@@ -88,6 +97,7 @@
                   <span v-if="t.langs && t.langs.includes(lang.code)">
                     <a
                       target="_blank"
+                      style="color: rgb(177 140 129)"
                       :href="
                         t.url
                           ? t.url(

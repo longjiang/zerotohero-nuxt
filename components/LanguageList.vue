@@ -39,6 +39,7 @@
         </router-link>
         <router-link :to="base">
           {{ languageName(language) }}
+          <span v-if="showCode">({{ language.code }})</span>
         </router-link>
         <span
           v-if="showSpeakers && language.speakers && language.speakers > 0"
@@ -73,6 +74,9 @@ export default {
     },
     showSpeakers: {
       default: true,
+    },
+    showCode: {
+      default: false,
     },
     skin: {
       default: "light",
