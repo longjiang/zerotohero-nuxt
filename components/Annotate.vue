@@ -224,7 +224,7 @@ export default {
     },
     async translateClick() {
       let text = this.$l2.continua ? this.text.replace(/ /g, "") : this.text;
-      let url = Helper.translationURL(text, this.$l1, this.$l2);
+      let url = this.$languages.translationURL(text, this.$l1, this.$l2);
       if (url) window.open(url, Helper.isMobile() ? "_blank" : "translate");
     },
     // https://stackoverflow.com/questions/2550951/what-regular-expression-do-i-need-to-check-for-some-non-latin-characters

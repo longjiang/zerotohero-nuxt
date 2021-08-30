@@ -9,7 +9,7 @@
       <div class="row">
         <div class="col-sm-12">
           <h4>Unicode</h4>
-          <Annotate>
+          <Annotate :buttons="true">
             <div>
               中国人，你会说广东话吗
             </div>

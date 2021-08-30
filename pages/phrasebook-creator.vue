@@ -166,7 +166,7 @@ export default {
     },
     translationURL() {
       if (typeof this.$l2 !== "undefined") {
-        let url = Helper.translationURL(this.csv, this.$l1, this.$l2);
+        let url = this.$languages.translationURL(this.csv, this.$l1, this.$l2);
         return url;
       }
     },
