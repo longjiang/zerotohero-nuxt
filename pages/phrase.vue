@@ -76,11 +76,14 @@
               'text-center': true,
             }"
           >
-            <PhraseHeader
-              v-if="term"
-              :term="term"
-              :class="{ 'mt-4': !wide }"
-            />
+            <PhraseHeader v-if="term" :term="term" :class="{ 'mt-4': !wide }" />
+            <div class="mt-3">
+              <SimilarPhrases
+                v-if="term"
+                :phraseStr="term"
+                class="text-center"
+              />
+            </div>
           </div>
           <div
             :class="{

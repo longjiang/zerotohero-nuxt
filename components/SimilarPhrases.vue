@@ -20,13 +20,13 @@
         }"
       >
         <div
-          v-if="youInOtherLangs.length > 0"
+          v-if="translation && youInOtherLangs.length > 0"
           :class="{
             'text-left': true,
           }"
         >
           <h5>
-            <em>{{ phraseObj.en }}</em>
+            <em>{{ translation }}</em>
           </h5>
           <router-link
             v-for="(phrase, index) of youInOtherLangs"
@@ -46,7 +46,7 @@
         </div>
         <div v-if="vousInOtherLangs.length > 0" class="text-left">
           <h5 class="mt-3">
-            <em>{{ phraseObj.phrase }}</em>
+            <em>{{ phrase }}</em>
           </h5>
           <router-link
             v-for="(phrase, index) of vousInOtherLangs"
@@ -96,37 +96,44 @@ export default {
     phraseObj: {
       type: Object,
     },
-  },
-  data: () => ({
-    allPhrases: [],
-    youInOtherLangs: [],
-    vousInOtherLangs: [],
-    params: {},
-    query: {
-      xs: {
-        minWidth: 0,
-        maxWidth: 423,
-      },
-      sm: {
-        minWidth: 423,
-        maxWidth: 720,
-      },
-      md: {
-        minWidth: 720,
-        maxWidth: 960,
-      },
-      lg: {
-        minWidth: 960,
-        maxWidth: 1140,
-      },
-      xl: {
-        minWidth: 1140,
-      },
+    phraseStr: {
+      type: String,
     },
-    updating: false,
-    loaded: false,
-    showButton: true,
-  }),
+  },
+  data() {
+    return {
+      phrase: this.phraseObj ? this.phraseObj.phrase : this.phraseStr,
+      translation: this.phraseObj ? this.phraseObj["en"] : undefined,
+      allPhrases: [],
+      youInOtherLangs: [],
+      vousInOtherLangs: [],
+      params: {},
+      query: {
+        xs: {
+          minWidth: 0,
+          maxWidth: 423,
+        },
+        sm: {
+          minWidth: 423,
+          maxWidth: 720,
+        },
+        md: {
+          minWidth: 720,
+          maxWidth: 960,
+        },
+        lg: {
+          minWidth: 960,
+          maxWidth: 1140,
+        },
+        xl: {
+          minWidth: 1140,
+        },
+      },
+      updating: false,
+      loaded: false,
+      showButton: true,
+    };
+  },
   computed: {
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
@@ -142,13 +149,28 @@ export default {
     },
   },
   methods: {
-    async f() {
-      let l1Code = "en";
-      if (this.phraseObj[l1Code]) {
+    async getSimilarPhrases() {
+      this.updating = true;
+      this.showButton = false;
+      let phrasebooks = [];
+      if (this.translation) {
+        phrasebooks = phrasebooks.concat(
+          await this.getYouInOtherLangs(this.translation)
+        );
+      }
+      if (this.phrase) {
+        phrasebooks = phrasebooks.concat(await this.getVousInOtherLangs(this.phrase));
+      }
+      this.allPhrases = this.extractAllPhrases(phrasebooks);
+      this.separatePhrases(this.allPhrases);
+      this.updating = false;
+    },
+    async getYouInOtherLangs(term) {
+      if (term) {
         let url = `${
           Config.wiki
         }items/phrasebook?sort=title&filter[phrases][contains]=${encodeURIComponent(
-          this.phraseObj[l1Code] + "\r"
+          term + "\r"
         )}&fields=*,tv_show.*&limit=500&timestamp=${
           this.$adminMode ? Date.now() : 0
         }`;
@@ -159,11 +181,11 @@ export default {
       }
       return [];
     },
-    async g() {
+    async getVousInOtherLangs(term) {
       let url = `${
         Config.wiki
       }items/phrasebook?sort=title&filter[phrases][contains]=${encodeURIComponent(
-        "\n" + this.phraseObj.phrase
+        "\n" + term
       )}&fields=*,tv_show.*&limit=500&timestamp=${
         this.$adminMode ? Date.now() : 0
       }`;
@@ -173,7 +195,7 @@ export default {
       }
       return [];
     },
-    h(phrasebooks) {
+    extractAllPhrases(phrasebooks) {
       let l1Code = "en";
       phrasebooks = Helper.uniqueByValue(phrasebooks, "id");
       let phrases = [];
@@ -188,8 +210,8 @@ export default {
         });
         for (let phrase of phrasebook.phrases) {
           if (
-            phrase.phrase === this.phraseObj.phrase ||
-            phrase[l1Code] === this.phraseObj[l1Code]
+            phrase.phrase === this.phrase ||
+            phrase[l1Code] === this.translation
           ) {
             phrase.l2 = l2;
             phrases.push(phrase);
@@ -200,25 +222,16 @@ export default {
       return phrases;
     },
     separatePhrases(phrases) {
-      let l1Code = "en";
-      if (this.phraseObj[l1Code]) {
+      if (this.translation) {
         this.youInOtherLangs = phrases
-          .filter((p) => p[l1Code] === this.phraseObj[l1Code])
+          .filter((p) => p["en"] === this.translation)
           .sort((a, b) => a.phrase.localeCompare(b.phrase));
       }
       this.vousInOtherLangs = phrases.filter(
         (p) =>
-          p.phrase === this.phraseObj.phrase &&
-          (p.l2.code !== this.$l2.code || p[l1Code] !== this.phraseObj[l1Code])
+          p.phrase === this.phrase &&
+          (p.l2.code !== this.$l2.code || p["en"] !== this.translation)
       );
-    },
-    async getSimilarPhrases() {
-      this.updating = true;
-      this.showButton = false;
-      let phrasebooks = [].concat(await this.f()).concat(await this.g());
-      this.allPhrases = this.h(phrasebooks);
-      this.separatePhrases(this.allPhrases);
-      this.updating = false;
     },
   },
 };
