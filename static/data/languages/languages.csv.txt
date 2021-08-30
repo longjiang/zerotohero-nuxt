@@ -502,7 +502,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 501,Azha,azha1235,sino1245,sani1266,language,23.9,104.15,aza,CN,,I,L,,,
 502,South Azerbaijani,sout2697,turk1311,mode1262,language,36.5137,48.4302,azb,AF AZ IQ IR TR,,I,L,,,
 503,Eastern Durango Nahuatl,east2695,utoa1244,dura1246,language,22.676,-104.6259,azd,MX,,I,L,,,
-504,Azerbaijani,mode1262,turk1311,azer1255,family,24,54,aze,,az,M,L,23000000,az,"Huseyn Javid (1882 – 1941), a prominent Azerbaijani poet and playwright"
+504,Azerbaijani,mode1262,turk1311,azer1255,family,40.3,47.7,aze,,az,M,L,23000000,az,"Huseyn Javid (1882 – 1941), a prominent Azerbaijani poet and playwright"
 505,San Pedro Amuzgos Amuzgo,sanp1260,otom1299,amuz1254,language,16.5198,-98.0464,azg,MX,,I,L,,,
 506,North Azerbaijani,nort2697,turk1311,mode1262,language,40.9777,46.4737,azj,AM AZ GE IR RU TR,,I,L,13869000,,
 507,Ipalapa Amuzgo,ipal1235,otom1299,amuz1254,language,16.5053,-98.0129,azm,MX,,I,L,,,
