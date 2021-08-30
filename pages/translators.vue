@@ -59,17 +59,22 @@
           </b-input-group>
         </div>
       </div>
+    </div>
+    <div class="container-fluid">
       <div class="row">
-        <div class="col-sm-12">
-          <table class="table">
-            <thead style="position: sticky; top: 0; background: #eee;">
+        <div class="col-sm-12 pl-0 pr-0">
+          <table
+            class="table table-responsive"
+            style="margin: 0 auto; max-width: 50rem"
+          >
+            <thead style="position: sticky; top: 0; background: #eee">
               <tr>
                 <th>Language (Code)</th>
                 <th
                   v-for="(t, i) in filteredTranslators"
                   :key="`translator-header-${i}`"
                 >
-                  {{ t.name.replace(' Translate', '') }}
+                  {{ t.name.replace(" Translate", "") }}
                 </th>
               </tr>
             </thead>
@@ -81,7 +86,22 @@
                   :key="`translator-${index}-${i}`"
                 >
                   <span v-if="t.langs && t.langs.includes(lang.code)">
-                    <a target="_blank" :href="t.url ? t.url(`I want to learn ${lang.name}.`, t.code(lang), t.code(english)) : t.home ? t.home : undefined">{{ t.name.replace(' Translate', '') }}</a>
+                    <a
+                      target="_blank"
+                      :href="
+                        t.url
+                          ? t.url(
+                              `I want to learn ${lang.name}.`,
+                              t.code(lang),
+                              t.code(english)
+                            )
+                          : t.home
+                          ? t.home
+                          : undefined
+                      "
+                    >
+                      {{ t.name.replace(" Translate", "") }}
+                    </a>
                   </span>
                 </td>
               </tr>
@@ -130,45 +150,46 @@ export default {
       return this.$languages.l1s.find((language) => language.code === "en");
     },
     filteredTranslators() {
-      return this.translators.translators.filter(t => t.id !== 'panlex')
+      return this.translators.translators
+        .filter((t) => t.id !== "panlex")
+        .sort((a, b) => a.langs.length - b.langs.length);
     },
     languages() {
       let langs = [];
       for (let t of this.filteredTranslators) {
-        if (typeof t.langs !== 'undefined') langs = langs.concat(t.langs);
+        if (typeof t.langs !== "undefined") langs = langs.concat(t.langs);
       }
       langs = Helper.unique(langs);
-      let languages = []
+      let languages = [];
       for (let lang of langs) {
-        let language = this.$languages.getSmart(lang)
-        if (typeof language === 'undefined') {
+        let language = this.$languages.getSmart(lang);
+        if (typeof language === "undefined") {
           // console.log('Undefined: ', lang)
         } else {
-          languages.push(language)
+          languages.push(language);
         }
-      } 
-      return languages.sort((a,b) => a.name.localeCompare(b.name));
+      }
+      return languages.sort((a, b) => a.name.localeCompare(b.name));
     },
     filteredLangs() {
-      let languages = this.languages
-      languages = languages
-        .filter((l) => {
-          if (this.keyword) {
-            let keyword = this.keyword.toLowerCase();
-            if (l["iso639-1"].includes(keyword)) return true;
-            if (l["iso639-3"].includes(keyword)) return true;
-            if (l["glottologId"].includes(keyword)) return true;
-            if (l["glottologFamilyId"].includes(keyword)) return true;
-            if (l["glottologParentId"].includes(keyword)) return true;
-            if (l.name.toLowerCase().includes(keyword)) return true;
-            let countries = l.country.filter((c) =>
-              c.name.toLowerCase().includes(keyword)
-            );
-            if (countries.length > 0) return true;
-            return false;
-          }
-          return true;
-        })
+      let languages = this.languages;
+      languages = languages.filter((l) => {
+        if (this.keyword) {
+          let keyword = this.keyword.toLowerCase();
+          if (l["iso639-1"].includes(keyword)) return true;
+          if (l["iso639-3"].includes(keyword)) return true;
+          if (l["glottologId"].includes(keyword)) return true;
+          if (l["glottologFamilyId"].includes(keyword)) return true;
+          if (l["glottologParentId"].includes(keyword)) return true;
+          if (l.name.toLowerCase().includes(keyword)) return true;
+          let countries = l.country.filter((c) =>
+            c.name.toLowerCase().includes(keyword)
+          );
+          if (countries.length > 0) return true;
+          return false;
+        }
+        return true;
+      });
       return languages;
     },
   },
