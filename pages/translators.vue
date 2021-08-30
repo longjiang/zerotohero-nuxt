@@ -43,7 +43,7 @@
       <div class="row">
         <div class="col-sm-12 pt-5 pb-5 text-center">
           <h3>Online Translators</h3>
-          <p>{{ filteredTranslators.length }} translators are listed.</p>
+          <p>{{ filteredTranslators.length }} translators, {{ filteredLangs.length }} languages.</p>
 
           <b-input-group class="mt-5 mb-3 input-group-ghost-dark">
             <b-form-input
