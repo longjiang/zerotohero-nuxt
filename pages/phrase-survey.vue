@@ -28,7 +28,13 @@
             <router-link
               :to="{
                 name: 'phrasebook-creator',
-                params: { csvProp: lines.map((l) => l.phrase).join('\n') },
+                params: {
+                  csvProp: lines
+                    .filter((l) => l.instances.length > 2)
+                    .map((l) => l.phrase)
+                    .slice(0, 1000)
+                    .join('\n'),
+                },
               }"
             >
               Make Phrasebook
