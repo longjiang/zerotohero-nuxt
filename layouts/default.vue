@@ -124,7 +124,6 @@ export default {
   },
   async mounted() {
     this.wide = Helper.wide();
-    this.$ga.page(this.$route.path);
     smoothscroll.polyfill(); // Safari does not support smoothscroll
     this.onLanguageChange();
   },
@@ -133,9 +132,6 @@ export default {
       window.removeEventListener("resize", this.onResize);
   },
   watch: {
-    $route() {
-      this.$ga.page(this.$route.path);
-    },
     l2() {
       this.onLanguageChange();
     },

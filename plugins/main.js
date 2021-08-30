@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VTooltip from 'v-tooltip'
 import VueObserveVisibility from 'vue-observe-visibility'
 import VueSimpleSVG from 'vue-simple-svg'
-import VueAnalytics from 'vue-analytics'
+import VueGtag from 'vue-gtag'
 import Languages from '@/lib/languages'
 import ModuleLoader from '~/lib/module-loader'
 import WorkerModuleLoader from '~/lib/worker-module-loader'
@@ -16,9 +16,6 @@ Vue.use(VTooltip)
 Vue.use(VueSimpleSVG)
 Vue.use(VueObserveVisibility)
 Vue.use(i18n)
-Vue.use(VueAnalytics, {
-  id: 'UA-1846573-21'
-})
 Vue.use(VueMq, {
   breakpoints: { // default breakpoints - customize this
     xs: 576,
@@ -50,6 +47,9 @@ Vue.filter('truncate', function (text, length, clamp) {
 })
 
 export default async ({ app, store }, inject) => {
+  Vue.use(VueGtag, {
+    config: { id: 'UA-1846573-21' }
+  }, app.router)
   // Make legacy hash URLs work
   // https://qvault.io/javascript/vue-history-mode-support-legacy-hash-urls/
   app.router.beforeEach((to, from, next) => {
