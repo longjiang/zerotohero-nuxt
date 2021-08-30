@@ -44,7 +44,6 @@
           v-if="showSpeakers && language.speakers && language.speakers > 0"
           class="language-list-item-speakers"
         >
-          <i class="fas fa-user"></i>
           {{ speakers(language.speakers) }}
         </span>
       </li>
@@ -83,19 +82,19 @@ export default {
     return {
       specials: {
         lzh: {
-          name: "Classical Chinese",
+          name: "文言文",
           l1: "zh",
         },
         hak: {
-          name: "Hakka Chinese",
+          name: "客家话",
           l1: "zh",
         },
         nan: {
-          name: "Min Nan Chinese",
+          name: "闽南话",
           l1: "zh",
         },
         cmn: {
-          name: "Mandarin Chinese (Pinyin Only)",
+          name: "Mandarin Dialect",
           l1: "en",
         },
       },
@@ -136,10 +135,10 @@ export default {
       let classes = {
         "language-list": true,
         "language-list-single-column": this.singleColumn,
-        "language-list-1-col": this.params.xs || this.params.sm,
-        "language-list-2-cols": this.params.md,
+        "language-list-1-col": this.params.xs,
+        "language-list-2-cols": this.params.sm || this.params.md,
         "language-list-3-cols": this.params.lg,
-        "language-list-4-cols": this.params.xl
+        "language-list-4-cols": this.params.xl,
       };
       classes[`language-list-${this.skin}`] = true;
       return classes;
