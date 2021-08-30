@@ -1,70 +1,97 @@
 <template>
-  <div>
-    <b-button @click="getSimilarPhrases" v-if="showButton" size="sm" variant="gray">
-      Compare Languages
-    </b-button>
-    <div v-if="youInOtherLangs.length > 0" class="text-left">
-      <h5>
-        <em>{{ phraseObj.en }}</em>
-      </h5>
-      <router-link
-        v-for="(phrase, index) of youInOtherLangs"
-        :to="`/${$l1.code}/${phrase.l2.code}/phrasebook/${phrase.bookId}/${
-          phrase.id
-        }/${encodeURIComponent(phrase.phrase)}`"
-        :key="`you-in-other-langs-${index}`"
-        class="d-block link-unstyled text-left"
+  <container-query :query="query" v-model="params">
+    <div class="similar-phrases">
+      <b-button
+        @click="getSimilarPhrases"
+        v-if="showButton"
+        size="sm"
+        variant="gray"
       >
-        <span class="similar-phrase-l2">{{ phrase.phrase }}</span>
-        <Speak :text="phrase.phrase" :l2="phrase.l2" />
-        <span class="similar-phrase-language">
-          <em>{{ phrase.en }}</em>
-          in {{ phrase.l2.name }}
-        </span>
-      </router-link>
-    </div>
-    <div v-if="vousInOtherLangs.length > 0" class="text-left">
-      <h5 class="mt-3">
-        <em>{{ phraseObj.phrase }}</em>
-      </h5>
-      <router-link
-        v-for="(phrase, index) of vousInOtherLangs"
-        :key="`vous-in-other-langs-${index}`"
-        class="d-block link-unstyled text-left"
-        :to="`/${$l1.code}/${phrase.l2.code}/phrasebook/${phrase.bookId}/${
-          phrase.id
-        }/${encodeURIComponent(phrase.phrase)}`"
+        Compare Languages
+      </b-button>
+      <div
+        :class="{
+          'similar-phrases-list': true,
+          'col-sm-12': true,
+          'similar-phrases-list-1-col': params.xs,
+          'similar-phrases-list-2-cols': params.sm,
+          'similar-phrases-list-3-cols': params.md,
+          'similar-phrases-list-4-cols': params.lg || params.xl,
+        }"
       >
-        <span class="similar-phrase-l2">{{ phrase.phrase }}</span>
-        <Speak :text="phrase.phrase" :l2="phrase.l2" />
-        <span class="similar-phrase-language">
-          <em>{{ phrase.en }}</em>
-          in {{ phrase.l2.name }}
-        </span>
-      </router-link>
+        <div
+          v-if="youInOtherLangs.length > 0"
+          :class="{
+            'text-left': true,
+          }"
+        >
+          <h5>
+            <em>{{ phraseObj.en }}</em>
+          </h5>
+          <router-link
+            v-for="(phrase, index) of youInOtherLangs"
+            :to="`/${$l1.code}/${phrase.l2.code}/phrasebook/${phrase.bookId}/${
+              phrase.id
+            }/${encodeURIComponent(phrase.phrase)}`"
+            :key="`you-in-other-langs-${index}`"
+            class="d-block link-unstyled text-left"
+          >
+            <span class="similar-phrase-l2">{{ phrase.phrase }}</span>
+            <Speak :text="phrase.phrase" :l2="phrase.l2" />
+            <span class="similar-phrase-language">
+              <em>{{ phrase.en }}</em>
+              in {{ phrase.l2.name }}
+            </span>
+          </router-link>
+        </div>
+        <div v-if="vousInOtherLangs.length > 0" class="text-left">
+          <h5 class="mt-3">
+            <em>{{ phraseObj.phrase }}</em>
+          </h5>
+          <router-link
+            v-for="(phrase, index) of vousInOtherLangs"
+            :key="`vous-in-other-langs-${index}`"
+            class="d-block link-unstyled text-left"
+            :to="`/${$l1.code}/${phrase.l2.code}/phrasebook/${phrase.bookId}/${
+              phrase.id
+            }/${encodeURIComponent(phrase.phrase)}`"
+          >
+            <span class="similar-phrase-l2">{{ phrase.phrase }}</span>
+            <Speak :text="phrase.phrase" :l2="phrase.l2" />
+            <span class="similar-phrase-language">
+              <em>{{ phrase.en }}</em>
+              in {{ phrase.l2.name }}
+            </span>
+          </router-link>
+        </div>
+      </div>
+      <Loader
+        :sticky="true"
+        message="Looking for similar phrases in other languages"
+        v-if="updating"
+      />
+      <div
+        v-if="
+          !showButton &&
+          !updating &&
+          vousInOtherLangs.length === 0 &&
+          youInOtherLangs.length === 0
+        "
+      >
+        No similar phrases found in other languages.
+      </div>
     </div>
-    <Loader
-      :sticky="true"
-      message="Looking for similar phrases in other languages"
-      v-if="updating"
-    />
-    <div
-      v-if="
-        !showButton &&
-        !updating &&
-        vousInOtherLangs.length === 0 &&
-        youInOtherLangs.length === 0
-      "
-    >
-      No similar phrases found in other languages.
-    </div>
-  </div>
+  </container-query>
 </template>
 
 <script>
 import Config from "@/lib/config";
 import Helper from "@/lib/helper";
+import { ContainerQuery } from "vue-container-query";
 export default {
+  components: {
+    ContainerQuery,
+  },
   props: {
     phraseObj: {
       type: Object,
@@ -74,6 +101,28 @@ export default {
     allPhrases: [],
     youInOtherLangs: [],
     vousInOtherLangs: [],
+    params: {},
+    query: {
+      xs: {
+        minWidth: 0,
+        maxWidth: 423,
+      },
+      sm: {
+        minWidth: 423,
+        maxWidth: 720,
+      },
+      md: {
+        minWidth: 720,
+        maxWidth: 960,
+      },
+      lg: {
+        minWidth: 960,
+        maxWidth: 1140,
+      },
+      xl: {
+        minWidth: 1140,
+      },
+    },
     updating: false,
     loaded: false,
     showButton: true,
@@ -94,7 +143,7 @@ export default {
   },
   methods: {
     async f() {
-      let l1Code = 'en';
+      let l1Code = "en";
       if (this.phraseObj[l1Code]) {
         let url = `${
           Config.wiki
@@ -125,7 +174,7 @@ export default {
       return [];
     },
     h(phrasebooks) {
-      let l1Code = 'en';
+      let l1Code = "en";
       phrasebooks = Helper.uniqueByValue(phrasebooks, "id");
       let phrases = [];
       for (let phrasebook of phrasebooks) {
@@ -147,19 +196,14 @@ export default {
           }
         }
       }
-      phrases = Helper.uniqueByValues(phrases, ["phrase", 'en', "l2"]);
+      phrases = Helper.uniqueByValues(phrases, ["phrase", "en", "l2"]);
       return phrases;
     },
     separatePhrases(phrases) {
-      let l1Code = 'en';
+      let l1Code = "en";
       if (this.phraseObj[l1Code]) {
         this.youInOtherLangs = phrases
-          .filter(
-            (p) =>
-              p[l1Code] === this.phraseObj[l1Code] &&
-              (p.l2.code !== this.$l2.code ||
-                p.phrase !== this.phraseObj.phrase)
-          )
+          .filter((p) => p[l1Code] === this.phraseObj[l1Code])
           .sort((a, b) => a.phrase.localeCompare(b.phrase));
       }
       this.vousInOtherLangs = phrases.filter(
@@ -185,6 +229,18 @@ export default {
   font-weight: bold;
   color: #c59f94;
 }
-.similar-phrase-language {
+.similar-phrases-list {
+  &.similar-phrases-list-1-col {
+    column-count: 1;
+  }
+  &.similar-phrases-list-2-cols {
+    column-count: 2;
+  }
+  &.similar-phrases-list-3-cols {
+    column-count: 3;
+  }
+  &.similar-phrases-list-4-cols {
+    column-count: 4;
+  }
 }
 </style>

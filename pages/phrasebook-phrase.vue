@@ -56,13 +56,7 @@
               <p class="text-center mt-1" v-if="phraseObj">
                 {{ phraseObj[$l1.code] }}
               </p>
-              <div
-                style="
-                  display: flex;
-                  flex-direction: column;
-                  align-items: center;
-                "
-              >
+              <div>
                 <SimilarPhrases
                   v-if="phraseObj"
                   :phraseObj="phraseObj"
