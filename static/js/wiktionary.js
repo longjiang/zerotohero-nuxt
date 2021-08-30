@@ -98,6 +98,7 @@ const Dictionary = {
         .replace('hbo', 'heb') // Ancient Hebrew uses Hebrew
         .replace('grc', 'ell') // Ancient Greek uses Greek
         .replace('hmn', 'mww') // Hmong uses white Hmong
+        .replace('prs', 'fas') // Dari uses Persian
       let csv = !this.useJSON.includes(this.l2)
       let filename = `${this.server}data/wiktionary${csv ? '-csv' : ''}/${l2}-${l1}.${csv ? 'csv' : 'json'}.txt`
       return filename
