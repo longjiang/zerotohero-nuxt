@@ -43,7 +43,7 @@
       <div class="row">
         <div class="col-sm-12 pt-5 pb-5 text-center">
           <h3>Online Translators</h3>
-          <p>{{ translators.translators.length }} translators are listed.</p>
+          <p>{{ filteredTranslators.length }} translators are listed.</p>
 
           <b-input-group class="mt-5 mb-3 input-group-ghost-dark">
             <b-form-input
@@ -66,7 +66,7 @@
               <tr>
                 <th>Language (Code)</th>
                 <th
-                  v-for="(t, i) in translators.translators"
+                  v-for="(t, i) in filteredTranslators"
                   :key="`translator-header-${i}`"
                 >
                   {{ t.name.replace(' Translate', '') }}
@@ -77,11 +77,11 @@
               <tr v-for="(lang, index) in filteredLangs" :key="`lang-${index}`">
                 <th>{{ lang.name }} ({{ lang.code }})</th>
                 <td
-                  v-for="(t, i) in translators.translators"
+                  v-for="(t, i) in filteredTranslators"
                   :key="`translator-${index}-${i}`"
                 >
                   <span v-if="t.langs && t.langs.includes(lang.code)">
-                    {{ t.name.replace(' Translate', '') }}
+                    <a target="_blank" :href="t.url ? t.url(`I want to learn ${lang.name}.`, t.code(lang), t.code(english)) : t.home ? t.home : undefined">{{ t.name.replace(' Translate', '') }}</a>
                   </span>
                 </td>
               </tr>
@@ -129,9 +129,12 @@ export default {
     english() {
       return this.$languages.l1s.find((language) => language.code === "en");
     },
+    filteredTranslators() {
+      return this.translators.translators.filter(t => t.id !== 'panlex')
+    },
     languages() {
       let langs = [];
-      for (let t of this.translators.translators) {
+      for (let t of this.filteredTranslators) {
         if (typeof t.langs !== 'undefined') langs = langs.concat(t.langs);
       }
       langs = Helper.unique(langs);
