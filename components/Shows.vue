@@ -155,7 +155,6 @@ export default {
       )}?filter[l2][eq]=${this.$l2.id}${
         this.$adminMode ? "" : "&filter[hidden][empty]=true"
       }&limit=500&timestamp=${this.$adminMode ? Date.now() : 0}`;
-      console.log(url);
       let response = await axios.get(url);
       if (response && response.data) this.shows = response.data.data;
     }
