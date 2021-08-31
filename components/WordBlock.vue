@@ -505,7 +505,7 @@ export default {
     },
     transform(text) {
       if (typeof text === "undefined") {
-        console.log("text", text), (text = "");
+        text = ""
       }
       if (this.$l2.code === "ru" && text.length > 9) text = this.segment(text);
       if (this.$l2.code === "tlh" && text.trim() !== "") {

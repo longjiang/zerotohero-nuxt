@@ -69,6 +69,9 @@
             <span v-if="entry.cjk" class="ml-2 mr-1">
               {{ entry.cjk.phonetics }}
             </span>
+            <span v-if="$l2.code === 'tlh'" class="ml-2 mr-1">
+              {{ entry.head }} /{{ klingonIPA(entry.head) }}/
+            </span>
             <Speak
               class="ml-1"
               :text="entry.bare"
@@ -101,9 +104,9 @@
             </template>
             <template v-else>
               <span
-                class="entry-word"
+                :class="{ 'entry-word': true, klingon: $l2.code === 'tlh' }"
                 :data-level="entry.level || 'outside'"
-                v-html="entry.accented"
+                v-html="transform(entry.accented)"
               ></span>
             </template>
           </router-link>
@@ -137,6 +140,7 @@
 </template>
 
 <script>
+import Klingon from "@/lib/klingon";
 export default {
   props: {
     entry: {
@@ -175,6 +179,21 @@ export default {
     this.nextPath = await this.nextWord();
   },
   methods: {
+    klingonIPA(text) {
+      return Klingon.latinToIPA(text);
+    },
+    fixKlingonTypos(text) {
+      return Klingon.fixTypos(text);
+    },
+    transform(text) {
+      if (typeof text === "undefined") {
+        text = ""
+      }
+      if (this.$l2.code === "tlh" && text.trim() !== "") {
+        text = Klingon.latinToConScript(text);
+      }
+      return text;
+    },
     async nextWord() {
       if (this.entry.newHSKMatches) {
         let match = this.entry.newHSKMatches.find(
