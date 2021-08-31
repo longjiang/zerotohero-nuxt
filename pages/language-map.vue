@@ -39,7 +39,7 @@
           <LanguageMap
             style="height: 100%"
             ref="languageMap"
-            :langs="filteredLangs"
+            :langs="filteredLangsWithGeo"
           />
         </div>
       </div>
@@ -55,19 +55,27 @@ export default {
     },
     filteredLangs() {
       let languages = this.$languages.l1s;
+      languages = languages.filter((l) => {
+        if (["hbo", "enm", "arc", "grc", "sjn"].includes(l["iso639-3"]))
+          return true;
+        if (l.name.includes("Sign Language")) return false;
+        if (["A", "E", "H"].includes(l.type)) return false;
+        if (
+          !this.hasDictionary(this.english, l) &&
+          !this.hasYouTube(this.english, l)
+        )
+          return false;
+        return true;
+      });
+      return languages;
+    },
+    filteredLangsWithGeo() {
+      let languages = this.filteredLangs;
       languages = languages
         .filter((l) => {
-          if (!(l.lat && l.long)) return false;
-          if (l.name.includes("Sign Language")) return false;
-          if (["A", "E", "H"].includes(l.type)) return false;
-          if (
-            !this.hasDictionary(this.english, l) &&
-            !this.hasYouTube(this.english, l)
-          )
-            return false;
-          return true;
+          if (l.lat && l.long) return true;
         })
-        .sort((x, y) => y.speakers - x.speakers);
+        .sort((a, b) => b.speakers - a.speakers);
       return languages;
     },
   },
@@ -88,7 +96,15 @@ export default {
         let code = url.split("/")[2];
         l2 = this.$languages.getSmart(code);
       }
-      if (l2) this.$refs.languageMap.goToLang(l2);
+      if (l2) {
+        if (l2.lat && l2.long) this.$refs.languageMap.goToLang(l2);
+        else {
+          let l1Code = "en";
+          if (l2.code === "lzh") l1Code = "zh";
+          let path = `/${l1Code}/${l2.code}/`;
+          this.$router.push(path);
+        }
+      }
     },
   },
 };
