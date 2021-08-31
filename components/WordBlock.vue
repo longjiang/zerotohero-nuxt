@@ -82,10 +82,14 @@
             l2Settings.showPinyin &&
             phonetics &&
             transliteration &&
-            transliteration !== text
+            transliteration !== text &&
+            $l2.code !== 'tlh'
           "
         >
           {{ savedTransliteration || transliteration }}
+        </span>
+        <span class="word-block-pinyin" v-if="$l2.code === 'tlh'">
+          {{ text }}
         </span>
         <span
           :class="{ 'word-block-text': true, klingon: $l2.code === 'tlh' }"
@@ -144,12 +148,12 @@
               </span>
               <span
                 style="color: #999"
-                v-else-if="$hasFeature('transliteration')"
+                v-else-if="$hasFeature('transliteration') && $l2.code !== 'tlh'"
               >
                 {{ tr(word.head) }}
               </span>
               <span style="color: #999" v-if="$l2.code === 'tlh'">
-                yo {{ word.head }}, {{ klingonIPA(word.head) }}
+                {{ word.head }} /{{ klingonIPA(word.head) }}/
               </span>
               <span style="color: #999" v-if="word.jyutping && word.pinyin">
                 / {{ word.pinyin }}
@@ -167,12 +171,14 @@
               class="mr-1"
               style="position: relative; bottom: 0.2rem; font-size: 1.2rem"
             ></Star>
-            <b :data-level="word.level || 'outside'" style="font-size: 1.5rem">
-              {{
-                $l2.code === "ru" && text.length > 9
-                  ? segment(word.accented)
-                  : word.accented
-              }}
+            <b
+              :data-level="word.level || 'outside'"
+              style="font-size: 1.5rem"
+              :class="{
+                klingon: $l2.code === 'tlh',
+              }"
+            >
+              {{ transform(word.accented) }}
             </b>
             <span
               v-if="word.traditional && word.traditional !== word.simplified"
