@@ -27,9 +27,18 @@
           @click="goTo(language)"
         >
           <l-icon>
-            <div :class="`language-marker-languages`">
+            <div
+              :class="{
+                'language-marker': true,
+                'language-marker-current': language === currentLang,
+                'language-marker-current-child': isDescendant(
+                  language,
+                  currentLang
+                ),
+              }"
+            >
               <div
-                class="language-marker-languages-size"
+                class="language-marker-size"
                 :style="`width: ${diameter(language)}px; height: ${diameter(
                   language
                 )}px; left: calc(50% - ${diameter(
@@ -40,6 +49,7 @@
                 :langs="[language]"
                 skin="dark"
                 :singleColumn="true"
+                class="language-marker-language-list"
               />
             </div>
           </l-icon>
@@ -68,121 +78,7 @@ export default {
     overlapped: [],
     currentZoom: 4,
     map: undefined,
-    chinaEthnicLangs: [
-      "acn",
-      "adi",
-      "ami",
-      "aou",
-      "bca",
-      "bfc",
-      "bfs",
-      "blr",
-      "blt",
-      "bnn",
-      "bod",
-      "clk",
-      "cng",
-      "cov",
-      "cuq",
-      "cuu",
-      "dka",
-      "dng",
-      "doc",
-      "dta",
-      "duu",
-      "evn",
-      "giq",
-      "gir",
-      "giw",
-      "gld",
-      "gqu",
-      "hmn",
-      "hni",
-      "iii",
-      "jiu",
-      "jiy",
-      "kac",
-      "kaz",
-      "khb",
-      "kir",
-      "kkf",
-      "kmc",
-      "kor",
-      "lay",
-      "lhi",
-      "lhu",
-      "lic",
-      "lis",
-      "lkc",
-      "lsh",
-      "mjg",
-      "mlm",
-      "mmd",
-      "mnc",
-      "mon",
-      "nru",
-      "nuf",
-      "nun",
-      "nxq",
-      "onp",
-      "orh",
-      "pcc",
-      "pce",
-      "peh",
-      "pll",
-      "pmi",
-      "pmj",
-      "prk",
-      "pwn",
-      "qxs",
-      "raw",
-      "rbb",
-      "rus",
-      "sce",
-      "sdp",
-      "sgp",
-      "shx",
-      "sjo",
-      "slr",
-      "stu",
-      "swi",
-      "tat",
-      "tay",
-      "tcl",
-      "tdd",
-      "tgk",
-      "thi",
-      "tji",
-      "tjs",
-      "tsj",
-      "twm",
-      "uig",
-      "uzb",
-      "vie",
-      "vwa",
-      "wbm",
-      "yao",
-      "ybe",
-      "yuy",
-      "zal",
-      "zha",
-      "zho",
-    ],
-    chineseDialects: [
-      "cdo",
-      "cjy",
-      "cnp",
-      "cpx",
-      "csp",
-      "czo",
-      "hak",
-      "hsn",
-      "leiz1236",
-      "mnp",
-      "nan",
-      "wuu",
-      "yue",
-    ],
+    currentLang: undefined,
   }),
   async created() {
     this.initialZoom = this.$route.query.z ? Number(this.$route.query.z) : 3;
@@ -219,6 +115,9 @@ export default {
     },
   },
   methods: {
+    isDescendant() {
+      return this.$languages.isDescendant(...arguments);
+    },
     goTo(l2) {
       let l1Code = "en";
       if (["hak", "nan", "lzh", "en"].includes(l2.code)) l1Code = "zh";
@@ -315,6 +214,7 @@ export default {
       }
     },
     goToLang(lang) {
+      this.currentLang = lang;
       let x = lang.speakers ? Math.max(Math.log10(lang.speakers), 0) : 0;
       let minZoom = 6;
       let maxZoom = 11;
@@ -332,7 +232,7 @@ export default {
   width: 100%;
   height: 40rem;
   max-height: 100vh;
-  .language-marker-languages {
+  .language-marker {
     width: 10rem;
     margin-left: -5rem;
     text-shadow: 0 1px 10px rgba(0, 0, 0, 1);
@@ -346,23 +246,36 @@ export default {
     margin-top: -100%;
     text-align: center;
     position: relative;
-    .language-marker-languages-size {
+    .language-marker-size {
       background-color: #00000088;
-      // background-color: #fd4f1c;
       position: absolute;
       z-index: -1;
       border-radius: 100%;
       pointer-events: none;
     }
-    ::v-deep .language-list.language-list-dark .language-list-item {
-      a {
-        color: white;
-        pointer-events: none;
+    &.language-marker-current {
+      .language-marker-size {
+        background-color: #fd4f1c88;
       }
-      .feature-icon {
-        color: white;
-        &.transparent {
-          display: none;
+      ::v-deep .language-list-item {
+        a {
+          color: white;
+        }
+        .feature-icon {
+          color: white;
+        }
+      }
+    }
+    &.language-marker-current-child {
+      .language-marker-size {
+        background-color: #fd4f1c88;
+      }
+      ::v-deep .language-list-item {
+        a {
+          color: white;
+        }
+        .feature-icon {
+          color: white;
         }
       }
     }
