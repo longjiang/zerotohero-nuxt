@@ -8,18 +8,14 @@
     <div class="container pt-5 pb-5">
       <div class="row">
         <div class="col-sm-12">
-          <h4>Chinese (zh)</h4>
+          <h4>Klingon (tlh)</h4>
           <Annotate :buttons="true">
-            <div>
-              中国人，你会说广东话吗
-            </div>
+            <div>DaH mojaq-mey-vam DI-vuS-nIS-beʼ ʼeʼ vI-Har</div>
           </Annotate>
-          <h4>Berber (tzm)</h4>
-          <Annotate :buttons="true">
-            <div>
-              ⴰⵎⴷⴷⴰⴽⴽⵯⵍ
-            </div>
-          </Annotate>
+          <h4>Desired:</h4>
+          <div class="klingon">
+                
+          </div>
         </div>
       </div>
     </div>

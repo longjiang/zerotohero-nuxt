@@ -389,7 +389,7 @@ export default {
             `<WordBlock :checkSaved="${this.checkSaved}" :phonetics="${this.phonetics}" :popup="${this.popup}" :sticky="${this.sticky}" :explore="${this.explore}">` +
               "$1</WordBlock>"
           )
-          .replace(/!!!###!!!/gi, "<span>&nbsp;</span>");
+          .replace(/!!!###!!!/gi, `<span class="${this.$l2.code === 'tlh' ? 'klingon' : ''}">&nbsp;</span>`);
       }
       // html = text.replace(/([\S]+)/gi, '<WordBlock>$1</WordBlock>')
       // $(`#sentence-placeholder-${batchId}`).remove()

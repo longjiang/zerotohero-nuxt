@@ -58,7 +58,7 @@
           >
             <dt>
               {{ phrase.klingon }}
-              <button class="btn btn-light p-1" @click="latin = phrase.klingon">
+              <button class="btn btn-gray btn-sm p-1" @click="latin = phrase.klingon">
                 Use
               </button>
             </dt>

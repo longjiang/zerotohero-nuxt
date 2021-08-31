@@ -62,10 +62,14 @@
         </span>
         <span
           v-else
-          class="word-block-text d-inline-block"
+          :class="{
+            'word-block-text d-inline-block': true,
+            klingon: $l2.code === 'tlh',
+          }"
           @click="wordBlockClick()"
-          v-html="token.text"
-        /><span
+          v-html="transform(token.text)"
+        />
+        <span
           v-if="l2Settings.showByeonggi && hanja"
           class="word-block-text-byeonggi d-inline-block"
           v-html="hanja"
@@ -83,12 +87,11 @@
         >
           {{ savedTransliteration || transliteration }}
         </span>
-        <span class="word-block-text" @click="wordBlockClick()">
-          <template v-if="$l2.code === 'ru' && text.length > 9">
-            {{ segment(text) }}
-          </template>
-          <slot v-else></slot>
-        </span>
+        <span
+          :class="{ 'word-block-text': true, klingon: $l2.code === 'tlh' }"
+          @click="wordBlockClick()"
+          v-html="transform(text)"
+        />
       </template>
     </span>
     <template slot="popover">
@@ -295,6 +298,7 @@
 import Helper from "@/lib/helper";
 import Config from "@/lib/config";
 import WordPhotos from "@/lib/word-photos";
+import Klingon from "@/lib/klingon";
 import { transliterate as tr } from "transliteration";
 import { mapState } from "vuex";
 
@@ -484,6 +488,16 @@ export default {
     },
   },
   methods: {
+    transform(text) {
+      if (typeof text === "undefined") {
+        console.log("text", text), (text = "");
+      }
+      if (this.$l2.code === "ru" && text.length > 9) text = this.segment(text);
+      if (this.$l2.code === "tlh" && text.trim() !== '') {
+        text = Klingon.latinToConScript(text);
+      }
+      return text;
+    },
     wordBlockClick() {
       if (
         this.explore &&
