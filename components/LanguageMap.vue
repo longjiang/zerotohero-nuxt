@@ -253,6 +253,11 @@ export default {
       border-radius: 100%;
       pointer-events: none;
     }
+    ::v-deep .language-list-item {
+      a {
+        pointer-events: none;
+      }
+    }
     &.language-marker-current {
       .language-marker-size {
         background-color: #fd4f1c88;
