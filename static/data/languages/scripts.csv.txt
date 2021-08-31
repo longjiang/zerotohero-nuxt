@@ -540,6 +540,7 @@ ms,Arab,,,,rtl
 mt,Latn,,,,
 mtr,Deva,,,,
 mua,Latn,,,,
+mup,Deva,,,,
 mus,Latn,,,,
 mvy,Arab,,,N,rtl
 mwk,Latn,,,,
