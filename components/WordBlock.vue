@@ -89,7 +89,7 @@
           {{ savedTransliteration || transliteration }}
         </span>
         <span class="word-block-pinyin" v-if="$l2.code === 'tlh'">
-          {{ text }}
+          {{ fixKlingonTypos(text) }}
         </span>
         <span
           :class="{ 'word-block-text': true, klingon: $l2.code === 'tlh' }"
@@ -499,6 +499,9 @@ export default {
   methods: {
     klingonIPA(text) {
       return Klingon.latinToIPA(text);
+    },
+    fixKlingonTypos(text) {
+      return Klingon.fixTypos(text);
     },
     transform(text) {
       if (typeof text === "undefined") {
