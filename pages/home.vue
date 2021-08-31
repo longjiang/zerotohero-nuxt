@@ -36,7 +36,7 @@
             </div>
           </client-only>
           <div :class="{ 'pl-1 pr-1 pb-2': true }">
-            <div class="home-card">
+            <div class="home-card text-white">
               <LazyLanguageInfoBox :lang="$l2" />
             </div>
           </div>

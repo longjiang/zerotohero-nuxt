@@ -2,12 +2,35 @@
   <div class="language-info-box">
     <WebImages
       v-if="lang"
-      :text="`${lang.name} people${(!lang.speakers || lang.speakers < 500000) && lang.country && lang.country[0] ? ' ' & lang.country.map(c => c.name).join(' or ') : ''}`"
+      :text="`${lang.name} people${
+        (!lang.speakers || lang.speakers < 500000) &&
+        lang.country &&
+        lang.country[0]
+          ? ' ' & lang.country.map((c) => c.name).join(' or ')
+          : ''
+      }`"
       limit="3"
       ref="images"
       class="language-info-box-images"
     />
-    <div class="language-info-box-wikipedia">{{ wikipediaSummary }}</div>
+    <div class="language-info-box-wikipedia" v-if="page">
+      {{ wikipediaSummary }} —
+      <a
+        target="blank"
+        :href="page.url()"
+        class="link-unstyled font-weight-bold"
+        style="text-decoration: underline"
+      >
+        Wikipedia</a>
+      <span v-if="lang.omniglot" class="ml-1">
+        <a
+          target="blank"
+          class="link-unstyled font-weight-bold"
+          style="text-decoration: underline"
+          :href="`https://omniglot.com/writing/${lang.omniglot}`"
+        >Omniglot</a>
+      </span>
+    </div>
   </div>
 </template>
 
@@ -23,6 +46,7 @@ export default {
   data() {
     return {
       wikipediaSummary: undefined,
+      page: undefined,
     };
   },
   computed: {
@@ -39,11 +63,13 @@ export default {
         let page = await wiki({
           apiUrl: `https://${this.$l1.code}.wikipedia.org/w/api.php`,
         }).page(`${this.lang.name} language`);
+        this.page = page;
         let summary = await page.summary();
         let shortSummary = summary
           .split("\n")[0]
-          .replace(/\(.*?\)/, "")
-          .replace(/(.*?\. .*?\. .*?\.) .*/, "$1");
+          .replace(/\(.*?\)/g, "")
+          .replace(/[()]/g, "")
+          .replace(/(.*?\. .*?\. .*?\. .*?\. .*?\. .*?\.) .*/, "$1 . . .");
         this.wikipediaSummary = shortSummary;
       } catch (err) {}
     }
