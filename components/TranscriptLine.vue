@@ -132,7 +132,8 @@ export default {
       return SmartQuotes.string(text);
     },
     lineHtml(line) {
-      let html = this.smartquotes(line.line);
+      let html = line.line;
+      if (!this.$l2.code === "tlh") html = this.smartquotes(html);
       if (this.highlight)
         html = this.highlightMultiple(
           html,

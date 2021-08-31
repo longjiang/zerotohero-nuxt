@@ -56,7 +56,6 @@ export const mutations = {
     }
   },
   SET_SUBS_SEARCH_LIMIT(state, subsSearchLimit) {
-    console.log('SET_SUBS_SEARCH_LIMIT', subsSearchLimit)
     state.subsSearchLimit = subsSearchLimit
     if (typeof localStorage !== 'undefined') {
       let settings = JSON.parse(localStorage.getItem('zthSettings') || '{}')
