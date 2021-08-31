@@ -35,6 +35,11 @@
               </div>
             </div>
           </client-only>
+          <div :class="{ 'pl-1 pr-1 pb-2': true }">
+            <div class="home-card">
+              <LazyLanguageInfoBox :lang="$l2" />
+            </div>
+          </div>
           <client-only>
             <Nav :l1="$l1" :l2="$l2" variant="page" />
           </client-only>
@@ -58,7 +63,7 @@
 </template>
 
 <script>
-import Helper from '@/lib/helper'
+import Helper from "@/lib/helper";
 export default {
   data() {
     return {
@@ -84,7 +89,7 @@ export default {
       ];
     },
     image() {
-      return Helper.background(this.$l2)
+      return Helper.background(this.$l2);
     },
   },
   methods: {

@@ -8,14 +8,7 @@
     <div class="container pt-5 pb-5">
       <div class="row">
         <div class="col-sm-12">
-          <h4>Klingon (tlh)</h4>
-          <Annotate :buttons="true">
-            <div>DaH mojaq-mey-vam DI-vuS-nIS-beʼ ʼeʼ vI-Har</div>
-          </Annotate>
-          <h4>Desired:</h4>
-          <div class="klingon">
-                
-          </div>
+          <LazyLanguageInfoBox :lang="$l2" />
         </div>
       </div>
     </div>
@@ -23,8 +16,8 @@
 </template>
 
 <script>
+
 export default {
-  // layout: "test-layout",
   computed: {
     $l1() {
       return this.$store.state.settings.l1;

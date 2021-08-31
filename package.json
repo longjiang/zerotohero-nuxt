@@ -68,6 +68,7 @@
     "vue-video-player": "^5.0.2",
     "vue2-touch-events": "^3.2.2",
     "wanakana": "^4.0.2",
+    "wikijs": "^6.3.2",
     "wikimedia-commons-file-path": "^2.0.0"
   },
   "devDependencies": {
