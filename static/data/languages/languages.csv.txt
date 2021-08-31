@@ -779,7 +779,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 778,Baikeno,baik1238,aust1307,nort3357,language,-9.32991,124.256,bkx,ID TL,,I,L,,,
 779,Bokyi,boky1238,atla1278,nucl1801,language,6.10475,9.05875,bky,CM NG,,I,L,,,
 780,Bungku,bung1269,aust1307,east2490,language,-3.22197,122.212,bkz,ID,,I,L,,,
-781,Siksika,siks1238,algi1248,algo1256,language,49.0669,-113.109,bla,CA US,,I,L,,bla,"Sahpo Muxika (1830 – 1890), also known as Crowfoot, Head Chief of the Siksika,"
+781,Siksika,siks1238,algi1248,algo1256,language,49.0669,-113.109,bla,CA US,,I,L,,bla,"Sahpo Muxika (1830 – 1890), also known as Crowfoot, Head Chief of the Siksika"
 782,Bilua,bilu1245,,,language,-7.92388,156.663,blb,SB,,I,L,,,
 783,Bella Coola,bell1243,sali1255,sali1255,language,52.3448,-126.689,blc,CA,,I,L,,,
 784,Bolango,bola1252,aust1307,goro1273,language,0.39044,123.888,bld,ID,,I,L,,,
@@ -2129,7 +2129,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 2126,Kok-Nar,kokn1236,pama1250,norm1247,language,-16.181,141.608,gko,AU,,I,E,,,
 2127,Guinea Kpelle,guin1254,mand1469,kpel1252,language,7.93196,-8.98843,gkp,GN LR,,I,L,808000,,
 2128,/=Ungkue,kxau1242,tuuu1241,dans1240,dialect,-29.4046,22.2901,gku,ZA,,I,E,,,
-2129,Scottish Gaelic,scot1245,indo1319,east2734,language,56.7574,-5.24366,gla,GB,gd,I,L,57000,gd,"Sorley MacLean (1911 – 1996), a Scottish Gaelic poet,"
+2129,Scottish Gaelic,scot1245,indo1319,east2734,language,56.7574,-5.24366,gla,GB,gd,I,L,57000,gd,"Sorley MacLean (1911 – 1996), a Scottish Gaelic poet"
 2130,Bon Gula,bong1282,atla1278,goul1244,language,10.6577,19.5774,glc,TD,,I,L,,,
 2131,Nanai,nana1257,tung1282,orok1264,language,48.4343,134.797,gld,CN RU,,I,L,12003,,
 2132,Irish,iris1253,indo1319,mode1265,language,53.2186,-7.61509,gle,GB IE,ga,I,L,170000,ga,"Francis Bacon (1909 – 1992), an Irish-born British figurative painter known for his raw, unsettling imagery"
@@ -2599,7 +2599,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 2596,Imroing,imro1237,aust1307,sout2882,language,-7.96772,129.651,imr,ID,,I,L,,,
 2597,Marsian,,,,,,,ims,,,I,A,,,
 2598,Milyan,mily1238,indo1319,lyci1242,language,36.356111,29.318611,imy,TR,,I,A,,,
-2599,Interlingua (International Auxiliary Language Association),inte1239,arti1236,arti1236,language,48.203,2.615,ina,FR,ia,I,C,,ia,"Alice Vanderbilt Morris (1874 – 1950), co-founder of the International Auxiliary Language Association (IALA),"
+2599,Interlingua (International Auxiliary Language Association),inte1239,arti1236,arti1236,language,48.203,2.615,ina,FR,ia,I,C,,ia,"Alice Vanderbilt Morris (1874 – 1950), co-founder of the International Auxiliary Language Association (IALA)"
 2600,Colombian Inga,inga1252,quec1387,colo1258,language,1.00313,-76.8606,inb,CO VE,,I,L,,,
 2601,Indonesian,indo1316,aust1307,stan1327,language,-7.33458,109.716,ind,ID NL PH SA SG US,id,I,L,43000000,id,"Pramoedya Ananta Toer (1925 – 2006), an Indonesian author of novels, short stories, essays, polemics and histories of his homeland and its people"
 2602,Degexit'an,dege1248,atha1245,koyu1238,language,62.0697,-160.044,ing,US,,I,L,,,
@@ -5852,7 +5852,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 5849,Kemi Saami,kemi1239,ural1272,main1280,language,67.093,27.537,sjk,FI,,I,E,,,
 5850,Sajolang,saja1240,sino1245,miji1239,language,27.57952,92.77,sjl,IN,,I,L,,,
 5851,Mapun,mapu1244,aust1307,born1254,language,6.09061,118.75,sjm,MY PH,,I,L,,,
-5852,Sindarin,sind1281,arti1236,arti1236,language,,,sjn,GB,,I,C,,,
+5852,Sindarin,sind1281,arti1236,arti1236,language,,,sjn,GB,,I,C,,sjn,"Legolas, a fictional character in J. R. R. Tolkien's The Lord of the Rings, a Sindar Elf of the Woodland Realm and one of the nine members of the Fellowship"
 5853,Xibe,xibe1242,tung1282,manc1251,language,43.5854,81.0034,sjo,CN KZ,,I,L,30000,,
 5854,Surjapuri,surj1235,indo1319,west2382,language,25.686,85.792,sjp,IN,,I,L,,,
 5855,Siar-Lak,siar1238,aust1307,stge1234,language,-4.62059,152.892,sjr,PG,,I,L,,,
