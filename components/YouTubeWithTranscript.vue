@@ -62,9 +62,14 @@
             style="line-height: 1.5"
           >
             <span v-if="video" :key="`video-title-${video.title}`" class="mt-4">
-              <Annotate :phonetics="false" :buttons="true">
+              <Annotate
+                :phonetics="false"
+                :buttons="true"
+                v-if="$l2.code !== 'tlh'"
+              >
                 <span>{{ video.title }}</span>
               </Annotate>
+              <span v-else>{{ video.title }}</span>
             </span>
             <a
               :class="{
