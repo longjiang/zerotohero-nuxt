@@ -24,6 +24,7 @@
           v-for="(language, index) in filteredLanguages"
           :lat-lng="[language.lat, language.long]"
           :key="`language-marker-${index}`"
+          @click="goTo(language)"
         >
           <l-icon>
             <div :class="`language-marker-languages`">
@@ -218,6 +219,11 @@ export default {
     },
   },
   methods: {
+    goTo(l2) {
+      let l1Code = "en";
+      if (["hak", "nan", "lzh", "en"].includes(l2.code)) l1Code = "zh";
+      this.$router.push(`/${l1Code}/${l2.code}/`);
+    },
     ready(mapObj) {
       this.map = mapObj;
       let bounds = mapObj.getBounds();
@@ -309,10 +315,10 @@ export default {
       }
     },
     goToLang(lang) {
-      let x = lang.speakers ? Math.max(Math.log10(lang.speakers), 0) : 0
-      let minZoom = 6
-      let maxZoom = 11
-      let zoomLevel = maxZoom - (maxZoom - minZoom) / 9 * x;
+      let x = lang.speakers ? Math.max(Math.log10(lang.speakers), 0) : 0;
+      let minZoom = 6;
+      let maxZoom = 11;
+      let zoomLevel = maxZoom - ((maxZoom - minZoom) / 9) * x;
       this.map.flyTo([lang.lat, lang.long], zoomLevel, {
         animation: true,
       });
@@ -351,6 +357,7 @@ export default {
     ::v-deep .language-list.language-list-dark .language-list-item {
       a {
         color: white;
+        pointer-events: none;
       }
       .feature-icon {
         color: white;
