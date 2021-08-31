@@ -293,6 +293,7 @@ export default {
       notes: "",
       mounted: false,
       autoBreakTranslationLines: false,
+      translationURL: undefined,
       originalText: "",
       punctuations: "。！？；：!?;:♪",
     };
@@ -317,16 +318,6 @@ export default {
           .map((line) => line.line.replace(/\n/g, " "))
           .join("\n");
     },
-    translationURL() {
-      if (typeof this.$l2 !== "undefined") {
-        let url = this.$languages.translationURL(
-          this.originalText,
-          this.$l1,
-          this.$l2
-        );
-        if (typeof url === "string") return url;
-      }
-    },
     originalTextHref() {
       return Helper.makeTextFile(this.originalText);
     },
@@ -334,6 +325,13 @@ export default {
   mounted() {
     this.mounted = true; // So that this component shows up on first load (updates $adminMode)
     this.originalText = this.text;
+    if (typeof this.$l2 !== "undefined") {
+      this.translationURL = this.$languages.translationURL(
+        this.originalText,
+        this.$l1,
+        this.$l2
+      );
+    }
   },
   watch: {
     showSubsEditing() {
