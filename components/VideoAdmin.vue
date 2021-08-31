@@ -319,8 +319,12 @@ export default {
     },
     translationURL() {
       if (typeof this.$l2 !== "undefined") {
-        let url = this.$languages.translationURL(this.originalText, this.$l1, this.$l2);
-        return url;
+        let url = this.$languages.translationURL(
+          this.originalText,
+          this.$l1,
+          this.$l2
+        );
+        if (typeof url === "string") return url;
       }
     },
     originalTextHref() {
@@ -390,8 +394,7 @@ export default {
     },
     updateOriginalText() {
       let text = this.originalText || "";
-      if (this.autoBreakTranslationLines)
-        text = this.breaklines(text);
+      if (this.autoBreakTranslationLines) text = this.breaklines(text);
       text = this.normalizeNotes(text);
       this.$emit("updateOriginalText", text);
     },

@@ -148,6 +148,9 @@
               >
                 {{ tr(word.head) }}
               </span>
+              <span style="color: #999" v-if="$l2.code === 'tlh'">
+                yo {{ word.head }}, {{ klingonIPA(word.head) }}
+              </span>
               <span style="color: #999" v-if="word.jyutping && word.pinyin">
                 / {{ word.pinyin }}
               </span>
@@ -488,12 +491,15 @@ export default {
     },
   },
   methods: {
+    klingonIPA(text) {
+      return Klingon.latinToIPA(text);
+    },
     transform(text) {
       if (typeof text === "undefined") {
         console.log("text", text), (text = "");
       }
       if (this.$l2.code === "ru" && text.length > 9) text = this.segment(text);
-      if (this.$l2.code === "tlh" && text.trim() !== '') {
+      if (this.$l2.code === "tlh" && text.trim() !== "") {
         text = Klingon.latinToConScript(text);
       }
       return text;
