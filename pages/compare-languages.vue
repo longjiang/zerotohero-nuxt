@@ -108,18 +108,56 @@
       >
         <div class="text-center mb-3">
           <b-button-group size="sm">
-            <b-button @click="listType = 'all-phrases'" :variant="listType === 'all-phrases' ? 'secondary' : 'outline-secondary'">All Phrases</b-button>
-            <b-button @click="listType = 'this-phrase'" :variant="listType === 'this-phrase' ? 'secondary' : 'outline-secondary'">This Phrase</b-button>
+            <b-button
+              @click="listType = 'all-phrases'"
+              :variant="
+                listType === 'all-phrases' ? 'secondary' : 'outline-secondary'
+              "
+            >
+              All Phrases
+            </b-button>
+            <b-button
+              @click="listType = 'this-phrase'"
+              :variant="
+                listType === 'this-phrase' ? 'secondary' : 'outline-secondary'
+              "
+            >
+              This Phrase
+            </b-button>
           </b-button-group>
         </div>
-        <SimilarPhrases
-          class="text-center"
+        <div
+          :class="{
+            'd-none': listType !== 'all-phrases',
+            'all-phrases-list': true,
+          }"
           v-if="phrases"
-          :phraseObj="phrases[currentIndex]"
-          :key="`similar-phrases-${currentIndex}`"
-          :autoLoad="true"
-          @youInOtherLangs="onYouInOtherLangs"
-        />
+        >
+          <div
+            v-for="(phrase, index) in phrases"
+            :key="`all-phrases-list-item-${index}`"
+            @click="currentIndex = index"
+            :class="{
+              'all-phrases-list-item': true,
+              'all-phrases-list-item-current': index === currentIndex,
+            }"
+          >
+            <span class="all-phrases-list-item-index">{{ index + 1 }}</span>
+            <span class="all-phrases-list-item-phrase">
+              {{ phrase.phrase }}
+            </span>
+          </div>
+        </div>
+        <div :class="{ 'd-none': listType !== 'this-phrase' }">
+          <SimilarPhrases
+            class="text-center"
+            v-if="phrases"
+            :phraseObj="phrases[currentIndex]"
+            :key="`similar-phrases-${currentIndex}`"
+            :autoLoad="true"
+            @youInOtherLangs="onYouInOtherLangs"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -168,6 +206,7 @@ export default {
           );
         }
       }
+      this.showList = false;
     },
   },
   async mounted() {
@@ -209,6 +248,28 @@ export default {
   box-shadow: 0 0 5px 10px rgba(0, 0, 0, 0.2);
   overflow-y: scroll;
   padding: 1rem;
+  .all-phrases-list {
+    .all-phrases-list-item {
+      cursor: pointer;
+      padding: 0.25rem 1rem;
+      border-radius: 0.25rem;
+      &:hover,
+      &.all-phrases-list-item-current {
+        background-color: #eee;
+      }
+      .all-phrases-list-item-index {
+        width: 2rem;
+        display: inline-block;
+        color: #ccc;
+      }
+      .all-phrases-list-item-phrase {
+        font-weight: bold;
+        color: #c59f94;
+        font-size: 1.5em;
+        font-style: italic;
+      }
+    }
+  }
 }
 .title {
   line-height: 1.2;

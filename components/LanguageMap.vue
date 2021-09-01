@@ -407,6 +407,7 @@ export default {
       font-weight: bold;
       color: #c59f94;
       font-size: 1.5em;
+      font-style: italic;
     }
   }
 }
