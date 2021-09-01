@@ -1467,8 +1467,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 1466,Hui Chinese,huiz1242,sino1245,wuhu1234,language,29.7646,118.232,czh,CN,,I,L,,,
 1467,Knaanic,,,,,,,czk,,,I,E,,,
 1468,Zenzontepec Chatino,zenz1235,otom1299,core1263,language,16.52799,-97.45546,czn,MX,,I,L,,,
-1469,Min Zhong Chinese,minz1235,sino1245,inla1267,language,26.0686,117.376,czo,CN,,I,L,683000,czo,"Zou Taofen (1895 – 1944), a native of Yongan, Fujian, Chinese journalist and publisher
-"
+1469,Min Zhong Chinese,minz1235,sino1245,inla1267,language,26.0686,117.376,czo,CN,,I,L,683000,czo,"Zou Taofen (1895 – 1944), a native of Yongan, Fujian, Chinese journalist and publisher"
 1470,Zotung Chin,zotu1235,sino1245,mara1381,language,22.5298,93.29,czt,MM,,I,L,,,
 1471,Dangaleat,dang1274,afro1255,dang1276,language,12.1517,18.385,daa,TD,,I,L,,,
 1472,Dambi,damb1246,aust1307,damb1252,language,-7.00587,146.474,dac,PG,,I,L,,,
@@ -1873,8 +1872,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 1871,Ejagham,ejag1239,atla1278,ejag1240,language,5.54442,8.90959,etu,CM NG,,I,L,,,
 1872,Eten,eten1239,atla1278,iten1244,language,9.73073,8.61443,etx,NG,,I,L,,,
 1873,Semimi,semi1264,mair1253,mair1253,language,-3.71553,134.454,etz,ID,,I,L,,,
-1874,Basque,basq1248,,,language,43.2787,-1.31622,eus,ES FR,eu,I,L,750000,eu,"Salbatore Mitxelena (1919 – 1965), a friar and a writer in the Basque language
-"
+1874,Basque,basq1248,,,language,43.2787,-1.31622,eus,ES FR,eu,I,L,750000,eu,"Salbatore Mitxelena (1919 – 1965), a friar and a writer in the Basque language"
 1875,Even,even1260,tung1282,nort3147,language,70.6687,130.914,eve,RU,,I,L,7170,,
 1876,Uvbie,uvbi1238,atla1278,sout2805,language,5.44263,5.77303,evh,NG,,I,L,,,
 1877,Evenki,even1259,tung1282,west2427,language,61.972,94.689,evn,CN MN RU,,I,L,40000,,
@@ -13150,7 +13148,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 13147,Hailu,hail1247,sino1245,hakk1236,dialect,,,,,,,,,,
 13148,Urulyungui Khamnigan Evenki,hail1248,tung1282,manc1253,dialect,,,,,,,,,,
 13149,Fucheng,hain1237,sino1245,hain1238,dialect,20.043869,110.329399,,,,,,,,
-13150,Hainan,hain1238,sino1245,qion1239,dialect,,,,,,,,,,
+13150,Hainan,hain1238,sino1245,qion1239,dialect,19.2,109.7,,,,,,5000000,,
 13151,Hainaut,hain1252,indo1319,pica1241,dialect,,,,,,,,,,
 13152,Hai||um,hain1254,khoe1240,haio1238,dialect,,,,,,,,,,
 13153,Haitian Sign Language,hait1245,sign1238,amer1258,language,18.541,-72.285,,HT,,,,,,
