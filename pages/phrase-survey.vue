@@ -254,10 +254,25 @@ export default {
       return foldedPhrases;
     },
 
+    /**
+     * Sort phrases into groups
+     * @param {array} phrases - Each item looks like:
+     * {
+     *   line: "'G obair ‘s an ghriain ag dhul faoi"
+     *   phrase: "'G obair"
+     *   starttime: 78.94
+     *   talk: null
+     *   title: "Cré Nó Cill - \"Worksong\" le Hozier as Gaeilge"
+     *   tv_show: { . . . }
+     *   youtube_id: "mv96TeiQZ9c"
+     *  }
+     */
     sortPhrases(phrases) {
+      // First alphabetically sort all by the phrase
       let sortedPhrases = phrases.sort((a, b) =>
         a.phrase.localeCompare(b.phrase, this.$l2.code)
       );
+      // Put them all into groups (grouped by the phrase)
       let groups = [];
       if (sortedPhrases.length > 0) {
         let group = {
@@ -265,6 +280,7 @@ export default {
           instances: [sortedPhrases[0]],
         };
         for (let phrase of sortedPhrases) {
+          // Use case-insensitive comparison
           if (phrase.phrase.toUpperCase() === group.phrase.toUpperCase()) {
             group.instances.push(phrase);
           } else {
@@ -277,6 +293,7 @@ export default {
           }
         }
       }
+      // Sorted the groups, first by number of instances, then by the length of the phrase
       groups = groups
         .sort((a, b) => a.phrase.length - b.phrase.length)
         .sort((a, b) => b.instances.length - a.instances.length);
