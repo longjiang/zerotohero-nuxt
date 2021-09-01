@@ -160,14 +160,12 @@ export default {
       this.showButton = false;
       let phrasebooks = [];
       if (this.translation) {
-        phrasebooks = phrasebooks.concat(
-          await this.getYouInOtherLangs(this.translation)
-        );
+        let youInOtherLangs = await this.getYouInOtherLangs(this.translation);
+        phrasebooks = phrasebooks.concat(youInOtherLangs);
       }
       if (this.phrase) {
-        phrasebooks = phrasebooks.concat(
-          await this.getVousInOtherLangs(this.phrase)
-        );
+        let vousInOtherLangs = await this.getVousInOtherLangs(this.phrase);
+        phrasebooks = phrasebooks.concat(vousInOtherLangs);
       }
       this.allPhrases = this.extractAllPhrases(phrasebooks);
       this.separatePhrases(this.allPhrases);
@@ -232,16 +230,20 @@ export default {
     separatePhrases(phrases) {
       if (this.translation) {
         this.youInOtherLangs = phrases
-          .filter((p) => p["en"] === this.translation)
+          .filter(
+            (p) => (p["en"] || "").toUpperCase() === (this.translation || "").toUpperCase()
+          )
           .sort((a, b) => a.phrase.localeCompare(b.phrase));
       }
       this.vousInOtherLangs = phrases.filter(
         (p) =>
-          p.phrase === this.phrase &&
+          (p.phrase || "").toUpperCase() === (this.phrase || "").toUpperCase() &&
           (typeof this.$l2 === "undefined" ||
             p.l2.code !== this.$l2.code ||
             p["en"] !== this.translation)
       );
+      this.$emit("youInOtherLangs", this.youInOtherLangs);
+      this.$emit("vousInOtherLangs", this.vousInOtherLangs);
     },
   },
 };

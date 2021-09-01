@@ -2,10 +2,11 @@
   <client-only>
     <button class="speak focus-exclude" @click.stop.prevent="speak">
       <i class="fas fa-volume-up" v-if="canSpeak"></i>
-      <span v-else>
+      <span v-else-if="forvo">
         <img
           src="/img/logo-forvo-circle.png"
           alt="Forvo"
+          data-not-lazy
           style="
             height: 1rem;
             opacity: 0.5;
@@ -35,6 +36,9 @@ export default {
     l2: {
       type: Object,
     },
+    forvo: {
+      default: true
+    }
   },
   computed: {
     $l1() {

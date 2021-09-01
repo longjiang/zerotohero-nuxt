@@ -24,7 +24,7 @@
           v-for="(language, index) in filteredLanguages"
           :lat-lng="[language.lat, language.long]"
           :key="`language-marker-${index}`"
-          @click="goTo(language)"
+          @click="!phrases ? goTo(language) : false"
         >
           <l-icon>
             <div
@@ -46,11 +46,51 @@
                 )}px / 2); top: calc(50% - ${diameter(language)}px / 2);`"
               ></div>
               <LanguageList
+                v-if="!phrases"
                 :langs="[language]"
-                skin="dark"
                 :singleColumn="true"
+                skin="dark"
                 class="language-marker-language-list"
               />
+              <div
+                v-if="phrases"
+                :class="{
+                  'text-center': true,
+                }"
+                class="language-marker-phrases"
+              >
+                <div
+                  :set="
+                    (filteredPhrases = phrases.filter(
+                      (phrase) => phrase.l2 === language
+                    ))
+                  "
+                >
+                  <span
+                    v-for="(phrase, index) in filteredPhrases"
+                    :key="`you-in-other-langs-${index}`"
+                    class="
+                      language-marker-phrases-phrase
+                      d-inline-block
+                      link-unstyled
+                      mr-1
+                      ml-1
+                    "
+                  >
+                    <router-link
+                      class="similar-phrase-l2"
+                      :to="`/en/${phrase.l2.code}/phrasebook/${phrase.bookId}/${
+                        phrase.id
+                      }/${encodeURIComponent(phrase.phrase)}`"
+                    >
+                      {{ phrase.phrase }}<template v-if="index < filteredPhrases.length - 1">,</template>
+                    </router-link>
+                  </span>
+                </div>
+                <span class="language-marker-phrases-language">
+                  {{ language.name }}
+                </span>
+              </div>
             </div>
           </l-icon>
         </l-marker>
@@ -66,6 +106,9 @@ import Papa from "papaparse";
 export default {
   props: {
     langs: {
+      type: Array,
+    },
+    phrases: {
       type: Array,
     },
   },
@@ -86,25 +129,7 @@ export default {
     this.initialCenter = this.$route.query.c
       ? this.$route.query.c.split(",")
       : [35, 105];
-    if (this.langs) {
-      this.languages = this.langs;
-    } else {
-      let languages = this.$languages.l1s;
-      languages = languages
-        .filter((l) => {
-          if (!(l.lat && l.long)) return false;
-          if (l.name.includes("Sign Language")) return false;
-          if (["A", "E", "H"].includes(l.type)) return false;
-          if (
-            !this.hasDictionary(this.english, l) &&
-            !this.hasYouTube(this.english, l)
-          )
-            return false;
-          return true;
-        })
-        .sort((x, y) => y.speakers - x.speakers);
-      this.languages = languages;
-    }
+    this.initLangs();
   },
   computed: {
     english() {
@@ -114,7 +139,39 @@ export default {
       return this.$languages.l1s.find((language) => language.code === "ar");
     },
   },
+  watch: {
+    phrases() {
+      this.initLangs();
+    },
+  },
   methods: {
+    initLangs() {
+      if (this.phrases) {
+        this.languages = this.phrases.map((p) => p.l2);
+        if (this.map) {
+          let bounds = this.map.getBounds();
+          this.updateBounds(bounds);
+        }
+      } else if (this.langs) {
+        this.languages = this.langs;
+      } else {
+        let languages = this.$languages.l1s;
+        languages = languages
+          .filter((l) => {
+            if (!(l.lat && l.long)) return false;
+            if (l.name.includes("Sign Language")) return false;
+            if (["A", "E", "H"].includes(l.type)) return false;
+            if (
+              !this.hasDictionary(this.english, l) &&
+              !this.hasYouTube(this.english, l)
+            )
+              return false;
+            return true;
+          })
+          .sort((x, y) => y.speakers - x.speakers);
+        this.languages = languages;
+      }
+    },
     isDescendant() {
       return this.$languages.isDescendant(...arguments);
     },
@@ -237,8 +294,6 @@ export default {
     margin-left: -5rem;
     text-shadow: 0 1px 10px rgba(0, 0, 0, 1);
     font-size: 1.2em;
-    text-transform: uppercase;
-    font-weight: bold;
     // background-color: #00000088;
     padding: 0.3rem 0.6rem;
     border-radius: 0.3rem;
@@ -246,6 +301,22 @@ export default {
     margin-top: -100%;
     text-align: center;
     position: relative;
+    .language-marker-language-list {
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+    .language-marker-phrases {
+      .language-marker-phrases-language {
+        color: #ddd;
+        display: inline-block;
+      }
+      a {
+        color: white;
+        font-size: 1.2em;
+        font-weight: bold;
+        font-style: italic;
+      }
+    }
     .language-marker-size {
       background-color: #00000088;
       position: absolute;

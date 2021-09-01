@@ -74,9 +74,10 @@
       <div class="row">
         <div class="col-12" style="height: calc(100vh - 54px); padding: 0">
           <LanguageMap
+            v-if="phrasesInAllLangs"
             style="height: 100%"
             ref="languageMap"
-            :langs="[english]"
+            :phrases="phrasesInAllLangs"
           />
         </div>
       </div>
@@ -87,6 +88,7 @@
           :phraseObj="phrases[currentIndex]"
           :key="`similar-phrases-${currentIndex}`"
           :autoLoad="true"
+          @youInOtherLangs="onYouInOtherLangs"
         />
       </div>
     </div>
@@ -111,6 +113,7 @@ export default {
       phrases: undefined,
       currentIndex: 0,
       updating: false,
+      phrasesInAllLangs: undefined
     };
   },
   async mounted() {
@@ -129,7 +132,11 @@ export default {
     }
     this.updating = false;
   },
-  methods: {},
+  methods: {
+    onYouInOtherLangs(youInOtherLangs) {
+      this.phrasesInAllLangs = youInOtherLangs
+    }
+  },
 };
 </script>
 
