@@ -83,7 +83,10 @@
                         phrase.id
                       }/${encodeURIComponent(phrase.phrase)}`"
                     >
-                      {{ phrase.phrase }}<template v-if="index < filteredPhrases.length - 1">,</template>
+                      {{ phrase.phrase }}
+                      <template v-if="index < filteredPhrases.length - 1">
+                        ,
+                      </template>
                     </router-link>
                   </span>
                 </div>
@@ -187,13 +190,17 @@ export default {
     },
     updateCenter(center) {
       if (typeof window !== "undefined") {
-        window.history.replaceState(
-          "",
-          "",
-          `?c=${Math.round(center.lat * 100) / 100},${
-            Math.round(center.lng * 100) / 100
-          }&z=${this.currentZoom}`
-        );
+        if ("URLSearchParams" in window) {
+          var searchParams = new URLSearchParams(window.location.search);
+          searchParams.set(
+            "c",
+            `${Math.round(center.lat * 100) / 100},${
+              Math.round(center.lng * 100) / 100
+            }`
+          );
+          searchParams.set("z", this.currentZoom);
+          window.history.replaceState("", "", `?${searchParams.toString()}`);
+        }
       }
     },
     updateBounds(bounds) {
