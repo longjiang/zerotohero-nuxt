@@ -148,7 +148,23 @@ export default {
       }
     },
   },
+  watch: {
+    currentIndex() {
+      if (typeof window !== "undefined") {
+        if ("URLSearchParams" in window) {
+          var searchParams = new URLSearchParams(window.location.search);
+          searchParams.set("i", this.currentIndex);
+          window.history.replaceState(
+            "",
+            "",
+            `?${searchParams.toString()}`
+          );
+        }
+      }
+    },
+  },
   async mounted() {
+    this.currentIndex = this.$route.query.i ? Number(this.$route.query.i) : 0;
     this.updating = true;
     let res = await axios.get(`${Config.wiki}items/phrasebook/283`);
     if (res && res.data) {
