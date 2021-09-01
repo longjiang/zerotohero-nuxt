@@ -219,6 +219,66 @@
             </div>
           </div>
         </div>
+        <div class="row">
+          <div class="col-sm-6 mb-5">
+            <div class="home-card text-center">
+              <h5 class="mb-3">Map of Languages</h5>
+              <router-link to="/language-map">
+                <div>
+                  <img
+                    src="/img/thumbnail-language-map.jpg"
+                    alt="World Language Map"
+                    class="rounded shadow img-fluid"
+                  />
+                </div>
+              </router-link>
+            </div>
+          </div>
+          <div class="col-sm-6 mb-5">
+            <div class="home-card text-center">
+              <h5 class="mb-3">Compare Phrases across Languages</h5>
+              <router-link to="/compare-languages">
+                <div>
+                  <img
+                    src="/img/thumbnail-compare-languages.jpg"
+                    alt="Compare phrases across languages on a map"
+                    class="rounded shadow img-fluid"
+                  />
+                </div>
+              </router-link>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6 mb-5">
+            <div class="home-card text-center">
+              <h5 class="mb-3">Faces of Languages</h5>
+              <router-link to="/language-icons">
+                <div>
+                  <img
+                    src="/img/thumbnail-language-icons.jpg"
+                    alt="Faces of Languages"
+                    class="rounded shadow img-fluid"
+                  />
+                </div>
+              </router-link>
+            </div>
+          </div>
+          <div class="col-sm-6 mb-5">
+            <div class="home-card text-center">
+              <h5 class="mb-3">Compare Online Translators</h5>
+              <router-link to="/translators">
+                <div>
+                  <img
+                    src="/img/thumbnail-translators.jpg"
+                    alt="Faces of Languages"
+                    class="rounded shadow img-fluid"
+                  />
+                </div>
+              </router-link>
+            </div>
+          </div>
+        </div>
         <div class="row mb-5">
           <div class="col-sm-12">
             <div class="home-card">
@@ -285,36 +345,6 @@
                 class="mt-4"
                 :sort="true"
               />
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-6 mb-5">
-            <div class="home-card text-center">
-              <h5 class="mb-3">Map of Languages</h5>
-              <router-link to="/language-map">
-                <div>
-                  <img
-                    src="/img/thumbnail-language-map.jpg"
-                    alt="World Language Map"
-                    class="rounded shadow img-fluid"
-                  />
-                </div>
-              </router-link>
-            </div>
-          </div>
-          <div class="col-sm-6 mb-5">
-            <div class="home-card text-center">
-              <h5 class="mb-3">Faces of Languages</h5>
-              <router-link to="/language-icons">
-                <div>
-                  <img
-                    src="/img/thumbnail-language-icons.jpg"
-                    alt="Faces of Languages"
-                    class="rounded shadow img-fluid"
-                  />
-                </div>
-              </router-link>
             </div>
           </div>
         </div>

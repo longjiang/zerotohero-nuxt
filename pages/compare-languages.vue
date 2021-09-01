@@ -12,7 +12,7 @@
     <SocialHead
       title="Compare Languages on a Map | Zero to Hero Languages"
       description="See on a map how people say words like 'yes', 'no', 'thanks' on a map!"
-      image="/img/thumbnail-language-map.jpg"
+      image="/img/thumbnail-compare-languages.jpg"
     />
     <div class="container-fluid">
       <div
