@@ -3,7 +3,7 @@
     <div class="similar-phrases">
       <b-button
         @click="getSimilarPhrases"
-        v-if="autoLoad && showButton"
+        v-if="!autoLoad && showButton"
         size="sm"
         variant="gray"
       >
