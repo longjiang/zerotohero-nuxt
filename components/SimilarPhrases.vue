@@ -3,7 +3,7 @@
     <div class="similar-phrases">
       <b-button
         @click="getSimilarPhrases"
-        v-if="showButton"
+        v-if="autoLoad && showButton"
         size="sm"
         variant="gray"
       >
@@ -99,6 +99,9 @@ export default {
     phraseStr: {
       type: String,
     },
+    autoLoad: {
+      default: false,
+    },
   },
   data() {
     return {
@@ -148,6 +151,9 @@ export default {
         return this.$store.state.settings.adminMode;
     },
   },
+  mounted() {
+    if (this.autoLoad) this.getSimilarPhrases();
+  },
   methods: {
     async getSimilarPhrases() {
       this.updating = true;
@@ -159,7 +165,9 @@ export default {
         );
       }
       if (this.phrase) {
-        phrasebooks = phrasebooks.concat(await this.getVousInOtherLangs(this.phrase));
+        phrasebooks = phrasebooks.concat(
+          await this.getVousInOtherLangs(this.phrase)
+        );
       }
       this.allPhrases = this.extractAllPhrases(phrasebooks);
       this.separatePhrases(this.allPhrases);
@@ -230,7 +238,9 @@ export default {
       this.vousInOtherLangs = phrases.filter(
         (p) =>
           p.phrase === this.phrase &&
-          (typeof this.$l2 === 'undefined' || p.l2.code !== this.$l2.code || p["en"] !== this.translation)
+          (typeof this.$l2 === "undefined" ||
+            p.l2.code !== this.$l2.code ||
+            p["en"] !== this.translation)
       );
     },
   },

@@ -21,20 +21,28 @@
       >
         <div class="col-sm-12 d-flex" style="overflow: visible">
           <div
-            class="mr-3 d-flex align-items-center"
+            class="d-flex align-items-center"
             style="width: 100%; justify-content: space-between"
           >
             <router-link to="/" class="link-unstyled">
               <i class="fa fa-chevron-left mr-2"></i>
               Home
             </router-link>
+            <Loader
+              :sticky="true"
+              message="Loading common phrases"
+              v-if="updating"
+            />
+            <div v-if="updating">
+              &nbsp; <!-- dummy -->
+            </div>
             <div v-if="phrases">
               {{ phrases[currentIndex].phrase }}
             </div>
             <div class="paginator" v-if="phrases">
               <b-button
                 :class="{
-                  'paginator-previous mr-2 mb-1': true,
+                  'paginator-previous mr-2': true,
                   transparent: currentIndex < 1,
                 }"
                 variant="ghost-dark"
@@ -47,7 +55,7 @@
               {{ currentIndex + 1 }} of {{ phrases.length }}
               <b-button
                 :class="{
-                  'paginator-next ml-2 mb-1': true,
+                  'paginator-next ml-2': true,
                   transparent: currentIndex > phrases.length - 2,
                 }"
                 variant="ghost-dark"
@@ -74,9 +82,11 @@
       </div>
       <div class="similar-phrases-panel">
         <SimilarPhrases
+          class="text-center"
           v-if="phrases"
           :phraseObj="phrases[currentIndex]"
-          class="text-center"
+          :key="`similar-phrases-${currentIndex}`"
+          :autoLoad="true"
         />
       </div>
     </div>
@@ -100,9 +110,11 @@ export default {
       phrasebook: undefined,
       phrases: undefined,
       currentIndex: 0,
+      updating: false,
     };
   },
   async mounted() {
+    this.updating = true;
     let res = await axios.get(`${Config.wiki}items/phrasebook/283`);
     if (res && res.data) {
       let phrasebook = res.data.data;
@@ -115,6 +127,7 @@ export default {
       this.phrasebook = phrasebook;
       this.phrases = phrasebook.phrases;
     }
+    this.updating = false;
   },
   methods: {},
 };
