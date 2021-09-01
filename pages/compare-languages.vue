@@ -106,6 +106,12 @@
           'd-none': !showList,
         }"
       >
+        <div class="text-center mb-3">
+          <b-button-group size="sm">
+            <b-button @click="listType = 'all-phrases'" :variant="listType === 'all-phrases' ? 'secondary' : 'outline-secondary'">All Phrases</b-button>
+            <b-button @click="listType = 'this-phrase'" :variant="listType === 'this-phrase' ? 'secondary' : 'outline-secondary'">This Phrase</b-button>
+          </b-button-group>
+        </div>
         <SimilarPhrases
           class="text-center"
           v-if="phrases"
@@ -134,6 +140,7 @@ export default {
       updating: false,
       phrasesInAllLangs: undefined,
       showList: false,
+      listType: "all-phrases", // or 'this-phrase'
     };
   },
   computed: {
