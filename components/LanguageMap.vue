@@ -93,6 +93,30 @@
           </l-icon>
         </l-marker>
       </l-map>
+      <b-modal
+        ref="phrase-picker-modal"
+        centered
+        hide-footer
+        title="Which one?"
+      >
+        <div class="phrase-picker-modal">
+          <router-link
+            v-for="(phrase, index) of modalPhrases"
+            :to="`/en/${phrase.l2.code}/phrasebook/${phrase.bookId}/${
+              phrase.id
+            }/${encodeURIComponent(phrase.phrase)}`"
+            :key="`you-in-other-langs-${index}`"
+            class="d-block link-unstyled text-left similar-phrase"
+          >
+            <span class="similar-phrase-l2">{{ phrase.phrase }}</span>
+            <Speak :text="phrase.phrase" :l2="phrase.l2" />
+            <span class="similar-phrase-language">
+              <em>{{ phrase.en }}</em>
+              in {{ phrase.l2.name }}
+            </span>
+          </router-link>
+        </div>
+      </b-modal>
     </client-only>
   </div>
 </template>
@@ -115,6 +139,7 @@ export default {
     initialCenter: [35, 105],
     languages: [],
     filteredLanguages: [],
+    modalPhrases: [],
     countries: [],
     overlapped: [],
     currentZoom: 4,
@@ -180,12 +205,15 @@ export default {
     },
     openPhrases(l2) {
       let filteredPhrases = this.phrases.filter((phrase) => phrase.l2 === l2);
-      if (filteredPhrases && filteredPhrases[0]) {
+      if (filteredPhrases && filteredPhrases.length === 1) {
         let phrase = filteredPhrases[0];
         let path = `/en/${phrase.l2.code}/phrasebook/${phrase.bookId}/${
           phrase.id
         }/${encodeURIComponent(phrase.phrase)}`;
         this.$router.push(path);
+      } else {
+        this.modalPhrases = filteredPhrases;
+        this.$refs["phrase-picker-modal"].show();
       }
     },
     ready(mapObj) {
@@ -370,6 +398,15 @@ export default {
           color: white;
         }
       }
+    }
+  }
+}
+.phrase-picker-modal {
+  .similar-phrase {
+    .similar-phrase-l2 {
+      font-weight: bold;
+      color: #c59f94;
+      font-size: 1.5em;
     }
   }
 }
