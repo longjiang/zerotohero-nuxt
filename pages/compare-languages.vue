@@ -53,7 +53,9 @@
                 variant="ghost-dark"
                 size="sm"
                 title="Next phrase"
-                @click="currentIndex = Math.min(phrases.length - 1, currentIndex + 1)"
+                @click="
+                  currentIndex = Math.min(phrases.length - 1, currentIndex + 1)
+                "
               >
                 <i class="fas fa-chevron-right"></i>
               </b-button>
@@ -63,14 +65,14 @@
       </div>
       <div class="row">
         <div class="col-12" style="height: calc(100vh - 54px); padding: 0">
-          <!-- <LanguageMap
+          <LanguageMap
             style="height: 100%"
             ref="languageMap"
-            :langs="filteredLangsWithGeo"
-          /> -->
+            :langs="[english]"
+          />
         </div>
       </div>
-      <div>
+      <div class="similar-phrases-panel">
         <SimilarPhrases
           v-if="phrases"
           :phraseObj="phrases[currentIndex]"
@@ -119,4 +121,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.similar-phrases-panel {
+  background: white;
+  position: fixed;
+  top: calc(49px + 1rem);
+  width: 20rem;
+  height: calc(100vh - 49px - 2rem);
+  right: 1rem;
+  z-index: 999;
+  border-radius: 0.25rem;
+  box-shadow: 0 0 5px 10px rgba(0, 0, 0, 0.2);
+  overflow-y: scroll;
+  padding: 1rem;
+}
 </style>
