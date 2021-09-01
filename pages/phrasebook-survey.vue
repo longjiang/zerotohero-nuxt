@@ -20,7 +20,10 @@
               :to="{
                 name: 'phrasebook-creator',
                 params: {
+                  l1: 'en',
+                  l2: 'en',
                   csvProp: groups
+                    .filter(g => g.instances.length > 20)
                     .slice(0, 1000)
                     .map((l) => l.en)
                     .join('\n'),
@@ -159,7 +162,8 @@ export default {
         };
         group[key] = sortedPhrases[0][key];
         for (let phrase of sortedPhrases) {
-          if (phrase[key] === group[key]) {
+          // Case insensitive comparison, so we don't get duplicate phrases that differ only in case.
+          if (phrase[key].toUpperCase() === group[key].toUpperCase()) {
             group.instances.push(phrase);
           } else {
             groups.push(group);

@@ -30,7 +30,7 @@
           </h5>
           <router-link
             v-for="(phrase, index) of youInOtherLangs"
-            :to="`/${$l1.code}/${phrase.l2.code}/phrasebook/${phrase.bookId}/${
+            :to="`/en/${phrase.l2.code}/phrasebook/${phrase.bookId}/${
               phrase.id
             }/${encodeURIComponent(phrase.phrase)}`"
             :key="`you-in-other-langs-${index}`"
@@ -52,7 +52,7 @@
             v-for="(phrase, index) of vousInOtherLangs"
             :key="`vous-in-other-langs-${index}`"
             class="d-block link-unstyled text-left"
-            :to="`/${$l1.code}/${phrase.l2.code}/phrasebook/${phrase.bookId}/${
+            :to="`/en/${phrase.l2.code}/phrasebook/${phrase.bookId}/${
               phrase.id
             }/${encodeURIComponent(phrase.phrase)}`"
           >
@@ -230,7 +230,7 @@ export default {
       this.vousInOtherLangs = phrases.filter(
         (p) =>
           p.phrase === this.phrase &&
-          (p.l2.code !== this.$l2.code || p["en"] !== this.translation)
+          (typeof this.$l2 === 'undefined' || p.l2.code !== this.$l2.code || p["en"] !== this.translation)
       );
     },
   },

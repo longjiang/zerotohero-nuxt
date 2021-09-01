@@ -55,6 +55,9 @@ export default {
     $hanzi() {
       return this.$getHanzi();
     },
+    english() {
+      return this.$languages.l1s.find((language) => language.code === "en");
+    },
   },
   data() {
     return {
@@ -65,7 +68,7 @@ export default {
     await this.$getDictionary();
     this.canSpeak =
       this.mp3 ||
-      (this.text && this.$languages.hasFeature(this.$l1, this.$l2, "speech"));
+      (this.text && this.$languages.hasFeature(this.$l1 || this.english, this.$l2, "speech"));
   },
   methods: {
     // https://www.npmjs.com/package/ogv

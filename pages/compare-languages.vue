@@ -1,0 +1,122 @@
+<router>
+  {
+    path: '/compare-languages',
+    props: true,
+    meta: {
+      layout: 'full'
+    }
+  }
+</router>
+<template>
+  <div>
+    <SocialHead
+      title="Compare Languages on a Map | Zero to Hero Languages"
+      description="See on a map how people say words like 'yes', 'no', 'thanks' on a map!"
+      image="/img/thumbnail-language-map.jpg"
+    />
+    <div class="container-fluid">
+      <div
+        class="row bg-dark text-white pt-2 pb-2 text-left"
+        style="overflow: visible"
+      >
+        <div class="col-sm-12 d-flex" style="overflow: visible">
+          <div
+            class="mr-3 d-flex align-items-center"
+            style="width: 100%; justify-content: space-between"
+          >
+            <router-link to="/" class="link-unstyled">
+              <i class="fa fa-chevron-left mr-2"></i>
+              Home
+            </router-link>
+            <div v-if="phrases">
+              {{ phrases[currentIndex].phrase }}
+            </div>
+            <div class="paginator" v-if="phrases">
+              <b-button
+                :class="{
+                  'paginator-previous mr-2 mb-1': true,
+                  transparent: currentIndex < 1,
+                }"
+                variant="ghost-dark"
+                size="sm"
+                title="Previous phrase"
+                @click="currentIndex = Math.max(0, currentIndex - 1)"
+              >
+                <i class="fas fa-chevron-left"></i>
+              </b-button>
+              {{ currentIndex + 1 }} of {{ phrases.length }}
+              <b-button
+                :class="{
+                  'paginator-next ml-2 mb-1': true,
+                  transparent: currentIndex > phrases.length - 2,
+                }"
+                variant="ghost-dark"
+                size="sm"
+                title="Next phrase"
+                @click="currentIndex = Math.min(phrases.length - 1, currentIndex + 1)"
+              >
+                <i class="fas fa-chevron-right"></i>
+              </b-button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12" style="height: calc(100vh - 54px); padding: 0">
+          <!-- <LanguageMap
+            style="height: 100%"
+            ref="languageMap"
+            :langs="filteredLangsWithGeo"
+          /> -->
+        </div>
+      </div>
+      <div>
+        <SimilarPhrases
+          v-if="phrases"
+          :phraseObj="phrases[currentIndex]"
+          class="text-center"
+        />
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import Config from "@/lib/config";
+import axios from "axios";
+import Papa from "papaparse";
+import Helper from "@/lib/helper";
+
+export default {
+  computed: {
+    english() {
+      return this.$languages.l1s.find((language) => language.code === "en");
+    },
+  },
+  data() {
+    return {
+      phrasebook: undefined,
+      phrases: undefined,
+      currentIndex: 0,
+    };
+  },
+  async mounted() {
+    let res = await axios.get(`${Config.wiki}items/phrasebook/283`);
+    if (res && res.data) {
+      let phrasebook = res.data.data;
+      phrasebook.phrases = Papa.parse(phrasebook.phrases, {
+        header: true,
+      }).data.map((p, id) => {
+        p.id = id;
+        return p;
+      });
+      this.phrasebook = phrasebook;
+      this.phrases = phrasebook.phrases;
+    }
+  },
+  methods: {},
+};
+</script>
+
+<style lang="scss" scoped>
+</style>
