@@ -19,7 +19,7 @@
       </div>
       <div>
         <router-link
-          to="/language-map"
+          :to="languageMapPath"
           class="btn top-bar-button btn-unstyled link-unstyled"
         >
           <i class="fas fa-globe-asia"></i>
@@ -63,7 +63,7 @@
                 <i class="fas fa-chevron-left mr-2"></i>
                 All languages
               </router-link>
-              <router-link to="/language-map" class="link-unstyled">
+              <router-link :to="languageMapPath" class="link-unstyled">
                 <i class="fas fa-globe-asia"></i>
               </router-link>
             </div>
@@ -295,6 +295,9 @@ export default {
     skin: {
       default: "light", // or 'dark'
     },
+    fullHistory: {
+      type: Array
+    }
   },
   data() {
     return {
@@ -310,6 +313,16 @@ export default {
     };
   },
   computed: {
+    languageMapPath() {
+      let historyMatches = this.fullHistory.filter((path) => {
+        if (path) {
+          let r = this.$router.resolve(path);
+          return r && r.route && ['compare-languages', 'language-map'].includes(r.route.name)
+        }
+      });
+      let path = historyMatches.pop();
+      return path ? path : '/language-map'
+    },
     savedWordsCount() {
       let count = this.$store.getters["savedWords/count"]({ l2: this.l2.code });
       // eslint-disable-next-line vue/no-parsing-error

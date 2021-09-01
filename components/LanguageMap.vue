@@ -205,6 +205,10 @@ export default {
           );
           searchParams.set("z", this.currentZoom);
           window.history.replaceState("", "", `?${searchParams.toString()}`);
+          this.$nuxt.$emit(
+            "history",
+            window.location.pathname + window.location.search
+          );
         }
       }
     },

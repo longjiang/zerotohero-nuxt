@@ -154,10 +154,10 @@ export default {
         if ("URLSearchParams" in window) {
           var searchParams = new URLSearchParams(window.location.search);
           searchParams.set("i", this.currentIndex);
-          window.history.replaceState(
-            "",
-            "",
-            `?${searchParams.toString()}`
+          window.history.replaceState("", "", `?${searchParams.toString()}`);
+          this.$nuxt.$emit(
+            "history",
+            window.location.pathname + window.location.search
           );
         }
       }

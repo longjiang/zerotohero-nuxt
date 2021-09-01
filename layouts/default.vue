@@ -16,12 +16,16 @@
           :key="`nav-${l1.code}-${l2.code}`"
           :variant="wide ? 'side-bar' : 'menu-bar'"
           :skin="$route.meta.skin ? $route.meta.skin : 'light'"
+          :fullHistory="fullHistory"
         />
       </client-only>
       <div class="zth-content">
         <Nuxt id="main" />
         <footer class="zth-footer" style="z-index: -1">
-          <div class="text-center pt-4 pb-3" style="line-height: 1.2; font-size: 1.1em">
+          <div
+            class="text-center pt-4 pb-3"
+            style="line-height: 1.2; font-size: 1.1em"
+          >
             <router-link class="link-unstyled text-white" to="/">
               <strong>ZERO TO HERO</strong>
               <span style="font-weight: 300">LANGUAGES</span>
@@ -51,7 +55,11 @@
                     <a target="_blank" href="https://www.sketchengine.eu/">
                       SketchEngine
                     </a>
-                    . Languages population size from <a href="https://github.com/wooorm/speakers">github.com/wooorm/speakers</a>.
+                    . Languages population size from
+                    <a href="https://github.com/wooorm/speakers">
+                      github.com/wooorm/speakers
+                    </a>
+                    .
                   </p>
                 </div>
               </div>
@@ -84,6 +92,7 @@ export default {
       skin: "light",
       dictionaryCredit: "",
       fullPageRoutes: ["index", "sale"],
+      fullHistory: [],
     };
   },
   computed: {
@@ -119,6 +128,7 @@ export default {
   },
   created() {
     this.$nuxt.$on("skin", this.onSkin);
+    this.$nuxt.$on("history", this.addFullHistoryItem);
     if (typeof window !== "undefined")
       window.addEventListener("resize", this.onResize);
   },
@@ -134,6 +144,9 @@ export default {
   watch: {
     l2() {
       this.onLanguageChange();
+    },
+    $route() {
+      this.addFullHistoryItem(this.$route.path);
     },
   },
   head() {
@@ -151,6 +164,9 @@ export default {
     return head;
   },
   methods: {
+    addFullHistoryItem(path) {
+      this.fullHistory.push(path);
+    },
     onSkin(skin) {
       this.skin = skin;
     },
