@@ -24,7 +24,7 @@
           v-for="(language, index) in filteredLanguages"
           :lat-lng="[language.lat, language.long]"
           :key="`language-marker-${index}`"
-          @click="!phrases ? goTo(language) : false"
+          @click="!phrases ? goTo(language) : openPhrases(language)"
         >
           <l-icon>
             <div
@@ -77,17 +77,12 @@
                       ml-1
                     "
                   >
-                    <router-link
-                      class="similar-phrase-l2"
-                      :to="`/en/${phrase.l2.code}/phrasebook/${phrase.bookId}/${
-                        phrase.id
-                      }/${encodeURIComponent(phrase.phrase)}`"
-                    >
+                    <span class="similar-phrase-l2">
                       {{ phrase.phrase }}
                       <template v-if="index < filteredPhrases.length - 1">
                         ,
                       </template>
-                    </router-link>
+                    </span>
                   </span>
                 </div>
                 <span class="language-marker-phrases-language">
@@ -182,6 +177,16 @@ export default {
       let l1Code = "en";
       if (["hak", "nan", "lzh", "en"].includes(l2.code)) l1Code = "zh";
       this.$router.push(`/${l1Code}/${l2.code}/`);
+    },
+    openPhrases(l2) {
+      let filteredPhrases = this.phrases.filter((phrase) => phrase.l2 === l2);
+      if (filteredPhrases && filteredPhrases[0]) {
+        let phrase = filteredPhrases[0];
+        let path = `/en/${phrase.l2.code}/phrasebook/${phrase.bookId}/${
+          phrase.id
+        }/${encodeURIComponent(phrase.phrase)}`;
+        this.$router.push(path);
+      }
     },
     ready(mapObj) {
       this.map = mapObj;
@@ -317,7 +322,7 @@ export default {
         color: #ddd;
         display: inline-block;
       }
-      a {
+      .language-marker-phrases-phrase {
         color: white;
         font-size: 1.2em;
         font-weight: bold;
