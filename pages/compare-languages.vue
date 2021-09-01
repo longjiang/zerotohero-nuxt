@@ -26,7 +26,7 @@
           >
             <router-link to="/" class="link-unstyled">
               <i class="fa fa-chevron-left mr-2"></i>
-              Home
+              <span class="home-text">Home</span>
             </router-link>
             <Loader
               :sticky="true"
@@ -34,15 +34,21 @@
               v-if="updating"
             />
             <div v-if="updating">
-              &nbsp; <!-- dummy -->
+              &nbsp;
+              <!-- dummy -->
             </div>
-            <div v-if="phrases">
-              {{ phrases[currentIndex].phrase }}
+            <div v-if="phrases" class="title">
+              <span class="title-phrase">
+                {{ phrases[currentIndex].phrase }}
+              </span>
+              <span class="title-languages" v-if="langs">
+                in {{ langs.length }} languages
+              </span>
             </div>
             <div class="paginator" v-if="phrases">
               <b-button
                 :class="{
-                  'paginator-previous mr-2': true,
+                  'paginator-previous': true,
                   transparent: currentIndex < 1,
                 }"
                 variant="ghost-dark"
@@ -52,10 +58,12 @@
               >
                 <i class="fas fa-chevron-left"></i>
               </b-button>
-              {{ currentIndex + 1 }} of {{ phrases.length }}
+              <span class="paginator-index ml-2 mr-2">
+                {{ currentIndex + 1 }} of {{ phrases.length }}
+              </span>
               <b-button
                 :class="{
-                  'paginator-next ml-2': true,
+                  'paginator-next': true,
                   transparent: currentIndex > phrases.length - 2,
                 }"
                 variant="ghost-dark"
@@ -66,6 +74,17 @@
                 "
               >
                 <i class="fas fa-chevron-right"></i>
+              </b-button>
+              <b-button
+                :class="{
+                  'show-list-button': true,
+                }"
+                variant="ghost-dark"
+                size="sm"
+                title="Show or hide the list"
+                @click="showList = !showList"
+              >
+                <i class="fas fa-list"></i>
               </b-button>
             </div>
           </div>
@@ -81,7 +100,12 @@
           />
         </div>
       </div>
-      <div class="similar-phrases-panel">
+      <div
+        :class="{
+          'similar-phrases-panel': true,
+          'd-none': !showList,
+        }"
+      >
         <SimilarPhrases
           class="text-center"
           v-if="phrases"
@@ -102,19 +126,27 @@ import Papa from "papaparse";
 import Helper from "@/lib/helper";
 
 export default {
-  computed: {
-    english() {
-      return this.$languages.l1s.find((language) => language.code === "en");
-    },
-  },
   data() {
     return {
       phrasebook: undefined,
       phrases: undefined,
       currentIndex: 0,
       updating: false,
-      phrasesInAllLangs: undefined
+      phrasesInAllLangs: undefined,
+      showList: false,
     };
+  },
+  computed: {
+    english() {
+      return this.$languages.l1s.find((language) => language.code === "en");
+    },
+    langs() {
+      if (this.phrasesInAllLangs) {
+        return Helper.unique(
+          this.phrasesInAllLangs.filter((p) => p.l2).map((p) => p.l2.code)
+        );
+      }
+    },
   },
   async mounted() {
     this.updating = true;
@@ -134,8 +166,8 @@ export default {
   },
   methods: {
     onYouInOtherLangs(youInOtherLangs) {
-      this.phrasesInAllLangs = youInOtherLangs
-    }
+      this.phrasesInAllLangs = youInOtherLangs;
+    },
   },
 };
 </script>
@@ -146,12 +178,35 @@ export default {
   position: fixed;
   top: calc(49px + 1rem);
   width: 20rem;
+  max-width: calc(100vw - 2rem);
   height: calc(100vh - 49px - 2rem);
   right: 1rem;
-  z-index: 999;
+  z-index: 9999;
   border-radius: 0.25rem;
   box-shadow: 0 0 5px 10px rgba(0, 0, 0, 0.2);
   overflow-y: scroll;
   padding: 1rem;
+}
+.title {
+  line-height: 1.2;
+  position: relative;
+  bottom: 0.1rem;
+  .title-phrase {
+    font-weight: bold;
+    font-size: 1.3em;
+    font-style: italic;
+    margin-right: 0.25rem;
+  }
+}
+@media (max-width: 480px) {
+  .title-languages {
+    display: none;
+  }
+  .home-text {
+    display: none;
+  }
+  .paginator-index {
+    display: none;
+  }
 }
 </style>
