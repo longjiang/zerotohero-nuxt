@@ -8,6 +8,9 @@
   <div class="main">
     <div class="container pt-5 pb-5">
       <SocialHead :title="title" :description="description" :image="image" />
+      <div class="text-center pt-5 pb-5" v-if="loading">
+        <Loader :sticky="true" message="Loading phrasebook..." />
+      </div>
       <PhrasebookComp
         v-if="phrasebook && phrasebook.phrases"
         :phrasebook="phrasebook"
@@ -18,9 +21,6 @@
 </template>
 
 <script>
-import Config from "@/lib/config";
-import axios from "axios";
-import Papa from "papaparse";
 import WordPhotos from "@/lib/word-photos";
 import Helper from "@/lib/helper";
 
@@ -37,6 +37,7 @@ export default {
     return {
       phrasebook: undefined,
       images: [],
+      loading: false
     };
   },
   computed: {
@@ -77,30 +78,35 @@ export default {
       }
     },
   },
-  async fetch() {
+  async fetch() {},
+  mounted() {
     let phrasebook = this.getPhrasebookFromStore();
     if (phrasebook) {
       if (!phrasebook.phrases) {
-        this.$store.dispatch("phrasebooks/loadPhrases", {
-          l2: this.$l2,
-          bookId: this.bookId,
-          adminMode: this.$adminMode,
-        });
+        this.loadPhrases();
       } else {
         this.phrasebook = phrasebook;
-        if (this.phrasebook && this.phrasebook.phrases[0]) {
-          this.images = await WordPhotos.getGoogleImages({
-            term: this.phrasebook.phrases[0].phrase,
-            lang: this.$l2.code,
-          });
-        }
       }
     }
-  },
-  mounted() {
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type.startsWith("phrasebooks")) {
-        this.phrasebook = this.getPhrasebookFromStore();
+        if (mutation.type === "phrasebooks/LOAD_PHRASEBOOKS") {
+          let phrasebook = this.getPhrasebookFromStore();
+          if (phrasebook) {
+            if (!phrasebook.phrases) {
+              this.loadPhrases();
+            } else {
+              this.phrasebook = phrasebook;
+            }
+          }
+        }
+        if (mutation.type === "phrasebooks/LOAD_PHRASES") {
+          let phrasebook = this.getPhrasebookFromStore();
+          if (phrasebook && phrasebook.phrases) {
+            this.phrasebook = phrasebook;
+          }
+          this.loading = false
+        }
       }
     });
   },
@@ -109,6 +115,14 @@ export default {
     this.unsubscribe();
   },
   methods: {
+    loadPhrases() {
+      this.loading = true
+      this.$store.dispatch("phrasebooks/loadPhrases", {
+        l2: this.$l2,
+        bookId: Number(this.bookId),
+        adminMode: this.$adminMode,
+      });
+    },
     scrollTo(index) {
       let el = document.getElementById(`phrasebook-phrase-${index}`);
       if (el) {
