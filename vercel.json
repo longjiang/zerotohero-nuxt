@@ -41,6 +41,15 @@
           "value": "s-maxage=120, stale-while-revalidate"
         }
       ]
+    },
+    {
+      "source": "/:l1/:l2/resource/list/all/all",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "s-maxage=120, stale-while-revalidate"
+        }
+      ]
     }
   ]
 }
