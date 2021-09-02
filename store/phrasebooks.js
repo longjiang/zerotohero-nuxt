@@ -21,11 +21,14 @@ export const mutations = {
     state.phrasebooks[l2.code] = state.phrasebooks[l2.code].filter((p) => p !== phrasebook);
   },
   LOAD_PHRASES(state, { l2, bookId, phrases }) {
-    let phrasebook = state.phrasebooks[l2.code].find(pb => {
-      return pb.id === bookId
-    })
-    if (phrasebook) {
-      phrasebook.phrases = phrases
+    let phrasebooks = state.phrasebooks[l2.code]
+    if (phrasebooks) {
+      let phrasebook = phrasebooks.find(pb => {
+        return pb.id === bookId
+      })
+      if (phrasebook) {
+        phrasebook.phrases = phrases
+      }
     }
   }
 }

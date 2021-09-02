@@ -271,27 +271,33 @@ export default {
       return this.params.wide && ["lg", "xl", "xxl"].includes(this.$mq);
     },
   },
-  async fetch() {
-    if (this.bookId !== "saved") this.getPhrasebookFromStore();
-    if (this.phrase)
-      this.images = await WordPhotos.getGoogleImages({
-        term: this.phrase,
-        lang: this.$l2.code,
-      });
-  },
   mounted() {
-    if (this.bookId === "saved") this.getPhrasebookFromStore();
+    let phrasebook = this.getPhrasebookFromStore();
+    if (phrasebook) {
+      if (!phrasebook.phrases) {
+        this.loadPhrases();
+      } else {
+        this.phrasebook = phrasebook;
+      }
+    }
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type.startsWith("phrasebooks")) {
-        this.getPhrasebookFromStore();
-      }
-      if (this.bookId === "saved" && mutation.type.startsWith("savedPhrases")) {
-        let savedPhrases = this.savedPhrases[this.$l2.code];
-        if (this.phrasebook) this.phrasebook.phrases = savedPhrases || [];
-        if (mutation.type === "savedPhrases/REMOVE_SAVED_PHRASE") {
-          if (mutation.payload.phrase === this.phrase) {
-            this.phraseUnsaved();
+        if (mutation.type === "phrasebooks/LOAD_PHRASEBOOKS") {
+          let phrasebook = this.getPhrasebookFromStore();
+          if (phrasebook) {
+            if (!phrasebook.phrases) {
+              this.loadPhrases();
+            } else {
+              this.phrasebook = phrasebook;
+            }
           }
+        }
+        if (mutation.type === "phrasebooks/LOAD_PHRASES") {
+          let phrasebook = this.getPhrasebookFromStore();
+          if (phrasebook && phrasebook.phrases) {
+            this.phrasebook = phrasebook;
+          }
+          this.loading = false;
         }
       }
     });
@@ -314,7 +320,16 @@ export default {
     next();
   },
   methods: {
-    async phraseReady() {},
+    loadPhrases() {
+      if (this.bookId !== "saved") {
+        this.loading = true;
+        this.$store.dispatch("phrasebooks/loadPhrases", {
+          l2: this.$l2,
+          bookId: Number(this.bookId),
+          adminMode: this.$adminMode,
+        });
+      }
+    },
     changeWordTo(w) {
       this.word = w;
     },
@@ -381,6 +396,11 @@ export default {
         if (!phrasebook) return;
       }
       this.phrasebook = phrasebook;
+      if (phrasebook.phrases) {
+        this.getPhrase();
+      }
+    },
+    async getPhrase() {
       let phrase = this.phrasebook.phrases.find((p, index) => {
         if (p.id === Number(this.phraseId + 1)) return true;
         if (index === Number(this.phraseId)) return true;
@@ -402,7 +422,6 @@ export default {
           },
         });
       }
-      this.phraseReady();
     },
     async matchPhraseToDictionaryEntries() {
       let dictionary = await this.$getDictionary();
