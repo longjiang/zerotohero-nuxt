@@ -127,7 +127,9 @@
               class="icon-description"
             >
               <b>ICON IMAGE:</b>
-              <span v-if="$l2.logoDesc">{{ $l2.logoDesc.replace(/\s/g, ' ') }},</span>
+              <span v-if="$l2.logoDesc">
+                {{ $l2.logoDesc.replace(/\s/g, " ") }},
+              </span>
               a user of {{ $l2.name }}.
             </div>
             <LoginButton
@@ -296,8 +298,8 @@ export default {
       default: "light", // or 'dark'
     },
     fullHistory: {
-      type: Array
-    }
+      type: Array,
+    },
   },
   data() {
     return {
@@ -314,14 +316,21 @@ export default {
   },
   computed: {
     languageMapPath() {
-      let historyMatches = this.fullHistory.filter((path) => {
-        if (path) {
-          let r = this.$router.resolve(path);
-          return r && r.route && ['compare-languages', 'language-map'].includes(r.route.name)
-        }
-      });
-      let path = historyMatches.pop();
-      return path ? path : '/language-map'
+      if (this.fullHistory) {
+        let historyMatches = this.fullHistory.filter((path) => {
+          if (path) {
+            let r = this.$router.resolve(path);
+            return (
+              r &&
+              r.route &&
+              ["compare-languages", "language-map"].includes(r.route.name)
+            );
+          }
+        });
+        let path = historyMatches.pop();
+        if (path) return path;
+      }
+      return "/language-map";
     },
     savedWordsCount() {
       let count = this.$store.getters["savedWords/count"]({ l2: this.l2.code });
@@ -504,7 +513,15 @@ export default {
             },
             {
               name: "youtube-browse",
-              title: `${this.hasTVShows || this.musicPath || this.moviesPath || this.newsPath || this.hasTalks ? 'Other ' : ''}Videos`,
+              title: `${
+                this.hasTVShows ||
+                this.musicPath ||
+                this.moviesPath ||
+                this.newsPath ||
+                this.hasTalks
+                  ? "Other "
+                  : ""
+              }Videos`,
               icon: "fa fa-play",
               show: true,
             },
