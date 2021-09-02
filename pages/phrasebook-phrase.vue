@@ -281,6 +281,11 @@ export default {
       }
     }
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (mutation.type === "savedPhrases/REMOVE_SAVED_PHRASE") {
+        if (mutation.payload.phrase === this.phrase) {
+          this.phraseUnsaved();
+        }
+      }
       if (mutation.type.startsWith("phrasebooks")) {
         if (mutation.type === "phrasebooks/LOAD_PHRASEBOOKS") {
           let phrasebook = this.getPhrasebookFromStore();
