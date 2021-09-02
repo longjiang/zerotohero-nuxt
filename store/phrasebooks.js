@@ -20,28 +20,40 @@ export const mutations = {
   REMOVE_PHRASEBOOK(state, { l2, phrasebook }) {
     state.phrasebooks[l2.code] = state.phrasebooks[l2.code].filter((p) => p !== phrasebook);
   },
+  LOAD_PHRASES(state, { l2, bookId, phrases }) {
+    let phrasebook = state.phrasebooks[l2.code].find(pb => pb.id === bookId)
+    if (phrasebook) {
+      phrasebook.phrases = phrases
+    }
+  }
 }
 
 export const actions = {
   async load(context, { l2, adminMode }) {
     let response = await axios.get(
       `${Config.wiki}items/phrasebook?sort=title&filter[l2][eq]=${l2.id
-      }&fields=*,tv_show.*&limit=500&timestamp=${adminMode ? Date.now() : 0}`
+      }&fields=id,description,exact,title,l2,tv_show.*&limit=500&timestamp=${adminMode ? Date.now() : 0}`
     );
     let phrasebooks =
       response.data.data
-    for (let phrasebook of phrasebooks) {
-      phrasebook.phrases = Papa.parse(phrasebook.phrases, {
+    phrasebooks = phrasebooks.sort((x, y) =>
+      (x.title || "").localeCompare(y.title, l2.code)
+    ) || [];
+    context.commit('LOAD_PHRASEBOOKS', { l2, phrasebooks })
+  },
+  async loadPhrases(context, { l2, bookId, adminMode }) {
+    let url = `${Config.wiki}items/phrasebook/${bookId}?fields=*,tv_show.*&timestamp=${adminMode ? Date.now() : 0}`;
+    let response = await axios.get(url);
+    if (response.data && response.data.data) {
+      let phrasebook = response.data.data;
+      let phrases = Papa.parse(phrasebook.phrases, {
         header: true,
       }).data.map((p, id) => {
         p.id = id;
         return p;
       });
+      context.commit('LOAD_PHRASES', { l2, bookId, phrases })
     }
-    phrasebooks = phrasebooks.sort((x, y) =>
-      (x.title || "").localeCompare(y.title, l2.code)
-    ) || [];
-    context.commit('LOAD_PHRASEBOOKS', { l2, phrasebooks })
   },
   async add(context, { l2, phrasebook }) {
     let response = await axios.post(

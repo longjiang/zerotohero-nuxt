@@ -9,7 +9,7 @@
     <div class="container pt-5 pb-5">
       <SocialHead :title="title" :description="description" :image="image" />
       <PhrasebookComp
-        v-if="phrasebook"
+        v-if="phrasebook && phrasebook.phrases"
         :phrasebook="phrasebook"
         :initId="initId"
       />
@@ -48,6 +48,11 @@ export default {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
+    $adminMode() {
+      this.mounted; // So that this component shows up on first load (updates $adminMode)
+      if (typeof this.$store.state.settings.adminMode !== "undefined")
+        return this.$store.state.settings.adminMode;
+    },
     title() {
       if (this.phrasebook) {
         return `${this.phrasebook.title} | ${
@@ -59,7 +64,7 @@ export default {
       } Zero to Hero`;
     },
     description() {
-      if (this.phrasebook) {
+      if (this.phrasebook && this.phrasebook.phrases) {
         return `Learn ${this.phrasebook.phrases.length} ${this.$l2.name} phrases from the phrasebook “${this.phrasebook.title}”. See how each phrase is used in TV shows, movies, music, etc.`;
       }
       return `See how each phrase is used in TV shows, movies, music, etc.`;
@@ -74,15 +79,22 @@ export default {
   },
   async fetch() {
     let phrasebook = this.getPhrasebookFromStore();
-    if (!phrasebook) {
-      phrasebook = await this.loadPhrasebook(this.bookId);
-    }
-    this.phrasebook = phrasebook;
-    if (this.phrasebook && this.phrasebook.phrases[0]) {
-      this.images = await WordPhotos.getGoogleImages({
-        term: this.phrasebook.phrases[0].phrase,
-        lang: this.$l2.code,
-      });
+    if (phrasebook) {
+      if (!phrasebook.phrases) {
+        this.$store.dispatch("phrasebooks/loadPhrases", {
+          l2: this.$l2,
+          bookId: this.bookId,
+          adminMode: this.$adminMode,
+        });
+      } else {
+        this.phrasebook = phrasebook;
+        if (this.phrasebook && this.phrasebook.phrases[0]) {
+          this.images = await WordPhotos.getGoogleImages({
+            term: this.phrasebook.phrases[0].phrase,
+            lang: this.$l2.code,
+          });
+        }
+      }
     }
   },
   mounted() {
@@ -110,20 +122,6 @@ export default {
           left: 0,
           behavior: "smooth",
         });
-      }
-    },
-    async loadPhrasebook(bookId) {
-      let url = `${Config.wiki}items/phrasebook/${bookId}?fields=*,tv_show.*`;
-      let response = await axios.get(url);
-      if (response.data && response.data.data) {
-        let phrasebook = response.data.data;
-        phrasebook.phrases = Papa.parse(phrasebook.phrases, {
-          header: true,
-        }).data.map((p, id) => {
-          p.id = id;
-          return p;
-        });
-        return phrasebook;
       }
     },
     getPhrasebookFromStore() {
