@@ -76,11 +76,11 @@
             </span>
             <span v-if="saved && saved.id">
               <i class="fas fa-check-circle mr-2 text-success"></i>
-              Saved
+              Saved. View
               <router-link
                 :to="`/${$l1.code}/${$l2.code}/phrasebook/${saved.id}/`"
               >
-                View {{ saved.title }}
+                {{ saved.title }}
               </router-link>
             </span>
             <b-form-checkbox v-model="exact" class="d-inline-block ml-2">
@@ -152,13 +152,21 @@ export default {
         if (this.translation) {
           let lines = csv.split("\n");
           let translationLines = this.translation.split("\n");
-          let jointLines = lines.map((l, i) => l + "\t" + (translationLines[i] ? translationLines[i] : ''));
+          let jointLines = lines.map(
+            (l, i) =>
+              l + "\t" + (translationLines[i] ? translationLines[i] : "")
+          );
           csv = jointLines.join("\n");
         }
         csv = headerRow + csv;
         let rows = Papa.parse(csv, { header: true }).data;
-        rows = rows.filter(r => r[this.$l1.code] && r.phrase !== r[this.$l1.code] && r.phrase.length < 21)
-        return rows
+        rows = rows.filter(
+          (r) =>
+            r[this.$l1.code] &&
+            r.phrase !== r[this.$l1.code] &&
+            r.phrase.length < 21
+        );
+        return rows;
       }
     },
     originalTextHref() {
