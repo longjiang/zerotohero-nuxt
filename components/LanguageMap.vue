@@ -132,34 +132,33 @@ export default {
     "l-map": async () => {
       if (process.client) {
         let { LMap } = await import("vue2-leaflet");
-        console.log('LMap', LMap)
-        return LMap
+        return LMap;
       }
     },
     "l-tile-layer": async () => {
       if (process.client) {
         let { LTileLayer } = await import("vue2-leaflet");
-        return LTileLayer
+        return LTileLayer;
       }
     },
     "l-marker": async () => {
       if (process.client) {
         let { LMarker } = await import("vue2-leaflet");
-        return LMarker
+        return LMarker;
       }
     },
     "l-icon": async () => {
       if (process.client) {
         let { LIcon } = await import("vue2-leaflet");
-        return LIcon
+        return LIcon;
       }
     },
     "l-control-scale": async () => {
       if (process.client) {
         let { LControlScale } = await import("vue2-leaflet");
-        return LControlScale
+        return LControlScale;
       }
-    }
+    },
   },
   props: {
     langs: {
