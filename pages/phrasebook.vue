@@ -78,7 +78,6 @@ export default {
       }
     },
   },
-  async fetch() {},
   mounted() {
     let phrasebook = this.getPhrasebookFromStore();
     if (phrasebook) {
