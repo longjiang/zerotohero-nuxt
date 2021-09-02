@@ -125,11 +125,42 @@
 import axios from "axios";
 import Config from "@/lib/config";
 import Papa from "papaparse";
-import Vue from "vue";
-import { LMap, LTileLayer, LMarker, LIcon, LControlScale } from "vue2-leaflet";
 import "leaflet/dist/leaflet.css";
 
 export default {
+  components: {
+    "l-map": async () => {
+      if (process.client) {
+        let { LMap } = await import("vue2-leaflet");
+        console.log('LMap', LMap)
+        return LMap
+      }
+    },
+    "l-tile-layer": async () => {
+      if (process.client) {
+        let { LTileLayer } = await import("vue2-leaflet");
+        return LTileLayer
+      }
+    },
+    "l-marker": async () => {
+      if (process.client) {
+        let { LMarker } = await import("vue2-leaflet");
+        return LMarker
+      }
+    },
+    "l-icon": async () => {
+      if (process.client) {
+        let { LIcon } = await import("vue2-leaflet");
+        return LIcon
+      }
+    },
+    "l-control-scale": async () => {
+      if (process.client) {
+        let { LControlScale } = await import("vue2-leaflet");
+        return LControlScale
+      }
+    }
+  },
   props: {
     langs: {
       type: Array,
@@ -151,11 +182,6 @@ export default {
     currentLang: undefined,
   }),
   async mounted() {
-    Vue.component("l-map", LMap);
-    Vue.component("l-tile-layer", LTileLayer);
-    Vue.component("l-marker", LMarker);
-    Vue.component("l-icon", LIcon);
-    Vue.component("l-control-scale", LControlScale);
     this.initialZoom = this.$route.query.z ? Number(this.$route.query.z) : 3;
     this.currentZoom = this.initialZoom;
     this.initialCenter = this.$route.query.c

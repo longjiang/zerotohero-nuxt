@@ -92,12 +92,14 @@
       </div>
       <div class="row">
         <div class="col-12" style="height: calc(100vh - 54px); padding: 0">
-          <LanguageMap
-            v-if="phrasesInAllLangs"
-            style="height: 100%"
-            ref="languageMap"
-            :phrases="phrasesInAllLangs"
-          />
+          <client-only>
+            <LanguageMap
+              v-if="phrasesInAllLangs"
+              style="height: 100%"
+              ref="languageMap"
+              :phrases="phrasesInAllLangs"
+            />
+          </client-only>
         </div>
       </div>
       <div
