@@ -105,7 +105,6 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     '~plugins/main.js',
-    { src: '~plugins/nuxt-video-player-plugin.js', ssr: false },
     { src: '~/plugins/pwa-update.js', mode: 'client' }
   ],
 

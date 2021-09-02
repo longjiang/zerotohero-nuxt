@@ -20,7 +20,12 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import VueVideoPlayer from 'vue-video-player/dist/ssr'
 import '@videojs/http-streaming'
+
+Vue.use(VueVideoPlayer)
+
 export default {
   props: {
     url: {
