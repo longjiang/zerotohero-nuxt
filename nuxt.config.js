@@ -81,7 +81,8 @@ export default {
     families: {
       Lato: [400, 700],
       Pacifico: true
-    }
+    },
+    display: 'swap'
   },
 
   modules: [
