@@ -8,7 +8,68 @@
             class="mt-3 mb-4"
             :preferredLanguages="languages"
           />
-          <LanguageList v-if="languages.length > 0" :langs="languages" :skin="skin" />
+          <LanguageList
+            :codes="[
+              'ar',
+              'az',
+              'bn',
+              'br',
+              'bs',
+              'bul',
+              'cat',
+              'ces',
+              'cmn',
+              'cy',
+              'dan',
+              'de',
+              'el',
+              'en',
+              'epo',
+              'es',
+              'fa',
+              'fin',
+              'fr',
+              'gle',
+              'glg',
+              'hak',
+              'he',
+              'hi',
+              'hun',
+              'hr',
+              'hye',
+              'id',
+              'isl',
+              'it',
+              'ja',
+              'ko',
+              'lat',
+              'lav',
+              'lit',
+              'lzh',
+              'msa',
+              'nan',
+              'nl',
+              'no',
+              'pa',
+              'pl',
+              'pt',
+              'ron',
+              'ru',
+              'sr',
+              'swe',
+              'ta',
+              'th',
+              'tl',
+              'tlh',
+              'tr',
+              'uk',
+              'vi',
+              'yue',
+              'zh',
+            ]"
+            :sort="true"
+            :skin="skin"
+          />
         </div>
       </div>
     </div>
@@ -26,8 +87,8 @@ export default {
   },
   props: {
     skin: {
-      default: 'light'
-    }
+      default: "light",
+    },
   },
   data() {
     return {
