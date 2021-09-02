@@ -36,11 +36,13 @@
       </div>
       <div class="row">
         <div class="col-12" style="height: calc(100vh - 54px); padding: 0">
-          <LanguageMap
-            style="height: 100%"
-            ref="languageMap"
-            :langs="filteredLangsWithGeo"
-          />
+          <client-only>
+            <LanguageMap
+              style="height: 100%"
+              ref="languageMap"
+              :langs="filteredLangsWithGeo"
+            />
+          </client-only>
         </div>
       </div>
     </div>
@@ -49,6 +51,17 @@
 
 <script>
 export default {
+  /**
+   * Include the LanguageMap this way to avoid nuxt complaining 'window is not defined'
+   * https://stackoverflow.com/questions/59347414/why-is-my-client-only-component-in-nuxt-complaining-that-window-is-not-define
+   */
+  components: {
+    LanguageMap: () => {
+      if (process.client) {
+        return import("../components/LanguageMap.vue");
+      }
+    },
+  },
   computed: {
     english() {
       return this.$languages.l1s.find((language) => language.code === "en");

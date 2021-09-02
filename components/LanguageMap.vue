@@ -125,6 +125,10 @@
 import axios from "axios";
 import Config from "@/lib/config";
 import Papa from "papaparse";
+import Vue from "vue";
+import { LMap, LTileLayer, LMarker, LIcon, LControlScale } from "vue2-leaflet";
+import "leaflet/dist/leaflet.css";
+
 export default {
   props: {
     langs: {
@@ -146,7 +150,12 @@ export default {
     map: undefined,
     currentLang: undefined,
   }),
-  async created() {
+  async mounted() {
+    Vue.component("l-map", LMap);
+    Vue.component("l-tile-layer", LTileLayer);
+    Vue.component("l-marker", LMarker);
+    Vue.component("l-icon", LIcon);
+    Vue.component("l-control-scale", LControlScale);
     this.initialZoom = this.$route.query.z ? Number(this.$route.query.z) : 3;
     this.currentZoom = this.initialZoom;
     this.initialCenter = this.$route.query.c

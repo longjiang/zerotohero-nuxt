@@ -90,7 +90,6 @@ export default {
     '@nuxtjs/axios',
     'nuxt-i18n',
     '@nuxtjs/google-fonts',
-    'nuxt-leaflet',
     ['nuxt-lazy-load', {
       defaultImage: '/img/placeholder-faded.png'
     }],

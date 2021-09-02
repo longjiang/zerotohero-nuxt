@@ -170,6 +170,17 @@ import Papa from "papaparse";
 import Helper from "@/lib/helper";
 
 export default {
+  /**
+   * Include the LanguageMap this way to avoid nuxt complaining 'window is not defined'
+   * https://stackoverflow.com/questions/59347414/why-is-my-client-only-component-in-nuxt-complaining-that-window-is-not-define
+   */
+  components: {
+    LanguageMap: () => {
+      if (process.client) {
+        return import("../components/LanguageMap.vue");
+      }
+    },
+  },
   data() {
     return {
       phrasebook: undefined,
