@@ -504,7 +504,7 @@ export default {
             },
             {
               name: "youtube-browse",
-              title: `Other Videos`,
+              title: `${this.hasTVShows || this.musicPath || this.moviesPath || this.newsPath || this.hasTalks ? 'Other ' : ''}Videos`,
               icon: "fa fa-play",
               show: true,
             },
