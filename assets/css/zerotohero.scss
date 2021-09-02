@@ -15,10 +15,12 @@
 
 .klingon {
   font-family: Constructium, Unifont CSUR, Code2000, Horta, Klingon pIqaD HaSta;
+  font-display: fallback;
 }
 
 html * {
   font-family: "Lato", Helvetica, sans-serif;
+  font-display: fallback;
 }
 
 body {
@@ -43,6 +45,7 @@ h6,
 .h6 {
   font-weight: bold;
   font-family: "Lato";
+  font-display: fallback;
 }
 
 .results-1,
@@ -866,15 +869,18 @@ button.bg-primary:focus {
 .study-sheet-td-translation span {
   font-size: 8px;
   font-family: "Adobe Text Pro", serif;
+  font-display: fallback;
 }
 
 .study-sheet-td-text span {
   font-size: 11px;
   font-family: "Adobe Text Pro", serif;
+  font-display: fallback;
 }
 
 .l2-zh .study-sheet-td-text span {
   font-family: "Source Han Serif SC", serif;
+  font-display: fallback;
 }
 
 .study-sheet-td-definition span {
@@ -883,22 +889,27 @@ button.bg-primary:focus {
 
 .l1-zh .study-sheet-td-definition span {
   font-family: "Source Han Serif SC", serif;
+  font-display: fallback;
 }
 
 .l2-zh .study-sheet-td-definition span {
   font-family: "Adobe Text Pro", serif;
+  font-display: fallback;
 }
 
 .study-sheet-td-definition span .word-block-dictionary-simplified {
   font-family: "Adobe Text Pro", serif;
+  font-display: fallback;
 }
 
 .l2-zh .study-sheet-td-definition span .word-block-dictionary-simplified {
   font-family: "Source Han Serif SC", serif;
+  font-display: fallback;
 }
 
 .study-sheet-td-definition span .word-block-dictionary-phonetic {
   font-family: "gentium plus";
+  font-display: fallback;
 }
 
 /* for the text column */
