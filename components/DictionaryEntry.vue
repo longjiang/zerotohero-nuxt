@@ -235,12 +235,8 @@
 </template>
 <script>
 import Helper from "@/lib/helper";
-import VueSlickCarousel from "vue-slick-carousel";
-import "vue-slick-carousel/dist/vue-slick-carousel.css";
-import "vue-slick-carousel/dist/vue-slick-carousel-theme.css";
 
 export default {
-  components: { VueSlickCarousel },
   props: {
     entry: {
       type: Object,
