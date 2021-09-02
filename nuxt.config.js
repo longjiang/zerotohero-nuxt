@@ -120,4 +120,10 @@ export default {
       }
     }
   },
+
+  generate: {
+    routes: [
+      '/'
+    ]
+  }
 }
