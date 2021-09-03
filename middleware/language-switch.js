@@ -19,7 +19,7 @@ export default async function ({ app, store, params, i18n }) {
         }
 
         let dictionaries = l1.dictionaries // ['freedict']
-          ? l1.dictionaries[l2["iso639-3"]]
+          ? l1.dictionaries[l2["iso639-3"] || l2["glottologId"]]
           : undefined;
 
         if (dictionaries) {
