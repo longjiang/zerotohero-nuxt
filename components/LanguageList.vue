@@ -8,42 +8,60 @@
           class="language-list-item"
           :set="(base = languagePath(language))"
         >
-          <router-link
-            :to="`${base}live-tv/`"
-            :class="{
-              'feature-icon mr-1': true,
-              transparent: !hasLiveTV(english, language),
-            }"
-            title="Live TV"
-          >
-            <i class="fa fa-broadcast-tower" />
-          </router-link>
-          <router-link
-            :to="`${base}youtube/browse/all/all/0`"
-            :class="{
-              'feature-icon mr-1': true,
-              transparent: !hasYouTube(english, language),
-            }"
-            title="Videos"
-          >
-            <i class="fa fa-play-circle" />
-          </router-link>
-          <router-link
-            :to="`${base}dictionary`"
-            :class="{
-              'feature-icon mr-1': true,
-              transparent: !hasDictionary(english, language),
-            }"
-            title="Dictionary"
-          >
-            <i class="fas fa-book" />
-          </router-link>
-          <router-link :to="base">
+          <span class="language-list-item-features">
+            <router-link
+              :to="`${base}live-tv/`"
+              :class="{
+                'feature-icon mr-1': true,
+                transparent: !hasLiveTV(english, language),
+              }"
+              title="Live TV"
+            >
+              <i class="fa fa-broadcast-tower" />
+            </router-link>
+            <router-link
+              :to="`${base}youtube/browse/all/all/0`"
+              :class="{
+                'feature-icon mr-1': true,
+                transparent: !hasYouTube(english, language),
+              }"
+              title="Videos"
+            >
+              <i class="fa fa-play-circle" />
+            </router-link>
+            <router-link
+              :to="`${base}dictionary`"
+              :class="{
+                'feature-icon mr-1': true,
+                transparent: !hasDictionary(english, language),
+              }"
+              title="Dictionary"
+            >
+              <i class="fas fa-book" />
+            </router-link>
+            <span
+              v-if="
+                variant === 'icon' &&
+                showSpeakers &&
+                language.speakers &&
+                language.speakers > 0
+              "
+              class="language-list-item-speakers"
+            >
+              {{ speakers(language.speakers) }}
+            </span>
+          </span>
+          <router-link :to="base" class="language-list-item-name">
             {{ languageName(language) }}
             <span v-if="showCode">({{ language.code }})</span>
           </router-link>
           <span
-            v-if="showSpeakers && language.speakers && language.speakers > 0"
+            v-if="
+              variant === 'list' &&
+              showSpeakers &&
+              language.speakers &&
+              language.speakers > 0
+            "
             class="language-list-item-speakers"
           >
             {{ speakers(language.speakers) }}
@@ -82,6 +100,9 @@ export default {
     },
     skin: {
       default: "light",
+    },
+    variant: {
+      default: "list", // or 'icon'
     },
   },
   data() {
@@ -147,6 +168,7 @@ export default {
         "language-list-4-cols": this.params.xl,
       };
       classes[`language-list-${this.skin}`] = true;
+      classes[`language-list-${this.variant}`] = true;
       return classes;
     },
     english() {
@@ -238,6 +260,28 @@ export default {
       }
       .language-list-item-speakers {
         color: rgba(255, 255, 255, 0.4);
+      }
+    }
+  }
+  &.language-list-icon {
+    .language-list-item {
+      display: table;
+      width: 100%;
+      .language-list-item-name {
+        display: table-header-group;
+      }
+      .language-list-item-features {
+        display: table-footer-group;
+        line-height: 0.8;
+        .feature-icon {
+          font-size: 0.8em;
+          &.transparent {
+            display: none;
+          }
+        }
+        .language-list-item-speakers {
+          margin: 0;
+        }
       }
     }
   }

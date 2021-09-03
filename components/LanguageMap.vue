@@ -49,6 +49,7 @@
                 v-if="!phrases"
                 :langs="[language]"
                 :singleColumn="true"
+                variant="icon"
                 skin="dark"
                 class="language-marker-language-list"
               />
