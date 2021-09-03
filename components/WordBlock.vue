@@ -761,13 +761,13 @@ export default {
     }
 
     .word-block-text-byeonggi-wrapper {
-      font-size: 0;
+      font-size: 0.1em;
       .word-block-text {
-        font-size: 1.2rem;
+        font-size: 10em;
       }
       .word-block-text-byeonggi {
         color: rgb(143, 158, 172);
-        font-size: 0.84rem;
+        font-size: 8em;
       }
     }
 
