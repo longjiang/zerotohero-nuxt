@@ -76,6 +76,7 @@ export default {
           this.hasDictionary(this.english, l) || this.hasYouTube(this.english, l)
         )
           return true;
+        if (!l['iso639-3']) return false
         // if (["A", "E", "H"].includes(l.type)) return false;
         return true;
       });
