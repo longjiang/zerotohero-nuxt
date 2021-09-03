@@ -1027,11 +1027,13 @@ button.bg-primary:focus {
     height: 40px;
     transform: scale(1.5);
     z-index: 1;
+    opacity: 0;
   }
   &:hover .play-button {
     color: rgba(255, 255, 255, 0.616);
     transform: scale(1.8);
     transition: 200ms ease-in-out;
+    opacity: 1;
   }
 }
 

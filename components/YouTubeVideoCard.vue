@@ -730,12 +730,12 @@ export default {
     }
   }
   &.youtube-video-card-wrapper-dark {
-    &:hover {
-      transform: scale(110%);
-      transition: 200ms ease-in-out;
-    }
     .youtube-thumbnail-wrapper {
       box-shadow: 0 5px 25px #fd89662f;
+      &:hover {
+        transform: scale(110%);
+        transition: 200ms ease-in-out;
+      }
     }
     .media-body {
       color: hsla(0deg 0% 100% / 75%);
