@@ -46,9 +46,10 @@ export default {
       this.languages = this.langs;
     } else {
       this.languages = this.$languages.l1s
-        .filter(
-          (language) => ["A", "C", "L", "E", "H"].includes(language.type) // Only living, extinct or historical languages (exclusing special codes 'S' and macro languages 'M')
-        )
+        .filter((language) => {
+          if (language.han) return true;
+          if (["A", "C", "L", "E", "H"].includes(language.type)) return true; // living, extinct or historical languages (exclusing special codes 'S' and macro languages 'M')
+        })
         .sort((a, b) => {
           if (a.name < b.name) {
             return -1;
