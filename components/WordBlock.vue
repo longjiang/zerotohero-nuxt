@@ -60,20 +60,22 @@
         >
           {{ token.candidates[0].traditional }}
         </span>
-        <span
-          v-else
-          :class="{
-            'word-block-text d-inline-block': true,
-            klingon: $l2.code === 'tlh',
-          }"
-          @click="wordBlockClick()"
-          v-html="transform(token.text)"
-        />
-        <span
-          v-if="l2Settings.showByeonggi && hanja"
-          class="word-block-text-byeonggi d-inline-block"
-          v-html="hanja"
-        />
+        <span v-else class="word-block-text-byeonggi-wrapper">
+          <span
+            :class="{
+              'word-block-text d-inline-block': true,
+              klingon: $l2.code === 'tlh',
+            }"
+            @click="wordBlockClick()"
+          >
+            {{ transform(token.text) }}
+          </span>
+          <span
+            v-if="l2Settings.showByeonggi && hanja"
+            class="word-block-text-byeonggi d-inline-block"
+            v-html="hanja"
+          />
+        </span>
       </template>
       <template v-else>
         <span
@@ -505,7 +507,7 @@ export default {
     },
     transform(text) {
       if (typeof text === "undefined") {
-        text = ""
+        text = "";
       }
       if (this.$l2.code === "ru" && text.length > 9) text = this.segment(text);
       if (this.$l2.code === "tlh" && text.trim() !== "") {
@@ -758,9 +760,15 @@ export default {
       text-indent: 0;
     }
 
-    .word-block-text-byeonggi {
-      color: rgb(143, 158, 172);
-      font-size: 0.7em;
+    .word-block-text-byeonggi-wrapper {
+      font-size: 0;
+      .word-block-text {
+        font-size: 1.2rem;
+      }
+      .word-block-text-byeonggi {
+        color: rgb(143, 158, 172);
+        font-size: 0.84rem;
+      }
     }
 
     /* Hide by default */
