@@ -31,7 +31,7 @@
               <span style="font-weight: 300">LANGUAGES</span>
             </router-link>
           </div>
-          <Choose :compact="true" skin="dark" />
+          <Choose :showLanguageList="false" skin="dark" />
           <div class="container">
             <div class="row">
               <div class="col-sm-12">

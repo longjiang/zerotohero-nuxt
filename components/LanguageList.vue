@@ -1,54 +1,56 @@
 <template>
   <container-query :query="query" v-model="params">
-    <ul v-if="languages && languages.length > 0" :class="classes">
-      <li
-        v-for="(language, index) in languages"
-        :key="`lang-${language.code}-${index}`"
-        class="language-list-item"
-        :set="(base = languagePath(language))"
-      >
-        <router-link
-          :to="`${base}live-tv/`"
-          :class="{
-            'feature-icon mr-1': true,
-            transparent: !hasLiveTV(english, language),
-          }"
-          title="Live TV"
+    <div>
+      <ul v-if="languages && languages.length > 0" :class="classes">
+        <li
+          v-for="(language, index) in languages"
+          :key="`lang-${language.code}-${index}`"
+          class="language-list-item"
+          :set="(base = languagePath(language))"
         >
-          <i class="fa fa-broadcast-tower" />
-        </router-link>
-        <router-link
-          :to="`${base}youtube/browse/all/all/0`"
-          :class="{
-            'feature-icon mr-1': true,
-            transparent: !hasYouTube(english, language),
-          }"
-          title="Videos"
-        >
-          <i class="fa fa-play-circle" />
-        </router-link>
-        <router-link
-          :to="`${base}dictionary`"
-          :class="{
-            'feature-icon mr-1': true,
-            transparent: !hasDictionary(english, language),
-          }"
-          title="Dictionary"
-        >
-          <i class="fas fa-book" />
-        </router-link>
-        <router-link :to="base">
-          {{ languageName(language) }}
-          <span v-if="showCode">({{ language.code }})</span>
-        </router-link>
-        <span
-          v-if="showSpeakers && language.speakers && language.speakers > 0"
-          class="language-list-item-speakers"
-        >
-          {{ speakers(language.speakers) }}
-        </span>
-      </li>
-    </ul>
+          <router-link
+            :to="`${base}live-tv/`"
+            :class="{
+              'feature-icon mr-1': true,
+              transparent: !hasLiveTV(english, language),
+            }"
+            title="Live TV"
+          >
+            <i class="fa fa-broadcast-tower" />
+          </router-link>
+          <router-link
+            :to="`${base}youtube/browse/all/all/0`"
+            :class="{
+              'feature-icon mr-1': true,
+              transparent: !hasYouTube(english, language),
+            }"
+            title="Videos"
+          >
+            <i class="fa fa-play-circle" />
+          </router-link>
+          <router-link
+            :to="`${base}dictionary`"
+            :class="{
+              'feature-icon mr-1': true,
+              transparent: !hasDictionary(english, language),
+            }"
+            title="Dictionary"
+          >
+            <i class="fas fa-book" />
+          </router-link>
+          <router-link :to="base">
+            {{ languageName(language) }}
+            <span v-if="showCode">({{ language.code }})</span>
+          </router-link>
+          <span
+            v-if="showSpeakers && language.speakers && language.speakers > 0"
+            class="language-list-item-speakers"
+          >
+            {{ speakers(language.speakers) }}
+          </span>
+        </li>
+      </ul>
+    </div>
   </container-query>
 </template>
 

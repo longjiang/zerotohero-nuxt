@@ -72,12 +72,11 @@ export default {
         if (["hbo", "enm", "arc", "grc", "sjn"].includes(l["iso639-3"]))
           return true;
         if (l.name.includes("Sign Language")) return false;
-        if (["A", "E", "H"].includes(l.type)) return false;
         if (
-          !this.hasDictionary(this.english, l) &&
-          !this.hasYouTube(this.english, l)
+          this.hasDictionary(this.english, l) || this.hasYouTube(this.english, l)
         )
-          return false;
+          return true;
+        // if (["A", "E", "H"].includes(l.type)) return false;
         return true;
       });
       return languages;
