@@ -169,13 +169,16 @@
             :key="`channel-${video.channel.id}`"
             class="d-inline-block"
           />
+          <div class="text-center" v-if="video.checkingSubs">
+            <Loader :sticky="true" message="Loading subtitles..." />
+          </div>
           <div
             class="p-4 mt-4 rounded"
             style="
               border: 2px dashed rgba(136, 136, 136, 0.5);
               color: rgba(136, 136, 136, 0.85);
             "
-            v-if="!video.subs_l2"
+            v-if="!video.subs_l2 && !video.checkingSubs"
           >
             <h6>
               This video does not have closed captions (CC) in {{ $l2.name }}.
