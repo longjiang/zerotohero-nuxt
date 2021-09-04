@@ -74,7 +74,7 @@
             </span>
             <Speak
               class="ml-1"
-              :text="entry.bare"
+              :text="entry.head"
               :mp3="entry.audio"
               :wiktionary="entry.wiktionary"
             />
