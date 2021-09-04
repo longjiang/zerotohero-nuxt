@@ -219,6 +219,7 @@ export default {
     async video() {
       if (!this.extrasLoaded && typeof this.video !== "undefined") {
         this.extrasLoaded = true;
+        this.video.checkingSubs = true
         this.video = await this.loadSubs(this.video);
         await this.loadExtras();
         this.bindKeys();
@@ -273,7 +274,6 @@ export default {
         let missingSubsL1 = !video.subs_l1 || video.subs_l1.length === 0;
         let missingSubsL2 = !video.subs_l2 || video.subs_l2.length === 0;
         if (missingSubsL1 || missingSubsL2) {
-          video.checkingSubs = true
           console.log(`YouTube View: Getting available transcripts...`);
           video = await YouTube.getYouTubeSubsList(video, this.$l1, this.$l2);
         }
@@ -293,7 +293,6 @@ export default {
             video.l2Name
           );
         }
-        video.checkingSubs = false
         if (video.subs_l2 && video.subs_l2.length > 0) {
           this.firstLineTime = video.subs_l2[0].starttime;
         }

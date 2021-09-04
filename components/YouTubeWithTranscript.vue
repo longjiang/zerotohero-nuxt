@@ -169,7 +169,7 @@
             :key="`channel-${video.channel.id}`"
             class="d-inline-block"
           />
-          <div class="text-center" v-if="video.checkingSubs">
+          <div class="text-center mt-5" v-if="video.checkingSubs">
             <Loader :sticky="true" message="Loading subtitles..." />
           </div>
           <div
