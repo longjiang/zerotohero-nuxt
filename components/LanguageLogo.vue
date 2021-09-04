@@ -5,7 +5,11 @@
   >
     <div class="logo-constructed">
       <div class="logo-circle-wrapper">
-        <div class="logo-circle">
+        <div
+          :class="`logo-circle
+        bg-gradient-${(l2.name || '').length.toString().split('').pop()}`"
+        >
+          <span class="logo-circle-initial">{{ l2Name.charAt(0) }}</span>
           <img
             :src="`/img/logo-square/${l2.code}.jpeg`"
             :alt="logoDescription"
@@ -22,11 +26,7 @@
       <div class="logo-text text-white">
         <template>
           <div class="logo-text-language">
-            {{
-              l1.translations && l1.translations[l2Name]
-                ? l1.translations[l2Name]
-                : l2Name
-            }}
+            {{ l2Name }}
           </div>
           <div class="logo-text-zth">
             <span v-if="!compact">
@@ -56,7 +56,12 @@ export default {
   },
   computed: {
     l2Name() {
-      return this.l2.name.replace(/ \(.*\)/gi, "");
+      let l2Name = this.l2.name.replace(/ \(.*\)/gi, "");
+      l2Name =
+        this.l1.translations && this.l1.translations[l2Name]
+          ? this.l1.translations[l2Name]
+          : l2Name;
+      return l2Name;
     },
     logoDescription() {
       return this.l2.logoDesc
@@ -87,13 +92,24 @@ export default {
     overflow: hidden;
     position: relative;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    line-height: 2.75rem;
+    .logo-circle-initial {
+      color: white;
+      font-size: 1.5rem;
+      opacity: 0.7;
+    }
+    img {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+      object-position: center;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
   }
-  .logo-circle img {
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
-    object-position: center;
-  }
+
   .logo-text * {
     font-family: "Helvetica Neue", Helvetica, sans-serif !important;
     text-align: left;
