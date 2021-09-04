@@ -115,6 +115,7 @@
                 :type="type"
                 :key="`shows-filtered-${this.keyword}`"
               />
+              <LazyIdenticalLanguages class="mt-3" :routeName="routeType" />
             </div>
           </div>
         </div>
@@ -125,9 +126,7 @@
 
 <script>
 import Config from "@/lib/config";
-import Helper from "@/lib/helper";
 import axios from "axios";
-import YouTube from "@/lib/youtube";
 import { tify } from "chinese-conv";
 
 export default {

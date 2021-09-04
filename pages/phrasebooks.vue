@@ -7,7 +7,7 @@
 <template>
   <div class="main">
     <container-query :query="query" v-model="params">
-      <div class="container" id="main">
+      <div class="container pb-5" id="main">
         <SocialHead :title="title" :description="description" :image="image" />
         <div class="row">
           <div class="col-sm-12">
@@ -32,7 +32,7 @@
             </div>
           </div>
         </div>
-        <div class="row pb-5" v-if="phrasebooks && phrasebooks.length > 0">
+        <div class="row" v-if="phrasebooks && phrasebooks.length > 0">
           <div
             v-for="(phrasebook, phrasebookIndex) in phrasebooks"
             :class="{
@@ -45,6 +45,11 @@
             style="padding-bottom: 2rem"
           >
             <PhrasebookCard :phrasebook="phrasebook" />
+          </div>
+        </div>
+        <div class="row pt-4">
+          <div class="col-12">
+            <LazyIdenticalLanguages routeName="youtube-search" />
           </div>
         </div>
       </div>

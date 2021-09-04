@@ -48,7 +48,10 @@
             </span>
           </p>
         </div>
-        <div class="col-sm-12" v-if="show && ['Music', 'News', 'Movies'].includes(show.title)">
+        <div
+          class="col-sm-12"
+          v-if="show && ['Music', 'News', 'Movies'].includes(show.title)"
+        >
           <div
             class="widget widget-dark mb-5"
             style="max-width: 70vh; margin: 0 auto"
@@ -86,14 +89,15 @@
                 <i class="fas fa-align-left mr-1"></i>
                 Transcript
               </router-link>
-              <b-button
-                variant="ghost-dark-no-bg"
-                @click="loadRandomEpisode"
-              >
+              <b-button variant="ghost-dark-no-bg" @click="loadRandomEpisode">
                 <i class="fas fa-step-forward mr-1"></i>
                 Another One
               </b-button>
-              <b-button variant="ghost-dark-no-bg" v-if="$adminMode" @click="removeEpisode(randomEpisode)">
+              <b-button
+                variant="ghost-dark-no-bg"
+                v-if="$adminMode"
+                @click="removeEpisode(randomEpisode)"
+              >
                 <i class="fas fa-trash"></i>
               </b-button>
             </div>
@@ -172,6 +176,7 @@
               <div v-observe-visibility="visibilityChanged"></div>
             </template>
           </div>
+          <LazyIdenticalLanguages class="mt-3" routeName="youtube-browse" />
         </div>
       </div>
     </div>
@@ -257,9 +262,11 @@ export default {
   },
   methods: {
     async removeEpisode(randomEpisode) {
-      let response = await axios.delete(`${Config.wiki}items/youtube_videos/${randomEpisode.id}`)
+      let response = await axios.delete(
+        `${Config.wiki}items/youtube_videos/${randomEpisode.id}`
+      );
       if (response) {
-        this.loadRandomEpisode()
+        this.loadRandomEpisode();
       }
     },
     updateCurrentTime(currentTime) {
@@ -359,7 +366,9 @@ export default {
       if (this.show.title !== "News") {
         videos =
           videos.sort((x, y) =>
-            (x.title || "").localeCompare(y.title, this.$l2.code, { numeric: true })
+            (x.title || "").localeCompare(y.title, this.$l2.code, {
+              numeric: true,
+            })
           ) || [];
       } else {
         videos =

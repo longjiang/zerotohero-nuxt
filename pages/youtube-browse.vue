@@ -98,34 +98,7 @@
             />
           </template>
           <div v-observe-visibility="visibilityChanged"></div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-12">
-          <hr />
-          <h3 class="mt-5 mb-5 text-center">
-            Search for More Videos on YouTube
-          </h3>
-          <SimpleSearch
-            class="mb-3"
-            skin="dark"
-            :placeholder="
-              $t('Search the entire YouTube for {l2} videos with CC', {
-                l2: $l2.name,
-              })
-            "
-            buttonText="Search"
-            :action="
-              (url) => {
-                this.$router.push({
-                  path: `/${$l1.code}/${
-                    $l2.code
-                  }/youtube/search/${encodeURIComponent(url)}`,
-                });
-              }
-            "
-            ref="search"
-          />
+          <LazyIdenticalLanguages class="mt-5" routeName="youtube-browse" />
         </div>
       </div>
     </div>

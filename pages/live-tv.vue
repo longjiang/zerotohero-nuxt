@@ -181,6 +181,11 @@
           </div>
         </div>
       </div>
+      <div class="row mt-5">
+        <div class="col-sm-12">
+          <LazyIdenticalLanguages routeName="live-tv" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -234,7 +239,7 @@ export default {
     filteredChannels() {
       let channels = this.channels;
       channels = channels.filter((c) => {
-        if (this.keyword && this.keyword !== '')
+        if (this.keyword && this.keyword !== "")
           return (
             c.name &&
             c.name.match(new RegExp(Helper.escapeRegExp(this.keyword), "i"))

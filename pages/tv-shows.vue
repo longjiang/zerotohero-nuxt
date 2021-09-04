@@ -8,14 +8,14 @@
   }
 </router>
 <template>
-  <Shows routeType="tv-shows" />
+  <div class="tv-shows">
+    <Shows routeType="tv-shows" />
+  </div>
 </template>
 
 <script>
-export default {
-}
+export default {};
 </script>
 
 <style>
-
 </style>

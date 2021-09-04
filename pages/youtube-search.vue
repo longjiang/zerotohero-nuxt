@@ -87,6 +87,7 @@
         :showProgress="false"
         ref="youtubeSearchResults"
       />
+      <LazyIdenticalLanguages routeName="youtube-search" />
     </div>
   </div>
 </template>

@@ -8,15 +8,14 @@
   }
 </router>
 <template>
-  <Shows routeType="talks" />
+  <div class="talks">
+    <Shows routeType="talks" />
+  </div>
 </template>
 
 <script>
-export default {
-
-}
+export default {};
 </script>
 
 <style>
-
 </style>
