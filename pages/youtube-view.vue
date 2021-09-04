@@ -203,54 +203,24 @@ export default {
           video = merged;
         }
       }
-      if (!video.subs_l2 || video.subs_l2.length === 0) {
-        console.log(`YouTube View: Getting ${this.$l2.name} transcript`);
-        video.subs_l2 = await this.getTranscriptByLang(this.$l2);
-      }
-      if (!video.subs_l1 || video.subs_l1.length === 0) {
-        console.log(`YouTube View: Getting ${this.$l1.name} transcript`);
-        video.subs_l1 = await this.getTranscriptByLang(this.$l1);
-      }
-      if (video.subs_l2 && video.subs_l2.length > 0) {
-        this.firstLineTime = video.subs_l2[0].starttime;
-      }
       if (video && video.id && !video.channel_id) {
-        console.log(`YouTube View: Adding channel id...`);
         this.addChannelID(video);
       }
-      this.starttime = this.$route.query.t ? Number(this.$route.query.t) : 0;
-      if (video.subs_l2)
-        this.startLineIndex =
-          video.subs_l2.findIndex(
-            (l) => Number(l.starttime) > this.starttime
-          ) || 0;
       this.video = video;
-      console.log(`YouTube View: this.video assigned.`);
-      console.log(`YouTube View: Loading show...`);
-      this.loadShow();
-      console.log(`YouTube View: Getting random episode youtube_id...`);
-      this.randomEpisodeYouTubeId = await YouTube.getRandomEpisodeYouTubeId(
-        this.$l2.id,
-        this.$store.state.shows.tvShows[this.$l2.code] ? "tv_show" : undefined
-      );
-      console.log(
-        `YouTube View: Got random episode youtube_id ${this.randomEpisodeYouTubeId}`
-      );
-      console.log(`YouTube View: Saving history...`);
-      this.saveHistory();
-      console.log(`YouTube View: All done.`);
     } catch (e) {
       console.log(e);
     }
   },
-  mounted() {
-    this.bindKeys();
-    this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type === "shows/LOAD_SHOWS") {
-        this.loadShow();
-      }
-    });
-    if (this.video) {
+  async mounted() {
+    if (typeof this.video !== "undefined") {
+      this.video = await this.loadSubs(this.video);
+      await this.loadExtras();
+      this.bindKeys();
+      this.unsubscribe = this.$store.subscribe((mutation, state) => {
+        if (mutation.type === "shows/LOAD_SHOWS") {
+          this.loadShow();
+        }
+      });
       this.saveHistory();
     }
   },
@@ -276,7 +246,9 @@ export default {
           if (this.show.title !== "News") {
             videos =
               videos.sort((x, y) =>
-                (x.title || "").localeCompare(y.title, this.$l2.code, { numeric: true })
+                (x.title || "").localeCompare(y.title, this.$l2.code, {
+                  numeric: true,
+                })
               ) || [];
           } else {
             videos =
@@ -294,6 +266,59 @@ export default {
     },
   },
   methods: {
+    async loadSubs(video) {
+      try {
+        let missingSubsL1 = !video.subs_l1 || video.subs_l1.length === 0;
+        let missingSubsL2 = !video.subs_l2 || video.subs_l2.length === 0;
+        if (missingSubsL1 || missingSubsL2) {
+          console.log(`YouTube View: Getting available transcripts...`);
+          video = await YouTube.getYouTubeSubsList(video, this.$l1, this.$l2);
+        }
+        if (missingSubsL1) {
+          console.log(`YouTube View: Getting ${this.$l1.name} transcript`);
+          video.subs_l1 = await YouTube.getTranscript(
+            video.youtube_id,
+            video.l1Locale,
+            video.l2Name
+          );
+        }
+        if (missingSubsL2) {
+          console.log(`YouTube View: Getting ${this.$l2.name} transcript`);
+          video.subs_l2 = await YouTube.getTranscript(
+            video.youtube_id,
+            video.l2Locale,
+            video.l2Name
+          );
+        }
+        if (video.subs_l2 && video.subs_l2.length > 0) {
+          this.firstLineTime = video.subs_l2[0].starttime;
+        }
+        this.starttime = this.$route.query.t ? Number(this.$route.query.t) : 0;
+        if (video.subs_l2)
+          this.startLineIndex =
+            video.subs_l2.findIndex(
+              (l) => Number(l.starttime) > this.starttime
+            ) || 0;
+        return video;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async loadExtras() {
+      console.log(`YouTube View: Loading show...`);
+      this.loadShow();
+      console.log(`YouTube View: Getting random episode youtube_id...`);
+      this.randomEpisodeYouTubeId = await YouTube.getRandomEpisodeYouTubeId(
+        this.$l2.id,
+        this.$store.state.shows.tvShows[this.$l2.code] ? "tv_show" : undefined
+      );
+      console.log(
+        `YouTube View: Got random episode youtube_id ${this.randomEpisodeYouTubeId}`
+      );
+      console.log(`YouTube View: Saving history...`);
+      this.saveHistory();
+      console.log(`YouTube View: All done.`);
+    },
     async getSaved() {
       let response = await axios.get(
         `${Config.wiki}items/youtube_videos?filter[youtube_id][eq]=${
@@ -415,13 +440,6 @@ export default {
         }
       }
     },
-    async getTranscriptByLang(lang) {
-      let locales = [lang.code];
-      if (lang.locales) {
-        locales = locales.concat(lang.locales);
-      }
-      return await YouTube.getTranscriptByLocales(this.youtube_id, locales);
-    },
     async addChannelID(video) {
       if (video.channel && video.channel.id) {
         let channelId = video.channel.id;
@@ -472,6 +490,7 @@ export default {
       };
     },
     saveHistory() {
+      if (typeof this.video === "undefined") return;
       let data = {
         type: "video",
         id: `${this.$l2.code}-video-${this.video.youtube_id}`,
