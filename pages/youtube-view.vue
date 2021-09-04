@@ -116,6 +116,7 @@ export default {
   data() {
     return {
       video: undefined,
+      extrasLoaded: false,
       show: undefined,
       showType: undefined,
       paused: true,
@@ -211,23 +212,24 @@ export default {
       console.log(e);
     }
   },
-  async mounted() {
-    if (typeof this.video !== "undefined") {
-      this.video = await this.loadSubs(this.video);
-      await this.loadExtras();
-      this.bindKeys();
-      this.unsubscribe = this.$store.subscribe((mutation, state) => {
-        if (mutation.type === "shows/LOAD_SHOWS") {
-          this.loadShow();
-        }
-      });
-      this.saveHistory();
-    }
-  },
   destroyed() {
     this.unbindKeys();
   },
   watch: {
+    async video() {
+      if (!this.extrasLoaded && typeof this.video !== "undefined") {
+        this.extrasLoaded = true;
+        this.video = await this.loadSubs(this.video);
+        await this.loadExtras();
+        this.bindKeys();
+        this.unsubscribe = this.$store.subscribe((mutation, state) => {
+          if (mutation.type === "shows/LOAD_SHOWS") {
+            this.loadShow();
+          }
+        });
+        this.saveHistory();
+      }
+    },
     async show() {
       if (this.show) {
         let sort = this.show.title !== "News" ? "title" : "-date";
@@ -274,7 +276,7 @@ export default {
           console.log(`YouTube View: Getting available transcripts...`);
           video = await YouTube.getYouTubeSubsList(video, this.$l1, this.$l2);
         }
-        if (missingSubsL1) {
+        if (missingSubsL1 && video.l1Locale !== video.l2Locale) {
           console.log(`YouTube View: Getting ${this.$l1.name} transcript`);
           video.subs_l1 = await YouTube.getTranscript(
             video.youtube_id,
