@@ -99,6 +99,7 @@ import Helper from "@/lib/helper";
 import DateHelper from "@/lib/date-helper";
 import Config from "@/lib/config";
 import axios from "axios";
+import Vue from "vue";
 import { ContainerQuery } from "vue-container-query";
 
 export default {
@@ -219,7 +220,6 @@ export default {
     async video() {
       if (!this.extrasLoaded && typeof this.video !== "undefined") {
         this.extrasLoaded = true;
-        this.video.checkingSubs = true
         this.video = await this.loadSubs(this.video);
         await this.loadExtras();
         this.bindKeys();
@@ -273,25 +273,35 @@ export default {
       try {
         let missingSubsL1 = !video.subs_l1 || video.subs_l1.length === 0;
         let missingSubsL2 = !video.subs_l2 || video.subs_l2.length === 0;
+        Vue.set(video, "checkingSubs", true);
         if (missingSubsL1 || missingSubsL2) {
           console.log(`YouTube View: Getting available transcripts...`);
+          Vue.set(video, "checkingSubs", true);
           video = await YouTube.getYouTubeSubsList(video, this.$l1, this.$l2);
+        } else {
+          Vue.set(video, "checkingSubs", false);
         }
         if (missingSubsL1 && video.l1Locale !== video.l2Locale) {
           console.log(`YouTube View: Getting ${this.$l1.name} transcript`);
-          video.subs_l1 = await YouTube.getTranscript(
+          Vue.set(video, "checkingSubs", true);
+          let subs_l1 = await YouTube.getTranscript(
             video.youtube_id,
             video.l1Locale,
             video.l2Name
           );
+          Vue.set(this.video, "subs_l1", subs_l1);
+          Vue.set(video, "checkingSubs", false);
         }
         if (missingSubsL2) {
           console.log(`YouTube View: Getting ${this.$l2.name} transcript`);
-          video.subs_l2 = await YouTube.getTranscript(
+          Vue.set(video, "checkingSubs", true);
+          let subs_l2 = await YouTube.getTranscript(
             video.youtube_id,
             video.l2Locale,
             video.l2Name
           );
+          Vue.set(this.video, "subs_l2", subs_l2);
+          Vue.set(video, "checkingSubs", false);
         }
         if (video.subs_l2 && video.subs_l2.length > 0) {
           this.firstLineTime = video.subs_l2[0].starttime;

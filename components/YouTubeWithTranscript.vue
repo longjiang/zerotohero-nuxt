@@ -178,7 +178,7 @@
               border: 2px dashed rgba(136, 136, 136, 0.5);
               color: rgba(136, 136, 136, 0.85);
             "
-            v-if="!video.subs_l2 && !video.checkingSubs"
+            v-if="(!video.subs_l2 || video.subs_l2.length === 0) && !video.checkingSubs"
           >
             <h6>
               This video does not have closed captions (CC) in {{ $l2.name }}.
@@ -584,7 +584,7 @@ export default {
       if (this.video.subs_l2[this.startLineIndex]) {
         let starttime = this.video.subs_l2[this.startLineIndex].starttime;
         this.seekYouTube(starttime);
-      } else this.$refs.transcript.rewind();
+      } else if (this.$refs.transcript) this.$refs.transcript.rewind();
     },
     pause() {
       this.$refs.youtube.pause();
