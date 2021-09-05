@@ -270,7 +270,7 @@ export default {
     sortPhrases(phrases) {
       // First alphabetically sort all by the phrase
       let sortedPhrases = phrases.sort((a, b) =>
-        a.phrase.localeCompare(b.phrase, this.$l2.code)
+        a.phrase.localeCompare(b.phrase, this.$l2.locales[0])
       );
       // Put them all into groups (grouped by the phrase)
       let groups = [];

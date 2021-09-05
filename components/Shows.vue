@@ -257,7 +257,7 @@ export default {
     },
     sortShows(shows) {
       shows =
-        shows.sort((x, y) => x.title.localeCompare(y.title, this.$l2.code)) ||
+        shows.sort((x, y) => x.title.localeCompare(y.title, this.$l2.locales[0])) ||
         [];
       return shows;
     },

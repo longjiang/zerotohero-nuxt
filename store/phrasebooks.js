@@ -42,7 +42,7 @@ export const actions = {
     let phrasebooks =
       response.data.data
     phrasebooks = phrasebooks.sort((x, y) =>
-      (x.title || "").localeCompare(y.title, l2.code)
+      (x.title || "").localeCompare(y.title, l2.locales[0])
     ) || [];
     context.commit('LOAD_PHRASEBOOKS', { l2, phrasebooks })
   },

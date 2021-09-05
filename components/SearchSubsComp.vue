@@ -570,10 +570,10 @@ export default {
         contextRight.push(hit.rightContext);
       }
       this.contextLeft = Helper.unique(contextLeft).sort((a, b) =>
-        a.localeCompare(b, this.$l2.code)
+        a.localeCompare(b, this.$l2.locales[0])
       );
       this.contextRight = Helper.unique(contextRight).sort((a, b) =>
-        a.localeCompare(b, this.$l2.code)
+        a.localeCompare(b, this.$l2.locales[0])
       );
       this.groupsLeft = this.groupContext(this.contextLeft, hits, "left");
       this.groupsRight = this.groupContext(this.contextRight, hits, "right");
@@ -627,7 +627,7 @@ export default {
       hitGroups = Object.assign({ zthSaved: savedHits }, hitGroups);
       for (let key in hitGroups) {
         hitGroups[key] = hitGroups[key].sort((a, b) =>
-          a.leftContext.localeCompare(b[`${leftOrRight}Context`], this.$l2.code)
+          a.leftContext.localeCompare(b[`${leftOrRight}Context`], this.$l2.locales[0])
         );
       }
       return hitGroups;

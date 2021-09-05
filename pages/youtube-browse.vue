@@ -231,7 +231,7 @@ export default {
       videos =
         videos.sort((x, y) =>
           x.title
-            ? x.title.localeCompare(y.title, this.$l2.code, { numeric: true })
+            ? x.title.localeCompare(y.title, this.$l2.locales[0], { numeric: true })
             : 0
         ) || [];
       return videos;

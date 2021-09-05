@@ -72,7 +72,7 @@ export default {
   methods: {
     add() {
       let sortedLines = this.allLines.concat(this.lines).sort((a, b) =>
-        a.line.localeCompare(b.line, this.$l2.code)
+        a.line.localeCompare(b.line, this.$l2.locales[0])
       );
       let foldedLines = [];
       if (sortedLines.length > 0) {

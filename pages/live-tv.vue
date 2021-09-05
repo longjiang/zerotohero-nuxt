@@ -327,7 +327,7 @@ export default {
         });
       }
       channels = channels.sort((a, b) =>
-        a.name.localeCompare(b.name, this.$l2.code)
+        a.name.localeCompare(b.name, this.$l2.locales[0])
       );
       this.channels = channels;
 

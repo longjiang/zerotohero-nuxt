@@ -249,7 +249,7 @@ export default {
           if (this.show.title !== "News") {
             videos =
               videos.sort((x, y) =>
-                (x.title || "").localeCompare(y.title, this.$l2.code, {
+                (x.title || "").localeCompare(y.title, this.$l2.locales[0], {
                   numeric: true,
                 })
               ) || [];
@@ -257,7 +257,7 @@ export default {
             videos =
               videos.sort((y, x) =>
                 x.date
-                  ? x.date.localeCompare(y.date, this.$l2.code, {
+                  ? x.date.localeCompare(y.date, this.$l2.locales[0], {
                       numeric: true,
                     })
                   : -1
