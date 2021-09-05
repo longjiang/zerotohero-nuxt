@@ -339,6 +339,7 @@ export default {
       this.word = w;
     },
     phraseUnsaved() {
+      if (this.bookId !== 'saved') return
       let savedPhrases = this.savedPhrases[this.$l2.code];
       let nextSavedPhrase = savedPhrases[Number(this.phraseId)];
       let phrasedId = this.phraseId;
