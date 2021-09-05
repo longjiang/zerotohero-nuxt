@@ -37,7 +37,7 @@
       <div class="row">
         <div class="col-12" style="height: calc(100vh - 54px); padding: 0">
           <div class="loader-wrapper" v-if="loadingMap">
-            <Loader :sticky="true" message="Loading map..." />
+            <Loader :sticky="true" message="Loading map, and plotting thousands of languages..." />
           </div>
           <client-only v-if="filteredLangsWithGeo">
             <LanguageMap
@@ -80,7 +80,7 @@ export default {
     },
   },
   async mounted() {
-    await Helper.timeout(1000)
+    await Helper.timeout(100)
     this.filteredLangs = this.getFilteredLangs()
     this.filteredLangsWithGeo = this.getFilteredLangsWithGeo()
   },
