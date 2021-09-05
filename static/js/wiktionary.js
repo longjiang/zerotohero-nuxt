@@ -80,7 +80,8 @@ const Dictionary = {
     ceb: 'tgl',
     tgl: 'ceb',
     cmn: 'zho',
-    nor: 'nno'
+    nor: 'nno',
+    nob: 'nno',
   },
   credit() {
     return 'The dictionary is provided by <a href="https://en.wiktionary.org/wiki/Wiktionary:Main_Page">Wiktionary</a>, which is freely distribtued under the <a href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike License</a>. The dictionary is parsed by <a href="https://github.com/tatuylonen/wiktextract">wiktextract</a>.'
@@ -91,7 +92,7 @@ const Dictionary = {
   } = {}) {
     if (l1 && l2) {
       l2 = l2.replace('hrv', 'hbs') // Serbian uses Serbo-Croatian
-        .replace('nor', 'nob') // Default Norwegian to Bokmål
+        .replace('nor', 'nob') // Default Norwegian to Bokmål (which is supplemented with Nynorsk)
         .replace('srp', 'hbs') // Croatian uses Serbo-Croatian
         .replace('bos', 'hbs') // Bosnian uses Serbo-Croatian
         .replace('run', 'kin') // Rundi uses Rwanda-Rundi
@@ -99,6 +100,10 @@ const Dictionary = {
         .replace('grc', 'ell') // Ancient Greek uses Greek
         .replace('hmn', 'mww') // Hmong uses white Hmong
         .replace('prs', 'fas') // Dari uses Persian
+        .replace('arb', 'ara') // Modern Standard Arabic uses Arabic
+        .replace('zsm', 'msa') // Standard Malaysian uses Malaysian
+        .replace('lvs', 'lav') // Standard Latvian uses Latvian
+        .replace('ekk', 'est') // Standard Estonian uses Estonian
       let csv = !this.useJSON.includes(this.l2)
       let filename = `${this.server}data/wiktionary${csv ? '-csv' : ''}/${l2}-${l1}.${csv ? 'csv' : 'json'}.txt`
       return filename
