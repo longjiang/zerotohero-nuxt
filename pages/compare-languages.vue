@@ -91,13 +91,17 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-12" style="height: calc(100vh - 54px); padding: 0">
+        <div class="col-12" style="height: calc(100vh - 45px); padding: 0">
+          <div class="loader-wrapper" v-if="loadingMap">
+            <Loader :sticky="true" message="Loading map..." />
+          </div>
           <client-only>
             <LanguageMap
               v-if="phrasesInAllLangs"
               style="height: 100%"
               ref="languageMap"
               :phrases="phrasesInAllLangs"
+              @ready="onReady"
             />
           </client-only>
         </div>
@@ -189,6 +193,7 @@ export default {
       phrases: undefined,
       currentIndex: 0,
       updating: false,
+      loadingMap: true,
       phrasesInAllLangs: undefined,
       showList: false,
       listType: "all-phrases", // or 'this-phrase'
@@ -240,6 +245,9 @@ export default {
     this.updating = false;
   },
   methods: {
+    onReady() {
+      this.loadingMap = false;
+    },
     onYouInOtherLangs(youInOtherLangs) {
       this.phrasesInAllLangs = youInOtherLangs;
     },
@@ -305,5 +313,16 @@ export default {
   .paginator-index {
     display: none;
   }
+}
+.loader-wrapper {
+  background: rgba(0, 0, 0, 0.66);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  color: white;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

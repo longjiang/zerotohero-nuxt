@@ -255,6 +255,7 @@ export default {
       this.map = mapObj;
       let bounds = mapObj.getBounds();
       this.updateBounds(bounds);
+      this.$emit('ready')
     },
     updateCenter(center) {
       if (typeof window !== "undefined") {

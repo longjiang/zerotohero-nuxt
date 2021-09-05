@@ -36,11 +36,15 @@
       </div>
       <div class="row">
         <div class="col-12" style="height: calc(100vh - 54px); padding: 0">
-          <client-only>
+          <div class="loader-wrapper" v-if="loadingMap">
+            <Loader :sticky="true" message="Loading map..." />
+          </div>
+          <client-only v-if="filteredLangsWithGeo">
             <LanguageMap
               style="height: 100%"
               ref="languageMap"
               :langs="filteredLangsWithGeo"
+              @ready="onReady"
             />
           </client-only>
         </div>
@@ -50,7 +54,15 @@
 </template>
 
 <script>
+import Helper from '@/lib/helper'
 export default {
+  data() {
+    return {
+      loadingMap: true,
+      filteredLangsWithGeo: undefined,
+      filteredLangs: undefined
+    };
+  },
   /**
    * Include the LanguageMap this way to avoid nuxt complaining 'window is not defined'
    * https://stackoverflow.com/questions/59347414/why-is-my-client-only-component-in-nuxt-complaining-that-window-is-not-define
@@ -66,23 +78,34 @@ export default {
     english() {
       return this.$languages.l1s.find((language) => language.code === "en");
     },
-    filteredLangs() {
+  },
+  async mounted() {
+    await Helper.timeout(1000)
+    this.filteredLangs = this.getFilteredLangs()
+    this.filteredLangsWithGeo = this.getFilteredLangsWithGeo()
+  },
+  methods: {
+    onReady() {
+      this.loadingMap = false;
+    },
+    getFilteredLangs() {
       let languages = this.$languages.l1s;
       languages = languages.filter((l) => {
         if (["hbo", "enm", "arc", "grc", "sjn"].includes(l["iso639-3"]))
           return true;
         if (l.name.includes("Sign Language")) return false;
         if (
-          this.hasDictionary(this.english, l) || this.hasYouTube(this.english, l)
+          this.hasDictionary(this.english, l) ||
+          this.hasYouTube(this.english, l)
         )
           return true;
-        if (!l['iso639-3']) return false
+        if (!l["iso639-3"]) return false;
         // if (["A", "E", "H"].includes(l.type)) return false;
         return true;
       });
       return languages;
     },
-    filteredLangsWithGeo() {
+    getFilteredLangsWithGeo() {
       let languages = this.filteredLangs;
       languages = languages
         .filter((l) => {
@@ -91,8 +114,6 @@ export default {
         .sort((a, b) => b.speakers - a.speakers);
       return languages;
     },
-  },
-  methods: {
     hasDictionary(l1, l2) {
       return (
         this.$languages.hasFeature(l1, l2, "dictionary") || l2.code === "en"
@@ -124,4 +145,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.loader-wrapper {
+  background: rgba(0, 0, 0, 0.66);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  color: white;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 </style>
