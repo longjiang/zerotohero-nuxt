@@ -91,7 +91,7 @@ export default {
     getFilteredLangs() {
       let languages = this.$languages.l1s;
       languages = languages.filter((l) => {
-        if (["hbo", "enm", "arc", "grc", "sjn"].includes(l["iso639-3"]))
+        if (["hbo", "enm", "arc", "grc", "sjn", "ang"].includes(l["iso639-3"]))
           return true;
         if (l["iso639-3"] === 'cmn') return false; // Mandarin overlaps Chinese, which is annoying
         if (l.name.includes("Sign Language")) return false;
