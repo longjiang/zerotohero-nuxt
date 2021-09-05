@@ -3798,7 +3798,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 3797,Layakha,laya1253,sino1245,nucl1307,language,28.0499,89.7177,lya,BT,,I,L,,,
 3798,India Lyngam,lyng1241,aust1305,lyng1240,language,25.35,91.05,lyg,IN,,I,L,,,
 3799,Luyi,luya1241,atla1278,east2747,language,-15.01,22.67,lyn,AO NA ZM,,I,L,,,
-3800,Literary Chinese,lite1248,sino1245,clas1255,language,34.09,109.05,lzh,CN,,I,H,,lzh,"Confucius (511 – 479 BCE), a Chinese philosopher and politician of the Sprig and Autumn period"
+3800,Literary Chinese,lite1248,sino1245,clas1255,language,34.09,109.05,lzh,CN,,I,H,,lzh,"Confucius (511 – 479 BCE), a Chinese philosopher and politician of the Spring and Autumn period"
 3801,Naman,litz1237,aust1307,cent2316,language,-16.1331,167.415,lzl,VU,,I,L,,,
 3802,Leinong Naga,lein1237,sino1245,lein1236,language,26.4481,95.4,lzn,MM,,I,L,,,
 3803,Laz,lazz1240,kart1248,zann1245,language,41.5004,41.9096,lzz,GE TR,,I,L,,,
