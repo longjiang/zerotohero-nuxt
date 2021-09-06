@@ -9,20 +9,44 @@
     <div class="container pt-5">
       <div class="row">
         <div :class="{ 'col-sm-12 mb-5': true }">
-          <h3 class="text-center">Analytics</h3>
+          <h3 class="text-center">
+            Language Content Audit for
+            <span class="text-primary">www.zerotohero.ca</span>
+          </h3>
           <client-only>
             <table class="table mt-5" v-if="analytics">
               <thead class="table-header">
                 <tr>
                   <th>Language</th>
                   <th>Views</th>
-                  <th>Videos</th>
-                  <th>TV Shows</th>
-                  <th>Music</th>
-                  <th>Movies</th>
-                  <th>News</th>
-                  <th>Talks</th>
-                  <th>Phrasebooks</th>
+                  <th>
+                    <i class="fa fa-play mr-2"></i>
+                    Videos
+                  </th>
+                  <th>
+                    <i class="fa fa-tv mr-2"></i>
+                    Shows
+                  </th>
+                  <th>
+                    <i class="fa fa-music mr-2"></i>
+                    Songs
+                  </th>
+                  <th>
+                    <i class="fa fa-film mr-2"></i>
+                    Movies
+                  </th>
+                  <th>
+                    <i class="fa fa-newspaper mr-2"></i>
+                    News
+                  </th>
+                  <th>
+                    <i class="fa fa-graduation-cap mr-2"></i>
+                    Talks
+                  </th>
+                  <th>
+                    <i class="fa fa-comment-alt mr-2"></i>
+                    Phrasebooks
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -33,14 +57,30 @@
                   <td>
                     <LazyLanguageList :singleColumn="true" :langs="[row.l2]" />
                   </td>
-                  <td>{{ row.uniquePageViews }}</td>
-                  <td>{{ row.youtube_videos }}</td>
-                  <td>{{ row.tv_shows }}</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td>{{ row.talks }}</td>
-                  <td>{{ row.phrasebook }}</td>
+                  <td>
+                    {{ formatK(row.uniquePageViews) }}
+                  </td>
+                  <td :class="{ warn: row.youtube_videos < 3 }">
+                    {{ formatK(row.youtube_videos) }}
+                  </td>
+                  <td :class="{ warn: row.tv_shows < 3 }">
+                    {{ formatK(row.tv_shows) }}
+                  </td>
+                  <td :class="{ warn: row.Music < 3 }">
+                    {{ formatK(row.Music) }}
+                  </td>
+                  <td :class="{ warn: row.Movies < 3 }">
+                    {{ formatK(row.Movies) }}
+                  </td>
+                  <td :class="{ warn: row.News < 3 }">
+                    {{ formatK(row.News) }}
+                  </td>
+                  <td :class="{ warn: row.talks < 3 }">
+                    {{ formatK(row.talks) }}
+                  </td>
+                  <td :class="{ warn: row.phrasebook < 3 }">
+                    {{ formatK(row.phrasebook) }}
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -63,7 +103,7 @@ export default {
   data() {
     return {
       analytics: undefined,
-      numRowsVisible: 15,
+      numRowsVisible: 10,
     };
   },
   computed: {
@@ -111,9 +151,12 @@ export default {
     }
   },
   methods: {
+    formatK() {
+      return Helper.formatK(...arguments);
+    },
     infiniteScroll(isVisible) {
       if (isVisible) {
-        this.numRowsVisible = this.numRowsVisible + 15;
+        this.numRowsVisible = this.numRowsVisible + 10;
       }
     },
     async loadData() {
@@ -128,11 +171,21 @@ export default {
           ]) {
             if (!row[key]) {
               let res = await axios.get(
-                `${Config.wiki}items/${key}?sort=title&filter[l2][eq]=${
+                `${Config.wiki}items/${key}?filter[l2][eq]=${row.l2.id}&filter[title][nin]=Movies,Music,News&limit=1&meta=filter_count`
+              );
+              if (res && res.data) {
+                Vue.set(row, key, res.data.meta.filter_count);
+              }
+            }
+          }
+          for (let key of ["Music", "Movies", "News"]) {
+            if (!row[key]) {
+              let res = await axios.get(
+                `${Config.wiki}items/youtube_videos?filter[l2][eq]=${
                   row.l2.id
-                }&limit=1&meta=filter_count&timestamp=${
-                  this.$adminMode ? Date.now() : 0
-                }`
+                }&filter[${
+                  "News" === key ? "talk" : "tv_show"
+                }.title][eq]=${key}&limit=1&meta=filter_count`
               );
               if (res && res.data) {
                 Vue.set(row, key, res.data.meta.filter_count);
@@ -158,5 +211,10 @@ export default {
   th {
     white-space: nowrap;
   }
+}
+.warn {
+  background-color: rgb(248, 238, 238);
+  color: rgb(170, 18, 18);
+  font-weight: bold;
 }
 </style>
