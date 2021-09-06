@@ -4446,7 +4446,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 4445,Nakanai,naka1262,aust1307,naka1266,language,-5.59931,150.888,nak,PG,,I,L,,,
 4446,Nalik,nali1244,aust1307,tung1294,language,-2.94411,151.332,nal,PG,,I,L,,,
 4447,Nangikurrunggurr,nang1259,sout2772,sout2772,language,-14.268,131.237,nam,AU,,I,L,,,
-4448,Min Nan Chinese,minn1241,sino1245,coas1318,language,24.5,118.17,nan,CN TW,,I,L,48000000,,
+4448,Min Nan Chinese,minn1241,sino1245,coas1318,language,24.5,118.17,nan,CN TW,,I,L,48000000,nan,"Chen Lei (born 1963), Taiwanese pop music singer"
 4449,Naaba,naab1241,sino1245,sher1260,language,27.6926,87.3409,nao,NP,,I,L,,,
 4450,Continental Southern Italian,neap1235,indo1319,ital1287,language,39.2288,16.4225,nap,IT,,I,L,,nap,"Enrico Caruso (1873 – 1921), an Italian operatic tenor"
 4451,Nama (Namibia),nama1264,khoe1240,nort3245,language,-25.0747,17.9767,naq,BW NA ZA,,I,L,,,
