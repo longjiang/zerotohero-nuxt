@@ -64,6 +64,14 @@
             </span>
           </router-link>
         </div>
+        <router-link
+          v-if="youInOtherLangs.length > 0 || vousInOtherLangs.length > 0"
+          class="mt-3 btn btn-primary btn-sm"
+          :to="{ name: 'compare-languages', params: { phraseObj, phraseStr } }"
+        >
+          <i class="fa fa-globe-asia mr-2"></i>
+          See them on a Map
+        </router-link>
       </div>
       <Loader
         :sticky="true"
@@ -231,13 +239,16 @@ export default {
       if (this.translation) {
         this.youInOtherLangs = phrases
           .filter(
-            (p) => (p["en"] || "").toUpperCase() === (this.translation || "").toUpperCase()
+            (p) =>
+              (p["en"] || "").toUpperCase() ===
+              (this.translation || "").toUpperCase()
           )
           .sort((a, b) => a.phrase.localeCompare(b.phrase));
       }
       this.vousInOtherLangs = phrases.filter(
         (p) =>
-          (p.phrase || "").toUpperCase() === (this.phrase || "").toUpperCase() &&
+          (p.phrase || "").toUpperCase() ===
+            (this.phrase || "").toUpperCase() &&
           (typeof this.$l2 === "undefined" ||
             p.l2.code !== this.$l2.code ||
             p["en"] !== this.translation)

@@ -17,7 +17,7 @@
     <div class="container-fluid">
       <div
         class="row bg-dark text-white pt-2 pb-2 text-left"
-        style="overflow: visible"
+        style="overflow: visible; height: 45px"
       >
         <div class="col-sm-12 d-flex" style="overflow: visible">
           <div
@@ -157,8 +157,9 @@
         <div :class="{ 'd-none': listType !== 'this-phrase' }">
           <SimilarPhrases
             class="text-center"
-            v-if="phrases"
-            :phraseObj="phrases[currentIndex]"
+            v-if="phrases || phraseObj || phraseStr"
+            :phraseObj="phrases ? phrases[currentIndex] : phraseObj ? phraseObj : undefined"
+            :phraseStr="phraseStr ? phraseStr : undefined"
             :key="`similar-phrases-${currentIndex}`"
             :autoLoad="true"
             @youInOtherLangs="onYouInOtherLangs"
@@ -237,6 +238,7 @@ export default {
   },
   async mounted() {
     if (!this.phraseObj && !this.phraseStr) this.loadPhraseObj();
+    console.log(this.phraseObj, this.phraeStr, this.phrasesInAllLangs)
   },
   methods: {
     onReady() {
