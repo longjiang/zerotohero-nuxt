@@ -16,7 +16,7 @@
               'col-sm-12 pt-4': !wide,
             }"
           >
-            <div class="text-center" v-if="phrasebook && phraseId && phraseObj">
+            <div class="text-center" v-if="phrasebook && phrasebook.phrases && phraseId && phraseObj">
               <router-link class="link-unstyled mb-4 d-block" :to="homeRoute">
                 <h5>{{ phrasebook.title }}</h5>
               </router-link>
