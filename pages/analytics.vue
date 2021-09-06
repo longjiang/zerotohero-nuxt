@@ -20,31 +20,24 @@
                   <th>Language</th>
                   <th>Views</th>
                   <th>
-                    <i class="fa fa-play mr-2"></i>
-                    Videos
+                    All Videos
                   </th>
                   <th>
-                    <i class="fa fa-tv mr-2"></i>
-                    Shows
+                    TV Shows
                   </th>
                   <th>
-                    <i class="fa fa-music mr-2"></i>
-                    Songs
+                    Music
                   </th>
                   <th>
-                    <i class="fa fa-film mr-2"></i>
                     Movies
                   </th>
                   <th>
-                    <i class="fa fa-newspaper mr-2"></i>
                     News
                   </th>
                   <th>
-                    <i class="fa fa-graduation-cap mr-2"></i>
                     Talks
                   </th>
                   <th>
-                    <i class="fa fa-comment-alt mr-2"></i>
                     Phrasebooks
                   </th>
                 </tr>
@@ -61,25 +54,25 @@
                     {{ formatK(row.uniquePageViews) }}
                   </td>
                   <td :class="{ warn: row.youtube_videos < 3 }">
-                    {{ formatK(row.youtube_videos) }}
+                    <i class="fa fa-play-circle mr-2"></i> {{ formatK(row.youtube_videos) }}
                   </td>
                   <td :class="{ warn: row.tv_shows < 3 }">
-                    {{ formatK(row.tv_shows) }}
+                    <i class="fa fa-tv mr-2"></i> {{ formatK(row.tv_shows) }}
                   </td>
                   <td :class="{ warn: row.Music < 3 }">
-                    {{ formatK(row.Music) }}
+                    <i class="fa fa-music mr-2"></i> {{ formatK(row.Music) }}
                   </td>
                   <td :class="{ warn: row.Movies < 3 }">
-                    {{ formatK(row.Movies) }}
+                    <i class="fa fa-film mr-2"></i> {{ formatK(row.Movies) }}
                   </td>
                   <td :class="{ warn: row.News < 3 }">
-                    {{ formatK(row.News) }}
+                    <i class="fa fa-newspaper mr-2"></i> {{ formatK(row.News) }}
                   </td>
                   <td :class="{ warn: row.talks < 3 }">
-                    {{ formatK(row.talks) }}
+                    <i class="fa fa-graduation-cap mr-2"></i> {{ formatK(row.talks) }}
                   </td>
                   <td :class="{ warn: row.phrasebook < 3 }">
-                    {{ formatK(row.phrasebook) }}
+                    <i class="fa fa-comment-alt mr-2"></i> {{ formatK(row.phrasebook) }}
                   </td>
                 </tr>
               </tbody>
