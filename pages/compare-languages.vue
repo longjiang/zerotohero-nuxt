@@ -187,6 +187,14 @@ export default {
       }
     },
   },
+  props: {
+    phraseObj: {
+      type: Object,
+    },
+    phraseStr: {
+      type: String,
+    },
+  },
   data() {
     return {
       phrasebook: undefined,
@@ -228,21 +236,7 @@ export default {
     },
   },
   async mounted() {
-    this.currentIndex = this.$route.query.i ? Number(this.$route.query.i) : 0;
-    this.updating = true;
-    let res = await axios.get(`${Config.wiki}items/phrasebook/283`);
-    if (res && res.data) {
-      let phrasebook = res.data.data;
-      phrasebook.phrases = Papa.parse(phrasebook.phrases, {
-        header: true,
-      }).data.map((p, id) => {
-        p.id = id;
-        return p;
-      });
-      this.phrasebook = phrasebook;
-      this.phrases = phrasebook.phrases;
-    }
-    this.updating = false;
+    if (!this.phraseObj && !this.phraseStr) this.loadPhraseObj();
   },
   methods: {
     onReady() {
@@ -250,6 +244,23 @@ export default {
     },
     onYouInOtherLangs(youInOtherLangs) {
       this.phrasesInAllLangs = youInOtherLangs;
+    },
+    async loadPhraseObj() {
+      this.currentIndex = this.$route.query.i ? Number(this.$route.query.i) : 0;
+      this.updating = true;
+      let res = await axios.get(`${Config.wiki}items/phrasebook/283`);
+      if (res && res.data) {
+        let phrasebook = res.data.data;
+        phrasebook.phrases = Papa.parse(phrasebook.phrases, {
+          header: true,
+        }).data.map((p, id) => {
+          p.id = id;
+          return p;
+        });
+        this.phrasebook = phrasebook;
+        this.phrases = phrasebook.phrases;
+      }
+      this.updating = false;
     },
   },
 };
