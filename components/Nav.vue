@@ -808,6 +808,12 @@ export default {
             },
             {
               icon: "fas fa-wrench",
+              title: "Analytics",
+              name: "analytics",
+              show: this.$adminMode,
+            },
+            {
+              icon: "fas fa-wrench",
               title: "Test",
               name: "test",
               show: this.$adminMode,
