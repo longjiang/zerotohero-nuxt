@@ -17,36 +17,41 @@
             <table class="table mt-5" v-if="analytics">
               <thead class="table-header">
                 <tr>
+                  <th></th>
                   <th>Language</th>
                   <th>Views</th>
-                  <th>
-                    All Videos
-                  </th>
-                  <th>
-                    TV Shows
-                  </th>
-                  <th>
-                    Music
-                  </th>
-                  <th>
-                    Movies
-                  </th>
-                  <th>
-                    News
-                  </th>
-                  <th>
-                    Talks
-                  </th>
-                  <th>
-                    Phrasebooks
-                  </th>
+                  <th>All Videos</th>
+                  <th>TV Shows</th>
+                  <th>Music</th>
+                  <th>Movies</th>
+                  <th>News</th>
+                  <th>Talks</th>
+                  <th>Phrasebooks</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody class="table-body">
                 <tr
                   v-for="(row, index) in analytics.slice(0, numRowsVisible)"
                   :key="`analytics-row-${index}`"
                 >
+                  <td class="text-center">
+                    <router-link
+                      :to="{
+                        name: 'home',
+                        params: {
+                          l1: l1(row.l2),
+                          l2: row.l2.code,
+                        },
+                      }"
+                    >
+                      <img
+                        :src="`/img/logo-square/${row.l2.code}.jpeg`"
+                        :alt="row.l2.name"
+                        :title="row.l2.logoDesc"
+                        class="lang-logo"
+                      />
+                    </router-link>
+                  </td>
                   <td>
                     <LazyLanguageList :singleColumn="true" :langs="[row.l2]" />
                   </td>
@@ -54,25 +59,133 @@
                     {{ formatK(row.uniquePageViews) }}
                   </td>
                   <td :class="{ warn: row.youtube_videos < 3 }">
-                    <i class="fa fa-play-circle mr-2"></i> {{ formatK(row.youtube_videos) }}
+                    <router-link
+                      class="link-unstyled"
+                      :to="{
+                        name: 'youtube-browse',
+                        params: {
+                          l1: l1(row.l2),
+                          l2: row.l2.code,
+                        },
+                      }"
+                    >
+                      <i class="fa fa-play-circle mr-2"></i>
+                      {{ formatK(row.youtube_videos) }}
+                    </router-link>
                   </td>
                   <td :class="{ warn: row.tv_shows < 3 }">
-                    <i class="fa fa-tv mr-2"></i> {{ formatK(row.tv_shows) }}
+                    <router-link
+                      class="link-unstyled"
+                      :to="{
+                        name: 'tv-shows',
+                        params: {
+                          l1: l1(row.l2),
+                          l2: row.l2.code,
+                        },
+                      }"
+                    >
+                      <i class="fa fa-tv mr-2"></i>
+                      {{ formatK(row.tv_shows) }}
+                    </router-link>
                   </td>
                   <td :class="{ warn: row.Music < 3 }">
-                    <i class="fa fa-music mr-2"></i> {{ formatK(row.Music) }}
+                    <router-link
+                      class="link-unstyled"
+                      :disabled="!row.MusicId"
+                      :event="row.MusicId ? 'click' : ''"
+                      :to="
+                        row.MusicId
+                          ? {
+                              name: 'show',
+                              params: {
+                                l1: l1(row.l2),
+                                l2: row.l2.code,
+                                type: 'tv-show',
+                                id: row.MusicId,
+                              },
+                            }
+                          : '/'
+                      "
+                    >
+                      <i class="fa fa-music mr-2"></i>
+                      {{ formatK(row.Music) }}
+                    </router-link>
                   </td>
                   <td :class="{ warn: row.Movies < 3 }">
-                    <i class="fa fa-film mr-2"></i> {{ formatK(row.Movies) }}
+                    <router-link
+                      class="link-unstyled"
+                      :disabled="!row.MoviesId"
+                      :event="row.MoviesId ? 'click' : ''"
+                      :to="
+                        row.MoviesId
+                          ? {
+                              name: 'show',
+                              params: {
+                                l1: l1(row.l2),
+                                l2: row.l2.code,
+                                type: 'tv-show',
+                                id: row.MoviesId,
+                              },
+                            }
+                          : '/'
+                      "
+                    >
+                      <i class="fa fa-film mr-2"></i>
+                      {{ formatK(row.Movies) }}
+                    </router-link>
                   </td>
                   <td :class="{ warn: row.News < 3 }">
-                    <i class="fa fa-newspaper mr-2"></i> {{ formatK(row.News) }}
+                    <router-link
+                      class="link-unstyled"
+                      :disabled="!row.NewsId"
+                      :event="row.NewsId ? 'click' : ''"
+                      :to="
+                        row.NewsId
+                          ? {
+                              name: 'show',
+                              params: {
+                                l1: l1(row.l2),
+                                l2: row.l2.code,
+                                type: 'talk',
+                                id: row.NewsId,
+                              },
+                            }
+                          : '/'
+                      "
+                    >
+                      <i class="fa fa-newspaper mr-2"></i>
+                      {{ formatK(row.News) }}
+                    </router-link>
                   </td>
                   <td :class="{ warn: row.talks < 3 }">
-                    <i class="fa fa-graduation-cap mr-2"></i> {{ formatK(row.talks) }}
+                    <router-link
+                      class="link-unstyled"
+                      :to="{
+                        name: 'talks',
+                        params: {
+                          l1: l1(row.l2),
+                          l2: row.l2.code,
+                        },
+                      }"
+                    >
+                      <i class="fa fa-graduation-cap mr-2"></i>
+                      {{ formatK(row.talks) }}
+                    </router-link>
                   </td>
                   <td :class="{ warn: row.phrasebook < 3 }">
-                    <i class="fa fa-comment-alt mr-2"></i> {{ formatK(row.phrasebook) }}
+                    <router-link
+                      class="link-unstyled"
+                      :to="{
+                        name: 'phrasebooks',
+                        params: {
+                          l1: l1(row.l2),
+                          l2: row.l2.code,
+                        },
+                      }"
+                    >
+                      <i class="fa fa-comment-alt mr-2"></i>
+                      {{ formatK(row.phrasebook) }}
+                    </router-link>
                   </td>
                 </tr>
               </tbody>
@@ -144,6 +257,9 @@ export default {
     }
   },
   methods: {
+    l1(l2) {
+      return ["en", "lzh", "hak", "nan"].includes(l2.code) ? "zh" : "en";
+    },
     formatK() {
       return Helper.formatK(...arguments);
     },
@@ -173,14 +289,13 @@ export default {
           }
           for (let key of ["Music", "Movies", "News"]) {
             if (!row[key]) {
+              let collection = "News" === key ? "talk" : "tv_show";
               let res = await axios.get(
-                `${Config.wiki}items/youtube_videos?filter[l2][eq]=${
-                  row.l2.id
-                }&filter[${
-                  "News" === key ? "talk" : "tv_show"
-                }.title][eq]=${key}&limit=1&meta=filter_count`
+                `${Config.wiki}items/youtube_videos?filter[l2][eq]=${row.l2.id}&filter[${collection}.title][eq]=${key}&limit=1&meta=filter_count`
               );
               if (res && res.data) {
+                if (res.data.data[0])
+                  Vue.set(row, `${key}Id`, res.data.data[0][collection]);
                 Vue.set(row, key, res.data.meta.filter_count);
               }
             }
@@ -203,6 +318,17 @@ export default {
   background: #ccc;
   th {
     white-space: nowrap;
+  }
+}
+.table-body {
+  td {
+    vertical-align: middle;
+    .lang-logo {
+      width: 3rem;
+      height: 3rem;
+      object-fit: cover;
+      border-radius: 100%;
+    }
   }
 }
 .warn {

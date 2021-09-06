@@ -120,9 +120,9 @@ export default {
           name: "闽南话",
           l1: "zh",
         },
-        cmn: {
-          name: "Mandarin Dialect",
-          l1: "en",
+        en: {
+          name: "英语",
+          l1: "zh",
         },
       },
       params: {},
