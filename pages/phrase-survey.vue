@@ -153,8 +153,8 @@ export default {
     return {
       videos: undefined,
       lines: undefined,
-      maxVideos: 2000, // False = infinite number of videos
-      perPage: 2000,
+      maxVideos: 1500, // False = infinite number of videos
+      perPage: 1500,
       chunkSize: 200, // Number of videos stored in each localStorage item in getAllLinesFromLocalStorage
       punctuations: undefined,
       fields: ["line", "count", "actions"],
@@ -210,18 +210,13 @@ export default {
       let videos = await this.getVideos(this.showSelect, start, this.perPage);
       let allVideos = [];
       let page = 0;
-      while (
-        videos.length > 0 &&
-        (!this.maxVideos || allVideos.length < this.maxVideos)
-      ) {
-        allVideos = allVideos.concat(videos);
-        page++;
-        videos = await this.getVideos(
-          this.showSelect,
-          start + this.perPage * page,
-          this.perPage
-        );
-      }
+      allVideos = allVideos.concat(videos);
+      page++;
+      videos = await this.getVideos(
+        this.showSelect,
+        start + this.perPage * page,
+        this.perPage
+      );
       return allVideos;
     },
     crunchPhrases(videos) {
