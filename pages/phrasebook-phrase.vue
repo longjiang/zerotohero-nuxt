@@ -7,7 +7,7 @@
 <template>
   <container-query :query="query" v-model="params">
     <div :class="{ 'bg-white': !wide }">
-      <SocialHead :title="title" :description="description" :image="image" />
+      <SocialHead :title="title" :description="description" />
       <div :class="{ container: !wide }">
         <div :class="{ row: !wide, 'content-panes': wide }">
           <div
@@ -259,13 +259,6 @@ export default {
       return `Look up ${this.$l2 ? this.$l2.name : ""} phrases. See how ${
         this.$l2 ? this.$l2.name : ""
       } words are used in TV shows, how they form collocations, and other examples.`;
-    },
-    image() {
-      if (this.images.length > 0) {
-        return this.images[0].src;
-      } else {
-        return "/img/zth-share-image.jpg";
-      }
     },
     wide() {
       return this.params.wide && ["lg", "xl", "xxl"].includes(this.$mq);

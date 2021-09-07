@@ -5,6 +5,7 @@
 <script>
 // Test on: https://cards-dev.twitter.com/validator
 // Test on: https://developers.facebook.com/tools/debug/
+import Helper from "@/lib/helper";
 export default {
   props: {
     title: {
@@ -17,7 +18,6 @@ export default {
     },
     image: {
       type: String,
-      default: "/img/zth-share-image.jpg",
     },
   },
   computed: {
@@ -61,7 +61,7 @@ export default {
         {
           hid: "twitter:image",
           name: "twitter:image",
-          content: this.image,
+          content: this.getImage(),
         },
         {
           hid: "twitter:image:alt",
@@ -93,14 +93,14 @@ export default {
         {
           hid: "og:image",
           property: "og:image",
-          content: this.image,
+          content: this.getImage(),
         },
         { property: "og:image:width", content: "1280" },
         { property: "og:image:height", content: "720" },
         {
           hid: "og:image:secure_url",
           property: "og:image:secure_url",
-          content: this.image,
+          content: this.getImage(),
         },
         {
           hid: "og:image:alt",
@@ -109,6 +109,15 @@ export default {
         },
       ],
     };
+  },
+  methods: {
+    getImage() {
+      if (this.image) return this.image;
+      let image = Helper.background(this.$l2);
+      return image;
+      // if (image !== "/img/background-branch.jpg") 
+      // else return "/img/zth-share-image.jpg";
+    },
   },
 };
 </script>
