@@ -844,7 +844,7 @@ tzm,Tfng,,,,
 ude,Cyrl,,,,
 udm,Cyrl,,,,
 udm,Latn,,,,
-ug,Arab,,,N,rtl
+ug,Arab,,,,rtl
 ug,Cyrl,,,,
 ug,Latn,,,,
 uga,Ugar,N,O,N,
