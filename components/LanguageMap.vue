@@ -126,6 +126,7 @@
 import axios from "axios";
 import Config from "@/lib/config";
 import Papa from "papaparse";
+import Helper from "@/lib/helper";
 import "leaflet/dist/leaflet.css";
 
 export default {
@@ -205,7 +206,10 @@ export default {
   methods: {
     initLangs() {
       if (this.phrases) {
-        this.languages = this.phrases.map((p) => p.l2);
+        let languages = this.phrases.map((p) => p.l2);
+        languages = Helper.uniqueByValue(languages, "id");
+        languages = languages.sort((a, b) => b.speakers - a.speakers);
+        this.languages = languages;
         if (this.map) {
           let bounds = this.map.getBounds();
           this.updateBounds(bounds);
@@ -255,7 +259,7 @@ export default {
       this.map = mapObj;
       let bounds = mapObj.getBounds();
       this.updateBounds(bounds);
-      this.$emit('ready')
+      this.$emit("ready");
     },
     updateCenter(center) {
       if (typeof window !== "undefined") {
@@ -320,7 +324,7 @@ export default {
                   magicNumbers[this.currentZoom] * magicScale * 3;
               return !overlapped;
             })
-            .slice(0, 20);
+            .slice(0, 50);
         }
       }
       this.filteredLanguages = filteredLanguages;
