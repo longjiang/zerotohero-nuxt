@@ -194,25 +194,28 @@
             @speechEnd="speechEnd"
             @updateTranslation="updateTranslation"
           />
-          <div class="text-center mt-5" v-if="video.checkingSubs">
-            <Loader :sticky="true" message="Loading subtitles..." />
-          </div>
-          <div
-            class="p-4 mt-4 rounded"
-            style="
-              border: 2px dashed rgba(136, 136, 136, 0.5);
-              color: rgba(136, 136, 136, 0.85);
-            "
-            v-if="(!video.subs_l2 || video.subs_l2.length === 0) && !video.checkingSubs"
-          >
-            <h6>
-              This video does not have closed captions (CC) in {{ $l2.name }}.
-            </h6>
-            <div class="mt-3">
-              Otherwise, video trancript will show up here.
-            </div>
-          </div>
           <div class="mt-5 youtube-video-info youtube-video-info-bottom">
+            <div class="text-center mt-5" v-if="video.checkingSubs">
+              <Loader :sticky="true" message="Loading subtitles..." />
+            </div>
+            <div
+              class="p-4 mt-4 rounded"
+              style="
+                border: 2px dashed rgba(136, 136, 136, 0.5);
+                color: rgba(136, 136, 136, 0.85);
+              "
+              v-if="
+                (!video.subs_l2 || video.subs_l2.length === 0) &&
+                !video.checkingSubs
+              "
+            >
+              <h6>
+                This video does not have closed captions (CC) in {{ $l2.name }}.
+              </h6>
+              <div class="mt-3">
+                Otherwise, video trancript will show up here.
+              </div>
+            </div>
             <div class="youtube-view-bottom-navigation text-center">
               <router-link
                 v-if="previousEpisode"
