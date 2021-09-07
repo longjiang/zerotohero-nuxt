@@ -205,7 +205,11 @@ export default {
         }
       } else {
         let res = await axios.get(
-          `${Config.wiki}items/${key}?filter[l2][eq]=${row.l2.id}&filter[title][nin]=Movies,Music,News&limit=1&meta=filter_count`
+          `${Config.wiki}items/${key}?filter[l2][eq]=${
+            row.l2.id
+          }&filter[title][nin]=Movies,Music,News&limit=1&meta=filter_count&timestamp=${
+            forceRefresh ? Date.now() : 0
+          }`
         );
         if (res && res.data) {
           Vue.set(row, key, res.data.meta.filter_count);
