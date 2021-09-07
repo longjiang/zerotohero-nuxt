@@ -114,9 +114,8 @@ export default {
     getImage() {
       if (this.image) return this.image;
       let image = Helper.background(this.$l2);
-      return image;
-      // if (image !== "/img/background-branch.jpg") 
-      // else return "/img/zth-share-image.jpg";
+      if (image !== "/img/background-branch.jpg") return image;
+      else return "/img/zth-share-image.jpg";
     },
   },
 };
