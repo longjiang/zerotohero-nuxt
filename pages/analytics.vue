@@ -58,134 +58,54 @@
                   <td>
                     {{ formatK(row.uniquePageViews) }}
                   </td>
-                  <td :class="{ warn: row.youtube_videos < 3 }">
-                    <router-link
-                      class="link-unstyled"
-                      :to="{
-                        name: 'youtube-browse',
-                        params: {
-                          l1: l1(row.l2),
-                          l2: row.l2.code,
-                        },
-                      }"
-                    >
-                      <i class="fa fa-play-circle mr-2"></i>
-                      {{ formatK(row.youtube_videos) }}
-                    </router-link>
+                  <td
+                    :class="{ 'data-cell': true, warn: row.youtube_videos < 3 }"
+                    @click="loadDataForRowKey(row, 'youtube_videos', true)"
+                  >
+                    <i class="fa fa-play-circle mr-2"></i>
+                    {{ formatK(row.youtube_videos) }}
                   </td>
-                  <td :class="{ warn: row.tv_shows < 3 }">
-                    <router-link
-                      class="link-unstyled"
-                      :to="{
-                        name: 'tv-shows',
-                        params: {
-                          l1: l1(row.l2),
-                          l2: row.l2.code,
-                        },
-                      }"
-                    >
-                      <i class="fa fa-tv mr-2"></i>
-                      {{ formatK(row.tv_shows) }}
-                    </router-link>
+                  <td
+                    :class="{ 'data-cell': true, warn: row.tv_shows < 3 }"
+                    @click="loadDataForRowKey(row, 'tv_shows', true)"
+                  >
+                    <i class="fa fa-tv mr-2"></i>
+                    {{ formatK(row.tv_shows) }}
                   </td>
-                  <td :class="{ warn: row.Music < 3 }">
-                    <router-link
-                      class="link-unstyled"
-                      :disabled="!row.MusicId"
-                      :event="row.MusicId ? 'click' : ''"
-                      :to="
-                        row.MusicId
-                          ? {
-                              name: 'show',
-                              params: {
-                                l1: l1(row.l2),
-                                l2: row.l2.code,
-                                type: 'tv-show',
-                                id: row.MusicId,
-                              },
-                            }
-                          : '/'
-                      "
-                    >
-                      <i class="fa fa-music mr-2"></i>
-                      {{ formatK(row.Music) }}
-                    </router-link>
+                  <td
+                    :class="{ 'data-cell': true, warn: row.Music < 3 }"
+                    @click="loadDataForRowKey(row, 'Music', true)"
+                  >
+                    <i class="fa fa-music mr-2"></i>
+                    {{ formatK(row.Music) }}
                   </td>
-                  <td :class="{ warn: row.Movies < 3 }">
-                    <router-link
-                      class="link-unstyled"
-                      :disabled="!row.MoviesId"
-                      :event="row.MoviesId ? 'click' : ''"
-                      :to="
-                        row.MoviesId
-                          ? {
-                              name: 'show',
-                              params: {
-                                l1: l1(row.l2),
-                                l2: row.l2.code,
-                                type: 'tv-show',
-                                id: row.MoviesId,
-                              },
-                            }
-                          : '/'
-                      "
-                    >
-                      <i class="fa fa-film mr-2"></i>
-                      {{ formatK(row.Movies) }}
-                    </router-link>
+                  <td
+                    :class="{ 'data-cell': true, warn: row.Movies < 3 }"
+                    @click="loadDataForRowKey(row, 'Movies', true)"
+                  >
+                    <i class="fa fa-film mr-2"></i>
+                    {{ formatK(row.Movies) }}
                   </td>
-                  <td :class="{ warn: row.News < 3 }">
-                    <router-link
-                      class="link-unstyled"
-                      :disabled="!row.NewsId"
-                      :event="row.NewsId ? 'click' : ''"
-                      :to="
-                        row.NewsId
-                          ? {
-                              name: 'show',
-                              params: {
-                                l1: l1(row.l2),
-                                l2: row.l2.code,
-                                type: 'talk',
-                                id: row.NewsId,
-                              },
-                            }
-                          : '/'
-                      "
-                    >
-                      <i class="fa fa-newspaper mr-2"></i>
-                      {{ formatK(row.News) }}
-                    </router-link>
+                  <td
+                    :class="{ 'data-cell': true, warn: row.News < 3 }"
+                    @click="loadDataForRowKey(row, 'News', true)"
+                  >
+                    <i class="fa fa-newspaper mr-2"></i>
+                    {{ formatK(row.News) }}
                   </td>
-                  <td :class="{ warn: row.talks < 3 }">
-                    <router-link
-                      class="link-unstyled"
-                      :to="{
-                        name: 'talks',
-                        params: {
-                          l1: l1(row.l2),
-                          l2: row.l2.code,
-                        },
-                      }"
-                    >
-                      <i class="fa fa-graduation-cap mr-2"></i>
-                      {{ formatK(row.talks) }}
-                    </router-link>
+                  <td
+                    :class="{ 'data-cell': true, warn: row.talks < 3 }"
+                    @click="loadDataForRowKey(row, 'talks', true)"
+                  >
+                    <i class="fa fa-graduation-cap mr-2"></i>
+                    {{ formatK(row.talks) }}
                   </td>
-                  <td :class="{ warn: row.phrasebook < 3 }">
-                    <router-link
-                      class="link-unstyled"
-                      :to="{
-                        name: 'phrasebooks',
-                        params: {
-                          l1: l1(row.l2),
-                          l2: row.l2.code,
-                        },
-                      }"
-                    >
-                      <i class="fa fa-comment-alt mr-2"></i>
-                      {{ formatK(row.phrasebook) }}
-                    </router-link>
+                  <td
+                    :class="{ 'data-cell': true, warn: row.phrasebook < 3 }"
+                    @click="loadDataForRowKey(row, 'phrasebook', true)"
+                  >
+                    <i class="fa fa-comment-alt mr-2"></i>
+                    {{ formatK(row.phrasebook) }}
                   </td>
                 </tr>
               </tbody>
@@ -268,6 +188,30 @@ export default {
         this.numRowsVisible = this.numRowsVisible + 10;
       }
     },
+    async loadDataForRowKey(row, key, forceRefresh) {
+      if (["Music", "Movies", "News"].includes(key)) {
+        let collection = "News" === key ? "talk" : "tv_show";
+        let res = await axios.get(
+          `${Config.wiki}items/youtube_videos?filter[l2][eq]=${
+            row.l2.id
+          }&filter[${collection}.title][eq]=${key}&limit=1&meta=filter_count&timestamp=${
+            forceRefresh ? Date.now() : 0
+          }`
+        );
+        if (res && res.data) {
+          if (res.data.data[0])
+            Vue.set(row, `${key}Id`, res.data.data[0][collection]);
+          Vue.set(row, key, res.data.meta.filter_count);
+        }
+      } else {
+        let res = await axios.get(
+          `${Config.wiki}items/${key}?filter[l2][eq]=${row.l2.id}&filter[title][nin]=Movies,Music,News&limit=1&meta=filter_count`
+        );
+        if (res && res.data) {
+          Vue.set(row, key, res.data.meta.filter_count);
+        }
+      }
+    },
     async loadData() {
       if (this.analytics) {
         let visibleRows = this.analytics.slice(0, this.numRowsVisible);
@@ -279,25 +223,12 @@ export default {
             "phrasebook",
           ]) {
             if (!row[key]) {
-              let res = await axios.get(
-                `${Config.wiki}items/${key}?filter[l2][eq]=${row.l2.id}&filter[title][nin]=Movies,Music,News&limit=1&meta=filter_count`
-              );
-              if (res && res.data) {
-                Vue.set(row, key, res.data.meta.filter_count);
-              }
+              this.loadDataForRowKey(row, key);
             }
           }
           for (let key of ["Music", "Movies", "News"]) {
             if (!row[key]) {
-              let collection = "News" === key ? "talk" : "tv_show";
-              let res = await axios.get(
-                `${Config.wiki}items/youtube_videos?filter[l2][eq]=${row.l2.id}&filter[${collection}.title][eq]=${key}&limit=1&meta=filter_count`
-              );
-              if (res && res.data) {
-                if (res.data.data[0])
-                  Vue.set(row, `${key}Id`, res.data.data[0][collection]);
-                Vue.set(row, key, res.data.meta.filter_count);
-              }
+              this.loadDataForRowKey(row, key);
             }
           }
         }
@@ -328,6 +259,12 @@ export default {
       height: 3rem;
       object-fit: cover;
       border-radius: 100%;
+    }
+    &.data-cell {
+      cursor: pointer;
+      &:hover {
+        background-color: #efefef;
+      }
     }
   }
 }
