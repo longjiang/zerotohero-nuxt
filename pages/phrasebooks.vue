@@ -49,7 +49,7 @@
         </div>
         <div class="row pt-4">
           <div class="col-12">
-            <LazyIdenticalLanguages routeName="youtube-search" />
+            <LazyIdenticalLanguages routeName="phrasebooks" />
           </div>
         </div>
       </div>

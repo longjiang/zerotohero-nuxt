@@ -176,7 +176,7 @@
               <div v-observe-visibility="visibilityChanged"></div>
             </template>
           </div>
-          <LazyIdenticalLanguages class="mt-3" routeName="youtube-browse" />
+          <LazyIdenticalLanguages class="mt-3" routeName="home" />
         </div>
       </div>
     </div>
