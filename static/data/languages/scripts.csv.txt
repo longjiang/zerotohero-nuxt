@@ -789,9 +789,9 @@ tem,Latn,,,,
 teo,Latn,,,,
 ter,Latn,,,,
 tet,Latn,,,,
-tg,Arab,,,,rtl
 tg,Cyrl,,,,
 tg,Latn,,,,
+tg,Arab,,,,rtl
 th,Thai,,,,
 thl,Deva,,,,
 thq,Deva,,,,

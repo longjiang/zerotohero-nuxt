@@ -13,6 +13,19 @@
             Language Content Audit for
             <span class="text-primary">www.zerotohero.ca</span>
           </h3>
+
+          <b-input-group class="mt-5 mb-3 input-group-ghost-dark">
+            <b-form-input
+              v-model="keyword"
+              @compositionend.prevent.stop="() => false"
+              placeholder="Filter by language or country"
+            />
+            <b-input-group-append>
+              <b-button variant="gray">
+                <i class="fas fa-filter"></i>
+              </b-button>
+            </b-input-group-append>
+          </b-input-group>
           <client-only>
             <table class="table mt-5" v-if="analytics">
               <thead class="table-header">
@@ -31,7 +44,7 @@
               </thead>
               <tbody class="table-body">
                 <tr
-                  v-for="(row, index) in analytics.slice(0, numRowsVisible)"
+                  v-for="(row, index) in filteredRows.slice(0, numRowsVisible)"
                   :key="`analytics-row-${index}`"
                 >
                   <td class="text-center">
@@ -130,6 +143,7 @@ export default {
     return {
       analytics: undefined,
       numRowsVisible: 10,
+      keyword: undefined,
     };
   },
   computed: {
@@ -144,6 +158,29 @@ export default {
     $adminMode() {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
+    },
+    filteredRows() {
+      let rows = this.analytics;
+      rows = rows.filter((row) => {
+        if (this.keyword) {
+          let l = row.l2;
+          let keyword = this.keyword.toLowerCase();
+          if (l["iso639-1"].includes(keyword)) return true;
+          if (l["iso639-3"].includes(keyword)) return true;
+          if (l["glottologId"].includes(keyword)) return true;
+          if (l["glottologFamilyId"].includes(keyword)) return true;
+          if (l["glottologParentId"].includes(keyword)) return true;
+          if (l.name.toLowerCase().includes(keyword)) return true;
+          if (l.logoDesc.toLowerCase().includes(keyword)) return true;
+          let countries = l.country.filter((c) =>
+            c.name.toLowerCase().includes(keyword)
+          );
+          if (countries.length > 0) return true;
+          return false;
+        }
+        return true;
+      });
+      return rows;
     },
   },
   async mounted() {
@@ -172,7 +209,7 @@ export default {
         };
         analytics.push(data);
       }
-      this.analytics = analytics;
+      this.analytics = analytics.sort((a, b) => b.l2.speakers - a.l2.speakers);
       this.loadData();
     }
   },
@@ -189,14 +226,16 @@ export default {
       }
     },
     async loadDataForRowKey(row, key, forceRefresh) {
+      let config = {};
+      if (forceRefresh)
+        config.headers = {
+          "Cache-Control": "no-cache",
+        };
       if (["Music", "Movies", "News"].includes(key)) {
         let collection = "News" === key ? "talk" : "tv_show";
         let res = await axios.get(
-          `${Config.wiki}items/youtube_videos?filter[l2][eq]=${
-            row.l2.id
-          }&filter[${collection}.title][eq]=${key}&limit=1&meta=filter_count&timestamp=${
-            forceRefresh ? Date.now() : 0
-          }`
+          `${Config.wiki}items/youtube_videos?filter[l2][eq]=${row.l2.id}&filter[${collection}.title][eq]=${key}&limit=1&meta=filter_count`,
+          config
         );
         if (res && res.data) {
           if (res.data.data[0])
@@ -205,11 +244,8 @@ export default {
         }
       } else {
         let res = await axios.get(
-          `${Config.wiki}items/${key}?filter[l2][eq]=${
-            row.l2.id
-          }&filter[title][nin]=Movies,Music,News&limit=1&meta=filter_count&timestamp=${
-            forceRefresh ? Date.now() : 0
-          }`
+          `${Config.wiki}items/${key}?filter[l2][eq]=${row.l2.id}&filter[title][nin]=Movies,Music,News&limit=1&meta=filter_count`,
+          config
         );
         if (res && res.data) {
           Vue.set(row, key, res.data.meta.filter_count);
@@ -217,8 +253,8 @@ export default {
       }
     },
     async loadData() {
-      if (this.analytics) {
-        let visibleRows = this.analytics.slice(0, this.numRowsVisible);
+      if (this.filteredRows) {
+        let visibleRows = this.filteredRows.slice(0, this.numRowsVisible);
         for (let row of visibleRows) {
           for (let key of [
             "youtube_videos",
