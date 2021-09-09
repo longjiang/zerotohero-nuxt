@@ -229,7 +229,7 @@ export default {
       let config = {};
       if (forceRefresh)
         config.headers = {
-          "Cache-Control": "no-cache",
+          // "Cache-Control": "no-cache", // Can't set CORS headers in directus config for some reason
         };
       if (["Music", "Movies", "News"].includes(key)) {
         let collection = "News" === key ? "talk" : "tv_show";
