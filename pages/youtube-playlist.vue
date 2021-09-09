@@ -15,7 +15,7 @@
             </Annotate>
           </h3>
           <p v-if="totalResults" class="text-center">
-            ({{ totalResults }} Videos)
+            {{ totalResults }} Videos · {{ shownResults }} Shown
           </p>
           <h3 class="text-center" v-else>Playlist: {{ playlist_id }}</h3>
           <div class="text-center mt-4 mb-4">
@@ -25,6 +25,20 @@
             >
               <i class="fa fa-sync-alt mr-1"></i>
               Force Refresh
+            </b-button>
+            <b-button
+              class="btn-small btn-secondary d-inline-block"
+              v-if="$adminMode"
+              @click="load500"
+            >
+              Load 500
+            </b-button>
+            <b-button
+              class="btn-small btn-secondary d-inline-block"
+              v-if="$adminMode"
+              @click="clearVideos"
+            >
+              Clear Videos
             </b-button>
             <b-button
               class="btn-small btn-secondary d-inline-block"
@@ -48,7 +62,6 @@
             :showProgress="false"
             ref="youtubeVideoList"
           />
-          <div v-if="!entire" v-observe-visibility="visibilityChanged"></div>
           <div v-if="noMoreVideos" class="text-center mt-4">
             <h6>No more videos.</h6>
             <p>{{ videos.length }} videos loaded.</p>
@@ -62,6 +75,7 @@
 <script>
 import YouTubeVideoList from "@/components/YouTubeVideoList";
 import YouTube from "@/lib/youtube";
+import Helper from "@/lib/helper";
 
 export default {
   components: {
@@ -82,6 +96,7 @@ export default {
       checkShows: false,
       nextPageToken: undefined,
       entire: false,
+      shownResults: 0,
       totalResults: undefined,
       forceRefresh: false,
       noMoreVideos: false,
@@ -139,6 +154,7 @@ export default {
         this.videos = videos;
       }
       this.totalResults = totalResults;
+      this.shownResults = totalResults;
     },
     async loadPlaylistPage({ pageToken } = {}) {
       this.noMoreVideos = false;
@@ -156,9 +172,19 @@ export default {
         }
         this.nextPageToken = nextPageToken;
         this.totalResults = totalResults;
+        this.shownResults = this.shownResults + videos.length
       } else {
         this.noMoreVideos = true;
       }
+    },
+    async load500() {
+      for (let i = 0; i < 10; i++) {
+        await Helper.timeout(500);
+        this.visibilityChanged(true);
+      }
+    },
+    clearVideos() {
+      this.videos = []
     },
     async checkShowsFunc(videos) {
       if (this.checkShows)
