@@ -121,14 +121,14 @@ export default {
     },
   },
   methods: {
-    load() {
+    async load() {
       if (this.entire) {
         this.videos = [];
-        this.loadEntirePlaylist();
+        await this.loadEntirePlaylist();
       } else {
         this.videos = [];
         this.nextPageToken = undefined;
-        this.loadPlaylistPage();
+        await this.loadPlaylistPage();
       }
     },
     visibilityChanged(isVisible) {
