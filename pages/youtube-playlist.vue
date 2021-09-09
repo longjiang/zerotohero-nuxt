@@ -42,7 +42,12 @@
             </b-button>
             <b-button
               class="btn-small btn-secondary d-inline-block"
-              v-if="$adminMode && entire === false && totalResults > 50 && totalResults <= 500"
+              v-if="
+                $adminMode &&
+                entire === false &&
+                totalResults > 50 &&
+                totalResults <= 500
+              "
               @click="entire = true"
             >
               Load Entire List
@@ -151,7 +156,7 @@ export default {
       let videos = playlistItems;
       if (videos && videos.length > 0) {
         videos = await this.checkShowsFunc(videos);
-        this.videos = videos;
+        this.videos = Helper.uniqueByValue(videos, "youtube_id");
       }
       this.totalResults = totalResults;
       this.shownResults = totalResults;
@@ -168,11 +173,14 @@ export default {
         let videos = playlistItems;
         if (videos && videos.length > 0) {
           videos = await this.checkShowsFunc(videos);
-          this.videos = this.videos.concat(videos);
+          this.videos = Helper.uniqueByValue(
+            this.videos.concat(videos),
+            "youtube_id"
+          );
         }
         this.nextPageToken = nextPageToken;
         this.totalResults = totalResults;
-        this.shownResults = this.shownResults + videos.length
+        this.shownResults = this.shownResults + videos.length;
       } else {
         this.noMoreVideos = true;
       }
@@ -184,7 +192,7 @@ export default {
       }
     },
     clearVideos() {
-      this.videos = []
+      this.videos = [];
     },
     async checkShowsFunc(videos) {
       if (this.checkShows)
