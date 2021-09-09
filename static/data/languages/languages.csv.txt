@@ -3461,7 +3461,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 3460,Lapuyan Subanun,lapu1236,aust1307,nucl1726,language,7.53449,123.13,laa,PH,,I,L,,,
 3461,Linear A,,,,,,,lab,,,I,A,,,
 3462,Lacandon,laca1243,maya1287,yuca1253,language,17.02093,-91.42348,lac,MX,,I,L,,,
-3463,Ladino,ladi1251,indo1319,sout3200,language,41.205,28.6632,lad,GR TR,,I,L,120000,,
+3463,Ladino,ladi1251,indo1319,sout3200,language,41.205,28.6632,lad,GR TR,,I,L,120000,lad,"Elias Canetti (1905 – 1994), a German-language author born in Ruse, Bulgaria"
 3464,Pattani,patt1248,sino1245,laha1249,language,32.6963,76.5966,lae,IN,,I,L,,,
 3465,Lafofa,lafo1243,,,language,10.3357,30.7331,laf,SD,,I,L,,,
 3466,Langi,lang1320,atla1278,mbug1243,language,-4.71413,35.9517,lag,TZ,,I,L,,,

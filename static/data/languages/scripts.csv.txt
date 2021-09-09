@@ -435,6 +435,7 @@ ky,Latn,,,,
 kyu,Kali,,,,
 la,Latn,,,,
 lab,Lina,N,O,N,
+lad,Latn,,,,
 lad,Hebr,,,,rtl
 lag,Latn,,,,
 lah,Arab,,,N,rtl
