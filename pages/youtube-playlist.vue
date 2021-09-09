@@ -15,7 +15,7 @@
             </Annotate>
           </h3>
           <p v-if="totalResults" class="text-center">
-            {{ totalResults }} Videos · {{ shownResults }} Shown
+            {{ shownResults }} of {{ totalResults }} videos shown
           </p>
           <h3 class="text-center" v-else>Playlist: {{ playlist_id }}</h3>
           <div class="text-center mt-4 mb-4">
@@ -28,21 +28,21 @@
             </b-button>
             <b-button
               class="btn-small btn-secondary d-inline-block"
-              v-if="$adminMode"
+              v-if="$adminMode && totalResults > 500"
               @click="load500"
             >
               Load 500
             </b-button>
             <b-button
               class="btn-small btn-secondary d-inline-block"
-              v-if="$adminMode"
+              v-if="$adminMode && totalResults > 500"
               @click="clearVideos"
             >
               Clear Videos
             </b-button>
             <b-button
               class="btn-small btn-secondary d-inline-block"
-              v-if="$adminMode && entire === false"
+              v-if="$adminMode && entire === false && totalResults > 50 && totalResults <= 500"
               @click="entire = true"
             >
               Load Entire List

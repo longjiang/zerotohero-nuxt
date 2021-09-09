@@ -345,7 +345,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 344,Angaité,anga1316,leng1261,east2852,language,-22.85,-58.45,aqt,PY,,I,L,,,
 345,Akuntsu,akun1241,tupi1275,akun1243,language,-12.8322,-60.9716,aqz,BR,,I,L,,,
 346,Arabic,arab1395,afro1255,arab1394,family,24,54,ara,AE BH DJ DZ EG EH ER GM IL IQ JO KM KW LB LY MA MR OM PS QA SA SD SO SY TD TN YE,ar,M,L,350000000,ar,"Ibn al-Haytham (c. 965 – c. 1040), a Muslim Arab mathematician, astronomer, and physicist of the Islamic Golden Age"
-347,Standard Arabic,stan1318,afro1255,arab1395,language,27.9625,43.8525,arb,AE BH DJ DZ EG ER IL IQ JO KM KW LB LY MA OM PS QA SA SD SO SY TD TN TZ YE,,I,L,280000000,,
+347,Standard Arabic,stan1318,afro1255,arab1395,language,27.9625,43.8525,arb,AE BH DJ DZ EG ER IL IQ JO KM KW LB LY MA OM PS QA SA SD SO SY TD TN TZ YE,,I,L,280000000,arb,"Taha Hussein (1889–1973), one of the most influential 20th-century Egyptian writers and intellectuals"
 348,Imperial Aramaic (700-300 BCE),impe1235,afro1255,impe1236,language,33.905,42.185,arc,IQ,,I,A,,arc,"Eliezer Ben‑Yehuda (1858 – 1922), a Hebrew lexicographer and newspaper editor"
 349,Arabana,arab1267,pama1250,arab1266,language,-28.705,135.449,ard,AU,,I,E,,,
 350,Western Arrarnta,west2441,pama1250,aran1263,language,-24.05052,133.24621,are,AU,,I,L,,,
