@@ -1,6 +1,6 @@
 <template>
   <div class="identical-languages" v-if="$l2.identicalLangs">
-    Additinoal content is available under:
+    Additional content is available under:
     <span
       v-for="(lang, index) of $l2.identicalLangs"
       :key="`identical-lang-${index}`"
