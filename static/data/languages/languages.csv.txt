@@ -5909,7 +5909,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 5908,Simbari,simb1255,anga1289,baru1271,language,-7.02259,145.603,smb,PG,,I,L,,,
 5909,Som,somm1240,nucl1709,saka1297,language,-6.07366,146.651,smc,PG,,I,E,,,
 5910,Sama,sama1300,atla1278,mbun1247,language,-9.86931,13.8713,smd,AO,,I,L,,,
-5911,North Saami,nort2671,ural1272,cent2240,language,68.725,22.1113,sme,FI NO SE,se,I,L,25000,se,"Nils Vibe Stockfleth (1787 – 1866), a Norwegian cleric who was instrumental in the first development of the written form of the Northern Sami language"
+5911,Saami,nort2671,ural1272,cent2240,language,68.725,22.1113,sme,FI NO SE,se,I,L,25000,se,"Nils Vibe Stockfleth (1787 – 1866), a Norwegian cleric who was instrumental in the first development of the written form of the Northern Sami language"
 5912,Auwe,auwe1239,bord1247,nucl1773,language,-3.33662,141.254,smf,PG,,I,L,,,
 5913,Simbali,simb1259,bain1263,bain1263,language,-4.88618,151.957,smg,PG,,I,L,,,
 5914,Samei,same1240,sino1245,nasu1237,language,24.7859,99.9217,smh,CN,,I,L,,,
