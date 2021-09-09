@@ -31,14 +31,7 @@
               v-if="$adminMode && totalResults > 500"
               @click="load500"
             >
-              Load 500
-            </b-button>
-            <b-button
-              class="btn-small btn-secondary d-inline-block"
-              v-if="$adminMode && totalResults > 500"
-              @click="clearVideos"
-            >
-              Clear Videos
+              Load {{ shownResults >= 500 ? "another" : "" }} 500
             </b-button>
             <b-button
               class="btn-small btn-secondary d-inline-block"
@@ -107,8 +100,11 @@ export default {
       noMoreVideos: false,
     };
   },
-  mounted() {
-    this.load();
+  async mounted() {
+    await this.load();
+    if (this.totalResults && this.totalResults <= 500) {
+      this.entire = true;
+    }
   },
   computed: {
     $l1() {
@@ -180,12 +176,14 @@ export default {
         }
         this.nextPageToken = nextPageToken;
         this.totalResults = totalResults;
-        this.shownResults = this.shownResults + videos.length;
+        this.shownResults = Math.min(this.shownResults + videos.length, totalResults);
       } else {
         this.noMoreVideos = true;
       }
     },
     async load500() {
+      this.clearVideos()
+      if (this.shownResults < 51) this.shownResults = 0
       for (let i = 0; i < 10; i++) {
         await Helper.timeout(500);
         this.visibilityChanged(true);
