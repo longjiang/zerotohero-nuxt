@@ -1315,7 +1315,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 1314,Emberá-Chamí,embe1262,choc1280,uppe1440,language,4.8791,-76.0749,cmi,CO,,I,L,,,
 1315,Campalagian,camp1262,aust1307,bugi1245,language,-4.016667,119.623611,cml,ID,,I,L,,,
 1316,Michigamea,,,,,,,cmm,,,I,E,,,
-1317,Mandarin Chinese,mand1415,sino1245,mand1471,language,40.0209,116.228,cmn,CN KP LA MM MN RU TW VN,,I,L,920000000,,
+1317,Mandarin Chinese,mand1415,sino1245,mand1471,language,40.0209,116.228,cmn,CN KP LA MM MN RU TW VN,,I,L,920000000,cmn,"Ba Jin (1904–2005), a Chinese writer and author who also wrote three original works in Esperanto"
 1318,Central Mnong,cent1992,aust1305,sout2691,language,12.6313,107.301,cmo,KH VN,,I,L,,,
 1319,Mro Chin,mroc1235,sino1245,khom1240,language,19.71,93.995,cmr,MM,,I,L,,,
 1320,Messapic,mess1244,indo1319,uncl1527,language,40.538334,17.860344,cms,IT,,I,A,,,
