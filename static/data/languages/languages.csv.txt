@@ -1989,7 +1989,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 1988,Gamkonora,gamk1238,nort2923,nucl1759,language,1.34308,127.506,gak,ID,,I,L,,,
 1989,Galoli-Talur,galo1243,aust1307,nort3194,language,-8.61074,125.959,gal,ID TL,,I,L,,,
 1990,Kandawo,kand1303,nucl1709,kand1306,language,-5.73674,144.966,gam,PG,,I,L,,,
-1991,Gan Chinese,ganc1239,sino1245,midd1354,language,27.9896,115.166,gan,CN,,I,L,55000000,,
+1991,Gan Chinese,ganc1239,sino1245,midd1354,language,27.9896,115.166,gan,CN,,I,L,55000000,gan,"Rao Pingru (1922–2020), a Chinese comic book author who wrote the autobiographical love memoir ‘Our Story’"
 1992,Gants,gant1244,nucl1709,east2767,language,-5.28113,144.771,gao,PG,,I,L,,,
 1993,Gal,gall1278,nucl1709,garu1247,language,-5.16351,145.623,gap,PG,,I,L,,,
 1994,Gata',gata1239,aust1305,mund1335,language,18.6076,82.984,gaq,IN,,I,L,,,
@@ -5046,7 +5046,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 5045,Oring,orin1239,atla1278,kori1259,language,6.68753,8.12005,org,NG,,I,L,,,
 5046,Oroqen,oroq1238,tung1282,west2427,language,50.6319,125.017,orh,CN RU,,I,L,1200,,
 5047,Odia,oriy1255,,,,20.27,85.82,ori,IN,or,M,L,35000000,or,"Madhusudan Rao (1853 – 1912), an Odia poet and writer from India"
-5048,Oromo,nucl1736,afro1255,nucl1701,family,8,38,orm,ET KE,om,M,L,38068600,,
+5048,Oromo,nucl1736,afro1255,nucl1701,family,8,38,orm,ET KE,om,M,L,38068600,om,"Jawar Mohammed (born 1986), an Ethiopian political analyst and activist"
 5049,Orang Kanaq,oran1258,aust1307,sing1270,language,1.88296,104.008,orn,MY,,I,L,,,
 5050,Orokolo,orok1267,nucl1580,west2573,language,-7.81309,145.34,oro,PG,,I,L,,,
 5051,Oruma,orum1241,ijoi1239,inla1259,language,4.9377,6.38295,orr,NG,,I,L,,,
