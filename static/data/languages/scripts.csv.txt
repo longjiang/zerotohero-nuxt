@@ -622,6 +622,7 @@ pcm,Latn,,,,
 pdc,Latn,,,,
 pdt,Latn,,,,
 peo,Xpeo,N,O,N,
+pes,Arab,,,,rtl
 pfl,Latn,,,,
 phn,Phnx,N,O,N,rtl
 pi,Deva,,O,,
@@ -637,6 +638,7 @@ pon,Latn,,,,
 prd,Arab,,,N,rtl
 prg,Latn,,,,
 pro,Latn,,,,
+prs,Arab,,,,rtl
 ps,Arab,,,,rtl
 pt,Latn,,,,
 puu,Latn,,,,
