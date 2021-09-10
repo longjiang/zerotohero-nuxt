@@ -3809,7 +3809,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 3808,Mafa,mafa1239,afro1255,mata1311,language,10.943,13.8181,maf,CM NG,,I,L,,,
 3809,Magahi,maga1260,indo1319,mait1254,language,25.0915,85.3335,mag,IN,,I,L,10821000,,
 3810,Marshallese,mars1254,aust1307,west2844,language,8.72,167.73,mah,MH,mh,I,L,55000,mh,
-3811,Maithili,mait1250,indo1319,mait1254,language,26.3817,86.2211,mai,IN NP,,I,L,34700000,,
+3811,Maithili,mait1250,indo1319,mait1254,language,26.3817,86.2211,mai,IN NP,,I,L,34700000,mai,"Surendra Jha ‘Suman’ (1910–2002), a Maithili poet, writer, publisher, editor and elected member of legislative assembly and parliament"
 3812,Jalapa De Díaz Mazatec,jala1237,otom1299,maza1308,language,18.0803,-96.4977,maj,MX,,I,L,,,
 3813,Makasar,maka1311,aust1307,nucl1727,language,-5.65551,119.838,mak,ID,,I,L,,,
 3814,Malayalam,mala1464,drav1251,mala1541,language,9.59208,76.7651,mal,IN,ml,I,L,35000000,ml,"Thilakan (1935 – 2012), a veteran Indian film and stage actor who appeared in over 200 Malayalam films"
