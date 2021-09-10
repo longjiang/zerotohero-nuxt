@@ -7724,7 +7724,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 7723,Minz Zhuang,minz1236,taik1256,deba1238,language,23.33,105.5,zgm,CN,,I,L,,,
 7724,Guibian Zhuang,guib1244,taik1256,nort3189,language,24.3,106.2,zgn,CN,,I,L,,,
 7725,Magori,mago1248,aust1307,mago1247,language,-10.2321,149.26,zgr,PG,,I,L,,,
-7726,Zhuang,nort3180,taik1256,nort3326,family,35,105,zha,CN,za,M,L,16000000,za,"Huang Xianfan (1899 – 1982), a Zhuang Chinese historian, ethnologist and educator"
+7726,Zhuang,nort3180,taik1256,nort3326,family,24.31,108.06,zha,CN,za,M,L,16000000,za,"Huang Xianfan (1899 – 1982), a Zhuang Chinese historian, ethnologist and educator"
 7727,Zhaba,zhab1238,sino1245,qian1263,language,30.7416,100.983,zhb,CN,,I,L,,,
 7728,Dai Zhuang,daiz1235,taik1256,wenm1239,language,23.4,104.4,zhd,CN VN,,I,L,,,
 7729,Zhire,zhir1238,atla1278,hyam1246,language,9.55,7.93,zhi,NG,,I,L,,,
