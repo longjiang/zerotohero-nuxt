@@ -131,9 +131,9 @@ export default {
         await this.loadPlaylistPage();
       }
     },
-    visibilityChanged(isVisible) {
+    async visibilityChanged(isVisible) {
       if (this.nextPageToken && isVisible && !this.entire) {
-        this.loadPlaylistPage({ pageToken: this.nextPageToken });
+        await this.loadPlaylistPage({ pageToken: this.nextPageToken });
       }
     },
     enableForceRefresh() {
@@ -176,17 +176,18 @@ export default {
         }
         this.nextPageToken = nextPageToken;
         this.totalResults = totalResults;
-        this.shownResults = Math.min(this.shownResults + videos.length, totalResults);
+        this.shownResults = Math.min(
+          this.shownResults + videos.length,
+          totalResults
+        );
       } else {
         this.noMoreVideos = true;
       }
     },
     async load500() {
-      this.clearVideos()
-      if (this.shownResults < 51) this.shownResults = 0
-      for (let i = 0; i < 10; i++) {
-        await Helper.timeout(500);
-        this.visibilityChanged(true);
+      if (this.shownResults > 50) this.clearVideos();
+      for (let i = 0; i < (this.shownResults > 50 ? 10 : 9); i++) {
+        await this.visibilityChanged(true);
       }
     },
     clearVideos() {
