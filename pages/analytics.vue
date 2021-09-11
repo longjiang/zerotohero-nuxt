@@ -30,7 +30,8 @@
             <table class="table table-responsive mt-5" v-if="analytics">
               <thead class="table-header">
                 <tr>
-                  <th>Rank</th>
+                  <th @click="asc = !asc; sortBy = 'index'">Rank</th>
+                  <th @click="asc = !asc; sortBy = 'l2.code'">Code</th>
                   <th @click="asc = !asc; sortBy = 'l2.logo.length'">Icon</th>
                   <th @click="asc = !asc; sortBy = 'l2.speakers'">Language</th>
                   <th @click="asc = !asc; sortBy = 'uniquePageViews'">Views</th>
@@ -45,12 +46,15 @@
               </thead>
               <tbody class="table-body">
                 <tr
-                  v-for="(row, index) in filteredRows.slice(0, numRowsVisible)"
+                  v-for="(row, index) in filteredRows"
                   :key="`analytics-row-${index}`"
                 >
-                <td>
-                  {{ index + 1 }}
-                </td>
+                  <td>
+                    {{ row.index + 1 }}
+                  </td>
+                  <td>
+                    {{ row.l2.code }}
+                  </td>
                   <td class="text-center">
                     <router-link
                       :to="{
@@ -189,6 +193,7 @@ export default {
         }
         return true;
       });
+      rows = rows.slice(0, this.numRowsVisible)
       if (this.sortBy) {
         let order = this.asc ? -1 : 1
         rows = rows.sort((a, b) => {
@@ -226,7 +231,11 @@ export default {
         };
         analytics.push(data);
       }
-      this.analytics = analytics.sort((a, b) => b.l2.speakers - a.l2.speakers);
+      analytics = analytics.sort((a, b) => b.l2.speakers - a.l2.speakers);
+      for (let index in analytics) {
+        analytics[index].index = Number(index)
+      }
+      this.analytics = analytics
       this.loadData();
     }
   },
