@@ -27,19 +27,20 @@
             </b-input-group-append>
           </b-input-group>
           <client-only>
-            <table class="table mt-5" v-if="analytics">
+            <table class="table table-responsive mt-5" v-if="analytics">
               <thead class="table-header">
                 <tr>
-                  <th></th>
-                  <th>Language</th>
-                  <th>Views</th>
-                  <th>All Videos</th>
-                  <th>TV Shows</th>
-                  <th>Music</th>
-                  <th>Movies</th>
-                  <th>News</th>
-                  <th>Talks</th>
-                  <th>Phrasebooks</th>
+                  <th>Rank</th>
+                  <th @click="sortBy = 'l2.logo'">Icon</th>
+                  <th @click="sortBy = 'l2.speakers'">Language</th>
+                  <th @click="sortBy = 'uniquePageViews'">Views</th>
+                  <th @click="sortBy = 'youtube_videos'">All Videos</th>
+                  <th @click="sortBy = 'tv_shows'">TV Shows</th>
+                  <th @click="sortBy = 'Music'">Music</th>
+                  <th @click="sortBy = 'Movies'">Movies</th>
+                  <th @click="sortBy = 'News'">News</th>
+                  <th @click="sortBy = 'talks'">Talks</th>
+                  <th @click="sortBy = 'phrasebook'">Phrasebooks</th>
                 </tr>
               </thead>
               <tbody class="table-body">
@@ -47,6 +48,9 @@
                   v-for="(row, index) in filteredRows.slice(0, numRowsVisible)"
                   :key="`analytics-row-${index}`"
                 >
+                <td>
+                  {{ index + 1 }}
+                </td>
                   <td class="text-center">
                     <router-link
                       :to="{
@@ -58,14 +62,16 @@
                       }"
                     >
                       <img
+                        v-if="row.l2.logo"
                         :src="`/img/logo-square/${row.l2.code}.jpeg`"
                         :alt="row.l2.name"
                         :title="row.l2.logoDesc"
                         class="lang-logo"
+                        data-not-lazy
                       />
                     </router-link>
                   </td>
-                  <td>
+                  <td style="min-width: 18rem">
                     <LazyLanguageList :singleColumn="true" :langs="[row.l2]" />
                   </td>
                   <td>
@@ -142,8 +148,10 @@ export default {
   data() {
     return {
       analytics: undefined,
-      numRowsVisible: 10,
+      numRowsVisible: 50,
+      perPage: 50,
       keyword: undefined,
+      sortBy: undefined
     };
   },
   computed: {
@@ -161,6 +169,7 @@ export default {
     },
     filteredRows() {
       let rows = this.analytics;
+      if (typeof rows === 'undefined') return
       rows = rows.filter((row) => {
         if (this.keyword) {
           let l = row.l2;
@@ -180,6 +189,9 @@ export default {
         }
         return true;
       });
+      if (this.sortBy) {
+        rows = rows.sort((a, b) => a[this.sortBy] && b[this.sortBy] ? b[this.sortBy] - a[this.sortBy] : 0)
+      }
       return rows;
     },
   },
@@ -222,7 +234,7 @@ export default {
     },
     infiniteScroll(isVisible) {
       if (isVisible) {
-        this.numRowsVisible = this.numRowsVisible + 10;
+        this.numRowsVisible = this.numRowsVisible + this.perPage;
       }
     },
     async loadDataForRowKey(row, key, forceRefresh) {
@@ -289,6 +301,7 @@ export default {
   background: #ccc;
   th {
     white-space: nowrap;
+    cursor: pointer;
   }
 }
 .table-body {
@@ -301,6 +314,7 @@ export default {
       border-radius: 100%;
     }
     &.data-cell {
+      white-space: nowrap;
       cursor: pointer;
       &:hover {
         background-color: #efefef;
