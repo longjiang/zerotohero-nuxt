@@ -71,12 +71,12 @@ export default {
   async mounted() {
     await this.$getDictionary();
     this.canSpeak =
-      this.mp3 ||
+      (this.mp3 && !this.mp3.endsWith('.flac')) ||
       (this.text && this.$languages.hasFeature(this.$l1 || this.english, this.$l2, "speech"));
   },
   methods: {
     // https://www.npmjs.com/package/ogv
-    f(url) {
+    playWithOGV(url) {
       // Create a new player with the constructor
       var ogv = require("ogv");
       ogv.OGVLoader.base = "/vendor/ogv";
@@ -88,9 +88,9 @@ export default {
       player.play();
     },
     speak() {
-      if (this.mp3) {
+      if (this.mp3 && !this.mp3.endsWith('.flac')) {
         let url = this.wiktionary ? commons(`File:${this.mp3}`) : this.mp3;
-        this.f(url);
+        this.playWithOGV(url);
       } else if (this.text) {
         if (this.$languages.hasFeature(this.$l1, this.$l2, "speech")) {
           Helper.speak(this.text, this.$l2, 0.75);
