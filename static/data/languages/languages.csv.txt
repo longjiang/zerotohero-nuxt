@@ -3477,7 +3477,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 3476,Pubiao-Qabiao,qabi1235,taik1256,east2365,language,23.2384,104.812,laq,CN VN,,I,L,,,
 3477,Larteh,lart1238,atla1278,hill1256,language,5.9367,-0.07822,lar,GH,,I,L,,,
 3478,Lama (Togo),lama1275,atla1278,kabi1265,language,8.66954,0.833293,las,BJ GH TG,,I,L,,,
-3479,Latin,lati1261,indo1319,impe1234,language,41.9026,12.4502,lat,VA,la,I,A,,la,"Ovid (43 BC – 17/18 AD), a Roman poet who lived during the reign of Augustus"
+3479,Latin,lati1261,indo1319,impe1234,language,41.9026,12.8,lat,VA,la,I,A,,la,"Ovid (43 BC – 17/18 AD), a Roman poet who lived during the reign of Augustus"
 3480,Laba,laba1241,book1242,book1242,language,1.66675,127.583,lau,ID,,I,L,,,
 3481,Latvian,latv1249,indo1319,east2280,language,56.826108,24.309118,lav,BY EE LT LV RU,lv,M,L,1750000,lv,"Aspazija (1865 – 1943), a Latvian poet and playwright"
 3482,Lauje,lauj1238,aust1307,nort2897,language,0.50708,120.262,law,ID,,I,L,,,
@@ -5178,7 +5178,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 5177,Old Persian (ca. 600-400 B.C.),oldp1254,indo1319,sout3157,language,32.0,54.0,peo,IR,,I,H,,,
 5178,Kánchá,kunj1246,more1255,wara1293,language,-8.92289,141.424,pep,PG,,I,L,,,
 5179,Southern Pomo,sout2984,pomo1273,sout2983,language,38.7643,-122.545,peq,US,,I,L,,,
-5180,Western Farsi,west2369,indo1319,fars1255,language,32.9,53.3,pes,AF AZ IQ IR TM TR,,I,L,33000000,,
+5180,Western Farsi,west2369,indo1319,fars1255,language,32.9,53.3,pes,AF AZ IQ IR TM TR,,I,L,33000000,pes,"Sadegh Hedayat (1903–1951), an Iranian writer, translator and intellectual, one of the earliest Iranian writers to adopt literary modernism in their career"
 5181,Pémono,pemo1245,cari1283,mapo1245,language,5.248,-66.082,pev,VE,,I,L,,,
 5182,Petats,peta1245,aust1307,buka1262,language,-5.34068,154.593,pex,PG,,I,L,,,
 5183,Petjo,petj1238,indo1319,glob1241,language,-6.16593,106.8,pey,ID,,I,L,,,
