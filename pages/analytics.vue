@@ -31,16 +31,16 @@
               <thead class="table-header">
                 <tr>
                   <th>Rank</th>
-                  <th @click="sortBy = 'l2.logo'">Icon</th>
-                  <th @click="sortBy = 'l2.speakers'">Language</th>
-                  <th @click="sortBy = 'uniquePageViews'">Views</th>
-                  <th @click="sortBy = 'youtube_videos'">All Videos</th>
-                  <th @click="sortBy = 'tv_shows'">TV Shows</th>
-                  <th @click="sortBy = 'Music'">Music</th>
-                  <th @click="sortBy = 'Movies'">Movies</th>
-                  <th @click="sortBy = 'News'">News</th>
-                  <th @click="sortBy = 'talks'">Talks</th>
-                  <th @click="sortBy = 'phrasebook'">Phrasebooks</th>
+                  <th @click="asc = !asc; sortBy = 'l2.logo.length'">Icon</th>
+                  <th @click="asc = !asc; sortBy = 'l2.speakers'">Language</th>
+                  <th @click="asc = !asc; sortBy = 'uniquePageViews'">Views</th>
+                  <th @click="asc = !asc; sortBy = 'youtube_videos'">All Videos</th>
+                  <th @click="asc = !asc; sortBy = 'tv_shows'">TV Shows</th>
+                  <th @click="asc = !asc; sortBy = 'Music'">Music</th>
+                  <th @click="asc = !asc; sortBy = 'Movies'">Movies</th>
+                  <th @click="asc = !asc; sortBy = 'News'">News</th>
+                  <th @click="asc = !asc; sortBy = 'talks'">Talks</th>
+                  <th @click="asc = !asc; sortBy = 'phrasebook'">Phrasebooks</th>
                 </tr>
               </thead>
               <tbody class="table-body">
@@ -67,7 +67,6 @@
                         :alt="row.l2.name"
                         :title="row.l2.logoDesc"
                         class="lang-logo"
-                        data-not-lazy
                       />
                     </router-link>
                   </td>
@@ -147,9 +146,10 @@ import Vue from "vue";
 export default {
   data() {
     return {
+      asc: false,
       analytics: undefined,
-      numRowsVisible: 50,
-      perPage: 50,
+      numRowsVisible: 10,
+      perPage: 10,
       keyword: undefined,
       sortBy: undefined
     };
@@ -190,7 +190,12 @@ export default {
         return true;
       });
       if (this.sortBy) {
-        rows = rows.sort((a, b) => a[this.sortBy] && b[this.sortBy] ? b[this.sortBy] - a[this.sortBy] : 0)
+        let order = this.asc ? -1 : 1
+        rows = rows.sort((a, b) => {
+          let aVal = eval(`a.${this.sortBy}`) || 0
+          let bVal = eval(`b.${this.sortBy}`) || 0
+          return (bVal - aVal) * order
+        })
       }
       return rows;
     },
