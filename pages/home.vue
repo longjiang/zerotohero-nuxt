@@ -56,7 +56,7 @@
               <FiftySixEthnic skin="dark" />
             </div>
           </div>
-          <div :class="{ 'pl-1 pr-1 pb-2': true }">
+          <div :class="{ 'pl-1 pr-1 pb-2': true }" v-if="$l2.identicalLangs">
             <div class="home-card">
               <LazyIdenticalLanguages
                 routeName="home"
