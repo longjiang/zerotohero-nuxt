@@ -148,8 +148,8 @@ export default {
     return {
       asc: false,
       analytics: undefined,
-      numRowsVisible: 10,
-      perPage: 10,
+      numRowsVisible: 50,
+      perPage: 50,
       keyword: undefined,
       sortBy: undefined
     };
