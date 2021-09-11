@@ -10,7 +10,6 @@
           :langs="group.languages"
           :singleColumn="true"
           :skin="skin"
-          :showSpeakers="false"
         />
       </div>
       <div class="ethnic-group-simplified">

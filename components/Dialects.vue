@@ -6,7 +6,7 @@
       class="dialect-item"
     >
       <div class="dialect-languages">
-        <LanguageList :langs="dialect.languages" :singleColumn="true" :skin="skin" :showSpeakers="false" />
+        <LanguageList :langs="dialect.languages" :singleColumn="true" :skin="skin" />
       </div>
       <div class="dialect-simplified">
         <Annotate :buttons="false">
