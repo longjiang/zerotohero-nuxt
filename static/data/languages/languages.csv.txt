@@ -5933,7 +5933,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 5932,Shona,shon1251,atla1278,cent2310,language,-17.20849,29.75725,sna,BW ZA ZM ZW,sn,I,L,15000000,,
 5933,Sebuyau,sebu1243,aust1307,nort3387,language,1.42104,110.48,snb,MY,,I,L,,,
 5934,Sinaugoro,sina1266,aust1307,sina1272,language,-9.79791,147.861,snc,PG,,I,L,,,
-5935,Sindhi,sind1272,indo1319,sind1279,language,26.0,69.0,snd,IN PK,sd,I,L,32000000,,
+5935,Sindhi,sind1272,indo1319,sind1279,language,26.0,69.0,snd,IN PK,sd,I,L,32000000,sd,"Hotchand Molchand Gurbakhshani (1884-1947), a leading academician, an educationist and scholar"
 5936,Bau-Jagoi Bidayuh,baub1235,aust1307,bida1237,language,1.54467,109.985,sne,ID MY,,I,L,,,
 5937,Noon,noon1242,atla1278,noon1244,language,14.792,-16.9205,snf,SN,,I,L,,,
 5938,Sanga (Democratic Republic of Congo),sang1331,atla1278,kaon1242,language,-10.0236,26.8462,sng,CD,,I,L,,,
@@ -6116,7 +6116,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 6115,Swedish,swed1254,indo1319,east2781,language,59.800634,17.389526,swe,AX DK FI NO SE,sv,I,L,10000000,sv,"Anna Greta Wide (1920 – 1965), a Swedish poet"
 6116,Sere,sere1264,atla1278,tagb1264,language,4.71127,27.4688,swf,CD CF,,I,L,,,
 6117,Swabian,swab1242,indo1319,nort3310,language,48.386796,9.987111,swg,DE,,I,L,,,
-6118,Swahili,swah1253,atla1278,momb1256,language,-8.25605,37.624,swh,BI KE MZ RW SO TZ UG,,I,L,30000000,,
+6118,Coastal Swahili,swah1253,atla1278,momb1256,language,-8.25605,37.624,swh,BI KE MZ RW SO TZ UG,,I,L,30000000,swh,"Haji Gora Haji (1933 - 2021), a Swahili-language poet, lyricist, and writer from the Zanzibar archipelago"
 6119,Sui,suii1243,taik1256,maon1239,language,24.0488,106.563,swi,CN VN,,I,L,300000,,
 6120,Sira,sira1266,atla1278,sira1270,language,-1.78084,10.4635,swj,GA,,I,L,,,
 6121,Malawi Sena,mala1475,atla1278,sena1270,language,-16.6183,34.991,swk,MW MZ,,I,L,,,

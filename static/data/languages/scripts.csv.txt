@@ -704,7 +704,7 @@ sck,Deva,,,,
 scn,Latn,,,,
 sco,Latn,,,,
 scs,Latn,,,,
-sd,Arab,,,N,rtl
+sd,Arab,,,,rtl
 sd,Deva,,,,
 sd,Khoj,N,,N,
 sd,Sind,N,,N,
