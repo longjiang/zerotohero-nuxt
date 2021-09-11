@@ -30,18 +30,102 @@
             <table class="table table-responsive mt-5" v-if="analytics">
               <thead class="table-header">
                 <tr>
-                  <th @click="asc = !asc; sortBy = 'index'">Rank</th>
-                  <th @click="asc = !asc; sortBy = 'l2.code'">Code</th>
-                  <th @click="asc = !asc; sortBy = 'l2.logo.length'">Icon</th>
-                  <th @click="asc = !asc; sortBy = 'l2.speakers'">Language</th>
-                  <th @click="asc = !asc; sortBy = 'uniquePageViews'">Views</th>
-                  <th @click="asc = !asc; sortBy = 'youtube_videos'">All Videos</th>
-                  <th @click="asc = !asc; sortBy = 'tv_shows'">TV Shows</th>
-                  <th @click="asc = !asc; sortBy = 'Music'">Music</th>
-                  <th @click="asc = !asc; sortBy = 'Movies'">Movies</th>
-                  <th @click="asc = !asc; sortBy = 'News'">News</th>
-                  <th @click="asc = !asc; sortBy = 'talks'">Talks</th>
-                  <th @click="asc = !asc; sortBy = 'phrasebook'">Phrasebooks</th>
+                  <th
+                    @click="
+                      asc = !asc;
+                      sortBy = 'index';
+                    "
+                  >
+                    Rank
+                  </th>
+                  <th
+                    @click="
+                      asc = !asc;
+                      sortBy = 'l2.code';
+                    "
+                  >
+                    Code
+                  </th>
+                  <th
+                    @click="
+                      asc = !asc;
+                      sortBy = 'l2.logo.length';
+                    "
+                  >
+                    Icon
+                  </th>
+                  <th
+                    @click="
+                      asc = !asc;
+                      sortBy = 'l2.speakers';
+                    "
+                  >
+                    Language
+                  </th>
+                  <th
+                    @click="
+                      asc = !asc;
+                      sortBy = 'uniquePageViews';
+                    "
+                  >
+                    Views
+                  </th>
+                  <th
+                    @click="
+                      asc = !asc;
+                      sortBy = 'youtube_videos';
+                    "
+                  >
+                    All Videos
+                  </th>
+                  <th
+                    @click="
+                      asc = !asc;
+                      sortBy = 'tv_shows';
+                    "
+                  >
+                    TV Shows
+                  </th>
+                  <th
+                    @click="
+                      asc = !asc;
+                      sortBy = 'Music';
+                    "
+                  >
+                    Music
+                  </th>
+                  <th
+                    @click="
+                      asc = !asc;
+                      sortBy = 'Movies';
+                    "
+                  >
+                    Movies
+                  </th>
+                  <th
+                    @click="
+                      asc = !asc;
+                      sortBy = 'News';
+                    "
+                  >
+                    News
+                  </th>
+                  <th
+                    @click="
+                      asc = !asc;
+                      sortBy = 'talks';
+                    "
+                  >
+                    Talks
+                  </th>
+                  <th
+                    @click="
+                      asc = !asc;
+                      sortBy = 'phrasebook';
+                    "
+                  >
+                    Phrasebooks
+                  </th>
                 </tr>
               </thead>
               <tbody class="table-body">
@@ -54,6 +138,12 @@
                   </td>
                   <td>
                     {{ row.l2.code }}
+                    <span
+                      v-if="row.l2.identicalLangs"
+                      class="identical-lang-codes"
+                    >
+                      {{ row.l2.identicalLangs.map((l) => l.code).join(", ") }}
+                    </span>
                   </td>
                   <td class="text-center">
                     <router-link
@@ -152,10 +242,10 @@ export default {
     return {
       asc: false,
       analytics: undefined,
-      numRowsVisible: 50,
-      perPage: 50,
+      numRowsVisible: 10,
+      perPage: 10,
       keyword: undefined,
-      sortBy: undefined
+      sortBy: undefined,
     };
   },
   computed: {
@@ -173,7 +263,7 @@ export default {
     },
     filteredRows() {
       let rows = this.analytics;
-      if (typeof rows === 'undefined') return
+      if (typeof rows === "undefined") return;
       rows = rows.filter((row) => {
         if (this.keyword) {
           let l = row.l2;
@@ -193,14 +283,14 @@ export default {
         }
         return true;
       });
-      rows = rows.slice(0, this.numRowsVisible)
+      rows = rows.slice(0, this.numRowsVisible);
       if (this.sortBy) {
-        let order = this.asc ? -1 : 1
+        let order = this.asc ? -1 : 1;
         rows = rows.sort((a, b) => {
-          let aVal = eval(`a.${this.sortBy}`) || 0
-          let bVal = eval(`b.${this.sortBy}`) || 0
-          return (bVal - aVal) * order
-        })
+          let aVal = eval(`a.${this.sortBy}`) || 0;
+          let bVal = eval(`b.${this.sortBy}`) || 0;
+          return (bVal - aVal) * order;
+        });
       }
       return rows;
     },
@@ -233,9 +323,9 @@ export default {
       }
       analytics = analytics.sort((a, b) => b.l2.speakers - a.l2.speakers);
       for (let index in analytics) {
-        analytics[index].index = Number(index)
+        analytics[index].index = Number(index);
       }
-      this.analytics = analytics
+      this.analytics = analytics;
       this.loadData();
     }
   },
@@ -321,6 +411,11 @@ export default {
 .table-body {
   td {
     vertical-align: middle;
+    .identical-lang-codes {
+      font-size: 0.8em;
+      color: #999;
+      display: block;
+    }
     .lang-logo {
       width: 3rem;
       height: 3rem;
