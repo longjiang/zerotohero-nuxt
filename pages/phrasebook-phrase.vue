@@ -335,18 +335,18 @@ export default {
     remove() {
       this.$store.dispatch("phrasebooks/removePhrase", {
         phrasebook: this.phrasebook,
-        phraseId: this.phraseId,
+        phrase: this.phraseObj,
       });
-      let nextPhraseId = Math.max(
+      let nextPhraseId = Math.min(
         this.phrasebook.phrases.length - 1,
-        Number(this.phraseId) + 1
+        Number(this.phraseId)
       );
       let nextPhrase = this.phrasebook.phrases[nextPhraseId];
       let route = {
         name: "phrasebook-phrase",
         params: {
           bookId: this.bookId,
-          phrasedId: nextPhraseId,
+          phraseId: String(nextPhrase.id),
           phrase: nextPhrase.phrase,
         },
       };
@@ -369,13 +369,13 @@ export default {
       if (this.bookId !== "saved") return;
       let savedPhrases = this.savedPhrases[this.$l2.code];
       let nextSavedPhrase = savedPhrases[Number(this.phraseId)];
-      let phrasedId = this.phraseId;
+      let phraseId = this.phraseId;
       if (nextSavedPhrase) {
         let route = {
           name: "phrasebook-phrase",
           params: {
             bookId: "saved",
-            phrasedId,
+            phraseId,
             phrase: nextSavedPhrase.phrase,
           },
         };
@@ -428,7 +428,7 @@ export default {
         phrasebook = phrasebooks.find((pb) => pb.id === Number(this.bookId));
         if (!phrasebook) return;
       }
-      return phrasebook
+      return phrasebook;
     },
     async getPhrase() {
       let phrase = this.phrasebook.phrases.find((p, index) => {

@@ -31,10 +31,14 @@ export const mutations = {
       }
     }
   },
-  REMOVE_PHRASE(state, { phrasebook, phraseId }) {
+  REMOVE_PHRASE(state, { phrasebook, phrase }) {
     if (phrasebook) {
-      phrasebook.phrases.splice(phraseId, 1)
-      console.log('REMOVED', phrasebook)
+      phrasebook.phrases = phrasebook.phrases.filter(p => p.id !== phrase.id || p.phrase !== phrase.phrase)
+      phrasebook.phrases = phrasebook.phrases.map((p, id) => {
+        p.id = id
+        return p
+      })
+      console.log('REMOVED', phrasebook.phrases.length)
     }
   }
 }
@@ -87,8 +91,8 @@ export const actions = {
     }
     return true
   },
-  async removePhrase(context, { phrasebook, phraseId }) {
-    context.commit('REMOVE_PHRASE', { phrasebook, phraseId })
+  async removePhrase(context, { phrasebook, phrase }) {
+    context.commit('REMOVE_PHRASE', { phrasebook, phrase })
     return true
 
   }
