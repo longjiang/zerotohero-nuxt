@@ -1,6 +1,6 @@
 <router>
   {
-    path: '/:l1/:l2/phrasebook/:bookId/:initId?',
+    path: '/:l1/:l2/phrasebook/:bookId',
     props: true
   }
 </router>
@@ -21,7 +21,6 @@
 </template>
 
 <script>
-import WordPhotos from "@/lib/word-photos";
 import Helper from "@/lib/helper";
 
 export default {
@@ -29,15 +28,13 @@ export default {
     bookId: {
       type: String,
     },
-    initId: {
-      default: undefined,
-    },
   },
   data() {
     return {
+      initId: undefined,
       phrasebook: undefined,
       images: [],
-      loading: false
+      loading: false,
     };
   },
   computed: {
@@ -79,6 +76,12 @@ export default {
     },
   },
   mounted() {
+    if (typeof window !== "undefined") {
+      if (window.location.hash) {
+        let initId = window.location.hash.replace("#", "");
+        if (initId) this.initId = initId;
+      }
+    }
     let phrasebook = this.getPhrasebookFromStore();
     if (phrasebook) {
       if (!phrasebook.phrases) {
@@ -104,7 +107,7 @@ export default {
           if (phrasebook && phrasebook.phrases) {
             this.phrasebook = phrasebook;
           }
-          this.loading = false
+          this.loading = false;
         }
       }
     });
@@ -115,7 +118,7 @@ export default {
   },
   methods: {
     loadPhrases() {
-      this.loading = true
+      this.loading = true;
       this.$store.dispatch("phrasebooks/loadPhrases", {
         l2: this.$l2,
         bookId: Number(this.bookId),

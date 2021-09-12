@@ -222,8 +222,8 @@ export default {
           name: "phrasebook",
           params: {
             bookId: String(this.phrasebook.id),
-            initId: Number(this.phraseId) + 1,
           },
+          hash: `#${Number(this.phraseId) + 1}`
         };
       }
       return route;
