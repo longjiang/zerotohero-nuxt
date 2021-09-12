@@ -68,7 +68,12 @@
                   </Annotate>
                 </div>
               </h2>
-              <p class="text-center mt-1" v-if="phraseObj">
+              <p
+                class="text-center mt-1"
+                v-if="phraseObj"
+                :contenteditable="$adminMode"
+                @blur="saveTranslation"
+              >
                 {{ phraseObj[$l1.code] }}
               </p>
               <div>
@@ -316,20 +321,7 @@ export default {
         }
         if (mutation.type === "phrasebooks/UPDATE_PHRASES") {
           this.getPhrase();
-          let nextPhraseId = Math.min(
-            this.phrasebook.phrases.length - 1,
-            Number(this.phraseId)
-          );
-          let nextPhrase = this.phrasebook.phrases[nextPhraseId];
-          let route = {
-            name: "phrasebook-phrase",
-            params: {
-              bookId: this.bookId,
-              phraseId: String(nextPhrase.id),
-              phrase: nextPhrase.phrase,
-            },
-          };
-          this.$router.push(route);
+          this.refreshPhrase();
         }
       }
     });
@@ -352,6 +344,20 @@ export default {
     next();
   },
   methods: {
+    async saveTranslation(e) {
+      let newText = e.target.innerText.trim();
+      if (this.phraseObj[this.$l1.code] !== newText) {
+        let phrase = Object.assign({}, this.phraseObj);
+        phrase[this.$l1.code] = newText;
+        this.updatePhrase(phrase);
+      }
+    },
+    updatePhrase(phrase) {
+      this.$store.dispatch("phrasebooks/updatePhrase", {
+        phrasebook: this.phrasebook,
+        phrase,
+      });
+    },
     remove() {
       this.$store.dispatch("phrasebooks/removePhrase", {
         phrasebook: this.phrasebook,
@@ -400,6 +406,22 @@ export default {
           name: "home",
         });
       }
+    },
+    refreshPhrase() {
+      let nextPhraseId = Math.min(
+        this.phrasebook.phrases.length - 1,
+        Number(this.phraseId)
+      );
+      let nextPhrase = this.phrasebook.phrases[nextPhraseId];
+      let route = {
+        name: "phrasebook-phrase",
+        params: {
+          bookId: this.bookId,
+          phraseId: String(nextPhrase.id),
+          phrase: nextPhrase.phrase,
+        },
+      };
+      this.$router.push(route);
     },
     savePhrasebookHistory(index) {
       if (!this.phrasebook) return;

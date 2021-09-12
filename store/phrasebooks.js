@@ -107,5 +107,25 @@ export const actions = {
     } catch (err) {
       // Direcuts bug
     }
+  },
+  async updatePhrase(context, { phrasebook, phrase }) {
+    let phrases = phrasebook.phrases
+    phrases = phrases.map(p => {
+      return p.id === phrase.id ? phrase : p
+    })
+    try {
+      let response = await axios.patch(
+        `${Config.wiki}items/phrasebook/${phrasebook.id}`,
+        { phrases: Papa.unparse(phrases) },
+        { contentType: "application/json" }
+      );
+      response = response.data;
+      if (response && response.data) {
+        context.commit('UPDATE_PHRASES', { phrasebook, phrases })    
+        return true
+      }
+    } catch (err) {
+      // Direcuts bug
+    }
   }
 }
