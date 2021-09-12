@@ -21,7 +21,10 @@
               v-if="phrasebook && phrasebook.phrases && phraseId && phraseObj"
             >
               <router-link class="link-unstyled mb-4 d-block" :to="homeRoute">
-                <h5>{{ phrasebook.title }}</h5>
+                <h5 class="phrasebook-title">
+                  <i class="fa fa-chevron-left mr-2"></i>
+                  {{ phrasebook.title }}
+                </h5>
               </router-link>
               <Paginator
                 class="mb-4"
@@ -479,7 +482,10 @@ export default {
       return text;
     },
     findCurrent(phraseObj) {
-      return phraseObj.id === Number(this.phraseId) && phraseObj.phrase === this.phrase;
+      return (
+        phraseObj.id === Number(this.phraseId) &&
+        phraseObj.phrase === this.phrase
+      );
     },
     url(phraseObj) {
       return `/${this.$l1.code}/${this.$l2.code}/phrasebook/${
@@ -573,6 +579,12 @@ export default {
         padding: 0.2rem 1rem;
       }
     }
+  }
+}
+
+.phrasebook-title {
+  &:hover {
+    color: #fd4f1c;
   }
 }
 
