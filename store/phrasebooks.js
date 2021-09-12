@@ -30,6 +30,12 @@ export const mutations = {
         phrasebook.phrases = phrases
       }
     }
+  },
+  REMOVE_PHRASE(state, { phrasebook, phraseId }) {
+    if (phrasebook) {
+      phrasebook.phrases.splice(phraseId, 1)
+      console.log('REMOVED', phrasebook)
+    }
   }
 }
 
@@ -81,4 +87,9 @@ export const actions = {
     }
     return true
   },
+  async removePhrase(context, { phrasebook, phraseId }) {
+    context.commit('REMOVE_PHRASE', { phrasebook, phraseId })
+    return true
+
+  }
 }

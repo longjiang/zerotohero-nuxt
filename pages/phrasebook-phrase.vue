@@ -16,7 +16,10 @@
               'col-sm-12 pt-4': !wide,
             }"
           >
-            <div class="text-center" v-if="phrasebook && phrasebook.phrases && phraseId && phraseObj">
+            <div
+              class="text-center"
+              v-if="phrasebook && phrasebook.phrases && phraseId && phraseObj"
+            >
               <router-link class="link-unstyled mb-4 d-block" :to="homeRoute">
                 <h5>{{ phrasebook.title }}</h5>
               </router-link>
@@ -28,7 +31,16 @@
                 ref="paginator"
               />
             </div>
-            <div>
+            <div style="position: relative">
+              <b-button
+                variant="unstyled"
+                size="md"
+                class="remove-btn"
+                @click="remove"
+                v-if="$adminMode"
+              >
+                <i class="fa fa-trash ml-1"></i>
+              </b-button>
               <div class="text-center" v-if="phraseObj && phraseObj.phrase">
                 <Saved
                   :item="phraseItem"
@@ -160,7 +172,6 @@
 
 <script>
 import Helper from "@/lib/helper";
-import WordPhotos from "@/lib/word-photos";
 import DateHelper from "@/lib/date-helper";
 import { ContainerQuery } from "vue-container-query";
 import { mapState } from "vuex";
@@ -271,6 +282,7 @@ export default {
         this.loadPhrases();
       } else {
         this.phrasebook = phrasebook;
+        this.getPhrase();
       }
     }
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
@@ -287,6 +299,7 @@ export default {
               this.loadPhrases();
             } else {
               this.phrasebook = phrasebook;
+              this.getPhrase();
             }
           }
         }
@@ -294,6 +307,7 @@ export default {
           let phrasebook = this.getPhrasebookFromStore();
           if (phrasebook && phrasebook.phrases) {
             this.phrasebook = phrasebook;
+            this.getPhrase();
           }
           this.loading = false;
         }
@@ -318,6 +332,26 @@ export default {
     next();
   },
   methods: {
+    remove() {
+      this.$store.dispatch("phrasebooks/removePhrase", {
+        phrasebook: this.phrasebook,
+        phraseId: this.phraseId,
+      });
+      let nextPhraseId = Math.max(
+        this.phrasebook.phrases.length - 1,
+        Number(this.phraseId) + 1
+      );
+      let nextPhrase = this.phrasebook.phrases[nextPhraseId];
+      let route = {
+        name: "phrasebook-phrase",
+        params: {
+          bookId: this.bookId,
+          phrasedId: nextPhraseId,
+          phrase: nextPhrase.phrase,
+        },
+      };
+      this.$router.push(route);
+    },
     loadPhrases() {
       if (this.bookId !== "saved") {
         this.loading = true;
@@ -332,7 +366,7 @@ export default {
       this.word = w;
     },
     phraseUnsaved() {
-      if (this.bookId !== 'saved') return
+      if (this.bookId !== "saved") return;
       let savedPhrases = this.savedPhrases[this.$l2.code];
       let nextSavedPhrase = savedPhrases[Number(this.phraseId)];
       let phrasedId = this.phraseId;
@@ -379,7 +413,7 @@ export default {
       data.phrasebook.progress = data.phrasebook.index / data.phrasebook.length;
       this.$store.dispatch("history/add", data);
     },
-    async getPhrasebookFromStore() {
+    getPhrasebookFromStore() {
       let phrasebooks, phrasebook;
       if (this.bookId === "saved") {
         phrasebook = {
@@ -394,10 +428,7 @@ export default {
         phrasebook = phrasebooks.find((pb) => pb.id === Number(this.bookId));
         if (!phrasebook) return;
       }
-      this.phrasebook = phrasebook;
-      if (phrasebook.phrases) {
-        this.getPhrase();
-      }
+      return phrasebook
     },
     async getPhrase() {
       let phrase = this.phrasebook.phrases.find((p, index) => {
@@ -541,5 +572,13 @@ export default {
       }
     }
   }
+}
+
+.remove-btn {
+  display: block;
+  position: absolute;
+  color: #999;
+  left: 0;
+  top: 0;
 }
 </style>
