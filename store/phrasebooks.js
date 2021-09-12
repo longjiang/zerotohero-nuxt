@@ -31,14 +31,9 @@ export const mutations = {
       }
     }
   },
-  REMOVE_PHRASE(state, { phrasebook, phrase }) {
+  UPDATE_PHRASES(state, { phrasebook, phrases }) {
     if (phrasebook) {
-      phrasebook.phrases = phrasebook.phrases.filter(p => p.id !== phrase.id || p.phrase !== phrase.phrase)
-      phrasebook.phrases = phrasebook.phrases.map((p, id) => {
-        p.id = id
-        return p
-      })
-      console.log('REMOVED', phrasebook.phrases.length)
+      phrasebook.phrases = phrases
     }
   }
 }
@@ -92,7 +87,26 @@ export const actions = {
     return true
   },
   async removePhrase(context, { phrasebook, phrase }) {
-    context.commit('REMOVE_PHRASE', { phrasebook, phrase })
+    let phrases = phrasebook.phrases.filter(p => p.id !== phrase.id || p.phrase !== phrase.phrase)
+    phrases = phrases.map((p, id) => {
+      let phrase = Object.assign({}, p)
+      phrase.id = id
+      return phrase
+    })
+    context.commit('UPDATE_PHRASES', { phrasebook, phrases })   
+    // try {
+    //   let response = await axios.patch(
+    //     `${Config.wiki}items/phrasebook/${phrasebook.id}`,
+    //     { phrases: Papa.unparse(phrases) },
+    //     { contentType: "application/json" }
+    //   );
+    //   response = response.data;
+    //   if (response && response.data) {
+    //     context.commit('UPDATE_PHRASES', { phrasebook, phrases })    
+    //   }
+    // } catch (err) {
+    //   // Direcuts bug
+    // }
     return true
 
   }
