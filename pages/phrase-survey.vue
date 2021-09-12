@@ -71,7 +71,10 @@
                   {{ data.item.phrase }}
                 </div>
                 <div v-if="expand[data.index]" class="mt-2 mb-2 ml-2">
-                  <div v-for="phrase of data.item.instances">
+                  <div
+                    v-for="(phrase, index) of data.item.instances"
+                    :key="`phrase-${index}`"
+                  >
                     <router-link
                       :to="`/${$l1.code}/${$l2.code}/youtube/view/${phrase.youtube_id}/?t=${phrase.starttime}`"
                       class="link-unstyled d-flex mt-1 mb-1"
@@ -264,14 +267,19 @@ export default {
      */
     sortPhrases(phrases) {
       // First alphabetically sort all by the phrase
-      let sortedPhrases = phrases.sort((a, b) =>
-        a.phrase.localeCompare(b.phrase, this.$l2.locales[0])
-      );
+      let sortedPhrases = phrases
+        .filter((p) => p.phrase !== "")
+        .sort((a, b) =>
+          a.phrase
+            .toUpperCase()
+            .localeCompare(b.phrase.toUpperCase(), this.$l2.locales[0])
+        );
       // Put them all into groups (grouped by the phrase)
       let groups = [];
       if (sortedPhrases.length > 0) {
+        let phrase = sortedPhrases[0].phrase;
         let group = {
-          phrase: sortedPhrases[0].phrase,
+          phrase,
           instances: [sortedPhrases[0]],
         };
         for (let phrase of sortedPhrases) {
@@ -288,10 +296,15 @@ export default {
           }
         }
       }
-      // Sorted the groups, first by number of instances, then by the length of the phrase
+      console.log(`Folded into ${groups.length} groups.`)
+      console.log('Sort the groups, first by number of instances, then by the length of the phrase')
       groups = groups
         .sort((a, b) => a.phrase.length - b.phrase.length)
         .sort((a, b) => b.instances.length - a.instances.length);
+      console.log('Groups sorted')
+      console.log(`Making groups unique...`)
+      groups = Helper.uniqueByValue(groups, 'phrase')
+      console.log('Groups now unique.')
       return groups;
     },
     async getVideos(show, start, limit) {
