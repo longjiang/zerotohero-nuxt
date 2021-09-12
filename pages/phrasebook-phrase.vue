@@ -311,6 +311,23 @@ export default {
           }
           this.loading = false;
         }
+        if (mutation.type === "phrasebooks/UPDATE_PHRASES") {
+          this.getPhrase();
+          let nextPhraseId = Math.min(
+            this.phrasebook.phrases.length - 1,
+            Number(this.phraseId)
+          );
+          let nextPhrase = this.phrasebook.phrases[nextPhraseId];
+          let route = {
+            name: "phrasebook-phrase",
+            params: {
+              bookId: this.bookId,
+              phraseId: String(nextPhrase.id),
+              phrase: nextPhrase.phrase,
+            },
+          };
+          this.$router.push(route);
+        }
       }
     });
   },
@@ -337,20 +354,6 @@ export default {
         phrasebook: this.phrasebook,
         phrase: this.phraseObj,
       });
-      let nextPhraseId = Math.min(
-        this.phrasebook.phrases.length - 1,
-        Number(this.phraseId)
-      );
-      let nextPhrase = this.phrasebook.phrases[nextPhraseId];
-      let route = {
-        name: "phrasebook-phrase",
-        params: {
-          bookId: this.bookId,
-          phraseId: String(nextPhrase.id),
-          phrase: nextPhrase.phrase,
-        },
-      };
-      this.$router.push(route);
     },
     loadPhrases() {
       if (this.bookId !== "saved") {
