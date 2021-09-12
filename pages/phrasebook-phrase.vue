@@ -223,7 +223,7 @@ export default {
           params: {
             bookId: String(this.phrasebook.id),
           },
-          hash: `#${Number(this.phraseId) + 1}`
+          hash: `#${Number(this.phraseId) + 1}`,
         };
       }
       return route;
@@ -482,10 +482,14 @@ export default {
       return text;
     },
     findCurrent(phraseObj) {
-      return (
-        phraseObj.id === Number(this.phraseId) &&
-        phraseObj.phrase === this.phrase
-      );
+      if (this.bookId === "saved") {
+        return phraseObj.phrase === this.phraseObj.phrase;
+      } else {
+        return (
+          phraseObj.id === Number(this.phraseId) &&
+          phraseObj.phrase === this.phrase
+        );
+      }
     },
     url(phraseObj) {
       return `/${this.$l1.code}/${this.$l2.code}/phrasebook/${
