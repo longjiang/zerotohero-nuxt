@@ -152,6 +152,9 @@ export default {
     position: relative;
     width: 100%;
     flex: 1;
+    .phrasebook-title {
+      color: #444;
+    }
   }
   .phrasebook-card-progress {
     height: 0.3rem;
