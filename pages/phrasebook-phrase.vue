@@ -476,8 +476,7 @@ export default {
       return text;
     },
     findCurrent(phraseObj) {
-      if (phraseObj.id) return phraseObj.id === Number(this.phraseId);
-      else return phraseObj.phrase === this.phraseObj.phrase;
+      return phraseObj.id === Number(this.phraseId) && phraseObj.phrase === this.phrase;
     },
     url(phraseObj) {
       return `/${this.$l1.code}/${this.$l2.code}/phrasebook/${
