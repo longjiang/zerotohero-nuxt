@@ -826,6 +826,12 @@ export default {
             },
             {
               icon: "fas fa-wrench",
+              title: "JSON to CSV",
+              name: "json-to-csv",
+              show: this.$adminMode,
+            },
+            {
+              icon: "fas fa-wrench",
               title: "Wiktionary CSV",
               name: "wiktionary-csv",
               show: this.$adminMode,
