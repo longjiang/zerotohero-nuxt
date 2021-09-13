@@ -21,37 +21,54 @@
         Added
       </span>
     </div>
-    <div class="show-and-date mt-2">
-      <router-link
-        class="btn btn-small bg-secondary text-white"
-        v-if="video.tv_show"
-        :to="{
-          name: 'show',
-          params: { type: 'tv-show', id: String(video.tv_show.id) },
-        }"
-      >
-        <i class="fa fa-tv mr-2" />
-        {{ video.tv_show.title }}
-        <i
-          :class="{ 'fas fa-times-circle ml-1': true, 'd-none': !$adminMode }"
-          @click.stop.prevent="unassignShow('tv_show')"
-        />
-      </router-link>
-      <router-link
-        class="btn btn-small bg-secondary text-white"
-        v-if="video.talk"
-        :to="{
-          name: 'show',
-          params: { type: 'talk', id: String(video.talk.id) },
-        }"
-      >
-        <i class="fas fa-graduation-cap mr-2"></i>
-        {{ video.talk.title }}
-        <i
-          :class="{ 'fas fa-times-circle ml-1': true, 'd-none': !$adminMode }"
-          @click.stop.prevent="unassignShow('talk')"
-        />
-      </router-link>
+    <div class="show-and-date mt-3">
+      <span class="mr-2" v-if="$adminMode">
+        <router-link
+          class="btn btn-small bg-secondary text-white"
+          v-if="video.tv_show"
+          :to="{
+            name: 'show',
+            params: { type: 'tv-show', id: String(video.tv_show.id) },
+          }"
+        >
+          <i class="fa fa-tv mr-2" />
+          {{ video.tv_show.title }}
+          <i
+            :class="{ 'fas fa-times-circle ml-1': true, 'd-none': !$adminMode }"
+            @click.stop.prevent="unassignShow('tv_show')"
+          />
+        </router-link>
+        <router-link
+          class="btn btn-small bg-secondary text-white"
+          v-if="video.talk"
+          :to="{
+            name: 'show',
+            params: { type: 'talk', id: String(video.talk.id) },
+          }"
+        >
+          <i class="fas fa-graduation-cap mr-2"></i>
+          {{ video.talk.title }}
+          <i
+            :class="{ 'fas fa-times-circle ml-1': true, 'd-none': !$adminMode }"
+            @click.stop.prevent="unassignShow('talk')"
+          />
+        </router-link>
+      </span>
+      <span style="font-size: 0.9em">
+        <a
+          :href="originalTextHref"
+          :download="`${video.title}.txt`"
+          target="_blank"
+          class="link-unstyled mr-2"
+        >
+          <i class="fa fa-download mr-1"></i>
+          TXT
+        </a>
+        <a :href="translationURL" target="_blank" class="link-unstyled mr-2">
+          <i class="fa fa-language mr-1"></i>
+          Translation
+        </a>
+      </span>
     </div>
     <div
       :class="{
@@ -132,26 +149,6 @@
           >
             Enable Translation Editing
           </b-form-checkbox>
-        </div>
-        <div
-          :class="{
-            'mt-2 ml-1': true,
-            'd-none': !enableTranslationEditing && !showSubsEditing,
-          }"
-        >
-          <a :href="translationURL" target="_blank" class="link-unstyled mr-1">
-            <i class="fa fa-language"></i>
-            Get Translation
-          </a>
-          <a
-            :href="originalTextHref"
-            :download="`${video.title}.txt`"
-            target="_blank"
-            class="link-unstyled"
-          >
-            <i class="fa fa-download"></i>
-            Download Text
-          </a>
         </div>
       </div>
       <div

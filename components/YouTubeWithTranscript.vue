@@ -154,7 +154,6 @@
             </router-link>
           </div>
           <VideoAdmin
-            :class="{ 'd-none': !$adminMode }"
             :video="video"
             ref="videoAdmin1"
             @showSubsEditing="toggleShowSubsEditing"
@@ -265,7 +264,7 @@
               </router-link>
             </div>
             <VideoAdmin
-              :class="{ 'mt-5': true, 'd-none': !$adminMode }"
+              :class="{ 'mt-5': true }"
               :video="video"
               ref="videoAdmin2"
               @showSubsEditing="toggleShowSubsEditing"
