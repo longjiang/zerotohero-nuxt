@@ -509,8 +509,7 @@ export default {
         return phraseObj.phrase === this.phraseObj.phrase;
       } else {
         return (
-          phraseObj.id === Number(this.phraseId) &&
-          phraseObj.phrase === this.phrase
+          phraseObj.id === Number(this.phraseId)
         );
       }
     },

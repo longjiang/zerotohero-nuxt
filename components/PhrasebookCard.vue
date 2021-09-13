@@ -65,13 +65,14 @@ export default {
             phraseId: String(this.phrasebook.index),
           },
         };
-      else
+      else {
         to = {
           name: "phrasebook",
           params: { bookId: String(this.phrasebook.id) },
         };
-      if (this.progress) {
-        to.hash = '#' + this.historyItem.phrasebook.index;
+        if (this.progress) {
+          to.hash = "#" + this.historyItem.phrasebook.index;
+        }
       }
       if (typeof this.l1 !== "undefined") {
         to.params.l1 = this.l1.code;
