@@ -501,7 +501,7 @@ export default {
           `${Config.wiki}items/youtube_videos/${this.video.id}`,
           {
             subs_l2: this.video.subs_l2
-              ? YouTube.unparseSubs(this.video.subs_l2)
+              ? YouTube.unparseSubs(this.video.subs_l2, this.$l2.code)
               : undefined,
             subs_l1: this.video.subs_l1
               ? YouTube.unparseSubs(this.video.subs_l1)
