@@ -34,16 +34,7 @@
                 ref="paginator"
               />
             </div>
-            <div style="position: relative">
-              <b-button
-                variant="unstyled"
-                size="md"
-                class="remove-btn"
-                @click="remove"
-                v-if="$adminMode"
-              >
-                <i class="fa fa-trash ml-1"></i>
-              </b-button>
+            <div>
               <div class="text-center" v-if="phraseObj && phraseObj.phrase">
                 <Saved
                   :item="phraseItem"
@@ -76,6 +67,16 @@
               >
                 {{ phraseObj[$l1.code] }}
               </p>
+              <div class="text-center mb-3" v-if="$adminMode">
+                <b-button
+                  variant="unstyled"
+                  size="md"
+                  class="remove-btn"
+                  @click="remove"
+                >
+                  <i class="fa fa-trash ml-1"></i>
+                </b-button>
+              </div>
               <div>
                 <SimilarPhrases
                   v-if="phraseObj"
@@ -615,10 +616,6 @@ export default {
 }
 
 .remove-btn {
-  display: block;
-  position: absolute;
   color: #999;
-  left: 0;
-  top: 0;
 }
 </style>
