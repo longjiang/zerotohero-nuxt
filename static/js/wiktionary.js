@@ -83,6 +83,8 @@ const Dictionary = {
     nor: 'nno',
     nob: 'nno',
   },
+  conjugations: undefined, // for french only
+  romanizations: undefined, // for persian only
   credit() {
     return 'The dictionary is provided by <a href="https://en.wiktionary.org/wiki/Wiktionary:Main_Page">Wiktionary</a>, which is freely distribtued under the <a href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike License</a>. The dictionary is parsed by <a href="https://github.com/tatuylonen/wiktextract">wiktextract</a>.'
   },
@@ -135,6 +137,7 @@ const Dictionary = {
       }
       this.words = words
       if (this.l2 === 'fra') await this.loadFrenchConjugationsAndLemmatizer()
+      if (this.l2 === 'fas') await this.loadPersianRomanization()
       console.log("Wiktionary: loaded.")
       return this
 
@@ -155,6 +158,18 @@ const Dictionary = {
     })
     console.log(`Wiktionary: ${file} loaded.`)
     return words
+  },
+  async loadPersianRomanization() {
+    console.log('Loading Persian romanization file...')
+    try {
+      let res = await axios.get(`${this.server}data/persian-g2p/tihudictBIG.csv.txt`)
+      if (res && res.data) {
+        let parsed = Papa.parse(res.data, {header: true})
+        this.romanizations = parsed.data
+      }
+    } catch(err) {
+
+    }
   },
   async loadFrenchConjugationsAndLemmatizer() {
     console.log('Loading French conjugations from "french-verbs-lefff"...')
@@ -177,6 +192,15 @@ const Dictionary = {
       let lexi = res.data
       this.NlpjsTFrDict[key] = { lexi }
     }
+  },
+  /**
+   * Romanize Persian text
+   * @param {String} text
+   */
+  romanize(text) {
+    text = text.trim()
+    let row = this.romanizations.find(r => r.persian === text)
+    if (row) return row.roman
   },
   parseDictionary(data) {
     console.log("Wiktionary: parsing words from JSON...")

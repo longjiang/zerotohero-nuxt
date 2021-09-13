@@ -8,7 +8,7 @@
     <div class="container pt-5 pb-5">
       <div class="row">
         <div class="col-sm-12">
-          <LazyLanguageInfoBox :lang="$l2" />
+          <Annotate><h3>بيا بايد بزاريم هوفبرگ بره داخل نيازي نيست متوجه ما بشه</h3></Annotate>
         </div>
       </div>
     </div>

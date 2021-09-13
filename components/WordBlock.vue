@@ -150,12 +150,18 @@
               </span>
               <span
                 style="color: #999"
-                v-else-if="$hasFeature('transliteration') && $l2.code !== 'tlh'"
+                v-else-if="
+                  $hasFeature('transliteration') &&
+                  !['tlh', 'fa'].includes($l2.code)
+                "
               >
                 {{ tr(word.head) }}
               </span>
               <span style="color: #999" v-if="$l2.code === 'tlh'">
                 {{ word.head }} /{{ klingonIPA(word.head) }}/
+              </span>
+              <span style="color: #999" v-if="$l2.code === 'fa'">
+                {{ farsiRomanizations[word.head] }}
               </span>
               <span style="color: #999" v-if="word.jyutping && word.pinyin">
                 / {{ word.pinyin }}
@@ -352,6 +358,8 @@ export default {
       tooltipHover: false,
       highlightHardWords: false,
       Config,
+      transliteration: undefined,
+      farsiRomanizations: {},
     };
   },
   computed: {
@@ -408,28 +416,6 @@ export default {
           attributes["data-weight"] = this.words[0].weight;
       }
       return attributes;
-    },
-    transliteration() {
-      if (this.$hasFeature("transliteration")) {
-        if (
-          this.token &&
-          this.token.candidates &&
-          this.token.candidates.length > 0
-        ) {
-          if (this.token.candidates[0].kana) {
-            return this.token.candidates[0].kana;
-          } else if (this.token.candidates[0].pronunciation) {
-            return this.token.candidates[0].pronunciation.split(",")[0];
-          } else if (this.token.candidates[0].pinyin) {
-            return this.token.candidates[0].pinyin;
-          } else {
-            return tr(this.token.candidates[0].head);
-          }
-        }
-        if (!["ja", "zh", "nan", "hak"].includes(this.$l2.code)) {
-          return tr(this.text);
-        }
-      }
     },
     level() {
       if (this.highlightHardWords) {
@@ -499,6 +485,35 @@ export default {
     },
   },
   methods: {
+    async getFarsiRomanization(text) {
+      let dictionary = await this.$getDictionary();
+      let roman = await (await dictionary).romanize(text);
+      return roman || tr(text);
+    },
+    async getTransliteration() {
+      if (this.$hasFeature("transliteration")) {
+        if (
+          this.token &&
+          this.token.candidates &&
+          this.token.candidates.length > 0
+        ) {
+          if (this.token.candidates[0].kana) {
+            return this.token.candidates[0].kana;
+          } else if (this.token.candidates[0].pronunciation) {
+            return this.token.candidates[0].pronunciation.split(",")[0];
+          } else if (this.token.candidates[0].pinyin) {
+            return this.token.candidates[0].pinyin;
+          }
+        }
+        if (this.$l2.code === "fa") {
+          let roman = await this.getFarsiRomanization(this.text);
+          return roman;
+        }
+        if (!["ja", "zh", "nan", "hak"].includes(this.$l2.code)) {
+          return tr(this.text);
+        }
+      }
+    },
     klingonIPA(text) {
       return Klingon.latinToIPA(text);
     },
@@ -605,6 +620,7 @@ export default {
           this.saved = savedWord ? savedWord : false;
         }
       }
+      this.transliteration = await this.getTransliteration();
     },
     matchCase(text) {
       if (this.text.match(/^[\wА-ЯЁ]/)) {
@@ -665,6 +681,10 @@ export default {
         words = await (await this.$getDictionary()).lookupFuzzy(this.text, 20);
         if (words) {
           for (let word of words) {
+            if (this.$l2.code === "fa") {
+              this.farsiRomanizations[word.head] =
+                await this.getFarsiRomanization(word.head);
+            }
             if (word && word.matches) {
               for (let match of word.matches) {
                 match.form = await (
