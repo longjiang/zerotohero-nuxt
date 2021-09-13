@@ -33,6 +33,10 @@ export const mutations = {
   },
   UPDATE_PHRASES(state, { phrasebook, phrases }) {
     if (phrasebook) {
+      phrases = phrases.map((p, id) => {
+        p.id = id
+        return p
+      })
       phrasebook.phrases = phrases
     }
   }
@@ -88,20 +92,20 @@ export const actions = {
   },
   async removePhrase(context, { phrasebook, phrase }) {
     let phrases = phrasebook.phrases.filter(p => p.id !== phrase.id || p.phrase !== phrase.phrase)
-    phrases = phrases.map((p, id) => {
-      let phrase = Object.assign({}, p)
-      phrase.id = id
-      return phrase
+    phrases = phrases.map((p) => {
+      let ph = Object.assign({}, p)
+      delete ph.id
+      return ph
     })
     try {
       let response = await axios.patch(
         `${Config.wiki}items/phrasebook/${phrasebook.id}`,
-        { phrases: Papa.unparse(phrases) },
+        { phrases: Papa.unparse(phrases.map) },
         { contentType: "application/json" }
       );
       response = response.data;
       if (response && response.data) {
-        context.commit('UPDATE_PHRASES', { phrasebook, phrases })    
+        context.commit('UPDATE_PHRASES', { phrasebook, phrases })
         return true
       }
     } catch (err) {
@@ -111,7 +115,9 @@ export const actions = {
   async updatePhrase(context, { phrasebook, phrase }) {
     let phrases = phrasebook.phrases
     phrases = phrases.map(p => {
-      return p.id === phrase.id ? phrase : p
+      let ph = Object.assign({}, p.id === phrase.id ? phrase : p)
+      delete ph.id
+      return ph
     })
     try {
       let response = await axios.patch(
@@ -121,7 +127,7 @@ export const actions = {
       );
       response = response.data;
       if (response && response.data) {
-        context.commit('UPDATE_PHRASES', { phrasebook, phrases })    
+        context.commit('UPDATE_PHRASES', { phrasebook, phrases })
         return true
       }
     } catch (err) {
