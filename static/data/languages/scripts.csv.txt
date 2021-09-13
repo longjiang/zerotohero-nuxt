@@ -30,7 +30,7 @@ aoz,Latn,,,,
 ar,Arab,,,,rtl
 ar,Syrc,,,,rtl
 arb,Arab,,,,rtl
-arc,Armi,N,O,N,rtl
+arc,Armi,,,,rtl
 arc,Nbat,N,O,N,rtl
 arc,Palm,N,O,N,rtl
 arn,Latn,,,,
