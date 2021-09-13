@@ -9,6 +9,7 @@
       <div class="row">
         <div class="col-sm-12">
           <h3 class="text-center mb-5">Convert JSON to CSV</h3>
+          <p>Optimized for converting the <a href="https://github.com/PasaOpasen/PersianG2P">PersianG2p</a> data file.</p>
           <b-form-file
             v-model="file"
             :state="Boolean(file)"
@@ -56,6 +57,7 @@ export default {
   },
   async mounted() {},
   methods: {
+    // This is made for converting persianG2p.json
     convert() {
       console.log(this.file);
       let reader = new FileReader();
