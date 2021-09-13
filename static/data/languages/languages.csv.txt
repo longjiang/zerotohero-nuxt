@@ -2195,7 +2195,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 2194,Gorap,gora1261,aust1307,mana1300,language,2.13058,128.261,goq,ID,,I,L,,,
 2195,Gorontalo,goro1259,aust1307,goro1273,language,0.62689,122.288,gor,ID,,I,L,,,
 2196,Gronings,gron1242,indo1319,ostf1234,language,53.2842,6.698,gos,DE NL,,I,L,,,
-2197,Gothic,goth1244,indo1319,east2805,language,46.9304,29.9786,got,UA,,I,A,,,
+2197,Gothic,goth1244,indo1319,east2805,language,46.9304,29.9786,got,UA,,I,A,,got,"J. R. R. Tolkien (1892–1973), an English writer, poet, philologist, and academic who made use of Gothic as a creative language"
 2198,Gavar,gava1241,afro1255,buwa1244,language,10.5603,13.8188,gou,CM,,I,L,,,
 2199,Gorowa,goro1270,afro1255,iraq1240,language,-4.23575,35.7996,gow,TZ,,I,L,,,
 2200,Gobu,gobu1238,atla1278,mids1242,language,5.01201,20.0194,gox,CD CF,,I,L,,,
