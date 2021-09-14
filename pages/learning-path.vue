@@ -69,7 +69,7 @@
             <b>{{ Math.ceil(level.hours / 10) * 10 }} hours</b>
           </p>
           <template>
-            <div v-for="course in courses[level.cefr]" class="level-activity">
+            <div v-for="(course, index) in courses[level.cefr]" class="level-activity" :key="`learning-path-course-${level.cefr}-${index}`">
               <p>
                 <b :data-level="level.cefr">Activity:</b>
                 Take (or continue to take) the online course:
@@ -148,7 +148,7 @@
                 {{ level.cefr }} level, we recommend using the following
                 resources, products, or services:
               </p>
-              <div v-for="resource in resources[level.cefr]">
+              <div v-for="(resource, index) in resources[level.cefr]" :key="`learning-path-resource-${level.cefr}-${index}`">
                 <Resource
                   :resource="{
                     title: resource.title,
@@ -161,10 +161,11 @@
             </div>
           </template>
           <template>
-            <template v-for="exam in exams[level.cefr]">
+            <template v-for="(exam, index) in exams[level.cefr]">
               <div
                 class="level-milestone mb-5"
                 v-if="exam.level !== 'all' || level.number > 1"
+                :key="`learning-path-exam-${level.cefr}-${index}`"
               >
                 <div
                   class="level-milestone-dot"
