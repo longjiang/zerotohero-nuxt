@@ -18,7 +18,7 @@
         👇 Now, hover or tap on words 👇
       </p>
       <div
-        v-if="text.length > 0 && !showTranslate"
+        v-if="text.length > 0"
         id="reader-annotated"
         :class="{ focus: true }"
         :style="`font-size: ${fontSize}rem; margin-bottom: 3rem;`"
@@ -40,11 +40,6 @@
           </Annotate>
         </template>
       </div>
-      <iframe
-        v-if="showTranslate"
-        :src="translationSrc"
-        id="translation-iframe"
-      ></iframe>
       <div class="reader-editor">
         <div>
           <textarea
@@ -54,6 +49,7 @@
             rows="5"
             :placeholder="$t('Paste {l2} text here', { l2: $l2.name })"
             v-model="text"
+            :dir="$l2.direction === 'rtl' ? 'rtl' : 'ltr'"
           ></textarea>
         </div>
         <div class="mt-1">
@@ -78,52 +74,22 @@
             <small>A</small>
           </button>
           <button
-            @click="toggleTranslation('en')"
+            @click="toggleTranslation()"
             :class="{
               'reader-button': true,
-              'reader-button-active': showTranslate === 'en',
+              'reader-button-active': showTranslate,
             }"
           >
-            <span style="font-size: 0.7em">EN</span>
-          </button>
-          <button
-            @click="toggleTranslation('ko')"
-            :class="{
-              'reader-button': true,
-              'reader-button-active': showTranslate === 'ko',
-            }"
-          >
-            <span style="font-size: 0.7em">한</span>
-          </button>
-          <button
-            @click="toggleTranslation('ja')"
-            :class="{
-              'reader-button': true,
-              'reader-button-active': showTranslate === 'ja',
-            }"
-          >
-            <span style="font-size: 0.7em">日</span>
-          </button>
-          <button
-            @click="toggleTranslation('ru')"
-            :class="{
-              'reader-button': true,
-              'reader-button-active': showTranslate === 'ru',
-            }"
-          >
-            <span style="font-size: 0.7em">РУ</span>
-          </button>
-          <button
-            @click="toggleTranslation('es')"
-            :class="{
-              'reader-button': true,
-              'reader-button-active': showTranslate === 'es',
-            }"
-          >
-            <span style="font-size: 0.7em">ES</span>
+            <i class="fa fa-language"></i>
           </button>
         </div>
       </div>
+      <iframe
+        v-if="showTranslate"
+        :src="translationSrc"
+        id="translation-iframe"
+        class="mt-2 mb-2"
+      ></iframe>
     </div>
   </div>
 </template>
@@ -164,9 +130,13 @@ export default {
     },
   },
   methods: {
-    toggleTranslation(lang) {
-      this.showTranslate = this.showTranslate === lang ? false : lang;
-      this.translationSrc = this.translationUrl(lang, this.$l2.code, this.text);
+    toggleTranslation() {
+      this.showTranslate = !this.showTranslate;
+      this.translationSrc = this.$languages.translationURL(
+        this.text,
+        this.$l1,
+        this.$l2
+      );
     },
     translationUrl(l1Code, l2Code, text) {
       let langs = {
@@ -234,7 +204,7 @@ export default {
 
 .zerotohero-wide {
   .reader-icon {
-    left: calc(416px + 1rem)
+    left: calc(416px + 1rem);
   }
 }
 
@@ -259,12 +229,10 @@ export default {
   display: inline-block;
   margin: 0 0.25rem 0 0;
   border-radius: 0.2rem;
-  height: 1.5rem;
-  width: 1.5rem;
   overflow: hidden;
   line-height: 1em;
   text-align: center;
-  padding: 0;
+  padding: 0.5rem;
 }
 
 .reader-button-active {
