@@ -506,6 +506,7 @@ export default {
           }
         }
         if (this.$l2.code === "fa") {
+          this.text = this.text.replace(/\u064a/g, "\u06cc")
           let roman = await this.getFarsiRomanization(this.text);
           return roman;
         }
