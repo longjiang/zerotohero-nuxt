@@ -100,7 +100,7 @@ export const actions = {
     try {
       let response = await axios.patch(
         `${Config.wiki}items/phrasebook/${phrasebook.id}`,
-        { phrases: Papa.unparse(phrases.map) },
+        { phrases: Papa.unparse(phrases) },
         { contentType: "application/json" }
       );
       response = response.data;
@@ -109,7 +109,7 @@ export const actions = {
         return true
       }
     } catch (err) {
-      // Direcuts bug
+      console.log('A network error occured when trying to remove phrase from phrasebook.', err)
     }
   },
   async updatePhrase(context, { phrasebook, phrase }) {
