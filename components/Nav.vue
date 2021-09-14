@@ -300,6 +300,9 @@ export default {
     fullHistory: {
       type: Array,
     },
+    showOnly: {
+      type: Array,
+    },
   },
   data() {
     return {
@@ -366,7 +369,7 @@ export default {
       return parent;
     },
     menu() {
-      return [
+      let items = [
         {
           icon: "fas fa-graduation-cap",
           title: "Courses",
@@ -863,6 +866,9 @@ export default {
           ],
         },
       ];
+      if (this.showOnly)
+        items = items.filter((i) => i.title && this.showOnly.includes(i.title));
+      return items;
     },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")

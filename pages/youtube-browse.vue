@@ -29,6 +29,9 @@
             {{ $l2.code === "zh" ? "Pinyin" : "" }} subtitles
           </p>
           <client-only>
+            <Nav :l1="$l1" :l2="$l2" variant="page" class="pt-4 pb-3" :showOnly="['Media']" />
+          </client-only>
+          <client-only>
             <div class="d-flex mt-4 mb-3">
               <SimpleSearch
                 placeholder="Search"
@@ -98,7 +101,10 @@
             />
           </template>
           <div v-observe-visibility="visibilityChanged"></div>
-          <LazyIdenticalLanguages class="mt-5" routeName="youtube-browse" />
+          <LazyIdenticalLanguages class="mt-4" routeName="youtube-browse" />
+          <client-only>
+            <Nav :l1="$l1" :l2="$l2" variant="page" class="pt-5" :showOnly="['Media']" />
+          </client-only>
         </div>
       </div>
     </div>
