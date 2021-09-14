@@ -89,9 +89,9 @@
           >
             <p>
               <b :data-level="level.cefr">Activity:</b>
-              Watch YouTube in
+              Watch lots of videos in
               {{ $l2.name }} and study the subtitles with the help of our
-              YouTube study tool.
+              video transcript study tool.
             </p>
             <Resource
               :resource="{

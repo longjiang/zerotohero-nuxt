@@ -4,9 +4,7 @@
       <img :src="resource.thumbnail" class="resource-thumbnail img-fluid" />
       <div class="media-body">
         <h6>
-          <Annotate>
-            <span>{{ resource.title }}</span>
-          </Annotate>
+          <span>{{ resource.title }}</span>
         </h6>
         <div>{{ resource.description }}</div>
       </div>
@@ -15,9 +13,7 @@
       <img :src="resource.thumbnail" class="resource-thumbnail img-fluid" />
       <div class="media-body">
         <h6>
-          <Annotate>
-            <span>{{ resource.title }}</span>
-          </Annotate>
+          <span>{{ resource.title }}</span>
         </h6>
         <div>{{ resource.description }}</div>
       </div>
@@ -27,8 +23,8 @@
 
 <script>
 export default {
-  props: [ 'resource', 'internal' ]
-}
+  props: ["resource", "internal"],
+};
 </script>
 
 <style>
