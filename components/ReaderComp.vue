@@ -215,6 +215,11 @@ export default {
   content: " \2717";
   color: red !important;
 }
+
+.show-pinyin #reader-annotated {
+  line-height: 2.5;
+}
+
 #translation-iframe {
   width: 100%;
   border: 1px solid #eee;
