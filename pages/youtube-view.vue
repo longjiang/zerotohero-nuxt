@@ -273,23 +273,10 @@ export default {
       try {
         let missingSubsL1 = !video.subs_l1 || video.subs_l1.length === 0;
         let missingSubsL2 = !video.subs_l2 || video.subs_l2.length === 0;
-        Vue.set(video, "checkingSubs", true);
         if (missingSubsL1 || missingSubsL2) {
           console.log(`YouTube View: Getting available transcripts...`);
-          Vue.set(video, "checkingSubs", true);
           video = await YouTube.getYouTubeSubsList(video, this.$l1, this.$l2);
         } else {
-          Vue.set(video, "checkingSubs", false);
-        }
-        if (missingSubsL1 && video.l1Locale !== video.l2Locale) {
-          console.log(`YouTube View: Getting ${this.$l1.name} transcript`);
-          Vue.set(video, "checkingSubs", true);
-          let subs_l1 = await YouTube.getTranscript(
-            video.youtube_id,
-            video.l1Locale,
-            video.l2Name
-          );
-          Vue.set(this.video, "subs_l1", subs_l1);
           Vue.set(video, "checkingSubs", false);
         }
         if (missingSubsL2) {
@@ -302,6 +289,15 @@ export default {
           );
           Vue.set(this.video, "subs_l2", subs_l2);
           Vue.set(video, "checkingSubs", false);
+        }
+        if (missingSubsL1 && video.l1Locale !== video.l2Locale) {
+          console.log(`YouTube View: Getting ${this.$l1.name} transcript`);
+          let subs_l1 = await YouTube.getTranscript(
+            video.youtube_id,
+            video.l1Locale,
+            video.l2Name
+          );
+          Vue.set(this.video, "subs_l1", subs_l1);
         }
         if (video.subs_l2 && video.subs_l2.length > 0) {
           this.firstLineTime = video.subs_l2[0].starttime;
@@ -357,6 +353,7 @@ export default {
           }
         }
         if (video.notes) video.notes = YouTube.parseNotes(video.notes);
+        video.checkingSubs = false;
         return video;
       }
     },

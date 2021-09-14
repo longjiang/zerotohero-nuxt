@@ -194,11 +194,11 @@
             @updateTranslation="updateTranslation"
           />
           <div class="mt-5 youtube-video-info youtube-video-info-bottom">
-            <div class="text-center mt-5" v-if="video.checkingSubs">
+            <div class="text-center mt-5 mb-5" v-if="video.checkingSubs">
               <Loader :sticky="true" message="Loading subtitles..." />
             </div>
             <div
-              class="p-4 mt-4 rounded"
+              class="p-4 mt-4 mb-5 rounded"
               style="
                 border: 2px dashed rgba(136, 136, 136, 0.5);
                 color: rgba(136, 136, 136, 0.85);
