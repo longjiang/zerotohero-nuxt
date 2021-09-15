@@ -3746,7 +3746,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 3745,Trinidad and Tobago Sign Language,trin1277,sign1238,asli1244,language,10.666667,-61.516667,lst,TT,,I,L,,,
 3746,Sivia Sign Language,sivi1235,sign1238,vill1244,language,-12.51094,-73.86124,lsv,PE,,I,L,,,
 3747,Mauritian Sign Language,maur1240,sign1238,deaf1237,language,-20.166667,57.516667,lsy,MU,,I,L,,,
-3748,Middle Chinese,midd1344,sino1245,midd1354,language,34.27,108.9,ltc,CN,,I,H,,,
+3748,Middle Chinese,midd1344,sino1245,midd1354,language,34.27,108.9,ltc,CN,,I,H,,ltc,"Li Bai (701–762), a Chinese poet acclaimed from his own day to the present as a genius and a romantic figure who took traditional poetic forms to new heights"
 3749,East Latvian,east2282,indo1319,latv1249,dialect,,,ltg,LV,,I,L,,,
 3750,Labwor,labw1238,nilo1247,acol1236,dialect,2.699942,33.657947,lth,UG,,I,L,,,
 3751,Leti (Indonesia),leti1246,aust1307,luan1262,language,-8.19808,127.674,lti,ID,,I,L,,,
@@ -4942,7 +4942,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 4941,Old Breton,,,,,,,obt,,,I,H,,,
 4942,Obulom-Ochichi,obul1239,atla1278,kugb1242,language,4.72908,7.11671,obu,NG,,I,L,,,
 4943,Ocaina,ocai1244,huit1251,nonu1240,language,-2.159,-72.1422,oca,CO PE,,I,L,,,
-4944,Old Chinese,oldc1244,sino1245,sini1245,language,36.12,114.32,och,CN,,I,A,,,
+4944,Old Chinese,oldc1244,sino1245,sini1245,language,36.12,114.32,och,CN,,I,A,,och,"Fu Hao (? – c. 1200 BC), one of the many wives of King Wu Ding of the Shang dynasty who served as a military general and high priestess"
 4945,Occitan,occi1239,indo1319,occi1240,language,44.1415,6.82979,oci,AD ES FR IT MC,oc,I,L,800000,oc,"Frédéric Mistral (1830 – 1914), a French writer of Occitan literature and lexicographer of the Provençal form of the language"
 4946,Old Cornish,oldc1252,indo1319,corn1251,dialect,,,oco,,,I,H,,,
 4947,Atzingo Matlatzinca,atzi1235,otom1299,matl1258,language,19.3871,-99.9239,ocu,MX,,I,L,,,
