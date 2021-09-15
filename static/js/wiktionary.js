@@ -75,13 +75,15 @@ const Dictionary = {
   l1: undefined,
   l2: undefined,
   supplementalLangs: {
-    msa: 'ind',
-    ind: 'msa',
+    ase: 'eng',
     ceb: 'tgl',
-    tgl: 'ceb',
     cmn: 'zho',
-    nor: 'nno',
+    ind: 'msa',
+    ins: 'eng',
+    msa: 'ind',
     nob: 'nno',
+    nor: 'nno',
+    tgl: 'ceb',
   },
   conjugations: undefined, // for french only
   romanizations: undefined, // for persian only

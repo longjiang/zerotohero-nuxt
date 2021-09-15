@@ -370,7 +370,7 @@ id,name,glottologId,glottologFamilyId,glottologParentId,level,lat,long,iso639-3,
 369,Asu (Tanzania),asut1235,atla1278,pare1277,language,-4.17978,37.8323,asa,KE TZ,,I,L,,,
 370,Assiniboine,assi1247,siou1252,dako1257,language,49.2923,-106.068,asb,CA US,,I,L,,,
 371,Casuarina Coast Asmat,casu1237,nucl1709,asma1257,language,-6.43005,138.566,asc,ID,,I,L,,,
-372,American Sign Language,amer1248,sign1238,amer1258,language,33.8117,-81.6121,ase,BB BF BJ BO CA CD CF CI CN GA GH JM KE MG MR NG PH SG TD TG US ZW,,I,L,,,
+372,American Sign Language,amer1248,sign1238,amer1258,language,33.8117,-81.6121,ase,BB BF BJ BO CA CD CF CI CN GA GH JM KE MG MR NG PH SG TD TG US ZW,,I,L,,ase,"Laura Redden Searing (1839–1923), a deaf poet and journalist"
 373,Auslan,aust1271,sign1238,aust1310,language,-30.0,145.0,asf,AU,,I,L,,,
 374,Western-Kambari-Cishingini,cish1238,atla1278,west2828,language,9.88458,4.48564,asg,BJ NG,,I,L,,,
 375,Aewa,abis1238,,,language,-1.284096,-75.084405,ash,PE,,I,E,,,
