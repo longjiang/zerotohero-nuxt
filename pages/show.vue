@@ -12,9 +12,7 @@
     <div class="youtube-browse container pt-5 pb-5">
       <SocialHead
         v-if="show"
-        :title="`Learn ${$l2.name} with the ${
-          this.type === 'tv-show' ? 'TV show' : 'talk series'
-        } “${show.title}” | ${$l2.name} Zero to Hero`"
+        :title="title"
         :description="`Watch the full episode and study the ${
           $l2.code === 'zh' ? 'Pinyin' : $l2.name
         } subtitles.`"
@@ -227,6 +225,16 @@ export default {
     showDate() {
       return this.type === "talk";
     },
+    title() {
+      let what = "";
+      if (this.type === "tv-show") what = `the TV show “${this.show.title}”`;
+      else what = `the talk series “${this.show.title}”`;
+      // But...
+      if (['Music', 'Movies', 'News'].includes(this.show.title)) {
+        what = this.show.title
+      }
+      return `Learn ${this.$l2.name} with ${what} | ${this.$l2.name} Zero to Hero`;
+    },
   },
   watch: {
     async keyword() {
@@ -374,7 +382,9 @@ export default {
         videos =
           videos.sort((y, x) =>
             x.date
-              ? x.date.localeCompare(y.date, this.$l2.locales[0], { numeric: true })
+              ? x.date.localeCompare(y.date, this.$l2.locales[0], {
+                  numeric: true,
+                })
               : -1
           ) || [];
       }
