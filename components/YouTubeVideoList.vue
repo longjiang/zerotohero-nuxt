@@ -72,7 +72,7 @@
               Drop SRT files here to bulk add subs ...
             </drop>
           </div>
-          <div class="mt-1" style="font-size: 0.9em;">
+          <div class="mt-1" style="font-size: 0.9em">
             <b-form-checkbox
               class="mr-1 d-inline-block"
               v-model="hideVideosWithoutSubs"
@@ -99,19 +99,22 @@
               Remove unavailable videos
             </a>
           </div>
-          <div v-if="uniqueVideosByChannel">
-            <h6 class="mt-2">Unique videos by channel:</h6>
-            <router-link
-              v-for="(video, index) in uniqueVideosByChannel"
+          <div v-if="channels">
+            <h6 class="mt-2">Channels with the most videos below:</h6>
+            <div
+              v-for="(channel, index) in channels"
               :key="`video-list-unique-by-channel-${index}`"
-              :to="{
-                name: 'youtube-view',
-                params: { youtube_id: video.youtube_id },
-              }"
-              class="d-block"
             >
-              {{ video.title }}
-            </router-link>
+              {{ channel.videos.length }} Videos:
+              <router-link
+                :to="{
+                  name: 'youtube-view',
+                  params: { youtube_id: channel.videos[0].youtube_id },
+                }"
+              >
+                {{ channel.videos[0].title.slice(0,30) }}
+              </router-link>
+            </div>
           </div>
         </div>
       </client-only>
@@ -123,7 +126,8 @@
             'col-12': params.xs && view === 'grid' && !singleColumn,
             'col-6': params.sm && view === 'grid' && !singleColumn,
             'col-4': params.md && view === 'grid' && !singleColumn,
-            'col-3': (params.lg || params.xl) && view === 'grid' && !singleColumn,
+            'col-3':
+              (params.lg || params.xl) && view === 'grid' && !singleColumn,
           }"
           :style="`padding-bottom: ${view === 'list' ? '1rem' : '2rem'}`"
           :key="`youtube-video-wrapper-${video.youtube_id}-${videoIndex}`"
@@ -215,7 +219,6 @@ export default {
       hideVideosWithoutSubs: false,
       showChannels: false,
       hideVideosInShows: false,
-      uniqueVideosByChannel: undefined,
       unavailableYouTubeIds: [],
       params: {},
       query: {
@@ -299,14 +302,16 @@ export default {
       this.unavailableYouTubeIds.push(youtube_id);
     },
     surveyChannels() {
-      let uniqueVideosByChannel = Helper.uniqueByValue(
-        this.videos,
-        "channel_id"
-      );
-      let channels = this.videos.map((v) => v.channel_id);
-      channels = Helper.unique(channels);
+      let groups = Helper.groupArrayBy(this.videos, "channel_id");
+      let channels = [];
+      for (let channel_id in groups) {
+        channels.push({
+          channel_id,
+          videos: groups[channel_id],
+        });
+      }
+      channels = channels.sort((a, b) => b.videos.length - a.videos.length);
       this.channels = channels;
-      this.uniqueVideosByChannel = uniqueVideosByChannel;
     },
     async checkSavedFunc(videos) {
       videos = videos.filter((v) => !v.id); // Only check those that are not saved
