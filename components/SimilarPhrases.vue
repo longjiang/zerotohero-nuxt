@@ -181,6 +181,7 @@ export default {
     },
     async getPhrasebooksThatContain(term) {
       if (term) {
+        // [contains] filter seems to be case INSENSITIVE
         let url = `${
           Config.wiki
         }items/phrasebook?sort=title&filter[phrases][contains]=${encodeURIComponent(
@@ -224,8 +225,8 @@ export default {
         });
         for (let phrase of phrasebook.phrases) {
           if (
-            phrase.phrase === this.phrase ||
-            phrase[l1Code] === this.translation
+            (phrase.phrase || "").toUpperCase() === (this.phrase || "").toUpperCase() ||
+            (phrase[l1Code] || "").toUpperCase() === (this.translation || "").toUpperCase()
           ) {
             phrase.l2 = l2;
             phrases.push(phrase);
