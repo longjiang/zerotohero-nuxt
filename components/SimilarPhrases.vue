@@ -179,12 +179,12 @@ export default {
       this.separatePhrases(this.allPhrases);
       this.updating = false;
     },
-    async getYouInOtherLangs(term) {
+    async getPhrasebooksThatContain(term) {
       if (term) {
         let url = `${
           Config.wiki
         }items/phrasebook?sort=title&filter[phrases][contains]=${encodeURIComponent(
-          term + "\r"
+          term
         )}&fields=*,tv_show.*&limit=500&timestamp=${
           this.$adminMode ? Date.now() : 0
         }`;
@@ -195,17 +195,17 @@ export default {
       }
       return [];
     },
+    async getYouInOtherLangs(term) {
+      if (term) {
+        let phrasebooks = await this.getPhrasebooksThatContain(term + "\r")
+        return phrasebooks
+      }
+      return [];
+    },
     async getVousInOtherLangs(term) {
-      let url = `${
-        Config.wiki
-      }items/phrasebook?sort=title&filter[phrases][contains]=${encodeURIComponent(
-        "\n" + term
-      )}&fields=*,tv_show.*&limit=500&timestamp=${
-        this.$adminMode ? Date.now() : 0
-      }`;
-      let res = await axios.get(url);
-      if (res && res.data) {
-        return res.data.data;
+      if (term) {
+        let phrasebooks = await this.getPhrasebooksThatContain("\n" + term)
+        return phrasebooks
       }
       return [];
     },
