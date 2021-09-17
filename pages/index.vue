@@ -42,21 +42,41 @@
         </client-only>
         <div class="row" v-if="!hasDashboard">
           <div class="col-sm-12">
-            <div class="intro-text mb-5">
-              <h5 class="mb-3" style="line-height: 1.5; font-weight: 600">
-                A one-stop resource to help you learn
-                <em>any</em>
-                language by comprehensible input.
-              </h5>
-              <hr class="border-light" style="opacity: 0.2" />
-              <p>
-                We provide you with live TV channels, TV shows with subtitles,
-                music with lyrics, phrasebooks with video examples... everything
-                that can help you to learn a language “by osmosis.”
+            <div class="intro-text mb-5 text-center">
+              <h4 class="mb-3" style="line-height: 1.5; font-weight: 600">
+                This is heaven for language lovers.
+              </h4>
+              <p class="mb-0" style="font-size: 1.1em">
+                This is a platform that provides tens of thousands of videos
+                with subtitles and dictionary tools across
+                <router-link
+                  :to="{ name: 'language-map' }"
+                  class="link-unstyled"
+                  style="text-decoration: underline"
+                >
+                  hundreds of languages
+                </router-link>
+                !
               </p>
-              <p class="mb-0">
-                We are also known for our “Chinese Zero to Hero” and “English
-                Zero to Hero” online language courses.
+              <p class="mb-0" style="font-size: 1.1em">
+                Fully open-source – see
+                <a
+                  href="https://github.com/longjiang/zerotohero-nuxt"
+                  class="link-unstyled"
+                  style="text-decoration: underline"
+                  target="_blank"
+                >
+                  our repository on GitHub
+                </a>
+                , and follow us on
+                <a
+                  href="https://twitter.com/zerotoherolang"
+                  target="_blank"
+                  class="link-unstyled"
+                  style="text-decoration: underline"
+                >
+                  Twitter.
+                </a>
               </p>
             </div>
           </div>
@@ -78,32 +98,36 @@
                     to="/en/zh/online-courses"
                     style="color: #fd4f1c; font-weight: bold"
                   >
-                    HSK courses
+                    HSK Courses
                   </router-link>
                 </li>
                 <li>
-                  <router-link to="/en/zh/dictionary">Dictionary</router-link>
-                </li>
-                <li>
-                  <router-link to="/en/zh/phrasebooks">Phrasebooks</router-link>
-                </li>
-                <li>
-                  <router-link to="/en/zh/grammar">
-                    Grammar reference
+                  <router-link to="/en/zh/dictionary">
+                    Chinese Dictionary
                   </router-link>
                 </li>
                 <li>
-                  <router-link to="/en/zh/live-tv">Live TV</router-link>
+                  <router-link to="/en/zh/phrasebooks">
+                    Chinese Phrasebooks
+                  </router-link>
                 </li>
                 <li>
-                  <router-link to="/en/zh/tv-shows">TV Shows</router-link>
+                  <router-link to="/en/zh/grammar">Chinese Grammar</router-link>
                 </li>
                 <li>
-                  <router-link to="/en/zh/reader">Reading tools</router-link>
+                  <router-link to="/en/zh/live-tv">Live Chinese TV</router-link>
+                </li>
+                <li>
+                  <router-link to="/en/zh/tv-shows">
+                    Chinese TV Shows
+                  </router-link>
+                </li>
+                <li>
+                  <router-link to="/en/zh/reader">Reading Tools</router-link>
                 </li>
                 <li>
                   <router-link to="/en/zh/resource/list/all/all">
-                    Resources
+                    Chinese Resources
                   </router-link>
                 </li>
               </ul>
@@ -169,23 +193,23 @@
                   </router-link>
                 </li>
                 <li>
-                  <router-link to="/zh/en/dictionary">词典工具</router-link>
+                  <router-link to="/zh/en/dictionary">英语词典工具</router-link>
                 </li>
                 <li>
-                  <router-link to="/zh/en/phrasebooks">单词表</router-link>
+                  <router-link to="/zh/en/phrasebooks">英语短语集</router-link>
                 </li>
                 <li>
-                  <router-link to="/zh/en/live-tv">电视直播</router-link>
+                  <router-link to="/zh/en/live-tv">英语电视直播</router-link>
                 </li>
                 <li>
-                  <router-link to="/zh/en/tv-shows">电视节目</router-link>
+                  <router-link to="/zh/en/tv-shows">英语电视节目</router-link>
                 </li>
                 <li>
-                  <router-link to="/zh/en/reader">阅读工具</router-link>
+                  <router-link to="/zh/en/reader">英语阅读工具</router-link>
                 </li>
                 <li>
                   <router-link to="/zh/en/resource/list/all/all">
-                    其它资源
+                    其它英语资源
                   </router-link>
                 </li>
               </ul>
