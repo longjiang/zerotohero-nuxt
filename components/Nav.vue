@@ -420,6 +420,25 @@ export default {
           ],
         },
         {
+          icon: "fab fa-twitter",
+          title: "What’s New",
+          show: true,
+          children: [
+            {
+              name: "updates",
+              title: "What’s New",
+              icon: "fab fa-twitter",
+              show: true,
+            },
+            {
+              name: "articles-wiki",
+              title: "Blog",
+              icon: "fas fa-copy",
+              show: true,
+            },
+          ]
+        },
+        {
           icon: "fa fa-book",
           title: "Dictionary",
           name: "dictionary",
@@ -715,32 +734,14 @@ export default {
           ],
         },
         {
-          icon: "fas fa-users",
-          title: "Community",
+          icon: "fas fa-gem",
+          title: "Resources",
           show: true,
           children: [
-            {
-              name: "updates",
-              title: "Updates",
-              icon: "fas fa-bell",
-              show: true,
-            },
-            {
-              name: "discussions",
-              title: "Discussions",
-              icon: "fas fa-comments",
-              show: true,
-            },
             {
               name: "resources",
               title: "Resources",
               icon: "fas fa-gem",
-              show: true,
-            },
-            {
-              name: "articles-wiki",
-              title: "Blog",
-              icon: "fas fa-copy",
               show: true,
             },
             {
