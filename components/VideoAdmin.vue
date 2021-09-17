@@ -69,24 +69,31 @@
           />
         </router-link>
       </span>
-      <span
-        style="font-size: 0.9em"
-        v-if="video.subs_l2 && video.subs_l2.length > 0"
-      >
-        <a
-          :href="originalTextHref"
-          :download="`${video.title}.txt`"
-          target="_blank"
-          class="link-unstyled mr-2"
+      <client-only>
+        <span
+          style="font-size: 0.9em; white-space: nowrap"
+          v-if="video.subs_l2 && video.subs_l2.length > 0"
         >
-          <i class="fa fa-download mr-1"></i>
-          TXT
-        </a>
-        <a :href="translationURL" target="_blank" class="link-unstyled mr-2">
-          <i class="fa fa-language mr-1"></i>
-          Translation
-        </a>
-      </span>
+          <a
+            :href="originalTextHref"
+            :download="`${video.title}.txt`"
+            target="_blank"
+            class="link-unstyled mr-2"
+          >
+            <i class="fa fa-download mr-1"></i>
+            TXT
+          </a>
+          <a
+            :href="translationURL"
+            target="_blank"
+            class="link-unstyled mr-2"
+            style="white-space: nowrap"
+          >
+            <i class="fa fa-language mr-1"></i>
+            Translation
+          </a>
+        </span>
+      </client-only>
     </div>
     <div
       :class="{
@@ -310,6 +317,7 @@ export default {
       autoBreakTranslationLines: false,
       originalText: "",
       punctuations: "。！？；：!?;:♪",
+      translationURL: undefined
     };
   },
   computed: {
@@ -335,19 +343,11 @@ export default {
     originalTextHref() {
       return Helper.makeTextFile(this.text);
     },
-    translationURL() {
-      if (typeof this.$l2 !== "undefined") {
-        return this.$languages.translationURL(
-          this.text,
-          this.$l1,
-          this.$l2
-        );
-      }
-    },
   },
   mounted() {
     this.mounted = true; // So that this component shows up on first load (updates $adminMode)
     this.originalText = this.text;
+    this.translationURL = this.getTranslationURL()
   },
   watch: {
     showSubsEditing() {
@@ -368,8 +368,16 @@ export default {
         this.transcriptKey++;
       }
     },
+    text() {
+      this.translationURL = this.getTranslationURL()
+    }
   },
   methods: {
+    getTranslationURL() {
+      if (typeof this.$l2 !== "undefined") {
+        return this.$languages.translationURL(this.text, this.$l1, this.$l2);
+      }
+    },
     breaklines(text) {
       return text
         .replace(new RegExp(`([${this.punctuations}])\n`, "g"), "$1")
