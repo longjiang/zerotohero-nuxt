@@ -6,15 +6,26 @@
         :class="{
           'd-none': true,
           'd-inline-block':
-            !saving && !(video && video.id) && (video.subs_l2 || $adminMode),
+            !saving &&
+            !(video && video.id) &&
+            ((video.subs_l2 && video.subs_l2.length > 0) || $adminMode),
         }"
         @click="save"
       >
         <i class="fas fa-plus mr-2"></i>
         Add to Videos
       </b-button>
-      <span class="ml-2 mt-1" style="position: relative; top: 0.1rem; opacity: 0.7; font-size: 0.9em" v-if="!saving && !(video && video.id) && (video.subs_l2 || $adminMode)">
-        <i class="fa fa-arrow-left mr-1"></i> Like the video? Add it to the library.
+      <span
+        class="ml-2 mt-1"
+        style="position: relative; top: 0.1rem; opacity: 0.7; font-size: 0.9em"
+        v-if="
+          !saving &&
+          !(video && video.id) &&
+          ((video.subs_l2 && video.subs_l2.length > 0) || $adminMode)
+        "
+      >
+        <i class="fa fa-arrow-left mr-1"></i>
+        Like the video? Add it to the library.
       </span>
       <span v-if="saving">
         <i class="fas fa-hourglass mr-2 text-secondary"></i>
@@ -58,7 +69,10 @@
           />
         </router-link>
       </span>
-      <span style="font-size: 0.9em">
+      <span
+        style="font-size: 0.9em"
+        v-if="video.subs_l2 && video.subs_l2.length > 0"
+      >
         <a
           :href="originalTextHref"
           :download="`${video.title}.txt`"
@@ -294,7 +308,6 @@ export default {
       notes: "",
       mounted: false,
       autoBreakTranslationLines: false,
-      translationURL: undefined,
       originalText: "",
       punctuations: "。！？；：!?;:♪",
     };
@@ -320,19 +333,21 @@ export default {
           .join("\n");
     },
     originalTextHref() {
-      return Helper.makeTextFile(this.originalText);
+      return Helper.makeTextFile(this.text);
+    },
+    translationURL() {
+      if (typeof this.$l2 !== "undefined") {
+        return this.$languages.translationURL(
+          this.text,
+          this.$l1,
+          this.$l2
+        );
+      }
     },
   },
   mounted() {
     this.mounted = true; // So that this component shows up on first load (updates $adminMode)
     this.originalText = this.text;
-    if (typeof this.$l2 !== "undefined") {
-      this.translationURL = this.$languages.translationURL(
-        this.originalText,
-        this.$l1,
-        this.$l2
-      );
-    }
   },
   watch: {
     showSubsEditing() {
