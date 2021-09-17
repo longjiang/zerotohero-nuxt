@@ -481,6 +481,12 @@ export default {
           show: this.hasFeature("youtube"),
           children: [
             {
+              name: "youtube-browse",
+              title: "Videos",
+              icon: "fa fa-play",
+              show: true,
+            },
+            {
               name: "tv-shows",
               icon: "fa fa-tv",
               title: "TV Shows",
@@ -513,20 +519,6 @@ export default {
               icon: "fas fa-graduation-cap",
               title: `Talks`,
               show: this.hasTalks,
-            },
-            {
-              name: "youtube-browse",
-              title: `${
-                this.hasTVShows ||
-                this.musicPath ||
-                this.moviesPath ||
-                this.newsPath ||
-                this.hasTalks
-                  ? "Other "
-                  : ""
-              }Videos`,
-              icon: "fa fa-play",
-              show: true,
             },
             {
               name: "live-tv",

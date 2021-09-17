@@ -2,6 +2,7 @@
   <div class="video-edit">
     <div class="video-edit-public">
       <b-button
+        size="sm"
         :class="{
           'd-none': true,
           'd-inline-block':
@@ -10,8 +11,11 @@
         @click="save"
       >
         <i class="fas fa-plus mr-2"></i>
-        Add to Library
+        Add to Videos
       </b-button>
+      <span class="ml-2 mt-1" style="position: relative; top: 0.1rem; opacity: 0.7; font-size: 0.9em" v-if="!saving && !(video && video.id) && (video.subs_l2 || $adminMode)">
+        <i class="fa fa-arrow-left mr-1"></i> Like the video? Add it to the library.
+      </span>
       <span v-if="saving">
         <i class="fas fa-hourglass mr-2 text-secondary"></i>
         Adding...
