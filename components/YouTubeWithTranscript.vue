@@ -65,7 +65,7 @@
               <Annotate
                 :phonetics="false"
                 :buttons="true"
-                v-if="$l2.code !== 'tlh'"
+                v-if="$l2.code !== 'tlh' && $l2.direction !== 'rtl'"
               >
                 <span>{{ video.title }}</span>
               </Annotate>

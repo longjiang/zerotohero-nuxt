@@ -346,19 +346,19 @@ export default {
         }
       } else if (
         [
-          "en",
-          "ko",
-          "vi",
-          "de",
-          "id",
-          "ms",
-          "tr",
-          "ta",
-          "hi",
-          "tl",
           "ceb",
           "cmn",
+          "de",
+          "en",
+          "hi",
           "hy",
+          "id",
+          "ko",
+          "ms",
+          "ta",
+          "tl",
+          "tr",
+          "vi",
         ].includes(this.$l2.code)
       ) {
         html = "";
