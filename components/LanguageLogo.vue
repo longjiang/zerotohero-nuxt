@@ -11,6 +11,7 @@
         >
           <span class="logo-circle-initial">{{ l2Name.charAt(0) }}</span>
           <img
+            v-if="l2.logo"
             :src="`/img/logo-square/${l2.code}.jpeg`"
             :alt="logoDescription"
             :title="logoDescription"
