@@ -86,57 +86,6 @@
           >
             <Loader :sticky="true" message="Loading videos in our library..." />
           </div>
-          <div
-            :class="{
-              'no-videos-message': true,
-              'd-none': !videos || videos.length > 0,
-            }"
-          >
-            <h5>
-              Oh no, we don't have any {{ $l2.name }} videos. We need your help
-              to expand our library!
-            </h5>
-            <p class="mt-4">Here is how you can help:</p>
-            <ol>
-              <li>
-                Install the "Open in Zero to Hero" this bookmarklet. Drag this
-                link to your browser's bookmarks bar:
-                <a :href="bookmarkletHref" class="btn btn-small btn-ghost-dark">
-                  Open in Zero to Hero
-                </a>
-              </li>
-              <li>
-                Search for {{ $l2.name }} videos on YouTube, preferrably those
-                that have {{ $l2.name }} closed captions (CC).
-              </li>
-              <li>
-                From the video page on YouTube, click on the bookmarklet you
-                just added in Step 1.
-                <b>
-                  When prompted to enter the language code for {{ $l2.name }},
-                  enter “{{ $l2.code }}”.
-                </b>
-                This will open that video on our website.
-              </li>
-              <li>Click the "+ Add to Videos" button to add it to our library.</li>
-              <li>
-                If the "+ Add to Videos" button is missing, you need to add
-                closed captions first by dragging and dropping a subtitles file
-                (SRT or ASS).
-              </li>
-            </ol>
-            <div>
-              Questions? Mention me on Twitter
-              <a
-                href="https://twitter.com/zerotoherolang"
-                target="_blank"
-                class="link-unstyled"
-              >
-                <u>@zerotoherolang</u>
-              </a>
-              and I'll help you out. Thanks for contributing!
-            </div>
-          </div>
           <template v-if="videos && videos.length > 0">
             <YouTubeVideoList
               skin="dark"
@@ -150,6 +99,93 @@
             />
           </template>
           <div v-observe-visibility="visibilityChanged"></div>
+          <div
+            :class="{
+              'no-videos-message': true,
+            }"
+          >
+            <h5 v-if="videos && videos.length === 0">
+              Oh no, we don't have any {{ $l2.name }} videos. We need your help
+              to expand our library!
+            </h5>
+            <h5 v-else>Help us expand our library!</h5>
+            <p class="mt-4">There are TWO WAYS you can add videos to our library.</p>
+            <h6 class="mt-4">METHOD 1: Use our YouTube search tool</h6>
+            <ol>
+              <li>
+                Open our
+                <router-link
+                  :to="{
+                    name: 'youtube-search',
+                    params: { term: `${$l2.name} language` },
+                  }"
+                >
+                  YouTube Search Tool
+                </router-link>
+                and search for {{ $l2.name }} videos. (In the search results,
+                videos without {{ $l2.name }} captions are automatically grayed
+                out, although you can still open them.)
+              </li>
+              <li>
+                If you don't see any results, try using the option "No
+                captions, more results."
+              </li>
+              <li>Open any video (preferably those that are not grayed out).</li>
+              <li>
+                Click the "+ Add to Videos" button to add it to our library.
+              </li>
+              <li>
+                If the "+ Add to Videos" button is missing, you need to add
+                closed captions first by dragging and dropping a subtitles file
+                (SRT or ASS).
+              </li>
+            </ol>
+            <h6 class="mt-4">METHOD 2: Search on YouTube directly</h6>
+            <ol>
+              <li>
+                Install the "Open in Zero to Hero" this bookmarklet. Drag this
+                link to your browser's bookmarks bar:
+                <a :href="bookmarkletHref" class="btn btn-small btn-ghost-dark">
+                  Open in Zero to Hero
+                </a>
+              </li>
+              <li>
+                Open
+                <a
+                  :href="`https://www.youtube.com/results?search_query=${$l2.name}+language&sp=EgIoAQ%253D%253D`"
+                >
+                  YouTube
+                </a>
+                , and search for {{ $l2.name }} videos, preferrably those that
+                have {{ $l2.name }} closed captions (CC).
+              </li>
+              <li>
+                From YouTube (either a video page or a playlist page), click on the bookmarklet you
+                just added in Step 1.
+                <b>
+                  When prompted to enter the language code for {{ $l2.name }},
+                  enter “{{ $l2.code }}”.
+                </b>
+                This will open that video on our website.
+              </li>
+              <li>
+                Click the "+ Add to Videos" button to add it to our library.
+              </li>
+              <li>
+                If the "+ Add to Videos" button is missing, you need to add
+                closed captions first by dragging and dropping a subtitles file
+                (SRT or ASS).
+              </li>
+            </ol>
+            <hr />
+            <div>
+              Questions? Mention me on Twitter
+              <a href="https://twitter.com/zerotoherolang" target="_blank">
+                <u>@zerotoherolang</u>
+              </a>
+              and I'll help you out. Thanks for contributing!
+            </div>
+          </div>
           <LazyIdenticalLanguages class="mt-4" routeName="youtube-browse" />
           <client-only>
             <Nav

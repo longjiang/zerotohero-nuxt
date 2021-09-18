@@ -34,26 +34,26 @@
       />
       <client-only>
         <b-form-group class="mt-3">
-          <b-form-radio
+          <!-- <b-form-radio
             v-model="captions"
             class="d-inline-block mr-3"
             value="captions"
           >
             With Captions
+          </b-form-radio> -->
+          <b-form-radio
+            v-model="captions"
+            class="d-inline-block mr-3"
+            value="all"
+          >
+            Yes captions
           </b-form-radio>
           <b-form-radio
             v-model="captions"
             class="d-inline-block mr-3"
             value="nocaptions"
           >
-            No Captions
-          </b-form-radio>
-          <b-form-radio
-            v-model="captions"
-            class="d-inline-block mr-3"
-            value="all"
-          >
-            All
+            No captions, more results
           </b-form-radio>
           <b-form-checkbox v-model="long" class="d-inline-block mr-3">
             Only long videos (20m+)
