@@ -15,7 +15,7 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/img/icons/favicon.ico' },
-      { rel: 'stylesheet', href: '/vendor/fontawesome/css/all.min.css' },
+      { rel: 'stylesheet', href: '/vendor/fontawesome-free-5.15.4-web/css/all.min.css' },
     ],
     script: [
       { hid: 'russian-legacy', src: '/js/russian-legacy.js', defer: true },

@@ -419,13 +419,13 @@ export default {
           ],
         },
         {
-          icon: "fab fa-twitter",
+          icon: "fas fa-air-freshener",
           title: "What’s New",
           show: true,
           children: [
             {
               name: "updates",
-              title: "What’s New",
+              title: "Updates",
               icon: "fab fa-twitter",
               show: true,
             },
