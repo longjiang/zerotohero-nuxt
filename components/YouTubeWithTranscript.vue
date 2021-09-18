@@ -153,6 +153,12 @@
               Random
             </router-link>
           </div>
+          <YouTubeChannelCard
+            v-if="video.channel"
+            :channel="video.channel"
+            :key="`channel-${video.channel.id}`"
+            class="d-inline-block mb-4"
+          />
           <VideoAdmin
             :video="video"
             ref="videoAdmin1"
@@ -160,13 +166,6 @@
             @updateTranslation="updateTranslation"
             @updateOriginalText="updateOriginalText"
             @enableTranslationEditing="toggleEnableTranslationEditing"
-          />
-          <hr v-if="video.channel" />
-          <YouTubeChannelCard
-            v-if="video.channel"
-            :channel="video.channel"
-            :key="`channel-${video.channel.id}`"
-            class="d-inline-block"
           />
         </div>
         <div class="mt-3">
@@ -198,21 +197,18 @@
               <Loader :sticky="true" message="Loading subtitles..." />
             </div>
             <div
-              class="p-4 mt-4 mb-5 rounded"
-              style="
-                border: 2px dashed rgba(136, 136, 136, 0.5);
-                color: rgba(136, 136, 136, 0.85);
-              "
+              class="mt-4 mb-5 rounded"
+              style="color: rgba(136, 136, 136, 0.85)"
               v-if="
                 (!video.subs_l2 || video.subs_l2.length === 0) &&
                 !video.checkingSubs
               "
             >
               <h6>
-                This video does not have closed captions (CC) in {{ $l2.name }}.
+                This YouTube video does not have closed captions (CC) in {{ $l2.name }}.
               </h6>
               <div class="mt-3">
-                Otherwise, video trancript will show up here.
+                If you have the subtitles file (.srt or .ass), you can add it by dragging &amp; dropping it above.
               </div>
             </div>
             <div class="youtube-view-bottom-navigation text-center">

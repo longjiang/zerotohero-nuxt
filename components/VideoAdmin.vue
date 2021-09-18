@@ -1,6 +1,20 @@
 <template>
   <div class="video-edit">
     <div class="video-edit-public">
+      <drop
+        @drop="handleDrop"
+        :class="{
+          'd-none': video.subs_l2 && video.subs_l2.length > 0,
+          over: over,
+          'subs-drop drop p-4': true,
+        }"
+        :key="`drop-${transcriptKey}`"
+        @dragover="over = true"
+        @dragleave="over = false"
+      >
+        <i class="fa fa-file mr-2"></i>
+        Drop .srt or .ass files here to add subtitles
+      </drop>
       <b-button
         size="sm"
         :class="{
@@ -317,7 +331,7 @@ export default {
       autoBreakTranslationLines: false,
       originalText: "",
       punctuations: "。！？；：!?;:♪",
-      translationURL: undefined
+      translationURL: undefined,
     };
   },
   computed: {
@@ -347,7 +361,7 @@ export default {
   mounted() {
     this.mounted = true; // So that this component shows up on first load (updates $adminMode)
     this.originalText = this.text;
-    this.translationURL = this.getTranslationURL()
+    this.translationURL = this.getTranslationURL();
   },
   watch: {
     showSubsEditing() {
@@ -369,8 +383,8 @@ export default {
       }
     },
     text() {
-      this.translationURL = this.getTranslationURL()
-    }
+      this.translationURL = this.getTranslationURL();
+    },
   },
   methods: {
     getTranslationURL() {
@@ -574,8 +588,19 @@ export default {
 };
 </script>
 
-<style>
-.main-dark .video-edit-admin {
-  background-color: #88888822;
+<style lang="scss" scoped>
+.main-dark {
+  .subs-drop {
+    border: 2px dashed rgba(136, 136, 136, 0.5);
+    color: rgba(136, 136, 136, 0.85);
+    border-radius: 0.25rem;
+    &:over {
+      border: 2px dashed rgba(136, 136, 136, 0.8);
+      color: rgba(136, 136, 136, 1);
+    }
+  }
+  .video-edit-admin {
+    background-color: #88888822;
+  }
 }
 </style>
