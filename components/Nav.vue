@@ -500,7 +500,7 @@ export default {
           children: [
             {
               name: "youtube-browse",
-              title: "Videos",
+              title: "New Videos",
               icon: "fa fa-play",
               show: true,
             },

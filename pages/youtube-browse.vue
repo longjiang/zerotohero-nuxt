@@ -38,7 +38,7 @@
             />
           </client-only>
           <client-only>
-            <div class="d-flex mt-4 mb-3" v-if="videos && videos.length > 0">
+            <div class="d-flex mt-4 mb-3" v-if="(videos && videos.length > 0) || keyword">
               <SimpleSearch
                 placeholder="Search"
                 ref="searchLibrary"
@@ -104,10 +104,11 @@
               'no-videos-message': true,
             }"
           >
-            <h5 v-if="videos && videos.length === 0">
-              Oh no, we don't have any {{ $l2.name }} videos. We need your help
+            <h5 v-if="!keyword && videos && videos.length === 0">
+              Oh no, we don't have any new {{ $l2.name }} videos. We need your help
               to expand our library!
             </h5>
+            <h5 v-else-if="keyword">No search results matching your keywords. Help us add some!</h5>
             <h5 v-else>Help us expand our library!</h5>
             <p class="mt-4">There are TWO WAYS you can add videos to our library.</p>
             <h6 class="mt-4">METHOD 1: Use our YouTube search tool</h6>
