@@ -50,7 +50,7 @@
         Added
       </span>
     </div>
-    <div class="show-and-date mt-3">
+    <div class="show-and-date">
       <span class="mr-2" v-if="$adminMode">
         <router-link
           class="btn btn-small bg-secondary text-white"

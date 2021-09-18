@@ -71,28 +71,26 @@
               </Annotate>
               <span v-else>{{ video.title }}</span>
             </span>
-            <a
-              :class="{
-                'btn btn-small ml-2 mb-1': true,
-                'btn-ghost-dark': skin === 'dark',
-              }"
-              :href="`https://www.google.com/search?q=${encodeURIComponent(
-                video.title
-              )}`"
-              target="google"
-            >
-              <i class="fas fa-info-circle"></i>
-            </a>
           </h3>
           <div style="color: #aaa" class="mb-2">
             <span v-if="video.date">{{ formatDate(video.date) }}</span>
             <span v-if="episodes.length">
               · Video {{ episodeIndex + 1 }} of {{ episodes.length }}
             </span>
+            ·
+            <a
+              class="link-unstyled"
+              :href="`https://www.google.com/search?q=${encodeURIComponent(
+                video.title
+              )}`"
+              target="google"
+            >
+              More Info
+            </a>
           </div>
           <div
             :key="`youtube-video-info-${video.youtube_id}-${videoInfoKey}`"
-            :class="{ 'd-none': !video.id }"
+            :class="{ 'd-none': !video.id, 'mb-3': true }"
           >
             <router-link
               v-if="previousEpisode"
@@ -157,11 +155,12 @@
             v-if="video.channel"
             :channel="video.channel"
             :key="`channel-${video.channel.id}`"
-            class="d-inline-block mb-4"
+            class="d-inline-block"
           />
           <VideoAdmin
             :video="video"
             ref="videoAdmin1"
+            class="mt-3 mb-3"
             @showSubsEditing="toggleShowSubsEditing"
             @updateTranslation="updateTranslation"
             @updateOriginalText="updateOriginalText"
@@ -205,10 +204,12 @@
               "
             >
               <h6>
-                This YouTube video does not have closed captions (CC) in {{ $l2.name }}.
+                This YouTube video does not have closed captions (CC) in
+                {{ $l2.name }}.
               </h6>
               <div class="mt-3">
-                If you have the subtitles file (.srt or .ass), you can add it by dragging &amp; dropping it above.
+                If you have the subtitles file (.srt or .ass), you can add it by
+                dragging &amp; dropping it above.
               </div>
             </div>
             <div class="youtube-view-bottom-navigation text-center">
