@@ -1,6 +1,6 @@
 <template>
   <div class="video-edit">
-    <div class="video-edit-public">
+    <div class="video-edit-public pt-2 pb-2">
       <drop
         @drop="handleDrop"
         :class="{
@@ -50,7 +50,7 @@
         Added
       </span>
     </div>
-    <div class="show-and-date">
+    <div class="show-and-date pt-2 pb-2">
       <span class="mr-2" v-if="$adminMode">
         <router-link
           class="btn btn-small bg-secondary text-white"
