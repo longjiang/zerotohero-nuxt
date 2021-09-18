@@ -29,7 +29,13 @@
             {{ $l2.code === "zh" ? "Pinyin" : "" }} subtitles
           </p>
           <client-only>
-            <Nav :l1="$l1" :l2="$l2" variant="page" class="pt-4 pb-3" :showOnly="['Media']" />
+            <Nav
+              :l1="$l1"
+              :l2="$l2"
+              variant="page"
+              class="youtube-browse-nav pt-4 pb-3"
+              :showOnly="['Media']"
+            />
           </client-only>
           <client-only>
             <div class="d-flex mt-4 mb-3">
@@ -103,7 +109,13 @@
           <div v-observe-visibility="visibilityChanged"></div>
           <LazyIdenticalLanguages class="mt-4" routeName="youtube-browse" />
           <client-only>
-            <Nav :l1="$l1" :l2="$l2" variant="page" class="pt-5" :showOnly="['Media']" />
+            <Nav
+              :l1="$l1"
+              :l2="$l2"
+              variant="page"
+              class="pt-5"
+              :showOnly="['Media']"
+            />
           </client-only>
         </div>
       </div>
@@ -237,7 +249,9 @@ export default {
       videos =
         videos.sort((x, y) =>
           x.title
-            ? x.title.localeCompare(y.title, this.$l2.locales[0], { numeric: true })
+            ? x.title.localeCompare(y.title, this.$l2.locales[0], {
+                numeric: true,
+              })
             : 0
         ) || [];
       return videos;
@@ -297,3 +311,10 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.youtube-browse-nav {
+  ::v-deep .feature-card-name-youtube-browse {
+    display: none;
+  }
+}
+</style>

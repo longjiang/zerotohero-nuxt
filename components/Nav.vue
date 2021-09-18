@@ -206,12 +206,11 @@
                     (child) => child.show
                   )"
                   :key="`subnav-${child.name || child.href}-${index}`"
-                  class="
-                    col-6 col-sm-4 col-lg-3 col-xl-2
+                  :class="`col-6 col-sm-4 col-lg-3 col-xl-2
                     mb-1
                     p-1
                     feature-card-column
-                  "
+                    feature-card-name-${child.name}`"
                 >
                   <NuxtLink
                     v-if="!child.href"
@@ -436,7 +435,7 @@ export default {
               icon: "fas fa-copy",
               show: true,
             },
-          ]
+          ],
         },
         {
           icon: "fa fa-book",
