@@ -106,22 +106,36 @@
                 </a>
               </li>
               <li>
-                Search for {{ $l2.name }} videos on YouTube, preferrably those that have
-                {{ $l2.name }} closed captions (CC).
+                Search for {{ $l2.name }} videos on YouTube, preferrably those
+                that have {{ $l2.name }} closed captions (CC).
               </li>
               <li>
                 From the video page on YouTube, click on the bookmarklet you
-                just added in Step 1. <b>The
-                language code for {{ $l2.name }} is
-                “{{ $l2.code }}”.</b> This will open that video on our website.
+                just added in Step 1.
+                <b>
+                  When prompted to enter the language code for {{ $l2.name }},
+                  enter “{{ $l2.code }}”.
+                </b>
+                This will open that video on our website.
               </li>
-              <li>Click "+ Add to Videos" to add it to our library.</li>
+              <li>Click the "+ Add to Videos" button to add it to our library.</li>
               <li>
-                If the "+ Add to Videos" button is missing, you need to add closed captions first
-                by dragging and dropping a subtitles file (SRT or ASS).
+                If the "+ Add to Videos" button is missing, you need to add
+                closed captions first by dragging and dropping a subtitles file
+                (SRT or ASS).
               </li>
             </ol>
-            <div>Questions? Mention me on Twitter <a href="https://twitter.com/zerotoherolang" target="_blank" class="link-unstyled"><u>@zerotoherolang</u></a> and I'll help you out. Thanks for contributing!</div>
+            <div>
+              Questions? Mention me on Twitter
+              <a
+                href="https://twitter.com/zerotoherolang"
+                target="_blank"
+                class="link-unstyled"
+              >
+                <u>@zerotoherolang</u>
+              </a>
+              and I'll help you out. Thanks for contributing!
+            </div>
           </div>
           <template v-if="videos && videos.length > 0">
             <YouTubeVideoList
