@@ -58,7 +58,6 @@
 </template>
 
 <script>
-import WordPhotos from "@/lib/word-photos";
 import { ContainerQuery } from "vue-container-query";
 
 export default {
@@ -68,8 +67,6 @@ export default {
   data() {
     return {
       phrasebooks: undefined,
-      images: [],
-
       params: {},
       query: {
         xs: {
@@ -114,7 +111,7 @@ export default {
       return `Learn ${this.$l2.name} phrases with multimedia phrasebooks! See how each phrase is used in TV shows, movies, music, etc.`;
     },
     image() {
-      if (this.images.length > 0) {
+      if (this.images && this.images.length > 0) {
         return this.images[0].src;
       } else {
         return "/img/zth-share-image.jpg";
@@ -123,10 +120,6 @@ export default {
   },
   async fetch() {
     this.phrasebooks = this.getPhrasebooksFromStore();
-    this.images = await WordPhotos.getGoogleImages({
-      term: `${this.$l2.name} drama photo`,
-      lang: this.$l2.code,
-    });
   },
   mounted() {
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
