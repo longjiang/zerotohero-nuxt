@@ -95,7 +95,7 @@
           <div
             :class="{
               'loader text-center mt-5 mb-5': true,
-              'd-none': videos && (!loading),
+              'd-none': videos && !loading,
             }"
             style="flex: 1"
           >
@@ -267,32 +267,34 @@ export default {
         filters += "&sort=title";
       }
       let limit = this.perPage;
-      let response = await axios.get(
-        `${Config.wiki}items/youtube_videos?sort=-id&filter[l2][eq]=${
-          this.$l2.id
-        }${filters}&limit=${limit}&offset=${start}&fields=channel_id,id,lesson,level,title,topic,youtube_id,tv_show.*,talk.*${
-          this.$adminMode ? ",subs_l2" : ""
-        }&timestamp=${this.$adminMode ? Date.now() : 0}`
-      );
-      let videos = response.data.data || [];
-      if (videos && this.$adminMode) {
-        videos = await YouTube.checkShows(videos, this.$l2.id);
-        for (let video of videos) {
-          try {
-            if (video.subs_l2)
-              video.subs_l2 = YouTube.parseSavedSubs(video.subs_l2);
-          } catch (err) {}
+      try {
+        let response = await axios.get(
+          `${Config.wiki}items/youtube_videos?sort=-id&filter[l2][eq]=${
+            this.$l2.id
+          }${filters}&limit=${limit}&offset=${start}&fields=channel_id,id,lesson,level,title,topic,youtube_id,tv_show.*,talk.*${
+            this.$adminMode ? ",subs_l2" : ""
+          }&timestamp=${this.$adminMode ? Date.now() : 0}`
+        );
+        let videos = response.data.data || [];
+        if (videos && this.$adminMode) {
+          videos = await YouTube.checkShows(videos, this.$l2.id);
+          for (let video of videos) {
+            try {
+              if (video.subs_l2)
+                video.subs_l2 = YouTube.parseSavedSubs(video.subs_l2);
+            } catch (err) {}
+          }
         }
-      }
-      videos =
-        videos.sort((x, y) =>
-          x.title
-            ? x.title.localeCompare(y.title, this.$l2.locales[0], {
-                numeric: true,
-              })
-            : 0
-        ) || [];
-      return videos;
+        videos =
+          videos.sort((x, y) =>
+            x.title
+              ? x.title.localeCompare(y.title, this.$l2.locales[0], {
+                  numeric: true,
+                })
+              : 0
+          ) || [];
+        return videos;
+      } catch (err) {}
     },
     async getChannels() {
       let response = await axios.get(
