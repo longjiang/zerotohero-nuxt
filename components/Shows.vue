@@ -148,6 +148,7 @@ export default {
     if (shows) {
       this.shows = shows;
     } else {
+      console.log("😱 fetch(): Sate has no shows");
       let url = `${Config.wiki}items/${this.routeType.replace(
         "-",
         "_"
@@ -235,12 +236,8 @@ export default {
       }
     },
     async getRandomShow() {
-      let langId = this.$l2.id;
-      let type = this.routeType.replace("-", "_");
-      let url = `${Config.wiki}items/${type}?filter[l2][eq]=${langId}&fields=id,title`;
-      let response = await axios.get(url);
-      if (response.data && response.data.data.length > 0) {
-        let shows = response.data.data;
+      let shows = this.$store.state.shows[this.type][this.$l2.code];
+      if (shows) {
         shows = shows.filter((s) => {
           if (
             this.routeType === "tv-shows" &&
@@ -255,10 +252,22 @@ export default {
         return randomShow;
       }
     },
+    async getShowsOverNetwork() {
+      let langId = this.$l2.id;
+      let type = this.routeType.replace("-", "_");
+      console.log("😱 Getting random show over network");
+      let url = `${Config.wiki}items/${type}?filter[l2][eq]=${langId}&fields=id,title`;
+      let response = await axios.get(url);
+      if (response.data && response.data.data.length > 0) {
+        let shows = response.data.data;
+        return shows;
+      }
+    },
     sortShows(shows) {
       shows =
-        shows.sort((x, y) => x.title.localeCompare(y.title, this.$l2.locales[0])) ||
-        [];
+        shows.sort((x, y) =>
+          x.title.localeCompare(y.title, this.$l2.locales[0])
+        ) || [];
       return shows;
     },
     loadShows() {

@@ -24,11 +24,11 @@ export const mutations = {
 }
 
 export const actions = {
-  async load(context, { l2, adminMode }) {
+  async load(context, { l2, adminMode, limit = 500 }) {
     let tvShows = []
     let response = await axios.get(
-      `${Config.wiki}items/tv_shows?sort=title&filter[l2][eq]=${l2.id
-      }${adminMode ? '' : '&filter[hidden][empty]=true'}&limit=500&timestamp=${adminMode ? Date.now() : 0}`
+      `${Config.wiki}items/tv_shows?filter[l2][eq]=${l2.id
+      }${adminMode ? '' : '&filter[hidden][empty]=true'}&limit=${limit}&timestamp=${adminMode ? Date.now() : 0}`
     );
 
     if (response.data.data) {
@@ -41,8 +41,8 @@ export const actions = {
     }
 
     response = await axios.get(
-      `${Config.wiki}items/talks?sort=title&filter[l2][eq]=${l2.id
-      }${adminMode ? '' : '&filter[hidden][empty]=true'}&limit=500&timestamp=${adminMode ? Date.now() : 0}`
+      `${Config.wiki}items/talks?filter[l2][eq]=${l2.id
+      }${adminMode ? '' : '&filter[hidden][empty]=true'}&limit=${limit}&timestamp=${adminMode ? Date.now() : 0}`
     );
     let talks = []
     if (response.data.data) {
