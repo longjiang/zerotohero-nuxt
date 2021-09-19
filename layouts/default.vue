@@ -181,7 +181,6 @@ export default {
       }
     },
     async onLanguageChange() {
-      if (this.l1 && this.l2) this.loadSettings();
       if (this.l1) this.updatei18n();
       this.unsubscribe = this.$store.subscribe((mutation, state) => {
         if (mutation.type.startsWith("settings")) {
@@ -204,7 +203,7 @@ export default {
         this.dictionaryCredit = await dictionary.credit();
       }
     },
-    async loadSettings() {
+    loadSettings() {
       this.$store.commit("settings/LOAD_SETTINGS");
       if (!this.$store.state.savedCollocations.savedCollocationsLoaded) {
         this.$store.commit("savedCollocations/LOAD_SAVED_COLLOCATIONS");
