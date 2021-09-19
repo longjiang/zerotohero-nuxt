@@ -169,6 +169,9 @@
               :exact="phraseObj.exact || phrasebook.exact"
               :showExternal="false"
               :showHeader="false"
+              :showImages="false"
+              :showCollocations="false"
+              :showExamples="false"
               class="mt-4 mb-4"
               ref="phrase"
             />

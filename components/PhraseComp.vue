@@ -46,20 +46,20 @@
       <div class="row">
         <div class="col-sm-12">
           <div class="focus">
-            <!-- <WebImages
-              v-if="term"
+            <WebImages
+              v-if="showImages && term"
               :text="term"
               limit="10"
               :key="`${term}-images`"
-            /> -->
+            />
             <client-only>
               <EntryYouTube :text="term" v-if="$adminMode" />
             </client-only>
-            <Collocations v-if="term" :text="term" :key="`${term}-col`" />
+            <Collocations v-if="showCollocations && term" :text="term" :key="`${term}-col`" />
           </div>
           <div :key="term" class="focus">
             <Concordance
-              v-if="term"
+              v-if="showExamples && term"
               :text="term"
               :key="`${term}-concordance`"
             />
@@ -81,6 +81,15 @@ export default {
     },
     exact: {
       default: false,
+    },
+    showImages: {
+      default: true,
+    },
+    showCollocations: {
+      default: true,
+    },
+    showExamples: {
+      default: true,
     },
     showExternal: {
       default: false,
