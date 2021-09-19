@@ -91,6 +91,7 @@ export default {
       wide: false,
       skin: "light",
       dictionaryCredit: "",
+      settingsLoaded: undefined,
       fullPageRoutes: ["index", "sale"],
       fullHistory: [],
     };
@@ -135,6 +136,7 @@ export default {
   async mounted() {
     this.wide = Helper.wide();
     smoothscroll.polyfill(); // Safari does not support smoothscroll
+    if (this.l1 && this.l2) this.loadSettings();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type.startsWith("settings")) {
         if (mutation.type === "settings/SET_L1") {
@@ -208,6 +210,8 @@ export default {
       }
     },
     loadSettings() {
+      if (this.settingsLoaded === this.l2.code) return
+      this.settingsLoaded = this.l2.code
       this.$store.commit("settings/LOAD_SETTINGS");
       if (!this.$store.state.savedCollocations.savedCollocationsLoaded) {
         this.$store.commit("savedCollocations/LOAD_SAVED_COLLOCATIONS");
