@@ -143,8 +143,8 @@
       <div
         class="dictionary-entry-section"
         v-if="
-          ['ja', 'ko'].includes($l2.code) ||
-          ($l2.han && sections[currentSection].title === 'Characters')
+          (['ja', 'ko'].includes($l2.code) || $l2.han) &&
+          sections[currentSection].title === 'Characters'
         "
       >
         <div v-if="$l2.code !== 'zh'">
