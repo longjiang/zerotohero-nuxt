@@ -135,19 +135,25 @@ export default {
   async mounted() {
     this.wide = Helper.wide();
     smoothscroll.polyfill(); // Safari does not support smoothscroll
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (mutation.type.startsWith("settings")) {
+        if (mutation.type === "settings/SET_L1") {
+          this.updatei18n();
+        }
+        if (mutation.type === "settings/SET_L2") {
+          this.loadSettings();
+        }
+      }
+    });
     this.onLanguageChange();
+  },
+  beforeDestroy() {
+    // you may call unsubscribe to stop the subscription
+    this.unsubscribe();
   },
   destroyed() {
     if (typeof window !== "undefined")
       window.removeEventListener("resize", this.onResize);
-  },
-  watch: {
-    l2() {
-      this.onLanguageChange();
-    },
-    $route() {
-      this.addFullHistoryItem(this.$route.path);
-    },
   },
   head() {
     let head = { script: [] };
@@ -162,6 +168,14 @@ export default {
       });
     }
     return head;
+  },
+  watch: {
+    l2() {
+      this.onLanguageChange();
+    },
+    $route() {
+      this.addFullHistoryItem(this.$route.path);
+    },
   },
   methods: {
     addFullHistoryItem(path) {
@@ -182,16 +196,6 @@ export default {
     },
     async onLanguageChange() {
       if (this.l1) this.updatei18n();
-      this.unsubscribe = this.$store.subscribe((mutation, state) => {
-        if (mutation.type.startsWith("settings")) {
-          if (mutation.type === "settings/SET_L1") {
-            this.updatei18n();
-          }
-          if (mutation.type === "settings/SET_L2") {
-            this.loadSettings();
-          }
-        }
-      });
       if (!this.$store.state.savedWords.savedWordsLoaded) {
         this.$store.commit("savedWords/LOAD_SAVED_WORDS");
       }
