@@ -38,7 +38,10 @@
             />
           </client-only>
           <client-only>
-            <div class="d-flex mt-4 mb-3" v-if="(videos && videos.length > 0) || keyword">
+            <div
+              class="d-flex mt-4 mb-3"
+              v-if="(videos && videos.length > 0) || keyword"
+            >
               <SimpleSearch
                 placeholder="Search"
                 ref="searchLibrary"
@@ -77,15 +80,6 @@
           </client-only>
         </div>
         <div class="col-sm-12 mb-5">
-          <div
-            :class="{
-              'loader text-center mt-5 mb-5': true,
-              'd-none': videos,
-            }"
-            style="flex: 1"
-          >
-            <Loader :sticky="true" message="Loading videos in our library..." />
-          </div>
           <template v-if="videos && videos.length > 0">
             <YouTubeVideoList
               skin="dark"
@@ -98,6 +92,15 @@
               :showPlayButton="true"
             />
           </template>
+          <div
+            :class="{
+              'loader text-center mt-5 mb-5': true,
+              'd-none': videos && (!loading),
+            }"
+            style="flex: 1"
+          >
+            <Loader :sticky="true" message="Loading videos in our library..." />
+          </div>
           <div v-observe-visibility="visibilityChanged"></div>
           <div
             :class="{
@@ -105,12 +108,16 @@
             }"
           >
             <h5 v-if="!keyword && videos && videos.length === 0">
-              Oh no, we don't have any new {{ $l2.name }} videos. We need your help
-              to expand our library!
+              Oh no, we don't have any new {{ $l2.name }} videos. We need your
+              help to expand our library!
             </h5>
-            <h5 v-else-if="keyword && videos && videos.length === 0">No search results matching your keywords. Help us add some!</h5>
+            <h5 v-else-if="keyword && videos && videos.length === 0">
+              No search results matching your keywords. Help us add some!
+            </h5>
             <h5 v-else>Help us expand our library!</h5>
-            <p class="mt-4">There are TWO WAYS you can add videos to our library.</p>
+            <p class="mt-4">
+              There are TWO WAYS you can add videos to our library.
+            </p>
             <h6 class="mt-4">METHOD 1: Use our YouTube search tool</h6>
             <ol>
               <li>
@@ -128,10 +135,12 @@
                 out, although you can still open them.)
               </li>
               <li>
-                If you don't see any results, try using the option "No
-                captions, more results."
+                If you don't see any results, try using the option "No captions,
+                more results."
               </li>
-              <li>Open any video (preferably those that are not grayed out).</li>
+              <li>
+                Open any video (preferably those that are not grayed out).
+              </li>
               <li>
                 Click the "+ Add to Videos" button to add it to our library.
               </li>
@@ -161,8 +170,8 @@
                 have {{ $l2.name }} closed captions (CC).
               </li>
               <li>
-                From YouTube (either a video page or a playlist page), click on the bookmarklet you
-                just added in Step 1.
+                From YouTube (either a video page or a playlist page), click on
+                the bookmarklet you just added in Step 1.
                 <b>
                   When prompted to enter the language code for {{ $l2.name }},
                   enter “{{ $l2.code }}”.
@@ -253,10 +262,12 @@ export default {
       includeShows: true,
       topicData: this.topic,
       topics,
+      loading: false,
     };
   },
   async fetch() {
-    if (!this.keyword || this.keyword.includes('channel:')) this.includeShows = false;
+    if (!this.keyword || this.keyword.includes("channel:"))
+      this.includeShows = false;
     this.videos = await this.getVideos(this.start);
     this.channels = await this.getChannels();
     this.randomEpisodeYouTubeId = await YouTube.getRandomEpisodeYouTubeId(
@@ -283,10 +294,12 @@ export default {
     async visibilityChanged(isVisible) {
       if (this.videos && isVisible) {
         this.moreVideos = this.moreVideos + this.perPage;
+        this.loading = true;
         let newVideos = await this.getVideos(
           Number(this.start) + this.moreVideos
         );
         this.videos = this.videos.concat(newVideos);
+        this.loading = false;
       }
     },
     async getVideos(start) {
