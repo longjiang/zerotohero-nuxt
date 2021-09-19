@@ -88,6 +88,8 @@
         ref="youtubeSearchResults"
       />
       <LazyIdenticalLanguages routeName="youtube-search" />
+      <h4 class="mt-5 text-center">You can help to expand this {{ $l2.name }} video library!</h4>
+      <LazyHowToContribute />
     </div>
   </div>
 </template>
