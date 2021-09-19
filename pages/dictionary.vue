@@ -81,7 +81,12 @@
             </client-only>
             <div v-if="entry" class="text-center">
               <div class="text-center mb-4" v-if="words && words.length > 1">
-                <b-dropdown size="sm" variant="gray" :items="words" text="Disambiguation">
+                <b-dropdown
+                  size="sm"
+                  variant="gray"
+                  :items="words"
+                  text="Disambiguation"
+                >
                   <b-dropdown-item
                     v-for="w in words"
                     :key="`phrase-word-disambiguation-${w.id}`"
@@ -258,10 +263,12 @@ export default {
           if (args !== "random") {
             let dictionary = await this.$getDictionary();
             this.entry = await dictionary.get(args);
-            this.images = await WordPhotos.getGoogleImages({
-              term: this.entry.bare,
-              lang: this.$l2.code,
-            });
+            if (process.server) {
+              this.images = await WordPhotos.getGoogleImages({
+                term: this.entry.bare,
+                lang: this.$l2.code,
+              });
+            }
           }
         } else if (method === "hsk") {
           this.entry = await (await this.$getDictionary()).getByHSKId(args);
