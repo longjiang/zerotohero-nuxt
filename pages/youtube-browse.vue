@@ -203,7 +203,6 @@ export default {
     if (!this.keyword || this.keyword.includes("channel:"))
       this.includeShows = false;
     this.videos = await this.getVideos(this.start);
-    this.channels = await this.getChannels();
     this.randomEpisodeYouTubeId = await YouTube.getRandomEpisodeYouTubeId(
       this.$l2.id,
       this.$store.state.shows.tvShows[this.$l2.code] ? "tv_show" : undefined
