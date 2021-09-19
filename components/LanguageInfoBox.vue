@@ -1,18 +1,20 @@
 <template>
   <div class="language-info-box">
-    <WebImages
-      v-if="lang"
-      :text="`${lang.name} people${
-        (!lang.speakers || lang.speakers < 500000) &&
-        lang.country &&
-        lang.country[0]
-          ? ' ' & lang.country.map((c) => c.name).join(' or ')
-          : ''
-      }`"
-      limit="3"
-      ref="images"
-      class="language-info-box-images"
-    />
+    <client-only>
+      <WebImages
+        v-if="lang"
+        :text="`${lang.name} people${
+          (!lang.speakers || lang.speakers < 500000) &&
+          lang.country &&
+          lang.country[0]
+            ? ' ' & lang.country.map((c) => c.name).join(' or ')
+            : ''
+        }`"
+        limit="3"
+        ref="images"
+        class="language-info-box-images"
+      />
+    </client-only>
     <div class="language-info-box-wikipedia" v-if="page">
       {{ wikipediaSummary }} —
       <a
@@ -21,14 +23,17 @@
         class="link-unstyled font-weight-bold"
         style="text-decoration: underline"
       >
-        Wikipedia</a>
+        Wikipedia
+      </a>
       <span v-if="lang.omniglot" class="ml-1">
         <a
           target="blank"
           class="link-unstyled font-weight-bold"
           style="text-decoration: underline"
           :href="`https://omniglot.com/writing/${lang.omniglot}`"
-        >Omniglot</a>
+        >
+          Omniglot
+        </a>
       </span>
     </div>
   </div>
