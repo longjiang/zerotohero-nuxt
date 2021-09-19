@@ -149,32 +149,34 @@
             <div class="text-center">
               <Loader class="pt-5 pb-5" />
             </div>
-            <LazyDictionaryEntry
-              v-if="word && phrasebook"
-              :entry="word"
-              :tvShow="phrasebook.tv_show"
-              :exact="phraseObj.exact || phrasebook.exact"
-              :exactPhrase="phraseObj.phrase"
-              :showHeader="false"
-              :showDefinitions="false"
-              :showExample="false"
-              :showExternal="false"
-              :key="`dictionary-entry-${word.id}`"
-              ref="dictionaryEntry"
-            />
-            <LazyPhraseComp
-              v-else-if="phraseObj && phraseObj.phrase && phrasebook"
-              :term="phraseObj.phrase.toLowerCase()"
-              :tvShow="phrasebook.tv_show"
-              :exact="phraseObj.exact || phrasebook.exact"
-              :showExternal="false"
-              :showHeader="false"
-              :showImages="false"
-              :showCollocations="false"
-              :showExamples="false"
-              class="mt-4 mb-4"
-              ref="phrase"
-            />
+            <div v-if="dictionaryMatchCompleted">
+              <LazyDictionaryEntry
+                v-if="word && phrasebook"
+                :entry="word"
+                :tvShow="phrasebook.tv_show"
+                :exact="phraseObj.exact || phrasebook.exact"
+                :exactPhrase="phraseObj.phrase"
+                :showHeader="false"
+                :showDefinitions="false"
+                :showExample="false"
+                :showExternal="false"
+                :key="`dictionary-entry-${word.id}`"
+                ref="dictionaryEntry"
+              />
+              <LazyPhraseComp
+                v-else-if="phraseObj && phraseObj.phrase && phrasebook"
+                :term="phraseObj.phrase.toLowerCase()"
+                :tvShow="phrasebook.tv_show"
+                :exact="phraseObj.exact || phrasebook.exact"
+                :showExternal="false"
+                :showHeader="false"
+                :showImages="false"
+                :showCollocations="false"
+                :showExamples="false"
+                class="mt-4 mb-4"
+                ref="phrase"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -209,6 +211,7 @@ export default {
       phraseObj: undefined,
       words: undefined,
       word: undefined,
+      dictionaryMatchCompleted: false,
       images: [],
       params: {},
       query: {
@@ -500,6 +503,7 @@ export default {
           this.word = this.words[0];
         }
       }
+      this.dictionaryMatchCompleted = true;
     },
     stripPunctuations(text) {
       text = text.replace(/[.!?。！？…؟♪\*]/g, "").trim();
@@ -511,9 +515,7 @@ export default {
       if (this.bookId === "saved") {
         return phraseObj.phrase === this.phraseObj.phrase;
       } else {
-        return (
-          phraseObj.id === Number(this.phraseId)
-        );
+        return phraseObj.id === Number(this.phraseId);
       }
     },
     url(phraseObj) {
