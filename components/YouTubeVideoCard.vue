@@ -458,7 +458,7 @@ export default {
           let data = {};
           data[type] = show.id;
           let response = await axios.patch(
-            `${Config.wiki}items/youtube_videos/${this.video.id}?fields=${type}.*`, // type is 'tv_show' or 'talk'
+            `${Config.wiki}items/youtube_videos/${this.video.id}?fields=id`,
             data
           );
           response = response.data;

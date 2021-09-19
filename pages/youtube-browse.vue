@@ -108,7 +108,7 @@
               Oh no, we don't have any new {{ $l2.name }} videos. We need your help
               to expand our library!
             </h5>
-            <h5 v-else-if="keyword">No search results matching your keywords. Help us add some!</h5>
+            <h5 v-else-if="keyword && videos && videos.length === 0">No search results matching your keywords. Help us add some!</h5>
             <h5 v-else>Help us expand our library!</h5>
             <p class="mt-4">There are TWO WAYS you can add videos to our library.</p>
             <h6 class="mt-4">METHOD 1: Use our YouTube search tool</h6>
@@ -249,14 +249,14 @@ export default {
       topics: Helper.topics,
       randomEpisodeYouTubeId: undefined,
       moreVideos: 0,
-      perPage: 12,
+      perPage: 96,
       includeShows: true,
       topicData: this.topic,
       topics,
     };
   },
   async fetch() {
-    if (!this.keyword) this.includeShows = false;
+    if (!this.keyword || this.keyword.includes('channel:')) this.includeShows = false;
     this.videos = await this.getVideos(this.start);
     this.channels = await this.getChannels();
     this.randomEpisodeYouTubeId = await YouTube.getRandomEpisodeYouTubeId(
