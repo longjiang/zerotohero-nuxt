@@ -23,7 +23,7 @@ const Dictionary = {
   load(lang) {
     console.log('Loading ECDICT...')
     this.lang = lang
-    const server = 'https://server.chinesezerotohero.com/'
+    const server = '/'
     this.file = `${server}data/ecdict/ecdict-longer-ranked.csv.txt`
     this.touchstoneFile = `${server}data/ecdict/touchstone.csv.txt`
     this.frequencyFile = `${server}data/ecdict/frequency.csv.txt`

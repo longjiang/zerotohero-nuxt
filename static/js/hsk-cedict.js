@@ -1,7 +1,7 @@
 const Dictionary = {
-  file: 'https://server.chinesezerotohero.com/data/hsk-cedict/hsk_cedict.csv.txt',
-  characterFile: 'https://server.chinesezerotohero.com/data/hsk-cedict/hsk_characters.csv.txt',
-  newHSKFile: 'https://server.chinesezerotohero.com/data/hsk-cedict/new_hsk.csv.txt',
+  file: '/data/hsk-cedict/hsk_cedict.csv.txt',
+  characterFile: '/data/hsk-cedict/hsk_characters.csv.txt',
+  newHSKFile: '/data/hsk-cedict/new_hsk.csv.txt',
   words: [],
   characters: [],
   newHSK: [],

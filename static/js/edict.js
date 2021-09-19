@@ -3,7 +3,7 @@ importScripts('../vendor/wanakana/wanakana.min.js')
 importScripts('../vendor/jpconjugations.js')
 
 const Dictionary = {
-  file: 'https://server.chinesezerotohero.com/data/edict/edict.tsv.txt',
+  file: '/data/edict/edict.tsv.txt',
   words: [],
   name: 'edict',
   tokenizer: undefined,
