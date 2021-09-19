@@ -105,7 +105,7 @@
         <button class="word-block-tool-tip-close" @click="closePopup">
           <i class="fa fa-times"></i>
         </button>
-        <div class="tooltip-images" :key="`tooltip-images-${text}`">
+        <!-- <div class="tooltip-images" :key="`tooltip-images-${text}`">
           <img
             alt
             class="image-wall-image"
@@ -113,7 +113,7 @@
             :key="`web-images-${text}-${index}`"
             :src="`${Config.imageProxy}?${image.src}`"
           />
-        </div>
+        </div> -->
         <EntryExternal
           v-if="text || token"
           :term="text ? text : token.candidates[0].head"
@@ -663,7 +663,7 @@ export default {
             this.lookup();
           }
         }
-        this.loadImages();
+        // this.loadImages();
         this.open = true;
       }
     },

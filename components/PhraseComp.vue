@@ -46,12 +46,12 @@
       <div class="row">
         <div class="col-sm-12">
           <div class="focus">
-            <WebImages
+            <!-- <WebImages
               v-if="term"
               :text="term"
               limit="10"
               :key="`${term}-images`"
-            />
+            /> -->
             <client-only>
               <EntryYouTube :text="term" v-if="$adminMode" />
             </client-only>
@@ -71,8 +71,6 @@
 </template>
 
 <script>
-import WordPhotos from "@/lib/word-photos";
-
 export default {
   props: {
     term: {
@@ -95,13 +93,6 @@ export default {
     return {
       images: [],
     };
-  },
-  async fetch() {
-    if (this.term)
-      this.images = await WordPhotos.getGoogleImages({
-        term: this.term,
-        lang: this.$l2.code,
-      });
   },
   computed: {
     $l1() {
