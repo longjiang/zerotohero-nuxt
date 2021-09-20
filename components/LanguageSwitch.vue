@@ -101,7 +101,7 @@ export default {
       let nameMatch = this.languages
         .filter((language) => language.name.toLowerCase().includes(text))
         .sort((language) =>
-          language.name.toLowerCase().startsWith(text) ? 1 : -1
+          language.name.toLowerCase().startsWith(text) ? -1 : 1
         );
       filteredLanguages = filteredLanguages.concat(
         twoLetterCodeMatch,
@@ -122,14 +122,23 @@ export default {
             language["iso639-3"],
             language["glottologId"],
           ].filter((c) => c);
+          let features = this.$languages.getFeatures({
+            l1: english,
+            l2: language,
+          });
+          if (
+            features.includes("dictionary") &&
+            language.wiktionary &&
+            english.dictionaries[language["iso639-3"]] && english.dictionaries[language["iso639-3"]][0] === "wiktionary"
+          ) {
+            let dfi = features.findIndex((f) => f === "dictionary");
+            features[dfi] = `${language.wiktionary} dictionary words`;
+          }
           return {
             head: `${language.name} (${(language.otherNames || [])
               .concat(codes)
               .join(", ")})`,
-            definitions: this.$languages.getFeatures({
-              l1: english,
-              l2: language,
-            }),
+            definitions: features,
             l1: english,
             l2: language,
           };
