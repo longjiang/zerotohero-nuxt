@@ -21,7 +21,7 @@
       </a>
       <a
         @click.prevent="toggleIframe"
-        :href="`https://en.m.wiktionary.org/w/index.php?search=${term}`"
+        :href="`https://en.m.wiktionary.org/w/index.php?search=${term}#${$l2.name}`"
         class="btn btn-small mb-1"
         :data-bg-level="iframe && iframe.startsWith('https://en.m.wiktionary.org') ? level : false"
       >
