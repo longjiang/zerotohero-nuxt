@@ -73,6 +73,14 @@
                   <th
                     @click="
                       asc = !asc;
+                      sortBy = 'l2.wiktionary';
+                    "
+                  >
+                    Wiktionary
+                  </th>
+                  <th
+                    @click="
+                      asc = !asc;
                       sortBy = 'youtube_videos';
                     "
                   >
@@ -169,6 +177,9 @@
                   </td>
                   <td>
                     {{ formatK(row.uniquePageViews) }}
+                  </td>
+                  <td style="min-width: 7rem">
+                    <span v-if="row.l2.wiktionary"><i class="fa fa-book mr-2"></i>{{ formatK(row.l2.wiktionary) }}</span>
                   </td>
                   <td
                     :class="{ 'data-cell': true, warn: row.youtube_videos < 3 }"
