@@ -332,7 +332,7 @@ export default {
         };
         analytics.push(data);
       }
-      analytics = analytics.sort((a, b) => b.l2.speakers - a.l2.speakers);
+      analytics = analytics.sort((a, b) => (b.l2.wiktionary || 0) - (a.l2.wiktionary || 0));
       for (let index in analytics) {
         analytics[index].index = Number(index);
       }
