@@ -100,9 +100,7 @@ export default {
         .sort((language) => (language["iso639-3"].startsWith(text) ? 1 : -1));
       let nameMatch = this.languages
         .filter((language) => language.name.toLowerCase().includes(text))
-        .sort((language) =>
-          language.name.toLowerCase().startsWith(text) ? -1 : 1
-        );
+        .sort((a, b) => a.name.length - b.name.length);
       filteredLanguages = filteredLanguages.concat(
         twoLetterCodeMatch,
         threeLetterCodeMatch,
@@ -129,7 +127,8 @@ export default {
           if (
             features.includes("dictionary") &&
             language.wiktionary &&
-            english.dictionaries[language["iso639-3"]] && english.dictionaries[language["iso639-3"]][0] === "wiktionary"
+            english.dictionaries[language["iso639-3"]] &&
+            english.dictionaries[language["iso639-3"]][0] === "wiktionary"
           ) {
             let dfi = features.findIndex((f) => f === "dictionary");
             features[dfi] = `${language.wiktionary} dictionary words`;
