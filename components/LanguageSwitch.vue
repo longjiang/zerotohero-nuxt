@@ -91,20 +91,31 @@ export default {
     suggestionsFunc(text) {
       text = text.toLowerCase();
       let english = this.languages.find((language) => language.code === "en");
-      return this.languages
-        .filter(
-          (language) =>
-            language.code.includes(text) ||
-            language["iso639-3"].includes(text) ||
-            language.name.toLowerCase().includes(text)
-        )
-        .sort((a, b) => b.name.length - a.name.length)
+      let filteredLanguages = [];
+      let twoLetterCodeMatch = this.languages
+        .filter((language) => language["iso639-1"].includes(text))
+        .sort((language) => (language["iso639-1"].startsWith(text) ? 1 : -1));
+      let threeLetterCodeMatch = this.languages
+        .filter((language) => language["iso639-3"].includes(text))
+        .sort((language) => (language["iso639-3"].startsWith(text) ? 1 : -1));
+      let nameMatch = this.languages
+        .filter((language) => language.name.toLowerCase().includes(text))
         .sort((language) =>
-          language["iso639-3"].startsWith(text) ||
-          language.name.startsWith(text)
-            ? 1
-            : -1
-        )
+          language.name.toLowerCase().startsWith(text) ? 1 : -1
+        );
+      filteredLanguages = filteredLanguages.concat(
+        twoLetterCodeMatch,
+        threeLetterCodeMatch,
+        nameMatch
+      );
+      if (filteredLanguages.length === 0) {
+        let otherNamesMatch = this.languages.filter((language) =>
+          (language.otherNames || []).join(" ").toLowerCase().includes(text)
+        );
+        filteredLanguages = filteredLanguages.concat(otherNamesMatch);
+      }
+      filteredLanguages = Helper.uniqueByValue(filteredLanguages, "id");
+      filteredLanguages = filteredLanguages
         .map((language) => {
           let codes = [
             language["iso639-1"],
@@ -112,7 +123,9 @@ export default {
             language["glottologId"],
           ].filter((c) => c);
           return {
-            head: `${language.name} (${codes.join(", ")})`,
+            head: `${language.name} (${(language.otherNames || [])
+              .concat(codes)
+              .join(", ")})`,
             definitions: this.$languages.getFeatures({
               l1: english,
               l2: language,
@@ -122,6 +135,7 @@ export default {
           };
         })
         .slice(0, 30);
+      return filteredLanguages;
     },
     hrefFunc(suggestion) {
       if (suggestion && suggestion.l1 && suggestion.l2) {
