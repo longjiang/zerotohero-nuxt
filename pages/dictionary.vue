@@ -122,6 +122,11 @@
                 class="mt-4 mb-4 text-center"
                 style="margin-bottom: 0"
               />
+              <SimilarPhrases
+                v-if="$l1.code === 'en' && $l2.code !== 'en'"
+                :phraseObj="{ phrase: entry.head, en: entry.definitions[0] }"
+                class="text-center"
+              />
             </div>
           </div>
 
@@ -453,6 +458,7 @@ export default {
     z-index: 9;
   }
   .content-pane-left {
+    overflow-y: scroll;
     padding: 1rem;
     padding-top: 6rem;
     ::v-deep .entry-word {

@@ -175,9 +175,15 @@ export default {
         let vousInOtherLangs = await this.getVousInOtherLangs(this.phrase);
         phrasebooks = phrasebooks.concat(vousInOtherLangs);
       }
-      this.allPhrases = this.extractAllPhrases(phrasebooks);
+      let phrases = this.extractAllPhrases(phrasebooks);
+      let phrasesFromWiktionary = await this.getPhrasesFromWiktionary();
+      this.allPhrases = phrases.concat(phrasesFromWiktionary);
       this.separatePhrases(this.allPhrases);
       this.updating = false;
+    },
+    getPhrasesFromWiktionary() {
+      let phrases = []
+      return phrases
     },
     async getPhrasebooksThatContain(term) {
       if (term) {
@@ -198,15 +204,15 @@ export default {
     },
     async getYouInOtherLangs(term) {
       if (term) {
-        let phrasebooks = await this.getPhrasebooksThatContain(term + "\r")
-        return phrasebooks
+        let phrasebooks = await this.getPhrasebooksThatContain(term + "\r");
+        return phrasebooks;
       }
       return [];
     },
     async getVousInOtherLangs(term) {
       if (term) {
-        let phrasebooks = await this.getPhrasebooksThatContain("\n" + term)
-        return phrasebooks
+        let phrasebooks = await this.getPhrasebooksThatContain("\n" + term);
+        return phrasebooks;
       }
       return [];
     },
@@ -225,8 +231,10 @@ export default {
         });
         for (let phrase of phrasebook.phrases) {
           if (
-            (phrase.phrase || "").toUpperCase() === (this.phrase || "").toUpperCase() ||
-            (phrase[l1Code] || "").toUpperCase() === (this.translation || "").toUpperCase()
+            (phrase.phrase || "").toUpperCase() ===
+              (this.phrase || "").toUpperCase() ||
+            (phrase[l1Code] || "").toUpperCase() ===
+              (this.translation || "").toUpperCase()
           ) {
             phrase.l2 = l2;
             phrases.push(phrase);
