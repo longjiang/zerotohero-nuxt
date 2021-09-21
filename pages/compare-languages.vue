@@ -239,7 +239,6 @@ export default {
   },
   async mounted() {
     if (!this.phraseObj && !this.phraseStr) this.loadPhraseObj();
-    console.log(this.phraseObj, this.phraeStr, this.phrasesInAllLangs)
   },
   methods: {
     onReady() {

@@ -124,7 +124,10 @@
               />
               <SimilarPhrases
                 v-if="entry.definitions && entry.definitions.length > 0"
-                :phraseObj="{ phrase: entry.head, en: $l2.code === 'en' ? entry.head : entry.definitions[0].split(', ')[0] }"
+                :phraseObj="{
+                  phrase: entry.head,
+                  en: similarPhraseTranslation,
+                }"
                 class="text-center"
               />
             </div>
@@ -202,6 +205,15 @@ export default {
     },
     $dictionaryName() {
       return this.$store.state.settings.dictionaryName;
+    },
+    similarPhraseTranslation() {
+      let en;
+      if (this.$l2.code === "en") en = this.entry.head;
+      else if (this.entry.definitions && this.entry.definitions[0]) {
+        en = this.entry.definitions[0].split(", ")[0];
+      }
+      en = en.replace(/\(.*\)/g, "").trim();
+      return en
     },
     title() {
       if (this.entry) {
