@@ -30,9 +30,15 @@
           </h5>
           <router-link
             v-for="(phrase, index) of youInOtherLangs"
-            :to="`/en/${phrase.l2.code}/phrasebook/${phrase.bookId}/${
-              phrase.id
-            }/${encodeURIComponent(phrase.phrase)}`"
+            :to="
+              phrase.bookId === 'wiktionary'
+                ? `/en/${phrase.l2.code}/phrase/search/${encodeURIComponent(
+                    phrase.phrase
+                  )}`
+                : `/en/${phrase.l2.code}/phrasebook/${phrase.bookId}/${
+                    phrase.id
+                  }/${encodeURIComponent(phrase.phrase)}`
+            "
             :key="`you-in-other-langs-${index}`"
             class="d-block link-unstyled text-left"
           >
