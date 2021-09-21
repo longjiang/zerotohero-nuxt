@@ -66,24 +66,36 @@
                       (phrase) => phrase.l2 === language
                     ))
                   "
+                  :set2="
+                    (maxPhraes = Math.max(
+                      Math.ceil(Math.log(language.speakers) / 9),
+                      1
+                    ))
+                  "
                   class="language-marker-phrases-phrase"
                   :direction="language.direction === 'rtl' ? 'rtl' : 'ltr'"
                 >
                   <span
-                    v-for="(phrase, index) in filteredPhrases.slice(0, 3)"
+                    v-for="(phrase, index) in filteredPhrases.slice(
+                      0,
+                      maxPhraes
+                    )"
                     :key="`you-in-other-langs-${index}`"
                     class="d-inline-block link-unstyled mr-1 ml-1"
                   >
                     <span class="similar-phrase-l2">
                       {{ phrase.phrase }}
                       <span
-                        v-if="index < Math.min(filteredPhrases.length - 1, 2)"
+                        v-if="
+                          index <
+                          Math.min(filteredPhrases.length - 1, maxPhraes - 1)
+                        "
                       >
                         ,
                       </span>
                     </span>
                   </span>
-                  <span v-if="filteredPhrases.length > 3">...</span>
+                  <span v-if="filteredPhrases.length > maxPhraes">...</span>
                 </div>
                 <span class="language-marker-phrases-language">
                   {{ language.name }}
