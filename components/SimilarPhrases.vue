@@ -7,7 +7,7 @@
         size="sm"
         variant="primary"
       >
-        {{ $t('Compare Languages') }}
+        {{ $t("Compare Languages") }}
       </b-button>
       <div
         :class="{
@@ -181,9 +181,70 @@ export default {
       this.separatePhrases(this.allPhrases);
       this.updating = false;
     },
-    getPhrasesFromWiktionary() {
-      let phrases = []
-      return phrases
+    async getVousFromWiktionary() {
+      let url = `${
+        Config.wiki
+      }items/wiktionary?filter[word][eq]=${encodeURIComponent(
+        this.phrase
+      )}&timestamp=${this.$adminMode ? Date.now() : 0}`;
+      try {
+        let res = await axios.get(url);
+        if (res && res.data) {
+          console.log(res.data.data);
+        }
+      } catch (err) {}
+    },
+    async getYousFromWiktionary(popularLanguagesOnly = false) {
+      let popularLanguageFilter =
+        "&filter[l2][in]=1824,3479,5980,2645,5644,1943,5332,1540,1916,7731,1167,3481,346,1838,4677,2780,6115,5326,4744,1800,2107,2239,2482,2343,6116,5589,5592,5613,5624,804,4489,4733,4813,1317,1482,1696,821,915,1012,1222,1401,4307,5576,2133,7218,2132,1827,3179,2213,7271,387,4053,6858,3601,3648,3801,6560,6615,2197,2201,2528,2532,2536,2638,2895,6281,6417,2504,2069,2831,7512,1425,4659,5956,6325,6338,6564,1218,2129,2894,1554,2369,2373,6311,1900,5361,5375,7802,1464,2351,4791,272,2601,1417,6112,1855,1857,1860,1864,504";
+      let url = `${
+        Config.wiki
+      }items/wiktionary?filter[definitions][rlike]=${encodeURIComponent(
+        this.translation + "%"
+      )}${popularLanguagesOnly ? popularLanguageFilter : ""}&limit=500`;
+      try {
+        let res = await axios.get(url);
+        if (res && res.data) {
+          let words = res.data.data.map((w) => {
+            let l2 = this.$languages.getById(w.l2);
+            return {
+              l2,
+              id: w.id,
+              word: w.word,
+              definitions: w.definitions
+                .split("|")
+                .map((d) => d.replace(/\(.*\)/g, "").trim()),
+            };
+          });
+          words = words.filter((w) => {
+            w.en = w.definitions.find((d) => d === this.translation);
+            return w.en;
+          });
+          let phrases = words.map((w) => {
+            return {
+              l2: w.l2,
+              id: w.id,
+              phrase: w.word,
+              en: w.en,
+              bookId: "wiktionary",
+            };
+          });
+          return phrases;
+        }
+      } catch (err) {}
+      return [];
+    },
+    async getPhrasesFromWiktionary() {
+      let phrases = [];
+      let yousFromWiktionary = await this.getYousFromWiktionary(true);
+      if (yousFromWiktionary.length < 50) {
+        yousFromWiktionary = yousFromWiktionary.concat(
+          await this.getYousFromWiktionary(false)
+        );
+        yousFromWiktionary = Helper.uniqueByValue(yousFromWiktionary, 'id')
+      }
+      phrases = phrases.concat(yousFromWiktionary);
+      return phrases;
     },
     async getPhrasebooksThatContain(term) {
       if (term) {
