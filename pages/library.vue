@@ -22,8 +22,14 @@
       />
       <div class="row">
         <div class="col-sm-12">
-          <h3 class="mb-5 text-center">{{ $l2.name }} Guided Readers</h3>
-          <p class="text-center lead" style="margin-bottom: 5rem">
+          <h3 class="mb-5 text-center">
+            {{ $t("{l2} Guided Readers", { l2: $t($l2.name) }) }}
+          </h3>
+          <p
+            class="text-center lead"
+            style="margin-bottom: 5rem"
+            v-if="booklists && booklists.length > 0"
+          >
             {{
               $t(
                 "This is where you can enjoy reading a variety of {l2} books with the help of hover dictionary and the ability to save words.",
@@ -31,8 +37,18 @@
               )
             }}
           </p>
+          <p class="text-center lead" style="margin-bottom: 5rem" v-else>
+            {{
+              $t("Sorry, no books are currently available for {l2}.", {
+                l2: $t($l2.name),
+              })
+            }}
+          </p>
 
-          <ul class="list-unstyled p-0 booklists">
+          <ul
+            class="list-unstyled p-0 booklists"
+            v-if="booklists && booklists.length > 0"
+          >
             <li
               v-for="(booklist, index) in booklists"
               :key="`booklist-item-${index}`"
@@ -61,48 +77,15 @@
             </li>
           </ul>
 
-          <div v-if="$l2.han && $l2.code !== 'lzh'" class="text-center lead rounded bg-gray p-3 mt-3">Also check out the <router-link to="/en/lzh/library">Classical Chinese library</router-link>.</div>
-
-          <hr class="mt-5 mb-5" />
-
-          <h3 class="text-center mt-5 mb-4">{{ $t("Custom Reading") }}</h3>
-
-          <p class="text-center lead mb-5">
-            {{ $t("Read any online document by pasting the URL.") }}
-          </p>
-
-          <div class="jumbotron bg-light pt-4 pb-3 mt-3 mb-3">
-            <SimpleSearch
-              placeholder="Enter the URL of a book from one of the sites below."
-              :action="
-                (url) => {
-                  this.$router.push({
-                    path: `/${$l1.code}/${
-                      $l2.code
-                    }/book/index?url=${encodeURIComponent(url)}`,
-                  });
-                }
-              "
-              class="mb-3"
-              ref="search"
-            />
-            <p>
-              We can work with these content providers.
-              <b>Copy paste</b>
-              URLs like the following into the above text box and enjoy reading!
-            </p>
-            <ul>
-              <li
-                v-for="(source, index) in sources"
-                :key="`library-source-${index}`"
-              >
-                {{ source.name }}, example URL:
-                <code
-                  v-if="typeof source.example === 'function'"
-                  v-html="`${source.example($l2.code)}`"
-                ></code>
-              </li>
-            </ul>
+          <div
+            v-if="$l2.han && $l2.code !== 'lzh'"
+            class="text-center lead rounded bg-gray p-3 mt-3"
+          >
+            Also check out the
+            <router-link to="/en/lzh/library">
+              Classical Chinese library
+            </router-link>
+            .
           </div>
         </div>
       </div>
