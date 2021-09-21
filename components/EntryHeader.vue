@@ -63,14 +63,21 @@
         <div class="mb-2">
           <div class="entry-pinyin">
             <Star :word="entry"></Star>
-            <span v-if="entry.pronunciation && !entry.cjk" class="ml-2 mr-1">
-              /{{ entry.pronunciation }}/
-            </span>
-            <span v-if="entry.cjk" class="ml-2 mr-1">
-              {{ entry.cjk.phonetics }}
-            </span>
-            <span v-if="$l2.code === 'tlh'" class="ml-2 mr-1">
-              {{ entry.head }} /{{ klingonIPA(entry.head) }}/
+            <span class="ml-2 mr-1">
+              <span v-if="$l2.code === 'tlh'">
+                {{ entry.head }} /{{ klingonIPA(entry.head) }}/
+              </span>
+              <template v-else>
+                <span v-if="entry.pronunciation && !entry.cjk">
+                  /{{ entry.pronunciation }}/
+                </span>
+                <span v-else-if="entry.cjk">
+                  {{ entry.cjk.phonetics }}
+                </span>
+                <span v-else>
+                  {{ transliterate(entry.head) }}
+                </span>
+              </template>
             </span>
             <Speak
               class="ml-1"
@@ -141,6 +148,8 @@
 
 <script>
 import Klingon from "@/lib/klingon";
+import { transliterate as tr } from "transliteration";
+
 export default {
   props: {
     entry: {
@@ -179,6 +188,9 @@ export default {
     this.nextPath = await this.nextWord();
   },
   methods: {
+    transliterate(text) {
+      return tr(text)
+    },
     klingonIPA(text) {
       return Klingon.latinToIPA(text);
     },
@@ -187,7 +199,7 @@ export default {
     },
     transform(text) {
       if (typeof text === "undefined") {
-        text = ""
+        text = "";
       }
       if (this.$l2.code === "tlh" && text.trim() !== "") {
         text = Klingon.latinToConScript(text);
