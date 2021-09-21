@@ -66,25 +66,24 @@
                       (phrase) => phrase.l2 === language
                     ))
                   "
+                  class="language-marker-phrases-phrase"
+                  :direction="language.direction === 'rtl' ? 'rtl' : 'ltr'"
                 >
                   <span
-                    v-for="(phrase, index) in filteredPhrases"
+                    v-for="(phrase, index) in filteredPhrases.slice(0, 3)"
                     :key="`you-in-other-langs-${index}`"
-                    class="
-                      language-marker-phrases-phrase
-                      d-inline-block
-                      link-unstyled
-                      mr-1
-                      ml-1
-                    "
+                    class="d-inline-block link-unstyled mr-1 ml-1"
                   >
                     <span class="similar-phrase-l2">
                       {{ phrase.phrase }}
-                      <template v-if="index < filteredPhrases.length - 1">
+                      <span
+                        v-if="index < Math.min(filteredPhrases.length - 1, 2)"
+                      >
                         ,
-                      </template>
+                      </span>
                     </span>
                   </span>
+                  <span v-if="filteredPhrases.length > 3">...</span>
                 </div>
                 <span class="language-marker-phrases-language">
                   {{ language.name }}
@@ -435,7 +434,7 @@ export default {
       }
 
       &.language-marker-size-family-nucl1709 {
-        // Nuclear Trans New Guinea 
+        // Nuclear Trans New Guinea
         background-color: #0076ba;
       }
 
