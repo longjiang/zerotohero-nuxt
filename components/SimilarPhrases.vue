@@ -110,6 +110,9 @@ export default {
     autoLoad: {
       default: false,
     },
+    wiktionary: {
+      default: true,
+    },
   },
   data() {
     return {
@@ -176,8 +179,11 @@ export default {
         phrasebooks = phrasebooks.concat(vousInOtherLangs);
       }
       let phrases = this.extractAllPhrases(phrasebooks);
-      let phrasesFromWiktionary = await this.getPhrasesFromWiktionary();
-      this.allPhrases = phrases.concat(phrasesFromWiktionary);
+      if (this.wiktionary) {
+        let phrasesFromWiktionary = await this.getPhrasesFromWiktionary();
+        phrases = phrases.concat(phrasesFromWiktionary);
+      }
+      this.allPhrases = phrases;
       this.separatePhrases(this.allPhrases);
       this.updating = false;
     },
@@ -241,7 +247,7 @@ export default {
         yousFromWiktionary = yousFromWiktionary.concat(
           await this.getYousFromWiktionary(false)
         );
-        yousFromWiktionary = Helper.uniqueByValue(yousFromWiktionary, 'id')
+        yousFromWiktionary = Helper.uniqueByValue(yousFromWiktionary, "id");
       }
       phrases = phrases.concat(yousFromWiktionary);
       return phrases;

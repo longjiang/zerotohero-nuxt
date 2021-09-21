@@ -325,7 +325,7 @@ export default {
             return (
               r &&
               r.route &&
-              ["compare-languages", "language-map"].includes(r.route.name)
+              ["language-map"].includes(r.route.name)
             );
           }
         });

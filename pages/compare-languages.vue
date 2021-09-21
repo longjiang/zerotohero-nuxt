@@ -160,6 +160,7 @@
             v-if="phrases || phraseObj || phraseStr"
             :phraseObj="phrases ? phrases[currentIndex] : phraseObj ? phraseObj : undefined"
             :phraseStr="phraseStr ? phraseStr : undefined"
+            :wiktionary="phraseObj || phraseStr ? true : false"
             :key="`similar-phrases-${currentIndex}`"
             :autoLoad="true"
             @youInOtherLangs="onYouInOtherLangs"
