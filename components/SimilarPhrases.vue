@@ -73,7 +73,10 @@
         <router-link
           v-if="youInOtherLangs.length > 0 || vousInOtherLangs.length > 0"
           class="mt-3 btn btn-primary btn-sm"
-          :to="{ name: 'compare-languages', params: { phraseObj, phraseStr } }"
+          :to="{
+            name: 'compare-languages',
+            params: { bookId: 'adhoc', phrase: phraseObj.phrase, en: phraseObj.en },
+          }"
         >
           <i class="fa fa-globe-asia mr-2"></i>
           See them on a Map

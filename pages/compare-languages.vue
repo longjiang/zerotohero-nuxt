@@ -1,6 +1,6 @@
 <router>
   {
-    path: '/compare-languages',
+    path: '/compare-languages/:bookId?/:phrase?/:en?',
     props: true,
     meta: {
       layout: 'full'
@@ -157,10 +157,10 @@
         <div :class="{ 'd-none': listType !== 'this-phrase' }">
           <SimilarPhrases
             class="text-center"
-            v-if="phrases || phraseObj || phraseStr"
-            :phraseObj="phrases ? phrases[currentIndex] : phraseObj ? phraseObj : undefined"
-            :phraseStr="phraseStr ? phraseStr : undefined"
-            :wiktionary="phraseObj || phraseStr ? true : false"
+            v-if="phrases || (phrase && en) || phrase"
+            :phraseObj="phrases ? phrases[currentIndex] : (phrase && en) ? {phrase, en} : undefined"
+            :phraseStr="phrase ? phrase : undefined"
+            :wiktionary="phrase ? true : false"
             :key="`similar-phrases-${currentIndex}`"
             :autoLoad="true"
             @youInOtherLangs="onYouInOtherLangs"
@@ -190,10 +190,13 @@ export default {
     },
   },
   props: {
-    phraseObj: {
-      type: Object,
+    bookId: {
+      default: '283', // Phrasebook id or 'adhoc'. Default to 283 (most common phrases)
     },
-    phraseStr: {
+    phrase: {
+      type: String,
+    },
+    en: {
       type: String,
     },
   },
@@ -238,7 +241,7 @@ export default {
     },
   },
   async mounted() {
-    if (!this.phraseObj && !this.phraseStr) this.loadPhraseObj();
+    if (this.bookId !== 'adhoc') this.loadPhraseObj();
   },
   methods: {
     onReady() {
@@ -250,7 +253,7 @@ export default {
     async loadPhraseObj() {
       this.currentIndex = this.$route.query.i ? Number(this.$route.query.i) : 0;
       this.updating = true;
-      let res = await axios.get(`${Config.wiki}items/phrasebook/283`);
+      let res = await axios.get(`${Config.wiki}items/phrasebook/${this.bookId}`);
       if (res && res.data) {
         let phrasebook = res.data.data;
         phrasebook.phrases = Papa.parse(phrasebook.phrases, {
