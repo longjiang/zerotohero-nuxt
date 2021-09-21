@@ -38,7 +38,7 @@
               }"
             >
               <div
-                class="language-marker-size"
+                :class="`language-marker-size language-marker-size-family-${language.glottologFamilyId}`"
                 :style="`width: ${diameter(language)}px; height: ${diameter(
                   language
                 )}px; left: calc(50% - ${diameter(
@@ -239,7 +239,8 @@ export default {
     },
     goTo(l2) {
       let l1Code = "en";
-      if (["hak", "nan", "lzh", "ltc", "och", "en"].includes(l2.code)) l1Code = "zh";
+      if (["hak", "nan", "lzh", "ltc", "och", "en"].includes(l2.code))
+        l1Code = "zh";
       this.$router.push(`/${l1Code}/${l2.code}/`);
     },
     openPhrases(l2) {
@@ -402,11 +403,61 @@ export default {
       }
     }
     .language-marker-size {
-      background-color: #00000088;
+      background-color: #000000;
+      opacity: 0.5;
       position: absolute;
       z-index: -1;
       border-radius: 100%;
       pointer-events: none;
+      &.language-marker-size-family-atla1278 {
+        // Atlantic-Congo
+        background-color: #03cea4;
+      }
+
+      &.language-marker-size-family-aust1307 {
+        // Austronesian
+        background-color: #8c2d7e;
+      }
+
+      &.language-marker-size-family-indo1319 {
+        // Indo-European
+        background-color: #004cc5;
+      }
+
+      &.language-marker-size-family-sino1245 {
+        // Sino-Tibetan
+        background-color: #ff0000;
+      }
+
+      &.language-marker-size-family-afro1255 {
+        // Afro-Asiatic
+        background-color: #eac435;
+      }
+
+      &.language-marker-size-family-nucl1709 {
+        // Nuclear Trans New Guinea 
+        background-color: #77c96d;
+      }
+
+      &.language-marker-size-family-turk1311 {
+        // Turkic
+        background-color: #1c949d;
+      }
+
+      &.language-marker-size-family-drav1251 {
+        // Dravidian
+        background-color: #60438a;
+      }
+
+      &.language-marker-size-family-aust1305 {
+        // Austroasiatic
+        background-color: #b81772;
+      }
+
+      &.language-marker-size-family-taik1256 {
+        // Tai-Kadai
+        background-color: #b1c751;
+      }
     }
     ::v-deep .language-list-item {
       a {
