@@ -123,8 +123,7 @@
                 style="margin-bottom: 0"
               />
               <SimilarPhrases
-                v-if="$l1.code === 'en' && $l2.code !== 'en'"
-                :phraseObj="{ phrase: entry.head, en: entry.definitions[0] }"
+                :phraseObj="{ phrase: entry.head, en: $l2.code === 'en' ? entry.head : entry.definitions[0] }"
                 class="text-center"
               />
             </div>

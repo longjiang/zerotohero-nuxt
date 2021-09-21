@@ -5,9 +5,9 @@
         @click="getSimilarPhrases"
         v-if="!autoLoad && showButton"
         size="sm"
-        variant="gray"
+        variant="primary"
       >
-        Compare Languages
+        {{ $t('Compare Languages') }}
       </b-button>
       <div
         :class="{
