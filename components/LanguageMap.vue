@@ -307,6 +307,7 @@ export default {
     updateBounds(bounds) {
       this.filteredLanguages = this.languages.filter((l) => {
         return (
+          l.lat && l.long &&
           l.lat < bounds._northEast.lat &&
           l.lat > bounds._southWest.lat &&
           l.long > bounds._southWest.lng &&
