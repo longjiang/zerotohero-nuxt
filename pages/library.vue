@@ -32,7 +32,7 @@
             }}
           </p>
 
-          <ul class="list-unstyled p-0 mb-5 booklists">
+          <ul class="list-unstyled p-0 booklists">
             <li
               v-for="(booklist, index) in booklists"
               :key="`booklist-item-${index}`"
@@ -61,7 +61,9 @@
             </li>
           </ul>
 
-          <hr class="mb-5" />
+          <div v-if="$l2.han && $l2.code !== 'lzh'" class="text-center lead rounded bg-gray p-3 mt-3">Also check out the <router-link to="/en/lzh/library">Classical Chinese library</router-link>.</div>
+
+          <hr class="mt-5 mb-5" />
 
           <h3 class="text-center mt-5 mb-4">{{ $t("Custom Reading") }}</h3>
 
