@@ -123,6 +123,7 @@
                 style="margin-bottom: 0"
               />
               <SimilarPhrases
+                v-if="entry.definitions && entry.definitions.length > 0"
                 :phraseObj="{ phrase: entry.head, en: $l2.code === 'en' ? entry.head : entry.definitions[0] }"
                 class="text-center"
               />
