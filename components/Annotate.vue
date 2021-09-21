@@ -350,6 +350,7 @@ export default {
           "cmn",
           "de",
           "en",
+          "sa",
           "hi",
           "hy",
           "id",
