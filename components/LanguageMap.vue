@@ -404,54 +404,54 @@ export default {
     }
     .language-marker-size {
       background-color: #000000;
-      opacity: 0.5;
+      opacity: 0.7;
       position: absolute;
       z-index: -1;
       border-radius: 100%;
       pointer-events: none;
       &.language-marker-size-family-atla1278 {
         // Atlantic-Congo
-        background-color: #03cea4;
+        background-color: #fd4f1c;
       }
 
       &.language-marker-size-family-aust1307 {
         // Austronesian
-        background-color: #8c2d7e;
+        background-color: #6a3669;
       }
 
       &.language-marker-size-family-indo1319 {
         // Indo-European
-        background-color: #004cc5;
+        background-color: #1b3e76;
       }
 
       &.language-marker-size-family-sino1245 {
         // Sino-Tibetan
-        background-color: #ff0000;
+        background-color: #bb1718;
       }
 
       &.language-marker-size-family-afro1255 {
         // Afro-Asiatic
-        background-color: #eac435;
+        background-color: #f8b51e;
       }
 
       &.language-marker-size-family-nucl1709 {
         // Nuclear Trans New Guinea 
-        background-color: #77c96d;
+        background-color: #0076ba;
       }
 
       &.language-marker-size-family-turk1311 {
         // Turkic
-        background-color: #1c949d;
+        background-color: #005f58;
       }
 
       &.language-marker-size-family-drav1251 {
         // Dravidian
-        background-color: #60438a;
+        background-color: #c59f94;
       }
 
       &.language-marker-size-family-aust1305 {
         // Austroasiatic
-        background-color: #b81772;
+        background-color: #5b0516;
       }
 
       &.language-marker-size-family-taik1256 {
