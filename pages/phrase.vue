@@ -1,6 +1,6 @@
 <router>
   {
-    path: '/:l1/:l2/phrase/search/:term?',
+    path: '/:l1/:l2/phrase/search/:term?/:dict?',
     props: true
   }
 </router>
@@ -80,9 +80,62 @@
             <div class="mt-3">
               <SimilarPhrases
                 v-if="term"
-                :phrase="term"
+                :phrase="word ? word.head : term"
+                :translation="similarPhraseTranslation"
+                :wiktionary="true"
                 class="text-center"
               />
+            </div>
+            <hr v-if="word" />
+            <div class="text-center mt-3 mb-3" v-if="words && words.length > 1">
+              <b-dropdown
+                size="sm"
+                :items="words"
+                text="Disambiguation"
+                menu-class="disambiguation-dropdown"
+                variant="gray"
+              >
+                <b-dropdown-item
+                  v-for="w in words"
+                  :key="`phrase-word-disambiguation-${w.id}`"
+                  @click="changeWordTo(w)"
+                >
+                  <b>{{ w.head }}</b>
+                  <b v-if="w.pronunciation || w.kana">
+                    ({{ w.pronunciation || w.kana }})
+                  </b>
+                  <em>{{ w.definitions[0] }}</em>
+                </b-dropdown-item>
+              </b-dropdown>
+            </div>
+            <div class="text-center">
+              <Loader class="pt-5 pb-5" />
+            </div>
+            <div
+              v-if="word"
+              class="text-center"
+              :key="`word-heading-${word.id}`"
+            >
+              <LazyEntryHeader :entry="word" />
+              <DefinitionsList
+                v-if="word.definitions"
+                class="mt-3"
+                :definitions="word.definitions"
+              ></DefinitionsList>
+              <EntryExternal
+                :term="word.head"
+                :traditional="word.traditional"
+                :level="word.level"
+                :sticky="false"
+                class="mt-4 mb-4 text-center"
+                style="margin-bottom: 0"
+              />
+              <EntryCourseAd
+                v-if="$l2.code === 'zh'"
+                variant="compact"
+                class="focus-exclude mt-4 mb-5"
+                :entry="word"
+              ></EntryCourseAd>
             </div>
           </div>
           <div
@@ -91,12 +144,24 @@
               'content-pane-right pl-3 pr-3': wide,
             }"
           >
-            <LazyPhraseComp
-              v-if="term"
-              :term="term"
-              class="mt-4"
-              :showHeader="false"
-            />
+            <template v-if="dictionaryMatchCompleted">
+              <LazyDictionaryEntry
+                v-if="word"
+                :entry="word"
+                :showHeader="false"
+                :showDefinitions="false"
+                :showExample="false"
+                :showExternal="false"
+                :key="`dictionary-entry-${word.id}`"
+                ref="dictionaryEntry"
+              />
+              <LazyPhraseComp
+                v-else-if="term"
+                :term="term"
+                class="mt-4"
+                :showHeader="false"
+              />
+            </template>
           </div>
         </div>
       </div>
@@ -106,6 +171,7 @@
 
 <script>
 import { ContainerQuery } from "vue-container-query";
+import Helper from "@/lib/helper";
 
 export default {
   components: {
@@ -114,10 +180,17 @@ export default {
   props: {
     term: "",
     compareTerm: "",
+    dict: {
+      type: String,
+      default: undefined, // or 'dict'
+    },
   },
   data() {
     return {
       params: {},
+      words: [],
+      word: undefined,
+      dictionaryMatchCompleted: false,
       query: {
         wide: {
           minWidth: 768,
@@ -137,6 +210,32 @@ export default {
     wide() {
       return this.params.wide && ["lg", "xl", "xxl"].includes(this.$mq);
     },
+    similarPhraseTranslation() {
+      if (!this.word) return;
+      let en;
+      if (this.$l2.code === "en") en = this.word.head;
+      else if (this.word.definitions && this.word.definitions[0]) {
+        en = this.word.definitions[0].split(", ")[0];
+      }
+      en = en.replace(/\(.*\)/g, "").trim();
+      return en;
+    },
+  },
+  activated() {
+    this.bindKeys();
+  },
+  deactivated() {
+    this.unbindKeys();
+  },
+  async mounted() {
+    if (this.dict === "dict") {
+      if (
+        process.server &&
+        Helper.dictionaryTooLargeAndWillCauseServerCrash(this.$l2["iso639-3"])
+      )
+        return;
+      else await this.matchPhraseToDictionaryEntries();
+    } else this.dictionaryMatchCompleted = true;
   },
   methods: {
     bindKeys() {
@@ -144,6 +243,16 @@ export default {
     },
     unbindKeys() {
       window.removeEventListener("keydown", this.keydown);
+    },
+    async matchPhraseToDictionaryEntries() {
+      let dictionary = await this.$getDictionary();
+      if (dictionary) {
+        this.words = await dictionary.lookupMultiple(this.term, true);
+        if (this.words && this.words.length > 0) {
+          this.word = this.words[0];
+        }
+      }
+      this.dictionaryMatchCompleted = true;
     },
     keydown(e) {
       if (
@@ -170,12 +279,6 @@ export default {
       }
     },
   },
-  activated() {
-    this.bindKeys();
-  },
-  deactivated() {
-    this.unbindKeys();
-  },
 };
 </script>
 
@@ -194,6 +297,7 @@ export default {
     z-index: 9;
   }
   .content-pane-left {
+    overflow-y: scroll;
     padding: 1rem;
     padding-top: 6rem;
     ::v-deep .entry-word {
@@ -221,7 +325,6 @@ export default {
     padding: 1rem;
     padding-top: 4rem;
   }
-
   .for-the-love-of {
     padding-top: 15rem;
   }

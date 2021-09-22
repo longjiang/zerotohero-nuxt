@@ -34,7 +34,7 @@
               phrase.bookId === 'wiktionary'
                 ? `/en/${phrase.l2.code}/phrase/search/${encodeURIComponent(
                     phrase.phrase
-                  )}`
+                  )}/dict`
                 : `/en/${phrase.l2.code}/phrasebook/${phrase.bookId}/${
                     phrase.id
                   }/${encodeURIComponent(phrase.phrase)}`
