@@ -82,6 +82,7 @@
                   v-if="phraseObj"
                   :phrase="phraseObj.phrase"
                   :translation="phraseObj.en"
+                  :wiktionary="false"
                   class="text-center"
                 />
               </div>
