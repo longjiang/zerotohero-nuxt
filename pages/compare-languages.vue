@@ -17,7 +17,7 @@
     <div class="container-fluid">
       <div
         class="row bg-dark text-white pt-2 pb-2 text-left"
-        style="overflow: visible; height: 45px"
+        style="overflow: visible; height: 56px"
       >
         <div class="col-sm-12 d-flex" style="overflow: visible">
           <div
@@ -35,15 +35,21 @@
             />
             <div v-if="updating">
               &nbsp;
-              <!-- dummy -->
+              <!-- spacer dummy -->
             </div>
-            <div  class="title" v-if="phrases && phrases[currentIndex]">
-              <span class="title-phrase">
-                {{ phrases[currentIndex].phrase }}
-              </span>
+            <div style="flex: 1; margin: 0 1rem; position: relative">
               <span class="title-languages" v-if="langs">
-                in {{ langs.length }} languages
+                {{ langs.length }} languages
               </span>
+              <b-input-group class="input-group-ghost-dark">
+                <b-form-input
+                  v-model="enData"
+                  :lazy="true"
+                  @compositionend.prevent.stop="() => false"
+                  placeholder="Try searching ‘lemon’"
+                  class="input-ghost-dark"
+                />
+              </b-input-group>
             </div>
             <div class="paginator" v-if="phrases">
               <b-button
@@ -91,7 +97,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-12" style="height: calc(100vh - 45px); padding: 0">
+        <div class="col-12" style="height: calc(100vh - 56px); padding: 0">
           <div class="loader-wrapper" v-if="loadingMap">
             <Loader :sticky="true" message="Loading map..." />
           </div>
@@ -158,8 +164,18 @@
           <SimilarPhrases
             class="text-center"
             v-if="phrases || en"
-            :phrase="typeof phrases !== 'undefined' ? phrases[currentIndex].phrase : undefined"
-            :translation="typeof phrases !== 'undefined' ? phrases[currentIndex].en : en ? en : undefined"
+            :phrase="
+              typeof phrases !== 'undefined'
+                ? phrases[currentIndex].phrase
+                : undefined
+            "
+            :translation="
+              typeof phrases !== 'undefined'
+                ? phrases[currentIndex].en
+                : en
+                ? en
+                : undefined
+            "
             :wiktionary="wiktionary === 'with-wiktionary' ? true : false"
             :key="`similar-phrases-${currentIndex}`"
             :autoLoad="true"
@@ -191,7 +207,7 @@ export default {
   },
   props: {
     bookId: {
-      default: '283', // Phrasebook id or 'adhoc'. Default to 283 (most common phrases)
+      default: "283", // Phrasebook id or 'adhoc'. Default to 283 (most common phrases)
     },
     en: {
       type: String,
@@ -205,6 +221,7 @@ export default {
       phrasebook: undefined,
       phrases: undefined,
       currentIndex: 0,
+      enData: undefined,
       updating: false,
       loadingMap: true,
       phrasesInAllLangs: undefined,
@@ -237,11 +254,13 @@ export default {
           );
         }
       }
+      this.enData = this.phrases[this.currentIndex].phrase;
       this.showList = false;
     },
   },
   async mounted() {
-    if (this.bookId !== 'adhoc') this.loadPhraseObj();
+    if (this.bookId !== "adhoc") this.loadPhraseObj();
+    else this.enData = this.en;
   },
   methods: {
     onReady() {
@@ -253,7 +272,9 @@ export default {
     async loadPhraseObj() {
       this.currentIndex = this.$route.query.i ? Number(this.$route.query.i) : 0;
       this.updating = true;
-      let res = await axios.get(`${Config.wiki}items/phrasebook/${this.bookId}`);
+      let res = await axios.get(
+        `${Config.wiki}items/phrasebook/${this.bookId}`
+      );
       if (res && res.data) {
         let phrasebook = res.data.data;
         phrasebook.phrases = Papa.parse(phrasebook.phrases, {
@@ -264,6 +285,7 @@ export default {
         });
         this.phrasebook = phrasebook;
         this.phrases = phrasebook.phrases;
+        this.enData = this.phrases[0].en;
       }
       this.updating = false;
     },
@@ -307,6 +329,12 @@ export default {
       }
     }
   }
+}
+.title-languages {
+  position: absolute;
+  right: 1rem;
+  top: 0.5rem;
+  opacity: 0.5;
 }
 .title {
   line-height: 1.2;
