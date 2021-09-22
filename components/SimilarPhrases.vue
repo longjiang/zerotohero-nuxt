@@ -77,7 +77,7 @@
           class="mt-3 btn btn-primary btn-sm"
           :to="{
             name: 'compare-languages',
-            params: { bookId: 'adhoc', en: translation },
+            params: { bookId: 'adhoc', en: translation, wiktionary: wiktionary ? 'with-wiktionary' : undefined },
           }"
         >
           <i class="fa fa-globe-asia mr-2"></i>

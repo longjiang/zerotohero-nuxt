@@ -1,6 +1,6 @@
 <router>
   {
-    path: '/compare-languages/:bookId?/:en?',
+    path: '/compare-languages/:bookId?/:en?/:wiktionary?',
     props: true,
     meta: {
       layout: 'full'
@@ -160,7 +160,7 @@
             v-if="phrases || en"
             :phrase="typeof phrases !== 'undefined' ? phrases[currentIndex].phrase : undefined"
             :translation="typeof phrases !== 'undefined' ? phrases[currentIndex].en : en ? en : undefined"
-            :wiktionary="phrase ? true : false"
+            :wiktionary="wiktionary === 'with-wiktionary' ? true : false"
             :key="`similar-phrases-${currentIndex}`"
             :autoLoad="true"
             @youInOtherLangs="onYouInOtherLangs"
@@ -195,6 +195,9 @@ export default {
     },
     en: {
       type: String,
+    },
+    wiktionary: {
+      default: undefined, // or 'with-wiktionary'
     },
   },
   data() {
