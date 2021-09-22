@@ -84,7 +84,7 @@
       </div>
       <Loader
         :sticky="true"
-        message="Looking for similar phrases in other languages"
+        :message="wiktionary ? 'Searching through 8,509,314 words across 7,488 languages' : 'Looking for similar phrases in other languages'"
         v-if="updating"
       />
       <div
