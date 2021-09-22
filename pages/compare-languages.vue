@@ -37,7 +37,7 @@
               &nbsp;
               <!-- spacer dummy -->
             </div>
-            <div style="flex: 1; margin: 0 1rem; position: relative">
+            <div style="flex: 1; margin-left: 1rem; position: relative">
               <span class="title-languages" v-if="langs">
                 {{ langs.length }} languages
               </span>
@@ -51,7 +51,7 @@
                 />
               </b-input-group>
             </div>
-            <div class="paginator" v-if="phrases">
+            <div class="paginator" v-if="phrases" style="margin-left: 1rem">
               <b-button
                 :class="{
                   'paginator-previous': true,
@@ -99,7 +99,14 @@
       <div class="row">
         <div class="col-12" style="height: calc(100vh - 56px); padding: 0">
           <div class="loader-wrapper" v-if="loadingMap">
-            <Loader :sticky="true" message="Loading map..." />
+            <Loader
+              :sticky="true"
+              :message="
+                wiktionary
+                  ? 'Searching through 8,509,314 words across 7,488 languages. This usualy takes 15 seconds...'
+                  : 'Looking for similar phrases in other languages'
+              "
+            />
           </div>
           <client-only>
             <LanguageMap
@@ -221,7 +228,7 @@ export default {
       phrasebook: undefined,
       phrases: undefined,
       currentIndex: 0,
-      enData: undefined,
+      enData: this.en,
       updating: false,
       loadingMap: true,
       phrasesInAllLangs: undefined,
@@ -256,6 +263,18 @@ export default {
       }
       this.enData = this.phrases[this.currentIndex].phrase;
       this.showList = false;
+    },
+    enData() {
+      if (!this.phrases || this.enData !== this.phrases[this.currentIndex].en) {
+        this.$router.push({
+          name: "compare-languages",
+          params: {
+            bookId: "adhoc",
+            en: this.enData,
+            wiktionary: "with-wiktionary",
+          },
+        });
+      }
     },
   },
   async mounted() {
