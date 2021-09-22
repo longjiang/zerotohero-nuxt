@@ -71,7 +71,7 @@
           :quiz="$quiz"
           :key="`transcript-${video.youtube_id}`"
           :autoload="true"
-          :autoplay="true"
+          :autoplay="false"
           :starttime="starttime"
           :show="show"
           :showType="showType"

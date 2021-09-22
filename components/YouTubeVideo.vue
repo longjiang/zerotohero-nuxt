@@ -136,7 +136,7 @@ export default {
           videoId: this.youtube,
           playerVars: {
             start: parseInt(this.starttime),
-            autoplay: 1,
+            autoplay: this.autoplay ? 1 : 0,
             cc_load_policy: 1,
             cc_lang_pref: this.langPref,
             showinfo: 0,

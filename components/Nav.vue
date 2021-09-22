@@ -416,6 +416,12 @@ export default {
               icon: "fas fa-clock",
               show: this.l2.code === "zh",
             },
+            {
+              name: "affiliate-program",
+              icon: "fas fa-money-check-alt",
+              show: true,
+              title: "Affiliate Program",
+            },
           ],
         },
         {
@@ -763,15 +769,9 @@ export default {
               title: "Contact Us",
             },
             {
-              name: "affiliate-program",
-              icon: "fas fa-money-check-alt",
-              show: true,
-              title: "Affiliate Program",
-            },
-            {
               name: "faq",
               icon: "fas fa-question-circle",
-              show: this.$hasFeature("courses"),
+              show: true,
               title: "FAQ",
             },
           ],

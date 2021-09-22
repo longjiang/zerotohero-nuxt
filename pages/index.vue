@@ -20,10 +20,11 @@
       <div class="container">
         <div class="row pt-5 mb-5">
           <div class="col-sm-12">
-            <div class="z2h-logo" style="line-height: 1.2; font-size: 2em">
-              <strong>ZERO TO HERO</strong>
-              <br />
-              <span style="font-weight: 300">LANGUAGES</span>
+            <div class="z2h-logo" style="line-height: 1.2">
+              <strong style="font-size: 3rem">zerotohero.ca</strong>
+              <div class="mt-3" style="font-weight: 300; font-size: 1.6rem">
+                Learn all languages of the world. Fully open-source.
+              </div>
             </div>
           </div>
         </div>
@@ -43,12 +44,10 @@
         <div class="row" v-if="!hasDashboard">
           <div class="col-sm-12">
             <div class="intro-text mb-5 text-center">
-              <h4 class="mb-3" style="line-height: 1.5; font-weight: 600">
-                This is heaven for language lovers.
-              </h4>
               <p class="mb-0" style="font-size: 1.1em">
-                This is a platform that provides tens of thousands of videos
-                with subtitles and dictionary tools across
+                This is heaven for language lovers. You can find dictionary
+                tools, tens of thousands of videos with subtitles and other
+                resources across
                 <router-link
                   :to="{ name: 'language-map' }"
                   class="link-unstyled"
@@ -56,10 +55,7 @@
                 >
                   hundreds of languages
                 </router-link>
-                !
-              </p>
-              <p class="mb-0" style="font-size: 1.1em">
-                Fully open-source – see
+                ! Fully open-source – see
                 <a
                   href="https://github.com/longjiang/zerotohero-nuxt"
                   class="link-unstyled"
@@ -260,7 +256,7 @@
           </div>
           <div class="col-sm-6 mb-5">
             <div class="home-card text-center">
-              <h5 class="mb-3">Compare Phrases across Languages</h5>
+              <h5 class="mb-3">Compare Phrases Across Languages</h5>
               <router-link to="/compare-languages">
                 <div>
                   <img
