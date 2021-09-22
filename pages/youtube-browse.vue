@@ -174,6 +174,7 @@ export default {
     return {
       channels: [],
       videos: undefined,
+      noMoreVideos: false,
       levels: Helper.levels(this.$l2),
       topics: Helper.topics,
       randomEpisodeYouTubeId: undefined,
@@ -236,17 +237,19 @@ export default {
   },
   methods: {
     async visibilityChanged(isVisible) {
-      if (this.videos && isVisible) {
+      if (this.videos && !this.noMoreVideos && isVisible) {
         this.moreVideos = this.moreVideos + this.perPage;
         this.loading = true;
         let newVideos = await this.getVideos(
           Number(this.start) + this.moreVideos
         );
         this.videos = this.videos.concat(newVideos);
+        if (newVideos.length < this.perPage) this.noMoreVideos = true;
         this.loading = false;
       }
     },
     async getVideos(start) {
+      this.noMoreVideos = false;
       let filters = "";
       if (!this.includeShows)
         filters = "&filter[tv_show][null]=1&filter[talk][null]=1";
