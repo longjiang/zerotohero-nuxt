@@ -1,6 +1,6 @@
 <router>
   {
-    path: '/compare-languages/:bookId?/:phrase?/:en?',
+    path: '/compare-languages/:bookId?/:en?',
     props: true,
     meta: {
       layout: 'full'
@@ -157,8 +157,8 @@
         <div :class="{ 'd-none': listType !== 'this-phrase' }">
           <SimilarPhrases
             class="text-center"
-            v-if="phrases || (phrase && en) || phrase"
-            :phrase="typeof phrases !== 'undefined' ? phrases[currentIndex].phrase : phrase ? phrase : undefined"
+            v-if="phrases || en"
+            :phrase="typeof phrases !== 'undefined' ? phrases[currentIndex].phrase : undefined"
             :translation="typeof phrases !== 'undefined' ? phrases[currentIndex].en : en ? en : undefined"
             :wiktionary="phrase ? true : false"
             :key="`similar-phrases-${currentIndex}`"
@@ -192,9 +192,6 @@ export default {
   props: {
     bookId: {
       default: '283', // Phrasebook id or 'adhoc'. Default to 283 (most common phrases)
-    },
-    phrase: {
-      type: String,
     },
     en: {
       type: String,
