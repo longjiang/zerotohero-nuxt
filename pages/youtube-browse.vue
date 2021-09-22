@@ -285,14 +285,6 @@ export default {
             } catch (err) {}
           }
         }
-        videos =
-          videos.sort((x, y) =>
-            x.title
-              ? x.title.localeCompare(y.title, this.$l2.locales[0], {
-                  numeric: true,
-                })
-              : 0
-          ) || [];
         return videos;
       } catch (err) {}
     },
