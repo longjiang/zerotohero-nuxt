@@ -37,7 +37,7 @@
               &nbsp;
               <!-- dummy -->
             </div>
-            <div v-if="phrases" class="title">
+            <div  class="title" v-if="phrases && phrases[currentIndex]">
               <span class="title-phrase">
                 {{ phrases[currentIndex].phrase }}
               </span>
@@ -158,8 +158,8 @@
           <SimilarPhrases
             class="text-center"
             v-if="phrases || (phrase && en) || phrase"
-            :phraseObj="phrases ? phrases[currentIndex] : (phrase && en) ? {phrase, en} : undefined"
-            :phraseStr="phrase ? phrase : undefined"
+            :phrase="typeof phrases !== 'undefined' ? phrases[currentIndex].phrase : phrase ? phrase : undefined"
+            :translation="typeof phrases !== 'undefined' ? phrases[currentIndex].en : en ? en : undefined"
             :wiktionary="phrase ? true : false"
             :key="`similar-phrases-${currentIndex}`"
             :autoLoad="true"

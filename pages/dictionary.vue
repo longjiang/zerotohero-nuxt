@@ -124,10 +124,8 @@
               />
               <SimilarPhrases
                 v-if="entry.definitions && entry.definitions.length > 0"
-                :phraseObj="{
-                  phrase: entry.head,
-                  en: similarPhraseTranslation,
-                }"
+                :phrase="entry.head"
+                :translation="similarPhraseTranslation"
                 class="text-center"
               />
             </div>
@@ -213,7 +211,7 @@ export default {
         en = this.entry.definitions[0].split(", ")[0];
       }
       en = en.replace(/\(.*\)/g, "").trim();
-      return en
+      return en;
     },
     title() {
       if (this.entry) {

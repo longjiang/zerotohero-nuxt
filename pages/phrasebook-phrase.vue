@@ -80,7 +80,8 @@
               <div>
                 <SimilarPhrases
                   v-if="phraseObj"
-                  :phraseObj="phraseObj"
+                  :phrase="phraseObj.phrase"
+                  :translation="phraseObj.en"
                   class="text-center"
                 />
               </div>

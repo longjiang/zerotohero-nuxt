@@ -80,7 +80,7 @@
             <div class="mt-3">
               <SimilarPhrases
                 v-if="term"
-                :phraseStr="term"
+                :phrase="term"
                 class="text-center"
               />
             </div>

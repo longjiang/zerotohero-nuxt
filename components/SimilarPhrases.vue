@@ -75,7 +75,7 @@
           class="mt-3 btn btn-primary btn-sm"
           :to="{
             name: 'compare-languages',
-            params: { bookId: 'adhoc', phrase: phraseObj.phrase, en: phraseObj.en },
+            params: { bookId: 'adhoc', phrase: phrase, en: translation },
           }"
         >
           <i class="fa fa-globe-asia mr-2"></i>
@@ -110,10 +110,10 @@ export default {
     ContainerQuery,
   },
   props: {
-    phraseObj: {
-      type: Object,
+    translation: {
+      type: String,
     },
-    phraseStr: {
+    phrase: {
       type: String,
     },
     autoLoad: {
@@ -125,8 +125,6 @@ export default {
   },
   data() {
     return {
-      phrase: this.phraseObj ? this.phraseObj.phrase : this.phraseStr,
-      translation: this.phraseObj ? this.phraseObj["en"] : undefined,
       allPhrases: [],
       youInOtherLangs: [],
       vousInOtherLangs: [],
