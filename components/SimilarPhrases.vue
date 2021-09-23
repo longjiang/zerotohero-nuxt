@@ -349,6 +349,7 @@ export default {
       return phrases;
     },
     normalizeTranslation(translation) {
+      if (!translation) return translation
       let normalized = translation;
       normalized = normalized.replace(/\(.*\)/g, "");
       normalized = normalized.split(/[,;|]/)[0];
@@ -356,6 +357,7 @@ export default {
       return normalized;
     },
     normalizePhrase(phrase) {
+      if (!phrase) return phrase
       let normalized = phrase;
       normalized = normalized.toUpperCase();
       return normalized;
