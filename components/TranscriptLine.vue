@@ -140,15 +140,17 @@ export default {
           this.highlight,
           this.hsk || "outside"
         );
-      html = html.replace(/\[(\d+)\]/g, (_, num) => {
-        let note;
-        if (this.notes) {
-          note = this.notes.find((note) => note.id === Number(num));
-        }
-        return `<PopupNote :number="${num}" content="${
-          note ? note.note : ""
-        }"></PopupNote>`;
-      });
+      if (this.notes) {
+        html = html.replace(/\[(\d+)\]/g, (_, num) => {
+          let note;
+          if (this.notes) {
+            note = this.notes.find((note) => note.id === Number(num));
+          }
+          return `<PopupNote :number="${num}" content="${
+            note ? note.note : ""
+          }"></PopupNote>`;
+        });
+      }
       return html;
     },
     highlightMultiple() {
