@@ -354,12 +354,14 @@ export default {
       normalized = normalized.replace(/\(.*\)/g, "");
       normalized = normalized.split(/[,;|]/)[0];
       normalized = normalized.toUpperCase();
+      normalized = normalized.trim()
       return normalized;
     },
     normalizePhrase(phrase) {
       if (!phrase) return phrase
       let normalized = phrase;
       normalized = normalized.toUpperCase();
+      normalized = normalized.trim()
       return normalized;
     },
     separatePhrases(phrases) {
