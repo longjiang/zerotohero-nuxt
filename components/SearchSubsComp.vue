@@ -539,7 +539,19 @@ export default {
         this.$l2.id,
         this.$adminMode,
         this.$l2.continua,
-        this.$subsSearchLimit ? (this.exact ? 20 : 10) : false,
+        this.$subsSearchLimit
+          ? this.exact
+            ? ["hy", "ka"].includes(this.$l2.code) // Give more room to less popular languages with alphebet-learning features (short words)
+              ? this.terms[0].length < 5
+                ? this.terms[0].length < 4
+                  ? this.terms[0].length < 3
+                    ? 100
+                    : 80
+                  : 60
+                : 40
+              : 20
+            : 10
+          : false,
         this.tvShow ? this.tvShow.id : undefined,
         this.exact,
         true
@@ -627,7 +639,10 @@ export default {
       hitGroups = Object.assign({ zthSaved: savedHits }, hitGroups);
       for (let key in hitGroups) {
         hitGroups[key] = hitGroups[key].sort((a, b) =>
-          a.leftContext.localeCompare(b[`${leftOrRight}Context`], this.$l2.locales[0])
+          a.leftContext.localeCompare(
+            b[`${leftOrRight}Context`],
+            this.$l2.locales[0]
+          )
         );
       }
       return hitGroups;
