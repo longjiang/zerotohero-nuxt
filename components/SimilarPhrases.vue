@@ -88,7 +88,7 @@
         :sticky="true"
         :message="
           wiktionary
-            ? 'Searching through 7,575,204 words across 3,752 languages'
+            ? 'Searching through 7,669,735 words across 3,752 languages'
             : 'Looking for similar phrases in other languages'
         "
         v-if="updating"

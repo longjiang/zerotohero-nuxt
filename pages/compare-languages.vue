@@ -103,7 +103,7 @@
               :sticky="true"
               :message="
                 wiktionary
-                  ? 'Searching through 7,575,204 words across 3,752 languages. This usualy takes 15 seconds...'
+                  ? 'Searching through 7,669,735 words across 3,752 languages. This usualy takes 15 seconds...'
                   : 'Looking for similar phrases in other languages'
               "
             />
