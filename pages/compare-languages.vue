@@ -171,6 +171,7 @@
           <SimilarPhrases
             class="text-center"
             v-if="phrases || en"
+            :sort="false"
             :phrase="
               typeof phrases !== 'undefined'
                 ? phrases[currentIndex].phrase

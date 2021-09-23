@@ -132,6 +132,9 @@ export default {
     wiktionary: {
       default: true,
     },
+    sort: {
+      default: true,
+    },
   },
   data() {
     return {
@@ -242,12 +245,20 @@ export default {
               l2,
               id: w.id,
               word: w.word,
-              definitions: w.definitions
-                .split("|"),
+              definitions: w.definitions.split("|"),
             };
           });
+          // Make sure the original search term shows up under 'English'
+          words.unshift({
+            l2: this.$languages.getSmart("en"),
+            id: 0,
+            word: this.translation,
+            definitions: [this.translation],
+          });
           words = words.filter((w) => {
-            w.en = w.definitions.find((d) => this.normalizeTranslation(d) === this.normalizedTranslation);
+            w.en = w.definitions.find(
+              (d) => this.normalizeTranslation(d) === this.normalizedTranslation
+            );
             return w.en;
           });
           let phrases = words.map((w) => {
@@ -351,13 +362,17 @@ export default {
     },
     separatePhrases(phrases) {
       if (this.normalizedTranslation) {
-        this.youInOtherLangs = phrases
-          .filter(
-            (p) =>
-              (p.normalizedTranslation || "") ===
-              (this.normalizedTranslation || "")
-          )
-          .sort((a, b) => a.phrase.localeCompare(b.phrase));
+        let youInOtherLangs = phrases.filter(
+          (p) =>
+            (p.normalizedTranslation || "") ===
+            (this.normalizedTranslation || "")
+        );
+        if (this.sort) {
+          youInOtherLangs = youInOtherLangs.sort((a, b) =>
+            a.phrase.localeCompare(b.phrase)
+          );
+        }
+        this.youInOtherLangs = youInOtherLangs;
       }
       this.vousInOtherLangs = phrases.filter(
         (p) =>
