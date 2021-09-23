@@ -185,15 +185,6 @@ export default {
                   this.interval = undefined;
                 }
               }
-              if (
-                !Helper.iOS() &&
-                !this.autoplay &&
-                this.autoload &&
-                this.neverPlayed
-              ) {
-                this.pause();
-                this.neverPlayed = false;
-              }
             },
             onReady: () => {},
           },

@@ -259,7 +259,7 @@
       :speed="speed"
       :startLineIndex="startLineIndex"
       :showFullscreenToggle="false"
-      :autoload="iOS() || navigated"
+      :autoload="true"
       :autoplay="navigated"
       :showLineList="false"
     />
