@@ -77,7 +77,11 @@
           class="mt-3 btn btn-primary btn-sm"
           :to="{
             name: 'compare-languages',
-            params: { bookId: 'adhoc', en: translation, wiktionary: wiktionary ? 'with-wiktionary' : undefined },
+            params: {
+              bookId: 'adhoc',
+              en: translation,
+              wiktionary: wiktionary ? 'with-wiktionary' : undefined,
+            },
           }"
         >
           <i class="fa fa-globe-asia mr-2"></i>
@@ -134,6 +138,8 @@ export default {
       allPhrases: [],
       youInOtherLangs: [],
       vousInOtherLangs: [],
+      normalizedTranslation: undefined,
+      normalizedPhrase: undefined,
       params: {},
       query: {
         xs: {
@@ -176,6 +182,9 @@ export default {
     },
   },
   mounted() {
+    if (this.translation)
+      this.normalizedTranslation = this.normalizeTranslation(this.translation);
+    if (this.phrase) this.normalizedPhrase = this.normalizePhrase(this.phrase);
     if (this.autoLoad) this.getSimilarPhrases();
   },
   methods: {
@@ -184,11 +193,15 @@ export default {
       this.showButton = false;
       let phrasebooks = [];
       if (this.translation) {
-        let youInOtherLangs = await this.getYouInOtherLangs(this.translation);
+        let youInOtherLangs = await this.getYouInOtherLangs(
+          this.normalizedTranslation
+        );
         phrasebooks = phrasebooks.concat(youInOtherLangs);
       }
       if (this.phrase) {
-        let vousInOtherLangs = await this.getVousInOtherLangs(this.phrase);
+        let vousInOtherLangs = await this.getVousInOtherLangs(
+          this.normalizedPhrase
+        );
         phrasebooks = phrasebooks.concat(vousInOtherLangs);
       }
       let phrases = this.extractAllPhrases(phrasebooks);
@@ -209,7 +222,6 @@ export default {
       try {
         let res = await axios.get(url);
         if (res && res.data) {
-          console.log(res.data.data);
         }
       } catch (err) {}
     },
@@ -219,7 +231,7 @@ export default {
       let url = `${
         Config.wiki
       }items/wiktionary?filter[definitions][rlike]=${encodeURIComponent(
-        this.translation + "%"
+        this.normalizedTranslation.toLowerCase() + "%"
       )}${popularLanguagesOnly ? popularLanguageFilter : ""}&limit=500`;
       try {
         let res = await axios.get(url);
@@ -231,12 +243,11 @@ export default {
               id: w.id,
               word: w.word,
               definitions: w.definitions
-                .split("|")
-                .map((d) => d.replace(/\(.*\)/g, "").trim()),
+                .split("|"),
             };
           });
           words = words.filter((w) => {
-            w.en = w.definitions.find((d) => d === this.translation);
+            w.en = w.definitions.find((d) => this.normalizeTranslation(d) === this.normalizedTranslation);
             return w.en;
           });
           let phrases = words.map((w) => {
@@ -244,7 +255,9 @@ export default {
               l2: w.l2,
               id: w.id,
               phrase: w.word,
+              normalizedPhrase: this.normalizePhrase(w.word),
               en: w.en,
+              normalizedTranslation: this.normalizeTranslation(w.en),
               bookId: "wiktionary",
             };
           });
@@ -297,7 +310,6 @@ export default {
       return [];
     },
     extractAllPhrases(phrasebooks) {
-      let l1Code = "en";
       phrasebooks = Helper.uniqueByValue(phrasebooks, "id");
       let phrases = [];
       for (let phrasebook of phrasebooks) {
@@ -307,14 +319,15 @@ export default {
         }).data.map((p, id) => {
           p.id = id;
           p.bookId = phrasebook.id;
+          p.normalizedPhrase = this.normalizePhrase(p.phrase);
+          p.normalizedTranslation = this.normalizeTranslation(p.en);
           return p;
         });
         for (let phrase of phrasebook.phrases) {
           if (
-            (phrase.phrase || "").toUpperCase() ===
-              (this.phrase || "").toUpperCase() ||
-            (phrase[l1Code] || "").toUpperCase() ===
-              (this.translation || "").toUpperCase()
+            (phrase.normalizedPhrase || "") === (this.normalizedPhrase || "") ||
+            (phrase.normalizedTranslation || "") ===
+              (this.normalizedTranslation || "")
           ) {
             phrase.l2 = l2;
             phrases.push(phrase);
@@ -324,23 +337,34 @@ export default {
       phrases = Helper.uniqueByValues(phrases, ["phrase", "en", "l2"]);
       return phrases;
     },
+    normalizeTranslation(translation) {
+      let normalized = translation;
+      normalized = normalized.replace(/\(.*\)/g, "");
+      normalized = normalized.split(/[,;|]/)[0];
+      normalized = normalized.toUpperCase();
+      return normalized;
+    },
+    normalizePhrase(phrase) {
+      let normalized = phrase;
+      normalized = normalized.toUpperCase();
+      return normalized;
+    },
     separatePhrases(phrases) {
-      if (this.translation) {
+      if (this.normalizedTranslation) {
         this.youInOtherLangs = phrases
           .filter(
             (p) =>
-              (p["en"] || "").toUpperCase() ===
-              (this.translation || "").toUpperCase()
+              (p.normalizedTranslation || "") ===
+              (this.normalizedTranslation || "")
           )
           .sort((a, b) => a.phrase.localeCompare(b.phrase));
       }
       this.vousInOtherLangs = phrases.filter(
         (p) =>
-          (p.phrase || "").toUpperCase() ===
-            (this.phrase || "").toUpperCase() &&
+          (p.normalizedPhrase || "") === (this.normalizedPhrase || "") &&
           (typeof this.$l2 === "undefined" ||
             p.l2.code !== this.$l2.code ||
-            p["en"] !== this.translation)
+            p.normalizedTranslation !== this.normalizedTranslation)
       );
       this.$emit("youInOtherLangs", this.youInOtherLangs);
       this.$emit("vousInOtherLangs", this.vousInOtherLangs);

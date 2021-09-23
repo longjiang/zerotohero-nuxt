@@ -62,8 +62,9 @@
               >
                 <div
                   :set="
-                    (filteredPhrases = phrases.filter(
-                      (phrase) => phrase.l2 === language
+                    (filteredPhrases = uniqueByValue(
+                      phrases.filter((phrase) => phrase.l2 === language),
+                      'phrase'
                     ))
                   "
                   :set2="
@@ -222,6 +223,9 @@ export default {
     },
   },
   methods: {
+    uniqueByValue() {
+      return Helper.uniqueByValue(...arguments);
+    },
     initLangs() {
       if (this.phrases) {
         let languages = this.phrases.map((p) => p.l2);
@@ -307,7 +311,8 @@ export default {
     updateBounds(bounds) {
       this.filteredLanguages = this.languages.filter((l) => {
         return (
-          l.lat && l.long &&
+          l.lat &&
+          l.long &&
           l.lat < bounds._northEast.lat &&
           l.lat > bounds._southWest.lat &&
           l.long > bounds._southWest.lng &&

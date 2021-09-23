@@ -103,7 +103,7 @@
               :sticky="true"
               :message="
                 wiktionary
-                  ? 'Searching through 7,669,735 words across 3,752 languages. This usualy takes 15 seconds...'
+                  ? 'Searching through 7,669,735 words across 3,752 languages. This usualy takes 15 seconds... No results? Make sure to search for ENGLISH words only, like “bicycle”, not “自行车”.'
                   : 'Looking for similar phrases in other languages'
               "
             />
