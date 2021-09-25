@@ -1,6 +1,83 @@
 <template>
   <container-query :query="query" v-model="params">
     <div class="container">
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="col-12 text-center">
+            <button
+              :class="`btn btn-ghost-dark btn-sm ml-1 ${
+                skin === 'light' ? 'text-secondary' : ''
+              }`"
+              v-if="
+                (savedWordsSorted && savedWordsSorted.length > 0) ||
+                (savedPhrasesSorted && savedPhrasesSorted.length > 0)
+              "
+              @click="showExportButtons = !showExportButtons"
+            >
+              <i class="fa fa-download mr-1"></i>
+              Export
+            </button>
+            <input
+              id="fileUpload"
+              ref="upload"
+              type="file"
+              hidden
+              @change="importCSV"
+            />
+            <button
+              :class="`btn btn-ghost-dark btn-sm ml-1 ${
+                skin === 'light' ? 'text-secondary' : ''
+              }`"
+              @click="importButtonClick()"
+            >
+              <i class="fa fa-upload mr-1"></i>
+              Import
+            </button>
+            <button
+              :class="`btn btn-danger btn-sm ml-1`"
+              v-if="
+                (savedWordsSorted && savedWordsSorted.length > 0) ||
+                (savedPhrasesSorted && savedPhrasesSorted.length > 0)
+              "
+              @click="deleteAllSavedWordsAndPhrases()"
+            >
+              <i class="fa fa-trash mr-1"></i>
+              Delete All
+            </button>
+            <div v-if="showExportButtons" class="mt-3">
+              <a
+                :href="wordsCSVHref"
+                :download="`saved-words${
+                  l2 ? '-' + l2.code : ''
+                }-${hostname}.csv`"
+                v-if="
+                  savedWordsSorted &&
+                  savedWordsSorted.length > 0 &&
+                  wordsCSVHref
+                "
+                class="mr-2"
+              >
+                <i class="fa fa-file mr-1"></i>
+                Saved Words
+              </a>
+              <a
+                v-if="
+                  savedPhrasesSorted &&
+                  savedPhrasesSorted.length > 0 &&
+                  phrasesCSVHref
+                "
+                :download="`saved-phrases${
+                  l2 ? '-' + l2.code : ''
+                }-${hostname}.csv`"
+                :href="phrasesCSVHref"
+              >
+                <i class="fa fa-file mr-1"></i>
+                Saved Phrases
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
       <div
         class="row dashboard-saved-words"
         v-if="
@@ -69,63 +146,8 @@
             </router-link>
           </div>
         </div>
-        <div class="col-12 text-center mt-4">
-          <button
-            :class="`btn btn-ghost-dark btn-sm ml-1 ${
-              skin === 'light' ? 'text-secondary' : ''
-            }`"
-            @click="showExportButtons = !showExportButtons"
-          >
-            <i class="fa fa-download mr-1"></i>
-            Export
-          </button>
-          <input
-            id="fileUpload"
-            ref="upload"
-            type="file"
-            hidden
-            @change="importCSV"
-          />
-          <button
-            :class="`btn btn-ghost-dark btn-sm ml-1 ${
-              skin === 'light' ? 'text-secondary' : ''
-            }`"
-            @click="importButtonClick()"
-          >
-            <i class="fa fa-upload mr-1"></i>
-            Import
-          </button>
-          <div v-if="showExportButtons" class="mt-2">
-            <a
-              :href="wordsCSVHref"
-              :download="`saved-words${
-                l2 ? '-' + l2.code : ''
-              }-${hostname}.csv`"
-              v-if="
-                savedWordsSorted && savedWordsSorted.length > 0 && wordsCSVHref
-              "
-              class="mr-2"
-            >
-              <i class="fa fa-file mr-1"></i>
-              Saved Words
-            </a>
-            <a
-              :href="
-                savedPhrasesSorted &&
-                savedPhrasesSorted.length > 0 &&
-                phrasesCSVHref
-              "
-              :download="`saved-phrases${
-                l2 ? '-' + l2.code : ''
-              }-${hostname}.csv`"
-              v-if="phrasesCSVHref"
-            >
-              <i class="fa fa-file mr-1"></i>
-              Saved Phrases
-            </a>
-          </div>
-        </div>
       </div>
+      <hr class="mt-4 mb-4" v-if="itemsFiltered.length > 0" />
       <div class="history-items row" v-if="itemsFiltered.length > 0">
         <div
           v-for="(item, itemIndex) of itemsFiltered.slice(0, 12)"
@@ -334,6 +356,26 @@ export default {
     },
   },
   methods: {
+    deleteAllSavedWordsAndPhrases() {
+      if (
+        this.savedWordsSorted &&
+        this.savedWordsSorted.length > 0 &&
+        confirm(
+          `Are you sure you want to delete all saved WORDS for all ${this.savedWordsSorted.length} languages?`
+        )
+      ) {
+        this.$store.dispatch("savedWords/removeAll");
+      }
+      if (
+        this.savedPhrasesSorted &&
+        this.savedPhrasesSorted.length > 0 &&
+        confirm(
+          `Are you sure you want to delete all saved PHRASES for all ${this.savedPhrasesSorted.length} languages?`
+        )
+      ) {
+        this.$store.dispatch("savedPhrases/removeAll");
+      }
+    },
     importButtonClick() {
       this.$refs["upload"].click();
     },

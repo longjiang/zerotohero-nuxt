@@ -68,10 +68,17 @@ export const mutations = {
       }
     }
   },
-  REMOVE_ALL_SAVED_PHRASES(state, { l2 }) {
-    if (typeof localStorage !== 'undefined' && state.savedPhrases[l2]) {
+  REMOVE_ALL_SAVED_PHRASES(state, { l2 } = {}) {
+    if (typeof localStorage !== 'undefined') {
       let savedPhrases = Object.assign({}, state.savedPhrases)
-      savedPhrases[l2] = []
+      console.log('l2', l2)
+      if (l2) {
+        if (state.savedPhrases[l2]) {
+          savedPhrases[l2] = []
+        }
+      } else {
+        savedPhrases = {}
+      }
       localStorage.setItem('zthSavedPhrases', JSON.stringify(savedPhrases))
       this._vm.$set(state, 'savedPhrases', savedPhrases)
     }

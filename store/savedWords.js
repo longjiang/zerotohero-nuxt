@@ -60,10 +60,16 @@ export const mutations = {
       this._vm.$set(state, 'savedWords', savedWords)
     }
   },
-  REMOVE_ALL_SAVED_WORDS(state, options) {
-    if (typeof localStorage !== 'undefined' && state.savedWords[options.l2]) {
+  REMOVE_ALL_SAVED_WORDS(state, options = {}) {
+    if (typeof localStorage !== 'undefined') {
       let savedWords = Object.assign({}, state.savedWords)
-      savedWords[options.l2] = []
+      if (options.l2) {
+        if (state.savedWords[options.l2]) {
+          savedWords[options.l2] = []
+        }
+      } else {
+        savedWords = {}
+      }
       localStorage.setItem('zthSavedWords', JSON.stringify(savedWords))
       this._vm.$set(state, 'savedWords', savedWords)
     }
@@ -96,7 +102,7 @@ export const getters = {
           item => {
             let forms = item.forms
             // Take care of edge cases where a user has used an old version of the site and imported word forms as a string rather than array.
-            if (typeof forms === 'string') forms = forms.split(',') 
+            if (typeof forms === 'string') forms = forms.split(',')
             return forms.map(form => form ? form.toLowerCase() : '').includes(options.text.toLowerCase())
           }
         )
