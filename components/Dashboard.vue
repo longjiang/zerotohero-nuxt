@@ -120,7 +120,7 @@
             </router-link>
             <router-link
               v-for="(savedPhrasesLang, index) in savedPhrasesSorted"
-              :to="`/${languageL1(savedPhrasesLang.l2)}}/${
+              :to="`/${languageL1(savedPhrasesLang.l2)}/${
                 savedPhrasesLang.l2.code
               }/saved-phrases`"
               class="link-unstyled d-block dashboard-saved-words-list-item"
