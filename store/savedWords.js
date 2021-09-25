@@ -30,6 +30,25 @@ export const mutations = {
       }
     }
   },
+  IMPORT_WORDS(state, rows) {
+    if (typeof localStorage !== 'undefined') {
+      for (let { id, forms, l2 } of rows) {
+        if (!state.savedWords[l2]) {
+          state.savedWords[l2] = []
+        }
+        if (
+          !state.savedWords[l2].find(item => item.id === id)
+        ) {
+          let savedWords = Object.assign({}, state.savedWords)
+          savedWords[l2].push({
+            id,
+            forms
+          })
+        }
+      }
+      localStorage.setItem('zthSavedWords', JSON.stringify(state.savedWords))
+    }
+  },
   REMOVE_SAVED_WORD(state, options) {
     if (typeof localStorage !== 'undefined' && state.savedWords[options.l2]) {
       const keepers = state.savedWords[options.l2].filter(
@@ -53,6 +72,9 @@ export const mutations = {
 export const actions = {
   add({ commit, dispatch }, options) {
     commit('ADD_SAVED_WORD', options)
+  },
+  importWords({ commit, dispatch }, rows) {
+    commit('IMPORT_WORDS', rows)
   },
   remove({ commit, dispatch }, options) {
     commit('REMOVE_SAVED_WORD', options)

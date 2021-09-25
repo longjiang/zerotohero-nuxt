@@ -15,7 +15,7 @@ export const mutations = {
   ADD_SAVED_PHRASE(state, { l2, phrase, phrasebookId, pronunciation, exact, translations = {} } = {}) {
     if (typeof localStorage !== 'undefined') {
       let phraseToSave = {
-        phrase, phrasebookId, pronunciation, exact, 
+        phrase, phrasebookId, pronunciation, exact,
       }
       for (let key in translations) {
         phraseToSave[key] = translations[key]
@@ -31,6 +31,21 @@ export const mutations = {
         localStorage.setItem('zthSavedPhrases', JSON.stringify(savedPhrases))
         this._vm.$set(state, 'savedPhrases', savedPhrases)
       }
+    }
+  },
+  IMPORT_PHRASES(state, rows) {
+    if (typeof localStorage !== 'undefined') {
+      for (let row of rows) {
+        if (!state.savedPhrases[row.l2]) {
+          state.savedPhrases[row.l2] = []
+        }
+        if (
+          !state.savedPhrases[row.l2].find(p => p.phrase === row.phrase)
+        ) {
+          state.savedPhrases[row.l2].push(row)
+        }
+      }
+      localStorage.setItem('zthSavedPhrases', JSON.stringify(state.savedPhrases))
     }
   },
   REMOVE_SAVED_PHRASE(state, { l2, phrase, phrasebookId, pronunciation, exact, translations = {} } = {}) {
@@ -65,6 +80,9 @@ export const mutations = {
 export const actions = {
   add({ commit, dispatch }, options) {
     commit('ADD_SAVED_PHRASE', options)
+  },
+  importPhrases({ commit, dispatch }, rows) {
+    commit('IMPORT_PHRASES', rows)
   },
   remove({ commit, dispatch }, options) {
     commit('REMOVE_SAVED_PHRASE', options)

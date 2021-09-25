@@ -127,6 +127,7 @@ export default {
         delete mapped.bare;
         delete mapped.username;
         delete mapped.created;
+        delete mapped.audio;
         delete mapped.c;
         delete mapped.e;
         delete mapped.f;
