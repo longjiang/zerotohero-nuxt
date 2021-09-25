@@ -17,7 +17,7 @@
           >
             <router-link
               v-for="(savedWordsLang, index) in savedWordsSorted"
-              :to="`/${savedWordsLang.l2.code === 'lzh' ? 'zh' : 'en'}/${
+              :to="`/${languageL1(savedWordsLang.l2)}/${
                 savedWordsLang.l2.code
               }/saved-words`"
               class="link-unstyled d-block dashboard-saved-words-list-item"
@@ -39,11 +39,11 @@
               saved word{{ savedWordsLang.words.length > 1 ? "s" : "" }}
 
               in
-              <strong>{{ savedWordsLang.l2.name }}</strong>
+              <strong>{{ languageName(savedWordsLang.l2) }}</strong>
             </router-link>
             <router-link
               v-for="(savedPhrasesLang, index) in savedPhrasesSorted"
-              :to="`/${savedPhrasesLang.l2.code === 'lzh' ? 'zh' : 'en'}/${
+              :to="`/${languageL1(savedPhrasesLang.l2)}}/${
                 savedPhrasesLang.l2.code
               }/saved-phrases`"
               class="link-unstyled d-block dashboard-saved-words-list-item"
@@ -210,6 +210,7 @@ export default {
       showExportButtons: false,
       phrasesCSVHref: undefined,
       wordsCSVHref: undefined,
+      specials: Helper.specialLanguages,
       query: {
         xs: {
           minWidth: 0,
@@ -396,6 +397,18 @@ export default {
       if (this.itemsFiltered && this.itemsFiltered.length > 0)
         hasDashboard = true;
       this.$emit("hasDashboard", hasDashboard);
+    },
+    languageL1(language) {
+      let l1 = "en";
+      let special = this.specials[language.code];
+      if (special) l1 = special.l1;
+      return l1;
+    },
+    languageName(language) {
+      let name = language.name.replace(/ \(.*\)/gi, "");
+      let special = this.specials[language.code];
+      if (special) name = special.name;
+      return name;
     },
   },
 };
