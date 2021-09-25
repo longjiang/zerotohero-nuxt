@@ -42,7 +42,7 @@ export const mutations = {
           let savedWords = Object.assign({}, state.savedWords)
           savedWords[l2].push({
             id,
-            forms
+            forms: forms.split(',')
           })
         }
       }
@@ -93,7 +93,12 @@ export const getters = {
         )
       } else if (options.text) {
         savedWord = state.savedWords[options.l2].find(
-          item => item.forms.map(form => form ? form.toLowerCase() : '').includes(options.text.toLowerCase())
+          item => {
+            let forms = item.forms
+            // Take care of edge cases where a user has used an old version of the site and imported word forms as a string rather than array.
+            if (typeof forms === 'string') forms = forms.split(',') 
+            return forms.map(form => form ? form.toLowerCase() : '').includes(options.text.toLowerCase())
+          }
         )
       }
       return savedWord
