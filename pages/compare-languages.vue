@@ -37,7 +37,10 @@
               &nbsp;
               <!-- spacer dummy -->
             </div>
-            <div style="flex: 1; margin-left: 1rem; position: relative">
+            <div
+              style="flex: 1; margin-left: 1rem; position: relative"
+              v-if="!updating"
+            >
               <span class="title-languages" v-if="langs">
                 {{ langs.length }} languages
               </span>
@@ -98,12 +101,12 @@
       </div>
       <div class="row">
         <div class="col-12" style="height: calc(100vh - 56px); padding: 0">
-          <div class="loader-wrapper" v-if="loadingMap">
+          <div class="loader-wrapper p-5" v-if="loadingMap || updating">
             <Loader
               :sticky="true"
               :message="
                 wiktionary
-                  ? 'Searching through 7,669,735 words across 3,752 languages. This usualy takes 15 seconds... No results? Make sure to search for ENGLISH words only, like “bicycle”, not “自行车”.'
+                  ? 'Searching through 7,669,735 words across 3,752 languages. This usualy takes 15 seconds...'
                   : 'Looking for similar phrases in other languages'
               "
             />
@@ -274,6 +277,7 @@ export default {
             en: this.enData,
             wiktionary: "with-wiktionary",
           },
+          query: Object.fromEntries(new URLSearchParams(location.search)),
         });
       }
     },
@@ -292,20 +296,24 @@ export default {
     async loadPhraseObj() {
       this.currentIndex = this.$route.query.i ? Number(this.$route.query.i) : 0;
       this.updating = true;
-      let res = await axios.get(
-        `${Config.wiki}items/phrasebook/${this.bookId}`
-      );
-      if (res && res.data) {
-        let phrasebook = res.data.data;
-        phrasebook.phrases = Papa.parse(phrasebook.phrases, {
-          header: true,
-        }).data.map((p, id) => {
-          p.id = id;
-          return p;
-        });
-        this.phrasebook = phrasebook;
-        this.phrases = phrasebook.phrases;
-        this.enData = this.phrases[0].en;
+      try {
+        let res = await axios.get(
+          `${Config.wiki}items/phrasebook/${this.bookId}`
+        );
+        if (res && res.data) {
+          let phrasebook = res.data.data;
+          phrasebook.phrases = Papa.parse(phrasebook.phrases, {
+            header: true,
+          }).data.map((p, id) => {
+            p.id = id;
+            return p;
+          });
+          this.phrasebook = phrasebook;
+          this.phrases = phrasebook.phrases;
+          this.enData = this.phrases[0].en;
+        }
+      } catch (err) {
+        this.loadingMap = false;
       }
       this.updating = false;
     },

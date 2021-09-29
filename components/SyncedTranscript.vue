@@ -6,83 +6,85 @@
       'synced-transcript-single-line': single,
     }"
   >
-    <template
-      v-for="(line, index) in single
-        ? [lines[currentLineIndex || 0]]
-        : lines.slice(visibleMin, visibleMax - visibleMin)"
-    >
-      <TranscriptLine
-        :line="line"
-        :parallelLine="
-          $l2.code !== $l1.code && parallellines
-            ? matchedParallelLines[
-                single ? currentLineIndex : index + visibleMin
-              ]
-            : undefined
-        "
-        :lineIndex="index + visibleMin"
-        :key="`line-${index + visibleMin}-${line.starttime}-${line.line.substr(
-          0,
-          10
-        )}`"
-        :abnormal="
-          $adminMode &&
-          lines[index + visibleMin - 1] &&
-          lines[index + visibleMin - 1].starttime > line.starttime
-        "
-        :matched="
-          !single &&
-          highlight &&
-          line &&
-          new RegExp(highlight.join('|')).test(line.line)
-        "
-        :showSubsEditing="showSubsEditing"
-        :sticky="sticky"
-        :single="single"
-        :highlight="highlight"
-        :hsk="hsk"
-        :notes="notes"
-        :enableTranslationEditing="$adminMode && enableTranslationEditing"
-        @click="lineClick(line)"
-        @removeLineClick="removeLine(index + visibleMin)"
-        @trasnlationLineBlur="trasnlationLineBlur"
-        @trasnlationLineKeydown="trasnlationLineKeydown"
-      />
-      <div v-if="!single" :key="`line-${index + visibleMin}-review`">
-        <h6
-          class="text-center mt-3"
-          :key="`review-title-${index + visibleMin}-${
-            reviewKeys[index + visibleMin]
-          }`"
-          v-if="
-            review[index + visibleMin] && review[index + visibleMin].length > 0
+    <client-only>
+      <template
+        v-for="(line, index) in single
+          ? [lines[currentLineIndex || 0]]
+          : lines.slice(visibleMin, visibleMax - visibleMin)"
+      >
+        <TranscriptLine
+          :line="line"
+          :parallelLine="
+            $l2.code !== $l1.code && parallellines
+              ? matchedParallelLines[
+                  single ? currentLineIndex : index + visibleMin
+                ]
+              : undefined
           "
-        >
-          Pop Quiz
-        </h6>
-        <Review
-          v-for="(reviewItem, reviewItemIndex) in review[index + visibleMin]"
-          :key="`review-${index + visibleMin}-${reviewItemIndex}-${
-            reviewKeys[index + visibleMin]
-          }`"
-          :reviewItem="reviewItem"
+          :lineIndex="index + visibleMin"
+          :key="`line-${index + visibleMin}-${
+            line.starttime
+          }-${line.line.substr(0, 10)}`"
+          :abnormal="
+            $adminMode &&
+            lines[index + visibleMin - 1] &&
+            lines[index + visibleMin - 1].starttime > line.starttime
+          "
+          :matched="
+            !single &&
+            highlight &&
+            line &&
+            new RegExp(highlight.join('|')).test(line.line)
+          "
+          :showSubsEditing="showSubsEditing"
+          :sticky="sticky"
+          :single="single"
+          :highlight="highlight"
           :hsk="hsk"
-          :skin="skin"
+          :notes="notes"
+          :enableTranslationEditing="$adminMode && enableTranslationEditing"
+          @click="lineClick(line)"
+          @removeLineClick="removeLine(index + visibleMin)"
+          @trasnlationLineBlur="trasnlationLineBlur"
+          @trasnlationLineKeydown="trasnlationLineKeydown"
         />
+        <div v-if="!single" :key="`line-${index + visibleMin}-review`">
+          <h6
+            class="text-center mt-3"
+            :key="`review-title-${index + visibleMin}-${
+              reviewKeys[index + visibleMin]
+            }`"
+            v-if="
+              review[index + visibleMin] &&
+              review[index + visibleMin].length > 0
+            "
+          >
+            Pop Quiz
+          </h6>
+          <Review
+            v-for="(reviewItem, reviewItemIndex) in review[index + visibleMin]"
+            :key="`review-${index + visibleMin}-${
+              reviewItem.text || reviewItem.simplified
+            }-${reviewItemIndex}-${reviewKeys[index + visibleMin]}`"
+            :reviewItem="reviewItem"
+            :hsk="hsk"
+            :skin="skin"
+          />
+        </div>
+      </template>
+      <div
+        v-observe-visibility="visibilityChanged"
+        style="
+          height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        "
+        v-if="!single && lines.length > visibleMax"
+      >
+        <Loader :sticky="true" />
       </div>
-    </template>
-    <div
-      v-observe-visibility="visibilityChanged"
-      style="
-        height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      "
-      v-if="!single && lines.length > visibleMax"
-    >
-      <Loader :sticky="true" />
-    </div>
+    </client-only>
   </div>
 </template>
 
@@ -291,6 +293,28 @@ export default {
     },
   },
   methods: {
+    /**
+     * Generate review items during initial load.
+     */
+    async generateReview() {
+      let review = {};
+      let affectedLineNumbers = [];
+      for (let savedWord of this.$store.state.savedWords.savedWords[
+        this.$l2.code
+      ]) {
+        let word = await (await this.$getDictionary()).get(savedWord.id);
+        if (word) {
+          let lineNumbers = await this.addReviewItemsForWord(
+            word,
+            savedWord.forms,
+            review
+          );
+          affectedLineNumbers = affectedLineNumbers.concat(lineNumbers);
+        }
+      }
+      this.updateKeysForLines(affectedLineNumbers);
+      return review;
+    },
     async turnOffPreventJumptingAtStartAfter3Seconds() {
       await Helper.timeout(3000);
       this.preventJumpingAtStart = false;
@@ -464,16 +488,6 @@ export default {
         this.matchedParallelLines.splice(lineIndex, 1);
       this.emitUpdateTranslation();
     },
-    async findSimilarWords(text) {
-      let words = await (await this.$getDictionary()).lookupFuzzy(text);
-      words = words.filter((word) => word.head !== text);
-      words = Helper.uniqueByValue(words, "head");
-      return words.sort(
-        (a, b) =>
-          Math.abs(a.head.length - text.length) -
-          Math.abs(b.head.length - text.length)
-      );
-    },
     async updateReview(mutation) {
       if (mutation.type === "savedWords/ADD_SAVED_WORD") {
         let affectedLines = await this.addReviewItemsForWord(
@@ -490,21 +504,31 @@ export default {
         this.updateKeysForLines(affectedLines);
       }
     },
-    async generateReview() {
-      let review = {};
-      let affectedLines = [];
-      for (let savedWord of this.$store.state.savedWords.savedWords[
-        this.$l2.code
-      ]) {
-        let word = await (await this.$getDictionary()).get(savedWord.id);
-        if (word) {
-          affectedLines = affectedLines.concat(
-            await this.addReviewItemsForWord(word, savedWord.forms, review)
-          );
+    async addReviewItemsForWord(word, wordForms, review) {
+      let lineOffset = this.reviewLineOffset;
+      let affectedLineNumbers = [];
+      for (let form of wordForms
+        .filter((form) => form && form !== "-")
+        .sort((a, b) => b.length - a.length)) {
+        for (let lineIndex in this.lines) {
+          if (this.reviewConditions(lineIndex, form, word)) {
+            let reviewItem = await this.generateReviewItem(
+              lineIndex,
+              form,
+              word
+            );
+            let reviewIndex = Math.min(
+              Math.ceil((Number(lineIndex) + lineOffset) / 10) * 10,
+              this.lines.length - 1
+            );
+            review[reviewIndex] = review[reviewIndex] || [];
+            review[reviewIndex].push(reviewItem);
+            affectedLineNumbers.push(reviewIndex);
+            this.reviewKeys[reviewIndex]++;
+          }
         }
       }
-      this.updateKeysForLines(affectedLines);
-      return review;
+      return affectedLineNumbers;
     },
     updateKeysForLines(affectedLines) {
       for (let lineIndex in this.reviewKeys) {
@@ -522,32 +546,6 @@ export default {
         );
         if (review[reviewIndex].length < length)
           affectedLines.push(reviewIndex);
-      }
-      return affectedLines;
-    },
-    async addReviewItemsForWord(word, wordForms, review) {
-      let lineOffset = this.reviewLineOffset;
-      let affectedLines = [];
-      for (let form of wordForms
-        .filter((form) => form && form !== "-")
-        .sort((a, b) => b.length - a.length)) {
-        for (let lineIndex in this.lines) {
-          if (this.reviewConditions(lineIndex, form, word)) {
-            let reviewItem = await this.generateReviewItem(
-              lineIndex,
-              form,
-              word
-            );
-            let reviewIndex = Math.min(
-              Math.ceil((Number(lineIndex) + lineOffset) / 10) * 10,
-              this.lines.length - 1
-            );
-            review[reviewIndex] = review[reviewIndex] || [];
-            review[reviewIndex].push(reviewItem);
-            affectedLines.push(reviewIndex);
-            this.reviewKeys[reviewIndex]++;
-          }
-        }
       }
       return affectedLines;
     },
@@ -572,29 +570,6 @@ export default {
     },
     async generateReviewItem(lineIndex, form, word) {
       let line = this.lines[lineIndex];
-      let similarWords = await this.findSimilarWords(form);
-      if (similarWords.length < 2) {
-        for (let i of [1, 2]) {
-          let randomWord = await (await this.$getDictionary()).random();
-          similarWords.push(randomWord);
-        }
-      }
-      let answers = similarWords
-        .map((similarWord) => {
-          return {
-            text: similarWord.head,
-            simplified: similarWord.simplified,
-            traditional: similarWord.traditional,
-            correct: false,
-          };
-        })
-        .slice(0, 2);
-      answers.push({
-        text: form,
-        simplified: word.simplified,
-        traditional: word.traditional,
-        correct: true,
-      });
       let parallelLines = this.matchedParallelLines
         ? this.matchedParallelLines[lineIndex]
         : undefined;
@@ -606,7 +581,6 @@ export default {
         word,
         simplified: word.simplified,
         traditional: word.traditional,
-        answers: Helper.shuffle(answers),
       };
     },
     seekVideoTo(starttime) {
@@ -677,7 +651,7 @@ export default {
     },
     goToLine(line) {
       this.currentLineIndex = this.lines.findIndex((l) => l === line);
-      this.nextLine = this.lines[this.currentLineIndex + 1]
+      this.nextLine = this.lines[this.currentLineIndex + 1];
       this.seekVideoTo(line.starttime);
     },
     rewind() {

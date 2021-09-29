@@ -60,7 +60,7 @@ export default {
       name: 'Zero to Hero Education',
       short_name: 'Zero to Hero',
       description: 'Language education done right.',
-      theme_color: '#fd4f1c',
+      theme_color: '#343a40',
       useWebmanifestExtension: false
     },
     workbox: {

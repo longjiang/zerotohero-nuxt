@@ -18,7 +18,7 @@
       <b-button
         size="sm"
         :class="{
-          'tab': true,
+          tab: true,
           'btn-gray text-secondary': hitAB !== 'A' && skin === 'light',
           'btn-ghost-dark': hitAB !== 'A' && skin === 'dark',
         }"
@@ -31,7 +31,8 @@
 
       <b-dropdown
         class="playlist-dropdown"
-        :toggle-class="{'btn btn-sm border-0 playlist-dropdown-toggle mr-1': true,
+        :toggle-class="{
+          'btn btn-sm border-0 playlist-dropdown-toggle mr-1': true,
           'btn-gray text-secondary': skin === 'light',
           'btn-ghost-dark': skin === 'dark',
         }"
@@ -115,46 +116,40 @@
                       />
                     </div>
                     <div style="flex: 1">
-                      <Annotate
-                        :phonetics="false"
-                        :checkSaved="false"
-                        :sticky="true"
-                        :popup="false"
+                      <span
                         :key="`dropdown-line-${index}-annotate-${
                           hit.video.subs_l2[Number(hit.lineIndex)].line
                         }`"
                       >
-                        <span>
-                          <span
-                            v-if="sort === 'left' && hit.lineIndex > 0"
-                            v-html="
-                              hit.video.subs_l2[Number(hit.lineIndex) - 1].line
-                            "
-                            style="margin-right: 0.5em; opacity: 0.5"
-                          />
-                          <span
-                            v-html="
-                              Helper.highlightMultiple(
-                                hit.video.subs_l2[Number(hit.lineIndex)].line,
-                                ab === 'A'
-                                  ? termsA.map((term) => term)
-                                  : termsB.map((term) => term),
-                                ab === 'A' ? levelA : levelB
-                              )
-                            "
-                          />
-                          <span
-                            v-if="
-                              sort === 'right' &&
-                              hit.lineIndex < hit.video.subs_l2.length - 1
-                            "
-                            v-html="
-                              hit.video.subs_l2[Number(hit.lineIndex) + 1].line
-                            "
-                            style="margin-left: 0.5em; opacity: 0.5"
-                          ></span>
-                        </span>
-                      </Annotate>
+                        <span
+                          v-if="sort === 'left' && hit.lineIndex > 0"
+                          v-html="
+                            hit.video.subs_l2[Number(hit.lineIndex) - 1].line
+                          "
+                          style="margin-right: 0.5em; opacity: 0.5"
+                        />
+                        <span
+                          v-html="
+                            Helper.highlightMultiple(
+                              hit.video.subs_l2[Number(hit.lineIndex)].line,
+                              ab === 'A'
+                                ? termsA.map((term) => term)
+                                : termsB.map((term) => term),
+                              ab === 'A' ? levelA : levelB
+                            )
+                          "
+                        />
+                        <span
+                          v-if="
+                            sort === 'right' &&
+                            hit.lineIndex < hit.video.subs_l2.length - 1
+                          "
+                          v-html="
+                            hit.video.subs_l2[Number(hit.lineIndex) + 1].line
+                          "
+                          style="margin-left: 0.5em; opacity: 0.5"
+                        ></span>
+                      </span>
                     </div>
                     <div style="margin-left: 1rem">
                       <img
@@ -182,7 +177,7 @@
       </b-dropdown>
       <b-button
         :class="{
-          'tab': true,
+          tab: true,
           'btn-gray text-secondary': hitAB !== 'B' && skin === 'light',
           'btn-ghost-dark': hitAB !== 'B' && skin === 'dark',
         }"
@@ -270,7 +265,7 @@ export default {
       default: true,
     },
     skin: {
-      default: 'light',
+      default: "light",
     },
   },
   data() {

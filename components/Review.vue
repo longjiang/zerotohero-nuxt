@@ -17,7 +17,7 @@
           $l2.scripts[0].direction === 'rtl',
       }"
     >
-      <Annotate tag="span" :buttons="true" class="transcript-line-chinese">
+      <Annotate tag="span" :buttons="true" class="transcript-line-l2">
         <span
           v-if="$l2.han && $l2.code !== 'ja'"
           v-html="
@@ -67,9 +67,9 @@
       >
         <span v-html="reviewItem.parallelLines" />
       </div>
-      <div class="mt-2">
+      <div class="mt-2" v-if="answers">
         <ReviewAnswerButton
-          v-for="(answer, index) in reviewItem.answers"
+          v-for="(answer, index) in answers"
           :key="`quiz-button-${index}`"
           :answer="answer"
           :skin="skin"
@@ -82,13 +82,18 @@
 
 <script>
 import Helper from "@/lib/helper";
+import FastestLevenshtein from "fastest-levenshtein";
+import { mapState } from "vuex";
 export default {
   data() {
     return {
+      answers: undefined,
       showAnswer: false,
+      s: [],
     };
   },
   computed: {
+    ...mapState("savedWords", ["savedWords"]),
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -109,7 +114,69 @@ export default {
       default: "light",
     },
   },
+  async mounted() {
+    this.answers = await this.generateAnswers(
+      this.reviewItem.text,
+      this.reviewItem.word
+    );
+  },
   methods: {
+    async findSimilarWords(text) {
+      let words = [];
+      let savedWords = this.savedWords[this.$l2.code] || [];
+      if (savedWords.length > 1) {
+        savedWords = savedWords.map((s) =>
+          Object.assign(
+            { distance: FastestLevenshtein.distance(s.forms[0], text) },
+            s
+          )
+        );
+        savedWords = savedWords
+          .filter((w) => w.forms && w.forms[0])
+          .sort((a, b) => a.distance - b.distance)
+          .slice(0, 2);
+        for (let w of savedWords) {
+          let word = await (await this.$getDictionary()).get(w.id);
+          words.push(word);
+        }
+      } else {
+        words = await (await this.$getDictionary()).lookupFuzzy(text);
+        words = words.sort(
+          (a, b) =>
+            Math.abs(a.head.length - text.length) -
+            Math.abs(b.head.length - text.length)
+        );
+      }
+      words = words.filter((word) => word.head !== text);
+      words = Helper.uniqueByValue(words, "head");
+      return words;
+    },
+    async generateAnswers(form, word) {
+      let similarWords = await this.findSimilarWords(form);
+      if (similarWords.length < 2) {
+        for (let i of [1, 2]) {
+          let randomWord = await (await this.$getDictionary()).random();
+          similarWords.push(randomWord);
+        }
+      }
+      let answers = similarWords
+        .map((similarWord) => {
+          return {
+            text: similarWord.head,
+            simplified: similarWord.simplified,
+            traditional: similarWord.traditional,
+            correct: false,
+          };
+        })
+        .slice(0, 2);
+      answers.push({
+        text: form,
+        simplified: word.simplified,
+        traditional: word.traditional,
+        correct: true,
+      });
+      return Helper.shuffle(answers);
+    },
     async speak() {
       if (this.reviewItem.parallelLines) {
         await Helper.speak(this.reviewItem.parallelLines, this.$l1, 1.1);
@@ -137,7 +204,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .review {
   margin: 0.5rem 0;
   padding: 1rem;
@@ -151,6 +218,13 @@ export default {
     overflow: hidden;
     padding: 0;
     font-size: 0.8em;
+  }
+  ::v-deep .transcript-line-l2 {
+    .highlight {
+      display: inline-block;
+      min-width: 5rem;
+      text-align: center;
+    }
   }
   .transcript-line-l1 {
     font-size: 13.44px;
@@ -168,8 +242,10 @@ export default {
       color: #999;
     }
     &:not(.show-answer) {
-      .highlight {
-        background-color: #ccc;
+      ::v-deep .transcript-line-l2 {
+        .highlight {
+          background-color: #ccc;
+        }
       }
     }
     &.show-answer {
@@ -179,8 +255,10 @@ export default {
   &.review-dark {
     background: #00000055;
     &:not(.show-answer) {
-      .highlight {
-        background: #444;
+      ::v-deep .transcript-line-l2 {
+        .highlight {
+          background: #444;
+        }
       }
     }
     &.show-answer {
@@ -188,11 +266,13 @@ export default {
     }
   }
   &:not(.show-answer) {
-    .highlight {
-      border-radius: 0.2rem;
-      * {
-        opacity: 0;
-        pointer-events: none;
+    ::v-deep .transcript-line-l2 {
+      .highlight {
+        border-radius: 0.2rem;
+        * {
+          opacity: 0;
+          pointer-events: none;
+        }
       }
     }
   }

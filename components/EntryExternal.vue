@@ -98,7 +98,7 @@
       </a>
       <a
         @click.prevent="toggleIframe"
-        :href="`https://${$l2.code}.m.wikipedia.org/w/index.php?search=${term}`"
+        :href="`https://${$l1.code}.m.wikipedia.org/w/index.php?search=${term}`"
         class="btn btn-small mb-1"
         :data-bg-level="iframe && iframe.startsWith(`https://${$l2.code}.m.wikipedia.org`) ? level : false"
       >
