@@ -114,7 +114,8 @@ export default {
         : false;
     },
   },
-  async fetch() {
+  async mounted() {
+    this.bindKeys();
     this.grammar = await this.loadGrammar();
     this.drills = await this.getDrill(this.grammar.id);
     this.images = await WordPhotos.getGoogleImages({
@@ -123,30 +124,52 @@ export default {
     });
     this.entry = await this.loadEntry();
   },
+  unmounted() {
+    this.unbindKeys();
+  },
+  activated() {
+    this.bindKeys();
+  },
+  deactivated() {
+    this.unbindKeys();
+  },
+  watch: {
+    id() {
+      this.loadGrammar();
+    },
+  },
   methods: {
     async getDrill(grammarID) {
-      let response = await axios.get(
-        `${Config.wiki}items/drills?filter[grammar_id][eq]=${grammarID}&fields=*,file.*`
-      );
-      response = response.data;
-      if (response && response.data && response.data[0]) {
-        return response.data;
-      }
+      try {
+        let response = await axios.get(
+          `${Config.wiki}items/drills?filter[grammar_id][eq]=${grammarID}&fields=*,file.*`
+        );
+        response = response.data;
+        if (response && response.data && response.data[0]) {
+          return response.data;
+        }
+      } catch (err) {}
     },
     async loadGrammar() {
       this.drills = [];
-
       let grammar = await this.$getGrammar();
-      return grammar._grammarData.find((row) => row.id === this.id);
+      let row = grammar._grammarData.find((row) => row.id === this.id);
+      return row;
     },
     async loadEntry() {
-      let entry = await (await this.$getDictionary()).lookup(this.term);
-      entry =
-        entry ||
-        (await (
-          await this.$getDictionary()
-        ).lookup(this.grammar.pattern.replace(/\*.*/, "")));
-      return entry;
+      let dictionary = await this.$getDictionary();
+      let entry;
+      if (dictionary) {
+        if (this.term) {
+          entry = await dictionary.lookup(this.term);
+        }
+        if (typeof entry === "undefined") {
+          entry = await dictionary.lookup(
+            this.grammar.pattern.replace(/\*.*/, "")
+          );
+        }
+        return entry;
+      }
     },
     prevClick() {
       this.$router.push({
@@ -208,24 +231,6 @@ export default {
     },
     unbindKeys() {
       document.removeEventListener("keydown", this.keydown);
-    },
-  },
-  mounted() {
-    this.bindKeys();
-    this.loadGrammar();
-  },
-  unmounted() {
-    this.unbindKeys();
-  },
-  activated() {
-    this.bindKeys();
-  },
-  deactivated() {
-    this.unbindKeys();
-  },
-  watch: {
-    id() {
-      this.loadGrammar();
     },
   },
 };

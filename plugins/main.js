@@ -76,13 +76,16 @@ export default async ({ app, store }, inject) => {
   });
   inject('getDictionary', async () => {
     if (store.state.settings.l1 && store.state.settings.l1 && store.state.settings.dictionaryName) {
-      if (process.server) {
-        let dictionary = ModuleLoader.load('dictionaries/' + store.state.settings.dictionaryName + '-server', { l1: store.state.settings.l1["iso639-3"], l2: store.state.settings.l2["iso639-3"] || store.state.settings.l2["glottologId"] })
-        return dictionary
-      } else {
+      if (process.client) {
         let dictionary = WorkerModuleLoader.load(store.state.settings.dictionaryName, { l1: store.state.settings.l1["iso639-3"], l2: store.state.settings.l2["iso639-3"] || store.state.settings.l2["glottologId"] })
         return dictionary
       }
+      /* We disable this for now to save bandwidth on Vercel
+      else if (process.server) {
+        let dictionary = ModuleLoader.load('dictionaries/' + store.state.settings.dictionaryName + '-server', { l1: store.state.settings.l1["iso639-3"], l2: store.state.settings.l2["iso639-3"] || store.state.settings.l2["glottologId"] })
+        return dictionary
+      }
+      */
     }
   })
   inject('getGrammar', async () => {

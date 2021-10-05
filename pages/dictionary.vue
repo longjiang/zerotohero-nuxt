@@ -249,18 +249,57 @@ export default {
       return this.params.wide && ["lg", "xl", "xxl"].includes(this.$mq);
     },
   },
-  async fetch() {
-    if (Helper.dictionaryTooLargeAndWillCauseServerCrash(this.$l2["iso639-3"]))
-      return;
-    else {
-      await this.loadEntry();
-    }
+  watch: {
+    "$route.params.args"() {
+      if (
+        this.$route.name === "dictionary" &&
+        this.$route.params.args === "random"
+      ) {
+        this.random();
+      }
+    },
   },
-  async created() {
-    if (Helper.dictionaryTooLargeAndWillCauseServerCrash(this.$l2["iso639-3"]))
-      this.loadEntry();
+  async mounted() {
+    // Begin tasks previously run on server
+    this.loadEntry();
     this.dictionarySize = await this.getDictionarySize();
     this.bindKeys();
+    // End tasks previously run on server
+    if (
+      this.$route.name === "dictionary" &&
+      this.$route.params.args === "random"
+    ) {
+      this.random();
+    }
+    if (this.sW.length === 0) this.updateWords();
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (mutation.type.startsWith("savedWords")) {
+        this.updateWords();
+      }
+      if (mutation.type === "savedWords/REMOVE_SAVED_WORD") {
+        if (mutation.payload.word.id === this.entry.id) {
+          let currentIndex = this.sW.findIndex(
+            (item) => item.id === this.entry.id
+          );
+          let nextSavedWord = this.sW[currentIndex + 1];
+          if (nextSavedWord) {
+            this.$router.push({
+              name: `dictionary`,
+              params: { method: this.method, args: nextSavedWord.id },
+            });
+          } else if (this.sW.length > 0) {
+            this.$router.push({
+              name: `dictionary`,
+              params: { method: this.method, args: this.sW[0].id },
+            });
+          }
+        }
+      }
+    });
+  },
+  beforeDestroy() {
+    // you may call unsubscribe to stop the subscription
+    this.unsubscribe();
   },
   destroyed() {
     this.unbindKeys();
@@ -268,8 +307,10 @@ export default {
   methods: {
     async getDictionarySize() {
       let dictionary = await this.$getDictionary();
-      let size = await (await dictionary).getSize();
-      return size;
+      if (dictionary) {
+        let size = await dictionary.getSize();
+        return size;
+      }
     },
     async loadEntry() {
       let method = this.$route.params.method;
@@ -278,12 +319,14 @@ export default {
         if (method === this.$store.state.settings.dictionaryName) {
           if (args !== "random") {
             let dictionary = await this.$getDictionary();
-            this.entry = await dictionary.get(args);
-            if (process.server) {
-              this.images = await WordPhotos.getGoogleImages({
-                term: this.entry.bare,
-                lang: this.$l2.code,
-              });
+            if (dictionary) {
+              this.entry = await dictionary.get(args);
+              if (process.server) {
+                this.images = await WordPhotos.getGoogleImages({
+                  term: this.entry.bare,
+                  lang: this.$l2.code,
+                });
+              }
             }
           }
         } else if (method === "hsk") {
@@ -404,53 +447,6 @@ export default {
         }
       }
     },
-  },
-  watch: {
-    "$route.params.args"() {
-      if (
-        this.$route.name === "dictionary" &&
-        this.$route.params.args === "random"
-      ) {
-        this.random();
-      }
-    },
-  },
-  mounted() {
-    if (
-      this.$route.name === "dictionary" &&
-      this.$route.params.args === "random"
-    ) {
-      this.random();
-    }
-    if (this.sW.length === 0) this.updateWords();
-    this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type.startsWith("savedWords")) {
-        this.updateWords();
-      }
-      if (mutation.type === "savedWords/REMOVE_SAVED_WORD") {
-        if (mutation.payload.word.id === this.entry.id) {
-          let currentIndex = this.sW.findIndex(
-            (item) => item.id === this.entry.id
-          );
-          let nextSavedWord = this.sW[currentIndex + 1];
-          if (nextSavedWord) {
-            this.$router.push({
-              name: `dictionary`,
-              params: { method: this.method, args: nextSavedWord.id },
-            });
-          } else if (this.sW.length > 0) {
-            this.$router.push({
-              name: `dictionary`,
-              params: { method: this.method, args: this.sW[0].id },
-            });
-          }
-        }
-      }
-    });
-  },
-  beforeDestroy() {
-    // you may call unsubscribe to stop the subscription
-    this.unsubscribe();
   },
 };
 </script>
