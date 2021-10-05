@@ -94,7 +94,6 @@
 
 <script>
 import Config from "@/lib/config";
-import Helper from "@/lib/helper";
 import ResourceList from "@/components/ResourceList";
 import axios from "axios";
 
@@ -113,7 +112,6 @@ export default {
   data() {
     return {
       Config,
-      Helper,
       resources: [],
       types: {
         av: "Audio-Visual",
