@@ -152,7 +152,7 @@ export default {
       return this.params.wide && ["lg", "xl", "xxl"].includes(this.$mq);
     },
   },
-  created() {
+  mounted() {
     this.route();
   },
   methods: {

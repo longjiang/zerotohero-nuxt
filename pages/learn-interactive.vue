@@ -72,7 +72,7 @@ export default {
       }
     },
   },
-  created() {
+  mounted() {
     this.route();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type.startsWith("savedWords")) {
