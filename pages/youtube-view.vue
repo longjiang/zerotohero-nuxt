@@ -181,7 +181,7 @@ export default {
       return Helper.isMobile();
     },
   },
-  async fetch() {
+  async mounted() {
     try {
       console.log(`YouTube View: Getting saved video...`);
       let video = await this.getSaved();
@@ -436,17 +436,18 @@ export default {
       return wordForms;
     },
     async saveWords(level, lesson) {
-      let words = await (
-        await this.$getDictionary()
-      ).lookupByLesson(level, lesson);
-      for (let word of words) {
-        if (word && !this.wordSaved(word)) {
-          let wordForms = await this.allForms(word);
-          this.$store.dispatch("savedWords/add", {
-            word: word,
-            wordForms: wordForms,
-            l2: this.$l2.code,
-          });
+      let dictionary = await this.$getDictionary();
+      if (typeof dictionary !== "undefined") {
+        let words = await dictionary.lookupByLesson(level, lesson);
+        for (let word of words) {
+          if (word && !this.wordSaved(word)) {
+            let wordForms = await this.allForms(word);
+            this.$store.dispatch("savedWords/add", {
+              word: word,
+              wordForms: wordForms,
+              l2: this.$l2.code,
+            });
+          }
         }
       }
     },
