@@ -130,6 +130,7 @@ export default {
   created() {
     this.$nuxt.$on("skin", this.onSkin);
     this.$nuxt.$on("history", this.addFullHistoryItem);
+    // this.$nuxt.$on("allLanguagesLoaded", this.onAllLanguagesLoaded);
     if (typeof window !== "undefined")
       window.addEventListener("resize", this.onResize);
   },
@@ -148,6 +149,7 @@ export default {
       }
     });
     this.onLanguageChange();
+    this.onAllLanguagesLoaded();
   },
   beforeDestroy() {
     // you may call unsubscribe to stop the subscription
@@ -180,6 +182,14 @@ export default {
     },
   },
   methods: {
+    onAllLanguagesLoaded() {
+      if (this.l1 && this.l2) {
+        let l1 = this.$languages.getSmart(this.l1.code);
+        let l2 = this.$languages.getSmart(this.l2.code);
+        this.$store.commit("settings/SET_L1", l1);
+        this.$store.commit("settings/SET_L2", l2);
+      }
+    },
     addFullHistoryItem(path) {
       this.fullHistory.push(path);
     },

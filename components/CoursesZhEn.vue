@@ -76,10 +76,10 @@
         </div>
       </div>
       <div class="row mb-5" style="max-width: 640px; margin: 0 auto">
-        <div class="col-sm-6 text-center">
+        <!-- <div class="col-sm-6 text-center">
           <a href="/zh/en/contact-us" target="_blank"><img src="/img/weixin.png" class="social-image" /></a>
           <div>请加入微信粉丝群</div>
-        </div>
+        </div> -->
         <div class="col-sm-6 text-center">
           <a href="https://m.cctalk.com/inst/stevmab3" target="_blank"><img src="/img/cctalk.png" class="social-image" /></a>
           <div>看课程视频和直播回顾</div>

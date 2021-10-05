@@ -46,7 +46,7 @@ Vue.filter('truncate', function (text, length, clamp) {
   return content.length > length ? content.slice(0, length) + clamp : content
 })
 
-export default async ({ app, store }, inject) => {
+export default async ({ app, store, route }, inject) => {
   Vue.use(VueGtag, {
     config: { id: 'UA-1846573-21' }
   }, app.router)
@@ -62,8 +62,18 @@ export default async ({ app, store }, inject) => {
     next();
   })
   if (!app.$languages) {
-    let languages = await Languages.load()
-    inject('languages', languages)
+
+    if (process.server) {
+      let l1Code = route.params.l1
+      let l2Code = route.params.l2
+      if (l1Code && l2Code) {
+        let languages = await Languages.load([l1Code, l2Code])
+        inject('languages', languages)
+      }
+    } else {
+      let languages = await Languages.load()
+      inject('languages', languages)
+    }
   }
 
   inject('hasFeature', (feature) => {

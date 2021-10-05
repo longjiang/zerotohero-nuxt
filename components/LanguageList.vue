@@ -162,12 +162,12 @@ export default {
       if (this.langs) {
         languages = this.langs.filter((l) => l);
       }
-      if (!languages && this.codes) {
+      if (!languages && this.codes && this.$languages) {
         languages = this.codes
           .map((c) => this.$languages.getSmart(c))
           .filter((l) => l);
       }
-      if (this.sort) {
+      if (this.sort && languages) {
         languages = Helper.uniqueByValue(languages, "iso639-3").sort((a, b) =>
           this.languageName(a).localeCompare(this.languageName(b), "en")
         );

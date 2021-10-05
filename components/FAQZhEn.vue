@@ -9,9 +9,9 @@
     <h5>课本怎么买？</h5>
     <p>
       想知道课本详情及如何购买，请参考这个页面的信息：
-      <a :href="`#/${$l1.code}/${$l2.code}/textbooks-workbooks`">
+      <router-link :to="`#/${$l1.code}/${$l2.code}/textbooks-workbooks`">
         如何购买课本？
-      </a>
+      </router-link>
     </p>
   </div>
 </template>

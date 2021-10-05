@@ -13,9 +13,9 @@
       />
     </div>
     <div class="button-container d-flex justify-content-center mt-2 mb-3">
-      <a href="/en/zh/hall-of-heroes">
+      <router-link to="/en/zh/hall-of-heroes">
         <b-button data-bg-level="3" class="btn btn-lg"><i class="fas fa-trophy mr-1"></i> See All {{ count }} Heroes</b-button>
-      </a>
+      </router-link>
     </div>
   </div>
 </template>

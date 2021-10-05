@@ -1,22 +1,27 @@
 <template>
-  <div class="identical-languages" v-if="$l2.identicalLangs">
-    Additional content is available under:
-    <span
-      v-for="(lang, index) of $l2.identicalLangs"
-      :key="`identical-lang-${index}`"
-      class="identical-language-item"
-    >
-      &nbsp;
-      <router-link
-        class="link-unstyled identical-language-item-name"
-        :to="{ name: routeName, params: { l1: $l1.code, l2: lang.code } }"
-      >
-        <b>
-          {{ lang.name }}
-        </b>
-        ({{ lang.code }})
-      </router-link>
-    </span>
+  <div class="identical-languages">
+    Additional content is available
+    <client-only>
+      <span v-if="$l2.identicalLangs">
+        under:
+        <span
+          v-for="(lang, index) of $l2.identicalLangs"
+          :key="`identical-lang-${index}`"
+          class="identical-language-item"
+        >
+          &nbsp;
+          <router-link
+            class="link-unstyled identical-language-item-name"
+            :to="{ name: routeName, params: { l1: $l1.code, l2: lang.code } }"
+          >
+            <b>
+              {{ lang.name }}
+            </b>
+            ({{ lang.code }})
+          </router-link>
+        </span>
+      </span>
+    </client-only>
     .
   </div>
 </template>
