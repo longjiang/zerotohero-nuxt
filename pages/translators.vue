@@ -165,21 +165,25 @@ export default {
         .sort((a, b) => b.langs.length - a.langs.length);
     },
     languages() {
-      let langs = [];
-      for (let t of this.filteredTranslators) {
-        if (typeof t.langs !== "undefined") langs = langs.concat(t.langs);
-      }
-      langs = Helper.unique(langs);
-      let languages = [];
-      for (let lang of langs) {
-        let language = this.$languages.getSmart(lang);
-        if (typeof language === "undefined") {
-          // console.log('Undefined: ', lang)
-        } else {
-          languages.push(language);
+      if (this.$languages) {
+        let langs = [];
+        for (let t of this.filteredTranslators) {
+          if (typeof t.langs !== "undefined") langs = langs.concat(t.langs);
         }
+        langs = Helper.unique(langs);
+        let languages = [];
+        for (let lang of langs) {
+          let language = this.$languages.getSmart(lang);
+          if (typeof language === "undefined") {
+            // console.log('Undefined: ', lang)
+          } else {
+            languages.push(language);
+          }
+        }
+        return languages.sort((a, b) => a.name.localeCompare(b.name));
+      } else {
+        return [];
       }
-      return languages.sort((a, b) => a.name.localeCompare(b.name));
     },
     filteredLangs() {
       let languages = this.languages;

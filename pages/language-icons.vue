@@ -38,12 +38,13 @@
         </div>
       </div>
     </div>
-
     <div class="container">
       <div class="row">
         <div class="col-sm-12 pt-5 pb-5 text-center">
           <h3>Face of the Language</h3>
-          <p>{{ filteredLangs.length }} languages are listed.</p>
+          <client-only>
+            <p>{{ filteredLangs.length }} languages are listed.</p>
+          </client-only>
 
           <b-input-group class="mt-5 mb-3 input-group-ghost-dark">
             <b-form-input
@@ -143,32 +144,37 @@ export default {
   }),
   computed: {
     english() {
-      return this.$languages.l1s.find((language) => language.code === "en");
+      if (this.$languages)
+        return this.$languages.l1s.find((language) => language.code === "en");
     },
     filteredLangs() {
-      let languages = this.$languages.l1s;
-      languages = languages
-        .filter((l) => {
-          if (!(l.logo && l.logo !== "")) return false;
-          if (this.keyword) {
-            let keyword = this.keyword.toLowerCase();
-            if (l["iso639-1"].includes(keyword)) return true;
-            if (l["iso639-3"].includes(keyword)) return true;
-            if (l["glottologId"].includes(keyword)) return true;
-            if (l["glottologFamilyId"].includes(keyword)) return true;
-            if (l["glottologParentId"].includes(keyword)) return true;
-            if (l.name.toLowerCase().includes(keyword)) return true;
-            if (l.logoDesc.toLowerCase().includes(keyword)) return true;
-            let countries = l.country.filter((c) =>
-              c.name.toLowerCase().includes(keyword)
-            );
-            if (countries.length > 0) return true;
-            return false;
-          }
-          return true;
-        })
-        .sort((a, b) => a.name.localeCompare(b.name));
-      return languages;
+      if (this.$languages) {
+        let languages = this.$languages.l1s;
+        languages = languages
+          .filter((l) => {
+            if (!(l.logo && l.logo !== "")) return false;
+            if (this.keyword) {
+              let keyword = this.keyword.toLowerCase();
+              if (l["iso639-1"].includes(keyword)) return true;
+              if (l["iso639-3"].includes(keyword)) return true;
+              if (l["glottologId"].includes(keyword)) return true;
+              if (l["glottologFamilyId"].includes(keyword)) return true;
+              if (l["glottologParentId"].includes(keyword)) return true;
+              if (l.name.toLowerCase().includes(keyword)) return true;
+              if (l.logoDesc.toLowerCase().includes(keyword)) return true;
+              let countries = l.country.filter((c) =>
+                c.name.toLowerCase().includes(keyword)
+              );
+              if (countries.length > 0) return true;
+              return false;
+            }
+            return true;
+          })
+          .sort((a, b) => a.name.localeCompare(b.name));
+        return languages;
+      } else {
+        return [];
+      }
     },
   },
   methods: {
