@@ -17,21 +17,9 @@
       }"
     >
       <SocialHead
-        v-if="video"
-        :title="`Learn ${$l2.name} from the video ${video.title} | ${$l2.name} Zero to Hero`"
-        :description="`Watch the video -- ${
-          video.title
-        } -- study the subtitles and improve your ${$l2.name}! ${
-          this.video.subs_l2 && this.video.subs_l2.length > 0
-            ? 'Full transcript: ' +
-              this.video.subs_l2
-                .slice(0, 10)
-                .filter((l) => l)
-                .map((l) => l.line)
-                .join(' ')
-            : ''
-        }`"
-        :image="`https://img.youtube.com/vi/${this.video.youtube_id}/hqdefault.jpg`"
+        :title="`Learn ${$l2.name} with a video | Zero to Hero Languages`"
+        :description="`Study the transcript of this video with a popup dictionary.`"
+        :image="`https://img.youtube.com/vi/${this.youtube_id}/hqdefault.jpg`"
       />
       <div class="pl-3 pr-3 mb-4">
         <SimpleSearch
