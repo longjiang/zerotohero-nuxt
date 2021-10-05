@@ -1,25 +1,24 @@
 <template>
   <div class="widget chinese">
-    <div class="widget-title">Learning Chinese?</div>
+    <div class="widget-title">Chinese Hànzì</div>
     <div class="widget-body jumbotron-fluid bg-light p-4">
       <div v-if="words">
         <div v-for="word in words">
           <div>
-            The Chinese word
             <router-link
               :to="`/en/zh/dictionary/hsk-cedict/${
                 word.traditional
               },${word.pinyin.replace(/ /g, '_')},${word.index}`"
               class="link-unstyled"
             >
-              <b class="bigger" :data-level="word.hsk">{{ word.simplified }}</b>
+              <b class="bigger" :data-level="'outside'">{{ word.simplified }}</b>
 
               [{{ word.traditional }}]
               <span>({{ word.pinyin }})</span>
             </router-link>
-            means
+            <Speak :text="word.traditional" :l2="chinese" />
             <em>{{ word.definitions }}</em>
-            .
+            in Chinese.
           </div>
         </div>
       </div>
@@ -39,11 +38,19 @@ export default {
     text: {
       type: String,
     },
+    hsk: {
+      default: "outside",
+    },
   },
   data() {
     return {
       words: [],
     };
+  },
+  computed: {
+    chinese() {
+      return this.$languages.getSmart('zh')
+    }
   },
   methods: {
     async loadVariants() {

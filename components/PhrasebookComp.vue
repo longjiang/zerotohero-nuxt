@@ -26,13 +26,23 @@
         </div>
       </div>
     </div>
+    <div
+      class="pt-3 pb-3 bg-white"
+      style="position: sticky; top: 0; z-index: 9"
+    >
+      <b-form-checkbox v-model="hideDefinitions">
+        Hide definitions
+      </b-form-checkbox>
+    </div>
     <div class="row" v-if="phrasebook">
       <router-link
         v-for="(phraseObj, phraseIndex) in phrasebook.phrases.slice(
           Number(startRow) - 1,
           Number(startRow) + 1 + Number(numRowsVisible)
         )"
-        :key="`phrasebook-phrase-${phraseObj.phrase}-${(phraseObj.id || phraseIndex) + 1}`"
+        :key="`phrasebook-phrase-${phraseObj.phrase}-${
+          (phraseObj.id || phraseIndex) + 1
+        }`"
         :id="`phrasebook-phrase-${(phraseObj.id || phraseIndex) + 1}`"
         class="link-unstyled col-sm-12 col-md-6 col-lg-4 mb-3 mt-3"
         :to="`/${$l1.code}/${$l2.code}/phrasebook/${phrasebook.id}/${
@@ -76,7 +86,10 @@
             v-html="phraseObj.phrase"
           />
 
-          <div class="mb-0" v-if="phraseObj && phraseObj[$l1.code]">
+          <div
+            class="mb-0"
+            v-if="phraseObj && phraseObj[$l1.code] && !hideDefinitions"
+          >
             {{ phraseObj[$l1.code] }}
           </div>
         </div>
@@ -101,6 +114,7 @@ export default {
       csvHref: undefined,
       numRowsVisible: 24,
       startRow: this.initId ? this.initId : 1,
+      hideDefinitions: false,
     };
   },
   mounted() {
@@ -119,7 +133,7 @@ export default {
   watch: {
     startRow() {
       if (!this.startRow || this.startRow < 1) {
-        this.startRow = 1
+        this.startRow = 1;
       }
     },
   },

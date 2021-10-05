@@ -95,7 +95,6 @@ export default {
           return true;
         if (l["iso639-3"] === 'cmn') return false; // Mandarin overlaps Chinese, which is annoying
         if (l.han) return true; // Show all Han languages
-        if (l.name.includes("Sign Language")) return false;
         if (
           this.hasDictionary(this.english, l) ||
           this.hasYouTube(this.english, l)

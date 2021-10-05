@@ -26,60 +26,7 @@
               filteredShows.length > 1 ? "s" : ""
             }})
           </p>
-          <div
-            class="widget widget-dark mb-5"
-            style="max-width: 70vh; margin: 0 auto"
-          >
-            <div class="widget-title">
-              Discover {{ $l2.name }}
-              {{ routeType === "tv-shows" ? "TV Shows" : "Talks" }}
-            </div>
-            <div class="text-center pt-5 pb-5" v-if="!randomShowFirstEpisode">
-              <Loader :sticky="true" message="Getting shows..." />
-            </div>
-            <LazyYouTubeVideo
-              v-if="randomShowFirstEpisode"
-              initialLayout="vertical"
-              :youtube="randomShowFirstEpisode.youtube_id"
-              :ref="`youtube`"
-              :autoload="true"
-              :autoplay="true"
-              :startAtRandomTime="true"
-              @currentTime="updateCurrentTime"
-            />
-            <div class="text-center pt-3 pb-3" v-if="randomShowFirstEpisode">
-              <router-link
-                :to="{
-                  name: 'youtube-view',
-                  params: {
-                    youtube_id: randomShowFirstEpisode.youtube_id,
-                  },
-                  query: {
-                    t: currentTime,
-                  },
-                }"
-                class="btn btn-ghost-dark-no-bg"
-              >
-                <i class="fas fa-align-left mr-1"></i>
-                Transcript
-              </router-link>
-              <b-button
-                variant="ghost-dark-no-bg"
-                v-if="filteredShows && filteredShows.length > 1"
-                @click="loadRandomShow"
-              >
-                <i class="fas fa-step-forward mr-1"></i>
-                Another One
-              </b-button>
-              <b-button
-                variant="ghost-dark-no-bg"
-                v-if="$adminMode"
-                @click="removeEpisode(randomShowFirstEpisode)"
-              >
-                <i class="fas fa-trash"></i>
-              </b-button>
-            </div>
-          </div>
+          <LazyDiscoverPlayer :routeType="routeType" :shows="shows" />
           <div class="show-list-wrapper">
             <b-input-group class="mb-5 input-group-ghost-dark">
               <b-form-input
@@ -137,26 +84,13 @@ export default {
     return {
       type: this.routeType === "tv-shows" ? "tvShows" : "talks",
       shows: undefined,
-      randomShowId: undefined,
-      randomShowFirstEpisode: undefined,
       keyword: "",
-      currentTime: 0,
     };
   },
   async fetch() {
     let shows = this.$store.state.shows[this.type][this.$l2.code];
     if (shows) {
       this.shows = shows;
-    } else {
-      console.log("😱 fetch(): Sate has no shows");
-      let url = `${Config.wiki}items/${this.routeType.replace(
-        "-",
-        "_"
-      )}?filter[l2][eq]=${this.$l2.id}${
-        this.$adminMode ? "" : "&filter[hidden][empty]=true"
-      }&limit=500&timestamp=${this.$adminMode ? Date.now() : 0}`;
-      let response = await axios.get(url);
-      if (response && response.data) this.shows = response.data.data;
     }
   },
   async mounted() {
@@ -165,7 +99,6 @@ export default {
         this.loadShows();
       }
     });
-    this.loadRandomShow();
   },
   beforeDestroy() {
     // you may call unsubscribe to stop the subscription
@@ -201,57 +134,6 @@ export default {
     },
   },
   methods: {
-    async removeEpisode(randomShowFirstEpisode) {
-      let response = await axios.delete(
-        `${Config.wiki}items/youtube_videos/${randomShowFirstEpisode.id}`
-      );
-      if (response) {
-        this.loadRandomShow();
-      }
-    },
-    updateCurrentTime(currentTime) {
-      if (typeof window !== "undefined") {
-        this.currentTime = currentTime;
-      }
-    },
-    async loadRandomShow() {
-      let randomShow = await this.getRandomShow();
-      if (randomShow) {
-        let randomShowFirstEpisode = await this.getFirstEpisodeOfShow(
-          randomShow.id,
-          this.routeType.replace(/s$/, "").replace("-", "_")
-        );
-        this.randomShow = randomShow;
-        this.randomShowFirstEpisode = randomShowFirstEpisode;
-      }
-    },
-    async getFirstEpisodeOfShow(showId, showType) {
-      let url = `${Config.wiki}items/youtube_videos?filter[l2][eq]=${this.$l2.id}&filter[${showType}][eq]=${showId}&fields=youtube_id,id`;
-      let response = await axios.get(url);
-
-      if (response.data && response.data.data.length > 0) {
-        let videos = response.data.data;
-        let firstEpisode = videos[0];
-        return firstEpisode;
-      }
-    },
-    async getRandomShow() {
-      let shows = this.$store.state.shows[this.type][this.$l2.code];
-      if (shows) {
-        shows = shows.filter((s) => {
-          if (
-            this.routeType === "tv-shows" &&
-            ["Music", "Movies"].includes(s.title)
-          )
-            return false;
-          if (this.routeType === "talks" && ["News"].includes(s.title))
-            return false;
-          return true;
-        });
-        let randomShow = shows[Math.floor(Math.random() * shows.length)];
-        return randomShow;
-      }
-    },
     async getShowsOverNetwork() {
       let langId = this.$l2.id;
       let type = this.routeType.replace("-", "_");

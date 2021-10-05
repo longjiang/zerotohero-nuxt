@@ -25,39 +25,52 @@
         >
           <i class="fas fa-adjust"></i>
         </router-link>
-        <router-link v-if="word" :to="getUrl(word, index)">
-          <span class="wordlist-item-word ml-1" :data-level="skin !== 'dark' ? getLevel(word) : undefined">
+        <router-link
+          v-if="word"
+          :to="getUrl(word, index)"
+          :title="
+            word.definitions.filter((def) => !def.startsWith('CL')).join(',')
+          "
+        >
+          <span
+            class="wordlist-item-word ml-1"
+            :data-level="skin !== 'dark' ? getLevel(word) : undefined"
+          >
             {{ word.accented }}
           </span>
-          <span v-if="word.pronunciation" class="wordlist-item-pinyin">
-            <span v-if="$l2.code !== 'zh'">/</span>
-            <span v-else>(</span>
-            {{ word.pronunciation || word.kana }}
-            <span v-if="$l2.code !== 'zh'">/</span>
-            <span v-else>)</span>
-          </span>
-          <span v-if="word.kana" class="wordlist-item-pinyin">
-            ({{ word.kana }})
-          </span>
-          <span v-if="word.hanja" class="wordlist-item-byeonggi">
-            {{ word.hanja }}
-          </span>
-          <span v-if="word.definitions" class="wordlist-item-l1">
-            {{
-              word.definitions.filter((def) => !def.startsWith("CL")).join(", ")
-            }}
-          </span>
-          <span class="wordlist-item-l1" v-if="word.counters">
-            :
-            <span style="font-style: normal">
-              {{
-                word.counters
-                  .map((counter) => "一" + counter.simplified)
-                  .join(word.simplified + "、") + word.simplified
-              }}。
-            </span>
-          </span>
         </router-link>
+        <span v-if="word.pronunciation" class="wordlist-item-pinyin">
+          <span v-if="$l2.code !== 'zh'">/</span>
+          <span v-else>(</span>
+          {{ word.pronunciation || word.kana }}
+          <span v-if="$l2.code !== 'zh'">/</span>
+          <span v-else>)</span>
+        </span>
+        <span v-if="word.kana" class="wordlist-item-pinyin">
+          ({{ word.kana }})
+        </span>
+        <span v-if="word.hanja" class="wordlist-item-byeonggi">
+          {{ word.hanja }}
+        </span>
+        <Speak :text="word.kana || word.head" :l2="$l2" />
+        <span
+          v-if="word.definitions && !hideDefinitions"
+          class="wordlist-item-l1"
+        >
+          {{
+            word.definitions.filter((def) => !def.startsWith("CL")).join(", ")
+          }}
+        </span>
+        <span class="wordlist-item-l1" v-if="word.counters">
+          :
+          <span style="font-style: normal">
+            {{
+              word.counters
+                .map((counter) => "一" + counter.simplified)
+                .join(word.simplified + "、") + word.simplified
+            }}。
+          </span>
+        </span>
       </li>
       <li
         class="wordlist-item"
@@ -119,6 +132,9 @@ export default {
     },
     skin: {
       default: "light",
+    },
+    hideDefinitions: {
+      default: false,
     },
   },
   computed: {

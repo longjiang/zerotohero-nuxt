@@ -80,10 +80,12 @@ export default {
     langPref() {
       // Sometimes a language (such as Breton) are mostly subtitles in French, and
       // English subtitles are not available. In this case use the best available subtitles
-      let preferences = {
-        br: "fr",
-      };
-      return preferences[this.$l2.code] || this.$l1.code;
+      if (this.$l2) {
+        let preferences = {
+          br: "fr",
+        };
+        return preferences[this.$l2.code] || this.$l1.code;
+      }
     },
     isPlaying() {
       let playing =
@@ -143,7 +145,7 @@ export default {
             playsinline: 1,
             rel: 0,
             fs: 1,
-            hl: this.$l1.code,
+            hl: this.$l1 ? this.$l1.code : 'en',
             iv_load_policy: 3,
             modestbranding: 1,
             id,
@@ -203,11 +205,11 @@ export default {
       // This cannot be a computed property because the player is not monitored by Vue
       if (this.player && this.player.getCurrentTime) {
         let newTime = this.player.getCurrentTime();
-        
+
         if (newTime !== this.currentTime) {
           this.currentTime = newTime;
           if (this.currentTime === 0 && this.neverPlayed) {
-            return
+            return;
           }
           // console.log(newTime, this.youtubeIframeID, this.player);
           this.$emit("currentTime", this.currentTime);

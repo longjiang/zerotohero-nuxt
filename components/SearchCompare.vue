@@ -14,7 +14,7 @@
       :type="type"
       :entry="searchEntry"
       :term="term"
-      :placeholder="$t('{l2} word or phrase', { l2: $t($l2.name) })"
+      placeholder="Word, phrase, or pattern (`_` is 1 char, `*` is multi-char)"
       v-if="!loading"
     ></Search>
     <Search

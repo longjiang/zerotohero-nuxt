@@ -369,7 +369,7 @@
           </div>
         </div>
         <div class="home-card mb-5">
-          <h5 class="text-center">All {{ $languages.l1s.length }} Languages</h5>
+          <h5 class="text-center">All 7,408 Languages</h5>
           <Choose :compact="true" />
         </div>
         <div class="row mb-5">

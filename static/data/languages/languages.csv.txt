@@ -370,7 +370,7 @@ id,name,otherNames,wiktionary,glottologId,glottologFamilyId,glottologParentId,le
 369,Pare,"Asu, Asu (Tanzania), Chasu, Kipare, Southern Pare, South Pare",3,asut1235,atla1278,pare1277,language,-4.17978,37.8323,KE TZ,asa,,I,L,,,
 370,Assiniboine,,4,assi1247,siou1252,dako1257,language,49.2923,-106.068,CA US,asb,,I,L,,,
 371,Casuarina Coast Asmat,,,casu1237,nucl1709,asma1257,language,-6.43005,138.566,ID,asc,,I,L,,,
-372,American Sign Language,,359,amer1248,sign1238,amer1258,language,33.8117,-81.6121,BB BF BJ BO CA CD CF CI CN GA GH JM KE MG MR NG PH SG TD TG US ZW,ase,,I,L,,ase,"Laura Redden Searing (1839–1923), a deaf poet and journalist"
+372,American Sign Language,,359,amer1248,sign1238,amer1258,language,33.8117,-81.6121,BB BF BJ BO CA CD CF CI CN GA GH JM KE MG MR NG PH SG TD TG US ZW,ase,,I,L,500000,ase,"Laura Redden Searing (1839–1923), a deaf poet and journalist"
 373,Auslan,,,aust1271,sign1238,aust1310,language,-30.0,145.0,AU,asf,,I,L,,,
 374,Cishingini,,,cish1238,atla1278,west2828,language,9.88458,4.48564,BJ NG,asg,,I,L,,,
 375,Abishira,"Tequiraca, Tekiráka, Avishiri, Auishiri, Agouisiri, Avirxiri, Abiquira, Abigira, Aiwa, Aewa",,abis1238,,,language,-1.284096,-75.084405,PE,ash,,I,E,,,
@@ -4757,7 +4757,7 @@ id,name,otherNames,wiktionary,glottologId,glottologFamilyId,glottologParentId,le
 4756,Old Norse,"Old Icelandic, Old Norwegian",7060,oldn1244,indo1319,west2805,language,63.42,10.38,NO,non,,I,H,,non,"Rasmus Rask (1787–1832), a Danish linguist and philologist"
 4757,Numanggang,,1,numa1254,nucl1709,boan1245,language,-6.39311,146.719,PG,nop,,I,L,,,
 4758,Ngongo,,,ngon1267,atla1278,nson1239,language,-5.5,18.2,CD,noq,,I,L,,,
-4759,Norwegian,,1825,norw1258,indo1319,west2805,language,59.92,10.71,FI NO RU SE SJ,nor,no,M,L,5320000,no,"Knut Hamsun (1859 – 1952), a Norwegian writer who was awarded the Nobel Prize in Literature in 1920"
+4759,Norwegian,,71691,norw1258,indo1319,west2805,language,59.92,10.71,FI NO RU SE SJ,nor,no,M,L,5320000,no,"Knut Hamsun (1859 – 1952), a Norwegian writer who was awarded the Nobel Prize in Literature in 1920"
 4760,Eastern Nisu,,,east2349,sino1245,nort2717,language,23.9843,102.694,CN VN,nos,,I,L,,,
 4761,Nomatsiguenga,,2,noma1263,araw1281,prea1240,language,-11.5349,-74.4371,PE,not,,I,L,4000,,
 4762,Ewage-Notu,,,ewag1241,nucl1709,coas1297,language,-8.68756,148.405,PG,nou,,I,L,,,

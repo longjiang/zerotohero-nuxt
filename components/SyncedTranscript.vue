@@ -293,28 +293,6 @@ export default {
     },
   },
   methods: {
-    /**
-     * Generate review items during initial load.
-     */
-    async generateReview() {
-      let review = {};
-      let affectedLineNumbers = [];
-      for (let savedWord of this.$store.state.savedWords.savedWords[
-        this.$l2.code
-      ]) {
-        let word = await (await this.$getDictionary()).get(savedWord.id);
-        if (word) {
-          let lineNumbers = await this.addReviewItemsForWord(
-            word,
-            savedWord.forms,
-            review
-          );
-          affectedLineNumbers = affectedLineNumbers.concat(lineNumbers);
-        }
-      }
-      this.updateKeysForLines(affectedLineNumbers);
-      return review;
-    },
     async turnOffPreventJumptingAtStartAfter3Seconds() {
       await Helper.timeout(3000);
       this.preventJumpingAtStart = false;
@@ -488,6 +466,28 @@ export default {
         this.matchedParallelLines.splice(lineIndex, 1);
       this.emitUpdateTranslation();
     },
+    /**
+     * Generate review items during initial load.
+     */
+    async generateReview() {
+      let review = {};
+      let affectedLineNumbers = [];
+      for (let savedWord of this.$store.state.savedWords.savedWords[
+        this.$l2.code
+      ]) {
+        let word = await (await this.$getDictionary()).get(savedWord.id);
+        if (word) {
+          let lineNumbers = await this.addReviewItemsForWord(
+            word,
+            savedWord.forms,
+            review
+          );
+          affectedLineNumbers = affectedLineNumbers.concat(lineNumbers);
+        }
+      }
+      this.updateKeysForLines(affectedLineNumbers);
+      return review;
+    },
     async updateReview(mutation) {
       if (mutation.type === "savedWords/ADD_SAVED_WORD") {
         let affectedLines = await this.addReviewItemsForWord(
@@ -507,9 +507,11 @@ export default {
     async addReviewItemsForWord(word, wordForms, review) {
       let lineOffset = this.reviewLineOffset;
       let affectedLineNumbers = [];
-      for (let form of wordForms
+      let forms = wordForms
         .filter((form) => form && form !== "-")
-        .sort((a, b) => b.length - a.length)) {
+        .map((f) => f.toLowerCase());
+      forms = Helper.unique(forms);
+      for (let form of forms.sort((a, b) => b.length - a.length)) {
         for (let lineIndex in this.lines) {
           if (this.reviewConditions(lineIndex, form, word)) {
             let reviewItem = await this.generateReviewItem(

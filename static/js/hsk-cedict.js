@@ -1,7 +1,7 @@
 const Dictionary = {
-  file: '/data/hsk-cedict/hsk_cedict.csv.txt',
-  characterFile: '/data/hsk-cedict/hsk_characters.csv.txt',
-  newHSKFile: '/data/hsk-cedict/new_hsk.csv.txt',
+  file: undefined,
+  characterFile: undefined,
+  newHSKFile: undefined,
   words: [],
   characters: [],
   newHSK: [],
@@ -10,6 +10,11 @@ const Dictionary = {
     return 'The Chinese dictionary is provided by <a href="https://www.mdbg.net/chinese/dictionary?page=cedict">CC-CEDICT</a>, open-source and distribtued under a <a href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>. We also added HSK information on top.'
   },
   load() {
+    const server = 'https://server.chinesezerotohero.com/'
+    this.file = `${server}/data/hsk-cedict/hsk_cedict.csv.txt`
+    this.characterFile = `${server}/data/hsk-cedict/hsk_characters.csv.txt`
+    this.newHSKFile = `${server}/data/hsk-cedict/new_hsk.csv.txt`
+    // const server =  `${process.env.baseUrl}/`
     return new Promise(resolve => {
       let wordsPromise = new Promise(resolve => {
         axios.get(this.file).then(response => {

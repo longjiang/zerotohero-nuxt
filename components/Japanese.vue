@@ -1,11 +1,10 @@
 <template>
   <div class="widget japanese">
-    <div class="widget-title">Learning Japanese?</div>
+    <div class="widget-title">Japanese Kanji</div>
     <div class="widget-body jumbotron-fluid p-4">
       <div v-if="words">
         <div v-for="word in words">
           <div>
-            The Japanese word
             <router-link
               :to="`/en/ja/dictionary/edict/${word.id}`"
               class="link-unstyled"
@@ -13,7 +12,7 @@
               <b :data-level="hsk" class="bigger">{{ word.kanji }}</b>
               ({{ word.kana }})
             </router-link>
-            means
+            <Speak :text="word.kana || word.kanji" :l2="japanese" />
             <em>
               {{
                 word.english
@@ -23,7 +22,7 @@
                   .replace(/,$/, "")
               }}
             </em>
-            .
+            in Japanese
           </div>
         </div>
       </div>
@@ -47,6 +46,11 @@ export default {
     hsk: {
       default: "outside",
     },
+  },
+  computed: {
+    japanese() {
+      return this.$languages.getSmart('ja')
+    }
   },
   data() {
     return {

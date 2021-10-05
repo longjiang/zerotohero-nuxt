@@ -1,11 +1,10 @@
 <template>
   <div class="widget korean">
-    <div class="widget-title">Learning Korean?</div>
+    <div class="widget-title">Korean Hanja</div>
     <div class="widget-body jumbotron-fluid p-4">
       <div v-if="words">
         <div v-for="word in words">
           <div>
-            The Korean word
             <router-link
               :to="`/en/ko/dictionary/kengdic/${word.kid}`"
               class="link-unstyled"
@@ -15,8 +14,8 @@
                 >{{ word.hanja }}</b
               >]</router-link
             >
-            means <em>{{ word.english }}</em
-            >.
+            <Speak :text="word.hangul" :l2="korean" /> <em>{{ word.english }}</em
+            > in Korean
           </div>
         </div>
       </div>
@@ -41,6 +40,11 @@ export default {
   data() {
     return {
       words: []
+    }
+  },
+  computed: {
+    korean() {
+      return this.$languages.getSmart('ko')
     }
   },
   methods: {

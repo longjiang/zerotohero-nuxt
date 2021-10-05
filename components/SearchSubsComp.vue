@@ -541,7 +541,7 @@ export default {
         this.$l2.continua,
         this.$subsSearchLimit
           ? this.exact
-            ? ["hy", "ka"].includes(this.$l2.code) // Give more room to less popular languages with alphebet-learning features (short words)
+            ? ["hy", "ka", "ko"].includes(this.$l2.code) // Give more room to less popular languages with alphebet-learning features (short words)
               ? this.terms[0].length < 5
                 ? this.terms[0].length < 4
                   ? this.terms[0].length < 3
@@ -554,7 +554,8 @@ export default {
           : false,
         this.tvShow ? this.tvShow.id : undefined,
         this.exact,
-        true
+        true, // apostrophe
+        this.$l2.han // convertToSimplified
       );
 
       hits = this.updateSaved(hits);

@@ -603,15 +603,17 @@ export default {
       margin-top: 1rem;
     }
     ::v-deep .disambiguation-dropdown {
-      max-width: 12rem;
       overflow: hidden;
-      left: 0;
-      position: fixed;
-      .dropdown-item {
-        white-space: normal;
-        padding: 0.2rem 1rem;
-      }
     }
+  }
+}
+
+::v-deep .disambiguation-dropdown {
+  margin-left: -3.5rem;
+  width: 15rem;
+  .dropdown-item {
+    white-space: normal;
+    padding: 0.2rem 1rem;
   }
 }
 

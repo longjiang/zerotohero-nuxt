@@ -4,6 +4,7 @@
       <ul
         :class="{
           'definitions mb-2': true,
+          single: singleColumn,
           'definitions-many': augmentedDefinitions.length > 3,
         }"
       >
@@ -12,7 +13,15 @@
           :key="`definition-${index}`"
           class="definition-list-item"
         >
-          <v-runtime-template :template="`<span>${definition.html}</span>`" /><span v-if="augmentedDefinitions.length < 4 && index < augmentedDefinitions.length - 1">; </span>
+          <v-runtime-template :template="`<span>${definition.html}</span>`" />
+          <span
+            v-if="
+              augmentedDefinitions.length < 4 &&
+              index < augmentedDefinitions.length - 1
+            "
+          >
+            ;
+          </span>
         </li>
       </ul>
     </template>
@@ -30,6 +39,7 @@ export default {
   },
   props: {
     definitions: Array,
+    singleColumn: false,
     nodef: {
       type: String,
       default: "",
@@ -73,7 +83,7 @@ export default {
     },
     async definitionHtml(text) {
       let m = text.match(/(.* of )([^\s]+)(.*)/);
-      if (m && this.$l2.code !== 'en') {
+      if (m && this.$l2.code !== "en") {
         let stringBefore = m[1];
         let lemma = m[2].replace(/\u200e/g, ""); // Left-to-Right Mark
         let stringAfter = m[3];
@@ -119,9 +129,11 @@ export default {
 @media (min-width: 768px) {
   .definitions-many {
     text-align: left;
-    columns: 2;
-    column-gap: 3rem;
     display: inline-block;
+    &:not(.single) {
+      columns: 2;
+      column-gap: 3rem;
+    }
   }
 }
 </style>

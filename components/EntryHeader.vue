@@ -189,7 +189,8 @@ export default {
   },
   methods: {
     transliterate(text) {
-      return tr(text)
+      let transliteration = tr(text);
+      if (transliteration !== text) return tr(text);
     },
     klingonIPA(text) {
       return Klingon.latinToIPA(text);

@@ -73,7 +73,18 @@
               Learn (Legacy)
             </router-link>
           </div>
-          <WordList :words="sW" class="mt-4"></WordList>
+          <div
+            class="pt-3 pb-3 bg-white"
+            style="position: sticky; top: 0; z-index: 9"
+          >
+            <b-form-checkbox v-model="hideDefinitions">
+              Hide definitions
+            </b-form-checkbox>
+          </div>
+          <WordList
+            :words="sW"
+            :hideDefinitions="hideDefinitions"
+          ></WordList>
         </div>
       </div>
     </div>
@@ -92,6 +103,7 @@ export default {
   },
   data() {
     return {
+      hideDefinitions: false,
       dictionaryLoaded: false,
       sWLoaded: false,
       showExport: false,
@@ -173,7 +185,7 @@ export default {
           }
         }
       }
-      this.sW = sW;
+      this.sW = sW.sort((a, b) => a.head.localeCompare(b.head));
       this.sWLoaded = true;
     },
     showImportClick() {

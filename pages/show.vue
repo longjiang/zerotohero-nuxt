@@ -50,56 +50,7 @@
           class="col-sm-12"
           v-if="show && ['Music', 'News', 'Movies'].includes(show.title)"
         >
-          <div
-            class="widget widget-dark mb-5"
-            style="max-width: 70vh; margin: 0 auto"
-          >
-            <div class="widget-title">
-              Discover {{ $l2.name }}
-              {{ show.title }}
-            </div>
-            <div class="text-center pt-5 pb-5" v-if="!randomEpisode">
-              <Loader :sticky="true" message="Getting recommendations..." />
-            </div>
-            <LazyYouTubeVideo
-              v-if="randomEpisode"
-              initialLayout="vertical"
-              :youtube="randomEpisode.youtube_id"
-              :ref="`youtube`"
-              :autoload="true"
-              :autoplay="true"
-              :startAtRandomTime="true"
-              @currentTime="updateCurrentTime"
-            />
-            <div class="text-center pt-3 pb-3" v-if="randomEpisode">
-              <router-link
-                :to="{
-                  name: 'youtube-view',
-                  params: {
-                    youtube_id: randomEpisode.youtube_id,
-                  },
-                  query: {
-                    t: currentTime,
-                  },
-                }"
-                class="btn btn-ghost-dark-no-bg"
-              >
-                <i class="fas fa-align-left mr-1"></i>
-                Transcript
-              </router-link>
-              <b-button variant="ghost-dark-no-bg" @click="loadRandomEpisode">
-                <i class="fas fa-step-forward mr-1"></i>
-                Another One
-              </b-button>
-              <b-button
-                variant="ghost-dark-no-bg"
-                v-if="$adminMode"
-                @click="removeEpisode(randomEpisode)"
-              >
-                <i class="fas fa-trash"></i>
-              </b-button>
-            </div>
-          </div>
+          <LazyDiscoverPlayer :routeType="type" :shows="[show]" />
         </div>
 
         <div class="col-sm-12 mb-5">
@@ -230,8 +181,8 @@ export default {
       if (this.type === "tv-show") what = `the TV show “${this.show.title}”`;
       else what = `the talk series “${this.show.title}”`;
       // But...
-      if (['Music', 'Movies', 'News'].includes(this.show.title)) {
-        what = this.show.title
+      if (["Music", "Movies", "News"].includes(this.show.title)) {
+        what = this.show.title;
       }
       return `Learn ${this.$l2.name} with ${what} | ${this.$l2.name} Zero to Hero`;
     },
@@ -265,37 +216,9 @@ export default {
           offset: this.moreVideos,
         });
       }
-      await this.loadRandomEpisode();
     }
   },
   methods: {
-    async removeEpisode(randomEpisode) {
-      let response = await axios.delete(
-        `${Config.wiki}items/youtube_videos/${randomEpisode.id}`
-      );
-      if (response) {
-        this.loadRandomEpisode();
-      }
-    },
-    updateCurrentTime(currentTime) {
-      if (typeof window !== "undefined") {
-        this.currentTime = currentTime;
-      }
-    },
-    async loadRandomEpisode() {
-      this.randomEpisode = await this.getRandomEpisode();
-    },
-    async getRandomEpisode() {
-      let videos = this.videos;
-      let randomVideo = videos[Math.floor(Math.random() * videos.length)];
-      let videoUrl = `${Config.wiki}items/youtube_videos/${randomVideo.id}?fields=youtube_id,id`;
-      let res = await axios.get(videoUrl);
-      if (res && res.data.data) {
-        let video = res.data.data;
-        video.subs_l2 = YouTube.parseSavedSubs(video.subs_l2);
-        return video;
-      }
-    },
     async saveTitle(e) {
       let newTitle = e.target.innerText;
       if (this.show.title !== newTitle) {

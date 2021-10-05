@@ -3,7 +3,7 @@ importScripts('../vendor/wanakana/wanakana.min.js')
 importScripts('../vendor/jpconjugations.js')
 
 const Dictionary = {
-  file: '/data/edict/edict.tsv.txt',
+  file: undefined,
   words: [],
   name: 'edict',
   tokenizer: undefined,
@@ -11,6 +11,8 @@ const Dictionary = {
     return 'The Japanese dictionary is provided by <a href="http://www.edrdg.org/jmdict/edict.html">EDICT</a>, open-source and distribtued under a <a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 license</a>.'
   },
   async load() {
+    const server = 'https://server.chinesezerotohero.com/'
+    this.file = `${server}data/edict/edict.tsv.txt`
     this.tokenizer = await new Promise(resolve => {
       kuromoji.builder({ dicPath: "/data/kuromoji" }).build((err, tokenizer) => {
         resolve(tokenizer)

@@ -86,6 +86,7 @@
                   variant="gray"
                   :items="words"
                   text="Disambiguation"
+                  menu-class="disambiguation-dropdown"
                 >
                   <b-dropdown-item
                     v-for="w in words"
@@ -310,7 +311,7 @@ export default {
           }
         }
       }
-      this.sW = sW;
+      this.sW = sW.sort((a, b) => a.head.localeCompare(b.head));
     },
     saved() {
       return (
@@ -482,14 +483,7 @@ export default {
       margin-top: 1rem;
     }
     ::v-deep .disambiguation-dropdown {
-      max-width: 12rem;
       overflow: hidden;
-      left: 0;
-      position: fixed;
-      .dropdown-item {
-        white-space: normal;
-        padding: 0.2rem 1rem;
-      }
     }
   }
   .content-pane-right {
@@ -499,6 +493,15 @@ export default {
 
   .for-the-love-of {
     padding-top: 15rem;
+  }
+}
+
+::v-deep .disambiguation-dropdown {
+  margin-left: -3.5rem;
+  width: 15rem;
+  .dropdown-item {
+    white-space: normal;
+    padding: 0.2rem 1rem;
   }
 }
 

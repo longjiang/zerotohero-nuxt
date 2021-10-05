@@ -17,12 +17,14 @@
         <DefinitionsList
           v-if="defDistinctA"
           :definitions="defDistinctA"
+          :singleColumn="true"
         ></DefinitionsList>
       </div>
       <div class="col-6 text-center">
         <DefinitionsList
           v-if="defDistinctB"
           :definitions="defDistinctB"
+          :singleColumn="true"
         ></DefinitionsList>
       </div>
     </div>

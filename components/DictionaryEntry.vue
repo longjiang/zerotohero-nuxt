@@ -170,6 +170,21 @@
             :key="`${entry.id}-characters-traditional`"
           ></EntryCharacters>
         </div>
+      </div>
+      <div
+        class="dictionary-entry-section"
+        v-if="sections[currentSection].title === 'Related'"
+      >
+        <!-- <EntryDifficulty :entry="entry" style="flex: 1" class="m-3" /> -->
+        <EntryDisambiguation
+          v-if="['zh', 'yue'].includes($l2.code)"
+          :entry="entry"
+        ></EntryDisambiguation>
+        <EntryRelated
+          @relatedReady="relatedReady = true"
+          :entry="entry"
+          :key="`related-${entry.id}`"
+        />
         <div class="row">
           <div class="col-sm-6" v-if="$l2.code !== 'zh'">
             <Chinese
@@ -208,21 +223,6 @@
             />
           </div>
         </div>
-      </div>
-      <div
-        class="dictionary-entry-section"
-        v-if="sections[currentSection].title === 'Related'"
-      >
-        <!-- <EntryDifficulty :entry="entry" style="flex: 1" class="m-3" /> -->
-        <EntryDisambiguation
-          v-if="['zh', 'yue'].includes($l2.code)"
-          :entry="entry"
-        ></EntryDisambiguation>
-        <EntryRelated
-          @relatedReady="relatedReady = true"
-          :entry="entry"
-          :key="`related-${entry.id}`"
-        />
         <EntryCourseAd
           v-if="$l2.code === 'zh'"
           :entry="entry"
@@ -316,7 +316,7 @@ export default {
         },
         {
           title: "Related",
-          visible: ["zh", "yue"].includes(this.$l2.code) || this.relatedReady,
+          visible: this.$l2.han || ['ko', 'ja'].includes(this.$l2.code) || this.relatedReady,
         },
       ];
     },

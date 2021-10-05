@@ -14,7 +14,6 @@ const Dictionary = {
   l1: undefined,
   l2: undefined,
   supplementalLangs: {
-    ase: 'eng',
     ceb: 'tgl',
     cmn: 'zho',
     ind: 'msa',
@@ -22,6 +21,7 @@ const Dictionary = {
     msa: 'ind',
     nob: 'nno',
     nor: 'nno',
+    nsl: 'nor',
     tgl: 'ceb',
   },
   conjugations: undefined, // for french only
