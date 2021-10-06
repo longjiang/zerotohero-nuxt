@@ -100,16 +100,16 @@
                   us to have some all of your videos "blacklisted" and never
                   again show up on this website. Please contact us via Twitter
                   <a
-                    href="https://www.zerotohero.ca/en/ms/updates"
+                    href="https://twitter.com/panlingo"
                     target="_blank"
                   >
-                    @zerotoherolang
+                    @panlingo
                   </a>
                   , either by direct messaging, post reply, or mention. For
                   other ways to reach us, see the
-                  <a href="https://www.zerotohero.ca/en/ms/contact-us">
+                  <router-link href="https://www.zerotohero.ca/en/ms/contact-us">
                     Contact Us
-                  </a>
+                  </router-link>
                   page.
                 </li>
               </ol>

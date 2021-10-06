@@ -66,7 +66,7 @@
                 </a>
                 , and follow us on
                 <a
-                  href="https://twitter.com/zerotoherolang"
+                  href="https://twitter.com/panlingo"
                   target="_blank"
                   class="link-unstyled"
                   style="text-decoration: underline"
@@ -252,13 +252,13 @@
                   />
                 </a>
                 &nbsp;&nbsp;
-                <a href="/zh/en/contact-us">
+                <router-link to="/zh/en/contact-us">
                   <img
                     src="/img/logo-wechat.png"
                     style="height: 1.4rem"
                     data-not-lazy
                   />
-                </a>
+                </router-link>
               </div>
             </div>
           </div>
@@ -484,7 +484,6 @@ export default {
   padding: 2rem;
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
-  border: 1px solid hsla(0deg, 0%, 30%, 0.7);
   border-radius: 1rem;
   text-align: left;
 }

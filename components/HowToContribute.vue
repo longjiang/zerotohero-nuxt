@@ -92,8 +92,8 @@
     <hr />
     <div>
       Questions? Mention me on Twitter
-      <a href="https://twitter.com/zerotoherolang" target="_blank">
-        <u>@zerotoherolang</u>
+      <a href="https://twitter.com/panlingo" target="_blank">
+        <u>@panlingo</u>
       </a>
       and I'll help you out. Thanks for contributing!
     </div>
