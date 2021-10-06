@@ -39,19 +39,21 @@
             {{ word.accented }}
           </span>
         </router-link>
-        <span v-if="word.pronunciation" class="wordlist-item-pinyin">
-          <span v-if="$l2.code !== 'zh'">/</span>
-          <span v-else>(</span>
-          {{ word.pronunciation || word.kana }}
-          <span v-if="$l2.code !== 'zh'">/</span>
-          <span v-else>)</span>
-        </span>
-        <span v-if="word.kana" class="wordlist-item-pinyin">
-          ({{ word.kana }})
-        </span>
-        <span v-if="word.hanja" class="wordlist-item-byeonggi">
-          {{ word.hanja }}
-        </span>
+        <template v-if="!hidePhonetics">
+          <span v-if="word.pronunciation" class="wordlist-item-pinyin">
+            <span v-if="$l2.code !== 'zh'">/</span>
+            <span v-else>(</span>
+            {{ word.pronunciation || word.kana }}
+            <span v-if="$l2.code !== 'zh'">/</span>
+            <span v-else>)</span>
+          </span>
+          <span v-if="word.kana" class="wordlist-item-pinyin">
+            ({{ word.kana }})
+          </span>
+          <span v-if="word.hanja" class="wordlist-item-byeonggi">
+            {{ word.hanja }}
+          </span>
+        </template>
         <Speak :text="word.kana || word.head" :l2="$l2" />
         <span
           v-if="word.definitions && !hideDefinitions"
@@ -134,6 +136,9 @@ export default {
       default: "light",
     },
     hideDefinitions: {
+      default: false,
+    },
+    hidePhonetics: {
       default: false,
     },
   },

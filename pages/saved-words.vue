@@ -77,13 +77,17 @@
             class="pt-3 pb-3 bg-white"
             style="position: sticky; top: 0; z-index: 9"
           >
-            <b-form-checkbox v-model="hideDefinitions">
+            <b-form-checkbox v-model="hideDefinitions" class="d-inline">
               Hide definitions
+            </b-form-checkbox>
+            <b-form-checkbox v-model="hidePhonetics" class="ml-2 d-inline">
+              Hide phonetics
             </b-form-checkbox>
           </div>
           <WordList
             :words="sW"
             :hideDefinitions="hideDefinitions"
+            :hidePhonetics="hidePhonetics"
           ></WordList>
         </div>
       </div>
@@ -104,6 +108,7 @@ export default {
   data() {
     return {
       hideDefinitions: false,
+      hidePhonetics: false,
       dictionaryLoaded: false,
       sWLoaded: false,
       showExport: false,
