@@ -251,14 +251,14 @@
                     data-not-lazy
                   />
                 </a>
-                &nbsp;&nbsp;
+                <!-- &nbsp;&nbsp;
                 <router-link to="/zh/en/contact-us">
                   <img
                     src="/img/logo-wechat.png"
                     style="height: 1.4rem"
                     data-not-lazy
                   />
-                </router-link>
+                </router-link> -->
               </div>
             </div>
           </div>

@@ -16,7 +16,7 @@
   <div class="main">
     <div class="container pt-5 pb-5">
       <SocialHead :title="`Contact Us | ${$l2.name} Zero to Hero`" />
-      <template v-if="this.$l1.code && this.$l2.code === 'en'">
+      <!-- <template v-if="this.$l1.code && this.$l2.code === 'en'">
         <div class="row">
           <div class="col-12 text-center mt-4">
             <img
@@ -26,8 +26,8 @@
             />
           </div>
         </div>
-      </template>
-      <template v-else>
+      </template> -->
+      <template>
         <div class="row">
           <div class="col-12">
             <h3 class="mb-5 text-center">
