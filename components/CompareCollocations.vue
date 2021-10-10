@@ -53,7 +53,9 @@
       >
         Sorry, we could not find matching collocations for both words in this
         corpus (dataset). You can set a different corpus in
-        <router-link :to="`/${$l1.code}/${$l2.code}/settings`">Settings</router-link>
+        <router-link :to="`/${$l1.code}/${$l2.code}/settings`">
+          Settings
+        </router-link>
         .
       </div>
       <div class="mt-2">
@@ -72,7 +74,9 @@
         </a>
         <br />
         Don't like the collocations? Choose a different corpus (dataset) in
-        <router-link :to="`/${$l1.code}/${$l2.code}/settings`">Settings</router-link>
+        <router-link :to="`/${$l1.code}/${$l2.code}/settings`">
+          Settings
+        </router-link>
         .
       </div>
     </div>
@@ -82,7 +86,7 @@
 <script>
 import Collocation from "@/components/Collocation.vue";
 import SketchEngine from "@/lib/sketch-engine";
-import Helper from '@/lib/helper'
+import Helper from "@/lib/helper";
 
 export default {
   props: {
@@ -124,14 +128,16 @@ export default {
         l2: this.$l2,
       });
       let colDesc = {};
-      for (let g of Helper.uniqueByValue(
-        (this.aSketch.Gramrels || []).concat(this.bSketch.Gramrels || []),
-        "name"
-      )) {
-        colDesc[g.name] = g.name.replace("%w", "{word}");
+      if (this.aSketch && this.b.Sketch) {
+        for (let g of Helper.uniqueByValue(
+          (this.aSketch.Gramrels || []).concat(this.bSketch.Gramrels || []),
+          "name"
+        )) {
+          colDesc[g.name] = g.name.replace("%w", "{word}");
+        }
+        this.colDesc = colDesc;
+        this.collocationsKey += 1;
       }
-      this.colDesc = colDesc;
-      this.collocationsKey += 1;
     },
     getGramrelsByName(gramrels, name) {
       return gramrels.find(
