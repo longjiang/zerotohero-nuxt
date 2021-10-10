@@ -245,7 +245,7 @@ export default {
       }
     },
   },
-  async fetch() {
+  async mounted() {
     let method = this.$route.params.method;
     let args = this.$route.params.args.split(",");
     let aId = args[0];
