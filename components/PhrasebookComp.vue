@@ -30,8 +30,11 @@
       class="pt-3 pb-3 bg-white"
       style="position: sticky; top: 0; z-index: 9"
     >
-      <b-form-checkbox v-model="hideDefinitions">
+      <b-form-checkbox v-model="hideDefinitions" class="d-inline">
         Hide definitions
+      </b-form-checkbox>
+      <b-form-checkbox v-model="hidePhonetics" class="ml-2 d-inline">
+        Hide phonetics
       </b-form-checkbox>
     </div>
     <div class="row" v-if="phrasebook">
@@ -73,22 +76,28 @@
               icon="bookmark"
               class="saved-button"
             />
-            <span v-if="phraseObj && phraseObj.pronunciation">
+            <span v-if="phraseObj && phraseObj.pronunciation" :class="{ transparent: hidePhonetics }">
               {{ phraseObj.pronunciation }}
             </span>
           </div>
 
-          <h4
-            :data-level="
-              phraseObj && phraseObj.level ? phraseObj.level : 'outside'
-            "
-            class="mb-0"
-            v-html="phraseObj.phrase"
-          />
+          <Annotate
+            :phonetics="!phraseObj.pronunciation"
+            :popup="false"
+            :class="{ 'hide-phonetics': hidePhonetics }"
+          >
+            <h4
+              :data-level="
+                phraseObj && phraseObj.level ? phraseObj.level : 'outside'
+              "
+              class="mb-0"
+              v-html="phraseObj.phrase"
+            />
+          </Annotate>
 
           <div
-            class="mb-0"
-            v-if="phraseObj && phraseObj[$l1.code] && !hideDefinitions"
+            :class="{ 'mb-0': true, transparent: hideDefinitions }"
+            v-if="phraseObj && phraseObj[$l1.code]"
           >
             {{ phraseObj[$l1.code] }}
           </div>
@@ -115,6 +124,7 @@ export default {
       numRowsVisible: 24,
       startRow: this.initId ? this.initId : 1,
       hideDefinitions: false,
+      hidePhonetics: false,
     };
   },
   mounted() {
@@ -200,5 +210,9 @@ export default {
   position: absolute !important;
   top: -8px;
   font-size: 1.3em;
+}
+
+::v-deep .hide-phonetics .word-block-pinyin {
+  opacity: 0;
 }
 </style>

@@ -17,6 +17,7 @@
           class="mr-1"
           style="overflow: hidden; height: 1.2rem"
         ></Star>
+        <Speak :text="word.kana || word.head" :l2="$l2" />
         <router-link
           v-if="compareWith"
           :to="`/${$l1.code}/${$l2.code}/compare/${$dictionaryName}/${compareWith.id},${word.id}`"
@@ -39,7 +40,7 @@
             {{ word.accented }}
           </span>
         </router-link>
-        <template v-if="!hidePhonetics">
+        <span :class="{ transparent: hidePhonetics }">
           <span v-if="word.pronunciation" class="wordlist-item-pinyin">
             <span v-if="$l2.code !== 'zh'">/</span>
             <span v-else>(</span>
@@ -53,11 +54,10 @@
           <span v-if="word.hanja" class="wordlist-item-byeonggi">
             {{ word.hanja }}
           </span>
-        </template>
-        <Speak :text="word.kana || word.head" :l2="$l2" />
+        </span>
         <span
-          v-if="word.definitions && !hideDefinitions"
-          class="wordlist-item-l1"
+          v-if="word.definitions"
+          :class="{ 'wordlist-item-l1': true, transparent: hideDefinitions }"
         >
           {{
             word.definitions.filter((def) => !def.startsWith("CL")).join(", ")

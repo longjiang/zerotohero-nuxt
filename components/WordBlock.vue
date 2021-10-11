@@ -22,7 +22,7 @@
         saved: saved,
       }"
       v-bind="attributes"
-      @click.stop.prevent="wordBlockClick"
+      v-on="popup ? { click: wordBlockClick } : {}"
       @mouseover="wordblockHover = true"
       @mouseout="wordblockHover = false"
     >
@@ -532,7 +532,11 @@ export default {
       }
       return text;
     },
-    wordBlockClick() {
+    wordBlockClick(event) {
+      if (event) {
+        event.preventDefault()
+        event.stopPropagation()
+      }
       if (
         this.explore &&
         this.token &&

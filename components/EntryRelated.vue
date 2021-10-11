@@ -8,6 +8,12 @@
       ”
     </div>
     <div class="jumbotron-fluid widget-body p-4">
+      <div
+        :class="{ 'loader text-center pb-5 pt-3': true, 'd-none': !checking }"
+        style="flex: 1"
+      >
+        <Loader :sticky="true" message="Looking up the thesaurus..." />
+      </div>
       <WordList
         v-if="words && words.length > 0"
         :words="words"
@@ -38,15 +44,14 @@
 </template>
 <script>
 import SketchEngine from "@/lib/sketch-engine";
-import Helper from "@/lib/helper";
 
 export default {
   props: ["entry"],
   data() {
     return {
-      Helper,
       words: undefined,
       relatedKey: 0,
+      checking: false,
     };
   },
   computed: {
@@ -69,10 +74,14 @@ export default {
     },
   },
   async mounted() {
-    let response = await SketchEngine.thesaurus({
-      l2: this.$l2,
-      term: this.entry.simplified || this.entry.head,
-    });
+    this.checking = true;
+    let response;
+    try {
+      response = await SketchEngine.thesaurus({
+        l2: this.$l2,
+        term: this.entry.simplified || this.entry.head,
+      });
+    } catch (err) {}
     if (response && response.Words) {
       let w = [];
       for (let Word of response.Words) {
@@ -98,6 +107,7 @@ export default {
     } else {
       this.words = [];
     }
+    this.checking = false;
   },
 };
 </script>

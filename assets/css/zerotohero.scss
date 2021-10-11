@@ -1074,15 +1074,34 @@ button.bg-primary:focus {
   }
 }
 
+.phrase-wide {
+  .playlist-dropdown {
+    .dropdown-menu {
+      margin-top: -3rem !important;
+      max-height: calc(100vh - 11rem) !important;
+    }
+  }
+}
+
+
+.dictionary-wide {
+  .playlist-dropdown {
+    .dropdown-menu {
+      margin-top: 6rem !important;
+      max-height: calc(100vh - 15rem) !important;
+    }
+  }
+}
+
 .search-subs,
 .compare-search-subs {
   .playlist-dropdown {
     .dropdown-menu {
-      margin-top: 2.2rem;
+      margin-top: -2.2rem;
       border: none;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
       overflow: scroll;
-      max-height: calc(100vh - 3rem);
+      max-height: calc(100vh - 4rem);
       max-width: calc(100% - 3rem);
       transform: translate3d(1.5rem, 8rem, 1.5rem) !important;
       .current {
@@ -1157,7 +1176,7 @@ button.bg-primary:focus {
   background-size: 100%;
   -webkit-background-clip: text;
   -moz-background-clip: text;
-  -webkit-text-fill-color: transparent; 
+  -webkit-text-fill-color: transparent;
   -moz-text-fill-color: transparent;
   padding-top: 0.04em;
 }

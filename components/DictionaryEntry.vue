@@ -311,12 +311,12 @@ export default {
           visible: true,
         },
         {
-          title: "Characters",
-          visible: this.entry.cjk && this.entry.cjk.canonical,
+          title: "Related",
+          visible: true,
         },
         {
-          title: "Related",
-          visible: this.$l2.han || ['ko', 'ja'].includes(this.$l2.code) || this.relatedReady,
+          title: "Characters",
+          visible: this.entry.cjk && this.entry.cjk.canonical,
         },
       ];
     },
