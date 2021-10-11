@@ -63,7 +63,7 @@
         <div class="mb-2">
           <div class="entry-pinyin">
             <Star :word="entry"></Star>
-            <span class="ml-2 mr-1">
+            <span :class="{ 'ml-2 mr-1': true, transparent: hidePhonetics }">
               <span v-if="$l2.code === 'tlh'">
                 {{ entry.head }} /{{ klingonIPA(entry.head) }}/
               </span>
@@ -158,6 +158,9 @@ export default {
     minimal: {
       type: String,
       default: "",
+    },
+    hidePhonetics: {
+      default: false,
     },
   },
   data() {

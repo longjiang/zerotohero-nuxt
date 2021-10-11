@@ -5,6 +5,8 @@ export const state = () => {
     dictionary: undefined,
     dictionaryName: undefined,
     adminMode: false,
+    hidePhonetics: false,
+    hideDefinitions: false,
     subsSearchLimit: true,
     settingsLoaded: {},
     l2Settings: {
@@ -53,6 +55,22 @@ export const mutations = {
     if (typeof localStorage !== 'undefined') {
       let settings = JSON.parse(localStorage.getItem('zthSettings') || '{}')
       settings.adminMode = adminMode
+      localStorage.setItem('zthSettings', JSON.stringify(settings))
+    }
+  },
+  SET_HIDE_PHONETICS(state, hidePhonetics) {
+    state.hidePhonetics = hidePhonetics
+    if (typeof localStorage !== 'undefined') {
+      let settings = JSON.parse(localStorage.getItem('zthSettings') || '{}')
+      settings.hidePhonetics = hidePhonetics
+      localStorage.setItem('zthSettings', JSON.stringify(settings))
+    }
+  },
+  SET_HIDE_DEFINITIONS(state, hideDefinitions) {
+    state.hideDefinitions = hideDefinitions
+    if (typeof localStorage !== 'undefined') {
+      let settings = JSON.parse(localStorage.getItem('zthSettings') || '{}')
+      settings.hideDefinitions = hideDefinitions
       localStorage.setItem('zthSettings', JSON.stringify(settings))
     }
   },
