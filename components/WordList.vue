@@ -63,7 +63,10 @@
             word.definitions.filter((def) => !def.startsWith("CL")).join(", ")
           }}
         </span>
-        <span class="wordlist-item-l1" v-if="word.counters">
+        <span
+          :class="{ 'wordlist-item-l1': true, transparent: hideDefinitions }"
+          v-if="word.counters"
+        >
           :
           <span style="font-style: normal">
             {{

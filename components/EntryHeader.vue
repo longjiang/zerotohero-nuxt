@@ -52,7 +52,11 @@
           {{ entry.level }}
         </span>
       </div>
-      <Annotate tag="div" class="mt-1 mb-2" v-if="entry.counters">
+      <Annotate
+        tag="div"
+        v-if="entry.counters"
+        :class="{ 'mt-1 mb-2': true, 'hide-phonetics': hidePhonetics }"
+      >
         <span>
           一{{
             entry.counters.map((counter) => counter.simplified).join("、一")
@@ -242,7 +246,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .entry-pinyin {
   font-size: 1.1rem;
 }
@@ -280,5 +284,9 @@ export default {
 
 .entry-cjk {
   font-size: 1.5rem;
+}
+
+::v-deep .hide-phonetics .word-block-pinyin {
+  opacity: 0;
 }
 </style>

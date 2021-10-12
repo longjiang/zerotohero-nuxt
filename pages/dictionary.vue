@@ -61,13 +61,21 @@
       <div :class="{ 'focus-exclude': true, container: !wide }">
         <div :class="{ row: !wide, 'content-panes': wide }" v-if="entry">
           <div :class="{ 'content-pane-left': wide, 'col-sm-12': !wide }">
+            <LazyHideDefs
+              class="mb-3 text-center"
+              @hideDefinitions="hideDefinitions = arguments[0]"
+              @hidePhonetics="hidePhonetics = arguments[0]"
+            />
             <client-only>
               <div v-if="saved() && sW.length > 0" class="text-center mb-4">
                 <router-link
                   class="link-unstyled mb-2 d-block"
                   :to="`/${$l1.code}/${$l2.code}/saved-words`"
                 >
-                  <h5>Saved {{ $l2.name }} Words</h5>
+                  <h5>
+                    <i class="fa fa-chevron-left mr-2"></i>
+                    Saved {{ $l2.name }} Words
+                  </h5>
                 </router-link>
                 <Paginator
                   :items="sW"
@@ -102,12 +110,12 @@
                   </b-dropdown-item>
                 </b-dropdown>
               </div>
-              <LazyEntryHeader :entry="entry" />
+              <LazyEntryHeader :entry="entry" :hidePhonetics="hidePhonetics" />
               <DefinitionsList
-                :key="`def-list-${entry.id}`"
                 v-if="entry.definitions"
-                class="mt-3"
+                :key="`def-list-${entry.id}`"
                 :definitions="entry.definitions"
+                :class="{ 'mt-3': true, transparent: hideDefinitions }"
               ></DefinitionsList>
               <EntryCourseAd
                 v-if="$l2.code === 'zh'"
@@ -179,6 +187,8 @@ export default {
     return {
       entry: undefined,
       words: undefined,
+      hideDefinitions: false,
+      hidePhonetics: false,
       images: [],
       entryKey: 0,
       paginatorKey: 0,

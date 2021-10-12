@@ -77,12 +77,10 @@
             class="pt-3 pb-3 bg-white"
             style="position: sticky; top: 0; z-index: 9"
           >
-            <b-form-checkbox v-model="hideDefinitions" class="d-inline">
-              Hide definitions
-            </b-form-checkbox>
-            <b-form-checkbox v-model="hidePhonetics" class="ml-2 d-inline">
-              Hide phonetics
-            </b-form-checkbox>
+            <LazyHideDefs
+              @hideDefinitions="hideDefinitions = arguments[0]"
+              @hidePhonetics="hidePhonetics = arguments[0]"
+            />
           </div>
           <WordList
             :words="sW"
