@@ -36,10 +36,11 @@
             "
             :key="`subs-search-${grammar.pattern}`"
           >
-            <div class="widget-title">“{{ grammar.pattern }}” in TV Shows</div>
+            <div class="widget-title">“{{ grammar.pattern }}” in 
+              <LazyShowFilter @showFilter="reloadSearchSubs" /></div>
             <div class="widget-body">
               <LazySearchSubsComp
-                v-if="grammar.pattern"
+                v-if="grammar.pattern && renderSearchSubs"
                 ref="searchSubs"
                 skin="dark"
                 :level="grammar.level"
@@ -97,6 +98,7 @@ export default {
       drills: [],
       entry: false,
       images: [],
+      renderSearchSubs: true
     };
   },
   computed: {
@@ -139,6 +141,12 @@ export default {
     },
   },
   methods: {
+    reloadSearchSubs() {
+      this.renderSearchSubs = false;
+      this.$nextTick(() => {
+        this.renderSearchSubs = true;
+      });
+    },
     async getDrill(grammarID) {
       try {
         let response = await axios.get(

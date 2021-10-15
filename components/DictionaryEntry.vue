@@ -49,11 +49,12 @@
         >
           <div class="widget-title">
             “{{ entry.head }}” in
-            {{ tvShow ? `the TV Show "${tvShow.title}"` : "TV Shows" }}
+            <span v-if="tvShow">the TV Show “{{ tvShow.title }}”</span>
+            <LazyShowFilter v-else @showFilter="reloadSearchSubs" />
           </div>
           <div class="widget-body">
             <LazySearchSubsComp
-              v-if="searchTerms"
+              v-if="searchTerms && renderSearchSubs"
               ref="searchSubs"
               skin="dark"
               :level="
@@ -288,6 +289,7 @@ export default {
       relatedReady: false,
       concordanceReady: false,
       searchSubsReady: false,
+      renderSearchSubs: true,
       currentSection: 0,
     };
   },
@@ -350,6 +352,12 @@ export default {
     this.searchTerms = await this.getSearchTerms();
   },
   methods: {
+    reloadSearchSubs() {
+      this.renderSearchSubs = false;
+      this.$nextTick(() => {
+        this.renderSearchSubs = true;
+      });
+    },
     goToSection(index) {
       this.currentSection = index;
     },

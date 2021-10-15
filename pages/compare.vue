@@ -84,11 +84,13 @@
             id="compare-search-subs"
           >
             <div class="widget-title">
-              “{{ a.bare }}” and “{{ b.bare }}” in TV Shows
+              “{{ a.bare }}” and “{{ b.bare }}” in 
+              <LazyShowFilter @showFilter="reloadSearchSubs" />
             </div>
             <div class="widget-body">
               <LazyCompareSearchSubs
                 skin="dark"
+                v-if="renderSearchSubs"
                 :key="`compare-search-subs-${a.id}-${b.id}`"
                 :levelA="a.newHSK && a.newHSK === '7-9' ? '7-9' : a.hsk || a.level || 'outside' "
                 :termsA="
@@ -204,6 +206,7 @@ export default {
       bKey: 100,
       aImages: [],
       bImages: [],
+      renderSearchSubs: true
     };
   },
   computed: {
@@ -297,6 +300,12 @@ export default {
     });
   },
   methods: {
+    reloadSearchSubs() {
+      this.renderSearchSubs = false;
+      this.$nextTick(() => {
+        this.renderSearchSubs = true;
+      });
+    },
     unbindKeys() {
       window.onkeydown = null;
     },

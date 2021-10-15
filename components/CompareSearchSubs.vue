@@ -28,153 +28,15 @@
       >
         {{ termsA[0] }}
       </b-button>
-
-      <b-dropdown
-        class="playlist-dropdown"
-        :toggle-class="{
-          'btn btn-sm border-0 playlist-dropdown-toggle mr-1': true,
-          'btn-gray text-secondary': skin === 'light',
-          'btn-ghost-dark': skin === 'dark',
-        }"
-        boundary="viewport"
-        ref="dropdown"
-        no-caret
+      <b-button
+        size="sm"
+        :variant="skin === 'light' ? 'gray' : 'ghost-dark'"
+        :class="{ 'border-0 mr-1': true, 'text-secondary': skin === 'light' }"
+        @click="showPlaylistModal"
       >
-        <template #button-content>
-          <i class="fa fa-stream" />
-          Compare Hits
-        </template>
-        <b-dropdown-item class="text-center">
-          <button
-            :class="{
-              btn: true,
-              'btn-small': true,
-              'bg-dark': sort === 'left',
-              'text-white': sort === 'left',
-            }"
-            @click.stop.prevent="sort = 'left'"
-          >
-            Sort Left
-          </button>
-          <button
-            :class="{
-              btn: true,
-              'btn-small': true,
-              'bg-dark': sort === 'right',
-              'text-white': sort === 'right',
-            }"
-            @click.stop.prevent="sort = 'right'"
-          >
-            Sort Right
-          </button>
-        </b-dropdown-item>
-        <template v-for="group in groups[sort]">
-          <div v-if="group" :key="`compare-subs-grouping-${sort}-${group.c}`">
-            <b-dropdown-divider
-              :key="`comp-subs-grouping-${group.c}-divider`"
-            />
-            <b-dropdown-item
-              v-for="index in Math.max(
-                group.hits.A.length,
-                group.hits.B.length
-              )"
-              :key="`comp-subs-grouping-${group.c}-${index}`"
-              @click="
-                group.hits.A[index - 1]
-                  ? goToHit('A', group.hits.A[index - 1])
-                  : group.hits.B[index - 1]
-                  ? goToHit('B', group.hits.B[index - 1])
-                  : false
-              "
-            >
-              <div style="display: flex">
-                <template v-for="ab in ['A', 'B']">
-                  <div
-                    :style="`flex: 1; margin-right: ${
-                      ab === 'A' ? '1rem' : 0
-                    }; display: flex;`"
-                    v-if="group.hits[ab][index - 1]"
-                    @click.stop.prevent="
-                      goToHit(
-                        ab,
-                        sort === 'right'
-                          ? group.hits[ab][index - 1]
-                          : group.hits[ab][index - 1]
-                      )
-                    "
-                    :set="(hit = group.hits[ab][index - 1])"
-                    :key="`comp-subs-grouping-${group.c}-${index}-${ab}-1`"
-                  >
-                    <div>
-                      <img
-                        class="hit-thumb"
-                        style="margin-top: 0.2rem"
-                        v-if="ab === 'A' && hit"
-                        :src="`//img.youtube.com/vi/${hit.video.youtube_id}/hqdefault.jpg`"
-                        :alt="hit.video.title"
-                        v-lazy-load
-                      />
-                    </div>
-                    <div style="flex: 1">
-                      <span
-                        :key="`dropdown-line-${index}-annotate-${
-                          hit.video.subs_l2[Number(hit.lineIndex)].line
-                        }`"
-                      >
-                        <span
-                          v-if="sort === 'left' && hit.lineIndex > 0"
-                          v-html="
-                            hit.video.subs_l2[Number(hit.lineIndex) - 1].line
-                          "
-                          style="margin-right: 0.5em; opacity: 0.5"
-                        />
-                        <span
-                          v-html="
-                            Helper.highlightMultiple(
-                              hit.video.subs_l2[Number(hit.lineIndex)].line,
-                              ab === 'A'
-                                ? termsA.map((term) => term)
-                                : termsB.map((term) => term),
-                              ab === 'A' ? levelA : levelB
-                            )
-                          "
-                        />
-                        <span
-                          v-if="
-                            sort === 'right' &&
-                            hit.lineIndex < hit.video.subs_l2.length - 1
-                          "
-                          v-html="
-                            hit.video.subs_l2[Number(hit.lineIndex) + 1].line
-                          "
-                          style="margin-left: 0.5em; opacity: 0.5"
-                        ></span>
-                      </span>
-                    </div>
-                    <div style="margin-left: 1rem">
-                      <img
-                        class="hit-thumb"
-                        style="margin-top: 0.2rem"
-                        v-if="ab === 'B' && hit"
-                        :src="`//img.youtube.com/vi/${hit.video.youtube_id}/hqdefault.jpg`"
-                        :alt="hit.video.title"
-                        v-lazy-load
-                      />
-                    </div>
-                  </div>
-                  <div
-                    v-if="!group.hits[ab][index - 1]"
-                    style="flex: 1; margin-right: 1rem"
-                    :key="`comp-subs-grouping-${group.c}-${index}-${ab}-2`"
-                  >
-                    &nbsp;
-                  </div>
-                </template>
-              </div>
-            </b-dropdown-item>
-          </div>
-        </template>
-      </b-dropdown>
+        <i class="fa fa-stream" />
+        Compare Hits
+      </b-button>
       <b-button
         :class="{
           tab: true,
@@ -214,6 +76,146 @@
           hitAB === 'A' ? levelA || 'outside' : levelB || 'outside'
         "
       ></div>
+      <b-modal
+        ref="playlist-modal"
+        centered
+        hide-footer
+        title="Video Caption Search Results"
+        body-class="playlist-modal-wrapper"
+        size="xl"
+      >
+        <div class="playlist-modal">
+          <div class="text-center pt-3 pl-3 pr-3">
+            <button
+              :class="{
+                btn: true,
+                'btn-small': true,
+                'bg-dark': sort === 'left',
+                'text-white': sort === 'left',
+              }"
+              @click.stop.prevent="sort = 'left'"
+            >
+              Sort Left
+            </button>
+            <button
+              :class="{
+                btn: true,
+                'btn-small': true,
+                'bg-dark': sort === 'right',
+                'text-white': sort === 'right',
+              }"
+              @click.stop.prevent="sort = 'right'"
+            >
+              Sort Right
+            </button>
+          </div>
+          <template v-for="group in groups[sort]">
+            <div v-if="group" :key="`compare-subs-grouping-${sort}-${group.c}`">
+              <hr :key="`comp-subs-grouping-${group.c}-divider`" v-if="group.hits.A.length > 0 && group.hits.B.length > 0"/>
+              <div
+                v-for="index in Math.max(
+                  group.hits.A.length,
+                  group.hits.B.length
+                )"
+                class="playlist-modal-item"
+                :key="`comp-subs-grouping-${group.c}-${index}`"
+                @click="
+                  group.hits.A[index - 1]
+                    ? goToHit('A', group.hits.A[index - 1])
+                    : group.hits.B[index - 1]
+                    ? goToHit('B', group.hits.B[index - 1])
+                    : false
+                "
+              >
+                <div style="display: flex">
+                  <template v-for="ab in ['A', 'B']">
+                    <div
+                      :style="`flex: 1; margin-right: ${
+                        ab === 'A' ? '1rem' : 0
+                      }; display: flex;`"
+                      v-if="group.hits[ab][index - 1]"
+                      @click.stop.prevent="
+                        goToHit(
+                          ab,
+                          sort === 'right'
+                            ? group.hits[ab][index - 1]
+                            : group.hits[ab][index - 1]
+                        )
+                      "
+                      :set="(hit = group.hits[ab][index - 1])"
+                      :key="`comp-subs-grouping-${group.c}-${index}-${ab}-1`"
+                    >
+                      <div>
+                        <img
+                          class="hit-thumb"
+                          style="margin-top: 0.2rem"
+                          v-if="ab === 'A' && hit"
+                          :src="`//img.youtube.com/vi/${hit.video.youtube_id}/hqdefault.jpg`"
+                          :alt="hit.video.title"
+                          v-lazy-load
+                        />
+                      </div>
+                      <div style="flex: 1">
+                        <span
+                          :key="`dropdown-line-${index}-annotate-${
+                            hit.video.subs_l2[Number(hit.lineIndex)].line
+                          }`"
+                        >
+                          <span
+                            v-if="sort === 'left' && hit.lineIndex > 0"
+                            v-html="
+                              hit.video.subs_l2[Number(hit.lineIndex) - 1].line
+                            "
+                            style="margin-right: 0.5em; opacity: 0.5"
+                          />
+                          <span
+                            v-html="
+                              Helper.highlightMultiple(
+                                hit.video.subs_l2[Number(hit.lineIndex)].line,
+                                ab === 'A'
+                                  ? termsA.map((term) => term)
+                                  : termsB.map((term) => term),
+                                ab === 'A' ? levelA : levelB
+                              )
+                            "
+                          />
+                          <span
+                            v-if="
+                              sort === 'right' &&
+                              hit.lineIndex < hit.video.subs_l2.length - 1
+                            "
+                            v-html="
+                              hit.video.subs_l2[Number(hit.lineIndex) + 1].line
+                            "
+                            style="margin-left: 0.5em; opacity: 0.5"
+                          ></span>
+                        </span>
+                      </div>
+                      <div style="margin-left: 1rem">
+                        <img
+                          class="hit-thumb"
+                          style="margin-top: 0.2rem"
+                          v-if="ab === 'B' && hit"
+                          :src="`//img.youtube.com/vi/${hit.video.youtube_id}/hqdefault.jpg`"
+                          :alt="hit.video.title"
+                          v-lazy-load
+                        />
+                      </div>
+                    </div>
+                    <div
+                      v-if="!group.hits[ab][index - 1]"
+                      style="flex: 1; margin-right: 1rem"
+                      :key="`comp-subs-grouping-${group.c}-${index}-${ab}-2`"
+                    >
+                      &nbsp;
+                    </div>
+                  </template>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </b-modal>
     </div>
     <SearchSubsComp
       :class="{ 'd-none': hitAB === 'B' }"
@@ -322,6 +324,9 @@ export default {
     },
   },
   methods: {
+    showPlaylistModal() {
+      this.$refs["playlist-modal"].show();
+    },
     mergeGroups(groups) {
       let merged = [];
       for (let letter of ["A", "B"]) {
@@ -392,7 +397,7 @@ export default {
       this.hitAB = hitAB;
       if (hitAB === "A") this.$refs.searchSubsA.goToHit(hit);
       if (hitAB === "B") this.$refs.searchSubsB.goToHit(hit);
-      this.$refs.dropdown.hide();
+      this.$refs["playlist-modal"].hide();
       setTimeout(() => {
         document.activeElement.blur();
       }, 100);

@@ -24,11 +24,12 @@
           >
             <div class="widget-title">
               “{{ term }}” in
-              {{ tvShow ? `the TV Show "${tvShow.title}"` : "TV Shows" }}
+              <span v-if="tvShow">the TV Show “{{ tvShow.title }}”</span>
+              <LazyShowFilter v-else @showFilter="reloadSearchSubs" />
             </div>
             <div class="widget-body">
               <LazySearchSubsComp
-                v-if="term"
+                v-if="term && renderSearchSubs"
                 ref="searchSubs"
                 level="outside"
                 skin="dark"
@@ -101,6 +102,7 @@ export default {
   data() {
     return {
       images: [],
+      renderSearchSubs: true
     };
   },
   computed: {
@@ -148,6 +150,12 @@ export default {
     },
   },
   methods: {
+    reloadSearchSubs() {
+      this.renderSearchSubs = false;
+      this.$nextTick(() => {
+        this.renderSearchSubs = true;
+      });
+    },
   },
 };
 </script>

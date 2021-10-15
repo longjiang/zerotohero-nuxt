@@ -17,6 +17,8 @@ export const state = () => {
       useSerif: false,
       showQuiz: true,
       showByeonggi: true,
+      tvShowFilter: "all",
+      talkFilter: "all",
       disableAnnotation: false
     },
     romanizationOffByDefault: ['ko', 'bo', 'dz', 'th', 'my', 'hy', 'vi']
