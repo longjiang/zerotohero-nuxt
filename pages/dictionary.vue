@@ -63,6 +63,7 @@
           <div :class="{ 'content-pane-left': wide, 'col-sm-12': !wide }">
             <LazyHideDefs
               class="mb-3 text-center"
+              @hideWord="hideWord = arguments[0]"
               @hideDefinitions="hideDefinitions = arguments[0]"
               @hidePhonetics="hidePhonetics = arguments[0]"
             />
@@ -110,7 +111,7 @@
                   </b-dropdown-item>
                 </b-dropdown>
               </div>
-              <LazyEntryHeader :entry="entry" :hidePhonetics="hidePhonetics" />
+              <LazyEntryHeader :entry="entry" :hidePhonetics="hidePhonetics" :hideWord="hideWord" />
               <DefinitionsList
                 v-if="entry.definitions"
                 :key="`def-list-${entry.id}`"
@@ -189,6 +190,7 @@ export default {
       words: undefined,
       hideDefinitions: false,
       hidePhonetics: false,
+      hideWord: false,
       images: [],
       entryKey: 0,
       paginatorKey: 0,

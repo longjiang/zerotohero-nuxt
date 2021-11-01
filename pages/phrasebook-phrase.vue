@@ -18,6 +18,7 @@
           >
             <LazyHideDefs
               class="mb-3 text-center"
+              @hideWord="hideWord = arguments[0]"
               @hideDefinitions="hideDefinitions = arguments[0]"
               @hidePhonetics="hidePhonetics = arguments[0]"
             />
@@ -59,7 +60,10 @@
                     @textChanged="textChanged"
                     :phonetics="!phraseObj.pronunciation"
                     :buttons="false"
-                    :class="{ 'hide-phonetics': hidePhonetics }"
+                    :class="{
+                      'hide-phonetics': hidePhonetics,
+                      'hide-word': hideWord,
+                    }"
                   >
                     <span>{{ phraseObj.phrase }}</span>
                   </Annotate>
@@ -128,7 +132,11 @@
                 class="text-center"
                 :key="`word-heading-${word.id}`"
               >
-                <LazyEntryHeader :entry="word" :hidePhonetics="hidePhonetics" />
+                <LazyEntryHeader
+                  :entry="word"
+                  :hidePhonetics="hidePhonetics"
+                  :hideWord="hideWord"
+                />
                 <DefinitionsList
                   v-if="word.definitions"
                   :class="{ 'mt-3': true, transparent: hideDefinitions }"
@@ -222,6 +230,7 @@ export default {
       phraseObj: undefined,
       words: undefined,
       word: undefined,
+      hideWord: false,
       hideDefinitions: false,
       hidePhonetics: false,
       dictionaryMatchCompleted: false,
@@ -639,6 +648,10 @@ export default {
 }
 
 ::v-deep .hide-phonetics .word-block-pinyin {
+  opacity: 0;
+}
+
+::v-deep .hide-word .word-block-text {
   opacity: 0;
 }
 </style>

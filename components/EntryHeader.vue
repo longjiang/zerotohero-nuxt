@@ -91,7 +91,7 @@
             />
           </div>
         </div>
-        <div>
+        <div :class="{ transparent: hideWord }">
           <router-link
             :to="`/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${entry.id}`"
           >
@@ -164,6 +164,9 @@ export default {
       default: "",
     },
     hidePhonetics: {
+      default: false,
+    },
+    hideWord: {
       default: false,
     },
   },

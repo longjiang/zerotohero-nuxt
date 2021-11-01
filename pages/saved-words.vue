@@ -78,6 +78,7 @@
             style="position: sticky; top: 0; z-index: 9"
           >
             <LazyHideDefs
+              @hideWord="hideWord = arguments[0]"
               @hideDefinitions="hideDefinitions = arguments[0]"
               @hidePhonetics="hidePhonetics = arguments[0]"
             />
@@ -86,6 +87,7 @@
             :words="sW"
             :hideDefinitions="hideDefinitions"
             :hidePhonetics="hidePhonetics"
+            :hideWord="hideWord"
           ></WordList>
         </div>
       </div>
@@ -105,6 +107,7 @@ export default {
   },
   data() {
     return {
+      hideWord: false,
       hideDefinitions: false,
       hidePhonetics: false,
       dictionaryLoaded: false,

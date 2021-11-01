@@ -123,7 +123,7 @@ export default {
           let k = this.$l2.han ? tify(this.keyword) : this.keyword;
           return this.shows.filter((s) => {
             let title = this.$l2.han ? tify(s.title) : s.title;
-            return title.includes(k);
+            return title.toLowerCase().includes(k.toLowerCase());
           });
         } else {
           return this.shows.filter(

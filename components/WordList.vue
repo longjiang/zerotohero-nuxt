@@ -28,6 +28,7 @@
         </router-link>
         <router-link
           v-if="word"
+          :class="{ transparent: hideWord }"
           :to="getUrl(word, index)"
           :title="
             word.definitions.filter((def) => !def.startsWith('CL')).join(',')
@@ -137,6 +138,9 @@ export default {
     },
     skin: {
       default: "light",
+    },
+    hideWord: {
+      default: false,
     },
     hideDefinitions: {
       default: false,

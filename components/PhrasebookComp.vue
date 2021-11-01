@@ -31,6 +31,7 @@
       style="position: sticky; top: 0; z-index: 9"
     >
       <LazyHideDefs
+        @hideWord="hideWord = arguments[0]"
         @hideDefinitions="hideDefinitions = arguments[0]"
         @hidePhonetics="hidePhonetics = arguments[0]"
       />
@@ -85,7 +86,7 @@
           <Annotate
             :phonetics="!phraseObj.pronunciation"
             :popup="false"
-            :class="{ 'hide-phonetics': hidePhonetics }"
+            :class="{ 'hide-phonetics': hidePhonetics, 'hide-word': hideWord }"
           >
             <h4
               :data-level="
@@ -126,6 +127,7 @@ export default {
       startRow: this.initId ? this.initId : 1,
       hideDefinitions: false,
       hidePhonetics: false,
+      hideWord: false,
     };
   },
   mounted() {
@@ -214,6 +216,10 @@ export default {
 }
 
 ::v-deep .hide-phonetics .word-block-pinyin {
+  opacity: 0;
+}
+
+::v-deep .hide-word .word-block-text {
   opacity: 0;
 }
 </style>

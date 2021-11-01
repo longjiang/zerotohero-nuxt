@@ -340,8 +340,8 @@ export default {
           .filter((l) => {
             return (
               l &&
-              l.starttime >= line.starttime - 0.5 &&
-              (!nextLine || l.starttime < nextLine.starttime - 0.5)
+              l.starttime >= line.starttime &&
+              (!nextLine || l.starttime < nextLine.starttime)
             );
           })
           .map((l) => l.line)
