@@ -143,11 +143,11 @@ export default {
         words = await (await this.$getDictionary()).lookupFuzzy(text);
         words = words.sort(
           (a, b) =>
-            Math.abs(a.head.length - text.length) -
-            Math.abs(b.head.length - text.length)
+            FastestLevenshtein.distance(a.head, text) -
+            FastestLevenshtein.distance(b.head, text)
         );
       }
-      words = words.filter((word) => word.head !== text);
+      words = words.filter((word) => word.head.toLowerCase() !== text.toLowerCase());
       words = Helper.uniqueByValue(words, "head");
       return words;
     },

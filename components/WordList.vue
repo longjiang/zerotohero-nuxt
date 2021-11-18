@@ -28,55 +28,55 @@
         </router-link>
         <router-link
           v-if="word"
-          :class="{ transparent: hideWord }"
           :to="getUrl(word, index)"
           :title="
             word.definitions.filter((def) => !def.startsWith('CL')).join(',')
           "
         >
           <span
-            class="wordlist-item-word ml-1"
+            :class="{ 'wordlist-item-word ml-1': true, transparent: hideWord }"
             :data-level="skin !== 'dark' ? getLevel(word) : undefined"
           >
             {{ word.accented }}
           </span>
-        </router-link>
-        <span :class="{ transparent: hidePhonetics }">
-          <span v-if="word.pronunciation" class="wordlist-item-pinyin">
-            <span v-if="$l2.code !== 'zh'">/</span>
-            <span v-else>(</span>
-            {{ word.pronunciation || word.kana }}
-            <span v-if="$l2.code !== 'zh'">/</span>
-            <span v-else>)</span>
+
+          <span :class="{ transparent: hidePhonetics }">
+            <span v-if="word.pronunciation" class="wordlist-item-pinyin">
+              <span v-if="$l2.code !== 'zh'">/</span>
+              <span v-else>(</span>
+              {{ word.pronunciation }}
+              <span v-if="$l2.code !== 'zh'">/</span>
+              <span v-else>)</span>
+            </span>
+            <span v-if="word.kana" class="wordlist-item-pinyin">
+              ( {{ word.kana }}, {{ transliterate(word.kana) }} )
+            </span>
+            <span v-if="word.hanja" class="wordlist-item-byeonggi">
+              {{ word.hanja }}
+            </span>
           </span>
-          <span v-if="word.kana" class="wordlist-item-pinyin">
-            ({{ word.kana }})
-          </span>
-          <span v-if="word.hanja" class="wordlist-item-byeonggi">
-            {{ word.hanja }}
-          </span>
-        </span>
-        <span
-          v-if="word.definitions"
-          :class="{ 'wordlist-item-l1': true, transparent: hideDefinitions }"
-        >
-          {{
-            word.definitions.filter((def) => !def.startsWith("CL")).join(", ")
-          }}
-        </span>
-        <span
-          :class="{ 'wordlist-item-l1': true, transparent: hideDefinitions }"
-          v-if="word.counters"
-        >
-          :
-          <span style="font-style: normal">
+          <span
+            v-if="word.definitions"
+            :class="{ 'wordlist-item-l1': true, transparent: hideDefinitions }"
+          >
             {{
-              word.counters
-                .map((counter) => "一" + counter.simplified)
-                .join(word.simplified + "、") + word.simplified
-            }}。
+              word.definitions.filter((def) => !def.startsWith("CL")).join(", ")
+            }}
           </span>
-        </span>
+          <span
+            :class="{ 'wordlist-item-l1': true, transparent: hideDefinitions }"
+            v-if="word.counters"
+          >
+            :
+            <span style="font-style: normal">
+              {{
+                word.counters
+                  .map((counter) => "一" + counter.simplified)
+                  .join(word.simplified + "、") + word.simplified
+              }}。
+            </span>
+          </span>
+        </router-link>
       </li>
       <li
         class="wordlist-item"
@@ -98,6 +98,7 @@
 </template>
 <script>
 import Helper from "@/lib/helper";
+import { transliterate as tr } from "transliteration";
 
 export default {
   data() {
@@ -179,6 +180,10 @@ export default {
     },
   },
   methods: {
+    transliterate(text) {
+      let transliteration = tr(text);
+      if (transliteration !== text) return tr(text);
+    },
     getUrl(word, index) {
       if (this.url) return this.url(word, index);
       else

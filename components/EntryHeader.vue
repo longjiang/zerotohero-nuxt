@@ -77,6 +77,7 @@
                 </span>
                 <span v-else-if="entry.cjk">
                   {{ entry.cjk.phonetics }}
+                  <template v-if="$l2.code === 'ja'">({{ transliterate(entry.cjk.phonetics) }})</template>
                 </span>
                 <span v-else>
                   {{ transliterate(entry.head) }}

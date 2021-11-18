@@ -45,6 +45,7 @@
               Delete All
             </button>
             <div v-if="showExportButtons" class="mt-3">
+              <span class="mr-2">Exported and ready to download:</span>
               <a
                 :href="wordsCSVHref"
                 :download="`saved-words${
@@ -57,8 +58,8 @@
                 "
                 class="mr-2"
               >
-                <i class="fa fa-file mr-1"></i>
-                Saved Words
+                <i class="fa fa-download mr-1"></i>
+                <u>Saved Words</u>
               </a>
               <a
                 v-if="
@@ -71,8 +72,8 @@
                 }-${hostname}.csv`"
                 :href="phrasesCSVHref"
               >
-                <i class="fa fa-file mr-1"></i>
-                Saved Phrases
+                <i class="fa fa-download mr-1"></i>
+                <u>Saved Phrases</u>
               </a>
             </div>
           </div>
@@ -406,12 +407,13 @@ export default {
       let words = [];
       if (this.savedWordsSorted) {
         for (let savedWordsLang of this.savedWordsSorted) {
-          let ws = savedWordsLang.words.map((w) => {
-            let op = Object.assign({}, w);
-            if (!this.l2) op.l2 = savedWordsLang.l2.code;
-            return op;
+          let wordsInLang = savedWordsLang.words.map((w) => {
+            let word = Object.assign({}, w);
+            if (!this.l2) word.l2 = savedWordsLang.l2.code;
+            else word.l2 = this.l2.code
+            return word;
           });
-          words = words.concat(ws);
+          words = words.concat(wordsInLang);
         }
       }
       let wordsCSV = Papa.unparse(words);
@@ -419,12 +421,13 @@ export default {
       let phrases = [];
       if (this.savedPhrasesSorted) {
         for (let savedPhrasesLang of this.savedPhrasesSorted) {
-          let ps = savedPhrasesLang.phrases.map((w) => {
-            let op = Object.assign({}, w);
-            if (!this.l2) op.l2 = savedPhrasesLang.l2.code;
-            return op;
+          let phrasesInLang = savedPhrasesLang.phrases.map((w) => {
+            let phrase = Object.assign({}, w);
+            if (!this.l2) phrase.l2 = savedPhrasesLang.l2.code;
+            else phrase.l2 = this.l2.code
+            return phrase;
           });
-          phrases = phrases.concat(ps);
+          phrases = phrases.concat(phrasesInLang);
         }
       }
       let phrasesCSV = Papa.unparse(phrases);
