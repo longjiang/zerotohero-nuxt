@@ -192,7 +192,7 @@
                 :showImages="false"
                 :showCollocations="false"
                 :showExamples="false"
-                class="mt-4 mb-4"
+                class="mt-4"
                 ref="phrase"
               />
             </div>

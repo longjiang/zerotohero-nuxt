@@ -56,7 +56,11 @@
             <client-only>
               <EntryYouTube :text="term" v-if="$adminMode" />
             </client-only>
-            <Collocations v-if="showCollocations && term" :text="term" :key="`${term}-col`" />
+            <Collocations
+              v-if="showCollocations && term"
+              :text="term"
+              :key="`${term}-col`"
+            />
           </div>
           <div :key="term" class="focus">
             <Concordance
@@ -65,6 +69,7 @@
               :key="`${term}-concordance`"
             />
           </div>
+          <Sale v-if="$l2.code === 'zh'" class="mb-5" />
         </div>
       </div>
     </div>
@@ -102,7 +107,7 @@ export default {
   data() {
     return {
       images: [],
-      renderSearchSubs: true
+      renderSearchSubs: true,
     };
   },
   computed: {

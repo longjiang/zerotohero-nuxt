@@ -21,6 +21,7 @@
 
       <div class="row">
         <div class="col-sm-12 mb-4">
+          <Sale class="mt-4 mb-4" v-if="$l2.code === 'zh'" />
           <h3 v-if="!keyword" class="mt-5 text-center">
             {{ $t("{l2} Video Library", { l2: $t($l2.name) }) }}
           </h3>

@@ -5,17 +5,35 @@
     @click="go"
   >
     <video autoplay muted loop>
-      <source src="/video/backgrounds/vbg-waves-480p.mp4" type="video/mp4" />
+      <source src="/video/backgrounds/vbg-night-480p.mp4" type="video/mp4" />
     </video>
     <div class="foreground text-center">
       <div class="p-4 d-inline-block">
-        <div style="font-weight: 700; font-size: 3rem; line-height: 1">SUMMER SALE</div>
-        <div class="mt-3" style="font-size: 1.2rem; font-weight: bold; opacity: 0.8">CHINESE COURSES 30% OFF</div>
+        <div style="font-weight: 700; font-size: 2.5rem; line-height: 1">
+          BLACK FRIDAY SALE
+        </div>
+        <div
+          class="mt-3"
+          style="font-size: 1.2rem; font-weight: bold; opacity: 0.8"
+        >
+          CHINESE COURSES 30% OFF
+        </div>
         <div style="font-size: 1.2rem; font-weight: bold; opacity: 0.8">
           <span>USE COUPON CODE</span>
-          <code class="coupon-code">SUMMER</code>
+          <code class="coupon-code">BF30</code>
         </div>
-        <div style="font-size: 1.2rem; font-weight: bold; opacity: 0.8">DEAL ENDS AUG 25</div>
+        <div style="font-size: 1.2rem; font-weight: bold; opacity: 0.8">
+          DEAL ENDS NOV 30.
+        </div>
+        <div class="mt-2">
+          <a
+            href="https://chinesezerotohero.teachable.com/"
+            class="btn btn-danger"
+          >
+            Browse Courses
+            <i class="fa fa-chevron-right ml-2"></i>
+          </a>
+        </div>
       </div>
     </div>
   </div>
@@ -48,7 +66,7 @@ video {
   left: 0;
 }
 .coupon-code {
-  background: #00000066;
+  background: #ff000066;
   backdrop-filter: blur(30px);
   font-size: 1em;
   color: white;

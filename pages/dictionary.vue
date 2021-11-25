@@ -38,6 +38,9 @@
               <div class="col-sm-12 bg-white">
                 <div class="for-the-love-of">
                   <h3 class="text-center font-weight-normal">
+                    <div class="pb-5 pl-5 pr-5" v-if="$l2.code === 'zh'">
+                      <Sale style="border-radius: 1rem !important" />
+                    </div>
                     <span v-if="!dictionarySize">
                       {{
                         $t("For the love of {l2} words.", { l2: $t($l2.name) })
@@ -111,7 +114,11 @@
                   </b-dropdown-item>
                 </b-dropdown>
               </div>
-              <LazyEntryHeader :entry="entry" :hidePhonetics="hidePhonetics" :hideWord="hideWord" />
+              <LazyEntryHeader
+                :entry="entry"
+                :hidePhonetics="hidePhonetics"
+                :hideWord="hideWord"
+              />
               <DefinitionsList
                 v-if="entry.definitions"
                 :key="`def-list-${entry.id}`"

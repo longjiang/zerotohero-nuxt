@@ -224,14 +224,15 @@
             />
           </div>
         </div>
-        <EntryCourseAd
-          v-if="$l2.code === 'zh'"
-          :entry="entry"
-          class="focus-exclude"
-          :key="`${entry.id}-course-ad`"
-        ></EntryCourseAd>
       </div>
     </div>
+    <Sale class="mb-5" style="border-radius: 1rem !important" v-if="$l2.code === 'zh'" />
+    <EntryCourseAd
+      v-if="$l2.code === 'zh'"
+      :entry="entry"
+      class="focus-exclude"
+      :key="`${entry.id}-course-ad`"
+    ></EntryCourseAd>
   </div>
 </template>
 <script>
