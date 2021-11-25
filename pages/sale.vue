@@ -66,7 +66,7 @@
           </client-only>
           <h2 class="text-center mt-4 mb-4" style="line-height: 2">
             USE THE COUPON CODE
-            <span class="coupon-code">BG50</span>
+            <span class="coupon-code">BF30</span>
           </h2>
         </div>
       </div>
