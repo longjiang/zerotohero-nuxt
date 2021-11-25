@@ -12,7 +12,7 @@
     <SocialHead :title="title" :description="description" :image="image" />
     <!-- The video -->
     <video autoplay muted loop class="video-background">
-      <source src="/video/backgrounds/vbg-waves-480p.mp4" type="video/mp4" />
+      <source src="/video/backgrounds/vbg-night-480p.mp4" type="video/mp4" />
     </video>
     <div class="container pt-5 pb-5 text-white">
       <div class="row justify-content-center">
@@ -22,6 +22,7 @@
               src="/img/czh-logo-light.png"
               class="img-fluid"
               style="max-width: 15rem"
+              data-not-lazy
             />
           </router-link>
         </div>
@@ -29,14 +30,14 @@
       <div class="row">
         <div class="col">
           <div class="text-center">
-            <h1 class="text-center mt-5 mb-4 sale-heading">SUMMER SALE</h1>
+            <h1 class="text-center mt-5 mb-4 sale-heading">BLACK FRIDAY SALE</h1>
           </div>
           <h2 class="text-center mt-4" style="margin-bottom: 2rem">
             ALL HSK COURSES 30% OFF
           </h2>
           <client-only>
             <div class="sale-counter text-xs-left text-sm-center">
-              <vac :end-time="new Date('Aug 25, 2021 23:59:59')">
+              <vac :end-time="new Date('Nov 30, 2021 23:59:59')">
                 <template v-slot:process="{ timeObj }">
                   <span>
                     <span style="white-space: nowrap">
@@ -65,7 +66,7 @@
           </client-only>
           <h2 class="text-center mt-4 mb-4" style="line-height: 2">
             USE THE COUPON CODE
-            <span class="coupon-code">SUMMER</span>
+            <span class="coupon-code">BG50</span>
           </h2>
         </div>
       </div>
@@ -90,7 +91,7 @@
           </h2>
           <client-only>
             <div class="sale-counter text-xs-left text-sm-center">
-              <vac :end-time="new Date('Aug 25, 2021 23:59:59')">
+              <vac :end-time="new Date('Nov 30, 2021 23:59:59')">
                 <template v-slot:process="{ timeObj }">
                   <span>
                     <span style="white-space: nowrap">
@@ -112,14 +113,14 @@
                   </span>
                 </template>
                 <template v-slot:finish>
-                  <span>Done!</span>
+                  <span>The sale has ended.</span>
                 </template>
               </vac>
             </div>
           </client-only>
           <h4 class="text-center mt-4 mb-4" style="line-height: 2">
             USE THE COUPON CODE
-            <span class="coupon-code">SUMMER</span>
+            <span class="coupon-code">BF30</span>
           </h4>
         </div>
       </div>
@@ -178,7 +179,7 @@ export default {
 }
 
 .sale-counter {
-  background-color: #00000066;
+  background-color: #ff000066;
   backdrop-filter: blur(30px);
   font-size: 1.5rem;
   padding: 1rem;
@@ -194,7 +195,7 @@ export default {
 }
 
 .coupon-code {
-  background: #00000066;
+  background: #ff000066;
   backdrop-filter: blur(30px);
   font-size: 1em;
   color: white;
@@ -203,12 +204,12 @@ export default {
 }
 
 .sale-heading {
-  font-size: 7rem;
+  font-size: 5rem;
 }
 
 @media (max-width: 540px) {
   .sale-heading {
-    font-size: 4rem;
+    font-size: 3rem;
   }
 }
 </style>
