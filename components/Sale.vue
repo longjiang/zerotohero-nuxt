@@ -26,13 +26,10 @@
           DEAL ENDS NOV 30.
         </div>
         <div class="mt-2">
-          <a
-            href="https://chinesezerotohero.teachable.com/"
-            class="btn btn-danger"
-          >
+          <router-link to="/sale" class="btn btn-danger">
             Browse Courses
             <i class="fa fa-chevron-right ml-2"></i>
-          </a>
+          </router-link>
         </div>
       </div>
     </div>
