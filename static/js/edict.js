@@ -14,7 +14,7 @@ const Dictionary = {
     const server = 'https://server.chinesezerotohero.com/'
     this.file = `${server}data/edict/edict.tsv.txt`
     this.tokenizer = await new Promise(resolve => {
-      kuromoji.builder({ dicPath: "/data/kuromoji" }).build((err, tokenizer) => {
+      kuromoji.builder({ dicPath: `${server}data/kuromoji` }).build((err, tokenizer) => {
         resolve(tokenizer)
       })
     })
