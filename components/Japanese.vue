@@ -49,14 +49,17 @@ export default {
   },
   computed: {
     japanese() {
-      return this.$languages.getSmart('ja')
-    }
+      return this.$languages.getSmart("ja");
+    },
   },
   data() {
     return {
       words: [],
       shinjitai: undefined,
     };
+  },
+  head: {
+    script: [{ hid: "kyujitai", src: "/vendor/kyujitai/kyujitai.js" }],
   },
   async created() {
     if (typeof Kyujitai !== "undefined") {
