@@ -5,7 +5,10 @@
     @click="go"
   >
     <video autoplay muted loop>
-      <source src="/video/backgrounds/vbg-night-480p.mp4" type="video/mp4" />
+      <source
+        :src="`${server}data/video/backgrounds/vbg-night-480p.mp4`"
+        type="video/mp4"
+      />
     </video>
     <div class="foreground text-center">
       <div class="p-4 d-inline-block">
@@ -37,7 +40,13 @@
 </template>
 
 <script>
+import Config from "@/lib/config";
 export default {
+  data() {
+    return {
+      server: Config.server,
+    };
+  },
   methods: {
     go() {
       this.$router.push({ name: "sale" });

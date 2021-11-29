@@ -12,7 +12,10 @@
     <SocialHead :title="title" :description="description" :image="image" />
     <!-- The video -->
     <video autoplay muted loop class="video-background">
-      <source src="/video/backgrounds/vbg-night-480p.mp4" type="video/mp4" />
+      <source
+        :src="`${server}data/video/backgrounds/vbg-night-480p.mp4`"
+        type="video/mp4"
+      />
     </video>
     <div class="container pt-5 pb-5 text-white">
       <div class="row justify-content-center">
@@ -30,7 +33,9 @@
       <div class="row">
         <div class="col">
           <div class="text-center">
-            <h1 class="text-center mt-5 mb-4 sale-heading">BLACK FRIDAY SALE</h1>
+            <h1 class="text-center mt-5 mb-4 sale-heading">
+              BLACK FRIDAY SALE
+            </h1>
           </div>
           <h2 class="text-center mt-4" style="margin-bottom: 2rem">
             ALL HSK COURSES 30% OFF
@@ -152,6 +157,7 @@
 <script>
 import vueAwesomeCountdown from "vue-awesome-countdown";
 import Vue from "vue";
+import Config from "@/lib/config";
 Vue.use(vueAwesomeCountdown);
 
 export default {
@@ -160,6 +166,7 @@ export default {
       title: "HSK Courses at 30% Off | Chinese Zero to Hero",
       description: "Deal ends Sun, Aug 25, 2021",
       image: "/img/sale/summer-sale-2021.jpg",
+      server: Config.server,
     };
   },
 };
