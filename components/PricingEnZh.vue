@@ -7,7 +7,7 @@
         :image="`/img/courses/bundle-ultimate.jpg`"
       />
       <h3 class="mb-5 text-center">Pricing Chart</h3>
-      <Sale class="mb-5 rounded" />
+      <!-- <Sale class="mb-5 rounded" /> -->
       <div class="bg-success text-light p-3 text-center mb-5 rounded">
         <h4 class="mb-0">No subscriptions! 😊 Pay once, enjoy forever!</h4>
       </div>

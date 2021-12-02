@@ -69,7 +69,7 @@
               :key="`${term}-concordance`"
             />
           </div>
-          <Sale v-if="$l2.code === 'zh'" class="mb-5" />
+          <!-- <Sale v-if="$l2.code === 'zh'" class="mb-5" /> -->
         </div>
       </div>
     </div>

@@ -28,7 +28,7 @@
             </div>
           </div>
         </div>
-        <Sale class="mb-5" style="border-radius: 1rem !important" />
+        <!-- <Sale class="mb-5" style="border-radius: 1rem !important" /> -->
         <client-only>
           <div :class="{ 'row mb-5': true, 'd-none': !hasDashboard }">
             <div class="col-sm-12">
