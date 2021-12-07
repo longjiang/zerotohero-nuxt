@@ -1,4 +1,4 @@
-importScripts('https://server.chinesezerotohero.com/vendor/kuromoji/kuromoji.js')
+importScripts('../vendor/kuromoji/kuromoji.js')
 importScripts('../vendor/wanakana/wanakana.min.js')
 importScripts('../vendor/jpconjugations.js')
 
