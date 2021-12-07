@@ -1,4 +1,4 @@
-importScripts('../vendor/kuromoji/kuromoji.js')
+importScripts('https://server.chinesezerotohero.com/vendor/kuromoji/kuromoji.js')
 importScripts('../vendor/wanakana/wanakana.min.js')
 importScripts('../vendor/jpconjugations.js')
 
@@ -14,7 +14,7 @@ const Dictionary = {
     const server = 'https://server.chinesezerotohero.com/'
     this.file = `${server}data/edict/edict.tsv.txt`
     this.tokenizer = await new Promise(resolve => {
-      kuromoji.builder({ dicPath: `${server}data/kuromoji` }).build((err, tokenizer) => {
+      kuromoji.builder({ dicPath: `https://server.chinesezerotohero.com/data/kuromoji/` }).build((err, tokenizer) => {
         resolve(tokenizer)
       })
     })
