@@ -274,7 +274,8 @@ export default {
           let subs_l2 = await YouTube.getTranscript(
             video.youtube_id,
             video.l2Locale,
-            video.l2Name
+            video.l2Name,
+            this.$adminMode
           );
           Vue.set(this.video, "subs_l2", subs_l2);
           Vue.set(video, "checkingSubs", false);
@@ -283,8 +284,9 @@ export default {
           console.log(`YouTube View: Getting ${this.$l1.name} transcript`);
           let subs_l1 = await YouTube.getTranscript(
             video.youtube_id,
-            video.l1Locale,
-            video.l2Name
+            this.$l1.locales[0],
+            undefined,
+            this.$adminMode
           );
           Vue.set(this.video, "subs_l1", subs_l1);
         }

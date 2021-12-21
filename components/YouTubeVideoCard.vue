@@ -613,7 +613,8 @@ export default {
           video.subs_l2 = await YouTube.getTranscript(
             video.youtube_id,
             video.l2Locale,
-            video.l2Name
+            video.l2Name,
+            this.$adminMode
           );
         }
         if (video.subs_l2[0]) {
