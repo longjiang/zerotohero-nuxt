@@ -322,11 +322,7 @@ export default {
         let historyMatches = this.fullHistory.filter((path) => {
           if (path) {
             let r = this.$router.resolve(path);
-            return (
-              r &&
-              r.route &&
-              ["language-map"].includes(r.route.name)
-            );
+            return r && r.route && ["language-map"].includes(r.route.name);
           }
         });
         let path = historyMatches.pop();
@@ -355,11 +351,12 @@ export default {
     },
     parent() {
       let parent = this.menu.find((item) => {
-        if (this.$route.name === this.nameOfSelfOrFirstChild(item)) return true;
+        let nameOfItemOrFirstChild = this.nameOfSelfOrFirstChild(item, true);
+        if (nameOfItemOrFirstChild && this.$route.name === nameOfItemOrFirstChild) return true;
         let href = this.$router.resolve({
-          name: this.nameOfSelfOrFirstChild(item),
+          name: nameOfItemOrFirstChild,
         }).href;
-        if (this.$route.path.includes(href)) return true;
+        if (nameOfItemOrFirstChild && this.$route.path.includes(href)) return true;
         if (item.children) {
           let childrenNames = item.children.map((child) => child.name);
           if (childrenNames.includes(this.$route.name)) return true;
@@ -976,8 +973,8 @@ export default {
     hasFeature(feature) {
       return this.$hasFeature(feature);
     },
-    nameOfSelfOrFirstChild(item) {
-      let result = this.selfOrFirstChild(item);
+    nameOfSelfOrFirstChild(item, visibleOnly) {
+      let result = this.selfOrFirstChild(item, visibleOnly);
       if (result) {
         return result.name;
       }
