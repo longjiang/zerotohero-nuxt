@@ -21,26 +21,14 @@
         <div class="row pt-5 mb-5">
           <div class="col-sm-12">
             <div class="z2h-logo" style="line-height: 1.2">
-              <strong style="font-size: 3rem">zerotohero.ca</strong>
+              <strong style="font-size: 3rem">zerotohero.ca<sup>🇨🇦</sup></strong>
               <div class="mt-3" style="font-weight: 300; font-size: 1.6rem">
-                Learn any language by comprehensible input.
+                Achieve fluency in any language by comprehensible input.
               </div>
             </div>
           </div>
         </div>
         <!-- <Sale class="mb-5" style="border-radius: 1rem !important" /> -->
-        <client-only>
-          <div :class="{ 'row mb-5': true, 'd-none': !hasDashboard }">
-            <div class="col-sm-12">
-              <div class="home-card mb-0" style="padding: 1rem">
-                <LazyDashboard
-                  @hasDashboard="hasDashboardUpdate"
-                  style="padding-top: 0.5rem"
-                />
-              </div>
-            </div>
-          </div>
-        </client-only>
         <client-only>
           <div class="row mb-5">
             <div class="col-sm-12">
@@ -257,16 +245,14 @@
           <div class="row">
             <div class="col-sm-6 mb-5">
               <div class="home-card text-center">
-                <h5 class="mb-3">Compare Phrases Across Languages</h5>
-                <router-link to="/compare-languages">
-                  <div>
-                    <img
-                      src="/img/thumbnail-compare-languages.jpg"
-                      alt="Compare phrases across languages on a map"
-                      class="rounded shadow img-fluid"
-                      data-not-lazy
-                    />
-                  </div>
+                <h5 class="mb-3">Discover TV Shows Across Languages</h5>
+                <router-link to="/discover-shows">
+                  <img
+                    src="/img/thumbnail-discover-shows.jpg"
+                    alt="Discover TV Shows Across Languages"
+                    class="rounded shadow img-fluid"
+                    data-not-lazy
+                  />
                 </router-link>
               </div>
             </div>
@@ -274,6 +260,13 @@
               <div class="home-card">
                 <h5 class="mb-3 text-center">Other Interlingual Features</h5>
                 <ul>
+                  <li class="mt-1 mb-1">
+                    <router-link to="/compare-languages">
+                      <b>Compare Phrases Across Languages</b>
+                    </router-link>
+                    – Search for any word or phrase in English, and see the same
+                    phrase across all languages on a map.
+                  </li>
                   <li class="mt-1 mb-1">
                     <router-link to="/language-icons">
                       <b>Face of the Language</b>
@@ -292,6 +285,21 @@
               </div>
             </div>
           </div>
+          <client-only>
+            <div :class="{ 'row mb-5': true, 'd-none': !hasDashboard }">
+              <div class="col-sm-12">
+                <div class="home-card mb-0" style="padding: 1rem">
+                  <h5 class="text-center mt-3 mb-3">
+                    Your Language-Learning Dashboard
+                  </h5>
+                  <LazyDashboard
+                    @hasDashboard="hasDashboardUpdate"
+                    style="padding-top: 0.5rem"
+                  />
+                </div>
+              </div>
+            </div>
+          </client-only>
           <div class="row mb-5">
             <div class="col-sm-12">
               <div class="home-card">
