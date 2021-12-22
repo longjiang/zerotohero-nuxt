@@ -52,7 +52,7 @@
                     to="/language-map"
                     style="font-size: 1.5rem"
                   >
-                    Pick A Language
+                    Pick a Language
                     <i class="fa fa-chevron-right ml-2"></i>
                   </router-link>
                 </h4>
