@@ -23,13 +23,14 @@
         <div class="col-sm-12 mb-4">
           <!-- <Sale class="mt-4 mb-4" v-if="$l2.code === 'zh'" /> -->
           <h3 v-if="!keyword" class="mt-5 text-center">
-            {{ $t("{l2} Video Library", { l2: $t($l2.name) }) }}
+            New Videos
           </h3>
-          <p v-if="!keyword" class="mt-3 text-center">
-            Study {{ $l2.name }} videos with
-            {{ $l2.code === "zh" ? "Pinyin" : "" }} subtitles
-          </p>
-          <client-only>
+          <div
+            class="col-sm-12"
+          >
+            <LazyDiscoverPlayer class="mt-5" routeType="talks" :shows="[]" />
+          </div>
+          <!-- <client-only>
             <Nav
               :l1="$l1"
               :l2="$l2"
@@ -37,7 +38,7 @@
               class="youtube-browse-nav pt-4 pb-3"
               :showOnly="['Media']"
             />
-          </client-only>
+          </client-only> -->
           <client-only>
             <div
               class="d-flex mt-4 mb-3"

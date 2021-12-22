@@ -127,14 +127,12 @@ export default {
     },
     async loadRandomShow() {
       let randomShow = this.getRandomShow();
-      if (randomShow) {
-        let randomShowRandomEpisode = await this.getRandomEpisodeOfShow(
-          randomShow.id,
-          this.routeType.replace(/s$/, "").replace("-", "_")
-        );
-        this.randomShow = randomShow;
-        this.randomShowRandomEpisode = randomShowRandomEpisode;
-      }
+      let randomShowRandomEpisode = await this.getRandomEpisodeOfShow(
+        randomShow ? randomShow.id : undefined,
+        this.routeType.replace(/s$/, "").replace("-", "_")
+      );
+      this.randomShow = randomShow;
+      this.randomShowRandomEpisode = randomShowRandomEpisode;
     },
     getRandomShow() {
       if (this.shows) {
@@ -168,7 +166,10 @@ export default {
       }
     },
     async getRandomEpisodeOfShow(showId, showType) {
-      let url = `${Config.wiki}items/youtube_videos?filter[${showType}][eq]=${showId}&fields=youtube_id,id,l2`;
+      let showFilter = showId
+        ? `filter[${showType}][eq]=${showId}`
+        : `filter[tv_show][null]=1&filter[talk][null]=1&filter[l2][eq]=${this.$l2.id}"`;
+      let url = `${Config.wiki}items/youtube_videos?${showFilter}&fields=youtube_id,id,l2`;
       let response = await axios.get(url);
 
       if (response.data && response.data.data.length > 0) {
