@@ -13,8 +13,8 @@
           <p class="mt-5 mb-5" style="font-size: 1.2em">
             <b>
               Follow our Twitter account
-              <a href="https://twitter.com/panlingo" target="_blank">
-                @panlingo
+              <a href="https://twitter.com/zerotohero_ca" target="_blank">
+                @zerotohero_ca
               </a>
             </b>
             to keep yourself up-to-date with our latest features and
@@ -23,9 +23,9 @@
           <client-only>
             <a
               class="twitter-timeline"
-              href="https://twitter.com/panlingo?ref_src=twsrc%5Etfw"
+              href="https://twitter.com/zerotohero_ca?ref_src=twsrc%5Etfw"
             >
-              Tweets by @panlingo
+              Tweets by @zerotohero_ca
             </a>
           </client-only>
         </div>

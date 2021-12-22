@@ -370,136 +370,6 @@ export default {
     menu() {
       let items = [
         {
-          icon: "fas fa-graduation-cap",
-          title: "Courses",
-          show: this.hasFeature("courses"),
-          children: [
-            {
-              name: "courses",
-              title: "Courses",
-              icon: "fas fa-graduation-cap",
-              show: ["zh", "en"].includes(this.l2.code),
-            },
-            {
-              href: "https://chinesezerotohero.teachable.com/",
-              title: "Course Directory",
-              icon: "fa fa-folder-open",
-              show: ["zh"].includes(this.l2.code),
-            },
-            {
-              name: "hall-of-heroes",
-              icon: "fa fa-trophy",
-              title: "Heroes",
-              show: this.l1.code === "en" && this.l2.code === "zh",
-            },
-            {
-              name: "textbooks-workbooks",
-              title: "Textbooks",
-              icon: "fas fa-book",
-              show: ["zh", "en"].includes(this.l2.code),
-            },
-            {
-              name: "video-count",
-              title: "Video Count",
-              icon: "fas fa-list-ol",
-              show: this.l2.code === "zh",
-            },
-            {
-              name: "pricing",
-              title: "Pricing",
-              icon: "fas fa-tag",
-              show: this.l2.code === "zh",
-            },
-            {
-              name: "course-release-schedule",
-              title: "Schedule",
-              icon: "fas fa-clock",
-              show: this.l2.code === "zh",
-            },
-            {
-              name: "affiliate-program",
-              icon: "fas fa-money-check-alt",
-              show: true,
-              title: "Affiliate Program",
-            },
-          ],
-        },
-        {
-          icon: "fas fa-air-freshener",
-          title: "What’s New",
-          show: true,
-          children: [
-            {
-              name: "updates",
-              title: "Updates",
-              icon: "fab fa-twitter",
-              show: true,
-            },
-            {
-              name: "articles-wiki",
-              title: "Blog",
-              icon: "fas fa-copy",
-              show: true,
-            },
-          ],
-        },
-        {
-          icon: "fa fa-book",
-          title: "Dictionary",
-          name: "dictionary",
-          show: this.hasFeature("dictionary") || this.hasPhrasebooks,
-          children: [
-            {
-              name: "phrasebooks",
-              icon: "fa fa-comment-alt",
-              title: "Phrasebooks",
-              show: this.hasPhrasebooks,
-            },
-            {
-              name: "phrasebook",
-              show: false,
-            },
-            {
-              name: "phrasebook-phrase",
-              show: false,
-            },
-            {
-              name: "dictionary",
-              icon: "fa fa-search",
-              title: "Look Up Words",
-              show: this.hasFeature("dictionary"),
-              shortcut: (e) => e.code === "KeyD" && e.metaKey && e.shiftKey,
-            },
-            {
-              name: "phrase",
-              icon: "fas fa-search",
-              title: "Look Up Phrases",
-              show: false,
-              shortcut: (e) => e.code === "KeyP" && e.metaKey && e.shiftKey,
-            },
-            {
-              name: "saved-phrases",
-              icon: "fas fa-bookmark",
-              title: "Saved Phrases",
-              show: true,
-            },
-            {
-              name: "saved-words",
-              icon: "fas fa-star",
-              title: "Saved Words",
-              show: true,
-            },
-            {
-              name: "compare",
-              show: false,
-            },
-            {
-              name: "compare-phrases",
-              show: false,
-            },
-          ],
-        },
-        {
           icon: "fas fa-photo-video",
           title: "Media",
           show: this.hasFeature("youtube"),
@@ -572,6 +442,117 @@ export default {
             },
             {
               name: "youtube-channel",
+              show: false,
+            },
+          ],
+        },
+        {
+          icon: "fas fa-graduation-cap",
+          title: "Courses",
+          show: this.hasFeature("courses"),
+          children: [
+            {
+              name: "courses",
+              title: "Courses",
+              icon: "fas fa-graduation-cap",
+              show: ["zh", "en"].includes(this.l2.code),
+            },
+            {
+              href: "https://chinesezerotohero.teachable.com/",
+              title: "Course Directory",
+              icon: "fa fa-folder-open",
+              show: ["zh"].includes(this.l2.code),
+            },
+            {
+              name: "hall-of-heroes",
+              icon: "fa fa-trophy",
+              title: "Heroes",
+              show: this.l1.code === "en" && this.l2.code === "zh",
+            },
+            {
+              name: "textbooks-workbooks",
+              title: "Textbooks",
+              icon: "fas fa-book",
+              show: ["zh", "en"].includes(this.l2.code),
+            },
+            {
+              name: "video-count",
+              title: "Video Count",
+              icon: "fas fa-list-ol",
+              show: this.l2.code === "zh",
+            },
+            {
+              name: "pricing",
+              title: "Pricing",
+              icon: "fas fa-tag",
+              show: this.l2.code === "zh",
+            },
+            {
+              name: "course-release-schedule",
+              title: "Schedule",
+              icon: "fas fa-clock",
+              show: this.l2.code === "zh",
+            },
+            {
+              name: "affiliate-program",
+              icon: "fas fa-money-check-alt",
+              show: this.l2.code === "zh",
+              title: "Affiliate Program",
+            },
+          ],
+        },
+        {
+          icon: "fa fa-book",
+          title: "Dictionary",
+          name: "dictionary",
+          show: this.hasFeature("dictionary") || this.hasPhrasebooks,
+          children: [
+            {
+              name: "phrasebooks",
+              icon: "fa fa-comment-alt",
+              title: "Phrasebooks",
+              show: this.hasPhrasebooks,
+            },
+            {
+              name: "phrasebook",
+              show: false,
+            },
+            {
+              name: "phrasebook-phrase",
+              show: false,
+            },
+            {
+              name: "dictionary",
+              icon: "fa fa-search",
+              title: "Look Up Words",
+              show: this.hasFeature("dictionary"),
+              shortcut: (e) => e.code === "KeyD" && e.metaKey && e.shiftKey,
+            },
+            {
+              name: "phrase",
+              icon: "fas fa-search",
+              title: "Look Up Phrases",
+              show: false,
+              shortcut: (e) => e.code === "KeyP" && e.metaKey && e.shiftKey,
+            },
+            {
+              name: "saved-phrases",
+              icon: "fas fa-bookmark",
+              title: "Saved Phrases",
+              show: true,
+            },
+            {
+              name: "saved-words",
+              icon: "fas fa-star",
+              title: "Saved Words",
+              show: true,
+            },
+            {
+              name: "compare",
+              show: false,
+            },
+            {
+              name: "compare-phrases",
               show: false,
             },
           ],
@@ -735,6 +716,25 @@ export default {
               title: "Pinyin List",
               icon: "fa fa-list",
               show: this.l2.code === "zh",
+            },
+          ],
+        },
+        {
+          icon: "fas fa-bell",
+          title: "What’s New",
+          show: true,
+          children: [
+            {
+              name: "updates",
+              title: "Updates",
+              icon: "fab fa-twitter",
+              show: true,
+            },
+            {
+              name: "articles-wiki",
+              title: "Blog",
+              icon: "fas fa-copy",
+              show: true,
             },
           ],
         },

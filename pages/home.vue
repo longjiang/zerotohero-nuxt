@@ -15,13 +15,6 @@
     <div class="container pt-5 pb-5">
       <div class="row">
         <div class="col-sm-12">
-          <div class="p-1">
-            <h3 class="home-intro-text font-weight-normal">
-              {{
-                $t("For the love of the {l2} language.", { l2: $t($l2.name) })
-              }}
-            </h3>
-          </div>
           <!-- <Sale class="mt-4 mb-4" v-if="$l2.code === 'zh'" /> -->
           <client-only>
             <div :class="{ 'pl-1 pr-1 pb-2': true, 'd-none': !hasDashboard }">
@@ -35,14 +28,17 @@
               </div>
             </div>
           </client-only>
-          <div :class="{ 'pl-1 pr-1 pb-2': true }">
-            <div class="home-card text-white">
-              <LazyLanguageInfoBox :lang="$l2" />
-            </div>
-          </div>
           <client-only>
             <Nav :l1="$l1" :l2="$l2" variant="page" class="pb-2" />
           </client-only>
+          <div :class="{ 'pl-1 pr-1 pb-2': true }" v-if="$l2.identicalLangs">
+            <div class="home-card">
+              <LazyIdenticalLanguages
+                routeName="home"
+                style="padding: 0; background: none"
+              />
+            </div>
+          </div>
           <div :class="{ 'pl-1 pr-1 pb-2': true }" v-if="$l2.han">
             <div class="home-card">
               <h4 class="text-center mb-4">Dialects of Chinese</h4>
@@ -56,12 +52,9 @@
               <FiftySixEthnic skin="dark" />
             </div>
           </div>
-          <div :class="{ 'pl-1 pr-1 pb-2': true }" v-if="$l2.identicalLangs">
-            <div class="home-card">
-              <LazyIdenticalLanguages
-                routeName="home"
-                style="padding: 0; background: none"
-              />
+          <div :class="{ 'pl-1 pr-1 pb-2': true }">
+            <div class="home-card text-white">
+              <LazyLanguageInfoBox :lang="$l2" />
             </div>
           </div>
         </div>
