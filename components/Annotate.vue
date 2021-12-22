@@ -159,6 +159,7 @@ export default {
       batchId: 0,
       text: "",
       Helper,
+      isVisible: false,
       textMode: false,
       tokenized: [],
       dictionary: undefined,
@@ -249,8 +250,10 @@ export default {
       document.execCommand("copy");
       document.body.removeChild(tempInput);
     },
-    visibilityChanged(isVisible) {
-      if (isVisible) {
+    async visibilityChanged(isVisible) {
+      this.isVisible = isVisible 
+      await Helper.delay(300)
+      if (this.isVisible) {
         this.convertToSentencesAndAnnotate(this.$slots.default[0]);
       }
     },
@@ -285,7 +288,7 @@ export default {
       this.annotating = true;
       this.annotatedSlots = [];
       this.annotatedSlots.push(
-        $(await this.annotateRecursive(node.cloneNode(true)))[0].outerHTML
+        trim($(await this.annotateRecursive(node.cloneNode(true)))[0].outerHTML)
       );
       this.annotating = false;
       this.annotated = true;

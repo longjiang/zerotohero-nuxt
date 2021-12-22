@@ -527,7 +527,7 @@ const Dictionary = {
     if (longest.matches.length > 0) {
       for (let word of longest.matches) {
         longest.matches = longest.matches.concat(this.stemWords(word, 1))
-        longest.matches = longest.matches.concat(this.phrases(word, 1))
+        // longest.matches = longest.matches.concat(this.phrases(word, 1)) // This is very slow
       }
       let result = []
       /* 
