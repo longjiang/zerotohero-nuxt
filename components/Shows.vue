@@ -4,10 +4,10 @@
       <SocialHead
         v-if="shows && shows[0]"
         :title="`Learn ${$l2.name} with ${
-          routeType === 'tv-shows' ? 'TV Shows' : 'Talks'
+          routeType === 'tv-shows' ? 'TV Shows' : 'YouTube Channels'
         } | ${$l2.name} Zero to Hero`"
         :description="`Learn ${$l2.name} with ${
-          routeType === 'tv-shows' ? 'TV Shows' : 'Talks'
+          routeType === 'tv-shows' ? 'TV Shows' : 'YouTube Channels'
         }.`"
         :image="
           routeType === 'tv-shows' && $l2.code === 'zh'
@@ -20,7 +20,7 @@
           <!-- <Sale class="mt-5 mb-5" v-if="$l2.code === 'zh'" /> -->
           <h3 class="text-center mt-5">
             Study {{ $l2.name }} with
-            {{ routeType === "tv-shows" ? "TV Shows" : "Talks" }}
+            {{ routeType === "tv-shows" ? "TV Shows" : "YouTube Channels" }}
           </h3>
           <p class="text-center mb-5" v-if="shows && shows.length">
             ({{ filteredShows && filteredShows.length }} show{{
@@ -54,7 +54,7 @@
               </div>
               <div class="text-center" v-if="shows && shows.length === 0">
                 Sorry, we could not find any
-                {{ routeType === "tv-shows" ? "TV shows" : "talks" }} in
+                {{ routeType === "tv-shows" ? "TV shows" : "YouTube Channels" }} in
                 {{ $l2.name }} 😭.
               </div>
               <ShowList
