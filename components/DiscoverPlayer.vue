@@ -2,7 +2,7 @@
   <div class="widget widget-dark mb-5" style="max-width: 70vh; margin: 0 auto">
     <div class="widget-title">
       <span style="font-weight: normal">
-        A Random {{ routeType === "tv-shows" ? "TV Show" : "Talk" }} Episode
+        A Random {{ routeType === "tv-shows" ? "TV Show Episode" : "Video" }}
         {{ randomShowFirstEpisodeL2 ? "in " : "" }}
       </span>
       <span style="font-weight: bold; color: white">
@@ -41,12 +41,12 @@
         }"
         class="btn btn-ghost-dark-no-bg"
       >
-        <i class="fas fa-align-left mr-1"></i>
-        Transcript
+        <i class="fas fa-play mr-1"></i>
+        {{ $t('Watch Full') }}
       </router-link>
       <b-button variant="ghost-dark-no-bg" @click="loadRandomShow">
         <i class="fas fa-step-forward mr-1"></i>
-        Another One
+        {{ $t('Another One') }}
       </b-button>
       <b-button
         variant="ghost-dark-no-bg"
