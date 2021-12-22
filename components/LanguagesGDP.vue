@@ -1,7 +1,7 @@
 <template>
   <div class="lang-gdp">
     <p class="text-center text-secondary">
-      Languages by % of World GDP PPP 2018 (
+      Based on GDP PPP 2018 (
       <a
         href="https://www.reddit.com/r/languagelearning/comments/9i72xd/the_20_languages_that_produce_86_of_the_worlds/"
         target="_blank"
@@ -22,6 +22,7 @@
           v-if="lang && lang.lang"
           :langs="[lang.lang]"
           :singleColumn="true"
+          :showSpeakers="false"
         />
         <div v-else>{{ lang.name }}</div>
       </div>

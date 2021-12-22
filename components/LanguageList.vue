@@ -64,7 +64,7 @@
             "
             class="language-list-item-speakers"
           >
-            {{ speakers(language.speakers) }}
+            {{ speakers(language.speakers) }} Speakers
           </span>
         </li>
       </ul>
