@@ -28,7 +28,7 @@
           <div
             class="col-sm-12"
           >
-            <LazyDiscoverPlayer class="mt-5" routeType="talks" :shows="[]" />
+            <LazyDiscoverPlayer v-if="videos && videos[0]" class="mt-5" routeType="talks" :shows="[]" />
           </div>
           <!-- <client-only>
             <Nav
