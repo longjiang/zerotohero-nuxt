@@ -288,7 +288,7 @@ export default {
       this.annotating = true;
       this.annotatedSlots = [];
       this.annotatedSlots.push(
-        trim($(await this.annotateRecursive(node.cloneNode(true)))[0].outerHTML)
+        $(await this.annotateRecursive(node.cloneNode(true)))[0].outerHTML
       );
       this.annotating = false;
       this.annotated = true;
@@ -416,7 +416,7 @@ export default {
       if (node.nodeType === 3) {
         // textNode
         // break setnences
-        let text = node.nodeValue;
+        let text = node.nodeValue.trimStart();
         text = text.replace(/\n\u200e/g, "\n"); // Fix error when \n and a left-to-right mark are found together and mess up with the order of words.
         let sentences = this.breakSentences(text);
         for (let sentence of sentences) {
