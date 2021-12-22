@@ -16,18 +16,12 @@
     <div class="container-fluid">
       <div
         class="row bg-dark text-white pt-2 pb-2 text-left"
-        style="overflow: visible"
+        style="overflow: visible; height: 54px"
       >
         <div class="col-sm-12 d-flex" style="overflow: visible">
-          <div class="mr-3 d-flex align-items-center">
+          <div class="mr-3 d-flex align-items-center" >
             <router-link to="/" class="link-unstyled">
-              <img
-                src="/img/logo-panlingo-white.svg"
-                alt="PanLingo"
-                class="site-top-bar-logo"
-                style="display: inline-block; height: 1.3rem"
-                data-not-lazy
-              />
+              <i class="fa fa-chevron-left mr-2"></i>Home
             </router-link>
           </div>
         </div>
