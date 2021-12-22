@@ -293,6 +293,8 @@ export default {
   overflow: scroll;
   border-radius: 0.3rem;
   background: white;
+  color: #666;
+  text-align: left;
   z-index: 10;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
   position: fixed;
