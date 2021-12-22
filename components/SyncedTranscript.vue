@@ -342,12 +342,14 @@ export default {
         // Assign parallel lines to this line if the parallel line starts before
         matchedParallelLines[lineIndex] = this.parallellines
           .filter((parallelLine, parallelLineIndex) => {
-            if (!parallelLine) return false
-            let nextParallelLine = this.parallellines[parallelLineIndex + 1]
-            let medianTime = nextParallelLine ? (parallelLine.starttime + nextParallelLine.starttime) / 2 : parallelLine.starttime
+            if (!parallelLine) return false;
+            let nextParallelLine = this.parallellines[parallelLineIndex + 1];
+            let medianTime = nextParallelLine
+              ? (parallelLine.starttime + nextParallelLine.starttime) / 2
+              : parallelLine.starttime;
             if (medianTime >= line.starttime) {
-              if (!nextLine) return true
-              else return medianTime <= nextLine.starttime
+              if (!nextLine) return true;
+              else return medianTime <= nextLine.starttime;
             }
           })
           .map((l) => l.line)
@@ -568,10 +570,12 @@ export default {
       )
         return true;
       if (!this.$l2.continua) {
-        return (
-          new RegExp(`[ .,:!?]${form}[ .,:!?]`, "gi").test(line.line) ||
-          new RegExp(`^${form}[ .,:!?]`, "gi").test()
-        );
+        try {
+          return (
+            new RegExp(`[ .,:!?]${form}[ .,:!?]`, "gi").test(line.line) ||
+            new RegExp(`^${form}[ .,:!?]`, "gi").test()
+          );
+        } catch (err) {}
       }
     },
     async generateReviewItem(lineIndex, form, word) {
@@ -656,6 +660,7 @@ export default {
       this.goToLine(this.nextLine || this.lines[0]);
     },
     goToLine(line) {
+      if (!line) return;
       this.currentLineIndex = this.lines.findIndex((l) => l === line);
       this.nextLine = this.lines[this.currentLineIndex + 1];
       this.seekVideoTo(line.starttime);
