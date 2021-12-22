@@ -295,7 +295,7 @@ export default {
               video.youtube_id,
               video.l2Locale,
               video.l2Name,
-              this.$l1.code,
+              this.$l1.code === 'zh' ? 'zh-Hans' : this.$l1.code,
               this.$adminMode
             );
 
