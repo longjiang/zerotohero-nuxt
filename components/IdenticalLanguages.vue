@@ -1,5 +1,5 @@
 <template>
-  <div class="identical-languages">
+  <div class="identical-languages" v-if="$l2.identicalLangs">
     Additional content is available
     <client-only>
       <span v-if="$l2.identicalLangs">
