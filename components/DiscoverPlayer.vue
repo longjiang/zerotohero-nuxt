@@ -3,37 +3,37 @@
     <div class="widget-title">
       <span style="font-weight: normal">
         A Random {{ routeType === "tv-shows" ? "TV Show Episode" : "Video" }}
-        {{ randomShowFirstEpisodeL2 ? "in " : "" }}
+        {{ randomShowRandomEpisodeL2 ? "in " : "" }}
       </span>
       <span style="font-weight: bold; color: white">
         {{
-          randomShowFirstEpisodeL2
-            ? `${randomShowFirstEpisodeL2.name} (${randomShowFirstEpisodeL2.code})`
+          randomShowRandomEpisodeL2
+            ? `${randomShowRandomEpisodeL2.name} (${randomShowRandomEpisodeL2.code})`
             : ""
         }}
       </span>
     </div>
-    <div class="text-center pt-5 pb-5" v-if="!randomShowFirstEpisode">
+    <div class="text-center pt-5 pb-5" v-if="!randomShowRandomEpisode">
       <Loader :sticky="true" message="Getting shows..." />
     </div>
     <LazyYouTubeVideo
-      v-if="randomShowFirstEpisode"
+      v-if="randomShowRandomEpisode"
       initialLayout="vertical"
-      :youtube="randomShowFirstEpisode.youtube_id"
+      :youtube="randomShowRandomEpisode.youtube_id"
       :ref="`youtube`"
       :autoload="true"
       :autoplay="true"
       :startAtRandomTime="true"
       @currentTime="updateCurrentTime"
     />
-    <div class="text-center pt-3 pb-3" v-if="randomShowFirstEpisode">
+    <div class="text-center pt-3 pb-3" v-if="randomShowRandomEpisode">
       <router-link
         :to="{
           name: 'youtube-view',
           params: {
-            l1: $l1 ? $l1.code : l1Code(randomShowFirstEpisodeL2Code),
-            l2: $l2 ? $l2.code : randomShowFirstEpisodeL2Code,
-            youtube_id: randomShowFirstEpisode.youtube_id,
+            l1: $l1 ? $l1.code : l1Code(randomShowRandomEpisodeL2Code),
+            l2: $l2 ? $l2.code : randomShowRandomEpisodeL2Code,
+            youtube_id: randomShowRandomEpisode.youtube_id,
           },
           query: {
             t: currentTime,
@@ -42,16 +42,16 @@
         class="btn btn-ghost-dark-no-bg"
       >
         <i class="fas fa-play mr-1"></i>
-        {{ $t('Watch Full') }}
+        {{ $t("Watch Full") }}
       </router-link>
       <b-button variant="ghost-dark-no-bg" @click="loadRandomShow">
         <i class="fas fa-step-forward mr-1"></i>
-        {{ $t('Another One') }}
+        {{ $t("Another One") }}
       </b-button>
       <b-button
         variant="ghost-dark-no-bg"
         v-if="$adminMode"
-        @click="removeEpisode(randomShowFirstEpisode)"
+        @click="removeEpisode(randomShowRandomEpisode)"
       >
         <i class="fas fa-trash"></i>
       </b-button>
@@ -76,7 +76,7 @@ export default {
       currentTime: 0,
       randomShow: undefined,
       randomShowId: undefined,
-      randomShowFirstEpisode: undefined,
+      randomShowRandomEpisode: undefined,
     };
   },
   computed: {
@@ -92,16 +92,16 @@ export default {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
     },
-    randomShowFirstEpisodeL2() {
-      if (this.randomShowFirstEpisode) {
-        let l2Id = this.randomShowFirstEpisode.l2;
+    randomShowRandomEpisodeL2() {
+      if (this.randomShowRandomEpisode) {
+        let l2Id = this.randomShowRandomEpisode.l2;
         let l2 = this.$languages.getById(l2Id);
         return l2;
       }
     },
-    randomShowFirstEpisodeL2Code() {
-      if (this.randomShowFirstEpisodeL2) {
-        return this.randomShowFirstEpisodeL2.code;
+    randomShowRandomEpisodeL2Code() {
+      if (this.randomShowRandomEpisodeL2) {
+        return this.randomShowRandomEpisodeL2.code;
       }
     },
   },
@@ -117,9 +117,9 @@ export default {
     l1Code() {
       return Helper.l1Code(...arguments);
     },
-    async removeEpisode(randomShowFirstEpisode) {
+    async removeEpisode(randomShowRandomEpisode) {
       let response = await axios.delete(
-        `${Config.wiki}items/youtube_videos/${randomShowFirstEpisode.id}`
+        `${Config.wiki}items/youtube_videos/${randomShowRandomEpisode.id}`
       );
       if (response) {
         this.loadRandomShow();
@@ -128,12 +128,12 @@ export default {
     async loadRandomShow() {
       let randomShow = this.getRandomShow();
       if (randomShow) {
-        let randomShowFirstEpisode = await this.getFirstEpisodeOfShow(
+        let randomShowRandomEpisode = await this.getRandomEpisodeOfShow(
           randomShow.id,
           this.routeType.replace(/s$/, "").replace("-", "_")
         );
         this.randomShow = randomShow;
-        this.randomShowFirstEpisode = randomShowFirstEpisode;
+        this.randomShowRandomEpisode = randomShowRandomEpisode;
       }
     },
     getRandomShow() {
@@ -165,6 +165,16 @@ export default {
         let videos = response.data.data;
         let firstEpisode = videos[0];
         return firstEpisode;
+      }
+    },
+    async getRandomEpisodeOfShow(showId, showType) {
+      let url = `${Config.wiki}items/youtube_videos?filter[${showType}][eq]=${showId}&fields=youtube_id,id,l2`;
+      let response = await axios.get(url);
+
+      if (response.data && response.data.data.length > 0) {
+        let videos = response.data.data;
+        let randomEpisode = videos[Math.floor(Math.random() * videos.length)];
+        return randomEpisode;
       }
     },
   },
