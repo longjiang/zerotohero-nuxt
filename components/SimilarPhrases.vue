@@ -4,7 +4,7 @@
       <div v-if="!autoLoad && showButton">
         <div>
           See words that mean
-          <b>“{{ translation }}”</b>
+          <b>“<span :class="{ transparent: hideDefinitions }">{{ translation }}</span>”</b>
           across all languages:
         </div>
         <b-button
@@ -142,6 +142,9 @@ export default {
     },
     sort: {
       default: true,
+    },
+    hideDefinitions: {
+      default: false,
     },
   },
   data() {

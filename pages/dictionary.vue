@@ -145,6 +145,7 @@
                 v-if="entry.definitions && entry.definitions.length > 0"
                 :phrase="entry.head"
                 :translation="similarPhraseTranslation"
+                :hideDefinitions="hideDefinitions"
                 class="text-center"
               />
             </div>
