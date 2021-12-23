@@ -70,6 +70,7 @@
               @hideDefinitions="hideDefinitions = arguments[0]"
               @hidePhonetics="hidePhonetics = arguments[0]"
             />
+            <hr class="mb-4" />
             <client-only>
               <div v-if="saved() && sW.length > 0" class="text-center mb-4">
                 <router-link
@@ -95,7 +96,7 @@
               <div class="text-center mb-4" v-if="words && words.length > 1">
                 <b-dropdown
                   size="sm"
-                  variant="gray"
+                  variant="primary"
                   :items="words"
                   text="Disambiguation"
                   menu-class="disambiguation-dropdown"
@@ -139,6 +140,7 @@
                 class="mt-4 mb-4 text-center"
                 style="margin-bottom: 0"
               />
+              <hr class="mb-3" />
               <SimilarPhrases
                 v-if="entry.definitions && entry.definitions.length > 0"
                 :phrase="entry.head"
@@ -486,7 +488,7 @@ export default {
   .content-pane-left {
     overflow-y: scroll;
     padding: 1rem;
-    padding-top: 6rem;
+    padding-top: 5.2rem;
     ::v-deep .entry-word {
       font-size: 2rem;
     }

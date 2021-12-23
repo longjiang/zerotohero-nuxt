@@ -18,7 +18,7 @@
     >
       <i class="far fa-eye-slash" v-if="hideDefinitions"></i>
       <i class="far fa-eye" v-else></i>
-      <span class="ml-1">Definitions</span>
+      <span class="ml-1">Defs</span>
     </b-button>
     <b-button
       variant="unstyled"

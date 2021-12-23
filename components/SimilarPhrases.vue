@@ -1,14 +1,22 @@
 <template>
   <container-query :query="query" v-model="params">
     <div class="similar-phrases">
-      <b-button
-        @click="getSimilarPhrases"
-        v-if="!autoLoad && showButton"
-        size="sm"
-        variant="primary"
-      >
-        {{ $t("Compare Languages") }}
-      </b-button>
+      <div v-if="!autoLoad && showButton">
+        <div>
+          See words that mean
+          <b>“{{ translation }}”</b>
+          across all languages:
+        </div>
+        <b-button
+          @click="getSimilarPhrases"
+          size="sm"
+          href="#"
+          variant="secondary"
+          class="mt-2"
+        >
+          Show Words
+        </b-button>
+      </div>
       <div
         :class="{
           'similar-phrases-list': true,
@@ -349,19 +357,19 @@ export default {
       return phrases;
     },
     normalizeTranslation(translation) {
-      if (!translation) return translation
+      if (!translation) return translation;
       let normalized = translation;
       normalized = normalized.replace(/\(.*\)/g, "");
       normalized = normalized.split(/[,;|]/)[0];
       normalized = normalized.toUpperCase();
-      normalized = normalized.trim()
+      normalized = normalized.trim();
       return normalized;
     },
     normalizePhrase(phrase) {
-      if (!phrase) return phrase
+      if (!phrase) return phrase;
       let normalized = phrase;
       normalized = normalized.toUpperCase();
-      normalized = normalized.trim()
+      normalized = normalized.trim();
       return normalized;
     },
     separatePhrases(phrases) {
