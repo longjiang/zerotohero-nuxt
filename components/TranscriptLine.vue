@@ -37,7 +37,7 @@
         v-if="!showSubsEditing"
         @textChanged="lineChanged(line, ...arguments)"
       >
-        <span v-html="lineHtml(line)" />
+        <span v-html="lineHtml(line).trim()" />
       </Annotate>
       <div v-else v-html="lineHtml(line)" />
       <div

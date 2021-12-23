@@ -416,7 +416,7 @@ export default {
       if (node.nodeType === 3) {
         // textNode
         // break setnences
-        let text = node.nodeValue.trimStart();
+        let text = node.nodeValue;
         text = text.replace(/\n\u200e/g, "\n"); // Fix error when \n and a left-to-right mark are found together and mess up with the order of words.
         let sentences = this.breakSentences(text);
         for (let sentence of sentences) {
