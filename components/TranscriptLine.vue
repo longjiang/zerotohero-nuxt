@@ -41,7 +41,7 @@
       </Annotate>
       <div v-else v-html="lineHtml(line)" />
       <div
-        v-if="parallelLine"
+        v-if="line.line.length > 0 && parallelLine"
         :class="{
           'transcript-line-l1': true,
           'pl-3': !single && $l2.direction === 'ltr',
