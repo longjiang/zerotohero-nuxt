@@ -20,7 +20,6 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
 import $ from "jquery";
 
 export default {
@@ -131,14 +130,13 @@ export default {
       let id = this.$el.querySelector(".youtube-iframe").getAttribute("id");
       this.removeYouTubeAPIVars();
       window.onYouTubePlayerAPIReady = () => {
-        // eslint-disable-next-line no-undef
         this.player = new YT.Player(id, {
           height: "390",
           width: "640",
           videoId: this.youtube,
           playerVars: {
             start: parseInt(this.starttime),
-            autoplay: this.autoplay ? 1 : 0,
+            // autoplay: this.autoplay ? 1 : 0,
             cc_load_policy: 1,
             cc_lang_pref: this.langPref,
             showinfo: 0,
@@ -169,7 +167,7 @@ export default {
                 }
                 if (this.startAtRandomTime && !this.randomSeeked) {
                   this.randomSeeked = true;
-                  let startAtRandomTime = Math.random() * this.duration;
+                  let startAtRandomTime = Math.random() * this.duration * 0.8;
                   this.seek(startAtRandomTime);
                 }
                 if (state === PLAYING) {
@@ -188,7 +186,9 @@ export default {
                 }
               }
             },
-            onReady: () => {},
+            onReady: () => {
+              if (this.autoplay) this.player.playVideo()
+            },
           },
         });
       };
