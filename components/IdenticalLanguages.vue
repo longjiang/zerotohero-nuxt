@@ -1,9 +1,8 @@
 <template>
   <div class="identical-languages" v-if="$l2.identicalLangs">
-    Additional content is available
+    For more content, please go to:
     <client-only>
       <span v-if="$l2.identicalLangs">
-        under:
         <span
           v-for="(lang, index) of $l2.identicalLangs"
           :key="`identical-lang-${index}`"
@@ -14,9 +13,7 @@
             class="link-unstyled identical-language-item-name"
             :to="{ name: routeName, params: { l1: $l1.code, l2: lang.code } }"
           >
-            <b>
-              {{ lang.name }}
-            </b>
+            <b style="text-decoration: underline">{{ lang.name }}</b>
             ({{ lang.code }})
           </router-link>
         </span>
@@ -48,12 +45,12 @@ export default {
 
 <style lang="scss" scoped>
 .identical-languages {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 1);
 }
 .identical-languages {
   text-align: center;
   padding: 2rem;
-  font-size: 1.1em;
+  font-size: 1.3em;
   border-radius: 0.5rem;
   background: rgba(37, 36, 44, 0.651);
   .identical-language-item-name {

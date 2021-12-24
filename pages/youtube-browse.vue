@@ -104,6 +104,7 @@
             <Loader :sticky="true" message="Loading videos in our library..." />
           </div>
           <div v-observe-visibility="visibilityChanged"></div>
+          <LazyIdenticalLanguages class="mb-4 bg-success" routeName="youtube-browse" />
           <div
             :class="{
               'no-videos-message': true,
@@ -119,7 +120,6 @@
             <h5 v-else>Help us expand our library!</h5>
             <LazyHowToContribute />
           </div>
-          <LazyIdenticalLanguages class="mt-4" routeName="youtube-browse" />
           <client-only>
             <Nav
               :l1="$l1"

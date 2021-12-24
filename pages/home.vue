@@ -32,7 +32,7 @@
             <Nav :l1="$l1" :l2="$l2" variant="page" class="pb-2" />
           </client-only>
           <div :class="{ 'pl-1 pr-1 pb-2': true }" v-if="$l2.identicalLangs">
-            <div class="home-card">
+            <div class="home-card bg-success">
               <LazyIdenticalLanguages
                 routeName="home"
                 style="padding: 0; background: none"
