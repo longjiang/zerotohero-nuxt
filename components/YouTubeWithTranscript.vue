@@ -317,6 +317,7 @@
         <div
           :key="'transcript-' + video.youtube_id"
           class="col-sm-12 text-center mt-2 synced-transcript-wrapper"
+          style="min-height: 65px"
         >
           <SyncedTranscript
             ref="transcript"
