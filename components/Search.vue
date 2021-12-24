@@ -264,10 +264,11 @@ export default {
   position: absolute;
   z-index: 9;
   border-radius: 0.3rem;
-  overflow: hidden;
+  overflow: scroll;
   border: 1px solid #ccc;
   width: 100%;
   top: 2.9rem;
+  max-height: calc(100vh - 5rem)
 }
 
 .suggestion,
