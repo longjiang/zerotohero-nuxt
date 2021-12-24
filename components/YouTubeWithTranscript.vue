@@ -348,6 +348,7 @@
 import Vue from "vue";
 import DateHelper from "@/lib/date-helper";
 import Helper from "@/lib/helper";
+import YouTube from "@/lib/youtube";
 
 export default {
   props: {
@@ -474,14 +475,63 @@ export default {
       return episode.youtube_id;
     },
   },
-  updated() {
+  async mounted() {
+    await this.getL1Transcript();
+  },
+  async updated() {
     if (this.$refs.transcript) {
       this.$refs.transcript.repeatMode = this.repeatMode;
       this.$refs.transcript.audioMode = this.audioMode;
     }
     if (this.$refs.youtube) this.$refs.youtube.speed = this.speed;
   },
+  watch: {
+    async video() {
+      await this.getL1Transcript();
+    },
+    startLineIndex() {
+      if (this.$refs.youtube.player && this.$refs.youtube.player.seekTo) {
+        this.rewind();
+      }
+    },
+    repeatMode() {
+      if (this.$refs.transcript)
+        this.$refs.transcript.repeatMode = this.repeatMode;
+    },
+    audioMode() {
+      if (this.$refs.transcript)
+        this.$refs.transcript.audioMode = this.audioMode;
+    },
+  },
   methods: {
+    async getL1Transcript() {
+      let video = this.video;
+      if (!video) return;
+      let missingSubsL1 = !this.video.subs_l1;
+      if (missingSubsL1) {
+        console.log(`YouTube with Transcript: Getting available transcripts...`);
+        video = await YouTube.getYouTubeSubsList(video, this.$l1, this.$l2);
+        console.log(
+          `YouTube with Transcript: Getting ${this.$l1.name} transcript`
+        );
+        let subs_l1;
+        if (video.l1Locale && video.l1Locale !== video.l2Locale) {
+          subs_l1 = await YouTube.getTranscript(
+            video.youtube_id,
+            this.$l1.locales[0],
+            undefined
+          );
+        } else {
+          subs_l1 = await YouTube.getTranslatedTranscript(
+            video.youtube_id,
+            video.l2Locale,
+            video.l2Name,
+            this.$l1.code === "zh" ? "zh-Hans" : this.$l1.code
+          );
+        }
+        if (subs_l1) Vue.set(this.video, "subs_l1", subs_l1);
+      }
+    },
     updateDuration(duration) {
       this.duration = duration;
     },
@@ -634,21 +684,6 @@ export default {
     toggleFullscreenMode() {
       this.layout = this.layout === "horizontal" ? "vertical" : "horizontal";
       this.$emit("updateLayout", this.layout);
-    },
-  },
-  watch: {
-    startLineIndex() {
-      if (this.$refs.youtube.player && this.$refs.youtube.player.seekTo) {
-        this.rewind();
-      }
-    },
-    repeatMode() {
-      if (this.$refs.transcript)
-        this.$refs.transcript.repeatMode = this.repeatMode;
-    },
-    audioMode() {
-      if (this.$refs.transcript)
-        this.$refs.transcript.audioMode = this.audioMode;
     },
   },
 };
