@@ -491,7 +491,7 @@ export default {
       await this.getL1Transcript();
     },
     startLineIndex() {
-      if (this.$refs.youtube.player && this.$refs.youtube.player.seekTo) {
+      if (this.$refs.youtube && this.$refs.youtube.player && this.$refs.youtube.player.seekTo) {
         this.rewind();
       }
     },

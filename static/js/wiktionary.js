@@ -40,6 +40,7 @@ const Dictionary = {
         .replace('nor', 'nob') // Default Norwegian to Bokmål (which is supplemented with Nynorsk)
         .replace('srp', 'hbs') // Croatian uses Serbo-Croatian
         .replace('bos', 'hbs') // Bosnian uses Serbo-Croatian
+        .replace('cnr', 'hbs') // Montenegrin uses Serbo-Croatian
         .replace('run', 'kin') // Rundi uses Rwanda-Rundi
         .replace('hbo', 'heb') // Ancient Hebrew uses Hebrew
         .replace('grc', 'ell') // Ancient Greek uses Greek
