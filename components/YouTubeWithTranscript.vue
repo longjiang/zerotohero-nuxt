@@ -519,7 +519,7 @@ export default {
         if (video.l1Locale && video.l1Locale !== video.l2Locale) {
           subs_l1 = await YouTube.getTranscript(
             video.youtube_id,
-            this.$l1.locales[0],
+            video.l1Locale,
             undefined
           );
         } else {
