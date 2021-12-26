@@ -112,7 +112,7 @@
                   params: { youtube_id: channel.videos[0].youtube_id },
                 }"
               >
-                {{ channel.videos[0].title.slice(0,30) }}
+                {{ channel.videos[0].title ? channel.videos[0].title.slice(0,30) : '(Untitled)' }}
               </router-link>
             </div>
           </div>
