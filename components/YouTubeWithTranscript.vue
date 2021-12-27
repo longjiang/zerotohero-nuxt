@@ -491,7 +491,11 @@ export default {
       await this.getL1Transcript();
     },
     startLineIndex() {
-      if (this.$refs.youtube && this.$refs.youtube.player && this.$refs.youtube.player.seekTo) {
+      if (
+        this.$refs.youtube &&
+        this.$refs.youtube.player &&
+        this.$refs.youtube.player.seekTo
+      ) {
         this.rewind();
       }
     },
@@ -510,7 +514,9 @@ export default {
       if (!video) return;
       let missingSubsL1 = !this.video.subs_l1;
       if (missingSubsL1) {
-        console.log(`YouTube with Transcript: Getting available transcripts...`);
+        console.log(
+          `YouTube with Transcript: Getting available transcripts...`
+        );
         video = await YouTube.getYouTubeSubsList(video, this.$l1, this.$l2);
         console.log(
           `YouTube with Transcript: Getting ${this.$l1.name} transcript`
@@ -522,6 +528,14 @@ export default {
             video.l1Locale,
             undefined
           );
+          if (!subs_l1 || !subs_l1[0]) {
+            subs_l1 = await YouTube.getTranscript(
+              video.youtube_id,
+              video.l1Locale,
+              undefined,
+              true // force refresh if no subs found
+            );
+          }
         } else {
           subs_l1 = await YouTube.getTranslatedTranscript(
             video.youtube_id,
@@ -529,6 +543,15 @@ export default {
             video.l2Name,
             this.$l1.code === "zh" ? "zh-Hans" : this.$l1.code
           );
+          if (!subs_l1 || !subs_l1[0]) {
+            subs_l1 = await YouTube.getTranslatedTranscript(
+              video.youtube_id,
+              video.l2Locale,
+              video.l2Name,
+              this.$l1.code === "zh" ? "zh-Hans" : this.$l1.code,
+              true
+            );
+          }
         }
         if (subs_l1) Vue.set(this.video, "subs_l1", subs_l1);
       }

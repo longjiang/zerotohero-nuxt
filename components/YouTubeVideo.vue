@@ -143,7 +143,7 @@ export default {
             playsinline: 1,
             rel: 0,
             fs: 1,
-            hl: this.$l1 ? this.$l1.code : 'en',
+            hl: this.$l1 ? this.$l1.code : "en",
             iv_load_policy: 3,
             modestbranding: 1,
             id,
@@ -180,15 +180,15 @@ export default {
                       this.updateCurrentTime();
                     }, 250);
                   }
+                } else if (state === UNSTARTED) {
+                  if (this.autoplay && this.player) this.player.playVideo();
                 } else {
                   clearInterval(this.interval);
                   this.interval = undefined;
                 }
               }
             },
-            onReady: () => {
-              if (this.autoplay) this.player.playVideo()
-            },
+            onReady: () => {},
           },
         });
       };
