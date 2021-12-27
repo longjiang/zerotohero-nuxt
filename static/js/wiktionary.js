@@ -447,7 +447,10 @@ const Dictionary = {
       if (this.l2 === 'vie') {
         return text.includes(row.head) || search.includes(row.head)
       } else {
-        return text.includes(row.head) || (row.search.length > 0 && search.includes(row.search))
+        let headMatches = text.includes(row.head)
+        let searchMatches = row.search.length > 0 && search.includes(row.search)
+        let found = headMatches || searchMatches
+        return found
       }
     })
     return this.subdict(words)
@@ -470,26 +473,25 @@ const Dictionary = {
       .filter((word) => {
         if (word.head.trim() === '') return false
         if (first) {
-          return word.head === first
+          return word.search === first
         } else {
           let matchedIndex = search.indexOf(word.search)
           if (matchedIndex !== -1) {
             let matchEndIndex = matchedIndex + word.search.length
             let nextChar = text.charAt(matchEndIndex)
-            // console.log(`Characgter at matchedIndex (${matchedIndex}) is ${text.charAt(matchedIndex)}, next char (${matchEndIndex}) is ${nextChar}`)
             while (this.isCombining(nextChar)) {
               matchEndIndex = matchEndIndex + 1
               nextChar = text.charAt(matchEndIndex)
             }
-            first = word.head
+            first = word.search
             matchedText = text.slice(matchedIndex, matchEndIndex)
             return true
           }
         }
       })
-      .sort((a, b) => {
-        return b.head.length - a.head.length
-      })
+    matches = matches.sort((a, b) => {
+      return b.head.length - a.head.length
+    })
     // console.log('😄 final matched text: ' + matchedText)
     return {
       matches: matches,
@@ -500,9 +502,10 @@ const Dictionary = {
     if (this.l2 === 'spa') {
       return this.tokenizeSpanish(text)
     } else {
+      let subdict = this.subdictFromText(text)
       let tokenized = this.tokenizeRecursively(
         text,
-        this.subdictFromText(text)
+        subdict
       )
       return tokenized
     }
@@ -519,6 +522,7 @@ const Dictionary = {
   },
   tokenizeRecursively(text, subdict) {
     const longest = subdict.longest(text)
+    console.log(longest)
     if (this.l2 === 'tha') {
       const isThai = subdict.isThai(text)
       if (!isThai) {
