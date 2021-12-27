@@ -402,7 +402,6 @@ export default {
   },
   async mounted() {
     if (this.checkSubs) {
-      await Helper.timeout(this.delay);
       await this.checkSubsFunc(this.video);
     }
     if (this.video.id && this.showSubsEditing) {
@@ -665,6 +664,7 @@ export default {
     },
     async checkSubsFunc(video) {
       Vue.set(video, "checkingSubs", true);
+      await Helper.timeout(this.delay);
       if (video.subs_l2 && video.subs_l2.length > 0) {
         Vue.set(video, "hasSubs", true);
         Vue.set(video, "checkingSubs", false);

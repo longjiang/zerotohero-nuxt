@@ -112,7 +112,11 @@
                   params: { youtube_id: channel.videos[0].youtube_id },
                 }"
               >
-                {{ channel.videos[0].title ? channel.videos[0].title.slice(0,30) : '(Untitled)' }}
+                {{
+                  channel.videos[0].title
+                    ? channel.videos[0].title.slice(0, 30)
+                    : "(Untitled)"
+                }}
               </router-link>
             </div>
           </div>
@@ -136,6 +140,7 @@
             ref="youTubeVideoCard"
             @newShow="newShow"
             @unavailable="onVideoUnavailable"
+            :delay="videoIndex * 333"
             :video="video"
             :checkSubs="checkSubsData"
             :showSubsEditing="showSubsEditing"
