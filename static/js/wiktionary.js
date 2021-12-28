@@ -522,7 +522,6 @@ const Dictionary = {
   },
   tokenizeRecursively(text, subdict) {
     const longest = subdict.longest(text)
-    console.log(longest)
     if (this.l2 === 'tha') {
       const isThai = subdict.isThai(text)
       if (!isThai) {
