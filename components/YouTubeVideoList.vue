@@ -124,7 +124,7 @@
       </client-only>
       <div class="youtube-videos row">
         <div
-          v-for="(video, videoIndex) in filteredVideos.slice(0, subsChecked + 1)"
+          v-for="(video, videoIndex) in filteredVideos.slice(0, subsChecked)"
           :class="{
             'col-sm-12': view === 'list' || singleColumn,
             'col-12': params.xs && view === 'grid' && !singleColumn,
@@ -225,7 +225,7 @@ export default {
       showChannels: false,
       hideVideosInShows: false,
       unavailableYouTubeIds: [],
-      subsChecked: 0,
+      subsChecked: 3,
       params: {},
       query: {
         xs: {
