@@ -53,13 +53,17 @@
               Load Paritially Over Infinite Scroll
             </b-button>
           </div>
-          <YouTubeVideoList
-            :videos="videos.filter((video) => video.title !== 'Private video')"
-            @newShow="newShow"
-            :checkSubs="true"
-            :showProgress="false"
-            ref="youtubeVideoList"
-          />
+          <div :key="videoListKey">
+            <YouTubeVideoList
+              :videos="
+                videos.filter((video) => video.title !== 'Private video')
+              "
+              @newShow="newShow"
+              :checkSubs="true"
+              :showProgress="false"
+              ref="youtubeVideoList"
+            />
+          </div>
           <div v-if="noMoreVideos" class="text-center mt-4">
             <h6>No more videos.</h6>
             <p>{{ videos.length }} videos loaded.</p>
@@ -98,6 +102,7 @@ export default {
       totalResults: undefined,
       forceRefresh: false,
       noMoreVideos: false,
+      videoListKey: 0,
     };
   },
   async mounted() {
@@ -186,6 +191,7 @@ export default {
     },
     async load500() {
       if (this.shownResults > 50) this.clearVideos();
+      this.videoListKey++;
       for (let i = 0; i < (this.shownResults > 50 ? 10 : 9); i++) {
         await this.visibilityChanged(true);
       }

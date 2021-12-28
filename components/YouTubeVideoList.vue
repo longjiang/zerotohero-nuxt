@@ -225,7 +225,7 @@ export default {
       showChannels: false,
       hideVideosInShows: false,
       unavailableYouTubeIds: [],
-      subsChecked: 1,
+      subsChecked: 0,
       params: {},
       query: {
         xs: {
@@ -295,11 +295,10 @@ export default {
           Vue.delete(video, "id");
         }
       }
-    },
+    }
   },
   methods: {
     onHasSubs(hasSubs) {
-      console.log('hasSubs', hasSubs)
       this.subsChecked++
     },
     isLocalHost() {
