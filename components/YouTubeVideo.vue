@@ -180,15 +180,15 @@ export default {
                       this.updateCurrentTime();
                     }, 250);
                   }
-                } else if (state === UNSTARTED) {
-                  if (this.autoplay && this.player) this.player.playVideo();
                 } else {
                   clearInterval(this.interval);
                   this.interval = undefined;
                 }
               }
             },
-            onReady: () => {},
+            onReady: (event) => {
+              if (this.autoplay) event.target.playVideo();
+            },
           },
         });
       };
