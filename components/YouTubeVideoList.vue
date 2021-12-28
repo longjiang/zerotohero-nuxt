@@ -124,7 +124,7 @@
       </client-only>
       <div class="youtube-videos row">
         <div
-          v-for="(video, videoIndex) in filteredVideos.slice(0, subsChecked)"
+          v-for="(video, videoIndex) in checkSubs ? filteredVideos.slice(0, subsChecked) : filteredVideos"
           :class="{
             'col-sm-12': view === 'list' || singleColumn,
             'col-12': params.xs && view === 'grid' && !singleColumn,
