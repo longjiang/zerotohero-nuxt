@@ -14,7 +14,7 @@
       <div class="row">
         <div class="col-sm-12">
           <div style="overflow: inherit">
-            <!-- <Sale class="mb-4" /> -->
+            <Sale class="mb-4" />
             <h3 class="mt-4 mb-3 text-center">
               New HSK 3.0 Word List (9 Levels)
             </h3>

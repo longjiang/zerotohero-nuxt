@@ -15,7 +15,7 @@
     <div class="container pt-5 pb-5">
       <div class="row">
         <div class="col-sm-12">
-          <!-- <Sale class="mt-4 mb-4" v-if="$l2.code === 'zh'" /> -->
+          <Sale class="mt-4 mb-4" v-if="$l2.code === 'zh'" />
           <client-only>
             <div :class="{ 'pl-1 pr-1 pb-2': true, 'd-none': !hasDashboard }">
               <div class="home-card">

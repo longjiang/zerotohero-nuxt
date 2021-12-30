@@ -22,7 +22,7 @@
         :image="`https://img.youtube.com/vi/${this.youtube_id}/hqdefault.jpg`"
       />
       <div class="pl-3 pr-3 mb-4">
-        <!-- <Sale class="mt-4 mb-4" v-if="$l2.code === 'zh'" /> -->
+        <Sale class="mt-4 mb-4" v-if="$l2.code === 'zh'" />
         <SimpleSearch
           placeholder="Search"
           ref="searchLibrary"
