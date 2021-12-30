@@ -21,53 +21,8 @@
       </client-only>
       <div class="zth-content">
         <Nuxt id="main" />
-        <footer class="zth-footer" style="z-index: -1">
-          <div
-            class="text-center pt-4 pb-3"
-            style="line-height: 1.2; font-size: 1.1em"
-          >
-            <router-link class="link-unstyled text-white" to="/">
-              <strong>ZERO TO HERO</strong>
-              <span style="font-weight: 300">LANGUAGES</span>
-            </router-link>
-          </div>
-          <Choose :showLanguageList="false" skin="dark" />
-          <div class="container">
-            <div class="row">
-              <div class="col-sm-12">
-                <div class="mt-5">
-                  <p>
-                    <strong>This is an open-source project.</strong>
-                    This website is built on
-                    <code>Vue.js</code>
-                    and is fully open source. Check out the code on GitHub at
-                    <a href="https://github.com/longjiang/zerotohero-nuxt">
-                      https://github.com/longjiang/zerotohero-nuxt
-                    </a>
-                    .
-                  </p>
-                </div>
-                <div class="mt-5">
-                  <p class="mb-4">
-                    <strong>Credits:</strong>
-                    <span v-html="dictionaryCredit"></span>
-                    The collocations and example sentences are provided by
-                    <a target="_blank" href="https://www.sketchengine.eu/">
-                      SketchEngine
-                    </a>
-                    . Languages population size from
-                    <a href="https://github.com/wooorm/speakers">
-                      github.com/wooorm/speakers
-                    </a>
-                    .
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </footer>
       </div>
-
+      <LazyFooter :dictionaryCredit="dictionaryCredit" />
       <ReaderComp
         v-if="l1 && l2 && $route.name !== 'youtube-view'"
         :iconMode="true"

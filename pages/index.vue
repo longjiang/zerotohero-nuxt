@@ -21,14 +21,17 @@
         <div class="row pt-5 mb-5">
           <div class="col-sm-12">
             <div class="z2h-logo" style="line-height: 1.2">
-              <strong style="font-size: 3rem">zerotohero.ca<sup>🇨🇦</sup></strong>
+              <strong style="font-size: 3rem">
+                zerotohero.ca
+                <sup>🇨🇦</sup>
+              </strong>
               <div class="mt-3" style="font-weight: 300; font-size: 1.6rem">
                 Achieve fluency in any language by comprehensible input.
               </div>
             </div>
           </div>
         </div>
-        <!-- <Sale class="mb-5" style="border-radius: 1rem !important" /> -->
+        <Sale class="mb-5" style="border-radius: 1rem !important" />
         <client-only>
           <div class="row mb-5">
             <div class="col-sm-12">
@@ -371,11 +374,18 @@
               </div>
             </div>
           </div>
-          <div class="row mb-5">
+          <div class="row">
             <div class="col-sm-12">
               <div class="home-card">
                 <h5 class="text-center">Languages by % of World GDP</h5>
                 <LazyLanguagesGDP />
+              </div>
+            </div>
+          </div>
+          <div class="row mt-5 mb-5">
+            <div class="col-sm-12">
+              <div class="home-card home-card-dark">
+                <LazyFooter />
               </div>
             </div>
           </div>

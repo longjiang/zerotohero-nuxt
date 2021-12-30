@@ -13,20 +13,20 @@
     <div class="foreground text-center">
       <div class="p-4 d-inline-block">
         <div style="font-weight: 700; font-size: 2.5rem; line-height: 1">
-          BLACK FRIDAY SALE
+          NEW YEAR SALE
         </div>
         <div
           class="mt-3"
           style="font-size: 1.2rem; font-weight: bold; opacity: 0.8"
         >
-          CHINESE COURSES 30% OFF
+          CHINESE COURSES 25% OFF
         </div>
         <div style="font-size: 1.2rem; font-weight: bold; opacity: 0.8">
           <span>USE COUPON CODE</span>
-          <code class="coupon-code">BF30</code>
+          <code class="coupon-code">NEWYEAR2022</code>
         </div>
         <div style="font-size: 1.2rem; font-weight: bold; opacity: 0.8">
-          DEAL ENDS NOV 30.
+          DEAL ENDS JAN 3.
         </div>
         <div class="mt-2">
           <router-link to="/sale" class="btn btn-danger">
