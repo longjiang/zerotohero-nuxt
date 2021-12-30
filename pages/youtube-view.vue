@@ -295,10 +295,9 @@ export default {
               video.youtube_id,
               video.l2Locale,
               video.l2Name,
-              this.$l1.code === 'zh' ? 'zh-Hans' : this.$l1.code,
+              this.$l1.code === "zh" ? "zh-Hans" : this.$l1.code,
               this.$adminMode
             );
-
           }
           if (subs_l1) Vue.set(this.video, "subs_l1", subs_l1);
         }
@@ -306,11 +305,12 @@ export default {
           this.firstLineTime = video.subs_l2[0].starttime;
         }
         this.starttime = this.$route.query.t ? Number(this.$route.query.t) : 0;
-        if (video.subs_l2)
-          this.startLineIndex =
-            video.subs_l2.findIndex(
-              (l) => Number(l.starttime) > this.starttime
-            ) || 0;
+        if (video.subs_l2) {
+          let startLineIndex = video.subs_l2.findIndex(
+            (l) => Number(l.starttime) >= this.starttime
+          );
+          this.startLineIndex = startLineIndex || 0;
+        }
         return video;
       } catch (err) {
         console.log(err);
