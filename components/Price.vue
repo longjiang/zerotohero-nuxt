@@ -4,7 +4,7 @@
     <b v-else>{{ price.price }}</b>
     <br v-if="!compact" />
     <span class="sale-price" v-if="price.salePrice">
-      <span v-if="!compact">SALE:</span>
+      <span v-if="!compact">NEW YEAR SALE:</span>
       <b>{{ price.salePrice }}</b>
     </span>
     <div style="color: rgb(26, 148, 6); font-size: 12px" v-if="save && !price.salePrice">
@@ -31,6 +31,6 @@ export default {
 
 <style lang="scss" scoped>
 .sale-price {
-  color: green;
+  color: #e17b12;
 }
 </style>

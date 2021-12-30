@@ -22,7 +22,7 @@
       <div class="zth-content">
         <Nuxt id="main" />
       </div>
-      <LazyFooter :dictionaryCredit="dictionaryCredit" />
+      <LazyFooter :dictionaryCredit="dictionaryCredit" class="zth-footer"/>
       <ReaderComp
         v-if="l1 && l2 && $route.name !== 'youtube-view'"
         :iconMode="true"
@@ -256,11 +256,8 @@ export default {
   color: white;
 }
 .zerotohero-wide {
-  .zth-footer {
-    margin-left: -29rem;
-    width: calc(100% + 29rem);
-    padding: 3rem;
-    padding-left: 32rem;
+  ::v-deep .zth-footer {
+    padding-left: 29rem;
   }
 }
 </style>

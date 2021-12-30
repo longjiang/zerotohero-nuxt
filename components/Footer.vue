@@ -1,5 +1,5 @@
 <template>
-  <footer class="zth-footer" style="z-index: -1">
+  <footer style="z-index: -1" >
     <div
       class="text-center pt-4 pb-3"
       style="line-height: 1.2; font-size: 1.1em"
@@ -61,5 +61,5 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 </style>

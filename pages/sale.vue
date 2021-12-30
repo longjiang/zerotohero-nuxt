@@ -96,7 +96,7 @@
           </h2>
           <client-only>
             <div class="sale-counter text-xs-left text-sm-center">
-              <vac :end-time="new Date('Nov 30, 2021 23:59:59')">
+              <vac :end-time="new Date('Jan 3, 2022 23:59:59')">
                 <template v-slot:process="{ timeObj }">
                   <span>
                     <span style="white-space: nowrap">
