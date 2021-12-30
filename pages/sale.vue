@@ -13,7 +13,7 @@
     <!-- The video -->
     <video autoplay muted loop class="video-background">
       <source
-        :src="`${server}data/video/backgrounds/vbg-night-480p.mp4`"
+        :src="`${server}data/video/backgrounds/vbg-sparks-480p.mp4`"
         type="video/mp4"
       />
     </video>
@@ -34,15 +34,15 @@
         <div class="col">
           <div class="text-center">
             <h1 class="text-center mt-5 mb-4 sale-heading">
-              BLACK FRIDAY SALE
+              NEW YEAR SALE
             </h1>
           </div>
           <h2 class="text-center mt-4" style="margin-bottom: 2rem">
-            ALL HSK COURSES 30% OFF
+            ALL HSK COURSES 25% OFF
           </h2>
           <client-only>
             <div class="sale-counter text-xs-left text-sm-center">
-              <vac :end-time="new Date('Nov 30, 2021 23:59:59')">
+              <vac :end-time="new Date('Jan 3, 2022 23:59:59')">
                 <template v-slot:process="{ timeObj }">
                   <span>
                     <span style="white-space: nowrap">
@@ -71,7 +71,7 @@
           </client-only>
           <h2 class="text-center mt-4 mb-4" style="line-height: 2">
             USE THE COUPON CODE
-            <span class="coupon-code">BF30</span>
+            <span class="coupon-code">NEWYEAR2022</span>
           </h2>
         </div>
       </div>
@@ -125,7 +125,7 @@
           </client-only>
           <h4 class="text-center mt-4 mb-4" style="line-height: 2">
             USE THE COUPON CODE
-            <span class="coupon-code">BF30</span>
+            <span class="coupon-code">NEWYEAR2022</span>
           </h4>
         </div>
       </div>
@@ -163,9 +163,9 @@ Vue.use(vueAwesomeCountdown);
 export default {
   data() {
     return {
-      title: "HSK Courses at 30% Off | Chinese Zero to Hero",
-      description: "Deal ends Sun, Aug 25, 2021",
-      image: "/img/sale/summer-sale-2021.jpg",
+      title: "HSK Courses at 25% Off | Chinese Zero to Hero",
+      description: "Deal ends Jan 3, 2022",
+      image: "/img/sale/new-year-sale-2022.jpg",
       server: Config.server,
     };
   },
@@ -186,7 +186,7 @@ export default {
 }
 
 .sale-counter {
-  background-color: #ff000066;
+  background-color: #e17b1266;
   backdrop-filter: blur(30px);
   font-size: 1.5rem;
   padding: 1rem;
@@ -202,7 +202,7 @@ export default {
 }
 
 .coupon-code {
-  background: #ff000066;
+  background: #e17b1266;
   backdrop-filter: blur(30px);
   font-size: 1em;
   color: white;

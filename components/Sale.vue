@@ -6,7 +6,7 @@
   >
     <video autoplay muted loop>
       <source
-        :src="`${server}data/video/backgrounds/vbg-night-480p.mp4`"
+        :src="`${server}data/video/backgrounds/vbg-sparks-480p.mp4`"
         type="video/mp4"
       />
     </video>
@@ -28,9 +28,9 @@
         <div style="font-size: 1.2rem; font-weight: bold; opacity: 0.8">
           DEAL ENDS JAN 3.
         </div>
-        <div class="mt-2">
-          <router-link to="/sale" class="btn btn-danger">
-            Browse Courses
+        <div class="mt-4 mb-2">
+          <router-link to="/sale" class="btn btn-danger" style="background-color: #e17b12; border: none">
+            Learn More
             <i class="fa fa-chevron-right ml-2"></i>
           </router-link>
         </div>
@@ -72,7 +72,7 @@ video {
   left: 0;
 }
 .coupon-code {
-  background: #ff000066;
+  background: #e17b1266;
   backdrop-filter: blur(30px);
   font-size: 1em;
   color: white;
