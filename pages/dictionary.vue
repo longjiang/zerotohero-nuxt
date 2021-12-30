@@ -320,8 +320,7 @@ export default {
     });
   },
   beforeDestroy() {
-    // you may call unsubscribe to stop the subscription
-    this.unsubscribe();
+    if (this.unsubscribe) this.unsubscribe();
   },
   destroyed() {
     this.unbindKeys();
