@@ -388,7 +388,7 @@ export default {
         }
         terms = Helper.unique(terms)
           .sort((a, b) => a.length - b.length)
-          .slice(0, 5);
+          .slice(0, 2);
       }
       return terms;
     },
