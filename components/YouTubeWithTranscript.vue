@@ -498,6 +498,15 @@ export default {
       if (this.$refs.transcript)
         this.$refs.transcript.audioMode = this.audioMode;
     },
+    startLineIndex() {
+      if (
+        this.$refs.youtube &&
+        this.$refs.youtube.player &&
+        this.$refs.youtube.player.seekTo
+      ) {
+        this.rewind();
+      }
+    },
   },
   methods: {
     async getL1Transcript() {
