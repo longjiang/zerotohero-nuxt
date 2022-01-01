@@ -490,15 +490,6 @@ export default {
     async video() {
       await this.getL1Transcript();
     },
-    startLineIndex() {
-      if (
-        this.$refs.youtube &&
-        this.$refs.youtube.player &&
-        this.$refs.youtube.player.seekTo
-      ) {
-        this.rewind();
-      }
-    },
     repeatMode() {
       if (this.$refs.transcript)
         this.$refs.transcript.repeatMode = this.repeatMode;
