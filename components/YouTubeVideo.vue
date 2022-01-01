@@ -187,7 +187,6 @@ export default {
               }
             },
             onReady: (event) => {
-              if (this.autoplay) event.target.playVideo();
             },
           },
         });
