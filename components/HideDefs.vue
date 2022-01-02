@@ -13,21 +13,22 @@
     <b-button
       variant="unstyled"
       size="sm"
-      @click="hideDefinitions = !hideDefinitions"
+      @click="hidePhonetics = !hidePhonetics"
       class="mr-2"
     >
-      <i class="far fa-eye-slash" v-if="hideDefinitions"></i>
+      <i class="far fa-eye-slash" v-if="hidePhonetics"></i>
       <i class="far fa-eye" v-else></i>
-      <span class="ml-1">Defs</span>
+      <span class="ml-1" v-if="$l2.code === 'ko'">Hanja</span>
+      <span class="ml-1" v-else>Phonetics</span>
     </b-button>
     <b-button
       variant="unstyled"
       size="sm"
-      @click="hidePhonetics = !hidePhonetics"
+      @click="hideDefinitions = !hideDefinitions"
     >
-      <i class="far fa-eye-slash" v-if="hidePhonetics"></i>
+      <i class="far fa-eye-slash" v-if="hideDefinitions"></i>
       <i class="far fa-eye" v-else></i>
-      <span class="ml-1">Phonetics</span>
+      <span class="ml-1">Defs</span>
     </b-button>
   </div>
 </template>
@@ -38,8 +39,18 @@ export default {
     return {
       hideDefinitions: false,
       hidePhonetics: false,
-      hideWord: false
+      hideWord: false,
     };
+  },
+  computed: {
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
   },
   watch: {
     hideDefinitions() {

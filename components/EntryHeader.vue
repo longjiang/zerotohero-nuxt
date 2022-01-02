@@ -77,7 +77,9 @@
                 </span>
                 <span v-else-if="entry.cjk">
                   {{ entry.cjk.phonetics }}
-                  <template v-if="$l2.code === 'ja'">({{ transliterate(entry.cjk.phonetics) }})</template>
+                  <template v-if="$l2.code === 'ja'">
+                    ({{ transliterate(entry.cjk.phonetics) }})
+                  </template>
                 </span>
                 <span v-else>
                   {{ transliterate(entry.head) }}
@@ -127,7 +129,9 @@
           v-if="$l2.code === 'ko' && entry.cjk && entry.cjk.canonical"
           class="mt-1"
         >
-          <span class="ml-2 entry-cjk">{{ entry.cjk.canonical }}</span>
+          <span :class="{ 'ml-2 entry-cjk': true, transparent: hidePhonetics }">
+            {{ entry.cjk.canonical }}
+          </span>
         </div>
         <div
           v-if="
