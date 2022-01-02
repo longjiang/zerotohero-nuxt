@@ -570,6 +570,7 @@ export default {
       )
         return true;
       if (!this.$l2.continua) {
+        form = Helper.escapeRegExp(form)
         try {
           return (
             new RegExp(`[ .,:!?]${form}[ .,:!?]`, "gi").test(line.line) ||
