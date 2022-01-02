@@ -370,25 +370,26 @@ export default {
         return [this.entry.simplified, this.entry.traditional];
       }
       if (this.exact && this.exactPhrase) return [this.exactPhrase];
-      let terms = [this.entry.head];
+      let terms;
       if (this.$dictionaryName === "edict") {
+        terms = [this.entry.head]
         terms.push(this.entry.kana);
         terms = Helper.unique(terms);
       } else {
         let forms =
           (await (await this.$getDictionary()).wordForms(this.entry)) || [];
-        terms = terms.concat(
-          forms
+        terms = forms
             .map((form) => form.form)
             .filter((s) => typeof s !== "undefined" && s.length > 1)
-        );
 
         if (this.$dictionaryName === "openrussian") {
           terms = terms.map((t) => t.replace(/'/gi, ""));
         }
+        terms = terms.sort((a, b) => a.length - b.length)
+        terms = [this.entry.head].concat(terms)
         terms = Helper.unique(terms)
-          .sort((a, b) => a.length - b.length)
           .slice(0, 3);
+        console.log(terms)
       }
       return terms;
     },
