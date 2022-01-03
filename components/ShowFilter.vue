@@ -336,17 +336,26 @@ export default {
         if (this.moviesShow && !this.moviesChecked) all = false;
         if (all) return "all";
         else {
-          return this.tvShows.map((s) => s.id);
+          let tvShowIDs = this.tvShows.map((s) => s.id);
+          if (!this.musicChecked) {
+            tvShowIDs = tvShowIDs.filter((id) => id !== this.musicShow.id);
+          }
+          if (!this.musicChecked) {
+            console.log(this.moviesShow.id)
+            tvShowIDs = tvShowIDs.filter((id) => id !== this.moviesShow.id);
+          }
+          return tvShowIDs;
         }
+      } else {
+        let tvShowFilter = [].concat(this.tvShowChecked);
+        if (this.musicChecked) {
+          if (this.musicShow) tvShowFilter.push(this.musicShow.id);
+        }
+        if (this.moviesChecked) {
+          if (this.moviesShow) tvShowFilter.push(this.moviesShow.id);
+        }
+        return Helper.unique(tvShowFilter);
       }
-      let tvShowFilter = [].concat(this.tvShowChecked);
-      if (this.musicChecked) {
-        if (this.musicShow) tvShowFilter.push(this.musicShow.id);
-      }
-      if (this.moviesChecked) {
-        if (this.moviesShow) tvShowFilter.push(this.moviesShow.id);
-      }
-      return Helper.unique(tvShowFilter);
     },
     getTalkFilter() {
       if (this.allVideosChecked) return "all";
@@ -355,7 +364,11 @@ export default {
         if (this.newsShow && !this.newsChecked) all = false;
         if (all) return "all";
         else {
-          return this.talks.map((s) => s.id);
+          let talkShowIDs = this.talks.map((s) => s.id);
+          if (!this.newsChecked) {
+            talkShowIDs = talkShowIDs.filter((id) => id !== this.newsShow.id);
+          }
+          return talkShowIDs
         }
       }
       let talkFilter = [].concat(this.talkChecked);
