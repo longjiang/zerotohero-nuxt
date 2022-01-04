@@ -8,7 +8,7 @@
   <div class="main">
     <div class="container pt-5 pb-5">
       <SocialHead :title="title" :description="description" :image="image" />
-      <Sale v-if="$l2.code === 'zh'" class="mb-5" />
+      <!-- <Sale v-if="$l2.code === 'zh'" class="mb-5" /> -->
       <div class="text-center pt-5 pb-5" v-if="loading">
         <Loader :sticky="true" message="Loading phrasebook..." />
       </div>

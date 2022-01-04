@@ -17,7 +17,7 @@
       />
       <div class="row">
         <div class="col-sm-12">
-          <Sale class="mt-5 mb-5" v-if="$l2.code === 'zh'" />
+          <!-- <Sale class="mt-5 mb-5" v-if="$l2.code === 'zh'" /> -->
           <h3 class="text-center mt-5">
             Study {{ $l2.name }} with
             {{ routeType === "tv-shows" ? "TV Shows" : "YouTube Channels" }}
