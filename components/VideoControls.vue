@@ -1,16 +1,6 @@
 <template>
   <div v-if="video" class="quick-access-buttons">
     <button
-      v-if="showLineList"
-      :class="{
-        'quick-access-button   d-inline-block text-center': true,
-        'quick-access-button-active': showList,
-      }"
-      @click="showList = !showList"
-    >
-      <i class="fas fa-align-left"></i>
-    </button>
-    <button
       :class="{
         'quick-access-button   d-inline-block text-center': true,
         'quick-access-button-active': speed !== 1,
@@ -51,7 +41,7 @@
       <i v-if="layout === 'horizontal'" class="fas fa-arrow-down"></i>
       <i v-if="layout === 'vertical'" class="fas fa-chevron-right"></i>
     </button>
-    <button
+    <!-- <button
       :class="{
         'quick-access-button   d-inline-block text-center': true,
         'quick-access-button-active': repeatMode,
@@ -68,6 +58,16 @@
       @click="toggleAudioMode"
     >
       <i class="fas fa-headphones"></i>
+    </button> -->
+    <button
+      v-if="showLineList"
+      :class="{
+        'quick-access-button   d-inline-block text-center': true,
+        'quick-access-button-active': showList,
+      }"
+      @click="showList = !showList"
+    >
+      <i class="fas fa-align-left"></i>
     </button>
     <button
       v-if="showFullscreenToggle"

@@ -68,7 +68,7 @@
           :nextEpisode="nextEpisode"
           :episodes="episodes"
           :episodeIndex="thisEpisodeIndex"
-          :forcePortrait="params.narrow"
+          :forcePortrait="false"
           :startLineIndex="startLineIndex"
           @paused="updatePaused"
           @ended="updateEnded"
@@ -117,11 +117,6 @@ export default {
       randomEpisodeYouTubeId: undefined,
       layout: "horizontal",
       params: {},
-      query: {
-        narrow: {
-          maxWidth: 900,
-        },
-      },
     };
   },
   computed: {
