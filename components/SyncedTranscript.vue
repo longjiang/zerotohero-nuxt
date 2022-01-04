@@ -346,7 +346,7 @@ export default {
             let nextParallelLine = this.parallellines[parallelLineIndex + 1];
             let medianTime = nextParallelLine
               ? (parallelLine.starttime + nextParallelLine.starttime) / 2
-              : parallelLine.starttime;
+              : parallelLine.starttime + 2;
             if (medianTime >= line.starttime) {
               if (!nextLine) return true;
               else return medianTime <= nextLine.starttime;
