@@ -8,78 +8,76 @@
   }
 </router>
 <template>
-  <container-query :query="query" v-model="params">
+  <div
+    :class="{
+      'youtube-view pt-3 pb-5 ': true,
+      'main-dark': layout !== 'vertical',
+      'main-dark-performant': isMobile,
+    }"
+  >
+    <SocialHead
+      :title="`Learn ${$l2.name} with a video | Zero to Hero Languages`"
+      :description="`Study the transcript of this video with a popup dictionary.`"
+      :image="`https://img.youtube.com/vi/${this.youtube_id}/hqdefault.jpg`"
+    />
+    <div class="pl-3 pr-3 mb-4">
+      <!-- <Sale class="mt-4 mb-4" v-if="$l2.code === 'zh'" /> -->
+      <SimpleSearch
+        placeholder="Search"
+        ref="searchLibrary"
+        :random="
+          randomEpisodeYouTubeId
+            ? `/${$l1.code}/${$l2.code}/youtube/view/${randomEpisodeYouTubeId}`
+            : false
+        "
+        skin="dark"
+        :action="
+          (url) => {
+            this.$router.push({
+              path: `/${$l1.code}/${
+                $l2.code
+              }/youtube/browse/all/all/0/${encodeURIComponent(url)}`,
+            });
+          }
+        "
+      />
+    </div>
     <div
       :class="{
-        'youtube-view pt-3 pb-5 ': true,
-        'main-dark': layout !== 'vertical',
-        'main-dark-performant': isMobile,
+        'youtube-view-wrapper': true,
+        fullscreen: layout === 'vertical',
       }"
     >
-      <SocialHead
-        :title="`Learn ${$l2.name} with a video | Zero to Hero Languages`"
-        :description="`Study the transcript of this video with a popup dictionary.`"
-        :image="`https://img.youtube.com/vi/${this.youtube_id}/hqdefault.jpg`"
+      <div :class="{ 'loader text-center pt-5 pb-5': true, 'd-none': video }">
+        <Loader :sticky="true" message="Preparing video and transcript..." />
+      </div>
+      <LazyYouTubeWithTranscript
+        v-if="video"
+        ref="youtube"
+        skin="dark"
+        :video="video"
+        :quiz="$quiz"
+        :key="`transcript-${video.youtube_id}`"
+        :autoload="true"
+        :autoplay="false"
+        :starttime="starttime"
+        :show="show"
+        :showType="showType"
+        :previousEpisode="previousEpisode"
+        :nextEpisode="nextEpisode"
+        :episodes="episodes"
+        :episodeIndex="thisEpisodeIndex"
+        :forcePortrait="false"
+        :startLineIndex="startLineIndex"
+        @paused="updatePaused"
+        @ended="updateEnded"
+        @currentTime="updateCurrentTime"
+        @speechStart="speechStart"
+        @speechEnd="speechEnd"
+        @updateLayout="(l) => (layout = l)"
       />
-      <div class="pl-3 pr-3 mb-4">
-        <!-- <Sale class="mt-4 mb-4" v-if="$l2.code === 'zh'" /> -->
-        <SimpleSearch
-          placeholder="Search"
-          ref="searchLibrary"
-          :random="
-            randomEpisodeYouTubeId
-              ? `/${$l1.code}/${$l2.code}/youtube/view/${randomEpisodeYouTubeId}`
-              : false
-          "
-          skin="dark"
-          :action="
-            (url) => {
-              this.$router.push({
-                path: `/${$l1.code}/${
-                  $l2.code
-                }/youtube/browse/all/all/0/${encodeURIComponent(url)}`,
-              });
-            }
-          "
-        />
-      </div>
-      <div
-        :class="{
-          'youtube-view-wrapper': true,
-          fullscreen: layout === 'vertical',
-        }"
-      >
-        <div :class="{ 'loader text-center pt-5 pb-5': true, 'd-none': video }">
-          <Loader :sticky="true" message="Preparing video and transcript..." />
-        </div>
-        <LazyYouTubeWithTranscript
-          v-if="video"
-          ref="youtube"
-          skin="dark"
-          :video="video"
-          :quiz="$quiz"
-          :key="`transcript-${video.youtube_id}`"
-          :autoload="true"
-          :autoplay="false"
-          :starttime="starttime"
-          :show="show"
-          :showType="showType"
-          :previousEpisode="previousEpisode"
-          :nextEpisode="nextEpisode"
-          :episodes="episodes"
-          :episodeIndex="thisEpisodeIndex"
-          :forcePortrait="false"
-          :startLineIndex="startLineIndex"
-          @paused="updatePaused"
-          @ended="updateEnded"
-          @currentTime="updateCurrentTime"
-          @speechStart="speechStart"
-          @speechEnd="speechEnd"
-          @updateLayout="(l) => (layout = l)"
-        />
-      </div>
     </div>
-  </container-query>
+  </div>
 </template>
 
 <script>
@@ -89,12 +87,8 @@ import DateHelper from "@/lib/date-helper";
 import Config from "@/lib/config";
 import axios from "axios";
 import Vue from "vue";
-import { ContainerQuery } from "vue-container-query";
 
 export default {
-  components: {
-    ContainerQuery,
-  },
   props: {
     youtube_id: {
       type: String,
@@ -116,7 +110,6 @@ export default {
       episodes: [],
       randomEpisodeYouTubeId: undefined,
       layout: "horizontal",
-      params: {},
     };
   },
   computed: {
