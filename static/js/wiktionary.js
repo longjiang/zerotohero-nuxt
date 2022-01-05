@@ -335,6 +335,7 @@ const Dictionary = {
         }
       }))
     }
+    // Find all forms of the word, that is, words whose stem matches word.head
     let words = this.words.filter(w => {
       let found = w.stems.filter(s => heads.includes(s))
       return found.length > 0

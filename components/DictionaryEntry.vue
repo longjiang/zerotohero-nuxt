@@ -48,7 +48,7 @@
           v-if="entry && showSearchSubs && searchTerms"
         >
           <div class="widget-title">
-            “{{ entry.head }}” in
+            “{{ searchTerms.join(", ") }}” in
             <span v-if="tvShow">the TV Show “{{ tvShow.title }}”</span>
             <LazyShowFilter v-else @showFilter="reloadSearchSubs" />
           </div>
@@ -372,24 +372,26 @@ export default {
       if (this.exact && this.exactPhrase) return [this.exactPhrase];
       let terms;
       if (this.$dictionaryName === "edict") {
-        terms = [this.entry.head]
+        terms = [this.entry.head];
         terms.push(this.entry.kana);
         terms = Helper.unique(terms);
       } else {
         let forms =
           (await (await this.$getDictionary()).wordForms(this.entry)) || [];
+        let entryIsLemma = !forms.find((f) => f.table === "lemma");
+        if (!entryIsLemma) {
+          forms = [forms[0]];
+        }
         terms = forms
-            .map((form) => form.form)
-            .filter((s) => typeof s !== "undefined" && s.length > 1)
+          .map((form) => form.form)
+          .filter((s) => typeof s !== "undefined" && s.length > 1);
 
         if (this.$dictionaryName === "openrussian") {
           terms = terms.map((t) => t.replace(/'/gi, ""));
         }
-        terms = terms.sort((a, b) => a.length - b.length)
-        terms = [this.entry.head].concat(terms)
-        terms = Helper.unique(terms)
-          .slice(0, 3);
-        console.log(terms)
+        terms = terms.sort((a, b) => a.length - b.length);
+        terms = [this.entry.head].concat(terms);
+        terms = Helper.unique(terms).slice(0, 3);
       }
       return terms;
     },
