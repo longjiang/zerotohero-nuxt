@@ -1,14 +1,14 @@
 <template>
   <div v-if="video" class="quick-access-buttons">
     <button
+      v-if="showLineList"
       :class="{
         'quick-access-button   d-inline-block text-center': true,
-        'quick-access-button-active': speed !== 1,
+        'quick-access-button-active': showList,
       }"
-      @click="toggleSpeed"
+      @click="showList = !showList"
     >
-      <i v-if="speed === 1" class="fas fa-tachometer-alt"></i>
-      <span v-else>{{ speed }}x</span>
+      <i class="fas fa-align-left"></i>
     </button>
     <button
       :class="{
@@ -41,6 +41,16 @@
       <i v-if="layout === 'horizontal'" class="fas fa-arrow-down"></i>
       <i v-if="layout === 'vertical'" class="fas fa-chevron-right"></i>
     </button>
+    <button
+      :class="{
+        'quick-access-button   d-inline-block text-center': true,
+        'quick-access-button-active': speed !== 1,
+      }"
+      @click="toggleSpeed"
+    >
+      <i v-if="speed === 1" class="fas fa-tachometer-alt"></i>
+      <span v-else>{{ speed }}x</span>
+    </button>
     <!-- <button
       :class="{
         'quick-access-button   d-inline-block text-center': true,
@@ -59,16 +69,6 @@
     >
       <i class="fas fa-headphones"></i>
     </button> -->
-    <button
-      v-if="showLineList"
-      :class="{
-        'quick-access-button   d-inline-block text-center': true,
-        'quick-access-button-active': showList,
-      }"
-      @click="showList = !showList"
-    >
-      <i class="fas fa-align-left"></i>
-    </button>
     <button
       v-if="showFullscreenToggle"
       :class="{
