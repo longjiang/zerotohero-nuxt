@@ -233,7 +233,7 @@ export default {
       else if (this.entry.definitions && this.entry.definitions[0]) {
         en = this.entry.definitions[0].split(", ")[0];
       }
-      en = en.replace(/\(.*\)/g, "").trim();
+      if (en) en = en.replace(/\(.*\)/g, "").trim();
       return en;
     },
     title() {
