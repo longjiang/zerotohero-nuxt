@@ -50,7 +50,7 @@
         <div
           class="col-sm-12"
         >
-          <LazyDiscoverPlayer :routeType="type" :shows="[show]" />
+          <LazyDiscoverPlayer v-if="show" :routeType="type" :shows="[show]" />
         </div>
 
         <div class="col-sm-12 mb-5">
@@ -136,7 +136,6 @@
 import Config from "@/lib/config";
 import Helper from "@/lib/helper";
 import axios from "axios";
-import YouTube from "@/lib/youtube";
 import { tify, sify } from "chinese-conv";
 
 export default {
