@@ -117,11 +117,11 @@ export default {
   mounted() {
     this.loadRandomShow();
   },
-  watch: {
-    shows() {
-      this.loadRandomShow();
-    },
-  },
+  // watch: {
+  //   shows() {
+  //     this.loadRandomShow();
+  //   },
+  // },
   methods: {
     loadHistory() {
       let historyItem = this.history.pop();

@@ -49,7 +49,6 @@
         </div>
         <div
           class="col-sm-12"
-          v-if="show && ['Music', 'News', 'Movies'].includes(show.title)"
         >
           <LazyDiscoverPlayer :routeType="type" :shows="[show]" />
         </div>
