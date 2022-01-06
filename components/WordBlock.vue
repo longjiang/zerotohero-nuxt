@@ -186,6 +186,9 @@
                 klingon: $l2.code === 'tlh',
               }"
             >
+              <span v-if="$l2.code === 'de' && word.gender">
+                {{ { n: "das", m: "der", f: "die" }[word.gender] }}
+              </span>
               {{ transform(word.accented) }}
             </b>
             <span
@@ -534,8 +537,8 @@ export default {
     },
     wordBlockClick(event) {
       if (event) {
-        event.preventDefault()
-        event.stopPropagation()
+        event.preventDefault();
+        event.stopPropagation();
       }
       if (
         this.explore &&
