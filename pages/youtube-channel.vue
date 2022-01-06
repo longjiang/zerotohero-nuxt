@@ -32,7 +32,20 @@
               <i class="fa fa-sync-alt mr-1"></i>
               Force Refresh
             </b-button>
-            <router-link class="ml-2" :to="`/en/de/youtube/browse/all/all/0/channel%3A${channel_id}`">Saved Videos from This Channel</router-link>
+            <router-link
+              class="ml-2"
+              :to="{
+                name: 'youtube-browse',
+                params: {
+                  topic: 'all',
+                  level: 'all',
+                  start: 0,
+                  keyword: `channel:${channel_id}`,
+                },
+              }"
+            >
+              Saved Videos
+            </router-link>
           </div>
           <template v-if="!loading">
             <h4 class="text-center mt-5">{{ $t("Playlists") }}</h4>
@@ -104,7 +117,9 @@ export default {
         playlists = playlists.sort((a, b) => b.count - a.count);
         let allVideosPlaylist = {
           id: this.channel_id.replace("UC", "UU"),
-          title: "All uploaded videos of " + (this.title ? this.title : 'this channel'),
+          title:
+            "All uploaded videos of " +
+            (this.title ? this.title : "this channel"),
         };
         if (playlists[0]) allVideosPlaylist.thumbnail = playlists[0].thumbnail;
         playlists = [allVideosPlaylist, ...playlists];
