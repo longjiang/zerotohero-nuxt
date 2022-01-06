@@ -245,6 +245,11 @@
               {{ abbreviate(word.type) }}
             </span>
             <span class="word-type" v-if="word.pos" style="color: #999">
+              {{
+                word.gender
+                  ? { m: "masculine", f: "feminine", n: "neuter" }[word.gender]
+                  : ""
+              }}
               {{ word.pos }}
               {{
                 word.heads && word.heads[0] && word.heads[0][1]
