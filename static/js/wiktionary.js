@@ -154,7 +154,11 @@ const Dictionary = {
       if (item.word && !item.redirect) {
         let definitions = []
         let stems = []
+        let gender
         if (item.senses && item.senses[0]) {
+          if (item.senses[0].tags && ['feminine', 'masculine', 'neuter'].includes(item.senses[0].tags[0])) {
+            gender = { masculine: 'm', feminine: 'f', neuter: 'n' }[item.senses[0].tags[0]]
+          }
           for (let sense of item.senses) {
             if (sense.glosses) {
               if (!sense.complex_inflection_of) {
@@ -195,6 +199,7 @@ const Dictionary = {
             audio: audio,
             definitions: definitions,
             pos: item.pos,
+            gender: gender,
             stems: stems.filter(s => s !== item.word),
             phrases: item.derived ? item.derived.map(d => d.word) : [],
             wiktionary: true
@@ -248,15 +253,17 @@ const Dictionary = {
   exportCSV() {
     console.log('Exporting CSV...')
     let csv = Papa.unparse(this.words.map(item => {
-      return {
+      let word = {
         word: item.word,
         pronunciation: item.pronunciation,
         audio: item.audio,
         definitions: item.definitions.join('|'),
         pos: item.pos,
+        gender: item.gender,
         stems: item.stems.join('|'),
         phrases: item.phrases.join('|')
       }
+      return word
     }))
     console.log('CSV exported.')
     return csv

@@ -120,8 +120,12 @@
               <span
                 :class="{ 'entry-word': true, klingon: $l2.code === 'tlh' }"
                 :data-level="entry.level || 'outside'"
-                v-html="transform(entry.accented)"
-              ></span>
+              >
+                <span v-if="$l2.code === 'de' && entry.gender" style="font-size: 0.7em">
+                  {{ { n: "das", m: "der", f: "die" }[entry.gender] }}
+                </span>
+                <span v-html="transform(entry.accented)"></span>
+              </span>
             </template>
           </router-link>
         </div>

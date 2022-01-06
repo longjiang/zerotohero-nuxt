@@ -37,6 +37,11 @@
             :class="{ 'wordlist-item-word ml-1': true, transparent: hideWord }"
             :data-level="skin !== 'dark' ? getLevel(word) : undefined"
           >
+            <span
+              v-if="$l2.code === 'de' && word.gender"
+            >
+              {{ { n: "das", m: "der", f: "die" }[word.gender] }}
+            </span>
             {{ word.accented }}
           </span>
 
