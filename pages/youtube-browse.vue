@@ -22,13 +22,14 @@
       <div class="row">
         <div class="col-sm-12 mb-4">
           <!-- <Sale class="mt-4 mb-4" v-if="$l2.code === 'zh'" /> -->
-          <h3 v-if="!keyword" class="mt-5 text-center">
-            New Videos
-          </h3>
-          <div
-            class="col-sm-12"
-          >
-            <LazyDiscoverPlayer v-if="!keyword && videos && videos[0]" class="mt-5" routeType="talks" :shows="[]" />
+          <h3 v-if="!keyword" class="mt-5 text-center">New Videos</h3>
+          <div class="col-sm-12">
+            <LazyDiscoverPlayer
+              v-if="!keyword && videos && videos[0]"
+              class="mt-5"
+              routeType="talks"
+              :shows="[]"
+            />
           </div>
           <!-- <client-only>
             <Nav
@@ -50,11 +51,6 @@
                 skin="dark"
                 class="mr-1"
                 style="flex: 1"
-                :random="
-                  undefined !== randomEpisodeYouTubeId
-                    ? `/${$l1.code}/${$l2.code}/youtube/view/${randomEpisodeYouTubeId}`
-                    : false
-                "
                 :action="
                   (url) => {
                     this.$router.push({
@@ -76,9 +72,24 @@
                 Category
               </b-form-select>
             </div>
-            <b-form-checkbox v-model="includeShows" v-if="$adminMode">
+            <b-form-checkbox v-model="includeShows" v-if="$adminMode" class="d-inline-block">
               Include videos in TV shows and talks
             </b-form-checkbox>
+            <router-link
+              :to="{
+                name: 'youtube-browse',
+                params: {
+                  topic,
+                  level,
+                  start: 0,
+                  keyword: undefined,
+                },
+              }"
+              v-if="keyword"
+              class="ml-2 btn btn-small btn-ghost-dark"
+            >
+              Clear Search
+            </router-link>
           </client-only>
         </div>
         <div class="col-sm-12 mb-5">
@@ -104,7 +115,10 @@
             <Loader :sticky="true" message="Loading videos in our library..." />
           </div>
           <div v-observe-visibility="visibilityChanged"></div>
-          <LazyIdenticalLanguages class="mb-4 bg-success" routeName="youtube-browse" />
+          <LazyIdenticalLanguages
+            class="mb-4 bg-success"
+            routeName="youtube-browse"
+          />
           <div
             :class="{
               'no-videos-message': true,
