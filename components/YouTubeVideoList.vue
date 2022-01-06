@@ -44,7 +44,7 @@
             </b-button>
             <br />
           </div>
-          <div>
+          <div v-if="checkSavedData">
             <AssignShow
               size="sm"
               @assignShow="assignShowToAll"
