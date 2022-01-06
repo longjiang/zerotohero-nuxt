@@ -24,7 +24,7 @@
             </Annotate>
             <span v-else>YouTube Channel {{ channel_id }}</span>
           </h3>
-          <div class="text-center">
+          <div class="text-center" v-if="$adminMode">
             <b-button
               class="btn-small btn-primary d-inline-block"
               @click="forceRefresh"
@@ -32,6 +32,7 @@
               <i class="fa fa-sync-alt mr-1"></i>
               Force Refresh
             </b-button>
+            <router-link class="ml-2" :to="`/en/de/youtube/browse/all/all/0/channel%3A${channel_id}`">Saved Videos from This Channel</router-link>
           </div>
           <template v-if="!loading">
             <h4 class="text-center mt-5">{{ $t("Playlists") }}</h4>
@@ -75,6 +76,10 @@ export default {
     $l2() {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
+    },
+    $adminMode() {
+      if (typeof this.$store.state.settings.adminMode !== "undefined")
+        return this.$store.state.settings.adminMode;
     },
   },
   methods: {
