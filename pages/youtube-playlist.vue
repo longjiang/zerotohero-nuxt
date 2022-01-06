@@ -15,7 +15,7 @@
             </Annotate>
           </h3>
           <p v-if="totalResults" class="text-center">
-            {{ shownResults }} of {{ totalResults }} videos shown
+            {{ shownResults }} of {{ totalResults }} videos loaded
           </p>
           <h3 class="text-center" v-else>Playlist: {{ playlist_id }}</h3>
           <div class="text-center mt-4 mb-4">

@@ -72,6 +72,16 @@
               Drop SRT files here to bulk add subs ...
             </drop>
           </div>
+          <div class="mt-1">
+            {{ filteredVideos.length }} videos
+            <span v-if="checkSubs">, {{ shownVideos.length }} checked</span>
+            <span v-if="checkSubs">
+              , {{ videosWithSubs.length }} have subs
+            </span>
+            <span v-if="checkSavedData">
+              , {{ savedVideos.length }} added
+            </span>
+          </div>
           <div class="mt-1" style="font-size: 0.9em">
             <b-form-checkbox
               class="mr-1 d-inline-block"
@@ -91,13 +101,13 @@
             >
               Show Subs Editing
             </b-form-checkbox>
-            <a
+            <!-- <a
               class="link-unstyled"
               @click="removeAllUnavailable()"
               v-if="isLocalHost()"
             >
               Remove unavailable videos
-            </a>
+            </a> -->
           </div>
           <div v-if="channels">
             <h6 class="mt-2">Channels with the most videos below:</h6>
@@ -124,7 +134,7 @@
       </client-only>
       <div class="youtube-videos row">
         <div
-          v-for="(video, videoIndex) in checkSubs ? filteredVideos.slice(0, subsChecked) : filteredVideos"
+          v-for="(video, videoIndex) in shownVideos"
           :class="{
             'col-sm-12': view === 'list' || singleColumn,
             'col-12': params.xs && view === 'grid' && !singleColumn,
@@ -283,6 +293,21 @@ export default {
       }
       return filteredVideos;
     },
+    shownVideos() {
+      return this.checkSubs
+        ? this.filteredVideos.slice(0, this.subsChecked)
+        : this.filteredVideos;
+    },
+    videosWithSubs() {
+      return this.checkSubs
+        ? this.filteredVideos.slice(0, this.subsChecked).filter((v) => v.hasSubs)
+        : this.filteredVideos.filter((v) => v.hasSubs);
+    },
+    savedVideos() {
+      return this.checkSubs
+        ? this.filteredVideos.slice(0, this.subsChecked).filter((v) => v.id)
+        : this.filteredVideos.filter((v) => v.id);
+    },
   },
   watch: {
     async checkSavedData() {
@@ -295,11 +320,11 @@ export default {
           Vue.delete(video, "id");
         }
       }
-    }
+    },
   },
   methods: {
     onHasSubs(hasSubs) {
-      this.subsChecked++
+      this.subsChecked++;
     },
     isLocalHost() {
       return (
