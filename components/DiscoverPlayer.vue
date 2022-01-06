@@ -27,6 +27,14 @@
       @currentTime="updateCurrentTime"
     />
     <div class="text-center pt-3 pb-3" v-if="randomShowRandomEpisode">
+      <b-button
+        variant="ghost-dark-no-bg"
+        @click="loadHistory"
+        :disabled="history.length <= 1"
+        :class="{ disabled: history.length <= 1 }"
+      >
+        <i class="fas fa-step-backward mr-1"></i>
+      </b-button>
       <router-link
         :to="{
           name: 'youtube-view',
@@ -45,7 +53,7 @@
         {{ $t("Watch Full") }}
       </router-link>
       <b-button variant="ghost-dark-no-bg" @click="loadRandomShow">
-        <i class="fas fa-step-forward mr-1"></i>
+        <i class="fas fa-random mr-1"></i>
         {{ $t("Another One") }}
       </b-button>
       <b-button
@@ -77,6 +85,7 @@ export default {
       randomShow: undefined,
       randomShowId: undefined,
       randomShowRandomEpisode: undefined,
+      history: [],
     };
   },
   computed: {
@@ -114,6 +123,13 @@ export default {
     },
   },
   methods: {
+    loadHistory() {
+      let historyItem = this.history.pop();
+      if (historyItem.episode === this.randomShowRandomEpisode)
+        historyItem = this.history.pop();
+      this.randomShow = historyItem.show;
+      this.randomShowRandomEpisode = historyItem.episode;
+    },
     l1Code() {
       return Helper.l1Code(...arguments);
     },
@@ -133,6 +149,10 @@ export default {
       );
       this.randomShow = randomShow;
       this.randomShowRandomEpisode = randomShowRandomEpisode;
+      this.history.push({
+        show: randomShow,
+        episode: randomShowRandomEpisode,
+      });
     },
     getRandomShow() {
       if (this.shows) {
@@ -182,5 +202,11 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
+.btn:disabled {
+  opacity: 0.2;
+  &:hover {
+    background: none;
+  }
+}
 </style>
