@@ -49,7 +49,7 @@
         <div
           class="small mb-2"
           style="color: #aaa"
-          v-if="video.date && view !== 'list' && (showDate || $adminMode)"
+          v-if="video.date && (showDate || $adminMode)"
         >
           {{ formatDate(video.date) }}
         </div>
@@ -64,7 +64,7 @@
           <router-link
             :class="{
               'link-unstyled': true,
-              'd-none': $adminMode || view === 'list',
+              'd-none': $adminMode && view !== 'list',
             }"
             :to="`/${$l1.code}/${$l2.code}/youtube/view/${video.youtube_id}/${
               video.lesson ? 'lesson' : ''
