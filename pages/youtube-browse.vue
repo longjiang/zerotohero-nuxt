@@ -216,7 +216,7 @@ export default {
         return this.$store.state.settings.adminMode;
     },
   },
-  async fetch() {
+  async mounted() {
     if (!this.keyword || this.keyword.includes("channel:"))
       this.includeShows = false;
     this.videos = await this.getVideos(this.start);

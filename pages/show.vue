@@ -206,7 +206,7 @@ export default {
       this.videos = videos;
     },
   },
-  async fetch() {
+  async mounted() {
     if (this.id) {
       this.show = await this.getShow(this.id, this.collection);
       if (this.show) {
