@@ -18,7 +18,7 @@
             </b-button>
             <b-button
               class="mt-1 mb-1"
-              v-if="checkSavedData"
+              v-if="checkSavedData && checkSavedDone"
               size="sm"
               @click="checkSavedData = false"
             >
@@ -28,23 +28,28 @@
             <b-button
               class="mt-1 mb-1"
               variant="secondary"
-              v-if="checkSavedData"
+              v-if="checkSavedData && checkSavedDone && videosWithSubs.length - savedVideos.length > 0"
               size="sm"
               @click="addAll()"
             >
               <i class="fas fa-plus mr-2"></i>
-              Add All
+              Add All {{ videosWithSubs.length - savedVideos.length }}
             </b-button>
             <b-button size="sm" @click="surveyChannels">
               Survey Channels
             </b-button>
-            <b-button class="mt-1 mb-1" @click="removeAll()" size="sm">
+            <b-button
+              v-if="checkSavedData && checkSavedDone"
+              class="mt-1 mb-1"
+              @click="removeAll()"
+              size="sm"
+            >
               <i class="fas fa-trash mr-2"></i>
               Remove All
             </b-button>
             <br />
           </div>
-          <div v-if="checkSavedData">
+          <div v-if="checkSavedData && checkSavedDone">
             <AssignShow
               size="sm"
               @assignShow="assignShowToAll"
@@ -78,9 +83,7 @@
             <span v-if="checkSubs">
               , {{ videosWithSubs.length }} have subs
             </span>
-            <span v-if="checkSavedData">
-              , {{ savedVideos.length }} added
-            </span>
+            <span v-if="checkSavedData">, {{ savedVideos.length }} added</span>
           </div>
           <div class="mt-1" style="font-size: 0.9em">
             <b-form-checkbox
@@ -234,6 +237,7 @@ export default {
       hideVideosWithoutSubs: false,
       showChannels: false,
       hideVideosInShows: false,
+      checkSavedDone: false,
       unavailableYouTubeIds: [],
       subsChecked: 3,
       params: {},
@@ -300,7 +304,9 @@ export default {
     },
     videosWithSubs() {
       return this.checkSubs
-        ? this.filteredVideos.slice(0, this.subsChecked).filter((v) => v.hasSubs)
+        ? this.filteredVideos
+            .slice(0, this.subsChecked)
+            .filter((v) => v.hasSubs)
         : this.filteredVideos.filter((v) => v.hasSubs);
     },
     savedVideos() {
@@ -313,12 +319,14 @@ export default {
     async checkSavedData() {
       if (this.checkSavedData) {
         await this.checkSavedFunc(this.filteredVideos);
+        this.checkSavedDone = true;
       } else {
         for (let video of this.filteredVideos) {
           delete video.tv_show;
           delete video.talk;
           Vue.delete(video, "id");
         }
+        this.checkSavedDone = false;
       }
     },
   },
