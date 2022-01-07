@@ -11,7 +11,7 @@
         <div class="col-sm-12">
           <h3 class="text-center" v-if="title">
             <Annotate :phonetics="false" :buttons="true">
-              <span>{{ title }}</span>
+              <span>{{ title.replace('All uploaded videos of ', '') }}</span>
             </Annotate>
           </h3>
           <p v-if="totalResults" class="text-center">
