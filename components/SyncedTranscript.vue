@@ -60,16 +60,42 @@
             "
           >
             Pop Quiz
+            <span class="d-inline-block" style="position: relative; bottom: 0.13rem"><b-button
+              class="ml-2"
+              style="font-weight: normal"
+              v-if="!reviewOpen[index + visibleMin]"
+              @click="openReview(index + visibleMin)"
+              size="small"
+              variant="ghost-dark"
+            >
+              Open
+              <i class="fa fa-chevron-down"></i>
+            </b-button>
+            <b-button
+              class="ml-2"
+              style="font-weight: normal"
+              v-if="reviewOpen[index + visibleMin] === true"
+              @click="closeReview(index + visibleMin)"
+              size="small"
+              variant="ghost-dark"
+            >
+              Close
+              <i class="fa fa-chevron-up"></i>
+            </b-button></span>
           </h6>
-          <Review
-            v-for="(reviewItem, reviewItemIndex) in review[index + visibleMin]"
-            :key="`review-${index + visibleMin}-${
-              reviewItem.text || reviewItem.simplified
-            }-${reviewItemIndex}-${reviewKeys[index + visibleMin]}`"
-            :reviewItem="reviewItem"
-            :hsk="hsk"
-            :skin="skin"
-          />
+          <div v-if="reviewOpen[index + visibleMin] === true">
+            <Review
+              v-for="(reviewItem, reviewItemIndex) in review[
+                index + visibleMin
+              ]"
+              :key="`review-${index + visibleMin}-${
+                reviewItem.text || reviewItem.simplified
+              }-${reviewItemIndex}-${reviewKeys[index + visibleMin]}`"
+              :reviewItem="reviewItem"
+              :hsk="hsk"
+              :skin="skin"
+            />
+          </div>
         </div>
       </template>
       <div
@@ -166,6 +192,7 @@ export default {
       repeatMode: false,
       audioCancelled: false,
       reviewKeys: [],
+      reviewOpen: [],
       neverPlayed: true,
       matchedParallelLines: undefined,
       visibleMin: 0,
@@ -293,6 +320,12 @@ export default {
     },
   },
   methods: {
+    openReview(index) {
+      Vue.set(this.reviewOpen, index, true)
+    },
+    closeReview(index) {
+      Vue.set(this.reviewOpen, index, undefined)
+    },
     async turnOffPreventJumptingAtStartAfter3Seconds() {
       await Helper.timeout(3000);
       this.preventJumpingAtStart = false;
@@ -570,7 +603,7 @@ export default {
       )
         return true;
       if (!this.$l2.continua) {
-        form = Helper.escapeRegExp(form)
+        form = Helper.escapeRegExp(form);
         try {
           return (
             new RegExp(`[ .,:!?]${form}[ .,:!?]`, "gi").test(line.line) ||
