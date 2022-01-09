@@ -147,7 +147,9 @@ export default {
             FastestLevenshtein.distance(b.head, text)
         );
       }
-      words = words.filter((word) => word.head.toLowerCase() !== text.toLowerCase());
+      words = words.filter(
+        (word) => word.head.toLowerCase() !== text.toLowerCase()
+      );
       words = Helper.uniqueByValue(words, "head");
       return words;
     },
@@ -269,6 +271,7 @@ export default {
     ::v-deep .transcript-line-l2 {
       .highlight {
         border-radius: 0.2rem;
+        color: #444 !important;
         * {
           opacity: 0;
           pointer-events: none;
