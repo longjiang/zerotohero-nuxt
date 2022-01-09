@@ -79,7 +79,7 @@
             <PhraseHeader v-if="term" :term="term" :class="{ 'mt-4': !wide }" />
             <div class="mt-3">
               <SimilarPhrases
-                v-if="term"
+                v-if="term && similarPhraseTranslation"
                 :phrase="word ? word.head : term"
                 :translation="similarPhraseTranslation"
                 :wiktionary="true"

@@ -92,7 +92,7 @@
               </div>
               <div>
                 <SimilarPhrases
-                  v-if="phraseObj"
+                  v-if="phraseObj && phraseObj.en"
                   :phrase="phraseObj.phrase"
                   :translation="phraseObj.en"
                   :wiktionary="false"
