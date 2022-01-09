@@ -396,7 +396,7 @@ export default {
         else {
           let hanjas = this.token.candidates.map((c) => c.hanja);
           hanjas = Helper.unique(hanjas);
-          if (hanjas.length === 1) hanja = hanjas[0];
+          if (hanjas.length === 1 && !hanjas[0].includes(',')) hanja = hanjas[0];
         }
         return hanja.split(/[,\-]/)[0];
       }
@@ -800,8 +800,8 @@ export default {
         font-size: 10em;
       }
       .word-block-text-byeonggi {
-        color: rgb(143, 158, 172);
-        font-size: 8em;
+        color: rgba(143, 158, 172, 0.8);
+        font-size: 6em;
       }
     }
 
