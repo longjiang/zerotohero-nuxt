@@ -60,28 +60,33 @@
             "
           >
             Pop Quiz
-            <span class="d-inline-block" style="position: relative; bottom: 0.13rem"><b-button
-              class="ml-2"
-              style="font-weight: normal"
-              v-if="!reviewOpen[index + visibleMin]"
-              @click="openReview(index + visibleMin)"
-              size="small"
-              variant="ghost-dark"
+            <span
+              class="d-inline-block"
+              style="position: relative; bottom: 0.13rem"
             >
-              Open
-              <i class="fa fa-chevron-down"></i>
-            </b-button>
-            <b-button
-              class="ml-2"
-              style="font-weight: normal"
-              v-if="reviewOpen[index + visibleMin] === true"
-              @click="closeReview(index + visibleMin)"
-              size="small"
-              variant="ghost-dark"
-            >
-              Close
-              <i class="fa fa-chevron-up"></i>
-            </b-button></span>
+              <b-button
+                class="ml-2"
+                style="font-weight: normal"
+                v-if="!reviewOpen[index + visibleMin]"
+                @click="openReview(index + visibleMin)"
+                size="small"
+                variant="ghost-dark"
+              >
+                Open
+                <i class="fa fa-chevron-down"></i>
+              </b-button>
+              <b-button
+                class="ml-2"
+                style="font-weight: normal"
+                v-if="reviewOpen[index + visibleMin] === true"
+                @click="closeReview(index + visibleMin)"
+                size="small"
+                variant="ghost-dark"
+              >
+                Close
+                <i class="fa fa-chevron-up"></i>
+              </b-button>
+            </span>
           </h6>
           <div v-if="reviewOpen[index + visibleMin] === true">
             <Review
@@ -321,10 +326,10 @@ export default {
   },
   methods: {
     openReview(index) {
-      Vue.set(this.reviewOpen, index, true)
+      Vue.set(this.reviewOpen, index, true);
     },
     closeReview(index) {
-      Vue.set(this.reviewOpen, index, undefined)
+      Vue.set(this.reviewOpen, index, undefined);
     },
     async turnOffPreventJumptingAtStartAfter3Seconds() {
       await Helper.timeout(3000);
@@ -595,7 +600,11 @@ export default {
       if (["en", "ru"].includes(this.$l2.code)) {
         return line.line.includes(form);
       }
-      if (this.$l2.continua && line.line.includes(form)) return true;
+      if (
+        (this.$l2.continua || this.$l2.agglutinative) &&
+        line.line.includes(form)
+      )
+        return true;
       if (
         this.$l2.han &&
         (line.line.includes(word.simplified) ||
@@ -604,12 +613,13 @@ export default {
         return true;
       if (!this.$l2.continua) {
         form = Helper.escapeRegExp(form);
+        let found = false;
         try {
-          return (
+          found =
             new RegExp(`[ .,:!?]${form}[ .,:!?]`, "gi").test(line.line) ||
-            new RegExp(`^${form}[ .,:!?]`, "gi").test()
-          );
+            new RegExp(`^${form}[ .,:!?]`, "gi").test();
         } catch (err) {}
+        return found;
       }
     },
     async generateReviewItem(lineIndex, form, word) {
