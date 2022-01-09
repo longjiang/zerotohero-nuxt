@@ -394,9 +394,14 @@ export default {
         let hanja = "";
         if (this.saved) hanja = this.saved.hanja;
         else {
-          let hanjas = this.token.candidates.map((c) => c.hanja);
-          hanjas = Helper.unique(hanjas);
-          if (hanjas.length === 1 && !hanjas[0].includes(',')) hanja = hanjas[0];
+          let head = this.token.candidates[0].head;
+          let bannedEndings = "이히하고가기는은";
+          if (!bannedEndings.includes(head.charAt(head.length - 1))) {
+            let hanjas = this.token.candidates.map((c) => c.hanja);
+            hanjas = Helper.unique(hanjas);
+            if (hanjas.length === 1 && !hanjas[0].includes(","))
+              hanja = hanjas[0];
+          }
         }
         return hanja.split(/[,\-]/)[0];
       }
