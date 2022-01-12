@@ -31,7 +31,7 @@
         variant="ghost-dark-no-bg"
         @click="loadHistory"
         :disabled="history.length <= 1"
-        :class="{ disabled: history.length <= 1 }"
+        :class="{ disabled: history.length <= 1, 'mr-2': true }"
       >
         <i class="fas fa-step-backward mr-1"></i>
       </b-button>
@@ -47,17 +47,18 @@
             t: currentTime,
           },
         }"
-        class="btn btn-ghost-dark-no-bg"
+        class="btn btn-success"
       >
         <i class="fas fa-play mr-1"></i>
         {{ $t("Watch Full") }}
       </router-link>
-      <b-button variant="ghost-dark-no-bg" @click="loadRandomShow">
-        <i class="fas fa-random mr-1"></i>
-        {{ $t("Another One") }}
+      <b-button variant="ghost-dark-no-bg" class="ml-2" @click="loadRandomShow">
+        <i class="fas fa-step-forward mr-1"></i>
       </b-button>
       <b-button
         variant="ghost-dark-no-bg"
+        size="sm"
+        style="float: right"
         v-if="$adminMode"
         @click="removeEpisode(randomShowRandomEpisode)"
       >

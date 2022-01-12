@@ -48,9 +48,14 @@
           </p>
         </div>
         <div
-          class="col-sm-12"
+          class="col-sm-12" v-if="show"
         >
-          <LazyDiscoverPlayer v-if="show" :routeType="type" :shows="[show]" />
+          <div class="text-center mb-5" v-if="!showDiscover">
+            <b-button @click="showDiscover = true" size="lg" variant="success">
+              <i class="fas fa-random mr-2"></i> Watch Something Random
+            </b-button>
+          </div>
+          <LazyDiscoverPlayer v-if="showDiscover" :routeType="type" :shows="[show]" />
         </div>
 
         <div class="col-sm-12 mb-5">
@@ -157,6 +162,7 @@ export default {
       coverUpdated: false,
       randomEpisode: undefined,
       currentTime: 0,
+      showDiscover: false,
     };
   },
   computed: {

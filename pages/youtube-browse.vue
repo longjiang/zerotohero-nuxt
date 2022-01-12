@@ -23,10 +23,19 @@
         <div class="col-sm-12 mb-4">
           <!-- <Sale class="mt-4 mb-4" v-if="$l2.code === 'zh'" /> -->
           <h3 v-if="!keyword" class="mt-5 text-center">New Videos</h3>
-          <div class="col-sm-12">
+          <div class="col-sm-12 mt-5" v-if="!keyword && videos && videos[0]">
+            <div class="text-center mb-5" v-if="!showDiscover">
+              <b-button
+                @click="showDiscover = true"
+                size="lg"
+                variant="success"
+              >
+                <i class="fas fa-random mr-2"></i>
+                Watch Something Random
+              </b-button>
+            </div>
             <LazyDiscoverPlayer
-              v-if="!keyword && videos && videos[0]"
-              class="mt-5"
+              v-if="showDiscover"
               routeType="talks"
               :shows="[]"
             />
@@ -72,7 +81,11 @@
                 Category
               </b-form-select>
             </div>
-            <b-form-checkbox v-model="includeShows" v-if="$adminMode" class="d-inline-block">
+            <b-form-checkbox
+              v-model="includeShows"
+              v-if="$adminMode"
+              class="d-inline-block"
+            >
               Include videos in TV shows and talks
             </b-form-checkbox>
             <router-link
@@ -200,6 +213,7 @@ export default {
       topicData: this.topic,
       topics,
       loading: false,
+      showDiscover: false,
     };
   },
   computed: {

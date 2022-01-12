@@ -27,7 +27,16 @@
               filteredShows.length > 1 ? "s" : ""
             }})
           </p>
-          <LazyDiscoverPlayer :routeType="routeType" :shows="shows" />
+          <div class="text-center mb-5" v-if="!showDiscover">
+            <b-button @click="showDiscover = true" size="lg" variant="success">
+              <i class="fas fa-random mr-2"></i> Watch Something Random
+            </b-button>
+          </div>
+          <LazyDiscoverPlayer
+            :routeType="routeType"
+            :shows="shows"
+            v-if="showDiscover"
+          />
           <div class="show-list-wrapper">
             <b-input-group class="mb-5 input-group-ghost-dark">
               <b-form-input
@@ -54,8 +63,8 @@
               </div>
               <div class="text-center" v-if="shows && shows.length === 0">
                 Sorry, we could not find any
-                {{ routeType === "tv-shows" ? "TV shows" : "YouTube Channels" }} in
-                {{ $l2.name }} 😭.
+                {{ routeType === "tv-shows" ? "TV shows" : "YouTube Channels" }}
+                in {{ $l2.name }} 😭.
               </div>
               <ShowList
                 v-if="shows && shows.length > 0"
@@ -86,6 +95,7 @@ export default {
       type: this.routeType === "tv-shows" ? "tvShows" : "talks",
       shows: undefined,
       keyword: "",
+      showDiscover: false,
     };
   },
   async fetch() {
