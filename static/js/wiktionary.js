@@ -23,6 +23,7 @@ const Dictionary = {
     nor: 'nno',
     nsl: 'nor',
     tgl: 'ceb',
+    wol: 'fra'
   },
   conjugations: undefined, // for french only
   romanizations: undefined, // for persian only
