@@ -3754,7 +3754,7 @@ id,name,otherNames,wiktionary,glottologId,glottologFamilyId,glottologParentId,le
 3753,Olutsotso,,,tsot1241,atla1278,cent2288,language,0.2975,34.6961,KE,lto,,I,L,,,
 3754,Lutachoni,,,tach1242,atla1278,cent2288,language,0.6079,34.8298,KE,lts,,I,L,,,
 3755,Latu,,,latu1237,aust1307,sapa1250,language,-3.41302,128.667,ID,ltu,,I,L,,,
-3756,Luxembourgish,,6657,luxe1241,indo1319,midd1319,language,49.6839,6.14931,BE DE FR LU,ltz,lb,I,L,,,
+3756,Luxembourgish,,6657,luxe1241,indo1319,midd1319,language,49.6839,6.14931,BE DE FR LU,ltz,lb,I,L,,lb,"Michel Lentz (1820 – 1893), a Luxembourg poet best known for having written “Ons Hémécht”, the national anthem of Luxembourg"
 3757,Luba-Kasai,"Tshiluba, Luba",,luba1249,atla1278,bang1371,language,-5.72717,22.4422,AO CD,lua,,I,L,6300000,,
 3758,Luba-Katanga,,1,luba1250,atla1278,kaon1242,language,-8.2816,25.8918,CD,lub,lu,I,L,1505000,lu,
 3759,Aringa,,1,arin1244,cent2225,cent2043,language,3.56143,31.3071,SS UG,luc,,I,L,,,
