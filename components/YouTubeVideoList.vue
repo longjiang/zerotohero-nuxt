@@ -396,7 +396,7 @@ export default {
     newShow(show) {
       this.$emit("newShow", show);
     },
-    async batch(action) {
+    async batch(action, delay = 0) {
       let indices = Object.keys(this.$refs.youTubeVideoCard);
       let chunks = Helper.arrayChunk(indices, 3);
       for (let chunk of chunks) {
@@ -404,7 +404,7 @@ export default {
         for (let videoIndex of chunk) {
           promises.push(action(videoIndex));
         }
-        await Helper.timeout(3000)
+        await Helper.timeout(delay)
         await Promise.all(promises);
       }
     },
@@ -412,14 +412,14 @@ export default {
       this.batch((videoIndex) => {
         if (this.$refs.youTubeVideoCard[videoIndex])
           this.$refs.youTubeVideoCard[videoIndex].getSubsAndSave();
-      });
+      }, 3000);
     },
     async assignShowToAll(show, type) {
       // type: 'tv_show' or 'talk'
       this.batch((videoIndex) => {
         if (this.$refs.youTubeVideoCard[videoIndex])
           this.$refs.youTubeVideoCard[videoIndex].saveShow(show, type);
-      });
+      }, 1);
     },
     async removeAll() {
       for (let videoIndex in this.$refs.youTubeVideoCard) {
