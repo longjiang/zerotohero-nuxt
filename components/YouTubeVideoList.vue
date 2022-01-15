@@ -404,6 +404,7 @@ export default {
         for (let videoIndex of chunk) {
           promises.push(action(videoIndex));
         }
+        await Helper.timeout(3000)
         await Promise.all(promises);
       }
     },
