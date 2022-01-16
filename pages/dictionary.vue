@@ -72,7 +72,7 @@
             />
             <hr class="mb-4" />
             <client-only>
-              <div v-if="saved() && sW.length > 0" class="text-center mb-4">
+              <div v-if="saved()" class="text-center mb-4">
                 <router-link
                   class="link-unstyled mb-2 d-block"
                   :to="`/${$l1.code}/${$l2.code}/saved-words`"
@@ -83,6 +83,7 @@
                   </h5>
                 </router-link>
                 <Paginator
+                  v-if="sW.length > 0"
                   :items="sW"
                   :findCurrent="(item) => item.id === entry.id"
                   :url="

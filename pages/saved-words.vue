@@ -17,7 +17,7 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
-          <h3 class="text-center">Saved {{ $l2.name }} Words</h3>
+          <h3 class="text-center">{{ sWLoaded ? sW.length : ''}} Saved {{ $l2.name }} Words</h3>
           <p class="text-center mb-5">
             {{
               $t(
@@ -49,7 +49,7 @@
                 .replace(/ /g, '-')}-saved-words.csv`"
               variant="primary"
               size="sm"
-              v-if="this.sW.length > 0"
+              v-if="sW.length > 0"
             >
               <i class="fa fa-download mr-1"></i>
               {{ $t("Export CSV") }}
@@ -73,9 +73,13 @@
               Learn (Legacy)
             </router-link>
           </div>
+          <div v-if="!sWLoaded" class="text-center">
+            <Loader :sticky="true" message="Loading words saved in your browser..." />
+          </div>
           <div
             class="pt-3 pb-3 bg-white"
             style="position: sticky; top: 0; z-index: 9"
+            v-if="sWLoaded && sW.length > 0"
           >
             <LazyHideDefs
               @hideWord="hideWord = arguments[0]"

@@ -102,6 +102,10 @@ const Dictionary = {
       word.id = String(index)
       return word
     })
+    let rekeyedWords = {}
+    for (let index in words) {
+      rekeyedWords[index] = words[index]
+    }
     console.log(`Wiktionary: ${file} loaded.`)
     return words
   },
@@ -279,7 +283,7 @@ const Dictionary = {
     return stemStr.trim()
   },
   get(id) {
-    return this.words.find(word => word.id == id)
+    return this.words[id]
   },
   lookup(text) {
     let word = this.words.find(word => word && word.bare.toLowerCase() === text.toLowerCase())
