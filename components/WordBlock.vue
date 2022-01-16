@@ -681,9 +681,9 @@ export default {
             this.lookup();
           }
         }
-        if (this.$refs.speak) {
-          this.$refs.speak[0].speak()
-        }
+        // if (this.$refs.speak) {
+        //   this.$refs.speak[0].speak()
+        // }
         this.loadImages();
         this.open = true;
       }
