@@ -87,13 +87,13 @@ export default {
       player.src = url;
       player.play();
     },
-    speak() {
+    speak(speed = 0.75, volume = 1) {
       if (this.mp3 && !this.mp3.endsWith('.flac')) {
         let url = this.wiktionary ? commons(`File:${this.mp3}`) : this.mp3;
         this.playWithOGV(url);
       } else if (this.text) {
         if (this.$languages.hasFeature(this.$l1, this.$l2, "speech")) {
-          Helper.speak(this.text, this.$l2, 0.75);
+          Helper.speak(this.text, this.$l2, speed, volume);
         } else {
           window.open(`https://forvo.com/search/${this.text}/${this.$l2.code}`);
         }

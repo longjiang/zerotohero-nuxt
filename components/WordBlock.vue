@@ -675,17 +675,21 @@ export default {
       }
     },
     async openPopup() {
+      if (this.open) return
       if (this.popup && (await this.$getDictionary())) {
         if (this.loading === true) {
           if (this.words && this.words.length === 0) {
             this.lookup();
           }
         }
-        // if (this.$refs.speak) {
-        //   this.$refs.speak[0].speak()
-        // }
         this.loadImages();
         this.open = true;
+        await Helper.timeout(300);
+        if (this.open) {
+          if (this.$refs.speak) {
+            this.$refs.speak[0].speak(0.75, 0.5); // Speed and volume
+          }
+        }
       }
     },
     async closePopup() {
