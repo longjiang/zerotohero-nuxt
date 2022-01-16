@@ -171,6 +171,7 @@
                 :mp3="word.audio"
                 :wiktionary="word.wiktionary"
                 class="ml-1"
+                ref="speak"
               />
             </div>
             <Star
@@ -679,6 +680,9 @@ export default {
           if (this.words && this.words.length === 0) {
             this.lookup();
           }
+        }
+        if (this.$refs.speak) {
+          this.$refs.speak[0].speak()
         }
         this.loadImages();
         this.open = true;
