@@ -87,10 +87,18 @@ export default {
       player.src = url;
       player.play();
     },
+    playAudio(url) {
+      let audio = new Audio(url);
+      audio.play();
+    },
     speak(speed = 0.75, volume = 1) {
-      if (this.mp3 && !this.mp3.endsWith('.flac')) {
+      if (this.mp3) {
         let url = this.wiktionary ? commons(`File:${this.mp3}`) : this.mp3;
-        this.playWithOGV(url);
+        if (url.endsWith('.ogg')) {
+          this.playWithOGV(url);
+        } else {
+          this.playAudio(url);
+        }
       } else if (this.text) {
         if (this.$languages.hasFeature(this.$l1, this.$l2, "speech")) {
           Helper.speak(this.text, this.$l2, speed, volume);
