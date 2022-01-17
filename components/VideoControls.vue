@@ -192,7 +192,7 @@ export default {
       this.$emit("togglePaused");
     },
     toggleSpeed() {
-      let speeds = [1, 0.75, 0.5, 1.5, 2];
+      let speeds = [1, 0.75, 0.5];
       let index = speeds.findIndex((s) => s === this.speed);
       if (index > -1) {
         index = index + 1;
