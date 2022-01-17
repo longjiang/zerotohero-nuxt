@@ -47,7 +47,6 @@
           v-if="!l2Settings.useTraditional && token.candidates[0].simplified"
           class="word-block-simplified"
           :data-level="level"
-          @click="wordBlockClick()"
         >
           {{ token.candidates[0].simplified }}
         </span>
@@ -56,7 +55,6 @@
             l2Settings.useTraditional && token.candidates[0].traditional
           "
           class="word-block-traditional"
-          @click="wordBlockClick()"
         >
           {{ token.candidates[0].traditional }}
         </span>
@@ -66,7 +64,6 @@
               'word-block-text d-inline-block': true,
               klingon: $l2.code === 'tlh',
             }"
-            @click="wordBlockClick()"
           >
             {{ transform(token.text) }}
           </span>
@@ -95,7 +92,6 @@
         </span>
         <span
           :class="{ 'word-block-text': true, klingon: $l2.code === 'tlh' }"
-          @click="wordBlockClick()"
           v-html="transform(text)"
         />
       </template>
@@ -411,7 +407,6 @@ export default {
       if (this.token && this.token.candidates && this.token.candidates[0]) {
         let saved = this.token.candidates.find((c) => c.saved);
         if (saved) {
-          console.log(saved);
           return saved;
         } else return this.token.candidates[0];
       }
@@ -664,8 +659,10 @@ export default {
       }
     },
     togglePopup() {
-      if (this.open) this.closePopup();
-      else if (this.popup) this.openPopup();
+      if (this.popup) {
+        if (this.open) this.closePopup();
+        else this.openPopup();
+      }
     },
     updateOpen() {
       if (this.wordblockHover || (!Helper.isMobile() && this.tooltipHover)) {
@@ -675,7 +672,7 @@ export default {
       }
     },
     async openPopup() {
-      if (this.open) return
+      if (this.open) return;
       if (this.popup && (await this.$getDictionary())) {
         if (this.loading === true) {
           if (this.words && this.words.length === 0) {
