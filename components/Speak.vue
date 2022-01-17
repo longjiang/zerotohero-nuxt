@@ -1,6 +1,6 @@
 <template>
   <client-only>
-    <button class="speak focus-exclude" @click.stop.prevent="speak">
+    <button class="speak focus-exclude" @click.stop.prevent="onClick">
       <i class="fas fa-volume-up" v-if="canSpeak"></i>
       <span v-else-if="forvo">
         <img
@@ -90,6 +90,9 @@ export default {
     playAudio(url) {
       let audio = new Audio(url);
       audio.play();
+    },
+    onClick() {
+      this.speak()
     },
     speak(speed = 0.75, volume = 1) {
       if (this.mp3) {
