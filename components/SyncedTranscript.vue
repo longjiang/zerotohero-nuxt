@@ -706,8 +706,9 @@ export default {
     goToLine(line) {
       if (!line) return;
       this.currentLineIndex = this.lines.findIndex((l) => l === line);
+      this.currentLine = line
       this.nextLine = this.lines[this.currentLineIndex + 1];
-      this.seekVideoTo(line.starttime);
+      this.seekVideoTo(line.starttime + 0.1); // We add 100 milliseconds to avoid the current line highlight from quickly "jumping up and down"
     },
     rewind() {
       this.goToLine(this.currentLine);
