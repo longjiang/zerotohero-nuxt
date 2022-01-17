@@ -90,6 +90,7 @@
               class="ml-1"
               :text="entry.head"
               :mp3="entry.audio"
+              ref="speak"
               :wiktionary="entry.wiktionary"
             />
           </div>
@@ -205,6 +206,9 @@ export default {
   async mounted() {
     this.prevPath = await this.prevWord();
     this.nextPath = await this.nextWord();
+    if (this.$refs.speak) {
+      this.$refs.speak.speak(0.75, 0.5); // Speed and volume
+    }
   },
   methods: {
     transliterate(text) {
