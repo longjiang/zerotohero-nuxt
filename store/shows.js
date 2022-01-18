@@ -26,34 +26,38 @@ export const mutations = {
 export const actions = {
   async load(context, { l2, adminMode, limit = 500 }) {
     let tvShows = []
-    let response = await axios.get(
-      `${Config.wiki}items/tv_shows?filter[l2][eq]=${l2.id
-      }${adminMode ? '' : '&filter[hidden][empty]=true'}&limit=${limit}&timestamp=${adminMode ? Date.now() : 0}`
-    );
-
-    if (response.data.data) {
-      tvShows = response.data.data.sort((x, y) => {
-        let sort = 0
-        if (x.title && y.title)
-          sort = (x.title || '').localeCompare(y.title, l2.locales[0])
-        return sort
-      });
-    }
-
-    response = await axios.get(
-      `${Config.wiki}items/talks?filter[l2][eq]=${l2.id
-      }${adminMode ? '' : '&filter[hidden][empty]=true'}&limit=${limit}&timestamp=${adminMode ? Date.now() : 0}`
-    );
     let talks = []
-    if (response.data.data) {
-      talks = response.data.data.sort((x, y) => {
-        let sort = 0
-        if (x.title && y.title)
-          sort = (x.title || "").localeCompare(y.title, l2.locales[0])
-        return sort
-      });
+    try {
+
+      let response = await axios.get(
+        `${Config.wiki}items/tv_shows?filter[l2][eq]=${l2.id
+        }${adminMode ? '' : '&filter[hidden][empty]=true'}&limit=${limit}&timestamp=${adminMode ? Date.now() : 0}`
+      );
+
+      if (response.data.data) {
+        tvShows = response.data.data.sort((x, y) => {
+          let sort = 0
+          if (x.title && y.title)
+            sort = (x.title || '').localeCompare(y.title, l2.locales[0])
+          return sort
+        });
+      }
+
+      response = await axios.get(
+        `${Config.wiki}items/talks?filter[l2][eq]=${l2.id
+        }${adminMode ? '' : '&filter[hidden][empty]=true'}&limit=${limit}&timestamp=${adminMode ? Date.now() : 0}`
+      );
+      if (response.data.data) {
+        talks = response.data.data.sort((x, y) => {
+          let sort = 0
+          if (x.title && y.title)
+            sort = (x.title || "").localeCompare(y.title, l2.locales[0])
+          return sort
+        });
+      }
+    } catch (err) {
     }
-    
+
     context.commit('LOAD_SHOWS', { l2, tvShows, talks })
   },
   async add(context, { l2, type, show }) {

@@ -319,7 +319,9 @@ export default {
           }
         }
         return videos;
-      } catch (err) {}
+      } catch (err) {
+        return []
+      }
     },
     async getChannels() {
       let response = await axios.get(
