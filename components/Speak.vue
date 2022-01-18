@@ -7,11 +7,7 @@
           src="/img/logo-forvo-circle.png"
           alt="Forvo"
           data-not-lazy
-          style="
-            height: 1rem;
-            opacity: 0.5;
-            margin-bottom: 0.2rem;
-          "
+          style="height: 1rem; opacity: 0.5; margin-bottom: 0.2rem"
         />
       </span>
       <div ref="player" class="hidden"></div>
@@ -37,8 +33,8 @@ export default {
       type: Object,
     },
     forvo: {
-      default: true
-    }
+      default: true,
+    },
   },
   computed: {
     $l1() {
@@ -71,8 +67,13 @@ export default {
   async mounted() {
     await this.$getDictionary();
     this.canSpeak =
-      (this.mp3 && !this.mp3.endsWith('.flac')) ||
-      (this.text && this.$languages.hasFeature(this.$l1 || this.english, this.$l2, "speech"));
+      (this.mp3 && !this.mp3.endsWith(".flac")) ||
+      (this.text &&
+        this.$languages.hasFeature(
+          this.$l1 || this.english,
+          this.$l2,
+          "speech"
+        ));
   },
   methods: {
     // https://www.npmjs.com/package/ogv
@@ -92,12 +93,14 @@ export default {
       audio.play();
     },
     onClick() {
-      this.speak()
+      if (this.canSpeak) this.speak();
+      else
+        window.open(`https://forvo.com/search/${this.text}/${this.$l2.code}`);
     },
     speak(speed = 0.75, volume = 1) {
       if (this.mp3) {
         let url = this.wiktionary ? commons(`File:${this.mp3}`) : this.mp3;
-        if (url.endsWith('.ogg')) {
+        if (url.endsWith(".ogg")) {
           this.playWithOGV(url);
         } else {
           this.playAudio(url);
@@ -105,8 +108,6 @@ export default {
       } else if (this.text) {
         if (this.$languages.hasFeature(this.$l1, this.$l2, "speech")) {
           Helper.speak(this.text, this.$l2, speed, volume);
-        } else {
-          window.open(`https://forvo.com/search/${this.text}/${this.$l2.code}`);
         }
       }
     },
