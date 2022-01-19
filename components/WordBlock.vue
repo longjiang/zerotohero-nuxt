@@ -23,8 +23,8 @@
       }"
       v-bind="attributes"
       v-on="popup ? { click: wordBlockClick } : {}"
-      @mouseover="wordblockHover = true"
-      @mouseout="wordblockHover = false"
+      @mouseenter="wordBlockMouseEnter"
+      @mouseleave="wordBlockMouseLeave"
     >
       <template v-if="token && token.candidates && token.candidates.length > 0">
         <span
@@ -97,7 +97,7 @@
       </template>
     </span>
     <template slot="popover">
-      <div @mouseover="tooltipHover = true" @mouseout="tooltipHover = false">
+      <div @mouseenter="tooltipMouseEnter" @mouseleave="tooltipMouseLeave">
         <button class="word-block-tool-tip-close" @click="closePopup">
           <i class="fa fa-times"></i>
         </button>
@@ -483,14 +483,12 @@ export default {
       if (this.words && this.words.length === 0) {
         this.lookup();
       }
-      if (!Helper.isMobile()) await Helper.timeout(750);
+      await Helper.timeout(Helper.isMobile() ? 100 : 750);
       this.updateOpen();
     },
     async tooltipHover() {
-      if (!Helper.isMobile()) {
-        await Helper.timeout(300);
-        this.updateOpen();
-      }
+      await Helper.timeout(300);
+      this.updateOpen();
     },
   },
   methods: {
@@ -541,6 +539,18 @@ export default {
       }
       return text;
     },
+    wordBlockMouseEnter(event) {
+      this.wordblockHover = true;
+    },
+    async wordBlockMouseLeave(event) {
+      this.wordblockHover = false;
+    },
+    tooltipMouseEnter(event) {
+      this.tooltipHover = true;
+    },
+    tooltipMouseLeave(event) {
+      this.tooltipHover = false;
+    },
     wordBlockClick(event) {
       if (event) {
         event.preventDefault();
@@ -556,7 +566,7 @@ export default {
           path: `/${this.$l1.code}/${this.$l2.code}/explore/related/${this.token.candidates[0].id}`,
         });
       } else {
-        this.togglePopup();
+        if (!Helper.isMobile()) this.togglePopup();
       }
     },
     tr(text) {
@@ -665,7 +675,8 @@ export default {
       }
     },
     updateOpen() {
-      if (this.wordblockHover || (!Helper.isMobile() && this.tooltipHover)) {
+      // alert(`w: ${this.wordblockHover}, t: ${this.tooltipHover}`);
+      if (this.wordblockHover || this.tooltipHover) {
         this.openPopup();
       } else {
         this.closePopup();
