@@ -1051,6 +1051,7 @@ button.bg-primary:focus {
 
 .main {
   background: white;
+  min-height: calc(100vh - 250px);
 }
 
 .zerotohero-wide {

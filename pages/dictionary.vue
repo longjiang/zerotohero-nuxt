@@ -61,7 +61,7 @@
           </div>
         </div>
       </client-only>
-      <div :class="{ 'focus-exclude': true, container: !wide }">
+      <div :class="{ 'focus-exclude dictionary-main': true, container: !wide }">
         <div :class="{ row: !wide, 'content-panes': wide }" v-if="entry">
           <div :class="{ 'content-pane-left': wide, 'col-sm-12': !wide }">
             <LazyHideDefs
