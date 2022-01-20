@@ -77,7 +77,7 @@
       </b-dropdown>
     </div>
     <div
-      :class="{ 'annotate-slot': true, 'd-none': annotated }"
+      :class="{ 'annotate-slot annotate-template': true, 'd-none': annotated }"
       style="display: inline"
     >
       <slot></slot>
@@ -92,13 +92,14 @@
         style="width: calc(100% - 2rem)"
       />
     </div>
-    <v-runtime-template
-      v-if="annotated && !textMode"
-      v-for="(template, index) of annotatedSlots"
-      :key="`annotate-template-${index}`"
-      :template="template"
-      class="annotate-template"
-    />
+    <template v-if="annotated && !textMode">
+      <v-runtime-template
+        v-for="(template, index) of annotatedSlots"
+        :key="`annotate-template-${index}`"
+        :template="template"
+        class="annotate-template"
+      />
+    </template>
     <div v-if="translation">{{ translation }}</div>
   </component>
 </template>
@@ -251,8 +252,8 @@ export default {
       document.body.removeChild(tempInput);
     },
     async visibilityChanged(isVisible) {
-      this.isVisible = isVisible 
-      await Helper.delay(300)
+      this.isVisible = isVisible;
+      await Helper.delay(300);
       if (this.isVisible) {
         this.convertToSentencesAndAnnotate(this.$slots.default[0]);
       }
@@ -334,17 +335,17 @@ export default {
       let html = text;
       if (this.$l2.continua) {
         html = await this.tokenizeContinua(text, batchId);
-      } else if ((this.$l2.scripts && this.$l2.scripts[0] && this.$l2.scripts[0].script === 'Arab') || (this.$l2.wiktionary && this.$l2.wiktionary < 2000)) {
+      } else if (
+        (this.$l2.scripts &&
+          this.$l2.scripts[0] &&
+          this.$l2.scripts[0].script === "Arab") ||
+        (this.$l2.wiktionary && this.$l2.wiktionary < 2000)
+      ) {
         html = await this.tokenizeIntegral(text);
       } else if (
-        this.$l2.agglutinative || this.$l2.indo ||
-        [
-          "de",
-          "no",
-          "en",
-          "hy",
-          "vi",
-        ].includes(this.$l2.code)
+        this.$l2.agglutinative ||
+        this.$l2.indo ||
+        ["de", "no", "en", "hy", "vi"].includes(this.$l2.code)
       ) {
         html = await this.tokenizeAgglutenative(text, batchId);
       } else {
@@ -508,12 +509,12 @@ export default {
   }
 }
 
-.text-center .annotated[dir="ltr"].with-buttons .annotate-template {
-  padding-left: 1.5rem;
+.text-center [dir="ltr"].with-buttons .annotate-template {
+  padding-left: 1rem;
 }
 
-.text-center .annotated[dir="rtl"].with-buttons .annotate-template {
-  padding-right: 1.5rem;
+.text-center [dir="rtl"].with-buttons .annotate-template {
+  padding-right: 1rem;
 }
 
 .annotator-buttons {
