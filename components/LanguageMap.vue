@@ -261,7 +261,7 @@ export default {
     },
     goTo(l2) {
       let l1Code = "en";
-      if (["hak", "nan", "lzh", "ltc", "och", "en"].includes(l2.code))
+      if (["hak", "nan", "lzh", "ltc", "och"].includes(l2.code))
         l1Code = "zh";
       this.$router.push(`/${l1Code}/${l2.code}/`);
     },
