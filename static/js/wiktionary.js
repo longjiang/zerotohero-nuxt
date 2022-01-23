@@ -23,6 +23,7 @@ const Dictionary = {
     nor: 'nno',
     nsl: 'nor',
     tgl: 'ceb',
+    tir: 'amh',
     wol: 'fra',
     vec: 'ita'
   },
