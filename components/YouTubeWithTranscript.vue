@@ -510,6 +510,7 @@ export default {
   },
   methods: {
     async getL1Transcript() {
+      if (this.$l2.code === this.$l1.code) return;
       let video = this.video;
       if (!video) return;
       let missingSubsL1 = !this.video.subs_l1;

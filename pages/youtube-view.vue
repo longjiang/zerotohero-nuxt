@@ -268,7 +268,7 @@ export default {
           Vue.set(this.video, "subs_l2", subs_l2);
           Vue.set(video, "checkingSubs", false);
         }
-        if (missingSubsL1) {
+        if (missingSubsL1 && this.$l2.code !== this.$l1.code) {
           console.log(`YouTube View: Getting ${this.$l1.name} transcript`);
           let subs_l1;
           if (video.l1Locale && video.l1Locale !== video.l2Locale) {
