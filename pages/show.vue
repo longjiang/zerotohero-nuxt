@@ -33,8 +33,8 @@
               v-if="titleUpdated"
             ></i>
           </h3>
-          <p v-if="count" style="opacity: 0.6">
-            {{ count }} Episodes
+          <p style="opacity: 0.6">
+            <span v-if="count">{{ count }} Episodes</span>
             <span v-if="$adminMode">
               · Cover youtube_id:
               <span contenteditable="true" @blur="saveCover">
@@ -47,15 +47,18 @@
             </span>
           </p>
         </div>
-        <div
-          class="col-sm-12" v-if="show"
-        >
+        <div class="col-sm-12" v-if="show">
           <div class="text-center mb-5" v-if="!showDiscover">
             <b-button @click="showDiscover = true" size="lg" variant="success">
-              <i class="fas fa-random mr-2"></i> Watch Something Random
+              <i class="fas fa-random mr-2"></i>
+              Watch Something Random
             </b-button>
           </div>
-          <LazyDiscoverPlayer v-if="showDiscover" :routeType="type" :shows="[show]" />
+          <LazyDiscoverPlayer
+            v-if="showDiscover"
+            :routeType="type"
+            :shows="[show]"
+          />
         </div>
 
         <div class="col-sm-12 mb-5">
@@ -286,6 +289,7 @@ export default {
     },
     async getVideos({ keyword, limit = 500, offset = 0 } = {}) {
       let sort = this.show.title === "News" ? "-date" : "title";
+      let count = this.show.title === "News" ? "" : "&meta=filter_count"; // Do not count news, there are too many
       let keywordFilter = keyword ? `&filter[title][contains]=${keyword}` : "";
       let response = await axios.get(
         `${Config.wiki}items/youtube_videos?filter[l2][eq]=${
@@ -294,10 +298,12 @@ export default {
           this.show.id
         }${keywordFilter}&fields=channel_id,id,lesson,level,title,topic,youtube_id,date,tv_show.*,talk.*&sort=${sort}&limit=${limit}&offset=${offset}&timestamp=${
           this.$adminMode ? Date.now() : 0
-        }&meta=filter_count`
+        }${count}`
       );
       let videos = response.data.data || [];
-      this.count = response.data.meta.filter_count;
+      if (response.data.meta && response.data.meta.filter_count) {
+        this.count = response.data.meta.filter_count;
+      }
       videos = Helper.uniqueByValue(videos, "youtube_id");
       if (this.show.title !== "News") {
         videos =
