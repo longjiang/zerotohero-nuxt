@@ -268,27 +268,6 @@ export default {
           Vue.set(this.video, "subs_l2", subs_l2);
           Vue.set(video, "checkingSubs", false);
         }
-        if (missingSubsL1 && this.$l2.code !== this.$l1.code) {
-          console.log(`YouTube View: Getting ${this.$l1.name} transcript`);
-          let subs_l1;
-          if (video.l1Locale && video.l1Locale !== video.l2Locale) {
-            subs_l1 = await YouTube.getTranscript(
-              video.youtube_id,
-              this.$l1.locales[0],
-              undefined,
-              this.$adminMode
-            );
-          } else {
-            subs_l1 = await YouTube.getTranslatedTranscript(
-              video.youtube_id,
-              video.l2Locale,
-              video.l2Name,
-              this.$l1.code === "zh" ? "zh-Hans" : this.$l1.code,
-              this.$adminMode
-            );
-          }
-          if (subs_l1) Vue.set(this.video, "subs_l1", subs_l1);
-        }
         if (video.subs_l2 && video.subs_l2.length > 0) {
           this.firstLineTime = video.subs_l2[0].starttime;
         }

@@ -487,7 +487,7 @@ export default {
     if (this.$refs.youtube) this.$refs.youtube.speed = this.speed;
   },
   watch: {
-    async video() {
+    async 'video.youtube_id'() {
       await this.getL1Transcript();
     },
     repeatMode() {
