@@ -57,13 +57,15 @@
       </span>
       <div
         v-if="$l2.code !== $l1.code && reviewItem.parallelLines"
+        :dir="$l1.direction === 'rtl' ? 'rtl' : 'ltr'"
         :class="{
-          'transcript-line-l1': true,
+          'transcript-line-l1 text-left mt-2': true,
           'text-right':
-            $l2.scripts &&
-            $l2.scripts.length > 0 &&
-            $l2.scripts[0].direction === 'rtl',
+            $l1.scripts &&
+            $l1.scripts.length > 0 &&
+            $l1.scripts[0].direction === 'rtl',
         }"
+        style="opacity: 0.7"
       >
         <span v-html="reviewItem.parallelLines" />
       </div>
