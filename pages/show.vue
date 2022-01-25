@@ -35,7 +35,7 @@
           </h3>
           <p style="opacity: 0.6">
             <span v-if="count">{{ count }} Episodes</span>
-            <span v-if="$adminMode">
+            <span v-if="$adminMode && show">
               · Cover youtube_id:
               <span contenteditable="true" @blur="saveCover">
                 {{ show.youtube_id }}
