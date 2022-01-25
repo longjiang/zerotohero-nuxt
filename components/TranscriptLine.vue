@@ -44,12 +44,12 @@
         v-if="line.line.length > 0 && parallelLine"
         :class="{
           'transcript-line-l1': true,
-          'pl-3': !single && $l2.direction === 'ltr',
-          'pr-3': !single && $l2.direction === 'rtl',
+          'pr-3': !single && $l2.direction === 'ltr',
+          'pl-3': !single && $l2.direction === 'rtl',
           'text-right':
-            $l2.scripts &&
-            $l2.scripts.length > 0 &&
-            $l2.scripts[0].direction === 'rtl',
+            $l1.scripts &&
+            $l1.scripts.length > 0 &&
+            $l1.scripts[0].direction === 'rtl',
           'text-center': single,
         }"
         v-html="parallelLine"
