@@ -72,23 +72,22 @@ const Dictionary = {
       if (l1 === 'eng' && supplementalLang) {
         // Append indonesian words to malay dictionary so we get more words
         let supplWords = await this.loadWords(this.dictionaryFile({ l1, l2: supplementalLang }))
-        for (let w of supplWords) {
-          w.id = supplementalLang + '-' + w.id
-          w.supplementalLang = supplementalLang
-        }
-        words = words.concat(supplWords)
-        words = words.sort((a, b) => {
+        supplWords = supplWords.sort((a, b) => {
           if (a.head && b.head) {
             return b.head.length - a.head.length
           }
         })
+        for (let w of supplWords) {
+          w.id = supplementalLang + '-' + w.id
+          w.supplementalLang = supplementalLang
+          words[w.id] = w
+        }
       }
       this.words = words
       if (this.l2 === 'fra') await this.loadFrenchConjugationsAndLemmatizer()
       if (this.l2 === 'fas') await this.loadPersianRomanization()
       console.log("Wiktionary: loaded.")
       return this
-
     }
   },
   async loadWords(file) {
