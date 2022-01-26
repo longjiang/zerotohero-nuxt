@@ -16,6 +16,7 @@ const Dictionary = {
   supplementalLangs: {
     ceb: 'tgl',
     cmn: 'zho',
+    gsw: 'deu',
     ind: 'msa',
     ins: 'eng',
     msa: 'ind',
@@ -80,8 +81,8 @@ const Dictionary = {
         for (let w of supplWords) {
           w.id = supplementalLang + '-' + w.id
           w.supplementalLang = supplementalLang
-          words[w.id] = w
         }
+        words = words.concat(supplWords)
       }
       this.words = words
       if (this.l2 === 'fra') await this.loadFrenchConjugationsAndLemmatizer()
@@ -103,10 +104,6 @@ const Dictionary = {
       word.id = String(index)
       return word
     })
-    let rekeyedWords = {}
-    for (let index in words) {
-      rekeyedWords[index] = words[index]
-    }
     console.log(`Wiktionary: ${file} loaded.`)
     return words
   },
@@ -284,7 +281,11 @@ const Dictionary = {
     return stemStr.trim()
   },
   get(id) {
-    return this.words[id]
+    if (id.includes('-')) {
+      // This comes from the supplemental dictionary
+      return this.words.find(w => w.id === id)
+    }
+    else return this.words[id]
   },
   lookup(text) {
     let word = this.words.find(word => word && word.bare.toLowerCase() === text.toLowerCase())
@@ -458,7 +459,7 @@ const Dictionary = {
   subdictFromText(text) {
     let search = text.toLowerCase()
     if (this.l2 !== 'vie') search = this.stripAccents(search)
-    let words = this.words.filter(function (row) {
+    let subdictFilterFunction = (row) => {
       if (this.l2 === 'vie') {
         return text.includes(row.head) || search.includes(row.head)
       } else {
@@ -467,7 +468,8 @@ const Dictionary = {
         let found = headMatches || searchMatches
         return found
       }
-    })
+    }
+    let words = this.words.filter(subdictFilterFunction)
     return this.subdict(words)
   },
   isCombining(char) {
