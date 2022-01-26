@@ -13,7 +13,7 @@
         ref="myMap"
       >
         <l-tile-layer
-          url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+          :url="mapTileURL[mapStyle]"
         ></l-tile-layer>
         <l-control-scale
           position="topright"
@@ -200,6 +200,11 @@ export default {
     currentZoom: 4,
     map: undefined,
     currentLang: undefined,
+    mapStyle: 'street',
+    mapTileURL: {
+      street: 'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png',
+      satellite: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+    }
   }),
   async mounted() {
     this.initialZoom = this.$route.query.z ? Number(this.$route.query.z) : 3;
