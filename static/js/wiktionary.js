@@ -73,16 +73,16 @@ const Dictionary = {
       if (l1 === 'eng' && supplementalLang) {
         // Append indonesian words to malay dictionary so we get more words
         let supplWords = await this.loadWords(this.dictionaryFile({ l1, l2: supplementalLang }))
-        supplWords = supplWords.sort((a, b) => {
-          if (a.head && b.head) {
-            return b.head.length - a.head.length
-          }
-        })
         for (let w of supplWords) {
           w.id = supplementalLang + '-' + w.id
           w.supplementalLang = supplementalLang
         }
         words = words.concat(supplWords)
+        words = words.sort((a, b) => {
+          if (a.head && b.head) {
+            return b.head.length - a.head.length
+          }
+        })
       }
       this.words = words
       if (this.l2 === 'fra') await this.loadFrenchConjugationsAndLemmatizer()
@@ -281,7 +281,7 @@ const Dictionary = {
     return stemStr.trim()
   },
   get(id) {
-    if (id.includes('-')) {
+    if (this.supplementalLangs[this.l2]) {
       // This comes from the supplemental dictionary
       return this.words.find(w => w.id === id)
     }
