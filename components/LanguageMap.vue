@@ -200,9 +200,9 @@ export default {
     currentZoom: 4,
     map: undefined,
     currentLang: undefined,
-    mapStyle: 'satellite',
+    mapStyle: 'street',
     mapTileURL: {
-      street: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+      street: 'http://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
       satellite: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
     }
   }),
