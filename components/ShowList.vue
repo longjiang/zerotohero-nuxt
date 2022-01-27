@@ -159,10 +159,10 @@ export default {
   &.tv-show-card-hidden {
     opacity: 0.3;
   }
-  &:hover {
-    transform: scale(110%) rotate(-3deg);
-    transition: all 200ms ease-out;
-  }
+  // &:hover {
+  //   transform: scale(110%);
+  //   transition: all 200ms ease-out;
+  // }
   .tv-show-thumbnail {
     width: 100%;
     max-height: 270px;

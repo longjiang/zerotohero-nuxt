@@ -1005,8 +1005,9 @@ button.bg-primary:focus {
 
 .play-button-wrapper {
   .play-button {
-    background: rgb(34, 34, 34);
+    background: rgba(0, 0, 0, 0.3);
     color: rgba(255, 255, 255, 0.384);
+    backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
     position: absolute;
     top: calc(50% - 20px);
@@ -1018,12 +1019,12 @@ button.bg-primary:focus {
     z-index: 1;
     opacity: 0;
   }
-  &:hover .play-button {
-    color: rgba(255, 255, 255, 0.616);
-    transform: scale(1.8);
-    transition: 200ms ease-in-out;
-    opacity: 1;
-  }
+  // &:hover .play-button {
+  //   color: rgba(255, 255, 255, 0.616);
+  //   transform: scale(1.8);
+  //   transition: 200ms ease-in-out;
+  //   opacity: 1;
+  // }
 }
 
 .home-card {
