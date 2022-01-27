@@ -222,7 +222,9 @@
                   >
                     <div class="feature-card-icon">
                       <i
-                        :class="`${child.icon} bg-gradient-${item.title.length
+                        :class="`${
+                          child.icon
+                        } bg-gradient-${item.title.length
                           .toString()
                           .split('')
                           .pop()} gradient-text`"
@@ -261,7 +263,9 @@
                   >
                     <div class="feature-card-icon">
                       <i
-                        :class="`${child.icon} bg-gradient-${item.title.length
+                        :class="`${
+                          child.icon
+                        } bg-gradient-${item.title.length
                           .toString()
                           .split('')
                           .pop()} gradient-text`"
@@ -352,11 +356,16 @@ export default {
     parent() {
       let parent = this.menu.find((item) => {
         let nameOfItemOrFirstChild = this.nameOfSelfOrFirstChild(item, true);
-        if (nameOfItemOrFirstChild && this.$route.name === nameOfItemOrFirstChild) return true;
+        if (
+          nameOfItemOrFirstChild &&
+          this.$route.name === nameOfItemOrFirstChild
+        )
+          return true;
         let href = this.$router.resolve({
           name: nameOfItemOrFirstChild,
         }).href;
-        if (nameOfItemOrFirstChild && this.$route.path.includes(href)) return true;
+        if (nameOfItemOrFirstChild && this.$route.path.includes(href))
+          return true;
         if (item.children) {
           let childrenNames = item.children.map((child) => child.name);
           if (childrenNames.includes(this.$route.name)) return true;
@@ -1383,8 +1392,6 @@ export default {
     font-size: 1.2em;
     border-radius: 0.5rem;
     box-shadow: 0 10px 30px rgba(68, 75, 134, 0.2);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
     display: block;
     text-align: center;
     &:hover {
@@ -1401,7 +1408,12 @@ export default {
       }
     }
     &.feature-card-dark {
-      background-color: rgba(0, 0, 0, 0.4);
+      background: rgb(69, 69, 69);
+      background: radial-gradient(
+        circle,
+        rgba(69, 69, 69, 1) 0%,
+        rgba(0, 0, 0, 1) 100%
+      );
       border: 1px solid rgba(255, 255, 255, 0.226);
       border-top: 1px solid rgba(255, 255, 255, 0.5);
       border-bottom: 1px solid rgba(0, 0, 0, 0.5);

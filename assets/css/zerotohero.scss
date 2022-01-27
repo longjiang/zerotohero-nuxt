@@ -1005,9 +1005,8 @@ button.bg-primary:focus {
 
 .play-button-wrapper {
   .play-button {
-    background: rgba(0, 0, 0, 0.3);
+    background: rgb(34, 34, 34);
     color: rgba(255, 255, 255, 0.384);
-    backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
     position: absolute;
     top: calc(50% - 20px);
@@ -1028,9 +1027,9 @@ button.bg-primary:focus {
 }
 
 .home-card {
-  background-color: hsla(0deg 100% 100% / 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(15px);
+  background-color: rgba(228, 228, 228, 1);
+  border: 1px solid rgba(255, 255, 255, 0.9); 
+  // backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   padding: 2rem;
   border-radius: 1rem;
