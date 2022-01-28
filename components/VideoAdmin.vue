@@ -479,22 +479,9 @@ export default {
     async save() {
       this.saving = true;
       try {
-        let data = {
-          l2: this.$l2.id,
-          title: this.video.title || "Untitled",
-          youtube_id: this.video.youtube_id,
-          channel_id: this.video.channel ? this.video.channel.id : null,
-          subs_l2: this.video.subs_l2
-            ? YouTube.unparseSubs(this.video.subs_l2, this.$l2.code)
-            : undefined,
-          date: DateHelper.unparseDate(this.video.date),
-        };
-        let response = await axios.post(
-          `${Config.wiki}items/youtube_videos`,
-          data
-        );
-        if (response) {
-          this.video.id = response.data.data.id;
+        let id = await YouTube.saveVideo(this.video, this.$l2)
+        if (id) {
+          this.video.id = id;
           this.saving = false;
           this.isNewVideo = true;
           this.videoInfoKey++;

@@ -631,36 +631,13 @@ export default {
     },
     async save(video, limit = false, tries = 0) {
       try {
-        let lines = video.subs_l2;
-        if (limit) lines = lines.slice(0, limit);
-        let csv = YouTube.unparseSubs(lines, this.$l2.code);
-        let data = {
-          youtube_id: video.youtube_id,
-          title: video.title || "Untitled",
-          l2: this.$l2.id,
-          subs_l2: csv,
-          channel_id: video.channel_id,
-          date: DateHelper.unparseDate(video.date),
-        };
-        if (this.video.tv_show) data.tv_show = this.video.tv_show.id;
-        if (this.video.talk) data.talk = this.video.talk.id;
-        let response = await axios.post(
-          `${Config.wiki}items/youtube_videos?fields=id,tv_show.*,talk.*`,
-          data
-        );
-        response = response.data;
-        if (response && response.data) {
-          Vue.set(video, "id", response.data.id);
+        let id = await YouTube.saveVideo(video, this.$l2, limit, tries);
+        if (id) {
+          Vue.set(video, "id", id);
           this.showSaved = true;
-          return true;
         }
-      } catch (err) {
-        if (tries > 1) return; // Only 2 tries
-        if (!limit) limit = video.subs_l2.length;
-        if (limit > 0) {
-          return this.save(video, Math.floor(limit / 2), tries + 1); // Try with half the lines each time
-        }
-      }
+        return true;
+      } catch (err) {}
     },
     async checkSubsFunc(video) {
       Vue.set(video, "checkingSubs", true);
@@ -673,7 +650,7 @@ export default {
         video = await YouTube.getYouTubeSubsList(video, this.$l1, this.$l2);
         this.$emit("hasSubs", video.hasSubs);
         if (this.checkSaved && this.showSubsEditing) {
-          video = this.addSubsL1(video);
+          this.addSubsL1(video);
         }
         Vue.set(video, "checkingSubs", false);
       }

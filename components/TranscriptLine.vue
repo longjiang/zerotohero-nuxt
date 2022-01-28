@@ -65,6 +65,7 @@
 <script>
 import SmartQuotes from "smartquotes";
 import Helper from "@/lib/helper";
+import HTMLEntities from "html-entities";
 
 export default {
   props: {
@@ -131,9 +132,20 @@ export default {
     smartquotes(text) {
       return SmartQuotes.string(text);
     },
+    decodeHtmlEntities(text) {
+      let HTMLEntities = require("html-entities");
+      const allEntities = new HTMLEntities.AllHtmlEntities();
+      return allEntities.decode(text);
+    },
     lineHtml(line) {
       let html = line.line;
-      if (!this.$l2.code === "tlh") html = this.smartquotes(html);
+      html = this.decodeHtmlEntities(html);
+      if (!this.$l2.apostrophe) {
+        let qhtml = this.smartquotes(html);
+        if (qhtml !== html) {
+          html = qhtml;
+        }
+      }
       if (this.highlight)
         html = this.highlightMultiple(
           html,

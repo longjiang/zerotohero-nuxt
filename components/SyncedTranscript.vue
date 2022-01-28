@@ -501,11 +501,6 @@ export default {
       this.$emit("speechEnd");
       this.$emit("pause");
     },
-    async decodeHtmlEntities(text) {
-      const HTMLEntities = await import("html-entities");
-      const allEntities = new HTMLEntities.AllHtmlEntities();
-      return allEntities.decode(text);
-    },
     removeLine(lineIndex) {
       this.lines.splice(lineIndex, 1);
       if (this.matchedParallelLines)
