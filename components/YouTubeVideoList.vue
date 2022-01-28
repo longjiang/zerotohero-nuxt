@@ -31,13 +31,19 @@
               v-if="
                 checkSavedData &&
                 checkSavedDone &&
-                videosWithSubs.length - savedVideos.length > 0
+                (generated ? shownVideos.length : videosWithSubs.length) -
+                  savedVideos.length >
+                  0
               "
               size="sm"
               @click="addAll()"
             >
               <i class="fas fa-plus mr-2"></i>
-              Add All {{ videosWithSubs.length - savedVideos.length }}
+              Add All
+              {{
+                (generated ? shownVideos.length : videosWithSubs.length) -
+                savedVideos.length
+              }}
             </b-button>
             <b-button size="sm" @click="surveyChannels">
               Survey Channels
@@ -108,6 +114,9 @@
             >
               Show Subs Editing
             </b-form-checkbox>
+            <b-form-checkbox class="mr-1 d-inline-block" v-model="generated">
+              Use Auto-Generated Subs
+            </b-form-checkbox>
             <!-- <a
               class="link-unstyled"
               @click="removeAllUnavailable()"
@@ -168,6 +177,7 @@
             @unavailable="onVideoUnavailable"
             @hasSubs="onHasSubs"
             :video="video"
+            :generated="generated"
             :checkSubs="checkSubsData"
             :showSubsEditing="showSubsEditing"
             :checkSaved="checkSavedData"
@@ -241,20 +251,21 @@ export default {
   data() {
     return {
       Helper,
-      keyword: undefined,
-      videosInfoKey: 0,
       channels: undefined,
-      showSubsEditing: false,
       checkSavedData: this.checkSaved,
-      checkSubsData: this.checkSubs,
-      over: false,
-      hideVideosWithoutSubs: false,
-      showChannels: false,
-      hideVideosInShows: false,
       checkSavedDone: false,
-      unavailableYouTubeIds: [],
-      subsChecked: 3,
+      checkSubsData: this.checkSubs,
+      generated: false,
+      hideVideosInShows: false,
+      hideVideosWithoutSubs: false,
+      keyword: undefined,
+      over: false,
       params: {},
+      showChannels: false,
+      showSubsEditing: false,
+      subsChecked: 3,
+      unavailableYouTubeIds: [],
+      videosInfoKey: 0,
       query: {
         xs: {
           minWidth: 0,

@@ -7,7 +7,12 @@
         over: over,
         'youtube-video-card-wrapper': true,
         media: true,
-        nosubs: checkSubs && !video.checkingSubs && !video.hasSubs && !video.id,
+        nosubs:
+          !generated &&
+          checkSubs &&
+          !video.checkingSubs &&
+          !video.hasSubs &&
+          !video.id,
         drop: checkSubs && !video.checkingSubs,
       },
     ]"
@@ -96,7 +101,7 @@
             </span>
             <div
               v-if="!video.checkingSubs && !video.hasSubs && !video.id"
-              class="btn btn-small mt-2 ml-0"
+              class="btn btn-small ml-0"
             >
               <span v-if="!over">No {{ $l2.name }} CC</span>
               <span v-else>Drop SRT to Add Subs</span>
@@ -109,7 +114,7 @@
               Added
             </div>
             <b-button
-              v-if="checkSaved && !video.id && video.hasSubs"
+              v-if="checkSaved && !video.id && (video.hasSubs || generated)"
               class="btn btn-small"
               @click="getSubsAndSave(video)"
             >
@@ -293,8 +298,8 @@ export default {
     checkSaved: {
       default: false,
     },
-    video: {
-      type: Object,
+    generated: {
+      default: false,
     },
     showAdmin: {
       default: true,
@@ -305,24 +310,27 @@ export default {
     showSubsEditing: {
       default: false,
     },
-    view: {
-      type: String,
-      default: "grid",
-    },
     showBadges: {
       default: false,
     },
     showDate: {
       default: false,
     },
-    skin: {
-      default: "card", // or 'dark'
-    },
     showProgress: {
       default: false,
     },
     showPlayButton: {
       default: false,
+    },
+    skin: {
+      default: "card", // or 'dark'
+    },
+    view: {
+      type: String,
+      default: "grid",
+    },
+    video: {
+      type: Object,
     },
   },
   data() {
@@ -607,16 +615,19 @@ export default {
       }
     },
     async getSubsAndSave(video = this.video) {
-      if (this.checkSaved && !video.id && video.hasSubs) {
-        if (!video.subs_l2 && video.l2Locale) {
+      if (this.checkSaved && !video.id && (video.hasSubs || this.generated)) {
+        console.log('adding?')
+        if (!video.subs_l2 && (video.l2Locale || this.generated)) {
+          console.log('adding!')
           video.subs_l2 = await YouTube.getTranscript(
             video.youtube_id,
-            video.l2Locale,
+            video.l2Locale || this.$l2.code,
             video.l2Name,
-            this.$adminMode
+            this.$adminMode,
+            this.generated
           );
         }
-        if (video.subs_l2[0]) {
+        if (video.subs_l2 && video.subs_l2[0]) {
           this.firstLineTime = video.subs_l2[0].starttime;
           if (!video.channel_id) await this.getChannelID(video);
           await this.save(video);

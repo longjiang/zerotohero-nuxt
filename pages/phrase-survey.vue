@@ -324,9 +324,9 @@ export default {
         showFilter = "";
       } else {
         if (show.startsWith("show-"))
-          showFilter = `&filter[tv_show][eq]=${show.replace('show-', '')}`;
+          showFilter = `&filter[tv_show][eq]=${show.replace("show-", "")}`;
         else if (show.startsWith("talk-"))
-          showFilter = `&filter[talk][eq]=${show.replace('talk-', '')}`;
+          showFilter = `&filter[talk][eq]=${show.replace("talk-", "")}`;
       }
       let response = await axios.get(
         `${Config.wiki}items/youtube_videos?sort=-id&limit=${limit}&offset=${start}&filter[l2][eq]=${this.$l2.id}${showFilter}&fields=*,tv_show.*,talk.*`
