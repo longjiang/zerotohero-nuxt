@@ -63,41 +63,52 @@
 
         <div class="col-sm-12 mb-5">
           <div class="youtube-video-list-wrapper">
-            <div class="d-flex mb-5">
-              <b-input-group class="flex-1 input-group-ghost-dark">
-                <b-form-input
-                  v-model="keyword"
-                  :lazy="true"
-                  @compositionend.prevent.stop="() => false"
-                  placeholder="Filter by video title..."
-                  class="input-ghost-dark"
-                />
-                <b-input-group-append>
-                  <b-button variant="ghost-dark">
-                    <i class="fas fa-filter"></i>
-                  </b-button>
-                </b-input-group-append>
-              </b-input-group>
-              <b-button-group>
-                <b-button
-                  :variant="
-                    view === 'grid' ? 'ghost-dark' : 'ghost-dark-outline'
-                  "
-                  class="ml-2"
-                  @click="view = 'grid'"
-                >
-                  <i class="fas fa-th"></i>
-                </b-button>
-                <b-button
-                  :variant="
-                    view === 'list' ? 'ghost-dark' : 'ghost-dark-outline'
-                  "
-                  @click="view = 'list'"
-                  style="border-left: none"
-                >
-                  <i class="fas fa-list"></i>
-                </b-button>
-              </b-button-group>
+            <div class="row mb-5">
+              <div class="col-sm-12 col-md-8 mb-2">
+                <div class="d-flex">
+                  <b-input-group class="flex-1 input-group-ghost-dark">
+                    <b-form-input
+                      v-model="keyword"
+                      :lazy="true"
+                      @compositionend.prevent.stop="() => false"
+                      placeholder="Filter by video title..."
+                      class="input-ghost-dark"
+                    />
+                    <b-input-group-append>
+                      <b-button variant="ghost-dark">
+                        <i class="fas fa-filter"></i>
+                      </b-button>
+                    </b-input-group-append>
+                  </b-input-group>
+                  <b-button-group>
+                    <b-button
+                      :variant="
+                        view === 'grid' ? 'ghost-dark' : 'ghost-dark-outline'
+                      "
+                      class="ml-2"
+                      @click="view = 'grid'"
+                    >
+                      <i class="fas fa-th"></i>
+                    </b-button>
+                    <b-button
+                      :variant="
+                        view === 'list' ? 'ghost-dark' : 'ghost-dark-outline'
+                      "
+                      @click="view = 'list'"
+                      style="border-left: none"
+                    >
+                      <i class="fas fa-list"></i>
+                    </b-button>
+                  </b-button-group>
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-4 mb-2">
+                <b-form-select
+                  v-model="sort"
+                  :options="sortOptions"
+                  class="select-ghost-dark"
+                ></b-form-select>
+              </div>
             </div>
             <div
               :class="{
@@ -166,6 +177,17 @@ export default {
       randomEpisode: undefined,
       currentTime: 0,
       showDiscover: false,
+      sortOptions: [
+        {
+          value: "title",
+          text: "Sort by Title",
+        },
+        {
+          value: "-date",
+          text: "Sort by Date",
+        },
+      ],
+      sort: "title",
     };
   },
   computed: {
@@ -214,11 +236,19 @@ export default {
       }
       this.videos = videos;
     },
+    async sort() {
+      this.moreVideos = 0;
+      this.videos = await this.getVideos({
+        limit: this.perPage,
+        offset: this.moreVideos,
+      });
+    },
   },
   async mounted() {
     if (this.id) {
       this.show = await this.getShow(this.id, this.collection);
       if (this.show) {
+        this.sort = this.show.title === "News" ? "-date" : "title";
         this.videos = await this.getVideos({
           limit: this.perPage,
           offset: this.moreVideos,
@@ -288,7 +318,7 @@ export default {
       }
     },
     async getVideos({ keyword, limit = 500, offset = 0 } = {}) {
-      let sort = this.show.title === "News" ? "-date" : "title";
+      let sort = this.sort;
       let count = this.show.title === "News" ? "" : "&meta=filter_count"; // Do not count news, there are too many
       let keywordFilter = keyword ? `&filter[title][contains]=${keyword}` : "";
       let response = await axios.get(
@@ -305,14 +335,14 @@ export default {
         this.count = response.data.meta.filter_count;
       }
       videos = Helper.uniqueByValue(videos, "youtube_id");
-      if (this.show.title !== "News") {
+      if (this.sort === "title") {
         videos =
           videos.sort((x, y) =>
             (x.title || "").localeCompare(y.title, this.$l2.locales[0], {
               numeric: true,
             })
           ) || [];
-      } else {
+      } else if (this.sort === "-date") {
         videos =
           videos.sort((y, x) =>
             x.date
