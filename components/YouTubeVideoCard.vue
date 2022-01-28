@@ -409,7 +409,7 @@ export default {
     },
   },
   async mounted() {
-    if (this.checkSubs && !this.generated) {
+    if (this.checkSubs) {
       await this.checkSubsFunc(this.video);
     }
     if (this.video.id && this.showSubsEditing) {
@@ -650,18 +650,24 @@ export default {
     },
     async checkSubsFunc(video) {
       Vue.set(video, "checkingSubs", true);
-      await Helper.timeout(this.delay);
-      if (video.subs_l2 && video.subs_l2.length > 0) {
+      if (this.generated) {
         Vue.set(video, "hasSubs", true);
         Vue.set(video, "checkingSubs", false);
         this.$emit("hasSubs", true);
       } else {
-        video = await YouTube.getYouTubeSubsList(video, this.$l1, this.$l2);
-        this.$emit("hasSubs", video.hasSubs);
-        if (this.checkSaved && this.showSubsEditing) {
-          this.addSubsL1(video);
+        await Helper.timeout(this.delay);
+        if (video.subs_l2 && video.subs_l2.length > 0) {
+          Vue.set(video, "hasSubs", true);
+          Vue.set(video, "checkingSubs", false);
+          this.$emit("hasSubs", true);
+        } else {
+          video = await YouTube.getYouTubeSubsList(video, this.$l1, this.$l2);
+          this.$emit("hasSubs", video.hasSubs);
+          if (this.checkSaved && this.showSubsEditing) {
+            this.addSubsL1(video);
+          }
+          Vue.set(video, "checkingSubs", false);
         }
-        Vue.set(video, "checkingSubs", false);
       }
       return video;
     },
