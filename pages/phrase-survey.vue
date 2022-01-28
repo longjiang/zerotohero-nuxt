@@ -164,6 +164,7 @@ export default {
       numRowsVisible: 20,
       showSelect: "all-tv-shows",
       shows: undefined,
+      talks: undefined,
       gettingPhrases: false,
       expand: {},
     };
@@ -194,6 +195,9 @@ export default {
     loadShows() {
       this.shows = this.$store.state.shows.tvShows[this.$l2.code]
         ? this.$store.state.shows.tvShows[this.$l2.code]
+        : undefined;
+      this.talks = this.$store.state.shows.talks[this.$l2.code]
+        ? this.$store.state.shows.talks[this.$l2.code]
         : undefined;
     },
     async getPhrases() {
@@ -296,15 +300,17 @@ export default {
           }
         }
       }
-      console.log(`Folded into ${groups.length} groups.`)
-      console.log('Sort the groups, first by number of instances, then by the length of the phrase')
+      console.log(`Folded into ${groups.length} groups.`);
+      console.log(
+        "Sort the groups, first by number of instances, then by the length of the phrase"
+      );
       groups = groups
         .sort((a, b) => a.phrase.length - b.phrase.length)
         .sort((a, b) => b.instances.length - a.instances.length);
-      console.log('Groups sorted')
-      console.log(`Making groups unique...`)
-      groups = Helper.uniqueByValue(groups, 'phrase')
-      console.log('Groups now unique.')
+      console.log("Groups sorted");
+      console.log(`Making groups unique...`);
+      groups = Helper.uniqueByValue(groups, "phrase");
+      console.log("Groups now unique.");
       return groups;
     },
     async getVideos(show, start, limit) {
@@ -317,7 +323,10 @@ export default {
       } else if (show === "all-videos") {
         showFilter = "";
       } else {
-        showFilter = `&filter[tv_show][eq]=${show}`;
+        if (show.startsWith("show-"))
+          showFilter = `&filter[tv_show][eq]=${show.replace('show-', '')}`;
+        else if (show.startsWith("talk-"))
+          showFilter = `&filter[talk][eq]=${show.replace('talk-', '')}`;
       }
       let response = await axios.get(
         `${Config.wiki}items/youtube_videos?sort=-id&limit=${limit}&offset=${start}&filter[l2][eq]=${this.$l2.id}${showFilter}&fields=*,tv_show.*,talk.*`
@@ -350,29 +359,42 @@ export default {
         return this.$store.state.settings.adminMode;
     },
     showOptions() {
+      let options = [];
       if (this.shows) {
-        let options = [
+        options = options.concat([
           {
             value: "all-tv-shows",
             text: "All TV Shows (Except Music)",
           },
           ...this.shows.map((s) => {
             return {
-              value: s.id,
+              value: `show-${s.id}`,
               text: s.title,
             };
           }),
+        ]);
+      }
+      if (this.talks) {
+        options = options.concat([
           {
             value: "all-talks",
             text: "All Talks",
           },
-          {
-            value: "all-videos",
-            text: "All Videos (Except Music)",
-          },
-        ];
-        return options;
+          ...this.talks.map((s) => {
+            return {
+              value: `talk-${s.id}`,
+              text: s.title,
+            };
+          }),
+        ]);
       }
+      options = options.concat([
+        {
+          value: "all-videos",
+          text: "All Videos (Except Music)",
+        },
+      ]);
+      return options;
     },
   },
 };
