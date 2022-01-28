@@ -409,7 +409,7 @@ export default {
     },
   },
   async mounted() {
-    if (this.checkSubs) {
+    if (this.checkSubs && !this.generated) {
       await this.checkSubsFunc(this.video);
     }
     if (this.video.id && this.showSubsEditing) {
@@ -616,9 +616,7 @@ export default {
     },
     async getSubsAndSave(video = this.video) {
       if (this.checkSaved && !video.id && (video.hasSubs || this.generated)) {
-        console.log('adding?')
         if (!video.subs_l2 && (video.l2Locale || this.generated)) {
-          console.log('adding!')
           video.subs_l2 = await YouTube.getTranscript(
             video.youtube_id,
             video.l2Locale || this.$l2.code,
