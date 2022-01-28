@@ -111,7 +111,7 @@
               skin="dark"
               ref="youtubeVideoList"
               :videos="videos"
-              :keyword="keyword"
+              :defaultShowTitle="keyword"
               :checkSubs="false"
               :checkSaved="false"
               :showProgress="true"

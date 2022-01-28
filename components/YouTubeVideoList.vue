@@ -28,7 +28,11 @@
             <b-button
               class="mt-1 mb-1"
               variant="secondary"
-              v-if="checkSavedData && checkSavedDone && videosWithSubs.length - savedVideos.length > 0"
+              v-if="
+                checkSavedData &&
+                checkSavedDone &&
+                videosWithSubs.length - savedVideos.length > 0
+              "
               size="sm"
               @click="addAll()"
             >
@@ -53,13 +57,13 @@
             <AssignShow
               size="sm"
               @assignShow="assignShowToAll"
-              :defaultSelection="keyword"
+              :defaultSelection="defaultShowTitle"
               type="tv-shows"
             />
             <AssignShow
               size="sm"
               @assignShow="assignShowToAll"
-              :defaultSelection="keyword"
+              :defaultSelection="defaultShowTitle"
               type="talks"
             />
             <drop
@@ -111,6 +115,15 @@
             >
               Remove unavailable videos
             </a> -->
+          </div>
+          <div class="mt-1">
+            <b-form-input
+              type="text"
+              v-model="keyword"
+              :lazy="true"
+              placeholder="Filter"
+              size="sm"
+            />
           </div>
           <div v-if="channels">
             <h6 class="mt-2">Channels with the most videos below:</h6>
@@ -189,7 +202,7 @@ export default {
     videos: {
       type: Array,
     },
-    keyword: {
+    defaultShowTitle: {
       type: String,
     },
     checkSaved: {
@@ -228,6 +241,7 @@ export default {
   data() {
     return {
       Helper,
+      keyword: undefined,
       videosInfoKey: 0,
       channels: undefined,
       showSubsEditing: false,
@@ -278,6 +292,7 @@ export default {
         return this.$store.state.settings.adminMode;
     },
     filteredVideos() {
+      let keyword = this.keyword ? this.keyword.toLowerCase() : undefined;
       let filteredVideos = this.videos.filter((video) => {
         if (this.hideVideosWithoutSubs && !video.hasSubs) return false;
         if (
@@ -286,7 +301,8 @@ export default {
           ((video.tv_show && video.tv_show.id) || (video.talk && video.talk.id))
         )
           return false;
-
+        if (keyword && !video.title.toLowerCase().includes(keyword))
+          return false;
         return true;
       });
       if (this.isLocalHost()) {
@@ -404,7 +420,7 @@ export default {
         for (let videoIndex of chunk) {
           promises.push(action(videoIndex));
         }
-        await Helper.timeout(delay)
+        await Helper.timeout(delay);
         await Promise.all(promises);
       }
     },
