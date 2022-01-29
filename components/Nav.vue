@@ -803,6 +803,12 @@ export default {
             },
             {
               icon: "fas fa-wrench",
+              title: "Text Survey",
+              name: "ngram",
+              show: this.$adminMode,
+            },
+            {
+              icon: "fas fa-wrench",
               title: "Add Phrasebook",
               name: "phrasebook-creator",
               show: this.$adminMode,
