@@ -11,12 +11,6 @@
   <div class="l2-zh">
     <SocialHead :title="title" :description="description" :image="image" />
     <!-- The video -->
-    <video autoplay muted loop class="video-background">
-      <source
-        :src="`${server}data/video/backgrounds/vbg-sparks-480p.mp4`"
-        type="video/mp4"
-      />
-    </video>
     <div class="container pt-5 pb-5 text-white">
       <div class="row justify-content-center">
         <div class="text-center col">
@@ -34,7 +28,7 @@
         <div class="col">
           <div class="text-center">
             <h1 class="text-center mt-5 mb-4 sale-heading">
-              NEW YEAR SALE
+              Chinese New Year Sale
             </h1>
           </div>
           <h2 class="text-center mt-4" style="margin-bottom: 2rem">
@@ -42,7 +36,7 @@
           </h2>
           <client-only>
             <div class="sale-counter text-xs-left text-sm-center">
-              <vac :end-time="new Date('Jan 3, 2022 23:59:59')">
+              <vac :end-time="new Date('Feb 5, 2022 23:59:59')">
                 <template v-slot:process="{ timeObj }">
                   <span>
                     <span style="white-space: nowrap">
@@ -64,14 +58,14 @@
                   </span>
                 </template>
                 <template v-slot:finish>
-                  <span>The sale has ended.</span>
+                  <div class="text-center">The sale has ended.</div>
                 </template>
               </vac>
             </div>
           </client-only>
           <h2 class="text-center mt-4 mb-4" style="line-height: 2">
-            USE THE COUPON CODE
-            <span class="coupon-code">NEWYEAR2022</span>
+            Use the coupon code
+            <span class="coupon-code">CNY2022</span>
           </h2>
         </div>
       </div>
@@ -96,7 +90,7 @@
           </h2>
           <client-only>
             <div class="sale-counter text-xs-left text-sm-center">
-              <vac :end-time="new Date('Jan 3, 2022 23:59:59')">
+              <vac :end-time="new Date('Feb 5, 2022 23:59:59')">
                 <template v-slot:process="{ timeObj }">
                   <span>
                     <span style="white-space: nowrap">
@@ -125,7 +119,7 @@
           </client-only>
           <h4 class="text-center mt-4 mb-4" style="line-height: 2">
             USE THE COUPON CODE
-            <span class="coupon-code">NEWYEAR2022</span>
+            <span class="coupon-code">CNY2022</span>
           </h4>
         </div>
       </div>
@@ -151,6 +145,20 @@
         </div>
       </div>
     </div>
+    <div
+      style="
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-image: url(/img/background-chinese-new-year.jpg);
+        height: 100vh;
+        width: 100vw;
+        background-size: cover;
+        background-position: center;
+        background-attachment: initial;
+        z-index: -1;
+      "
+    ></div>
   </div>
 </template>
 
@@ -164,8 +172,8 @@ export default {
   data() {
     return {
       title: "HSK Courses at 25% Off | Chinese Zero to Hero",
-      description: "Deal ends Jan 3, 2022",
-      image: "/img/sale/new-year-sale-2022.jpg",
+      description: "Deal ends Jan 5, 2022",
+      image: "/img/sale/cny-sale-2022.jpeg",
       server: Config.server,
     };
   },
@@ -186,8 +194,12 @@ export default {
 }
 
 .sale-counter {
-  background-color: #e17b1266;
-  backdrop-filter: blur(30px);
+  background: rgb(221, 45, 45);
+  background: radial-gradient(
+    circle,
+    rgba(221, 45, 45, 1) 0%,
+    rgba(108, 15, 15, 1) 100%
+  );
   font-size: 1.5rem;
   padding: 1rem;
   border-radius: 0.5rem;
@@ -202,8 +214,12 @@ export default {
 }
 
 .coupon-code {
-  background: #e17b1266;
-  backdrop-filter: blur(30px);
+  background: rgb(221, 45, 45);
+  background: radial-gradient(
+    circle,
+    rgba(221, 45, 45, 1) 0%,
+    rgba(108, 15, 15, 1) 100%
+  );
   font-size: 1em;
   color: white;
   padding: 0.5rem 1rem;
@@ -211,12 +227,6 @@ export default {
 }
 
 .sale-heading {
-  font-size: 5rem;
-}
-
-@media (max-width: 540px) {
-  .sale-heading {
-    font-size: 3rem;
-  }
+  font-size: 3.5rem;
 }
 </style>

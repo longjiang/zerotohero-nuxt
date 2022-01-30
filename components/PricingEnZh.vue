@@ -7,7 +7,7 @@
         :image="`/img/courses/bundle-ultimate.jpg`"
       />
       <h3 class="mb-5 text-center">Pricing Chart</h3>
-      <!-- <Sale class="mb-5 rounded" /> -->
+      <Sale class="mb-5 rounded" />
       <div class="bg-success text-light p-3 text-center mb-5 rounded">
         <h4 class="mb-0">No subscriptions! 😊 Pay once, enjoy forever!</h4>
       </div>
@@ -42,7 +42,7 @@
               </a>
             </td>
             <td class="text-center">
-              <Price :price="price(29, { sale: false })"></Price>
+              <Price :price="price(29, { sale: true })"></Price>
             </td>
             <td class="text-center align-middle" rowspan="4">
               <a
@@ -51,7 +51,7 @@
               >
                 HSK 1-4 Bundle
               </a>
-              <Price :price="price(134, { sale: false })" :save="money(24)"></Price>
+              <Price :price="price(134, { sale: true })" :save="money(24)"></Price>
             </td>
             <td
               class="text-center align-middle"
@@ -64,7 +64,7 @@
               >
                 Ultimate Bundle
               </a>
-              <Price :price="price(219, { sale: false })" :save="money(67)"></Price>
+              <Price :price="price(219, { sale: true })" :save="money(67)"></Price>
               <p style="font-size: 0.8em">
                 This bundles includes all of our paid courses with a total of
                 <router-link :to="{ name: 'video-count' }">
@@ -73,7 +73,7 @@
                 , on average each video costs about
                 <Price
                   :price="
-                    price(0.102, { sale: false, precision: 2, compact: true })
+                    price(0.102, { sale: true, precision: 2, compact: true })
                   "
                   :compact="true"
                 />.
@@ -88,7 +88,7 @@
               </a>
             </td>
             <td class="text-center">
-              <Price :price="price(29, { sale: false })"></Price>
+              <Price :price="price(29, { sale: true })"></Price>
             </td>
           </tr>
 
@@ -99,7 +99,7 @@
               </a>
             </td>
             <td class="text-center">
-              <Price :price="price(36, { sale: false })"></Price>
+              <Price :price="price(36, { sale: true })"></Price>
             </td>
           </tr>
 
@@ -110,7 +110,7 @@
               </a>
             </td>
             <td class="text-center">
-              <Price :price="price(64, { sale: false })"></Price>
+              <Price :price="price(64, { sale: true })"></Price>
             </td>
           </tr>
 
@@ -121,7 +121,7 @@
               </a>
             </td>
             <td class="text-center">
-              <Price :price="price(64, { sale: false })"></Price>
+              <Price :price="price(64, { sale: true })"></Price>
             </td>
             <td class="text-center align-middle" rowspan="5">
               <a
@@ -130,7 +130,7 @@
               >
                 HSK 5-6 Bundle
               </a>
-              <Price :price="price(109, { sale: false })" :save="money(48)"></Price>
+              <Price :price="price(109, { sale: true })" :save="money(48)"></Price>
             </td>
           </tr>
 
@@ -146,7 +146,7 @@
               </div>
             </td>
             <td class="text-center align-middle">
-              <Price :price="price(9, { sale: false })"></Price>
+              <Price :price="price(9, { sale: true })"></Price>
               ea.
               <span>
                 <b>FREE</b>
@@ -162,7 +162,7 @@
               </a>
             </td>
             <td class="text-center">
-              <Price :price="price(64, { sale: false })"></Price>
+              <Price :price="price(64, { sale: true })"></Price>
             </td>
           </tr>
 
@@ -178,7 +178,7 @@
               </div>
             </td>
             <td class="text-center align-middle">
-              <Price :price="price(9, { sale: false })"></Price>
+              <Price :price="price(9, { sale: true })"></Price>
               ea.
               <span>
                 <b>FREE</b>
@@ -199,7 +199,7 @@
               </div>
             </td>
             <td class="text-center">
-              <Price :price="price(29, { sale: false })"></Price>
+              <Price :price="price(29, { sale: true })"></Price>
               <span>
                 <b>FREE</b>
                 with HSK 5 or HSK 6
@@ -214,7 +214,7 @@
               </a>
             </td>
             <td class="text-center" colspan="2">
-              <Price :price="price(22, { sale: false })"></Price>
+              <Price :price="price(22, { sale: true })"></Price>
             </td>
           </tr>
 
@@ -225,7 +225,7 @@
               </a>
             </td>
             <td class="text-center" colspan="2">
-              <Price :price="price(9, { sale: false })"></Price>
+              <Price :price="price(9, { sale: true })"></Price>
             </td>
           </tr>
           <tr>
