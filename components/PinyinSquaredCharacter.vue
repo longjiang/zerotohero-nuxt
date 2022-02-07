@@ -1,5 +1,12 @@
 <template>
-  <v-popover offset="6" placement="top" :open="hover" style="display: inline-block">
+  <v-popover
+    offset="6"
+    placement="top"
+    :open="hover"
+    style="display: inline-block"
+    class="pinyin-squared-character"
+    popoverClass="pinyin-squared-character-tooltip"
+  >
     <div class="block" @mouseover="hover = true" @mouseleave="hover = false">
       <div class="pinyin" v-if="pinyinParsed">{{ pinyinParsed }}</div>
       <div class="character" v-if="initial">
@@ -25,110 +32,136 @@
       <div class="string" v-if="string">{{ string }}</div>
     </div>
     <template slot="popover">
-      <div>
-        <simple-svg
-          v-if="initial"
-          :src="`/img/pinyin-squared/${initial}.svg`"
-          :fill="`#717171`"
-          custom-class-name="legend-initial"
-        />
-        = {{ initial }}
-      </div>
-      <div>
-        <simple-svg
-          v-if="final"
-          :src="`/img/pinyin-squared/${final}.svg`"
-          :fill="`#717171`"
-          custom-class-name="legend-final"
-        />
-        = {{ final }}
-      </div>
-      <div>
-        <simple-svg
-          v-if="tone"
-          :src="`/img/pinyin-squared/tone-${tone}.svg`"
-          :fill="`#28a745`"
-          custom-class-name="legend-tone"
-        />
-        = tone {{ tone }}
+      <div class="pinyin-squared-legend">
+        <div>
+          <simple-svg
+            v-if="initial"
+            :src="`/img/pinyin-squared/${initial}.svg`"
+            :fill="`#717171`"
+            custom-class-name="legend-initial"
+          />
+          = {{ initial }}
+        </div>
+        <div>
+          <simple-svg
+            v-if="final"
+            :src="`/img/pinyin-squared/${final}.svg`"
+            :fill="`#717171`"
+            custom-class-name="legend-final"
+          />
+          = {{ final }}
+        </div>
+        <div>
+          <simple-svg
+            v-if="tone"
+            :src="`/img/pinyin-squared/tone-${tone}.svg`"
+            :fill="`#28a745`"
+            custom-class-name="legend-tone"
+          />
+          = tone {{ tone }}
+        </div>
       </div>
     </template>
   </v-popover>
 </template>
 
 <script>
-
 export default {
   props: {
     blockOrString: {
-      default: undefined
-    }
+      default: undefined,
+    },
   },
   data() {
     return {
-      hover: false
-    }
+      hover: false,
+    };
   },
   computed: {
     pinyinParsed() {
-      return this.block ? pinyinify(this.block.pinyin) : false
+      return this.block ? pinyinify(this.block.pinyin) : false;
     },
     initial() {
-      if (typeof this.blockOrString === 'object') {
-        return this.blockOrString.initial
+      if (typeof this.blockOrString === "object") {
+        return this.blockOrString.initial;
       } else {
-        return undefined
+        return undefined;
       }
     },
     final() {
-      if (typeof this.blockOrString === 'object') {
-        return this.blockOrString.final
+      if (typeof this.blockOrString === "object") {
+        return this.blockOrString.final;
       } else {
-        return undefined
+        return undefined;
       }
     },
     tone() {
-      if (typeof this.blockOrString === 'object') {
-        return this.blockOrString.tone
+      if (typeof this.blockOrString === "object") {
+        return this.blockOrString.tone;
       } else {
-        return undefined
+        return undefined;
       }
     },
     string() {
-      if (typeof this.blockOrString === 'string') {
-        return this.blockOrString
+      if (typeof this.blockOrString === "string") {
+        return this.blockOrString;
       } else {
-        return undefined
+        return undefined;
       }
-    }
+    },
   },
   methods: {
     construct() {
-      if (typeof this.blockOrString === 'string') {
-        this.string = this.blockOrString
-      } else if (typeof this.blockOrString === 'object') {
-        this.block = this.blockOrString
+      if (typeof this.blockOrString === "string") {
+        this.string = this.blockOrString;
+      } else if (typeof this.blockOrString === "object") {
+        this.block = this.blockOrString;
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="scss">
-.legend-initial,
-.legend-final,
-.legend-tone {
-  display: inline-block;
-  width: 2rem;
+.pinyin-squared-character {
+  .character {
+    width: 1.5rem;
+    height: 1.5rem;
+    position: relative;
+    .initial,
+    .final,
+    .tone {
+      width: 100% !important;
+      position: absolute;
+    }
+    .initial {
+      left: -25%;
+    }
+    .final {
+      left: 25%;
+    }
+    .tone {
+      left: 0;
+    }
+  }
 }
 
-.legend-tone {
-  position: relative;
-  bottom: -0.8em;
-  left: -0.33em;
+.pinyin-squared-legend {
+  .legend-initial,
+  .legend-final,
+  .legend-tone {
+    display: inline-block;
+    width: 2rem !important;
+  }
+
+  .legend-tone {
+    position: relative;
+    bottom: -0.8em;
+    left: -0.33em;
+  }
 }
 
-.tooltip {
+.pinyin-squared-character-tooltip {
   display: block !important;
   z-index: 10000;
 
@@ -150,7 +183,7 @@ export default {
     z-index: 1;
   }
 
-  &[x-placement^='top'] {
+  &[x-placement^="top"] {
     margin-bottom: 5px;
 
     .tooltip-arrow {
@@ -165,7 +198,7 @@ export default {
     }
   }
 
-  &[x-placement^='bottom'] {
+  &[x-placement^="bottom"] {
     margin-top: 5px;
 
     .tooltip-arrow {
@@ -180,7 +213,7 @@ export default {
     }
   }
 
-  &[x-placement^='right'] {
+  &[x-placement^="right"] {
     margin-left: 5px;
 
     .tooltip-arrow {
@@ -195,7 +228,7 @@ export default {
     }
   }
 
-  &[x-placement^='left'] {
+  &[x-placement^="left"] {
     margin-right: 5px;
 
     .tooltip-arrow {
@@ -210,13 +243,13 @@ export default {
     }
   }
 
-  &[aria-hidden='true'] {
+  &[aria-hidden="true"] {
     visibility: hidden;
     opacity: 0;
     transition: opacity 0.15s, visibility 0.15s;
   }
 
-  &[aria-hidden='false'] {
+  &[aria-hidden="false"] {
     visibility: visible;
     opacity: 1;
     transition: opacity 0.15s;

@@ -1,6 +1,6 @@
 <template>
   <router-link :to="`/${$l1.code}/${$l2.code}/youtube/channel/${channel.id}/${encodeURIComponent(channel.title)}`" class="link-unstyled channel">
-    <img v-if="channel.avatar" :src="channel.avatar" class="channel-avatar" alt />
+    <img v-lazy-load v-if="channel.avatar" :src="channel.avatar" class="channel-avatar" alt />
     <div class="channel-body">
       <h6>
         Channel: <span>{{ channel.title }}</span>

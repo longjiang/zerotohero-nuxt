@@ -6,6 +6,7 @@
     v-if="images && images.length > 0"
   >
     <img
+      v-lazy-load
       alt
       class="image-wall-image"
       v-for="(image, index) in images.slice(0, limit)"

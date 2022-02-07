@@ -667,12 +667,6 @@ export default {
               show: false,
             },
             {
-              name: "pinyin-squared",
-              title: "Pinyin Squared",
-              icon: "fa fa-list",
-              show: false,
-            },
-            {
               name: "tutoring",
               title: "Tutoring Kit",
               icon: "fas fa-folder",
@@ -721,6 +715,12 @@ export default {
               name: "pinyin-list",
               title: "Pinyin List",
               icon: "fa fa-list",
+              show: this.l2.code === "zh",
+            },
+            {
+              name: "pinyin-squared",
+              title: "Pinyin Squared",
+              icon: "fa fa-superscript",
               show: this.l2.code === "zh",
             },
           ],

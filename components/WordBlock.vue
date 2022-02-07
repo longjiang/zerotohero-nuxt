@@ -103,6 +103,7 @@
         </button>
         <div class="tooltip-images" :key="`tooltip-images-${text}`">
           <img
+            v-lazy-load
             alt
             class="image-wall-image"
             v-for="(image, index) in images"

@@ -1,6 +1,6 @@
 <template>
   <div class="animated-svg-wrapper">
-    <img :src="src" class="animated-svg" />
+    <img v-lazy-load :src="src" class="animated-svg" />
     <button
       class="replay-btn btn-medium btn-gray mt-2 focus-exclude"
       @click="playSVG"

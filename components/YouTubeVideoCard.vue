@@ -43,6 +43,7 @@
           ></b-progress>
         </client-only>
         <img
+          v-lazy-load
           :src="thumbnail"
           class="youtube-thumbnail aspect"
           ref="thumbnail"

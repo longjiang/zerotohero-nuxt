@@ -10,6 +10,7 @@
       >
         <span class="avatar-wrapper"
           ><img
+            v-lazy-load
             :src="
               hero.avatar
                 ? hero.avatar.data.thumbnails[0].url
