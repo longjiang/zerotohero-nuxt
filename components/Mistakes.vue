@@ -24,6 +24,7 @@
               class="mistake-sentence"
               :showTranslate="true"
               :checkSaved="false"
+              :buttons="true"
             >
               <span>
                 {{ mistake.left }}
@@ -42,7 +43,7 @@
                 <span>{{ mistake.rightContext }}</span>
               </Annotate>
             </span>
-            <ShowMoreButton class="mb-2 btn-small ml-2">Context</ShowMoreButton>
+            <ShowMoreButton :length="1" class="mb-2 btn-small ml-2">Context</ShowMoreButton>
             <div>
               <div class="mistake-description">
                 <span v-if="mistake.country">
