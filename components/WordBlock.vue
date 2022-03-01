@@ -45,8 +45,7 @@
         </span>
         <span
           v-if="!l2Settings.useTraditional && token.candidates[0].simplified"
-          class="word-block-simplified"
-          :data-level="level"
+          :class="`word-block-simplified ${hard ? 'word-block-hard' : ''}`"
         >
           {{ token.candidates[0].simplified }}
         </span>
@@ -63,6 +62,7 @@
             :class="{
               'word-block-text d-inline-block': true,
               klingon: $l2.code === 'tlh',
+              'word-block-hard': hard,
             }"
           >
             {{ transform(token.text) }}
@@ -362,7 +362,7 @@ export default {
       checkSaved: true,
       wordblockHover: false,
       tooltipHover: false,
-      highlightHardWords: false,
+      highlightHardWords: true,
       Config,
       transliteration: undefined,
       farsiRomanizations: {},
@@ -427,7 +427,7 @@ export default {
       }
       return attributes;
     },
-    level() {
+    hard() {
       if (this.highlightHardWords) {
         if (
           this.$l2.code === "zh" &&
@@ -845,6 +845,13 @@ export default {
 .show-traditional .word-block .word-block-traditional,
 .show-definition .word-block .word-block-definition {
   display: block;
+}
+
+
+.show-pinyin .word-block .word-block-hard {
+  // text-decoration: underline;
+  background-color: rgba(255, 226, 129, 0.137);
+  border-radius: 0.2rem;
 }
 
 .show-byeonggi .word-block .word-block-text-byeonggi {
