@@ -87,7 +87,31 @@ const Dictionary = {
     return text
   },
   getNewHSK() {
-    return this.newHSK
+    if (this.newHSKCrunched) return this.newHSKCrunched
+    else {
+      let newHSK = this.newHSK
+      let newHSKWordsFlattened = newHSK.reduce(
+        (previousValue, currentValue) => previousValue + currentValue.simplified,
+        ""
+      );
+      let subdict = this.subdictFromText(newHSKWordsFlattened)
+      for (let word of newHSK) {
+        let ws = subdict.lookupSimplified(word.simplified);
+        if (ws) {
+          let w = ws[0];
+          word.hsk = w.hsk;
+          word.pinyin = w.pinyin;
+          word.id = w.id;
+          if (w.definitions) {
+            word.definitions = w.definitions
+              .filter((def) => !def.startsWith("CL"))
+              .join("; ");
+          }
+        }
+      }
+      this.newHSKCrunched = newHSK
+      return this.newHSKCrunched
+    }
   },
   getByNewHSK(level, num) {
     let match = this.newHSK.find(word => word.level === level && Number(word.num) === num)

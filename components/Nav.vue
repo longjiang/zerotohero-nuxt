@@ -616,6 +616,12 @@ export default {
               show: this.hasFeature("levels"),
             },
             {
+              name: "new-levels-graphic",
+              icon: "fas fa-adjust",
+              title: "Old vs New HSK",
+              show: this.hasFeature("levels"),
+            },
+            {
               name: "explore-related",
               icon: "fas fa-project-diagram",
               title: "Word Explorer",
