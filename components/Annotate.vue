@@ -345,11 +345,12 @@ export default {
         ["de", "gsw", "no", "en", "hy", "vi"].includes(this.$l2.code)
       ) {
         html = await this.tokenizeAgglutenative(text, batchId);
-      } else if (this.$l2.agglutinative || this.$l2.indo) {
-        if (this.$l2.wiktionary) {
-          if (this.$l2.wiktionary > 2000)
-            html = await this.tokenizeAgglutenative(text, batchId);
-        }
+      } else if (
+        (this.$l2.agglutinative || this.$l2.indo) &&
+        this.$l2.wiktionary &&
+        this.$l2.wiktionary > 2000
+      ) {
+        html = await this.tokenizeAgglutenative(text, batchId);
       } else {
         html = await this.tokenizeIntegral(text);
       }
