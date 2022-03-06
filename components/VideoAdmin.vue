@@ -375,7 +375,7 @@ export default {
     text() {
       if (this.video.subs_l2)
         return this.video.subs_l2
-          .map((line) => line.line.replace(/\n/g, " "))
+          .map((line) => line ? line.line.replace(/\n/g, " ") : '')
           .join("\n");
     },
     originalTextHref() {

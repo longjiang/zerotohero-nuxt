@@ -9,8 +9,8 @@
     <client-only>
       <template
         v-for="(line, index) in single
-          ? [lines[currentLineIndex || 0]]
-          : lines.slice(visibleMin, visibleMax - visibleMin)"
+          ? [lines[currentLineIndex || 0]].filter(line => line)
+          : lines.slice(visibleMin, visibleMax - visibleMin).filter(line => line)"
       >
         <TranscriptLine
           :line="line"
