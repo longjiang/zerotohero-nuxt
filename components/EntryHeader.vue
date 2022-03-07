@@ -72,8 +72,19 @@
                 {{ entry.head }} /{{ klingonIPA(entry.head) }}/
               </span>
               <template v-else>
-                <span v-if="entry.pronunciation && !entry.cjk">
-                  /{{ entry.pronunciation }}/
+                <span
+                  v-if="$l2.code === 'vi'"
+                  v-html="
+                    '[' +
+                    entry.pronunciation.replace(
+                      /\[\[(.+?)#Vietnamese\|.+?]]/g,
+                      '$1'
+                    ) +
+                    ']'
+                  "
+                />
+                <span v-else-if="entry.pronunciation && !entry.cjk">
+                  [{{ entry.pronunciation }}]
                 </span>
                 <span v-else-if="entry.cjk">
                   {{ entry.cjk.phonetics }}
@@ -122,7 +133,10 @@
                 :class="{ 'entry-word': true, klingon: $l2.code === 'tlh' }"
                 :data-level="entry.level || 'outside'"
               >
-                <span v-if="$l2.code === 'de' && entry.gender" style="font-size: 0.7em">
+                <span
+                  v-if="$l2.code === 'de' && entry.gender"
+                  style="font-size: 0.7em"
+                >
                   {{ { n: "das", m: "der", f: "die" }[entry.gender] }}
                 </span>
                 <span v-html="transform(entry.accented)"></span>
@@ -265,6 +279,7 @@ export default {
 <style lang="scss" scoped>
 .entry-pinyin {
   font-size: 1.1rem;
+  color: #779bb5;
 }
 
 .entry-word {

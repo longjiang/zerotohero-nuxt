@@ -132,21 +132,31 @@
               {{ match.table !== "declension" ? match.table : "" }}
               of
             </div>
-            <div>
-              <span style="color: #999" v-if="word.pronunciation">
-                {{ word.pronunciation }}
+            <div class="word-pronunciation">
+              <span
+                v-if="$l2.code === 'vi'"
+                v-html="
+                  '[' +
+                  word.pronunciation.replace(
+                    /\[\[(.+?)#Vietnamese\|.+?]]/g,
+                    '$1'
+                  ) +
+                  ']'
+                "
+              />
+              <span v-else-if="word.pronunciation">
+                <template v-if="$l2 === 'zh'">
+                  {{ word.pronunciation }}
+                </template>
+                <template v-else>[{{ word.pronunciation }}]</template>
               </span>
-              <span style="color: #999" v-else-if="word.pinyin">
+              <span v-else-if="word.pinyin">
                 {{ word.pinyin }}
               </span>
-              <span
-                style="color: #999"
-                v-else-if="word.kana && word.kana !== word.head"
-              >
+              <span v-else-if="word.kana && word.kana !== word.head">
                 {{ word.kana }}
               </span>
               <span
-                style="color: #999"
                 v-else-if="
                   $hasFeature('transliteration') &&
                   !['tlh', 'fa'].includes($l2.code)
@@ -154,13 +164,13 @@
               >
                 {{ tr(word.head) }}
               </span>
-              <span style="color: #999" v-if="$l2.code === 'tlh'">
+              <span v-if="$l2.code === 'tlh'">
                 {{ word.head }} /{{ klingonIPA(word.head) }}/
               </span>
-              <span style="color: #999" v-if="$l2.code === 'fa'">
+              <span v-if="$l2.code === 'fa'">
                 {{ farsiRomanizations[word.head] }}
               </span>
-              <span style="color: #999" v-if="word.jyutping && word.pinyin">
+              <span v-if="word.jyutping && word.pinyin">
                 / {{ word.pinyin }}
               </span>
               <Speak
@@ -847,7 +857,6 @@ export default {
   display: block;
 }
 
-
 .show-pinyin .word-block .word-block-hard {
   // text-decoration: underline;
   background-color: rgba(255, 226, 129, 0.137);
@@ -1061,6 +1070,10 @@ export default {
       margin-top: 1rem;
       border-top: 1px solid #ccc;
       padding-top: 1rem;
+    }
+
+    .word-pronunciation {
+      color: #779bb5;
     }
   }
 }
