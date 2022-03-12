@@ -37,9 +37,7 @@
             :class="{ 'wordlist-item-word ml-1': true, transparent: hideWord }"
             :data-level="skin !== 'dark' ? getLevel(word) : undefined"
           >
-            <span
-              v-if="$l2.code === 'de' && word.gender"
-            >
+            <span v-if="$l2.code === 'de' && word.gender">
               {{ { n: "das", m: "der", f: "die" }[word.gender] }}
             </span>
             {{ word.accented }}
@@ -47,10 +45,19 @@
 
           <span :class="{ transparent: hidePhonetics }">
             <span v-if="word.pronunciation" class="wordlist-item-pinyin">
-              <span v-if="$l2.code !== 'zh'">/</span>
+              <span v-if="$l2.code !== 'zh'">[</span>
               <span v-else>(</span>
-              {{ word.pronunciation }}
-              <span v-if="$l2.code !== 'zh'">/</span>
+              <span
+                v-if="$l2.code === 'vi'"
+                v-html="
+                  word.pronunciation.replace(
+                    /\[\[(.+?)#Vietnamese\|.+?]]/g,
+                    '$1'
+                  )
+                "
+              />
+              <span v-else>{{ word.pronunciation }}</span>
+              <span v-if="$l2.code !== 'zh'">]</span>
               <span v-else>)</span>
             </span>
             <span v-if="word.kana" class="wordlist-item-pinyin">
@@ -239,6 +246,9 @@ export default {
 
     &.matched {
       opacity: 0.2;
+    }
+    .wordlist-item-pinyin {
+      color: #779bb5;
     }
   }
   &.wordlist-dark {
