@@ -277,9 +277,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.entry-pinyin {
+.entry-pinyin,
+.entry-pinyin * {
   font-size: 1.1rem;
   color: #779bb5;
+  font-family: "Arial", sans-serif;
 }
 
 .entry-word {

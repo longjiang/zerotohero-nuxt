@@ -247,8 +247,10 @@ export default {
     &.matched {
       opacity: 0.2;
     }
-    .wordlist-item-pinyin {
+    .wordlist-item-pinyin,
+    .wordlist-item-pinyin * {
       color: #779bb5;
+      font-family: "Arial", sans-serif;
     }
   }
   &.wordlist-dark {

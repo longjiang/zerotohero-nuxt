@@ -1072,8 +1072,10 @@ export default {
       padding-top: 1rem;
     }
 
-    .word-pronunciation {
+    .word-pronunciation,
+    .word-pronunciation span {
       color: #779bb5;
+      font-family: "Arial", sans-serif;
     }
   }
 }
