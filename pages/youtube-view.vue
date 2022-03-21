@@ -158,7 +158,7 @@ export default {
       return Helper.isMobile();
     },
   },
-  async created() {
+  async fetch() {
     try {
       console.log(`YouTube View: Getting saved video...`);
       let video = await this.getSaved();
