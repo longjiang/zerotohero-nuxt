@@ -250,7 +250,7 @@ export default {
     .wordlist-item-pinyin,
     .wordlist-item-pinyin * {
       color: #779bb5;
-      font-family: "Arial", sans-serif;
+      font-family: AndikaW, Andika, Arial, sans-serif;
     }
   }
   &.wordlist-dark {

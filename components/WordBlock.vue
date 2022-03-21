@@ -1075,7 +1075,7 @@ export default {
     .word-pronunciation,
     .word-pronunciation span {
       color: #779bb5;
-      font-family: "Arial", sans-serif;
+      font-family: AndikaW, Andika, Arial, sans-serif;
     }
   }
 }

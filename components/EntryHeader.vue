@@ -281,7 +281,7 @@ export default {
 .entry-pinyin * {
   font-size: 1.1rem;
   color: #779bb5;
-  font-family: "Arial", sans-serif;
+  font-family: AndikaW, Andika, Arial, sans-serif;
 }
 
 .entry-word {
