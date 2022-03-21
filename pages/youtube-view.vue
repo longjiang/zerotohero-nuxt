@@ -16,7 +16,9 @@
     }"
   >
     <SocialHead
-      :title="`${video ? video.title + ' | ' : ''}Learn ${$l2.name} with a video | zerotohero.ca`"
+      :title="`${video ? video.title + ' | ' : ''}Learn ${
+        $l2.name
+      } with a video | zerotohero.ca`"
       :description="`Study the transcript of this video with a popup dictionary`"
       :image="`https://img.youtube.com/vi/${this.youtube_id}/hqdefault.jpg`"
     />
@@ -110,6 +112,8 @@ export default {
       episodes: [],
       randomEpisodeYouTubeId: undefined,
       layout: "horizontal",
+      fetchDone: false,
+      mountedDone: false,
     };
   },
   computed: {
@@ -165,34 +169,13 @@ export default {
       if (this.lesson && video.level && video.lesson) {
         this.saveWords(video.level, video.lesson);
       }
-      if (video) this.video = video;
-    } catch (e) {
-      console.log(e);
-    }
-  },
-  async mounted() {
-    try {
-      let video = this.video || {}
-      if (!this.video || !this.video.channel) {
+      if (!video) {
         console.log(
           `YouTube View: Getting channel information with youtube api...`
         );
-        let youtube_video = await YouTube.videoByApi(this.youtube_id);
-        if (youtube_video) {
-          let merged = {};
-          for (var attrname in video) {
-            merged[attrname] = video[attrname] || youtube_video[attrname];
-          }
-          for (var attrname in youtube_video) {
-            merged[attrname] = video[attrname] || youtube_video[attrname];
-          }
-          video = merged;
-        }
+        video = await YouTube.videoByApi(this.youtube_id);
       }
-      if (video && video.id && !video.channel_id) {
-        this.addChannelID(video);
-      }
-      this.video = video;
+      this.video = this.mergeVideos(this.video, video);
     } catch (e) {
       console.log(e);
     }
@@ -253,6 +236,18 @@ export default {
     },
   },
   methods: {
+    mergeVideos(video, youtube_video) {
+      let merged = {};
+      video = video || {};
+      youtube_video = youtube_video || {};
+      for (var attrname in video) {
+        merged[attrname] = video[attrname] || youtube_video[attrname];
+      }
+      for (var attrname in youtube_video) {
+        merged[attrname] = video[attrname] || youtube_video[attrname];
+      }
+      return merged;
+    },
     async loadSubs(video) {
       try {
         let missingSubsL1 = !video.subs_l1 || video.subs_l1.length === 0;
