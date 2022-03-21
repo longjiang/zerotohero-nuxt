@@ -16,8 +16,8 @@
     }"
   >
     <SocialHead
-      :title="`Learn ${$l2.name} with a video | Zero to Hero Languages`"
-      :description="`Study the transcript of this video with a popup dictionary.`"
+      :title="`${video ? video.title + ' | ' : ''}Learn ${$l2.name} with a video | zerotohero.ca`"
+      :description="`Study the transcript of this video with a popup dictionary`"
       :image="`https://img.youtube.com/vi/${this.youtube_id}/hqdefault.jpg`"
     />
     <div class="pl-3 pr-3 mb-4">
@@ -158,20 +158,27 @@ export default {
       return Helper.isMobile();
     },
   },
-  async mounted() {
+  async created() {
     try {
       console.log(`YouTube View: Getting saved video...`);
       let video = await this.getSaved();
       if (this.lesson && video.level && video.lesson) {
         this.saveWords(video.level, video.lesson);
       }
-      if (!video || !video.channel) {
+      if (video) this.video = video;
+    } catch (e) {
+      console.log(e);
+    }
+  },
+  async mounted() {
+    try {
+      let video = this.video || {}
+      if (!this.video || !this.video.channel) {
         console.log(
           `YouTube View: Getting channel information with youtube api...`
         );
         let youtube_video = await YouTube.videoByApi(this.youtube_id);
         if (youtube_video) {
-          if (!video) video = {};
           let merged = {};
           for (var attrname in video) {
             merged[attrname] = video[attrname] || youtube_video[attrname];
