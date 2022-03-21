@@ -325,6 +325,11 @@ export default {
           }
         }
         if (video.notes) video.notes = YouTube.parseNotes(video.notes);
+        if (!video.channel && video.channel_id) {
+          video.channel = {
+            id: video.channel_id,
+          };
+        }
         video.checkingSubs = false;
         return video;
       }
