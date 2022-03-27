@@ -73,7 +73,7 @@
               </span>
               <template v-else>
                 <span
-                  v-if="$l2.code === 'vi'"
+                  v-if="$l2.code === 'vi' && entry.pronunciation"
                   v-html="
                     '[' +
                     entry.pronunciation.replace(
