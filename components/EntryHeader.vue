@@ -145,7 +145,7 @@
           </router-link>
         </div>
         <div
-          v-if="$l2.code === 'ko' && entry.cjk && entry.cjk.canonical"
+          v-if="['ko', 'vi'].includes($l2.code) && entry.cjk && entry.cjk.canonical"
           class="mt-1"
         >
           <span :class="{ 'ml-2 entry-cjk': true, transparent: hidePhonetics }">

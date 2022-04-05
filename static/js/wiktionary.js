@@ -168,11 +168,15 @@ const Dictionary = {
             if (sense.glosses) {
               if (!sense.complex_inflection_of) {
                 let definition = sense.glosses[0]
-                if (sense.form_of) {
-                  let stem = this.normalizeStem(sense.form_of[0])
-                  stems.push(stem)
-                  if (!definition.includes(' of ')) {
-                    definition = definition + ' of ' + stem
+                if (sense.form_of && sense.form_of[0]) {
+                  let stemStr = sense.form_of[0]
+                  if (typeof stemStr === 'object' && stemStr.word) stemStr = stemStr.word
+                  if (typeof stemStr === 'string') {
+                    let stem = this.normalizeStem(stemStr)
+                    stems.push(stem)
+                    if (!definition.includes(' of ')) {
+                      definition = definition + ' of ' + stem
+                    }
                   }
                 }
                 definitions.push(definition)
@@ -209,6 +213,13 @@ const Dictionary = {
             phrases: item.derived ? item.derived.map(d => d.word) : [],
             wiktionary: true
           }
+          if (this.l2 === 'vie') {
+            let vietnameseHanTu = this.getVietnameseHanTu(item)
+            word.cjk = {
+              canonical: vietnameseHanTu,
+              phonetics: bare
+            }
+          }
           words.push(Object.assign(item, word))
         } else {
           // definitions.push(this.blankInflection(item))
@@ -217,6 +228,26 @@ const Dictionary = {
       }
     }
     return words
+  },
+  getVietnameseHanTu(item) {
+    if (!item['etymology-templates']) return
+    let etymologyItems = item['etymology-templates'].filter(t => t.args && t.name && t.name === 'der' && t.args && t.args[2] && t.args[2] === 'zh')
+    if (etymologyItems.length === 0) {
+      etymologyItems = item['etymology-templates'].filter(t => t.args && t.name && t.name === 'm' && t.args && t.args[1] && t.args[1] === 'vi')
+    } else {
+      etymologyItems.map(i => i.args[2] = i.args[3])
+    }
+    let etymologyText = etymologyItems.map(i => i.args[2])
+    if (etymologyText.length > 0) {
+      if (etymologyText[0].length > 1) {
+        etymologyText = etymologyText[0]
+      } else {
+        etymologyText = etymologyText.join('')
+      }
+    } else {
+      etymologyText = undefined
+    }
+    return etymologyText
   },
   parseDictionaryCSV(data) {
     console.log("Wiktionary: parsing words from CSV...")
@@ -238,6 +269,12 @@ const Dictionary = {
         }
         item.stems = this.unique(item.stems)
         item.phrases = item.phrases ? item.phrases.split('|') : []
+        if (item.han) {
+          item.cjk = {
+            canonical: item.han,
+            pronunciation: item.bare
+          }
+        }
         return item
       })
     return words
@@ -266,7 +303,10 @@ const Dictionary = {
         pos: item.pos,
         gender: item.gender,
         stems: item.stems.join('|'),
-        phrases: item.phrases.join('|')
+        phrases: item.phrases.join('|'),
+      }
+      if (this.l2 === 'vie') {
+        word.han = item.cjk && item.cjk.canonical ? item.cjk.canonical : undefined
       }
       return word
     }))

@@ -63,8 +63,8 @@
             <span v-if="word.kana" class="wordlist-item-pinyin">
               ( {{ word.kana }}, {{ transliterate(word.kana) }} )
             </span>
-            <span v-if="word.hanja" class="wordlist-item-byeonggi">
-              {{ word.hanja }}
+            <span v-if="['ko', 'vi'].includes($l2.code) && word.cjk && word.cjk.canonical" class="wordlist-item-byeonggi">
+              {{ word.cjk.canonical }}
             </span>
           </span>
           <span

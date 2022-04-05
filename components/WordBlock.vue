@@ -134,7 +134,7 @@
             </div>
             <div class="word-pronunciation">
               <span
-                v-if="$l2.code === 'vi'"
+                v-if="$l2.code === 'vi' && word.pronunciation"
                 v-html="
                   '[' +
                   word.pronunciation.replace(
@@ -207,7 +207,7 @@
               {{ word.traditional }}
             </span>
             <span
-              v-if="$l2.code === 'ko' && word.cjk && word.cjk.canonical"
+              v-if="['ko', 'vi'].includes($l2.code) && word.cjk && word.cjk.canonical"
               class="ml-1"
               style="font-size: 1.2em; color: #999"
             >
