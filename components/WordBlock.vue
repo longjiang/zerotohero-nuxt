@@ -409,7 +409,11 @@ export default {
             if (this.$l2.code !== 'vi') hanjas = Helper.unique(hanjas); // Vietnamese Han Tu is wiktionary CSV file has incorrect homophones
             if (hanjas.length === 1 && hanjas[0] && !hanjas[0].includes(",")) {
               hanja = hanjas[0];
-            }   
+            } else if (this.$l2.code === 'vi') {
+              if (hanjas[0] && hanjas[0].length > 1) {
+                hanja = hanjas[0]
+              }
+            }
           }
         }
         return hanja ? hanja.split(/[,\-]/)[0] : "";
