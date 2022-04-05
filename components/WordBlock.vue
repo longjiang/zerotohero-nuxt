@@ -642,7 +642,7 @@ export default {
         if (
           savedWord &&
           savedWord.id &&
-          ["ja", "zh", "nan", "hak", "en", "ko"].includes(this.$l2.code)
+          ["ja", "zh", "nan", "hak", "en", "ko", "vi"].includes(this.$l2.code)
         ) {
           let word =
             savedCandidate ||
@@ -654,7 +654,7 @@ export default {
               : undefined);
           if (word && word.head && word.head === text) {
             this.savedTransliteration =
-              word.jyutping || word.pinyin || word.kana || this.transliteration;
+              word.jyutping || word.pinyin || word.kana || word.pronunciation || this.transliteration;
           }
           this.saved = word ? word : false;
         } else {
