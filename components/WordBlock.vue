@@ -412,7 +412,7 @@ export default {
             }   
           }
         }
-        return hanja.split(/[,\-]/)[0];
+        return hanja ? hanja.split(/[,\-]/)[0] : "";
       }
     },
     bestCandidate() {
