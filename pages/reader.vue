@@ -23,7 +23,7 @@
       <div class="row">
         <div class="col-sm-12">
           <h3 class="text-center mb-5">{{ $l2.name }} Text Reading Tool</h3>
-          <ReaderComp ref="reader" @readerTextChanged="save(text)" />
+          <ReaderComp ref="reader" @readerTextChanged="readerTextChanged" />
         </div>
       </div>
       <h5 class="mt-5">Usage tips</h5>
@@ -100,6 +100,9 @@ export default {
     },
   },
   methods: {
+    readerTextChanged(text) {
+      this.save(text)
+    },
     getSaved() {
       let json = localStorage.getItem("zthReaderText");
       try {
@@ -112,16 +115,13 @@ export default {
     get() {
       let saved = this.getSaved();
       if (saved) {
-        return saved[this.$l2.code] || localStorage.getItem("fzhReaderText");
-      } else {
-        return localStorage.getItem("fzhReaderText");
+        return saved[this.$l2.code];
       }
     },
     save(text) {
       let saved = this.getSaved() || {};
       saved[this.$l2.code] = text;
       localStorage.setItem("zthReaderText", JSON.stringify(saved));
-      localStorage.removeItem("fzhReaderText");
     },
     async route() {
       let method = this.$route.params.method;
