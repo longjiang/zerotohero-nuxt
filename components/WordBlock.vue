@@ -398,7 +398,7 @@ export default {
       return this.$getHanzi();
     },
     hanja() {
-      if (this.$l2.code === "ko") {
+      if (["ko", "vi"].includes(this.$l2.code)) {
         let hanja = "";
         if (this.saved) hanja = this.saved.hanja;
         else {
@@ -407,8 +407,9 @@ export default {
           if (!bannedEndings.includes(head.charAt(head.length - 1))) {
             let hanjas = this.token.candidates.map((c) => c.hanja);
             hanjas = Helper.unique(hanjas);
-            if (hanjas.length === 1 && !hanjas[0].includes(","))
+            if (hanjas.length === 1 && hanjas[0] && !hanjas[0].includes(",")) {
               hanja = hanjas[0];
+            }   
           }
         }
         return hanja.split(/[,\-]/)[0];

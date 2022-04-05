@@ -219,6 +219,7 @@ const Dictionary = {
               canonical: vietnameseHanTu,
               phonetics: bare
             }
+            word.hanja = vietnameseHanTu
           }
           words.push(Object.assign(item, word))
         } else {
@@ -231,9 +232,9 @@ const Dictionary = {
   },
   getVietnameseHanTu(item) {
     if (!item['etymology-templates']) return
-    let etymologyItems = item['etymology-templates'].filter(t => t.args && t.name && t.name === 'der' && t.args && t.args[2] && t.args[2] === 'zh')
+    let etymologyItems = item['etymology-templates'].filter(t => t.args && t.name && t.name === 'der' && t.args && t.args[2] && t.args[2] === 'zh' && t.args[3] && this.isHan(t.args[3]))
     if (etymologyItems.length === 0) {
-      etymologyItems = item['etymology-templates'].filter(t => t.args && t.name && t.name === 'm' && t.args && t.args[1] && t.args[1] === 'vi')
+      etymologyItems = item['etymology-templates'].filter(t => t.args && t.name && t.name === 'm' && t.args && t.args[1] && t.args[1] === 'vi' && t.args[2] && this.isHan(t.args[2]))
     } else {
       etymologyItems.map(i => i.args[2] = i.args[3])
     }
@@ -248,6 +249,12 @@ const Dictionary = {
       etymologyText = undefined
     }
     return etymologyText
+  },
+  isHan(text) {
+    return text.match(
+      // eslint-disable-next-line no-irregular-whitespace
+      /[\u2E80-\u2E99\u2E9B-\u2EF3\u2F00-\u2FD5\u3005\u3007\u3021-\u3029\u3038-\u303B‌​\u3400-\u4DB5\u4E00-\u9FCC\uF900-\uFA6D\uFA70-\uFAD9]+/g
+    )
   },
   parseDictionaryCSV(data) {
     console.log("Wiktionary: parsing words from CSV...")
@@ -274,6 +281,7 @@ const Dictionary = {
             canonical: item.han,
             pronunciation: item.bare
           }
+          item.hanja = item.han
         }
         return item
       })
