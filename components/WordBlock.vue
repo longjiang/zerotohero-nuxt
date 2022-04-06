@@ -65,7 +65,7 @@
               'word-block-hard': hard,
             }"
           >
-            {{ transform(token.text) }}
+            {{ transform(token.text, $l2.code === 'vi') }}
           </span>
           <span
             v-if="l2Settings.showByeonggi && hanja"
@@ -545,13 +545,16 @@ export default {
     fixKlingonTypos(text) {
       return Klingon.fixTypos(text);
     },
-    transform(text) {
+    transform(text, removeSpacing = false) {
       if (typeof text === "undefined") {
         text = "";
       }
       if (this.$l2.code === "ru" && text.length > 9) text = this.segment(text);
       if (this.$l2.code === "tlh" && text.trim() !== "") {
         text = Klingon.latinToConScript(text);
+      }
+      if (removeSpacing) {
+        text = text.replace(/ /gi, '')
       }
       return text;
     },
