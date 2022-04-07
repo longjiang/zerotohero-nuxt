@@ -21,6 +21,7 @@
           Show
           <a
             href="https://en.wikipedia.org/wiki/History_of_writing_in_Vietnam#Ch%E1%BB%AF_H%C3%A1n"
+            target="_blank"
           >
             Hán tự
           </a>
