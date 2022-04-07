@@ -1,16 +1,31 @@
 <template>
   <div>
     <div class="mt-3">
-      <b-form-checkbox v-if="$l2.code === 'ko'" class="mb-2" v-model="showByeonggi">
-        Show hanja next to hanguel (
-        <a
-          href="https://ko.wikipedia.org/wiki/%ED%95%9C%EA%B8%80%EC%A0%84%EC%9A%A9%EA%B3%BC_%EA%B5%AD%ED%95%9C%EB%AC%B8%ED%98%BC%EC%9A%A9#%ED%95%9C%EC%9E%90_%EB%B3%91%EA%B8%B0"
-          target="_blank"
-        >
-          병기, 倂記,
-          <em>byeonggi</em>
-        </a>
-        )
+      <b-form-checkbox
+        v-if="['ko', 'vi'].includes($l2.code)"
+        class="mb-2"
+        v-model="showByeonggi"
+      >
+        <span v-if="$l2.code === 'ko'">
+          Show hanja next to hanguel (
+          <a
+            href="https://ko.wikipedia.org/wiki/%ED%95%9C%EA%B8%80%EC%A0%84%EC%9A%A9%EA%B3%BC_%EA%B5%AD%ED%95%9C%EB%AC%B8%ED%98%BC%EC%9A%A9#%ED%95%9C%EC%9E%90_%EB%B3%91%EA%B8%B0"
+            target="_blank"
+          >
+            병기, 倂記,
+            <em>byeonggi</em>
+          </a>
+          )
+        </span>
+        <span v-if="$l2.code === 'vi'">
+          Show
+          <a
+            href="https://en.wikipedia.org/wiki/History_of_writing_in_Vietnam#Ch%E1%BB%AF_H%C3%A1n"
+          >
+            Hán tự
+          </a>
+          (Chữ Hán, Chữ Nho) next to Sino-Vietnamese words
+        </span>
       </b-form-checkbox>
       <template v-if="$hasFeature('transliteration')">
         <b-form-checkbox v-model="showPinyin" class="mb-2">
@@ -37,7 +52,7 @@
               'ryu',
               'bo',
               'my',
-              'lzh'
+              'lzh',
             ].includes(this.$l2.code)
           "
           v-model="showDefinition"
@@ -48,12 +63,13 @@
       <b-form-checkbox class="mb-2" v-model="showTranslation">
         Show translation
       </b-form-checkbox>
-      <b-form-checkbox class="mb-2" v-model="showQuiz">Show pop quiz</b-form-checkbox>
-      <b-form-checkbox class="mb-2" v-model="disableAnnotation">Disable popup dictionary</b-form-checkbox>
-      <b-button-group
-        v-if="$l2.han"
-        class="d-block mb-2"
-      >
+      <b-form-checkbox class="mb-2" v-model="showQuiz">
+        Show pop quiz
+      </b-form-checkbox>
+      <b-form-checkbox class="mb-2" v-model="disableAnnotation">
+        Disable popup dictionary
+      </b-form-checkbox>
+      <b-button-group v-if="$l2.han" class="d-block mb-2">
         <b-button
           :variant="!useTraditional ? 'secondary' : 'outline-secondary'"
           @click="useTraditional = false"
@@ -235,7 +251,8 @@ export default {
       this.showQuiz = this.$store.state.settings.l2Settings.showQuiz;
       this.useSerif = this.$store.state.settings.l2Settings.useSerif;
       this.showByeonggi = this.$store.state.settings.l2Settings.showByeonggi;
-      this.disableAnnotation = this.$store.state.settings.l2Settings.disableAnnotation;
+      this.disableAnnotation =
+        this.$store.state.settings.l2Settings.disableAnnotation;
     },
   },
   watch: {
