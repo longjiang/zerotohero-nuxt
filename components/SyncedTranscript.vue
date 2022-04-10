@@ -696,7 +696,7 @@ export default {
         window.scrollTo({
           top: middle,
           left: 0,
-          behavior: "smooth",
+          // behavior: "smooth",
         });
       }
     },
