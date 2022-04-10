@@ -660,13 +660,14 @@ export default {
       if (el) {
         let smallScreenYOffset = this.getSmallScreenOffset();
         let elHeight = el.clientHeight;
-        let duration = this.currentLine && this.nextLine ? Math.min(3000, (this.nextLine.starttime - this.currentLine.starttime) * 1000) : 3000 
+        let duration = this.currentLine && this.nextLine ? (this.nextLine.starttime - this.currentLine.starttime) * 1000 : 2000 
         this.$smoothScroll({
           scrollTo: el,
           updateHistory: false,
           offset: - (window.innerHeight + smallScreenYOffset) / 2 + elHeight / 2,
           duration,
           left: 0,
+          easingFunction: t => t
         });
       }
     },
