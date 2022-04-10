@@ -9,8 +9,10 @@
     <client-only>
       <template
         v-for="(line, index) in single
-          ? [lines[currentLineIndex || 0]].filter(line => line)
-          : lines.slice(visibleMin, visibleMax - visibleMin).filter(line => line)"
+          ? [lines[currentLineIndex || 0]].filter((line) => line)
+          : lines
+              .slice(visibleMin, visibleMax - visibleMin)
+              .filter((line) => line)"
       >
         <TranscriptLine
           :line="line"
@@ -657,15 +659,18 @@ export default {
       );
       if (el) {
         let smallScreenYOffset = this.getSmallScreenOffset();
-        if (!Helper.isInViewport(el, smallScreenYOffset, 0)) {
-          let offsetTop = Helper.documentOffsetTop(el);
-          let middle = offsetTop - smallScreenYOffset - 10;
-          window.scrollTo({
-            top: middle,
-            left: 0,
-            behavior: "smooth",
-          });
-        }
+        let offsetTop = Helper.documentOffsetTop(el);
+        let elHeight = el.clientHeight;
+        let top = offsetTop - smallScreenYOffset - 10;
+        let middle = top - (window.innerHeight - smallScreenYOffset) / 2 + elHeight / 2
+        console.log(middle)
+        this.$smoothScroll({
+          scrollTo: el,
+          updateHistory: false,
+          offset: - (window.innerHeight + smallScreenYOffset) / 2 + elHeight / 2,
+          duration: 3000,
+          left: 0,
+        });
       }
     },
     lineClick(line) {
@@ -701,7 +706,7 @@ export default {
     goToLine(line) {
       if (!line) return;
       this.currentLineIndex = this.lines.findIndex((l) => l === line);
-      this.currentLine = line
+      this.currentLine = line;
       this.nextLine = this.lines[this.currentLineIndex + 1];
       this.seekVideoTo(line.starttime - 0.2); // We rewind to 200ms earlier to capture more audio at the beginning of the line
     },

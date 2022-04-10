@@ -66,6 +66,7 @@
     "vue-simple-svg": "^2.0.2",
     "vue-video-player": "^5.0.2",
     "vue2-leaflet": "^2.7.1",
+    "vue2-smooth-scroll": "^1.6.0",
     "vue2-touch-events": "^3.2.2",
     "wanakana": "^4.0.2",
     "wikijs": "^6.3.2",

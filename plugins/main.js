@@ -8,6 +8,7 @@ import ModuleLoader from '~/lib/module-loader'
 import WorkerModuleLoader from '~/lib/worker-module-loader'
 import { i18n } from '~/plugins/i18n.js'
 import VueMq from 'vue-mq'
+import VueSmoothScroll from 'vue2-smooth-scroll'
 
 
 Vue.config.productionTip = false
@@ -16,6 +17,7 @@ Vue.use(VTooltip)
 Vue.use(VueSimpleSVG)
 Vue.use(VueObserveVisibility)
 Vue.use(i18n)
+Vue.use(VueSmoothScroll)
 Vue.use(VueMq, {
   breakpoints: { // default breakpoints - customize this
     xs: 576,
