@@ -1066,8 +1066,7 @@ button.bg-primary:focus {
 }
 
 .main-dark {
-  background-color: hsl(0deg 0% 0% / 72%);
-  backdrop-filter: blur(20px);
+  background-color: black;
   -webkit-backdrop-filter: blur(20px);
   color: hsla(0deg 100% 100% / 0.8);
   &.main-dark-performant {

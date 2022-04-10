@@ -222,9 +222,7 @@
                   >
                     <div class="feature-card-icon">
                       <i
-                        :class="`${
-                          child.icon
-                        } bg-gradient-${item.title.length
+                        :class="`${child.icon} bg-gradient-${item.title.length
                           .toString()
                           .split('')
                           .pop()} gradient-text`"
@@ -263,9 +261,7 @@
                   >
                     <div class="feature-card-icon">
                       <i
-                        :class="`${
-                          child.icon
-                        } bg-gradient-${item.title.length
+                        :class="`${child.icon} bg-gradient-${item.title.length
                           .toString()
                           .split('')
                           .pop()} gradient-text`"
@@ -1137,7 +1133,7 @@ export default {
     &.nuxt-link-active,
     &:hover {
       color: white;
-      background: rgba(65, 65, 65, 0.74);
+      background: rgb(50, 50, 50);
       border-top: 1px solid rgba(255, 255, 255, 0.4);
     }
   }
@@ -1165,11 +1161,7 @@ export default {
   }
   .nav-side-bar {
     .secondary-nav {
-      background: linear-gradient(
-        90deg,
-        rgba(65, 65, 65, 0.74) 0%,
-        rgba(0, 0, 0, 0.72) 100%
-      );
+      background: linear-gradient(90deg, rgb(50 50 50) 0%, black 100%);
     }
   }
 }

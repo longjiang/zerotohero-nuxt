@@ -302,7 +302,7 @@ export default {
       this.previousTime = this.currentTime;
     },
     currentLine() {
-      if (!this.single && this.currentLineIndex !== 0)
+      if (!this.single)
         this.scrollTo(this.currentLineIndex);
     },
     currentLineIndex() {
@@ -659,16 +659,13 @@ export default {
       );
       if (el) {
         let smallScreenYOffset = this.getSmallScreenOffset();
-        let offsetTop = Helper.documentOffsetTop(el);
         let elHeight = el.clientHeight;
-        let top = offsetTop - smallScreenYOffset - 10;
-        let middle = top - (window.innerHeight - smallScreenYOffset) / 2 + elHeight / 2
-        console.log(middle)
+        let duration = this.currentLine && this.nextLine ? Math.min(3000, (this.nextLine.starttime - this.currentLine.starttime) * 1000) : 3000 
         this.$smoothScroll({
           scrollTo: el,
           updateHistory: false,
           offset: - (window.innerHeight + smallScreenYOffset) / 2 + elHeight / 2,
-          duration: 3000,
+          duration,
           left: 0,
         });
       }
