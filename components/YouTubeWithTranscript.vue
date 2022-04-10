@@ -115,10 +115,11 @@
                 'btn-ghost-dark': skin === 'dark',
               }"
             >
-              <i class="fa fa-tv mr-1" v-if="show.title !== 'Music'"></i>
-              <i class="fas fa-music mr-1" v-if="show.title === 'Music'"></i>
-              <i class="fas fa-film mr-1" v-if="show.title === 'Movies'"></i>
-              <i class="fas fa-news mr-1" v-if="show.title === 'News'"></i>
+              <i class="fas fa-music" v-if="show.title === 'Music'"></i>
+              <i class="fas fa-film" v-else-if="show.title === 'Movies'"></i>
+              <i class="fas fa-newspaper" v-else-if="show.title === 'News'"></i>
+              <i class="fab fa-youtube" v-else-if="showType === 'talk'"></i>
+              <i class="fa fa-tv" v-else></i>
               All
               {{
                 ["Music", "News", "Movies"].includes(show.title)
@@ -223,7 +224,7 @@
                 }"
               >
                 <i class="fa fa-chevron-left"></i>
-                Previous
+                Prev
               </router-link>
               <router-link
                 v-if="show"
@@ -236,10 +237,11 @@
                   'btn-ghost-dark': skin === 'dark',
                 }"
               >
-                <i class="fa fa-tv mr-1" v-if="show.title !== 'Music'"></i>
-                <i class="fas fa-music mr-1" v-if="show.title === 'Music'"></i>
-                <i class="fas fa-film mr-1" v-if="show.title === 'Movies'"></i>
-                <i class="fas fa-news mr-1" v-if="show.title === 'News'"></i>
+                <i class="fas fa-music" v-if="show.title === 'Music'"></i>
+                <i class="fas fa-film" v-else-if="show.title === 'Movies'"></i>
+                <i class="fas fa-newspaper" v-else-if="show.title === 'News'"></i>
+                <i class="fab fa-youtube" v-else-if="showType === 'talk'"></i>
+                <i class="fa fa-tv" v-else></i>
                 All
                 {{
                   ["Music", "News", "Movies"].includes(show.title)
