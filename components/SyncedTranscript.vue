@@ -703,7 +703,7 @@ export default {
       this.currentLineIndex = this.lines.findIndex((l) => l === line);
       this.currentLine = line
       this.nextLine = this.lines[this.currentLineIndex + 1];
-      this.seekVideoTo(line.starttime + 0.1); // We add 100 milliseconds to avoid the current line highlight from quickly "jumping up and down"
+      this.seekVideoTo(line.starttime - 0.2); // We rewind to 200ms earlier to capture more audio at the beginning of the line
     },
     rewind() {
       this.goToLine(this.currentLine);
