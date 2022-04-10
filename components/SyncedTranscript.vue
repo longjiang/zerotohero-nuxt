@@ -302,8 +302,7 @@ export default {
       this.previousTime = this.currentTime;
     },
     currentLine() {
-      if (!this.single)
-        this.scrollTo(this.currentLineIndex);
+      if (!this.single) this.scrollTo(this.currentLineIndex);
     },
     currentLineIndex() {
       let visibleMax = Math.max(
@@ -660,16 +659,30 @@ export default {
       if (el) {
         let smallScreenYOffset = this.getSmallScreenOffset();
         let elHeight = el.clientHeight;
-        let lastDuration = this.previousLine && this.currentLine ? (this.currentLine.starttime - this.previousLine.starttime) * 1000 : 2000
-        lastDuration = lastDuration || 2000
-        let duration = this.currentLine && this.nextLine ? Math.min((this.nextLine.starttime - this.currentLine.starttime) * 1000, lastDuration) : 2000 
+        let lastDuration =
+          this.previousLine && this.currentLine
+            ? (this.currentLine.starttime - this.previousLine.starttime) * 1000
+            : 2000;
+        lastDuration = lastDuration || 2000;
+        let duration =
+          this.currentLine && this.nextLine
+            ? Math.min(
+                (this.nextLine.starttime - this.currentLine.starttime) * 1000,
+                lastDuration
+              )
+            : 2000;
         this.$smoothScroll({
           scrollTo: el,
           updateHistory: false,
-          offset: - (window.innerHeight + smallScreenYOffset) / 2 + elHeight / 2,
+          offset:
+            -(smallScreenYOffset
+              ? window.innerHeight + smallScreenYOffset
+              : (this.$el.clientWidth * 9) / 16 + 52) /
+              2 +
+            elHeight / 2,
           duration,
           left: 0,
-          easingFunction: t => t
+          easingFunction: (t) => t,
         });
       }
     },
