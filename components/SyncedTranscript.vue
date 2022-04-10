@@ -662,15 +662,16 @@ export default {
         let lastDuration =
           this.previousLine && this.currentLine
             ? (this.currentLine.starttime - this.previousLine.starttime) * 1000
-            : 2000;
-        lastDuration = lastDuration || 2000;
+            : 500;
+        lastDuration = lastDuration || 500;
         let duration =
           this.currentLine && this.nextLine
             ? Math.min(
                 (this.nextLine.starttime - this.currentLine.starttime) * 1000,
-                lastDuration
+                lastDuration,
+                500
               )
-            : 2000;
+            : 500;
         this.$smoothScroll({
           scrollTo: el,
           updateHistory: false,
