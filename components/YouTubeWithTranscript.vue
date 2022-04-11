@@ -224,7 +224,6 @@
                 }"
               >
                 <i class="fa fa-chevron-left"></i>
-                Prev
               </router-link>
               <router-link
                 v-if="show"
@@ -239,7 +238,10 @@
               >
                 <i class="fas fa-music" v-if="show.title === 'Music'"></i>
                 <i class="fas fa-film" v-else-if="show.title === 'Movies'"></i>
-                <i class="fas fa-newspaper" v-else-if="show.title === 'News'"></i>
+                <i
+                  class="fas fa-newspaper"
+                  v-else-if="show.title === 'News'"
+                ></i>
                 <i class="fab fa-youtube" v-else-if="showType === 'talk'"></i>
                 <i class="fa fa-tv" v-else></i>
                 All
@@ -258,7 +260,6 @@
                   'btn-ghost-dark': skin === 'dark',
                 }"
               >
-                Next
                 <i class="fa fa-chevron-right"></i>
               </router-link>
             </div>
@@ -489,7 +490,7 @@ export default {
     if (this.$refs.youtube) this.$refs.youtube.speed = this.speed;
   },
   watch: {
-    async 'video.youtube_id'() {
+    async "video.youtube_id"() {
       await this.getL1Transcript();
     },
     repeatMode() {
