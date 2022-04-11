@@ -659,45 +659,47 @@ export default {
       if (el) {
         let smallScreenYOffset = this.getSmallScreenOffset();
         let elHeight = el.clientHeight;
-        // let lastDuration =
-        //   this.previousLine && this.currentLine
-        //     ? (this.currentLine.starttime - this.previousLine.starttime) * 1000
-        //     : 500;
-        // lastDuration = lastDuration || 500;
-        // let duration =
-        //   this.currentLine && this.nextLine
-        //     ? Math.min(
-        //         (this.nextLine.starttime - this.currentLine.starttime) * 1000,
-        //         lastDuration,
-        //         500
-        //       )
-        //     : 500;
-        // this.$smoothScroll({
-        //   scrollTo: el,
-        //   updateHistory: false,
-        //   offset:
-        //     -(smallScreenYOffset
-        //       ? window.innerHeight + smallScreenYOffset
-        //       : (this.$el.clientWidth * 9) / 16 + 52) /
-        //       2 +
-        //     elHeight / 2,
-        //   duration,
-        //   left: 0,
-        //   easingFunction: (t) => t,
-        // });
-        let offsetTop = Helper.documentOffsetTop(el);
-        let middle =
-          offsetTop -
-          (smallScreenYOffset
-            ? window.innerHeight + smallScreenYOffset
-            : (this.$el.clientWidth * 9) / 16 + 52) /
-            2 +
-          elHeight / 2;
-        window.scrollTo({
-          top: middle,
+
+        let lastDuration =
+          this.previousLine && this.currentLine
+            ? (this.currentLine.starttime - this.previousLine.starttime) * 1000
+            : 3000;
+        lastDuration = lastDuration || 3000;
+        let duration =
+          this.currentLine && this.nextLine
+            ? Math.min(
+                (this.nextLine.starttime - this.currentLine.starttime) * 1000,
+                lastDuration,
+                3000
+              )
+            : 3000;
+        this.$smoothScroll({
+          scrollTo: el,
+          updateHistory: false,
+          offset:
+            -(smallScreenYOffset
+              ? window.innerHeight + smallScreenYOffset
+              : (this.$el.clientWidth * 9) / 16 + 52) /
+              2 +
+            elHeight / 2,
+          duration,
           left: 0,
-          // behavior: "smooth",
+          easingFunction: (t) => t,
         });
+
+        // let offsetTop = Helper.documentOffsetTop(el);
+        // let middle =
+        //   offsetTop -
+        //   (smallScreenYOffset
+        //     ? window.innerHeight + smallScreenYOffset
+        //     : (this.$el.clientWidth * 9) / 16 + 52) /
+        //     2 +
+        //   elHeight / 2;
+        // window.scrollTo({
+        //   top: middle,
+        //   left: 0,
+        //   behavior: "smooth",
+        // });
       }
     },
     lineClick(line) {
