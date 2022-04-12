@@ -679,7 +679,12 @@ export default {
           offset:
             -(smallScreenYOffset
               ? window.innerHeight + smallScreenYOffset
-              : ((this.$el.clientWidth * 9) / 16 + 52) * 2 - elHeight / 2) /
+              : Math.min(
+                  window.innerHeight / 2,
+                  (this.$el.clientWidth * 9) / 16 + 52
+                ) *
+                  2 -
+                elHeight / 2) /
               2 +
             elHeight / 2,
           duration,
