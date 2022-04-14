@@ -262,11 +262,21 @@ export default {
       this.currentLineIndex = startLineIndex;
       this.nextLine = this.lines[startLineIndex + 1];
     }
+    window.addEventListener('wheel', this.cancelSmoothScroll);
+    window.addEventListener('touchstart', this.cancelSmoothScroll);
   },
   beforeDestroy() {
     if (this.unsubscribe) this.unsubscribe();
+    window.removeEventListener('wheel', this.cancelSmoothScroll);
+    window.removeEventListener('touchstart', this.cancelSmoothScroll);
   },
   watch: {
+    paused() {
+      // Stop smooth scrolling
+      if (this.paused) {
+        this.cancelSmoothScroll();
+      }
+    },
     async currentTime() {
       if (this.preventJumpingAtStart) {
         this.turnOffPreventJumptingAtStartAfter3Seconds();
@@ -326,6 +336,12 @@ export default {
     },
   },
   methods: {
+    cancelSmoothScroll() {
+      let id = window.requestAnimationFrame(function () {});
+      while (id--) {
+        window.cancelAnimationFrame(id);
+      }
+    },
     openReview(index) {
       Vue.set(this.reviewOpen, index, true);
     },
