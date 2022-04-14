@@ -23,7 +23,7 @@
       <div class="row">
         <div class="col-sm-12">
           <div>
-            <!-- <Sale class="mb-4" /> -->
+            <Sale class="mb-4" />
             <h3 class="text-center">Browse Words by HSK Courses</h3>
             <p class="text-center">
               Each tiny square represents a word in the

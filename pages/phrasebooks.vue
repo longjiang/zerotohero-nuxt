@@ -11,7 +11,7 @@
         <SocialHead :title="title" :description="description" :image="image" />
         <div class="row">
           <div class="col-sm-12">
-            <!-- <Sale class="mt-5 mb-5" v-if="$l2.code === 'zh'" /> -->
+            <Sale class="mt-5 mb-5" v-if="$l2.code === 'zh'" />
             <h3 class="text-center mt-5 mb-5">{{ $l2.name }} Phrasebooks</h3>
             <div class="mb-5">
               <div

@@ -31,7 +31,7 @@
             </div>
           </div>
         </div>
-        <!-- <Sale class="mb-5" style="border-radius: 1rem !important" /> -->
+        <Sale class="mb-5" style="border-radius: 1rem !important" />
         <div class="row mb-5">
           <div class="col-sm-12">
             <div class="home-card">

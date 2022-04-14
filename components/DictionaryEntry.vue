@@ -226,7 +226,7 @@
         </div>
       </div>
     </div>
-    <!-- <Sale class="mb-5" style="border-radius: 1rem !important" v-if="$l2.code === 'zh'" /> -->
+    <Sale class="mb-5" style="border-radius: 1rem !important" v-if="$l2.code === 'zh'" />
     <EntryCourseAd
       v-if="$l2.code === 'zh'"
       :entry="entry"

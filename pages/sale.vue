@@ -24,7 +24,7 @@
           </router-link>
         </div>
       </div>
-      <div class="row">
+      <div class="row text-shadow">
         <div class="col">
           <div class="text-center">
             <h1 class="text-center mt-5 mb-4 sale-heading">Spring Sale</h1>
@@ -81,7 +81,7 @@
           </div>
         </div>
       </div>
-      <div class="row mt-5">
+      <div class="row mt-5 text-shadow">
         <div class="col">
           <h2 class="text-center mt-4" style="margin-bottom: 2rem">
             Start Mastering Chinese Today
@@ -193,7 +193,7 @@ export default {
 
 .sale-counter {
   background: #275e69;
-  background: radial-gradient(circle, #7b827e 0%, #275e69 100%);
+  background: radial-gradient(circle, #92a49b 0%, #1196b0 100%);
   font-size: 1.5rem;
   padding: 1rem;
   border-radius: 0.5rem;
@@ -209,7 +209,7 @@ export default {
 
 .coupon-code {
   background: #275e69;
-  background: radial-gradient(circle, #7b827e 0%, #275e69 100%);
+  background: radial-gradient(circle, #92a49b 0%, #1196b0 100%);
   font-size: 1em;
   color: white;
   padding: 0.5rem 1rem;
