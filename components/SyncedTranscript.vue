@@ -262,13 +262,13 @@ export default {
       this.currentLineIndex = startLineIndex;
       this.nextLine = this.lines[startLineIndex + 1];
     }
-    window.addEventListener('wheel', this.cancelSmoothScroll);
-    window.addEventListener('touchstart', this.cancelSmoothScroll);
+    if (window) window.addEventListener('wheel', this.cancelSmoothScroll);
+    if (window) window.addEventListener('touchstart', this.cancelSmoothScroll);
   },
   beforeDestroy() {
     if (this.unsubscribe) this.unsubscribe();
-    window.removeEventListener('wheel', this.cancelSmoothScroll);
-    window.removeEventListener('touchstart', this.cancelSmoothScroll);
+    if (window) window.removeEventListener('wheel', this.cancelSmoothScroll);
+    if (window) window.removeEventListener('touchstart', this.cancelSmoothScroll);
   },
   watch: {
     paused() {
