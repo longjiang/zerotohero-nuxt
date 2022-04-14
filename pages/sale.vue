@@ -27,16 +27,14 @@
       <div class="row">
         <div class="col">
           <div class="text-center">
-            <h1 class="text-center mt-5 mb-4 sale-heading">
-              Chinese New Year Sale
-            </h1>
+            <h1 class="text-center mt-5 mb-4 sale-heading">Spring Sale</h1>
           </div>
           <h2 class="text-center mt-4" style="margin-bottom: 2rem">
-            ALL HSK COURSES 25% OFF
+            ALL HSK COURSES 30% OFF
           </h2>
           <client-only>
             <div class="sale-counter text-xs-left text-sm-center">
-              <vac :end-time="new Date('Feb 5, 2022 23:59:59')">
+              <vac :end-time="new Date('Apr 19, 2022 23:59:59')">
                 <template v-slot:process="{ timeObj }">
                   <span>
                     <span style="white-space: nowrap">
@@ -65,7 +63,7 @@
           </client-only>
           <h2 class="text-center mt-4 mb-4" style="line-height: 2">
             Use the coupon code
-            <span class="coupon-code">CNY2022</span>
+            <span class="coupon-code">SP30</span>
           </h2>
         </div>
       </div>
@@ -90,7 +88,7 @@
           </h2>
           <client-only>
             <div class="sale-counter text-xs-left text-sm-center">
-              <vac :end-time="new Date('Feb 5, 2022 23:59:59')">
+              <vac :end-time="new Date('Apr 19, 2022 23:59:59')">
                 <template v-slot:process="{ timeObj }">
                   <span>
                     <span style="white-space: nowrap">
@@ -119,7 +117,7 @@
           </client-only>
           <h4 class="text-center mt-4 mb-4" style="line-height: 2">
             USE THE COUPON CODE
-            <span class="coupon-code">CNY2022</span>
+            <span class="coupon-code">SP30</span>
           </h4>
         </div>
       </div>
@@ -150,7 +148,7 @@
         position: fixed;
         top: 0;
         left: 0;
-        background-image: url(/img/background-chinese-new-year.jpg);
+        background-image: url(/img/background-cherry-blossom-2022-blurred.jpg);
         height: 100vh;
         width: 100vw;
         background-size: cover;
@@ -171,9 +169,9 @@ Vue.use(vueAwesomeCountdown);
 export default {
   data() {
     return {
-      title: "HSK Courses at 25% Off | Chinese Zero to Hero",
-      description: "Deal ends Jan 5, 2022",
-      image: "/img/sale/cny-sale-2022.jpeg",
+      title: "HSK Courses at 30% Off | Chinese Zero to Hero",
+      description: "Deal ends Apr 19, 2022",
+      image: "/img/sale/spring-sale-2022.jpg",
       server: Config.server,
     };
   },
@@ -194,12 +192,8 @@ export default {
 }
 
 .sale-counter {
-  background: rgb(221, 45, 45);
-  background: radial-gradient(
-    circle,
-    rgba(221, 45, 45, 1) 0%,
-    rgba(108, 15, 15, 1) 100%
-  );
+  background: #275e69;
+  background: radial-gradient(circle, #7b827e 0%, #275e69 100%);
   font-size: 1.5rem;
   padding: 1rem;
   border-radius: 0.5rem;
@@ -214,12 +208,8 @@ export default {
 }
 
 .coupon-code {
-  background: rgb(221, 45, 45);
-  background: radial-gradient(
-    circle,
-    rgba(221, 45, 45, 1) 0%,
-    rgba(108, 15, 15, 1) 100%
-  );
+  background: #275e69;
+  background: radial-gradient(circle, #7b827e 0%, #275e69 100%);
   font-size: 1em;
   color: white;
   padding: 0.5rem 1rem;
