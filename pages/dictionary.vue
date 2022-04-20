@@ -39,7 +39,7 @@
                 <div class="for-the-love-of">
                   <h3 class="text-center font-weight-normal">
                     <div class="pb-5 pl-5 pr-5" v-if="$l2.code === 'zh'">
-                      <Sale style="border-radius: 1rem !important" />
+                      <!-- <Sale style="border-radius: 1rem !important" /> -->
                     </div>
                     <span v-if="!dictionarySize">
                       {{

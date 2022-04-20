@@ -20,7 +20,7 @@
       />
       <div class="row">
         <div class="col-sm-12 mb-4 text-center">
-          <Sale class="mb-4" v-if="$l2.code === 'zh'" />
+          <!-- <Sale class="mb-4" v-if="$l2.code === 'zh'" /> -->
           <h3 v-if="show">
             <Annotate :phonetics="false" :buttons="true" v-if="!$adminMode">
               <span>{{ show.title }}</span>
