@@ -145,7 +145,9 @@
           </router-link>
         </div>
         <div
-          v-if="['ko', 'vi'].includes($l2.code) && entry.cjk && entry.cjk.canonical"
+          v-if="
+            ['ko', 'vi'].includes($l2.code) && entry.cjk && entry.cjk.canonical
+          "
           class="mt-1"
         >
           <span :class="{ 'ml-2 entry-cjk': true, transparent: hidePhonetics }">
@@ -169,6 +171,19 @@
         >
           {{ $languages.getSmart(entry.supplementalLang).name }}
         </span>
+      </div>
+      <div class="word-type mt-3" v-if="entry.pos" style="color: #999">
+        {{
+          entry.gender
+            ? { m: "masculine", f: "feminine", n: "neuter" }[entry.gender]
+            : ""
+        }}
+        {{ entry.pos }}
+        {{
+          entry.heads && entry.heads[0] && entry.heads[0][1]
+            ? entry.heads[0][1]
+            : ""
+        }}
       </div>
     </div>
   </div>

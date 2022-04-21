@@ -71,6 +71,19 @@
             v-if="word.definitions"
             :class="{ 'wordlist-item-l1': true, transparent: hideDefinitions }"
           >
+            <span class="word-type" v-if="word.pos" style="color: #999">
+              {{
+                word.gender
+                  ? { m: "masculine", f: "feminine", n: "neuter" }[word.gender]
+                  : ""
+              }}
+              {{ word.pos }}
+              {{
+                word.heads && word.heads[0] && word.heads[0][1]
+                  ? word.heads[0][1]
+                  : ""
+              }}:
+            </span>
             {{
               word.definitions.filter((def) => !def.startsWith("CL")).join(", ")
             }}
