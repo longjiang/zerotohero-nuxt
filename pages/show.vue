@@ -250,7 +250,7 @@ export default {
     if (this.id) {
       this.show = await this.getShow(this.id, this.collection);
       if (this.show) {
-        this.sort = this.type === "talk" ? "-date" : "title";
+        this.sort = (this.type === "talk" && !this.show.audiobook) ? "-date" : "title";
         this.videos = await this.getVideos({
           limit: this.perPage,
           offset: this.moreVideos,
