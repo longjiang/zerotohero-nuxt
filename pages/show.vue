@@ -238,10 +238,12 @@ export default {
     },
     async sort() {
       this.moreVideos = 0;
-      this.videos = await this.getVideos({
-        limit: this.perPage,
-        offset: this.moreVideos,
-      });
+      if (this.videos) {
+        this.videos = await this.getVideos({
+          limit: this.perPage,
+          offset: this.moreVideos,
+        });
+      }
     },
   },
   async mounted() {
