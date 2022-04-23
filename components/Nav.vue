@@ -310,6 +310,7 @@ export default {
       hasTVShows: false,
       hasLiveTV: false,
       hasTalks: false,
+      hasAudiobooks: false,
       musicPath: false,
       moviePath: false,
       newsPath: false,
@@ -393,6 +394,12 @@ export default {
               icon: "fab fa-youtube",
               title: `YouTube Channels`,
               show: this.hasTalks,
+            },
+            {
+              name: "audiobooks",
+              icon: "fa fa-book-open",
+              title: `Audiobooks`,
+              show: this.hasAudiobooks,
             },
             {
               path: this.musicPath,
@@ -980,6 +987,10 @@ export default {
         if (newsShow) {
           this.newsPath = `/${this.$l1.code}/${this.$l2.code}/show/talk/${newsShow.id}`;
         }
+        let audiobooks = this.$store.state.shows.talks[this.l2.code].filter(
+          (s) => s.audiobook
+        );
+        this.hasAudiobooks = audiobooks.length > 0;
       }
     },
     to(item) {

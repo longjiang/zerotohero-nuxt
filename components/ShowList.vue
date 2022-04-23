@@ -43,10 +43,19 @@
                 v-if="$adminMode"
                 size="sm"
                 class="admin-hide-button"
-                @click.stop.prevent="toggleHidden(show)"
+                @click.stop.prevent="toggle(show, 'hidden')"
               >
                 <i class="far fa-eye" v-if="show.hidden"></i>
                 <i class="far fa-eye-slash" v-else></i>
+              </b-button>
+              <b-button
+                v-if="$adminMode"
+                size="sm"
+                class="admin-audiobook-button"
+                @click.stop.prevent="toggle(show, 'audiobook')"
+              >
+                <i class="fa fa-microphone" v-if="show.audiobook"></i>
+                <i class="fa fa-microphone-slash" v-else></i>
               </b-button>
               <b-button
                 v-if="$adminMode"
@@ -132,17 +141,19 @@ export default {
         this.slug
       }/${encodeURIComponent(show.id)}`;
     },
-    async toggleHidden(show) {
-      let hidden = !show.hidden;
+    async toggle(show, property) {
+      let toggled = !show[property]; // If true, make it false, and vice versa
       try {
         let url = `${Config.wiki}items/${this.field}s/${show.id}`;
+        let payload = {}
+        payload[property] = toggled
         let response = await axios.patch(
           url,
-          { hidden },
+          payload,
           { contentType: "application/json" }
         );
         if (response && response.data.data) {
-          Vue.set(show, "hidden", hidden);
+          Vue.set(show, property, toggled);
         }
       } catch (err) {
         // Direcuts bug
@@ -210,5 +221,10 @@ export default {
   position: absolute;
   bottom: 0.5rem;
   left: 0.5rem;
+}
+.admin-audiobook-button {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 2rem;
 }
 </style>

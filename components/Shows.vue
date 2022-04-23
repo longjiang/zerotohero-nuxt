@@ -3,12 +3,8 @@
     <div class="container">
       <SocialHead
         v-if="shows && shows[0]"
-        :title="`Learn ${$l2.name} with ${
-          routeType === 'tv-shows' ? 'TV Shows' : 'YouTube Channels'
-        } | ${$l2.name} Zero to Hero`"
-        :description="`Learn ${$l2.name} with ${
-          routeType === 'tv-shows' ? 'TV Shows' : 'YouTube Channels'
-        }.`"
+        :title="`Learn ${$l2.name} with ${routeTitles[routeType]} | ${$l2.name} Zero to Hero`"
+        :description="`Learn ${$l2.name} with ${routeTitles[routeType]}.`"
         :image="
           routeType === 'tv-shows' && $l2.code === 'zh'
             ? '/img/tv-shows.jpg'
@@ -20,7 +16,7 @@
           <!-- <Sale class="mt-5 mb-5" v-if="$l2.code === 'zh'" /> -->
           <h3 class="text-center mt-5">
             Study {{ $l2.name }} with
-            {{ routeType === "tv-shows" ? "TV Shows" : "YouTube Channels" }}
+            {{ routeTitles[routeType] }}
           </h3>
           <p class="text-center mb-5" v-if="shows && shows.length">
             ({{ filteredShows && filteredShows.length }} show{{
@@ -29,7 +25,8 @@
           </p>
           <div class="text-center mb-5" v-if="!showDiscover">
             <b-button @click="showDiscover = true" size="lg" variant="success">
-              <i class="fas fa-random mr-2"></i> Watch Something Random
+              <i class="fas fa-random mr-2"></i>
+              Watch Something Random
             </b-button>
           </div>
           <LazyDiscoverPlayer
@@ -63,8 +60,8 @@
               </div>
               <div class="text-center" v-if="shows && shows.length === 0">
                 Sorry, we could not find any
-                {{ routeType === "tv-shows" ? "TV shows" : "YouTube Channels" }}
-                in {{ $l2.name }} 😭.
+                {{ routeTitles[routeType] }}
+                in {{ $l2.name }}.
               </div>
               <ShowList
                 v-if="shows && shows.length > 0"
@@ -92,10 +89,19 @@ export default {
   },
   data() {
     return {
-      type: this.routeType === "tv-shows" ? "tvShows" : "talks",
+      type: {
+        "tv-shows": "tvShows",
+        talks: "talks",
+        audiobooks: "talks",
+      }[this.routeType],
       shows: undefined,
       keyword: "",
       showDiscover: false,
+      routeTitles: {
+        "tv-shows": "TV Shows",
+        talks: "YouTube Channels",
+        audiobooks: "Audiobooks",
+      },
     };
   },
   async fetch() {
@@ -130,14 +136,20 @@ export default {
     },
     filteredShows() {
       if (this.shows) {
+        let shows = this.shows;
+        if (this.routeType === "audiobooks") {
+          shows = shows.filter((s) => s.audiobook);
+        } else {
+          shows = shows.filter((s) => !s.audiobook);
+        }
         if (this.keyword) {
           let k = this.$l2.han ? tify(this.keyword) : this.keyword;
-          return this.shows.filter((s) => {
+          return shows.filter((s) => {
             let title = this.$l2.han ? tify(s.title) : s.title;
             return title.toLowerCase().includes(k.toLowerCase());
           });
         } else {
-          return this.shows.filter(
+          return shows.filter(
             (show) => !["News", "Music", "Movies"].includes(show.title)
           );
         }
