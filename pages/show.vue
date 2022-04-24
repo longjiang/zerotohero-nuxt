@@ -36,7 +36,7 @@
           <p style="opacity: 0.6">
             <span v-if="count">{{ count }} Episodes</span>
             <span v-if="$adminMode && show">
-              · Cover youtube_id:
+              Cover youtube_id:
               <span contenteditable="true" @blur="saveCover">
                 {{ show.youtube_id }}
               </span>
@@ -250,7 +250,8 @@ export default {
     if (this.id) {
       this.show = await this.getShow(this.id, this.collection);
       if (this.show) {
-        this.sort = (this.type === "talk" && !this.show.audiobook) ? "-date" : "title";
+        this.sort =
+          this.type === "talk" && !this.show.audiobook ? "-date" : "title";
         this.videos = await this.getVideos({
           limit: this.perPage,
           offset: this.moreVideos,
@@ -321,7 +322,6 @@ export default {
     },
     async getVideos({ keyword, limit = 500, offset = 0 } = {}) {
       let sort = this.sort;
-      let count = this.show.title === "News" ? "" : "&meta=filter_count"; // Do not count news, there are too many
       let keywordFilter = keyword ? `&filter[title][contains]=${keyword}` : "";
       let response = await axios.get(
         `${Config.wiki}items/youtube_videos?filter[l2][eq]=${
@@ -330,12 +330,9 @@ export default {
           this.show.id
         }${keywordFilter}&fields=channel_id,id,lesson,level,title,topic,youtube_id,date,tv_show.*,talk.*&sort=${sort}&limit=${limit}&offset=${offset}&timestamp=${
           this.$adminMode ? Date.now() : 0
-        }${count}`
+        }`
       );
       let videos = response.data.data || [];
-      if (response.data.meta && response.data.meta.filter_count) {
-        this.count = response.data.meta.filter_count;
-      }
       videos = Helper.uniqueByValue(videos, "youtube_id");
       if (this.sort === "title") {
         videos =
