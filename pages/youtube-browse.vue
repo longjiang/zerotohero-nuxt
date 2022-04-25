@@ -302,7 +302,7 @@ export default {
       let limit = this.perPage;
       try {
         let response = await axios.get(
-          `${Config.wiki}items/youtube_videos?sort=-id&filter[l2][eq]=${
+          `${Config.youtubeVideosTableName(this.$l2.id)}?sort=-id&filter[l2][eq]=${
             this.$l2.id
           }${filters}&limit=${limit}&offset=${start}&fields=channel_id,id,lesson,level,title,topic,youtube_id,tv_show.*,talk.*${
             this.$adminMode ? ",subs_l2" : ""

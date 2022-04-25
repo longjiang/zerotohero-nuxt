@@ -169,6 +169,14 @@ export default {
       expand: {},
     };
   },
+  computed: {
+    $l1() {
+      return this.$store.state.settings.l1;
+    },
+    $l2() {
+      return this.$store.state.settings.l2;
+    }
+  },
   mounted() {
     this.loadShows();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
@@ -329,7 +337,7 @@ export default {
           showFilter = `&filter[talk][eq]=${show.replace("talk-", "")}`;
       }
       let response = await axios.get(
-        `${Config.wiki}items/youtube_videos?sort=-id&limit=${limit}&offset=${start}&filter[l2][eq]=${this.$l2.id}${showFilter}&fields=*,tv_show.*,talk.*`
+        `${Config.youtubeVideosTableName(this.$l2.id)}?sort=-id&limit=${limit}&offset=${start}&filter[l2][eq]=${this.$l2.id}${showFilter}&fields=*,tv_show.*,talk.*`
       );
       let videos = response.data.data || [];
       if (["all-tv-shows", "all-videos"].includes(show)) {

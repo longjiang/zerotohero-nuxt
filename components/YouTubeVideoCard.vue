@@ -466,7 +466,7 @@ export default {
           let data = {};
           data[type] = show.id;
           let response = await axios.patch(
-            `${Config.wiki}items/youtube_videos/${this.video.id}?fields=id`,
+            `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}?fields=id`,
             data
           );
           response = response.data;
@@ -481,7 +481,7 @@ export default {
       let data = {};
       data[type] = null;
       let response = await axios.patch(
-        `${Config.wiki}items/youtube_videos/${this.video.id}`,
+        `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}`,
         data
       );
       if (response && response.data) {
@@ -493,7 +493,7 @@ export default {
       if (this.video.title !== newTitle) {
         try {
           let response = await axios.patch(
-            `${Config.wiki}items/youtube_videos/${this.video.id}`,
+            `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}`,
             { title: newTitle },
             { contentType: "application/json" }
           );
@@ -530,7 +530,7 @@ export default {
       if (this.video.id) {
         try {
           let response = await axios.delete(
-            `${Config.wiki}items/youtube_videos/${this.video.id}`
+            `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}`
           );
           if (response) {
             Vue.delete(this.video, "id");
@@ -543,7 +543,7 @@ export default {
     },
     async updateSubs() {
       let response = await axios.patch(
-        `${Config.wiki}items/youtube_videos/${this.video.id}`,
+        `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}`,
         { subs_l2: YouTube.unparseSubs(this.video.subs_l2) }
       );
       response = response.data;
@@ -608,7 +608,7 @@ export default {
     async addChannelID(video) {
       let channelId = await this.getChannelID(video);
       let response = await axios.patch(
-        `${Config.wiki}items/youtube_videos/${video.id}`,
+        `${Config.youtubeVideosTableName(this.$l2.id)}/${video.id}`,
         { channel_id: channelId }
       );
       if (response && response.data) {

@@ -136,7 +136,7 @@ export default {
     },
     async removeEpisode(randomShowRandomEpisode) {
       let response = await axios.delete(
-        `${Config.wiki}items/youtube_videos/${randomShowRandomEpisode.id}`
+        `${Config.youtubeVideosTableName(this.$l2.id)}/${randomShowRandomEpisode.id}`
       );
       if (response) {
         this.loadRandomShow();
@@ -177,7 +177,7 @@ export default {
       }
     },
     async getFirstEpisodeOfShow(showId, showType) {
-      let url = `${Config.wiki}items/youtube_videos?filter[${showType}][eq]=${showId}&fields=youtube_id,id,l2`;
+      let url = `${Config.youtubeVideosTableName(this.$l2.id)}?filter[${showType}][eq]=${showId}&fields=youtube_id,id,l2`;
       let response = await axios.get(url);
 
       if (response.data && response.data.data.length > 0) {
@@ -190,7 +190,7 @@ export default {
       let showFilter = showId
         ? `filter[${showType}][eq]=${showId}`
         : `filter[tv_show][null]=1&filter[talk][null]=1&filter[l2][eq]=${this.$l2.id}"`;
-      let url = `${Config.wiki}items/youtube_videos?${showFilter}&fields=youtube_id,id,l2`;
+      let url = `${Config.youtubeVideosTableName(this.$l2.id)}?${showFilter}&fields=youtube_id,id,l2`;
       let response = await axios.get(url);
 
       if (response.data && response.data.data.length > 0) {

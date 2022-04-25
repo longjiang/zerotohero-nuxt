@@ -144,7 +144,11 @@ export default {
     async getLessonVideos() {
       this.lessonVideos = [];
       let response = await $.getJSON(
-        `${Config.wiki}items/youtube_videos?sort=-id&filter[l2][eq]=${this.$l2.id}&filter[level][eq]=${this.level}&filter[lesson][eq]=${this.lesson}`
+        `${Config.youtubeVideosTableName(
+          this.$l2.id
+        )}?sort=-id&filter[l2][eq]=${this.$l2.id}&filter[level][eq]=${
+          this.level
+        }&filter[lesson][eq]=${this.lesson}`
       );
       let videos = response.data || [];
       if (videos.length > 0) {
@@ -181,9 +185,9 @@ export default {
               promises.push(
                 new Promise((resolve, reject) => {
                   $.getJSON(
-                    `${
-                      Config.wiki
-                    }items/youtube_videos?sort=-id&filter[l2][eq]=${
+                    `${Config.youtubeVideosTableName(
+                      this.$l2.id
+                    )}?sort=-id&filter[l2][eq]=${
                       this.$l2.id
                     }&filter[lesson][null]&filter[subs_l2][contains]=${JSON.stringify(
                       wordForm
@@ -246,7 +250,7 @@ export default {
     },
     async removeVideo(video) {
       let response = await $.ajax({
-        url: `${Config.wiki}items/youtube_videos/${video.id}`,
+        url: `${Config.youtubeVideosTableName(this.$l2.id)}/${video.id}`,
         type: "DELETE",
         contentType: "application/json",
         xhr: function () {
@@ -263,7 +267,7 @@ export default {
     },
     async removeVideoFromLesson(video) {
       let response = await $.ajax({
-        url: `${Config.wiki}items/youtube_videos/${video.id}`,
+        url: `${Config.youtubeVideosTableName(this.$l2.id)}/${video.id}`,
         data: JSON.stringify({ level: null, lesson: null }),
         type: "PATCH",
         contentType: "application/json",
@@ -283,7 +287,7 @@ export default {
     },
     async addVideoToLesson(video) {
       let response = await $.ajax({
-        url: `${Config.wiki}items/youtube_videos/${video.id}`,
+        url: `${Config.youtubeVideosTableName(this.$l2.id)}/${video.id}`,
         data: JSON.stringify({ level: this.level, lesson: this.lesson }),
         type: "PATCH",
         contentType: "application/json",

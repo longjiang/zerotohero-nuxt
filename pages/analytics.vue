@@ -361,7 +361,7 @@ export default {
       if (["Music", "Movies", "News"].includes(key)) {
         let collection = "News" === key ? "talk" : "tv_show";
         let res = await axios.get(
-          `${Config.wiki}items/youtube_videos?filter[l2][eq]=${row.l2.id}&filter[${collection}.title][eq]=${key}&limit=1&meta=filter_count`,
+          `${Config.youtubeVideosTableName(this.$l2.id)}?filter[l2][eq]=${row.l2.id}&filter[${collection}.title][eq]=${key}&limit=1&meta=filter_count`,
           config
         );
         if (res && res.data) {

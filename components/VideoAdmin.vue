@@ -468,7 +468,7 @@ export default {
       let data = {};
       data[type] = null;
       let response = await axios.patch(
-        `${Config.wiki}items/youtube_videos/${this.video.id}`,
+        `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}`,
         data
       );
       if (response && response.data) {
@@ -495,7 +495,7 @@ export default {
         let data = {};
         data[type] = show.id;
         let response = await axios.patch(
-          `${Config.wiki}items/youtube_videos/${this.video.id}?fields=${type}.*`, // type is 'tv_show' or 'talk'
+          `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}?fields=${type}.*`, // type is 'tv_show' or 'talk'
           data
         );
         response = response.data;
@@ -528,7 +528,7 @@ export default {
     },
     async changeLevel(slug) {
       let response = await $.ajax({
-        url: `${Config.wiki}items/youtube_videos/${this.video.id}`,
+        url: `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}`,
         data: JSON.stringify({ level: slug }),
         type: "PATCH",
         contentType: "application/json",
@@ -547,7 +547,7 @@ export default {
       this.updating = true;
       try {
         let response = await axios.patch(
-          `${Config.wiki}items/youtube_videos/${this.video.id}`,
+          `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}`,
           {
             subs_l2: this.video.subs_l2
               ? YouTube.unparseSubs(this.video.subs_l2, this.$l2.code)
@@ -570,7 +570,7 @@ export default {
     },
     async changeTopic(slug) {
       let response = await $.ajax({
-        url: `${Config.wiki}items/youtube_videos/${this.video.id}`,
+        url: `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}`,
         data: JSON.stringify({ topic: slug }),
         type: "PATCH",
         contentType: "application/json",
@@ -588,7 +588,7 @@ export default {
     async remove() {
       try {
         let response = await axios.delete(
-          `${Config.wiki}items/youtube_videos/${this.video.id}`
+          `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}`
         );
         if (response) {
           this.deleted = true;

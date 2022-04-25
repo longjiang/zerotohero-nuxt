@@ -485,7 +485,7 @@ export default {
       let response;
       try {
         response = await axios.delete(
-          `${Config.wiki}items/youtube_videos/${id}`
+          `${Config.youtubeVideosTableName(this.$l2.id)}/${id}`
         );
       } catch (err) {}
       let hits = [];

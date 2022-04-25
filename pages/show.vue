@@ -162,6 +162,14 @@ export default {
     id: String,
     type: String,
   },
+  computed: {
+    $l1() {
+      return this.$store.state.settings.l1;
+    },
+    $l2() {
+      return this.$store.state.settings.l2;
+    }
+  },
   data() {
     return {
       collection: this.type === "tv-show" ? "tv_show" : "talk",
@@ -324,7 +332,7 @@ export default {
       let sort = this.sort;
       let keywordFilter = keyword ? `&filter[title][contains]=${keyword}` : "";
       let response = await axios.get(
-        `${Config.wiki}items/youtube_videos?filter[l2][eq]=${
+        `${Config.youtubeVideosTableName(this.$l2.id)}?filter[l2][eq]=${
           this.$l2.id
         }&filter[${this.collection}][eq]=${
           this.show.id

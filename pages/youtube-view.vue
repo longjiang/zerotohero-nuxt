@@ -202,7 +202,7 @@ export default {
       if (this.show) {
         let sort = this.show.title !== "News" ? "title" : "-date";
         let response = await axios.get(
-          `${Config.wiki}items/youtube_videos?filter[l2][eq]=${
+          `${Config.youtubeVideosTableName(this.$l2.id)}?filter[l2][eq]=${
             this.$l2.id
           }&filter[${this.showType}][eq]=${
             this.show.id
@@ -302,7 +302,7 @@ export default {
     },
     async getSaved() {
       let response = await axios.get(
-        `${Config.wiki}items/youtube_videos?filter[youtube_id][eq]=${
+        `${Config.youtubeVideosTableName(this.$l2.id)}?filter[youtube_id][eq]=${
           this.youtube_id
         }&filter[l2][eq]=${this.$l2.id}&fields=*,tv_show.*,talk.*&timestamp=${
           this.$adminMode ? Date.now() : 0
@@ -432,7 +432,7 @@ export default {
       if (video.channel && video.channel.id) {
         let channelId = video.channel.id;
         let response = await axios.patch(
-          `${Config.wiki}items/youtube_videos/${video.id}`,
+          `${Config.youtubeVideosTableName(this.$l2.id)}/${video.id}`,
           { channel_id: channelId }
         );
         if (response && response.data) {

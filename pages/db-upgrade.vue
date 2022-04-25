@@ -173,6 +173,14 @@ export default {
       ],
     };
   },
+  computed: {
+    $l1() {
+      return this.$store.state.settings.l1;
+    },
+    $l2() {
+      return this.$store.state.settings.l2;
+    }
+  },
   async mounted() {
     this.videos = await this.getVideos();
   },
@@ -180,7 +188,7 @@ export default {
     async getVideos() {
       let limit = this.perPage;
       let response = await axios.get(
-        `${Config.wiki}items/youtube_videos?sort=-id&limit=${limit}&offset=${
+        `${Config.youtubeVideosTableName(this.$l2.id)}?sort=-id&limit=${limit}&offset=${
           this.start
         }&fields=id,youtube_id,l2,title,subs_l2,channel_id,topic,level,lesson&timestamp=${
           this.$adminMode ? Date.now() : 0
@@ -203,7 +211,7 @@ export default {
     async remove(video) {
       try {
         let response = await axios.delete(
-          `${Config.wiki}items/youtube_videos/${video.id}`
+          `${Config.youtubeVideosTableName(this.$l2.id)}/${video.id}`
         );
         if (response.data) {
           this.videos = this.videos.filter((v) => v !== video);
@@ -249,7 +257,7 @@ export default {
       );
       try {
         let response = await axios.patch(
-          `${Config.wiki}items/youtube_videos/${video.id}`,
+          `${Config.youtubeVideosTableName(this.$l2.id)}/${video.id}`,
           {
             subs_l2: csv,
           }

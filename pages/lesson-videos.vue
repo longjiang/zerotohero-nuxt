@@ -206,7 +206,7 @@ export default {
   async fetch() {
     this.lessonVideos = [];
     let response = await axios.get(
-      `${Config.wiki}items/youtube_videos?sort=-id&filter[l2][eq]=${this.$l2.id}&filter[level][eq]=${this.level}&filter[lesson][eq]=${this.lesson}`
+      `${Config.youtubeVideosTableName(this.$l2.id)}?sort=-id&filter[l2][eq]=${this.$l2.id}&filter[level][eq]=${this.level}&filter[lesson][eq]=${this.lesson}`
     );
     let videos = response.data.data || [];
     if (videos.length > 0) {

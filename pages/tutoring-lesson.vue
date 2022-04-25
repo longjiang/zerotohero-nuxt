@@ -225,7 +225,7 @@ export default {
     );
     readings = readings.data.data;
     let youtubeVideos = await axios.get(
-      `${Config.wiki}items/youtube_videos?filter[l2][eq]=${this.$l2.id}&filter[lesson][eq]=${this.id}`
+      `${Config.youtubeVideosTableName(this.$l2.id)}?filter[l2][eq]=${this.$l2.id}&filter[lesson][eq]=${this.id}`
     );
     youtubeVideos = youtubeVideos.data.data.map((video) => {
       return {
