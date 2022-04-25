@@ -43,12 +43,12 @@
           ></b-progress>
         </client-only>
         <img
-          v-lazy-load
           :src="thumbnail"
           class="youtube-thumbnail aspect"
           ref="thumbnail"
           @load="thumbnailLoaded"
           @error="thumbnailError"
+          v-lazy-load
         />
       </router-link>
       <div class="media-body">
