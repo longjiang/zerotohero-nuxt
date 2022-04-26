@@ -545,6 +545,12 @@ export default {
               shortcut: (e) => e.code === "KeyP" && e.metaKey && e.shiftKey,
             },
             {
+              name: "minimal-pairs",
+              icon: "fa fa-adjust",
+              title: "Minimal Pairs",
+              show: this.hasFeature("dictionary"),
+            },
+            {
               name: "saved-phrases",
               icon: "fas fa-bookmark",
               title: "Saved Phrases",
