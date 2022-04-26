@@ -9,7 +9,7 @@
     <div class="container pt-5 pb-5">
       <div class="row">
         <div class="col-sm-12">
-          <h3 class="mb-5 text-center">Minimal Pairs</h3>
+          <h3 class="mb-5 text-center">{{ $l2.name }} Minimal Pairs</h3>
           <p class="text-center mb-3">Enter two distinct phonetic segments:</p>
           <b-input-group>
             <b-form-input
@@ -93,7 +93,7 @@ export default {
       defaults: {
         ko: ["사", "싸"],
         zh: ["āng", "àng"],
-        vi: ["˧˧", "˧˨"],
+        vi: ["˧˧", "˨˩"],
         ja: ["また", "まだ"],
         ru: ["ш", "щ"],
         en: ["ɪt", "iːt"],
@@ -158,6 +158,7 @@ export default {
       let bs = pronunciations.filter(
         (p) => p.chosenPornunciation.split(this.b).length === 2
       );
+      console.log(as, bs)
       let minimalPairs = [];
       for (let a of as) {
         let aSplit = a.chosenPornunciation.split(this.a);
