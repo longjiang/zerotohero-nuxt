@@ -24,7 +24,7 @@
       </div>
       <LazyFooter :dictionaryCredit="dictionaryCredit" class="zth-footer"/>
       <ReaderComp
-        v-if="l1 && l2 && $route.name !== 'youtube-view'"
+        v-if="l1 && l2 && $route.name !== 'youtube-view' && $route.name !== 'home'"
         :iconMode="true"
       />
     </template>

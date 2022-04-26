@@ -119,6 +119,16 @@
             >
               <i :class="`${item.icon}`"></i>
               {{ $t(item.title, { l2: $t($l2.name) }) }}
+              <span
+                class="saved-words-count"
+                v-cloak
+                v-if="
+                  item.icon === 'fas fa-star' &&
+                  savedWordsCount + savedPhrasesCount > 0
+                "
+              >
+                {{ savedWordsCount + savedPhrasesCount }}
+              </span>
             </NuxtLink>
           </div>
           <div v-if="variant === 'side-bar'" class="end-nav">
@@ -373,6 +383,25 @@ export default {
     menu() {
       let items = [
         {
+          icon: "fas fa-star",
+          title: "Saved Items",
+          show: this.savedWordsCount > 0,
+          children: [
+            {
+              name: "saved-words",
+              icon: "fas fa-star",
+              title: "Saved Words",
+              show: true,
+            },
+            {
+              name: "saved-phrases",
+              icon: "fas fa-bookmark",
+              title: "Saved Phrases",
+              show: true,
+            },
+          ],
+        },
+        {
           icon: "fas fa-photo-video",
           title: "Media",
           show: this.hasFeature("youtube"),
@@ -517,6 +546,13 @@ export default {
           show: this.hasFeature("dictionary") || this.hasPhrasebooks,
           children: [
             {
+              name: "dictionary",
+              icon: "fa fa-search",
+              title: "Dictionary",
+              show: this.hasFeature("dictionary"),
+              shortcut: (e) => e.code === "KeyD" && e.metaKey && e.shiftKey,
+            },
+            {
               name: "phrasebooks",
               icon: "fa fa-comment-alt",
               title: "Phrasebooks",
@@ -529,13 +565,6 @@ export default {
             {
               name: "phrasebook-phrase",
               show: false,
-            },
-            {
-              name: "dictionary",
-              icon: "fa fa-search",
-              title: "Look Up Words",
-              show: this.hasFeature("dictionary"),
-              shortcut: (e) => e.code === "KeyD" && e.metaKey && e.shiftKey,
             },
             {
               name: "phrase",
@@ -551,16 +580,22 @@ export default {
               show: this.hasFeature("dictionary"),
             },
             {
-              name: "saved-phrases",
-              icon: "fas fa-bookmark",
-              title: "Saved Phrases",
-              show: true,
+              name: "levels",
+              icon: "fa fa-signal",
+              title: "HSK Words",
+              show: this.hasFeature("levels"),
             },
             {
-              name: "saved-words",
-              icon: "fas fa-star",
-              title: "Saved Words",
-              show: true,
+              name: "new-levels",
+              icon: "fa fa-signal",
+              title: "New HSK Words",
+              show: this.hasFeature("levels"),
+            },
+            {
+              name: "new-levels-graphic",
+              icon: "fas fa-exchange-alt",
+              title: "Old vs New HSK",
+              show: this.hasFeature("levels"),
             },
             {
               name: "compare",
@@ -611,24 +646,6 @@ export default {
               icon: "fas fa-bookmark",
               title: "Bookmarklet",
               show: this.hasFeature("bookmarklet"),
-            },
-            {
-              name: "levels",
-              icon: "fa fa-signal",
-              title: "HSK Words",
-              show: this.hasFeature("levels"),
-            },
-            {
-              name: "new-levels",
-              icon: "fa fa-signal",
-              title: "New HSK Words",
-              show: this.hasFeature("levels"),
-            },
-            {
-              name: "new-levels-graphic",
-              icon: "fas fa-adjust",
-              title: "Old vs New HSK",
-              show: this.hasFeature("levels"),
             },
             {
               name: "explore-related",
@@ -1350,7 +1367,7 @@ export default {
 }
 
 .saved-words-count {
-  border-radius: 0.5rem;
+  border-radius: 100%;
   font-size: 0.7rem;
   font-weight: bold;
   display: inline-block;
@@ -1361,27 +1378,10 @@ export default {
   position: relative;
   min-width: 1.3rem;
   margin-left: 0.2rem;
-  opacity: 0.7;
   display: inline-block;
-}
-
-.zth-nav-light {
-  .saved-words-count {
-    background: #666;
-    color: white;
-  }
-}
-
-.zth-nav-dark {
-  .saved-words-count {
-    background: white;
-    color: black;
-  }
-}
-
-.nuxt-link-active .saved-words-count {
-  color: rgba(1, 65, 97, 0.78039);
-  background: white;
+  text-shadow: none;
+  color: white;
+  background: #fd4f1c;
 }
 
 .secondary-nav-item {
