@@ -67,8 +67,6 @@
                 :key="`minimal-pairs-row-${index}`"
                 style="position: relative"
               >
-                <td style="width: 50%"><WordList :maxDefinitions="1" :words="[row.a.w]" /></td>
-                <td style="width: 50%"><WordList :maxDefinitions="1" :words="[row.b.w]" /></td>
                 <td>
                   <router-link
                     :to="{
@@ -78,11 +76,14 @@
                         args: `${row.a.w.id},${row.b.w.id}`,
                       },
                     }"
-                    class="btn btn-primary"
+                    class="btn btn-medium btn-success mt-2"
+                    style="font-size: 0.7em; width: 1.5rem"
                   >
-                    <i class="fa fa-adjust" />
+                    <i class="fa fa-play" />
                   </router-link>
                 </td>
+                <td style="width: 50%"><WordList :maxDefinitions="1" :words="[row.a.w]" /></td>
+                <td style="width: 50%"><WordList :maxDefinitions="1" :words="[row.b.w]" /></td>
               </tr>
             </tbody>
           </table>

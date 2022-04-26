@@ -252,6 +252,8 @@ export default {
 
 <style lang="scss" scoped>
 .wordlist {
+  margin-bottom: inherit;
+
   .wordlist-item {
     a {
       color: inherit;
