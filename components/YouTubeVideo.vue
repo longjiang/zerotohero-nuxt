@@ -177,6 +177,7 @@ export default {
                     !this.interval
                   ) {
                     this.interval = setInterval(() => {
+                      
                       this.updateCurrentTime();
                     }, 250);
                   }
@@ -194,7 +195,7 @@ export default {
       $.getScript("//www.youtube.com/iframe_api");
     },
     playerIsThisPlayerNotSomeOtherPlayer() {
-      if (this.player && this.player.getVideoData && this.player.h) {
+      if (this.player && this.player.getVideoData) {
         let video_id = this.player.getVideoData().video_id;
         let playerIsThisPlayerNotSomeOtherPlayer = this.youtube === video_id;
         return playerIsThisPlayerNotSomeOtherPlayer;
@@ -210,7 +211,6 @@ export default {
           if (this.currentTime === 0 && this.neverPlayed) {
             return;
           }
-          // console.log(newTime, this.youtubeIframeID, this.player);
           this.$emit("currentTime", this.currentTime);
         }
       }
