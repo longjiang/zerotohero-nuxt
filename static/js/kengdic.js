@@ -52,6 +52,9 @@ const Dictionary = {
   unique(a) {
     return a.filter((item, i, ar) => ar.indexOf(item) === i);
   },
+  getWords() {
+    return this.words
+  },
   getWordsThatContain(text) {
     let words = this.words.filter(w => w.head && w.head.includes(text))
     let strings = words

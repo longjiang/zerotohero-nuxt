@@ -35,45 +35,48 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-12 text-center mt-5 mb-5" v-if="crunching">
-          <Loader :sticky="true" message="Looking for minimal pairs . . ." />
-        </div>
-        <table
-          class="table table-responsive mt-5"
-          v-if="minimalPairs && minimalPairs.length > 0"
-        >
-          <thead class="table-header">
-            <tr><th></th></tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="(row, index) in filteredRows"
-              :key="`minimal-pairs-row-${index}`"
-            >
-              <td><WordList :words="[row.a.w]" /></td>
-              <td><WordList :words="[row.b.w]" /></td>
-              <td>
-                <router-link
-                  :to="{
-                    name: 'compare',
-                    params: {
-                      method: $store.state.settings.dictionaryName,
-                      args: `${row.a.w.id},${row.b.w.id}`,
-                    },
-                  }"
-                >
-                  Compare
-                </router-link>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div v-observe-visibility="infiniteScroll">
-          <div
-            class="mt-3 mb-3 text-center"
-            v-if="minimalPairs && numRowsVisible < minimalPairs.length"
+        <div class="col-sm-12 mt-5 mb-5">
+          <div class="text-center mt-5 mb-5" v-if="crunching">
+            <Loader :sticky="true" message="Looking for minimal pairs . . ." />
+          </div>
+          <p v-if="minimalPairs && minimalPairs.length > 0" class="text-center">
+            <strong>{{ minimalPairs.length }} pairs found:</strong>
+          </p>
+          <table
+            class="table table-responsive mt-3"
+            v-if="minimalPairs && minimalPairs.length > 0"
           >
-            <Loader :sticky="true" message="Loading . . ." />
+            <tbody>
+              <tr
+                v-for="(row, index) in filteredRows"
+                :key="`minimal-pairs-row-${index}`"
+              >
+                <td><WordList :words="[row.a.w]" /></td>
+                <td><WordList :words="[row.b.w]" /></td>
+                <td>
+                  <router-link
+                    :to="{
+                      name: 'compare',
+                      params: {
+                        method: $store.state.settings.dictionaryName,
+                        args: `${row.a.w.id},${row.b.w.id}`,
+                      },
+                    }"
+                    class="btn btn-primary"
+                  >
+                    <i class="fa fa-adjust" />
+                  </router-link>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div v-observe-visibility="infiniteScroll">
+            <div
+              class="mt-3 mb-3 text-center"
+              v-if="minimalPairs && numRowsVisible < minimalPairs.length"
+            >
+              <Loader :sticky="true" message="Loading . . ." />
+            </div>
           </div>
         </div>
       </div>
@@ -85,13 +88,26 @@
 export default {
   data() {
     return {
-      a: "ā",
-      b: "à",
+      a: undefined,
+      b: undefined,
+      defaults: {
+        ko: ['사', '싸'],
+        zh: ['āng', 'àng'],
+        vi: ['˧˧', '˧˨'],
+        ja: ['また', 'まだ'],
+        ru: ['ш', 'щ']
+      },
       crunching: false,
       minimalPairs: undefined,
       numRowsVisible: 10,
       perPage: 10,
     };
+  },
+  mounted() {
+    if (this.defaults[this.$l2.code]) {
+      this.a = this.defaults[this.$l2.code][0]
+      this.b = this.defaults[this.$l2.code][1]
+    }
   },
   computed: {
     $l1() {
@@ -111,23 +127,27 @@ export default {
       }
     },
     async findMinimalPairs() {
+      let dictionaryName = this.$store.state.settings.dictionaryName
+      let property = 'pronunciation'
+      if (['kengdic', 'openrussian'].includes(dictionaryName)) property = 'bare'
+      if (dictionaryName === 'edict') property = 'kana'
       this.crunching = true;
       let dictionary = await this.$getDictionary();
       let words = await dictionary.getWords();
       let pronunciations = words
-        .filter((w) => w.pronunciation)
+        .filter((w) => w[property])
         .map((w) => {
-          let pronunciations = w.pronunciation.split(",");
+          let pronunciations = w[property].split(",");
           let lastPronunciation =
             pronunciations[pronunciations.length - 1].trim();
           return { w, lastPronunciation };
         });
-      let as = pronunciations.filter((p) =>
-        p.lastPronunciation.includes(this.a)
-      );
-      let bs = pronunciations.filter((p) =>
-        p.lastPronunciation.includes(this.b)
-      );
+      let as = pronunciations
+        .filter((p) => p.lastPronunciation.split(this.a).length === 2)
+        .slice(0, 10000);
+      let bs = pronunciations
+        .filter((p) => p.lastPronunciation.split(this.b).length === 2)
+        .slice(0, 10000);
       let minimalPairs = [];
       for (let a of as) {
         let aSplit = a.lastPronunciation.split(this.a);

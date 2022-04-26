@@ -30,7 +30,7 @@
           v-if="word"
           :to="getUrl(word, index)"
           :title="
-            word.definitions.filter((def) => !def.startsWith('CL')).join(',')
+            word.definitions ? word.definitions.filter((def) => !def.startsWith('CL')).join(',') : ''
           "
         >
           <span
@@ -85,7 +85,7 @@
               }}:
             </span>
             {{
-              word.definitions.filter((def) => !def.startsWith("CL")).join(", ")
+              word.definitions ? word.definitions.filter((def) => !def.startsWith("CL")).join(", ") : ''
             }}
           </span>
           <span

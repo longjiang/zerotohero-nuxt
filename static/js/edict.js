@@ -46,6 +46,9 @@ const Dictionary = {
   getSize() {
     return this.words.length
   },
+  getWords() {
+    return this.words
+  },
   getWordsThatContain(text) {
     let strings = []
     let words = this.words.filter(w => {

@@ -126,6 +126,7 @@ const Dictionary = {
       }
       if (row.bare) row.head = row.bare
       delete row.audio
+      row.pos = row.type
       this.words[row.id] = row
     }
   },
@@ -173,6 +174,9 @@ const Dictionary = {
   },
   unique(a) {
     return a.filter((item, i, ar) => ar.indexOf(item) === i);
+  },
+  getWords() {
+    return this.words
   },
   getWordsThatContain(text) {
     let words = this.words.filter(w => (w.head.includes(text)) || (w.bare.includes(text)))

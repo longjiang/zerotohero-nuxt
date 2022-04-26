@@ -52,6 +52,9 @@ const Dictionary = {
       Promise.all([wordsPromise, characterPromise, newHSKPromise]).then(() => resolve(this))
     })
   },
+  getWords() {
+    return this.words
+  },
   getWordsThatContain(text) {
     let words = this.words.filter(w => (w.simplified && w.simplified.includes(text)) || (w.traditional && w.traditional.includes(text)))
     let strings = this.unique(

@@ -347,6 +347,9 @@ const Dictionary = {
     let word = this.words.find(word => word && (word.simplified === text || word.traditional === text))
     return word
   },
+  getWords() {
+    return this.words
+  },
   getWordsThatContain(text) {
     let words = this.words.filter(w => (w.simplified && w.simplified.includes(text)) || (w.traditional && w.traditional.includes(text)))
     let strings = this.unique(
