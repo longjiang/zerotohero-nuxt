@@ -246,7 +246,7 @@ const Dictionary = {
       bare: row.word,
       accented: row.word,
       head: row.word,
-      pronunciation: row.phonetic,
+      pronunciation: row.phonetic.replace(/:/g, 'ː').replace(/,/g, 'ˌ').replace(/'/g, 'ˈ').replace(/i(?!ː)/g, 'ɪ'),
       definitions: row.translation ? row.translation.split('\\n') : [],
       pos: row.pos,
       extra: row

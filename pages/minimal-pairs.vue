@@ -91,11 +91,12 @@ export default {
       a: undefined,
       b: undefined,
       defaults: {
-        ko: ['사', '싸'],
-        zh: ['āng', 'àng'],
-        vi: ['˧˧', '˧˨'],
-        ja: ['また', 'まだ'],
-        ru: ['ш', 'щ']
+        ko: ["사", "싸"],
+        zh: ["āng", "àng"],
+        vi: ["˧˧", "˧˨"],
+        ja: ["また", "まだ"],
+        ru: ["ш", "щ"],
+        en: ["ɪt", "iːt"],
       },
       crunching: false,
       minimalPairs: undefined,
@@ -105,8 +106,8 @@ export default {
   },
   mounted() {
     if (this.defaults[this.$l2.code]) {
-      this.a = this.defaults[this.$l2.code][0]
-      this.b = this.defaults[this.$l2.code][1]
+      this.a = this.defaults[this.$l2.code][0];
+      this.b = this.defaults[this.$l2.code][1];
     }
   },
   computed: {
@@ -127,27 +128,31 @@ export default {
       }
     },
     async findMinimalPairs() {
-      let dictionaryName = this.$store.state.settings.dictionaryName
-      let property = 'pronunciation'
-      if (['kengdic', 'openrussian'].includes(dictionaryName)) property = 'bare'
-      if (dictionaryName === 'edict') property = 'kana'
+      let dictionaryName = this.$store.state.settings.dictionaryName;
+      let property = "pronunciation";
+      if (["kengdic", "openrussian"].includes(dictionaryName))
+        property = "bare";
+      if (dictionaryName === "edict") property = "kana";
       this.crunching = true;
       let dictionary = await this.$getDictionary();
       let words = await dictionary.getWords();
       let pronunciations = words
         .filter((w) => w[property])
         .map((w) => {
-          let pronunciations = w[property].split(",");
+          let pronunciations =
+            dictionaryName === "wiktionary"
+              ? w[property].split(",")
+              : [w[property]];
           let lastPronunciation =
             pronunciations[pronunciations.length - 1].trim();
           return { w, lastPronunciation };
         });
-      let as = pronunciations
-        .filter((p) => p.lastPronunciation.split(this.a).length === 2)
-        .slice(0, 10000);
-      let bs = pronunciations
-        .filter((p) => p.lastPronunciation.split(this.b).length === 2)
-        .slice(0, 10000);
+      let as = pronunciations.filter(
+        (p) => p.lastPronunciation.split(this.a).length === 2
+      );
+      let bs = pronunciations.filter(
+        (p) => p.lastPronunciation.split(this.b).length === 2
+      );
       let minimalPairs = [];
       for (let a of as) {
         let aSplit = a.lastPronunciation.split(this.a);
