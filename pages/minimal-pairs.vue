@@ -97,6 +97,9 @@ export default {
         ja: ["また", "まだ"],
         ru: ["ш", "щ"],
         en: ["ɪt", "iːt"],
+        fr: ['ɑ̃', 'œ̃'],
+        es: ['ɾo', 'ro'],
+        de: ['ʏ', 'yː']
       },
       crunching: false,
       minimalPairs: undefined,
@@ -130,8 +133,8 @@ export default {
     async findMinimalPairs() {
       let dictionaryName = this.$store.state.settings.dictionaryName;
       let property = "pronunciation";
-      if (["kengdic", "openrussian"].includes(dictionaryName))
-        property = "bare";
+      if (["kengdic", "openrussian"].includes(dictionaryName) || this.$l2.code === 'it')
+        property = "head";
       if (dictionaryName === "edict") property = "kana";
       this.crunching = true;
       let dictionary = await this.$getDictionary();
@@ -143,22 +146,24 @@ export default {
             dictionaryName === "wiktionary"
               ? w[property].split(",")
               : [w[property]];
-          let lastPronunciation =
-            pronunciations[pronunciations.length - 1].trim();
-          return { w, lastPronunciation };
+          let chosenPornunciation =
+            pronunciations[
+              this.$l2.code === "vi" ? pronunciations.length - 1 : 0
+            ].trim();
+          return { w, chosenPornunciation };
         });
       let as = pronunciations.filter(
-        (p) => p.lastPronunciation.split(this.a).length === 2
+        (p) => p.chosenPornunciation.split(this.a).length === 2
       );
       let bs = pronunciations.filter(
-        (p) => p.lastPronunciation.split(this.b).length === 2
+        (p) => p.chosenPornunciation.split(this.b).length === 2
       );
       let minimalPairs = [];
       for (let a of as) {
-        let aSplit = a.lastPronunciation.split(this.a);
+        let aSplit = a.chosenPornunciation.split(this.a);
         if (aSplit.length > 2) continue;
         let b = bs.find((b) => {
-          let bSplit = b.lastPronunciation.split(this.b);
+          let bSplit = b.chosenPornunciation.split(this.b);
           if (bSplit.length > 2) return;
           return aSplit[0] === bSplit[0] && aSplit[1] === bSplit[1];
         });
@@ -166,7 +171,8 @@ export default {
       }
       this.crunching = false;
       minimalPairs = minimalPairs.sort(
-        (a, b) => b.a.lastPronunciation.length - a.a.lastPronunciation.length
+        (a, b) =>
+          b.a.chosenPornunciation.length - a.a.chosenPornunciation.length
       );
       return (this.minimalPairs = minimalPairs);
     },
