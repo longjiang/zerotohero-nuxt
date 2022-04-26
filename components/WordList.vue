@@ -29,9 +29,7 @@
         <router-link
           v-if="word"
           :to="getUrl(word, index)"
-          :title="
-            word.definitions ? word.definitions.filter((def) => !def.startsWith('CL')).join(',') : ''
-          "
+          :title="word.definitions ? filterDefinitions(word).join(',') : ''"
         >
           <span
             :class="{ 'wordlist-item-word ml-1': true, transparent: hideWord }"
@@ -63,7 +61,14 @@
             <span v-if="word.kana" class="wordlist-item-pinyin">
               ( {{ word.kana }}, {{ transliterate(word.kana) }} )
             </span>
-            <span v-if="['ko', 'vi'].includes($l2.code) && word.cjk && word.cjk.canonical" class="wordlist-item-byeonggi">
+            <span
+              v-if="
+                ['ko', 'vi'].includes($l2.code) &&
+                word.cjk &&
+                word.cjk.canonical
+              "
+              class="wordlist-item-byeonggi"
+            >
               {{ word.cjk.canonical }}
             </span>
           </span>
@@ -84,9 +89,7 @@
                   : ""
               }}:
             </span>
-            {{
-              word.definitions ? word.definitions.filter((def) => !def.startsWith("CL")).join(", ") : ''
-            }}
+            {{ word.definitions ? filterDefinitions(word).join(", ") : "" }}
           </span>
           <span
             :class="{ 'wordlist-item-l1': true, transparent: hideDefinitions }"
@@ -174,6 +177,7 @@ export default {
     hidePhonetics: {
       default: false,
     },
+    maxDefinitions: undefined,
   },
   computed: {
     $l1() {
@@ -205,6 +209,19 @@ export default {
     },
   },
   methods: {
+    filterDefinitions(word) {
+      if (!word.definitions) return;
+      let definitions = word.definitions;
+      if (this.$l2.code === "zh")
+        definitions = definitions.filter((def) => !def.startsWith("CL"));
+      definitions = Helper.unique(definitions);
+      if (this.maxDefinitions)
+        definitions = definitions.slice(0, this.maxDefinitions);
+      return definitions;
+    },
+    unique(list) {
+      return Helper.unique(list);
+    },
     transliterate(text) {
       let transliteration = tr(text);
       if (transliteration !== text) return tr(text);

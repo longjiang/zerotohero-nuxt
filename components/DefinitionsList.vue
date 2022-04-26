@@ -33,6 +33,8 @@
 
 <script>
 import VRuntimeTemplate from "v-runtime-template";
+import Helper from "@/lib/helper";
+
 export default {
   components: {
     VRuntimeTemplate,
@@ -52,7 +54,7 @@ export default {
   },
   async mounted() {
     let augmentedDefinitions = [];
-    for (let definition of this.definitions) {
+    for (let definition of Helper.unique(this.definitions)) {
       if (typeof definition === "string") definition = { text: definition };
       definition.html = await this.definitionHtml(definition.text);
       augmentedDefinitions.push(definition);

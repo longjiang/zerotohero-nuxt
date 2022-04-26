@@ -65,9 +65,10 @@
               <tr
                 v-for="(row, index) in filteredRows"
                 :key="`minimal-pairs-row-${index}`"
+                style="position: relative"
               >
-                <td><WordList :words="[row.a.w]" /></td>
-                <td><WordList :words="[row.b.w]" /></td>
+                <td style="width: 50%"><WordList :maxDefinitions="1" :words="[row.a.w]" /></td>
+                <td style="width: 50%"><WordList :maxDefinitions="1" :words="[row.b.w]" /></td>
                 <td>
                   <router-link
                     :to="{
