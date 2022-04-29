@@ -57,7 +57,6 @@ export default {
   computed: {
     ...mapState("settings", ["l2Settings", "l1", "l2"]),
     classes() {
-      console.log("classes??");
       let classes = {
         "zerotohero-wide": this.wide,
       };
@@ -80,7 +79,6 @@ export default {
         if (this.l2.han) classes["l2-zh"] = true;
         if (this.l2.han) classes["l2-zh"] = true;
       }
-      console.log(classes);
       return classes;
     },
     background() {
