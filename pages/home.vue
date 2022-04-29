@@ -141,10 +141,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.zerotohero-wide {
+#zerotohero.zerotohero-wide {
   .home {
     padding-left: 2rem;
     padding-right: 2rem;
+  }
+}
+#zerotohero:not(.zerotohero-wide) {
+  .home {
+    background-color: #110701;
   }
 }
 .home-card {
