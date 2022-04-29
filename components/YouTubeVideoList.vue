@@ -437,7 +437,7 @@ export default {
       this.batch((videoIndex) => {
         if (this.$refs.youTubeVideoCard[videoIndex])
           this.$refs.youTubeVideoCard[videoIndex].getSubsAndSave();
-      }, 0);
+      }, 1000);
     },
     async assignShowToAll(show, type) {
       // type: 'tv_show' or 'talk'

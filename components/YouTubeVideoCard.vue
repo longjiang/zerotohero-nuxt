@@ -617,7 +617,7 @@ export default {
     },
     async getSubsAndSave(video = this.video) {
       if (this.checkSaved && !video.id && (video.hasSubs || this.generated)) {
-        if (!video.subs_l2 && (video.l2Locale || this.generated)) {
+        if ((!video.subs_l2 || !video.subs_l2[0]) && (video.l2Locale || this.generated)) {
           video.subs_l2 = await YouTube.getTranscript(
             video.youtube_id,
             video.l2Locale || this.$l2.code,
