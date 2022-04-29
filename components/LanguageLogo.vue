@@ -28,6 +28,7 @@
         <template>
           <div class="logo-text-language">
             {{ l2Name }}
+            <div class="language-id" v-if="$adminMode">#{{ l2.id }}</div>
           </div>
           <div class="logo-text-zth">
             <span v-if="!compact">
@@ -68,6 +69,10 @@ export default {
       return this.l2.logoDesc
         ? `${this.l2.logoDesc}, a user of ${this.l2.name}.`
         : this.l2.name;
+    },
+    $adminMode() {
+      if (typeof this.$store.state.settings.adminMode !== "undefined")
+        return this.$store.state.settings.adminMode;
     },
   },
   methods: {},
@@ -116,6 +121,7 @@ export default {
     text-align: left;
     margin-bottom: -0.4rem;
     text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+    text-align: left;
   }
   .logo-speech-bubble {
     height: 2rem;
@@ -144,6 +150,23 @@ export default {
   .logo-text-zth {
     font-weight: bold;
     text-transform: uppercase;
+  }
+  .language-id {
+    font-size: 0.7em;
+    background: #000000b5;
+    color: #f4f1f195;
+    letter-spacing: 0;
+    font-weight: normal;
+    border: 1px solid rgba(186, 181, 181, 0.407);
+    display: inline-block;
+    text-align: center !important;
+    padding: 0.05rem 0.3rem;
+    border-radius: 0.2rem;
+    bottom: 0.15rem !important;
+    margin-left: -0.1rem;
+    position: relative;
+    left: 0;
+    text-shadow: none;
   }
 }
 </style>
