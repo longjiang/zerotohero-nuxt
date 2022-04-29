@@ -53,12 +53,18 @@ export default {
       fullHistory: [],
     };
   },
+
   computed: {
     ...mapState("settings", ["l2Settings", "l1", "l2"]),
     classes() {
+      console.log("classes??");
+      let classes = {
+        "zerotohero-wide": this.wide,
+      };
+      classes[`route-${this.$route.name}`] = true;
       if (this.l1 && this.l2) {
         this.l1, this.l2;
-        let classes = {
+        classes = Object.assign(classes, {
           "show-pinyin": this.l2Settings.showPinyin,
           "show-pinyin-for-saved":
             !this.l2Settings.showPinyin && this.l2 && this.l2.han,
@@ -68,21 +74,18 @@ export default {
           "show-translation": this.l2Settings.showTranslation,
           "show-byeonggi": this.l2Settings.showByeonggi,
           "use-serif": this.l2Settings.useSerif,
-          "zerotohero-wide": this.wide,
-        };
+        });
         classes[`l1-${this.l1.code}`] = true;
         classes[`l2-${this.l2.code}`] = true;
         if (this.l2.han) classes["l2-zh"] = true;
         if (this.l2.han) classes["l2-zh"] = true;
-        return classes;
       }
+      console.log(classes);
+      return classes;
     },
     background() {
       return Helper.background(this.l2);
-    },
-    fullPage() {
-      return $;
-    },
+    }
   },
   created() {
     this.$nuxt.$on("skin", this.onSkin);
@@ -209,21 +212,19 @@ export default {
 }
 
 #zerotohero {
-  &.zerotohero-wide {
-    .zerotohero-background {
-      height: 100vh;
-      width: 100vw;
-      background-color: #000;
-      background-attachment: initial;
-      background-position: center;
-      background-size: cover;
-      z-index: -1;
-      position: fixed;
-      top: 0;
-      left: 0;
-    }
+  .zerotohero-background {
+    height: 100vh;
+    width: 100vw;
+    background-color: #000;
+    background-attachment: initial;
+    background-position: center;
+    background-size: cover;
+    z-index: -1;
+    position: fixed;
+    top: 0;
+    left: 0;
   }
-  &:not(.zerotohero-wide) {
+  &:not(.zerotohero-wide):not(.route-index) {
     .zerotohero-background {
       display: none;
     }
