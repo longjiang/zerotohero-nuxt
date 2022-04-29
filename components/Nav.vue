@@ -1099,9 +1099,7 @@ export default {
 </script>
 
 <style lang="scss">
-.zth-nav.zth-nav-menu-bar,
 .zth-nav.zth-nav-side-bar {
-  // background: #002d4433;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
 }
@@ -1227,6 +1225,12 @@ export default {
   }
   .btn {
     padding: 0 0.5rem 0 0;
+  }
+}
+
+#zerotohero:not(.zerotohero-wide) {
+  .nav-menu-bar {
+    background: rgb(1, 4, 22);
   }
 }
 

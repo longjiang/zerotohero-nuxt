@@ -22,9 +22,11 @@
       <div class="zth-content">
         <Nuxt id="main" />
       </div>
-      <LazyFooter :dictionaryCredit="dictionaryCredit" class="zth-footer"/>
+      <LazyFooter :dictionaryCredit="dictionaryCredit" class="zth-footer" />
       <ReaderComp
-        v-if="l1 && l2 && $route.name !== 'youtube-view' && $route.name !== 'home'"
+        v-if="
+          l1 && l2 && $route.name !== 'youtube-view' && $route.name !== 'home'
+        "
         :iconMode="true"
       />
     </template>
@@ -175,8 +177,8 @@ export default {
       }
     },
     loadSettings() {
-      if (this.settingsLoaded === this.l2.code) return
-      this.settingsLoaded = this.l2.code
+      if (this.settingsLoaded === this.l2.code) return;
+      this.settingsLoaded = this.l2.code;
       this.$store.commit("settings/LOAD_SETTINGS");
       if (!this.$store.state.savedCollocations.savedCollocationsLoaded) {
         this.$store.commit("savedCollocations/LOAD_SAVED_COLLOCATIONS");
@@ -207,17 +209,24 @@ export default {
 }
 
 #zerotohero {
-  .zerotohero-background {
-    height: 100vh;
-    width: 100vw;
-    background-color: #000;
-    background-attachment: initial;
-    background-position: center;
-    background-size: cover;
-    z-index: -1;
-    position: fixed;
-    top: 0;
-    left: 0;
+  &.zerotohero-wide {
+    .zerotohero-background {
+      height: 100vh;
+      width: 100vw;
+      background-color: #000;
+      background-attachment: initial;
+      background-position: center;
+      background-size: cover;
+      z-index: -1;
+      position: fixed;
+      top: 0;
+      left: 0;
+    }
+  }
+  &:not(.zerotohero-wide) {
+    .zerotohero-background {
+      display: none;
+    }
   }
 }
 
