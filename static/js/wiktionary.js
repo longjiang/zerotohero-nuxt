@@ -199,9 +199,11 @@ const Dictionary = {
           let pronunciations = item.sounds && item.sounds.length > 0 ? item.sounds.filter(s => s.ipa).map(s => s.ipa.replace(/[/\[\]]/g, '')) : []
           if (item.heads) pronunciations = pronunciations.concat(item.heads.filter(h => h.tr).map(h => h.tr))
           pronunciations = this.unique(pronunciations)
+          let search = bare.toLowerCase()
+          if (this.l2.agglutinative) search = search.replace(/^-/, '')
           let word = {
             bare,
-            search: bare.toLowerCase().replace(/^-/, ''),
+            search,
             head: item.word,
             accented: item.word,
             pronunciation: pronunciations.length > 0 ? pronunciations.join(', ') : undefined,
@@ -263,7 +265,8 @@ const Dictionary = {
     words = words.filter(w => w.word.length > 0) // filter empty rows
       .map(item => {
         item.bare = this.l2 !== 'vie' ? this.stripAccents(item.word) : item.word
-        item.search = item.bare.toLowerCase().replace(/^-/, '')
+        item.search = item.bare.toLowerCase()
+        if (this.l2.agglutinative) item.search = item.search.replace(/^-/, '')
         item.head = item.word
         item.accented = item.word
         delete item.word
@@ -541,7 +544,7 @@ const Dictionary = {
     let matches = []
     for (let word of this.words) {
       let matched = false
-      if (word.head.trim() === '') return false
+      if (word.head.trim() === '') continue
       if (firstSeen) {
         matched = word.search === firstSeen
       } else {

@@ -12,7 +12,7 @@
         <Loader class="mb-5" />
       </div>
       <div
-        v-if="text.length > 0"
+        v-if="text.length > 0 && !loading"
         id="reader-annotated"
         :class="{ focus: true }"
         :style="`font-size: ${fontSize}rem; margin-bottom: 2rem;`"
@@ -31,7 +31,8 @@
               Tap on any word for a popup dictionary. Tap on the three dots
               "..." next to each line for translation. You can customize the
               output in
-              <router-link to="settings">Settings</router-link>.
+              <router-link to="settings">Settings</router-link>
+              .
             </small>
           </div>
         </div>
@@ -117,6 +118,7 @@ export default {
       fontSize: this.iconMode ? 2 : 1.333,
       fullscreen: false,
       showTranslate: false,
+      loading: true,
     };
   },
   props: {
@@ -140,6 +142,16 @@ export default {
       return (
         Marked(this.text.replace(/^ {4,}/gm, "")) || this.text // 4 spaces in a row would emit <code>!
       );
+    },
+  },
+  async mounted() {
+    await this.$getDictionary();
+    this.loading = false;
+  },
+  watch: {
+    text() {
+      this.$emit("readerTextChanged", this.text);
+      this.readerKey++;
     },
   },
   methods: {
@@ -185,12 +197,6 @@ export default {
       if (marked) {
         $("#reader-annotated").html(marked);
       }
-    },
-  },
-  watch: {
-    text() {
-      this.$emit("readerTextChanged", this.text);
-      this.readerKey++;
     },
   },
 };
