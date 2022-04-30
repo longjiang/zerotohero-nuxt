@@ -33,28 +33,11 @@
           v-html="highlight(reviewItem.line.line, reviewItem.text, hsk)"
         />
       </Annotate>
-      <span class="ml-1">
-        <button
-          :class="{
-            'review-speak-button': true,
-            'btn-ghost-dark': skin === 'dark',
-          }"
-          @click="speak"
-        >
-          <i class="fas fa-volume-up"></i>
-        </button>
-      </span>
-      <span>
-        <button
-          :class="{
-            'review-seek-button': true,
-            'btn-ghost-dark': skin === 'dark',
-          }"
-          @click="$parent.seekVideoTo(reviewItem.line.starttime)"
-        >
-          <i class="fas fa-arrow-up"></i>
-        </button>
-      </span>
+      <small style="opacity: 0.5; cursor: pointer">
+        <u @click="scrollToLine">
+          Scroll to line
+        </u>
+      </small>
       <div
         v-if="$l2.code !== $l1.code && reviewItem.parallelLines"
         :dir="$l1.direction === 'rtl' ? 'rtl' : 'ltr'"
@@ -123,6 +106,10 @@ export default {
     );
   },
   methods: {
+    scrollToLine() {
+      this.$parent.seekVideoTo(this.reviewItem.line.starttime)
+      this.$parent.play()
+    },
     async findSimilarWords(text) {
       let words = [];
       let savedWords = this.savedWords[this.$l2.code] || [];

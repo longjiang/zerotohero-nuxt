@@ -340,6 +340,9 @@ export default {
     },
   },
   methods: {
+    play() {
+      this.$emit("play");
+    },
     cancelSmoothScroll() {
       let id = window.requestAnimationFrame(function () {});
       while (id--) {

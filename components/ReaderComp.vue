@@ -36,7 +36,10 @@
             </small>
           </div>
         </div>
-        <hr class="hide-for-present mt-0 mb-4" />
+        <hr
+          class="hide-for-present mt-0 mb-4"
+          v-if="text.length > 0 && !fullscreen"
+        />
         <template
           v-for="(line, index) of marked
             .trim()
@@ -297,7 +300,7 @@ export default {
   #translation-iframe {
     position: fixed;
     width: calc(100vw - 2rem);
-    height: calc(100vh - 15vh - 4.5rem);
+    height: calc(100vh - 15vh - 5.5rem);
     overflow: scroll;
   }
 }
