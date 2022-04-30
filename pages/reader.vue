@@ -49,8 +49,13 @@
           This is a {{ $l2.name }} text reading tool (a.k.a annotator,
           tokenizer, lemmatizer)
         </li>
-        <li>Tap on any word for a popup dictionary.</li>
+        <li>Tap on any word below for a popup dictionary.</li>
         <li>Tap on the three dots "..." next to each line for translation.</li>
+        <li>
+          You can customize the output in
+          <router-link to="settings">Settings</router-link>
+          .
+        </li>
         <li>
           <code>Markdown</code>
           and

@@ -20,7 +20,7 @@
         <div
           v-if="text.length > 0 && !fullscreen"
           style="font-size: 1rem; line-height: 1"
-          class="text-center mb-3"
+          class="mb-3"
         >
           <strong>
             <i class="fas fa-check text-success mr-1" />
@@ -29,7 +29,9 @@
           <div class="mt-1">
             <small>
               Tap on any word for a popup dictionary. Tap on the three dots
-              "..." next to each line for translation.
+              "..." next to each line for translation. You can customize the
+              output in
+              <router-link to="settings">Settings</router-link>.
             </small>
           </div>
         </div>
