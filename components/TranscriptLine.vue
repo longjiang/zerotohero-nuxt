@@ -36,6 +36,7 @@
         :buttons="true"
         v-if="!showSubsEditing"
         @textChanged="lineChanged(line, ...arguments)"
+        :translation="parallelLine"
       >
         <span v-html="lineHtml(line).trim()" />
       </Annotate>

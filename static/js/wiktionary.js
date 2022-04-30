@@ -32,6 +32,8 @@ const Dictionary = {
   },
   conjugations: undefined, // for french only
   romanizations: undefined, // for persian only
+  accentCritical: false,
+  accentCriticalLangs: ['tur', 'vie'], // Languages that should not strip accents when searching
   credit() {
     let credit = `The dictionary is provided by <a href="https://en.wiktionary.org/wiki/Wiktionary:Main_Page">Wiktionary</a>, which is freely distribtued under the <a href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike License</a>. The dictionary is parsed by <a href="https://github.com/tatuylonen/wiktextract">wiktextract</a>.`
     if (this.l2 === 'fas') credit = credit + ` Persian transliteration is made possible with <a href="https://github.com/PasaOpasen/PersianG2P/tree/master/transform%20dict">PasaOpasen/PersianG2P</a>.`
@@ -61,6 +63,9 @@ const Dictionary = {
       return filename
     }
   },
+  isAccentCritical() {
+    return this.accentCriticalLangs.includes(this.l2)
+  },
   async load({
     l1 = undefined,
     l2 = undefined
@@ -68,6 +73,7 @@ const Dictionary = {
     if (l1 && l2) {
       this.l1 = l1
       this.l2 = l2
+      this.accentCritical = this.isAccentCritical()
       this.file = this.dictionaryFile({ l1, l2 })
       let words = await this.loadWords(this.file)
       let supplementalLang = this.supplementalLangs[l2]
@@ -195,7 +201,7 @@ const Dictionary = {
               }
             }
           }
-          let bare = this.l2 !== 'vie' ? this.stripAccents(item.word) : item.word
+          let bare = this.accentCritical ? this.stripAccents(item.word) : item.word
           let pronunciations = item.sounds && item.sounds.length > 0 ? item.sounds.filter(s => s.ipa).map(s => s.ipa.replace(/[/\[\]]/g, '')) : []
           if (item.heads) pronunciations = pronunciations.concat(item.heads.filter(h => h.tr).map(h => h.tr))
           pronunciations = this.unique(pronunciations)
@@ -264,7 +270,7 @@ const Dictionary = {
     let words = parsed.data
     words = words.filter(w => w.word.length > 0) // filter empty rows
       .map(item => {
-        item.bare = this.l2 !== 'vie' ? this.stripAccents(item.word) : item.word
+        item.bare = !this.accentCritical ? this.stripAccents(item.word) : item.word
         item.search = item.bare.toLowerCase()
         if (this.l2.agglutinative) item.search = item.search.replace(/^-/, '')
         item.head = item.word
@@ -344,7 +350,7 @@ const Dictionary = {
     return word
   },
   lookupMultiple(text, ignoreAccents = false) {
-    if (ignoreAccents && this.l2 !== 'vie') text = this.stripAccents(text)
+    if (ignoreAccents && !this.accentCritical) text = this.stripAccents(text)
     let words = this.words.filter(word => word && word[ignoreAccents ? 'bare' : 'head'].toLowerCase() === text.toLowerCase())
     return words
   },
@@ -513,9 +519,9 @@ const Dictionary = {
   },
   subdictFromText(text) {
     let search = text.toLowerCase()
-    if (this.l2 !== 'vie') search = this.stripAccents(search)
+    if (!this.accentCritical) search = this.stripAccents(search)
     let subdictFilterFunction = (row) => {
-      if (this.l2 === 'vie') {
+      if (this.accentCritical) {
         return text.includes(row.head) || search.includes(row.head)
       } else {
         let headMatches = text.includes(row.head)
@@ -540,7 +546,7 @@ const Dictionary = {
     let firstSeen = false
     let matchedIndex, matchEndIndex
     let search = text.toLowerCase()
-    if (this.l2 !== 'vie') search = this.stripAccents(search)
+    if (!this.accentCritical) search = this.stripAccents(search)
     let matches = []
     for (let word of this.words) {
       let matched = false
@@ -709,7 +715,7 @@ const Dictionary = {
     }
   },
   lookupFuzzy(text, limit = 30) { // text = 'abcde'
-    if (this.l2 !== 'vie') text = this.stripAccents(text)
+    if (!this.accentCritical) text = this.stripAccents(text)
     text = text.toLowerCase()
     let words = []
     if (['fra'].includes(this.l2)) {
@@ -732,8 +738,10 @@ const Dictionary = {
         let search = word.search ? word.search : undefined
         if (search) {
           let distance = FastestLevenshtein.distance(search, text);
+          if (this.l2 === 'tur' && text.startsWith(search)) distance = distance / 2
           let max = Math.max(text.length, search.length)
           let similarity = (max - distance) / max
+          similarity = similarity
           words.push(Object.assign({ score: similarity }, word))
           if (similarity === 1) {
             words = words.concat(this.stemWords(word, 1))

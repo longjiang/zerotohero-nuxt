@@ -33,10 +33,18 @@
       >
         <template #button-content><i class="fas fa-ellipsis-v"></i></template>
         <b-dropdown-item>
+          <Saved
+            :item="phraseItem(text, translation)"
+            store="savedPhrases"
+            icon="bookmark"
+            class="mr-1 annotator-button focus-exclude"
+            title="Save Phrase"
+          />
           <Speak
             :text="text"
-            class="ml-1 mr-1"
+            class="annotator-button ml-1 mr-1"
             style="position: relative; top: 0.08rem; position: relative"
+            title="Speak"
           />
           <span
             class="
@@ -45,30 +53,24 @@
               mr-1
               focus-exclude
             "
+            title="Translate"
             @click="translateClick"
           >
             <i class="fas fa-language"></i>
           </span>
           <span
             :class="{
-              'annotator-button annotator-fullscreen ml-1 mr-1 focus-exclude': true,
-              active: fullscreenMode,
-            }"
-            @click="fullscreenClick"
-          >
-            <i class="fas fa-expand"></i>
-          </span>
-          <span
-            :class="{
               'annotator-button annotator-text-mode ml-1 mr-1 focus-exclude': true,
               active: textMode,
             }"
+            title="Edit"
             @click="textMode = !textMode"
           >
             <i class="fas fa-edit"></i>
           </span>
           <span
             @click="copyClick"
+            title="Copy"
             class="annotator-button annotator-copy ml-1 mr-1 focus-exclude"
           >
             <i class="fas fa-copy"></i>
@@ -100,7 +102,6 @@
         class="annotate-template"
       />
     </template>
-    <div v-if="translation">{{ translation }}</div>
   </component>
 </template>
 
@@ -147,6 +148,7 @@ export default {
     explore: {
       default: false,
     },
+    translation: undefined,
   },
   data() {
     return {
@@ -154,7 +156,6 @@ export default {
       annotated: false,
       annotating: false,
       translate: false,
-      translation: undefined,
       fullscreenMode: false,
       selectedText: undefined,
       batchId: 0,
@@ -208,6 +209,17 @@ export default {
     },
   },
   methods: {
+    phraseItem(phrase, translation = undefined) {
+      if (typeof phrase !== "undefined") {
+        let phraseItem = {
+          l2: this.$l2.code,
+          phrase,
+          translations: {},
+        };
+        if (translation) phraseItem.translations[this.$l1.code] = translation;
+        return phraseItem;
+      }
+    },
     async onMenuHide() {
       await Helper.timeout(300);
       document.activeElement.blur();
@@ -251,6 +263,7 @@ export default {
       document.execCommand("copy");
       document.body.removeChild(tempInput);
     },
+    savePhraseClick() {},
     async visibilityChanged(isVisible) {
       this.isVisible = isVisible;
       await Helper.delay(300);
@@ -336,13 +349,14 @@ export default {
       if (this.$l2.continua) {
         html = await this.tokenizeContinua(text, batchId);
       } else if (
-        this.$l2.scripts &&
-        this.$l2.scripts[0] &&
-        this.$l2.scripts[0].script === "Arab"
+        (this.$l2.scripts &&
+          this.$l2.scripts[0] &&
+          this.$l2.scripts[0].script === "Arab") ||
+        this.$l2.code === "tr"
       ) {
         html = await this.tokenizeIntegral(text);
       } else if (
-        ["de", "gsw", "no", "en", "hy", "vi", "tr"].includes(this.$l2.code)
+        ["de", "gsw", "no", "en", "hy", "vi"].includes(this.$l2.code)
       ) {
         html = await this.tokenizeAgglutenative(text, batchId);
       } else if (
@@ -558,6 +572,7 @@ export default {
   .annotator-button {
     padding: 0.3rem 0.3rem;
     border-radius: 0.2rem;
+    line-height: 16px;
   }
   .annotator-button.active {
     background-color: #fd4f1c;
