@@ -201,7 +201,7 @@ const Dictionary = {
           pronunciations = this.unique(pronunciations)
           let word = {
             bare,
-            search: bare.toLowerCase(),
+            search: bare.toLowerCase().replace(/^-/, ''),
             head: item.word,
             accented: item.word,
             pronunciation: pronunciations.length > 0 ? pronunciations.join(', ') : undefined,
@@ -263,8 +263,8 @@ const Dictionary = {
     words = words.filter(w => w.word.length > 0) // filter empty rows
       .map(item => {
         item.bare = this.l2 !== 'vie' ? this.stripAccents(item.word) : item.word
-        item.search = item.bare.toLowerCase(),
-          item.head = item.word
+        item.search = item.bare.toLowerCase().replace(/^-/, '')
+        item.head = item.word
         item.accented = item.word
         delete item.word
         item.wiktionary = true
@@ -534,50 +534,60 @@ const Dictionary = {
   /* Returns the longest word in the dictionary that is inside `text` */
   longest(text) {
     // Only return the *first* seen word and those the same as it
-    let first = false
+    let firstSeen = false
+    let matchedIndex, matchEndIndex
     let search = text.toLowerCase()
     if (this.l2 !== 'vie') search = this.stripAccents(search)
-    let matchedText
-    let matches = this.words
-      .filter((word) => {
-        if (word.head.trim() === '') return false
-        if (first) {
-          return word.search === first
-        } else {
-          let matchedIndex = search.indexOf(word.search)
-          if (matchedIndex !== -1) {
-            let matchEndIndex = matchedIndex + word.search.length
-            let nextChar = text.charAt(matchEndIndex)
-            while (this.isCombining(nextChar)) {
-              matchEndIndex = matchEndIndex + 1
-              nextChar = text.charAt(matchEndIndex)
-            }
-            first = word.search
-            matchedText = text.slice(matchedIndex, matchEndIndex)
-            return true
+    let matches = []
+    for (let word of this.words) {
+      let matched = false
+      if (word.head.trim() === '') return false
+      if (firstSeen) {
+        matched = word.search === firstSeen
+      } else {
+        matchedIndex = search.indexOf(word.search)
+        let matchFound = matchedIndex !== -1
+        if (matchFound) {
+          matchEndIndex = matchedIndex + word.search.length
+          let nextChar = text.charAt(matchEndIndex)
+          while (this.isCombining(nextChar)) {
+            matchEndIndex = matchEndIndex + 1
+            nextChar = text.charAt(matchEndIndex)
           }
+          firstSeen = word.search
+          matchedText = text.slice(matchedIndex, matchEndIndex)
+          matched = true
         }
+      }
+      if (matched) {
+        matches.push({
+          word,
+          matchedIndex,
+          matchEndIndex
+        })
+      }
+    }
+
+    // Turkish words should only find matches at the beginning of each word
+    if (this.l2 === 'tur')
+      matches = matches.sort((a, b) => {
+        return a.matchedIndex - b.matchedIndex
       })
     matches = matches.sort((a, b) => {
-      return b.head.length - a.head.length
+      return b.word.head.length - a.word.head.length
     })
-    // console.log('😄 final matched text: ' + matchedText)
     return {
-      matches: matches,
+      matches: matches.map(m => m.word),
       text: matchedText
     }
   },
   tokenize(text) {
-    if (this.l2 === 'spa') {
-      return this.tokenizeSpanish(text)
-    } else {
-      let subdict = this.subdictFromText(text)
-      let tokenized = this.tokenizeRecursively(
-        text,
-        subdict
-      )
-      return tokenized
-    }
+    let subdict = this.subdictFromText(text)
+    let tokenized = this.tokenizeRecursively(
+      text,
+      subdict
+    )
+    return tokenized
   },
   splitByReg(text, reg) {
     let words = text.replace(reg, '!!!BREAKWORKD!!!$1!!!BREAKWORKD!!!').replace(/^!!!BREAKWORKD!!!/, '').replace(/!!!BREAKWORKD!!!$/, '')
