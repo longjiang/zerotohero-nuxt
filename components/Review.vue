@@ -34,9 +34,7 @@
         />
       </Annotate>
       <small style="opacity: 0.5; cursor: pointer">
-        <u @click="scrollToLine">
-          Scroll to line
-        </u>
+        <u @click="scrollToLine">Scroll to line</u>
       </small>
       <div
         v-if="$l2.code !== $l1.code && reviewItem.parallelLines"
@@ -107,8 +105,8 @@ export default {
   },
   methods: {
     scrollToLine() {
-      this.$parent.seekVideoTo(this.reviewItem.line.starttime)
-      this.$parent.play()
+      this.$parent.seekVideoTo(this.reviewItem.line.starttime);
+      this.$parent.play();
     },
     async findSimilarWords(text) {
       let words = [];
@@ -248,7 +246,11 @@ export default {
     &:not(.show-answer) {
       ::v-deep .transcript-line-l2 {
         .highlight {
-          background: #444;
+          background: rgba(0, 0, 0, 0);
+          border-bottom: 1px solid white;
+          margin: 0 0.2rem;
+          position: relative;
+          bottom: 0.2rem;
         }
       }
     }
@@ -259,8 +261,7 @@ export default {
   &:not(.show-answer) {
     ::v-deep .transcript-line-l2 {
       .highlight {
-        border-radius: 0.2rem;
-        color: #444 !important;
+        color: rgba(0, 0, 0, 0);
         * {
           opacity: 0;
           pointer-events: none;
