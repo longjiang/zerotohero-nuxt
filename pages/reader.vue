@@ -22,20 +22,44 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
-          <h3 class="text-center mb-5">{{ $l2.name }} Text Reading Tool</h3>
+          <h3 class="text-center mb-3">{{ $l2.name }} Reader (Annotator)</h3>
+          <p class="text-center mb-4">
+            I can
+            <b class="text-success">convert any {{ $l2.name }} text</b>
+            into a learner-friendly format, with
+            <span v-if="$hasFeature('transliteration')">
+              {{
+                {
+                  zh: "pinyin annotation",
+                  ja: "furigana (Japanese alphabet) annotation",
+                  ko: "Hanja byeonggi (Chinese character annotation)",
+                  vi: "Hán tự (Chinese character) annotation",
+                }[$l2.code] || "phonetic transcription"
+              }}
+              and
+            </span>
+            a popup dictionary!
+          </p>
           <ReaderComp ref="reader" @readerTextChanged="readerTextChanged" />
         </div>
       </div>
-      <h5 class="mt-5">Usage tips</h5>
+      <h5 class="mt-5">More about this {{ $l2.name }} Reader</h5>
       <ul>
+        <li>
+          This is a {{ $l2.name }} text reading tool (a.k.a annotator,
+          tokenizer, lemmatizer)
+        </li>
+        <li>Tap on any word for a popup dictionary.</li>
+        <li>Tap on the three dots "..." next to each line for translation.</li>
         <li>
           <code>Markdown</code>
           and
           <code>HTML</code>
           are also supported.
         </li>
+        <li v-if="dictionaryCredit" v-html="dictionaryCredit"></li>
       </ul>
-      <div class="row mt-5">
+      <div class="row mt-3">
         <div class="col-sm-12">
           <h5 class="mb-3">{{ $t("Not sure what to read?") }}</h5>
           <ul>
@@ -46,6 +70,14 @@
           </ul>
         </div>
       </div>
+      <h5 class="mt-2">Keywords for search engines</h5>
+      <ul>
+        <li>Online {{ $l2.name }} lemmatizer</li>
+        <li>Online {{ $l2.name }} annotator</li>
+        <li>Online {{ $l2.name }} reader</li>
+        <li>Online {{ $l2.name }} tokenizer</li>
+        <li>Online {{ $l2.name }} NLP tool</li>
+      </ul>
     </div>
     <!-- .container -->
     <!-- ANCHOR img/anchors/learn-this.png -->
@@ -72,6 +104,7 @@ export default {
   data() {
     return {
       text: "",
+      dictionaryCredit: undefined,
     };
   },
   watch: {
@@ -84,9 +117,13 @@ export default {
       this.$refs.reader.text = this.text;
     },
   },
-  mounted() {
+  async mounted() {
     if (this.$route.name === "reader") {
       this.route();
+    }
+    let dictionary = await this.$getDictionary();
+    if (dictionary) {
+      this.dictionaryCredit = await dictionary.credit();
     }
   },
   computed: {
@@ -101,7 +138,7 @@ export default {
   },
   methods: {
     readerTextChanged(text) {
-      this.save(text)
+      this.save(text);
     },
     getSaved() {
       let json = localStorage.getItem("zthReaderText");

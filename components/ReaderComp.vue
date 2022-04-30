@@ -11,18 +11,29 @@
       <div class="text-center">
         <Loader class="mb-5" />
       </div>
-      <p
-        v-if="text.length > 0 && !fullscreen"
-        class="mt-2 mb-5 hide-for-present"
-      >
-        👇 Now, hover or tap on words 👇
-      </p>
       <div
         v-if="text.length > 0"
         id="reader-annotated"
         :class="{ focus: true }"
-        :style="`font-size: ${fontSize}rem; margin-bottom: 3rem;`"
+        :style="`font-size: ${fontSize}rem; margin-bottom: 2rem;`"
       >
+        <div
+          v-if="text.length > 0 && !fullscreen"
+          style="font-size: 1rem; line-height: 1"
+          class="text-center mb-3"
+        >
+          <strong>
+            <i class="fas fa-check text-success mr-1" />
+            Converted
+          </strong>
+          <div class="mt-1">
+            <small>
+              Tap on any word for a popup dictionary. Tap on the three dots
+              "..." next to each line for translation.
+            </small>
+          </div>
+        </div>
+        <hr class="hide-for-present mt-0 mb-4" />
         <template
           v-for="(line, index) of marked
             .trim()
@@ -101,7 +112,7 @@ export default {
       text: "",
       annotated: false,
       readerKey: 0, // used to force re-render this component
-      fontSize: this.iconMode ? 2 : 1,
+      fontSize: this.iconMode ? 2 : 1.333,
       fullscreen: false,
       showTranslate: false,
     };
@@ -211,6 +222,14 @@ export default {
 #reader-annotated >>> del .word-block {
   color: red !important;
 }
+#reader-annotated {
+  background: white;
+  padding: 1rem 1rem 0 1rem;
+  border-radius: 0.25rem;
+  box-shadow: 0px 3px 10px #191c553b;
+  border: 1px solid #d7d7d8;
+}
+
 #reader-annotated >>> del .word-block .word-block-simplified::after {
   content: " \2717";
   color: red !important;
