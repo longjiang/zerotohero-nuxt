@@ -51,50 +51,16 @@
           @trasnlationLineKeydown="trasnlationLineKeydown"
         />
         <div v-if="!single" :key="`line-${index + visibleMin}-review`">
-          <h6
-            class="text-center mt-3"
-            :key="`review-title-${index + visibleMin}-${
-              reviewKeys[index + visibleMin]
-            }`"
-            v-if="
-              review[index + visibleMin] &&
-              review[index + visibleMin].length > 0
-            "
-          >
-            Pop Quiz
-            <span
-              class="d-inline-block"
-              style="position: relative; bottom: 0.13rem"
-            >
-              <b-button
-                class="ml-2"
-                style="font-weight: normal"
-                v-if="!reviewOpen[index + visibleMin]"
-                @click="openReview(index + visibleMin)"
-                size="small"
-                variant="ghost-dark"
-              >
-                Open
-                <i class="fa fa-chevron-down"></i>
-              </b-button>
-              <b-button
-                class="ml-2"
-                style="font-weight: normal"
-                v-if="reviewOpen[index + visibleMin] === true"
-                @click="closeReview(index + visibleMin)"
-                size="small"
-                variant="ghost-dark"
-              >
-                Close
-                <i class="fa fa-chevron-up"></i>
-              </b-button>
-            </span>
-          </h6>
-          <div v-if="reviewOpen[index + visibleMin] === true">
+          <div v-if="review[index + visibleMin]">
             <Review
               v-for="(reviewItem, reviewItemIndex) in review[
                 index + visibleMin
-              ]"
+              ].slice(
+                0,
+                reviewOpen[index + visibleMin] === true
+                  ? reviewOpen[index + visibleMin].length
+                  : 1
+              )"
               :key="`review-${index + visibleMin}-${
                 reviewItem.text || reviewItem.simplified
               }-${reviewItemIndex}-${reviewKeys[index + visibleMin]}`"
@@ -102,6 +68,43 @@
               :hsk="hsk"
               :skin="skin"
             />
+          </div>
+          <div
+            class="text-center mt-2"
+            :key="`review-title-${index + visibleMin}-${
+              reviewKeys[index + visibleMin]
+            }`"
+            v-if="
+              review[index + visibleMin] &&
+              review[index + visibleMin].length > 1
+            "
+          >
+            <span
+              class="d-inline-block"
+              style="
+                position: relative;
+                bottom: 0.13rem;
+                font-weight: normal;
+                opacity: 0.5;
+                font-size: 0.8em;
+                cursor: pointer;
+              "
+            >
+              <span
+                v-if="!reviewOpen[index + visibleMin]"
+                @click="openReview(index + visibleMin)"
+              >
+                <i class="fa fa-chevron-down mr-1"></i>
+                Show More Questions
+              </span>
+              <span
+                v-if="reviewOpen[index + visibleMin] === true"
+                @click="closeReview(index + visibleMin)"
+              >
+                <i class="fa fa-chevron-up mr-1"></i>
+                Show Fewer Questions
+              </span>
+            </span>
           </div>
         </div>
       </template>
@@ -263,15 +266,15 @@ export default {
       this.nextLine = this.lines[startLineIndex + 1];
     }
     if (process.client) {
-      window.addEventListener('wheel', this.cancelSmoothScroll);
-      window.addEventListener('touchstart', this.cancelSmoothScroll);
+      window.addEventListener("wheel", this.cancelSmoothScroll);
+      window.addEventListener("touchstart", this.cancelSmoothScroll);
     }
   },
   beforeDestroy() {
     if (this.unsubscribe) this.unsubscribe();
     if (process.client) {
-      window.removeEventListener('wheel', this.cancelSmoothScroll);
-      window.removeEventListener('touchstart', this.cancelSmoothScroll);
+      window.removeEventListener("wheel", this.cancelSmoothScroll);
+      window.removeEventListener("touchstart", this.cancelSmoothScroll);
     }
   },
   watch: {
@@ -583,7 +586,7 @@ export default {
               word
             );
             let reviewIndex = Math.min(
-              Math.ceil((Number(lineIndex) + lineOffset) / 10) * 10,
+              Math.ceil((Number(lineIndex) + lineOffset) / 4) * 4,
               this.lines.length - 1
             );
             review[reviewIndex] = review[reviewIndex] || [];

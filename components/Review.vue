@@ -197,7 +197,7 @@ export default {
 .review {
   margin: 0.5rem 0;
   padding: 1rem;
-  border-radius: 0.5rem;
+  border: 1px solid #ffb7002b;
   .review-speak-button,
   .review-seek-button {
     border-radius: 100%;
@@ -217,7 +217,6 @@ export default {
   }
   .transcript-line-l1 {
     font-size: 13.44px;
-    padding-left: 0.5rem;
   }
   &.review-light {
     background-color: #f3f3f3;
@@ -242,7 +241,8 @@ export default {
     }
   }
   &.review-dark {
-    background: #00000055;
+    border-radius: 0.5rem;
+    background: #dea4171f;
     &:not(.show-answer) {
       ::v-deep .transcript-line-l2 {
         .highlight {
