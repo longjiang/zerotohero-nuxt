@@ -50,8 +50,18 @@
           @trasnlationLineBlur="trasnlationLineBlur"
           @trasnlationLineKeydown="trasnlationLineKeydown"
         />
-        <div v-if="!single" :key="`line-${index + visibleMin}-review`">
-          <div v-if="review[index + visibleMin]">
+        <div
+          class="review-placeholder"
+          :key="`line-${index + visibleMin}-review-placeholder-${
+            reviewKeys[index + visibleMin]
+          }`"
+        >
+          <div
+            v-if="!single && review[index + visibleMin]"
+            :key="`line-${index + visibleMin}-review-${
+              reviewKeys[index + visibleMin]
+            }`"
+          >
             <Review
               v-for="(reviewItem, reviewItemIndex) in review[
                 index + visibleMin
@@ -68,43 +78,43 @@
               :hsk="hsk"
               :skin="skin"
             />
-          </div>
-          <div
-            class="text-center mt-2"
-            :key="`review-title-${index + visibleMin}-${
-              reviewKeys[index + visibleMin]
-            }`"
-            v-if="
-              review[index + visibleMin] &&
-              review[index + visibleMin].length > 1
-            "
-          >
-            <span
-              class="d-inline-block"
-              style="
-                position: relative;
-                bottom: 0.13rem;
-                font-weight: normal;
-                opacity: 0.5;
-                font-size: 0.8em;
-                cursor: pointer;
+            <div
+              class="text-center mt-2"
+              :key="`review-title-${index + visibleMin}-${
+                reviewKeys[index + visibleMin]
+              }`"
+              v-if="
+                review[index + visibleMin] &&
+                review[index + visibleMin].length > 1
               "
             >
               <span
-                v-if="!reviewOpen[index + visibleMin]"
-                @click="openReview(index + visibleMin)"
+                class="d-inline-block"
+                style="
+                  position: relative;
+                  bottom: 0.13rem;
+                  font-weight: normal;
+                  opacity: 0.5;
+                  font-size: 0.8em;
+                  cursor: pointer;
+                "
               >
-                <i class="fa fa-chevron-down mr-1"></i>
-                Show More Questions
+                <span
+                  v-if="!reviewOpen[index + visibleMin]"
+                  @click="openReview(index + visibleMin)"
+                >
+                  <i class="fa fa-chevron-down mr-1"></i>
+                  Show More Questions
+                </span>
+                <span
+                  v-if="reviewOpen[index + visibleMin] === true"
+                  @click="closeReview(index + visibleMin)"
+                >
+                  <i class="fa fa-chevron-up mr-1"></i>
+                  Show Fewer Questions
+                </span>
               </span>
-              <span
-                v-if="reviewOpen[index + visibleMin] === true"
-                @click="closeReview(index + visibleMin)"
-              >
-                <i class="fa fa-chevron-up mr-1"></i>
-                Show Fewer Questions
-              </span>
-            </span>
+            </div>
           </div>
         </div>
       </template>
@@ -193,7 +203,7 @@ export default {
       currentTime: 0,
       currentLine: undefined,
       currentLineIndex: undefined,
-      reviewLineOffset: 10, // Show review this number of lines after the first appearance of the word
+      reviewLineOffset: 1, // Show review this number of lines after the first appearance of the word
       nextLine: undefined,
       review: {},
       paused: true,
@@ -613,7 +623,7 @@ export default {
           (reviewItem) => word.id !== reviewItem.word.id
         );
         if (review[reviewIndex].length < length)
-          affectedLines.push(reviewIndex);
+          affectedLines.push(Number(reviewIndex));
       }
       return affectedLines;
     },
