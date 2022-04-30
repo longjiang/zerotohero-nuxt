@@ -567,15 +567,16 @@ const Dictionary = {
         })
       }
     }
-
     // Turkish words should only find matches at the beginning of each word
-    if (this.l2 === 'tur')
+    if (this.l2 === 'tur') {
       matches = matches.sort((a, b) => {
         return a.matchedIndex - b.matchedIndex
       })
-    matches = matches.sort((a, b) => {
-      return b.word.head.length - a.word.head.length
-    })
+    } else {
+      matches = matches.sort((a, b) => {
+        return b.word.head.length - a.word.head.length
+      })
+    }
     return {
       matches: matches.map(m => m.word),
       text: matchedText

@@ -342,7 +342,7 @@ export default {
       ) {
         html = await this.tokenizeIntegral(text);
       } else if (
-        ["de", "gsw", "no", "en", "hy", "vi"].includes(this.$l2.code)
+        ["de", "gsw", "no", "en", "hy", "vi", "tr"].includes(this.$l2.code)
       ) {
         html = await this.tokenizeAgglutenative(text, batchId);
       } else if (
