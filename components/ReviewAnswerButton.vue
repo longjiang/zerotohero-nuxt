@@ -10,6 +10,7 @@
       checked: checked,
       'review-answer-correct': answer.correct,
     }"
+    style="position: relative"
     @click="answered()"
   >
     <template v-if="$l2.code === 'ja' || !$l2.han">
@@ -21,6 +22,25 @@
     <template v-else-if="$l2.han && !$useTraditional">
       {{ answer.simplified || answer.traditional }}
     </template>
+    <div v-if="checked && answer.correct" class="sparkles" style="position: relative;">
+      <div style="position: absolute; width: 5rem; height: 4rem; left: calc(50% - 2.5rem); top: -3rem;">
+        <img
+          src="/img/sparkle.svg"
+          class="sparkle sparkle-1"
+          style="position: absolute; height: 38px; left: 50%; top: 0"
+        />
+        <img
+          src="/img/sparkle.svg"
+          class="sparkle sparkle-2"
+          style="position: absolute; height: 30px; right: 0; bottom: 0"
+        />
+        <img
+          src="/img/sparkle.svg"
+          class="sparkle sparkle-3"
+          style="position: absolute; height: 60px; left: 0%; top: 10%"
+        />
+      </div>
+    </div>
   </button>
 </template>
 
@@ -86,5 +106,43 @@ export default {
   background-color: #63ab67 !important;
   border-color: #36823b !important;
   color: white !important;
+}
+
+.sparkles {
+  pointer-events: one;
+  .sparkle {
+    opacity: 0;
+  }
+}
+
+.sparkle {
+  animation-name: sparkle;
+  animation-iteration-count: 1;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+  &.sparkle-1 {
+    animation-delay: 0;
+  }
+  &.sparkle-2 {
+    animation-delay: 0.2s;
+  }
+  &.sparkle-3 {
+    animation-delay: 0.4s;
+  }
+}
+
+@keyframes sparkle {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0);
+  }
 }
 </style>
