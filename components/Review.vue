@@ -18,6 +18,26 @@
           $l2.scripts[0].direction === 'rtl',
       }"
     >
+      <div style="float: left; margin-right: 0.5rem; height: 2rem; width: 2.5rem;">
+        <img
+          src="/img/face-happy.gif"
+          alt=""
+          style="width: 100%"
+          v-if="showAnswer"
+        />
+        <img
+          src="/img/face-surprise.gif"
+          alt=""
+          style="width: 100%"
+          v-else-if="wrong"
+        />
+        <img
+          src="/img/face-straight.gif"
+          alt=""
+          style="width: 100%"
+          v-else
+        />
+      </div>
       <Annotate tag="span" :buttons="true" class="transcript-line-l2">
         <span
           v-if="$l2.han && $l2.code !== 'ja'"
@@ -34,8 +54,8 @@
           v-html="highlight(reviewItem.line.line, reviewItem.text, hsk)"
         />
       </Annotate>
-      <small style="opacity: 0.5; cursor: pointer">
-        <u @click="scrollToLine">Scroll to line</u>
+      <small style="opacity: 0.5; cursor: pointer" @click="scrollToLine">
+        <i class="fa fa-arrow-up"></i>
       </small>
       <div
         v-if="$l2.code !== $l1.code && reviewItem.parallelLines"
@@ -74,6 +94,7 @@ export default {
       answers: undefined,
       showAnswer: false,
       s: [],
+      wrong: false,
     };
   },
   computed: {
@@ -176,9 +197,12 @@ export default {
     answered(answer) {
       if (answer.correct) {
         this.showAnswer = true;
+        this.wrong = false;
         var audio = new Audio("/audio/correct-ding.mp3");
         audio.volume = 0.2;
         audio.play();
+      } else {
+        this.wrong = true;
       }
     },
     highlightMultiple() {
