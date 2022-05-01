@@ -6,6 +6,7 @@
       'review-light': skin === 'light',
       'review-dark': skin === 'dark',
     }"
+    style="position: relative"
   >
     <div
       class="review-item"
@@ -175,6 +176,9 @@ export default {
     answered(answer) {
       if (answer.correct) {
         this.showAnswer = true;
+        var audio = new Audio("/audio/correct-ding.mp3");
+        audio.volume = 0.2;
+        audio.play();
       }
     },
     highlightMultiple() {
@@ -213,6 +217,7 @@ export default {
       display: inline-block;
       min-width: 5rem;
       text-align: center;
+      border-bottom: 1px solid white;
     }
   }
   .transcript-line-l1 {
@@ -247,7 +252,6 @@ export default {
       ::v-deep .transcript-line-l2 {
         .highlight {
           background: rgba(0, 0, 0, 0);
-          border-bottom: 1px solid white;
           margin: 0 0.2rem;
           position: relative;
           bottom: 0.2rem;
@@ -256,6 +260,7 @@ export default {
     }
     &.show-answer {
       background-color: #4070433f;
+      border: 1px solid #093909;
     }
   }
   &:not(.show-answer) {
