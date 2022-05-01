@@ -385,7 +385,7 @@ export default {
         {
           icon: "fas fa-star",
           title: "Saved Items",
-          show: this.savedWordsCount > 0,
+          show: this.savedWordsCount + this.savedPhrasesCount > 0,
           children: [
             {
               name: "saved-words",
