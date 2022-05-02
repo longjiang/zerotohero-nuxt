@@ -83,7 +83,7 @@
                     ']'
                   "
                 />
-                <span v-else-if="entry.pronunciation && !entry.cjk">
+                <span v-else-if="entry.pronunciation && (!entry.cjk || $l2.code === 'ko')">
                   [{{ entry.pronunciation }}]
                 </span>
                 <span v-else-if="entry.cjk">
