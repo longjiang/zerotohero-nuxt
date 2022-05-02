@@ -541,10 +541,10 @@ export default {
                   ? this.terms[0].length < 3
                     ? 100
                     : 80
-                  : 60
-                : 40
-              : 20
-            : 10
+                  : 70
+                : 60
+              : 50
+            : 25
           : false,
         tvShowFilter: this.tvShowFilter,
         talkFilter: this.talkFilter,
