@@ -20,7 +20,7 @@
                 <strong>zero</strong>to<strong>hero</strong><small>.ca <small>🇨🇦</small></small>
               </span>
               <div style="font-size: 1.6rem; max-width: 40rem; margin: 2rem auto 0 auto; line-height: 1.5;">
-                Learn <strong><span style="color: #fd4f1c">225</span> languages</strong> by
+                Learn <strong><span style="color: #fd4f1c">{{ languagesWithVideos.length }}</span> languages</strong> by
                 “comprehensible input” through a collection of <strong><span style="color:#fd4f1c">320,364</span>
                   videos,</strong> each with full subtitles and a popup dictionary in <em>every</em> language
                 imaginable—yes, even
@@ -548,20 +548,14 @@ export default {
         ["Liberia Kpelle", "xpe"],
         ["Zuojiang Zhuang", "zzj"],
         ["Egyptian Arabic", "arz"],
-        ["Beaver", "bea"],
         ["Middle English", "enm"],
         ["Jamaican Creole English", "jam"],
         ["Konkani", "kok"],
         ["Lakota", "lkt"],
-        ["Malvi", "mup"],
         ["Oscan", "osc"],
         ["Sindarin", "sjn"],
-        ["Thai Song", "soa"],
-        ["Timne", "tem"],
-        ["Tsakonian", "tsd"],
-        ["Munsee", "umu"],
-        ["Nenets", "yrk"],
-        ["Zuojiang Zhuang", "zzj"]]
+        ["Tsakonian", "tsd"]
+      ]
     };
   },
   created() {

@@ -29,7 +29,9 @@ const Dictionary = {
     nsl: 'nor',
     scn: 'ita',
     sco: 'eng',
+    soa: 'tha',
     tgl: 'ceb',
+    tsd: 'ell',
     tir: 'amh',
     wol: 'fra',
     vec: 'ita'
