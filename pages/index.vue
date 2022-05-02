@@ -267,14 +267,6 @@
               </div>
             </div>
           </div>
-          <div class="row">
-            <div class="col-sm-12">
-              <div class="home-card">
-                <h5 class="text-center">Languages by % of World GDP</h5>
-                <LazyLanguagesGDP />
-              </div>
-            </div>
-          </div>
         </client-only>
 
         <div class="row">
@@ -316,6 +308,16 @@
             </div>
           </div>
         </div>
+        <client-only>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="home-card">
+                <h5 class="text-center">Languages by % of World GDP</h5>
+                <LazyLanguagesGDP />
+              </div>
+            </div>
+          </div>
+        </client-only>
         <div class="row mt-5 mb-5">
           <div class="col-sm-12">
             <div class="home-card home-card-dark">
