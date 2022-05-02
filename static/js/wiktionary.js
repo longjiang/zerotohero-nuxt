@@ -9,7 +9,9 @@ const Dictionary = {
   cache: {},
   tables: [],
   NlpjsTFrDict: {},
-  useJSON: [],
+  useJSON: ['kor'],
+  hanRegex: /[\u2E80-\u2E99\u2E9B-\u2EF3\u2F00-\u2FD5\u3005\u3007\u3021-\u3029\u3038-\u303B‌​\u3400-\u4DB5\u4E00-\u9FCC\uF900-\uFA6D\uFA70-\uFAD9]+/g,
+  hanRegexStrict: /^[\u2E80-\u2E99\u2E9B-\u2EF3\u2F00-\u2FD5\u3005\u3007\u3021-\u3029\u3038-\u303B‌​\u3400-\u4DB5\u4E00-\u9FCC\uF900-\uFA6D\uFA70-\uFAD9]+$/,
   server: 'https://server.chinesezerotohero.com/',
   l1: undefined,
   l2: undefined,
@@ -228,13 +230,15 @@ const Dictionary = {
             phrases: item.derived ? item.derived.map(d => d.word) : [],
             wiktionary: true
           }
-          if (this.l2 === 'vie') {
-            let vietnameseHanTu = this.getVietnameseHanTu(item)
+          if (['vie', 'kor'].includes(this.l2)) {
+            let sino
+            if (this.l2 === 'vie') sino = this.getVietnameseHanTu(item)
+            if (this.l2 === 'kor') sino = this.getKoreanHanja(item)
             word.cjk = {
-              canonical: vietnameseHanTu,
+              canonical: sino,
               phonetics: bare
             }
-            word.hanja = vietnameseHanTu
+            word.hanja = sino
           }
           words.push(Object.assign(item, word))
         } else {
@@ -244,6 +248,22 @@ const Dictionary = {
       }
     }
     return words
+  },
+  getKoreanHanja(item) {
+    if (!item['etymology_text']) return
+    let hanja = item['etymology_text'].replace('Sino-Korean word from ', '')
+    hanja = hanja.replace('From Middle Chinese ', '')
+    hanja = hanja.replace('.', '')
+    hanja = hanja.replace(/\(.*\)/, '')
+    hanja = hanja.replace(/,.*/, '')
+    hanja = hanja.trim()
+    if (!this.isHan(hanja)) {
+      let matches = item['etymology_text'].match(this.hanRegex)
+      if (matches) hanja = matches[0]
+    }
+    if (this.isHan(hanja)) {
+      return hanja
+    }
   },
   getVietnameseHanTu(item) {
     if (!item['etymology-templates']) return
@@ -265,11 +285,13 @@ const Dictionary = {
     }
     return etymologyText
   },
-  isHan(text) {
+  hasHan(text) {
     return text.match(
-      // eslint-disable-next-line no-irregular-whitespace
-      /[\u2E80-\u2E99\u2E9B-\u2EF3\u2F00-\u2FD5\u3005\u3007\u3021-\u3029\u3038-\u303B‌​\u3400-\u4DB5\u4E00-\u9FCC\uF900-\uFA6D\uFA70-\uFAD9]+/g
+      this.hanRegex
     )
+  },
+  isHan(text) {
+    return this.hanRegexStrict.test(text)
   },
   parseDictionaryCSV(data) {
     console.log("Wiktionary: parsing words from CSV...")
@@ -329,7 +351,7 @@ const Dictionary = {
         stems: item.stems.join('|'),
         phrases: item.phrases.join('|'),
       }
-      if (this.l2 === 'vie') {
+      if (['vie', 'kor'].includes(this.l2)) {
         word.han = item.cjk && item.cjk.canonical ? item.cjk.canonical : undefined
       }
       return word
