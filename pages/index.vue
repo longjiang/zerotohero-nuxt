@@ -19,15 +19,18 @@
               <span style="font-size: 3rem">
                 <strong>zero</strong>to<strong>hero</strong><small>.ca <small>🇨🇦</small></small>
               </span>
-              <div style="font-size: 1.6rem; max-width: 40rem; margin: 2rem auto 0 auto; line-height: 1.5;">
-                Learn <strong><span style="color: #fd4f1c">{{ languagesWithVideos.length }}</span> languages</strong> by
-                “comprehensible input” through a collection of <strong><span style="color:#fd4f1c">320,364</span>
-                  videos,</strong> each with full subtitles and a popup dictionary in <em>every</em> language
-                imaginable—yes, even
-                <router-link :to="`/en/${this.randomLanguage[1]}`" style="color: #fd4f1c">{{
+              <p style="font-size: 1.6rem; max-width: 45rem; margin: 2rem auto 0 auto; line-height: 1.5;">
+                Learn <strong><span style="color: #fd4f1c">{{ languagesWithVideos.length }} languages</span></strong> by
+                “comprehensible input” through a collection of <strong><span style="color:#fd4f1c">320,364
+                    videos</span></strong>, including TV shows, movies, music, news, audiobooks, with full subtitles and
+                a popup dictionary.
+              </p>
+              <p style="font-size: 1.6rem; max-width: 45rem; margin: 1rem auto 0 auto; line-height: 1.5;">And yes, we
+                have
+                <router-link :to="`/en/${this.randomLanguage[1]}`" style="color: #fd4f1c; font-weight: bold;">{{
                     this.randomLanguage[0]
                 }}</router-link>.
-              </div>
+              </p>
             </div>
           </div>
         </div>
@@ -561,7 +564,7 @@ export default {
     };
   },
   created() {
-    this.randomLanguage = Helper.randomArrayItem(this.languagesWithVideos)
+    this.randomLanguage = Helper.randomArrayItem(this.languagesWithVideos.slice(0, 141))
   },
   mounted() {
     this.loaded = true;
