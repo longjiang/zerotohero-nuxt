@@ -6,6 +6,7 @@ const Dictionary = {
   file: 'https://server.chinesezerotohero.com/data/kengdic/kengdic_2011.tsv.txt',
   words: [],
   name: 'kengdic',
+  hangulRegex: /[\u1100-\u11FF\u302E\u302F\u3131-\u318E\u3200-\u321E\u3260-\u327E\uA960-\uA97C\uAC00-\uD7A3\uD7B0-\uD7C6\uD7CB-\uD7FB\uFFA0-\uFFBE\uFFC2-\uFFC7\uFFCA-\uFFCF\uFFD2-\uFFD7\uFFDA-\uFFDC]+/,
   credit() {
     return `The Korean dictionary is provided by <a href="https://github.com/garfieldnate/kengdic">kengdic</a> created by Joe Speigle, which is freely available from its GitHub project page. Korean conjugation made possible with <a href="https://github.com/max-christian/korean_conjugation">max-christian/korean_conjugation</a>.`
   },
@@ -185,18 +186,53 @@ const Dictionary = {
     let words = this.words.filter(word => word && (word.bare === text || word.hanja === text))
     return words
   },
-  async tokenizeWithOpenKoreanText(seg) {
-    let res = await axios.get(`https://server.chinesezerotohero.com/scrape2.php?&cache_life=0&url=${encodeURIComponent('http://py.zerotohero.ca:4567/tokenize?text=' + seg)}`)
+  async tokenizeWithOpenKoreanText(text) {
+    let res = await axios.get(`https://server.chinesezerotohero.com/scrape2.php?&cache_life=-1&url=${encodeURIComponent('http://py.zerotohero.ca:4567/tokenize?text=' + text.replace(/\s/g, '%20'))}`)
     if (res.data) {
       return res.data.tokens
     }
   },
   isHangul(text) {
-    let regex = /[\u1100-\u11FF\u302E\u302F\u3131-\u318E\u3200-\u321E\u3260-\u327E\uA960-\uA97C\uAC00-\uD7A3\uD7B0-\uD7C6\uD7CB-\uD7FB\uFFA0-\uFFBE\uFFC2-\uFFC7\uFFCA-\uFFCF\uFFD2-\uFFD7\uFFDA-\uFFDC]+/
-    let isHangul = regex.test(text)
+    let isHangul = this.hangulRegex.test(text)
     return isHangul
   },
+  hasHangul(text) {
+    let hasHangul = text.includes
+  },
   async tokenize(text) {
+    let t = []
+    let lastPosition = 0
+    let tokenized
+    let isHangul = this.isHangul(text)
+    if (isHangul) tokenized = await this.tokenizeWithOpenKoreanText(text);
+    if (tokenized) {
+      for (let index in tokenized) {
+        let token = tokenized[index]
+        if (token.offset > lastPosition) {
+          t.push(' ')
+          lastPosition = token.offset
+        }
+        let candidates = this.lookupMultiple(
+          token.text
+        );
+        if (token.stem && token.stem !== token.text) {
+          candidates = candidates.concat(
+            this.lookupMultiple(
+              token.stem
+            )
+          );
+        }
+        t.push({
+          text: token.text,
+          candidates,
+          pos: token.pos
+        })
+        lastPosition = lastPosition + token.length
+      }
+      return t
+    }
+  },
+  async tokenizeBySplitting(text) {
     let t = []
     let segs = text.split(/\s+/)
     for (let seg of segs) {
