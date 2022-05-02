@@ -15,6 +15,7 @@ const Dictionary = {
   l2: undefined,
   supplementalLangs: {
     ceb: 'tgl',
+    csb: 'pol',
     cmn: 'zho',
     gsw: 'deu',
     ind: 'msa',
