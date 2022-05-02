@@ -18,6 +18,7 @@ const Dictionary = {
     ceb: 'tgl',
     csb: 'pol',
     cmn: 'zho',
+    goh: 'gsw',
     gsw: 'deu',
     ind: 'msa',
     ins: 'eng',
