@@ -3170,7 +3170,7 @@ id,name,otherNames,wiktionary,glottologId,glottologFamilyId,glottologParentId,le
 3169,Cogui,"Kogi, Cogi, Kagaba, Cagaba, Cágaba",3,cogu1240,chib1249,arhu1241,language,10.9485,-73.8043,CO,kog,,I,L,,,
 3170,Koyo,,1,koyo1242,atla1278,koyo1245,language,-0.69688,15.7508,CG,koh,,I,L,,,
 3171,Komi-Permyak,,281,komi1269,ural1272,komi1267,language,59.6602,54.7959,RU,koi,,I,L,63000,,
-3172,Konkani,,429,,,,,15.27,74.21,,kok,,M,L,2300000,,
+3172,Konkani,,429,,,,,15.27,74.21,IN,kok,,M,L,2300000,,
 3173,Kol (New Guinea),"Kol, Kol (Papua New Guina)",,kolp1236,,,language,-5.21042,151.583,PG,kol,,I,L,,,
 3174,Komi,,,komi1267,ural1272,perm1256,family,60,100,RU,kom,kv,M,L,160000,kv,"Pyotr Subbotin-Permyak (1886 – 1923), a Russian avant-gardist painter, the professor of decorative painting"
 3175,Kongo,,33,core1256,,,,0,25,CD,kon,kg,M,L,6500000,,
