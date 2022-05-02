@@ -301,6 +301,7 @@ const Dictionary = {
         })
         lastPosition = lastPosition + token.length
       }
+      if (lastPosition < text.length) t.push(' ')
       return t
     }
   },
