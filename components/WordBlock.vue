@@ -1,99 +1,62 @@
 <template>
-  <v-popover
-    :open="popup && open"
-    :open-group="'id' + _uid"
-    :id="id"
-    placement="top"
-    trigger="manual"
-    class="word-block-popover"
-    style="display: inline-block"
-  >
-    <span
-      :class="{
-        'word-block': true,
-        'with-popup': popup,
-        sticky,
-        common:
-          this.words &&
-          this.words.length > 0 &&
-          this.words[0].weight &&
-          this.words[0].weight > 750,
-        seen: seen,
-        saved: saved,
-      }"
-      v-bind="attributes"
-      v-on="popup ? { click: wordBlockClick } : {}"
-      @mouseenter="wordBlockMouseEnter"
-      @mouseleave="wordBlockMouseLeave"
-    >
+  <v-popover :open="popup && open" :open-group="'id' + _uid" :id="id" placement="top" trigger="manual"
+    class="word-block-popover" style="display: inline-block">
+    <span :class="{
+      'word-block': true,
+      'with-popup': popup,
+      sticky,
+      common:
+        this.words &&
+        this.words.length > 0 &&
+        this.words[0].weight &&
+        this.words[0].weight > 750,
+      seen: seen,
+      saved: saved,
+    }" v-bind="attributes" v-on="popup ? { click: wordBlockClick } : {}" @mouseenter="wordBlockMouseEnter"
+      @mouseleave="wordBlockMouseLeave">
       <template v-if="token && token.candidates && token.candidates.length > 0">
-        <span
-          class="word-block-definition"
-          v-if="l2Settings.showDefinition"
-          v-html="token.candidates[0].definitions[0]"
-        ></span>
-        <span
-          class="word-block-pinyin"
-          v-if="
-            l2Settings.showPinyin &&
-            phonetics &&
-            transliteration &&
-            transliteration !== token.text
-          "
-        >
+        <span class="word-block-definition" v-if="l2Settings.showDefinition"
+          v-html="token.candidates[0].definitions[0]"></span>
+        <span class="word-block-pinyin" v-if="
+          l2Settings.showPinyin &&
+          phonetics &&
+          transliteration &&
+          transliteration !== token.text
+        ">
           {{ savedTransliteration || transliteration }}
         </span>
-        <span
-          v-if="!l2Settings.useTraditional && token.candidates[0].simplified"
-          :class="`word-block-simplified ${hard ? 'word-block-hard' : ''}`"
-        >
+        <span v-if="!l2Settings.useTraditional && token.candidates[0].simplified"
+          :class="`word-block-simplified ${hard ? 'word-block-hard' : ''} ${token.pos ? 'pos-' + token.pos : ''}`">
           {{ token.candidates[0].simplified }}
         </span>
-        <span
-          v-else-if="
-            l2Settings.useTraditional && token.candidates[0].traditional
-          "
-          class="word-block-traditional"
-        >
+        <span v-else-if="
+          l2Settings.useTraditional && token.candidates[0].traditional
+        " :class="`word-block-traditional  ${hard ? 'word-block-hard' : ''} ${token.pos ? 'pos-' + token.pos : ''}`">
           {{ token.candidates[0].traditional }}
         </span>
         <span v-else class="word-block-text-byeonggi-wrapper">
           <span
-            :class="{
-              'word-block-text d-inline-block': true,
-              klingon: $l2.code === 'tlh',
-              'word-block-hard': hard,
-            }"
-          >
+            :class="`word-block-text d-inline-block ${$l2.code === 'tlh' ? 'klingon' : ''} ${hard ? 'word-block-hard' : ''}  ${token.pos ? 'pos-' + token.pos : ''}`">
             {{ transform(token.text, $l2.code === 'vi') }}
           </span>
-          <span
-            v-if="l2Settings.showByeonggi && hanja"
-            class="word-block-text-byeonggi d-inline-block"
-            v-html="hanja"
-          />
+          <span v-if="l2Settings.showByeonggi && hanja" class="word-block-text-byeonggi d-inline-block"
+            v-html="hanja" />
         </span>
       </template>
       <template v-else>
-        <span
-          class="word-block-pinyin"
-          v-if="
-            l2Settings.showPinyin &&
-            phonetics &&
-            transliteration &&
-            transliteration !== text &&
-            $l2.code !== 'tlh'
-          "
-        >
+        <span class="word-block-pinyin" v-if="
+          l2Settings.showPinyin &&
+          phonetics &&
+          transliteration &&
+          transliteration !== text &&
+          $l2.code !== 'tlh'
+        ">
           {{ savedTransliteration || transliteration }}
         </span>
         <span class="word-block-pinyin" v-if="$l2.code === 'tlh'">
           {{ fixKlingonTypos(text) }}
         </span>
-        <span
-          :class="{ 'word-block-text': true, klingon: $l2.code === 'tlh' }"
-          v-html="transform(text)"
-        />
+        <span :class="{ 'word-block-text': true, klingon: $l2.code === 'tlh' }" v-html="transform(text)" />
       </template>
     </span>
     <template slot="popover">
@@ -102,48 +65,27 @@
           <i class="fa fa-times"></i>
         </button>
         <div class="tooltip-images" :key="`tooltip-images-${text}`">
-          <img
-            v-lazy-load
-            alt
-            class="image-wall-image"
-            v-for="(image, index) in images"
-            :key="`web-images-${text}-${index}`"
-            :src="`${Config.imageProxy}?${image.src}`"
-          />
+          <img v-lazy-load alt class="image-wall-image" v-for="(image, index) in images"
+            :key="`web-images-${text}-${index}`" :src="`${Config.imageProxy}?${image.src}`" />
         </div>
-        <EntryExternal
-          v-if="text || token"
-          :term="text ? text : token.candidates[0].head"
-          :sticky="false"
-          class="mt-3"
-        />
-        <div
-          v-for="word in words"
-          :key="`word-block-word-${word.id}`"
-          :class="classes"
-        >
+        <EntryExternal v-if="text || token" :term="text ? text : token.candidates[0].head" :sticky="false"
+          class="mt-3" />
+        <div v-for="word in words" :key="`word-block-word-${word.id}`" :class="classes">
           <div v-if="word">
-            <div
-              v-for="(match, index) in word.matches"
-              style="color: #999"
-              :key="`match-${index}`"
-            >
+            <div v-for="(match, index) in word.matches" style="color: #999" :key="`match-${index}`">
               <b>{{ match.field }} {{ match.number }}</b>
               {{ match.table !== "declension" ? match.table : "" }}
               of
             </div>
             <div class="word-pronunciation">
-              <span
-                v-if="$l2.code === 'vi' && word.pronunciation"
-                v-html="
-                  '[' +
-                  word.pronunciation.replace(
-                    /\[\[(.+?)#Vietnamese\|.+?]]/g,
-                    '$1'
-                  ) +
-                  ']'
-                "
-              />
+              <span v-if="$l2.code === 'vi' && word.pronunciation" v-html="
+                '[' +
+                word.pronunciation.replace(
+                  /\[\[(.+?)#Vietnamese\|.+?]]/g,
+                  '$1'
+                ) +
+                ']'
+              " />
               <span v-else-if="word.pronunciation">
                 <template v-if="$l2 === 'zh'">
                   {{ word.pronunciation }}
@@ -156,12 +98,10 @@
               <span v-else-if="word.kana && word.kana !== word.head">
                 {{ word.kana }}
               </span>
-              <span
-                v-else-if="
-                  $hasFeature('transliteration') &&
-                  !['tlh', 'fa'].includes($l2.code)
-                "
-              >
+              <span v-else-if="
+                $hasFeature('transliteration') &&
+                !['tlh', 'fa'].includes($l2.code)
+              ">
                 {{ tr(word.head) }}
               </span>
               <span v-if="$l2.code === 'tlh'">
@@ -173,101 +113,65 @@
               <span v-if="word.jyutping && word.pinyin">
                 / {{ word.pinyin }}
               </span>
-              <Speak
-                :text="word.kana || word.head"
-                :mp3="word.audio"
-                :wiktionary="word.wiktionary"
-                class="ml-1"
-                ref="speak"
-              />
+              <Speak :text="word.kana || word.head" :mp3="word.audio" :wiktionary="word.wiktionary" class="ml-1"
+                ref="speak" />
             </div>
-            <Star
-              :word="word"
-              :text="text"
-              class="mr-1"
-              style="position: relative; bottom: 0.2rem; font-size: 1.2rem"
-            ></Star>
-            <b
-              :data-level="word.level || 'outside'"
-              style="font-size: 1.5rem"
-              :class="{
-                klingon: $l2.code === 'tlh',
-              }"
-            >
+            <Star :word="word" :text="text" class="mr-1" style="position: relative; bottom: 0.2rem; font-size: 1.2rem">
+            </Star>
+            <b :data-level="word.level || 'outside'" style="font-size: 1.5rem" :class="{
+              klingon: $l2.code === 'tlh',
+            }">
               <span v-if="$l2.code === 'de' && word.gender">
                 {{ { n: "das", m: "der", f: "die" }[word.gender] }}
               </span>
               {{ transform(word.accented) }}
             </b>
-            <span
-              v-if="word.traditional && word.traditional !== word.simplified"
-              class="ml-1"
-              style="font-size: 1.2em; color: #999"
-            >
+            <span v-if="word.traditional && word.traditional !== word.simplified" class="ml-1"
+              style="font-size: 1.2em; color: #999">
               {{ word.traditional }}
             </span>
-            <span
-              v-if="['ko', 'vi'].includes($l2.code) && word.cjk && word.cjk.canonical"
-              class="ml-1"
-              style="font-size: 1.2em; color: #999"
-            >
+            <span v-if="['ko', 'vi'].includes($l2.code) && word.cjk && word.cjk.canonical" class="ml-1"
+              style="font-size: 1.2em; color: #999">
               [{{ word.cjk.canonical }}]
             </span>
-            <span
-              v-if="word.level && word.level !== 'outside'"
-              :data-bg-level="word.level"
+            <span v-if="word.level && word.level !== 'outside'" :data-bg-level="word.level"
               class="pl-1 pr-1 ml-1 rounded d-inline-block"
-              style="font-size: 0.8em; position: relative; bottom: 0.1rem"
-            >
+              style="font-size: 0.8em; position: relative; bottom: 0.1rem">
               {{ $dictionaryName === "hsk-cedict" ? "HSK " : ""
               }}{{ word.level }}
             </span>
-            <span
-              v-if="word.newHSK"
-              class="ml-1"
-              :style="`position: relative; bottom: 0.2em; font-size: 0.8em; color: ${
-                word.newHSK === '7-9' ? '#00716B' : 'inherit'
-              }`"
-            >
+            <span v-if="word.newHSK" class="ml-1" :style="`position: relative; bottom: 0.2em; font-size: 0.8em; color: ${word.newHSK === '7-9' ? '#00716B' : 'inherit'
+            }`">
               <i class="fa fa-arrow-right mr-1" />
               新 HSK {{ word.newHSK }}
             </span>
             <span v-if="word.unit" style="font-size: 0.8em" class="ml-1">
               Unit {{ word.unit }}
             </span>
-            <router-link
-              :to="`/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${word.id}`"
-              class="ml-1 link-unstyled"
-              style="color: #999"
-            >
+            <router-link :to="`/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${word.id}`"
+              class="ml-1 link-unstyled" style="color: #999">
               <i class="fas fa-book"></i>
             </router-link>
           </div>
           <div>
-            <span
-              class="word-type"
-              v-if="word.type !== 'other'"
-              style="color: #999"
-            >
+            <span class="word-type" v-if="word.type !== 'other'" style="color: #999">
               {{ word.verbs ? abbreviate(word.verbs.aspect) : "" }}
               {{ abbreviate(word.type) }}
             </span>
             <span class="word-type" v-if="word.pos" style="color: #999">
               {{
-                word.gender
-                  ? { m: "masculine", f: "feminine", n: "neuter" }[word.gender]
-                  : ""
+                  word.gender
+                    ? { m: "masculine", f: "feminine", n: "neuter" }[word.gender]
+                    : ""
               }}
               {{ word.pos }}
               {{
-                word.heads && word.heads[0] && word.heads[0][1]
-                  ? word.heads[0][1]
-                  : ""
+                  word.heads && word.heads[0] && word.heads[0][1]
+                    ? word.heads[0][1]
+                    : ""
               }}
             </span>
-            <span
-              v-if="word.supplementalLang"
-              class="
+            <span v-if="word.supplementalLang" class="
                 pl-1
                 pr-1
                 ml-1
@@ -275,47 +179,35 @@
                 d-inline-block
                 bg-warning
                 text-white
-              "
-              style="font-size: 0.8em; position: relative; bottom: 0.1rem"
-            >
+              " style="font-size: 0.8em; position: relative; bottom: 0.1rem">
               {{ $languages.getSmart(word.supplementalLang).name }}
             </span>
             <ol class="word-translation" v-if="word.definitions">
-              <li
-                v-for="(def, index) in word.definitions
-                  .filter((def) => def.trim() !== '')
-                  .map((definition) =>
-                    definition ? definition.replace(/\[.*\] /g, '') : ''
-                  )"
-                :key="`wordblock-def-${index}`"
-                class="word-translation-item"
-              >
+              <li v-for="(def, index) in word.definitions
+              .filter((def) => def.trim() !== '')
+              .map((definition) =>
+                definition ? definition.replace(/\[.*\] /g, '') : ''
+              )" :key="`wordblock-def-${index}`" class="word-translation-item">
                 <span>{{ def }}</span>
               </li>
             </ol>
             <span class="word-counters" v-if="word.counters">
               <em>:</em>
               {{
-                word.counters
-                  .map((counter) => "一" + counter.simplified)
-                  .join(word.simplified + "、") + word.simplified
+                  word.counters
+                    .map((counter) => "一" + counter.simplified)
+                    .join(word.simplified + "、") + word.simplified
               }}。
             </span>
           </div>
         </div>
         <div v-if="loading === true">💭 Thinking...</div>
-        <div
-          v-if="words && words.length === 0 && loading === false"
-          class="mt-3"
-        >
+        <div v-if="words && words.length === 0 && loading === false" class="mt-3">
           <span style="color: #999" v-if="$hasFeature('transliteration')">
             {{ tr(text) }}
             <Speak :text="text" class="ml-1" />
           </span>
-          <div
-            data-level="outside"
-            style="font-size: 1.5rem; font-weight: bold"
-          >
+          <div data-level="outside" style="font-size: 1.5rem; font-weight: bold">
             {{ text }}
           </div>
           <span style="color: #999">
@@ -760,17 +652,17 @@ export default {
       }
       words = words
         ? words.sort((a, b) => {
-            let asaved = this.$store.getters["savedWords/has"]({
-              id: a.id,
-              l2: this.$l2.code,
-            });
+          let asaved = this.$store.getters["savedWords/has"]({
+            id: a.id,
+            l2: this.$l2.code,
+          });
 
-            let bsaved = this.$store.getters["savedWords/has"]({
-              id: b.id,
-              l2: this.$l2.code,
-            });
-            return asaved === bsaved ? 0 : asaved ? -1 : 1;
-          })
+          let bsaved = this.$store.getters["savedWords/has"]({
+            id: b.id,
+            l2: this.$l2.code,
+          });
+          return asaved === bsaved ? 0 : asaved ? -1 : 1;
+        })
         : [];
       this.words = Helper.uniqueByValue(words, "id");
       this.loading = false;
@@ -802,9 +694,11 @@ export default {
 <style lang="scss">
 .word-block.with-popup {
   cursor: pointer;
+
   &.saved {
     font-weight: bold;
   }
+
   &:hover {
     background-color: rgba(250, 248, 195, 0.5);
     border-radius: 0.25rem;
@@ -836,9 +730,11 @@ export default {
 
     .word-block-text-byeonggi-wrapper {
       font-size: 0.1em;
+
       .word-block-text {
         font-size: 10em;
       }
+
       .word-block-text-byeonggi {
         color: rgba(143, 158, 172, 0.8);
         font-size: 6em;
@@ -868,7 +764,6 @@ export default {
 .show-pinyin .word-block .word-block-hard {
   // text-decoration: underline;
   background-color: rgba(255, 226, 129, 0.137);
-  border-radius: 0.2rem;
 }
 
 .show-byeonggi .word-block .word-block-text-byeonggi {
@@ -900,6 +795,16 @@ export default {
   text-overflow: ellipsis;
 }
 
+.word-block-simplified,
+.word-block-traditional,
+.word-block-text {
+  &.pos-verb,
+  &.pos-Verb,
+  &.pos-動詞 {
+    border-bottom: 1px solid rgba(204, 204, 204, 0.5);
+  }
+}
+
 .show-pinyin-for-saved {
   .word-block:hover:not(.saved) {
     .word-block-pinyin {
@@ -911,9 +816,11 @@ export default {
       width: 10em;
     }
   }
+
   .word-block.saved {
     margin-left: 0.1rem;
     margin-right: 0.1rem;
+
     .word-block-pinyin {
       display: block;
     }
@@ -1028,6 +935,7 @@ export default {
     width: 1.5rem;
     padding: 0;
     z-index: 10;
+
     &:hover {
       background: rgba(0, 0, 0, 0.4);
     }
@@ -1062,6 +970,7 @@ export default {
       overflow-x: scroll;
       display: flex;
       height: 4rem;
+
       img {
         flex: 1;
         height: 4rem;
@@ -1074,7 +983,7 @@ export default {
       color: #666;
     }
 
-    .tooltip-entry + .tooltip-entry {
+    .tooltip-entry+.tooltip-entry {
       margin-top: 1rem;
       border-top: 1px solid #ccc;
       padding-top: 1rem;

@@ -82,6 +82,7 @@ const Dictionary = {
           if (candidates.length > 0) {
             found = true;
             token.candidates = token.candidates.concat(candidates);
+            token.pos = lemma[1]
           }
         }
         token.candidates = this.uniqueByValue(token.candidates, "id");

@@ -252,6 +252,7 @@ const Dictionary = {
         t.push({
           text: token.surface_form,
           candidates,
+          pos: token.pos
         })
       }
       t.push(' ')
