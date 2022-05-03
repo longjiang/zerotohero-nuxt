@@ -621,12 +621,59 @@ const Dictionary = {
     }
   },
   tokenize(text) {
+    if (this.l2 === 'tur') return this.tokenizeTurkish(text)
     let subdict = this.subdictFromText(text)
     let tokenized = this.tokenizeRecursively(
       text,
       subdict
     )
     return tokenized
+  },
+  async tokenizeTurkish(text) {
+    let url = `https://python.zerotohero.ca/lemmatize-turkish?text=${encodeURIComponent(text)}`
+    let tokenized = await this.proxy(url, 0)
+    let tokens = []
+    for (let lemmas of tokenized) {
+      if (!lemmas[0]) {
+        tokens.push(' ')
+      } else if (['Unk', 'Punc'].includes(lemmas[0].pos)) {
+        tokens.push(lemmas[0].word)
+        tokens.push(' ')
+      } else {
+        let candidates = []
+        for (let lemma of lemmas) {
+          candidates = candidates.concat(this.lookupMultiple(lemma.word))
+          candidates = candidates.concat(this.lookupMultiple(lemma.lemma))
+        }
+        candidates = this.uniqueByValue(candidates, 'id')
+        tokens.push({
+          text: lemmas[0].word,
+          lemmas,
+          candidates,
+          pos: lemmas[0].pos
+        })
+        tokens.push(' ')
+      }
+    }
+    return tokens
+  },
+  // json or plain text only, and returns object
+  async proxy(url, cacheLife = -1, encoding = false) {
+    try {
+      let proxyURL = `https://server.chinesezerotohero.com/scrape2.php?cache_life=${cacheLife}${encoding ? '&encoding=' + encoding : ''}&url=${encodeURIComponent(
+        url
+      )}`
+      let response = await
+        axios.get(
+          proxyURL
+        )
+      if (response.data) {
+        return response.data
+      }
+    } catch (err) {
+      console.log(`Helper.proxy() cannot get ${url}`)
+    }
+    return false
   },
   splitByReg(text, reg) {
     let words = text.replace(reg, '!!!BREAKWORKD!!!$1!!!BREAKWORKD!!!').replace(/^!!!BREAKWORKD!!!/, '').replace(/!!!BREAKWORKD!!!$/, '')
@@ -748,7 +795,7 @@ const Dictionary = {
     text = text.toLowerCase()
     let words = []
     words = this.words.filter(word => word.search === text).map(w => Object.assign({ score: 1 }, w))
-    
+
     if (!quick) {
       if (['fra'].includes(this.l2) && !quick) {
         let stems = this.findStems(text)

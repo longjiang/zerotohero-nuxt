@@ -1,106 +1,62 @@
 <template>
-  <component
-    :is="tag"
-    v-observe-visibility="visibilityChanged"
-    :dir="
-      foreign &&
+  <component :is="tag" v-observe-visibility="visibilityChanged" :dir="
+    foreign &&
       $l2.scripts &&
       $l2.scripts.length > 0 &&
       $l2.scripts[0].direction === 'rtl'
-        ? 'rtl'
-        : 'ltr'
-    "
-    :class="{
-      annotated: annotated,
-      'text-right':
-        foreign &&
-        $l2.scripts &&
-        $l2.scripts.length > 0 &&
-        $l2.scripts[0].direction === 'rtl',
-      'add-pinyin': $hasFeature('transliteration'),
-      phonetics,
-      fullscreen: fullscreenMode,
-      'with-buttons': buttons,
-    }"
-  >
+      ? 'rtl'
+      : 'ltr'
+  " :class="{
+  annotated: annotated,
+  'text-right':
+    foreign &&
+    $l2.scripts &&
+    $l2.scripts.length > 0 &&
+    $l2.scripts[0].direction === 'rtl',
+  'add-pinyin': $hasFeature('transliteration'),
+  phonetics,
+  fullscreen: fullscreenMode,
+  'with-buttons': buttons,
+}">
     <div class="annotator-buttons" v-if="!empty() && buttons">
-      <b-dropdown
-        no-caret
-        toggle-class="annotator-menu-toggle"
-        :dropleft="$l2.direction !== 'rtl'"
-        :dropright="$l2.direction === 'rtl'"
-        @hide="onMenuHide"
-      >
+      <b-dropdown no-caret toggle-class="annotator-menu-toggle" :dropleft="$l2.direction !== 'rtl'"
+        :dropright="$l2.direction === 'rtl'" @hide="onMenuHide">
         <template #button-content><i class="fas fa-ellipsis-v"></i></template>
         <b-dropdown-item>
-          <Saved
-            :item="phraseItem(text, translation)"
-            store="savedPhrases"
-            icon="bookmark"
-            class="mr-1 annotator-button focus-exclude"
-            title="Save Phrase"
-          />
-          <Speak
-            :text="text"
-            class="annotator-button ml-1 mr-1"
-            style="position: relative; top: 0.08rem; position: relative"
-            title="Speak"
-          />
-          <span
-            class="
+          <Saved :item="phraseItem(text, translation)" store="savedPhrases" icon="bookmark"
+            class="mr-1 annotator-button focus-exclude" title="Save Phrase" />
+          <Speak :text="text" class="annotator-button ml-1 mr-1"
+            style="position: relative; top: 0.08rem; position: relative" title="Speak" />
+          <span class="
               annotator-button annotator-show-translate
               ml-1
               mr-1
               focus-exclude
-            "
-            title="Translate"
-            @click="translateClick"
-          >
+            " title="Translate" @click="translateClick">
             <i class="fas fa-language"></i>
           </span>
-          <span
-            :class="{
-              'annotator-button annotator-text-mode ml-1 mr-1 focus-exclude': true,
-              active: textMode,
-            }"
-            title="Edit"
-            @click="textMode = !textMode"
-          >
+          <span :class="{
+            'annotator-button annotator-text-mode ml-1 mr-1 focus-exclude': true,
+            active: textMode,
+          }" title="Edit" @click="textMode = !textMode">
             <i class="fas fa-edit"></i>
           </span>
-          <span
-            @click="copyClick"
-            title="Copy"
-            class="annotator-button annotator-copy ml-1 mr-1 focus-exclude"
-          >
+          <span @click="copyClick" title="Copy" class="annotator-button annotator-copy ml-1 mr-1 focus-exclude">
             <i class="fas fa-copy"></i>
           </span>
         </b-dropdown-item>
       </b-dropdown>
     </div>
-    <div
-      :class="{ 'annotate-slot annotate-template': true, 'd-none': annotated }"
-      style="display: inline"
-    >
+    <div :class="{ 'annotate-slot annotate-template': true, 'd-none': annotated }" style="display: inline">
       <slot></slot>
     </div>
     <div :class="{ 'd-none': !textMode }">
-      <input
-        :class="{ 'annotate-input': true, 'd-none': !textMode || !annotated }"
-        @select="select"
-        @blur="annotateInputBlur"
-        @click.stop="dummyFunction"
-        :value="text"
-        style="width: calc(100% - 2rem)"
-      />
+      <input :class="{ 'annotate-input': true, 'd-none': !textMode || !annotated }" @select="select"
+        @blur="annotateInputBlur" @click.stop="dummyFunction" :value="text" style="width: calc(100% - 2rem)" />
     </div>
     <template v-if="annotated && !textMode">
-      <v-runtime-template
-        v-for="(template, index) of annotatedSlots"
-        :key="`annotate-template-${index}`"
-        :template="template"
-        class="annotate-template"
-      />
+      <v-runtime-template v-for="(template, index) of annotatedSlots" :key="`annotate-template-${index}`"
+        :template="template" class="annotate-template" />
     </template>
   </component>
 </template>
@@ -263,7 +219,7 @@ export default {
       document.execCommand("copy");
       document.body.removeChild(tempInput);
     },
-    savePhraseClick() {},
+    savePhraseClick() { },
     async visibilityChanged(isVisible) {
       this.isVisible = isVisible;
       await Helper.delay(300);
@@ -351,8 +307,7 @@ export default {
       } else if (
         (this.$l2.scripts &&
           this.$l2.scripts[0] &&
-          this.$l2.scripts[0].script === "Arab") ||
-        this.$l2.code === "tr"
+          this.$l2.scripts[0].script === "Arab")
       ) {
         html = await this.tokenizeIntegral(text);
       } else if (
@@ -401,7 +356,7 @@ export default {
         if (typeof item === "object") {
           html += `<WordBlock :checkSaved="${this.checkSaved}" :phonetics="${this.phonetics}" :popup="${this.popup}" :sticky="${this.sticky}" :explore="${this.explore}" :token="tokenized[${batchId}][${index}]">${item.text}</WordBlock>`;
         } else {
-          html += `<span>${item
+          html += `<span>${(item || '')
             .replace(/\s+([,.!?])/, "$1")
             .replace(/\s+/g, "&nbsp;")}</span>`;
         }
@@ -409,9 +364,8 @@ export default {
       return html;
     },
     async tokenizeIntegral(text) {
-      let regex = `(((?![?])[${
-        this.$l2.apostrophe ? "'ʼ" : ""
-      }${Helper.characterClass("L")}])+)`;
+      let regex = `(((?![?])[${this.$l2.apostrophe ? "'ʼ" : ""
+        }${Helper.characterClass("L")}])+)`;
       // Additional characters removed so the spanish question mark (¿) gets excluded
       // \u10000-\u1007F\u10080-\u100FF\u10140-\u1018F\u10190-\u101CF\u101D0-\u101FF\u10280-\u1029F\u102A0-\u102DF\u102E0-\u102FF\u10300-\u1032F\u10330-\u1034F\u10350-\u1037F\u10380-\u1039F\u103A0-\u103DF\u10400-\u1044F\u10450-\u1047F\u10480-\u104AF\u104B0-\u104FF\u10500-\u1052F\u10530-\u1056F\u10600-\u1077F\u10800-\u1083F\u10840-\u1085F\u10860-\u1087F\u10880-\u108AF\u108E0-\u108FF\u10900-\u1091F\u10920-\u1093F\u10980-\u1099F\u109A0-\u109FF\u10A00-\u10A5F\u10A60-\u10A7F\u10A80-\u10A9F\u10AC0-\u10AFF\u10B00-\u10B3F\u10B40-\u10B5F\u10B60-\u10B7F\u10B80-\u10BAF\u10C00-\u10C4F\u10C80-\u10CFF\u10D00-\u10D3F\u10E60-\u10E7F\u10F00-\u10F2F\u10F30-\u10F6F\u10FE0-\u10FFF\u11000-\u1107F\u11080-\u110CF\u110D0-\u110FF\u11100-\u1114F\u11150-\u1117F\u11180-\u111DF\u111E0-\u111FF\u11200-\u1124F\u11280-\u112AF\u112B0-\u112FF\u11300-\u1137F\u11400-\u1147F\u11480-\u114DF\u11580-\u115FF\u11600-\u1165F\u11660-\u1167F\u11680-\u116CF\u11700-\u1173F\u11800-\u1184F\u118A0-\u118FF\u119A0-\u119FF\u11A00-\u11A4F\u11A50-\u11AAF\u11AC0-\u11AFF\u11C00-\u11C6F\u11C70-\u11CBF\u11D00-\u11D5F\u11D60-\u11DAF\u11EE0-\u11EFF\u11FC0-\u11FFF\u12000-\u123FF\u12480-\u1254F\u13000-\u1342F\u13430-\u1343F\u14400-\u1467F\u16800-\u16A3F\u16A40-\u16A6F\u16AD0-\u16AFF\u16B00-\u16B8F\u16E40-\u16E9F\u16F00-\u16F9F\u17000-\u187FF\u18800-\u18AFF\u1B000-\u1B0FF\u1B100-\u1B12F\u1B130-\u1B16F\u1B170-\u1B2FF\u1BC00-\u1BC9F\u1D200-\u1D24F\u1D800-\u1DAAF\u1E000-\u1E02F\u1E100-\u1E14F\u1E2C0-\u1E2FF\u1E800-\u1E8DF\u1E900-\u1E95F\u1EE00-\u1EEFF\u1F200-\u1F2FF\u1F300-\u1F5FF\u20000-\u2A6DF\u2A700-\u2B73F\u2B740-\u2B81F\u2B820-\u2CEAF\u2CEB0-\u2EBEF\u2F800-\u2FA1F\uE0100-\uE01EF\uF0000-\uFFFFF\u100000-\u10FFFF
       let reg = new RegExp(regex, "gi");
@@ -420,12 +374,11 @@ export default {
         .replace(
           reg,
           `<WordBlock :checkSaved="${this.checkSaved}" :phonetics="${this.phonetics}" :popup="${this.popup}" :sticky="${this.sticky}" :explore="${this.explore}">` +
-            "$1</WordBlock>"
+          "$1</WordBlock>"
         )
         .replace(
           /!!!###!!!/gi,
-          `<span class="${
-            this.$l2.code === "tlh" ? "klingon" : ""
+          `<span class="${this.$l2.code === "tlh" ? "klingon" : ""
           }">&nbsp;</span>`
         );
       return html;
@@ -464,32 +417,41 @@ export default {
 .show-pinyin .add-pinyin.phonetics:not(.annotated) .sentence {
   line-height: 2.2;
 }
+
 .sentence {
   // margin-right: 0.3em;
 }
-.sentence + .highlight {
+
+.sentence+.highlight {
   // margin-left: 0.3em;
 }
-.highlight + .sentence {
+
+.highlight+.sentence {
   // margin-left: 0.3em;
 }
-.sentence + .sentence {
+
+.sentence+.sentence {
   // margin-left: 0.3em;
 }
+
 .word-block.saved {
   color: #c59f94;
 }
+
 .l2-zh {
   .sentence {
     margin-right: 0;
   }
-  .sentence + .highlight {
+
+  .sentence+.highlight {
     margin-left: 0;
   }
-  .highlight + .sentence {
+
+  .highlight+.sentence {
     margin-left: 0;
   }
-  .sentence + .sentence {
+
+  .sentence+.sentence {
     margin-left: 0;
   }
 }
@@ -514,6 +476,7 @@ export default {
   font-size: 3rem;
   padding: 3rem;
   flex-direction: row-reverse;
+
   .annotator-close {
     opacity: 0;
     position: absolute;
@@ -521,6 +484,7 @@ export default {
     right: 2.5rem;
     transition: 0.5s all ease-in-out;
   }
+
   .annotator-close:hover {
     opacity: 1;
   }
@@ -543,6 +507,7 @@ export default {
   float: left;
   padding: 0 0.5rem 0 0;
 }
+
 .annotator-menu-toggle {
   font-size: 0.8rem;
   padding: 0.1rem 0.4rem;
@@ -563,17 +528,21 @@ export default {
   &:hover {
     background: none;
   }
+
   span {
     color: #888;
+
     &:hover {
       color: #666;
     }
   }
+
   .annotator-button {
     padding: 0.3rem 0.3rem;
     border-radius: 0.2rem;
     line-height: 16px;
   }
+
   .annotator-button.active {
     background-color: #fd4f1c;
     color: white;
