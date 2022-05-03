@@ -47,10 +47,7 @@
           'transcript-line-l1': true,
           'pr-3': !single && $l2.direction === 'ltr',
           'pl-3': !single && $l2.direction === 'rtl',
-          'text-right':
-            $l1.scripts &&
-            $l1.scripts.length > 0 &&
-            $l1.scripts[0].direction === 'rtl',
+          'text-right': !single && $l2.direction === 'rtl',
           'text-center': single,
         }"
         v-html="parallelLine"

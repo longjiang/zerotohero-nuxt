@@ -161,10 +161,15 @@ const Dictionary = {
    * Romanize Persian text
    * @param {String} text
    */
-  romanize(text) {
+  async romanize(text) {
     text = text.trim()
     let row = this.romanizations.find(r => r.persian === text)
     if (row) return row.roman
+    else {
+      let url = `https://python.zerotohero.ca/transliterate-persian?text=${encodeURIComponent(text)}`
+      let transliteration = await this.proxy(url, 0)
+      return transliteration
+    }
   },
   parseDictionary(data) {
     console.log("Wiktionary: parsing words from JSON...")
