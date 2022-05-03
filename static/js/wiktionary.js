@@ -743,44 +743,47 @@ const Dictionary = {
       return []
     }
   },
-  lookupFuzzy(text, limit = 30) { // text = 'abcde'
+  lookupFuzzy(text, limit = 30, quick = false) { // text = 'abcde'
     if (!this.accentCritical) text = this.stripAccents(text)
     text = text.toLowerCase()
     let words = []
-    if (['fra'].includes(this.l2)) {
-      words = this.words.filter(word => word.search === text).map(w => Object.assign({ score: 1 }, w))
-      let stems = this.findStems(text)
-      if (stems.length > 0) {
-        let stemWords = this.stringsToWords(stems)
-        let stemWordsWithScores = stemWords.map(w => Object.assign({ score: 1 }, w))
-        words = words.concat(stemWordsWithScores)
-      }
-    }
     words = this.words.filter(word => word.search === text).map(w => Object.assign({ score: 1 }, w))
-    for (let word of words) {
-      let stemWords = this.stemWords(word, 1)
-      let phrases = this.phrases(word, 1)
-      words = words.concat(stemWords).concat(phrases)
-    }
-    if (words.length === 0 && this.words.length < 200000) {
-      for (let word of this.words) {
-        let search = word.search ? word.search : undefined
-        if (search) {
-          let distance = FastestLevenshtein.distance(search, text);
-          if (this.l2 === 'tur' && text.startsWith(search)) distance = distance / 2
-          let max = Math.max(text.length, search.length)
-          let similarity = (max - distance) / max
-          similarity = similarity
-          words.push(Object.assign({ score: similarity }, word))
-          if (similarity === 1) {
-            words = words.concat(this.stemWords(word, 1))
-            words = words.concat(this.phrases(word, 1))
+    
+    if (!quick) {
+      if (['fra'].includes(this.l2) && !quick) {
+        let stems = this.findStems(text)
+        if (stems.length > 0 && !quick) {
+          let stemWords = this.stringsToWords(stems)
+          let stemWordsWithScores = stemWords.map(w => Object.assign({ score: 1 }, w))
+          words = words.concat(stemWordsWithScores)
+        }
+      } else {
+        if (words.length === 0 && this.words.length < 200000) {
+          for (let word of this.words) {
+            let search = word.search ? word.search : undefined
+            if (search) {
+              let distance = FastestLevenshtein.distance(search, text);
+              if (this.l2 === 'tur' && text.startsWith(search)) distance = distance / 2
+              let max = Math.max(text.length, search.length)
+              let similarity = (max - distance) / max
+              words.push(Object.assign({ score: similarity }, word))
+              if (similarity === 1 && !quick) {
+                words = words.concat(this.stemWords(word, 1))
+                words = words.concat(this.phrases(word, 1))
+              }
+            }
+          }
+        } else {
+          for (let word of words) {
+            let stemWords = this.stemWords(word, 1)
+            let phrases = this.phrases(word, 1)
+            words = words.concat(stemWords).concat(phrases)
           }
         }
       }
+      words = words.sort((a, b) => b.score - a.score)
+      words = this.uniqueByValue(words, 'id')
     }
-    words = words.sort((a, b) => b.score - a.score)
-    words = this.uniqueByValue(words, 'id')
     words = words.slice(0, limit)
     return words
   },

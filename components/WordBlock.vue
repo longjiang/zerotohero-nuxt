@@ -13,7 +13,7 @@
       seen: seen,
       saved: saved,
     }" v-bind="attributes" v-on="popup ? { click: wordBlockClick } : {}" @mouseenter="wordBlockMouseEnter"
-      @mouseleave="wordBlockMouseLeave">
+      @mouseleave="wordBlockMouseLeave" v-observe-visibility="visibilityChanged">
       <template v-if="token && token.candidates && token.candidates.length > 0">
         <span class="word-block-definition" v-if="l2Settings.showDefinition"
           v-html="token.candidates[0].definitions[0]"></span>
@@ -26,17 +26,18 @@
           {{ savedTransliteration || transliteration }}
         </span>
         <span v-if="!l2Settings.useTraditional && token.candidates[0].simplified"
-          :class="`word-block-simplified ${hard ? 'word-block-hard' : ''} ${token.pos ? 'pos-' + token.pos : ''}`">
+          :class="`word-block-simplified ${hard ? 'word-block-hard' : ''} ${pos ? 'pos-' + pos : ''} ${words && words[0] ? 'pos-' + words[0] : ''}`">
           {{ token.candidates[0].simplified }}
         </span>
         <span v-else-if="
           l2Settings.useTraditional && token.candidates[0].traditional
-        " :class="`word-block-traditional  ${hard ? 'word-block-hard' : ''} ${token.pos ? 'pos-' + token.pos : ''}`">
+        "
+          :class="`word-block-traditional  ${hard ? 'word-block-hard' : ''} ${pos ? 'pos-' + pos : ''} ${words && words[0] ? 'pos-' + words[0] : ''}`">
           {{ token.candidates[0].traditional }}
         </span>
         <span v-else class="word-block-text-byeonggi-wrapper">
           <span
-            :class="`word-block-text d-inline-block ${$l2.code === 'tlh' ? 'klingon' : ''} ${hard ? 'word-block-hard' : ''}  ${token.pos ? 'pos-' + token.pos : ''}`">
+            :class="`word-block-text d-inline-block ${$l2.code === 'tlh' ? 'klingon' : ''} ${hard ? 'word-block-hard' : ''}  ${pos ? 'pos-' + pos : ''} ${words && words[0] ? 'pos-' + words[0].pos : ''}`">
             {{ transform(token.text, $l2.code === 'vi') }}
           </span>
           <span v-if="l2Settings.showByeonggi && hanja" class="word-block-text-byeonggi d-inline-block"
@@ -56,7 +57,9 @@
         <span class="word-block-pinyin" v-if="$l2.code === 'tlh'">
           {{ fixKlingonTypos(text) }}
         </span>
-        <span :class="{ 'word-block-text': true, klingon: $l2.code === 'tlh' }" v-html="transform(text)" />
+        <span
+          :class="`word-block-text ${$l2.code === 'tlh' ? 'klingon' : ''} ${pos ? 'pos-' + pos : ''} ${words && words[0] ? 'pos-' + words[0].pos : ''}`"
+          v-html="transform(text)" />
       </template>
     </span>
     <template slot="popover">
@@ -183,7 +186,7 @@
               {{ $languages.getSmart(word.supplementalLang).name }}
             </span>
             <ol class="word-translation" v-if="word.definitions">
-              <li v-for="(def, index) in word.definitions
+              <li v-for="(def, index) in unique(word.definitions)
               .filter((def) => def.trim() !== '')
               .map((definition) =>
                 definition ? definition.replace(/\[.*\] /g, '') : ''
@@ -257,6 +260,7 @@ export default {
       text: this.$slots.default ? this.$slots.default[0].text : undefined,
       saved: false,
       images: [],
+      pos: this.token ? this.token.pos : undefined,
       words: [],
       classes: {
         "tooltip-entry": true,
@@ -268,6 +272,7 @@ export default {
       Config,
       transliteration: undefined,
       farsiRomanizations: {},
+      lastLookupWasQuick: false
     };
   },
   computed: {
@@ -388,7 +393,7 @@ export default {
   },
   watch: {
     async wordblockHover() {
-      if (this.words && this.words.length === 0) {
+      if ((this.words && this.words.length === 0) || this.lastLookupWasQuick) {
         this.lookup();
       }
       await Helper.timeout(Helper.isMobile() ? 100 : 750);
@@ -400,6 +405,13 @@ export default {
     },
   },
   methods: {
+    async visibilityChanged(isVisible) {
+      this.isVisible = isVisible;
+      await Helper.delay(300);
+      if (this.isVisible && (!this.words || this.words.length === 0)) {
+        this.lookup(true);
+      }
+    },
     async getFarsiRomanization(text) {
       let dictionary = await this.$getDictionary();
       let roman = await (await dictionary).romanize(text);
@@ -597,7 +609,7 @@ export default {
       if (this.open) return;
       if (this.popup && (await this.$getDictionary())) {
         if (this.loading === true) {
-          if (this.words && this.words.length === 0) {
+          if ((this.words && this.words.length === 0) || this.lastLookupWasQuick) {
             this.lookup();
           }
         }
@@ -614,7 +626,8 @@ export default {
     async closePopup() {
       this.open = false;
     },
-    async lookup() {
+    async lookup(quick = false) {
+      this.lastLookupWasQuick = quick
       let words = [];
       if (
         this.token &&
@@ -624,7 +637,7 @@ export default {
         words = this.token.candidates;
       } else if (this.text) {
         if (!this.text && this.token) this.text = this.token.candidates[0].head;
-        words = await (await this.$getDictionary()).lookupFuzzy(this.text, 20);
+        words = await (await this.$getDictionary()).lookupFuzzy(this.text, 20, quick);
         if (words) {
           for (let word of words) {
             if (this.$l2.code === "fa") {
@@ -666,6 +679,9 @@ export default {
         : [];
       this.words = Helper.uniqueByValue(words, "id");
       this.loading = false;
+    },
+    unique(a) {
+      return a.filter((item, i, ar) => ar.indexOf(item) === i);
     },
     abbreviate(type) {
       let abb = {
@@ -798,6 +814,7 @@ export default {
 .word-block-simplified,
 .word-block-traditional,
 .word-block-text {
+
   &.pos-verb,
   &.pos-Verb,
   &.pos-動詞 {
