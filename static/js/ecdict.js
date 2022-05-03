@@ -56,6 +56,15 @@ const Dictionary = {
     let words = text.replace(reg, '!!!BREAKWORKD!!!$1!!!BREAKWORKD!!!').replace(/^!!!BREAKWORKD!!!/, '').replace(/!!!BREAKWORKD!!!$/, '')
     return words.split('!!!BREAKWORKD!!!')
   },
+  // https://stackoverflow.com/questions/38613654/javascript-find-unique-objects-in-array-based-on-multiple-properties
+  uniqueByValues(arr, keyProps) {
+    const kvArray = arr.map(entry => {
+      const key = keyProps.map(k => entry[k]).join('|');
+      return [key, entry];
+    });
+    const map = new Map(kvArray);
+    return Array.from(map.values());
+  },
   tokenize(text) {
     text = text.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // strip accents e.g. résumé -> resume
     tokenized = [];
@@ -70,19 +79,21 @@ const Dictionary = {
         reg.test(word) &&
         !['m', 's', 't', 'll', 'd', 're', 'ain', 'don'].includes(word)
       ) {
-        let lemmas = lemmatizer.lemmas(word);
-        lemmas = [[word, "inflected"]].concat(lemmas);
-        let found = false;
         let token = {
           text: seg,
           candidates: [],
         };
-        for (let lemma of lemmas) {
-          let candidates = this.lookupMultiple(lemma[0]);
+        let lemmas = lemmatizer.lemmas(word);
+        if (lemmas && lemmas.length === 1) token.pos = lemmas[0][1]
+        lemmas = [[word, "inflected"]].concat(lemmas);
+        let found = false;
+        let forms = this.unique(lemmas.map(l => l[0]))
+
+        for (let form of forms) {
+          let candidates = this.lookupMultiple(form);
           if (candidates.length > 0) {
             found = true;
             token.candidates = token.candidates.concat(candidates);
-            token.pos = lemma[1]
           }
         }
         token.candidates = this.uniqueByValue(token.candidates, "id");
