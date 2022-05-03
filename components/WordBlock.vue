@@ -26,18 +26,17 @@
           {{ savedTransliteration || transliteration }}
         </span>
         <span v-if="!l2Settings.useTraditional && token.candidates[0].simplified"
-          :class="`word-block-simplified ${hard ? 'word-block-hard' : ''} ${pos ? 'pos-' + pos : ''} ${words && words[0] ? 'pos-' + words[0] : ''}`">
+          :class="`word-block-simplified ${hard ? 'word-block-hard' : ''} ${pos ? 'pos-' + pos : ''}`">
           {{ token.candidates[0].simplified }}
         </span>
         <span v-else-if="
           l2Settings.useTraditional && token.candidates[0].traditional
-        "
-          :class="`word-block-traditional  ${hard ? 'word-block-hard' : ''} ${pos ? 'pos-' + pos : ''} ${words && words[0] ? 'pos-' + words[0] : ''}`">
+        " :class="`word-block-traditional  ${hard ? 'word-block-hard' : ''} ${pos ? 'pos-' + pos : ''}`">
           {{ token.candidates[0].traditional }}
         </span>
         <span v-else class="word-block-text-byeonggi-wrapper">
           <span
-            :class="`word-block-text d-inline-block ${$l2.code === 'tlh' ? 'klingon' : ''} ${hard ? 'word-block-hard' : ''}  ${pos ? 'pos-' + pos : ''} ${words && words[0] ? 'pos-' + words[0].pos : ''}`">
+            :class="`word-block-text d-inline-block ${$l2.code === 'tlh' ? 'klingon' : ''} ${hard ? 'word-block-hard' : ''}  ${pos ? 'pos-' + pos : ''}`">
             {{ transform(token.text, $l2.code === 'vi') }}
           </span>
           <span v-if="l2Settings.showByeonggi && hanja" class="word-block-text-byeonggi d-inline-block"
@@ -57,8 +56,7 @@
         <span class="word-block-pinyin" v-if="$l2.code === 'tlh'">
           {{ fixKlingonTypos(text) }}
         </span>
-        <span
-          :class="`word-block-text ${$l2.code === 'tlh' ? 'klingon' : ''} ${pos ? 'pos-' + pos : ''} ${words && words[0] ? 'pos-' + words[0].pos : ''}`"
+        <span :class="`word-block-text ${$l2.code === 'tlh' ? 'klingon' : ''} ${pos ? 'pos-' + pos : ''}`"
           v-html="transform(text)" />
       </template>
     </span>
@@ -260,7 +258,6 @@ export default {
       text: this.$slots.default ? this.$slots.default[0].text : undefined,
       saved: false,
       images: [],
-      pos: this.token ? this.token.pos : undefined,
       words: [],
       classes: {
         "tooltip-entry": true,
@@ -293,6 +290,16 @@ export default {
     },
     $hanzi() {
       return this.$getHanzi();
+    },
+    pos() {
+      let pos
+      if (this.token && this.token.pos) {
+        pos = this.token.pos.replace(/\s/g, '-')
+      }
+      if (!pos && this.words && this.words[0]) {
+        pos = this.words[0].pos
+      }
+      if (pos) return pos.replace(/\s/g, '-')
     },
     hanja() {
       if (["ko", "vi"].includes(this.$l2.code)) {
