@@ -78,6 +78,9 @@
               {{ match.table !== "declension" ? match.table : "" }}
               of
             </div>
+            <div v-if="word.morphology" style="color: #999" :key="`match-${index}`">
+              {{ word.morphology }} of
+            </div>
             <div class="word-pronunciation">
               <span v-if="$l2.code === 'vi' && word.pronunciation" v-html="
                 '[' +
@@ -651,6 +654,7 @@ export default {
               this.farsiRomanizations[word.head] =
                 await this.getFarsiRomanization(word.head);
             }
+            // Russian
             if (word && word.matches) {
               for (let match of word.matches) {
                 match.form = await (
@@ -666,6 +670,10 @@ export default {
                   await this.$getDictionary()
                 ).stylize(match.table);
               }
+            }
+            // Turkish
+            if (word.lemmas && word.lemmas[0]) {
+              word.morphology
             }
           }
         }

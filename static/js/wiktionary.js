@@ -643,7 +643,7 @@ const Dictionary = {
         let candidates = []
         for (let lemma of lemmas) {
           candidates = candidates.concat(this.lookupMultiple(lemma.word))
-          candidates = candidates.concat(this.lookupMultiple(lemma.lemma))
+          candidates = candidates.concat(this.lookupMultiple(lemma.lemma).map(w => { w.morphology = lemma.morphemes.join(' '); return w }))
         }
         candidates = this.uniqueByValue(candidates, 'id')
         tokens.push({
