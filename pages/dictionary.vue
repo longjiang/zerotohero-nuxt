@@ -6,28 +6,20 @@
 </router>
 <template>
   <container-query :query="query" v-model="params">
-    <div
-      :class="{
-        'dictionary focus': true,
-        'bg-white': !wide,
-        'dictionary-wide': wide,
-      }"
-      :key="`entry-${entryKey}`"
-      @keydown="keydown"
-    >
+    <div :class="{
+      'dictionary focus': true,
+      'bg-white': !wide,
+      'dictionary-wide': wide,
+    }" :key="`entry-${entryKey}`" @keydown="keydown">
       <SocialHead :title="title" :description="description" :image="image" />
       <client-only>
         <div class="dictionary-search-bar">
           <div :class="{ 'container pt-2 pb-5': !wide }">
             <div :class="{ row: !wide }">
               <div :class="{ 'col-sm-12': !wide }">
-                <SearchCompare
-                  :searchEntry="entry"
+                <SearchCompare :searchEntry="entry"
                   :random="`/${$l1.code}/${$l2.code}/dictionary/${$store.state.settings.dictionaryName}/random`"
-                  ref="searchCompare"
-                  :key="`search-${args}`"
-                  id="search-compare-bar"
-                />
+                  ref="searchCompare" :key="`search-${args}`" id="search-compare-bar" />
               </div>
             </div>
           </div>
@@ -43,15 +35,15 @@
                     </div>
                     <span v-if="!dictionarySize">
                       {{
-                        $t("For the love of {l2} words.", { l2: $t($l2.name) })
+                          $t("For the love of {l2} words.", { l2: $t($l2.name) })
                       }}
                     </span>
                     <span v-else>
                       {{
-                        $t("For the love of {count} {l2} words.", {
-                          count: $n(dictionarySize),
-                          l2: $t($l2.name),
-                        })
+                          $t("For the love of {count} {l2} words.", {
+                            count: $n(dictionarySize),
+                            l2: $t($l2.name),
+                          })
                       }}
                     </span>
                   </h3>
@@ -64,113 +56,57 @@
       <div :class="{ 'focus-exclude dictionary-main': true, container: !wide }">
         <div :class="{ row: !wide, 'content-panes': wide }" v-if="entry">
           <div :class="{ 'content-pane-left': wide, 'col-sm-12': !wide }">
-            <LazyHideDefs
-              class="mb-3 text-center"
-              @hideWord="hideWord = arguments[0]"
-              @hideDefinitions="hideDefinitions = arguments[0]"
-              @hidePhonetics="hidePhonetics = arguments[0]"
-            />
+            <LazyHideDefs class="mb-3 text-center" @hideWord="hideWord = arguments[0]"
+              @hideDefinitions="hideDefinitions = arguments[0]" @hidePhonetics="hidePhonetics = arguments[0]" />
             <hr class="mb-4" />
             <client-only>
               <div v-if="saved()" class="text-center mb-4">
-                <router-link
-                  class="link-unstyled mb-2 d-block"
-                  :to="`/${$l1.code}/${$l2.code}/saved-words`"
-                >
+                <router-link class="link-unstyled mb-2 d-block" :to="`/${$l1.code}/${$l2.code}/saved-words`">
                   <h5>
                     <i class="fa fa-chevron-left mr-2"></i>
                     Saved {{ $l2.name }} Words
                   </h5>
                 </router-link>
-                <Paginator
-                  v-if="sW.length > 0"
-                  :items="sW"
-                  :findCurrent="(item) => item.id === entry.id"
-                  :url="
-                    (item) =>
-                      `/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${item.id}`
-                  "
-                />
+                <Paginator v-if="sW.length > 0" :items="sW" :findCurrent="(item) => item.id === entry.id" :url="
+                  (item) =>
+                    `/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${item.id}`
+                " />
               </div>
             </client-only>
             <div v-if="entry" class="text-center">
               <div class="text-center mb-4" v-if="words && words.length > 1">
-                <b-dropdown
-                  size="sm"
-                  variant="primary"
-                  :items="words"
-                  text="Disambiguation"
-                  menu-class="disambiguation-dropdown"
-                >
-                  <b-dropdown-item
-                    v-for="w in words"
-                    :key="`phrase-word-disambiguation-${w.id}`"
-                    @click="
-                      $router.push(
-                        `/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${w.id}`
-                      )
-                    "
-                  >
+                <b-dropdown size="sm" variant="primary" :items="words" text="Disambiguation"
+                  menu-class="disambiguation-dropdown">
+                  <b-dropdown-item v-for="w in words" :key="`phrase-word-disambiguation-${w.id}`" @click="
+                    $router.push(
+                      `/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${w.id}`
+                    )
+                  ">
                     <b>{{ w.head }}</b>
                     <em>{{ w.definitions[0] }}</em>
                   </b-dropdown-item>
                 </b-dropdown>
               </div>
-              <LazyEntryHeader
-                :entry="entry"
-                :hidePhonetics="hidePhonetics"
-                :hideWord="hideWord"
-              />
-              <DefinitionsList
-                v-if="entry.definitions"
-                :key="`def-list-${entry.id}`"
-                :definitions="entry.definitions"
-                :class="{ 'mt-3': true, transparent: hideDefinitions }"
-              ></DefinitionsList>
-              <EntryCourseAd
-                v-if="$l2.code === 'zh'"
-                variant="compact"
-                class="focus-exclude mt-4 mb-5"
-                :entry="entry"
-              ></EntryCourseAd>
-              <EntryExternal
-                :term="entry.head"
-                :traditional="entry.traditional"
-                :level="entry.level"
-                :sticky="false"
-                class="mt-4 mb-4 text-center"
-                style="margin-bottom: 0"
-              />
-              <hr class="mb-3" />
-              <SimilarPhrases
-                v-if="entry.definitions && entry.definitions.length > 0"
-                :phrase="entry.head"
-                :translation="similarPhraseTranslation"
-                :hideDefinitions="hideDefinitions"
-                class="text-center"
-              />
+              <LazyEntryHeader :entry="entry" :hidePhonetics="hidePhonetics" :hideWord="hideWord" />
+              <DefinitionsList v-if="entry.definitions" :key="`def-list-${entry.id}`" :definitions="entry.definitions"
+                :class="{ 'mt-3': true, transparent: hideDefinitions }"></DefinitionsList>
+              <EntryCourseAd v-if="$l2.code === 'zh'" variant="compact" class="focus-exclude mt-4 mb-5" :entry="entry">
+              </EntryCourseAd>
+              <EntryExternal :term="entry.head" :traditional="entry.traditional" :level="entry.level" :sticky="false"
+                class="mt-4 mb-4 text-center" style="margin-bottom: 0" />
             </div>
           </div>
 
-          <div
-            :class="{
-              'col-sm-12': !wide,
-              'content-pane-right pl-3 pr-3': wide,
-            }"
-            style="position: relative; overflow: hidden"
-          >
-            <LazyDictionaryEntry
-              v-if="entry"
-              :entry="entry"
-              :images="images"
-              ref="dictionaryEntry"
-              :class="{ 'pb-5': $l2.code !== 'zh' }"
-              :key="`dictionary-entry-${entry.id}`"
-              :showHeader="false"
-              :showDefinitions="false"
-              :showExample="false"
-              :showExternal="false"
-            />
+          <div :class="{
+            'col-sm-12': !wide,
+            'content-pane-right pl-3 pr-3': wide,
+          }" style="position: relative; overflow: hidden">
+            <LazyDictionaryEntry v-if="entry" :entry="entry" :images="images" ref="dictionaryEntry"
+              :class="{ 'pb-5': $l2.code !== 'zh' }" :key="`dictionary-entry-${entry.id}`" :showHeader="false"
+              :showDefinitions="false" :showExample="false" :showExternal="false" />
+            <hr class="mb-3" />
+            <SimilarPhrases v-if="entry.definitions && entry.definitions.length > 0" :phrase="entry.head"
+              :translation="similarPhraseTranslation" :hideDefinitions="hideDefinitions" class="text-center" />
           </div>
         </div>
       </div>
@@ -239,27 +175,22 @@ export default {
     },
     title() {
       if (this.entry) {
-        return `${this.entry.bare} ${
-          this.entry.pronunciation ? "(" + this.entry.pronunciation + ")" : ""
-        } ${
-          this.entry.definitions
+        return `${this.entry.bare} ${this.entry.pronunciation ? "(" + this.entry.pronunciation + ")" : ""
+          } ${this.entry.definitions
             ? this.entry.definitions.slice(0, 2).join("; ")
             : ""
-        } | ${this.$l2 ? this.$l2.name : ""} Zero to Hero Dictionary`;
+          } | ${this.$l2 ? this.$l2.name : ""} Zero to Hero Dictionary`;
       }
-      return `${this.$l2 ? this.$l2.name : ""} Dictionary | ${
-        this.$l2 ? this.$l2.name : ""
-      } Zero to Hero`;
+      return `${this.$l2 ? this.$l2.name : ""} Dictionary | ${this.$l2 ? this.$l2.name : ""
+        } Zero to Hero`;
     },
     description() {
       if (this.entry) {
-        return `"${this.entry.bare}" means ${
-          this.entry.definitions ? this.entry.definitions.join("; ") : "..."
-        } Watch examples of this from TV shows.`;
+        return `"${this.entry.bare}" means ${this.entry.definitions ? this.entry.definitions.join("; ") : "..."
+          } Watch examples of this from TV shows.`;
       }
-      return `Look up ${this.$l2 ? this.$l2.name : ""} words. See how ${
-        this.$l2 ? this.$l2.name : ""
-      } words are used in TV shows, how they form collocations, and avoid common mistakes.`;
+      return `Look up ${this.$l2 ? this.$l2.name : ""} words. See how ${this.$l2 ? this.$l2.name : ""
+        } words are used in TV shows, how they form collocations, and avoid common mistakes.`;
     },
     image() {
       if (this.images.length > 0) {
@@ -486,24 +417,30 @@ export default {
     -webkit-backdrop-filter: blur(20px);
     z-index: 9;
   }
+
   .content-pane-left {
     overflow-y: scroll;
     padding: 1rem;
     padding-top: 5.2rem;
+
     ::v-deep .entry-word {
       font-size: 2rem;
     }
+
     ::v-deep .entry-cjk {
       font-size: 1.2rem;
     }
+
     ::v-deep .definitions-many {
       columns: 1;
       margin-top: 1rem;
     }
+
     ::v-deep .disambiguation-dropdown {
       overflow: hidden;
     }
   }
+
   .content-pane-right {
     padding: 1rem;
     padding-top: 4rem;
@@ -517,6 +454,7 @@ export default {
 ::v-deep .disambiguation-dropdown {
   margin-left: -3.5rem;
   width: 15rem;
+
   .dropdown-item {
     white-space: normal;
     padding: 0.2rem 1rem;
@@ -525,9 +463,11 @@ export default {
 
 .for-the-love-of {
   padding: 10rem 3rem;
+
   h3 {
     transform: scale(1.3);
   }
+
   h3,
   h3 * {
     font-family: pacifico !important;
