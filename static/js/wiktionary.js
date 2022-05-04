@@ -15,6 +15,33 @@ const Dictionary = {
   server: 'https://server.chinesezerotohero.com/',
   l1: undefined,
   l2: undefined,
+  lemmatizationLangs: {
+    ast: 'ast',
+    bul: 'bg',
+    // cat: 'ca', // Large ones are disabled because they are not necessary
+    ces: 'cs',
+    cym: 'cy',
+    // deu: 'de',
+    // eng: 'en',
+    // spa: 'es',
+    est: 'et',
+    fas: 'fa',
+    fra: 'fr',
+    gle: 'ga',
+    gla: 'gd',
+    glg: 'gl',
+    glv: 'gv',
+    hun: 'hu',
+    ita: 'it',
+    // por: 'pt',
+    ron: 'ro',
+    // rus: 'ru',
+    slk: 'sk',
+    slv: 'sl',
+    // swe: 'sv',
+    ukr: 'uk'
+  }
+  ,
   supplementalLangs: {
     arz: 'ara',
     ceb: 'tgl',
@@ -39,6 +66,7 @@ const Dictionary = {
     wol: 'fra',
     vec: 'ita'
   },
+  lemmatization: undefined,
   conjugations: undefined, // for french only
   romanizations: undefined, // for persian only
   accentCritical: false,
@@ -85,6 +113,9 @@ const Dictionary = {
       this.accentCritical = this.isAccentCritical()
       this.file = this.dictionaryFile({ l1, l2 })
       let words = await this.loadWords(this.file)
+      if (this.lemmatizationLangs[this.l2]) {
+        this.lemmatization = await this.loadLemmatizationTable(this.lemmatizationLangs[this.l2])
+      }
       let supplementalLang = this.supplementalLangs[l2]
       if (l1 === 'eng' && supplementalLang) {
         // Append indonesian words to malay dictionary so we get more words
@@ -105,6 +136,22 @@ const Dictionary = {
       if (this.l2 === 'fas') await this.loadPersianRomanization()
       console.log("Wiktionary: loaded.")
       return this
+    }
+  },
+  async loadLemmatizationTable(langCode) {
+    let res = await axios.get(`${this.server}data/lemmatization-lists/lemmatization-${langCode}.txt`)
+    if (res && res.data) {
+      let parsed = Papa.parse(res.data, { header: false })
+      let table = {}
+      for (let row of parsed.data) {
+        let lemma = row[0]
+        let surface = row[1]
+        if (surface && lemma) {
+          if (!table[surface]) table[surface] = []
+          table[surface].push(lemma)
+        }
+      }
+      return table
     }
   },
   async loadWords(file) {
@@ -167,7 +214,7 @@ const Dictionary = {
     if (row) return row.roman
     else {
       let url = `https://python.zerotohero.ca/transliterate-persian?text=${encodeURIComponent(text)}`
-      let transliteration = await this.proxy(url, 0)
+      let transliteration = await this.proxy(url, -1)
       return transliteration
     }
   },
@@ -800,7 +847,17 @@ const Dictionary = {
     text = text.toLowerCase()
     let words = []
     words = this.words.filter(word => word.search === text).map(w => Object.assign({ score: 1 }, w))
-
+    if (this.lemmatizationLangs[this.l2]) {
+      let lemmas = this.lemmatization[text]
+      let lemmaWords = []
+      if (lemmas) {
+        for (let lemma of lemmas) {
+          lemmaWords = lemmaWords.concat(this.lookupMultiple(lemma))
+        }
+        lemmaWords = lemmaWords.map(w => Object.assign({ morphology: 'Inflected form' }, w))
+        words = this.uniqueByValue(lemmaWords.concat(words), 'id')
+      }
+    }
     if (!quick) {
       if (['fra'].includes(this.l2) && !quick) {
         let stems = this.findStems(text)

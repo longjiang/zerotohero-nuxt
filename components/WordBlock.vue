@@ -78,7 +78,7 @@
               {{ match.table !== "declension" ? match.table : "" }}
               of
             </div>
-            <div v-if="word.morphology" style="color: #999" :key="`match-${index}`">
+            <div v-if="word.morphology" style="color: #999" :key="`word-block-word-morphology-${word.id}`">
               {{ word.morphology }} of
             </div>
             <div class="word-pronunciation">
@@ -670,10 +670,6 @@ export default {
                   await this.$getDictionary()
                 ).stylize(match.table);
               }
-            }
-            // Turkish
-            if (word.lemmas && word.lemmas[0]) {
-              word.morphology
             }
           }
         }
