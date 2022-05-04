@@ -682,6 +682,7 @@ const Dictionary = {
     return tokenized
   },
   async tokenizeTurkish(text) {
+    text = text.replace(/-/g, '- ')
     let url = `https://python.zerotohero.ca/lemmatize-turkish?text=${encodeURIComponent(text)}`
     let tokenized = await this.proxy(url, 0)
     let tokens = []
