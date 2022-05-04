@@ -40,8 +40,7 @@ const Dictionary = {
     slv: 'sl',
     // swe: 'sv',
     ukr: 'uk'
-  }
-  ,
+  },
   supplementalLangs: {
     arz: 'ara',
     ceb: 'tgl',
@@ -208,7 +207,8 @@ const Dictionary = {
    * Romanize Persian text
    * @param {String} text
    */
-  async romanize(text) {
+  async romanizePersian(text) {
+    if (this.l2 !== 'fas') return
     text = text.trim()
     let row = this.romanizations.find(r => r.persian === text)
     if (row) return row.roman

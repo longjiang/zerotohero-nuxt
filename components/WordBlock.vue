@@ -423,9 +423,11 @@ export default {
       }
     },
     async getFarsiRomanization(text) {
-      let dictionary = await this.$getDictionary();
-      let roman = await (await dictionary).romanize(text);
-      return roman || tr(text);
+      if (this.$l2.code === 'fa') {
+        let dictionary = await this.$getDictionary();
+        let roman = await (await dictionary).romanizePersian(text);
+        return roman || tr(text);
+      }
     },
     async getTransliteration() {
       if (this.$hasFeature("transliteration")) {
