@@ -62,15 +62,13 @@
     </span>
     <template slot="popover">
       <div @mouseenter="tooltipMouseEnter" @mouseleave="tooltipMouseLeave">
-        <button class="word-block-tool-tip-close" @click="closePopup">
+        <!-- <button class="word-block-tool-tip-close" @click="closePopup">
           <i class="fa fa-times"></i>
-        </button>
-        <div class="tooltip-images" :key="`tooltip-images-${text}`">
+        </button> -->
+        <div class="tooltip-images" :key="`tooltip-images-${text}`" v-if="images && images.length > 0">
           <img v-lazy-load alt class="image-wall-image" v-for="(image, index) in images"
             :key="`web-images-${text}-${index}`" :src="`${Config.imageProxy}?${image.src}`" />
         </div>
-        <EntryExternal v-if="text || token" :term="text ? text : token.candidates[0].head" :sticky="false"
-          class="mt-3" />
         <div v-for="word in words" :key="`word-block-word-${word.id}`" :class="classes">
           <div v-if="word">
             <div v-for="(match, index) in word.matches" style="color: #999" :key="`match-${index}`">
@@ -82,6 +80,8 @@
               {{ word.morphology }} of
             </div>
             <div class="word-pronunciation">
+              <Star :word="word" :text="text" class="mr-1" style="font-size: 1.2rem">
+              </Star>
               <span v-if="$l2.code === 'vi' && word.pronunciation" v-html="
                 '[' +
                 word.pronunciation.replace(
@@ -120,8 +120,6 @@
               <Speak :text="word.kana || word.head" :mp3="word.audio" :wiktionary="word.wiktionary" class="ml-1"
                 ref="speak" />
             </div>
-            <Star :word="word" :text="text" class="mr-1" style="position: relative; bottom: 0.2rem; font-size: 1.2rem">
-            </Star>
             <b :data-level="word.level || 'outside'" style="font-size: 1.5rem" :class="{
               klingon: $l2.code === 'tlh',
             }">
@@ -175,7 +173,7 @@
                     : ""
               }}
               <span class="word-counters" v-if="word.counters">(
-                <Annotate tag="span"  :buttons="false" :popup="false"><span>{{ word.counters
+                <Annotate tag="span" :buttons="false" :popup="false"><span>{{ word.counters
                     .map((counter) => "一" + counter.simplified)
                     .join(word.simplified + "、") + word.simplified
                 }}</span></Annotate>
@@ -204,6 +202,8 @@
             </ol>
           </div>
         </div>
+        <EntryExternal v-if="text || token" :term="text ? text : token.candidates[0].head" :sticky="false"
+          class="mt-2" />
         <div v-if="loading === true">💭 Thinking...</div>
         <div v-if="words && words.length === 0 && loading === false" class="mt-3">
           <span style="color: #999" v-if="$hasFeature('transliteration')">
@@ -624,7 +624,7 @@ export default {
             this.lookup();
           }
         }
-        this.loadImages();
+        if (this.words && this.words.find(w => w.pos && ['proper noun', 'noun', 'Noun'].includes(w.pos))) this.loadImages();
         this.open = true;
         await Helper.timeout(300);
         if (this.open) {
@@ -779,7 +779,9 @@ export default {
     }
   }
 }
+
 .tooltip-inner {
+
   .word-block-pinyin,
   .word-block-simplified,
   .word-block-traditional {
@@ -865,6 +867,7 @@ export default {
 
 .word-translation {
   padding-left: 1rem;
+  margin-bottom: 0;
 }
 
 .word-translation-item {
@@ -881,8 +884,6 @@ export default {
   $height: 20rem;
   $width: 20rem;
   border: none;
-  height: $height;
-  width: $width;
   max-height: $height;
   max-width: $width;
   border-radius: 1rem;
@@ -995,8 +996,6 @@ export default {
     color: black;
     padding: 1rem;
     box-shadow: 0 5px 20px rgba(black, 0.2);
-    width: $width;
-    height: $height;
     max-width: $width;
     max-height: $height;
 
