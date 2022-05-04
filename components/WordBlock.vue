@@ -174,6 +174,13 @@
                     ? word.heads[0][1]
                     : ""
               }}
+              <span class="word-counters" v-if="word.counters">(
+                <Annotate tag="span"  :buttons="false" :popup="false"><span>{{ word.counters
+                    .map((counter) => "一" + counter.simplified)
+                    .join(word.simplified + "、") + word.simplified
+                }}</span></Annotate>
+                )
+              </span>
             </span>
             <span v-if="word.supplementalLang" class="
                 pl-1
@@ -195,14 +202,6 @@
                 <span>{{ def }}</span>
               </li>
             </ol>
-            <span class="word-counters" v-if="word.counters">
-              <em>:</em>
-              {{
-                  word.counters
-                    .map((counter) => "一" + counter.simplified)
-                    .join(word.simplified + "、") + word.simplified
-              }}。
-            </span>
           </div>
         </div>
         <div v-if="loading === true">💭 Thinking...</div>
@@ -779,6 +778,14 @@ export default {
       display: none;
     }
   }
+}
+.tooltip-inner {
+  .word-block-pinyin,
+  .word-block-simplified,
+  .word-block-traditional {
+    display: block!important;
+  }
+  
 }
 
 /* Shown on demand */

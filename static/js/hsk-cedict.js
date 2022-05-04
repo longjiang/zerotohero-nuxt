@@ -353,6 +353,12 @@ const Dictionary = {
     if (row.definitions.includes('surname ') || row.definitions.startsWith('variant') || row.definitions.startsWith('old variant') || row.traditional.startsWith('妳')) {
       row.weight = -1
     }
+    let definitions = row.definitions.split('/')
+    let pos
+    if (definitions[0]) {
+      if (definitions[0].startsWith('to ')) pos = 'verb'
+      if (definitions[0].startsWith('surname ') || /^[A-Z].*/.test(definitions[0])) pos = 'proper noun'
+    }
     let augmented = Object.assign(row, {
       id: `${row.traditional},${row.pinyin.replace(/ /g, '_')},${row.index}`,
       bare: row.simplified,
@@ -367,9 +373,10 @@ const Dictionary = {
         phonetics: row.pinyin
       },
       pronunciation: row.pinyin,
-      definitions: row.definitions.split('/'),
+      definitions,
       search: this.removeTones(row.pinyin.replace(/ /g, '')),
-      level: row.hsk
+      level: row.hsk,
+      pos
     })
     for (let definition of augmented.definitions) {
       definition = definition.replace(/\[.*\] /g, '')
@@ -386,6 +393,7 @@ const Dictionary = {
           cs.push(c)
         }
         augmented.counters = cs
+        if (!augmented.pos) augmented.pos = 'noun'
       }
     }
     augmented.definitions = augmented.definitions.filter(
