@@ -783,9 +783,8 @@ export default {
   .word-block-pinyin,
   .word-block-simplified,
   .word-block-traditional {
-    display: block!important;
+    display: block !important;
   }
-  
 }
 
 /* Shown on demand */
