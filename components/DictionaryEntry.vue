@@ -273,11 +273,9 @@ export default {
           terms = terms.map((t) => t.replace(/'/gi, ""));
         }
         terms = [this.entry.head].concat(terms);
-        let a = []
         terms = Helper.unique(terms)
         let optimalLength = this.entry.head.length - 1
         terms = terms.sort((a, b) => Math.abs(a.length - optimalLength) - Math.abs(b.length - optimalLength)).slice(0, 3);
-        console.log(terms)
         terms = Helper.mutuallyExclusive(terms);
       }
       return terms;

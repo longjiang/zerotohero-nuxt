@@ -497,6 +497,57 @@ export default {
           ],
         },
         {
+          icon: "fas fa-book-open",
+          title: "Reading",
+          show:
+            this.hasFeature("dictionary") || this.hasFeature("transliteration"),
+          children: [
+            {
+              name: "reader",
+              title: "Text Reader",
+              icon: "fas fa-file-alt",
+              show: true,
+              shortcut: (e) => e.code === "KeyR" && e.metaKey && e.shiftKey,
+            },
+            {
+              name: "studysheet",
+              title: "Study Sheet",
+              icon: "fas fa-print",
+              show: ["ru", "en", "zh"].includes(this.$l2.code),
+            },
+            {
+              name: "library",
+              title: "Guided Readers",
+              icon: "fas fa-book-reader",
+              show: true,
+            },
+            {
+              name: "book-list",
+              show: false,
+            },
+            {
+              name: "book-index",
+              show: false,
+            },
+            {
+              name: "book-chapter",
+              show: false,
+            },
+            {
+              name: "pinyin-list",
+              title: "Pinyin List",
+              icon: "fa fa-list",
+              show: this.l2.code === "zh",
+            },
+            {
+              name: "pinyin-squared",
+              title: "Pinyin Squared",
+              icon: "fa fa-superscript",
+              show: this.l2.code === "zh",
+            },
+          ],
+        },
+        {
           icon: "fas fa-pencil-alt",
           title: "Study Aid",
           show: true,
@@ -592,57 +643,6 @@ export default {
               title: "Tutoring Kit",
               icon: "fas fa-folder",
               show: true,
-            },
-          ],
-        },
-        {
-          icon: "fas fa-book-open",
-          title: "Reading",
-          show:
-            this.hasFeature("dictionary") || this.hasFeature("transliteration"),
-          children: [
-            {
-              name: "reader",
-              title: "Text Reader",
-              icon: "fas fa-file-alt",
-              show: true,
-              shortcut: (e) => e.code === "KeyR" && e.metaKey && e.shiftKey,
-            },
-            {
-              name: "studysheet",
-              title: "Study Sheet",
-              icon: "fas fa-print",
-              show: ["ru", "en", "zh"].includes(this.$l2.code),
-            },
-            {
-              name: "library",
-              title: "Guided Readers",
-              icon: "fas fa-book-reader",
-              show: true,
-            },
-            {
-              name: "book-list",
-              show: false,
-            },
-            {
-              name: "book-index",
-              show: false,
-            },
-            {
-              name: "book-chapter",
-              show: false,
-            },
-            {
-              name: "pinyin-list",
-              title: "Pinyin List",
-              icon: "fa fa-list",
-              show: this.l2.code === "zh",
-            },
-            {
-              name: "pinyin-squared",
-              title: "Pinyin Squared",
-              icon: "fa fa-superscript",
-              show: this.l2.code === "zh",
             },
           ],
         },
