@@ -1,238 +1,121 @@
 <template>
   <div class="dictionary-entry">
     <div class="text-center">
-      <EntryHeader
-        v-if="showHeader"
-        class="p-4"
-        :entry="entry"
-        :key="`header-${entry.id}`"
-        ref="entryHeader"
-      ></EntryHeader>
-      <DefinitionsList
-        :key="`def-list-${entry.id}`"
-        v-if="entry.definitions && showDefinitions"
-        class="mt-3"
-        :definitions="entry.definitions"
-      ></DefinitionsList>
-      <EntryExample
-        v-if="showExample"
-        :entry="entry"
-        class=""
-        :key="`${entry.id}-example`"
-      ></EntryExample>
+      <EntryHeader v-if="showHeader" class="p-4" :entry="entry" :key="`header-${entry.id}`" ref="entryHeader">
+      </EntryHeader>
+      <DefinitionsList :key="`def-list-${entry.id}`" v-if="entry.definitions && showDefinitions" class="mt-3"
+        :definitions="entry.definitions"></DefinitionsList>
+      <EntryExample v-if="showExample" :entry="entry" class="" :key="`${entry.id}-example`"></EntryExample>
     </div>
     <div class="section-nav-wrapper">
       <div class="section-nav">
-        <div
-          v-for="(section, index) in sections.filter((s) => s.visible)"
-          :key="`section-nav-item-${index}`"
-          :class="{
-            'section-nav-item': true,
-            'section-nav-item-current': currentSection === index,
-            'd-none': !section.visible,
-          }"
-          @click="goToSection(index)"
-        >
+        <div v-for="(section, index) in sections.filter((s) => s.visible)" :key="`section-nav-item-${index}`" :class="{
+          'section-nav-item': true,
+          'section-nav-item-current': currentSection === index,
+          'd-none': !section.visible,
+        }" @click="goToSection(index)">
           {{ section.title }}
         </div>
       </div>
     </div>
     <div class="dictionary-entry-sections">
-      <div
-        class="dictionary-entry-section"
-        v-if="sections[currentSection].title === 'TV Shows'"
-      >
-        <div
-          :class="{ 'widget widget-dark': true }"
-          id="search-subs"
-          v-if="entry && showSearchSubs && searchTerms"
-        >
+      <div class="dictionary-entry-section" v-if="sections[currentSection].title === 'TV Shows'">
+        <div :class="{ 'widget widget-dark': true }" id="search-subs" v-if="entry && showSearchSubs && searchTerms">
           <div class="widget-title">
             “{{ searchTerms.join(", ") }}” in
             <span v-if="tvShow">the TV Show “{{ tvShow.title }}”</span>
             <LazyShowFilter v-else @showFilter="reloadSearchSubs" />
           </div>
           <div class="widget-body">
-            <LazySearchSubsComp
-              v-if="searchTerms && renderSearchSubs"
-              ref="searchSubs"
-              skin="dark"
-              :level="
-                entry.newHSK && entry.newHSK === '7-9' ? '7-9' : entry.hsk
-              "
-              :key="`subs-search-${entry.id}`"
-              :terms="searchTerms"
-              :tvShow="tvShow"
-              :exact="exact"
-            />
+            <LazySearchSubsComp v-if="searchTerms && renderSearchSubs" ref="searchSubs" skin="dark" :level="
+              entry.newHSK && entry.newHSK === '7-9' ? '7-9' : entry.hsk
+            " :key="`subs-search-${entry.id}`" :terms="searchTerms" :tvShow="tvShow" :exact="exact" />
           </div>
         </div>
-        <EntryExternal
-          v-if="showExternal"
-          :term="entry.head"
-          :traditional="entry.traditional"
-          :level="entry.level"
-          class="mt-4 mb-4 text-center"
-        />
+        <EntryExternal v-if="showExternal" :term="entry.head" :traditional="entry.traditional" :level="entry.level"
+          class="mt-4 mb-4 text-center" />
         <EntryYouTube :text="entry.head" v-if="$adminMode" class="" />
       </div>
 
-      <div
-        class="dictionary-entry-section"
-        v-if="sections[currentSection].title === 'Images' && showImages"
-      >
+      <div class="dictionary-entry-section" v-if="sections[currentSection].title === 'Images' && showImages">
         <div class="web-images widget">
           <div class="widget-title">
             {{ $t("Images of “{text}” on the Web", { text: entry.head }) }}
           </div>
           <div class="widget-body jumbotron-fluid p-4">
-            <WebImages
-              :text="entry.head"
-              :entry="entry"
-              limit="10"
-              ref="images"
-              :preloaded="images"
-              @loaded="webImagesLoaded"
-            />
+            <WebImages :text="entry.head" :entry="entry" limit="10" ref="images" :preloaded="images"
+              @loaded="webImagesLoaded" />
             <p class="">
               See more images of of “{{ entry.head }}” on
-              <a
-                :href="`https://www.google.com/search?q=${entry.head.replace(
-                  / /g,
-                  '+'
-                )}&tbm=isch&sout=1#spf=1567955197854`"
-              >
-                <img
-                  src="/img/logo-google-images.png"
-                  alt="Google Images"
-                  class="logo-small ml-2"
-                />
+              <a :href="`https://www.google.com/search?q=${entry.head.replace(
+                / /g,
+                '+'
+              )}&tbm=isch&sout=1#spf=1567955197854`">
+                <img src="/img/logo-google-images.png" alt="Google Images" class="logo-small ml-2" />
               </a>
             </p>
           </div>
         </div>
       </div>
 
-      <div
-        class="dictionary-entry-section"
-        v-if="sections[currentSection].title === 'Collocations'"
-      >
+      <div class="dictionary-entry-section" v-if="sections[currentSection].title === 'Collocations'">
         <EntryForms v-if="hasForms" class="" :word="entry" />
-        <Collocations
-          :word="entry"
-          @collocationsReady="collocationsReady = true"
-          :level="entry.newHSK && entry.newHSK === '7-9' ? '7-9' : entry.level"
-        />
+        <Collocations :word="entry" @collocationsReady="collocationsReady = true"
+          :level="entry.newHSK && entry.newHSK === '7-9' ? '7-9' : entry.level" />
       </div>
-      <div
-        class="dictionary-entry-section"
-        v-if="sections[currentSection].title === 'Examples'"
-      >
-        <Mistakes
-          :class="{ '': true, hidden: !mistakesReady }"
-          @mistakesReady="mistakesReady = true"
-          v-if="$l2.code === 'zh'"
-          :text="entry.simplified"
-          :key="`mistakes-${entry.id}`"
-        ></Mistakes>
-        <Concordance
-          @concordanceReady="concordanceReady = true"
-          :word="entry"
-          :level="entry.level"
-        />
+      <div class="dictionary-entry-section" v-if="sections[currentSection].title === 'Examples'">
+        <Mistakes :class="{ '': true, hidden: !mistakesReady }" @mistakesReady="mistakesReady = true"
+          v-if="$l2.code === 'zh'" :text="entry.simplified" :key="`mistakes-${entry.id}`"></Mistakes>
+        <Concordance @concordanceReady="concordanceReady = true" :word="entry" :level="entry.level" />
       </div>
-      <div
-        class="dictionary-entry-section"
-        v-if="
-          (['ja', 'ko'].includes($l2.code) || $l2.han) &&
-          sections[currentSection].title === 'Characters'
-        "
-      >
+      <div class="dictionary-entry-section" v-if="
+        (['ja', 'ko'].includes($l2.code) || $l2.han) &&
+        sections[currentSection].title === 'Characters'
+      ">
         <div v-if="$l2.code !== 'zh'">
-          <EntryCharacters
-            v-if="entry.cjk && entry.cjk.canonical"
-            :key="`${entry.id}-characters`"
-            class=""
-            :text="entry.cjk.canonical"
-            :pinyin="entry.cjk.phonetics ? entry.cjk.phonetics : undefined"
-          ></EntryCharacters>
+          <EntryCharacters v-if="entry.cjk && entry.cjk.canonical" :key="`${entry.id}-characters`" class=""
+            :text="entry.cjk.canonical" :pinyin="entry.cjk.phonetics ? entry.cjk.phonetics : undefined">
+          </EntryCharacters>
         </div>
         <div v-else>
-          <EntryCharacters
-            class="simplified"
-            :text="entry.simplified"
-            :pinyin="entry.pinyin"
-            :key="`${entry.id}-characters-simplified`"
-          ></EntryCharacters>
-          <EntryCharacters
-            class="traditional"
-            :text="entry.traditional"
-            :pinyin="entry.pinyin"
-            :key="`${entry.id}-characters-traditional`"
-          ></EntryCharacters>
+          <EntryCharacters class="simplified" :text="entry.simplified" :pinyin="entry.pinyin"
+            :key="`${entry.id}-characters-simplified`"></EntryCharacters>
+          <EntryCharacters class="traditional" :text="entry.traditional" :pinyin="entry.pinyin"
+            :key="`${entry.id}-characters-traditional`"></EntryCharacters>
         </div>
       </div>
-      <div
-        class="dictionary-entry-section"
-        v-if="sections[currentSection].title === 'Related'"
-      >
+      <div class="dictionary-entry-section" v-if="sections[currentSection].title === 'Related'">
         <!-- <EntryDifficulty :entry="entry" style="flex: 1" class="m-3" /> -->
-        <EntryDisambiguation
-          v-if="['zh', 'yue'].includes($l2.code)"
-          :entry="entry"
-        ></EntryDisambiguation>
-        <EntryRelated
-          @relatedReady="relatedReady = true"
-          :entry="entry"
-          :key="`related-${entry.id}`"
-        />
+        <EntryDisambiguation v-if="['zh', 'yue'].includes($l2.code)" :entry="entry"></EntryDisambiguation>
+        <EntryRelated @relatedReady="relatedReady = true" :entry="entry" :key="`related-${entry.id}`" />
         <div class="row">
           <div class="col-sm-6" v-if="$l2.code !== 'zh'">
-            <Chinese
-              v-if="
-                entry.cjk &&
-                entry.cjk.canonical &&
-                entry.cjk.canonical !== 'NULL'
-              "
-              class=""
-              :text="entry.cjk.canonical"
-              :key="`${entry.id}-chinese`"
-            />
+            <Chinese v-if="
+              entry.cjk &&
+              entry.cjk.canonical &&
+              entry.cjk.canonical !== 'NULL'
+            " class="" :text="entry.cjk.canonical" :key="`${entry.id}-chinese`" />
           </div>
           <div class="col-sm-6" v-if="$l2.code !== 'ja'">
-            <Japanese
-              v-if="
-                entry.cjk &&
-                entry.cjk.canonical &&
-                entry.cjk.canonical !== 'NULL'
-              "
-              class=""
-              :text="entry.cjk.canonical"
-              :key="`${entry.id}-japanese`"
-            />
+            <Japanese v-if="
+              entry.cjk &&
+              entry.cjk.canonical &&
+              entry.cjk.canonical !== 'NULL'
+            " class="" :text="entry.cjk.canonical" :key="`${entry.id}-japanese`" />
           </div>
           <div class="col-sm-6" v-if="$l2.code !== 'ko'">
-            <Korean
-              v-if="
-                entry.cjk &&
-                entry.cjk.canonical &&
-                entry.cjk.canonical !== 'NULL'
-              "
-              class=""
-              :text="entry.cjk.canonical"
-              :key="`${entry.id}-korean`"
-            />
+            <Korean v-if="
+              entry.cjk &&
+              entry.cjk.canonical &&
+              entry.cjk.canonical !== 'NULL'
+            " class="" :text="entry.cjk.canonical" :key="`${entry.id}-korean`" />
           </div>
         </div>
       </div>
     </div>
     <!-- <Sale class="mb-5" style="border-radius: 1rem !important" v-if="$l2.code === 'zh'" /> -->
-    <EntryCourseAd
-      v-if="$l2.code === 'zh'"
-      :entry="entry"
-      class="focus-exclude"
-      :key="`${entry.id}-course-ad`"
-    ></EntryCourseAd>
+    <EntryCourseAd v-if="$l2.code === 'zh'" :entry="entry" class="focus-exclude" :key="`${entry.id}-course-ad`">
+    </EntryCourseAd>
   </div>
 </template>
 <script>
@@ -389,9 +272,13 @@ export default {
         if (this.$dictionaryName === "openrussian") {
           terms = terms.map((t) => t.replace(/'/gi, ""));
         }
-        terms = terms.sort((a, b) => a.length - b.length);
         terms = [this.entry.head].concat(terms);
-        terms = Helper.unique(terms).slice(0, 3);
+        let a = []
+        terms = Helper.unique(terms)
+        let optimalLength = this.entry.head.length - 1
+        terms = terms.sort((a, b) => Math.abs(a.length - optimalLength) - Math.abs(b.length - optimalLength)).slice(0, 3);
+        console.log(terms)
+        terms = Helper.mutuallyExclusive(terms);
       }
       return terms;
     },
@@ -417,16 +304,19 @@ export default {
 .widget {
   margin-bottom: 2rem;
 }
+
 .dictionary-entry {
   .dictionary-entry-section {
     overflow: visible;
     padding: 1rem 0;
   }
+
   .section-nav-wrapper {
     position: sticky;
     top: 0;
     z-index: 1;
     background: white;
+
     .section-nav {
       white-space: nowrap;
       padding: 0.5rem 0 0.75rem 0;
@@ -434,12 +324,14 @@ export default {
       overflow: scroll;
       overflow-y: hidden;
       max-width: 100%;
+
       .section-nav-item {
         display: inline-block;
         padding: 0.5rem 0;
         margin: 0 0.7rem;
         cursor: pointer;
         font-weight: bold;
+
         &:hover,
         &.section-nav-item-current {
           background-image: linear-gradient(#fd4f1c44, #fd4f1c44);
