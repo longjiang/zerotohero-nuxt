@@ -155,7 +155,7 @@ export default {
         );
       }
       words = words.filter(
-        (word) => word.head.toLowerCase() !== text.toLowerCase()
+        (word) => word && word.head && word.head.toLowerCase() !== text.toLowerCase()
       );
       words = Helper.uniqueByValue(words, "head");
       return words;
@@ -236,12 +236,13 @@ export default {
     padding: 0;
     font-size: 0.8em;
   }
-  ::v-deep .transcript-line-l2 {
+  ::v-deep {
     .highlight {
       display: inline-block;
       min-width: 5rem;
       text-align: center;
       border-bottom: 1px solid white;
+      color: #00000000 !important;
     }
   }
   .transcript-line-l1 {
@@ -273,7 +274,7 @@ export default {
     border-radius: 0.5rem;
     background: #dea4171f;
     &:not(.show-answer) {
-      ::v-deep .transcript-line-l2 {
+      ::v-deep {
         .highlight {
           background: rgba(0, 0, 0, 0);
           margin: 0 0.2rem;

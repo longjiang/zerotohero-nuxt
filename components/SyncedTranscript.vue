@@ -203,7 +203,7 @@ export default {
       currentTime: 0,
       currentLine: undefined,
       currentLineIndex: undefined,
-      reviewLineOffset: 1, // Show review this number of lines after the first appearance of the word
+      reviewLineOffset: 10, // Show review this number of lines after the first appearance of the word
       nextLine: undefined,
       review: {},
       paused: true,
@@ -596,7 +596,7 @@ export default {
               word
             );
             let reviewIndex = Math.min(
-              Math.ceil((Number(lineIndex) + lineOffset) / 4) * 4,
+              Math.ceil((Number(lineIndex) + lineOffset) / 10) * 10,
               this.lines.length - 1
             );
             review[reviewIndex] = review[reviewIndex] || [];
