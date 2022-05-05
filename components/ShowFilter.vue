@@ -341,7 +341,6 @@ export default {
             tvShowIDs = tvShowIDs.filter((id) => id !== this.musicShow.id);
           }
           if (!this.musicChecked) {
-            console.log(this.moviesShow.id)
             tvShowIDs = tvShowIDs.filter((id) => id !== this.moviesShow.id);
           }
           return tvShowIDs;
