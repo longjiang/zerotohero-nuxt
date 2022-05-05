@@ -574,7 +574,15 @@ export default {
   max-width: calc((100vh - 10rem) * 16 / 9);
   margin: 0 auto;
   position: sticky;
+  top: 46.8px;
 }
+
+.zerotohero-wide {
+  .youtube-video-wrapper {
+    top: 0;
+  }
+}
+
 .youtube-video-column {
   position: sticky;
   top: 0;
