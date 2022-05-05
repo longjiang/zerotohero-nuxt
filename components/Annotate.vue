@@ -435,7 +435,7 @@ export default {
 }
 
 .word-block.saved {
-  color: #c59f94;
+  color: #72a805;
 }
 
 .l2-zh {

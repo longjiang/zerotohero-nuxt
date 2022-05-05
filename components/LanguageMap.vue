@@ -480,7 +480,7 @@ export default {
 
       &.language-marker-size-family-drav1251 {
         // Dravidian
-        background-color: #c59f94;
+        background-color: #72a805;
       }
 
       &.language-marker-size-family-aust1305 {
@@ -530,7 +530,7 @@ export default {
   .similar-phrase {
     .similar-phrase-l2 {
       font-weight: bold;
-      color: #c59f94;
+      color: #72a805;
       font-size: 1.5em;
       font-style: italic;
     }

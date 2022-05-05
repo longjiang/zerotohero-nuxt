@@ -406,7 +406,7 @@ export default {
 <style lang="scss" scoped>
 .similar-phrase-l2 {
   font-weight: bold;
-  color: #c59f94;
+  color: #72a805;
 }
 .similar-phrases-list {
   &.similar-phrases-list-1-col {
