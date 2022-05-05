@@ -82,7 +82,7 @@
       </b-button>
     </div>
     <LazyYouTubeWithTranscript v-if="currentHit" initialLayout="vertical" :video="currentHit.video"
-      :ref="`youtube-${hitIndex}`" :highlight="terms" :hsk="level" :speed="speed" :startLineIndex="startLineIndex"
+      :ref="`youtube-${hitIndex}`" :speed="speed" :startLineIndex="startLineIndex"
       :showFullscreenToggle="false" :autoload="true" :autoplay="navigated" :showLineList="false" />
     <b-modal ref="playlist-modal" size="lg" centered hide-footer title="Video Caption Search Results"
       body-class="playlist-modal-wrapper" @show="onPlaylistModalShown">

@@ -1,27 +1,15 @@
 <template>
   <div>
-    <button
-      v-if="iconMode && !fullscreen"
-      @click="fullscreen = !fullscreen"
-      class="reader-icon"
-    >
+    <button v-if="iconMode && !fullscreen" @click="fullscreen = !fullscreen" class="reader-icon">
       <i class="fas fa-pencil-alt" />
     </button>
     <div :class="{ reader: true, fullscreen }" v-else>
       <div class="text-center">
         <Loader class="mb-5" />
       </div>
-      <div
-        v-if="text.length > 0 && !loading"
-        id="reader-annotated"
-        :class="{ focus: true }"
-        :style="`font-size: ${fontSize}rem; margin-bottom: 2rem;`"
-      >
-        <div
-          v-if="text.length > 0 && !fullscreen"
-          style="font-size: 1rem; line-height: 1"
-          class="mb-3"
-        >
+      <div v-if="text.length > 0 && !loading" id="reader-annotated" :class="{ focus: true }"
+        :style="`font-size: ${fontSize}rem; margin-bottom: 2rem;`">
+        <div v-if="text.length > 0 && !fullscreen" style="font-size: 1rem; line-height: 1" class="mb-3">
           <strong>
             <i class="fas fa-check text-success mr-1" />
             Converted
@@ -36,52 +24,28 @@
             </small>
           </div>
         </div>
-        <hr
-          class="hide-for-present mt-0 mb-4"
-          v-if="text.length > 0 && !fullscreen"
-        />
-        <template
-          v-for="(line, index) of marked
-            .trim()
-            .replace(/<(div|p|li|h1|h2|h3|h4|h5|h6)/g, '\n<$1')
-            .split('\n')"
-        >
-          <Annotate
-            v-if="line.trim().length > 0"
-            class="mb-3"
-            tag="div"
-            :key="`reader-${readerKey}-${index}`"
-            :buttons="true"
-          >
+        <hr class="hide-for-present mt-0 mb-4" v-if="text.length > 0 && !fullscreen" />
+        <template v-for="(line, index) of marked
+        .trim()
+        .replace(/<(div|p|li|h1|h2|h3|h4|h5|h6)/g, '\n<$1')
+        .split('\n')">
+          <Annotate v-if="line.trim().length > 0" class="mb-3" tag="div" :key="`reader-${readerKey}-${index}`"
+            :buttons="true">
             <span v-html="line.trim()" />
           </Annotate>
         </template>
       </div>
       <div class="reader-editor">
         <div>
-          <textarea
-            id="reader-textarea"
-            class="form-control"
-            cols="30"
-            rows="5"
-            :placeholder="$t('Paste {l2} text here', { l2: $l2.name })"
-            v-model="text"
-            :dir="$l2.direction === 'rtl' ? 'rtl' : 'ltr'"
-          ></textarea>
+          <textarea id="reader-textarea" class="form-control" cols="30" rows="5"
+            :placeholder="$t('Paste {l2} text here', { l2: $l2.name })" v-model="text"
+            :dir="$l2.direction === 'rtl' ? 'rtl' : 'ltr'"></textarea>
         </div>
         <div class="mt-1">
-          <button
-            v-if="!fullscreen"
-            @click="toggleFullscreen"
-            class="reader-button"
-          >
+          <button v-if="!fullscreen" @click="toggleFullscreen" class="reader-button">
             <i class="fa fa-expand" />
           </button>
-          <button
-            v-if="fullscreen"
-            @click="toggleFullscreen"
-            class="reader-button"
-          >
+          <button v-if="fullscreen" @click="toggleFullscreen" class="reader-button">
             <i class="fa fa-times" />
           </button>
           <button @click="bigger" class="reader-button">
@@ -90,28 +54,22 @@
           <button @click="smaller" class="reader-button">
             <small>A</small>
           </button>
-          <button
-            @click="toggleTranslation()"
-            :class="{
-              'reader-button': true,
-              'reader-button-active': showTranslate,
-            }"
-          >
+          <button @click="toggleTranslation()" :class="{
+            'reader-button': true,
+            'reader-button-active': showTranslate,
+          }">
             <i class="fa fa-language"></i>
           </button>
         </div>
       </div>
-      <iframe
-        v-if="showTranslate"
-        :src="translationSrc"
-        id="translation-iframe"
-        class="mt-2 mb-2"
-      ></iframe>
+      <iframe v-if="showTranslate" :src="translationSrc" id="translation-iframe" class="mt-2 mb-2"></iframe>
     </div>
   </div>
 </template>
 <script>
 import Marked from "marked";
+import Helper from '@/lib/helper';
+
 export default {
   data() {
     return {
@@ -122,6 +80,7 @@ export default {
       fullscreen: false,
       showTranslate: false,
       loading: true,
+      typing: undefined
     };
   },
   props: {
@@ -152,9 +111,13 @@ export default {
     this.loading = false;
   },
   watch: {
-    text() {
-      this.$emit("readerTextChanged", this.text);
-      this.readerKey++;
+    async text() {
+      let typing = this.text
+      await Helper.timeout(1000)
+      if (typing === this.text) {
+        this.$emit("readerTextChanged", this.text);
+        this.readerKey++;
+      }
     },
   },
   methods: {
@@ -219,6 +182,7 @@ export default {
   opacity: 0.2;
   z-index: 10;
   padding: 0;
+
   &:hover {
     opacity: 1;
   }
@@ -230,9 +194,10 @@ export default {
   }
 }
 
-#reader-annotated >>> del .word-block {
+#reader-annotated>>>del .word-block {
   color: red !important;
 }
+
 #reader-annotated {
   background: white;
   padding: 1rem 1rem 0 1rem;
@@ -241,7 +206,7 @@ export default {
   border: 1px solid #d7d7d8;
 }
 
-#reader-annotated >>> del .word-block .word-block-simplified::after {
+#reader-annotated>>>del .word-block .word-block-simplified::after {
   content: " \2717";
   color: red !important;
 }
@@ -291,6 +256,7 @@ export default {
     position: fixed;
     bottom: 1rem;
     width: calc(100vw - 2rem);
+
     #reader-textarea {
       max-height: 15vh;
     }
