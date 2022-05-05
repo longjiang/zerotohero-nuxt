@@ -65,6 +65,7 @@ const Dictionary = {
     wol: 'fra',
     vec: 'ita'
   },
+  turkishPOS: {},
   lemmatization: undefined,
   conjugations: undefined, // for french only
   romanizations: undefined, // for persian only
@@ -133,8 +134,17 @@ const Dictionary = {
       this.words = words
       if (this.l2 === 'fra') await this.loadFrenchConjugationsAndLemmatizer()
       if (this.l2 === 'fas') await this.loadPersianRomanization()
+      if (this.l2 === 'tur') this.loadTurkishPOS()
       console.log("Wiktionary: loaded.")
       return this
+    }
+  },
+  loadTurkishPOS() {
+    let data = this.loadCSVString(turkishPOSCSV, true)
+    for (let row of data) {
+      for (let symbol of row.Symbol.split(',')) {
+        this.turkishPOS[symbol] = row.POS
+      }
     }
   },
   async loadLemmatizationTable(langCode) {
@@ -300,6 +310,14 @@ const Dictionary = {
       }
     }
     return words
+  },
+  loadCSVString(csv, header = true) {
+    if (typeof Papa !== 'undefined') {
+      let r = Papa.parse(csv, {
+        header: header
+      })
+      return r.data
+    }
   },
   getKoreanHanja(item) {
     if (!item['etymology_text']) return
@@ -689,14 +707,14 @@ const Dictionary = {
     for (let lemmas of tokenized) {
       if (!lemmas[0]) {
         tokens.push(' ')
-      } else if (['Unk', 'Punc'].includes(lemmas[0].pos)) {
+      } else if (['Punc'].includes(lemmas[0].pos)) {
         tokens.push(lemmas[0].word)
         tokens.push(' ')
       } else {
         let candidates = []
         for (let lemma of lemmas) {
           candidates = candidates.concat(this.lookupMultiple(lemma.word))
-          candidates = candidates.concat(this.lookupMultiple(lemma.lemma).map(w => { w.morphology = lemma.morphemes.join(' '); return w }))
+          if (lemma !== 'Unk') candidates = candidates.concat(this.lookupMultiple(lemma.lemma).map(w => { w.morphology = lemma.morphemes.map(m => this.turkishPOS[m] || m).join(', ').toLowerCase(); return w }))
         }
         candidates = this.uniqueByValue(candidates, 'id')
         tokens.push({
@@ -752,9 +770,9 @@ const Dictionary = {
         // longest.matches = longest.matches.concat(this.phrases(word, 1)) // This is very slow
       }
       let result = []
-      /* 
+      /*
       result = [
-        '我', 
+        '我',
         {
           text: '是'
           candidates: [{...}, {...}, {...}
@@ -922,3 +940,73 @@ const Dictionary = {
     return rawString.replace(/[\u0591-\u05C7]/g, "")
   },
 }
+
+let turkishPOSCSV = `POS	Symbol
+Ability/Probability	Abil
+Ablative	Abl
+Accusative 	Acc
+Acquire	Acquire,Acquire-V
+Agentive	Agt
+Agentive	Agt, Agt-N
+Aorist Participle	AorPart
+Causative	Caus
+Conditional	Cond
+Conditional Copula	CondCop
+Continue doing so	Cont
+Continue doing so	Cont2
+Copula	Cop
+Dative	Dat
+Diminutive (Compassion and empathy)	Dim2,Dim2-N
+Diminutive (endearment and affection)	Dim,Dim-N
+Evidential Participle	EvidPart
+Evidential- Narrative Copula	EvidCop
+First Person Plural	A1pl
+First Person Plural Possession	P1pl
+First person singular	A1sg
+First Person Singular Possession	P1sg
+Future	Fut
+Future Participle	FutPart
+Genitive	Gen
+Imparative	Imp
+Infinitive	Inf2
+Infinitive	Inf3
+Infinitive 	Inf
+Instrumental	Inst
+Locative	Loc
+Made For doing stg.	MadeFor,MadeFor-Adj
+Narrative/Evidential	Evid
+Necessity/Obligation	Necess
+NegativeOlumsuzluk	Neg
+Ness	Ness,Ness-N
+No Possession	Pnon
+Nominal	Nom
+Not being able to	NegAbil
+Optative	Opt
+Passive	Pass
+Past	Past
+Past Copula	PastCop
+Past Participle	PastPart
+Plural	Pl
+Present Participle	PresPart
+Present, Aorist 	Aor
+Progressive (Process)	Prog
+Progressive (State)	Prog2
+Reciprocal	Recip
+Reflexive	Reflex
+Rel	Rel
+Related	Related,Related-Adj
+Resemblance	Resemb,Resemb-Adj
+Second Person Plural	A2pl
+Second Person Plural Possession	P2pl
+Second person singular	A2sg
+Second Person Singular Possession	P2sg
+Since	Since,Since-Adv
+Suffix	WorthyOfDoing
+Third Person Plural	A3pl
+Third Person Plural Possession	P3pl
+Third Person Singular	A3sg
+Third Person Singular Possession	P3sg
+To apply something	Apply,Apply-V
+To Become Something	Become,Become-V
+With	With,With-Adj
+Without	Without,Without-Adj`
