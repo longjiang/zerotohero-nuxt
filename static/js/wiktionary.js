@@ -26,7 +26,7 @@ const Dictionary = {
     // spa: 'es',
     est: 'et',
     fas: 'fa',
-    fra: 'fr',
+    // fra: 'fr',
     gle: 'ga',
     gla: 'gd',
     glg: 'gl',
