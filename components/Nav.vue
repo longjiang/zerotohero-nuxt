@@ -8,28 +8,6 @@
     'zth-nav-page': variant === 'page',
     'has-secondary-nav': parent && parent.children,
   }">
-    <div class="site-top-bar" v-if="variant === 'menu-bar'">
-      <div class="text-center">
-        <router-link to="/" class="link-unstyled">
-          zerotohero.ca<sup>🇨🇦</sup>
-        </router-link>
-      </div>
-      <div>
-        <router-link :to="languageMapPath" class="btn top-bar-button btn-unstyled link-unstyled">
-          <i class="fas fa-globe-asia"></i>
-        </router-link>
-        <button :class="[
-          'btn top-bar-button btn-unstyled',
-          { 'd-none': !canShare() },
-        ]" @click="share" style="color: #ccc">
-          <i class="fa fa-share"></i>
-        </button>
-        <button :class="['btn top-bar-button btn-unstyled', { 'd-none': !isPWA }]" @click="reload" style="color: #ccc">
-          <i class="fas fa-sync-alt"></i>
-        </button>
-        <LoginButton class="d-inline-block" :icon="false" />
-      </div>
-    </div>
     <div :class="{
       'nav-menu-bar': variant === 'menu-bar',
       'nav-side-bar': variant === 'side-bar',
@@ -38,14 +16,7 @@
       <template v-if="variant === 'menu-bar' || variant === 'side-bar'">
         <nav :class="{ 'main-nav': true, tabs: variant === 'menu-bar' }">
           <div class="zth-header" v-if="variant === 'menu-bar' || variant === 'side-bar'">
-            <div class="site-top-bar" v-if="variant === 'side-bar'">
-              <router-link to="/" class="link-unstyled">
-                zerotohero.ca<sup>🇨🇦</sup>
-              </router-link>
-              <router-link :to="languageMapPath" class="link-unstyled">
-                <i class="fas fa-globe-asia"></i>
-              </router-link>
-            </div>
+            <SiteTopBar v-if="variant === 'side-bar'" variant="side-bar" />
 
             <router-link v-if="l1.code === 'en' && l2.code === 'zh'" to="/en/zh/">
               <img src="/img/czh-logo-light.png" alt="Chinese Zero to Hero"
@@ -217,19 +188,6 @@ export default {
     };
   },
   computed: {
-    languageMapPath() {
-      if (this.fullHistory) {
-        let historyMatches = this.fullHistory.filter((path) => {
-          if (path) {
-            let r = this.$router.resolve(path);
-            return r && r.route && ["language-map"].includes(r.route.name);
-          }
-        });
-        let path = historyMatches.pop();
-        if (path) return path;
-      }
-      return "/language-map";
-    },
     savedWordsCount() {
       let count = this.$store.getters["savedWords/count"]({ l2: this.l2.code });
       // eslint-disable-next-line vue/no-parsing-error
@@ -845,19 +803,6 @@ export default {
         this.$store.state.phrasebooks.phrasebooks[this.l2.code] &&
         this.$store.state.phrasebooks.phrasebooks[this.l2.code].length > 0;
     },
-    canShare() {
-      return typeof navigator !== "undefined" && navigator.share;
-    },
-    share() {
-      if (navigator.share) {
-        navigator.share({
-          url: location.href,
-        });
-      }
-    },
-    reload() {
-      location.reload();
-    },
     checkShows() {
       let hasTVShows =
         this.$store.state.shows.tvShows &&
@@ -867,7 +812,6 @@ export default {
         this.$store.state.shows.talks &&
         this.$store.state.shows.talks[this.l2.code] &&
         this.$store.state.shows.talks[this.l2.code].length > 0;
-
       this.hasTVShows =
         hasTVShows &&
         this.$store.state.shows.tvShows[this.l2.code].filter(
@@ -1104,30 +1048,6 @@ export default {
   height: 100%;
 }
 
-.site-top-bar {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  width: 100%;
-  z-index: 2;
-  background-color: rgba(29, 29, 29, 0.5);
-  position: absolute;
-  padding: 0.25rem 1rem;
-
-  a {
-    color: #ccc;
-    line-height: 2.3rem;
-
-    &:hover {
-      color: white;
-    }
-  }
-
-  .btn {
-    padding: 0 0.5rem 0 0;
-  }
-}
-
 #zerotohero:not(.zerotohero-wide) {
   .nav-menu-bar {
     background: rgb(1, 4, 22);
@@ -1138,12 +1058,6 @@ export default {
   .main-nav {
     text-align: center;
     padding-top: 52px;
-
-    .zth-header {
-      .site-top-bar {
-        width: 100vw;
-      }
-    }
 
     .main-nav-item {
       border-radius: 0.3rem 0.3rem 0 0;
@@ -1189,12 +1103,6 @@ export default {
       .logo,
       .logo-constructed {
         transform: scale(0.9);
-      }
-
-      .site-top-bar {
-        margin-left: -1rem;
-        padding-left: 1.5rem;
-        margin-top: -2.6rem;
       }
 
       padding-top: 2.6rem;

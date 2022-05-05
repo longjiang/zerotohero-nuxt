@@ -9,6 +9,7 @@
     </template>
     <template v-else>
       <client-only>
+        <SiteTopBar v-if="$route.params.l1 && $route.params.l1 && l1 && l2 && !wide" variant="menu-bar" />
         <Nav
           v-if="$route.params.l1 && $route.params.l1 && l1 && l2"
           :l1="l1"
