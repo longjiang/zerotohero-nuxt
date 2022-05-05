@@ -1057,7 +1057,6 @@ export default {
 .nav-menu-bar {
   .main-nav {
     text-align: center;
-    padding-top: 52px;
 
     .main-nav-item {
       border-radius: 0.3rem 0.3rem 0 0;

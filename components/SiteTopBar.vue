@@ -12,7 +12,7 @@
         </router-link>
         <button :class="[
           'btn top-bar-button btn-unstyled',
-          { 'd-none': !canShare() },
+          { 'd-none': !isPWA || !canShare() },
         ]" @click="share" style="color: #ccc">
           <i class="fa fa-share"></i>
         </button>
@@ -84,15 +84,13 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-
-
 .site-top-bar {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
   z-index: 2;
-  background-color: rgba(29, 29, 29, 0.5);
+  background-color: rgb(29, 29, 29);
   position: absolute;
   padding: 0.25rem 1rem;
 
@@ -108,14 +106,19 @@ export default {
   .btn {
     padding: 0 0.5rem 0 0;
   }
-  .site-top-bar-menu-bar {
-        width: 100vw;
 
+  &.site-top-bar-menu-bar {
+    width: 100vw;
+    position: sticky;
+    top: 0;
+    z-index: 3;
   }
-  .site-top-bar-side-bar {
-        margin-left: -1rem;
-        padding-left: 1.5rem;
-        margin-top: -2.6rem;
+
+  &.site-top-bar-side-bar {
+    margin-left: -1rem;
+    padding-left: 1.5rem;
+    margin-top: -2.6rem;
+    background-color: rgba(29, 29, 29, 0.5);
 
   }
 }
