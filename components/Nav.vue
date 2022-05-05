@@ -63,9 +63,12 @@
           </div>
         </nav>
         <nav class="secondary-nav" v-if="parent && parent.children">
+          <AnnotationSettings v-if="variant === 'side-bar'" variant="toolbar" style="width: calc(100% - 1rem); text-align: center; margin: 0 0.5rem 0.5rem 0.5rem" />
           <template v-for="(child, index) in parent.children.filter(
             (child) => child.show
           )">
+
+
             <NuxtLink :class="{
               'secondary-nav-item': true,
               'd-block': variant === 'side-bar',

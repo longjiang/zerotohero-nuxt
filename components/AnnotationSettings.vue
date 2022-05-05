@@ -3,8 +3,9 @@
     <div v-if="variant = 'toolbar'">
       <span v-if="$hasFeature('transliteration')"  @click="showPinyin = !showPinyin" :class="`annotation-setting-toggle ${showPinyin ? 'annotation-setting-toggle-active' : ''}`">
         <ruby v-if="$l2.han"  style="position: relative; bottom:-0.1rem;">拼<rt>pīn</rt></ruby>
-        <ruby v-else-if="$l2.code === 'ja'">假名<rt>かな</rt></ruby>
-        <span v-else>[IPA]</span>
+        <ruby v-else-if="$l2.code === 'ja'">假<rt>か</rt></ruby>
+        <ruby v-else-if="$l2.scripts && $l2.scripts[0] && $l2.scripts[0].script === 'Arab'">نص<rt>naṣṣ</rt></ruby>
+        <span v-else>[p<sup>h</sup>]</span>
       </span>
       <span v-if="$l2.han" @click="useTraditional = !useTraditional" :class="`annotation-setting-toggle ${useTraditional ? 'annotation-setting-toggle-active' : ''}`"><span v-if="useTraditional">繁</span><span v-if="!useTraditional">简</span></span>
       <span @click="showTranslation = !showTranslation" :class="`annotation-setting-toggle ${showTranslation ? 'annotation-setting-toggle-active' : ''}`"><i class="fas fa-language"></i></span>
@@ -306,6 +307,7 @@ export default {
 
 .annotation-setting-toggle {
   margin: 0 0.2rem;
+  cursor: pointer;
 }
 
 .annotation-setting-toggle-active {
