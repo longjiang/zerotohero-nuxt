@@ -7,6 +7,7 @@
         </router-link>
       </div>
       <div>
+        <AnnotationSettings variant="toolbar" style="position: relative; bottom: -0.1rem;"/>
         <router-link :to="languageMapPath" class="btn top-bar-button btn-unstyled link-unstyled">
           <i class="fas fa-globe-asia"></i>
         </router-link>
@@ -19,7 +20,7 @@
         <button :class="['btn top-bar-button btn-unstyled', { 'd-none': !isPWA }]" @click="reload" style="color: #ccc">
           <i class="fas fa-sync-alt"></i>
         </button>
-        <LoginButton class="d-inline-block" :icon="false" />
+        <LoginButton class="d-inline-block ml-1" :icon="true" :text="false" style="color: #ddd" />
       </div>
     </template>
 
@@ -34,53 +35,52 @@
   </div>
 </template>
 <script>
+import AnnotationSettings from "./AnnotationSettings.vue";
 
 
 export default {
-  props: {
-    variant: {
-      default: 'menu-bar'
-    }
-  },
-  computed: {
-
-    isPWA() {
-      return (
-        (typeof navigator !== "undefined" && navigator.standalone) ||
-        (typeof window !== "undefined" &&
-          window.matchMedia("(display-mode: standalone)").matches)
-      );
+    props: {
+        variant: {
+            default: "menu-bar"
+        }
     },
-    languageMapPath() {
-      if (this.fullHistory) {
-        let historyMatches = this.fullHistory.filter((path) => {
-          if (path) {
-            let r = this.$router.resolve(path);
-            return r && r.route && ["language-map"].includes(r.route.name);
-          }
-        });
-        let path = historyMatches.pop();
-        if (path) return path;
-      }
-      return "/language-map";
+    computed: {
+        isPWA() {
+            return ((typeof navigator !== "undefined" && navigator.standalone) ||
+                (typeof window !== "undefined" &&
+                    window.matchMedia("(display-mode: standalone)").matches));
+        },
+        languageMapPath() {
+            if (this.fullHistory) {
+                let historyMatches = this.fullHistory.filter((path) => {
+                    if (path) {
+                        let r = this.$router.resolve(path);
+                        return r && r.route && ["language-map"].includes(r.route.name);
+                    }
+                });
+                let path = historyMatches.pop();
+                if (path)
+                    return path;
+            }
+            return "/language-map";
+        },
     },
-  },
-  methods: {
-
-    canShare() {
-      return typeof navigator !== "undefined" && navigator.share;
+    methods: {
+        canShare() {
+            return typeof navigator !== "undefined" && navigator.share;
+        },
+        share() {
+            if (navigator.share) {
+                navigator.share({
+                    url: location.href,
+                });
+            }
+        },
+        reload() {
+            location.reload();
+        },
     },
-    share() {
-      if (navigator.share) {
-        navigator.share({
-          url: location.href,
-        });
-      }
-    },
-    reload() {
-      location.reload();
-    },
-  }
+    components: { AnnotationSettings }
 }
 </script>
 <style lang="scss" scoped>
@@ -104,7 +104,7 @@ export default {
   }
 
   .btn {
-    padding: 0 0.5rem 0 0;
+    padding: 0 0 0 0.5rem;
   }
 
   &.site-top-bar-menu-bar {
@@ -119,7 +119,6 @@ export default {
     padding-left: 1.5rem;
     margin-top: -2.6rem;
     background-color: rgba(29, 29, 29, 0.5);
-
   }
 }
 </style>
