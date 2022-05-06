@@ -22,8 +22,7 @@
         <div class="col-sm-12 d-flex" style="overflow: visible">
           <div class="mr-3 d-flex align-items-center">
             <router-link to="/" class="link-unstyled">
-              <i class="fa fa-chevron-left mr-2"></i>
-              Home
+              <img src="/img/czh-icon.png" style="height: 1.5rem; margin-right: 0.25rem" /><b>zerotohero.ca</b>
             </router-link>
           </div>
           <LanguageSwitch

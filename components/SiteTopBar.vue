@@ -3,7 +3,7 @@
     <template v-if="variant === 'menu-bar'">
       <div class="text-center">
         <router-link to="/" class="link-unstyled">
-          zerotohero.ca<sup>🇨🇦</sup>
+          <img v-if="$l2.code !== 'zh'" src="/img/czh-icon.png" style="height: 1.5rem; margin-right: 0.25rem" /><b>zerotohero.ca</b>
         </router-link>
       </div>
       <div>
@@ -26,7 +26,7 @@
 
     <template v-if="variant === 'side-bar'">
       <router-link to="/" class="link-unstyled">
-        zerotohero.ca<sup>🇨🇦</sup>
+        <img v-if="$l2.code !== 'zh'" src="/img/czh-icon.png" style="height: 1.5rem; margin-right: 0.25rem" /><b>zerotohero.ca</b>
       </router-link>
       <router-link :to="languageMapPath" class="link-unstyled">
         <i class="fas fa-globe-asia"></i>
@@ -45,6 +45,14 @@ export default {
     }
   },
   computed: {
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
     isPWA() {
       return ((typeof navigator !== "undefined" && navigator.standalone) ||
         (typeof window !== "undefined" &&

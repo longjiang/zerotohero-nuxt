@@ -17,7 +17,7 @@
           <div class="col-sm-12">
             <div class="z2h-logo" style="line-height: 1.2">
               <span style="font-size: 3rem">
-                <strong>zero</strong>to<strong>hero</strong><small>.ca <small>🇨🇦</small></small>
+                <img src="/img/czh-icon.png" style="height: 7rem; margin-right: 0.25rem; margin-bottom: 0.5rem" data-not-lazy /><br /><b>zerotohero.ca</b>
               </span>
               <p style="font-size: 1.6rem; max-width: 45rem; margin: 2rem auto 0 auto; line-height: 1.5;">
                 Learn <strong><span style="color: #fd4f1c">{{ languagesWithVideos.length }} languages</span></strong> by
