@@ -2,13 +2,13 @@
   <div>
     <Search
       :hrefFunc="hrefFunc"
-      :button="true"
+      :button="button"
       :suggestionsFunc="suggestionsFunc"
       :nav="nav"
       :defaultURL="(text) => `/en/${text}/`"
-      :random="random ? random : false"
+      :random="showRandom && random ? random : false"
       @nav="onNav"
-      placeholder="Search by language name or code..."
+      placeholder="Search languages"
       ref="l1"
       type="generic"
     />
@@ -33,6 +33,12 @@ export default {
     langs: {
       type: Array,
     },
+    showRandom: {
+      default: true,
+    },
+    button: {
+      default: true,
+    }
   },
   data() {
     return {
@@ -76,7 +82,7 @@ export default {
       this.random = this.getRandom();
     },
     getRandom() {
-      if (this.languages) {
+      if (this.showRandom && this.languages) {
         let preferredLanguages = this.preferredLanguages || this.languages;
         if (this.$l2)
           preferredLanguages = preferredLanguages.filter(

@@ -30,6 +30,8 @@
             style="flex: 1; z-index: 999"
             :nav="false"
             @nav="onNav"
+            :button="false"
+            :showRandom="false"
             :langs="filteredLangs"
           />
         </div>
