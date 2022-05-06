@@ -130,7 +130,7 @@
             </template>
             <template v-else>
               <span
-                :class="{ 'entry-word': true, klingon: $l2.code === 'tlh' }"
+                :class="{ 'entry-word': true }"
                 :data-level="entry.level || 'outside'"
               >
                 <span
@@ -139,7 +139,7 @@
                 >
                   {{ { n: "das", m: "der", f: "die" }[entry.gender] }}
                 </span>
-                <span v-html="transform(entry.accented)"></span>
+                <span v-html="transform(entry.accented)" :class="{klingon: $l2.code === 'tlh'}"></span>
               </span>
             </template>
           </router-link>
