@@ -6,6 +6,7 @@ const Dictionary = {
   characters: [],
   newHSK: [],
   _maxWeight: 0,
+  tokenizationCache: {},
   credit() {
     return 'The Chinese dictionary is provided by <a href="https://www.mdbg.net/chinese/dictionary?page=cedict">CC-CEDICT</a>, open-source and distribtued under a <a href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>. We also added HSK information on top.'
   },
@@ -357,7 +358,8 @@ const Dictionary = {
     let pos
     if (definitions[0]) {
       if (definitions[0].startsWith('to ')) pos = 'verb'
-      if (definitions[0].startsWith('surname ') || /^[A-Z].*/.test(definitions[0])) pos = 'proper noun'
+      else if (definitions[0].startsWith('a ') || ('the ')) pos = 'noun'
+      else if (definitions[0].startsWith('surname ') || /^[A-Z].*/.test(definitions[0])) pos = 'proper noun'
     }
     let augmented = Object.assign(row, {
       id: `${row.traditional},${row.pinyin.replace(/ /g, '_')},${row.index}`,
@@ -428,11 +430,14 @@ const Dictionary = {
     }
   },
   tokenize(text) {
-    return this.tokenizeRecursively(
+    if (this.tokenizationCache[text]) return this.tokenizationCache[text]
+    let tokenized = this.tokenizeRecursively(
       text,
       this.subdictFromText(text),
       this.isTraditional(text)
     )
+    this.tokenizationCache[text] = tokenized
+    return tokenized
   },
   variants(word) {
     let variants = []
