@@ -4,80 +4,46 @@
     props: true,
     meta: {
       skin: 'dark'
-    }
+    },
   }
 </router>
 <template>
-  <div
-    :class="{
-      'youtube-view pt-3 pb-5 ': true,
-      'main-dark': layout !== 'vertical',
-      'main-dark-performant': isMobile,
-    }"
-  >
-    <SocialHead
-      :title="`${video ? video.title + ' | ' : ''}Learn ${
-        $l2.name
-      } with a video | zerotohero.ca`"
-      :description="`Study the transcript of this video with a popup dictionary`"
-      :image="`https://img.youtube.com/vi/${this.youtube_id}/hqdefault.jpg`"
-    />
+  <div :class="{
+    'youtube-view pt-3 pb-5 ': true,
+    'main-dark': layout !== 'vertical',
+    'main-dark-performant': isMobile,
+  }">
+    <SocialHead :title="`${video ? video.title + ' | ' : ''}Learn ${$l2.name
+    } with a video | zerotohero.ca`" :description="`Study the transcript of this video with a popup dictionary`"
+      :image="`https://img.youtube.com/vi/${this.youtube_id}/hqdefault.jpg`" />
     <div class="pl-3 pr-3 mb-4">
       <!-- <Sale class="mt-4 mb-4" v-if="$l2.code === 'zh'" /> -->
-      <SimpleSearch
-        placeholder="Search"
-        ref="searchLibrary"
-        :random="
-          randomEpisodeYouTubeId
-            ? `/${$l1.code}/${$l2.code}/youtube/view/${randomEpisodeYouTubeId}`
-            : false
-        "
-        skin="dark"
-        :action="
-          (url) => {
-            this.$router.push({
-              path: `/${$l1.code}/${
-                $l2.code
-              }/youtube/browse/all/all/0/${encodeURIComponent(url)}`,
-            });
-          }
-        "
-      />
+      <SimpleSearch placeholder="Search" ref="searchLibrary" :random="
+        randomEpisodeYouTubeId
+          ? `/${$l1.code}/${$l2.code}/youtube/view/${randomEpisodeYouTubeId}`
+          : false
+      " skin="dark" :action="
+  (url) => {
+    this.$router.push({
+      path: `/${$l1.code}/${$l2.code
+        }/youtube/browse/all/all/0/${encodeURIComponent(url)}`,
+    });
+  }
+" />
     </div>
-    <div
-      :class="{
-        'youtube-view-wrapper': true,
-        fullscreen: layout === 'vertical',
-      }"
-    >
+    <div :class="{
+      'youtube-view-wrapper': true,
+      fullscreen: layout === 'vertical',
+    }">
       <div :class="{ 'loader text-center pt-5 pb-5': true, 'd-none': video }">
         <Loader :sticky="true" message="Preparing video and transcript..." />
       </div>
-      <LazyYouTubeWithTranscript
-        v-if="video"
-        ref="youtube"
-        skin="dark"
-        :video="video"
-        :quiz="$quiz"
-        :key="`transcript-${video.youtube_id}`"
-        :autoload="true"
-        :autoplay="false"
-        :starttime="starttime"
-        :show="show"
-        :showType="showType"
-        :previousEpisode="previousEpisode"
-        :nextEpisode="nextEpisode"
-        :episodes="episodes"
-        :episodeIndex="thisEpisodeIndex"
-        :forcePortrait="false"
-        :startLineIndex="startLineIndex"
-        @paused="updatePaused"
-        @ended="updateEnded"
-        @currentTime="updateCurrentTime"
-        @speechStart="speechStart"
-        @speechEnd="speechEnd"
-        @updateLayout="(l) => (layout = l)"
-      />
+      <LazyYouTubeWithTranscript v-if="video" ref="youtube" skin="dark" :video="video" :quiz="$quiz"
+        :key="`transcript-${video.youtube_id}`" :autoload="true" :autoplay="false" :starttime="starttime" :show="show"
+        :showType="showType" :previousEpisode="previousEpisode" :nextEpisode="nextEpisode" :episodes="episodes"
+        :episodeIndex="thisEpisodeIndex" :forcePortrait="false" :startLineIndex="startLineIndex" @paused="updatePaused"
+        @ended="updateEnded" @currentTime="updateCurrentTime" @speechStart="speechStart" @speechEnd="speechEnd"
+        @updateLayout="(l) => (layout = l)" />
     </div>
   </div>
 </template>
@@ -140,9 +106,8 @@ export default {
     previousEpisode() {
       let thisEpisodeIndex = this.thisEpisodeIndex;
       if (thisEpisodeIndex > 0 && this.episodes[thisEpisodeIndex - 1])
-        return `/${this.$l1.code}/${this.$l2.code}/youtube/view/${
-          this.episodes[thisEpisodeIndex - 1].youtube_id
-        }/`;
+        return `/${this.$l1.code}/${this.$l2.code}/youtube/view/${this.episodes[thisEpisodeIndex - 1].youtube_id
+          }/`;
     },
     thisEpisodeIndex() {
       return this.episodes.findIndex((episode) => episode.id === this.video.id);
@@ -150,9 +115,8 @@ export default {
     nextEpisode() {
       let thisEpisodeIndex = this.thisEpisodeIndex;
       if (this.episodes[thisEpisodeIndex + 1])
-        return `/${this.$l1.code}/${this.$l2.code}/youtube/view/${
-          this.episodes[thisEpisodeIndex + 1].youtube_id
-        }/`;
+        return `/${this.$l1.code}/${this.$l2.code}/youtube/view/${this.episodes[thisEpisodeIndex + 1].youtube_id
+          }/`;
     },
     currentTimeInSeconds() {
       let t = Math.floor(this.currentTime / 10) * 10;
@@ -196,18 +160,19 @@ export default {
           }
         });
         this.saveHistory();
+        let el = this.$refs['searchLibrary']
+        if (el) {
+          el.$el.scrollIntoView({ behavior: 'smooth' })
+        }
       }
     },
     async show() {
       if (this.show) {
         let sort = this.show.title !== "News" ? "title" : "-date";
         let response = await axios.get(
-          `${Config.youtubeVideosTableName(this.$l2.id)}?filter[l2][eq]=${
-            this.$l2.id
-          }&filter[${this.showType}][eq]=${
-            this.show.id
-          }&sort=${sort}&fields=channel_id,id,lesson,level,title,date,topic,youtube_id,tv_show.*,talk.*&timestamp=${
-            this.$adminMode ? Date.now() : 0
+          `${Config.youtubeVideosTableName(this.$l2.id)}?filter[l2][eq]=${this.$l2.id
+          }&filter[${this.showType}][eq]=${this.show.id
+          }&sort=${sort}&fields=channel_id,id,lesson,level,title,date,topic,youtube_id,tv_show.*,talk.*&timestamp=${this.$adminMode ? Date.now() : 0
           }&limit=500`
         );
         if (response.data && response.data.data) {
@@ -225,8 +190,8 @@ export default {
               videos.sort((y, x) =>
                 x.date
                   ? x.date.localeCompare(y.date, this.$l2.locales[0], {
-                      numeric: true,
-                    })
+                    numeric: true,
+                  })
                   : -1
               ) || [];
           }
@@ -302,10 +267,8 @@ export default {
     },
     async getSaved() {
       let response = await axios.get(
-        `${Config.youtubeVideosTableName(this.$l2.id)}?filter[youtube_id][eq]=${
-          this.youtube_id
-        }&filter[l2][eq]=${this.$l2.id}&fields=*,tv_show.*,talk.*&timestamp=${
-          this.$adminMode ? Date.now() : 0
+        `${Config.youtubeVideosTableName(this.$l2.id)}?filter[youtube_id][eq]=${this.youtube_id
+        }&filter[l2][eq]=${this.$l2.id}&fields=*,tv_show.*,talk.*&timestamp=${this.$adminMode ? Date.now() : 0
         }`
       );
       response = response.data;
@@ -385,7 +348,7 @@ export default {
         ) {
           this.$router.push(
             this.nextEpisode ||
-              `/${this.$l1.code}/${this.$l2.code}/youtube/view/${this.randomEpisodeYouTubeId}`
+            `/${this.$l1.code}/${this.$l2.code}/youtube/view/${this.randomEpisodeYouTubeId}`
           );
         }
       }
@@ -517,16 +480,19 @@ export default {
       .youtube {
         border-radius: 0.3rem 0.3rem 0 0;
         overflow: hidden;
+
         .video-area {
           background: black;
         }
       }
+
       .quick-access-buttons {
         border-radius: 0 0 0.3rem 0.3rem;
       }
     }
   }
 }
+
 .youtube-view-wrapper {
   &.fullscreen {
     position: fixed;

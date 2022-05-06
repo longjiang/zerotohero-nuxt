@@ -32,7 +32,7 @@
               'btn-primary': skin === 'light',
               'btn-ghost-dark': skin === 'dark',
             }">
-              <i class="fa fa-chevron-left"></i>
+              <i class="fa fa-step-backward"></i>
             </router-link>
             <router-link v-if="show" :to="`/${$l1.code}/${$l2.code}/show/${showType === 'tv_show' ? 'tv-show' : 'talk'
             }/${show.id}`" :class="{
@@ -50,7 +50,7 @@
               'btn-primary': skin === 'light',
               'btn-ghost-dark': skin === 'dark',
             }">
-              <i class="fa fa-chevron-right"></i>
+              <i class="fa fa-step-forward"></i>
             </router-link>
             <router-link v-if="episodes.length > 0"
               :to="`/${this.$l1.code}/${this.$l2.code}/youtube/view/${this.randomEpisodeYouTubeId}`" :class="{
@@ -74,9 +74,9 @@
           </h3>
           <div style="color: #aaa" class="mb-2 mt-3">
             <span v-if="video.channel">
-              <router-link style="color: inherit" :to="{ name: 'channel', params: { id: video.channel.id } }"><i class="fab fa-youtube mr-1"></i>{{ video.channel.title || 'View Channel' }}</router-link>
+              <router-link style="color: inherit" :to="{ name: 'channel', params: { id: video.channel.id } }"><i class="fab fa-youtube mr-1"></i>{{ video.channel.title || 'Channel' }}</router-link>
             </span>
-            <span v-if="video.date">· {{ formatDate(video.date) }}</span>
+            <span v-if="video.date">| {{ formatDate(video.date) }}</span>
           </div>
           <VideoAdmin :video="video" ref="videoAdmin1" @showSubsEditing="toggleShowSubsEditing"
             @updateTranslation="updateTranslation" @updateOriginalText="updateOriginalText"

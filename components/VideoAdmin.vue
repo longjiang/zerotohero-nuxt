@@ -29,19 +29,21 @@
           Added
         </span>
         <span v-if="video.subs_l2 && video.subs_l2.length > 0">
-          <a :href="originalTextHref" :download="`${video.title}.txt`" target="_blank" class="btn btn-small btn-ghost-dark">
+          <a :href="originalTextHref" :download="`${video.title}.txt`" target="_blank"
+            class="btn btn-small btn-ghost-dark">
             <i class="fas fa-file-alt"></i>
           </a>
           <a :href="translationURL" target="_blank" class="link-unstyled btn btn-small btn-ghost-dark">
             <i class="fa fa-language"></i>
           </a>
         </span>
-        <div style="font-size: 0.7em; opacity: 0.7" class="mt-2">Once saved, the video will be available for everyone to
+        <div v-if="!saving && !(video && video.id) && ((video.subs_l2 && video.subs_l2.length > 0) || $adminMode)" style="font-size: 0.7em; opacity: 0.7"
+          class="mt-2">Once saved, the video will be available for everyone to
           see. You can find it at <i class="fas fa-photo-video"></i> Media → <i class="fa fa-play"></i> New Videos.
         </div>
       </div>
       <div class="show-and-date" v-if="$adminMode">
-        <span class="mr-2" >
+        <span class="mr-2">
           <router-link class="btn btn-small bg-secondary text-white" v-if="video.tv_show" :to="{
             name: 'show',
             params: { type: 'tv-show', id: String(video.tv_show.id) },

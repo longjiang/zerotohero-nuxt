@@ -1,5 +1,5 @@
 <template>
-  <div :class="`site-top-bar site-top-bar-${variant}`">
+  <div :class="`site-top-bar site-top-bar-${variant}`" @click="scrollToTop">
     <template v-if="variant === 'menu-bar'">
       <div class="text-center">
         <router-link to="/" class="link-unstyled">
@@ -7,7 +7,7 @@
         </router-link>
       </div>
       <div>
-        <AnnotationSettings variant="toolbar" style="position: relative; bottom: -0.1rem;"/>
+        <AnnotationSettings variant="toolbar" style="position: relative; bottom: -0.1rem;" />
         <router-link :to="languageMapPath" class="btn top-bar-button btn-unstyled link-unstyled">
           <i class="fas fa-globe-asia"></i>
         </router-link>
@@ -39,48 +39,53 @@ import AnnotationSettings from "./AnnotationSettings.vue";
 
 
 export default {
-    props: {
-        variant: {
-            default: "menu-bar"
-        }
+  props: {
+    variant: {
+      default: "menu-bar"
+    }
+  },
+  computed: {
+    isPWA() {
+      return ((typeof navigator !== "undefined" && navigator.standalone) ||
+        (typeof window !== "undefined" &&
+          window.matchMedia("(display-mode: standalone)").matches));
     },
-    computed: {
-        isPWA() {
-            return ((typeof navigator !== "undefined" && navigator.standalone) ||
-                (typeof window !== "undefined" &&
-                    window.matchMedia("(display-mode: standalone)").matches));
-        },
-        languageMapPath() {
-            if (this.fullHistory) {
-                let historyMatches = this.fullHistory.filter((path) => {
-                    if (path) {
-                        let r = this.$router.resolve(path);
-                        return r && r.route && ["language-map"].includes(r.route.name);
-                    }
-                });
-                let path = historyMatches.pop();
-                if (path)
-                    return path;
-            }
-            return "/language-map";
-        },
+    languageMapPath() {
+      if (this.fullHistory) {
+        let historyMatches = this.fullHistory.filter((path) => {
+          if (path) {
+            let r = this.$router.resolve(path);
+            return r && r.route && ["language-map"].includes(r.route.name);
+          }
+        });
+        let path = historyMatches.pop();
+        if (path)
+          return path;
+      }
+      return "/language-map";
     },
-    methods: {
-        canShare() {
-            return typeof navigator !== "undefined" && navigator.share;
-        },
-        share() {
-            if (navigator.share) {
-                navigator.share({
-                    url: location.href,
-                });
-            }
-        },
-        reload() {
-            location.reload();
-        },
+  },
+  methods: {
+    scrollToTop(e) {
+      if (e.target !== this)
+        return;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     },
-    components: { AnnotationSettings }
+    canShare() {
+      return typeof navigator !== "undefined" && navigator.share;
+    },
+    share() {
+      if (navigator.share) {
+        navigator.share({
+          url: location.href,
+        });
+      }
+    },
+    reload() {
+      location.reload();
+    },
+  },
+  components: { AnnotationSettings }
 }
 </script>
 <style lang="scss" scoped>
