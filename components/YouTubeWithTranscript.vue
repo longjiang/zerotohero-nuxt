@@ -7,7 +7,7 @@
     <div v-if="layout === 'horizontal'" :class="`row youtube-with-transcript-${layout}`">
       <div :class="{
         'youtube-video-column col-sm-12 mb-4 p-0': true,
-        'order-2': landscape && $l2.direction === 'rtl',
+        'order-2': landscape,
       }">
         <div class="youtube-video-wrapper" :key="'youtube-' + video.youtube_id">
           <YouTubeVideo ref="youtube" @paused="updatePaused" @currentTime="updateCurrentTime" @ended="updateEnded"
@@ -25,6 +25,42 @@
       </div>
       <div class="youtube-transcript-column">
         <div class="youtube-video-info youtube-video-info-top">
+          <div :key="`youtube-video-info-${video.youtube_id}-${videoInfoKey}`"
+            :class="{ 'd-none': !video.id, 'mb-3': true }">
+            <router-link v-if="previousEpisode" :to="previousEpisode" :class="{
+              'btn btn-medium': true,
+              'btn-primary': skin === 'light',
+              'btn-ghost-dark': skin === 'dark',
+            }">
+              <i class="fa fa-chevron-left"></i>
+            </router-link>
+            <router-link v-if="show" :to="`/${$l1.code}/${$l2.code}/show/${showType === 'tv_show' ? 'tv-show' : 'talk'
+            }/${show.id}`" :class="{
+    'btn btn-medium': true,
+    'btn-primary': skin === 'light',
+    'btn-ghost-dark': skin === 'dark',
+  }">
+              <i class="fas fa-stream mr-1"></i>
+              {{
+                  show.title
+              }}<span v-if="episodes && episodes.length"> ({{ episodeIndex + 1 }} of {{ episodes.length }})</span>
+            </router-link>
+            <router-link v-if="nextEpisode" :to="nextEpisode" :class="{
+              'btn btn-medium': true,
+              'btn-primary': skin === 'light',
+              'btn-ghost-dark': skin === 'dark',
+            }">
+              <i class="fa fa-chevron-right"></i>
+            </router-link>
+            <router-link v-if="episodes.length > 0"
+              :to="`/${this.$l1.code}/${this.$l2.code}/youtube/view/${this.randomEpisodeYouTubeId}`" :class="{
+                'btn btn-medium': true,
+                'bg-secondary': skin === 'light',
+                'btn-ghost-dark': skin === 'dark',
+              }">
+              <i class="fa fa-random"></i>
+            </router-link>
+          </div>
           <h3 :class="{
             h4: video.title.length > 30,
             h5: video.title.length > 60,
@@ -36,67 +72,13 @@
               <span v-else>{{ video.title }}</span>
             </span>
           </h3>
-          <div style="color: #aaa" class="mb-2">
-            <span v-if="video.date">{{ formatDate(video.date) }}</span>
-            <span v-if="episodes.length">
-              · Video {{ episodeIndex + 1 }} of {{ episodes.length }}
+          <div style="color: #aaa" class="mb-2 mt-3">
+            <span v-if="video.channel">
+              <router-link style="color: inherit" :to="{ name: 'channel', params: { id: video.channel.id } }"><i class="fab fa-youtube mr-1"></i>{{ video.channel.title || 'View Channel' }}</router-link>
             </span>
-            ·
-            <a class="link-unstyled" :href="`https://www.google.com/search?q=${encodeURIComponent(
-              video.title
-            )}`" target="google">
-              More Info
-            </a>
+            <span v-if="video.date">· {{ formatDate(video.date) }}</span>
           </div>
-          <div :key="`youtube-video-info-${video.youtube_id}-${videoInfoKey}`"
-            :class="{ 'd-none': !video.id, 'mb-3': true }">
-            <router-link v-if="previousEpisode" :to="previousEpisode" :class="{
-              'btn btn-small': true,
-              'btn-primary': skin === 'light',
-              'btn-ghost-dark': skin === 'dark',
-            }">
-              <i class="fa fa-chevron-left"></i>
-              Previous
-            </router-link>
-            <router-link v-if="show" :to="`/${$l1.code}/${$l2.code}/show/${showType === 'tv_show' ? 'tv-show' : 'talk'
-            }/${show.id}`" :class="{
-    'btn btn-small': true,
-    'btn-primary': skin === 'light',
-    'btn-ghost-dark': skin === 'dark',
-  }">
-              <i class="fas fa-music" v-if="show.title === 'Music'"></i>
-              <i class="fas fa-film" v-else-if="show.title === 'Movies'"></i>
-              <i class="fas fa-newspaper" v-else-if="show.title === 'News'"></i>
-              <i class="fab fa-youtube" v-else-if="showType === 'talk'"></i>
-              <i class="fa fa-tv" v-else></i>
-              All
-              {{
-                  ["Music", "News", "Movies"].includes(show.title)
-                    ? show.title
-                    : "Episodes"
-              }}
-            </router-link>
-            <router-link v-if="nextEpisode" :to="nextEpisode" :class="{
-              'btn btn-small': true,
-              'btn-primary': skin === 'light',
-              'btn-ghost-dark': skin === 'dark',
-            }">
-              Next
-              <i class="fa fa-chevron-right"></i>
-            </router-link>
-            <router-link v-if="episodes.length > 0"
-              :to="`/${this.$l1.code}/${this.$l2.code}/youtube/view/${this.randomEpisodeYouTubeId}`" :class="{
-                'btn btn-small': true,
-                'bg-secondary': skin === 'light',
-                'btn-ghost-dark': skin === 'dark',
-              }">
-              <i class="fa fa-random"></i>
-              Random
-            </router-link>
-          </div>
-          <YouTubeChannelCard v-if="video.channel" :channel="video.channel" :key="`channel-${video.channel.id}`"
-            class="d-inline-block" />
-          <VideoAdmin :video="video" ref="videoAdmin1" class="mt-3 mb-3" @showSubsEditing="toggleShowSubsEditing"
+          <VideoAdmin :video="video" ref="videoAdmin1" @showSubsEditing="toggleShowSubsEditing"
             @updateTranslation="updateTranslation" @updateOriginalText="updateOriginalText"
             @enableTranslationEditing="toggleEnableTranslationEditing" />
         </div>
@@ -574,7 +556,7 @@ export default {
   max-width: calc((100vh - 10rem) * 16 / 9);
   margin: 0 auto;
   position: sticky;
-  top: 46.8px;
+  top: 46px;
 }
 
 .zerotohero-wide {
@@ -591,7 +573,7 @@ export default {
 
 #zerotohero:not(.zerotohero-wide) {
   .youtube-video-column {
-    top: 46.8px;
+    top: 46px;
   }
 }
 
@@ -613,7 +595,7 @@ export default {
 }
 
 .youtube-video-info {
-  padding-left: 2.5rem;
-  padding-right: 1.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 </style>

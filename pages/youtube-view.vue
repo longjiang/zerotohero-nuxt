@@ -514,7 +514,6 @@ export default {
 .zerotohero-wide {
   .youtube-view-wrapper {
     ::v-deep .youtube-with-transcript-landscape {
-      padding-left: 2rem;
       .youtube {
         border-radius: 0.3rem 0.3rem 0 0;
         overflow: hidden;
