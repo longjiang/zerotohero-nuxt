@@ -32,10 +32,12 @@
           'text-center': single,
           'pr-3': single && $l2.direction === 'rtl',
           'pl-3': single && $l2.direction !== 'rtl',
+          'transparent': !annotated
         }"
         :buttons="true"
         v-if="!showSubsEditing"
         @textChanged="lineChanged(line, ...arguments)"
+        @annotated="annotated = true"
         :translation="parallelLine"
       >
         <span v-html="lineHtml(line).trim()" />
@@ -103,6 +105,11 @@ export default {
     enableTranslationEditing: {
       type: Boolean,
     },
+  },
+  data() {
+    return {
+      annotated: false
+    }
   },
   computed: {
     $l1() {

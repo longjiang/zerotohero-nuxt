@@ -262,6 +262,7 @@ export default {
       );
       this.annotating = false;
       this.annotated = true;
+      this.$emit('annotated')
     },
     async annotateRecursive(node) {
       if (node && node.classList && node.classList.contains("sentence")) {
