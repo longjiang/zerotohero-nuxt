@@ -305,9 +305,9 @@ export default {
       if (this.$l2.continua) {
         html = await this.tokenizeContinua(text, batchId);
       } else if (
-        (this.$l2.scripts &&
+        ((this.$l2.scripts &&
           this.$l2.scripts[0] &&
-          this.$l2.scripts[0].script === "Arab")
+          this.$l2.scripts[0].script === "Arab") || ['hu'].includes(this.$l2.code))
       ) {
         html = await this.tokenizeIntegral(text);
       } else if (
