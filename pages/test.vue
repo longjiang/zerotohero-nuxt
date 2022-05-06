@@ -8,10 +8,7 @@
     <div class="container pt-5 pb-5">
       <div class="row">
         <div class="col-sm-12">
-          <Annotate>
-            <h3>بيا بايد بزاريم هوفبرگ بره داخل نيازي نيست متوجه ما بشه</h3>
-          </Annotate>
-          <a :href="href" download="tihudictBIG-and-wiktionary-merged.csv.txt">Download CSV</a>
+
         </div>
       </div>
     </div>
@@ -40,17 +37,20 @@ export default {
       href: undefined,
     };
   },
-  async mounted() {
-    let res = await axios.get(`${Config.server}data/persian-g2p/tihudictBIG-and-wiktionary-merged.csv.txt`)
-    let parsed = Papa.parse(res.data, {header: true})
-    let rows = parsed.data
-    console.log(rows.length)
-    rows = Helper.uniqueByValue(rows, 'persian')
-    console.log(rows.length)
-    let csv = Papa.unparse(rows);
-    this.href = Helper.makeTextFile(csv);
+  mounted() {
+    console.log(Helper.mutuallyExclusive(['az', 'azokként', 'azokkal', 'azoknak', 'azokban', 'azokért', 'azoknál', 'azokhoz', 'azokból', 'azoktól', 'azokról', 'azokat', 'azokig', 'akként', 'azokba', 'azokká', 'azokon', 'azokra', 'azért', 'addig', 'annak', 'abban', 'ahhoz', 'azzal', 'arról', 'annál', 'abból', 'attól', 'abba', 'arra', 'azon', 'azok', 'azzá', 'azt', 'azé']))
   },
   methods: {
+    async dicMerge() {
+      let res = await axios.get(`${Config.server}data/persian-g2p/tihudictBIG-and-wiktionary-merged.csv.txt`)
+      let parsed = Papa.parse(res.data, { header: true })
+      let rows = parsed.data
+      console.log(rows.length)
+      rows = Helper.uniqueByValue(rows, 'persian')
+      console.log(rows.length)
+      let csv = Papa.unparse(rows);
+      this.href = Helper.makeTextFile(csv);
+    },
     async dictionarySize() {
       let dictionary = await this.$getDictionary();
       let size = await (await dictionary).getSize();

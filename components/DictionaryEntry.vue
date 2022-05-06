@@ -275,7 +275,7 @@ export default {
         terms = [this.entry.head].concat(terms);
         terms = Helper.unique(terms)
         let optimalLength = this.entry.head.length - 1
-        terms = terms.sort((a, b) => Math.abs(a.length - optimalLength) - Math.abs(b.length - optimalLength));
+        terms = terms.sort((a, b) => Math.abs(a.length - optimalLength) - Math.abs(b.length - optimalLength)).slice(0, 6);
         terms = Helper.mutuallyExclusive(terms).slice(0, 3);
       }
       return terms;
