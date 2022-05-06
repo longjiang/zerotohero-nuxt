@@ -9,30 +9,27 @@
 </router>
 <template>
   <div>
-    <SocialHead
-      title="Map of World Languages | Zero to Hero Languages"
+    <SocialHead title="Map of World Languages | Zero to Hero Languages"
       description="Tap on any language label to learn the language! Live TV channels, TV shows with subtitles, music with lyrics, phrasebooks with video examples... everything that can help you to learn a language “by osmosis.”"
-      image="/img/thumbnail-language-map.jpg"
-    />
+      image="/img/thumbnail-language-map.jpg" />
     <div class="container-fluid">
-      <div
-        class="row bg-dark text-white pt-2 pb-2 text-left"
-        style="overflow: visible"
-      >
+      <div class="row bg-dark text-white pt-2 pb-2 text-left" style="overflow: visible">
         <div class="col-sm-12 d-flex" style="overflow: visible">
           <div class="mr-3 d-flex align-items-center">
             <router-link to="/" class="link-unstyled">
-              <img src="/img/czh-icon.png" style="height: 1.5rem; margin-right: 0.25rem" /><b>zerotohero.ca</b>
+              <img src="/img/czh-icon.png" style="height: 1.5rem" />
             </router-link>
           </div>
-          <LanguageSwitch
-            style="flex: 1; z-index: 999"
-            :nav="false"
-            @nav="onNav"
-            :button="false"
-            :showRandom="false"
-            :langs="filteredLangs"
-          />
+          <div class="mr-1 d-flex align-items-center">
+            L1
+          </div>
+          <b-form-select v-model="l1" :options="l1s" class="mr-2" style="display: inline-block; width: 3.7rem">
+          </b-form-select>
+          <div class="mr-1 d-flex align-items-center">
+            L2
+          </div>
+          <LanguageSwitch style="flex: 1; z-index: 999" :nav="false" @nav="onNav" :button="false" :showRandom="false"
+            :langs="filteredLangs" />
         </div>
       </div>
       <div class="row">
@@ -41,12 +38,8 @@
             <Loader :sticky="true" message="Loading map, and plotting thousands of languages..." />
           </div>
           <client-only v-if="filteredLangsWithGeo">
-            <LanguageMap
-              style="height: 100%"
-              ref="languageMap"
-              :langs="filteredLangsWithGeo"
-              @ready="onReady"
-            />
+            <LanguageMap style="height: 100%" ref="languageMap" :langs="filteredLangsWithGeo" @ready="onReady"
+              :key="`language-map-${languagesKey}`" :l1="l1" />
           </client-only>
         </div>
       </div>
@@ -59,9 +52,21 @@ import Helper from '@/lib/helper'
 export default {
   data() {
     return {
+      l1: 'en',
+      l1s: [
+        {
+          value: 'en',
+          text: 'English'
+        },
+        {
+          value: 'zh',
+          text: '中文'
+        }
+      ],
       loadingMap: true,
       filteredLangsWithGeo: undefined,
-      filteredLangs: undefined
+      filteredLangs: undefined,
+      languagesKey: 0
     };
   },
   /**
@@ -76,34 +81,41 @@ export default {
     },
   },
   computed: {
-    english() {
-      return this.$languages.l1s.find((language) => language.code === "en");
+    l1Lang() {
+      return this.$languages.l1s.find((language) => language.code === this.l1);
     },
   },
   async mounted() {
     await Helper.timeout(100)
-    this.filteredLangs = this.getFilteredLangs()
-    this.filteredLangsWithGeo = this.getFilteredLangsWithGeo()
+    this.updateLanguages()
+  },
+  watch: {
+    l1() {
+      this.updateLanguages()
+    }
   },
   methods: {
     onReady() {
       this.loadingMap = false;
     },
+    updateLanguages() {
+      this.filteredLangs = this.getFilteredLangs()
+      this.filteredLangsWithGeo = this.getFilteredLangsWithGeo()
+      this.languagesKey++
+    },
     getFilteredLangs() {
       let languages = this.$languages.l1s;
       languages = languages.filter((l) => {
-        if (["hbo", "enm", "arc", "grc", "sjn", "ang", "non"].includes(l["iso639-3"]))
-          return true;
+        // if (["hbo", "enm", "arc", "grc", "sjn", "ang", "non"].includes(l["iso639-3"]))
+        //   return true;
         if (l["iso639-3"] === 'cmn') return false; // Mandarin overlaps Chinese, which is annoying
-        if (l.han) return true; // Show all Han languages
-        if (
-          this.hasDictionary(this.english, l) ||
-          this.hasYouTube(this.english, l)
-        )
-          return true;
         if (!l["iso639-3"]) return false;
         // if (["A", "E", "H"].includes(l.type)) return false;
-        return true;
+        if (
+          !this.hasDictionary(this.l1Lang, l)
+        )
+          return false;
+        return true
       });
       return languages;
     },
@@ -135,8 +147,7 @@ export default {
       if (l2) {
         if (l2.lat && l2.long) this.$refs.languageMap.goToLang(l2);
         else {
-          let l1Code = "en";
-          if (l2.code === "lzh") l1Code = "zh";
+          let l1Code = this.l1;
           let path = `/${l1Code}/${l2.code}/`;
           this.$router.push(path);
         }

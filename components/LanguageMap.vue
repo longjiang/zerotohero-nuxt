@@ -51,6 +51,7 @@
                 :singleColumn="true"
                 variant="icon"
                 skin="dark"
+                :l1="l1"
                 class="language-marker-language-list"
               />
               <div
@@ -188,6 +189,9 @@ export default {
     phrases: {
       type: Array,
     },
+    l1: {
+      default: 'en'
+    }
   },
   data: () => ({
     initialZoom: 3,
@@ -265,7 +269,7 @@ export default {
       return this.$languages.isDescendant(...arguments);
     },
     goTo(l2) {
-      let l1Code = "en";
+      let l1Code = this.l1;
       if (["hak", "nan", "lzh", "ltc", "och"].includes(l2.code))
         l1Code = "zh";
       this.$router.push(`/${l1Code}/${l2.code}/`);

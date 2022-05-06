@@ -104,6 +104,9 @@ export default {
     variant: {
       default: "list", // or 'icon'
     },
+    l1: {
+      default: 'en'
+    }
   },
   data() {
     return {
@@ -133,14 +136,6 @@ export default {
     };
   },
   computed: {
-    $l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-    },
-    $l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
-    },
     classes() {
       let classes = {
         "language-list": true,
@@ -180,9 +175,8 @@ export default {
       return Helper.formatK(number, 1);
     },
     languagePath(language) {
-      let l1 = "en";
       let special = this.specials[language.code];
-      if (special) l1 = special.l1;
+      let l1 = special ? special.l1 : this.l1;
       return `/${l1}/${language.code}/`;
     },
     languageName(language) {
