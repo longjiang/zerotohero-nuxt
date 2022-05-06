@@ -225,7 +225,7 @@ export default {
     savePhraseClick() { },
     async visibilityChanged(isVisible) {
       this.isVisible = isVisible;
-      if (this.delay) await Helper.delay(delay.delay);
+      if (this.delay) await Helper.delay(this.delay);
       if (this.isVisible) {
         this.convertToSentencesAndAnnotate(this.$slots.default[0]);
       }
