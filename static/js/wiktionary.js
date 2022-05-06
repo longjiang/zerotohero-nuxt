@@ -32,7 +32,7 @@ const Dictionary = {
     glg: 'gl',
     glv: 'gv',
     hun: 'hu',
-    ita: 'it',
+    // ita: 'it',
     // por: 'pt',
     ron: 'ro',
     // rus: 'ru',
