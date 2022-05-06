@@ -5,6 +5,7 @@ importScripts('../vendor/jpconjugations.js')
 const Dictionary = {
   file: undefined,
   words: [],
+  tokenizationCache: {},
   name: 'edict',
   tokenizer: undefined,
   credit() {
@@ -332,6 +333,7 @@ const Dictionary = {
     }
   },
   tokenize(text) {
+    if (this.tokenizationCache[text]) return this.tokenizationCache[text]
     let t = []
     let segs = text.split(/\s+/)
     for (let seg of segs) {

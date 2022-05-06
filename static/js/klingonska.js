@@ -5,6 +5,7 @@ const Dictionary = {
   words: [],
   index: {},
   cache: {},
+  tokenizationCache: {},
   tables: [],
   l1: undefined,
   l2: undefined,
@@ -174,7 +175,10 @@ const Dictionary = {
     }
   },
   tokenize(text) {
-    return this.tokenizeRecursively(text, this.subdictFromText(text))
+    if (this.tokenizationCache[text]) return this.tokenizationCache[text]
+    let tokenized = this.tokenizeRecursively(text, this.subdictFromText(text))
+    this.tokenizationCache[text] = tokenized
+    return tokenized
   },
   tokenizeRecursively(text, subdict) {
     const longest = subdict.longest(text)

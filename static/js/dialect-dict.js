@@ -185,6 +185,7 @@ const Dictionary = {
   },
   words: [],
   name: 'dialect-dict',
+  tokenizationCache: {},
   credit() {
     return `The Cantonese dictionary is provided by <a href="http://cantonese.org/download.html">cc-canto</a> dict, 
     open-source and distribtued under a <a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 license</a>. 
@@ -453,11 +454,12 @@ const Dictionary = {
     }
   },
   tokenize(text) {
-    return this.tokenizeRecursively(
+    this.tokenizationCache[text] = this.tokenizationCache[text] || this.tokenizeRecursively(
       text,
       this.subdictFromText(text),
       this.isTraditional(text)
     )
+    return this.tokenizationCache[text]
   },
   tokenizeRecursively(text, subdict, traditional = false) {
     const isChinese = subdict.isChinese(text)

@@ -66,6 +66,7 @@ const Dictionary = {
     return Array.from(map.values());
   },
   tokenize(text) {
+    if (this.tokenizationCache[text]) return this.tokenizationCache[text]
     text = text.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // strip accents e.g. résumé -> resume
     tokenized = [];
     let segs = this.splitByReg(text, /([a-zA-Z0-9]+)/gi);
@@ -106,6 +107,7 @@ const Dictionary = {
         tokenized.push(seg);
       }
     }
+    this.tokenizationCache[text] = tokenized
     return tokenized
   },
   unique(a) {
