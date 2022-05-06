@@ -1,117 +1,25 @@
 <template>
   <container-query :query="query" v-model="params">
     <div class="container">
-      <div class="row mb-4">
+      <div class="row dashboard-saved-words" v-if="
+        showWords && 
+        ((savedWordsSorted && savedWordsSorted.length > 0) ||
+        (savedPhrasesSorted && savedPhrasesSorted.length > 0))
+      ">
         <div class="col-12">
-          <div class="col-12 text-center">
-            <button
-              :class="`btn btn-ghost-dark btn-sm ml-1 ${
-                skin === 'light' ? 'text-secondary' : ''
-              }`"
-              v-if="
-                (savedWordsSorted && savedWordsSorted.length > 0) ||
-                (savedPhrasesSorted && savedPhrasesSorted.length > 0)
-              "
-              @click="showExportButtons = !showExportButtons"
-            >
-              <i class="fa fa-download mr-1"></i>
-              Export
-            </button>
-            <input
-              id="fileUpload"
-              ref="upload"
-              type="file"
-              hidden
-              @change="importCSV"
-            />
-            <button
-              :class="`btn btn-ghost-dark btn-sm ml-1 ${
-                skin === 'light' ? 'text-secondary' : ''
-              }`"
-              @click="importButtonClick()"
-            >
-              <i class="fa fa-upload mr-1"></i>
-              Import
-            </button>
-            <button
-              :class="`btn btn-danger btn-sm ml-1`"
-              v-if="
-                (savedWordsSorted && savedWordsSorted.length > 0) ||
-                (savedPhrasesSorted && savedPhrasesSorted.length > 0)
-              "
-              @click="deleteAllSavedWordsAndPhrases()"
-            >
-              <i class="fa fa-trash mr-1"></i>
-              Delete All
-            </button>
-            <div v-if="showExportButtons" class="mt-3">
-              <span class="mr-2">Exported and ready to download:</span>
-              <a
-                :href="wordsCSVHref"
-                :download="`saved-words${
-                  l2 ? '-' + l2.code : ''
-                }-${hostname}.csv`"
-                v-if="
-                  savedWordsSorted &&
-                  savedWordsSorted.length > 0 &&
-                  wordsCSVHref
-                "
-                class="mr-2"
-              >
-                <i class="fa fa-download mr-1"></i>
-                <u>Saved Words</u>
-              </a>
-              <a
-                v-if="
-                  savedPhrasesSorted &&
-                  savedPhrasesSorted.length > 0 &&
-                  phrasesCSVHref
-                "
-                :download="`saved-phrases${
-                  l2 ? '-' + l2.code : ''
-                }-${hostname}.csv`"
-                :href="phrasesCSVHref"
-              >
-                <i class="fa fa-download mr-1"></i>
-                <u>Saved Phrases</u>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div
-        class="row dashboard-saved-words"
-        v-if="
-          (savedWordsSorted && savedWordsSorted.length > 0) ||
-          (savedPhrasesSorted && savedPhrasesSorted.length > 0)
-        "
-      >
-        <div class="col-12">
-          <div
-            :class="{
-              'text-center': l2,
-              'dashboard-saved-words-list': !l2,
-            }"
-          >
-            <router-link
-              v-for="(savedWordsLang, index) in savedWordsSorted"
-              :to="`/${languageL1(savedWordsLang.l2)}/${
-                savedWordsLang.l2.code
-              }/saved-words`"
-              class="link-unstyled d-block dashboard-saved-words-list-item"
-              :key="`dashboard-saved-words-${index}`"
-            >
-              <i
-                class="fa fa-star"
-                style="opacity: 0.5; width: 1.2rem; text-align: center"
-              ></i>
-              <span
-                style="
+          <div :class="{
+            'text-center': l2,
+            'dashboard-saved-words-list': !l2,
+          }">
+            <router-link v-for="(savedWordsLang, index) in savedWordsSorted" :to="`/${languageL1(savedWordsLang.l2)}/${savedWordsLang.l2.code
+            }/saved-words`" class="link-unstyled d-block dashboard-saved-words-list-item"
+              :key="`dashboard-saved-words-${index}`">
+              <i class="fa fa-star" style="opacity: 0.5; width: 1.2rem; text-align: center"></i>
+              <span style="
                   min-width: 1.7rem;
                   display: inline-block;
                   text-align: center;
-                "
-              >
+                ">
                 {{ savedWordsLang.words.length }}
               </span>
               saved word{{ savedWordsLang.words.length > 1 ? "s" : "" }}
@@ -119,25 +27,15 @@
               in
               <strong>{{ languageName(savedWordsLang.l2) }}</strong>
             </router-link>
-            <router-link
-              v-for="(savedPhrasesLang, index) in savedPhrasesSorted"
-              :to="`/${languageL1(savedPhrasesLang.l2)}/${
-                savedPhrasesLang.l2.code
-              }/saved-phrases`"
-              class="link-unstyled d-block dashboard-saved-words-list-item"
-              :key="`dashboard-saved-phrases-${index}`"
-            >
-              <i
-                class="fa fa-bookmark"
-                style="opacity: 0.5; width: 1.2rem; text-align: center"
-              ></i>
-              <span
-                style="
+            <router-link v-for="(savedPhrasesLang, index) in savedPhrasesSorted" :to="`/${languageL1(savedPhrasesLang.l2)}/${savedPhrasesLang.l2.code
+            }/saved-phrases`" class="link-unstyled d-block dashboard-saved-words-list-item"
+              :key="`dashboard-saved-phrases-${index}`">
+              <i class="fa fa-bookmark" style="opacity: 0.5; width: 1.2rem; text-align: center"></i>
+              <span style="
                   min-width: 1.7rem;
                   display: inline-block;
                   text-align: center;
-                "
-              >
+                ">
                 {{ savedPhrasesLang.phrases.length }}
               </span>
               saved phrase{{ savedPhrasesLang.phrases.length > 1 ? "s" : "" }}
@@ -148,68 +46,86 @@
           </div>
         </div>
       </div>
-      <hr class="mt-4 mb-4" v-if="itemsFiltered.length > 0" />
-      <div class="history-items row" v-if="itemsFiltered.length > 0">
-        <div
-          v-for="(item, itemIndex) of itemsFiltered.slice(0, 12)"
-          :key="`history-item-${itemIndex}`"
-          :class="{
-            'pb-4 history-item-column': true,
-            'col-12': params.xs,
-            'col-6': params.sm,
-            'col-4': params.md,
-            'col-3': params.lg,
-          }"
-          :set="(itemL1 = $languages.getSmart(item.l1))"
-          :set2="(itemL2 = $languages.getSmart(item.l2))"
-        >
+      <div class="row mt-2" v-if="showWords">
+        <div class="col-12">
+          <div class="col-12 text-center">
+            <button :class="`btn btn-ghost-dark btn-small ${skin === 'light' ? 'text-secondary' : ''
+            }`" v-if="
+    (savedWordsSorted && savedWordsSorted.length > 0) ||
+    (savedPhrasesSorted && savedPhrasesSorted.length > 0)
+  " @click="showExportButtons = !showExportButtons">
+              <i class="fa fa-download mr-1"></i>
+              Export
+            </button>
+            <input id="fileUpload" ref="upload" type="file" hidden @change="importCSV" />
+            <button :class="`btn btn-ghost-dark btn-small ${skin === 'light' ? 'text-secondary' : ''
+            }`" @click="importButtonClick()">
+              <i class="fa fa-upload mr-1"></i>
+              Import
+            </button>
+            <button :class="`btn btn-danger bg-danger text-white btn-small`" v-if="
+              (savedWordsSorted && savedWordsSorted.length > 0) ||
+              (savedPhrasesSorted && savedPhrasesSorted.length > 0)
+            " @click="deleteAllSavedWordsAndPhrases()">
+              <i class="fa fa-trash mr-1"></i>
+              Delete All
+            </button>
+            <div v-if="showExportButtons" class="mt-3">
+              <span class="mr-2">Exported and ready to download:</span>
+              <a :href="wordsCSVHref" :download="`saved-words${l2 ? '-' + l2.code : ''
+              }-${hostname}.csv`" v-if="
+    savedWordsSorted &&
+    savedWordsSorted.length > 0 &&
+    wordsCSVHref
+  " class="mr-2">
+                <i class="fa fa-download mr-1"></i>
+                <u>Saved Words</u>
+              </a>
+              <a v-if="
+                savedPhrasesSorted &&
+                savedPhrasesSorted.length > 0 &&
+                phrasesCSVHref
+              " :download="`saved-phrases${l2 ? '-' + l2.code : ''
+}-${hostname}.csv`" :href="phrasesCSVHref">
+                <i class="fa fa-download mr-1"></i>
+                <u>Saved Phrases</u>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr class="mt-4 mb-4" v-if="showWords && showVideos && itemsFiltered.length > 0" />
+      <div class="history-items row" v-if="showVideos && itemsFiltered.length > 0">
+        <div v-for="(item, itemIndex) of itemsFiltered.slice(0, 12)" :key="`history-item-${itemIndex}`" :class="{
+          'pb-4 history-item-column': true,
+          'col-12': params.xs,
+          'col-6': params.sm,
+          'col-4': params.md,
+          'col-3': params.lg,
+        }" :set="(itemL1 = $languages.getSmart(item.l1))" :set2="(itemL2 = $languages.getSmart(item.l2))">
           <div class="history-item-language-badge" v-if="itemL1 && itemL2">
             {{ itemL2.name }}
           </div>
-          <YouTubeVideoCard
-            v-if="itemL1 && itemL2 && item.type === 'video'"
-            skin="card"
-            :video="Object.assign({}, item.video)"
-            :l1="itemL1"
-            :l2="itemL2"
-            :showProgress="true"
-            :showPlayButton="true"
-            :showAdmin="false"
-          />
-          <PhrasebookCard
-            v-if="itemL1 && itemL2 && item.type === 'phrasebook'"
-            skin="light"
-            size="lg"
-            :l1="itemL1"
-            :l2="itemL2"
-            :phrasebook="Object.assign({}, item.phrasebook)"
-            :showAdmin="false"
-          />
-          <button
-            class="
+          <YouTubeVideoCard v-if="itemL1 && itemL2 && item.type === 'video'" skin="card"
+            :video="Object.assign({}, item.video)" :l1="itemL1" :l2="itemL2" :showProgress="true" :showPlayButton="true"
+            :showAdmin="false" />
+          <PhrasebookCard v-if="itemL1 && itemL2 && item.type === 'phrasebook'" skin="light" size="lg" :l1="itemL1"
+            :l2="itemL2" :phrasebook="Object.assign({}, item.phrasebook)" :showAdmin="false" />
+          <button class="
               btn btn-small
               bg-white
               text-secondary
               ml-0
               history-item-remove-btn
-            "
-            @click.stop.prevent="$store.dispatch('history/remove', item)"
-          >
+            " @click.stop.prevent="$store.dispatch('history/remove', item)">
             <i class="fa fa-times"></i>
           </button>
         </div>
       </div>
-      <div class="row">
-        <div
-          class="col-12 text-center mb-2"
-          v-if="videosFiltered && videosFiltered.length > 0"
-        >
-          <button
-            :class="`btn btn-ghost-dark btn-sm ml-0 ${
-              skin === 'light' ? 'text-secondary' : ''
-            }`"
-            @click.stop.prevent="$store.dispatch('history/removeAll')"
-          >
+      <div class="row" v-if="showVideos">
+        <div class="col-12 text-center mb-2" v-if="videosFiltered && videosFiltered.length > 0">
+          <button :class="`btn btn-ghost-dark btn-sm ml-0 ${skin === 'light' ? 'text-secondary' : ''
+          }`" @click.stop.prevent="$store.dispatch('history/removeAll')">
             Clear History
           </button>
         </div>
@@ -226,6 +142,18 @@ import Helper from "@/lib/helper";
 export default {
   components: {
     ContainerQuery,
+  },
+  props: {
+    l2: undefined,
+    showWords: {
+      default: true,
+    },
+    showVideos: {
+      default: true,
+    },
+    skin: {
+      default: "light",
+    },
   },
   data() {
     return {
@@ -256,12 +184,6 @@ export default {
         },
       },
     };
-  },
-  props: {
-    l2: undefined,
-    skin: {
-      default: "light",
-    },
   },
   mounted() {
     this.emitHasDashboard();
@@ -434,14 +356,14 @@ export default {
       this.phrasesCSVHref = Helper.makeTextFile(phrasesCSV);
     },
     emitHasDashboard() {
-      let hasDashboard = false;
+      let dashboardItems = [];
       if (this.savedWordsSorted && this.savedWordsSorted.length > 0)
-        hasDashboard = true;
+        dashboardItems.push('words');
       if (this.savedPhrasesSorted && this.savedPhrasesSorted.length > 0)
-        hasDashboard = true;
+        dashboardItems.push('phrases');
       if (this.itemsFiltered && this.itemsFiltered.length > 0)
-        hasDashboard = true;
-      this.$emit("hasDashboard", hasDashboard);
+        dashboardItems.push('items');
+      this.$emit("hasDashboard", dashboardItems.length === 0 ? false : dashboardItems);
     },
     languageL1(language) {
       let l1 = "en";
@@ -465,19 +387,23 @@ export default {
     column-count: 2;
   }
 }
+
 @media (min-width: 992px) {
   .dashboard-saved-words-list {
     column-count: 3;
   }
 }
-.dashboard-saved-words + .history-items {
+
+.dashboard-saved-words+.history-items {
   margin-top: 2rem;
 }
 
 .history-items.row {
   perspective: 800px;
+
   .history-item-column {
     position: relative;
+
     .history-item-remove-btn {
       position: absolute;
       top: 0.25rem;
@@ -488,11 +414,13 @@ export default {
       color: rgba(255, 255, 255, 0.384) !important;
       backdrop-filter: blur(5px);
       -webkit-backdrop-filter: blur(5px);
+
       &:hover {
         color: rgba(255, 255, 255, 0.6) !important;
         background: rgba(0, 0, 0, 0.4) !important;
       }
     }
+
     .history-item-language-badge {
       position: absolute;
       top: 0.25rem;

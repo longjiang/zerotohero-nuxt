@@ -17,7 +17,8 @@
           <div class="col-sm-12">
             <div class="z2h-logo" style="line-height: 1.2">
               <span style="font-size: 3rem">
-                <img src="/img/czh-icon.png" style="height: 7rem; margin-right: 0.25rem; margin-bottom: 0.5rem" data-not-lazy /><br /><b>zerotohero.ca</b>
+                <img src="/img/czh-icon.png" style="height: 7rem; margin-right: 0.25rem; margin-bottom: 0.5rem"
+                  data-not-lazy /><br /><b>zerotohero.ca</b>
               </span>
               <p style="font-size: 1.6rem; max-width: 45rem; margin: 2rem auto 0 auto; line-height: 1.5;">
                 Learn <strong><span style="color: #fd4f1c">{{ languagesWithVideos.length }} languages</span></strong> by
@@ -103,11 +104,11 @@
         <client-only>
           <div :class="{ 'row mb-5': true, 'd-none': !hasDashboard }">
             <div class="col-sm-12">
-              <div class="home-card mb-0" style="padding: 1rem">
+              <div class="home-card mb-0" style="padding: 1rem 1rem 2rem 1rem">
                 <h5 class="text-center mt-3 mb-3">
-                  Your Language-Learning Dashboard
+                  Your Saved Words &amp; Phrases
                 </h5>
-                <LazyDashboard @hasDashboard="hasDashboardUpdate" style="padding-top: 0.5rem" />
+                <LazyDashboard @hasDashboard="hasDashboardUpdate" :showVideos="false" style="padding-top: 0.5rem" />
               </div>
             </div>
           </div>
@@ -571,7 +572,7 @@ export default {
   },
   methods: {
     hasDashboardUpdate(hasDashboard) {
-      this.hasDashboard = hasDashboard;
+      this.hasDashboard = hasDashboard && (hasDashboard.includes('words') || hasDashboard.includes('phrases'));
     },
   },
 };
