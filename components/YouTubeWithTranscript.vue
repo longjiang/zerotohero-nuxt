@@ -74,7 +74,7 @@
           </h3>
           <div style="color: #aaa" class="mb-2 mt-3">
             <span v-if="video.channel">
-              <router-link style="color: inherit" :to="{ name: 'channel', params: { id: video.channel.id } }"><i class="fab fa-youtube mr-1"></i>{{ video.channel.title || 'Channel' }}</router-link>
+              <router-link style="color: inherit" :to="{ name: 'youtube-channel', params: { channel_id: video.channel.id } }"><i class="fab fa-youtube mr-1"></i>{{ video.channel.title || 'Channel' }}</router-link>
             </span>
             <span v-if="video.date">| {{ formatDate(video.date) }}</span>
           </div>
