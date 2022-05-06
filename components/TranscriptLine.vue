@@ -192,9 +192,11 @@ export default {
     font-weight: bold;
   }
   .transcript-line-l1 {
-    color: rgb(173, 159, 153);
-    font-size: 0.75em;
+    opacity: 0.4;
+    font-size: 0.7em;
     display: none;
+    line-height: 1.2;
+    margin-top: 0.1rem;
   }
 }
 
