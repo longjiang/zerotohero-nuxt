@@ -1,16 +1,29 @@
 <template>
   <div :class="`annotation-settings annotation-settings-${variant}`">
     <div v-if="variant = 'toolbar'">
-      <span v-if="$hasFeature('transliteration')"  @click="showPinyin = !showPinyin" :class="`annotation-setting-toggle ${showPinyin ? 'annotation-setting-toggle-active' : ''}`">
-        <ruby v-if="$l2.han"  style="position: relative; bottom:-0.1rem;">拼<rt>pīn</rt></ruby>
+      <span v-if="onceAdmin" @click="adminMode = !adminMode" style="display: inline-block"
+        :class="`annotation-setting-toggle ${adminMode ? 'annotation-setting-toggle-active' : ''}`">
+        <i class="fa fa-wrench"></i>
+      </span>
+      <span v-if="$hasFeature('transliteration')" @click="showPinyin = !showPinyin"
+        :class="`annotation-setting-toggle ${showPinyin ? 'annotation-setting-toggle-active' : ''}`">
+        <ruby v-if="$l2.han" style="position: relative; bottom:-0.1rem;">拼<rt>pīn</rt></ruby>
         <ruby v-else-if="$l2.code === 'ja'">假<rt>か</rt></ruby>
         <ruby v-else-if="$l2.scripts && $l2.scripts[0] && $l2.scripts[0].script === 'Arab'">نص<rt>naṣṣ</rt></ruby>
         <span v-else>[p<sup>h</sup>]</span>
       </span>
-      <span v-if="$l2.han" @click="useTraditional = !useTraditional" :class="`annotation-setting-toggle ${useTraditional ? 'annotation-setting-toggle-active' : ''}`"><span v-if="useTraditional">繁</span><span v-if="!useTraditional">简</span></span>
-      <span @click="showTranslation = !showTranslation" :class="`annotation-setting-toggle ${showTranslation ? 'annotation-setting-toggle-active' : ''}`"><i class="fas fa-language"></i></span>
-      <span v-if="$l2.code === 'ko'" @click="showByeonggi = !showByeonggi" :class="`annotation-setting-toggle ${showByeonggi ? 'annotation-setting-toggle-active' : ''}`">자<small style="font-size:0.5em">字</small></span>
-      <span v-if="$l2.code === 'vi'" @click="showByeonggi = !showByeonggi" :class="`annotation-setting-toggle ${showByeonggi ? 'annotation-setting-toggle-active' : ''}`">Tự<small style="font-size:0.5em">字</small></span>
+      <span v-if="$l2.han" @click="useTraditional = !useTraditional"
+        :class="`annotation-setting-toggle ${useTraditional ? 'annotation-setting-toggle-active' : ''}`"><span
+          v-if="useTraditional">繁</span><span v-if="!useTraditional">简</span></span>
+      <span @click="showTranslation = !showTranslation"
+        :class="`annotation-setting-toggle ${showTranslation ? 'annotation-setting-toggle-active' : ''}`"><i
+          class="fas fa-language"></i></span>
+      <span v-if="$l2.code === 'ko'" @click="showByeonggi = !showByeonggi"
+        :class="`annotation-setting-toggle ${showByeonggi ? 'annotation-setting-toggle-active' : ''}`">자<small
+          style="font-size:0.5em">字</small></span>
+      <span v-if="$l2.code === 'vi'" @click="showByeonggi = !showByeonggi"
+        :class="`annotation-setting-toggle ${showByeonggi ? 'annotation-setting-toggle-active' : ''}`">Tự<small
+          style="font-size:0.5em">字</small></span>
     </div>
     <div v-if="variant === 'page'">
       <div class="mt-3">
@@ -209,6 +222,8 @@ export default {
       useSerif: undefined,
       showByeonggi: undefined,
       disableAnnotation: undefined,
+      adminMode: false,
+      onceAdmin: false,
     };
   },
   mounted() {
@@ -244,9 +259,14 @@ export default {
       this.showByeonggi = this.$store.state.settings.l2Settings.showByeonggi;
       this.disableAnnotation =
         this.$store.state.settings.l2Settings.disableAnnotation;
+      this.adminMode = this.$store.state.settings.adminMode;
+      if (this.adminMode) this.onceAdmin = true
     },
   },
   watch: {
+    adminMode() {
+      this.$store.commit("settings/SET_ADMIN_MODE", this.adminMode);
+    },
     showDefinition() {
       this.$store.commit("settings/SET_L2_SETTINGS", {
         showDefinition: this.showDefinition,
@@ -319,7 +339,7 @@ export default {
   padding: 0.1rem 0.4rem;
   display: inline-block;
   color: #999;
-  background-color: rgba(29,29,29);
+  background-color: rgba(29, 29, 29);
   border-radius: 0.2rem;
   border: 1px solid #555;
   line-height: 1.9;
