@@ -39,6 +39,7 @@
         @textChanged="lineChanged(line, ...arguments)"
         @annotated="annotated = true"
         :translation="parallelLine"
+        :delay="single ? false : 300"
       >
         <span v-html="lineHtml(line).trim()" />
       </Annotate>
@@ -51,6 +52,7 @@
           'pl-3': !single && $l2.direction === 'rtl',
           'text-right': !single && $l2.direction === 'rtl',
           'text-center': single,
+          'transparent': !annotated
         }"
         v-html="parallelLine"
         :contenteditable="enableTranslationEditing"

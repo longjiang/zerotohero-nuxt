@@ -77,6 +77,9 @@ export default {
     phonetics: {
       default: true,
     },
+    delay: {
+      default: 300
+    },
     sticky: {
       default: false, // whether or not to show each word's level color by default (without hovering)
     },
@@ -222,7 +225,7 @@ export default {
     savePhraseClick() { },
     async visibilityChanged(isVisible) {
       this.isVisible = isVisible;
-      await Helper.delay(300);
+      if (this.delay) await Helper.delay(delay.delay);
       if (this.isVisible) {
         this.convertToSentencesAndAnnotate(this.$slots.default[0]);
       }
