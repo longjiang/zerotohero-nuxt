@@ -1,6 +1,6 @@
 <template>
   <div :class="`annotation-settings annotation-settings-${variant}`">
-    <div v-if="variant = 'toolbar'">
+    <div v-if="variant === 'toolbar'">
       <span v-if="onceAdmin" @click="adminMode = !adminMode" style="display: inline-block"
         :class="`annotation-setting-toggle ${adminMode ? 'annotation-setting-toggle-active' : ''}`">
         <i class="fa fa-wrench"></i>
@@ -338,8 +338,8 @@ export default {
   font-size: 0.8rem;
   padding: 0.1rem 0.4rem;
   display: inline-block;
-  color: #999;
-  background-color: rgba(29, 29, 29);
+  color: rgba(255, 255, 255, 0.6);
+  background-color: rgba(0,0,0,0.6);
   border-radius: 0.2rem;
   border: 1px solid #555;
   line-height: 1.9;
