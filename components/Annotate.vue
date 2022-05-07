@@ -78,7 +78,7 @@ export default {
       default: true,
     },
     delay: {
-      default: 300
+      default: 123
     },
     sticky: {
       default: false, // whether or not to show each word's level color by default (without hovering)
@@ -225,7 +225,7 @@ export default {
     savePhraseClick() { },
     async visibilityChanged(isVisible) {
       this.isVisible = isVisible;
-      if (this.delay) await Helper.delay(this.delay);
+      if (this.delay) await Helper.timeout(this.delay);
       if (this.isVisible) {
         this.convertToSentencesAndAnnotate(this.$slots.default[0]);
       }

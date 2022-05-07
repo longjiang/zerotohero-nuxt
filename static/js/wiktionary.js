@@ -5,7 +5,9 @@ const Dictionary = {
   file: undefined,
   dictionary: undefined,
   words: [],
-  index: {},
+  bareIndex: {},
+  headIndex: {},
+  searchIndex: {},
   cache: {},
   tables: [],
   NlpjsTFrDict: {},
@@ -133,6 +135,7 @@ const Dictionary = {
         })
       }
       this.words = words
+      this.createIndices()
       if (this.l2 === 'fra') await this.loadFrenchConjugationsAndLemmatizer()
       if (this.l2 === 'fas') await this.loadPersianRomanization()
       if (this.l2 === 'tur') this.loadTurkishPOS()
@@ -140,34 +143,10 @@ const Dictionary = {
       return this
     }
   },
-  loadTurkishPOS() {
-    let data = this.loadCSVString(turkishPOSCSV, true)
-    for (let row of data) {
-      for (let symbol of row.Symbol.split(',')) {
-        this.turkishPOS[symbol] = row.POS
-      }
-    }
-  },
-  async loadLemmatizationTable(langCode) {
-    let res = await axios.get(`${this.server}data/lemmatization-lists/lemmatization-${langCode}.txt`)
-    if (res && res.data) {
-      let parsed = Papa.parse(res.data, { header: false })
-      let table = {}
-      for (let row of parsed.data) {
-        let lemma = row[0]
-        let surface = row[1]
-        if (surface && lemma) {
-          if (!table[surface]) table[surface] = []
-          table[surface].push(lemma)
-        }
-      }
-      return table
-    }
-  },
   async loadWords(file) {
     console.log(`Wiktionary: loading ${file}`)
     let res = await axios.get(file)
-    let words = !this.useJSON.includes(this.l2) ? this.parseDictionaryCSV(res.data) : this.parseDictionary(res.data)
+    let words = !this.useJSON.includes(this.l2) ? this.parseDictionaryCSV(res.data) : this.parseDictionaryJSON(res.data)
     words = words.sort((a, b) => {
       if (a.head && b.head) {
         return b.head.length - a.head.length
@@ -180,56 +159,51 @@ const Dictionary = {
     console.log(`Wiktionary: ${file} loaded.`)
     return words
   },
-  async loadPersianRomanization() {
-    console.log('Loading Persian romanization file...')
-    try {
-      let res = await axios.get(`${this.server}data/persian-g2p/tihudictBIG-and-wiktionary-merged.csv.txt`)
-      if (res && res.data) {
-        let parsed = Papa.parse(res.data, { header: true })
-        this.romanizations = parsed.data
+  createIndices() {
+    console.log('Wiktionary: Indexing...')
+    for (let word of this.words) {
+      for (let indexType of ['bare', 'head', 'search']) {
+        let indexRef = this[indexType + 'Index'][word[indexType]]
+        if (!Array.isArray(indexRef)) indexRef = []
+        if (!indexRef.concat) console.log(indexType + 'Index', word)
+        indexRef = indexRef.concat(word)
       }
-    } catch (err) {
-
     }
   },
-  async loadFrenchConjugationsAndLemmatizer() {
-    console.log('Loading French conjugations from "french-verbs-lefff"...')
-    let res = await axios.get(`${this.server}data/french-verbs-lefff/conjugations.json.txt`)
-    if (res && res.data) {
-      this.conjugations = res.data
-    }
-    console.log('Loading French tokenizer...')
-    importScripts('../vendor/nlp-js-tools-french/nlp-js-tools-french.js')
-    for (let key of ['adj',
-      'adv',
-      'art',
-      'con',
-      'nom',
-      'ono',
-      'pre',
-      'ver',
-      'pro']) {
-      let res = await axios.get(`/vendor/nlp-js-tools-french/dict/${key.replace('con', 'conj')}.json`)
-      let lexi = res.data
-      this.NlpjsTFrDict[key] = { lexi }
-    }
+  parseDictionaryCSV(data) {
+    console.log("Wiktionary: parsing words from CSV...")
+    let parsed = Papa.parse(data, { header: true })
+    let words = parsed.data
+    words = words.filter(w => w.word.length > 0) // filter empty rows
+      .map(item => this.augmentCSVRow(item))
+    return words
   },
-  /**
-   * Romanize Persian text
-   * @param {String} text
-   */
-  async romanizePersian(text) {
-    if (this.l2 !== 'fas') return
-    text = text.trim()
-    let row = this.romanizations.find(r => r.persian === text)
-    if (row) return row.roman
-    else {
-      let url = `https://python.zerotohero.ca/transliterate-persian?text=${encodeURIComponent(text)}`
-      let transliteration = await this.proxy(url, -1)
-      return transliteration
+  augmentCSVRow(item) {
+    item.bare = !this.accentCritical ? this.stripAccents(item.word) : item.word
+    item.search = item.bare.toLowerCase()
+    if (this.l2.agglutinative) item.search = item.search.replace(/^-/, '')
+    item.head = item.word
+    item.accented = item.word
+    delete item.word
+    item.wiktionary = true
+    item.definitions = item.definitions ? item.definitions.split('|') : []
+    item.stems = item.stems ? item.stems.split('|') : []
+    for (let definition of item.definitions.filter(d => d.includes(' of '))) {
+      let lemma = this.lemmaFromDefinition(definition)
+      if (lemma) item.stems.push(lemma)
     }
+    item.stems = this.unique(item.stems)
+    item.phrases = item.phrases ? item.phrases.split('|') : []
+    if (item.han) {
+      item.cjk = {
+        canonical: item.han,
+        pronunciation: item.bare
+      }
+      item.hanja = item.han
+    }
+    return item
   },
-  parseDictionary(data) {
+  parseDictionaryJSON(data) {
     console.log("Wiktionary: parsing words from JSON...")
     this.dictionary = data
     let words = []
@@ -312,6 +286,79 @@ const Dictionary = {
     }
     return words
   },
+  loadTurkishPOS() {
+    let data = this.loadCSVString(turkishPOSCSV, true)
+    for (let row of data) {
+      for (let symbol of row.Symbol.split(',')) {
+        this.turkishPOS[symbol] = row.POS
+      }
+    }
+  },
+  async loadLemmatizationTable(langCode) {
+    let res = await axios.get(`${this.server}data/lemmatization-lists/lemmatization-${langCode}.txt`)
+    if (res && res.data) {
+      let parsed = Papa.parse(res.data, { header: false })
+      let table = {}
+      for (let row of parsed.data) {
+        let lemma = row[0]
+        let surface = row[1]
+        if (surface && lemma) {
+          if (!table[surface]) table[surface] = []
+          table[surface].push(lemma)
+        }
+      }
+      return table
+    }
+  },
+  async loadPersianRomanization() {
+    console.log('Loading Persian romanization file...')
+    try {
+      let res = await axios.get(`${this.server}data/persian-g2p/tihudictBIG-and-wiktionary-merged.csv.txt`)
+      if (res && res.data) {
+        let parsed = Papa.parse(res.data, { header: true })
+        this.romanizations = parsed.data
+      }
+    } catch (err) {
+
+    }
+  },
+  async loadFrenchConjugationsAndLemmatizer() {
+    console.log('Loading French conjugations from "french-verbs-lefff"...')
+    let res = await axios.get(`${this.server}data/french-verbs-lefff/conjugations.json.txt`)
+    if (res && res.data) {
+      this.conjugations = res.data
+    }
+    console.log('Loading French tokenizer...')
+    importScripts('../vendor/nlp-js-tools-french/nlp-js-tools-french.js')
+    for (let key of ['adj',
+      'adv',
+      'art',
+      'con',
+      'nom',
+      'ono',
+      'pre',
+      'ver',
+      'pro']) {
+      let res = await axios.get(`/vendor/nlp-js-tools-french/dict/${key.replace('con', 'conj')}.json`)
+      let lexi = res.data
+      this.NlpjsTFrDict[key] = { lexi }
+    }
+  },
+  /**
+   * Romanize Persian text
+   * @param {String} text
+   */
+  async romanizePersian(text) {
+    if (this.l2 !== 'fas') return
+    text = text.trim()
+    let row = this.romanizations.find(r => r.persian === text)
+    if (row) return row.roman
+    else {
+      let url = `https://python.zerotohero.ca/transliterate-persian?text=${encodeURIComponent(text)}`
+      let transliteration = await this.proxy(url, -1)
+      return transliteration
+    }
+  },
   loadCSVString(csv, header = true) {
     if (typeof Papa !== 'undefined') {
       let r = Papa.parse(csv, {
@@ -364,38 +411,6 @@ const Dictionary = {
   isHan(text) {
     return this.hanRegexStrict.test(text)
   },
-  parseDictionaryCSV(data) {
-    console.log("Wiktionary: parsing words from CSV...")
-    let parsed = Papa.parse(data, { header: true })
-    let words = parsed.data
-    words = words.filter(w => w.word.length > 0) // filter empty rows
-      .map(item => {
-        item.bare = !this.accentCritical ? this.stripAccents(item.word) : item.word
-        item.search = item.bare.toLowerCase()
-        if (this.l2.agglutinative) item.search = item.search.replace(/^-/, '')
-        item.head = item.word
-        item.accented = item.word
-        delete item.word
-        item.wiktionary = true
-        item.definitions = item.definitions ? item.definitions.split('|') : []
-        item.stems = item.stems ? item.stems.split('|') : []
-        for (let definition of item.definitions.filter(d => d.includes(' of '))) {
-          let lemma = this.lemmaFromDefinition(definition)
-          if (lemma) item.stems.push(lemma)
-        }
-        item.stems = this.unique(item.stems)
-        item.phrases = item.phrases ? item.phrases.split('|') : []
-        if (item.han) {
-          item.cjk = {
-            canonical: item.han,
-            pronunciation: item.bare
-          }
-          item.hanja = item.han
-        }
-        return item
-      })
-    return words
-  },
   inflections(sense) {
     let definitions = []
     for (let inflection of sense.complex_inflection_of) {
@@ -446,12 +461,81 @@ const Dictionary = {
     else return this.words[id]
   },
   lookup(text) {
-    let word = this.words.find(word => word && word.bare.toLowerCase() === text.toLowerCase())
-    return word
+    let words = this.searchIndex[text.toLowerCase()]
+    if (words && words[0]) return words[0]
   },
   lookupMultiple(text, ignoreAccents = false) {
     if (ignoreAccents && !this.accentCritical) text = this.stripAccents(text)
-    let words = this.words.filter(word => word && word[ignoreAccents ? 'bare' : 'head'].toLowerCase() === text.toLowerCase())
+    let type = ignoreAccents ? 'bare' : 'head'
+    let words = this[type + 'Index'][text.toLowerCase()]
+    return words
+  },
+  lookupByDef(text, limit = 30) {
+    text = text.toLowerCase()
+    let results = []
+    for (let word of this.words) {
+      for (let d of word.definitions) {
+        let found = d.toLowerCase().includes(text)
+        if (found) {
+          results.push(Object.assign({ score: 1 / (d.length - text.length + 1) }, word))
+        }
+      }
+    }
+    results = results.sort((a, b) => b.score - a.score)
+    return results.slice(0, limit)
+  },
+  lookupFuzzy(text, limit = 30, quick = false) { // text = 'abcde'
+    if (!this.accentCritical) text = this.stripAccents(text)
+    text = text.toLowerCase()
+    let words = []
+    words = (this.searchIndex[text] || []).map(w => Object.assign({ score: 1 }, w))
+    if (this.lemmatizationLangs[this.l2]) {
+      let lemmas = this.lemmatization[text]
+      let lemmaWords = []
+      if (lemmas) {
+        for (let lemma of lemmas) {
+          lemmaWords = lemmaWords.concat(this.lookupMultiple(lemma))
+        }
+        lemmaWords = lemmaWords.map(w => Object.assign({ morphology: 'Inflected form' }, w))
+        words = this.uniqueByValue(lemmaWords.concat(words), 'id')
+      }
+    }
+    if (!quick) {
+      if (['fra'].includes(this.l2) && !quick) {
+        let stems = this.findStems(text)
+        if (stems.length > 0 && !quick) {
+          let stemWords = this.stringsToWords(stems)
+          let stemWordsWithScores = stemWords.map(w => Object.assign({ score: 1 }, w))
+          words = words.concat(stemWordsWithScores)
+        }
+      } else {
+        if (words.length === 0 && this.words.length < 200000) {
+          for (let word of this.words) {
+            let search = word.search ? word.search : undefined
+            if (search) {
+              let distance = FastestLevenshtein.distance(search, text);
+              if (this.l2 === 'tur' && text.startsWith(search)) distance = distance / 2
+              let max = Math.max(text.length, search.length)
+              let similarity = (max - distance) / max
+              words.push(Object.assign({ score: similarity }, word))
+              if (similarity === 1 && !quick) {
+                words = words.concat(this.stemWords(word, 1))
+                words = words.concat(this.phrases(word, 1))
+              }
+            }
+          }
+        } else {
+          for (let word of words) {
+            let stemWords = this.stemWords(word, 1)
+            let phrases = this.phrases(word, 1)
+            words = words.concat(stemWords).concat(phrases)
+          }
+        }
+      }
+      words = words.sort((a, b) => b.score - a.score)
+      words = this.uniqueByValue(words, 'id')
+    }
+    words = words.slice(0, limit)
     return words
   },
   getWords() {
@@ -587,20 +671,6 @@ const Dictionary = {
       }
     }
     return forms
-  },
-  lookupByDef(text, limit = 30) {
-    text = text.toLowerCase()
-    let results = []
-    for (let word of this.words) {
-      for (let d of word.definitions) {
-        let found = d.toLowerCase().includes(text)
-        if (found) {
-          results.push(Object.assign({ score: 1 / (d.length - text.length + 1) }, word))
-        }
-      }
-    }
-    results = results.sort((a, b) => b.score - a.score)
-    return results.slice(0, limit)
   },
   uniqueByValue(array, key) {
     let flags = []
@@ -834,14 +904,14 @@ const Dictionary = {
     return words
   },
   stemWords(word, score = undefined) {
-    if (word.stems.length > 0) {
+    if (word.stems && word.stems.length > 0) {
       let stemWords = this.stringsToWords(word.stems)
       stemWordsWithScores = stemWords.map(w => Object.assign({ score: score }, w))
       return stemWordsWithScores
     } else return []
   },
   phrases(word, score = undefined) {
-    if (word.phrases.length > 0) {
+    if (word.phrases && word.phrases.length > 0) {
       let phrases = []
       for (let s of word.phrases) {
         phrases = phrases.concat(this.lookupMultiple(s))
@@ -863,60 +933,6 @@ const Dictionary = {
     } else {
       return []
     }
-  },
-  lookupFuzzy(text, limit = 30, quick = false) { // text = 'abcde'
-    if (!this.accentCritical) text = this.stripAccents(text)
-    text = text.toLowerCase()
-    let words = []
-    words = this.words.filter(word => word.search === text).map(w => Object.assign({ score: 1 }, w))
-    if (this.lemmatizationLangs[this.l2]) {
-      let lemmas = this.lemmatization[text]
-      let lemmaWords = []
-      if (lemmas) {
-        for (let lemma of lemmas) {
-          lemmaWords = lemmaWords.concat(this.lookupMultiple(lemma))
-        }
-        lemmaWords = lemmaWords.map(w => Object.assign({ morphology: 'Inflected form' }, w))
-        words = this.uniqueByValue(lemmaWords.concat(words), 'id')
-      }
-    }
-    if (!quick) {
-      if (['fra'].includes(this.l2) && !quick) {
-        let stems = this.findStems(text)
-        if (stems.length > 0 && !quick) {
-          let stemWords = this.stringsToWords(stems)
-          let stemWordsWithScores = stemWords.map(w => Object.assign({ score: 1 }, w))
-          words = words.concat(stemWordsWithScores)
-        }
-      } else {
-        if (words.length === 0 && this.words.length < 200000) {
-          for (let word of this.words) {
-            let search = word.search ? word.search : undefined
-            if (search) {
-              let distance = FastestLevenshtein.distance(search, text);
-              if (this.l2 === 'tur' && text.startsWith(search)) distance = distance / 2
-              let max = Math.max(text.length, search.length)
-              let similarity = (max - distance) / max
-              words.push(Object.assign({ score: similarity }, word))
-              if (similarity === 1 && !quick) {
-                words = words.concat(this.stemWords(word, 1))
-                words = words.concat(this.phrases(word, 1))
-              }
-            }
-          }
-        } else {
-          for (let word of words) {
-            let stemWords = this.stemWords(word, 1)
-            let phrases = this.phrases(word, 1)
-            words = words.concat(stemWords).concat(phrases)
-          }
-        }
-      }
-      words = words.sort((a, b) => b.score - a.score)
-      words = this.uniqueByValue(words, 'id')
-    }
-    words = words.slice(0, limit)
-    return words
   },
   randomArrayItem(array, start = 0, length = false) {
     length = length || array.length

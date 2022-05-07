@@ -28,18 +28,18 @@
         tag="div"
         :sticky="sticky"
         :class="{
-          'transcript-line-chinese': true,
+          'transcript-line-l2': true,
           'text-center': single,
           'pr-3': single && $l2.direction === 'rtl',
           'pl-3': single && $l2.direction !== 'rtl',
-          'transparent': !annotated
+          'annotated': annotated
         }"
         :buttons="true"
         v-if="!showSubsEditing"
         @textChanged="lineChanged(line, ...arguments)"
         @annotated="annotated = true"
         :translation="parallelLine"
-        :delay="single ? false : 300"
+        :delay="single ? false : 123"
       >
         <span v-html="lineHtml(line).trim()" />
       </Annotate>
@@ -199,6 +199,13 @@ export default {
   &.transcript-line-matched {
     color: #616161;
     font-weight: bold;
+  }
+  .transcript-line-l2 {
+    transition: 0.1s linear all;
+    opacity: 0;
+    &.annotated {
+      opacity: 1;
+    }
   }
   .transcript-line-l1 {
     opacity: 0.4;

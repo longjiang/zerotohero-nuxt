@@ -409,14 +409,14 @@ export default {
       this.updateOpen();
     },
     async tooltipHover() {
-      await Helper.timeout(300);
+      await Helper.timeout(123);
       this.updateOpen();
     },
   },
   methods: {
     async visibilityChanged(isVisible) {
       this.isVisible = isVisible;
-      await Helper.delay(300);
+      await Helper.timeout(123);
       if (this.isVisible && (!this.words || this.words.length === 0)) {
         this.lookup(true);
       }
@@ -626,7 +626,7 @@ export default {
         }
         if (this.words && this.words.find(w => w.pos && ['proper noun', 'noun', 'Noun'].includes(w.pos))) this.loadImages();
         this.open = true;
-        await Helper.timeout(300);
+        await Helper.timeout(123);
         if (this.open) {
           if (this.$refs.speak) {
             this.$refs.speak[0].speak(0.75, 0.5); // Speed and volume
