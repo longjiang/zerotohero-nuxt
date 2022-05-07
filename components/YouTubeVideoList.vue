@@ -3,7 +3,7 @@
     <div class="youtube-video-list">
       <client-only>
         <div
-          v-if="$adminMode"
+          v-if="$adminMode && showAdminToolsInAdminMode"
           class="mb-4 youtube-video-list-admin-bar rounded p-3 w-100"
         >
           <div>
@@ -246,6 +246,9 @@ export default {
     showPlayButton: {
       default: false,
     },
+    showAdminToolsInAdminMode: {
+      default: true
+    }
   },
 
   data() {
@@ -499,6 +502,9 @@ export default {
 .main-dark {
   .youtube-video-list-admin-bar {
     background-color: #88888822;
+  }
+  .youtube-title {
+    color: white;
   }
 }
 

@@ -191,8 +191,8 @@ export default {
     background: rgb(78, 75, 75);
     background: radial-gradient(
       circle,
-      rgb(44, 43, 43) 0%,
-      rgb(10, 10, 10) 100%
+      rgb(58, 57, 57) 0%,
+      rgb(26, 26, 26) 100%
     );
     a {
       z-index: 1;

@@ -304,9 +304,7 @@ export default {
         let response = await axios.get(
           `${Config.youtubeVideosTableName(this.$l2.id)}?sort=-id&filter[l2][eq]=${
             this.$l2.id
-          }${filters}&limit=${limit}&offset=${start}&fields=channel_id,id,lesson,level,title,topic,youtube_id,tv_show.*,talk.*${
-            this.$adminMode ? ",subs_l2" : ""
-          }&timestamp=${this.$adminMode ? Date.now() : 0}`
+          }${filters}&limit=${limit}&offset=${start}&fields=channel_id,id,lesson,level,title,topic,youtube_id,tv_show.*,talk.*&timestamp=${this.$adminMode ? Date.now() : 0}`
         );
         let videos = response.data.data || [];
         if (videos && this.$adminMode) {
