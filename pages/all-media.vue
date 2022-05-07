@@ -19,17 +19,21 @@
             <h3 class="text-center mt-5 mb-4">
               TV Shows
             </h3>
-            <ShowList :shows="random(tvShows, 3)" type="tvShows" :key="`tv-shows`" />
-            <b-button variant="ghost-dark d-block w-100">More TV Shows <i class="fas fa-chevron-right ml-1"
-                style="opacity: 0.5"></i></b-button>
+            <ShowList :shows="random(tvShows, 6)" type="tvShows" :key="`tv-shows`" />
+            <div class="text-center mt-1">
+              <b-button variant="ghost-dark">More TV Shows <i class="fas fa-chevron-right ml-1"
+                  style="opacity: 0.5"></i></b-button>
+            </div>
           </div>
           <div v-if="talks && talks.length > 0">
             <h3 class="text-center mt-5 mb-4">
               YouTube Channels
             </h3>
-            <ShowList :shows="random(talks, 3)" type="talks" :key="`tv-shows`" />
-            <b-button variant="ghost-dark d-block w-100">More YouTube Channels <i class="fas fa-chevron-right ml-1"
-                style="opacity: 0.5"></i></b-button>
+            <ShowList :shows="random(talks, 6)" type="talks" :key="`tv-shows`" />
+            <div class="text-center mt-1">
+              <b-button variant="ghost-dark">More YouTube Channels <i class="fas fa-chevron-right ml-1"
+                  style="opacity: 0.5"></i></b-button>
+            </div>
           </div>
         </div>
       </div>
