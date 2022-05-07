@@ -1,115 +1,67 @@
 <template>
-  <div
-    :class="{
-      'synced-transcript': true,
-      'synced-transcript-multi-line': !single,
-      'synced-transcript-single-line': single,
-    }"
-  >
+  <div :class="{
+    'synced-transcript': true,
+    'synced-transcript-multi-line': !single,
+    'synced-transcript-single-line': single,
+  }">
     <client-only>
-      <template
-        v-for="(line, index) in single
-          ? [lines[currentLineIndex || 0]].filter((line) => line)
-          : lines
-              .slice(visibleMin, visibleMax - visibleMin)
-              .filter((line) => line)"
-      >
-        <TranscriptLine
-          :line="line"
-          :parallelLine="
-            $l2.code !== $l1.code && parallellines
-              ? matchedParallelLines[
-                  single ? currentLineIndex : index + visibleMin
-                ]
-              : undefined
-          "
-          :lineIndex="index + visibleMin"
-          :key="`line-${index + visibleMin}-${
-            line.starttime
-          }-${line.line.substr(0, 10)}`"
-          :abnormal="
-            $adminMode &&
-            lines[index + visibleMin - 1] &&
-            lines[index + visibleMin - 1].starttime > line.starttime
-          "
-          :matched="
-            !single &&
-            highlight &&
-            line &&
-            new RegExp(highlight.join('|')).test(line.line)
-          "
-          :showSubsEditing="showSubsEditing"
-          :sticky="sticky"
-          :single="single"
-          :highlight="highlight"
-          :hsk="hsk"
-          :notes="notes"
-          :enableTranslationEditing="$adminMode && enableTranslationEditing"
-          @click="lineClick(line)"
-          @removeLineClick="removeLine(index + visibleMin)"
-          @trasnlationLineBlur="trasnlationLineBlur"
-          @trasnlationLineKeydown="trasnlationLineKeydown"
-        />
-        <div
-          class="review-placeholder"
-          :key="`line-${index + visibleMin}-review-placeholder-${
-            reviewKeys[index + visibleMin]
-          }`"
-        >
-          <div
-            v-if="!single && review[index + visibleMin]"
-            :key="`line-${index + visibleMin}-review-${
-              reviewKeys[index + visibleMin]
-            }`"
-          >
-            <Review
-              v-for="(reviewItem, reviewItemIndex) in review[
-                index + visibleMin
-              ].slice(
-                0,
-                reviewOpen[index + visibleMin] === true
-                  ? reviewOpen[index + visibleMin].length
-                  : 1
-              )"
-              :key="`review-${index + visibleMin}-${
-                reviewItem.text || reviewItem.simplified
-              }-${reviewItemIndex}-${reviewKeys[index + visibleMin]}`"
-              :reviewItem="reviewItem"
-              :hsk="hsk"
-              :skin="skin"
-            />
-            <div
-              class="text-center mt-2"
-              :key="`review-title-${index + visibleMin}-${
-                reviewKeys[index + visibleMin]
-              }`"
-              v-if="
-                review[index + visibleMin] &&
-                review[index + visibleMin].length > 1
-              "
-            >
-              <span
-                class="d-inline-block"
-                style="
+      <template v-for="(line, index) in single
+    ? [lines[currentLineIndex || 0]].filter((line) => line)
+    : lines
+      .slice(visibleMin, visibleMax - visibleMin)
+      .filter((line) => line)">
+        <TranscriptLine :line="line" :parallelLine="
+          $l2.code !== $l1.code && parallellines
+            ? matchedParallelLines[
+            single ? currentLineIndex : index + visibleMin
+            ]
+            : undefined
+        " :lineIndex="index + visibleMin" :key="`line-${index + visibleMin}-${line.starttime
+}-${line.line.substr(0, 10)}`" :abnormal="
+    $adminMode &&
+    lines[index + visibleMin - 1] &&
+    lines[index + visibleMin - 1].starttime > line.starttime
+  " :matched="
+  !single &&
+  highlight &&
+  line &&
+  new RegExp(highlight.join('|')).test(line.line)
+" :showSubsEditing="showSubsEditing" :sticky="sticky" :single="single" :highlight="highlight" :hsk="hsk"
+          :notes="notes" :enableTranslationEditing="$adminMode && enableTranslationEditing" @click="lineClick(line)"
+          @removeLineClick="removeLine(index + visibleMin)" @trasnlationLineBlur="trasnlationLineBlur"
+          @trasnlationLineKeydown="trasnlationLineKeydown" />
+        <div class="review-placeholder" :key="`line-${index + visibleMin}-review-placeholder-${reviewKeys[index + visibleMin]
+        }`">
+          <div v-if="!single && review[index + visibleMin]" :key="`line-${index + visibleMin}-review-${reviewKeys[index + visibleMin]
+          }`">
+            <Review v-for="(reviewItem, reviewItemIndex) in review[
+              index + visibleMin
+            ].slice(
+              0,
+              reviewOpen[index + visibleMin] === true
+                ? reviewOpen[index + visibleMin].length
+                : 1
+            )" :key="`review-${index + visibleMin}-${reviewItem.text || reviewItem.simplified
+}-${reviewItemIndex}-${reviewKeys[index + visibleMin]}`" :reviewItem="reviewItem" :hsk="hsk"
+              :skin="skin" />
+            <div class="text-center mt-2" :key="`review-title-${index + visibleMin}-${reviewKeys[index + visibleMin]
+            }`" v-if="
+    review[index + visibleMin] &&
+    review[index + visibleMin].length > 1
+  ">
+              <span class="d-inline-block" style="
                   position: relative;
                   bottom: 0.13rem;
                   font-weight: normal;
                   opacity: 0.5;
                   font-size: 0.8em;
                   cursor: pointer;
-                "
-              >
-                <span
-                  v-if="!reviewOpen[index + visibleMin]"
-                  @click="openReview(index + visibleMin)"
-                >
+                ">
+                <span v-if="!reviewOpen[index + visibleMin]" @click="openReview(index + visibleMin)">
                   <i class="fa fa-chevron-down mr-1"></i>
                   Show More Questions
                 </span>
-                <span
-                  v-if="reviewOpen[index + visibleMin] === true"
-                  @click="closeReview(index + visibleMin)"
-                >
+                <span v-if="reviewOpen[index + visibleMin] === true" @click="closeReview(index + visibleMin)">
                   <i class="fa fa-chevron-up mr-1"></i>
                   Show Fewer Questions
                 </span>
@@ -118,16 +70,12 @@
           </div>
         </div>
       </template>
-      <div
-        v-observe-visibility="visibilityChanged"
-        style="
+      <div v-observe-visibility="visibilityChanged" style="
           height: 100vh;
           display: flex;
           align-items: center;
           justify-content: center;
-        "
-        v-if="!single && lines.length > visibleMax"
-      >
+        " v-if="!single && lines.length > visibleMax">
         <Loader :sticky="true" />
       </div>
     </client-only>
@@ -357,7 +305,7 @@ export default {
       this.$emit("play");
     },
     cancelSmoothScroll() {
-      let id = window.requestAnimationFrame(function () {});
+      let id = window.requestAnimationFrame(function () { });
       while (id--) {
         window.cancelAnimationFrame(id);
       }
@@ -650,7 +598,7 @@ export default {
           found =
             new RegExp(`[ .,:!?]${form}[ .,:!?]`, "gi").test(line.line) ||
             new RegExp(`^${form}[ .,:!?]`, "gi").test();
-        } catch (err) {}
+        } catch (err) { }
         return found;
       }
     },
@@ -694,53 +642,54 @@ export default {
       );
       if (el) {
         let smallScreenYOffset = this.getSmallScreenOffset();
+
         let elHeight = el.clientHeight;
 
         let lastDuration =
           this.previousLine && this.currentLine
             ? (this.currentLine.starttime - this.previousLine.starttime) * 1000
             : 3000;
+
         lastDuration = lastDuration || 3000;
+
         let duration =
           this.currentLine && this.nextLine
             ? Math.min(
-                (this.nextLine.starttime - this.currentLine.starttime) * 1000,
-                lastDuration,
-                3000
-              )
+              (this.nextLine.starttime - this.currentLine.starttime) * 1000,
+              lastDuration,
+              3000
+            )
             : 3000;
-        this.$smoothScroll({
-          scrollTo: el,
-          updateHistory: false,
-          offset:
-            -(smallScreenYOffset
-              ? window.innerHeight + smallScreenYOffset
-              : Math.min(
-                  window.innerHeight / 2,
-                  (this.$el.clientWidth * 9) / 16 + 52
-                ) *
-                  2 -
-                elHeight / 2) /
-              2 +
-            elHeight / 2,
-          duration,
-          left: 0,
-          easingFunction: (t) => t,
-        });
 
-        // let offsetTop = Helper.documentOffsetTop(el);
-        // let middle =
-        //   offsetTop -
-        //   (smallScreenYOffset
-        //     ? window.innerHeight + smallScreenYOffset
-        //     : (this.$el.clientWidth * 9) / 16 + 52) /
-        //     2 +
-        //   elHeight / 2;
-        // window.scrollTo({
-        //   top: middle,
-        //   left: 0,
-        //   behavior: "smooth",
-        // });
+        let offset = -(smallScreenYOffset
+          ? window.innerHeight + smallScreenYOffset
+          : Math.min(
+            window.innerHeight / 2,
+            (this.$el.clientWidth * 9) / 16 + 52
+          ) *
+          2 -
+          elHeight / 2) /
+          2 +
+          elHeight / 2
+        if (navigator.hardwareConcurrency < 4) {
+          let offsetTop = Helper.documentOffsetTop(el);
+          window.scrollTo({
+            top: offsetTop + offset,
+            left: 0,
+            behavior: "smooth",
+          });
+        } else {
+          this.$smoothScroll({
+            scrollTo: el,
+            updateHistory: false,
+            offset,
+            duration,
+            left: 0,
+            easingFunction: (t) => t,
+          });
+
+        }
+
       }
     },
     lineClick(line) {
@@ -793,6 +742,7 @@ export default {
     font-weight: bold;
     font-size: 1.5rem;
   }
+
   &.synced-transcript-multi-line {
     padding-left: 1rem;
     padding-right: 1rem;
