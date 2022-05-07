@@ -31,7 +31,18 @@
             </h3>
             <YouTubeVideoList :videos="random(videos).slice(0, 8)" :showAdminToolsInAdminMode="false" skin="dark" />
             <div class="text-center mt-1">
-              <router-link class="btn btn-ghost-dark" :to="{ name: 'youtube-browse' }"> More Videos <i class=" fas
+              <router-link class="btn btn-ghost-dark" :to="{ name: 'youtube-browse' }"> More New Arrivals <i class=" fas
+                fa-chevron-right ml-1" style="opacity: 0.5"></i></router-link>
+            </div>
+          </div>
+          <div v-if="videos && movies && movies.length > 0">
+            <h3 class="text-center mt-5 mb-4">
+              Movies
+            </h3>
+            <YouTubeVideoList :videos="random(movies).slice(0, 4)" :showAdminToolsInAdminMode="false" skin="dark" />
+            <div class="text-center mt-1">
+              <router-link class="btn btn-ghost-dark"
+                :to="{ name: 'show', params: { type: 'tv-show', id: moviesShow.id } }"> More Movies <i class=" fas
                 fa-chevron-right ml-1" style="opacity: 0.5"></i></router-link>
             </div>
           </div>
@@ -65,6 +76,32 @@
                 fa-chevron-right ml-1" style="opacity: 0.5"></i></router-link>
             </div>
           </div>
+          <div v-if="videos && music && music.length > 0">
+            <h3 class="text-center mt-5 mb-4">
+              Music
+            </h3>
+            <YouTubeVideoList :videos="random(music).slice(0, 4)" :showAdminToolsInAdminMode="false" skin="dark" />
+            <div class="text-center mt-1">
+              <router-link class="btn btn-ghost-dark"
+                :to="{ name: 'show', params: { type: 'tv-show', id: musicShow.id } }"> More Music <i class=" fas
+                fa-chevron-right ml-1" style="opacity: 0.5"></i></router-link>
+            </div>
+          </div>
+          <div v-if="videos && news && news.length > 0">
+            <h3 class="text-center mt-5 mb-4">
+              News
+            </h3>
+            <YouTubeVideoList :videos="random(news).slice(0, 4)" :showAdminToolsInAdminMode="false" skin="dark" />
+            <div class="text-center mt-1">
+              <router-link class="btn btn-ghost-dark"
+                :to="{ name: 'show', params: { type: 'tv-show', id: newsShow.id } }"> More News <i class=" fas
+                fa-chevron-right ml-1" style="opacity: 0.5"></i></router-link>
+            </div>
+          </div>
+          <LazyIdenticalLanguages
+            class="mt-5 mb-4"
+            routeName="all-media"
+          />
         </div>
       </div>
     </div>
@@ -80,12 +117,17 @@ export default {
     return {
       videos: undefined,
       tvShows: undefined,
-      talks: undefined
+      talks: undefined,
+      musicShow: undefined,
+      moviesShow: undefined,
+      newsShow: undefined,
+      music: [],
+      movies: [],
+      news: [],
     };
   },
   async fetch() {
-    this.tvShows = this.$store.state.shows['tvShows'][this.$l2.code]
-    this.talks = this.$store.state.shows['talks'][this.$l2.code]
+    this.loadShows()
   },
   async mounted() {
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
@@ -93,7 +135,7 @@ export default {
         this.loadShows();
       }
     });
-    if (!this.videos || this.videos.length === 0) this.videos = await this.getVideos(100)
+    if (!this.videos || this.videos.length === 0) this.videos = await this.getVideos({ limit: 100 })
   },
   beforeDestroy() {
     // you may call unsubscribe to stop the subscription
@@ -117,30 +159,51 @@ export default {
     },
   },
   methods: {
-    loadShows() {
-      this.tvShows = this.$store.state.shows['tvShows'][this.$l2.code]
-      this.talks = this.$store.state.shows['talks'][this.$l2.code]
+    async loadShows() {
+      this.tvShows = this.$store.state.shows.tvShows[this.$l2.code]
+      this.talks = this.$store.state.shows.talks[this.$l2.code]
+      if (this.tvShows) {
+        this.musicShow = this.$store.state.shows.tvShows[this.$l2.code].find(
+          (s) => s.title === "Music"
+        );
+        this.moviesShow = this.$store.state.shows.tvShows[this.$l2.code].find(
+          (s) => s.title === "Movies"
+        );
+        this.music = await this.getVideos({ limit: 10, tvShow: this.musicShow.id })
+        this.movies = await this.getVideos({ limit: 10, tvShow: this.moviesShow.id })
+      }
+      if (this.talks) {
+        this.newsShow = this.$store.state.shows.talks[this.$l2.code].find(
+          (s) => s.title === "News"
+        );
+        this.news = await this.getVideos({ limit: 10, talk: this.newsShow.id })
+      }
     },
     random(array, max) {
       let shuffled = Helper.shuffle(array)
       return shuffled.slice(0, max)
     },
-    async getVideos(limit) {
+    async getVideos({ limit = 10, tvShow = undefined, talk = undefined }) {
       try {
         let videos
+        let filter = 'filter[tv_show][nnull]=1'
+        if (tvShow) filter = `filter[tv_show][eq]=${tvShow}`
+        if (talk) filter = `filter[talk][eq]=${talk}`
+
         let response = await axios.get(
           `${Config.youtubeVideosTableName(this.$l2.id)}?sort=-date&filter[l2][eq]=${this.$l2.id
-          }&filter[tv_show][nnull]=1&filter[youtube_id][contains]=${this.randBase64(1)}&limit=${limit}&fields=channel_id,id,lesson,level,title,topic,youtube_id,tv_show,talk`
+          }&${filter}&filter[youtube_id][contains]=${this.randBase64(1)}&limit=${limit}&fields=channel_id,id,lesson,level,title,topic,youtube_id,tv_show,talk`
         );
         if (response.data.data && response.data.data.length > 0) videos = response.data.data
-        if (!videos) {
+        if (!videos && !tvShow && !talk) {
           response = await axios.get(
             `${Config.youtubeVideosTableName(this.$l2.id)}?sort=-date&filter[l2][eq]=${this.$l2.id
             }&limit=${limit}&fields=channel_id,id,lesson,level,title,topic,youtube_id,tv_show,talk`
           );
           videos = response.data.data || []
         }
-        return Helper.uniqueByValue(videos, 'tv_show')
+        if (!tvShow & !talk) videos = Helper.uniqueByValue(videos, 'tv_show')
+        return videos
       } catch (err) {
         return []
       }
