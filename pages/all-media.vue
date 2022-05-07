@@ -15,31 +15,23 @@
       <div class="row">
         <div class="col-sm-12">
           <!-- <Sale class="mt-5 mb-5" v-if="$l2.code === 'zh'" /> -->
-          <SimpleSearch
-            placeholder="Search"
-            ref="searchLibrary"
-            skin="dark"
-            class="mt-4 mb-5"
-            style="flex: 1"
-            :action="
-              (url) => {
-                this.$router.push({
-                  path: `/${$l1.code}/${
-                    $l2.code
+          <SimpleSearch placeholder="Search" ref="searchLibrary" skin="dark" class="mt-4 mb-5" style="flex: 1" :action="
+            (url) => {
+              this.$router.push({
+                path: `/${$l1.code}/${$l2.code
                   }/youtube/browse/all/all/0/${encodeURIComponent(
                     url
                   )}`,
-                });
-              }
-            "
-          />
+              });
+            }
+          " />
           <div v-if="videos && videos.length > 0">
             <h3 class="text-center mt-3 mb-4">
               New Arrivals
             </h3>
             <YouTubeVideoList :videos="random(videos).slice(0, 8)" :showAdminToolsInAdminMode="false" skin="dark" />
             <div class="text-center mt-1">
-              <router-link class="btn btn-ghost-dark" :to="{ name: 'youtube-browse' }" > More Videos <i class=" fas
+              <router-link class="btn btn-ghost-dark" :to="{ name: 'youtube-browse' }"> More Videos <i class=" fas
                 fa-chevron-right ml-1" style="opacity: 0.5"></i></router-link>
             </div>
           </div>
@@ -49,7 +41,7 @@
             </h3>
             <ShowList :shows="random(tvShows, 6)" type="tvShows" :key="`tv-shows`" />
             <div class="text-center mt-1">
-              <router-link class="btn btn-ghost-dark" :to="{ name: 'tv-shows' }" > More TV Shows <i class=" fas
+              <router-link class="btn btn-ghost-dark" :to="{ name: 'tv-shows' }"> More TV Shows <i class=" fas
                 fa-chevron-right ml-1" style="opacity: 0.5"></i></router-link>
             </div>
           </div>
@@ -59,7 +51,17 @@
             </h3>
             <ShowList :shows="random(talks, 6)" type="talks" :key="`tv-shows`" />
             <div class="text-center mt-1">
-              <router-link class="btn btn-ghost-dark" :to="{ name: 'talks' }" > More YouTube Channels <i class=" fas
+              <router-link class="btn btn-ghost-dark" :to="{ name: 'talks' }"> More YouTube Channels <i class=" fas
+                fa-chevron-right ml-1" style="opacity: 0.5"></i></router-link>
+            </div>
+          </div>
+          <div v-if="videos && talks && talks.length > 0 && audiobooks.length > 0">
+            <h3 class="text-center mt-5 mb-4">
+              Audiobooks
+            </h3>
+            <ShowList :shows="random(audiobooks, 6)" type="talks" :key="`tv-shows`" />
+            <div class="text-center mt-1">
+              <router-link class="btn btn-ghost-dark" :to="{ name: 'audiobooks' }"> More Audiobooks <i class=" fas
                 fa-chevron-right ml-1" style="opacity: 0.5"></i></router-link>
             </div>
           </div>
@@ -98,6 +100,9 @@ export default {
     this.unsubscribe();
   },
   computed: {
+    audiobooks() {
+      return this.talks.filter(t => t.audiobook)
+    },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
