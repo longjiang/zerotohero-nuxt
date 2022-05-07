@@ -11,6 +11,8 @@
   <div>
     <SocialHead title="Zero to Hero Languages | Master any language by comprehensible input."
       description="We provide live TV channels in the target language, TV shows with subtitles, music with lyrics, phrasebooks with video examples... everything that can help you to learn a language “by osmosis.” We are also known for our “Chinese Zero to Hero” and “English Zero to Hero” online language courses." />
+    <div class="gradient-backdrop"></div>
+    <div class="gradient-backdrop-2"></div>
     <div class="container-fluid pt-4" style="overflow: hidden; position: relative">
       <div class="container">
         <div class="row pt-5 mb-5">
@@ -21,14 +23,15 @@
                   data-not-lazy /><br /><b>zerotohero.ca</b>
               </span>
               <p style="font-size: 1.6rem; max-width: 45rem; margin: 2rem auto 0 auto; line-height: 1.5;">
-                Learn <strong><span style="color: #fd4f1c">{{ languagesWithVideos.length }} languages</span></strong> by
-                “comprehensible input” through a collection of <strong><span style="color:#fd4f1c">320,364
+                Learn <strong><span class="blurb-highlight">{{ languagesWithVideos.length }} languages</span></strong>
+                by
+                “comprehensible input” through a collection of <strong><span class="blurb-highlight">320,364
                     videos</span></strong>, including TV shows, movies, music, news, audiobooks, with full subtitles and
                 a popup dictionary.
               </p>
               <p style="font-size: 1.6rem; max-width: 45rem; margin: 1rem auto 0 auto; line-height: 1.5;">And yes, we
                 have
-                <router-link :to="`/en/${this.randomLanguage[1]}`" style="color: #fd4f1c; font-weight: bold;">{{
+                <router-link :to="`/en/${this.randomLanguage[1]}`" class="blurb-highlight">{{
                     this.randomLanguage[0]
                 }}</router-link>.
               </p>
@@ -631,8 +634,6 @@ export default {
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
   padding: 2rem;
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
   border-radius: 1rem;
   text-align: left;
 }
@@ -652,5 +653,30 @@ export default {
   color: #004a5c;
   background-color: #fcddc1;
   font-weight: bold;
+}
+
+.gradient-backdrop {
+  background: radial-gradient(rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
+  height: 100vh;
+  width: 100%;
+  z-index: 9;
+  position: absolute;
+  z-index: -1;
+  mix-blend-mode: overlay;
+}
+
+.gradient-backdrop-2 {
+  background: radial-gradient(rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 100%);
+  height: 100vh;
+  width: 100%;
+  z-index: 9;
+  position: absolute;
+  z-index: -1;
+}
+
+.blurb-highlight {
+  color: #1bd445;
+  font-weight: bold;
+  text-shadow:#004a5c;
 }
 </style>
