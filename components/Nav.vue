@@ -257,6 +257,12 @@ export default {
           show: this.hasFeature("youtube"),
           children: [
             {
+              name: 'all-media',
+              icon: "fa fa-photo-video",
+              title: `All Media`,
+              show: true,
+            },
+            {
               path: this.moviesPath,
               icon: "fa fa-film",
               title: `Movies`,

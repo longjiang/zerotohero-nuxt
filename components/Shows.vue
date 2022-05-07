@@ -160,7 +160,6 @@ export default {
     async getShowsOverNetwork() {
       let langId = this.$l2.id;
       let type = this.routeType.replace("-", "_");
-      console.log("😱 Getting random show over network");
       let url = `${Config.wiki}items/${type}?filter[l2][eq]=${langId}&fields=id,title`;
       let response = await axios.get(url);
       if (response.data && response.data.data.length > 0) {
