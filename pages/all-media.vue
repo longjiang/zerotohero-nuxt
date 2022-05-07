@@ -45,14 +45,14 @@
               TV Shows <router-link :to="{ name: 'tv-shows' }" class="show-all">Show All <i class=" fas
                 fa-chevron-right ml-1"></i></router-link>
             </h3>
-            <ShowList :shows="random(tvShows, 6)" type="tvShows" :key="`tv-shows`" />
+            <ShowList :shows="random(tvShows.filter(s => !['Movies', 'Music'].includes(s.title)), 6)" type="tvShows" :key="`tv-shows`" />
           </div>
           <div v-if="videos && talks && talks.length > 0">
             <h3 class="text-center mt-5 mb-4">
               YouTube<router-link :to="{ name: 'talks' }" class="show-all">Show All <i class=" fas
                 fa-chevron-right ml-1"></i></router-link>
             </h3>
-            <ShowList :shows="random(talks, 6)" type="talks" :key="`tv-shows`" />
+            <ShowList :shows="random(talks.filter(s => !['News'].includes(s.title) && !s.audiobook), 6)" type="talks" :key="`tv-shows`" />
             <div class="text-center mt-1">
             </div>
           </div>
@@ -180,7 +180,8 @@ export default {
           );
           videos = response.data.data || []
         }
-        if (!tvShow & !talk) videos = Helper.uniqueByValue(Helper.uniqueByValue(videos, 'tv_show').concat(this.random(videos)), 'id')
+        videos = Helper.uniqueByValue(videos, 'youtube_id')
+        if (!tvShow & !talk) videos = Helper.uniqueByValue(Helper.uniqueByValue(videos, 'tv_show').concat(this.random(videos)), 'youtube_id')
         return videos
       } catch (err) {
         return []
