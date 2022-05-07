@@ -250,7 +250,7 @@ export default {
     },
     async getSearchTerms() {
       if (this.$dictionaryName === "hsk-cedict") {
-        return [this.entry.simplified, this.entry.traditional];
+        return Helper.unique([this.entry.simplified, this.entry.traditional]);
       }
       if (this.exact && this.exactPhrase) return [this.exactPhrase];
       let terms;
