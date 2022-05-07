@@ -13,8 +13,9 @@ const Dictionary = {
     return `The Korean dictionary is provided by <a href="https://github.com/garfieldnate/kengdic">kengdic</a> created by Joe Speigle, which is freely available from its GitHub project page. Korean conjugation made possible with <a href="https://github.com/max-christian/korean_conjugation">max-christian/korean_conjugation</a>.`
   },
   async load() {
-    let words = await this.loadKengdic(this.file)
-    let wiktionaryWords = await this.loadWiktionary(this.wiktionaryFile)
+    let [kengdicData, wiktionaryData] = await Promise.all([axios.get(this.file), axios.get(this.wiktionaryFile)])
+    let words = await this.loadKengdic(kengdicData)
+    let wiktionaryWords = await this.loadWiktionary(wiktionaryData)
     wiktionaryWords = wiktionaryWords.map((word, index) => {
       word.id = String(300000 + index)
       return word
@@ -24,8 +25,7 @@ const Dictionary = {
     axios.get('https://py.zerotohero.ca/start-open-korean-text.php') // Call index.php to make sure the java open-korean-text process is running (Dreamhost kills it from time to time)
     return this
   },
-  async loadKengdic(file) {
-    let res = await axios.get(file)
+  async loadKengdic(res) {
     let results = await Papa.parse(res.data, {
       header: true
     })
@@ -49,16 +49,13 @@ const Dictionary = {
     }
     return data
   },
-  async loadWiktionary(file) {
-    console.log(`Wiktionary: loading ${file}`)
-    let res = await axios.get(file)
+  async loadWiktionary(res) {
     let words = this.parseDictionaryCSV(res.data)
     words = words.sort((a, b) => {
       if (a.head && b.head) {
         return b.head.length - a.head.length
       }
     })
-    console.log(`Wiktionary: ${file} loaded.`)
     return words
   },
   parseDictionaryCSV(data) {

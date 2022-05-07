@@ -738,6 +738,19 @@ export default {
   background-color: #00000066;
 }
 
+.word-block-text-byeonggi-wrapper {
+  font-size: 0.1em;
+
+  .word-block-text {
+    font-size: 10em;
+  }
+
+  .word-block-text-byeonggi {
+    color: rgba(143, 158, 172, 0.8);
+    font-size: 6em;
+  }
+}
+
 .add-pinyin {
   &.phonetics {
     // line-height: 2;
@@ -754,19 +767,6 @@ export default {
       display: block;
       line-height: 1.3;
       text-indent: 0;
-    }
-
-    .word-block-text-byeonggi-wrapper {
-      font-size: 0.1em;
-
-      .word-block-text {
-        font-size: 10em;
-      }
-
-      .word-block-text-byeonggi {
-        color: rgba(143, 158, 172, 0.8);
-        font-size: 6em;
-      }
     }
 
     /* Hide by default */
