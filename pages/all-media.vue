@@ -15,6 +15,24 @@
       <div class="row">
         <div class="col-sm-12">
           <!-- <Sale class="mt-5 mb-5" v-if="$l2.code === 'zh'" /> -->
+          <SimpleSearch
+            placeholder="Search"
+            ref="searchLibrary"
+            skin="dark"
+            class="mt-4 mb-5"
+            style="flex: 1"
+            :action="
+              (url) => {
+                this.$router.push({
+                  path: `/${$l1.code}/${
+                    $l2.code
+                  }/youtube/browse/all/all/0/${encodeURIComponent(
+                    url
+                  )}`,
+                });
+              }
+            "
+          />
           <div v-if="videos && videos.length > 0">
             <h3 class="text-center mt-3 mb-4">
               New Arrivals
@@ -73,7 +91,7 @@ export default {
         this.loadShows();
       }
     });
-    if (!this.videos || this.videos.length === 0) this.videos = await this.getVideos(50)
+    if (!this.videos || this.videos.length === 0) this.videos = await this.getVideos(100)
   },
   beforeDestroy() {
     // you may call unsubscribe to stop the subscription
