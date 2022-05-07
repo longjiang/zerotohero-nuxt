@@ -351,7 +351,7 @@ export default {
       }
       .all-phrases-list-item-phrase {
         font-weight: bold;
-        color: #72a805;
+        color: #28a745;
         font-size: 1.5em;
         font-style: italic;
       }

@@ -120,7 +120,7 @@
               <Speak :text="word.kana || word.head" :mp3="word.audio" :wiktionary="word.wiktionary" class="ml-1"
                 ref="speak" />
             </div>
-            <b :data-level="word.level || 'outside'" style="font-size: 1.5rem" :class="{
+            <b :data-level="word.level || ''" style="font-size: 1.5rem" :class="{
               klingon: $l2.code === 'tlh',
             }">
               <span v-if="$l2.code === 'de' && word.gender">
@@ -337,10 +337,7 @@ export default {
       let attributes = {};
       if (this.words && this.words.length > 0) {
         if (this.popup) {
-          attributes["data-hover-level"] =
-            this.words[0].newHSK && this.words[0].newHSK === "7-9"
-              ? "7-9"
-              : false || this.words[0].level || "outside";
+          attributes["data-hover-level"] = 'outside'
         }
         if (this.words[0].rank) attributes["data-rank"] = this.words[0].rank;
         if (this.words[0].weight)
@@ -752,10 +749,6 @@ export default {
 }
 
 .add-pinyin {
-  &.phonetics {
-    // line-height: 2;
-  }
-
   .word-block {
     display: inline-block;
     text-align: center;
@@ -817,6 +810,13 @@ export default {
   font-size: 0.7em;
   margin: 0 0.2rem;
   opacity: 0.7;
+}
+
+.word-block.saved {
+  .word-block-pinyin {
+    opacity: 1;
+    font-weight: normal;
+  }
 }
 
 .word-block-definition {

@@ -331,7 +331,7 @@ export default {
 }
 
 .annotation-setting-toggle-active {
-  color: #72a805;
+  color: #28a745;
 }
 
 .annotation-settings-toolbar {

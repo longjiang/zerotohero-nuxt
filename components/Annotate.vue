@@ -439,7 +439,7 @@ export default {
 }
 
 .word-block.saved {
-  color: #72a805;
+  color: #28a745;
 }
 
 .l2-zh {
