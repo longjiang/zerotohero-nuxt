@@ -208,7 +208,7 @@ export default {
     }
   }
   .transcript-line-l1 {
-    opacity: 0.4;
+    opacity: 0.7;
     font-size: 0.7em;
     display: none;
     line-height: 1.2;
