@@ -201,7 +201,7 @@ export default {
     font-weight: bold;
   }
   .transcript-line-l2 {
-    transition: 0.1s linear all;
+    transition: 0.2s linear all;
     opacity: 0;
     &.annotated {
       opacity: 1;
