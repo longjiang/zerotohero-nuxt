@@ -1,7 +1,9 @@
 <template>
-  <div :class="`site-top-bar site-top-bar-${variant}`" @click="scrollToTop">
+  <div :class="`site-top-bar site-top-bar-${variant}`" @click.self="scrollToTop">
     <template v-if="variant === 'menu-bar'">
+      
       <div class="text-center">
+        <span style="line-height: 2.3rem; color: #ccc; cursor: pointer; margin-right: 0.75rem" @click="scrollToTop"><i class="fas fa-bars"></i></span>
         <router-link to="/" class="link-unstyled">
           <img v-if="$l2.code !== 'zh'" src="/img/czh-icon.png" style="height: 1.5rem; margin-right: 0.25rem" /><b>zerotohero.ca</b>
         </router-link>
@@ -20,7 +22,7 @@
         <button :class="['btn top-bar-button btn-unstyled', { 'd-none': !isPWA }]" @click="reload" style="color: #ccc">
           <i class="fas fa-sync-alt"></i>
         </button>
-        <LoginButton class="d-inline-block ml-1" :icon="true" :text="false" style="color: #ddd" />
+        <LoginButton class="d-inline-block" :icon="true" :text="false" style="color: #ddd" />
       </div>
     </template>
 
@@ -74,9 +76,7 @@ export default {
     },
   },
   methods: {
-    scrollToTop(e) {
-      if (e.target !== this)
-        return;
+    scrollToTop() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     },
     canShare() {

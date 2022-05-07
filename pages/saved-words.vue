@@ -78,7 +78,7 @@
           </div>
           <div
             class="pt-3 pb-3 bg-white"
-            style="position: sticky; top: 0; z-index: 9"
+            style="position: sticky; top: 0; z-index: 2"
             v-if="sWLoaded && sW.length > 0"
           >
             <LazyHideDefs

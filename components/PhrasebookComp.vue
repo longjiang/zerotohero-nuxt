@@ -28,7 +28,7 @@
     </div>
     <div
       class="pt-3 pb-3 mb-3 bg-white"
-      style="position: sticky; top: 0; z-index: 9"
+      style="position: sticky; top: 0; z-index: 2"
     >
       <LazyHideDefs
         @hideWord="hideWord = arguments[0]"
