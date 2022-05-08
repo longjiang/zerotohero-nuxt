@@ -26,11 +26,11 @@
       <div class="youtube-transcript-column">
         <div class="youtube-video-info youtube-video-info-top">
           <div :key="`youtube-video-info-${video.youtube_id}-${videoInfoKey}`"
-            :class="{ 'd-none': !video.id, 'mb-3': true }">
+            :class="{ 'd-none': !video.id, 'text-center mb-3': true }">
             <router-link v-if="previousEpisode" :to="previousEpisode" :class="{
               'btn btn-medium': true,
               'btn-primary': skin === 'light',
-              'btn-ghost-dark': skin === 'dark',
+              'btn-black text-white': skin === 'dark',
             }">
               <i class="fa fa-step-backward"></i>
             </router-link>
@@ -38,17 +38,25 @@
             }/${show.id}`" :class="{
     'btn btn-medium': true,
     'btn-primary': skin === 'light',
-    'btn-ghost-dark': skin === 'dark',
+    'btn-black text-white': skin === 'dark',
   }">
               <i class="fas fa-stream mr-1"></i>
-              {{
-                  show.title
-              }}<span v-if="episodes && episodes.length"> ({{ episodeIndex + 1 }} of {{ episodes.length }})</span>
+              <span style="max-width: 8rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    white-space: nowrap;
+    line-height: 1;
+    position: relative;
+    bottom: -0.1rem;">{{
+        show.title
+    }}</span><span v-if="episodes && episodes.length"> ({{ episodeIndex + 1 }} of {{ episodes.length
+}})</span>
             </router-link>
             <router-link v-if="nextEpisode" :to="nextEpisode" :class="{
               'btn btn-medium': true,
               'btn-primary': skin === 'light',
-              'btn-ghost-dark': skin === 'dark',
+              'btn-black text-white': skin === 'dark',
             }">
               <i class="fa fa-step-forward"></i>
             </router-link>
@@ -56,7 +64,7 @@
               :to="`/${this.$l1.code}/${this.$l2.code}/youtube/view/${this.randomEpisodeYouTubeId}`" :class="{
                 'btn btn-medium': true,
                 'bg-secondary': skin === 'light',
-                'btn-ghost-dark': skin === 'dark',
+                'btn-black text-white': skin === 'dark',
               }">
               <i class="fa fa-random"></i>
             </router-link>
@@ -76,7 +84,8 @@
             <span v-if="video.channel">
               <router-link style="color: inherit"
                 :to="{ name: 'youtube-channel', params: { channel_id: video.channel.id, title: video.channel.title || video.channel.id } }">
-                <i class="fab fa-youtube mr-1"></i>{{ video.channel.title || 'Channel' }}</router-link>
+                <i class="fab fa-youtube mr-1"></i>{{ video.channel.title || 'Channel' }}
+              </router-link>
             </span>
             <span v-if="video.date">| {{ formatDate(video.date) }}</span>
           </div>
