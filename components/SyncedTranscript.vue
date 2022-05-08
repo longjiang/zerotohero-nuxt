@@ -26,8 +26,8 @@
   highlight &&
   line &&
   new RegExp(highlight.join('|')).test(line.line)
-" :showSubsEditing="showSubsEditing" :sticky="sticky" :single="single" :highlight="highlight" :hsk="hsk"
-          :notes="notes" :enableTranslationEditing="$adminMode && enableTranslationEditing" @click="lineClick(line)"
+" :showSubsEditing="showSubsEditing" :sticky="sticky" :single="single" :highlight="highlight" :hsk="hsk" :notes="notes"
+          :enableTranslationEditing="$adminMode && enableTranslationEditing" @click="lineClick(line)"
           @removeLineClick="removeLine(index + visibleMin)" @trasnlationLineBlur="trasnlationLineBlur"
           @trasnlationLineKeydown="trasnlationLineKeydown" />
         <div class="review-placeholder" :key="`line-${index + visibleMin}-review-placeholder-${reviewKeys[index + visibleMin]
@@ -42,8 +42,7 @@
                 ? reviewOpen[index + visibleMin].length
                 : 1
             )" :key="`review-${index + visibleMin}-${reviewItem.text || reviewItem.simplified
-}-${reviewItemIndex}-${reviewKeys[index + visibleMin]}`" :reviewItem="reviewItem" :hsk="hsk"
-              :skin="skin" />
+}-${reviewItemIndex}-${reviewKeys[index + visibleMin]}`" :reviewItem="reviewItem" :hsk="hsk" :skin="skin" />
             <div class="text-center mt-2" :key="`review-title-${index + visibleMin}-${reviewKeys[index + visibleMin]
             }`" v-if="
     review[index + visibleMin] &&
@@ -652,15 +651,6 @@ export default {
 
         lastDuration = lastDuration || 3000;
 
-        let duration =
-          this.currentLine && this.nextLine
-            ? Math.min(
-              (this.nextLine.starttime - this.currentLine.starttime) * 1000,
-              lastDuration,
-              3000
-            )
-            : 3000;
-
         let offset = -(smallScreenYOffset
           ? window.innerHeight + smallScreenYOffset
           : Math.min(
@@ -671,24 +661,33 @@ export default {
           elHeight / 2) /
           2 +
           elHeight / 2
-        if (navigator.hardwareConcurrency < 4) {
-          let offsetTop = Helper.documentOffsetTop(el);
-          window.scrollTo({
-            top: offsetTop + offset,
-            left: 0,
-            behavior: "smooth",
-          });
-        } else {
-          this.$smoothScroll({
-            scrollTo: el,
-            updateHistory: false,
-            offset,
-            duration,
-            left: 0,
-            easingFunction: (t) => t,
-          });
 
-        }
+        let offsetTop = Helper.documentOffsetTop(el);
+        let top = offsetTop + offset
+        window.scrollTo({
+          top,
+          left: 0,
+          behavior: Math.abs(window.scrollY - top) > 1000 ? "auto" : "smooth",
+        });
+
+        // if (navigator.hardwareConcurrency >= 4) {
+        // let duration =
+        //   this.currentLine && this.nextLine
+        //     ? Math.min(
+        //       (this.nextLine.starttime - this.currentLine.starttime) * 1000,
+        //       lastDuration,
+        //       3000
+        //     )
+        //     : 3000;
+        //   this.$smoothScroll({
+        //     scrollTo: el,
+        //     updateHistory: false,
+        //     offset,
+        //     duration,
+        //     left: 0,
+        //     easingFunction: (t) => t,
+        //   });
+        // }
 
       }
     },
