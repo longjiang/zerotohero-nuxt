@@ -38,7 +38,7 @@
             line &&
             new RegExp(highlight.join('|')).test(line.line)
           "
-          :current="index + visibleMin === currentLineIndex"
+          :ref="`transcript-line-${index + visibleMin}`"
           :duration="lines[index + 1] ? lines[index + 1].starttime - lines[index].starttime : undefined"
           :showSubsEditing="showSubsEditing"
           :sticky="sticky"
@@ -290,11 +290,14 @@ export default {
     }
   },
   watch: {
-    paused() {
+    async paused() {
       // Stop smooth scrolling
       if (this.paused) {
         this.cancelSmoothScroll();
       }
+      let currentLineRefs = this.$refs[`transcript-line-${this.currentLineIndex}`]
+      if (this.paused) if (currentLineRefs && currentLineRefs[0]) currentLineRefs[0].pauseAnimation()
+      if (!this.paused) if (currentLineRefs && currentLineRefs[0]) currentLineRefs[0].playAnimation(this.currentTime - this.currentLine.starttime)
     },
     async currentTime() {
       if (this.preventJumpingAtStart) {
@@ -330,8 +333,29 @@ export default {
       }
       this.previousTime = this.currentTime;
     },
+    currentLineIndex() {
+      let visibleMax = Math.max(
+        this.visibleMax,
+        this.currentLineIndex + this.visibleRange
+      );
+      if (visibleMax > this.visibleMax + this.visibleRange / 2) {
+        this.visibleMax = visibleMax;
+      }
+      let lineEls = this.$el.querySelectorAll(`.transcript-line`);
+      lineEls.forEach((lineEl) =>
+        lineEl.classList.remove("transcript-line-current")
+      );
+      let lineEl = this.$el.querySelector(
+        `.transcript-line[data-line-index="${this.currentLineIndex}"]`
+      );
+      if (lineEl) lineEl.classList.add("transcript-line-current");
+    },
     currentLine() {
       if (!this.single && !this.paused) this.scrollTo(this.currentLineIndex);
+      if (!this.paused) {
+        let currentLineRefs = this.$refs[`transcript-line-${this.currentLineIndex}`]
+        if (currentLineRefs && currentLineRefs[0]) currentLineRefs[0].playAnimation(this.currentTime - this.currentLine.starttime)
+      }
     },
     parallellines() {
       if (this.parallellines) this.matchParallelLines();

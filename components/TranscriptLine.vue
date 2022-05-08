@@ -2,7 +2,6 @@
   <div
     :class="{
       'transcript-line': true,
-      'transcript-line-current': current,
       'transcript-line-abnormal': abnormal,
       'transcript-line-matched': matched,
       'pl-4': !single && $l2.direction !== 'rtl',
@@ -27,6 +26,7 @@
     <div style="flex: 1">
       <Annotate
         tag="div"
+        ref="annotate"
         :sticky="sticky"
         :class="{
           'transcript-line-l2': true,
@@ -36,7 +36,7 @@
           annotated: annotated,
         }"
         :buttons="true"
-        :animationDuration="animationStarted && duration ? duration : undefined"
+        :animationDuration="duration"
         :translation="parallelLine"
         :delay="single ? false : 123"
         v-if="!showSubsEditing"
@@ -111,20 +111,13 @@ export default {
     enableTranslationEditing: {
       type: Boolean,
     },
-    current: {
-      default: false,
-    },
   },
   data() {
     return {
       annotated: false,
-      animationStarted: false,
+      lineStarted: false,
+      durationPlayed: 0
     };
-  },
-  watch: {
-    current() {
-      this.animationStarted = true;
-    },
   },
   computed: {
     $l1() {
@@ -137,6 +130,12 @@ export default {
     },
   },
   methods: {
+    playAnimation(startFrom) {
+      this.$refs['annotate'].playAnimation(startFrom)
+    },
+    pauseAnimation() {
+      this.$refs['annotate'].pauseAnimation()
+    },
     trasnlationLineKeydown(e) {
       this.$emit("trasnlationLineKeydown", e);
     },
