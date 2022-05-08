@@ -23,10 +23,10 @@
                   data-not-lazy /><br /><b>zerotohero.ca</b>
               </span>
               <p style="font-size: 1.6rem; max-width: 45rem; margin: 2rem auto 0 auto; line-height: 1.5;">
-                Learn <strong><span class="blurb-highlight">{{ languagesWithVideos.length }} languages</span></strong>
+                Learn <strong><router-link :to="{name: 'language-map'}" class="blurb-highlight">{{ languagesWithVideos.length }} languages</router-link></strong>
                 by
-                “comprehensible input” through a collection of <strong><span class="blurb-highlight">320,364
-                    videos</span></strong>, including TV shows, movies, music, news, audiobooks, with full subtitles and
+                “comprehensible input” through a collection of <strong><router-link :to="{name: 'discover-shows'}" class="blurb-highlight">320,364
+                    videos</router-link></strong>, including TV shows, movies, music, news, audiobooks, with full subtitles and
                 a popup dictionary.
               </p>
               <p style="font-size: 1.6rem; max-width: 45rem; margin: 1rem auto 0 auto; line-height: 1.5;">And yes, we
@@ -98,12 +98,6 @@
           </div>
         </div>
 
-        <div class="row" v-if="!loaded">
-          <div class="col-sm-12 text-center pt-3 pb-3 text-white">
-            Loading languages ...
-          </div>
-        </div>
-
         <client-only>
           <div :class="{ 'row mb-5': true, 'd-none': !hasDashboard }">
             <div class="col-sm-12">
@@ -111,13 +105,14 @@
                 <h5 class="text-center mt-3 mb-3">
                   Your Saved Words &amp; Phrases
                 </h5>
-                <LazyDashboard @hasDashboard="hasDashboardUpdate" :showVideos="false" style="padding-top: 0.5rem" />
+                <LazyDashboard @hasDashboard="hasDashboardUpdate" :showVideos="false" :showFlags="true"
+                  style="padding-top: 0.5rem" />
               </div>
             </div>
           </div>
         </client-only>
         <div class="row">
-          <div class="col-sm-6 mb-5">
+          <div class="col-sm-6 mb-4">
             <div class="home-card">
               <router-link to="/en/zh">
                 <img src="/img/czh-logo-dark.png" class="czh-logo" data-not-lazy />
@@ -165,7 +160,7 @@
               </ul>
             </div>
           </div>
-          <div class="col-sm-6 mb-5">
+          <div class="col-sm-6 mb-4">
             <div class="home-card">
               <router-link to="/zh/en">
                 <img src="/img/ezh-logo-dark.png" class="ezh-logo" data-not-lazy />
@@ -206,8 +201,15 @@
             </div>
           </div>
         </div>
+        <div class="row mt-2 mb-3" v-if="!loaded">
+          <div class="col-sm-12 text-center pt-3 pb-3 mb-3">
+            <div class="home-card mb-0" style="padding: 1rem 1rem 2rem 1rem">
+              <Loader :sticky="true" message="Loading more languages . . ." />
+            </div>
+          </div>
+        </div>
         <client-only>
-          <div class="row mb-5">
+          <div class="row mt-4 mb-5">
             <div class="col-sm-12">
               <div class="home-card">
                 <h5 class="text-center">More Languages</h5>
@@ -220,7 +222,6 @@
                   'bul',
                   'cat',
                   'ces',
-                  'cmn',
                   'cy',
                   'dan',
                   'de',
@@ -228,6 +229,7 @@
                   'en',
                   'epo',
                   'es',
+                  'eu',
                   'fa',
                   'fin',
                   'fr',
@@ -268,7 +270,7 @@
                   'vi',
                   'yue',
                   'zh',
-                ]" class="mt-4" :sort="true" />
+                ]" class="mt-4" :sort="true" :showFlags="true" />
                 <h5 class="text-center mt-5">EVEN More languages</h5>
                 <Choose :compact="true" :showLanguageList="false" />
               </div>
@@ -677,6 +679,6 @@ export default {
 .blurb-highlight {
   color: #1bd445;
   font-weight: bold;
-  text-shadow:#004a5c;
+  text-shadow: #004a5c;
 }
 </style>

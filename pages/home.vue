@@ -25,6 +25,7 @@
                   @hasDashboard="hasDashboardUpdate"
                   :showWords="false"
                   skin="dark"
+                  :showFlags="true"
                 />
               </div>
             </div>
