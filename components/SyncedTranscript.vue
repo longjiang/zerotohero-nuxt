@@ -39,7 +39,11 @@
             new RegExp(highlight.join('|')).test(line.line)
           "
           :ref="`transcript-line-${index + visibleMin}`"
-          :duration="lines[index + 1] ? lines[index + 1].starttime - lines[index].starttime : undefined"
+          :duration="
+            lines[index + 1]
+              ? lines[index + 1].starttime - lines[index].starttime
+              : undefined
+          "
           :showSubsEditing="showSubsEditing"
           :sticky="sticky"
           :single="single"
@@ -295,9 +299,16 @@ export default {
       if (this.paused) {
         this.cancelSmoothScroll();
       }
-      let currentLineRefs = this.$refs[`transcript-line-${this.currentLineIndex}`]
-      if (this.paused) if (currentLineRefs && currentLineRefs[0]) currentLineRefs[0].pauseAnimation()
-      if (!this.paused) if (currentLineRefs && currentLineRefs[0]) currentLineRefs[0].playAnimation(this.currentTime - this.currentLine.starttime)
+      let currentLineRefs =
+        this.$refs[`transcript-line-${this.currentLineIndex}`];
+      if (this.paused)
+        if (currentLineRefs && currentLineRefs[0])
+          currentLineRefs[0].pauseAnimation();
+      if (!this.paused)
+        if (currentLineRefs && currentLineRefs[0])
+          currentLineRefs[0].playAnimation(
+            this.currentTime - this.currentLine.starttime
+          );
     },
     async currentTime() {
       if (this.preventJumpingAtStart) {
@@ -353,8 +364,12 @@ export default {
     currentLine() {
       if (!this.single && !this.paused) this.scrollTo(this.currentLineIndex);
       if (!this.paused) {
-        let currentLineRefs = this.$refs[`transcript-line-${this.currentLineIndex}`]
-        if (currentLineRefs && currentLineRefs[0]) currentLineRefs[0].playAnimation(this.currentTime - this.currentLine.starttime)
+        let currentLineRefs =
+          this.$refs[`transcript-line-${this.currentLineIndex}`];
+        if (currentLineRefs && currentLineRefs[0])
+          currentLineRefs[0].playAnimation(
+            this.currentTime - this.currentLine.starttime
+          );
       }
     },
     parallellines() {
@@ -725,32 +740,35 @@ export default {
             2 +
           elHeight / 2;
 
+        
         let offsetTop = Helper.documentOffsetTop(el);
         let top = offsetTop + offset;
-        window.scrollTo({
-          top,
-          left: 0,
-          behavior: Math.abs(window.scrollY - top) > 1000 ? "auto" : "smooth",
-        });
-
-        // if (navigator.hardwareConcurrency >= 4) {
-        // let duration =
-        //   this.currentLine && this.nextLine
-        //     ? Math.min(
-        //       (this.nextLine.starttime - this.currentLine.starttime) * 1000,
-        //       lastDuration,
-        //       3000
-        //     )
-        //     : 3000;
-        //   this.$smoothScroll({
-        //     scrollTo: el,
-        //     updateHistory: false,
-        //     offset,
-        //     duration,
-        //     left: 0,
-        //     easingFunction: (t) => t,
-        //   });
-        // }
+        if (Math.abs(window.scrollY - top) > 1000) {
+          window.scrollTo({
+            top,
+            left: 0
+          });
+        } else {
+          if (navigator.hardwareConcurrency >= 4) {
+            let duration =
+              this.currentLine && this.nextLine
+                ? Math.min(
+                    (this.nextLine.starttime - this.currentLine.starttime) *
+                      1000,
+                    lastDuration,
+                    3000
+                  )
+                : 3000;
+            this.$smoothScroll({
+              scrollTo: el,
+              updateHistory: false,
+              offset,
+              duration,
+              left: 0,
+              easingFunction: (t) => t,
+            });
+          }
+        }
       }
     },
     lineClick(line) {
