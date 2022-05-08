@@ -19,7 +19,7 @@
         :image="`https://img.youtube.com/vi/${show.youtube_id}/hqdefault.jpg`"
       />
       <div class="row">
-        <div class="col-sm-12 mb-4 text-center">
+        <div class="col-sm-12 mb-3 text-center">
           <!-- <Sale class="mb-4" v-if="$l2.code === 'zh'" /> -->
           <h3 v-if="show">
             <Annotate :phonetics="false" :buttons="true" v-if="!$adminMode">
@@ -46,12 +46,10 @@
               ></i>
             </span>
           </p>
-        </div>
-        <div class="col-sm-12" v-if="show">
-          <div class="text-center mb-5" v-if="!showDiscover">
-            <b-button @click="showDiscover = true" size="lg" variant="success">
+          <div class="text-center mb-3" v-if="!showDiscover">
+            <b-button @click="showDiscover = true" size="sm" variant="success">
               <i class="fas fa-random mr-2"></i>
-              Watch Something Random
+              Surprise Me
             </b-button>
           </div>
           <LazyDiscoverPlayer

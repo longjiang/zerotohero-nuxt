@@ -79,6 +79,15 @@
           </div>
           <LazyIdenticalLanguages class="mt-5 mb-4" routeName="all-media" />
         </div>
+        <div
+          :class="{
+            'loader text-center mt-5 mb-5': true,
+            'd-none': videos && !loading,
+          }"
+          style="flex: 1"
+        >
+          <Loader :sticky="true" message="Loading videos in our library..." />
+        </div>
       </div>
     </div>
   </div>
@@ -101,6 +110,7 @@ export default {
       music: [],
       movies: [],
       news: [],
+      loading: true,
     };
   },
   async fetch() {
@@ -156,6 +166,7 @@ export default {
         );
         this.news = await this.getVideos({ limit: 100, talk: this.newsShow.id })
       }
+      this.loading = false
     },
     random(array, max) {
       let shuffled = Helper.shuffle(array)

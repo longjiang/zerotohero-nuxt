@@ -15,18 +15,18 @@
         <div class="col-sm-12">
           <!-- <Sale class="mt-5 mb-5" v-if="$l2.code === 'zh'" /> -->
           <h3 class="text-center mt-5">
-            Study {{ $l2.name }} with
+            {{ $l2.name }} 
             {{ routeTitles[routeType] }}
           </h3>
-          <p class="text-center mb-5" v-if="shows && shows.length">
+          <p class="text-center mb-3" v-if="shows && shows.length">
             ({{ filteredShows && filteredShows.length }} show{{
               filteredShows.length > 1 ? "s" : ""
             }})
           </p>
           <div class="text-center mb-5" v-if="!showDiscover">
-            <b-button @click="showDiscover = true" size="lg" variant="success">
-              <i class="fas fa-random mr-2"></i>
-              Watch Something Random
+            <b-button @click="showDiscover = true" size="sm" variant="success">
+              <i class="fas fa-random mr-1"></i>
+              Surprise Me
             </b-button>
           </div>
           <LazyDiscoverPlayer
