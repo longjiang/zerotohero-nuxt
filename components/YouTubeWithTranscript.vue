@@ -26,7 +26,7 @@
       <div class="youtube-transcript-column">
         <div class="youtube-video-info youtube-video-info-top">
           <div :key="`youtube-video-info-${video.youtube_id}-${videoInfoKey}`"
-            :class="{ 'd-none': !video.id, 'text-center mb-3': true }">
+            :class="{ 'd-none': !video.id, 'text-center mb-3': true }" style="border-radius: 0.2rem; border: 1px solid #ffffff33; padding: 0.3rem 0 0.3rem 0">
             <router-link v-if="previousEpisode" :to="previousEpisode" :class="{
               'btn btn-medium': true,
               'btn-primary': skin === 'light',
