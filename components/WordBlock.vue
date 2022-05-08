@@ -65,7 +65,7 @@
         <!-- <button class="word-block-tool-tip-close" @click="closePopup">
           <i class="fa fa-times"></i>
         </button> -->
-        <div class="tooltip-images" :key="`tooltip-images-${text}`" v-if="images && images.length > 0">
+        <div class="tooltip-images" :key="`tooltip-images-${text}`" v-if="loadingImages">
           <img v-lazy-load alt class="image-wall-image" v-for="(image, index) in images"
             :key="`web-images-${text}-${index}`" :src="`${Config.imageProxy}?${image.src}`" />
         </div>
@@ -271,7 +271,8 @@ export default {
       Config,
       transliteration: undefined,
       farsiRomanizations: {},
-      lastLookupWasQuick: false
+      lastLookupWasQuick: false,
+      loadingImages: false
     };
   },
   computed: {
@@ -590,6 +591,7 @@ export default {
       }
     },
     async loadImages() {
+      this.loadingImages = true
       if (this.images.length === 0) {
         this.images = (
           await WordPhotos.getGoogleImages({
