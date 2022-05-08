@@ -40,9 +40,9 @@
           "
           :ref="`transcript-line-${index + visibleMin}`"
           :duration="
-            lines[index + 1]
-              ? lines[index + 1].starttime - lines[index].starttime
-              : undefined
+            line.duration ? line.duration : lines[index + 1]
+              ? lines[index + 1].starttime - line.starttime
+              : 5
           "
           :showSubsEditing="showSubsEditing"
           :sticky="sticky"
