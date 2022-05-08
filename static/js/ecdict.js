@@ -9,7 +9,7 @@ const Dictionary = {
   words: [],
   frequency: [],
   index: {},
-  cache: {},
+  tokenizationCache: {},
   tables: [],
   levels: {
     1: 'Pre-A1',
