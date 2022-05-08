@@ -129,17 +129,18 @@ export default {
   async fetch() {
     try {
       console.log(`YouTube View: Getting saved video...`);
-      let video = await this.getSaved();
-      if (this.lesson && video.level && video.lesson) {
-        this.saveWords(video.level, video.lesson);
+      let savedVideo, videoFromApi
+      savedVideo = await this.getSaved();
+      if (this.lesson && savedVideo.level && savedVideo.lesson) {
+        this.saveWords(savedVideo.level, savedVideo.lesson);
       }
-      if (!video) {
+      if (!savedVideo || (!savedVideo.channel && this.$adminMode)) {
         console.log(
           `YouTube View: Getting channel information with youtube api...`
         );
-        video = await YouTube.videoByApi(this.youtube_id);
+        videoFromApi = await YouTube.videoByApi(this.youtube_id);
       }
-      this.video = this.mergeVideos(this.video, video);
+      this.video = this.mergeVideos(savedVideo, videoFromApi);
     } catch (e) {
       console.log(e);
     }
@@ -391,16 +392,13 @@ export default {
         }
       }
     },
-    async addChannelID(video) {
-      if (video.channel && video.channel.id) {
-        let channelId = video.channel.id;
-        let response = await axios.patch(
-          `${Config.youtubeVideosTableName(this.$l2.id)}/${video.id}`,
-          { channel_id: channelId }
-        );
-        if (response && response.data) {
-          video = response.data;
-        }
+    async patchChannelID(video, channelId) {
+      let response = await axios.patch(
+        `${Config.youtubeVideosTableName(this.$l2.id)}/${video.id}?fields=id,channel_id`,
+        { channel_id: channelId }
+      );
+      if (response && response.data) {
+        video.channel_id = response.data;
       }
     },
     scrollToComments() {
