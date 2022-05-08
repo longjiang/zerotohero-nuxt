@@ -120,7 +120,7 @@
               <Speak :text="word.kana || word.head" :mp3="word.audio" :wiktionary="word.wiktionary" class="ml-1"
                 ref="speak" />
             </div>
-            <b :data-level="word.level || ''" style="font-size: 1.5rem" :class="{
+            <b :data-level="word.level || 'outside'" style="font-size: 1.5rem" :class="{
               klingon: $l2.code === 'tlh',
             }">
               <span v-if="$l2.code === 'de' && word.gender">
