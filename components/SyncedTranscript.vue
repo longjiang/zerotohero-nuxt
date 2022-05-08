@@ -259,6 +259,7 @@ export default {
   async created() {
     this.lines.map((line) => {
       line.starttime = Number(line.starttime);
+      if (line.duration) Number(line.duration);
     });
     if (this.parallellines) this.matchParallelLines();
     this.reviewKeys = this.lines.map(() => 0);
