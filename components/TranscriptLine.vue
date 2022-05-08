@@ -202,7 +202,7 @@ export default {
   font-size: 1.2rem;
   padding: 0.5rem;
   &.transcript-line-current {
-    box-shadow: 0 0 10px 2px #fd511299;
+    box-shadow: 0 0 10px 2px #96ffaf99;
     border-radius: 0.25rem;
   }
   &.transcript-line-abnormal {
