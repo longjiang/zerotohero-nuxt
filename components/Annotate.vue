@@ -56,7 +56,7 @@
     </div>
     <template v-if="annotated && !textMode">
       <v-runtime-template v-for="(template, index) of annotatedSlots" :key="`annotate-template-${index}`"
-        :template="template" class="annotate-template" />
+        :template="template" class="annotate-template" ref="run-time-template" />
     </template>
   </component>
 </template>
@@ -74,6 +74,9 @@ export default {
     VRuntimeTemplate,
   },
   props: {
+    animationDuration: {
+      default: undefined, // number of seconds to animate (highlight in sequence) each word block
+    },
     phonetics: {
       default: true,
     },
@@ -166,6 +169,19 @@ export default {
         element.focus();
       }
     },
+    async animationDuration() {
+      console.log(this.animationDuration)
+      console.log(this.$el)
+      await Helper.timeout(50) // Wait for element to rerender
+      let blocks = this.$el.querySelectorAll('.word-block')
+      let duration = this.animationDuration / blocks.length
+      for (let block of blocks) {
+        block.classList.add('animate')
+        console.log(block)
+        await Helper.timeout(duration * 1000)
+        block.classList.remove('animate')
+      }
+    }
   },
   methods: {
     phraseItem(phrase, translation = undefined) {
@@ -340,9 +356,9 @@ export default {
         if (typeof token === "object") {
           if (token && typeof token === "object") {
             if (token.candidates.length > 0) {
-              html += `<WordBlock :checkSaved="${this.checkSaved}" :phonetics="${this.phonetics}" :popup="${this.popup}" :sticky="${this.sticky}" :explore="explore" :token="tokenized[${batchId}][${index}]">${token.text}</WordBlock>`;
+              html += `<WordBlock :checkSaved="${this.checkSaved}" ref="word-block" :phonetics="${this.phonetics}" :popup="${this.popup}" :sticky="${this.sticky}" :explore="explore" :token="tokenized[${batchId}][${index}]">${token.text}</WordBlock>`;
             } else {
-              html += `<WordBlock :checkSaved="${this.checkSaved}" :phonetics="${this.phonetics}" :popup="${this.popup}" :sticky="${this.sticky}" :explore="explore">${token.text}</WordBlock>`;
+              html += `<WordBlock :checkSaved="${this.checkSaved}" ref="word-block" :phonetics="${this.phonetics}" :popup="${this.popup}" :sticky="${this.sticky}" :explore="explore">${token.text}</WordBlock>`;
             }
           }
         } else {
@@ -359,7 +375,7 @@ export default {
       for (let index in this.tokenized[batchId]) {
         let item = this.tokenized[batchId][index];
         if (typeof item === "object") {
-          html += `<WordBlock :checkSaved="${this.checkSaved}" :phonetics="${this.phonetics}" :popup="${this.popup}" :sticky="${this.sticky}" :explore="${this.explore}" :token="tokenized[${batchId}][${index}]">${item.text}</WordBlock>`;
+          html += `<WordBlock :checkSaved="${this.checkSaved}" ref="word-block" :phonetics="${this.phonetics}" :popup="${this.popup}" :sticky="${this.sticky}" :explore="${this.explore}" :token="tokenized[${batchId}][${index}]">${item.text}</WordBlock>`;
         } else {
           html += `<span>${(item || '')
             .replace(/\s+([,.!?])/, "$1")
@@ -378,7 +394,7 @@ export default {
         .replace(/\s+/gi, "!!!###!!!")
         .replace(
           reg,
-          `<WordBlock :checkSaved="${this.checkSaved}" :phonetics="${this.phonetics}" :popup="${this.popup}" :sticky="${this.sticky}" :explore="${this.explore}">` +
+          `<WordBlock :checkSaved="${this.checkSaved}" ref="word-block"  :phonetics="${this.phonetics}" :popup="${this.popup}" :sticky="${this.sticky}" :explore="${this.explore}">` +
           "$1</WordBlock>"
         )
         .replace(

@@ -719,6 +719,14 @@ export default {
 </script>
 
 <style lang="scss">
+.word-block {
+  transition: 0.5s linear all;
+  opacity: 0.5;
+  &.animate {
+    opacity: 1;
+  }
+}
+
 .word-block.with-popup {
   cursor: pointer;
 

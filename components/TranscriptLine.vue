@@ -33,14 +33,15 @@
           'text-center': single,
           'pr-3': single && $l2.direction === 'rtl',
           'pl-3': single && $l2.direction !== 'rtl',
-          'annotated': annotated
+          annotated: annotated,
         }"
         :buttons="true"
+        :animationDuration="animationStarted && duration ? duration : undefined"
+        :translation="parallelLine"
+        :delay="single ? false : 123"
         v-if="!showSubsEditing"
         @textChanged="lineChanged(line, ...arguments)"
         @annotated="annotated = true"
-        :translation="parallelLine"
-        :delay="single ? false : 123"
       >
         <span v-html="lineHtml(line).trim()" />
       </Annotate>
@@ -53,7 +54,7 @@
           'pl-3': !single && $l2.direction === 'rtl',
           'text-right': !single && $l2.direction === 'rtl',
           'text-center': single,
-          'transparent': !annotated
+          transparent: !annotated,
         }"
         v-html="parallelLine"
         :contenteditable="enableTranslationEditing"
@@ -102,7 +103,7 @@ export default {
       type: Array,
     },
     duration: {
-      default: undefined
+      default: undefined,
     },
     parallelLine: {
       type: String,
@@ -111,18 +112,19 @@ export default {
       type: Boolean,
     },
     current: {
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
-      annotated: false
-    }
+      annotated: false,
+      animationStarted: false,
+    };
   },
   watch: {
     current() {
-      this.animate()
-    }
+      this.animationStarted = true;
+    },
   },
   computed: {
     $l1() {
@@ -135,9 +137,6 @@ export default {
     },
   },
   methods: {
-    animate() {
-
-    },
     trasnlationLineKeydown(e) {
       this.$emit("trasnlationLineKeydown", e);
     },
