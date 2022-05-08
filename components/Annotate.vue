@@ -253,6 +253,7 @@ export default {
         if (slot) {
           this.convertToSentencesRecursive(slot.elm);
           if (!this.disableAnnotation) this.annotate(slot.elm);
+          else this.$emit('annotated', true)
         }
       }
     },
