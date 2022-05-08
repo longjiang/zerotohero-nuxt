@@ -68,7 +68,6 @@
 <script>
 import SmartQuotes from "smartquotes";
 import Helper from "@/lib/helper";
-import HTMLEntities from "html-entities";
 
 export default {
   props: {
@@ -102,6 +101,9 @@ export default {
     notes: {
       type: Array,
     },
+    duration: {
+      default: undefined
+    },
     parallelLine: {
       type: String,
     },
@@ -117,6 +119,11 @@ export default {
       annotated: false
     }
   },
+  watch: {
+    current() {
+      this.animate()
+    }
+  },
   computed: {
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
@@ -128,6 +135,9 @@ export default {
     },
   },
   methods: {
+    animate() {
+
+    },
     trasnlationLineKeydown(e) {
       this.$emit("trasnlationLineKeydown", e);
     },

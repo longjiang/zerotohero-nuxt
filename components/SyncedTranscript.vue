@@ -39,6 +39,7 @@
             new RegExp(highlight.join('|')).test(line.line)
           "
           :current="index + visibleMin === currentLineIndex"
+          :duration="lines[index + 1] ? lines[index + 1].starttime - lines[index].starttime : undefined"
           :showSubsEditing="showSubsEditing"
           :sticky="sticky"
           :single="single"
