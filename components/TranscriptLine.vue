@@ -2,6 +2,7 @@
   <div
     :class="{
       'transcript-line': true,
+      'transcript-line-current': current,
       'transcript-line-abnormal': abnormal,
       'transcript-line-matched': matched,
       'pl-4': !single && $l2.direction !== 'rtl',
@@ -107,6 +108,9 @@ export default {
     enableTranslationEditing: {
       type: Boolean,
     },
+    current: {
+      default: false
+    }
   },
   data() {
     return {
