@@ -9,34 +9,13 @@
 </router>
 <template>
   <div>
-    <SocialHead
-      title="Discover TV Shows Across Languages | PanLingo"
-      description="Watch TV shows across languages at random and be surprised!"
-    />
+    <SocialHead title="Discover TV Shows Across Languages | PanLingo"
+      description="Watch TV shows across languages at random and be surprised!" />
+    <SiteTopBar />
     <div class="container-fluid">
-      <div
-        class="row bg-dark text-white pt-2 pb-2 text-left"
-        style="overflow: visible; height: 54px"
-      >
-        <div class="col-sm-12 d-flex" style="overflow: visible">
-          <div class="mr-3 d-flex align-items-center" >
-            <router-link to="/" class="link-unstyled">
-              <i class="fa fa-chevron-left mr-2"></i>Home
-            </router-link>
-          </div>
-        </div>
-      </div>
       <div class="row">
-        <div
-          class="col-12 loader-wrapper"
-          style="height: calc(100vh - 54px); padding: 0"
-        >
-          <LazyDiscoverPlayer
-            v-if="randomShows"
-            routeType="tv-shows"
-            :shows="randomShows"
-            style="flex: 1"
-          />
+        <div class="col-12 loader-wrapper" style="height: calc(100vh - 43px); padding: 0">
+          <LazyDiscoverPlayer v-if="randomShows" routeType="tv-shows" :shows="randomShows" style="flex: 1" />
         </div>
       </div>
     </div>
@@ -94,12 +73,10 @@ export default {
     },
     async loadRandomShowsMatchingIds(ids, adminMode) {
       let response = await axios.get(
-        `${Config.wiki}items/tv_shows?filter${
-          adminMode ? "" : "&filter[hidden][empty]=true"
+        `${Config.wiki}items/tv_shows?filter${adminMode ? "" : "&filter[hidden][empty]=true"
         }&filter[id][in]=${ids.join(
           ","
-        )}&filter[title][nin]=Movies,Music,News&timestamp=${
-          adminMode ? Date.now() : 0
+        )}&filter[title][nin]=Movies,Music,News&timestamp=${adminMode ? Date.now() : 0
         }`
       );
       if (response && response.data) {

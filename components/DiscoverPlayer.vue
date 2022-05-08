@@ -7,61 +7,42 @@
       </span>
       <span style="font-weight: bold; color: white">
         {{
-          randomShowRandomEpisodeL2
-            ? `${randomShowRandomEpisodeL2.name} (${randomShowRandomEpisodeL2.code})`
-            : ""
+            randomShowRandomEpisodeL2
+              ? `${randomShowRandomEpisodeL2.name} (${randomShowRandomEpisodeL2.code})`
+              : ""
         }}
       </span>
     </div>
     <div class="text-center pt-5 pb-5" v-if="!randomShowRandomEpisode">
       <Loader :sticky="true" message="Getting shows..." />
     </div>
-    <LazyYouTubeVideo
-      v-if="randomShowRandomEpisode"
-      initialLayout="vertical"
-      :youtube="randomShowRandomEpisode.youtube_id"
-      :ref="`youtube`"
-      :autoload="true"
-      :autoplay="true"
-      :startAtRandomTime="true"
-      @currentTime="updateCurrentTime"
-    />
+    <LazyYouTubeVideo v-if="randomShowRandomEpisode" initialLayout="vertical"
+      :youtube="randomShowRandomEpisode.youtube_id" :ref="`youtube`" :autoload="true" :autoplay="true"
+      :startAtRandomTime="true" @currentTime="updateCurrentTime" />
     <div class="text-center pt-3 pb-3" v-if="randomShowRandomEpisode">
-      <b-button
-        variant="ghost-dark-no-bg"
-        @click="loadHistory"
-        :disabled="history.length <= 1"
-        :class="{ disabled: history.length <= 1, 'mr-2': true }"
-      >
+      <b-button variant="ghost-dark-no-bg" @click="loadHistory" :disabled="history.length <= 1"
+        :class="{ disabled: history.length <= 1, 'mr-2': true }">
         <i class="fas fa-step-backward mr-1"></i>
       </b-button>
-      <router-link
-        :to="{
-          name: 'youtube-view',
-          params: {
-            l1: $l1 ? $l1.code : l1Code(randomShowRandomEpisodeL2Code),
-            l2: $l2 ? $l2.code : randomShowRandomEpisodeL2Code,
-            youtube_id: randomShowRandomEpisode.youtube_id,
-          },
-          query: {
-            t: currentTime,
-          },
-        }"
-        class="btn btn-success"
-      >
-        <i class="fas fa-play mr-1"></i>
-        {{ $t("Watch Full") }}
+      <router-link :to="{
+        name: 'youtube-view',
+        params: {
+          l1: l1 ? l1.code : l1Code(randomShowRandomEpisodeL2Code),
+          l2: l2 ? l2.code : randomShowRandomEpisodeL2Code,
+          youtube_id: randomShowRandomEpisode.youtube_id,
+        },
+        query: {
+          t: currentTime,
+        },
+      }" class="btn btn-success">
+        <i class="fas fa-window-restore mr-1"></i>
+        {{ $t("Open in Full Player") }}
       </router-link>
       <b-button variant="ghost-dark-no-bg" class="ml-2" @click="loadRandomShow">
         <i class="fas fa-step-forward mr-1"></i>
       </b-button>
-      <b-button
-        variant="ghost-dark-no-bg"
-        size="sm"
-        style="float: right"
-        v-if="$adminMode"
-        @click="removeEpisode(randomShowRandomEpisode)"
-      >
+      <b-button variant="ghost-dark-no-bg" size="sm" style="float: right" v-if="$adminMode"
+        @click="removeEpisode(randomShowRandomEpisode)">
         <i class="fas fa-trash"></i>
       </b-button>
     </div>
@@ -79,6 +60,12 @@ export default {
     shows: {
       default: undefined,
     },
+    l1: {
+      default: undefined
+    },
+    l2: {
+      default: undefined
+    }
   },
   data() {
     return {
@@ -90,14 +77,6 @@ export default {
     };
   },
   computed: {
-    $l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-    },
-    $l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
-    },
     $adminMode() {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
@@ -136,7 +115,7 @@ export default {
     },
     async removeEpisode(randomShowRandomEpisode) {
       let response = await axios.delete(
-        `${Config.youtubeVideosTableName(this.$l2.id)}/${randomShowRandomEpisode.id}`
+        `${Config.youtubeVideosTableName(randomShowRandomEpisode.l2)}/${randomShowRandomEpisode.id}`
       );
       if (response) {
         this.loadRandomShow();
@@ -146,7 +125,7 @@ export default {
       let randomShow = this.getRandomShow();
       let randomShowRandomEpisode = await this.getRandomEpisodeOfShow(
         randomShow ? randomShow.id : undefined,
-        this.routeType.replace(/s$/, "").replace("-", "_")
+        this.routeType.replace(/s$/, "").replace("-", "_"), randomShow ? randomShow.l2 : this.l2 ? this.l2.id : undefined
       );
       this.randomShow = randomShow;
       this.randomShowRandomEpisode = randomShowRandomEpisode;
@@ -176,8 +155,8 @@ export default {
         this.currentTime = currentTime;
       }
     },
-    async getFirstEpisodeOfShow(showId, showType) {
-      let url = `${Config.youtubeVideosTableName(this.$l2.id)}?filter[${showType}][eq]=${showId}&fields=youtube_id,id,l2`;
+    async getFirstEpisodeOfShow(showId, showType, l2Id) {
+      let url = `${Config.youtubeVideosTableName(l2Id)}?filter[${showType}][eq]=${showId}&fields=youtube_id,id,l2`;
       let response = await axios.get(url);
 
       if (response.data && response.data.data.length > 0) {
@@ -186,11 +165,11 @@ export default {
         return firstEpisode;
       }
     },
-    async getRandomEpisodeOfShow(showId, showType) {
+    async getRandomEpisodeOfShow(showId, showType, l2Id) {
       let showFilter = showId
         ? `filter[${showType}][eq]=${showId}`
-        : `filter[tv_show][null]=1&filter[talk][null]=1&filter[l2][eq]=${this.$l2.id}"`;
-      let url = `${Config.youtubeVideosTableName(this.$l2.id)}?${showFilter}&fields=youtube_id,id,l2`;
+        : `filter[tv_show][null]=1&filter[talk][null]=1&filter[l2][eq]=${l2Id}`;
+      let url = `${Config.youtubeVideosTableName(l2Id)}?${showFilter}&fields=youtube_id,id,l2`;
       let response = await axios.get(url);
 
       if (response.data && response.data.data.length > 0) {
@@ -206,6 +185,7 @@ export default {
 <style lang="scss" scoped>
 .btn:disabled {
   opacity: 0.2;
+
   &:hover {
     background: none;
   }

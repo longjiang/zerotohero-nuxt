@@ -38,6 +38,8 @@
               v-if="showDiscover"
               routeType="talks"
               :shows="[]"
+              :l1="$l1"
+              :l2="$l2"
             />
           </div>
           <!-- <client-only>

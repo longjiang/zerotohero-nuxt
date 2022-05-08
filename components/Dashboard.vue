@@ -2,9 +2,9 @@
   <container-query :query="query" v-model="params">
     <div class="container">
       <div class="row dashboard-saved-words" v-if="
-        showWords && 
+        showWords &&
         ((savedWordsSorted && savedWordsSorted.length > 0) ||
-        (savedPhrasesSorted && savedPhrasesSorted.length > 0))
+          (savedPhrasesSorted && savedPhrasesSorted.length > 0))
       ">
         <div class="col-12">
           <div :class="{
@@ -22,10 +22,12 @@
                 ">
                 {{ savedWordsLang.words.length }}
               </span>
-              saved word{{ savedWordsLang.words.length > 1 ? "s" : "" }}
+              word{{
+                  savedWordsLang.words.length > 1 ? "s" : ""
+              }}
 
               in
-              <strong>{{ languageName(savedWordsLang.l2) }}</strong>
+              <span v-if="showFlags" class="mr-1">{{ flagIcon(savedWordsLang.l2) }}</span> <strong>{{ languageName(savedWordsLang.l2) }}</strong>
             </router-link>
             <router-link v-for="(savedPhrasesLang, index) in savedPhrasesSorted" :to="`/${languageL1(savedPhrasesLang.l2)}/${savedPhrasesLang.l2.code
             }/saved-phrases`" class="link-unstyled d-block dashboard-saved-words-list-item"
@@ -38,10 +40,12 @@
                 ">
                 {{ savedPhrasesLang.phrases.length }}
               </span>
-              saved phrase{{ savedPhrasesLang.phrases.length > 1 ? "s" : "" }}
+              phrase{{
+                  savedPhrasesLang.phrases.length > 1 ? "s" : ""
+              }}
 
               in
-              <strong>{{ savedPhrasesLang.l2.name }}</strong>
+              <span v-if="showFlags" class="mr-1">{{ flagIcon(savedPhrasesLang.l2) }}</span> <strong>{{ savedPhrasesLang.l2.name }}</strong>
             </router-link>
           </div>
         </div>
@@ -154,6 +158,9 @@ export default {
     skin: {
       default: "light",
     },
+    showFlags: {
+      default: false
+    }
   },
   data() {
     return {
@@ -279,6 +286,9 @@ export default {
     },
   },
   methods: {
+    flagIcon(l2) {
+      return this.$languages.flagIcon(l2)
+    },
     deleteAllSavedWordsAndPhrases() {
       if (
         this.savedWordsSorted &&

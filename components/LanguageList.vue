@@ -52,6 +52,7 @@
             </span>
           </span>
           <router-link :to="base" class="language-list-item-name">
+            <span v-if="showFlags" class="mr-1">{{ flagIcon(language) }}</span>
             {{ languageName(language) }}
             <span v-if="showCode">({{ language.code }})</span>
           </router-link>
@@ -106,6 +107,9 @@ export default {
     },
     l1: {
       default: 'en'
+    },
+    showFlags: {
+      default: false
     }
   },
   data() {
@@ -171,6 +175,9 @@ export default {
     },
   },
   methods: {
+    flagIcon(l2) {
+      return this.$languages.flagIcon(l2)
+    },
     speakers(number) {
       return Helper.formatK(number, 1);
     },

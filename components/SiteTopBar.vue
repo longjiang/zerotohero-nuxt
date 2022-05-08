@@ -6,10 +6,10 @@
         <span style="line-height: 2.3rem; color: #ccc; cursor: pointer; margin-right: 0.5rem" @click="scrollToTop"><i
             class="fas fa-bars"></i></span>
         <router-link to="/" class="link-unstyled">
-          <img v-if="$l2.code !== 'zh'" src="/img/czh-icon.png" style="height: 1.5rem; margin-right: 0.25rem" /><b
-            class="text-white" style="font-size: 0.9em">zerotohero.ca</b>
+          <img v-if="!$l2 || $l2.code !== 'zh'" src="/img/czh-icon.png" style="height: 1.5rem; margin-right: 0.25rem" /><b
+            class="text-white" style="font-size: 0.9em" data-not-lazy>zerotohero.ca</b>
         </router-link>
-        <router-link :to="{ name: 'home' }" class="link-unstyled language-flag-and-name"> <i
+        <router-link v-if="$l2" :to="{ name: 'home' }" class="link-unstyled language-flag-and-name"> <i
             class="fas fa-chevron-right"
             style="opacity: 0.5; font-size: 0.7em; margin-left: 0.15rem; margin-right: 0.15rem"></i><span
             style="font-weight: bold; color: white;">{{
@@ -18,7 +18,7 @@
         </router-link>
       </div>
       <div>
-        <AnnotationSettings variant="toolbar" style="position: relative; bottom: -0.1rem;" />
+        <AnnotationSettings v-if="$l2" variant="toolbar" style="position: relative; bottom: -0.1rem;" />
         <router-link :to="languageMapPath" class="btn top-bar-button btn-unstyled link-unstyled">
           <i class="fas fa-globe-asia"></i>
         </router-link>
@@ -31,13 +31,13 @@
         <button :class="['btn top-bar-button btn-unstyled', { 'd-none': !isPWA }]" @click="reload" style="color: #ccc">
           <i class="fas fa-sync-alt"></i>
         </button>
-        <LoginButton class="d-inline-block" :icon="true" :text="false" style="color: #ddd" />
+        <LoginButton v-if="$l2" class="d-inline-block" :icon="true" :text="false" style="color: #ddd" />
       </div>
     </template>
 
     <template v-if="variant === 'side-bar'">
       <router-link to="/" class="link-unstyled">
-        <img v-if="$l2.code !== 'zh'" src="/img/czh-icon.png"
+        <img v-if="!$l2 || $l2.code !== 'zh'" src="/img/czh-icon.png" data-not-lazy
           style="height: 1.5rem; margin-right: 0.25rem" /><b>zerotohero.ca</b>
       </router-link>
       <router-link :to="languageMapPath" class="link-unstyled">
