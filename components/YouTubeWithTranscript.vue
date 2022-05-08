@@ -570,7 +570,7 @@ export default {
 .youtube-video-column {
   position: sticky;
   top: 0;
-  z-index: 9;
+  z-index: 2;
 }
 
 #zerotohero:not(.zerotohero-wide) {

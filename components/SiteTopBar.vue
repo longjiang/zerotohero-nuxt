@@ -102,7 +102,7 @@ export default {
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
-  z-index: 2;
+  z-index: 4;
   background-color: rgb(29, 29, 29);
   position: absolute;
   padding: 0.25rem 1rem;
