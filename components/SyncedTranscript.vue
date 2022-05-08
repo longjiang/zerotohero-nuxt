@@ -40,7 +40,9 @@
           "
           :ref="`transcript-line-${index + visibleMin}`"
           :duration="
-            line.duration ? line.duration : lines[index + 1]
+            line.duration
+              ? line.duration
+              : lines[index + 1]
               ? lines[index + 1].starttime - line.starttime
               : 5
           "
@@ -300,16 +302,8 @@ export default {
       if (this.paused) {
         this.cancelSmoothScroll();
       }
-      let currentLineRefs =
-        this.$refs[`transcript-line-${this.currentLineIndex}`];
-      if (this.paused)
-        if (currentLineRefs && currentLineRefs[0])
-          currentLineRefs[0].pauseAnimation();
-      if (!this.paused)
-        if (currentLineRefs && currentLineRefs[0])
-          currentLineRefs[0].playAnimation(
-            this.currentTime - this.currentLine.starttime
-          );
+      if (this.paused) this.pauseCurrentLineAnimation();
+      if (!this.paused) this.playCurrentLineAnimation();
     },
     async currentTime() {
       if (this.preventJumpingAtStart) {
@@ -365,12 +359,7 @@ export default {
     currentLine() {
       if (!this.single && !this.paused) this.scrollTo(this.currentLineIndex);
       if (!this.paused) {
-        let currentLineRefs =
-          this.$refs[`transcript-line-${this.currentLineIndex}`];
-        if (currentLineRefs && currentLineRefs[0])
-          currentLineRefs[0].playAnimation(
-            this.currentTime - this.currentLine.starttime
-          );
+        this.playCurrentLineAnimation()
       }
     },
     parallellines() {
@@ -741,13 +730,12 @@ export default {
             2 +
           elHeight / 2;
 
-        
         let offsetTop = Helper.documentOffsetTop(el);
         let top = offsetTop + offset;
         if (Math.abs(window.scrollY - top) > 1000) {
           window.scrollTo({
             top,
-            left: 0
+            left: 0,
           });
         } else {
           if (navigator.hardwareConcurrency >= 4) {
@@ -808,6 +796,23 @@ export default {
       this.currentLine = line;
       this.nextLine = this.lines[this.currentLineIndex + 1];
       this.seekVideoTo(line.starttime - 0.2); // We rewind to 200ms earlier to capture more audio at the beginning of the line
+      if (!this.paused) {
+        this.playCurrentLineAnimation();
+      }
+    },
+    playCurrentLineAnimation() {
+      let currentLineRefs =
+        this.$refs[`transcript-line-${this.currentLineIndex}`];
+      if (currentLineRefs && currentLineRefs[0])
+        currentLineRefs[0].playAnimation(
+          this.currentTime - this.currentLine.starttime
+        );
+    },
+    pauseCurrentLineAnimation() {
+      let currentLineRefs =
+        this.$refs[`transcript-line-${this.currentLineIndex}`];
+      if (currentLineRefs && currentLineRefs[0])
+        currentLineRefs[0].pauseAnimation();
     },
     rewind() {
       this.goToLine(this.currentLine);
