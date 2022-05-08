@@ -48,8 +48,6 @@
 </template>
 <script>
 import AnnotationSettings from "./AnnotationSettings.vue";
-import { hasFlag } from 'country-flag-icons'
-import getUnicodeFlagIcon from 'country-flag-icons/unicode'
 
 export default {
   props: {
@@ -86,27 +84,10 @@ export default {
       return "/language-map";
     },
     flagIcon() {
-      let code = this.countryCode()
-      if (code && hasFlag(code)) return getUnicodeFlagIcon(code)
+      return this.$languages.flagIcon(this.$l2)
     }
   },
   methods: {
-    countryCode() {
-      if (this.$l2.code === 'en') return 'UK'
-      if (this.$l2.code === 'da') return 'DK'
-      if (this.$l2.code === 'fr') return 'FR'
-      if (this.$l2.country && this.$l2.country[0]) {
-        let country
-        let countries = this.$l2.country
-        if (countries.length === 1) country = countries[0]
-        else {
-          let prefCountries = this.$l2.country.filter(c => c.name.startsWith(this.$l2.name.slice(0, 3)))
-          if (prefCountries) country = prefCountries[0]
-        }
-        if (country) return country.alpha2Code
-      }
-
-    },
     scrollToTop() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     },
