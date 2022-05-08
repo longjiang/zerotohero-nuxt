@@ -14,7 +14,7 @@
             style="opacity: 0.5; font-size: 0.7em; margin-left: 0.15rem; margin-right: 0.15rem"></i><span
             style="font-weight: bold; color: white;">{{
                 $l2.code
-            }}</span> <span style="position: relative; bottom: -0.1rem;" v-if="flagIcon">{{ flagIcon }}</span>
+            }}</span> <span v-if="flagIcon">{{ flagIcon }}</span>
         </router-link>
       </div>
       <div>

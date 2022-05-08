@@ -23,17 +23,24 @@
                   data-not-lazy /><br /><b>zerotohero.ca</b>
               </span>
               <p style="font-size: 1.6rem; max-width: 45rem; margin: 2rem auto 0 auto; line-height: 1.5;">
-                Learn <strong><router-link :to="{name: 'language-map'}" class="blurb-highlight">{{ languagesWithVideos.length }} languages</router-link></strong>
-                by
-                “comprehensible input” through a collection of <strong><router-link :to="{name: 'discover-shows'}" class="blurb-highlight">320,364
-                    videos</router-link></strong>, including TV shows, movies, music, news, audiobooks, with full subtitles and
-                a popup dictionary.
+                Learn <strong>
+                  <router-link :to="{ name: 'language-map' }" class="blurb-highlight">{{ languagesWithVideos.length }}
+                    languages 🌏</router-link>
+                </strong>
+                with <strong>
+                  <router-link :to="{ name: 'discover-shows' }" class="blurb-highlight">320,364
+                    videos 📺</router-link>
+                </strong> <br />
               </p>
-              <p style="font-size: 1.6rem; max-width: 45rem; margin: 1rem auto 0 auto; line-height: 1.5;">And yes, we
-                have
+              <p style="font-size: 1.3rem; max-width: 45rem; margin: 1rem auto 0 auto; line-height: 1.5;">TV shows,
+                movies, music, news, audiobooks... with full subtitles and dictionary tools, all you need for
+                <a class="blurb-highlight" href="https://en.wikipedia.org/wiki/Input_hypothesis" target="_blank">comprehensible input 🎧</a>.
+              </p>
+              <p style="font-size: 1.3rem; max-width: 45rem; margin: 1rem auto 0 auto; line-height: 1.5;">And yes, we have
                 <router-link :to="`/en/${this.randomLanguage[1]}`" class="blurb-highlight">{{
                     this.randomLanguage[0]
-                }}</router-link>.
+                }}!<span v-if="flagIcon(this.randomLanguage[1])" class="ml-2">{{ flagIcon(this.randomLanguage[1]) }}</span><span v-else>💬</span>
+                </router-link>
               </p>
             </div>
           </div>
@@ -579,6 +586,9 @@ export default {
     hasDashboardUpdate(hasDashboard) {
       this.hasDashboard = hasDashboard && (hasDashboard.includes('words') || hasDashboard.includes('phrases'));
     },
+    flagIcon(l2Code) {
+      return this.$languages ? this.$languages.flagIcon(this.$languages.getSmart(l2Code)) : undefined
+    }
   },
 };
 </script>
