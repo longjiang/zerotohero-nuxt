@@ -23,6 +23,7 @@
     "chinese-conv": "^1.0.1",
     "core-js": "^3.9.1",
     "country-code-lookup": "^0.0.19",
+    "country-flag-icons": "^1.4.26",
     "css-percentage-circle": "^2.0.1",
     "deep-equal": "^2.0.5",
     "detect-file-encoding-and-language": "^2.1.0",

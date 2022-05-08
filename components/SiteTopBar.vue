@@ -1,11 +1,20 @@
 <template>
   <div :class="`site-top-bar site-top-bar-${variant}`" @click.self="scrollToTop">
     <template v-if="variant === 'menu-bar'">
-      
+
       <div class="text-center">
-        <span style="line-height: 2.3rem; color: #ccc; cursor: pointer; margin-right: 0.75rem" @click="scrollToTop"><i class="fas fa-bars"></i></span>
+        <span style="line-height: 2.3rem; color: #ccc; cursor: pointer; margin-right: 0.5rem" @click="scrollToTop"><i
+            class="fas fa-bars"></i></span>
         <router-link to="/" class="link-unstyled">
-          <img v-if="$l2.code !== 'zh'" src="/img/czh-icon.png" style="height: 1.5rem; margin-right: 0.25rem" /><b>zerotohero.ca</b>
+          <img v-if="$l2.code !== 'zh'" src="/img/czh-icon.png" style="height: 1.5rem; margin-right: 0.25rem" /><b
+            class="text-white" style="font-size: 0.9em">zerotohero.ca</b>
+        </router-link>
+        <router-link :to="{ name: 'home' }" class="link-unstyled language-flag-and-name"> <i
+            class="fas fa-chevron-right"
+            style="opacity: 0.5; font-size: 0.7em; margin-left: 0.15rem; margin-right: 0.15rem"></i><span
+            style="font-weight: bold; color: white;">{{
+                $l2.code
+            }}</span> <span style="position: relative; bottom: -0.1rem;" v-if="flagIcon">{{ flagIcon }}</span>
         </router-link>
       </div>
       <div>
@@ -28,7 +37,8 @@
 
     <template v-if="variant === 'side-bar'">
       <router-link to="/" class="link-unstyled">
-        <img v-if="$l2.code !== 'zh'" src="/img/czh-icon.png" style="height: 1.5rem; margin-right: 0.25rem" /><b>zerotohero.ca</b>
+        <img v-if="$l2.code !== 'zh'" src="/img/czh-icon.png"
+          style="height: 1.5rem; margin-right: 0.25rem" /><b>zerotohero.ca</b>
       </router-link>
       <router-link :to="languageMapPath" class="link-unstyled">
         <i class="fas fa-globe-asia"></i>
@@ -38,7 +48,8 @@
 </template>
 <script>
 import AnnotationSettings from "./AnnotationSettings.vue";
-
+import { hasFlag } from 'country-flag-icons'
+import getUnicodeFlagIcon from 'country-flag-icons/unicode'
 
 export default {
   props: {
@@ -74,8 +85,28 @@ export default {
       }
       return "/language-map";
     },
+    flagIcon() {
+      let code = this.countryCode()
+      if (code && hasFlag(code)) return getUnicodeFlagIcon(code)
+    }
   },
   methods: {
+    countryCode() {
+      if (this.$l2.code === 'en') return 'UK'
+      if (this.$l2.code === 'da') return 'DK'
+      if (this.$l2.code === 'fr') return 'FR'
+      if (this.$l2.country && this.$l2.country[0]) {
+        let country
+        let countries = this.$l2.country
+        if (countries.length === 1) country = countries[0]
+        else {
+          let prefCountries = this.$l2.country.filter(c => c.name.startsWith(this.$l2.name.slice(0, 3)))
+          if (prefCountries) country = prefCountries[0]
+        }
+        if (country) return country.alpha2Code
+      }
+
+    },
     scrollToTop() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     },
@@ -132,6 +163,18 @@ export default {
     padding-left: 1.5rem;
     margin-top: -2.6rem;
     background-color: rgba(29, 29, 29, 0.5);
+  }
+
+  .language-flag-and-name {
+    line-height: 1;
+    text-overflow: ellipsis;
+    max-width: 4rem;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+    position: relative;
+    bottom: -0.15rem;
+    text-align: left;
   }
 }
 </style>
