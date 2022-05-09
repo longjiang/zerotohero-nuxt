@@ -30,7 +30,7 @@
               :l2="l2"
               branded="true"
               :icon="collapsed"
-              style="margin: 1.5rem 0"
+              style="margin: 1.25rem 0 0.25rem 0"
             />
           </div>
           <div

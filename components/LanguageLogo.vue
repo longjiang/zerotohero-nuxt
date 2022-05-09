@@ -3,21 +3,47 @@
     :to="`/${l1.code}/${l2.code}/`"
     class="link-unstyled d-inline-block"
   >
-    <img
-      src="/img/czh-logo-light.png"
-      alt="Chinese Zero to Hero"
-      class="logo"
-      data-not-lazy
-      v-if="branded && l1.code === 'en' && l2.code === 'zh'"
-    />
-    <img
-      src="/img/ezh-logo-light.png"
-      alt="Chinese Zero to Hero"
-      class="logo"
-      data-not-lazy
-      v-else-if="branded && l1.code === 'zh' && l2.code === 'en'"
-    />
-    <div class="logo-constructed" v-else>
+    <template
+      v-if="
+        branded &&
+        ((l1.code === 'zh' && l2.code === 'en') ||
+          (l1.code === 'en' && l2.code === 'zh'))
+      "
+    >
+      <template v-if="!icon">
+        <img
+          src="/img/czh-logo-light.png"
+          alt="Chinese Zero to Hero"
+          class="logo"
+          data-not-lazy
+          v-if="l1.code === 'en' && l2.code === 'zh'"
+        />
+        <img
+          src="/img/ezh-logo-light.png"
+          alt="Chinese Zero to Hero"
+          class="logo"
+          data-not-lazy
+          v-else-if="l1.code === 'zh' && l2.code === 'en'"
+        />
+      </template>
+      <template v-else>
+        <img
+          src="/img/czh-icon.png"
+          alt="Chinese Zero to Hero"
+          class="logo-image"
+          data-not-lazy
+          v-if="l1.code === 'en' && l2.code === 'zh'"
+        />
+        <img
+          src="/img/ezh-icon.png"
+          alt="Chinese Zero to Hero"
+          class="logo-image"
+          data-not-lazy
+          v-else-if="l1.code === 'zh' && l2.code === 'en'"
+        />
+      </template>
+    </template>
+    <div v-else class="logo-constructed">
       <div class="logo-circle-wrapper">
         <div
           :class="`logo-circle
@@ -78,8 +104,8 @@ export default {
       default: false,
     },
     icon: {
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
@@ -114,7 +140,7 @@ export default {
   max-width: 11rem;
 }
 .logo-image {
-  height: 4rem;
+  height: 2.9rem;
 }
 .logo-constructed {
   display: flex;

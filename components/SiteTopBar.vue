@@ -19,7 +19,7 @@
           </span>
           <router-link to="/" class="link-unstyled">
             <img
-              v-if="params.sm && (!$l2 || $l2.code !== 'zh')"
+              v-if="params.sm"
               src="/img/czh-icon.png"
               style="height: 1.5rem; margin-right: 0.25rem"
             />
