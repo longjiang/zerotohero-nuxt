@@ -11,6 +11,7 @@
       <client-only>
         <Nav
           v-if="$route.params.l1 && $route.params.l1 && l1 && l2"
+          class="zth-nav-wrapper"
           :l1="l1"
           :l2="l2"
           :key="`nav-${l1.code}-${l2.code}`"
@@ -242,21 +243,21 @@ export default {
     margin-left: 13rem;
     overflow: visible;
   }
-  .zth-nav.has-secondary-nav + .zth-content {
+  .zth-nav-wrapper.has-secondary-nav + .zth-content {
     margin-left: 26rem;
   }
   &.zerotohero-wide-collapsed {
     .zth-content {
       margin-left: 4.5rem;
     }
-    .zth-nav.has-secondary-nav + .zth-content {
+    .zth-nav-wrapper.has-secondary-nav + .zth-content {
       margin-left: 9rem;
     }
   }
 }
 
 @media screen and (max-device-width: 1024px) {
-  .zth-nav {
+  .zth-nav-wrapper {
     background-attachment: scroll;
   }
 }

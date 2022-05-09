@@ -1,7 +1,6 @@
 <template>
   <div
     :class="{
-      'zth-nav': true,
       'zth-nav-light': skin === 'light',
       'zth-nav-dark': skin === 'dark',
       'zth-nav-menu-bar': variant === 'menu-bar',
@@ -11,7 +10,7 @@
       'has-secondary-nav': currentParent && currentParent.children,
     }"
   >
-    <SiteTopBar :variant="variant" @toggleCollapsed="toggleCollapsed" />
+    <SiteTopBar :variant="variant" @toggleCollapsed="toggleCollapsed" v-if="variant!=='page'" />
     <div
       :class="{
         'nav-menu-bar': variant === 'menu-bar',
@@ -913,13 +912,13 @@ export default {
 
 <style lang="scss">
 
-.zth-nav.zth-nav-side-bar {
+.zth-nav-wrapper.zth-nav-side-bar {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
 }
 
 .zerotohero-wide {
-  .zth-nav {
+  .zth-nav-wrapper {
     overflow: hidden;
     position: fixed;
     top: 0;
