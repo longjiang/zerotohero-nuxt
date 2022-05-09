@@ -46,7 +46,7 @@
         </span>
         <span
           v-if="!l2Settings.useTraditional && token.candidates[0].simplified"
-          :class="`word-block-simplified ${hard ? 'word-block-hard' : ''} ${
+          :class="`word-block-text word-block-simplified ${hard ? 'word-block-hard' : ''} ${
             pos ? 'pos-' + pos : ''
           }`"
         >
@@ -56,7 +56,7 @@
           v-else-if="
             l2Settings.useTraditional && token.candidates[0].traditional
           "
-          :class="`word-block-traditional  ${hard ? 'word-block-hard' : ''} ${
+          :class="`word-block-text word-block-traditional  ${hard ? 'word-block-hard' : ''} ${
             pos ? 'pos-' + pos : ''
           }`"
         >
