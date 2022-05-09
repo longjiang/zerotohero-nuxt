@@ -221,7 +221,7 @@ export default {
       this.animate = true;
       await Helper.timeout(50) // So that everything is rendered and queryselectorall works
       if (this.animationDuration) {
-        let blocks = this.$el.querySelectorAll(".word-block")
+        let blocks = this.$el.querySelectorAll(".word-block, .word-block-unknown")
         let duration = (this.animationDuration - 0.05) / (blocks.length + 1);
         let durationAlreadyPlayed = 0;
         for (let block of blocks) {
@@ -231,9 +231,10 @@ export default {
             if (!this.animate) return;
             block.classList.add("animate");
             await Helper.timeout(duration * 1000);
-            block.classList.remove("animate");
           }
         }
+        await Helper.timeout(2000);
+        blocks.forEach(b => b.classList.remove("animate"))
       }
     },
     async pauseAnimation() {
@@ -418,7 +419,7 @@ export default {
             }
           }
         } else {
-          html += `<span>${token.replace(/\s+/, "&nbsp;")}</span>`;
+          html += `<span class="word-block-unknown">${token.replace(/\s+/, "&nbsp;")}</span>`;
         }
       }
       return html;
@@ -433,7 +434,7 @@ export default {
         if (typeof item === "object") {
           html += `<WordBlock :checkSaved="${this.checkSaved}" ref="word-block" :phonetics="${this.phonetics}" :popup="${this.popup}" :sticky="${this.sticky}" :explore="${this.explore}" :token="tokenized[${batchId}][${index}]">${item.text}</WordBlock>`;
         } else {
-          html += `<span>${(item || "")
+          html += `<span class="word-block-unknown">${(item || "")
             .replace(/\s+([,.!?])/, "$1")
             .replace(/\s+/g, "&nbsp;")}</span>`;
         }
@@ -458,7 +459,7 @@ export default {
           /!!!###!!!/gi,
           `<span class="${
             this.$l2.code === "tlh" ? "klingon" : ""
-          }">&nbsp;</span>`
+          } word-block-unknown">&nbsp;</span>`
         );
       return html;
     },

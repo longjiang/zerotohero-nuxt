@@ -865,12 +865,27 @@ export default {
 
 <style lang="scss">
 .main-dark {
-  .word-block {
+  .word-block,
+  .word-block-unknown {
     color: #ccc;
-    transition: 0.4s linear all;
     &.animate {
-      color: #54ff7c;
+      animation-name: shine;
+      animation-iteration-count: 1;
+      animation-duration: 2s;
+      animation-timing-function: ease-in-out;
     }
+  }
+}
+
+@keyframes shine {
+  0% {
+    color: #ccc;
+  }
+  10% {
+    color: #54ff7c;
+  }
+  100% {
+    color: #ccc;
   }
 }
 
