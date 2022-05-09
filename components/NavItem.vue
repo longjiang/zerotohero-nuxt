@@ -12,8 +12,8 @@
   >
     <i :class="`${item.icon}`"></i>
     {{ $t(item.title, { l2: $t($l2.name) }) }}
-    <span class="saved-words-count" v-cloak v-if="badgeCount">
-      {{ badgeCount }}
+    <span class="saved-words-count" v-cloak v-if="badge">
+      {{ badge }}
     </span>
   </NuxtLink>
 </template>
@@ -30,7 +30,7 @@ export default {
     item: {
       type: Object,
     },
-    badgeCount: {
+    badge: {
       type: Number,
     },
     to: {

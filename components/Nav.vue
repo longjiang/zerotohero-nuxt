@@ -45,7 +45,7 @@
               :variant="variant"
               :key="`nav-${index}`"
               :active="currentParent && currentParent.name === nameOfSelfOrFirstChild(item)"
-              :badgeCount="item.icon === 'fas fa-star' ? savedWordsCount + savedPhrasesCount : undefined"
+              :badge="item.icon === 'fas fa-star' ? savedWordsCount + savedPhrasesCount : undefined"
             />
           </div>
           <div v-if="variant === 'side-bar'" class="end-nav">
