@@ -164,7 +164,7 @@ export default {
   },
   async fetch() {
     try {
-      console.log(`YouTube View: Getting saved video...`);
+      console.log(`YouTube View (Fetch): Getting saved video...`);
       let savedVideo, videoFromApi;
       savedVideo = await this.getSaved();
       if (this.lesson && savedVideo.level && savedVideo.lesson) {
@@ -172,7 +172,7 @@ export default {
       }
       if (!savedVideo || (!savedVideo.channel && this.$adminMode)) {
         console.log(
-          `YouTube View: Getting channel information with youtube api...`
+          `YouTube View (Fetch): Getting channel information with youtube api...`
         );
         videoFromApi = await YouTube.videoByApi(this.youtube_id);
       }
@@ -188,6 +188,7 @@ export default {
     async video() {
       if (!this.extrasLoaded && typeof this.video !== "undefined") {
         this.extrasLoaded = true;
+        console.log(`YouTube View (on video change): load subs if missing...`);
         this.video = await this.loadSubsIfMissing(this.video);
         if (
           this.video &&
@@ -197,6 +198,7 @@ export default {
         ) {
           this.video = await this.patchDuration(this.video);
         }
+        console.log(`YouTube View (on video change): loading extras...`);
         await this.loadExtras();
         this.bindKeys();
         this.unsubscribe = this.$store.subscribe((mutation, state) => {
@@ -283,6 +285,7 @@ export default {
     async getTranscript(video) {
       console.log(`YouTube View: Getting ${this.$l2.name} transcript`);
       Vue.set(video, "checkingSubs", true);
+      console.log()
       let subs_l2 = await YouTube.getTranscript(
         video.youtube_id,
         video.l2Locale,
@@ -296,8 +299,8 @@ export default {
     async loadSubsIfMissing(video) {
       try {
         video = this.checkSubsAndAddLocalesIfNeeded(video);
-        if (!video.subs_l2 || video.subs_l2.length) {
-          video = this.getTranscript(video);
+        if (!video.subs_l2 || video.subs_l2.length === 0) {
+          video = await this.getTranscript(video);
         }
         if (video.subs_l2 && video.subs_l2.length > 0) {
           this.firstLineTime = video.subs_l2[0].starttime;
@@ -313,6 +316,7 @@ export default {
       } catch (err) {
         console.log(err);
       }
+      return video;
     },
     async loadExtras() {
       console.log(`YouTube View: Loading show...`);
