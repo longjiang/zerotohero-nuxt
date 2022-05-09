@@ -116,65 +116,13 @@ p-1
 feature-card-column
 feature-card-name-${child.name}`"
                 >
-                  <NuxtLink
-                    v-if="!child.href"
+                  <NavItem
                     :to="last(child) || child"
-                    style="height: 100%"
-                    :class="`feature-card feature-card-${
-                      item.title === 'Media' ? 'dark' : 'dark'
-                    } link-unstyled`"
+                    :item="child"
+                    variant="page"
+                    :badge="child.name === 'saved-words' && savedWordsCount > 0 ? savedWordsCount : child.name === 'saved-phrases' && savedPhrasesCount > 0 ? savedPhrasesCount : undefined"
                   >
-                    <div class="feature-card-icon">
-                      <i
-                        :class="`${child.icon} bg-gradient-${item.title.length
-                          .toString()
-                          .split('')
-                          .pop()} gradient-text`"
-                      ></i>
-                    </div>
-                    <div class="feature-card-title">
-                      {{ $t(child.title, { l2: $t($l2.name) }) }}
-                      <span
-                        class="saved-words-count"
-                        v-cloak
-                        v-if="
-                          child.name === 'saved-words' && savedWordsCount > 0
-                        "
-                      >
-                        {{ savedWordsCount }}
-                      </span>
-                      <span
-                        class="saved-words-count"
-                        v-cloak
-                        v-if="
-                          child.name === 'saved-phrases' &&
-                          savedPhrasesCount > 0
-                        "
-                      >
-                        {{ savedPhrasesCount }}
-                      </span>
-                    </div>
-                  </NuxtLink>
-                  <a
-                    v-else
-                    :href="child.href"
-                    :class="`feature-card feature-card-${
-                      item.title === 'Media' ? 'dark' : 'dark'
-                    } link-unstyled`"
-                    target="_blank"
-                  >
-                    <div class="feature-card-icon">
-                      <i
-                        :class="`${child.icon} bg-gradient-${item.title.length
-                          .toString()
-                          .split('')
-                          .pop()} gradient-text`"
-                      ></i>
-                    </div>
-                    <div class="feature-card-title">
-                      {{ $t(child.title, { l2: $t($l2.name) }) }}
-                    </div>
-                  </a>
+                  </NavItem>
                 </div>
               </template>
             </template>
@@ -979,24 +927,6 @@ export default {
 }
 
 .zth-nav-light {
-  .main-nav-item {
-    &.nuxt-link-active,
-    &:hover {
-      color: #444;
-      text-shadow: none;
-      background: hsla(0deg, 100%, 100%, 0.75);
-      border-top: 1px solid rgba(255, 255, 255, 0.5);
-      border-left: 1px solid rgba(255, 255, 255, 0.5);
-      border-right: 1px solid rgba(255, 255, 255, 0.5);
-    }
-  }
-
-  .seoncdary-nav-item {
-    &.nuxt-link-active,
-    &:hover {
-      background: #014161c7;
-    }
-  }
 
   .nav-menu-bar,
   .nav-side-bar {
@@ -1022,29 +952,6 @@ export default {
 }
 
 .zth-nav-dark {
-  .main-nav-item {
-    &.nuxt-link-active,
-    &:hover {
-      color: white;
-      background: rgb(50, 50, 50);
-      border-top: 1px solid rgba(255, 255, 255, 0.4);
-    }
-  }
-
-  .secondary-nav-item {
-    color: white;
-
-    &.nuxt-link-active,
-    &:hover {
-      color: white;
-      background: linear-gradient(
-        180deg,
-        rgba(255, 255, 255, 0.4) 0%,
-        rgba(148, 148, 148, 0) 5%,
-        rgba(122, 122, 122, 0.4) 75%
-      );
-    }
-  }
 
   .nav-menu-bar {
     .secondary-nav {
@@ -1083,12 +990,6 @@ export default {
 .nav-menu-bar {
   .main-nav {
     text-align: center;
-
-    .main-nav-item {
-      border-radius: 0.3rem 0.3rem 0 0;
-      border-bottom: none;
-      margin-right: 0.2rem;
-    }
 
     .zth-header {
       text-align: center;
@@ -1150,18 +1051,6 @@ export default {
       border-radius: 0.25rem;
     }
 
-    .main-nav-item {
-      border-radius: 0.3rem 0 0 0.3rem;
-      border-right: 0;
-      padding-left: 0.5rem;
-      margin: 0.3rem 0;
-
-      i {
-        width: 2rem;
-        text-align: center;
-      }
-    }
-
     .end-nav {
       position: absolute;
       width: calc(100% - 1rem);
@@ -1193,135 +1082,19 @@ export default {
   .secondary-nav {
     width: 50%;
     padding: 0.5rem;
-
-    .secondary-nav-item {
-      padding: 0.5rem;
-      margin: 0.5rem;
-
-      i {
-        width: 1.5rem;
-        text-align: center;
-      }
-    }
   }
 }
 
-.tab-saved-words.nuxt-link-active,
-.tab-saved-words:hover {
-  color: #f8b61e;
-}
 
 .tab-saved-words-count[v-cloak] {
   display: none;
 }
 
-.tab-saved-words.nuxt-link-active .tab-saved-words-count,
-.tab-saved-words:hover .tab-saved-words-count {
-  background: #f8b61e;
-  color: white;
-}
-
-.saved-words-count {
-  border-radius: 100%;
-  font-size: 0.7rem;
-  font-weight: bold;
-  display: inline-block;
-  line-height: 1.2rem;
-  text-align: center;
-  position: relative;
-  top: -0.1rem;
-  position: relative;
-  min-width: 1.3rem;
-  margin-left: 0.2rem;
-  display: inline-block;
-  text-shadow: none;
-  color: white;
-  background: #fd4f1c;
-}
-
-.secondary-nav-item {
-  padding: 0.5rem 1rem;
-  margin: 0.2rem;
-  border-radius: 0.3rem;
-  color: #666;
-  display: inline-block;
-  white-space: nowrap;
-}
-
-.secondary-nav-item:hover {
-  text-decoration: none;
-  color: inherit;
-  background-color: #f7f7f7;
-}
-
-.secondary-nav-item.nuxt-link-active {
-  background: #666;
-  color: white;
-}
 
 .feature-card-column:hover {
   z-index: 1;
 }
 
-.feature-card-column {
-  .feature-card {
-    padding: 0.75rem;
-    font-size: 1.2em;
-    border-radius: 0.5rem;
-    box-shadow: 0 10px 30px rgba(68, 75, 134, 0.2);
-    display: block;
-    text-align: center;
-
-    &:hover {
-      transform: scale(115%);
-      transition: 200ms ease-in-out;
-      background-color: hsla(0deg, 100%, 100%, 0.8);
-    }
-
-    &.feature-card-light {
-      background-color: hsla(0deg, 100%, 100%, 0.7);
-      border: 1px solid rgba(255, 255, 255, 0.9);
-      color: #333;
-
-      &:hover {
-        color: #444;
-      }
-    }
-
-    &.feature-card-dark {
-      background: rgb(69, 69, 69);
-      background: radial-gradient(
-        circle,
-        rgba(69, 69, 69, 1) 0%,
-        rgba(0, 0, 0, 1) 100%
-      );
-      border: 1px solid rgba(255, 255, 255, 0.226);
-      border-top: 1px solid rgba(255, 255, 255, 0.5);
-      border-bottom: 1px solid rgba(0, 0, 0, 0.5);
-      color: rgba(255, 255, 255, 0.8);
-
-      &:hover {
-        color: white;
-      }
-    }
-
-    .feature-card-icon {
-      font-size: 2rem;
-      opacity: 1;
-      display: block;
-    }
-
-    .feature-card-title {
-      font-size: 0.9em;
-      line-height: 1;
-      display: block;
-      height: 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-  }
-}
 
 .logo {
   filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.5));
