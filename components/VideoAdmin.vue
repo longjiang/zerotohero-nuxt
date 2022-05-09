@@ -1,22 +1,65 @@
 <template>
   <div class="video-edit">
+    <div class="video-details">
+      <router-link
+        class="link-unstyled"
+        v-if="video.channel"
+        :to="{
+          name: 'youtube-channel',
+          params: {
+            channel_id: video.channel.id,
+            title: video.channel.title || video.channel.id,
+          },
+        }"
+      >
+        <i class="fab fa-youtube mr-1"></i>
+        {{ video.channel.title || "Channel" }}
+      </router-link>
+      <span v-if="video.subs_l2 && video.subs_l2.length > 0">
+        <a
+          :href="originalTextHref"
+          :download="`${video.title}.txt`"
+          target="_blank"
+          class="link-unstyled ml-2"
+        >
+          <i class="fas fa-file-alt mr-1"></i>
+          Transcript
+        </a>
+        <a :href="translationURL" target="_blank" class="link-unstyled ml-2">
+          <i class="fa fa-language mr-1"></i>
+          Translation
+        </a>
+      </span>
+      <div v-if="video.date">{{ formatDate(video.date) }}</div>
+    </div>
     <client-only>
-      <div class="video-edit-public pt-2 pb-2">
-        <drop @drop="handleDrop" :class="{
-          'd-none': video.subs_l2 && video.subs_l2.length > 0,
-          over: over,
-          'subs-drop drop p-4': true,
-        }" :key="`drop-${transcriptKey}`" @dragover="over = true" @dragleave="over = false">
+      <div class="video-edit-public">
+        <drop
+          @drop="handleDrop"
+          :class="{
+            'd-none': video.subs_l2 && video.subs_l2.length > 0,
+            over: over,
+            'subs-drop drop p-4': true,
+          }"
+          :key="`drop-${transcriptKey}`"
+          @dragover="over = true"
+          @dragleave="over = false"
+        >
           <i class="fa fa-file mr-2"></i>
           Drop .srt or .ass files here to add subtitles
         </drop>
-        <b-button size="small" :class="{
-          'd-none bg-success text-white': true,
-          'd-inline-block':
-            !saving &&
-            !(video && video.id) &&
-            ((video.subs_l2 && video.subs_l2.length > 0) || $adminMode),
-        }" @click="save" variant="success">
+        <b-button
+          size="small"
+          :class="{
+            'd-none bg-success text-white': true,
+            'd-inline-block':
+              !saving &&
+              !(video && video.id) &&
+              ((video.subs_l2 && video.subs_l2.length > 0) || $adminMode),
+          }"
+          @click="save"
+          variant="success"
+        >
           <i class="fas fa-plus mr-1"></i>
           Save Video for Everyone
         </b-button>
@@ -28,70 +71,116 @@
           <i class="fas fa-check-circle mr-2 text-success"></i>
           Added
         </span>
-        <span v-if="video.subs_l2 && video.subs_l2.length > 0">
-          <a :href="originalTextHref" :download="`${video.title}.txt`" target="_blank"
-            class="btn btn-small btn-ghost-dark">
-            <i class="fas fa-file-alt"></i>
-          </a>
-          <a :href="translationURL" target="_blank" class="link-unstyled btn btn-small btn-ghost-dark">
-            <i class="fa fa-language"></i>
-          </a>
-        </span>
-        <div v-if="!saving && !(video && video.id) && ((video.subs_l2 && video.subs_l2.length > 0) || $adminMode)" style="font-size: 0.7em; opacity: 0.7"
-          class="mt-2">Once saved, the video will be available for everyone to
-          see. You can find it at <i class="fas fa-photo-video"></i> Media → <i class="fa fa-play"></i> New Videos.
+        <div
+          v-if="
+            !saving &&
+            !(video && video.id) &&
+            ((video.subs_l2 && video.subs_l2.length > 0) || $adminMode)
+          "
+          style="font-size: 0.7em; opacity: 0.7"
+          class="mt-2"
+        >
+          Once saved, the video will be available for everyone to see. You can
+          find it at
+          <i class="fas fa-photo-video"></i>
+          Media →
+          <i class="fa fa-play"></i>
+          New Videos.
         </div>
       </div>
       <div class="show-and-date" v-if="$adminMode">
         <span class="mr-2">
-          <router-link class="btn btn-small bg-secondary text-white" v-if="video.tv_show" :to="{
-            name: 'show',
-            params: { type: 'tv-show', id: String(video.tv_show.id) },
-          }">
+          <router-link
+            class="btn btn-small bg-secondary text-white"
+            v-if="video.tv_show"
+            :to="{
+              name: 'show',
+              params: { type: 'tv-show', id: String(video.tv_show.id) },
+            }"
+          >
             <i class="fa fa-tv mr-2" />
             {{ video.tv_show.title }}
-            <i :class="{
-              'fas fa-times-circle ml-1': true,
-              'd-none': !$adminMode,
-            }" @click.stop.prevent="unassignShow('tv_show')" />
+            <i
+              :class="{
+                'fas fa-times-circle ml-1': true,
+                'd-none': !$adminMode,
+              }"
+              @click.stop.prevent="unassignShow('tv_show')"
+            />
           </router-link>
-          <router-link class="btn btn-small bg-secondary text-white" v-if="video.talk" :to="{
-            name: 'show',
-            params: { type: 'talk', id: String(video.talk.id) },
-          }">
+          <router-link
+            class="btn btn-small bg-secondary text-white"
+            v-if="video.talk"
+            :to="{
+              name: 'show',
+              params: { type: 'talk', id: String(video.talk.id) },
+            }"
+          >
             <i class="fas fa-graduation-cap mr-2"></i>
             {{ video.talk.title }}
-            <i :class="{
-              'fas fa-times-circle ml-1': true,
-              'd-none': !$adminMode,
-            }" @click.stop.prevent="unassignShow('talk')" />
+            <i
+              :class="{
+                'fas fa-times-circle ml-1': true,
+                'd-none': !$adminMode,
+              }"
+              @click.stop.prevent="unassignShow('talk')"
+            />
           </router-link>
         </span>
       </div>
-      <div :class="{
-        'video-edit-admin rounded p-3 mt-3 mb-3 d-none': true,
-        'd-block': $adminMode && video && video.id,
-      }">
+      <div
+        :class="{
+          'video-edit-admin rounded p-3 mt-3 mb-3 d-none': true,
+          'd-block': $adminMode && video && video.id,
+        }"
+      >
         <div class="video-edit-admin-first-line">
-          <b-dropdown size="sm" id="dropdown-1" :text="video.topic ? topics[video.topic] : 'Topic'"
-            :variant="video.topic ? 'success' : undefined" class="ml-1">
-            <b-dropdown-item v-for="(title, slug) in topics" :key="`change-topic-item-${slug}`"
-              @click="changeTopic(slug)">
+          <b-dropdown
+            size="sm"
+            id="dropdown-1"
+            :text="video.topic ? topics[video.topic] : 'Topic'"
+            :variant="video.topic ? 'success' : undefined"
+            class="ml-1"
+          >
+            <b-dropdown-item
+              v-for="(title, slug) in topics"
+              :key="`change-topic-item-${slug}`"
+              @click="changeTopic(slug)"
+            >
               {{ title }}
             </b-dropdown-item>
           </b-dropdown>
           <template v-if="!video.lesson">
-            <b-dropdown id="dropdown-1" size="sm" :text="video.level ? levels[video.level] : 'Level'"
-              :variant="video.level ? 'success' : undefined">
-              <b-dropdown-item v-for="(title, slug) in levels" :key="`change-level-item-${slug}`"
-                @click="changeLevel(slug)">
+            <b-dropdown
+              id="dropdown-1"
+              size="sm"
+              :text="video.level ? levels[video.level] : 'Level'"
+              :variant="video.level ? 'success' : undefined"
+            >
+              <b-dropdown-item
+                v-for="(title, slug) in levels"
+                :key="`change-level-item-${slug}`"
+                @click="changeLevel(slug)"
+              >
                 {{ title }}
               </b-dropdown-item>
             </b-dropdown>
-            <AssignShow @assignShow="saveShow" v-if="!video.tv_show && !video.talk" :defaultYoutubeId="video.youtube_id"
-              :defaultTitle="video.title" type="tv-shows" variant="secondary" />
-            <AssignShow @assignShow="saveShow" v-if="!video.tv_show && !video.talk" :defaultYoutubeId="video.youtube_id"
-              :defaultTitle="video.title" type="talks" variant="secondary" />
+            <AssignShow
+              @assignShow="saveShow"
+              v-if="!video.tv_show && !video.talk"
+              :defaultYoutubeId="video.youtube_id"
+              :defaultTitle="video.title"
+              type="tv-shows"
+              variant="secondary"
+            />
+            <AssignShow
+              @assignShow="saveShow"
+              v-if="!video.tv_show && !video.talk"
+              :defaultYoutubeId="video.youtube_id"
+              :defaultTitle="video.title"
+              type="talks"
+              variant="secondary"
+            />
             <b-button v-if="!deleted" @click="remove" size="sm">
               <i class="fas fa-trash-alt"></i>
               Remove
@@ -106,60 +195,115 @@
             </span>
           </template>
           <div class="video-admin-checkboxes">
-            <b-form-checkbox v-model="showSubsEditing" class="mt-2 d-inline-block">
+            <b-form-checkbox
+              v-model="showSubsEditing"
+              class="mt-2 d-inline-block"
+            >
               Show Subs Editing
             </b-form-checkbox>
-            <b-form-checkbox v-model="enableTranslationEditing" class="mt-2 d-inline-block">
+            <b-form-checkbox
+              v-model="enableTranslationEditing"
+              class="mt-2 d-inline-block"
+            >
               Enable Translation Editing
             </b-form-checkbox>
           </div>
         </div>
-        <div :class="{
-          'video-edit-admin-second-line': true,
-          'd-none': !showSubsEditing,
-        }">
-          <drop @drop="handleDrop" :class="{
-            over: over,
-            'subs-drop drop text-dark btn btn-sm btn-light w-100 mt-2': true,
-          }" :key="`drop-${transcriptKey}`" @dragover="over = true" @dragleave="over = false">
+        <div
+          :class="{
+            'video-edit-admin-second-line': true,
+            'd-none': !showSubsEditing,
+          }"
+        >
+          <drop
+            @drop="handleDrop"
+            :class="{
+              over: over,
+              'subs-drop drop text-dark btn btn-sm btn-light w-100 mt-2': true,
+            }"
+            :key="`drop-${transcriptKey}`"
+            @dragover="over = true"
+            @dragleave="over = false"
+          >
             Drop Subs Here
           </drop>
         </div>
-        <b-form-textarea :class="{
-          'd-none': !enableTranslationEditing && !showSubsEditing,
-        }" v-model="originalText" placeholder="Original text" rows="3" class="mt-2" max-rows="6"
-          @blur="updateOriginalText"></b-form-textarea>
-        <b-form-textarea :class="{
-          'd-none': !enableTranslationEditing,
-        }" v-model="translation" @blur="updateTranslation" placeholder="Translation" rows="3" class="mt-2"
-          max-rows="6"></b-form-textarea>
+        <b-form-textarea
+          :class="{
+            'd-none': !enableTranslationEditing && !showSubsEditing,
+          }"
+          v-model="originalText"
+          placeholder="Original text"
+          rows="3"
+          class="mt-2"
+          max-rows="6"
+          @blur="updateOriginalText"
+        ></b-form-textarea>
+        <b-form-textarea
+          :class="{
+            'd-none': !enableTranslationEditing,
+          }"
+          v-model="translation"
+          @blur="updateTranslation"
+          placeholder="Translation"
+          rows="3"
+          class="mt-2"
+          max-rows="6"
+        ></b-form-textarea>
         <client-only>
           <div :class="{ 'd-none': !enableTranslationEditing }">
-            <b-form-checkbox :class="{
-              'mt-2 d-inline-block': true,
-            }" v-model="autoBreakTranslationLines">
+            <b-form-checkbox
+              :class="{
+                'mt-2 d-inline-block': true,
+              }"
+              v-model="autoBreakTranslationLines"
+            >
               Auto Break Lines
             </b-form-checkbox>
-            <b-form-checkbox :class="{
-              'ml-2 mt-2 d-inline-block': true,
-            }" v-model="enableNormalizeNotes">
+            <b-form-checkbox
+              :class="{
+                'ml-2 mt-2 d-inline-block': true,
+              }"
+              v-model="enableNormalizeNotes"
+            >
               Normalize Notes
             </b-form-checkbox>
           </div>
         </client-only>
-        <b-form-textarea :class="{
-          'd-none': !enableTranslationEditing,
-        }" v-model="notes" @blur="updateNotes" placeholder="Notes" rows="3" class="mt-2" max-rows="6">
-        </b-form-textarea>
-        <div :class="{
-          'mt-2': true,
-          'd-none': !showSubsEditing && !enableTranslationEditing,
-        }">
+        <b-form-textarea
+          :class="{
+            'd-none': !enableTranslationEditing,
+          }"
+          v-model="notes"
+          @blur="updateNotes"
+          placeholder="Notes"
+          rows="3"
+          class="mt-2"
+          max-rows="6"
+        ></b-form-textarea>
+        <div
+          :class="{
+            'mt-2': true,
+            'd-none': !showSubsEditing && !enableTranslationEditing,
+          }"
+        >
           First line starts at
-          <b-form-input v-model="firstLineTime" size="sm" type="text" placeholder="0" class="d-inline-block ml-1"
-            style="width: 4rem" :lazy="true" />
-          <b-button v-if="!updating && !subsUpdated" size="sm" @click="updateSubs" class="ml-2"
-            style="margin-bottom: 0.2rem">
+          <b-form-input
+            v-model="firstLineTime"
+            size="sm"
+            type="text"
+            placeholder="0"
+            class="d-inline-block ml-1"
+            style="width: 4rem"
+            :lazy="true"
+          />
+          <b-button
+            v-if="!updating && !subsUpdated"
+            size="sm"
+            @click="updateSubs"
+            class="ml-2"
+            style="margin-bottom: 0.2rem"
+          >
             <i class="fa fa-save mr-2"></i>
             Update Subs
           </b-button>
@@ -239,7 +383,7 @@ export default {
     text() {
       if (this.video.subs_l2)
         return this.video.subs_l2
-          .map((line) => line ? line.line.replace(/\n/g, " ") : '')
+          .map((line) => (line ? line.line.replace(/\n/g, " ") : ""))
           .join("\n");
     },
     originalTextHref() {
@@ -275,6 +419,9 @@ export default {
     },
   },
   methods: {
+    formatDate(date) {
+      return DateHelper.formatDate(date);
+    },
     getTranslationURL() {
       if (typeof this.$l2 !== "undefined") {
         return this.$languages.translationURL(this.text, this.$l1, this.$l2);
@@ -343,7 +490,7 @@ export default {
     async save() {
       this.saving = true;
       try {
-        let id = await YouTube.saveVideo(this.video, this.$l2)
+        let id = await YouTube.saveVideo(this.video, this.$l2);
         if (id) {
           this.video.id = id;
           this.saving = false;
@@ -359,7 +506,9 @@ export default {
         let data = {};
         data[type] = show.id;
         let response = await axios.patch(
-          `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}?fields=${type}.*`, // type is 'tv_show' or 'talk'
+          `${Config.youtubeVideosTableName(this.$l2.id)}/${
+            this.video.id
+          }?fields=${type}.*`, // type is 'tv_show' or 'talk'
           data
         );
         response = response.data;
@@ -431,7 +580,7 @@ export default {
           await Helper.timeout(2000);
           this.subsUpdated = false;
         }
-      } catch (err) { }
+      } catch (err) {}
     },
     async changeTopic(slug) {
       let response = await $.ajax({
@@ -458,7 +607,7 @@ export default {
         if (response) {
           this.deleted = true;
         }
-      } catch (err) { }
+      } catch (err) {}
     },
   },
 };
@@ -479,6 +628,15 @@ export default {
 
   .video-edit-admin {
     background-color: #88888822;
+  }
+
+  .video-details {
+    font-size: 0.8em;
+    text-align: left;
+    a {
+      color: #aaa;
+    }
+    line-height: 2;
   }
 }
 </style>

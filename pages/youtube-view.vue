@@ -197,6 +197,8 @@ export default {
           !this.video.subs_l2[0].duration
         ) {
           this.video = await this.patchDuration(this.video);
+        } else {
+          console.log('YouTube View: Video subs have duration! 🎉 First line duration is ', this.video.subs_l2[0].duration)
         }
         console.log(`YouTube View (on video change): loading extras...`);
         await this.loadExtras();
@@ -473,6 +475,7 @@ export default {
       }
     },
     async patchDuration(video) {
+      console.log('YouTube View: Saved subtitles does not have duration, getting duration...')
       video = await this.checkSubsAndAddLocalesIfNeeded(video);
       video = await this.getTranscript(video);
       if (video.subs_l2 && video.subs_l2[0] && video.subs_l2[0].duration) {

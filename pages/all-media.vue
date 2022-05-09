@@ -77,7 +77,6 @@
             </h3>
             <YouTubeVideoList :videos="random(news).slice(0, 4)" :showAdminToolsInAdminMode="false" skin="dark" />
           </div>
-          <LazyIdenticalLanguages class="mt-5 mb-4" routeName="all-media" />
         </div>
         <div
           :class="{
@@ -86,8 +85,9 @@
           }"
           style="flex: 1"
         >
-          <Loader :sticky="true" message="Loading videos in our library..." />
+          <Loader :sticky="true" message="Loading videos in our library..." class="mb-5" />
         </div>
+        <LazyIdenticalLanguages class="mt-5 mb-5" routeName="all-media" />
       </div>
     </div>
   </div>

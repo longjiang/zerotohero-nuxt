@@ -12,7 +12,7 @@
     >
       <div
         :class="{
-          'youtube-video-column col-sm-12 mb-4 p-0': true,
+          'youtube-video-column col-sm-12 mb-3 p-0': true,
           'order-2': landscape,
         }"
       >
@@ -55,16 +55,6 @@
       </div>
       <div class="youtube-transcript-column">
         <div class="youtube-video-info youtube-video-info-top">
-          <EpisodeNav
-            :video="video"
-            :previousEpisode="previousEpisode"
-            :nextEpisode="nextEpisode"
-            :skin="skin"
-            :episodes="episodes"
-            :show="show"
-            :showType="showType"
-            :episodeIndex="episodeIndex"
-          />
           <h3
             :class="{
               h4: video.title.length > 30,
@@ -72,7 +62,7 @@
             }"
             style="line-height: 1.5"
           >
-            <span v-if="video" :key="`video-title-${video.title}`" class="mt-4">
+            <span v-if="video" :key="`video-title-${video.title}`">
               <Annotate
                 :phonetics="false"
                 :buttons="true"
@@ -83,24 +73,6 @@
               <span v-else>{{ video.title }}</span>
             </span>
           </h3>
-          <div style="color: #aaa" class="mb-2 mt-3">
-            <span v-if="video.channel">
-              <router-link
-                style="color: inherit"
-                :to="{
-                  name: 'youtube-channel',
-                  params: {
-                    channel_id: video.channel.id,
-                    title: video.channel.title || video.channel.id,
-                  },
-                }"
-              >
-                <i class="fab fa-youtube mr-1"></i>
-                {{ video.channel.title || "Channel" }}
-              </router-link>
-            </span>
-            <span v-if="video.date">| {{ formatDate(video.date) }}</span>
-          </div>
           <VideoAdmin
             :video="video"
             ref="videoAdmin1"
@@ -108,6 +80,17 @@
             @updateTranslation="updateTranslation"
             @updateOriginalText="updateOriginalText"
             @enableTranslationEditing="toggleEnableTranslationEditing"
+          />
+          <EpisodeNav
+            :video="video"
+            :previousEpisode="previousEpisode"
+            :nextEpisode="nextEpisode"
+            :skin="skin"
+            :episodes="episodes"
+            :show="show"
+            :showType="showType"
+            :episodeIndex="episodeIndex"
+            class="mt-3"
           />
           <div
             v-if="
@@ -117,8 +100,8 @@
             style="font-size: 0.7em; opacity: 0.7"
             class="mt-2"
           >
-            Once saved, the video will be available for everyone to see. You
-            can find it at
+            Once saved, the video will be available for everyone to see. You can
+            find it at
             <i class="fas fa-photo-video"></i>
             Media →
             <i class="fa fa-play"></i>
@@ -126,36 +109,30 @@
           </div>
         </div>
         <div class="mt-4">
-          <hr class="mb-4 ml-3 mr-3 border-secondary" />
-          <h5 class="text-center">Transcript</h5>
-          <p class="text-center mb-3" style="color: #999">
-            All verbs are
-            <u>underscored</u>
-            . Tap line to play.
-          </p>
-          <SyncedTranscript
-            v-if="video.subs_l2 && video.subs_l2.length > 0"
-            ref="transcript"
-            :key="'transcript-' + video.youtube_id"
-            :lines="video.subs_l2"
-            :quiz="quiz"
-            :parallellines="video.subs_l1"
-            :sticky="sticky"
-            :startLineIndex="startLineIndex"
-            :stopLineIndex="stopLineIndex"
-            :showSubsEditing="showSubsEditing"
-            :enableTranslationEditing="enableTranslationEditing"
-            :notes="video.notes"
-            :collapsed="collapsed"
-            :skin="skin"
-            :landscape="landscape"
-            @seek="seekYouTube"
-            @pause="pause"
-            @play="play"
-            @speechStart="speechStart"
-            @speechEnd="speechEnd"
-            @updateTranslation="updateTranslation"
-          />
+          <div v-if="video.subs_l2 && video.subs_l2.length > 0">
+            <SyncedTranscript
+              ref="transcript"
+              :key="'transcript-' + video.youtube_id"
+              :lines="video.subs_l2"
+              :quiz="quiz"
+              :parallellines="video.subs_l1"
+              :sticky="sticky"
+              :startLineIndex="startLineIndex"
+              :stopLineIndex="stopLineIndex"
+              :showSubsEditing="showSubsEditing"
+              :enableTranslationEditing="enableTranslationEditing"
+              :notes="video.notes"
+              :collapsed="collapsed"
+              :skin="skin"
+              :landscape="landscape"
+              @seek="seekYouTube"
+              @pause="pause"
+              @play="play"
+              @speechStart="speechStart"
+              @speechEnd="speechEnd"
+              @updateTranslation="updateTranslation"
+            />
+          </div>
           <div class="mt-5 youtube-video-info youtube-video-info-bottom">
             <div class="text-center mt-5 mb-5" v-if="video.checkingSubs">
               <Loader :sticky="true" message="Loading subtitles..." />
@@ -186,6 +163,7 @@
               :show="show"
               :showType="showType"
               :episodeIndex="episodeIndex"
+              class="mb-5"
             />
             <VideoAdmin
               :class="{ 'mt-5': true }"
@@ -544,9 +522,6 @@ export default {
       if (this.$refs.videoAdmin2)
         this.$refs.videoAdmin2.enableTranslationEditing =
           enableTranslationEditing;
-    },
-    formatDate(date) {
-      return DateHelper.formatDate(date);
     },
     updateEnded(ended) {
       if (ended !== this.ended) {
