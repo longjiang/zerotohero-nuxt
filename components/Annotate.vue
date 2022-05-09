@@ -222,7 +222,7 @@ export default {
       await Helper.timeout(50) // So that everything is rendered and queryselectorall works
       if (this.animationDuration) {
         let blocks = this.$el.querySelectorAll(".word-block, .word-block-unknown")
-        let duration = (this.animationDuration - 0.05) / (blocks.length + 1);
+        let duration = (this.animationDuration - 0.05) / (blocks.length + 2);
         let durationAlreadyPlayed = 0;
         for (let block of blocks) {
           durationAlreadyPlayed = durationAlreadyPlayed + duration;

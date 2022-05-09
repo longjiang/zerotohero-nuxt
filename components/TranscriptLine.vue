@@ -131,10 +131,10 @@ export default {
   },
   methods: {
     playAnimation(startFrom) {
-      this.$refs['annotate'].playAnimation(startFrom)
+      if(this.$refs['annotate']) this.$refs['annotate'].playAnimation(startFrom)
     },
     pauseAnimation() {
-      this.$refs['annotate'].pauseAnimation()
+      if(this.$refs['annotate']) this.$refs['annotate'].pauseAnimation()
     },
     trasnlationLineKeydown(e) {
       this.$emit("trasnlationLineKeydown", e);
