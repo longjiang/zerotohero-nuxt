@@ -484,20 +484,21 @@ export default {
           this.token.candidates &&
           this.token.candidates.length > 0
         ) {
-          if (
-            this.token.candidates[0].newHSK &&
-            this.token.candidates[0].newHSK === "7-9"
-          ) {
-            return "7-9";
-          } else if (
-            this.token.candidates[0].hsk === "outside" &&
-            !this.token.candidates[0].newHSK &&
-            this.token.candidates[0].weight < 750
-          ) {
-            return "outside";
-          } else {
-            return false;
-          }
+          if (this.token.candidates[0].head.length < 4) return false // Only highlight chengyu
+          // if (
+          //   this.token.candidates[0].newHSK &&
+          //   this.token.candidates[0].newHSK === "7-9"
+          // ) {
+          //   return "7-9";
+          // } else if (
+          //   this.token.candidates[0].hsk === "outside" &&
+          //   !this.token.candidates[0].newHSK &&
+          //   this.token.candidates[0].weight < 750
+          // ) {
+          //   return "outside";
+          // } else {
+          //   return false;
+          // }
         } else if (
           this.$l2.code === "en" &&
           this.token &&
