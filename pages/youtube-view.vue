@@ -11,7 +11,7 @@
   <div
     :class="{
       'youtube-view pt-3 pb-5 ': true,
-      'main-dark': layout !== 'vertical',
+      'main-dark': true,
       'main-dark-performant': isMobile,
     }"
   >

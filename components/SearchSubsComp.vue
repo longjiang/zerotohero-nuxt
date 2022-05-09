@@ -81,7 +81,7 @@
         Refresh
       </b-button>
     </div>
-    <LazyYouTubeWithTranscript v-if="currentHit" initialLayout="vertical" :video="currentHit.video"
+    <LazyYouTubeWithTranscript class="main-dark" v-if="currentHit" initialLayout="vertical" :video="currentHit.video"
       :ref="`youtube-${hitIndex}`" :speed="speed" :startLineIndex="startLineIndex"
       :showFullscreenToggle="false" :autoload="true" :autoplay="navigated" :showLineList="false" />
     <b-modal ref="playlist-modal" size="lg" centered hide-footer title="Video Caption Search Results"

@@ -38,12 +38,14 @@
             line &&
             new RegExp(highlight.join('|')).test(line.line)
           "
-          :ref="`transcript-line-${index + visibleMin}`"
+          :ref="`${single ? 'transcript-line' : 'transcript-line-'}${
+            !single ? index + visibleMin : ''}`"
           :duration="
             line.duration
               ? line.duration
-              : lines[index + 1]
-              ? lines[index + 1].starttime - line.starttime
+              : lines[single ? currentLineIndex + 1 : index + 1]
+              ? lines[single ? currentLineIndex + 1 : index + 1].starttime -
+                line.starttime
               : 5
           "
           :showSubsEditing="showSubsEditing"
@@ -359,7 +361,7 @@ export default {
     currentLine() {
       if (!this.single && !this.paused) this.scrollTo(this.currentLineIndex);
       if (!this.paused) {
-        this.playCurrentLineAnimation()
+        this.playCurrentLineAnimation();
       }
     },
     parallellines() {
@@ -802,10 +804,12 @@ export default {
     },
     playCurrentLineAnimation() {
       let currentLineRefs =
-        this.$refs[`transcript-line-${this.currentLineIndex}`];
+        this.single ? this.$refs[`transcript-line`] : this.$refs[`transcript-line-${this.currentLineIndex}`];
       if (currentLineRefs && currentLineRefs[0])
         currentLineRefs[0].playAnimation(
-          this.currentTime - this.currentLine.starttime
+          this.single
+            ? 0
+            : Math.min(this.currentTime - this.currentLine.starttime, 0)
         );
     },
     pauseCurrentLineAnimation() {

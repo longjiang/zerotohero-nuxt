@@ -540,7 +540,7 @@ export default {
     updateCurrentTime(currentTime) {
       if (this.neverPlayed) {
         this.neverPlayed = false;
-        if (this.$refs["transcript"]) this.$refs["transcript"].scrollTo(0);
+        if (this.layout !== 'vertical' && this.$refs["transcript"]) this.$refs["transcript"].scrollTo(0);
       }
       if (this.currentTime !== currentTime) {
         this.currentTime = currentTime;

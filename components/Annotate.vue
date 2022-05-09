@@ -218,23 +218,28 @@ export default {
   },
   methods: {
     async playAnimation(startFrom) {
-      this.animate = true;
-      await Helper.timeout(50) // So that everything is rendered and queryselectorall works
-      if (this.animationDuration) {
-        let blocks = this.$el.querySelectorAll(".word-block, .word-block-unknown")
-        let duration = (this.animationDuration - 0.05) / (blocks.length + 2);
-        let durationAlreadyPlayed = 0;
-        for (let block of blocks) {
-          durationAlreadyPlayed = durationAlreadyPlayed + duration;
-          // Which ones should skip
-          if (durationAlreadyPlayed > startFrom) {
-            if (!this.animate) return;
-            block.classList.add("animate");
-            await Helper.timeout(duration * 1000);
+      if (!this.annotated) {
+        return;
+      } else {
+        this.animate = true;
+        if (this.animationDuration) {
+          let blocks = this.$el.querySelectorAll(
+            ".word-block, .word-block-unknown"
+          );
+          let duration = (this.animationDuration - 0.05) / (blocks.length + 2);
+          let durationAlreadyPlayed = 0;
+          for (let block of blocks) {
+            durationAlreadyPlayed = durationAlreadyPlayed + duration;
+            // Which ones should skip
+            if (durationAlreadyPlayed > startFrom) {
+              if (!this.animate) return;
+              block.classList.add("animate");
+              await Helper.timeout(duration * 1000);
+            }
           }
+          await Helper.timeout(2000);
+          blocks.forEach((b) => b.classList.remove("animate"));
         }
-        await Helper.timeout(2000);
-        blocks.forEach(b => b.classList.remove("animate"))
       }
     },
     async pauseAnimation() {
@@ -419,7 +424,10 @@ export default {
             }
           }
         } else {
-          html += `<span class="word-block-unknown">${token.replace(/\s+/, "&nbsp;")}</span>`;
+          html += `<span class="word-block-unknown">${token.replace(
+            /\s+/,
+            "&nbsp;"
+          )}</span>`;
         }
       }
       return html;

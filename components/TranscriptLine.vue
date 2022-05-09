@@ -116,7 +116,8 @@ export default {
     return {
       annotated: false,
       lineStarted: false,
-      durationPlayed: 0
+      durationPlayed: 0,
+      animateOnceAnnotated: undefined
     };
   },
   computed: {
@@ -129,12 +130,26 @@ export default {
         return this.$store.state.settings.l2;
     },
   },
+  watch: {
+    annotated() {
+      if (this.annotated && this.animateOnceAnnotated !== undefined && this.$refs["annotate"]) {
+        this.$refs["annotate"].playAnimation(this.animateOnceAnnotated);
+      }
+        
+    },
+  },
   methods: {
     playAnimation(startFrom) {
-      if(this.$refs['annotate']) this.$refs['annotate'].playAnimation(startFrom)
+      if (this.$refs["annotate"]) {
+        if (this.annotated) {
+          this.$refs["annotate"].playAnimation(startFrom);
+        } else {
+          this.animateOnceAnnotated = startFrom;
+        }
+      }
     },
     pauseAnimation() {
-      if(this.$refs['annotate']) this.$refs['annotate'].pauseAnimation()
+      if (this.$refs["annotate"]) this.$refs["annotate"].pauseAnimation();
     },
     trasnlationLineKeydown(e) {
       this.$emit("trasnlationLineKeydown", e);
