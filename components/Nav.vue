@@ -10,7 +10,7 @@
       'has-secondary-nav': currentParent && currentParent.children,
     }"
   >
-    <SiteTopBar :variant="variant" @toggleCollapsed="toggleCollapsed" v-if="variant!=='page'" />
+    <SiteTopBar v-if="variant === 'side-bar'" :variant="variant" @toggleCollapsed="toggleCollapsed" />
     <div
       :class="{
         'nav-menu-bar': variant === 'menu-bar',

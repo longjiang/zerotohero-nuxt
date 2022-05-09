@@ -2,7 +2,7 @@
   <container-query :query="query" v-model="params">
     <div
       :class="`site-top-bar site-top-bar-${variant}`"
-      @click.self="scrollToTop"
+      @click.self="variant === 'side-bar' ? scrollToTop : ()=>{}"
     >
       <template>
         <div class="text-center">
@@ -13,7 +13,7 @@
               cursor: pointer;
               margin-right: 0.5rem;
             "
-            @click="toggleCollapsed"
+            @click="variant === 'side-bar' ? toggleCollapsed : scrollToTop"
           >
             <i class="fas fa-bars"></i>
           </span>
