@@ -226,19 +226,19 @@ export default {
           let blocks = this.$el.querySelectorAll(
             ".word-block, .word-block-unknown"
           );
-          let averageDuration = this.animationDuration / (blocks.length + 2);
           let durationAlreadyPlayed = 0;
           let spans = this.$el.querySelectorAll(".word-block-text, .word-block-unknown");
           let aggregateText = ''
-          spans.forEach(span => aggregateText = aggregateText + span.textContent);
+          spans.forEach(span => aggregateText = aggregateText + span.textContent.trim());
           for (let block of blocks) {
-            let span = block.classList.contains('.word-block-unknown') ? block.querySelector(".word-block-text") : block;
-            if (!span) console.log(block)
+            let span = block.classList.contains('word-block') ? block.querySelector(".word-block-text") : block;
             let blockLength = span
               ? span.textContent.trim().length
               : aggregateText.length / blocks.length;
+            if (!span) console.log(span)
             let blockDuration =
               (blockLength / aggregateText.length) * this.animationDuration;
+            if (blockDuration === 0) continue
             durationAlreadyPlayed = durationAlreadyPlayed + blockDuration;
             // Which ones should skip
             if (durationAlreadyPlayed > startFrom) {
