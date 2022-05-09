@@ -44,9 +44,7 @@ export default {
     badge: {
       type: Number,
     },
-    to: {
-      type: Object,
-    },
+    to: [Object, String],
     active: {
       default: false,
     },
