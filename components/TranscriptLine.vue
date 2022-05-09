@@ -4,8 +4,7 @@
       'transcript-line': true,
       'transcript-line-abnormal': abnormal,
       'transcript-line-matched': matched,
-      'pl-4': !single && $l2.direction !== 'rtl',
-      'pr-4': !single && $l2.direction === 'rtl',
+      'transcript-line-current': current,
     }"
     style="display: flex"
     ref="lines"
@@ -22,6 +21,17 @@
       >
         <i class="fa fa-trash"></i>
       </b-button>
+    </div>
+    <div
+      style="
+        width: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+      "
+      v-if="!single && $l2.direction !== 'rtl'"
+    >
+      <div class="dot" v-if="current"></div>
     </div>
     <div style="flex: 1">
       <Annotate
@@ -63,6 +73,17 @@
         @keydown.capture="trasnlationLineKeydown"
       ></div>
     </div>
+    <div
+      style="
+        width: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+      "
+      v-if="!single && $l2.direction === 'rtl'"
+    >
+      <div class="dot" v-if="current"></div>
+    </div>
   </div>
 </template>
 
@@ -79,6 +100,9 @@ export default {
       type: Number,
     },
     abnormal: {
+      type: Boolean,
+    },
+    current: {
       type: Boolean,
     },
     matched: {
@@ -117,7 +141,7 @@ export default {
       annotated: false,
       lineStarted: false,
       durationPlayed: 0,
-      animateOnceAnnotated: undefined
+      animateOnceAnnotated: undefined,
     };
   },
   computed: {
@@ -132,10 +156,13 @@ export default {
   },
   watch: {
     annotated() {
-      if (this.annotated && this.animateOnceAnnotated !== undefined && this.$refs["annotate"]) {
+      if (
+        this.annotated &&
+        this.animateOnceAnnotated !== undefined &&
+        this.$refs["annotate"]
+      ) {
         this.$refs["annotate"].playAnimation(this.animateOnceAnnotated);
       }
-        
     },
   },
   methods: {
@@ -215,7 +242,7 @@ export default {
   cursor: pointer;
   position: relative;
   font-size: 1.2rem;
-  padding: 0.5rem;
+  padding: 0.5rem 0;
   // &.transcript-line-current {
   //   box-shadow: 0 0 10px 2px #96ffaf99;
   //   border-radius: 0.25rem;
@@ -255,6 +282,68 @@ export default {
 .show-translation {
   .transcript-line-l1 {
     display: inherit;
+  }
+}
+
+/* https://codepen.io/availchet/pen/rNMRvZB */
+.dot {
+  /* Vector */
+  height: 0.66rem;
+  width: 0.66rem;
+  border-radius: 50%;
+  background: #54ff7c;
+  opacity: 0.66;
+}
+
+.dot:after {
+  content: "";
+  position: absolute;
+  height: 0.66rem;
+  width: 0.66rem;
+  border-radius: 50%;
+  background: #54ff7c;
+  display: block;
+  animation: pulse 2s ease 0s infinite;
+}
+
+.dot:before {
+  content: "";
+  position: absolute;
+  height: 0.66rem;
+  width: 0.66rem;
+  border-radius: 50%;
+  background: #54ff7c;
+  display: block;
+  animation: pulse2 2s ease 0s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  80% {
+    opacity: 0;
+    transform: scale(2.5);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(3);
+  }
+}
+
+@keyframes pulse2 {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.5);
   }
 }
 </style>

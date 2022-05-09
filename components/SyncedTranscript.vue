@@ -32,6 +32,7 @@
             lines[index + visibleMin - 1] &&
             lines[index + visibleMin - 1].starttime > line.starttime
           "
+          :current="currentLine === line"
           :matched="
             !single &&
             highlight &&
@@ -349,14 +350,6 @@ export default {
       if (visibleMax > this.visibleMax + this.visibleRange / 2) {
         this.visibleMax = visibleMax;
       }
-      let lineEls = this.$el.querySelectorAll(`.transcript-line`);
-      lineEls.forEach((lineEl) =>
-        lineEl.classList.remove("transcript-line-current")
-      );
-      let lineEl = this.$el.querySelector(
-        `.transcript-line[data-line-index="${this.currentLineIndex}"]`
-      );
-      if (lineEl) lineEl.classList.add("transcript-line-current");
     },
     currentLine() {
       if (!this.single && !this.paused) this.scrollTo(this.currentLineIndex);
