@@ -41,6 +41,7 @@
               )"
               :to="to(item)"
               :item="item"
+              :level="1"
               :variant="variant"
               :key="`nav-${index}`"
               :active="currentParent && currentParent.name === nameOfSelfOrFirstChild(item)"

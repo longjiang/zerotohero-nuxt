@@ -1,7 +1,7 @@
 <template>
   <NuxtLink
     :class="{
-      'main-nav-item': true,
+      'main-nav-item': level === 1,
       tab: variant === 'menu-bar',
       'd-block': variant === 'side-bar',
       'router-link-active': active,
@@ -37,6 +37,9 @@ export default {
     },
     active: {
       default: false
+    },
+    level: {
+      default: 1
     }
   },
   computed: {
