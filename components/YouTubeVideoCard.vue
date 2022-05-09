@@ -566,6 +566,7 @@ export default {
             subs_l2 = parseSync(str).map((cue) => {
               return {
                 starttime: cue.data.start / 1000,
+                duration: (cue.data.end - cue.data.start) / 1000,
                 line: cue.data.text,
               };
             });
