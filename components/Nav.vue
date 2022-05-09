@@ -1,82 +1,123 @@
 <template>
-  <div :class="{
-    'zth-nav': true,
-    'zth-nav-light': skin === 'light',
-    'zth-nav-dark': skin === 'dark',
-    'zth-nav-menu-bar': variant === 'menu-bar',
-    'zth-nav-side-bar': variant === 'side-bar',
-    'zth-nav-page': variant === 'page',
-    'has-secondary-nav': parent && parent.children,
-  }">
-    <div :class="{
-      'nav-menu-bar': variant === 'menu-bar',
-      'nav-side-bar': variant === 'side-bar',
-      'nav-page': variant === 'page',
-    }">
+  <div
+    :class="{
+      'zth-nav': true,
+      'zth-nav-light': skin === 'light',
+      'zth-nav-dark': skin === 'dark',
+      'zth-nav-menu-bar': variant === 'menu-bar',
+      'zth-nav-side-bar': variant === 'side-bar',
+      'zth-nav-page': variant === 'page',
+      'has-secondary-nav': currentParent && currentParent.children,
+    }"
+  >
+    <div
+      :class="{
+        'nav-menu-bar': variant === 'menu-bar',
+        'nav-side-bar': variant === 'side-bar',
+        'nav-page': variant === 'page',
+      }"
+    >
       <template v-if="variant === 'menu-bar' || variant === 'side-bar'">
         <nav :class="{ 'main-nav': true, tabs: variant === 'menu-bar' }">
-          <div class="zth-header" v-if="variant === 'menu-bar' || variant === 'side-bar'">
+          <div
+            class="zth-header"
+            v-if="variant === 'menu-bar' || variant === 'side-bar'"
+          >
             <SiteTopBar v-if="variant === 'side-bar'" variant="side-bar" />
-            <LanguageLogo v-if="l1 && l2" :l1="l1" :l2="l2" branded="true" style="margin: 1.5rem 0" />
+            <LanguageLogo
+              v-if="l1 && l2"
+              :l1="l1"
+              :l2="l2"
+              branded="true"
+              style="margin: 1.5rem 0"
+            />
           </div>
-          <div :class="{ 'main-nav-items': true, tabs: variant === 'menu-bar' }">
-            <NuxtLink v-for="(item, index) in menu.filter(
-              (item) => item.show && to(item)
-            )" :key="`nav-${index}`" :class="{
-  'main-nav-item': true,
-  tab: variant === 'menu-bar',
-  'd-block': variant === 'side-bar',
-  'router-link-active':
-    parent && parent.name === nameOfSelfOrFirstChild(item),
-}" :to="to(item)" :title="item.title">
-              <i :class="`${item.icon}`"></i>
-              {{ $t(item.title, { l2: $t($l2.name) }) }}
-              <span class="saved-words-count" v-cloak v-if="
-                item.icon === 'fas fa-star' &&
-                savedWordsCount + savedPhrasesCount > 0
-              ">
-                {{ savedWordsCount + savedPhrasesCount }}
-              </span>
-            </NuxtLink>
+          <div
+            :class="{ 'main-nav-items': true, tabs: variant === 'menu-bar' }"
+          >
+            <NavItem
+              v-for="(item, index) in menu.filter(
+                (item) => item.show && to(item)
+              )"
+              :to="to(item)"
+              :item="item"
+              :variant="variant"
+              :key="`nav-${index}`"
+              :active="currentParent && currentParent.name === nameOfSelfOrFirstChild(item)"
+              :badgeCount="item.icon === 'fas fa-star' ? savedWordsCount + savedPhrasesCount : undefined"
+            />
           </div>
           <div v-if="variant === 'side-bar'" class="end-nav">
-            <div v-if="$l2 && !['en', 'zh'].includes($l2.code) && $l2.logo" class="icon-description">
+            <div
+              v-if="$l2 && !['en', 'zh'].includes($l2.code) && $l2.logo"
+              class="icon-description"
+            >
               <b>ICON IMAGE:</b>
               <span v-if="$l2.logoDesc">
                 {{ $l2.logoDesc.replace(/\s/g, " ") }},
               </span>
               a user of {{ $l2.name }} ({{ $l2.code }}).
             </div>
-            <LoginButton class="end-nav-item" v-if="
-              ($l1.code === 'zh' && $l2.code === 'en') ||
-              ($l1.code === 'en' && $l2.code === 'zh')
-            " />
+            <LoginButton
+              class="end-nav-item"
+              v-if="
+                ($l1.code === 'zh' && $l2.code === 'en') ||
+                ($l1.code === 'en' && $l2.code === 'zh')
+              "
+            />
           </div>
         </nav>
-        <nav class="secondary-nav" v-if="parent && parent.children">
-          <AnnotationSettings v-if="variant === 'side-bar'" variant="toolbar" style="width: calc(100% - 1rem); text-align: center; margin: 0 0.5rem 0.5rem 0.5rem" />
-          <template v-for="(child, index) in parent.children.filter(
-            (child) => child.show
-          )">
-
-
-            <NuxtLink :class="{
-              'secondary-nav-item': true,
-              'd-block': variant === 'side-bar',
-            }" v-if="!child.href" :key="`subnav-${child.name || child.href}-${index}`" :to="last(child) || child">
+        <nav class="secondary-nav" v-if="currentParent && currentParent.children">
+          <AnnotationSettings
+            v-if="variant === 'side-bar'"
+            variant="toolbar"
+            style="
+              width: calc(100% - 1rem);
+              text-align: center;
+              margin: 0 0.5rem 0.5rem 0.5rem;
+            "
+          />
+          <template
+            v-for="(child, index) in currentParent.children.filter(
+              (child) => child.show
+            )"
+          >
+            <NuxtLink
+              :class="{
+                'secondary-nav-item': true,
+                'd-block': variant === 'side-bar',
+              }"
+              v-if="!child.href"
+              :key="`subnav-${child.name || child.href}-${index}`"
+              :to="last(child) || child"
+            >
               <i :class="`${child.icon}`"></i>
               {{ $t(child.title, { l2: $t($l2.name) }) }}
-              <span class="saved-words-count" v-cloak v-if="child.name === 'saved-words' && savedWordsCount > 0">
+              <span
+                class="saved-words-count"
+                v-cloak
+                v-if="child.name === 'saved-words' && savedWordsCount > 0"
+              >
                 {{ savedWordsCount }}
               </span>
-              <span class="saved-words-count" v-cloak v-if="child.name === 'saved-phrases' && savedPhrasesCount > 0">
+              <span
+                class="saved-words-count"
+                v-cloak
+                v-if="child.name === 'saved-phrases' && savedPhrasesCount > 0"
+              >
                 {{ savedPhrasesCount }}
               </span>
             </NuxtLink>
-            <a v-else :href="child.href" :key="`subnav-${child.name || child.href}-${index}`" target="_blank" :class="{
-              'secondary-nav-item': true,
-              'd-block': variant === 'side-bar',
-            }">
+            <a
+              v-else
+              :href="child.href"
+              :key="`subnav-${child.name || child.href}-${index}`"
+              target="_blank"
+              :class="{
+                'secondary-nav-item': true,
+                'd-block': variant === 'side-bar',
+              }"
+            >
               <i :class="`${child.icon}`"></i>
               {{ $t(child.title, { l2: $t($l2.name) }) }}
             </a>
@@ -86,50 +127,80 @@
       <template v-if="variant === 'page'">
         <div class="container">
           <div class="row">
-            <template v-for="item in menu.filter(
-              (item) =>
-                item.show &&
-                to(item) &&
-                !['Admin', 'Contact', 'Settings'].includes(item.title)
-            )">
+            <template
+              v-for="item in menu.filter(
+                (item) =>
+                  item.show &&
+                  to(item) &&
+                  !['Admin', 'Contact', 'Settings'].includes(item.title)
+              )"
+            >
               <template v-if="typeof item !== 'undefined' && item.children">
-                <div v-for="(child, index) in item.children.filter(
-                  (child) => child.show
-                )" :key="`subnav-${child.name || child.href}-${index}`" :class="`col-6 col-sm-4 col-lg-3 col-xl-2
+                <div
+                  v-for="(child, index) in item.children.filter(
+                    (child) => child.show
+                  )"
+                  :key="`subnav-${child.name || child.href}-${index}`"
+                  :class="`col-6 col-sm-4 col-lg-3 col-xl-2
 mb-1
 p-1
 feature-card-column
-feature-card-name-${child.name}`">
-                  <NuxtLink v-if="!child.href" :to="last(child) || child" style="height: 100%" :class="`feature-card feature-card-${item.title === 'Media' ? 'dark' : 'dark'
-                  } link-unstyled`">
+feature-card-name-${child.name}`"
+                >
+                  <NuxtLink
+                    v-if="!child.href"
+                    :to="last(child) || child"
+                    style="height: 100%"
+                    :class="`feature-card feature-card-${
+                      item.title === 'Media' ? 'dark' : 'dark'
+                    } link-unstyled`"
+                  >
                     <div class="feature-card-icon">
-                      <i :class="`${child.icon} bg-gradient-${item.title.length
-                      .toString()
-                      .split('')
-                      .pop()} gradient-text`"></i>
+                      <i
+                        :class="`${child.icon} bg-gradient-${item.title.length
+                          .toString()
+                          .split('')
+                          .pop()} gradient-text`"
+                      ></i>
                     </div>
                     <div class="feature-card-title">
                       {{ $t(child.title, { l2: $t($l2.name) }) }}
-                      <span class="saved-words-count" v-cloak v-if="
-                        child.name === 'saved-words' && savedWordsCount > 0
-                      ">
+                      <span
+                        class="saved-words-count"
+                        v-cloak
+                        v-if="
+                          child.name === 'saved-words' && savedWordsCount > 0
+                        "
+                      >
                         {{ savedWordsCount }}
                       </span>
-                      <span class="saved-words-count" v-cloak v-if="
-                        child.name === 'saved-phrases' &&
-                        savedPhrasesCount > 0
-                      ">
+                      <span
+                        class="saved-words-count"
+                        v-cloak
+                        v-if="
+                          child.name === 'saved-phrases' &&
+                          savedPhrasesCount > 0
+                        "
+                      >
                         {{ savedPhrasesCount }}
                       </span>
                     </div>
                   </NuxtLink>
-                  <a v-else :href="child.href" :class="`feature-card feature-card-${item.title === 'Media' ? 'dark' : 'dark'
-                  } link-unstyled`" target="_blank">
+                  <a
+                    v-else
+                    :href="child.href"
+                    :class="`feature-card feature-card-${
+                      item.title === 'Media' ? 'dark' : 'dark'
+                    } link-unstyled`"
+                    target="_blank"
+                  >
                     <div class="feature-card-icon">
-                      <i :class="`${child.icon} bg-gradient-${item.title.length
-                      .toString()
-                      .split('')
-                      .pop()} gradient-text`"></i>
+                      <i
+                        :class="`${child.icon} bg-gradient-${item.title.length
+                          .toString()
+                          .split('')
+                          .pop()} gradient-text`"
+                      ></i>
                     </div>
                     <div class="feature-card-title">
                       {{ $t(child.title, { l2: $t($l2.name) }) }}
@@ -201,7 +272,7 @@ export default {
           window.matchMedia("(display-mode: standalone)").matches)
       );
     },
-    parent() {
+    currentParent() {
       let parent = this.menu.find((item) => {
         let nameOfItemOrFirstChild = this.nameOfSelfOrFirstChild(item, true);
         if (
@@ -220,6 +291,18 @@ export default {
         }
       });
       return parent;
+    },
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
+    $adminMode() {
+      if (typeof this.$store.state.settings.adminMode !== "undefined")
+        return this.$store.state.settings.adminMode;
     },
     menu() {
       let items = [
@@ -248,7 +331,7 @@ export default {
           show: this.hasFeature("youtube"),
           children: [
             {
-              name: 'all-media',
+              name: "all-media",
               icon: "fa fa-photo-video",
               title: `All Media`,
               show: true,
@@ -753,18 +836,6 @@ export default {
         items = items.filter((i) => i.title && this.showOnly.includes(i.title));
       return items;
     },
-    $l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-    },
-    $l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
-    },
-    $adminMode() {
-      if (typeof this.$store.state.settings.adminMode !== "undefined")
-        return this.$store.state.settings.adminMode;
-    },
   },
   mounted() {
     this.bindKeys();
@@ -917,8 +988,8 @@ export default {
             this.$router.push(
               last
                 ? {
-                  path: last,
-                }
+                    path: last,
+                  }
                 : { name: this.nameOfSelfOrFirstChild(shortcutItem) }
             );
             e.preventDefault();
@@ -942,27 +1013,10 @@ export default {
   width: 100%;
   overflow: hidden;
   display: block;
-
-  .main-nav-item {
-    padding: 0.5rem 1rem;
-    color: white;
-    display: inline-block;
-    border: none;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 1);
-    border: 1px solid rgba(255, 255, 255, 0);
-    border-radius: 0.3rem;
-    white-space: nowrap;
-
-    &.nuxt-link-active,
-    &:hover {
-      text-decoration: none;
-    }
-  }
 }
 
 .zth-nav-light {
   .main-nav-item {
-
     &.nuxt-link-active,
     &:hover {
       color: #444;
@@ -975,7 +1029,6 @@ export default {
   }
 
   .seoncdary-nav-item {
-
     &.nuxt-link-active,
     &:hover {
       background: #014161c7;
@@ -989,10 +1042,12 @@ export default {
 
   .nav-menu-bar {
     .secondary-nav {
-      background: linear-gradient(180deg,
-          rgba(255, 255, 255, 0.75) 0%,
-          rgba(255, 255, 255, 0.75) 10%,
-          rgba(255, 255, 255, 1) 100%);
+      background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.75) 0%,
+        rgba(255, 255, 255, 0.75) 10%,
+        rgba(255, 255, 255, 1) 100%
+      );
     }
   }
 
@@ -1005,7 +1060,6 @@ export default {
 
 .zth-nav-dark {
   .main-nav-item {
-
     &.nuxt-link-active,
     &:hover {
       color: white;
@@ -1020,18 +1074,22 @@ export default {
     &.nuxt-link-active,
     &:hover {
       color: white;
-      background: linear-gradient(180deg,
-          rgba(255, 255, 255, 0.4) 0%,
-          rgba(148, 148, 148, 0) 5%,
-          rgba(122, 122, 122, 0.4) 75%);
+      background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.4) 0%,
+        rgba(148, 148, 148, 0) 5%,
+        rgba(122, 122, 122, 0.4) 75%
+      );
     }
   }
 
   .nav-menu-bar {
     .secondary-nav {
-      background: linear-gradient(180deg,
-          rgba(65, 65, 65, 0.74) 0%,
-          rgba(0, 0, 0, 0.72) 100%);
+      background: linear-gradient(
+        180deg,
+        rgba(65, 65, 65, 0.74) 0%,
+        rgba(0, 0, 0, 0.72) 100%
+      );
     }
   }
 
@@ -1103,7 +1161,6 @@ export default {
     position: relative;
 
     .zth-header {
-
       .logo,
       .logo-constructed {
         transform: scale(0.9);
@@ -1117,9 +1174,11 @@ export default {
       top: 0;
       left: 1rem;
       text-align: center;
-      background-image: linear-gradient(45deg,
-          rgba(35, 86, 48, 0.47) 0%,
-          rgba(0, 0, 0, 0.78039) 74%);
+      background-image: linear-gradient(
+        45deg,
+        rgba(35, 86, 48, 0.47) 0%,
+        rgba(0, 0, 0, 0.78039) 74%
+      );
       backdrop-filter: blur(30px);
       -webkit-backdrop-filter: blur(30px);
       width: 23rem;
@@ -1268,9 +1327,11 @@ export default {
 
     &.feature-card-dark {
       background: rgb(69, 69, 69);
-      background: radial-gradient(circle,
-          rgba(69, 69, 69, 1) 0%,
-          rgba(0, 0, 0, 1) 100%);
+      background: radial-gradient(
+        circle,
+        rgba(69, 69, 69, 1) 0%,
+        rgba(0, 0, 0, 1) 100%
+      );
       border: 1px solid rgba(255, 255, 255, 0.226);
       border-top: 1px solid rgba(255, 255, 255, 0.5);
       border-bottom: 1px solid rgba(0, 0, 0, 0.5);
