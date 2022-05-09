@@ -405,6 +405,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.zerotohero-wide-collapsed .dictionary-wide .dictionary-search-bar {
+  left: 9rem;
+  width: calc(100vw - 9rem);
+}
+
+
 .dictionary-wide {
   .dictionary-search-bar {
     padding: 1rem;
