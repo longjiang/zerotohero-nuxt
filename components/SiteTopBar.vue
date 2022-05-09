@@ -23,7 +23,7 @@
               src="/img/czh-icon.png"
               style="height: 1.5rem; margin-right: 0.25rem"
             />
-            <b :class="`text-white`" v-if="params.lg">
+            <b :class="`text-white`" v-if="params.xlg">
               zerotohero.ca
             </b>
           </router-link>
@@ -107,6 +107,9 @@ export default {
         lg: {
           minWidth: 320,
         },
+        xlg: {
+          minWidth: 350,
+        },
       },
     };
   },
@@ -186,7 +189,7 @@ export default {
   width: 100%;
   z-index: 4;
   background-color: rgb(29, 29, 29);
-  padding: 0.25rem 1rem;
+  padding: 0.25rem 0.75rem;
 
   a {
     color: #ccc;
