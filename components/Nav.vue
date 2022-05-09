@@ -10,6 +10,7 @@
       'has-secondary-nav': currentParent && currentParent.children,
     }"
   >
+    <SiteTopBar :variant="variant" />
     <div
       :class="{
         'nav-menu-bar': variant === 'menu-bar',
@@ -23,7 +24,6 @@
             class="zth-header"
             v-if="variant === 'menu-bar' || variant === 'side-bar'"
           >
-            <SiteTopBar v-if="variant === 'side-bar'" variant="side-bar" />
             <LanguageLogo
               v-if="l1 && l2"
               :l1="l1"
@@ -69,15 +69,6 @@
           </div>
         </nav>
         <nav class="secondary-nav" v-if="currentParent && currentParent.children">
-          <AnnotationSettings
-            v-if="variant === 'side-bar'"
-            variant="toolbar"
-            style="
-              width: calc(100% - 1rem);
-              text-align: center;
-              margin: 0 0.5rem 0.5rem 0.5rem;
-            "
-          />
           <NavItem
             v-for="(child, index) in currentParent.children.filter(
               (child) => child.show && !child.href
@@ -1020,7 +1011,6 @@ export default {
       width: 50%;
     }
 
-    padding-left: 1rem;
     margin: 0;
     position: relative;
 
@@ -1029,8 +1019,7 @@ export default {
       .logo-constructed {
         transform: scale(0.9);
       }
-
-      padding-top: 2.6rem;
+      text-align: center;
     }
 
     .zth-header-glass {
@@ -1049,6 +1038,10 @@ export default {
       z-index: 9;
       box-shadow: 0 5px 20px rgb(0 0 0 / 20%);
       border-radius: 0.25rem;
+    }
+
+    .main-nav-items {
+      padding-left: 1rem;
     }
 
     .end-nav {

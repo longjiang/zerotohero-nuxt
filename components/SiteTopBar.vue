@@ -1,9 +1,8 @@
 <template>
   <div :class="`site-top-bar site-top-bar-${variant}`" @click.self="scrollToTop">
-    <template v-if="variant === 'menu-bar'">
-
+    <template >
       <div class="text-center">
-        <span style="line-height: 2.3rem; color: #ccc; cursor: pointer; margin-right: 0.5rem" @click="scrollToTop"><i
+        <span style="line-height: 2.3rem; color: #ccc; cursor: pointer; margin-right: 0.5rem" @click="variant === 'side-bar' ? toggleCollapse: scrollToTop"><i
             class="fas fa-bars"></i></span>
         <router-link to="/" class="link-unstyled">
           <img v-if="!$l2 || $l2.code !== 'zh'" src="/img/czh-icon.png" style="height: 1.5rem; margin-right: 0.25rem" /><b
@@ -33,16 +32,6 @@
         </button>
         <LoginButton v-if="$l2" class="d-inline-block" :icon="true" :text="false" style="color: #ddd" />
       </div>
-    </template>
-
-    <template v-if="variant === 'side-bar'">
-      <router-link to="/" class="link-unstyled">
-        <img v-if="!$l2 || $l2.code !== 'zh'" src="/img/czh-icon.png" data-not-lazy
-          style="height: 1.5rem; margin-right: 0.25rem" /><b>zerotohero.ca</b>
-      </router-link>
-      <router-link :to="languageMapPath" class="link-unstyled">
-        <i class="fas fa-globe-asia"></i>
-      </router-link>
     </template>
   </div>
 </template>
@@ -88,6 +77,9 @@ export default {
     }
   },
   methods: {
+    toggleCollapse() {
+      this.$emit('toggleCollapse')
+    },
     scrollToTop() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     },
@@ -116,7 +108,6 @@ export default {
   width: 100%;
   z-index: 4;
   background-color: rgb(29, 29, 29);
-  position: absolute;
   padding: 0.25rem 1rem;
 
   a {
@@ -139,12 +130,6 @@ export default {
     z-index: 3;
   }
 
-  &.site-top-bar-side-bar {
-    margin-left: -1rem;
-    padding-left: 1.5rem;
-    margin-top: -2.6rem;
-    background-color: rgba(29, 29, 29, 0.5);
-  }
 
   .language-flag-and-name {
     line-height: 1;
