@@ -292,7 +292,7 @@ export default {
         video.l2Name,
         this.$adminMode
       );
-      Vue.set(video, "subs_l2", subs_l2);
+      if (subs_l2 && subs_l2.length > 0) Vue.set(video, "subs_l2", subs_l2);
       Vue.set(video, "checkingSubs", false);
       return video;
     },
