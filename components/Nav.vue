@@ -78,51 +78,19 @@
               margin: 0 0.5rem 0.5rem 0.5rem;
             "
           />
-          <template
+          <NavItem
             v-for="(child, index) in currentParent.children.filter(
-              (child) => child.show
+              (child) => child.show && !child.href
             )"
-          >
-            <NuxtLink
-              :class="{
-                'secondary-nav-item': true,
-                'd-block': variant === 'side-bar',
-              }"
-              v-if="!child.href"
-              :key="`subnav-${child.name || child.href}-${index}`"
-              :to="last(child) || child"
-            >
-              <i :class="`${child.icon}`"></i>
-              {{ $t(child.title, { l2: $t($l2.name) }) }}
-              <span
-                class="saved-words-count"
-                v-cloak
-                v-if="child.name === 'saved-words' && savedWordsCount > 0"
-              >
-                {{ savedWordsCount }}
-              </span>
-              <span
-                class="saved-words-count"
-                v-cloak
-                v-if="child.name === 'saved-phrases' && savedPhrasesCount > 0"
-              >
-                {{ savedPhrasesCount }}
-              </span>
-            </NuxtLink>
-            <a
-              v-else
-              :href="child.href"
-              :key="`subnav-${child.name || child.href}-${index}`"
-              target="_blank"
-              :class="{
-                'secondary-nav-item': true,
-                'd-block': variant === 'side-bar',
-              }"
-            >
-              <i :class="`${child.icon}`"></i>
-              {{ $t(child.title, { l2: $t($l2.name) }) }}
-            </a>
-          </template>
+            :key="`subnav-item-${child.name || child.href}-${index}`"
+            :variant="variant"
+            :to="last(child) || child"
+            :item="child"
+            :level="2"
+            :badge="child.name === 'saved-words' && savedWordsCount > 0 ? savedWordsCount : child.name === 'saved-phrases' && savedPhrasesCount > 0 ? savedPhrasesCount : undefined"
+            :href="child.href"
+          />
+
         </nav>
       </template>
       <template v-if="variant === 'page'">
@@ -425,12 +393,6 @@ export default {
               title: "Courses",
               icon: "fas fa-graduation-cap",
               show: ["zh", "en"].includes(this.l2.code),
-            },
-            {
-              href: "https://chinesezerotohero.teachable.com/",
-              title: "Course Directory",
-              icon: "fa fa-folder-open",
-              show: ["zh"].includes(this.l2.code),
             },
             {
               name: "hall-of-heroes",

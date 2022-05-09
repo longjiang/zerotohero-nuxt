@@ -2,6 +2,7 @@
   <NuxtLink
     :class="{
       'main-nav-item': level === 1,
+      'secondary-nav-item': level === 2,
       tab: variant === 'menu-bar',
       'd-block': variant === 'side-bar',
       'router-link-active': active,
@@ -33,14 +34,14 @@ export default {
       type: Number,
     },
     to: {
-      type: Object
+      type: Object,
     },
     active: {
-      default: false
+      default: false,
     },
     level: {
-      default: 1
-    }
+      default: 1,
+    },
   },
   computed: {
     $l1() {
@@ -60,19 +61,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .main-nav-item {
-    padding: 0.5rem 1rem;
-    color: white;
-    display: inline-block;
-    border: none;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 1);
-    border: 1px solid rgba(255, 255, 255, 0);
-    border-radius: 0.3rem;
-    white-space: nowrap;
+.main-nav-item {
+  padding: 0.5rem 1rem;
+  color: white;
+  display: inline-block;
+  border: none;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 1);
+  border: 1px solid rgba(255, 255, 255, 0);
+  border-radius: 0.3rem;
+  white-space: nowrap;
 
-    &.nuxt-link-active,
-    &:hover {
-      text-decoration: none;
-    }
+  &.nuxt-link-active,
+  &:hover {
+    text-decoration: none;
   }
+}
 </style>
