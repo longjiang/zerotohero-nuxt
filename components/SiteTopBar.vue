@@ -19,16 +19,16 @@
           </span>
           <router-link to="/" class="link-unstyled">
             <img
-              v-if="params.md && (!$l2 || $l2.code !== 'zh')"
+              v-if="params.sm && (!$l2 || $l2.code !== 'zh')"
               src="/img/czh-icon.png"
               style="height: 1.5rem; margin-right: 0.25rem"
             />
-            <b :class="`text-white`" v-if="params.md">
+            <b :class="`text-white`" v-if="params.lg">
               zerotohero.ca
             </b>
           </router-link>
           <router-link
-            v-if="$l2 && params.lg"
+            v-if="$l2 && params.sm"
             :to="{ name: 'home' }"
             class="link-unstyled language-flag-and-name"
           >
@@ -54,7 +54,7 @@
           <router-link
             :to="languageMapPath"
             class="btn top-bar-button btn-unstyled link-unstyled"
-            v-if="params.lg"
+            v-if="params.md"
           >
             <i class="fas fa-globe-asia"></i>
           </router-link>
@@ -98,6 +98,9 @@ export default {
     return {
       params: {},
       query: {
+        sm: {
+          minWidth: 75,
+        },
         md: {
           minWidth: 150,
         },
