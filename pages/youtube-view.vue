@@ -203,18 +203,18 @@ export default {
           );
         }
         console.log(`YouTube View (on video change): loading extras...`);
-        // await this.loadExtras();
-        // this.bindKeys();
-        // this.unsubscribe = this.$store.subscribe((mutation, state) => {
-        //   if (mutation.type === "shows/LOAD_SHOWS") {
-        //     this.loadShow();
-        //   }
-        // });
-        // this.saveHistory();
-        // if (!Helper.wide()) {
-        //   let el = this.$refs["youtube"];
-        //   if (el) Helper.scrollToTargetAdjusted(el.$el, 43);
-        // }
+        await this.loadExtras();
+        this.bindKeys();
+        this.unsubscribe = this.$store.subscribe((mutation, state) => {
+          if (mutation.type === "shows/LOAD_SHOWS") {
+            this.loadShow();
+          }
+        });
+        this.saveHistory();
+        if (!Helper.wide()) {
+          let el = this.$refs["youtube"];
+          if (el) Helper.scrollToTargetAdjusted(el.$el, 43);
+        }
       }
     },
     async show() {
