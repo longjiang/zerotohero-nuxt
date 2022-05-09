@@ -3,7 +3,21 @@
     :to="`/${l1.code}/${l2.code}/`"
     class="link-unstyled d-inline-block"
   >
-    <div class="logo-constructed">
+    <img
+      src="/img/czh-logo-light.png"
+      alt="Chinese Zero to Hero"
+      class="logo"
+      data-not-lazy
+      v-if="branded && l1.code === 'en' && l2.code === 'zh'"
+    />
+    <img
+      src="/img/ezh-logo-light.png"
+      alt="Chinese Zero to Hero"
+      class="logo"
+      data-not-lazy
+      v-else-if="branded && l1.code === 'zh' && l2.code === 'en'"
+    />
+    <div class="logo-constructed" v-else>
       <div class="logo-circle-wrapper">
         <div
           :class="`logo-circle
@@ -50,7 +64,20 @@
 import Config from "@/lib/config";
 
 export default {
-  props: ["l1", "l2", "compact"],
+  props: {
+    l1: {
+      type: Object,
+    },
+    l2: {
+      type: Object,
+    },
+    compact: {
+      default: false,
+    },
+    branded: {
+      default: false,
+    },
+  },
   data() {
     return {
       Config,
@@ -80,6 +107,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.logo {
+  max-width: 11rem;
+}
 .logo-image {
   height: 4rem;
 }

@@ -12,21 +12,12 @@
       'nav-menu-bar': variant === 'menu-bar',
       'nav-side-bar': variant === 'side-bar',
       'nav-page': variant === 'page',
-    }" style="z-index: 3">
+    }">
       <template v-if="variant === 'menu-bar' || variant === 'side-bar'">
         <nav :class="{ 'main-nav': true, tabs: variant === 'menu-bar' }">
           <div class="zth-header" v-if="variant === 'menu-bar' || variant === 'side-bar'">
             <SiteTopBar v-if="variant === 'side-bar'" variant="side-bar" />
-
-            <router-link v-if="l1.code === 'en' && l2.code === 'zh'" to="/en/zh/">
-              <img src="/img/czh-logo-light.png" alt="Chinese Zero to Hero"
-                style="max-width: 11rem; margin: 2rem 0 1rem 0" class="logo" data-not-lazy />
-            </router-link>
-            <router-link v-else-if="l1.code === 'zh' && l2.code === 'en'" to="/zh/en/">
-              <img src="/img/ezh-logo-light.png" alt="Chinese Zero to Hero" style="max-width: 11rem; margin: 1.5rem 0"
-                class="logo" data-not-lazy />
-            </router-link>
-            <LanguageLogo v-else-if="l1 && l2" :l1="l1" :l2="l2" style="margin: 1.5rem 0" />
+            <LanguageLogo v-if="l1 && l2" :l1="l1" :l2="l2" branded="true" style="margin: 1.5rem 0" />
           </div>
           <div :class="{ 'main-nav-items': true, tabs: variant === 'menu-bar' }">
             <NuxtLink v-for="(item, index) in menu.filter(
@@ -989,6 +980,11 @@ export default {
     &:hover {
       background: #014161c7;
     }
+  }
+
+  .nav-menu-bar,
+  .nav-side-bar {
+    z-index: 3;
   }
 
   .nav-menu-bar {
