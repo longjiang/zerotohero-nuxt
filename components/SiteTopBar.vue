@@ -13,7 +13,7 @@
               cursor: pointer;
               margin-right: 0.5rem;
             "
-            @click="variant === 'side-bar' ? toggleCollapse : scrollToTop"
+            @click="toggleCollapsed"
           >
             <i class="fas fa-bars"></i>
           </span>
@@ -141,8 +141,8 @@ export default {
     },
   },
   methods: {
-    toggleCollapse() {
-      this.$emit("toggleCollapse");
+    toggleCollapsed() {
+      this.$emit("toggleCollapsed");
     },
     scrollToTop() {
       window.scrollTo({ top: 0, behavior: "smooth" });

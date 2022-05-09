@@ -38,7 +38,7 @@
           <b>{{ l2.code }}</b>
         </div>
       </div>
-      <div class="logo-text text-white">
+      <div class="logo-text text-white" v-if="!icon">
         <template>
           <div class="logo-text-language">
             {{ l2Name }}
@@ -77,6 +77,9 @@ export default {
     branded: {
       default: false,
     },
+    icon: {
+      default: false
+    }
   },
   data() {
     return {

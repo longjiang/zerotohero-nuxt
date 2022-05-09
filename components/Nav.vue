@@ -7,10 +7,11 @@
       'zth-nav-menu-bar': variant === 'menu-bar',
       'zth-nav-side-bar': variant === 'side-bar',
       'zth-nav-page': variant === 'page',
+      'zth-nav-collapsed': collapsed,
       'has-secondary-nav': currentParent && currentParent.children,
     }"
   >
-    <SiteTopBar :variant="variant" />
+    <SiteTopBar :variant="variant" @toggleCollapsed="toggleCollapsed" />
     <div
       :class="{
         'nav-menu-bar': variant === 'menu-bar',
@@ -29,6 +30,7 @@
               :l1="l1"
               :l2="l2"
               branded="true"
+              :icon="collapsed"
               style="margin: 1.5rem 0"
             />
           </div>
@@ -158,7 +160,38 @@ export default {
       moviePath: false,
       newsPath: false,
       hasPhrasebooks: false,
+      collapsed: false
     };
+  },
+  mounted() {
+    this.bindKeys();
+  },
+  created() {
+    this.checkShows();
+    this.checkPhrasebooks();
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (mutation.type.startsWith("shows")) {
+        this.checkShows();
+      }
+      if (mutation.type.startsWith("phrasebooks")) {
+        this.checkPhrasebooks();
+      }
+    });
+    if (this.$hasFeature("live-tv")) {
+      this.hasLiveTV = true;
+    }
+  },
+  beforeDestroy() {
+    // you may call unsubscribe to stop the subscription
+    this.unsubscribe();
+  },
+  unmounted() {
+    this.unbindKeys();
+  },
+  watch: {
+    $route() {
+      this.history.push(this.$route.path);
+    },
   },
   computed: {
     savedWordsCount() {
@@ -739,37 +772,10 @@ export default {
       return items;
     },
   },
-  mounted() {
-    this.bindKeys();
-  },
-  created() {
-    this.checkShows();
-    this.checkPhrasebooks();
-    this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type.startsWith("shows")) {
-        this.checkShows();
-      }
-      if (mutation.type.startsWith("phrasebooks")) {
-        this.checkPhrasebooks();
-      }
-    });
-    if (this.$hasFeature("live-tv")) {
-      this.hasLiveTV = true;
-    }
-  },
-  beforeDestroy() {
-    // you may call unsubscribe to stop the subscription
-    this.unsubscribe();
-  },
-  unmounted() {
-    this.unbindKeys();
-  },
-  watch: {
-    $route() {
-      this.history.push(this.$route.path);
-    },
-  },
   methods: {
+    toggleCollapsed() {
+      this.collapsed = !this.collapsed
+    },
     checkPhrasebooks() {
       this.hasPhrasebooks =
         this.$store.state.phrasebooks.phrasebooks &&
@@ -905,6 +911,7 @@ export default {
 </script>
 
 <style lang="scss">
+
 .zth-nav.zth-nav-side-bar {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);

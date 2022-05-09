@@ -125,6 +125,13 @@ export default {
     }
   }
 }
+
+.zth-nav-collapsed.zth-nav-side-bar {
+  .nav-item-title {
+    display: none;
+  }
+}
+
 .nav-side-bar {
   .main-nav {
     .main-nav-item {
