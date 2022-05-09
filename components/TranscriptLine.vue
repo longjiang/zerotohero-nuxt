@@ -238,7 +238,7 @@ export default {
     opacity: 0.7;
     font-size: 0.7em;
     display: none;
-    line-height: 1.2;
+    line-height: 1.5;
     margin-top: 0.1rem;
   }
 }

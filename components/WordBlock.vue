@@ -984,6 +984,13 @@ export default {
   opacity: 0.7;
 }
 
+[dir="rtl"] .annotate-template {
+  font-size: 1.33em;
+  .word-block-pinyin {
+    font-size: 0.66rem;
+  }
+}
+
 .word-block.saved {
   .word-block-pinyin {
     opacity: 1;
