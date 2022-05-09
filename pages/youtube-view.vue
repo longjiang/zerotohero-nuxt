@@ -207,9 +207,9 @@ export default {
           }
         });
         this.saveHistory();
-        let el = this.$refs["searchLibrary"];
-        if (el) {
-          el.$el.scrollIntoView({ behavior: "smooth" });
+        if (!Helper.wide()) {
+          let el = this.$refs["youtube"];
+          if(el) Helper.scrollToTargetAdjusted(el.$el, 43);
         }
       }
     },
@@ -285,7 +285,7 @@ export default {
     async getTranscript(video) {
       console.log(`YouTube View: Getting ${this.$l2.name} transcript`);
       Vue.set(video, "checkingSubs", true);
-      console.log()
+      console.log();
       let subs_l2 = await YouTube.getTranscript(
         video.youtube_id,
         video.l2Locale,
@@ -481,9 +481,9 @@ export default {
           `${Config.youtubeVideosTableName(this.$l2.id)}/${video.id}?fields=id`,
           { subs_l2 }
         );
-        console.log('Missing duration information added.')
+        console.log("Missing duration information added.");
       }
-      return video
+      return video;
     },
     scrollToComments() {
       document.getElementById("comments").scrollIntoView();

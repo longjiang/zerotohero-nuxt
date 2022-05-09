@@ -39,6 +39,7 @@
             :showFullscreenToggle="showFullscreenToggle"
             :showLineList="showLineList"
             ref="videoControls"
+            :class="`${neverPlayed ? 'd-none' : ''}`"
             @goToLine="goToLine"
             @togglePaused="togglePaused"
             @rewind="rewind"
@@ -108,8 +109,30 @@
             @updateOriginalText="updateOriginalText"
             @enableTranslationEditing="toggleEnableTranslationEditing"
           />
+          <div
+            v-if="
+              !(video && video.id) &&
+              ((video.subs_l2 && video.subs_l2.length > 0) || $adminMode)
+            "
+            style="font-size: 0.7em; opacity: 0.7"
+            class="mt-2"
+          >
+            Once saved, the video will be available for everyone to see. You
+            can find it at
+            <i class="fas fa-photo-video"></i>
+            Media →
+            <i class="fa fa-play"></i>
+            New Videos.
+          </div>
         </div>
-        <div class="mt-3">
+        <div class="mt-4">
+          <hr class="mb-4 ml-3 mr-3 border-secondary" />
+          <h5 class="text-center">Transcript</h5>
+          <p class="text-center mb-3" style="color: #999">
+            All verbs are
+            <u>underscored</u>
+            . Tap line to play.
+          </p>
           <SyncedTranscript
             v-if="video.subs_l2 && video.subs_l2.length > 0"
             ref="transcript"
@@ -332,6 +355,7 @@ export default {
     return {
       speaking: false,
       transcriptKey: 0,
+      neverPlayed: true,
       paused: true,
       repeatMode: false,
       audioMode: false,
@@ -539,6 +563,10 @@ export default {
       if (this.$refs.transcript) this.$refs.transcript.paused = paused;
     },
     updateCurrentTime(currentTime) {
+      if (this.neverPlayed) {
+        this.neverPlayed = false;
+        if (this.$refs["transcript"]) this.$refs["transcript"].scrollTo(0);
+      }
       if (this.currentTime !== currentTime) {
         this.currentTime = currentTime;
         this.$emit("currentTime", this.currentTime);
