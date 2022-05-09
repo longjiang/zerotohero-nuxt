@@ -198,7 +198,10 @@ export default {
         ) {
           this.video = await this.patchDuration(this.video);
         } else {
-          console.log('YouTube View: Video subs have duration! 🎉 First line duration is ', this.video.subs_l2[0].duration)
+          console.log(
+            "YouTube View: Video subs have duration! 🎉 First line duration is ",
+            this.video.subs_l2[0].duration
+          );
         }
         console.log(`YouTube View (on video change): loading extras...`);
         await this.loadExtras();
@@ -211,7 +214,7 @@ export default {
         this.saveHistory();
         if (!Helper.wide()) {
           let el = this.$refs["youtube"];
-          if(el) Helper.scrollToTargetAdjusted(el.$el, 43);
+          if (el) Helper.scrollToTargetAdjusted(el.$el, 43);
         }
       }
     },
@@ -475,16 +478,24 @@ export default {
       }
     },
     async patchDuration(video) {
-      console.log('YouTube View: Saved subtitles does not have duration, getting duration...')
+      console.log(
+        "YouTube View: Saved subtitles does not have duration, getting duration..."
+      );
       video = await this.checkSubsAndAddLocalesIfNeeded(video);
       video = await this.getTranscript(video);
       if (video.subs_l2 && video.subs_l2[0] && video.subs_l2[0].duration) {
         let subs_l2 = YouTube.unparseSubs(video.subs_l2);
-        await axios.patch(
-          `${Config.youtubeVideosTableName(this.$l2.id)}/${video.id}?fields=id`,
-          { subs_l2 }
-        );
-        console.log("Missing duration information added.");
+        try {
+          await axios.patch(
+            `${Config.youtubeVideosTableName(this.$l2.id)}/${
+              video.id
+            }?fields=id`,
+            { subs_l2 }
+          );
+          console.log("Missing duration information added.");
+        } catch (err) {
+          console.log(err)
+        }
       }
       return video;
     },
