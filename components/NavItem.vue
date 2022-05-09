@@ -20,9 +20,11 @@
       ></i>
     </div>
     <i v-else :class="`${item.icon}`"></i>
-    {{ $t(item.title, { l2: $t($l2.name) }) }}
-    <span class="saved-words-count" v-cloak v-if="badge">
-      {{ badge }}
+    <span class="nav-item-title">
+      {{ $t(item.title, { l2: $t($l2.name) }) }}
+      <span class="saved-words-count" v-cloak v-if="badge">
+        {{ badge }}
+      </span>
     </span>
   </NuxtLink>
 </template>
@@ -254,7 +256,7 @@ export default {
     display: block;
   }
 
-  .feature-card-title {
+  .nav-item-title {
     font-size: 0.9em;
     line-height: 1;
     display: block;
