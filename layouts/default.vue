@@ -9,7 +9,7 @@
     </template>
     <template v-else>
       <client-only>
-        <SiteTopBar v-if="$route.params.l1 && $route.params.l1 && l1 && l2" :variant="variant" @toggleCollapsed="toggleCollapsed"  />
+        <SiteTopBar v-if="!wide && $route.params.l1 && $route.params.l1 && l1 && l2" :variant="variant" @toggleCollapsed="toggleCollapsed"  />
         <Nav
           v-if="$route.params.l1 && $route.params.l1 && l1 && l2"
           class="zth-nav-wrapper"
