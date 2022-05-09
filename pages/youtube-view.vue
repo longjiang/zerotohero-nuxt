@@ -8,42 +8,76 @@
   }
 </router>
 <template>
-  <div :class="{
-    'youtube-view pt-3 pb-5 ': true,
-    'main-dark': layout !== 'vertical',
-    'main-dark-performant': isMobile,
-  }">
-    <SocialHead :title="`${video ? video.title + ' | ' : ''}Learn ${$l2.name
-    } with a video | zerotohero.ca`" :description="`Study the transcript of this video with a popup dictionary`"
-      :image="`https://img.youtube.com/vi/${this.youtube_id}/hqdefault.jpg`" />
+  <div
+    :class="{
+      'youtube-view pt-3 pb-5 ': true,
+      'main-dark': layout !== 'vertical',
+      'main-dark-performant': isMobile,
+    }"
+  >
+    <SocialHead
+      :title="`${video ? video.title + ' | ' : ''}Learn ${
+        $l2.name
+      } with a video | zerotohero.ca`"
+      :description="`Study the transcript of this video with a popup dictionary`"
+      :image="`https://img.youtube.com/vi/${this.youtube_id}/hqdefault.jpg`"
+    />
     <div class="pl-3 pr-3 mb-4">
       <!-- <Sale class="mt-4 mb-4" v-if="$l2.code === 'zh'" /> -->
-      <SimpleSearch placeholder="Search" ref="searchLibrary" :random="
-        randomEpisodeYouTubeId
-          ? `/${$l1.code}/${$l2.code}/youtube/view/${randomEpisodeYouTubeId}`
-          : false
-      " skin="dark" :action="
-  (url) => {
-    this.$router.push({
-      path: `/${$l1.code}/${$l2.code
-        }/youtube/browse/all/all/0/${encodeURIComponent(url)}`,
-    });
-  }
-" />
+      <SimpleSearch
+        placeholder="Search"
+        ref="searchLibrary"
+        :random="
+          randomEpisodeYouTubeId
+            ? `/${$l1.code}/${$l2.code}/youtube/view/${randomEpisodeYouTubeId}`
+            : false
+        "
+        skin="dark"
+        :action="
+          (url) => {
+            this.$router.push({
+              path: `/${$l1.code}/${
+                $l2.code
+              }/youtube/browse/all/all/0/${encodeURIComponent(url)}`,
+            });
+          }
+        "
+      />
     </div>
-    <div :class="{
-      'youtube-view-wrapper': true,
-      fullscreen: layout === 'vertical',
-    }">
+    <div
+      :class="{
+        'youtube-view-wrapper': true,
+        fullscreen: layout === 'vertical',
+      }"
+    >
       <div :class="{ 'loader text-center pt-5 pb-5': true, 'd-none': video }">
         <Loader :sticky="true" message="Preparing video and transcript..." />
       </div>
-      <LazyYouTubeWithTranscript v-if="video" ref="youtube" skin="dark" :video="video" :quiz="$quiz"
-        :key="`transcript-${video.youtube_id}`" :autoload="true" :autoplay="false" :starttime="starttime" :show="show"
-        :showType="showType" :previousEpisode="previousEpisode" :nextEpisode="nextEpisode" :episodes="episodes"
-        :episodeIndex="thisEpisodeIndex" :forcePortrait="false" :startLineIndex="startLineIndex" @paused="updatePaused"
-        @ended="updateEnded" @currentTime="updateCurrentTime" @speechStart="speechStart" @speechEnd="speechEnd"
-        @updateLayout="(l) => (layout = l)" />
+      <LazyYouTubeWithTranscript
+        v-if="video"
+        ref="youtube"
+        skin="dark"
+        :video="video"
+        :quiz="$quiz"
+        :key="`transcript-${video.youtube_id}`"
+        :autoload="true"
+        :autoplay="false"
+        :starttime="starttime"
+        :show="show"
+        :showType="showType"
+        :previousEpisode="previousEpisode"
+        :nextEpisode="nextEpisode"
+        :episodes="episodes"
+        :episodeIndex="thisEpisodeIndex"
+        :forcePortrait="false"
+        :startLineIndex="startLineIndex"
+        @paused="updatePaused"
+        @ended="updateEnded"
+        @currentTime="updateCurrentTime"
+        @speechStart="speechStart"
+        @speechEnd="speechEnd"
+        @updateLayout="(l) => (layout = l)"
+      />
     </div>
   </div>
 </template>
@@ -67,19 +101,19 @@ export default {
   },
   data() {
     return {
-      video: undefined,
-      extrasLoaded: false,
-      show: undefined,
-      showType: undefined,
-      paused: true,
-      starttime: 0,
-      startLineIndex: 0,
       currentTime: 0,
       episodes: [],
-      randomEpisodeYouTubeId: undefined,
-      layout: "horizontal",
+      extrasLoaded: false,
       fetchDone: false,
+      layout: "horizontal",
       mountedDone: false,
+      paused: true,
+      randomEpisodeYouTubeId: undefined,
+      show: undefined,
+      showType: undefined,
+      startLineIndex: 0,
+      starttime: 0,
+      video: undefined,
     };
   },
   computed: {
@@ -106,8 +140,9 @@ export default {
     previousEpisode() {
       let thisEpisodeIndex = this.thisEpisodeIndex;
       if (thisEpisodeIndex > 0 && this.episodes[thisEpisodeIndex - 1])
-        return `/${this.$l1.code}/${this.$l2.code}/youtube/view/${this.episodes[thisEpisodeIndex - 1].youtube_id
-          }/`;
+        return `/${this.$l1.code}/${this.$l2.code}/youtube/view/${
+          this.episodes[thisEpisodeIndex - 1].youtube_id
+        }/`;
     },
     thisEpisodeIndex() {
       return this.episodes.findIndex((episode) => episode.id === this.video.id);
@@ -115,8 +150,9 @@ export default {
     nextEpisode() {
       let thisEpisodeIndex = this.thisEpisodeIndex;
       if (this.episodes[thisEpisodeIndex + 1])
-        return `/${this.$l1.code}/${this.$l2.code}/youtube/view/${this.episodes[thisEpisodeIndex + 1].youtube_id
-          }/`;
+        return `/${this.$l1.code}/${this.$l2.code}/youtube/view/${
+          this.episodes[thisEpisodeIndex + 1].youtube_id
+        }/`;
     },
     currentTimeInSeconds() {
       let t = Math.floor(this.currentTime / 10) * 10;
@@ -129,7 +165,7 @@ export default {
   async fetch() {
     try {
       console.log(`YouTube View: Getting saved video...`);
-      let savedVideo, videoFromApi
+      let savedVideo, videoFromApi;
       savedVideo = await this.getSaved();
       if (this.lesson && savedVideo.level && savedVideo.lesson) {
         this.saveWords(savedVideo.level, savedVideo.lesson);
@@ -152,7 +188,15 @@ export default {
     async video() {
       if (!this.extrasLoaded && typeof this.video !== "undefined") {
         this.extrasLoaded = true;
-        this.video = await this.loadSubs(this.video);
+        this.video = await this.loadSubsIfMissing(this.video);
+        if (
+          this.video &&
+          this.video.subs_l2 &&
+          this.video.subs_l2[0] &&
+          !this.video.subs_l2[0].duration
+        ) {
+          this.video = await this.patchDuration(this.video);
+        }
         await this.loadExtras();
         this.bindKeys();
         this.unsubscribe = this.$store.subscribe((mutation, state) => {
@@ -161,9 +205,9 @@ export default {
           }
         });
         this.saveHistory();
-        let el = this.$refs['searchLibrary']
+        let el = this.$refs["searchLibrary"];
         if (el) {
-          el.$el.scrollIntoView({ behavior: 'smooth' })
+          el.$el.scrollIntoView({ behavior: "smooth" });
         }
       }
     },
@@ -171,9 +215,12 @@ export default {
       if (this.show) {
         let sort = this.show.title !== "News" ? "title" : "-date";
         let response = await axios.get(
-          `${Config.youtubeVideosTableName(this.$l2.id)}?filter[l2][eq]=${this.$l2.id
-          }&filter[${this.showType}][eq]=${this.show.id
-          }&sort=${sort}&fields=channel_id,id,lesson,level,title,date,topic,youtube_id,tv_show.*,talk.*&timestamp=${this.$adminMode ? Date.now() : 0
+          `${Config.youtubeVideosTableName(this.$l2.id)}?filter[l2][eq]=${
+            this.$l2.id
+          }&filter[${this.showType}][eq]=${
+            this.show.id
+          }&sort=${sort}&fields=channel_id,id,lesson,level,title,date,topic,youtube_id,tv_show.*,talk.*&timestamp=${
+            this.$adminMode ? Date.now() : 0
           }&limit=500`
         );
         if (response.data && response.data.data) {
@@ -191,8 +238,8 @@ export default {
               videos.sort((y, x) =>
                 x.date
                   ? x.date.localeCompare(y.date, this.$l2.locales[0], {
-                    numeric: true,
-                  })
+                      numeric: true,
+                    })
                   : -1
               ) || [];
           }
@@ -214,27 +261,43 @@ export default {
       }
       return merged;
     },
-    async loadSubs(video) {
+    async checkSubsAndAddLocalesIfNeeded(video) {
       try {
         let missingSubsL1 = !video.subs_l1 || video.subs_l1.length === 0;
         let missingSubsL2 = !video.subs_l2 || video.subs_l2.length === 0;
         if (missingSubsL1 || missingSubsL2) {
           console.log(`YouTube View: Getting available transcripts...`);
-          video = await YouTube.getYouTubeSubsList(video, this.$l1, this.$l2);
+          video = await YouTube.getYouTubeSubsListAndAddLocale(
+            video,
+            this.$l1,
+            this.$l2
+          );
         } else {
           Vue.set(video, "checkingSubs", false);
         }
-        if (missingSubsL2) {
-          console.log(`YouTube View: Getting ${this.$l2.name} transcript`);
-          Vue.set(video, "checkingSubs", true);
-          let subs_l2 = await YouTube.getTranscript(
-            video.youtube_id,
-            video.l2Locale,
-            video.l2Name,
-            this.$adminMode
-          );
-          Vue.set(this.video, "subs_l2", subs_l2);
-          Vue.set(video, "checkingSubs", false);
+        return video;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async getTranscript(video) {
+      console.log(`YouTube View: Getting ${this.$l2.name} transcript`);
+      Vue.set(video, "checkingSubs", true);
+      let subs_l2 = await YouTube.getTranscript(
+        video.youtube_id,
+        video.l2Locale,
+        video.l2Name,
+        this.$adminMode
+      );
+      Vue.set(video, "subs_l2", subs_l2);
+      Vue.set(video, "checkingSubs", false);
+      return video;
+    },
+    async loadSubsIfMissing(video) {
+      try {
+        video = this.checkSubsAndAddLocalesIfNeeded(video);
+        if (!video.subs_l2 || video.subs_l2.length) {
+          video = this.getTranscript(video);
         }
         if (video.subs_l2 && video.subs_l2.length > 0) {
           this.firstLineTime = video.subs_l2[0].starttime;
@@ -268,8 +331,10 @@ export default {
     },
     async getSaved() {
       let response = await axios.get(
-        `${Config.youtubeVideosTableName(this.$l2.id)}?filter[youtube_id][eq]=${this.youtube_id
-        }&filter[l2][eq]=${this.$l2.id}&fields=*,tv_show.*,talk.*&timestamp=${this.$adminMode ? Date.now() : 0
+        `${Config.youtubeVideosTableName(this.$l2.id)}?filter[youtube_id][eq]=${
+          this.youtube_id
+        }&filter[l2][eq]=${this.$l2.id}&fields=*,tv_show.*,talk.*&timestamp=${
+          this.$adminMode ? Date.now() : 0
         }`
       );
       response = response.data;
@@ -349,7 +414,7 @@ export default {
         ) {
           this.$router.push(
             this.nextEpisode ||
-            `/${this.$l1.code}/${this.$l2.code}/youtube/view/${this.randomEpisodeYouTubeId}`
+              `/${this.$l1.code}/${this.$l2.code}/youtube/view/${this.randomEpisodeYouTubeId}`
           );
         }
       }
@@ -394,12 +459,27 @@ export default {
     },
     async patchChannelID(video, channelId) {
       let response = await axios.patch(
-        `${Config.youtubeVideosTableName(this.$l2.id)}/${video.id}?fields=id,channel_id`,
+        `${Config.youtubeVideosTableName(this.$l2.id)}/${
+          video.id
+        }?fields=id,channel_id`,
         { channel_id: channelId }
       );
       if (response && response.data) {
         video.channel_id = response.data;
       }
+    },
+    async patchDuration(video) {
+      video = await this.checkSubsAndAddLocalesIfNeeded(video);
+      video = await this.getTranscript(video);
+      if (video.subs_l2 && video.subs_l2[0] && video.subs_l2[0].duration) {
+        let subs_l2 = YouTube.unparseSubs(video.subs_l2);
+        await axios.patch(
+          `${Config.youtubeVideosTableName(this.$l2.id)}/${video.id}?fields=id`,
+          { subs_l2 }
+        );
+        console.log('Missing duration information added.')
+      }
+      return video
     },
     scrollToComments() {
       document.getElementById("comments").scrollIntoView();

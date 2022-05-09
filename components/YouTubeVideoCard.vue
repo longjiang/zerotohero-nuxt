@@ -662,7 +662,7 @@ export default {
           Vue.set(video, "checkingSubs", false);
           this.$emit("hasSubs", true);
         } else {
-          video = await YouTube.getYouTubeSubsList(video, this.$l1, this.$l2);
+          video = await YouTube.getYouTubeSubsListAndAddLocale(video, this.$l1, this.$l2);
           this.$emit("hasSubs", video.hasSubs);
           if (this.checkSaved && this.showSubsEditing) {
             this.addSubsL1(video);
@@ -675,7 +675,7 @@ export default {
     async addSubsL1(video) {
       if (video) {
         if (!video.l1Locale) {
-          video = await YouTube.getYouTubeSubsList(video, this.$l1, this.$l2);
+          video = await YouTube.getYouTubeSubsListAndAddLocale(video, this.$l1, this.$l2);
         }
         let subs_l1 = await YouTube.getTranscript(
           video.youtube_id,

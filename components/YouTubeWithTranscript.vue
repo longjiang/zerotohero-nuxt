@@ -362,7 +362,7 @@ export default {
         console.log(
           `YouTube with Transcript: Getting available transcripts...`
         );
-        video = await YouTube.getYouTubeSubsList(video, this.$l1, this.$l2);
+        video = await YouTube.getYouTubeSubsListAndAddLocale(video, this.$l1, this.$l2);
         console.log(
           `YouTube with Transcript: Getting ${this.$l1.name} transcript`
         );
