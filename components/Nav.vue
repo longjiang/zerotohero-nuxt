@@ -50,7 +50,7 @@
               :badge="item.icon === 'fas fa-star' ? savedWordsCount + savedPhrasesCount : undefined"
             />
           </div>
-          <div v-if="variant === 'side-bar'" class="end-nav">
+          <div v-if="variant === 'side-bar' && !collapsed" class="end-nav">
             <div
               v-if="$l2 && !['en', 'zh'].includes($l2.code) && $l2.logo"
               class="icon-description"
@@ -775,6 +775,7 @@ export default {
   methods: {
     toggleCollapsed() {
       this.collapsed = !this.collapsed
+      this.$emit('collapsed', this.collapsed)
     },
     checkPhrasebooks() {
       this.hasPhrasebooks =
@@ -930,11 +931,11 @@ export default {
       width: 26rem;
     }
     &.zth-nav-collapsed {
-      width: 9rem;
+      width: 4.5rem;
+      &.has-secondary-nav {
+        width: 9rem;
+      }
     }
-  }
-  .zth-nav.has-secondary-nav + .zth-content {
-    margin-left: 26rem;
   }
 }
 
@@ -1030,7 +1031,7 @@ export default {
   flex-wrap: nowrap;
   top: 0;
   left: 0;
-  height: 100%;
+  height: calc(100% - 2.95rem);
 
   .main-nav {
     width: 100%;

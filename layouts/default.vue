@@ -17,6 +17,7 @@
           :variant="wide ? 'side-bar' : 'menu-bar'"
           :skin="$route.meta.skin ? $route.meta.skin : 'light'"
           :fullHistory="fullHistory"
+          @collapsed="updateCollapsed"
         />
       </client-only>
       <div class="zth-content">
@@ -51,6 +52,7 @@ export default {
       settingsLoaded: undefined,
       fullPageRoutes: ["index", "sale"],
       fullHistory: [],
+      collapsed: false,
     };
   },
 
@@ -59,6 +61,7 @@ export default {
     classes() {
       let classes = {
         "zerotohero-wide": this.wide,
+        "zerotohero-wide-collapsed": this.collapsed,
       };
       classes[`route-${this.$route.name}`] = true;
       if (this.l1 && this.l2) {
@@ -83,7 +86,7 @@ export default {
     },
     background() {
       return Helper.background(this.l2);
-    }
+    },
   },
   created() {
     this.$nuxt.$on("skin", this.onSkin);
@@ -140,6 +143,9 @@ export default {
     },
   },
   methods: {
+    updateCollapsed(collapsed) {
+      this.collapsed = collapsed;
+    },
     onAllLanguagesLoaded() {
       if (this.l1 && this.l2) {
         let l1 = this.$languages.getSmart(this.l1.code);
@@ -235,6 +241,17 @@ export default {
     flex: 1;
     margin-left: 13rem;
     overflow: visible;
+  }
+  .zth-nav.has-secondary-nav + .zth-content {
+    margin-left: 26rem;
+  }
+  &.zerotohero-wide-collapsed {
+    .zth-content {
+      margin-left: 4.5rem;
+    }
+    .zth-nav.has-secondary-nav + .zth-content {
+      margin-left: 9rem;
+    }
   }
 }
 
