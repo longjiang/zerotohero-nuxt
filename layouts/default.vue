@@ -231,25 +231,10 @@ export default {
 
 .zerotohero-wide {
   height: 100%;
-  .zth-nav {
-    overflow: hidden;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 13rem;
-    height: 100vh;
-    z-index: 2;
-    &.has-secondary-nav {
-      width: 26rem;
-    }
-  }
   .zth-content {
     flex: 1;
     margin-left: 13rem;
     overflow: visible;
-  }
-  .zth-nav.has-secondary-nav + .zth-content {
-    margin-left: 26rem;
   }
 }
 

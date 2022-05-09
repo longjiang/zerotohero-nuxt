@@ -19,11 +19,11 @@
           </span>
           <router-link to="/" class="link-unstyled">
             <img
-              v-if="!$l2 || $l2.code !== 'zh'"
+              v-if="params.md && (!$l2 || $l2.code !== 'zh')"
               src="/img/czh-icon.png"
               style="height: 1.5rem; margin-right: 0.25rem"
             />
-            <b class="text-white" style="font-size: 0.9em" data-not-lazy>
+            <b :class="`text-white`" v-if="params.md">
               zerotohero.ca
             </b>
           </router-link>
@@ -54,28 +54,30 @@
           <router-link
             :to="languageMapPath"
             class="btn top-bar-button btn-unstyled link-unstyled"
+            v-if="params.lg"
           >
             <i class="fas fa-globe-asia"></i>
           </router-link>
           <button
             :class="[
               'btn top-bar-button btn-unstyled',
-              { 'd-none': !isPWA || !canShare() },
             ]"
             @click="share"
             style="color: #ccc"
+            v-if="isPWA && canShare() && params.lg"
           >
             <i class="fa fa-share"></i>
           </button>
           <button
-            :class="['btn top-bar-button btn-unstyled', { 'd-none': !isPWA }]"
+            :class="['btn top-bar-button btn-unstyled']"
             @click="reload"
             style="color: #ccc"
+            v-if="isPWA && params.lg"
           >
             <i class="fas fa-sync-alt"></i>
           </button>
           <LoginButton
-            v-if="$l2"
+            v-if="$l2 && params.lg"
             class="d-inline-block"
             :icon="true"
             :text="false"
@@ -96,6 +98,9 @@ export default {
     return {
       params: {},
       query: {
+        md: {
+          minWidth: 150,
+        },
         lg: {
           minWidth: 320,
         },

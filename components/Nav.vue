@@ -917,6 +917,27 @@ export default {
   -webkit-backdrop-filter: blur(20px);
 }
 
+.zerotohero-wide {
+  .zth-nav {
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 13rem;
+    height: 100vh;
+    z-index: 2;
+    &.has-secondary-nav {
+      width: 26rem;
+    }
+    &.zth-nav-collapsed {
+      width: 9rem;
+    }
+  }
+  .zth-nav.has-secondary-nav + .zth-content {
+    margin-left: 26rem;
+  }
+}
+
 .main-nav {
   margin: 0 auto;
   width: 100%;
