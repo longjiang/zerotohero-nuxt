@@ -1,80 +1,82 @@
 <template>
-  <div :class="{
-    'container-fluid youtube-with-transcript': true,
-    'youtube-with-transcript-landscape': landscape,
-    'youtube-with-transcript-portrait': !landscape,
-  }">
-    <div v-if="layout === 'horizontal'" :class="`row youtube-with-transcript-${layout}`">
-      <div :class="{
-        'youtube-video-column col-sm-12 mb-4 p-0': true,
-        'order-2': landscape,
-      }">
+  <div
+    :class="{
+      'container-fluid youtube-with-transcript': true,
+      'youtube-with-transcript-landscape': landscape,
+      'youtube-with-transcript-portrait': !landscape,
+    }"
+  >
+    <div
+      v-if="layout === 'horizontal'"
+      :class="`row youtube-with-transcript-${layout}`"
+    >
+      <div
+        :class="{
+          'youtube-video-column col-sm-12 mb-4 p-0': true,
+          'order-2': landscape,
+        }"
+      >
         <div class="youtube-video-wrapper" :key="'youtube-' + video.youtube_id">
-          <YouTubeVideo ref="youtube" @paused="updatePaused" @currentTime="updateCurrentTime" @ended="updateEnded"
-            @duration="updateDuration" :speed="speed" :youtube="video.youtube_id" :starttime="start"
-            :autoload="autoload" :autoplay="autoplay" :startAtRandomTime="startAtRandomTime"
-            :class="{ 'd-none': collapsed }" />
-          <VideoControls v-if="showControls && video" :video="video" :paused="paused" :layout="layout"
-            :showFullscreenToggle="showFullscreenToggle" :showLineList="showLineList" ref="videoControls"
-            @goToLine="goToLine" @togglePaused="togglePaused" @rewind="rewind"
-            @updateCollapsed="(c) => (this.collapsed = c)" @updateAudioMode="(a) => (this.audioMode = a)"
-            @updateSpeed="(s) => (speed = s)" @toggleFullscreenMode="toggleFullscreenMode"
-            @updateRepeatMode="(r) => (this.repeatMode = r)" @goToPreviousLine="$refs.transcript.goToPreviousLine()"
-            @goToNextLine="$refs.transcript.goToNextLine()" />
+          <YouTubeVideo
+            ref="youtube"
+            @paused="updatePaused"
+            @currentTime="updateCurrentTime"
+            @ended="updateEnded"
+            @duration="updateDuration"
+            :speed="speed"
+            :youtube="video.youtube_id"
+            :starttime="start"
+            :autoload="autoload"
+            :autoplay="autoplay"
+            :startAtRandomTime="startAtRandomTime"
+            :class="{ 'd-none': collapsed }"
+          />
+          <VideoControls
+            v-if="showControls && video"
+            :video="video"
+            :paused="paused"
+            :layout="layout"
+            :showFullscreenToggle="showFullscreenToggle"
+            :showLineList="showLineList"
+            ref="videoControls"
+            @goToLine="goToLine"
+            @togglePaused="togglePaused"
+            @rewind="rewind"
+            @updateCollapsed="(c) => (this.collapsed = c)"
+            @updateAudioMode="(a) => (this.audioMode = a)"
+            @updateSpeed="(s) => (speed = s)"
+            @toggleFullscreenMode="toggleFullscreenMode"
+            @updateRepeatMode="(r) => (this.repeatMode = r)"
+            @goToPreviousLine="$refs.transcript.goToPreviousLine()"
+            @goToNextLine="$refs.transcript.goToNextLine()"
+          />
         </div>
       </div>
       <div class="youtube-transcript-column">
         <div class="youtube-video-info youtube-video-info-top">
-          <div :key="`youtube-video-info-${video.youtube_id}-${videoInfoKey}`"
-            :class="{ 'd-none': !video.id || !show , 'text-center mb-3': true }" style="border-radius: 0.2rem; border: 1px solid #ffffff33; padding: 0.3rem 0 0.3rem 0">
-            <router-link v-if="previousEpisode" :to="previousEpisode" :class="{
-              'btn btn-medium': true,
-              'btn-primary': skin === 'light',
-              'btn-black text-white': skin === 'dark',
-            }">
-              <i class="fa fa-step-backward"></i>
-            </router-link>
-            <router-link v-if="show" :to="`/${$l1.code}/${$l2.code}/show/${showType === 'tv_show' ? 'tv-show' : 'talk'
-            }/${show.id}`" :class="{
-    'btn btn-medium': true,
-    'btn-primary': skin === 'light',
-    'btn-black text-white': skin === 'dark',
-  }">
-              <i class="fas fa-stream mr-1"></i>
-              <span style="max-width: 8rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: inline-block;
-    white-space: nowrap;
-    line-height: 1;
-    position: relative;
-    bottom: -0.1rem;">{{
-        show.title
-    }}</span><span v-if="episodes && episodes.length"> ({{ episodeIndex + 1 }} of {{ episodes.length
-}})</span>
-            </router-link>
-            <router-link v-if="nextEpisode" :to="nextEpisode" :class="{
-              'btn btn-medium': true,
-              'btn-primary': skin === 'light',
-              'btn-black text-white': skin === 'dark',
-            }">
-              <i class="fa fa-step-forward"></i>
-            </router-link>
-            <router-link v-if="episodes.length > 0"
-              :to="`/${this.$l1.code}/${this.$l2.code}/youtube/view/${this.randomEpisodeYouTubeId}`" :class="{
-                'btn btn-medium': true,
-                'bg-secondary': skin === 'light',
-                'btn-black text-white': skin === 'dark',
-              }">
-              <i class="fa fa-random"></i>
-            </router-link>
-          </div>
-          <h3 :class="{
-            h4: video.title.length > 30,
-            h5: video.title.length > 60,
-          }" style="line-height: 1.5">
+          <EpisodeNav
+            :video="video"
+            :previousEpisode="previousEpisode"
+            :nextEpisode="nextEpisode"
+            :skin="skin"
+            :episodes="episodes"
+            :show="show"
+            :showType="showType"
+            :episodeIndex="episodeIndex"
+          />
+          <h3
+            :class="{
+              h4: video.title.length > 30,
+              h5: video.title.length > 60,
+            }"
+            style="line-height: 1.5"
+          >
             <span v-if="video" :key="`video-title-${video.title}`" class="mt-4">
-              <Annotate :phonetics="false" :buttons="true" v-if="$l2.code !== 'tlh' && $l2.direction !== 'rtl'">
+              <Annotate
+                :phonetics="false"
+                :buttons="true"
+                v-if="$l2.code !== 'tlh' && $l2.direction !== 'rtl'"
+              >
                 <span>{{ video.title }}</span>
               </Annotate>
               <span v-else>{{ video.title }}</span>
@@ -82,32 +84,67 @@
           </h3>
           <div style="color: #aaa" class="mb-2 mt-3">
             <span v-if="video.channel">
-              <router-link style="color: inherit"
-                :to="{ name: 'youtube-channel', params: { channel_id: video.channel.id, title: video.channel.title || video.channel.id } }">
-                <i class="fab fa-youtube mr-1"></i>{{ video.channel.title || 'Channel' }}
+              <router-link
+                style="color: inherit"
+                :to="{
+                  name: 'youtube-channel',
+                  params: {
+                    channel_id: video.channel.id,
+                    title: video.channel.title || video.channel.id,
+                  },
+                }"
+              >
+                <i class="fab fa-youtube mr-1"></i>
+                {{ video.channel.title || "Channel" }}
               </router-link>
             </span>
             <span v-if="video.date">| {{ formatDate(video.date) }}</span>
           </div>
-          <VideoAdmin :video="video" ref="videoAdmin1" @showSubsEditing="toggleShowSubsEditing"
-            @updateTranslation="updateTranslation" @updateOriginalText="updateOriginalText"
-            @enableTranslationEditing="toggleEnableTranslationEditing" />
+          <VideoAdmin
+            :video="video"
+            ref="videoAdmin1"
+            @showSubsEditing="toggleShowSubsEditing"
+            @updateTranslation="updateTranslation"
+            @updateOriginalText="updateOriginalText"
+            @enableTranslationEditing="toggleEnableTranslationEditing"
+          />
         </div>
         <div class="mt-3">
-          <SyncedTranscript v-if="video.subs_l2 && video.subs_l2.length > 0" ref="transcript"
-            :key="'transcript-' + video.youtube_id" :lines="video.subs_l2" :quiz="quiz" :parallellines="video.subs_l1"
-            :sticky="sticky" :startLineIndex="startLineIndex" :stopLineIndex="stopLineIndex"
-            :showSubsEditing="showSubsEditing" :enableTranslationEditing="enableTranslationEditing" :notes="video.notes"
-            :collapsed="collapsed" :skin="skin" :landscape="landscape" @seek="seekYouTube" @pause="pause" @play="play"
-            @speechStart="speechStart" @speechEnd="speechEnd" @updateTranslation="updateTranslation" />
+          <SyncedTranscript
+            v-if="video.subs_l2 && video.subs_l2.length > 0"
+            ref="transcript"
+            :key="'transcript-' + video.youtube_id"
+            :lines="video.subs_l2"
+            :quiz="quiz"
+            :parallellines="video.subs_l1"
+            :sticky="sticky"
+            :startLineIndex="startLineIndex"
+            :stopLineIndex="stopLineIndex"
+            :showSubsEditing="showSubsEditing"
+            :enableTranslationEditing="enableTranslationEditing"
+            :notes="video.notes"
+            :collapsed="collapsed"
+            :skin="skin"
+            :landscape="landscape"
+            @seek="seekYouTube"
+            @pause="pause"
+            @play="play"
+            @speechStart="speechStart"
+            @speechEnd="speechEnd"
+            @updateTranslation="updateTranslation"
+          />
           <div class="mt-5 youtube-video-info youtube-video-info-bottom">
             <div class="text-center mt-5 mb-5" v-if="video.checkingSubs">
               <Loader :sticky="true" message="Loading subtitles..." />
             </div>
-            <div class="mt-4 mb-5 rounded" style="color: rgba(136, 136, 136, 0.85)" v-if="
-              (!video.subs_l2 || video.subs_l2.length === 0) &&
-              !video.checkingSubs
-            ">
+            <div
+              class="mt-4 mb-5 rounded"
+              style="color: rgba(136, 136, 136, 0.85)"
+              v-if="
+                (!video.subs_l2 || video.subs_l2.length === 0) &&
+                !video.checkingSubs
+              "
+            >
               <h6>
                 This YouTube video does not have closed captions (CC) in
                 {{ $l2.name }}.
@@ -117,43 +154,25 @@
                 dragging &amp; dropping it above.
               </div>
             </div>
-            <div class="youtube-view-bottom-navigation text-center">
-              <router-link v-if="previousEpisode" :to="previousEpisode" :class="{
-                btn: true,
-                'btn-primary': skin === 'light',
-                'btn-ghost-dark': skin === 'dark',
-              }">
-                <i class="fa fa-chevron-left"></i>
-              </router-link>
-              <router-link v-if="show" :to="`/${$l1.code}/${$l2.code}/show/${showType === 'tv_show' ? 'tv-show' : 'talk'
-              }/${show.id}`" :class="{
-    btn: true,
-    'btn-primary': skin === 'light',
-    'btn-ghost-dark': skin === 'dark',
-  }">
-                <i class="fas fa-music" v-if="show.title === 'Music'"></i>
-                <i class="fas fa-film" v-else-if="show.title === 'Movies'"></i>
-                <i class="fas fa-newspaper" v-else-if="show.title === 'News'"></i>
-                <i class="fab fa-youtube" v-else-if="showType === 'talk'"></i>
-                <i class="fa fa-tv" v-else></i>
-                All
-                {{
-                    ["Music", "News", "Movies"].includes(show.title)
-                      ? show.title
-                      : "Episodes"
-                }}
-              </router-link>
-              <router-link v-if="nextEpisode" :to="nextEpisode" :class="{
-                btn: true,
-                'btn-primary': skin === 'light',
-                'btn-ghost-dark': skin === 'dark',
-              }">
-                <i class="fa fa-chevron-right"></i>
-              </router-link>
-            </div>
-            <VideoAdmin :class="{ 'mt-5': true }" :video="video" ref="videoAdmin2"
-              @showSubsEditing="toggleShowSubsEditing" @updateTranslation="updateTranslation"
-              @updateOriginalText="updateOriginalText" @enableTranslationEditing="toggleEnableTranslationEditing" />
+            <EpisodeNav
+              :video="video"
+              :previousEpisode="previousEpisode"
+              :nextEpisode="nextEpisode"
+              :skin="skin"
+              :episodes="episodes"
+              :show="show"
+              :showType="showType"
+              :episodeIndex="episodeIndex"
+            />
+            <VideoAdmin
+              :class="{ 'mt-5': true }"
+              :video="video"
+              ref="videoAdmin2"
+              @showSubsEditing="toggleShowSubsEditing"
+              @updateTranslation="updateTranslation"
+              @updateOriginalText="updateOriginalText"
+              @enableTranslationEditing="toggleEnableTranslationEditing"
+            />
           </div>
         </div>
       </div>
@@ -162,27 +181,68 @@
       <div class="row video-area">
         <div style="width: 100%">
           <div class="youtube-video-wrapper">
-            <YouTubeVideo ref="youtube" @paused="updatePaused" @currentTime="updateCurrentTime" @ended="updateEnded"
-              @duration="updateDuration" :speed="speed" :youtube="video.youtube_id" :starttime="start"
-              :autoload="autoload" :autoplay="autoplay" :startAtRandomTime="startAtRandomTime" />
-            <VideoControls v-if="video" :video="showControls && video" :paused="paused" :layout="layout"
-              :showFullscreenToggle="showFullscreenToggle" :showLineList="showLineList" :showCollapse="false"
-              ref="videoControls" @goToLine="goToLine" @updateCollapsed="(c) => (this.collapsed = c)"
-              @togglePaused="togglePaused" @rewind="rewind" @updateAudioMode="(a) => (this.audioMode = a)"
-              @updateSpeed="(s) => (speed = s)" @toggleFullscreenMode="toggleFullscreenMode"
-              @updateRepeatMode="(r) => (this.repeatMode = r)" @goToPreviousLine="$refs.transcript.goToPreviousLine()"
-              @goToNextLine="$refs.transcript.goToNextLine()" />
+            <YouTubeVideo
+              ref="youtube"
+              @paused="updatePaused"
+              @currentTime="updateCurrentTime"
+              @ended="updateEnded"
+              @duration="updateDuration"
+              :speed="speed"
+              :youtube="video.youtube_id"
+              :starttime="start"
+              :autoload="autoload"
+              :autoplay="autoplay"
+              :startAtRandomTime="startAtRandomTime"
+            />
+            <VideoControls
+              v-if="video"
+              :video="showControls && video"
+              :paused="paused"
+              :layout="layout"
+              :showFullscreenToggle="showFullscreenToggle"
+              :showLineList="showLineList"
+              :showCollapse="false"
+              ref="videoControls"
+              @goToLine="goToLine"
+              @updateCollapsed="(c) => (this.collapsed = c)"
+              @togglePaused="togglePaused"
+              @rewind="rewind"
+              @updateAudioMode="(a) => (this.audioMode = a)"
+              @updateSpeed="(s) => (speed = s)"
+              @toggleFullscreenMode="toggleFullscreenMode"
+              @updateRepeatMode="(r) => (this.repeatMode = r)"
+              @goToPreviousLine="$refs.transcript.goToPreviousLine()"
+              @goToNextLine="$refs.transcript.goToNextLine()"
+            />
           </div>
         </div>
       </div>
       <div class="row" v-if="video.subs_l2 && video.subs_l2.length > 0">
-        <div :key="'transcript-' + video.youtube_id" class="col-sm-12 text-center mt-2 synced-transcript-wrapper"
-          style="min-height: 65px">
-          <SyncedTranscript ref="transcript" :lines="video.subs_l2" :parallellines="video.subs_l1" :single="true"
-            :quiz="false" :highlight="highlight" :hsk="hsk" :highlight-saved-words="false"
-            :startLineIndex="startLineIndex" :stopLineIndex="stopLineIndex" :sticky="sticky" :notes="video.notes"
-            :skin="skin" @seek="seekYouTube" @pause="pause" @play="play" @speechStart="speechStart"
-            @speechEnd="speechEnd" />
+        <div
+          :key="'transcript-' + video.youtube_id"
+          class="col-sm-12 text-center mt-2 synced-transcript-wrapper"
+          style="min-height: 65px"
+        >
+          <SyncedTranscript
+            ref="transcript"
+            :lines="video.subs_l2"
+            :parallellines="video.subs_l1"
+            :single="true"
+            :quiz="false"
+            :highlight="highlight"
+            :hsk="hsk"
+            :highlight-saved-words="false"
+            :startLineIndex="startLineIndex"
+            :stopLineIndex="stopLineIndex"
+            :sticky="sticky"
+            :notes="video.notes"
+            :skin="skin"
+            @seek="seekYouTube"
+            @pause="pause"
+            @play="play"
+            @speechStart="speechStart"
+            @speechEnd="speechEnd"
+          />
         </div>
       </div>
     </template>
@@ -297,10 +357,10 @@ export default {
     start() {
       let starttime =
         this.video.subs_l2 &&
-          this.video.subs_l2.length > 0 &&
-          this.startLineIndex &&
-          this.video.subs_l2 &&
-          this.video.subs_l2[this.startLineIndex]
+        this.video.subs_l2.length > 0 &&
+        this.startLineIndex &&
+        this.video.subs_l2 &&
+        this.video.subs_l2[this.startLineIndex]
           ? this.video.subs_l2[this.startLineIndex].starttime
           : this.starttime;
       return starttime;
@@ -314,10 +374,6 @@ export default {
       let landscape =
         typeof window !== "undefined" && window.innerWidth > window.innerHeight;
       return landscape;
-    },
-    randomEpisodeYouTubeId() {
-      let episode = Helper.randomArrayItem(this.episodes);
-      return episode.youtube_id;
     },
   },
   async mounted() {
@@ -362,7 +418,11 @@ export default {
         console.log(
           `YouTube with Transcript: Getting available transcripts...`
         );
-        video = await YouTube.getYouTubeSubsListAndAddLocale(video, this.$l1, this.$l2);
+        video = await YouTube.getYouTubeSubsListAndAddLocale(
+          video,
+          this.$l1,
+          this.$l2
+        );
         console.log(
           `YouTube with Transcript: Getting ${this.$l1.name} transcript`
         );
@@ -594,7 +654,6 @@ export default {
 }
 
 .youtube-with-transcript-landscape {
-
   .youtube-video-column,
   .youtube-transcript-column {
     flex: 1;
