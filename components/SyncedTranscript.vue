@@ -292,13 +292,13 @@ export default {
       window.addEventListener("wheel", this.cancelSmoothScroll);
       window.addEventListener("touchstart", this.cancelSmoothScroll);
     }
-    $nuxt.$on("popupOpened", () => {
+    this.$nuxt.$on("popupOpened", () => {
       if (!this.paused) {
         this.pause();
         this.pausedOnPopupOpen = true;
       }
     });
-    $nuxt.$on("popupClosed", () => {
+    this.$nuxt.$on("popupClosed", () => {
       if (this.pausedOnPopupOpen) {
         this.pausedOnPopupOpen = false;
         this.play();
