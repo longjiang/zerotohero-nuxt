@@ -768,7 +768,7 @@ const Dictionary = {
       text,
       subdict
     )
-    this.tokenizationCache[text] = tokenized
+    if (['tur'].includes(this.l2)) this.tokenizationCache[text] = tokenized
     return tokenized
   },
   async tokenizeTurkish(text) {
