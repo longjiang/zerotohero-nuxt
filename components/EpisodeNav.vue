@@ -5,7 +5,11 @@
     style="
       border-radius: 0.2rem;
       border: 1px solid #ffffff33;
-      padding: 0.3rem 0 0.3rem 0;
+      padding: 0.3rem;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
     "
   >
     <router-link
@@ -14,7 +18,7 @@
       :class="{
         'btn btn-medium': true,
         'btn-primary': skin === 'light',
-        'btn-black text-white': skin === 'dark',
+        'btn-black': skin === 'dark',
       }"
     >
       <i class="fa fa-step-backward"></i>
@@ -27,27 +31,27 @@
       :class="{
         'btn btn-medium': true,
         'btn-primary': skin === 'light',
-        'btn-black text-white': skin === 'dark',
+        'btn-black': skin === 'dark',
       }"
+      style="
+        flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: inline-block;
+        white-space: nowrap;
+        padding-left: 0;
+      "
     >
-      <i class="fas fa-stream mr-1"></i>
-      <span
-        style="
-          max-width: 8rem;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          display: inline-block;
-          white-space: nowrap;
-          line-height: 1;
-          position: relative;
-          bottom: -0.1rem;
-        "
-      >
-        {{ show.title }}
-      </span>
-      <span v-if="episodes && episodes.length">
-        ({{ episodeIndex + 1 }} of {{ episodes.length }})
-      </span>
+      {{ show.title }}
+    </router-link>
+    <router-link
+      v-if="episodes && episodes.length && show"
+      :to="`/${$l1.code}/${$l2.code}/show/${
+        showType === 'tv_show' ? 'tv-show' : 'talk'
+      }/${show.id}`"
+      class="small pr-2"
+    >
+      {{ episodeIndex + 1 }} / {{ episodes.length }}
     </router-link>
     <router-link
       v-if="nextEpisode"
@@ -55,7 +59,7 @@
       :class="{
         'btn btn-medium': true,
         'btn-primary': skin === 'light',
-        'btn-black text-white': skin === 'dark',
+        'btn-black': skin === 'dark',
       }"
     >
       <i class="fa fa-step-forward"></i>
@@ -66,7 +70,7 @@
       :class="{
         'btn btn-medium': true,
         'bg-secondary': skin === 'light',
-        'btn-black text-white': skin === 'dark',
+        'btn-black': skin === 'dark',
       }"
     >
       <i class="fa fa-random"></i>
@@ -75,7 +79,7 @@
 </template>
 
 <script>
-import Helper from '@/lib/helper'
+import Helper from "@/lib/helper";
 export default {
   props: {
     video: {
@@ -94,7 +98,7 @@ export default {
       type: Array,
     },
     show: {
-      type: Object
+      type: Object,
     },
     showType: {
       type: String,
@@ -105,8 +109,8 @@ export default {
   },
   data() {
     return {
-      videoInfoKey: 0
-    }
+      videoInfoKey: 0,
+    };
   },
   computed: {
     $l1() {
@@ -125,5 +129,8 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+a {
+  color: #999;
+}
 </style>
