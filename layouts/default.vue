@@ -1,5 +1,9 @@
 <template>
-  <div id="zerotohero" :class="classes" :style="`background-image: url(${background})`">
+  <div
+    id="zerotohero"
+    :class="classes"
+    :style="`background-image: url(${background})`"
+  >
     <div
       class="zerotohero-background"
       :style="`background-image: url(${background})`"
@@ -8,22 +12,26 @@
       <Nuxt id="main" />
     </template>
     <template v-else>
-      <SiteTopBar v-if="!wide && $route.params.l1 && $route.params.l1 && l1 && l2" variant="menu-bar" />
-      <client-only>
-        <Nav
-          v-if="$route.params.l1 && $route.params.l1 && l1 && l2"
-          class="zth-nav-wrapper"
-          :l1="l1"
-          :l2="l2"
-          :key="`nav-${l1.code}-${l2.code}`"
-          :variant="wide ? 'side-bar' : 'menu-bar'"
-          :skin="$route.meta.skin ? $route.meta.skin : 'light'"
-          :fullHistory="fullHistory"
-          @collapsed="updateCollapsed"
-        />
-      </client-only>
+      <SiteTopBar
+        v-if="!wide && $route.params.l1 && $route.params.l1 && l1 && l2"
+        variant="menu-bar"
+      />
+
+      <Nav
+        v-if="$route.params.l1 && $route.params.l1 && l1 && l2"
+        class="zth-nav-wrapper"
+        :l1="l1"
+        :l2="l2"
+        :key="`nav-${l1.code}-${l2.code}`"
+        :variant="wide ? 'side-bar' : 'menu-bar'"
+        :skin="$route.meta.skin ? $route.meta.skin : 'light'"
+        :fullHistory="fullHistory"
+        @collapsed="updateCollapsed"
+      />
       <div class="zth-content">
-        <div class="splash text-white text-center" v-if="!l1 && !l2">zerotohero.ca</div>
+        <div class="splash text-white text-center" v-if="!l1 && !l2">
+          zerotohero.ca
+        </div>
         <Nuxt id="main" />
       </div>
       <LazyFooter :dictionaryCredit="dictionaryCredit" class="zth-footer" />
