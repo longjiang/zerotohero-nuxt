@@ -2,7 +2,6 @@
   <div
     id="zerotohero"
     :class="classes"
-    :style="`background-image: url(${background})`"
   >
     <div
       class="zerotohero-background"
