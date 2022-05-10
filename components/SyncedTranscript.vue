@@ -292,18 +292,7 @@ export default {
       window.addEventListener("wheel", this.cancelSmoothScroll);
       window.addEventListener("touchstart", this.cancelSmoothScroll);
     }
-    this.$nuxt.$on("popupOpened", () => {
-      if (!this.paused) {
-        this.pause();
-        this.pausedOnPopupOpen = true;
-      }
-    });
-    this.$nuxt.$on("popupClosed", () => {
-      if (this.pausedOnPopupOpen) {
-        this.pausedOnPopupOpen = false;
-        this.play();
-      }
-    });
+    this.attachPopupEventListeners()
   },
   beforeDestroy() {
     if (this.unsubscribe) this.unsubscribe();
@@ -311,6 +300,8 @@ export default {
       window.removeEventListener("wheel", this.cancelSmoothScroll);
       window.removeEventListener("touchstart", this.cancelSmoothScroll);
     }
+    this.$nuxt.$off("popupOpened")
+    this.$nuxt.$off("popupClosed")
   },
   watch: {
     async paused() {
@@ -380,6 +371,21 @@ export default {
     },
     pause() {
       this.$emit("pause");
+    },
+    /* Stop video when popup is open, and resume when popup closes */
+    attachPopupEventListeners() {
+      this.$nuxt.$on("popupOpened", () => {
+        if (!this.paused) {
+          this.pause();
+          this.pausedOnPopupOpen = true;
+        }
+      });
+      this.$nuxt.$on("popupClosed", () => {
+        if (this.pausedOnPopupOpen) {
+          this.pausedOnPopupOpen = false;
+          this.play();
+        }
+      });
     },
     cancelSmoothScroll() {
       let id = window.requestAnimationFrame(function () {});
