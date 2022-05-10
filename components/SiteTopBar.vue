@@ -88,7 +88,7 @@
             <i class="fas fa-sync-alt"></i>
           </button>
           <LoginButton
-            :class="`${$l2 && params.lg ? 'd-inline-block' : 'd-none'}`"
+            :class="`${$l2 && params.xxlg ? 'd-inline-block' : 'd-none'}`"
             :icon="true"
             :text="false"
             style="color: #ddd"
@@ -119,6 +119,9 @@ export default {
         },
         xlg: {
           minWidth: 350,
+        },
+        xxlg: {
+          minWidth: 370,
         },
       },
     };
