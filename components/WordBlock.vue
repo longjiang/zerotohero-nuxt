@@ -328,7 +328,7 @@
           :sticky="false"
           class="mt-2"
         />
-        <div v-if="loading === true">💭 Thinking...</div>
+        <div v-if="loading === true"><Loader :sticky="true" :message="`Looking up “${this.text}” in the dictionary...`" /></div>
         <div
           v-if="words && words.length === 0 && loading === false"
           class="mt-3"
