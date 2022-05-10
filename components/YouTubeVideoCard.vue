@@ -726,7 +726,7 @@ export default {
   }
   &.youtube-video-card-wrapper-dark {
     .youtube-thumbnail-wrapper {
-      box-shadow: 0 5px 25px #fd89662f;
+      box-shadow: 0 -1px 1px #ffffff69;
     }
     .media-body {
       color: hsla(0deg 0% 100% / 75%);

@@ -166,7 +166,7 @@ export default {
 <style lang="scss" scoped>
 .tv-show-card {
   height: 100%;
-  box-shadow: 0 5px 25px #fd89662f;
+  box-shadow: 0 -1px 1px #ffffff69;
   border-radius: 0.25rem;
   &.tv-show-card-hidden {
     opacity: 0.3;

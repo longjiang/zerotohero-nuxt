@@ -27,29 +27,43 @@
           " />
           <div v-if="videos && videos.length > 0">
             <h3 class="text-center mt-3 mb-4">
-              Videos <router-link :to="{ name: 'youtube-browse' }" class="show-all">Show All <i class=" fas
+              Videos <router-link :to="{ name: 'youtube-browse' }" class="show-all">More <i class=" fas
                 fa-chevron-right ml-1"></i></router-link>
             </h3>
             <YouTubeVideoList :videos="randomVideos" :showAdminToolsInAdminMode="false" skin="dark" />
           </div>
           <div v-if="videos && movies && movies.length > 0">
-            <h3 class="text-center mt-5 mb-4">
+            <h3 class="text-center mt-5 mb-5">
               Movies <router-link :to="{ name: 'show', params: { type: 'tv-show', id: moviesShow.id } }"
-                class="show-all">Show All <i class=" fas
+                class="show-all">More <i class=" fas
                 fa-chevron-right ml-1"></i></router-link>
             </h3>
-            <YouTubeVideoList :videos="random(movies).slice(0, 4)" :showAdminToolsInAdminMode="false" skin="dark" />
+            <YouTubeVideoList :videos="random(movies).slice(0, 12)" :showAdminToolsInAdminMode="false" skin="dark" />
+          </div>
+          <div v-if="videos && music && music.length > 0">
+            <h3 class="text-center mt-5 mb-5">
+              Music <router-link :to="{ name: 'show', params: { type: 'tv-show', id: musicShow.id } }" class="show-all">More <i class=" fas
+                fa-chevron-right ml-1"></i></router-link>
+            </h3>
+            <YouTubeVideoList :videos="random(music).slice(0, 12)" :showAdminToolsInAdminMode="false" skin="dark" />
+          </div>
+          <div v-if="videos && news && news.length > 0">
+            <h3 class="text-center mt-5 mb-5">
+              News <router-link :to="{ name: 'show', params: { type: 'talk', id: newsShow.id } }" class="show-all">More <i class=" fas
+                fa-chevron-right ml-1"></i></router-link>
+            </h3>
+            <YouTubeVideoList :videos="random(news).slice(0, 12)" :showAdminToolsInAdminMode="false" skin="dark" />
           </div>
           <div v-if="videos && tvShows && tvShows.length > 0">
-            <h3 class="text-center mt-5 mb-4">
-              TV Shows <router-link :to="{ name: 'tv-shows' }" class="show-all">Show All <i class=" fas
+            <h3 class="text-center mt-5 mb-5">
+              TV Shows <router-link :to="{ name: 'tv-shows' }" class="show-all">More <i class=" fas
                 fa-chevron-right ml-1"></i></router-link>
             </h3>
             <ShowList :shows="random(tvShows.filter(s => !['Movies', 'Music'].includes(s.title)), 6)" type="tvShows" :key="`tv-shows`" />
           </div>
           <div v-if="videos && talks && talks.length > 0">
-            <h3 class="text-center mt-5 mb-4">
-              YouTube<router-link :to="{ name: 'talks' }" class="show-all">Show All <i class=" fas
+            <h3 class="text-center mt-5 mb-5">
+              YouTube<router-link :to="{ name: 'talks' }" class="show-all">More <i class=" fas
                 fa-chevron-right ml-1"></i></router-link>
             </h3>
             <ShowList :shows="random(talks.filter(s => !['News'].includes(s.title) && !s.audiobook), 6)" type="talks" :key="`tv-shows`" />
@@ -57,25 +71,11 @@
             </div>
           </div>
           <div v-if="videos && talks && talks.length > 0 && audiobooks.length > 0">
-            <h3 class="text-center mt-5 mb-4">
-              Audiobooks <router-link :to="{ name: 'audiobooks' }" class="show-all">Show All <i class=" fas
+            <h3 class="text-center mt-5 mb-5">
+              Audiobooks <router-link :to="{ name: 'audiobooks' }" class="show-all">More <i class=" fas
                 fa-chevron-right ml-1"></i></router-link>
             </h3>
             <ShowList :shows="random(audiobooks, 6)" type="talks" :key="`tv-shows`" />
-          </div>
-          <div v-if="videos && music && music.length > 0">
-            <h3 class="text-center mt-5 mb-4">
-              Music <router-link :to="{ name: 'show', params: { type: 'tv-show', id: musicShow.id } }" class="show-all">Show All <i class=" fas
-                fa-chevron-right ml-1"></i></router-link>
-            </h3>
-            <YouTubeVideoList :videos="random(music).slice(0, 4)" :showAdminToolsInAdminMode="false" skin="dark" />
-          </div>
-          <div v-if="videos && news && news.length > 0">
-            <h3 class="text-center mt-5 mb-4">
-              News <router-link :to="{ name: 'show', params: { type: 'talk', id: newsShow.id } }" class="show-all">Show All <i class=" fas
-                fa-chevron-right ml-1"></i></router-link>
-            </h3>
-            <YouTubeVideoList :videos="random(news).slice(0, 4)" :showAdminToolsInAdminMode="false" skin="dark" />
           </div>
           <div
             :class="{
@@ -122,7 +122,7 @@ export default {
       }
     });
     if (!this.videos || this.videos.length === 0) this.videos = await this.getVideos({ limit: 50, sort: 'youtube_id' })
-    this.randomVideos = this.videos.slice(0, 8)
+    this.randomVideos = this.videos.slice(0, 12)
   },
   beforeDestroy() {
     // you may call unsubscribe to stop the subscription
@@ -241,5 +241,6 @@ h3 {
   right: 0;
   top: 0.3em;
   display: block;
+  color: #28a745;
 }
 </style>

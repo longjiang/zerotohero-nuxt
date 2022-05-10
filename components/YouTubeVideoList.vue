@@ -319,12 +319,6 @@ export default {
           return false;
         return true;
       });
-      if (this.isLocalHost()) {
-        filteredVideos = filteredVideos.filter((video) => {
-          if (!this.$adminMode && video.unavailable) return false;
-          return true;
-        });
-      }
       return filteredVideos;
     },
     shownVideos() {
