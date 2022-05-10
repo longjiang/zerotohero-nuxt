@@ -103,9 +103,9 @@
     </span>
     <template slot="popover">
       <div @mouseenter="tooltipMouseEnter" @mouseleave="tooltipMouseLeave">
-        <!-- <button class="word-block-tool-tip-close" @click="closePopup">
+        <button class="word-block-tool-tip-close" @click="closePopup">
           <i class="fa fa-times"></i>
-        </button> -->
+        </button>
         <div
           class="tooltip-images"
           :key="`tooltip-images-${text}`"
@@ -534,7 +534,7 @@ export default {
       if ((this.words && this.words.length === 0) || this.lastLookupWasQuick) {
         this.lookup();
       }
-      await Helper.timeout(Helper.isMobile() ? 100 : 750);
+      await Helper.timeout(300);
       this.updateOpen();
     },
     async tooltipHover() {
@@ -1153,20 +1153,16 @@ export default {
 
   .word-block-tool-tip-close {
     border-radius: 100%;
-    background: white;
-    color: #ccc;
+    background: #28a745;
+    color: white;
     border: none;
     position: fixed;
     top: 0.5rem;
-    left: 0.5rem;
+    right: 0.5rem;
     height: 1.5rem;
     width: 1.5rem;
     padding: 0;
     z-index: 10;
-
-    &:hover {
-      background: rgba(0, 0, 0, 0.4);
-    }
   }
 
   .tooltip-arrow {
