@@ -875,6 +875,9 @@ export default {
       animation-duration: 2s;
       animation-timing-function: ease-in-out;
     }
+    &.saved.animate {
+      animation-name: shinesaved;
+    }
   }
 }
 
@@ -887,6 +890,18 @@ export default {
   }
   100% {
     color: #ccc;
+  }
+}
+
+@keyframes shinesaved {
+  0% {
+    color: #28a745;
+  }
+  10% {
+    color: #54ff7c;
+  }
+  100% {
+    color: #28a745;
   }
 }
 
