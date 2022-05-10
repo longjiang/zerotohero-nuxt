@@ -4,7 +4,7 @@
   }
 </router>
 <template>
-  <div class="home">
+  <div class="home main-dark" >
     <SocialHead
       :title="`${$l2.name} Zero to Hero`"
       :description="`Learn ${$l2.name} language from zero to fluency with ${
@@ -153,11 +153,7 @@ export default {
   .home {
     padding-left: 2rem;
     padding-right: 2rem;
-  }
-}
-#zerotohero:not(.zerotohero-wide) {
-  .home {
-    background-color: #110701;
+    background: rgba(0,0,0,0.7);
   }
 }
 .home-card {

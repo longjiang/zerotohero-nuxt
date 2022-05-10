@@ -19,16 +19,21 @@
           </span>
           <router-link to="/" class="link-unstyled">
             <img
-              v-if="params.sm"
+              :class="`site-top-bar-logo ${
+                params.sm === false ? 'd-none' : ''
+              }`"
               src="/img/czh-icon.png"
               style="height: 1.5rem; margin-right: 0.25rem"
+              data-not-lazy
             />
-            <b :class="`text-white`" v-if="params.xlg">
+            <b :class="`text-white ${params.xlg === false ? 'd-none' : ''}`">
               zerotohero.ca
             </b>
           </router-link>
           <router-link
-            v-if="$l2 && params.sm"
+            :class="`text-white ${
+              !$route.params.l2 || params.sm === false ? 'd-none' : ''
+            }`"
             :to="{ name: 'home' }"
             class="link-unstyled language-flag-and-name"
           >
@@ -41,44 +46,49 @@
                 margin-right: 0.15rem;
               "
             ></i>
-            <span style="font-weight: bold; color: white">{{ $l2.code }}</span>
-            <span v-if="flagIcon">{{ flagIcon }}</span>
+            <span style="font-weight: bold; color: white">{{
+              $route.params.l2
+            }}</span>
+            <span :class="`flagIcon ${!flagIcon ? 'd-none' : ''}`">{{
+              flagIcon
+            }}</span>
           </router-link>
         </div>
         <div>
-          <AnnotationSettings
-            v-if="$l2 && params.lg"
-            variant="toolbar"
-            style="position: relative; bottom: -0.1rem"
-          />
+          <client-only
+            ><AnnotationSettings
+              v-if="$l2 && params.lg"
+              variant="toolbar"
+              style="position: relative; bottom: -0.1rem"
+          /></client-only>
           <router-link
             :to="languageMapPath"
-            class="btn top-bar-button btn-unstyled link-unstyled"
-            v-if="params.md"
+            :class="`btn top-bar-button btn-unstyled link-unstyled ${
+              params.md === false ? 'd-none' : ''
+            }`"
           >
             <i class="fas fa-globe-asia"></i>
           </router-link>
           <button
-            :class="[
-              'btn top-bar-button btn-unstyled',
-            ]"
+            :class="`btn top-bar-button btn-unstyled ${
+              isPWA && canShare() && params.lg ? '' : 'd-none'
+            }`"
             @click="share"
             style="color: #ccc"
-            v-if="isPWA && canShare() && params.lg"
           >
             <i class="fa fa-share"></i>
           </button>
           <button
-            :class="['btn top-bar-button btn-unstyled']"
+            :class="`btn top-bar-button btn-unstyled ${
+              isPWA && params.lg ? '' : 'd-none'
+            }`"
             @click="reload"
             style="color: #ccc"
-            v-if="isPWA && params.lg"
           >
             <i class="fas fa-sync-alt"></i>
           </button>
           <LoginButton
-            v-if="$l2 && params.lg"
-            class="d-inline-block"
+            :class="`d-inline-block ${$l2 && params.lg ? '' : 'd-none'}`"
             :icon="true"
             :text="false"
             style="color: #ddd"
@@ -153,11 +163,11 @@ export default {
   },
   methods: {
     backgroundClick() {
-      if (this.variant === 'menu-bar') this.scrollToTop()
+      if (this.variant === "menu-bar") this.scrollToTop();
     },
     collapseClick() {
-      if (this.variant === 'side-bar') this.toggleCollapsed()
-      else this.scrollToTop()
+      if (this.variant === "side-bar") this.toggleCollapsed();
+      else this.scrollToTop();
     },
     toggleCollapsed() {
       this.$emit("toggleCollapsed");

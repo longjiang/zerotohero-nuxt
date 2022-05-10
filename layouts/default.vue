@@ -8,8 +8,8 @@
       <Nuxt id="main" />
     </template>
     <template v-else>
+      <SiteTopBar v-if="!wide && $route.params.l1 && $route.params.l1 && l1 && l2" variant="menu-bar" />
       <client-only>
-        <SiteTopBar v-if="!wide && $route.params.l1 && $route.params.l1 && l1 && l2" variant="menu-bar" />
         <Nav
           v-if="$route.params.l1 && $route.params.l1 && l1 && l2"
           class="zth-nav-wrapper"
@@ -23,6 +23,7 @@
         />
       </client-only>
       <div class="zth-content">
+        <div class="splash text-white text-center" v-if="!l1 && !l2">zerotohero.ca</div>
         <Nuxt id="main" />
       </div>
       <LazyFooter :dictionaryCredit="dictionaryCredit" class="zth-footer" />
@@ -242,6 +243,7 @@ export default {
 
 .zth-content {
   min-height: 100vh;
+  background-color: black;
 }
 
 .zerotohero-wide {
