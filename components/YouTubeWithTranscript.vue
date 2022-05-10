@@ -290,6 +290,8 @@ export default {
       layout: this.initialLayout,
       collapsed: false,
       duration: undefined,
+      viewportWidth: undefined,
+      viewportHeight: undefined
     };
   },
   computed: {
@@ -318,10 +320,19 @@ export default {
     },
     landscape() {
       if (this.forcePortrait) return false;
-      let landscape =
-        typeof window !== "undefined" && window.innerWidth > window.innerHeight;
-      return landscape;
+      if (process.browser && this.viewportWidth && this.viewportHeight) {
+        let landscape = this.viewportWidth > this.viewportHeight;
+        return landscape;
+      }
     },
+  },
+  created() {
+    if (process.browser) {
+      window.addEventListener("resize", this.updateLayout);
+    }
+  },
+  destroyed() {
+    window.removeEventListener("resize", this.updateLayout);
   },
   async mounted() {
     await this.getL1Transcript();
@@ -334,6 +345,9 @@ export default {
     if (this.$refs.youtube) this.$refs.youtube.speed = this.speed;
   },
   watch: {
+    viewportWidth() {
+      this.landscape
+    },
     async "video.youtube_id"() {
       await this.getL1Transcript();
     },
@@ -356,6 +370,10 @@ export default {
     },
   },
   methods: {
+    updateLayout() {
+      this.viewportWidth = this.$el.clientWidth
+      this.viewportHeight = window.innerHeight
+    },
     async getL1Transcript() {
       if (this.$l2.code === this.$l1.code) return;
       let video = this.video;
