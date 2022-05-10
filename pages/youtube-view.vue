@@ -304,7 +304,8 @@ export default {
     },
     async loadSubsIfMissing(video) {
       try {
-        video = this.checkSubsAndAddLocalesIfNeeded(video);
+        video = await this.checkSubsAndAddLocalesIfNeeded(video);
+        console.log(video)
         if (!video.subs_l2 || video.subs_l2.length === 0) {
           video = await this.getTranscript(video);
         }
