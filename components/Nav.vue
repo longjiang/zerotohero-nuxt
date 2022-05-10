@@ -164,6 +164,7 @@ export default {
   },
   mounted() {
     this.bindKeys();
+    if (this.variant === 'side-bar') this.$emit('collapsed', this.collapsed)
   },
   created() {
     this.checkShows();

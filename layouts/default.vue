@@ -145,9 +145,6 @@ export default {
     },
   },
   methods: {
-    toggleCollapsed() {
-
-    },
     updateCollapsed(collapsed) {
       this.collapsed = collapsed;
     },
