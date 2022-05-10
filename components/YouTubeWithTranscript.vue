@@ -1,7 +1,7 @@
 <template>
   <div
     :class="{
-      'container-fluid youtube-with-transcript': true,
+      'youtube-with-transcript': true,
     }"
   >
     <div
@@ -608,8 +608,6 @@ export default {
 
 .youtube-with-transcript-horizontal-landscape {
   display: flex;
-  margin-left: -15px;
-  margin-right: -15px;
   .youtube-video-column,
   .youtube-transcript-column {
     flex: 1;
