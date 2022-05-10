@@ -447,7 +447,7 @@ const Dictionary = {
     `(inflected form, see <a href="https://en.wiktionary.org/wiki/${item.word}" target="_blank">Wiktionary</a> for details)`
   },
   exportCSV() {
-    console.log('Exporting CSV...')
+    console.log('Wiktionary: Exporting CSV...')
     let csv = Papa.unparse(this.words.map(item => {
       let word = {
         word: item.head,

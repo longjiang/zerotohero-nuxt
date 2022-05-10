@@ -9,9 +9,15 @@
       <div class="row">
         <div class="col-sm-12">
           <div v-if="href">
-            CSV Ready.
+            Wiktionary CSV Ready.
             <a :href="href" :download="`${$l2['iso639-3']}-eng.csv.txt`">
-              Download
+              Download Wiktionary CSV
+            </a>
+          </div>
+          <div v-if="languagesHref">
+            Languages CSV Ready.
+            <a :href="languagesHref" :download="`common-languages.csv.txt`">
+              Download Languages CSV
             </a>
           </div>
           <div v-else>Preparing CSV...</div>
@@ -34,16 +40,24 @@ export default {
   data() {
     return {
       href: undefined,
+      languagesHref: undefined
     };
   },
   async mounted() {
-    this.testWiktionaryCSVExport();
+    this.languageCSVExport();
+    this.wiktionaryCSVExport();
   },
   methods: {
-    async testWiktionaryCSVExport() {
+    async wiktionaryCSVExport() {
       let dictionary = await this.$getDictionary();
-      let csv = await (await dictionary).exportCSV();
-      this.href = Helper.makeTextFile(csv);
+      if ((await dictionary).exportCSV) {
+        let csv = await (await dictionary).exportCSV();
+        this.href = Helper.makeTextFile(csv);
+      }
+    },
+    async languageCSVExport() {
+      let csv = await this.$languages.exportCSV();
+      this.languagesHref = Helper.makeTextFile(csv);
     },
   },
 };
