@@ -285,14 +285,15 @@ const Dictionary = {
       let res = await axios.get(
         `https://server.chinesezerotohero.com/scrape2.php?&cache_life=-1&url=${encodeURIComponent(
           "http://py.zerotohero.ca:4567/tokenize?text=" +
-            text.replace(/\s/g, "%20")
+            text.replace(/\s/g, "%20"),
+          { timeout: 5000 }
         )}`
       );
       if (res.data) {
         return res.data.tokens;
       }
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
   },
   isHangul(text) {
