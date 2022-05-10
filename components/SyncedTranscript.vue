@@ -733,25 +733,30 @@ export default {
             left: 0,
           });
         } else {
-          if (navigator.hardwareConcurrency >= 4) {
-            let duration =
-              this.currentLine && this.nextLine
-                ? Math.min(
-                    (this.nextLine.starttime - this.currentLine.starttime) *
-                      1000,
-                    lastDuration,
-                    3000
-                  )
-                : 3000;
-            this.$smoothScroll({
-              scrollTo: el,
-              updateHistory: false,
-              offset,
-              duration,
-              left: 0,
-              easingFunction: (t) => t,
-            });
-          }
+          window.scrollTo({
+            top,
+            left: 0,
+            behavior: 'smooth'
+          });
+          // if (navigator.hardwareConcurrency >= 4) {
+          //   let duration =
+          //     this.currentLine && this.nextLine
+          //       ? Math.min(
+          //           (this.nextLine.starttime - this.currentLine.starttime) *
+          //             1000,
+          //           lastDuration,
+          //           3000
+          //         )
+          //       : 3000;
+          //   this.$smoothScroll({
+          //     scrollTo: el,
+          //     updateHistory: false,
+          //     offset,
+          //     duration,
+          //     left: 0,
+          //     easingFunction: (t) => t,
+          //   });
+          // }
         }
       }
     },
