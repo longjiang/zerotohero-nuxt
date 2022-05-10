@@ -248,6 +248,9 @@ export default {
     },
     showAdminToolsInAdminMode: {
       default: true
+    },
+    hideVideosWithoutSubsProp: {
+      default: false
     }
   },
 
@@ -260,7 +263,7 @@ export default {
       checkSubsData: this.checkSubs,
       generated: false,
       hideVideosInShows: false,
-      hideVideosWithoutSubs: false,
+      hideVideosWithoutSubs: this.hideVideosWithoutSubsProp,
       keyword: undefined,
       over: false,
       params: {},

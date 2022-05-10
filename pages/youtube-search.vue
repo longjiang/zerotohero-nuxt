@@ -3,24 +3,24 @@
     path: '/:l1/:l2/youtube/search/:term?/:start?',
     props: true,
     meta: {
-      title: 'YouTube Reader | Zero to Hero',
+      title: 'Search Media Library | Zero to Hero',
       metaTags: [
         {
           name: 'description',
-          content: 'Watch YouTube videos and study the subtitles.'
+          content: 'Search our media library and on YouTube for videos with subtitles.'
         }
-      ]
+      ],
+      skin: 'dark'
     }
   }
 </router>
 <template>
-  <div class="main">
+  <div class="main main-dark">
     <div class="container pt-5 pb-5 youtube-search">
-      <h3 class="text-center mb-5">
-        Search YouTube for videos with {{ $l2.name }} CC
-      </h3>
+      <h3 class="text-center mb-5">Search {{ $l2.name }} Videos</h3>
       <SimpleSearch
         :placeholder="$t('Enter a search term in {l2}...', { l2: $l2.name })"
+        skin="dark"
         :action="
           (url) => {
             let path = `/${$l1.code}/${
@@ -76,6 +76,13 @@
           </b-button>
         </b-form-group>
       </client-only>
+      <MediaSearchResults :keyword="term" />
+      <h4 class="text-center mt-5">More from YouTube</h4>
+      <p class="text-center mb-5">Videos without {{ $l2.name }} subs are dimmed out.</p>
+      <LazyIdenticalLanguages
+        class="mb-4 bg-success"
+        routeName="youtube-browse"
+      />
       <YouTubeSearchResults
         :term="term"
         :start="start"
@@ -85,10 +92,22 @@
         :long="long"
         :infinite="true"
         :showProgress="false"
+        skin="dark"
         ref="youtubeSearchResults"
       />
+      <client-only>
+        <Nav
+          :l1="$l1"
+          :l2="$l2"
+          variant="page"
+          class="youtube-browse-nav"
+          :showOnly="['Media']"
+        />
+      </client-only>
       <LazyIdenticalLanguages routeName="youtube-search" />
-      <h4 class="mt-5 text-center">You can help to expand this {{ $l2.name }} video library!</h4>
+      <h4 class="mt-5 text-center">
+        You can help to expand this {{ $l2.name }} video library!
+      </h4>
       <LazyHowToContribute />
     </div>
   </div>

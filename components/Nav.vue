@@ -343,7 +343,7 @@ export default {
             },
             {
               name: "youtube-search",
-              title: `Search YouTube`,
+              title: `Search`,
               icon: "fas fa-search",
               show: true,
             },

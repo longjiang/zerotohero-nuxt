@@ -9,6 +9,7 @@
       :hideVideosWithoutSubsProp="hideVideosWithoutSubs"
       :showBadges="true"
       :showProgress="false"
+      :skin="skin"
     />
     <div v-if="infinite && !noMoreVideos" v-observe-visibility="infinite ? visibilityChanged : undefined"></div>
     <div v-if="term && infinite && noMoreVideos" class="text-center mt-4">
@@ -82,6 +83,9 @@ export default {
     },
     showPaginator: {
       default: true
+    },
+    skin: {
+      default: 'light'
     }
   },
   data() {
