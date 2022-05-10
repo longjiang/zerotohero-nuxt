@@ -630,7 +630,7 @@ export default {
   max-width: calc((100vh - 10rem) * 16 / 9);
   margin: 0 auto;
   position: sticky;
-  top: 46px;
+  top: 2.9rem;
 }
 
 .zerotohero-wide {
@@ -647,7 +647,7 @@ export default {
 
 #zerotohero:not(.zerotohero-wide) {
   .youtube-video-column {
-    top: 46px;
+    top: 2.9rem;
   }
 }
 

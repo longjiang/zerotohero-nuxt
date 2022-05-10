@@ -14,7 +14,7 @@
     <SiteTopBar />
     <div class="container-fluid">
       <div class="row">
-        <div class="col-12 loader-wrapper" style="height: calc(100vh - 43px); padding: 0">
+        <div class="col-12 loader-wrapper" style="height: calc(100vh - 2.925rem); padding: 0">
           <LazyDiscoverPlayer v-if="randomShows" routeType="tv-shows" :shows="randomShows" style="flex: 1" />
         </div>
       </div>

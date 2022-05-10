@@ -22,46 +22,60 @@
         <i class="fa fa-trash"></i>
       </b-button>
     </div>
-    <div
-      style="
-        width: 1.5rem;
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-      "
-      v-if="!single && $l2.direction !== 'rtl'"
-    >
-      <div class="dot" v-if="current"></div>
-    </div>
     <div style="flex: 1">
-      <Annotate
-        tag="div"
-        ref="annotate"
-        :sticky="sticky"
-        :class="{
-          'transcript-line-l2': true,
-          'text-center': single,
-          'pr-3': single && $l2.direction === 'rtl',
-          'pl-3': single && $l2.direction !== 'rtl',
-          annotated: annotated,
-        }"
-        :buttons="true"
-        :animationDuration="duration"
-        :translation="parallelLine"
-        :delay="single ? false : 123"
-        v-if="!showSubsEditing"
-        @textChanged="lineChanged(line, ...arguments)"
-        @annotated="annotated = true"
-      >
-        <span v-html="lineHtml(line).trim()" />
-      </Annotate>
-      <div v-else v-html="lineHtml(line)" />
+      <div style="display: flex;">
+        <div
+          style="
+            width: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+          "
+          v-if="!single && $l2.direction !== 'rtl'"
+        >
+          <div class="dot" v-if="current"></div>
+        </div>
+        <Annotate
+          tag="div"
+          ref="annotate"
+          :sticky="sticky"
+          :class="{
+            'transcript-line-l2': true,
+            'text-center': single,
+            'pr-3': single && $l2.direction === 'rtl',
+            'pl-3': single && $l2.direction !== 'rtl',
+            annotated: annotated,
+          }"
+          :buttons="true"
+          :animationDuration="duration"
+          :translation="parallelLine"
+          :delay="single ? false : 123"
+          v-if="!showSubsEditing"
+          style="flex: 1"
+          @textChanged="lineChanged(line, ...arguments)"
+          @annotated="annotated = true"
+        >
+          <span v-html="lineHtml(line).trim()" />
+        </Annotate>
+        <div v-else v-html="lineHtml(line)" />
+        <div
+          style="
+            width: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+          "
+          v-if="!single && $l2.direction === 'rtl'"
+        >
+          <div class="dot" v-if="current"></div>
+        </div>
+      </div>
       <div
         v-if="line.line.length > 0 && parallelLine"
         :class="{
           'transcript-line-l1': true,
-          'pr-3': !single && $l2.direction === 'ltr',
-          'pl-3': !single && $l2.direction === 'rtl',
+          'pl-4' : !single && $l2.direction !== 'rtl',
+          'pr-4' : !single && $l2.direction === 'rtl',
           'text-right': !single && $l2.direction === 'rtl',
           'text-center': single,
           transparent: !annotated,
@@ -72,17 +86,6 @@
         @blur.capture="trasnlationLineBlur"
         @keydown.capture="trasnlationLineKeydown"
       ></div>
-    </div>
-    <div
-      style="
-        width: 1.5rem;
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-      "
-      v-if="!single && $l2.direction === 'rtl'"
-    >
-      <div class="dot" v-if="current"></div>
     </div>
   </div>
 </template>
@@ -292,7 +295,7 @@ export default {
   width: 0.66rem;
   border-radius: 50%;
   background: #54ff7c;
-  opacity: 0.66;
+  opacity: 0.5;
 }
 
 .dot:after {
