@@ -11,14 +11,14 @@
       <i class="fas fa-align-left"></i>
     </button> -->
     <button
+      v-if="showCollapse"
       :class="{
         'quick-access-button   d-inline-block text-center': true,
-        'quick-access-button-active': speed !== 1,
       }"
-      @click="toggleSpeed"
+      @click="toggleCollapsed"
     >
-      <i v-if="speed === 1" class="fas fa-tachometer-alt"></i>
-      <span v-else>{{ speed }}x</span>
+      <i class="fas fa-caret-square-up" v-if="!collapsed"></i>
+      <i class="fas fa-caret-square-down" v-if="collapsed"></i>
     </button>
     <button
       :class="{
@@ -92,6 +92,16 @@
       <i class="fas fa-headphones"></i>
     </button> -->
     <button
+      :class="{
+        'quick-access-button   d-inline-block text-center': true,
+        'quick-access-button-active': speed !== 1,
+      }"
+      @click="toggleSpeed"
+    >
+      <i v-if="speed === 1" class="fas fa-tachometer-alt"></i>
+      <span v-else>{{ speed }}x</span>
+    </button>
+    <button
       v-if="showFullscreenToggle"
       :class="{
         'quick-access-button   d-inline-block text-center': true,
@@ -100,16 +110,6 @@
       @click="toggleFullscreenMode"
     >
       <i class="fas fa-expand"></i>
-    </button>
-    <button
-      v-if="showCollapse"
-      :class="{
-        'quick-access-button   d-inline-block text-center': true,
-      }"
-      @click="toggleCollapsed"
-    >
-      <i class="fas fa-caret-square-up" v-if="!collapsed"></i>
-      <i class="fas fa-caret-square-down" v-if="collapsed"></i>
     </button>
 
     <div

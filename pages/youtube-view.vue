@@ -72,6 +72,7 @@
         :episodeIndex="thisEpisodeIndex"
         :forcePortrait="false"
         :startLineIndex="startLineIndex"
+        :initialLayout="layout"
         @paused="updatePaused"
         @ended="updateEnded"
         @currentTime="updateCurrentTime"

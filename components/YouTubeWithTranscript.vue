@@ -2,13 +2,15 @@
   <div
     :class="{
       'container-fluid youtube-with-transcript': true,
-      'youtube-with-transcript-landscape': landscape,
-      'youtube-with-transcript-portrait': !landscape,
     }"
   >
     <div
-      v-if="layout === 'horizontal'"
-      :class="`row youtube-with-transcript-${layout}`"
+      :class="`youtube-with-transcript-${layout} ${
+        layout === 'horizontal'
+          ? 'youtube-with-transcript-horizontal-' +
+            (landscape ? 'landscape' : 'portrait')
+          : ''
+      }`"
     >
       <div
         :class="{
@@ -38,8 +40,11 @@
             :layout="layout"
             :showFullscreenToggle="showFullscreenToggle"
             :showLineList="showLineList"
+            :showCollapse="layout === 'horizontal'"
             ref="videoControls"
-            :class="`${neverPlayed ? 'transparent' : ''}`"
+            :class="`${
+              neverPlayed && layout === 'horizontal' ? 'transparent' : ''
+            }`"
             :episodes="episodes"
             :episodeIndex="episodeIndex"
             @goToLine="goToLine"
@@ -56,7 +61,10 @@
         </div>
       </div>
       <div class="youtube-transcript-column">
-        <div class="youtube-video-info youtube-video-info-top">
+        <div
+          class="youtube-video-info youtube-video-info-top"
+          v-if="layout === 'horizontal'"
+        >
           <h3
             :class="{
               h4: video.title.length > 30,
@@ -110,32 +118,36 @@
             New Videos.
           </div>
         </div>
-        <div class="mt-4">
-          <div v-if="video.subs_l2 && video.subs_l2.length > 0">
-            <SyncedTranscript
-              ref="transcript"
-              :key="'transcript-' + video.youtube_id"
-              :lines="video.subs_l2"
-              :quiz="quiz"
-              :parallellines="video.subs_l1"
-              :sticky="sticky"
-              :startLineIndex="startLineIndex"
-              :stopLineIndex="stopLineIndex"
-              :showSubsEditing="showSubsEditing"
-              :enableTranslationEditing="enableTranslationEditing"
-              :notes="video.notes"
-              :collapsed="collapsed"
-              :skin="skin"
-              :landscape="landscape"
-              @seek="seekYouTube"
-              @pause="pause"
-              @play="play"
-              @speechStart="speechStart"
-              @speechEnd="speechEnd"
-              @updateTranslation="updateTranslation"
-            />
-          </div>
-          <div class="mt-5 youtube-video-info youtube-video-info-bottom">
+        <div>
+          <SyncedTranscript
+            v-if="video.subs_l2 && video.subs_l2.length > 0"
+            ref="transcript"
+            :key="'transcript-' + video.youtube_id"
+            :lines="video.subs_l2"
+            :quiz="quiz"
+            :parallellines="video.subs_l1"
+            :sticky="sticky"
+            :startLineIndex="startLineIndex"
+            :stopLineIndex="stopLineIndex"
+            :showSubsEditing="showSubsEditing"
+            :enableTranslationEditing="enableTranslationEditing"
+            :notes="video.notes"
+            :collapsed="collapsed"
+            :skin="skin"
+            :landscape="landscape"
+            :single="layout === 'vertical'"
+            @seek="seekYouTube"
+            @pause="pause"
+            @play="play"
+            @speechStart="speechStart"
+            @speechEnd="speechEnd"
+            @updateTranslation="updateTranslation"
+          />
+
+          <div
+            class="mt-5 youtube-video-info youtube-video-info-bottom"
+            v-if="layout === 'horizontal'"
+          >
             <div class="text-center mt-5 mb-5" v-if="video.checkingSubs">
               <Loader :sticky="true" message="Loading subtitles..." />
             </div>
@@ -180,77 +192,6 @@
         </div>
       </div>
     </div>
-    <template v-if="layout === 'vertical'">
-      <div class="row video-area">
-        <div style="width: 100%">
-          <div class="youtube-video-wrapper">
-            <YouTubeVideo
-              ref="youtube"
-              @paused="updatePaused"
-              @currentTime="updateCurrentTime"
-              @ended="updateEnded"
-              @duration="updateDuration"
-              :speed="speed"
-              :youtube="video.youtube_id"
-              :starttime="start"
-              :autoload="autoload"
-              :autoplay="autoplay"
-              :startAtRandomTime="startAtRandomTime"
-            />
-            <VideoControls
-              v-if="video"
-              :video="showControls && video"
-              :paused="paused"
-              :layout="layout"
-              :showFullscreenToggle="showFullscreenToggle"
-              :showLineList="showLineList"
-              :showCollapse="false"
-              :episodes="episodes"
-              :episodeIndex="episodeIndex"
-              ref="videoControls"
-              @goToLine="goToLine"
-              @updateCollapsed="(c) => (this.collapsed = c)"
-              @togglePaused="togglePaused"
-              @rewind="rewind"
-              @updateAudioMode="(a) => (this.audioMode = a)"
-              @updateSpeed="(s) => (speed = s)"
-              @toggleFullscreenMode="toggleFullscreenMode"
-              @updateRepeatMode="(r) => (this.repeatMode = r)"
-              @goToPreviousLine="$refs.transcript.goToPreviousLine()"
-              @goToNextLine="$refs.transcript.goToNextLine()"
-            />
-          </div>
-        </div>
-      </div>
-      <div class="row" v-if="video.subs_l2 && video.subs_l2.length > 0">
-        <div
-          :key="'transcript-' + video.youtube_id"
-          class="col-sm-12 text-center mt-2 synced-transcript-wrapper"
-          style="min-height: 65px"
-        >
-          <SyncedTranscript
-            ref="transcript"
-            :lines="video.subs_l2"
-            :parallellines="video.subs_l1"
-            :single="true"
-            :quiz="false"
-            :highlight="highlight"
-            :hsk="hsk"
-            :highlight-saved-words="false"
-            :startLineIndex="startLineIndex"
-            :stopLineIndex="stopLineIndex"
-            :sticky="sticky"
-            :notes="video.notes"
-            :skin="skin"
-            @seek="seekYouTube"
-            @pause="pause"
-            @play="play"
-            @speechStart="speechStart"
-            @speechEnd="speechEnd"
-          />
-        </div>
-      </div>
-    </template>
   </div>
 </template>
 
@@ -646,14 +587,16 @@ export default {
   }
 }
 
-.youtube-video-column {
-  position: sticky;
-  top: 0;
-  z-index: 2;
+.youtube-with-transcript-horizontal {
+  .youtube-video-column {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+  }
 }
 
 #zerotohero:not(.zerotohero-wide) {
-  .youtube-video-column {
+  .youtube-with-transcript-horizontal .youtube-video-column {
     top: 2.9rem;
   }
 }
@@ -663,7 +606,10 @@ export default {
   padding-right: 0.667rem;
 }
 
-.youtube-with-transcript-landscape {
+.youtube-with-transcript-horizontal-landscape {
+  display: flex;
+  margin-left: -15px;
+  margin-right: -15px;
   .youtube-video-column,
   .youtube-transcript-column {
     flex: 1;
