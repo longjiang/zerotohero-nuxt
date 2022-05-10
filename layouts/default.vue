@@ -9,7 +9,7 @@
     </template>
     <template v-else>
       <client-only>
-        <SiteTopBar v-if="!wide && $route.params.l1 && $route.params.l1 && l1 && l2" variant="menu-bar" @toggleCollapsed="toggleCollapsed"  />
+        <SiteTopBar v-if="!wide && $route.params.l1 && $route.params.l1 && l1 && l2" variant="menu-bar" />
         <Nav
           v-if="$route.params.l1 && $route.params.l1 && l1 && l2"
           class="zth-nav-wrapper"
@@ -91,9 +91,7 @@ export default {
     },
   },
   created() {
-    this.$nuxt.$on("skin", this.onSkin);
-    this.$nuxt.$on("history", this.addFullHistoryItem);
-    // this.$nuxt.$on("allLanguagesLoaded", this.onAllLanguagesLoaded);
+    this.$nuxt.$on("history", this.addFullHistoryItem); // from Language map
     if (typeof window !== "undefined")
       window.addEventListener("resize", this.onResize);
   },

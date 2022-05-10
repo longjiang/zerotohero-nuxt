@@ -164,7 +164,8 @@ export default {
   },
   mounted() {
     this.bindKeys();
-    if (this.variant === 'side-bar') this.$emit('collapsed', this.collapsed)
+    if (this.$route.meta.collapseNav) this.collapsed = this.$route.meta.collapseNav
+    this.$emit('collapsed', this.collapsed)
   },
   created() {
     this.checkShows();
@@ -191,7 +192,12 @@ export default {
   watch: {
     $route() {
       this.history.push(this.$route.path);
+      if (this.$route.meta.collapseNav) this.collapsed = this.$route.meta.collapseNav
+      else this.collapsed = false
     },
+    collapsed() {
+      this.$emit('collapsed', this.collapsed)
+    }
   },
   computed: {
     savedWordsCount() {
@@ -775,7 +781,6 @@ export default {
   methods: {
     toggleCollapsed() {
       this.collapsed = !this.collapsed
-      this.$emit('collapsed', this.collapsed)
     },
     checkPhrasebooks() {
       this.hasPhrasebooks =
