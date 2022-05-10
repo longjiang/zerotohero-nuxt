@@ -7,7 +7,7 @@
       class="zerotohero-background"
       :style="`background-image: url(${background})`"
     />
-    <template v-if="$route.meta.layout === 'full'">
+    <template v-if="$route.meta.layout === 'full' || !($route.params.l1 && $route.params.l1 && l1 && l2)">
       <Nuxt id="main" />
     </template>
     <template v-else>
@@ -28,9 +28,6 @@
         @collapsed="updateCollapsed"
       />
       <div class="zth-content">
-        <div class="splash text-white text-center" v-if="!l1 && !l2">
-          zerotohero.ca
-        </div>
         <Nuxt id="main" />
       </div>
       <LazyFooter :dictionaryCredit="dictionaryCredit" class="zth-footer" />
@@ -250,7 +247,6 @@ export default {
 
 .zth-content {
   min-height: 100vh;
-  background-color: black;
 }
 
 .zerotohero-wide {

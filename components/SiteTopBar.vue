@@ -46,21 +46,22 @@
                 margin-right: 0.15rem;
               "
             ></i>
-            <span style="font-weight: bold; color: white">{{
-              $route.params.l2
-            }}</span>
-            <span :class="`flagIcon ${!flagIcon ? 'd-none' : ''}`">{{
-              flagIcon
-            }}</span>
+            <span style="font-weight: bold; color: white">
+              {{ $route.params.l2 }}
+            </span>
+            <span :class="`flagIcon ${!flagIcon ? 'd-none' : ''}`">
+              {{ flagIcon }}
+            </span>
           </router-link>
         </div>
         <div>
-          <client-only
-            ><AnnotationSettings
+          <client-only>
+            <AnnotationSettings
               v-if="$l2 && params.lg"
               variant="toolbar"
               style="position: relative; bottom: -0.1rem"
-          /></client-only>
+            />
+          </client-only>
           <router-link
             :to="languageMapPath"
             :class="`btn top-bar-button btn-unstyled link-unstyled ${
@@ -88,6 +89,7 @@
             <i class="fas fa-sync-alt"></i>
           </button>
           <LoginButton
+            v-if="$l1 && $l2"
             :class="`${$l2 && params.xxlg ? 'd-inline-block' : 'd-none'}`"
             :icon="true"
             :text="false"
@@ -161,7 +163,7 @@ export default {
       return "/language-map";
     },
     flagIcon() {
-      return this.$languages.flagIcon(this.$l2);
+      if (this.$l2) return this.$languages.flagIcon(this.$l2);
     },
   },
   methods: {
