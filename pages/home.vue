@@ -4,7 +4,7 @@
   }
 </router>
 <template>
-  <div class="home main-dark" >
+  <div class="home main-dark">
     <SocialHead
       :title="`${$l2.name} Zero to Hero`"
       :description="`Learn ${$l2.name} language from zero to fluency with ${
@@ -19,7 +19,7 @@
           <client-only>
             <div :class="{ 'pl-1 pr-1 pb-2': true, 'd-none': !hasDashboard }">
               <div class="home-card">
-                <h4 class="text-center mb-4">Your History</h4>
+                <h4 class="text-center mb-4">Continue Watching</h4>
                 <LazyDashboard
                   :l2="$l2"
                   @hasDashboard="hasDashboardUpdate"
@@ -30,24 +30,14 @@
               </div>
             </div>
           </client-only>
-          <client-only>
-            <Nav :l1="$l1" :l2="$l2" variant="page" class="pb-2" />
-          </client-only>
-          <div :class="{ 'pl-1 pr-1 pb-2': true }" v-if="$l2.identicalLangs">
-            <div class="home-card bg-success">
-              <LazyIdenticalLanguages
-                routeName="home"
-                style="padding: 0; background: none"
-              />
-            </div>
-          </div>
-          <client-only>
-            <div v-if="$route.params.l1 && $route.params.l1 && $l1 && $l2">
-              <div :class="{ 'pl-1 pr-1 pb-2': true }">
-                <div class="home-card text-white">
-                  <LazyLanguageInfoBox :lang="$l2" />
-                </div>
+          <Nav :l1="$l1" :l2="$l2" variant="page" class="pb-2" />
+          <div v-if="$route.params.l1 && $route.params.l1 && $l1 && $l2">
+            <div :class="{ 'pl-1 pr-1 pb-2': true }">
+              <div class="home-card text-white">
+                <LazyLanguageInfoBox :lang="$l2" />
               </div>
+            </div>
+            <client-only>
               <div :class="{ 'pl-1 pr-1 pb-2': true }" v-if="$l2.han">
                 <div class="home-card">
                   <h4 class="text-center mb-4">Dialects of Chinese</h4>
@@ -60,9 +50,17 @@
                   <p class="text-center mb-4">(2010 Numbers)</p>
                   <FiftySixEthnic skin="dark" />
                 </div>
-              </div>  
+              </div>
+            </client-only>
+          </div>
+          <div :class="{ 'pl-1 pr-1 pb-2': true }" v-if="$l2.identicalLangs">
+            <div class="home-card bg-success">
+              <LazyIdenticalLanguages
+                routeName="home"
+                style="padding: 0; background: none"
+              />
             </div>
-          </client-only>
+          </div>
         </div>
       </div>
     </div>
@@ -153,7 +151,7 @@ export default {
   .home {
     padding-left: 2rem;
     padding-right: 2rem;
-    background: rgba(0,0,0,0.7);
+    background: rgba(0, 0, 0, 0.7);
   }
 }
 .home-card {

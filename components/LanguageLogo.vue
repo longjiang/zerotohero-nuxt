@@ -15,14 +15,14 @@
           src="/img/czh-logo-light.png"
           alt="Chinese Zero to Hero"
           class="logo"
-          data-not-lazy
+        
           v-if="l1.code === 'en' && l2.code === 'zh'"
         />
         <img
           src="/img/ezh-logo-light.png"
           alt="Chinese Zero to Hero"
           class="logo"
-          data-not-lazy
+        
           v-else-if="l1.code === 'zh' && l2.code === 'en'"
         />
       </template>
@@ -31,14 +31,14 @@
           src="/img/czh-icon.png"
           alt="Chinese Zero to Hero"
           class="logo-image"
-          data-not-lazy
+        
           v-if="l1.code === 'en' && l2.code === 'zh'"
         />
         <img
           src="/img/ezh-icon.png"
           alt="Chinese Zero to Hero"
           class="logo-image"
-          data-not-lazy
+        
           v-else-if="l1.code === 'zh' && l2.code === 'en'"
         />
       </template>
