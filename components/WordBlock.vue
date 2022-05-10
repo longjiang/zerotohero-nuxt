@@ -46,9 +46,9 @@
         </span>
         <span
           v-if="!l2Settings.useTraditional && token.candidates[0].simplified"
-          :class="`word-block-text word-block-simplified ${hard ? 'word-block-hard' : ''} ${
-            pos ? 'pos-' + pos : ''
-          }`"
+          :class="`word-block-text word-block-simplified ${
+            hard ? 'word-block-hard' : ''
+          } ${pos ? 'pos-' + pos : ''}`"
         >
           {{ token.candidates[0].simplified }}
         </span>
@@ -56,9 +56,9 @@
           v-else-if="
             l2Settings.useTraditional && token.candidates[0].traditional
           "
-          :class="`word-block-text word-block-traditional  ${hard ? 'word-block-hard' : ''} ${
-            pos ? 'pos-' + pos : ''
-          }`"
+          :class="`word-block-text word-block-traditional  ${
+            hard ? 'word-block-hard' : ''
+          } ${pos ? 'pos-' + pos : ''}`"
         >
           {{ token.candidates[0].traditional }}
         </span>
@@ -103,9 +103,6 @@
     </span>
     <template slot="popover">
       <div @mouseenter="tooltipMouseEnter" @mouseleave="tooltipMouseLeave">
-        <button class="word-block-tool-tip-close" @click="closePopup">
-          <i class="fa fa-times"></i>
-        </button>
         <div
           class="tooltip-images"
           :key="`tooltip-images-${text}`"
@@ -120,6 +117,9 @@
             :src="`${Config.imageProxy}?${image.src}`"
           />
         </div>
+        <button class="word-block-tool-tip-close" @click.stop="closePopup">
+          <i class="fa fa-times"></i>
+        </button>
         <div
           v-for="word in words"
           :key="`word-block-word-${word.id}`"
@@ -484,7 +484,7 @@ export default {
           this.token.candidates &&
           this.token.candidates.length > 0
         ) {
-          if (this.token.candidates[0].head.length < 4) return false // Only highlight chengyu
+          if (this.token.candidates[0].head.length < 4) return false; // Only highlight chengyu
           // if (
           //   this.token.candidates[0].newHSK &&
           //   this.token.candidates[0].newHSK === "7-9"
@@ -546,7 +546,7 @@ export default {
     async visibilityChanged(isVisible) {
       await Helper.timeout(123);
       if (isVisible && (!this.words || this.words.length === 0)) {
-        if (this.$l2.code !== 'fa') this.lookup(true);
+        if (this.$l2.code !== "fa") this.lookup(true);
       }
     },
     async getFarsiRomanization(text) {
@@ -710,7 +710,8 @@ export default {
           this.saved = savedWord ? savedWord : false;
         }
       }
-      if (!this.transliteration) this.transliteration = await this.getTransliteration();
+      if (!this.transliteration)
+        this.transliteration = await this.getTransliteration();
     },
     matchCase(text) {
       if (this.text.match(/^[\wА-ЯЁ]/)) {
@@ -774,11 +775,11 @@ export default {
           }
         }
       }
-      $nuxt.$emit('popupOpened')
+      this.$nuxt.$emit("popupOpened");
     },
     async closePopup() {
       this.open = false;
-      $nuxt.$emit('popupClosed')
+      this.$nuxt.$emit("popupClosed");
     },
     async lookup(quick = false) {
       this.lastLookupWasQuick = quick;
@@ -1158,7 +1159,7 @@ export default {
     background: #28a745;
     color: white;
     border: none;
-    position: fixed;
+    position: absolute;
     top: 0.5rem;
     right: 0.5rem;
     height: 1.5rem;
