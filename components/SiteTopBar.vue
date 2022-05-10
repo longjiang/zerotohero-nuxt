@@ -88,7 +88,7 @@
             <i class="fas fa-sync-alt"></i>
           </button>
           <LoginButton
-            :class="`d-inline-block ${$l2 && params.lg ? '' : 'd-none'}`"
+            :class="`${$l2 && params.lg ? 'd-inline-block' : 'd-none'}`"
             :icon="true"
             :text="false"
             style="color: #ddd"
