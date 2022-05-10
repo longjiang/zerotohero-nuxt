@@ -1,14 +1,5 @@
 <template>
   <div class="media-search-results">
-    <SocialHead
-      v-if="videos && videos[0]"
-      :title="`Study ${$l2.name} videos with subs | ${$l2.name} Zero to Hero`"
-      :description="`Watch ${$l2.name} videos and study the ${
-        $l2.code === 'zh' ? 'Pinyin' : $l2.name
-      } subtitles.`"
-      :image="`https://img.youtube.com/vi/${videos[0].youtube_id}/hqdefault.jpg`"
-    />
-
     <div class="row">
       <div class="col-sm-12 mb-4">
         <h3

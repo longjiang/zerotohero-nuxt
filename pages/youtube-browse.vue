@@ -32,6 +32,20 @@
 
 <script>
 export default {
+  props: {
+    topic: {
+      default: "all",
+    },
+    level: {
+      default: "all",
+    },
+    keyword: {
+      default: "",
+    },
+    start: {
+      default: 0,
+    },
+  },
   computed: {
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
