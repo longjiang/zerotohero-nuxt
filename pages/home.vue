@@ -41,24 +41,27 @@
               />
             </div>
           </div>
-          <div :class="{ 'pl-1 pr-1 pb-2': true }" v-if="$l2.han">
-            <div class="home-card">
-              <h4 class="text-center mb-4">Dialects of Chinese</h4>
-              <Dialects skin="dark" />
+          <client-only>
+            <div :class="{ 'pl-1 pr-1 pb-2': true }" v-if="$l2.han">
+              <div class="home-card">
+                <h4 class="text-center mb-4">Dialects of Chinese</h4>
+                <Dialects skin="dark" />
+              </div>
             </div>
-          </div>
-          <div :class="{ 'pl-1 pr-1 pb-2': true }" v-if="$l2.han">
-            <div class="home-card">
-              <h4 class="text-center">56 Ethnic Groups of China</h4>
-              <p class="text-center mb-4">(2010 Numbers)</p>
-              <FiftySixEthnic skin="dark" />
+            <div :class="{ 'pl-1 pr-1 pb-2': true }" v-if="$l2.han">
+              <div class="home-card">
+                <h4 class="text-center">56 Ethnic Groups of China</h4>
+                <p class="text-center mb-4">(2010 Numbers)</p>
+                <FiftySixEthnic skin="dark" />
+              </div>
             </div>
-          </div>
-          <div :class="{ 'pl-1 pr-1 pb-2': true }">
-            <div class="home-card text-white">
-              <LazyLanguageInfoBox :lang="$l2" />
+
+            <div :class="{ 'pl-1 pr-1 pb-2': true }">
+              <div class="home-card text-white">
+                <LazyLanguageInfoBox :lang="$l2" />
+              </div>
             </div>
-          </div>
+          </client-only>
         </div>
       </div>
     </div>
@@ -97,8 +100,8 @@ export default {
   },
   methods: {
     hasDashboardUpdate(hasDashboard) {
-      if (hasDashboard && hasDashboard.includes('items')) {
-        this.hasDashboard = true
+      if (hasDashboard && hasDashboard.includes("items")) {
+        this.hasDashboard = true;
       }
     },
     redirectToCourses() {

@@ -1,5 +1,5 @@
 <template>
-  <div id="zerotohero" :class="classes">
+  <div id="zerotohero" :class="classes" :style="`background-image: url(${background})`">
     <div
       class="zerotohero-background"
       :style="`background-image: url(${background})`"
@@ -63,6 +63,7 @@ export default {
     classes() {
       let classes = {
         "zerotohero-wide": this.wide,
+        "zerotohero-not-wide": !this.wide,
         "zerotohero-wide-collapsed": this.collapsed,
       };
       classes[`route-${this.$route.name}`] = true;
@@ -216,6 +217,10 @@ export default {
 }
 
 #zerotohero {
+  min-height: 100vh;
+}
+
+#zerotohero {
   .zerotohero-background {
     height: 100vh;
     width: 100vw;
@@ -228,11 +233,15 @@ export default {
     top: 0;
     left: 0;
   }
-  &:not(.zerotohero-wide):not(.route-index) {
+  &.zerotohero-not-wide:not(.route-index) {
     .zerotohero-background {
       display: none;
     }
   }
+}
+
+.zth-content {
+  min-height: 100vh;
 }
 
 .zerotohero-wide {
