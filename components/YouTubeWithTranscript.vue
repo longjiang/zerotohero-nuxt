@@ -335,6 +335,7 @@ export default {
     window.removeEventListener("resize", this.updateLayout);
   },
   async mounted() {
+    this.updateLayout()
     await this.getL1Transcript();
   },
   async updated() {
@@ -345,9 +346,6 @@ export default {
     if (this.$refs.youtube) this.$refs.youtube.speed = this.speed;
   },
   watch: {
-    viewportWidth() {
-      this.landscape
-    },
     async "video.youtube_id"() {
       await this.getL1Transcript();
     },
