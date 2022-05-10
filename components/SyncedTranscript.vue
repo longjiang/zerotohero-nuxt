@@ -40,7 +40,8 @@
             new RegExp(highlight.join('|')).test(line.line)
           "
           :ref="`${single ? 'transcript-line' : 'transcript-line-'}${
-            !single ? index + visibleMin : ''}`"
+            !single ? index + visibleMin : ''
+          }`"
           :duration="
             line.duration
               ? line.duration
@@ -291,6 +292,18 @@ export default {
       window.addEventListener("wheel", this.cancelSmoothScroll);
       window.addEventListener("touchstart", this.cancelSmoothScroll);
     }
+    $nuxt.$on("popupOpened", () => {
+      if (!this.paused) {
+        this.pause();
+        this.pausedOnPopupOpen = true;
+      }
+    });
+    $nuxt.$on("popupClosed", () => {
+      if (this.pausedOnPopupOpen) {
+        this.pausedOnPopupOpen = false;
+        this.play();
+      }
+    });
   },
   beforeDestroy() {
     if (this.unsubscribe) this.unsubscribe();
@@ -364,6 +377,9 @@ export default {
   methods: {
     play() {
       this.$emit("play");
+    },
+    pause() {
+      this.$emit("pause");
     },
     cancelSmoothScroll() {
       let id = window.requestAnimationFrame(function () {});
@@ -736,7 +752,7 @@ export default {
           window.scrollTo({
             top,
             left: 0,
-            behavior: 'smooth'
+            behavior: "smooth",
           });
           // if (navigator.hardwareConcurrency >= 4) {
           //   let duration =
@@ -801,8 +817,9 @@ export default {
       }
     },
     playCurrentLineAnimation() {
-      let currentLineRefs =
-        this.single ? this.$refs[`transcript-line`] : this.$refs[`transcript-line-${this.currentLineIndex}`];
+      let currentLineRefs = this.single
+        ? this.$refs[`transcript-line`]
+        : this.$refs[`transcript-line-${this.currentLineIndex}`];
       if (currentLineRefs && currentLineRefs[0])
         currentLineRefs[0].playAnimation(
           this.single

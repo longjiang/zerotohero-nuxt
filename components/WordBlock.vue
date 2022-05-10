@@ -774,9 +774,11 @@ export default {
           }
         }
       }
+      $nuxt.$emit('popupOpened')
     },
     async closePopup() {
       this.open = false;
+      $nuxt.$emit('popupClosed')
     },
     async lookup(quick = false) {
       this.lastLookupWasQuick = quick;
