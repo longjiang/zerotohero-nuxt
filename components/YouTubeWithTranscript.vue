@@ -102,21 +102,6 @@
             :show="show"
             class="mt-3"
           />
-          <div
-            v-if="
-              !(video && video.id) &&
-              ((video.subs_l2 && video.subs_l2.length > 0) || $adminMode)
-            "
-            style="font-size: 0.7em; opacity: 0.7"
-            class="mt-2"
-          >
-            Once saved, the video will be available for everyone to see. You can
-            find it at
-            <i class="fas fa-photo-video"></i>
-            Media →
-            <i class="fa fa-play"></i>
-            New Videos.
-          </div>
         </div>
         <div>
           <SyncedTranscript
@@ -180,6 +165,7 @@
               class="mb-5"
             />
             <VideoAdmin
+              v-if="$adminMode"
               :class="{ 'mt-5': true }"
               :video="video"
               ref="videoAdmin2"
