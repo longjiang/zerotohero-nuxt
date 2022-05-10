@@ -29,7 +29,7 @@
               :l1="l1"
               :l2="l2"
               branded="true"
-              :icon="collapsed"
+              :icon="collapsed && variant === 'side-bar'"
               style="margin: 1.25rem 0 0.25rem 0"
             />
           </div>
