@@ -12,7 +12,7 @@
     >
       <div
         :class="{
-          'youtube-video-column col-sm-12 mb-3 p-0': true,
+          'youtube-video-column col-sm-12 p-0': true,
           'order-2': landscape && $l2.direction === 'rtl',
         }"
       >
@@ -39,7 +39,11 @@
             :showFullscreenToggle="showFullscreenToggle"
             :showLineList="showLineList"
             ref="videoControls"
-            :class="`${neverPlayed ? 'd-none' : ''}`"
+            :class="`${neverPlayed ? 'transparent' : ''}`"
+            :episodes="episodes"
+            :episodeIndex="episodeIndex"
+            :show="show"
+            :showType="showType"
             @goToLine="goToLine"
             @togglePaused="togglePaused"
             @rewind="rewind"
@@ -85,11 +89,11 @@
             :video="video"
             :previousEpisode="previousEpisode"
             :nextEpisode="nextEpisode"
-            :skin="skin"
             :episodes="episodes"
-            :show="show"
-            :showType="showType"
             :episodeIndex="episodeIndex"
+            :showType="showType"
+            :skin="skin"
+            :show="show"
             class="mt-3"
           />
           <div

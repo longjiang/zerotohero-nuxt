@@ -191,6 +191,10 @@ export default {
         this.extrasLoaded = true;
         console.log(`YouTube View (on video change): load subs if missing...`);
         this.video = await this.loadSubsIfMissing(this.video);
+        if (!Helper.wide()) {
+          let el = this.$refs["youtube"];
+          if (el) Helper.scrollToTargetAdjusted(el.$el, 43);
+        }
         if (
           this.video &&
           this.video.subs_l2 &&
@@ -212,10 +216,6 @@ export default {
           }
         });
         this.saveHistory();
-        if (!Helper.wide()) {
-          let el = this.$refs["youtube"];
-          if (el) Helper.scrollToTargetAdjusted(el.$el, 43);
-        }
       }
     },
     async show() {

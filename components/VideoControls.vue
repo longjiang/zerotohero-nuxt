@@ -1,6 +1,6 @@
 <template>
   <div v-if="video" class="quick-access-buttons">
-    <button
+    <!-- <button
       v-if="showLineList"
       :class="{
         'quick-access-button   d-inline-block text-center': true,
@@ -9,6 +9,16 @@
       @click="showList = !showList"
     >
       <i class="fas fa-align-left"></i>
+    </button> -->
+    <button
+      :class="{
+        'quick-access-button   d-inline-block text-center': true,
+        'quick-access-button-active': speed !== 1,
+      }"
+      @click="toggleSpeed"
+    >
+      <i v-if="speed === 1" class="fas fa-tachometer-alt"></i>
+      <span v-else>{{ speed }}x</span>
     </button>
     <button
       :class="{
@@ -18,6 +28,17 @@
     >
       <i class="fas fa-undo"></i>
     </button>
+    <router-link
+      v-if="previousEpisode || nextEpisode"
+      :disabled="!previousEpisode"
+      class="quick-access-button d-inline-block text-center"
+      :to="{
+        name: 'youtube-view',
+        params: { youtube_id: previousEpisode.youtube_id },
+      }"
+    >
+      <i class="fas fa-step-backward"></i>
+    </router-link>
     <button
       class="quick-access-button d-inline-block text-center"
       @click="$emit('goToPreviousLine')"
@@ -41,16 +62,17 @@
       <i v-if="layout === 'horizontal'" class="fas fa-arrow-down"></i>
       <i v-if="layout === 'vertical'" class="fas fa-chevron-right"></i>
     </button>
-    <button
-      :class="{
-        'quick-access-button   d-inline-block text-center': true,
-        'quick-access-button-active': speed !== 1,
+    <router-link
+      v-if="previousEpisode || nextEpisode"
+      :disabled="!nextEpisode"
+      class="quick-access-button d-inline-block text-center"
+      :to="{
+        name: 'youtube-view',
+        params: { youtube_id: nextEpisode.youtube_id },
       }"
-      @click="toggleSpeed"
     >
-      <i v-if="speed === 1" class="fas fa-tachometer-alt"></i>
-      <span v-else>{{ speed }}x</span>
-    </button>
+      <i class="fas fa-step-forward"></i>
+    </router-link>
     <!-- <button
       :class="{
         'quick-access-button   d-inline-block text-center': true,
@@ -77,7 +99,7 @@
       }"
       @click="toggleFullscreenMode"
     >
-      <i class="fas fa-arrows-alt-h"></i>
+      <i class="fas fa-expand"></i>
     </button>
     <button
       v-if="showCollapse"
@@ -86,8 +108,8 @@
       }"
       @click="toggleCollapsed"
     >
-      <i class="fas fa-angle-double-up" v-if="!collapsed"></i>
-      <i class="fas fa-angle-double-down" v-if="collapsed"></i>
+      <i class="fas fa-caret-square-up" v-if="!collapsed"></i>
+      <i class="fas fa-caret-square-down" v-if="collapsed"></i>
     </button>
 
     <div
@@ -123,7 +145,7 @@
         }"
         :key="`video-line-list-${index}`"
         @click="
-          goToLine(line)
+          goToLine(line);
           showList = !showList;
         "
       >
@@ -154,6 +176,15 @@ export default {
     showCollapse: {
       default: true,
     },
+    episodes: {
+      type: Array,
+    },
+    episodeIndex: {
+      type: Number,
+    },
+    show: {
+      type: Object,
+    },
   },
   data() {
     return {
@@ -165,7 +196,7 @@ export default {
       audioMode: false,
       sortedLines: undefined,
       collapsed: false,
-      currentLine: undefined
+      currentLine: undefined,
     };
   },
   computed: {
@@ -180,6 +211,16 @@ export default {
     $adminMode() {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
+    },
+    previousEpisode() {
+      if (this.episodes && this.episodeIndex) {
+        return this.episodes[this.episodeIndex - 1];
+      }
+    },
+    nextEpisode() {
+      if (this.episodes && this.episodeIndex) {
+        return this.episodes[this.episodeIndex + 1];
+      }
     },
   },
   mounted() {
@@ -262,14 +303,14 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgb(23, 23, 23);
+  background: linear-gradient(black 0%, black 66%, transparent 100%);
 }
 
 .quick-access-button {
   border: none;
   padding: 0.5rem;
   background: none;
-  color: white;
+  color: #ccc;
   margin: 0 0.2rem;
 }
 
@@ -307,7 +348,6 @@ export default {
     max-height: calc(100vh - 50vw * 9 / 16 - 2rem);
   }
 }
-
 
 .youtube-view-line-list .youtube-view-line-list-item {
   padding: 0.2rem 0.7rem;
