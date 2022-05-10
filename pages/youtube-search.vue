@@ -33,7 +33,7 @@
         ref="search"
       />
       <client-only>
-        <b-form-group class="mt-3">
+        <b-form-group class="mt-3" v-if="$adminMode">
           <!-- <b-form-radio
             v-model="captions"
             class="d-inline-block mr-3"
@@ -76,7 +76,7 @@
           </b-button>
         </b-form-group>
       </client-only>
-      <MediaSearchResults :keyword="term" />
+      <MediaSearchResults :keyword="term" class="mt-4" />
       <h4 class="text-center mt-5">More from YouTube</h4>
       <p class="text-center mb-5">Videos without {{ $l2.name }} subs are dimmed out.</p>
       <LazyIdenticalLanguages

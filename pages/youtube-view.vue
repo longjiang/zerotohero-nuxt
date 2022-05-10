@@ -39,7 +39,7 @@
             this.$router.push({
               path: `/${$l1.code}/${
                 $l2.code
-              }/youtube/browse/all/all/0/${encodeURIComponent(url)}`,
+              }/youtube/search/${encodeURIComponent(url)}`,
             });
           }
         "
