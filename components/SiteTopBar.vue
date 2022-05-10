@@ -214,7 +214,7 @@ export default {
   .language-flag-and-name {
     line-height: 1;
     text-overflow: ellipsis;
-    max-width: 4rem;
+    max-width: 4.5rem;
     overflow: hidden;
     white-space: nowrap;
     display: inline-block;
