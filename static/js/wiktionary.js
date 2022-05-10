@@ -397,10 +397,10 @@ const Dictionary = {
     hanja = hanja.replace(/\(.*\)/, '')
     hanja = hanja.replace(/,.*/, '')
     hanja = hanja.trim()
-    if (!this.isHan(hanja)) {
-      let matches = item['etymology_text'].match(this.hanRegex)
-      if (matches) hanja = matches[0]
-    }
+    // if (!this.isHan(hanja)) {
+    //   let matches = item['etymology_text'].match(this.hanRegex)
+    //   if (matches) hanja = matches[0]
+    // }
     if (this.isHan(hanja)) {
       return hanja
     }
