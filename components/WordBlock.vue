@@ -544,10 +544,9 @@ export default {
   },
   methods: {
     async visibilityChanged(isVisible) {
-      this.isVisible = isVisible;
       await Helper.timeout(123);
-      if (this.isVisible && (!this.words || this.words.length === 0)) {
-        this.lookup(true);
+      if (isVisible && (!this.words || this.words.length === 0)) {
+        if (this.$l2.code !== 'fa') this.lookup(true);
       }
     },
     async getFarsiRomanization(text) {
@@ -574,7 +573,6 @@ export default {
         }
         if (this.$l2.code === "fa") {
           this.text = this.text.replace(/\u064a/g, "\u06cc"); // Arabic YEH to Farsi YEH
-
           let roman = await this.getFarsiRomanization(this.text);
           return roman.replace(/\^/g, "");
         }
@@ -712,7 +710,7 @@ export default {
           this.saved = savedWord ? savedWord : false;
         }
       }
-      this.transliteration = await this.getTransliteration();
+      if (!this.transliteration) this.transliteration = await this.getTransliteration();
     },
     matchCase(text) {
       if (this.text.match(/^[\wА-ЯЁ]/)) {
@@ -796,7 +794,7 @@ export default {
         ).lookupFuzzy(this.text, 20, quick);
         if (words) {
           for (let word of words) {
-            if (this.$l2.code === "fa") {
+            if (this.$l2.code === "fa" && !quick) {
               this.farsiRomanizations[word.head] =
                 await this.getFarsiRomanization(word.head);
             }

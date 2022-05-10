@@ -169,7 +169,6 @@ export default {
       batchId: 0,
       text: "",
       Helper,
-      isVisible: false,
       textMode: false,
       tokenized: [],
       dictionary: undefined,
@@ -311,9 +310,8 @@ export default {
     },
     savePhraseClick() {},
     async visibilityChanged(isVisible) {
-      this.isVisible = isVisible;
       if (this.delay) await Helper.timeout(this.delay);
-      if (this.isVisible) {
+      if (isVisible) {
         this.convertToSentencesAndAnnotate(this.$slots.default[0]);
       }
     },
