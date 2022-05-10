@@ -11,7 +11,9 @@ const Dictionary = {
   cache: {},
   tables: [],
   NlpjsTFrDict: {},
+  frequency: undefined,
   useJSON: [],
+  hasFrequency: ['eng'],
   hanRegex: /[\u2E80-\u2E99\u2E9B-\u2EF3\u2F00-\u2FD5\u3005\u3007\u3021-\u3029\u3038-\u303B‌​\u3400-\u4DB5\u4E00-\u9FCC\uF900-\uFA6D\uFA70-\uFAD9]+/g,
   hanRegexStrict: /^[\u2E80-\u2E99\u2E9B-\u2EF3\u2F00-\u2FD5\u3005\u3007\u3021-\u3029\u3038-\u303B‌​\u3400-\u4DB5\u4E00-\u9FCC\uF900-\uFA6D\uFA70-\uFAD9]+$/,
   tokenizationCache: {},
@@ -115,6 +117,7 @@ const Dictionary = {
       this.l2 = l2
       this.accentCritical = this.isAccentCritical()
       this.file = this.dictionaryFile({ l1, l2 })
+      if (this.hasFrequency.includes(this.l2) && this.useJSON.includes(this.l2)) await this.loadFrequency()
       let words = await this.loadWords(this.file)
       if (this.lemmatizationLangs[this.l2]) {
         this.lemmatization = await this.loadLemmatizationTable(this.lemmatizationLangs[this.l2])
@@ -142,6 +145,23 @@ const Dictionary = {
       console.log("Wiktionary: loaded.")
       return this
     }
+  },
+  async loadFrequency() {
+    console.log(`Wiktionary: loading frequency...`)
+    let res = await axios.get(`${this.server}data/frequency/frequency-${this.l2}.csv.txt`)
+    if (res && res.data) {
+      let parsed = Papa.parse(res.data, { header: true })
+      this.frequency = {}
+      for (let row of parsed.data) {
+        let search = row.word.toLowerCase()
+        this.frequency[search] = Math.max(this.frequency[search] || 0, Number(row.count))
+      }
+    }
+  },
+  getWordsWithFrequencyGreaterThan(frequency) {
+    let count = this.words.filter(w => w.frequency > frequency).length
+    console.log(`There are ${count} words (${count / this.words.length * 100}% total) with frequency > ${frequency}`)
+    return count
   },
   async loadWords(file) {
     console.log(`Wiktionary: loading ${file}`)
@@ -193,6 +213,8 @@ const Dictionary = {
     }
     item.stems = this.unique(item.stems)
     item.phrases = item.phrases ? item.phrases.split('|') : []
+    
+    if (this.frequency && !item.frequency) item.frequency = this.frequency[item.search]
     if (item.han) {
       item.cjk = {
         canonical: item.han,
@@ -275,6 +297,7 @@ const Dictionary = {
               phonetics: bare
             }
             word.hanja = sino
+            if (this.frequency && !word.frequency) word.frequency = this.frequency[word.search]
           }
           words.push(Object.assign(item, word))
         } else {
@@ -427,7 +450,7 @@ const Dictionary = {
     console.log('Exporting CSV...')
     let csv = Papa.unparse(this.words.map(item => {
       let word = {
-        word: item.word,
+        word: item.head,
         pronunciation: item.pronunciation,
         audio: item.audio,
         definitions: item.definitions.join('|'),
@@ -439,6 +462,7 @@ const Dictionary = {
       if (['vie', 'kor'].includes(this.l2)) {
         word.han = item.cjk && item.cjk.canonical ? item.cjk.canonical : undefined
       }
+      if (this.frequency) word.frequency = Math.round(item.frequency / 12711)
       return word
     }))
     console.log('CSV exported.')
