@@ -182,9 +182,6 @@ export default {
     episodeIndex: {
       type: Number,
     },
-    show: {
-      type: Object,
-    },
   },
   data() {
     return {

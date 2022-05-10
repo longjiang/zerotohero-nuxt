@@ -42,8 +42,6 @@
             :class="`${neverPlayed ? 'transparent' : ''}`"
             :episodes="episodes"
             :episodeIndex="episodeIndex"
-            :show="show"
-            :showType="showType"
             @goToLine="goToLine"
             @togglePaused="togglePaused"
             @rewind="rewind"
@@ -207,6 +205,8 @@
               :showFullscreenToggle="showFullscreenToggle"
               :showLineList="showLineList"
               :showCollapse="false"
+              :episodes="episodes"
+              :episodeIndex="episodeIndex"
               ref="videoControls"
               @goToLine="goToLine"
               @updateCollapsed="(c) => (this.collapsed = c)"
@@ -544,7 +544,10 @@ export default {
     updateCurrentTime(currentTime) {
       if (this.neverPlayed) {
         this.neverPlayed = false;
-        if (this.layout !== 'vertical' && this.$refs["transcript"]) this.$refs["transcript"].scrollTo(this.$refs.transcript.currentLineIndex);
+        if (this.layout !== "vertical" && this.$refs["transcript"])
+          this.$refs["transcript"].scrollTo(
+            this.$refs.transcript.currentLineIndex
+          );
       }
       if (this.currentTime !== currentTime) {
         this.currentTime = currentTime;
