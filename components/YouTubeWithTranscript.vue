@@ -13,7 +13,7 @@
       <div
         :class="{
           'youtube-video-column col-sm-12 mb-3 p-0': true,
-          'order-2': landscape,
+          'order-2': landscape && $l2.direction === 'rtl',
         }"
       >
         <div class="youtube-video-wrapper" :key="'youtube-' + video.youtube_id">

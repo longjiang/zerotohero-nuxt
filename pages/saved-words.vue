@@ -73,7 +73,7 @@
               Learn (Legacy)
             </router-link>
           </div>
-          <div v-if="!sWLoaded" class="text-center">
+          <div v-if="dictionaryLoaded && !sWLoaded" class="text-center">
             <Loader :sticky="true" message="Loading words saved in your browser..." />
           </div>
           <div
