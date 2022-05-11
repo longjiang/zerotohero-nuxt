@@ -76,7 +76,6 @@ const Dictionary = {
         item.bare = item.word;
         item.search = item.bare.toLowerCase();
         item.head = item.word;
-        item.accented = item.word;
         delete item.word;
         item.wiktionary = true;
         item.definitions = item.definitions ? item.definitions.split("|") : [];

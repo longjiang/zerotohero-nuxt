@@ -207,7 +207,7 @@
               <span v-if="$l2.code === 'de' && word.gender">
                 {{ { n: "das", m: "der", f: "die" }[word.gender] }}
               </span>
-              {{ transform(word.accented) }}
+              {{ transform(word.head) }}
             </b>
             <span
               v-if="word.traditional && word.traditional !== word.simplified"

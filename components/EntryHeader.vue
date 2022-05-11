@@ -139,7 +139,7 @@
                 >
                   {{ { n: "das", m: "der", f: "die" }[entry.gender] }}
                 </span>
-                <span v-html="transform(entry.accented)" :class="{klingon: $l2.code === 'tlh'}"></span>
+                <span v-html="transform(entry.head)" :class="{klingon: $l2.code === 'tlh'}"></span>
               </span>
             </template>
           </router-link>

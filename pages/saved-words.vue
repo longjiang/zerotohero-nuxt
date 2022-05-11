@@ -156,7 +156,6 @@ export default {
         delete mapped.i;
         delete mapped.k;
         delete mapped.l;
-        if (this.$dictionaryName !== "openrussian") delete mapped.accented;
         delete mapped.wiktionary;
         return mapped;
       });

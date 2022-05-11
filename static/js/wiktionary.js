@@ -1,11 +1,10 @@
-importScripts('../vendor/fastest-levenshtein/fastest-levenshtein.js')
+importScripts("../vendor/fastest-levenshtein/fastest-levenshtein.js");
 
 const Dictionary = {
-  name: 'wiktionary',
+  name: "wiktionary",
   file: undefined,
   dictionary: undefined,
   words: [],
-  bareIndex: {},
   headIndex: {},
   searchIndex: {},
   cache: {},
@@ -13,247 +12,271 @@ const Dictionary = {
   NlpjsTFrDict: {},
   frequency: undefined,
   useJSON: [],
-  hasFrequency: ['eng'],
+  hasFrequency: ["eng"],
   hanRegex: /[\u2E80-\u2E99\u2E9B-\u2EF3\u2F00-\u2FD5\u3005\u3007\u3021-\u3029\u3038-\u303B‌​\u3400-\u4DB5\u4E00-\u9FCC\uF900-\uFA6D\uFA70-\uFAD9]+/g,
   hanRegexStrict: /^[\u2E80-\u2E99\u2E9B-\u2EF3\u2F00-\u2FD5\u3005\u3007\u3021-\u3029\u3038-\u303B‌​\u3400-\u4DB5\u4E00-\u9FCC\uF900-\uFA6D\uFA70-\uFAD9]+$/,
   tokenizationCache: {},
-  server: 'https://server.chinesezerotohero.com/',
+  server: "https://server.chinesezerotohero.com/",
   l1: undefined,
   l2: undefined,
   lemmatizationLangs: {
-    ast: 'ast',
-    bul: 'bg',
+    ast: "ast",
+    bul: "bg",
     // cat: 'ca', // Large ones are disabled because they are not necessary
-    ces: 'cs',
-    cym: 'cy',
+    ces: "cs",
+    cym: "cy",
     // deu: 'de',
     // eng: 'en',
     // spa: 'es',
-    est: 'et',
-    fas: 'fa',
+    est: "et",
+    fas: "fa",
     // fra: 'fr',
-    gle: 'ga',
-    gla: 'gd',
-    glg: 'gl',
-    glv: 'gv',
-    hun: 'hu',
+    gle: "ga",
+    gla: "gd",
+    glg: "gl",
+    glv: "gv",
+    hun: "hu",
     // ita: 'it',
     // por: 'pt',
-    ron: 'ro',
+    ron: "ro",
     // rus: 'ru',
-    slk: 'sk',
-    slv: 'sl',
+    slk: "sk",
+    slv: "sl",
     // swe: 'sv',
-    ukr: 'uk'
+    ukr: "uk"
   },
   supplementalLangs: {
-    arz: 'ara',
-    ceb: 'tgl',
-    csb: 'pol',
-    cmn: 'zho',
-    goh: 'gsw',
-    gsw: 'deu',
-    ind: 'msa',
-    ins: 'eng',
-    jam: 'eng',
-    kok: 'mar',
-    msa: 'ind',
-    nob: 'nno',
-    nor: 'nno',
-    nsl: 'nor',
-    scn: 'ita',
-    sco: 'eng',
-    soa: 'tha',
-    tgl: 'ceb',
-    tsd: 'ell',
-    tir: 'amh',
-    wol: 'fra',
-    vec: 'ita'
+    arz: "ara",
+    ceb: "tgl",
+    csb: "pol",
+    cmn: "zho",
+    goh: "gsw",
+    gsw: "deu",
+    ind: "msa",
+    ins: "eng",
+    jam: "eng",
+    kok: "mar",
+    msa: "ind",
+    nob: "nno",
+    nor: "nno",
+    nsl: "nor",
+    scn: "ita",
+    sco: "eng",
+    soa: "tha",
+    tgl: "ceb",
+    tsd: "ell",
+    tir: "amh",
+    wol: "fra",
+    vec: "ita"
   },
   turkishPOS: {},
   lemmatization: undefined,
   conjugations: undefined, // for french only
   romanizations: undefined, // for persian only
   accentCritical: false,
-  accentCriticalLangs: ['tur', 'vie'], // Languages that should not strip accents when searching
+  accentCriticalLangs: ["tur", "vie"], // Languages that should not strip accents when searching
   credit() {
-    let credit = `The dictionary is provided by <a href="https://en.wiktionary.org/wiki/Wiktionary:Main_Page">Wiktionary</a>, which is freely distribtued under the <a href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike License</a>. The dictionary is parsed by <a href="https://github.com/tatuylonen/wiktextract">wiktextract</a>.`
-    if (this.l2 === 'fas') credit = credit + ` Persian transliteration is made possible with <a href="https://github.com/PasaOpasen/PersianG2P/tree/master/transform%20dict">PasaOpasen/PersianG2P</a>.`
-    return credit
+    let credit = `The dictionary is provided by <a href="https://en.wiktionary.org/wiki/Wiktionary:Main_Page">Wiktionary</a>, which is freely distribtued under the <a href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike License</a>. The dictionary is parsed by <a href="https://github.com/tatuylonen/wiktextract">wiktextract</a>.`;
+    if (this.l2 === "fas")
+      credit =
+        credit +
+        ` Persian transliteration is made possible with <a href="https://github.com/PasaOpasen/PersianG2P/tree/master/transform%20dict">PasaOpasen/PersianG2P</a>.`;
+    return credit;
   },
-  dictionaryFile({
-    l1 = undefined,
-    l2 = undefined
-  } = {}) {
+  dictionaryFile({ l1 = undefined, l2 = undefined } = {}) {
     if (l1 && l2) {
-      l2 = l2.replace('hrv', 'hbs') // Serbian uses Serbo-Croatian
-        .replace('nor', 'nob') // Default Norwegian to Bokmål (which is supplemented with Nynorsk)
-        .replace('srp', 'hbs') // Croatian uses Serbo-Croatian
-        .replace('bos', 'hbs') // Bosnian uses Serbo-Croatian
-        .replace('cnr', 'hbs') // Montenegrin uses Serbo-Croatian
-        .replace('run', 'kin') // Rundi uses Rwanda-Rundi
-        .replace('hbo', 'heb') // Ancient Hebrew uses Hebrew
-        .replace('grc', 'ell') // Ancient Greek uses Greek
-        .replace('hmn', 'mww') // Hmong uses white Hmong
-        .replace('prs', 'fas') // Dari uses Persian
-        .replace('arb', 'ara') // Modern Standard Arabic uses Arabic
-        .replace('zsm', 'msa') // Standard Malaysian uses Malaysian
-        .replace('lvs', 'lav') // Standard Latvian uses Latvian
-        .replace('ekk', 'est') // Standard Estonian uses Estonian
-      let csv = !this.useJSON.includes(this.l2)
-      let filename = `${this.server}data/wiktionary${csv ? '-csv' : ''}/${l2}-${l1}.${csv ? 'csv' : 'json'}.txt`
-      return filename
+      l2 = l2
+        .replace("hrv", "hbs") // Serbian uses Serbo-Croatian
+        .replace("nor", "nob") // Default Norwegian to Bokmål (which is supplemented with Nynorsk)
+        .replace("srp", "hbs") // Croatian uses Serbo-Croatian
+        .replace("bos", "hbs") // Bosnian uses Serbo-Croatian
+        .replace("cnr", "hbs") // Montenegrin uses Serbo-Croatian
+        .replace("run", "kin") // Rundi uses Rwanda-Rundi
+        .replace("hbo", "heb") // Ancient Hebrew uses Hebrew
+        .replace("grc", "ell") // Ancient Greek uses Greek
+        .replace("hmn", "mww") // Hmong uses white Hmong
+        .replace("prs", "fas") // Dari uses Persian
+        .replace("arb", "ara") // Modern Standard Arabic uses Arabic
+        .replace("zsm", "msa") // Standard Malaysian uses Malaysian
+        .replace("lvs", "lav") // Standard Latvian uses Latvian
+        .replace("ekk", "est"); // Standard Estonian uses Estonian
+      let csv = !this.useJSON.includes(this.l2);
+      let filename = `${this.server}data/wiktionary${
+        csv ? "-csv" : ""
+      }/${l2}-${l1}.${csv ? "csv" : "json"}.txt`;
+      return filename;
     }
   },
   isAccentCritical() {
-    return this.accentCriticalLangs.includes(this.l2)
+    return this.accentCriticalLangs.includes(this.l2);
   },
-  async load({
-    l1 = undefined,
-    l2 = undefined
-  } = {}) {
+  async load({ l1 = undefined, l2 = undefined } = {}) {
     if (l1 && l2) {
-      this.l1 = l1
-      this.l2 = l2
-      this.accentCritical = this.isAccentCritical()
-      this.file = this.dictionaryFile({ l1, l2 })
-      if (this.hasFrequency.includes(this.l2) && this.useJSON.includes(this.l2)) await this.loadFrequency()
-      let words = await this.loadWords(this.file)
+      this.l1 = l1;
+      this.l2 = l2;
+      this.accentCritical = this.isAccentCritical();
+      this.file = this.dictionaryFile({ l1, l2 });
+      if (this.hasFrequency.includes(this.l2) && this.useJSON.includes(this.l2))
+        await this.loadFrequency();
+      let words = await this.loadWords(this.file);
       if (this.lemmatizationLangs[this.l2]) {
-        this.lemmatization = await this.loadLemmatizationTable(this.lemmatizationLangs[this.l2])
+        this.lemmatization = await this.loadLemmatizationTable(
+          this.lemmatizationLangs[this.l2]
+        );
       }
-      let supplementalLang = this.supplementalLangs[l2]
-      if (l1 === 'eng' && supplementalLang) {
+      let supplementalLang = this.supplementalLangs[l2];
+      if (l1 === "eng" && supplementalLang) {
         // Append indonesian words to malay dictionary so we get more words
-        let supplWords = await this.loadWords(this.dictionaryFile({ l1, l2: supplementalLang }))
+        let supplWords = await this.loadWords(
+          this.dictionaryFile({ l1, l2: supplementalLang })
+        );
         for (let w of supplWords) {
-          w.id = supplementalLang + '-' + w.id
-          w.supplementalLang = supplementalLang
+          w.id = supplementalLang + "-" + w.id;
+          w.supplementalLang = supplementalLang;
         }
-        words = words.concat(supplWords)
+        words = words.concat(supplWords);
         words = words.sort((a, b) => {
           if (a.head && b.head) {
-            return b.head.length - a.head.length
+            return b.head.length - a.head.length;
           }
-        })
+        });
       }
-      this.words = words
-      this.createIndices()
-      if (this.l2 === 'fra') await this.loadFrenchConjugationsAndLemmatizer()
-      if (this.l2 === 'fas') await this.loadPersianRomanization()
-      if (this.l2 === 'tur') this.loadTurkishPOS()
-      console.log("Wiktionary: loaded.")
-      return this
+      this.words = words;
+      this.createIndices();
+      if (this.l2 === "fra") await this.loadFrenchConjugationsAndLemmatizer();
+      if (this.l2 === "fas") await this.loadPersianRomanization();
+      if (this.l2 === "tur") this.loadTurkishPOS();
+      console.log("Wiktionary: loaded.");
+      return this;
     }
   },
   async loadFrequency() {
-    console.log(`Wiktionary: loading frequency...`)
-    let res = await axios.get(`${this.server}data/frequency/frequency-${this.l2}.csv.txt`)
+    console.log(`Wiktionary: loading frequency...`);
+    let res = await axios.get(
+      `${this.server}data/frequency/frequency-${this.l2}.csv.txt`
+    );
     if (res && res.data) {
-      let parsed = Papa.parse(res.data, { header: true })
-      this.frequency = {}
+      let parsed = Papa.parse(res.data, { header: true });
+      this.frequency = {};
       for (let row of parsed.data) {
-        let search = row.word.toLowerCase()
-        this.frequency[search] = Math.max(this.frequency[search] || 0, Number(row.count))
+        let search = row.word.toLowerCase();
+        this.frequency[search] = Math.max(
+          this.frequency[search] || 0,
+          Number(row.count)
+        );
       }
     }
   },
   getWordsWithFrequencyGreaterThan(frequency) {
-    let count = this.words.filter(w => w.frequency > frequency).length
-    console.log(`There are ${count} words (${count / this.words.length * 100}% total) with frequency > ${frequency}`)
-    return count
+    let count = this.words.filter(w => w.frequency > frequency).length;
+    console.log(
+      `There are ${count} words (${(count / this.words.length) *
+        100}% total) with frequency > ${frequency}`
+    );
+    return count;
   },
   async loadWords(file) {
-    console.log(`Wiktionary: loading ${file}`)
-    let res = await axios.get(file)
-    let words = !this.useJSON.includes(this.l2) ? this.parseDictionaryCSV(res.data) : this.parseDictionaryJSON(res.data)
-    res = null
+    console.log(`Wiktionary: loading ${file}`);
+    let res = await axios.get(file);
+    let words = !this.useJSON.includes(this.l2)
+      ? this.parseDictionaryCSV(res.data)
+      : this.parseDictionaryJSON(res.data);
+    res = null;
     words = words.sort((a, b) => {
       if (a.head && b.head) {
-        return b.head.length - a.head.length
+        return b.head.length - a.head.length;
       }
-    })
+    });
     words = words.map((word, index) => {
-      word.id = String(index)
-      return word
-    })
-    console.log(`Wiktionary: ${file} loaded.`)
-    return words
+      word.id = String(index);
+      return word;
+    });
+    console.log(`Wiktionary: ${file} loaded.`);
+    return words;
   },
   createIndices() {
-    console.log('Wiktionary: Indexing...')
+    console.log("Wiktionary: Indexing...");
     for (let word of this.words) {
-      for (let indexType of ['bare', 'head', 'search']) {
-        let indexRef = this[indexType + 'Index'][word[indexType]]
-        if (!Array.isArray(this[indexType + 'Index'][word[indexType]])) this[indexType + 'Index'][word[indexType]] = []
-        this[indexType + 'Index'][word[indexType]] = this[indexType + 'Index'][word[indexType]].concat(word)
+      for (let indexType of ["head", "search"]) {
+        if (!Array.isArray(this[indexType + "Index"][word[indexType]]))
+          this[indexType + "Index"][word[indexType]] = [];
+        this[indexType + "Index"][word[indexType]] = this[indexType + "Index"][
+          word[indexType]
+        ].concat(word);
       }
     }
   },
   parseDictionaryCSV(data) {
-    console.log("Wiktionary: parsing words from CSV...")
-    let parsed = Papa.parse(data, { header: true })
-    let words = parsed.data
-    words = words.filter(w => w.word.length > 0) // filter empty rows
-      .map(item => this.augmentCSVRow(item))
-    return words
+    console.log("Wiktionary: parsing words from CSV...");
+    let parsed = Papa.parse(data, { header: true });
+    let words = parsed.data;
+    words = words
+      .filter(w => w.word.length > 0) // filter empty rows
+      .map(item => this.augmentCSVRow(item));
+    return words;
   },
   augmentCSVRow(item) {
-    item.bare = !this.accentCritical ? this.stripAccents(item.word) : item.word
-    item.search = item.bare.toLowerCase()
-    if (this.l2.agglutinative) item.search = item.search.replace(/^-/, '')
-    item.head = item.word
-    item.accented = item.word
-    delete item.word
-    item.wiktionary = true
-    item.definitions = item.definitions ? item.definitions.split('|') : []
-    item.stems = item.stems ? item.stems.split('|') : []
-    for (let definition of item.definitions.filter(d => d.includes(' of '))) {
-      let lemma = this.lemmaFromDefinition(definition)
-      if (lemma) item.stems.push(lemma)
+    let bare = !this.accentCritical ? this.stripAccents(item.word) : item.word;
+    item.search = bare.toLowerCase();
+    if (this.l2.agglutinative) item.search = item.search.replace(/^-/, "");
+    item.head = item.word;
+    delete item.word;
+    item.wiktionary = true;
+    item.definitions = item.definitions ? item.definitions.split("|") : [];
+    item.stems = item.stems ? item.stems.split("|") : [];
+    for (let definition of item.definitions.filter(d => d.includes(" of "))) {
+      let lemma = this.lemmaFromDefinition(definition);
+      if (lemma) item.stems.push(lemma);
     }
-    item.stems = this.unique(item.stems)
-    item.phrases = item.phrases ? item.phrases.split('|') : []
-    
-    if (this.frequency && !item.frequency) item.frequency = this.frequency[item.search]
+    item.stems = this.unique(item.stems);
+    item.phrases = item.phrases ? item.phrases.split("|") : [];
+
+    if (this.frequency && !item.frequency)
+      item.frequency = this.frequency[item.search];
     if (item.han) {
       item.cjk = {
         canonical: item.han,
-        pronunciation: item.bare
-      }
-      item.hanja = item.han
+        pronunciation: item.head
+      };
+      item.hanja = item.han;
     }
-    return item
+    return item;
   },
   parseDictionaryJSON(data) {
-    console.log("Wiktionary: parsing words from JSON...")
-    this.dictionary = data
-    let words = []
+    console.log("Wiktionary: parsing words from JSON...");
+    this.dictionary = data;
+    let words = [];
     for (let item of this.dictionary) {
       if (item.word && !item.redirect) {
-        let definitions = []
-        let stems = []
-        let gender
+        let definitions = [];
+        let stems = [];
+        let gender;
         if (item.senses && item.senses[0]) {
-          if (item.senses[0].tags && ['feminine', 'masculine', 'neuter'].includes(item.senses[0].tags[0])) {
-            gender = { masculine: 'm', feminine: 'f', neuter: 'n' }[item.senses[0].tags[0]]
+          if (
+            item.senses[0].tags &&
+            ["feminine", "masculine", "neuter"].includes(item.senses[0].tags[0])
+          ) {
+            gender = { masculine: "m", feminine: "f", neuter: "n" }[
+              item.senses[0].tags[0]
+            ];
           }
           for (let sense of item.senses) {
             if (sense.glosses) {
               if (!sense.complex_inflection_of) {
-                let definition = sense.glosses[0]
+                let definition = sense.glosses[0];
                 if (sense.form_of && sense.form_of[0]) {
-                  let stemStr = sense.form_of[0]
-                  if (typeof stemStr === 'object' && stemStr.word) stemStr = stemStr.word
-                  if (typeof stemStr === 'string') {
-                    let stem = this.normalizeStem(stemStr)
-                    stems.push(stem)
-                    if (!definition.includes(' of ')) {
-                      definition = definition + ' of ' + stem
+                  let stemStr = sense.form_of[0];
+                  if (typeof stemStr === "object" && stemStr.word)
+                    stemStr = stemStr.word;
+                  if (typeof stemStr === "string") {
+                    let stem = this.normalizeStem(stemStr);
+                    stems.push(stem);
+                    if (!definition.includes(" of ")) {
+                      definition = definition + " of " + stem;
                     }
                   }
                 }
-                definitions.push(definition)
+                definitions.push(definition);
               } else {
                 // definitions.concat(this.inflections(sense)) // Probably not that useful in practice.
               }
@@ -261,26 +284,36 @@ const Dictionary = {
           }
         }
         if (definitions.length > 0) {
-          let audio = undefined
+          let audio = undefined;
           if (item.sounds) {
             for (let pronunciation of item.sounds) {
               if (pronunciation.audio) {
-                audio = pronunciation.audio
+                audio = pronunciation.audio;
               }
             }
           }
-          let bare = this.accentCritical ? this.stripAccents(item.word) : item.word
-          let pronunciations = item.sounds && item.sounds.length > 0 ? item.sounds.filter(s => s.ipa).map(s => s.ipa.replace(/[/\[\]]/g, '')) : []
-          if (item.heads) pronunciations = pronunciations.concat(item.heads.filter(h => h.tr).map(h => h.tr))
-          pronunciations = this.unique(pronunciations)
-          let search = bare.toLowerCase()
-          if (this.l2.agglutinative) search = search.replace(/^-/, '')
+          let bare = this.accentCritical
+            ? this.stripAccents(item.word)
+            : item.word;
+          let pronunciations =
+            item.sounds && item.sounds.length > 0
+              ? item.sounds
+                  .filter(s => s.ipa)
+                  .map(s => s.ipa.replace(/[/\[\]]/g, ""))
+              : [];
+          if (item.heads)
+            pronunciations = pronunciations.concat(
+              item.heads.filter(h => h.tr).map(h => h.tr)
+            );
+          pronunciations = this.unique(pronunciations);
+          let search = bare.toLowerCase();
+          if (this.l2.agglutinative) search = search.replace(/^-/, "");
           let word = {
             bare,
             search,
             head: item.word,
-            accented: item.word,
-            pronunciation: pronunciations.length > 0 ? pronunciations.join(', ') : undefined,
+            pronunciation:
+              pronunciations.length > 0 ? pronunciations.join(", ") : undefined,
             audio: audio,
             definitions: definitions,
             pos: item.pos,
@@ -288,83 +321,92 @@ const Dictionary = {
             stems: stems.filter(s => s !== item.word),
             phrases: item.derived ? item.derived.map(d => d.word) : [],
             wiktionary: true
-          }
-          if (['vie', 'kor'].includes(this.l2)) {
-            let sino
-            if (this.l2 === 'vie') sino = this.getVietnameseHanTu(item)
-            if (this.l2 === 'kor') sino = this.getKoreanHanja(item)
+          };
+          if (["vie", "kor"].includes(this.l2)) {
+            let sino;
+            if (this.l2 === "vie") sino = this.getVietnameseHanTu(item);
+            if (this.l2 === "kor") sino = this.getKoreanHanja(item);
             word.cjk = {
               canonical: sino,
               phonetics: bare
-            }
-            word.hanja = sino
-            if (this.frequency && !word.frequency) word.frequency = this.frequency[word.search]
+            };
+            word.hanja = sino;
+            if (this.frequency && !word.frequency)
+              word.frequency = this.frequency[word.search];
           }
-          words.push(Object.assign(item, word))
+          words.push(Object.assign(item, word));
         } else {
           // definitions.push(this.blankInflection(item))
           // probably not that useful in practice
         }
       }
     }
-    return words
+    return words;
   },
   loadTurkishPOS() {
-    let data = this.loadCSVString(turkishPOSCSV, true)
+    let data = this.loadCSVString(turkishPOSCSV, true);
     for (let row of data) {
-      for (let symbol of row.Symbol.split(',')) {
-        this.turkishPOS[symbol] = row.POS
+      for (let symbol of row.Symbol.split(",")) {
+        this.turkishPOS[symbol] = row.POS;
       }
     }
   },
   async loadLemmatizationTable(langCode) {
-    let res = await axios.get(`${this.server}data/lemmatization-lists/lemmatization-${langCode}.txt`)
+    let res = await axios.get(
+      `${this.server}data/lemmatization-lists/lemmatization-${langCode}.txt`
+    );
     if (res && res.data) {
-      let parsed = Papa.parse(res.data, { header: false })
-      let table = {}
+      let parsed = Papa.parse(res.data, { header: false });
+      let table = {};
       for (let row of parsed.data) {
-        let lemma = row[0]
-        let surface = row[1]
+        let lemma = row[0];
+        let surface = row[1];
         if (surface && lemma) {
-          if (!table[surface]) table[surface] = []
-          table[surface].push(lemma)
+          if (!table[surface]) table[surface] = [];
+          table[surface].push(lemma);
         }
       }
-      return table
+      return table;
     }
   },
   async loadPersianRomanization() {
-    console.log('Loading Persian romanization file...')
+    console.log("Loading Persian romanization file...");
     try {
-      let res = await axios.get(`${this.server}data/persian-g2p/tihudictBIG-and-wiktionary-merged.csv.txt`)
+      let res = await axios.get(
+        `${this.server}data/persian-g2p/tihudictBIG-and-wiktionary-merged.csv.txt`
+      );
       if (res && res.data) {
-        let parsed = Papa.parse(res.data, { header: true })
-        this.romanizations = parsed.data
+        let parsed = Papa.parse(res.data, { header: true });
+        this.romanizations = parsed.data;
       }
-    } catch (err) {
-
-    }
+    } catch (err) {}
   },
   async loadFrenchConjugationsAndLemmatizer() {
-    console.log('Loading French conjugations from "french-verbs-lefff"...')
-    let res = await axios.get(`${this.server}data/french-verbs-lefff/conjugations.json.txt`)
+    console.log('Loading French conjugations from "french-verbs-lefff"...');
+    let res = await axios.get(
+      `${this.server}data/french-verbs-lefff/conjugations.json.txt`
+    );
     if (res && res.data) {
-      this.conjugations = res.data
+      this.conjugations = res.data;
     }
-    console.log('Loading French tokenizer...')
-    importScripts('../vendor/nlp-js-tools-french/nlp-js-tools-french.js')
-    for (let key of ['adj',
-      'adv',
-      'art',
-      'con',
-      'nom',
-      'ono',
-      'pre',
-      'ver',
-      'pro']) {
-      let res = await axios.get(`/vendor/nlp-js-tools-french/dict/${key.replace('con', 'conj')}.json`)
-      let lexi = res.data
-      this.NlpjsTFrDict[key] = { lexi }
+    console.log("Loading French tokenizer...");
+    importScripts("../vendor/nlp-js-tools-french/nlp-js-tools-french.js");
+    for (let key of [
+      "adj",
+      "adv",
+      "art",
+      "con",
+      "nom",
+      "ono",
+      "pre",
+      "ver",
+      "pro"
+    ]) {
+      let res = await axios.get(
+        `/vendor/nlp-js-tools-french/dict/${key.replace("con", "conj")}.json`
+      );
+      let lexi = res.data;
+      this.NlpjsTFrDict[key] = { lexi };
     }
   },
   /**
@@ -372,394 +414,453 @@ const Dictionary = {
    * @param {String} text
    */
   async romanizePersian(text) {
-    if (this.l2 !== 'fas') return
-    text = text.trim()
-    let row = this.romanizations.find(r => r.persian === text)
-    if (row) return row.roman
+    if (this.l2 !== "fas") return;
+    text = text.trim();
+    let row = this.romanizations.find(r => r.persian === text);
+    if (row) return row.roman;
     else {
-      let url = `https://python.zerotohero.ca/transliterate-persian?text=${encodeURIComponent(text)}`
-      let transliteration = await this.proxy(url, -1)
-      return transliteration
+      let url = `https://python.zerotohero.ca/transliterate-persian?text=${encodeURIComponent(
+        text
+      )}`;
+      let transliteration = await this.proxy(url, -1);
+      return transliteration;
     }
   },
   loadCSVString(csv, header = true) {
-    if (typeof Papa !== 'undefined') {
+    if (typeof Papa !== "undefined") {
       let r = Papa.parse(csv, {
         header: header
-      })
-      return r.data
+      });
+      return r.data;
     }
   },
   getKoreanHanja(item) {
-    if (!item['etymology_text']) return
-    let hanja = item['etymology_text'].replace('Sino-Korean word from ', '')
-    hanja = hanja.replace('From Middle Chinese ', '')
-    hanja = hanja.replace('.', '')
-    hanja = hanja.replace(/\(.*\)/, '')
-    hanja = hanja.replace(/,.*/, '')
-    hanja = hanja.trim()
+    if (!item["etymology_text"]) return;
+    let hanja = item["etymology_text"].replace("Sino-Korean word from ", "");
+    hanja = hanja.replace("From Middle Chinese ", "");
+    hanja = hanja.replace(".", "");
+    hanja = hanja.replace(/\(.*\)/, "");
+    hanja = hanja.replace(/,.*/, "");
+    hanja = hanja.trim();
     // if (!this.isHan(hanja)) {
     //   let matches = item['etymology_text'].match(this.hanRegex)
     //   if (matches) hanja = matches[0]
     // }
     if (this.isHan(hanja)) {
-      return hanja
+      return hanja;
     }
   },
   getVietnameseHanTu(item) {
-    if (!item['etymology-templates']) return
-    let etymologyItems = item['etymology-templates'].filter(t => t.args && t.name && t.name === 'der' && t.args && t.args[2] && t.args[2] === 'zh' && t.args[3] && this.isHan(t.args[3]))
+    if (!item["etymology-templates"]) return;
+    let etymologyItems = item["etymology-templates"].filter(
+      t =>
+        t.args &&
+        t.name &&
+        t.name === "der" &&
+        t.args &&
+        t.args[2] &&
+        t.args[2] === "zh" &&
+        t.args[3] &&
+        this.isHan(t.args[3])
+    );
     if (etymologyItems.length === 0) {
-      etymologyItems = item['etymology-templates'].filter(t => t.args && t.name && t.name === 'm' && t.args && t.args[1] && t.args[1] === 'vi' && t.args[2] && this.isHan(t.args[2]))
+      etymologyItems = item["etymology-templates"].filter(
+        t =>
+          t.args &&
+          t.name &&
+          t.name === "m" &&
+          t.args &&
+          t.args[1] &&
+          t.args[1] === "vi" &&
+          t.args[2] &&
+          this.isHan(t.args[2])
+      );
     } else {
-      etymologyItems.map(i => i.args[2] = i.args[3])
+      etymologyItems.map(i => (i.args[2] = i.args[3]));
     }
-    let etymologyText = etymologyItems.map(i => i.args[2])
+    let etymologyText = etymologyItems.map(i => i.args[2]);
     if (etymologyText.length > 0) {
       if (etymologyText[0].length > 1) {
-        etymologyText = etymologyText[0]
+        etymologyText = etymologyText[0];
       } else {
-        etymologyText = etymologyText.join('')
+        etymologyText = etymologyText.join("");
       }
     } else {
-      etymologyText = undefined
+      etymologyText = undefined;
     }
-    return etymologyText
+    return etymologyText;
   },
   hasHan(text) {
-    return text.match(
-      this.hanRegex
-    )
+    return text.match(this.hanRegex);
   },
   isHan(text) {
-    return this.hanRegexStrict.test(text)
+    return this.hanRegexStrict.test(text);
   },
   inflections(sense) {
-    let definitions = []
+    let definitions = [];
     for (let inflection of sense.complex_inflection_of) {
-      let head = inflection['1'] || inflection['2']
+      let head = inflection["1"] || inflection["2"];
       if (head) {
-        definitions.push(`${inflection['3']} ${inflection['4']} ${inflection['5']} inflection of <a href="https://en.wiktionary.org/wiki/${head}" target="_blank">${head}</a>`)
+        definitions.push(
+          `${inflection["3"]} ${inflection["4"]} ${inflection["5"]} inflection of <a href="https://en.wiktionary.org/wiki/${head}" target="_blank">${head}</a>`
+        );
       }
     }
-    return definitions
+    return definitions;
   },
   blankInflection(item) {
-    `(inflected form, see <a href="https://en.wiktionary.org/wiki/${item.word}" target="_blank">Wiktionary</a> for details)`
+    `(inflected form, see <a href="https://en.wiktionary.org/wiki/${item.word}" target="_blank">Wiktionary</a> for details)`;
   },
   exportCSV() {
-    console.log('Wiktionary: Exporting CSV...')
-    let csv = Papa.unparse(this.words.map(item => {
-      let word = {
-        word: item.head,
-        pronunciation: item.pronunciation,
-        audio: item.audio,
-        definitions: item.definitions.join('|'),
-        pos: item.pos,
-        gender: item.gender,
-        stems: item.stems.join('|'),
-        phrases: item.phrases.join('|'),
-      }
-      if (['vie', 'kor'].includes(this.l2)) {
-        word.han = item.cjk && item.cjk.canonical ? item.cjk.canonical : undefined
-      }
-      if (this.frequency) word.frequency = Math.round(item.frequency / 12711)
-      return word
-    }))
-    console.log('CSV exported.')
-    return csv
+    console.log("Wiktionary: Exporting CSV...");
+    let csv = Papa.unparse(
+      this.words.map(item => {
+        let word = {
+          word: item.head,
+          pronunciation: item.pronunciation,
+          audio: item.audio,
+          definitions: item.definitions.join("|"),
+          pos: item.pos,
+          gender: item.gender,
+          stems: item.stems.join("|"),
+          phrases: item.phrases.join("|")
+        };
+        if (["vie", "kor"].includes(this.l2)) {
+          word.han =
+            item.cjk && item.cjk.canonical ? item.cjk.canonical : undefined;
+        }
+        if (this.frequency) word.frequency = Math.round(item.frequency / 12711);
+        return word;
+      })
+    );
+    console.log("CSV exported.");
+    return csv;
   },
   normalizeStem(stemStr) {
-    stemStr = stemStr.replace(/ \(.*\)/, '').replace(/ \[\[.*\]\]/g, '')
-    if (this.l2 === 'heb') {
-      stemStr = stemStr.split(/ \u000092 /)[0]
-      stemStr = this.stripHebrewVowels(stemStr.replace(/\u200e/gi, ''))
+    stemStr = stemStr.replace(/ \(.*\)/, "").replace(/ \[\[.*\]\]/g, "");
+    if (this.l2 === "heb") {
+      stemStr = stemStr.split(/ \u000092 /)[0];
+      stemStr = this.stripHebrewVowels(stemStr.replace(/\u200e/gi, ""));
     }
-    return stemStr.trim()
+    return stemStr.trim();
   },
   get(id) {
     if (this.supplementalLangs[this.l2]) {
       // This comes from the supplemental dictionary
-      return this.words.find(w => w.id === id)
-    }
-    else return this.words[id]
+      return this.words.find(w => w.id === id);
+    } else return this.words[id];
   },
   lookup(text) {
-    let words = this.searchIndex[text.toLowerCase()]
-    if (words && words[0]) return words[0]
+    let words = this.searchIndex[text.toLowerCase()];
+    if (words && words[0]) return words[0];
   },
   lookupMultiple(text, ignoreAccents = false) {
-    if (ignoreAccents && !this.accentCritical) text = this.stripAccents(text)
-    let type = ignoreAccents ? 'bare' : 'head'
-    let words = this[type + 'Index'][text.toLowerCase()]
-    return words || []
+    if (ignoreAccents && !this.accentCritical) text = this.stripAccents(text);
+    let type = ignoreAccents ? "bare" : "head";
+    let words = this[type + "Index"][text.toLowerCase()];
+    return words || [];
   },
   lookupByDef(text, limit = 30) {
-    text = text.toLowerCase()
-    let results = []
+    text = text.toLowerCase();
+    let results = [];
     for (let word of this.words) {
       for (let d of word.definitions) {
-        let found = d.toLowerCase().includes(text)
+        let found = d.toLowerCase().includes(text);
         if (found) {
-          results.push(Object.assign({ score: 1 / (d.length - text.length + 1) }, word))
+          results.push(
+            Object.assign({ score: 1 / (d.length - text.length + 1) }, word)
+          );
         }
       }
     }
-    results = results.sort((a, b) => b.score - a.score)
-    return results.slice(0, limit)
+    results = results.sort((a, b) => b.score - a.score);
+    return results.slice(0, limit);
   },
-  lookupFuzzy(text, limit = 30, quick = false) { // text = 'abcde'
-    if (!this.accentCritical) text = this.stripAccents(text)
-    text = text.toLowerCase()
-    let words = []
-    words = (this.searchIndex[text] || []).map(w => Object.assign({ score: 1 }, w))
+  lookupFuzzy(text, limit = 30, quick = false) {
+    // text = 'abcde'
+    if (!this.accentCritical) text = this.stripAccents(text);
+    text = text.toLowerCase();
+    let words = [];
+    words = (this.searchIndex[text] || []).map(w => {
+      return { score: 1, w };
+    });
+    console.log("1", words);
     if (this.lemmatizationLangs[this.l2]) {
-      let lemmas = this.lemmatization[text]
-      let lemmaWords = []
+      let lemmas = this.lemmatization[text];
+      let lemmaWords = [];
       if (lemmas) {
         for (let lemma of lemmas) {
-          lemmaWords = lemmaWords.concat(this.lookupMultiple(lemma))
+          lemmaWords = lemmaWords.concat(
+            this.lookupMultiple(lemma).map(w => {
+              return { score: 1, w };
+            })
+          );
         }
-        lemmaWords = lemmaWords.map(w => Object.assign({ morphology: 'Inflected form' }, w))
-        words = this.uniqueByValue(lemmaWords.concat(words), 'id')
+        lemmaWords = lemmaWords.map(w => {
+          return { score: 1, morphology: "Inflected form", w };
+        });
+        words = words.concat(lemmaWords);
       }
     }
+    console.log("2", words);
     if (!quick) {
-      if (['fra'].includes(this.l2) && !quick) {
-        let stems = this.findStems(text)
+      if (["fra"].includes(this.l2) && !quick) {
+        let stems = this.findStems(text);
         if (stems.length > 0 && !quick) {
-          let stemWords = this.stringsToWords(stems)
-          let stemWordsWithScores = stemWords.map(w => Object.assign({ score: 1 }, w))
-          words = words.concat(stemWordsWithScores)
+          let stemWords = this.stringsToWords(stems);
+          let stemWordsWithScores = stemWords.map(w => {
+            return {
+              score: 1,
+              w
+            };
+          });
+          words = words.concat(stemWordsWithScores);
         }
       } else {
         if (words.length === 0 && this.words.length < 200000) {
           for (let word of this.words) {
-            let search = word.search ? word.search : undefined
+            let search = word.search ? word.search : undefined;
             if (search) {
               let distance = FastestLevenshtein.distance(search, text);
-              if (this.l2 === 'tur' && text.startsWith(search)) distance = distance / 2
-              let max = Math.max(text.length, search.length)
-              let similarity = (max - distance) / max
-              words.push(Object.assign({ score: similarity }, word))
+              if (this.l2 === "tur" && text.startsWith(search))
+                distance = distance / 2;
+              let max = Math.max(text.length, search.length);
+              let similarity = (max - distance) / max;
+              words.push({ score: similarity, w: word });
               if (similarity === 1 && !quick) {
-                words = words.concat(this.stemWords(word, 1))
-                words = words.concat(this.phrases(word, 1))
+                words = words.concat(this.stemWords(word, 1));
+                words = words.concat(this.phrases(word, 1));
               }
             }
           }
         } else {
           for (let word of words) {
-            let stemWords = this.stemWords(word, 1)
-            let phrases = this.phrases(word, 1)
-            words = words.concat(stemWords).concat(phrases)
+            let stemWords = this.stemWords(word, 1);
+            let phrases = this.phrases(word, 1);
+            words = words.concat(stemWords).concat(phrases);
           }
         }
       }
-      words = words.sort((a, b) => b.score - a.score)
-      words = this.uniqueByValue(words, 'id')
+      words = words.sort((a, b) => b.score - a.score);
+      console.log("3", words);
+      words = this.uniqueByValue(
+        words.map(w => w.w),
+        "id"
+      );
     }
-    words = words.slice(0, limit)
-    return words
+    words = words.slice(0, limit);
+    return words;
   },
   getWords() {
-    return this.words
+    return this.words;
   },
   getWordsThatContain(text) {
-    let words = this.words.filter(w => (w.head.includes(text)) || (w.bare.includes(text)))
+    let words = this.words.filter(
+      w => w.head.includes(text) || w.search.includes(text)
+    );
     let strings = words
-      .map((word) => word.bare)
-      .concat(words.map((word) => word.head))
-    return this.unique(strings)
+      .map(word => word.search)
+      .concat(words.map(word => word.head));
+    return this.unique(strings);
   },
   formTable() {
-    return this.tables
+    return this.tables;
   },
   stylize(name) {
-    return name
+    return name;
   },
   // https://stackoverflow.com/questions/38613654/javascript-find-unique-objects-in-array-based-on-multiple-properties
   uniqueByValues(arr, keyProps) {
     const kvArray = arr.map(entry => {
-      const key = keyProps.map(k => entry[k]).join('|');
+      const key = keyProps.map(k => entry[k]).join("|");
       return [key, entry];
     });
     const map = new Map(kvArray);
     return Array.from(map.values());
   },
   wordForms(word) {
-    let forms = [{
-      table: 'head',
-      field: 'head',
-      form: word.head
-    }]
-    if (this.l2 === 'fra') forms = forms.concat(this.frenchWordForms(word))
-    else if (this.l2 !== 'vie') forms = forms.concat(this.findForms(word))
-    forms = this.uniqueByValues(forms, ['table', 'field', 'form'])
-    return forms
+    let forms = [
+      {
+        table: "head",
+        field: "head",
+        form: word.head
+      }
+    ];
+    if (this.l2 === "fra") forms = forms.concat(this.frenchWordForms(word));
+    else if (this.l2 !== "vie") forms = forms.concat(this.findForms(word));
+    forms = this.uniqueByValues(forms, ["table", "field", "form"]);
+    return forms;
   },
   lemmaFromDefinition(definition) {
-    definition = definition.replace(/\(.*\)/g, '').trim()
+    definition = definition.replace(/\(.*\)/g, "").trim();
     let m = definition.match(/(.* of )([^\s\.]+)$/);
     if (m) {
       let lemma = m[2].replace(/\u200e/g, ""); // Left-to-Right Mark
-      if (this.l2 === 'lat') lemma = this.stripAccents(lemma)
-      return lemma
+      if (this.l2 === "lat") lemma = this.stripAccents(lemma);
+      return lemma;
     }
   },
   findForms(word) {
-    let heads = [word.head]
-    let forms = []
+    let heads = [word.head];
+    let forms = [];
     if (word.stems && word.stems[0]) {
-      forms = forms.concat(word.stems.map(s => {
-        return {
-          table: 'lemma',
-          field: 'lemma',
-          form: s
-        }
-      }))
+      forms = forms.concat(
+        word.stems.map(s => {
+          return {
+            table: "lemma",
+            field: "lemma",
+            form: s
+          };
+        })
+      );
     }
     // Find all forms of the word, that is, words whose stem matches word.head
     let words = this.words.filter(w => {
-      let found = w.stems.filter(s => heads.includes(s))
-      return found.length > 0
-    })
-    let moreForms = []
+      let found = w.stems.filter(s => heads.includes(s));
+      return found.length > 0;
+    });
+    let moreForms = [];
     for (let w of words) {
       for (let d of w.definitions) {
-        let lemma = this.lemmaFromDefinition(d)
+        let lemma = this.lemmaFromDefinition(d);
         for (let head of heads) {
           if (head === lemma) {
-            field = d.replace(new RegExp(`of ${head}.*`), '').trim()
-            field = field.replace(/form$/, '').trim()
-            let table = field.replace(/.*?([^\s]+)$/, "$1").trim()
-            if (table.includes(')')) table = ''
-            if (table === 'A') table = ''
-            if (table === '') {
-              table = 'inflected'
-              field = field.replace('A(n) ', '').replace('A', 'inflected') + " form"
-            }
-            else field = field.replace(table, '')
-            if (field === 'A') field = 'inflected'
+            field = d.replace(new RegExp(`of ${head}.*`), "").trim();
+            field = field.replace(/form$/, "").trim();
+            let table = field.replace(/.*?([^\s]+)$/, "$1").trim();
+            if (table.includes(")")) table = "";
+            if (table === "A") table = "";
+            if (table === "") {
+              table = "inflected";
+              field =
+                field.replace("A(n) ", "").replace("A", "inflected") + " form";
+            } else field = field.replace(table, "");
+            if (field === "A") field = "inflected";
             let form = {
               table,
               field: field ? field : table,
               form: w.head
-            }
-            moreForms.push(form)
+            };
+            moreForms.push(form);
           }
         }
       }
     }
-    forms = forms.concat(moreForms)
-    return forms
+    forms = forms.concat(moreForms);
+    return forms;
   },
   getSize() {
-    return this.words.length
+    return this.words.length;
   },
   frenchWordForms(word) {
-    let forms = []
+    let forms = [];
     let fields = {
-      0: 'je',
-      1: 'tu',
-      2: 'il/elle',
-      3: 'nous',
-      4: 'vous',
-      5: 'ils'
-    }
+      0: "je",
+      1: "tu",
+      2: "il/elle",
+      3: "nous",
+      4: "vous",
+      5: "ils"
+    };
     let tables = {
-      P: 'présent',
-      S: 'subjonctif',
-      Y: 'Y',
-      I: 'imparfait',
-      G: 'gérondif',
-      K: 'participe passé',
-      J: 'passé simple',
-      T: 'subjonctif imparfait',
-      F: 'futur',
-      C: 'conditionnel présent'
-    }
+      P: "présent",
+      S: "subjonctif",
+      Y: "Y",
+      I: "imparfait",
+      G: "gérondif",
+      K: "participe passé",
+      J: "passé simple",
+      T: "subjonctif imparfait",
+      F: "futur",
+      C: "conditionnel présent"
+    };
     if (this.conjugations) {
-      let conjugations = this.conjugations[word.head]
+      let conjugations = this.conjugations[word.head];
       if (conjugations) {
         for (let key in conjugations) {
-          let conj = conjugations[key]
-          forms = forms.concat(conj.filter(formStr => formStr !== 'NA').map((formStr, index) => {
-            return {
-              table: tables[key],
-              field: fields[index],
-              form: formStr
-            }
-          }))
+          let conj = conjugations[key];
+          forms = forms.concat(
+            conj
+              .filter(formStr => formStr !== "NA")
+              .map((formStr, index) => {
+                return {
+                  table: tables[key],
+                  field: fields[index],
+                  form: formStr
+                };
+              })
+          );
         }
       }
     }
-    return forms
+    return forms;
   },
   uniqueByValue(array, key) {
-    let flags = []
-    let unique = []
-    let l = array.length
+    let flags = [];
+    let unique = [];
+    let l = array.length;
     for (let i = 0; i < l; i++) {
-      if (flags[array[i][key]]) continue
-      flags[array[i][key]] = true
-      unique.push(array[i])
+      if (flags[array[i][key]]) continue;
+      flags[array[i][key]] = true;
+      unique.push(array[i]);
     }
-    return unique
+    return unique;
   },
   subdict(data) {
-    let newDict = Object.assign({}, this)
-    return Object.assign(newDict, { words: data })
+    let newDict = Object.assign({}, this);
+    return Object.assign(newDict, { words: data });
   },
   subdictFromText(text) {
-    let search = text.toLowerCase()
-    if (!this.accentCritical) search = this.stripAccents(search)
-    let subdictFilterFunction = (row) => {
+    let search = text.toLowerCase();
+    if (!this.accentCritical) search = this.stripAccents(search);
+    let subdictFilterFunction = row => {
       if (this.accentCritical) {
-        return text.includes(row.head) || search.includes(row.head)
+        return text.includes(row.head) || search.includes(row.head);
       } else {
-        let headMatches = text.includes(row.head)
-        let searchMatches = row.search.length > 0 && search.includes(row.search)
-        let found = headMatches || searchMatches
-        return found
+        let headMatches = text.includes(row.head);
+        let searchMatches =
+          row.search.length > 0 && search.includes(row.search);
+        let found = headMatches || searchMatches;
+        return found;
       }
-    }
-    let words = this.words.filter(subdictFilterFunction)
-    return this.subdict(words)
+    };
+    let words = this.words.filter(subdictFilterFunction);
+    return this.subdict(words);
   },
   isCombining(char) {
-    let M = '\u0300-\u036F\u0483-\u0489\u0591-\u05BD\u05BF\u05C1\u05C2\u05C4\u05C5\u05C7\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06E4\u06E7\u06E8\u06EA-\u06ED\u0711\u0730-\u074A\u07A6-\u07B0\u07EB-\u07F3\u07FD\u0816-\u0819\u081B-\u0823\u0825-\u0827\u0829-\u082D\u0859-\u085B\u08D3-\u08E1\u08E3-\u0903\u093A-\u093C\u093E-\u094F\u0951-\u0957\u0962\u0963\u0981-\u0983\u09BC\u09BE-\u09C4\u09C7\u09C8\u09CB-\u09CD\u09D7\u09E2\u09E3\u09FE\u0A01-\u0A03\u0A3C\u0A3E-\u0A42\u0A47\u0A48\u0A4B-\u0A4D\u0A51\u0A70\u0A71\u0A75\u0A81-\u0A83\u0ABC\u0ABE-\u0AC5\u0AC7-\u0AC9\u0ACB-\u0ACD\u0AE2\u0AE3\u0AFA-\u0AFF\u0B01-\u0B03\u0B3C\u0B3E-\u0B44\u0B47\u0B48\u0B4B-\u0B4D\u0B56\u0B57\u0B62\u0B63\u0B82\u0BBE-\u0BC2\u0BC6-\u0BC8\u0BCA-\u0BCD\u0BD7\u0C00-\u0C04\u0C3E-\u0C44\u0C46-\u0C48\u0C4A-\u0C4D\u0C55\u0C56\u0C62\u0C63\u0C81-\u0C83\u0CBC\u0CBE-\u0CC4\u0CC6-\u0CC8\u0CCA-\u0CCD\u0CD5\u0CD6\u0CE2\u0CE3\u0D00-\u0D03\u0D3B\u0D3C\u0D3E-\u0D44\u0D46-\u0D48\u0D4A-\u0D4D\u0D57\u0D62\u0D63\u0D82\u0D83\u0DCA\u0DCF-\u0DD4\u0DD6\u0DD8-\u0DDF\u0DF2\u0DF3\u0E31\u0E34-\u0E3A\u0E47-\u0E4E\u0EB1\u0EB4-\u0EBC\u0EC8-\u0ECD\u0F18\u0F19\u0F35\u0F37\u0F39\u0F3E\u0F3F\u0F71-\u0F84\u0F86\u0F87\u0F8D-\u0F97\u0F99-\u0FBC\u0FC6\u102B-\u103E\u1056-\u1059\u105E-\u1060\u1062-\u1064\u1067-\u106D\u1071-\u1074\u1082-\u108D\u108F\u109A-\u109D\u135D-\u135F\u1712-\u1714\u1732-\u1734\u1752\u1753\u1772\u1773\u17B4-\u17D3\u17DD\u180B-\u180D\u1885\u1886\u18A9\u1920-\u192B\u1930-\u193B\u1A17-\u1A1B\u1A55-\u1A5E\u1A60-\u1A7C\u1A7F\u1AB0-\u1ABE\u1B00-\u1B04\u1B34-\u1B44\u1B6B-\u1B73\u1B80-\u1B82\u1BA1-\u1BAD\u1BE6-\u1BF3\u1C24-\u1C37\u1CD0-\u1CD2\u1CD4-\u1CE8\u1CED\u1CF4\u1CF7-\u1CF9\u1DC0-\u1DF9\u1DFB-\u1DFF\u20D0-\u20F0\u2CEF-\u2CF1\u2D7F\u2DE0-\u2DFF\u302A-\u302F\u3099\u309A\uA66F-\uA672\uA674-\uA67D\uA69E\uA69F\uA6F0\uA6F1\uA802\uA806\uA80B\uA823-\uA827\uA880\uA881\uA8B4-\uA8C5\uA8E0-\uA8F1\uA8FF\uA926-\uA92D\uA947-\uA953\uA980-\uA983\uA9B3-\uA9C0\uA9E5\uAA29-\uAA36\uAA43\uAA4C\uAA4D\uAA7B-\uAA7D\uAAB0\uAAB2-\uAAB4\uAAB7\uAAB8\uAABE\uAABF\uAAC1\uAAEB-\uAAEF\uAAF5\uAAF6\uABE3-\uABEA\uABEC\uABED\uFB1E\uFE00-\uFE0F\uFE20-\uFE2F'
-    let regex = new RegExp(`[${M}]+`)
-    let combining = regex.test(char)
+    let M =
+      "\u0300-\u036F\u0483-\u0489\u0591-\u05BD\u05BF\u05C1\u05C2\u05C4\u05C5\u05C7\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06E4\u06E7\u06E8\u06EA-\u06ED\u0711\u0730-\u074A\u07A6-\u07B0\u07EB-\u07F3\u07FD\u0816-\u0819\u081B-\u0823\u0825-\u0827\u0829-\u082D\u0859-\u085B\u08D3-\u08E1\u08E3-\u0903\u093A-\u093C\u093E-\u094F\u0951-\u0957\u0962\u0963\u0981-\u0983\u09BC\u09BE-\u09C4\u09C7\u09C8\u09CB-\u09CD\u09D7\u09E2\u09E3\u09FE\u0A01-\u0A03\u0A3C\u0A3E-\u0A42\u0A47\u0A48\u0A4B-\u0A4D\u0A51\u0A70\u0A71\u0A75\u0A81-\u0A83\u0ABC\u0ABE-\u0AC5\u0AC7-\u0AC9\u0ACB-\u0ACD\u0AE2\u0AE3\u0AFA-\u0AFF\u0B01-\u0B03\u0B3C\u0B3E-\u0B44\u0B47\u0B48\u0B4B-\u0B4D\u0B56\u0B57\u0B62\u0B63\u0B82\u0BBE-\u0BC2\u0BC6-\u0BC8\u0BCA-\u0BCD\u0BD7\u0C00-\u0C04\u0C3E-\u0C44\u0C46-\u0C48\u0C4A-\u0C4D\u0C55\u0C56\u0C62\u0C63\u0C81-\u0C83\u0CBC\u0CBE-\u0CC4\u0CC6-\u0CC8\u0CCA-\u0CCD\u0CD5\u0CD6\u0CE2\u0CE3\u0D00-\u0D03\u0D3B\u0D3C\u0D3E-\u0D44\u0D46-\u0D48\u0D4A-\u0D4D\u0D57\u0D62\u0D63\u0D82\u0D83\u0DCA\u0DCF-\u0DD4\u0DD6\u0DD8-\u0DDF\u0DF2\u0DF3\u0E31\u0E34-\u0E3A\u0E47-\u0E4E\u0EB1\u0EB4-\u0EBC\u0EC8-\u0ECD\u0F18\u0F19\u0F35\u0F37\u0F39\u0F3E\u0F3F\u0F71-\u0F84\u0F86\u0F87\u0F8D-\u0F97\u0F99-\u0FBC\u0FC6\u102B-\u103E\u1056-\u1059\u105E-\u1060\u1062-\u1064\u1067-\u106D\u1071-\u1074\u1082-\u108D\u108F\u109A-\u109D\u135D-\u135F\u1712-\u1714\u1732-\u1734\u1752\u1753\u1772\u1773\u17B4-\u17D3\u17DD\u180B-\u180D\u1885\u1886\u18A9\u1920-\u192B\u1930-\u193B\u1A17-\u1A1B\u1A55-\u1A5E\u1A60-\u1A7C\u1A7F\u1AB0-\u1ABE\u1B00-\u1B04\u1B34-\u1B44\u1B6B-\u1B73\u1B80-\u1B82\u1BA1-\u1BAD\u1BE6-\u1BF3\u1C24-\u1C37\u1CD0-\u1CD2\u1CD4-\u1CE8\u1CED\u1CF4\u1CF7-\u1CF9\u1DC0-\u1DF9\u1DFB-\u1DFF\u20D0-\u20F0\u2CEF-\u2CF1\u2D7F\u2DE0-\u2DFF\u302A-\u302F\u3099\u309A\uA66F-\uA672\uA674-\uA67D\uA69E\uA69F\uA6F0\uA6F1\uA802\uA806\uA80B\uA823-\uA827\uA880\uA881\uA8B4-\uA8C5\uA8E0-\uA8F1\uA8FF\uA926-\uA92D\uA947-\uA953\uA980-\uA983\uA9B3-\uA9C0\uA9E5\uAA29-\uAA36\uAA43\uAA4C\uAA4D\uAA7B-\uAA7D\uAAB0\uAAB2-\uAAB4\uAAB7\uAAB8\uAABE\uAABF\uAAC1\uAAEB-\uAAEF\uAAF5\uAAF6\uABE3-\uABEA\uABEC\uABED\uFB1E\uFE00-\uFE0F\uFE20-\uFE2F";
+    let regex = new RegExp(`[${M}]+`);
+    let combining = regex.test(char);
     // console.log(`👀 checking if ${char} is combinging`, combining)
-    return combining
+    return combining;
   },
   /* Returns the longest word in the dictionary that is inside `text` */
   longest(text) {
     // Only return the *first* seen word and those the same as it
-    let firstSeen = false
-    let matchedIndex, matchEndIndex
-    let search = text.toLowerCase()
-    if (!this.accentCritical) search = this.stripAccents(search)
-    let matches = []
+    let firstSeen = false;
+    let matchedIndex, matchEndIndex;
+    let search = text.toLowerCase();
+    if (!this.accentCritical) search = this.stripAccents(search);
+    let matches = [];
     for (let word of this.words) {
-      let matched = false
-      if (word.head.trim() === '') continue
+      let matched = false;
+      if (word.head.trim() === "") continue;
       if (firstSeen) {
-        matched = word.search === firstSeen
+        matched = word.search === firstSeen;
       } else {
-        matchedIndex = search.indexOf(word.search)
-        let matchFound = matchedIndex !== -1
+        matchedIndex = search.indexOf(word.search);
+        let matchFound = matchedIndex !== -1;
         if (matchFound) {
-          matchEndIndex = matchedIndex + word.search.length
-          let nextChar = text.charAt(matchEndIndex)
+          matchEndIndex = matchedIndex + word.search.length;
+          let nextChar = text.charAt(matchEndIndex);
           while (this.isCombining(nextChar)) {
-            matchEndIndex = matchEndIndex + 1
-            nextChar = text.charAt(matchEndIndex)
+            matchEndIndex = matchEndIndex + 1;
+            nextChar = text.charAt(matchEndIndex);
           }
-          firstSeen = word.search
-          matchedText = text.slice(matchedIndex, matchEndIndex)
-          matched = true
+          firstSeen = word.search;
+          matchedText = text.slice(matchedIndex, matchEndIndex);
+          matched = true;
         }
       }
       if (matched) {
@@ -767,106 +868,114 @@ const Dictionary = {
           word,
           matchedIndex,
           matchEndIndex
-        })
+        });
       }
     }
     // Turkish words should only find matches at the beginning of each word
-    if (this.l2 === 'tur') {
+    if (this.l2 === "tur") {
       matches = matches.sort((a, b) => {
-        return a.matchedIndex - b.matchedIndex
-      })
+        return a.matchedIndex - b.matchedIndex;
+      });
     } else {
       matches = matches.sort((a, b) => {
-        return b.word.head.length - a.word.head.length
-      })
+        return b.word.head.length - a.word.head.length;
+      });
     }
     return {
       matches: matches.map(m => m.word),
       text: matchedText
-    }
+    };
   },
   tokenize(text) {
-    if (this.tokenizationCache[text]) return this.tokenizationCache[text]
-    if (this.l2 === 'tur') return this.tokenizeTurkish(text)
-    let subdict = this.subdictFromText(text)
-    let tokenized = this.tokenizeRecursively(
-      text,
-      subdict
-    )
-    if (['tur'].includes(this.l2)) this.tokenizationCache[text] = tokenized
-    return tokenized
+    if (this.tokenizationCache[text]) return this.tokenizationCache[text];
+    if (this.l2 === "tur") return this.tokenizeTurkish(text);
+    let subdict = this.subdictFromText(text);
+    let tokenized = this.tokenizeRecursively(text, subdict);
+    if (["tur"].includes(this.l2)) this.tokenizationCache[text] = tokenized;
+    return tokenized;
   },
   async tokenizeTurkish(text) {
-    text = text.replace(/-/g, '- ')
-    let url = `https://python.zerotohero.ca/lemmatize-turkish?text=${encodeURIComponent(text)}`
-    let tokenized = await this.proxy(url, 0)
-    let tokens = []
+    text = text.replace(/-/g, "- ");
+    let url = `https://python.zerotohero.ca/lemmatize-turkish?text=${encodeURIComponent(
+      text
+    )}`;
+    let tokenized = await this.proxy(url, 0);
+    let tokens = [];
     for (let lemmas of tokenized) {
       if (!lemmas[0]) {
-        tokens.push(' ')
-      } else if (['Punc'].includes(lemmas[0].pos)) {
-        tokens.push(lemmas[0].word)
-        tokens.push(' ')
+        tokens.push(" ");
+      } else if (["Punc"].includes(lemmas[0].pos)) {
+        tokens.push(lemmas[0].word);
+        tokens.push(" ");
       } else {
-        let candidates = []
+        let candidates = [];
         for (let lemma of lemmas) {
-          candidates = candidates.concat(this.lookupMultiple(lemma.word))
-          if (lemma !== 'Unk') candidates = candidates.concat(this.lookupMultiple(lemma.lemma).map(w => { w.morphology = lemma.morphemes.map(m => this.turkishPOS[m] || m).join(', ').toLowerCase(); return w }))
+          candidates = candidates.concat(this.lookupMultiple(lemma.word));
+          if (lemma !== "Unk")
+            candidates = candidates.concat(
+              this.lookupMultiple(lemma.lemma).map(w => {
+                w.morphology = lemma.morphemes
+                  .map(m => this.turkishPOS[m] || m)
+                  .join(", ")
+                  .toLowerCase();
+                return w;
+              })
+            );
         }
-        candidates = this.uniqueByValue(candidates, 'id')
+        candidates = this.uniqueByValue(candidates, "id");
         tokens.push({
           text: lemmas[0].word,
           lemmas,
           candidates,
           pos: lemmas[0].pos
-        })
-        tokens.push(' ')
+        });
+        tokens.push(" ");
       }
     }
-    return tokens
+    return tokens;
   },
   // json or plain text only, and returns object
   async proxy(url, cacheLife = -1, encoding = false) {
     try {
-      let proxyURL = `https://server.chinesezerotohero.com/scrape2.php?cache_life=${cacheLife}${encoding ? '&encoding=' + encoding : ''}&url=${encodeURIComponent(
-        url
-      )}`
-      let response = await
-        axios.get(
-          proxyURL
-        )
+      let proxyURL = `https://server.chinesezerotohero.com/scrape2.php?cache_life=${cacheLife}${
+        encoding ? "&encoding=" + encoding : ""
+      }&url=${encodeURIComponent(url)}`;
+      let response = await axios.get(proxyURL);
       if (response.data) {
-        return response.data
+        return response.data;
       }
     } catch (err) {
-      console.log(`Helper.proxy() cannot get ${url}`)
+      console.log(`Helper.proxy() cannot get ${url}`);
     }
-    return false
+    return false;
   },
   splitByReg(text, reg) {
-    let words = text.replace(reg, '!!!BREAKWORKD!!!$1!!!BREAKWORKD!!!').replace(/^!!!BREAKWORKD!!!/, '').replace(/!!!BREAKWORKD!!!$/, '')
-    return words.split('!!!BREAKWORKD!!!')
+    let words = text
+      .replace(reg, "!!!BREAKWORKD!!!$1!!!BREAKWORKD!!!")
+      .replace(/^!!!BREAKWORKD!!!/, "")
+      .replace(/!!!BREAKWORKD!!!$/, "");
+    return words.split("!!!BREAKWORKD!!!");
   },
   isThai(text) {
-    let match = text.match(
-      /[\u0E00-\u0E7F]+/g
-    )
-    return match
+    let match = text.match(/[\u0E00-\u0E7F]+/g);
+    return match;
   },
   tokenizeRecursively(text, subdict) {
-    const longest = subdict.longest(text)
-    if (this.l2 === 'tha') {
-      const isThai = subdict.isThai(text)
+    const longest = subdict.longest(text);
+    if (this.l2 === "tha") {
+      const isThai = subdict.isThai(text);
       if (!isThai) {
-        return [text]
+        return [text];
       }
     }
     if (longest.matches.length > 0) {
       for (let word of longest.matches) {
-        longest.matches = longest.matches.concat(this.stemWords(word, 1))
+        longest.matches = longest.matches.concat(
+          this.stemWords(word, 1).map(w => w.w)
+        );
         // longest.matches = longest.matches.concat(this.phrases(word, 1)) // This is very slow
       }
-      let result = []
+      let result = [];
       /*
       result = [
         '我',
@@ -878,112 +987,114 @@ const Dictionary = {
       ]
       */
       for (let textFragment of text.split(longest.text)) {
-        result.push(textFragment) // '我'
+        result.push(textFragment); // '我'
         result.push({
           text: longest.text,
           candidates: longest.matches
-        })
+        });
       }
       result = result.filter(item => {
-        if (typeof item === 'string') {
-          return item !== ''
+        if (typeof item === "string") {
+          return item !== "";
+        } else {
+          return item.text !== "";
         }
-        else {
-          return item.text !== ''
-        }
-      })
-      result.pop() // last item is always useless, remove it
-      var tokens = []
+      });
+      result.pop(); // last item is always useless, remove it
+      var tokens = [];
       for (let item of result) {
-        if (typeof item === 'string' && item !== text) {
-          for (let token of this.tokenizeRecursively(
-            item,
-            subdict
-          )) {
-            tokens.push(token)
+        if (typeof item === "string" && item !== text) {
+          for (let token of this.tokenizeRecursively(item, subdict)) {
+            tokens.push(token);
           }
         } else {
-          tokens.push(item)
+          tokens.push(item);
         }
       }
-      return tokens
+      return tokens;
     } else {
-      return [text]
+      return [text];
     }
   },
   // https://stackoverflow.com/questions/990904/remove-accents-diacritics-in-a-string-in-javascript
   stripAccents(str) {
-    str = str.normalize("NFD")
+    str = str
+      .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "") // Accents
       .replace(/[\u0600-\u0620\u064b-\u0655]/g, "") // Arabic diacritics
-      .replace(/[\u0559-\u055F]/g, "") // Armenian diacritics
-    if (['he', 'hbo', 'iw'].includes(this.l2)) str = this.stripHebrewVowels(str)
-    return str
+      .replace(/[\u0559-\u055F]/g, ""); // Armenian diacritics
+    if (["he", "hbo", "iw"].includes(this.l2))
+      str = this.stripHebrewVowels(str);
+    return str;
   },
   stringsToWords(strings) {
-    let words = []
+    let words = [];
     for (let s of strings) {
-      words = words.concat(this.lookupMultiple(s))
+      words = words.concat(this.lookupMultiple(s));
     }
-    return words
+    return words;
   },
   stemWords(word, score = undefined) {
     if (word.stems && word.stems.length > 0) {
-      let stemWords = this.stringsToWords(word.stems)
-      stemWordsWithScores = stemWords.map(w => Object.assign({ score: score }, w))
-      return stemWordsWithScores
-    } else return []
+      let stemWords = this.stringsToWords(word.stems);
+      stemWordsWithScores = stemWords.map(w => {
+        return { score, w };
+      });
+      return stemWordsWithScores;
+    } else return [];
   },
   phrases(word, score = undefined) {
     if (word.phrases && word.phrases.length > 0) {
-      let phrases = []
+      let phrases = [];
       for (let s of word.phrases) {
-        phrases = phrases.concat(this.lookupMultiple(s))
+        phrases = phrases.concat(this.lookupMultiple(s));
       }
-      phrasesWithScores = phrases.map(w => Object.assign({ score: score }, w))
-      return phrasesWithScores
-    } else return []
+      phrasesWithScores = phrases.map(w => {
+        return { score, w };
+      });
+      return phrasesWithScores;
+    } else return [];
   },
   unique(a) {
     return a.filter((item, i, ar) => ar.indexOf(item) === i);
   },
   findStems(text) {
     let word = text.toLowerCase();
-    if (this.l2 === 'fra') {
+    if (this.l2 === "fra") {
       let tokenizer = new NlpjsTFr(this.NlpjsTFrDict, text);
-      var lemmas = tokenizer.lemmatizer()
-      var flattend = this.unique([word].concat(lemmas.map(l => l.lemma)))
-      lemmas = null
-      return flattend
+      var lemmas = tokenizer.lemmatizer();
+      var flattend = this.unique([word].concat(lemmas.map(l => l.lemma)));
+      lemmas = null;
+      return flattend;
     } else {
-      return []
+      return [];
     }
   },
   randomArrayItem(array, start = 0, length = false) {
-    length = length || array.length
-    array = array.slice(start, length)
-    let index = Math.floor(Math.random() * array.length)
-    return array[index]
+    length = length || array.length;
+    array = array.slice(start, length);
+    let index = Math.floor(Math.random() * array.length);
+    return array[index];
   },
   //https://stackoverflow.com/questions/2532218/pick-random-property-from-a-javascript-object
   randomProperty(obj) {
-    var keys = Object.keys(obj)
-    return obj[keys[(keys.length * Math.random()) << 0]]
+    var keys = Object.keys(obj);
+    return obj[keys[(keys.length * Math.random()) << 0]];
   },
   random() {
-    return this.randomProperty(this.words)
+    return this.randomProperty(this.words);
   },
   accent(text) {
-    return text.replace(/'/g, '́')
+    return text.replace(/'/g, "́");
   },
 
   /*
   * https://gist.github.com/yakovsh/345a71d841871cc3d375
   /* @shimondoodkin suggested even a much shorter way to do this */
   stripHebrewVowels(rawString) {
-    return rawString.replace(/[\u0591-\u05C7]/g, "")
-  },
-}
+    return rawString.replace(/[\u0591-\u05C7]/g, "");
+  }
+};
 
 let turkishPOSCSV = `POS	Symbol
 Ability/Probability	Abil
@@ -1053,4 +1164,4 @@ Third Person Singular Possession	P3sg
 To apply something	Apply,Apply-V
 To Become Something	Become,Become-V
 With	With,With-Adj
-Without	Without,Without-Adj`
+Without	Without,Without-Adj`;

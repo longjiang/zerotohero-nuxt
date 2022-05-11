@@ -46,7 +46,7 @@
               ></i>
             </span>
           </p>
-          <div class="text-center mb-3" v-if="!showDiscover">
+          <div class="text-center mt-4 mb-3" v-if="!showDiscover">
             <b-button @click="showDiscover = true" size="sm" variant="success">
               <i class="fas fa-random mr-2"></i>
               Surprise Me
