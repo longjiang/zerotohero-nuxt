@@ -142,7 +142,7 @@ export default {
         }/`;
     },
     thisEpisodeIndex() {
-      return this.episodes.findIndex((episode) => episode.id === this.video.id);
+      return this.episodes.findIndex((episode) => episode.youtube_id === this.video.youtube_id);
     },
     nextEpisode() {
       let thisEpisodeIndex = this.thisEpisodeIndex;
