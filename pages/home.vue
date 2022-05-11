@@ -16,20 +16,6 @@
       <div class="row">
         <div class="col-sm-12">
           <!-- <Sale class="mt-4 mb-4" v-if="$l2.code === 'zh'" /> -->
-          <client-only>
-            <div :class="{ 'pl-1 pr-1 pb-2': true, 'd-none': !hasDashboard }">
-              <div class="home-card">
-                <h4 class="text-center mb-4">Continue Watching</h4>
-                <LazyDashboard
-                  :l2="$l2"
-                  @hasDashboard="hasDashboardUpdate"
-                  :showWords="false"
-                  skin="dark"
-                  :showFlags="true"
-                />
-              </div>
-            </div>
-          </client-only>
           <Nav :l1="$l1" :l2="$l2" variant="page" class="pb-2" />
           <div v-if="$route.params.l1 && $route.params.l1 && $l1 && $l2">
             <div :class="{ 'pl-1 pr-1 pb-2': true }">

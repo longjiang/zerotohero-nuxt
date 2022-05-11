@@ -284,6 +284,12 @@ export default {
               show: true,
             },
             {
+              name: "watch-history",
+              icon: "fas fa-history",
+              title: "Watch History",
+              show: true,
+            },
+            {
               path: this.moviesPath,
               icon: "fa fa-film",
               title: `Movies`,

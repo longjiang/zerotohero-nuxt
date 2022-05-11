@@ -5,7 +5,7 @@
       class="link-unstyled nuxt-link-active btn-sign-in"
       href="https://m.cctalk.com/inst/stevmab3"
     >
-      <i v-if="icon" class="fas fa-user text-center" style="width: 1.5rem"></i>
+      <i v-if="icon" class="fas fa-chalkboard-teacher text-center" style="width: 1.5rem"></i>
       <span v-if="text">我的课程</span>
     </a>
     <a
@@ -13,7 +13,7 @@
       class="link-unstyled nuxt-link-active btn-sign-in"
       href="https://sso.teachable.com/secure/133035/users/sign_in"
     >
-      <i v-if="icon" class="fas fa-user text-center" style="width: 1.5rem"></i>
+      <i v-if="icon" class="fas fa-chalkboard-teacher text-center" style="width: 1.5rem"></i>
       <span v-if="text">My Courses</span>
     </a>
   </div>
