@@ -6,12 +6,18 @@ export default async function ({ error, route, app, store, params, i18n }) {
       console.log('Language Switch: Setting languages...')
       let l1 = app.$languages.getSmart(params.l1)
       let l2 = app.$languages.getSmart(params.l2)
-      if (!l2) {
-        error({
-          statusCode: 404,
-          message: `Invalid route: ${route.path}`,
-        })
-        return
+      if (!l1 || !l2) {
+        // If common languages do not include the code requested, load the whole language list
+        await app.$languages.loadFull()
+        l1 = app.$languages.getSmart(params.l1)
+        l2 = app.$languages.getSmart(params.l2)
+        if (!l1 || !l2) {
+          error({
+            statusCode: 404,
+            message: `Invalid route: ${route.path}`,
+          })
+          return
+        }
       }
       store.commit('settings/SET_L1', l1)
       store.commit('settings/SET_L2', l2)
