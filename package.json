@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.13.1",
+    "@sindresorhus/transliterate": "^1.5.0",
     "@videojs/http-streaming": "^2.10.0",
     "accounting": "^0.4.1",
     "ass-parser": "^0.2.0",
@@ -32,6 +33,7 @@
     "fs": "^0.0.1-security",
     "he": "^1.2.0",
     "html-entities": "^1.4.0",
+    "install": "^0.13.0",
     "jquery": "^3.6.0",
     "leaflet": "^1.7.1",
     "marked": "^2.0.4",
@@ -39,6 +41,7 @@
     "money": "^0.2.0",
     "net": "^1.0.2",
     "node-html-parser": "^3.3.3",
+    "npm": "^8.10.0",
     "nuxt": "^2.15.8",
     "nuxt-i18n": "^6.27.0",
     "nuxt-lazy-load": "^1.2.6",

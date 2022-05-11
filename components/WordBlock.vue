@@ -357,7 +357,7 @@ import Helper from "@/lib/helper";
 import Config from "@/lib/config";
 import WordPhotos from "@/lib/word-photos";
 import Klingon from "@/lib/klingon";
-import { transliterate as tr } from "transliteration";
+import tr from '@sindresorhus/transliterate';
 import { mapState } from "vuex";
 
 export default {

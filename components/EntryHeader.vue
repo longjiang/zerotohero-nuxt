@@ -191,7 +191,7 @@
 
 <script>
 import Klingon from "@/lib/klingon";
-import { transliterate as tr } from "transliteration";
+import tr from '@sindresorhus/transliterate';
 
 export default {
   props: {

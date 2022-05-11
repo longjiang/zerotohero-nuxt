@@ -126,7 +126,7 @@
 </template>
 <script>
 import Helper from "@/lib/helper";
-import { transliterate as tr } from "transliteration";
+import tr from '@sindresorhus/transliterate';
 
 export default {
   data() {
