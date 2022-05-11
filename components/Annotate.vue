@@ -187,6 +187,15 @@ export default {
       this.myanmarZawgyiConverter = new google_myanmar_tools.ZawgyiConverter();
     }
   },
+  beforeDestroy() {
+    try {
+      this.tokenized = []
+      if (this.$refs["run-time-template"] && this.$refs["run-time-template"][0])
+        this.$refs["run-time-template"][0].$destroy();
+    } catch (err) {
+      console.log(err);
+    }
+  },
   computed: {
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
@@ -226,18 +235,24 @@ export default {
             ".word-block, .word-block-unknown"
           );
           let durationAlreadyPlayed = 0;
-          let spans = this.$el.querySelectorAll(".word-block-text, .word-block-unknown");
-          let aggregateText = ''
-          spans.forEach(span => aggregateText = aggregateText + span.textContent.trim());
+          let spans = this.$el.querySelectorAll(
+            ".word-block-text, .word-block-unknown"
+          );
+          let aggregateText = "";
+          spans.forEach(
+            (span) => (aggregateText = aggregateText + span.textContent.trim())
+          );
           for (let block of blocks) {
-            let span = block.classList.contains('word-block') ? block.querySelector(".word-block-text") : block;
+            let span = block.classList.contains("word-block")
+              ? block.querySelector(".word-block-text")
+              : block;
             let blockLength = span
               ? span.textContent.trim().length
               : aggregateText.length / blocks.length;
-            if (!span) console.log(span)
+            if (!span) console.log(span);
             let blockDuration =
               (blockLength / aggregateText.length) * this.animationDuration;
-            if (blockDuration === 0) continue
+            if (blockDuration === 0) continue;
             durationAlreadyPlayed = durationAlreadyPlayed + blockDuration;
             // Which ones should skip
             if (durationAlreadyPlayed > startFrom) {

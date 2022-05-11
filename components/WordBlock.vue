@@ -527,6 +527,9 @@ export default {
     });
   },
   beforeDestroy() {
+    this.words = []
+    this.token = null
+    console.log('Destorying', this.text)
     // you may call unsubscribe to stop the subscription
     this.unsubscribe();
   },
