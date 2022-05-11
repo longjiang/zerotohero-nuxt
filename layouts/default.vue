@@ -29,8 +29,8 @@
       />
       <div class="zth-content">
         <Nuxt id="main" />
+        <LazyFooter :dictionaryCredit="dictionaryCredit" class="zth-footer" />
       </div>
-      <LazyFooter :dictionaryCredit="dictionaryCredit" class="zth-footer" />
       <ReaderComp
         v-if="
           l1 && l2 && $route.name !== 'youtube-view' && $route.name !== 'home'
@@ -223,9 +223,6 @@ export default {
 
 #zerotohero {
   min-height: 100vh;
-}
-
-#zerotohero {
   .zerotohero-background {
     height: 100vh;
     width: 100vw;
@@ -243,10 +240,14 @@ export default {
       display: none;
     }
   }
-}
-
-.zth-content {
-  min-height: 100vh;
+  .zth-content {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    #main {
+      flex: 1;
+    }
+  }
 }
 
 .zerotohero-wide {
@@ -278,10 +279,5 @@ export default {
 .zth-footer {
   background-color: #25242cfa;
   color: white;
-}
-.zerotohero-wide {
-  ::v-deep .zth-footer {
-    padding-left: 29rem;
-  }
 }
 </style>
