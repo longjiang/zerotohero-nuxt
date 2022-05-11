@@ -12,7 +12,7 @@ const Dictionary = {
   NlpjsTFrDict: {},
   frequency: undefined,
   useJSON: [],
-  hasFrequency: ["eng"],
+  hasFrequency: [],
   hanRegex: /[\u2E80-\u2E99\u2E9B-\u2EF3\u2F00-\u2FD5\u3005\u3007\u3021-\u3029\u3038-\u303B‌​\u3400-\u4DB5\u4E00-\u9FCC\uF900-\uFA6D\uFA70-\uFAD9]+/g,
   hanRegexStrict: /^[\u2E80-\u2E99\u2E9B-\u2EF3\u2F00-\u2FD5\u3005\u3007\u3021-\u3029\u3038-\u303B‌​\u3400-\u4DB5\u4E00-\u9FCC\uF900-\uFA6D\uFA70-\uFAD9]+$/,
   tokenizationCache: {},
@@ -244,13 +244,21 @@ const Dictionary = {
   },
   parseDictionaryJSON(data) {
     console.log("Wiktionary: parsing words from JSON...");
-    this.dictionary = data;
+    this.words = data;
     let words = [];
-    for (let item of this.dictionary) {
+    for (let item of this.words) {
       if (item.word && !item.redirect) {
         let definitions = [];
         let stems = [];
         let gender;
+        if (
+          item.head_templates &&
+          item.head_templates[0] &&
+          item.head_templates[0].args &&
+          item.head_templates[0].args.g
+        ) {
+          gender = item.head_templates[0].args.g
+        }
         if (item.senses && item.senses[0]) {
           if (
             item.senses[0].tags &&
@@ -331,9 +339,9 @@ const Dictionary = {
               phonetics: head
             };
             word.hanja = sino;
-            if (this.frequency && !word.frequency)
-              word.frequency = this.frequency[word.search];
           }
+          if (this.frequency && !word.frequency)
+            word.frequency = this.frequency[word.search];
           words.push(Object.assign(item, word));
         } else {
           // definitions.push(this.blankInflection(item))
@@ -513,26 +521,35 @@ const Dictionary = {
   },
   exportCSV() {
     console.log("Wiktionary: Exporting CSV...");
-    let csv = Papa.unparse(
-      this.words.map(item => {
-        let word = {
-          word: item.head,
-          pronunciation: item.pronunciation,
-          audio: item.audio,
-          definitions: item.definitions.join("|"),
-          pos: item.pos,
-          gender: item.gender,
-          stems: item.stems.join("|"),
-          phrases: item.phrases.join("|")
-        };
-        if (["vie", "kor"].includes(this.l2)) {
-          word.han =
-            item.cjk && item.cjk.canonical ? item.cjk.canonical : undefined;
-        }
-        if (this.frequency) word.frequency = Math.round(item.frequency / 12711);
-        return word;
-      })
-    );
+    let words = this.words;
+    let maxFrequency = 0;
+    if (this.frequency) {
+      for (let word of words) {
+        if (word.frequency > maxFrequency) maxFrequency = word.frequency;
+      }
+    }
+    words = words.map(item => {
+      let word = {
+        word: item.head,
+        pronunciation: item.pronunciation,
+        audio: item.audio,
+        definitions: item.definitions.join("|"),
+        pos: item.pos,
+        gender: item.gender
+        // stems: item.stems.join("|"),
+        // phrases: item.phrases.join("|")
+      };
+      if (["vie", "kor"].includes(this.l2)) {
+        word.han =
+          item.cjk && item.cjk.canonical ? item.cjk.canonical : undefined;
+      }
+      if (this.frequency)
+        word.frequency = Math.round((item.frequency / maxFrequency) * 1000);
+      return word;
+    });
+    words = words.filter(item => item.word && !item.word.includes(" "));
+    // words = words.filter(item => item.frequency)
+    let csv = Papa.unparse(words);
     console.log("CSV exported.");
     return csv;
   },
