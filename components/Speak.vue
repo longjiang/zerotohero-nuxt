@@ -87,6 +87,7 @@ export default {
       this.$refs.player.appendChild(player);
       player.src = url;
       player.play();
+      player = null
     },
     playAudio(url) {
       let audio = new Audio(url);
