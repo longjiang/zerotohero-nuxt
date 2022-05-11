@@ -257,7 +257,7 @@ const Dictionary = {
           item.head_templates[0].args &&
           item.head_templates[0].args.g
         ) {
-          gender = item.head_templates[0].args.g
+          gender = item.head_templates[0].args.g;
         }
         if (item.senses && item.senses[0]) {
           if (
@@ -613,20 +613,23 @@ const Dictionary = {
           );
         }
         lemmaWords = lemmaWords.map(w => {
-          return { score: 1, morphology: "Inflected form", w };
+          return {
+            score: 1,
+            w: Object.assign({ morphology: "Inflected form" }, w)
+          };
         });
         words = words.concat(lemmaWords);
       }
     }
     if (!quick) {
       if (["fra"].includes(this.l2) && !quick) {
-        let stems = this.findStems(text);
+        let stems = this.findFrenchStems(text);
         if (stems.length > 0 && !quick) {
           let stemWords = this.stringsToWords(stems);
           let stemWordsWithScores = stemWords.map(w => {
             return {
-              score: 1,
-              w
+              score: 2,
+              w: Object.assign({ morphology: "Inflected form of" }, w)
             };
           });
           words = words.concat(stemWordsWithScores);
@@ -1072,7 +1075,7 @@ const Dictionary = {
   unique(a) {
     return a.filter((item, i, ar) => ar.indexOf(item) === i);
   },
-  findStems(text) {
+  findFrenchStems(text) {
     let word = text.toLowerCase();
     if (this.l2 === "fra") {
       let tokenizer = new NlpjsTFr(this.NlpjsTFrDict, text);
