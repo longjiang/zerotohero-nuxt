@@ -27,6 +27,7 @@ const Dictionary = {
           for (let row of this.words) {
             row.rank = row.weight / this._maxWeight
           }
+          response = null
           resolve()
         })
       })
@@ -36,6 +37,7 @@ const Dictionary = {
             header: true
           })
           this.characters = results.data
+          response = null
           resolve()
 
         })
@@ -47,6 +49,7 @@ const Dictionary = {
             delimiter: ','
           })
           this.newHSK = results.data
+          response = null
           resolve()
         })
       })

@@ -44,6 +44,7 @@ const Dictionary = {
     let results = await Papa.parse(res.data, {
       header: true
     })
+    res = null
     for (let index in results.data) {
       let row = results.data[index]
       let word = row

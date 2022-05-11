@@ -167,6 +167,7 @@ const Dictionary = {
     console.log(`Wiktionary: loading ${file}`)
     let res = await axios.get(file)
     let words = !this.useJSON.includes(this.l2) ? this.parseDictionaryCSV(res.data) : this.parseDictionaryJSON(res.data)
+    res = null
     words = words.sort((a, b) => {
       if (a.head && b.head) {
         return b.head.length - a.head.length
@@ -952,6 +953,7 @@ const Dictionary = {
       let tokenizer = new NlpjsTFr(this.NlpjsTFrDict, text);
       var lemmas = tokenizer.lemmatizer()
       var flattend = this.unique([word].concat(lemmas.map(l => l.lemma)))
+      lemmas = null
       return flattend
     } else {
       return []

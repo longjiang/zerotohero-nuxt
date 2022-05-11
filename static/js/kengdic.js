@@ -27,7 +27,9 @@ const Dictionary = {
       return word;
     });
     words = words.concat(wiktionaryWords);
-    this.words = this.uniqueByValues(words, ["bare", "hanja"]);
+    this.words = this.uniqueByValues(words, ["bare", "hanja", "pos"]);
+    kengdicData = null
+    wiktionaryData = null
     axios.get("https://py.zerotohero.ca/start-open-korean-text.php"); // Call index.php to make sure the java open-korean-text process is running (Dreamhost kills it from time to time)
     return this;
   },

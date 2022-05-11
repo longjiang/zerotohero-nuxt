@@ -117,6 +117,7 @@ const Dictionary = {
     let results = await Papa.parse(res.data, {
       header: true
     })
+    res = null
     let sorted = results.data.sort((a, b) =>
       a.kana && b.kana ? a.kana.length - b.kana.length : 0
     )
