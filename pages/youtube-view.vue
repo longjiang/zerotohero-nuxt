@@ -28,11 +28,6 @@
       <SimpleSearch
         placeholder="Search"
         ref="searchLibrary"
-        :random="
-          randomEpisodeYouTubeId
-            ? `/${$l1.code}/${$l2.code}/youtube/view/${randomEpisodeYouTubeId}`
-            : false
-        "
         skin="dark"
         :action="
           (url) => {
@@ -196,17 +191,14 @@ export default {
           let el = this.$refs["youtube"];
           if (el) Helper.scrollToTargetAdjusted(el.$el, 43);
         }
-        if (
-          this.video &&
-          this.video.subs_l2 &&
-          this.video.subs_l2[0] 
-        ) {
+        if (this.video && this.video.subs_l2 && this.video.subs_l2[0]) {
           if (!this.video.subs_l2[0].duration)
             this.video = await this.patchDuration(this.video);
-          else console.log(
-            "YouTube View: Video subs have duration! 🎉 First line duration is ",
-            this.video.subs_l2[0].duration
-          );
+          else
+            console.log(
+              "YouTube View: Video subs have duration! 🎉 First line duration is ",
+              this.video.subs_l2[0].duration
+            );
         }
         console.log(`YouTube View (on video change): loading extras...`);
         await this.loadExtras();
@@ -221,36 +213,22 @@ export default {
     },
     async show() {
       if (this.show) {
-        let sort = this.show.title !== "News" ? "title" : "-date";
+        // News and YouTube channels are sorted by date
+        // Audiobooks and TV Shows are sorted by title
+        let sort = "-date"
+        if (this.showType === "tv_show" || this.show.audiobook) sort = "title"
         let response = await axios.get(
           `${Config.youtubeVideosTableName(this.$l2.id)}?filter[l2][eq]=${
             this.$l2.id
           }&filter[${this.showType}][eq]=${
             this.show.id
-          }&sort=${sort}&fields=channel_id,id,lesson,level,title,date,topic,youtube_id,tv_show.*,talk.*&timestamp=${
+          }&sort=${sort}&fields=youtube_id&timestamp=${
             this.$adminMode ? Date.now() : 0
-          }&limit=500`
+          }&limit=100`
         );
         if (response.data && response.data.data) {
           let videos = response.data.data;
           videos = Helper.uniqueByValue(videos, "youtube_id");
-          if (this.show.title !== "News") {
-            videos =
-              videos.sort((x, y) =>
-                (x.title || "").localeCompare(y.title, this.$l2.locales[0], {
-                  numeric: true,
-                })
-              ) || [];
-          } else {
-            videos =
-              videos.sort((y, x) =>
-                x.date
-                  ? x.date.localeCompare(y.date, this.$l2.locales[0], {
-                      numeric: true,
-                    })
-                  : -1
-              ) || [];
-          }
           this.episodes = videos;
         }
       }
@@ -327,14 +305,6 @@ export default {
     async loadExtras() {
       console.log(`YouTube View: Loading show...`);
       this.loadShow();
-      console.log(`YouTube View: Getting random episode youtube_id...`);
-      this.randomEpisodeYouTubeId = await YouTube.getRandomEpisodeYouTubeId(
-        this.$l2.id,
-        this.$store.state.shows.tvShows[this.$l2.code] ? "tv_show" : undefined
-      );
-      console.log(
-        `YouTube View: Got random episode youtube_id ${this.randomEpisodeYouTubeId}`
-      );
       console.log(`YouTube View: Saving history...`);
       this.saveHistory();
       console.log(`YouTube View: All done.`);
@@ -422,10 +392,7 @@ export default {
           !this.$refs.youtube.showSubsEditing &&
           !this.$refs.youtube.enableTranslationEditing
         ) {
-          this.$router.push(
-            this.nextEpisode ||
-              `/${this.$l1.code}/${this.$l2.code}/youtube/view/${this.randomEpisodeYouTubeId}`
-          );
+          if (this.nextEpisode) this.$router.push(this.nextEpisode);
         }
       }
     },
@@ -495,7 +462,7 @@ export default {
           );
           console.log("Missing duration information added.");
         } catch (err) {
-          console.log(err)
+          console.log(err);
         }
       }
       return video;

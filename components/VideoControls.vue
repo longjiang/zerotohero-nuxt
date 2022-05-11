@@ -29,7 +29,7 @@
       <i class="fas fa-undo"></i>
     </button>
     <router-link
-      v-if="previousEpisode || nextEpisode"
+      v-if="previousEpisode"
       :disabled="!previousEpisode"
       class="quick-access-button d-inline-block text-center"
       :to="{
@@ -63,7 +63,7 @@
       <i v-if="layout === 'vertical'" class="fas fa-chevron-right"></i>
     </button>
     <router-link
-      v-if="previousEpisode || nextEpisode"
+      v-if="nextEpisode"
       :disabled="!nextEpisode"
       class="quick-access-button d-inline-block text-center"
       :to="{
