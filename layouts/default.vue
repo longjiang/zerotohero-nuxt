@@ -211,6 +211,9 @@ export default {
           adminMode: this.$store.state.settings.adminMode,
         });
       }
+      if (!this.$store.state.history.historyLoaded) {
+        this.$store.dispatch("history/load");
+      }
     },
   },
 };
