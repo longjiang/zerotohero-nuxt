@@ -13,11 +13,9 @@
       <div class="row pt-5 pb-5">
         <div class="col-sm-12">
           <h3 class="text-center">My Watch History</h3>
-          <LazyDashboard
+          <WatchHistoryComp
             :l2="$l2"
-            :showWords="false"
             skin="dark"
-            :showFlags="true"
             class="mt-5"
           />
         </div>

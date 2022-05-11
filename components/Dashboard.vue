@@ -4,7 +4,6 @@
       <div
         class="row dashboard-saved-words"
         v-if="
-          showWords &&
           ((savedWordsSorted && savedWordsSorted.length > 0) ||
             (savedPhrasesSorted && savedPhrasesSorted.length > 0))
         "
@@ -77,7 +76,7 @@
           </div>
         </div>
       </div>
-      <div class="row mt-2" v-if="showWords">
+      <div class="row mt-2">
         <div class="col-12">
           <div class="col-12 text-center">
             <button
@@ -155,89 +154,7 @@
           </div>
         </div>
       </div>
-      <hr
-        class="mt-4 mb-4"
-        v-if="showWords && showVideos && itemsFiltered.length > 0"
-      />
-      <div
-        class="history-items row"
-        v-if="showVideos && itemsFiltered.length > 0"
-      >
-        <div
-          v-for="(item, itemIndex) of itemsFiltered.slice(0, 12)"
-          :key="`history-item-${itemIndex}`"
-          :class="{
-            'pb-4 history-item-column': true,
-            'col-12': params.xs,
-            'col-6': params.sm,
-            'col-4': params.md,
-            'col-3': params.lg,
-          }"
-          :set="(itemL1 = $languages.getSmart(item.l1))"
-          :set2="(itemL2 = $languages.getSmart(item.l2))"
-        >
-          <div class="history-item-language-badge" v-if="itemL1 && itemL2">
-            {{ itemL2.name }}
-          </div>
-          <YouTubeVideoCard
-            v-if="itemL1 && itemL2 && item.type === 'video'"
-            :skin="skin === 'dark' ? 'dark' : 'card'"
-            :video="Object.assign({}, item.video)"
-            :l1="itemL1"
-            :l2="itemL2"
-            :showProgress="true"
-            :showPlayButton="true"
-            :showAdmin="false"
-          />
-          <PhrasebookCard
-            v-if="itemL1 && itemL2 && item.type === 'phrasebook'"
-            skin="light"
-            size="lg"
-            :l1="itemL1"
-            :l2="itemL2"
-            :phrasebook="Object.assign({}, item.phrasebook)"
-            :showAdmin="false"
-          />
-          <button
-            class="
-              btn btn-small
-              bg-white
-              text-secondary
-              ml-0
-              history-item-remove-btn
-            "
-            @click.stop.prevent="$store.dispatch('history/remove', item)"
-          >
-            <i class="fa fa-times"></i>
-          </button>
-        </div>
-      </div>
-      <p
-        v-if="itemsFiltered.length === 0"
-        class="text-center p-5 mt-5 ghost-dark rounded"
-        style="background: rgba(37, 36, 44, 0.651)"
-      >
-        You don't have anything in your history yet. <br/><br/>
-        <router-link :to="{ name: 'all-media' }" class="btn btn-success">
-          <i class="fas fa-play mr-1"></i>
-          Watch Some Videos
-        </router-link>
-      </p>
-      <div class="row" v-if="showVideos">
-        <div
-          class="col-12 text-center mb-2"
-          v-if="videosFiltered && videosFiltered.length > 0"
-        >
-          <button
-            :class="`btn btn-ghost-dark btn-sm ml-0 ${
-              skin === 'light' ? 'text-secondary' : ''
-            }`"
-            @click.stop.prevent="$store.dispatch('history/removeAll')"
-          >
-            Clear History
-          </button>
-        </div>
-      </div>
+      
     </div>
   </container-query>
 </template>
@@ -253,12 +170,6 @@ export default {
   },
   props: {
     l2: undefined,
-    showWords: {
-      default: true,
-    },
-    showVideos: {
-      default: true,
-    },
     skin: {
       default: "light",
     },
@@ -303,7 +214,6 @@ export default {
     }
   },
   computed: {
-    ...mapState("history", ["history"]),
     ...mapState("savedWords", ["savedWords"]),
     ...mapState("savedPhrases", ["savedPhrases"]),
     hostname() {
@@ -347,39 +257,8 @@ export default {
         );
       return savedPhrasesSorted;
     },
-    itemsFiltered() {
-      if (typeof this.history !== "undefined") {
-        return this.history.filter((i) => {
-          if (this.l2 && i.l2 !== this.l2.code) return false;
-          if (i.type === "video") return typeof i.video !== "undefined";
-          if (i.type === "phrasebook")
-            return (
-              typeof i.phrasebook !== "undefined" && i.phrasebook.id !== "saved"
-            );
-        });
-      }
-    },
-    videosFiltered() {
-      if (typeof this.history !== "undefined") {
-        return this.history.filter((i) => {
-          if (this.l2 && i.l2 !== this.l2.code) return false;
-          return i.type === "video" && i.video;
-        });
-      }
-    },
-    phrasebooksFiltered() {
-      if (typeof this.history !== "undefined") {
-        return this.history.filter((i) => {
-          if (this.l2 && i.l2 !== this.l2.code) return false;
-          return i.type === "phrasebook" && i.phrasebook;
-        });
-      }
-    },
   },
   watch: {
-    history() {
-      this.emitHasDashboard();
-    },
     savedWords() {
       this.emitHasDashboard();
     },
@@ -475,8 +354,6 @@ export default {
         dashboardItems.push("words");
       if (this.savedPhrasesSorted && this.savedPhrasesSorted.length > 0)
         dashboardItems.push("phrases");
-      if (this.itemsFiltered && this.itemsFiltered.length > 0)
-        dashboardItems.push("items");
       this.$emit(
         "hasDashboard",
         dashboardItems.length === 0 ? false : dashboardItems
@@ -513,51 +390,6 @@ export default {
 
 .dashboard-saved-words + .history-items {
   margin-top: 2rem;
-}
-
-.history-items.row {
-  perspective: 800px;
-
-  .history-item-column {
-    position: relative;
-
-    .history-item-remove-btn {
-      position: absolute;
-      top: 0.25rem;
-      right: 1.2rem;
-      z-index: 9;
-      border-radius: 0.2rem;
-      background: rgba(0, 0, 0, 0.2) !important;
-      color: rgba(255, 255, 255, 0.384) !important;
-      backdrop-filter: blur(5px);
-      -webkit-backdrop-filter: blur(5px);
-
-      &:hover {
-        color: rgba(255, 255, 255, 0.6) !important;
-        background: rgba(0, 0, 0, 0.4) !important;
-      }
-    }
-
-    .history-item-language-badge {
-      position: absolute;
-      top: 0.25rem;
-      left: 1.2rem;
-      z-index: 9;
-      border-radius: 0.2rem;
-      background: rgba(0, 0, 0, 0.2) !important;
-      color: rgba(255, 255, 255, 0.5) !important;
-      font-size: 0.85em;
-      padding: 0.1rem 0.3rem;
-      backdrop-filter: blur(5px);
-      -webkit-backdrop-filter: blur(5px);
-    }
-  }
-}
-
-::v-deep .youtube-title,
-::v-deep .phrasebook-title {
-  font-size: 1rem;
-  line-height: 1.33rem !important;
 }
 
 .history-item-column:hover {
