@@ -76,35 +76,39 @@
           </b-button>
         </b-form-group>
       </client-only>
-      <MediaSearchResults :keyword="term" class="mt-4" />
-      <h4 class="text-center mt-5">More from YouTube</h4>
-      <p class="text-center mb-5">Videos without {{ $l2.name }} subs are dimmed out.</p>
-      <LazyIdenticalLanguages
-        class="mb-4 bg-success"
-        routeName="youtube-browse"
-      />
-      <YouTubeSearchResults
-        :term="term"
-        :start="start"
-        :captions="captions"
-        class="mt-5"
-        :key="searchResultKey"
-        :long="long"
-        :infinite="true"
-        :showProgress="false"
-        skin="dark"
-        ref="youtubeSearchResults"
-      />
+      <div v-if="term">
+        <MediaSearchResults :keyword="term" class="mt-4" />
+        <h4 class="text-center mt-5">More from YouTube</h4>
+        <p class="text-center mb-5">
+          Videos without {{ $l2.name }} subs are dimmed out.
+        </p>
+        <LazyIdenticalLanguages
+          class="mb-4 bg-success"
+          routeName="youtube-browse"
+        />
+        <YouTubeSearchResults
+          :term="term"
+          :start="start"
+          :captions="captions"
+          class="mt-5"
+          :key="searchResultKey"
+          :long="long"
+          :infinite="true"
+          :showProgress="false"
+          skin="dark"
+          ref="youtubeSearchResults"
+        />
+      </div>
       <client-only>
         <Nav
           :l1="$l1"
           :l2="$l2"
           variant="page"
-          class="youtube-browse-nav"
+          class="youtube-browse-nav mt-5"
           :showOnly="['Media']"
         />
       </client-only>
-      <LazyIdenticalLanguages routeName="youtube-search" />
+      <LazyIdenticalLanguages routeName="youtube-search" class="mt-5" />
       <h4 class="mt-5 text-center">
         You can help to expand this {{ $l2.name }} video library!
       </h4>
