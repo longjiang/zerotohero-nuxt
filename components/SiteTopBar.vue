@@ -216,7 +216,7 @@ export default {
   }
 
   .btn {
-    padding: 0 0 0 0.5rem;
+    padding: 0 0 0 0.3rem;
   }
 
   &.site-top-bar-menu-bar {

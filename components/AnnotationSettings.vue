@@ -336,7 +336,7 @@ export default {
 
 .annotation-settings-toolbar {
   font-size: 0.8rem;
-  padding: 0.1rem 0.4rem;
+  padding: 0.1rem;
   display: inline-block;
   color: rgba(255, 255, 255, 0.6);
   background-color: rgba(0,0,0,0.6);
