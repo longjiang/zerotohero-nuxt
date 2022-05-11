@@ -32,7 +32,7 @@
                     v-html="
                       highlight(
                         collocation.line,
-                        word ? word.bare : text,
+                        word ? word.head : text,
                         level
                       )
                     "
@@ -197,7 +197,7 @@ export default {
         });
     },
     term() {
-      return this.word ? this.word.bare : this.text;
+      return this.word ? this.word.head : this.text;
     },
     $dictionary() {
       return this.$getDictionary();

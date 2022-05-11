@@ -146,7 +146,6 @@ export default {
         delete mapped.newHSKMatches;
         delete mapped.saved;
         delete mapped.phrase;
-        delete mapped.bare;
         delete mapped.username;
         delete mapped.created;
         delete mapped.audio;

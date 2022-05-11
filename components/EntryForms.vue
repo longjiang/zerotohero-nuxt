@@ -1,6 +1,6 @@
 <template>
   <div id="entry-morphology" class="widget">
-    <div class="widget-title">Word forms of “{{ word.bare }}”</div>
+    <div class="widget-title">Word forms of “{{ word.head }}”</div>
     <div class="widget-body jumbotron-fluid p-4">
       <div class="row">
         <div
@@ -13,7 +13,7 @@
           v-if="!checking && (Helper.isEmpty(tables) || tables.length === 0)"
           class="pl-4 pr-4 text-center"
         >
-          The word “{{ word.bare }}” seems to only take on one form.
+          The word “{{ word.head }}” seems to only take on one form.
         </div>
         <div
           class="col-sm-12 form-table"

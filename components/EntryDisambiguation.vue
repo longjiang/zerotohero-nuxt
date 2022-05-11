@@ -56,7 +56,7 @@ export default {
   methods: {
     async getOtherPronunciations() {
       let similarWords = []
-      let words = ['zh', 'yue'].includes(this.$l2.code) ? await (await this.$getDictionary()).lookupSimplified(this.entry.simplified) : await (await this.$getDictionary()).lookupMultiple(this.entry.bare)
+      let words = ['zh', 'yue'].includes(this.$l2.code) ? await (await this.$getDictionary()).lookupSimplified(this.entry.simplified) : await (await this.$getDictionary()).lookupMultiple(this.entry.head)
       for (let word of words) {
         if (word.id !== this.entry.id) {
           similarWords.push(word)

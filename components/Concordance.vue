@@ -117,7 +117,7 @@ export default {
   },
   computed: {
     term() {
-      return this.word ? this.word.bare : this.text;
+      return this.word ? this.word.head : this.text;
     },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")

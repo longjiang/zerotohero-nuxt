@@ -328,7 +328,7 @@ const Dictionary = {
             if (this.l2 === "kor") sino = this.getKoreanHanja(item);
             word.cjk = {
               canonical: sino,
-              phonetics: bare
+              phonetics: head
             };
             word.hanja = sino;
             if (this.frequency && !word.frequency)

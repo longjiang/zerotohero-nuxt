@@ -84,7 +84,7 @@
             id="compare-search-subs"
           >
             <div class="widget-title">
-              “{{ a.bare }}” and “{{ b.bare }}” in 
+              “{{ a.head }}” and “{{ b.head }}” in 
               <LazyShowFilter @showFilter="reloadSearchSubs" />
             </div>
             <div class="widget-body">
@@ -98,7 +98,7 @@
                     ? a.simplified === a.traditional
                       ? [a.simplified]
                       : [a.simplified, a.traditional]
-                    : [a.bare]
+                    : [a.head]
                 "
                 :levelB="b.newHSK && b.newHSK === '7-9' ? '7-9' : b.hsk || a.level || 'outside'"
                 :termsB="
@@ -106,7 +106,7 @@
                     ? b.simplified === b.traditional
                       ? [b.simplified]
                       : [b.simplified, b.traditional]
-                    : [b.bare]
+                    : [b.head]
                 "
               />
             </div>
@@ -120,7 +120,7 @@
         <div class="col-sm-6">
           <LazyWebImages
             v-if="a"
-            :text="a.bare"
+            :text="a.head"
             limit="10"
             :preloaded="aImages"
             :key="`${a.id}-images`"
@@ -129,7 +129,7 @@
         <div class="col-sm-6">
           <LazyWebImages
             v-if="b"
-            :text="b.bare"
+            :text="b.head"
             limit="10"
             :preloaded="bImages"
             :key="`${b.id}-images`"
@@ -144,8 +144,8 @@
           <LazyCompareCollocations
             class="mt-5 focus"
             v-if="a && b"
-            :term="a.bare"
-            :compareTerm="b.bare"
+            :term="a.head"
+            :compareTerm="b.head"
             :level="a.level"
             :compareLevel="b.level"
           />
@@ -170,7 +170,7 @@
         <div class="col-sm-6">
           <LazyConcordance
             v-if="a"
-            :text="a.bare"
+            :text="a.head"
             :level="a.hsk"
             :key="`${a.id}-concordance`"
           />
@@ -178,7 +178,7 @@
         <div class="col-sm-6">
           <LazyConcordance
             v-if="b"
-            :text="b.bare"
+            :text="b.head"
             :level="b.hsk"
             :key="`${b.id}-concordance`"
           />
@@ -220,7 +220,7 @@ export default {
     },
     title() {
       if (this.a && this.b) {
-        return `“${this.a.bare}” vs “${this.b.bare}” - ${
+        return `“${this.a.head}” vs “${this.b.head}” - ${
           this.$l2 ? this.$l2.name : ""
         } Words Compared | ${this.$l2 ? this.$l2.name : ""} Zero to Hero`;
       }
@@ -231,9 +231,9 @@ export default {
     description() {
       if (this.a && this.b) {
         return `See how the two ${this.$l2 ? this.$l2.name : ""} words “${
-          this.a.bare
+          this.a.head
         }” and “${
-          this.b.bare
+          this.b.head
         }” are used differently in common collocations and on TV shows.`;
       }
       return `Compare two  ${
@@ -291,11 +291,11 @@ export default {
       }
     }
     this.aImages = await WordPhotos.getGoogleImages({
-      term: this.a.bare,
+      term: this.a.head,
       lang: this.$l2.code,
     });
     this.bImages = await WordPhotos.getGoogleImages({
-      term: this.b.bare,
+      term: this.b.head,
       lang: this.$l2.code,
     });
   },

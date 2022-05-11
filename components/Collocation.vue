@@ -23,7 +23,7 @@
           <Annotate tag="div" :checkSaved="false" :buttons="true">
             <span
               v-html="
-                Helper.highlight(line.line, word ? word.bare : text, level)
+                Helper.highlight(line.line, word ? word.head : text, level)
               "
             />
           </Annotate>
@@ -85,7 +85,7 @@ export default {
         : [];
     },
     term() {
-      return this.word ? this.word.bare : this.text;
+      return this.word ? this.word.head : this.text;
     },
 
     $l1() {

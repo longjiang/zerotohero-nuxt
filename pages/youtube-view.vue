@@ -410,7 +410,7 @@ export default {
       let wordForms =
         (await (await this.$getDictionary()).wordForms(word)) || [];
       wordForms = wordForms.filter((form) => form !== "");
-      wordForms = [word.bare.toLowerCase()].concat(
+      wordForms = [word.head.toLowerCase()].concat(
         wordForms.map((form) => form.form.replace(/'/g, ""))
       );
       wordForms = Helper.unique(wordForms).filter(

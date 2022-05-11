@@ -175,7 +175,7 @@ export default {
     },
     title() {
       if (this.entry) {
-        return `${this.entry.bare} ${this.entry.pronunciation ? "(" + this.entry.pronunciation + ")" : ""
+        return `${this.entry.head} ${this.entry.pronunciation ? "(" + this.entry.pronunciation + ")" : ""
           } ${this.entry.definitions
             ? this.entry.definitions.slice(0, 2).join("; ")
             : ""
@@ -186,7 +186,7 @@ export default {
     },
     description() {
       if (this.entry) {
-        return `"${this.entry.bare}" means ${this.entry.definitions ? this.entry.definitions.join("; ") : "..."
+        return `"${this.entry.head}" means ${this.entry.definitions ? this.entry.definitions.join("; ") : "..."
           } Watch examples of this from TV shows.`;
       }
       return `Look up ${this.$l2 ? this.$l2.name : ""} words. See how ${this.$l2 ? this.$l2.name : ""
@@ -276,7 +276,7 @@ export default {
               this.entry = await dictionary.get(args);
               if (process.server) {
                 this.images = await WordPhotos.getGoogleImages({
-                  term: this.entry.bare,
+                  term: this.entry.head,
                   lang: this.$l2.code,
                 });
               }
@@ -312,9 +312,9 @@ export default {
     saved() {
       return (
         this.entry &&
-        this.entry.bare &&
+        this.entry.head &&
         this.$store.getters["savedWords/has"]({
-          text: this.entry.bare.toLowerCase(),
+          text: this.entry.head.toLowerCase(),
           l2: this.$l2.code,
         })
       );

@@ -66,7 +66,7 @@ export default {
       let wordForms =
         (await (await this.$getDictionary()).wordForms(this.word)) || [];
       wordForms = wordForms.filter((form) => form !== "");
-      wordForms = [this.word.bare].concat(
+      wordForms = [this.word.head].concat(
         wordForms.map((form) => form.form.replace(/'/g, ""))
       );
       if (this.text) {

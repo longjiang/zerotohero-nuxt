@@ -60,7 +60,7 @@
         v-for="(suggestion, index) in suggestions.filter(
           (suggestion) => suggestion
         )"
-        :key="`search-suggestion-${index}-${suggestion ? suggestion.bare : ''}`"
+        :key="`search-suggestion-${index}-${suggestion ? suggestion.head : ''}`"
         :href="hrefFunc(suggestion)"
         @click.stop.prevent="go(hrefFunc(suggestion), suggestion)"
       >
