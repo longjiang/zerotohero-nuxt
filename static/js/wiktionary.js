@@ -584,7 +584,6 @@ const Dictionary = {
     words = (this.searchIndex[text] || []).map(w => {
       return { score: 1, w };
     });
-    console.log("1", words);
     if (this.lemmatizationLangs[this.l2]) {
       let lemmas = this.lemmatization[text];
       let lemmaWords = [];
@@ -602,7 +601,6 @@ const Dictionary = {
         words = words.concat(lemmaWords);
       }
     }
-    console.log("2", words);
     if (!quick) {
       if (["fra"].includes(this.l2) && !quick) {
         let stems = this.findStems(text);
@@ -642,7 +640,6 @@ const Dictionary = {
         }
       }
       words = words.sort((a, b) => b.score - a.score);
-      console.log("3", words);
       words = this.uniqueByValue(
         words.map(w => w.w),
         "id"
