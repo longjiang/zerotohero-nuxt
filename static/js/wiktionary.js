@@ -656,10 +656,9 @@ const Dictionary = {
         }
       }
       words = words.sort((a, b) => b.score - a.score);
-      return words.map(w => w.w)
     }
     words = words.slice(0, limit);
-    return words;
+    return words.map(w => w.w);
   },
   /**
    *  https://blog.adriaan.io/make-a-javascript-array-with-objects-unique-by-its-nested-key.html
