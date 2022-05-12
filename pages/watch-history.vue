@@ -16,7 +16,7 @@
           <WatchHistoryComp
             :l2="$l2"
             skin="dark"
-            class="mt-5"
+            class="mt-3"
           />
         </div>
       </div>

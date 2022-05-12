@@ -22,7 +22,6 @@ export const mutations = {
       }
       let history = state.history
       let prevVersionOfSameItemIndex = history.findIndex(i => i.id === historyItem.id)
-      historyItem.date = Date.now()
       if (prevVersionOfSameItemIndex !== -1)
         history[prevVersionOfSameItemIndex] = historyItem
       else history.push(historyItem)
