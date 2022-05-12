@@ -151,7 +151,7 @@ export default {
   computed: {
     ...mapState("history", ["history"]),
     groups() {
-      let history = this.history.map((i) => {
+      let history = this.itemsFiltered.map((i) => {
         let d = String(i.date).split(" ");
         let obj = Object.assign({}, i);
         obj.date = d.length === 2 ? d[0] : 0;
