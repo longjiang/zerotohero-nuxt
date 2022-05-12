@@ -310,7 +310,7 @@
             <ol class="word-translation" v-if="word.definitions">
               <li
                 v-for="(def, index) in unique(word.definitions)
-                  .filter((def) => def.trim() !== '')
+                  .filter((def) => def && def.trim() !== '')
                   .map((definition) =>
                     definition ? definition.replace(/\[.*\] /g, '') : ''
                   )"
