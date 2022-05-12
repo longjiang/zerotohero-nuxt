@@ -647,7 +647,7 @@ const Dictionary = {
             let lemma = this.lemmaFromDefinition(d)
             if (lemma) {
               let lemmaWords = this.lookupMultiple(lemma.lemma)
-              lemmaWords = lemmaWords.map(l => { return { w: l, score: 2 } })
+              lemmaWords = lemmaWords.map(l => { return { w: l, score: 1 } })
               words = words.concat(lemmaWords)
             }
           }
