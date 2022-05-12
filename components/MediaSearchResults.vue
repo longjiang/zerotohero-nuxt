@@ -83,7 +83,7 @@
       </div>
       <div class="col-sm-12">
         <template v-if="videos && videos.length > 0">
-          <YouTubeVideoList
+          <LazyYouTubeVideoList
             skin="dark"
             ref="youtubeVideoList"
             :videos="videos"
@@ -127,7 +127,6 @@
 
 <script>
 import YouTubeNav from "@/components/YouTubeNav";
-import YouTubeVideoList from "@/components/YouTubeVideoList";
 import YouTubeChannelCard from "@/components/YouTubeChannelCard";
 import SimpleSearch from "@/components/SimpleSearch";
 import Config from "@/lib/config";
@@ -138,7 +137,6 @@ import axios from "axios";
 export default {
   components: {
     YouTubeNav,
-    YouTubeVideoList,
     YouTubeChannelCard,
     SimpleSearch,
   },

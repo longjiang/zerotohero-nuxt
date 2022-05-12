@@ -50,7 +50,7 @@
       <div class="col-md-8">
         <h4 class="mt-5">Lesson Videos</h4>
         <p class="mb-4">{{ lessonVideos.length }} videos</p>
-        <YouTubeVideoList
+        <LazyYouTubeVideoList
           :noThumbs="false"
           :updateVideos="updateLessonVideos"
           :videos="lessonVideos"
@@ -61,7 +61,7 @@
         />
         <h4 class="mt-5 mb-4">More Videos</h4>
         <b-button @click="refresh()">Refresh</b-button>
-        <YouTubeVideoList
+        <LazyYouTubeVideoList
           :noThumbs="false"
           :updateVideos="updateVideos"
           :videos="videos"
@@ -77,7 +77,6 @@
 
 <script>
 import WordList from "@/components/WordList";
-import YouTubeVideoList from "@/components/YouTubeVideoList";
 import Config from "@/lib/config";
 import Helper from "@/lib/helper";
 
@@ -95,7 +94,6 @@ export default {
   },
   components: {
     WordList,
-    YouTubeVideoList,
   },
   props: ["level", "lesson"],
   activated() {

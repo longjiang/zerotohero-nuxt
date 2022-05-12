@@ -114,13 +114,13 @@
             <div class="lesson-section" v-if="lesson.youtubeVideos">
               <h4>Watch and Learn</h4>
               <p>Watch any one of the videos and study the subtitles:</p>
-              <YouTubeVideoList
+              <LazyYouTubeVideoList
                 v-if="lesson.youtubeVideos.length > 0"
                 :videos="lesson.youtubeVideos"
                 :showProgress="true"
                 :showPlayButton="true"
               />
-              <YouTubeSearchResults
+              <LazyYouTubeSearchResults
                 v-if="lesson.youtubeVideos.length === 0"
                 :term="`${$l2.name} ${lesson.name}`"
                 :start="0"
@@ -202,13 +202,9 @@
 import WordPhotos from "@/lib/word-photos";
 import Config from "@/lib/config";
 import Helper from "@/lib/helper";
-import YouTubeVideoList from "@/components/YouTubeVideoList";
 import axios from "axios";
 
 export default {
-  components: {
-    YouTubeVideoList,
-  },
   props: ["id"],
   data() {
     return {

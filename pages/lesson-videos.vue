@@ -63,7 +63,7 @@
         :key="`lesson-video-${videoIndex}`"
       >
         <div class="col-md-6">
-          <YouTubeVideoList
+          <LazyYouTubeVideoList
             skin="dark"
             :checkSubs="false"
             :lesson="true"
@@ -142,7 +142,6 @@
 <script>
 import WordList from "@/components/WordList";
 import YouTube from "@/lib/youtube";
-import YouTubeVideoList from "@/components/YouTubeVideoList";
 import Config from "@/lib/config";
 import Helper from "@/lib/helper";
 import axios from "axios";
@@ -171,7 +170,6 @@ export default {
   },
   components: {
     WordList,
-    YouTubeVideoList,
   },
   props: {
     level: {

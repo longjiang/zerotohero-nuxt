@@ -171,7 +171,7 @@
           :style="`padding-bottom: ${view === 'list' ? '1rem' : '2rem'}`"
           :key="`youtube-video-wrapper-${video.youtube_id}-${videoIndex}`"
         >
-          <YouTubeVideoCard
+          <LazyYouTubeVideoCard
             ref="youTubeVideoCard"
             @newShow="newShow"
             @unavailable="onVideoUnavailable"

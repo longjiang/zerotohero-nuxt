@@ -1,6 +1,6 @@
 <template>
   <div>
-    <YouTubeVideoList
+    <LazyYouTubeVideoList
       ref="youTubeVideoList"
       :videos="videos"
       :checkSubs="true"
@@ -48,12 +48,8 @@
 
 <script>
 import YouTube from "@/lib/youtube";
-import YouTubeVideoList from "@/components/YouTubeVideoList";
 
 export default {
-  components: {
-    YouTubeVideoList,
-  },
   props: {
     term: {
       type: String,

@@ -30,7 +30,7 @@
               Videos <router-link :to="{ name: 'youtube-browse' }" class="show-all">More <i class=" fas
                 fa-chevron-right ml-1"></i></router-link>
             </h3>
-            <YouTubeVideoList :videos="randomVideos" :showAdminToolsInAdminMode="false" skin="dark" />
+            <LazyYouTubeVideoList :videos="randomVideos" :showAdminToolsInAdminMode="false" skin="dark" />
           </div>
           <div v-if="videos && movies && movies.length > 0">
             <h3 class="text-center mt-5 mb-5">
@@ -38,21 +38,21 @@
                 class="show-all">More <i class=" fas
                 fa-chevron-right ml-1"></i></router-link>
             </h3>
-            <YouTubeVideoList :videos="random(movies).slice(0, 12)" :showAdminToolsInAdminMode="false" skin="dark" />
+            <LazyYouTubeVideoList :videos="random(movies).slice(0, 12)" :showAdminToolsInAdminMode="false" skin="dark" />
           </div>
           <div v-if="videos && music && music.length > 0">
             <h3 class="text-center mt-5 mb-5">
               Music <router-link :to="{ name: 'show', params: { type: 'tv-show', id: musicShow.id } }" class="show-all">More <i class=" fas
                 fa-chevron-right ml-1"></i></router-link>
             </h3>
-            <YouTubeVideoList :videos="random(music).slice(0, 12)" :showAdminToolsInAdminMode="false" skin="dark" />
+            <LazyYouTubeVideoList :videos="random(music).slice(0, 12)" :showAdminToolsInAdminMode="false" skin="dark" />
           </div>
           <div v-if="videos && news && news.length > 0">
             <h3 class="text-center mt-5 mb-5">
               News <router-link :to="{ name: 'show', params: { type: 'talk', id: newsShow.id } }" class="show-all">More <i class=" fas
                 fa-chevron-right ml-1"></i></router-link>
             </h3>
-            <YouTubeVideoList :videos="random(news).slice(0, 12)" :showAdminToolsInAdminMode="false" skin="dark" />
+            <LazyYouTubeVideoList :videos="random(news).slice(0, 12)" :showAdminToolsInAdminMode="false" skin="dark" />
           </div>
           <div v-if="videos && tvShows && tvShows.length > 0">
             <h3 class="text-center mt-5 mb-5">

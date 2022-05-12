@@ -49,7 +49,7 @@
               <div class="history-item-language-badge" v-if="itemL1 && itemL2">
                 {{ itemL2.name }}
               </div>
-              <YouTubeVideoCard
+              <LazyYouTubeVideoCard
                 v-if="itemL1 && itemL2 && item.type === 'video'"
                 :skin="skin === 'dark' ? 'dark' : 'card'"
                 :video="Object.assign({}, item.video)"
@@ -59,7 +59,7 @@
                 :showPlayButton="true"
                 :showAdmin="false"
               />
-              <PhrasebookCard
+              <LazyPhrasebookCard
                 v-if="itemL1 && itemL2 && item.type === 'phrasebook'"
                 skin="light"
                 size="lg"

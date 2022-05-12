@@ -19,7 +19,7 @@
         }"
       >
         <div class="youtube-video-wrapper" :key="'youtube-' + video.youtube_id">
-          <YouTubeVideo
+          <LazyYouTubeVideo
             ref="youtube"
             @paused="updatePaused"
             @currentTime="updateCurrentTime"
@@ -33,7 +33,7 @@
             :startAtRandomTime="startAtRandomTime"
             :class="{ 'd-none': collapsed }"
           />
-          <VideoControls
+          <LazyVideoControls
             v-if="showControls && video"
             :video="video"
             :paused="paused"

@@ -54,7 +54,7 @@
             </b-button>
           </div>
           <div :key="videoListKey">
-            <YouTubeVideoList
+            <LazyYouTubeVideoList
               :videos="
                 videos.filter((video) => video.title !== 'Private video')
               "
@@ -75,14 +75,10 @@
 </template>
 
 <script>
-import YouTubeVideoList from "@/components/YouTubeVideoList";
 import YouTube from "@/lib/youtube";
 import Helper from "@/lib/helper";
 
 export default {
-  components: {
-    YouTubeVideoList,
-  },
   props: {
     playlist_id: {
       type: String,

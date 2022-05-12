@@ -126,7 +126,7 @@
               No more videos.
             </div>
             <template v-if="videos && videos.length > 0">
-              <YouTubeVideoList
+              <LazyYouTubeVideoList
                 ref="youtubeVideoList"
                 skin="dark"
                 :videos="videos"
