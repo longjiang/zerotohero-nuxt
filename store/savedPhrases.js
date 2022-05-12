@@ -16,6 +16,7 @@ export const mutations = {
     if (typeof localStorage !== 'undefined') {
       let phraseToSave = {
         phrase, phrasebookId, pronunciation, exact,
+        date: Date.now()
       }
       for (let key in translations) {
         phraseToSave[key] = translations[key]

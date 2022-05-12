@@ -17,7 +17,9 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
-          <h3 class="text-center">{{ sWLoaded ? sW.length : ''}} Saved {{ $l2.name }} Words</h3>
+          <h3 class="text-center">
+            {{ sWLoaded ? sW.length : "" }} Saved {{ $l2.name }} Words
+          </h3>
           <p class="text-center mb-5">
             {{
               $t(
@@ -74,7 +76,10 @@
             </router-link>
           </div>
           <div v-if="dictionaryLoaded && !sWLoaded" class="text-center">
-            <Loader :sticky="true" message="Loading words saved in your browser..." />
+            <Loader
+              :sticky="true"
+              message="Loading words saved in your browser..."
+            />
           </div>
           <div
             class="pt-3 pb-3 bg-white"
@@ -87,12 +92,29 @@
               @hidePhonetics="hidePhonetics = arguments[0]"
             />
           </div>
-          <WordList
-            :words="sW"
-            :hideDefinitions="hideDefinitions"
-            :hidePhonetics="hidePhonetics"
-            :hideWord="hideWord"
-          ></WordList>
+          <div
+            v-for="(group, index) in groups"
+            :key="`group-${index}`"
+            class="mt-4"
+          >
+            <h5 class="text-center" v-if="group.date === '0'">Earlier</h5>
+            <h5 class="text-center" v-else>
+              {{
+                new Date(group.date).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })
+              }}
+            </h5>
+            <WordList
+              :words="group.sW.map((s) => s.word)"
+              :hideDefinitions="hideDefinitions"
+              :hidePhonetics="hidePhonetics"
+              :hideWord="hideWord"
+              class="mt-3"
+            ></WordList>
+          </div>
         </div>
       </div>
     </div>
@@ -121,6 +143,24 @@ export default {
     };
   },
   computed: {
+    groups() {
+      let savedWords = this.sW.map((savedWord) => {
+        let r = Object.assign({}, savedWord);
+        r.date = savedWord.date
+          ? new Date(Number(savedWord.date)).toISOString().replace(/T.*/, "")
+          : 0;
+        return r;
+      });
+      let groups = Helper.groupArrayBy(savedWords, "date");
+      groups = Object.keys(groups).map((date) => {
+        return {
+          date,
+          sW: groups[date],
+        };
+      });
+      if (this.sWLoaded)
+        return groups.sort((a, b) => b.date.localeCompare(a.date));
+    },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -136,7 +176,8 @@ export default {
       return this.$store.state.settings.dictionaryName;
     },
     csv() {
-      let csvWords = this.sW.map((word) => {
+      let csvWords = this.sW.map((savedWord) => {
+        let word = savedWord.word;
         let mapped = { id: word.id, head: word.head };
         mapped = Object.assign(mapped, word);
         mapped.definitions = word.definitions.join("; ");
@@ -189,11 +230,13 @@ export default {
         ]) {
           let word = await (await this.$getDictionary()).get(savedWord.id);
           if (word) {
-            sW.push(word);
+            let r = Object.assign({}, savedWord);
+            r.word = word;
+            sW.push(r);
           }
         }
       }
-      this.sW = sW.sort((a, b) => a.head.localeCompare(b.head));
+      this.sW = sW;
       this.sWLoaded = true;
     },
     showImportClick() {

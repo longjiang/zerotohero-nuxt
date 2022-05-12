@@ -23,7 +23,8 @@ export const mutations = {
         let savedWords = Object.assign({}, state.savedWords)
         savedWords[options.l2].push({
           id: options.word.id,
-          forms: options.wordForms
+          forms: options.wordForms,
+          date: Date.now()
         })
         localStorage.setItem('zthSavedWords', JSON.stringify(savedWords))
         this._vm.$set(state, 'savedWords', savedWords)
