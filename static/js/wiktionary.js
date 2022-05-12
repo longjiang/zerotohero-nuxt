@@ -101,9 +101,8 @@ const Dictionary = {
         .replace("lvs", "lav") // Standard Latvian uses Latvian
         .replace("ekk", "est"); // Standard Estonian uses Estonian
       let csv = !this.useJSON.includes(this.l2);
-      let filename = `${this.server}data/wiktionary${
-        csv ? "-csv" : ""
-      }/${l2}-${l1}.${csv ? "csv" : "json"}.txt`;
+      let filename = `${this.server}data/wiktionary${csv ? "-csv" : ""
+        }/${l2}-${l1}.${csv ? "csv" : "json"}.txt`;
       return filename;
     }
   },
@@ -143,7 +142,7 @@ const Dictionary = {
       }
       this.words = words;
       this.createIndices();
-      if (this.l2 === "fra") await this.loadFrenchConjugationsAndLemmatizer();
+      // if (this.l2 === "fra") await this.loadFrenchConjugationsAndLemmatizer();
       if (this.l2 === "fas") await this.loadPersianRomanization();
       if (this.l2 === "tur") this.loadTurkishPOS();
       console.log("Wiktionary: loaded.");
@@ -171,7 +170,7 @@ const Dictionary = {
     let count = this.words.filter(w => w.frequency > frequency).length;
     console.log(
       `There are ${count} words (${(count / this.words.length) *
-        100}% total) with frequency > ${frequency}`
+      100}% total) with frequency > ${frequency}`
     );
     return count;
   },
@@ -210,12 +209,14 @@ const Dictionary = {
     console.log("Wiktionary: parsing words from CSV...");
     let parsed = Papa.parse(data, { header: true });
     let words = parsed.data;
+    let hasStems = parsed.meta.fields.includes('stems')
+    let hasPhrases = parsed.meta.fields.includes('phrases')
     words = words
       .filter(w => w.word.length > 0) // filter empty rows
-      .map(item => this.augmentCSVRow(item));
+      .map(item => this.augmentCSVRow(item, !hasStems, !hasPhrases));
     return words;
   },
-  augmentCSVRow(item) {
+  augmentCSVRow(item, findStems = false, findPhrases = false) {
     let bare = !this.accentCritical ? this.stripAccents(item.word) : item.word;
     item.search = bare.toLowerCase();
     if (this.l2.agglutinative) item.search = item.search.replace(/^-/, "");
@@ -224,11 +225,13 @@ const Dictionary = {
     item.wiktionary = true;
     item.definitions = item.definitions ? item.definitions.split("|") : [];
     item.stems = item.stems ? item.stems.split("|") : [];
-    for (let definition of item.definitions.filter(d => d.includes(" of "))) {
-      let lemma = this.lemmaFromDefinition(definition);
-      if (lemma) item.stems.push(lemma);
+    if (findStems) {
+      for (let definition of item.definitions.filter(d => d.includes(" of "))) {
+        let lemma = this.lemmaFromDefinition(definition);
+        if (lemma) item.stems.push(lemma.lemma);
+      }
+      item.stems = this.unique(item.stems);
     }
-    item.stems = this.unique(item.stems);
     item.phrases = item.phrases ? item.phrases.split("|") : [];
 
     if (this.frequency && !item.frequency)
@@ -306,8 +309,8 @@ const Dictionary = {
           let pronunciations =
             item.sounds && item.sounds.length > 0
               ? item.sounds
-                  .filter(s => s.ipa)
-                  .map(s => s.ipa.replace(/[/\[\]]/g, ""))
+                .filter(s => s.ipa)
+                .map(s => s.ipa.replace(/[/\[\]]/g, ""))
               : [];
           if (item.heads)
             pronunciations = pronunciations.concat(
@@ -387,7 +390,7 @@ const Dictionary = {
         let parsed = Papa.parse(res.data, { header: true });
         this.romanizations = parsed.data;
       }
-    } catch (err) {}
+    } catch (err) { }
   },
   async loadFrenchConjugationsAndLemmatizer() {
     console.log('Loading French conjugations from "french-verbs-lefff"...');
@@ -622,51 +625,61 @@ const Dictionary = {
       }
     }
     if (!quick) {
-      if (["fra"].includes(this.l2) && !quick) {
-        let stems = this.findFrenchStems(text);
-        if (stems.length > 0 && !quick) {
-          let stemWords = this.stringsToWords(stems);
-          let stemWordsWithScores = stemWords.map(w => {
-            return {
-              score: 2,
-              w: Object.assign({ morphology: "Inflected form of" }, w)
-            };
-          });
-          words = words.concat(stemWordsWithScores);
-        }
-      } else {
-        if (words.length === 0 && this.words.length < 200000) {
-          for (let word of this.words) {
-            let search = word.search ? word.search : undefined;
-            if (search) {
-              let distance = FastestLevenshtein.distance(search, text);
-              if (this.l2 === "tur" && text.startsWith(search))
-                distance = distance / 2;
-              let max = Math.max(text.length, search.length);
-              let similarity = (max - distance) / max;
-              words.push({ score: similarity, w: word });
-              if (similarity === 1 && !quick) {
-                words = words.concat(this.stemWords(word, 1));
-                words = words.concat(this.phrases(word, 1));
-              }
+      if (words.length === 0 && this.words.length < 200000) {
+        for (let word of this.words) {
+          let search = word.search ? word.search : undefined;
+          if (search) {
+            let distance = FastestLevenshtein.distance(search, text);
+            if (this.l2 === "tur" && text.startsWith(search))
+              distance = distance / 2;
+            let max = Math.max(text.length, search.length);
+            let similarity = (max - distance) / max;
+            words.push({ score: similarity, w: word });
+            if (similarity === 1 && !quick) {
+              words = words.concat(this.stemWordsWithScores(word.w, 1));
+              words = words.concat(this.phrasesWithScores(word.w, 1));
             }
           }
-        } else {
-          for (let word of words) {
-            let stemWords = this.stemWords(word, 1);
-            let phrases = this.phrases(word, 1);
-            words = words.concat(stemWords).concat(phrases);
+        }
+      } else {
+        for (let word of words) {
+          for (let d of word.w.definitions) {
+            let lemma = this.lemmaFromDefinition(d)
+            if (lemma) {
+              let lemmaWords = this.lookupMultiple(lemma.lemma)
+              lemmaWords = lemmaWords.map(l => { return { w: l, score: 2 } })
+              words = words.concat(lemmaWords)
+            }
           }
+          let phrases = this.phrasesWithScores(word.w, 1);
+          words = words.concat(phrases);
         }
       }
       words = words.sort((a, b) => b.score - a.score);
-      words = this.uniqueByValue(
-        words.map(w => w.w),
-        "id"
-      );
+      return words.map(w => w.w)
     }
     words = words.slice(0, limit);
     return words;
+  },
+  /**
+   *  https://blog.adriaan.io/make-a-javascript-array-with-objects-unique-by-its-nested-key.html
+   *  Property can be the name of a propterty or a compare function
+   */
+  uniqueByFunction(array, property) {
+    const compare =
+      typeof property === "function"
+        ? property
+        : (left, right) => left[property] == right[property];
+
+    const newArray = [];
+
+    array.forEach((right) => {
+      const run = (left) => compare.call(this, left, right);
+      var i = newArray.findIndex(run);
+      if (i === -1) newArray.push(right);
+    });
+
+    return newArray;
   },
   getWords() {
     return this.words;
@@ -703,8 +716,8 @@ const Dictionary = {
         form: word.head
       }
     ];
-    if (this.l2 === "fra") forms = forms.concat(this.frenchWordForms(word));
-    else if (this.l2 !== "vie") forms = forms.concat(this.findForms(word));
+    // if (this.l2 === "fra") forms = forms.concat(this.frenchWordForms(word));
+    if (this.l2 !== "vie") forms = forms.concat(this.findForms(word));
     forms = this.uniqueByValues(forms, ["table", "field", "form"]);
     return forms;
   },
@@ -714,7 +727,10 @@ const Dictionary = {
     if (m) {
       let lemma = m[2].replace(/\u200e/g, ""); // Left-to-Right Mark
       if (this.l2 === "lat") lemma = this.stripAccents(lemma);
-      return lemma;
+      return {
+        lemma,
+        morphology: m
+      };
     }
   },
   findForms(word) {
@@ -741,7 +757,7 @@ const Dictionary = {
       for (let d of w.definitions) {
         let lemma = this.lemmaFromDefinition(d);
         for (let head of heads) {
-          if (head === lemma) {
+          if (head === lemma.lemma) {
             field = d.replace(new RegExp(`of ${head}.*`), "").trim();
             field = field.replace(/form$/, "").trim();
             let table = field.replace(/.*?([^\s]+)$/, "$1").trim();
@@ -954,9 +970,8 @@ const Dictionary = {
   // json or plain text only, and returns object
   async proxy(url, cacheLife = -1, encoding = false) {
     try {
-      let proxyURL = `https://server.chinesezerotohero.com/scrape2.php?cache_life=${cacheLife}${
-        encoding ? "&encoding=" + encoding : ""
-      }&url=${encodeURIComponent(url)}`;
+      let proxyURL = `https://server.chinesezerotohero.com/scrape2.php?cache_life=${cacheLife}${encoding ? "&encoding=" + encoding : ""
+        }&url=${encodeURIComponent(url)}`;
       let response = await axios.get(proxyURL);
       if (response.data) {
         return response.data;
@@ -988,9 +1003,9 @@ const Dictionary = {
     if (longest.matches.length > 0) {
       for (let word of longest.matches) {
         longest.matches = longest.matches.concat(
-          this.stemWords(word, 1).map(w => w.w)
+          this.stemWordsWithScores(word, 1).map(w => w.w)
         );
-        // longest.matches = longest.matches.concat(this.phrases(word, 1)) // This is very slow
+        // longest.matches = longest.matches.concat(this.phrasesWithScores(word, 1)) // This is very slow
       }
       let result = [];
       /*
@@ -1051,7 +1066,7 @@ const Dictionary = {
     }
     return words;
   },
-  stemWords(word, score = undefined) {
+  stemWordsWithScores(word, score = undefined) {
     if (word.stems && word.stems.length > 0) {
       let stemWords = this.stringsToWords(word.stems);
       stemWordsWithScores = stemWords.map(w => {
@@ -1060,7 +1075,7 @@ const Dictionary = {
       return stemWordsWithScores;
     } else return [];
   },
-  phrases(word, score = undefined) {
+  phrasesWithScores(word, score = undefined) {
     if (word.phrases && word.phrases.length > 0) {
       let phrases = [];
       for (let s of word.phrases) {
