@@ -576,7 +576,7 @@ const Dictionary = {
   },
   lookupMultiple(text, ignoreAccents = false) {
     if (ignoreAccents && !this.accentCritical) text = this.stripAccents(text);
-    let type = ignoreAccents ? "bare" : "head";
+    let type = ignoreAccents ? "search" : "head";
     let words = this[type + "Index"][text.toLowerCase()];
     return words || [];
   },
