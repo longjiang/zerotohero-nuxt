@@ -118,10 +118,10 @@ export default {
       }
     }
   },
-
   generate: {
     routes: [
       '/'
-    ]
+    ],
+    crawler: false
   }
 }
