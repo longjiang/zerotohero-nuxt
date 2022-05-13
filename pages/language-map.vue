@@ -9,37 +9,57 @@
 </router>
 <template>
   <div>
-    <SocialHead title="Map of World Languages | Zero to Hero Languages"
+    <SocialHead
+      title="Map of World Languages | Zero to Hero Languages"
       description="Tap on any language label to learn the language! Live TV channels, TV shows with subtitles, music with lyrics, phrasebooks with video examples... everything that can help you to learn a language “by osmosis.”"
-      image="/img/thumbnail-language-map.jpg" />
+      image="/img/thumbnail-language-map.jpg"
+    />
     <div class="container-fluid">
-      <div class="row bg-dark text-white pt-2 pb-2 text-left" style="overflow: visible">
+      <div
+        class="language-map-top-bar row"
+        style="overflow: visible"
+      >
         <div class="col-sm-12 d-flex" style="overflow: visible">
           <div class="mr-3 d-flex align-items-center">
             <router-link to="/" class="link-unstyled">
               <img src="/img/czh-icon.png" style="height: 1.5rem" />
             </router-link>
           </div>
-          <div class="mr-1 d-flex align-items-center">
-            L1
-          </div>
-          <b-form-select v-model="l1" :options="l1s" class="mr-2" style="display: inline-block; width: 3.7rem">
-          </b-form-select>
-          <div class="mr-1 d-flex align-items-center">
-            L2
-          </div>
-          <LanguageSwitch style="flex: 1; z-index: 999" :nav="false" @nav="onNav" :button="false" :showRandom="false"
-            :langs="filteredLangs" />
+          <div class="mr-1 d-flex align-items-center">L1</div>
+          <b-form-select
+            v-model="l1"
+            :options="l1s"
+            class="mr-2"
+            style="display: inline-block; width: 3.7rem"
+          ></b-form-select>
+          <div class="mr-1 d-flex align-items-center">L2</div>
+          <LanguageSwitch
+            style="flex: 1; z-index: 999"
+            :nav="false"
+            @nav="onNav"
+            :button="false"
+            :showRandom="false"
+            :langs="filteredLangs"
+          />
         </div>
       </div>
       <div class="row">
         <div class="col-12" style="height: calc(100vh - 54px); padding: 0">
           <div class="loader-wrapper" v-if="loadingMap">
-            <Loader :sticky="true" message="Loading map, and plotting thousands of languages..." />
+            <Loader
+              :sticky="true"
+              message="Loading map, and plotting thousands of languages..."
+            />
           </div>
           <client-only v-if="filteredLangsWithGeo">
-            <LanguageMap style="height: 100%" ref="languageMap" :langs="filteredLangsWithGeo" @ready="onReady"
-              :key="`language-map-${languagesKey}`" :l1="l1" />
+            <LanguageMap
+              style="height: 100%"
+              ref="languageMap"
+              :langs="filteredLangsWithGeo"
+              @ready="onReady"
+              :key="`language-map-${languagesKey}`"
+              :l1="l1"
+            />
           </client-only>
         </div>
       </div>
@@ -48,25 +68,25 @@
 </template>
 
 <script>
-import Helper from '@/lib/helper'
+import Helper from "@/lib/helper";
 export default {
   data() {
     return {
-      l1: 'en',
+      l1: "en",
       l1s: [
         {
-          value: 'en',
-          text: 'English'
+          value: "en",
+          text: "English",
         },
         {
-          value: 'zh',
-          text: '中文'
-        }
+          value: "zh",
+          text: "中文",
+        },
       ],
       loadingMap: true,
       filteredLangsWithGeo: undefined,
       filteredLangs: undefined,
-      languagesKey: 0
+      languagesKey: 0,
     };
   },
   /**
@@ -86,36 +106,33 @@ export default {
     },
   },
   async mounted() {
-    await Helper.timeout(100)
-    this.updateLanguages()
+    await Helper.timeout(100);
+    this.updateLanguages();
   },
   watch: {
     l1() {
-      this.updateLanguages()
-    }
+      this.updateLanguages();
+    },
   },
   methods: {
     onReady() {
       this.loadingMap = false;
     },
     updateLanguages() {
-      this.filteredLangs = this.getFilteredLangs()
-      this.filteredLangsWithGeo = this.getFilteredLangsWithGeo()
-      this.languagesKey++
+      this.filteredLangs = this.getFilteredLangs();
+      this.filteredLangsWithGeo = this.getFilteredLangsWithGeo();
+      this.languagesKey++;
     },
     getFilteredLangs() {
       let languages = this.$languages.l1s;
       languages = languages.filter((l) => {
         // if (["hbo", "enm", "arc", "grc", "sjn", "ang", "non"].includes(l["iso639-3"]))
         //   return true;
-        if (l["iso639-3"] === 'cmn') return false; // Mandarin overlaps Chinese, which is annoying
+        if (l["iso639-3"] === "cmn") return false; // Mandarin overlaps Chinese, which is annoying
         if (!l["iso639-3"]) return false;
         // if (["A", "E", "H"].includes(l.type)) return false;
-        if (
-          !this.hasDictionary(this.l1Lang, l)
-        )
-          return false;
-        return true
+        if (!this.hasDictionary(this.l1Lang, l)) return false;
+        return true;
       });
       return languages;
     },
@@ -158,6 +175,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.language-map-top-bar {
+  padding: calc(env(safe-area-inset-top) + 0.25rem) 0.75rem 0.25rem 0.75rem;
+  background-color: rgb(29, 29, 29);
+  color: white;
+}
 .loader-wrapper {
   background: rgba(0, 0, 0, 0.66);
   backdrop-filter: blur(15px);
