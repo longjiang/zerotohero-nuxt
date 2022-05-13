@@ -1,13 +1,15 @@
 <template>
-  <div
-    id="zerotohero"
-    :class="classes"
-  >
+  <div id="zerotohero" :class="classes">
     <div
       class="zerotohero-background"
       :style="`background-image: url(${background})`"
     />
-    <template v-if="$route.meta.layout === 'full' || !($route.params.l1 && $route.params.l1 && l1 && l2)">
+    <template
+      v-if="
+        $route.meta.layout === 'full' ||
+        !($route.params.l1 && $route.params.l1 && l1 && l2)
+      "
+    >
       <Nuxt id="main" />
     </template>
     <template v-else>

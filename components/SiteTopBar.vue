@@ -204,7 +204,7 @@ export default {
   width: 100%;
   z-index: 4;
   background-color: rgb(29, 29, 29);
-  padding: 0.25rem 0.75rem;
+  padding: calc(env(safe-area-inset-top) + 0.25rem)  0.75rem 0.25rem 0.75rem;
 
   a {
     color: #ccc;
