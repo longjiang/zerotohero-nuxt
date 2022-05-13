@@ -1,0 +1,6 @@
+{
+  "appId": "ca.zerotohero.app",
+  "appName": " zerotohero-nuxt",
+  "webDir": "dist",
+  "bundledWebRuntime": false
+}
