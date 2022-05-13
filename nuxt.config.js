@@ -1,10 +1,6 @@
 export default {
-  server: {
-    host: "0.0.0.0",
-    port: 2748
-  },
   env: {
-    baseUrl: process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:2748'
+    baseUrl: process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'
   },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
