@@ -1,6 +1,10 @@
 export default {
+  server: {
+    host: "0.0.0.0",
+    port: 2748
+  },
   env: {
-    baseUrl: process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'
+    baseUrl: process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:2748'
   },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -11,7 +15,8 @@ export default {
     meta: [
       { charset: 'utf-8' },
       // { name: 'referrer', content: 'no-referrer'}, // Turned off because some youtube videos will not load.
-      { name: 'viewport', content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' },
+      { name: 'viewport', content: 'viewport-fit=cover, width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' },
+      { 'http-equiv': 'Content-Security-Policy', content: "script-src: 'self';"}
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/img/icons/favicon.ico' },
@@ -118,6 +123,7 @@ export default {
       }
     }
   },
+  target: 'static',
   generate: {
     routes: [
       '/'
