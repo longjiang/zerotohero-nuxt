@@ -47,7 +47,7 @@
 </template>
 
 <script>
-// import WordBlock from '@/components/WordBlock'
+import WordBlock from '@/components/WordBlock'
 import WordBlockDictionary from '@/components/WordBlockDictionary'
 import VRuntimeTemplate from 'v-runtime-template'
 import Helper from '@/lib/helper'
@@ -55,6 +55,7 @@ import Config from '@/lib/config'
 
 export default {
   components: {
+    WordBlock,
     WordBlockDictionary,
     VRuntimeTemplate
   },
