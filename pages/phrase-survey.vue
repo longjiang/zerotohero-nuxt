@@ -81,7 +81,7 @@
                       target="_blank"
                     >
                       <img
-                        :src="`//img.youtube.com/vi/${phrase.youtube_id}/hqdefault.jpg`"
+                        :src="`https://img.youtube.com/vi/${phrase.youtube_id}/hqdefault.jpg`"
                         :alt="phrase.title"
                         class="video-thumb"
                         v-lazy-load

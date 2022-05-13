@@ -77,7 +77,7 @@
               >
                 <img
                   class="show-thumb"
-                  :src="`//img.youtube.com/vi/${tvShow.youtube_id}/hqdefault.jpg`"
+                  :src="`https://img.youtube.com/vi/${tvShow.youtube_id}/hqdefault.jpg`"
                   v-lazy-load
                 />
                 {{ tvShow.title }}
@@ -123,7 +123,7 @@
               >
                 <img
                   class="show-thumb"
-                  :src="`//img.youtube.com/vi/${talk.youtube_id}/hqdefault.jpg`"
+                  :src="`https://img.youtube.com/vi/${talk.youtube_id}/hqdefault.jpg`"
                   v-lazy-load
                 />
                 {{ talk.title }}

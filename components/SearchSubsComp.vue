@@ -120,7 +120,7 @@
               }" :key="`dropdown-line-${c}-${index}`"
                 :ref="hit === currentHit ? 'playlist-modal-current-item' : undefined">
                 <SmallStar :item="hit" :saved="(hit) => hit.saved" :save="saveHit" :remove="removeSavedHit" />
-                <img class="hit-thumb" :src="`//img.youtube.com/vi/${hit.video.youtube_id}/hqdefault.jpg`"
+                <img class="hit-thumb" :src="`https://img.youtube.com/vi/${hit.video.youtube_id}/hqdefault.jpg`"
                   :alt="hit.video.title" v-lazy-load />
                 <span :key="`dropdown-line-${index}-annotate-${hit.video.subs_l2[Number(hit.lineIndex)].line
                 }`">

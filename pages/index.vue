@@ -9,37 +9,98 @@
 </router>
 <template>
   <div>
-    <SocialHead title="Zero to Hero Languages | Master any language by comprehensible input."
-      description="We provide live TV channels in the target language, TV shows with subtitles, music with lyrics, phrasebooks with video examples... everything that can help you to learn a language “by osmosis.” We are also known for our “Chinese Zero to Hero” and “English Zero to Hero” online language courses." />
+    <SocialHead
+      title="Zero to Hero Languages | Master any language by comprehensible input."
+      description="We provide live TV channels in the target language, TV shows with subtitles, music with lyrics, phrasebooks with video examples... everything that can help you to learn a language “by osmosis.” We are also known for our “Chinese Zero to Hero” and “English Zero to Hero” online language courses."
+    />
     <div class="gradient-backdrop"></div>
     <div class="gradient-backdrop-2"></div>
-    <div class="container-fluid pt-4" style="overflow: hidden; position: relative">
+    <div
+      class="container-fluid pt-4"
+      style="overflow: hidden; position: relative"
+    >
       <div class="container">
         <div class="row pt-5 mb-5">
           <div class="col-sm-12">
             <div class="z2h-logo" style="line-height: 1.2">
               <span style="font-size: 3rem">
-                <img src="/img/czh-icon.png" style="height: 7rem; margin-right: 0.25rem; margin-bottom: 0.5rem"
-                  data-not-lazy /><br /><b>zerotohero.ca</b>
+                <img
+                  src="/img/czh-icon.png"
+                  style="
+                    height: 7rem;
+                    margin-right: 0.25rem;
+                    margin-bottom: 0.5rem;
+                  "
+                  data-not-lazy
+                />
+                <br />
+                <b>zerotohero.ca</b>
               </span>
-              <p style="font-size: 1.6rem; max-width: 45rem; margin: 2rem auto 0 auto; line-height: 1.5;">
-                Learn <strong>
-                  <router-link :to="{ name: 'language-map' }" class="blurb-highlight">{{ languagesWithVideos.length }}
-                    languages 🌏</router-link>
+              <p
+                style="
+                  font-size: 1.6rem;
+                  max-width: 45rem;
+                  margin: 2rem auto 0 auto;
+                  line-height: 1.5;
+                "
+              >
+                Learn
+                <strong>
+                  <router-link
+                    :to="{ name: 'language-map' }"
+                    class="blurb-highlight"
+                  >
+                    {{ languagesWithVideos.length }} languages 🌏
+                  </router-link>
                 </strong>
-                with <strong>
-                  <router-link :to="{ name: 'discover-shows' }" class="blurb-highlight">320,364
-                    videos 📺</router-link>
-                </strong> <br />
+                with
+                <strong>
+                  <router-link
+                    :to="{ name: 'discover-shows' }"
+                    class="blurb-highlight"
+                  >
+                    320,364 videos 📺
+                  </router-link>
+                </strong>
+                <br />
               </p>
-              <p style="font-size: 1.3rem; max-width: 45rem; margin: 1rem auto 0 auto; line-height: 1.5;">TV shows,
-                movies, music, news, audiobooks... with full subtitles and dictionary tools, all you need for
-                <a class="blurb-highlight" href="https://en.wikipedia.org/wiki/Input_hypothesis" target="_blank">comprehensible input 🎧</a>.
+              <p
+                style="
+                  font-size: 1.3rem;
+                  max-width: 45rem;
+                  margin: 1rem auto 0 auto;
+                  line-height: 1.5;
+                "
+              >
+                TV shows, movies, music, news, audiobooks... with full subtitles
+                and dictionary tools, all you need for
+                <a
+                  class="blurb-highlight"
+                  href="https://en.wikipedia.org/wiki/Input_hypothesis"
+                  target="_blank"
+                >
+                  comprehensible input 🎧
+                </a>
+                .
               </p>
-              <p style="font-size: 1.3rem; max-width: 45rem; margin: 1rem auto 0 auto; line-height: 1.5;">And yes, we have
-                <router-link :to="`/en/${this.randomLanguage[1]}`" class="blurb-highlight">{{
-                    this.randomLanguage[0]
-                }}!<span v-if="flagIcon(this.randomLanguage[1])" class="ml-2">{{ flagIcon(this.randomLanguage[1]) }}</span><span v-else>💬</span>
+              <p
+                style="
+                  font-size: 1.3rem;
+                  max-width: 45rem;
+                  margin: 1rem auto 0 auto;
+                  line-height: 1.5;
+                "
+              >
+                And yes, we have
+                <router-link
+                  :to="`/en/${this.randomLanguage[1]}`"
+                  class="blurb-highlight"
+                >
+                  {{ this.randomLanguage[0] }}!
+                  <span v-if="flagIcon(this.randomLanguage[1])" class="ml-2">
+                    {{ flagIcon(this.randomLanguage[1]) }}
+                  </span>
+                  <span v-else>💬</span>
                 </router-link>
               </p>
             </div>
@@ -49,7 +110,11 @@
         <div class="row mb-5">
           <div class="col-sm-12">
             <h4 class="text-center">
-              <router-link class="btn btn-success" to="/language-map" style="font-size: 1.5rem">
+              <router-link
+                class="btn btn-success"
+                to="/language-map"
+                style="font-size: 1.5rem"
+              >
                 Pick Your Language
                 <i class="fa fa-chevron-right ml-2"></i>
               </router-link>
@@ -61,36 +126,79 @@
           <div class="col-sm-12">
             <div class="home-card">
               <h5 class="text-center mb-3">Find Us On</h5>
-              <div class="home-card-logos text-center" style="line-height: 2rem">
+              <div
+                class="home-card-logos text-center"
+                style="line-height: 2rem"
+              >
                 <a href="https://twitter.com/zerotohero_ca">
-                  <img src="/img/twitter-text.png" style="height: 0.9rem; padding: 0 0.5rem" data-not-lazy />
+                  <img
+                    src="/img/twitter-text.png"
+                    style="height: 0.9rem; padding: 0 0.5rem"
+                    data-not-lazy
+                  />
                 </a>
-                <a href="https://www.youtube.com/channel/UCQ3IlLg5VGeydxtswBoyt6A">
-                  <img src="/img/logo-youtube.png" style="height: 1.2rem; padding: 0 0.5rem" data-not-lazy />
+                <a
+                  href="https://www.youtube.com/channel/UCQ3IlLg5VGeydxtswBoyt6A"
+                >
+                  <img
+                    src="/img/logo-youtube.png"
+                    style="height: 1.2rem; padding: 0 0.5rem"
+                    data-not-lazy
+                  />
                 </a>
                 <a href="https://www.instagram.com/chinesezerotohero/">
-                  <img src="/img/logo-instagram.png" style="height: 1.4rem; padding: 0 0.5rem" data-not-lazy />
+                  <img
+                    src="/img/logo-instagram.png"
+                    style="height: 1.4rem; padding: 0 0.5rem"
+                    data-not-lazy
+                  />
                 </a>
                 <a href="http://chinesezerotohero.teachable.com/">
-                  <img src="/img/logo-teachable.png" style="height: 1.4rem; padding: 0 0.5rem" data-not-lazy />
+                  <img
+                    src="/img/logo-teachable.png"
+                    style="height: 1.4rem; padding: 0 0.5rem"
+                    data-not-lazy
+                  />
                 </a>
                 <a href="http://t.me/zerotohero_zh">
-                  <img src="/img/logo-telegram.png" style="height: 1.4rem; padding: 0 0.5rem" data-not-lazy />
+                  <img
+                    src="/img/logo-telegram.png"
+                    style="height: 1.4rem; padding: 0 0.5rem"
+                    data-not-lazy
+                  />
                 </a>
                 <a href="https://m.cctalk.com/inst/stevmab3">
-                  <img src="/img/logo-cctalk.png" style="height: 1.2rem" data-not-lazy />
+                  <img
+                    src="/img/logo-cctalk.png"
+                    style="height: 1.2rem"
+                    data-not-lazy
+                  />
                 </a>
                 &nbsp;&nbsp;
                 <a href="https://space.bilibili.com/253569339">
-                  <img src="/img/logo-bilibili.png" style="height: 1.2rem" data-not-lazy />
+                  <img
+                    src="/img/logo-bilibili.png"
+                    style="height: 1.2rem"
+                    data-not-lazy
+                  />
                 </a>
                 &nbsp;&nbsp;
                 <a href="https://v.douyin.com/eNJCcD8/">
-                  <img src="/img/logo-douyin.png" style="height: 1.4rem" data-not-lazy />
+                  <img
+                    src="/img/logo-douyin.png"
+                    style="height: 1.4rem"
+                    data-not-lazy
+                  />
                 </a>
                 &nbsp;&nbsp;
-                <a href="https://www.xiaohongshu.com/user/profile/5fad77c0000000000100696e">
-                  <img src="/img/logo-xiaohongshu.png" style="height: 1.4rem" data-not-lazy />
+                <a
+                  href="https://www.xiaohongshu.com/user/profile/5fad77c0000000000100696e"
+                >
+                  <img
+                    src="/img/logo-xiaohongshu.png"
+                    style="height: 1.4rem"
+                    data-not-lazy
+                  />
                 </a>
                 <!-- &nbsp;&nbsp;
                 <router-link to="/zh/en/contact-us">
@@ -112,8 +220,12 @@
                 <h5 class="text-center mt-3 mb-3">
                   Your Saved Words &amp; Phrases
                 </h5>
-                <LazyDashboard @hasDashboard="hasDashboardUpdate" :showVideos="false" :showFlags="true"
-                  style="padding-top: 0.5rem" />
+                <LazyDashboard
+                  @hasDashboard="hasDashboardUpdate"
+                  :showVideos="false"
+                  :showFlags="true"
+                  style="padding-top: 0.5rem"
+                />
               </div>
             </div>
           </div>
@@ -122,19 +234,24 @@
           <div class="col-sm-6 mb-4">
             <div class="home-card">
               <router-link to="/en/zh">
-                <img src="/img/czh-logo-dark.png" class="czh-logo" data-not-lazy />
+                <img
+                  src="/img/czh-logo-dark.png"
+                  class="czh-logo"
+                  data-not-lazy
+                />
               </router-link>
               <hr />
               <ul class="czh-links mb-0">
                 <li>
-                  <router-link to="/en/zh/online-courses" style="color: #fd4f1c; font-weight: bold">
+                  <router-link
+                    to="/en/zh/online-courses"
+                    style="color: #fd4f1c; font-weight: bold"
+                  >
                     HSK Courses
                   </router-link>
                 </li>
                 <li>
-                  <router-link to="/en/zh/tv-shows">
-                    TV Shows
-                  </router-link>
+                  <router-link to="/en/zh/tv-shows">TV Shows</router-link>
                 </li>
                 <li>
                   <router-link to="/en/zh/dictionary">
@@ -142,22 +259,16 @@
                   </router-link>
                 </li>
                 <li>
-                  <router-link to="/en/zh/phrasebooks">
-                    Phrasebooks
-                  </router-link>
+                  <router-link to="/en/zh/phrasebooks">Phrasebooks</router-link>
                 </li>
                 <li>
                   <router-link to="/en/zh/reader">Reader</router-link>
                 </li>
                 <li>
-                  <router-link to="/en/zh/grammar">
-                    Grammar
-                  </router-link>
+                  <router-link to="/en/zh/grammar">Grammar</router-link>
                 </li>
                 <li>
-                  <router-link to="/en/zh/live-tv">
-                    Live TV
-                  </router-link>
+                  <router-link to="/en/zh/live-tv">Live TV</router-link>
                 </li>
                 <li>
                   <router-link to="/en/zh/resource/list/all/all">
@@ -170,12 +281,19 @@
           <div class="col-sm-6 mb-4">
             <div class="home-card">
               <router-link to="/zh/en">
-                <img src="/img/ezh-logo-dark.png" class="ezh-logo" data-not-lazy />
+                <img
+                  src="/img/ezh-logo-dark.png"
+                  class="ezh-logo"
+                  data-not-lazy
+                />
               </router-link>
               <hr />
               <ul class="ezh-links mb-0">
                 <li>
-                  <router-link to="/zh/en/online-courses" style="color: #1b3e76; font-weight: bold">
+                  <router-link
+                    to="/zh/en/online-courses"
+                    style="color: #1b3e76; font-weight: bold"
+                  >
                     CEFR Courses 视频教程
                   </router-link>
                 </li>
@@ -190,19 +308,27 @@
                   </router-link>
                 </li>
                 <li>
-                  <router-link to="/zh/en/tv-shows">TV Shows 电视节目</router-link>
+                  <router-link to="/zh/en/tv-shows">
+                    TV Shows 电视节目
+                  </router-link>
                 </li>
                 <li>
                   <router-link to="/zh/en/talks">Channels 油管频道</router-link>
                 </li>
                 <li>
-                  <router-link to="/zh/en/audiobooks">Audiobooks 有声书</router-link>
+                  <router-link to="/zh/en/audiobooks">
+                    Audiobooks 有声书
+                  </router-link>
                 </li>
                 <li>
-                  <router-link to="/zh/en/live-tv">Live TV 电视直播</router-link>
+                  <router-link to="/zh/en/live-tv">
+                    Live TV 电视直播
+                  </router-link>
                 </li>
                 <li>
-                  <router-link to="/zh/en/reader">Reader 文字阅读器</router-link>
+                  <router-link to="/zh/en/reader">
+                    Reader 文字阅读器
+                  </router-link>
                 </li>
               </ul>
             </div>
@@ -220,64 +346,69 @@
             <div class="col-sm-12">
               <div class="home-card">
                 <h5 class="text-center">More Languages</h5>
-                <LanguageList :codes="[
-                  'ar',
-                  'az',
-                  'bn',
-                  'br',
-                  'bs',
-                  'bul',
-                  'cat',
-                  'ces',
-                  'cy',
-                  'dan',
-                  'de',
-                  'el',
-                  'en',
-                  'epo',
-                  'es',
-                  'eu',
-                  'fa',
-                  'fin',
-                  'fr',
-                  'gle',
-                  'glg',
-                  'hak',
-                  'he',
-                  'hi',
-                  'hun',
-                  'hr',
-                  'hye',
-                  'id',
-                  'isl',
-                  'it',
-                  'ja',
-                  'ko',
-                  'lat',
-                  'lav',
-                  'lit',
-                  'lzh',
-                  'msa',
-                  'nan',
-                  'nl',
-                  'no',
-                  'pa',
-                  'pl',
-                  'pt',
-                  'ron',
-                  'ru',
-                  'sr',
-                  'swe',
-                  'ta',
-                  'th',
-                  'tl',
-                  'tlh',
-                  'tr',
-                  'uk',
-                  'vi',
-                  'yue',
-                  'zh',
-                ]" class="mt-4" :sort="true" :showFlags="true" />
+                <LanguageList
+                  :codes="[
+                    'ar',
+                    'az',
+                    'bn',
+                    'br',
+                    'bs',
+                    'bul',
+                    'cat',
+                    'ces',
+                    'cy',
+                    'dan',
+                    'de',
+                    'el',
+                    'en',
+                    'epo',
+                    'es',
+                    'eu',
+                    'fa',
+                    'fin',
+                    'fr',
+                    'gle',
+                    'glg',
+                    'hak',
+                    'he',
+                    'hi',
+                    'hun',
+                    'hr',
+                    'hye',
+                    'id',
+                    'isl',
+                    'it',
+                    'ja',
+                    'ko',
+                    'lat',
+                    'lav',
+                    'lit',
+                    'lzh',
+                    'msa',
+                    'nan',
+                    'nl',
+                    'no',
+                    'pa',
+                    'pl',
+                    'pt',
+                    'ron',
+                    'ru',
+                    'sr',
+                    'swe',
+                    'ta',
+                    'th',
+                    'tl',
+                    'tlh',
+                    'tr',
+                    'uk',
+                    'vi',
+                    'yue',
+                    'zh',
+                  ]"
+                  class="mt-4"
+                  :sort="true"
+                  :showFlags="true"
+                />
                 <h5 class="text-center mt-5">EVEN More languages</h5>
                 <Choose :compact="true" :showLanguageList="false" />
               </div>
@@ -290,8 +421,12 @@
             <div class="home-card text-center">
               <h5 class="mb-3">Discover TV Shows Across Languages</h5>
               <router-link to="/discover-shows">
-                <img src="/img/thumbnail-discover-shows.jpg" alt="Discover TV Shows Across Languages"
-                  class="rounded shadow img-fluid" data-not-lazy />
+                <img
+                  src="/img/thumbnail-discover-shows.jpg"
+                  alt="Discover TV Shows Across Languages"
+                  class="rounded shadow img-fluid"
+                  data-not-lazy
+                />
               </router-link>
             </div>
           </div>
@@ -347,7 +482,6 @@
 </template>
 
 <script>
-import Helper from '@/lib/helper'
 export default {
   data() {
     return {
@@ -572,23 +706,35 @@ export default {
         ["Lakota", "lkt"],
         ["Oscan", "osc"],
         ["Sindarin", "sjn"],
-        ["Tsakonian", "tsd"]
-      ]
+        ["Tsakonian", "tsd"],
+      ],
     };
   },
   created() {
-    this.randomLanguage = Helper.randomArrayItem(this.languagesWithVideos.slice(0, 141))
+    this.randomLanguage = this.randomArrayItem(
+      this.languagesWithVideos.slice(0, 141)
+    );
   },
   mounted() {
     this.loaded = true;
   },
   methods: {
     hasDashboardUpdate(hasDashboard) {
-      this.hasDashboard = hasDashboard && (hasDashboard.includes('words') || hasDashboard.includes('phrases'));
+      this.hasDashboard =
+        hasDashboard &&
+        (hasDashboard.includes("words") || hasDashboard.includes("phrases"));
     },
     flagIcon(l2Code) {
-      return this.$languages ? this.$languages.flagIcon(this.$languages.getSmart(l2Code)) : undefined
-    }
+      return this.$languages
+        ? this.$languages.flagIcon(this.$languages.getSmart(l2Code))
+        : undefined;
+    },
+    randomArrayItem(array, start = 0, length = false) {
+      length = length || array.length;
+      array = array.slice(start, length);
+      let index = Math.floor(Math.random() * array.length);
+      return array[index];
+    },
   },
 };
 </script>
@@ -601,7 +747,6 @@ export default {
 }
 
 @media (min-width: 768px) {
-
   .czh-links,
   .ezh-links {
     column-count: 2;

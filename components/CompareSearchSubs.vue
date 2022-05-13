@@ -150,7 +150,7 @@
                           class="hit-thumb"
                           style="margin-top: 0.2rem"
                           v-if="ab === 'A' && hit"
-                          :src="`//img.youtube.com/vi/${hit.video.youtube_id}/hqdefault.jpg`"
+                          :src="`https://img.youtube.com/vi/${hit.video.youtube_id}/hqdefault.jpg`"
                           :alt="hit.video.title"
                           v-lazy-load
                         />
@@ -196,7 +196,7 @@
                           class="hit-thumb"
                           style="margin-top: 0.2rem"
                           v-if="ab === 'B' && hit"
-                          :src="`//img.youtube.com/vi/${hit.video.youtube_id}/hqdefault.jpg`"
+                          :src="`https://img.youtube.com/vi/${hit.video.youtube_id}/hqdefault.jpg`"
                           :alt="hit.video.title"
                           v-lazy-load
                         />

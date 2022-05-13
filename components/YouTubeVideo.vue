@@ -4,7 +4,7 @@
       :style="{
         backgroundImage:
           !autoplay && !loading
-            ? `url(//img.youtube.com/vi/${youtube}/hqdefault.jpg)`
+            ? `url(https://img.youtube.com/vi/${youtube}/hqdefault.jpg)`
             : 'none',
         'background-repeat': 'no-repeat',
         'background-size': 'cover',
@@ -192,7 +192,7 @@ export default {
           },
         });
       };
-      $.getScript("//www.youtube.com/iframe_api");
+      $.getScript("https://www.youtube.com/iframe_api");
     },
     playerIsThisPlayerNotSomeOtherPlayer() {
       if (this.player && this.player.getVideoData) {

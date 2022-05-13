@@ -405,7 +405,7 @@ export default {
     thumbnail() {
       return (
         this.video.thumbnail ||
-        `//img.youtube.com/vi/${this.video.youtube_id}/hqdefault.jpg`
+        `https://img.youtube.com/vi/${this.video.youtube_id}/hqdefault.jpg`
       );
     },
   },
