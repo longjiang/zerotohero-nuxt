@@ -178,7 +178,7 @@
                   !['tlh', 'fa'].includes($l2.code)
                 "
               >
-                {{ tr(word.head) }}
+                {{ transliterate(word.head) }}
               </span>
               <span v-if="$l2.code === 'tlh'">
                 {{ word.head }} /{{ klingonIPA(word.head) }}/
@@ -334,7 +334,7 @@
           class="mt-3"
         >
           <span style="color: #999" v-if="$hasFeature('transliteration')">
-            {{ tr(text) }}
+            {{ transliterate(text) }}
             <Speak :text="text" class="ml-1" />
           </span>
           <div
@@ -357,7 +357,6 @@ import Helper from "@/lib/helper";
 import Config from "@/lib/config";
 import WordPhotos from "@/lib/word-photos";
 import Klingon from "@/lib/klingon";
-import tr from '@sindresorhus/transliterate';
 import { mapState } from "vuex";
 
 export default {
@@ -555,7 +554,7 @@ export default {
       if (this.$l2.code === "fa") {
         let dictionary = await this.$getDictionary();
         let roman = await (await dictionary).romanizePersian(text);
-        return roman || tr(text);
+        return roman || this.transliterate(text);
       }
     },
     async getTransliteration() {
@@ -579,7 +578,7 @@ export default {
           return roman.replace(/\^/g, "");
         }
         if (!["ja", "zh", "nan", "hak"].includes(this.$l2.code)) {
-          return tr(this.text);
+          return this.transliterate(this.text);
         }
       }
     },
@@ -632,8 +631,9 @@ export default {
         if (!Helper.isMobile()) this.togglePopup();
       }
     },
-    tr(text) {
-      return tr(text);
+    transliterate(text) {
+      return ''
+      // return tr(text);
     },
     segment(text) {
       return text
