@@ -30,6 +30,7 @@
         :dropleft="$l2.direction !== 'rtl'"
         :dropright="$l2.direction === 'rtl'"
         @hide="onMenuHide"
+        variant="unstyled"
       >
         <template #button-content><i class="fas fa-ellipsis-v"></i></template>
         <b-dropdown-item>
@@ -43,7 +44,6 @@
           <Speak
             :text="text"
             class="annotator-button ml-1 mr-1"
-            style="position: relative; top: 0.08rem; position: relative"
             title="Speak"
           />
           <span
@@ -628,6 +628,11 @@ export default {
   color: #ddd;
 }
 
+.show > .annotator-menu-toggle { 
+  background-color: #545b62;
+  color: white;
+}
+
 .main-dark,
 .widget-dark {
   .annotator-menu-toggle {
@@ -636,6 +641,7 @@ export default {
 }
 
 .annotator-buttons .dropdown-item {
+  padding: 0 0.75rem;
   &:hover {
     background: none;
   }
@@ -652,6 +658,8 @@ export default {
     padding: 0.3rem 0.3rem;
     border-radius: 0.2rem;
     line-height: 16px;
+    height: 1.6rem;
+    display: inline-block;
   }
 
   .annotator-button.active {
