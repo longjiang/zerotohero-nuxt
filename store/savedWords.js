@@ -106,20 +106,21 @@ export const actions = {
   }
 }
 export const getters = {
-  has: state => options => {
-    if (state.savedWords[options.l2]) {
+  has: state => ({ l2, id, text }) => {
+    if (state.savedWords[l2]) {
       let savedWord = false
-      if (options.id) {
-        savedWord = state.savedWords[options.l2].find(
-          item => item.id && item.id == options.id
+      if (id) {
+        savedWord = state.savedWords[l2].find(
+          item => item.id && item.id == id
         )
-      } else if (options.text) {
-        savedWord = state.savedWords[options.l2].find(
+      } else if (text) {
+        let search = text.toLowerCase()
+        savedWord = state.savedWords[l2].find(
           item => {
             let forms = item.forms
             // Take care of edge cases where a user has used an old version of the site and imported word forms as a string rather than array.
             if (typeof forms === 'string') forms = forms.split(',')
-            return forms.map(form => form ? form.toLowerCase() : '').includes(options.text.toLowerCase())
+            return forms.includes(search)
           }
         )
       }
