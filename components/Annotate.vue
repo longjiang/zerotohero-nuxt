@@ -17,7 +17,7 @@
         $l2.scripts &&
         $l2.scripts.length > 0 &&
         $l2.scripts[0].direction === 'rtl',
-      'add-pinyin': $hasFeature('transliterationprop'),
+      'add-pinyin': $hasFeature('transliteration'),
       phonetics,
       fullscreen: fullscreenMode,
       'with-buttons': buttons,
@@ -111,7 +111,7 @@ import wordblock from "@/components/WordBlock";
 import popupnote from "@/components/PopupNote";
 import VRuntimeTemplate from "v-runtime-template";
 import Helper from "@/lib/helper";
-import tr from "@sindresorhus/transliterate";
+import { transliterate as tr } from "transliteration";
 
 export default {
   components: {
@@ -442,7 +442,7 @@ export default {
           if (token && typeof token === "object") {
             if (token.candidates.length > 0) {
               html += `<WordBlock transliterationprop="${tr(
-                token.text
+                token.text.replace('"', '')
               )}" :checkSaved="${
                 this.checkSaved
               }" ref="word-block" :phonetics="${this.phonetics}" :popup="${
@@ -453,8 +453,9 @@ export default {
                 token.text
               }</WordBlock>`;
             } else {
-              html += `<WordBlock transliterationprop="${tr(
-                token.text
+              html += `<WordBlock transliterationprop="${tr(token.text).replace(
+                '"',
+                ""
               )}" :checkSaved="${
                 this.checkSaved
               }" ref="word-block" :phonetics="${this.phonetics}" :popup="${
@@ -481,8 +482,9 @@ export default {
       for (let index in this.tokenized[batchId]) {
         let item = this.tokenized[batchId][index];
         if (typeof item === "object") {
-          html += `<WordBlock transliterationprop="${tr(
-            item.text
+          html += `<WordBlock transliterationprop="${tr(item.text).replace(
+            '"',
+            ""
           )}" :checkSaved="${this.checkSaved}" ref="word-block" :phonetics="${
             this.phonetics
           }" :popup="${this.popup}" :sticky="${this.sticky}" :explore="${
@@ -508,7 +510,10 @@ export default {
         .replace(
           reg,
           (match, p1) =>
-            `<WordBlock transliterationprop="${tr(p1)}" :checkSaved="${
+            `<WordBlock transliterationprop="${tr(p1).replace(
+              '"',
+              ""
+            )}" :checkSaved="${
               this.checkSaved
             }" ref="word-block"  :phonetics="${this.phonetics}" :popup="${
               this.popup

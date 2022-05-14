@@ -635,7 +635,7 @@ export default {
       }
     },
     transliterate(text) {
-      return this.transliterationprop ? this.transliterationprop : ''
+      return this.transliterationprop && this.transliterationprop !== text ? this.transliterationprop : ''
       // return tr(text);
     },
     segment(text) {
