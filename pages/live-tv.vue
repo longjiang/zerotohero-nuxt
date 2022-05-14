@@ -158,7 +158,7 @@
             >
               <img
                 v-if="channel.logo"
-                :src="channel.logo"
+                :src="channel.logo.replace('http:', 'https:')"
                 :alt="channel.name"
                 @error="logoLoadError(channel)"
               />
