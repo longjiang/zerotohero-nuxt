@@ -53,14 +53,7 @@
                 </strong>
                 <br />
               </p>
-              <p
-                style="
-                  font-size: 1.1rem;
-                  max-width: 35rem;
-                  margin: 1rem auto 0 auto;
-                  line-height: 1.5;
-                "
-              >
+              <p class="blurb-secondary">
                 TV shows, movies, music, news, audiobooks... with full subtitles
                 and dictionary tools, all you need for
                 <a
@@ -72,14 +65,7 @@
                 </a>
                 .
               </p>
-              <p
-                style="
-                  font-size: 1.1rem;
-                  max-width: 35rem;
-                  margin: 1rem auto 0 auto;
-                  line-height: 1.5;
-                "
-              >
+              <p class="blurb-secondary">
                 And yes, we have
                 <router-link
                   :to="`/en/${this.randomLanguage[1]}`"
@@ -831,5 +817,12 @@ export default {
   color: #1bd445;
   font-weight: bold;
   text-shadow: #004a5c;
+}
+
+.blurb-secondary {
+  font-size: 1.1rem;
+  max-width: 35rem;
+  margin: 1rem auto 0 auto;
+  line-height: 1.5;
 }
 </style>
