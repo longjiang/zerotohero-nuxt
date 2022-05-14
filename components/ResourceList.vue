@@ -9,7 +9,7 @@
       </div>
     </div>
     <div v-else class="resources">
-      <Resource v-for="(resource, index) of resources" :resource="resource" :key="`resource-${index}`" />
+      <Resource v-for="(resource, index) of resources" :resource="resource" :internal="resource.internal" :key="`resource-${index}`" />
     </div>
   </div>
 </template>
@@ -40,7 +40,7 @@ export default {
   props: {
     resources: {
       type: Array
-    }
+    },
   }
 }
 </script>

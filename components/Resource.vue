@@ -10,7 +10,7 @@
       </div>
     </router-link>
     <a :href="resource.url" v-else target="_blank" class="link-unstyled">
-      <img v-lazy-load v-lazy-load :src="resource.thumbnail" class="resource-thumbnail img-fluid" />
+      <img v-lazy-load :src="resource.thumbnail" class="resource-thumbnail img-fluid" />
       <div class="media-body">
         <h6>
           <span>{{ resource.title }}</span>
