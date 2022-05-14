@@ -30,12 +30,13 @@
               zerotohero.ca
             </b>
           </router-link>
-          <router-link
+          <span
             :class="`text-white ${
               !$route.params.l2 || params.sm === false ? 'd-none' : ''
             }`"
-            :to="{ name: 'home' }"
-            class="link-unstyled language-flag-and-name"
+            @click="showPlaylistModal"
+            class="language-flag-and-name"
+            style="cursor: pointer"
           >
             <i
               class="fas fa-chevron-right"
@@ -52,7 +53,7 @@
             <span :class="`flagIcon ${!flagIcon ? 'd-none' : ''}`">
               {{ flagIcon }}
             </span>
-          </router-link>
+          </span>
         </div>
         <div>
           <client-only>
@@ -97,6 +98,82 @@
           />
         </div>
       </template>
+      <b-modal
+        ref="languages-modal"
+        size="lg"
+        centered
+        hide-footer
+        title="Switch Language"
+        body-class="languages-modal-wrapper"
+        @show="onLanguagesModalShown"
+      >
+        <div class="languages-modal">
+          <LanguageSwitch :compact="true" :showLanguageList="false" :showRandom="false" class="mb-3" :button="false" />
+          <LanguageList
+            :showSpeakers="false"
+            :codes="[
+              'ar',
+              'az',
+              'bn',
+              'br',
+              'bs',
+              'bul',
+              'cat',
+              'ces',
+              'cy',
+              'dan',
+              'de',
+              'el',
+              'en',
+              'epo',
+              'es',
+              'eu',
+              'fa',
+              'fin',
+              'fr',
+              'gle',
+              'glg',
+              'hak',
+              'he',
+              'hi',
+              'hun',
+              'hr',
+              'hye',
+              'id',
+              'isl',
+              'it',
+              'ja',
+              'ko',
+              'lat',
+              'lav',
+              'lit',
+              'lzh',
+              'msa',
+              'nan',
+              'nl',
+              'no',
+              'pa',
+              'pl',
+              'pt',
+              'ron',
+              'ru',
+              'sr',
+              'swe',
+              'ta',
+              'th',
+              'tl',
+              'tlh',
+              'tr',
+              'uk',
+              'vi',
+              'yue',
+              'zh',
+            ]"
+            :sort="true"
+            :showFlags="true"
+          />
+        </div>
+      </b-modal>
     </div>
   </container-query>
 </template>
@@ -166,7 +243,19 @@ export default {
       if (this.$l2) return this.$languages.flagIcon(this.$l2);
     },
   },
+  watch: {
+    $route() {
+      this.hideLanguagesModal();
+    }
+  },
   methods: {
+    showPlaylistModal() {
+      this.$refs["languages-modal"].show();
+    },
+    hideLanguagesModal() {
+      this.$refs["languages-modal"].hide();
+    },
+    onLanguagesModalShown() {},
     backgroundClick() {
       if (this.variant === "menu-bar") this.scrollToTop();
     },
@@ -204,7 +293,7 @@ export default {
   width: 100%;
   z-index: 4;
   background-color: rgb(29, 29, 29);
-  padding: calc(env(safe-area-inset-top) + 0.25rem)  0.75rem 0.25rem 0.75rem;
+  padding: calc(env(safe-area-inset-top) + 0.25rem) 0.75rem 0.25rem 0.75rem;
 
   a {
     color: #ccc;

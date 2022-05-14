@@ -7,6 +7,7 @@
             v-if="languages && languages.length > 0"
             class="mt-3 mb-4"
             :preferredLanguages="languages"
+            :showRandom="showRandom"
           />
           <LanguageList
             v-if="showLanguageList && languages && languages.length > 0"
@@ -35,7 +36,10 @@ export default {
     },
     showLanguageList: {
       default: true
-    }
+    },
+    showRandom: {
+      default: true,
+    },
   },
   data() {
     return {

@@ -8,9 +8,12 @@
           class="language-list-item"
           :set="(base = languagePath(language))"
         >
-          <span class="language-list-item-features">
+          <span class="language-list-item-features" v-if="showFeatures">
             <router-link
-              :to="`${base}live-tv/`"
+              :to="{
+                name: 'live-tv',
+                params: { l1: l1, l2: language.code },
+              }"
               :class="{
                 'feature-icon mr-1': true,
                 transparent: !hasLiveTV(english, language),
@@ -20,7 +23,10 @@
               <i class="fa fa-broadcast-tower" />
             </router-link>
             <router-link
-              :to="`${base}youtube/browse/all/all/0`"
+              :to="{
+                name: 'all-media',
+                params: { l1: l1, l2: language.code },
+              }"
               :class="{
                 'feature-icon mr-1': true,
                 transparent: !hasYouTube(english, language),
@@ -30,7 +36,10 @@
               <i class="fa fa-play-circle" />
             </router-link>
             <router-link
-              :to="`${base}dictionary`"
+              :to="{
+                name: 'dictionary',
+                params: { l1: l1, l2: language.code },
+              }"
               :class="{
                 'feature-icon mr-1': true,
                 transparent: !hasDictionary(english, language),
@@ -81,6 +90,9 @@ export default {
     ContainerQuery,
   },
   props: {
+    showFeatures: {
+      default: true,
+    },
     langs: {
       default: undefined,
     },
@@ -106,11 +118,11 @@ export default {
       default: "list", // or 'icon'
     },
     l1: {
-      default: 'en'
+      default: "en",
     },
     showFlags: {
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
@@ -176,7 +188,7 @@ export default {
   },
   methods: {
     flagIcon(l2) {
-      return this.$languages.flagIcon(l2)
+      return this.$languages.flagIcon(l2);
     },
     speakers(number) {
       return Helper.formatK(number, 1);
