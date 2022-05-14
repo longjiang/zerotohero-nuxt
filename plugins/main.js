@@ -39,7 +39,7 @@ Vue.filter('striphtml', function (value) {
   return text
 })
 
-https://stackoverflow.com/questions/35070271/vue-js-components-how-to-truncate-the-text-in-the-slot-element-in-a-component
+// https://stackoverflow.com/questions/35070271/vue-js-components-how-to-truncate-the-text-in-the-slot-element-in-a-component
 Vue.filter('truncate', function (text, length, clamp) {
   clamp = clamp || '...'
   var node = document.createElement('div')
