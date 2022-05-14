@@ -108,9 +108,11 @@
         @show="onLanguagesModalShown"
       >
         <div class="languages-modal">
-          <LanguageSwitch :compact="true" :showLanguageList="false" :showRandom="false" class="mb-3" :button="false" />
+          <b-form-input v-model="keyword" @compositionend.prevent.stop="() => false" placeholder="Search languages" class="mb-3" />
           <LanguageList
+            @click="hideLanguagesModal"
             :showSpeakers="false"
+            :keyword="keyword"
             :codes="[
               'ar',
               'az',
@@ -185,6 +187,7 @@ export default {
   components: { AnnotationSettings, ContainerQuery },
   data() {
     return {
+      keyword: undefined,
       params: {},
       query: {
         sm: {

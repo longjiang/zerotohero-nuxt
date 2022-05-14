@@ -63,6 +63,8 @@
           <router-link :to="base" class="language-list-item-name">
             <span v-if="showFlags" class="mr-1">{{ flagIcon(language) }}</span>
             {{ languageName(language) }}
+            <span v-if="keyword && language.otherNames.length > 0">({{ language.otherNames.slice(0, 1).join(', ') }})
+            </span>
             <span v-if="showCode">({{ language.code }})</span>
           </router-link>
           <span
@@ -101,6 +103,9 @@ export default {
     },
     sort: {
       default: false,
+    },
+    keyword: {
+      type: String,
     },
     singleColumn: {
       default: false,
@@ -155,7 +160,7 @@ export default {
     classes() {
       let classes = {
         "language-list": true,
-        "language-list-single-column": this.singleColumn,
+        "language-list-single-column": this.singleColumn || this.keyword,
         "language-list-1-col": this.params.xs,
         "language-list-2-cols": this.params.sm || this.params.md,
         "language-list-3-cols": this.params.lg,
@@ -170,7 +175,18 @@ export default {
     },
     languages() {
       let languages;
-      if (this.langs) {
+      if (this.keyword && this.keyword !== "") {
+        let keyword = this.keyword.toLowerCase();
+        languages = this.$languages.l1s.filter(
+          (l) =>
+            l.name.toLowerCase().includes(keyword) ||
+            (l.otherNames
+              ? l.otherNames.join(" ").toLowerCase().includes(keyword)
+              : false) ||
+            l["iso639-3"].includes(keyword) ||
+            l["iso639-1"].includes(keyword)
+        );
+      } else if (this.langs) {
         languages = this.langs.filter((l) => l);
       }
       if (!languages && this.codes && this.$languages) {
@@ -188,7 +204,8 @@ export default {
   },
   methods: {
     flagIcon(l2) {
-      return this.$languages.flagIcon(l2);
+      let flagIcon = this.$languages.flagIcon(l2);
+      return flagIcon || " ";
     },
     speakers(number) {
       return Helper.formatK(number, 1);
