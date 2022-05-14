@@ -419,17 +419,6 @@ export default {
     if (!this.$store.state.history.historyLoaded) {
       this.$store.commit("history/LOAD_HISTORY");
     }
-    if (
-      typeof window !== "undefined" &&
-      window.location.href.startsWith("http://localhost")
-    ) {
-      try {
-        await axios.get(this.thumbnail);
-      } catch (e) {
-        Vue.set(this.video, "unavailable", true);
-        this.$emit("unavailable", this.video.youtube_id);
-      }
-    }
   },
   watch: {
     firstLineTime(newTime, oldTime) {
@@ -466,7 +455,9 @@ export default {
           let data = {};
           data[type] = show.id;
           let response = await axios.patch(
-            `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}?fields=id`,
+            `${Config.youtubeVideosTableName(this.$l2.id)}/${
+              this.video.id
+            }?fields=id`,
             data
           );
           response = response.data;
@@ -618,7 +609,10 @@ export default {
     },
     async getSubsAndSave(video = this.video) {
       if (this.checkSaved && !video.id && (video.hasSubs || this.generated)) {
-        if ((!video.subs_l2 || !video.subs_l2[0]) && (video.l2Locale || this.generated)) {
+        if (
+          (!video.subs_l2 || !video.subs_l2[0]) &&
+          (video.l2Locale || this.generated)
+        ) {
           video.subs_l2 = await YouTube.getTranscript(
             video.youtube_id,
             video.l2Locale || this.$l2.code,
@@ -663,7 +657,11 @@ export default {
           Vue.set(video, "checkingSubs", false);
           this.$emit("hasSubs", true);
         } else {
-          video = await YouTube.getYouTubeSubsListAndAddLocale(video, this.$l1, this.$l2);
+          video = await YouTube.getYouTubeSubsListAndAddLocale(
+            video,
+            this.$l1,
+            this.$l2
+          );
           this.$emit("hasSubs", video.hasSubs);
           if (this.checkSaved && this.showSubsEditing) {
             this.addSubsL1(video);
@@ -676,7 +674,11 @@ export default {
     async addSubsL1(video) {
       if (video) {
         if (!video.l1Locale) {
-          video = await YouTube.getYouTubeSubsListAndAddLocale(video, this.$l1, this.$l2);
+          video = await YouTube.getYouTubeSubsListAndAddLocale(
+            video,
+            this.$l1,
+            this.$l2
+          );
         }
         let subs_l1 = await YouTube.getTranscript(
           video.youtube_id,
