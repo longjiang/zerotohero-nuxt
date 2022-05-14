@@ -125,5 +125,6 @@ export default {
       '/'
     ],
     crawler: false
+    fallback: true,
   }
 }
