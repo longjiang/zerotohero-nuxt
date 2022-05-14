@@ -871,7 +871,7 @@ const Dictionary = {
   longest(text) {
     // Only return the *first* seen word and those the same as it
     let firstSeen = false;
-    let matchedIndex, matchEndIndex;
+    let matchedIndex, matchEndIndex, matchedText;
     let search = text.toLowerCase();
     if (!this.accentCritical) search = this.stripAccents(search);
     let matches = [];
