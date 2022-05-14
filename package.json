@@ -33,6 +33,7 @@
     "fs": "^0.0.1-security",
     "he": "^1.2.0",
     "html-entities": "^1.4.0",
+    "idb": "^7.0.1",
     "jquery": "^3.6.0",
     "leaflet": "^1.7.1",
     "marked": "^2.0.4",
