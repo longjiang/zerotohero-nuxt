@@ -122,9 +122,9 @@ export default {
   target: 'static',
   generate: {
     routes: [
-      '/'
+      '/',
     ],
-    crawler: false
     fallback: true,
+    crawler: false
   }
 }
