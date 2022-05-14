@@ -23,28 +23,17 @@
         <div class="row pt-5 mb-5">
           <div class="col-sm-12">
             <div class="z2h-logo" style="line-height: 1.2">
-              <span style="font-size: 3rem">
+              <div style="font-size: 2rem">
                 <img
                   src="/img/czh-icon.png"
-                  style="
-                    height: 7rem;
-                    margin-right: 0.25rem;
-                    margin-bottom: 0.5rem;
-                  "
+                  style="height: 5.5rem; margin-bottom: 1rem"
                   data-not-lazy
                 />
                 <br />
                 <b>zerotohero.ca</b>
-              </span>
-              <p
-                style="
-                  font-size: 1.6rem;
-                  max-width: 45rem;
-                  margin: 2rem auto 0 auto;
-                  line-height: 1.5;
-                "
-              >
-                Learn
+              </div>
+              <p class="blurb">
+                Study
                 <strong>
                   <router-link
                     :to="{ name: 'language-map' }"
@@ -66,8 +55,8 @@
               </p>
               <p
                 style="
-                  font-size: 1.3rem;
-                  max-width: 45rem;
+                  font-size: 1.1rem;
+                  max-width: 35rem;
                   margin: 1rem auto 0 auto;
                   line-height: 1.5;
                 "
@@ -85,8 +74,8 @@
               </p>
               <p
                 style="
-                  font-size: 1.3rem;
-                  max-width: 45rem;
+                  font-size: 1.1rem;
+                  max-width: 35rem;
                   margin: 1rem auto 0 auto;
                   line-height: 1.5;
                 "
@@ -818,7 +807,7 @@ export default {
   width: 100%;
   z-index: 9;
   position: absolute;
-  z-index: -1;
+  z-index: 0;
   mix-blend-mode: overlay;
 }
 
@@ -828,7 +817,14 @@ export default {
   width: 100%;
   z-index: 9;
   position: absolute;
-  z-index: -1;
+  z-index: 0;
+}
+
+.blurb {
+  font-size: 1.3rem;
+  max-width: 45rem;
+  margin: 2rem auto 0 auto;
+  line-height: 1.5;
 }
 
 .blurb-highlight {
