@@ -379,6 +379,9 @@ export default {
     popup: {
       default: true,
     },
+    transliterationprop: {
+      type: String
+    },
   },
   data() {
     return {
@@ -632,7 +635,7 @@ export default {
       }
     },
     transliterate(text) {
-      return ''
+      return this.transliterationprop ? this.transliterationprop : ''
       // return tr(text);
     },
     segment(text) {

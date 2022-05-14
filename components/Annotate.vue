@@ -17,7 +17,7 @@
         $l2.scripts &&
         $l2.scripts.length > 0 &&
         $l2.scripts[0].direction === 'rtl',
-      'add-pinyin': $hasFeature('transliteration'),
+      'add-pinyin': $hasFeature('transliterationprop'),
       phonetics,
       fullscreen: fullscreenMode,
       'with-buttons': buttons,
@@ -111,6 +111,7 @@ import wordblock from "@/components/WordBlock";
 import popupnote from "@/components/PopupNote";
 import VRuntimeTemplate from "v-runtime-template";
 import Helper from "@/lib/helper";
+import tr from "@sindresorhus/transliterate";
 
 export default {
   components: {
@@ -189,7 +190,7 @@ export default {
   },
   beforeDestroy() {
     try {
-      this.tokenized = []
+      this.tokenized = [];
       if (this.$refs["run-time-template"] && this.$refs["run-time-template"][0])
         this.$refs["run-time-template"][0].$destroy();
     } catch (err) {
@@ -249,7 +250,6 @@ export default {
             let blockLength = span
               ? span.textContent.trim().length
               : aggregateText.length / blocks.length;
-            if (!span) console.log(span);
             let blockDuration =
               (blockLength / aggregateText.length) * this.animationDuration;
             if (blockDuration === 0) continue;
@@ -441,9 +441,27 @@ export default {
         if (typeof token === "object") {
           if (token && typeof token === "object") {
             if (token.candidates.length > 0) {
-              html += `<WordBlock :checkSaved="${this.checkSaved}" ref="word-block" :phonetics="${this.phonetics}" :popup="${this.popup}" :sticky="${this.sticky}" :explore="explore" :token="tokenized[${batchId}][${index}]">${token.text}</WordBlock>`;
+              html += `<WordBlock transliterationprop="${tr(
+                token.text
+              )}" :checkSaved="${
+                this.checkSaved
+              }" ref="word-block" :phonetics="${this.phonetics}" :popup="${
+                this.popup
+              }" :sticky="${
+                this.sticky
+              }" :explore="explore" :token="tokenized[${batchId}][${index}]">${
+                token.text
+              }</WordBlock>`;
             } else {
-              html += `<WordBlock :checkSaved="${this.checkSaved}" ref="word-block" :phonetics="${this.phonetics}" :popup="${this.popup}" :sticky="${this.sticky}" :explore="explore">${token.text}</WordBlock>`;
+              html += `<WordBlock transliterationprop="${tr(
+                token.text
+              )}" :checkSaved="${
+                this.checkSaved
+              }" ref="word-block" :phonetics="${this.phonetics}" :popup="${
+                this.popup
+              }" :sticky="${this.sticky}" :explore="explore">${
+                token.text
+              }</WordBlock>`;
             }
           }
         } else {
@@ -463,7 +481,13 @@ export default {
       for (let index in this.tokenized[batchId]) {
         let item = this.tokenized[batchId][index];
         if (typeof item === "object") {
-          html += `<WordBlock :checkSaved="${this.checkSaved}" ref="word-block" :phonetics="${this.phonetics}" :popup="${this.popup}" :sticky="${this.sticky}" :explore="${this.explore}" :token="tokenized[${batchId}][${index}]">${item.text}</WordBlock>`;
+          html += `<WordBlock transliterationprop="${tr(
+            item.text
+          )}" :checkSaved="${this.checkSaved}" ref="word-block" :phonetics="${
+            this.phonetics
+          }" :popup="${this.popup}" :sticky="${this.sticky}" :explore="${
+            this.explore
+          }" :token="tokenized[${batchId}][${index}]">${item.text}</WordBlock>`;
         } else {
           html += `<span class="word-block-unknown">${(item || "")
             .replace(/\s+([,.!?])/, "$1")
@@ -483,8 +507,14 @@ export default {
         .replace(/\s+/gi, "!!!###!!!")
         .replace(
           reg,
-          `<WordBlock :checkSaved="${this.checkSaved}" ref="word-block"  :phonetics="${this.phonetics}" :popup="${this.popup}" :sticky="${this.sticky}" :explore="${this.explore}">` +
-            "$1</WordBlock>"
+          (match, p1) =>
+            `<WordBlock transliterationprop="${tr(p1)}" :checkSaved="${
+              this.checkSaved
+            }" ref="word-block"  :phonetics="${this.phonetics}" :popup="${
+              this.popup
+            }" :sticky="${this.sticky}" :explore="${
+              this.explore
+            }">${p1}</WordBlock>`
         )
         .replace(
           /!!!###!!!/gi,
@@ -628,7 +658,7 @@ export default {
   color: #ddd;
 }
 
-.show > .annotator-menu-toggle { 
+.show > .annotator-menu-toggle {
   background-color: #545b62;
   color: white;
 }
