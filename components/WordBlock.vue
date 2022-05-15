@@ -22,12 +22,18 @@
       @mouseleave="wordBlockMouseLeave"
       v-observe-visibility="visibilityChanged"
     >
-      <template v-if="token && token.candidates && token.candidates.length > 0">
-      </template>
+      <template
+        v-if="token && token.candidates && token.candidates.length > 0"
+      ></template>
       <template>
         <span
           class="word-block-definition"
-          v-if="l2Settings.showDefinition && words[0] && words[0].definitions && words[0].definitions[0]"
+          v-if="
+            l2Settings.showDefinition &&
+            words[0] &&
+            words[0].definitions &&
+            words[0].definitions[0]
+          "
           v-html="words[0].definitions[0]"
         ></span>
         <span
@@ -39,7 +45,11 @@
             transliteration !== text
           "
         >
-          {{ $l2.code === 'tlh' ? fixKlingonTypos(text) : (savedTransliteration || transliteration) }}
+          {{
+            $l2.code === "tlh"
+              ? fixKlingonTypos(text)
+              : savedTransliteration || transliteration
+          }}
         </span>
         <span class="word-block-text-byeonggi-wrapper">
           <span
@@ -47,7 +57,13 @@
               $l2.code === 'tlh' ? 'klingon' : ''
             } ${hard ? 'word-block-hard' : ''}  ${pos ? 'pos-' + pos : ''}`"
           >
-            <template v-if="$l2.han && words[0]">{{ l2Settings.useTraditional ? words[0].traditional : words[0].simplified }}</template>
+            <template v-if="$l2.han && words[0]">
+              {{
+                l2Settings.useTraditional
+                  ? words[0].traditional
+                  : words[0].simplified
+              }}
+            </template>
             <template v-else>{{ transform(text, $l2.code === "vi") }}</template>
           </span>
           <span
@@ -812,7 +828,6 @@ export default {
         //         id: a.id,
         //         l2: this.$l2.code,
         //       });
-
         //       let bsaved = this.$store.getters["savedWords/has"]({
         //         id: b.id,
         //         l2: this.$l2.code,
@@ -820,9 +835,9 @@ export default {
         //       return asaved === bsaved ? 0 : asaved ? -1 : 1;
         //     })
         //   : [];
-        // words = Helper.uniqueByValue(words, "id");
       }
-      this.words = words
+      words = Helper.uniqueByValue(words, "id");
+      this.words = words;
       this.loading = false;
     },
     unique(a) {
