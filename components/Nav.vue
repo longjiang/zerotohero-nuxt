@@ -92,7 +92,7 @@
             :to="last(child) || child"
             :item="child"
             :level="2"
-            :showIcon="false"
+            :showIcon="collapsed"
             :badge="
               child.name === 'saved-words' && savedWordsCount > 0
                 ? savedWordsCount
@@ -1183,7 +1183,7 @@ export default {
 
   .secondary-nav {
     width: 50%;
-    padding: 0.5rem;
+    padding: 0.5rem 0 0.5rem 0.5rem;
   }
 }
 

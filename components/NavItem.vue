@@ -83,6 +83,11 @@ export default {
 </script>
 
 <style lang="scss">
+.main-nav-item,
+.secondary-nav-item {
+  cursor: pointer;
+}
+
 .secondary-nav-item {
   padding-bottom: 0.5rem;
   + .secondary-nav-item {
@@ -122,14 +127,8 @@ export default {
       border-top: 1px solid rgba(255, 255, 255, 0.4);
     }
   }
-
   .secondary-nav-item {
     color: white;
-
-    &.nuxt-link-active,
-    &:hover {
-      border-bottom: 0.4rem solid #28a745cc;
-    }
   }
 }
 
@@ -142,6 +141,12 @@ export default {
       &.nav-item-small-icon {
         padding: 0.5rem;
       }
+    }
+  }
+  .secondary-nav-item {
+    &.nuxt-link-active,
+    &:hover {
+      border-bottom: 0.4rem solid #28a745cc;
     }
   }
 }
@@ -189,11 +194,15 @@ export default {
   .secondary-nav {
     .secondary-nav-item {
       padding: 0.5rem;
-      margin: 0.5rem;
+      margin: 0.5rem 0 0.5rem 0.5rem;
       display: block;
       i {
         width: 1.5rem;
         text-align: center;
+      }
+      &.nuxt-link-active,
+      &:hover {
+        border-right: 0.4rem solid #28a745cc;
       }
     }
   }
