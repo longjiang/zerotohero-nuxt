@@ -1,11 +1,10 @@
 <template>
   <v-popover
     :open="popup && open"
-    :open-group="'id' + _uid"
+    :open-group="`id${_uid}`"
     :id="id"
     placement="top"
     trigger="manual"
-    class="word-block-popover"
     style="display: inline-block"
   >
     <span
@@ -13,13 +12,9 @@
         'word-block': true,
         'with-popup': popup,
         sticky,
-        common:
-          this.words &&
-          this.words.length > 0 &&
-          this.words[0].weight &&
-          this.words[0].weight > 750,
-        seen: seen,
-        saved: saved,
+        common,
+        seen,
+        saved,
       }"
       v-bind="attributes"
       v-on="popup ? { click: wordBlockClick } : {}"
@@ -328,7 +323,12 @@
           :sticky="false"
           class="mt-2"
         />
-        <div v-if="loading === true"><Loader :sticky="true" :message="`Looking up “${this.text}” in the dictionary...`" /></div>
+        <div v-if="loading === true">
+          <Loader
+            :sticky="true"
+            :message="`Looking up “${this.text}” in the dictionary...`"
+          />
+        </div>
         <div
           v-if="words && words.length === 0 && loading === false"
           class="mt-3"
@@ -380,7 +380,7 @@ export default {
       default: true,
     },
     transliterationprop: {
-      type: String
+      type: String,
     },
   },
   data() {
@@ -426,6 +426,14 @@ export default {
     $hanzi() {
       return this.$getHanzi();
     },
+    common() {
+      return (
+        this.words &&
+        this.words.length > 0 &&
+        this.words[0].weight &&
+        this.words[0].weight > 750
+      );
+    },
     pos() {
       let pos;
       if (this.token && this.token.pos) {
@@ -443,8 +451,11 @@ export default {
         else {
           let head = this.token.candidates[0].head;
           let bannedEndings = "이히하고가기는은도의";
-          let bannedWords = ['지난', '진자']
-          if (!bannedWords.includes(head) && !bannedEndings.includes(head.charAt(head.length - 1))) {
+          let bannedWords = ["지난", "진자"];
+          if (
+            !bannedWords.includes(head) &&
+            !bannedEndings.includes(head.charAt(head.length - 1))
+          ) {
             let hanjas = this.token.candidates.map((c) => c.hanja);
             if (this.$l2.code !== "vi") hanjas = Helper.unique(hanjas); // Vietnamese Han Tu is wiktionary CSV file has incorrect homophones
             if (hanjas.length === 1 && hanjas[0] && !hanjas[0].includes(",")) {
@@ -529,7 +540,7 @@ export default {
     });
   },
   beforeDestroy() {
-    this.words = []
+    this.words = [];
     // you may call unsubscribe to stop the subscription
     this.unsubscribe();
   },
@@ -635,7 +646,9 @@ export default {
       }
     },
     transliterate(text) {
-      return this.transliterationprop && this.transliterationprop !== text ? this.transliterationprop : ''
+      return this.transliterationprop && this.transliterationprop !== text
+        ? this.transliterationprop
+        : "";
       // return tr(text);
     },
     segment(text) {
@@ -787,6 +800,10 @@ export default {
       this.$nuxt.$emit("popupClosed");
     },
     async lookup(quick = false) {
+      if (this.words.length > 0) {
+        if (quick) return;
+        else if (!this.lastLookupWasQuick) return;
+      }
       this.lastLookupWasQuick = quick;
       let words = [];
       if (
@@ -800,9 +817,9 @@ export default {
         words = await (
           await this.$getDictionary()
         ).lookupFuzzy(this.text, 20, quick);
-        if (words) {
+        if (words && !quick) {
           for (let word of words) {
-            if (this.$l2.code === "fa" && !quick) {
+            if (this.$l2.code === "fa") {
               this.farsiRomanizations[word.head] =
                 await this.getFarsiRomanization(word.head);
             }
@@ -826,21 +843,23 @@ export default {
           }
         }
       }
-      words = words
-        ? words.sort((a, b) => {
-            let asaved = this.$store.getters["savedWords/has"]({
-              id: a.id,
-              l2: this.$l2.code,
-            });
+      if (!quick) {
+        words = words
+          ? words.sort((a, b) => {
+              let asaved = this.$store.getters["savedWords/has"]({
+                id: a.id,
+                l2: this.$l2.code,
+              });
 
-            let bsaved = this.$store.getters["savedWords/has"]({
-              id: b.id,
-              l2: this.$l2.code,
-            });
-            return asaved === bsaved ? 0 : asaved ? -1 : 1;
-          })
-        : [];
-      this.words = Helper.uniqueByValue(words, "id");
+              let bsaved = this.$store.getters["savedWords/has"]({
+                id: b.id,
+                l2: this.$l2.code,
+              });
+              return asaved === bsaved ? 0 : asaved ? -1 : 1;
+            })
+          : [];
+        this.words = Helper.uniqueByValue(words, "id");
+      }
       this.loading = false;
     },
     unique(a) {

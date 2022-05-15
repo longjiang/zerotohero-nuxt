@@ -58,9 +58,9 @@ export const mutations = {
           forms: wordForms,
           date: Date.now()
         })
-        buildIndex(l2, state)
         localStorage.setItem('zthSavedWords', JSON.stringify(savedWords))
         this._vm.$set(state, 'savedWords', savedWords)
+        buildIndex(l2, state)
       }
     }
   },
@@ -87,15 +87,15 @@ export const mutations = {
     }
   },
   REMOVE_SAVED_WORD(state, { l2, word }) {
-    if (typeof localStorage !== 'undefined' && state.savedWords[options.l2]) {
+    if (typeof localStorage !== 'undefined' && state.savedWords[l2]) {
       const keepers = state.savedWords[l2].filter(
         item => item.id != word.id
       )
       let savedWords = Object.assign({}, state.savedWords)
       savedWords[l2] = keepers
-      buildIndex(l2, state)
       localStorage.setItem('zthSavedWords', JSON.stringify(savedWords))
       this._vm.$set(state, 'savedWords', savedWords)
+      buildIndex(l2, state)
     }
   },
   REMOVE_ALL_SAVED_WORDS(state, { l2 }) {
@@ -108,9 +108,9 @@ export const mutations = {
       } else {
         savedWords = {}
       }
-      buildIndex(l2, state)
       localStorage.setItem('zthSavedWords', JSON.stringify(savedWords))
       this._vm.$set(state, 'savedWords', savedWords)
+      buildIndex(l2, state)
     }
   }
 }
@@ -142,9 +142,9 @@ export const getters = {
       return savedWord
     }
   },
-  count: state => options => {
-    if (state.savedWords[options.l2]) {
-      return state.savedWords[options.l2].length
+  count: state => ({ l2 }) => {
+    if (state.savedWords[l2]) {
+      return state.savedWords[l2].length
     } else {
       return 0
     }
