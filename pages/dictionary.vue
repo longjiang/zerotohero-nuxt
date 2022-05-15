@@ -410,6 +410,11 @@ export default {
   width: calc(100vw - 9rem);
 }
 
+.dictionary-main {
+  min-height: calc(100vh - 40rem);
+  background: white;
+}
+
 
 .dictionary-wide {
   .dictionary-search-bar {
