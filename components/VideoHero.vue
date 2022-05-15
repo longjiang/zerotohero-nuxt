@@ -1,5 +1,5 @@
 <template>
-  <div style="position: relative">
+  <div style="position: relative" :class="{ unavailable: videoUnavailable }">
     <div class="video-hero">
       <div class="top-overlay"></div>
       <div class="bottom-overlay"></div>
@@ -16,9 +16,12 @@
         <div class="row">
           <div class="col-sm-12">
             <div class="hero-video-info">
-              <h4 class="hero-video-title">{{ video.title }}</h4>
+              <h4 class="hero-video-title">
+                {{ title ? title : video.title }}
+              </h4>
               <div class="mt-3">
                 <router-link
+                  v-if="!videoUnavailable"
                   :to="{
                     name: 'youtube-view',
                     params: { youtube_id: video.youtube_id },
@@ -29,7 +32,7 @@
                   Play
                 </router-link>
                 <router-link
-                  v-if="video.tv_show || video.talk"
+                  v-if="(video.tv_show || video.talk) && showEpisodes"
                   :to="{
                     name: 'show',
                     params: {
@@ -59,10 +62,28 @@ export default {
       type: Object,
       required: true,
     },
+    title: {
+      type: String,
+    },
+    showEpisodes: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  data() {
+    return {
+      videoUnavailable: false,
+    };
   },
   methods: {
     onVideoUnavailable() {
-      this.$emit('videoUnavailable', true)
+      this.videoUnavailable = true;
+      this.$emit("videoUnavailable", true);
+    },
+  },
+  watch: {
+    video() {
+      this.videoUnavailable = false
     }
   }
 };
@@ -74,6 +95,7 @@ export default {
   position: relative;
   max-height: 50vh;
   padding-bottom: 10%;
+  background: black;
   .top-overlay {
     background: linear-gradient(black 0%, rgba(0, 0, 0, 0) 100%);
     height: 20%;
@@ -109,6 +131,19 @@ export default {
     .btn {
       width: 8rem;
     }
+  }
+}
+
+.unavailable {
+  .hero-video-info-wrapper .hero-video-info {
+    max-width: 100%;
+  }
+  .hero-video-title {
+    text-align: center;
+  }
+  .youtube {
+    opacity: 0;
+    padding-bottom: 7rem;
   }
 }
 

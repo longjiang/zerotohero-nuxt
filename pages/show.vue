@@ -9,8 +9,17 @@
 </router>
 <template>
   <div>
-    <VideoHero v-if="videos && videos[0]" :video="random(videos)[0]" />
-    <div class="youtube-browse main-dark pb-5" style="min-height: 100vh; padding-top: 5rem;">
+    <VideoHero
+      v-if="featuredVideo"
+      :video="featuredVideo"
+      :showEpisodes="false"
+      :title="show.title"
+      @videoUnavailable="onVideoUnavailable"
+    />
+    <div
+      class="youtube-browse main-dark pb-5"
+      style="min-height: 100vh; padding-top: 5rem"
+    >
       <div class="container">
         <SocialHead
           v-if="show"
@@ -160,6 +169,7 @@ export default {
   data() {
     return {
       collection: this.type === "tv-show" ? "tv_show" : "talk",
+      tries: 0,
       moreVideos: 0,
       show: undefined,
       videos: undefined,
@@ -172,6 +182,8 @@ export default {
       randomEpisode: undefined,
       currentTime: 0,
       showDiscover: false,
+      featuredVideo: undefined,
+      heroUnavailable: false,
       sortOptions: [
         {
           value: "title",
@@ -251,13 +263,26 @@ export default {
           limit: this.perPage,
           offset: this.moreVideos,
         });
+        this.loadFeaturedVideo();
       }
     }
   },
   methods: {
+    loadFeaturedVideo() {
+      if (this.tries < 5) {
+        if (this.videos && this.videos.length > 0)
+          this.featuredVideo = this.random(this.videos)[0];
+        this.tries++;
+      } else {
+        this.heroUnavailable = true
+      }
+    },
+    onVideoUnavailable() {
+      this.loadFeaturedVideo();
+    },
     random(array, max) {
-      let shuffled = Helper.shuffle(array)
-      return shuffled.slice(0, max)
+      let shuffled = Helper.shuffle(array);
+      return shuffled.slice(0, max);
     },
     async saveTitle(e) {
       let newTitle = e.target.innerText;

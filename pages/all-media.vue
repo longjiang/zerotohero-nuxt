@@ -9,7 +9,8 @@
 </router>
 <template>
   <div class="main-dark">
-    <VideoHero v-if="heroVideo" :video="heroVideo" />
+    <VideoHero v-if="heroVideo" :video="heroVideo" 
+        @videoUnavailable="onVideoUnavailable"/>
     <div class="container pb-5" style="padding-top: 5rem">
       <SocialHead :title="`Learn ${$l2.name} with Videos | ${$l2.name} Zero to Hero`"
         :description="`Learn ${$l2.name} with Videos`" :image="'/img/tv-shows.jpg'" />
@@ -111,7 +112,7 @@ export default {
       movies: [],
       news: [],
       loading: true,
-      heroVideo: undefined
+      heroVideo: undefined,
     };
   },
   async fetch() {
@@ -125,7 +126,7 @@ export default {
     });
     if (!this.videos || this.videos.length === 0) this.videos = await this.getVideos({ limit: 50, sort: 'youtube_id' })
     this.randomVideos = this.videos.slice(0, 12)
-    this.heroVideo = this.random(this.randomVideos)[0]
+    this.loadHeroVideo()
   },
   beforeDestroy() {
     // you may call unsubscribe to stop the subscription
@@ -149,6 +150,14 @@ export default {
     },
   },
   methods: {
+    loadHeroVideo() {
+      this.heroVideo = this.random(this.randomVideos)[0]
+    },
+    onVideoUnavailable() {
+      this.videoUnavailable = true;
+      this.randomVideos = this.randomVideos.filter(v => v.youtube_id !== this.heroVideo.youtube_id)
+      this.loadHeroVideo()
+    },
     async loadShows() {
       this.tvShows = this.$store.state.shows.tvShows[this.$l2.code]
       this.talks = this.$store.state.shows.talks[this.$l2.code]
@@ -159,14 +168,14 @@ export default {
         this.moviesShow = this.$store.state.shows.tvShows[this.$l2.code].find(
           (s) => s.title === "Movies"
         );
-        this.music = await this.getVideos({ limit: 100, tvShow: this.musicShow.id, sort: 'youtube_id' })
-        this.movies = await this.getVideos({ limit: 100, tvShow: this.moviesShow.id, sort: 'youtube_id' })
+        if (this.musicShow) this.music = await this.getVideos({ limit: 100, tvShow: this.musicShow.id, sort: 'youtube_id' })
+        if (this.moviesShow) this.movies = await this.getVideos({ limit: 100, tvShow: this.moviesShow.id, sort: 'youtube_id' })
       }
       if (this.talks) {
         this.newsShow = this.$store.state.shows.talks[this.$l2.code].find(
           (s) => s.title === "News"
         );
-        this.news = await this.getVideos({ limit: 100, talk: this.newsShow.id })
+        if (this.newsShow) this.news = await this.getVideos({ limit: 100, talk: this.newsShow.id })
       }
       this.loading = false
     },
