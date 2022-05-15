@@ -18,7 +18,6 @@
       <div class="row">
         <div
           class="col-12 loader-wrapper"
-          style="height: calc(100vh - 2.925rem); padding: 0"
         >
           <LazyDiscoverPlayer
             routeType="tv-shows"
@@ -107,16 +106,12 @@ export default {
 
 <style lang="scss" scoped>
 .loader-wrapper {
+  padding-top: 3rem;
   color: white;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .loader-bg {
-  background: rgba(0, 0, 0, 0.66);
+  background: black;
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
 }

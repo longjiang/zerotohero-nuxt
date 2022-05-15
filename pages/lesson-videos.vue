@@ -18,8 +18,8 @@
       />
       <div class="row">
         <div class="col-md-12 text-center">
-          <h3 class="mt-5">
-            Expansion videos for
+          <h3 class="mt-5">Expansion Videos</h3>
+          <div class="mt-3">
             <b-dropdown id="dropdown-1" :text="levels[level]" class="ml-1">
               <b-dropdown-item
                 v-for="(title, slug) in levels"
@@ -38,7 +38,7 @@
                 Lesson {{ lesson }}
               </b-dropdown-item>
             </b-dropdown>
-          </h3>
+          </div>
           <p class="mt-3 mb-5" style="max-width: 35rem; margin: 0 auto">
             After finishing Lesson {{ lesson }} of the
             <a
@@ -165,7 +165,7 @@ export default {
       updateLessonVideos: 0,
       updateVideos: 0,
       matchedWordsKey: 0,
-      skin: 'dark'
+      skin: "dark",
     };
   },
   components: {
@@ -204,7 +204,9 @@ export default {
   async fetch() {
     this.lessonVideos = [];
     let response = await axios.get(
-      `${Config.youtubeVideosTableName(this.$l2.id)}?sort=-id&filter[l2][eq]=${this.$l2.id}&filter[level][eq]=${this.level}&filter[lesson][eq]=${this.lesson}`
+      `${Config.youtubeVideosTableName(this.$l2.id)}?sort=-id&filter[l2][eq]=${
+        this.$l2.id
+      }&filter[level][eq]=${this.level}&filter[lesson][eq]=${this.lesson}`
     );
     let videos = response.data.data || [];
     if (videos.length > 0) {

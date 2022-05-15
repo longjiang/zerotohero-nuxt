@@ -10,9 +10,8 @@
 <template>
   <div class="main-dark">
     <div class="container">
-      <div class="row pt-5 pb-5">
+      <div class="row pb-5">
         <div class="col-sm-12">
-          <h3 class="text-center">My Watch History</h3>
           <WatchHistoryComp
             :l2="$l2"
             skin="dark"

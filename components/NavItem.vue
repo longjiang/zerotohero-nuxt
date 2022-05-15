@@ -5,19 +5,25 @@
       'secondary-nav-item': mode !== 'large-icon' && level === 2,
       'nav-item-pill': mode === 'pill',
       'nav-item-small-icon': mode === 'small-icon',
-      'nav-item-large-icon nav-item-large-icon-dark link-unstyled': mode === 'large-icon',
-      tab: mode === 'pill',
+      'nav-item-large-icon nav-item-large-icon-dark link-unstyled':
+        mode === 'large-icon',
       'router-link-active': active,
     }"
     :to="to"
     :title="item.title"
   >
-    <div v-if="['large-icon', 'small-icon'].includes(mode)" class="icon-wrapper">
+    <div
+      v-if="['large-icon', 'small-icon'].includes(mode)"
+      class="icon-wrapper"
+    >
       <i
-        :class="`nav-item-icon ${item.icon} ${mode === 'large-icon' ? gradientClasses : ''}`"
+        v-if="showIcon"
+        :class="`nav-item-icon ${item.icon} ${
+          mode === 'large-icon' ? gradientClasses : ''
+        }`"
       ></i>
     </div>
-    <i v-else :class="`nav-item-icon ${item.icon}`"></i>
+    <i v-else-if="showIcon" :class="`nav-item-icon ${item.icon}`"></i>
     <span class="nav-item-title">
       {{ $t(item.title, { l2: $t($l2.name) }) }}
       <span class="saved-words-count" v-cloak v-if="badge">
@@ -32,6 +38,9 @@ export default {
   props: {
     mode: {
       default: "pill", // or "icon", "large-icon"
+    },
+    showIcon: {
+      default: true,
     },
     parent: {
       type: Object,
@@ -65,15 +74,22 @@ export default {
     },
     gradientClasses() {
       return `bg-gradient-${this.item.title.length
-          .toString()
-          .split('')
-          .pop()} gradient-text`
-    }
+        .toString()
+        .split("")
+        .pop()} gradient-text`;
+    },
   },
 };
 </script>
 
 <style lang="scss">
+.secondary-nav-item {
+  padding-bottom: 0.5rem;
+  + .secondary-nav-item {
+    margin-left: 1rem;
+  }
+}
+
 .zth-nav-light {
   .main-nav-item {
     color: #444;
@@ -96,7 +112,6 @@ export default {
   }
 }
 
-
 .zth-nav-dark {
   .main-nav-item {
     color: white;
@@ -113,13 +128,7 @@ export default {
 
     &.nuxt-link-active,
     &:hover {
-      color: white;
-      background: linear-gradient(
-        180deg,
-        rgba(255, 255, 255, 0.4) 0%,
-        rgba(148, 148, 148, 0) 5%,
-        rgba(122, 122, 122, 0.4) 75%
-      );
+      border-bottom: 0.4rem solid #28a745cc;
     }
   }
 }
@@ -195,7 +204,7 @@ export default {
   font-size: 0.7em;
   font-weight: bold;
   display: inline-block;
-  
+
   text-align: center;
   position: relative;
   top: -0.1rem;
@@ -210,25 +219,8 @@ export default {
   background: #fd4f1c;
 }
 
-
-.secondary-nav-item {
-  padding: 0.5rem 1rem;
-  margin: 0.2rem;
-  border-radius: 0.3rem;
-  color: #666;
-  display: inline-block;
-  white-space: nowrap;
-}
-
 .secondary-nav-item:hover {
   text-decoration: none;
-  color: inherit;
-  background-color: #f7f7f7;
-}
-
-.secondary-nav-item.nuxt-link-active {
-  background: #666;
-  color: white;
 }
 
 .main-nav-item {

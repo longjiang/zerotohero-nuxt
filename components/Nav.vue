@@ -92,6 +92,7 @@
             :to="last(child) || child"
             :item="child"
             :level="2"
+            :showIcon="false"
             :badge="
               child.name === 'saved-words' && savedWordsCount > 0
                 ? savedWordsCount
@@ -324,15 +325,27 @@ export default {
           show: this.hasFeature("youtube"),
           children: [
             {
+              name: "watch-history",
+              icon: "fas fa-history",
+              title: "My History",
+              show: true,
+            },
+            {
               name: "all-media",
               icon: "fa fa-photo-video",
               title: `Recommended`,
               show: true,
             },
             {
-              name: "watch-history",
-              icon: "fas fa-history",
-              title: "My History",
+              name: "youtube-search",
+              title: `Search`,
+              icon: "fas fa-search",
+              show: true,
+            },
+            {
+              name: "youtube-browse",
+              title: "Newly Added",
+              icon: "fa fa-play",
               show: true,
             },
             {
@@ -372,12 +385,6 @@ export default {
               show: this.newsPath,
             },
             {
-              name: "youtube-browse",
-              title: "New Videos",
-              icon: "fa fa-play",
-              show: true,
-            },
-            {
               name: "show",
               show: false,
             },
@@ -392,12 +399,6 @@ export default {
               title: "Lesson Expansion",
               icon: "fa fa-chalkboard-teacher",
               show: this.l2.code === "zh",
-            },
-            {
-              name: "youtube-search",
-              title: `Search`,
-              icon: "fas fa-search",
-              show: true,
             },
             {
               name: "discover-shows",
@@ -1052,20 +1053,13 @@ export default {
   }
 }
 
-.secondary-nav {
-  padding: 1rem;
-
-  a svg,
-  a i {
-    margin-right: 0.5rem;
-  }
-
-  height: 100%;
-}
 
 .zth-nav-menu-bar {
   .zth-header {
     background: rgb(1, 4, 22);
+  }
+  .secondary-nav {
+    padding: 1rem;
   }
 }
 

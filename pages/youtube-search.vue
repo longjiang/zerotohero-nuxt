@@ -17,9 +17,9 @@
 <template>
   <div class="main main-dark">
     <div class="container pt-5 pb-5 youtube-search">
-      <h3 class="text-center mb-5">Search {{ $l2.name }} Videos</h3>
+      <h5 class="mb-3 text-center">Search {{ $l2.name }} Videos</h5>
       <SimpleSearch
-        :placeholder="$t('Enter a search term in {l2}...', { l2: $l2.name })"
+        :placeholder="`Search`"
         skin="dark"
         :action="
           (url) => {
@@ -99,20 +99,22 @@
           ref="youtubeSearchResults"
         />
       </div>
-      <client-only>
-        <Nav
-          :l1="$l1"
-          :l2="$l2"
-          variant="page"
-          class="youtube-browse-nav mt-5"
-          :showOnly="['Media']"
-        />
-      </client-only>
-      <LazyIdenticalLanguages routeName="youtube-search" class="mt-5" />
-      <h4 class="mt-5 text-center">
-        You can help to expand this {{ $l2.name }} video library!
-      </h4>
-      <LazyHowToContribute />
+      <div v-if="term && term !== ''">
+        <client-only>
+          <Nav
+            :l1="$l1"
+            :l2="$l2"
+            variant="page"
+            class="youtube-browse-nav mt-5"
+            :showOnly="['Media']"
+          />
+        </client-only>
+        <LazyIdenticalLanguages routeName="youtube-search" class="mt-5" />
+        <h4 class="mt-5 text-center">
+          You can help to expand this {{ $l2.name }} video library!
+        </h4>
+        <LazyHowToContribute />
+      </div>
     </div>
   </div>
 </template>

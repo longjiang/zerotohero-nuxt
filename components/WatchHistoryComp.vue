@@ -4,32 +4,33 @@
       <div class="history-items container" v-if="itemsFiltered.length > 0">
         <div class="row">
           <div
-            class="col-12 text-center mb-2"
+            class="col-12 text-right"
             v-if="videosFiltered && videosFiltered.length > 0"
           >
             <button
-              :class="`btn btn-ghost-dark btn-sm ml-0 ${
+              :class="`btn text-success bg-none btn-md p-0 ${
                 skin === 'light' ? 'text-secondary' : ''
               }`"
               @click.stop.prevent="$store.dispatch('history/removeAll')"
             >
-              Clear History
+              <i class="fas fa-times mr-1"></i>
+              Clear Watch History
             </button>
           </div>
         </div>
         <div v-for="group in groups" :key="group.date">
           <div class="row">
             <div class="col-sm-12">
-              <h5 v-if="group.date === '0'" class="mb-4 mt-4">Earlier</h5>
-              <h5 class="mb-4 mt-4" v-else>
-                {{
+              <p v-if="group.date === '0'" class="mb-4 mt-4">Watched earlier:</p>
+              <p class="mb-4 mt-4" v-else>
+                Watched on {{
                   new Date(group.date).toLocaleDateString("en-US", {
                     year: "numeric",
                     month: "long",
                     day: "numeric",
                   })
-                }}
-              </h5>
+                }}:
+              </p>
             </div>
           </div>
           <div class="row">
@@ -151,12 +152,14 @@ export default {
   computed: {
     ...mapState("history", ["history"]),
     groups() {
-      let history = this.itemsFiltered.map((i) => {
-        let d = String(i.date).split(" ");
-        let obj = Object.assign({}, i);
-        obj.date = d.length === 2 ? d[0] : 0;
-        return obj;
-      });
+      let history = this.itemsFiltered
+        .sort((a, b) => b.date.localeCompare(a.date))
+        .map((i) => {
+          let d = String(i.date).split(" ");
+          let obj = Object.assign({}, i);
+          obj.date = d.length === 2 ? d[0] : 0;
+          return obj;
+        });
       let groups = Helper.groupArrayBy(history, "date");
       groups = Object.keys(groups).map((date) => {
         return {
