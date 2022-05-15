@@ -10,7 +10,11 @@
       'has-secondary-nav': currentParent && currentParent.children,
     }"
   >
-    <SiteTopBar v-if="variant === 'side-bar'" :variant="variant" @toggleCollapsed="toggleCollapsed" />
+    <SiteTopBar
+      v-if="variant === 'side-bar'"
+      :variant="variant"
+      @toggleCollapsed="toggleCollapsed"
+    />
     <div
       :class="{
         'nav-menu-bar': variant === 'menu-bar',
@@ -20,10 +24,7 @@
     >
       <template v-if="variant === 'menu-bar' || variant === 'side-bar'">
         <nav :class="{ 'main-nav': true }">
-          <div
-            class="zth-header"
-            v-if="showLogo"
-          >
+          <div class="zth-header" v-if="showLogo">
             <LanguageLogo
               v-if="l1 && l2"
               :l1="l1"
@@ -33,10 +34,7 @@
               style="margin: 1.25rem 0 0.25rem 0"
             />
           </div>
-          <div
-            v-if="showMainNav"
-            :class="{ 'main-nav-items': true }"
-          >
+          <div v-if="showMainNav" :class="{ 'main-nav-items': true }">
             <NavItem
               v-for="(item, index) in menu.filter(
                 (item) => item.show && to(item)
@@ -46,11 +44,21 @@
               :level="1"
               :mode="mode"
               :key="`nav-${index}`"
-              :active="currentParent && currentParent.name === nameOfSelfOrFirstChild(item)"
-              :badge="item.icon === 'fas fa-star' ? savedWordsCount + savedPhrasesCount : undefined"
+              :active="
+                currentParent &&
+                currentParent.name === nameOfSelfOrFirstChild(item)
+              "
+              :badge="
+                item.icon === 'fas fa-star'
+                  ? savedWordsCount + savedPhrasesCount
+                  : undefined
+              "
             />
           </div>
-          <div v-if="showMainNav && variant === 'side-bar' && !collapsed" class="end-nav">
+          <div
+            v-if="showMainNav && variant === 'side-bar' && !collapsed"
+            class="end-nav"
+          >
             <div
               v-if="$l2 && !['en', 'zh'].includes($l2.code) && $l2.logo"
               class="icon-description"
@@ -70,7 +78,10 @@
             />
           </div>
         </nav>
-        <nav v-if="showSecondaryNav && currentParent && currentParent.children" class="secondary-nav">
+        <nav
+          v-if="showSecondaryNav && currentParent && currentParent.children"
+          class="secondary-nav"
+        >
           <NavItem
             v-for="(child, index) in currentParent.children.filter(
               (child) => child.show && !child.href
@@ -80,10 +91,15 @@
             :to="last(child) || child"
             :item="child"
             :level="2"
-            :badge="child.name === 'saved-words' && savedWordsCount > 0 ? savedWordsCount : child.name === 'saved-phrases' && savedPhrasesCount > 0 ? savedPhrasesCount : undefined"
+            :badge="
+              child.name === 'saved-words' && savedWordsCount > 0
+                ? savedWordsCount
+                : child.name === 'saved-phrases' && savedPhrasesCount > 0
+                ? savedPhrasesCount
+                : undefined
+            "
             :href="child.href"
           />
-
         </nav>
       </template>
       <template v-if="variant === 'page'">
@@ -113,9 +129,15 @@ feature-card-name-${child.name}`"
                     :to="last(child) || child"
                     :item="child"
                     mode="large-icon"
-                    :badge="child.name === 'saved-words' && savedWordsCount > 0 ? savedWordsCount : child.name === 'saved-phrases' && savedPhrasesCount > 0 ? savedPhrasesCount : undefined"
-                  >
-                  </NavItem>
+                    :badge="
+                      child.name === 'saved-words' && savedWordsCount > 0
+                        ? savedWordsCount
+                        : child.name === 'saved-phrases' &&
+                          savedPhrasesCount > 0
+                        ? savedPhrasesCount
+                        : undefined
+                    "
+                  ></NavItem>
                 </div>
               </template>
             </template>
@@ -153,19 +175,19 @@ export default {
     },
     showLogo: {
       type: Boolean,
-      default: true
+      default: true,
     },
     showHeader: {
       type: Boolean,
-      default: true
+      default: true,
     },
     showMainNav: {
       type: Boolean,
-      default: true
+      default: true,
     },
     showSecondaryNav: {
       type: Boolean,
-      default: true
+      default: true,
     },
   },
   data() {
@@ -180,13 +202,14 @@ export default {
       moviePath: false,
       newsPath: false,
       hasPhrasebooks: false,
-      collapsed: false
+      collapsed: false,
     };
   },
   mounted() {
     this.bindKeys();
-    if (this.$route.meta.collapseNav) this.collapsed = this.$route.meta.collapseNav
-    this.$emit('collapsed', this.collapsed)
+    if (this.$route.meta.collapseNav)
+      this.collapsed = this.$route.meta.collapseNav;
+    this.$emit("collapsed", this.collapsed);
   },
   created() {
     this.checkShows();
@@ -213,12 +236,13 @@ export default {
   watch: {
     $route() {
       this.history.push(this.$route.path);
-      if (this.$route.meta.collapseNav) this.collapsed = this.$route.meta.collapseNav
-      else this.collapsed = false
+      if (this.$route.meta.collapseNav)
+        this.collapsed = this.$route.meta.collapseNav;
+      else this.collapsed = false;
     },
     collapsed() {
-      this.$emit('collapsed', this.collapsed)
-    }
+      this.$emit("collapsed", this.collapsed);
+    },
   },
   computed: {
     savedWordsCount() {
@@ -807,7 +831,7 @@ export default {
   },
   methods: {
     toggleCollapsed() {
-      this.collapsed = !this.collapsed
+      this.collapsed = !this.collapsed;
     },
     checkPhrasebooks() {
       this.hasPhrasebooks =
@@ -944,7 +968,6 @@ export default {
 </script>
 
 <style lang="scss">
-
 .zth-nav-wrapper.zth-nav-side-bar {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -979,21 +1002,9 @@ export default {
 }
 
 .zth-nav-light {
-
   .nav-menu-bar,
   .nav-side-bar {
     z-index: 3;
-  }
-
-  .nav-menu-bar {
-    .secondary-nav {
-      background: linear-gradient(
-        180deg,
-        rgba(255, 255, 255, 0.75) 0%,
-        rgba(255, 255, 255, 0.75) 10%,
-        rgba(255, 255, 255, 1) 100%
-      );
-    }
   }
 
   .nav-side-bar {
@@ -1004,20 +1015,14 @@ export default {
 }
 
 .zth-nav-dark {
-
-  .nav-menu-bar {
-    .secondary-nav {
-      background: linear-gradient(
-        180deg,
-        rgba(65, 65, 65, 0.74) 0%,
-        rgba(0, 0, 0, 0.72) 100%
-      );
-    }
-  }
-
   .nav-side-bar {
     .secondary-nav {
       background: linear-gradient(90deg, rgb(50 50 50) 0%, black 100%);
+    }
+  }
+  .nav-menu-bar {
+    .secondary-nav {
+      background: #010416;
     }
   }
 }
@@ -1033,8 +1038,8 @@ export default {
   height: 100%;
 }
 
-#zerotohero:not(.zerotohero-wide) {
-  .nav-menu-bar {
+.zth-nav-menu-bar {
+  .zth-header {
     background: rgb(1, 4, 22);
   }
 }
@@ -1061,13 +1066,24 @@ export default {
 
 .zth-bottom-nav {
   position: fixed;
-  background: black;
+  &.zth-nav-dark {
+    background: black;
+    border-top: 1px solid #666;
+  }
+  &.zth-nav-light {
+    background: white;
+    border-top: 1px solid #ccc;
+  }
   bottom: 0;
   z-index: 1;
-  padding: 0.5rem 0.5rem 0 0.5rem;
-  border-top: 1px solid #666;
   width: 100%;
-  white-space: nowrap;
+  box-shadow: 0 0px 20px rgba(0,0,0,0.15);
+  .main-nav-items {
+    padding: 0.5rem 0.5rem 0 0.5rem;
+    white-space: nowrap;
+    width: 100%;
+    overflow: scroll;
+  }
 }
 
 .nav-side-bar {
@@ -1151,16 +1167,13 @@ export default {
   }
 }
 
-
 .tab-saved-words-count[v-cloak] {
   display: none;
 }
 
-
 .feature-card-column:hover {
   z-index: 1;
 }
-
 
 .logo {
   filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.5));

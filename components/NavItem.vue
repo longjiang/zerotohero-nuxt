@@ -76,10 +76,11 @@ export default {
 <style lang="scss">
 .zth-nav-light {
   .main-nav-item {
+    color: #444;
+    text-shadow: none;
     &.nuxt-link-active,
     &:hover {
-      color: #444;
-      text-shadow: none;
+      color: #28a745;
       background: hsla(0deg, 100%, 100%, 0.75);
       border-top: 1px solid rgba(255, 255, 255, 0.5);
       border-left: 1px solid rgba(255, 255, 255, 0.5);
@@ -94,8 +95,11 @@ export default {
     }
   }
 }
+
+
 .zth-nav-dark {
   .main-nav-item {
+    color: white;
     &.nuxt-link-active,
     &:hover {
       color: white;
@@ -145,7 +149,16 @@ export default {
   }
 }
 
-.nav-side-bar {
+.zth-nav-side-bar {
+  &.zth-nav-light {
+    .main-nav-item {
+      color: white;
+      &.router-link-active,
+      &:hover {
+        color: #666;
+      }
+    }
+  }
   .main-nav {
     .main-nav-item {
       border-radius: 0.3rem 0 0 0.3rem;
@@ -212,7 +225,6 @@ export default {
 
 .main-nav-item {
   padding: 0.5rem 1rem;
-  color: white;
   display: inline-block;
   border: none;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 1);

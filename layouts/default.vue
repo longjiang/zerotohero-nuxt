@@ -53,7 +53,11 @@
       </div>
       <ReaderComp
         v-if="
-          l1 && l2 && $route.name !== 'youtube-view' && $route.name !== 'home'
+          wide &&
+          l1 &&
+          l2 &&
+          $route.name !== 'youtube-view' &&
+          $route.name !== 'home'
         "
         :iconMode="true"
       />
