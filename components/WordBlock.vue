@@ -23,10 +23,12 @@
       v-observe-visibility="visibilityChanged"
     >
       <template v-if="token && token.candidates && token.candidates.length > 0">
+      </template>
+      <template>
         <span
           class="word-block-definition"
-          v-if="l2Settings.showDefinition"
-          v-html="token.candidates[0].definitions[0]"
+          v-if="l2Settings.showDefinition && words[0] && words[0].definitions && words[0].definitions[0]"
+          v-html="words[0].definitions[0]"
         ></span>
         <span
           class="word-block-pinyin"
@@ -34,36 +36,19 @@
             l2Settings.showPinyin &&
             phonetics &&
             transliteration &&
-            transliteration !== token.text
+            transliteration !== text
           "
         >
-          {{ savedTransliteration || transliteration }}
+          {{ $l2.code === 'tlh' ? fixKlingonTypos(text) : (savedTransliteration || transliteration) }}
         </span>
-        <span
-          v-if="!l2Settings.useTraditional && token.candidates[0].simplified"
-          :class="`word-block-text word-block-simplified ${
-            hard ? 'word-block-hard' : ''
-          } ${pos ? 'pos-' + pos : ''}`"
-        >
-          {{ token.candidates[0].simplified }}
-        </span>
-        <span
-          v-else-if="
-            l2Settings.useTraditional && token.candidates[0].traditional
-          "
-          :class="`word-block-text word-block-traditional  ${
-            hard ? 'word-block-hard' : ''
-          } ${pos ? 'pos-' + pos : ''}`"
-        >
-          {{ token.candidates[0].traditional }}
-        </span>
-        <span v-else class="word-block-text-byeonggi-wrapper">
+        <span class="word-block-text-byeonggi-wrapper">
           <span
             :class="`word-block-text d-inline-block ${
               $l2.code === 'tlh' ? 'klingon' : ''
             } ${hard ? 'word-block-hard' : ''}  ${pos ? 'pos-' + pos : ''}`"
           >
-            {{ transform(token.text, $l2.code === "vi") }}
+            <template v-if="$l2.han && words[0]">{{ l2Settings.useTraditional ? words[0].traditional : words[0].simplified }}</template>
+            <template v-else>{{ transform(text, $l2.code === "vi") }}</template>
           </span>
           <span
             v-if="l2Settings.showByeonggi && hanja"
@@ -71,29 +56,6 @@
             v-html="hanja"
           />
         </span>
-      </template>
-      <template v-else>
-        <span
-          class="word-block-pinyin"
-          v-if="
-            l2Settings.showPinyin &&
-            phonetics &&
-            transliteration &&
-            transliteration !== text &&
-            $l2.code !== 'tlh'
-          "
-        >
-          {{ savedTransliteration || transliteration }}
-        </span>
-        <span class="word-block-pinyin" v-if="$l2.code === 'tlh'">
-          {{ fixKlingonTypos(text) }}
-        </span>
-        <span
-          :class="`word-block-text ${$l2.code === 'tlh' ? 'klingon' : ''} ${
-            pos ? 'pos-' + pos : ''
-          }`"
-          v-html="transform(text)"
-        />
       </template>
     </span>
     <template slot="popover">
