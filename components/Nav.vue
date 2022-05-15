@@ -25,7 +25,7 @@
     >
       <template v-if="variant === 'menu-bar' || variant === 'side-bar'">
         <nav :class="{ 'main-nav': true }">
-          <div class="zth-header" v-if="showLogo">
+          <!-- <div class="zth-header" v-if="showLogo">
             <LanguageLogo
               v-if="l1 && l2"
               :l1="l1"
@@ -34,7 +34,7 @@
               :icon="collapsed && variant === 'side-bar'"
               style="margin: 1.25rem 0 0.25rem 0"
             />
-          </div>
+          </div> -->
           <div v-if="showMainNav" :class="{ 'main-nav-items': true }">
             <NavItem
               v-for="(item, index) in menu.filter(
@@ -326,13 +326,13 @@ export default {
             {
               name: "all-media",
               icon: "fa fa-photo-video",
-              title: `All Media`,
+              title: `Recommended`,
               show: true,
             },
             {
               name: "watch-history",
               icon: "fas fa-history",
-              title: "Watch History",
+              title: "My History",
               show: true,
             },
             {

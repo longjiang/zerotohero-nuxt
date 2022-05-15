@@ -19,7 +19,7 @@
               <h4 class="hero-video-title">
                 {{ title ? title : video.title }}
               </h4>
-              <div class="mt-3">
+              <div>
                 <router-link
                   v-if="!videoUnavailable"
                   :to="{
@@ -125,7 +125,7 @@ export default {
     .hero-video-title {
       line-height: 1.667;
       text-shadow: 0 0 20px black;
-      margin-bottom: 2rem;
+      margin-bottom: 1rem;
       font-size: 1.67rem;
     }
     .btn {
