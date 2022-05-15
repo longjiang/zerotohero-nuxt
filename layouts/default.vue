@@ -16,6 +16,7 @@
       <SiteTopBar
         v-if="!wide && $route.params.l1 && $route.params.l1 && l1 && l2"
         variant="menu-bar"
+      :badge="savedWordsCount + savedPhrasesCount"
       />
 
       <Nav
@@ -89,6 +90,18 @@ export default {
 
   computed: {
     ...mapState("settings", ["l2Settings", "l1", "l2"]),
+    savedWordsCount() {
+      let count = this.$store.getters["savedWords/count"]({ l2: this.l2.code });
+      // eslint-disable-next-line vue/no-parsing-error
+      return count;
+    },
+    savedPhrasesCount() {
+      let count = this.$store.getters["savedPhrases/count"]({
+        l2: this.l2.code,
+      });
+      // eslint-disable-next-line vue/no-parsing-error
+      return count;
+    },
     classes() {
       let classes = {
         "zerotohero-wide": this.wide,

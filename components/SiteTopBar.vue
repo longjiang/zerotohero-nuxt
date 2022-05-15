@@ -63,13 +63,24 @@
               style="position: relative; bottom: -0.1rem"
             />
           </client-only>
-          <router-link
+          <!-- <router-link
             :to="languageMapPath"
             :class="`btn top-bar-button btn-unstyled link-unstyled ${
               params.md === false ? 'd-none' : ''
             }`"
           >
             <i class="fas fa-globe-asia"></i>
+          </router-link> -->
+          <router-link
+            :to="{ name: 'saved-words' }"
+            :class="`btn top-bar-button btn-unstyled link-unstyled ${
+              params.md === false ? 'd-none' : ''
+            }`"
+          >
+            <i class="fas fa-star"></i>
+            <span class="saved-words-count" v-cloak v-if="badge">
+              {{ badge }}
+            </span>
           </router-link>
           <button
             :class="`btn top-bar-button btn-unstyled ${
@@ -108,7 +119,12 @@
         @show="onLanguagesModalShown"
       >
         <div class="languages-modal">
-          <b-form-input v-model="keyword" @compositionend.prevent.stop="() => false" placeholder="Search languages" class="mb-3" />
+          <b-form-input
+            v-model="keyword"
+            @compositionend.prevent.stop="() => false"
+            placeholder="Search languages"
+            class="mb-3"
+          />
           <LanguageList
             @click="hideLanguagesModal"
             :showSpeakers="false"
@@ -212,6 +228,9 @@ export default {
     variant: {
       default: "menu-bar",
     },
+    badge: {
+      type: [String, Number],
+    },
   },
   computed: {
     $l1() {
@@ -249,7 +268,7 @@ export default {
   watch: {
     $route() {
       this.hideLanguagesModal();
-    }
+    },
   },
   methods: {
     showPlaylistModal() {
@@ -289,6 +308,15 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.top-bar-button {
+  position: relative;
+  .saved-words-count {
+    position: absolute;
+    font-size: 0.5em;
+    top: 0;
+    right: -10px;
+  }
+}
 .site-top-bar {
   display: flex;
   flex-direction: row;

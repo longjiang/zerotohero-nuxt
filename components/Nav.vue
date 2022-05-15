@@ -13,6 +13,7 @@
     <SiteTopBar
       v-if="variant === 'side-bar'"
       :variant="variant"
+      :badge="savedWordsCount + savedPhrasesCount"
       @toggleCollapsed="toggleCollapsed"
     />
     <div
@@ -743,6 +744,13 @@ export default {
           ],
         },
         {
+          name: "settings",
+          icon: "fas fa-cog",
+          title: "Settings",
+          shortcut: (e) => e.code === "KeyS" && e.metaKey && e.shiftKey,
+          show: true,
+        },
+        {
           icon: "fas fa-id-card",
           title: "Contact",
           show: true,
@@ -761,14 +769,6 @@ export default {
             },
           ],
         },
-        {
-          name: "settings",
-          icon: "fas fa-cog",
-          title: "Settings",
-          shortcut: (e) => e.code === "KeyS" && e.metaKey && e.shiftKey,
-          show: true,
-        },
-
         {
           icon: "fas fa-wrench",
           title: "Admin",
