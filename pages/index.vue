@@ -291,6 +291,9 @@
                   :sort="true"
                   :showFlags="true"
                 />
+                <div class="text-center mt-4">
+                  <router-link class="btn btn-success d-block" to="/language-map" ><i class="fas fa-globe-asia mr-1"></i> Choose language from a map <i class="ml-1 fas fa-chevron-right"></i></router-link>
+                </div>
               </div>
             </div>
           </div>
