@@ -380,7 +380,7 @@ export default {
       if (["ko", "vi"].includes(this.$l2.code)) {
         let hanja = "";
         if (this.saved) hanja = this.saved.hanja;
-        else {
+        else if (this.token && this.token.candidates && this.token.candidates[0]) {
           let head = this.token.candidates[0].head;
           let bannedEndings = "이히하고가기는은도의";
           let bannedWords = ["지난", "진자"];
