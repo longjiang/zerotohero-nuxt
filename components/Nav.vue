@@ -1091,6 +1091,11 @@ export default {
 
 .zth-bottom-nav {
   position: fixed;
+  bottom: 0;
+  z-index: 9;
+  width: 100%;
+  box-shadow: 0 0px 20px rgba(0,0,0,0.15);
+  padding-bottom: calc(env(safe-area-inset-bottom) + 0.25rem);
   &.zth-nav-dark {
     background: black;
     border-top: 1px solid #666;
@@ -1099,10 +1104,6 @@ export default {
     background: white;
     border-top: 1px solid #ccc;
   }
-  bottom: 0;
-  z-index: 1;
-  width: 100%;
-  box-shadow: 0 0px 20px rgba(0,0,0,0.15);
   .main-nav-items {
     padding: 0.5rem 0.5rem 0 0.5rem;
     white-space: nowrap;
