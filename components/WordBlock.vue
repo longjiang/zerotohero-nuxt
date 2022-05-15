@@ -38,18 +38,9 @@
         ></span>
         <span
           class="word-block-pinyin"
-          v-if="
-            l2Settings.showPinyin &&
-            phonetics &&
-            transliteration &&
-            transliteration !== text
-          "
+          v-if="l2Settings.showPinyin && phonetics && transliteration"
         >
-          {{
-            $l2.code === "tlh"
-              ? fixKlingonTypos(text)
-              : savedTransliteration || transliteration
-          }}
+          {{ savedTransliteration || transliteration }}
         </span>
         <span class="word-block-text-byeonggi-wrapper">
           <span
@@ -74,8 +65,13 @@
         </span>
       </template>
     </span>
+
     <template slot="popover">
-      <div @mouseenter="tooltipMouseEnter" @mouseleave="tooltipMouseLeave" v-if="open">
+      <div
+        @mouseenter="tooltipMouseEnter"
+        @mouseleave="tooltipMouseLeave"
+        v-if="open"
+      >
         <div
           class="tooltip-images"
           :key="`tooltip-images-${text}`"
@@ -115,53 +111,14 @@
             >
               {{ word.morphology }} of
             </div>
-            <div class="word-pronunciation">
+            <div>
               <Star
                 :word="word"
                 :text="text"
                 class="mr-1"
                 style="font-size: 1.2rem"
               ></Star>
-              <span
-                v-if="$l2.code === 'vi' && word.pronunciation"
-                v-html="
-                  '[' +
-                  word.pronunciation.replace(
-                    /\[\[(.+?)#Vietnamese\|.+?]]/g,
-                    '$1'
-                  ) +
-                  ']'
-                "
-              />
-              <span v-else-if="word.pronunciation">
-                <template v-if="$l2 === 'zh'">
-                  {{ word.pronunciation }}
-                </template>
-                <template v-else>[{{ word.pronunciation }}]</template>
-              </span>
-              <span v-else-if="word.pinyin">
-                {{ word.pinyin }}
-              </span>
-              <span v-else-if="word.kana && word.kana !== word.head">
-                {{ word.kana }}
-              </span>
-              <span
-                v-else-if="
-                  $hasFeature('transliteration') &&
-                  !['tlh', 'fa'].includes($l2.code)
-                "
-              >
-                {{ transliterate(word.head) }}
-              </span>
-              <span v-if="$l2.code === 'tlh'">
-                {{ word.head }} /{{ klingonIPA(word.head) }}/
-              </span>
-              <span v-if="$l2.code === 'fa'">
-                {{ farsiRomanizations[word.head] }}
-              </span>
-              <span v-if="word.jyutping && word.pinyin">
-                / {{ word.pinyin }}
-              </span>
+              <span class="word-pronunciation">{{ pronunciation(word) }}</span>
               <Speak
                 :text="word.kana || word.head"
                 :mp3="word.audio"
@@ -282,15 +239,11 @@
             </span>
             <ol class="word-translation" v-if="word.definitions">
               <li
-                v-for="(def, index) in unique(word.definitions)
-                  .filter((def) => def && def.trim() !== '')
-                  .map((definition) =>
-                    definition ? definition.replace(/\[.*\] /g, '') : ''
-                  )"
+                v-for="(def, index) in unique(word.definitions)"
                 :key="`wordblock-def-${index}`"
                 class="word-translation-item"
               >
-                <span>{{ def }}</span>
+                {{ def }}
               </li>
             </ol>
           </div>
@@ -383,7 +336,7 @@ export default {
       farsiRomanizations: {},
       lastLookupWasQuick: false,
       loadingImages: false,
-      t: 0
+      t: 0,
     };
   },
   computed: {
@@ -511,7 +464,7 @@ export default {
     if (this.sticky) {
       this.lookup();
     }
-    this.update();
+      this.update();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type.startsWith("savedWords")) {
         this.update();
@@ -537,8 +490,33 @@ export default {
     },
   },
   methods: {
+    pronunciation(word) {
+      let pronunciation = word.pronunciation;
+      if (this.$l2.code === "vi") {
+        pronunciation = pronunciation.replace(
+          /\[\[(.+?)#Vietnamese\|.+?]]/g,
+          "$1"
+        );
+      } else if (this.$l2.code === "tlh")
+        pronunciation = this.klingonIPA(word.head);
+      else if (word.kana && word.kana !== word.head) pronunciation = word.kana;
+      else if (this.$l2.code === "fa")
+        pronunciation = farsiRomanizations[word.head];
+      else if (word.jyutping && word.pinyin)
+        pronunciation = [word.jyutping, word.pinyin].join(", ");
+      else if (
+        !pronunciation &&
+        this.$hasFeature("transliteration") &&
+        !["tlh", "fa"].includes(this.$l2.code)
+      )
+        pronunciation = this.transliterate(word.head);
+      let formattedPronunciation = pronunciation ? `[${pronunciation}]` : "";
+      if (this.$l2.code === "tlh")
+        formattedPronunciation = word.head + " " + formattedPronunciation;
+      return formattedPronunciation;
+    },
     test(arg) {
-      console.log(`Evaluated`, arg)
+      console.log(`Evaluated`, arg);
     },
     async visibilityChanged(isVisible) {
       await Helper.timeout(123);
@@ -554,29 +532,28 @@ export default {
       }
     },
     async getTransliteration() {
-      if (this.$hasFeature("transliteration")) {
-        if (
-          this.token &&
-          this.token.candidates &&
-          this.token.candidates.length > 0
-        ) {
-          if (this.token.candidates[0].kana) {
-            return this.token.candidates[0].kana;
-          } else if (this.token.candidates[0].pronunciation) {
-            return this.token.candidates[0].pronunciation.split(",")[0];
-          } else if (this.token.candidates[0].pinyin) {
-            return this.token.candidates[0].pinyin;
-          }
-        }
-        if (this.$l2.code === "fa") {
-          this.text = this.text.replace(/\u064a/g, "\u06cc"); // Arabic YEH to Farsi YEH
-          let roman = await this.getFarsiRomanization(this.text);
-          return roman.replace(/\^/g, "");
-        }
-        if (!["ja", "zh", "nan", "hak"].includes(this.$l2.code)) {
-          return this.transliterate(this.text);
+      let transliteration;
+      if (this.$l2.code === "tlh") {
+        return this.fixKlingonTypos(this.text);
+      } else if (this.$l2.code === "fa") {
+        this.text = this.text.replace(/\u064a/g, "\u06cc"); // Arabic YEH to Farsi YEH
+        let roman = await this.getFarsiRomanization(this.text);
+        transliteration = roman.replace(/\^/g, "");
+      } else if (this.token && this.token.candidates.length > 0) {
+        if (this.token.candidates[0].kana) {
+          transliteration = this.token.candidates[0].kana;
+        } else if (this.token.candidates[0].pronunciation) {
+          transliteration = this.token.candidates[0].pronunciation.split(",")[0];
+        } else if (this.token.candidates[0].pinyin) {
+          transliteration = this.token.candidates[0].pinyin;
         }
       }
+      if (this.$hasFeature("transliteration")) {
+        if (!["ja", "zh", "nan", "hak"].includes(this.$l2.code)) {
+          transliteration = this.transliterate(this.text);
+        }
+      }
+      if (transliteration !== this.text) return transliteration;
     },
     klingonIPA(text) {
       return Klingon.latinToIPA(text);
@@ -709,9 +686,9 @@ export default {
         } else {
           this.saved = savedWord ? savedWord : false;
         }
+        if (!this.transliteration || this.transliteration === "")
+          this.transliteration = await this.getTransliteration();
       }
-      if (!this.transliteration)
-        this.transliteration = await this.getTransliteration();
     },
     matchCase(text) {
       if (this.text.match(/^[\wА-ЯЁ]/)) {
@@ -826,19 +803,19 @@ export default {
         }
       }
       if (!quick) {
-        // words = words
-        //   ? words.sort((a, b) => {
-        //       let asaved = this.$store.getters["savedWords/has"]({
-        //         id: a.id,
-        //         l2: this.$l2.code,
-        //       });
-        //       let bsaved = this.$store.getters["savedWords/has"]({
-        //         id: b.id,
-        //         l2: this.$l2.code,
-        //       });
-        //       return asaved === bsaved ? 0 : asaved ? -1 : 1;
-        //     })
-        //   : [];
+        words = words
+          ? words.sort((a, b) => {
+              let asaved = this.$store.getters["savedWords/has"]({
+                id: a.id,
+                l2: this.$l2.code,
+              });
+              let bsaved = this.$store.getters["savedWords/has"]({
+                id: b.id,
+                l2: this.$l2.code,
+              });
+              return asaved === bsaved ? 0 : asaved ? -1 : 1;
+            })
+          : [];
       }
       words = Helper.uniqueByValue(words, "id");
       this.words = words;
