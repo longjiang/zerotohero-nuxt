@@ -10,7 +10,7 @@
 <template>
   <div>
     <VideoHero v-if="videos && videos[0]" :video="random(videos)[0]" />
-    <div class="youtube-browse main-dark pt-5 pb-5" style="min-height: 100vh">
+    <div class="youtube-browse main-dark pb-5" style="min-height: 100vh; padding-top: 5rem;">
       <div class="container">
         <SocialHead
           v-if="show"

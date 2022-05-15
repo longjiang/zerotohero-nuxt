@@ -10,7 +10,7 @@
 <template>
   <div class="main-dark">
     <VideoHero v-if="heroVideo" :video="heroVideo" />
-    <div class="container pt-5 pb-5">
+    <div class="container pb-5" style="padding-top: 5rem">
       <SocialHead :title="`Learn ${$l2.name} with Videos | ${$l2.name} Zero to Hero`"
         :description="`Learn ${$l2.name} with Videos`" :image="'/img/tv-shows.jpg'" />
       <div class="row">

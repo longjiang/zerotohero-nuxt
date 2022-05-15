@@ -1,7 +1,7 @@
 <template>
   <div class="main-dark">
     <VideoHero v-if="featureEpisode" :video="featureEpisode" />
-    <div class="shows pt-5">
+    <div class="shows" style="padding-top: 3rem;">
       <div class="container">
         <SocialHead
           v-if="shows && shows[0]"
