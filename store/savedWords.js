@@ -131,19 +131,11 @@ export const getters = {
     if (state.savedWords[l2]) {
       let savedWord = false
       if (id) {
-        savedWord = state.savedWords[l2].find(
-          item => item.id && item.id == id
-        )
+        savedWord = state.idIndex[l2][id]
       } else if (text) {
         let search = text.toLowerCase()
-        savedWord = state.savedWords[l2].find(
-          item => {
-            let forms = item.forms
-            // Take care of edge cases where a user has used an old version of the site and imported word forms as a string rather than array.
-            if (typeof forms === 'string') forms = forms.split(',')
-            return forms.includes(search)
-          }
-        )
+        let savedWords = state.savedWords[l2][search] || []
+        if (savedWords) return savedWords[0]
       }
       return savedWord
     }
