@@ -120,7 +120,7 @@ export default {
       default: "light",
     },
     variant: {
-      default: "list", // or 'icon'
+      default: "list", // or 'icon', 'grid'
     },
     l1: {
       default: "en",

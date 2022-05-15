@@ -12,7 +12,7 @@
       } comprehensible input.`"
       :image="image"
     />
-    <div class="container pt-5 pb-5">
+    <div class="container pt-2 pb-5">
       <div class="row">
         <div class="col-sm-12">
           <!-- <Sale class="mt-4 mb-4" v-if="$l2.code === 'zh'" /> -->

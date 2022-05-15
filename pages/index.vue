@@ -53,6 +53,16 @@
                 </strong>
                 <br />
               </p>
+              <div class="mt-4 mb-4">
+                <b-button
+                  class="btn btn-success"
+                  @click="scrollToLanguageList"
+                  style="font-size: 1.2rem; padding: 0.5rem 1.5rem; border-radius: 1rem; box-shadow: #09651d 0px 3px 0px;"
+                >
+                  Choose Your Language
+                  <i class="fa fa-chevron-right ml-2"></i>
+                </b-button>
+              </div>
               <p class="blurb-secondary">
                 TV shows, movies, music, news, audiobooks... with full subtitles
                 and dictionary tools, all you need for
@@ -82,111 +92,6 @@
           </div>
         </div>
         <!-- <Sale class="mb-5" style="border-radius: 1rem !important" /> -->
-        <div class="row mb-5">
-          <div class="col-sm-12">
-            <h4 class="text-center">
-              <router-link
-                class="btn btn-success"
-                to="/language-map"
-                style="font-size: 1.5rem"
-              >
-                Pick Your Language
-                <i class="fa fa-chevron-right ml-2"></i>
-              </router-link>
-            </h4>
-          </div>
-        </div>
-
-        <div class="row mb-5">
-          <div class="col-sm-12">
-            <div class="home-card">
-              <h5 class="text-center mb-3">Find Us On</h5>
-              <div
-                class="home-card-logos text-center"
-                style="line-height: 2rem"
-              >
-                <a href="https://twitter.com/zerotohero_ca">
-                  <img
-                    src="/img/twitter-text.png"
-                    style="height: 0.9rem; padding: 0 0.5rem"
-                    data-not-lazy
-                  />
-                </a>
-                <a
-                  href="https://www.youtube.com/channel/UCQ3IlLg5VGeydxtswBoyt6A"
-                >
-                  <img
-                    src="/img/logo-youtube.png"
-                    style="height: 1.2rem; padding: 0 0.5rem"
-                    data-not-lazy
-                  />
-                </a>
-                <a href="https://www.instagram.com/chinesezerotohero/">
-                  <img
-                    src="/img/logo-instagram.png"
-                    style="height: 1.4rem; padding: 0 0.5rem"
-                    data-not-lazy
-                  />
-                </a>
-                <a href="http://chinesezerotohero.teachable.com/">
-                  <img
-                    src="/img/logo-teachable.png"
-                    style="height: 1.4rem; padding: 0 0.5rem"
-                    data-not-lazy
-                  />
-                </a>
-                <a href="http://t.me/zerotohero_zh">
-                  <img
-                    src="/img/logo-telegram.png"
-                    style="height: 1.4rem; padding: 0 0.5rem"
-                    data-not-lazy
-                  />
-                </a>
-                <a href="https://m.cctalk.com/inst/stevmab3">
-                  <img
-                    src="/img/logo-cctalk.png"
-                    style="height: 1.2rem"
-                    data-not-lazy
-                  />
-                </a>
-                &nbsp;&nbsp;
-                <a href="https://space.bilibili.com/253569339">
-                  <img
-                    src="/img/logo-bilibili.png"
-                    style="height: 1.2rem"
-                    data-not-lazy
-                  />
-                </a>
-                &nbsp;&nbsp;
-                <a href="https://v.douyin.com/eNJCcD8/">
-                  <img
-                    src="/img/logo-douyin.png"
-                    style="height: 1.4rem"
-                    data-not-lazy
-                  />
-                </a>
-                &nbsp;&nbsp;
-                <a
-                  href="https://www.xiaohongshu.com/user/profile/5fad77c0000000000100696e"
-                >
-                  <img
-                    src="/img/logo-xiaohongshu.png"
-                    style="height: 1.4rem"
-                    data-not-lazy
-                  />
-                </a>
-                <!-- &nbsp;&nbsp;
-                <router-link to="/zh/en/contact-us">
-                  <img
-                    src="/img/logo-wechat.png"
-                    style="height: 1.4rem"
-                    data-not-lazy
-                  />
-                </router-link> -->
-              </div>
-            </div>
-          </div>
-        </div>
 
         <client-only>
           <div :class="{ 'row mb-5': true, 'd-none': !hasDashboard }">
@@ -317,11 +222,13 @@
           </div>
         </div>
         <client-only>
-          <div class="row mt-4 mb-5">
+          <div class="row mt-4 mb-5" id="languageList">
             <div class="col-sm-12">
               <div class="home-card">
-                <h5 class="text-center">More Languages</h5>
+                <h5 class="text-center">Choose Your Language</h5>
+                <Choose :compact="true" :showLanguageList="false" :button="false" :showRandom="false" />
                 <LanguageList
+                  :showSpeakers="false"
                   :codes="[
                     'ar',
                     'az',
@@ -384,12 +291,100 @@
                   :sort="true"
                   :showFlags="true"
                 />
-                <h5 class="text-center mt-5">EVEN More languages</h5>
-                <Choose :compact="true" :showLanguageList="false" />
               </div>
             </div>
           </div>
         </client-only>
+        <div class="row mb-5">
+          <div class="col-sm-12">
+            <div class="home-card">
+              <h5 class="text-center mb-3">Find Us On</h5>
+              <div
+                class="home-card-logos text-center"
+                style="line-height: 2rem"
+              >
+                <a href="https://twitter.com/zerotohero_ca">
+                  <img
+                    src="/img/twitter-text.png"
+                    style="height: 0.9rem; padding: 0 0.5rem"
+                    data-not-lazy
+                  />
+                </a>
+                <a
+                  href="https://www.youtube.com/channel/UCQ3IlLg5VGeydxtswBoyt6A"
+                >
+                  <img
+                    src="/img/logo-youtube.png"
+                    style="height: 1.2rem; padding: 0 0.5rem"
+                    data-not-lazy
+                  />
+                </a>
+                <a href="https://www.instagram.com/chinesezerotohero/">
+                  <img
+                    src="/img/logo-instagram.png"
+                    style="height: 1.4rem; padding: 0 0.5rem"
+                    data-not-lazy
+                  />
+                </a>
+                <a href="http://chinesezerotohero.teachable.com/">
+                  <img
+                    src="/img/logo-teachable.png"
+                    style="height: 1.4rem; padding: 0 0.5rem"
+                    data-not-lazy
+                  />
+                </a>
+                <a href="http://t.me/zerotohero_zh">
+                  <img
+                    src="/img/logo-telegram.png"
+                    style="height: 1.4rem; padding: 0 0.5rem"
+                    data-not-lazy
+                  />
+                </a>
+                <a href="https://m.cctalk.com/inst/stevmab3">
+                  <img
+                    src="/img/logo-cctalk.png"
+                    style="height: 1.2rem"
+                    data-not-lazy
+                  />
+                </a>
+                &nbsp;&nbsp;
+                <a href="https://space.bilibili.com/253569339">
+                  <img
+                    src="/img/logo-bilibili.png"
+                    style="height: 1.2rem"
+                    data-not-lazy
+                  />
+                </a>
+                &nbsp;&nbsp;
+                <a href="https://v.douyin.com/eNJCcD8/">
+                  <img
+                    src="/img/logo-douyin.png"
+                    style="height: 1.4rem"
+                    data-not-lazy
+                  />
+                </a>
+                &nbsp;&nbsp;
+                <a
+                  href="https://www.xiaohongshu.com/user/profile/5fad77c0000000000100696e"
+                >
+                  <img
+                    src="/img/logo-xiaohongshu.png"
+                    style="height: 1.4rem"
+                    data-not-lazy
+                  />
+                </a>
+                <!-- &nbsp;&nbsp;
+                <router-link to="/zh/en/contact-us">
+                  <img
+                    src="/img/logo-wechat.png"
+                    style="height: 1.4rem"
+                    data-not-lazy
+                  />
+                </router-link> -->
+              </div>
+            </div>
+          </div>
+        </div>
 
         <div class="row">
           <div class="col-sm-6 mb-5">
@@ -694,6 +689,11 @@ export default {
     this.loaded = true;
   },
   methods: {
+    scrollToLanguageList() {
+      document.querySelector('#languageList').scrollIntoView({ 
+        behavior: 'smooth' 
+      });
+    },
     hasDashboardUpdate(hasDashboard) {
       this.hasDashboard =
         hasDashboard &&

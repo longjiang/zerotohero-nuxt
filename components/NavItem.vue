@@ -156,9 +156,11 @@ export default {
   &.zth-nav-light {
     .main-nav-item {
       color: white;
+      text-shadow: black 0 1px 3px;
       &.router-link-active,
       &:hover {
-        color: #666;
+        color: #444;
+        text-shadow: none;
       }
     }
   }

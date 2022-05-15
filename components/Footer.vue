@@ -5,14 +5,14 @@
       style="line-height: 1.2; font-size: 1.1em"
     >
       <router-link class="link-unstyled text-white" to="/">
-        <strong>ZERO TO HERO</strong>
-        <span style="font-weight: 300">LANGUAGES</span>
+        <h4>zerotohero.ca</h4>
       </router-link>
     </div>
-    <Choose :showLanguageList="false" skin="dark" />
+    
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
+          <Choose :showLanguageList="false" skin="dark" />
           <div>
             <p>
               <strong>This is an open-source project.</strong>

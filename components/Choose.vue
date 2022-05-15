@@ -1,23 +1,18 @@
 <template>
   <div>
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-12">
-          <LanguageSwitch
-            v-if="languages && languages.length > 0"
-            class="mt-3 mb-4"
-            :preferredLanguages="languages"
-            :showRandom="showRandom"
-          />
-          <LanguageList
-            v-if="showLanguageList && languages && languages.length > 0"
-            :langs="languages"
-            :sort="true"
-            :skin="skin"
-          />
-        </div>
-      </div>
-    </div>
+    <LanguageSwitch
+      v-if="languages && languages.length > 0"
+      class="mt-3 mb-4"
+      :preferredLanguages="languages"
+      :showRandom="showRandom"
+      :button="button"
+    />
+    <LanguageList
+      v-if="showLanguageList && languages && languages.length > 0"
+      :langs="languages"
+      :sort="true"
+      :skin="skin"
+    />
   </div>
 </template>
 
@@ -35,6 +30,9 @@ export default {
       default: "light",
     },
     showLanguageList: {
+      default: true,
+    },
+    button: {
       default: true
     },
     showRandom: {
