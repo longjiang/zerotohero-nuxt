@@ -3,10 +3,11 @@
     :class="{
       'main-nav-item': mode !== 'large-icon' && level === 1,
       'secondary-nav-item': mode !== 'large-icon' && level === 2,
-      tab: mode === 'pill',
-      'd-block': mode === 'side-bar',
-      'router-link-active': active,
+      'nav-item-pill': mode === 'pill',
+      'nav-item-small-icon': mode === 'small-icon',
       'feature-card feature-card-dark link-unstyled': mode === 'large-icon',
+      tab: mode === 'pill',
+      'router-link-active': active,
     }"
     :to="to"
     :title="item.title"

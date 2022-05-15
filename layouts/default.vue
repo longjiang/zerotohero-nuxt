@@ -45,7 +45,7 @@
         :showLogo="false"
         :showMainNav="true"
         :showSecondaryNav="false"
-        mode="icon"
+        mode="small-icon"
       />
       <div class="zth-content">
         <Nuxt id="main" />
