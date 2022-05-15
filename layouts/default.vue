@@ -28,6 +28,22 @@
         :skin="$route.meta.skin ? $route.meta.skin : 'light'"
         :fullHistory="fullHistory"
         @collapsed="updateCollapsed"
+        :showMainNav="wide"
+      />
+
+      <Nav
+        v-if="$route.params.l1 && $route.params.l1 && l1 && l2 && !wide"
+        class="zth-bottom-nav"
+        :l1="l1"
+        :l2="l2"
+        :key="`nav-bottom-${l1.code}-${l2.code}`"
+        variant="menu-bar"
+        :skin="$route.meta.skin ? $route.meta.skin : 'light'"
+        :fullHistory="fullHistory"
+        @collapsed="updateCollapsed"
+        :showLogo="false"
+        :showMainNav="true"
+        :showSecondaryNav="false"
       />
       <div class="zth-content">
         <Nuxt id="main" />

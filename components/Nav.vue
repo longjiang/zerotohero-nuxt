@@ -1051,6 +1051,16 @@ export default {
   }
 }
 
+.zth-bottom-nav {
+  position: fixed;
+  background: black;
+  bottom: 0;
+  z-index: 1;
+  padding: 0.5rem;
+  border-top: 1px solid #666;
+  width: 100%;
+}
+
 .nav-side-bar {
   display: flex;
   flex-wrap: nowrap;
