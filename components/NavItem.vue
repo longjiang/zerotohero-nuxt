@@ -130,6 +130,9 @@ export default {
       border-radius: 0.3rem 0.3rem 0 0;
       border-bottom: none;
       margin-right: 0.2rem;
+      &.nav-item-small-icon {
+        padding: 0.5rem;
+      }
     }
   }
 }
@@ -187,21 +190,24 @@ export default {
 
 .saved-words-count {
   border-radius: 100%;
-  font-size: 0.7rem;
+  font-size: 0.7em;
   font-weight: bold;
   display: inline-block;
-  line-height: 1.2rem;
+  
   text-align: center;
   position: relative;
   top: -0.1rem;
   position: relative;
-  min-width: 1.3rem;
-  margin-left: 0.2rem;
+  line-height: 1.7;
+  min-width: 1.7em;
+  height: 1.7em;
+  margin-left: 0.2em;
   display: inline-block;
   text-shadow: none;
   color: white;
   background: #fd4f1c;
 }
+
 
 .secondary-nav-item {
   padding: 0.5rem 1rem;

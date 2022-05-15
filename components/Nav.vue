@@ -300,7 +300,7 @@ export default {
       let items = [
         {
           icon: "fas fa-star",
-          title: "Saved Items",
+          title: "Saved",
           show: this.savedWordsCount + this.savedPhrasesCount > 0,
           children: [
             {
