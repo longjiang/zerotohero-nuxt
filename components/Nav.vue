@@ -22,7 +22,7 @@
         <nav :class="{ 'main-nav': true, tabs: variant === 'menu-bar' }">
           <div
             class="zth-header"
-            v-if="variant === 'menu-bar' || variant === 'side-bar'"
+            v-if="showLogo"
           >
             <LanguageLogo
               v-if="l1 && l2"
@@ -34,6 +34,7 @@
             />
           </div>
           <div
+            v-if="showMainNav"
             :class="{ 'main-nav-items': true, tabs: variant === 'menu-bar' }"
           >
             <NavItem
@@ -49,7 +50,7 @@
               :badge="item.icon === 'fas fa-star' ? savedWordsCount + savedPhrasesCount : undefined"
             />
           </div>
-          <div v-if="variant === 'side-bar' && !collapsed" class="end-nav">
+          <div v-if="showMainNav && variant === 'side-bar' && !collapsed" class="end-nav">
             <div
               v-if="$l2 && !['en', 'zh'].includes($l2.code) && $l2.logo"
               class="icon-description"
@@ -69,7 +70,7 @@
             />
           </div>
         </nav>
-        <nav class="secondary-nav" v-if="currentParent && currentParent.children">
+        <nav v-if="showSecondaryNav && currentParent && currentParent.children" class="secondary-nav">
           <NavItem
             v-for="(child, index) in currentParent.children.filter(
               (child) => child.show && !child.href
@@ -146,6 +147,18 @@ export default {
     showOnly: {
       type: Array,
     },
+    showHeader: {
+      type: Boolean,
+      default: true
+    },
+    showMainNav: {
+      type: Boolean,
+      default: true
+    },
+    showSecondaryNav: {
+      type: Boolean,
+      default: true
+    }
   },
   data() {
     return {
