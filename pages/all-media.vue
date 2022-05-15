@@ -28,14 +28,14 @@
             }
           " />
           <div v-if="videos && videos.length > 0">
-            <h3 class="text-center mt-3 mb-4">
+            <h3 class="mt-3 mb-4">
               Videos <router-link :to="{ name: 'youtube-browse' }" class="show-all">More <i class=" fas
                 fa-chevron-right ml-1"></i></router-link>
             </h3>
             <LazyYouTubeVideoList :videos="randomVideos" :showAdminToolsInAdminMode="false" skin="dark" />
           </div>
           <div v-if="videos && movies && movies.length > 0">
-            <h3 class="text-center mt-5 mb-5">
+            <h3 class="mt-5 mb-5">
               Movies <router-link :to="{ name: 'show', params: { type: 'tv-show', id: moviesShow.id } }"
                 class="show-all">More <i class=" fas
                 fa-chevron-right ml-1"></i></router-link>
@@ -43,28 +43,28 @@
             <LazyYouTubeVideoList :videos="random(movies).slice(0, 12)" :showAdminToolsInAdminMode="false" skin="dark" />
           </div>
           <div v-if="videos && music && music.length > 0">
-            <h3 class="text-center mt-5 mb-5">
+            <h3 class="mt-5 mb-5">
               Music <router-link :to="{ name: 'show', params: { type: 'tv-show', id: musicShow.id } }" class="show-all">More <i class=" fas
                 fa-chevron-right ml-1"></i></router-link>
             </h3>
             <LazyYouTubeVideoList :videos="random(music).slice(0, 12)" :showAdminToolsInAdminMode="false" skin="dark" />
           </div>
           <div v-if="videos && news && news.length > 0">
-            <h3 class="text-center mt-5 mb-5">
+            <h3 class="mt-5 mb-5">
               News <router-link :to="{ name: 'show', params: { type: 'talk', id: newsShow.id } }" class="show-all">More <i class=" fas
                 fa-chevron-right ml-1"></i></router-link>
             </h3>
             <LazyYouTubeVideoList :videos="random(news).slice(0, 12)" :showAdminToolsInAdminMode="false" skin="dark" />
           </div>
           <div v-if="videos && tvShows && tvShows.length > 0">
-            <h3 class="text-center mt-5 mb-5">
+            <h3 class="mt-5 mb-5">
               TV Shows <router-link :to="{ name: 'tv-shows' }" class="show-all">More <i class=" fas
                 fa-chevron-right ml-1"></i></router-link>
             </h3>
             <ShowList :shows="random(tvShows.filter(s => !['Movies', 'Music'].includes(s.title)), 6)" type="tvShows" :key="`tv-shows`" />
           </div>
           <div v-if="videos && talks && talks.length > 0">
-            <h3 class="text-center mt-5 mb-5">
+            <h3 class="mt-5 mb-5">
               YouTube<router-link :to="{ name: 'talks' }" class="show-all">More <i class=" fas
                 fa-chevron-right ml-1"></i></router-link>
             </h3>
@@ -73,7 +73,7 @@
             </div>
           </div>
           <div v-if="videos && talks && talks.length > 0 && audiobooks.length > 0">
-            <h3 class="text-center mt-5 mb-5">
+            <h3 class="mt-5 mb-5">
               Audiobooks <router-link :to="{ name: 'audiobooks' }" class="show-all">More <i class=" fas
                 fa-chevron-right ml-1"></i></router-link>
             </h3>
@@ -245,14 +245,13 @@ export default {
 
 h3 {
   position: relative;
+  font-size: 1.3rem;
 }
 
 .show-all {
-  font-size: 0.7em;
-  position: absolute;
-  right: 0;
-  top: 0.3em;
-  display: block;
+  font-size: 1rem;
+  margin-left: 1rem;
+  display: inline-block;
   color: #28a745;
 }
 </style>
