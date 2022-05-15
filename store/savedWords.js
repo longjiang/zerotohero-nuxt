@@ -44,21 +44,21 @@ export const mutations = {
       state.savedWordsLoaded = true
     }
   },
-  ADD_SAVED_WORD(state, options) {
+  ADD_SAVED_WORD(state, { l2, word, wordForms }) {
     if (typeof localStorage !== 'undefined') {
-      if (!state.savedWords[options.l2]) {
-        state.savedWords[options.l2] = []
+      if (!state.savedWords[l2]) {
+        state.savedWords[l2] = []
       }
       if (
-        !state.savedWords[options.l2].find(item => item.id === options.word.id)
+        !state.savedWords[l2].find(item => item.id === word.id)
       ) {
         let savedWords = Object.assign({}, state.savedWords)
-        savedWords[options.l2].push({
-          id: options.word.id,
-          forms: options.wordForms,
+        savedWords[l2].push({
+          id: word.id,
+          forms: wordForms,
           date: Date.now()
         })
-        buildIndex(options.l2, state)
+        buildIndex(l2, state)
         localStorage.setItem('zthSavedWords', JSON.stringify(savedWords))
         this._vm.$set(state, 'savedWords', savedWords)
       }
@@ -80,49 +80,51 @@ export const mutations = {
           })
         }
       }
-      buildIndex(options.l2, state)
+      for (let l2 in state.savedWords) {
+        buildIndex(l2, state)
+      }
       localStorage.setItem('zthSavedWords', JSON.stringify(state.savedWords))
     }
   },
-  REMOVE_SAVED_WORD(state, options) {
+  REMOVE_SAVED_WORD(state, { l2, word }) {
     if (typeof localStorage !== 'undefined' && state.savedWords[options.l2]) {
-      const keepers = state.savedWords[options.l2].filter(
-        item => item.id != options.word.id
+      const keepers = state.savedWords[l2].filter(
+        item => item.id != word.id
       )
       let savedWords = Object.assign({}, state.savedWords)
-      savedWords[options.l2] = keepers
-      buildIndex(options.l2, state)
+      savedWords[l2] = keepers
+      buildIndex(l2, state)
       localStorage.setItem('zthSavedWords', JSON.stringify(savedWords))
       this._vm.$set(state, 'savedWords', savedWords)
     }
   },
-  REMOVE_ALL_SAVED_WORDS(state, options = {}) {
+  REMOVE_ALL_SAVED_WORDS(state, { l2 }) {
     if (typeof localStorage !== 'undefined') {
       let savedWords = Object.assign({}, state.savedWords)
-      if (options.l2) {
-        if (state.savedWords[options.l2]) {
-          savedWords[options.l2] = []
+      if (l2) {
+        if (state.savedWords[l2]) {
+          savedWords[l2] = []
         }
       } else {
         savedWords = {}
       }
-      buildIndex(options.l2, state)
+      buildIndex(l2, state)
       localStorage.setItem('zthSavedWords', JSON.stringify(savedWords))
       this._vm.$set(state, 'savedWords', savedWords)
     }
   }
 }
 export const actions = {
-  add({ commit, dispatch }, options) {
+  add({ commit }, options) {
     commit('ADD_SAVED_WORD', options)
   },
-  importWords({ commit, dispatch }, rows) {
+  importWords({ commit }, rows) {
     commit('IMPORT_WORDS', rows)
   },
-  remove({ commit, dispatch }, options) {
+  remove({ commit }, options) {
     commit('REMOVE_SAVED_WORD', options)
   },
-  removeAll({ commit, dispatch }, options) {
+  removeAll({ commit }, options) {
     commit('REMOVE_ALL_SAVED_WORDS', options)
   }
 }
