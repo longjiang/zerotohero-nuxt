@@ -11,7 +11,7 @@
         : 'ltr'
     "
     :class="{
-      annotated: annotated,
+      annotated,
       'text-right':
         foreign &&
         $l2.scripts &&
@@ -328,6 +328,9 @@ export default {
       if (this.delay) await Helper.timeout(this.delay);
       if (isVisible) {
         this.convertToSentencesAndAnnotate(this.$slots.default[0]);
+      } else {
+        this.annotated = false
+        this.$emit("annotated", false);
       }
     },
     async annotateInputBlur(e) {
@@ -366,7 +369,7 @@ export default {
       );
       this.annotating = false;
       this.annotated = true;
-      this.$emit("annotated");
+      this.$emit("annotated", true);
     },
     async annotateRecursive(node) {
       if (node && node.classList && node.classList.contains("sentence")) {

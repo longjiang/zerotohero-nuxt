@@ -53,7 +53,7 @@
           v-if="!showSubsEditing"
           style="flex: 1"
           @textChanged="lineChanged(line, ...arguments)"
-          @annotated="annotated = true"
+          @annotated="updateAnnotated"
         >
           <span v-html="lineHtml(line).trim()" />
         </Annotate>
@@ -169,6 +169,9 @@ export default {
     },
   },
   methods: {
+    updateAnnotated(annotated) {
+      this.annotated = annotated
+    },
     playAnimation(startFrom) {
       if (this.$refs["annotate"]) {
         if (this.annotated) {
