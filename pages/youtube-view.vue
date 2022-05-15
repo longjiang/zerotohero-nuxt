@@ -95,7 +95,7 @@ export default {
     },
     lesson: {
       type: String, // If the video is a "lesson video" (with lesson vocab highlighted), set this to "lesson"
-      required: false
+      required: false,
     },
   },
   data() {
@@ -144,7 +144,9 @@ export default {
         }/`;
     },
     thisEpisodeIndex() {
-      return this.episodes.findIndex((episode) => episode.youtube_id === this.video.youtube_id);
+      return this.episodes.findIndex(
+        (episode) => episode.youtube_id === this.video.youtube_id
+      );
     },
     nextEpisode() {
       let thisEpisodeIndex = this.thisEpisodeIndex;
@@ -160,6 +162,10 @@ export default {
     isMobile() {
       return Helper.isMobile();
     },
+  },
+  validate({ params, query, store }) {
+    if (params.youtube_id && params.youtube_id.length > 1) return true;
+    return false;
   },
   async fetch() {
     try {
@@ -217,8 +223,8 @@ export default {
       if (this.show) {
         // News and YouTube channels are sorted by date
         // Audiobooks and TV Shows are sorted by title
-        let sort = "-date"
-        if (this.showType === "tv_show" || this.show.audiobook) sort = "title"
+        let sort = "-date";
+        if (this.showType === "tv_show" || this.show.audiobook) sort = "title";
         let response = await axios.get(
           `${Config.youtubeVideosTableName(this.$l2.id)}?filter[l2][eq]=${
             this.$l2.id
