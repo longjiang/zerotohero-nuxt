@@ -16,14 +16,31 @@ const setupDB = async () => {
 export const state = () => {
   return {
     savedWords: {},
+    formIndex: {},
+    idIndex: {},
     savedWordsLoaded: false
   }
 }
+
+const buildIndex = (l2, state) => {
+  state.formIndex[l2] = {}
+  state.idIndex[l2] = {}
+  for (let savedWord of state.savedWords[l2]) {
+    for (let form of savedWord.forms) {
+      state.formIndex[l2][form] = [savedWord].concat(state.formIndex[l2][form] || [])
+    }
+    state.idIndex[l2][savedWord.id] = savedWord
+  }
+}
+
 export const mutations = {
   LOAD_SAVED_WORDS(state) {
     if (typeof localStorage !== 'undefined') {
       let savedWords = JSON.parse(localStorage.getItem('zthSavedWords') || '{}')
       state.savedWords = savedWords || state.savedWords
+      for (let l2 in state.savedWords) {
+        buildIndex(l2, state)
+      }
       state.savedWordsLoaded = true
     }
   },
@@ -41,6 +58,7 @@ export const mutations = {
           forms: options.wordForms,
           date: Date.now()
         })
+        buildIndex(options.l2, state)
         localStorage.setItem('zthSavedWords', JSON.stringify(savedWords))
         this._vm.$set(state, 'savedWords', savedWords)
       }
@@ -62,6 +80,7 @@ export const mutations = {
           })
         }
       }
+      buildIndex(options.l2, state)
       localStorage.setItem('zthSavedWords', JSON.stringify(state.savedWords))
     }
   },
@@ -72,6 +91,7 @@ export const mutations = {
       )
       let savedWords = Object.assign({}, state.savedWords)
       savedWords[options.l2] = keepers
+      buildIndex(options.l2, state)
       localStorage.setItem('zthSavedWords', JSON.stringify(savedWords))
       this._vm.$set(state, 'savedWords', savedWords)
     }
@@ -86,6 +106,7 @@ export const mutations = {
       } else {
         savedWords = {}
       }
+      buildIndex(options.l2, state)
       localStorage.setItem('zthSavedWords', JSON.stringify(savedWords))
       this._vm.$set(state, 'savedWords', savedWords)
     }
