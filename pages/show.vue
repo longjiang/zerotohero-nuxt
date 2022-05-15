@@ -13,7 +13,7 @@
       v-if="featuredVideo"
       :video="featuredVideo"
       :showEpisodes="false"
-      :title="show.title"
+      :title="['Music', 'News', 'Movies'].includes(show.title) ? featuredVideo.title : show.title"
       @videoUnavailable="onVideoUnavailable"
     />
     <div
@@ -382,12 +382,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@media (max-width: 576px) {
-  .youtube-video-list-wrapper {
-    max-width: 423px;
-    margin: 0 auto;
-  }
-}
 ::v-deep .synced-transcript {
   height: 5rem;
   overflow: hidden;

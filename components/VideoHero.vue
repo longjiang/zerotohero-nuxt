@@ -97,14 +97,14 @@ export default {
   padding-bottom: 10%;
   background: black;
   .top-overlay {
-    background: linear-gradient(black 10%, rgba(0, 0, 0, 0) 100%);
+    background: linear-gradient(black 0%, rgba(0, 0, 0, 0) 100%);
     height: 25%;
     width: 100%;
     position: absolute;
     z-index: 2;
   }
   .bottom-overlay {
-    background: linear-gradient(rgba(0, 0, 0, 0) 0%, black 90%);
+    background: linear-gradient(rgba(0, 0, 0, 0) 0%, black 100%);
     height: 75%;
     width: 100%;
     position: absolute;
