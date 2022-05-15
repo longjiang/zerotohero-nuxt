@@ -19,7 +19,7 @@
       }"
     >
       <template v-if="variant === 'menu-bar' || variant === 'side-bar'">
-        <nav :class="{ 'main-nav': true, tabs: variant === 'menu-bar' }">
+        <nav :class="{ 'main-nav': true }">
           <div
             class="zth-header"
             v-if="showLogo"
@@ -35,7 +35,7 @@
           </div>
           <div
             v-if="showMainNav"
-            :class="{ 'main-nav-items': true, tabs: variant === 'menu-bar' }"
+            :class="{ 'main-nav-items': true }"
           >
             <NavItem
               v-for="(item, index) in menu.filter(
@@ -1064,9 +1064,10 @@ export default {
   background: black;
   bottom: 0;
   z-index: 1;
-  padding: 0.5rem;
+  padding: 0.5rem 0.5rem 0 0.5rem;
   border-top: 1px solid #666;
   width: 100%;
+  white-space: nowrap;
 }
 
 .nav-side-bar {

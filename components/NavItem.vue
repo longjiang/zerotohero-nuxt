@@ -5,22 +5,19 @@
       'secondary-nav-item': mode !== 'large-icon' && level === 2,
       'nav-item-pill': mode === 'pill',
       'nav-item-small-icon': mode === 'small-icon',
-      'feature-card feature-card-dark link-unstyled': mode === 'large-icon',
+      'nav-item-large-icon nav-item-large-icon-dark link-unstyled': mode === 'large-icon',
       tab: mode === 'pill',
       'router-link-active': active,
     }"
     :to="to"
     :title="item.title"
   >
-    <div v-if="mode === 'large-icon'" class="feature-card-icon">
+    <div v-if="['large-icon', 'small-icon'].includes(mode)" class="icon-wrapper">
       <i
-        :class="`${item.icon} bg-gradient-${item.title.length
-          .toString()
-          .split('')
-          .pop()} gradient-text`"
+        :class="`nav-item-icon ${item.icon} ${mode === 'large-icon' ? gradientClasses : ''}`"
       ></i>
     </div>
-    <i v-else :class="`${item.icon}`"></i>
+    <i v-else :class="`nav-item-icon ${item.icon}`"></i>
     <span class="nav-item-title">
       {{ $t(item.title, { l2: $t($l2.name) }) }}
       <span class="saved-words-count" v-cloak v-if="badge">
@@ -66,6 +63,12 @@ export default {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
     },
+    gradientClasses() {
+      return `bg-gradient-${this.item.title.length
+          .toString()
+          .split('')
+          .pop()} gradient-text`
+    }
   },
 };
 </script>
@@ -133,6 +136,15 @@ export default {
   }
 }
 
+.nav-item-small-icon {
+  .nav-item-title {
+    font-size: 0.7rem;
+  }
+  .nav-item-icon {
+    font-size: 1.2rem;
+  }
+}
+
 .nav-side-bar {
   .main-nav {
     .main-nav-item {
@@ -140,7 +152,7 @@ export default {
       border-right: 0;
       padding-left: 0.5rem;
       margin: 0.3rem 0;
-
+      display: block;
       i {
         width: 2rem;
         text-align: center;
@@ -151,7 +163,7 @@ export default {
     .secondary-nav-item {
       padding: 0.5rem;
       margin: 0.5rem;
-
+      display: block;
       i {
         width: 1.5rem;
         text-align: center;
@@ -214,7 +226,7 @@ export default {
   }
 }
 
-.feature-card {
+.nav-item-large-icon {
   padding: 0.75rem;
   font-size: 1.2em;
   border-radius: 0.5rem;
@@ -229,7 +241,7 @@ export default {
     background-color: hsla(0deg, 100%, 100%, 0.8);
   }
 
-  &.feature-card-light {
+  &.nav-item-large-icon-light {
     background-color: hsla(0deg, 100%, 100%, 0.7);
     border: 1px solid rgba(255, 255, 255, 0.9);
     color: #333;
@@ -239,7 +251,7 @@ export default {
     }
   }
 
-  &.feature-card-dark {
+  &.nav-item-large-icon-dark {
     background: rgb(69, 69, 69);
     background: radial-gradient(
       circle,
@@ -256,7 +268,7 @@ export default {
     }
   }
 
-  .feature-card-icon {
+  .icon-wrapper {
     font-size: 2rem;
     opacity: 1;
     display: block;
