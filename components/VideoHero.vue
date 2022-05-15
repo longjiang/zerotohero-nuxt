@@ -6,6 +6,7 @@
       <LazyYouTubeVideo
         autoload="true"
         autoplay="true"
+        :cc="false"
         :youtube="video.youtube_id"
       />
     </div>

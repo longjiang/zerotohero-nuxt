@@ -48,6 +48,10 @@ export default {
     startAtRandomTime: {
       default: false,
     },
+    cc: {
+      type: Boolean,
+      default: true
+    }
   },
   data() {
     return {
@@ -137,7 +141,7 @@ export default {
           playerVars: {
             start: parseInt(this.starttime),
             autoplay: this.autoplay ? 1 : 0,
-            cc_load_policy: 1,
+            cc_load_policy: this.cc ? 1 : 0,
             cc_lang_pref: this.langPref,
             showinfo: 0,
             playsinline: 1,
