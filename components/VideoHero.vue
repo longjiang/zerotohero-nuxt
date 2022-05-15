@@ -1,12 +1,14 @@
 <template>
-  <div class="video-hero">
-    <div class="top-overlay"></div>
-    <div class="bottom-overlay"></div>
-    <LazyYouTubeVideo
-      autoload="true"
-      autoplay="true"
-      :youtube="video.youtube_id"
-    />
+  <div style="position: relative">
+    <div class="video-hero">
+      <div class="top-overlay"></div>
+      <div class="bottom-overlay"></div>
+      <LazyYouTubeVideo
+        autoload="true"
+        autoplay="true"
+        :youtube="video.youtube_id"
+      />
+    </div>
     <div class="hero-video-info-wrapper">
       <div class="container">
         <div class="row">
@@ -64,6 +66,7 @@ export default {
   overflow: hidden;
   position: relative;
   max-height: 50vh;
+  padding-bottom: 10%;
   .top-overlay {
     background: linear-gradient(black 0%, rgba(0, 0, 0, 0) 100%);
     height: 20%;
@@ -79,25 +82,32 @@ export default {
     bottom: 0;
     z-index: 2;
   }
-  .hero-video-info-wrapper {
-    z-index: 3;
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    padding: 3rem 0;
-    .hero-video-info {
-      max-width: 35rem;
-      color: white;
-      .hero-video-title {
-        line-height: 1.667;
-        text-shadow: 0 0 20px black;
-        margin-bottom: 2rem;
-        font-size: 1.3rem;
-      }
-      .btn {
-        width: 10rem;
-      }
+}
+
+.hero-video-info-wrapper {
+  z-index: 5;
+  bottom: 0;
+  width: 100%;
+  position: absolute;
+  bottom: -10%;
+  .hero-video-info {
+    max-width: 35rem;
+    color: white;
+    .hero-video-title {
+      line-height: 1.667;
+      text-shadow: 0 0 20px black;
+      margin-bottom: 2rem;
+      font-size: 1.67rem;
     }
+    .btn {
+      width: 8rem;
+    }
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .hero-video-title {
+    font-size: 1.2rem !important;
   }
 }
 </style>

@@ -1,75 +1,60 @@
 <template>
-  <div class="main-dark shows">
-    <div class="container">
-      <SocialHead
-        v-if="shows && shows[0]"
-        :title="`Learn ${$l2.name} with ${routeTitles[routeType]} | ${$l2.name} Zero to Hero`"
-        :description="`Learn ${$l2.name} with ${routeTitles[routeType]}.`"
-        :image="
-          routeType === 'tv-shows' && $l2.code === 'zh'
-            ? '/img/tv-shows.jpg'
-            : `https://img.youtube.com/vi/${shows[0].youtube_id}/hqdefault.jpg`
-        "
-      />
-      <div class="row">
-        <div class="col-sm-12">
-          <!-- <Sale class="mt-5 mb-5" v-if="$l2.code === 'zh'" /> -->
-          <h3 class="text-center mt-5">
-            {{ $l2.name }} 
-            {{ routeTitles[routeType] }}
-          </h3>
-          <p class="text-center mb-3" v-if="shows && shows.length">
-            ({{ filteredShows && filteredShows.length }} show{{
-              filteredShows.length > 1 ? "s" : ""
-            }})
-          </p>
-          <div class="text-center mb-5" v-if="!showDiscover">
-            <b-button @click="showDiscover = true" size="sm" variant="success">
-              <i class="fas fa-random mr-1"></i>
-              Surprise Me
-            </b-button>
-          </div>
-          <LazyDiscoverPlayer
-            :routeType="routeType"
-            :shows="shows"
-            v-if="showDiscover"
-          />
-          <div class="show-list-wrapper">
-            <b-input-group class="mb-5 input-group-ghost-dark">
-              <b-form-input
-                v-model="keyword"
-                @compositionend.prevent.stop="() => false"
-                placeholder="Filter by show title..."
-                class="input-ghost-dark"
-              />
-              <b-input-group-append>
-                <b-button variant="ghost-dark">
-                  <i class="fas fa-filter"></i>
-                </b-button>
-              </b-input-group-append>
-            </b-input-group>
-            <div class="mb-5">
-              <div
-                :class="{
-                  'loader text-center': true,
-                  'd-none': shows,
-                }"
-                style="flex: 1"
-              >
-                <Loader :sticky="true" message="Getting shows..." />
+  <div class="main-dark">
+    <VideoHero v-if="featureEpisode" :video="featureEpisode" />
+    <div class="shows pt-5">
+      <div class="container">
+        <SocialHead
+          v-if="shows && shows[0]"
+          :title="`Learn ${$l2.name} with ${routeTitles[routeType]} | ${$l2.name} Zero to Hero`"
+          :description="`Learn ${$l2.name} with ${routeTitles[routeType]}.`"
+          :image="
+            routeType === 'tv-shows' && $l2.code === 'zh'
+              ? '/img/tv-shows.jpg'
+              : `https://img.youtube.com/vi/${shows[0].youtube_id}/hqdefault.jpg`
+          "
+        />
+        <div class="row">
+          <div class="col-sm-12">
+            <!-- <Sale class="mt-5 mb-5" v-if="$l2.code === 'zh'" /> -->
+            <div class="show-list-wrapper">
+              <b-input-group class="mt-5 mb-5 input-group-ghost-dark">
+                <b-form-input
+                  v-model="keyword"
+                  @compositionend.prevent.stop="() => false"
+                  :placeholder="`Filter ${filteredShows ? filteredShows.length : ''} ${
+                    $l2.name
+                  } ${routeTitles[routeType]}`"
+                  class="input-ghost-dark"
+                />
+                <b-input-group-append>
+                  <b-button variant="ghost-dark">
+                    <i class="fas fa-filter"></i>
+                  </b-button>
+                </b-input-group-append>
+              </b-input-group>
+              <div class="mb-5">
+                <div
+                  :class="{
+                    'loader text-center': true,
+                    'd-none': shows,
+                  }"
+                  style="flex: 1"
+                >
+                  <Loader :sticky="true" message="Getting shows..." />
+                </div>
+                <div class="text-center" v-if="shows && shows.length === 0">
+                  Sorry, we could not find any
+                  {{ routeTitles[routeType] }}
+                  in {{ $l2.name }}.
+                </div>
+                <ShowList
+                  v-if="shows && shows.length > 0"
+                  :shows="filteredShows"
+                  :type="type"
+                  :key="`shows-filtered-${this.keyword}`"
+                />
+                <LazyIdenticalLanguages class="mt-3" :routeName="routeType" />
               </div>
-              <div class="text-center" v-if="shows && shows.length === 0">
-                Sorry, we could not find any
-                {{ routeTitles[routeType] }}
-                in {{ $l2.name }}.
-              </div>
-              <ShowList
-                v-if="shows && shows.length > 0"
-                :shows="filteredShows"
-                :type="type"
-                :key="`shows-filtered-${this.keyword}`"
-              />
-              <LazyIdenticalLanguages class="mt-3" :routeName="routeType" />
             </div>
           </div>
         </div>
@@ -85,7 +70,7 @@ import { tify } from "chinese-conv";
 
 export default {
   props: {
-    routeType: String,
+    routeType: String, // "tv-shows" or "talks"
   },
   data() {
     return {
@@ -97,6 +82,8 @@ export default {
       shows: undefined,
       keyword: "",
       showDiscover: false,
+      featureShow: undefined,
+      featureEpisode: undefined,
       routeTitles: {
         "tv-shows": "TV Shows",
         talks: "YouTube Channels",
@@ -107,7 +94,7 @@ export default {
   async fetch() {
     let shows = this.$store.state.shows[this.type][this.$l2.code];
     if (shows) {
-      this.shows = shows;
+      this.loadShows();
     }
   },
   async mounted() {
@@ -174,12 +161,46 @@ export default {
         ) || [];
       return shows;
     },
-    loadShows() {
+    async loadShows() {
       let shows = this.$store.state.shows[this.type][this.$l2.code]
         ? this.$store.state.shows[this.type][this.$l2.code]
         : undefined;
       if (shows) {
         this.shows = this.sortShows(shows);
+        this.featureShow = this.getRandomShow();
+        this.featureEpisode = await this.getFirstEpisodeOfShow(
+          this.featureShow.id,
+          this.routeType === "tv-shows" ? "tv_show" : "talk",
+          this.$l2.id
+        );
+      }
+    },
+    async getFirstEpisodeOfShow(showId, showType, l2Id) {
+      let url = `${Config.youtubeVideosTableName(
+        l2Id
+      )}?filter[${showType}][eq]=${showId}&fields=youtube_id,id,l2,tv_show,talk,title`;
+      let response = await axios.get(url);
+
+      if (response.data && response.data.data.length > 0) {
+        let videos = response.data.data;
+        let firstEpisode = videos[0];
+        return firstEpisode;
+      }
+    },
+    getRandomShow() {
+      if (this.shows) {
+        let shows = this.shows.filter((s) => {
+          if (
+            this.routeType === "tv-shows" &&
+            ["Music", "Movies"].includes(s.title)
+          )
+            return false;
+          if (this.routeType === "talks" && ["News"].includes(s.title))
+            return false;
+          return true;
+        });
+        let randomShow = shows[Math.floor(Math.random() * shows.length)];
+        return randomShow;
       }
     },
   },
@@ -187,19 +208,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.zerotohero-wide {
-  .shows {
-    padding-left: 2rem;
-    padding-right: 2rem;
-  }
-}
-@media (max-width: 576px) {
-  .show-list-wrapper {
-    max-width: 423px;
-    margin: 0 auto;
-  }
-}
-
 ::v-deep .synced-transcript {
   height: 5rem;
   overflow: hidden;

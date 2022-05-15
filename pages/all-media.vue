@@ -8,9 +8,9 @@
   }
 </router>
 <template>
-  <div class="main-dark pb-5">
-    <VideoHero v-if="randomVideos[0]" :video="random(randomVideos)[0]" />
-    <div class="container">
+  <div class="main-dark">
+    <VideoHero v-if="heroVideo" :video="heroVideo" />
+    <div class="container pt-5 pb-5">
       <SocialHead :title="`Learn ${$l2.name} with Videos | ${$l2.name} Zero to Hero`"
         :description="`Learn ${$l2.name} with Videos`" :image="'/img/tv-shows.jpg'" />
       <div class="row">
@@ -111,6 +111,7 @@ export default {
       movies: [],
       news: [],
       loading: true,
+      heroVideo: undefined
     };
   },
   async fetch() {
@@ -124,6 +125,7 @@ export default {
     });
     if (!this.videos || this.videos.length === 0) this.videos = await this.getVideos({ limit: 50, sort: 'youtube_id' })
     this.randomVideos = this.videos.slice(0, 12)
+    this.heroVideo = this.random(this.randomVideos)[0]
   },
   beforeDestroy() {
     // you may call unsubscribe to stop the subscription

@@ -9,8 +9,8 @@
 </router>
 <template>
   <div>
-    <VideoHero v-if="videos && videos[0]" :video="videos[0]" />
-    <div class="youtube-browse main-dark pb-5" style="min-height: 100vh">
+    <VideoHero v-if="videos && videos[0]" :video="random(videos)[0]" />
+    <div class="youtube-browse main-dark pt-5 pb-5" style="min-height: 100vh">
       <div class="container">
         <SocialHead
           v-if="show"
@@ -255,6 +255,10 @@ export default {
     }
   },
   methods: {
+    random(array, max) {
+      let shuffled = Helper.shuffle(array)
+      return shuffled.slice(0, max)
+    },
     async saveTitle(e) {
       let newTitle = e.target.innerText;
       if (this.show.title !== newTitle) {
