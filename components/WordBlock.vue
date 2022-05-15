@@ -75,7 +75,7 @@
       </template>
     </span>
     <template slot="popover">
-      <div @mouseenter="tooltipMouseEnter" @mouseleave="tooltipMouseLeave">
+      <div @mouseenter="tooltipMouseEnter" @mouseleave="tooltipMouseLeave" v-if="open">
         <div
           class="tooltip-images"
           :key="`tooltip-images-${text}`"
@@ -383,6 +383,7 @@ export default {
       farsiRomanizations: {},
       lastLookupWasQuick: false,
       loadingImages: false,
+      t: 0
     };
   },
   computed: {
@@ -536,6 +537,9 @@ export default {
     },
   },
   methods: {
+    test(arg) {
+      console.log(`Evaluated`, arg)
+    },
     async visibilityChanged(isVisible) {
       await Helper.timeout(123);
       if (isVisible && (!this.words || this.words.length === 0)) {
