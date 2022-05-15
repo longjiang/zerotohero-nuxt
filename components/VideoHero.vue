@@ -8,6 +8,7 @@
         autoplay="true"
         :cc="false"
         :youtube="video.youtube_id"
+        @videoUnavailable="onVideoUnavailable"
       />
     </div>
     <div class="hero-video-info-wrapper">
@@ -59,6 +60,11 @@ export default {
       required: true,
     },
   },
+  methods: {
+    onVideoUnavailable() {
+      this.$emit('videoUnavailable', true)
+    }
+  }
 };
 </script>
 

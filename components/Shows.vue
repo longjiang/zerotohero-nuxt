@@ -1,7 +1,11 @@
 <template>
   <div class="main-dark">
-    <VideoHero v-if="featureEpisode" :video="featureEpisode" />
-    <div class="shows" style="padding-top: 3rem;">
+    <VideoHero
+      v-if="featureEpisode"
+      :video="featureEpisode"
+      @videoUnavailable="onVideoUnavailable"
+    />
+    <div class="shows" style="padding-top: 3rem">
       <div class="container">
         <SocialHead
           v-if="shows && shows[0]"
@@ -21,9 +25,9 @@
                 <b-form-input
                   v-model="keyword"
                   @compositionend.prevent.stop="() => false"
-                  :placeholder="`Filter ${filteredShows ? filteredShows.length : ''} ${
-                    $l2.name
-                  } ${routeTitles[routeType]}`"
+                  :placeholder="`Filter ${
+                    filteredShows ? filteredShows.length : ''
+                  } ${$l2.name} ${routeTitles[routeType]}`"
                   class="input-ghost-dark"
                 />
                 <b-input-group-append>
@@ -144,6 +148,9 @@ export default {
     },
   },
   methods: {
+    onVideoUnavailable() {
+      this.loadFeatureShowAndEpisode()
+    },
     async getShowsOverNetwork() {
       let langId = this.$l2.id;
       let type = this.routeType.replace("-", "_");
@@ -167,18 +174,21 @@ export default {
         : undefined;
       if (shows) {
         this.shows = this.sortShows(shows);
-        this.featureShow = this.getRandomShow();
-        this.featureEpisode = await this.getFirstEpisodeOfShow(
-          this.featureShow.id,
-          this.routeType === "tv-shows" ? "tv_show" : "talk",
-          this.$l2.id
-        );
+        this.loadFeatureShowAndEpisode();
       }
+    },
+    async loadFeatureShowAndEpisode() {
+      this.featureShow = this.getRandomShow();
+      this.featureEpisode = await this.getFirstEpisodeOfShow(
+        this.featureShow.id,
+        this.routeType === "tv-shows" ? "tv_show" : "talk",
+        this.$l2.id
+      );
     },
     async getFirstEpisodeOfShow(showId, showType, l2Id) {
       let url = `${Config.youtubeVideosTableName(
         l2Id
-      )}?filter[${showType}][eq]=${showId}&fields=youtube_id,id,l2,tv_show,talk,title`;
+      )}?filter[${showType}][eq]=${showId}&limit=1&fields=youtube_id,id,l2,tv_show,talk,title`;
       let response = await axios.get(url);
 
       if (response.data && response.data.data.length > 0) {

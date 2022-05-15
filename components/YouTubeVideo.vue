@@ -153,7 +153,7 @@ export default {
             id,
           },
           events: {
-            onStateChange: () => {
+            onStateChange: (event) => {
               const UNSTARTED = -1;
               const ENDED = 0;
               const PLAYING = 1;
@@ -192,6 +192,9 @@ export default {
               }
             },
             onReady: (event) => {
+              if (this.player && this.player.getPlayerState && this.player.getPlayerState() === -1) {
+                this.$emit('videoUnavailable', true)
+              }
             },
           },
         });

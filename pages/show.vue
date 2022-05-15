@@ -24,7 +24,7 @@
           <div class="col-sm-12 mb-3 text-center">
             <!-- <Sale class="mb-4" v-if="$l2.code === 'zh'" /> -->
             <h3 v-if="show">
-              <span v-if="adminMode" contenteditable="true" @blur="saveTitle">
+              <span v-if="$adminMode" contenteditable="true" @blur="saveTitle">
                 {{ show.title }}
               </span>
               <i
