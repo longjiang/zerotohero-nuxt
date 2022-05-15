@@ -399,6 +399,13 @@ export default {
               show: true,
             },
             {
+              name: "discover-shows",
+              title: "Discover Shows",
+              icon: "fas fa-lightbulb",
+              show: true,
+              params: {l1: this.l1.code, l2: this.l2.code}
+            },
+            {
               name: "youtube-view",
               show: false,
             },

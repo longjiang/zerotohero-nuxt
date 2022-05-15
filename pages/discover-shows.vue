@@ -1,21 +1,32 @@
 <router>
   {
-    path: '/discover-shows/:type?',
+    path: '/discover-shows/:l1?/:l2?/:type?',
     props: true,
     meta: {
-      layout: 'full'
+      skin: 'dark'
     }
   }
 </router>
 <template>
-  <div>
-    <SocialHead title="Discover TV Shows Across Languages | PanLingo"
-      description="Watch TV shows across languages at random and be surprised!" />
-    <SiteTopBar />
-    <div class="container-fluid">
+  <div class="loader-bg">
+    <SocialHead
+      title="Discover TV Shows Across Languages | PanLingo"
+      description="Watch TV shows across languages at random and be surprised!"
+    />
+    <SiteTopBar v-if="!l1 && !l2" />
+    <div class="container">
       <div class="row">
-        <div class="col-12 loader-wrapper" style="height: calc(100vh - 2.925rem); padding: 0">
-          <LazyDiscoverPlayer v-if="randomShows" routeType="tv-shows" :shows="randomShows" style="flex: 1" />
+        <div
+          class="col-12 loader-wrapper"
+          style="height: calc(100vh - 2.925rem); padding: 0"
+        >
+          <LazyDiscoverPlayer
+            routeType="tv-shows"
+            :shows="[]"
+            style="flex: 1"
+            :l1="$l1"
+            :l2="$l2"
+          />
         </div>
       </div>
     </div>
@@ -29,6 +40,12 @@ export default {
   props: {
     type: {
       default: "tv-shows", // or 'talks'
+    },
+    l1: {
+      type: String,
+    },
+    l2: {
+      type: String,
     },
   },
   data() {
@@ -46,13 +63,12 @@ export default {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
     },
-  },
-  async mounted() {
-    let lastShowId = await this.getLastShowId();
-    this.lastShowId = lastShowId;
-    let randomIds = this.generateRandomIds(lastShowId, 100);
-    let randomShows = await this.loadRandomShowsMatchingIds(randomIds, this.adminMode);
-    this.randomShows = randomShows
+    $l1() {
+      if (this.l1 && this.$languages) return this.$languages.getSmart(this.l1);
+    },
+    $l2() {
+      if (this.l2 && this.$languages) return this.$languages.getSmart(this.l2);
+    },
   },
   methods: {
     async getLastShowId() {
@@ -61,7 +77,7 @@ export default {
         `${Config.wiki}items/${key}?filter[title][nin]=Movies,Music,News&sort=-id&limit=1`
       );
       if (res && res.data && res.data.data && res.data.data[0]) {
-        return res.data.data[0].id
+        return res.data.data[0].id;
       }
     },
     generateRandomIds(max, count = 500) {
@@ -73,14 +89,16 @@ export default {
     },
     async loadRandomShowsMatchingIds(ids, adminMode) {
       let response = await axios.get(
-        `${Config.wiki}items/tv_shows?filter${adminMode ? "" : "&filter[hidden][empty]=true"
+        `${Config.wiki}items/tv_shows?filter${
+          adminMode ? "" : "&filter[hidden][empty]=true"
         }&filter[id][in]=${ids.join(
           ","
-        )}&filter[title][nin]=Movies,Music,News&timestamp=${adminMode ? Date.now() : 0
+        )}&filter[title][nin]=Movies,Music,News&timestamp=${
+          adminMode ? Date.now() : 0
         }`
       );
       if (response && response.data) {
-        return response.data.data
+        return response.data.data;
       }
     },
   },
@@ -89,14 +107,17 @@ export default {
 
 <style lang="scss" scoped>
 .loader-wrapper {
-  background: rgba(0, 0, 0, 0.66);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
   color: white;
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.loader-bg {
+  background: rgba(0, 0, 0, 0.66);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
 }
 </style>

@@ -24,6 +24,7 @@
         :class="{ disabled: history.length <= 1, 'mr-2': true }">
         <i class="fas fa-step-backward mr-1"></i>
       </b-button>
+      
       <router-link :to="{
         name: 'youtube-view',
         params: {
@@ -166,9 +167,10 @@ export default {
       }
     },
     async getRandomEpisodeOfShow(showId, showType, l2Id) {
+      let langFilter = l2Id ? `&filter[l2][eq]=${l2Id}` : ''
       let showFilter = showId
         ? `filter[${showType}][eq]=${showId}`
-        : `filter[tv_show][null]=1&filter[talk][null]=1&filter[l2][eq]=${l2Id}`;
+        : `filter[tv_show][null]=1&filter[talk][null]=1${langFilter}`;
       let url = `${Config.youtubeVideosTableName(l2Id)}?${showFilter}&fields=youtube_id,id,l2`;
       let response = await axios.get(url);
 
