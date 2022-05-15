@@ -1,17 +1,17 @@
 <template>
   <NuxtLink
     :class="{
-      'main-nav-item': variant !== 'page' && level === 1,
-      'secondary-nav-item': variant !== 'page' && level === 2,
-      tab: variant === 'menu-bar',
+      'main-nav-item': variant !== 'large-icon' && level === 1,
+      'secondary-nav-item': variant !== 'large-icon' && level === 2,
+      tab: variant === 'pill',
       'd-block': variant === 'side-bar',
       'router-link-active': active,
-      'feature-card feature-card-dark link-unstyled': variant === 'page',
+      'feature-card feature-card-dark link-unstyled': variant === 'large-icon',
     }"
     :to="to"
     :title="item.title"
   >
-    <div v-if="variant === 'page'" class="feature-card-icon">
+    <div v-if="variant === 'large-icon'" class="feature-card-icon">
       <i
         :class="`${item.icon} bg-gradient-${item.title.length
           .toString()
@@ -33,7 +33,7 @@
 export default {
   props: {
     variant: {
-      default: "menu-bar",
+      default: "pill", // or "large-icon"
     },
     parent: {
       type: Object,

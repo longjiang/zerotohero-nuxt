@@ -29,6 +29,7 @@
         :fullHistory="fullHistory"
         @collapsed="updateCollapsed"
         :showMainNav="wide"
+        mode="pills"
       />
 
       <Nav
@@ -44,6 +45,7 @@
         :showLogo="false"
         :showMainNav="true"
         :showSecondaryNav="false"
+        mode="icons"
       />
       <div class="zth-content">
         <Nuxt id="main" />

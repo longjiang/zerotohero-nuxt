@@ -44,7 +44,7 @@
               :to="to(item)"
               :item="item"
               :level="1"
-              :variant="variant"
+              :variant="mode"
               :key="`nav-${index}`"
               :active="currentParent && currentParent.name === nameOfSelfOrFirstChild(item)"
               :badge="item.icon === 'fas fa-star' ? savedWordsCount + savedPhrasesCount : undefined"
@@ -76,7 +76,7 @@
               (child) => child.show && !child.href
             )"
             :key="`subnav-item-${child.name || child.href}-${index}`"
-            :variant="variant"
+            :variant="mode"
             :to="last(child) || child"
             :item="child"
             :level="2"
@@ -112,7 +112,7 @@ feature-card-name-${child.name}`"
                   <NavItem
                     :to="last(child) || child"
                     :item="child"
-                    variant="page"
+                    variant="large-icon"
                     :badge="child.name === 'saved-words' && savedWordsCount > 0 ? savedWordsCount : child.name === 'saved-phrases' && savedPhrasesCount > 0 ? savedPhrasesCount : undefined"
                   >
                   </NavItem>
@@ -141,11 +141,19 @@ export default {
     skin: {
       default: "light", // or 'dark'
     },
+    mode: {
+      type: String,
+      default: "pills", // or 'icons'
+    },
     fullHistory: {
       type: Array,
     },
     showOnly: {
       type: Array,
+    },
+    showLogo: {
+      type: Boolean,
+      default: true
     },
     showHeader: {
       type: Boolean,
@@ -158,7 +166,7 @@ export default {
     showSecondaryNav: {
       type: Boolean,
       default: true
-    }
+    },
   },
   data() {
     return {
