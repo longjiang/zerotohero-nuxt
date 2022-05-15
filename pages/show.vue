@@ -22,9 +22,7 @@
         <div class="col-sm-12 mb-3 text-center">
           <!-- <Sale class="mb-4" v-if="$l2.code === 'zh'" /> -->
           <h3 v-if="show">
-            <Annotate :phonetics="false" :buttons="true" v-if="!$adminMode">
-              <span>{{ show.title }}</span>
-            </Annotate>
+            <span v-if="!$adminMode">{{ show.title }}</span>
             <span v-else contenteditable="true" @blur="saveTitle">
               {{ show.title }}
             </span>
@@ -46,7 +44,7 @@
               ></i>
             </span>
           </p>
-          <div class="text-center mt-4 mb-3" v-if="!showDiscover">
+          <div class="text-center mt-4 mb-3" v-if="show && !showDiscover">
             <b-button @click="showDiscover = true" size="sm" variant="success">
               <i class="fas fa-random mr-2"></i>
               Surprise Me
@@ -158,7 +156,7 @@ import { tify, sify } from "chinese-conv";
 export default {
   props: {
     id: String,
-    type: String,
+    type: String, // "tv-show" or "talk"
   },
   computed: {
     $l1() {
@@ -166,7 +164,7 @@ export default {
     },
     $l2() {
       return this.$store.state.settings.l2;
-    }
+    },
   },
   data() {
     return {
