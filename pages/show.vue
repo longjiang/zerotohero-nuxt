@@ -8,139 +8,130 @@
   }
 </router>
 <template>
-  <div class="main main-dark">
-    <div class="youtube-browse container pt-5 pb-5">
-      <SocialHead
-        v-if="show"
-        :title="title"
-        :description="`Watch the full episode and study the ${
-          $l2.code === 'zh' ? 'Pinyin' : $l2.name
-        } subtitles.`"
-        :image="`https://img.youtube.com/vi/${show.youtube_id}/hqdefault.jpg`"
-      />
-      <div class="row">
-        <div class="col-sm-12 mb-3 text-center">
-          <!-- <Sale class="mb-4" v-if="$l2.code === 'zh'" /> -->
-          <h3 v-if="show">
-            <span v-if="!$adminMode">{{ show.title }}</span>
-            <span v-else contenteditable="true" @blur="saveTitle">
-              {{ show.title }}
-            </span>
-            <i
-              class="fas fa-check-circle text-success ml-2"
-              v-if="titleUpdated"
-            ></i>
-          </h3>
-          <p style="opacity: 0.6">
-            <span v-if="count">{{ count }} Episodes</span>
-            <span v-if="$adminMode && show">
-              Cover youtube_id:
-              <span contenteditable="true" @blur="saveCover">
-                {{ show.youtube_id }}
+  <div>
+    <VideoHero v-if="videos && videos[0]" :video="videos[0]" />
+    <div class="youtube-browse main-dark pb-5" style="min-height: 100vh">
+      <div class="container">
+        <SocialHead
+          v-if="show"
+          :title="title"
+          :description="`Watch the full episode and study the ${
+            $l2.code === 'zh' ? 'Pinyin' : $l2.name
+          } subtitles.`"
+          :image="`https://img.youtube.com/vi/${show.youtube_id}/hqdefault.jpg`"
+        />
+        <div class="row">
+          <div class="col-sm-12 mb-3 text-center">
+            <!-- <Sale class="mb-4" v-if="$l2.code === 'zh'" /> -->
+            <h3 v-if="show">
+              <span v-if="adminMode" contenteditable="true" @blur="saveTitle">
+                {{ show.title }}
               </span>
               <i
                 class="fas fa-check-circle text-success ml-2"
-                v-if="coverUpdated"
+                v-if="titleUpdated"
               ></i>
-            </span>
-          </p>
-          <div class="text-center mt-4 mb-3" v-if="show && !showDiscover">
-            <b-button @click="showDiscover = true" size="sm" variant="success">
-              <i class="fas fa-random mr-2"></i>
-              Surprise Me
-            </b-button>
+            </h3>
+            <p style="opacity: 0.6">
+              <span v-if="count">{{ count }} Episodes</span>
+              <span v-if="$adminMode && show">
+                Cover youtube_id:
+                <span contenteditable="true" @blur="saveCover">
+                  {{ show.youtube_id }}
+                </span>
+                <i
+                  class="fas fa-check-circle text-success ml-2"
+                  v-if="coverUpdated"
+                ></i>
+              </span>
+            </p>
           </div>
-          <LazyDiscoverPlayer
-            v-if="showDiscover"
-            :routeType="type"
-            :shows="[show]"
-          />
-        </div>
 
-        <div class="col-sm-12 mb-5">
-          <div class="youtube-video-list-wrapper">
-            <div class="row mb-5">
-              <div class="col-sm-12 col-md-8 mb-2">
-                <div class="d-flex">
-                  <b-input-group class="flex-1 input-group-ghost-dark">
-                    <b-form-input
-                      v-model="keyword"
-                      :lazy="true"
-                      @compositionend.prevent.stop="() => false"
-                      placeholder="Filter by video title..."
-                      class="input-ghost-dark"
-                    />
-                    <b-input-group-append>
-                      <b-button variant="ghost-dark">
-                        <i class="fas fa-filter"></i>
+          <div class="col-sm-12 mb-5">
+            <div class="youtube-video-list-wrapper">
+              <div class="row mb-5">
+                <div class="col-sm-12 col-md-8 mb-2">
+                  <div class="d-flex">
+                    <b-input-group class="flex-1 input-group-ghost-dark">
+                      <b-form-input
+                        v-model="keyword"
+                        :lazy="true"
+                        @compositionend.prevent.stop="() => false"
+                        placeholder="Filter by video title..."
+                        class="input-ghost-dark"
+                      />
+                      <b-input-group-append>
+                        <b-button variant="ghost-dark">
+                          <i class="fas fa-filter"></i>
+                        </b-button>
+                      </b-input-group-append>
+                    </b-input-group>
+                    <b-button-group>
+                      <b-button
+                        :variant="
+                          view === 'grid' ? 'ghost-dark' : 'ghost-dark-outline'
+                        "
+                        class="ml-2"
+                        @click="view = 'grid'"
+                      >
+                        <i class="fas fa-th"></i>
                       </b-button>
-                    </b-input-group-append>
-                  </b-input-group>
-                  <b-button-group>
-                    <b-button
-                      :variant="
-                        view === 'grid' ? 'ghost-dark' : 'ghost-dark-outline'
-                      "
-                      class="ml-2"
-                      @click="view = 'grid'"
-                    >
-                      <i class="fas fa-th"></i>
-                    </b-button>
-                    <b-button
-                      :variant="
-                        view === 'list' ? 'ghost-dark' : 'ghost-dark-outline'
-                      "
-                      @click="view = 'list'"
-                      style="border-left: none"
-                    >
-                      <i class="fas fa-list"></i>
-                    </b-button>
-                  </b-button-group>
+                      <b-button
+                        :variant="
+                          view === 'list' ? 'ghost-dark' : 'ghost-dark-outline'
+                        "
+                        @click="view = 'list'"
+                        style="border-left: none"
+                      >
+                        <i class="fas fa-list"></i>
+                      </b-button>
+                    </b-button-group>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-4 mb-2">
+                  <b-form-select
+                    v-model="sort"
+                    :options="sortOptions"
+                    class="select-ghost-dark"
+                  ></b-form-select>
                 </div>
               </div>
-              <div class="col-sm-12 col-md-4 mb-2">
-                <b-form-select
-                  v-model="sort"
-                  :options="sortOptions"
-                  class="select-ghost-dark"
-                ></b-form-select>
+              <div
+                :class="{
+                  'loader text-center mb-4': true,
+                  'd-none': videos,
+                }"
+                style="flex: 1"
+              >
+                <Loader :sticky="true" message="Loading videos..." />
               </div>
+              <div
+                :class="{
+                  'text-center': true,
+                  'd-none': !videos || videos.length > 0,
+                }"
+              >
+                No more videos.
+              </div>
+              <template v-if="videos && videos.length > 0">
+                <LazyYouTubeVideoList
+                  ref="youtubeVideoList"
+                  skin="dark"
+                  :videos="videos"
+                  :checkSubs="false"
+                  :checkSaved="false"
+                  :key="`videos-filtered-${this.keyword}`"
+                  :view="view"
+                  :showBadges="false"
+                  :showDate="showDate"
+                  :showProgress="true"
+                  :showPlayButton="true"
+                />
+                <div v-observe-visibility="visibilityChanged"></div>
+              </template>
             </div>
-            <div
-              :class="{
-                'loader text-center mb-4': true,
-                'd-none': videos,
-              }"
-              style="flex: 1"
-            >
-              <Loader :sticky="true" message="Loading videos..." />
-            </div>
-            <div
-              :class="{
-                'text-center': true,
-                'd-none': !videos || videos.length > 0,
-              }"
-            >
-              No more videos.
-            </div>
-            <template v-if="videos && videos.length > 0">
-              <LazyYouTubeVideoList
-                ref="youtubeVideoList"
-                skin="dark"
-                :videos="videos"
-                :checkSubs="false"
-                :checkSaved="false"
-                :key="`videos-filtered-${this.keyword}`"
-                :view="view"
-                :showBadges="false"
-                :showDate="showDate"
-                :showProgress="true"
-                :showPlayButton="true"
-              />
-              <div v-observe-visibility="visibilityChanged"></div>
-            </template>
+            <LazyIdenticalLanguages class="mt-3" routeName="home" />
           </div>
-          <LazyIdenticalLanguages class="mt-3" routeName="home" />
         </div>
       </div>
     </div>

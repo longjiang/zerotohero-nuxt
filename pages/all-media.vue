@@ -9,7 +9,7 @@
 </router>
 <template>
   <div class="main-dark pb-5">
-    <VideoHero v-if="randomVideos[0]" :video="randomVideos[0]" />
+    <VideoHero v-if="randomVideos[0]" :video="random(randomVideos)[0]" />
     <div class="container">
       <SocialHead :title="`Learn ${$l2.name} with Videos | ${$l2.name} Zero to Hero`"
         :description="`Learn ${$l2.name} with Videos`" :image="'/img/tv-shows.jpg'" />
