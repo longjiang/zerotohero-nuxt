@@ -83,9 +83,9 @@ export default {
   },
   watch: {
     video() {
-      this.videoUnavailable = false
-    }
-  }
+      this.videoUnavailable = false;
+    },
+  },
 };
 </script>
 
@@ -97,15 +97,15 @@ export default {
   padding-bottom: 10%;
   background: black;
   .top-overlay {
-    background: linear-gradient(black 0%, rgba(0, 0, 0, 0) 100%);
-    height: 20%;
+    background: linear-gradient(black 10%, rgba(0, 0, 0, 0) 100%);
+    height: 25%;
     width: 100%;
     position: absolute;
     z-index: 2;
   }
   .bottom-overlay {
-    background: linear-gradient(rgba(0, 0, 0, 0) 0%, black 100%);
-    height: 67%;
+    background: linear-gradient(rgba(0, 0, 0, 0) 0%, black 90%);
+    height: 75%;
     width: 100%;
     position: absolute;
     bottom: 0;
@@ -150,6 +150,15 @@ export default {
 @media screen and (max-width: 400px) {
   .hero-video-title {
     font-size: 1.2rem !important;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .youtube {
+    position: relative;
+    ::v-deep.youtube-screen {
+      margin-top: calc(-1 * (56.25% - 50vh) / 2);
+    }
   }
 }
 </style>
