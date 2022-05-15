@@ -91,9 +91,11 @@ export default {
   props: {
     youtube_id: {
       type: String,
+      required: true
     },
     lesson: {
-      default: false,
+      type: String, // If the video is a "lesson video" (with lesson vocab highlighted), set this to "lesson"
+      required: false
     },
   },
   data() {
