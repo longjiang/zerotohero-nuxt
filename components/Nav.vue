@@ -722,6 +722,24 @@ export default {
               icon: "fab fa-reddit",
               show: true,
             },
+            {
+              name: "language-icons",
+              title: "Language Users",
+              icon: "fas fa-user",
+              show: true,
+            },
+            {
+              name: "compare-languages",
+              title: "Compare Langs",
+              icon: "fas fa-globe-asia",
+              show: true,
+            },
+            {
+              name: "translators",
+              title: "Web Translators",
+              icon: "fas fa-language",
+              show: true,
+            },
           ],
         },
         {
