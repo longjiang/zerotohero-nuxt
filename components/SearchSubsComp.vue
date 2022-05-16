@@ -5,7 +5,7 @@
     'search-subs-dark': skin === 'dark',
     fullscreen,
   }">
-    <div class="text-center pt-2 pb-2" :style="fullscreenToggle && !$adminMode ? 'padding-left: 2.5rem' : ''">
+    <div class="text-center pb-2" :style="fullscreenToggle && !$adminMode ? 'padding-left: 2.5rem' : ''">
       <span v-if="hits.length > 0">
         <div :class="{ 'float-left ml-1': true, 'd-none': !$adminMode }">
           <b-button :variant="skin === 'dark' ? 'ghost-dark-no-bg' : 'gray'" size="sm" @click="remove">

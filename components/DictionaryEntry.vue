@@ -19,7 +19,7 @@
       </div>
     </div>
     <div class="dictionary-entry-sections">
-      <div class="dictionary-entry-section" v-if="sections[currentSection].title === 'TV Shows'">
+      <div class="dictionary-entry-section" v-if="sections[currentSection].title === 'Videos'">
         <div :class="{ 'widget widget-dark': true }" id="search-subs" v-if="entry && showSearchSubs && searchTerms">
           <div class="widget-title">
             “{{ searchTerms.join(", ") }}” in
@@ -181,7 +181,7 @@ export default {
     sections() {
       return [
         {
-          title: "TV Shows",
+          title: "Videos",
           visible: this.entry && this.showSearchSubs && this.searchTerms,
         },
         {
@@ -317,7 +317,7 @@ export default {
 
     .section-nav {
       white-space: nowrap;
-      padding: 0.5rem 0 0.75rem 0;
+      padding: 0.5rem 0 0 0;
       text-align: center;
       overflow: scroll;
       overflow-y: hidden;
