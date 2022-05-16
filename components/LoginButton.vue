@@ -44,7 +44,6 @@ export default {
 
 <style>
 .btn-sign-in {
-  font-size: 0.8rem;
   text-decoration: none;
 }
 

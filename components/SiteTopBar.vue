@@ -6,14 +6,14 @@
     >
       <template>
         <div class="text-center">
-          <router-link
+          <!-- <router-link
             to="/"
             style="color: #ccc; cursor: pointer; margin-right: 0.5rem"
             :class="{ 'd-none': variant === 'side-bar' }"
           >
             <i class="fas fa-chevron-left"></i>
-          </router-link>
-          <router-link class="link-unstyled" :to="{ name: 'all-media' }">
+          </router-link> -->
+          <router-link class="link-unstyled" to="/">
             <img
               :class="`site-top-bar-logo ${
                 params.sm === false ? 'd-none' : ''
@@ -23,7 +23,7 @@
               data-not-lazy
             />
             <b :class="`text-white ${params.xlg === false ? 'd-none' : ''}`">
-              zerotohero.ca
+              Zero to Hero
             </b>
           </router-link>
           <span
@@ -34,21 +34,22 @@
             class="language-flag-and-name"
             style="cursor: pointer"
           >
-            <i
-              class="fas fa-chevron-right"
+            <!-- <i
+              class="far fa-comment"
               style="
                 opacity: 0.5;
-                font-size: 0.7em;
+                font-size: 1.2em;
                 margin-left: 0.15rem;
                 margin-right: 0.15rem;
               "
-            ></i>
-            <span style="font-weight: bold; color: white">
+            ></i> -->
+            <span style="font-weight: bold; color: white" :class="`${flagIcon ? 'd-none' : ''}`">
               {{ $route.params.l2 }}
             </span>
             <span :class="`flagIcon ${!flagIcon ? 'd-none' : ''}`">
               {{ flagIcon }}
             </span>
+            <i class="fas fa-sort-down" style="position: relative; bottom: 0.2rem; opacity: 0.7"></i>
           </span>
         </div>
         <div>
@@ -66,6 +67,13 @@
           >
             <i class="fas fa-globe-asia"></i>
           </router-link> -->
+          <LoginButton
+            v-if="$l1 && $l2"
+            :class="`${$l2 && params.xxlg ? 'd-inline-block' : 'd-none'} ml-2 mr-1`"
+            :icon="true"
+            :text="false"
+            style="color: #ddd"
+          />
           <router-link
             id="site-top-bar-saved-words"
             :to="{ name: 'saved-words' }"
@@ -107,13 +115,6 @@
           >
             <i class="fas fa-bars"></i>
           </span>
-          <!-- <LoginButton
-            v-if="$l1 && $l2"
-            :class="`${$l2 && params.xxlg ? 'd-inline-block' : 'd-none'}`"
-            :icon="true"
-            :text="false"
-            style="color: #ddd"
-          /> -->
         </div>
       </template>
       <b-modal

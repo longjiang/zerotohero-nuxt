@@ -30,7 +30,7 @@
                   data-not-lazy
                 />
                 <br />
-                <b>zerotohero.ca</b>
+                <b>Zero to Hero</b>
               </div>
               <p class="blurb">
                 Study
