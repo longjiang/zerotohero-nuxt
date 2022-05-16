@@ -7,6 +7,7 @@
       'zth-nav-side-bar': variant === 'side-bar',
       'zth-nav-page': variant === 'page',
       'zth-nav-collapsed': collapsed,
+      'zth-nav-bottom': bottom,
       'has-secondary-nav': currentParent && currentParent.children,
     }"
   >
@@ -162,6 +163,10 @@ export default {
     variant: {
       default: "menu-bar", // or 'page', or 'side-bar'
     },
+    bottom: {
+      type: Boolean,
+      default: false,
+    },
     skin: {
       default: "light", // or 'dark'
     },
@@ -212,6 +217,7 @@ export default {
     if (this.$route.meta.collapseNav)
       this.collapsed = this.$route.meta.collapseNav;
     this.$emit("collapsed", this.collapsed);
+    this.bindAutoHideBottomBarEvent();
   },
   created() {
     this.checkShows();
@@ -405,7 +411,7 @@ export default {
               title: "Discover Shows",
               icon: "fas fa-lightbulb",
               show: true,
-              params: {l1: this.l1.code, l2: this.l2.code}
+              params: { l1: this.l1.code, l2: this.l2.code },
             },
             {
               name: "youtube-view",
@@ -856,6 +862,24 @@ export default {
     },
   },
   methods: {
+    /* When the user scrolls down, hide the navbar. When the user scrolls up, show the navbar */
+    /* https://www.w3schools.com/howto/howto_js_navbar_hide_scroll.asp */
+    bindAutoHideBottomBarEvent() {
+      if (this.bottom) {
+        var prevScrollpos = window.pageYOffset;
+        window.onscroll = () => {
+          if (this.bottom) {
+            var currentScrollPos = window.pageYOffset;
+            if (prevScrollpos === currentScrollPos + 1) {
+              this.$el.style.bottom = "0";
+            } else {
+              this.$el.style.bottom = "-" + this.$el.clientHeight + "px";
+            }
+            prevScrollpos = currentScrollPos;
+          }
+        };
+      }
+    },
     toggleCollapsed() {
       this.collapsed = !this.collapsed;
     },
@@ -1053,7 +1077,6 @@ export default {
   }
 }
 
-
 .zth-nav-menu-bar {
   .zth-header {
     background: rgb(1, 4, 22);
@@ -1083,13 +1106,14 @@ export default {
   }
 }
 
-.zth-bottom-nav {
+.zth-nav-bottom {
   position: fixed;
   bottom: 0;
   z-index: 9;
   width: 100%;
-  box-shadow: 0 0px 20px rgba(0,0,0,0.15);
+  box-shadow: 0 0px 20px rgba(0, 0, 0, 0.15);
   padding-bottom: calc(env(safe-area-inset-bottom) + 0.25rem);
+  transition: 0.2s all ease-in-out;
   &.zth-nav-dark {
     background: black;
     border-top: 1px solid #666;
