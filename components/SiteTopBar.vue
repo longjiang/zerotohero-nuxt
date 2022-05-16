@@ -72,6 +72,7 @@
             <i class="fas fa-globe-asia"></i>
           </router-link> -->
           <router-link
+            v-if="badge"
             :to="{ name: 'saved-words' }"
             :class="`btn top-bar-button btn-unstyled link-unstyled ${
               params.md === false ? 'd-none' : ''

@@ -19,7 +19,7 @@
         <div class="col-sm-12">
           <p
             v-if="dictionaryLoaded && sWLoaded && sW.length <= 0"
-            class="alert alert-warning no-saved-words text-center p-5"
+            class="alert alert-warning no-saved-words text-center mt-5 p-5"
           >
             You don't have any words saved yet. Save words by tapping on the
             <i class="far fa-star"></i>
@@ -124,15 +124,10 @@
 </template>
 
 <script>
-import WordList from "@/components/WordList.vue";
 import Helper from "@/lib/helper";
 import Papa from "papaparse";
 
 export default {
-  template: "#saved-words-template",
-  components: {
-    WordList,
-  },
   data() {
     return {
       hideWord: false,

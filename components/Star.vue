@@ -1,9 +1,10 @@
 <template>
   <client-only>
     <div class="toggle-saved-word focus-exclude">
+      <i class="fas fa-star star-animation animate"></i>
       <button
         class="btn btn-unstyled not-saved btn-toggle-saved-word add-word"
-        v-if="!saved()"
+        v-if="!saved"
         v-on:click="saveWordClick"
         title='Add to "Saved Words"'
       >
@@ -12,7 +13,7 @@
       </button>
       <button
         class="btn btn-unstyled saved btn-toggle-saved-word remove-word"
-        v-if="saved() && !removeSymbol"
+        v-if="saved && !removeSymbol"
         v-on:click="removeWordClick"
         title='Remove from "Saved Words"'
       >
@@ -54,8 +55,27 @@ export default {
       Helper,
     };
   },
+  sa() {
+    this.animate
+  },
   computed: {
     ...mapState("savedWords", ["savedWords"]),
+    saved() {
+      let saved = false;
+      if (this.word) {
+        saved = this.$store.getters["savedWords/has"]({
+          id: this.word.id,
+          l2: this.$l2.code,
+        });
+        this.word.saved = saved;
+      } else if (this.text) {
+        saved = this.$store.getters["savedWords/has"]({
+          text: this.text.toLowerCase(),
+          l2: this.$l2.code,
+        });
+      }
+      return saved;
+    },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -90,22 +110,6 @@ export default {
       );
       return wordForms;
     },
-    saved() {
-      let saved = false;
-      if (this.word) {
-        saved = this.$store.getters["savedWords/has"]({
-          id: this.word.id,
-          l2: this.$l2.code,
-        });
-      } else {
-        saved = this.$store.getters["savedWords/has"]({
-          text: this.text.toLowerCase(),
-          l2: this.$l2.code,
-        });
-      }
-      this.word.saved = saved;
-      return saved;
-    },
     async saveWordClick() {
       let wordForms = this.word
         ? await this.allForms()
@@ -130,6 +134,18 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
+.star-animation {
+  color: #f8b61e;
+  position: absolute;
+  &.animate {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 99;
+    opacity: 0;
+  }
+}
+
 .toggle-saved-word {
   display: inline-block;
 }
