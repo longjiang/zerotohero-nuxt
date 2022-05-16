@@ -1,7 +1,7 @@
 <template>
-  <footer style="z-index: -1" >
+  <footer style="padding-bottom: 6rem">
     <div
-      class="text-center pt-4 pb-3"
+      class="text-center pt-5 pb-2"
       style="line-height: 1.2; font-size: 1.1em"
     >
       <router-link class="link-unstyled text-white" to="/">

@@ -63,6 +63,7 @@
               :hideDefinitions="hideDefinitions"
               :hidePhonetics="hidePhonetics"
               :hideWord="hideWord"
+              skin="light"
               class="mt-3"
             ></WordList>
           </div>

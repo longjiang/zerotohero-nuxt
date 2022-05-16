@@ -9,11 +9,17 @@
 </router>
 <template>
   <div class="main-dark">
-    <VideoHero v-if="heroVideo" :video="heroVideo" 
-        @videoUnavailable="onVideoUnavailable"/>
+    <VideoHero
+      v-if="heroVideo"
+      :video="heroVideo"
+      @videoUnavailable="onVideoUnavailable"
+    />
     <div class="container pb-5" style="padding-top: 3rem">
-      <SocialHead :title="`Learn ${$l2.name} with Videos | ${$l2.name} Zero to Hero`"
-        :description="`Learn ${$l2.name} with Videos`" :image="'/img/tv-shows.jpg'" />
+      <SocialHead
+        :title="`Learn ${$l2.name} with Videos | ${$l2.name} Zero to Hero`"
+        :description="`Learn ${$l2.name} with Videos`"
+        :image="'/img/tv-shows.jpg'"
+      />
       <div class="row mt-4">
         <div class="col-sm-12">
           <!-- <Sale class="mt-5 mb-5" v-if="$l2.code === 'zh'" /> -->
@@ -27,57 +33,143 @@
               });
             }
           " /> -->
-          <div v-if="videos && movies && movies.length > 0" class="media-section">
+          <div
+            v-if="videos && movies && movies.length > 0"
+            class="media-section"
+          >
             <h3 class="media-seaction-heading">
-              {{ $l2.name }} Movies <router-link :to="{ name: 'show', params: { type: 'tv-show', id: moviesShow.id } }"
-                class="show-all">More <i class=" fas
-                fa-chevron-right ml-1"></i></router-link>
+              {{ $l2.name }} Movies
+              <router-link
+                :to="{
+                  name: 'show',
+                  params: { type: 'tv-show', id: moviesShow.id },
+                }"
+                class="show-all"
+              >
+                More
+                <i class="fas fa-chevron-right ml-1"></i>
+              </router-link>
             </h3>
-            <LazyYouTubeVideoList :videos="random(movies).slice(0, 12)" :showAdminToolsInAdminMode="false" skin="dark" />
+            <LazyYouTubeVideoList
+              :videos="random(movies).slice(0, 12)"
+              :showAdminToolsInAdminMode="false"
+              skin="dark"
+            />
           </div>
           <div v-if="videos && music && music.length > 0" class="media-section">
             <h3 class="media-seaction-heading">
-              {{ $l2.name }} Music Videos<router-link :to="{ name: 'show', params: { type: 'tv-show', id: musicShow.id } }" class="show-all">More <i class=" fas
-                fa-chevron-right ml-1"></i></router-link>
+              {{ $l2.name }} Music Videos
+              <router-link
+                :to="{
+                  name: 'show',
+                  params: { type: 'tv-show', id: musicShow.id },
+                }"
+                class="show-all"
+              >
+                More
+                <i class="fas fa-chevron-right ml-1"></i>
+              </router-link>
             </h3>
-            <LazyYouTubeVideoList :videos="random(music).slice(0, 12)" :showAdminToolsInAdminMode="false" skin="dark" />
+            <LazyYouTubeVideoList
+              :videos="random(music).slice(0, 12)"
+              :showAdminToolsInAdminMode="false"
+              skin="dark"
+            />
           </div>
-          <div v-if="videos && tvShows && tvShows.length > 0" class="media-section">
+          <div
+            v-if="videos && tvShows && tvShows.length > 0"
+            class="media-section"
+          >
             <h3 class="media-seaction-heading">
-              {{ $l2.name }} TV Shows <router-link :to="{ name: 'tv-shows' }" class="show-all">More <i class=" fas
-                fa-chevron-right ml-1"></i></router-link>
+              {{ $l2.name }} TV Shows
+              <router-link :to="{ name: 'tv-shows' }" class="show-all">
+                More
+                <i class="fas fa-chevron-right ml-1"></i>
+              </router-link>
             </h3>
-            <ShowList :shows="random(tvShows.filter(s => !['Movies', 'Music'].includes(s.title)), 6)" type="tvShows" :key="`tv-shows`" />
+            <ShowList
+              :shows="
+                random(
+                  tvShows.filter((s) => !['Movies', 'Music'].includes(s.title)),
+                  6
+                )
+              "
+              type="tvShows"
+              :key="`tv-shows`"
+            />
           </div>
           <div v-if="videos && talks && talks.length > 0" class="media-section">
             <h3 class="media-seaction-heading">
-              {{ $l2.name }} YouTube<router-link :to="{ name: 'talks' }" class="show-all">More <i class=" fas
-                fa-chevron-right ml-1"></i></router-link>
+              {{ $l2.name }} YouTube
+              <router-link :to="{ name: 'talks' }" class="show-all">
+                More
+                <i class="fas fa-chevron-right ml-1"></i>
+              </router-link>
             </h3>
-            <ShowList :shows="random(talks.filter(s => !['News'].includes(s.title) && !s.audiobook), 6)" type="talks" :key="`tv-shows`" />
-            <div class="text-center mt-1">
-            </div>
+            <ShowList
+              :shows="
+                random(
+                  talks.filter(
+                    (s) => !['News'].includes(s.title) && !s.audiobook
+                  ),
+                  6
+                )
+              "
+              type="talks"
+              :key="`tv-shows`"
+            />
+            <div class="text-center mt-1"></div>
           </div>
-          <div v-if="videos && talks && talks.length > 0 && audiobooks.length > 0" class="media-section">
+          <div
+            v-if="videos && talks && talks.length > 0 && audiobooks.length > 0"
+            class="media-section"
+          >
             <h3 class="media-seaction-heading">
-              {{ $l2.name }} Audiobooks <router-link :to="{ name: 'audiobooks' }" class="show-all">More <i class=" fas
-                fa-chevron-right ml-1"></i></router-link>
+              {{ $l2.name }} Audiobooks
+              <router-link :to="{ name: 'audiobooks' }" class="show-all">
+                More
+                <i class="fas fa-chevron-right ml-1"></i>
+              </router-link>
             </h3>
-            <ShowList :shows="random(audiobooks, 6)" type="talks" :key="`tv-shows`" />
+            <ShowList
+              :shows="random(audiobooks, 6)"
+              type="talks"
+              :key="`tv-shows`"
+            />
           </div>
           <div v-if="videos && news && news.length > 0" class="media-section">
             <h3 class="media-seaction-heading">
-              {{ $l2.name }} News <router-link :to="{ name: 'show', params: { type: 'talk', id: newsShow.id } }" class="show-all">More <i class=" fas
-                fa-chevron-right ml-1"></i></router-link>
+              {{ $l2.name }} News
+              <router-link
+                :to="{
+                  name: 'show',
+                  params: { type: 'talk', id: newsShow.id },
+                }"
+                class="show-all"
+              >
+                More
+                <i class="fas fa-chevron-right ml-1"></i>
+              </router-link>
             </h3>
-            <LazyYouTubeVideoList :videos="random(news).slice(0, 12)" :showAdminToolsInAdminMode="false" skin="dark" />
+            <LazyYouTubeVideoList
+              :videos="random(news).slice(0, 12)"
+              :showAdminToolsInAdminMode="false"
+              skin="dark"
+            />
           </div>
           <div v-if="videos && videos.length > 0" class="media-section">
             <h3 class="media-seaction-heading">
-              {{ $l2.name }} Videos <router-link :to="{ name: 'youtube-browse' }" class="show-all">More <i class=" fas
-                fa-chevron-right ml-1"></i></router-link>
+              {{ $l2.name }} Videos
+              <router-link :to="{ name: 'youtube-browse' }" class="show-all">
+                More
+                <i class="fas fa-chevron-right ml-1"></i>
+              </router-link>
             </h3>
-            <LazyYouTubeVideoList :videos="randomVideos" :showAdminToolsInAdminMode="false" skin="dark" />
+            <LazyYouTubeVideoList
+              :videos="randomVideos"
+              :showAdminToolsInAdminMode="false"
+              skin="dark"
+            />
           </div>
           <div
             :class="{
@@ -85,7 +177,35 @@
               'd-none': videos && !loading,
             }"
           >
-            <Loader :sticky="true" message="Loading videos in our library..." class="mb-5" />
+            <Loader
+              :sticky="true"
+              message="Loading videos in our library..."
+              class="mb-5"
+            />
+          </div>
+
+          <div v-if="$route.params.l1 && $route.params.l1 && $l1 && $l2">
+            <div :class="{ 'pl-1 pr-1 pb-2': true }">
+              <h4 class="text-center mb-4">About the {{ $l2.name }} Language</h4>
+              <LazyLanguageInfoBox :lang="$l2" class="mb-4" />
+              <p><b>ISO639-1:</b> {{ $l2['iso639-1'] || 'Not available'}}</p>
+              <p><b>ISO639-3:</b> {{ $l2['iso639-3'] || 'Not available'}}</p>
+              <p><b>Language ID:</b> {{ $l2.id || 'Not available'}}</p>
+              <p><b>Scripts used:</b> {{ $l2.scripts ? $l2.scripts.map(s => s.script).join(', ') : 'Not available' }}</p>
+              <p><b>Number of Speakers:</b> {{ $l2.speakers ? $n($l2.speakers) : 'Not available' }}</p>
+              <p><b>Speakers native to:</b> {{ $l2.country.map(c => c.flag + ' ' + c.name ).join(', ') }}</p>
+            </div>
+            <client-only>
+              <div :class="{ 'pl-1 pr-1 pb-2 pt-5': true }" v-if="$l2.han">
+                <h4 class="text-center mb-4">Dialects of Chinese</h4>
+                <Dialects skin="dark" />
+              </div>
+              <div :class="{ 'pl-1 pr-1 pb-2 pt-5': true }" v-if="$l2.han">
+                <h4 class="text-center">56 Ethnic Groups of China</h4>
+                <p class="text-center mb-4">(2010 Numbers)</p>
+                <FiftySixEthnic skin="dark" />
+              </div>
+            </client-only>
           </div>
           <LazyIdenticalLanguages class="mt-5 mb-5" routeName="all-media" />
         </div>
@@ -95,8 +215,8 @@
 </template>
 
 <script>
-import Helper from '@/lib/helper'
-import Config from '@/lib/config'
+import Helper from "@/lib/helper";
+import Config from "@/lib/config";
 
 export default {
   data() {
@@ -116,7 +236,7 @@ export default {
     };
   },
   async fetch() {
-    this.loadShows()
+    this.loadShows();
   },
   async mounted() {
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
@@ -124,9 +244,10 @@ export default {
         this.loadShows();
       }
     });
-    if (!this.videos || this.videos.length === 0) this.videos = await this.getVideos({ limit: 50, sort: 'youtube_id' })
-    this.randomVideos = this.videos.slice(0, 12)
-    this.loadHeroVideo()
+    if (!this.videos || this.videos.length === 0)
+      this.videos = await this.getVideos({ limit: 50, sort: "youtube_id" });
+    this.randomVideos = this.videos.slice(0, 12);
+    this.loadHeroVideo();
   },
   beforeDestroy() {
     // you may call unsubscribe to stop the subscription
@@ -134,7 +255,7 @@ export default {
   },
   computed: {
     audiobooks() {
-      return this.talks.filter(t => t.audiobook)
+      return this.talks.filter((t) => t.audiobook);
     },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
@@ -151,16 +272,18 @@ export default {
   },
   methods: {
     loadHeroVideo() {
-      this.heroVideo = this.random(this.randomVideos)[0]
+      this.heroVideo = this.random(this.randomVideos)[0];
     },
     onVideoUnavailable() {
       this.videoUnavailable = true;
-      this.randomVideos = this.randomVideos.filter(v => v.youtube_id !== this.heroVideo.youtube_id)
-      this.loadHeroVideo()
+      this.randomVideos = this.randomVideos.filter(
+        (v) => v.youtube_id !== this.heroVideo.youtube_id
+      );
+      this.loadHeroVideo();
     },
     async loadShows() {
-      this.tvShows = this.$store.state.shows.tvShows[this.$l2.code]
-      this.talks = this.$store.state.shows.talks[this.$l2.code]
+      this.tvShows = this.$store.state.shows.tvShows[this.$l2.code];
+      this.talks = this.$store.state.shows.talks[this.$l2.code];
       if (this.tvShows) {
         this.musicShow = this.$store.state.shows.tvShows[this.$l2.code].find(
           (s) => s.title === "Music"
@@ -168,57 +291,89 @@ export default {
         this.moviesShow = this.$store.state.shows.tvShows[this.$l2.code].find(
           (s) => s.title === "Movies"
         );
-        if (this.musicShow) this.music = await this.getVideos({ limit: 100, tvShow: this.musicShow.id, sort: 'youtube_id' })
-        if (this.moviesShow) this.movies = await this.getVideos({ limit: 100, tvShow: this.moviesShow.id, sort: 'youtube_id' })
+        if (this.musicShow)
+          this.music = await this.getVideos({
+            limit: 100,
+            tvShow: this.musicShow.id,
+            sort: "youtube_id",
+          });
+        if (this.moviesShow)
+          this.movies = await this.getVideos({
+            limit: 100,
+            tvShow: this.moviesShow.id,
+            sort: "youtube_id",
+          });
       }
       if (this.talks) {
         this.newsShow = this.$store.state.shows.talks[this.$l2.code].find(
           (s) => s.title === "News"
         );
-        if (this.newsShow) this.news = await this.getVideos({ limit: 100, talk: this.newsShow.id })
+        if (this.newsShow)
+          this.news = await this.getVideos({
+            limit: 100,
+            talk: this.newsShow.id,
+          });
       }
-      this.loading = false
+      this.loading = false;
     },
     random(array, max) {
-      let shuffled = Helper.shuffle(array)
-      return shuffled.slice(0, max)
+      let shuffled = Helper.shuffle(array);
+      return shuffled.slice(0, max);
     },
-    async getVideos({ limit = 10, tvShow = undefined, talk = undefined, sort = '-date' }) {
+    async getVideos({
+      limit = 10,
+      tvShow = undefined,
+      talk = undefined,
+      sort = "-date",
+    }) {
       try {
-        let videos
-        let filter = 'filter[tv_show][nnull]=1'
-        if (tvShow) filter = `filter[tv_show][eq]=${tvShow}`
-        if (talk) filter = `filter[talk][eq]=${talk}`
+        let videos;
+        let filter = "filter[tv_show][nnull]=1";
+        if (tvShow) filter = `filter[tv_show][eq]=${tvShow}`;
+        if (talk) filter = `filter[talk][eq]=${talk}`;
 
         let response = await axios.get(
-          `${Config.youtubeVideosTableName(this.$l2.id)}?sort=${sort}&filter[l2][eq]=${this.$l2.id
+          `${Config.youtubeVideosTableName(
+            this.$l2.id
+          )}?sort=${sort}&filter[l2][eq]=${
+            this.$l2.id
           }&${filter}&limit=${limit}&fields=channel_id,id,lesson,level,title,topic,youtube_id,tv_show,talk`
         );
-        if (response.data.data && response.data.data.length > 0) videos = response.data.data
+        if (response.data.data && response.data.data.length > 0)
+          videos = response.data.data;
         if (!videos && !tvShow && !talk) {
           response = await axios.get(
-            `${Config.youtubeVideosTableName(this.$l2.id)}?sort=${sort}&filter[l2][eq]=${this.$l2.id
+            `${Config.youtubeVideosTableName(
+              this.$l2.id
+            )}?sort=${sort}&filter[l2][eq]=${
+              this.$l2.id
             }&limit=${limit}&fields=channel_id,id,lesson,level,title,topic,youtube_id,tv_show,talk`
           );
-          videos = response.data.data || []
+          videos = response.data.data || [];
         }
-        videos = Helper.uniqueByValue(videos, 'youtube_id')
-        if (!tvShow & !talk) videos = Helper.uniqueByValue(Helper.uniqueByValue(videos, 'tv_show').concat(this.random(videos)), 'youtube_id')
-        return videos
+        videos = Helper.uniqueByValue(videos, "youtube_id");
+        if (!tvShow & !talk)
+          videos = Helper.uniqueByValue(
+            Helper.uniqueByValue(videos, "tv_show").concat(this.random(videos)),
+            "youtube_id"
+          );
+        return videos;
       } catch (err) {
-        return []
+        return [];
       }
     },
     randBase64(length) {
-      var result = '';
-      var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      var result = "";
+      var characters =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
       var charactersLength = characters.length;
       for (var i = 0; i < length; i++) {
-        result += characters.charAt(Math.floor(Math.random() *
-          charactersLength));
+        result += characters.charAt(
+          Math.floor(Math.random() * charactersLength)
+        );
       }
       return result;
-    }
+    },
   },
 };
 </script>

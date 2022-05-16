@@ -5,7 +5,7 @@
       :button="button"
       :suggestionsFunc="suggestionsFunc"
       :nav="nav"
-      :defaultURL="(text) => `/en/${text}/`"
+      :defaultURL="(text) => `/en/${text}`"
       :random="showRandom && random ? random : false"
       @nav="onNav"
       placeholder="Search languages"
@@ -91,7 +91,7 @@ export default {
         let randomLanguage = Helper.randomArrayItem(preferredLanguages);
         return `/${randomLanguage.code === "en" ? "zh" : "en"}/${
           randomLanguage.code
-        }`;
+        }/all-media`;
       }
     },
     suggestionsFunc(text) {
@@ -153,7 +153,7 @@ export default {
     },
     hrefFunc(suggestion) {
       if (suggestion && suggestion.l1 && suggestion.l2) {
-        return `/${suggestion.l1.code}/${suggestion.l2.code}/`;
+        return `/${suggestion.l1.code}/${suggestion.l2.code}/all-media`;
       }
     },
   },

@@ -243,7 +243,7 @@ export default {
           return false;
         }
       } else {
-        return word.level;
+        return word.level || 'outside';
       }
     },
   },
