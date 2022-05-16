@@ -1,3 +1,6 @@
+importScripts('../vendor/javascript-lemmatizer/js/lemmatizer.js')
+importScripts("../vendor/localforage/localforage.js")
+
 const Dictionary = {
   name: 'klingonska',
   file: undefined,
@@ -12,10 +15,25 @@ const Dictionary = {
   credit() {
     return 'The Klingon dictionary is provided by <a href="http://klingonska.org/dict/">klingonska.org</a>.'
   },
+  async loadSmart(name, file) {
+    let data = await localforage.getItem(name)
+    if (!data) {
+      console.log(`Klingonska: requesting '${file}' . . .`)
+      let response = await axios.get(file)
+      data = response.data
+      localforage.setItem(name, data)
+      response = null
+    } else {
+      console.log(`Klingonska: dictionary '${name}' loaded from local indexedDB via localforage`)
+    }
+    if (data) {
+      return data
+    }
+  },
   async loadWords() {
     console.log('Klingonska: Loading words')
-    let res = await axios.get(this.file)
-    this.words = this.parseDictionary(res.data)
+    let data = await this.loadSmart('klingonska', this.file)
+    this.words = this.parseDictionary(data)
     return this
   },
   getSize() {
@@ -24,9 +42,9 @@ const Dictionary = {
   parseDictionary(text) {
     this.dictionary = text.split('\n\n')
     let words = []
-    for(let block of this.dictionary) {
+    for (let block of this.dictionary) {
       let item = {}
-      for(let line of block.split('\n')) {
+      for (let line of block.split('\n')) {
         let pair = line.split(':\t')
         if (pair.length > 0) {
           let key = pair[0]
@@ -42,9 +60,9 @@ const Dictionary = {
             head: item.word,
             accented: item.word,
             pronunciation:
-                  item.pronunciations && item.pronunciations[0].ipa
-                    ? item.pronunciations[0].ipa[0][1].replace(/\//g, '')
-                    : undefined,
+              item.pronunciations && item.pronunciations[0].ipa
+                ? item.pronunciations[0].ipa[0][1].replace(/\//g, '')
+                : undefined,
             definitions: [item.en.replace(/[<>«»]/g, '')],
             pos: item.pos
           })
@@ -56,7 +74,7 @@ const Dictionary = {
         return b.head.length - a.head.length
       }
     })
-    
+
     words = words.map((word, index) => {
       word.id = index
       return word
@@ -146,7 +164,7 @@ const Dictionary = {
   },
   subdictFromText(text) {
     return this.subdict(
-      this.words.filter(function(row) {
+      this.words.filter(function (row) {
         return text.includes(row.head)
       })
     )
@@ -156,7 +174,7 @@ const Dictionary = {
     // Only return the *first* seen word and those the same as it
     let first = false
     let matches = this.words
-      .filter(function(word) {
+      .filter(function (word) {
         if (first) {
           return word.head === first
         } else {
