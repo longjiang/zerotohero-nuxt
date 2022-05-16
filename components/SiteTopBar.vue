@@ -32,7 +32,7 @@
           </router-link>
           <span
             :class="`text-white ${
-              !$route.params.l2 || params.sm === false ? 'd-none' : ''
+              !$route.params.l2 || params.md === false ? 'd-none' : ''
             }`"
             @click="showPlaylistModal"
             class="language-flag-and-name"
@@ -75,9 +75,7 @@
             v-if="badge"
             id="site-top-bar-saved-words"
             :to="{ name: 'saved-words' }"
-            :class="`btn top-bar-button btn-unstyled link-unstyled ${
-              params.md === false ? 'd-none' : ''
-            }`"
+            :class="`btn top-bar-button btn-unstyled link-unstyled`"
           >
             <i class="fas fa-star"></i>
             <span class="saved-words-count" v-cloak v-if="badge">
@@ -322,8 +320,8 @@ export default {
   .saved-words-count {
     position: absolute;
     font-size: 0.5em;
-    top: 0;
-    right: -10px;
+    top: 5px;
+    right: -5px;
   }
 }
 .site-top-bar {
@@ -345,7 +343,8 @@ export default {
   }
 
   .btn {
-    padding: 0 0 0 0.3rem;
+    margin: 0 0 0 0.3rem;
+    padding: 0;
   }
 
   &.site-top-bar-menu-bar {

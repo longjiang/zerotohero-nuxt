@@ -196,8 +196,8 @@ export default {
         let x = targetBounds.left - bounds.left
         let y = targetBounds.bottom - bounds.bottom
         const starAnimation = [
-          { transform: `scale(2) translateX(0px) translateY(0px)`, opacity: 1 },
-          { transform: `scale(1) translateX(${x}px) translateY(${y}px)`, opacity: 0.5 },
+          { transform: `scale(2.2) translateX(0px) translateY(0px) rotate(0)`, opacity: 1},
+          { transform: `scale(1) translateX(${x}px) translateY(${y}px) rotate(360deg)`, opacity: 0.7 },
         ];
         const star = document.querySelector(".star-animation");
         star.style.display = 'block'

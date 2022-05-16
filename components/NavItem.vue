@@ -117,10 +117,6 @@ export default {
 .zth-nav-dark {
   .main-nav-item {
     color: white;
-    &.nuxt-link-active,
-    &:hover {
-      color: #28a745;
-    }
   }
   .secondary-nav-item {
     color: white;
@@ -135,6 +131,10 @@ export default {
       margin-right: 0.2rem;
       &.nav-item-small-icon {
         padding: 0.5rem;
+      }
+      &.nuxt-link-active,
+      &:hover {
+        color: #28a745;
       }
     }
   }
@@ -171,6 +171,14 @@ export default {
         color: #444;
         text-shadow: none;
         background: rgba(255, 255, 255, 0.75);
+      }
+    }
+  }
+  &.zth-nav-dark {
+    .main-nav-item {
+      &.nuxt-link-active,
+      &:hover {
+        background: #323232;
       }
     }
   }
