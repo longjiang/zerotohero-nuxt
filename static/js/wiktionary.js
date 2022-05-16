@@ -1,4 +1,5 @@
 importScripts("../vendor/fastest-levenshtein/fastest-levenshtein.js");
+importScripts("../vendor/localforage/localforage.js")
 
 const Dictionary = {
   name: "wiktionary",
@@ -175,12 +176,24 @@ const Dictionary = {
     return count;
   },
   async loadWords(file) {
-    console.log(`Wiktionary: loading ${file}`);
-    let res = await axios.get(file);
+    let data, res
+    let indexedDBKey = `wiktionary-${this.l2}-${this.l1}`
+    if (!this.useJSON.includes(this.l2)) {
+      data = await localforage.getItem(indexedDBKey)
+    }
+    if (data) {
+      console.log(`Wiktionary: data loaded from local indexedDB via localforage, key '${indexedDBKey}'`);
+    } else {
+      console.log(`Wiktionary: loading ${file}`);
+      let res = await axios.get(file);
+      data = res.data
+      res = null;
+    }
+    if (!data) return
+    if (!this.useJSON.includes(this.l2)) localforage.setItem(indexedDBKey, data)
     let words = !this.useJSON.includes(this.l2)
-      ? this.parseDictionaryCSV(res.data)
-      : this.parseDictionaryJSON(res.data);
-    res = null;
+      ? this.parseDictionaryCSV(data)
+      : this.parseDictionaryJSON(data);
     words = words.sort((a, b) => {
       if (a.head && b.head) {
         return b.head.length - a.head.length;
