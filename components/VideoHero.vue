@@ -1,6 +1,6 @@
 <template>
   <div style="position: relative" :class="{ unavailable: videoUnavailable }">
-    <div class="video-hero">
+    <div class="video-hero" @click="play">
       <div class="top-overlay"></div>
       <div class="bottom-overlay"></div>
       <LazyYouTubeVideo
@@ -10,7 +10,6 @@
         :cc="false"
         :youtube="video.youtube_id"
         @videoUnavailable="onVideoUnavailable"
-        @click="play"
       />
     </div>
     <div class="hero-video-info-wrapper">
@@ -31,7 +30,7 @@
                   class="btn btn-success"
                 >
                   <i class="fas fa-play mr-1"></i>
-                  Play
+                  Watch &amp; Learn
                 </router-link>
                 <router-link
                   v-if="(video.tv_show || video.talk) && showEpisodes"
@@ -79,6 +78,7 @@ export default {
   },
   methods: {
     play() {
+      console.log('pl')
       this.$refs.youtube.play()
     },
     onVideoUnavailable() {
@@ -135,9 +135,6 @@ export default {
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
-    }
-    .btn {
-      width: 8rem;
     }
   }
 }

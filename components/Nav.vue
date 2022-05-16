@@ -349,12 +349,6 @@ export default {
               show: true,
             },
             {
-              name: "youtube-browse",
-              title: "Newly Added",
-              icon: "fa fa-play",
-              show: true,
-            },
-            {
               path: this.moviesPath,
               icon: "fa fa-film",
               title: `Movies`,
@@ -389,6 +383,12 @@ export default {
               icon: "fa fa-newspaper",
               title: `News`,
               show: this.newsPath,
+            },
+            {
+              name: "youtube-browse",
+              title: "Newly Added",
+              icon: "fa fa-play",
+              show: true,
             },
             {
               name: "show",
