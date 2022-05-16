@@ -43,13 +43,13 @@
                 margin-right: 0.15rem;
               "
             ></i> -->
-            <span style="font-weight: bold; color: white" :class="`${flagIcon ? 'd-none' : ''}`">
-              {{ $route.params.l2 }}
+            <span style="font-weight: bold; color: white" :class="`${flagIcon ? 'd-none' : ''} ml-1`">
+              | {{ $route.params.l2 }}
             </span>
-            <span :class="`flagIcon ${!flagIcon ? 'd-none' : ''}`">
+            <span :class="`flagIcon ${!flagIcon ? 'd-none' : ''} ml-1`">
               {{ flagIcon }}
             </span>
-            <i class="fas fa-sort-down" style="position: relative; bottom: 0.2rem; opacity: 0.7"></i>
+            <i class="fas fa-sort-down ml-1" style="position: relative; bottom: 0.2rem; opacity: 0.7"></i>
           </span>
         </div>
         <div>
