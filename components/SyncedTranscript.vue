@@ -288,18 +288,18 @@ export default {
       this.currentLineIndex = startLineIndex;
       this.nextLine = this.lines[startLineIndex + 1];
     }
-    if (process.client) {
-      window.addEventListener("wheel", this.cancelSmoothScroll);
-      window.addEventListener("touchstart", this.cancelSmoothScroll);
-    }
+    // if (process.client) {
+    //   window.addEventListener("wheel", this.cancelSmoothScroll);
+    //   window.addEventListener("touchstart", this.cancelSmoothScroll);
+    // }
     this.attachPopupEventListeners()
   },
   beforeDestroy() {
     if (this.unsubscribe) this.unsubscribe();
-    if (process.client) {
-      window.removeEventListener("wheel", this.cancelSmoothScroll);
-      window.removeEventListener("touchstart", this.cancelSmoothScroll);
-    }
+    // if (process.client) {
+    //   window.removeEventListener("wheel", this.cancelSmoothScroll);
+    //   window.removeEventListener("touchstart", this.cancelSmoothScroll);
+    // }
     this.$nuxt.$off("popupOpened")
     this.$nuxt.$off("popupClosed")
   },
