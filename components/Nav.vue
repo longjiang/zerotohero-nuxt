@@ -872,7 +872,7 @@ export default {
             var currentScrollPos = window.pageYOffset;
             if (prevScrollpos > currentScrollPos) {
               this.$el.style.bottom = "0";
-            } else {
+            } else if (prevScrollpos < currentScrollPos - 5) {
               this.$el.style.bottom = "-" + this.$el.clientHeight + "px";
             }
             prevScrollpos = currentScrollPos;
