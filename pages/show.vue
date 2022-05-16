@@ -17,8 +17,8 @@
       @videoUnavailable="onVideoUnavailable"
     />
     <div
-      class="youtube-browse main-dark pb-5"
-      style="min-height: 100vh; padding-top: 5rem"
+      class="youtube-browse main-dark pb-5 pt-5"
+      style="min-height: 100vh"
     >
       <div class="container">
         <SocialHead
@@ -59,7 +59,7 @@
           <div class="col-sm-12 mb-5">
             <div class="youtube-video-list-wrapper">
               <div class="row mb-5">
-                <div class="col-sm-12 col-md-8 mb-2">
+                <div class="col-sm-12 mb-2">
                   <div class="d-flex">
                     <b-input-group class="flex-1 input-group-ghost-dark">
                       <b-form-input
@@ -95,14 +95,16 @@
                         <i class="fas fa-list"></i>
                       </b-button>
                     </b-button-group>
+                    <b-button
+                      variant="ghost-dark-outline"
+                      @click="sort = sort === 'title' ? '-date' : 'title'"
+                      title="Sort by..."
+                      class="ml-1"
+                    >
+                      <i class="fas fa-sort-alpha-down" v-if="sort === 'title'"></i>
+                      <i class="fas fa-calendar-alt" v-if="sort === '-date'"></i>
+                    </b-button>
                   </div>
-                </div>
-                <div class="col-sm-12 col-md-4 mb-2">
-                  <b-form-select
-                    v-model="sort"
-                    :options="sortOptions"
-                    class="select-ghost-dark"
-                  ></b-form-select>
                 </div>
               </div>
               <div
@@ -184,16 +186,6 @@ export default {
       showDiscover: false,
       featuredVideo: undefined,
       heroUnavailable: false,
-      sortOptions: [
-        {
-          value: "title",
-          text: "Sort by Title",
-        },
-        {
-          value: "-date",
-          text: "Sort by Date",
-        },
-      ],
       sort: "title",
     };
   },
