@@ -31,6 +31,9 @@
               message="Loading words saved in your browser..."
             />
           </div>
+          <div class="text-center mt-3" v-if="$dictionaryName && sW && sW[0]">
+            <router-link :to="{name: 'dictionary', params: {method: $dictionaryName, args: sW[0].id }}" class="btn btn-success">Review All {{  sWLoaded ? sW.length : "" }} Words <i class="fas fa-chevron-right ml-1"></i></router-link>
+          </div>
           <div
             class="pb-3 pt-3 bg-white text-center"
             style="position: sticky; top: 2.9rem; z-index: 2"
@@ -42,13 +45,10 @@
               @hidePhonetics="hidePhonetics = arguments[0]"
             />
           </div>
-          <div class="text-center">
-            <router-link :to="{name: 'dictionary', params: {method: $dictionaryName, args: sW[0].id }}" class="btn btn-success">Review Your Words</router-link>
-          </div>
           <div
             v-for="(group, index) in groups"
             :key="`group-${index}`"
-            class="mt-3 small" style="color: #ccc"
+            class="small mb-3" style="color: #ccc"
           >
             <div v-if="group.date === '0'">Earlier</div>
             <div v-else>
@@ -70,20 +70,13 @@
               class="mt-3"
             ></WordList>
           </div>
+          <div class="text-center mt-5" v-if="$dictionaryName && sW && sW[0]">
+            <router-link :to="{name: 'dictionary', params: {method: $dictionaryName, args: sW[0].id }}" class="btn btn-success">Review All {{  sWLoaded ? sW.length : "" }} Words <i class="fas fa-chevron-right ml-1"></i></router-link>
+          </div>
         </div>
       </div>
-      <div class="row mt-5 text-center">
+      <div class="row mt-4 text-center">
         <div class="col-sm-12">
-          <h6>
-            {{ sWLoaded ? sW.length : "" }} {{ $l2.name }} Words Saved
-          </h6>
-          <p class="mb-3">
-            {{
-              $t(
-                "These words are stored in your browser's local storage, which persists unless you clear your browsing data."
-              )
-            }}
-          </p>
           <div class="text-center">
             <Loader class="mt-4" @loaded="updateLoaded" />
           </div>
@@ -121,6 +114,9 @@
               Learn (Legacy)
             </router-link>
           </div>
+          <p class="mt-3 mb-3 text-left">
+            <b>How are my words saved?</b> Your words are stored in your browser's "local storage", so even if you refresh your browser, the words are still there.
+          </p>
         </div>
       </div>
     </div>
