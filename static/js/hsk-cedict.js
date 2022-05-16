@@ -30,13 +30,20 @@ const Dictionary = {
   },
   async loadSmart(name) {
     const server = 'https://server.chinesezerotohero.com/'
-    let file = `${server}/data/hsk-cedict/${name}.csv.txt`
-    let response = await axios.get(file)
-    let results = Papa.parse(response.data, {
-      header: true
-    })
-    response = null
-    return results.data
+    let data = await localforage.getItem(name)
+    if (!data) {
+      let file = `${server}/data/hsk-cedict/${name}.csv.txt`
+      let response = await axios.get(file)
+      data = response.data
+      localforage.setItem(name, data)
+      response = null
+    }
+    if (data) {
+      let results = Papa.parse(data, {
+        header: true
+      })
+      return results.data
+    }
   },
   getWords() {
     return this.words
