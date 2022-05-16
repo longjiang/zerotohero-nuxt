@@ -3,7 +3,7 @@
     <div
       :style="{
         backgroundImage:
-          !autoplay && !loading
+          posterOnly || (!autoplay && !loading)
             ? `url(https://img.youtube.com/vi/${youtube}/hqdefault.jpg)`
             : 'none',
         'background-repeat': 'no-repeat',
@@ -51,6 +51,14 @@ export default {
     cc: {
       type: Boolean,
       default: true
+    },
+    icon: {
+      type: Boolean,
+      default: true
+    },
+    posterOnly: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -99,7 +107,7 @@ export default {
     },
   },
   mounted() {
-    if (this.autoload) {
+    if (this.autoload && !this.posterOnly) {
       this.loadYouTubeiFrame();
     }
     this.time = this.starttime;
@@ -130,6 +138,7 @@ export default {
       }
     },
     loadYouTubeiFrame() {
+      if (this.posterOnly) return
       this.loading = true;
       let id = this.$el.querySelector(".youtube-iframe").getAttribute("id");
       this.removeYouTubeAPIVars();

@@ -13,13 +13,14 @@
       v-if="featuredVideo"
       :video="featuredVideo"
       :showEpisodes="false"
-      :title="['Music', 'News', 'Movies'].includes(show.title) ? featuredVideo.title : show.title"
+      :title="
+        ['Music', 'News', 'Movies'].includes(show.title)
+          ? featuredVideo.title
+          : show.title
+      "
       @videoUnavailable="onVideoUnavailable"
     />
-    <div
-      class="youtube-browse main-dark pb-5 pt-5"
-      style="min-height: 100vh"
-    >
+    <div class="youtube-browse main-dark pb-5 pt-5" style="min-height: 100vh">
       <div class="container">
         <SocialHead
           v-if="show"
@@ -31,6 +32,15 @@
         />
         <div class="row">
           <div class="col-sm-12 mb-3 text-center">
+            <div
+              :class="{
+                'loader text-center pt-5 pb-5': true,
+                'd-none': videos,
+              }"
+              style="flex: 1"
+            >
+              <Loader :sticky="true" message="Loading videos..." />
+            </div>
             <!-- <Sale class="mb-4" v-if="$l2.code === 'zh'" /> -->
             <h3 v-if="show">
               <span v-if="$adminMode" contenteditable="true" @blur="saveTitle">
@@ -101,20 +111,17 @@
                       title="Sort by..."
                       class="ml-1"
                     >
-                      <i class="fas fa-sort-alpha-down" v-if="sort === 'title'"></i>
-                      <i class="fas fa-calendar-alt" v-if="sort === '-date'"></i>
+                      <i
+                        class="fas fa-sort-alpha-down"
+                        v-if="sort === 'title'"
+                      ></i>
+                      <i
+                        class="fas fa-calendar-alt"
+                        v-if="sort === '-date'"
+                      ></i>
                     </b-button>
                   </div>
                 </div>
-              </div>
-              <div
-                :class="{
-                  'loader text-center mb-4': true,
-                  'd-none': videos,
-                }"
-                style="flex: 1"
-              >
-                <Loader :sticky="true" message="Loading videos..." />
               </div>
               <div
                 :class="{
@@ -266,7 +273,7 @@ export default {
           this.featuredVideo = this.random(this.videos)[0];
         this.tries++;
       } else {
-        this.heroUnavailable = true
+        this.heroUnavailable = true;
       }
     },
     onVideoUnavailable() {

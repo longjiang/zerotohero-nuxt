@@ -173,14 +173,14 @@
           </div>
           <div
             :class="{
-              'loader text-center mt-5 mb-5': true,
+              'loader text-center': true,
               'd-none': videos && !loading,
             }"
+            style="margin: 7rem 0 15rem 0"
           >
             <Loader
               :sticky="true"
               message="Loading videos in our library..."
-              class="mb-5"
             />
           </div>
 

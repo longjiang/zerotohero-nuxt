@@ -4,12 +4,14 @@
       <div class="top-overlay"></div>
       <div class="bottom-overlay"></div>
       <LazyYouTubeVideo
-        autoload="true"
-        autoplay="true"
+        autoload="!isMobile"
+        autoplay="!isMobile"
         ref="youtube"
         :cc="false"
         :youtube="video.youtube_id"
         @videoUnavailable="onVideoUnavailable"
+        :posterOnly="isMobile"
+        :icon="false"
       />
     </div>
     <div class="hero-video-info-wrapper">
@@ -18,7 +20,14 @@
           <div class="col-sm-12">
             <div class="hero-video-info">
               <h4 class="hero-video-title">
-                {{ title ? title : video.title.replace(/[|【】《》]/g, '').replace('ENG SUBS', '').replace('MULTI SUBS', '') }}
+                {{
+                  title
+                    ? title
+                    : video.title
+                        .replace(/[|【】《》]/g, "")
+                        .replace("ENG SUBS", "")
+                        .replace("MULTI SUBS", "")
+                }}
               </h4>
               <div>
                 <router-link
@@ -57,6 +66,7 @@
 </template>
 
 <script>
+import Helper from "@/lib/helper";
 export default {
   props: {
     video: {
@@ -76,10 +86,15 @@ export default {
       videoUnavailable: false,
     };
   },
+  computed: {
+    isMobile() {
+      return Helper.isMobile();
+    },
+  },
   methods: {
     play() {
-      console.log('pl')
-      this.$refs.youtube.play()
+      console.log("pl");
+      this.$refs.youtube.play();
     },
     onVideoUnavailable() {
       this.videoUnavailable = true;
