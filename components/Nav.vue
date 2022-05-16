@@ -92,7 +92,7 @@
             :to="last(child) || child"
             :item="child"
             :level="2"
-            :showIcon="collapsed"
+            :showIcon="collapsed && variant === 'side-bar'"
             :badge="
               child.name === 'saved-words' && savedWordsCount > 0
                 ? savedWordsCount

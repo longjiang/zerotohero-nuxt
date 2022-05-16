@@ -213,7 +213,7 @@ export default {
     languagePath(language) {
       let special = this.specials[language.code];
       let l1 = special ? special.l1 : this.l1;
-      return `/${l1}/${language.code}/`;
+      return `/${l1}/${language.code}/all-media`;
     },
     languageName(language) {
       let name = language.name.replace(/ \(.*\)/gi, "");
@@ -237,6 +237,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+a:hover,
+a:active {
+  text-decoration: none;
+}
+
 .language-list {
   list-style: none;
   padding: 0;
