@@ -5,7 +5,7 @@ export default function (to, from, savedPosition) {
     }
   } else if (from.name === 'dictionary' && to.name === 'dictionary') {
     return '.dictionary-main'
-  }else {
-    return { x: 0, y: 0 }
+  } else {
+    return { x: 0, y: -40 }
   }
 }

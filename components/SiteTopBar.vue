@@ -6,18 +6,14 @@
     >
       <template>
         <div class="text-center">
-          <span
-            style="
-              line-height: 2.3rem;
-              color: #ccc;
-              cursor: pointer;
-              margin-right: 0.5rem;
-            "
-            @click="collapseClick"
+          <router-link
+            to="/"
+            style="color: #ccc; cursor: pointer; margin-right: 0.5rem"
+            :class="{ 'd-none': variant === 'side-bar' }"
           >
-            <i class="fas fa-bars"></i>
-          </span>
-          <router-link to="/" class="link-unstyled">
+            <i class="fas fa-chevron-left"></i>
+          </router-link>
+          <router-link class="link-unstyled" :to="{ name: 'all-media' }">
             <img
               :class="`site-top-bar-logo ${
                 params.sm === false ? 'd-none' : ''
@@ -60,7 +56,6 @@
             <AnnotationSettings
               v-if="$l2 && params.lg"
               variant="toolbar"
-              style="position: relative; bottom: -0.1rem"
             />
           </client-only>
           <!-- <router-link
@@ -74,7 +69,9 @@
           <router-link
             id="site-top-bar-saved-words"
             :to="{ name: 'saved-words' }"
-            :class="`btn top-bar-button btn-unstyled link-unstyled ${badge ? '' : 'd-none'}`"
+            :class="`btn top-bar-button btn-unstyled link-unstyled ${
+              badge ? '' : 'd-none'
+            }`"
           >
             <i class="fas fa-star"></i>
             <span class="saved-words-count">
@@ -99,13 +96,24 @@
           >
             <i class="fas fa-sync-alt"></i>
           </button>
-          <LoginButton
+          <span
+            style="
+              color: #ccc;
+              cursor: pointer;
+              margin-left: 0.5rem;
+            "
+            @click="collapseClick"
+            :class="{ 'd-none': variant === 'menu-bar' }"
+          >
+            <i class="fas fa-bars"></i>
+          </span>
+          <!-- <LoginButton
             v-if="$l1 && $l2"
             :class="`${$l2 && params.xxlg ? 'd-inline-block' : 'd-none'}`"
             :icon="true"
             :text="false"
             style="color: #ddd"
-          />
+          /> -->
         </div>
       </template>
       <b-modal
@@ -329,6 +337,7 @@ export default {
   justify-content: space-between;
   width: 100%;
   z-index: 4;
+  line-height: 2.3;
   background-color: rgb(29, 29, 29);
   padding: calc(env(safe-area-inset-top) + 0.25rem) 0.75rem 0.25rem 0.75rem;
 
