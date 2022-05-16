@@ -1,6 +1,7 @@
 importScripts("../vendor/korean_conjugation/html/korean/hangeul.js");
 importScripts("../vendor/korean_conjugation/html/korean/conjugator.js");
 importScripts("../vendor/fastest-levenshtein/fastest-levenshtein.js");
+importScripts('../vendor/localforage/localforage.js')
 
 const Dictionary = {
   file:
@@ -17,8 +18,8 @@ const Dictionary = {
   },
   async load() {
     let [kengdicData, wiktionaryData] = await Promise.all([
-      axios.get(this.file),
-      axios.get(this.wiktionaryFile)
+      this.loadSmart('kengdic', this.file),
+      this.loadSmart('wiktionary-kor-eng', this.wiktionaryFile)
     ]);
     let words = await this.loadKengdic(kengdicData);
     let wiktionaryWords = await this.loadWiktionary(wiktionaryData);
@@ -33,8 +34,23 @@ const Dictionary = {
     axios.get("https://py.zerotohero.ca/start-open-korean-text.php"); // Call index.php to make sure the java open-korean-text process is running (Dreamhost kills it from time to time)
     return this;
   },
-  async loadKengdic(res) {
-    let results = await Papa.parse(res.data, {
+  async loadSmart(name, file) {
+    let data = await localforage.getItem(name)
+    if (!data) {
+      console.log(`KENGDIC: requesting '${file}' . . .`)
+      let response = await axios.get(file)
+      data = response.data
+      localforage.setItem(name, data)
+      response = null
+    } else {
+      console.log(`KENGDIC: dictionary '${name}' loaded from local indexedDB via localforage`)
+    }
+    if (data) {
+      return data
+    }
+  },
+  async loadKengdic(csv) {
+    let results = await Papa.parse(csv, {
       header: true
     });
     let sorted = results.data.sort((a, b) =>
@@ -57,8 +73,8 @@ const Dictionary = {
     }
     return data;
   },
-  async loadWiktionary(res) {
-    let words = this.parseDictionaryCSV(res.data);
+  async loadWiktionary(csv) {
+    let words = this.parseDictionaryCSV(csv);
     words = words.sort((a, b) => {
       if (a.head && b.head) {
         return b.head.length - a.head.length;
