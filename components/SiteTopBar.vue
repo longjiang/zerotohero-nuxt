@@ -16,7 +16,7 @@
           <router-link class="link-unstyled" to="/">
             <img
               :class="`site-top-bar-logo ${
-                params.sm === false ? 'd-none' : ''
+                params.md === false ? 'd-none' : ''
               }`"
               src="/img/czh-icon.png"
               style="height: 1.5rem; margin-right: 0.25rem"
@@ -55,7 +55,7 @@
         <div>
           <client-only>
             <AnnotationSettings
-              v-if="$l2 && params.lg"
+              v-if="$l2 && params.sm"
               variant="toolbar"
             />
           </client-only>
@@ -77,7 +77,7 @@
           <router-link
             id="site-top-bar-saved-words"
             :to="{ name: 'saved-words' }"
-            :class="`btn top-bar-button btn-unstyled link-unstyled ${
+            :class="`btn top-bar-button btn-unstyled link-unstyled ml-1 ${
               badge ? '' : 'd-none'
             }`"
           >
