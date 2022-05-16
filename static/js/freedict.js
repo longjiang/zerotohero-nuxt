@@ -1,3 +1,6 @@
+importScripts('../vendor/javascript-lemmatizer/js/lemmatizer.js')
+importScripts("../vendor/localforage/localforage.js")
+
 const Dictionary = {
   name: 'freedict',
   file: undefined,
@@ -7,10 +10,75 @@ const Dictionary = {
   words: [],
   index: {},
   cache: {},
+  tokenizationCache: {},
   conjugations: undefined,
   tables: [],
   credit() {
     return 'The dictionary is provided by <a href="https://freedict.org/">FreeDict</a> dict, open-source and <a href="https://freedict.org/about/">freely distribtued</a>.'
+  },
+  async loadSmart(name, file) {
+    let data = await localforage.getItem(name)
+    if (!data) {
+      console.log(`Freedict: requesting '${file}' . . .`)
+      let response = await axios.get(file)
+      data = response.data
+      localforage.setItem(name, data)
+      response = null
+    } else {
+      console.log(`Freedict: dictionary '${name}' loaded from local indexedDB via localforage`)
+    }
+    if (data) {
+      return data
+    }
+  },
+  splitByReg(text, reg) {
+    let words = text.replace(reg, '!!!BREAKWORKD!!!$1!!!BREAKWORKD!!!').replace(/^!!!BREAKWORKD!!!/, '').replace(/!!!BREAKWORKD!!!$/, '')
+    return words.split('!!!BREAKWORKD!!!')
+  },
+  tokenize(text) {
+    if (this.tokenizationCache[text]) return this.tokenizationCache[text]
+    text = text.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // strip accents e.g. résumé -> resume
+    tokenized = [];
+    let segs = this.splitByReg(text, /([a-zA-Z0-9]+)/gi);
+    var lemmatizer = new Lemmatizer();
+    let reg = new RegExp(
+      `.*([a-z0-9]+).*`
+    );
+    for (let seg of segs) {
+      let word = seg.toLowerCase();
+      if (
+        reg.test(word) &&
+        !['m', 's', 't', 'll', 'd', 're', 'ain', 'don'].includes(word)
+      ) {
+        let token = {
+          text: seg,
+          candidates: [],
+        };
+        let lemmas = lemmatizer.lemmas(word);
+        if (lemmas && lemmas.length === 1) token.pos = lemmas[0][1]
+        lemmas = [[word, "inflected"]].concat(lemmas);
+        let found = false;
+        let forms = this.unique(lemmas.map(l => l[0]))
+
+        for (let form of forms) {
+          let candidates = this.lookupMultiple(form);
+          if (candidates.length > 0) {
+            found = true;
+            token.candidates = token.candidates.concat(candidates);
+          }
+        }
+        token.candidates = this.uniqueByValue(token.candidates, "id");
+        if (found) {
+          tokenized.push(token);
+        } else {
+          tokenized.push(seg);
+        }
+      } else {
+        tokenized.push(seg);
+      }
+    }
+    this.tokenizationCache[text] = tokenized
+    return tokenized
   },
   async load(options) {
     console.log('Loading FreeDict...')
@@ -28,8 +96,8 @@ const Dictionary = {
     return filename
   },
   async loadWords() {
-    let res = await axios.get(this.file)
-    this.words = this.parseDictionary(res.data)
+    let data = await this.loadSmart(`freedict-${this.l1}-${this.l2}`, this.file)
+    this.words = this.parseDictionary(data)
   },
   async loadConjugations() {
     if (this.l2 === 'fra') {
