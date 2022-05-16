@@ -42,6 +42,9 @@
               @hidePhonetics="hidePhonetics = arguments[0]"
             />
           </div>
+          <div class="text-center">
+            <router-link :to="{name: 'dictionary', params: {method: $dictionaryName, args: sW[0].id }}" class="btn btn-success">Review Your Words</router-link>
+          </div>
           <div
             v-for="(group, index) in groups"
             :key="`group-${index}`"

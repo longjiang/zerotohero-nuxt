@@ -156,7 +156,7 @@
               :traditional="entry.traditional"
               :level="entry.level"
               :sticky="false"
-              class="mt-5 mb-5 text-center"
+              class="mb-4 text-center"
               style="margin-bottom: 0"
             />
             <SimilarPhrases
@@ -166,6 +166,8 @@
               :hideDefinitions="hideDefinitions"
               class="text-center mb-5"
             />
+            <!-- <Sale class="mb-5" style="border-radius: 1rem !important" v-if="$l2.code === 'zh'" /> -->
+            <EntryCourseAd v-if="$l2.code === 'zh'" :entry="entry" class="focus-exclude mb-5" style="margin-top: 10rem" :key="`${entry.id}-course-ad`" />
           </div>
         </div>
       </div>

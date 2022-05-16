@@ -3,19 +3,23 @@
     <div class="similar-phrases">
       <div v-if="!autoLoad && showButton">
         <div>
-          See words that mean
-          <b>“<span :class="{ transparent: hideDefinitions }">{{ translation }}</span>”</b>
-          across all languages:
+          How do you say
+          <b>
+            “
+            <span :class="{ transparent: hideDefinitions }">
+              {{ translation }}
+            </span>
+            ”
+          </b>
+          in other languages?
+          <u
+            @click="getSimilarPhrases"
+            style="font-weight: bold"
+            class="text-success ml-2"
+          >
+            Show Words
+          </u>
         </div>
-        <b-button
-          @click="getSimilarPhrases"
-          size="sm"
-          href="#"
-          variant="secondary"
-          class="mt-2"
-        >
-          Show Words
-        </b-button>
       </div>
       <div
         :class="{

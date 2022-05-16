@@ -107,7 +107,7 @@ export default {
     box-shadow: 4px 6px 19px #00000091;
     margin-bottom: 2rem;
     border-radius: 1rem;
-    max-width: 20rem;
+    max-width: 15rem;
     margin-top: -8rem;
   }
 }
