@@ -50,7 +50,7 @@
       />
       <div class="zth-content">
         <Nuxt id="main" />
-        <LazyFooter :dictionaryCredit="dictionaryCredit" class="zth-footer" />
+        <LazyFooter v-if="dictionaryCredit" :dictionaryCredit="dictionaryCredit" class="zth-footer" />
       </div>
       <ReaderComp
         v-if="

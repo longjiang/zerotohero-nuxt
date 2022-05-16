@@ -184,18 +184,42 @@
             />
           </div>
 
-          <div v-if="$route.params.l1 && $route.params.l1 && $l1 && $l2">
-            <div :class="{ 'pl-1 pr-1 pb-2': true }">
-              <h4 class="text-center mb-4">About the {{ $l2.name }} Language</h4>
-              <LazyLanguageInfoBox :lang="$l2" class="mb-4" />
-              <p><b>ISO639-1:</b> {{ $l2['iso639-1'] || 'Not available'}}</p>
-              <p><b>ISO639-3:</b> {{ $l2['iso639-3'] || 'Not available'}}</p>
-              <p><b>Language ID:</b> {{ $l2.id || 'Not available'}}</p>
-              <p><b>Scripts used:</b> {{ $l2.scripts ? $l2.scripts.map(s => s.script).join(', ') : 'Not available' }}</p>
-              <p><b>Number of Speakers:</b> {{ $l2.speakers ? $n($l2.speakers) : 'Not available' }}</p>
-              <p><b>Speakers native to:</b> {{ $l2.country.map(c => c.flag + ' ' + c.name ).join(', ') }}</p>
-            </div>
-            <client-only>
+          <client-only>
+            <div v-if="$route.params.l1 && $route.params.l1 && $l1 && $l2">
+              <div :class="{ 'pl-1 pr-1 pb-2': true }">
+                <h4 class="text-center mb-4">
+                  About the {{ $l2.name }} Language
+                </h4>
+                <LazyLanguageInfoBox :lang="$l2" class="mb-4" />
+                <p>
+                  <b>ISO639-1:</b>
+                  {{ $l2["iso639-1"] || "Not available" }}
+                </p>
+                <p>
+                  <b>ISO639-3:</b>
+                  {{ $l2["iso639-3"] || "Not available" }}
+                </p>
+                <p>
+                  <b>Language ID:</b>
+                  {{ $l2.id || "Not available" }}
+                </p>
+                <p>
+                  <b>Scripts used:</b>
+                  {{
+                    $l2.scripts
+                      ? $l2.scripts.map((s) => s.script).join(", ")
+                      : "Not available"
+                  }}
+                </p>
+                <p>
+                  <b>Number of Speakers:</b>
+                  {{ $l2.speakers ? $l2.speakers : "Not available" }}
+                </p>
+                <p>
+                  <b>Speakers native to:</b>
+                  {{ $l2.country.map((c) => c.flag + " " + c.name).join(", ") }}
+                </p>
+              </div>
               <div :class="{ 'pl-1 pr-1 pb-2 pt-5': true }" v-if="$l2.han">
                 <h4 class="text-center mb-4">Dialects of Chinese</h4>
                 <Dialects skin="dark" />
@@ -205,9 +229,9 @@
                 <p class="text-center mb-4">(2010 Numbers)</p>
                 <FiftySixEthnic skin="dark" />
               </div>
-            </client-only>
-          </div>
-          <LazyIdenticalLanguages class="mt-5 mb-5" routeName="all-media" />
+            </div>
+            <LazyIdenticalLanguages class="mt-5 mb-5" routeName="all-media" />
+          </client-only>
         </div>
       </div>
     </div>

@@ -28,7 +28,7 @@
           <div>
             <p>
               <strong>Credits:</strong>
-              <span v-if="dictionaryCredit" v-html="dictionaryCredit"></span>
+              <client-only><span v-if="dictionaryCredit" v-html="dictionaryCredit"></span></client-only>
               The collocations and example sentences are provided by
               <a target="_blank" href="https://www.sketchengine.eu/">
                 SketchEngine

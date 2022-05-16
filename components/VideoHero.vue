@@ -6,9 +6,11 @@
       <LazyYouTubeVideo
         autoload="true"
         autoplay="true"
+        ref="youtube"
         :cc="false"
         :youtube="video.youtube_id"
         @videoUnavailable="onVideoUnavailable"
+        @click="play"
       />
     </div>
     <div class="hero-video-info-wrapper">
@@ -17,7 +19,7 @@
           <div class="col-sm-12">
             <div class="hero-video-info">
               <h4 class="hero-video-title">
-                {{ title ? title : video.title }}
+                {{ title ? title : video.title.replace(/[|【】《》]/g, '').replace('ENG SUBS', '').replace('MULTI SUBS', '') }}
               </h4>
               <div>
                 <router-link
@@ -76,6 +78,9 @@ export default {
     };
   },
   methods: {
+    play() {
+      this.$refs.youtube.play()
+    },
     onVideoUnavailable() {
       this.videoUnavailable = true;
       this.$emit("videoUnavailable", true);
@@ -127,6 +132,9 @@ export default {
       text-shadow: 0 0 20px black;
       margin-bottom: 1rem;
       font-size: 1.67rem;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
     .btn {
       width: 8rem;
