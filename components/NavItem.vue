@@ -93,8 +93,7 @@ export default {
   + .secondary-nav-item {
     margin-left: 1rem;
   }
-  &.nuxt-link-active,
-  &:hover {
+  &.nuxt-link-active {
     font-weight: bold;
   }
 }
@@ -120,9 +119,7 @@ export default {
     color: white;
     &.nuxt-link-active,
     &:hover {
-      color: white;
-      background: rgb(50, 50, 50);
-      border-top: 1px solid rgba(255, 255, 255, 0.4);
+      color: #28a745;
     }
   }
   .secondary-nav-item {

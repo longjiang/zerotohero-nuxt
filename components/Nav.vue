@@ -325,15 +325,15 @@ export default {
           show: this.hasFeature("youtube"),
           children: [
             {
-              name: "watch-history",
-              icon: "fas fa-history",
-              title: "My History",
-              show: true,
-            },
-            {
               name: "all-media",
               icon: "fa fa-photo-video",
               title: `Recommended`,
+              show: true,
+            },
+            {
+              name: "watch-history",
+              icon: "fas fa-history",
+              title: "My History",
               show: true,
             },
             {
