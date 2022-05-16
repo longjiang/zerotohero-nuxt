@@ -17,7 +17,7 @@
         $l2.scripts &&
         $l2.scripts.length > 0 &&
         $l2.scripts[0].direction === 'rtl',
-      'add-pinyin': $hasFeature('transliteration'),
+      'add-pinyin': true,
       phonetics,
       fullscreen: fullscreenMode,
       'with-buttons': buttons,
