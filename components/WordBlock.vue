@@ -546,13 +546,15 @@ export default {
       } else if (this.token && this.token.candidates.length > 0) {
         if (this.token.candidates[0].pronunciation) {
           transliteration =
-            this.token.candidates[0].pronunciation.split(",")[this.$l2.code === 'vi' ? 1 : 0];
-          transliteration =
-            transliteration ||
-            this.token.candidates[0].kana ||
-            this.token.candidates[0].jyutping ||
-            this.token.candidates[0].pinyin;
+            this.token.candidates[0].pronunciation.split(",")[
+              this.$l2.code === "vi" ? 1 : 0
+            ];
         }
+        transliteration =
+          transliteration ||
+          this.token.candidates[0].kana ||
+          this.token.candidates[0].jyutping ||
+          this.token.candidates[0].pinyin;
       }
       return transliteration;
       // if (!transliteration && this.$hasFeature("transliteration")) {
