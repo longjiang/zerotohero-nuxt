@@ -4,8 +4,8 @@
       <div
         class="row dashboard-saved-words"
         v-if="
-          ((savedWordsSorted && savedWordsSorted.length > 0) ||
-            (savedPhrasesSorted && savedPhrasesSorted.length > 0))
+          (savedWordsSorted && savedWordsSorted.length > 0) ||
+          (savedPhrasesSorted && savedPhrasesSorted.length > 0)
         "
       >
         <div class="col-12">
@@ -76,9 +76,9 @@
           </div>
         </div>
       </div>
-      <div class="row mt-2">
+      <div class="row mt-4">
         <div class="col-12">
-          <div class="col-12 text-center">
+          <div class="text-center">
             <button
               :class="`btn btn-ghost-dark btn-small ${
                 skin === 'light' ? 'text-secondary' : ''
@@ -109,7 +109,9 @@
               Import
             </button>
             <button
-              :class="`btn btn-danger bg-danger text-white btn-small`"
+              :class="`btn btn-ghost-dark btn-small ${
+                skin === 'light' ? 'text-secondary' : ''
+              }`"
               v-if="
                 (savedWordsSorted && savedWordsSorted.length > 0) ||
                 (savedPhrasesSorted && savedPhrasesSorted.length > 0)
@@ -154,7 +156,6 @@
           </div>
         </div>
       </div>
-      
     </div>
   </container-query>
 </template>

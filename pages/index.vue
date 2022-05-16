@@ -97,8 +97,8 @@
           <div :class="{ 'row mb-5': true, 'd-none': !hasDashboard }">
             <div class="col-sm-12">
               <div class="home-card mb-0" style="padding: 1rem 1rem 2rem 1rem">
-                <h5 class="text-center mt-3 mb-3">
-                  Your Saved Words &amp; Phrases
+                <h5 class="text-center mt-3 mb-3 p-0">
+                  Your Words &amp; Phrases
                 </h5>
                 <LazyDashboard
                   @hasDashboard="hasDashboardUpdate"
@@ -292,7 +292,7 @@
                   :showFlags="true"
                 />
                 <div class="text-center mt-4">
-                  <router-link class="btn btn-success d-block" to="/language-map" ><i class="fas fa-globe-asia mr-1"></i> Choose language from a map <i class="ml-1 fas fa-chevron-right"></i></router-link>
+                  <router-link class="btn btn-success d-block" to="/language-map" ><i class="fas fa-globe-asia mr-1"></i> Pick language from a map <i class="ml-1 fas fa-chevron-right"></i></router-link>
                 </div>
               </div>
             </div>
@@ -442,14 +442,12 @@
             </div>
           </div>
         </client-only>
-        <div class="row mt-5 mb-5">
+      </div>
+        <div class="row mt-5 mb-5 bg-dark text-white">
           <div class="col-sm-12">
-            <div class="home-card home-card-dark">
-              <LazyFooter />
-            </div>
+            <LazyFooter />
           </div>
         </div>
-      </div>
     </div>
   </div>
 </template>
