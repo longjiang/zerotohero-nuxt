@@ -135,6 +135,7 @@ export default {
   },
   created() {
     this.$nuxt.$on("history", this.addFullHistoryItem); // from Language map
+    this.$nuxt.$on('animateStar', this.onAnimateStar)
     if (typeof window !== "undefined")
       window.addEventListener("resize", this.onResize);
   },
@@ -186,6 +187,9 @@ export default {
     },
   },
   methods: {
+    onAnimateStar(el) {
+      console.log(el)
+    },
     updateCollapsed(collapsed) {
       this.collapsed = collapsed;
     },

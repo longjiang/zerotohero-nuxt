@@ -55,8 +55,10 @@ export default {
       Helper,
     };
   },
-  sa() {
-    this.animate
+  watch: {
+    saved() {
+      $nuxt.$emit('animateStar', this.$el)
+    },
   },
   computed: {
     ...mapState("savedWords", ["savedWords"]),
