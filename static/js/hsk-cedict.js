@@ -32,11 +32,14 @@ const Dictionary = {
     const server = 'https://server.chinesezerotohero.com/'
     let data = await localforage.getItem(name)
     if (!data) {
-      let file = `${server}/data/hsk-cedict/${name}.csv.txt`
+      let file = `${server}data/hsk-cedict/${name}.csv.txt`
+      console.log(`HSK CEDICT: requesting '${file}' . . .`)
       let response = await axios.get(file)
       data = response.data
       localforage.setItem(name, data)
       response = null
+    } else {
+      console.log(`HSK CEDICT: dictionary '${name}' loaded from local indexedDB via localforage`)
     }
     if (data) {
       let results = Papa.parse(data, {

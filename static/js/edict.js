@@ -1,6 +1,7 @@
 importScripts('../vendor/kuromoji/kuromoji.js')
 importScripts('../vendor/wanakana/wanakana.min.js')
 importScripts('../vendor/jpconjugations.js')
+importScripts('../vendor/localforage/localforage.js')
 
 const Dictionary = {
   file: undefined,
@@ -106,22 +107,16 @@ const Dictionary = {
     "vz": "Ichidan verb - zuru verb (alternative form of -jiru verbs)"
   },
   async load() {
-    const server = 'https://server.chinesezerotohero.com/'
-    this.file = `${server}data/edict/edict.tsv.txt`
     this.tokenizer = await new Promise(resolve => {
       kuromoji.builder({ dicPath: `https://server.chinesezerotohero.com/data/kuromoji/` }).build((err, tokenizer) => {
         resolve(tokenizer)
       })
     })
-    let res = await axios.get(this.file)
-    let results = await Papa.parse(res.data, {
-      header: true
-    })
-    res = null
-    let sorted = results.data.sort((a, b) =>
+    let data = await this.loadSmart('edict')
+    let sorted = data.sort((a, b) =>
       a.kana && b.kana ? a.kana.length - b.kana.length : 0
     )
-    let data = []
+    let words = []
     for (let row of sorted) {
       if (row.kanji === 'ー') delete row.kana
       let pos = row.english ? row.english.replace(/^\((.*?)\).*/gi, "$1").split(',')[0] : undefined
@@ -139,10 +134,30 @@ const Dictionary = {
         },
         romaji: wanakana.toRomaji(row.kana)
       })
-      if (word.id) data.push(word)
+      if (word.id) words.push(word)
     }
-    this.words = data.sort((a, b) => b.head && a.head ? b.head.length - a.head.length : 0)
+    this.words = words.sort((a, b) => b.head && a.head ? b.head.length - a.head.length : 0)
     return this
+  },
+  async loadSmart(name) {
+    const server = 'https://server.chinesezerotohero.com/'
+    let data = await localforage.getItem(name)
+    if (!data) {
+      let file = `${server}data/edict/${name}.tsv.txt`
+      console.log(`EDICT: requesting '${file}' . . .`)
+      let response = await axios.get(file)
+      data = response.data
+      localforage.setItem(name, data)
+      response = null
+    } else {
+      console.log(`EDICT: dictionary '${name}' loaded from local indexedDB via localforage`)
+    }
+    if (data) {
+      let results = Papa.parse(data, {
+        header: true
+      })
+      return results.data
+    }
   },
   getSize() {
     return this.words.length

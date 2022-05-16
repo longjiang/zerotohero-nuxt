@@ -12,11 +12,11 @@ export default {
       { charset: 'utf-8' },
       // { name: 'referrer', content: 'no-referrer'}, // Turned off because some youtube videos will not load.
       { name: 'viewport', content: 'viewport-fit=cover, width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' },
-      { 'http-equiv': 'Content-Security-Policy', content: "script-src: 'self';"}
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/img/icons/favicon.ico' },
       { rel: 'stylesheet', href: '/vendor/fontawesome-free-5.15.4-web/css/all.min.css' },
+      { rel: 'stylesheet', href: '/fonts/fonts.css' },
     ],
     script: [
       { hid: 'russian-legacy', src: '/js/russian-legacy.js', defer: true },
@@ -75,14 +75,6 @@ export default {
         },
       }],
     }
-  },
-
-  googleFonts: {
-    families: {
-      Lato: [400, 700],
-      Pacifico: true
-    },
-    display: 'swap'
   },
 
   modules: [
