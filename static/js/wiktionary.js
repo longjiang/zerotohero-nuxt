@@ -176,7 +176,7 @@ const Dictionary = {
     return count;
   },
   async loadWords(file) {
-    let data, res
+    let data
     let indexedDBKey = `wiktionary-${this.l2}-${this.l1}`
     if (!this.useJSON.includes(this.l2)) {
       data = await localforage.getItem(indexedDBKey)

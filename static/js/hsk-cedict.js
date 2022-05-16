@@ -1,3 +1,5 @@
+importScripts("../vendor/localforage/localforage.js")
+
 const Dictionary = {
   file: undefined,
   characterFile: undefined,
@@ -10,51 +12,31 @@ const Dictionary = {
   credit() {
     return 'The Chinese dictionary is provided by <a href="https://www.mdbg.net/chinese/dictionary?page=cedict">CC-CEDICT</a>, open-source and distribtued under a <a href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>. We also added HSK information on top.'
   },
-  load() {
+  async load() {
     const server = 'https://server.chinesezerotohero.com/'
     this.file = `${server}/data/hsk-cedict/hsk_cedict.csv.txt`
     this.characterFile = `${server}/data/hsk-cedict/hsk_characters.csv.txt`
     this.newHSKFile = `${server}/data/hsk-cedict/new_hsk.csv.txt`
     // const server =  `${process.env.baseUrl}/`
-    return new Promise(resolve => {
-      let wordsPromise = new Promise(resolve => {
-        axios.get(this.file).then(response => {
-          let results = Papa.parse(response.data, {
-            header: true
-          })
-          this.words = results.data.map(row => this.augment(row))
-            .sort((a, b) => b.simplified.length - a.simplified.length)
-          for (let row of this.words) {
-            row.rank = row.weight / this._maxWeight
-          }
-          response = null
-          resolve()
-        })
-      })
-      let characterPromise = new Promise(resolve => {
-        axios.get(this.characterFile).then(response => {
-          let results = Papa.parse(response.data, {
-            header: true
-          })
-          this.characters = results.data
-          response = null
-          resolve()
 
-        })
-      })
-      let newHSKPromise = new Promise(resolve => {
-        axios.get(this.newHSKFile).then(response => {
-          let results = Papa.parse(response.data, {
-            header: true,
-            delimiter: ','
-          })
-          this.newHSK = results.data
-          response = null
-          resolve()
-        })
-      })
-      Promise.all([wordsPromise, characterPromise, newHSKPromise]).then(() => resolve(this))
+    let [words, characters, newHSK] = await Promise.all([this.loadSmart('hsk_cedict'), this.loadSmart('hsk_characters'), this.loadSmart('new_hsk')])
+    this.words = words.map(row => this.augment(row))
+      .sort((a, b) => b.simplified.length - a.simplified.length)
+    for (let row of this.words) {
+      row.rank = row.weight / this._maxWeight
+    }
+    this.characters = characters
+    this.newHSK = newHSK
+  },
+  async loadSmart(name) {
+    const server = 'https://server.chinesezerotohero.com/'
+    let file = `${server}/data/hsk-cedict/${name}.csv.txt`
+    let response = await axios.get(file)
+    let results = Papa.parse(response.data, {
+      header: true
     })
+    response = null
+    return results.data
   },
   getWords() {
     return this.words
