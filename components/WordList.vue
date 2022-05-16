@@ -14,10 +14,10 @@
         <Star
           v-if="word && star === true"
           :word="word"
-          class="mr-1"
-          style="overflow: hidden; height: 1.2rem"
+          :removeSymbol="true"
+          class="pr-2"
         ></Star>
-        <Speak :text="word.kana || word.head" :l2="$l2" />
+        <Speak :text="word.kana || word.head" :l2="$l2" class="text-secondary" />
         <router-link
           v-if="compareWith"
           :to="`/${$l1.code}/${$l2.code}/compare/${$dictionaryName}/${compareWith.id},${word.id}`"

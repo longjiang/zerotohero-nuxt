@@ -66,7 +66,7 @@
       <div class="entry-word-wrapper" style="display: inline-block">
         <div class="mb-2">
           <div class="entry-pinyin">
-            <Star :word="entry"></Star>
+            
             <span :class="{ 'ml-2 mr-1': true, transparent: hidePhonetics }">
               <span v-if="$l2.code === 'tlh'">
                 {{ entry.head }} /{{ klingonIPA(entry.head) }}/
@@ -98,7 +98,7 @@
               </template>
             </span>
             <Speak
-              class="ml-1"
+              class="ml-1 mr-2"
               :text="entry.head"
               :mp3="entry.audio"
               ref="speak"
@@ -106,7 +106,7 @@
             />
           </div>
         </div>
-        <div :class="{ transparent: hideWord }">
+        <span :class="{ transparent: hideWord }">
           <router-link
             :to="`/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${entry.id}`"
           >
@@ -143,8 +143,8 @@
               </span>
             </template>
           </router-link>
-        </div>
-        <div
+        </span>
+        <span
           v-if="
             ['ko', 'vi'].includes($l2.code) && entry.cjk && entry.cjk.canonical
           "
@@ -153,8 +153,8 @@
           <span :class="{ 'ml-2 entry-cjk': true, transparent: hidePhonetics }">
             {{ entry.cjk.canonical }}
           </span>
-        </div>
-        <div
+        </span>
+        <span
           v-if="
             ['hsk-cedict', 'dialect-dict'].includes($dictionaryName) &&
             entry.simplified !== entry.traditional
@@ -163,7 +163,7 @@
         >
           <span class="ml-2 entry-cjk simplified">{{ entry.traditional }}</span>
           <span class="ml-2 entry-cjk traditional">{{ entry.simplified }}</span>
-        </div>
+        </span>
 
         <span
           v-if="entry.supplementalLang"
@@ -172,6 +172,7 @@
           {{ $languages.getSmart(entry.supplementalLang).name }}
         </span>
       </div>
+      <div class="mt-3" ><Star :word="entry" /></div>
     </div>
   </div>
 </template>

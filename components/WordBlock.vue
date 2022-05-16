@@ -112,12 +112,6 @@
               {{ word.morphology }} of
             </div>
             <div>
-              <Star
-                :word="word"
-                :text="text"
-                class="mr-1"
-                style="font-size: 1.2rem"
-              ></Star>
               <span class="word-pronunciation">{{ pronunciation(word) }}</span>
               <Speak
                 :text="word.kana || word.head"
@@ -126,6 +120,12 @@
                 class="ml-1"
                 ref="speak"
               />
+              <Star
+                :word="word"
+                :text="text"
+                class="ml-1"
+                style="font-size: 0.8rem"
+              ></Star>
             </div>
             <b
               :data-level="word.level || 'outside'"

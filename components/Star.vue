@@ -2,21 +2,30 @@
   <client-only>
     <div class="toggle-saved-word focus-exclude">
       <button
-        class="star remove-word"
-        v-if="saved()"
-        v-on:click="removeWordClick"
-        title='Remove from "Saved Words"'
-      >
-        <!-- <i class="fas fa-bookmark"></i> -->
-        <i class="fas fa-star"></i>
-      </button>
-      <button
-        class="star add-word"
+        class="btn btn-unstyled not-saved btn-toggle-saved-word add-word"
         v-if="!saved()"
         v-on:click="saveWordClick"
         title='Add to "Saved Words"'
       >
-        <i class="far fa-star"></i>
+        <i class="fas fa-plus"></i>
+        Save Word
+      </button>
+      <button
+        class="btn btn-unstyled saved btn-toggle-saved-word remove-word"
+        v-if="saved() && !removeSymbol"
+        v-on:click="removeWordClick"
+        title='Remove from "Saved Words"'
+      >
+        <!-- <i class="fas fa-bookmark"></i> -->
+        <i class="fas fa-check"></i>
+        Saved
+        <i class="fas fa-times-circle ml-1"></i>
+      </button>
+      <button
+        v-if="removeSymbol"
+        class="btn btn-unstyled text-secondary p-0 pb-1"
+      >
+        <i class="fas fa-times-circle"></i>
       </button>
     </div>
   </client-only>
@@ -33,6 +42,10 @@ export default {
     },
     text: {
       type: String,
+    },
+    removeSymbol: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -116,21 +129,23 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style lang="scss" scoped>
 .toggle-saved-word {
   display: inline-block;
-  position: relative;
-  padding: 0;
-  margin: 0;
-  background: none;
-  border: none;
 }
 
-.star {
-  background: none;
-  border: none;
-  color: #f8b61e;
-  padding: 0;
-  font-size: 1em;
+.btn-toggle-saved-word {
+  position: relative;
+  bottom: 0.2em;
+  padding: 0.05rem 0.4rem;
+  font-size: 0.8em;
+  &.not-saved {
+    color: #f8b61e;
+    border: 2px solid #f8b61e99;
+  }
+  &.saved {
+    background: #f8b61e;
+    color: white;
+  }
 }
 </style>

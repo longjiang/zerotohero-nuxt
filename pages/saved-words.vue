@@ -13,25 +13,8 @@
   }
 </router>
 <template>
-  <div class="main pt-5 pb-4" v-cloak>
+  <div class="main pb-4" v-cloak>
     <div class="container">
-      <div class="row">
-        <div class="col-sm-12">
-          <h3 class="text-center">
-            {{ sWLoaded ? sW.length : "" }} Saved {{ $l2.name }} Words
-          </h3>
-          <p class="text-center mb-5">
-            {{
-              $t(
-                "These words are stored in your browser's local storage, which persists unless you clear your browsing data."
-              )
-            }}
-          </p>
-          <div class="text-center">
-            <Loader class="mt-4" @loaded="updateLoaded" />
-          </div>
-        </div>
-      </div>
       <div class="row">
         <div class="col-sm-12">
           <p
@@ -42,9 +25,68 @@
             <i class="far fa-star"></i>
             icon next to it.
           </p>
+          <div v-if="dictionaryLoaded && !sWLoaded" class="text-center">
+            <Loader
+              :sticky="true"
+              message="Loading words saved in your browser..."
+            />
+          </div>
+          <div
+            class="pb-3 pt-3 bg-white text-center"
+            style="position: sticky; top: 2.9rem; z-index: 2"
+            v-if="sWLoaded && sW.length > 0"
+          >
+            <LazyHideDefs
+              @hideWord="hideWord = arguments[0]"
+              @hideDefinitions="hideDefinitions = arguments[0]"
+              @hidePhonetics="hidePhonetics = arguments[0]"
+            />
+          </div>
+          <div
+            v-for="(group, index) in groups"
+            :key="`group-${index}`"
+            class="mt-3 small" style="color: #ccc"
+          >
+            <div v-if="group.date === '0'">Earlier</div>
+            <div v-else>
+              {{
+                new Date(group.date).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })
+              }}
+            </div>
+            <hr class="mt-1" />
+            <WordList
+              :words="group.sW.map((s) => s.word)"
+              :hideDefinitions="hideDefinitions"
+              :hidePhonetics="hidePhonetics"
+              :hideWord="hideWord"
+              class="mt-3"
+            ></WordList>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-5 text-center">
+        <div class="col-sm-12">
+          <h6>
+            {{ sWLoaded ? sW.length : "" }} {{ $l2.name }} Words Saved
+          </h6>
+          <p class="mb-3">
+            {{
+              $t(
+                "These words are stored in your browser's local storage, which persists unless you clear your browsing data."
+              )
+            }}
+          </p>
+          <div class="text-center">
+            <Loader class="mt-4" @loaded="updateLoaded" />
+          </div>
+
           <div>
             <a
-              class="download-csv btn btn-primary btn-sm"
+              class="download-csv btn btn-success btn-small"
               :href="csvHref"
               :download="`${$l2.name
                 .toLowerCase()
@@ -57,63 +99,23 @@
               {{ $t("Export CSV") }}
             </a>
             <b-button
-              class="remove-all"
+              class="remove-all btn-small"
               variant="danger"
               size="sm"
               v-on:click="removeAllClick"
               v-if="this.sW.length > 0"
             >
-              <i class="glyphicon glyphicon-trash"></i>
-              {{ $t("Clear") }}
+              <i class="fas fa-times mr-1"></i>
+              {{ $t("Remove All") }}
             </b-button>
             <router-link
               v-if="sW.length > 0"
-              class="btn btn-gray btn-sm"
+              class="btn btn-small"
               :to="`/${$l1.code}/${$l2.code}/learn-interactive/saved`"
             >
               <i class="fa fa-chalkboard"></i>
               Learn (Legacy)
             </router-link>
-          </div>
-          <div v-if="dictionaryLoaded && !sWLoaded" class="text-center">
-            <Loader
-              :sticky="true"
-              message="Loading words saved in your browser..."
-            />
-          </div>
-          <div
-            class="pt-3 pb-3 bg-white"
-            style="position: sticky; top: 0; z-index: 2"
-            v-if="sWLoaded && sW.length > 0"
-          >
-            <LazyHideDefs
-              @hideWord="hideWord = arguments[0]"
-              @hideDefinitions="hideDefinitions = arguments[0]"
-              @hidePhonetics="hidePhonetics = arguments[0]"
-            />
-          </div>
-          <div
-            v-for="(group, index) in groups"
-            :key="`group-${index}`"
-            class="mt-4"
-          >
-            <h5 class="text-center" v-if="group.date === '0'">Earlier</h5>
-            <h5 class="text-center" v-else>
-              {{
-                new Date(group.date).toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })
-              }}
-            </h5>
-            <WordList
-              :words="group.sW.map((s) => s.word)"
-              :hideDefinitions="hideDefinitions"
-              :hidePhonetics="hidePhonetics"
-              :hideWord="hideWord"
-              class="mt-3"
-            ></WordList>
           </div>
         </div>
       </div>
