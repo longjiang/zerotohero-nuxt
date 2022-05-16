@@ -1,7 +1,7 @@
 importScripts("../vendor/korean_conjugation/html/korean/hangeul.js");
 importScripts("../vendor/korean_conjugation/html/korean/conjugator.js");
 importScripts("../vendor/fastest-levenshtein/fastest-levenshtein.js");
-importScripts('../vendor/localforage/localforage.js')
+importScripts("../vendor/localforage/localforage.js")
 
 const Dictionary = {
   file:
@@ -302,7 +302,7 @@ const Dictionary = {
       let res = await axios.get(
         `https://server.chinesezerotohero.com/scrape2.php?&cache_life=-1&url=${encodeURIComponent(
           "http://py.zerotohero.ca:4567/tokenize?text=" +
-            text.replace(/\s/g, "%20"),
+          text.replace(/\s/g, "%20"),
           { timeout: 5000 }
         )}`
       );

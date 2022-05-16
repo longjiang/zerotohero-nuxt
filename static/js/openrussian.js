@@ -1,3 +1,5 @@
+importScripts('../vendor/localforage/localforage.js')
+
 const Dictionary = {
   words: [],
   merged: [],
@@ -53,19 +55,32 @@ const Dictionary = {
   credit() {
     return 'The Russian dictionary is provided by <a href="https://en.openrussian.org/about">OpenRussian.org</a>, which is freely distribtued.'
   },
-  dictionaryFile(table) {
-    let filename = `https://server.chinesezerotohero.com/data/openrussian/${table}.csv.txt`
-    return filename
+  async loadSmart(name) {
+    const server = 'https://server.chinesezerotohero.com/'
+    let data = await localforage.getItem(name)
+    if (!data) {
+      let file = `${server}data/openrussian/${name}.csv.txt`
+      console.log(`Open Russian: requesting '${file}' . . .`)
+      let response = await axios.get(file)
+      data = response.data
+      localforage.setItem(name, data)
+      response = null
+    } else {
+      console.log(`Open Russian: dictionary '${name}' loaded from local indexedDB via localforage`)
+    }
+    if (data) {
+      let results = Papa.parse(data, {
+        header: true
+      })
+      return results.data
+    }
   },
   async loadDeclensions() {
     console.log(`OpenRussian: Loading declensions`)
-    let res = await axios.get(this.dictionaryFile('declensions'))
-    let results = await Papa.parse(res.data, {
-      header: true
-    })
+    let data = await this.loadSmart('declensions')
 
     let declensions = []
-    for (let row of results.data) {
+    for (let row of data) {
       declensions[row.id] = row
     }
     for (let word of this.words) {
@@ -97,15 +112,12 @@ const Dictionary = {
     }
   },
   async loadTable(table) {
-    let res = await axios.get(this.dictionaryFile(table))
-    let results = await Papa.parse(res.data, {
-      header: true
-    })
+    let data = await this.loadSmart(table)
     this[table] = []
     if (table === 'translations') {
-      results.data = results.data.filter(row => row.lang === 'en')
+      data = data.filter(row => row.lang === 'en')
     }
-    for (let row of results.data) {
+    for (let row of data) {
       let word = this.words[row.word_id]
       if (word) {
         word[table] = row
@@ -116,11 +128,8 @@ const Dictionary = {
   },
   async loadWords() {
     console.log('OpenRussian: Loading words')
-    let res = await axios.get(this.dictionaryFile('words'))
-    let results = await Papa.parse(res.data, {
-      header: true
-    })
-    for (let row of results.data) {
+    let data = await this.loadSmart('words')
+    for (let row of data) {
       if (row.accented) {
         row.accented = this.accent(row.accented)
       }
