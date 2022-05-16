@@ -380,7 +380,11 @@ export default {
       if (["ko", "vi"].includes(this.$l2.code)) {
         let hanja = "";
         if (this.saved) hanja = this.saved.hanja;
-        else if (this.token && this.token.candidates && this.token.candidates[0]) {
+        else if (
+          this.token &&
+          this.token.candidates &&
+          this.token.candidates[0]
+        ) {
           let head = this.token.candidates[0].head;
           let bannedEndings = "이히하고가기는은도의";
           let bannedWords = ["지난", "진자"];
@@ -464,7 +468,7 @@ export default {
     if (this.sticky) {
       this.lookup();
     }
-      this.update();
+    this.update();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type.startsWith("savedWords")) {
         this.update();
@@ -540,20 +544,23 @@ export default {
         let roman = await this.getFarsiRomanization(this.text);
         transliteration = roman.replace(/\^/g, "");
       } else if (this.token && this.token.candidates.length > 0) {
-        if (this.token.candidates[0].kana) {
-          transliteration = this.token.candidates[0].kana;
-        } else if (this.token.candidates[0].pronunciation) {
-          transliteration = this.token.candidates[0].pronunciation.split(",")[0];
-        } else if (this.token.candidates[0].pinyin) {
-          transliteration = this.token.candidates[0].pinyin;
+        if (this.token.candidates[0].pronunciation) {
+          transliteration =
+            this.token.candidates[0].pronunciation.split(",")[this.$l2.code === 'vi' ? 1 : 0];
+          transliteration =
+            transliteration ||
+            this.token.candidates[0].kana ||
+            this.token.candidates[0].jyutping ||
+            this.token.candidates[0].pinyin;
         }
       }
-      if (this.$hasFeature("transliteration")) {
-        if (!["ja", "zh", "nan", "hak"].includes(this.$l2.code)) {
-          transliteration = this.transliterate(this.text);
-        }
-      }
-      if (transliteration !== this.text) return transliteration;
+      return transliteration;
+      // if (!transliteration && this.$hasFeature("transliteration")) {
+      //   if (!["ja", "zh", "nan", "hak"].includes(this.$l2.code)) {
+      //     transliteration = this.transliterate(this.text);
+      //   }
+      // }
+      // if (transliteration !== this.text) return transliteration;
     },
     klingonIPA(text) {
       return Klingon.latinToIPA(text);
