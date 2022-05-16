@@ -1,3 +1,5 @@
+importScripts("../vendor/localforage/localforage.js")
+
 /**
  * @file Converts pinyin tone numbers to tone marks.
  * @author Kevin K. Yang <yangkevi@usc.edu>
@@ -201,21 +203,36 @@ const Dictionary = {
       return `${this.server}/${this.files[l2]}`
     }
   },
+  async loadSmart(name, file) {
+    let data = await localforage.getItem(name)
+    if (!data) {
+      console.log(`Dialect Dict: requesting '${file}' . . .`)
+      let response = await axios.get(file)
+      data = response.data
+      localforage.setItem(name, data)
+      response = null
+    } else {
+      console.log(`Dialect Dict: dictionary '${name}' loaded from local indexedDB via localforage`)
+    }
+    if (data) {
+      let results = Papa.parse(data, {
+        header: true,
+        delimiter: ','
+      })
+      return results.data
+    }
+  },
   async load({
     l1 = undefined,
     l2 = undefined
   } = {}) {
     if (l1 && l2) {
       this.file = this.dictionaryFile({ l1, l2 })
-      let res = await axios.get(this.file)
-      let results = await Papa.parse(res.data, {
-        header: true,
-        delimiter: ','
-      })
-      let sorted = results.data.sort((a, b) =>
+      let data = await this.loadSmart(`dialect-dict-${l1}-${l2}`, this.file)
+      let sorted = data.sort((a, b) =>
         a.traditional && b.traditional ? a.traditional.length - b.traditional.length : 0
       )
-      let data = []
+      let words = []
       for (let [index, row] of sorted.entries()) {
         let definitions = row.english ? row.english.split('/').map(d => d.trim()) : row.definitions ? row.definitions.split('|').map(d => d.trim()) : []
         let word = {
@@ -234,7 +251,7 @@ const Dictionary = {
           traditional: row.traditional,
           simplified: row.simplified,
         }
-        data.push(word)
+        words.push(word)
       }
       this.words = data.sort((a, b) => b.head && a.head ? b.head.length - a.head.length : 0)
       return this

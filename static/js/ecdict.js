@@ -1,4 +1,5 @@
 importScripts('../vendor/javascript-lemmatizer/js/lemmatizer.js')
+importScripts("../vendor/localforage/localforage.js")
 
 const Dictionary = {
   name: 'ecdict',
@@ -20,37 +21,51 @@ const Dictionary = {
     6: 'C1',
     7: 'C2'
   },
-  load(lang) {
+  async load(lang) {
     console.log('Loading ECDICT...')
     this.lang = lang
     const server = 'https://server.chinesezerotohero.com/'
     this.file = `${server}data/ecdict/ecdict-longer-ranked.csv.txt`
     this.touchstoneFile = `${server}data/ecdict/touchstone.csv.txt`
     this.frequencyFile = `${server}data/ecdict/frequency.csv.txt`
-    return new Promise(async resolve => {
-      await this.loadWords()
-      // await this.loadFrequency() // Frequency is now built in the csv
-      this.addIdToWords()
-      // this.addFrequencyToWords()
-      // this.addFrequencyToPhrases()
-      this.assignLevels()
-      // console.log(Papa.unparse(this.words))
-      resolve(this)
-    })
+    await this.loadWords()
+    // await this.loadFrequency() // Frequency is now built in the csv
+    this.addIdToWords()
+    // this.addFrequencyToWords()
+    // this.addFrequencyToPhrases()
+    this.assignLevels()
+    // console.log(Papa.unparse(this.words))
+    return this
+  },
+  async loadSmart(name, file) {
+    let data = await localforage.getItem(name)
+    if (!data) {
+      console.log(`ECDICT: requesting '${file}' . . .`)
+      let response = await axios.get(file)
+      data = response.data
+      localforage.setItem(name, data)
+      response = null
+    } else {
+      console.log(`ECDICT: dictionary '${name}' loaded from local indexedDB via localforage`)
+    }
+    if (data) {
+      let results = Papa.parse(data, {
+        header: true
+      })
+      return results.data
+    }
   },
   async loadWords() {
     console.log('Loading words...')
-    let res = await axios.get(this.file)
-    let results = await Papa.parse(res.data, {
-      header: true
-    })
-    res = null
-    for (let index in results.data) {
-      let row = results.data[index]
+    let data = await this.loadSmart('ecdict', this.file)
+    let words = []
+    for (let index in data) {
+      let row = data[index]
       let word = row
       word = this.augment(row)
-      this.words.push(word)
+      words.push(word)
     }
+    this.words = words
     console.log('Words loaded.')
   },
   splitByReg(text, reg) {
