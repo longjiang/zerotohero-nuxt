@@ -5,7 +5,7 @@
         :class="`annotation-setting-toggle ${adminMode ? 'annotation-setting-toggle-active' : ''}`">
         <i class="fa fa-wrench"></i>
       </span>
-      <span v-if="$hasFeature('transliteration')" @click="showPinyin = !showPinyin"
+      <span @click="showPinyin = !showPinyin"
         :class="`annotation-setting-toggle ${showPinyin ? 'annotation-setting-toggle-active' : ''}`">
         <ruby v-if="$l2.han" style="position: relative; bottom:-0.1rem;">拼<rt>pīn</rt></ruby>
         <ruby v-else-if="$l2.code === 'ja'">假<rt>か</rt></ruby>

@@ -34,7 +34,7 @@ export const mutations = {
   SET_L2(state, l2) {
     if (typeof l2 === 'undefined') return
     state.l2 = l2
-    if ((l2.scripts && l2.scripts[0] && l2.scripts[0].script === 'Cyrl') || state.romanizationOffByDefault.includes(l2.code)) {
+    if ((l2.scripts && l2.scripts[0] && ['Cyrl', 'Latn'].includes(l2.scripts[0].script)) || state.romanizationOffByDefault.includes(l2.code)) {
       state.l2Settings.showPinyin = false
     }
   },
