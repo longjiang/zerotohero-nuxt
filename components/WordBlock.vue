@@ -556,13 +556,12 @@ export default {
           this.token.candidates[0].jyutping ||
           this.token.candidates[0].pinyin;
       }
-      return transliteration;
-      // if (!transliteration && this.$hasFeature("transliteration")) {
-      //   if (!["ja", "zh", "nan", "hak"].includes(this.$l2.code)) {
-      //     transliteration = this.transliterate(this.text);
-      //   }
-      // }
-      // if (transliteration !== this.text) return transliteration;
+      if (!transliteration && this.$hasFeature("transliteration")) {
+        if (!["ja", "zh", "nan", "hak"].includes(this.$l2.code)) {
+          transliteration = this.transliterate(this.text);
+        }
+      }
+      if (transliteration !== this.text) return transliteration;
     },
     klingonIPA(text) {
       return Klingon.latinToIPA(text);
