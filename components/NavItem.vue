@@ -93,6 +93,10 @@ export default {
   + .secondary-nav-item {
     margin-left: 1rem;
   }
+  &.nuxt-link-active,
+  &:hover {
+    font-weight: bold;
+  }
 }
 
 .zth-nav-light {
@@ -103,17 +107,11 @@ export default {
     &:hover {
       color: #28a745;
       background: hsla(0deg, 100%, 100%, 0.75);
-      border-top: 1px solid rgba(255, 255, 255, 0.5);
-      border-left: 1px solid rgba(255, 255, 255, 0.5);
-      border-right: 1px solid rgba(255, 255, 255, 0.5);
     }
   }
 
-  .seoncdary-nav-item {
-    &.nuxt-link-active,
-    &:hover {
-      background: #014161c7;
-    }
+  a.secondary-nav-item {
+    color: #444;
   }
 }
 
@@ -171,10 +169,11 @@ export default {
     .main-nav-item {
       color: white;
       text-shadow: black 0 1px 3px;
-      &.router-link-active,
+      &.nuxt-link-active,
       &:hover {
         color: #444;
         text-shadow: none;
+        background: rgba(255, 255, 255, 0.75);
       }
     }
   }

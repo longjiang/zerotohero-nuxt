@@ -989,8 +989,7 @@ button.bg-primary:focus {
     flex-wrap: nowrap;
     .content-pane-left {
       width: 21rem;
-      background: #ffffffdd;
-      backdrop-filter: blur(20px);
+      background: rgb(244 245 244);
       height: 100vh;
       position: sticky;
       top: 0;

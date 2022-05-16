@@ -13,6 +13,23 @@
           :key="`definition-${index}`"
           class="definition-list-item"
         >
+          <span
+            class="word-type mt-3"
+            v-if="index === 0 && entry && entry.pos"
+            style="color: #999"
+          >
+            {{
+              entry.gender
+                ? { m: "masculine", f: "feminine", n: "neuter" }[entry.gender]
+                : ""
+            }}
+            {{ entry.pos }}
+            {{
+              entry.heads && entry.heads[0] && entry.heads[0][1]
+                ? entry.heads[0][1]
+                : ""
+            }}:
+          </span>
           <v-runtime-template :template="`<span>${definition.html}</span>`" />
           <span
             v-if="
@@ -40,6 +57,7 @@ export default {
     VRuntimeTemplate,
   },
   props: {
+    entry: Object,
     definitions: Array,
     singleColumn: false,
     nodef: {

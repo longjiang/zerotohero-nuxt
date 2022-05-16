@@ -1151,6 +1151,7 @@ export default {
 
     .main-nav-items {
       padding-left: 1rem;
+      padding-top: 0.75rem;
     }
 
     .end-nav {

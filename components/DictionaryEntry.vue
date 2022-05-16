@@ -332,7 +332,7 @@ export default {
 
         &:hover,
         &.section-nav-item-current {
-          background-image: linear-gradient(#fd4f1c44, #fd4f1c44);
+          background-image: linear-gradient(#28a745cc, #28a745cc);
           background-position: 50% 100%;
           background-size: 70% 0.35rem;
           background-repeat: no-repeat;

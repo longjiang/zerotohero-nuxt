@@ -14,7 +14,7 @@
       :type="type"
       :entry="searchEntry"
       :term="term"
-      placeholder="Word, phrase, or pattern (`_` is 1 char, `*` is multi-char)"
+      placeholder="Search"
       v-if="!loading"
     ></Search>
     <Search
