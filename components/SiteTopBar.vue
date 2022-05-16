@@ -72,13 +72,12 @@
             <i class="fas fa-globe-asia"></i>
           </router-link> -->
           <router-link
-            v-if="badge"
             id="site-top-bar-saved-words"
             :to="{ name: 'saved-words' }"
-            :class="`btn top-bar-button btn-unstyled link-unstyled`"
+            :class="`btn top-bar-button btn-unstyled link-unstyled ${badge ? '' : 'd-none'}`"
           >
             <i class="fas fa-star"></i>
-            <span class="saved-words-count" v-cloak v-if="badge">
+            <span class="saved-words-count">
               {{ badge }}
             </span>
           </router-link>
