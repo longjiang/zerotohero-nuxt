@@ -16,7 +16,7 @@
       <SiteTopBar
         v-if="!wide && $route.params.l1 && $route.params.l1 && l1 && l2"
         variant="menu-bar"
-      :badge="savedWordsCount + savedPhrasesCount"
+        :badge="savedWordsCount + savedPhrasesCount"
       />
 
       <Nav
@@ -63,6 +63,7 @@
         :iconMode="true"
       />
     </template>
+    <i class="fas fa-star star-animation"></i>
   </div>
 </template>
 
@@ -135,7 +136,7 @@ export default {
   },
   created() {
     this.$nuxt.$on("history", this.addFullHistoryItem); // from Language map
-    this.$nuxt.$on('animateStar', this.onAnimateStar)
+    this.$nuxt.$on("animateStar", this.onAnimateStar);
     if (typeof window !== "undefined")
       window.addEventListener("resize", this.onResize);
   },
@@ -187,8 +188,28 @@ export default {
     },
   },
   methods: {
-    onAnimateStar(el) {
-      console.log(el)
+    async onAnimateStar(el) {
+      let target = document.querySelector("#site-top-bar-saved-words");
+      if (el && target) {
+        let bounds = el.getBoundingClientRect();
+        let targetBounds = target.getBoundingClientRect();
+        let x = targetBounds.left - bounds.left
+        let y = targetBounds.bottom - bounds.bottom
+        const starAnimation = [
+          { transform: `scale(2) translateX(0px) translateY(0px)`, opacity: 1 },
+          { transform: `scale(1) translateX(${x}px) translateY(${y}px)`, opacity: 0.5 },
+        ];
+        const star = document.querySelector(".star-animation");
+        star.style.display = 'block'
+        star.style.top = bounds.top + 'px';
+        star.style.left = bounds.left + 'px';
+        star.animate(starAnimation, {
+          duration: 1000,
+          iterations: 1,
+        });
+        await Helper.timeout(1000)
+        star.style.display = 'none'
+      }
     },
     updateCollapsed(collapsed) {
       this.collapsed = collapsed;
@@ -263,6 +284,17 @@ export default {
 <style lang="scss" scoped>
 .__nuxt-error-page {
   z-index: 99;
+}
+
+.star-animation {
+  color: #f8b61e;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 9999;
+  width: 1.2rem;
+  height: 1.2rem;
+  display: none;
 }
 
 #zerotohero {

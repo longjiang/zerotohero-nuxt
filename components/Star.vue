@@ -57,7 +57,7 @@ export default {
   },
   watch: {
     saved() {
-      $nuxt.$emit('animateStar', this.$el)
+      if (this.saved) $nuxt.$emit('animateStar', this.$el)
     },
   },
   computed: {

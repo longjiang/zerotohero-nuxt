@@ -73,6 +73,7 @@
           </router-link> -->
           <router-link
             v-if="badge"
+            id="site-top-bar-saved-words"
             :to="{ name: 'saved-words' }"
             :class="`btn top-bar-button btn-unstyled link-unstyled ${
               params.md === false ? 'd-none' : ''

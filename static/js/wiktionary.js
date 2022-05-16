@@ -755,26 +755,29 @@ const Dictionary = {
     for (let w of words) {
       for (let d of w.definitions) {
         let lemma = this.lemmaFromDefinition(d);
-        for (let head of heads) {
-          if (head === lemma.lemma) {
-            field = d.replace(new RegExp(`of ${head}.*`), "").trim();
-            field = field.replace(/form$/, "").trim();
-            let table = field.replace(/.*?([^\s]+)$/, "$1").trim();
-            if (table.includes(")")) table = "";
-            if (table === "A") table = "";
-            if (table === "") {
-              table = "inflected";
-              field =
-                field.replace("A(n) ", "").replace("A", "inflected") + " form";
-            } else field = field.replace(table, "");
-            if (field === "A") field = "inflected";
-            let form = {
-              table,
-              field: field ? field : table,
-              form: w.head
-            };
-            moreForms.push(form);
+        if (lemma && lemma.lemma) {
+          for (let head of heads) {
+            if (head === lemma.lemma) {
+              field = d.replace(new RegExp(`of ${head}.*`), "").trim();
+              field = field.replace(/form$/, "").trim();
+              let table = field.replace(/.*?([^\s]+)$/, "$1").trim();
+              if (table.includes(")")) table = "";
+              if (table === "A") table = "";
+              if (table === "") {
+                table = "inflected";
+                field =
+                  field.replace("A(n) ", "").replace("A", "inflected") + " form";
+              } else field = field.replace(table, "");
+              if (field === "A") field = "inflected";
+              let form = {
+                table,
+                field: field ? field : table,
+                form: w.head
+              };
+              moreForms.push(form);
+            }
           }
+
         }
       }
     }
