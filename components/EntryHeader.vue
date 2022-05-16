@@ -172,7 +172,6 @@
           {{ $languages.getSmart(entry.supplementalLang).name }}
         </span>
       </div>
-      <div class="mt-3" ><Star :word="entry" /></div>
     </div>
   </div>
 </template>

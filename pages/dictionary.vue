@@ -17,7 +17,7 @@
     >
       <SocialHead :title="title" :description="description" :image="image" />
       <client-only>
-        <div :class="{'dictionary-search-bar' : args}">
+        <div :class="{ 'dictionary-search-bar': args }">
           <div :class="{ 'container pt-2': !wide }">
             <div :class="{ row: !wide }">
               <div :class="{ 'col-sm-12': !wide }">
@@ -40,12 +40,22 @@
             <div class="row">
               <div class="col-sm-12 bg-white">
                 <!-- <Sale style="border-radius: 1rem !important" class="pb-5 pl-5 pr-5" v-if="$l2.code === 'zh'" /> -->
-                <div v-if="dictionarySize" style="max-width: 50rem; margin: 0 auto">
+                <div
+                  v-if="dictionarySize"
+                  style="max-width: 50rem; margin: 0 auto"
+                >
                   <h6 class="mt-4">Usage tips:</h6>
                   <ul>
-                    <li>Wild cards: use "<code>_</code>" (underscore) to match one character, use "<code>*</code>" (asterisk) to match one or more characters.</li>
+                    <li>
+                      Wild cards: use "
+                      <code>_</code>
+                      " (underscore) to match one character, use "
+                      <code>*</code>
+                      " (asterisk) to match one or more characters.
+                    </li>
                     <li v-if="dictionarySize">
-                      This {{ $l2.name }} dictionary has {{ $n(dictionarySize) }} words.
+                      This {{ $l2.name }} dictionary has
+                      {{ $n(dictionarySize) }} words.
                     </li>
                   </ul>
                 </div>
@@ -64,20 +74,14 @@
               @hidePhonetics="hidePhonetics = arguments[0]"
             />
             <client-only>
-              <div v-if="saved()" class="text-center mb-4">
-                <router-link
-                  class="link-unstyled mb-2 d-block"
-                  :to="`/${$l1.code}/${$l2.code}/saved-words`"
-                >
-                  <h5>
-                    <i class="fa fa-chevron-left mr-2"></i>
-                    Saved {{ $l2.name }} Words
-                  </h5>
-                </router-link>
+              <div class="text-center mb-3">
+                <Star :word="entry"/>
                 <Paginator
-                  v-if="sW.length > 0"
+                  class="d-inline-block ml-2"
+                  v-if="saved() && sW.length > 0"
                   :items="sW"
                   :findCurrent="(item) => item.id === entry.id"
+                  append=" Saved Words"
                   :url="
                     (item) =>
                       `/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${item.id}`
@@ -373,7 +377,7 @@ export default {
         this.entry &&
         this.entry.head &&
         this.$store.getters["savedWords/has"]({
-          text: this.entry.head.toLowerCase(),
+          id: this.entry.id,
           l2: this.$l2.code,
         })
       );

@@ -7,7 +7,7 @@
         v-on:click="saveWordClick"
         title='Add to "Saved Words"'
       >
-        <i class="fas fa-plus"></i>
+        <i class="far fa-star"></i>
         Save Word
       </button>
       <button
