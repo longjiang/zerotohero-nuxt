@@ -68,7 +68,7 @@
             <i class="fas fa-globe-asia"></i>
           </router-link> -->
           <LoginButton
-            v-if="$l1 && $l2"
+            v-if="$l1 && $l2 && ($l2.code === 'zh' || $l2.code === 'en')"
             :class="`${$l2 && params.xxlg ? 'd-inline-block' : 'd-none'} ml-2 mr-1`"
             :icon="true"
             :text="false"
@@ -108,7 +108,7 @@
             style="
               color: #ccc;
               cursor: pointer;
-              margin-left: 0.5rem;
+              margin-left: 1rem;
             "
             @click="collapseClick"
             :class="{ 'd-none': variant === 'menu-bar' }"
