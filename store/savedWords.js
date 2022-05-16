@@ -136,7 +136,7 @@ export const getters = {
         savedWord = state.idIndex[l2][id]
       } else if (text) {
         let search = text.toLowerCase()
-        let savedWords = state.savedWords[l2][search] || []
+        let savedWords = state.formIndex[l2][search] || []
         if (savedWords) return savedWords[0]
       }
       return savedWord
