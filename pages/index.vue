@@ -243,6 +243,8 @@
                 />
                 <LanguageList
                   :showSpeakers="false"
+                  :showFeatures="false"
+                  :showCode="true"
                   :keyword="langKeyword"
                   :codes="[
                     'ar',
@@ -305,14 +307,15 @@
                   class="mt-4"
                   :sort="true"
                   :showFlags="true"
+                  variant="grid"
                 />
-                <div class="text-center mt-4">
+                <div class="text-center mt-1 p-1">
                   <router-link
                     class="btn btn-success d-block"
                     to="/language-map"
                   >
                     <i class="fas fa-globe-asia mr-1"></i>
-                    Pick language from a map
+                    More languages
                     <i class="ml-1 fas fa-chevron-right"></i>
                   </router-link>
                 </div>

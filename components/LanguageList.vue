@@ -2,7 +2,34 @@
   <container-query :query="query" v-model="params">
     <div>
       <div v-if="languages && languages.length > 0" :class="classes">
-        <div v-if="variant === 'grid'"></div>
+        <div class="container" v-if="variant === 'grid'">
+          <div class="row">
+            <div
+              v-for="(language, index) in languages"
+              :key="`lang-${language.code}-${index}`"
+              :class="`${
+                params.xs
+                  ? 'col-6'
+                  : params.sm
+                  ? 'col-3'
+                  : params.md
+                  ? 'col-3'
+                  : params.lg
+                  ? 'col-2'
+                  : 'col-2'
+              } mb-1 p-1 language-list-column`"
+            >
+              <LanguageListItem
+                :showFlags="showFlags"
+                :showFeatures="showFeatures"
+                :variant="variant"
+                :showSpeakers="showSpeakers"
+                :language="language"
+                :showCode="showCode"
+              />
+            </div>
+          </div>
+        </div>
         <div v-else>
           <LanguageListItem
             v-for="(language, index) in languages"
@@ -12,6 +39,7 @@
             :variant="variant"
             :showSpeakers="showSpeakers"
             :language="language"
+            :showCode="showCode"
           />
         </div>
       </div>
@@ -100,10 +128,11 @@ export default {
       let classes = {
         "language-list": true,
         "language-list-single-column": this.singleColumn || this.keyword,
-        "language-list-1-col": this.params.xs,
-        "language-list-2-cols": this.params.sm || this.params.md,
-        "language-list-3-cols": this.params.lg,
-        "language-list-4-cols": this.params.xl,
+        "language-list-1-col": this.variant === "list" && this.params.xs,
+        "language-list-2-cols":
+          this.variant === "list" && (this.params.sm || this.params.md),
+        "language-list-3-cols": this.variant === "list" && this.params.lg,
+        "language-list-4-cols": this.variant === "list" && this.params.xl,
       };
       classes[`language-list-${this.skin}`] = true;
       classes[`language-list-${this.variant}`] = true;
@@ -158,7 +187,7 @@ export default {
   margin-bottom: 0;
 }
 
-.language-list:not(.language-list-single-column) {
+.language-list.language-list-list:not(.language-list-single-column) {
   &.language-list-1-col {
     column-count: 1;
   }

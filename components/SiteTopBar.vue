@@ -151,13 +151,15 @@
           <b-form-input
             v-model="keyword"
             @compositionend.prevent.stop="() => false"
-            placeholder="Search languages"
+            placeholder="Search for more languages"
             class="mb-3"
           />
           <LanguageList
             @click="hideLanguagesModal"
             :showSpeakers="false"
             :keyword="keyword"
+            variant="grid"
+            :showFeatures="false"
             :codes="[
               'ar',
               'az',
@@ -219,10 +221,10 @@
             :sort="true"
             :showFlags="true"
           />
-          <div class="text-center mt-4">
+          <div class="text-center mt-1">
             <router-link class="btn btn-success d-block" to="/language-map">
               <i class="fas fa-globe-asia mr-1"></i>
-              Choose language from a map
+              More Languages
               <i class="ml-1 fas fa-chevron-right"></i>
             </router-link>
           </div>
@@ -344,6 +346,11 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+
+.flag-icon {
+  position: relative;
+  bottom: 0.1rem;
+}
 .top-bar-button {
   position: relative;
   .saved-words-count {

@@ -1,5 +1,5 @@
 <template>
-  <div class="language-list-item">
+  <div :class="`language-list-item language-list-item-${variant}`" @click.self="$router.push(languagePath(language))">
     <span class="language-list-item-features" v-if="showFeatures">
       <router-link
         :to="{
@@ -52,17 +52,26 @@
         {{ speakers(language.speakers) }}
       </span>
     </span>
-    <router-link :to="base" class="language-list-item-name">
+    <router-link :to="base">
       <img
         v-if="showFlags && countryCode(language)"
         :src="`/vendor/flag-svgs/${countryCode(language)}.svg`"
-        class="flag-icon mr-1"
+        class="flag-icon"
       />
-      {{ languageName(language) }}
-      <span v-if="keyword && language.otherNames.length > 0">
+      <div
+        v-if="showFlags && !countryCode(language)"
+        class="no-flag-placeholder"
+      ></div>
+      <span class="language-list-item-name">{{ languageName(language) }}</span>
+      <span
+        v-if="keyword && language.otherNames.length > 0"
+        class="language-list-item-other-names"
+      >
         ({{ language.otherNames.slice(0, 1).join(", ") }})
       </span>
-      <span v-if="showCode">({{ language.code }})</span>
+      <span v-if="showCode" class="language-list-item-code">
+        ({{ language.code }})
+      </span>
     </router-link>
     <span
       v-if="
@@ -157,16 +166,47 @@ a:active {
   text-decoration: none;
 }
 
-.flag-icon {
-  margin-bottom: 0.15rem;
-}
-
 .language-list {
   .language-list-item {
     .language-list-item-speakers {
       font-size: 0.8em;
       white-space: nowrap;
       margin-left: 0.25rem;
+    }
+    &.language-list-item-icon {
+      .flag-icon {
+        margin-bottom: 0.15rem;
+      }
+    }
+    &.language-list-item-grid {
+      height: 100%;
+      border: 1px solid #ddd;
+      padding: 1rem;
+      padding-bottom: 0.7rem;
+      text-align: center;
+      border-radius: 0.5rem;
+      background-color: #eee;
+      cursor: pointer;
+      .flag-icon {
+        width: 2rem;
+        display: block;
+        margin: 0 auto 0.5rem auto;
+      }
+      .no-flag-placeholder {
+        height: 1.6rem;
+        width: 2rem;
+        background-color: #ddd;
+        border-radius: 0.3rem;
+        margin: 0 auto 0.5rem auto;
+      }
+      .language-list-item-name {
+        display: block;
+        font-weight: bold;
+        line-height: 1.2;
+      }
+      &:hover {
+        background-color: white;
+      }
     }
   }
 
@@ -221,5 +261,4 @@ a:active {
     }
   }
 }
-
 </style>
