@@ -57,7 +57,12 @@
                 <b-button
                   class="btn btn-success"
                   @click="scrollToLanguageList"
-                  style="font-size: 1.2rem; padding: 0.5rem 1.5rem; border-radius: 1rem; box-shadow: #09651d 0px 3px 0px;"
+                  style="
+                    font-size: 1.2rem;
+                    padding: 0.5rem 1.5rem;
+                    border-radius: 1rem;
+                    box-shadow: #09651d 0px 3px 0px;
+                  "
                 >
                   Choose Your Language
                   <i class="fa fa-chevron-right ml-2"></i>
@@ -82,9 +87,14 @@
                   class="blurb-highlight"
                 >
                   {{ this.randomLanguage[0] }}!
-                  <span v-if="flagIcon(this.randomLanguage[1])" class="ml-2">
-                    {{ flagIcon(this.randomLanguage[1]) }}
-                  </span>
+
+                  <img
+                    v-if="countryCode(this.randomLanguage[1])"
+                    :class="`flag-icon ${!countryCode ? 'd-none' : ''} ml-2`"
+                    :src="`/vendor/flag-svgs/${countryCode(
+                      this.randomLanguage[1]
+                    )}.svg`"
+                  />
                   <span v-else>💬</span>
                 </router-link>
               </p>
@@ -226,7 +236,12 @@
             <div class="col-sm-12">
               <div class="home-card">
                 <h5 class="text-center">Choose Your Language</h5>
-                <Choose :compact="true" :showLanguageList="false" :button="false" :showRandom="false" />
+                <Choose
+                  :compact="true"
+                  :showLanguageList="false"
+                  :button="false"
+                  :showRandom="false"
+                />
                 <LanguageList
                   :showSpeakers="false"
                   :codes="[
@@ -292,7 +307,14 @@
                   :showFlags="true"
                 />
                 <div class="text-center mt-4">
-                  <router-link class="btn btn-success d-block" to="/language-map" ><i class="fas fa-globe-asia mr-1"></i> Pick language from a map <i class="ml-1 fas fa-chevron-right"></i></router-link>
+                  <router-link
+                    class="btn btn-success d-block"
+                    to="/language-map"
+                  >
+                    <i class="fas fa-globe-asia mr-1"></i>
+                    Pick language from a map
+                    <i class="ml-1 fas fa-chevron-right"></i>
+                  </router-link>
                 </div>
               </div>
             </div>
@@ -443,11 +465,11 @@
           </div>
         </client-only>
       </div>
-        <div class="row mt-5 mb-5 bg-dark text-white">
-          <div class="col-sm-12">
-            <LazyFooter />
-          </div>
+      <div class="row mt-5 mb-5 bg-dark text-white">
+        <div class="col-sm-12">
+          <LazyFooter />
         </div>
+      </div>
     </div>
   </div>
 </template>
@@ -691,8 +713,8 @@ export default {
   },
   methods: {
     scrollToLanguageList() {
-      document.querySelector('#languageList').scrollIntoView({ 
-        behavior: 'smooth' 
+      document.querySelector("#languageList").scrollIntoView({
+        behavior: "smooth",
       });
     },
     hasDashboardUpdate(hasDashboard) {
@@ -700,9 +722,9 @@ export default {
         hasDashboard &&
         (hasDashboard.includes("words") || hasDashboard.includes("phrases"));
     },
-    flagIcon(l2Code) {
+    countryCode(l2Code) {
       return this.$languages
-        ? this.$languages.flagIcon(this.$languages.getSmart(l2Code))
+        ? this.$languages.countryCode(this.$languages.getSmart(l2Code))
         : undefined;
     },
     randomArrayItem(array, start = 0, length = false) {

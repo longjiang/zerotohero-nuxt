@@ -43,21 +43,25 @@
                 margin-right: 0.15rem;
               "
             ></i> -->
-            <span style="font-weight: bold; color: white" :class="`${flagIcon ? 'd-none' : ''} ml-1`">
+            <span
+              style="font-weight: bold; color: white"
+              :class="`${flagCode ? 'd-none' : ''} ml-1`"
+            >
               | {{ $route.params.l2 }}
             </span>
-            <span :class="`flagIcon ${!flagIcon ? 'd-none' : ''} ml-1`">
-              {{ flagIcon }}
-            </span>
-            <i class="fas fa-sort-down ml-1" style="position: relative; bottom: 0.2rem; opacity: 0.7"></i>
+            <img
+              :class="`flag-icon ${!flagCode ? 'd-none' : ''} ml-1`"
+              :src="`/vendor/flag-svgs/${flagCode}.svg`"
+            />
+            <i
+              class="fas fa-sort-down ml-1"
+              style="position: relative; bottom: 0.2rem; opacity: 0.7"
+            ></i>
           </span>
         </div>
         <div>
           <client-only>
-            <AnnotationSettings
-              v-if="$l2 && params.sm"
-              variant="toolbar"
-            />
+            <AnnotationSettings v-if="$l2 && params.sm" variant="toolbar" />
           </client-only>
           <!-- <router-link
             :to="languageMapPath"
@@ -69,7 +73,9 @@
           </router-link> -->
           <LoginButton
             v-if="$l1 && $l2 && ($l2.code === 'zh' || $l2.code === 'en')"
-            :class="`${$l2 && params.xxlg ? 'd-inline-block' : 'd-none'} ml-2 mr-1`"
+            :class="`${
+              $l2 && params.xxlg ? 'd-inline-block' : 'd-none'
+            } ml-2 mr-1`"
             :icon="true"
             :text="false"
             style="color: #ddd"
@@ -105,11 +111,7 @@
             <i class="fas fa-sync-alt"></i>
           </button>
           <span
-            style="
-              color: #ccc;
-              cursor: pointer;
-              margin-left: 1rem;
-            "
+            style="color: #ccc; cursor: pointer; margin-left: 1rem"
             @click="collapseClick"
             :class="{ 'd-none': variant === 'menu-bar' }"
           >
@@ -276,8 +278,8 @@ export default {
       }
       return "/language-map";
     },
-    flagIcon() {
-      if (this.$l2) return this.$languages.flagIcon(this.$l2);
+    flagCode() {
+      if (this.$l2) return this.$languages.countryCode(this.$l2);
     },
   },
   watch: {

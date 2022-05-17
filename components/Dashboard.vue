@@ -39,9 +39,7 @@
               word{{ savedWordsLang.words.length > 1 ? "s" : "" }}
 
               in
-              <span v-if="showFlags" class="mr-1">
-                {{ flagIcon(savedWordsLang.l2) }}
-              </span>
+              <img v-if="showFlags && countryCode(savedWordsLang.l2)" :src="`/vendor/flag-svgs/${countryCode(savedWordsLang.l2)}.svg`" class="flag-icon mr-1" />
               <strong>{{ languageName(savedWordsLang.l2) }}</strong>
             </router-link>
             <router-link
@@ -68,9 +66,7 @@
               phrase{{ savedPhrasesLang.phrases.length > 1 ? "s" : "" }}
 
               in
-              <span v-if="showFlags" class="mr-1">
-                {{ flagIcon(savedPhrasesLang.l2) }}
-              </span>
+              <img v-if="showFlags && countryCode(savedPhrasesLang.l2)" :src="`/vendor/flag-svgs/${countryCode(savedPhrasesLang.l2)}.svg`" class="flag-icon mr-1" />
               <strong>{{ savedPhrasesLang.l2.name }}</strong>
             </router-link>
           </div>
@@ -270,8 +266,8 @@ export default {
     },
   },
   methods: {
-    flagIcon(l2) {
-      return this.$languages.flagIcon(l2);
+    countryCode(l2) {
+      return this.$languages.countryCode(l2);
     },
     deleteAllSavedWordsAndPhrases() {
       if (
