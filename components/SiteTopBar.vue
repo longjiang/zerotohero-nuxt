@@ -143,7 +143,7 @@
         size="lg"
         centered
         hide-footer
-        title="Switch Language"
+        title="Choose a language to learn"
         body-class="languages-modal-wrapper"
         @show="onLanguagesModalShown"
       >

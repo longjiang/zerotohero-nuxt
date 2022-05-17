@@ -1,100 +1,106 @@
 <template>
-  <div
-    :class="{
-      'transcript-line': true,
-      'transcript-line-abnormal': abnormal,
-      'transcript-line-matched': matched,
-      'transcript-line-current': current,
-    }"
-    style="display: flex"
-    ref="lines"
-    :data-line-index="lineIndex"
-    @click="$emit('click')"
-  >
-    <div v-if="!single && showSubsEditing" class="mr-3">
-      <div style="font-size: 0.7em; color: #ccc">
-        {{ Math.round(line.starttime * 100) / 100 }}
-      </div>
-      <b-button
-        class="btn btn-small bg-danger text-white"
-        @click="removeLineClick"
-      >
-        <i class="fa fa-trash"></i>
-      </b-button>
-    </div>
-    <div style="flex: 1">
-      <div style="display: flex;">
-        <div
-          style="
-            width: 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-          "
-          v-if="!single && $l2.direction !== 'rtl'"
-        >
-          <div class="dot" v-if="current"></div>
+  <container-query :query="query" v-model="params">
+    <div
+      :class="{
+        'transcript-line': true,
+        'transcript-line-abnormal': abnormal,
+        'transcript-line-matched': matched,
+        'transcript-line-current': current,
+        'transcript-line-wide': !single && params.lg,
+      }"
+      ref="lines"
+      :data-line-index="lineIndex"
+      @click="$emit('click')"
+    >
+      <div v-if="!single && showSubsEditing" class="transcript-line-edit mr-3">
+        <div style="font-size: 0.7em; color: #ccc">
+          {{ Math.round(line.starttime * 100) / 100 }}
         </div>
-        <Annotate
-          tag="div"
-          ref="annotate"
-          :sticky="sticky"
+        <b-button
+          class="btn btn-small bg-danger text-white"
+          @click="removeLineClick"
+        >
+          <i class="fa fa-trash"></i>
+        </b-button>
+      </div>
+      <div class="transcript-line-both">
+        <div class="transcript-line-l2-wrapper">
+          <div
+            style="
+              width: 1.5rem;
+              display: flex;
+              align-items: center;
+              justify-content: flex-start;
+            "
+            v-if="!single && $l2.direction !== 'rtl'"
+          >
+            <div class="dot" v-if="current"></div>
+          </div>
+          <Annotate
+            tag="div"
+            ref="annotate"
+            :sticky="sticky"
+            :class="{
+              'transcript-line-l2': true,
+              'text-center': single,
+              'pr-3': single && $l2.direction === 'rtl',
+              'pl-3': single && $l2.direction !== 'rtl',
+              annotated: annotated,
+            }"
+            :buttons="true"
+            :animationDuration="duration"
+            :translation="parallelLine"
+            :delay="single ? false : 123"
+            v-if="!showSubsEditing"
+            style="flex: 1"
+            @textChanged="lineChanged(line, ...arguments)"
+            @annotated="updateAnnotated"
+          >
+            <span v-html="lineHtml(line).trim()" />
+          </Annotate>
+          <div v-else v-html="lineHtml(line)" />
+          <div
+            style="
+              width: 1.5rem;
+              display: flex;
+              align-items: center;
+              justify-content: flex-end;
+            "
+            v-if="!single && $l2.direction === 'rtl'"
+          >
+            <div class="dot" v-if="current"></div>
+          </div>
+        </div>
+        <div
+          v-if="line.line.length > 0 && parallelLine"
           :class="{
-            'transcript-line-l2': true,
+            'transcript-line-l1': true,
+            'pl-4': !single && $l2.direction !== 'rtl',
+            'pr-4': !single && $l2.direction === 'rtl',
+            'text-right': !single && $l2.direction === 'rtl',
             'text-center': single,
-            'pr-3': single && $l2.direction === 'rtl',
-            'pl-3': single && $l2.direction !== 'rtl',
-            annotated: annotated,
+            transparent: !annotated,
           }"
-          :buttons="true"
-          :animationDuration="duration"
-          :translation="parallelLine"
-          :delay="single ? false : 123"
-          v-if="!showSubsEditing"
-          style="flex: 1"
-          @textChanged="lineChanged(line, ...arguments)"
-          @annotated="updateAnnotated"
-        >
-          <span v-html="lineHtml(line).trim()" />
-        </Annotate>
-        <div v-else v-html="lineHtml(line)" />
-        <div
-          style="
-            width: 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-          "
-          v-if="!single && $l2.direction === 'rtl'"
-        >
-          <div class="dot" v-if="current"></div>
-        </div>
+          v-html="parallelLine"
+          :contenteditable="enableTranslationEditing"
+          :data-line-index="lineIndex"
+          @blur.capture="trasnlationLineBlur"
+          @keydown.capture="trasnlationLineKeydown"
+        ></div>
       </div>
-      <div
-        v-if="line.line.length > 0 && parallelLine"
-        :class="{
-          'transcript-line-l1': true,
-          'pl-4' : !single && $l2.direction !== 'rtl',
-          'pr-4' : !single && $l2.direction === 'rtl',
-          'text-right': !single && $l2.direction === 'rtl',
-          'text-center': single,
-          transparent: !annotated,
-        }"
-        v-html="parallelLine"
-        :contenteditable="enableTranslationEditing"
-        :data-line-index="lineIndex"
-        @blur.capture="trasnlationLineBlur"
-        @keydown.capture="trasnlationLineKeydown"
-      ></div>
     </div>
-  </div>
+  </container-query>
 </template>
 
 <script>
 import SmartQuotes from "smartquotes";
 import Helper from "@/lib/helper";
+import { ContainerQuery } from "vue-container-query";
 
 export default {
+  components: {
+    ContainerQuery,
+  },
   props: {
     line: {
       type: Object,
@@ -145,6 +151,12 @@ export default {
       lineStarted: false,
       durationPlayed: 0,
       animateOnceAnnotated: undefined,
+      params: {},
+      query: {
+        lg: {
+          minWidth: 600,
+        },
+      },
     };
   },
   computed: {
@@ -170,7 +182,7 @@ export default {
   },
   methods: {
     updateAnnotated(annotated) {
-      this.annotated = annotated
+      this.annotated = annotated;
     },
     playAnimation(startFrom) {
       if (this.$refs["annotate"]) {
@@ -240,8 +252,30 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.show-translation {
+  .transcript-line-wide {
+    .transcript-line-both {
+      display: flex;
+      align-items: flex-start;
+      .transcript-line-l2-wrapper {
+        width: 60%;
+      }
+      .transcript-line-l1 {
+        width: 40%;
+      }
+    }
+  }
+}
 .transcript.single-line .transcript-line:not(.transcript-line-current) {
   display: none;
+}
+
+.transcript-line-l2-wrapper {
+  display: flex;
+}
+
+.transcript-line-both {
+  flex: 1;
 }
 
 .transcript-line {
@@ -249,10 +283,7 @@ export default {
   position: relative;
   font-size: 1.2rem;
   padding: 0.5rem 0;
-  // &.transcript-line-current {
-  //   box-shadow: 0 0 10px 2px #96ffaf99;
-  //   border-radius: 0.25rem;
-  // }
+  display: flex;
   &.transcript-line-abnormal {
     background-color: lightpink;
   }
