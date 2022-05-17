@@ -137,6 +137,7 @@ export default {
   data() {
     return {
       specials: Helper.specialLanguages,
+      hide: ['cmn'],
       params: {},
       query: {
         xs: {
@@ -204,6 +205,7 @@ export default {
           this.languageName(a).localeCompare(this.languageName(b), "en")
         );
       }
+      languages = languages.filter(l => !this.hide.includes(l.code))
       return languages;
     },
   },

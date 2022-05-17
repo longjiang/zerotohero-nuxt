@@ -235,15 +235,15 @@
           <div class="row mt-4 mb-5" id="languageList">
             <div class="col-sm-12">
               <div class="home-card">
-                <h5 class="text-center">Choose Your Language</h5>
-                <Choose
-                  :compact="true"
-                  :showLanguageList="false"
-                  :button="false"
-                  :showRandom="false"
+                <h5 class="text-center mb-3">Choose Your Language</h5>
+                <b-form-input
+                  v-model="langKeyword"
+                  @compositionend.prevent.stop="() => false"
+                  placeholder="Search languages"
                 />
                 <LanguageList
                   :showSpeakers="false"
+                  :keyword="langKeyword"
                   :codes="[
                     'ar',
                     'az',
@@ -478,6 +478,7 @@
 export default {
   data() {
     return {
+      langKeyword: undefined,
       loaded: false,
       hasDashboard: false,
       randomLanguage: undefined,
