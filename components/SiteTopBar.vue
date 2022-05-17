@@ -27,9 +27,7 @@
             </b>
           </router-link>
           <span
-            :class="`text-white ${
-              !$route.params.l2 || params.md === false ? 'd-none' : ''
-            }`"
+            :class="`text-white`"
             @click="showPlaylistModal"
             class="language-flag-and-name"
             style="cursor: pointer"
@@ -43,20 +41,39 @@
                 margin-right: 0.15rem;
               "
             ></i> -->
-            <span
-              style="font-weight: bold; color: white"
-              :class="`${flagCode ? 'd-none' : ''} ml-1`"
-            >
-              | {{ $route.params.l2 }}
-            </span>
             <img
-              :class="`flag-icon ${!flagCode ? 'd-none' : ''} ml-1`"
+              :class="`flag-icon ${
+                !flagCode || !$route.params.l2 || params.sm === false
+                  ? 'd-none'
+                  : ''
+              } ml-1`"
               :src="`/vendor/flag-svgs/${flagCode}.svg`"
             />
-            <i
-              class="fas fa-sort-down ml-1"
-              style="position: relative; bottom: 0.2rem; opacity: 0.7"
-            ></i>
+            <i class="fas fa-cheveron-right" v-if="!flagCode"></i>
+            <span
+              style="font-weight: bold; color: white"
+              :class="`${!$route.params.l2 ? 'd-none' : ''} ${params.md && params.lg === false ? '' : 'd-none'} ml-1`"
+            >
+              {{ $route.params.l2 }}
+            </span>
+            <span
+              style="font-weight: bold; color: white"
+              :class="`${
+                !$route.params.l2 || params.lg === false ? 'd-none' : ''
+              } ml-1`"
+            >
+              {{ $l2.name }}
+            </span>
+            <span
+              :class="`${
+                !$route.params.l2 || params.md === false ? 'd-none' : ''
+              } ml-1`"
+            >
+              <i
+                class="fas fa-sort-down"
+                style="position: relative; bottom: 0.2rem; opacity: 0.7"
+              ></i>
+            </span>
           </span>
         </div>
         <div>
@@ -111,7 +128,7 @@
             <i class="fas fa-sync-alt"></i>
           </button>
           <span
-            style="color: #ccc; cursor: pointer; margin-left: 1rem"
+            style="color: #ccc; cursor: pointer; margin-left: 0.5rem"
             @click="collapseClick"
             :class="{ 'd-none': variant === 'menu-bar' }"
           >
@@ -368,7 +385,6 @@ export default {
   .language-flag-and-name {
     line-height: 1;
     text-overflow: ellipsis;
-    max-width: 4.5rem;
     overflow: hidden;
     white-space: nowrap;
     display: inline-block;
