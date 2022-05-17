@@ -64,6 +64,9 @@ export default {
       useWebmanifestExtension: false
     },
     workbox: {
+      icon: {
+        fileName: 'icon2.png', // Renamed from icon.png in order for the pwa module to regenerate updated icons
+      },
       runtimeCaching: [{
         urlPattern: 'http://server.chinesezerotohero.com/.*',
         handler: 'CacheFirst',
