@@ -52,7 +52,9 @@
             <i class="fas fa-cheveron-right" v-if="!flagCode"></i>
             <span
               style="font-weight: bold; color: white"
-              :class="`${!$route.params.l2 ? 'd-none' : ''} ${params.md && params.lg === false ? '' : 'd-none'} ml-1`"
+              :class="`${!$route.params.l2 ? 'd-none' : ''} ${
+                params.md && params.lg === false ? '' : 'd-none'
+              } ml-1`"
             >
               {{ $route.params.l2 }}
             </span>

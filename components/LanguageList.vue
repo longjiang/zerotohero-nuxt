@@ -2,88 +2,15 @@
   <container-query :query="query" v-model="params">
     <div>
       <ul v-if="languages && languages.length > 0" :class="classes">
-        <li
+        <LanguageListItem
           v-for="(language, index) in languages"
           :key="`lang-${language.code}-${index}`"
-          class="language-list-item"
-          :set="(base = languagePath(language))"
-        >
-          <span class="language-list-item-features" v-if="showFeatures">
-            <router-link
-              :to="{
-                name: 'live-tv',
-                params: { l1: l1, l2: language.code },
-              }"
-              :class="{
-                'feature-icon mr-1': true,
-                transparent: !hasLiveTV(english, language),
-              }"
-              title="Live TV"
-            >
-              <i class="fa fa-broadcast-tower" />
-            </router-link>
-            <router-link
-              :to="{
-                name: 'all-media',
-                params: { l1: l1, l2: language.code },
-              }"
-              :class="{
-                'feature-icon mr-1': true,
-                transparent: !hasYouTube(english, language),
-              }"
-              title="Videos"
-            >
-              <i class="fa fa-play-circle" />
-            </router-link>
-            <router-link
-              :to="{
-                name: 'dictionary',
-                params: { l1: l1, l2: language.code },
-              }"
-              :class="{
-                'feature-icon mr-1': true,
-                transparent: !hasDictionary(english, language),
-              }"
-              title="Dictionary"
-            >
-              <i class="fas fa-book" />
-            </router-link>
-            <span
-              v-if="
-                variant === 'icon' &&
-                showSpeakers &&
-                language.speakers &&
-                language.speakers > 0
-              "
-              class="language-list-item-speakers"
-            >
-              {{ speakers(language.speakers) }}
-            </span>
-          </span>
-          <router-link :to="base" class="language-list-item-name">
-            <img
-              v-if="showFlags && countryCode(language)"
-              :src="`/vendor/flag-svgs/${countryCode(language)}.svg`"
-              class="flag-icon mr-1"
-            />
-            {{ languageName(language) }}
-            <span v-if="keyword && language.otherNames.length > 0">
-              ({{ language.otherNames.slice(0, 1).join(", ") }})
-            </span>
-            <span v-if="showCode">({{ language.code }})</span>
-          </router-link>
-          <span
-            v-if="
-              variant === 'list' &&
-              showSpeakers &&
-              language.speakers &&
-              language.speakers > 0
-            "
-            class="language-list-item-speakers"
-          >
-            {{ speakers(language.speakers) }} Speakers
-          </span>
-        </li>
+          :showFlags="showFlags"
+          :showFeatures="showFeatures"
+          :variant="variant"
+          :showSpeakers="showSpeakers"
+          :language="language"
+        />
       </ul>
     </div>
   </container-query>
@@ -92,9 +19,11 @@
 <script>
 import Helper from "@/lib/helper";
 import { ContainerQuery } from "vue-container-query";
+
+
 export default {
   components: {
-    ContainerQuery,
+    ContainerQuery
   },
   props: {
     showFeatures: {
@@ -116,6 +45,7 @@ export default {
       default: false,
     },
     showSpeakers: {
+      type: Boolean,
       default: true,
     },
     showCode: {
@@ -125,6 +55,7 @@ export default {
       default: "light",
     },
     variant: {
+      type: String,
       default: "list", // or 'icon', 'grid'
     },
     l1: {
@@ -137,7 +68,7 @@ export default {
   data() {
     return {
       specials: Helper.specialLanguages,
-      hide: ['cmn'],
+      hide: ["cmn"],
       params: {},
       query: {
         xs: {
@@ -176,9 +107,6 @@ export default {
       classes[`language-list-${this.variant}`] = true;
       return classes;
     },
-    english() {
-      return this.$languages.l1s.find((language) => language.code === "en");
-    },
     languages() {
       let languages;
       if (this.keyword && this.keyword !== "") {
@@ -205,39 +133,16 @@ export default {
           this.languageName(a).localeCompare(this.languageName(b), "en")
         );
       }
-      languages = languages.filter(l => !this.hide.includes(l.code))
+      languages = languages.filter((l) => !this.hide.includes(l.code));
       return languages;
     },
   },
   methods: {
-    countryCode(l2) {
-      let countryCode = this.$languages.countryCode(l2);
-      return countryCode;
-    },
-    speakers(number) {
-      return Helper.formatK(number, 1);
-    },
-    languagePath(language) {
-      let special = this.specials[language.code];
-      let l1 = special ? special.l1 : this.l1;
-      return `/${l1}/${language.code}/all-media`;
-    },
     languageName(language) {
       let name = language.name.replace(/ \(.*\)/gi, "");
       let special = this.specials[language.code];
       if (special) name = special.name;
       return name;
-    },
-    hasDictionary(l1, l2) {
-      return (
-        this.$languages.hasFeature(l1, l2, "dictionary") || l2.code === "en"
-      );
-    },
-    hasYouTube(l1, l2) {
-      return this.$languages.hasYouTube(l1, l2);
-    },
-    hasLiveTV(l1, l2) {
-      return this.$languages.hasFeature(l1, l2, "live-tv");
     },
   },
 };
