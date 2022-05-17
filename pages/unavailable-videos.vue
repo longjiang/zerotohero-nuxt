@@ -9,7 +9,11 @@
       <div class="row">
         <div class="col-sm-12">
           <h3 class="text-center mb-4">Unavailable Videos</h3>
-          <YouTubeVideoList :videos="videos" :multilingual="true" :checkSubs="false" />
+          <YouTubeVideoList
+            :videos="videos"
+            :multilingual="true"
+            :checkSubs="false"
+          />
         </div>
       </div>
     </div>
@@ -34,13 +38,38 @@ export default {
     };
   },
   async mounted() {
-    let res = await axios.get(`${Config.wiki}items/unavailable_videos?fields=youtube_id,l2`);
-    if (res) {
-      let videos = res.data.data;
-      this.videos = videos;
-    }
+    try {
+      let res = await axios.get(
+        `${Config.wiki}items/unavailable_videos?fields=youtube_id,l2`
+      );
+      if (res) {
+        let reports = res.data.data;
+        let videos = await this.resolveReports(reports);
+        this.videos = videos;
+      }
+    } catch (err) {}
   },
-  methods: {},
+  methods: {
+    async resolveReports(reports) {
+      let reportedYouTubeIds = reports.map((r) => r.youtube_id);
+      let reportedLanguages = Helper.unique(reports.map((r) => r.l2));
+      let dbTablesOfReportedLanguages = Helper.unique(
+        reportedLanguages.map((l) => Config.youtubeVideosTableName(l))
+      );
+      let videos = [];
+
+      for (let table of dbTablesOfReportedLanguages) {
+        let url = `${table}?filter[youtube_id][in]=${reportedYouTubeIds}&fields=id,youtube_id,title,tv_show,talk,l2`;
+        try {
+          let res = await axios.get(url);
+          if (res && res.data) videos = videos.concat(res.data.data);
+        } catch (err) {
+          console.log(err);
+        }
+      }
+      return videos;
+    },
+  },
 };
 </script>
 
