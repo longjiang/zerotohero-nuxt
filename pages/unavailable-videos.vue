@@ -8,8 +8,8 @@
     <div class="container pt-5 mb-5">
       <div class="row">
         <div class="col-sm-12">
-          <h3>Unavailable Videos</h3>
-          <YouTubeVideoList :videos="videos" />
+          <h3 class="text-center mb-4">Unavailable Videos</h3>
+          <YouTubeVideoList :videos="videos" :multilingual="true" :checkSubs="false" />
         </div>
       </div>
     </div>
@@ -34,7 +34,7 @@ export default {
     };
   },
   async mounted() {
-    let res = await axios.get(`${Config.wiki}items/unavailable_videos`);
+    let res = await axios.get(`${Config.wiki}items/unavailable_videos?fields=youtube_id,l2`);
     if (res) {
       let videos = res.data.data;
       this.videos = videos;

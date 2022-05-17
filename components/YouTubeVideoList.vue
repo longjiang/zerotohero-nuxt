@@ -187,6 +187,7 @@
             :skin="skin"
             :showProgress="showProgress"
             :showPlayButton="showPlayButton"
+            :showLanguage="multilingual"
           />
         </div>
       </div>
@@ -250,6 +251,9 @@ export default {
       default: true
     },
     hideVideosWithoutSubsProp: {
+      default: false
+    },
+    multilingual: {
       default: false
     }
   },

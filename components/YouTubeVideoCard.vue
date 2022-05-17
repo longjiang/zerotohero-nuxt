@@ -94,15 +94,12 @@
                 - {{ subsFile.name.replace(/[_.]/g, " ") }}
               </span>
             </div>
-            <span
-              class="youtube-video-card-badge"
-              v-if="$adminMode && video.youtube_id.includes('0x')"
-            >
-              ID含`0x`，或许无法添加
-            </span>
+            <div v-if="showLanguage && language" class="youtube-video-card-badge">
+              {{ language.name }} ({{ language.code }})
+            </div>
             <div
-              v-if="!video.checkingSubs && !video.hasSubs && !video.id"
-              class="btn btn-small ml-0"
+              v-if="checkSubs && (!video.checkingSubs && !video.hasSubs && !video.id)"
+              class="youtube-video-card-badge"
             >
               <span v-if="!over">No {{ $l2.name }} CC</span>
               <span v-else>Drop SRT to Add Subs</span>
@@ -308,6 +305,9 @@ export default {
     checkSubs: {
       default: false,
     },
+    showLanguage: {
+      default: false,
+    },
     showSubsEditing: {
       default: false,
     },
@@ -350,6 +350,10 @@ export default {
     };
   },
   computed: {
+    language() {
+      let language = this.$languages.l1s.find(l1 => l1.id === this.video.l2)
+      return language
+    },
     to() {
       let to = {
         name: "youtube-view",
