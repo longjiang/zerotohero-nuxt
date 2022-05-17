@@ -56,6 +56,9 @@ export default {
   ],
 
   pwa: {
+    icon: {
+      fileName: 'icon3.png', // Renamed from icon.png in order for the pwa module to regenerate updated icons
+    },
     manifest: {
       name: 'Zero to Hero Education',
       short_name: 'Zero to Hero',
@@ -64,9 +67,6 @@ export default {
       useWebmanifestExtension: false
     },
     workbox: {
-      icon: {
-        fileName: 'icon2.png', // Renamed from icon.png in order for the pwa module to regenerate updated icons
-      },
       runtimeCaching: [{
         urlPattern: 'http://server.chinesezerotohero.com/.*',
         handler: 'CacheFirst',
