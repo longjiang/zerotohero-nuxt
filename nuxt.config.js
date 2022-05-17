@@ -67,7 +67,19 @@ export default {
       useWebmanifestExtension: false
     },
     workbox: {
-      cacheAssets: ['/workers/dict-worker.js'],
+      cacheAssets: [
+        '/workers/dict-worker.js',
+        '/js/dialect-dict.js',
+        '/js/ecdict.js',
+        '/js/edict.js',
+        '/js/freedict.js',
+        '/js/hsk-cedict.js',
+        '/js/kengdic.js',
+        '/js/klingonska.js',
+        '/js/openrussian.js',
+        '/js/russian-legacy.js',
+        '/js/wiktionary.js',
+      ],
       runtimeCaching: [{
         urlPattern: 'http://server.chinesezerotohero.com/.*',
         handler: 'CacheFirst',
