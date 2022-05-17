@@ -123,7 +123,7 @@
         <div class="row">
           <div class="col-sm-6 mb-4">
             <div class="home-card">
-              <router-link to="/en/zh">
+              <router-link to="/en/zh/all-media">
                 <img
                   src="/img/czh-logo-dark.png"
                   class="czh-logo"
@@ -170,7 +170,7 @@
           </div>
           <div class="col-sm-6 mb-4">
             <div class="home-card">
-              <router-link to="/zh/en">
+              <router-link to="/zh/en/all-media">
                 <img
                   src="/img/ezh-logo-dark.png"
                   class="ezh-logo"
