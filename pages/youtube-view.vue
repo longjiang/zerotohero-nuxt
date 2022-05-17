@@ -245,6 +245,7 @@ export default {
   },
   methods: {
     async onVideoUnavailable(youtube_id) {
+      console.log('🔥 Unavailable', youtube_id)
       try {
         await YouTube.reportUnavailableVideo({
           youtube_id,
@@ -253,7 +254,9 @@ export default {
         });
         // Go to next video
         if (this.nextEpisode) this.$router.push(this.nextEpisode);
-      } catch (err) {}
+      } catch (err) {
+        console.log(err)
+      }
     },
     mergeVideos(video, youtube_video) {
       let merged = {};
