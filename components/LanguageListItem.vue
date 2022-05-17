@@ -123,13 +123,16 @@ export default {
       base: this.languagePath(this.language),
     };
   },
+  computed: {
+    english() {
+      let english = this.$languages.l1s.find((language) => language.code === "en");
+      return english
+    },
+  },
   methods: {
     countryCode(l2) {
       let countryCode = this.$languages.countryCode(l2);
       return countryCode;
-    },
-    english() {
-      return this.$languages.l1s.find((language) => language.code === "en");
     },
     speakers(number) {
       return Helper.formatK(number, 1);
