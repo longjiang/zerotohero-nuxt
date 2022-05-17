@@ -152,6 +152,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+a:hover,
+a:active {
+  text-decoration: none;
+}
+
+.flag-icon {
+  margin-bottom: 0.15rem;
+}
 
 .language-list {
   .language-list-item {

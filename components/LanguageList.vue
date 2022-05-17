@@ -1,7 +1,7 @@
 <template>
   <container-query :query="query" v-model="params">
     <div>
-      <template v-if="languages && languages.length > 0" :class="classes">
+      <div v-if="languages && languages.length > 0" :class="classes">
         <div v-if="variant === 'grid'"></div>
         <div v-else>
           <LanguageListItem
@@ -14,7 +14,7 @@
             :language="language"
           />
         </div>
-      </template>
+      </div>
     </div>
   </container-query>
 </template>
@@ -151,76 +151,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-a:hover,
-a:active {
-  text-decoration: none;
-}
-
-.flag-icon {
-  margin-bottom: 0.15rem;
-}
-
 .language-list {
   list-style: none;
   padding: 0;
   column-gap: 2rem;
   margin-bottom: 0;
-  .language-list-item {
-    .language-list-item-speakers {
-      font-size: 0.8em;
-      white-space: nowrap;
-      margin-left: 0.25rem;
-    }
-  }
-
-  &.language-list-light {
-    .language-list-item {
-      a {
-        color: hsla(14deg 98% 10% / 80%);
-      }
-      .feature-icon {
-        color: hsla(14deg 98% 10% / 60%);
-      }
-      .language-list-item-speakers {
-        color: hsla(14deg 98% 10% / 40%);
-      }
-    }
-  }
-  &.language-list-dark {
-    .language-list-item {
-      a {
-        color: rgba(255, 255, 255, 0.8);
-      }
-      .feature-icon {
-        color: rgba(255, 255, 255, 0.6);
-      }
-      .language-list-item-speakers {
-        color: rgba(255, 255, 255, 0.4);
-      }
-    }
-  }
-  &.language-list-icon {
-    .language-list-item {
-      display: table;
-      width: 100%;
-      .language-list-item-name {
-        display: table-header-group;
-      }
-      .language-list-item-features {
-        display: table-footer-group;
-        line-height: 0.8;
-        .feature-icon {
-          font-size: 0.8em;
-          &.transparent {
-            display: none;
-          }
-        }
-        .language-list-item-speakers {
-          margin: 0;
-        }
-      }
-    }
-  }
 }
 
 .language-list:not(.language-list-single-column) {
