@@ -61,10 +61,9 @@
             <span
               style="font-weight: bold; color: white"
               :class="`${
-                !$route.params.l2 || params.lg === false ? 'd-none' : ''
+                !$route.params.l2 || params.xxlg === false ? 'd-none' : ''
               } ml-1`"
             >
-              {{ $l2.name }}
             </span>
             <span
               :class="`${
