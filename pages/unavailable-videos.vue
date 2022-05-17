@@ -9,7 +9,9 @@
       <div class="row">
         <div class="col-sm-12">
           <h3 class="text-center mb-4">Unavailable Videos</h3>
+          <div class="mt-5 mb-5 text-center" v-if="!videos"><Loader :sticky="true" message="Resolving videos" /></div>
           <YouTubeVideoList
+            v-if="videos"
             :videos="videos"
             :multilingual="true"
             :checkSubs="false"
@@ -34,13 +36,13 @@ export default {
   },
   data() {
     return {
-      videos: [],
+      videos: undefined,
     };
   },
   async mounted() {
     try {
       let res = await axios.get(
-        `${Config.wiki}items/unavailable_videos?fields=youtube_id,l2`
+        `${Config.wiki}items/unavailable_videos?fields=youtube_id,l2,created_on&sort=-created_on`
       );
       if (res) {
         let reports = res.data.data;
