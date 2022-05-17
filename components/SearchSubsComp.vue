@@ -468,17 +468,9 @@ export default {
       if (youtube_id) {
         // Log it
         try {
-          let response = await axios.post(
-            `${Config.wiki}items/unavailable_videos`,
-            {
-              id: video.id,
-              youtube_id: video.youtube_id,
-              l2: this.$l2.id,
-            }
-          );
+          let res = await reportUnavailableVideo({ youtube_id: video.youtube_id, video_id: video.id, l2Code: this.$l2.id })
         } catch(err) {
         }
-        
         // Go to next video
         this.removeCurrentHitAndGoToNext()
       }
