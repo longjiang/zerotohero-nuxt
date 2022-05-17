@@ -43,7 +43,7 @@
             ></i> -->
             <img
               :class="`flag-icon ${
-                !flagCode || !$route.params.l2 || params.sm === false
+                !flagCode || !$route.params.l2 || params.md === false
                   ? 'd-none'
                   : ''
               } ml-1`"
