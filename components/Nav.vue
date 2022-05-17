@@ -61,15 +61,18 @@
             v-if="showMainNav && variant === 'side-bar' && !collapsed"
             class="end-nav"
           >
-            <div
-              v-if="$l2 && !['en', 'zh'].includes($l2.code) && $l2.logo"
-              class="icon-description"
-            >
-              <b>ICON IMAGE:</b>
+            <div v-if="$l2.logo" class="icon-description">
+              <img
+                class="logo-circle"
+                :src="`/img/logo-square/${l2.code}.jpeg`"
+                :alt="$l2.logoDesc"
+              />
               <span v-if="$l2.logoDesc">
                 {{ $l2.logoDesc.replace(/\s/g, " ") }},
               </span>
-              a user of {{ $l2.name }} ({{ $l2.code }}).
+              a user of
+              <b>{{ $l2.name }} ({{ $l2.code }})</b>
+              .
             </div>
             <LoginButton
               class="end-nav-item"
@@ -1185,10 +1188,27 @@ export default {
       left: 1rem;
 
       .icon-description {
-        color: #ffffffcc;
+        color: white;
         font-size: 0.7rem;
-        padding-right: 1rem;
+        padding: 0 1rem 1.5rem 1rem;
         z-index: -9;
+        margin-left: -1rem;
+        margin-bottom: -1rem;
+        text-shadow: 2px 2px 15px black;
+
+        .logo-circle {
+          width: 44px;
+          height: 44px;
+          -o-object-fit: cover;
+          object-fit: cover;
+          border-radius: 0.3rem;
+          margin-top: 0.2rem;
+          margin-bottom: -2px;
+          margin-right: 8px;
+          display: block;
+          box-shadow: 2px 2px 15px rgb(0 0 0 / 50%);
+          float: left;
+        }
       }
     }
 

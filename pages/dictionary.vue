@@ -17,11 +17,11 @@
     >
       <SocialHead :title="title" :description="description" :image="image" />
       <client-only>
-        <div :class="{ 'dictionary-search-bar': args }">
+        <div :class="{ 'dictionary-search-bar': args, 'bg-white': true }">
           <div :class="{ 'container pt-2': !wide }">
             <div :class="{ row: !wide }">
               <div :class="{ 'col-sm-12': !wide }">
-                <h5 class="text-center mt-4 mb-4" v-if="!args">
+                <h5 class="text-center pt-5 pb-4" v-if="!args">
                   {{ $l2.name }} Zero to Hero Dictionary
                 </h5>
                 <SearchCompare
