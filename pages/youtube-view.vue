@@ -245,21 +245,21 @@ export default {
   },
   methods: {
     async onVideoUnavailable(unavailable) {
-      if (unavailable) {
-        // Log it
-
-        let response = await axios.post(
-          `${Config.wiki}items/unavailable_videos`,
-          {
-            id: this.video.id,
-            youtube_id: this.video.youtube_id,
-            l2: this.$l2.id,
-          }
-        );
-        
-        // Go to next video
-        if (this.nextEpisode) this.$router.push(this.nextEpisode);
-      }
+      try {
+        if (unavailable) {
+          // Log it
+          let response = await axios.post(
+            `${Config.wiki}items/unavailable_videos`,
+            {
+              id: this.video.id,
+              youtube_id: this.video.youtube_id,
+              l2: this.$l2.id,
+            }
+          );
+        }
+      } catch (err) {}
+      // Go to next video
+      if (this.nextEpisode) this.$router.push(this.nextEpisode);
     },
     mergeVideos(video, youtube_video) {
       let merged = {};
