@@ -67,6 +67,7 @@ export default {
       useWebmanifestExtension: false
     },
     workbox: {
+      cacheAssets: ['/workers/dict-worker.js'],
       runtimeCaching: [{
         urlPattern: 'http://server.chinesezerotohero.com/.*',
         handler: 'CacheFirst',
