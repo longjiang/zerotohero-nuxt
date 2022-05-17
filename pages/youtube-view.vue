@@ -244,9 +244,9 @@ export default {
     },
   },
   methods: {
-    async onVideoUnavailable(unavailable) {
+    async onVideoUnavailable(youtube_id) {
       try {
-        if (unavailable) {
+        if (youtube_id) {
           // Log it
           let response = await axios.post(
             `${Config.wiki}items/unavailable_videos`,

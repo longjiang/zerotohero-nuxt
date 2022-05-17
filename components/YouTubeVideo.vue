@@ -202,7 +202,7 @@ export default {
             },
             onReady: (event) => {
               if (this.player && this.player.getPlayerState && this.player.getPlayerState() === -1) {
-                this.$emit('videoUnavailable', true)
+                this.$emit('videoUnavailable', this.youtube_id)
               }
             },
           },

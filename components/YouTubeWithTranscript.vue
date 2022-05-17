@@ -355,9 +355,9 @@ export default {
     },
   },
   methods: {
-    onVideoUnavailable(unavailable) {
-      if (unavailable) {
-        this.$emit('videoUnavailable', true)
+    onVideoUnavailable(youtube_id) {
+      if (youtube_id) {
+        this.$emit('videoUnavailable', youtube_id)
       }
     },
     updateLayout() {

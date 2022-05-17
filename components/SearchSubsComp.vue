@@ -463,9 +463,9 @@ export default {
     if (this.keyboard) this.bindKeys();
   },
   methods: {
-    async onVideoUnavailable(unavailable) {
+    async onVideoUnavailable(youtube_id) {
       let video = this.currentHit.video;
-      if (unavailable) {
+      if (youtube_id) {
         // Log it
         try {
           let response = await axios.post(
