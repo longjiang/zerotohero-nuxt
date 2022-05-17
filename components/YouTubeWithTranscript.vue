@@ -25,6 +25,7 @@
             @currentTime="updateCurrentTime"
             @ended="updateEnded"
             @duration="updateDuration"
+            @videoUnavailable="onVideoUnavailable"
             :speed="speed"
             :youtube="video.youtube_id"
             :starttime="start"
@@ -354,6 +355,11 @@ export default {
     },
   },
   methods: {
+    onVideoUnavailable(unavailable) {
+      if (unavailable) {
+        this.$emit('videoUnavailable', true)
+      }
+    },
     updateLayout() {
       this.viewportWidth = this.$el.clientWidth
       this.viewportHeight = window.innerHeight

@@ -74,6 +74,7 @@
         @speechStart="speechStart"
         @speechEnd="speechEnd"
         @updateLayout="(l) => (layout = l)"
+        @videoUnavailable="onVideoUnavailable"
       />
     </div>
   </div>
@@ -91,7 +92,7 @@ export default {
   props: {
     youtube_id: {
       type: String,
-      required: true
+      required: true,
     },
     lesson: {
       type: String, // If the video is a "lesson video" (with lesson vocab highlighted), set this to "lesson"
@@ -243,6 +244,23 @@ export default {
     },
   },
   methods: {
+    async onVideoUnavailable(unavailable) {
+      if (unavailable) {
+        // Log it
+
+        let response = await axios.post(
+          `${Config.wiki}items/unavailable_videos`,
+          {
+            id: this.video.id,
+            youtube_id: this.video.youtube_id,
+            l2: this.$l2.id,
+          }
+        );
+        
+        // Go to next video
+        if (this.nextEpisode) this.$router.push(this.nextEpisode);
+      }
+    },
     mergeVideos(video, youtube_video) {
       let merged = {};
       video = video || {};
