@@ -786,6 +786,12 @@ export default {
           children: [
             {
               icon: "fas fa-wrench",
+              title: "Unavailable Videos",
+              name: "unavailable-videos",
+              show: this.$adminMode,
+            },
+            {
+              icon: "fas fa-wrench",
               title: "Phrase Survey",
               name: "phrase-survey",
               show: this.$adminMode,
