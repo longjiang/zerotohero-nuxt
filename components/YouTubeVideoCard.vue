@@ -525,7 +525,7 @@ export default {
       if (this.video.id) {
         try {
           let response = await axios.delete(
-            `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}`
+            `${Config.youtubeVideosTableName(this.video.l2)}/${this.video.id}`
           );
           if (response) {
             Vue.delete(this.video, "id");
