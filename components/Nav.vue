@@ -940,7 +940,9 @@ export default {
     },
     to(item) {
       if (item.to) return item.to;
-      let to = this.last(item) || this.selfOrFirstChild(item, true);
+      let selfOrFirstChild = this.selfOrFirstChild(item, true);
+      if (this.currentParent === item) return selfOrFirstChild; // Clicking on the same navigation item as the currently active one should return to the "root' of that navigation item
+      let to = this.last(item) || selfOrFirstChild;
       return to;
     },
     hasFeature(feature) {
