@@ -54,9 +54,14 @@ export default {
       538219, // Macau
   }),
   async created() {
-    let res = await axios.get(
-      `${Config.server}data/56-ethnic-groups/56-ethnic-groups-of-china.csv.txt`
-    );
+    let res
+    try {
+      res = await axios.get(
+        `${Config.server}data/56-ethnic-groups/56-ethnic-groups-of-china.csv.txt`
+      );
+    } catch (err) {
+      console.log(err);
+    }
     if (res && res.data) {
       let parsed = Papa.parse(res.data, {
         header: true,

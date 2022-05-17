@@ -1,17 +1,17 @@
-import { openDB, deleteDB, wrap, unwrap } from 'idb';
+// import { openDB, deleteDB, wrap, unwrap } from 'idb';
 
-let db = undefined
+// let db = undefined
 
-let store = undefined
+// let store = undefined
 
-const setupDB = async () => {
-  db = await openDB('zthSavedWords', 1, {
-    upgrade(db, oldVersion, newVersion, transaction) {
-      db.createObjectStore("zthSavedWords", { keyPath: "l2id" });
-    },
-  });
-  store = db.transaction('zthSavedWords')
-}
+// const setupDB = async () => {
+//   db = await openDB('zthSavedWords', 1, {
+//     upgrade(db, oldVersion, newVersion, transaction) {
+//       db.createObjectStore("zthSavedWords", { keyPath: "l2id" });
+//     },
+//   });
+//   store = db.transaction('zthSavedWords')
+// }
 
 export const state = () => {
   return {
