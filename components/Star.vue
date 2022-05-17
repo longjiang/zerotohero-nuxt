@@ -9,7 +9,7 @@
         title='Add to "Saved Words"'
       >
         <i class="far fa-star"></i>
-        Save Word
+        SAVE WORD
       </button>
       <button
         class="btn btn-unstyled saved btn-toggle-saved-word remove-word"
@@ -19,7 +19,7 @@
       >
         <!-- <i class="fas fa-bookmark"></i> -->
         <i class="fas fa-check"></i>
-        Saved
+        SAVED
         <i class="fas fa-times-circle ml-1"></i>
       </button>
       <button
