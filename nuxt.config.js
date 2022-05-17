@@ -58,6 +58,7 @@ export default {
   pwa: {
     icon: {
       fileName: 'icon3.png', // Renamed from icon.png in order for the pwa module to regenerate updated icons
+      purpose: 'maskable', // So that the user's os will add masking/padding around the icon (rounded corner, circle, etc)
     },
     manifest: {
       name: 'Zero to Hero Education',
