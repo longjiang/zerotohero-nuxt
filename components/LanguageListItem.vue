@@ -1,5 +1,5 @@
 <template>
-  <li class="language-list-item">
+  <div class="language-list-item">
     <span class="language-list-item-features" v-if="showFeatures">
       <router-link
         :to="{
@@ -75,7 +75,7 @@
     >
       {{ speakers(language.speakers) }} Speakers
     </span>
-  </li>
+  </div>
 </template>
 
 <script>
@@ -175,7 +175,7 @@ export default {
       }
     }
   }
-  
+
   &.language-list-dark {
     .language-list-item {
       a {

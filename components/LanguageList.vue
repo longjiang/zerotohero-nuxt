@@ -1,17 +1,20 @@
 <template>
   <container-query :query="query" v-model="params">
     <div>
-      <ul v-if="languages && languages.length > 0" :class="classes">
-        <LanguageListItem
-          v-for="(language, index) in languages"
-          :key="`lang-${language.code}-${index}`"
-          :showFlags="showFlags"
-          :showFeatures="showFeatures"
-          :variant="variant"
-          :showSpeakers="showSpeakers"
-          :language="language"
-        />
-      </ul>
+      <template v-if="languages && languages.length > 0" :class="classes">
+        <div v-if="variant === 'grid'"></div>
+        <div v-else>
+          <LanguageListItem
+            v-for="(language, index) in languages"
+            :key="`lang-${language.code}-${index}`"
+            :showFlags="showFlags"
+            :showFeatures="showFeatures"
+            :variant="variant"
+            :showSpeakers="showSpeakers"
+            :language="language"
+          />
+        </div>
+      </template>
     </div>
   </container-query>
 </template>
@@ -20,10 +23,9 @@
 import Helper from "@/lib/helper";
 import { ContainerQuery } from "vue-container-query";
 
-
 export default {
   components: {
-    ContainerQuery
+    ContainerQuery,
   },
   props: {
     showFeatures: {
