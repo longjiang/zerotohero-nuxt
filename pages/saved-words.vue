@@ -16,7 +16,7 @@
   <div class="main pb-4" v-cloak>
     <div class="container">
       <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-12 pt-4">
           <p
             v-if="dictionaryLoaded && sWLoaded && sW.length <= 0"
             class="alert alert-warning no-saved-words text-center mt-5 p-5"
@@ -25,9 +25,15 @@
             <i class="far fa-star"></i>
             icon next to it.
           </p>
-          <div v-if="dictionaryLoaded" class="text-center alert-success p-3 pb-4 rounded mt-4">
+          <div
+            v-if="dictionaryLoaded && !$auth.loggedIn"
+            class="text-center alert-success p-3 pb-4 rounded mt-4"
+          >
             <p>To sync words across devices, please login.</p>
-            <router-link :to="{name: 'login'}" class="btn btn-success">Login <i class="fas fa-chevron-right"></i></router-link>
+            <router-link :to="{ name: 'login' }" class="btn btn-success">
+              Login
+              <i class="fas fa-chevron-right"></i>
+            </router-link>
           </div>
           <div v-if="dictionaryLoaded && !sWLoaded" class="text-center">
             <Loader
@@ -36,8 +42,7 @@
             />
           </div>
           <div
-            class="pb-3 pt-3 bg-white text-center"
-            style="position: sticky; top: 2.9rem; z-index: 2"
+            class="hide-defs pb-3 pt-3 bg-white text-center"
             v-if="sWLoaded && sW.length > 0"
           >
             <LazyHideDefs
@@ -266,3 +271,16 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.hide-defs {
+  position: sticky;
+  z-index: 2;
+  top: 0;
+}
+
+.zerotohero-not-wide {
+  .hide-defs {
+    top: 2.9rem;
+  }
+}
+</style>
