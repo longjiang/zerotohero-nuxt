@@ -866,7 +866,7 @@ export default {
         },
         {
           icon: "fas fa-user",
-          title: `${this.$auth.user && this.$auth.user.first_name ? 'Hi, ' + this.$auth.user.first_name: 'Login'}`,
+          title: `${this.$auth.loggedIn && this.$auth.user && this.$auth.user.first_name ? 'Hi, ' + this.$auth.user.first_name: 'Login'}`,
           show: true,
           children: [
             {
