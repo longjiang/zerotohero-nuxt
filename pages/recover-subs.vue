@@ -235,7 +235,9 @@ export default {
           });
           let recoveredCSV = Papa.unparse(recoveredSubs);
           let patchResponse = await axios.patch(
-            `${Config.youtubeVideosTableName(this.$l2.id)}/${video.id}?fields=id`,
+            `${Config.youtubeVideosTableName(this.$l2.id)}/${video.id}${
+            this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
+          }&fields=id`,
             { subs_l2: recoveredCSV }
           );
           if (patchResponse && patchResponse.data) {
@@ -324,7 +326,9 @@ export default {
       );
       try {
         let response = await axios.patch(
-          `${Config.youtubeVideosTableName(this.$l2.id)}/${video.id}`,
+          `${Config.youtubeVideosTableName(this.$l2.id)}/${video.id}${
+            this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
+          }`,
           {
             subs_l2: csv,
           }

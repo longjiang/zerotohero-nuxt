@@ -242,7 +242,9 @@ export default {
       );
       try {
         let response = await axios.patch(
-          `${Config.youtubeVideosTableName(this.$l2.id)}/${video.id}`,
+          `${Config.youtubeVideosTableName(this.$l2.id)}/${video.id}${
+            this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
+          }`,
           {
             subs_l2: csv,
           }

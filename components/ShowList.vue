@@ -144,7 +144,9 @@ export default {
     async toggle(show, property) {
       let toggled = !show[property]; // If true, make it false, and vice versa
       try {
-        let url = `${Config.wiki}items/${this.field}s/${show.id}`;
+        let url = `${Config.wiki}items/${this.field}s/${show.id}${
+            this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
+          }`;
         let payload = {}
         payload[property] = toggled
         let response = await axios.patch(

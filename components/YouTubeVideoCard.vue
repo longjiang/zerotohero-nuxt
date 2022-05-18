@@ -466,7 +466,9 @@ export default {
           let response = await axios.patch(
             `${Config.youtubeVideosTableName(this.$l2.id)}/${
               this.video.id
-            }?fields=id`,
+            }${
+            this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
+          }&fields=id`,
             data
           );
           response = response.data;
@@ -481,7 +483,9 @@ export default {
       let data = {};
       data[type] = null;
       let response = await axios.patch(
-        `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}`,
+        `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}${
+            this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
+          }`,
         data
       );
       if (response && response.data) {
@@ -493,7 +497,9 @@ export default {
       if (this.video.title !== newTitle) {
         try {
           let response = await axios.patch(
-            `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}`,
+            `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}${
+            this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
+          }`,
             { title: newTitle },
             { contentType: "application/json" }
           );
@@ -543,7 +549,9 @@ export default {
     },
     async updateSubs() {
       let response = await axios.patch(
-        `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}`,
+        `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}${
+            this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
+          }`,
         { subs_l2: YouTube.unparseSubs(this.video.subs_l2) }
       );
       response = response.data;
@@ -609,7 +617,9 @@ export default {
     async addChannelID(video) {
       let channelId = await this.getChannelID(video);
       let response = await axios.patch(
-        `${Config.youtubeVideosTableName(this.$l2.id)}/${video.id}`,
+        `${Config.youtubeVideosTableName(this.$l2.id)}/${video.id}${
+            this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
+          }`,
         { channel_id: channelId }
       );
       if (response && response.data) {

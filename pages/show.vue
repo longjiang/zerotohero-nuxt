@@ -288,7 +288,9 @@ export default {
       if (this.show.title !== newTitle) {
         try {
           let response = await axios.patch(
-            `${Config.wiki}items/${this.collection}s/${this.show.id}`,
+            `${Config.wiki}items/${this.collection}s/${this.show.id}${
+            this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
+          }`,
             { title: newTitle },
             { contentType: "application/json" }
           );
@@ -309,7 +311,9 @@ export default {
       if (this.show.title !== newCover) {
         try {
           let response = await axios.patch(
-            `${Config.wiki}items/${this.collection}s/${this.show.id}`,
+            `${Config.wiki}items/${this.collection}s/${this.show.id}${
+            this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
+          }`,
             { youtube_id: newCover },
             { contentType: "application/json" }
           );

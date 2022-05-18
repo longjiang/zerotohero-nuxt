@@ -479,7 +479,9 @@ export default {
       let data = {};
       data[type] = null;
       let response = await axios.patch(
-        `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}`,
+        `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}${
+            this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
+          }`,
         data
       );
       if (response && response.data) {
@@ -508,7 +510,9 @@ export default {
         let response = await axios.patch(
           `${Config.youtubeVideosTableName(this.$l2.id)}/${
             this.video.id
-          }?fields=${type}.*`, // type is 'tv_show' or 'talk'
+          }${
+            this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
+          }&fields=${type}.*`, // type is 'tv_show' or 'talk'
           data
         );
         response = response.data;
@@ -561,7 +565,9 @@ export default {
       this.updating = true;
       try {
         let response = await axios.patch(
-          `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}`,
+          `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}${
+            this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
+          }`,
           {
             subs_l2: this.video.subs_l2
               ? YouTube.unparseSubs(this.video.subs_l2, this.$l2.code)

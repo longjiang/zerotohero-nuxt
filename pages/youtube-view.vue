@@ -460,7 +460,9 @@ export default {
       let response = await axios.patch(
         `${Config.youtubeVideosTableName(this.$l2.id)}/${
           video.id
-        }?fields=id,channel_id`,
+        }${
+            this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
+          }&fields=id,channel_id`,
         { channel_id: channelId }
       );
       if (response && response.data) {
@@ -479,7 +481,9 @@ export default {
           await axios.patch(
             `${Config.youtubeVideosTableName(this.$l2.id)}/${
               video.id
-            }?fields=id`,
+            }${
+            this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
+          }&fields=id`,
             { subs_l2 }
           );
           console.log("Missing duration information added.");
