@@ -315,6 +315,12 @@ export default {
               show: !this.$auth.loggedIn,
             },
             {
+              name: "register",
+              icon: "fas fa-key",
+              title: "Register",
+              show: !this.$auth.loggedIn,
+            },
+            {
               name: "saved-words",
               icon: "fas fa-star",
               title: "Saved Words",
