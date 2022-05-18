@@ -103,7 +103,30 @@ export default {
       defaultImage: '/img/placeholder-faded.png',
       directiveOnly: false
     }],
+    '@nuxtjs/auth-next'
   ],
+
+  auth: {
+    strategies: {
+      local: {
+        token: {
+          property: 'data.token',
+          global: true,
+          // required: true,
+          // type: 'Bearer'
+        },
+        user: {
+          property: 'data.user',
+          // autoFetch: true
+        },
+        endpoints: {
+          login: { url: 'https://db2.zerotohero.ca/zerotohero/auth/authenticate', method: 'post' },
+          // logout: { url: '/api/auth/logout', method: 'post' },
+          user: { url: 'https://db2.zerotohero.ca/zerotohero/users/me', method: 'get' }
+        }
+      }
+    }
+  },
 
   bootstrapVue: {
     components: ['BForm', 'BCard', 'BFormInput', 'BFormFile', 'BFormGroup', 'BFormSelect', 'BFormTextarea', 'BFormSelectOption', 'BButton', 'BProgress', 'BTable',
