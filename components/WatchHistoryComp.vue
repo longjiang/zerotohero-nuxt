@@ -145,9 +145,9 @@ export default {
   },
   mounted() {
     this.emitHasWatchHistory();
-    if (!this.$store.state.history.historyLoaded) {
-      this.$store.commit("history/LOAD_HISTORY");
-    }
+    // if (!this.$store.state.history.historyLoaded) {
+    //   this.$store.dispatch("history/load");
+    // }
   },
   computed: {
     ...mapState("history", ["history"]),

@@ -420,9 +420,9 @@ export default {
     if (this.video.id && this.showSubsEditing) {
       await this.addSubsL1(this.video);
     }
-    if (!this.$store.state.history.historyLoaded) {
-      this.$store.commit("history/LOAD_HISTORY");
-    }
+    // if (!this.$store.state.history.historyLoaded) {
+    //   this.$store.dispatch("history/load");
+    // }
   },
   watch: {
     firstLineTime(newTime, oldTime) {
