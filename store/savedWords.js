@@ -87,6 +87,15 @@ export const mutations = {
       localStorage.setItem('zthSavedWords', JSON.stringify(state.savedWords))
     }
   },
+  IMPORT_WORDS_FROM_JSON(state, json) {
+    if (typeof localStorage !== 'undefined') {
+      state.savedWords = JSON.parse(json)
+      for (let l2 in state.savedWords) {
+        buildIndex(l2, state)
+      }
+      localStorage.setItem('zthSavedWords', JSON.stringify(state.savedWords))
+    }
+  },
   REMOVE_SAVED_WORD(state, { l2, word }) {
     if (typeof localStorage !== 'undefined' && state.savedWords[l2]) {
       const keepers = state.savedWords[l2].filter(
@@ -116,37 +125,53 @@ export const mutations = {
   }
 }
 export const actions = {
+  load({ commit, dispatch }) {
+    commit('LOAD_SAVED_WORDS')
+    dispatch('pull')
+  },
   async add({ dispatch, commit }, { l2, word, wordForms }) {
     commit('ADD_SAVED_WORD', { l2, word, wordForms })
     dispatch('push')
   },
-  importWords({ commit }, rows) {
+  importWords({ commit, dispatch }, rows) {
     commit('IMPORT_WORDS', rows)
+    dispatch('push')
   },
-  remove({ commit }, options) {
+  remove({ commit, dispatch }, options) {
     commit('REMOVE_SAVED_WORD', options)
+    dispatch('push')
   },
-  removeAll({ commit }, options) {
+  removeAll({ commit, dispatch }, options) {
     commit('REMOVE_ALL_SAVED_WORDS', options)
+    dispatch('push')
   },
   async push({ commit, state, rootState }) {
     let user = rootState.auth.user
     if (user && user.id && user.token) {
-      // try {
       let payload = { saved_words: JSON.stringify(state.savedWords) }
-      console.log(payload)
-      let res = await axios.patch(`${Config.wiki}items/user_data/${user.id}?access_token=${user.token}`, payload)
+      await axios.patch(`${Config.wiki}items/user_data/${user.id}?access_token=${user.token}`, payload)
         .catch(async (err) => {
           if (err.response && err.response.data && err.response.data.error && err.response.data.error.code === 203) {
-            let res2 = await axios.post(`${Config.wiki}items/user_data?access_token=${user.token}`, { id: user.id, saved_words: JSON.stringify(state.savedWords) })
+            // Initialize the user data record if there isn't one
+            await axios.post(`${Config.wiki}items/user_data?access_token=${user.token}`, { id: user.id, saved_words: JSON.stringify(state.savedWords) })
           }
         })
-      // } catch (err) {
-      //   // console.log(err.reponse)
-      //   // let res = await axios.post(`${Config.wiki}items/user_data?access_token=${user.token}`, { id: user.id, saved_words: state.savedWords })
-      // }
     }
-
+  },
+  async pull({ commit, state, rootState }) {
+    let user = rootState.auth.user
+    if (user && user.id && user.token) {
+      let res = await axios.get(`${Config.wiki}items/user_data/${user.id}?fields=saved_words&access_token=${user.token}`)
+        .catch(async (err) => {
+          if (err.response && err.response.data && err.response.data.error && err.response.data.error.code === 203) {
+            // Initialize the user data record if there isn't one
+            await axios.post(`${Config.wiki}items/user_data?access_token=${user.token}`, { id: user.id, saved_words: JSON.stringify(state.savedWords) })
+          }
+        })
+      if (res && res.data && res.data.data) {
+        commit('IMPORT_WORDS_FROM_JSON', res.data.data.saved_words)
+      }
+    }
   }
 }
 export const getters = {

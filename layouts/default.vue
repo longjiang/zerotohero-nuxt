@@ -241,7 +241,7 @@ export default {
     async onLanguageChange() {
       if (this.l1) this.updatei18n();
       if (!this.$store.state.savedWords.savedWordsLoaded) {
-        this.$store.commit("savedWords/LOAD_SAVED_WORDS");
+        this.$store.dispatch("savedWords/load");
       }
       if (!this.$store.state.savedPhrases.savedPhrasesLoaded) {
         this.$store.commit("savedPhrases/LOAD_SAVED_PHRASES");
