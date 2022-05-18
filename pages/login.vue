@@ -103,6 +103,7 @@ export default {
           this.$store.dispatch('savedWords/pull')
           this.$store.dispatch('savedPhrases/pull')
           this.$store.dispatch('history/pull')
+          this.$store.dispatch('settings/pull')
           this.$router.back();
           this.$toast.success(`Welcome back, ${res.data.data.first_name}!`, {
             position: "top-center",

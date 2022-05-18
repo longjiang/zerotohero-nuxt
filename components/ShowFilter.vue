@@ -319,12 +319,12 @@ export default {
       let talkFilter = this.getTalkFilter();
 
       this.tvShowFilter = tvShowFilter;
-      this.$store.commit("settings/SET_L2_SETTINGS", {
+      this.$store.dispatch("settings/setL2Settings", {
         tvShowFilter: this.tvShowFilter,
       });
 
       this.talkFilter = talkFilter;
-      this.$store.commit("settings/SET_L2_SETTINGS", {
+      this.$store.dispatch("settings/setL2Settings", {
         talkFilter: this.talkFilter,
       });
     },

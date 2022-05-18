@@ -265,45 +265,45 @@ export default {
   },
   watch: {
     adminMode() {
-      this.$store.commit("settings/SET_ADMIN_MODE", this.adminMode);
+      this.$store.dispatch("settings/setAdminMode", this.adminMode);
     },
     showDefinition() {
-      this.$store.commit("settings/SET_L2_SETTINGS", {
+      this.$store.dispatch("settings/setL2Settings", {
         showDefinition: this.showDefinition,
       });
     },
     showPinyin() {
-      this.$store.commit("settings/SET_L2_SETTINGS", {
+      this.$store.dispatch("settings/setL2Settings", {
         showPinyin: this.showPinyin,
       });
     },
     useTraditional() {
-      this.$store.commit("settings/SET_L2_SETTINGS", {
+      this.$store.dispatch("settings/setL2Settings", {
         useTraditional: this.useTraditional,
       });
     },
     showTranslation() {
-      this.$store.commit("settings/SET_L2_SETTINGS", {
+      this.$store.dispatch("settings/setL2Settings", {
         showTranslation: this.showTranslation,
       });
     },
     showQuiz() {
-      this.$store.commit("settings/SET_L2_SETTINGS", {
+      this.$store.dispatch("settings/setL2Settings", {
         showQuiz: this.showQuiz,
       });
     },
     useSerif() {
-      this.$store.commit("settings/SET_L2_SETTINGS", {
+      this.$store.dispatch("settings/setL2Settings", {
         useSerif: this.useSerif,
       });
     },
     showByeonggi() {
-      this.$store.commit("settings/SET_L2_SETTINGS", {
+      this.$store.dispatch("settings/setL2Settings", {
         showByeonggi: this.showByeonggi,
       });
     },
     disableAnnotation() {
-      this.$store.commit("settings/SET_L2_SETTINGS", {
+      this.$store.dispatch("settings/setL2Settings", {
         disableAnnotation: this.disableAnnotation,
       });
     },

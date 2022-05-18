@@ -254,7 +254,7 @@ export default {
     loadSettings() {
       if (this.settingsLoaded === this.l2.code) return;
       this.settingsLoaded = this.l2.code;
-      this.$store.commit("settings/LOAD_SETTINGS");
+      this.$store.dispatch("settings/load");
       if (!this.$store.state.savedCollocations.savedCollocationsLoaded) {
         this.$store.commit("savedCollocations/LOAD_SAVED_COLLOCATIONS");
       }

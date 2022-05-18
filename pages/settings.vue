@@ -140,13 +140,13 @@ export default {
   },
   watch: {
     subsSearchLimit() {
-      this.$store.commit(
-        "settings/SET_SUBS_SEARCH_LIMIT",
+      this.$store.dispatch(
+        "settings/setSubsSearchLimit",
         this.subsSearchLimit
       );
     },
     adminMode() {
-      this.$store.commit("settings/SET_ADMIN_MODE", this.adminMode);
+      this.$store.dispatch("settings/setAdminMode", this.adminMode);
     },
     adminModePasscode() {
       if (this.adminModePasscode === "A lion flies on camera") {

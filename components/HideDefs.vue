@@ -54,15 +54,15 @@ export default {
   },
   watch: {
     hideDefinitions() {
-      this.$store.commit("settings/SET_HIDE_DEFINITIONS", this.hideDefinitions);
+      this.$store.dispatch("settings/setHideDefinitions", this.hideDefinitions);
       this.$emit("hideDefinitions", this.hideDefinitions);
     },
     hidePhonetics() {
-      this.$store.commit("settings/SET_HIDE_PHONETICS", this.hidePhonetics);
+      this.$store.dispatch("settings/setHidePhonetics", this.hidePhonetics);
       this.$emit("hidePhonetics", this.hidePhonetics);
     },
     hideWord() {
-      this.$store.commit("settings/SET_HIDE_WORD", this.hideWord);
+      this.$store.dispatch("settings/setHideWord", this.hideWord);
       this.$emit("hideWord", this.hideWord);
     },
   },
