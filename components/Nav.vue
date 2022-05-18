@@ -864,6 +864,25 @@ export default {
             },
           ],
         },
+        {
+          icon: "fas fa-user",
+          title: `${this.$auth.user && this.$auth.user.first_name ? 'Hi, ' + this.$auth.user.first_name: 'Login'}`,
+          show: true,
+          children: [
+            {
+              name: "login",
+              icon: "fas fa-key",
+              title: "Login",
+              show: !this.$auth.loggedIn,
+            },
+            {
+              name: "logout",
+              icon: "fas fa-exit",
+              title: "Logout",
+              show: this.$auth.loggedIn,
+            },
+          ],
+        },
       ];
       if (this.showOnly)
         items = items.filter((i) => i.title && this.showOnly.includes(i.title));

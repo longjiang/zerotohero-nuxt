@@ -107,6 +107,12 @@ export default {
   ],
 
   auth: {
+    redirect: {
+      login: false,
+      logout: false,
+      callback: false,
+      home: false
+    },
     strategies: {
       local: {
         token: {
@@ -122,7 +128,7 @@ export default {
         endpoints: {
           login: { url: 'https://db2.zerotohero.ca/zerotohero/auth/authenticate', method: 'post' },
           // logout: { url: '/api/auth/logout', method: 'post' },
-          // user: { url: 'https://db2.zerotohero.ca/zerotohero/users/me', method: 'get' }
+          user: false
         }
       }
     }
@@ -137,7 +143,8 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     '~plugins/main.js',
-    { src: '~/plugins/pwa-update.js', mode: 'client' }
+    { src: '~/plugins/pwa-update.js', mode: 'client' },
+    { src: '~/plugins/vuex-persist.js', mode: 'client' }
   ],
 
   build: {

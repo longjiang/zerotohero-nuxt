@@ -55,8 +55,11 @@ export default {
     async onSubmit(event) {
       try {
         let response = await this.$auth.loginWith('local', { data: this.form })
-        const user = await axios.get(`https://db2.zerotohero.ca/zerotohero/users/me?access_token=${this.$auth.strategy.token.get().replace('Bearer ', '')}`)
-        this.$auth.setUser(user)
+        const res = await axios.get(`https://db2.zerotohero.ca/zerotohero/users/me?access_token=${this.$auth.strategy.token.get().replace('Bearer ', '')}`)
+        if (res && res.data && res.data.data) {
+          this.$auth.setUser(res.data.data)
+          this.$router.back()
+        }
       } catch (err) {
         console.log(err)
       }
