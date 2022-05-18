@@ -1,3 +1,5 @@
+import Config from '@/lib/config'
+
 export const state = () => {
   return {
     savedPhrases: {},
@@ -49,6 +51,12 @@ export const mutations = {
       localStorage.setItem('zthSavedPhrases', JSON.stringify(state.savedPhrases))
     }
   },
+  IMPORT_PHRASES_FROM_JSON(state, json) {
+    if (typeof localStorage !== 'undefined') {
+      state.savedPhrases = JSON.parse(json) || state.savedPhrases
+      localStorage.setItem('zthSavedPhrases', JSON.stringify(state.savedPhrases))
+    }
+  },
   REMOVE_SAVED_PHRASE(state, { l2, phrase, phrasebookId, pronunciation, exact, translations = {} } = {}) {
     if (typeof localStorage !== 'undefined' && state.savedPhrases[l2]) {
       let phraseToRemove = {
@@ -86,17 +94,53 @@ export const mutations = {
   }
 }
 export const actions = {
+  load({ commit, dispatch }) {
+    commit('LOAD_SAVED_PHRASES')
+    dispatch('pull')
+  },
   add({ commit, dispatch }, options) {
     commit('ADD_SAVED_PHRASE', options)
+    dispatch('push')
   },
   importPhrases({ commit, dispatch }, rows) {
     commit('IMPORT_PHRASES', rows)
+    dispatch('push')
   },
   remove({ commit, dispatch }, options) {
     commit('REMOVE_SAVED_PHRASE', options)
+    dispatch('push')
   },
   removeAll({ commit, dispatch }, options) {
     commit('REMOVE_ALL_SAVED_PHRASES', options)
+    dispatch('push')
+  },
+  async push({ commit, state, rootState }) {
+    let user = rootState.auth.user
+    if (user && user.id && user.token) {
+      let payload = { saved_phrases: JSON.stringify(state.savedPhrases) }
+      await axios.patch(`${Config.wiki}items/user_data/${user.id}?access_token=${user.token}`, payload)
+        .catch(async (err) => {
+          if (err.response && err.response.data && err.response.data.error && err.response.data.error.code === 203) {
+            // Initialize the user data record if there isn't one
+            await axios.post(`${Config.wiki}items/user_data?access_token=${user.token}`, { id: user.id, saved_phrases: JSON.stringify(state.savedPhrases) })
+          }
+        })
+    }
+  },
+  async pull({ commit, state, rootState }) {
+    let user = rootState.auth.user
+    if (user && user.id && user.token) {
+      let res = await axios.get(`${Config.wiki}items/user_data/${user.id}?fields=saved_phrases&access_token=${user.token}`)
+        .catch(async (err) => {
+          if (err.response && err.response.data && err.response.data.error && err.response.data.error.code === 203) {
+            // Initialize the user data record if there isn't one
+            await axios.post(`${Config.wiki}items/user_data?access_token=${user.token}`, { id: user.id, saved_phrases: JSON.stringify(state.savedPhrases) })
+          }
+        })
+      if (res && res.data && res.data.data) {
+        commit('IMPORT_PHRASES_FROM_JSON', res.data.data.saved_phrases)
+      }
+    }
   }
 }
 export const getters = {
@@ -104,7 +148,7 @@ export const getters = {
     let phraseToTest = {
       phrase, phrasebookId, pronunciation, exact, translations
     }
-    if (state.savedPhrases[l2]) {
+    if (state.savedPhrases && state.savedPhrases[l2]) {
       let savedphrase = false
       savedphrase = state.savedPhrases[l2].find(
         phrase => phrase.phrase === phraseToTest.phrase
@@ -113,7 +157,7 @@ export const getters = {
     }
   },
   count: state => ({ l2 }) => {
-    if (state.savedPhrases[l2]) {
+    if (state.savedPhrases && state.savedPhrases[l2]) {
       return state.savedPhrases[l2].length
     } else {
       return 0

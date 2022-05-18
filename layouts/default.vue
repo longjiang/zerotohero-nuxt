@@ -244,7 +244,7 @@ export default {
         this.$store.dispatch("savedWords/load");
       }
       if (!this.$store.state.savedPhrases.savedPhrasesLoaded) {
-        this.$store.commit("savedPhrases/LOAD_SAVED_PHRASES");
+        this.$store.dispatch("savedPhrases/load");
       }
       let dictionary = await this.$getDictionary();
       if (dictionary) {

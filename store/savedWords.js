@@ -96,7 +96,7 @@ export const mutations = {
   },
   IMPORT_WORDS_FROM_JSON(state, json) {
     if (typeof localStorage !== 'undefined') {
-      state.savedWords = JSON.parse(json)
+      state.savedWords = JSON.parse(json) || state.savedWords
       for (let l2 in state.savedWords) {
         buildIndex(l2, state)
       }
@@ -136,7 +136,7 @@ export const actions = {
     commit('LOAD_SAVED_WORDS')
     dispatch('pull')
   },
-  async add({ dispatch, commit }, { l2, word, wordForms }) {
+  add({ dispatch, commit }, { l2, word, wordForms }) {
     commit('ADD_SAVED_WORD', { l2, word, wordForms })
     dispatch('push')
   },
