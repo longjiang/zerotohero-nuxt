@@ -89,7 +89,7 @@
         >
           <NavItem
             v-for="(child, index) in currentParent.children.filter(
-              (child) => child.show && !child.href
+              (child) => child.show
             )"
             :key="`subnav-item-${child.name || child.href}-${index}`"
             :mode="mode"
@@ -877,6 +877,25 @@ export default {
               show: this.$auth.loggedIn,
             },
             {
+              href: "https://sso.teachable.com/secure/133035/identity/login",
+              icon: "fas fa-graduation-cap",
+              title: "My Teachable Courses",
+              show: this.$l2 && this.$l2.code === 'zh',
+            },
+            {
+              href: "https://m.cctalk.com/inst/stevmab3",
+              icon: "fas fa-graduation-cap",
+              title: "My CCtalk Courses",
+              show: this.$l2 && this.$l2.code === 'en',
+            },
+            {
+              name: "logout",
+              icon: "fas fa-exit",
+              title: "Logout",
+              show: this.$auth.loggedIn,
+              params: { l1: this.l1.code, l2: this.l2.code },
+            },
+            {
               name: "login",
               icon: "fas fa-key",
               title: "Login",
@@ -893,25 +912,6 @@ export default {
               icon: "fas fa-bookmark",
               title: "Saved Phrases",
               show: true,
-            },
-            {
-              name: "logout",
-              icon: "fas fa-exit",
-              title: "Logout",
-              show: this.$auth.loggedIn,
-              params: { l1: this.l1.code, l2: this.l2.code },
-            },
-            {
-              href: "https://sso.teachable.com/secure/133035/identity/login",
-              icon: "fas fa-graduation-cap",
-              title: "My Chinese Courses",
-              show: this.$l2 && this.$l2.code === 'zh',
-            },
-            {
-              href: "https://m.cctalk.com/inst/stevmab3",
-              icon: "fas fa-graduation-cap",
-              title: "My English Courses",
-              show: this.$l2 && this.$l2.code === 'en',
             },
           ],
         },

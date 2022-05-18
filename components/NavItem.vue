@@ -1,5 +1,6 @@
 <template>
-  <NuxtLink
+  <component
+    :is="`${item.href ? 'a' : 'NuxtLink'}`"
     :class="{
       'main-nav-item': mode !== 'large-icon' && level === 1,
       'secondary-nav-item': mode !== 'large-icon' && level === 2,
@@ -9,6 +10,7 @@
         mode === 'large-icon',
       'router-link-active': active,
     }"
+    :href="item.href"
     :to="to"
     :title="item.title"
   >
@@ -30,7 +32,7 @@
         {{ badge }}
       </span>
     </span>
-  </NuxtLink>
+  </component>
 </template>
 
 <script>
