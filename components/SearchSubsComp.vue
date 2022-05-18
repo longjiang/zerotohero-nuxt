@@ -468,8 +468,9 @@ export default {
       if (youtube_id) {
         // Log it
         try {
-          let res = await reportUnavailableVideo({ youtube_id: video.youtube_id, video_id: video.id, l2Code: this.$l2.id })
+          let res = await YouTube.reportUnavailableVideo({ youtube_id: video.youtube_id, video_id: video.id, l2Id: this.$l2.id })
         } catch(err) {
+          console.log(err)
         }
         // Go to next video
         this.removeCurrentHitAndGoToNext()

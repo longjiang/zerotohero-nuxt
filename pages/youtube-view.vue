@@ -250,7 +250,7 @@ export default {
         await YouTube.reportUnavailableVideo({
           youtube_id,
           video_id: this.video.id,
-          l2Code: this.$l2.id,
+          l2Id: this.$l2.id,
         });
         // Go to next video
         if (this.nextEpisode) this.$router.push(this.nextEpisode);
