@@ -107,8 +107,8 @@ export default {
                 duration: 5000,
               }
             );
-            this.$router.back();
-            this.$router.back();
+            this.$router.back(); // First to the login page
+            this.$router.back(); // Then to whatever the user was looking at
           }
         }
       } catch (err) {
