@@ -137,25 +137,17 @@ export const actions = {
     commit("SET_L2_SETTINGS", l2Settings);
     dispatch("push");
   },
-  setHideDefinitions({ dispatch, commit }, value) {
-    commit("SET_HIDE_DEFINITIONS", value);
-    dispatch("push");
-  },
-  setAdminnMode({ dispatch, commit }, value) {
+  setAdminMode({ dispatch, commit }, value) {
     commit("SET_ADMIN_MODE", value);
-    dispatch("push");
   },
   setHideWord({ dispatch, commit }, value) {
     commit("SET_HIDE_WORD", value);
-    dispatch("push");
   },
   setHidePhonetics({ dispatch, commit }, value) {
     commit("SET_HIDE_PHONETICS", value);
-    dispatch("push");
   },
   setHideDefinitions({ dispatch, commit }, value) {
     commit("SET_HIDE_DEFINITIONS", value);
-    dispatch("push");
   },
   setSubsSearchLimit({ dispatch, commit }, value) {
     commit("SET_SUBS_SEARCH_LIMIT", value);

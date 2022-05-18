@@ -38,6 +38,18 @@
           <hr />
           <h5>Settings specific to {{ $l2.name }}:</h5>
           <AnnotationSettings />
+          <client-only
+            ><div class="text-right">
+              <b-form-checkbox
+                v-model="adminMode"
+                style="display: inline-block"
+                v-if="userIsAdmin"
+                class="mt-2 mb-4"
+              >
+                Admin mode
+              </b-form-checkbox>
+            </div></client-only
+          >
           <div>
             <h5>{{ $t("Text Corpus Settings") }}</h5>
             <p v-if="$l1.code === 'zh'">
@@ -73,28 +85,6 @@
     <div class="container-fluid">
       <CorpusSelect />
     </div>
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-12">
-          <b-form-checkbox
-            v-model="adminMode"
-            style="display: inline-block"
-            v-if="adminMode"
-          >
-            Admin mode
-          </b-form-checkbox>
-          <b-input-group v-else>
-            <b-form-input
-              v-model.lazy="adminModePasscode"
-              placeholder="Enter passcode to enable admin mode."
-            />
-            <b-input-group-append>
-              <b-button variant="primary">Enable</b-button>
-            </b-input-group-append>
-          </b-input-group>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -109,7 +99,7 @@ export default {
     AnnotationSettings,
   },
   mounted() {
-    if (typeof this.$store.state.settings !== 'undefined') {
+    if (typeof this.$store.state.settings !== "undefined") {
       this.subsSearchLimit = this.$store.state.settings.subsSearchLimit;
       this.adminMode = this.$store.state.settings.adminMode;
     }
@@ -124,7 +114,6 @@ export default {
     return {
       subsSearchLimit: true,
       adminMode: false,
-      adminModePasscode: "",
     };
   },
   computed: {
@@ -136,22 +125,17 @@ export default {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
+    userIsAdmin() {
+      return this.$auth.user && this.$auth.user.role === 1;
+    },
     ...mapState("settings", ["l2Settings", "l1", "l2"]),
   },
   watch: {
     subsSearchLimit() {
-      this.$store.dispatch(
-        "settings/setSubsSearchLimit",
-        this.subsSearchLimit
-      );
+      this.$store.dispatch("settings/setSubsSearchLimit", this.subsSearchLimit);
     },
     adminMode() {
       this.$store.dispatch("settings/setAdminMode", this.adminMode);
-    },
-    adminModePasscode() {
-      if (this.adminModePasscode === "A lion flies on camera") {
-        this.adminMode = true;
-      }
     },
   },
 };
