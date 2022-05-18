@@ -12,6 +12,26 @@
             <h4>Create an Account</h4>
           </div>
           <b-form @submit.prevent="onSubmit" v-if="show">
+            <div class="d-flex mb-3">
+              <b-form-input
+                id="first_name"
+                v-model="form.first_name"
+                type="text"
+                placeholder="First Name"
+                required
+                style="flex: 1"
+                class="mr-1"
+              ></b-form-input>
+              <b-form-input
+                id="last_name"
+                v-model="form.last_name"
+                type="text"
+                placeholder="Last Name"
+                required
+                style="flex: 1"
+                class="ml-1"
+              ></b-form-input>
+            </div>
             <b-form-group id="input-group-1" label-for="email">
               <b-form-input
                 id="email"
@@ -32,8 +52,15 @@
               ></b-form-input>
             </b-form-group>
 
-            <b-button class="d-block w-100" type="submit" variant="success">Sign Up</b-button>
-            <div class="mt-3 text-center"><router-link :to="{name: 'login'}">I have an account <i class="fas fa-chevron-right ml-1"></i></router-link></div>
+            <b-button class="d-block w-100" type="submit" variant="success">
+              Sign Up
+            </b-button>
+            <div class="mt-3 text-center">
+              <router-link :to="{ name: 'login' }">
+                I have an account
+                <i class="fas fa-chevron-right ml-1"></i>
+              </router-link>
+            </div>
           </b-form>
         </div>
       </div>
@@ -48,8 +75,12 @@ export default {
   data() {
     return {
       form: {
-        email: "jon@chinesezerotohero.com",
-        password: "X6w8pG@azXj_9H@v7bPBVyfZ",
+        first_name: "",
+        last_name: "",
+        email: "",
+        password: "",
+        role: 3,
+        status: "active",
       },
       show: true,
     };
@@ -57,16 +88,28 @@ export default {
   methods: {
     async onSubmit(event) {
       try {
-        let response = await this.$auth.loginWith("local", { data: this.form });
-        const res = await axios.get(
-          `https://db2.zerotohero.ca/zerotohero/users/me?access_token=${this.$auth.strategy.token
-            .get()
-            .replace("Bearer ", "")}`
+        const res = await axios.post(
+          `https://db2.zerotohero.ca/zerotohero/users`,
+          this.form
         );
-        if (res && res.data && res.data.data) {
-          this.$auth.setUser(res.data.data);
-          this.$router.back();
-          this.$toast.success(`Welcome back, ${res.data.data.first_name}!`, {position: 'top-center', duration: 5000})
+
+        if (res && res.data && res.data.public === true) {
+          let response = await this.$auth.loginWith("local", {
+            data: this.form,
+          });
+          if (response && response.data && response.data.data && response.data.data.user) {
+            let userWithToken = response.data.data.user;
+            this.$auth.setUser(userWithToken);
+            this.$toast.success(
+              `Welcome aboard, ${userWithToken.first_name}!`,
+              {
+                position: "top-center",
+                duration: 5000,
+              }
+            );
+            this.$router.back();
+            this.$router.back();
+          }
         }
       } catch (err) {
         console.log(err);

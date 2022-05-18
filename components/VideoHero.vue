@@ -93,7 +93,6 @@ export default {
   },
   methods: {
     play() {
-      console.log("pl");
       this.$refs.youtube.play();
     },
     onVideoUnavailable() {
