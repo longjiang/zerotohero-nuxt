@@ -75,7 +75,9 @@ export const actions = {
   },
   async remove(context, { l2, type, show }) {
     let response = await axios.delete(
-      `${Config.wiki}items/${type === 'tvShows' ? 'tv_shows' : 'talks'}/${show.id}`
+      `${Config.wiki}items/${type === 'tvShows' ? 'tv_shows' : 'talks'}/${show.id}${
+        this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
+      }`
     );
     if (response && response.data) {
       context.commit('REMOVE_SHOW', { l2, type, show })

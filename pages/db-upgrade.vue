@@ -211,7 +211,9 @@ export default {
     async remove(video) {
       try {
         let response = await axios.delete(
-          `${Config.youtubeVideosTableName(this.$l2.id)}/${video.id}`
+          `${Config.youtubeVideosTableName(this.$l2.id)}/${video.id}${
+            this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
+          }`
         );
         if (response.data) {
           this.videos = this.videos.filter((v) => v !== video);

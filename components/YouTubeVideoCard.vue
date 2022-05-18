@@ -536,7 +536,7 @@ export default {
             Vue.delete(this.video, "id");
           }
         } catch (err) {
-          // Directus bug
+          console.log(err)
         }
       }
       return true;

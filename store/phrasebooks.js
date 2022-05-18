@@ -83,7 +83,9 @@ export const actions = {
   },
   async remove(context, { l2, phrasebook }) {
     let response = await axios.delete(
-      `${Config.wiki}items/phrasebook/${phrasebook.id}`
+      `${Config.wiki}items/phrasebook/${phrasebook.id}${
+        this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
+      }`
     );
     if (response && response.data) {
       context.commit('REMOVE_PHRASEBOOK', { l2, phrasebook })

@@ -351,7 +351,7 @@ export default {
           this.$l2.id
         }&filter[${this.collection}][eq]=${
           this.show.id
-        }${keywordFilter}&fields=channel_id,id,lesson,level,title,topic,youtube_id,date,tv_show.*,talk.*&sort=${sort}&limit=${limit}&offset=${offset}&timestamp=${
+        }${keywordFilter}&fields=id,title,l2,youtube_id,date,tv_show.*,talk.*&sort=${sort}&limit=${limit}&offset=${offset}&timestamp=${
           this.$adminMode ? Date.now() : 0
         }`
       );

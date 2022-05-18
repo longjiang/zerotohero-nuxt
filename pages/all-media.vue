@@ -370,7 +370,7 @@ export default {
             this.$l2.id
           )}?sort=${sort}&filter[l2][eq]=${
             this.$l2.id
-          }&${filter}&limit=${limit}&fields=channel_id,id,lesson,level,title,topic,youtube_id,tv_show,talk`
+          }&${filter}&limit=${limit}&fields=id,title,youtube_id,tv_show,talk,l2`
         );
         if (response.data.data && response.data.data.length > 0)
           videos = response.data.data;
@@ -380,7 +380,7 @@ export default {
               this.$l2.id
             )}?sort=${sort}&filter[l2][eq]=${
               this.$l2.id
-            }&limit=${limit}&fields=channel_id,id,lesson,level,title,topic,youtube_id,tv_show,talk`
+            }&limit=${limit}&fields=id,title,youtube_id,tv_show,talk,l2`
           );
           videos = response.data.data || [];
         }
