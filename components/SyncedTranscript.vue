@@ -23,6 +23,7 @@
                 ]
               : undefined
           "
+          :showParallelLine="parallellines && parallellines.length > 0"
           :lineIndex="index + visibleMin"
           :key="`line-${index + visibleMin}-${
             line.starttime
@@ -292,7 +293,7 @@ export default {
     //   window.addEventListener("wheel", this.cancelSmoothScroll);
     //   window.addEventListener("touchstart", this.cancelSmoothScroll);
     // }
-    this.attachPopupEventListeners()
+    this.attachPopupEventListeners();
   },
   beforeDestroy() {
     if (this.unsubscribe) this.unsubscribe();
@@ -300,8 +301,8 @@ export default {
     //   window.removeEventListener("wheel", this.cancelSmoothScroll);
     //   window.removeEventListener("touchstart", this.cancelSmoothScroll);
     // }
-    this.$nuxt.$off("popupOpened")
-    this.$nuxt.$off("popupClosed")
+    this.$nuxt.$off("popupOpened");
+    this.$nuxt.$off("popupClosed");
   },
   watch: {
     async paused() {

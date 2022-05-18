@@ -7,6 +7,7 @@
         'transcript-line-matched': matched,
         'transcript-line-current': current,
         'transcript-line-wide': !single && params.lg,
+        'transcript-line-with-translation': showParallelLine,
       }"
       ref="lines"
       :data-line-index="lineIndex"
@@ -141,6 +142,9 @@ export default {
     parallelLine: {
       type: String,
     },
+    showParallelLine: {
+      default: true, // The user can hide the line via settings/css, but if the transcript has no parallel line we control how the component is rendered
+    },
     enableTranslationEditing: {
       type: Boolean,
     },
@@ -253,7 +257,7 @@ export default {
 
 <style lang="scss" scoped>
 .show-translation {
-  .transcript-line-wide {
+  .transcript-line-wide.transcript-line-with-translation {
     .transcript-line-both {
       display: flex;
       align-items: flex-start;
