@@ -13,6 +13,7 @@
 //   store = db.transaction('zthSavedWords')
 // }
 import Config from '@/lib/config'
+import Helper from '@/lib/helper'
 
 export const state = () => {
   return {
@@ -32,6 +33,16 @@ const buildIndex = (l2, state) => {
     }
     state.idIndex[l2][savedWord.id] = savedWord
   }
+}
+
+const parseSavedWordsCSV = (csv) => {
+  let parsed = Papa.parse(csv, {header: true})
+  let rows = parsed.data
+  let savedWords = Helper.groupArrayBy(rows, 'l2')
+  for (let sW of savedWords) {
+    sW.forms = sW.forms.split(',')
+  }
+  return savedWords
 }
 
 export const mutations = {
@@ -65,20 +76,16 @@ export const mutations = {
       }
     }
   },
-  IMPORT_WORDS(state, rows) {
+  IMPORT_WORDS(state, csv) {
     if (typeof localStorage !== 'undefined') {
-      for (let { id, forms, l2 } of rows) {
+      let savedWords = parseSavedWordsCSV(csv)
+      for (let l2 in savedWords) {
         if (!state.savedWords[l2]) {
           state.savedWords[l2] = []
         }
-        if (
-          !state.savedWords[l2].find(item => item.id === id)
-        ) {
-          let savedWords = Object.assign({}, state.savedWords)
-          savedWords[l2].push({
-            id,
-            forms: forms.split(',')
-          })
+        for (let sW of savedWords) {
+          if (!state.idIndex[l2][sW.id])
+          state.savedWords[l2].push(sW)
         }
       }
       for (let l2 in state.savedWords) {
@@ -133,8 +140,8 @@ export const actions = {
     commit('ADD_SAVED_WORD', { l2, word, wordForms })
     dispatch('push')
   },
-  importWords({ commit, dispatch }, rows) {
-    commit('IMPORT_WORDS', rows)
+  importWords({ commit, dispatch }, csv) {
+    commit('IMPORT_WORDS', csv)
     dispatch('push')
   },
   remove({ commit, dispatch }, options) {

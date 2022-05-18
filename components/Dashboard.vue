@@ -298,19 +298,19 @@ export default {
         let reader = new FileReader();
         reader.readAsText(file);
         reader.onload = (event) => {
-          let text = event.target.result;
-          let parsed = Papa.parse(text, { header: true });
+          let csv = event.target.result;
+          let parsed = Papa.parse(csv, { header: true });
           let rows = parsed.data;
           if (rows && rows[0] && rows[0].id) {
-            this.importSavedWords(rows);
+            this.importSavedWords(csv);
           } else if (rows && rows[0] && rows[0].phrase) {
             this.importSavedPhrases(rows);
           }
         };
       }
     },
-    importSavedWords(rows) {
-      this.$store.dispatch("savedWords/importWords", rows);
+    importSavedWords(csv) {
+      this.$store.dispatch("savedWords/importWords", csv);
     },
     importSavedPhrases(rows) {
       this.$store.dispatch("savedPhrases/importPhrases", rows);
