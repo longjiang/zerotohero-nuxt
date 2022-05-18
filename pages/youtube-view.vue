@@ -245,7 +245,6 @@ export default {
   },
   methods: {
     async onVideoUnavailable(youtube_id) {
-      console.log('🔥 Unavailable', youtube_id)
       try {
         await YouTube.reportUnavailableVideo({
           youtube_id,
@@ -253,7 +252,7 @@ export default {
           l2Id: this.$l2.id,
         });
         // Go to next video
-        if (this.nextEpisode) this.$router.push(this.nextEpisode);
+        if (!this.$adminMode && this.nextEpisode) this.$router.push(this.nextEpisode);
       } catch (err) {
         console.log(err)
       }

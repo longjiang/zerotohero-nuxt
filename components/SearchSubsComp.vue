@@ -468,12 +468,16 @@ export default {
       if (youtube_id) {
         // Log it
         try {
-          let res = await YouTube.reportUnavailableVideo({ youtube_id: video.youtube_id, video_id: video.id, l2Id: this.$l2.id })
-        } catch(err) {
-          console.log(err)
+          let res = await YouTube.reportUnavailableVideo({
+            youtube_id: video.youtube_id,
+            video_id: video.id,
+            l2Id: this.$l2.id,
+          });
+        } catch (err) {
+          console.log(err);
         }
         // Go to next video
-        this.removeCurrentHitAndGoToNext()
+        this.removeCurrentHitAndGoToNext();
       }
     },
     loadSettings() {
@@ -516,9 +520,11 @@ export default {
       let response;
       try {
         response = await axios.delete(
-          `${Config.youtubeVideosTableName(this.$l2.id)}/${id}`
+          `${Config.youtubeVideosTableName(this.$l2.id)}/${id}${
+            this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
+          }`
         );
-        this.removeCurrentHitAndGoToNext()
+        this.removeCurrentHitAndGoToNext();
       } catch (err) {}
     },
     removeCurrentHitAndGoToNext() {
