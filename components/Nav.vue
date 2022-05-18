@@ -871,11 +871,28 @@ export default {
           exact: true,
           children: [
             {
+              name: "profile",
+              icon: "fas fa-user",
+              title: "Profile",
+              show: this.$auth.loggedIn,
+            },
+            {
               name: "login",
               icon: "fas fa-key",
               title: "Login",
               show: !this.$auth.loggedIn,
-              params: { l1: this.l1.code, l2: this.l2.code },
+            },
+            {
+              name: "saved-words",
+              icon: "fas fa-star",
+              title: "Saved Words",
+              show: true,
+            },
+            {
+              name: "saved-phrases",
+              icon: "fas fa-bookmark",
+              title: "Saved Phrases",
+              show: true,
             },
             {
               name: "logout",

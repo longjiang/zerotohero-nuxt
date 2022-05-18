@@ -1,6 +1,6 @@
 <router>
   {
-    path: '/logout/:l1?/:l2?',
+    path: '/:l1/:l2/logout',
     props: true
   }
 </router>
@@ -17,8 +17,6 @@
 </template>
 
 <script>
-import Config from "@/lib/config";
-
 export default {
   data() {
     return {
@@ -29,13 +27,26 @@ export default {
       show: true,
     };
   },
-  methods: {
-    mounted() {
-      this.logout()
+  mounted() {
+    this.logout();
+  },
+  computed: {
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
     },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
+  },
+  methods: {
     async logout() {
-      await this.$auth.setUser(null)
-      this.$router.back()
+      await this.$auth.setUser(null);
+      this.$router.push({
+        name: "all-media",
+        params: { l1: this.$l1.code, l2: this.$l2.code },
+      });
     },
   },
 };

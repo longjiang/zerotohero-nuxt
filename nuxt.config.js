@@ -103,8 +103,13 @@ export default {
       defaultImage: '/img/placeholder-faded.png',
       directiveOnly: false
     }],
-    '@nuxtjs/auth-next'
+    '@nuxtjs/auth-next',
+    '@nuxtjs/toast',
   ],
+
+  toast: {
+    position: 'top-center'
+  },
 
   auth: {
     redirect: {

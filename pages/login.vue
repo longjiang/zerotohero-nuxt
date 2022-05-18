@@ -1,6 +1,6 @@
 <router>
   {
-    path: '/login'
+    path: '/:l1/:l2/login/'
   }
 </router>
 <template>
@@ -8,7 +8,15 @@
     <div class="row">
       <div class="col-sm-12">
         <div class="login-page">
-          <h3 class="mt-3 mb-5 text-center">Login</h3>
+          <div class="text-center mb-4">
+            <img
+              src="/img/czh-icon.png"
+              style="height: 5.5rem; margin-bottom: 1rem"
+              data-not-lazy
+            />
+            <br />
+            <h4>Zero to Hero</h4>
+          </div>
           <b-form @submit.prevent="onSubmit" v-if="show">
             <b-form-group id="input-group-1" label-for="email">
               <b-form-input
@@ -30,7 +38,7 @@
               ></b-form-input>
             </b-form-group>
 
-            <b-button type="submit" variant="primary">Login</b-button>
+            <b-button class="d-block w-100" type="submit" variant="success">Login</b-button>
           </b-form>
         </div>
       </div>
@@ -54,14 +62,19 @@ export default {
   methods: {
     async onSubmit(event) {
       try {
-        let response = await this.$auth.loginWith('local', { data: this.form })
-        const res = await axios.get(`https://db2.zerotohero.ca/zerotohero/users/me?access_token=${this.$auth.strategy.token.get().replace('Bearer ', '')}`)
+        let response = await this.$auth.loginWith("local", { data: this.form });
+        const res = await axios.get(
+          `https://db2.zerotohero.ca/zerotohero/users/me?access_token=${this.$auth.strategy.token
+            .get()
+            .replace("Bearer ", "")}`
+        );
         if (res && res.data && res.data.data) {
-          this.$auth.setUser(res.data.data)
-          this.$router.back()
+          this.$auth.setUser(res.data.data);
+          this.$router.back();
+          this.$toast.success(`Welcome back, ${res.data.data.first_name}!`, {position: 'top-center', duration: 5000})
         }
       } catch (err) {
-        console.log(err)
+        console.log(err);
       }
     },
   },
@@ -69,10 +82,13 @@ export default {
 </script>
 <style lang="scss" scoped>
 .login-page {
-  margin: 2rem 0px 5rem 0;
+  margin: 5rem auto 5rem auto;
   padding: 2rem;
   border-radius: 1rem;
   overflow: hidden;
-  background: white;
+  background: #ffffffdd;
+  max-width: 20rem;
+  box-shadow: 0 0 30px black;
+  backdrop-filter: blur(20px);
 }
 </style>
