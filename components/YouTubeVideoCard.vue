@@ -94,11 +94,16 @@
                 - {{ subsFile.name.replace(/[_.]/g, " ") }}
               </span>
             </div>
-            <div v-if="showLanguage && language" class="youtube-video-card-badge">
+            <div
+              v-if="showLanguage && language"
+              class="youtube-video-card-badge"
+            >
               {{ language.name }} ({{ language.code }})
             </div>
             <div
-              v-if="checkSubs && (!video.checkingSubs && !video.hasSubs && !video.id)"
+              v-if="
+                checkSubs && !video.checkingSubs && !video.hasSubs && !video.id
+              "
               class="youtube-video-card-badge"
             >
               <span v-if="!over">No {{ $l2.name }} CC</span>
@@ -525,7 +530,7 @@ export default {
       if (this.video.id) {
         try {
           let response = await axios.delete(
-            `${Config.youtubeVideosTableName(this.video.l2)}/${this.video.id}`
+            `${Config.youtubeVideosTableName(this.video.l2)}/${this.video.id}${this.$auth.user ? '?access_token=' + this.$auth.user.token : ''}`
           );
           if (response) {
             Vue.delete(this.video, "id");

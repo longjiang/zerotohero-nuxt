@@ -7,43 +7,62 @@
       </span>
       <span style="font-weight: bold; color: white">
         {{
-            randomShowRandomEpisodeL2
-              ? `${randomShowRandomEpisodeL2.name} (${randomShowRandomEpisodeL2.code})`
-              : ""
+          randomShowRandomEpisodeL2
+            ? `${randomShowRandomEpisodeL2.name} (${randomShowRandomEpisodeL2.code})`
+            : ""
         }}
       </span>
     </div>
     <div class="text-center pt-5 pb-5" v-if="!randomShowRandomEpisode">
       <Loader :sticky="true" message="Getting shows..." />
     </div>
-    <LazyYouTubeVideo v-if="randomShowRandomEpisode" initialLayout="vertical"
-      :youtube="randomShowRandomEpisode.youtube_id" :ref="`youtube`" :autoload="true" :autoplay="true"
-      :startAtRandomTime="true" @currentTime="updateCurrentTime" />
+    <LazyYouTubeVideo
+      v-if="randomShowRandomEpisode"
+      initialLayout="vertical"
+      :youtube="randomShowRandomEpisode.youtube_id"
+      :ref="`youtube`"
+      :autoload="true"
+      :autoplay="true"
+      :startAtRandomTime="true"
+      @currentTime="updateCurrentTime"
+    />
     <div class="text-center pt-3 pb-3" v-if="randomShowRandomEpisode">
-      <b-button variant="ghost-dark-no-bg" @click="loadHistory" :disabled="history.length <= 1"
-        :class="{ disabled: history.length <= 1, 'mr-2': true }">
+      <b-button
+        variant="ghost-dark-no-bg"
+        @click="loadHistory"
+        :disabled="history.length <= 1"
+        :class="{ disabled: history.length <= 1, 'mr-2': true }"
+      >
         <i class="fas fa-step-backward mr-1"></i>
       </b-button>
-      
-      <router-link :to="{
-        name: 'youtube-view',
-        params: {
-          l1: l1 ? l1.code : l1Code(randomShowRandomEpisodeL2Code),
-          l2: l2 ? l2.code : randomShowRandomEpisodeL2Code,
-          youtube_id: randomShowRandomEpisode.youtube_id,
-        },
-        query: {
-          t: currentTime,
-        },
-      }" class="btn btn-success">
+
+      <router-link
+        :to="{
+          name: 'youtube-view',
+          params: {
+            l1: l1 ? l1.code : l1Code(randomShowRandomEpisodeL2Code),
+            l2: l2 ? l2.code : randomShowRandomEpisodeL2Code,
+            youtube_id: randomShowRandomEpisode.youtube_id,
+          },
+          query: {
+            t: currentTime,
+          },
+        }"
+        class="btn btn-success"
+      >
         <i class="fas fa-window-restore mr-1"></i>
         {{ $t("Open in Full Player") }}
       </router-link>
       <b-button variant="ghost-dark-no-bg" class="ml-2" @click="loadRandomShow">
         <i class="fas fa-step-forward mr-1"></i>
       </b-button>
-      <b-button variant="ghost-dark-no-bg" size="sm" style="float: right" v-if="$adminMode"
-        @click="removeEpisode(randomShowRandomEpisode)">
+      <b-button
+        variant="ghost-dark-no-bg"
+        size="sm"
+        style="float: right"
+        v-if="$adminMode"
+        @click="removeEpisode(randomShowRandomEpisode)"
+      >
         <i class="fas fa-trash"></i>
       </b-button>
     </div>
@@ -116,8 +135,9 @@ export default {
     },
     async removeEpisode(randomShowRandomEpisode) {
       let response = await axios.delete(
-        `${Config.youtubeVideosTableName(randomShowRandomEpisode.l2)}/${randomShowRandomEpisode.id}`
+        `${Config.youtubeVideosTableName(randomShowRandomEpisode.l2)}/${randomShowRandomEpisode.id}${this.$auth.user ? '?access_token=' + this.$auth.user.token : ''}`
       );
+      
       if (response) {
         this.loadRandomShow();
       }
