@@ -14,7 +14,8 @@
         <Star
           v-if="word && star === true"
           :word="word"
-          :removeSymbol="true"
+          :removeSymbol="removeSymbol"
+          :label="false"
           class="pr-2"
         ></Star>
         <Speak :text="word.kana || word.head" :l2="$l2" class="text-secondary" />
@@ -178,6 +179,9 @@ export default {
       default: false,
     },
     maxDefinitions: undefined,
+    removeSymbol: {
+      default: false
+    }
   },
   computed: {
     $l1() {

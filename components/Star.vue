@@ -5,26 +5,27 @@
       <button
         class="btn btn-unstyled not-saved btn-toggle-saved-word add-word"
         v-if="!saved"
-        v-on:click="saveWordClick"
+        @click="saveWordClick"
         title='Add to "Saved Words"'
       >
         <i class="far fa-star"></i>
-        SAVE WORD
+        <template v-if="label">SAVE WORD</template>
       </button>
       <button
         class="btn btn-unstyled saved btn-toggle-saved-word remove-word"
         v-if="saved && !removeSymbol"
-        v-on:click="removeWordClick"
+        @click="removeWordClick"
         title='Remove from "Saved Words"'
       >
         <!-- <i class="fas fa-bookmark"></i> -->
         <i class="fas fa-check"></i>
-        SAVED
+        <template v-if="label">SAVED</template>
         <i class="fas fa-times-circle ml-1"></i>
       </button>
       <button
         v-if="removeSymbol"
         class="btn btn-unstyled text-secondary p-0 pb-1"
+        @click="removeWordClick"
       >
         <i class="fas fa-times-circle"></i>
       </button>
@@ -48,6 +49,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    label: {
+      type: Boolean,
+      default: true
+    }
   },
   data() {
     return {
