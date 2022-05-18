@@ -1,6 +1,7 @@
 <router>
   {
-    path: '/logout'
+    path: '/logout/:l1?/:l2?',
+    props: true
   }
 </router>
 <template>
@@ -8,8 +9,7 @@
     <div class="row">
       <div class="col-sm-12">
         <div class="login-page">
-          <h3 class="mt-3 mb-5 text-center">Logout</h3>
-          <b-button variant="success" @click="logout">Logout</b-button>
+          <h3 class="mt-3 mb-5 text-center">Logging out...</h3>
         </div>
       </div>
     </div>
@@ -30,6 +30,9 @@ export default {
     };
   },
   methods: {
+    mounted() {
+      this.logout()
+    },
     async logout() {
       await this.$auth.setUser(null)
       this.$router.back()

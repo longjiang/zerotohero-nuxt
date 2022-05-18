@@ -868,18 +868,33 @@ export default {
           icon: "fas fa-user",
           title: `${this.$auth.loggedIn && this.$auth.user && this.$auth.user.first_name ? 'Hi, ' + this.$auth.user.first_name: 'Login'}`,
           show: true,
+          exact: true,
           children: [
             {
               name: "login",
               icon: "fas fa-key",
               title: "Login",
               show: !this.$auth.loggedIn,
+              params: { l1: this.l1.code, l2: this.l2.code },
             },
             {
               name: "logout",
               icon: "fas fa-exit",
               title: "Logout",
               show: this.$auth.loggedIn,
+              params: { l1: this.l1.code, l2: this.l2.code },
+            },
+            {
+              href: "https://sso.teachable.com/secure/133035/identity/login",
+              icon: "fas fa-graduation-cap",
+              title: "My Chinese Courses",
+              show: this.$l2 && this.$l2.code === 'zh',
+            },
+            {
+              href: "https://m.cctalk.com/inst/stevmab3",
+              icon: "fas fa-graduation-cap",
+              title: "My English Courses",
+              show: this.$l2 && this.$l2.code === 'en',
             },
           ],
         },
@@ -967,8 +982,8 @@ export default {
       if (item.to) return item.to;
       let selfOrFirstChild = this.selfOrFirstChild(item, true);
       if (this.currentParent === item) return selfOrFirstChild; // Clicking on the same navigation item as the currently active one should return to the "root' of that navigation item
-      let to = this.last(item) || selfOrFirstChild;
-      return to;
+      if (item.exact) return selfOrFirstChild;
+      else return this.last(item) || selfOrFirstChild;
     },
     hasFeature(feature) {
       return this.$hasFeature(feature);
