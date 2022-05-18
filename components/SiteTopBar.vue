@@ -89,15 +89,6 @@
           >
             <i class="fas fa-globe-asia"></i>
           </router-link> -->
-          <LoginButton
-            v-if="$l1 && $l2 && ($l2.code === 'zh' || $l2.code === 'en')"
-            :class="`${
-              $l2 && params.xxlg ? 'd-inline-block' : 'd-none'
-            } ml-2 mr-1`"
-            :icon="true"
-            :text="false"
-            style="color: #ddd"
-          />
           <router-link
             id="site-top-bar-saved-words"
             :to="{ name: 'saved-words' }"

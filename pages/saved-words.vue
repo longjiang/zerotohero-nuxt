@@ -25,14 +25,15 @@
             <i class="far fa-star"></i>
             icon next to it.
           </p>
+          <div v-if="dictionaryLoaded" class="text-center alert-success p-3 pb-4 rounded mt-4">
+            <p>To sync words across devices, please login.</p>
+            <router-link :to="{name: 'login'}" class="btn btn-success">Login <i class="fas fa-chevron-right"></i></router-link>
+          </div>
           <div v-if="dictionaryLoaded && !sWLoaded" class="text-center">
             <Loader
               :sticky="true"
               message="Loading words saved in your browser..."
             />
-          </div>
-          <div class="text-center mt-3" v-if="$dictionaryName && sW && sW[0]">
-            <router-link :to="{name: 'dictionary', params: {method: $dictionaryName, args: sW[0].id }}" class="btn btn-success">Review All {{  sWLoaded ? sW.length : "" }} Words <i class="fas fa-chevron-right ml-1"></i></router-link>
           </div>
           <div
             class="pb-3 pt-3 bg-white text-center"
@@ -48,7 +49,8 @@
           <div
             v-for="(group, index) in groups"
             :key="`group-${index}`"
-            class="small mb-3" style="color: #ccc"
+            class="small mb-3"
+            style="color: #ccc"
           >
             <div v-if="group.date === '0'">Earlier</div>
             <div v-else>
@@ -71,7 +73,16 @@
             ></WordList>
           </div>
           <div class="text-center mt-5" v-if="$dictionaryName && sW && sW[0]">
-            <router-link :to="{name: 'dictionary', params: {method: $dictionaryName, args: sW[0].id }}" class="btn btn-success">Review All {{  sWLoaded ? sW.length : "" }} Words <i class="fas fa-chevron-right ml-1"></i></router-link>
+            <router-link
+              :to="{
+                name: 'dictionary',
+                params: { method: $dictionaryName, args: sW[0].id },
+              }"
+              class="btn btn-success"
+            >
+              Review All {{ sWLoaded ? sW.length : "" }} Words
+              <i class="fas fa-chevron-right ml-1"></i>
+            </router-link>
           </div>
         </div>
       </div>
@@ -115,7 +126,9 @@
             </router-link>
           </div>
           <p class="mt-3 mb-3 text-left">
-            <b>How are my words saved?</b> Your words are stored in your browser's "local storage", so even if you refresh your browser, the words are still there.
+            <b>How are my words saved?</b>
+            Your words are stored in your browser's "local storage", so even if
+            you refresh your browser, the words are still there.
           </p>
         </div>
       </div>

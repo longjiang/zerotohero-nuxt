@@ -13,6 +13,7 @@
     :href="item.href"
     :to="to"
     :title="item.title"
+    :target="item.href ? '_blank' : undefined"
   >
     <div
       v-if="['large-icon', 'small-icon'].includes(mode)"

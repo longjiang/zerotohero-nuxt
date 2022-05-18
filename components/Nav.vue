@@ -51,7 +51,7 @@
                 currentParent.name === nameOfSelfOrFirstChild(item)
               "
               :badge="
-                item.icon === 'fas fa-star'
+                item.icon === 'fas fa-user'
                   ? savedWordsCount + savedPhrasesCount
                   : undefined
               "
@@ -74,13 +74,6 @@
               <b>{{ $l2.name }} ({{ $l2.code }})</b>
               .
             </div>
-            <LoginButton
-              class="end-nav-item"
-              v-if="
-                ($l1.code === 'zh' && $l2.code === 'en') ||
-                ($l1.code === 'en' && $l2.code === 'zh')
-              "
-            />
           </div>
         </nav>
         <nav
@@ -310,10 +303,17 @@ export default {
     menu() {
       let items = [
         {
-          icon: "fas fa-star",
-          title: "Saved",
-          show: this.savedWordsCount + this.savedPhrasesCount > 0,
+          icon: "fas fa-user",
+          title: `${this.$auth.loggedIn && this.$auth.user && this.$auth.user.first_name ? 'Hi, ' + this.$auth.user.first_name: 'Login'}`,
+          show: true,
+          exact: true,
           children: [
+            {
+              name: "login",
+              icon: "fas fa-key",
+              title: "Login",
+              show: !this.$auth.loggedIn,
+            },
             {
               name: "saved-words",
               icon: "fas fa-star",
@@ -325,6 +325,31 @@ export default {
               icon: "fas fa-bookmark",
               title: "Saved Phrases",
               show: true,
+            },
+            {
+              href: "https://sso.teachable.com/secure/133035/identity/login",
+              icon: "fas fa-graduation-cap",
+              title: "My Teachable Courses",
+              show: this.$l2 && this.$l2.code === 'zh',
+            },
+            {
+              href: "https://m.cctalk.com/inst/stevmab3",
+              icon: "fas fa-graduation-cap",
+              title: "My CCtalk Courses",
+              show: this.$l2 && this.$l2.code === 'en',
+            },
+            {
+              name: "logout",
+              icon: "fas fa-exit",
+              title: "Logout",
+              show: this.$auth.loggedIn,
+              params: { l1: this.l1.code, l2: this.l2.code },
+            },
+            {
+              name: "profile",
+              icon: "fas fa-user",
+              title: "Profile",
+              show: this.$auth.loggedIn,
             },
           ],
         },
@@ -864,57 +889,6 @@ export default {
             },
           ],
         },
-        {
-          icon: "fas fa-user",
-          title: `${this.$auth.loggedIn && this.$auth.user && this.$auth.user.first_name ? 'Hi, ' + this.$auth.user.first_name: 'Login'}`,
-          show: true,
-          exact: true,
-          children: [
-            {
-              name: "profile",
-              icon: "fas fa-user",
-              title: "Profile",
-              show: this.$auth.loggedIn,
-            },
-            {
-              href: "https://sso.teachable.com/secure/133035/identity/login",
-              icon: "fas fa-graduation-cap",
-              title: "My Teachable Courses",
-              show: this.$l2 && this.$l2.code === 'zh',
-            },
-            {
-              href: "https://m.cctalk.com/inst/stevmab3",
-              icon: "fas fa-graduation-cap",
-              title: "My CCtalk Courses",
-              show: this.$l2 && this.$l2.code === 'en',
-            },
-            {
-              name: "logout",
-              icon: "fas fa-exit",
-              title: "Logout",
-              show: this.$auth.loggedIn,
-              params: { l1: this.l1.code, l2: this.l2.code },
-            },
-            {
-              name: "login",
-              icon: "fas fa-key",
-              title: "Login",
-              show: !this.$auth.loggedIn,
-            },
-            {
-              name: "saved-words",
-              icon: "fas fa-star",
-              title: "Saved Words",
-              show: true,
-            },
-            {
-              name: "saved-phrases",
-              icon: "fas fa-bookmark",
-              title: "Saved Phrases",
-              show: true,
-            },
-          ],
-        },
       ];
       if (this.showOnly)
         items = items.filter((i) => i.title && this.showOnly.includes(i.title));
@@ -1249,7 +1223,7 @@ export default {
       .icon-description {
         color: white;
         font-size: 0.7rem;
-        padding: 0 1rem 1.5rem 1rem;
+        padding: 0 1rem 1rem 1rem;
         z-index: -9;
         margin-left: -1rem;
         margin-bottom: -1rem;
