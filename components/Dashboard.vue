@@ -207,7 +207,7 @@ export default {
   mounted() {
     this.emitHasDashboard();
     if (!this.$store.state.history.historyLoaded) {
-      this.$store.commit("history/LOAD_HISTORY");
+      this.$store.dispatch("history/load");
     }
   },
   computed: {

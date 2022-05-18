@@ -1,4 +1,5 @@
 import Helper from '@/lib/helper'
+import Config from '@/lib/config'
 
 export const state = () => {
   return {
@@ -7,6 +8,12 @@ export const state = () => {
   }
 }
 export const mutations = {
+  IMPORT_HISTORY_FROM_JSON(state, json) {
+    if (typeof localStorage !== 'undefined') {
+      state.history = JSON.parse(json)
+      localStorage.setItem('zthhistory', JSON.stringify(state.history))
+    }
+  },
   LOAD_HISTORY(state) {
     if (typeof localStorage !== 'undefined') {
       let history = JSON.parse(localStorage.getItem('zthHistory') || '[]')
@@ -52,15 +59,47 @@ export const mutations = {
 export const actions = {
   load({ commit, dispatch }) {
     commit('LOAD_HISTORY')
+    dispatch('pull')
   },
   add({ commit, dispatch }, historyItem) {
     commit('ADD_HISTORY_ITEM', Object.assign({}, historyItem))
+    dispatch('push')
   },
   remove({ commit, dispatch }, historyItem) {
     commit('REMOVE_HISTORY_ITEM', Object.assign({}, historyItem))
+    dispatch('push')
   },
   removeAll({ commit, dispatch }) {
     commit('REMOVE_ALL_HISTORY')
+    dispatch('push')
+  },
+  async push({ commit, state, rootState }) {
+    let user = rootState.auth.user
+    if (user && user.id && user.token) {
+      let payload = { history: JSON.stringify(state.history) }
+      await axios.patch(`${Config.wiki}items/user_data/${user.id}?access_token=${user.token}`, payload)
+        .catch(async (err) => {
+          if (err.response && err.response.data && err.response.data.error && err.response.data.error.code === 203) {
+            // Initialize the user data record if there isn't one
+            await axios.post(`${Config.wiki}items/user_data?access_token=${user.token}`, { id: user.id, history: JSON.stringify(state.history) })
+          }
+        })
+    }
+  },
+  async pull({ commit, state, rootState }) {
+    let user = rootState.auth.user
+    if (user && user.id && user.token) {
+      let res = await axios.get(`${Config.wiki}items/user_data/${user.id}?fields=history&access_token=${user.token}`)
+        .catch(async (err) => {
+          if (err.response && err.response.data && err.response.data.error && err.response.data.error.code === 203) {
+            // Initialize the user data record if there isn't one
+            await axios.post(`${Config.wiki}items/user_data?access_token=${user.token}`, { id: user.id, history: JSON.stringify(state.history) })
+          }
+        })
+      if (res && res.data && res.data.data) {
+        commit('IMPORT_HISTORY_FROM_JSON', res.data.data.history)
+      }
+    }
   }
 }
 export const getters = {
