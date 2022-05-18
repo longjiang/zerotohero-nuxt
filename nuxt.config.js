@@ -117,12 +117,12 @@ export default {
         },
         user: {
           property: 'data.user',
-          // autoFetch: true
+          autoFetch: false
         },
         endpoints: {
           login: { url: 'https://db2.zerotohero.ca/zerotohero/auth/authenticate', method: 'post' },
           // logout: { url: '/api/auth/logout', method: 'post' },
-          user: { url: 'https://db2.zerotohero.ca/zerotohero/users/me', method: 'get' }
+          // user: { url: 'https://db2.zerotohero.ca/zerotohero/users/me', method: 'get' }
         }
       }
     }

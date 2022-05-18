@@ -53,17 +53,10 @@ export default {
   },
   methods: {
     async onSubmit(event) {
-      // let res = await axios.post(`${Config.wiki}auth/authenticate`, this.form);
-      // if (res && res.data && res.data.data) {
-      //   let data = res.data.data;
-      //   let token = data.token;
-      //   let user = data.user;
-      // }
-
       try {
         let response = await this.$auth.loginWith('local', { data: this.form })
-        console.log(response)
-        console.log(this.$auth.$state.loggedIn)
+        const user = await axios.get(`https://db2.zerotohero.ca/zerotohero/users/me?access_token=${this.$auth.strategy.token.get().replace('Bearer ', '')}`)
+        this.$auth.setUser(user)
       } catch (err) {
         console.log(err)
       }
