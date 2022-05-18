@@ -32,9 +32,6 @@
 
             <b-button type="submit" variant="primary">Login</b-button>
           </b-form>
-          <b-card class="mt-3" header="Form Data Result">
-            <pre class="m-0">{{ form }}</pre>
-          </b-card>
         </div>
       </div>
     </div>
@@ -56,11 +53,19 @@ export default {
   },
   methods: {
     async onSubmit(event) {
-      let res = await axios.post(`${Config.wiki}auth/authenticate`, this.form);
-      if (res && res.data && res.data.data) {
-        let data = res.data.data;
-        let token = data.token;
-        let user = data.user;
+      // let res = await axios.post(`${Config.wiki}auth/authenticate`, this.form);
+      // if (res && res.data && res.data.data) {
+      //   let data = res.data.data;
+      //   let token = data.token;
+      //   let user = data.user;
+      // }
+
+      try {
+        let response = await this.$auth.loginWith('local', { data: this.form })
+        console.log(response)
+        console.log(this.$auth.$state.loggedIn)
+      } catch (err) {
+        console.log(err)
       }
     },
   },
