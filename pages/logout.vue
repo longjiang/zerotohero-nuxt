@@ -43,6 +43,10 @@ export default {
   methods: {
     async logout() {
       await this.$auth.setUser(null);
+      this.$toast.success(`You're now logged out.`, {
+        position: "top-center",
+        duration: 5000,
+      });
       this.$router.push({
         name: "all-media",
         params: { l1: this.$l1.code, l2: this.$l2.code },
