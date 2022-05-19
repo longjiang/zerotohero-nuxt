@@ -28,14 +28,15 @@ export const state = () => {
 
 
 const buildIndex = (l2, state) => {
-  state.formIndex[l2] = {}
-  state.idIndex[l2] = {}
+  let formIndex = {}
+  let idIndex = {}
   for (let savedWord of state.savedWords[l2]) {
     for (let form of savedWord.forms) {
-      state.formIndex[l2][form] = [savedWord].concat(state.formIndex[l2][form] || [])
+      formIndex[form] = [savedWord].concat(formIndex[form] || [])
     }
-    state.idIndex[l2][savedWord.id] = savedWord
+    idIndex[savedWord.id] = savedWord
   }
+  return { formIndex, idIndex }
 }
 
 const parseSavedWordsCSV = (csv) => {
@@ -54,7 +55,9 @@ export const mutations = {
       let savedWords = JSON.parse(localStorage.getItem('zthSavedWords') || '{}')
       state.savedWords = savedWords || state.savedWords
       for (let l2 in state.savedWords) {
-        buildIndex(l2, state)
+        let { formIndex, idIndex } = buildIndex(l2, state)
+        state.formIndex[l2] = formIndex
+        state.idIndex[l2] = idIndex
       }
       state.savedWordsLoaded = true
     }
@@ -70,10 +73,12 @@ export const mutations = {
         let savedWords = Object.assign({}, state.savedWords)
         savedWords[l2].push({
           id: word.id,
-          forms: wordForms,
+          forms: [...wordForms],
           date: Date.now()
         })
+        console.log(savedWords)
         localStorage.setItem('zthSavedWords', JSON.stringify(savedWords))
+        
         this._vm.$set(state, 'savedWords', savedWords)
         buildIndex(l2, state)
       }
@@ -164,9 +169,7 @@ export const actions = {
     dispatch('push')
   },
   async push({ commit, state, rootState }) {
-    console.log('🦵 pushing')
     let user = rootState.auth.user
-    console.log(user, user.id, user.token, rootState.auth.token)
     if (user && user.id && user.token && user.dataId) {
       let payload = { saved_words: localStorage.getItem('zthSavedWords') }
       let url = `${Config.wiki}items/user_data/${user.dataId}?access_token=${user.token}`
