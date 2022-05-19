@@ -194,7 +194,7 @@ export const actions = {
   async pull({ commit, state, rootState }) {
     let user = rootState.auth.user
     if (user && user.id && user.token) {
-      let res = await axios.get(`${Config.wiki}items/user_data?filter[owner][eq]=${user.id}&fields=id,saved_words&access_token=${user.token}`)
+      let res = await axios.get(`${Config.wiki}items/user_data?filter[owner][eq]=${user.id}&fields=id,saved_words&access_token=${user.token}&timestamp=${Date.now()}`)
         .catch(async (err) => {
           console.log(err)
         })
