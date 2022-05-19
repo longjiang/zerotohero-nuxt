@@ -100,11 +100,19 @@ export const mutations = {
   },
   IMPORT_WORDS_FROM_JSON(state, json) {
     if (typeof localStorage !== 'undefined') {
-      state.savedWords = JSON.parse(json) || state.savedWords
-      for (let l2 in state.savedWords) {
-        buildIndex(l2, state)
+      let savedWords
+      try {
+        savedWords = JSON.parse(json)
+      } catch (err) {
+        console.log(err)
       }
-      localStorage.setItem('zthSavedWords', JSON.stringify(state.savedWords))
+      if (savedWords) {
+        state.savedWords = savedWords
+        for (let l2 in state.savedWords) {
+          buildIndex(l2, state)
+        }
+        localStorage.setItem('zthSavedWords', JSON.stringify(state.savedWords))
+      }
     }
   },
   REMOVE_SAVED_WORD(state, { l2, word }) {
@@ -178,8 +186,8 @@ export const actions = {
             state.userDataId = createNewUserDataRecord(user.token, { saved_words: JSON.stringify(state.savedWords) })
           }
         })
-      if (res && res.data && res.data.data) {
-        commit('IMPORT_WORDS_FROM_JSON', res.data.data.saved_words)
+      if (res && res.data && res.data.data && res.data.data[0]) {
+        commit('IMPORT_WORDS_FROM_JSON', res.data.data[0].saved_words)
       }
     }
   }
