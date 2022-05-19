@@ -56,7 +56,7 @@
         />
       </div>
     </div>
-    <div class="youtube-transcript-column pt-4">
+    <div class="youtube-transcript-column">
       <div
         class="youtube-video-info youtube-video-info-top"
         v-if="layout === 'horizontal'"
@@ -99,78 +99,77 @@
           class="mt-3"
         />
       </div>
-      <div>
-        <SyncedTranscript
-          v-if="video.subs_l2 && video.subs_l2.length > 0"
-          ref="transcript"
-          :key="'transcript-' + video.youtube_id"
-          :lines="video.subs_l2"
-          :quiz="quiz"
-          :parallellines="video.subs_l1"
-          :sticky="sticky"
-          :startLineIndex="startLineIndex"
-          :stopLineIndex="stopLineIndex"
-          :showSubsEditing="showSubsEditing"
-          :enableTranslationEditing="enableTranslationEditing"
-          :notes="video.notes"
-          :collapsed="collapsed"
-          :skin="skin"
-          :landscape="landscape"
-          :single="layout === 'vertical'"
-          @seek="seekYouTube"
-          @pause="pause"
-          @play="play"
-          @speechStart="speechStart"
-          @speechEnd="speechEnd"
-          @updateTranslation="updateTranslation"
-        />
 
-        <div
-          class="mt-5 youtube-video-info youtube-video-info-bottom"
-          v-if="layout === 'horizontal'"
-        >
-          <div class="text-center mt-5 mb-5" v-if="video.checkingSubs">
-            <Loader :sticky="true" message="Loading subtitles..." />
-          </div>
-          <div
-            class="mt-4 mb-5 rounded"
-            style="color: rgba(136, 136, 136, 0.85)"
-            v-if="
-              (!video.subs_l2 || video.subs_l2.length === 0) &&
-              !video.checkingSubs
-            "
-          >
-            <h6>
-              This YouTube video does not have closed captions (CC) in
-              {{ $l2.name }}.
-            </h6>
-            <div class="mt-3">
-              If you have the subtitles file (.srt or .ass), you can add it by
-              dragging &amp; dropping it above.
-            </div>
-          </div>
-          <EpisodeNav
-            :video="video"
-            :previousEpisode="previousEpisode"
-            :nextEpisode="nextEpisode"
-            :skin="skin"
-            :episodes="episodes"
-            :show="show"
-            :showType="showType"
-            :episodeIndex="episodeIndex"
-            class="mb-5"
-          />
-          <VideoAdmin
-            v-if="$adminMode"
-            :class="{ 'mt-5': true }"
-            :video="video"
-            ref="videoAdmin2"
-            @showSubsEditing="toggleShowSubsEditing"
-            @updateTranslation="updateTranslation"
-            @updateOriginalText="updateOriginalText"
-            @enableTranslationEditing="toggleEnableTranslationEditing"
-          />
+      <SyncedTranscript
+        v-if="video.subs_l2 && video.subs_l2.length > 0"
+        ref="transcript"
+        :key="'transcript-' + video.youtube_id"
+        :lines="video.subs_l2"
+        :quiz="quiz"
+        :parallellines="video.subs_l1"
+        :sticky="sticky"
+        :startLineIndex="startLineIndex"
+        :stopLineIndex="stopLineIndex"
+        :showSubsEditing="showSubsEditing"
+        :enableTranslationEditing="enableTranslationEditing"
+        :notes="video.notes"
+        :collapsed="collapsed"
+        :skin="skin"
+        :landscape="landscape"
+        :single="['vertical', 'mini'].includes(layout)"
+        @seek="seekYouTube"
+        @pause="pause"
+        @play="play"
+        @speechStart="speechStart"
+        @speechEnd="speechEnd"
+        @updateTranslation="updateTranslation"
+      />
+
+      <div
+        class="mt-5 youtube-video-info youtube-video-info-bottom"
+        v-if="layout === 'horizontal'"
+      >
+        <div class="text-center mt-5 mb-5" v-if="video.checkingSubs">
+          <Loader :sticky="true" message="Loading subtitles..." />
         </div>
+        <div
+          class="mt-4 mb-5 rounded"
+          style="color: rgba(136, 136, 136, 0.85)"
+          v-if="
+            (!video.subs_l2 || video.subs_l2.length === 0) &&
+            !video.checkingSubs
+          "
+        >
+          <h6>
+            This YouTube video does not have closed captions (CC) in
+            {{ $l2.name }}.
+          </h6>
+          <div class="mt-3">
+            If you have the subtitles file (.srt or .ass), you can add it by
+            dragging &amp; dropping it above.
+          </div>
+        </div>
+        <EpisodeNav
+          :video="video"
+          :previousEpisode="previousEpisode"
+          :nextEpisode="nextEpisode"
+          :skin="skin"
+          :episodes="episodes"
+          :show="show"
+          :showType="showType"
+          :episodeIndex="episodeIndex"
+          class="mb-5"
+        />
+        <VideoAdmin
+          v-if="$adminMode"
+          :class="{ 'mt-5': true }"
+          :video="video"
+          ref="videoAdmin2"
+          @showSubsEditing="toggleShowSubsEditing"
+          @updateTranslation="updateTranslation"
+          @updateOriginalText="updateOriginalText"
+          @enableTranslationEditing="toggleEnableTranslationEditing"
+        />
       </div>
     </div>
   </div>
@@ -178,8 +177,6 @@
 
 <script>
 import Vue from "vue";
-import DateHelper from "@/lib/date-helper";
-import Helper from "@/lib/helper";
 import YouTube from "@/lib/youtube";
 
 export default {
@@ -208,7 +205,7 @@ export default {
     episodeIndex: {
       type: Number,
     },
-    initialLayout: {
+    layout: {
       type: String,
       default: "horizontal", // or 'vertical', 'mini'
     },
@@ -268,7 +265,6 @@ export default {
       currentTime: 0,
       videoInfoKey: 0,
       speed: 1,
-      layout: this.initialLayout,
       collapsed: false,
       duration: undefined,
       viewportWidth: undefined,
@@ -573,14 +569,35 @@ export default {
 
 <style lang="scss" scoped>
 .youtube-with-transcript-mini {
+  display: flex;
   .youtube-video-column {
     height: 5rem;
     width: 8.88rem;
-    position: absolute;
-    top: 0 !important;
-    left: 0;
+    max-width: 8.88rem;
+    background: green;
+    margin-right: 8.3rem;
+    ::v-deep .quick-access-buttons {
+      position: absolute;
+      left: 9.7rem;
+      top: 1rem;
+      background: none;
+
+      .quick-access-button-rewind,
+      .quick-access-button-previous,
+      .quick-access-button-next,
+      .quick-access-button-speed,
+      .quick-access-button-fullscreen {
+        display: none !important;
+      }
+    }
   }
   .youtube-transcript-column {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    .synced-transcript {
+      width: 100%;
+    }
     .youtube-video-info {
       display: none;
     }

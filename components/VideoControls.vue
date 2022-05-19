@@ -3,7 +3,7 @@
     <!-- <button
       v-if="showLineList"
       :class="{
-        'quick-access-button   d-inline-block text-center': true,
+        'quick-access-button   text-center': true,
         'quick-access-button-active': showList,
       }"
       @click="showList = !showList"
@@ -13,7 +13,7 @@
     <button
       v-if="showCollapse"
       :class="{
-        'quick-access-button   d-inline-block text-center': true,
+        'quick-access-button quick-access-button-collapse text-center': true,
       }"
       @click="toggleCollapsed"
     >
@@ -22,7 +22,7 @@
     </button>
     <button
       :class="{
-        'quick-access-button d-inline-block text-center': true,
+        'quick-access-button quick-access-button-rewind text-center': true,
       }"
       @click="rewind"
     >
@@ -31,7 +31,7 @@
     <router-link
       v-if="previousEpisode"
       :disabled="!previousEpisode"
-      class="quick-access-button d-inline-block text-center"
+      class="quick-access-button quick-access-button-previous text-center"
       :to="{
         name: 'youtube-view',
         params: { youtube_id: previousEpisode.youtube_id },
@@ -40,15 +40,15 @@
       <i class="fas fa-step-backward"></i>
     </router-link>
     <button
-      class="quick-access-button d-inline-block text-center"
+      class="quick-access-button quick-access-button-previous-line text-center"
       @click="$emit('goToPreviousLine')"
     >
       <i v-if="layout === 'horizontal'" class="fas fa-arrow-up"></i>
-      <i v-if="layout === 'vertical'" class="fas fa-chevron-left"></i>
+      <i v-else class="fas fa-chevron-left"></i>
     </button>
     <button
       :class="{
-        'quick-access-button play-pause d-inline-block text-center': true,
+        'quick-access-button quick-access-button-play play-pause text-center': true,
       }"
       @click="togglePaused"
     >
@@ -56,16 +56,16 @@
       <i v-if="!paused || speaking" class="fas fa-pause"></i>
     </button>
     <button
-      class="quick-access-button d-inline-block text-center"
+      class="quick-access-button quick-access-button-next-line text-center"
       @click="$emit('goToNextLine')"
     >
       <i v-if="layout === 'horizontal'" class="fas fa-arrow-down"></i>
-      <i v-if="layout === 'vertical'" class="fas fa-chevron-right"></i>
+      <i v-else class="fas fa-chevron-right"></i>
     </button>
     <router-link
       v-if="nextEpisode"
       :disabled="!nextEpisode"
-      class="quick-access-button d-inline-block text-center"
+      class="quick-access-button quick-access-button-next text-center"
       :to="{
         name: 'youtube-view',
         params: { youtube_id: nextEpisode.youtube_id },
@@ -75,7 +75,7 @@
     </router-link>
     <!-- <button
       :class="{
-        'quick-access-button   d-inline-block text-center': true,
+        'quick-access-button   text-center': true,
         'quick-access-button-active': repeatMode,
       }"
       @click="toggleRepeatMode"
@@ -84,7 +84,7 @@
     </button>
     <button
       :class="{
-        'quick-access-button   d-inline-block text-center': true,
+        'quick-access-button   text-center': true,
         'quick-access-button-active': audioMode,
       }"
       @click="toggleAudioMode"
@@ -93,7 +93,7 @@
     </button> -->
     <button
       :class="{
-        'quick-access-button   d-inline-block text-center': true,
+        'quick-access-button  quick-access-button-speed text-center': true,
         'quick-access-button-active': speed !== 1,
       }"
       @click="toggleSpeed"
@@ -104,7 +104,7 @@
     <button
       v-if="showFullscreenToggle"
       :class="{
-        'quick-access-button   d-inline-block text-center': true,
+        'quick-access-button quick-access-button-fullscreen text-center': true,
         'quick-access-button-active': layout === 'vertical',
       }"
       @click="toggleFullscreenMode"

@@ -7,7 +7,8 @@
       } with a video | zerotohero.ca`"
       :description="`Study the transcript of this video with a popup dictionary`"
       :image="`https://img.youtube.com/vi/${this.youtube_id}/hqdefault.jpg`"
-    />{{ this.mini }} {{ this.layout }}
+    />
+
     <div
       :class="{
         'youtube-view pb-5 ': true,
@@ -20,6 +21,7 @@
       <div :class="{ 'loader text-center pt-5 pb-5': true, 'd-none': video }">
         <Loader :sticky="true" message="Preparing video and transcript..." />
       </div>
+      
       <LazyYouTubeWithTranscript
         v-if="video"
         ref="youtube"
@@ -38,13 +40,13 @@
         :episodeIndex="thisEpisodeIndex"
         :forcePortrait="false"
         :startLineIndex="startLineIndex"
-        :initialLayout="layout"
+        :layout="layout"
         @paused="updatePaused"
         @ended="updateEnded"
         @currentTime="updateCurrentTime"
         @speechStart="speechStart"
         @speechEnd="speechEnd"
-        @updateLayout="(l) => (layout = l)"
+        @updateLayout="onYouTubeUpdateLayout"
         @videoUnavailable="onVideoUnavailable"
       />
     </div>
@@ -81,7 +83,6 @@ export default {
       episodes: [],
       extrasLoaded: false,
       fetchDone: false,
-      layout: this.mini ? "mini" : "horizontal",
       mountedDone: false,
       paused: true,
       randomEpisodeYouTubeId: undefined,
@@ -90,9 +91,13 @@ export default {
       startLineIndex: 0,
       starttime: 0,
       video: undefined,
+      initialLayout: "horizontal"
     };
   },
   computed: {
+    layout() {
+      return this.mini ? "mini" : this.initialLayout;
+    },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -220,8 +225,10 @@ export default {
     },
   },
   methods: {
+    onYouTubeUpdateLayout(layout) {
+      this.initialLayout = initialLayout
+    },
     async onVideoUnavailable(youtube_id) {
-      console.log("🔥 Unavailable", youtube_id);
       try {
         await YouTube.reportUnavailableVideo({
           youtube_id,
@@ -537,9 +544,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped >
-  .main-dark {
-    background: red;
-  }
 .zerotohero-wide {
   .youtube-view-wrapper {
     ::v-deep .youtube-with-transcript-landscape {

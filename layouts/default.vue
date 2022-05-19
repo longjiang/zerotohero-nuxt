@@ -329,8 +329,9 @@ export default {
   &.overlay-player-minimized {
     position: fixed;
     height: 5rem;
+    background: red;
     min-height: 0;
-    bottom: 4.56rem;
+    bottom: 4.88rem;
     top: inherit;
     overflow: hidden;
   }

@@ -43,9 +43,8 @@
             :sticky="sticky"
             :class="{
               'transcript-line-l2': true,
-              'text-center': single,
-              'pr-3': single && $l2.direction === 'rtl',
-              'pl-3': single && $l2.direction !== 'rtl',
+              'transcript-line-l2-single': single,
+              'transcript-line-l2-rtl': $l2.direction === 'rtl',
               annotated: annotated,
             }"
             :buttons="true"
@@ -76,10 +75,8 @@
           v-if="line.line.length > 0 && parallelLine"
           :class="{
             'transcript-line-l1': true,
-            'pl-4': !single && $l2.direction !== 'rtl',
-            'pr-4': !single && $l2.direction === 'rtl',
-            'text-right': !single && $l2.direction === 'rtl',
-            'text-center': single,
+            'transcript-line-l1-rtl': !single && $l2.direction === 'rtl',
+            'transcript-line-l1-single': single,
             transparent: !annotated,
           }"
           v-html="parallelLine"
