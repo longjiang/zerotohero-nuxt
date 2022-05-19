@@ -99,10 +99,6 @@ export default {
     '@nuxtjs/axios',
     'nuxt-i18n',
     '@nuxtjs/google-fonts',
-    ['nuxt-lazy-load', {
-      defaultImage: '/img/placeholder-faded.png',
-      directiveOnly: false
-    }],
     '@nuxtjs/auth-next',
     '@nuxtjs/toast',
   ],
