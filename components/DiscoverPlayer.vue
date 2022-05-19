@@ -16,7 +16,7 @@
     <div class="text-center pt-5 pb-5" v-if="!randomShowRandomEpisode">
       <Loader :sticky="true" message="Getting shows..." />
     </div>
-    <LazyYouTubeVideo v-if="randomShowRandomEpisode" initialLayout="vertical"
+    <LazyYouTubeVideo v-if="randomShowRandomEpisode" layout="vertical"
       :youtube="randomShowRandomEpisode.youtube_id" :ref="`youtube`" :autoload="true" :autoplay="true"
       :startAtRandomTime="true" @currentTime="updateCurrentTime" />
     <div class="text-center pt-3 pb-3" v-if="randomShowRandomEpisode">

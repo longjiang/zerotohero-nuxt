@@ -253,6 +253,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.synced-transcript-single-line {
+  .transcript-line-both {
+    text-align: center;
+    .transcript-line-l2 {
+      padding-left: 1.5rem;
+    }
+    .transcript-line-l2-rtl {
+      padding-right: 1.5rem;
+    }
+    .transcript-line-l1 {
+      padding: 0;
+    }
+  }
+}
 .show-translation {
   .transcript-line-wide.transcript-line-with-translation {
     .transcript-line-both {
@@ -305,6 +319,10 @@ export default {
     display: none;
     line-height: 1.5;
     margin-top: 0.1rem;
+    padding-left: 1.5rem;
+    &.transcript-line-l1-rtl {
+      padding-right: 1.5rem;
+    }
   }
 }
 

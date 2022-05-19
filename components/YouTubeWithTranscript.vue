@@ -587,6 +587,7 @@ export default {
 
 
       .quick-access-button-previous,
+      .quick-access-button-speed,
       .quick-access-button-next,
       .quick-access-button-fullscreen {
         display: none !important;

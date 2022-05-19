@@ -157,7 +157,7 @@
     <LazyYouTubeWithTranscript
       class="main-dark"
       v-if="currentHit"
-      initialLayout="vertical"
+      layout="vertical"
       :video="currentHit.video"
       :ref="`youtube-${hitIndex}`"
       :speed="speed"
