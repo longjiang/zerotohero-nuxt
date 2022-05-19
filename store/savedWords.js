@@ -76,11 +76,12 @@ export const mutations = {
           forms: [...wordForms],
           date: Date.now()
         })
-        console.log(savedWords)
         localStorage.setItem('zthSavedWords', JSON.stringify(savedWords))
-        
+
         this._vm.$set(state, 'savedWords', savedWords)
-        buildIndex(l2, state)
+        let { formIndex, idIndex } = buildIndex(l2, state)
+        state.formIndex[l2] = formIndex
+        state.idIndex[l2] = idIndex
       }
     }
   },
@@ -97,7 +98,9 @@ export const mutations = {
         }
       }
       for (let l2 in state.savedWords) {
-        buildIndex(l2, state)
+        let { formIndex, idIndex } = buildIndex(l2, state)
+        state.formIndex[l2] = formIndex
+        state.idIndex[l2] = idIndex
       }
       localStorage.setItem('zthSavedWords', JSON.stringify(state.savedWords))
     }
@@ -113,7 +116,9 @@ export const mutations = {
       if (savedWords) {
         state.savedWords = savedWords
         for (let l2 in state.savedWords) {
-          buildIndex(l2, state)
+          let { formIndex, idIndex } = buildIndex(l2, state)
+          state.formIndex[l2] = formIndex
+          state.idIndex[l2] = idIndex
         }
         localStorage.setItem('zthSavedWords', JSON.stringify(state.savedWords))
       }
@@ -128,7 +133,10 @@ export const mutations = {
       savedWords[l2] = keepers
       localStorage.setItem('zthSavedWords', JSON.stringify(savedWords))
       this._vm.$set(state, 'savedWords', savedWords)
-      buildIndex(l2, state)
+
+      let { formIndex, idIndex } = buildIndex(l2, state)
+      state.formIndex[l2] = formIndex
+      state.idIndex[l2] = idIndex
     }
   },
   REMOVE_ALL_SAVED_WORDS(state, { l2 }) {
@@ -143,7 +151,10 @@ export const mutations = {
       }
       localStorage.setItem('zthSavedWords', JSON.stringify(savedWords))
       this._vm.$set(state, 'savedWords', savedWords)
-      buildIndex(l2, state)
+
+      let { formIndex, idIndex } = buildIndex(l2, state)
+      state.formIndex[l2] = formIndex
+      state.idIndex[l2] = idIndex
     }
   }
 }
