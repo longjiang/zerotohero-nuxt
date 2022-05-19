@@ -214,7 +214,7 @@ export default {
       }
     },
     async initAndGetUserData() {
-      if (this.$auth.loggedIn && this.$auth.strategy.token) {
+      if (this.$auth.loggedIn) {
         let user = this.$auth.user;
         let token = this.$auth.strategy.token.get()
           ? this.$auth.strategy.token.get().replace("Bearer ", "")
@@ -236,21 +236,27 @@ export default {
               .get(
                 `${Config.wiki}items/user_data?filter[owner][eq]=${
                   user.id
-                }&access_token=${token}&timestamp=${Date.now()}`
+                }&access_token=${token}&limit=1&timestamp=${Date.now()}`
               )
               .catch(async (err) => {
                 console.log(err);
               });
             if (userDataRes && userDataRes.data && userDataRes.data.data) {
               if (userDataRes.data.data[0]) {
-                user.dataId = userDataRes.data.data[0].id;
+                let {id, saved_words, saved_phrases, history, settings } = userDataRes.data.data[0]
+                user.dataId = id
                 this.$store.dispatch(
-                  "savedWords/importWordsFromJSON",
-                  userDataRes.data.data[0].saved_words
+                  "savedWords/importFromJSON", saved_words
                 );
-                // this.$store.dispatch("savedPhrases/pull");
-                // this.$store.dispatch("history/pull");
-                // this.$store.dispatch("settings/pull");
+                this.$store.dispatch(
+                  "savedPhrases/importFromJSON", saved_phrases
+                );
+                // this.$store.dispatch(
+                //   "history/importFromJSON", history
+                // );
+                // this.$store.dispatch(
+                //   "settings/importFromJSON", settings
+                // );
               } else {
                 // No user data found, let's create it
                 user.dataId = await createNewUserDataRecord(token);

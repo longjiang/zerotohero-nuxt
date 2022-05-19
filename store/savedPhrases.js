@@ -53,8 +53,17 @@ export const mutations = {
   },
   IMPORT_PHRASES_FROM_JSON(state, json) {
     if (typeof localStorage !== 'undefined') {
-      state.savedPhrases = JSON.parse(json) || state.savedPhrases
-      localStorage.setItem('zthSavedPhrases', JSON.stringify(state.savedPhrases))
+      let savedPhrases
+      try {
+        savedPhrases = JSON.parse(json)
+      } catch (err) {
+        console.log(err)
+      }
+      if (savedPhrases) {
+        state.savedPhrases = savedPhrases
+        localStorage.setItem('zthSavedPhrases', JSON.stringify(savedPhrases))
+      }
+      this.savedPhrasesLoaded = true
     }
   },
   REMOVE_SAVED_PHRASE(state, { l2, phrase, phrasebookId, pronunciation, exact, translations = {} } = {}) {
@@ -95,8 +104,7 @@ export const mutations = {
 }
 export const actions = {
   load({ commit, dispatch }) {
-    commit('LOAD_SAVED_PHRASES')
-    dispatch('pull')
+    if (!state.savedPhrasesLoaded) commit('LOAD_SAVED_PHRASES')
   },
   add({ commit, dispatch }, options) {
     commit('ADD_SAVED_PHRASE', options)
@@ -116,31 +124,17 @@ export const actions = {
   },
   async push({ commit, state, rootState }) {
     let user = rootState.auth.user
-    if (user && user.id && user.token) {
-      let payload = { saved_phrases: JSON.stringify(state.savedPhrases) }
-      await axios.patch(`${Config.wiki}items/user_data/${user.id}?access_token=${user.token}`, payload)
+    if (user && user.id && user.token && user.dataId) {
+      let payload = { saved_phrases: localStorage.getItem('zthSavedPhrases') }
+      let url = `${Config.wiki}items/user_data/${user.dataId}?access_token=${user.token}`
+      await axios.patch(url, payload)
         .catch(async (err) => {
-          if (err.response && err.response.data && err.response.data.error && err.response.data.error.code === 203) {
-            // Initialize the user data record if there isn't one
-            await axios.post(`${Config.wiki}items/user_data?access_token=${user.token}`, { id: user.id, saved_phrases: JSON.stringify(state.savedPhrases) })
-          }
+          console.log('Axios error in savedPhrases.js: err, url, payload', err, url, payload)
         })
     }
   },
-  async pull({ commit, state, rootState }) {
-    let user = rootState.auth.user
-    if (user && user.id && user.token) {
-      let res = await axios.get(`${Config.wiki}items/user_data/${user.id}?fields=saved_phrases&access_token=${user.token}`)
-        .catch(async (err) => {
-          if (err.response && err.response.data && err.response.data.error && err.response.data.error.code === 203) {
-            // Initialize the user data record if there isn't one
-            await axios.post(`${Config.wiki}items/user_data?access_token=${user.token}`, { id: user.id, saved_phrases: JSON.stringify(state.savedPhrases) })
-          }
-        })
-      if (res && res.data && res.data.data) {
-        commit('IMPORT_PHRASES_FROM_JSON', res.data.data.saved_phrases)
-      }
-    }
+  async importFromJSON({ commit, dispatch }, json) {
+    commit('IMPORT_PHRASES_FROM_JSON', json)
   }
 }
 export const getters = {

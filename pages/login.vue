@@ -99,7 +99,6 @@ export default {
         );
         if (res && res.data && res.data.data) {
           this.$auth.setUser(res.data.data);
-          this.$auth.user.token = token || this.$auth.user.token
           this.$router.back();
           this.$toast.success(`Welcome back, ${res.data.data.first_name}!`, {
             position: "top-center",

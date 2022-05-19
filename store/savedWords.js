@@ -171,7 +171,7 @@ export const actions = {
     commit('IMPORT_WORDS', csv)
     dispatch('push')
   },
-  importWordsFromJSON({ commit, dispatch }, json) {
+  importFromJSON({ commit, dispatch }, json) {
     commit('IMPORT_WORDS_FROM_JSON', json)
   },
   remove({ commit, dispatch }, options) {
