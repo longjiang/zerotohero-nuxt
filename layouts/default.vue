@@ -333,12 +333,22 @@ export default {
     bottom: 4.88rem;
     top: inherit;
     overflow: hidden;
-    width: inherit;
     z-index: 9;
     ::v-deep .main-dark {
       background: rgba(0, 0, 0, 0.8);
       backdrop-filter: blur(20px);
     }
+  }
+}
+
+.zerotohero-wide {
+  .overlay-player-minimized {
+    width: inherit;
+  }
+}
+.zerotohero-not-wide {
+  .overlay-player-minimized {
+    width: 100%;
   }
 }
 

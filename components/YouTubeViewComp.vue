@@ -9,6 +9,7 @@
       :image="`https://img.youtube.com/vi/${this.youtube_id}/hqdefault.jpg`"
     />
     <router-link
+      v-if="layout === 'mini'"
       class="btn btn-unstyled btn-minimize-toggle"
       :to="minimizeToggleRouterLinkTo"
     >
@@ -24,7 +25,10 @@
         fullscreen: layout === 'vertical',
       }"
     >
-      <div :class="{ 'loader text-center': true, 'd-none': video }" style="padding-top: 30vh; padding-bottom: 30vh">
+      <div
+        :class="{ 'loader text-center': true, 'd-none': video }"
+        style="padding-top: 30vh; padding-bottom: 30vh"
+      >
         <Loader :sticky="true" message="Preparing video and transcript..." />
       </div>
 
@@ -573,10 +577,15 @@ export default {
   align-items: center;
   width: 4rem;
   z-index: 9;
-  position: fixed;
+  position: absolute;
   color: white;
   right: 0;
   bottom: 0;
+}
+.zerotohero-not-wide {
+  .btn-minimize-toggle {
+    top: 5rem;
+  }
 }
 
 .overlay-player-minimized {
