@@ -24,7 +24,7 @@
         fullscreen: layout === 'vertical',
       }"
     >
-      <div :class="{ 'loader text-center pt-5 pb-5': true, 'd-none': video }">
+      <div :class="{ 'loader text-center': true, 'd-none': video }" style="padding-top: 30vh; padding-bottom: 30vh">
         <Loader :sticky="true" message="Preparing video and transcript..." />
       </div>
 
@@ -576,8 +576,9 @@ export default {
   position: fixed;
   color: white;
   right: 0;
-  top: 0;
+  bottom: 0;
 }
+
 .overlay-player-minimized {
   .btn-minimize-toggle {
     bottom: 0;

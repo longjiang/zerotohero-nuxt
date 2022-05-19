@@ -570,11 +570,13 @@ export default {
 <style lang="scss" scoped>
 .youtube-with-transcript-mini {
   display: flex;
+  .main-dark {
+    background: rgba(0,0,0,0.5);
+  }
   .youtube-video-column {
     height: 5rem;
     width: 8.88rem;
     max-width: 8.88rem;
-    background: green;
     margin-right: 5rem;
     ::v-deep .quick-access-buttons {
       position: absolute;

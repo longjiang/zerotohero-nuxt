@@ -62,7 +62,8 @@
           :lesson="overlayPlayerLesson"
           :mini="overlayPlayerMinimized"
           :fullHistory="fullHistory"
-          :class="`${overlayPlayerMinimized ? 'overlay-player-minimized': ''}`"
+          :class="`${overlayPlayerMinimized ? 'overlay-player-minimized' : ''}`"
+          :key="`youtube-view-comp-${overlayPlayerYouTubeId}`"
         />
       </div>
     </template>
@@ -108,7 +109,7 @@ export default {
       return count;
     },
     overlayPlayerMinimized() {
-      return this.$route.name !== 'youtube-view'
+      return this.$route.name !== "youtube-view";
     },
     classes() {
       let classes = {
@@ -322,26 +323,28 @@ export default {
 }
 
 #overlay-player {
-  position: absolute;
   min-height: 100vh;
-  top: 0;
-  z-index: 3;
+  background: black;
   &.overlay-player-minimized {
+    background: none;
     position: fixed;
     height: 5rem;
-    background: red;
     min-height: 0;
     bottom: 4.88rem;
     top: inherit;
     overflow: hidden;
     width: inherit;
+    z-index: 9;
+    ::v-deep .main-dark {
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(20px);
+    }
   }
 }
 
 .zerotohero-wide #overlay-player.overlay-player-minimized {
   bottom: 0;
 }
-
 
 #zerotohero {
   min-height: 100vh;
