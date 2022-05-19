@@ -61,6 +61,7 @@
           :youtube_id="overlayPlayerYouTubeId"
           :lesson="overlayPlayerLesson"
           :mini="overlayPlayerMinimized"
+          :fullHistory="fullHistory"
           :class="`${overlayPlayerMinimized ? 'overlay-player-minimized': ''}`"
         />
       </div>
@@ -324,7 +325,6 @@ export default {
   position: absolute;
   min-height: 100vh;
   top: 0;
-  width: 100%;
   z-index: 3;
   &.overlay-player-minimized {
     position: fixed;
@@ -334,6 +334,7 @@ export default {
     bottom: 4.88rem;
     top: inherit;
     overflow: hidden;
+    width: inherit;
   }
 }
 
@@ -365,8 +366,6 @@ export default {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    position: relative;
-    overflow: hidden;
     #main {
       flex: 1;
     }

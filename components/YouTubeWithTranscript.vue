@@ -101,7 +101,7 @@
       </div>
 
       <SyncedTranscript
-        v-if="video.subs_l2 && video.subs_l2.length > 0"
+        v-if="layout !== 'mini' && video.subs_l2 && video.subs_l2.length > 0"
         ref="transcript"
         :key="'transcript-' + video.youtube_id"
         :lines="video.subs_l2"
@@ -575,17 +575,17 @@ export default {
     width: 8.88rem;
     max-width: 8.88rem;
     background: green;
-    margin-right: 8.3rem;
+    margin-right: 5rem;
     ::v-deep .quick-access-buttons {
       position: absolute;
-      left: 9.7rem;
+      left: 9.4rem;
       top: 1rem;
       background: none;
+      height: 3.2rem;
 
-      .quick-access-button-rewind,
+
       .quick-access-button-previous,
       .quick-access-button-next,
-      .quick-access-button-speed,
       .quick-access-button-fullscreen {
         display: none !important;
       }
@@ -638,6 +638,7 @@ export default {
 .youtube-video-info {
   padding-left: 0.667rem;
   padding-right: 0.667rem;
+  padding-top: 0.667rem;
 }
 
 .youtube-with-transcript-horizontal-landscape {

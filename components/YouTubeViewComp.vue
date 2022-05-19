@@ -8,7 +8,13 @@
       :description="`Study the transcript of this video with a popup dictionary`"
       :image="`https://img.youtube.com/vi/${this.youtube_id}/hqdefault.jpg`"
     />
-
+    <router-link
+      class="btn btn-unstyled btn-minimize-toggle"
+      :to="minimizeToggleRouterLinkTo"
+    >
+      <i class="fas fa-chevron-up" v-if="mini"></i>
+      <i class="fas fa-chevron-down" v-else></i>
+    </router-link>
     <div
       :class="{
         'youtube-view pb-5 ': true,
@@ -21,7 +27,7 @@
       <div :class="{ 'loader text-center pt-5 pb-5': true, 'd-none': video }">
         <Loader :sticky="true" message="Preparing video and transcript..." />
       </div>
-      
+
       <LazyYouTubeWithTranscript
         v-if="video"
         ref="youtube"
@@ -74,8 +80,11 @@ export default {
     mini: {
       type: Boolean,
       default: false,
-      required: false
-    }
+      required: false,
+    },
+    fullHistory: {
+      type: Array,
+    },
   },
   data() {
     return {
@@ -91,10 +100,24 @@ export default {
       startLineIndex: 0,
       starttime: 0,
       video: undefined,
-      initialLayout: "horizontal"
+      initialLayout: "horizontal",
     };
   },
   computed: {
+    minimizeToggleRouterLinkTo() {
+      if (this.mini)
+        return {
+          name: "youtube-view",
+          params: { youtube_id: this.youtube_id, lesson: this.lesson },
+        };
+      else if (this.fullHistory) {
+        let lastNonYouTubeViewPath = this.fullHistory.find(
+          (h) => !h.includes("youtube/view")
+        );
+        if (lastNonYouTubeViewPath) return lastNonYouTubeViewPath;
+      }
+      return { name: "all-media" };
+    },
     layout() {
       return this.mini ? "mini" : this.initialLayout;
     },
@@ -226,7 +249,7 @@ export default {
   },
   methods: {
     onYouTubeUpdateLayout(layout) {
-      this.initialLayout = initialLayout
+      this.initialLayout = initialLayout;
     },
     async onVideoUnavailable(youtube_id) {
       try {
@@ -544,6 +567,23 @@ export default {
 };
 </script>
 <style lang="scss" scoped >
+.btn-minimize-toggle {
+  height: 5rem;
+  display: flex;
+  align-items: center;
+  width: 4rem;
+  z-index: 9;
+  position: fixed;
+  color: white;
+  right: 0;
+  top: 0;
+}
+.overlay-player-minimized {
+  .btn-minimize-toggle {
+    bottom: 0;
+    top: inherit;
+  }
+}
 .zerotohero-wide {
   .youtube-view-wrapper {
     ::v-deep .youtube-with-transcript-landscape {
