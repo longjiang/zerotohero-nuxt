@@ -9,7 +9,13 @@ import WorkerModuleLoader from '~/lib/worker-module-loader'
 import { i18n } from '~/plugins/i18n.js'
 import VueMq from 'vue-mq'
 import VueSmoothScroll from 'vue2-smooth-scroll'
-
+import VueLazyload from 'vue-lazyload'
+Vue.use(VueLazyload, {
+  preLoad: 1.3,
+  error: '/img/placeholder-unavailable.jpg',
+  loading: '/img/placeholder-faded.png',
+  attempt: 1
+})
 
 Vue.config.productionTip = false
 
@@ -27,7 +33,10 @@ Vue.use(VueMq, {
     xl: 1400,
     xxl: Infinity
   },
-  defaultBreakpoint: 'sm' // customize this for SSR
+  defaultBreakpoint: 'sm', // customize this for SSR
+  error (listender, Init) {
+      console.log('error')
+  }
 })
 
 

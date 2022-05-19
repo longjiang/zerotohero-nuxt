@@ -27,11 +27,9 @@
             :to="path(show)"
           >
             <img
-              v-lazy-load
-              :src="`https://img.youtube.com/vi/${show.youtube_id}/hqdefault.jpg`"
+              :v-lazy="`https://img.youtube.com/vi/${show.youtube_id}/hqdefault.jpg`"
               class="youtube-thumbnail aspect"
               style="transform: scale(1.4)"
-              v-lazy-load
             />
           </router-link>
           <div class="tv-show-card-title">

@@ -83,8 +83,7 @@
                       <img
                         :src="`https://img.youtube.com/vi/${phrase.youtube_id}/hqdefault.jpg`"
                         :alt="phrase.title"
-                        class="video-thumb"
-                        v-lazy-load
+                        v-lazy="video-thumb"
                       />
                       <div style="flex: 1">
                         <span

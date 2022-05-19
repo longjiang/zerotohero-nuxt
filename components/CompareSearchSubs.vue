@@ -150,9 +150,8 @@
                           class="hit-thumb"
                           style="margin-top: 0.2rem"
                           v-if="ab === 'A' && hit"
-                          :src="`https://img.youtube.com/vi/${hit.video.youtube_id}/hqdefault.jpg`"
+                          :v-lazy="`https://img.youtube.com/vi/${hit.video.youtube_id}/hqdefault.jpg`"
                           :alt="hit.video.title"
-                          v-lazy-load
                         />
                       </div>
                       <div style="flex: 1">
@@ -196,9 +195,8 @@
                           class="hit-thumb"
                           style="margin-top: 0.2rem"
                           v-if="ab === 'B' && hit"
-                          :src="`https://img.youtube.com/vi/${hit.video.youtube_id}/hqdefault.jpg`"
+                          :v-lazy="`https://img.youtube.com/vi/${hit.video.youtube_id}/hqdefault.jpg`"
                           :alt="hit.video.title"
-                          v-lazy-load
                         />
                       </div>
                     </div>

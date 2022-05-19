@@ -20,12 +20,10 @@
         :to="`/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${word.id}`"
       >
         <img
-          v-lazy-load
           v-if="srcs && srcs.length > 0"
-          :src="srcs[srcIndex]"
+          :v-lazy="srcs[srcIndex]"
           class="word-list-ext-image"
           @error="logoLoadError(srcIndex)"
-          v-lazy-load
         />
       </router-link>
     </div>

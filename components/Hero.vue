@@ -10,15 +10,13 @@
       >
         <span class="avatar-wrapper"
           ><img
-            v-lazy-load
-            :src="
+            :v-lazy="
               hero.avatar
                 ? hero.avatar.data.thumbnails[0].url
                 : '/img/default-avatar.jpg'
             "
             alt=""
             class="avatar"
-            v-lazy-load
         /></span>
         <div class="slice">
           <div

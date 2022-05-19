@@ -6,9 +6,8 @@
     class="link-unstyled channel"
   >
     <img
-      v-lazy-load
       v-if="channel.avatar"
-      :src="channel.avatar"
+      :v-lazy="channel.avatar"
       class="channel-avatar"
       alt
     />

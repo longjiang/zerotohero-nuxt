@@ -239,9 +239,8 @@
                 />
                 <img
                   class="hit-thumb"
-                  :src="`https://img.youtube.com/vi/${hit.video.youtube_id}/hqdefault.jpg`"
+                  :v-lazy="`https://img.youtube.com/vi/${hit.video.youtube_id}/hqdefault.jpg`"
                   :alt="hit.video.title"
-                  v-lazy-load
                 />
                 <span
                   :key="`dropdown-line-${index}-annotate-${
