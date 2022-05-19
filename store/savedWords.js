@@ -50,7 +50,7 @@ const parseSavedWordsCSV = (csv) => {
 }
 
 export const mutations = {
-  LOAD_SAVED_WORDS(state) {
+  LOAD_SAVED_WORDS_LOCALLY(state) {
     if (typeof localStorage !== 'undefined') {
       let savedWords = JSON.parse(localStorage.getItem('zthSavedWords') || '{}')
       state.savedWords = savedWords || state.savedWords
@@ -122,6 +122,7 @@ export const mutations = {
         }
         localStorage.setItem('zthSavedWords', JSON.stringify(state.savedWords))
       }
+      this.savedWordsLoaded = true
     }
   },
   REMOVE_SAVED_WORD(state, { l2, word }) {
@@ -159,9 +160,9 @@ export const mutations = {
   }
 }
 export const actions = {
-  load({ commit, dispatch }) {
-    commit('LOAD_SAVED_WORDS')
-    dispatch('pull')
+  async load({ commit, dispatch }) {
+    await dispatch('pull') // Already loads the words from the server
+    if (!state.savedWordsLoaded) commit('LOAD_SAVED_WORDS_LOCALLY') // If the user is offline or not logged in, load locally
   },
   add({ dispatch, commit }, { l2, word, wordForms }) {
     commit('ADD_SAVED_WORD', { l2, word, wordForms })
@@ -201,6 +202,7 @@ export const actions = {
         if (res.data.data[0]) {
           user.dataId = res.data.data[0].id
           commit('IMPORT_WORDS_FROM_JSON', res.data.data[0].saved_words)
+          return
         } else {
           // No user data found, let's create it
           user.dataId = createNewUserDataRecord(user.token, { saved_words: JSON.stringify(state.savedWords) })
