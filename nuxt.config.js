@@ -116,9 +116,16 @@ export default {
     },
     strategies: {
       local: {
+        scheme: 'refresh',
+        refreshToken: {
+          property: 'data.token',
+          data: 'data.token',
+          maxAge: 60 * 60 * 24 * 30
+        },
         token: {
           property: 'data.token',
           global: true,
+          maxAge: 1800,
           // required: true,
           // type: 'Bearer'
         },
@@ -128,6 +135,7 @@ export default {
         },
         endpoints: {
           login: { url: 'https://db2.zerotohero.ca/zerotohero/auth/authenticate', method: 'post' },
+          refresh: { url: 'https://db2.zerotohero.ca/zerotohero/auth/refresh', method: 'post' },
           // logout: { url: '/api/auth/logout', method: 'post' },
           user: false
         }
