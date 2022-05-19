@@ -2,7 +2,7 @@
 <template>
   <div
     :class="{
-      'youtube-view pt-3 pb-5 ': true,
+      'youtube-view pb-5 ': true,
       'main-dark': true,
       'main-dark-performant': isMobile,
     }"
@@ -14,23 +14,6 @@
       :description="`Study the transcript of this video with a popup dictionary`"
       :image="`https://img.youtube.com/vi/${this.youtube_id}/hqdefault.jpg`"
     />
-    <div class="pl-3 pr-3 mb-4">
-      <!-- <Sale class="mt-4 mb-4" v-if="$l2.code === 'zh'" /> -->
-      <SimpleSearch
-        placeholder="Search"
-        ref="searchLibrary"
-        skin="dark"
-        :action="
-          (url) => {
-            this.$router.push({
-              path: `/${$l1.code}/${
-                $l2.code
-              }/youtube/search/${encodeURIComponent(url)}`,
-            });
-          }
-        "
-      />
-    </div>
     <div
       :class="{
         'youtube-view-wrapper': true,

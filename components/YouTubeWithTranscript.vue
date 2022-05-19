@@ -61,7 +61,7 @@
           />
         </div>
       </div>
-      <div class="youtube-transcript-column">
+      <div class="youtube-transcript-column pt-4">
         <div
           class="youtube-video-info youtube-video-info-top"
           v-if="layout === 'horizontal'"

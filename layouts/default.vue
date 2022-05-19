@@ -49,19 +49,19 @@
         mode="small-icon"
       />
       <div class="zth-content">
-        <Nuxt id="main" />
-        <LazyFooter v-if="dictionaryCredit" :dictionaryCredit="dictionaryCredit" class="zth-footer" />
+        <Nuxt id="main" v-if="$route.name !== 'youtube-view'" />
+        <LazyFooter
+          v-if="dictionaryCredit"
+          :dictionaryCredit="dictionaryCredit"
+          class="zth-footer"
+        />
+        <YouTubeViewComp
+          id="overlay-player"
+          v-if="overlayPlayerYouTubeId"
+          :youtube_id="overlayPlayerYouTubeId"
+          :lesson="overlayPlayerLesson"
+        />
       </div>
-      <ReaderComp
-        v-if="
-          wide &&
-          l1 &&
-          l2 &&
-          $route.name !== 'youtube-view' &&
-          $route.name !== 'home'
-        "
-        :iconMode="true"
-      />
     </template>
     <i class="fas fa-star star-animation"></i>
   </div>
@@ -86,9 +86,10 @@ export default {
       fullPageRoutes: ["index", "sale"],
       fullHistory: [],
       collapsed: false,
+      overlayPlayerYouTubeId: undefined,
+      overlayPlayerLesson: undefined,
     };
   },
-
   computed: {
     ...mapState("settings", ["l2Settings", "l1", "l2"]),
     savedWordsCount() {
@@ -139,6 +140,10 @@ export default {
     this.$nuxt.$on("animateStar", this.onAnimateStar);
     if (typeof window !== "undefined")
       window.addEventListener("resize", this.onResize);
+    if (this.$route.name === "youtube-view") {
+      this.overlayPlayerYouTubeId = this.$route.params.youtube_id;
+      this.overlayPlayerLesson = this.$route.params.lesson;
+    }
   },
   async mounted() {
     this.wide = Helper.wide();
@@ -185,6 +190,13 @@ export default {
     },
     $route() {
       this.addFullHistoryItem(this.$route.path);
+      if (
+        this.$route.name === "youtube-view" &&
+        this.$route.params.youtube_id
+      ) {
+        this.overlayPlayerYouTubeId = this.$route.params.youtube_id;
+        this.overlayPlayerLesson = this.$route.params.lesson;
+      }
     },
   },
   methods: {
@@ -193,22 +205,28 @@ export default {
       if (el && target) {
         let bounds = el.getBoundingClientRect();
         let targetBounds = target.getBoundingClientRect();
-        let x = targetBounds.left - bounds.left
-        let y = targetBounds.bottom - bounds.bottom
+        let x = targetBounds.left - bounds.left;
+        let y = targetBounds.bottom - bounds.bottom;
         const starAnimation = [
-          { transform: `scale(2.2) translateX(0px) translateY(0px) rotate(0)`, opacity: 1},
-          { transform: `scale(1) translateX(${x}px) translateY(${y}px) rotate(360deg)`, opacity: 0.7 },
+          {
+            transform: `scale(2.2) translateX(0px) translateY(0px) rotate(0)`,
+            opacity: 1,
+          },
+          {
+            transform: `scale(1) translateX(${x}px) translateY(${y}px) rotate(360deg)`,
+            opacity: 0.7,
+          },
         ];
         const star = document.querySelector(".star-animation");
-        star.style.display = 'block'
-        star.style.top = bounds.top + 'px';
-        star.style.left = bounds.left + 'px';
+        star.style.display = "block";
+        star.style.top = bounds.top + "px";
+        star.style.left = bounds.left + "px";
         star.animate(starAnimation, {
           duration: 1000,
           iterations: 1,
         });
-        await Helper.timeout(1000)
-        star.style.display = 'none'
+        await Helper.timeout(1000);
+        star.style.display = "none";
       }
     },
     updateCollapsed(collapsed) {
@@ -297,6 +315,15 @@ export default {
   display: none;
 }
 
+#overlay-player {
+  position: absolute;
+  min-height: 100vh;
+  top: 0;
+  width: 100%;
+  z-index: 3;
+}
+
+
 #zerotohero {
   min-height: 100vh;
   .zerotohero-background {
@@ -320,6 +347,8 @@ export default {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    position: relative;
+    overflow: hidden;
     #main {
       flex: 1;
     }
@@ -332,16 +361,20 @@ export default {
     flex: 1;
     margin-left: 13rem;
     overflow: visible;
+    width: calc(100% - 13rem);
   }
   .zth-nav-wrapper.has-secondary-nav + .zth-content {
     margin-left: 26rem;
+    width: calc(100% - 26rem);
   }
   &.zerotohero-wide-collapsed {
     .zth-content {
       margin-left: 4.5rem;
+      width: calc(100% - 4.5rem);
     }
     .zth-nav-wrapper.has-secondary-nav + .zth-content {
       margin-left: 9rem;
+      width: calc(100% - 9rem);
     }
   }
 }
