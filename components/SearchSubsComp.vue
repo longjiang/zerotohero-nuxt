@@ -465,15 +465,25 @@ export default {
   methods: {
     async onVideoUnavailable(youtube_id) {
       let video = this.currentHit.video;
+      console.log(
+        "😭 Looks like this video is unavailable: ",
+        `https://www.youtube.com/watch?v=${youtube_id}`
+      );
       if (youtube_id) {
         // Log it
         try {
-          let res = await YouTube.reportUnavailableVideo({ youtube_id: video.youtube_id, video_id: video.id, l2Id: this.$l2.id })
-        } catch(err) {
-          console.log(err)
+          let res = await YouTube.reportUnavailableVideo({
+            youtube_id: video.youtube_id,
+            video_id: video.id,
+            l2Id: this.$l2.id,
+          });
+        } catch (err) {
+          console.log(err);
         }
         // Go to next video
-        this.removeCurrentHitAndGoToNext()
+        await Helper.timeout(2000);
+        if (this.currentHit.video.youtube_id === youtube_id)
+          this.removeCurrentHitAndGoToNext();
       }
     },
     loadSettings() {
@@ -518,7 +528,7 @@ export default {
         response = await axios.delete(
           `${Config.youtubeVideosTableName(this.$l2.id)}/${id}`
         );
-        this.removeCurrentHitAndGoToNext()
+        this.removeCurrentHitAndGoToNext();
       } catch (err) {}
     },
     removeCurrentHitAndGoToNext() {
