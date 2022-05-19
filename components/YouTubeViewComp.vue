@@ -1,12 +1,6 @@
 
 <template>
-  <div
-    :class="{
-      'youtube-view pb-5 ': true,
-      'main-dark': true,
-      'main-dark-performant': isMobile,
-    }"
-  >
+  <div>
     <SocialHead
       :title="`${video ? video.title + ' | ' : ''}Learn ${
         $l2.name
@@ -16,6 +10,9 @@
     />
     <div
       :class="{
+        'youtube-view pb-5 ': true,
+        'main-dark': true,
+        'main-dark-performant': isMobile,
         'youtube-view-wrapper': true,
         fullscreen: layout === 'vertical',
       }"
@@ -219,7 +216,7 @@ export default {
   },
   methods: {
     async onVideoUnavailable(youtube_id) {
-      console.log('🔥 Unavailable', youtube_id)
+      console.log("🔥 Unavailable", youtube_id);
       try {
         await YouTube.reportUnavailableVideo({
           youtube_id,
@@ -229,7 +226,7 @@ export default {
         // Go to next video
         if (this.nextEpisode) this.$router.push(this.nextEpisode);
       } catch (err) {
-        console.log(err)
+        console.log(err);
       }
     },
     mergeVideos(video, youtube_video) {

@@ -50,16 +50,17 @@
       />
       <div class="zth-content">
         <Nuxt id="main" v-if="$route.name !== 'youtube-view'" />
-        <LazyFooter
+        <!-- <LazyFooter
           v-if="dictionaryCredit"
           :dictionaryCredit="dictionaryCredit"
           class="zth-footer"
-        />
+        /> -->
         <YouTubeViewComp
           id="overlay-player"
           v-if="overlayPlayerYouTubeId"
           :youtube_id="overlayPlayerYouTubeId"
           :lesson="overlayPlayerLesson"
+          :class="`${overlayPlayerMinimized ? 'overlay-player-minimized': ''}`"
         />
       </div>
     </template>
@@ -103,6 +104,9 @@ export default {
       });
       // eslint-disable-next-line vue/no-parsing-error
       return count;
+    },
+    overlayPlayerMinimized() {
+      return this.$route.name !== 'youtube-view'
     },
     classes() {
       let classes = {
@@ -321,6 +325,18 @@ export default {
   top: 0;
   width: 100%;
   z-index: 3;
+  &.overlay-player-minimized {
+    position: fixed;
+    height: 5rem;
+    min-height: 0;
+    bottom: 4.56rem;
+    top: inherit;
+    overflow: hidden;
+  }
+}
+
+.zerotohero-wide #overlay-player.overlay-player-minimized {
+  bottom: 0;
 }
 
 
