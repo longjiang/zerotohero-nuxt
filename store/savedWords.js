@@ -201,9 +201,10 @@ export const actions = {
 
 // Initialize the user data record if there isn't one
 const createNewUserDataRecord = async (token, payload) => {
-  res = await axios.post(`${Config.wiki}items/user_data?access_token=${token}`, payload).catch((err) => {
+  let res = await axios.post(`${Config.wiki}items/user_data?access_token=${token}`, payload).catch((err) => {
     console.log('Axios error in savedWords.js: err, url, payload', err, url, payload)
   })
+  console.log('👨 CREATING USER DATA', res)
   if (res && res.data && res.data.data) {
     let userDataId = res.data.data.id
     return userDataId

@@ -97,16 +97,24 @@ export default {
           let response = await this.$auth.loginWith("local", {
             data: this.form,
           });
-          if (response && response.data && response.data.data && response.data.data.user) {
-            let userWithToken = response.data.data.user;
-            this.$auth.setUser(userWithToken);
-            this.$toast.success(
-              `Welcome aboard, ${userWithToken.first_name}!`,
-              {
-                position: "top-center",
-                duration: 5000,
-              }
-            );
+          if (
+            response &&
+            response.data &&
+            response.data.data &&
+            response.data.data.user
+          ) {
+            this.$auth.setUser(response.data.data.user);
+            let token = this.$auth.strategy.token.get().replace("Bearer ", "");
+            this.$auth.user.token = token || this.$auth.user.token;
+            this.$store.dispatch("savedWords/pull");
+            this.$store.dispatch("savedPhrases/pull");
+            this.$store.dispatch("history/pull");
+            this.$store.dispatch("settings/pull");
+            this.$router.back();
+            this.$toast.success(`Welcome aboard, ${res.data.data.first_name}!`, {
+              position: "top-center",
+              duration: 5000,
+            });
             this.$router.back(); // First to the login page
             this.$router.back(); // Then to whatever the user was looking at
           }
