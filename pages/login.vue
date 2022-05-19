@@ -100,10 +100,6 @@ export default {
         if (res && res.data && res.data.data) {
           this.$auth.setUser(res.data.data);
           this.$auth.user.token = token || this.$auth.user.token
-          this.$store.dispatch("savedWords/pull");
-          this.$store.dispatch("savedPhrases/pull");
-          this.$store.dispatch("history/pull");
-          this.$store.dispatch("settings/pull");
           this.$router.back();
           this.$toast.success(`Welcome back, ${res.data.data.first_name}!`, {
             position: "top-center",

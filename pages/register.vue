@@ -104,13 +104,6 @@ export default {
             response.data.data.user
           ) {
             this.$auth.setUser(response.data.data.user);
-            let token = this.$auth.strategy.token.get().replace("Bearer ", "");
-            this.$auth.user.token = token || this.$auth.user.token;
-            this.$store.dispatch("savedWords/pull");
-            this.$store.dispatch("savedPhrases/pull");
-            this.$store.dispatch("history/pull");
-            this.$store.dispatch("settings/pull");
-            this.$router.back();
             this.$toast.success(`Welcome aboard, ${res.data.data.first_name}!`, {
               position: "top-center",
               duration: 5000,

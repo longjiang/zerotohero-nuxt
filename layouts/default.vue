@@ -50,7 +50,11 @@
       />
       <div class="zth-content">
         <Nuxt id="main" />
-        <LazyFooter v-if="dictionaryCredit" :dictionaryCredit="dictionaryCredit" class="zth-footer" />
+        <LazyFooter
+          v-if="dictionaryCredit"
+          :dictionaryCredit="dictionaryCredit"
+          class="zth-footer"
+        />
       </div>
       <ReaderComp
         v-if="
@@ -141,6 +145,7 @@ export default {
       window.addEventListener("resize", this.onResize);
   },
   async mounted() {
+    this.initAndGetUserData();
     this.wide = Helper.wide();
     smoothscroll.polyfill(); // Safari does not support smoothscroll
     if (this.l1 && this.l2) this.loadSettings();
@@ -186,29 +191,102 @@ export default {
     $route() {
       this.addFullHistoryItem(this.$route.path);
     },
+    "$auth.user"() {
+      this.initAndGetUserData();
+    },
   },
   methods: {
+    // Initialize the user data record if there isn't one
+    async createNewUserDataRecord(token, payload = {}) {
+      let res = await axios
+        .post(`${Config.wiki}items/user_data?access_token=${token}`, payload)
+        .catch((err) => {
+          console.log(
+            "Axios error in savedWords.js: err, url, payload",
+            err,
+            url,
+            payload
+          );
+        });
+      if (res && res.data && res.data.data) {
+        let userDataId = res.data.data.id;
+        return userDataId;
+      }
+    },
+    async initAndGetUserData() {
+      if (this.$auth.loggedIn && this.$auth.strategy.token) {
+        let user = this.$auth.user;
+        let token = this.$auth.strategy.token.get()
+          ? this.$auth.strategy.token.get().replace("Bearer ", "")
+          : undefined;
+        if (user) {
+          if (!token) {
+            await this.$auth.setUser(null); // Remind the user that they no longer have credentials
+            this.$toast.danger(`Sorry, but you need to login again.`, {
+              position: "top-center",
+              duration: 5000,
+            });
+            this.$router.push({
+              name: "login",
+              params: { l1: this.$l1.code, l2: this.$l2.code },
+            });
+          } else {
+            token = token.replace("Bearer ", "");
+            let userDataRes = await axios
+              .get(
+                `${Config.wiki}items/user_data?filter[owner][eq]=${
+                  user.id
+                }&access_token=${token}&timestamp=${Date.now()}`
+              )
+              .catch(async (err) => {
+                console.log(err);
+              });
+            if (userDataRes && userDataRes.data && userDataRes.data.data) {
+              if (userDataRes.data.data[0]) {
+                user.dataId = userDataRes.data.data[0].id;
+                this.$store.dispatch(
+                  "savedWords/importWordsFromJSON",
+                  userDataRes.data.data[0].saved_words
+                );
+                // this.$store.dispatch("savedPhrases/pull");
+                // this.$store.dispatch("history/pull");
+                // this.$store.dispatch("settings/pull");
+              } else {
+                // No user data found, let's create it
+                user.dataId = await createNewUserDataRecord(token);
+              }
+            }
+          }
+        }
+      }
+    },
     async onAnimateStar(el) {
       let target = document.querySelector("#site-top-bar-saved-words");
       if (el && target) {
         let bounds = el.getBoundingClientRect();
         let targetBounds = target.getBoundingClientRect();
-        let x = targetBounds.left - bounds.left
-        let y = targetBounds.bottom - bounds.bottom
+        let x = targetBounds.left - bounds.left;
+        let y = targetBounds.bottom - bounds.bottom;
         const starAnimation = [
-          { transform: `scale(2.2) translateX(0px) translateY(0px) rotate(0)`, opacity: 1},
-          { transform: `scale(1) translateX(${x}px) translateY(${y}px) rotate(360deg)`, opacity: 0.7 },
+          {
+            transform: `scale(2.2) translateX(0px) translateY(0px) rotate(0)`,
+            opacity: 1,
+          },
+          {
+            transform: `scale(1) translateX(${x}px) translateY(${y}px) rotate(360deg)`,
+            opacity: 0.7,
+          },
         ];
         const star = document.querySelector(".star-animation");
-        star.style.display = 'block'
-        star.style.top = bounds.top + 'px';
-        star.style.left = bounds.left + 'px';
+        star.style.display = "block";
+        star.style.top = bounds.top + "px";
+        star.style.left = bounds.left + "px";
         star.animate(starAnimation, {
           duration: 1000,
           iterations: 1,
         });
-        await Helper.timeout(1000)
-        star.style.display = 'none'
+        await Helper.timeout(1000);
+        star.style.display = "none";
       }
     },
     updateCollapsed(collapsed) {

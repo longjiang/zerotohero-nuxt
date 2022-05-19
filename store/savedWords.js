@@ -161,7 +161,6 @@ export const mutations = {
 }
 export const actions = {
   async load({ commit, dispatch }) {
-    await dispatch('pull') // Already loads the words from the server
     if (!state.savedWordsLoaded) commit('LOAD_SAVED_WORDS_LOCALLY') // If the user is offline or not logged in, load locally
   },
   add({ dispatch, commit }, { l2, word, wordForms }) {
@@ -171,6 +170,9 @@ export const actions = {
   importWords({ commit, dispatch }, csv) {
     commit('IMPORT_WORDS', csv)
     dispatch('push')
+  },
+  importWordsFromJSON({ commit, dispatch }, json) {
+    commit('IMPORT_WORDS_FROM_JSON', json)
   },
   remove({ commit, dispatch }, options) {
     commit('REMOVE_SAVED_WORD', options)
@@ -190,39 +192,11 @@ export const actions = {
           console.log('Axios error in savedWords.js: err, url, payload', err, url, payload)
         })
     }
-  },
-  async pull({ commit, state, rootState }) {
-    let user = rootState.auth.user
-    if (user && user.id && user.token) {
-      let res = await axios.get(`${Config.wiki}items/user_data?filter[owner][eq]=${user.id}&fields=id,saved_words&access_token=${user.token}&timestamp=${Date.now()}`)
-        .catch(async (err) => {
-          console.log(err)
-        })
-      if (res && res.data && res.data.data) {
-        if (res.data.data[0]) {
-          user.dataId = res.data.data[0].id
-          commit('IMPORT_WORDS_FROM_JSON', res.data.data[0].saved_words)
-          return
-        } else {
-          // No user data found, let's create it
-          user.dataId = createNewUserDataRecord(user.token, { saved_words: JSON.stringify(state.savedWords) })
-        }
-      }
-    }
   }
 }
 
-// Initialize the user data record if there isn't one
-const createNewUserDataRecord = async (token, payload) => {
-  let res = await axios.post(`${Config.wiki}items/user_data?access_token=${token}`, payload).catch((err) => {
-    console.log('Axios error in savedWords.js: err, url, payload', err, url, payload)
-  })
-  console.log('👨 CREATING USER DATA', res)
-  if (res && res.data && res.data.data) {
-    let userDataId = res.data.data.id
-    return userDataId
-  }
-}
+
+
 
 export const getters = {
   has: state => ({ l2, id, text }) => {
