@@ -15,14 +15,18 @@
 import Config from '@/lib/config'
 import Helper from '@/lib/helper'
 
+
 export const state = () => {
   return {
     savedWords: {},
     formIndex: {},
     idIndex: {},
-    savedWordsLoaded: false
+    savedWordsLoaded: false,
+    userDataId: undefined
   }
 }
+
+
 
 const buildIndex = (l2, state) => {
   state.formIndex[l2] = {}
@@ -36,7 +40,7 @@ const buildIndex = (l2, state) => {
 }
 
 const parseSavedWordsCSV = (csv) => {
-  let parsed = Papa.parse(csv, {header: true})
+  let parsed = Papa.parse(csv, { header: true })
   let rows = parsed.data
   let savedWords = Helper.groupArrayBy(rows, 'l2')
   for (let sW of savedWords) {
@@ -85,7 +89,7 @@ export const mutations = {
         }
         for (let sW of savedWords) {
           if (!state.idIndex[l2][sW.id])
-          state.savedWords[l2].push(sW)
+            state.savedWords[l2].push(sW)
         }
       }
       for (let l2 in state.savedWords) {
@@ -153,26 +157,25 @@ export const actions = {
     dispatch('push')
   },
   async push({ commit, state, rootState }) {
+    console.log('🦵 pushing')
     let user = rootState.auth.user
-    if (user && user.id && user.token) {
+    console.log(user, user.id, user.token, rootState.auth.token)
+    if (user && user.id && user.token && state.userDataId) {
       let payload = { saved_words: JSON.stringify(state.savedWords) }
-      await axios.patch(`${Config.wiki}items/user_data/${user.id}?access_token=${user.token}`, payload)
+      let url = `${Config.wiki}items/user_data/${state.userDataId}?access_token=${user.token}`
+      await axios.patch(url, payload)
         .catch(async (err) => {
-          if (err.response && err.response.data && err.response.data.error && err.response.data.error.code === 203) {
-            // Initialize the user data record if there isn't one
-            await axios.post(`${Config.wiki}items/user_data?access_token=${user.token}`, { id: user.id, saved_words: JSON.stringify(state.savedWords) })
-          }
+          console.log('Axios error in savedWords.js: err, url, payload', err, url, payload)
         })
     }
   },
   async pull({ commit, state, rootState }) {
     let user = rootState.auth.user
     if (user && user.id && user.token) {
-      let res = await axios.get(`${Config.wiki}items/user_data/${user.id}?fields=saved_words&access_token=${user.token}`)
+      let res = await axios.get(`${Config.wiki}items/user_data?filter[owner][eq]=${user.id}&fields=id,saved_words&access_token=${user.token}`)
         .catch(async (err) => {
           if (err.response && err.response.data && err.response.data.error && err.response.data.error.code === 203) {
-            // Initialize the user data record if there isn't one
-            await axios.post(`${Config.wiki}items/user_data?access_token=${user.token}`, { id: user.id, saved_words: JSON.stringify(state.savedWords) })
+            state.userDataId = createNewUserDataRecord(user.token, { saved_words: JSON.stringify(state.savedWords) })
           }
         })
       if (res && res.data && res.data.data) {
@@ -181,6 +184,18 @@ export const actions = {
     }
   }
 }
+
+// Initialize the user data record if there isn't one
+const createNewUserDataRecord = async (token, payload) => {
+  res = await axios.post(`${Config.wiki}items/user_data?access_token=${token}`, payload).catch((err) => {
+    console.log('Axios error in savedWords.js: err, url, payload', err, url, payload)
+  })
+  if (res && res.data && res.data.data) {
+    let userDataId = res.data.data.id
+    return userDataId
+  }
+}
+
 export const getters = {
   has: state => ({ l2, id, text }) => {
     if (state.savedWords[l2]) {

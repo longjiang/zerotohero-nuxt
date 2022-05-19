@@ -93,17 +93,17 @@ export default {
     async onSubmit(event) {
       try {
         let response = await this.$auth.loginWith("local", { data: this.form });
+        let token = this.$auth.strategy.token.get().replace("Bearer ", "");
         const res = await axios.get(
-          `https://db2.zerotohero.ca/zerotohero/users/me?access_token=${this.$auth.strategy.token
-            .get()
-            .replace("Bearer ", "")}`
+          `https://db2.zerotohero.ca/zerotohero/users/me?access_token=${token}`
         );
         if (res && res.data && res.data.data) {
           this.$auth.setUser(res.data.data);
-          this.$store.dispatch('savedWords/pull')
-          this.$store.dispatch('savedPhrases/pull')
-          this.$store.dispatch('history/pull')
-          this.$store.dispatch('settings/pull')
+          this.$auth.user.token = this.$auth.user.token || token
+          this.$store.dispatch("savedWords/pull");
+          this.$store.dispatch("savedPhrases/pull");
+          this.$store.dispatch("history/pull");
+          this.$store.dispatch("settings/pull");
           this.$router.back();
           this.$toast.success(`Welcome back, ${res.data.data.first_name}!`, {
             position: "top-center",
