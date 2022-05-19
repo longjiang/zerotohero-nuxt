@@ -104,7 +104,7 @@ export default {
       startLineIndex: 0,
       starttime: 0,
       video: undefined,
-      layout: "horizontal",
+      initialLayout: "horizontal",
     };
   },
   computed: {
@@ -123,7 +123,7 @@ export default {
       return { name: "all-media" };
     },
     layout() {
-      return this.mini ? "mini" : this.layout;
+      return this.mini ? "mini" : this.initialLayout;
     },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
@@ -253,7 +253,7 @@ export default {
   },
   methods: {
     onYouTubeUpdateLayout(layout) {
-      this.layout = layout;
+      this.initialLayout = initialLayout;
     },
     async onVideoUnavailable(youtube_id) {
       try {
