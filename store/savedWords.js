@@ -21,8 +21,7 @@ export const state = () => {
     savedWords: {},
     formIndex: {},
     idIndex: {},
-    savedWordsLoaded: false,
-    userDataId: undefined
+    savedWordsLoaded: false
   }
 }
 
@@ -168,9 +167,9 @@ export const actions = {
     console.log('🦵 pushing')
     let user = rootState.auth.user
     console.log(user, user.id, user.token, rootState.auth.token)
-    if (user && user.id && user.token && state.userDataId) {
-      let payload = { saved_words: JSON.stringify(state.savedWords) }
-      let url = `${Config.wiki}items/user_data/${state.userDataId}?access_token=${user.token}`
+    if (user && user.id && user.token && user.dataId) {
+      let payload = { saved_words: localStorage.getItem('zthSavedWords') }
+      let url = `${Config.wiki}items/user_data/${user.dataId}?access_token=${user.token}`
       await axios.patch(url, payload)
         .catch(async (err) => {
           console.log('Axios error in savedWords.js: err, url, payload', err, url, payload)
@@ -182,12 +181,16 @@ export const actions = {
     if (user && user.id && user.token) {
       let res = await axios.get(`${Config.wiki}items/user_data?filter[owner][eq]=${user.id}&fields=id,saved_words&access_token=${user.token}`)
         .catch(async (err) => {
-          if (err.response && err.response.data && err.response.data.error && err.response.data.error.code === 203) {
-            state.userDataId = createNewUserDataRecord(user.token, { saved_words: JSON.stringify(state.savedWords) })
-          }
+          console.log(err)
         })
-      if (res && res.data && res.data.data && res.data.data[0]) {
-        commit('IMPORT_WORDS_FROM_JSON', res.data.data[0].saved_words)
+      if (res && res.data && res.data.data) {
+        if (res.data.data[0]) {
+          user.dataId = res.data.data[0].id
+          commit('IMPORT_WORDS_FROM_JSON', res.data.data[0].saved_words)
+        } else {
+          // No user data found, let's create it
+          user.dataId = createNewUserDataRecord(user.token, { saved_words: JSON.stringify(state.savedWords) })
+        }
       }
     }
   }
