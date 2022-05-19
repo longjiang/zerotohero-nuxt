@@ -10,7 +10,7 @@
       class="image-wall-image"
       v-for="(image, index) in images.slice(0, limit)"
       :key="`web-images-${text}-${index}`"
-      :v-lazy="`${Config.imageProxy}?${image.src}`"
+      :src="`${Config.imageProxy}?${image.src}`"
       @click="goto(image.url)"
     />
   </div>

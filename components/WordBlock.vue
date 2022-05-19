@@ -82,7 +82,7 @@
             class="image-wall-image"
             v-for="(image, index) in images"
             :key="`web-images-${text}-${index}`"
-            :v-lazy="`${Config.imageProxy}?${image.src}`"
+            :src="`${Config.imageProxy}?${image.src}`"
           />
         </div>
         <button class="word-block-tool-tip-close" @click.stop="closePopup">
