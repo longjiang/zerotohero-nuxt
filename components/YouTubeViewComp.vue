@@ -7,7 +7,7 @@
       } with a video | zerotohero.ca`"
       :description="`Study the transcript of this video with a popup dictionary`"
       :image="`https://img.youtube.com/vi/${this.youtube_id}/hqdefault.jpg`"
-    />
+    />{{ this.mini }} {{ this.layout }}
     <div
       :class="{
         'youtube-view pb-5 ': true,
@@ -69,6 +69,11 @@ export default {
       type: String, // If the video is a "lesson video" (with lesson vocab highlighted), set this to "lesson"
       required: false,
     },
+    mini: {
+      type: Boolean,
+      default: false,
+      required: false
+    }
   },
   data() {
     return {
@@ -76,7 +81,7 @@ export default {
       episodes: [],
       extrasLoaded: false,
       fetchDone: false,
-      layout: "horizontal",
+      layout: this.mini ? "mini" : "horizontal",
       mountedDone: false,
       paused: true,
       randomEpisodeYouTubeId: undefined,
@@ -532,6 +537,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped >
+  .main-dark {
+    background: red;
+  }
 .zerotohero-wide {
   .youtube-view-wrapper {
     ::v-deep .youtube-with-transcript-landscape {

@@ -60,6 +60,7 @@
           v-if="overlayPlayerYouTubeId"
           :youtube_id="overlayPlayerYouTubeId"
           :lesson="overlayPlayerLesson"
+          :mini="overlayPlayerMinimized"
           :class="`${overlayPlayerMinimized ? 'overlay-player-minimized': ''}`"
         />
       </div>
