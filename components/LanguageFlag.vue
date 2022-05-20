@@ -1,14 +1,15 @@
 <template>
   <div>
     <img
-      v-if="countryCode(language)"
-      :src="`/vendor/flag-svgs/${countryCode(language)}.svg`"
+      v-if="currentCountryCode"
+      :src="`/vendor/flag-svgs/${currentCountryCode}.svg`"
       class="flag-icon"
     />
-    <div v-else class="no-flag-placeholder" ></div>
+    <div v-else class="no-flag-placeholder"></div>
   </div>
 </template>
 <script>
+import Helper from "@/lib/helper";
 export default {
   props: {
     language: {
@@ -16,10 +17,29 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      currentCountryCode: this.countryCode(this.language)
+    }
+  },
+  mounted() {
+    this.loop()
+  },
   methods: {
     countryCode(l2) {
       let countryCode = this.$languages.countryCode(l2);
       return countryCode;
+    },
+    async loop() {
+      let countryCodes = this.language.country.map(c => c.alpha2Code)
+      let index = 0
+      while(index < countryCodes.length) {
+        let code = countryCodes[index];
+        this.currentCountryCode = code;
+        await Helper.timeout(3000);
+        index++
+        if (index === countryCodes.length) index = 0;
+      }
     },
   },
 };
