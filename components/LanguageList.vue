@@ -9,7 +9,7 @@
               :key="`lang-${language.code}-${index}`"
               :class="`${
                 params.xs
-                  ? 'col-6'
+                  ? 'col-4'
                   : params.sm
                   ? 'col-3'
                   : params.md

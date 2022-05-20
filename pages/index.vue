@@ -234,7 +234,7 @@
         <client-only>
           <div class="row mt-4 mb-5" id="languageList">
             <div class="col-sm-12">
-              <div class="home-card">
+              <div class="home-card p-4">
                 <h5 class="text-center mb-3">Choose Your Language</h5>
                 <b-form-input
                   v-model="langKeyword"
@@ -244,7 +244,6 @@
                 <LanguageList
                   :showSpeakers="false"
                   :showFeatures="false"
-                  :showCode="true"
                   :keyword="langKeyword"
                   :codes="[
                     'ar',
