@@ -53,15 +53,7 @@
       </span>
     </span>
     <router-link :to="base">
-      <img
-        v-if="showFlags && countryCode(language)"
-        :src="`/vendor/flag-svgs/${countryCode(language)}.svg`"
-        class="flag-icon"
-      />
-      <div
-        v-if="showFlags && !countryCode(language)"
-        class="no-flag-placeholder"
-      ></div>
+      <LanguageFlag v-if="showFlags" :language="language" />
       <span class="language-list-item-name">{{ languageName(language) }}</span>
       <span
         v-if="keyword && language.otherNames.length > 0"
@@ -130,10 +122,6 @@ export default {
     },
   },
   methods: {
-    countryCode(l2) {
-      let countryCode = this.$languages.countryCode(l2);
-      return countryCode;
-    },
     speakers(number) {
       return Helper.formatK(number, 1);
     },
@@ -177,7 +165,7 @@ a:active {
       margin-left: 0.25rem;
     }
     &.language-list-item-icon {
-      .flag-icon {
+      :v-deep .flag-icon {
         margin-bottom: 0.15rem;
       }
     }
@@ -190,16 +178,7 @@ a:active {
       border-radius: 0.5rem;
       background-color: #eee;
       cursor: pointer;
-      .flag-icon {
-        width: 2rem;
-        display: block;
-        margin: 0 auto 0.5rem auto;
-      }
-      .no-flag-placeholder {
-        height: 1.6rem;
-        width: 2rem;
-        background-color: #ddd;
-        border-radius: 0.3rem;
+      :v-deep .no-flag-placeholder {
         margin: 0 auto 0.5rem auto;
       }
       .language-list-item-name {

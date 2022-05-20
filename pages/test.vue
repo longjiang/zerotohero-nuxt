@@ -8,7 +8,7 @@
     <div class="container pt-5 pb-5">
       <div class="row">
         <div class="col-sm-12">
-          {{ message }}
+          <LanguageList variant="grid" :showFeatures="false" :showFlags="true" />
         </div>
       </div>
     </div>

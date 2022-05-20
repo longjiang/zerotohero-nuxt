@@ -56,6 +56,12 @@ export default {
     ContainerQuery,
   },
   props: {
+    l1: {
+      default: "en",
+    },
+    showFlags: {
+      default: false,
+    },
     showFeatures: {
       default: true,
     },
@@ -87,12 +93,6 @@ export default {
     variant: {
       type: String,
       default: "list", // or 'icon', 'grid'
-    },
-    l1: {
-      default: "en",
-    },
-    showFlags: {
-      default: false,
     },
   },
   data() {
@@ -139,7 +139,13 @@ export default {
       return classes;
     },
     languages() {
-      let languages;
+      let languages = [];
+      languages = this.langs
+        ? this.langs
+        : this.codes
+        ? this.mapCodes(thiis.codes)
+        : this.$languages.l1s;
+
       if (this.keyword && this.keyword !== "") {
         let keyword = this.keyword.toLowerCase();
         languages = this.$languages.l1s.filter(
@@ -151,24 +157,20 @@ export default {
             l["iso639-3"].includes(keyword) ||
             l["iso639-1"].includes(keyword)
         );
-      } else if (this.langs) {
-        languages = this.langs.filter((l) => l);
       }
-      if (!languages && this.codes && this.$languages) {
-        languages = this.codes
-          .map((c) => this.$languages.getSmart(c))
-          .filter((l) => l);
-      }
+      languages = languages.filter((l) => !this.hide.includes(l.code));
       if (this.sort && languages) {
         languages = Helper.uniqueByValue(languages, "iso639-3").sort((a, b) =>
           this.languageName(a).localeCompare(this.languageName(b), "en")
         );
       }
-      languages = languages.filter((l) => !this.hide.includes(l.code));
       return languages;
     },
   },
   methods: {
+    mapCodes(codes) {
+      return codes.map((c) => this.$languages.getSmart(c)).filter((l) => l);
+    },
     languageName(language) {
       let name = language.name.replace(/ \(.*\)/gi, "");
       let special = this.specials[language.code];
