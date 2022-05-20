@@ -125,7 +125,7 @@ export default {
         token: {
           property: 'data.token',
           global: true,
-          maxAge: 1800,
+          maxAge: 1100, // DIrectus token expires in 20 minutes
           required: true,
           type: 'Bearer'
         },

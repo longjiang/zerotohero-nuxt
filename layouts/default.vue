@@ -222,7 +222,7 @@ export default {
         if (user) {
           if (!token) {
             await this.$auth.setUser(null); // Remind the user that they no longer have credentials
-            this.$toast.danger(`Sorry, but you need to login again.`, {
+            this.$toast.error(`Sorry, but you need to login again.`, {
               position: "top-center",
               duration: 5000,
             });
@@ -231,6 +231,7 @@ export default {
               params: { l1: this.$l1.code, l2: this.$l2.code },
             });
           } else {
+            document.cookie = "directus-zerotohero-session=" + token;
             token = token.replace("Bearer ", "");
             let userDataRes = await axios
               .get(
