@@ -1,8 +1,9 @@
 <template>
   <div class="youtube-playlists">
     <div
-      v-for="playlist of playlists"
+      v-for="(playlist, index) in playlists"
       class="youtube-playlist media rounded shadow"
+      :key="`youtube-playlist-item-${index}`"
     >
       <router-link :to="`/${$l1.code}/${$l2.code}/youtube/playlist/${playlist.id}/${encodeURIComponent(playlist.title)}`" class="playlist-link">
         <div class="youtube-thumbnail-wrapper aspect-wrapper">

@@ -71,9 +71,7 @@
               'link-unstyled': true,
               'd-none': $adminMode && view !== 'list',
             }"
-            :to="`/${$l1.code}/${$l2.code}/youtube/view/${video.youtube_id}/${
-              video.lesson ? 'lesson' : ''
-            }`"
+            :to="to"
           >
             {{ video.title }}
           </router-link>
@@ -87,7 +85,7 @@
               v-if="video.hasSubs || video.id"
               class="youtube-video-card-badge"
             >
-              {{ $l2.name }} CC
+              {{ videoL2.name || $l2.name }} CC
               <span v-if="video.l2Locale">({{ video.l2Locale }})</span>
               <span v-if="subsFile">
                 - {{ subsFile.name.replace(/[_.]/g, " ") }}
@@ -355,23 +353,25 @@ export default {
   },
   computed: {
     language() {
-      let language = this.$languages.l1s.find(l1 => l1.id === this.video.l2)
-      return language
+      let language = this.$languages.l1s.find((l1) => l1.id === this.video.l2);
+      return language;
+    },
+    videoL2() {
+      if (this.video.l2) return this.$languages.getById(this.video.l2)
     },
     to() {
       let to = {
         name: "youtube-view",
-        params: { youtube_id: this.video.youtube_id },
+        params: {
+          youtube_id: this.video.youtube_id,
+          l1: this.l1 ? this.l1.code : this.$l1 ? this.$l1.code : "en",
+          l2: this.l2 ? this.l2.code : this.videoL2 ? this.videoL2.code : this.$l2.code,
+        },
         query: {},
       };
+
       if (this.video.lesson) {
         to.params.lesson = "lesson";
-      }
-      if (typeof this.l1 !== "undefined") {
-        to.params.l1 = this.l1.code;
-      }
-      if (typeof this.l2 !== "undefined") {
-        to.params.l2 = this.l2.code;
       }
       if (this.video.starttime) {
         to.query.t = this.video.starttime;
@@ -463,11 +463,9 @@ export default {
           let data = {};
           data[type] = show.id;
           let response = await axios.patch(
-            `${Config.youtubeVideosTableName(this.$l2.id)}/${
-              this.video.id
-            }${
-            this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
-          }&fields=id`,
+            `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}${
+              this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
+            }&fields=id`,
             data
           );
           response = response.data;
@@ -483,8 +481,8 @@ export default {
       data[type] = null;
       let response = await axios.patch(
         `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}${
-            this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
-          }`,
+          this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
+        }`,
         data
       );
       if (response && response.data) {
@@ -497,8 +495,8 @@ export default {
         try {
           let response = await axios.patch(
             `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}${
-            this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
-          }`,
+              this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
+            }`,
             { title: newTitle },
             { contentType: "application/json" }
           );
@@ -535,13 +533,15 @@ export default {
       if (this.video.id) {
         try {
           let response = await axios.delete(
-            `${Config.youtubeVideosTableName(this.video.l2)}/${this.video.id}${this.$auth.user ? '?access_token=' + this.$auth.user.token : ''}`
+            `${Config.youtubeVideosTableName(this.video.l2)}/${this.video.id}${
+              this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
+            }`
           );
           if (response) {
             Vue.delete(this.video, "id");
           }
         } catch (err) {
-          console.log(err)
+          console.log(err);
         }
       }
       return true;
@@ -549,8 +549,8 @@ export default {
     async updateSubs() {
       let response = await axios.patch(
         `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}${
-            this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
-          }`,
+          this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
+        }`,
         { subs_l2: YouTube.unparseSubs(this.video.subs_l2) }
       );
       response = response.data;
@@ -617,8 +617,8 @@ export default {
       let channelId = await this.getChannelID(video);
       let response = await axios.patch(
         `${Config.youtubeVideosTableName(this.$l2.id)}/${video.id}${
-            this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
-          }`,
+          this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
+        }`,
         { channel_id: channelId }
       );
       if (response && response.data) {
