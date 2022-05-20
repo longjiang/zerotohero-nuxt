@@ -229,7 +229,7 @@ export default {
       }
     },
     async initAndGetUserData() {
-      if (this.$auth.loggedIn) {
+      if (this.$auth && this.$auth.loggedIn) {
         let user = this.$auth.user;
         let token = this.$auth.strategy.token.get()
           ? this.$auth.strategy.token.get().replace("Bearer ", "")

@@ -118,17 +118,17 @@ export default {
     strategies: {
       local: {
         scheme: 'refresh',
-        refreshToken: {
-          property: 'data.token',
-          data: 'data.token',
-          maxAge: 60 * 60 * 24 * 30
-        },
         token: {
           property: 'data.token',
           global: true,
-          maxAge: 1100, // DIrectus token expires in 20 minutes
-          required: true,
-          type: 'Bearer'
+          maxAge: 60 * 60 * 24 * 30, // Set in Directus settings
+          // required: true,
+          // type: 'Bearer'
+        },
+        refreshToken: {
+          property: 'data.token',
+          data: 'token',
+          maxAge: 60 * 60 * 24 * 30
         },
         user: {
           property: 'data.user',
@@ -155,7 +155,7 @@ export default {
     '~plugins/main.js',
     { src: '~/plugins/pwa-update.js', mode: 'client' },
     { src: '~/plugins/vuex-persist.js', mode: 'client' },
-    { src: '~/plugins/shared-mutations.js', mode: 'client'}
+    { src: '~/plugins/shared-mutations.js', mode: 'client' }
   ],
 
   build: {

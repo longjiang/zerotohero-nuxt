@@ -304,7 +304,7 @@ export default {
       let items = [
         {
           icon: "fas fa-user",
-          title: `${this.$auth.loggedIn && this.$auth.user && this.$auth.user.first_name ? 'Hi, ' + this.$auth.user.first_name: 'Login'}`,
+          title: `${this.$auth && this.$auth.loggedIn && this.$auth.user && this.$auth.user.first_name ? 'Hi, ' + this.$auth.user.first_name: 'Login'}`,
           show: true,
           exact: true,
           children: [
@@ -312,13 +312,13 @@ export default {
               name: "login",
               icon: "fas fa-key",
               title: "Login",
-              show: !this.$auth.loggedIn,
+              show: !(this.$auth && this.$auth.loggedIn),
             },
             {
               name: "register",
               icon: "fas fa-key",
               title: "Register",
-              show: !this.$auth.loggedIn,
+              show: !(this.$auth && this.$auth.loggedIn),
             },
             {
               name: "saved-words",
@@ -348,14 +348,14 @@ export default {
               name: "logout",
               icon: "fas fa-exit",
               title: "Logout",
-              show: this.$auth.loggedIn,
+              show: this.$auth && this.$auth.loggedIn,
               params: { l1: this.l1.code, l2: this.l2.code },
             },
             {
               name: "profile",
               icon: "fas fa-user",
               title: "Profile",
-              show: this.$auth.loggedIn,
+              show: this.$auth && this.$auth.loggedIn,
             },
           ],
         },
