@@ -49,11 +49,6 @@ export default {
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 
-  // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
-  buildModules: [
-    ['@nuxtjs/router-extras', { /* module options */ }],
-    '@nuxtjs/pwa'
-  ],
 
   pwa: {
     icon: {
@@ -101,6 +96,12 @@ export default {
     '@nuxtjs/google-fonts',
     '@nuxtjs/auth-next',
     '@nuxtjs/toast',
+  ],
+
+  // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
+  buildModules: [
+    ['@nuxtjs/router-extras', { /* module options */ }],
+    '@nuxtjs/pwa'
   ],
 
   toast: {
