@@ -49,23 +49,23 @@
         mode="small-icon"
       />
       <div class="zth-content">
-        <Nuxt id="main" />
-        <LazyFooter
+        <Nuxt id="main" v-if="$route.name !== 'youtube-view'" />
+        <!-- <LazyFooter
           v-if="dictionaryCredit"
           :dictionaryCredit="dictionaryCredit"
           class="zth-footer"
+        /> -->
+        <YouTubeViewComp
+          id="overlay-player"
+          v-if="overlayPlayerYouTubeId"
+          :youtube_id="overlayPlayerYouTubeId"
+          :lesson="overlayPlayerLesson"
+          :mini="overlayPlayerMinimized"
+          :fullHistory="fullHistory"
+          :class="`${overlayPlayerMinimized ? 'overlay-player-minimized' : ''}`"
+          :key="`youtube-view-comp-${overlayPlayerYouTubeId}`"
         />
       </div>
-      <ReaderComp
-        v-if="
-          wide &&
-          l1 &&
-          l2 &&
-          $route.name !== 'youtube-view' &&
-          $route.name !== 'home'
-        "
-        :iconMode="true"
-      />
     </template>
     <i class="fas fa-star star-animation"></i>
   </div>
@@ -90,9 +90,10 @@ export default {
       fullPageRoutes: ["index", "sale"],
       fullHistory: [],
       collapsed: false,
+      overlayPlayerYouTubeId: undefined,
+      overlayPlayerLesson: undefined,
     };
   },
-
   computed: {
     ...mapState("settings", ["l2Settings", "l1", "l2"]),
     savedWordsCount() {
@@ -106,6 +107,9 @@ export default {
       });
       // eslint-disable-next-line vue/no-parsing-error
       return count;
+    },
+    overlayPlayerMinimized() {
+      return this.$route.name !== "youtube-view";
     },
     classes() {
       let classes = {
@@ -143,6 +147,10 @@ export default {
     this.$nuxt.$on("animateStar", this.onAnimateStar);
     if (typeof window !== "undefined")
       window.addEventListener("resize", this.onResize);
+    if (this.$route.name === "youtube-view") {
+      this.overlayPlayerYouTubeId = this.$route.params.youtube_id;
+      this.overlayPlayerLesson = this.$route.params.lesson;
+    }
   },
   async mounted() {
     this.initAndGetUserData();
@@ -190,6 +198,13 @@ export default {
     },
     $route() {
       this.addFullHistoryItem(this.$route.path);
+      if (
+        this.$route.name === "youtube-view" &&
+        this.$route.params.youtube_id
+      ) {
+        this.overlayPlayerYouTubeId = this.$route.params.youtube_id;
+        this.overlayPlayerLesson = this.$route.params.lesson;
+      }
     },
     "$auth.user"() {
       this.initAndGetUserData();
@@ -378,6 +393,40 @@ export default {
   display: none;
 }
 
+#overlay-player {
+  min-height: 100vh;
+  background: black;
+  &.overlay-player-minimized {
+    background: none;
+    position: fixed;
+    height: 5rem;
+    min-height: 0;
+    bottom: 4.88rem;
+    top: inherit;
+    overflow: hidden;
+    z-index: 9;
+    ::v-deep .main-dark {
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(20px);
+    }
+  }
+}
+
+.zerotohero-wide {
+  .overlay-player-minimized {
+    width: inherit;
+  }
+}
+.zerotohero-not-wide {
+  .overlay-player-minimized {
+    width: 100%;
+  }
+}
+
+.zerotohero-wide #overlay-player.overlay-player-minimized {
+  bottom: 0;
+}
+
 #zerotohero {
   min-height: 100vh;
   .zerotohero-background {
@@ -413,16 +462,20 @@ export default {
     flex: 1;
     margin-left: 13rem;
     overflow: visible;
+    width: calc(100% - 13rem);
   }
   .zth-nav-wrapper.has-secondary-nav + .zth-content {
     margin-left: 26rem;
+    width: calc(100% - 26rem);
   }
   &.zerotohero-wide-collapsed {
     .zth-content {
       margin-left: 4.5rem;
+      width: calc(100% - 4.5rem);
     }
     .zth-nav-wrapper.has-secondary-nav + .zth-content {
       margin-left: 9rem;
+      width: calc(100% - 9rem);
     }
   }
 }

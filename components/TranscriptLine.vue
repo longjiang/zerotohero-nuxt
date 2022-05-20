@@ -7,6 +7,7 @@
         'transcript-line-matched': matched,
         'transcript-line-current': current,
         'transcript-line-wide': !single && params.lg,
+        'transcript-line-with-translation': showParallelLine,
       }"
       ref="lines"
       :data-line-index="lineIndex"
@@ -42,9 +43,8 @@
             :sticky="sticky"
             :class="{
               'transcript-line-l2': true,
-              'text-center': single,
-              'pr-3': single && $l2.direction === 'rtl',
-              'pl-3': single && $l2.direction !== 'rtl',
+              'transcript-line-l2-single': single,
+              'transcript-line-l2-rtl': $l2.direction === 'rtl',
               annotated: annotated,
             }"
             :buttons="true"
@@ -75,10 +75,8 @@
           v-if="line.line.length > 0 && parallelLine"
           :class="{
             'transcript-line-l1': true,
-            'pl-4': !single && $l2.direction !== 'rtl',
-            'pr-4': !single && $l2.direction === 'rtl',
-            'text-right': !single && $l2.direction === 'rtl',
-            'text-center': single,
+            'transcript-line-l1-rtl': !single && $l2.direction === 'rtl',
+            'transcript-line-l1-single': single,
             transparent: !annotated,
           }"
           v-html="parallelLine"
@@ -140,6 +138,9 @@ export default {
     },
     parallelLine: {
       type: String,
+    },
+    showParallelLine: {
+      default: true, // The user can hide the line via settings/css, but if the transcript has no parallel line we control how the component is rendered
     },
     enableTranslationEditing: {
       type: Boolean,
@@ -252,8 +253,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.synced-transcript-single-line {
+  .transcript-line-both {
+    text-align: center;
+    .transcript-line-l2 {
+      padding-left: 1.5rem;
+    }
+    .transcript-line-l2-rtl {
+      padding-right: 1.5rem;
+    }
+    .transcript-line-l1 {
+      padding: 0;
+    }
+  }
+}
 .show-translation {
-  .transcript-line-wide {
+  .transcript-line-wide.transcript-line-with-translation {
     .transcript-line-both {
       display: flex;
       align-items: flex-start;
@@ -304,6 +319,10 @@ export default {
     display: none;
     line-height: 1.5;
     margin-top: 0.1rem;
+    padding-left: 1.5rem;
+    &.transcript-line-l1-rtl {
+      padding-right: 1.5rem;
+    }
   }
 }
 

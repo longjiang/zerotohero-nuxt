@@ -65,7 +65,7 @@
       <i class="fa fa-step-forward"></i>
     </router-link>
     <router-link
-      v-if="episodes.length > 0"
+      v-if="episodes && episodes.length > 0"
       :to="`/${this.$l1.code}/${this.$l2.code}/youtube/view/${this.randomEpisodeYouTubeId}`"
       :class="{
         'btn btn-medium': true,

@@ -910,7 +910,7 @@ export default {
         window.onscroll = () => {
           if (this.bottom && this.collapsed) {
             var currentScrollPos = window.pageYOffset;
-            if (prevScrollpos > currentScrollPos) {
+            if (prevScrollpos > currentScrollPos + 5) {
               this.$el.style.bottom = "0";
             } else if (prevScrollpos < currentScrollPos - 5) {
               this.$el.style.bottom = "-" + this.$el.clientHeight + "px";

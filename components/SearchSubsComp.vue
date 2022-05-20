@@ -157,7 +157,7 @@
     <LazyYouTubeWithTranscript
       class="main-dark"
       v-if="currentHit"
-      initialLayout="vertical"
+      layout="vertical"
       :video="currentHit.video"
       :ref="`youtube-${hitIndex}`"
       :speed="speed"
@@ -464,6 +464,10 @@ export default {
   methods: {
     async onVideoUnavailable(youtube_id) {
       let video = this.currentHit.video;
+      console.log(
+        "😭 Looks like this video is unavailable: ",
+        `https://www.youtube.com/watch?v=${youtube_id}`
+      );
       if (youtube_id) {
         // Log it
         try {
@@ -476,7 +480,9 @@ export default {
           console.log(err);
         }
         // Go to next video
-        this.removeCurrentHitAndGoToNext();
+        await Helper.timeout(2000);
+        if (this.currentHit.video.youtube_id === youtube_id)
+          this.removeCurrentHitAndGoToNext();
       }
     },
     loadSettings() {
