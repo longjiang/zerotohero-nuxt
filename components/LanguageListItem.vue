@@ -2,6 +2,7 @@
   <div
     @mouseover="cycleFlags"
     @mouseleave="stopCycling"
+    :autocycle="false"
     :class="`language-list-item language-list-item-${variant}`"
     @click.self="$router.push(languagePath(language))"
   >
@@ -133,10 +134,10 @@ export default {
   },
   methods: {
     cycleFlags() {
-      this.$refs.flag.cycleFlags();
+      if (this.$refs.flag) this.$refs.flag.cycleFlags();
     },
     stopCycling() {
-      this.$refs.flag.stopCycling();
+      if (this.$refs.flag) this.$refs.flag.stopCycling();
     },
     speakers(number) {
       return Helper.formatK(number, 1);

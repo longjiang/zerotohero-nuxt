@@ -1,5 +1,9 @@
 <template>
-  <div class="flag-icon-wrapper">
+  <div
+    class="flag-icon-wrapper"
+
+    @mouseleave="autocycle ? stopCycling() : undefined"
+  >
     <img
       v-if="countryCode"
       :src="`/vendor/flag-svgs/${countryCode}.svg`"
@@ -23,6 +27,7 @@ export default {
       countryCode: undefined,
       countryCodes: [],
       typicalCountryCode: undefined,
+      autocycle: true,
     };
   },
   mounted() {
@@ -31,21 +36,23 @@ export default {
     this.countryCode = this.typicalCountryCode = this.$languages.countryCode(
       this.language
     );
+    // if (this.autocycle) this.cycleFlags();
   },
   methods: {
     async cycleFlags() {
-      if (this.countryCodes.length < 2) return
+      if (this.cycle) return // Already cycling
+      if (this.countryCodes.length < 2) return;
       this.cycle = true;
       for (let i = 0; i < 999999; i++) {
-        if (!this.cycle) return
+        if (!this.cycle) break;
         this.countryCode = this.countryCodes[i % this.countryCodes.length];
         await Helper.timeout(500);
       }
     },
     stopCycling() {
-      this.cycle = false
+      this.cycle = false;
       this.countryCode = this.typicalCountryCode;
-    }
+    },
   },
 };
 </script>

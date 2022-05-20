@@ -158,7 +158,7 @@ export default {
             l["iso639-1"].includes(keyword)
         );
       }
-      languages = languages.filter((l) => !this.hide.includes(l.code));
+      languages = languages.filter((l) => l && !this.hide.includes(l.code));
       if (this.sort && languages) {
         languages = Helper.uniqueByValue(languages, "iso639-3").sort((a, b) =>
           this.languageName(a).localeCompare(this.languageName(b), "en")

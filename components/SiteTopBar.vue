@@ -5,7 +5,11 @@
       @click.self="backgroundClick"
     >
       <template>
-        <div class="text-center">
+        <div
+          class="text-center"
+          @mouseover="cycleFlags"
+          @mouseleave="stopCycling"
+        >
           <!-- <router-link
             to="/"
             style="color: #ccc; cursor: pointer; margin-right: 0.5rem"
@@ -41,13 +45,15 @@
                 margin-right: 0.15rem;
               "
             ></i> -->
-            <img
-              :class="`flag-icon ${
-                !flagCode || !$route.params.l2 || params.md === false
-                  ? 'd-none'
-                  : ''
-              } ml-1`"
-              :src="`/vendor/flag-svgs/${flagCode}.svg`"
+            <LanguageFlag
+              ref="flag"
+              :autocycle="false"
+              :language="$l2"
+              style="
+                transform: scale(0.7);
+                margin-right: -0.5rem;
+                margin-bottom: -0.3rem;
+              "
             />
             <i class="fas fa-cheveron-right" v-if="!flagCode"></i>
             <span
@@ -299,6 +305,12 @@ export default {
     },
   },
   methods: {
+    cycleFlags() {
+      this.$refs.flag.cycleFlags();
+    },
+    stopCycling() {
+      this.$refs.flag.stopCycling();
+    },
     showPlaylistModal() {
       this.$refs["languages-modal"].show();
     },
@@ -336,7 +348,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-
 .flag-icon {
   position: relative;
   bottom: 0.1rem;
