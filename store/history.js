@@ -20,7 +20,7 @@ export const mutations = {
         state.history = history
         localStorage.setItem('zthHistory', JSON.stringify(state.history))
       }
-      this.historyLoaded = true
+      state.historyLoaded = true
     }
   },
   LOAD_HISTORY(state) {
@@ -86,9 +86,11 @@ export const actions = {
   },
   async push({ commit, state, rootState }) {
     let user = rootState.auth.user
-    if (user && user.id && user.token && user.dataId) {
+    let token = $nuxt.$auth.strategy.token.get()
+    if (user && user.id && user.dataId && token) {
+      token = token.replace('Bearer ', '')
       let payload = { history: localStorage.getItem('zthHistory') }
-      let url = `${Config.wiki}items/user_data/${user.dataId}?access_token=${user.token}`
+      let url = `${Config.wiki}items/user_data/${user.dataId}?fields=id&access_token=${token}`
       await axios.patch(url, payload)
         .catch(async (err) => {
           console.log('Axios error in savedWords.js: err, url, payload', err, url, payload)

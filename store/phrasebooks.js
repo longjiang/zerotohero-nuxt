@@ -82,9 +82,12 @@ export const actions = {
     }
   },
   async remove(context, { l2, phrasebook }) {
+    let token = $nuxt.$auth.strategy.token.get()
+    if (!token) return
+    token = token.replace('Bearer ', '')
     let response = await axios.delete(
       `${Config.wiki}items/phrasebook/${phrasebook.id}${
-        this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
+        this.$auth.user ? "?access_token=" + token : ""
       }`
     );
     if (response && response.data) {

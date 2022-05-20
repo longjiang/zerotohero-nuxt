@@ -74,9 +74,12 @@ export const actions = {
     }
   },
   async remove(context, { l2, type, show }) {
+    let token = $nuxt.$auth.strategy.token.get()
+    if (!token) return
     let response = await axios.delete(
+      token = token.replace('Bearer ', '')
       `${Config.wiki}items/${type === 'tvShows' ? 'tv_shows' : 'talks'}/${show.id}${
-        this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
+        this.$auth.user ? "?access_token=" + token : ""
       }`
     );
     if (response && response.data) {

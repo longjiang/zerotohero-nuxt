@@ -63,7 +63,7 @@ export const mutations = {
         state.savedPhrases = savedPhrases
         localStorage.setItem('zthSavedPhrases', JSON.stringify(savedPhrases))
       }
-      this.savedPhrasesLoaded = true
+      state.savedPhrasesLoaded = true
     }
   },
   REMOVE_SAVED_PHRASE(state, { l2, phrase, phrasebookId, pronunciation, exact, translations = {} } = {}) {
@@ -124,9 +124,11 @@ export const actions = {
   },
   async push({ commit, state, rootState }) {
     let user = rootState.auth.user
-    if (user && user.id && user.token && user.dataId) {
+    let token = $nuxt.$auth.strategy.token.get()
+    if (user && user.id && user.dataId && token) {
+      token = token.replace('Bearer ', '')
       let payload = { saved_phrases: localStorage.getItem('zthSavedPhrases') }
-      let url = `${Config.wiki}items/user_data/${user.dataId}?access_token=${user.token}`
+      let url = `${Config.wiki}items/user_data/${user.dataId}?fields=id&access_token=${token}`
       await axios.patch(url, payload)
         .catch(async (err) => {
           console.log('Axios error in savedPhrases.js: err, url, payload', err, url, payload)

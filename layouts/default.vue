@@ -236,27 +236,23 @@ export default {
               .get(
                 `${Config.wiki}items/user_data?filter[owner][eq]=${
                   user.id
-                }&access_token=${token}&limit=1&timestamp=${Date.now()}`
+                }&timestamp=${Date.now()}`,
+                { headers: { Authorization: `Bearer ${token}` } }
               )
               .catch(async (err) => {
                 console.log(err);
               });
             if (userDataRes && userDataRes.data && userDataRes.data.data) {
               if (userDataRes.data.data[0]) {
-                let {id, saved_words, saved_phrases, history, settings } = userDataRes.data.data[0]
-                user.dataId = id
+                let { id, saved_words, saved_phrases, history, settings } =
+                  userDataRes.data.data[0];
+                user.dataId = id;
+                this.$store.dispatch("savedWords/importFromJSON", saved_words);
                 this.$store.dispatch(
-                  "savedWords/importFromJSON", saved_words
+                  "savedPhrases/importFromJSON",
+                  saved_phrases
                 );
-                this.$store.dispatch(
-                  "savedPhrases/importFromJSON", saved_phrases
-                );
-                // this.$store.dispatch(
-                //   "history/importFromJSON", history
-                // );
-                // this.$store.dispatch(
-                //   "settings/importFromJSON", settings
-                // );
+                this.$store.dispatch("history/importFromJSON", history);
               } else {
                 // No user data found, let's create it
                 user.dataId = await createNewUserDataRecord(token);

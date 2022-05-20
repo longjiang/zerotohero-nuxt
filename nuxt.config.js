@@ -126,8 +126,8 @@ export default {
           property: 'data.token',
           global: true,
           maxAge: 1800,
-          // required: true,
-          // type: 'Bearer'
+          required: true,
+          type: 'Bearer'
         },
         user: {
           property: 'data.user',
