@@ -244,7 +244,7 @@ export default {
               });
             if (userDataRes && userDataRes.data && userDataRes.data.data) {
               if (userDataRes.data.data[0]) {
-                let { id, saved_words, saved_phrases, history, settings } =
+                let { id, saved_words, saved_phrases, history } =
                   userDataRes.data.data[0];
                 user.dataId = id;
                 this.$store.dispatch("savedWords/importFromJSON", saved_words);

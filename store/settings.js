@@ -131,11 +131,9 @@ export const mutations = {
 export const actions = {
   load({ dispatch, commit }) {
     commit("LOAD_SETTINGS");
-    dispatch("pull");
   },
   setL2Settings({ dispatch, commit }, l2Settings) {
     commit("SET_L2_SETTINGS", l2Settings);
-    dispatch("push");
   },
   setAdminMode({ dispatch, commit }, value) {
     commit("SET_ADMIN_MODE", value);
@@ -151,61 +149,5 @@ export const actions = {
   },
   setSubsSearchLimit({ dispatch, commit }, value) {
     commit("SET_SUBS_SEARCH_LIMIT", value);
-    dispatch("push");
   },
-  async push({ commit, state, rootState }) {
-    let user = rootState.auth.user;
-    if (user && user.id && user.token) {
-      let payload = { settings: localStorage.getItem("zthSettings") || "{}" };
-      await axios
-        .patch(
-          `${Config.wiki}items/user_data/${user.id}?access_token=${user.token}`,
-          payload
-        )
-        .catch(async err => {
-          if (
-            err.response &&
-            err.response.data &&
-            err.response.data.error &&
-            err.response.data.error.code === 203
-          ) {
-            // Initialize the user data record if there isn't one
-            await axios.post(
-              `${Config.wiki}items/user_data?access_token=${user.token}`,
-              {
-                id: user.id,
-                settings: localStorage.getItem("zthSettings") || "{}"
-              }
-            );
-          }
-        });
-    }
-  },
-  async pull({ commit, state, rootState }) {
-    let user = rootState.auth.user;
-    if (user && user.id && user.token) {
-      let res = await axios
-        .get(
-          `${Config.wiki}items/user_data/${user.id}?fields=settings&access_token=${user.token}`
-        )
-        .catch(async err => {
-          if (
-            err.response &&
-            err.response.data &&
-            err.response.data.error &&
-            err.response.data.error.code === 203
-          ) {
-            // Initialize the user data record if there isn't one
-            await axios.post(
-              `${Config.wiki}items/user_data?access_token=${user.token}`,
-              { id: user.id, settings: localStorage.getItem("zthSettings") || "{}" }
-            );
-          }
-        });
-      if (res && res.data && res.data.data) {
-        localStorage.setItem("zthSettings", res.data.data.settings);
-        commit('LOAD_SETTINGS');
-      }
-    }
-  }
 };
