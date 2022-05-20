@@ -143,7 +143,7 @@ export default {
       languages = this.langs
         ? this.langs
         : this.codes
-        ? this.mapCodes(thiis.codes)
+        ? this.mapCodes(this.codes)
         : this.$languages.l1s;
 
       if (this.keyword && this.keyword !== "") {
