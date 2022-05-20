@@ -1,5 +1,10 @@
 <template>
-  <div :class="`language-list-item language-list-item-${variant}`" @click.self="$router.push(languagePath(language))">
+  <div
+    @mouseover="cycleFlags"
+    @mouseleave="stopCycling"
+    :class="`language-list-item language-list-item-${variant}`"
+    @click.self="$router.push(languagePath(language))"
+  >
     <span class="language-list-item-features" v-if="showFeatures">
       <router-link
         :to="{
@@ -53,7 +58,7 @@
       </span>
     </span>
     <router-link :to="base">
-      <LanguageFlag v-if="showFlags" :language="language" />
+      <LanguageFlag v-if="showFlags" :language="language" ref="flag" />
       <span class="language-list-item-name">{{ languageName(language) }}</span>
       <span
         v-if="keyword && language.otherNames.length > 0"
@@ -115,13 +120,24 @@ export default {
       base: this.languagePath(this.language),
     };
   },
+  mounted() {
+    // this.cycleFlags()
+  },
   computed: {
     english() {
-      let english = this.$languages.l1s.find((language) => language.code === "en");
-      return english
+      let english = this.$languages.l1s.find(
+        (language) => language.code === "en"
+      );
+      return english;
     },
   },
   methods: {
+    cycleFlags() {
+      this.$refs.flag.cycleFlags();
+    },
+    stopCycling() {
+      this.$refs.flag.stopCycling();
+    },
     speakers(number) {
       return Helper.formatK(number, 1);
     },
@@ -164,11 +180,6 @@ a:active {
       white-space: nowrap;
       margin-left: 0.25rem;
     }
-    &.language-list-item-icon {
-      :v-deep .flag-icon {
-        margin-bottom: 0.15rem;
-      }
-    }
     &.language-list-item-grid {
       height: 100%;
       border: 1px solid #ddd;
@@ -178,13 +189,13 @@ a:active {
       border-radius: 0.5rem;
       background-color: #eee;
       cursor: pointer;
-      :v-deep .no-flag-placeholder {
-        margin: 0 auto 0.5rem auto;
-      }
       .language-list-item-name {
         display: block;
         font-weight: bold;
         line-height: 1.2;
+      }
+      ::v-deep .flag-icon-wrapper {
+        margin-bottom: 0.5rem;
       }
       &:hover {
         background-color: white;

@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div class="flag-icon-wrapper">
     <img
-      v-if="currentCountryCode"
-      :src="`/vendor/flag-svgs/${currentCountryCode}.svg`"
+      v-if="countryCode"
+      :src="`/vendor/flag-svgs/${countryCode}.svg`"
       class="flag-icon"
     />
     <div v-else class="no-flag-placeholder"></div>
@@ -19,36 +19,44 @@ export default {
   },
   data() {
     return {
-      currentCountryCode: this.countryCode(this.language)
-    }
+      cycle: false,
+      countryCode: undefined,
+      countryCodes: [],
+      typicalCountryCode: undefined,
+    };
   },
   mounted() {
-    this.loop()
+    // Find the 'prototypical country code' to show initially, most of the time
+    this.countryCodes = this.language.country.map((c) => c.alpha2Code);
+    this.countryCode = this.typicalCountryCode = this.$languages.countryCode(
+      this.language
+    );
   },
   methods: {
-    countryCode(l2) {
-      let countryCode = this.$languages.countryCode(l2);
-      return countryCode;
-    },
-    async loop() {
-      let countryCodes = this.language.country.map(c => c.alpha2Code)
-      let index = 0
-      while(index < countryCodes.length) {
-        let code = countryCodes[index];
-        this.currentCountryCode = code;
-        await Helper.timeout(3000);
-        index++
-        if (index === countryCodes.length) index = 0;
+    async cycleFlags() {
+      if (this.countryCodes.length < 2) return
+      this.cycle = true;
+      for (let i = 0; i < 999999; i++) {
+        if (!this.cycle) return
+        this.countryCode = this.countryCodes[i % this.countryCodes.length];
+        await Helper.timeout(500);
       }
     },
+    stopCycling() {
+      this.cycle = false
+      this.countryCode = this.typicalCountryCode;
+    }
   },
 };
 </script>
 <style lang="scss" scoped>
+.flag-icon-wrapper {
+  display: inline-block;
+}
 .flag-icon {
   width: 2rem;
-  display: block;
-  margin: 0 auto 0.5rem auto;
+  height: 1.6rem;
+  border-radius: 0.3rem;
 }
 .no-flag-placeholder {
   height: 1.6rem;
