@@ -59,12 +59,17 @@
       </span>
     </span>
     <router-link :to="base">
-      <div class="flag-badge-wrapper">
+      <div class="flag-badge-wrapper" v-if="showFlags">
         <div class="badge" v-if="badge && badge !== 0">{{ badge }}</div>
-        <LanguageFlag v-if="showFlags" :language="language" ref="flag" />
+        <LanguageFlag :language="language" ref="flag" />
       </div>
 
-      <span class="language-list-item-name">{{ languageName(language) }}</span>
+      <span class="language-list-item-name">
+        {{ languageName(language) }}
+        <div class="badge" v-if="!showFlags && badge && badge !== 0">
+          {{ badge }}
+        </div>
+      </span>
       <span
         v-if="keyword && language.otherNames.length > 0"
         class="language-list-item-other-names"
@@ -180,24 +185,31 @@ a:hover,
 a:active {
   text-decoration: none;
 }
+.badge {
+  color: white;
+  background: red;
+  border-radius: 100%;
+  height: 2em;
+  width: 2em;
+  line-height: 1.5em;
+  font-size: 0.6rem;
+}
 
 .language-list {
   .language-list-item {
     .flag-badge-wrapper {
-      width: 3rem;
-      margin: 0 auto;
       position: relative;
+      display: inline-block;
       .badge {
         position: absolute;
-        top: -0.4rem;
-        right: 0;
-        color: white;
-        background: red;
-        border-radius: 100%;
-        height: 2em;
-        width: 2em;
-        line-height: 1.5em;
-        font-size: 0.6rem;
+        top: -0.5rem;
+        right: -0.5rem;
+      }
+    }
+    .language-list-item-name {
+      .badge {
+        position: relative;
+        bottom: 0.1rem;
       }
     }
     .language-list-item-speakers {

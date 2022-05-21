@@ -47,12 +47,13 @@
               ></div>
               <LanguageList
                 v-if="!phrases"
-                :langs="[language]"
-                :singleColumn="true"
                 variant="icon"
                 skin="dark"
-                :l1="l1"
                 class="language-marker-language-list"
+                :langs="[language]"
+                :singleColumn="true"
+                :showFeatures="false"
+                :l1="l1"
               />
               <div
                 v-if="phrases"
