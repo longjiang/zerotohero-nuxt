@@ -245,6 +245,7 @@ export default {
       if (this.$route.meta.collapseNav)
         this.collapsed = this.$route.meta.collapseNav;
       else this.collapsed = false;
+      this.hidden = false
     },
     collapsed() {
       this.$emit("collapsed", this.collapsed);
