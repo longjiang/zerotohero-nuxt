@@ -160,7 +160,11 @@ export default {
     this.unbindKeys();
   },
   watch: {
+    /**
+     * Called when the video is first fetched
+     */
     async video() {
+      console.log('YouTube View: 📼 Video changed', this.video)
       if (!this.extrasLoaded && typeof this.video !== "undefined") {
         this.extrasLoaded = true;
         console.log(`YouTube View (on video change): load subs if missing...`);
@@ -189,7 +193,11 @@ export default {
         this.saveHistory();
       }
     },
+    /**
+     * Called when the show is loaded from this.loadShows() after the shows.js store retrieves TV shows
+     */
     async show() {
+      console.log('YouTube View: 📀 Show changed', this.show)
       if (this.show) {
         // News and YouTube channels are sorted by date
         // Audiobooks and TV Shows are sorted by title
@@ -297,9 +305,7 @@ export default {
       return video;
     },
     async loadExtras() {
-      console.log(`YouTube View: Loading show...`);
       this.loadShow();
-      console.log(`YouTube View: Saving history...`);
       this.saveHistory();
       console.log(`YouTube View: All done.`);
     },
@@ -338,6 +344,7 @@ export default {
       }
     },
     loadShow() {
+      console.log('YouTube View: Loading show...')
       if (this.video) {
         if (this.video.tv_show) {
           this.show = this.video.tv_show;
@@ -499,6 +506,7 @@ export default {
       };
     },
     saveHistory() {
+      console.log(`YouTube View: Saving history...`);
       if (typeof this.video === "undefined") return;
       let data = {
         type: "video",
