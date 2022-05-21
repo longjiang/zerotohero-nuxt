@@ -20,7 +20,7 @@
       />
 
       <Nav
-        v-if="$route.params.l1 && $route.params.l1 && l1 && l2"
+        v-if="$route.params.l1 && $route.params.l1 && l1 && l2  && $route.name !== 'youtube-view'"
         class="zth-nav-wrapper"
         :l1="l1"
         :l2="l2"
