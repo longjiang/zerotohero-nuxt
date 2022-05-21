@@ -70,7 +70,7 @@
           <span v-if="video" :key="`video-title-${video.title}`">
             <Annotate
               :phonetics="false"
-              :buttons="true"
+              :buttons="false"
               v-if="$l2.code !== 'tlh' && $l2.direction !== 'rtl'"
             >
               <span>{{ video.title }}</span>
@@ -566,6 +566,7 @@ export default {
       height: 3.2rem;
 
 
+      .quick-access-button-rewind,
       .quick-access-button-previous,
       .quick-access-button-speed,
       .quick-access-button-next,

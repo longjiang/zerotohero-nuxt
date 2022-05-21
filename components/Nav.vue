@@ -8,6 +8,7 @@
       'zth-nav-page': variant === 'page',
       'zth-nav-collapsed': collapsed,
       'zth-nav-bottom': bottom,
+      'zth-nav-bottom-hidden': hidden,
       'has-secondary-nav': currentParent && currentParent.children,
     }"
   >
@@ -197,6 +198,7 @@ export default {
     return {
       shortcuts: [],
       history: [],
+      hidden: false,
       hasTVShows: false,
       hasLiveTV: false,
       hasTalks: false,
@@ -243,6 +245,7 @@ export default {
       if (this.$route.meta.collapseNav)
         this.collapsed = this.$route.meta.collapseNav;
       else this.collapsed = false;
+      this.hidden = false
     },
     collapsed() {
       this.$emit("collapsed", this.collapsed);
@@ -911,9 +914,9 @@ export default {
           if (this.bottom && this.collapsed) {
             var currentScrollPos = window.pageYOffset;
             if (prevScrollpos > currentScrollPos + 5) {
-              this.$el.style.bottom = "0";
+              this.hidden = false
             } else if (prevScrollpos < currentScrollPos - 5) {
-              this.$el.style.bottom = "-" + this.$el.clientHeight + "px";
+              this.hidden = true
             }
             prevScrollpos = currentScrollPos;
           }
@@ -1156,6 +1159,9 @@ export default {
   box-shadow: 0 0px 20px rgba(0, 0, 0, 0.15);
   padding-bottom: calc(env(safe-area-inset-bottom) + 0.25rem);
   transition: 0.2s all ease-in-out;
+  &.zth-nav-bottom-hidden {
+    bottom: -5rem;
+  }
   &.zth-nav-dark {
     background: black;
     border-top: 1px solid #666;

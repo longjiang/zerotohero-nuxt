@@ -9,18 +9,27 @@
       :image="`https://img.youtube.com/vi/${this.youtube_id}/hqdefault.jpg`"
     />
     <router-link
-      v-if="layout === 'mini'"
-      class="btn btn-unstyled btn-minimize-toggle"
+      v-if="layout !== 'mini'"
+      :class="`btn btn-unstyled btn-minimize-toggle ${
+        paused ? '' : 'btn-minimize-toggle-hidden'
+      }`"
       :to="minimizeToggleRouterLinkTo"
     >
-      <i class="fas fa-chevron-up" v-if="mini"></i>
-      <i class="fas fa-chevron-down" v-else></i>
+      <i class="fas fa-chevron-down"></i>
+    </router-link>
+    <router-link
+      v-if="layout === 'mini'"
+      class="btn btn-unstyled btn-maximize-toggle"
+      :to="minimizeToggleRouterLinkTo"
+    >
+      <i class="fas fa-chevron-up"></i>
     </router-link>
     <div
       :class="{
         'youtube-view pb-5 ': true,
         'main-dark main-dark-performant': true,
         'youtube-view-wrapper': true,
+        'youtube-view-landscape': landscape,
         fullscreen: layout === 'vertical',
       }"
     >
@@ -99,6 +108,13 @@ export default {
     };
   },
   computed: {
+    landscape() {
+      if (this.forcePortrait) return false;
+      if (process.browser && this.viewportWidth && this.viewportHeight) {
+        let landscape = this.viewportWidth > this.viewportHeight;
+        return landscape;
+      }
+    },
     minimizeToggleRouterLinkTo() {
       if (this.mini)
         return {
@@ -523,20 +539,43 @@ export default {
 };
 </script>
 <style lang="scss" scoped >
-.btn-minimize-toggle {
+.btn-minimize-toggle,
+.btn-maximize-toggle {
+  color: white;
+  text-shadow: 0 0 10px black;
+}
+
+.btn-maximize-toggle {
   height: 5rem;
   display: flex;
   align-items: center;
   width: 4rem;
   z-index: 9;
   position: absolute;
-  color: white;
   right: 0;
-  bottom: 0;
 }
+
+.zerotohero-wide {
+  .btn-minimize-toggle {
+    position: fixed;
+    right: 1rem;
+    z-index: 999;
+    top: 1rem;
+  }
+}
+
 .zerotohero-not-wide {
   .btn-minimize-toggle {
-    top: 5rem;
+    position: fixed;
+    z-index: 9999;
+    right: 1.75rem;
+    top: 7rem;
+    bottom: inherit;
+    opacity: 1;
+    transition: 1s all ease-in-out;
+  }
+  .btn-minimize-toggle-hidden {
+    opacity: 0;
   }
 }
 
