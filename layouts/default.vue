@@ -1,87 +1,3 @@
-<template>
-  <div id="zerotohero" :class="classes">
-    <div
-      class="zerotohero-background"
-      :style="`background-image: url(${background})`"
-    />
-    <template
-      v-if="
-        $route.meta.layout === 'full' ||
-        !($route.params.l1 && $route.params.l1 && l1 && l2)
-      "
-    >
-      <Nuxt id="main" />
-    </template>
-    <template v-else>
-      <SiteTopBar
-        v-if="!wide && $route.params.l1 && $route.params.l1 && l1 && l2"
-        variant="menu-bar"
-        :badge="savedWordsCount + savedPhrasesCount"
-      />
-
-      <Nav
-        v-if="
-          $route.params.l1 &&
-          $route.params.l1 &&
-          l1 &&
-          l2 &&
-          !(!wide && $route.name === 'youtube-view')
-        "
-        class="zth-nav-wrapper"
-        :l1="l1"
-        :l2="l2"
-        :key="`nav-${l1.code}-${l2.code}`"
-        :variant="wide ? 'side-bar' : 'menu-bar'"
-        :skin="$route.meta.skin ? $route.meta.skin : 'light'"
-        :fullHistory="fullHistory"
-        @collapsed="updateCollapsed"
-        :showMainNav="wide"
-        mode="pill"
-      />
-
-      <Nav
-        v-if="$route.params.l1 && $route.params.l1 && l1 && l2 && !wide"
-        :l1="l1"
-        :l2="l2"
-        :key="`nav-bottom-${l1.code}-${l2.code}`"
-        variant="menu-bar"
-        :skin="$route.meta.skin ? $route.meta.skin : 'light'"
-        :fullHistory="fullHistory"
-        @collapsed="updateCollapsed"
-        :showLogo="false"
-        :showMainNav="true"
-        :showSecondaryNav="false"
-        :bottom="true"
-        mode="small-icon"
-        style="z-index: 10"
-      />
-      <div class="zth-content">
-        <Nuxt id="main" v-if="$route.name !== 'youtube-view'" />
-        <!-- <LazyFooter
-          v-if="dictionaryCredit"
-          :dictionaryCredit="dictionaryCredit"
-          class="zth-footer"
-        /> -->
-        <YouTubeViewComp
-          id="overlay-player"
-          v-if="overlayPlayerYouTubeId"
-          :youtube_id="overlayPlayerYouTubeId"
-          :lesson="overlayPlayerLesson"
-          :mini="overlayPlayerMinimized"
-          :fullHistory="fullHistory"
-          :class="`${overlayPlayerMinimized ? 'overlay-player-minimized' : ''}`"
-          :key="`youtube-view-comp-${overlayPlayerYouTubeId}`"
-          @close="
-            overlayPlayerYouTubeId = undefined;
-            overlayPlayerLesson = undefined;
-          "
-        />
-      </div>
-    </template>
-    <i class="fas fa-star star-animation"></i>
-  </div>
-</template>
-
 <script lang="javascript">
 import Config from "@/lib/config";
 import smoothscroll from "smoothscroll-polyfill";
@@ -92,6 +8,8 @@ export default {
   data() {
     return {
       Config,
+      transition: false,
+      edgeDetected: false,
       focus: false,
       loaded: false,
       wide: false,
@@ -103,6 +21,7 @@ export default {
       collapsed: false,
       overlayPlayerYouTubeId: undefined,
       overlayPlayerLesson: undefined,
+      translateX: 0,
     };
   },
   computed: {
@@ -170,12 +89,12 @@ export default {
     smoothscroll.polyfill(); // Safari does not support smoothscroll
     this.loadGeneralSettings();
     if (this.l1 && this.l2) this.loadLanguageSpecificSettings();
-    let navigated = false
+    let navigated = false;
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type === ("history/LOAD_HISTORY")) {
+      if (mutation.type === "history/LOAD_HISTORY") {
         if (!navigated) {
           this.goToLastLanguage();
-          navigated = true
+          navigated = true;
         }
       }
       if (mutation.type.startsWith("settings")) {
@@ -231,6 +150,37 @@ export default {
     },
   },
   methods: {
+    onPanStart(e) {
+      if (e.center.x > window.innerWidth * 0.9) this.edgeDetected = "right";
+      if (e.center.x < window.innerWidth * 0.1) this.edgeDetected = "left";
+    },
+    async onPan(e) {
+      let { deltaX, isFirst, isFinal } = e;
+      if (this.edgeDetected) {
+        this.translateX = deltaX;
+      }
+      if (isFinal) {
+        if (deltaX < 0 && this.edgeDetected === 'right') {
+          console.log("FORWARD");
+          this.transition = true;
+          this.translateX = -1 * window.innerWidth;
+          await Helper.timeout(500);
+          this.transition = false;
+          this.$router.forward();
+          this.translateX = 0;
+        }
+        if (deltaX > 0 && this.edgeDetected === 'left') {
+          console.log("BACK");
+          this.transition = true;
+          this.translateX = window.innerWidth;
+          await Helper.timeout(500);
+          this.transition = false;
+          this.$router.back();
+          this.translateX = 0;
+        }
+        this.edgeDetected = false;
+      }
+    },
     goToLastLanguage() {
       let { l1, l2 } = this.history[this.history.length - 1];
       this.$router.push({ name: "all-media", params: { l1, l2 } });
@@ -403,7 +353,99 @@ export default {
 };
 </script>
 
+<template>
+  <div id="zerotohero" :class="classes">
+    <div
+      class="zerotohero-background"
+      :style="`background-image: url(${background})`"
+    />
+    <template
+      v-if="
+        $route.meta.layout === 'full' ||
+        !($route.params.l1 && $route.params.l1 && l1 && l2)
+      "
+    >
+      <Nuxt id="main" />
+    </template>
+    <template v-else>
+      <SiteTopBar
+        v-if="!wide && $route.params.l1 && $route.params.l1 && l1 && l2"
+        variant="menu-bar"
+        :badge="savedWordsCount + savedPhrasesCount"
+      />
+
+      <Nav
+        v-if="
+          $route.params.l1 &&
+          $route.params.l1 &&
+          l1 &&
+          l2 &&
+          !(!wide && $route.name === 'youtube-view')
+        "
+        class="zth-nav-wrapper"
+        :l1="l1"
+        :l2="l2"
+        :key="`nav-${l1.code}-${l2.code}`"
+        :variant="wide ? 'side-bar' : 'menu-bar'"
+        :skin="$route.meta.skin ? $route.meta.skin : 'light'"
+        :fullHistory="fullHistory"
+        @collapsed="updateCollapsed"
+        :showMainNav="wide"
+        mode="pill"
+      />
+
+      <Nav
+        v-if="$route.params.l1 && $route.params.l1 && l1 && l2 && !wide"
+        :l1="l1"
+        :l2="l2"
+        :key="`nav-bottom-${l1.code}-${l2.code}`"
+        variant="menu-bar"
+        :skin="$route.meta.skin ? $route.meta.skin : 'light'"
+        :fullHistory="fullHistory"
+        @collapsed="updateCollapsed"
+        :showLogo="false"
+        :showMainNav="true"
+        :showSecondaryNav="false"
+        :bottom="true"
+        mode="small-icon"
+        style="z-index: 10"
+      />
+      <div
+        :class="`zth-content ${transition ? 'transition' : ''}`"
+        v-hammer:pan="onPan"
+        v-hammer:panstart="onPanStart"
+        :style="`transform: translateX(${translateX}px)`"
+      >
+        <Nuxt id="main" v-if="$route.name !== 'youtube-view'" />
+        <!-- <LazyFooter
+          v-if="dictionaryCredit"
+          :dictionaryCredit="dictionaryCredit"
+          class="zth-footer"
+        /> -->
+        <YouTubeViewComp
+          id="overlay-player"
+          v-if="overlayPlayerYouTubeId"
+          :youtube_id="overlayPlayerYouTubeId"
+          :lesson="overlayPlayerLesson"
+          :mini="overlayPlayerMinimized"
+          :fullHistory="fullHistory"
+          :class="`${overlayPlayerMinimized ? 'overlay-player-minimized' : ''}`"
+          :key="`youtube-view-comp-${overlayPlayerYouTubeId}`"
+          @close="
+            overlayPlayerYouTubeId = undefined;
+            overlayPlayerLesson = undefined;
+          "
+        />
+      </div>
+    </template>
+    <i class="fas fa-star star-animation"></i>
+  </div>
+</template>
+
 <style lang="scss" scoped>
+.transition {
+  transition: 0.5s all ease-in-out;
+}
 .__nuxt-error-page {
   z-index: 99;
 }

@@ -16,9 +16,11 @@ Vue.use(VueLazyload, {
   loading: '/img/placeholder-faded.png',
   attempt: 1
 })
+import { NuxtHammer } from 'nuxt-hammer'
 
 Vue.config.productionTip = false
 
+Vue.use(NuxtHammer)
 Vue.use(VTooltip)
 Vue.use(VueSimpleSVG)
 Vue.use(VueObserveVisibility)
