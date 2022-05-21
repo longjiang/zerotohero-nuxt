@@ -85,7 +85,7 @@
               v-if="video.hasSubs || video.id"
               class="youtube-video-card-badge"
             >
-              {{ videoL2.name || $l2.name }} CC
+              {{ videoL2 ? videoL2.name : $l2.name }} CC
               <span v-if="video.l2Locale">({{ video.l2Locale }})</span>
               <span v-if="subsFile">
                 - {{ subsFile.name.replace(/[_.]/g, " ") }}
