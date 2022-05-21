@@ -9,12 +9,18 @@
       :image="`https://img.youtube.com/vi/${this.youtube_id}/hqdefault.jpg`"
     />
     <router-link
-      v-if="layout === 'mini'"
+      v-if="layout !== 'mini'"
       class="btn btn-unstyled btn-minimize-toggle"
       :to="minimizeToggleRouterLinkTo"
     >
-      <i class="fas fa-chevron-up" v-if="mini"></i>
-      <i class="fas fa-chevron-down" v-else></i>
+      <i class="fas fa-chevron-down"></i>
+    </router-link>
+    <router-link
+      v-if="layout === 'mini'"
+      class="btn btn-unstyled btn-maximize-toggle"
+      :to="minimizeToggleRouterLinkTo"
+    >
+      <i class="fas fa-chevron-up"></i>
     </router-link>
     <div
       :class="{
@@ -571,20 +577,30 @@ export default {
 };
 </script>
 <style lang="scss" scoped >
-.btn-minimize-toggle {
+.btn-minimize-toggle,
+.btn-maximize-toggle {
+  color: white;
+}
+
+.btn-maximize-toggle {
   height: 5rem;
   display: flex;
   align-items: center;
   width: 4rem;
   z-index: 9;
   position: absolute;
-  color: white;
   right: 0;
   bottom: 0;
 }
+
 .zerotohero-not-wide {
   .btn-minimize-toggle {
-    top: 5rem;
+    position: fixed;
+    z-index: 9999;
+    right: 1.5rem;
+    top: 3.1rem;
+    bottom: inherit;
+    right: 0.2rem;
   }
 }
 
