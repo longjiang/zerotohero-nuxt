@@ -480,8 +480,8 @@ export default {
       data[type] = null;
       let response = await axios.patch(
         `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}${
-            this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
-          }`,
+          this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
+        }`,
         data
       );
       if (response && response.data) {
@@ -508,9 +508,7 @@ export default {
         let data = {};
         data[type] = show.id;
         let response = await axios.patch(
-          `${Config.youtubeVideosTableName(this.$l2.id)}/${
-            this.video.id
-          }${
+          `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}${
             this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
           }&fields=${type}.*`, // type is 'tv_show' or 'talk'
           data
@@ -563,10 +561,13 @@ export default {
     },
     async updateSubs() {
       this.updating = true;
+      let token = this.$auth.strategy.token.get();
       try {
         let response = await axios.patch(
           `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}${
-            this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
+            this.$auth.user
+              ? "?access_token=" + token.replace("Bearer ", "")
+              : ""
           }`,
           {
             subs_l2: this.video.subs_l2
