@@ -333,6 +333,12 @@ export default {
               show: true,
             },
             {
+              name: "watch-history",
+              icon: "fas fa-history",
+              title: "Watch History",
+              show: true,
+            },
+            {
               href: "https://sso.teachable.com/secure/133035/identity/login",
               icon: "fas fa-graduation-cap",
               title: "My Teachable Courses",
@@ -368,12 +374,6 @@ export default {
               name: "all-media",
               icon: "fa fa-photo-video",
               title: `Recommended`,
-              show: true,
-            },
-            {
-              name: "watch-history",
-              icon: "fas fa-history",
-              title: "My History",
               show: true,
             },
             {
