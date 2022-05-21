@@ -64,6 +64,7 @@
           :fullHistory="fullHistory"
           :class="`${overlayPlayerMinimized ? 'overlay-player-minimized' : ''}`"
           :key="`youtube-view-comp-${overlayPlayerYouTubeId}`"
+          @close="overlayPlayerYouTubeId = undefined; overlayPlayerLesson = undefined"
         />
       </div>
     </template>

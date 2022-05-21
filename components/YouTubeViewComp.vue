@@ -8,22 +8,22 @@
       :description="`Study the transcript of this video with a popup dictionary`"
       :image="`https://img.youtube.com/vi/${this.youtube_id}/hqdefault.jpg`"
     />
-    <router-link
-      v-if="layout !== 'mini'"
-      :class="`btn btn-unstyled btn-minimize-toggle ${
-        paused ? '' : 'btn-minimize-toggle-hidden'
-      }`"
-      :to="minimizeToggleRouterLinkTo"
+    <div
+      :class="`toggle-wrapper ${layout !== 'mini' ? 'maximized' : 'minimized'}`"
     >
-      <i class="fas fa-chevron-down"></i>
-    </router-link>
-    <router-link
-      v-if="layout === 'mini'"
-      class="btn btn-unstyled btn-maximize-toggle"
-      :to="minimizeToggleRouterLinkTo"
-    >
-      <i class="fas fa-chevron-up"></i>
-    </router-link>
+      <router-link
+        :class="`btn btn-unstyled ${
+          layout !== 'mini' ? 'btn-maximize-toggle' : 'btn-minimize-toggle'
+        }`"
+        :to="minimizeToggleRouterLinkTo"
+      >
+        <i class="fas fa-chevron-down" v-if="layout !== 'mini'"></i>
+        <i class="fas fa-chevron-up" v-if="layout === 'mini'"></i>
+      </router-link>
+      <b-button variant="unstyled" class="btn-close" @click="close">
+        <i class="fa fa-times"></i>
+      </b-button>
+    </div>
     <div
       :class="{
         'youtube-view pb-5 ': true,
@@ -115,19 +115,26 @@ export default {
         return landscape;
       }
     },
-    minimizeToggleRouterLinkTo() {
-      if (this.mini)
-        return {
-          name: "youtube-view",
-          params: { youtube_id: this.youtube_id, lesson: this.lesson },
-        };
-      else if (this.fullHistory) {
+    /**
+     * The router link that we send the user to when they close the player.
+     */
+    maximizeVideoTo() {
+      return {
+        name: "youtube-view",
+        params: { youtube_id: this.youtube_id, lesson: this.lesson },
+      };
+    },
+    minimizeVideoTo() {
+      if (this.fullHistory) {
         let lastNonYouTubeViewPath = this.fullHistory.find(
           (h) => !h.includes("youtube/view")
         );
         if (lastNonYouTubeViewPath) return lastNonYouTubeViewPath;
       }
       return { name: "all-media" };
+    },
+    minimizeToggleRouterLinkTo() {
+      return this.mini ? this.maximizeVideoTo : this.minimizeVideoTo;
     },
     layout() {
       return this.mini ? "mini" : this.initialLayout;
@@ -176,7 +183,7 @@ export default {
      * Called when the video is first fetched
      */
     async video() {
-      console.log('YouTube View: 📼 Video changed', this.video)
+      console.log("YouTube View: 📼 Video changed", this.video);
       if (!this.extrasLoaded && typeof this.video !== "undefined") {
         this.extrasLoaded = true;
         console.log(`YouTube View (on video change): load subs if missing...`);
@@ -210,7 +217,7 @@ export default {
      * Called when the show is loaded from this.setShows() after the shows.js store retrieves TV shows
      */
     async show() {
-      console.log('YouTube View: 📀 Show changed', this.show)
+      console.log("YouTube View: 📀 Show changed", this.show);
       if (this.show) {
         // News and YouTube channels are sorted by date
         // Audiobooks and TV Shows are sorted by title
@@ -234,6 +241,10 @@ export default {
     },
   },
   methods: {
+    close() {
+      this.$router.push(this.minimizeVideoTo);
+      this.$emit('close')
+    },
     onYouTubeUpdateLayout(layout) {
       this.initialLayout = initialLayout;
     },
@@ -318,21 +329,27 @@ export default {
       return video;
     },
     async getSaved() {
-      let response
+      let response;
       try {
         response = await axios.get(
-          `${Config.youtubeVideosTableName(this.$l2.id)}?filter[youtube_id][eq]=${
-            this.youtube_id
-          }&filter[l2][eq]=${this.$l2.id}&fields=channel_id,id,l2,lesson,level,notes,subs_l1,subs_l2,title,topic,youtube_id,tv_show.*,talk.*&timestamp=${
+          `${Config.youtubeVideosTableName(
+            this.$l2.id
+          )}?filter[youtube_id][eq]=${this.youtube_id}&filter[l2][eq]=${
+            this.$l2.id
+          }&fields=channel_id,id,l2,lesson,level,notes,subs_l1,subs_l2,title,topic,youtube_id,tv_show.*,talk.*&timestamp=${
             this.$adminMode ? Date.now() : 0
           }`
         );
+      } catch (err) {
+        console.log(err);
+        return;
       }
-      catch (err) {
-        console.log(err)
-        return
-      }
-      if (response && response.data && response.data.data && response.data.data.length > 0) {
+      if (
+        response &&
+        response.data &&
+        response.data.data &&
+        response.data.data.length > 0
+      ) {
         let video = response.data.data[0];
         for (let field of ["subs_l2", "subs_l1"]) {
           if (video[field] && typeof video[field] === "string") {
@@ -357,7 +374,7 @@ export default {
       }
     },
     setShow() {
-      console.log('YouTube View: Setting show...')
+      console.log("YouTube View: Setting show...");
       if (this.video) {
         if (this.video.tv_show) {
           this.show = this.video.tv_show;
@@ -486,7 +503,7 @@ export default {
             return false;
           }
           if (e.code === "Space") {
-            this.$refs.youtube ? this.$refs.youtube.togglePaused() : '';
+            this.$refs.youtube ? this.$refs.youtube.togglePaused() : "";
             return false;
           }
           if (["ArrowUp", "ArrowLeft"].includes(e.code)) {
@@ -539,52 +556,37 @@ export default {
 };
 </script>
 <style lang="scss" scoped >
-.btn-minimize-toggle,
-.btn-maximize-toggle {
+.toggle-wrapper {
   color: white;
-  text-shadow: 0 0 10px black;
-}
-
-.btn-maximize-toggle {
   height: 5rem;
   display: flex;
   align-items: center;
-  width: 4rem;
   z-index: 9;
-  position: absolute;
-  right: 0;
-}
-
-.zerotohero-wide {
+  position: fixed;
+  right: 1rem;
+  &.maximized {
+    top: 0;
+  }
+  &.minimized {
+  }
+  .btn {
+    color: white;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  }
+  .btn-maximize-toggle {
+  }
   .btn-minimize-toggle {
-    position: fixed;
-    right: 1rem;
-    z-index: 999;
-    top: 1rem;
+  }
+  .btn-close {
   }
 }
 
 .zerotohero-not-wide {
-  .btn-minimize-toggle {
-    position: fixed;
-    z-index: 9999;
-    right: 1.75rem;
-    top: 7rem;
-    bottom: inherit;
-    opacity: 1;
-    transition: 1s all ease-in-out;
-  }
-  .btn-minimize-toggle-hidden {
-    opacity: 0;
+  .toggle-wrapper.maximized {
+    top: calc(env(safe-area-inset-top) + 5rem);
   }
 }
 
-.overlay-player-minimized {
-  .btn-minimize-toggle {
-    bottom: 0;
-    top: inherit;
-  }
-}
 .zerotohero-wide {
   .youtube-view-wrapper {
     ::v-deep .youtube-with-transcript-landscape {
