@@ -159,6 +159,13 @@ export default {
   ],
 
   build: {
+    /* Extending webpack config */
+    /* https://vue-loader.vuejs.org/guide/css-modules.html */
+    loaders: {
+      cssModules: {
+        modules: true
+      }
+    },
     extend(config, { isDev, isClient }) {
       config.resolve.alias['vue'] = 'vue/dist/vue.common'
       // Extend only webpack config for client-bundle
