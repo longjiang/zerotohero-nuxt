@@ -137,6 +137,12 @@ export default {
         return duration;
       }
     },
+    mute() {
+      if (this.player) this.player.mute()
+    },
+    unMute() {
+      if (this.player) this.player.unMute()
+    },
     loadYouTubeiFrame() {
       if (this.posterOnly) return
       this.loading = true;

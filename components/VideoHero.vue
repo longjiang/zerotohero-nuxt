@@ -1,5 +1,5 @@
 <template>
-  <div style="position: relative" :class="{ unavailable: videoUnavailable }">
+  <div style="position: relative" :class="{ unavailable: videoUnavailable }" v-observe-visibility="visibilityChanged">
     <div class="video-hero" @click="play">
       <div class="top-overlay"></div>
       <div class="bottom-overlay"></div>
@@ -56,6 +56,10 @@
                   <i class="fas fa-th-large mr-1"></i>
                   Episodes
                 </router-link>
+                <b-button variant="secondary" class="ml-1" @click="muted = !muted">
+                  <i class="fas fa-volume-mute" v-if="muted"></i>
+                  <i class="fas fa-volume-up" v-else></i>
+                </b-button>
               </div>
             </div>
           </div>
@@ -84,11 +88,21 @@ export default {
   data() {
     return {
       videoUnavailable: false,
+      muted: false,
     };
   },
   computed: {
     isMobile() {
       return Helper.isMobile();
+    },
+  },
+  watch: {
+    muted() {
+      if (this.muted) this.$refs.youtube.mute();
+      else this.$refs.youtube.unMute();
+    },
+    video() {
+      this.videoUnavailable = false;
     },
   },
   methods: {
@@ -99,11 +113,11 @@ export default {
       this.videoUnavailable = true;
       this.$emit("videoUnavailable", true);
     },
-  },
-  watch: {
-    video() {
-      this.videoUnavailable = false;
-    },
+    visibilityChanged(visible) {
+      console.log(visible)
+      if (!visible) this.$refs.youtube.mute();
+      if (visible && !this.muted) this.$refs.youtube.unMute();
+    }
   },
 };
 </script>
@@ -123,7 +137,7 @@ export default {
     z-index: 2;
   }
   .bottom-overlay {
-    background: linear-gradient(rgba(0, 0, 0, 0) 0%, black 100%);
+    background: linear-gradient(rgba(0, 0, 0, 0) 0%, black 75%);
     height: 75%;
     width: 100%;
     position: absolute;
