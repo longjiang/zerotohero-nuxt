@@ -46,6 +46,7 @@
               "
             ></i> -->
             <LanguageFlag
+              v-if="!(!flagCode || !$route.params.l2 || params.md === false)"
               ref="flag"
               :autocycle="false"
               :language="$l2"
@@ -102,7 +103,7 @@
               badge ? '' : 'd-none'
             }`"
           >
-            <i class="fas fa-star"></i>
+            <i class="fas fa-user"></i>
             <span class="saved-words-count">
               {{ badge }}
             </span>
