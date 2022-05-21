@@ -307,10 +307,10 @@ export default {
   },
   methods: {
     cycleFlags() {
-      this.$refs.flag.cycleFlags();
+      if (this.$refs.flag) this.$refs.flag.cycleFlags();
     },
     stopCycling() {
-      this.$refs.flag.stopCycling();
+      if (this.$refs.flag) this.$refs.flag.stopCycling();
     },
     showPlaylistModal() {
       this.$refs["languages-modal"].show();

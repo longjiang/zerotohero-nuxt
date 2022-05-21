@@ -355,7 +355,7 @@ export default {
             },
             {
               name: "logout",
-              icon: "fas fa-exit",
+              icon: "fas fa-sign-out-alt",
               title: "Logout",
               show: this.$auth && this.$auth.loggedIn,
               params: { l1: this.l1.code, l2: this.l2.code },
@@ -651,7 +651,7 @@ export default {
             {
               name: "noun-cases",
               icon: "fas fa-list-ul",
-              title: "Grammar Tools",
+              title: "Grammar",
               show: this.hasFeature("noun-cases"),
             },
             {
