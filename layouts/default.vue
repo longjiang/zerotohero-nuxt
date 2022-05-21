@@ -8,8 +8,6 @@ export default {
   data() {
     return {
       Config,
-      transition: false,
-      edgeDetected: false,
       focus: false,
       loaded: false,
       wide: false,
@@ -21,7 +19,9 @@ export default {
       collapsed: false,
       overlayPlayerYouTubeId: undefined,
       overlayPlayerLesson: undefined,
-      translateX: 0,
+      // transition: false,
+      // edgeDetected: false,
+      // translateX: 0,
     };
   },
   computed: {
@@ -411,8 +411,7 @@ export default {
         style="z-index: 10"
       />
       <div
-        :class="`zth-content ${transition ? 'transition' : ''}`"
-        :style="`transform: translateX(${translateX}px)`"
+        class="zth-content"
       >
         <!-- These touch events block scrolling from iOS! -->
         <!-- v-hammer:panstart.horizontal="onPanStart"
