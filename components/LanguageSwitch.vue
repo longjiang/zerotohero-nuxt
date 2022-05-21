@@ -8,7 +8,7 @@
       :defaultURL="(text) => `/en/${text}`"
       :random="showRandom && random ? random : false"
       @nav="onNav"
-      placeholder="Search languages"
+      :placeholder="placeholder"
       ref="l1"
       type="generic"
     />
@@ -26,6 +26,10 @@ export default {
   props: {
     preferredLanguages: {
       type: Array,
+    },
+    placeholder: {
+      type: String,
+      default: 'Search languages'
     },
     nav: {
       default: true,

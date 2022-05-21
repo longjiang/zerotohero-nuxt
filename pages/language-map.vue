@@ -8,43 +8,16 @@
   }
 </router>
 <template>
-  <div>
+  <div style="display: flex; flex-direction: column; height: 100vh">
     <SocialHead
       title="Map of World Languages | Zero to Hero Languages"
       description="Tap on any language label to learn the language! Live TV channels, TV shows with subtitles, music with lyrics, phrasebooks with video examples... everything that can help you to learn a language “by osmosis.”"
       image="/img/thumbnail-language-map.jpg"
     />
-    <div class="container-fluid">
-      <div
-        class="language-map-top-bar row"
-        style="overflow: visible"
-      >
-        <div class="col-sm-12 d-flex" style="overflow: visible">
-          <div class="mr-3 d-flex align-items-center">
-            <router-link to="/" class="link-unstyled">
-              <img src="/img/czh-icon.png" style="height: 1.5rem" />
-            </router-link>
-          </div>
-          <div class="mr-1 d-flex align-items-center">L1</div>
-          <b-form-select
-            v-model="l1"
-            :options="l1s"
-            class="mr-2"
-            style="display: inline-block; width: 3.7rem"
-          ></b-form-select>
-          <div class="mr-1 d-flex align-items-center">L2</div>
-          <LanguageSwitch
-            style="flex: 1; z-index: 999"
-            :nav="false"
-            @nav="onNav"
-            :button="false"
-            :showRandom="false"
-            :langs="filteredLangs"
-          />
-        </div>
-      </div>
+    <SiteTopBar />
+    <div class="container-fluid flex-1">
       <div class="row">
-        <div class="col-12" style="height: calc(100vh - 54px); padding: 0">
+        <div class="col-12 p-0" >
           <div class="loader-wrapper" v-if="loadingMap">
             <Loader
               :sticky="true"
@@ -52,13 +25,28 @@
             />
           </div>
           <client-only v-if="filteredLangsWithGeo">
+            <div class="options-bar">
+              <b-dropdown id="dropdown-1" :text="`From ${l1Lang.name}`" style="z-index: 500">
+                <b-dropdown-item @click="l1 = 'en'">English</b-dropdown-item>
+                <b-dropdown-item @click="l1 = 'zh'">Chinese</b-dropdown-item>
+              </b-dropdown>
+              <LanguageSwitch
+                style="flex: 1; z-index: 999; margin-left: 0.25rem"
+                placeholder="I want to learn..."
+                :nav="false"
+                :button="false"
+                :showRandom="false"
+                :langs="filteredLangs"
+                @nav="onNav"
+              />
+            </div>
             <LanguageMap
-              style="height: 100%"
               ref="languageMap"
               :langs="filteredLangsWithGeo"
-              @ready="onReady"
               :key="`language-map-${languagesKey}`"
               :l1="l1"
+              @ready="onReady"
+               style="height: 100vh"
             />
           </client-only>
         </div>
@@ -175,10 +163,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.language-map-top-bar {
-  padding: calc(env(safe-area-inset-top) + 0.25rem) 0.75rem 0.25rem 0.75rem;
-  background-color: rgb(29, 29, 29);
-  color: white;
+.options-bar {
+  position: fixed;
+  width: calc(100vw - 2rem);
+  top: 3.5rem;
+  left: 1rem;
+  z-index: 1001; // The map has a z-index of 1000
+  display: flex;
 }
 .loader-wrapper {
   background: rgba(0, 0, 0, 0.66);
@@ -190,5 +181,14 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+::v-deep .leaflet-left .leaflet-control {
+  margin-top: 4rem;
+  margin-left: 1rem;
+}
+
+::v-deep .leaflet-right .leaflet-control {
+  margin-top: 4rem;
+  margin-right: 1rem;
 }
 </style>
