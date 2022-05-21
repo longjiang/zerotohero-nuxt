@@ -26,6 +26,10 @@
                 :showSpeakers="showSpeakers"
                 :language="language"
                 :showCode="showCode"
+                :badge="
+                  (savedWords[language.code] || []).length +
+                  (savedPhrases[language.code] || []).length
+                "
               />
             </div>
           </div>
@@ -40,6 +44,10 @@
             :showSpeakers="showSpeakers"
             :language="language"
             :showCode="showCode"
+            :badge="
+              (savedWords[language.code] || []).length +
+              (savedPhrases[language.code] || []).length
+            "
           />
         </div>
       </div>
@@ -49,6 +57,7 @@
 
 <script>
 import Helper from "@/lib/helper";
+import { mapState } from "vuex";
 import { ContainerQuery } from "vue-container-query";
 
 export default {
@@ -124,6 +133,8 @@ export default {
     };
   },
   computed: {
+    ...mapState("savedWords", ["savedWords"]),
+    ...mapState("savedPhrases", ["savedPhrases"]),
     classes() {
       let classes = {
         "language-list": true,

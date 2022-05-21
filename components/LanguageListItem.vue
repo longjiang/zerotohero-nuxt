@@ -59,7 +59,11 @@
       </span>
     </span>
     <router-link :to="base">
-      <LanguageFlag v-if="showFlags" :language="language" ref="flag" />
+      <div class="flag-badge-wrapper">
+        <div class="badge" v-if="badge && badge !== 0">{{ badge }}</div>
+        <LanguageFlag v-if="showFlags" :language="language" ref="flag" />
+      </div>
+
       <span class="language-list-item-name">{{ languageName(language) }}</span>
       <span
         v-if="keyword && language.otherNames.length > 0"
@@ -89,6 +93,9 @@
 import Helper from "@/lib/helper";
 export default {
   props: {
+    badge: {
+      type: Number,
+    },
     showFeatures: {
       type: Boolean,
     },
@@ -176,6 +183,23 @@ a:active {
 
 .language-list {
   .language-list-item {
+    .flag-badge-wrapper {
+      width: 3rem;
+      margin: 0 auto;
+      position: relative;
+      .badge {
+        position: absolute;
+        top: -0.4rem;
+        right: 0;
+        color: white;
+        background: red;
+        border-radius: 100%;
+        height: 2em;
+        width: 2em;
+        line-height: 1.5em;
+        font-size: 0.6rem;
+      }
+    }
     .language-list-item-speakers {
       font-size: 0.8em;
       white-space: nowrap;
