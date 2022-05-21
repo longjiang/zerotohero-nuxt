@@ -281,6 +281,8 @@ export default {
       this.videos = await this.getVideos({ limit: 50, sort: "youtube_id" });
     this.randomVideos = this.videos.slice(0, 12);
     this.loadHeroVideo();
+    await Helper.timeout(3000)
+    this.loading = false // Incase resources fail to load, at least show them
   },
   beforeDestroy() {
     // you may call unsubscribe to stop the subscription
