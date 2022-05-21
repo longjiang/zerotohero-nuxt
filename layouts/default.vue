@@ -412,10 +412,11 @@ export default {
       />
       <div
         :class="`zth-content ${transition ? 'transition' : ''}`"
-        v-hammer:panstart="onPanStart"
-        v-hammer:pan.horizontal="onPan"
         :style="`transform: translateX(${translateX}px)`"
       >
+        <!-- These touch events block scrolling from iOS! -->
+        <!-- v-hammer:panstart.horizontal="onPanStart"
+        v-hammer:pan.horizontal="onPan" -->
         <Nuxt id="main" v-if="$route.name !== 'youtube-view'" />
         <!-- <LazyFooter
           v-if="dictionaryCredit"
