@@ -151,7 +151,7 @@ export default {
   bottom: 0;
   width: 100%;
   position: absolute;
-  bottom: -10%;
+  bottom: 10%;
   .hero-video-info {
     max-width: 35rem;
     color: white;
