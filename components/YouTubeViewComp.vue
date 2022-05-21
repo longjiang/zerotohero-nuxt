@@ -19,8 +19,7 @@
     <div
       :class="{
         'youtube-view pb-5 ': true,
-        'main-dark': true,
-        'main-dark-performant': isMobile,
+        'main-dark main-dark-performant': true,
         'youtube-view-wrapper': true,
         fullscreen: layout === 'vertical',
       }"
@@ -44,7 +43,6 @@
         :show="show"
         :showType="showType"
         :episodes="episodes"
-        :episodeIndex="thisEpisodeIndex"
         :forcePortrait="false"
         :startLineIndex="startLineIndex"
         :layout="layout"
@@ -130,34 +128,9 @@ export default {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
-    saved() {
-      return this.video.id;
-    },
-    previousEpisode() {
-      let thisEpisodeIndex = this.thisEpisodeIndex;
-      if (thisEpisodeIndex > 0 && this.episodes[thisEpisodeIndex - 1])
-        return `/${this.$l1.code}/${this.$l2.code}/youtube/view/${
-          this.episodes[thisEpisodeIndex - 1].youtube_id
-        }/`;
-    },
-    thisEpisodeIndex() {
-      return this.episodes.findIndex(
-        (episode) => episode.youtube_id === this.video.youtube_id
-      );
-    },
-    nextEpisode() {
-      let thisEpisodeIndex = this.thisEpisodeIndex;
-      if (this.episodes[thisEpisodeIndex + 1])
-        return `/${this.$l1.code}/${this.$l2.code}/youtube/view/${
-          this.episodes[thisEpisodeIndex + 1].youtube_id
-        }/`;
-    },
     currentTimeInSeconds() {
       let t = Math.floor(this.currentTime / 10) * 10;
       return t;
-    },
-    isMobile() {
-      return Helper.isMobile();
     },
   },
   validate({ params, query, store }) {
