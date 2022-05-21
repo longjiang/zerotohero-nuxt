@@ -155,6 +155,7 @@ export default {
       if (e.center.x < window.innerWidth * 0.1) this.edgeDetected = "left";
     },
     async onPan(e) {
+      console.log(e)
       let { deltaX, isFirst, isFinal } = e;
       if (this.edgeDetected) {
         this.translateX = deltaX;
@@ -412,8 +413,8 @@ export default {
       />
       <div
         :class="`zth-content ${transition ? 'transition' : ''}`"
-        v-hammer:pan="onPan"
         v-hammer:panstart="onPanStart"
+        v-hammer:pan.horizontal="onPan"
         :style="`transform: translateX(${translateX}px)`"
       >
         <Nuxt id="main" v-if="$route.name !== 'youtube-view'" />
