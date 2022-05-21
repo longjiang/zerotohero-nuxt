@@ -27,8 +27,7 @@
     <div
       :class="{
         'youtube-view pb-5 ': true,
-        'main-dark': true,
-        'main-dark-performant': isMobile,
+        'main-dark main-dark-performant': true,
         'youtube-view-wrapper': true,
         'youtube-view-landscape': landscape,
         fullscreen: layout === 'vertical',
@@ -46,25 +45,18 @@
         ref="youtube"
         skin="dark"
         :video="video"
-        :quiz="$quiz"
         :key="`transcript-${video.youtube_id}`"
         :autoload="true"
         :autoplay="false"
         :starttime="starttime"
         :show="show"
         :showType="showType"
-        :previousEpisode="previousEpisode"
-        :nextEpisode="nextEpisode"
         :episodes="episodes"
-        :episodeIndex="thisEpisodeIndex"
         :forcePortrait="false"
         :startLineIndex="startLineIndex"
         :layout="layout"
-        @paused="updatePaused"
         @ended="updateEnded"
-        @currentTime="updateCurrentTime"
-        @speechStart="speechStart"
-        @speechEnd="speechEnd"
+        @currentTime="updateCurrentTimeQueryString"
         @updateLayout="onYouTubeUpdateLayout"
         @videoUnavailable="onVideoUnavailable"
       />
@@ -105,15 +97,14 @@ export default {
       episodes: [],
       extrasLoaded: false,
       fetchDone: false,
+      initialLayout: "horizontal",
       mountedDone: false,
-      paused: true,
       randomEpisodeYouTubeId: undefined,
       show: undefined,
       showType: undefined,
       startLineIndex: 0,
       starttime: 0,
       video: undefined,
-      initialLayout: "horizontal",
     };
   },
   computed: {
@@ -149,43 +140,9 @@ export default {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
-    $adminMode() {
-      if (typeof this.$store.state.settings.adminMode !== "undefined")
-        return this.$store.state.settings.adminMode;
-    },
-    $quiz() {
-      if (typeof this.$store.state.settings.l2Settings !== "undefined")
-        return this.$store.state.settings.l2Settings.showQuiz;
-      else return false;
-    },
-    saved() {
-      return this.video.id;
-    },
-    previousEpisode() {
-      let thisEpisodeIndex = this.thisEpisodeIndex;
-      if (thisEpisodeIndex > 0 && this.episodes[thisEpisodeIndex - 1])
-        return `/${this.$l1.code}/${this.$l2.code}/youtube/view/${
-          this.episodes[thisEpisodeIndex - 1].youtube_id
-        }/`;
-    },
-    thisEpisodeIndex() {
-      return this.episodes.findIndex(
-        (episode) => episode.youtube_id === this.video.youtube_id
-      );
-    },
-    nextEpisode() {
-      let thisEpisodeIndex = this.thisEpisodeIndex;
-      if (this.episodes[thisEpisodeIndex + 1])
-        return `/${this.$l1.code}/${this.$l2.code}/youtube/view/${
-          this.episodes[thisEpisodeIndex + 1].youtube_id
-        }/`;
-    },
     currentTimeInSeconds() {
       let t = Math.floor(this.currentTime / 10) * 10;
       return t;
-    },
-    isMobile() {
-      return Helper.isMobile();
     },
   },
   validate({ params, query, store }) {
@@ -215,7 +172,11 @@ export default {
     this.unbindKeys();
   },
   watch: {
+    /**
+     * Called when the video is first fetched
+     */
     async video() {
+      console.log('YouTube View: 📼 Video changed', this.video)
       if (!this.extrasLoaded && typeof this.video !== "undefined") {
         this.extrasLoaded = true;
         console.log(`YouTube View (on video change): load subs if missing...`);
@@ -234,17 +195,22 @@ export default {
             );
         }
         console.log(`YouTube View (on video change): loading extras...`);
-        await this.loadExtras();
+        this.setShow();
+        this.saveHistory();
         this.bindKeys();
         this.unsubscribe = this.$store.subscribe((mutation, state) => {
           if (mutation.type === "shows/LOAD_SHOWS") {
-            this.loadShow();
+            this.setShow();
           }
         });
-        this.saveHistory();
+        console.log(`YouTube View: All done.`);
       }
     },
+    /**
+     * Called when the show is loaded from this.setShows() after the shows.js store retrieves TV shows
+     */
     async show() {
+      console.log('YouTube View: 📀 Show changed', this.show)
       if (this.show) {
         // News and YouTube channels are sorted by date
         // Audiobooks and TV Shows are sorted by title
@@ -351,25 +317,23 @@ export default {
       }
       return video;
     },
-    async loadExtras() {
-      console.log(`YouTube View: Loading show...`);
-      this.loadShow();
-      console.log(`YouTube View: Saving history...`);
-      this.saveHistory();
-      console.log(`YouTube View: All done.`);
-    },
     async getSaved() {
-      let response = await axios.get(
-        `${Config.youtubeVideosTableName(this.$l2.id)}?filter[youtube_id][eq]=${
-          this.youtube_id
-        }&filter[l2][eq]=${this.$l2.id}&fields=*,tv_show.*,talk.*&timestamp=${
-          this.$adminMode ? Date.now() : 0
-        }`
-      );
-      response = response.data;
-
-      if (response && response.data && response.data.length > 0) {
-        let video = response.data[0];
+      let response
+      try {
+        response = await axios.get(
+          `${Config.youtubeVideosTableName(this.$l2.id)}?filter[youtube_id][eq]=${
+            this.youtube_id
+          }&filter[l2][eq]=${this.$l2.id}&fields=channel_id,id,l2,lesson,level,notes,subs_l1,subs_l2,title,topic,youtube_id,tv_show.*,talk.*&timestamp=${
+            this.$adminMode ? Date.now() : 0
+          }`
+        );
+      }
+      catch (err) {
+        console.log(err)
+        return
+      }
+      if (response && response.data && response.data.data && response.data.data.length > 0) {
+        let video = response.data.data[0];
         for (let field of ["subs_l2", "subs_l1"]) {
           if (video[field] && typeof video[field] === "string") {
             let savedSubs = YouTube.parseSavedSubs(video[field]);
@@ -392,7 +356,8 @@ export default {
         return video;
       }
     },
-    loadShow() {
+    setShow() {
+      console.log('YouTube View: Setting show...')
       if (this.video) {
         if (this.video.tv_show) {
           this.show = this.video.tv_show;
@@ -403,7 +368,7 @@ export default {
         }
       }
     },
-    updateCurrentTime(currentTime) {
+    updateCurrentTimeQueryString(currentTime) {
       if (typeof window !== "undefined") {
         this.currentTime = currentTime;
         const params = new URLSearchParams(window.location.search);
@@ -416,17 +381,6 @@ export default {
           );
           this.saveHistory();
         }
-      }
-    },
-    speechStart() {
-      this.speaking = true;
-    },
-    speechEnd() {
-      this.speaking = false;
-    },
-    updatePaused(paused) {
-      if (paused !== this.paused) {
-        this.paused = paused;
       }
     },
     async updateEnded(ended) {
@@ -519,9 +473,6 @@ export default {
     scrollToComments() {
       document.getElementById("comments").scrollIntoView();
     },
-    togglePaused() {
-      this.$refs.youtube.togglePaused();
-    },
     bindKeys() {
       window.onkeydown = (e) => {
         if (
@@ -535,7 +486,7 @@ export default {
             return false;
           }
           if (e.code === "Space") {
-            this.togglePaused();
+            this.$refs.youtube ? this.$refs.youtube.togglePaused() : '';
             return false;
           }
           if (["ArrowUp", "ArrowLeft"].includes(e.code)) {
@@ -554,6 +505,7 @@ export default {
       };
     },
     saveHistory() {
+      console.log(`YouTube View: Saving history...`);
       if (typeof this.video === "undefined") return;
       let data = {
         type: "video",

@@ -42,7 +42,7 @@ export default {
   async mounted() {
     try {
       let res = await axios.get(
-        `${Config.wiki}items/unavailable_videos?fields=youtube_id,l2,created_on&sort=-created_on`
+        `${Config.wiki}items/unavailable_videos?fields=youtube_id,l2,created_on&sort=-created_on&timestamp=${Date.now()}`
       );
       if (res) {
         let reports = res.data.data;

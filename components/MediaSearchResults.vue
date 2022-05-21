@@ -277,7 +277,7 @@ export default {
             this.$l2.id
           )}?sort=-id&filter[l2][eq]=${
             this.$l2.id
-          }${filters}&limit=${limit}&offset=${start}&fields=channel_id,id,lesson,level,title,topic,youtube_id,tv_show.*,talk.*&timestamp=${
+          }${filters}&limit=${limit}&offset=${start}&fields=id,l2,title,youtube_id,tv_show.*,talk.*&timestamp=${
             this.$adminMode ? Date.now() : 0
           }`
         );

@@ -76,13 +76,14 @@ export const actions = {
   async remove(context, { l2, type, show }) {
     let token = $nuxt.$auth.strategy.token.get()
     if (!token) return
+    token = token.replace('Bearer ', '')
     let response = await axios.delete(
-      token = token.replace('Bearer ', '')
       `${Config.wiki}items/${type === 'tvShows' ? 'tv_shows' : 'talks'}/${show.id}${
         this.$auth.user ? "?access_token=" + token : ""
       }`
     );
-    if (response && response.data) {
+    // response.data could be "" (empty string), which evaluates to undefined.
+    if (response) {
       context.commit('REMOVE_SHOW', { l2, type, show })
     }
     return true
