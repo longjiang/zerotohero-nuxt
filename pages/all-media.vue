@@ -226,7 +226,16 @@
                 </p>
                 <p>
                   <b>Speakers native to:</b>
-                  {{ $l2.country.map((c) => c.flag + " " + c.name).join(", ") }}
+                  <span
+                    v-for="c in $l2.country"
+                    :key="`lang-country-${c.alpha2Code}`"
+                  >
+                    <img
+                      :src="`/vendor/flag-svgs/${c.alpha2Code}.svg`"
+                      class="flag-icon"
+                    />
+                    {{ c.name }}
+                  </span>
                 </p>
               </div>
               <div :class="{ 'pl-1 pr-1 pb-2 pt-5': true }" v-if="$l2.han">
@@ -281,8 +290,8 @@ export default {
       this.videos = await this.getVideos({ limit: 50, sort: "youtube_id" });
     this.randomVideos = this.videos.slice(0, 12);
     this.loadHeroVideo();
-    await Helper.timeout(3000)
-    this.loading = false // Incase resources fail to load, at least show them
+    await Helper.timeout(3000);
+    this.loading = false; // Incase resources fail to load, at least show them
   },
   beforeDestroy() {
     // you may call unsubscribe to stop the subscription
@@ -349,7 +358,7 @@ export default {
             talk: this.newsShow.id,
           });
       }
-      this.loading = false
+      this.loading = false;
     },
     random(array, max) {
       let shuffled = Helper.shuffle(array);
