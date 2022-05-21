@@ -20,7 +20,13 @@
       />
 
       <Nav
-        v-if="$route.params.l1 && $route.params.l1 && l1 && l2 && !(!wide && $route.name === 'youtube-view')"
+        v-if="
+          $route.params.l1 &&
+          $route.params.l1 &&
+          l1 &&
+          l2 &&
+          !(!wide && $route.name === 'youtube-view')
+        "
         class="zth-nav-wrapper"
         :l1="l1"
         :l2="l2"
@@ -65,7 +71,10 @@
           :fullHistory="fullHistory"
           :class="`${overlayPlayerMinimized ? 'overlay-player-minimized' : ''}`"
           :key="`youtube-view-comp-${overlayPlayerYouTubeId}`"
-          @close="overlayPlayerYouTubeId = undefined; overlayPlayerLesson = undefined"
+          @close="
+            overlayPlayerYouTubeId = undefined;
+            overlayPlayerLesson = undefined;
+          "
         />
       </div>
     </template>
@@ -98,6 +107,7 @@ export default {
   },
   computed: {
     ...mapState("settings", ["l2Settings", "l1", "l2"]),
+    ...mapState("history", ["history"]),
     savedWordsCount() {
       let count = this.$store.getters["savedWords/count"]({ l2: this.l2.code });
       // eslint-disable-next-line vue/no-parsing-error
@@ -158,14 +168,18 @@ export default {
     this.initAndGetUserData();
     this.wide = Helper.wide();
     smoothscroll.polyfill(); // Safari does not support smoothscroll
-    if (this.l1 && this.l2) this.loadSettings();
+    this.loadGeneralSettings();
+    if (this.l1 && this.l2) this.loadLanguageSpecificSettings();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (mutation.type.startsWith("history")) {
+        this.goToLastLanguage();
+      }
       if (mutation.type.startsWith("settings")) {
         if (mutation.type === "settings/SET_L1") {
           this.updatei18n();
         }
         if (mutation.type === "settings/SET_L2") {
-          this.loadSettings();
+          this.loadLanguageSpecificSettings();
         }
       }
     });
@@ -213,6 +227,10 @@ export default {
     },
   },
   methods: {
+    goToLastLanguage() {
+      let { l1, l2 } = this.history[this.history.length - 1];
+      this.$router.push({ name: "all-media", params: { l1, l2 } });
+    },
     // Initialize the user data record if there isn't one
     async createNewUserDataRecord(token, payload = {}) {
       let res = await axios
@@ -349,7 +367,12 @@ export default {
         this.dictionaryCredit = await dictionary.credit();
       }
     },
-    loadSettings() {
+    loadGeneralSettings() {
+      if (!this.$store.state.history.historyLoaded) {
+        this.$store.dispatch("history/load");
+      }
+    },
+    loadLanguageSpecificSettings() {
       if (this.settingsLoaded === this.l2.code) return;
       this.settingsLoaded = this.l2.code;
       this.$store.dispatch("settings/load");
@@ -370,9 +393,6 @@ export default {
           l2: this.l2,
           adminMode: this.$store.state.settings.adminMode,
         });
-      }
-      if (!this.$store.state.history.historyLoaded) {
-        this.$store.dispatch("history/load");
       }
     },
   },
