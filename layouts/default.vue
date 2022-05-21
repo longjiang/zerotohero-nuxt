@@ -155,7 +155,6 @@ export default {
       if (e.center.x < window.innerWidth * 0.1) this.edgeDetected = "left";
     },
     async onPan(e) {
-      console.log(e)
       let { deltaX, isFirst, isFinal } = e;
       if (this.edgeDetected) {
         this.translateX = deltaX;
