@@ -10,7 +10,9 @@
     />
     <router-link
       v-if="layout !== 'mini'"
-      class="btn btn-unstyled btn-minimize-toggle"
+      :class="`btn btn-unstyled btn-minimize-toggle ${
+        paused ? '' : 'btn-minimize-toggle-hidden'
+      }`"
       :to="minimizeToggleRouterLinkTo"
     >
       <i class="fas fa-chevron-down"></i>
@@ -597,10 +599,14 @@ export default {
   .btn-minimize-toggle {
     position: fixed;
     z-index: 9999;
-    right: 1.5rem;
-    top: 3.1rem;
+    right: 0.75rem;
+    top: calc(100vw * 9 / 16 / 2 + 1.75rem);
     bottom: inherit;
-    right: 0.2rem;
+    opacity: 1;
+    transition: 1s all ease-in-out;
+  }
+  .btn-minimize-toggle-hidden {
+    opacity: 0;
   }
 }
 
