@@ -164,7 +164,7 @@ import { tify, sify } from "chinese-conv";
 
 export default {
   props: {
-    id: String,
+    id: [Number, String],
     type: String, // "tv-show" or "talk"
   },
   computed: {
@@ -237,6 +237,7 @@ export default {
         videos = videos.concat(
           await this.getVideos({
             keyword,
+            sort: this.sort
           })
         );
       }
@@ -248,6 +249,7 @@ export default {
         this.videos = await this.getVideos({
           limit: this.perPage,
           offset: this.moreVideos,
+          sort: this.sort
         });
       }
     },
@@ -261,6 +263,7 @@ export default {
         this.videos = await this.getVideos({
           limit: this.perPage,
           offset: this.moreVideos,
+          sort: this.sort
         });
         this.loadFeaturedVideo();
       }
@@ -270,7 +273,8 @@ export default {
     loadFeaturedVideo() {
       if (this.tries < 5) {
         if (this.videos && this.videos.length > 0)
-          this.featuredVideo = this.random(this.videos)[0];
+          // Helper.shuffle mutates the original array!
+          this.featuredVideo = Helper.shuffle([...this.videos])[0];
         this.tries++;
       } else {
         this.heroUnavailable = true;
@@ -278,10 +282,6 @@ export default {
     },
     onVideoUnavailable() {
       this.loadFeaturedVideo();
-    },
-    random(array, max) {
-      let shuffled = Helper.shuffle(array);
-      return shuffled.slice(0, max);
     },
     async saveTitle(e) {
       let newTitle = e.target.innerText;
@@ -335,6 +335,7 @@ export default {
         let newVideos = await this.getVideos({
           limit: this.perPage,
           offset: this.moreVideos,
+          sort: this.sort
         });
         this.videos = this.videos.concat(newVideos);
       }
@@ -347,8 +348,7 @@ export default {
         return response.data.data;
       }
     },
-    async getVideos({ keyword, limit = 500, offset = 0 } = {}) {
-      let sort = this.sort;
+    async getVideos({ keyword, limit = 500, offset = 0, sort = "title" } = {}) {
       let keywordFilter = keyword ? `&filter[title][contains]=${keyword}` : "";
       let response = await axios.get(
         `${Config.youtubeVideosTableName(this.$l2.id)}?filter[l2][eq]=${
@@ -361,14 +361,14 @@ export default {
       );
       let videos = response.data.data || [];
       videos = Helper.uniqueByValue(videos, "youtube_id");
-      if (this.sort === "title") {
+      if (sort === "title") {
         videos =
           videos.sort((x, y) =>
             (x.title || "").localeCompare(y.title, this.$l2.locales[0], {
               numeric: true,
             })
           ) || [];
-      } else if (this.sort === "-date") {
+      } else if (sort === "-date") {
         videos =
           videos.sort((y, x) =>
             x.date
