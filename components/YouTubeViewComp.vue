@@ -30,6 +30,7 @@
         'main-dark': true,
         'main-dark-performant': isMobile,
         'youtube-view-wrapper': true,
+        'youtube-view-landscape': landscape,
         fullscreen: layout === 'vertical',
       }"
     >
@@ -116,6 +117,13 @@ export default {
     };
   },
   computed: {
+    landscape() {
+      if (this.forcePortrait) return false;
+      if (process.browser && this.viewportWidth && this.viewportHeight) {
+        let landscape = this.viewportWidth > this.viewportHeight;
+        return landscape;
+      }
+    },
     minimizeToggleRouterLinkTo() {
       if (this.mini)
         return {
@@ -582,6 +590,7 @@ export default {
 .btn-minimize-toggle,
 .btn-maximize-toggle {
   color: white;
+  text-shadow: 0 0 10px black;
 }
 
 .btn-maximize-toggle {
@@ -592,15 +601,23 @@ export default {
   z-index: 9;
   position: absolute;
   right: 0;
-  bottom: 0;
+}
+
+.zerotohero-wide {
+  .btn-minimize-toggle {
+    position: fixed;
+    right: 1rem;
+    z-index: 999;
+    top: 1rem;
+  }
 }
 
 .zerotohero-not-wide {
   .btn-minimize-toggle {
     position: fixed;
     z-index: 9999;
-    right: 0.75rem;
-    top: calc(100vw * 9 / 16 / 2 + 1.75rem);
+    right: 1.75rem;
+    top: 7rem;
     bottom: inherit;
     opacity: 1;
     transition: 1s all ease-in-out;
