@@ -37,15 +37,12 @@
         ref="youtube"
         skin="dark"
         :video="video"
-        :quiz="$quiz"
         :key="`transcript-${video.youtube_id}`"
         :autoload="true"
         :autoplay="false"
         :starttime="starttime"
         :show="show"
         :showType="showType"
-        :previousEpisode="previousEpisode"
-        :nextEpisode="nextEpisode"
         :episodes="episodes"
         :episodeIndex="thisEpisodeIndex"
         :forcePortrait="false"
@@ -96,6 +93,7 @@ export default {
       episodes: [],
       extrasLoaded: false,
       fetchDone: false,
+      initialLayout: "horizontal",
       mountedDone: false,
       paused: true,
       randomEpisodeYouTubeId: undefined,
@@ -104,7 +102,6 @@ export default {
       startLineIndex: 0,
       starttime: 0,
       video: undefined,
-      initialLayout: "horizontal",
     };
   },
   computed: {
@@ -132,15 +129,6 @@ export default {
     $l2() {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
-    },
-    $adminMode() {
-      if (typeof this.$store.state.settings.adminMode !== "undefined")
-        return this.$store.state.settings.adminMode;
-    },
-    $quiz() {
-      if (typeof this.$store.state.settings.l2Settings !== "undefined")
-        return this.$store.state.settings.l2Settings.showQuiz;
-      else return false;
     },
     saved() {
       return this.video.id;

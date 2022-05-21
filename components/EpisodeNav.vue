@@ -14,7 +14,7 @@
   >
     <router-link
       v-if="previousEpisode"
-      :to="previousEpisode"
+      :to="to(previousEpisode)"
       :class="{
         'btn btn-medium': true,
         'btn-primary': skin === 'light',
@@ -25,9 +25,13 @@
     </router-link>
     <router-link
       v-if="show"
-      :to="`/${$l1.code}/${$l2.code}/show/${
-        showType === 'tv_show' ? 'tv-show' : 'talk'
-      }/${show.id}`"
+      :to="{
+        name: 'show',
+        params: {
+          type: showType === 'tv_show' ? 'tv-show' : 'talk',
+          id: show.id,
+        },
+      }"
       :class="{
         'btn btn-medium': true,
         'btn-primary': skin === 'light',
@@ -46,16 +50,20 @@
     </router-link>
     <router-link
       v-if="episodes && episodes.length && show"
-      :to="`/${$l1.code}/${$l2.code}/show/${
-        showType === 'tv_show' ? 'tv-show' : 'talk'
-      }/${show.id}`"
+      :to="{
+        name: 'show',
+        params: {
+          type: showType === 'tv_show' ? 'tv-show' : 'talk',
+          id: show.id,
+        },
+      }"
       class="small pr-2"
     >
       {{ episodeIndex + 1 }} / {{ episodes.length }}
     </router-link>
     <router-link
       v-if="nextEpisode"
-      :to="nextEpisode"
+      :to="to(nextEpisode)"
       :class="{
         'btn btn-medium': true,
         'btn-primary': skin === 'light',
@@ -85,12 +93,6 @@ export default {
     video: {
       type: Object,
     },
-    previousEpisode: {
-      type: String,
-    },
-    nextEpisode: {
-      type: String,
-    },
     skin: {
       default: "light",
     },
@@ -102,9 +104,6 @@ export default {
     },
     showType: {
       type: String,
-    },
-    episodeIndex: {
-      type: Number,
     },
   },
   data() {
@@ -124,6 +123,29 @@ export default {
     randomEpisodeYouTubeId() {
       let episode = Helper.randomArrayItem(this.episodes);
       return episode.youtube_id;
+    },
+    previousEpisode() {
+      return this.episodeIndex > 0
+        ? this.episodes[this.episodeIndex - 1]
+        : undefined;
+    },
+    nextEpisode() {
+      return this.episodeIndex < this.episodes.length - 1
+        ? this.episodes[this.episodeIndex + 1]
+        : undefined;
+    },
+    episodeIndex() {
+      return this.episodes.findIndex(
+        (v) => v.youtube_id === this.video.youtube_id
+      );
+    },
+  },
+  methods: {
+    to(video) {
+      return {
+        name: "youtube-view",
+        params: { youtube_id: video.youtube_id, lesson: video.lesson },
+      };
     },
   },
 };

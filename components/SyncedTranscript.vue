@@ -156,9 +156,6 @@ export default {
     skin: {
       default: "light",
     },
-    quiz: {
-      default: false,
-    },
     sticky: {
       default: false,
     },
@@ -255,6 +252,11 @@ export default {
     $adminMode() {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
+    },
+    quiz() {
+      if (typeof this.$store.state.settings.l2Settings !== "undefined")
+        return this.$store.state.settings.l2Settings.showQuiz;
+      else return false;
     },
     previousLine() {
       let previousIndex = Math.max(this.currentLineIndex - 1, 0);

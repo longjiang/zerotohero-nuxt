@@ -42,7 +42,6 @@
             neverPlayed && layout === 'horizontal' ? 'transparent' : ''
           }`"
           :episodes="episodes"
-          :episodeIndex="episodeIndex"
           @goToLine="goToLine"
           @togglePaused="togglePaused"
           @rewind="rewind"
@@ -89,10 +88,7 @@
         />
         <EpisodeNav
           :video="video"
-          :previousEpisode="previousEpisode"
-          :nextEpisode="nextEpisode"
           :episodes="episodes"
-          :episodeIndex="episodeIndex"
           :showType="showType"
           :skin="skin"
           :show="show"
@@ -105,7 +101,6 @@
         ref="transcript"
         :key="'transcript-' + video.youtube_id"
         :lines="video.subs_l2"
-        :quiz="quiz"
         :parallellines="video.subs_l1"
         :sticky="sticky"
         :startLineIndex="startLineIndex"
@@ -151,13 +146,10 @@
         </div>
         <EpisodeNav
           :video="video"
-          :previousEpisode="previousEpisode"
-          :nextEpisode="nextEpisode"
           :skin="skin"
           :episodes="episodes"
           :show="show"
           :showType="showType"
-          :episodeIndex="episodeIndex"
           class="mb-5"
         />
         <VideoAdmin
@@ -193,17 +185,8 @@ export default {
     showType: {
       type: String,
     },
-    previousEpisode: {
-      type: String,
-    },
-    nextEpisode: {
-      type: String,
-    },
     episodes: {
       type: Array,
-    },
-    episodeIndex: {
-      type: Number,
     },
     layout: {
       type: String,
@@ -211,9 +194,6 @@ export default {
     },
     highlight: {
       type: Array,
-    },
-    quiz: {
-      default: false,
     },
     hsk: {
       default: "outside",
