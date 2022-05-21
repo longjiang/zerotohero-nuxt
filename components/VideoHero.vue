@@ -98,6 +98,7 @@ export default {
   },
   watch: {
     muted() {
+      if (!this.$refs.youtube) return false
       if (this.muted) this.$refs.youtube.mute();
       else this.$refs.youtube.unMute();
     },
@@ -114,7 +115,7 @@ export default {
       this.$emit("videoUnavailable", true);
     },
     visibilityChanged(visible) {
-      console.log(visible)
+      if (!this.$refs.youtube) return
       if (!visible) this.$refs.youtube.mute();
       if (visible && !this.muted) this.$refs.youtube.unMute();
     }
