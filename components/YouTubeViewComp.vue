@@ -307,7 +307,7 @@ export default {
         response = await axios.get(
           `${Config.youtubeVideosTableName(this.$l2.id)}?filter[youtube_id][eq]=${
             this.youtube_id
-          }&filter[l2][eq]=${this.$l2.id}&fields=*,tv_show.*,talk.*&timestamp=${
+          }&filter[l2][eq]=${this.$l2.id}&fields=channel_id,id,l2,lesson,level,notes,subs_l1,subs_l2,title,topic,youtube_id,tv_show.*,talk.*&timestamp=${
             this.$adminMode ? Date.now() : 0
           }`
         );
