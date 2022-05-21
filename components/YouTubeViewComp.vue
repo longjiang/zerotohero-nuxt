@@ -302,17 +302,22 @@ export default {
       return video;
     },
     async getSaved() {
-      let response = await axios.get(
-        `${Config.youtubeVideosTableName(this.$l2.id)}?filter[youtube_id][eq]=${
-          this.youtube_id
-        }&filter[l2][eq]=${this.$l2.id}&fields=*,tv_show.*,talk.*&timestamp=${
-          this.$adminMode ? Date.now() : 0
-        }`
-      );
-      response = response.data;
-
-      if (response && response.data && response.data.length > 0) {
-        let video = response.data[0];
+      let response
+      try {
+        response = await axios.get(
+          `${Config.youtubeVideosTableName(this.$l2.id)}?filter[youtube_id][eq]=${
+            this.youtube_id
+          }&filter[l2][eq]=${this.$l2.id}&fields=*,tv_show.*,talk.*&timestamp=${
+            this.$adminMode ? Date.now() : 0
+          }`
+        );
+      }
+      catch (err) {
+        console.log(err)
+        return
+      }
+      if (response && response.data && response.data.data && response.data.data.length > 0) {
+        let video = response.data.data[0];
         for (let field of ["subs_l2", "subs_l1"]) {
           if (video[field] && typeof video[field] === "string") {
             let savedSubs = YouTube.parseSavedSubs(video[field]);
