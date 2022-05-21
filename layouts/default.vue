@@ -170,9 +170,13 @@ export default {
     smoothscroll.polyfill(); // Safari does not support smoothscroll
     this.loadGeneralSettings();
     if (this.l1 && this.l2) this.loadLanguageSpecificSettings();
+    let navigated = false
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type.startsWith("history")) {
-        this.goToLastLanguage();
+      if (mutation.type === ("history/LOAD_HISTORY")) {
+        if (!navigated) {
+          this.goToLastLanguage();
+          navigated = true
+        }
       }
       if (mutation.type.startsWith("settings")) {
         if (mutation.type === "settings/SET_L1") {

@@ -183,7 +183,7 @@ export default {
      * Called when the video is first fetched
      */
     async video() {
-      console.log("YouTube View: 📼 Video changed", this.video);
+      console.log("YouTube View: 📼 Video changed, getting subs and other info...");
       if (!this.extrasLoaded && typeof this.video !== "undefined") {
         this.extrasLoaded = true;
         console.log(`YouTube View (on video change): load subs if missing...`);
@@ -201,7 +201,6 @@ export default {
               this.video.subs_l2[0].duration
             );
         }
-        console.log(`YouTube View (on video change): loading extras...`);
         this.setShow();
         this.saveHistory();
         this.bindKeys();
@@ -217,7 +216,7 @@ export default {
      * Called when the show is loaded from this.setShows() after the shows.js store retrieves TV shows
      */
     async show() {
-      console.log("YouTube View: 📀 Show changed", this.show);
+      console.log("YouTube View: 📀 Show changed, getting episodes...");
       if (this.show) {
         // News and YouTube channels are sorted by date
         // Audiobooks and TV Shows are sorted by title

@@ -3,10 +3,13 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12 text-center">
-          <div v-if="!$route.params || !$route.params.l1" style="font-size: 2rem; color: white">
+          <div
+            v-if="!$route.params || !$route.params.l1"
+            style="font-size: 2rem; color: white"
+          >
             <img
               src="/img/czh-icon.png"
-              style="height: 5.5rem; margin-bottom: 1rem; margin-top: 3rem;"
+              style="height: 5.5rem; margin-bottom: 1rem; margin-top: 3rem"
               data-not-lazy
             />
             <br />
@@ -14,7 +17,7 @@
           </div>
           <div class="error-page">
             <h1 v-if="error.statusCode === 404">Route Not Found</h1>
-            <h1 v-else>An {{ error.statusCode }} error has occurred.</h1>
+            <h1 v-else>A {{ error.statusCode }} error has occurred.</h1>
             <p v-if="error.statusCode === 404">
               The route you requested
               <code>{{ $route.path }}</code>
@@ -32,6 +35,9 @@
 export default {
   props: ["error"],
   layout: "error",
+  mounted() {
+    console.log(this.error);
+  },
 };
 </script>
 <style scoped>
