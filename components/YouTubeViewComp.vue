@@ -242,7 +242,7 @@ export default {
   },
   methods: {
     close() {
-      this.$router.push(this.minimizeVideoTo);
+      if (this.layout !== 'mini') this.$router.push(this.minimizeVideoTo);
       this.$emit('close')
     },
     onYouTubeUpdateLayout(layout) {

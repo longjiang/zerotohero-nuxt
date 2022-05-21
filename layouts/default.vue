@@ -47,6 +47,7 @@
         :showSecondaryNav="false"
         :bottom="true"
         mode="small-icon"
+        style="z-index: 10"
       />
       <div class="zth-content">
         <Nuxt id="main" v-if="$route.name !== 'youtube-view'" />
