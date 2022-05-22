@@ -220,7 +220,7 @@ a:active {
     &.language-list-item-grid {
       height: 100%;
       border: 1px solid #ddd;
-      padding: 1rem;
+      padding: 1rem 0;
       padding-bottom: 0.7rem;
       text-align: center;
       border-radius: 0.5rem;
@@ -230,6 +230,7 @@ a:active {
         display: block;
         font-weight: bold;
         line-height: 1.2;
+        font-size: 0.75em;
       }
       ::v-deep .flag-icon-wrapper {
         margin-bottom: 0.5rem;

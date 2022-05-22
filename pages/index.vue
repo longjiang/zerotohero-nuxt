@@ -33,7 +33,7 @@
                 <b>Zero to Hero</b>
               </div>
               <p class="blurb">
-                Study
+                Learn
                 <strong>
                   <router-link
                     :to="{ name: 'language-map' }"
@@ -42,7 +42,7 @@
                     {{ languagesWithVideos.length }} languages 🌏
                   </router-link>
                 </strong>
-                with
+                by watching
                 <strong>
                   <router-link
                     :to="{ name: 'discover-shows' }"
@@ -103,23 +103,107 @@
         </div>
         <!-- <Sale class="mb-5" style="border-radius: 1rem !important" /> -->
 
+        <div class="row mt-2 mb-3" v-if="!loaded">
+          <div class="col-sm-12 text-center pt-3 pb-3 mb-3">
+            <div class="home-card mb-0" style="padding: 1rem 1rem 2rem 1rem">
+              <Loader :sticky="true" message="Loading more languages . . ." />
+            </div>
+          </div>
+        </div>
         <client-only>
-          <div :class="{ 'row mb-5': true, 'd-none': !hasDashboard }">
+          <div class="row mt-4 mb-5" id="languageList">
             <div class="col-sm-12">
-              <div class="home-card mb-0" style="padding: 1rem 1rem 2rem 1rem">
-                <h5 class="text-center mt-3 mb-3 p-0">
-                  Your Words &amp; Phrases
-                </h5>
-                <LazyDashboard
-                  @hasDashboard="hasDashboardUpdate"
-                  :showVideos="false"
+              <div class="home-card p-2">
+                <h5 class="text-center mt-3 mb-3">Choose Your Language</h5>
+                <div class="pl-2 pr-2">
+                  <b-form-input
+                    v-model="langKeyword"
+                    @compositionend.prevent.stop="() => false"
+                    placeholder="Search languages"
+                  />
+                </div>
+                <LanguageList
+                  :showSpeakers="false"
+                  :showFeatures="false"
+                  :keyword="langKeyword"
+                  :codes="[
+                    'ar',
+                    'az',
+                    'bn',
+                    'br',
+                    'bs',
+                    'bul',
+                    'cat',
+                    'ces',
+                    'cy',
+                    'dan',
+                    'de',
+                    'el',
+                    'en',
+                    'epo',
+                    'es',
+                    'eu',
+                    'fa',
+                    'fin',
+                    'fr',
+                    'gle',
+                    'glg',
+                    'hak',
+                    'he',
+                    'hi',
+                    'hun',
+                    'hr',
+                    'hye',
+                    'id',
+                    'isl',
+                    'it',
+                    'ja',
+                    'ko',
+                    'lat',
+                    'lav',
+                    'lit',
+                    'lzh',
+                    'msa',
+                    'nan',
+                    'nl',
+                    'no',
+                    'pa',
+                    'pl',
+                    'pt',
+                    'ron',
+                    'ru',
+                    'sr',
+                    'swe',
+                    'ta',
+                    'th',
+                    'tl',
+                    'tlh',
+                    'tr',
+                    'uk',
+                    'vi',
+                    'yue',
+                    'zh',
+                  ]"
+                  class="mt-4"
+                  :sort="true"
                   :showFlags="true"
-                  style="padding-top: 0.5rem"
+                  variant="grid"
                 />
+                <div class="text-center mt-1 p-1">
+                  <router-link
+                    class="btn btn-success d-block"
+                    to="/language-map"
+                  >
+                    <i class="fas fa-globe-asia mr-1"></i>
+                    More languages
+                    <i class="ml-1 fas fa-chevron-right"></i>
+                  </router-link>
+                </div>
               </div>
             </div>
           </div>
         </client-only>
+
         <div class="row">
           <div class="col-sm-6 mb-4">
             <div class="home-card">
@@ -224,100 +308,19 @@
             </div>
           </div>
         </div>
-        <div class="row mt-2 mb-3" v-if="!loaded">
-          <div class="col-sm-12 text-center pt-3 pb-3 mb-3">
-            <div class="home-card mb-0" style="padding: 1rem 1rem 2rem 1rem">
-              <Loader :sticky="true" message="Loading more languages . . ." />
-            </div>
-          </div>
-        </div>
         <client-only>
-          <div class="row mt-4 mb-5" id="languageList">
+          <div :class="{ 'row mb-5': true, 'd-none': !hasDashboard }">
             <div class="col-sm-12">
-              <div class="home-card p-4">
-                <h5 class="text-center mb-3">Choose Your Language</h5>
-                <b-form-input
-                  v-model="langKeyword"
-                  @compositionend.prevent.stop="() => false"
-                  placeholder="Search languages"
-                />
-                <LanguageList
-                  :showSpeakers="false"
-                  :showFeatures="false"
-                  :keyword="langKeyword"
-                  :codes="[
-                    'ar',
-                    'az',
-                    'bn',
-                    'br',
-                    'bs',
-                    'bul',
-                    'cat',
-                    'ces',
-                    'cy',
-                    'dan',
-                    'de',
-                    'el',
-                    'en',
-                    'epo',
-                    'es',
-                    'eu',
-                    'fa',
-                    'fin',
-                    'fr',
-                    'gle',
-                    'glg',
-                    'hak',
-                    'he',
-                    'hi',
-                    'hun',
-                    'hr',
-                    'hye',
-                    'id',
-                    'isl',
-                    'it',
-                    'ja',
-                    'ko',
-                    'lat',
-                    'lav',
-                    'lit',
-                    'lzh',
-                    'msa',
-                    'nan',
-                    'nl',
-                    'no',
-                    'pa',
-                    'pl',
-                    'pt',
-                    'ron',
-                    'ru',
-                    'sr',
-                    'swe',
-                    'ta',
-                    'th',
-                    'tl',
-                    'tlh',
-                    'tr',
-                    'uk',
-                    'vi',
-                    'yue',
-                    'zh',
-                  ]"
-                  class="mt-4"
-                  :sort="true"
+              <div class="home-card mb-0" style="padding: 1rem 1rem 2rem 1rem">
+                <h5 class="text-center mt-3 mb-3 p-0">
+                  Your Words &amp; Phrases
+                </h5>
+                <LazyDashboard
+                  @hasDashboard="hasDashboardUpdate"
+                  :showVideos="false"
                   :showFlags="true"
-                  variant="grid"
+                  style="padding-top: 0.5rem"
                 />
-                <div class="text-center mt-1 p-1">
-                  <router-link
-                    class="btn btn-success d-block"
-                    to="/language-map"
-                  >
-                    <i class="fas fa-globe-asia mr-1"></i>
-                    More languages
-                    <i class="ml-1 fas fa-chevron-right"></i>
-                  </router-link>
-                </div>
               </div>
             </div>
           </div>
@@ -467,7 +470,7 @@
           </div>
         </client-only>
       </div>
-      <div class="row mt-5 mb-5 bg-dark text-white">
+      <div class="row mt-5 bg-dark text-white">
         <div class="col-sm-12">
           <LazyFooter />
         </div>

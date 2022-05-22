@@ -5,7 +5,7 @@
       style="line-height: 1.2; font-size: 1.1em"
     >
       <router-link class="link-unstyled text-white" to="/">
-        <h4>zerotohero.ca</h4>
+        <h4>Zero to Hero</h4>
       </router-link>
     </div>
     
