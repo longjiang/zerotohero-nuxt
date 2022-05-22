@@ -329,7 +329,10 @@ export default {
       if (isVisible) {
         this.convertToSentencesAndAnnotate(this.$slots.default[0]);
       } else {
-        this.annotated = false
+        // We unset the annotations to save memory and battery, but we set the height and width to prevent the annotated text from shifting up and down.
+        this.$el.style.minHeight = this.$el.clientHeight + "px";
+        this.$el.style.minWidth = this.$el.clientWidth + "px";
+        this.annotated = false;
         this.$emit("annotated", false);
       }
     },
@@ -445,7 +448,7 @@ export default {
           if (token && typeof token === "object") {
             if (token.candidates.length > 0) {
               html += `<WordBlock transliterationprop="${tr(
-                token.text.replace('"', '')
+                token.text.replace('"', "")
               )}" :checkSaved="${
                 this.checkSaved
               }" ref="word-block" :phonetics="${this.phonetics}" :popup="${

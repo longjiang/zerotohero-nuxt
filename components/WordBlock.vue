@@ -238,7 +238,7 @@
             </span>
             <ol class="word-translation" v-if="word.definitions">
               <li
-                v-for="(def, index) in unique(word.definitions)"
+                v-for="(def, index) in unique(word.definitions || [])"
                 :key="`wordblock-def-${index}`"
                 class="word-translation-item"
               >
@@ -392,7 +392,7 @@ export default {
             !bannedEndings.includes(head.charAt(head.length - 1))
           ) {
             let hanjas = this.token.candidates.map((c) => c.hanja);
-            if (this.$l2.code !== "vi") hanjas = Helper.unique(hanjas); // Vietnamese Han Tu is wiktionary CSV file has incorrect homophones
+            if (this.$l2.code !== "vi") hanjas = Helper.unique(hanjas || []); // Vietnamese Han Tu is wiktionary CSV file has incorrect homophones
             if (hanjas.length === 1 && hanjas[0] && !hanjas[0].includes(",")) {
               hanja = hanjas[0];
             } else if (this.$l2.code === "vi") {
