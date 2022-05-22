@@ -13,6 +13,7 @@
       v-if="featuredVideo"
       :video="featuredVideo"
       :showEpisodes="false"
+      :playButtonIcon="heroButtonIcon"
       :playButtonText="heroButtonText"
       :title="
         ['Music', 'News', 'Movies'].includes(show.title)
@@ -198,6 +199,9 @@ export default {
     showDate() {
       return this.type === "talk";
     },
+    heroButtonIcon() {
+      if (this.show.audiobook) return 'fas fa-book-open'
+    },
     heroButtonText() {
       if (this.collection === "tv_show") {
         if (this.show.title === "Music") return "Play Music Video";
@@ -208,7 +212,6 @@ export default {
         if (this.show.audiobook) return "Read Chapter 1";
         return "Play Latest Upload"
       }
-      return "Play Video";
     },
     title() {
       let what = "";

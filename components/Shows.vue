@@ -3,10 +3,10 @@
     <VideoHero
       v-if="featureEpisode"
       :video="featureEpisode"
+      :playButtonIcon="heroButtonIcon"
       :playButtonText="heroButtonText"
       :episodesButtonText="heroEpisodesText"
-      :playButtonIcon="heroEpisodesIcon"
-      :icon="heroButtonIcon"
+      :episodesButtonIcon="heroEpisodesIcon"
       @videoUnavailable="onVideoUnavailable"
     />
     <div class="shows">
@@ -68,7 +68,6 @@
 
 <script>
 import Config from "@/lib/config";
-import axios from "axios";
 import { tify } from "chinese-conv";
 
 export default {
@@ -113,7 +112,10 @@ export default {
   },
   computed: {
     heroEpisodesIcon() {
-      if (this.routeType === "audiobooks") return "fas fa-headphones";
+      if (this.routeType === "audiobooks") return "fas fa-list";
+    },
+    heroButtonIcon() {
+      if (this.routeType === "audiobooks") return "fas fa-book-open";
     },
     heroButtonText() {
       if (this.routeType === "tv-shows") return "Watch Episode 1";
@@ -198,13 +200,15 @@ export default {
       );
     },
     async getFirstEpisodeOfShow(show, showType, l2Id) {
-      let sort = '-date'
-      if (show.audiobook || showType === 'tv_show') {
-        sort = 'title'
+      let sort = "-date";
+      if (show.audiobook || showType === "tv_show") {
+        sort = "title";
       }
       let url = `${Config.youtubeVideosTableName(
         l2Id
-      )}?filter[${showType}][eq]=${show.id}&limit=1&fields=youtube_id,id,l2,tv_show,talk,title&sort=${sort}`;
+      )}?filter[${showType}][eq]=${
+        show.id
+      }&limit=1&fields=youtube_id,id,l2,tv_show,talk,title&sort=${sort}`;
       let response = await this.$authios.get(url);
 
       if (response.data && response.data.data.length > 0) {

@@ -56,7 +56,7 @@
                   }"
                   class="ml-1 btn btn-ghost-dark-no-bg"
                 >
-                  <i class="fas fa-th-large mr-1"></i>
+                  <i :class="`${episodesButtonIcon} mr-1`"></i>
                   {{ episodesButtonText }}
                 </router-link>
                 <b-button
@@ -87,14 +87,17 @@ export default {
     title: {
       type: String,
     },
-    playButtonText: {
-      default: "Watch & Learn",
+    episodesButtonIcon: {
+      default: "fas fa-th-large",
     },
     episodesButtonText: {
       default: "Episodes",
     },
     playButtonIcon: {
       default: "fas fa-play",
+    },
+    playButtonText: {
+      default: "Watch & Learn",
     },
     showEpisodes: {
       type: Boolean,
