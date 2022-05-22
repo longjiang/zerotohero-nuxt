@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     async load() {
-      let response = await axios.get(
+      let response = await this.$authios.get(
         `${Config.wiki}items/pages/${this.id}?${Date.now()}`
       );
       response = response.data

@@ -272,7 +272,7 @@ export default {
       }
       let limit = this.perPage;
       try {
-        let response = await axios.get(
+        let response = await this.$authios.get(
           `${Config.youtubeVideosTableName(
             this.$l2.id
           )}?sort=-id&filter[l2][eq]=${
@@ -297,7 +297,7 @@ export default {
       }
     },
     async getChannels() {
-      let response = await axios.get(
+      let response = await this.$authios.get(
         `${Config.wiki}items/youtube_channels?filter[language][eq]=${this.$l2.id}&fields=*,avatar.*`
       );
       if (response.data && response.data.length > 0) {

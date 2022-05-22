@@ -50,7 +50,7 @@ export default {
     },
   },
   async fetch() {
-    let response = await axios.get(
+    let response = await this.$authios.get(
       `${Config.wiki}items/heroes?fields=*,avatar.*`
     );
     this.heroes = response.data.data

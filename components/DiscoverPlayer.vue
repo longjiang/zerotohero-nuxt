@@ -127,7 +127,7 @@ export default {
       return Helper.l1Code(...arguments);
     },
     async removeEpisode(randomShowRandomEpisode) {
-      let response = await axios.delete(
+      let response = await this.$authios.delete(
         `${Config.youtubeVideosTableName(randomShowRandomEpisode.l2)}/${randomShowRandomEpisode.id}${this.$auth.user ? '?access_token=' + this.$auth.user.token : ''}`
       );
       
@@ -171,7 +171,7 @@ export default {
     },
     async getFirstEpisodeOfShow(showId, showType, l2Id) {
       let url = `${Config.youtubeVideosTableName(l2Id)}?filter[${showType}][eq]=${showId}&fields=youtube_id,id,l2`;
-      let response = await axios.get(url);
+      let response = await this.$authios.get(url);
 
       if (response.data && response.data.data.length > 0) {
         let videos = response.data.data;
@@ -185,7 +185,7 @@ export default {
         ? `filter[${showType}][eq]=${showId}`
         : `filter[tv_show][null]=1&filter[talk][null]=1${langFilter}`;
       let url = `${Config.youtubeVideosTableName(l2Id)}?${showFilter}&fields=youtube_id,id,l2`;
-      let response = await axios.get(url);
+      let response = await this.$authios.get(url);
 
       if (response.data && response.data.data.length > 0) {
         let videos = response.data.data;
