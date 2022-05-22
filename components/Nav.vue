@@ -312,6 +312,12 @@ export default {
           exact: true,
           children: [
             {
+              name: "profile",
+              icon: "fas fa-user",
+              title: "Profile",
+              show: this.$auth && this.$auth.loggedIn,
+            },
+            {
               name: "login",
               icon: "fas fa-key",
               title: "Login",
@@ -359,12 +365,6 @@ export default {
               title: "Logout",
               show: this.$auth && this.$auth.loggedIn,
               params: { l1: this.l1.code, l2: this.l2.code },
-            },
-            {
-              name: "profile",
-              icon: "fas fa-user",
-              title: "Profile",
-              show: this.$auth && this.$auth.loggedIn,
             },
           ],
         },

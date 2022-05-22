@@ -155,7 +155,8 @@ export default {
     '~plugins/main.js',
     { src: '~/plugins/pwa-update.js', mode: 'client' },
     { src: '~/plugins/vuex-persist.js', mode: 'client' },
-    { src: '~/plugins/shared-mutations.js', mode: 'client' }
+    { src: '~/plugins/shared-mutations.js', mode: 'client' },
+    { src: '~/plugins/idle-vue.js', mode: 'client' }
   ],
 
   build: {

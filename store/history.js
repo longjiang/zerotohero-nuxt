@@ -92,7 +92,7 @@ export const actions = {
       let url = `${Config.wiki}items/user_data/${user.dataId}?fields=id`
       await this.$authios.patch(url, payload)
         .catch(async (err) => {
-          console.log('Axios error in savedWords.js: err, url, payload', err, url, payload)
+          console.log('Axios error in history.js: err, url, payload', err, url, payload)
         })
     }
   }

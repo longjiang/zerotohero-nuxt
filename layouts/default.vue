@@ -19,6 +19,8 @@ export default {
       collapsed: false,
       overlayPlayerYouTubeId: undefined,
       overlayPlayerLesson: undefined,
+      time: 0,
+      timeLoggerID: undefined,
       // transition: false,
       // edgeDetected: false,
       // translateX: 0,
@@ -105,6 +107,10 @@ export default {
           this.loadLanguageSpecificSettings();
         }
       }
+      if (mutation.type === "progress/LOAD") {
+        this.time = this.$store.getters["progress/time"](this.l2);
+        this.startLoggingUserTime();
+      }
     });
     this.onLanguageChange();
     this.onAllLanguagesLoaded();
@@ -150,6 +156,20 @@ export default {
     },
   },
   methods: {
+    startLoggingUserTime() {
+      if (this.timeLoggerID) return;
+      this.timeLoggerID = setInterval(() => {
+        if (!this.isAppIdle && this.l2) {
+          this.time += 1000;
+          if (this.time % 5000 === 0) {
+            this.$store.dispatch("progress/setTime", {
+              l2: this.l2,
+              time: this.time,
+            });
+          }
+        }
+      }, 1000);
+    },
     onPanStart(e) {
       if (e.center.x > window.innerWidth * 0.9) this.edgeDetected = "right";
       if (e.center.x < window.innerWidth * 0.1) this.edgeDetected = "left";
@@ -160,7 +180,7 @@ export default {
         this.translateX = deltaX;
       }
       if (isFinal) {
-        if (deltaX < 0 && this.edgeDetected === 'right') {
+        if (deltaX < 0 && this.edgeDetected === "right") {
           console.log("FORWARD");
           this.transition = true;
           this.translateX = -1 * window.innerWidth;
@@ -169,7 +189,7 @@ export default {
           this.$router.forward();
           this.translateX = 0;
         }
-        if (deltaX > 0 && this.edgeDetected === 'left') {
+        if (deltaX > 0 && this.edgeDetected === "left") {
           console.log("BACK");
           this.transition = true;
           this.translateX = window.innerWidth;
@@ -234,7 +254,7 @@ export default {
               });
             if (userDataRes && userDataRes.data && userDataRes.data.data) {
               if (userDataRes.data.data[0]) {
-                let { id, saved_words, saved_phrases, history } =
+                let { id, saved_words, saved_phrases, history, progress } =
                   userDataRes.data.data[0];
                 user.dataId = id;
                 this.$store.dispatch("savedWords/importFromJSON", saved_words);
@@ -243,6 +263,7 @@ export default {
                   saved_phrases
                 );
                 this.$store.dispatch("history/importFromJSON", history);
+                this.$store.dispatch("progress/importFromJSON", progress);
               } else {
                 // No user data found, let's create it
                 user.dataId = await createNewUserDataRecord(token);
@@ -315,6 +336,9 @@ export default {
       }
       if (!this.$store.state.savedPhrases.savedPhrasesLoaded) {
         this.$store.dispatch("savedPhrases/load");
+      }
+      if (!this.$store.state.progress.progressLoaded) {
+        this.$store.dispatch("progress/load");
       }
       let dictionary = await this.$getDictionary();
       if (dictionary) {
@@ -410,9 +434,7 @@ export default {
         mode="small-icon"
         style="z-index: 10"
       />
-      <div
-        class="zth-content"
-      >
+      <div class="zth-content">
         <!-- These touch events block scrolling from iOS! -->
         <!-- v-hammer:panstart.horizontal="onPanStart"
         v-hammer:pan.horizontal="onPan" -->
