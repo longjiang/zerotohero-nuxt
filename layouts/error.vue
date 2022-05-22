@@ -16,14 +16,14 @@
             <b>Hero to Zero 😭</b>
           </div>
           <div class="error-page">
-            <h1 v-if="error.statusCode === 404">Route Not Found</h1>
-            <h1 v-else>A {{ error.statusCode }} error has occurred.</h1>
+            <h3 v-if="error.statusCode === 404">Route Not Found</h3>
+            <h3 v-else>A {{ error.statusCode }} error has occurred.</h3>
             <p v-if="error.statusCode === 404">
               The route you requested
               <code>{{ $route.path }}</code>
               is invalid.
             </p>
-            <NuxtLink to="/">Go back to the home page</NuxtLink>
+            <a href="/">Go back to the home page</a>
           </div>
         </div>
       </div>

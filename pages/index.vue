@@ -87,15 +87,7 @@
                   class="blurb-highlight"
                 >
                   {{ this.randomLanguage[0] }}!
-
-                  <img
-                    v-if="countryCode(this.randomLanguage[1])"
-                    :class="`flag-icon ${!countryCode ? 'd-none' : ''} ml-2`"
-                    :src="`/vendor/flag-svgs/${countryCode(
-                      this.randomLanguage[1]
-                    )}.svg`"
-                  />
-                  <span v-else>💬</span>
+                  <LanguageFlag :language="randomLanguageObj" :autocycle="true" style="position: relative; bottom: 0.2rem; transform: scale(0.75);" />
                 </router-link>
               </p>
             </div>
@@ -487,6 +479,7 @@ export default {
       loaded: false,
       hasDashboard: false,
       randomLanguage: undefined,
+      randomLanguageObj: undefined,
       languagesWithVideos: [
         ["Chinese", "zho"],
         ["English", "eng"],
@@ -713,11 +706,15 @@ export default {
     this.randomLanguage = this.randomArrayItem(
       this.languagesWithVideos.slice(0, 141)
     );
+    this.randomLanguageObj = this.language(this.randomLanguage[1])
   },
   mounted() {
     this.loaded = true;
   },
   methods: {
+    language(code) {
+      if (this.$languages) return this.$languages.getSmart(code);
+    },
     scrollToLanguageList() {
       document.querySelector("#languageList").scrollIntoView({
         behavior: "smooth",

@@ -377,7 +377,8 @@ export default {
   .saved-words-count {
     position: absolute;
     font-size: 0.5em;
-    top: 5px;
+    bottom: 5px;
+    top: inherit;
     right: -5px;
   }
 }

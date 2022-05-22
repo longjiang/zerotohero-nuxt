@@ -1,12 +1,15 @@
 <template>
   <div
-    class="flag-icon-wrapper"
+    :class="`flag-icon-wrapper ${cycle ? 'cycle' : ''}`"
     @mouseover="autocycle ? cycleFlags() : undefined"
     @mouseleave="autocycle ? stopCycling() : undefined"
   >
+    <div class="country-name" v-if="country">{{ country.name }}</div>
     <img
-      v-if="countryCode"
-      :src="`/vendor/flag-svgs/${countryCode}.svg`"
+      v-if="country"
+      :alt="`Flag of ${country.name}`"
+      :title="`Flag of ${country.name} (${country.alpha2Code})`"
+      :src="`/vendor/flag-svgs/${country.alpha2Code}.svg`"
       class="flag-icon"
     />
     <div v-else class="no-flag-placeholder"></div>
@@ -25,33 +28,34 @@ export default {
   data() {
     return {
       cycle: false,
-      countryCode: undefined,
-      countryCodes: [],
-      typicalCountryCode: undefined,
+      country: undefined,
+      countries: [],
+      typicalCountry: undefined,
     };
   },
   mounted() {
     // Find the 'prototypical country code' to show initially, most of the time
-    this.countryCodes = this.language.country.map((c) => c.alpha2Code);
-    this.countryCode = this.typicalCountryCode = this.$languages.countryCode(
-      this.language
+    this.countries = this.language.country;
+    let typicalCountryCode = this.$languages.countryCode(this.language);
+    this.country = this.typicalCountry = this.$languages.countries.find(
+      (c) => c.alpha2Code === typicalCountryCode
     );
     // if (this.autocycle) this.cycleFlags();
   },
   methods: {
     async cycleFlags() {
       if (this.cycle) return; // Already cycling
-      if (this.countryCodes.length < 2) return;
+      if (this.countries.length < 2) return;
       this.cycle = true;
       for (let i = 0; i < 999999; i++) {
         if (!this.cycle) break;
-        this.countryCode = this.countryCodes[i % this.countryCodes.length];
+        this.country = this.countries[i % this.countries.length];
         await Helper.timeout(500);
       }
     },
     stopCycling() {
       this.cycle = false;
-      this.countryCode = this.typicalCountryCode;
+      this.country = this.typicalCountry;
     },
   },
 };
@@ -70,5 +74,27 @@ export default {
   width: 2rem;
   background-color: #ddd;
   border-radius: 0.3rem;
+}
+
+.flag-icon-wrapper {
+}
+
+.flag-icon-wrapper:hover,
+.cycle {
+  .country-name {
+    visibility: inherit;
+  }
+}
+
+.country-name {
+  position: absolute;
+  color: #888;
+  top: -0.8em;
+  left: 50%;
+  font-weight: normal;
+  font-size: 0.6em;
+  visibility: hidden;
+  white-space: nowrap;
+  transform: translate(-50%, -50%);
 }
 </style>
