@@ -344,3 +344,13 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+::v-deep .entry-word {
+  font-size: 2.5rem !important;
+}
+::v-deep .image-wall {
+  img {
+    height: 4rem;
+  }
+}
+</style>

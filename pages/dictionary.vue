@@ -20,8 +20,18 @@
           <div :class="{ 'container pt-2': !wide }">
             <div :class="{ row: !wide }">
               <div :class="{ 'col-sm-12': !wide }">
-                <h5 class="text-center pt-5 pb-4" v-if="!args">
-                  {{ $l2.name }} Zero to Hero Dictionary
+                <div
+                  style="font-size: 1.5rem; color: white; text-align: center"
+                  v-if="!args"
+                >
+                  <img
+                    src="/img/czh-icon.png"
+                    style="height: 4rem; margin-bottom: 1rem; margin-top: 3rem"
+                    data-not-lazy
+                  />
+                </div>
+                <h5 class="text-center pb-4" v-if="!args">
+                  Zero to Hero <LanguageFlag :language="$l2" style="position: relative; bottom: 0.2rem; margin: 0 0.3rem" :autocycle="true" /> {{ $l2.name }} Dictionary
                 </h5>
                 <SearchCompare
                   :searchEntry="entry"
@@ -34,27 +44,31 @@
             </div>
           </div>
         </div>
-        <div class="bg-white">
+        <div class="bg-white" style="opacity: 0.8">
           <div class="container" v-if="!entry">
             <div class="row">
               <div class="col-sm-12 bg-white">
                 <!-- <Sale style="border-radius: 1rem !important" class="pb-5 pl-5 pr-5" v-if="$l2.code === 'zh'" /> -->
-                <div
-                  v-if="dictionarySize"
-                  style="max-width: 50rem; margin: 0 auto"
-                >
-                  <h6 class="mt-4">Usage tips:</h6>
-                  <ul>
-                    <li>
-                      Wild cards: use "
-                      <code>_</code>
-                      " (underscore) to match one character, use "
-                      <code>*</code>
-                      " (asterisk) to match one or more characters.
+                <div style="max-width: 50rem; margin: 0 auto" class="mt-5">
+                  <ul class="list-unstyled">
+                    <li class="mt-2">
+                      🔍 You can do power search for patterns with
+                      <b>wild cards</b>
+                      🃏
                     </li>
-                    <li v-if="dictionarySize">
-                      This {{ $l2.name }} dictionary has
-                      {{ $n(dictionarySize) }} words.
+                    <li class="mt-2">
+                      ☝️ Use 
+                      <code>_</code>
+                       underscore to match one character
+                    </li>
+                    <li class="mt-2">
+                      ☝️ Use 
+                      <code>*</code>
+                       asterisk to match one or more characters
+                    </li>
+                    <li class="mt-2" v-if="dictionarySize">
+                      📖 This {{ $l2.name }} dictionary has
+                      <b>{{ $n(dictionarySize) }} words</b>
                     </li>
                   </ul>
                 </div>
@@ -74,7 +88,7 @@
             />
             <client-only>
               <div class="text-center mb-3">
-                <Star :word="entry"/>
+                <Star :word="entry" />
                 <Paginator
                   class="d-inline-block ml-2"
                   v-if="saved() && sW.length > 0"
@@ -166,7 +180,13 @@
               class="text-center mb-5"
             />
             <!-- <Sale class="mb-5" style="border-radius: 1rem !important" v-if="$l2.code === 'zh'" /> -->
-            <EntryCourseAd v-if="$l2.code === 'zh'" :entry="entry" class="focus-exclude mb-5" style="margin-top: 10rem" :key="`${entry.id}-course-ad`" />
+            <EntryCourseAd
+              v-if="$l2.code === 'zh'"
+              :entry="entry"
+              class="focus-exclude mb-5"
+              style="margin-top: 10rem"
+              :key="`${entry.id}-course-ad`"
+            />
           </div>
         </div>
       </div>

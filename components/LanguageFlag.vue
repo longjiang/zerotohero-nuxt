@@ -1,7 +1,7 @@
 <template>
   <div
     class="flag-icon-wrapper"
-
+    @mouseover="autocycle ? cycleFlags() : undefined"
     @mouseleave="autocycle ? stopCycling() : undefined"
   >
     <img
@@ -20,6 +20,7 @@ export default {
       type: Object,
       required: true,
     },
+    autocycle: false,
   },
   data() {
     return {
@@ -27,7 +28,6 @@ export default {
       countryCode: undefined,
       countryCodes: [],
       typicalCountryCode: undefined,
-      autocycle: true,
     };
   },
   mounted() {
@@ -40,7 +40,7 @@ export default {
   },
   methods: {
     async cycleFlags() {
-      if (this.cycle) return // Already cycling
+      if (this.cycle) return; // Already cycling
       if (this.countryCodes.length < 2) return;
       this.cycle = true;
       for (let i = 0; i < 999999; i++) {

@@ -128,7 +128,7 @@ export default {
         l2: this.$l2,
       });
       let colDesc = {};
-      if (this.aSketch && this.b.Sketch) {
+      if (this.aSketch && this.bSketch) {
         for (let g of Helper.uniqueByValue(
           (this.aSketch.Gramrels || []).concat(this.bSketch.Gramrels || []),
           "name"
