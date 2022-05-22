@@ -4,6 +4,25 @@
       :class="`site-top-bar site-top-bar-${variant}`"
       @click.self="backgroundClick"
     >
+      <div>
+        <b-button
+          @click="$router.back()"
+          variant="unstyled"
+          style="color: #ccc"
+          v-if="params.md !== false"
+        >
+          <i class="fas fa-chevron-left"></i>
+        </b-button>
+        <b-button
+          @click="$router.forward()"
+          variant="unstyled"
+          style="color: #ccc"
+          class="ml-3"
+          v-if="params.md !== false"
+        >
+          <i class="fas fa-chevron-right"></i>
+        </b-button>
+      </div>
       <template>
         <div
           class="text-center"
@@ -70,8 +89,7 @@
               :class="`${
                 !$route.params.l2 || params.xxlg === false ? 'd-none' : ''
               } ml-1`"
-            >
-            </span>
+            ></span>
             <span
               :class="`${
                 !$route.params.l2 || params.md === false ? 'd-none' : ''
