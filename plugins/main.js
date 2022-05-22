@@ -200,7 +200,7 @@ export default async ({ app, store, route }, inject) => {
         title: video.title || "Untitled",
         l2: l2.id,
         subs_l2: csv.replace(/&quot;/g, "”"),
-        channel_id: video.channel_id,
+        channel_id: video.channel ? video.channel.id : video.channel_id,
         date: DateHelper.unparseDate(video.date)
       };
       if (video.tv_show) data.tv_show = video.tv_show.id;
