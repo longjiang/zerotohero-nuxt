@@ -167,6 +167,7 @@
             'col-4': params.md && view === 'grid' && !singleColumn,
             'col-3':
               (params.lg || params.xl) && view === 'grid' && !singleColumn,
+            'col-no-subs': !video.hasSubs,
           }"
           :style="`padding-bottom: ${view === 'list' ? '1rem' : '2rem'}`"
           :key="`youtube-video-wrapper-${video.youtube_id}-${videoIndex}`"
@@ -248,14 +249,14 @@ export default {
       default: false,
     },
     showAdminToolsInAdminMode: {
-      default: true
+      default: true,
     },
     hideVideosWithoutSubsProp: {
-      default: false
+      default: false,
     },
     multilingual: {
-      default: false
-    }
+      default: false,
+    },
   },
 
   data() {
@@ -394,7 +395,9 @@ export default {
       let chunks = Helper.arrayChunk(youtube_ids, 100);
       for (let youtube_ids of chunks) {
         let response = await this.$authios.get(
-          `${Config.youtubeVideosTableName(this.$l2.id)}?filter[youtube_id][in]=${youtube_ids}&fields=id,title,channel_id,youtube_id,tv_show.*,talk.*${
+          `${Config.youtubeVideosTableName(
+            this.$l2.id
+          )}?filter[youtube_id][in]=${youtube_ids}&fields=id,title,channel_id,youtube_id,tv_show.*,talk.*${
             this.showSubsEditing ? ",subs_l2" : ""
           }&filter[l2][eq]=${this.$l2.id}&timestamp=${
             this.$adminMode ? Date.now() : 0

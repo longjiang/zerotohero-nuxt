@@ -1,5 +1,10 @@
 <template>
-  <div>
+  <div
+    :class="{
+      'youtube-search-results': true,
+      'cloak-videos-without-subs': cloakVideosWithoutSubs,
+    }"
+  >
     <LazyYouTubeVideoList
       ref="youTubeVideoList"
       :videos="videos"
@@ -11,7 +16,10 @@
       :showProgress="false"
       :skin="skin"
     />
-    <div v-if="infinite && !noMoreVideos" v-observe-visibility="infinite ? visibilityChanged : undefined"></div>
+    <div
+      v-if="infinite && !noMoreVideos"
+      v-observe-visibility="infinite ? visibilityChanged : undefined"
+    ></div>
     <div v-if="term && infinite && noMoreVideos" class="text-center mt-4">
       <h6>No more videos.</h6>
       <p>{{ moreVideos }} videos loaded.</p>
@@ -75,13 +83,16 @@ export default {
       default: false,
     },
     hideVideosWithoutSubs: {
-      default: false
+      default: false,
     },
     showPaginator: {
-      default: true
+      default: true,
     },
     skin: {
-      default: 'light'
+      default: "light",
+    },
+    cloakVideosWithoutSubs: {
+      default: "true"
     }
   },
   data() {
@@ -192,3 +203,10 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.cloak-videos-without-subs {
+  ::v-deep .col-no-subs {
+    display: none;
+  }
+}
+</style>

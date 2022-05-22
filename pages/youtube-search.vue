@@ -79,25 +79,17 @@
       </client-only>
       <div v-if="term">
         <MediaSearchResults :keyword="term" class="mt-4" />
-        <h4 class="text-center mt-5">More from YouTube</h4>
-        <p class="text-center mb-5">
-          Videos without {{ $l2.name }} subs are dimmed out.
-        </p>
-        <LazyIdenticalLanguages
-          class="mb-4 bg-success"
-          routeName="youtube-browse"
-        />
         <YouTubeSearchResults
           :term="term"
           :start="start"
           :captions="captions"
-          class="mt-5"
           :key="searchResultKey"
           :long="long"
           :infinite="true"
           :showProgress="false"
           skin="dark"
           ref="youtubeSearchResults"
+          :cloakVideosWithoutSubs="!$adminMode"
         />
       </div>
       <div v-if="term && term !== ''">
@@ -116,6 +108,10 @@
         </h4>
         <LazyHowToContribute />
       </div>
+      <LazyIdenticalLanguages
+        class="mb-4 bg-success"
+        routeName="youtube-browse"
+      />
     </div>
   </div>
 </template>
