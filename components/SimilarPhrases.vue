@@ -238,7 +238,7 @@ export default {
         this.phrase
       )}&timestamp=${this.$adminMode ? Date.now() : 0}`;
       try {
-        let res = await axios.get(url);
+        let res = await this.$authios.get(url);
         if (res && res.data) {
         }
       } catch (err) {}
@@ -252,7 +252,7 @@ export default {
         this.normalizedTranslation.toLowerCase() + "%"
       )}${popularLanguagesOnly ? popularLanguageFilter : ""}&limit=500`;
       try {
-        let res = await axios.get(url);
+        let res = await this.$authios.get(url);
         if (res && res.data) {
           let words = res.data.data.map((w) => {
             let l2 = this.$languages.getById(w.l2);
@@ -314,7 +314,7 @@ export default {
         )}&fields=*,tv_show.*&limit=500&timestamp=${
           this.$adminMode ? Date.now() : 0
         }`;
-        let res = await axios.get(url);
+        let res = await this.$authios.get(url);
         if (res && res.data) {
           return res.data.data;
         }

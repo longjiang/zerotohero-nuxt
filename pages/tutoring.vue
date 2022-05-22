@@ -160,7 +160,7 @@ export default {
     },
   },
   async created() {
-    let response = await axios.get(
+    let response = await this.$authios.get(
       `${Config.wiki}items/tutoring_kit?fields=id,name,reading,free_talk,writing,level`
     );
     this.lessons = response.data.data || [];

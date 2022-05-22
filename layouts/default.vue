@@ -187,8 +187,8 @@ export default {
     },
     // Initialize the user data record if there isn't one
     async createNewUserDataRecord(token, payload = {}) {
-      let res = await axios
-        .post(`${Config.wiki}items/user_data?access_token=${token}`, payload)
+      let res = await this.$authios
+        .post(`${Config.wiki}items/user_data`, payload)
         .catch((err) => {
           console.log(
             "Axios error in savedWords.js: err, url, payload",

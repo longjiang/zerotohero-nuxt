@@ -155,7 +155,7 @@ export default {
       let langId = this.$l2.id;
       let type = this.routeType.replace("-", "_");
       let url = `${Config.wiki}items/${type}?filter[l2][eq]=${langId}&fields=id,title`;
-      let response = await axios.get(url);
+      let response = await this.$authios.get(url);
       if (response.data && response.data.data.length > 0) {
         let shows = response.data.data;
         return shows;
@@ -189,7 +189,7 @@ export default {
       let url = `${Config.youtubeVideosTableName(
         l2Id
       )}?filter[${showType}][eq]=${showId}&limit=1&fields=youtube_id,id,l2,tv_show,talk,title`;
-      let response = await axios.get(url);
+      let response = await this.$authios.get(url);
 
       if (response.data && response.data.data.length > 0) {
         let videos = response.data.data;

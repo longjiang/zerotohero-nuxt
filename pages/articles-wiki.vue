@@ -112,7 +112,7 @@ export default {
       this.method = this.$route.params.method;
       if (this.method === "list") {
         this.articles = [];
-        let response = await axios.get(
+        let response = await this.$authios.get(
           `${Config.wiki}items/articles?filter[l2][eq]=${this.$l2.id}`
         );
 
@@ -127,7 +127,7 @@ export default {
       } else if (this.method === "view" && this.$route.params.args) {
         this.args = this.$route.params.args.split(",");
         this.article = undefined;
-        let response = await axios.get(
+        let response = await this.$authios.get(
           `${Config.wiki}items/articles/${this.args[0]}`
         );
         this.article = response.data.data;

@@ -44,7 +44,7 @@ export const mutations = {
 
 export const actions = {
   async load(context, { l2, adminMode }) {
-    let response = await axios.get(
+    let response = await this.$authios.get(
       `${Config.wiki}items/phrasebook?sort=title&filter[l2][eq]=${l2.id
       }&fields=id,description,exact,title,l2,tv_show.*&limit=500&timestamp=${adminMode ? Date.now() : 0}`
     );
@@ -57,7 +57,7 @@ export const actions = {
   },
   async loadPhrases(context, { l2, bookId, adminMode }) {
     let url = `${Config.wiki}items/phrasebook/${bookId}?fields=*,tv_show.*&timestamp=${adminMode ? Date.now() : 0}`;
-    let response = await axios.get(url);
+    let response = await this.$authios.get(url);
     if (response.data && response.data.data) {
       let phrasebook = response.data.data;
       let phrases = Papa.parse(phrasebook.phrases, {
@@ -70,7 +70,7 @@ export const actions = {
     }
   },
   async add(context, { l2, phrasebook }) {
-    let response = await axios.post(
+    let response = await this.$authios.post(
       `${Config.wiki}items/phrasebooks`,
       phrasebook
     );
@@ -85,10 +85,8 @@ export const actions = {
     let token = $nuxt.$auth.strategy.token.get()
     if (!token) return
     token = token.replace('Bearer ', '')
-    let response = await axios.delete(
-      `${Config.wiki}items/phrasebook/${phrasebook.id}${
-        this.$auth.user ? "?access_token=" + token : ""
-      }`
+    let response = await this.$authios.delete(
+      `${Config.wiki}items/phrasebook/${phrasebook.id}`
     );
     if (response && response.data) {
       context.commit('REMOVE_PHRASEBOOK', { l2, phrasebook })
@@ -103,7 +101,7 @@ export const actions = {
       return ph
     })
     try {
-      let response = await axios.patch(
+      let response = await this.$authios.patch(
         `${Config.wiki}items/phrasebook/${phrasebook.id}`,
         { phrases: Papa.unparse(phrases) },
         { contentType: "application/json" }
@@ -125,7 +123,7 @@ export const actions = {
       return ph
     })
     try {
-      let response = await axios.patch(
+      let response = await this.$authios.patch(
         `${Config.wiki}items/phrasebook/${phrasebook.id}`,
         { phrases: Papa.unparse(phrases) },
         { contentType: "application/json" }

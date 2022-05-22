@@ -128,7 +128,7 @@ export default {
     },
     async removeEpisode(randomShowRandomEpisode) {
       let response = await this.$authios.delete(
-        `${Config.youtubeVideosTableName(randomShowRandomEpisode.l2)}/${randomShowRandomEpisode.id}${this.$auth.user ? '?access_token=' + this.$auth.user.token : ''}`
+        `${Config.youtubeVideosTableName(randomShowRandomEpisode.l2)}/${randomShowRandomEpisode.id}`
       );
       
       if (response) {

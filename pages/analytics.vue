@@ -307,7 +307,7 @@ export default {
     },
   },
   async mounted() {
-    let res = await axios.get(
+    let res = await this.$authios.get(
       `${Config.server}data/analytics/analytics-2021-09-05.csv`
     );
     if (res && res.data) {
@@ -360,7 +360,7 @@ export default {
         };
       if (["Music", "Movies", "News"].includes(key)) {
         let collection = "News" === key ? "talk" : "tv_show";
-        let res = await axios.get(
+        let res = await this.$authios.get(
           `${Config.youtubeVideosTableName(this.$l2.id)}?filter[l2][eq]=${row.l2.id}&filter[${collection}.title][eq]=${key}&limit=1&meta=filter_count`,
           config
         );
@@ -370,7 +370,7 @@ export default {
           Vue.set(row, key, res.data.meta.filter_count);
         }
       } else {
-        let res = await axios.get(
+        let res = await this.$authios.get(
           `${Config.wiki}items/${key}?filter[l2][eq]=${row.l2.id}&filter[title][nin]=Movies,Music,News&limit=1&meta=filter_count`,
           config
         );

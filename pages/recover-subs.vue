@@ -213,7 +213,7 @@ export default {
   methods: {
     async recoverAll() {
       let videos = this.unRecoveredVideos;
-      let response = await axios.get(
+      let response = await this.$authios.get(
         `https://db.zerotohero.ca/_/items/youtube_videos?limit=-1&filter[id][in]=${videos
           .map((v) => v.id)
           .join(",")}`
@@ -234,10 +234,8 @@ export default {
             return { starttime: l.starttime, line: l.line };
           });
           let recoveredCSV = Papa.unparse(recoveredSubs);
-          let patchResponse = await axios.patch(
-            `${Config.youtubeVideosTableName(this.$l2.id)}/${video.id}${
-            this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
-          }&fields=id`,
+          let patchResponse = await this.$authios.patch(
+            `${Config.youtubeVideosTableName(this.$l2.id)}/${video.id}&fields=id`,
             { subs_l2: recoveredCSV }
           );
           if (patchResponse && patchResponse.data) {
@@ -256,7 +254,7 @@ export default {
     },
     async getVideos() {
       let limit = this.perPage;
-      let response = await axios.get(
+      let response = await this.$authios.get(
         `${Config.youtubeVideosTableName(this.$l2.id)}?sort=-id&limit=${limit}&offset=${
           this.start
         }&fields=id,youtube_id,l2,title,channel_id,topic,level,lesson,subs_l2&timestamp=${
@@ -278,10 +276,8 @@ export default {
     },
     async remove(video) {
       try {
-        let response = await axios.delete(
-          `${Config.youtubeVideosTableName(this.$l2.id)}/${video.id}${
-            this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
-          }`
+        let response = await this.$authios.delete(
+          `${Config.youtubeVideosTableName(this.$l2.id)}/${video.id}`
         );
         if (response.data) {
           this.videos = this.videos.filter((v) => v !== video);
@@ -325,10 +321,8 @@ export default {
         })
       );
       try {
-        let response = await axios.patch(
-          `${Config.youtubeVideosTableName(this.$l2.id)}/${video.id}${
-            this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
-          }`,
+        let response = await this.$authios.patch(
+          `${Config.youtubeVideosTableName(this.$l2.id)}/${video.id}`,
           {
             subs_l2: csv,
           }

@@ -149,7 +149,7 @@ export default {
     },
     async getDrill(grammarID) {
       try {
-        let response = await axios.get(
+        let response = await this.$authios.get(
           `${Config.wiki}items/drills?filter[grammar_id][eq]=${grammarID}&fields=*,file.*`
         );
         response = response.data;

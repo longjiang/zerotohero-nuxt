@@ -287,10 +287,8 @@ export default {
       let newTitle = e.target.innerText;
       if (this.show.title !== newTitle) {
         try {
-          let response = await axios.patch(
-            `${Config.wiki}items/${this.collection}s/${this.show.id}${
-            this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
-          }`,
+          let response = await this.$authios.patch(
+            `${Config.wiki}items/${this.collection}s/${this.show.id}`,
             { title: newTitle },
             { contentType: "application/json" }
           );
@@ -310,10 +308,8 @@ export default {
       let newCover = e.target.innerText;
       if (this.show.title !== newCover) {
         try {
-          let response = await axios.patch(
-            `${Config.wiki}items/${this.collection}s/${this.show.id}${
-            this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
-          }`,
+          let response = await this.$authios.patch(
+            `${Config.wiki}items/${this.collection}s/${this.show.id}`,
             { youtube_id: newCover },
             { contentType: "application/json" }
           );
@@ -341,7 +337,7 @@ export default {
       }
     },
     async getShow(id, collection) {
-      let response = await axios.get(
+      let response = await this.$authios.get(
         `${Config.wiki}items/${collection}s/${id}`
       );
       if (response && response.data) {
@@ -350,7 +346,7 @@ export default {
     },
     async getVideos({ keyword, limit = 500, offset = 0, sort = "title" } = {}) {
       let keywordFilter = keyword ? `&filter[title][contains]=${keyword}` : "";
-      let response = await axios.get(
+      let response = await this.$authios.get(
         `${Config.youtubeVideosTableName(this.$l2.id)}?filter[l2][eq]=${
           this.$l2.id
         }&filter[${this.collection}][eq]=${

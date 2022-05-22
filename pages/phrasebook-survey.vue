@@ -129,7 +129,7 @@ export default {
     },
     async surveyPhrases() {
       this.gettingPhrases = true;
-      let res = await axios.get(`${Config.wiki}items/phrasebook`);
+      let res = await this.$authios.get(`${Config.wiki}items/phrasebook`);
       if (res && res.data) {
         let phrasebooks = res.data.data;
         for (let phrasebook of phrasebooks) {

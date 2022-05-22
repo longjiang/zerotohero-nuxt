@@ -188,8 +188,8 @@ export const actions = {
     if (user && user.id && user.dataId && token) {
       token = token.replace('Bearer ', '')
       let payload = { saved_words: localStorage.getItem('zthSavedWords') }
-      let url = `${Config.wiki}items/user_data/${user.dataId}?fields=id&access_token=${token}`
-      await axios.patch(url, payload)
+      let url = `${Config.wiki}items/user_data/${user.dataId}?fields=id`
+      await this.$authios.patch(url, payload)
         .catch(async (err) => {
           console.log('Axios error in savedWords.js: err, url, payload', err, url, payload)
         })

@@ -227,7 +227,7 @@ export default {
         // Audiobooks and TV Shows are sorted by title
         let sort = "-date";
         if (this.showType === "tv_show" || this.show.audiobook) sort = "title";
-        let response = await axios.get(
+        let response = await this.$authios.get(
           `${Config.youtubeVideosTableName(this.$l2.id)}?filter[l2][eq]=${
             this.$l2.id
           }&filter[${this.showType}][eq]=${
@@ -335,7 +335,7 @@ export default {
     async getSaved() {
       let response;
       try {
-        response = await axios.get(
+        response = await this.$authios.get(
           `${Config.youtubeVideosTableName(
             this.$l2.id
           )}?filter[youtube_id][eq]=${this.youtube_id}&filter[l2][eq]=${
@@ -459,7 +459,7 @@ export default {
       }
     },
     async patchChannelID(video, channelId) {
-      let response = await axios.patch(
+      let response = await this.$authios.patch(
         `${Config.youtubeVideosTableName(this.$l2.id)}/${
           video.id
         }?fields=id,channel_id`,
@@ -478,7 +478,7 @@ export default {
       if (video.subs_l2 && video.subs_l2[0] && video.subs_l2[0].duration) {
         let subs_l2 = YouTube.unparseSubs(video.subs_l2);
         try {
-          await axios.patch(
+          await this.$authios.patch(
             `${Config.youtubeVideosTableName(this.$l2.id)}/${
               video.id
             }?fields=id`,

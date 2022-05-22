@@ -524,10 +524,8 @@ export default {
       let id = this.currentHit.video.id;
       let response;
       try {
-        response = await axios.delete(
-          `${Config.youtubeVideosTableName(this.$l2.id)}/${id}${
-            this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
-          }`
+        response = await this.$authios.delete(
+          `${Config.youtubeVideosTableName(this.$l2.id)}/${id}`
         );
         this.removeCurrentHitAndGoToNext();
       } catch (err) {}

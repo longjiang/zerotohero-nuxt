@@ -393,7 +393,7 @@ export default {
         .filter((id) => !id.includes("0x"));
       let chunks = Helper.arrayChunk(youtube_ids, 100);
       for (let youtube_ids of chunks) {
-        let response = await axios.get(
+        let response = await this.$authios.get(
           `${Config.youtubeVideosTableName(this.$l2.id)}?filter[youtube_id][in]=${youtube_ids}&fields=id,title,channel_id,youtube_id,tv_show.*,talk.*${
             this.showSubsEditing ? ",subs_l2" : ""
           }&filter[l2][eq]=${this.$l2.id}&timestamp=${

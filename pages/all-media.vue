@@ -376,7 +376,7 @@ export default {
         if (tvShow) filter = `filter[tv_show][eq]=${tvShow}`;
         if (talk) filter = `filter[talk][eq]=${talk}`;
 
-        let response = await axios.get(
+        let response = await this.$authios.get(
           `${Config.youtubeVideosTableName(
             this.$l2.id
           )}?sort=${sort}&filter[l2][eq]=${
@@ -386,7 +386,7 @@ export default {
         if (response.data.data && response.data.data.length > 0)
           videos = response.data.data;
         if (!videos && !tvShow && !talk) {
-          response = await axios.get(
+          response = await this.$authios.get(
             `${Config.youtubeVideosTableName(
               this.$l2.id
             )}?sort=${sort}&filter[l2][eq]=${

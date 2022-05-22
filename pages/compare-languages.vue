@@ -297,7 +297,7 @@ export default {
       this.currentIndex = this.$route.query.i ? Number(this.$route.query.i) : 0;
       this.updating = true;
       try {
-        let res = await axios.get(
+        let res = await this.$authios.get(
           `${Config.wiki}items/phrasebook/${this.bookId}`
         );
         if (res && res.data) {

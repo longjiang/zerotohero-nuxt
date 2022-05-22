@@ -294,7 +294,7 @@ export default {
   },
   methods: {
     async loadExams() {
-      let response = await axios.get(
+      let response = await this.$authios.get(
         `${Config.wiki}items/exams?filter[l2][eq]=${this.$l2.id}`
       );
       response = response.data;
@@ -311,7 +311,7 @@ export default {
       return result;
     },
     async loadCourses() {
-      let response = await axios.get(
+      let response = await this.$authios.get(
         `${Config.wiki}items/resources?filter[l2][eq]=${this.$l2.id}&filter[type][eq]=courses&filter[featured][eq]=1&fields=*,thumbnail.*`
       );
       response = response.data;
@@ -328,7 +328,7 @@ export default {
       return result;
     },
     async loadResources() {
-      let response = await axios.get(
+      let response = await this.$authios.get(
         `${Config.wiki}items/resources?filter[l2][eq]=${this.$l2.id}&filter[type][neq]=courses&filter[featured][eq]=1&fields=*,thumbnail.*`
       );
       response = response.data;

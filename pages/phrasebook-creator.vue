@@ -201,7 +201,7 @@ export default {
       }
       this.saving = true;
       try {
-        let res = await axios.post(
+        let res = await this.$authios.post(
           `${Config.wiki}items/phrasebook`,
           phrasebook
         );

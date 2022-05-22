@@ -147,7 +147,7 @@ export default {
       if (this.type !== "all") {
         filters += "&filter[type][eq]=" + this.type;
       }
-      let response = await axios.get(
+      let response = await this.$authios.get(
         `${Config.wiki}items/resources?filter[l2][eq]=${this.$l2.id}${filters}&fields=*,thumbnail.*`
       );
       this.resources =

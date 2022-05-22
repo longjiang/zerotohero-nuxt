@@ -478,10 +478,8 @@ export default {
     async unassignShow(type) {
       let data = {};
       data[type] = null;
-      let response = await axios.patch(
-        `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}${
-          this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
-        }`,
+      let response = await this.$authios.patch(
+        `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}`,
         data
       );
       if (response && response.data) {
@@ -507,10 +505,8 @@ export default {
       if (!this.video[type] || this.video[type].id !== show.id) {
         let data = {};
         data[type] = show.id;
-        let response = await axios.patch(
-          `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}${
-            this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
-          }&fields=${type}.*`, // type is 'tv_show' or 'talk'
+        let response = await this.$authios.patch(
+          `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}&fields=${type}.*`, // type is 'tv_show' or 'talk'
           data
         );
         response = response.data;
@@ -563,12 +559,8 @@ export default {
       this.updating = true;
       let token = this.$auth.strategy.token.get();
       try {
-        let response = await axios.patch(
-          `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}${
-            this.$auth.user
-              ? "?access_token=" + token.replace("Bearer ", "")
-              : ""
-          }`,
+        let response = await this.$authios.patch(
+          `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}`,
           {
             subs_l2: this.video.subs_l2
               ? YouTube.unparseSubs(this.video.subs_l2, this.$l2.code)
@@ -608,10 +600,8 @@ export default {
     },
     async remove() {
       try {
-        let response = await axios.delete(
-          `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}${
-            this.$auth.user ? "?access_token=" + this.$auth.user.token : ""
-          }`
+        let response = await this.$authios.delete(
+          `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}`
         );
         if (response) {
           this.deleted = true;

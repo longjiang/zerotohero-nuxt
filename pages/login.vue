@@ -92,10 +92,9 @@ export default {
   methods: {
     async onSubmit(event) {
       try {
-        let response = await this.$auth.loginWith("local", { data: this.form });
-        let token = this.$auth.strategy.token.get().replace("Bearer ", "");
-        const res = await axios.get(
-          `https://db2.zerotohero.ca/zerotohero/users/me?access_token=${token}`
+        await this.$auth.loginWith("local", { data: this.form });
+        const res = await this.$authios.get(
+          `https://db2.zerotohero.ca/zerotohero/users/me`
         );
         if (res && res.data && res.data.data) {
           this.$auth.setUser(res.data.data);

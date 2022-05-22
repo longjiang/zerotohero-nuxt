@@ -203,7 +203,7 @@ export default {
   },
   async fetch() {
     this.lessonVideos = [];
-    let response = await axios.get(
+    let response = await this.$authios.get(
       `${Config.youtubeVideosTableName(this.$l2.id)}?sort=-id&filter[l2][eq]=${
         this.$l2.id
       }&filter[level][eq]=${this.level}&filter[lesson][eq]=${this.lesson}`
