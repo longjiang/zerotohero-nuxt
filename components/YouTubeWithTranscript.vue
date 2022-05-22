@@ -37,6 +37,7 @@
           :showFullscreenToggle="showFullscreenToggle"
           :showLineList="showLineList"
           :showCollapse="layout === 'horizontal'"
+          :episode="episodes"
           ref="videoControls"
           :class="`${
             neverPlayed && layout === 'horizontal' ? 'transparent' : ''

@@ -179,9 +179,6 @@ export default {
     episodes: {
       type: Array,
     },
-    episodeIndex: {
-      type: Number,
-    },
   },
   data() {
     return {
@@ -208,6 +205,11 @@ export default {
     $adminMode() {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
+    },
+    episodeIndex() {
+      return this.episodes.findIndex(
+        (e) => e.youtube_id === this.video.youtube_id
+      );
     },
     previousEpisode() {
       if (this.episodes && this.episodeIndex) {
