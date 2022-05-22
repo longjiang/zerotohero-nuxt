@@ -19,8 +19,9 @@
       <i class="fas fa-random mr-1"></i>
       <span>Random</span>
     </router-link>
-    <b-input-group-append>
+    <b-input-group-append v-if="button">
       <b-button
+        
         :variant="skin === 'dark' ? 'ghost-dark' : 'primary'"
         @click="action(text)"
       >
@@ -45,6 +46,9 @@ export default {
     },
     random: {
       default: "",
+    },
+    button: {
+      default: true,
     },
     skin: {
       default: "light",

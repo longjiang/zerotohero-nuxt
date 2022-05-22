@@ -4,8 +4,9 @@
       v-if="featureEpisode"
       :video="featureEpisode"
       @videoUnavailable="onVideoUnavailable"
+      playButtonText="Play Episode 1"
     />
-    <div class="shows" style="padding-top: 3rem">
+    <div class="shows" >
       <div class="container">
         <SocialHead
           v-if="shows && shows[0]"
@@ -21,7 +22,7 @@
           <div class="col-sm-12">
             <!-- <Sale class="mt-5 mb-5" v-if="$l2.code === 'zh'" /> -->
             <div class="show-list-wrapper">
-              <b-input-group class="mt-5 mb-5 input-group-ghost-dark">
+              <b-input-group class="mb-5 input-group-ghost-dark">
                 <b-form-input
                   v-model="keyword"
                   @compositionend.prevent.stop="() => false"
@@ -30,11 +31,6 @@
                   } ${$l2.name} ${routeTitles[routeType]}`"
                   class="input-ghost-dark"
                 />
-                <b-input-group-append>
-                  <b-button variant="ghost-dark">
-                    <i class="fas fa-filter"></i>
-                  </b-button>
-                </b-input-group-append>
               </b-input-group>
               <div class="mb-5">
                 <div
@@ -188,7 +184,7 @@ export default {
     async getFirstEpisodeOfShow(showId, showType, l2Id) {
       let url = `${Config.youtubeVideosTableName(
         l2Id
-      )}?filter[${showType}][eq]=${showId}&limit=1&fields=youtube_id,id,l2,tv_show,talk,title`;
+      )}?filter[${showType}][eq]=${showId}&limit=1&fields=youtube_id,id,l2,tv_show,talk,title&sort=title`;
       let response = await this.$authios.get(url);
 
       if (response.data && response.data.data.length > 0) {

@@ -265,7 +265,8 @@ h6,
 .show-level-4 .word-block-dictionary[data-level="B1"]:not(.seen),
 .show-level-5 .word-block-dictionary[data-level="B2"]:not(.seen),
 .show-level-6 .word-block-dictionary[data-level="C1"]:not(.seen),
-.show-level-outside .word-block-dictionary[data-level="C2"]:not(.seen):not(.common) {
+.show-level-outside
+  .word-block-dictionary[data-level="C2"]:not(.seen):not(.common) {
   display: inline;
   color: #838888 !important;
 }
@@ -386,7 +387,9 @@ h6,
 .l2-zh .show-level-4 .word-block-dictionary[data-level="4"]:not(.seen),
 .l2-zh .show-level-5 .word-block-dictionary[data-level="5"]:not(.seen),
 .l2-zh .show-level-6 .word-block-dictionary[data-level="6"]:not(.seen),
-.l2-zh .show-level-outside .word-block-dictionary[data-level="outside"]:not(.seen):not(.common) {
+.l2-zh
+  .show-level-outside
+  .word-block-dictionary[data-level="outside"]:not(.seen):not(.common) {
   display: inline;
   color: inherit !important;
 }
@@ -451,7 +454,9 @@ h6,
 .l2-zh [data-level="outside"],
 .l2-zh [data-hover-level="outside"]:hover,
 .l2-zh [data-hover-level="outside"].saved,
-.l2-zh .show-level-7 [data-hover-level="outside"].sticky:not(.seen):not(.common) {
+.l2-zh
+  .show-level-7
+  [data-hover-level="outside"].sticky:not(.seen):not(.common) {
   color: #28a745 !important;
 }
 
@@ -724,13 +729,14 @@ button.bg-primary:focus {
 }
 
 .input-ghost-dark {
-  background: hsla(0deg 0% 100% / 10%);
+  background: black;
   border-radius: 0.25rem;
   border: none;
-  color: hsla(0deg 0% 100% / 75%);
+  color: rgba(255, 255, 255, 0.75);
   height: 40px;
+  box-shadow: 0px 5px 14px 3px rgb(119 119 119 / 42%);
   &::placeholder {
-    color: hsla(0deg 0% 100% / 40%);
+    color: rgba(255, 255, 255, 0.392);
   }
 }
 
@@ -915,7 +921,10 @@ button.bg-primary:focus {
 .show-level-4 .study-sheet-table [data-hover-level="4"].sticky:not(.seen) span,
 .show-level-5 .study-sheet-table [data-hover-level="5"].sticky:not(.seen) span,
 .show-level-6 .study-sheet-table [data-hover-level="6"].sticky:not(.seen) span,
-.show-level-outside .study-sheet-table [data-hover-level="outside"].sticky:not(.seen):not(.common) span {
+.show-level-outside
+  .study-sheet-table
+  [data-hover-level="outside"].sticky:not(.seen):not(.common)
+  span {
   color: #b74900 !important;
 }
 
@@ -926,7 +935,9 @@ button.bg-primary:focus {
 .show-level-4 .study-sheet-table [data-level="4"]:not(.seen),
 .show-level-5 .study-sheet-table [data-level="5"]:not(.seen),
 .show-level-6 .study-sheet-table [data-level="6"]:not(.seen),
-.show-level-outside .study-sheet-table [data-level="outside"]:not(.seen):not(.common) {
+.show-level-outside
+  .study-sheet-table
+  [data-level="outside"]:not(.seen):not(.common) {
   color: #b74900 !important;
 }
 
@@ -938,7 +949,9 @@ button.bg-primary:focus {
 .show-level-4 .study-sheet-table [data-hover-level="B1"].sticky:not(.seen),
 .show-level-5 .study-sheet-table [data-hover-level="B2"].sticky:not(.seen),
 .show-level-6 .study-sheet-table [data-hover-level="C1"].sticky:not(.seen),
-.show-level-outside .study-sheet-table [data-hover-level="C2"].sticky:not(.seen):not(.common) {
+.show-level-outside
+  .study-sheet-table
+  [data-hover-level="C2"].sticky:not(.seen):not(.common) {
   color: #b74900 !important;
 }
 
@@ -950,7 +963,9 @@ button.bg-primary:focus {
 .show-level-4 .study-sheet-table [data-level="B1"]:not(.seen),
 .show-level-5 .study-sheet-table [data-level="B2"]:not(.seen),
 .show-level-6 .study-sheet-table [data-level="C1"]:not(.seen),
-.show-level-outside .study-sheet-table [data-level="C2"]:not(.seen):not(.common):not(.low-rank) {
+.show-level-outside
+  .study-sheet-table
+  [data-level="C2"]:not(.seen):not(.common):not(.low-rank) {
   color: #b74900 !important;
 }
 
@@ -1034,7 +1049,7 @@ button.bg-primary:focus {
 
 .home-card {
   background-color: rgba(228, 228, 228, 1);
-  border: 1px solid rgba(255, 255, 255, 0.9); 
+  border: 1px solid rgba(255, 255, 255, 0.9);
   padding: 2rem;
   border-radius: 1rem;
   box-shadow: 0 10px 30px rgba(68, 75, 134, 0.2);
@@ -1105,7 +1120,12 @@ button.bg-primary:focus {
 
 .bg-gradient-1 {
   background-color: #4158d0;
-  background-image: linear-gradient(43deg, #4158d0 0%, #c850c0 46%, #ffcc70 100%);
+  background-image: linear-gradient(
+    43deg,
+    #4158d0 0%,
+    #c850c0 46%,
+    #ffcc70 100%
+  );
 }
 .bg-gradient-2 {
   background-color: #0093e9;

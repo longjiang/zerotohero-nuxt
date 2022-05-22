@@ -39,7 +39,7 @@
                   class="btn btn-success"
                 >
                   <i class="fas fa-play mr-1"></i>
-                  Watch &amp; Learn
+                  {{ playButtonText ? playButtonText : 'Watch &amp; Learn' }}
                 </router-link>
                 <router-link
                   v-if="(video.tv_show || video.talk) && showEpisodes"
@@ -51,12 +51,12 @@
                     },
                     id: String(video.tv_show ? video.tv_show : video.talk),
                   }"
-                  class="ml-1 btn btn-secondary"
+                  class="ml-1 btn btn-ghost-dark-no-bg"
                 >
                   <i class="fas fa-th-large mr-1"></i>
                   Episodes
                 </router-link>
-                <b-button variant="secondary" class="ml-1" @click="muted = !muted">
+                <b-button variant="ghost-dark-no-bg" class="ml-1" @click="muted = !muted">
                   <i class="fas fa-volume-mute" v-if="muted"></i>
                   <i class="fas fa-volume-up" v-else></i>
                 </b-button>
@@ -78,6 +78,9 @@ export default {
       required: true,
     },
     title: {
+      type: String,
+    },
+    playButtonText: {
       type: String,
     },
     showEpisodes: {

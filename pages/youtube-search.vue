@@ -17,7 +17,7 @@
 <template>
   <div class="main main-dark">
     <div class="container pt-5 pb-5 youtube-search">
-      <h5 class="mb-3 text-center">Search {{ $l2.name }} Videos</h5>
+      <h5 class="mb-5 text-center">Search {{ $l2.name }} Videos</h5>
       <SimpleSearch
         :placeholder="`Search`"
         skin="dark"
@@ -31,6 +31,7 @@
           }
         "
         ref="search"
+        :button="false"
       />
       <client-only>
         <b-form-group class="mt-3" v-if="$adminMode">

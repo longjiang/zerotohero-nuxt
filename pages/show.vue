@@ -13,6 +13,7 @@
       v-if="featuredVideo"
       :video="featuredVideo"
       :showEpisodes="false"
+      :playButtonText="heroButtonText"
       :title="
         ['Music', 'News', 'Movies'].includes(show.title)
           ? featuredVideo.title
@@ -20,7 +21,7 @@
       "
       @videoUnavailable="onVideoUnavailable"
     />
-    <div class="youtube-browse main-dark pb-5 pt-5" style="min-height: 100vh">
+    <div class="youtube-browse main-dark pb-5" style="min-height: 100vh">
       <div class="container">
         <SocialHead
           v-if="show"
@@ -31,7 +32,7 @@
           :image="`https://img.youtube.com/vi/${show.youtube_id}/hqdefault.jpg`"
         />
         <div class="row">
-          <div class="col-sm-12 mb-3 text-center">
+          <div class="col-sm-12 text-center">
             <div
               :class="{
                 'loader text-center pt-5 pb-5': true,
@@ -42,7 +43,7 @@
               <Loader :sticky="true" message="Loading videos..." />
             </div>
             <!-- <Sale class="mb-4" v-if="$l2.code === 'zh'" /> -->
-            <h3 v-if="show">
+            <h3 v-if="show" >
               <span v-if="$adminMode" contenteditable="true" @blur="saveTitle">
                 {{ show.title }}
               </span>
@@ -51,7 +52,7 @@
                 v-if="titleUpdated"
               ></i>
             </h3>
-            <p style="opacity: 0.6">
+            <p style="opacity: 0.6" class="mb-3">
               <span v-if="count">{{ count }} Episodes</span>
               <span v-if="$adminMode && show">
                 Cover youtube_id:
@@ -76,50 +77,35 @@
                         v-model="keyword"
                         :lazy="true"
                         @compositionend.prevent.stop="() => false"
-                        placeholder="Filter by video title..."
+                        placeholder="Filter..."
                         class="input-ghost-dark"
                       />
-                      <b-input-group-append>
-                        <b-button variant="ghost-dark">
-                          <i class="fas fa-filter"></i>
-                        </b-button>
-                      </b-input-group-append>
                     </b-input-group>
-                    <b-button-group>
+                    <b-button-group style="opacity: 0.6">
                       <b-button
-                        :variant="
-                          view === 'grid' ? 'ghost-dark' : 'ghost-dark-outline'
-                        "
+                        variant="ghost-dark-no-bg"
                         class="ml-2"
-                        @click="view = 'grid'"
+                        @click="view = view === 'grid' ? 'list' : 'grid'"
                       >
-                        <i class="fas fa-th"></i>
+                        <i class="fas fa-th" v-if="view === 'grid'"></i>
+                        <i class="fas fa-list" v-if="view === 'list'"></i>
                       </b-button>
                       <b-button
-                        :variant="
-                          view === 'list' ? 'ghost-dark' : 'ghost-dark-outline'
-                        "
-                        @click="view = 'list'"
-                        style="border-left: none"
+                        variant="ghost-dark-no-bg"
+                        @click="sort = sort === 'title' ? '-date' : 'title'"
+                        title="Sort by..."
+                        class="ml-1"
                       >
-                        <i class="fas fa-list"></i>
+                        <i
+                          class="fas fa-sort-alpha-down"
+                          v-if="sort === 'title'"
+                        ></i>
+                        <i
+                          class="fas fa-calendar-alt"
+                          v-if="sort === '-date'"
+                        ></i>
                       </b-button>
                     </b-button-group>
-                    <b-button
-                      variant="ghost-dark-outline"
-                      @click="sort = sort === 'title' ? '-date' : 'title'"
-                      title="Sort by..."
-                      class="ml-1"
-                    >
-                      <i
-                        class="fas fa-sort-alpha-down"
-                        v-if="sort === 'title'"
-                      ></i>
-                      <i
-                        class="fas fa-calendar-alt"
-                        v-if="sort === '-date'"
-                      ></i>
-                    </b-button>
                   </div>
                 </div>
               </div>
@@ -212,6 +198,17 @@ export default {
     showDate() {
       return this.type === "talk";
     },
+    heroButtonText() {
+      if (this.collection === "tv_show") {
+        if (this.show.title === "Music") return "Play Music Video";
+        if (this.show.title === "Movies") return "Play Film";
+        if (this.show.title === "News") return "Play News";
+        return "Play Episode 1";
+      } else {
+        if (this.show.audiobook) return "Read Chapter 1";
+      }
+      return "Play Video";
+    },
     title() {
       let what = "";
       if (this.type === "tv-show") what = `the TV show “${this.show.title}”`;
@@ -237,7 +234,7 @@ export default {
         videos = videos.concat(
           await this.getVideos({
             keyword,
-            sort: this.sort
+            sort: this.sort,
           })
         );
       }
@@ -249,7 +246,7 @@ export default {
         this.videos = await this.getVideos({
           limit: this.perPage,
           offset: this.moreVideos,
-          sort: this.sort
+          sort: this.sort,
         });
       }
     },
@@ -263,7 +260,7 @@ export default {
         this.videos = await this.getVideos({
           limit: this.perPage,
           offset: this.moreVideos,
-          sort: this.sort
+          sort: this.sort,
         });
         this.loadFeaturedVideo();
       }
@@ -331,7 +328,7 @@ export default {
         let newVideos = await this.getVideos({
           limit: this.perPage,
           offset: this.moreVideos,
-          sort: this.sort
+          sort: this.sort,
         });
         this.videos = this.videos.concat(newVideos);
       }
