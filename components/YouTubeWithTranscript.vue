@@ -37,12 +37,13 @@
           :showFullscreenToggle="showFullscreenToggle"
           :showLineList="showLineList"
           :showCollapse="layout === 'horizontal'"
-          :episode="episodes"
+          :episodes="episodes"
           ref="videoControls"
           :class="`${
             neverPlayed && layout === 'horizontal' ? 'transparent' : ''
           }`"
-          :episodes="episodes"
+          @previous="$emit('previous')"
+          @next="$emit('next')"
           @goToLine="goToLine"
           @togglePaused="togglePaused"
           @rewind="rewind"

@@ -7,9 +7,7 @@
       fullscreen,
     }"
   >
-    <div
-      class="text-center pb-2"
-    >
+    <div class="text-center pb-2">
       <span v-if="hits.length > 0">
         <div :class="{ 'float-left ml-1': true, 'd-none': !$adminMode }">
           <b-button
@@ -165,7 +163,10 @@
       :autoload="true"
       :autoplay="navigated"
       :showLineList="false"
+      :episodes="hits.map((h) => h.video)"
       @videoUnavailable="onVideoUnavailable"
+      @previous="goToPrevHit"
+      @next="goToNextHit"
     />
     <b-modal
       ref="playlist-modal"
@@ -238,7 +239,7 @@
                 />
                 <img
                   class="hit-thumb"
-                  :v-lazy="`https://img.youtube.com/vi/${hit.video.youtube_id}/hqdefault.jpg`"
+                  :src="`https://img.youtube.com/vi/${hit.video.youtube_id}/hqdefault.jpg`"
                   :alt="hit.video.title"
                 />
                 <span

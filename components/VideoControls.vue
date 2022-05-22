@@ -28,17 +28,14 @@
     >
       <i class="fas fa-undo"></i>
     </button>
-    <router-link
-      v-if="previousEpisode"
+    <button
+      v-if="episodes"
       :disabled="!previousEpisode"
       class="quick-access-button quick-access-button-previous text-center"
-      :to="{
-        name: 'youtube-view',
-        params: { youtube_id: previousEpisode.youtube_id },
-      }"
+      @click="$emit('previous')"
     >
       <i class="fas fa-step-backward"></i>
-    </router-link>
+    </button>
     <button
       class="quick-access-button quick-access-button-previous-line text-center"
       @click="$emit('goToPreviousLine')"
@@ -62,17 +59,14 @@
       <i v-if="layout === 'horizontal'" class="fas fa-arrow-down"></i>
       <i v-else class="fas fa-chevron-right"></i>
     </button>
-    <router-link
-      v-if="nextEpisode"
+    <button
+      v-if="episodes"
       :disabled="!nextEpisode"
       class="quick-access-button quick-access-button-next text-center"
-      :to="{
-        name: 'youtube-view',
-        params: { youtube_id: nextEpisode.youtube_id },
-      }"
+      @click="$emit('next')"
     >
       <i class="fas fa-step-forward"></i>
-    </router-link>
+    </button>
     <!-- <button
       :class="{
         'quick-access-button   text-center': true,
@@ -212,12 +206,12 @@ export default {
       );
     },
     previousEpisode() {
-      if (this.episodes && this.episodeIndex) {
+      if (this.episodes && this.episodeIndex > -1) {
         return this.episodes[this.episodeIndex - 1];
       }
     },
     nextEpisode() {
-      if (this.episodes && this.episodeIndex) {
+      if (this.episodes && this.episodeIndex > -1) {
         return this.episodes[this.episodeIndex + 1];
       }
     },
@@ -296,7 +290,8 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
+
 .quick-access-buttons {
   text-align: center;
   display: flex;
@@ -311,6 +306,9 @@ export default {
   background: none;
   color: #ccc;
   margin: 0 0.2rem;
+  &:disabled {
+    color: #444;
+  }
 }
 
 .quick-access-button-active {
