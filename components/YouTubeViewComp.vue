@@ -56,6 +56,8 @@
         :startLineIndex="startLineIndex"
         :layout="layout"
         @ended="updateEnded"
+        @prev="goToPreviousEpisode"
+        @next="goToNextEpisode"
         @currentTime="updateCurrentTimeQueryString"
         @updateLayout="onYouTubeUpdateLayout"
         @videoUnavailable="onVideoUnavailable"
@@ -69,7 +71,6 @@ import YouTube from "@/lib/youtube";
 import Helper from "@/lib/helper";
 import DateHelper from "@/lib/date-helper";
 import Config from "@/lib/config";
-import axios from "axios";
 import Vue from "vue";
 
 export default {
@@ -153,6 +154,21 @@ export default {
     currentTimeInSeconds() {
       let t = Math.floor(this.currentTime / 10) * 10;
       return t;
+    },
+    episodeIndex() {
+      return this.episodes.findIndex(
+        (e) => e.youtube_id === this.video.youtube_id
+      );
+    },
+    previousEpisode() {
+      if (this.episodes && this.episodeIndex > -1) {
+        return this.episodes[this.episodeIndex - 1];
+      }
+    },
+    nextEpisode() {
+      if (this.episodes && this.episodeIndex > -1) {
+        return this.episodes[this.episodeIndex + 1];
+      }
     },
   },
   validate({ params, query, store }) {
@@ -239,12 +255,23 @@ export default {
         if (response.data && response.data.data) {
           let videos = response.data.data;
           videos = Helper.uniqueByValue(videos, "youtube_id");
+          // If the episodes don't include the current video, we prepend it.
+          let episodeIndex = videos.findIndex(v => v.youtube_id === this.video.youtube_id)
+          if (episodeIndex < 0) videos = [this.video, ...videos]
           this.episodes = videos;
         }
       }
     },
   },
   methods: {
+    goToPreviousEpisode() {
+      if (this.previousEpisode)
+        this.$router.push({ name: "youtube-view", params: this.previousEpisode });
+    },
+    goToNextEpisode() {
+      if (this.nextEpisode)
+        this.$router.push({ name: "youtube-view", params: this.nextEpisode });
+    },
     close() {
       if (this.layout !== "mini") this.$router.push(this.minimizeVideoTo);
       this.$emit("close");
@@ -260,7 +287,7 @@ export default {
           l2Id: this.$l2.id,
         });
         // Go to next video
-        if (this.nextEpisode) this.$router.push(this.nextEpisode);
+        if (this.nextEpisode) this.$router.push({name: 'youtube-view', params: this.nextEpisode});
       } catch (err) {
         console.log(err);
       }
@@ -416,7 +443,7 @@ export default {
           !this.$refs.youtube.showSubsEditing &&
           !this.$refs.youtube.enableTranslationEditing
         ) {
-          if (this.nextEpisode) this.$router.push(this.nextEpisode);
+          if (this.nextEpisode) this.$router.push({name: 'youtube-view', params: this.nextEpisode});
         }
       }
     },
