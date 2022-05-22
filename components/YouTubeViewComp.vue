@@ -127,9 +127,12 @@ export default {
     minimizeVideoTo() {
       if (this.fullHistory) {
         let lastNonYouTubeViewPath = this.fullHistory.find(
-          (h) => !h.includes("youtube/view")
+          (h) =>
+            !h.includes("youtube/view") &&
+            h.includes(this.$l1.code + "/" + this.$l2.code) // Must be the same language!
         );
         if (lastNonYouTubeViewPath) return lastNonYouTubeViewPath;
+        else return { name: "all-media" };
       }
       return { name: "all-media" };
     },
@@ -183,7 +186,9 @@ export default {
      * Called when the video is first fetched
      */
     async video() {
-      console.log("YouTube View: 📼 Video changed, getting subs and other info...");
+      console.log(
+        "YouTube View: 📼 Video changed, getting subs and other info..."
+      );
       if (!this.extrasLoaded && typeof this.video !== "undefined") {
         this.extrasLoaded = true;
         console.log(`YouTube View (on video change): load subs if missing...`);
@@ -241,8 +246,8 @@ export default {
   },
   methods: {
     close() {
-      if (this.layout !== 'mini') this.$router.push(this.minimizeVideoTo);
-      this.$emit('close')
+      if (this.layout !== "mini") this.$router.push(this.minimizeVideoTo);
+      this.$emit("close");
     },
     onYouTubeUpdateLayout(layout) {
       this.initialLayout = initialLayout;
