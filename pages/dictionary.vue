@@ -9,7 +9,6 @@
     <div
       :class="{
         'dictionary focus': true,
-        'bg-white': !wide,
         'dictionary-wide': wide,
       }"
       :key="`entry-${entryKey}`"
@@ -17,7 +16,7 @@
     >
       <SocialHead :title="title" :description="description" :image="image" />
       <client-only>
-        <div :class="{ 'dictionary-search-bar': args, 'bg-white': true }">
+        <div :class="{ 'dictionary-search-bar': args }">
           <div :class="{ 'container pt-2': !wide }">
             <div :class="{ row: !wide }">
               <div :class="{ 'col-sm-12': !wide }">
@@ -470,6 +469,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.dictionary {
+  min-height: 100vh;
+  background: white;
+}
+
 .zerotohero-wide-collapsed .dictionary-wide .dictionary-search-bar {
   left: 9rem;
   width: calc(100vw - 9rem);
