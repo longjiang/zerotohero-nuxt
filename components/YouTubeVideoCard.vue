@@ -21,6 +21,18 @@
     :key="`video-${video.youtube_id}`"
   >
     <div
+      v-if="
+        !generated &&
+        checkSubs &&
+        !video.checkingSubs &&
+        !video.hasSubs &&
+        !video.id
+      "
+      class="no-subs-badge"
+    >
+      <span v-if="!over"><i class="fa fa-times"></i> NO SUBS</span>
+    </div>
+    <div
       :class="{
         'youtube-video-card': true,
         'youtube-video-card-grid': view === 'grid',
@@ -358,7 +370,7 @@ export default {
       return language;
     },
     videoL2() {
-      if (this.video.l2) return this.$languages.getById(this.video.l2)
+      if (this.video.l2) return this.$languages.getById(this.video.l2);
     },
     to() {
       let to = {
@@ -366,7 +378,11 @@ export default {
         params: {
           youtube_id: this.video.youtube_id,
           l1: this.l1 ? this.l1.code : this.$l1 ? this.$l1.code : "en",
-          l2: this.l2 ? this.l2.code : this.videoL2 ? this.videoL2.code : this.$l2.code,
+          l2: this.l2
+            ? this.l2.code
+            : this.videoL2
+            ? this.videoL2.code
+            : this.$l2.code,
         },
         query: {},
       };
@@ -463,7 +479,9 @@ export default {
           let data = {};
           data[type] = show.id;
           let response = await this.$authios.patch(
-            `${Config.youtubeVideosTableName(this.video.l2 ? this.video.l2.id : this.$l2.id)}/${this.video.id}?fields=id`,
+            `${Config.youtubeVideosTableName(
+              this.video.l2 ? this.video.l2.id : this.$l2.id
+            )}/${this.video.id}?fields=id`,
             data
           );
           response = response.data;
@@ -478,7 +496,9 @@ export default {
       let data = {};
       data[type] = null;
       let response = await this.$authios.patch(
-        `${Config.youtubeVideosTableName(this.video.l2 ? this.video.l2.id : this.$l2.id)}/${this.video.id}`,
+        `${Config.youtubeVideosTableName(
+          this.video.l2 ? this.video.l2.id : this.$l2.id
+        )}/${this.video.id}`,
         data
       );
       if (response && response.data) {
@@ -490,7 +510,9 @@ export default {
       if (this.video.title !== newTitle) {
         try {
           let response = await this.$authios.patch(
-            `${Config.youtubeVideosTableName(this.video.l2 ? this.video.l2.id : this.$l2.id)}/${this.video.id}`,
+            `${Config.youtubeVideosTableName(
+              this.video.l2 ? this.video.l2.id : this.$l2.id
+            )}/${this.video.id}`,
             { title: newTitle },
             { contentType: "application/json" }
           );
@@ -527,7 +549,9 @@ export default {
       if (this.video.id) {
         try {
           let response = await this.$authios.delete(
-            `${Config.youtubeVideosTableName(this.video.l2 ? this.video.l2.id : this.$l2.id)}/${this.video.id}`
+            `${Config.youtubeVideosTableName(
+              this.video.l2 ? this.video.l2.id : this.$l2.id
+            )}/${this.video.id}`
           );
           if (response) {
             Vue.delete(this.video, "id");
@@ -540,7 +564,9 @@ export default {
     },
     async updateSubs() {
       let response = await this.$authios.patch(
-        `${Config.youtubeVideosTableName(this.video.l2 ? this.video.l2.id : this.$l2.id)}/${this.video.id}`,
+        `${Config.youtubeVideosTableName(
+          this.video.l2 ? this.video.l2.id : this.$l2.id
+        )}/${this.video.id}`,
         { subs_l2: YouTube.unparseSubs(this.video.subs_l2) }
       );
       response = response.data;
@@ -606,7 +632,9 @@ export default {
     async addChannelID(video) {
       let channelId = await this.getChannelID(video);
       let response = await this.$authios.patch(
-        `${Config.youtubeVideosTableName(this.video.l2 ? this.video.l2.id : this.$l2.id)}/${video.id}`,
+        `${Config.youtubeVideosTableName(
+          this.video.l2 ? this.video.l2.id : this.$l2.id
+        )}/${video.id}`,
         { channel_id: channelId }
       );
       if (response && response.data) {
@@ -649,7 +677,7 @@ export default {
         }
         return true;
       } catch (err) {
-        console.log(err)
+        console.log(err);
       }
     },
     async checkSubsFunc(video) {
@@ -704,7 +732,7 @@ export default {
 <style lang="scss" scoped>
 .youtube-video-card-wrapper {
   overflow: hidden;
-  &.nosubs:not(.over) {
+  &.nosubs:not(.over) > * {
     opacity: 0.2;
   }
   &.youtube-video-card-wrapper-dark,
@@ -815,5 +843,18 @@ export default {
       color: #ffffffaa !important;
     }
   }
+}
+
+.no-subs-badge {
+  opacity: 1 !important;
+  background-color: rgb(140, 0, 0);
+  position: absolute;
+  z-index: 2;
+  font-size: 0.9em;
+  text-align: center;
+  border-radius: 0 0.3rem 0.3rem 0;
+  padding: 0 0.7rem;
+  top: 1rem;
+  left: 0.5rem;
 }
 </style>

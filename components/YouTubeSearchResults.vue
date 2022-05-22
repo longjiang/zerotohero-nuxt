@@ -12,6 +12,7 @@
       :updateVideos="updateVideos"
       :checkSaved="checkSaved"
       :hideVideosWithoutSubsProp="hideVideosWithoutSubs"
+      :cloakVideosWithoutSubs="cloakVideosWithoutSubs"
       :showBadges="true"
       :showProgress="false"
       :skin="skin"
@@ -203,10 +204,3 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped>
-.cloak-videos-without-subs {
-  ::v-deep .col-no-subs {
-    display: none;
-  }
-}
-</style>

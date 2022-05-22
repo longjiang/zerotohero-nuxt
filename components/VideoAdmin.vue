@@ -8,7 +8,7 @@
           name: 'youtube-channel',
           params: {
             channel_id: video.channel.id,
-            title: video.channel.title || video.channel.id,
+            title: video.channel.title || undefined,
           },
         }"
       >

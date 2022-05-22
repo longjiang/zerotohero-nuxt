@@ -1,11 +1,14 @@
 <router>
   {
     path: '/:l1/:l2/youtube/playlist/:playlist_id?/:title?',
-    props: true
+    props: true,
+    meta: {
+      skin: 'dark'
+    }
   }
 </router>
 <template>
-  <div class="main">
+  <div class="main-dark">
     <div class="youtube-browse container pt-5 pb-5">
       <div class="row">
         <div class="col-sm-12">
@@ -14,11 +17,12 @@
               <span>{{ title.replace('All uploaded videos of ', '') }}</span>
             </Annotate>
           </h3>
+          <h3 class="text-center" v-else>Playlist</h3>
+          <span v-if="$adminMode">Playlist ID: {{ playlist_id }}</span>
           <p v-if="totalResults" class="text-center">
-            {{ shownResults }} of {{ totalResults }} videos loaded
+            {{ shownResults }} of {{ totalResults }} videos loaded. Videos without subs are dimmed.
           </p>
-          <h3 class="text-center" v-else>Playlist: {{ playlist_id }}</h3>
-          <div class="text-center mt-4 mb-4">
+          <div class="text-center mt-4 mb-5">
             <b-button
               class="btn-small btn-primary d-inline-block"
               @click="enableForceRefresh"
@@ -58,9 +62,10 @@
               :videos="
                 videos.filter((video) => video.title !== 'Private video')
               "
-              @newShow="newShow"
+              skin="dark"
               :checkSubs="true"
               :showProgress="false"
+              @newShow="newShow"
               ref="youtubeVideoList"
             />
           </div>

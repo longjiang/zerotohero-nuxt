@@ -1,6 +1,11 @@
 <template>
   <container-query :query="query" v-model="params">
-    <div class="youtube-video-list">
+    <div
+      :class="{
+        'youtube-video-list': true,
+        'cloak-videos-without-subs': cloakVideosWithoutSubs,
+      }"
+    >
       <client-only>
         <div
           v-if="$adminMode && showAdminToolsInAdminMode"
@@ -252,6 +257,9 @@ export default {
       default: true,
     },
     hideVideosWithoutSubsProp: {
+      default: false,
+    },
+    cloakVideosWithoutSubs: {
       default: false,
     },
     multilingual: {
@@ -515,5 +523,11 @@ export default {
 .subs-drop {
   border: 1px #666 dashed;
   padding: 0.2rem 0.6rem;
+}
+
+.cloak-videos-without-subs {
+  .col-no-subs {
+    display: none;
+  }
 }
 </style>

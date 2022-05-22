@@ -4,6 +4,7 @@
     props: true,
     meta: {
       title: 'Study YouTube Subtitles | Zero to Hero',
+      skin: 'dark',
       metaTags: [
         {
           name: 'description',
@@ -14,7 +15,7 @@
   }
 </router>
 <template>
-  <div class="main">
+  <div class="main-dark">
     <div class="youtube-browse container pt-5 pb-5">
       <div class="row">
         <div class="col-sm-12">
@@ -22,7 +23,8 @@
             <Annotate :phonetics="false" :buttons="true" v-if="title && title !== 'undefined'">
               <span>{{ title }}</span>
             </Annotate>
-            <span v-else>YouTube Channel {{ channel_id }}</span>
+            <span v-else>Playlists from the Channel</span>
+            <span v-if="$adminMode">Channel ID: {{ channel_id }}</span>
           </h3>
           <div class="text-center" v-if="$adminMode">
             <b-button
@@ -48,9 +50,7 @@
             </router-link>
           </div>
           <template v-if="!loading">
-            <h4 class="text-center mt-5">{{ $t("Playlists") }}</h4>
-            <hr />
-            <YouTubePlaylists :playlists="playlists" />
+            <YouTubePlaylists :playlists="playlists" skin="dark" />
           </template>
         </div>
       </div>
@@ -118,8 +118,8 @@ export default {
         let allVideosPlaylist = {
           id: this.channel_id.replace("UC", "UU"),
           title:
-            "All uploaded videos of " +
-            (this.title ? this.title : "this channel"),
+            "All Uploaded Videos" +
+            (this.title ? ' of ' + this.title : ""),
         };
         if (playlists[0]) allVideosPlaylist.thumbnail = playlists[0].thumbnail;
         playlists = [allVideosPlaylist, ...playlists];
