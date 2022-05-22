@@ -596,7 +596,7 @@ export default {
   max-width: calc((100vh - 10rem) * 16 / 9);
   margin: 0 auto;
   position: sticky;
-  top: calc(env(safe-area-inset-top, 0) + 2.85rem);
+  top: calc(env(safe-area-inset-top, 0) + 2.7rem);
 }
 
 .zerotohero-wide {
@@ -615,7 +615,7 @@ export default {
 
 #zerotohero:not(.zerotohero-wide) {
   .youtube-with-transcript-horizontal .youtube-video-column {
-    top: calc(env(safe-area-inset-top, 0) + 2.85rem);
+    top: calc(env(safe-area-inset-top, 0) + 2.7rem);
   }
 }
 

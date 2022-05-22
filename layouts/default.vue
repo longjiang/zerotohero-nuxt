@@ -469,7 +469,7 @@ export default {
     position: fixed;
     height: 5rem;
     min-height: 0;
-    bottom: 4.88rem;
+    bottom: calc(env(safe-area-inset-bottom) + 4.88rem);
     top: inherit;
     overflow: hidden;
     z-index: 9;

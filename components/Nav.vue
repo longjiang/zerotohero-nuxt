@@ -1161,6 +1161,7 @@ export default {
   transition: 0.2s all ease-in-out;
   &.zth-nav-bottom-hidden {
     bottom: -5rem;
+    padding-bottom: 0;
   }
   &.zth-nav-dark {
     background: black;
