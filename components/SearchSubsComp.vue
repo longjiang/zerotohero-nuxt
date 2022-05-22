@@ -9,7 +9,6 @@
   >
     <div
       class="text-center pb-2"
-      :style="fullscreenToggle && !$adminMode ? 'padding-left: 2.5rem' : ''"
     >
       <span v-if="hits.length > 0">
         <div :class="{ 'float-left ml-1': true, 'd-none': !$adminMode }">
@@ -84,7 +83,7 @@
         >
           <i class="fas fa-step-forward" />
         </b-button>
-        <div class="float-right mr-1">
+        <div class="float-right mr-1" v-if="$adminMode">
           <SmallStar
             :item="currentHit"
             :saved="(hit) => hit.saved"
