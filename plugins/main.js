@@ -127,20 +127,30 @@ export default async ({ app, store, route }, inject) => {
         return options
       } else return {}
     },
+    host: process.server ? process.env.baseUrl : window.location.hostname,
+    /**
+     * We append a cors=... query string because directus server caching seems to 'remember' cors header, causing problems when multiple doamins try ti access
+     * @param {String} url 
+     * @returns Url with cors string attached
+     */
+    appendHostCors(url) {
+      let joiner = url.includes('?') ? '&' : '?'
+      return url + joiner + `cors=${this.host}`
+    },
     async patch(url, payload) {
-      let res = await axios.patch(url, payload, this.tokenOptions())
+      let res = await axios.patch(this.appendHostCors(url), payload, this.tokenOptions())
       if (res) return res
     },
     async post(url, payload) {
-      let res = await axios.post(url, payload, this.tokenOptions())
+      let res = await axios.post(this.appendHostCors(url), payload, this.tokenOptions())
       if (res) return res
     },
     async delete(url, payload) {
-      let res = await axios.delete(url, this.tokenOptions())
+      let res = await axios.delete(this.appendHostCors(url), this.tokenOptions())
       if (res) return res
     },
     async get(url, payload) {
-      let res = await axios.get(url, this.tokenOptions())
+      let res = await axios.get(this.appendHostCors(url), this.tokenOptions())
       if (res) return res
     }
   })
