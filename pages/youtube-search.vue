@@ -17,7 +17,17 @@
 <template>
   <div class="main main-dark">
     <div class="container pt-5 pb-5 youtube-search">
-      <h5 class="mb-5 text-center">Search {{ $l2.name }} Videos</h5>
+      <div
+        style="font-size: 1.5rem; color: white; text-align: center"
+      >
+        <img
+          src="/img/czh-icon.png"
+          style="height: 4rem; margin-bottom: 1rem; margin-top: 3rem"
+          data-not-lazy
+        />
+      </div>
+      <h4 class="mt-3 mb-5 text-center">Zero to Hero Video Search</h4>
+      
       <SimpleSearch
         :placeholder="`Search`"
         skin="dark"
@@ -107,11 +117,11 @@
           You can help to expand this {{ $l2.name }} video library!
         </h4>
         <LazyHowToContribute />
+        <LazyIdenticalLanguages
+          class="mb-4"
+          routeName="youtube-browse"
+        />
       </div>
-      <LazyIdenticalLanguages
-        class="mb-4 bg-success"
-        routeName="youtube-browse"
-      />
     </div>
   </div>
 </template>

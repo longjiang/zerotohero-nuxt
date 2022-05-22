@@ -13,7 +13,7 @@
               data-not-lazy
             />
             <br />
-            <b>zerotohero.ca</b>
+            <b>Hero to Zero 😭</b>
           </div>
           <div class="error-page">
             <h1 v-if="error.statusCode === 404">Route Not Found</h1>
