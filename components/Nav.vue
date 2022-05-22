@@ -90,7 +90,7 @@
             :to="last(child) || child"
             :item="child"
             :level="2"
-            :showIcon="collapsed && variant === 'side-bar'"
+            :showIcon="collapsed || variant !== 'side-bar'"
             :badge="
               child.name === 'saved-words' && savedWordsCount > 0
                 ? savedWordsCount
@@ -380,12 +380,6 @@ export default {
               show: true,
             },
             {
-              name: "youtube-search",
-              title: `Search`,
-              icon: "fas fa-search",
-              show: true,
-            },
-            {
               path: this.moviesPath,
               icon: "fa fa-film",
               title: `Movies`,
@@ -428,10 +422,6 @@ export default {
               show: true,
             },
             {
-              name: "show",
-              show: false,
-            },
-            {
               name: "live-tv",
               icon: "fa fa-broadcast-tower",
               title: "Live TV",
@@ -449,6 +439,16 @@ export default {
               icon: "fas fa-lightbulb",
               show: true,
               params: { l1: this.l1.code, l2: this.l2.code },
+            },
+            {
+              name: "youtube-search",
+              title: `Search`,
+              icon: "fas fa-search",
+              show: true,
+            },
+            {
+              name: "show",
+              show: false,
             },
             {
               name: "youtube-view",

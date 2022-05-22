@@ -3,10 +3,13 @@
     <VideoHero
       v-if="featureEpisode"
       :video="featureEpisode"
+      :playButtonText="heroButtonText"
+      :episodesButtonText="heroEpisodesText"
+      :playButtonIcon="heroEpisodesIcon"
+      :icon="heroButtonIcon"
       @videoUnavailable="onVideoUnavailable"
-      playButtonText="Play Episode 1"
     />
-    <div class="shows" >
+    <div class="shows">
       <div class="container">
         <SocialHead
           v-if="shows && shows[0]"
@@ -109,6 +112,19 @@ export default {
     this.unsubscribe();
   },
   computed: {
+    heroEpisodesIcon() {
+      if (this.routeType === "audiobooks") return "fas fa-headphones";
+    },
+    heroButtonText() {
+      if (this.routeType === "tv-shows") return "Watch Episode 1";
+      if (this.routeType === "talks") return "Play Latest";
+      if (this.routeType === "audiobooks") return "Read Chapter 1";
+    },
+    heroEpisodesText() {
+      if (this.routeType === "tv-shows") return "Episodes";
+      if (this.routeType === "talks") return "Uploads";
+      if (this.routeType === "audiobooks") return "Table of Contents";
+    },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -176,15 +192,19 @@ export default {
     async loadFeatureShowAndEpisode() {
       this.featureShow = this.getRandomShow();
       this.featureEpisode = await this.getFirstEpisodeOfShow(
-        this.featureShow.id,
+        this.featureShow,
         this.routeType === "tv-shows" ? "tv_show" : "talk",
         this.$l2.id
       );
     },
-    async getFirstEpisodeOfShow(showId, showType, l2Id) {
+    async getFirstEpisodeOfShow(show, showType, l2Id) {
+      let sort = '-date'
+      if (show.audiobook || showType === 'tv_show') {
+        sort = 'title'
+      }
       let url = `${Config.youtubeVideosTableName(
         l2Id
-      )}?filter[${showType}][eq]=${showId}&limit=1&fields=youtube_id,id,l2,tv_show,talk,title&sort=title`;
+      )}?filter[${showType}][eq]=${show.id}&limit=1&fields=youtube_id,id,l2,tv_show,talk,title&sort=${sort}`;
       let response = await this.$authios.get(url);
 
       if (response.data && response.data.data.length > 0) {

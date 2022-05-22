@@ -26,7 +26,7 @@
         }`"
       ></i>
     </div>
-    <i v-else-if="showIcon" :class="`nav-item-icon ${item.icon}`"></i>
+    <i v-else-if="showIcon" :class="`nav-item-icon mr-1 ${item.icon}`"></i>
     <span class="nav-item-title">
       {{ $t(item.title, { l2: $t($l2.name) }) }}
       <span class="saved-words-count" v-cloak v-if="badge">
@@ -123,9 +123,12 @@ export default {
   }
   .secondary-nav-item {
     color: white;
+    &.nuxt-link-active,
+    &:hover {
+      color: white;
+    }
   }
 }
-
 .nav-menu-bar {
   .main-nav {
     .main-nav-item {
@@ -142,8 +145,16 @@ export default {
     }
   }
   .secondary-nav-item {
+    color: #ccc;
+    .nav-item-icon {
+      color: #28a74566;
+      margin-right: 0.5rem;
+    }
     &.nuxt-link-active,
     &:hover {
+      .nav-item-icon {
+        color: #28a745;
+      }
       border-bottom: 0.4rem solid #28a745cc;
     }
   }

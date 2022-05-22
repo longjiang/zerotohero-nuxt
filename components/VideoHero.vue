@@ -1,5 +1,9 @@
 <template>
-  <div style="position: relative" :class="{ unavailable: videoUnavailable }" v-observe-visibility="visibilityChanged">
+  <div
+    style="position: relative"
+    :class="{ unavailable: videoUnavailable }"
+    v-observe-visibility="visibilityChanged"
+  >
     <div class="video-hero" @click="play">
       <div class="top-overlay"></div>
       <div class="bottom-overlay"></div>
@@ -21,12 +25,11 @@
             <div class="hero-video-info">
               <h4 class="hero-video-title">
                 {{
-                  title
-                    ? title
-                    : video.title
-                        .replace(/[|【】《》]/g, "")
-                        .replace("ENG SUBS", "")
-                        .replace("MULTI SUBS", "")
+                  (title || video.title)
+                    .replace(/[|【】《》]/g, "")
+                    .replace("ENG SUBS", "")
+                    .replace("MULTI SUBS", "")
+                    .replace("MULTISUB", "")
                 }}
               </h4>
               <div>
@@ -38,8 +41,8 @@
                   }"
                   class="btn btn-success"
                 >
-                  <i class="fas fa-play mr-1"></i>
-                  {{ playButtonText ? playButtonText : 'Watch &amp; Learn' }}
+                  <i :class="`${playButtonIcon} mr-1`"></i>
+                  {{ playButtonText }}
                 </router-link>
                 <router-link
                   v-if="(video.tv_show || video.talk) && showEpisodes"
@@ -54,9 +57,13 @@
                   class="ml-1 btn btn-ghost-dark-no-bg"
                 >
                   <i class="fas fa-th-large mr-1"></i>
-                  Episodes
+                  {{ episodesButtonText }}
                 </router-link>
-                <b-button variant="ghost-dark-no-bg" class="ml-1" @click="muted = !muted">
+                <b-button
+                  variant="ghost-dark-no-bg"
+                  class="ml-1"
+                  @click="muted = !muted"
+                >
                   <i class="fas fa-volume-mute" v-if="muted"></i>
                   <i class="fas fa-volume-up" v-else></i>
                 </b-button>
@@ -81,7 +88,13 @@ export default {
       type: String,
     },
     playButtonText: {
-      type: String,
+      default: "Watch & Learn",
+    },
+    episodesButtonText: {
+      default: "Episodes",
+    },
+    playButtonIcon: {
+      default: "fas fa-play",
     },
     showEpisodes: {
       type: Boolean,
@@ -101,7 +114,7 @@ export default {
   },
   watch: {
     muted() {
-      if (!this.$refs.youtube) return false
+      if (!this.$refs.youtube) return false;
       if (this.muted) this.$refs.youtube.mute();
       else this.$refs.youtube.unMute();
     },
@@ -118,10 +131,10 @@ export default {
       this.$emit("videoUnavailable", true);
     },
     visibilityChanged(visible) {
-      if (!this.$refs.youtube) return
+      if (!this.$refs.youtube) return;
       if (!visible) this.$refs.youtube.mute();
       if (visible && !this.muted) this.$refs.youtube.unMute();
-    }
+    },
   },
 };
 </script>

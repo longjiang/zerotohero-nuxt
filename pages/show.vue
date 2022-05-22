@@ -43,7 +43,7 @@
               <Loader :sticky="true" message="Loading videos..." />
             </div>
             <!-- <Sale class="mb-4" v-if="$l2.code === 'zh'" /> -->
-            <h3 v-if="show" >
+            <h3 v-if="show">
               <span v-if="$adminMode" contenteditable="true" @blur="saveTitle">
                 {{ show.title }}
               </span>
@@ -202,10 +202,11 @@ export default {
       if (this.collection === "tv_show") {
         if (this.show.title === "Music") return "Play Music Video";
         if (this.show.title === "Movies") return "Play Film";
-        if (this.show.title === "News") return "Play News";
         return "Play Episode 1";
       } else {
+        if (this.show.title === "News") return "Play Latest News";
         if (this.show.audiobook) return "Read Chapter 1";
+        return "Play Latest Upload"
       }
       return "Play Video";
     },
@@ -269,9 +270,13 @@ export default {
   methods: {
     loadFeaturedVideo() {
       if (this.tries < 5) {
-        if (this.videos && this.videos.length > 0)
+        if (this.videos && this.videos.length > 0) {
           // Helper.shuffle mutates the original array!
-          this.featuredVideo = Helper.shuffle([...this.videos])[0];
+          let videos = [...this.videos];
+          if (["Movies", "Music"].includes(this.show.title))
+            videos = Helper.shuffle(videos);
+          this.featuredVideo = videos[0];
+        }
         this.tries++;
       } else {
         this.heroUnavailable = true;
