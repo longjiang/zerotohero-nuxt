@@ -1,5 +1,4 @@
 import Config from '@/lib/config'
-import axios from 'axios'
 
 export const state = () => {
   return {
@@ -29,7 +28,7 @@ export const actions = {
     let talks = []
     try {
 
-      let response = await axios.get(
+      let response = await this.$authios.get(
         `${Config.wiki}items/tv_shows?filter[l2][eq]=${l2.id
         }${adminMode ? '' : '&filter[hidden][empty]=true'}&limit=${limit}&timestamp=${adminMode ? Date.now() : 0}`
       );
@@ -43,7 +42,7 @@ export const actions = {
         });
       }
 
-      response = await axios.get(
+      response = await this.$authios.get(
         `${Config.wiki}items/talks?filter[l2][eq]=${l2.id
         }${adminMode ? '' : '&filter[hidden][empty]=true'}&limit=${limit}&timestamp=${adminMode ? Date.now() : 0}`
       );
@@ -61,7 +60,7 @@ export const actions = {
     context.commit('LOAD_SHOWS', { l2, tvShows, talks })
   },
   async add(context, { l2, type, show }) {
-    let response = await axios.post(
+    let response = await this.$authios.post(
       `${Config.wiki}items/${type === 'tvShows' ? 'tv_shows' : 'talks'}`,
       show
     );
@@ -77,10 +76,8 @@ export const actions = {
     let token = $nuxt.$auth.strategy.token.get()
     if (!token) return
     token = token.replace('Bearer ', '')
-    let response = await axios.delete(
-      `${Config.wiki}items/${type === 'tvShows' ? 'tv_shows' : 'talks'}/${show.id}${
-        this.$auth.user ? "?access_token=" + token : ""
-      }`
+    let response = await this.$authios.delete(
+      `${Config.wiki}items/${type === 'tvShows' ? 'tv_shows' : 'talks'}/${show.id}`
     );
     // response.data could be "" (empty string), which evaluates to undefined.
     if (response) {

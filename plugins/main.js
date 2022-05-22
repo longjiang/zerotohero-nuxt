@@ -36,8 +36,8 @@ Vue.use(VueMq, {
     xxl: Infinity
   },
   defaultBreakpoint: 'sm', // customize this for SSR
-  error (listender, Init) {
-      console.log('error')
+  error(listender, Init) {
+    console.log('error')
   }
 })
 
@@ -110,6 +110,31 @@ export default async ({ app, store, route }, inject) => {
         return dictionary
       }
       */
+    }
+  })
+  inject('authios', {
+    tokenOptions() {
+      let token = app.$auth.strategy.token.get()
+      if (token) {
+        let options = { headers: { Authorization: token } }
+        return options
+      } else return {}
+    },
+    async patch(url, payload) {
+      let res = await axios.patch(url, payload, this.tokenOptions())
+      if (res) return res
+    },
+    async post(url, payload) {
+      let res = await axios.post(url, payload, this.tokenOptions())
+      if (res) return res
+    },
+    async delete(url, payload) {
+      let res = await axios.delete(url,  this.tokenOptions())
+      if (res) return res
+    },
+    async get(url, payload) {
+      let res = await axios.get(url, this.tokenOptions())
+      if (res) return res
     }
   })
   inject('getGrammar', async () => {
