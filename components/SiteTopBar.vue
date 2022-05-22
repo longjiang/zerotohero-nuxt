@@ -67,13 +67,14 @@
             <LanguageFlag
               v-if="!(!flagCode || !$route.params.l2 || params.md === false)"
               ref="flag"
-              :autocycle="false"
-              :language="$l2"
               style="
                 transform: scale(0.7);
                 margin-right: -0.5rem;
                 margin-bottom: -0.3rem;
               "
+              :key="`top-bar-flag-${$l2.code}`"
+              :autocycle="false"
+              :language="$l2"
             />
             <i class="fas fa-cheveron-right" v-if="!flagCode"></i>
             <span
