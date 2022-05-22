@@ -2,27 +2,6 @@
   <div class="media-search-results">
     <div class="row">
       <div class="col-sm-12 mb-4">
-        <h3
-          v-if="!keyword && showLatestIfKeywordMissing"
-          class="mt-5 text-center"
-        >
-          New Videos
-        </h3>
-        <div class="col-sm-12 mt-5" v-if="!keyword && videos && videos[0]">
-          <div class="text-center mb-5" v-if="!showDiscover">
-            <b-button @click="showDiscover = true" size="lg" variant="success">
-              <i class="fas fa-random mr-2"></i>
-              Watch Something Random
-            </b-button>
-          </div>
-          <LazyDiscoverPlayer
-            v-if="showDiscover"
-            routeType="talks"
-            :shows="[]"
-            :l1="$l1"
-            :l2="$l2"
-          />
-        </div>
         <client-only>
           <div v-if="showSearchBar">
             <div
@@ -176,7 +155,6 @@ export default {
       noMoreVideos: false,
       levels: Helper.levels(this.$l2),
       topics: Helper.topics,
-      randomEpisodeYouTubeId: undefined,
       moreVideos: 0,
       perPage: 96,
       includeShows: true,
@@ -204,10 +182,7 @@ export default {
     if (!this.keyword || this.keyword.includes("channel:"))
       this.includeShows = false;
     this.videos = await this.getVideos(this.start);
-    this.randomEpisodeYouTubeId = await this.$directus.getRandomEpisodeYouTubeId(
-      this.$l2.id,
-      this.$store.state.shows.tvShows[this.$l2.code] ? "tv_show" : undefined
-    );
+    this.$emit('videosLoaded', this.videos)
   },
   watch: {
     async includeShows() {

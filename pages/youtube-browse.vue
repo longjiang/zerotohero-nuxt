@@ -9,6 +9,11 @@
 </router>
 <template>
   <div class="main-dark">
+    <VideoHero
+      v-if="heroVideo"
+      :video="heroVideo"
+      @videoUnavailable="onVideoUnavailable"
+    />
     <div class="youtube-browse container pb-5">
       <SocialHead
         :title="`Study ${$l2.name} videos with subs | ${$l2.name} Zero to Hero`"
@@ -21,9 +26,10 @@
         :level="level"
         :keyword="keyword"
         :start="start"
-        :showLatestIfKeywordMissing ="true"
-        :showNoVideosMessage = "true"
-        :showSearchBar = "true"
+        :showLatestIfKeywordMissing="true"
+        :showNoVideosMessage="true"
+        :showSearchBar="true"
+        @videosLoaded="onVideosLoaded"
       />
       <div class="row"></div>
     </div>
@@ -58,6 +64,27 @@ export default {
     $adminMode() {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
+    },
+    heroVideo() {
+      if (this.videos.length > 0)
+        return this.videos[Math.floor(Math.random() * this.videos.length)];
+    },
+  },
+  data() {
+    return {
+      videos: [],
+    };
+  },
+  methods: {
+    onVideoUnavailable() {
+      this.videoUnavailable = true;
+      this.videos = this.videos.filter(
+        (v) => v.youtube_id !== this.heroVideo.youtube_id
+      );
+      this.loadHeroVideo();
+    },
+    onVideosLoaded(videos) {
+      this.videos = videos || [];
     },
   },
 };

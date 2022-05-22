@@ -149,7 +149,7 @@ export default {
   },
   methods: {
     onVideoUnavailable() {
-      this.loadFeatureShowAndEpisode()
+      this.loadFeatureShowAndEpisode();
     },
     async getShowsOverNetwork() {
       let langId = this.$l2.id;
@@ -207,6 +207,7 @@ export default {
             return false;
           if (this.routeType === "talks" && ["News"].includes(s.title))
             return false;
+          if (this.routeType === "audiobooks") return s.audiobook;
           return true;
         });
         let randomShow = shows[Math.floor(Math.random() * shows.length)];

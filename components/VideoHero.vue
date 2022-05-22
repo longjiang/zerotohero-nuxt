@@ -46,7 +46,7 @@
                   :to="{
                     name: 'show',
                     params: {
-                      id: video.tv_show,
+                      id: video.tv_show || video.talk,
                       type: video.tv_show ? 'tv-show' : 'talk',
                     },
                     id: String(video.tv_show ? video.tv_show : video.talk),

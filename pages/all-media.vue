@@ -186,7 +186,7 @@
                 </router-link>
               </h3>
               <LazyYouTubeVideoList
-                :videos="randomVideos"
+                :videos="videos.slice(0, 12)"
                 :showAdminToolsInAdminMode="false"
                 skin="dark"
               />
@@ -269,7 +269,6 @@ export default {
       musicShow: undefined,
       moviesShow: undefined,
       newsShow: undefined,
-      randomVideos: [],
       music: [],
       movies: [],
       news: [],
@@ -288,7 +287,6 @@ export default {
     });
     if (!this.videos || this.videos.length === 0)
       this.videos = await this.getVideos({ limit: 50, sort: "youtube_id" });
-    this.randomVideos = this.videos.slice(0, 12);
     this.loadHeroVideo();
     await Helper.timeout(3000);
     this.loading = false; // Incase resources fail to load, at least show them
@@ -316,11 +314,11 @@ export default {
   },
   methods: {
     loadHeroVideo() {
-      this.heroVideo = this.random(this.randomVideos)[0];
+      this.heroVideo = this.random(this.videos)[0];
     },
     onVideoUnavailable() {
       this.videoUnavailable = true;
-      this.randomVideos = this.randomVideos.filter(
+      this.videos = this.videos.filter(
         (v) => v.youtube_id !== this.heroVideo.youtube_id
       );
       this.loadHeroVideo();
