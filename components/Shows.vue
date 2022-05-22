@@ -3,10 +3,6 @@
     <VideoHero
       v-if="featureEpisode"
       :video="featureEpisode"
-      :playButtonIcon="heroButtonIcon"
-      :playButtonText="heroButtonText"
-      :episodesButtonText="heroEpisodesText"
-      :episodesButtonIcon="heroEpisodesIcon"
       @videoUnavailable="onVideoUnavailable"
     />
     <div class="shows">
@@ -111,22 +107,6 @@ export default {
     this.unsubscribe();
   },
   computed: {
-    heroEpisodesIcon() {
-      if (this.routeType === "audiobooks") return "fas fa-list";
-    },
-    heroButtonIcon() {
-      if (this.routeType === "audiobooks") return "fas fa-book-open";
-    },
-    heroButtonText() {
-      if (this.routeType === "tv-shows") return "Watch Episode 1";
-      if (this.routeType === "talks") return "Play Latest";
-      if (this.routeType === "audiobooks") return "Read Chapter 1";
-    },
-    heroEpisodesText() {
-      if (this.routeType === "tv-shows") return "Episodes";
-      if (this.routeType === "talks") return "Uploads";
-      if (this.routeType === "audiobooks") return "Table of Contents";
-    },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -225,7 +205,7 @@ export default {
             ["Music", "Movies"].includes(s.title)
           )
             return false;
-          if (this.routeType === "talks" && ["News"].includes(s.title))
+          if (this.routeType === "talks" && (["News"].includes(s.title) || s.audiobook))
             return false;
           if (this.routeType === "audiobooks") return s.audiobook;
           return true;

@@ -406,7 +406,7 @@ export default {
             {
               path: this.musicPath,
               icon: "fa fa-music",
-              title: `Music`,
+              title: `Songs`,
               show: this.musicPath,
             },
             {
