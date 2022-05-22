@@ -3,13 +3,20 @@ import VTooltip from 'v-tooltip'
 import VueObserveVisibility from 'vue-observe-visibility'
 import VueSimpleSVG from 'vue-simple-svg'
 import VueGtag from 'vue-gtag'
-import Languages from '@/lib/languages'
 import ModuleLoader from '~/lib/module-loader'
 import WorkerModuleLoader from '~/lib/worker-module-loader'
-import { i18n } from '~/plugins/i18n.js'
 import VueMq from 'vue-mq'
 import VueSmoothScroll from 'vue2-smooth-scroll'
 import VueLazyload from 'vue-lazyload'
+import SmartQuotes from "smartquotes";
+import he from "he"; // html entities
+import { i18n } from '~/plugins/i18n.js'
+import YouTube from '@/lib/youtube'
+import Config from '@/lib/config'
+import Helper from '@/lib/helper'
+import Languages from '@/lib/languages'
+import DateHelper from "@/lib/date-helper";
+
 Vue.use(VueLazyload, {
   preLoad: 1.3,
   error: '/img/placeholder-unavailable.jpg',
@@ -129,12 +136,91 @@ export default async ({ app, store, route }, inject) => {
       if (res) return res
     },
     async delete(url, payload) {
-      let res = await axios.delete(url,  this.tokenOptions())
+      let res = await axios.delete(url, this.tokenOptions())
       if (res) return res
     },
     async get(url, payload) {
       let res = await axios.get(url, this.tokenOptions())
       if (res) return res
+    }
+  })
+  inject('directus', {
+    async getRandomEpisodeYouTubeId(langId, type) {
+      let showFilter = type ? `&filter[${type}][nnull]=1` : "";
+      let randBase64Char = Helper.randBase64(1);
+      let url = `${Config.youtubeVideosTableName(
+        langId
+      )}?filter[l2][eq]=${langId}${showFilter}&filter[youtube_id][contains]=${randBase64Char}&fields=youtube_id`;
+      try {
+        let response = await app.$authios.get(url);
+        if (response.data && response.data.data.length > 0) {
+          response = response.data;
+          let randomVideo =
+            response.data[Math.floor(Math.random() * response.data.length)];
+          return randomVideo.youtube_id;
+        }
+      } catch (err) {
+        return false;
+      }
+    },
+
+    async reportUnavailableVideo({ youtube_id, video_id, l2Id }) {
+      try {
+        if (youtube_id) {
+          console.log("YouTube: Reporting unavailable video - ", {
+            youtube_id,
+            video_id,
+            l2Id
+          });
+          // Log it
+          let payload = { youtube_id };
+          if (video_id) payload.video_id = video_id;
+          if (l2Id) payload.l2 = l2Id;
+          let response = await app.$authios.post(
+            `${Config.wiki}items/unavailable_videos`,
+            payload
+          );
+          return response;
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async saveVideo(video, l2, limit = false, tries = 0) {
+      let lines = video.subs_l2 || [];
+      if (limit) lines = lines.slice(0, limit);
+      for (let line of lines) {
+        let hline = he.decode(line.line); // parse html entities
+        let qline = l2.apostrophe ? hline : SmartQuotes.string(hline); // convert to smartquotes
+        line.line = qline;
+      }
+      let csv = YouTube.unparseSubs(lines, l2.code);
+      let data = {
+        youtube_id: video.youtube_id,
+        title: video.title || "Untitled",
+        l2: l2.id,
+        subs_l2: csv.replace(/&quot;/g, "”"),
+        channel_id: video.channel_id,
+        date: DateHelper.unparseDate(video.date)
+      };
+      if (video.tv_show) data.tv_show = video.tv_show.id;
+      if (video.talk) data.talk = video.talk.id;
+      try {
+        let response = await app.$authios.post(
+          `${Config.youtubeVideosTableName(l2.id)}?fields=id,tv_show.*,talk.*`,
+          data
+        );
+        response = response.data;
+        if (response && response.data) {
+          return response.data.id;
+        }
+      } catch (err) {
+        if (tries > 1) return; // Only 2 tries
+        if (!limit) limit = video.subs_l2.length;
+        if (limit > 0) {
+          return this.saveVideo(video, l2, Math.floor(limit / 2), tries + 1); // Try with half the lines each time
+        }
+      }
     }
   })
   inject('getGrammar', async () => {

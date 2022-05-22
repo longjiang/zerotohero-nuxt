@@ -471,7 +471,7 @@ export default {
       if (youtube_id) {
         // Log it
         try {
-          let res = await YouTube.reportUnavailableVideo({
+          let res = await this.$directus.reportUnavailableVideo({
             youtube_id: video.youtube_id,
             video_id: video.id,
             l2Id: this.$l2.id,

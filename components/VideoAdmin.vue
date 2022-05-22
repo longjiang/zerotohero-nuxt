@@ -490,7 +490,7 @@ export default {
     async save() {
       this.saving = true;
       try {
-        let id = await YouTube.saveVideo(this.video, this.$l2);
+        let id = await this.$directus.saveVideo(this.video, this.$l2);
         if (id) {
           this.video.id = id;
           this.saving = false;

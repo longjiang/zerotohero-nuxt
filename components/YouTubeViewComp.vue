@@ -254,7 +254,7 @@ export default {
     },
     async onVideoUnavailable(youtube_id) {
       try {
-        await YouTube.reportUnavailableVideo({
+        await this.$directus.reportUnavailableVideo({
           youtube_id,
           video_id: this.video.id,
           l2Id: this.$l2.id,

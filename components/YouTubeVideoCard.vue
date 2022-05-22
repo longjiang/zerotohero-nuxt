@@ -463,7 +463,7 @@ export default {
           let data = {};
           data[type] = show.id;
           let response = await this.$authios.patch(
-            `${Config.youtubeVideosTableName(this.video.l2.id || this.$l2.id)}/${this.video.id}&fields=id`,
+            `${Config.youtubeVideosTableName(this.video.l2 ? this.video.l2.id : this.$l2.id)}/${this.video.id}?fields=id`,
             data
           );
           response = response.data;
@@ -478,7 +478,7 @@ export default {
       let data = {};
       data[type] = null;
       let response = await this.$authios.patch(
-        `${Config.youtubeVideosTableName(this.video.l2.id || this.$l2.id)}/${this.video.id}`,
+        `${Config.youtubeVideosTableName(this.video.l2 ? this.video.l2.id : this.$l2.id)}/${this.video.id}`,
         data
       );
       if (response && response.data) {
@@ -490,7 +490,7 @@ export default {
       if (this.video.title !== newTitle) {
         try {
           let response = await this.$authios.patch(
-            `${Config.youtubeVideosTableName(this.video.l2.id || this.$l2.id)}/${this.video.id}`,
+            `${Config.youtubeVideosTableName(this.video.l2 ? this.video.l2.id : this.$l2.id)}/${this.video.id}`,
             { title: newTitle },
             { contentType: "application/json" }
           );
@@ -527,7 +527,7 @@ export default {
       if (this.video.id) {
         try {
           let response = await this.$authios.delete(
-            `${Config.youtubeVideosTableName(this.video.l2.id || this.$l2.id)}/${this.video.id}`
+            `${Config.youtubeVideosTableName(this.video.l2 ? this.video.l2.id : this.$l2.id)}/${this.video.id}`
           );
           if (response) {
             Vue.delete(this.video, "id");
@@ -540,7 +540,7 @@ export default {
     },
     async updateSubs() {
       let response = await this.$authios.patch(
-        `${Config.youtubeVideosTableName(this.video.l2.id || this.$l2.id)}/${this.video.id}`,
+        `${Config.youtubeVideosTableName(this.video.l2 ? this.video.l2.id : this.$l2.id)}/${this.video.id}`,
         { subs_l2: YouTube.unparseSubs(this.video.subs_l2) }
       );
       response = response.data;
@@ -606,7 +606,7 @@ export default {
     async addChannelID(video) {
       let channelId = await this.getChannelID(video);
       let response = await this.$authios.patch(
-        `${Config.youtubeVideosTableName(this.video.l2.id || this.$l2.id)}/${video.id}`,
+        `${Config.youtubeVideosTableName(this.video.l2 ? this.video.l2.id : this.$l2.id)}/${video.id}`,
         { channel_id: channelId }
       );
       if (response && response.data) {
@@ -642,13 +642,15 @@ export default {
     },
     async save(video, limit = false, tries = 0) {
       try {
-        let id = await YouTube.saveVideo(video, this.$l2, limit, tries);
+        let id = await this.$directus.saveVideo(video, this.$l2, limit, tries);
         if (id) {
           Vue.set(video, "id", id);
           this.showSaved = true;
         }
         return true;
-      } catch (err) {}
+      } catch (err) {
+        console.log(err)
+      }
     },
     async checkSubsFunc(video) {
       Vue.set(video, "checkingSubs", true);
