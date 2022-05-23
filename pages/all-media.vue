@@ -42,26 +42,18 @@
           >
             <Loader :sticky="true" message="Loading videos in our library..." />
           </div>
+
           <div class="media-sections" v-if="!loading">
-            <div
-              v-if="videos && movies && movies.length > 0"
-              class="media-section"
-            >
+            <div v-if="videos && videos.length > 0" class="media-section">
               <h3 class="media-seaction-heading">
-                {{ $l2.name }} Movies
-                <router-link
-                  :to="{
-                    name: 'show',
-                    params: { type: 'tv-show', id: moviesShow.id },
-                  }"
-                  class="show-all"
-                >
+                {{ $l2.name }} Videos
+                <router-link :to="{ name: 'youtube-browse' }" class="show-all">
                   More
                   <i class="fas fa-chevron-right ml-1"></i>
                 </router-link>
               </h3>
               <LazyYouTubeVideoList
-                :videos="random(movies).slice(0, 12)"
+                :videos="videos.slice(0, 12)"
                 :showAdminToolsInAdminMode="false"
                 skin="dark"
               />
@@ -71,7 +63,7 @@
               class="media-section"
             >
               <h3 class="media-seaction-heading">
-                {{ $l2.name }} Music Videos
+                {{ $l2.name }} Music
                 <router-link
                   :to="{
                     name: 'show',
@@ -87,74 +79,6 @@
                 :videos="random(music).slice(0, 12)"
                 :showAdminToolsInAdminMode="false"
                 skin="dark"
-              />
-            </div>
-            <div
-              v-if="videos && tvShows && tvShows.length > 0"
-              class="media-section"
-            >
-              <h3 class="media-seaction-heading">
-                {{ $l2.name }} TV Shows
-                <router-link :to="{ name: 'tv-shows' }" class="show-all">
-                  More
-                  <i class="fas fa-chevron-right ml-1"></i>
-                </router-link>
-              </h3>
-              <ShowList
-                :shows="
-                  random(
-                    tvShows.filter(
-                      (s) => !['Movies', 'Music'].includes(s.title)
-                    ),
-                    6
-                  )
-                "
-                type="tvShows"
-                :key="`tv-shows`"
-              />
-            </div>
-            <div
-              v-if="videos && talks && talks.length > 0"
-              class="media-section"
-            >
-              <h3 class="media-seaction-heading">
-                {{ $l2.name }} YouTube
-                <router-link :to="{ name: 'talks' }" class="show-all">
-                  More
-                  <i class="fas fa-chevron-right ml-1"></i>
-                </router-link>
-              </h3>
-              <ShowList
-                :shows="
-                  random(
-                    talks.filter(
-                      (s) => !['News'].includes(s.title) && !s.audiobook
-                    ),
-                    6
-                  )
-                "
-                type="talks"
-                :key="`tv-shows`"
-              />
-              <div class="text-center mt-1"></div>
-            </div>
-            <div
-              v-if="
-                videos && talks && talks.length > 0 && audiobooks.length > 0
-              "
-              class="media-section"
-            >
-              <h3 class="media-seaction-heading">
-                {{ $l2.name }} Audiobooks
-                <router-link :to="{ name: 'audiobooks' }" class="show-all">
-                  More
-                  <i class="fas fa-chevron-right ml-1"></i>
-                </router-link>
-              </h3>
-              <ShowList
-                :shows="random(audiobooks, 6)"
-                type="talks"
-                :key="`tv-shows`"
               />
             </div>
             <div v-if="videos && news && news.length > 0" class="media-section">
@@ -177,20 +101,90 @@
                 skin="dark"
               />
             </div>
-            <div v-if="videos && videos.length > 0" class="media-section">
-              <h3 class="media-seaction-heading">
-                {{ $l2.name }} Videos
-                <router-link :to="{ name: 'youtube-browse' }" class="show-all">
-                  More
-                  <i class="fas fa-chevron-right ml-1"></i>
-                </router-link>
-              </h3>
-              <LazyYouTubeVideoList
-                :videos="videos.slice(0, 12)"
-                :showAdminToolsInAdminMode="false"
-                skin="dark"
-              />
-            </div>
+          </div>
+          <div
+            v-if="videos && movies && movies.length > 0"
+            class="media-section"
+          >
+            <h3 class="media-seaction-heading">
+              {{ $l2.name }} Movies
+              <router-link
+                :to="{
+                  name: 'show',
+                  params: { type: 'tv-show', id: moviesShow.id },
+                }"
+                class="show-all"
+              >
+                More
+                <i class="fas fa-chevron-right ml-1"></i>
+              </router-link>
+            </h3>
+            <LazyYouTubeVideoList
+              :videos="random(movies).slice(0, 12)"
+              :showAdminToolsInAdminMode="false"
+              skin="dark"
+            />
+          </div>
+          <div
+            v-if="videos && tvShows && tvShows.length > 0"
+            class="media-section"
+          >
+            <h3 class="media-seaction-heading">
+              {{ $l2.name }} TV Shows
+              <router-link :to="{ name: 'tv-shows' }" class="show-all">
+                More
+                <i class="fas fa-chevron-right ml-1"></i>
+              </router-link>
+            </h3>
+            <ShowList
+              :shows="
+                random(
+                  tvShows.filter((s) => !['Movies', 'Music'].includes(s.title)),
+                  6
+                )
+              "
+              type="tvShows"
+              :key="`tv-shows`"
+            />
+          </div>
+          <div v-if="videos && talks && talks.length > 0" class="media-section">
+            <h3 class="media-seaction-heading">
+              {{ $l2.name }} YouTube
+              <router-link :to="{ name: 'talks' }" class="show-all">
+                More
+                <i class="fas fa-chevron-right ml-1"></i>
+              </router-link>
+            </h3>
+            <ShowList
+              :shows="
+                random(
+                  talks.filter(
+                    (s) => !['News'].includes(s.title) && !s.audiobook
+                  ),
+                  6
+                )
+              "
+              type="talks"
+              :key="`tv-shows`"
+            />
+            <div class="text-center mt-1"></div>
+          </div>
+          <div
+            v-if="videos && talks && talks.length > 0 && audiobooks.length > 0"
+            class="media-section"
+          >
+            <h3 class="media-seaction-heading">
+              {{ $l2.name }} Audiobooks
+              <router-link :to="{ name: 'audiobooks' }" class="show-all">
+                More
+                <i class="fas fa-chevron-right ml-1"></i>
+              </router-link>
+            </h3>
+            <ShowList
+              :shows="random(audiobooks, 6)"
+              type="talks"
+              :key="`tv-shows`"
+            />
           </div>
 
           <client-only>
@@ -424,7 +418,6 @@ export default {
 
 <style lang="scss" scoped>
 .media-section {
-  margin-bottom: 4rem;
   padding-bottom: 2rem;
   border-bottom: 1px solid #111;
 }
