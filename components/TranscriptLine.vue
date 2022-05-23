@@ -27,12 +27,7 @@
       <div class="transcript-line-both">
         <div class="transcript-line-l2-wrapper">
           <div
-            style="
-              width: 1.5rem;
-              display: flex;
-              align-items: center;
-              justify-content: flex-start;
-            "
+            class="dot-wrapper-ltr"
             v-if="!single && $l2.direction !== 'rtl'"
           >
             <div class="dot" v-if="current"></div>
@@ -60,12 +55,7 @@
           </Annotate>
           <div v-else v-html="lineHtml(line)" />
           <div
-            style="
-              width: 1.5rem;
-              display: flex;
-              align-items: center;
-              justify-content: flex-end;
-            "
+            class="dot-wrapper-rtl"
             v-if="!single && $l2.direction === 'rtl'"
           >
             <div class="dot" v-if="current"></div>
@@ -253,6 +243,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.dot-wrapper-ltr {
+  width: 1.5rem;
+  min-width: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.dot-wrapper-rtl {
+  width: 1.5rem;
+  min-width: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
 .synced-transcript-single-line {
   .transcript-line-both {
     text-align: center;

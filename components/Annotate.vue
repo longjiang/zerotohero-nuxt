@@ -565,26 +565,6 @@ export default {
 </script>
 
 <style lang="scss">
-.show-pinyin-for-saved .add-pinyin.phonetics .sentence,
-.show-pinyin .add-pinyin.phonetics:not(.annotated) .sentence {
-  line-height: 2.2;
-}
-
-.sentence {
-  // margin-right: 0.3em;
-}
-
-.sentence + .highlight {
-  // margin-left: 0.3em;
-}
-
-.highlight + .sentence {
-  // margin-left: 0.3em;
-}
-
-.sentence + .sentence {
-  // margin-left: 0.3em;
-}
 
 .word-block.saved {
   color: #28a745;
