@@ -37,7 +37,9 @@
               </a>
               .
             </div>
-            <div v-if="message" class="alert alert-danger mt-2">{{ message }}</div>
+            <div v-if="message" class="alert alert-danger mt-2">
+              {{ message }}
+            </div>
             <b-form-group id="input-group-1" label-for="email">
               <b-form-input
                 id="email"
@@ -79,7 +81,7 @@ import Helper from "@/lib/helper";
 
 export default {
   props: {
-    message: String
+    message: String,
   },
   data() {
     return {
@@ -107,17 +109,16 @@ export default {
   methods: {
     async onSubmit(event) {
       try {
-        await this.$auth.loginWith("local", { data: this.form });
-        const res = await this.$authios.get(
-          `https://db2.zerotohero.ca/zerotohero/users/me`
-        );
-        if (res && res.data && res.data.data) {
-          this.$auth.setUser(res.data.data);
-          this.$router.back();
+        let res = await this.$auth.loginWith("local", { data: this.form });
+        if (res && res.data && res.data.data && res.data.data.user) {
+          let user = res.data.data.user
+          this.$auth.setUser(user);
           this.$toast.success(`Welcome back, ${res.data.data.first_name}!`, {
             position: "top-center",
             duration: 5000,
           });
+          this.$router.push({ name: "profile" });
+
         }
       } catch (err) {
         if (err.response && err.response.data) {
@@ -131,8 +132,8 @@ export default {
             duration: 5000,
           });
         }
+        this.shake();
       }
-      this.shake();
     },
     async shake() {
       this.shaking = true;
@@ -148,7 +149,7 @@ export default {
   padding: 2rem;
   border-radius: 1rem;
   overflow: hidden;
-  background: #ffffffdd;
+  background: #ffffffbb;
   max-width: 20rem;
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.483);
   backdrop-filter: blur(20px);

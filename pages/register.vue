@@ -155,7 +155,7 @@ export default {
   padding: 2rem;
   border-radius: 1rem;
   overflow: hidden;
-  background: #ffffffdd;
+  background: #ffffffbb;
   max-width: 20rem;
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.483);
   backdrop-filter: blur(20px);

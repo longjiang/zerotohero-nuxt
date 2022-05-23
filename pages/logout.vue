@@ -1,15 +1,21 @@
 <router>
   {
     path: '/:l1/:l2/logout',
-    props: true
+    props: true,
+    meta: {
+      skin: 'dark'
+    },
   }
 </router>
 <template>
-  <div class="container">
+  <div
+    class="container-fluid"
+    :style="`background-image: url(${backgroundImage}); background-size: cover; background-position: center;`"
+  >
     <div class="row">
       <div class="col-sm-12">
         <div class="login-page">
-          <h3 class="mt-3 mb-5 text-center">Logging out...</h3>
+          <h4 class="mt-5 mb-5 text-center">Logging you out...</h4>
         </div>
       </div>
     </div>
@@ -17,17 +23,20 @@
 </template>
 
 <script>
+import Helper from "@/lib/helper";
 export default {
   data() {
     return {
       form: {
-        email: "jon@chinesezerotohero.com",
-        password: "X6w8pG@azXj_9H@v7bPBVyfZ",
+        email: "",
+        password: "",
       },
       show: true,
+      backgroundImage: undefined
     };
   },
   mounted() {
+    this.backgroundImage = Helper.background(this.$l2);
     this.logout();
   },
   computed: {
@@ -42,8 +51,9 @@ export default {
   },
   methods: {
     async logout() {
+      await this.$auth.logout();
       await this.$auth.setUser(null);
-      this.$toast.success(`You're now logged out.`, {
+      this.$toast.success(`You've now been logged out.`, {
         position: "top-center",
         duration: 5000,
       });
@@ -57,10 +67,13 @@ export default {
 </script>
 <style lang="scss" scoped>
 .login-page {
-  margin: 2rem 0px 5rem 0;
+  margin: 5rem auto 5rem auto;
   padding: 2rem;
   border-radius: 1rem;
   overflow: hidden;
-  background: white;
+  background: #ffffffbb;
+  max-width: 20rem;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.483);
+  backdrop-filter: blur(20px);
 }
 </style>
