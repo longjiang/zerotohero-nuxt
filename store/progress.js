@@ -80,10 +80,6 @@ export const actions = {
     commit('SET_TIME', { l2, time })
     dispatch('push')
   },
-  addCertification({ dispatch, commit }, { l2, certification }) {
-    commit('SET_TIME', { l2, certification })
-    dispatch('push')
-  },
   async push({ commit, state, rootState }) {
     let user = rootState.auth.user
     let token = $nuxt.$auth.strategy.token.get()

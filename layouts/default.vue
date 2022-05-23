@@ -111,6 +111,9 @@ export default {
         this.time = this.$store.getters["progress/time"](this.l2);
         this.startLoggingUserTime();
       }
+      if (mutation.type === "progress/SET_TIME") {
+        this.time = this.$store.getters["progress/time"](this.l2);
+      }
     });
     this.onLanguageChange();
     this.onAllLanguagesLoaded();
