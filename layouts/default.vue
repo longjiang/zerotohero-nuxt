@@ -260,7 +260,7 @@ export default {
               if (userDataRes.data.data[0]) {
                 let { id, saved_words, saved_phrases, history, progress } =
                   userDataRes.data.data[0];
-                user.dataId = id;
+                this.$auth.$storage.setUniversal('dataId', dataId);
                 this.$store.dispatch("savedWords/importFromJSON", saved_words);
                 this.$store.dispatch(
                   "savedPhrases/importFromJSON",
@@ -271,7 +271,7 @@ export default {
               } else {
                 // No user data found, let's create it
                 let dataId = await this.createNewUserDataRecord(token);
-                this.$auth.setUser(Object.assign({ dataId }, this.$auth.user));
+                this.$auth.$storage.setUniversal('dataId', dataId);
               }
             }
           }

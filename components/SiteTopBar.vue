@@ -117,7 +117,7 @@
           </router-link> -->
           <router-link
             id="site-top-bar-saved-words"
-            :to="{ name: 'profile' }"
+            :to="$auth.loggedIn ? { name: 'profile' } : { name: 'login' }"
             :class="`btn top-bar-button btn-unstyled link-unstyled ml-1 ${
               badge ? '' : 'd-none'
             }`"

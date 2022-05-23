@@ -116,6 +116,11 @@
             </div>
           </div>
         </div>
+        <div class="row mt-4">
+          <div class="col-sm-12 text-center mt-4">
+            <router-link :to="{name: 'logout'}" class="btn btn-danger pl-4 pr-4"><i class="fas fa-sign-out-alt"></i> Logout</router-link>
+          </div>
+        </div>
       </template>
     </div>
   </div>

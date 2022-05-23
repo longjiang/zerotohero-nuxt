@@ -125,10 +125,11 @@ export const actions = {
   async push({ commit, state, rootState }) {
     let user = rootState.auth.user
     let token = $nuxt.$auth.strategy.token.get()
-    if (user && user.id && user.dataId && token) {
+    let dataId = this.$auth.$storage.getUniversal('dataId');
+    if (user && user.id && dataId && token) {
       token = token.replace('Bearer ', '')
       let payload = { saved_phrases: localStorage.getItem('zthSavedPhrases') }
-      let url = `${Config.wiki}items/user_data/${user.dataId}?fields=id`
+      let url = `${Config.wiki}items/user_data/${dataId}?fields=id`
       await this.$authios.patch(url, payload)
         .catch(async (err) => {
           console.log('Axios error in savedPhrases.js: err, url, payload', err, url, payload)

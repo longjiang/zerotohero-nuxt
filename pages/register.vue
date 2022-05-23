@@ -1,10 +1,16 @@
 <router>
   {
-    path: '/:l1/:l2/register/'
+    path: '/:l1/:l2/register/',
+    meta: {
+      skin: 'dark'
+    }
   }
 </router>
 <template>
-  <div class="container">
+  <div
+    class="container-fluid"
+    :style="`background-image: url(${backgroundImage}); background-size: cover; background-position: center;`"
+  >
     <div class="row">
       <div class="col-sm-12">
         <div class="login-page">
@@ -69,7 +75,8 @@
 </template>
 
 <script>
-import Config from "@/lib/config";
+import Helper from "@/lib/helper";
+import Config from '@/lib/config'
 
 export default {
   data() {
@@ -83,7 +90,11 @@ export default {
         status: "active",
       },
       show: true,
+      backgroundImage: undefined,
     };
+  },
+  mounted() {
+    this.backgroundImage = Helper.background(this.$l2);
   },
   methods: {
     async onSubmit(event) {
@@ -92,28 +103,47 @@ export default {
           `https://db2.zerotohero.ca/zerotohero/users`,
           this.form
         );
-
         if (res && res.data && res.data.public === true) {
-          let response = await this.$auth.loginWith("local", {
-            data: this.form,
-          });
-          if (
-            response &&
-            response.data &&
-            response.data.data &&
-            response.data.data.user
-          ) {
-            this.$auth.setUser(response.data.data.user);
-            this.$toast.success(`Welcome aboard, ${res.data.data.first_name}!`, {
-              position: "top-center",
-              duration: 5000,
+          // Directus isn't returning users for some reason, let's get it
+          let response = await this.$authios.get(`${Config.wiki}users`); 
+          if (response.data && response.data.data && response.data.data[0]) {
+            let user = response.data.data[0]
+            response = await this.$auth.loginWith("local", {
+              data: this.form,
             });
-            this.$router.back(); // First to the login page
-            this.$router.back(); // Then to whatever the user was looking at
+            if (response && response.data) {
+              this.$auth.setUser(user);
+              this.$toast.success(`Welcome aboard, ${this.form.first_name}!`, {
+                position: "top-center",
+                duration: 5000,
+              });
+              this.$router.push({ name: "profile" });
+            }
           }
         }
       } catch (err) {
-        console.log(err);
+        console.log(err)
+        if (err.response && err.response.data) {
+          let message = err.response.data.error.message;
+          if (err.response.data.error.code === 204) {
+            message = `Your email ${this.form.email} has already been registered, please login.`;
+            this.$router.push({
+              name: "login",
+              params: {
+                message: `Your email ${this.form.email} has already been registered, please login.`,
+              },
+            });
+          }
+          this.$toast.error(message, {
+            position: "top-center",
+            duration: 5000,
+          });
+        } else {
+          this.$toast.error("There has been an error.", {
+            position: "top-center",
+            duration: 5000,
+          });
+        }
       }
     },
   },
@@ -127,7 +157,7 @@ export default {
   overflow: hidden;
   background: #ffffffdd;
   max-width: 20rem;
-  box-shadow: 0 0 30px black;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.483);
   backdrop-filter: blur(20px);
 }
 </style>

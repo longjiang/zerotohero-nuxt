@@ -1,5 +1,7 @@
 <template>
-  <div>
+  <div
+    :style="`min-height: 100vh; background-image: url(${background()}); background-size: cover; background-position: center;`"
+  >
     <div class="container">
       <div class="row">
         <div class="col-sm-12 text-center">
@@ -32,11 +34,17 @@
 </template>
 
 <script>
+import Helper from "@/lib/helper";
 export default {
   props: ["error"],
   layout: "error",
   mounted() {
     console.log(this.error);
+  },
+  methods: {
+    background(...args) {
+      return Helper.background(...args);
+    },
   },
 };
 </script>

@@ -1,6 +1,7 @@
 <router>
   {
     path: '/:l1/:l2/login/',
+    props: true,
     meta: {
       skin: 'dark',
     }
@@ -9,9 +10,7 @@
 <template>
   <div
     class="container-fluid"
-    :style="`background-image: url(${background(
-      this.$l2
-    )}); background-size: cover; background-position: center;`"
+    :style="`background-image: url(${backgroundImage}); background-size: cover; background-position: center;`"
   >
     <div class="row">
       <div class="col-sm-12">
@@ -25,7 +24,7 @@
             <br />
             <h4>Zero to Hero</h4>
           </div>
-          <b-form @submit.prevent="onSubmit" v-if="show">
+          <b-form @submit.prevent="onSubmit">
             <div class="alert alert-warning" v-if="$l2.code === 'zh'">
               <b>Friendly reminder:</b>
               This does NOT login to your Chinese Zero to Hero online courses on
@@ -38,6 +37,7 @@
               </a>
               .
             </div>
+            <div v-if="message" class="alert alert-danger mt-2">{{ message }}</div>
             <b-form-group id="input-group-1" label-for="email">
               <b-form-input
                 id="email"
@@ -78,14 +78,17 @@
 import Helper from "@/lib/helper";
 
 export default {
+  props: {
+    message: String
+  },
   data() {
     return {
       form: {
         email: "",
         password: "",
       },
-      show: true,
       shaking: false,
+      backgroundImage: undefined,
     };
   },
   computed: {
@@ -98,10 +101,10 @@ export default {
         return this.$store.state.settings.l2;
     },
   },
+  mounted() {
+    this.backgroundImage = Helper.background(this.$l2);
+  },
   methods: {
-    background(...args) {
-      return Helper.background(...args);
-    },
     async onSubmit(event) {
       try {
         await this.$auth.loginWith("local", { data: this.form });
