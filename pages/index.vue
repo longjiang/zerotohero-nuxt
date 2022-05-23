@@ -21,21 +21,25 @@
     >
       <div class="container">
         <div class="row pt-3">
-          <div class="col-sm-12 ">
+          <div class="col-sm-12">
             <Logo />
           </div>
         </div>
-        <div class="row pt-4" v-if="$auth.loggedIn">
-          <div class="col-sm-12">
-            <div class="home-card p-2 pt-4 pb-4">
-              <h5 class="text-center mb-4">{{ $auth.user.first_name }}'s Language Learning Dashboard</h5>
-              <LazyDashboard />
+        <client-only>
+          <div class="row pt-4" v-if="$auth.loggedIn">
+            <div class="col-sm-12">
+              <div class="home-card p-2 pt-4 pb-4">
+                <h5 class="text-center mb-4">
+                  {{ $auth.user.first_name }}'s Language Learning Dashboard
+                </h5>
+                <LazyDashboard />
+              </div>
             </div>
           </div>
-        </div>
+        </client-only>
         <div class="row">
           <div class="col-sm-12">
-            <div style="line-height: 1.2; color: white; text-align: center;">
+            <div style="line-height: 1.2; color: white; text-align: center">
               <p class="blurb">
                 Learn
                 <strong>
@@ -775,7 +779,6 @@ export default {
 .ezh-links a {
   font-size: 0.9em;
 }
-
 
 .z2h-slogan {
   max-height: 10rem;

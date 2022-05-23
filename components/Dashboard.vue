@@ -1,6 +1,17 @@
 <template>
   <container-query :query="query" v-model="params">
     <div class="container">
+      <div class="row">
+        <div
+          class="language-overview-item col-12"
+          v-for="(l2Code, index) in progress"
+          :set="language = $languages.getSmart(l2Code)"
+          :key="`language-overview-item-${index}`"
+        >
+          {{ language }}
+          <!-- <LanguageProgress :$l2="language" /> -->
+        </div>
+      </div>
       <div
         class="row dashboard-saved-words"
         v-if="
@@ -39,7 +50,11 @@
               word{{ savedWordsLang.words.length > 1 ? "s" : "" }}
 
               in
-              <img v-if="showFlags && countryCode(savedWordsLang.l2)" :src="`/vendor/flag-svgs/${countryCode(savedWordsLang.l2)}.svg`" class="flag-icon mr-1" />
+              <img
+                v-if="showFlags && countryCode(savedWordsLang.l2)"
+                :src="`/vendor/flag-svgs/${countryCode(savedWordsLang.l2)}.svg`"
+                class="flag-icon mr-1"
+              />
               <strong>{{ languageName(savedWordsLang.l2) }}</strong>
             </router-link>
             <router-link
@@ -66,7 +81,13 @@
               phrase{{ savedPhrasesLang.phrases.length > 1 ? "s" : "" }}
 
               in
-              <img v-if="showFlags && countryCode(savedPhrasesLang.l2)" :src="`/vendor/flag-svgs/${countryCode(savedPhrasesLang.l2)}.svg`" class="flag-icon mr-1" />
+              <img
+                v-if="showFlags && countryCode(savedPhrasesLang.l2)"
+                :src="`/vendor/flag-svgs/${countryCode(
+                  savedPhrasesLang.l2
+                )}.svg`"
+                class="flag-icon mr-1"
+              />
               <strong>{{ savedPhrasesLang.l2.name }}</strong>
             </router-link>
           </div>
@@ -213,6 +234,7 @@ export default {
   computed: {
     ...mapState("savedWords", ["savedWords"]),
     ...mapState("savedPhrases", ["savedPhrases"]),
+    ...mapState("progress", ["progress"]),
     hostname() {
       if (window) return window.location.hostname;
       else return "";

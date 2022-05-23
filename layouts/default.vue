@@ -113,13 +113,6 @@ export default {
           this.loadLanguageSpecificSettings();
         }
       }
-      if (mutation.type === "progress/LOAD") {
-        this.time = this.$store.getters["progress/time"](this.l2);
-        this.startLoggingUserTime();
-      }
-      if (mutation.type === "progress/SET_TIME") {
-        this.time = this.$store.getters["progress/time"](this.l2);
-      }
     });
     this.onLanguageChange();
     this.onAllLanguagesLoaded();
@@ -382,6 +375,13 @@ export default {
           l2: this.l2,
           adminMode: this.$store.state.settings.adminMode,
         });
+      }
+      if (mutation.type === "progress/LOAD") {
+        this.time = this.$store.getters["progress/time"](this.l2);
+        this.startLoggingUserTime();
+      }
+      if (mutation.type === "progress/SET_TIME") {
+        this.time = this.$store.getters["progress/time"](this.l2);
       }
     },
   },
