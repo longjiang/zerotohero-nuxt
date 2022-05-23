@@ -111,7 +111,7 @@
               <b>{{ Math.round(hoursNeeded) }} hours</b>
               {{ levelObj(level).exam.name }}
               {{ levelObj(level).level }} from to
-              {{ levelObj(level).exam.name }}
+              {{ levelObj(level + 1).exam.name }}
               {{ levelObj(level + 1).level }}.
             </div>
           </div>
@@ -226,7 +226,7 @@ export default {
     height: 1.3rem;
     position: absolute;
     left: 0.5rem;
-    z-index: 9999;
+    z-index: 9;
   }
 }
 </style>

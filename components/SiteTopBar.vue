@@ -117,7 +117,7 @@
           </router-link> -->
           <router-link
             id="site-top-bar-saved-words"
-            :to="{ name: 'saved-words' }"
+            :to="{ name: 'profile' }"
             :class="`btn top-bar-button btn-unstyled link-unstyled ml-1 ${
               badge ? '' : 'd-none'
             }`"
