@@ -325,7 +325,7 @@ export default {
             },
             {
               name: "register",
-              icon: "fas fa-key",
+              icon: "fas fa-user-plus",
               title: "Register",
               show: !(this.$auth && this.$auth.loggedIn),
             },

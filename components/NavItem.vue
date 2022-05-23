@@ -147,13 +147,14 @@ export default {
   .secondary-nav-item {
     color: #ccc;
     .nav-item-icon {
-      color: #28a74566;
+      opacity: 0.4;
       margin-right: 0.5rem;
     }
     &.nuxt-link-active,
     &:hover {
       .nav-item-icon {
         color: #28a745;
+        opacity: 1;
       }
       border-bottom: 0.4rem solid #28a745cc;
     }
