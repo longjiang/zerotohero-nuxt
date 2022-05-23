@@ -91,13 +91,10 @@
 import Helper from "@/lib/helper";
 export default {
   props: {
-    $l2: Object
+    $l1: Object,
+    $l2: Object,
   },
   computed: {
-    $l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-    },
     time() {
       return this.$store.state.progress.progressLoaded
         ? this.$store.getters["progress/time"](this.$l2)

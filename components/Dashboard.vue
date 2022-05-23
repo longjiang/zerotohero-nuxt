@@ -4,12 +4,16 @@
       <div class="row">
         <div
           class="language-overview-item col-12"
-          v-for="(l2Code, index) in progress"
-          :set="language = $languages.getSmart(l2Code)"
-          :key="`language-overview-item-${index}`"
+          v-for="(languageProgress, l2Code) in progress"
+          :set="(language = $languages.getSmart(l2Code))"
+          :key="`language-overview-item-${l2Code}`"
         >
-          {{ language }}
-          <!-- <LanguageProgress :$l2="language" /> -->
+          <div v-if="language && language.name">
+            <LanguageProgress
+              :$l1="$languages.getSmart('en')"
+              :$l2="language"
+            />
+          </div>
         </div>
       </div>
       <div

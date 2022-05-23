@@ -29,10 +29,10 @@
             <h5 class="mb-4">Your {{ $l2.name }} Learning Progress</h5>
           </div>
         </div>
-        <LanguageGoal :$l2="$l2" />
+        <LanguageGoal :$l1="$l1" :$l2="$l2" />
         <div class="row mt-3">
           <div class="col-sm-12">
-            <LanguageProgress :$l2="$l2" />
+            <LanguageProgress :$l1="$l1" :$l2="$l2" />
             <router-link
               :to="{ name: 'all-media' }"
               class="text-success mt-5 d-block"
