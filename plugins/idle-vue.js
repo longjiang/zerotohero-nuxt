@@ -11,5 +11,5 @@ const store = new Vuex.Store({
 Vue.use(IdleVue, {
   eventEmitter: eventsHub,
   store,
-  idleTime: 60000 // If a user is inactive for 60 seconds, we stop logging their time unless they start interacting again
+  idleTime: 300000 // If a user is inactive for 300 seconds, we stop logging their time unless they start interacting again
 })
