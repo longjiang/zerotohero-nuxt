@@ -4,7 +4,7 @@
       <div class="row">
         <div
           :class="{
-            'language-overview-item mt-3': true,
+            'language-overview-item': true,
             'col-sm-4': params.md || params.lg || params.xl,
             'col-sm-6': params.sm,
             'col-sm-12': params.xs,
