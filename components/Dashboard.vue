@@ -3,17 +3,25 @@
     <div class="container">
       <div class="row">
         <div
-          class="language-overview-item col-12"
+          :class="{
+            'language-overview-item mt-3': true,
+            'col-sm-4': params.md || params.lg || params.xl,
+            'col-sm-6': params.sm,
+            'col-sm-12': params.xs,
+          }"
           v-for="(languageProgress, l2Code) in progress"
           :set="(language = $languages.getSmart(l2Code))"
           :key="`language-overview-item-${l2Code}`"
         >
-          <div v-if="language && language.name">
+          <template v-if="language && language.name">
+            <div class="language-flag-wrapper">
+              <LanguageFlag :language="language" />
+            </div>
             <LanguageProgress
               :$l1="$languages.getSmart('en')"
               :$l2="language"
             />
-          </div>
+          </template>
         </div>
       </div>
       <div
@@ -399,6 +407,28 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.language-overview-item {
+  display: flex;
+  padding: 1rem;
+  .language-flag-wrapper {
+    margin-right: 1rem;
+    position: relative;
+    padding-top: 1.3rem;
+  }
+  .language-progress {
+    flex: 1;
+  }
+  ::v-deep .hours-display {
+    font-size: 1rem;
+  }
+  ::v-deep .bottom-labels {
+    font-size: 0.8rem;
+    .bottom-label-right {
+      display: none;
+    }
+  }
+}
+
 @media (min-width: 768px) {
   .dashboard-saved-words-list {
     column-count: 2;

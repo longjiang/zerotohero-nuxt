@@ -113,6 +113,14 @@ export default {
           this.loadLanguageSpecificSettings();
         }
       }
+
+      if (mutation.type === "progress/LOAD") {
+        this.time = this.$store.getters["progress/time"](this.l2);
+        this.startLoggingUserTime();
+      }
+      if (mutation.type === "progress/SET_TIME") {
+        this.time = this.$store.getters["progress/time"](this.l2);
+      }
     });
     this.onLanguageChange();
     this.onAllLanguagesLoaded();
@@ -335,15 +343,6 @@ export default {
     },
     async onLanguageChange() {
       if (this.l1) this.updatei18n();
-      if (!this.$store.state.savedWords.savedWordsLoaded) {
-        this.$store.dispatch("savedWords/load");
-      }
-      if (!this.$store.state.savedPhrases.savedPhrasesLoaded) {
-        this.$store.dispatch("savedPhrases/load");
-      }
-      if (!this.$store.state.progress.progressLoaded) {
-        this.$store.dispatch("progress/load");
-      }
       let dictionary = await this.$getDictionary();
       if (dictionary) {
         this.dictionaryCredit = await dictionary.credit();
@@ -358,6 +357,15 @@ export default {
       if (this.settingsLoaded === this.l2.code) return;
       this.settingsLoaded = this.l2.code;
       this.$store.dispatch("settings/load");
+      if (!this.$store.state.savedWords.savedWordsLoaded) {
+        this.$store.dispatch("savedWords/load");
+      }
+      if (!this.$store.state.savedPhrases.savedPhrasesLoaded) {
+        this.$store.dispatch("savedPhrases/load");
+      }
+      if (!this.$store.state.progress.progressLoaded) {
+        this.$store.dispatch("progress/load");
+      }
       if (!this.$store.state.savedCollocations.savedCollocationsLoaded) {
         this.$store.commit("savedCollocations/LOAD_SAVED_COLLOCATIONS");
       }
@@ -376,13 +384,7 @@ export default {
           adminMode: this.$store.state.settings.adminMode,
         });
       }
-      if (mutation.type === "progress/LOAD") {
-        this.time = this.$store.getters["progress/time"](this.l2);
-        this.startLoggingUserTime();
-      }
-      if (mutation.type === "progress/SET_TIME") {
-        this.time = this.$store.getters["progress/time"](this.l2);
-      }
+
     },
   },
 };

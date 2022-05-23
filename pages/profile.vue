@@ -32,7 +32,7 @@
         <LanguageGoal :$l1="$l1" :$l2="$l2" />
         <div class="row mt-3">
           <div class="col-sm-12">
-            <LanguageProgress :$l1="$l1" :$l2="$l2" />
+            <LanguageProgress class="mt-3" :$l1="$l1" :$l2="$l2" :description="true" :dot="true" :edit="true" :animated="true" progressBarHeight="1.5rem" :progressBarShowValue="true" />
             <router-link
               :to="{ name: 'all-media' }"
               class="text-success mt-5 d-block"

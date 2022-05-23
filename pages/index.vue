@@ -28,7 +28,7 @@
         <client-only>
           <div class="row pt-4" v-if="$auth.loggedIn">
             <div class="col-sm-12">
-              <div class="home-card p-2 pt-4 pb-4">
+              <div class="home-card p-2 pt-4 pb-4 bg-white">
                 <h5 class="text-center mb-4">
                   {{ $auth.user.first_name }}'s Language Learning Dashboard
                 </h5>
