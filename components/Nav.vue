@@ -314,7 +314,7 @@ export default {
             {
               name: "profile",
               icon: "fas fa-user",
-              title: "Profile",
+              title: "Profile & Progress",
               show: this.$auth && this.$auth.loggedIn,
             },
             {

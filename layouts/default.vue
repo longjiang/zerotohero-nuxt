@@ -164,7 +164,8 @@ export default {
       this.timeLoggerID = setInterval(() => {
         if (!this.isAppIdle && this.l2) {
           this.time += 1000;
-          if (this.time % 5000 === 0) {
+          // Log user's time on site every 60 seconds
+          if (this.time % 60000 === 0) {
             this.$store.dispatch("progress/setTime", {
               l2: this.l2,
               time: this.time,

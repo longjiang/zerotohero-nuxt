@@ -19,6 +19,7 @@
           <div class="col-sm-12 text-center">
             <LanguageFlag
               :language="$l2"
+              :autocycle="true"
               style="
                 transform: scale(1.5);
                 margin-top: 1rem;
@@ -29,22 +30,26 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-6">
+          <div class="col-6 pr-1 text-center">
             Your current level
             <b-form-select
               v-model="mannuallySetLevel"
               :options="levels"
             ></b-form-select>
           </div>
-          <div class="col-6">
-            So your next goal is
+          <div class="col-6 pl-1 text-center">
+            Your next goal
             <br />
-            <div v-if="level < 7" class="goal">
-              {{ levelObj(level + 1).exam.name }}
-              {{ levelObj(level + 1).level }}
+            <div class="goal">
+              <template v-if="level < 7">
+                {{ levelObj(level + 1).exam.name }}
+                {{ levelObj(level + 1).level }}
+              </template>
+              <template v-if="level >= 7" class="goal">
+                Mastery
+              </template>
               <img src="/img/trophy.svg" />
             </div>
-            <div v-if="level >= 7" class="goal">Native-like mastery</div>
           </div>
         </div>
         <div class="row mt-3">
@@ -62,9 +67,9 @@
               ></b-progress-bar>
             </b-progress>
             <div v-if="$store.state.progress.progressLoaded" class="mt-3">
-              You've spent 
+              You've spent
               <b>{{ Math.floor(hours) }} hours</b>
-              <b>and {{ Math.ceil((hours % 1) * 60) }} min</b>
+              <b>{{ Math.ceil((hours % 1) * 60) }} min</b>
               on Zero to Hero learning {{ $l2.name }}.
               <u
                 style="font-weight: bold; cursor: pointer"
@@ -86,11 +91,16 @@
             </div>
             <div class="mt-3" v-if="hours < hoursNeeded">
               If you're typical L1 {{ $l1.name }} speaker at the
-              {{ levelObj(level + 1).exam.name }}
+              {{ levelObj(level).exam.name }}
               {{ levelObj(level).level }} level, it is estimated that you need
               <b>{{ Math.round(hoursNeeded) }} hours</b>
-              to get to {{ levelObj(level + 1).exam.name }}
-              {{ levelObj(level + 1).level }}. You're
+              to get to
+              <span v-if="level < 7">
+                {{ levelObj(level + 1).exam.name }}
+                {{ levelObj(level + 1).level }}
+              </span>
+              <span v-else>native-like mastery</span>
+              . You're
               <b>{{ Math.round((hours / hoursNeeded) * 100) }}%</b>
               way there,
               <b>{{ Math.round(hoursNeeded - hours) }} more hours</b>
@@ -99,9 +109,9 @@
             <div class="mt-3" v-else>
               Typically, {{ $l1.name }} speakers need
               <b>{{ Math.round(hoursNeeded) }} hours</b>
-              {{ levelObj(level + 1).exam.name }}
+              {{ levelObj(level).exam.name }}
               {{ levelObj(level).level }} from to
-              {{ levelObj(level + 1).exam.name }}
+              {{ levelObj(level).exam.name }}
               {{ levelObj(level + 1).level }}.
             </div>
           </div>
@@ -164,6 +174,10 @@ export default {
     this.unsubscribe();
   },
   mounted() {
+    if (this.$store.state.progress.progressLoaded)
+      this.mannuallySetLevel = Number(
+        this.$store.getters["progress/level"](this.$l2)
+      );
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type === "progress/LOAD") {
         this.mannuallySetLevel = Number(

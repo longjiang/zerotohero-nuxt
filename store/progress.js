@@ -1,4 +1,3 @@
-import Helper from '@/lib/helper'
 import Config from '@/lib/config'
 
 export const state = () => {
@@ -95,7 +94,7 @@ export const actions = {
 }
 export const getters = {
   level: state => l2 => {
-    if (state.progress[l2.code]) return state.progress[l2.code].level
+    if (state.progress[l2.code]) return state.progress[l2.code].level || 1
   },
   time: state => l2 => {
     let time = 0
