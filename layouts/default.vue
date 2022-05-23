@@ -270,7 +270,8 @@ export default {
                 this.$store.dispatch("progress/importFromJSON", progress);
               } else {
                 // No user data found, let's create it
-                user.dataId = await createNewUserDataRecord(token);
+                let dataId = await this.createNewUserDataRecord(token);
+                this.$auth.setUser(Object.assign({ dataId }, this.$auth.user));
               }
             }
           }
