@@ -287,7 +287,6 @@ export default {
     });
     if (!this.videos || this.videos.length === 0)
       this.videos = await this.getVideos({ limit: 50, sort: "youtube_id" });
-    this.loadHeroVideo();
     await Helper.timeout(3000);
     this.loading = false; // Incase resources fail to load, at least show them
   },
@@ -312,9 +311,20 @@ export default {
         return this.$store.state.settings.adminMode;
     },
   },
+  watch: {
+    loading() {
+      if (this.loading === false) this.loadHeroVideo();
+    },
+  },
   methods: {
     loadHeroVideo() {
-      this.heroVideo = this.random(this.videos)[0];
+      let randomVideos = this.random([
+        ...this.music,
+        ...this.movies,
+        ...this.news,
+        ...this.videos,
+      ]);
+      this.heroVideo = randomVideos[0];
     },
     onVideoUnavailable() {
       this.videoUnavailable = true;
@@ -359,9 +369,16 @@ export default {
       this.loading = false;
     },
     random(array, max) {
-      let shuffled = Helper.shuffle(array);
+      let shuffled = Helper.shuffle([...array]);
       return shuffled.slice(0, max);
     },
+    /**
+     * Retrieve videos from Directus.
+     * @param limit maximum number of videos to retrieve
+     * @param tvShow id of the TV show,
+     * @param talk id of the talk
+     * @param sort how the resort should be sorted
+     */
     async getVideos({
       limit = 10,
       tvShow = undefined,
@@ -369,36 +386,21 @@ export default {
       sort = "-date",
     }) {
       try {
-        let videos;
-        let filter = "filter[tv_show][nnull]=1";
+        let videos = [];
+        let filter = "";
         if (tvShow) filter = `filter[tv_show][eq]=${tvShow}`;
         if (talk) filter = `filter[talk][eq]=${talk}`;
-
+        // First find videos associated with a particular tv show, or talk
         let response = await this.$authios.get(
           `${Config.youtubeVideosTableName(
             this.$l2.id
           )}?sort=${sort}&filter[l2][eq]=${
             this.$l2.id
-          }&${filter}&limit=${limit}&fields=id,title,youtube_id,tv_show,talk,l2`
+          }&${filter}&limit=${limit}&fields=l2,id,title,youtube_id,tv_show,talk,l2`
         );
-        if (response.data.data && response.data.data.length > 0)
-          videos = response.data.data;
-        if (!videos && !tvShow && !talk) {
-          response = await this.$authios.get(
-            `${Config.youtubeVideosTableName(
-              this.$l2.id
-            )}?sort=${sort}&filter[l2][eq]=${
-              this.$l2.id
-            }&limit=${limit}&fields=id,title,youtube_id,tv_show,talk,l2`
-          );
-          videos = response.data.data || [];
+        if (response.data.data && response.data.data.length > 0) {
+          videos = Helper.uniqueByValue(response.data.data, "youtube_id");
         }
-        videos = Helper.uniqueByValue(videos, "youtube_id");
-        if (!tvShow & !talk)
-          videos = Helper.uniqueByValue(
-            Helper.uniqueByValue(videos, "tv_show").concat(this.random(videos)),
-            "youtube_id"
-          );
         return videos;
       } catch (err) {
         return [];
