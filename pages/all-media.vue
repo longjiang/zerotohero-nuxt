@@ -253,6 +253,7 @@
 <script>
 import Helper from "@/lib/helper";
 import Config from "@/lib/config";
+import { mapState } from "vuex";
 
 export default {
   data() {
@@ -280,13 +281,17 @@ export default {
       }
     });
     if (!this.videos || this.videos.length === 0) {
-      let videos = await this.getVideos({ limit: 50, sort: "youtube_id" });
+      let videos = await this.getVideos({
+        limit: 50,
+        sort: "youtube_id",
+        offset: this.randomOffset("allVideos", 50),
+      });
       // Let's prioritize videos in tv shows or talks
       this.videos = this.random(videos)
         .sort((a, b) => (b.talk === a.talk ? 0 : b.tv_show ? 1 : -1))
         .sort((a, b) => (b.tv_show === a.tv_show ? 0 : b.tv_show ? 1 : -1));
     }
-    await Helper.timeout(3000);
+    await Helper.timeout(5000);
     this.loading = false; // Incase resources fail to load, at least show them
   },
   beforeDestroy() {
@@ -294,6 +299,7 @@ export default {
     this.unsubscribe();
   },
   computed: {
+    ...mapState("stats", ["stats"]),
     audiobooks() {
       return this.talks.filter((t) => t.audiobook);
     },
@@ -318,10 +324,10 @@ export default {
   methods: {
     loadHeroVideo() {
       let randomVideos = this.random([
-        ...this.music,
-        ...this.movies,
-        ...this.news,
-        ...this.videos,
+        ...(this.music || []),
+        ...(this.movies || []),
+        ...(this.news || []),
+        ...(this.videos || []).filter((v) => v.tv_show || v.talk), // Let's not feature non-tv-show non-talk videos
       ]);
       this.heroVideo = randomVideos[0];
     },
@@ -344,15 +350,17 @@ export default {
         );
         if (this.musicShow)
           this.music = await this.getVideos({
-            limit: 100,
+            limit: 25,
             tvShow: this.musicShow.id,
             sort: "youtube_id",
+            offset: this.randomOffset("music", 25),
           });
         if (this.moviesShow)
           this.movies = await this.getVideos({
-            limit: 100,
+            limit: 25,
             tvShow: this.moviesShow.id,
             sort: "youtube_id",
+            offset: this.randomOffset("movies", 25),
           });
       }
       if (this.talks) {
@@ -361,11 +369,28 @@ export default {
         );
         if (this.newsShow)
           this.news = await this.getVideos({
-            limit: 100,
+            limit: 25,
             talk: this.newsShow.id,
+            offset: this.randomOffset("news", 25),
           });
       }
       this.loading = false;
+    },
+    /**
+     * @param statsKey key in the stats, one of: 'allVideos', 'movies', 'newVideos', 'music', 'news'
+     * @param max maximum number of array items
+     */
+    randomOffset(statsKey, max) {
+      if (this.stats && this.stats[this.$l2.code]) {
+        let stats = this.stats[this.$l2.code][statsKey];
+        // If we only have so many videos, we don't need arandom offset
+        if (stats < max) return 0;
+        else {
+          let offset = Math.floor(Math.random() * (stats - max));
+          return offset;
+        }
+      }
+      return 0;
     },
     random(array, max) {
       let shuffled = Helper.shuffle([...array]);
@@ -383,6 +408,7 @@ export default {
       tvShow = undefined,
       talk = undefined,
       sort = "-date",
+      offset = 0,
     }) {
       try {
         let videos = [];
@@ -395,7 +421,7 @@ export default {
             this.$l2.id
           )}?sort=${sort}&filter[l2][eq]=${
             this.$l2.id
-          }&${filter}&limit=${limit}&fields=l2,id,title,youtube_id,tv_show,talk,l2`
+          }&${filter}&limit=${limit}&fields=l2,id,title,youtube_id,tv_show,talk,l2&offset=${offset}`
         );
         if (response.data.data && response.data.data.length > 0) {
           videos = Helper.uniqueByValue(response.data.data, "youtube_id");
