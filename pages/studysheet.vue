@@ -115,29 +115,7 @@ export default {
         return this.$store.state.settings.l2;
     },
     levels() {
-      if (this.$l2.code === "zh") {
-        return {
-          1: "HSK 1",
-          2: "HSK 2",
-          3: "HSK 3",
-          4: "HSK 4",
-          5: "HSK 5",
-          6: "HSK 6",
-          7: "Outside HSK",
-        };
-      } else if (this.$l2.code === "en") {
-        return {
-          1: "零基础",
-          2: "A1（初级）",
-          3: "A2（雅思3.5分以下）",
-          4: "B1（雅思4～5分）",
-          5: "B2（雅思5.5～6.5分）",
-          6: "C1（雅思7～8分）",
-          7: "C2（雅思8.5～9分）",
-        };
-      } else {
-        return Helper.levels(this.$l2);
-      }
+      return Helper.languageLevels(this.$l2)
     },
     targetLevelClasses() {
       let classes = {

@@ -181,7 +181,7 @@ export default {
   },
   computed: {
     levels() {
-      return Helper.levels(this.$l2);
+      return Helper.languageLevels(this.$l2)
     },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")

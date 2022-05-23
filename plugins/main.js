@@ -16,6 +16,7 @@ import Config from '@/lib/config'
 import Helper from '@/lib/helper'
 import Languages from '@/lib/languages'
 import DateHelper from "@/lib/date-helper";
+import axios from 'axios'
 
 Vue.use(VueLazyload, {
   preLoad: 1.3,

@@ -69,7 +69,11 @@
             <b>{{ Math.ceil(level.hours / 10) * 10 }} hours</b>
           </p>
           <template>
-            <div v-for="(course, index) in courses[level.cefr]" class="level-activity" :key="`learning-path-course-${level.cefr}-${index}`">
+            <div
+              v-for="(course, index) in courses[level.cefr]"
+              class="level-activity"
+              :key="`learning-path-course-${level.cefr}-${index}`"
+            >
               <p>
                 <b :data-level="level.cefr">Activity:</b>
                 Take (or continue to take) the online course:
@@ -90,8 +94,8 @@
             <p>
               <b :data-level="level.cefr">Activity:</b>
               Watch lots of videos in
-              {{ $l2.name }} and study the subtitles with the help of our
-              video transcript study tool.
+              {{ $l2.name }} and study the subtitles with the help of our video
+              transcript study tool.
             </p>
             <Resource
               :resource="{
@@ -148,7 +152,10 @@
                 {{ level.cefr }} level, we recommend using the following
                 resources, products, or services:
               </p>
-              <div v-for="(resource, index) in resources[level.cefr]" :key="`learning-path-resource-${level.cefr}-${index}`">
+              <div
+                v-for="(resource, index) in resources[level.cefr]"
+                :key="`learning-path-resource-${level.cefr}-${index}`"
+              >
                 <Resource
                   :resource="{
                     title: resource.title,
@@ -217,7 +224,7 @@
 <script>
 import Resource from "@/components/Resource";
 import Config from "@/lib/config";
-import axios from "axios";
+import Helper from "@/lib/helper";
 
 export default {
   components: {
@@ -225,43 +232,6 @@ export default {
   },
   data() {
     return {
-      levels: [
-        {
-          number: "1",
-          cefr: "PreA1",
-          category: "Beginner",
-        },
-        {
-          number: "2",
-          cefr: "A1",
-          category: "Beginner",
-        },
-        {
-          number: "3",
-          cefr: "A2",
-          category: "Beginner",
-        },
-        {
-          number: "4",
-          cefr: "B1",
-          category: "Intermediate",
-        },
-        {
-          number: "5",
-          cefr: "B2",
-          category: "Intermediate",
-        },
-        {
-          number: "6",
-          cefr: "C1",
-          category: "Advanced",
-        },
-        {
-          number: "7",
-          cefr: "C2",
-          category: "Advanced",
-        },
-      ],
       exams: {},
       courses: {},
       resources: {},
@@ -276,6 +246,17 @@ export default {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
+    levels() {
+      let levels = Object.keys(Helper.levels).map((key) => {
+        return { number: key, ...Helper.levels[key] };
+      });
+      let hours = Helper.languageHours(this.$l2);
+      for (let level in levels) {
+        level = Number(level)
+        levels[level].hours = hours[level + 1];
+      }
+      return levels;
+    },
     omniglot() {
       let url = "https://www.omniglot.com/writing/" + this.$l2.omniglot;
       url = url.replace(/[^/]+\/\.\./, "");
@@ -286,8 +267,7 @@ export default {
       };
     },
   },
-  async fetch() {
-    await this.loadHours();
+  async created() {
     this.exams = await this.loadExams();
     this.courses = await this.loadCourses();
     this.resources = await this.loadResources();
@@ -343,32 +323,6 @@ export default {
         }
       }
       return result;
-    },
-    loadHours() {
-      let hours = this.$l2.hours || 1100;
-      for (let level of this.levels) {
-        if (level.number === "7") {
-          level.hours = hours * 2;
-        }
-        if (level.number === "6") {
-          level.hours = hours;
-        }
-        if (level.number === "5") {
-          level.hours = hours / 2;
-        }
-        if (level.number === "4") {
-          level.hours = hours / 4;
-        }
-        if (level.number === "3") {
-          level.hours = hours / 8;
-        }
-        if (level.number === "2") {
-          level.hours = hours / 16;
-        }
-        if (level.number === "1") {
-          level.hours = hours / 16;
-        }
-      }
     },
   },
 };

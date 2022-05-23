@@ -153,7 +153,6 @@ export default {
       channels: [],
       videos: undefined,
       noMoreVideos: false,
-      levels: Helper.levels(this.$l2),
       topics: Helper.topics,
       moreVideos: 0,
       perPage: 96,

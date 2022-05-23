@@ -349,7 +349,6 @@ export default {
       saving: false,
       isNewVideo: false,
       topics: Helper.topics,
-      levels: Helper.levels(this.$l2),
       transcriptKey: 0,
       deleted: false,
       deleting: false,
@@ -374,6 +373,9 @@ export default {
     $l2() {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
+    },
+    levels() {
+      return Helper.languageLevels(this.$l2)
     },
     $adminMode() {
       this.mounted; // So that this component shows up on first load (updates $adminMode)
