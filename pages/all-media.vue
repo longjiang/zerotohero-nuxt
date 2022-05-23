@@ -279,8 +279,13 @@ export default {
         this.loadShows();
       }
     });
-    if (!this.videos || this.videos.length === 0)
-      this.videos = await this.getVideos({ limit: 50, sort: "youtube_id" });
+    if (!this.videos || this.videos.length === 0) {
+      let videos = await this.getVideos({ limit: 50, sort: "youtube_id" });
+      // Let's prioritize videos in tv shows or talks
+      this.videos = this.random(videos)
+        .sort((a, b) => (b.talk === a.talk ? 0 : b.tv_show ? 1 : -1))
+        .sort((a, b) => (b.tv_show === a.tv_show ? 0 : b.tv_show ? 1 : -1));
+    }
     await Helper.timeout(3000);
     this.loading = false; // Incase resources fail to load, at least show them
   },
