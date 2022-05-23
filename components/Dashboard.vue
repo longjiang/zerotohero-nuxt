@@ -4,7 +4,6 @@
       <div class="row">
         <div
           :class="{
-            'language-overview-item': true,
             'col-sm-4': params.md || params.lg || params.xl,
             'col-sm-6': params.sm,
             'col-sm-12': params.xs,
@@ -13,15 +12,20 @@
           :set="(language = $languages.getSmart(l2Progress.l2Code))"
           :key="`language-overview-item-${l2Progress.l2Code}`"
         >
-          <template v-if="language && language.name">
+          <router-link
+            class="language-overview-item"
+            v-if="language && language.name"
+            :to="{ name: 'profile', params: { l1: 'en', l2: language.code } }"
+          >
             <div class="language-flag-wrapper">
-              <LanguageFlag :language="language" />
+              <LanguageFlag :language="language" :autocycle="true" />
+              <span class="language-name">{{ language.name }}</span>
             </div>
             <LanguageProgress
               :$l1="$languages.getSmart('en')"
               :$l2="language"
             />
-          </template>
+          </router-link>
         </div>
       </div>
     </div>
@@ -89,10 +93,29 @@ export default {
 .language-overview-item {
   display: flex;
   padding: 1rem;
+  color: #666;
+  text-decoration: none;
   .language-flag-wrapper {
     margin-right: 1rem;
     position: relative;
-    padding-top: 1.3rem;
+    text-align: center;
+    width: 3.5rem;
+    padding-top: 0.5rem;
+    ::v-deep .flag-icon-wrapper  {
+      transform: scale(1.5);
+      .country-name {
+        font-size: 0.5em;
+        top: calc(50% - 2.5em);
+      }
+    }
+    .language-name {
+      display: block;
+      color: #444;
+      font-size: 0.8em;
+      font-weight: bold;
+      position: relative;
+      top: 0.85rem;
+    }
   }
   .language-progress {
     flex: 1;

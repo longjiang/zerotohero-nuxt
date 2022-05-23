@@ -66,14 +66,15 @@ export default {
 }
 .flag-icon {
   width: 2rem;
-  height: 1.6rem;
-  border-radius: 0.3rem;
+  height: 1.4rem;
+  border-radius: 0.2rem;
+  object-fit: cover;
 }
 .no-flag-placeholder {
   height: 1.6rem;
   width: 2rem;
   background-color: #ddd;
-  border-radius: 0.3rem;
+  border-radius: 0.2rem;
 }
 
 .flag-icon-wrapper {
@@ -89,7 +90,7 @@ export default {
 .country-name {
   position: absolute;
   color: #888;
-  top: -0.8em;
+  top: calc(50% - 2.4em);
   left: 50%;
   font-weight: normal;
   font-size: 0.6em;
