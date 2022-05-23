@@ -17,19 +17,20 @@
 <template>
   <div class="main main-dark">
     <div class="container pt-5 pb-5 youtube-search">
-      <div
-        style="font-size: 1.5rem; color: white; text-align: center"
-      >
+      <div style="font-size: 1.5rem; color: white; text-align: center">
         <img
           src="/img/czh-icon.png"
           style="height: 4rem; margin-bottom: 1rem; margin-top: 3rem"
           data-not-lazy
         />
       </div>
-      <h4 class="mt-3 mb-5 text-center">Zero to Hero Video Search</h4>
-      
+      <h4 class="mt-3 mb-5 text-center">
+        Zero to Hero
+        <LanguageFlag :autocycle="true" :language="$l2" style="position: relative; bottom: 0.2rem; margin: 0 0.4rem" />
+        Video Search
+      </h4>
       <SimpleSearch
-        :placeholder="`Search`"
+        :placeholder="`Search ${stats ? $n(stats[$l2.code].allVideos) : ''} ${$l2.name} videos`"
         skin="dark"
         :action="
           (url) => {
@@ -117,10 +118,7 @@
           You can help to expand this {{ $l2.name }} video library!
         </h4>
         <LazyHowToContribute />
-        <LazyIdenticalLanguages
-          class="mb-4"
-          routeName="youtube-browse"
-        />
+        <LazyIdenticalLanguages class="mb-4" routeName="youtube-browse" />
       </div>
     </div>
   </div>
@@ -129,7 +127,7 @@
 <script>
 import SimpleSearch from "@/components/SimpleSearch";
 import YouTubeSearchResults from "@/components/YouTubeSearchResults";
-
+import { mapState } from 'vuex';
 export default {
   components: {
     SimpleSearch,
@@ -146,6 +144,7 @@ export default {
     };
   },
   computed: {
+    ...mapState('stats', ['stats']),
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
