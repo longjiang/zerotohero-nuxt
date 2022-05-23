@@ -480,7 +480,7 @@ export default {
           data[type] = show.id;
           let response = await this.$authios.patch(
             `${Config.youtubeVideosTableName(
-              this.video.l2 ? this.video.l2.id : this.$l2.id
+              this.video.l2 ? this.video.l2.id || this.video.l2 : this.$l2.id
             )}/${this.video.id}?fields=id`,
             data
           );
@@ -497,7 +497,7 @@ export default {
       data[type] = null;
       let response = await this.$authios.patch(
         `${Config.youtubeVideosTableName(
-          this.video.l2 ? this.video.l2.id : this.$l2.id
+          this.video.l2 ? this.video.l2.id || this.video.l2 : this.$l2.id
         )}/${this.video.id}`,
         data
       );
@@ -511,7 +511,7 @@ export default {
         try {
           let response = await this.$authios.patch(
             `${Config.youtubeVideosTableName(
-              this.video.l2 ? this.video.l2.id : this.$l2.id
+              this.video.l2 ? this.video.l2.id || this.video.l2 : this.$l2.id
             )}/${this.video.id}`,
             { title: newTitle },
             { contentType: "application/json" }
@@ -550,7 +550,7 @@ export default {
         try {
           let response = await this.$authios.delete(
             `${Config.youtubeVideosTableName(
-              this.video.l2 ? this.video.l2.id : this.$l2.id
+              this.video.l2 ? this.video.l2.id || this.video.l2 : this.$l2.id
             )}/${this.video.id}`
           );
           if (response) {
@@ -565,7 +565,7 @@ export default {
     async updateSubs() {
       let response = await this.$authios.patch(
         `${Config.youtubeVideosTableName(
-          this.video.l2 ? this.video.l2.id : this.$l2.id
+          this.video.l2 ? this.video.l2.id || this.video.l2 : this.$l2.id
         )}/${this.video.id}`,
         { subs_l2: YouTube.unparseSubs(this.video.subs_l2) }
       );
@@ -633,7 +633,7 @@ export default {
       let channelId = await this.getChannelID(video);
       let response = await this.$authios.patch(
         `${Config.youtubeVideosTableName(
-          this.video.l2 ? this.video.l2.id : this.$l2.id
+          this.video.l2 ? this.video.l2.id || this.video.l2 : this.$l2.id
         )}/${video.id}`,
         { channel_id: channelId }
       );
