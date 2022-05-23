@@ -1,13 +1,21 @@
 <router>
   {
-    path: '/:l1/:l2/login/'
+    path: '/:l1/:l2/login/',
+    meta: {
+      skin: 'dark',
+    }
   }
 </router>
 <template>
-  <div class="container">
+  <div
+    class="container-fluid"
+    :style="`background-image: url(${background(
+      this.$l2
+    )}); background-size: cover; background-position: center;`"
+  >
     <div class="row">
       <div class="col-sm-12">
-        <div class="login-page">
+        <div :class="{ 'login-page': true, shaking }">
           <div class="text-center mb-4">
             <img
               src="/img/czh-icon.png"
@@ -19,7 +27,7 @@
           </div>
           <b-form @submit.prevent="onSubmit" v-if="show">
             <div class="alert alert-warning" v-if="$l2.code === 'zh'">
-              <b>Notice:</b>
+              <b>Friendly reminder:</b>
               This does NOT login to your Chinese Zero to Hero online courses on
               Teachable. For course login
               <a
@@ -67,7 +75,7 @@
 </template>
 
 <script>
-import Config from "@/lib/config";
+import Helper from "@/lib/helper";
 
 export default {
   data() {
@@ -77,6 +85,7 @@ export default {
         password: "",
       },
       show: true,
+      shaking: false,
     };
   },
   computed: {
@@ -90,6 +99,9 @@ export default {
     },
   },
   methods: {
+    background(...args) {
+      return Helper.background(...args);
+    },
     async onSubmit(event) {
       try {
         await this.$auth.loginWith("local", { data: this.form });
@@ -105,8 +117,24 @@ export default {
           });
         }
       } catch (err) {
-        console.log(err);
+        if (err.response && err.response.data) {
+          this.$toast.error(err.response.data.error.message, {
+            position: "top-center",
+            duration: 5000,
+          });
+        } else {
+          this.$toast.error("There has been an error.", {
+            position: "top-center",
+            duration: 5000,
+          });
+        }
       }
+      this.shake();
+    },
+    async shake() {
+      this.shaking = true;
+      await Helper.timeout(500);
+      this.shaking = false;
     },
   },
 };
@@ -119,7 +147,38 @@ export default {
   overflow: hidden;
   background: #ffffffdd;
   max-width: 20rem;
-  box-shadow: 0 0 30px black;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.483);
   backdrop-filter: blur(20px);
+}
+
+.shaking {
+  animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  animation-iteration-count: infinite;
+}
+
+@keyframes shake {
+  10%,
+  90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+
+  20%,
+  80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%,
+  60% {
+    transform: translate3d(4px, 0, 0);
+  }
 }
 </style>
