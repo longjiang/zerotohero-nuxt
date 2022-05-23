@@ -1,5 +1,5 @@
 <template>
-  <div style="font-size: 2rem">
+  <div class="z2h-logo" style="font-size: 2rem">
     <img
       src="/img/czh-icon.png"
       style="height: 5.5rem; margin-bottom: 1rem"
@@ -14,5 +14,13 @@
 export default {};
 </script>
 
-<style>
+<style lang="scss" scoped>
+.z2h-logo {
+  color: white;
+  text-align: center;
+  display: block;
+  -webkit-filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.7));
+  filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.7));
+  text-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+}
 </style>

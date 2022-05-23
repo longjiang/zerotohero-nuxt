@@ -20,10 +20,22 @@
       style="overflow: hidden; position: relative"
     >
       <div class="container">
-        <div class="row pt-5 mb-5">
+        <div class="row pt-3">
+          <div class="col-sm-12 ">
+            <Logo />
+          </div>
+        </div>
+        <div class="row pt-4" v-if="$auth.loggedIn">
           <div class="col-sm-12">
-            <div class="z2h-logo" style="line-height: 1.2">
-              <Logo />
+            <div class="home-card p-2 pt-4 pb-4">
+              <h5 class="text-center mb-4">{{ $auth.user.first_name }}'s Language Learning Dashboard</h5>
+              <LazyDashboard />
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <div style="line-height: 1.2; color: white; text-align: center;">
               <p class="blurb">
                 Learn
                 <strong>
@@ -79,7 +91,15 @@
                   class="blurb-highlight"
                 >
                   {{ this.randomLanguage[0] }}!
-                  <LanguageFlag :language="randomLanguageObj" :autocycle="true" style="position: relative; bottom: 0.2rem; transform: scale(0.75);" />
+                  <LanguageFlag
+                    :language="randomLanguageObj"
+                    :autocycle="true"
+                    style="
+                      position: relative;
+                      bottom: 0.2rem;
+                      transform: scale(0.75);
+                    "
+                  />
                 </router-link>
               </p>
             </div>
@@ -698,7 +718,7 @@ export default {
     this.randomLanguage = this.randomArrayItem(
       this.languagesWithVideos.slice(0, 141)
     );
-    this.randomLanguageObj = this.language(this.randomLanguage[1])
+    this.randomLanguageObj = this.language(this.randomLanguage[1]);
   },
   mounted() {
     this.loaded = true;
@@ -756,14 +776,6 @@ export default {
   font-size: 0.9em;
 }
 
-.z2h-logo {
-  color: white;
-  text-align: center;
-  display: block;
-  -webkit-filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.7));
-  filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.7));
-  text-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
-}
 
 .z2h-slogan {
   max-height: 10rem;
