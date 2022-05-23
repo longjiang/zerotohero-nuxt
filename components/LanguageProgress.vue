@@ -83,8 +83,7 @@
       <div class="mt-3" v-else>
         Typically, {{ $l1.name }} speakers need
         <b>{{ Math.round(hoursNeeded) }} hours</b>
-        {{ levelText }} from to
-        {{ goalText }}.
+        {{ levelText }} from to {{ goalText }}.
       </div>
     </div>
   </div>
@@ -112,8 +111,8 @@ export default {
       default: "0.75rem",
     },
     progressBarShowValue: {
-      default: false
-    }
+      default: false,
+    },
   },
   computed: {
     time() {
@@ -146,13 +145,14 @@ export default {
       return Math.ceil(this.targetHours / 10) * 10;
     },
     levelText() {
-      let goal = this.levelObj(this.level)
-      return goal.exam.name + ' ' + goal.level
+      let level = this.levelObj(this.level);
+      return level.exam.name + " " + level.level;
     },
     goalText() {
-      let goal = this.levelObj(this.level + 1)
-      return goal.exam.name + ' ' + goal.level
-    }
+      let goal = this.levelObj(this.level + 1);
+      if (goal) return goal.exam.name + " " + goal.level;
+      else return 'the “Next Level”'
+    },
   },
   data() {
     return {
