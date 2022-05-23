@@ -23,15 +23,7 @@
         <div class="row pt-5 mb-5">
           <div class="col-sm-12">
             <div class="z2h-logo" style="line-height: 1.2">
-              <div style="font-size: 2rem">
-                <img
-                  src="/img/czh-icon.png"
-                  style="height: 5.5rem; margin-bottom: 1rem"
-                  data-not-lazy
-                />
-                <br />
-                <b>Zero to Hero</b>
-              </div>
+              <Logo />
               <p class="blurb">
                 Learn
                 <strong>
