@@ -731,7 +731,7 @@ button.bg-primary:focus {
 .input-ghost-dark {
   background: black;
   border-radius: 0.25rem;
-  border: none;
+  border: 1px solid #cccccc44;
   color: rgba(255, 255, 255, 0.75);
   height: 40px;
   box-shadow: 0px 5px 14px 3px rgb(119 119 119 / 42%);
