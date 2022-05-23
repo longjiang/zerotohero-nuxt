@@ -45,15 +45,51 @@
                 {{ levelObj(level + 1).exam.name }}
                 {{ levelObj(level + 1).level }}
               </template>
-              <template v-if="level >= 7" class="goal">
-                Mastery
-              </template>
+              <template v-if="level >= 7" class="goal">Mastery</template>
               <img src="/img/trophy.svg" />
             </div>
           </div>
         </div>
         <div class="row mt-3">
           <div class="col-sm-12">
+            <div>
+              <h5 class="text-success mt-3">
+                {{ Math.floor(hours) }} hours
+                {{ Math.ceil((hours % 1) * 60) }} min
+                <span class="dot"></span>
+                <span
+                  style="
+                    font-weight: bold;
+                    cursor: pointer;
+                    font-size: 0.9rem;
+                    float: right;
+                    margin-top: 0.2rem;
+                  "
+                  @click="showManuallySetHours = !showManuallySetHours"
+                  class="text-secondary ml-2"
+                >
+                  <i class="fas fa-pencil-alt mr-1"></i>
+                  Edit hours
+                </span>
+              </h5>
+            </div>
+            <div v-if="showManuallySetHours" class="mt-2 mb-3">
+              Mannually set your total time on {{ $l2.name }} to
+              <b-form-input
+                v-model="mannuallySetHours"
+                type="number"
+                :lazy="true"
+                placeholder="hours"
+                aria-autocomplete="both"
+                aria-haspopup="false"
+                autocapitalize="off"
+                autocomplete="off"
+                autocorrect="off"
+                autofocus=""
+                role="combobox"
+                spellcheck="false"
+              />
+            </div>
             <b-progress
               class="mt-2"
               :max="hoursNeeded"
@@ -66,28 +102,27 @@
                 variant="success"
               ></b-progress-bar>
             </b-progress>
-            <div v-if="$store.state.progress.progressLoaded" class="mt-3">
-              You've spent
-              <b>{{ Math.floor(hours) }} hours</b>
-              <b>{{ Math.ceil((hours % 1) * 60) }} min</b>
-              on Zero to Hero learning {{ $l2.name }}.
-              <u
-                style="font-weight: bold; cursor: pointer"
-                class="text-success"
-                @click="showManuallySetHours = !showManuallySetHours"
-              >
-                Manually change hours
-                <i class="fas fa-caret-down"></i>
-              </u>
+            <div class="mt-2">
+              <b class="text-success">
+                {{ Math.round((hours / hoursNeeded) * 100) }}%
+              </b>
+              way there
+              <span style="float: right">
+                remaining
+                <b class="text-warning">
+                  {{ Math.round(hoursNeeded - hours) }} hours
+                </b>
+              </span>
             </div>
-            <div v-if="showManuallySetHours" class="mt-2">
-              Mannually set your total time on {{ $l2.name }} to
-              <b-form-input
-                v-model="mannuallySetHours"
-                type="number"
-                :lazy="true"
-                placeholder="hours"
-              />
+            <div v-if="$store.state.progress.progressLoaded" class="mt-4">
+              You've spent
+              <b>
+                {{ Math.floor(hours) }} hours
+                {{ Math.ceil((hours % 1) * 60) }} min
+              </b>
+              on the
+              <b>{{ $l2.name }}</b>
+              section of Zero to Hero.
             </div>
             <div class="mt-3" v-if="hours < hoursNeeded">
               If you're typical L1 {{ $l1.name }} speaker at the
@@ -114,11 +149,14 @@
               {{ levelObj(level + 1).exam.name }}
               {{ levelObj(level + 1).level }}.
             </div>
-          </div>
-        </div>
-        <div class="row mt-4">
-          <div class="col-sm-12 text-center mt-4">
-            <router-link :to="{name: 'logout'}" class="btn btn-danger pl-4 pr-4"><i class="fas fa-sign-out-alt"></i> Logout</router-link>
+            <router-link
+              :to="{ name: 'all-media' }"
+              class="text-success mt-5 d-block"
+              style="font-size: 1.2rem; font-weight: bold"
+            >
+              Continue Learning
+              <i class="fas fa-chevron-right ml-1"></i>
+            </router-link>
           </div>
         </div>
       </template>
@@ -232,6 +270,73 @@ export default {
     position: absolute;
     left: 0.5rem;
     z-index: 9;
+  }
+}
+
+/* https://codepen.io/availchet/pen/rNMRvZB */
+.dot {
+  /* Vector */
+  display: inline-block;
+  position: relative;
+  bottom: 0.1rem;
+  margin-left: 0.2rem;
+  margin-right: 0.5rem;
+  height: 0.66rem;
+  width: 0.66rem;
+  border-radius: 50%;
+  background: #28a745;
+  opacity: 1;
+}
+
+.dot:after {
+  content: "";
+  position: absolute;
+  height: 0.66rem;
+  width: 0.66rem;
+  border-radius: 50%;
+  background: #28a745;
+  display: block;
+  animation: pulse 2s ease 0s infinite;
+}
+
+.dot:before {
+  content: "";
+  position: absolute;
+  height: 0.66rem;
+  width: 0.66rem;
+  border-radius: 50%;
+  background: #28a745;
+  display: block;
+  animation: pulse2 2s ease 0s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  80% {
+    opacity: 0;
+    transform: scale(2.5);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(3);
+  }
+}
+
+@keyframes pulse2 {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.5);
   }
 }
 </style>
