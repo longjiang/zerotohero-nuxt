@@ -12,12 +12,12 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(corpus, index) in corpora" :key="`corpora-select-row-${index}`">
+        <tr
+          v-for="(corpus, index) in corpora"
+          :key="`corpora-select-row-${index}`"
+        >
           <td>
-            <b-form-radio
-              :value="corpus.corpname"
-              v-model="corpname"
-            />
+            <b-form-radio :value="corpus.corpname" v-model="corpname" />
           </td>
           <td>{{ corpus.name }}</td>
           <td>
@@ -56,7 +56,7 @@ export default {
     return {
       SketchEngine,
       corpname: undefined,
-      corpora: undefined
+      corpora: undefined,
     };
   },
   computed: {
@@ -70,8 +70,8 @@ export default {
     },
   },
   async mounted() {
-    this.corpora = await this.getCorpora()
-    this.corpname = await SketchEngine.corpname(this.$l2)
+    this.corpora = await this.getCorpora();
+    this.corpname = await SketchEngine.corpname(this.$l2);
   },
   watch: {
     corpname() {
@@ -83,16 +83,19 @@ export default {
   methods: {
     async getCorpora() {
       let corpora = await SketchEngine.getCorpora();
+      corpora = corpora || []
       corpora = corpora
         .filter(
           (corpus) =>
-            [this.$l2.code].concat(this.$l2.locales || []).includes(corpus.language_id) &&
+            [this.$l2.code]
+              .concat(this.$l2.locales || [])
+              .includes(corpus.language_id) &&
             !(corpus.tags && corpus.tags.includes("learner"))
         )
-        .sort((a, b) => b['wordcount'] - a['wordcount']);
+        .sort((a, b) => b["wordcount"] - a["wordcount"]);
       return corpora;
     },
-  }
+  },
 };
 </script>
 
