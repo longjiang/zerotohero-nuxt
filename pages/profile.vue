@@ -15,11 +15,22 @@
           <p>{{ $store.state.progress }}</p>
         </div>
         <div class="col-sm-12">
+          Your current level is {{ levelObj(level).exam.name }}
+          {{ levelObj(level).level }}
           <div v-if="$store.state.progress.progressLoaded">
             You spent
-            {{ Math.round((time / 1000 / 60 / 60) * 100) / 100 }} hours on Zero to Hero learning {{ $l2.name }}.
+            {{ Math.round((time / 1000 / 60 / 60) * 100) / 100 }} hours on Zero
+            to Hero learning {{ $l2.name }}.
           </div>
-          {{ targetHours  }}
+          <div v-if="level < 7">
+            You need {{ Math.ceil(targetHours / 10) * 10 }} hours to get to the
+            next level, {{ levelObj(level + 1).exam.name }}
+            {{ levelObj(level + 1).level }}.
+          </div>
+          <div v-if="level >= 7">
+            This is the highest level. You need
+            {{ Math.ceil(targetHours / 10) * 10 }} hours to progress to native-like mastery.
+          </div>
         </div>
       </div>
     </div>
@@ -27,7 +38,7 @@
 </template>
 
 <script>
-import Helper from '@/lib/helper'
+import Helper from "@/lib/helper";
 export default {
   mounted() {},
   computed: {
@@ -45,14 +56,19 @@ export default {
         : 0;
     },
     targetHours() {
-      return Helper.levels[this.level].hoursMultiplier * this.$l2.hours
-    }
+      return Helper.levels[this.level].hoursMultiplier * this.$l2.hours;
+    },
   },
   data() {
     return {
-      level: 1
-    }
-  }
+      level: 7,
+    };
+  },
+  methods: {
+    levelObj(level) {
+      return Helper.languageLevels(this.$l2)[level];
+    },
+  },
 };
 </script>
 
