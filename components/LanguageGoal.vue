@@ -1,64 +1,38 @@
-<router>
-  {
-    path: '/:l1/:l2/profile/',
-    props: true
-  }
-</router>
 <template>
-  <div class="main pt-3">
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-12 text-center">
-          <h3>{{ $auth.user.first_name }} {{ $auth.user.last_name }}</h3>
-          <p>{{ $auth.user.email }}</p>
-          <p>{{ $auth.user.avatar }}</p>
-        </div>
-      </div>
-      <template v-if="level">
+  
         <div class="row">
-          <div class="col-sm-12 text-center">
-            <LanguageFlag
-              :language="$l2"
-              :autocycle="true"
-              style="
-                transform: scale(1.5);
-                margin-top: 1rem;
-                margin-bottom: 2rem;
-              "
-            />
-            <h5 class="mb-4">Your {{ $l2.name }} Learning Progress</h5>
+          <div class="col-6 pr-1 text-center">
+            Your current level
+            <b-form-select
+              v-model="mannuallySetLevel"
+              :options="levels"
+            ></b-form-select>
+          </div>
+          <div class="col-6 pl-1 text-center">
+            Your next goal
+            <br />
+            <div class="goal">
+              <template v-if="level < 7">
+                {{ levelObj(level + 1).exam.name }}
+                {{ levelObj(level + 1).level }}
+              </template>
+              <template v-if="level >= 7" class="goal">Mastery</template>
+              <img src="/img/trophy.svg" />
+            </div>
           </div>
         </div>
-        <LanguageGoal :$l2="$l2" />
-        <div class="row mt-3">
-          <div class="col-sm-12">
-            <LanguageProgress :$l2="$l2" />
-            <router-link
-              :to="{ name: 'all-media' }"
-              class="text-success mt-5 d-block"
-              style="font-size: 1.2rem; font-weight: bold"
-            >
-              Continue Learning
-              <i class="fas fa-chevron-right ml-1"></i>
-            </router-link>
-          </div>
-        </div>
-      </template>
-    </div>
-  </div>
 </template>
 
 <script>
 import Helper from "@/lib/helper";
 export default {
+  props: {
+    $l2: Object
+  },
   computed: {
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
-    },
-    $l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
     },
     time() {
       return this.$store.state.progress.progressLoaded
