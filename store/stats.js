@@ -51,6 +51,13 @@ export const actions = {
         if (res && res.data) stats.news = res.data
       }
 
+
+      res = await axios.get(
+        `https://db2.zerotohero.ca/count.php?table_suffix=${tableSuffix}&lang_id=${l2.id}&timestamp=${adminMode ? Date.now() : 0}`
+      );
+      if (res && res.data) stats.allVideos = res.data
+
+
       commit('LOAD', { l2, stats })
     } catch (err) {
       console.log(err)

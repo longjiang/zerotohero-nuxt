@@ -199,10 +199,10 @@ export default {
       shortcuts: [],
       history: [],
       hidden: false,
-      hasTVShows: false,
+      tvShowsCount: false,
       hasLiveTV: false,
-      hasTalks: false,
-      hasAudiobooks: false,
+      talksCount: false,
+      audioBooksCount: false,
       musicPath: false,
       moviePath: false,
       newsPath: false,
@@ -403,20 +403,20 @@ export default {
             {
               name: "tv-shows",
               icon: "fa fa-tv",
-              title: "TV Shows",
-              show: this.hasTVShows,
+              title: `TV Shows (${this.tvShowsCount})`,
+              show: this.tvShowsCount,
             },
             {
               name: "talks",
               icon: "fab fa-youtube",
-              title: `YouTube Channels`,
-              show: this.hasTalks,
+              title: `Channels (${this.talksCount})`,
+              show: this.talksCount,
             },
             {
               name: "audiobooks",
               icon: "fa fa-book-open",
-              title: `Audiobooks`,
-              show: this.hasAudiobooks,
+              title: `Audiobooks (${this.audioBooksCount})`,
+              show: this.audioBooksCount,
             },
             {
               path: this.musicPath,
@@ -449,6 +449,16 @@ export default {
               show: true,
             },
             {
+              name: "youtube-search",
+              title: `Search ${
+                this.stats && this.stats
+                  ? "(" + this.$n(this.stats.allVideos) + ")"
+                  : ""
+              }`,
+              icon: "fas fa-search",
+              show: true,
+            },
+            {
               name: "live-tv",
               icon: "fa fa-broadcast-tower",
               title: "Live TV",
@@ -466,12 +476,6 @@ export default {
               icon: "fas fa-lightbulb",
               show: true,
               params: { l1: this.l1.code, l2: this.l2.code },
-            },
-            {
-              name: "youtube-search",
-              title: `Search`,
-              icon: "fas fa-search",
-              show: true,
             },
             {
               name: "show",
@@ -965,25 +969,22 @@ export default {
         this.$store.state.stats.stats[this.l2.code];
     },
     checkShows() {
-      let hasTVShows =
+      let tvShowsCount =
         this.$store.state.shows.tvShows &&
         this.$store.state.shows.tvShows[this.l2.code] &&
-        this.$store.state.shows.tvShows[this.l2.code].length > 0;
-      let hasTalks =
-        this.$store.state.shows.talks &&
-        this.$store.state.shows.talks[this.l2.code] &&
-        this.$store.state.shows.talks[this.l2.code].length > 0;
-      this.hasTVShows =
-        hasTVShows &&
         this.$store.state.shows.tvShows[this.l2.code].filter(
           (s) => !["Music", "Movies"].includes(s.title)
-        ).length > 0;
-      this.hasTalks =
-        hasTalks &&
+        ).length;
+
+      let talksCount =
+        this.$store.state.shows.talks &&
+        this.$store.state.shows.talks[this.l2.code] &&
         this.$store.state.shows.talks[this.l2.code].filter(
-          (s) => !["News"].includes(s.title)
-        ).length > 0;
-      if (hasTVShows) {
+          (s) => !["News"].includes(s.title) && !s.audiobook
+        ).length;
+      this.tvShowsCount = tvShowsCount;
+      this.talksCount = talksCount;
+      if (tvShowsCount > 0) {
         let musicShow = this.$store.state.shows.tvShows[this.l2.code].find(
           (s) => s.title === "Music"
         );
@@ -997,7 +998,7 @@ export default {
           this.moviesPath = `/${this.$l1.code}/${this.$l2.code}/show/tv-show/${moviesShow.id}`;
         }
       }
-      if (hasTalks) {
+      if (talksCount > 0) {
         let newsShow = this.$store.state.shows.talks[this.l2.code].find(
           (s) => s.title === "News"
         );
@@ -1007,7 +1008,7 @@ export default {
         let audiobooks = this.$store.state.shows.talks[this.l2.code].filter(
           (s) => s.audiobook
         );
-        this.hasAudiobooks = audiobooks.length > 0;
+        this.audioBooksCount = audiobooks.length;
       }
     },
     to(item) {
