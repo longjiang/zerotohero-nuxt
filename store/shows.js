@@ -4,6 +4,7 @@ export const state = () => {
   return {
     tvShows: {},
     talks: {},
+    stats: {},
     showsLoaded: {}
   }
 }
@@ -86,3 +87,25 @@ export const actions = {
     return true
   },
 }
+
+
+
+export const getters = {
+  movies: state => ({ l2 }) => {
+    if (state.showsLoaded[l2.code])
+      return state.tvShows[l2.code].find(s => s.title === 'Movies')
+  },
+  music: state => ({ l2 }) => {
+    if (state.showsLoaded[l2.code])
+    return state.tvShows[l2.code].find(s => s.title === 'Music')
+  },
+  news: state => ({ l2 }) => {
+    if (state.showsLoaded[l2.code])
+    return state.talks[l2.code].find(s => s.title === 'News')
+  },
+  audiobooks: state => ({ l2 }) => {
+    if (state.showsLoaded[l2.code])
+    return state.talks[l2.code].filter(s => s.audiobook)
+  },
+}
+

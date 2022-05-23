@@ -99,6 +99,12 @@ export default {
           navigated = true;
         }
       }
+      if (mutation.type === "shows/LOAD_SHOWS") {
+        this.$store.dispatch("stats/load", {
+          l2: this.l2,
+          adminMode: this.$store.state.settings.adminMode,
+        });
+      }
       if (mutation.type.startsWith("settings")) {
         if (mutation.type === "settings/SET_L1") {
           this.updatei18n();
@@ -260,7 +266,7 @@ export default {
               if (userDataRes.data.data[0]) {
                 let { id, saved_words, saved_phrases, history, progress } =
                   userDataRes.data.data[0];
-                this.$auth.$storage.setUniversal('dataId', dataId);
+                this.$auth.$storage.setUniversal("dataId", id);
                 this.$store.dispatch("savedWords/importFromJSON", saved_words);
                 this.$store.dispatch(
                   "savedPhrases/importFromJSON",
@@ -271,7 +277,7 @@ export default {
               } else {
                 // No user data found, let's create it
                 let dataId = await this.createNewUserDataRecord(token);
-                this.$auth.$storage.setUniversal('dataId', dataId);
+                this.$auth.$storage.setUniversal("dataId", dataId);
               }
             }
           }

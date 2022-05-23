@@ -208,6 +208,7 @@ export default {
       newsPath: false,
       hasPhrasebooks: false,
       collapsed: false,
+      stats: undefined,
     };
   },
   mounted() {
@@ -227,6 +228,9 @@ export default {
       if (mutation.type.startsWith("phrasebooks")) {
         this.checkPhrasebooks();
       }
+      if (mutation.type.startsWith("stats")) {
+        this.checkStats();
+      }
     });
     if (this.$hasFeature("live-tv")) {
       this.hasLiveTV = true;
@@ -245,7 +249,7 @@ export default {
       if (this.$route.meta.collapseNav)
         this.collapsed = this.$route.meta.collapseNav;
       else this.collapsed = false;
-      this.hidden = false
+      this.hidden = false;
     },
     collapsed() {
       this.$emit("collapsed", this.collapsed);
@@ -307,7 +311,14 @@ export default {
       let items = [
         {
           icon: "fas fa-user",
-          title: `${this.$auth && this.$auth.loggedIn && this.$auth.user && this.$auth.user.first_name ? 'Hi, ' + this.$auth.user.first_name: 'Login'}`,
+          title: `${
+            this.$auth &&
+            this.$auth.loggedIn &&
+            this.$auth.user &&
+            this.$auth.user.first_name
+              ? "Hi, " + this.$auth.user.first_name
+              : "Login"
+          }`,
           show: true,
           exact: true,
           children: [
@@ -351,13 +362,13 @@ export default {
               href: "https://sso.teachable.com/secure/133035/identity/login",
               icon: "fas fa-graduation-cap",
               title: "My Teachable Courses",
-              show: this.$l2 && this.$l2.code === 'zh',
+              show: this.$l2 && this.$l2.code === "zh",
             },
             {
               href: "https://m.cctalk.com/inst/stevmab3",
               icon: "fas fa-graduation-cap",
               title: "My CCtalk Courses",
-              show: this.$l2 && this.$l2.code === 'en',
+              show: this.$l2 && this.$l2.code === "en",
             },
             {
               name: "logout",
@@ -382,7 +393,11 @@ export default {
             {
               path: this.moviesPath,
               icon: "fa fa-film",
-              title: `Movies`,
+              title: `Movies ${
+                this.stats && this.stats
+                  ? "(" + this.$n(this.stats.movies) + ")"
+                  : ""
+              }`,
               show: this.moviesPath,
             },
             {
@@ -406,18 +421,30 @@ export default {
             {
               path: this.musicPath,
               icon: "fa fa-music",
-              title: `Songs`,
+              title: `Songs ${
+                this.stats && this.stats
+                  ? "(" + this.$n(this.stats.music) + ")"
+                  : ""
+              }`,
               show: this.musicPath,
             },
             {
               path: this.newsPath,
               icon: "fa fa-newspaper",
-              title: `News`,
+              title: `News ${
+                this.stats && this.stats
+                  ? "(" + this.$n(this.stats.news) + ")"
+                  : ""
+              }`,
               show: this.newsPath,
             },
             {
               name: "youtube-browse",
-              title: "Newly Added",
+              title: `Newly Added ${
+                this.stats && this.stats
+                  ? "(" + this.$n(this.stats.newVideos) + ")"
+                  : ""
+              }`,
               icon: "fa fa-play",
               show: true,
             },
@@ -914,9 +941,9 @@ export default {
           if (this.bottom && this.collapsed) {
             var currentScrollPos = window.pageYOffset;
             if (prevScrollpos > currentScrollPos + 5) {
-              this.hidden = false
+              this.hidden = false;
             } else if (prevScrollpos < currentScrollPos - 5) {
-              this.hidden = true
+              this.hidden = true;
             }
             prevScrollpos = currentScrollPos;
           }
@@ -931,6 +958,11 @@ export default {
         this.$store.state.phrasebooks.phrasebooks &&
         this.$store.state.phrasebooks.phrasebooks[this.l2.code] &&
         this.$store.state.phrasebooks.phrasebooks[this.l2.code].length > 0;
+    },
+    checkStats() {
+      this.stats =
+        this.$store.state.stats.stats &&
+        this.$store.state.stats.stats[this.l2.code];
     },
     checkShows() {
       let hasTVShows =
