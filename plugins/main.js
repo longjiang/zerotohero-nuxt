@@ -156,6 +156,13 @@ export default async ({ app, store, route }, inject) => {
     }
   })
   inject('directus', {
+    async countShowEpisodes(showType, showId, l2Id) {
+      let tableSuffix = Config.youtubeVideosTableName(l2Id).replace(`${Config.wiki}items/youtube_videos`, '')
+      let res = await axios.get(
+        `https://db2.zerotohero.ca/count.php?table_suffix=${tableSuffix}&lang_id=${l2Id}&type=${showType}&id=${showId}`
+      );
+      if (res && res.data) return res.data
+    },
     async getRandomEpisodeYouTubeId(langId, type) {
       let showFilter = type ? `&filter[${type}][nnull]=1` : "";
       let randBase64Char = Helper.randBase64(1);

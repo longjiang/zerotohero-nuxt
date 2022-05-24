@@ -94,6 +94,7 @@
           :showType="showType"
           :skin="skin"
           :show="show"
+          :largeEpisodeCount="largeEpisodeCount"
           class="mt-3"
         />
       </div>
@@ -152,6 +153,7 @@
           :episodes="episodes"
           :show="show"
           :showType="showType"
+          :largeEpisodeCount="largeEpisodeCount"
           class="mb-5"
         />
         <VideoAdmin
@@ -189,6 +191,9 @@ export default {
     },
     episodes: {
       type: Array,
+    },
+    largeEpisodeCount: {
+      type: Number, // Mannually set the number of episode displayed in the episode navigator
     },
     layout: {
       type: String,

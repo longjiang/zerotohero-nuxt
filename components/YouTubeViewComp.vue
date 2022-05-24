@@ -55,6 +55,7 @@
         :forcePortrait="false"
         :startLineIndex="startLineIndex"
         :layout="layout"
+        :largeEpisodeCount="largeEpisodeCount"
         @ended="updateEnded"
         @prev="goToPreviousEpisode"
         @next="goToNextEpisode"
@@ -72,6 +73,7 @@ import Helper from "@/lib/helper";
 import DateHelper from "@/lib/date-helper";
 import Config from "@/lib/config";
 import Vue from "vue";
+import { mapState } from "vuex";
 
 export default {
   props: {
@@ -106,9 +108,11 @@ export default {
       startLineIndex: 0,
       starttime: 0,
       video: undefined,
+      largeEpisodeCount: undefined,
     };
   },
   computed: {
+    ...mapState("stats", ["stats"]),
     landscape() {
       if (this.forcePortrait) return false;
       if (process.browser && this.viewportWidth && this.viewportHeight) {
@@ -239,34 +243,86 @@ export default {
     async show() {
       console.log("YouTube View: 📀 Show changed, getting episodes...");
       if (this.show) {
+        let videos = [];
         // News and YouTube channels are sorted by date
         // Audiobooks and TV Shows are sorted by title
-        let sort = "-date";
-        if (this.showType === "tv_show" || this.show.audiobook) sort = "title";
-        let response = await this.$authios.get(
-          `${Config.youtubeVideosTableName(this.$l2.id)}?filter[l2][eq]=${
-            this.$l2.id
-          }&filter[${this.showType}][eq]=${
-            this.show.id
-          }&sort=${sort}&fields=youtube_id&timestamp=${
-            this.$adminMode ? Date.now() : 0
-          }&limit=100`
-        );
-        if (response.data && response.data.data) {
-          let videos = response.data.data;
-          videos = Helper.uniqueByValue(videos, "youtube_id");
-          // If the episodes don't include the current video, we prepend it.
-          let episodeIndex = videos.findIndex(v => v.youtube_id === this.video.youtube_id)
-          if (episodeIndex < 0) videos = [this.video, ...videos]
-          this.episodes = videos;
+        let limit = 50;
+        let sort =
+          this.showType === "tv_show" || this.show.audiobook
+            ? "title"
+            : "-date";
+        let fields = "youtube_id,title,date";
+        let timestamp = this.$adminMode ? Date.now() : 0;
+        let params = { limit, sort, fields, timestamp };
+        params[`filter[${this.showType}][eq]`] = this.show.id;
+        let episodeCount = 0;
+        if (this.stats && this.stats[this.$l2.code]) {
+          // Music, Movies, News
+          episodeCount =
+            this.stats[this.$l2.code][this.show.title.toLowerCase()] || 0; // Most likely undefined
         }
+        // We assume that this is a LONG show with hundreds or even thousands of episodes (like News, Music, or some TV station show
+        // Let's grab the videos immediately PRIOR and AFTER the current video, so the user can eventually paginate through all the episodes.
+        // If sort is '-date', the user wants to see contents that are around the same date.
+        // If sort is 'title', the user wants to see contents with similar alpha-sorted titles
+
+        if (episodeCount < 1) {
+          try {
+            episodeCount = await this.$directus.countShowEpisodes(
+              this.showType,
+              this.show.id,
+              this.$l2.id
+            );
+          } catch (err) {
+            print(err);
+          }
+        }
+
+        if (episodeCount > limit && this.$refs.youtube)
+          this.largeEpisodeCount = episodeCount;
+
+        let postParams = Object.assign({}, params);
+        if (episodeCount > limit) {
+          if (sort === "title") {
+            postParams["filter[title][gt]"] = this.video.title;
+          }
+          if (sort === "-date") {
+            postParams["filter[date][lt]"] = this.video.date;
+          }
+        }
+        let response;
+        try {
+          response = await axios.get(
+            Config.youtubeVideosTableName(this.$l2.id) +
+              "?" +
+              Helper.queryString(postParams)
+          );
+          if (response.data && response.data.data) {
+            videos = [...videos, ...response.data.data];
+          }
+        } catch (err) {
+          console.log(err);
+        }
+
+        // Make sure this video is included in the collection
+        videos = [this.video, ...videos];
+        videos = Helper.uniqueByValue(videos, "youtube_id");
+        if (sort === "-date") {
+          videos = videos.sort((a, b) => b.date.localeCompare(a.date));
+        } else {
+          videos = videos.sort((a, b) => a.title.localeCompare(b.title));
+        }
+        this.episodes = videos;
       }
     },
   },
   methods: {
     goToPreviousEpisode() {
       if (this.previousEpisode)
-        this.$router.push({ name: "youtube-view", params: this.previousEpisode });
+        this.$router.push({
+          name: "youtube-view",
+          params: this.previousEpisode,
+        });
     },
     goToNextEpisode() {
       if (this.nextEpisode)
@@ -287,7 +343,8 @@ export default {
           l2Id: this.$l2.id,
         });
         // Go to next video
-        if (this.nextEpisode) this.$router.push({name: 'youtube-view', params: this.nextEpisode});
+        if (this.nextEpisode)
+          this.$router.push({ name: "youtube-view", params: this.nextEpisode });
       } catch (err) {
         console.log(err);
       }
@@ -365,9 +422,9 @@ export default {
         response = await this.$authios.get(
           `${Config.youtubeVideosTableName(
             this.$l2.id
-          )}?filter[youtube_id][eq]=${this.youtube_id}&filter[l2][eq]=${
-            this.$l2.id
-          }&fields=channel_id,id,l2,lesson,level,notes,subs_l1,subs_l2,title,topic,youtube_id,tv_show.*,talk.*&timestamp=${
+          )}?filter[youtube_id][eq]=${
+            this.youtube_id
+          }&fields=*,tv_show.*,talk.*&timestamp=${
             this.$adminMode ? Date.now() : 0
           }`
         );
@@ -443,7 +500,11 @@ export default {
           !this.$refs.youtube.showSubsEditing &&
           !this.$refs.youtube.enableTranslationEditing
         ) {
-          if (this.nextEpisode) this.$router.push({name: 'youtube-view', params: this.nextEpisode});
+          if (this.nextEpisode)
+            this.$router.push({
+              name: "youtube-view",
+              params: this.nextEpisode,
+            });
         }
       }
     },

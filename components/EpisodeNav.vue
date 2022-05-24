@@ -47,9 +47,10 @@
       "
     >
       {{ show.title }}
+      {{ largeEpisodeCount ? "(" + $n(largeEpisodeCount) + ")" : "" }}
     </router-link>
     <router-link
-      v-if="episodes && episodes.length && show"
+      v-if="episodes && episodes.length && show && !largeEpisodeCount"
       :to="{
         name: 'show',
         params: {
@@ -59,7 +60,7 @@
       }"
       class="small pr-2"
     >
-      {{ episodeIndex + 1 }} / {{ episodes.length }}
+      {{ episodeIndex + 1 }} / {{ $n(episodes.length) }}
     </router-link>
     <router-link
       v-if="nextEpisode"
@@ -104,6 +105,9 @@ export default {
     },
     showType: {
       type: String,
+    },
+    largeEpisodeCount: {
+      type: Number, // Mannually set the number of episode displayed in the episode navigator
     },
   },
   data() {
