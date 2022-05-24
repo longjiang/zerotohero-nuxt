@@ -80,20 +80,14 @@
                 <b-button
                   variant="unstyled text-white font-weight-bold"
                   @click="scrollTo('#englishLanguageList')"
-                  style="
-                    font-size: 1.2rem;
-                    text-shadow: 0px 1px 8px black;
-                  "
+                  style="font-size: 1.2rem; text-shadow: 0px 1px 8px black"
                 >
                   Learn English >
                 </b-button>
                 <b-button
                   variant="unstyled text-white font-weight-bold"
                   @click="scrollTo('#chineseLanguageList')"
-                  style="
-                    font-size: 1.2rem;
-                    text-shadow: 0px 1px 8px black;
-                  "
+                  style="font-size: 1.2rem; text-shadow: 0px 1px 8px black"
                 >
                   汉语界面 >
                 </b-button>
@@ -110,25 +104,27 @@
                 </a>
                 .
               </p>
-              <p class="blurb-secondary" v-if="randomLanguage">
-                And yes, we have
-                <router-link
-                  :to="`/en/${this.randomLanguage.code}/all-media`"
-                  class="blurb-highlight"
-                >
-                  {{ this.randomLanguage.name }}!
-                  <LanguageFlag
-                    v-if="randomLanguage"
-                    :language="randomLanguage"
-                    :autocycle="true"
-                    style="
-                      position: relative;
-                      bottom: 0.2rem;
-                      transform: scale(0.75);
-                    "
-                  />
-                </router-link>
-              </p>
+              <client-only>
+                <p class="blurb-secondary" v-if="randomLanguage">
+                  And yes, we have
+                  <router-link
+                    :to="`/en/${this.randomLanguage.code}/all-media`"
+                    class="blurb-highlight"
+                  >
+                    {{ this.randomLanguage.name }}!
+                    <LanguageFlag
+                      v-if="randomLanguage"
+                      :language="randomLanguage"
+                      :autocycle="true"
+                      style="
+                        position: relative;
+                        bottom: 0.2rem;
+                        transform: scale(0.75);
+                      "
+                    />
+                  </router-link>
+                </p>
+              </client-only>
             </div>
           </div>
         </div>
