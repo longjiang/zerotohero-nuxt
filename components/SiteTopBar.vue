@@ -23,7 +23,7 @@
           <i class="fas fa-chevron-right"></i>
         </b-button>
         <div
-          class="d-inline-block ml-2"
+          class="d-inline-block"
           @mouseover="cycleFlags"
           @mouseleave="stopCycling"
         >
@@ -44,6 +44,7 @@
               :key="`top-bar-flag-${$l2.code}`"
               :autocycle="false"
               :language="$l2"
+              class="ml-2"
             />
             <span
               :class="`${
@@ -59,7 +60,7 @@
         </div>
       </div>
       <client-only>
-        <AnnotationSettings v-if="$l2 && params.sm" variant="toolbar" />
+        <AnnotationSettings v-if="$l2 && params.md" variant="toolbar" />
       </client-only>
       <template>
         <div>
@@ -84,7 +85,7 @@
             </span>
           </router-link>
           <span
-            style="color: #ccc; cursor: pointer; margin-left: 0.5rem"
+            style="color: #ccc; cursor: pointer; margin-left: 1rem; margin-right: 0.5rem; position: relative; bottom: -0.1rem;"
             @click="collapseClick"
             :class="{ 'd-none': variant === 'menu-bar' }"
           >
