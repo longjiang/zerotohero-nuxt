@@ -88,16 +88,16 @@
                 </a>
                 .
               </p>
-              <p class="blurb-secondary">
+              <p class="blurb-secondary" v-if="randomLanguage">
                 And yes, we have
                 <router-link
-                  :to="`/en/${this.randomLanguage[1]}`"
+                  :to="`/en/${this.randomLanguage.code}/all-media`"
                   class="blurb-highlight"
                 >
-                  {{ this.randomLanguage[0] }}!
+                  {{ this.randomLanguage.name }}!
                   <LanguageFlag
-                    v-if="randomLanguageObj"
-                    :language="randomLanguageObj"
+                    v-if="randomLanguage"
+                    :language="randomLanguage"
                     :autocycle="true"
                     style="
                       position: relative;
@@ -135,64 +135,45 @@
                   :showSpeakers="false"
                   :showFeatures="false"
                   :keyword="langKeyword"
-                  :codes="[
-                    'ar',
-                    'az',
-                    'bn',
-                    'br',
-                    'bs',
-                    'bul',
-                    'cat',
-                    'ces',
-                    'cy',
-                    'dan',
-                    'de',
-                    'el',
-                    'en',
-                    'epo',
-                    'es',
-                    'eu',
-                    'fa',
-                    'fin',
-                    'fr',
-                    'gle',
-                    'glg',
-                    'hak',
-                    'he',
-                    'hi',
-                    'hun',
-                    'hr',
-                    'hye',
-                    'id',
-                    'isl',
-                    'it',
-                    'ja',
-                    'ko',
-                    'lat',
-                    'lav',
-                    'lit',
-                    'lzh',
-                    'msa',
-                    'nan',
-                    'nl',
-                    'no',
-                    'pa',
-                    'pl',
-                    'pt',
-                    'ron',
-                    'ru',
-                    'sr',
-                    'swe',
-                    'ta',
-                    'th',
-                    'tl',
-                    'tlh',
-                    'tr',
-                    'uk',
-                    'vi',
-                    'yue',
-                    'zh',
-                  ]"
+                  :codes="
+                    'ar,az,bn,br,bs,bul,cat,ces,cy,dan,de,el,en,epo,es,eu,fa,fin,fr,gle,glg,hak,he,hi,hun,hr,hye,id,isl,it,ja,ko,lat,lav,lit,lzh,msa,nan,nl,no,pa,pl,pt,ron,ru,sr,swe,ta,th,tl,tlh,tr,uk,vi,yue,zh'.split(
+                      ','
+                    )
+                  "
+                  class="mt-4"
+                  :sort="true"
+                  :showFlags="true"
+                  variant="grid"
+                />
+                <div class="text-center mt-1 p-1">
+                  <router-link
+                    class="btn btn-success d-block"
+                    to="/language-map"
+                  >
+                    <i class="fas fa-globe-asia mr-1"></i>
+                    More languages
+                    <i class="ml-1 fas fa-chevron-right"></i>
+                  </router-link>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-4 mb-5" id="languageList">
+            <div class="col-sm-12">
+              <div class="home-card p-2">
+                <h5 class="text-center mt-3 mb-3">Learn English From</h5>
+                <div class="pl-2 pr-2">
+                  <b-form-input
+                    v-model="langKeyword"
+                    @compositionend.prevent.stop="() => false"
+                    placeholder="Search languages"
+                  />
+                </div>
+                <LanguageList
+                  :showSpeakers="false"
+                  :showFeatures="false"
+                  :keyword="langKeyword"
+                  :pairs="learnEnglishLanguagePairs"
                   class="mt-4"
                   :sort="true"
                   :showFlags="true"
@@ -495,243 +476,32 @@ export default {
       langKeyword: undefined,
       loaded: false,
       hasDashboard: false,
-      randomLanguage: undefined,
-      randomLanguageObj: undefined,
-      languagesWithVideos: [
-        ["Chinese", "zho"],
-        ["English", "eng"],
-        ["Korean", "kor"],
-        ["German", "deu"],
-        ["Italian", "ita"],
-        ["Japanese", "jpn"],
-        ["French", "fra"],
-        ["Spanish", "spa"],
-        ["Catalan", "cat"],
-        ["Russian", "rus"],
-        ["Vietnamese", "vie"],
-        ["Turkish", "tur"],
-        ["Yue Chinese", "yue"],
-        ["Ukrainian", "ukr"],
-        ["Dutch", "nld"],
-        ["Arabic", "ara"],
-        ["Norwegian", "nor"],
-        ["Modern Greek", "ell"],
-        ["Swedish", "swe"],
-        ["Mandarin Chinese", "cmn"],
-        ["Hindi", "hin"],
-        ["Polish", "pol"],
-        ["Min Nan Chinese", "nan"],
-        ["Persian", "fas"],
-        ["American Sign Language", "ase"],
-        ["Indonesian", "ind"],
-        ["Portuguese", "por"],
-        ["Thai", "tha"],
-        ["Hungarian", "hun"],
-        ["Georgian", "kat"],
-        ["Romanian", "ron"],
-        ["Serbian", "srp"],
-        ["Tagalog", "tgl"],
-        ["Malay", "msa"],
-        ["Wolof", "wol"],
-        ["Tamil", "tam"],
-        ["Esperanto", "epo"],
-        ["Hebrew", "heb"],
-        ["Slovak", "slk"],
-        ["Croatian", "hrv"],
-        ["Welsh", "cym"],
-        ["Armenian", "hye"],
-        ["Bengali", "ben"],
-        ["Gujarati", "guj"],
-        ["Bulgarian", "bul"],
-        ["Danish", "dan"],
-        ["Icelandic", "isl"],
-        ["Marathi", "mar"],
-        ["Czech", "ces"],
-        ["Kazakh", "kaz"],
-        ["Mongolian", "mon"],
-        ["Latvian", "lav"],
-        ["Klingon", "tlh"],
-        ["Galician", "glg"],
-        ["Estonian", "est"],
-        ["Breton", "bre"],
-        ["Lithuanian", "lit"],
-        ["Latin", "lat"],
-        ["Macedonian", "mkd"],
-        ["Azerbaijani", "aze"],
-        ["Finnish", "fin"],
-        ["Sundanese", "sun"],
-        ["Panjabi", "pan"],
-        ["Montenegrin", "cnr"],
-        ["Literary Chinese", "lzh"],
-        ["Indian Sign Language", "ins"],
-        ["Telugu", "tel"],
-        ["Serbo-Croatian", "hbs"],
-        ["Albanian", "sqi"],
-        ["Urdu", "urd"],
-        ["Belarusian", "bel"],
-        ["Tibetan", "bod"],
-        ["Irish", "gle"],
-        ["Burmese", "mya"],
-        ["Assamese", "asm"],
-        ["Kannada", "kan"],
-        ["Uzbek", "uzb"],
-        ["Hakka Chinese", "hak"],
-        ["Maori", "mri"],
-        ["Maltese", "mlt"],
-        ["Standard Arabic", "arb"],
-        ["Malayalam", "mal"],
-        ["Luxembourgish", "ltz"],
-        ["Central Kurdish", "ckb"],
-        ["Ancient Greek", "grc"],
-        ["Scottish Gaelic", "gla"],
-        ["Amis", "ami"],
-        ["Lao", "lao"],
-        ["Khmer", "khm"],
-        ["Tatar", "tat"],
-        ["Faroese", "fao"],
-        ["Sanskrit", "san"],
-        ["Quechua", "que"],
-        ["Yoruba", "yor"],
-        ["Norwegian Sign Language", "nsl"],
-        ["Samoan", "smo"],
-        ["Sinhala", "sin"],
-        ["Somali", "som"],
-        ["Javanese", "jav"],
-        ["Kurdish", "kur"],
-        ["Slovenian", "slv"],
-        ["Bashkir", "bak"],
-        ["Afrikaans", "afr"],
-        ["Amharic", "amh"],
-        ["Cebuano", "ceb"],
-        ["Kirghiz", "kir"],
-        ["French Sign Language", "fsl"],
-        ["Basque", "eus"],
-        ["Western Frisian", "fry"],
-        ["Ancient Hebrew", "hbo"],
-        ["Wu Chinese", "wuu"],
-        ["Bosnian", "bos"],
-        ["Occitan", "oci"],
-        ["Sindhi", "snd"],
-        ["Kachin", "kac"],
-        ["Swahili", "swa"],
-        ["Yiddish", "yid"],
-        ["Nepali", "nep"],
-        ["Old Norse", "non"],
-        ["Tigrinya", "tir"],
-        ["Oromo", "orm"],
-        ["Dari", "prs"],
-        ["Saramaccan", "srm"],
-        ["Scots", "sco"],
-        ["Swiss German", "gsw"],
-        ["Crimean Tatar", "crh"],
-        ["Metlatónoc Mixtec", "mxv"],
-        ["Iranian Persian", "pes"],
-        ["Romansh", "roh"],
-        ["Malagasy", "mlg"],
-        ["Bhojpuri", "bho"],
-        ["Sicilian", "scn"],
-        ["Hiligaynon", "hil"],
-        ["Korean Sign Language", "kvk"],
-        ["Navajo", "nav"],
-        ["Coptic", "cop"],
-        ["Gothic", "got"],
-        ["Xiang Chinese", "hsn"],
-        ["Interlingua", "ina"],
-        ["Karelian", "krl"],
-        ["Lingala", "lin"],
-        ["Norwegian Bokmål", "nob"],
-        ["Abkhazian", "abk"],
-        ["Norwegian Nynorsk", "nno"],
-        ["Central Okinawan", "ryu"],
-        ["Xhosa", "xho"],
-        ["Yakut", "sah"],
-        ["Uighur", "uig"],
-        ["Zhuang", "zha"],
-        ["Zulu", "zul"],
-        ["Ainu", "aib"],
-        ["Pu-Xian Chinese", "cpx"],
-        ["Guarani", "grn"],
-        ["Hani", "hni"],
-        ["Min Bei Chinese", "mnp"],
-        ["Pushto", "pus"],
-        ["Lower Silesian", "sli"],
-        ["Tajik", "tgk"],
-        ["Zuojiang Zhuang", "zzj"],
-        ["Old English", "ang"],
-        ["Kashubian", "csb"],
-        ["Hausa", "hau"],
-        ["Old Japanese", "ojp"],
-        ["Northern Sami", "sme"],
-        ["Ainu", "ain"],
-        ["Jinyu Chinese", "cjy"],
-        ["Kalaallisut", "kal"],
-        ["Ladino", "lad"],
-        ["Achuar-Shiwiar", "acu"],
-        ["Official Aramaic", "arc"],
-        ["Lower Sorbian", "dsb"],
-        ["Dzongkha", "dzo"],
-        ["Manx", "glv"],
-        ["Sichuan Yi", "iii"],
-        ["S'gaw Karen", "ksw"],
-        ["Late Middle Chinese", "ltc"],
-        ["Sumerian", "sux"],
-        ["West Yugur", "ybe"],
-        ["Akkadian", "akk"],
-        ["A'ou", "aou"],
-        ["Awadhi", "awa"],
-        ["Aymara", "aym"],
-        ["Friulian", "fur"],
-        ["Chhattisgarhi", "hne"],
-        ["Kabyle", "kab"],
-        ["Kpelle", "kpe"],
-        ["Maithili", "mai"],
-        ["Maru", "mhx"],
-        ["N'Ko", "nqo"],
-        ["Saint Lucian Creole French", "acf"],
-        ["Burushaski", "bsk"],
-        ["Basay", "byq"],
-        ["Min Zhong Chinese", "czo"],
-        ["Gan Chinese", "gan"],
-        ["Guinea Kpelle", "gkp"],
-        ["Old High German", "goh"],
-        ["Igbo", "ibo"],
-        ["Inupiaq", "ipk"],
-        ["Minangkabau", "min"],
-        ["Manipuri", "mni"],
-        ["Old Chinese", "och"],
-        ["Oriya", "ori"],
-        ["Pijin", "pis"],
-        ["Piemontese", "pms"],
-        ["Sardinian", "srd"],
-        ["Swati", "ssw"],
-        ["Venetian", "vec"],
-        ["Volapük", "vol"],
-        ["Liberia Kpelle", "xpe"],
-        ["Zuojiang Zhuang", "zzj"],
-        ["Egyptian Arabic", "arz"],
-        ["Middle English", "enm"],
-        ["Jamaican Creole English", "jam"],
-        ["Konkani", "kok"],
-        ["Lakota", "lkt"],
-        ["Oscan", "osc"],
-        ["Sindarin", "sjn"],
-        ["Tsakonian", "tsd"],
-      ],
+      // The following list is SORTED by number of videos available.
+      languagesWithVideos:
+        "zho,eng,kor,deu,ita,jpn,fra,spa,cat,rus,vie,tur,yue,ukr,nld,ara,nor,ell,swe,cmn,hin,pol,nan,fas,ase,ind,por,tha,hun,kat,ron,srp,tgl,msa,wol,tam,epo,heb,slk,hrv,cym,hye,ben,guj,bul,dan,isl,mar,ces,kaz,mon,lav,tlh,glg,est,bre,lit,lat,mkd,aze,fin,sun,pan,cnr,lzh,ins,tel,hbs,sqi,urd,bel,bod,gle,mya,asm,kan,uzb,hak,mri,mlt,arb,mal,ltz,ckb,grc,gla,ami,lao,khm,tat,fao,san,que,yor,nsl,smo,sin,som,jav,kur,slv,bak,afr,amh,ceb,kir,fsl,eus,fry,hbo,wuu,bos,oci,snd,kac,swa,yid,nep,non,tir,orm,prs,srm,sco,gsw,crh,mxv,pes,roh,mlg,bho,scn,hil,kvk,nav,cop,got,hsn,ina,krl,lin,nob,abk,nno,ryu,xho,sah,uig,zha,zul,aib,cpx,grn,hni,mnp,pus,sli,tgk,zzj,ang,csb,hau,ojp,sme,ain,cjy,kal,lad,acu,arc,dsb,dzo,glv,iii,ksw,ltc,sux,ybe,akk,aou,awa,aym,fur,hne,kab,kpe,mai,mhx,nqo,acf,bsk,byq,czo,gan,gkp,goh,ibo,ipk,min,mni,och,ori,pis,pms,srd,ssw,vec,vol,xpe,zzj,arz,enm,jam,kok,lkt,osc,sjn,tsd".split(
+          ","
+        ),
     };
   },
-  created() {
-    this.randomLanguage = this.randomArrayItem(
-      this.languagesWithVideos.slice(0, 141)
-    );
-    this.randomLanguageObj = this.language(this.randomLanguage[1]);
+  computed: {
+    learnEnglishLanguagePairs() {
+      return [];
+    },
+    randomLanguage() {
+      if (this.$languages) {
+        let randomLanguage = this.randomArrayItem(
+          this.languagesWithVideos.slice(0, 141)
+        );
+        let randomLanguageObj = this.$languages.getSmart(randomLanguage);
+        return randomLanguageObj;
+      }
+    },
   },
+  created() {},
   mounted() {
     this.loaded = true;
   },
   methods: {
-    language(code) {
-      if (this.$languages) return this.$languages.getSmart(code);
-    },
     scrollToLanguageList() {
       document.querySelector("#languageList").scrollIntoView({
         behavior: "smooth",
