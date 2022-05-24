@@ -26,13 +26,36 @@
                 margin-bottom: 2rem;
               "
             />
-            <h5 class="mb-4">Your {{ $l2.name }} Learning Progress</h5>
+            <h5 class="mb-2">{{ $auth.user.first_name }}’s {{ $l2.name }}-Learning Progress</h5>
+            <router-link
+              to="/"
+              class="text-success"
+              style="
+                font-size: 0.8em;
+                font-weight: bold;
+                margin-bottom: 2rem;
+                display: block;
+              "
+            >
+              <i class="fas fa-chevron-left"></i>
+              All languages
+            </router-link>
           </div>
         </div>
         <LanguageGoal :$l1="$l1" :$l2="$l2" />
         <div class="row mt-3">
           <div class="col-sm-12">
-            <LanguageProgress class="mt-3" :$l1="$l1" :$l2="$l2" :description="true" :dot="true" :edit="true" :animated="true" progressBarHeight="1.5rem" :progressBarShowValue="true" />
+            <LanguageProgress
+              class="mt-3"
+              :$l1="$l1"
+              :$l2="$l2"
+              :description="true"
+              :dot="true"
+              :edit="true"
+              :animated="true"
+              progressBarHeight="1.5rem"
+              :progressBarShowValue="false"
+            />
             <router-link
               :to="{ name: 'all-media' }"
               class="text-success mt-5 d-block"

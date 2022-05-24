@@ -102,6 +102,12 @@
         @show="onLanguagesModalShown"
       >
         <div class="languages-modal">
+          <div class="mb-3">
+            <router-link to="/" class="text-success">
+              <i class="fas fa-chevron-left"></i>
+              Back to home page
+            </router-link>
+          </div>
           <b-form-input
             v-model="keyword"
             @compositionend.prevent.stop="() => false"

@@ -92,7 +92,7 @@ export default {
 <style lang="scss" scoped>
 .language-overview-item {
   display: flex;
-  padding: 1rem;
+  padding: 1rem 0;
   color: #666;
   text-decoration: none;
   .language-flag-wrapper {

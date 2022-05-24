@@ -45,15 +45,11 @@
     </b-progress>
     <div class="bottom-labels">
       <div class="bottom-label-left">
-        <b class="text-success">
-          {{ Math.round((hours / hoursNeeded) * 100) }}%
+        <b class="" style="color: #e6a000">
+          {{ Math.round(hoursNeeded - hours) }}
         </b>
-        way to {{ goalText }}
+        hrs more to {{ goalText }}
       </div>
-      <span class="bottom-label-right">
-        remaining
-        <b class="text-warning">{{ Math.round(hoursNeeded - hours) }} hours</b>
-      </span>
     </div>
     <div v-if="description" class="description">
       <div v-if="$store.state.progress.progressLoaded">
@@ -151,7 +147,7 @@ export default {
     goalText() {
       let goal = this.levelObj(this.level + 1);
       if (goal) return goal.exam.name + " " + goal.level;
-      else return 'the “Next Level”'
+      else return "Mastery";
     },
   },
   data() {
@@ -206,7 +202,7 @@ export default {
 }
 
 .bottom-labels {
-  margin-top: 0.5rem;
+  margin-top: 0.4rem;
   .bottom-label-left {
     float: left;
   }
