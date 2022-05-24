@@ -428,13 +428,10 @@ export default {
 }
 
 .annotation-settings-toolbar {
-  font-size: 0.8rem;
-  padding: 0.1rem;
   display: inline-block;
   color: rgba(255, 255, 255, 0.6);
-  background-color: rgba(0, 0, 0, 0.6);
   border-radius: 0.2rem;
-  border: 1px solid #555;
-  line-height: 1.9;
+  position: relative;
+  bottom: -0.1rem;
 }
 </style>

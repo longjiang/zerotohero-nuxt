@@ -22,48 +22,17 @@
         >
           <i class="fas fa-chevron-right"></i>
         </b-button>
-      </div>
-      <template>
         <div
-          class="text-center"
+          class="d-inline-block ml-2"
           @mouseover="cycleFlags"
           @mouseleave="stopCycling"
         >
-          <!-- <router-link
-            to="/"
-            style="color: #ccc; cursor: pointer; margin-right: 0.5rem"
-            :class="{ 'd-none': variant === 'side-bar' }"
-          >
-            <i class="fas fa-chevron-left"></i>
-          </router-link> -->
-          <router-link class="link-unstyled" to="/">
-            <img
-              :class="`site-top-bar-logo ${
-                params.md === false ? 'd-none' : ''
-              }`"
-              src="/img/czh-icon.png"
-              style="height: 1.5rem; margin-right: 0.25rem"
-              data-not-lazy
-            />
-            <b :class="`text-white ${params.xlg === false ? 'd-none' : ''}`">
-              Zero to Hero
-            </b>
-          </router-link>
           <span
             :class="`text-white`"
             @click="showPlaylistModal"
             class="language-flag-and-name"
             style="cursor: pointer"
           >
-            <!-- <i
-              class="far fa-comment"
-              style="
-                opacity: 0.5;
-                font-size: 1.2em;
-                margin-left: 0.15rem;
-                margin-right: 0.15rem;
-              "
-            ></i> -->
             <LanguageFlag
               v-if="!(!flagCode || !$route.params.l2 || params.md === false)"
               ref="flag"
@@ -76,21 +45,6 @@
               :autocycle="false"
               :language="$l2"
             />
-            <i class="fas fa-cheveron-right" v-if="!flagCode"></i>
-            <span
-              style="font-weight: bold; color: white"
-              :class="`${!$route.params.l2 ? 'd-none' : ''} ${
-                params.md && params.lg === false ? '' : 'd-none'
-              } ml-1`"
-            >
-              {{ $route.params.l2 }}
-            </span>
-            <span
-              style="font-weight: bold; color: white"
-              :class="`${
-                !$route.params.l2 || params.xxlg === false ? 'd-none' : ''
-              } ml-1`"
-            ></span>
             <span
               :class="`${
                 !$route.params.l2 || params.md === false ? 'd-none' : ''
@@ -103,22 +57,24 @@
             </span>
           </span>
         </div>
+      </div>
+      <client-only>
+        <AnnotationSettings v-if="$l2 && params.sm" variant="toolbar" />
+      </client-only>
+      <template>
         <div>
-          <client-only>
-            <AnnotationSettings v-if="$l2 && params.sm" variant="toolbar" />
-          </client-only>
-          <!-- <router-link
-            :to="languageMapPath"
-            :class="`btn top-bar-button btn-unstyled link-unstyled ${
-              params.md === false ? 'd-none' : ''
-            }`"
+          <router-link
+            id="site-top-bar-saved-words"
+            :to="{ name: 'youtube-search' }"
+            :class="`btn top-bar-buttontop btn-unstyled link-unstyled mr-1`"
+            title="Search Videos"
           >
-            <i class="fas fa-globe-asia"></i>
-          </router-link> -->
+            <i class="fas fa-search"></i>
+          </router-link>
           <router-link
             id="site-top-bar-saved-words"
             :to="$auth.loggedIn ? { name: 'profile' } : { name: 'login' }"
-            :class="`btn top-bar-button btn-unstyled link-unstyled ml-1 ${
+            :class="`btn top-bar-button top-bar-user-button  btn-unstyled link-unstyled ml-2 ${
               badge ? '' : 'd-none'
             }`"
           >
@@ -127,24 +83,6 @@
               {{ badge }}
             </span>
           </router-link>
-          <button
-            :class="`btn top-bar-button btn-unstyled ${
-              isPWA && canShare() && params.lg ? '' : 'd-none'
-            }`"
-            @click="share"
-            style="color: #ccc"
-          >
-            <i class="fa fa-share"></i>
-          </button>
-          <button
-            :class="`btn top-bar-button btn-unstyled ${
-              isPWA && params.lg ? '' : 'd-none'
-            }`"
-            @click="reload"
-            style="color: #ccc"
-          >
-            <i class="fas fa-sync-alt"></i>
-          </button>
           <span
             style="color: #ccc; cursor: pointer; margin-left: 0.5rem"
             @click="collapseClick"
@@ -176,64 +114,6 @@
             :keyword="keyword"
             variant="grid"
             :showFeatures="false"
-            :codes="[
-              'ar',
-              'az',
-              'bn',
-              'br',
-              'bs',
-              'bul',
-              'cat',
-              'ces',
-              'cy',
-              'dan',
-              'de',
-              'el',
-              'en',
-              'epo',
-              'es',
-              'eu',
-              'fa',
-              'fin',
-              'fr',
-              'gle',
-              'glg',
-              'hak',
-              'he',
-              'hi',
-              'hun',
-              'hr',
-              'hye',
-              'id',
-              'isl',
-              'it',
-              'ja',
-              'ko',
-              'lat',
-              'lav',
-              'lit',
-              'lzh',
-              'msa',
-              'nan',
-              'nl',
-              'no',
-              'pa',
-              'pl',
-              'pt',
-              'ron',
-              'ru',
-              'sr',
-              'swe',
-              'ta',
-              'th',
-              'tl',
-              'tlh',
-              'tr',
-              'uk',
-              'vi',
-              'yue',
-              'zh',
-            ]"
             :sort="true"
             :showFlags="true"
           />
@@ -377,7 +257,7 @@ export default {
   .saved-words-count {
     position: absolute;
     font-size: 0.5em;
-    bottom: 5px;
+    bottom: 18px;
     top: inherit;
     right: -5px;
   }
@@ -423,5 +303,18 @@ export default {
     bottom: -0.15rem;
     text-align: left;
   }
+}
+
+.top-bar-user-button {
+  background: #5a5a5a;
+  width: 2.3rem;
+  height: 2.3rem;
+  display: inline-block;
+  vertical-align: middle;
+  border-radius: 100%;
+  font-size: 1.2rem;
+  line-height: 3rem;
+  position: relative;
+  bottom: 0.07rem;
 }
 </style>

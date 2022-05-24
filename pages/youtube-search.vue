@@ -16,7 +16,7 @@
 </router>
 <template>
   <div class="main main-dark">
-    <div class="container pt-5 pb-5 youtube-search">
+    <div class="container pt-3 pb-5 youtube-search">
       <div style="font-size: 1.5rem; color: white; text-align: center">
         <img
           src="/img/czh-icon.png"
