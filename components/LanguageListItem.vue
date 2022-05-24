@@ -62,17 +62,23 @@
       <div class="flag-badge-wrapper" v-if="showFlags">
         <div class="badge" v-if="badge && badge !== 0">{{ badge }}</div>
         <LanguageFlag :language="language" ref="flag" class="l2-flag" />
-        <LanguageFlag :language="from" ref="l1Flag" class="l1-flag" :autocycle="true" />
+        <LanguageFlag
+          :language="from"
+          ref="l1Flag"
+          class="l1-flag"
+          :autocycle="true"
+          v-if="from && from.code !== 'en'"
+        />
       </div>
 
       <span class="language-list-item-name">
-        {{ languageName(language) }}
+        {{ $languages.translate(languageName(language), from["iso639-3"]) }}
         <div class="badge" v-if="!showFlags && badge && badge !== 0">
           {{ badge }}
         </div>
       </span>
-      <span class="language-list-item-name">
-        from {{ languageName(from) }}
+      <span class="language-list-item-from-name" v-if="from && from.code !== 'en'">
+        ({{ $languages.translate(`from ${this.languageName(from)}`, from['iso639-3']) }})
       </span>
       <span
         v-if="keyword && language.otherNames.length > 0"
@@ -226,11 +232,16 @@ a:active {
       border-radius: 0.5rem;
       background-color: #eee;
       cursor: pointer;
+      .language-list-item-from-name,
       .language-list-item-name {
         display: block;
         font-weight: bold;
         line-height: 1.2;
         font-size: 0.75em;
+      }
+      .language-list-item-from-name {
+        font-weight: inherit;
+        margin-top: 0.1rem;
       }
       .l1-flag {
         transform: scale(0.6);

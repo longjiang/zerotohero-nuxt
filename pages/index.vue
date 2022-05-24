@@ -490,8 +490,10 @@ export default {
         let langPairs = langsWithEnDict.map((l1) => {
           return { l1, l2: english };
         });
-        console.log(langPairs);
-        return langPairs;
+        return langPairs.sort(
+          (a, b) => a.l1.name.localeCompare(b.l1.name),
+          "en"
+        );
       }
     },
     learnFromChineseLanguagePairs() {
@@ -500,7 +502,6 @@ export default {
         let langPairs = Object.keys(chinese.dictionaries).map((l2) => {
           return { l1: chinese, l2: this.$languages.getSmart(l2) };
         });
-        console.log(langPairs);
         return langPairs;
       }
     },
