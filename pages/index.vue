@@ -96,6 +96,7 @@
                 >
                   {{ this.randomLanguage[0] }}!
                   <LanguageFlag
+                    v-if="randomLanguageObj"
                     :language="randomLanguageObj"
                     :autocycle="true"
                     style="
@@ -122,7 +123,7 @@
           <div class="row mt-4 mb-5" id="languageList">
             <div class="col-sm-12">
               <div class="home-card p-2">
-                <h5 class="text-center mt-3 mb-3">Choose Your Language</h5>
+                <h5 class="text-center mt-3 mb-3">I want to learn …</h5>
                 <div class="pl-2 pr-2">
                   <b-form-input
                     v-model="langKeyword"

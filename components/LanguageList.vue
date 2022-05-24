@@ -5,8 +5,8 @@
         <div class="container" v-if="variant === 'grid'">
           <div class="row">
             <div
-              v-for="(language, index) in languages"
-              :key="`lang-${language.code}-${index}`"
+              v-for="(languagePair, index) in languagePairs"
+              :key="`lang-${languagePair.l2.code}-${index}`"
               :class="`${
                 params.xs
                   ? 'col-4'
@@ -24,11 +24,12 @@
                 :showFeatures="showFeatures"
                 :variant="variant"
                 :showSpeakers="showSpeakers"
-                :language="language"
+                :language="languagePair.l2"
+                :from="languagePair.l1"
                 :showCode="showCode"
                 :badge="
-                  (savedWords[language.code] || []).length +
-                  (savedPhrases[language.code] || []).length
+                  (savedWords[languagePair.l2.code] || []).length +
+                  (savedPhrases[languagePair.l2.code] || []).length
                 "
               />
             </div>
@@ -36,17 +37,18 @@
         </div>
         <div v-else>
           <LanguageListItem
-            v-for="(language, index) in languages"
-            :key="`lang-${language.code}-${index}`"
+            v-for="(languagePair, index) in languagePairs"
+            :key="`lang-${languagePair.l2.code}-${index}`"
             :showFlags="showFlags"
             :showFeatures="showFeatures"
             :variant="variant"
             :showSpeakers="showSpeakers"
-            :language="language"
+            :language="languagePair.l2"
+            :from="languagePair.l1"
             :showCode="showCode"
             :badge="
-              (savedWords[language.code] || []).length +
-              (savedPhrases[language.code] || []).length
+              (savedWords[languagePair.l2.code] || []).length +
+              (savedPhrases[languagePair.l2.code] || []).length
             "
           />
         </div>
@@ -65,29 +67,32 @@ export default {
     ContainerQuery,
   },
   props: {
-    l1: {
-      default: "en",
-    },
-    showFlags: {
-      default: false,
-    },
-    showFeatures: {
-      default: true,
-    },
     langs: {
       default: undefined,
     },
     codes: {
       default: undefined,
     },
-    sort: {
-      default: false,
+    pairs: {
+      default: undefined, // pairs of l1 and l2s: {l1: {name: 'English', ...}, l2: {name: 'Chinese', ...}}
+    },
+    l1: {
+      default: "en",
     },
     keyword: {
       type: String,
     },
+    sort: {
+      default: false,
+    },
     singleColumn: {
       default: false,
+    },
+    showFlags: {
+      default: false,
+    },
+    showFeatures: {
+      default: true,
     },
     showSpeakers: {
       type: Boolean,
@@ -176,6 +181,18 @@ export default {
         );
       }
       return languages;
+    },
+    languagePairs() {
+      if (this.pairs) return this.pairs;
+      else {
+        let en = this.$languages.getSmart("en");
+        return this.languages.map((l2) => {
+          return {
+            l1: en,
+            l2,
+          };
+        });
+      }
     },
   },
   methods: {
