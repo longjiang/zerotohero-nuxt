@@ -64,7 +64,7 @@
               <div class="mt-4 mb-4">
                 <b-button
                   class="btn btn-success"
-                  @click="scrollToLanguageList"
+                  @click="scrollTo('#mainLanguageList')"
                   style="
                     font-size: 1.2rem;
                     padding: 0.5rem 1.5rem;
@@ -74,6 +74,28 @@
                 >
                   Choose Your Language
                   <i class="fa fa-chevron-right ml-2"></i>
+                </b-button>
+              </div>
+              <div>
+                <b-button
+                  variant="unstyled text-white font-weight-bold"
+                  @click="scrollTo('#englishLanguageList')"
+                  style="
+                    font-size: 1.2rem;
+                    text-shadow: 0px 1px 8px black;
+                  "
+                >
+                  Learn English >
+                </b-button>
+                <b-button
+                  variant="unstyled text-white font-weight-bold"
+                  @click="scrollTo('#chineseLanguageList')"
+                  style="
+                    font-size: 1.2rem;
+                    text-shadow: 0px 1px 8px black;
+                  "
+                >
+                  汉语界面 >
                 </b-button>
               </div>
               <p class="blurb-secondary">
@@ -120,10 +142,46 @@
           </div>
         </div>
         <client-only>
+          <div class="row mt-4 mb-5" id="englishLanguageList">
+            <div class="col-sm-12">
+              <div class="home-card p-2">
+                <h5 class="text-center mt-3 mb-3">Learn English from...</h5>
+                <LanguageList
+                  :showSpeakers="false"
+                  :showFeatures="false"
+                  :keyword="langKeyword"
+                  :pairs="learnEnglishLanguagePairs"
+                  class="mt-4"
+                  :sort="true"
+                  :showFlags="true"
+                  variant="grid"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="row mt-4 mb-5" id="chineseLanguageList">
+            <div class="col-sm-12">
+              <div class="home-card p-2">
+                <h5 class="text-center mt-3 mb-3">可用汉语界面学习的语言</h5>
+                <LanguageList
+                  :showSpeakers="false"
+                  :showFeatures="false"
+                  :keyword="langKeyword"
+                  :pairs="learnFromChineseLanguagePairs"
+                  class="mt-4"
+                  :sort="true"
+                  :showFlags="true"
+                  variant="grid"
+                />
+              </div>
+            </div>
+          </div>
           <div class="row mt-4 mb-5" id="mainLanguageList">
             <div class="col-sm-12">
               <div class="home-card p-2">
-                <h5 class="text-center mt-3 mb-3">I want to learn …</h5>
+                <h5 class="text-center mt-3 mb-3">
+                  I speak English and want to learn …
+                </h5>
                 <div class="pl-2 pr-2">
                   <b-form-input
                     v-model="langKeyword"
@@ -155,43 +213,9 @@
               </div>
             </div>
           </div>
-          <div class="row mt-4 mb-5">
-            <div class="col-sm-12">
-              <div class="home-card p-2">
-                <h5 class="text-center mt-3 mb-3">Learn English From</h5>
-                <LanguageList
-                  :showSpeakers="false"
-                  :showFeatures="false"
-                  :keyword="langKeyword"
-                  :pairs="learnEnglishLanguagePairs"
-                  class="mt-4"
-                  :sort="true"
-                  :showFlags="true"
-                  variant="grid"
-                />
-              </div>
-            </div>
-          </div>
-          <div class="row mt-4 mb-5">
-            <div class="col-sm-12">
-              <div class="home-card p-2">
-                <h5 class="text-center mt-3 mb-3">用汉语学习</h5>
-                <LanguageList
-                  :showSpeakers="false"
-                  :showFeatures="false"
-                  :keyword="langKeyword"
-                  :pairs="learnFromChineseLanguagePairs"
-                  class="mt-4"
-                  :sort="true"
-                  :showFlags="true"
-                  variant="grid"
-                />
-              </div>
-            </div>
-          </div>
         </client-only>
 
-        <div class="row">
+        <div class="row mb-3">
           <div class="col-sm-6 mb-4">
             <div class="home-card">
               <router-link to="/en/zh/all-media">
@@ -520,8 +544,8 @@ export default {
     this.loaded = true;
   },
   methods: {
-    scrollToLanguageList() {
-      document.querySelector("#mainLanguageList").scrollIntoView({
+    scrollTo(selector) {
+      document.querySelector(selector).scrollIntoView({
         behavior: "smooth",
       });
     },

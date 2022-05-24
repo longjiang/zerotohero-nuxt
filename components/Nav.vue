@@ -393,68 +393,56 @@ export default {
             {
               path: this.moviesPath,
               icon: "fa fa-film",
-              title: `Movies ${
-                this.stats && this.stats
-                  ? "(" + this.$n(this.stats.movies) + ")"
-                  : ""
-              }`,
+              title: `Movies`,
+              count: this.stats ? this.stats.movies : undefined,
               show: this.moviesPath,
             },
             {
               name: "tv-shows",
               icon: "fa fa-tv",
-              title: `TV Shows (${this.tvShowsCount})`,
+              title: `TV Shows`,
+              count: this.tvShowsCount,
               show: this.tvShowsCount,
             },
             {
               name: "talks",
               icon: "fab fa-youtube",
-              title: `Channels (${this.talksCount})`,
+              title: `Channels`,
+              count: this.talksCount,
               show: this.talksCount,
             },
             {
               name: "audiobooks",
               icon: "fa fa-book-open",
-              title: `Audiobooks (${this.audioBooksCount})`,
+              title: `Audiobooks`,
+              count: this.audioBooksCount,
               show: this.audioBooksCount,
             },
             {
               path: this.musicPath,
               icon: "fa fa-music",
-              title: `Songs ${
-                this.stats && this.stats
-                  ? "(" + this.$n(this.stats.music) + ")"
-                  : ""
-              }`,
+              title: `Songs`,
+              count: this.stats ? this.stats.music : undefined,
               show: this.musicPath,
             },
             {
               path: this.newsPath,
               icon: "fa fa-newspaper",
-              title: `News ${
-                this.stats && this.stats
-                  ? "(" + this.$n(this.stats.news) + ")"
-                  : ""
-              }`,
+              title: `News`,
+              count: this.stats ? this.stats.news : undefined,
               show: this.newsPath,
             },
             {
               name: "youtube-browse",
-              title: `Newly Added ${
-                this.stats && this.stats
-                  ? "(" + this.$n(this.stats.newVideos) + ")"
-                  : ""
-              }`,
+              title: `Newly Added`,
+              count: this.stats ? this.stats.newVideos : undefined,
               icon: "fa fa-play",
               show: true,
             },
             {
               name: "youtube-search",
-              title: `Search ${
-                this.stats && this.stats
-                  ? "(" + this.$n(this.stats.allVideos) + ")"
-                  : ""
-              }`,
+              title: `Search`,
+              count: this.stats ? this.stats.allVideos : undefined,
               icon: "fas fa-search",
               show: true,
             },
