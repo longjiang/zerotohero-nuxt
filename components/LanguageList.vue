@@ -111,7 +111,6 @@ export default {
   },
   data() {
     return {
-      specials: Helper.specialLanguages,
       hide: ["cmn"],
       params: {},
       query: {
@@ -201,8 +200,6 @@ export default {
     },
     languageName(language) {
       let name = language.name.replace(/ \(.*\)/gi, "");
-      let special = this.specials[language.code];
-      if (special) name = special.name;
       return name;
     },
   },

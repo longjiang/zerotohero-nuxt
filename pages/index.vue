@@ -131,15 +131,12 @@
                     placeholder="Search languages"
                   />
                 </div>
+                <!-- a shorter language list is 'ar,az,bn,br,bs,bul,cat,ces,cy,dan,de,el,en,epo,es,eu,fa,fin,fr,gle,glg,hak,he,hi,hun,hr,hye,id,isl,it,ja,ko,lat,lav,lit,lzh,msa,nan,nl,no,pa,pl,pt,ron,ru,sr,swe,ta,th,tl,tlh,tr,uk,vi,yue,zh' -->
                 <LanguageList
                   :showSpeakers="false"
                   :showFeatures="false"
                   :keyword="langKeyword"
-                  :codes="
-                    'ar,az,bn,br,bs,bul,cat,ces,cy,dan,de,el,en,epo,es,eu,fa,fin,fr,gle,glg,hak,he,hi,hun,hr,hye,id,isl,it,ja,ko,lat,lav,lit,lzh,msa,nan,nl,no,pa,pl,pt,ron,ru,sr,swe,ta,th,tl,tlh,tr,uk,vi,yue,zh'.split(
-                      ','
-                    )
-                  "
+                  :codes="languagesWithVideos"
                   class="mt-4"
                   :sort="true"
                   :showFlags="true"
