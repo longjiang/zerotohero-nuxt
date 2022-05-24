@@ -1,7 +1,10 @@
 <template>
   <component
     :is="tag"
-    v-observe-visibility="visibilityChanged"
+    v-observe-visibility="{
+      callback: visibilityChanged,
+      once: true,
+    }"
     :dir="
       foreign &&
       $l2.scripts &&
@@ -565,7 +568,6 @@ export default {
 </script>
 
 <style lang="scss">
-
 .word-block.saved {
   color: #28a745;
 }
