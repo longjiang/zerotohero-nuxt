@@ -30,7 +30,7 @@
         Video Search
       </h4>
       <SimpleSearch
-        :placeholder="`Search ${stats ? $n(stats[$l2.code].allVideos) : ''} ${$l2.name} videos`"
+        :placeholder="`Search ${stats && stats[$l2.code] ? $n(stats[$l2.code].allVideos) : ''} ${$l2.name} videos`"
         skin="dark"
         :action="
           (url) => {

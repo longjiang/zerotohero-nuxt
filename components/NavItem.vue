@@ -29,6 +29,7 @@
     <i v-else-if="showIcon" :class="`nav-item-icon mr-1 ${item.icon}`"></i>
     <span class="nav-item-title">
       {{ $t(item.title, { l2: $t($l2.name) }) }}
+      <span class="nav-item-count" v-cloak v-if="item.count">{{ $n(item.count) }}</span>
       <span class="saved-words-count" v-cloak v-if="badge">
         {{ badge }}
       </span>
@@ -53,6 +54,9 @@ export default {
     },
     badge: {
       type: Number,
+    },
+    count: {
+      type: [Number, String], // How many of this item there are (e.g. how many tv shows)
     },
     to: [Object, String],
     active: {
@@ -174,6 +178,23 @@ export default {
   .nav-item-icon {
     font-size: 1.2rem;
   }
+}
+
+.nav-item-count {
+  font-size: 0.8rem;
+  color: #888;
+  font-weight: bold;
+  &::before {
+    content: '(';
+  }
+  &::after {
+    content: ')';
+  }
+  // background: #53545f;
+  // padding: 0.1rem 0.2rem;
+  // border-radius: 0.15rem;
+  // position: relative;
+  // bottom: 0.15rem;
 }
 
 .zth-nav-side-bar {
