@@ -61,7 +61,8 @@
     <router-link :to="base">
       <div class="flag-badge-wrapper" v-if="showFlags">
         <div class="badge" v-if="badge && badge !== 0">{{ badge }}</div>
-        <LanguageFlag :language="language" ref="flag" />
+        <LanguageFlag :language="language" ref="flag" class="l2-flag" />
+        <LanguageFlag :language="from" ref="l1Flag" class="l1-flag" :autocycle="true" />
       </div>
 
       <span class="language-list-item-name">
@@ -69,6 +70,9 @@
         <div class="badge" v-if="!showFlags && badge && badge !== 0">
           {{ badge }}
         </div>
+      </span>
+      <span class="language-list-item-name">
+        from {{ languageName(from) }}
       </span>
       <span
         v-if="keyword && language.otherNames.length > 0"
@@ -155,7 +159,7 @@ export default {
       return Helper.formatK(number, 1);
     },
     languagePath(language) {
-      return `/${this.from ? this.from.code : 'en'}/${language.code}/all-media`;
+      return `/${this.from ? this.from.code : "en"}/${language.code}/all-media`;
     },
     hasDictionary(l1, l2) {
       return (
@@ -227,6 +231,15 @@ a:active {
         font-weight: bold;
         line-height: 1.2;
         font-size: 0.75em;
+      }
+      .l1-flag {
+        transform: scale(0.6);
+        position: absolute;
+        bottom: -30%;
+        right: -30%;
+        ::v-deep .flag-icon {
+          border: 2px solid white;
+        }
       }
       ::v-deep .flag-icon-wrapper {
         margin-bottom: 0.5rem;
