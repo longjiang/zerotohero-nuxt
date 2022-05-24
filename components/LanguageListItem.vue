@@ -10,11 +10,11 @@
       <router-link
         :to="{
           name: 'live-tv',
-          params: { l1: l1, l2: language.code },
+          params: { l1: from || english, l2: language.code },
         }"
         :class="{
           'feature-icon mr-1': true,
-          transparent: !hasLiveTV(english, language),
+          transparent: !hasLiveTV(from || english, language),
         }"
         title="Live TV"
       >
@@ -23,11 +23,11 @@
       <router-link
         :to="{
           name: 'all-media',
-          params: { l1: l1, l2: language.code },
+          params: { l1: from || english, l2: language.code },
         }"
         :class="{
           'feature-icon mr-1': true,
-          transparent: !hasYouTube(english, language),
+          transparent: !hasYouTube(from || english, language),
         }"
         title="Videos"
       >
@@ -36,11 +36,11 @@
       <router-link
         :to="{
           name: 'dictionary',
-          params: { l1: l1, l2: language.code },
+          params: { l1: from || english, l2: language.code },
         }"
         :class="{
           'feature-icon mr-1': true,
-          transparent: !hasDictionary(english, language),
+          transparent: !hasDictionary(from || english, language),
         }"
         title="Dictionary"
       >
@@ -99,10 +99,10 @@ import Helper from "@/lib/helper";
 export default {
   props: {
     language: {
-      type: Object,
+      type: Object, // the L2.
     },
-    l1: {
-      default: "en",
+    from: {
+      type: Object, // the L1.
     },
     keyword: {
       type: String,
@@ -155,8 +155,7 @@ export default {
       return Helper.formatK(number, 1);
     },
     languagePath(language) {
-      let l1 = this.l1
-      return `/${l1}/${language.code}/all-media`;
+      return `/${this.from ? this.from.code : 'en'}/${language.code}/all-media`;
     },
     hasDictionary(l1, l2) {
       return (
