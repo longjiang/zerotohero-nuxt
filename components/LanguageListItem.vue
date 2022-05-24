@@ -98,24 +98,27 @@
 import Helper from "@/lib/helper";
 export default {
   props: {
-    badge: {
-      type: Number,
-    },
-    showFeatures: {
-      type: Boolean,
-    },
     language: {
       type: Object,
+    },
+    l1: {
+      default: "en",
+    },
+    keyword: {
+      type: String,
+    },
+    badge: {
+      type: Number,
     },
     variant: {
       type: String,
       default: "list", // or 'icon', 'grid'
     },
+    showFeatures: {
+      type: Boolean,
+    },
     showCode: {
       default: false,
-    },
-    keyword: {
-      type: String,
     },
     showSpeakers: {
       type: Boolean,
@@ -123,9 +126,6 @@ export default {
     },
     showFlags: {
       default: false,
-    },
-    l1: {
-      default: "en",
     },
   },
   data() {
@@ -155,8 +155,7 @@ export default {
       return Helper.formatK(number, 1);
     },
     languagePath(language) {
-      let special = Helper.specialLanguages[language.code];
-      let l1 = special ? special.l1 : this.l1;
+      let l1 = this.l1
       return `/${l1}/${language.code}/all-media`;
     },
     hasDictionary(l1, l2) {
@@ -172,8 +171,6 @@ export default {
     },
     languageName(language) {
       let name = language.name.replace(/ \(.*\)/gi, "");
-      let special = Helper.specialLanguages[language.code];
-      if (special) name = special.name;
       return name;
     },
   },

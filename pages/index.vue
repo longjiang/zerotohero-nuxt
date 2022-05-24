@@ -120,7 +120,7 @@
           </div>
         </div>
         <client-only>
-          <div class="row mt-4 mb-5" id="languageList">
+          <div class="row mt-4 mb-5" id="mainLanguageList">
             <div class="col-sm-12">
               <div class="home-card p-2">
                 <h5 class="text-center mt-3 mb-3">I want to learn …</h5>
@@ -155,17 +155,10 @@
               </div>
             </div>
           </div>
-          <div class="row mt-4 mb-5" id="languageList">
+          <div class="row mt-4 mb-5">
             <div class="col-sm-12">
               <div class="home-card p-2">
                 <h5 class="text-center mt-3 mb-3">Learn English From</h5>
-                <div class="pl-2 pr-2">
-                  <b-form-input
-                    v-model="langKeyword"
-                    @compositionend.prevent.stop="() => false"
-                    placeholder="Search languages"
-                  />
-                </div>
                 <LanguageList
                   :showSpeakers="false"
                   :showFeatures="false"
@@ -176,16 +169,23 @@
                   :showFlags="true"
                   variant="grid"
                 />
-                <div class="text-center mt-1 p-1">
-                  <router-link
-                    class="btn btn-success d-block"
-                    to="/language-map"
-                  >
-                    <i class="fas fa-globe-asia mr-1"></i>
-                    More languages
-                    <i class="ml-1 fas fa-chevron-right"></i>
-                  </router-link>
-                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-4 mb-5">
+            <div class="col-sm-12">
+              <div class="home-card p-2">
+                <h5 class="text-center mt-3 mb-3">用汉语学习</h5>
+                <LanguageList
+                  :showSpeakers="false"
+                  :showFeatures="false"
+                  :keyword="langKeyword"
+                  :pairs="learnFromChineseLanguagePairs"
+                  class="mt-4"
+                  :sort="true"
+                  :showFlags="true"
+                  variant="grid"
+                />
               </div>
             </div>
           </div>
@@ -482,7 +482,27 @@ export default {
   },
   computed: {
     learnEnglishLanguagePairs() {
-      return [];
+      if (this.$languages) {
+        let english = this.$languages.getSmart("en");
+        let langsWithEnDict = this.$languages.l1s.filter(
+          (l) => l.dictionaries && l.dictionaries.eng
+        );
+        let langPairs = langsWithEnDict.map((l1) => {
+          return { l1, l2: english };
+        });
+        console.log(langPairs);
+        return langPairs;
+      }
+    },
+    learnFromChineseLanguagePairs() {
+      if (this.$languages) {
+        let chinese = this.$languages.getSmart("zh");
+        let langPairs = Object.keys(chinese.dictionaries).map((l2) => {
+          return { l1: chinese, l2: this.$languages.getSmart(l2) };
+        });
+        console.log(langPairs);
+        return langPairs;
+      }
     },
     randomLanguage() {
       if (this.$languages) {
@@ -500,7 +520,7 @@ export default {
   },
   methods: {
     scrollToLanguageList() {
-      document.querySelector("#languageList").scrollIntoView({
+      document.querySelector("#mainLanguageList").scrollIntoView({
         behavior: "smooth",
       });
     },
