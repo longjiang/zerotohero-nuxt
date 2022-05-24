@@ -9,7 +9,7 @@
 <template>
   <div
     class="container-fluid"
-    :style="`background-image: url(${backgroundImage}); background-size: cover; background-position: center;`"
+    :style="`${backgroundImage ? 'background-image: url(' + backgroundImage + '); background-size: cover; background-position: center;' : ''}`"
   >
     <div class="row">
       <div class="col-sm-12">
@@ -90,11 +90,20 @@ export default {
         status: "active",
       },
       show: true,
-      backgroundImage: undefined,
     };
   },
-  mounted() {
-    this.backgroundImage = Helper.background(this.$l2);
+  computed: {
+    backgroundImage() {
+      return Helper.background(this.$l2);
+    },
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
   },
   methods: {
     async onSubmit(event) {
@@ -151,7 +160,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .login-page {
-  margin: 5rem auto 5rem auto;
+  margin: 2rem auto 5rem auto;
   padding: 2rem;
   border-radius: 1rem;
   overflow: hidden;

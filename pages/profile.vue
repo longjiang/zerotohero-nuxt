@@ -6,7 +6,7 @@
 </router>
 <template>
   <div class="main pt-3">
-    <div class="container">
+    <div class="container" v-if="$auth.user">
       <div class="row">
         <div class="col-sm-12 text-center">
           <h3>{{ $auth.user.first_name }} {{ $auth.user.last_name }}</h3>
