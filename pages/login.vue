@@ -112,7 +112,7 @@ export default {
         if (res && res.data && res.data.data && res.data.data.user) {
           let user = res.data.data.user
           this.$auth.setUser(user);
-          this.$toast.success(`Welcome back, ${res.data.data.first_name}!`, {
+          this.$toast.success(`Welcome back, ${this.$auth.user.first_name}!`, {
             position: "top-center",
             duration: 5000,
           });
