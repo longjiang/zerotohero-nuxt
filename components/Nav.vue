@@ -614,8 +614,14 @@ export default {
               shortcut: (e) => e.code === "KeyR" && e.metaKey && e.shiftKey,
             },
             {
-              name: "library",
+              name: "books",
               title: "Books",
+              icon: "fas fa-book-reader",
+              show: true,
+            },
+            {
+              name: "library",
+              title: "Books (Legacy)",
               icon: "fas fa-book-reader",
               show: true,
             },
@@ -839,12 +845,6 @@ export default {
           children: [
             {
               icon: "fas fa-wrench",
-              title: "Unavailable Videos",
-              name: "unavailable-videos",
-              show: this.$adminMode,
-            },
-            {
-              icon: "fas fa-wrench",
               title: "Phrase Survey",
               name: "phrase-survey",
               show: this.$adminMode,
@@ -859,12 +859,6 @@ export default {
               icon: "fas fa-wrench",
               title: "Add Phrasebook",
               name: "phrasebook-creator",
-              show: this.$adminMode,
-            },
-            {
-              icon: "fas fa-wrench",
-              title: "Analytics",
-              name: "analytics",
               show: this.$adminMode,
             },
             {
@@ -913,6 +907,18 @@ export default {
               icon: "fas fa-wrench",
               title: "Assign Lesson Videos",
               name: "assign-lesson-videos",
+              show: this.$adminMode,
+            },
+            {
+              icon: "fas fa-wrench",
+              title: "Unavailable Videos",
+              name: "unavailable-videos",
+              show: this.$adminMode,
+            },
+            {
+              icon: "fas fa-wrench",
+              title: "Analytics",
+              name: "analytics",
               show: this.$adminMode,
             },
           ],

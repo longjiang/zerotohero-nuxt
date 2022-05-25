@@ -8,7 +8,7 @@
     <div class="container pt-5 pb-5">
       <div class="row">
         <div class="col-sm-12">
-          <LanguageList variant="grid" :showFeatures="false" :showFlags="true" :sort="true" />
+          
         </div>
       </div>
     </div>
@@ -18,6 +18,7 @@
 <script>
 import Config from '@/lib/config'
 import Helper from '@/lib/helper'
+
 export default {
   computed: {
     $l1() {
