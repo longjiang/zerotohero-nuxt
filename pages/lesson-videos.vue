@@ -20,13 +20,13 @@
         <div class="col-md-12 text-center">
           <h3 class="mt-5">Expansion Videos</h3>
           <div class="mt-3">
-            <b-dropdown id="dropdown-1" :text="levels[level]" class="ml-1">
+            <b-dropdown id="dropdown-1" :text="levels[level].exam.name + ' ' + levels[level].level" class="ml-1">
               <b-dropdown-item
-                v-for="(title, slug) in levels"
+                v-for="(level, slug) in levels"
                 :key="`level-item-${slug}`"
                 @click="changeLevel(slug)"
               >
-                {{ title }}
+                {{ level.exam.name }} {{ level.level}}
               </b-dropdown-item>
             </b-dropdown>
             <b-dropdown id="dropdown-1" :text="`Lesson ${lesson}`" class="ml-1">
