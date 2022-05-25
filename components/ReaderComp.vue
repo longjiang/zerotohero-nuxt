@@ -1,86 +1,170 @@
 <template>
-  <div>
-    <button v-if="iconMode && !fullscreen" @click="fullscreen = !fullscreen" class="reader-icon">
-      <i class="fas fa-pencil-alt" />
-    </button>
-    <div :class="{ reader: true, fullscreen }" v-else>
-      <div class="text-center">
-        <Loader class="mb-5" />
-      </div>
-      <div v-if="text.length > 0 && !loading" id="reader-annotated" :class="{ focus: true }"
-        :style="`font-size: ${fontSize}rem; margin-bottom: 2rem;`">
-        <div v-if="text.length > 0 && !fullscreen" style="font-size: 1rem; line-height: 1" class="mb-3">
-          <strong>
-            <i class="fas fa-check text-success mr-1" />
-            Converted
-          </strong>
-          <div class="mt-1">
-            <small>
-              Tap on any word for a popup dictionary. Tap on the three dots
-              "..." next to each line for translation. You can customize the
-              output in
-              <router-link to="settings">Settings</router-link>
-              .
-            </small>
+  <container-query :query="query" v-model="params">
+    <div>
+      <button
+        v-if="iconMode && !fullscreen"
+        @click="fullscreen = !fullscreen"
+        class="reader-icon"
+      >
+        <i class="fas fa-pencil-alt" />
+      </button>
+      <div :class="{ reader: true, fullscreen }" v-else>
+        <div class="text-center">
+          <Loader class="mb-5" />
+        </div>
+        <div
+          v-if="text.length > 0 && !loading"
+          id="reader-annotated"
+          :class="{ focus: true, 'reader-annotated-wide': params.lg, 'with-translation': translation }"
+          :style="`font-size: ${fontSize}rem; margin-bottom: 2rem;`"
+        >
+          <div
+            v-if="text.length > 0 && !fullscreen"
+            style="font-size: 1rem; line-height: 1"
+            class="mb-3"
+          >
+            <strong>
+              <i class="fas fa-check text-success mr-1" />
+              Converted
+            </strong>
+            <div class="mt-1">
+              <small>
+                Tap on any word for a popup dictionary. Tap on the three dots
+                "..." next to each line for translation. You can customize the
+                output in
+                <router-link to="settings">Settings</router-link>
+                .
+              </small>
+            </div>
           </div>
+          <hr
+            class="hide-for-present mt-0 mb-4"
+            v-if="text.length > 0 && !fullscreen"
+          />
+          <template
+            v-for="(line, index) of marked
+              .trim()
+              .replace(/<(div|p|li|h1|h2|h3|h4|h5|h6)/g, '\n<$1')
+              .trim()
+              .split('\n')"
+          >
+            <div class="line mb-3" :key="`reader-${readerKey}-${index}`">
+              <Annotate
+                class="annotated-line"
+                v-if="line.trim().length > 0"
+                tag="div"
+                :buttons="true"
+                cla
+              >
+                <span v-html="line.trim()" />
+              </Annotate>
+              <div class="translation-line">
+                {{ translation.split("\n")[index] }}
+              </div>
+            </div>
+          </template>
         </div>
-        <hr class="hide-for-present mt-0 mb-4" v-if="text.length > 0 && !fullscreen" />
-        <template v-for="(line, index) of marked
-        .trim()
-        .replace(/<(div|p|li|h1|h2|h3|h4|h5|h6)/g, '\n<$1')
-        .split('\n')">
-          <Annotate v-if="line.trim().length > 0" class="mb-3" tag="div" :key="`reader-${readerKey}-${index}`"
-            :buttons="true">
-            <span v-html="line.trim()" />
-          </Annotate>
-        </template>
+        <div class="reader-editor">
+          <div>
+            <textarea
+              id="reader-textarea"
+              class="form-control"
+              cols="30"
+              rows="5"
+              :placeholder="$t('Paste {l2} text here', { l2: $l2.name })"
+              v-model="text"
+              :dir="$l2.direction === 'rtl' ? 'rtl' : 'ltr'"
+            ></textarea>
+          </div>
+          <div class="mt-1">
+            <button
+              v-if="!fullscreen"
+              @click="toggleFullscreen"
+              class="reader-button"
+            >
+              <i class="fa fa-expand" />
+            </button>
+            <button
+              v-if="fullscreen"
+              @click="toggleFullscreen"
+              class="reader-button"
+            >
+              <i class="fa fa-times" />
+            </button>
+            <button @click="bigger" class="reader-button">
+              <span style="font-size: 1.25rem">A</span>
+            </button>
+            <button @click="smaller" class="reader-button">
+              <small>A</small>
+            </button>
+            <button
+              @click="toggleTranslation()"
+              :class="{
+                'reader-button': true,
+                'reader-button-active': showTranslate,
+              }"
+            >
+              <i class="fa fa-language"></i>
+            </button>
+            <button
+              @click="addTranslation = !addTranslation"
+              :class="{
+                'reader-button': true,
+                'reader-button-active': addTranslation,
+              }"
+              style="font-size: 0.9em"
+            >
+              Add translation
+            </button>
+          </div>
+          <textarea
+            v-if="addTranslation"
+            id="translation-textarea"
+            class="form-control mt-2"
+            cols="30"
+            rows="5"
+            :placeholder="$t('Paste translation text here', { l2: $l2.name })"
+            v-model="translation"
+            :dir="$l2.direction === 'rtl' ? 'rtl' : 'ltr'"
+          ></textarea>
+        </div>
+        <iframe
+          v-if="showTranslate"
+          :src="translationSrc"
+          id="translation-iframe"
+          class="mt-2 mb-2"
+        ></iframe>
       </div>
-      <div class="reader-editor">
-        <div>
-          <textarea id="reader-textarea" class="form-control" cols="30" rows="5"
-            :placeholder="$t('Paste {l2} text here', { l2: $l2.name })" v-model="text"
-            :dir="$l2.direction === 'rtl' ? 'rtl' : 'ltr'"></textarea>
-        </div>
-        <div class="mt-1">
-          <button v-if="!fullscreen" @click="toggleFullscreen" class="reader-button">
-            <i class="fa fa-expand" />
-          </button>
-          <button v-if="fullscreen" @click="toggleFullscreen" class="reader-button">
-            <i class="fa fa-times" />
-          </button>
-          <button @click="bigger" class="reader-button">
-            <span style="font-size: 1.25rem">A</span>
-          </button>
-          <button @click="smaller" class="reader-button">
-            <small>A</small>
-          </button>
-          <button @click="toggleTranslation()" :class="{
-            'reader-button': true,
-            'reader-button-active': showTranslate,
-          }">
-            <i class="fa fa-language"></i>
-          </button>
-        </div>
-      </div>
-      <iframe v-if="showTranslate" :src="translationSrc" id="translation-iframe" class="mt-2 mb-2"></iframe>
     </div>
-  </div>
+  </container-query>
 </template>
 <script>
 import Marked from "marked";
-import Helper from '@/lib/helper';
+import Helper from "@/lib/helper";
+import { ContainerQuery } from "vue-container-query";
 
 export default {
+  components: {
+    ContainerQuery,
+  },
   data() {
     return {
       text: "",
+      translation: "",
       annotated: false,
       readerKey: 0, // used to force re-render this component
       fontSize: this.iconMode ? 2 : 1.333,
       fullscreen: false,
       showTranslate: false,
+      addTranslation: false,
       loading: true,
-      typing: undefined
+      typing: undefined,
+      params: {},
+      query: {
+        lg: {
+          minWidth: 600,
+        },
+      },
     };
   },
   props: {
@@ -112,8 +196,8 @@ export default {
   },
   watch: {
     async text() {
-      let typing = this.text
-      await Helper.timeout(1000)
+      let typing = this.text;
+      await Helper.timeout(1000);
       if (typing === this.text) {
         this.$emit("readerTextChanged", this.text);
         this.readerKey++;
@@ -168,6 +252,25 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.translation-line {
+  font-size: 0.8em;
+  color: #999;
+}
+
+.reader-annotated-wide.with-translation {
+  .line {
+    display: flex;
+    align-items: flex-start;
+    .annotated-line {
+      width: 60%;
+    }
+    .translation-line {
+      width: 40%;
+      margin-left: 1rem;
+    }
+  }
+}
+
 .reader-icon {
   border: none;
   background: white;
@@ -194,7 +297,7 @@ export default {
   }
 }
 
-#reader-annotated>>>del .word-block {
+#reader-annotated >>> del .word-block {
   color: red !important;
 }
 
@@ -206,7 +309,7 @@ export default {
   border: 1px solid #d7d7d8;
 }
 
-#reader-annotated>>>del .word-block .word-block-simplified::after {
+#reader-annotated >>> del .word-block .word-block-simplified::after {
   content: " \2717";
   color: red !important;
 }

@@ -273,6 +273,7 @@ export default {
     }
   }
 }
+
 .show-translation {
   .transcript-line-wide.transcript-line-with-translation {
     .transcript-line-both {
@@ -287,6 +288,7 @@ export default {
     }
   }
 }
+
 .transcript.single-line .transcript-line:not(.transcript-line-current) {
   display: none;
 }

@@ -333,8 +333,8 @@ export default {
         this.convertToSentencesAndAnnotate(this.$slots.default[0]);
       } else {
         // We unset the annotations to save memory and battery, but we set the height and width to prevent the annotated text from shifting up and down.
-        this.$el.style.minHeight = this.$el.clientHeight + "px";
-        this.$el.style.minWidth = this.$el.clientWidth + "px";
+        // this.$el.style.minHeight = this.$el.clientHeight + "px";
+        // this.$el.style.minWidth = this.$el.clientWidth + "px";
         this.annotated = false;
         this.$emit("annotated", false);
       }
@@ -568,6 +568,10 @@ export default {
 </script>
 
 <style lang="scss">
+#reader-annotated p {
+  margin-bottom: 0;
+}
+
 .word-block.saved {
   color: #28a745;
 }
