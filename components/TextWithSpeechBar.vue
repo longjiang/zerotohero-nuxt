@@ -30,12 +30,7 @@
         </b-button-group>
       </client-only>
     </div>
-    <template
-      v-for="(line, lineIndex) of html
-        .trim()
-        .replace(/<(div|p|h1|h2|h3|h4|h5|h6|dd)/g, 'ANNOTATORSEPARATOR!!!<$1')
-        .split('ANNOTATORSEPARATOR!!!')"
-    >
+    <template v-for="(line, lineIndex) of lines">
       <Annotate
         v-if="line.trim().length > 0"
         :key="`chapter-line-${lineIndex}`"
@@ -81,6 +76,11 @@ export default {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
+    lines() {
+      let html = this.html.trim()
+      let lines = html.replace(/<(div|p|h1|h2|h3|h4|h5|h6|dd)/g, 'ANNOTATORSEPARATOR!!!<$1').split('ANNOTATORSEPARATOR!!!')
+      return lines
+    }
   },
   mounted() {
     this.getVoices();

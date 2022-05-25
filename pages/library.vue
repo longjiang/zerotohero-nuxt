@@ -8,7 +8,7 @@
     <div class="container pt-5 pb-5" id="library">
       <SocialHead
         v-if="booklists"
-        :title="`${$l2.name} Guided Readers: ${booklists
+        :title="`${$l2.name} Books: ${booklists
           .slice(0, 1)
           .map((b) => b.title)
           .join(', ')} and more | ${$l2.name} Zero to Hero`"
@@ -23,7 +23,7 @@
       <div class="row">
         <div class="col-sm-12">
           <h3 class="mb-5 text-center">
-            {{ $t("{l2} Guided Readers", { l2: $t($l2.name) }) }}
+            {{ $t("{l2} Books", { l2: $t($l2.name) }) }}
           </h3>
           <p
             class="text-center lead"

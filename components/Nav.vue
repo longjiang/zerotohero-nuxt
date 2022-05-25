@@ -614,16 +614,28 @@ export default {
               shortcut: (e) => e.code === "KeyR" && e.metaKey && e.shiftKey,
             },
             {
+              name: "library",
+              title: "Books",
+              icon: "fas fa-book-reader",
+              show: true,
+            },
+            {
+              name: "pinyin-list",
+              title: "Pinyin List",
+              icon: "fa fa-list",
+              show: this.l2.code === "zh",
+            },
+            {
               name: "studysheet",
               title: "Study Sheet",
               icon: "fas fa-print",
               show: ["ru", "en", "zh"].includes(this.$l2.code),
             },
             {
-              name: "library",
-              title: "Guided Readers",
-              icon: "fas fa-book-reader",
-              show: true,
+              name: "pinyin-squared",
+              title: "Pinyin Squared",
+              icon: "fa fa-superscript",
+              show: this.l2.code === "zh",
             },
             {
               name: "book-list",
@@ -636,18 +648,6 @@ export default {
             {
               name: "book-chapter",
               show: false,
-            },
-            {
-              name: "pinyin-list",
-              title: "Pinyin List",
-              icon: "fa fa-list",
-              show: this.l2.code === "zh",
-            },
-            {
-              name: "pinyin-squared",
-              title: "Pinyin Squared",
-              icon: "fa fa-superscript",
-              show: this.l2.code === "zh",
             },
           ],
         },

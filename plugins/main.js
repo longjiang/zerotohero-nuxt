@@ -32,7 +32,9 @@ Vue.use(NuxtHammer)
 Vue.use(VTooltip)
 Vue.use(VueSimpleSVG)
 Vue.use(VueObserveVisibility)
-Vue.use(i18n)
+Vue.use(i18n, {
+  fallbackLocale: 'en',
+})
 Vue.use(VueSmoothScroll)
 Vue.use(VueMq, {
   breakpoints: { // default breakpoints - customize this
