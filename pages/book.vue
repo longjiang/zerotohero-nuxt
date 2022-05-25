@@ -34,6 +34,7 @@
               >
                 {{ author.name }}
               </div>
+              <a :href='bookData.formats["text/html"]' target="_blank" class="btn btn-sm mt-3 btn-success">View on Gutenberg <i class="fas fa-chevron-right ml-1"></i></a>
             </div>
           </div>
         </div>
@@ -71,7 +72,7 @@
                 },
               }"
             >
-              <i class="fas fa-chevron-right"></i>
+              Next Page <i class="fas fa-chevron-right ml-1"></i>
             </router-link>
           </div>
         </div>
@@ -87,11 +88,11 @@ import { parse } from "node-html-parser";
 
 export default {
   props: {
-    id: String,
+    id: Number,
     book: Object,
     title: String,
     page: {
-      type: String,
+      type: Number,
       default: 1,
     },
   },

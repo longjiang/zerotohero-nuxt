@@ -2,7 +2,7 @@
   <div class="book-card">
     <div class="p-3">
       <router-link
-        :to="{ name: 'book', params: { id: book.id, title: book.title, book } }"
+        :to="{ name: 'book', params: { id: book.id, title: book.title, book, page: 1 } }"
         class="three-to-two-aspect-wrapper shadow d-block"
       >
         <img

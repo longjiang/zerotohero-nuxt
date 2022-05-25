@@ -64,7 +64,7 @@ export default {
       default: true,
     },
     page: {
-      type: Number
+      type: Number,
     },
   },
   data() {
@@ -74,7 +74,6 @@ export default {
       utterance: undefined,
       speaking: false,
       voices: [],
-      page: 1,
     };
   },
   computed: {
