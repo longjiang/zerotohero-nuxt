@@ -6,68 +6,72 @@
 </router>
 <template>
   <div class="main pt-3">
-    <div class="container" v-if="$auth.user">
-      <div class="row">
-        <div class="col-sm-12 text-center">
-          <h3>{{ $auth.user.first_name }} {{ $auth.user.last_name }}</h3>
-          <p>{{ $auth.user.email }}</p>
-          <p>{{ $auth.user.avatar }}</p>
-        </div>
-      </div>
-      <template v-if="level">
+    <client-only>
+      <div class="container" v-if="$auth.user">
         <div class="row">
           <div class="col-sm-12 text-center">
-            <LanguageFlag
-              :language="$l2"
-              :autocycle="true"
-              style="
-                transform: scale(1.5);
-                margin-top: 1rem;
-                margin-bottom: 2rem;
-              "
-            />
-            <h5 class="mb-2">{{ $auth.user.first_name }}’s {{ $l2.name }}-Learning Progress</h5>
-            <router-link
-              to="/"
-              class="text-success"
-              style="
-                font-size: 0.8em;
-                font-weight: bold;
-                margin-bottom: 2rem;
-                display: block;
-              "
-            >
-              <i class="fas fa-chevron-left"></i>
-              All languages
-            </router-link>
+            <h3>{{ $auth.user.first_name }} {{ $auth.user.last_name }}</h3>
+            <p>{{ $auth.user.email }}</p>
+            <p>{{ $auth.user.avatar }}</p>
           </div>
         </div>
-        <LanguageGoal :$l1="$l1" :$l2="$l2" />
-        <div class="row mt-3">
-          <div class="col-sm-12">
-            <LanguageProgress
-              class="mt-3"
-              :$l1="$l1"
-              :$l2="$l2"
-              :description="true"
-              :dot="true"
-              :edit="true"
-              :animated="true"
-              progressBarHeight="1.5rem"
-              :progressBarShowValue="false"
-            />
-            <router-link
-              :to="{ name: 'all-media' }"
-              class="text-success mt-5 d-block"
-              style="font-size: 1.2rem; font-weight: bold"
-            >
-              Continue Learning
-              <i class="fas fa-chevron-right ml-1"></i>
-            </router-link>
+        <template v-if="level">
+          <div class="row">
+            <div class="col-sm-12 text-center">
+              <LanguageFlag
+                :language="$l2"
+                :autocycle="true"
+                style="
+                  transform: scale(1.5);
+                  margin-top: 1rem;
+                  margin-bottom: 2rem;
+                "
+              />
+              <h5 class="mb-2">
+                {{ $auth.user.first_name }}’s {{ $l2.name }}-Learning Progress
+              </h5>
+              <router-link
+                to="/"
+                class="text-success"
+                style="
+                  font-size: 0.8em;
+                  font-weight: bold;
+                  margin-bottom: 2rem;
+                  display: block;
+                "
+              >
+                <i class="fas fa-chevron-left"></i>
+                All languages
+              </router-link>
+            </div>
           </div>
-        </div>
-      </template>
-    </div>
+          <LanguageGoal :$l1="$l1" :$l2="$l2" />
+          <div class="row mt-3">
+            <div class="col-sm-12">
+              <LanguageProgress
+                class="mt-3"
+                :$l1="$l1"
+                :$l2="$l2"
+                :description="true"
+                :dot="true"
+                :edit="true"
+                :animated="true"
+                progressBarHeight="1.5rem"
+                :progressBarShowValue="false"
+              />
+              <router-link
+                :to="{ name: 'all-media' }"
+                class="text-success mt-5 d-block"
+                style="font-size: 1.2rem; font-weight: bold"
+              >
+                Continue Learning
+                <i class="fas fa-chevron-right ml-1"></i>
+              </router-link>
+            </div>
+          </div>
+        </template>
+      </div>
+    </client-only>
   </div>
 </template>
 
