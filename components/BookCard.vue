@@ -1,13 +1,16 @@
 <template>
   <div class="book-card">
     <div class="p-3">
-      <div class="three-to-two-aspect-wrapper shadow">
+      <router-link
+        :to="{ name: 'book', params: { id: book.id, title: book.title, book } }"
+        class="three-to-two-aspect-wrapper shadow d-block"
+      >
         <img
           :src="book.formats['image/jpeg']"
           alt="Book cover"
           class="book-cover aspect"
         />
-      </div>
+      </router-link>
     </div>
     <div class="info">
       <div class="title">{{ book.title }}</div>

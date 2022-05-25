@@ -644,6 +644,10 @@ export default {
               show: this.l2.code === "zh",
             },
             {
+              name: "book",
+              show: false,
+            },
+            {
               name: "book-list",
               show: false,
             },

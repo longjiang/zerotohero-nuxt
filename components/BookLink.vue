@@ -3,7 +3,7 @@
     <slot></slot>
     &nbsp;
     <router-link
-      v-if="!href.endsWith('undefined')"
+      v-if="href && !href.endsWith('undefined')"
       :to="href"
       :title="title"
       class="btn btn-small"

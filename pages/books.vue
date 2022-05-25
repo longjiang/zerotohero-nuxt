@@ -96,6 +96,7 @@ export default {
     try {
       let params = {
         languages: this.$l2.code,
+        mime_type: 'text/html'
       };
       let res = await axios.get("http://gutendex.com/books", { params });
       if (res && res.data && res.data.results) {
