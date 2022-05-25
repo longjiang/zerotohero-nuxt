@@ -182,7 +182,6 @@ export default {
     };
   },
   mounted() {
-    console.log(this.l2Settings)
     if (this.$slots.default) {
       for (let slot of this.$slots.default) {
         this.text += $(slot.elm).text();
