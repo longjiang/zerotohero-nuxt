@@ -2,7 +2,12 @@
   <div class="language-progress">
     <div>
       <h5 class="hours-display">
-        {{ Math.floor(hours) }} hours {{ Math.ceil((hours % 1) * 60) }} min
+        {{
+          new Date(time)
+            .toISOString()
+            .substr(11, 8)
+            .replace(/(.*):(.*):(.*)/, "$1 hours $2 min $3 sec").replace(/00/g, '0')
+        }}
         <span v-if="dot" class="dot"></span>
         <span
           v-if="edit"
