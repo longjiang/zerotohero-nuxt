@@ -5,11 +5,24 @@
       @click.self="backgroundClick"
     >
       <div>
+        <span
+          style="
+            color: #ccc;
+            cursor: pointer;
+            margin-right: 0.5rem;
+            position: relative;
+            bottom: -0.1rem;
+          "
+          @click="collapseClick"
+          :class="{ 'd-none': variant === 'menu-bar' }"
+        >
+          <i class="fas fa-bars"></i>
+        </span>
         <b-button
           @click="$router.back()"
           variant="unstyled"
           style="color: #ccc"
-          v-if="params.md !== false"
+          v-if="params.lg !== false"
         >
           <i class="fas fa-chevron-left"></i>
         </b-button>
@@ -18,7 +31,7 @@
           variant="unstyled"
           style="color: #ccc"
           class="ml-3"
-          v-if="params.md !== false"
+          v-if="params.lg !== false"
         >
           <i class="fas fa-chevron-right"></i>
         </b-button>
@@ -26,6 +39,7 @@
           class="d-inline-block"
           @mouseover="cycleFlags"
           @mouseleave="stopCycling"
+          v-if="params.lg !== false"
         >
           <span
             :class="`text-white`"
@@ -68,6 +82,7 @@
             id="site-top-bar-saved-words"
             :to="{ name: 'youtube-search' }"
             :class="`btn top-bar-buttontop btn-unstyled link-unstyled mr-1`"
+            v-if="params.xs !== false"
             title="Search Videos"
           >
             <i class="fas fa-search"></i>
@@ -84,13 +99,6 @@
               {{ badge }}
             </span>
           </router-link>
-          <span
-            style="color: #ccc; cursor: pointer; margin-left: 1rem; margin-right: 0.5rem; position: relative; bottom: -0.1rem;"
-            @click="collapseClick"
-            :class="{ 'd-none': variant === 'menu-bar' }"
-          >
-            <i class="fas fa-bars"></i>
-          </span>
         </div>
       </template>
       <b-modal
