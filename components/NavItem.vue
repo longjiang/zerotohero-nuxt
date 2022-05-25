@@ -8,7 +8,7 @@
       'nav-item-small-icon': mode === 'small-icon',
       'nav-item-large-icon nav-item-large-icon-dark link-unstyled':
         mode === 'large-icon',
-      'router-link-active': active,
+      'nav-item-active': active,
     }"
     :href="item.href"
     :to="to"
@@ -100,7 +100,7 @@ export default {
   + .secondary-nav-item {
     margin-left: 1rem;
   }
-  &.nuxt-link-active {
+  &.nav-item-active {
     font-weight: bold;
   }
 }
@@ -109,7 +109,7 @@ export default {
   .main-nav-item {
     color: #444;
     text-shadow: none;
-    &.nuxt-link-active,
+    &.nav-item-active,
     &:hover {
       color: #28a745;
       background: hsla(0deg, 100%, 100%, 0.75);
@@ -127,7 +127,7 @@ export default {
   }
   .secondary-nav-item {
     color: white;
-    &.nuxt-link-active,
+    &.nav-item-active,
     &:hover {
       color: white;
     }
@@ -142,7 +142,7 @@ export default {
       &.nav-item-small-icon {
         padding: 0.5rem;
       }
-      &.nuxt-link-active,
+      &.nav-item-active,
       &:hover {
         color: #28a745;
       }
@@ -154,7 +154,7 @@ export default {
       opacity: 0.4;
       margin-right: 0.5rem;
     }
-    &.nuxt-link-active,
+    &.nav-item-active,
     &:hover {
       .nav-item-icon {
         color: #28a745;
@@ -202,7 +202,7 @@ export default {
     .main-nav-item {
       color: white;
       text-shadow: black 0 1px 3px;
-      &.nuxt-link-active,
+      &.nav-item-active,
       &:hover {
         color: #444;
         text-shadow: none;
@@ -212,7 +212,7 @@ export default {
   }
   &.zth-nav-dark {
     .main-nav-item {
-      &.nuxt-link-active,
+      &.nav-item-active,
       &:hover {
         background: #323232;
       }
@@ -240,7 +240,7 @@ export default {
         width: 1.5rem;
         text-align: center;
       }
-      &.nuxt-link-active,
+      &.nav-item-active,
       &:hover {
         border-right: 0.4rem solid #28a745cc;
       }
@@ -281,7 +281,7 @@ export default {
   border-radius: 0.3rem;
   white-space: nowrap;
 
-  &.nuxt-link-active,
+  &.nav-item-active,
   &:hover {
     text-decoration: none;
   }

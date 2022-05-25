@@ -89,13 +89,11 @@
           </router-link>
           <router-link
             id="site-top-bar-saved-words"
-            :to="$auth.loggedIn ? { name: 'profile' } : { name: 'login' }"
-            :class="`btn top-bar-button top-bar-user-button  btn-unstyled link-unstyled ml-2 ${
-              badge ? '' : 'd-none'
-            }`"
+            :to="$route.name === 'profile' ? '/' : $auth.loggedIn ? { name: 'profile' } : { name: 'login' }"
+            :class="`btn top-bar-button top-bar-user-button  btn-unstyled link-unstyled ml-2`"
           >
             <i class="fas fa-user"></i>
-            <span class="saved-words-count">
+            <span class="saved-words-count" v-if="badge && badge !== 0">
               {{ badge }}
             </span>
           </router-link>

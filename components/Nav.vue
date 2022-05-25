@@ -38,25 +38,29 @@
             />
           </div> -->
           <div v-if="showMainNav" :class="{ 'main-nav-items': true }">
-            <NavItem
+            <template
               v-for="(item, index) in menu.filter(
                 (item) => item.show && to(item)
               )"
-              :to="to(item)"
-              :item="item"
-              :level="1"
-              :mode="mode"
-              :key="`nav-${index}`"
-              :active="
-                currentParent &&
-                currentParent.name === nameOfSelfOrFirstChild(item)
-              "
-              :badge="
-                item.icon === 'fas fa-user'
-                  ? savedWordsCount + savedPhrasesCount
-                  : undefined
-              "
-            />
+            >
+              <NavItem
+                :to="to(item)"
+                :item="item"
+                :level="1"
+                :mode="mode"
+                :key="`nav-${index}`"
+                :active="
+                  currentParent &&
+                  currentParent === item &&
+                  item.name !== 'index'
+                "
+                :badge="
+                  item.icon === 'fas fa-user'
+                    ? savedWordsCount + savedPhrasesCount
+                    : undefined
+                "
+              />
+            </template>
           </div>
           <div
             v-if="showMainNav && variant === 'side-bar' && !collapsed"
@@ -91,6 +95,7 @@
             :item="child"
             :level="2"
             :showIcon="collapsed || variant !== 'side-bar'"
+            :active="$route && $route.name === child.name"
             :badge="
               child.name === 'saved-words' && savedWordsCount > 0
                 ? savedWordsCount
@@ -277,6 +282,7 @@ export default {
     },
     currentParent() {
       let parent = this.menu.find((item) => {
+        if (item.name === "index") return false;
         let nameOfItemOrFirstChild = this.nameOfSelfOrFirstChild(item, true);
         if (
           nameOfItemOrFirstChild &&
@@ -309,6 +315,12 @@ export default {
     },
     menu() {
       let items = [
+        {
+          icon: "fas fa-home",
+          name: "index",
+          title: "Home",
+          show: true,
+        },
         {
           icon: "fas fa-photo-video",
           title: "Media",
