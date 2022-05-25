@@ -16,94 +16,105 @@
         :description="`After finishing Lesson ${lesson} of the Chinse Zero to Hero HSK ${level} Course, reinforce the vocabulary you have learned in the lesson by watching these ${lessonVideos.length} videos:`"
         :image="`https://img.youtube.com/vi/${lessonVideos[0].youtube_id}/hqdefault.jpg`"
       />
-      <div class="row">
-        <div class="col-md-12 text-center">
-          <h3 class="mt-5">Expansion Videos</h3>
-          <div class="mt-3">
-            <b-dropdown id="dropdown-1" :text="levels[level].exam.name + ' ' + levels[level].level" class="ml-1">
-              <b-dropdown-item
-                v-for="(level, slug) in levels"
-                :key="`level-item-${slug}`"
-                @click="changeLevel(slug)"
+      <client-only>
+        <div class="row">
+          <div class="col-md-12 text-center">
+            <h3 class="mt-5">Expansion Videos</h3>
+            <div class="mt-3">
+              <b-dropdown
+                id="dropdown-1"
+                :text="levels[level].exam.name + ' ' + levels[level].level"
+                class="ml-1"
               >
-                {{ level.exam.name }} {{ level.level}}
-              </b-dropdown-item>
-            </b-dropdown>
-            <b-dropdown id="dropdown-1" :text="`Lesson ${lesson}`" class="ml-1">
-              <b-dropdown-item
-                v-for="(lesson, index) in levelLessons[level]"
-                @click="changeLesson(lesson)"
-                :key="`lesson-item-${index}`"
+                <b-dropdown-item
+                  v-for="(level, slug) in levels"
+                  :key="`level-item-${slug}`"
+                  @click="changeLevel(slug)"
+                >
+                  {{ level.exam.name }} {{ level.level }}
+                </b-dropdown-item>
+              </b-dropdown>
+              <b-dropdown
+                id="dropdown-1"
+                :text="`Lesson ${lesson}`"
+                class="ml-1"
               >
-                Lesson {{ lesson }}
-              </b-dropdown-item>
-            </b-dropdown>
+                <b-dropdown-item
+                  v-for="(lesson, index) in levelLessons[level]"
+                  @click="changeLesson(lesson)"
+                  :key="`lesson-item-${index}`"
+                >
+                  Lesson {{ lesson }}
+                </b-dropdown-item>
+              </b-dropdown>
+            </div>
+            <p class="mt-3 mb-5" style="max-width: 35rem; margin: 0 auto">
+              After finishing Lesson {{ lesson }} of the
+              <a
+                :href="`https://courses.chinesezerotohero.com/p/hsk-${level}-course`"
+                class="link-unstyled text-primary"
+                target="_blank"
+              >
+                <b>Chinese Zero to Hero HSK {{ level }} Course</b>
+              </a>
+              , reinforce the vocabulary you have learned in the lesson by
+              watching these
+              {{ lessonVideos.length }} videos:
+            </p>
           </div>
-          <p class="mt-3 mb-5" style="max-width: 35rem; margin: 0 auto">
-            After finishing Lesson {{ lesson }} of the
-            <a
-              :href="`https://courses.chinesezerotohero.com/p/hsk-${level}-course`"
-              class="link-unstyled text-primary"
-              target="_blank"
-            >
-              <b>Chinese Zero to Hero HSK {{ level }} Course</b>
-            </a>
-            , reinforce the vocabulary you have learned in the lesson by
-            watching these
-            {{ lessonVideos.length }} videos:
-          </p>
         </div>
-      </div>
-      <div v-if="loading" class="text-center">
-        <Loader :sticky="true" />
-      </div>
-      <div
-        class="row mb-4"
-        v-for="(video, videoIndex) in lessonVideos"
-        :key="`lesson-video-${videoIndex}`"
-      >
-        <div class="col-md-6">
-          <LazyYouTubeVideoList
-            skin="dark"
-            :checkSubs="false"
-            :lesson="true"
-            :updateVideos="updateLessonVideos"
-            :videos="[video]"
-            :singleColumn="true"
-            :showProgress="true"
-            :showPlayButton="true"
-          />
+        <div v-if="loading" class="text-center">
+          <Loader :sticky="true" />
         </div>
-        <div class="col-md-6">
-          <h5>Vocabulary covered</h5>
-          <Loader
-            message="Loading words...<br/>Don't wait. View the video now."
-          />
-          <WordList
-            :words="video.matches"
-            :key="`matched-words-${videoIndex}-${matchedWordsKey}`"
-            skin="dark"
-          ></WordList>
-        </div>
-      </div>
-      <div class="row mt-5 mb-5">
-        <div class="col-lg-2"></div>
-        <div class="col-md-12 col-lg-8">
-          <div class="pt-4 pb-4" v-if="unmatchedWords.length > 0">
-            <h4 class="mt-3 mb-4 text-center text-danger">
-              Lesson words
-              <em>not</em>
-              covered in the videos
-            </h4>
-            <Loader message="Loading words..." />
+        <div
+          class="row mb-4"
+          v-for="(video, videoIndex) in lessonVideos"
+          :key="`lesson-video-${videoIndex}`"
+        >
+          <div class="col-md-6">
+            <LazyYouTubeVideoList
+              skin="dark"
+              :checkSubs="false"
+              :lesson="true"
+              :updateVideos="updateLessonVideos"
+              :videos="[video]"
+              :singleColumn="true"
+              :showProgress="true"
+              :showPlayButton="true"
+            />
+          </div>
+          <div class="col-md-6">
+            <h5>Vocabulary covered</h5>
+            <Loader
+              message="Loading words...<br/>Don't wait. View the video now."
+            />
+
             <WordList
-              :words="unmatchedWords"
-              :key="`unmatched-words-${matchedWordsKey}`"
+              :words="video.matches"
+              :key="`matched-words-${videoIndex}-${matchedWordsKey}`"
               skin="dark"
             ></WordList>
           </div>
-          <div class="col-sm-12 text-center">
-            <client-only>
+        </div>
+
+        <div class="row mt-5 mb-5">
+          <div class="col-lg-2"></div>
+          <div class="col-md-12 col-lg-8">
+            <div class="pt-4 pb-4" v-if="unmatchedWords.length > 0">
+              <h4 class="mt-3 mb-4 text-center text-danger">
+                Lesson words
+                <em>not</em>
+                covered in the videos
+              </h4>
+              <Loader message="Loading words..." />
+
+              <WordList
+                :words="unmatchedWords"
+                :key="`unmatched-words-${matchedWordsKey}`"
+                skin="dark"
+              ></WordList>
+            </div>
+            <div class="col-sm-12 text-center">
               <router-link
                 v-if="lesson > 1"
                 :class="`btn btn-${
@@ -124,10 +135,10 @@
               >
                 Next Lesson
               </router-link>
-            </client-only>
+            </div>
           </div>
         </div>
-      </div>
+      </client-only>
     </div>
     <EntryCourseAd
       v-if="words[0]"
@@ -144,7 +155,6 @@ import WordList from "@/components/WordList";
 import YouTube from "@/lib/youtube";
 import Config from "@/lib/config";
 import Helper from "@/lib/helper";
-import axios from "axios";
 
 export default {
   data() {
@@ -181,7 +191,7 @@ export default {
   },
   computed: {
     levels() {
-      return Helper.languageLevels(this.$l2)
+      return Helper.languageLevels(this.$l2);
     },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
@@ -201,7 +211,7 @@ export default {
       });
     },
   },
-  async fetch() {
+  async created() {
     this.lessonVideos = [];
     let response = await this.$authios.get(
       `${Config.youtubeVideosTableName(this.$l2.id)}?sort=-id&filter[l2][eq]=${
@@ -217,9 +227,8 @@ export default {
     }
     this.loading = false;
     this.lessonVideos = Helper.uniqueByValue(videos, "youtube_id");
-    let words = await (
-      await this.$getDictionary()
-    ).lookupByLesson(this.level, this.lesson);
+    let dictionary = await this.$getDictionary()
+    let words = await dictionary.lookupByLesson(this.level, this.lesson);
     words = words.filter((word) => !word.oofc || !word.oofc === "");
     if (this.$l2.han && this.$l2.code !== "ja") {
       this.words = Helper.uniqueByValue(words, "simplified");
