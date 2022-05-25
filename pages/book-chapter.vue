@@ -236,48 +236,51 @@ export default {
   },
   watch: {
     args() {
-      console.log({args: this.args})
-      this.$fetch();
+      this.getChapter();
+      if (this.$refs.search) this.$refs.search.text = this.args;
     },
   },
   async created() {
-    let url = decodeURIComponent(this.args);
-    try {
-      let libraryL2 = await (
-        await import(`@/lib/library-l2s/library-${this.$l2["iso639-3"]}.js`)
-      ).default;
-      await Library.setLangSources(libraryL2.sources);
-    } catch (err) {
-      console.log(`Booklists for ${this.$l2["iso639-3"]} is unavailable.`);
-    }
-    let chapter = await Library.getChapter(url);
-    if (chapter) {
-      let root = parse("<div></div>");
-      root.innerHTML = sanitizeHtml(chapter.content);
-      for (let a of root.querySelectorAll("a")) {
-        if (!a.getAttribute("target")) {
-          let url = a.getAttribute("href");
-          a.setAttribute(
-            "href",
-            `/${this.$l1.code}/${
-              this.$l2.code
-            }/book/chapter?url=${encodeURIComponent(url)}`
-          );
-        }
-      }
-      chapter.content = root.innerHTML;
-      if (chapter.lang && chapter.lang === this.$l1.code) {
-        this.foreign = false;
-      } else {
-        this.foreign = true;
-      }
-      this.chapter = chapter;
-      if (chapter.book) {
-        this.book = this.chapter.book;
-      }
-    }
+    await this.getChapter();
   },
   methods: {
+    async getChapter() {
+      let url = decodeURIComponent(this.args);
+      try {
+        let libraryL2 = await(
+          await import(`@/lib/library-l2s/library-${this.$l2["iso639-3"]}.js`)
+        ).default;
+        await Library.setLangSources(libraryL2.sources);
+      } catch (err) {
+        console.log(`Booklists for ${this.$l2["iso639-3"]} is unavailable.`);
+      }
+      let chapter = await Library.getChapter(url);
+      if (chapter) {
+        let root = parse("<div></div>");
+        root.innerHTML = sanitizeHtml(chapter.content);
+        for (let a of root.querySelectorAll("a")) {
+          if (!a.getAttribute("target")) {
+            let url = a.getAttribute("href");
+            a.setAttribute(
+              "href",
+              `/${this.$l1.code}/${
+                this.$l2.code
+              }/book/chapter?url=${encodeURIComponent(url)}`
+            );
+          }
+        }
+        chapter.content = root.innerHTML;
+        if (chapter.lang && chapter.lang === this.$l1.code) {
+          this.foreign = false;
+        } else {
+          this.foreign = true;
+        }
+        this.chapter = chapter;
+        if (chapter.book) {
+          this.book = this.chapter.book;
+        }
+      }
+    },
     stripTags(t) {
       return Helper.stripTags(t);
     },

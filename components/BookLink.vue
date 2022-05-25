@@ -1,7 +1,15 @@
 <template>
   <span>
     <slot></slot>
-    <router-link :to="href" :title="title" class="btn btn-small"><i class="fa fa-chevron-right"></i></router-link>
+    &nbsp;
+    <router-link
+      v-if="!href.endsWith('undefined')"
+      :to="href"
+      :title="title"
+      class="btn btn-small"
+    >
+      <i class="fa fa-chevron-right"></i>
+    </router-link>
   </span>
 </template>
 
@@ -20,8 +28,8 @@ export default {
       hover: false,
     };
   },
-  methods: {
-  },
+  mounted() {},
+  methods: {},
 };
 </script>
 

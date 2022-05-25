@@ -80,6 +80,7 @@ export default {
     },
     lines() {
       let html = this.html.trim()
+      console.log(html)
       let lines = html.replace(/<(div|p|h1|h2|h3|h4|h5|h6|dd)/g, 'ANNOTATORSEPARATOR!!!<$1').split('ANNOTATORSEPARATOR!!!')
       lines = lines.map(line => this.augmentHtml(line))
       return lines
