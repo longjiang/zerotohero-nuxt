@@ -284,11 +284,15 @@ const Dictionary = {
   lookupFuzzy(text, limit = false) {
     let results = []
     if (!this.isRoman(text)) {
-      let reg = new RegExp(text, 'gi')
-      results = this.words
-        .filter(
-          row => reg.test(row.kanji) || reg.test(row.kana)
-        )
+      try {
+        let reg = new RegExp(text, 'gi')
+        results = this.words
+          .filter(
+            row => reg.test(row.kanji) || reg.test(row.kana)
+          )
+      } catch (err) {
+        console.log(err)
+      }
     } else {
       text = text.toLowerCase().trim()
       results = this.words
@@ -301,7 +305,7 @@ const Dictionary = {
     if (results) {
       results = results
         .sort((a, b) => {
-          return a.kana.length - b.kana.length
+          return a.kana && b.kana ? a.kana.length - b.kana.length : 0
         })
       if (limit) {
         results = results.slice(0, limit)

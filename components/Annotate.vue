@@ -454,8 +454,9 @@ export default {
         if (typeof token === "object") {
           if (token && typeof token === "object") {
             if (token.candidates.length > 0) {
-              html += `<WordBlock transliterationprop="${tr(
-                token.text.replace('"', "")
+              html += `<WordBlock transliterationprop="${tr(token.text).replace(
+                /"/g,
+                ""
               )}" :checkSaved="${
                 this.checkSaved
               }" ref="word-block" :phonetics="${this.phonetics}" :popup="${
