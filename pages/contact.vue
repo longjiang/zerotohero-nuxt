@@ -52,18 +52,18 @@
             </div>
           </div>
         </div>
+        <div class="row">
+          <div class="col-12">
+            <h4 class="mb-5 text-center">Our “Team”</h4>
+          </div>
+        </div>
 
         <div class="row">
-          <div class="col-sm-6">
+          <div class="col-sm-6 mb-4" style="height: 100%">
             <div class="contact-block p-4">
-              <h5 class="mb-3">
-                {{ $t("Sale & business inquiries:") }}
-              </h5>
-              <div>
-                <span>
-                  <strong>Co-Founder:</strong>
-                  <span>Ken Dai</span>
-                </span>
+              <div class="mb-3">
+                <h5>Ken Dai</h5>
+                <div>Co-founder, sales &amp; operations</div>
               </div>
               <div>
                 <span>
@@ -79,16 +79,11 @@
               </div>
             </div>
           </div>
-          <div class="col-sm-6">
+          <div class="col-sm-6" style="height: 100%">
             <div class="contact-block p-4">
-              <h5 class="mb-3">
-                {{ $t("Website & course inquiries:") }}
-              </h5>
-              <div>
-                <span>
-                  <strong>Co-Founder:</strong>
-                  <span>Jiang Long</span>
-                </span>
+              <div class="mb-3">
+                <h5>Jiang Long</h5>
+                <div>Co-founder, instructor, designer &amp; dev</div>
               </div>
               <div>
                 <span>
@@ -96,11 +91,12 @@
                   <a href="mailto:jon@chinesezerotohero.com">
                     jon@chinesezerotohero.com
                   </a>
+                  (fyi I have 1,219 unread messages)
                 </span>
               </div>
               <div>
                 <strong>{{ $t("WeChat:") }}</strong>
-                longjiang2005bby&nbsp;
+                longjiang2005bby (I'm too busy coding to check my phone)
               </div>
             </div>
           </div>
@@ -108,7 +104,9 @@
         <div class="row mt-4">
           <div class="col-sm-12">
             <div class="text-center p-4">
-              <h5 class="mb-4">And you can always reach us via:</h5>
+              <h5 class="mb-4">
+                And you can always reach either one of us via:
+              </h5>
               <SocialLogos style="line-height: 3" />
             </div>
           </div>
