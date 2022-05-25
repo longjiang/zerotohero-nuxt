@@ -19,7 +19,7 @@ export default {
       collapsed: false,
       overlayPlayerYouTubeId: undefined,
       overlayPlayerLesson: undefined,
-      time: 0,
+      l2Time: {},
       timeLoggerID: undefined,
       // transition: false,
       // edgeDetected: false,
@@ -113,11 +113,15 @@ export default {
         }
       }
       if (mutation.type === "progress/LOAD") {
-        this.time = this.$store.getters["progress/time"](this.l2);
+        this.l2Time[this.l2.code] = this.$store.getters["progress/time"](
+          this.l2
+        );
         this.startLoggingUserTime();
       }
       if (mutation.type === "progress/SET_TIME") {
-        this.time = this.$store.getters["progress/time"](this.l2);
+        this.l2Time[this.l2.code] = this.$store.getters["progress/time"](
+          this.l2
+        );
       }
     });
     if (this.l1 && this.l2) this.loadLanguageSpecificSettings(); // Make sure this line is AFTER registering mutation event listeners above!
@@ -166,20 +170,26 @@ export default {
   },
   methods: {
     startLoggingUserTime() {
-      console.log('🕙 Timer started!')
       if (this.timeLoggerID) return;
       this.timeLoggerID = setInterval(() => {
         if (!this.isAppIdle && this.l2) {
-          this.time += 1000;
+          if (!this.l2Time[this.l2.code]) this.l2Time[this.l2.code] = 0;
+          this.l2Time[this.l2.code] += 1000;
           // Log user's time on site every 60 seconds
-          if (this.time % 60000 === 0) {
+          if (this.l2Time[this.l2.code] % 15000 === 0) {
             this.$store.dispatch("progress/setTime", {
               l2: this.l2,
-              time: this.time,
+              time: this.l2Time[this.l2.code],
             });
           }
         }
       }, 1000);
+      console.log("🕙 Timer started!", { loggerID: this.timeLoggerID });
+    },
+    restartLoggingUserTime() {
+      clearInterval(this.timeLoggerID);
+      this.timeLoggerID = undefined;
+      this.startLoggingUserTime();
     },
     onPanStart(e) {
       if (e.center.x > window.innerWidth * 0.9) this.edgeDetected = "right";
@@ -384,7 +394,6 @@ export default {
           adminMode: this.$store.state.settings.adminMode,
         });
       }
-
     },
   },
 };
