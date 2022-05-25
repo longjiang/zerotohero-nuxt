@@ -1,14 +1,14 @@
 <router>
   {
-    path: '/:l1/:l2/book/:id/:title',
+    path: '/:l1/:l2/book/:id/:page?/:title?',
     props: true
   }
 </router>
 <template>
   <div class="main">
-    <div class="container pt-4">
+    <div class="container pt-4 pb-5">
       <div class="row">
-        <div class="col-sm-6 col-md-4 col-lg-3">
+        <div class="col-sm-6 col-lg-4 col-xl-3">
           <div class="book-info" v-if="bookData">
             <div class="p-4">
               <router-link
@@ -38,10 +38,42 @@
           </div>
         </div>
         <div
-          class="col-sm-12 col-md-8 col-lg-9 pt-3"
+          class="col-sm-12 col-lg-8 col-xl-9 pt-3"
           v-if="bookData && filteredHtml"
         >
-          <LazyTextWithSpeechBar :html="filteredHtml" />
+          <LazyTextWithSpeechBar :html="filteredHtml" :page="page" />
+
+          <div>
+            <router-link
+              v-if="Number(page) > 1"
+              class="btn btn-success"
+              :to="{
+                name: 'book',
+                params: {
+                  id,
+                  book,
+                  title,
+                  page: page ? Number(page) - 1 : undefined,
+                },
+              }"
+            >
+              <i class="fas fa-chevron-left"></i>
+            </router-link>
+            <router-link
+              class="btn btn-success"
+              :to="{
+                name: 'book',
+                params: {
+                  id,
+                  book,
+                  title,
+                  page: page ? Number(page) + 1 : undefined,
+                },
+              }"
+            >
+              <i class="fas fa-chevron-right"></i>
+            </router-link>
+          </div>
         </div>
       </div>
     </div>
@@ -55,9 +87,13 @@ import { parse } from "node-html-parser";
 
 export default {
   props: {
-    id: [Number, String],
+    id: String,
     book: Object,
     title: String,
+    page: {
+      type: String,
+      default: 1,
+    },
   },
   data() {
     return { bookData: this.book, html: undefined };

@@ -30,7 +30,11 @@
         </b-button-group>
       </client-only>
     </div>
-    <template v-for="(line, lineIndex) of lines">
+    <template
+      v-for="(line, lineIndex) of page
+        ? lines.slice(10 * (page - 1), 10 * page)
+        : lines"
+    >
       <Annotate
         v-if="line.trim().length > 0"
         :key="`chapter-line-${lineIndex}`"
@@ -59,6 +63,9 @@ export default {
     foreign: {
       default: true,
     },
+    page: {
+      type: Number
+    },
   },
   data() {
     return {
@@ -67,6 +74,7 @@ export default {
       utterance: undefined,
       speaking: false,
       voices: [],
+      page: 1,
     };
   },
   computed: {
