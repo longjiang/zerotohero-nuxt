@@ -220,11 +220,6 @@ export default {
   methods: {
     toggleTranslation() {
       this.showTranslate = !this.showTranslate;
-      this.translationSrc = this.$languages.translationURL(
-        this.text,
-        this.$l1,
-        this.$l2
-      );
     },
     translationUrl(l1Code, l2Code, text) {
       let langs = {

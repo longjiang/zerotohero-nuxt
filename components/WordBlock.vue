@@ -493,6 +493,16 @@ export default {
     },
   },
   methods: {
+    stripAccents(str) {
+      str = str
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "") // Accents
+        .replace(/[\u0600-\u0620\u064b-\u0655]/g, "") // Arabic diacritics
+        .replace(/[\u0559-\u055F]/g, ""); // Armenian diacritics
+      if (["he", "hbo", "iw"].includes(this.l2))
+        str = this.stripHebrewVowels(str);
+      return str;
+    },
     pronunciation(word) {
       let pronunciation = word.pronunciation;
       if (this.$l2.code === "vi") {
@@ -524,7 +534,12 @@ export default {
     async visibilityChanged(isVisible) {
       await Helper.timeout(123);
       if (isVisible && (!this.words || this.words.length === 0)) {
-        if (this.$l2.code !== "fa") this.lookup(true);
+        if (this.$l2.code !== "fa") {
+          let quick = true;
+          if (this.l2Settings.showPinyin && !this.transliteration)
+            quick = false; // If the user wants to see IPA, we get all the words from the get go by setting quick to false, which can take a performance hit
+          await this.lookup(quick);
+        }
       }
     },
     async getFarsiRomanization(text) {
@@ -733,6 +748,19 @@ export default {
         this.closePopup();
       }
     },
+    updateIPA() {
+      if (!this.transliteration && this.words && this.words[0]) {
+        // let search = this.stripAccents(this.text.toLowerCase());
+        let word = this.words.find(
+          (w) => w.pronunciation && w.pronunciation !== ""
+        );
+        if (this.text === "traversiers") console.log(this.words);
+        this.transliteration =
+          word && word.pronunciation
+            ? word.pronunciation.split(",")[0]
+            : this.transliteration;
+      }
+    },
     async openPopup() {
       if (this.open) return;
       if (this.popup && (await this.$getDictionary())) {
@@ -826,6 +854,7 @@ export default {
       }
       words = Helper.uniqueByValue(words, "id");
       this.words = words;
+      this.updateIPA();
       this.loading = false;
     },
     unique(a) {
