@@ -19,9 +19,8 @@
       <template>
         <div class="row">
           <div class="col-12">
-            <h3 class="mb-5 text-center">Support and Contact</h3>
             <div class="alert-success p-4 rounded mb-5">
-              <h5 class="text-center">Give Feed Back to Zero to Hero</h5>
+              <h5 class="text-center">Get Help &amp; Give Feed Back</h5>
               <p>
                 If you experience a problem, see something broken, or would like
                 to suggest a feature, please

@@ -14,39 +14,37 @@
           <div>
             <h3 class="text-center mb-5">Frequently Asked Questions</h3>
             <div class="faq-item">
-              <h5>Who are you?</h5>
+              <h5>What is Zero to Hero?</h5>
               <p>
-                zerotohero.ca is an open-source (see
+                Zero to Hero is an
                 <a href="https://github.com/longjiang/zerotohero-nuxt">
-                  GitHub repo
+                  open-source
                 </a>
-                ), non-profit, community-driven platform to help people learn
-                all languages around the world.
+                language-learning platform that helps people learn all languages
+                natually via comprehensible input.
               </p>
               <p>
-                At the moment, the website has promotional content for various
-                language-learning product such as Chinese Zero to Hero, Enlgish
-                Zero to Hero. We are currently working with the community to
-                separte the commercial and non-commercial content from the site
-                and make the data at zerotohero.ca fully open-source.
+                We have also produced online video lessons for the Chinese and
+                English languages: Chinese Zero to Hero (hosted on Teachable)
+                and Enlgish Zero to Hero (hosted on CCtalk).
               </p>
             </div>
             <div class="faq-item">
-              <h5>What about copyright?</h5>
+              <h5>Where are your videos hosted?</h5>
               <p>
                 The videos under the Media tab are
-                <em>not copied</em>
+                <em>NOT hosted on our servers</em>
                 but merely
                 <a
                   href="https://support.google.com/youtube/answer/171780?hl=en"
                 >
-                  i-frame embeds from YouTube
+                  YouTube iframe embeds
                 </a>
                 . YouTube allows anyone to embed any video on any website. We do
                 not infringe on copyright simply by embedding YouTube videos.
               </p>
               <p>
-                Nevertheless, the community behind zerotohero.ca wants to be on
+                Nevertheless, the community behind Zero to Hero wants to be on
                 good terms with all content creators. If you wish to have your
                 content removed, you can easily do so by following the
                 instructions in the next section.
@@ -55,7 +53,7 @@
             <div class="faq-item">
               <h5>How can I prevent my videos from showing up on this site?</h5>
               <p>
-                By allowing websites like zerotohero.ca, your videos will get
+                By allowing websites like Zero to Hero, your videos will get
                 views and generate ad revenue for you as if the videos are
                 viewed on YouTube. The YouTube embed player on this website also
                 recommends other videos from you channel, which can potentially
@@ -70,7 +68,7 @@
               <ol>
                 <li>
                   <b>Restrict embedding for specific websites.</b>
-                  You can blacklist certain domains (such as www.zerotohero.ca)
+                  You can blacklist certain domains (such as www.Zero to Hero)
                   to prevent them from displaying your YouTube videos. For
                   instructions, see
                   <a
