@@ -34,7 +34,7 @@
               >
                 {{ author.name }}
               </div>
-              <a :href='bookData.formats["text/html"]' target="_blank" class="btn btn-sm mt-3 btn-success">View on Gutenberg <i class="fas fa-chevron-right ml-1"></i></a>
+              <a :href='bookData.formats["text/html"]' target="_blank" class="btn btn-md mt-3 btn-success">Gutenberg <i class="fas fa-chevron-right ml-1"></i></a>
             </div>
           </div>
         </div>
@@ -44,10 +44,10 @@
         >
           <LazyTextWithSpeechBar :html="filteredHtml" :page="page" />
 
-          <div>
+          <div class="mt-4">
             <router-link
               v-if="Number(page) > 1"
-              class="btn btn-success"
+              class="btn btn-success btn-lg"
               :to="{
                 name: 'book',
                 params: {
@@ -61,7 +61,7 @@
               <i class="fas fa-chevron-left"></i>
             </router-link>
             <router-link
-              class="btn btn-success"
+              class="btn btn-success btn-lg"
               :to="{
                 name: 'book',
                 params: {
