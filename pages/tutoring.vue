@@ -78,7 +78,7 @@
                 :key="`level-tab-${n}`"
                 :to="`/${$l1.code}/${$l2.code}/tutoring/${n}`"
                 class="tab link-unstyled"
-                :data-bg-level="Helper.level(n).name.replace('-', '')"
+                :data-bg-level="Helper.level(n, $l2).name.replace('-', '')"
               >
                 {{ Helper.level(n, $l2).name }}
               </router-link>
@@ -93,7 +93,7 @@
               style="height: 0.5rem"
               :class="
                 level
-                  ? `bg-level${Helper.level(level).name.replace('-', '')}`
+                  ? `bg-level${Helper.level(level, $l2).name.replace('-', '')}`
                   : `bg-dark`
               "
             ></div>
@@ -139,7 +139,6 @@
 <script>
 import Helper from "@/lib/helper";
 import Config from "@/lib/config";
-import axios from 'axios'
 
 export default {
   props: ["level"],
