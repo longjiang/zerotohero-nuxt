@@ -88,11 +88,11 @@ import { parse } from "node-html-parser";
 
 export default {
   props: {
-    id: Number,
+    id: [Number, String],
     book: Object,
     title: String,
     page: {
-      type: Number,
+      type: [Number, String],
       default: 1,
     },
   },
