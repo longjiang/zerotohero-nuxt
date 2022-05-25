@@ -46,6 +46,8 @@
 </template>
 
 <script>
+import { parse } from 'node-html-parser';
+
 export default {
   props: {
     html: {
@@ -79,6 +81,7 @@ export default {
     lines() {
       let html = this.html.trim()
       let lines = html.replace(/<(div|p|h1|h2|h3|h4|h5|h6|dd)/g, 'ANNOTATORSEPARATOR!!!<$1').split('ANNOTATORSEPARATOR!!!')
+      lines = lines.map(line => this.augmentHtml(line))
       return lines
     }
   },
@@ -86,6 +89,16 @@ export default {
     this.getVoices();
   },
   methods: {
+    augmentHtml(html) {
+      let dom = parse(html)
+      let as = dom.querySelectorAll('a')
+      as.forEach(a => {
+        let bookLinkHtml = a.toString().replace(/^<a/, '<BookLink').replace(/<\/a>$/, '</BookLink>')
+        a.replaceWith(parse(bookLinkHtml))
+      })
+      html = dom.toString()
+      return html
+    },
     browser() {
       return typeof document !== "undefined";
     },

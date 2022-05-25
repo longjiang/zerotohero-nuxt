@@ -236,6 +236,7 @@ export default {
   },
   watch: {
     args() {
+      console.log({args: this.args})
       this.$fetch();
     },
   },

@@ -112,6 +112,7 @@
 <script>
 import wordblock from "@/components/WordBlock";
 import popupnote from "@/components/PopupNote";
+import booklink from "@/components/BookLink";
 import VRuntimeTemplate from "v-runtime-template";
 import Helper from "@/lib/helper";
 import { transliterate as tr } from "transliteration";
@@ -121,6 +122,7 @@ export default {
   components: {
     wordblock,
     popupnote,
+    booklink,
     VRuntimeTemplate,
   },
   props: {
