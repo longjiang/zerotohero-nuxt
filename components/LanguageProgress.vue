@@ -3,10 +3,7 @@
     <div>
       <h5 class="hours-display">
         {{
-          new Date(time)
-            .toISOString()
-            .substr(11, 8)
-            .replace(/(.*):(.*):(.*)/, "$1 hours $2 min $3 sec").replace(/00/g, '0')
+          formatDuration(time)
         }}
         <span v-if="dot" class="dot"></span>
         <span
@@ -51,7 +48,7 @@
     <div class="bottom-labels">
       <div class="bottom-label-left">
         <b class="" style="color: #e6a000">
-          {{ Math.round(hoursNeeded - hours) }}
+          {{ $n(Math.round(hoursNeeded - hours)) }}
         </b>
         hrs more to {{ goalText }}
       </div>
@@ -181,6 +178,18 @@ export default {
   methods: {
     levelObj(level) {
       return Helper.languageLevels(this.$l2)[level];
+    },
+    // https://www.codegrepper.com/code-examples/javascript/javascript+duration+format
+    formatDuration(time) {
+      
+      var sec_num = parseInt(time / 1000, 10); // don't forget the second param
+      var hours = Math.floor(sec_num / 3600);
+      var minutes = Math.floor((sec_num - hours * 3600) / 60);
+      var seconds = sec_num - hours * 3600 - minutes * 60;
+
+      let formatted = `${hours ? hours + ' hr' : ''} ${minutes ? minutes + ' min' : ''} ${seconds ? seconds + ' sec' : ''}`
+      formatted = formatted.trim() === '' ? 'Just started' : formatted
+      return formatted
     },
   },
   watch: {
