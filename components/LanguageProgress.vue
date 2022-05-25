@@ -2,9 +2,7 @@
   <div class="language-progress">
     <div>
       <h5 class="hours-display">
-        {{
-          formatDuration(time)
-        }}
+        {{ formatDuration(time) }}
         <span v-if="dot" class="dot"></span>
         <span
           v-if="edit"
@@ -48,7 +46,12 @@
     <div class="bottom-labels">
       <div class="bottom-label-left">
         <b class="" style="color: #e6a000">
-          {{ $n(Math.round(hoursNeeded - hours)) }}
+          {{
+            String(Math.round(hoursNeeded - hours)).replace(
+              /\B(?=(\d{3})+(?!\d))/g,
+              ","
+            )
+          }}
         </b>
         hrs more to {{ goalText }}
       </div>
@@ -181,15 +184,16 @@ export default {
     },
     // https://www.codegrepper.com/code-examples/javascript/javascript+duration+format
     formatDuration(time) {
-      
       var sec_num = parseInt(time / 1000, 10); // don't forget the second param
       var hours = Math.floor(sec_num / 3600);
       var minutes = Math.floor((sec_num - hours * 3600) / 60);
       var seconds = sec_num - hours * 3600 - minutes * 60;
 
-      let formatted = `${hours ? hours + ' hr' : ''} ${minutes ? minutes + ' min' : ''} ${seconds ? seconds + ' sec' : ''}`
-      formatted = formatted.trim() === '' ? 'Just started' : formatted
-      return formatted
+      let formatted = `${hours ? hours + " hr" : ""} ${
+        minutes ? minutes + " min" : ""
+      } ${seconds ? seconds + " sec" : ""}`;
+      formatted = formatted.trim() === "" ? "Just started" : formatted;
+      return formatted;
     },
   },
   watch: {
