@@ -227,15 +227,17 @@ export default {
     }
     this.loading = false;
     this.lessonVideos = Helper.uniqueByValue(videos, "youtube_id");
-    let dictionary = await this.$getDictionary()
-    let words = await dictionary.lookupByLesson(this.level, this.lesson);
-    words = words.filter((word) => !word.oofc || !word.oofc === "");
-    if (this.$l2.han && this.$l2.code !== "ja") {
-      this.words = Helper.uniqueByValue(words, "simplified");
-    } else {
-      this.words = Helper.uniqueByValue(words, "head");
+    let dictionary = await this.$getDictionary();
+    if (dictionary) {
+      let words = await dictionary.lookupByLesson(this.level, this.lesson);
+      words = words.filter((word) => !word.oofc || !word.oofc === "");
+      if (this.$l2.han && this.$l2.code !== "ja") {
+        this.words = Helper.uniqueByValue(words, "simplified");
+      } else {
+        this.words = Helper.uniqueByValue(words, "head");
+      }
+      this.updateMatches();
     }
-    this.updateMatches();
   },
   methods: {
     changeLevel(level) {

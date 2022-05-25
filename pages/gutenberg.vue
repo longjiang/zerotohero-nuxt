@@ -1,6 +1,6 @@
 <router>
   {
-    path: '/:l1/:l2/book/:id/:page?/:title?',
+    path: '/:l1/:l2/gutenberg/:id/:page?/:title?',
     props: true
   }
 </router>
@@ -19,7 +19,7 @@
               v-if="Number(page) > 1"
               class="btn btn-success btn-lg d-block w-100 mr-1 flex-1"
               :to="{
-                name: 'book',
+                name: 'gutenberg',
                 params: {
                   id,
                   book,
@@ -33,7 +33,7 @@
             <router-link
               class="btn btn-success btn-lg w-100 d-block ml-1 flex-1"
               :to="{
-                name: 'book',
+                name: 'gutenberg',
                 params: {
                   id,
                   book,
@@ -53,7 +53,7 @@
               <div class="p-4">
                 <router-link
                   :to="{
-                    name: 'book',
+                    name: 'gutenberg',
                     params: { id: bookData.id, title: bookData.title, book },
                   }"
                   class="three-to-two-aspect-wrapper shadow d-block"
