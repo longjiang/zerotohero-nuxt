@@ -82,7 +82,7 @@
       </b-dropdown>
     </div>
     <div
-      :class="{ 'annotate-slot annotate-template': true, 'd-none': annotated }"
+      :class="{ 'annotate-slot': true, 'd-none': annotated }"
       style="display: inline"
     >
       <slot></slot>

@@ -117,7 +117,7 @@ export default {
     getSentences() {
       let sentences = [];
       for (let annotate of this.$children) {
-        for (let sentence of $(annotate.$el).find(".sentence")) {
+        for (let sentence of $(annotate.$el).find(".annotate-template .sentence")) {
           sentences.push(sentence);
         }
       }
