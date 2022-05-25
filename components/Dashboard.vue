@@ -77,7 +77,7 @@ export default {
           let l2Progress = Object.assign({ l2Code }, this.progress[l2Code]);
           return l2Progress;
         })
-        .filter((item) => item && item.l2Code && item.time);
+        .filter((item) => item && item.l2Code && item.time !== undefined);
       sorted = sorted
         .sort((a, b) => b.time - a.time)
         .sort((a, b) => b.level - a.level);

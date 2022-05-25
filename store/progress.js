@@ -41,6 +41,7 @@ export const mutations = {
     }
   },
   SET_TIME(state, { l2, time }) {
+    console.log(`⏳ Logging time for ${l2.name} (${l2.code}): ${parseInt(time / 1000 / 60)} minutes`)
     if (typeof localStorage !== 'undefined') {
       if (!state.progress[l2.code]) {
         state.progress[l2.code] = {}

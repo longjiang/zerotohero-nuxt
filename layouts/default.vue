@@ -90,7 +90,6 @@ export default {
     this.wide = Helper.wide();
     smoothscroll.polyfill(); // Safari does not support smoothscroll
     this.loadGeneralSettings();
-    if (this.l1 && this.l2) this.loadLanguageSpecificSettings();
     let navigated = false;
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type === "history/LOAD_HISTORY") {
@@ -113,7 +112,6 @@ export default {
           this.loadLanguageSpecificSettings();
         }
       }
-
       if (mutation.type === "progress/LOAD") {
         this.time = this.$store.getters["progress/time"](this.l2);
         this.startLoggingUserTime();
@@ -122,6 +120,7 @@ export default {
         this.time = this.$store.getters["progress/time"](this.l2);
       }
     });
+    if (this.l1 && this.l2) this.loadLanguageSpecificSettings(); // Make sure this line is AFTER registering mutation event listeners above!
     this.onLanguageChange();
     this.onAllLanguagesLoaded();
   },
@@ -167,6 +166,7 @@ export default {
   },
   methods: {
     startLoggingUserTime() {
+      console.log('🕙 Timer started!')
       if (this.timeLoggerID) return;
       this.timeLoggerID = setInterval(() => {
         if (!this.isAppIdle && this.l2) {
