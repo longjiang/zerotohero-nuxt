@@ -310,76 +310,6 @@ export default {
     menu() {
       let items = [
         {
-          icon: "fas fa-user",
-          title: `${
-            this.$auth &&
-            this.$auth.loggedIn &&
-            this.$auth.user &&
-            this.$auth.user.first_name
-              ? "Hi, " + this.$auth.user.first_name
-              : "Login"
-          }`,
-          show: true,
-          exact: true,
-          children: [
-            {
-              name: "profile",
-              icon: "fas fa-user",
-              title: "Profile & Progress",
-              show: this.$auth && this.$auth.loggedIn,
-            },
-            {
-              name: "login",
-              icon: "fas fa-key",
-              title: "Login",
-              show: !(this.$auth && this.$auth.loggedIn),
-            },
-            {
-              name: "register",
-              icon: "fas fa-user-plus",
-              title: "Register",
-              show: !(this.$auth && this.$auth.loggedIn),
-            },
-            {
-              name: "saved-words",
-              icon: "fas fa-star",
-              title: "Saved Words",
-              show: true,
-            },
-            {
-              name: "saved-phrases",
-              icon: "fas fa-bookmark",
-              title: "Saved Phrases",
-              show: true,
-            },
-            {
-              name: "watch-history",
-              icon: "fas fa-history",
-              title: "Watch History",
-              show: true,
-            },
-            {
-              href: "https://sso.teachable.com/secure/133035/identity/login",
-              icon: "fas fa-graduation-cap",
-              title: "My Teachable Courses",
-              show: this.$l2 && this.$l2.code === "zh",
-            },
-            {
-              href: "https://m.cctalk.com/inst/stevmab3",
-              icon: "fas fa-graduation-cap",
-              title: "My CCtalk Courses",
-              show: this.$l2 && this.$l2.code === "en",
-            },
-            {
-              name: "logout",
-              icon: "fas fa-sign-out-alt",
-              title: "Logout",
-              show: this.$auth && this.$auth.loggedIn,
-              params: { l1: this.l1.code, l2: this.l2.code },
-            },
-          ],
-        },
-        {
           icon: "fas fa-photo-video",
           title: "Media",
           show: this.hasFeature("youtube"),
@@ -761,25 +691,6 @@ export default {
           ],
         },
         {
-          icon: "fas fa-bell",
-          title: "What’s New",
-          show: true,
-          children: [
-            {
-              name: "updates",
-              title: "Updates",
-              icon: "fab fa-twitter",
-              show: true,
-            },
-            {
-              name: "articles-wiki",
-              title: "Blog",
-              icon: "fas fa-copy",
-              show: true,
-            },
-          ],
-        },
-        {
           icon: "fas fa-gem",
           title: "Resources",
           show: true,
@@ -817,22 +728,33 @@ export default {
           ],
         },
         {
-          name: "settings",
-          icon: "fas fa-cog",
-          title: "Settings",
-          shortcut: (e) => e.code === "KeyS" && e.metaKey && e.shiftKey,
-          show: true,
-        },
-        {
-          icon: "fas fa-id-card",
-          title: "Contact",
+          icon: "fas fa-question",
+          title: "Help & Support",
           show: true,
           children: [
             {
               name: "contact",
               icon: "fas fa-id-card",
               show: true,
-              title: "Contact Us",
+              title: "Support & Contact",
+            },
+            {
+              name: "discussions",
+              icon: "fas fa-comment",
+              show: true,
+              title: "Comments & Feedback",
+            },
+            {
+              name: "updates",
+              title: "New Features",
+              icon: "fab fa-twitter",
+              show: true,
+            },
+            {
+              name: "articles-wiki",
+              title: "Latest Articles",
+              icon: "fas fa-copy",
+              show: true,
             },
             {
               name: "faq",
@@ -924,6 +846,83 @@ export default {
               title: "Analytics",
               name: "analytics",
               show: this.$adminMode,
+            },
+          ],
+        },
+        {
+          name: "settings",
+          icon: "fas fa-cog",
+          title: "Settings",
+          shortcut: (e) => e.code === "KeyS" && e.metaKey && e.shiftKey,
+          show: true,
+        },
+        {
+          icon: "fas fa-user",
+          title: `${
+            this.$auth &&
+            this.$auth.loggedIn &&
+            this.$auth.user &&
+            this.$auth.user.first_name
+              ? "Hi, " + this.$auth.user.first_name
+              : "Login"
+          }`,
+          show: true,
+          exact: true,
+          children: [
+            {
+              name: "profile",
+              icon: "fas fa-user",
+              title: "Profile & Progress",
+              show: this.$auth && this.$auth.loggedIn,
+            },
+            {
+              name: "login",
+              icon: "fas fa-key",
+              title: "Login",
+              show: !(this.$auth && this.$auth.loggedIn),
+            },
+            {
+              name: "register",
+              icon: "fas fa-user-plus",
+              title: "Register",
+              show: !(this.$auth && this.$auth.loggedIn),
+            },
+            {
+              name: "saved-words",
+              icon: "fas fa-star",
+              title: "Saved Words",
+              show: true,
+            },
+            {
+              name: "saved-phrases",
+              icon: "fas fa-bookmark",
+              title: "Saved Phrases",
+              show: true,
+            },
+            {
+              name: "watch-history",
+              icon: "fas fa-history",
+              title: "Watch History",
+              show: true,
+            },
+            {
+              href: "https://sso.teachable.com/secure/133035/identity/login",
+              icon: "fas fa-graduation-cap",
+              title: "My Teachable Courses",
+              show: this.$l2 && this.$l2.code === "zh",
+            },
+            {
+              href: "https://m.cctalk.com/inst/stevmab3",
+              icon: "fas fa-graduation-cap",
+              title: "My CCtalk Courses",
+              show: this.$l2 && this.$l2.code === "en",
+            },
+            {
+              name: "logout",
+              icon: "fas fa-sign-out-alt",
+              title: "Logout",
+              show: this.$auth && this.$auth.loggedIn,
+              params: { l1: this.l1.code, l2: this.l2.code },
             },
           ],
         },
