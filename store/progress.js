@@ -13,7 +13,7 @@ export const mutations = {
       try {
         progress = JSON.parse(json)
       } catch (err) {
-        console.log(err)
+        Helper.logError(err)
       }
       if (progress) {
         state.progress = progress

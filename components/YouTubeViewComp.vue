@@ -301,7 +301,7 @@ export default {
             videos = [...videos, ...response.data.data];
           }
         } catch (err) {
-          console.log(err);
+          Helper.logError(err);
         }
 
         // Make sure this video is included in the collection
@@ -346,7 +346,7 @@ export default {
         if (this.nextEpisode)
           this.$router.push({ name: "youtube-view", params: this.nextEpisode });
       } catch (err) {
-        console.log(err);
+        Helper.logError(err);
       }
     },
     mergeVideos(video, youtube_video) {
@@ -377,7 +377,7 @@ export default {
         }
         return video;
       } catch (err) {
-        console.log(err);
+        Helper.logError(err);
       }
     },
     async getTranscript(video) {
@@ -412,7 +412,7 @@ export default {
         }
         return video;
       } catch (err) {
-        console.log(err);
+        Helper.logError(err);
       }
       return video;
     },
@@ -429,7 +429,7 @@ export default {
           }`
         );
       } catch (err) {
-        console.log(err);
+        Helper.logError(err);
         return;
       }
       if (
@@ -574,7 +574,7 @@ export default {
           );
           console.log("Missing duration information added.");
         } catch (err) {
-          console.log(err);
+          Helper.logError(err);
         }
       }
       return video;

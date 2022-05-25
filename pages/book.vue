@@ -140,7 +140,7 @@ export default {
         if (html) this.html = html;
       }
     } catch (err) {
-      console.log(err);
+      Helper.logError(err);
     }
   },
 };

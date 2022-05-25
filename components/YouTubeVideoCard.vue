@@ -557,7 +557,7 @@ export default {
             Vue.delete(this.video, "id");
           }
         } catch (err) {
-          console.log(err);
+          Helper.logError(err);
         }
       }
       return true;
@@ -677,7 +677,7 @@ export default {
         }
         return true;
       } catch (err) {
-        console.log(err);
+        Helper.logError(err);
       }
     },
     async checkSubsFunc(video) {

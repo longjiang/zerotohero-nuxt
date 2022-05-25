@@ -310,7 +310,7 @@ const Dictionary = {
         return res.data.tokens;
       }
     } catch (err) {
-      console.log(err);
+      Helper.logError(err);
     }
   },
   isHangul(text) {

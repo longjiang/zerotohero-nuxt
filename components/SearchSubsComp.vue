@@ -477,7 +477,7 @@ export default {
             l2Id: this.$l2.id,
           });
         } catch (err) {
-          console.log(err);
+          Helper.logError(err);
         }
         // Go to next video
         await Helper.timeout(2000);

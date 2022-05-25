@@ -200,7 +200,7 @@ export default {
       if (this.$refs["run-time-template"] && this.$refs["run-time-template"][0])
         this.$refs["run-time-template"][0].$destroy();
     } catch (err) {
-      console.log(err);
+      Helper.logError(err);
     }
   },
   computed: {

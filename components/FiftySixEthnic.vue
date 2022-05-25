@@ -60,7 +60,7 @@ export default {
         `${Config.server}data/56-ethnic-groups/56-ethnic-groups-of-china.csv.txt`
       );
     } catch (err) {
-      console.log(err);
+      Helper.logError(err);
     }
     if (res && res.data) {
       let parsed = Papa.parse(res.data, {

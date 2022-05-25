@@ -203,7 +203,7 @@ export default async ({ app, store, route }, inject) => {
           return response;
         }
       } catch (err) {
-        console.log(err);
+        Helper.logError(err);
       }
     },
     async saveVideo(video, l2, limit = false, tries = 0) {

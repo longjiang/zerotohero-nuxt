@@ -271,7 +271,7 @@ export default {
                 { headers: { Authorization: `Bearer ${token}` } }
               )
               .catch(async (err) => {
-                console.log(err);
+                Helper.logError(err);
               });
             if (userDataRes && userDataRes.data && userDataRes.data.data) {
               if (userDataRes.data.data[0]) {

@@ -60,7 +60,7 @@ export const actions = {
 
       commit('LOAD', { l2, stats })
     } catch (err) {
-      console.log(err)
+      Helper.logError(err)
     }
   },
 }

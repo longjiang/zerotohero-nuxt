@@ -215,7 +215,7 @@ export default {
         });
       } catch (err) {
         this.saving = false;
-        console.log(err);
+        Helper.logError(err);
       }
     },
   },

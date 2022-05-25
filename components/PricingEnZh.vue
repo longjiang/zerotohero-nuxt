@@ -319,7 +319,7 @@ export default {
         "https://api.exchangerate.host/latest"
       );
     } catch (err) {
-      console.log(err);
+      Helper.logError(err);
     }
     if (response && response.data) {
       let data = response.data;

@@ -131,7 +131,7 @@ export default {
           }
         }
       } catch (err) {
-        console.log(err)
+        Helper.logError(err)
         if (err.response && err.response.data) {
           let message = err.response.data.error.message;
           if (err.response.data.error.code === 204) {

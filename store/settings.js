@@ -34,7 +34,7 @@ export const loadSettingsFromLocalStorage = () => {
     try {
       settings = JSON.parse(localStorage.getItem("zthSettings"));
     } catch (err) {
-      console.log(err);
+      Helper.logError(err);
     }
     if (!settings) settings = {};
     return settings;

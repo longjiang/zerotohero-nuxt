@@ -291,7 +291,7 @@ const Dictionary = {
             row => reg.test(row.kanji) || reg.test(row.kana)
           )
       } catch (err) {
-        console.log(err)
+        Helper.logError(err)
       }
     } else {
       text = text.toLowerCase().trim()

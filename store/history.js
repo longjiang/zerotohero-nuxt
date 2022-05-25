@@ -14,7 +14,7 @@ export const mutations = {
       try {
         history = JSON.parse(json)
       } catch (err) {
-        console.log(err)
+        Helper.logError(err)
       }
       if (history) {
         state.history = history

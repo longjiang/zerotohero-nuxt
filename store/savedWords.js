@@ -111,7 +111,7 @@ export const mutations = {
       try {
         savedWords = JSON.parse(json)
       } catch (err) {
-        console.log(err)
+        Helper.logError(err)
       }
       if (savedWords) {
         state.savedWords = savedWords

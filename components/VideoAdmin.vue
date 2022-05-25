@@ -500,7 +500,7 @@ export default {
           this.videoInfoKey++;
         }
       } catch (err) {
-        console.log(err);
+        Helper.logError(err);
       }
     },
     async saveShow(show, type) {

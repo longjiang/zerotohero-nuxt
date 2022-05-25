@@ -66,7 +66,7 @@ export default {
           let res = await this.$authios.get(url);
           if (res && res.data) videos = videos.concat(res.data.data);
         } catch (err) {
-          console.log(err);
+          Helper.logError(err);
         }
       }
       return videos;
