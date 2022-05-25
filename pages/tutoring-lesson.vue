@@ -247,7 +247,7 @@ export default {
       return images;
     },
     level(level) {
-      return Helper.level(level, this.$l2);
+      return Helper.level(level, this.$l2).name;
     },
   },
   computed: {
