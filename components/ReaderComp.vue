@@ -15,7 +15,11 @@
         <div
           v-if="text.length > 0 && !loading"
           id="reader-annotated"
-          :class="{ focus: true, 'reader-annotated-wide': params.lg, 'with-translation': translation }"
+          :class="{
+            focus: true,
+            'reader-annotated-wide': params.lg,
+            'with-translation': translation,
+          }"
           :style="`font-size: ${fontSize}rem; margin-bottom: 2rem;`"
         >
           <div
@@ -156,7 +160,7 @@ export default {
       fontSize: this.iconMode ? 2 : 1.333,
       fullscreen: false,
       showTranslate: false,
-      addTranslation: false,
+      addTranslation: this.translation && this.translation !== "",
       loading: true,
       typing: undefined,
       params: {},
@@ -202,6 +206,15 @@ export default {
         this.$emit("readerTextChanged", this.text);
         this.readerKey++;
       }
+    },
+    async translation() {
+      let typing = this.translation;
+      await Helper.timeout(1000);
+      if (typing === this.translation) {
+        this.$emit("readerTranslationChanged", this.translation);
+      }
+      if (this.translation && this.translation !== "")
+        this.addTranslation = true;
     },
   },
   methods: {

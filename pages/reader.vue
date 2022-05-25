@@ -40,7 +40,7 @@
             </span>
             a popup dictionary!
           </p>
-          <ReaderComp ref="reader" @readerTextChanged="readerTextChanged" />
+          <ReaderComp ref="reader" @readerTextChanged="readerTextChanged" @readerTranslationChanged="readerTranslationChanged" />
         </div>
       </div>
       <h5 class="mt-5">More about this {{ $l2.name }} Reader</h5>
@@ -109,6 +109,7 @@ export default {
   data() {
     return {
       text: "",
+      translation: "",
       dictionaryCredit: undefined,
     };
   },
@@ -120,6 +121,9 @@ export default {
     },
     text() {
       this.$refs.reader.text = this.text;
+    },
+    translation() {
+      this.$refs.reader.translation = this.translation;
     },
   },
   async mounted() {
@@ -145,6 +149,9 @@ export default {
     readerTextChanged(text) {
       this.save(text);
     },
+    readerTranslationChanged(text) {
+      this.saveTranslation(text);
+    },
     getSaved() {
       let json = localStorage.getItem("zthReaderText");
       try {
@@ -164,6 +171,26 @@ export default {
       let saved = this.getSaved() || {};
       saved[this.$l2.code] = text;
       localStorage.setItem("zthReaderText", JSON.stringify(saved));
+    },
+    getSavedTranslation() {
+      let json = localStorage.getItem("zthReaderTranslation");
+      try {
+        if (json) {
+          let saved = JSON.parse(json);
+          return saved;
+        }
+      } catch (e) {}
+    },
+    getTranslation() {
+      let saved = this.getSavedTranslation();
+      if (saved) {
+        return saved[this.$l2.code];
+      }
+    },
+    saveTranslation(text) {
+      let saved = this.getSavedTranslation() || {};
+      saved[this.$l2.code] = text;
+      localStorage.setItem("zthReaderTranslation", JSON.stringify(saved));
     },
     async route() {
       let method = this.$route.params.method;
@@ -186,6 +213,7 @@ export default {
       } else {
         if (!this.text) {
           const text = this.get();
+          const translation = this.getTranslation();
           if (text) {
             this.text = text;
             // this.show()
@@ -193,6 +221,9 @@ export default {
             if (Helper.sampleText[this.$l2.code]) {
               this.text = Helper.sampleText[this.$l2.code]
             }
+          }
+          if (translation) {
+            this.translation = translation;
           }
         }
       }
