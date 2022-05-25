@@ -20,7 +20,7 @@
         $l2.scripts &&
         $l2.scripts.length > 0 &&
         $l2.scripts[0].direction === 'rtl',
-      'add-pinyin': true,
+      'add-pinyin': l2Settings && l2Settings.showPinyin,
       phonetics,
       fullscreen: fullscreenMode,
       'with-buttons': buttons,
@@ -115,6 +115,7 @@ import popupnote from "@/components/PopupNote";
 import VRuntimeTemplate from "v-runtime-template";
 import Helper from "@/lib/helper";
 import { transliterate as tr } from "transliteration";
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -181,6 +182,7 @@ export default {
     };
   },
   mounted() {
+    console.log(this.l2Settings)
     if (this.$slots.default) {
       for (let slot of this.$slots.default) {
         this.text += $(slot.elm).text();
@@ -201,6 +203,7 @@ export default {
     }
   },
   computed: {
+    ...mapState("settings", ["l2Settings"]),
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -568,6 +571,11 @@ export default {
 </script>
 
 <style lang="scss">
+/* IF annotation flickering occurs, try to turn this line off, or check if v-observe-visiblility has the correct settings (e.g. 'once') */
+.annotated.add-pinyin {
+  line-height: 2.2;
+}
+
 #reader-annotated p {
   margin-bottom: 0;
 }
