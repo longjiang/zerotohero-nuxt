@@ -94,8 +94,10 @@ export default {
     }
     await this.initAndGetUserData(); // Make sure user data is fetched from the server
     console.log("Default.vue: User data initialized.");
-    if (this.l1 && this.l2) this.loadLanguageSpecificSettings(); // Make sure this line is AFTER registering mutation event listeners above!
-    this.onLanguageChange();
+    if (this.l1 && this.l2) {
+      this.loadLanguageSpecificSettings(); // Make sure this line is AFTER registering mutation event listeners above!
+      this.onLanguageChange();
+    }
     this.onAllLanguagesLoaded();
   },
   beforeDestroy() {
@@ -159,10 +161,12 @@ export default {
           mutation.type === "progress/LOAD" ||
           mutation.type === "progress/IMPORT_FROM_JSON"
         ) {
-          this.l2Time[this.l2.code] = this.$store.getters["progress/time"](
-            this.l2
-          );
-          this.startLoggingUserTime();
+          if (this.l2) {
+            this.l2Time[this.l2.code] = this.$store.getters["progress/time"](
+              this.l2
+            );
+            this.startLoggingUserTime();
+          }
         }
         if (mutation.type === "progress/SET_TIME") {
           this.l2Time[this.l2.code] = this.$store.getters["progress/time"](
