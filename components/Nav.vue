@@ -780,6 +780,13 @@ export default {
               show: true,
               title: "FAQ",
             },
+            {
+              name: "page",
+              params: {id: 17},
+              icon: "fas fa-page",
+              title: "Privacy Policy",
+              show: true,
+            },
           ],
         },
         {

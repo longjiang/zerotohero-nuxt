@@ -39,7 +39,7 @@
           class="d-inline-block"
           @mouseover="cycleFlags"
           @mouseleave="stopCycling"
-          v-if="params.lg !== false"
+          v-if="params.md !== false"
         >
           <span
             :class="`text-white`"
@@ -74,7 +74,7 @@
         </div>
       </div>
       <client-only>
-        <AnnotationSettings v-if="$l2 && params.md" variant="toolbar" />
+        <AnnotationSettings v-if="$l2 && params.lg" variant="toolbar" />
       </client-only>
       <template>
         <div>
