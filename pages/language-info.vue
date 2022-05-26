@@ -1,195 +1,66 @@
 <router>
   {
-    path: '/:l1/:l2/all-media',
+    path: '/:l1/:l2/language-info',
     props: true,
-    meta: {
-      skin: 'dark'
-    }
   }
 </router>
 <template>
-  <div class="main-dark">
-    <VideoHero
-      v-if="heroVideo"
-      :video="heroVideo"
-      @videoUnavailable="onVideoUnavailable"
-    />
-    <div class="container pb-5" style="padding-top: 3rem">
-      <SocialHead
-        :title="`Learn ${$l2.name} with Videos | ${$l2.name} Zero to Hero`"
-        :description="`Learn ${$l2.name} with Videos`"
-        :image="'/img/tv-shows.jpg'"
-      />
-      <div class="row mt-4">
-        <div class="col-sm-12">
-          <!-- <Sale class="mt-5 mb-5" v-if="$l2.code === 'zh'" /> -->
-          <!-- <SimpleSearch placeholder="Search" ref="searchLibrary" skin="dark" class="mt-4 mb-5" style="flex: 1" :action="
-            (url) => {
-              this.$router.push({
-                path: `/${$l1.code}/${$l2.code
-                  }/youtube/search/${encodeURIComponent(
-                    url
-                  )}`,
-              });
-            }
-          " /> -->
-          <div
-            :class="{
-              'loader text-center': true,
-              'd-none': videos && !loading,
-            }"
-            style="margin: 7rem 0 15rem 0"
-          >
-            <Loader :sticky="true" message="Loading videos in our library..." />
-          </div>
-
-          <div class="media-sections" v-if="!loading">
-            <div v-if="videos && videos.length > 0" class="media-section">
-              <h3 class="media-seaction-heading">
-                {{ $l2.name }} Videos
-                <router-link :to="{ name: 'youtube-browse' }" class="show-all">
-                  More
-                  <i class="fas fa-chevron-right ml-1"></i>
-                </router-link>
-              </h3>
-              <LazyYouTubeVideoList
-                :videos="videos.slice(0, 12)"
-                :showAdminToolsInAdminMode="false"
-                skin="dark"
-              />
-            </div>
-            <div
-              v-if="videos && music && music.length > 0"
-              class="media-section"
-            >
-              <h3 class="media-seaction-heading">
-                {{ $l2.name }} Music
-                <router-link
-                  :to="{
-                    name: 'show',
-                    params: { type: 'tv-show', id: musicShow.id },
-                  }"
-                  class="show-all"
-                >
-                  More
-                  <i class="fas fa-chevron-right ml-1"></i>
-                </router-link>
-              </h3>
-              <LazyYouTubeVideoList
-                :videos="random(music).slice(0, 12)"
-                :showAdminToolsInAdminMode="false"
-                skin="dark"
-              />
-            </div>
-            <div v-if="videos && news && news.length > 0" class="media-section">
-              <h3 class="media-seaction-heading">
-                {{ $l2.name }} News
-                <router-link
-                  :to="{
-                    name: 'show',
-                    params: { type: 'talk', id: newsShow.id },
-                  }"
-                  class="show-all"
-                >
-                  More
-                  <i class="fas fa-chevron-right ml-1"></i>
-                </router-link>
-              </h3>
-              <LazyYouTubeVideoList
-                :videos="random(news).slice(0, 12)"
-                :showAdminToolsInAdminMode="false"
-                skin="dark"
-              />
-            </div>
-          </div>
-          <div
-            v-if="videos && movies && movies.length > 0"
-            class="media-section"
-          >
-            <h3 class="media-seaction-heading">
-              {{ $l2.name }} Movies
-              <router-link
-                :to="{
-                  name: 'show',
-                  params: { type: 'tv-show', id: moviesShow.id },
-                }"
-                class="show-all"
+  <div class="main pt-5 pb-5">
+    <div class="row">
+      <div class="col-sm-12">
+        <div v-if="$route.params.l1 && $route.params.l1 && $l1 && $l2">
+          <div :class="{ 'pl-1 pr-1 pb-2': true }">
+            <h4 class="text-center mb-4">About the {{ $l2.name }} Language</h4>
+            <LazyLanguageInfoBox :lang="$l2" class="mb-4" />
+            <p>
+              <b>ISO639-1:</b>
+              {{ $l2["iso639-1"] || "Not available" }}
+            </p>
+            <p>
+              <b>ISO639-3:</b>
+              {{ $l2["iso639-3"] || "Not available" }}
+            </p>
+            <p>
+              <b>Language ID:</b>
+              {{ $l2.id || "Not available" }}
+            </p>
+            <p>
+              <b>Scripts used:</b>
+              {{
+                $l2.scripts
+                  ? $l2.scripts.map((s) => s.script).join(", ")
+                  : "Not available"
+              }}
+            </p>
+            <p>
+              <b>Number of Speakers:</b>
+              {{ $l2.speakers ? $n($l2.speakers) : "Not available" }}
+            </p>
+            <p>
+              <b>Speakers native to:</b>
+              <span
+                v-for="c in $l2.country"
+                :key="`lang-country-${c.alpha2Code}`"
+                style="margin-right: 0.5rem"
               >
-                More
-                <i class="fas fa-chevron-right ml-1"></i>
-              </router-link>
-            </h3>
-            <LazyYouTubeVideoList
-              :videos="random(movies).slice(0, 12)"
-              :showAdminToolsInAdminMode="false"
-              skin="dark"
-            />
+                <img
+                  :src="`/vendor/flag-svgs/${c.alpha2Code}.svg`"
+                  class="flag-icon mr-1"
+                />
+                {{ c.name }}
+              </span>
+            </p>
           </div>
-          <div
-            v-if="videos && tvShows && tvShows.length > 0"
-            class="media-section"
-          >
-            <h3 class="media-seaction-heading">
-              {{ $l2.name }} TV Shows
-              <router-link :to="{ name: 'tv-shows' }" class="show-all">
-                More
-                <i class="fas fa-chevron-right ml-1"></i>
-              </router-link>
-            </h3>
-            <ShowList
-              :shows="
-                random(
-                  tvShows.filter((s) => !['Movies', 'Music'].includes(s.title)),
-                  6
-                )
-              "
-              type="tvShows"
-              :key="`tv-shows`"
-            />
+          <div :class="{ 'pl-1 pr-1 pb-2 pt-5': true }" v-if="$l2.han">
+            <h4 class="text-center mb-4">Dialects of Chinese</h4>
+            <p class="text-center">Bar graph shows number of speakers.</p>
+            <Dialects skin="light" />
           </div>
-          <div v-if="videos && talks && talks.length > 0" class="media-section">
-            <h3 class="media-seaction-heading">
-              {{ $l2.name }} YouTube
-              <router-link :to="{ name: 'talks' }" class="show-all">
-                More
-                <i class="fas fa-chevron-right ml-1"></i>
-              </router-link>
-            </h3>
-            <ShowList
-              :shows="
-                random(
-                  talks.filter(
-                    (s) => !['News'].includes(s.title) && !s.audiobook
-                  ),
-                  6
-                )
-              "
-              type="talks"
-              :key="`tv-shows`"
-            />
-            <div class="text-center mt-1"></div>
+          <div :class="{ 'pl-1 pr-1 pb-2 pt-5': true }" v-if="$l2.han">
+            <h4 class="text-center">56 Ethnic Groups of China</h4>
+            <p class="text-center">Bar graph shows number of speakers. (2010 Numbers)</p>
+            <FiftySixEthnic skin="light" />
           </div>
-          <div
-            v-if="videos && talks && talks.length > 0 && audiobooks.length > 0"
-            class="media-section"
-          >
-            <h3 class="media-seaction-heading">
-              {{ $l2.name }} Audiobooks
-              <router-link :to="{ name: 'audiobooks' }" class="show-all">
-                More
-                <i class="fas fa-chevron-right ml-1"></i>
-              </router-link>
-            </h3>
-            <ShowList
-              :shows="random(audiobooks, 6)"
-              type="talks"
-              :key="`tv-shows`"
-            />
-          </div>
-
-          <client-only>
-            <LazyIdenticalLanguages class="mt-5 mb-5" routeName="all-media" v-if="!loading"/>
-          </client-only>
         </div>
       </div>
     </div>

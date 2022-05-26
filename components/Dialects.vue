@@ -23,9 +23,9 @@
           class="progress-bar"
         ></b-progress-bar>
       </b-progress>
-      <div style="width: 5rem; margin-top: 0.15rem; white-space: nowrap;" class="ml-2 small">
+      <!-- <div style="width: 5rem; margin-top: 0.15rem; white-space: nowrap;" class="ml-2 small">
         {{ $n(Number(Math.ceil(dialect.population / 1000))) }} K
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

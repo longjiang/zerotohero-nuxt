@@ -609,6 +609,24 @@ export default {
           show: true,
           children: [
             {
+              name: "noun-cases",
+              icon: "fas fa-list-ul",
+              title: "Grammar",
+              show: this.hasFeature("noun-cases"),
+            },
+            {
+              name: "language-info",
+              title: `About ${this.l2.name}`,
+              icon: "fas fa-flag",
+              show: true,
+            },
+            {
+              name: "learning-path",
+              title: "Learning Path",
+              icon: "fas fa-road",
+              show: true,
+            },
+            {
               name: "grammar",
               icon: "fas fa-list-ul",
               title: "Grammar",
@@ -618,18 +636,6 @@ export default {
             {
               name: "grammar-view",
               show: false,
-            },
-            {
-              name: "noun-cases",
-              icon: "fas fa-list-ul",
-              title: "Grammar",
-              show: this.hasFeature("noun-cases"),
-            },
-            {
-              name: "learning-path",
-              title: "Learning Path",
-              icon: "fas fa-road",
-              show: true,
             },
             {
               name: "keyboard",
