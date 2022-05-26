@@ -157,7 +157,7 @@ export default {
     { src: '~/plugins/vuex-persist.js', mode: 'client' },
     { src: '~/plugins/shared-mutations.js', mode: 'client' },
     { src: '~/plugins/idle-vue.js', mode: 'client' },
-    { src: '~/plugins/iframe-translator.js', mode: 'client' }
+    // { src: '~/plugins/iframe-translator.js', mode: 'client' }
   ],
 
   build: {

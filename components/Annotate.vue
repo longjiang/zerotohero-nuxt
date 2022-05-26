@@ -152,6 +152,7 @@ import Helper from "@/lib/helper";
 import { transliterate as tr } from "transliteration";
 import { mapState } from "vuex";
 import { ContainerQuery } from "vue-container-query";
+import { getClient, AvailableLanguages } from "iframe-translator";
 
 export default {
   components: {
@@ -279,8 +280,9 @@ export default {
   methods: {
     async translateClick() {
       let text = this.text.replace(/\n/g, "").trim();
-
-      let translation = await this.$iframeTranslationClient.translate(
+      // https://www.npmjs.com/package/iframe-translator
+      const iframeTranslationClient = await getClient();
+      let translation = await iframeTranslationClient.translate(
         text,
         this.$l1.code
       );
@@ -288,6 +290,7 @@ export default {
         this.$emit("translation", translation);
         if (this.showTranslation) this.translation = translation;
       }
+      iframeTranslationClient.destroy()
     },
     async playAnimation(startFrom) {
       if (!this.annotated) {
