@@ -10,9 +10,9 @@
       <div class="row">
         <div class="col">
           <div class="text-center">
-            <h3 class="mb-5">Discussions</h3>
-            <p class="mt-3" style="font-size: 1.1em">Feedback? Questions? General language-learning discussions?</p>
-            <p class="mb-5" style="font-size: 1.1em">Leave all your comments here.</p>
+            <h6 style="font-size: 1.1em">Please leave your questions and comments here.</h6>
+            <p>This is a <a href="https://disqus.com/profile/login/?next=/admin/create/" target="_blank">Disqus</a> discussion board. To post a comment, you ened to first <a href="https://disqus.com/profile/login/?next=/admin/create/" target="_blank">login to Disqus</a>.</p>
+            <p class="mb-5"></p>
           </div>
           <client-only>
             <section class="comments" aria-labelledby="comment">

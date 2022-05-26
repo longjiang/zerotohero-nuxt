@@ -22,7 +22,6 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
-          <FeedbackPrompt class="mb-5" :skin="$route.meta ? $route.meta.skin : 'light'"/>
           <h3 class="text-center mb-3">{{ $l2.name }} Reader (Annotator)</h3>
           <p class="text-center mb-4">
             I can
@@ -42,6 +41,7 @@
             a popup dictionary!
           </p>
           <ReaderComp ref="reader" @readerTextChanged="readerTextChanged" @readerTranslationChanged="readerTranslationChanged" />
+          <FeedbackPrompt class="mt-3" :skin="$route.meta ? $route.meta.skin : 'light'"/>
         </div>
       </div>
       <h5 class="mt-5">More about this {{ $l2.name }} Reader</h5>

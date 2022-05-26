@@ -23,7 +23,7 @@
         <div class="row pt-3">
           <div class="col-sm-12">
 
-            <FeedbackPrompt />
+            <!-- <FeedbackPrompt /> -->
             <Logo class="mt-4 mb-3" />
           </div>
         </div>

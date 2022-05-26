@@ -19,7 +19,7 @@
       <template>
         <div class="row">
           <div class="col-12">
-            <FeedbackPrompt />
+            <FeedbackPrompt class="mb-5" />
           </div>
         </div>
         <div class="row">
@@ -29,8 +29,8 @@
         </div>
 
         <div class="row">
-          <div class="col-sm-6 mb-4" style="height: 100%">
-            <div class="contact-block p-4">
+          <div class="col-sm-6 mb-4" >
+            <div class="contact-block p-4" style="height: 100%">
               <div class="mb-3">
                 <h5>Ken Dai</h5>
                 <div>Co-founder, sales &amp; operations</div>
@@ -49,8 +49,8 @@
               </div>
             </div>
           </div>
-          <div class="col-sm-6" style="height: 100%">
-            <div class="contact-block p-4">
+          <div class="col-sm-6 mb-4">
+            <div class="contact-block p-4"  style="height: 100%">
               <div class="mb-3">
                 <h5>Jiang Long</h5>
                 <div>Co-founder, instructor, designer &amp; dev</div>
@@ -81,12 +81,12 @@
             </div>
           </div>
         </div>
-        <div class="row">
+        <div class="row" v-if="this.$l2.code === 'zh'">
           <div class="col-sm-12">
             <h4 class="mt-5 mb-4 text-center">Chinese Language Chat</h4>
           </div>
           <div class="col-sm-12 col-md-6 mb-3">
-            <div v-if="this.$l2.code === 'zh'">
+            <div>
               <div class="p-4 container">
                 <h5>Chinese Learning WeChat Group</h5>
                 <ul class="pl-3 mt-3">
