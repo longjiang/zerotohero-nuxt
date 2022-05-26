@@ -19,36 +19,7 @@
       <template>
         <div class="row">
           <div class="col-12">
-            <div class="alert-success p-4 rounded mb-5">
-              <h5 class="text-center">Get Help &amp; Give Feed Back</h5>
-              <p>
-                If you experience a problem, see something broken, or would like
-                to suggest a feature, please
-                <router-link
-                  :to="{ name: 'discussions' }"
-                  class="strong text-success"
-                >
-                  join the discussion
-                </router-link>
-                and post to our
-                <router-link
-                  :to="{ name: 'discussions' }"
-                  class="strong text-success"
-                >
-                  Support Disqus Board
-                </router-link>
-                .
-              </p>
-              <div class="text-center">
-                <router-link
-                  :to="{ name: 'discussions' }"
-                  class="btn btn-bg btn-success strong"
-                >
-                  <i class="fas fa-comment-alt mr-2"></i>
-                  Post a Comment
-                </router-link>
-              </div>
-            </div>
+            <FeedbackPrompt />
           </div>
         </div>
         <div class="row">

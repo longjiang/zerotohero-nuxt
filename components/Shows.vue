@@ -17,6 +17,8 @@
               : `https://img.youtube.com/vi/${shows[0].youtube_id}/hqdefault.jpg`
           "
         />
+
+        <FeedbackPrompt class="mt-5" :skin="$route.meta ? $route.meta.skin : 'light'"/>
         <div class="row">
           <div class="col-sm-12">
             <!-- <Sale class="mt-5 mb-5" v-if="$l2.code === 'zh'" /> -->

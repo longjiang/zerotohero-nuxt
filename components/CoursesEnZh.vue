@@ -10,7 +10,7 @@
       <div class="row">
         <div class="col-sm-12 text-center">
           <!-- <Sale class="mb-5" /> -->
-          <h3 class="mb-5">Online Chinese Courses from HSK 1 to HSK 6</h3>
+          <h3 class="mb-5">Chinese Language Video Courses</h3>
           <VideoComp
             class="intro-video mb-5"
             thumbnail="/img/video-thumbnail-hsk-courses.jpeg"
@@ -21,6 +21,7 @@
     </div>
     <div class="container">
       <Courses />
+      <FeedbackPrompt class="mt-5" :skin="$route.meta ? $route.meta.skin : 'light'"/>
       <h3 class="pb-5 pt-5 text-center">Follow Us</h3>
       <div class="row">
         <div class="col-md-6 col-lg-4 mb-5">
@@ -82,12 +83,13 @@
         </div>
       </div>
     </div>
-
     <Testimonials />
+    
 
     <div class="container pt-5 pb-5">
       <div class="row">
         <div class="col-sm-12">
+          
           <h1 class="mb-5 text-center">
             Courses that take your Chinese to the next level.
           </h1>
@@ -247,6 +249,10 @@
             these courses offer a meaningful contribution to the Chinese
             learning community.
           </p>
+          
+        </div>
+        <div class="col-sm-12">
+          <FeedbackPrompt class="mt-5" :skin="$route.meta ? $route.meta.skin : 'light'"/>
         </div>
       </div>
     </div>

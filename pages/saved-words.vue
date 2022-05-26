@@ -19,7 +19,7 @@
         <div class="col-sm-12 pt-4">
           <p
             v-if="dictionaryLoaded && sWLoaded && sW.length <= 0"
-            class="alert alert-warning no-saved-words text-center mt-5 p-5"
+            class="alert alert-warning no-saved-words text-center p-5"
           >
             You don't have any words saved yet. Save words by tapping on the
             <i class="far fa-star"></i>
@@ -54,11 +54,10 @@
           <div
             v-for="(group, index) in groups"
             :key="`group-${index}`"
-            class="small mb-3"
             style="color: #ccc"
           >
-            <div v-if="group.date === '0'">Earlier</div>
-            <div v-else>
+            <div v-if="group.date === '0'" class="small mb-3">Earlier</div>
+            <div v-else class="small mb-3">
               {{
                 new Date(group.date).toLocaleDateString("en-US", {
                   year: "numeric",
@@ -132,9 +131,15 @@
           </div>
           <p class="mt-3 mb-3 text-left">
             <b>How are my words saved?</b>
-            Your words are stored in your browser's "local storage", so even if
-            you refresh your browser, the words are still there.
+            If you are logged in, your words are saved on our servers and are
+            synced automatically. If you are not logged in, your words are
+            stored permanently in your web browser's "local storage".
           </p>
+
+          <FeedbackPrompt
+            class=""
+            :skin="$route.meta ? $route.meta.skin : 'light'"
+          />
         </div>
       </div>
     </div>

@@ -17,6 +17,7 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
+          <FeedbackPrompt class="mb-5" :skin="$route.meta ? $route.meta.skin : 'light'"/>
           <h3 class="page-title text-center">
             {{ $t("Settings") }}
           </h3>

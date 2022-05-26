@@ -49,9 +49,12 @@
               🤦‍♂️.
             </p>
           </div>
+          <FeedbackPrompt class="mb-5" :skin="$route.meta ? $route.meta.skin : 'light'"/>
         </div>
+          
       </div>
     </div>
+
     <div class="container-fluid">
       <GrammarChart />
     </div>

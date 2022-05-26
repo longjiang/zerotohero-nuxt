@@ -1,24 +1,31 @@
 <template>
-  <div>
-    <div class="row justify-content-center">
+  <container-query :query="query" v-model="params">
+    
+    <div class="row">
       <div
-        class="col-md-6 col-lg-4 mb-5"
+        :class="{
+          'col-12': params.xs || params.sm,
+          'col-6': params.md,
+          'col-4': params.lg || params.xl,
+          'mb-5': true,
+        }"
         v-for="(hero, index) in heroes.filter(filter)"
         :key="`hero-list-${index}`"
       >
         <Hero :hero="hero" />
       </div>
     </div>
-  </div>
+  </container-query>
 </template>
 
 <script>
 import Config from "@/lib/config";
 import Hero from "@/components/Hero";
-import axios from "axios";
+import { ContainerQuery } from "vue-container-query";
 
 export default {
   components: {
+    ContainerQuery,
     Hero,
   },
   props: {
@@ -32,6 +39,28 @@ export default {
   data() {
     return {
       heroes: [],
+      params: {},
+      query: {
+        xs: {
+          minWidth: 0,
+          maxWidth: 423,
+        },
+        sm: {
+          minWidth: 423,
+          maxWidth: 640,
+        },
+        md: {
+          minWidth: 640,
+          maxWidth: 960,
+        },
+        lg: {
+          minWidth: 960,
+          maxWidth: 1140,
+        },
+        xl: {
+          minWidth: 1140,
+        },
+      },
     };
   },
   computed: {
@@ -60,7 +89,7 @@ export default {
       .sort((a, b) => {
         return b.hsk - a.hsk;
       });
-    this.$emit('heroes', this.heroes)
+    this.$emit("heroes", this.heroes);
   },
   methods: {
     filter(hero) {

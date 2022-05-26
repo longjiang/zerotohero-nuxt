@@ -31,7 +31,13 @@
                   />
                 </div>
                 <h5 class="text-center pb-4" v-if="!args">
-                  Zero to Hero <LanguageFlag :language="$l2" style="position: relative; bottom: 0.2rem; margin: 0 0.3rem" :autocycle="true" /> {{ $l2.name }} Dictionary
+                  Zero to Hero
+                  <LanguageFlag
+                    :language="$l2"
+                    style="position: relative; bottom: 0.2rem; margin: 0 0.3rem"
+                    :autocycle="true"
+                  />
+                  {{ $l2.name }} Dictionary
                 </h5>
                 <SearchCompare
                   :searchEntry="entry"
@@ -57,20 +63,25 @@
                       🃏
                     </li>
                     <li class="mt-2">
-                      ☝️ Use 
+                      ☝️ Use
                       <code>_</code>
-                       underscore to match one character
+                      underscore to match one character
                     </li>
                     <li class="mt-2">
-                      ☝️ Use 
+                      ☝️ Use
                       <code>*</code>
-                       asterisk to match one or more characters
+                      asterisk to match one or more characters
                     </li>
                     <li class="mt-2" v-if="dictionarySize">
                       📖 This {{ $l2.name }} dictionary has
                       <b>{{ $n(dictionarySize) }} words</b>
                     </li>
                   </ul>
+
+                  <FeedbackPrompt
+                    class="mt-5"
+                    :skin="$route.meta ? $route.meta.skin : 'light'"
+                  />
                 </div>
               </div>
             </div>
@@ -183,10 +194,11 @@
             <EntryCourseAd
               v-if="$l2.code === 'zh'"
               :entry="entry"
-              class="focus-exclude mb-5"
+              class="focus-exclude mb-2"
               style="margin-top: 10rem"
               :key="`${entry.id}-course-ad`"
             />
+            <FeedbackPrompt class="mb-5" :skin="$route.meta ? $route.meta.skin : 'light'"/>
           </div>
         </div>
       </div>

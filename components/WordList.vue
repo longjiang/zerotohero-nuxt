@@ -255,7 +255,7 @@ export default {
 
   .wordlist-item {
     a {
-      color: inherit;
+      color: #28a745;
     }
 
     a:hover {

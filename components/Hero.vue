@@ -1,6 +1,6 @@
 <template>
   <div class="hero">
-    <div class="avatar-percentage-wrapper">
+    <div class="avatar-percentage-wrapper" >
       <div
         :class="
           `c100 p${Math.floor(
@@ -10,7 +10,7 @@
       >
         <span class="avatar-wrapper"
           ><img
-            :v-lazy="
+            :src="
               hero.avatar
                 ? hero.avatar.data.thumbnails[0].url
                 : '/img/default-avatar.jpg'

@@ -67,6 +67,7 @@
                 Continue Learning
                 <i class="fas fa-chevron-right ml-1"></i>
               </router-link>
+              <FeedbackPrompt class="mt-5 mb-4" :skin="$route.meta ? $route.meta.skin : 'light'"/>
             </div>
           </div>
         </template>

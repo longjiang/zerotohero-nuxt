@@ -22,6 +22,7 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
+          <FeedbackPrompt class="mb-5" :skin="$route.meta ? $route.meta.skin : 'light'"/>
           <h3 class="text-center mb-3">{{ $l2.name }} Reader (Annotator)</h3>
           <p class="text-center mb-4">
             I can

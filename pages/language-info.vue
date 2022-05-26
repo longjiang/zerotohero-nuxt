@@ -7,7 +7,7 @@
 <template>
   <div class="main pt-5 pb-5">
     <div class="row">
-      <div class="col-sm-12">
+      <div class="col-sm-12" style="max-width: 50rem; margin: 0 auto">
         <div v-if="$route.params.l1 && $route.params.l1 && $l1 && $l2">
           <div :class="{ 'pl-1 pr-1 pb-2': true }">
             <h4 class="text-center mb-4">About the {{ $l2.name }} Language</h4>

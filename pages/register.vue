@@ -9,7 +9,13 @@
 <template>
   <div
     class="container-fluid"
-    :style="`${backgroundImage ? 'background-image: url(' + backgroundImage + '); background-size: cover; background-position: center;' : ''}`"
+    :style="`${
+      backgroundImage
+        ? 'background-image: url(' +
+          backgroundImage +
+          '); background-size: cover; background-position: center;'
+        : ''
+    }`"
   >
     <div class="row">
       <div class="col-sm-12">
@@ -67,6 +73,11 @@
                 <i class="fas fa-chevron-right ml-1"></i>
               </router-link>
             </div>
+
+            <FeedbackPrompt
+              class="mt-5"
+              :skin="$route.meta ? $route.meta.skin : 'light'"
+            />
           </b-form>
         </div>
       </div>
@@ -76,7 +87,7 @@
 
 <script>
 import Helper from "@/lib/helper";
-import Config from '@/lib/config'
+import Config from "@/lib/config";
 
 export default {
   data() {
@@ -114,9 +125,9 @@ export default {
         );
         if (res && res.data && res.data.public === true) {
           // Directus isn't returning users for some reason, let's get it
-          let response = await this.$authios.get(`${Config.wiki}users`); 
+          let response = await this.$authios.get(`${Config.wiki}users`);
           if (response.data && response.data.data && response.data.data[0]) {
-            let user = response.data.data[0]
+            let user = response.data.data[0];
             response = await this.$auth.loginWith("local", {
               data: this.form,
             });
@@ -131,7 +142,7 @@ export default {
           }
         }
       } catch (err) {
-        Helper.logError(err)
+        Helper.logError(err);
         if (err.response && err.response.data) {
           let message = err.response.data.error.message;
           if (err.response.data.error.code === 204) {

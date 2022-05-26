@@ -16,13 +16,15 @@
     <div class="gradient-backdrop"></div>
     <div class="gradient-backdrop-2"></div>
     <div
-      class="container-fluid pt-4"
+      class="container-fluid pt-1"
       style="overflow: hidden; position: relative"
     >
       <div class="container">
         <div class="row pt-3">
           <div class="col-sm-12">
-            <Logo />
+
+            <FeedbackPrompt />
+            <Logo class="mt-4 mb-3" />
           </div>
         </div>
         <client-only>

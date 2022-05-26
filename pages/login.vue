@@ -9,67 +9,79 @@
 </router>
 <template>
   <div
-    class="container-fluid"
-    :style="`${backgroundImage ? 'background-image: url(' + backgroundImage + '); background-size: cover; background-position: center;' : ''}`"
+    class="container-fluid pt-5"
+    :style="`${
+      backgroundImage
+        ? 'background-image: url(' +
+          backgroundImage +
+          '); background-size: cover; background-position: center;'
+        : ''
+    }`"
   >
-    <div class="row">
-      <div class="col-sm-12">
-        <div :class="{ 'login-page': true, shaking }">
-          <div class="text-center mb-4">
-            <img
-              src="/img/czh-icon.png"
-              style="height: 5.5rem; margin-bottom: 1rem"
-              data-not-lazy
-            />
-            <br />
-            <h4>Zero to Hero</h4>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <div :class="{ 'login-page': true, shaking }">
+            <div class="text-center mb-4">
+              <img
+                src="/img/czh-icon.png"
+                style="height: 5.5rem; margin-bottom: 1rem"
+                data-not-lazy
+              />
+              <br />
+              <h4>Zero to Hero</h4>
+            </div>
+            <b-form @submit.prevent="onSubmit">
+              <div class="alert alert-warning" v-if="$l2.code === 'zh'">
+                <b>Friendly reminder:</b>
+                This does NOT login to your Chinese Zero to Hero online courses
+                on Teachable. For course login
+                <a
+                  href="https://chinesezerotohero.teachable.com/"
+                  target="_blank"
+                >
+                  click here
+                </a>
+                .
+              </div>
+              <div v-if="message" class="alert alert-danger mt-2">
+                {{ message }}
+              </div>
+              <b-form-group id="input-group-1" label-for="email">
+                <b-form-input
+                  id="email"
+                  v-model="form.email"
+                  type="email"
+                  placeholder="Email"
+                  required
+                ></b-form-input>
+              </b-form-group>
+
+              <b-form-group id="input-group-2" label-for="password">
+                <b-form-input
+                  id="password"
+                  type="password"
+                  v-model="form.password"
+                  placeholder="Password"
+                  required
+                ></b-form-input>
+              </b-form-group>
+
+              <b-button class="d-block w-100" type="submit" variant="success">
+                Login
+              </b-button>
+              <div class="mt-3 text-center">
+                <router-link :to="{ name: 'register' }">
+                  Create an Account
+                  <i class="fas fa-chevron-right ml-1"></i>
+                </router-link>
+              </div>
+            </b-form>
+          <FeedbackPrompt
+            class="mt-5"
+            :skin="$route.meta ? $route.meta.skin : 'light'"
+          />
           </div>
-          <b-form @submit.prevent="onSubmit">
-            <div class="alert alert-warning" v-if="$l2.code === 'zh'">
-              <b>Friendly reminder:</b>
-              This does NOT login to your Chinese Zero to Hero online courses on
-              Teachable. For course login
-              <a
-                href="https://chinesezerotohero.teachable.com/"
-                target="_blank"
-              >
-                click here
-              </a>
-              .
-            </div>
-            <div v-if="message" class="alert alert-danger mt-2">
-              {{ message }}
-            </div>
-            <b-form-group id="input-group-1" label-for="email">
-              <b-form-input
-                id="email"
-                v-model="form.email"
-                type="email"
-                placeholder="Email"
-                required
-              ></b-form-input>
-            </b-form-group>
-
-            <b-form-group id="input-group-2" label-for="password">
-              <b-form-input
-                id="password"
-                type="password"
-                v-model="form.password"
-                placeholder="Password"
-                required
-              ></b-form-input>
-            </b-form-group>
-
-            <b-button class="d-block w-100" type="submit" variant="success">
-              Login
-            </b-button>
-            <div class="mt-3 text-center">
-              <router-link :to="{ name: 'register' }">
-                Create an Account
-                <i class="fas fa-chevron-right ml-1"></i>
-              </router-link>
-            </div>
-          </b-form>
         </div>
       </div>
     </div>
@@ -110,14 +122,13 @@ export default {
       try {
         let res = await this.$auth.loginWith("local", { data: this.form });
         if (res && res.data && res.data.data && res.data.data.user) {
-          let user = res.data.data.user
+          let user = res.data.data.user;
           this.$auth.setUser(user);
           this.$toast.success(`Welcome back, ${this.$auth.user.first_name}!`, {
             position: "top-center",
             duration: 5000,
           });
           this.$router.push({ name: "profile" });
-
         }
       } catch (err) {
         if (err.response && err.response.data) {
@@ -144,7 +155,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .login-page {
-  margin: 2rem auto 5rem auto;
+  margin: 2rem auto 2rem auto;
   padding: 2rem;
   border-radius: 1rem;
   overflow: hidden;

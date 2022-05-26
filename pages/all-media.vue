@@ -58,6 +58,7 @@
                 skin="dark"
               />
             </div>
+            <FeedbackPrompt class="mt-5 mb-4" :skin="$route.meta ? $route.meta.skin : 'light'"/>
             <div
               v-if="videos && music && music.length > 0"
               class="media-section"
