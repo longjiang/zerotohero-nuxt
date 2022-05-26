@@ -1,125 +1,140 @@
 <template>
-  <component
-    :is="tag"
-    v-observe-visibility="{
-      callback: visibilityChanged,
-      once: true,
-    }"
-    :dir="
-      foreign &&
-      $l2.scripts &&
-      $l2.scripts.length > 0 &&
-      $l2.scripts[0].direction === 'rtl'
-        ? 'rtl'
-        : 'ltr'
-    "
-    :class="{
-      annotated,
-      'text-right':
-        foreign &&
-        $l2.scripts &&
-        $l2.scripts.length > 0 &&
-        $l2.scripts[0].direction === 'rtl',
-      'add-pinyin': l2Settings && l2Settings.showPinyin,
-      phonetics,
-      fullscreen: fullscreenMode,
-      'with-buttons': buttons,
-    }"
-  >
-    <div class="annotator-buttons" v-if="!empty() && buttons">
-      <b-dropdown
-        no-caret
-        toggle-class="annotator-menu-toggle"
-        :dropleft="$l2.direction !== 'rtl'"
-        :dropright="$l2.direction === 'rtl'"
-        @hide="onMenuHide"
-        variant="unstyled"
+  <div>
+    <div :class="{ 'annotate-wrapper': true, 'annotate-wrapper-wide': params.lg, 'annotate-with-translation': translation }">
+      <component
+        :is="tag"
+        v-observe-visibility="{
+          callback: visibilityChanged,
+          once: true,
+        }"
+        :dir="
+          foreign &&
+          $l2.scripts &&
+          $l2.scripts.length > 0 &&
+          $l2.scripts[0].direction === 'rtl'
+            ? 'rtl'
+            : 'ltr'
+        "
+        :class="{
+          annotated,
+          'text-right':
+            foreign &&
+            $l2.scripts &&
+            $l2.scripts.length > 0 &&
+            $l2.scripts[0].direction === 'rtl',
+          'add-pinyin': l2Settings && l2Settings.showPinyin,
+          phonetics,
+          fullscreen: fullscreenMode,
+          'with-buttons': buttons,
+        }"
       >
-        <template #button-content><i class="fas fa-ellipsis-v"></i></template>
-        <b-dropdown-item>
-          <Saved
-            :item="phraseItem(text, translation)"
-            store="savedPhrases"
-            icon="bookmark"
-            class="mr-1 annotator-button focus-exclude"
-            title="Save Phrase"
-          />
-          <Speak
-            :text="text"
-            class="annotator-button ml-1 mr-1"
-            title="Speak"
-          />
-          <span
-            class="
-              annotator-button annotator-translate
-              ml-1
-              mr-1
-              focus-exclude
-            "
-            title="Translate"
-            @click="translateClick"
+        <div class="annotator-buttons" v-if="!empty() && buttons">
+          <b-dropdown
+            no-caret
+            toggle-class="annotator-menu-toggle"
+            :dropleft="$l2.direction !== 'rtl'"
+            :dropright="$l2.direction === 'rtl'"
+            @hide="onMenuHide"
+            variant="unstyled"
           >
-            <i class="fas fa-language"></i>
-          </span>
-          <span
-            class="
-              annotator-button annotator-external-translate
-              ml-1
-              mr-1
-              focus-exclude
-            "
-            title="Translate"
-            @click="externalTranslateClick"
-          >
-            <i class="fas fa-globe"></i>
-          </span>
-          <span
+            <template #button-content>
+              <i class="fas fa-ellipsis-v"></i>
+            </template>
+            <b-dropdown-item>
+              <Saved
+                :item="phraseItem(text, translation)"
+                store="savedPhrases"
+                icon="bookmark"
+                class="mr-1 annotator-button focus-exclude"
+                title="Save Phrase"
+              />
+              <Speak
+                :text="text"
+                class="annotator-button ml-1 mr-1"
+                title="Speak"
+              />
+              <span
+                class="
+                  annotator-button annotator-translate
+                  ml-1
+                  mr-1
+                  focus-exclude
+                "
+                title="Translate"
+                @click="translateClick"
+              >
+                <i class="fas fa-language"></i>
+              </span>
+              <span
+                class="
+                  annotator-button annotator-external-translate
+                  ml-1
+                  mr-1
+                  focus-exclude
+                "
+                title="Translate"
+                @click="externalTranslateClick"
+              >
+                <i class="fas fa-globe"></i>
+              </span>
+              <span
+                :class="{
+                  'annotator-button annotator-text-mode ml-1 mr-1 focus-exclude': true,
+                  active: textMode,
+                }"
+                title="Edit"
+                @click="textMode = !textMode"
+              >
+                <i class="fas fa-edit"></i>
+              </span>
+              <span
+                @click="copyClick"
+                title="Copy"
+                class="annotator-button annotator-copy ml-1 mr-1 focus-exclude"
+              >
+                <i class="fas fa-copy"></i>
+              </span>
+            </b-dropdown-item>
+          </b-dropdown>
+        </div>
+        <div
+          :class="{ 'annotate-slot': true, 'd-none': annotated }"
+          style="display: inline"
+        >
+          <slot></slot>
+        </div>
+        <div :class="{ 'd-none': !textMode }">
+          <input
             :class="{
-              'annotator-button annotator-text-mode ml-1 mr-1 focus-exclude': true,
-              active: textMode,
+              'annotate-input': true,
+              'd-none': !textMode || !annotated,
             }"
-            title="Edit"
-            @click="textMode = !textMode"
-          >
-            <i class="fas fa-edit"></i>
-          </span>
-          <span
-            @click="copyClick"
-            title="Copy"
-            class="annotator-button annotator-copy ml-1 mr-1 focus-exclude"
-          >
-            <i class="fas fa-copy"></i>
-          </span>
-        </b-dropdown-item>
-      </b-dropdown>
+            @select="select"
+            @blur="annotateInputBlur"
+            @click.stop="dummyFunction"
+            :value="text"
+            style="width: calc(100% - 2rem)"
+          />
+        </div>
+        <template v-if="annotated && !textMode">
+          <v-runtime-template
+            v-for="(template, index) of annotatedSlots"
+            :key="`annotate-template-${index}`"
+            :template="template"
+            class="annotate-template"
+            ref="run-time-template"
+          />
+        </template>
+      </component>
+      <div class="annotate-translation" v-if="translation">
+        {{ translation }}
+      </div>
     </div>
-    <div
-      :class="{ 'annotate-slot': true, 'd-none': annotated }"
-      style="display: inline"
-    >
-      <slot></slot>
-    </div>
-    <div :class="{ 'd-none': !textMode }">
-      <input
-        :class="{ 'annotate-input': true, 'd-none': !textMode || !annotated }"
-        @select="select"
-        @blur="annotateInputBlur"
-        @click.stop="dummyFunction"
-        :value="text"
-        style="width: calc(100% - 2rem)"
-      />
-    </div>
-    <template v-if="annotated && !textMode">
-      <v-runtime-template
-        v-for="(template, index) of annotatedSlots"
-        :key="`annotate-template-${index}`"
-        :template="template"
-        class="annotate-template"
-        ref="run-time-template"
-      />
-    </template>
-    <div class="annotate-translation" v-if="translation">{{ translation }}</div>
-  </component>
+
+    <container-query :query="query" v-model="params">
+      <div></div>
+    </container-query>
+  </div>
 </template>
 
 <script>
@@ -130,6 +145,7 @@ import VRuntimeTemplate from "v-runtime-template";
 import Helper from "@/lib/helper";
 import { transliterate as tr } from "transliteration";
 import { mapState } from "vuex";
+import { ContainerQuery } from "vue-container-query";
 
 export default {
   components: {
@@ -137,6 +153,7 @@ export default {
     popupnote,
     booklink,
     VRuntimeTemplate,
+    ContainerQuery,
   },
   props: {
     animationDuration: {
@@ -192,7 +209,13 @@ export default {
       dictionary: undefined,
       myanmarZawgyiDetector: undefined,
       myanmarZawgyiConverter: undefined,
-      translation: undefined
+      translation: undefined,
+      params: {},
+      query: {
+        lg: {
+          minWidth: 600,
+        },
+      },
     };
   },
   mounted() {
@@ -246,11 +269,13 @@ export default {
   },
   methods: {
     async translateClick() {
-      let text = this.text.replace(/\n/g, '').trim()
+      let text = this.text.replace(/\n/g, "").trim();
       console.log(this.$iframeTranslationClientAvailableLanguages); // { 'af': 'Afrikaans', ... }
-      let translation = await this.$iframeTranslationClient.translate(text, this.$l1.code)
-      console.log({text, translation})
-      if (translation) this.translation = translation
+      let translation = await this.$iframeTranslationClient.translate(
+        text,
+        this.$l1.code
+      );
+      if (translation) this.translation = translation;
     },
     async playAnimation(startFrom) {
       if (!this.annotated) {
@@ -324,7 +349,11 @@ export default {
     },
     async externalTranslateClick() {
       let text = this.$l2.continua ? this.text.replace(/ /g, "") : this.text;
-      let url = this.$languages.translationURL(text.replace(/\n/g, ''), this.$l1, this.$l2);
+      let url = this.$languages.translationURL(
+        text.replace(/\n/g, ""),
+        this.$l1,
+        this.$l2
+      );
       if (url) window.open(url, Helper.isMobile() ? "_blank" : "translate");
     },
     // https://stackoverflow.com/questions/2550951/what-regular-expression-do-i-need-to-check-for-some-non-latin-characters
@@ -592,10 +621,23 @@ export default {
 </script>
 
 <style lang="scss">
+.annotate-wrapper.annotate-wrapper-wide.annotate-with-translation {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+  .annotated {
+    width: 60%;
+  }
+  .annotated-translation {
+    min-width: 40%;
+  }
+}
+
 .annotate-translation {
   font-size: 0.8em;
-  color: #888888;
+  opacity: 0.7;
 }
+
 /* IF annotation flickering occurs, try to turn this line off, or check if v-observe-visiblility has the correct settings (e.g. 'once') */
 .annotated.add-pinyin {
   line-height: 2.2;
@@ -669,14 +711,26 @@ export default {
   padding-right: 1rem;
 }
 
-.annotator-buttons {
-  float: right;
-  padding: 0 0 0 0.5rem;
-}
+.annotated.with-buttons {
+  min-width: 60%;
+  width: 100%;
+  display: flex;
+  align-items: stretch;
+  flex-direction: row;
 
-[dir="rtl"] .annotator-buttons {
-  float: left;
-  padding: 0 0.5rem 0 0;
+  .annotate-template {
+    flex: 1;
+  }
+
+  .annotator-buttons {
+    padding: 0 0 0 0.5rem;
+    order: 2;
+  }
+  &[dir="rtl"] {
+    .annotator-buttons {
+      padding: 0 0.5rem 0 0;
+    }
+  }
 }
 
 .annotator-menu-toggle {

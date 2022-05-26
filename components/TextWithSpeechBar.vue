@@ -39,7 +39,7 @@
         v-if="line.trim().length > 0"
         :key="`chapter-line-${lineIndex}`"
         :foreign="foreign"
-        class="mb-4"
+        class="mb-4 w-100"
         tag="div"
         :buttons="true"
       >
