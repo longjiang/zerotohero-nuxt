@@ -1,6 +1,12 @@
 <template>
   <div>
-    <div :class="{ 'annotate-wrapper': true, 'annotate-wrapper-wide': params.lg, 'annotate-with-translation': translation }">
+    <div
+      :class="{
+        'annotate-wrapper': true,
+        'annotate-wrapper-wide': params.lg,
+        'annotate-with-translation': translation,
+      }"
+    >
       <component
         :is="tag"
         v-observe-visibility="{
@@ -60,7 +66,7 @@
                   mr-1
                   focus-exclude
                 "
-                title="Translate"
+                title="Translate Inline"
                 @click="translateClick"
               >
                 <i class="fas fa-language"></i>
@@ -72,7 +78,7 @@
                   mr-1
                   focus-exclude
                 "
-                title="Translate"
+                title="Translate with External Translator"
                 @click="externalTranslateClick"
               >
                 <i class="fas fa-globe"></i>
@@ -192,6 +198,9 @@ export default {
     explore: {
       default: false,
     },
+    showTranslation: {
+      default: true,
+    },
   },
   data() {
     return {
@@ -270,12 +279,15 @@ export default {
   methods: {
     async translateClick() {
       let text = this.text.replace(/\n/g, "").trim();
-      console.log(this.$iframeTranslationClientAvailableLanguages); // { 'af': 'Afrikaans', ... }
+
       let translation = await this.$iframeTranslationClient.translate(
         text,
         this.$l1.code
       );
-      if (translation) this.translation = translation;
+      if (translation) {
+        this.$emit("translation", translation);
+        if (this.showTranslation) this.translation = translation;
+      }
     },
     async playAnimation(startFrom) {
       if (!this.annotated) {

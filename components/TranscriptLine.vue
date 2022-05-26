@@ -46,8 +46,10 @@
             :animationDuration="duration"
             :translation="parallelLine"
             :delay="single ? false : 123"
+            :showTranslation="false"
             v-if="!showSubsEditing"
             style="flex: 1"
+            @translation="onTranslation"
             @textChanged="lineChanged(line, ...arguments)"
             @annotated="updateAnnotated"
           >
@@ -62,14 +64,14 @@
           </div>
         </div>
         <div
-          v-if="line.line.length > 0 && parallelLine"
+          v-if="line.line.length > 0 && (parallelLine || translation)"
           :class="{
             'transcript-line-l1': true,
             'transcript-line-l1-rtl': !single && $l2.direction === 'rtl',
             'transcript-line-l1-single': single,
             transparent: !annotated,
           }"
-          v-html="parallelLine"
+          v-html="translation || parallelLine"
           :contenteditable="enableTranslationEditing"
           :data-line-index="lineIndex"
           @blur.capture="trasnlationLineBlur"
@@ -142,6 +144,7 @@ export default {
       lineStarted: false,
       durationPlayed: 0,
       animateOnceAnnotated: undefined,
+      translation: undefined, // From user's clicking the translate button inside <Anntoate>
       params: {},
       query: {
         lg: {
@@ -172,6 +175,9 @@ export default {
     },
   },
   methods: {
+    onTranslation(translation) {
+      this.translation = translation;
+    },
     updateAnnotated(annotated) {
       this.annotated = annotated;
     },
