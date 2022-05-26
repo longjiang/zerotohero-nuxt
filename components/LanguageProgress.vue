@@ -60,7 +60,7 @@
       <div v-if="$store.state.progress.progressLoaded">
         You've spent
         <b>
-          {{ Math.floor(hours) }} hours {{ Math.ceil((hours % 1) * 60) }} min
+          {{ formatDuration(time) }}
         </b>
         on the
         <b>{{ $l2.name }}</b>

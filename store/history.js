@@ -66,7 +66,7 @@ export const mutations = {
   }
 }
 export const actions = {
-  load({ commit, dispatch }) {
+  load({ commit }) {
     if (!state.historyLoaded) commit('LOAD_HISTORY')
   },
   add({ commit, dispatch }, historyItem) {
@@ -84,7 +84,7 @@ export const actions = {
   async importFromJSON({commit}, json) {
     commit('IMPORT_HISTORY_FROM_JSON', json)
   },
-  async push({ commit, state, rootState }) {
+  async push({ rootState }) {
     let user = rootState.auth.user
     let token = $nuxt.$auth.strategy.token.get()
     let dataId = this.$auth.$storage.getUniversal('dataId');
