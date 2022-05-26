@@ -1,6 +1,6 @@
 <template>
   <div :class="bodyClasses" class="container">
-    <h5>{{ $t('Join our Telegram discussion group') }}</h5>
+    <h5>Chinese Learning Telegram Group</h5>
     <ul class="pl-3 mt-3">
       <li> {{ $t('Share learning resources.') }}</li>
       <li> {{ $t('Interact with fellow learners.') }}</li>

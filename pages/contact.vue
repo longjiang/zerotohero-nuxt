@@ -103,33 +103,43 @@
         <div class="row mt-4">
           <div class="col-sm-12">
             <div class="text-center p-4">
-              <h5 class="mb-4">
-                And you can always reach either one of us via:
-              </h5>
+              <h4 class="mb-4">
+                Follow Us on Social Media
+              </h4>
               <SocialLogos style="line-height: 3" />
             </div>
           </div>
         </div>
         <div class="row">
           <div class="col-sm-12">
+            <h4 class="mt-5 mb-4 text-center">Chinese Language Chat</h4>
+          </div>
+          <div class="col-sm-12 col-md-6 mb-3">
             <div v-if="this.$l2.code === 'zh'">
-              <div class="contact-block p-4 container">
-                <h5>{{ $t("Join our WeChat discussion group") }}</h5>
+              <div class="p-4 container">
+                <h5>Chinese Learning WeChat Group</h5>
+                <ul class="pl-3 mt-3">
+                  <li>{{ $t("Share learning resources.") }}</li>
+                  <li>{{ $t("Interact with fellow learners.") }}</li>
+                  <li>{{ $t("Help each other out with questions.") }}</li>
+                  <li>{{ $t("Inspire others with learning experiences.") }}</li>
+                </ul>
                 <p class="mt-3">
-                  {{
-                    $t(
-                      "Download the WeChat app, scan Ken’s QR code below, leave him a message, and he will invite you into the group."
-                    )
-                  }}
+                  Download the
+                  <a
+                    class="strong"
+                    target="_blank"
+                    href="https://www.wechat.com/"
+                  >
+                    WeChat app
+                  </a>
+                  , add Ken's WeChat (id: kendai9) and send a request to join.
                 </p>
-                <img
-                  src="/img/ken-wechat-qr.jpg"
-                  class="img-fluid shadow"
-                  style="max-width: 15rem"
-                />
               </div>
-              <TelegramPrompt bodyClasses=" contact-block p-4 " />
             </div>
+          </div>
+          <div class="col-sm-12 col-md-6 mb-3">
+            <TelegramPrompt bodyClasses="  p-4 " />
           </div>
         </div>
       </template>
@@ -172,5 +182,6 @@ export default {
   background: #ffffff;
   border-radius: 0.5rem;
   box-shadow: 0px 5px 20px rgb(0 0 0 / 25%);
+  height: 100%;
 }
 </style>
