@@ -51,7 +51,7 @@
           />
           <span
             class="
-              annotator-button annotator-show-translate
+              annotator-button annotator-translate
               ml-1
               mr-1
               focus-exclude
@@ -60,6 +60,18 @@
             @click="translateClick"
           >
             <i class="fas fa-language"></i>
+          </span>
+          <span
+            class="
+              annotator-button annotator-external-translate
+              ml-1
+              mr-1
+              focus-exclude
+            "
+            title="Translate"
+            @click="externalTranslateClick"
+          >
+            <i class="fas fa-globe"></i>
           </span>
           <span
             :class="{
@@ -106,6 +118,7 @@
         ref="run-time-template"
       />
     </template>
+    <div class="annotate-translation" v-if="translation">{{ translation }}</div>
   </component>
 </template>
 
@@ -162,7 +175,6 @@ export default {
     explore: {
       default: false,
     },
-    translation: undefined,
   },
   data() {
     return {
@@ -180,6 +192,7 @@ export default {
       dictionary: undefined,
       myanmarZawgyiDetector: undefined,
       myanmarZawgyiConverter: undefined,
+      translation: undefined
     };
   },
   mounted() {
@@ -232,6 +245,13 @@ export default {
     },
   },
   methods: {
+    async translateClick() {
+      let text = this.text.replace(/\n/g, '').trim()
+      console.log(this.$iframeTranslationClientAvailableLanguages); // { 'af': 'Afrikaans', ... }
+      let translation = await this.$iframeTranslationClient.translate(text, this.$l1.code)
+      console.log({text, translation})
+      if (translation) this.translation = translation
+    },
     async playAnimation(startFrom) {
       if (!this.annotated) {
         return;
@@ -302,9 +322,9 @@ export default {
         event.target.selectionEnd
       );
     },
-    async translateClick() {
+    async externalTranslateClick() {
       let text = this.$l2.continua ? this.text.replace(/ /g, "") : this.text;
-      let url = this.$languages.translationURL(text, this.$l1, this.$l2);
+      let url = this.$languages.translationURL(text.replace(/\n/g, ''), this.$l1, this.$l2);
       if (url) window.open(url, Helper.isMobile() ? "_blank" : "translate");
     },
     // https://stackoverflow.com/questions/2550951/what-regular-expression-do-i-need-to-check-for-some-non-latin-characters
@@ -572,6 +592,10 @@ export default {
 </script>
 
 <style lang="scss">
+.annotate-translation {
+  font-size: 0.8em;
+  color: #888888;
+}
 /* IF annotation flickering occurs, try to turn this line off, or check if v-observe-visiblility has the correct settings (e.g. 'once') */
 .annotated.add-pinyin {
   line-height: 2.2;
