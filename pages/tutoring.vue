@@ -69,7 +69,7 @@
                 class="tab link-unstyled"
                 :data-bg-level="n < 7 ? n : 'outside'"
               >
-                {{ level(n, $l2).name }}
+                {{ getLevel(n, $l2).name }}
               </router-link>
             </template>
             <template v-else>
@@ -78,9 +78,9 @@
                 :key="`level-tab-${n}`"
                 :to="`/${$l1.code}/${$l2.code}/tutoring/${n}`"
                 class="tab link-unstyled"
-                :data-bg-level="level(n, $l2).name.replace('-', '')"
+                :data-bg-level="getLevel(n, $l2).name.replace('-', '')"
               >
-                {{ level(n, $l2).name }}
+                {{ getLevel(n, $l2).name }}
               </router-link>
             </template>
             <div
@@ -93,7 +93,7 @@
               style="height: 0.5rem"
               :class="
                 level
-                  ? `bg-level${level(level, $l2).name.replace('-', '')}`
+                  ? `bg-level${getLevel(level, $l2).name.replace('-', '')}`
                   : `bg-dark`
               "
             ></div>
@@ -164,7 +164,7 @@ export default {
     this.lessons = response.data.data || [];
   },
   methods: {
-    level(...args) {
+    getLevel(...args) {
       return Helper.level(...args);
     },
     goto(id) {
