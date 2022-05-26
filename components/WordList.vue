@@ -127,6 +127,7 @@
 </template>
 <script>
 import { transliterate as tr } from "transliteration";
+import Helper from '@/lib/helper'
 
 export default {
   props: {
