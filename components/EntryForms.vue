@@ -10,7 +10,7 @@
           <Loader :sticky="true" message="Searching for word forms..." />
         </div>
         <div
-          v-if="!checking && (Helper.isEmpty(tables) || tables.length === 0)"
+          v-if="!checking && (isEmpty(tables) || tables.length === 0)"
           class="pl-4 pr-4 text-center"
         >
           The word “{{ word.head }}” seems to only take on one form.
@@ -23,12 +23,12 @@
           <h6 class="mt-2">
             {{
               tableName === "verbs"
-                ? Helper.ucFirst(
+                ? ucFirst(
                     table.find((field) => field.field === "aspect").form
                   )
                 : ""
             }}
-            {{ Helper.ucFirst(tableName) }}
+            {{ ucFirst(tableName) }}
             {{
               tableName === "adjectives"
                 ? parseInt(
@@ -89,12 +89,35 @@ export default {
   },
   data() {
     return {
-      Helper,
       tables: [],
       checking: true,
     };
   },
+  computed: {
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
+  },
+  watch: {
+    word() {
+      this.getTables();
+    },
+  },
+  mounted() {
+    this.getTables();
+  },
   methods: {
+    isEmpty(...args) {
+      return Helper.isEmpty(...args)
+    },
+    ucFirst(...args) {
+      return Helper.ucFirst(...args)
+    },
     async getTables() {
       // https://www.consolelog.io/group-by-in-javascript/
       this.checking = true;
@@ -107,24 +130,6 @@ export default {
       }
       this.tables = Helper.groupArrayBy(forms, "table");
       this.checking = false;
-    },
-  },
-  mounted() {
-    this.getTables();
-  },
-  watch: {
-    word() {
-      this.getTables();
-    },
-  },
-  computed: {
-    $l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-    },
-    $l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
     },
   },
 };

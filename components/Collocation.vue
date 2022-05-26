@@ -23,7 +23,7 @@
           <Annotate tag="div" :checkSaved="false" :buttons="true">
             <span
               v-html="
-                Helper.highlight(line.line, word ? word.head : text, level)
+                highlight(line.line, word ? word.head : text, level)
               "
             />
           </Annotate>
@@ -67,7 +67,6 @@ export default {
   },
   data() {
     return {
-      Helper,
       lines: [],
     };
   },
@@ -121,6 +120,9 @@ export default {
     this.update();
   },
   methods: {
+    highlight(...args) {
+      return Helper.highlight(...args)
+    },
     saveLine(line) {
       this.$store.dispatch("savedCollocations/add", {
         term: this.term,

@@ -140,14 +140,7 @@ export default {
   },
   methods: {
     subscribeToVuexMutations() {
-      let navigated = false;
       this.unsubscribe = this.$store.subscribe((mutation) => {
-        if (mutation.type === "history/LOAD_HISTORY") {
-          if (!navigated) {
-            this.goToLastLanguage();
-            navigated = true;
-          }
-        }
         if (mutation.type === "shows/LOAD_SHOWS") {
           this.$store.dispatch("stats/load", {
             l2: this.l2,
@@ -199,7 +192,11 @@ export default {
       clearInterval(this.timeLoggerID);
       this.timeLoggerID = undefined;
       this.l2Time[this.l2.code] = this.$store.getters["progress/time"](this.l2);
-      console.log(`🕙 Language changed to ${this.l2.code}, timer restarted from ${this.l2Time[this.l2.code] / 1000} seconds.`)
+      console.log(
+        `🕙 Language changed to ${this.l2.code}, timer restarted from ${
+          this.l2Time[this.l2.code] / 1000
+        } seconds.`
+      );
       this.startLoggingUserTime();
     },
     onPanStart(e) {
@@ -232,10 +229,6 @@ export default {
         }
         this.edgeDetected = false;
       }
-    },
-    goToLastLanguage() {
-      let { l1, l2 } = this.history[this.history.length - 1];
-      this.$router.push({ name: "all-media", params: { l1, l2 } });
     },
     // Initialize the user data record if there isn't one
     async createNewUserDataRecord(token, payload = {}) {
@@ -370,7 +363,7 @@ export default {
       if (dictionary) {
         this.dictionaryCredit = await dictionary.credit();
       }
-      this.stopAndRestartLoggingUserTimeOnLanguageChange()
+      this.stopAndRestartLoggingUserTimeOnLanguageChange();
     },
     loadLanguageSpecificSettings() {
       if (this.settingsLoaded === this.l2.code) return;

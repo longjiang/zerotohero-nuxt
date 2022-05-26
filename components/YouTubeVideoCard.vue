@@ -177,13 +177,13 @@
               v-if="video.id && video.topic"
               class="youtube-video-card-badge"
             >
-              {{ Helper.topics[video.topic] }}
+              {{ topics[video.topic] }}
             </div>
             <div
               v-if="video.id && video.level"
               class="youtube-video-card-badge"
             >
-              {{ Helper.level(video.level, $l2).name }}
+              {{ level(video.level, $l2).name }}
             </div>
             <b-button
               v-if="showAdmin && $adminMode && video.id"
@@ -350,8 +350,6 @@ export default {
   },
   data() {
     return {
-      Helper,
-      Config,
       over: false,
       firstLineTime:
         this.video.subs_l2 && this.video.subs_l2[0]
@@ -432,6 +430,9 @@ export default {
         `https://img.youtube.com/vi/${this.video.youtube_id}/hqdefault.jpg`
       );
     },
+    topics() {
+      return Helper.topics
+    }
   },
   async mounted() {
     if (this.checkSubs) {
@@ -459,6 +460,12 @@ export default {
     },
   },
   methods: {
+    level(...args) {
+      return Helper.level(...args)
+    },
+    level(...args) {
+      return Helper.level(...args)
+    },
     thumbnailError(e) {
       console.log("❌ ERROR", this.video.title);
     },

@@ -31,12 +31,12 @@
               <Speak :text="phrase" class="ml-2"></Speak>
               <div
                 class="text-center big-word"
-                v-html="Helper.highlight(phrase, word.simplified, word.hsk)"
+                v-html="highlight(phrase, word.simplified, word.hsk)"
               ></div>
               <div
                 class="example-sentence-word mt-2 simplified"
                 v-html="
-                  Helper.highlight(
+                  highlight(
                     gramrelNameSimplified,
                     word.simplified,
                     word.hsk
@@ -46,7 +46,7 @@
               <div
                 class="example-sentence-word mt-2 traditional"
                 v-html="
-                  Helper.highlight(
+                  highlight(
                     gramrelNameTraditional,
                     word.traditional,
                     word.hsk
@@ -79,9 +79,6 @@ export default {
   components: {},
   data() {
     return {
-      Helper,
-      Config,
-      SketchEngine,
       gramrel: undefined,
       phrase: undefined,
       gramrelName: undefined,
@@ -111,6 +108,9 @@ export default {
     }
   },
   methods: {
+    highlight(...args) {
+      return Helper.highlight(...args)
+    },
     choosePhrase() {
       this.gramrel = Helper.randomArrayItem(this.word.sketch.Gramrels)
       this.phrase = Helper.randomArrayItem(this.gramrel.Words, 0, 5).cm

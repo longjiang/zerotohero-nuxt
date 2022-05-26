@@ -78,7 +78,7 @@
           <span
             class="suggestion-l1"
             v-if="suggestion.definitions"
-            v-html="Helper.highlight(suggestion.definitions.join(', '), text)"
+            v-html="highlight(suggestion.definitions.join(', '), text)"
           ></span>
         </span>
       </a>
@@ -156,7 +156,6 @@ export default {
   },
   data() {
     return {
-      Helper,
       suggestions: [],
       dEntry: this.entry,
       text: this.entry ? this.entry.head : this.term,
@@ -210,6 +209,9 @@ export default {
     },
   },
   methods: {
+    highlight(...args) {
+      return Helper.highlight(...args)
+    },
     focusOnInput() {
       this.$refs.lookup.focus();
     },

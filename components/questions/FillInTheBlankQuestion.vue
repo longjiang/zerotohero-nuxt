@@ -31,13 +31,13 @@
             <span
               v-if="split && split.before"
               class="decomposition-before"
-              v-html="Helper.highlight(split.before, split.before, hsk)"
+              v-html="highlight(split.before, split.before, hsk)"
             ></span>
             <StrokeOrder v-if="split" :char="split.char" />
             <span
               v-if="split && split.after"
               class="decomposition-after"
-              v-html="Helper.highlight(split.after, split.after, hsk)"
+              v-html="highlight(split.after, split.after, hsk)"
             ></span>
           </div>
         </div>
@@ -48,7 +48,6 @@
 
 <script>
 import Helper from '@/lib/helper'
-import Config from '@/lib/config'
 import StrokeOrder from '@/components/StrokeOrder.vue'
 
 export default {
@@ -58,8 +57,6 @@ export default {
   },
   data() {
     return {
-      Helper,
-      Config,
       split: undefined
     }
   },
@@ -69,6 +66,9 @@ export default {
     }
   },
   methods: {
+    highlight(...args) {
+      return Helper.highlight(...args)
+    },
     fillInTheBlankHTML() {
       return `${
         this.split.before

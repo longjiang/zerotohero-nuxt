@@ -1,6 +1,6 @@
 <template>
   <div class="question-decomposition" v-if="text" :id="id">
-    <div class="question-slide-aspect" v-for="rc in [randomChar(text)]">
+    <div class="question-slide-aspect" v-for="rc in [randomChar(text)]" :key="rc">
       <div class="question-slide" :id="`question-${id}-slide-1`">
         <div :data-level="hsk" class="text-center big-word-pinyin mb-4">
           {{ pinyin }}
@@ -10,13 +10,13 @@
           <span
             v-if="rc.before !== ''"
             class="decomposition-before"
-            v-html="Helper.highlight(rc.before, rc.before, hsk)"
+            v-html="highlight(rc.before, rc.before, hsk)"
           ></span>
           <decomposition :char="rc.char" :quiz="true"></decomposition>
           <span
             class="decomposition-after"
             v-if="rc.after !== ''"
-            v-html="Helper.highlight(rc.after, rc.after, hsk)"
+            v-html="highlight(rc.after, rc.after, hsk)"
           ></span>
         </div>
         <div class="text-center character-example-english mt-4">
@@ -30,7 +30,6 @@
 <script>
 import Decomposition from '@/components/Decomposition.vue'
 import Helper from '@/lib/helper'
-import Config from '@/lib/config'
 
 export default {
   props: ['id', 'text', 'type', 'definitions', 'hsk', 'pinyin'],
@@ -39,8 +38,6 @@ export default {
   },
   data() {
     return {
-      Helper,
-      Config
     }
   },
   mounted() {
@@ -59,6 +56,9 @@ export default {
       })
   },
   methods: {
+    highlight(...args) {
+      return Helper.highlight(...args)
+    },
     randomChar(word) {
       const index = Math.floor(Math.random() * word.length)
       return {

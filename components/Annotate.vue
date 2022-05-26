@@ -175,7 +175,6 @@ export default {
       selectedText: undefined,
       batchId: 0,
       text: "",
-      Helper,
       textMode: false,
       tokenized: [],
       dictionary: undefined,

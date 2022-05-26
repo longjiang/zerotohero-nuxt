@@ -56,8 +56,7 @@ export default {
   },
   data() {
     return {
-      id: Helper.uniqueId(),
-      Helper,
+      id: this._uid,
     };
   },
   watch: {

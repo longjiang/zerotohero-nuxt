@@ -44,7 +44,6 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
 import Search from "@/components/Search";
 
 export default {
@@ -80,8 +79,6 @@ export default {
   },
   data() {
     return {
-      Helper,
-      Search,
       loading: this.type !== "generic",
       showCompare: this.compare,
     };

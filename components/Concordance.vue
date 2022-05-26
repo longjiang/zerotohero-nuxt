@@ -28,7 +28,7 @@
             >
               <span
                 v-html="
-                  Helper.highlightMultiple(
+                  highlightMultiple(
                     example.sentences[0],
                     words,
                     level || 'outside'
@@ -107,7 +107,6 @@ export default {
   },
   data() {
     return {
-      Helper,
       examples: undefined,
       concordanceKey: 0,
       words: [],
@@ -143,6 +142,9 @@ export default {
     },
   },
   methods: {
+    highlightMultiple(...args) {
+      return Helper.highlight(...args)
+    },
     async update() {
       this.updating = true;
       this.examples = undefined;

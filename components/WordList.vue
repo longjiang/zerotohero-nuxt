@@ -126,15 +126,9 @@
   </div>
 </template>
 <script>
-import Helper from "@/lib/helper";
 import { transliterate as tr } from "transliteration";
 
 export default {
-  data() {
-    return {
-      Helper,
-    };
-  },
   props: {
     words: {
       type: Array,

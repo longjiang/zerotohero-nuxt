@@ -70,7 +70,7 @@
               </div>
               <div class="mistake-description">
                 <span v-if="mistake.proficiency">
-                  <b>{{ Helper.ucFirst(mistake.proficiency) }}</b>
+                  <b>{{ ucFirst(mistake.proficiency) }}</b>
                   Chinese proficiency
                 </span>
               </div>
@@ -126,9 +126,7 @@ export default {
   props: ["text"],
   data() {
     return {
-      Helper,
       show: false,
-      SketchEngine,
       mistakes: undefined,
       updating: true
     };
@@ -137,6 +135,9 @@ export default {
     showClick() {
       this.show = true;
     },
+    ucFirst(...args) {
+      return Helper.ucFirst(...args)
+    }
   },
   async created() {
     let results = await SketchEngine.mistakes({

@@ -169,7 +169,7 @@
                           />
                           <span
                             v-html="
-                              Helper.highlightMultiple(
+                              highlightMultiple(
                                 hit.video.subs_l2[Number(hit.lineIndex)].line,
                                 ab === 'A'
                                   ? termsA.map((term) => term)
@@ -273,7 +273,6 @@ export default {
       hitAB: "A",
       checkingA: true,
       checkingB: true,
-      Helper,
       sort: "right",
       fullscreen: false,
     };
@@ -322,6 +321,9 @@ export default {
     },
   },
   methods: {
+    highlightMultiple(...args) {
+      return Helper.highlightMultiple(...args)
+    },
     showPlaylistModal() {
       this.$refs["playlist-modal"].show();
     },

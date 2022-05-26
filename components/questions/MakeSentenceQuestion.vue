@@ -24,7 +24,7 @@
       <div class="question-slide answer" :id="`${id}-slide-2`">
         <div>
           <img
-            :src="`${Config.imageUrl}${word.hskId}-${word.simplified}.jpg`"
+            :src="`${imageUrl}${word.hskId}-${word.simplified}.jpg`"
             class="question-image mb-4"
           />
         </div>
@@ -33,7 +33,7 @@
         </div>
         <div
           class="text-center example-sentence-word mb-4"
-          v-html="Helper.highlight(word.example, word.simplified, word.hsk)"
+          v-html="highlight(word.example, word.simplified, word.hsk)"
         >
           {{ word.example }}
         </div>
@@ -51,14 +51,15 @@ import Config from '@/lib/config'
 
 export default {
   props: ['id', 'word', 'type'],
-  components: {},
-  data() {
-    return {
-      Helper,
-      Config
+  computed: {
+    imageUrl() {
+      return Config.imageUrl
     }
   },
-  mounted() {},
-  methods: {}
+  methods: {
+    highlight(...args) {
+      return Helper.highlight(...args)
+    }
+  },
 }
 </script>

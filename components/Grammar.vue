@@ -13,7 +13,6 @@
   </div>
 </template>
 <script>
-import Helper from "@/lib/helper";
 import Grammar from "@/lib/grammar";
 import GrammarPoint from "@/components/GrammarPoint";
 
@@ -28,7 +27,6 @@ export default {
   },
   data() {
     return {
-      Helper,
       grammarKey: 0,
       grammarPoints: undefined,
     };

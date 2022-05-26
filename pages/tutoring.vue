@@ -69,7 +69,7 @@
                 class="tab link-unstyled"
                 :data-bg-level="n < 7 ? n : 'outside'"
               >
-                {{ Helper.level(n, $l2).name }}
+                {{ level(n, $l2).name }}
               </router-link>
             </template>
             <template v-else>
@@ -78,9 +78,9 @@
                 :key="`level-tab-${n}`"
                 :to="`/${$l1.code}/${$l2.code}/tutoring/${n}`"
                 class="tab link-unstyled"
-                :data-bg-level="Helper.level(n, $l2).name.replace('-', '')"
+                :data-bg-level="level(n, $l2).name.replace('-', '')"
               >
-                {{ Helper.level(n, $l2).name }}
+                {{ level(n, $l2).name }}
               </router-link>
             </template>
             <div
@@ -93,7 +93,7 @@
               style="height: 0.5rem"
               :class="
                 level
-                  ? `bg-level${Helper.level(level, $l2).name.replace('-', '')}`
+                  ? `bg-level${level(level, $l2).name.replace('-', '')}`
                   : `bg-dark`
               "
             ></div>
@@ -144,7 +144,6 @@ export default {
   props: ["level"],
   data() {
     return {
-      Helper,
       lessons: undefined,
     };
   },
@@ -165,6 +164,9 @@ export default {
     this.lessons = response.data.data || [];
   },
   methods: {
+    level(...args) {
+      return Helper.level(...args);
+    },
     goto(id) {
       this.$router.push({
         path: `/${this.$l1.code}/${this.$l2.code}/tutoring/lesson/${id}`,

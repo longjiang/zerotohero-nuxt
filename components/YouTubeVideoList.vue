@@ -269,7 +269,6 @@ export default {
 
   data() {
     return {
-      Helper,
       channels: undefined,
       checkSavedData: this.checkSaved,
       checkSavedDone: false,

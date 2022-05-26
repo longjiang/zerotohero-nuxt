@@ -13,7 +13,7 @@
             >
               <span
                 v-html="
-                  Helper.highlight(entry.example, entry.simplified, entry.newHSK && entry.newHSK === '7-9' ? '7-9' : entry.hsk)
+                  highlight(entry.example, entry.simplified, entry.newHSK && entry.newHSK === '7-9' ? '7-9' : entry.hsk)
                 "
               ></span>
             </Annotate>
@@ -68,7 +68,6 @@
 
 <script>
 import Helper from '@/lib/helper'
-import Config from '@/lib/config'
 
 export default {
   props: {
@@ -84,14 +83,15 @@ export default {
   },
   data() {
     return {
-      Helper,
-      Config,
       hasImage: true,
       image: undefined,
       admin: false
     }
   },
   methods: {
+    highlight(...args) {
+      return Helper.highlight(...args)
+    },
     searchImageKeyupEnter(e) {
       const app = this
       WordPhotos.getSrcsFromUnsplash($(e.target).val(), function(srcs) {

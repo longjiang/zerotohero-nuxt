@@ -49,8 +49,6 @@
 </template>
 
 <script>
-import Config from "@/lib/config";
-import Helper from "@/lib/helper";
 
 export default {
   components: {},
@@ -59,8 +57,6 @@ export default {
     return {
       articles: [],
       articleId: undefined,
-      Config,
-      Helper,
     };
   },
   watch: {
