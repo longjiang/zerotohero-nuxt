@@ -144,7 +144,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .decomposition-before,
 .decomposition-after {
   font-size: 3rem;
