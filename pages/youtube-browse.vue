@@ -76,12 +76,14 @@ export default {
     };
   },
   methods: {
-    onVideoUnavailable() {
-      this.videoUnavailable = true;
-      this.videos = this.videos.filter(
-        (v) => v.youtube_id !== this.heroVideo.youtube_id
-      );
-      this.loadHeroVideo();
+    onVideoUnavailable(youtube_id) {
+      if (this.heroVideo.youtube_id === youtube_id) {
+        this.videoUnavailable = true;
+        this.videos = this.videos.filter(
+          (v) => v.youtube_id !== this.heroVideo.youtube_id
+        );
+        this.loadHeroVideo();
+      }
     },
     onVideosLoaded(videos) {
       this.videos = videos || [];

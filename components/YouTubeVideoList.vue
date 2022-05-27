@@ -180,7 +180,6 @@
           <LazyYouTubeVideoCard
             ref="youTubeVideoCard"
             @newShow="newShow"
-            @unavailable="onVideoUnavailable"
             @hasSubs="onHasSubs"
             :video="video"
             :generated="generated"
@@ -378,9 +377,6 @@ export default {
         typeof window !== "undefined" &&
         window.location.href.startsWith("http://localhost")
       );
-    },
-    onVideoUnavailable(youtube_id) {
-      this.unavailableYouTubeIds.push(youtube_id);
     },
     surveyChannels() {
       let groups = Helper.groupArrayBy(this.videos, "channel_id");

@@ -285,8 +285,10 @@ export default {
         this.heroUnavailable = true;
       }
     },
-    onVideoUnavailable() {
-      this.loadFeaturedVideo();
+    onVideoUnavailable(youtube_id) {
+      if (this.featuredVideo.youtube_id === youtube_id) {
+        this.loadFeaturedVideo();
+      }
     },
     async saveTitle(e) {
       let newTitle = e.target.innerText;

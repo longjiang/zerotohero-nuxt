@@ -58,7 +58,10 @@
                 skin="dark"
               />
             </div>
-            <FeedbackPrompt class="mt-5 mb-4" :skin="$route.meta ? $route.meta.skin : 'light'"/>
+            <FeedbackPrompt
+              class="mt-5 mb-4"
+              :skin="$route.meta ? $route.meta.skin : 'light'"
+            />
             <div
               v-if="videos && music && music.length > 0"
               class="media-section"
@@ -189,7 +192,11 @@
           </div>
 
           <client-only>
-            <LazyIdenticalLanguages class="mt-5 mb-5" routeName="all-media" v-if="!loading"/>
+            <LazyIdenticalLanguages
+              class="mt-5 mb-5"
+              routeName="all-media"
+              v-if="!loading"
+            />
           </client-only>
         </div>
       </div>
@@ -278,12 +285,14 @@ export default {
       ]);
       this.heroVideo = randomVideos[0];
     },
-    onVideoUnavailable() {
-      this.videoUnavailable = true;
-      this.videos = this.videos.filter(
-        (v) => v.youtube_id !== this.heroVideo.youtube_id
-      );
-      this.loadHeroVideo();
+    onVideoUnavailable(youtube_id) {
+      if (this.heroVideo.youtube_id === youtube_id) {
+        this.videoUnavailable = true;
+        this.videos = this.videos.filter(
+          (v) => v.youtube_id !== this.heroVideo.youtube_id
+        );
+        this.loadHeroVideo();
+      }
     },
     async loadShows() {
       this.tvShows = this.$store.state.shows.tvShows[this.$l2.code];

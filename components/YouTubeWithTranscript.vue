@@ -333,7 +333,7 @@ export default {
   },
   methods: {
     onVideoUnavailable(youtube_id) {
-      if (youtube_id) {
+      if (youtube_id === this.video.youtube_id) {
         this.$emit("videoUnavailable", youtube_id);
       }
     },

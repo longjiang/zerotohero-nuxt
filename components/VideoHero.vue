@@ -217,9 +217,11 @@ export default {
     play() {
       this.$refs.youtube.play();
     },
-    onVideoUnavailable() {
-      this.videoUnavailable = true;
-      this.$emit("videoUnavailable", true);
+    onVideoUnavailable(youtube_id) {
+      if (youtube_id === this.video.youtube_id) {
+        this.videoUnavailable = true;
+        this.$emit("videoUnavailable", youtube_id);
+      }
     },
     visibilityChanged(visible) {
       if (!this.$refs.youtube) return;
