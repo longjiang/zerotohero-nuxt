@@ -34,9 +34,7 @@
           <rt>naṣṣ</rt>
         </ruby>
         <span v-else>
-          [p
-          <sup>h</sup>
-          ]
+          [pʰ]
         </span>
       </span>
       <span
