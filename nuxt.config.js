@@ -176,7 +176,10 @@ export default {
       } else {
         config.devtool = false
       }
-    }
+    },
+    transpile: [
+      'iframe-translator'
+    ]
   },
   target: 'static',
   generate: {
