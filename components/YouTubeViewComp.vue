@@ -308,9 +308,9 @@ export default {
         videos = [this.video, ...videos];
         videos = Helper.uniqueByValue(videos, "youtube_id");
         if (sort === "-date") {
-          videos = videos.sort((a, b) => b.date.localeCompare(a.date));
+          videos = videos.sort((a, b) => b.date ? b.date.localeCompare(a.date) : 0);
         } else {
-          videos = videos.sort((a, b) => a.title.localeCompare(b.title));
+          videos = videos.sort((a, b) => a.title ? a.title.localeCompare(b.title) : 0);
         }
         this.episodes = videos;
       }
