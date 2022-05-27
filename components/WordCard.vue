@@ -21,7 +21,7 @@
       >
         <img
           v-if="srcs && srcs.length > 0"
-          :v-lazy="srcs[srcIndex]"
+          :src="srcs[srcIndex]"
           class="word-list-ext-image"
           @error="logoLoadError(srcIndex)"
         />

@@ -96,6 +96,15 @@ export default {
     '@nuxtjs/google-fonts',
     '@nuxtjs/auth-next',
     '@nuxtjs/toast',
+
+    ['nuxt-lazy-load', {
+      // These are the default values
+      native: false, // https://caniuse.com/loading-lazy-attr
+      directiveOnly: false, 
+
+      // Default image must be in the static folder
+      defaultImage: '/img/placeholder-faded.png',
+    }]
   ],
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
@@ -157,7 +166,6 @@ export default {
     { src: '~/plugins/vuex-persist.js', mode: 'client' },
     { src: '~/plugins/shared-mutations.js', mode: 'client' },
     { src: '~/plugins/idle-vue.js', mode: 'client' },
-    // { src: '~/plugins/iframe-translator.js', mode: 'client' }
   ],
 
   build: {

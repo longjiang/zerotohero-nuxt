@@ -7,7 +7,7 @@
   >
     <img
       v-if="channel.avatar"
-      :v-lazy="channel.avatar"
+      :src="channel.avatar"
       class="channel-avatar"
       alt
     />

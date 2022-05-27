@@ -7,7 +7,6 @@ import ModuleLoader from '~/lib/module-loader'
 import WorkerModuleLoader from '~/lib/worker-module-loader'
 import VueMq from 'vue-mq'
 import VueSmoothScroll from 'vue2-smooth-scroll'
-import VueLazyload from 'vue-lazyload'
 import SmartQuotes from "smartquotes";
 import he from "he"; // html entities
 import { i18n } from '~/plugins/i18n.js'
@@ -18,17 +17,7 @@ import Languages from '@/lib/languages'
 import DateHelper from "@/lib/date-helper";
 import axios from 'axios'
 
-Vue.use(VueLazyload, {
-  preLoad: 1.3,
-  error: '/img/placeholder-unavailable.jpg',
-  loading: '/img/placeholder-faded.png',
-  attempt: 1
-})
-import { NuxtHammer } from 'nuxt-hammer'
-
 Vue.config.productionTip = false
-
-Vue.use(NuxtHammer)
 Vue.use(VTooltip)
 Vue.use(VueSimpleSVG)
 Vue.use(VueObserveVisibility)

@@ -77,7 +77,7 @@
               >
                 <img
                   class="show-thumb"
-                  :v-lazy="`https://img.youtube.com/vi/${tvShow.youtube_id}/hqdefault.jpg`"
+                  :src="`https://img.youtube.com/vi/${tvShow.youtube_id}/hqdefault.jpg`"
                 />
                 {{ tvShow.title }}
               </b-form-checkbox>
@@ -122,7 +122,7 @@
               >
                 <img
                   class="show-thumb"
-                  :v-lazy="`https://img.youtube.com/vi/${talk.youtube_id}/hqdefault.jpg`"
+                  :src="`https://img.youtube.com/vi/${talk.youtube_id}/hqdefault.jpg`"
                 />
                 {{ talk.title }}
               </b-form-checkbox>

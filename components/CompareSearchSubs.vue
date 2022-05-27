@@ -150,7 +150,7 @@
                           class="hit-thumb"
                           style="margin-top: 0.2rem"
                           v-if="ab === 'A' && hit"
-                          :v-lazy="`https://img.youtube.com/vi/${hit.video.youtube_id}/hqdefault.jpg`"
+                          :src="`https://img.youtube.com/vi/${hit.video.youtube_id}/hqdefault.jpg`"
                           :alt="hit.video.title"
                         />
                       </div>
@@ -195,7 +195,7 @@
                           class="hit-thumb"
                           style="margin-top: 0.2rem"
                           v-if="ab === 'B' && hit"
-                          :v-lazy="`https://img.youtube.com/vi/${hit.video.youtube_id}/hqdefault.jpg`"
+                          :src="`https://img.youtube.com/vi/${hit.video.youtube_id}/hqdefault.jpg`"
                           :alt="hit.video.title"
                         />
                       </div>
