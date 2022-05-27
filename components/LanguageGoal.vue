@@ -1,26 +1,26 @@
 <template>
-  
-        <div class="row">
-          <div class="col-6 pr-1 text-center">
-            Your current level
-            <b-form-select
-              v-model="mannuallySetLevel"
-              :options="levels"
-            ></b-form-select>
-          </div>
-          <div class="col-6 pl-1 text-center">
-            Your next goal
-            <br />
-            <div class="goal">
-              <template v-if="level < 7">
-                {{ levelObj(level + 1).exam.name }}
-                {{ levelObj(level + 1).level }}
-              </template>
-              <template v-if="level >= 7" class="goal">Mastery</template>
-              <img src="/img/trophy.svg" />
-            </div>
-          </div>
-        </div>
+  <div class="row">
+    <div class="col-6 pr-1 text-center">
+      Your current level
+      <b-form-select
+        v-model="mannuallySetLevel"
+        :options="levels"
+        @change="levelChangedByUser"
+      ></b-form-select>
+    </div>
+    <div class="col-6 pl-1 text-center">
+      Your next goal
+      <br />
+      <div class="goal">
+        <template v-if="level < 7">
+          {{ levelObj(level + 1).exam.name }}
+          {{ levelObj(level + 1).level }}
+        </template>
+        <template v-if="level >= 7" class="goal">Mastery</template>
+        <img src="/img/trophy.svg" />
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -28,7 +28,7 @@ import Helper from "@/lib/helper";
 export default {
   props: {
     $l1: Object,
-    $l2: Object
+    $l2: Object,
   },
   computed: {
     time() {
@@ -65,7 +65,6 @@ export default {
     return {
       showManuallySetHours: false,
       mannuallySetLevel: this.level,
-      mannuallySetHours: undefined,
     };
   },
   beforeDestroy() {
@@ -88,18 +87,10 @@ export default {
     levelObj(level) {
       return Helper.languageLevels(this.$l2)[level];
     },
-  },
-  watch: {
-    mannuallySetLevel() {
+    levelChangedByUser() {
       this.$store.dispatch("progress/setLevel", {
         l2: this.$l2,
         level: this.mannuallySetLevel,
-      });
-    },
-    mannuallySetHours() {
-      this.$store.dispatch("progress/setTime", {
-        l2: this.$l2,
-        time: this.mannuallySetHours * 60 * 60 * 1000,
       });
     },
   },

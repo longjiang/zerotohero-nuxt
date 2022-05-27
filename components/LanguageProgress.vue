@@ -158,25 +158,16 @@ export default {
   data() {
     return {
       showManuallySetHours: false,
-      mannuallySetLevel: this.level,
       mannuallySetHours: undefined,
     };
   },
-  beforeDestroy() {
-    this.unsubscribe();
-  },
-  mounted() {
-    if (this.$store.state.progress.progressLoaded)
-      this.mannuallySetLevel = Number(
-        this.$store.getters["progress/level"](this.$l2)
-      );
-    this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type === "progress/LOAD") {
-        this.mannuallySetLevel = Number(
-          this.$store.getters["progress/level"](this.$l2)
-        );
-      }
-    });
+  watch: {
+    mannuallySetHours() {
+      this.$store.dispatch("progress/setTime", {
+        l2: this.$l2,
+        time: this.mannuallySetHours * 60 * 60 * 1000,
+      });
+    },
   },
   methods: {
     levelObj(level) {
@@ -194,20 +185,6 @@ export default {
       } ${seconds ? seconds + " sec" : ""}`;
       formatted = formatted.trim() === "" ? "Just started" : formatted;
       return formatted;
-    },
-  },
-  watch: {
-    mannuallySetLevel() {
-      this.$store.dispatch("progress/setLevel", {
-        l2: this.$l2,
-        level: this.mannuallySetLevel,
-      });
-    },
-    mannuallySetHours() {
-      this.$store.dispatch("progress/setTime", {
-        l2: this.$l2,
-        time: this.mannuallySetHours * 60 * 60 * 1000,
-      });
     },
   },
 };
