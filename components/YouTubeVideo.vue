@@ -21,6 +21,7 @@
 
 <script>
 import $ from "jquery";
+import Helper from "@/lib/helper";
 
 export default {
   props: {
@@ -50,16 +51,16 @@ export default {
     },
     cc: {
       type: Boolean,
-      default: true
+      default: true,
     },
     icon: {
       type: Boolean,
-      default: true
+      default: true,
     },
     posterOnly: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
@@ -138,13 +139,13 @@ export default {
       }
     },
     mute() {
-      if (this.player) this.player.mute()
+      if (this.player) this.player.mute();
     },
     unMute() {
-      if (this.player) this.player.unMute()
+      if (this.player) this.player.unMute();
     },
     loadYouTubeiFrame() {
-      if (this.posterOnly) return
+      if (this.posterOnly) return;
       this.loading = true;
       let id = this.$el.querySelector(".youtube-iframe").getAttribute("id");
       this.removeYouTubeAPIVars();
@@ -196,7 +197,6 @@ export default {
                     !this.interval
                   ) {
                     this.interval = setInterval(() => {
-                      
                       this.updateCurrentTime();
                     }, 250);
                   }
@@ -207,14 +207,35 @@ export default {
               }
             },
             onReady: (event) => {
-              if (this.player && this.player.getPlayerState && this.player.getPlayerState() === -1) {
-                this.$emit('videoUnavailable', this.youtube)
-              }
+              this.reportIfVideoUnavailableUponAutoload(this.youtube);
             },
           },
         });
       };
       $.getScript("https://www.youtube.com/iframe_api");
+    },
+    async reportIfVideoUnavailableUponAutoload(youtube_id) {
+      if (!this.autoload) return;
+      // playerState of -1 means video is unstarted, but if a user skips the video as soon as it is loaded the video state is still -1
+      // which will trigger a 'videoUnavailable' false alarm
+      if (
+        this.youtube === youtube_id && // Make sure the video hasn't changed on us
+        this.player &&
+        this.player.getPlayerState &&
+        this.player.getPlayerState() === -1
+      ) {
+        await Helper.timeout(1000); // So le'ts make sure we give it a second before doing anything
+        if (
+          this.youtube === youtube_id &&
+          this.player.getPlayerState() === -1
+        ) {
+          console.log(
+            "😭 Looks like this video is unavailable:",
+            `https://www.zerotohero.ca/${this.$l1.code}/${this.$l2.code}/youtube/view/${youtube_id}`
+          );
+          this.$emit("videoUnavailable", youtube_id);
+        }
+      }
     },
     playerIsThisPlayerNotSomeOtherPlayer() {
       if (this.player && this.player.getVideoData) {

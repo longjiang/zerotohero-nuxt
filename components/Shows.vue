@@ -144,8 +144,9 @@ export default {
     },
   },
   methods: {
-    onVideoUnavailable() {
-      this.loadFeatureShowAndEpisode();
+    onVideoUnavailable(youtube_id) {
+      if (youtube_id === this.featureEpisode.youtube_id)
+        this.loadFeatureShowAndEpisode();
     },
     async getShowsOverNetwork() {
       let langId = this.$l2.id;

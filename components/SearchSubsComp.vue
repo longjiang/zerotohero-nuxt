@@ -464,26 +464,21 @@ export default {
   methods: {
     async onVideoUnavailable(youtube_id) {
       let video = this.currentHit.video;
-      console.log(
-        "😭 Looks like this video is unavailable: ",
-        `https://www.youtube.com/watch?v=${youtube_id}`
-      );
-      if (youtube_id) {
-        // Log it
-        try {
-          let res = await this.$directus.reportUnavailableVideo({
-            youtube_id: video.youtube_id,
-            video_id: video.id,
-            l2Id: this.$l2.id,
-          });
-        } catch (err) {
-          Helper.logError(err);
-        }
-        // Go to next video
-        await Helper.timeout(2000);
-        if (this.currentHit.video.youtube_id === youtube_id)
-          this.removeCurrentHitAndGoToNext();
+      if (youtube_id && youtube_id !== video.youtube_id) return; // Always make sure the unavailable video is indeed what the user is looking at
+      // Log it
+      try {
+        let res = await this.$directus.reportUnavailableVideo({
+          youtube_id: video.youtube_id,
+          video_id: video.id,
+          l2Id: this.$l2.id,
+        });
+      } catch (err) {
+        Helper.logError(err);
       }
+      // Go to next video
+      await Helper.timeout(2000);
+      if (this.currentHit.video.youtube_id === youtube_id)
+        this.removeCurrentHitAndGoToNext();
     },
     loadSettings() {
       this.tvShowFilter = this.tvShow

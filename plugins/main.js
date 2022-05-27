@@ -187,7 +187,7 @@ export default async ({ app, store, route }, inject) => {
     async reportUnavailableVideo({ youtube_id, video_id, l2Id }) {
       try {
         if (youtube_id) {
-          console.log("YouTube: Reporting unavailable video - ", {
+          console.log("Directus: Reporting unavailable video - ", {
             youtube_id,
             video_id,
             l2Id
