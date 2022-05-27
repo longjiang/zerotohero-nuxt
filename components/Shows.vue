@@ -1,5 +1,5 @@
 <template>
-  <div class="main-dark">
+  <div class="main-dark pt-5">
     <VideoHero
       v-if="featureEpisode"
       :video="featureEpisode"

@@ -49,6 +49,8 @@ export default {
         "zerotohero-wide": this.wide,
         "zerotohero-not-wide": !this.wide,
         "zerotohero-wide-collapsed": this.collapsed,
+        "zerotohero-dark": this.$route.meta && this.$route.meta.skin === 'dark',
+        "zerotohero-light": this.$route.meta && this.$route.meta.skin === 'light'
       };
       classes[`route-${this.$route.name}`] = true;
       if (this.l1 && this.l2) {
@@ -547,6 +549,9 @@ export default {
 
 #zerotohero {
   min-height: 100vh;
+  &.zerotohero-dark .zth-content {
+    background: black;
+  }
   .zerotohero-background {
     height: 100vh;
     width: 100vw;
