@@ -13,7 +13,6 @@
       >
         <div class="youtube-thumbnail-wrapper aspect-wrapper">
           <img
-            v-lazy-load
             :src="playlist.thumbnail"
             class="youtube-thumbnail aspect"
           />

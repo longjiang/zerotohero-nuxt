@@ -59,7 +59,7 @@
           ref="thumbnail"
           @load="thumbnailLoaded"
           @error="thumbnailError"
-          v-lazy="thumbnail"
+          :src="thumbnail"
         />
       </router-link>
       <div class="media-body">
