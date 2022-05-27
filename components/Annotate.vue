@@ -152,7 +152,7 @@ import Helper from "@/lib/helper";
 import { transliterate as tr } from "transliteration";
 import { mapState } from "vuex";
 import { ContainerQuery } from "vue-container-query";
-import { getClient, AvailableLanguages } from "iframe-translator";
+import { getClient } from "iframe-translator";
 
 export default {
   components: {
@@ -213,13 +213,13 @@ export default {
       fullscreenMode: false,
       selectedText: undefined,
       batchId: 0,
-      text: "",
       textMode: false,
       tokenized: [],
       dictionary: undefined,
       myanmarZawgyiDetector: undefined,
       myanmarZawgyiConverter: undefined,
       translation: undefined,
+      text: undefined,
       params: {},
       query: {
         lg: {
@@ -229,11 +229,14 @@ export default {
     };
   },
   mounted() {
+    let text = "";
     if (this.$slots.default) {
       for (let slot of this.$slots.default) {
-        this.text += $(slot.elm).text();
+        if (slot.elm) text += slot.elm.textContent;
       }
     }
+    text.replace(/[\n\s]+/g, this.$l2.continua ? "" : " ");
+    this.text = text.trim(); // This cannot be a computed property because slot element is not available of the server side
     if (this.$l2.code === "my" && typeof google_myanmar_tools !== "undefined") {
       this.myanmarZawgyiDetector = new google_myanmar_tools.ZawgyiDetector();
       this.myanmarZawgyiConverter = new google_myanmar_tools.ZawgyiConverter();
@@ -279,7 +282,7 @@ export default {
   },
   methods: {
     async translateClick() {
-      let text = this.text.replace(/\n/g, "").trim();
+      let text = this.text;
       // https://www.npmjs.com/package/iframe-translator
       const iframeTranslationClient = await getClient();
       let translation = await iframeTranslationClient.translate(
@@ -290,7 +293,7 @@ export default {
         this.$emit("translation", translation);
         if (this.showTranslation) this.translation = translation;
       }
-      iframeTranslationClient.destroy()
+      iframeTranslationClient.destroy();
     },
     async playAnimation(startFrom) {
       if (!this.annotated) {
@@ -363,12 +366,8 @@ export default {
       );
     },
     async externalTranslateClick() {
-      let text = this.$l2.continua ? this.text.replace(/ /g, "") : this.text;
-      let url = this.$languages.translationURL(
-        text.replace(/\n/g, ""),
-        this.$l1,
-        this.$l2
-      );
+      let text = this.text;
+      let url = this.$languages.translationURL(text, this.$l1, this.$l2);
       if (url) window.open(url, Helper.isMobile() ? "_blank" : "translate");
     },
     // https://stackoverflow.com/questions/2550951/what-regular-expression-do-i-need-to-check-for-some-non-latin-characters
@@ -378,7 +377,7 @@ export default {
       return nonLatin;
     },
     empty() {
-      return this.text.trim() === "";
+      return !this.text || this.text.trim() === "";
     },
     fullscreenClick() {
       this.fullscreenMode = !this.fullscreenMode;
