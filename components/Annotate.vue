@@ -232,10 +232,10 @@ export default {
     let text = "";
     if (this.$slots.default) {
       for (let slot of this.$slots.default) {
-        if (slot.elm) text += slot.elm.textContent;
+        if (slot.elm) text += slot.elm.textContent + " ";
       }
     }
-    text.replace(/[\n\s]+/g, this.$l2.continua ? "" : " ");
+    text = text.replace(/[\n\s]+/g, this.$l2.continua ? "" : " ");
     this.text = text.trim(); // This cannot be a computed property because slot element is not available of the server side
     if (this.$l2.code === "my" && typeof google_myanmar_tools !== "undefined") {
       this.myanmarZawgyiDetector = new google_myanmar_tools.ZawgyiDetector();
@@ -283,15 +283,20 @@ export default {
   methods: {
     async translateClick() {
       let text = this.text;
-      // https://www.npmjs.com/package/iframe-translator
       const iframeTranslationClient = await getClient();
-      let translation = await iframeTranslationClient.translate(
-        text,
-        this.$l1.code
-      );
-      if (translation) {
-        this.$emit("translation", translation);
-        if (this.showTranslation) this.translation = translation;
+      try {
+        // https://www.npmjs.com/package/iframe-translator
+        let translation = await iframeTranslationClient.translate(
+          text,
+          this.$l1.code
+        );
+        if (translation) {
+          this.$emit("translation", translation);
+          if (this.showTranslation) this.translation = translation;
+        }
+      } catch (err) {
+        Helper.logError(err);
+        iframeTranslationClient.destroy(); // Make sure to destroy the client otherwise whenever there is an error and the translation is not returned, the client is never destroyed and ios users can't scroll
       }
       iframeTranslationClient.destroy();
     },
@@ -383,7 +388,7 @@ export default {
       this.fullscreenMode = !this.fullscreenMode;
     },
     copyClick() {
-      let text = this.$l2.continua ? this.text.replace(/ /g, "") : this.text;
+      let text = this.text;
       var tempInput = document.createElement("input");
       tempInput.style = "position: absolute; left: -1000px; top: -1000px";
       tempInput.value = text;
