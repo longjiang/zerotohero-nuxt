@@ -61,12 +61,11 @@
                   <a href="mailto:jon@chinesezerotohero.com">
                     jon@chinesezerotohero.com
                   </a>
-                  (fyi I have 1,219 unread messages)
                 </span>
               </div>
               <div>
                 <strong>{{ $t("WeChat:") }}</strong>
-                longjiang2005bby (I'm too busy coding to check my phone)
+                longjiang2005bby
               </div>
             </div>
           </div>
