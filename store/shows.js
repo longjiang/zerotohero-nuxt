@@ -34,7 +34,7 @@ export const mutations = {
     show.episodes = episodes
   },
   SET_EPISODE_COUNT(state, {  l2, collection, showId, episodeCount }) {
-    let show = state[collection][l2.code].find(s => s.id === showId)
+    let show = state[collection][l2.code].find(s => s.id === Number(showId))
     show.episodeCount = episodeCount
   }
 }

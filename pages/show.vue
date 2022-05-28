@@ -228,6 +228,7 @@ export default {
     async show() {
       this.sort =
         this.type === "talk" && !this.show.audiobook ? "-date" : "title";
+      this.episodeCount = await this.getEpisodeCount()
       this.videos = await this.getVideos({
         limit: this.perPage,
         offset: this.moreVideos,
@@ -369,11 +370,40 @@ export default {
         return response.data.data;
       }
     },
-    async getVideos({ keyword, limit = 500, offset = 0, sort = "title" } = {}) {
-      if (this.show.episodes) return this.show.episodes;
+    async getVideos({ keyword, limit = this.perPage, offset = 0, sort = "title" } = {}) {
+      limit = Math.min(limit, this.episodeCount - offset)
+      if (this.show.episodes && this.show.episodes.length > offset + limit) return this.show.episodes.slice(offset, limit);
       else {
         return await this.getVideosFromServer({ keyword, limit, offset, sort });
       }
+    },
+    async getEpisodeCount() {
+      if (this.show.episodeCount) return this.show.episodeCount;
+      let episodeCount = 0;
+      if (this.stats && this.stats[this.$l2.code]) {
+        // Music, Movies, News
+        episodeCount =
+          this.stats[this.$l2.code][this.show.title.toLowerCase()] || 0; // Most likely undefined
+      }
+      if (episodeCount < 1) {
+        try {
+          episodeCount = await this.$directus.countShowEpisodes(
+            this.collection,
+            this.show.id,
+            this.$l2.id
+          );
+        } catch (err) {
+          print(err);
+        }
+      }
+      if (episodeCount)
+        this.$store.dispatch("shows/setEpisodeCount", {
+          l2: this.$l2,
+          collection: this.collection === "tv_show" ? "tvShows" : "talks",
+          showId: this.show.id,
+          episodeCount,
+        });
+      return episodeCount;
     },
     async getVideosFromServer({ keyword, limit, offset, sort } = {}) {
       let keywordFilter = keyword ? `&filter[title][contains]=${keyword}` : "";

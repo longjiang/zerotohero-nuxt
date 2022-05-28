@@ -147,6 +147,13 @@ export default async ({ app, store, route }, inject) => {
     }
   })
   inject('directus', {
+    /**
+     * Count the number of episodes in a show
+     * @param {string} showType 'tv_show' or 'talk'
+     * @param {number} showId 
+     * @param {number} l2Id 
+     * @returns 
+     */
     async countShowEpisodes(showType, showId, l2Id) {
       let tableSuffix = Config.youtubeVideosTableName(l2Id).replace(`${Config.wiki}items/youtube_videos`, '')
       let data = await Helper.proxy(

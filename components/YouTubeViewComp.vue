@@ -277,6 +277,11 @@ export default {
       params[`filter[${this.showType}][eq]`] = this.show.id;
 
       let postParams = Object.assign({}, params);
+
+      // We assume that this is a LONG show with hundreds or even thousands of episodes (like News, Music, or some TV station show
+      // Let's grab the videos immediately PRIOR and AFTER the current video, so the user can eventually paginate through all the episodes.
+      // If sort is '-date', the user wants to see contents that are around the same date.
+      // If sort is 'title', the user wants to see contents with similar alpha-sorted titles
       if (episodeCount > limit) {
         if (sort === "title") {
           postParams["filter[title][gt]"] = this.video.title;
@@ -329,11 +334,6 @@ export default {
         episodeCount =
           this.stats[this.$l2.code][this.show.title.toLowerCase()] || 0; // Most likely undefined
       }
-      // We assume that this is a LONG show with hundreds or even thousands of episodes (like News, Music, or some TV station show
-      // Let's grab the videos immediately PRIOR and AFTER the current video, so the user can eventually paginate through all the episodes.
-      // If sort is '-date', the user wants to see contents that are around the same date.
-      // If sort is 'title', the user wants to see contents with similar alpha-sorted titles
-
       if (episodeCount < 1) {
         try {
           episodeCount = await this.$directus.countShowEpisodes(
