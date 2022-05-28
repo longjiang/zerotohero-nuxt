@@ -245,7 +245,7 @@ export default {
     async show() {
       console.log("YouTube View: 📀 Show changed, getting episodes...");
       if (this.show) {
-        let limit = 50;
+        let limit = 100;
         let episodeCount = await this.getEpisodeCount();
         if (episodeCount > limit && this.$refs.youtube)
           this.largeEpisodeCount = episodeCount;
