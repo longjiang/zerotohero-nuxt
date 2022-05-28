@@ -85,7 +85,7 @@
             :src="`${Config.imageProxy}?${image.src}`"
           />
         </div>
-        <button class="word-block-tool-tip-close" @click.stop="closePopup">
+        <button class="word-block-tool-tip-close" @click="$nuxt.$emit('popupClosed')" v-close-popover>
           <i class="fa fa-times"></i>
         </button>
         <div
