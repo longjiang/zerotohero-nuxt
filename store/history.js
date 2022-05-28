@@ -81,7 +81,7 @@ export const actions = {
     commit('REMOVE_ALL_HISTORY')
     dispatch('push')
   },
-  async importFromJSON({commit}, json) {
+  async importFromJSON({ commit }, json) {
     commit('IMPORT_HISTORY_FROM_JSON', json)
   },
   async push({ rootState }) {

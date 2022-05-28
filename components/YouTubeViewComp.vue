@@ -482,14 +482,14 @@ export default {
       if (typeof window !== "undefined") {
         this.currentTime = currentTime;
         const params = new URLSearchParams(window.location.search);
-        const qt = params.get("t") ? Number(params.get("t")) : 0;
-        if (this.currentTimeInSeconds !== qt) {
+        const queryStringTime = params.get("t") ? Number(params.get("t")) : 0;
+        if (this.currentTimeInSeconds !== queryStringTime) {
           window.history.replaceState(
             "",
             "",
             `?t=${this.currentTimeInSeconds}`
           );
-          this.saveHistory();
+          if (this.currentTimeInSeconds % 60 === 0) this.saveHistory(); // Only update history (and push to the server) every minute
         }
       }
     },
@@ -638,7 +638,7 @@ export default {
         data.video.duration = this.$refs.youtube.duration;
         data.video.progress = data.video.starttime / data.video.duration;
       }
-      this.$store.dispatch("history/add", data);
+      this.$store.dispatch("history/add", data); // history's ADD_HISTORY_ITEM mutation automatically checks if this item is already in the history based on it's id (e.g. zh-video-Y23x9L4)
     },
     unbindKeys() {
       window.onkeydown = null;
