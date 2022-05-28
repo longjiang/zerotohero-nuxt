@@ -245,18 +245,6 @@ export default {
     async show() {
       console.log("YouTube View: 📀 Show changed, getting episodes...");
       if (this.show) {
-        let videos = [];
-        // News and YouTube channels are sorted by date
-        // Audiobooks and TV Shows are sorted by title
-        let limit = 50;
-        let sort =
-          this.showType === "tv_show" || this.show.audiobook
-            ? "title"
-            : "-date";
-        let fields = "youtube_id,title,date";
-        let timestamp = this.$adminMode ? Date.now() : 0;
-        let params = { limit, sort, fields, timestamp };
-        params[`filter[${this.showType}][eq]`] = this.show.id;
 
         let episodeCount = await this.getEpisodeCount();
         this.episodes = await this.getEpisodes(episodeCount);
@@ -271,6 +259,19 @@ export default {
         this.show.episodes.find((s) => s.youtube_id === this.video.youtube_id)
       )
         return this.show.episodes;
+
+      let videos = [];
+      // News and YouTube channels are sorted by date
+      // Audiobooks and TV Shows are sorted by title
+      let limit = 50;
+      let sort =
+        this.showType === "tv_show" || this.show.audiobook
+          ? "title"
+          : "-date";
+      let fields = "youtube_id,title,date";
+      let timestamp = this.$adminMode ? Date.now() : 0;
+      let params = { limit, sort, fields, timestamp };
+      params[`filter[${this.showType}][eq]`] = this.show.id;
       if (episodeCount > limit && this.$refs.youtube)
         this.largeEpisodeCount = episodeCount;
 
