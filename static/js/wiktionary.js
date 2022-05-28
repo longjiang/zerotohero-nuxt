@@ -992,7 +992,7 @@ const Dictionary = {
         return response.data;
       }
     } catch (err) {
-      console.log(`Helper.proxy() cannot get ${url}`);
+      console.log(`Cannot get ${url}`);
     }
     return false;
   },
