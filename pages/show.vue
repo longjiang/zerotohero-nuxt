@@ -54,7 +54,7 @@
               ></i>
             </h3>
             <p style="opacity: 0.6" class="mb-3">
-              <span v-if="count">{{ count }} Episodes</span>
+              <span v-if="episodeCount">{{ episodeCount }} Episodes</span>
               <span v-if="$adminMode && show">
                 Cover youtube_id:
                 <span contenteditable="true" @blur="saveCover">
@@ -165,22 +165,22 @@ export default {
   data() {
     return {
       collection: this.type === "tv-show" ? "tv_show" : "talk",
-      tries: 0,
-      moreVideos: 0,
-      show: undefined,
-      videos: undefined,
-      perPage: 96,
-      count: undefined,
-      keyword: "",
-      view: "grid",
-      titleUpdated: false,
+      episodeCount: undefined,
       coverUpdated: false,
-      randomEpisode: undefined,
       currentTime: 0,
-      showDiscover: false,
       featuredVideo: undefined,
       heroUnavailable: false,
+      keyword: "",
+      moreVideos: 0,
+      perPage: 96,
+      randomEpisode: undefined,
+      show: undefined,
+      showDiscover: false,
       sort: "title",
+      titleUpdated: false,
+      tries: 0,
+      videos: undefined,
+      view: "grid",
     };
   },
   computed: {
@@ -282,12 +282,12 @@ export default {
   },
   methods: {
     getShowFromStore() {
-      let collection = this.collection === 'tv_show' ? 'tvShow' : 'talk'
+      let collection = this.collection === "tv_show" ? "tvShow" : "talk";
       let show = this.$store.getters[`shows/${collection}`]({
         l2: this.$l2,
         id: this.id,
       });
-      this.show = show
+      this.show = show;
     },
     loadFeaturedVideo() {
       if (this.tries < 5) {
@@ -370,6 +370,12 @@ export default {
       }
     },
     async getVideos({ keyword, limit = 500, offset = 0, sort = "title" } = {}) {
+      if (this.show.episodes) return this.show.episodes;
+      else {
+        return await this.getVideosFromServer({ keyword, limit, offset, sort });
+      }
+    },
+    async getVideosFromServer({ keyword, limit, offset, sort } = {}) {
       let keywordFilter = keyword ? `&filter[title][contains]=${keyword}` : "";
       let response = await this.$authios.get(
         `${Config.youtubeVideosTableName(this.$l2.id)}?filter[l2][eq]=${
@@ -399,6 +405,13 @@ export default {
               : -1
           ) || [];
       }
+      this.$store.dispatch("shows/addEpisodesToShow", {
+        l2: this.$l2,
+        collection: this.collection === "tv_show" ? "tvShows" : "talks",
+        showId: this.show.id,
+        episodes: videos,
+        sort,
+      });
       return videos;
     },
   },
