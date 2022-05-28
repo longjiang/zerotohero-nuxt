@@ -143,6 +143,11 @@ export default {
     },
   },
   methods: {
+    overlayPlayerClose(youtube_id) {
+      this.overlayPlayerYouTubeId = undefined;
+      this.overlayPlayerLesson = undefined;
+      this.fullHistory = this.fullHistory.filter(path => !path.includes(`/youtube/view/${youtube_id}`)) // If the user closes the youtube overlay player, we should never go back to it in history
+    },
     subscribeToVuexMutations() {
       this.unsubscribe = this.$store.subscribe((mutation) => {
         if (mutation.type === "shows/LOAD_SHOWS") {
@@ -477,16 +482,15 @@ export default {
         <YouTubeViewComp
           id="overlay-player"
           v-if="overlayPlayerYouTubeId"
-          :youtube_id="overlayPlayerYouTubeId"
-          :lesson="overlayPlayerLesson"
-          :mini="overlayPlayerMinimized"
-          :fullHistory="fullHistory"
-          :class="`${overlayPlayerMinimized ? 'overlay-player-minimized' : ''}`"
-          :key="`youtube-view-comp-${overlayPlayerYouTubeId}`"
-          @close="
-            overlayPlayerYouTubeId = undefined;
-            overlayPlayerLesson = undefined;
-          "
+          v-bind="{
+            youtube_id: overlayPlayerYouTubeId,
+            lesson: overlayPlayerLesson,
+            mini: overlayPlayerMinimized,
+            fullHistory,
+            class: `${overlayPlayerMinimized ? 'overlay-player-minimized' : ''}`,
+            key: `youtube-view-comp-${overlayPlayerYouTubeId}`
+          }"
+          @close="overlayPlayerClose"
         />
       </div>
     </template>

@@ -330,7 +330,7 @@ export default {
     },
     close() {
       if (this.layout !== "mini") this.$router.push(this.minimizeVideoTo);
-      this.$emit("close");
+      this.$emit("close", this.youtube_id);
     },
     onYouTubeUpdateLayout(layout) {
       this.initialLayout = initialLayout;
