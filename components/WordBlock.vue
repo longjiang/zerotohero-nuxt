@@ -2,6 +2,8 @@
   <v-popover
     :open="popup && open"
     :open-group="`id${_uid}`"
+    @show="popupOpened"
+    @hide="popupClosed"
     :id="id"
     placement="top"
     trigger="manual"
@@ -85,7 +87,7 @@
             :src="`${Config.imageProxy}?${image.src}`"
           />
         </div>
-        <button class="word-block-tool-tip-close" @click.stop="closePopup">
+        <button class="word-block-tool-tip-close" v-close-popover>
           <i class="fa fa-times"></i>
         </button>
         <div
@@ -493,6 +495,12 @@ export default {
     },
   },
   methods: {
+    popupOpened() {
+      this.$nuxt.$emit("popupOpened");
+    },
+    popupClosed() {
+      this.$nuxt.$emit("popupClosed");
+    },
     stripAccents(str) {
       str = str
         .normalize("NFD")
@@ -787,11 +795,9 @@ export default {
           }
         }
       }
-      this.$nuxt.$emit("popupOpened");
     },
     async closePopup() {
       this.open = false;
-      this.$nuxt.$emit("popupClosed");
     },
     async lookup(quick = false) {
       if (this.words.length > 0) {
