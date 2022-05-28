@@ -1,4 +1,5 @@
 import Config from '@/lib/config'
+import Helper from '@/lib/helper'
 
 export const state = () => {
   return {
@@ -20,42 +21,47 @@ export const actions = {
     try {
       let stats = {}
       let tableSuffix = Config.youtubeVideosTableName(l2.id).replace(`${Config.wiki}items/youtube_videos`, '')
-      let res = await axios.get(
-        `https://db2.zerotohero.ca/count.php?table_suffix=${tableSuffix}&lang_id=${l2.id}&type=new_videos&timestamp=${adminMode ? Date.now() : 0}`
+      let data = await Helper.proxy(
+        `https://db2.zerotohero.ca/count.php?table_suffix=${tableSuffix}&lang_id=${l2.id}&type=new_videos`,
+        { cacheLife: 86400 } // cache the count for one day (86400 seconds)
       );
-      if (res && res.data) stats.newVideos = res.data
+      if (data) stats.newVideos = data
 
       let music = rootGetters["shows/music"]({ l2 })
       if (music) {
-        res = await axios.get(
-          `https://db2.zerotohero.ca/count.php?table_suffix=${tableSuffix}&lang_id=${l2.id}&type=tv_show&id=${music.id}&timestamp=${adminMode ? Date.now() : 0}`
+        data = await Helper.proxy(
+          `https://db2.zerotohero.ca/count.php?table_suffix=${tableSuffix}&lang_id=${l2.id}&type=tv_show&id=${music.id}`,
+          { cacheLife: 86400 } // cache the count for one day (86400 seconds)
         );
-        if (res && res.data) stats.music = res.data
+        if (data) stats.music = data
       }
 
 
       let movies = rootGetters["shows/movies"]({ l2 })
       if (movies) {
-        res = await axios.get(
-          `https://db2.zerotohero.ca/count.php?table_suffix=${tableSuffix}&lang_id=${l2.id}&type=tv_show&id=${movies.id}&timestamp=${adminMode ? Date.now() : 0}`
+        data = await Helper.proxy(
+          `https://db2.zerotohero.ca/count.php?table_suffix=${tableSuffix}&lang_id=${l2.id}&type=tv_show&id=${movies.id}`,
+          { cacheLife: 86400 } // cache the count for one day (86400 seconds)
         );
-        if (res && res.data) stats.movies = res.data
+        if (data) stats.movies = data
       }
 
 
       let news = rootGetters["shows/news"]({ l2 })
       if (news) {
-        res = await axios.get(
-          `https://db2.zerotohero.ca/count.php?table_suffix=${tableSuffix}&lang_id=${l2.id}&type=talk&id=${news.id}&timestamp=${adminMode ? Date.now() : 0}`
+        data = await Helper.proxy(
+          `https://db2.zerotohero.ca/count.php?table_suffix=${tableSuffix}&lang_id=${l2.id}&type=talk&id=${news.id}`,
+          { cacheLife: 86400 } // cache the count for one day (86400 seconds)
         );
-        if (res && res.data) stats.news = res.data
+        if (data) stats.news = data
       }
 
 
-      res = await axios.get(
-        `https://db2.zerotohero.ca/count.php?table_suffix=${tableSuffix}&lang_id=${l2.id}&timestamp=${adminMode ? Date.now() : 0}`
+      data = await Helper.proxy(
+        `https://db2.zerotohero.ca/count.php?table_suffix=${tableSuffix}&lang_id=${l2.id}`,
+        { cacheLife: 86400 } // cache the count for one day (86400 seconds)
       );
-      if (res && res.data) stats.allVideos = res.data
+      if (data) stats.allVideos = data
 
 
       commit('LOAD', { l2, stats })
