@@ -43,7 +43,8 @@ const Dictionary = {
     }
     if (data) {
       let results = Papa.parse(data, {
-        header: true
+        header: true,
+        delimiter: ','
       })
       return results.data
     }
@@ -89,28 +90,28 @@ const Dictionary = {
     if (this.newHSKCrunched) return this.newHSKCrunched
     else {
       let newHSK = this.newHSK
-      let newHSKWordsFlattened = newHSK.reduce(
-        (previousValue, currentValue) => previousValue + currentValue.simplified,
+      let newHSKWordsFlattened = newHSK.map(row => row.simplified).reduce(
+        (a, b) => a + b,
         ""
       );
       let subdict = this.subdictFromText(newHSKWordsFlattened)
-      for (let word of newHSK) {
-        let ws = subdict.lookupSimplified(word.simplified);
-        if (ws) {
-          let w = ws[0];
-          word.hsk = w.hsk;
-          word.pinyin = w.pinyin;
-          word.id = w.id;
-          if (w.definitions) {
-            word.definitions = w.definitions
-              .filter((def) => !def.startsWith("CL"))
-              .join("; ");
-          }
+      for (let newHSKWord of newHSK) {
+        let matchedWords = subdict.lookupSimplified(newHSKWord.simplified);
+        if (matchedWords && matchedWords[0]) {
+          let { hsk, pinyin, id, definitions } = matchedWords[0];
+          newHSKWord = { hsk, pinyin, id, definitions }
         }
       }
-      this.newHSKCrunched = newHSK
+      this.newHSKCrunched = newHSK // Cache this
+      newHSKWordsFlattened = null
+      subdict = null
       return this.newHSKCrunched
     }
+  },
+  defString(definitions) {
+    return definitions
+      .filter((def) => !def.startsWith("CL"))
+      .join("; ");
   },
   getByNewHSK(level, num) {
     let match = this.newHSK.find(word => word.level === level && Number(word.num) === num)

@@ -156,10 +156,16 @@ export default {
     };
   },
   async fetch() {
-    let newHSK = await (await this.$getDictionary()).getNewHSK();
-    this.newHSK = newHSK;
-    this.rows = this.newHSK;
-    this.ready = true;
+    let dictionary = await this.$getDictionary();
+    if (dictionary) {
+      let newHSK = await dictionary.getNewHSK();
+      this.newHSK = newHSK;
+      this.rows = this.newHSK;
+      this.ready = true;
+    } else {
+      this.ready = true;
+      this.$toast.error('No dictionary found.')
+    }
   },
   computed: {
     $l1() {
