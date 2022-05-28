@@ -245,14 +245,16 @@ export default {
     async show() {
       console.log("YouTube View: 📀 Show changed, getting episodes...");
       if (this.show) {
-
+        let limit = 50;
         let episodeCount = await this.getEpisodeCount();
-        this.episodes = await this.getEpisodes(episodeCount);
+        if (episodeCount > limit && this.$refs.youtube)
+          this.largeEpisodeCount = episodeCount;
+        this.episodes = await this.getEpisodes(episodeCount, limit);
       }
     },
   },
   methods: {
-    async getEpisodes(episodeCount) {
+    async getEpisodes(episodeCount, limit) {
       // If we already have the episodes stored in the show (in Vuex), and the episodes include the current video, just return the episodes
       if (
         this.show.episodes &&
@@ -263,17 +265,13 @@ export default {
       let videos = [];
       // News and YouTube channels are sorted by date
       // Audiobooks and TV Shows are sorted by title
-      let limit = 50;
+
       let sort =
-        this.showType === "tv_show" || this.show.audiobook
-          ? "title"
-          : "-date";
+        this.showType === "tv_show" || this.show.audiobook ? "title" : "-date";
       let fields = "youtube_id,title,date";
       let timestamp = this.$adminMode ? Date.now() : 0;
       let params = { limit, sort, fields, timestamp };
       params[`filter[${this.showType}][eq]`] = this.show.id;
-      if (episodeCount > limit && this.$refs.youtube)
-        this.largeEpisodeCount = episodeCount;
 
       let postParams = Object.assign({}, params);
       if (episodeCount > limit) {
@@ -310,7 +308,7 @@ export default {
           a.title ? a.title.localeCompare(b.title) : 0
         );
       }
-      
+
       this.$store.dispatch("shows/addEpisodesToShow", {
         l2: this.$l2,
         collection: this.showType === "tv_show" ? "tvShows" : "talks",
@@ -321,7 +319,7 @@ export default {
       return videos;
     },
     async getEpisodeCount() {
-      if (this.show.episodeCount) return episodeCount;
+      if (this.show.episodeCount) return this.show.episodeCount;
       let episodeCount = 0;
       if (this.stats && this.stats[this.$l2.code]) {
         // Music, Movies, News
