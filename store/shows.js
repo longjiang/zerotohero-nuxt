@@ -115,14 +115,13 @@ export const actions = {
 export const getters = {
   tvShow: state => ({ l2, id }) => {
     if (state.showsLoaded[l2.code]) {
-      let show = state.tvShows[l2.code].find(s => s.id === id)
+      let show = state.tvShows[l2.code].find(s => s.id === Number(id))
       return show
     }
-      
   },
   talk: state => ({ l2, id }) => {
     if (state.showsLoaded[l2.code])
-      return state.talks[l2.code].find(s => s.id === id)
+      return state.talks[l2.code].find(s => s.id === Number(id))
   },
   movies: state => ({ l2 }) => {
     if (state.showsLoaded[l2.code])

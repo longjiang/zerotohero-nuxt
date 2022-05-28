@@ -200,7 +200,7 @@ export default {
       return this.type === "talk";
     },
     heroButtonIcon() {
-      if (this.show.audiobook) return 'fas fa-book-open'
+      if (this.show.audiobook) return "fas fa-book-open";
     },
     heroButtonText() {
       if (this.collection === "tv_show") {
@@ -210,7 +210,7 @@ export default {
       } else {
         if (this.show.title === "News") return "Play Latest News";
         if (this.show.audiobook) return "Read Chapter 1";
-        return "Play Latest Upload"
+        return "Play Latest Upload";
       }
     },
     title() {
@@ -225,6 +225,16 @@ export default {
     },
   },
   watch: {
+    async show() {
+      this.sort =
+        this.type === "talk" && !this.show.audiobook ? "-date" : "title";
+      this.videos = await this.getVideos({
+        limit: this.perPage,
+        offset: this.moreVideos,
+        sort: this.sort,
+      });
+      this.loadFeaturedVideo();
+    },
     async keyword() {
       let keywords = [this.keyword];
       if (this.$l2.han) {
@@ -255,22 +265,30 @@ export default {
       }
     },
   },
-  async mounted() {
+  beforeDestroy() {
+    if (this.unsubscribe) this.unsubscribe();
+  },
+  mounted() {
     if (this.id) {
-      this.show = await this.getShow(this.id, this.collection);
-      if (this.show) {
-        this.sort =
-          this.type === "talk" && !this.show.audiobook ? "-date" : "title";
-        this.videos = await this.getVideos({
-          limit: this.perPage,
-          offset: this.moreVideos,
-          sort: this.sort,
-        });
-        this.loadFeaturedVideo();
+      if (this.$store.state.shows.showsLoaded[this.$l2.code]) {
+        this.getShowFromStore();
       }
+      this.unsubscribe = this.$store.subscribe((mutation, state) => {
+        if (mutation.type === "shows/LOAD_SHOWS") {
+          if (!this.show) this.getShowFromStore();
+        }
+      });
     }
   },
   methods: {
+    getShowFromStore() {
+      let collection = this.collection === 'tv_show' ? 'tvShow' : 'talk'
+      let show = this.$store.getters[`shows/${collection}`]({
+        l2: this.$l2,
+        id: this.id,
+      });
+      this.show = show
+    },
     loadFeaturedVideo() {
       if (this.tries < 5) {
         if (this.videos && this.videos.length > 0) {
@@ -343,7 +361,7 @@ export default {
         this.videos = this.videos.concat(newVideos);
       }
     },
-    async getShow(id, collection) {
+    async getShowFromServer(id, collection) {
       let response = await this.$authios.get(
         `${Config.wiki}items/${collection}s/${id}`
       );

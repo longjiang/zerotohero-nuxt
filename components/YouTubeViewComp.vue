@@ -201,6 +201,9 @@ export default {
   destroyed() {
     this.unbindKeys();
   },
+  beforeDestroy() {
+    if (this.unsubscribe) this.unsubscribe()
+  },
   watch: {
     /**
      * Called when the video is first fetched
