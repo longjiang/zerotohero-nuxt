@@ -12,6 +12,7 @@
           <div class="text-center">
             <h6 style="font-size: 1.1em">Please leave your questions and comments here.</h6>
             <p>This is a <a href="https://disqus.com/profile/login/?next=/admin/create/" target="_blank">Disqus</a> discussion board. To post a comment, you ened to first <a href="https://disqus.com/profile/login/?next=/admin/create/" target="_blank">login to Disqus</a>.</p>
+            <div class="alert alert-danger"><b>Note:</b> Discussions in iOS app is currently not supported.</div>
             <p class="mb-5"></p>
           </div>
           <client-only>
