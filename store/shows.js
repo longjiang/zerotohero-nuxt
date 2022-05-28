@@ -32,6 +32,10 @@ export const mutations = {
       episodes = episodes.sort((a, b) => a.title ? a.title.localeCompare(b.title) : 0);
     }
     show.episodes = episodes
+  },
+  SET_EPISODE_COUNT(state, {  l2, collection, showId, episodeCount }) {
+    let show = state[collection][l2.code].find(s => s.id === showId)
+    show.episodeCount = episodeCount
   }
 }
 
@@ -100,12 +104,26 @@ export const actions = {
   },
   async addEpisodesToShow({ commit }, { l2, collection = 'tvShows', showId, episodes, sort = '-date' }) {
     commit('ADD_EPISODES_TO_SHOW', { l2, collection, showId, episodes, sort })
+  },
+  async setEpisodeCount({ commit }, { l2, collection = 'tvShows', showId, episodeCount }) {
+    commit('SET_EPISODE_COUNT', { l2, collection, showId, episodeCount })
   }
 }
 
 
 
 export const getters = {
+  tvShow: state => ({ l2, id }) => {
+    if (state.showsLoaded[l2.code]) {
+      let show = state.tvShows[l2.code].find(s => s.id === id)
+      return show
+    }
+      
+  },
+  talk: state => ({ l2, id }) => {
+    if (state.showsLoaded[l2.code])
+      return state.talks[l2.code].find(s => s.id === id)
+  },
   movies: state => ({ l2 }) => {
     if (state.showsLoaded[l2.code])
       return state.tvShows[l2.code].find(s => s.title === 'Movies')

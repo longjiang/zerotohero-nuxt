@@ -226,12 +226,14 @@ export default {
               this.video.subs_l2[0].duration
             );
         }
-        this.setShow();
         this.saveHistory();
         this.bindKeys();
+        if (this.$store.state.shows.showsLoaded[this.$l2.code]) {
+          if (!this.show) this.setShow();
+        }
         this.unsubscribe = this.$store.subscribe((mutation, state) => {
           if (mutation.type === "shows/LOAD_SHOWS") {
-            this.setShow();
+            if (!this.show) this.setShow();
           }
         });
         console.log(`YouTube View: All done.`);
@@ -277,6 +279,13 @@ export default {
             print(err);
           }
         }
+        if (episodeCount)
+          this.$store.dispatch("shows/setEpisodeCount", {
+            l2: this.$l2,
+            collection: this.showType === "tv_show" ? "tvShows" : "talks",
+            showId: this.show.id,
+            episodeCount,
+          });
 
         if (episodeCount > limit && this.$refs.youtube)
           this.largeEpisodeCount = episodeCount;
@@ -482,10 +491,16 @@ export default {
       console.log("YouTube View: Setting show...");
       if (this.video) {
         if (this.video.tv_show) {
-          this.show = this.video.tv_show;
+          this.show = this.$store.getters["shows/tvShow"]({
+            id: this.video.tv_show.id,
+            l2: this.$l2,
+          });
           this.showType = "tv_show";
         } else if (this.video.talk) {
-          this.show = this.video.talk;
+          this.show = this.$store.getters["shows/talk"]({
+            id: this.video.talk.id,
+            l2: this.$l2,
+          });
           this.showType = "talk";
         }
       }
