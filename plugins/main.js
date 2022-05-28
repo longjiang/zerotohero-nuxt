@@ -119,7 +119,7 @@ export default async ({ app, store, route }, inject) => {
         return options
       } else return {}
     },
-    host: process.server ? process.env.baseUrl : window.location.hostname,
+    host: process.server ? process.env.baseUrl : window.location.protocol + '//' + window.location.hostname + ':' + window.location.port,
     /**
      * We append a cors=... query string because directus server caching seems to 'remember' cors header, causing problems when multiple doamins try ti access
      * @param {String} url 
