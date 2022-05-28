@@ -132,7 +132,7 @@ export default {
       type: String,
     },
     showParallelLine: {
-      default: true, // The user can hide the line via settings/css, but if the transcript has no parallel line we control how the component is rendered
+      default: false, // The user can hide the line via settings/css, but if the transcript has no parallel line we control how the component is rendered
     },
     enableTranslationEditing: {
       type: Boolean,
