@@ -1,4 +1,5 @@
 import Config from '@/lib/config'
+import Helper from '@/lib/helper'
 
 export const state = () => {
   return {
@@ -21,6 +22,17 @@ export const mutations = {
   REMOVE_SHOW(state, { l2, type, show }) {
     state[type][l2.code] = state[type][l2.code].filter((s) => s !== show);
   },
+  ADD_EPISODES_TO_SHOW(state, { l2, collection = 'tvShows', showId, episodes, sort = '-date' }) {
+    let show = state[collection][l2.code].find(s => s.id === showId)
+    if (show.episodes && show.episodes.length > 0) episodes = episodes.concat(show.episodes)
+    episodes = Helper.uniqueByValue(episodes, 'youtube_id')
+    if (sort === "-date") {
+      episodes = episodes.sort((a, b) => b.date ? b.date.localeCompare(a.date) : 0);
+    } else if (sort === 'title') {
+      episodes = episodes.sort((a, b) => a.title ? a.title.localeCompare(b.title) : 0);
+    }
+    show.episodes = episodes
+  }
 }
 
 export const actions = {
@@ -86,6 +98,9 @@ export const actions = {
     }
     return true
   },
+  async addEpisodesToShow({ commit }, { l2, collection = 'tvShows', showId, episodes, sort = '-date' }) {
+    commit('ADD_EPISODES_TO_SHOW', { l2, collection, showId, episodes, sort })
+  }
 }
 
 
@@ -97,15 +112,15 @@ export const getters = {
   },
   music: state => ({ l2 }) => {
     if (state.showsLoaded[l2.code])
-    return state.tvShows[l2.code].find(s => s.title === 'Music')
+      return state.tvShows[l2.code].find(s => s.title === 'Music')
   },
   news: state => ({ l2 }) => {
     if (state.showsLoaded[l2.code])
-    return state.talks[l2.code].find(s => s.title === 'News')
+      return state.talks[l2.code].find(s => s.title === 'News')
   },
   audiobooks: state => ({ l2 }) => {
     if (state.showsLoaded[l2.code])
-    return state.talks[l2.code].filter(s => s.audiobook)
+      return state.talks[l2.code].filter(s => s.audiobook)
   },
 }
 

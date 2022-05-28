@@ -308,11 +308,22 @@ export default {
         videos = [this.video, ...videos];
         videos = Helper.uniqueByValue(videos, "youtube_id");
         if (sort === "-date") {
-          videos = videos.sort((a, b) => b.date ? b.date.localeCompare(a.date) : 0);
+          videos = videos.sort((a, b) =>
+            b.date ? b.date.localeCompare(a.date) : 0
+          );
         } else {
-          videos = videos.sort((a, b) => a.title ? a.title.localeCompare(b.title) : 0);
+          videos = videos.sort((a, b) =>
+            a.title ? a.title.localeCompare(b.title) : 0
+          );
         }
         this.episodes = videos;
+        this.$store.dispatch("shows/addEpisodesToShow", {
+          l2: this.$l2,
+          collection: this.showType === "tv_show" ? "tvShows" : "talks",
+          showId: this.show.id,
+          episodes: videos,
+          sort,
+        });
       }
     },
   },
@@ -344,7 +355,8 @@ export default {
             l2Id: this.$l2.id,
           });
           // Go to next video
-          if (this.nextEpisode && this.route.params.youtube_id === youtube_id) // Make sure the user is still on the same video by the time
+          if (this.nextEpisode && this.route.params.youtube_id === youtube_id)
+            // Make sure the user is still on the same video by the time
             this.$router.push({
               name: "youtube-view",
               params: this.nextEpisode,
