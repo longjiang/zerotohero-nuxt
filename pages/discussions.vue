@@ -17,7 +17,10 @@
           </div>
           <client-only>
             <section class="comments" aria-labelledby="comment">
-              <Disqus shortname="zero-to-hero" />
+              <Disqus shortname="zero-to-hero" :pageConfig="{
+                  identifier: 'comments-feedback',
+                  title: 'Zero to Hero Comments & Feedback'
+                }" />
             </section>
           </client-only>
         </div>
