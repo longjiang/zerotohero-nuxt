@@ -79,6 +79,100 @@
             <div class="col-sm-6 col-md-4 mb-4">
               <div class="home-card p-4">
                 <div class="text-center">
+                  <router-link :to="`/en/zh/all-media`" class="link-unstyled">
+                    <LanguageFlag
+                      :language="language('zh')"
+                      style="transform: scale(2); margin: 1rem"
+                      :autocycle="true"
+                    />
+                    <h5 class="strong mt-2">Learn Chinese</h5>
+                  </router-link>
+                  <div class="row mt-4">
+                    <div class="col-6 col-sm-12 col-md-12 col-lg-6">
+                      <ul
+                        style="font-size: 0.9em"
+                        class="list-unstyled text-left mb-0"
+                      >
+                        <li style="white-space: nowrap">
+                          <router-link
+                            to="/en/zh/all-media"
+                            class="link-unstyled"
+                          >
+                            <b>Mandarin</b>
+                          </router-link>
+                        </li>
+                        <li style="white-space: nowrap">
+                          <router-link
+                            to="/en/yue/all-media"
+                            class="link-unstyled"
+                          >
+                            <b>Cantonese</b>
+                          </router-link>
+                        </li>
+                        <li style="white-space: nowrap">
+                          <router-link
+                            to="/zh/nan/all-media"
+                            class="link-unstyled"
+                          >
+                            Min Nan
+                          </router-link>
+                        </li>
+                        <li style="white-space: nowrap">
+                          <router-link
+                            to="/zh/hak/all-media"
+                            class="link-unstyled"
+                          >
+                            Hakka
+                          </router-link>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="col-6 col-sm-12 col-md-12 col-lg-6">
+                      <ul
+                        style="font-size: 0.9em"
+                        class="list-unstyled text-left mb-0"
+                      >
+                        <li style="white-space: nowrap">
+                          <router-link
+                            to="/en/wuu/all-media"
+                            class="link-unstyled"
+                          >
+                            Wu
+                          </router-link>
+                        </li>
+                        <li style="white-space: nowrap">
+                          <router-link
+                            to="/en/lzh/all-media"
+                            class="link-unstyled"
+                          >
+                            Classical Chinese
+                          </router-link>
+                        </li>
+                        <li style="white-space: nowrap">
+                          <router-link
+                            to="/en/ltc/all-media"
+                            class="link-unstyled"
+                          >
+                            Middle Chinese
+                          </router-link>
+                        </li>
+                        <li style="white-space: nowrap">
+                          <router-link
+                            to="/en/och/all-media"
+                            class="link-unstyled"
+                          >
+                            Old Chinese
+                          </router-link>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-4 mb-4">
+              <div class="home-card p-4">
+                <div class="text-center">
                   <router-link
                     :to="`/${browserLanguage}/en/all-media`"
                     class="link-unstyled"
@@ -177,107 +271,14 @@
                 </div>
               </div>
             </div>
-            <div class="col-sm-6 col-md-4 mb-4">
-              <div class="home-card p-4">
-                <div class="text-center">
-                  <router-link :to="`/en/zh/all-media`" class="link-unstyled">
-                    <LanguageFlag
-                      :language="language('zh')"
-                      style="transform: scale(2); margin: 1rem"
-                      :autocycle="true"
-                    />
-                    <h5 class="strong mt-2">Learn Chinese</h5>
-                  </router-link>
-                  <div class="row mt-4">
-                    <div class="col-6 col-sm-12 col-md-12 col-lg-6">
-                      <ul
-                        style="font-size: 0.9em"
-                        class="list-unstyled text-left mb-0"
-                      >
-                        <li style="white-space: nowrap">
-                          <router-link
-                            to="/en/zh/all-media"
-                            class="link-unstyled"
-                          >
-                            <b>Mandarin</b>
-                          </router-link>
-                        </li>
-                        <li style="white-space: nowrap">
-                          <router-link
-                            to="/en/yue/all-media"
-                            class="link-unstyled"
-                          >
-                            <b>Cantonese</b>
-                          </router-link>
-                        </li>
-                        <li style="white-space: nowrap">
-                          <router-link
-                            to="/zh/nan/all-media"
-                            class="link-unstyled"
-                          >
-                            Min Nan
-                          </router-link>
-                        </li>
-                        <li style="white-space: nowrap">
-                          <router-link
-                            to="/zh/hak/all-media"
-                            class="link-unstyled"
-                          >
-                            Hakka
-                          </router-link>
-                        </li>
-                      </ul>
-                    </div>
-                    <div class="col-6 col-sm-12 col-md-12 col-lg-6">
-                      <ul
-                        style="font-size: 0.9em"
-                        class="list-unstyled text-left mb-0"
-                      >
-                        <li style="white-space: nowrap">
-                          <router-link
-                            to="/en/wuu/all-media"
-                            class="link-unstyled"
-                          >
-                            Wu
-                          </router-link>
-                        </li>
-                        <li style="white-space: nowrap">
-                          <router-link
-                            to="/en/lzh/all-media"
-                            class="link-unstyled"
-                          >
-                            Classical Chinese
-                          </router-link>
-                        </li>
-                        <li style="white-space: nowrap">
-                          <router-link
-                            to="/en/ltc/all-media"
-                            class="link-unstyled"
-                          >
-                            Middle Chinese
-                          </router-link>
-                        </li>
-                        <li style="white-space: nowrap">
-                          <router-link
-                            to="/en/och/all-media"
-                            class="link-unstyled"
-                          >
-                            Old Chinese
-                          </router-link>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
             <div class="col-sm-12 col-md-4 mb-4">
-              <div class="home-card pb-2">
+              <div class="home-card pb-2 pt-4">
+                <h5 class="text-center mb-3">Learn</h5>
                 <div class="row">
                   <div
                     v-for="code in ['es', 'de', 'fr', 'it', 'ja', 'ko']"
                     :key="`quick-lang-${code}`"
-                    class="text-center col-4 col-sm-4 col-md-6 col-lg-4 mt-3 mb-3"
+                    class="text-center col-4 col-sm-4 col-md-6 col-lg-4 mt-2 mb-2"
                   >
                     <router-link :to="`/en/${code}/all-media`" class="link-unstyled">
                       <LanguageFlag
@@ -293,7 +294,7 @@
             </div>
             <div class="col-sm-6 col-md-4"></div>
           </div>
-          <div class="row mt-4 mb-5" id="chineseLanguageList" v-if="browserLanguage && browserLanguage === 'zh'">
+          <div class="row mb-4" id="chineseLanguageList" v-if="browserLanguage && browserLanguage === 'zh'">
             <div class="col-sm-12">
               <div class="home-card p-2">
                 <h5 class="text-center mt-3 mb-3">可用汉语界面学习的语言</h5>
@@ -310,10 +311,10 @@
               </div>
             </div>
           </div>
-          <div class="row mt-2 mb-5" id="mainLanguageList">
+          <div class="row mt-3 mb-5" id="mainLanguageList">
             <div class="col-sm-12">
               <div class="home-card p-2">
-                <h5 class="text-center mt-3 mb-3">More Languages</h5>
+                <h5 class="text-center mt-3 mb-3">Learn More Languages</h5>
                 <div class="pl-2 pr-2">
                   <b-form-input
                     v-model="langKeyword"
