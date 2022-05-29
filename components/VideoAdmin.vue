@@ -29,8 +29,11 @@
           <i class="fa fa-language mr-1"></i>
           Translation
         </a>
+        <Share class="ml-2" />
       </span>
-      <div v-if="video.date">{{ formatDate(video.date) }}</div>
+      <div>
+        <span v-if="video.date">{{ formatDate(video.date) }}</span>
+      </div>
     </div>
     <client-only>
       <div class="video-edit-public">
@@ -375,7 +378,7 @@ export default {
         return this.$store.state.settings.l2;
     },
     levels() {
-      return Helper.languageLevels(this.$l2)
+      return Helper.languageLevels(this.$l2);
     },
     $adminMode() {
       this.mounted; // So that this component shows up on first load (updates $adminMode)
@@ -508,7 +511,9 @@ export default {
         let data = {};
         data[type] = show.id;
         let response = await this.$authios.patch(
-          `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}&fields=${type}.*`, // type is 'tv_show' or 'talk'
+          `${Config.youtubeVideosTableName(this.$l2.id)}/${
+            this.video.id
+          }&fields=${type}.*`, // type is 'tv_show' or 'talk'
           data
         );
         response = response.data;
@@ -635,7 +640,7 @@ export default {
     font-size: 0.8em;
     text-align: left;
     a {
-      color: #aaa;
+      color: #ccc;
     }
     line-height: 2;
   }
