@@ -10,7 +10,7 @@
 <template>
   <div
     class="container-fluid pt-5"
-    :style="`${
+    :style="`min-height: 100vh; ${
       backgroundImage
         ? 'background-image: url(' +
           backgroundImage +
@@ -23,13 +23,7 @@
         <div class="col-sm-12">
           <div :class="{ 'login-page': true, shaking }">
             <div class="text-center mb-4">
-              <img
-                src="/img/czh-icon.png"
-                style="height: 5.5rem; margin-bottom: 1rem"
-                data-not-lazy
-              />
-              <br />
-              <h4>Zero to Hero</h4>
+              <Logo skin="light" />
             </div>
             <b-form @submit.prevent="onSubmit">
               <div class="alert alert-warning" v-if="$l2 && $l2.code === 'zh'">
@@ -128,7 +122,11 @@ export default {
             position: "top-center",
             duration: 5000,
           });
-          if (this.$l1 && this.$l2) this.$router.push({ name: "profile" });
+          if (this.$l1 && this.$l2)
+            this.$router.push({
+              name: "profile",
+              params: { l1: this.$l1.code, l2: this.$l2.code },
+            });
           else this.$router.push("/");
         }
       } catch (err) {

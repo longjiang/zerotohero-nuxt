@@ -903,12 +903,14 @@ export default {
               icon: "fas fa-key",
               title: "Login",
               show: !(this.$auth && this.$auth.loggedIn),
+              params: { l1: this.l1.code, l2: this.l2.code },
             },
             {
               name: "register",
               icon: "fas fa-user-plus",
               title: "Register",
               show: !(this.$auth && this.$auth.loggedIn),
+              params: { l1: this.l1.code, l2: this.l2.code },
             },
             {
               name: "saved-words",

@@ -22,6 +22,21 @@
       <div class="container">
         <div class="row pt-3">
           <div class="col-sm-12">
+            <div>
+              <span
+                to="/profile"
+                v-if="
+                  $auth && $auth.loggedIn && $auth.user && $auth.user.first_name
+                "
+              >
+                Hi, {{ $auth.user.first_name }}
+                <router-link to="/logout">Logout</router-link>
+              </span>
+              <span v-else>
+                <router-link to="/login">Login</router-link>
+                <router-link to="/register">Register</router-link>
+              </span>
+            </div>
             <!-- <FeedbackPrompt /> -->
             <Logo class="mt-4 mb-3" />
             <p class="blurb text-white text-center">
@@ -32,7 +47,7 @@
         <client-only>
           <div
             class="row pt-4 mb-3"
-            v-if="$auth.loggedIn && $auth.user && $auth.user.first_name"
+            v-if="$auth.loggedIn && $auth.user && $auth.user.first_name && $store.state.progress.progress && Object.keys($store.state.progress.progress).length > 0"
           >
             <div class="col-sm-12">
               <div class="home-card p-2 pt-4 pb-4 bg-white">
@@ -278,15 +293,25 @@
                   <div
                     v-for="code in ['es', 'de', 'fr', 'it', 'ja', 'ko']"
                     :key="`quick-lang-${code}`"
-                    class="text-center col-4 col-sm-4 col-md-6 col-lg-4 mt-2 mb-2"
+                    class="
+                      text-center
+                      col-4 col-sm-4 col-md-6 col-lg-4
+                      mt-2
+                      mb-2
+                    "
                   >
-                    <router-link :to="`/en/${code}/all-media`" class="link-unstyled">
+                    <router-link
+                      :to="`/en/${code}/all-media`"
+                      class="link-unstyled"
+                    >
                       <LanguageFlag
                         :language="language(code)"
                         :autocycle="true"
                         style="transform: scale(1.5); margin: 0 1rem 1rem 1rem"
                       />
-                      <h6 class="strong" style="font-size: 0.9em">{{ language(code).name }}</h6>
+                      <h6 class="strong" style="font-size: 0.9em">
+                        {{ language(code).name }}
+                      </h6>
                     </router-link>
                   </div>
                 </div>
@@ -294,7 +319,11 @@
             </div>
             <div class="col-sm-6 col-md-4"></div>
           </div>
-          <div class="row mb-4" id="chineseLanguageList" v-if="browserLanguage && browserLanguage === 'zh'">
+          <div
+            class="row mb-4"
+            id="chineseLanguageList"
+            v-if="browserLanguage && browserLanguage === 'zh'"
+          >
             <div class="col-sm-12">
               <div class="home-card p-2">
                 <h5 class="text-center mt-3 mb-3">可用汉语界面学习的语言</h5>
@@ -318,7 +347,7 @@
                 <div class="row pl-1 pr-1">
                   <div class="col-12 col-md-7 pr-1">
                     <b-form-input
-                      v-model="keyword"
+                      v-model="langKeyword"
                       @compositionend.prevent.stop="() => false"
                       placeholder="Search for more languages"
                       class="mb-3"
@@ -326,7 +355,10 @@
                   </div>
                   <div class="col-12 col-md-5 pl-0">
                     <div class="text-center mb-3">
-                      <router-link class="btn btn-success d-block" to="/language-map">
+                      <router-link
+                        class="btn btn-success d-block"
+                        to="/language-map"
+                      >
                         <i class="fas fa-globe-asia mr-1"></i>
                         Languages Map
                         <i class="ml-1 fas fa-chevron-right"></i>

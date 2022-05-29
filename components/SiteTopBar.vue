@@ -93,8 +93,8 @@
               $route.name === 'profile'
                 ? '/'
                 : $auth.loggedIn
-                ? { name: 'profile' }
-                : { name: 'login' }
+                ? { name: 'profile', params: { l1: $l1.code, l2: $l2.code } }
+                : { name: 'saved-words' }
             "
             :class="`btn top-bar-button top-bar-user-button  btn-unstyled link-unstyled ml-2`"
           >

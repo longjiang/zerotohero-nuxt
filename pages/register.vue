@@ -9,7 +9,7 @@
 <template>
   <div
     class="container-fluid"
-    :style="`${
+    :style="`min-height: 100vh; ${
       backgroundImage
         ? 'background-image: url(' +
           backgroundImage +
@@ -21,7 +21,7 @@
       <div class="col-sm-12">
         <div class="login-page">
           <div class="text-center mb-4">
-            <h4>Create an Account</h4>
+            <Logo skin="light" />
           </div>
           <b-form @submit.prevent="onSubmit" v-if="show">
             <div class="d-flex mb-3">
@@ -141,7 +141,7 @@ export default {
               if (this.$l1 && this.$l2)
                 this.$router.push({
                   name: "profile",
-                  params: { l1: this.$l1, l2: this.$l2 },
+                  params: { l1: this.$l1.code, l2: this.$l2.code },
                 });
               else this.$router.push("/");
             }

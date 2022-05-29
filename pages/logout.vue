@@ -10,7 +10,7 @@
 <template>
   <div
     class="container-fluid"
-    :style="`${
+    :style="`min-height: 100vh; ${
       backgroundImage
         ? 'background-image: url(' +
           backgroundImage +
@@ -21,6 +21,9 @@
     <div class="row">
       <div class="col-sm-12">
         <div class="login-page">
+          <div class="text-center mb-4">
+            <Logo skin="light" />
+          </div>
           <h4 class="mt-5 mb-5 text-center">Logging you out...</h4>
         </div>
       </div>
