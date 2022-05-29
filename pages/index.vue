@@ -581,7 +581,8 @@ export default {
           this.langsWithEnDict.find((l) => l.code === code)
         )
           return code;
-      } else return "en";
+      }
+      return "en";
     },
     langsWithEnDict() {
       if (this.$languages) {
