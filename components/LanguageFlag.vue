@@ -90,10 +90,10 @@ export default {
 .country-name {
   position: absolute;
   color: #888;
-  top: calc(50% - 2.4em);
+  top: -22.5%;
   left: 50%;
   font-weight: normal;
-  font-size: 0.6em;
+  font-size: 0.55em;
   visibility: hidden;
   white-space: nowrap;
   transform: translate(-50%, -50%);

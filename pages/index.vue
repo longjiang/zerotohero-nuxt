@@ -22,13 +22,15 @@
       <div class="container">
         <div class="row pt-3">
           <div class="col-sm-12">
-
             <!-- <FeedbackPrompt /> -->
             <Logo class="mt-4 mb-3" />
           </div>
         </div>
         <client-only>
-          <div class="row pt-4" v-if="$auth.loggedIn && $auth.user && $auth.user.first_name">
+          <div
+            class="row pt-4"
+            v-if="$auth.loggedIn && $auth.user && $auth.user.first_name"
+          >
             <div class="col-sm-12">
               <div class="home-card p-2 pt-4 pb-4 bg-white">
                 <h5 class="text-center mt-2 mb-1">
@@ -43,25 +45,7 @@
           <div class="col-sm-12">
             <div style="line-height: 1.2; color: white; text-align: center">
               <p class="blurb">
-                Learn
-                <strong>
-                  <router-link
-                    :to="{ name: 'language-map' }"
-                    class="blurb-highlight"
-                  >
-                    {{ languagesWithVideos.length }} languages 🌏
-                  </router-link>
-                </strong>
-                by watching
-                <strong>
-                  <router-link
-                    :to="{ name: 'discover-shows' }"
-                    class="blurb-highlight"
-                  >
-                    320,364 videos 📺
-                  </router-link>
-                </strong>
-                <br />
+                Learn languages with videos.
               </p>
               <div class="mt-4 mb-4">
                 <b-button
@@ -78,55 +62,6 @@
                   <i class="fa fa-chevron-right ml-2"></i>
                 </b-button>
               </div>
-              <div>
-                <b-button
-                  variant="unstyled text-white font-weight-bold"
-                  @click="scrollTo('#englishLanguageList')"
-                  style="font-size: 1.2rem; text-shadow: 0px 1px 8px black"
-                >
-                  Learn English >
-                </b-button>
-                <b-button
-                  variant="unstyled text-white font-weight-bold"
-                  @click="scrollTo('#chineseLanguageList')"
-                  style="font-size: 1.2rem; text-shadow: 0px 1px 8px black"
-                >
-                  汉语界面 >
-                </b-button>
-              </div>
-              <p class="blurb-secondary">
-                TV shows, movies, music, news, audiobooks... with full subtitles
-                and dictionary tools, all you need for
-                <a
-                  class="blurb-highlight"
-                  href="https://en.wikipedia.org/wiki/Input_hypothesis"
-                  target="_blank"
-                >
-                  comprehensible input 🎧
-                </a>
-                .
-              </p>
-              <client-only>
-                <p class="blurb-secondary" v-if="randomLanguage">
-                  And yes, we have
-                  <router-link
-                    :to="`/en/${this.randomLanguage.code}/all-media`"
-                    class="blurb-highlight"
-                  >
-                    {{ this.randomLanguage.name }}!
-                    <LanguageFlag
-                      v-if="randomLanguage"
-                      :language="randomLanguage"
-                      :autocycle="true"
-                      style="
-                        position: relative;
-                        bottom: 0.2rem;
-                        transform: scale(0.75);
-                      "
-                    />
-                  </router-link>
-                </p>
-              </client-only>
             </div>
           </div>
         </div>
@@ -140,24 +75,225 @@
           </div>
         </div>
         <client-only>
-          <div class="row mt-4 mb-5" id="englishLanguageList">
-            <div class="col-sm-12">
-              <div class="home-card p-2">
-                <h5 class="text-center mt-3 mb-3">Learn English from...</h5>
-                <LanguageList
-                  :showSpeakers="false"
-                  :showFeatures="false"
-                  :keyword="langKeyword"
-                  :pairs="learnEnglishLanguagePairs"
-                  class="mt-4"
-                  :sort="true"
-                  :showFlags="true"
-                  variant="grid"
-                />
+          <div class="row mt-4" v-if="language('en')">
+            <div class="col-sm-6 col-md-4 mb-4">
+              <div class="home-card p-4">
+                <div class="text-center">
+                  <router-link
+                    :to="`/${browserLanguage}/en/all-media`"
+                    class="link-unstyled"
+                  >
+                    <LanguageFlag
+                      :language="language('en')"
+                      style="transform: scale(2); margin: 1rem"
+                      :autocycle="true"
+                    />
+                    <h5 class="strong mt-2">
+                      {{ translate("Learn English", browserLanguage) }}
+                    </h5>
+                  </router-link>
+                  <div class="row mt-4">
+                    <div class="col-6 col-sm-12 col-md-12 col-lg-6">
+                      <ul
+                        style="font-size: 0.9em"
+                        class="list-unstyled text-left mb-0"
+                      >
+                        <li style="white-space: nowrap">
+                          <router-link
+                            to="/ru/en/all-media"
+                            class="link-unstyled"
+                          >
+                            Выучить англ. язык
+                          </router-link>
+                        </li>
+                        <li style="white-space: nowrap">
+                          <router-link
+                            to="/de/en/all-media"
+                            class="link-unstyled"
+                          >
+                            Lerne Englisch
+                          </router-link>
+                        </li>
+                        <li style="white-space: nowrap">
+                          <router-link
+                            to="/pt/en/all-media"
+                            class="link-unstyled"
+                          >
+                            Aprender inglês
+                          </router-link>
+                        </li>
+                        <li style="white-space: nowrap">
+                          <router-link
+                            to="/es/en/all-media"
+                            class="link-unstyled"
+                          >
+                            Aprende inglés
+                          </router-link>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="col-6 col-sm-12 col-md-12 col-lg-6">
+                      <ul
+                        style="font-size: 0.9em"
+                        class="list-unstyled text-left mb-0"
+                      >
+                        <li style="white-space: nowrap">
+                          <router-link
+                            to="/fr/en/all-media"
+                            class="link-unstyled"
+                          >
+                            Apprendre l’anglais
+                          </router-link>
+                        </li>
+                        <li style="white-space: nowrap">
+                          <router-link
+                            to="/it/en/all-media"
+                            class="link-unstyled"
+                          >
+                            Impara l’inglese
+                          </router-link>
+                        </li>
+                        <li style="white-space: nowrap">
+                          <router-link
+                            to="/ja/en/all-media"
+                            class="link-unstyled"
+                          >
+                            英語を習う
+                          </router-link>
+                        </li>
+                        <li style="white-space: nowrap">
+                          <b
+                            href="#englishLanguageList"
+                            class="link-unstyled"
+                            style="cursor: pointer"
+                            @click="scrollTo('#englishLanguageList')"
+                          >
+                            Learn English
+                          </b>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
+            <div class="col-sm-6 col-md-4 mb-4">
+              <div class="home-card p-4">
+                <div class="text-center">
+                  <router-link :to="`/en/zh/all-media`" class="link-unstyled">
+                    <LanguageFlag
+                      :language="language('zh')"
+                      style="transform: scale(2); margin: 1rem"
+                      :autocycle="true"
+                    />
+                    <h5 class="strong mt-2">Learn Chinese</h5>
+                  </router-link>
+                  <div class="row mt-4">
+                    <div class="col-6 col-sm-12 col-md-12 col-lg-6">
+                      <ul
+                        style="font-size: 0.9em"
+                        class="list-unstyled text-left mb-0"
+                      >
+                        <li style="white-space: nowrap">
+                          <router-link
+                            to="/en/zh/all-media"
+                            class="link-unstyled"
+                          >
+                            <b>Mandarin</b>
+                          </router-link>
+                        </li>
+                        <li style="white-space: nowrap">
+                          <router-link
+                            to="/en/yue/all-media"
+                            class="link-unstyled"
+                          >
+                            <b>Cantonese</b>
+                          </router-link>
+                        </li>
+                        <li style="white-space: nowrap">
+                          <router-link
+                            to="/zh/nan/all-media"
+                            class="link-unstyled"
+                          >
+                            Min Nan
+                          </router-link>
+                        </li>
+                        <li style="white-space: nowrap">
+                          <router-link
+                            to="/zh/hak/all-media"
+                            class="link-unstyled"
+                          >
+                            Hakka
+                          </router-link>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="col-6 col-sm-12 col-md-12 col-lg-6">
+                      <ul
+                        style="font-size: 0.9em"
+                        class="list-unstyled text-left mb-0"
+                      >
+                        <li style="white-space: nowrap">
+                          <router-link
+                            to="/en/wuu/all-media"
+                            class="link-unstyled"
+                          >
+                            Wu
+                          </router-link>
+                        </li>
+                        <li style="white-space: nowrap">
+                          <router-link
+                            to="/en/lzh/all-media"
+                            class="link-unstyled"
+                          >
+                            Classical Chinese
+                          </router-link>
+                        </li>
+                        <li style="white-space: nowrap">
+                          <router-link
+                            to="/en/ltc/all-media"
+                            class="link-unstyled"
+                          >
+                            Middle Chinese
+                          </router-link>
+                        </li>
+                        <li style="white-space: nowrap">
+                          <router-link
+                            to="/en/och/all-media"
+                            class="link-unstyled"
+                          >
+                            Old Chinese
+                          </router-link>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-12 col-md-4 mb-4">
+              <div class="home-card pb-2">
+                <div class="row">
+                  <div
+                    v-for="code in ['es', 'de', 'fr', 'it', 'ja', 'ko']"
+                    :key="`quick-lang-${code}`"
+                    class="text-center col-4 col-sm-4 col-md-6 col-lg-4 mt-3 mb-3"
+                  >
+                    <router-link :to="`/en/${code}/all-media`" class="link-unstyled">
+                      <LanguageFlag
+                        :language="language(code)"
+                        :autocycle="true"
+                        style="transform: scale(1.5); margin: 0 1rem 1rem 1rem"
+                      />
+                      <h6 class="strong" style="font-size: 0.9em">{{ language(code).name }}</h6>
+                    </router-link>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-4"></div>
           </div>
-          <div class="row mt-4 mb-5" id="chineseLanguageList">
+          <div class="row mt-4 mb-5" id="chineseLanguageList" v-if="browserLanguage && browserLanguage === 'zh'">
             <div class="col-sm-12">
               <div class="home-card p-2">
                 <h5 class="text-center mt-3 mb-3">可用汉语界面学习的语言</h5>
@@ -174,12 +310,10 @@
               </div>
             </div>
           </div>
-          <div class="row mt-4 mb-5" id="mainLanguageList">
+          <div class="row mt-2 mb-5" id="mainLanguageList">
             <div class="col-sm-12">
               <div class="home-card p-2">
-                <h5 class="text-center mt-3 mb-3">
-                  I speak English and want to learn …
-                </h5>
+                <h5 class="text-center mt-3 mb-3">More Languages</h5>
                 <div class="pl-2 pr-2">
                   <b-form-input
                     v-model="langKeyword"
@@ -193,7 +327,7 @@
                   :showFeatures="false"
                   :keyword="langKeyword"
                   :codes="languagesWithVideos"
-                  class="mt-4"
+                  class="mt-2"
                   :sort="true"
                   :showFlags="true"
                   variant="grid"
@@ -204,10 +338,27 @@
                     to="/language-map"
                   >
                     <i class="fas fa-globe-asia mr-1"></i>
-                    More languages
+                    See Even More Languages on a Map
                     <i class="ml-1 fas fa-chevron-right"></i>
                   </router-link>
                 </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-4 mb-5" id="englishLanguageList">
+            <div class="col-sm-12">
+              <div class="home-card p-2">
+                <h5 class="text-center mt-3 mb-3">Learn English from...</h5>
+                <LanguageList
+                  :showSpeakers="false"
+                  :showFeatures="false"
+                  :keyword="langKeyword"
+                  :pairs="learnEnglishLanguagePairs"
+                  class="mt-4"
+                  :sort="true"
+                  :showFlags="true"
+                  variant="grid"
+                />
               </div>
             </div>
           </div>
@@ -421,13 +572,28 @@ export default {
     };
   },
   computed: {
-    learnEnglishLanguagePairs() {
+    browserLanguage() {
+      if (process.browser) {
+        let code = navigator.language.replace(/-.*/, "");
+        if (
+          this.langsWithEnDict &&
+          this.langsWithEnDict.find((l) => l.code === code)
+        )
+          return code;
+      } else return "en";
+    },
+    langsWithEnDict() {
       if (this.$languages) {
-        let english = this.$languages.getSmart("en");
         let langsWithEnDict = this.$languages.l1s.filter(
           (l) => l.dictionaries && l.dictionaries.eng
         );
-        let langPairs = langsWithEnDict.map((l1) => {
+        return langsWithEnDict;
+      }
+    },
+    learnEnglishLanguagePairs() {
+      if (this.langsWithEnDict) {
+        let english = this.$languages.getSmart("en");
+        let langPairs = this.langsWithEnDict.map((l1) => {
           return { l1, l2: english };
         });
         return langPairs.sort(
@@ -460,6 +626,13 @@ export default {
     this.loaded = true;
   },
   methods: {
+    translate(text, code) {
+      if (this.$languages) return this.$languages.translate(text, code);
+      else return text;
+    },
+    language(code) {
+      if (this.$languages) return this.$languages.getSmart(code);
+    },
     scrollTo(selector) {
       document.querySelector(selector).scrollIntoView({
         behavior: "smooth",
@@ -571,7 +744,7 @@ export default {
 .blurb {
   font-size: 1.3rem;
   max-width: 45rem;
-  margin: 2rem auto 0 auto;
+  margin: 0 auto 0 auto;
   line-height: 1.5;
 }
 
