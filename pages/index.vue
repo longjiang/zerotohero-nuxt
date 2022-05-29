@@ -22,19 +22,17 @@
       <div class="container">
         <div class="row pt-3">
           <div class="col-sm-12">
-            <div>
+            <div class="user-links">
               <span
                 to="/profile"
                 v-if="
                   $auth && $auth.loggedIn && $auth.user && $auth.user.first_name
                 "
               >
-                Hi, {{ $auth.user.first_name }}
                 <router-link to="/logout">Logout</router-link>
               </span>
               <span v-else>
                 <router-link to="/login">Login</router-link>
-                <router-link to="/register">Register</router-link>
               </span>
             </div>
             <!-- <FeedbackPrompt /> -->
@@ -805,5 +803,17 @@ export default {
   max-width: 35rem;
   margin: 1rem auto 0 auto;
   line-height: 1.5;
+}
+
+.user-links {
+  position: absolute;
+  right: 1rem;
+  top: 0;
+  a {
+    color: white;
+    font-weight: bold;
+    text-shadow: 0 0 15px rgba(0,0,0);
+    margin-left: 0.5rem;
+  }
 }
 </style>

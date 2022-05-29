@@ -8,7 +8,7 @@
 </router>
 <template>
   <div
-    class="container-fluid"
+    class="container-fluid pt-5"
     :style="`min-height: 100vh; ${
       backgroundImage
         ? 'background-image: url(' +
@@ -73,11 +73,6 @@
                 <i class="fas fa-chevron-right ml-1"></i>
               </router-link>
             </div>
-
-            <FeedbackPrompt
-              class="mt-5"
-              :skin="$route.meta ? $route.meta.skin : 'light'"
-            />
           </b-form>
         </div>
       </div>

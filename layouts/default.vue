@@ -49,8 +49,9 @@ export default {
         "zerotohero-wide": this.wide,
         "zerotohero-not-wide": !this.wide,
         "zerotohero-wide-collapsed": this.collapsed,
-        "zerotohero-dark": this.$route.meta && this.$route.meta.skin === 'dark',
-        "zerotohero-light": this.$route.meta && this.$route.meta.skin === 'light'
+        "zerotohero-dark": this.$route.meta && this.$route.meta.skin === "dark",
+        "zerotohero-light":
+          this.$route.meta && this.$route.meta.skin === "light",
       };
       classes[`route-${this.$route.name}`] = true;
       if (this.l1 && this.l2) {
@@ -146,7 +147,9 @@ export default {
     overlayPlayerClose(youtube_id) {
       this.overlayPlayerYouTubeId = undefined;
       this.overlayPlayerLesson = undefined;
-      this.fullHistory = this.fullHistory.filter(path => !path.includes(`/youtube/view/${youtube_id}`)) // If the user closes the youtube overlay player, we should never go back to it in history
+      this.fullHistory = this.fullHistory.filter(
+        (path) => !path.includes(`/youtube/view/${youtube_id}`)
+      ); // If the user closes the youtube overlay player, we should never go back to it in history
     },
     subscribeToVuexMutations() {
       this.unsubscribe = this.$store.subscribe((mutation) => {
@@ -193,7 +196,7 @@ export default {
             this.$store.dispatch("progress/setTime", {
               l2: this.l2,
               time: this.l2Time[this.l2.code],
-              autoLog: true
+              autoLog: true,
             });
           }
         }
@@ -418,6 +421,7 @@ export default {
     <div
       class="zerotohero-background"
       :style="`background-image: url(${background})`"
+      v-if="wide || !($route.params.l1 && $route.params.l1 && l1 && l2)"
     />
     <template
       v-if="
@@ -488,8 +492,10 @@ export default {
             lesson: overlayPlayerLesson,
             mini: overlayPlayerMinimized,
             fullHistory,
-            class: `${overlayPlayerMinimized ? 'overlay-player-minimized' : ''}`,
-            key: `youtube-view-comp-${overlayPlayerYouTubeId}`
+            class: `${
+              overlayPlayerMinimized ? 'overlay-player-minimized' : ''
+            }`,
+            key: `youtube-view-comp-${overlayPlayerYouTubeId}`,
           }"
           @close="overlayPlayerClose"
         />
@@ -568,11 +574,6 @@ export default {
     position: fixed;
     top: 0;
     left: 0;
-  }
-  &.zerotohero-not-wide:not(.route-index) {
-    .zerotohero-background {
-      display: none;
-    }
   }
   .zth-content {
     display: flex;

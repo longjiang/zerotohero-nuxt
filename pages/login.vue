@@ -71,10 +71,6 @@
                 </router-link>
               </div>
             </b-form>
-            <FeedbackPrompt
-              class="mt-5"
-              :skin="$route.meta ? $route.meta.skin : 'light'"
-            />
           </div>
         </div>
       </div>

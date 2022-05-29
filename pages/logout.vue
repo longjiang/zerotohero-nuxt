@@ -9,7 +9,7 @@
 </router>
 <template>
   <div
-    class="container-fluid"
+    class="container-fluid pt-5"
     :style="`min-height: 100vh; ${
       backgroundImage
         ? 'background-image: url(' +
