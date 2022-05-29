@@ -166,15 +166,14 @@
         <div
           v-for="(video, videoIndex) in shownVideos"
           :class="{
+            'pb-3': true,
             'col-sm-12': view === 'list' || singleColumn,
-            'col-12': params.xs && view === 'grid' && !singleColumn,
-            'col-6': params.sm && view === 'grid' && !singleColumn,
+            'col-compact': params.xs,
+            'col-6': (params.xs || params.sm) && view === 'grid' && !singleColumn,
             'col-4': params.md && view === 'grid' && !singleColumn,
-            'col-3':
-              (params.lg || params.xl) && view === 'grid' && !singleColumn,
+            'col-3': (params.lg || params.xl) && view === 'grid' && !singleColumn,
             'col-no-subs': !video.hasSubs,
           }"
-          :style="`padding-bottom: ${view === 'list' ? '1rem' : '2rem'}`"
           :key="`youtube-video-wrapper-${video.youtube_id}-${videoIndex}`"
         >
           <LazyYouTubeVideoCard
@@ -501,7 +500,13 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+.col-compact {
+  padding: 0.5rem;
+  ::v-deep .media-body {
+    font-size: 0.9em;
+  }
+}
 .youtube-video-list-admin-bar {
   background: rgb(205, 207, 212);
 }

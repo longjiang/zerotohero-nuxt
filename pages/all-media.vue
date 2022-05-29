@@ -14,7 +14,7 @@
       :video="heroVideo"
       @videoUnavailable="onVideoUnavailable"
     />
-    <div class="container pb-5" style="padding-top: 3rem">
+    <div class="container pb-5" >
       <SocialHead
         :title="`Learn ${$l2.name} with Videos | ${$l2.name} Zero to Hero`"
         :description="`Learn ${$l2.name} with Videos`"
