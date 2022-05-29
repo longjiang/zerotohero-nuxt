@@ -143,7 +143,7 @@ export default {
   },
   methods: {
     highlightMultiple(...args) {
-      return Helper.highlight(...args)
+      return Helper.highlightMultiple(...args)
     },
     async update() {
       this.updating = true;
