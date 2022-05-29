@@ -16,7 +16,7 @@
     <div class="gradient-backdrop"></div>
     <div class="gradient-backdrop-2"></div>
     <div
-      class="container-fluid pt-1"
+      class="container-fluid safe-padding-top safe-padding-bottom"
       style="overflow: hidden; position: relative"
     >
       <div class="container">
@@ -24,11 +24,14 @@
           <div class="col-sm-12">
             <!-- <FeedbackPrompt /> -->
             <Logo class="mt-4 mb-3" />
+            <p class="blurb text-white text-center">
+              Learn languages with videos.
+            </p>
           </div>
         </div>
         <client-only>
           <div
-            class="row pt-4"
+            class="row pt-4 mb-3"
             v-if="$auth.loggedIn && $auth.user && $auth.user.first_name"
           >
             <div class="col-sm-12">
@@ -44,9 +47,6 @@
         <div class="row">
           <div class="col-sm-12">
             <div style="line-height: 1.2; color: white; text-align: center">
-              <p class="blurb">
-                Learn languages with videos.
-              </p>
               <div class="mt-4 mb-4">
                 <b-button
                   class="btn btn-success"
