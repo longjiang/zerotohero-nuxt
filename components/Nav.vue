@@ -313,12 +313,12 @@ export default {
     },
     menu() {
       let items = [
-        {
-          icon: "fas fa-home",
-          name: "index",
-          title: "Home",
-          show: true,
-        },
+        // {
+        //   icon: "fas fa-home",
+        //   name: "index",
+        //   title: "Home",
+        //   show: true,
+        // },
         {
           icon: "fas fa-photo-video",
           title: "Media",
@@ -328,6 +328,12 @@ export default {
               name: "all-media",
               icon: "fa fa-photo-video",
               title: `Recommended`,
+              show: true,
+            },
+            {
+              name: "watch-history",
+              icon: "fas fa-history",
+              title: "Watch History",
               show: true,
             },
             {
@@ -490,6 +496,18 @@ export default {
               icon: "fa fa-comment-alt",
               title: "Phrasebooks",
               show: this.hasPhrasebooks,
+            },
+            {
+              name: "saved-words",
+              icon: "fas fa-star",
+              title: "Saved Words",
+              show: true,
+            },
+            {
+              name: "saved-phrases",
+              icon: "fas fa-bookmark",
+              title: "Saved Phrases",
+              show: true,
             },
             {
               name: "phrasebook",
@@ -704,13 +722,6 @@ export default {
               icon: "fas fa-folder",
               show: true,
             },
-          ],
-        },
-        {
-          icon: "fas fa-gem",
-          title: "Resources",
-          show: true,
-          children: [
             {
               name: "resources",
               title: "Resources",
@@ -744,31 +755,32 @@ export default {
           ],
         },
         {
-          icon: "fas fa-question",
-          title: "Help & Support",
+          icon: "fas fa-ellipsis-h",
+          title: "More",
           show: true,
           children: [
             {
-              name: "contact",
-              icon: "fas fa-id-card",
+              name: "settings",
+              icon: "fas fa-cog",
+              title: "Settings",
+              shortcut: (e) => e.code === "KeyS" && e.metaKey && e.shiftKey,
               show: true,
-              title: "Support & Contact",
             },
             {
               name: "discussions",
               icon: "fas fa-comment",
               show: true,
-              title: "Comments & Feedback",
+              title: "Forum",
             },
             {
               name: "updates",
-              title: "New Features",
+              title: "What’s New",
               icon: "fab fa-twitter",
               show: true,
             },
             {
               name: "articles-wiki",
-              title: "Latest Articles",
+              title: "Blog",
               icon: "fas fa-copy",
               show: true,
             },
@@ -779,9 +791,15 @@ export default {
               title: "FAQ",
             },
             {
+              name: "contact",
+              icon: "fas fa-id-card",
+              show: true,
+              title: "Contact Us",
+            },
+            {
               name: "page",
               params: {id: 17},
-              icon: "fas fa-page",
+              icon: "fas fa-file",
               title: "Privacy Policy",
               show: true,
             },
@@ -873,13 +891,6 @@ export default {
           ],
         },
         {
-          name: "settings",
-          icon: "fas fa-cog",
-          title: "Settings",
-          shortcut: (e) => e.code === "KeyS" && e.metaKey && e.shiftKey,
-          show: true,
-        },
-        {
           icon: "fas fa-user",
           title: `${
             this.$auth &&
@@ -889,7 +900,7 @@ export default {
               ? "Hi, " + this.$auth.user.first_name
               : "Login"
           }`,
-          show: true,
+          show: false,
           exact: true,
           children: [
             {
