@@ -8,13 +8,13 @@
   }
 </router>
 <template>
-  <div style="display: flex; flex-direction: column; height: 100vh">
+  <div style="display: flex; flex-direction: column; height: 100vh;">
     <SocialHead
       title="Map of World Languages | Zero to Hero Languages"
       description="Tap on any language label to learn the language! Live TV channels, TV shows with subtitles, music with lyrics, phrasebooks with video examples... everything that can help you to learn a language “by osmosis.”"
       image="/img/thumbnail-language-map.jpg"
     />
-    <SiteTopBar />
+    <SiteTopBar class="safe-padding-top"/>
     <div class="container-fluid flex-1">
       <div class="row">
         <div class="col-12 p-0" >
