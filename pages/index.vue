@@ -38,7 +38,7 @@
             <!-- <FeedbackPrompt /> -->
             <Logo class="mt-4 mb-3" />
             <p class="blurb text-white text-center">
-              Learn languages with videos.
+              Learn languages naturally with videos.
             </p>
           </div>
         </div>
@@ -61,19 +61,7 @@
           <div class="col-sm-12">
             <div style="line-height: 1.2; color: white; text-align: center">
               <div class="mt-4 mb-4">
-                <b-button
-                  class="btn btn-success"
-                  @click="scrollTo('#mainLanguageList')"
-                  style="
-                    font-size: 1.2rem;
-                    padding: 0.5rem 1.5rem;
-                    border-radius: 1rem;
-                    box-shadow: #09651d 0px 3px 0px;
-                  "
-                >
-                  Choose Your Language
-                  <i class="fa fa-chevron-right ml-2"></i>
-                </b-button>
+                <a href="https://apps.apple.com/us/app/zero-to-hero-languages/id1623985525" target="_blank"><img src="/img/logo-ios-app.png" alt="Download on the App Store" style="width: 10rem"></a>
               </div>
             </div>
           </div>
