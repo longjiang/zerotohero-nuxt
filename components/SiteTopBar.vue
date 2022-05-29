@@ -89,7 +89,13 @@
           </router-link>
           <router-link
             id="site-top-bar-saved-words"
-            :to="$route.name === 'profile' ? '/' : $auth.loggedIn ? { name: 'profile' } : { name: 'login' }"
+            :to="
+              $route.name === 'profile'
+                ? '/'
+                : $auth.loggedIn
+                ? { name: 'profile' }
+                : { name: 'login' }
+            "
             :class="`btn top-bar-button top-bar-user-button  btn-unstyled link-unstyled ml-2`"
           >
             <i class="fas fa-user"></i>
@@ -101,10 +107,11 @@
       </template>
       <b-modal
         ref="languages-modal"
-        size="lg"
+        size="xl"
         centered
         hide-footer
-        title="Choose a language to learn"
+        title="Switch languages"
+        modal-class="safe-padding-top mt-4"
         body-class="languages-modal-wrapper"
         @show="onLanguagesModalShown"
       >
@@ -112,15 +119,53 @@
           <div class="mb-3">
             <router-link to="/" class="text-success">
               <i class="fas fa-chevron-left"></i>
-              Back to home page
+              Back to The Home Page
             </router-link>
           </div>
-          <b-form-input
-            v-model="keyword"
-            @compositionend.prevent.stop="() => false"
-            placeholder="Search for more languages"
-            class="mb-3"
+          <LazyDashboard class="mb-5" />
+          <LanguageList
+            @click="hideLanguagesModal"
+            :showSpeakers="false"
+            :keyword="keyword"
+            variant="grid"
+            :showFeatures="false"
+            :sort="false"
+            :showFlags="true"
+            :codes="[
+              'en',
+              'zh',
+              'es',
+              'de',
+              'fr',
+              'it',
+              'ja',
+              'ko',
+              'yue',
+              'he',
+              'ar',
+              'lzh',
+            ]"
           />
+          <h4 class="text-center mt-5 mb-3">More Languages</h4>
+          <div class="row pl-1 pr-1">
+            <div class="col-12 col-md-7 col-lg-9 pr-1">
+              <b-form-input
+                v-model="keyword"
+                @compositionend.prevent.stop="() => false"
+                placeholder="Search for more languages"
+                class="mb-3"
+              />
+            </div>
+            <div class="col-12 col-md-5 col-lg-3 pl-0">
+              <div class="text-center mb-3">
+                <router-link class="btn btn-success d-block" to="/language-map">
+                  <i class="fas fa-globe-asia mr-1"></i>
+                  Languages Map
+                  <i class="ml-1 fas fa-chevron-right"></i>
+                </router-link>
+              </div>
+            </div>
+          </div>
           <LanguageList
             @click="hideLanguagesModal"
             :showSpeakers="false"
@@ -130,13 +175,6 @@
             :sort="true"
             :showFlags="true"
           />
-          <div class="text-center mt-1">
-            <router-link class="btn btn-success d-block" to="/language-map">
-              <i class="fas fa-globe-asia mr-1"></i>
-              More Languages
-              <i class="ml-1 fas fa-chevron-right"></i>
-            </router-link>
-          </div>
         </div>
       </b-modal>
     </div>

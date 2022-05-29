@@ -315,12 +315,24 @@
             <div class="col-sm-12">
               <div class="home-card p-2">
                 <h5 class="text-center mt-3 mb-3">Learn More Languages</h5>
-                <div class="pl-2 pr-2">
-                  <b-form-input
-                    v-model="langKeyword"
-                    @compositionend.prevent.stop="() => false"
-                    placeholder="Search languages"
-                  />
+                <div class="row pl-1 pr-1">
+                  <div class="col-12 col-md-7 pr-1">
+                    <b-form-input
+                      v-model="keyword"
+                      @compositionend.prevent.stop="() => false"
+                      placeholder="Search for more languages"
+                      class="mb-3"
+                    />
+                  </div>
+                  <div class="col-12 col-md-5 pl-0">
+                    <div class="text-center mb-3">
+                      <router-link class="btn btn-success d-block" to="/language-map">
+                        <i class="fas fa-globe-asia mr-1"></i>
+                        Languages Map
+                        <i class="ml-1 fas fa-chevron-right"></i>
+                      </router-link>
+                    </div>
+                  </div>
                 </div>
                 <!-- a shorter language list is 'ar,az,bn,br,bs,bul,cat,ces,cy,dan,de,el,en,epo,es,eu,fa,fin,fr,gle,glg,hak,he,hi,hun,hr,hye,id,isl,it,ja,ko,lat,lav,lit,lzh,msa,nan,nl,no,pa,pl,pt,ron,ru,sr,swe,ta,th,tl,tlh,tr,uk,vi,yue,zh' -->
                 <LanguageList
