@@ -45,28 +45,7 @@
             class="hide-for-present mt-0 mb-4"
             v-if="text.length > 0 && !fullscreen"
           />
-          <template
-            v-for="(line, index) of marked
-              .trim()
-              .replace(/<(div|p|li|h1|h2|h3|h4|h5|h6)/g, '\n<$1')
-              .trim()
-              .split('\n')"
-          >
-            <div class="line mb-3" :key="`reader-${readerKey}-${index}`">
-              <Annotate
-                class="annotated-line"
-                v-if="line.trim().length > 0"
-                tag="div"
-                :buttons="true"
-                cla
-              >
-                <span v-html="line.trim()" />
-              </Annotate>
-              <div class="translation-line">
-                {{ translation.split("\n")[index] }}
-              </div>
-            </div>
-          </template>
+          <LazyTextWithSpeechBar :html="marked" :translation="translation" :key="marked" />
         </div>
         <div class="reader-editor">
           <div>
