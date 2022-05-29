@@ -378,6 +378,7 @@ export default {
       if (dictionary) {
         this.dictionaryCredit = await dictionary.credit();
       }
+      this.fullHistory = this.fullHistory.filter(h => h.includes(`/${this.l1.code}/${this.l2.code}`))
       this.stopAndRestartLoggingUserTimeOnLanguageChange();
     },
     loadLanguageSpecificSettings() {
