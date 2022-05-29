@@ -202,7 +202,6 @@ export default {
   data() {
     return {
       shortcuts: [],
-      history: [],
       hidden: false,
       tvShowsCount: false,
       hasLiveTV: false,
@@ -250,7 +249,6 @@ export default {
   },
   watch: {
     $route() {
-      this.history.push(this.$route.path);
       if (this.$route.meta.collapseNav)
         this.collapsed = this.$route.meta.collapseNav;
       else this.collapsed = false;
@@ -1063,7 +1061,7 @@ export default {
     last(item) {
       if (item) {
         if (item.to) return item.to;
-        let historyMatches = this.history.filter((path) => {
+        let historyMatches = this.fullHistory.filter((path) => {
           if (path) {
             let r = this.$router.resolve(path);
             if (r && r.route) {
