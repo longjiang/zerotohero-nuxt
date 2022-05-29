@@ -24,7 +24,7 @@
     <div class="section-nav-wrapper">
       <div class="section-nav">
         <div
-          v-for="(section, index) in sections.filter((s) => s.visible)"
+          v-for="(section, index) in sections"
           :key="`section-nav-item-${index}`"
           :class="{
             'section-nav-item': true,
