@@ -134,6 +134,17 @@
         class="dictionary-entry-section"
         v-if="sections[currentSection].title === 'Examples'"
       >
+        <Concordance
+          @concordanceReady="concordanceReady = true"
+          :word="entry"
+          :level="entry.level"
+        />
+      </div>
+
+      <div
+        class="dictionary-entry-section"
+        v-if="sections[currentSection].title === 'Mistakes'"
+      >
         <Mistakes
           :class="{ '': true, hidden: !mistakesReady }"
           @mistakesReady="mistakesReady = true"
@@ -141,12 +152,8 @@
           :text="entry.simplified"
           :key="`mistakes-${entry.id}`"
         ></Mistakes>
-        <Concordance
-          @concordanceReady="concordanceReady = true"
-          :word="entry"
-          :level="entry.level"
-        />
       </div>
+
       <div
         class="dictionary-entry-section"
         v-if="
@@ -315,6 +322,10 @@ export default {
         {
           title: "Examples",
           visible: true,
+        },
+        {
+          title: "Mistakes",
+          visible: this.$l2.code === 'zh',
         },
         {
           title: "Related",
