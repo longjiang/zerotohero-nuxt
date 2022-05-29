@@ -1,6 +1,6 @@
 <router>
   {
-    path: '/:l1/:l2/logout',
+    path: '/logout',
     props: true,
     meta: {
       skin: 'dark'
@@ -64,10 +64,14 @@ export default {
         position: "top-center",
         duration: 5000,
       });
-      this.$router.push({
-        name: "all-media",
-        params: { l1: this.$l1.code, l2: this.$l2.code },
-      });
+      this.$router.push(
+        this.$l1 && this.$l2
+          ? {
+              name: "all-media",
+              params: { l1: this.$l1.code, l2: this.$l2.code },
+            }
+          : "/"
+      );
     },
   },
 };

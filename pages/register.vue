@@ -1,6 +1,6 @@
 <router>
   {
-    path: '/:l1/:l2/register/',
+    path: '/register',
     meta: {
       skin: 'dark'
     }
@@ -125,19 +125,25 @@ export default {
         );
         if (res && res.data && res.data.public === true) {
           // Directus isn't returning users for some reason, let's get it
-          let response = await this.$authios.get(`${Config.wiki}users`);
-          if (response.data && response.data.data && response.data.data[0]) {
-            let user = response.data.data[0];
-            response = await this.$auth.loginWith("local", {
-              data: this.form,
-            });
-            if (response && response.data) {
+
+          let response = await this.$auth.loginWith("local", {
+            data: this.form,
+          });
+          if (response && response.data) {
+            response = await this.$authios.get(`${Config.wiki}users/me`);
+            if (response.data && response.data.data) {
+              let user = response.data.data;
               this.$auth.setUser(user);
-              this.$toast.success(`Welcome aboard, ${this.form.first_name}!`, {
+              this.$toast.success(`Registration successful. Welcome aboard, ${this.form.first_name}!`, {
                 position: "top-center",
                 duration: 5000,
               });
-              this.$router.push({ name: "profile" });
+              if (this.$l1 && this.$l2)
+                this.$router.push({
+                  name: "profile",
+                  params: { l1: this.$l1, l2: this.$l2 },
+                });
+              else this.$router.push("/");
             }
           }
         }

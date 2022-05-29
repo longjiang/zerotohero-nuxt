@@ -1,6 +1,6 @@
 <router>
   {
-    path: '/:l1/:l2/login/',
+    path: '/login',
     props: true,
     meta: {
       skin: 'dark',
@@ -32,7 +32,7 @@
               <h4>Zero to Hero</h4>
             </div>
             <b-form @submit.prevent="onSubmit">
-              <div class="alert alert-warning" v-if="$l2.code === 'zh'">
+              <div class="alert alert-warning" v-if="$l2 && $l2.code === 'zh'">
                 <b>Friendly reminder:</b>
                 This does NOT login to your Chinese Zero to Hero online courses
                 on Teachable. For course login
@@ -77,10 +77,10 @@
                 </router-link>
               </div>
             </b-form>
-          <FeedbackPrompt
-            class="mt-5"
-            :skin="$route.meta ? $route.meta.skin : 'light'"
-          />
+            <FeedbackPrompt
+              class="mt-5"
+              :skin="$route.meta ? $route.meta.skin : 'light'"
+            />
           </div>
         </div>
       </div>
@@ -128,7 +128,8 @@ export default {
             position: "top-center",
             duration: 5000,
           });
-          this.$router.push({ name: "profile" });
+          if (this.$l1 && this.$l2) this.$router.push({ name: "profile" });
+          else this.$router.push("/");
         }
       } catch (err) {
         if (err.response && err.response.data) {
