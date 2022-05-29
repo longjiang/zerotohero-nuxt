@@ -1,4 +1,5 @@
 import Config from '@/lib/config'
+import Helper from '@/lib/helper'
 
 export const state = () => {
   return {
@@ -41,7 +42,7 @@ export const mutations = {
     }
   },
   SET_TIME(state, { l2, time }) {
-    console.log(`⏳ Logging time for ${l2.name} (${l2.code}): ${parseInt(time / 1000)} seconds`)
+    console.log(`⏳ Set time for ${l2.name} (${l2.code}): ${parseInt(time / 1000)} seconds`)
     if (typeof localStorage !== 'undefined') {
       if (!state.progress[l2.code]) {
         state.progress[l2.code] = {}
@@ -77,9 +78,47 @@ export const actions = {
     commit('SET_LEVEL', { l2, level })
     dispatch('push')
   },
-  setTime({ dispatch, commit }, { l2, time }) {
-    commit('SET_TIME', { l2, time })
-    dispatch('push')
+  async fetchProgressFromServer() {
+    let dataId = this.$auth.$storage.getUniversal('dataId');
+    let url = `${Config.wiki}items/user_data/${dataId}?fields=id,progress`
+    let res = await this.$authios.get(url)
+      .catch(async (err) => {
+        Helper.logError(err, 'progress.js: setTime()')
+      })
+    if (res && res.data && res.data.data) {
+      let progress = JSON.parse(res.data.data.progress)
+      return progress
+    } else {
+      return false
+    }
+  },
+  /**
+   * 
+   * @param {object} context 
+   * @param {object} options { l2: language object, time: time in milliseconds, autoLog: whether this action is dispatched from the auto time logger }
+   */
+  async setTime({ dispatch, commit }, { l2, time, autoLog }) {
+    if (autoLog) {
+      // every minute
+      if (time % 60000 === 0) {
+        let progress = await dispatch('fetchProgressFromServer')
+        if (progress) {
+          let timeFromServer = progress[l2.code].time
+          if (time > timeFromServer) {
+            commit('SET_TIME', { l2, time })
+            console.log(`✅ New time is ${(time - timeFromServer) / 1000}s greater than time on server, pushing...`)
+            dispatch('push')
+          } else {
+            commit('SET_TIME', { l2, time: progress[l2.code].time })
+          }
+        }
+      } else {
+        commit('SET_TIME', { l2, time })
+      }
+    } else {
+      commit('SET_TIME', { l2, time })
+      dispatch('push')
+    }
   },
   async push({ rootState }) {
     let user = rootState.auth.user
@@ -88,9 +127,10 @@ export const actions = {
     if (user && user.id && dataId && token) {
       let payload = { progress: localStorage.getItem('zthProgress') }
       let url = `${Config.wiki}items/user_data/${dataId}?fields=id`
+      console.log('🕙 Saving progress to the server...')
       await this.$authios.patch(url, payload)
         .catch(async (err) => {
-          console.log('Axios error in progress.js: err, url, payload', err, url, payload)
+          Helper.logError(err, 'progress.js: push()')
         })
     }
   }

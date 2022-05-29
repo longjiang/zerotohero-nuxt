@@ -193,6 +193,7 @@ export default {
             this.$store.dispatch("progress/setTime", {
               l2: this.l2,
               time: this.l2Time[this.l2.code],
+              autoLog: true
             });
           }
         }
