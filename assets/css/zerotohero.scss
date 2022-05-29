@@ -8,6 +8,15 @@
   src: url("/fonts/Klingon-pIqaD-HaSta.ttf") format("truetype");
 }
 
+
+.safe-padding-top {
+  padding-top: env(safe-area-inset-bottom);
+}
+
+.safe-padding-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
 .flag-icon {
   border-radius: 0.15rem;
   width: 1.3rem;
