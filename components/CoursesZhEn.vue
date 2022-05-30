@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="row">
-      <div class="col-sm-12 text-center">
+      <!-- <div class="col-sm-12 text-center">
         <h2 class="mt-5 mb-5" style="font-weight: 100; font-size: 30px">
           <strong style="font-weight: 700">全面、系统、个性化</strong>
           的线上英语课程
@@ -41,7 +41,7 @@
           </a>
           <div>通过看影评学字幕自然习得英语</div>
         </div>
-      </div>
+      </div> -->
       <div class="col-sm-12 text-center">
         <h4 class="mt-5 mb-5">
           <img src="/img/line-dot-right.png" style="width: 80px" class="mr-3" />
