@@ -20,6 +20,7 @@ export default {
       overlayPlayerYouTubeId: undefined,
       overlayPlayerLesson: undefined,
       l2Time: {},
+      zoomLevel: 0,
       timeLoggerID: undefined,
       // transition: false,
       // edgeDetected: false,
@@ -54,6 +55,7 @@ export default {
           this.$route.meta && this.$route.meta.skin === "light",
       };
       classes[`route-${this.$route.name}`] = true;
+      classes[`zerotohero-zoom-${this.zoomLevel}`] = true;
       if (this.l1 && this.l2) {
         this.l1, this.l2;
         classes = Object.assign(classes, {
@@ -89,6 +91,7 @@ export default {
     }
   },
   async mounted() {
+    $nuxt.$on("zoom", this.onZoom);
     this.subscribeToVuexMutations();
     this.wide = Helper.wide();
     smoothscroll.polyfill(); // Safari does not support smoothscroll
@@ -144,6 +147,9 @@ export default {
     },
   },
   methods: {
+    onZoom(zoomLevel) {
+      this.zoomLevel = zoomLevel;
+    },
     overlayPlayerClose(youtube_id) {
       this.overlayPlayerYouTubeId = undefined;
       this.overlayPlayerLesson = undefined;

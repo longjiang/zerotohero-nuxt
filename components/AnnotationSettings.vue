@@ -33,9 +33,7 @@
           نص
           <rt>naṣṣ</rt>
         </ruby>
-        <span v-else>
-          [pʰ]
-        </span>
+        <span v-else>[pʰ]</span>
       </span>
       <span
         v-if="$l2.han"
@@ -74,6 +72,19 @@
       >
         Tự
         <small style="font-size: 0.5em">字</small>
+      </span>
+
+      <span
+        class="annotation-setting-toggle"
+        @click="zoomLevel = zoomLevel > 0 ? zoomLevel - 1 : zoomLevel"
+      >
+        ᴛ
+      </span>
+      <span
+        class="annotation-setting-toggle"
+        @click="zoomLevel = zoomLevel < 4 ? zoomLevel + 1 : zoomLevel"
+      >
+        T
       </span>
     </div>
     <div v-if="variant === 'page'">
@@ -305,6 +316,7 @@ export default {
   },
   data() {
     return {
+      zoomLevel: 0,
       showDefinition: undefined,
       showTranslation: undefined,
       showPinyin: undefined,
@@ -355,6 +367,9 @@ export default {
     },
   },
   watch: {
+    zoomLevel() {
+      $nuxt.$emit("zoom", Number(this.zoomLevel));
+    },
     adminMode() {
       this.$store.dispatch("settings/setAdminMode", this.adminMode);
     },
