@@ -650,10 +650,10 @@ export default {
   gap: 1.5rem;
   align-items: flex-start;
   .annotated {
-    width: 60%;
+    width: 61.8%;
   }
   .annotated-translation {
-    min-width: 40%;
+    min-width: 38.2%;
   }
 }
 
@@ -736,7 +736,7 @@ export default {
 }
 
 .annotated.with-buttons {
-  min-width: 60%;
+  min-width: 61.8%;
   width: 100%;
   display: flex;
   align-items: stretch;

@@ -286,10 +286,10 @@ export default {
       display: flex;
       align-items: flex-start;
       .transcript-line-l2-wrapper {
-        width: 60%;
+        width: 61.8%;
       }
       .transcript-line-l1 {
-        width: 40%;
+        width: 38.2%;
       }
     }
   }
@@ -329,7 +329,7 @@ export default {
   }
   .transcript-line-l1 {
     opacity: 0.7;
-    font-size: 0.7em;
+    font-size: 80%;
     display: none;
     line-height: 1.5;
     margin-top: 0.1rem;

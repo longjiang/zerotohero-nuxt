@@ -308,10 +308,10 @@ export default {
     display: flex;
     align-items: flex-start;
     .annotated-line {
-      width: 60%;
+      width: 61.8%;
     }
     .translation-line {
-      width: 40%;
+      width: 38.2%;
       margin-left: 1rem;
     }
   }
