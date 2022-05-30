@@ -8,10 +8,12 @@
         <client-only>
           <b-button-group class="d-flex">
             <b-button v-if="!speaking" @click="play()">
-              <i class="fas fa-volume-up"></i> {{ this.current === 0 ? 'Read' : 'Resume' }}
+              <i class="fas fa-volume-up"></i>
+              {{ this.current === 0 ? "Read" : "Resume" }}
             </b-button>
             <b-button v-if="speaking" @click="pause()">
-              <i class="fas fa-pause"></i> Pause 
+              <i class="fas fa-pause"></i>
+              Pause
             </b-button>
             <b-button @click="previous()">
               <i class="fas fa-arrow-up"></i>
@@ -20,7 +22,9 @@
               <i class="fas fa-arrow-down"></i>
             </b-button>
             <b-button @click="toggleSpeed">
-              <i v-if="speed === 1" class="fas fa-tachometer-alt"></i>
+              <span v-if="speed === 1">
+                <i class="fas fa-tachometer-alt"></i>
+              </span>
               <span v-else>{{ speed }}x</span>
             </b-button>
             <b-dropdown right text="Voice" style="flex: 1">
@@ -134,16 +138,16 @@ export default {
   watch: {
     speed() {
       if (this.speaking) {
-        this.pause()
-        this.play()
+        this.pause();
+        this.play();
       }
     },
     voice() {
       if (this.speaking) {
-        this.pause()
-        this.play()
+        this.pause();
+        this.play();
       }
-    }
+    },
   },
   methods: {
     toggleSpeed() {
@@ -196,8 +200,8 @@ export default {
       this.voice = index;
     },
     sentenceText(sentence) {
-      let textAttr = sentence.getAttribute('data-sentence-text')
-      return textAttr || '';
+      let textAttr = sentence.getAttribute("data-sentence-text");
+      return textAttr || "";
     },
     update() {
       for (let sentence of this.getSentences()) {
@@ -210,7 +214,7 @@ export default {
       if (this.voices.length === 0) this.getVoices();
       this.utterance = new SpeechSynthesisUtterance(text);
       // this.utterance.lang = this.lang || this.$l2.code
-      this.utterance.rate = this.speed
+      this.utterance.rate = this.speed;
       if (this.voices[this.voice]) {
         this.utterance.voice = this.voices[this.voice];
       }
@@ -282,6 +286,10 @@ export default {
   position: sticky;
   top: 0;
   z-index: 1;
+}
+
+::v-deep img {
+  max-width: 100%;
 }
 
 #zerotohero:not(.zerotohero-wide) {
