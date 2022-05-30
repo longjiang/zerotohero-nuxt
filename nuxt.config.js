@@ -12,6 +12,7 @@ export default {
       { charset: 'utf-8' },
       // { name: 'referrer', content: 'no-referrer'}, // Turned off because some youtube videos will not load.
       { name: 'viewport', content: 'viewport-fit=cover, width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' },
+      { name: "apple-itunes-app", content: "app-id=1623985525" }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/img/icons/favicon.ico' },
