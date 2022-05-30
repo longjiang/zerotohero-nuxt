@@ -8,10 +8,10 @@
         <client-only>
           <b-button-group class="d-flex">
             <b-button v-if="!speaking" @click="play()">
-              <i class="fas fa-volume-up"></i> Read
+              <i class="fas fa-volume-up"></i> {{ this.current === 0 ? 'Read' : 'Resume' }}
             </b-button>
             <b-button v-if="speaking" @click="pause()">
-              <i class="fas fa-pause"></i> Pause
+              <i class="fas fa-pause"></i> Pause 
             </b-button>
             <b-button @click="previous()">
               <i class="fas fa-arrow-up"></i>
@@ -173,7 +173,7 @@ export default {
     getSentences() {
       let sentences = [];
       for (let annotate of this.$children) {
-        for (let sentence of $(annotate.$el).find(
+        for (let sentence of annotate.$el.querySelectorAll(
           ".annotate-template .sentence"
         )) {
           sentences.push(sentence);
@@ -195,23 +195,8 @@ export default {
       this.voice = index;
     },
     sentenceText(sentence) {
-      let text = "";
-      for (let block of $(sentence).find(
-        ".word-block, .word-block-text, .word-block-unknown"
-      )) {
-        if (
-          $(block).is(".word-block-text") ||
-          $(block).is(".word-block-unknown")
-        ) {
-          text += $(block).text();
-          if (!["zh", "ja"].includes(this.$l2.code)) {
-            text += " ";
-          }
-        } else {
-          text += $(block).find(".word-block-simplified").text();
-        }
-      }
-      return text || $(sentence).text();
+      let textAttr = sentence.getAttribute('data-sentence-text')
+      return textAttr || '';
     },
     update() {
       for (let sentence of this.getSentences()) {
@@ -247,7 +232,6 @@ export default {
       let text = this.sentenceText(sentence);
       text = text.replace(/[\n\s]+/g, " ");
       if (this.$l2.continua) text = text.replace(/\s/g, "");
-      console.log(text);
       if (text.length === 0) {
         this.next();
         return;

@@ -462,7 +462,7 @@ export default {
             sentence = this.myanmarZawgyiConverter.zawgyiToUnicode(sentence);
         }
         let html = await this.tokenize(sentence, this.batchId);
-        let $tokenizedSentenceSpan = $(`<span class="sentence">${html}</span>`);
+        let $tokenizedSentenceSpan = $(`<span class="sentence" data-sentence-text="${sentence.trim().replace(/"/g, '\"')}">${html}</span>`);
         this.batchId = this.batchId + 1;
         $(node).before($tokenizedSentenceSpan);
         $(node).remove();
@@ -619,7 +619,7 @@ export default {
         let sentences = this.breakSentences(text);
         for (let sentence of sentences) {
           // $(node).before(`<span id="sentence-placeholder-${this.batchId}">${sentence}</span>`)
-          let sentenceSpan = $(`<span class="sentence">${sentence}</span>`);
+          let sentenceSpan = $(`<span class="sentence" data-sentence-text="${sentence.trim().replace(/"/g, '\"')}">${sentence}</span>`);
           $(node).before(sentenceSpan);
         }
         $(node).remove();
