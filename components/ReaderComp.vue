@@ -41,15 +41,29 @@
               </small>
             </div>
           </div>
-          <hr
-            class="hide-for-present mt-0 mb-4"
-            v-if="text.length > 0 && !fullscreen"
-          />
           <LazyTextWithSpeechBar
             :html="marked"
             :translation="translation"
             :key="marked"
           />
+        </div>
+        <div v-if="savedWordIdsInText && savedWordIdsInText.length > 0" id="vocabulary-list" class="mb-4 pb-4">
+          <div
+            style="font-size: 1rem; line-height: 1"
+            class="mb-3"
+          >
+            <strong>
+              <i class="fas fa-star text-success mr-1" />
+              Vocabulary List
+            </strong>
+            <div class="mt-1">
+              <small>
+                These are the words you saved that appear in this text.
+              </small>
+            </div>
+            <hr />
+          </div>
+          <WordList :ids="savedWordIdsInText" :star="false" />
         </div>
         <div class="reader-editor">
           <div class="mb-1">
@@ -179,6 +193,7 @@
 import Marked from "marked";
 import Helper from "@/lib/helper";
 import { ContainerQuery } from "vue-container-query";
+import { mapState } from "vuex";
 import Config from "@/lib/config";
 
 export default {
@@ -213,6 +228,22 @@ export default {
     },
   },
   computed: {
+    ...mapState("savedWords", ["savedWords"]),
+    savedWordIdsInText() {
+      if (this.savedWords) {
+        let savedWords = this.savedWords[this.$l2.code];
+        let foundWordIds = []
+        if (savedWords) {
+          for (let word of savedWords) {
+            for (let form of (word.forms || [])) {
+              if (this.text.includes(form) && form !== 'a') foundWordIds.push(word.id)
+            }
+          }
+        }
+        foundWordIds = Helper.unique(foundWordIds)
+        return foundWordIds
+      }
+    },
     shareURL() {
       if (this.shared)
         return `${window.location.protocol}//${window.location.hostname}/${this.$l1.code}/${this.$l2.code}/reader/shared/${this.shared.id}`;
@@ -264,7 +295,8 @@ export default {
       let typing = this.text;
       await Helper.timeout(1000);
       if (typing === this.text) {
-        if (this.shared && this.text !== this.shared.text) this.shared = undefined // Unset link to the shared text on the server
+        if (this.shared && this.text !== this.shared.text)
+          this.shared = undefined; // Unset link to the shared text on the server
         this.$emit("readerTextChanged", this.text);
         this.readerKey++;
       }
@@ -274,7 +306,8 @@ export default {
       await Helper.timeout(1000);
       if (typing === this.translation) {
         this.$emit("readerTranslationChanged", this.translation);
-        if (this.shared && this.translation !== this.shared.translation) this.shared = undefined // Unset link to the shared text on the server
+        if (this.shared && this.translation !== this.shared.translation)
+          this.shared = undefined; // Unset link to the shared text on the server
       }
       if (this.translation && this.translation !== "")
         this.addTranslation = true;
@@ -403,12 +436,17 @@ export default {
   color: red !important;
 }
 
-#reader-annotated {
+#reader-annotated,
+#vocabulary-list {
   background: white;
-  padding: 1rem 1rem 0 1rem;
+  padding: 1.5rem;
   border-radius: 0.25rem;
   box-shadow: 0px 3px 10px #191c553b;
   border: 1px solid #d7d7d8;
+}
+
+#reader-annotated {
+  padding-bottom: 0;
 }
 
 #reader-annotated >>> del .word-block .word-block-simplified::after {
