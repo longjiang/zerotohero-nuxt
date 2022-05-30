@@ -45,7 +45,13 @@
         <client-only>
           <div
             class="row pt-4 mb-3"
-            v-if="$auth.loggedIn && $auth.user && $auth.user.first_name && $store.state.progress.progress && Object.keys($store.state.progress.progress).length > 0"
+            v-if="
+              $auth.loggedIn &&
+              $auth.user &&
+              $auth.user.first_name &&
+              $store.state.progress.progress &&
+              Object.keys($store.state.progress.progress).length > 0
+            "
           >
             <div class="col-sm-12">
               <div class="home-card p-2 pt-4 pb-4 bg-white">
@@ -61,7 +67,17 @@
           <div class="col-sm-12">
             <div style="line-height: 1.2; color: white; text-align: center">
               <div class="mt-4 mb-4">
-                <a href="https://apps.apple.com/us/app/zero-to-hero-languages/id1623985525" target="_blank"><img data-not-lazy src="/img/logo-ios-app.png" alt="Download on the App Store" style="width: 10rem"></a>
+                <a
+                  href="https://apps.apple.com/us/app/zero-to-hero-languages/id1623985525"
+                  target="_blank"
+                >
+                  <img
+                    data-not-lazy
+                    src="/img/logo-ios-app.png"
+                    alt="Download on the App Store"
+                    style="width: 10rem"
+                  />
+                </a>
               </div>
             </div>
           </div>
@@ -330,27 +346,21 @@
             <div class="col-sm-12">
               <div class="home-card p-2">
                 <h5 class="text-center mt-3 mb-3">Learn More Languages</h5>
-                <div class="row pl-1 pr-1">
-                  <div class="col-12 col-md-7 pr-1">
-                    <b-form-input
-                      v-model="langKeyword"
-                      @compositionend.prevent.stop="() => false"
-                      placeholder="Search for more languages"
-                      class="mb-3"
-                    />
-                  </div>
-                  <div class="col-12 col-md-5 pl-0">
-                    <div class="text-center mb-3">
-                      <router-link
-                        class="btn btn-success d-block"
-                        to="/language-map"
-                      >
-                        <i class="fas fa-globe-asia mr-1"></i>
-                        Languages Map
-                        <i class="ml-1 fas fa-chevron-right"></i>
-                      </router-link>
-                    </div>
-                  </div>
+                <div class="mb-3" style="display: flex;">
+                  <b-form-input
+                    v-model="langKeyword"
+                    style="flex: 1; margin-right: 0.5rem;"
+                    @compositionend.prevent.stop="() => false"
+                    placeholder="Search languages"
+                  />
+                  <router-link
+                    class="btn btn-success d-block"
+                    to="/language-map"
+                  >
+                    <i class="fas fa-globe-asia mr-1"></i>
+                    <span class="d-none d-sm-inline">Language</span> Map
+                    <i class="ml-1 fas fa-chevron-right"></i>
+                  </router-link>
                 </div>
                 <!-- a shorter language list is 'ar,az,bn,br,bs,bul,cat,ces,cy,dan,de,el,en,epo,es,eu,fa,fin,fr,gle,glg,hak,he,hi,hun,hr,hye,id,isl,it,ja,ko,lat,lav,lit,lzh,msa,nan,nl,no,pa,pl,pt,ron,ru,sr,swe,ta,th,tl,tlh,tr,uk,vi,yue,zh' -->
                 <LanguageList
@@ -800,7 +810,7 @@ export default {
   a {
     color: white;
     font-weight: bold;
-    text-shadow: 0 0 15px rgba(0,0,0);
+    text-shadow: 0 0 15px rgba(0, 0, 0);
     margin-left: 0.5rem;
   }
 }
