@@ -105,6 +105,20 @@
               <i class="fas fa-keyboard"></i>
               Enter Translation
             </button>
+            <button
+              @click="upload"
+              :class="{
+                'reader-button': true,
+              }"
+              style="font-size: 0.9em"
+            >
+              <i class="fas fa-share"></i>
+              Share
+            </button>
+          </div>
+          <div v-if="shared || sharing">
+            <div v-if="shared">{{ shared.id }}</div>
+            <div v-if="sharing">Creating a shareable URL...</div>
           </div>
           <div class="mt-2 p-1">
             <span
@@ -114,13 +128,18 @@
               <a
                 :href="translator.url"
                 target="_blank"
-                style="font-size: 0.9em; white-space: nowrap; display: inline-block; color: black"
+                style="
+                  font-size: 0.9em;
+                  white-space: nowrap;
+                  display: inline-block;
+                  color: black;
+                "
                 :class="{
                   'mr-3': true,
                 }"
               >
-                
-                {{ translator.name }} <i class="fas fa-angle-right"></i>
+                {{ translator.name }}
+                <i class="fas fa-angle-right"></i>
               </a>
             </span>
           </div>
@@ -139,6 +158,7 @@
 import Marked from "marked";
 import Helper from "@/lib/helper";
 import { ContainerQuery } from "vue-container-query";
+import Config from "@/lib/config";
 
 export default {
   components: {
@@ -147,6 +167,8 @@ export default {
   data() {
     return {
       text: "",
+      shared: undefined, // The object corresponding to the text object shared (uploaded) to the server: {id: 1, text: '...', translation: '...'}
+      sharing: false,
       translation: "",
       annotated: false,
       readerKey: 0, // used to force re-render this component
@@ -232,6 +254,22 @@ export default {
     },
   },
   methods: {
+    async upload() {
+      this.sharing = true;
+      try {
+        let res = await this.$authios.post(`${Config.wiki}items/text`, {
+          text: this.text,
+          translation: this.translation,
+        });
+        if (res && res.data && res.data.data.id) {
+          this.shared = res.data.data;
+        }
+        this.sharing = false;
+      } catch (err) {
+        Helper.logError(err);
+        this.sharing = false;
+      }
+    },
     translatorURL(translator) {
       return translator.url(this.text, this.$l1.code, this.$l2.code);
     },
@@ -351,7 +389,7 @@ export default {
   border: none;
   background: none;
   display: inline-block;
-  margin: 0 0.25rem 0 0;
+  margin: 0;
   border-radius: 0.2rem;
   overflow: hidden;
   line-height: 1em;

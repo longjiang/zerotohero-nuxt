@@ -3,6 +3,7 @@
     path: '/:l1/:l2/reader/:method?/:arg?',
     meta: {
       title: 'Reader | Zero to Hero',
+      props: true,
       metaTags: [
         {
           name: 'description',
@@ -40,8 +41,15 @@
             </span>
             a popup dictionary!
           </p>
-          <ReaderComp ref="reader" @readerTextChanged="readerTextChanged" @readerTranslationChanged="readerTranslationChanged" />
-          <FeedbackPrompt class="mt-3" :skin="$route.meta ? $route.meta.skin : 'light'"/>
+          <ReaderComp
+            ref="reader"
+            @readerTextChanged="readerTextChanged"
+            @readerTranslationChanged="readerTranslationChanged"
+          />
+          <FeedbackPrompt
+            class="mt-3"
+            :skin="$route.meta ? $route.meta.skin : 'light'"
+          />
         </div>
       </div>
       <h5 class="mt-5">More about this {{ $l2.name }} Reader</h5>
@@ -107,6 +115,14 @@ export default {
   components: {
     ReaderComp,
   },
+  props: {
+    method: {
+      type: String,
+    },
+    arg: {
+      type: String,
+    },
+  },
   data() {
     return {
       text: "",
@@ -128,13 +144,35 @@ export default {
     },
   },
   async mounted() {
-    if (this.$route.name === "reader") {
-      this.route();
-    }
     let dictionary = await this.$getDictionary();
     if (dictionary) {
       this.dictionaryCredit = await dictionary.credit();
     }
+    let method = this.method;
+    let arg = this.arg;
+    let text;
+    let translation;
+
+    if (method === "md-url" || method === "html-url") {
+      try {
+        let t = await Helper.proxy(arg);
+        text = t || "";
+      } catch (err) {
+        Helper.logError(err);
+      }
+    } else if (["md", "html", "txt"].includes(method)) {
+      text = arg.replace(/\n/g, "<br>");
+    } else {
+      text = this.get(); // from localstorage
+      translation = this.getTranslation();
+      if (!text) {
+        if (Helper.sampleText[this.$l2.code]) {
+          this.text = Helper.sampleText[this.$l2.code];
+        }
+      }
+    }
+    this.text = text;
+    this.translation = translation;
   },
   computed: {
     $l1() {
@@ -192,42 +230,6 @@ export default {
       let saved = this.getSavedTranslation() || {};
       saved[this.$l2.code] = text;
       localStorage.setItem("zthReaderTranslation", JSON.stringify(saved));
-    },
-    async route() {
-      let method = this.$route.params.method;
-      let arg = this.$route.params.arg;
-      if (method) {
-        if (method === "md-url" || method === "html-url") {
-          Helper.proxy(arg).then((response) => {
-            this.text = response || "";
-          });
-        }
-        if (method === "md") {
-          this.text = arg;
-        }
-        if (method === "html") {
-          this.text = arg;
-        }
-        if (method === "txt") {
-          this.text = arg.replace(/\n/g, "<br>");
-        }
-      } else {
-        if (!this.text) {
-          const text = this.get();
-          const translation = this.getTranslation();
-          if (text) {
-            this.text = text;
-            // this.show()
-          } else {
-            if (Helper.sampleText[this.$l2.code]) {
-              this.text = Helper.sampleText[this.$l2.code]
-            }
-          }
-          if (translation) {
-            this.translation = translation;
-          }
-        }
-      }
     },
   },
 };
