@@ -61,7 +61,7 @@
           <div class="col-sm-12">
             <div style="line-height: 1.2; color: white; text-align: center">
               <div class="mt-4 mb-4">
-                <a href="https://apps.apple.com/us/app/zero-to-hero-languages/id1623985525" target="_blank"><img src="/img/logo-ios-app.png" alt="Download on the App Store" style="width: 10rem"></a>
+                <a href="https://apps.apple.com/us/app/zero-to-hero-languages/id1623985525" target="_blank"><img data-not-lazy src="/img/logo-ios-app.png" alt="Download on the App Store" style="width: 10rem"></a>
               </div>
             </div>
           </div>

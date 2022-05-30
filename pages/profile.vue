@@ -197,13 +197,15 @@ export default {
     levelObj(level) {
       return Helper.languageLevels(this.$l2)[level];
     },
-    removeProgress() {
+    async removeProgress() {
       this.$store.dispatch("progress/removeL2Progress", { l2: this.$l2 });
       this.$toast.success(
         `${this.$l2.name} has been removed from your languages.`,
         { duration: 5000 }
       );
       this.$router.push("/");
+      await Helper.timeout(3000) 
+      location.reload();
     },
   },
   watch: {
