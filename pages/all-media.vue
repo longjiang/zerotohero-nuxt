@@ -14,7 +14,7 @@
       :video="heroVideo"
       @videoUnavailable="onVideoUnavailable"
     />
-    <div class="container pb-5" >
+    <div class="container pb-5">
       <SocialHead
         :title="`Learn ${$l2.name} with Videos | ${$l2.name} Zero to Hero`"
         :description="`Learn ${$l2.name} with Videos`"
@@ -288,9 +288,11 @@ export default {
     onVideoUnavailable(youtube_id) {
       if (this.heroVideo.youtube_id === youtube_id) {
         this.videoUnavailable = true;
-        this.videos = this.videos.filter(
-          (v) => v.youtube_id !== this.heroVideo.youtube_id
-        );
+        if (this.videos) {
+          this.videos = this.videos.filter(
+            (v) => v.youtube_id !== this.heroVideo.youtube_id
+          );
+        }
         this.loadHeroVideo();
       }
     },

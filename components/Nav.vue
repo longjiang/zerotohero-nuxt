@@ -1074,7 +1074,7 @@ export default {
     last(item) {
       if (item) {
         if (item.to) return item.to;
-        let historyMatches = this.fullHistory.filter((path) => {
+        let historyMatches = (this.fullHistory || []).filter((path) => {
           if (path) {
             let r = this.$router.resolve(path);
             if (r && r.route) {

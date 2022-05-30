@@ -17,28 +17,6 @@
         <div class="col-sm-12">
           <!-- <Sale class="mt-4 mb-4" v-if="$l2.code === 'zh'" /> -->
           <Nav :l1="$l1" :l2="$l2" variant="page" class="pb-2" />
-          <div v-if="$route.params.l1 && $route.params.l1 && $l1 && $l2">
-            <div :class="{ 'pl-1 pr-1 pb-2': true }">
-              <div class="home-card text-white">
-                <LazyLanguageInfoBox :lang="$l2" />
-              </div>
-            </div>
-            <client-only>
-              <div :class="{ 'pl-1 pr-1 pb-2': true }" v-if="$l2.han">
-                <div class="home-card">
-                  <h4 class="text-center mb-4">Dialects of Chinese</h4>
-                  <Dialects skin="dark" />
-                </div>
-              </div>
-              <div :class="{ 'pl-1 pr-1 pb-2': true }" v-if="$l2.han">
-                <div class="home-card">
-                  <h4 class="text-center">56 Ethnic Groups of China</h4>
-                  <p class="text-center mb-4">(2010 Numbers)</p>
-                  <FiftySixEthnic skin="dark" />
-                </div>
-              </div>
-            </client-only>
-          </div>
           <div :class="{ 'pl-1 pr-1 pb-2': true }" v-if="$l2.identicalLangs">
             <div class="home-card bg-success">
               <LazyIdenticalLanguages
@@ -82,6 +60,14 @@ export default {
     image() {
       return Helper.background(this.$l2);
     },
+  },
+  mounted() {
+    let name = "all-media";
+    if (this.$l1.code === "en" && this.$l2.code === "zh")
+      name = "courses";
+    if (this.$l1.code === "zh" && this.$l2.code === "en")
+      name = "courses";
+    this.$router.push({ name });
   },
   methods: {
     hasDashboardUpdate(hasDashboard) {
