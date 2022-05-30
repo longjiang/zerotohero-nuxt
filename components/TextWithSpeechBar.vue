@@ -46,9 +46,10 @@
           :key="`chapter-line-${lineIndex}`"
         >
           <Annotate
-            :foreign="foreign"
             class="annotated-line"
             tag="div"
+            :foreign="foreign"
+            :emitSentenceTextAsAttr="true"
             :buttons="true"
           >
             <div v-html="line.trim()" />
