@@ -50,7 +50,7 @@
             <div v-html="line.trim()" />
           </Annotate>
           <div v-if="translation" class="translation-line">
-            {{ translation.split("\n")[lineIndex] }}
+            {{ parallellines[lineIndex] }}
           </div>
         </div>
       </div>
@@ -117,6 +117,9 @@ export default {
       if (this.page) lines = lines.slice(10 * (this.page - 1), 10 * this.page);
       return lines;
     },
+    parallellines() {
+      if (this.translation) return this.translation.replace(/\n+/g, "\n").split("\n")
+    }
   },
   mounted() {
     this.getVoices();
