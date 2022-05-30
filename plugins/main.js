@@ -16,6 +16,8 @@ import Helper from '@/lib/helper'
 import Languages from '@/lib/languages'
 import DateHelper from "@/lib/date-helper";
 import axios from 'axios'
+import AsyncComputed from 'vue-async-computed'
+ 
 
 Vue.config.productionTip = false
 Vue.use(VTooltip)
@@ -39,6 +41,7 @@ Vue.use(VueMq, {
     console.log('error')
   }
 })
+Vue.use(AsyncComputed)
 
 
 // https://stackoverflow.com/questions/44371639/how-to-remove-html-tags-from-rendered-text

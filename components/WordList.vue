@@ -8,7 +8,7 @@
             matchedWords &&
             matchedWords.map((word) => word.id).includes(word.id),
         }"
-        v-for="(word, index) in words"
+        v-for="(word, index) in words || wordFromIds || []"
         :key="`word-list-word-${index}-${word.id}`"
       >
         <Star
@@ -18,7 +18,11 @@
           :label="false"
           class="pr-2"
         ></Star>
-        <Speak :text="word.kana || word.head" :l2="$l2" class="text-secondary" />
+        <Speak
+          :text="word.kana || word.head"
+          :l2="$l2"
+          class="text-secondary"
+        />
         <router-link
           v-if="compareWith"
           :to="`/${$l1.code}/${$l2.code}/compare/${$dictionaryName}/${compareWith.id},${word.id}`"
@@ -127,11 +131,14 @@
 </template>
 <script>
 import { transliterate as tr } from "transliteration";
-import Helper from '@/lib/helper'
+import Helper from "@/lib/helper";
 
 export default {
   props: {
     words: {
+      type: Array,
+    },
+    ids: {
       type: Array,
     },
     texts: {
@@ -175,8 +182,8 @@ export default {
     },
     maxDefinitions: undefined,
     removeSymbol: {
-      default: false
-    }
+      default: false,
+    },
   },
   computed: {
     $l1() {
@@ -205,6 +212,17 @@ export default {
       };
       classes[`collapse-${this.collapse}`] = true;
       return classes;
+    },
+  },
+  asyncComputed: {
+    async wordFromIds() {
+      if (this.ids) {
+        let dictionary = await this.$getDictionary();
+        let words = await Promise.all(
+          this.ids.map(async (id) => await dictionary.get(id))
+        );
+        return words;
+      }
     },
   },
   methods: {
@@ -242,7 +260,7 @@ export default {
           return false;
         }
       } else {
-        return word.level || 'outside';
+        return word.level || "outside";
       }
     },
   },

@@ -59,6 +59,7 @@
                 progressBarHeight="1.5rem"
                 :progressBarShowValue="false"
               />
+              <WordList :ids="wordIds" skin="light" class="mt-3"></WordList>
               <router-link
                 :to="{ name: 'all-media' }"
                 class="text-success mt-5 d-block"
@@ -67,7 +68,10 @@
                 Continue Learning
                 <i class="fas fa-chevron-right ml-1"></i>
               </router-link>
-              <FeedbackPrompt class="mt-5 mb-4" :skin="$route.meta ? $route.meta.skin : 'light'"/>
+              <FeedbackPrompt
+                class="mt-5 mb-4"
+                :skin="$route.meta ? $route.meta.skin : 'light'"
+              />
             </div>
           </div>
         </template>
@@ -78,8 +82,10 @@
 
 <script>
 import Helper from "@/lib/helper";
+import { mapState } from "vuex";
 export default {
   computed: {
+    ...mapState("savedWords", ["savedWords"]),
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -116,6 +122,10 @@ export default {
     },
     hoursNeeded() {
       return Math.ceil(this.targetHours / 10) * 10;
+    },
+    wordIds() {
+      let savedWords = this.savedWords[this.$l2.code] || []
+      return savedWords.map(w => w.id);
     },
   },
   data() {
