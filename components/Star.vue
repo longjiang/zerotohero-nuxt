@@ -67,7 +67,7 @@ export default {
   computed: {
     ...mapState("savedWords", ["savedWords"]),
     saved() {
-      let saved = false;
+      let saved;
       if (this.word) {
         saved = this.$store.getters["savedWords/has"]({
           id: this.word.id,
@@ -80,7 +80,7 @@ export default {
           l2: this.$l2.code,
         });
       }
-      return saved;
+      return saved ? true : false;
     },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")

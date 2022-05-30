@@ -5,7 +5,7 @@
   }
 </router>
 <template>
-  <div class="main pt-3">
+  <div class="main pt-3 pb-5">
     <client-only>
       <div class="container" v-if="$auth.user">
         <div class="row">
@@ -59,7 +59,25 @@
                 progressBarHeight="1.5rem"
                 :progressBarShowValue="false"
               />
-              <WordList :ids="wordIds" skin="light" class="mt-3"></WordList>
+              <div v-if="wordIds">
+                <h5 class="mt-5 mb-3">
+                  Your {{ $l2.name }} Words
+                  <router-link
+                    class="text-success ml-2"
+                    style="font-size: 1rem; font-weight: bold"
+                    :to="{ name: 'saved-words' }"
+                  >
+                    See All {{ wordIds.length }}
+                    <i class="fas fa-angle-right ml-1"></i>
+                  </router-link>
+                </h5>
+                <WordList
+                  :ids="wordIds.slice(0, 7)"
+                  skin="light"
+                  class="mt-3"
+                ></WordList>
+              </div>
+              <div></div>
               <router-link
                 :to="{ name: 'all-media' }"
                 class="text-success mt-5 d-block"
@@ -124,8 +142,8 @@ export default {
       return Math.ceil(this.targetHours / 10) * 10;
     },
     wordIds() {
-      let savedWords = this.savedWords[this.$l2.code] || []
-      return savedWords.map(w => w.id);
+      let savedWords = this.savedWords[this.$l2.code] || [];
+      return savedWords.map((w) => w.id);
     },
   },
   data() {
