@@ -45,10 +45,14 @@
             class="hide-for-present mt-0 mb-4"
             v-if="text.length > 0 && !fullscreen"
           />
-          <LazyTextWithSpeechBar :html="marked" :translation="translation" :key="marked" />
+          <LazyTextWithSpeechBar
+            :html="marked"
+            :translation="translation"
+            :key="marked"
+          />
         </div>
         <div class="reader-editor">
-          <div>
+          <div class="d-flex">
             <textarea
               id="reader-textarea"
               class="form-control"
@@ -56,6 +60,16 @@
               rows="5"
               :placeholder="$t('Paste {l2} text here', { l2: $l2.name })"
               v-model="text"
+              :dir="$l2.direction === 'rtl' ? 'rtl' : 'ltr'"
+            ></textarea>
+            <textarea
+              v-if="addTranslation"
+              id="translation-textarea"
+              class="form-control ml-1"
+              cols="30"
+              rows="5"
+              :placeholder="$t('Paste translation text here', { l2: $l2.name })"
+              v-model="translation"
               :dir="$l2.direction === 'rtl' ? 'rtl' : 'ltr'"
             ></textarea>
           </div>
@@ -81,15 +95,6 @@
               <small>A</small>
             </button>
             <button
-              @click="toggleTranslation()"
-              :class="{
-                'reader-button': true,
-                'reader-button-active': showTranslate,
-              }"
-            >
-              <i class="fa fa-language"></i>
-            </button>
-            <button
               @click="addTranslation = !addTranslation"
               :class="{
                 'reader-button': true,
@@ -97,19 +102,28 @@
               }"
               style="font-size: 0.9em"
             >
-              Add translation
+              <i class="fas fa-keyboard"></i>
+              Enter Translation
             </button>
           </div>
-          <textarea
-            v-if="addTranslation"
-            id="translation-textarea"
-            class="form-control mt-2"
-            cols="30"
-            rows="5"
-            :placeholder="$t('Paste translation text here', { l2: $l2.name })"
-            v-model="translation"
-            :dir="$l2.direction === 'rtl' ? 'rtl' : 'ltr'"
-          ></textarea>
+          <div class="mt-2 p-1">
+            <span
+              v-for="translator of translators"
+              :key="`trans-${translator.id}`"
+            >
+              <a
+                :href="translator.url"
+                target="_blank"
+                style="font-size: 0.9em; white-space: nowrap; display: inline-block; color: black"
+                :class="{
+                  'mr-3': true,
+                }"
+              >
+                
+                {{ translator.name }} <i class="fas fa-angle-right"></i>
+              </a>
+            </span>
+          </div>
         </div>
         <iframe
           v-if="showTranslate"
@@ -172,6 +186,27 @@ export default {
         Marked(this.text.replace(/^ {4,}/gm, "")) || this.text // 4 spaces in a row would emit <code>!
       );
     },
+    translators() {
+      let translators = this.$languages.getTranslator(this.$l1, this.$l2) || [];
+      let mappedTranslators = [];
+      for (let t of translators.translators) {
+        if (typeof t.url === "function") {
+          // Wait until the function is available
+          mappedTranslators.push({
+            name: t.name,
+            id: t.id,
+            url: t.url(this.text, this.$l1.code, this.$l2.code),
+          });
+        }
+      }
+      return mappedTranslators;
+    },
+    externalTranslateUrl() {
+      if (!this.text) return;
+      let text = this.text.trim();
+      let url = this.$languages.translationURL(text, this.$l1, this.$l2);
+      return url;
+    },
   },
   async mounted() {
     await this.$getDictionary();
@@ -197,6 +232,9 @@ export default {
     },
   },
   methods: {
+    translatorURL(translator) {
+      return translator.url(this.text, this.$l1.code, this.$l2.code);
+    },
     toggleTranslation() {
       this.showTranslate = !this.showTranslate;
     },
