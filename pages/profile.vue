@@ -77,15 +77,39 @@
                   class="mt-3"
                 ></WordList>
               </div>
-              <div></div>
-              <router-link
-                :to="{ name: 'all-media' }"
-                class="text-success mt-5 d-block"
-                style="font-size: 1.2rem; font-weight: bold"
-              >
-                Continue Learning
-                <i class="fas fa-chevron-right ml-1"></i>
-              </router-link>
+              <div>
+                <h5 class="mt-5 mb-4">
+                  {{ $l2.name }} Videos You Watched
+                  <router-link
+                    class="text-success ml-2"
+                    style="font-size: 1rem; font-weight: bold"
+                    :to="{ name: 'saved-words' }"
+                  >
+                    See Entire History
+                    <i class="fas fa-angle-right ml-1"></i>
+                  </router-link>
+                </h5>
+                <WatchHistoryComp
+                  :limit="12"
+                  :l2="$l2"
+                  :showClear="false"
+                  :showDate="false"
+                  class="row"
+                />
+              </div>
+              <div class="mt-4 pb-5">
+                <h5 class="mb-4">Danger Zone</h5>
+                <div class="text-center alert-danger rounded p-4">
+                  <b-button variant="danger" @click="removeProgress">
+                    <i class="fas fa-trash mr-2"></i>
+                    Remove {{ $l2.name }}
+                  </b-button>
+                  <p class="mt-3 mb-0">
+                    This will remove your logged time for {{ $l2.name }}, and
+                    remove {{ $l2.name }} from your home screen Dashboard.
+                  </p>
+                </div>
+              </div>
               <FeedbackPrompt
                 class="mt-5 mb-4"
                 :skin="$route.meta ? $route.meta.skin : 'light'"
@@ -172,6 +196,14 @@ export default {
   methods: {
     levelObj(level) {
       return Helper.languageLevels(this.$l2)[level];
+    },
+    removeProgress() {
+      this.$store.dispatch("progress/removeL2Progress", { l2: this.$l2 });
+      this.$toast.success(
+        `${this.$l2.name} has been removed from your languages.`,
+        { duration: 5000 }
+      );
+      this.$router.push("/");
     },
   },
   watch: {

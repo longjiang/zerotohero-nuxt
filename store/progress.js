@@ -30,6 +30,14 @@ export const mutations = {
       state.progressLoaded = true
     }
   },
+  REMOVE_L2_PROGRESS(state, { l2 }) {
+    if (typeof localStorage !== 'undefined') {
+      state.progress[l2.code] = null
+      let progress = Object.assign({}, state.progress)
+      localStorage.setItem('zthProgress', JSON.stringify(progress))
+      this._vm.$set(state, 'progress', progress)
+    }
+  },
   SET_LEVEL(state, { l2, level }) {
     if (typeof localStorage !== 'undefined') {
       if (!state.progress[l2.code]) {
@@ -76,6 +84,10 @@ export const actions = {
   },
   setLevel({ dispatch, commit }, { l2, level }) {
     commit('SET_LEVEL', { l2, level })
+    dispatch('push')
+  },
+  removeL2Progress({ dispatch, commit }, { l2 }) {
+    commit('REMOVE_L2_PROGRESS', { l2 })
     dispatch('push')
   },
   async fetchProgressFromServer() {

@@ -1,8 +1,8 @@
 <template>
   <container-query :query="query" v-model="params">
-    <div>
+    <div :class="`watch-history watch-history-${skin}`">
       <div class="history-items container" v-if="itemsFiltered.length > 0">
-        <div class="row">
+        <div class="row" v-if="showClear">
           <div
             class="col-12 text-right"
             v-if="videosFiltered && videosFiltered.length > 0"
@@ -19,11 +19,14 @@
           </div>
         </div>
         <div v-for="group in groups" :key="group.date">
-          <div class="row">
+          <div class="row" v-if="showDate">
             <div class="col-sm-12">
-              <p v-if="group.date === '0'" class="mb-4 mt-4">Watched earlier:</p>
+              <p v-if="group.date === '0'" class="mb-4 mt-4">
+                Watched earlier:
+              </p>
               <p class="mb-4 mt-4" v-else>
-                Watched on {{
+                Watched on
+                {{
                   new Date(group.date).toLocaleDateString("en-US", {
                     year: "numeric",
                     month: "long",
@@ -85,19 +88,23 @@
           </div>
         </div>
       </div>
-      <p
-        v-if="itemsFiltered.length === 0"
-        class="text-center p-5 mt-5 ghost-dark rounded"
-        style="background: rgba(37, 36, 44, 0.651)"
-      >
-        You don't have anything in your history yet.
-        <br />
-        <br />
-        <router-link :to="{ name: 'all-media' }" class="btn btn-success">
-          <i class="fas fa-play mr-1"></i>
-          Watch Some Videos
-        </router-link>
-      </p>
+      <div class="w-100" v-if="itemsFiltered.length === 0">
+        <div class="col-sm-12">
+          <p
+            :class="`text-center p-4 rounded no-videos ${
+              skin === 'dark' ? 'ghost-dark' : ''
+            }`"
+          >
+            You haven't watched any {{ l2 ? l2.name : '' }} videos yet.
+            <br />
+            <br />
+            <router-link :to="{ name: 'all-media' }" class="btn btn-success">
+              <i class="fas fa-play mr-1"></i>
+              Start Watching
+            </router-link>
+          </p>
+        </div>
+      </div>
     </div>
   </container-query>
 </template>
@@ -115,6 +122,17 @@ export default {
     l2: undefined,
     skin: {
       default: "light",
+    },
+    limit: {
+      type: Number,
+    },
+    showClear: {
+      type: Boolean,
+      default: true,
+    },
+    showDate: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {
@@ -160,6 +178,7 @@ export default {
           obj.date = d.length === 2 ? d[0] : 0;
           return obj;
         });
+      if (this.limit) history = history.slice(0, this.limit);
       let groups = Helper.groupArrayBy(history, "date");
       groups = Object.keys(groups).map((date) => {
         return {
@@ -213,6 +232,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.no-videos {
+  background: rgb(239, 237, 237);
+  width: 100%;
+}
+.watch-history-dark {
+  .no-videos {
+    background: rgba(37, 36, 44, 0.651);
+  }
+}
 ::v-deep .youtube-title,
 ::v-deep .phrasebook-title {
   font-size: 1rem;
