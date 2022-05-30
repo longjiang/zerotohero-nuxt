@@ -7,19 +7,23 @@
       >
         <client-only>
           <b-button-group class="d-flex">
-            <b-button @click="previous()">
-              <i class="fas fa-chevron-left"></i>
-            </b-button>
             <b-button v-if="!speaking" @click="play()">
-              <i class="fas fa-play"></i>
+              <i class="fas fa-volume-up"></i> Read
             </b-button>
             <b-button v-if="speaking" @click="pause()">
-              <i class="fas fa-pause"></i>
+              <i class="fas fa-pause"></i> Pause
+            </b-button>
+            <b-button @click="previous()">
+              <i class="fas fa-arrow-up"></i>
             </b-button>
             <b-button @click="next()">
-              <i class="fas fa-chevron-right"></i>
+              <i class="fas fa-arrow-down"></i>
             </b-button>
-            <b-dropdown right text="Switch Voice" style="flex: 1">
+            <b-button @click="toggleSpeed">
+              <i v-if="speed === 1" class="fas fa-tachometer-alt"></i>
+              <span v-else>{{ speed }}x</span>
+            </b-button>
+            <b-dropdown right text="Voice" style="flex: 1">
               <b-dropdown-item
                 v-for="(voice, index) in voices"
                 :key="`speech-bar-voice-${index}-${voice.name}`"
@@ -87,6 +91,7 @@ export default {
     return {
       current: 0,
       voice: 0,
+      speed: 1,
       utterance: undefined,
       speaking: false,
       voices: [],
@@ -118,13 +123,37 @@ export default {
       return lines;
     },
     parallellines() {
-      if (this.translation) return this.translation.replace(/\n+/g, "\n").split("\n")
-    }
+      if (this.translation)
+        return this.translation.replace(/\n+/g, "\n").split("\n");
+    },
   },
   mounted() {
     this.getVoices();
   },
+  watch: {
+    speed() {
+      if (this.speaking) {
+        this.pause()
+        this.play()
+      }
+    },
+    voice() {
+      if (this.speaking) {
+        this.pause()
+        this.play()
+      }
+    }
+  },
   methods: {
+    toggleSpeed() {
+      let speeds = [1, 0.75, 0.5];
+      let index = speeds.findIndex((s) => s === this.speed);
+      if (index > -1) {
+        index = index + 1;
+        if (index === speeds.length) index = 0;
+      }
+      this.speed = speeds[index];
+    },
     augmentHtml(html) {
       let dom = parse(html);
       let as = dom.querySelectorAll("a");
@@ -195,6 +224,7 @@ export default {
       if (this.voices.length === 0) this.getVoices();
       this.utterance = new SpeechSynthesisUtterance(text);
       // this.utterance.lang = this.lang || this.$l2.code
+      this.utterance.rate = this.speed
       if (this.voices[this.voice]) {
         this.utterance.voice = this.voices[this.voice];
       }
@@ -268,7 +298,6 @@ export default {
   top: 0;
   z-index: 1;
 }
-
 
 #zerotohero:not(.zerotohero-wide) {
   .speech-bar {
