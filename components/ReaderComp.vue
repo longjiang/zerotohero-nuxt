@@ -52,28 +52,7 @@
           />
         </div>
         <div class="reader-editor">
-          <div class="d-flex">
-            <textarea
-              id="reader-textarea"
-              class="form-control"
-              cols="30"
-              rows="5"
-              :placeholder="$t('Paste {l2} text here', { l2: $l2.name })"
-              v-model="text"
-              :dir="$l2.direction === 'rtl' ? 'rtl' : 'ltr'"
-            ></textarea>
-            <textarea
-              v-if="addTranslation"
-              id="translation-textarea"
-              class="form-control ml-1"
-              cols="30"
-              rows="5"
-              :placeholder="$t('Paste translation text here', { l2: $l2.name })"
-              v-model="translation"
-              :dir="$l2.direction === 'rtl' ? 'rtl' : 'ltr'"
-            ></textarea>
-          </div>
-          <div class="mt-1">
+          <div class="mb-1">
             <button
               v-if="!fullscreen"
               @click="toggleFullscreen"
@@ -95,6 +74,18 @@
               <small>A</small>
             </button>
             <button
+              @click="upload"
+              :class="{
+                'reader-button': true,
+              }"
+              style="font-size: 0.9em"
+              v-if="!shared"
+            >
+              <i class="fas fa-share"></i>
+              Share
+            </button>
+            <button
+              v-if="!addTranslation"
               @click="addTranslation = !addTranslation"
               :class="{
                 'reader-button': true,
@@ -105,20 +96,50 @@
               <i class="fas fa-keyboard"></i>
               Enter Translation
             </button>
-            <button
-              @click="upload"
-              :class="{
-                'reader-button': true,
-              }"
-              style="font-size: 0.9em"
-            >
-              <i class="fas fa-share"></i>
-              Share
-            </button>
           </div>
-          <div v-if="shared || sharing">
-            <div v-if="shared">{{ shared.id }}</div>
-            <div v-if="sharing">Creating a shareable URL...</div>
+          <client-only>
+            <div v-if="shared || sharing" class="alert alert-success mt-2">
+              <div v-if="shared">
+                <div class="strong mb-2">
+                  <i class="fas fa-paper-plane"></i>
+                  Shareable via link:
+                </div>
+                <div class="border-gray rounded p-2 bg-white">
+                  {{ shareURL }}
+                </div>
+                <b-button
+                  variant="unstyled"
+                  @click="copyClick"
+                  class="copy-btn"
+                >
+                  <i class="fas fa-copy"></i>
+                </b-button>
+              </div>
+              <div v-if="sharing" class="strong">
+                Creating a shareable URL...
+              </div>
+            </div>
+          </client-only>
+          <div class="d-flex">
+            <textarea
+              id="reader-textarea"
+              class="form-control"
+              cols="30"
+              rows="5"
+              :placeholder="$t('Paste {l2} text here', { l2: $l2.name })"
+              v-model="text"
+              :dir="$l2.direction === 'rtl' ? 'rtl' : 'ltr'"
+            ></textarea>
+            <textarea
+              v-if="addTranslation"
+              id="translation-textarea"
+              class="form-control ml-1"
+              cols="30"
+              rows="5"
+              :placeholder="$t('Paste translation text here', { l2: $l2.name })"
+              v-model="translation"
+              :dir="$l2.direction === 'rtl' ? 'rtl' : 'ltr'"
+            ></textarea>
           </div>
           <div class="mt-2 p-1">
             <span
@@ -192,6 +213,10 @@ export default {
     },
   },
   computed: {
+    shareURL() {
+      if (this.shared)
+        return `${window.location.protocol}//${window.location.hostname}/${this.$l1.code}/${this.$l2.code}/reader/shared/${this.shared.id}`;
+    },
     translationSrc() {
       return this.translationUrl(this.$l1.code, this.$l2.code, this.text);
     },
@@ -239,6 +264,7 @@ export default {
       let typing = this.text;
       await Helper.timeout(1000);
       if (typing === this.text) {
+        if (this.shared && this.text !== this.shared.text) this.shared = undefined // Unset link to the shared text on the server
         this.$emit("readerTextChanged", this.text);
         this.readerKey++;
       }
@@ -248,12 +274,25 @@ export default {
       await Helper.timeout(1000);
       if (typing === this.translation) {
         this.$emit("readerTranslationChanged", this.translation);
+        if (this.shared && this.translation !== this.shared.translation) this.shared = undefined // Unset link to the shared text on the server
       }
       if (this.translation && this.translation !== "")
         this.addTranslation = true;
+      else this.addTranslation = false;
     },
   },
   methods: {
+    copyClick() {
+      let text = this.shareURL;
+      var tempInput = document.createElement("input");
+      tempInput.style = "position: absolute; left: -1000px; top: -1000px";
+      tempInput.value = text;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand("copy");
+      document.body.removeChild(tempInput);
+      this.$toast.info("Copied!", { duration: 3000 });
+    },
     async upload() {
       this.sharing = true;
       try {
@@ -430,6 +469,17 @@ export default {
     width: calc(100vw - 2rem);
     height: calc(100vh - 15vh - 5.5rem);
     overflow: scroll;
+  }
+}
+
+.copy-btn {
+  position: absolute;
+  bottom: 0.75rem;
+  right: 1.1rem;
+  color: #888;
+  font-size: 1.2rem;
+  &:hover {
+    color: #444;
   }
 }
 </style>

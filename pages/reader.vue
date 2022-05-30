@@ -1,9 +1,9 @@
 <router>
   {
     path: '/:l1/:l2/reader/:method?/:arg?',
+    props: true,
     meta: {
       title: 'Reader | Zero to Hero',
-      props: true,
       metaTags: [
         {
           name: 'description',
@@ -109,6 +109,7 @@
 <script>
 import ReaderComp from "@/components/ReaderComp";
 import Helper from "@/lib/helper";
+import Config from "@/lib/config";
 
 export default {
   template: "#reader-template",
@@ -152,8 +153,20 @@ export default {
     let arg = this.arg;
     let text;
     let translation;
-
-    if (method === "md-url" || method === "html-url") {
+    if (method === "shared") {
+      try {
+        let id = arg;
+        let res = await this.$authios.get(`${Config.wiki}items/text/${id}`);
+        if (res && res.data && res.data.data) {
+          text = res.data.data.text;
+          translation = res.data.data.translation;
+          this.shared = res.data.data;
+          this.$refs.reader.shared = res.data.data
+        }
+      } catch (err) {
+        Helper.logError(err);
+      }
+    } else if (method === "md-url" || method === "html-url") {
       try {
         let t = await Helper.proxy(arg);
         text = t || "";
