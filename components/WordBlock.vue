@@ -514,7 +514,7 @@ export default {
         pronunciation = this.klingonIPA(word.head);
       else if (word.kana && word.kana !== word.head) pronunciation = word.kana;
       else if (this.$l2.code === "fa")
-        pronunciation = farsiRomanizations[word.head];
+        pronunciation = this.farsiRomanizations[word.head];
       else if (word.jyutping && word.pinyin)
         pronunciation = [word.jyutping, word.pinyin].join(", ");
       else if (

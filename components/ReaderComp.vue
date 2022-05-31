@@ -13,7 +13,7 @@
           <Loader class="mb-5" />
         </div>
         <div
-          v-if="text.length > 0 && !loading"
+          v-if="text && text.length > 0 && !loading"
           id="reader-annotated"
           :class="{
             focus: true,
@@ -23,7 +23,7 @@
           :style="`font-size: ${fontSize}rem; margin-bottom: 2rem;`"
         >
           <div
-            v-if="text.length > 0 && !fullscreen"
+            v-if="text && text.length > 0 && !fullscreen"
             style="font-size: 1rem; line-height: 1"
             class="mb-3"
           >
