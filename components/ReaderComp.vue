@@ -230,13 +230,14 @@ export default {
   computed: {
     ...mapState("savedWords", ["savedWords"]),
     savedWordIdsInText() {
+      if (!this.text) return
       if (this.savedWords) {
         let savedWords = this.savedWords[this.$l2.code];
         let foundWordIds = []
         if (savedWords) {
           for (let word of savedWords) {
             for (let form of (word.forms || [])) {
-              if (this.text.includes(form) && form !== 'a') foundWordIds.push(word.id)
+              if ((this.text).includes(form) && form !== 'a') foundWordIds.push(word.id)
             }
           }
         }

@@ -1,8 +1,8 @@
 <template>
   <container-query :query="query" v-model="params">
-    <div v-if="html" id="speech-container">
+    <div id="speech-container">
       <div
-        v-if="$hasFeature('speech') || !foreign || browser()"
+        v-if="(html && voices && voices.length > 0) && ($hasFeature('speech') || !foreign) && browser()"
         class="speech-bar mb-4 bg-white pt-2 pb-2"
       >
         <client-only>
