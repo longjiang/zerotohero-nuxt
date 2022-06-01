@@ -513,7 +513,7 @@ export default {
         let response = await this.$authios.patch(
           `${Config.youtubeVideosTableName(this.$l2.id)}/${
             this.video.id
-          }&fields=${type}.*`, // type is 'tv_show' or 'talk'
+          }?fields=${type}.*`, // type is 'tv_show' or 'talk'
           data
         );
         response = response.data;
