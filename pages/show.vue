@@ -388,7 +388,8 @@ export default {
           episodeCount = await this.$directus.countShowEpisodes(
             this.collection,
             this.show.id,
-            this.$l2.id
+            this.$l2.id,
+            this.$adminMode
           );
         } catch (err) {
           print(err);

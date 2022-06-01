@@ -23,7 +23,7 @@ export const actions = {
       let tableSuffix = Config.youtubeVideosTableName(l2.id).replace(`${Config.wiki}items/youtube_videos`, '')
       let data = await Helper.proxy(
         `https://db2.zerotohero.ca/count.php?table_suffix=${tableSuffix}&lang_id=${l2.id}&type=new_videos`,
-        { cacheLife: 86400 } // cache the count for one day (86400 seconds)
+        { cacheLife: adminMode ? 0 : 86400 } // cache the count for one day (86400 seconds)
       );
       if (data) stats.newVideos = data
 
@@ -31,7 +31,7 @@ export const actions = {
       if (music) {
         data = await Helper.proxy(
           `https://db2.zerotohero.ca/count.php?table_suffix=${tableSuffix}&lang_id=${l2.id}&type=tv_show&id=${music.id}`,
-          { cacheLife: 86400 } // cache the count for one day (86400 seconds)
+          { cacheLife: adminMode ? 0 : 86400 } // cache the count for one day (86400 seconds)
         );
         if (data) stats.music = data
       }
@@ -41,7 +41,7 @@ export const actions = {
       if (movies) {
         data = await Helper.proxy(
           `https://db2.zerotohero.ca/count.php?table_suffix=${tableSuffix}&lang_id=${l2.id}&type=tv_show&id=${movies.id}`,
-          { cacheLife: 86400 } // cache the count for one day (86400 seconds)
+          { cacheLife: adminMode ? 0 : 86400 } // cache the count for one day (86400 seconds)
         );
         if (data) stats.movies = data
       }
@@ -51,7 +51,7 @@ export const actions = {
       if (news) {
         data = await Helper.proxy(
           `https://db2.zerotohero.ca/count.php?table_suffix=${tableSuffix}&lang_id=${l2.id}&type=talk&id=${news.id}`,
-          { cacheLife: 86400 } // cache the count for one day (86400 seconds)
+          { cacheLife: adminMode ? 0 : 86400 } // cache the count for one day (86400 seconds)
         );
         if (data) stats.news = data
       }
@@ -59,7 +59,7 @@ export const actions = {
 
       data = await Helper.proxy(
         `https://db2.zerotohero.ca/count.php?table_suffix=${tableSuffix}&lang_id=${l2.id}`,
-        { cacheLife: 86400 } // cache the count for one day (86400 seconds)
+        { cacheLife: adminMode ? 0 : 86400 } // cache the count for one day (86400 seconds)
       );
       if (data) stats.allVideos = data
 
