@@ -71,7 +71,7 @@
             'transcript-line-l1-single': single,
             transparent: !annotated,
           }"
-          v-html="translation || parallelLine"
+          v-html="(translation || parallelLine).replace(/\n/g, '<br/>')"
           :contenteditable="enableTranslationEditing"
           :data-line-index="lineIndex"
           @blur.capture="trasnlationLineBlur"
@@ -239,6 +239,7 @@ export default {
           }"></PopupNote>`;
         });
       }
+      html = html.replace(/\n/g, '<br/>')
       return html;
     },
     highlightMultiple() {
