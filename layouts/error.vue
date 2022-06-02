@@ -1,6 +1,6 @@
 <template>
   <div
-    :style="`min-height: 100vh; background-image: url(${background()}); background-size: cover; background-position: center;`"
+    :style="`min-height: 100vh; background-image: url(/img/background-earth-vector-bw.jpg); background-size: cover; background-position: center;`"
   >
     <div class="container">
       <div class="row">
@@ -34,17 +34,11 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
 export default {
   props: ["error"],
   layout: "error",
   mounted() {
     console.log(this.error);
-  },
-  methods: {
-    background(...args) {
-      return Helper.background(...args);
-    },
   },
 };
 </script>
