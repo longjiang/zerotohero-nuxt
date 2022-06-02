@@ -18,7 +18,7 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12 pt-5 pb-5 text-center">
-          <h3>Choose Your Language</h3>
+          <h3>Face of the Language</h3>
           <client-only>
             <p>{{ filteredLangs.length }} languages listed</p>
           </client-only>

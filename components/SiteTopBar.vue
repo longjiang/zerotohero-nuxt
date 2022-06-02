@@ -48,7 +48,7 @@
             style="cursor: pointer"
           >
             <LanguageFlag
-              v-if="!(!flagCode || !$route.params.l2 || params.md === false)"
+              v-if="$l2 && flagCode && params.md !== false"
               ref="flag"
               style="
                 transform: scale(0.7);
@@ -76,7 +76,7 @@
       <client-only>
         <AnnotationSettings v-if="$l2 && params.lg" variant="toolbar" />
       </client-only>
-      <template>
+      <template v-if="$l1 && $l2">
         <div>
           <router-link
             id="site-top-bar-saved-words"
