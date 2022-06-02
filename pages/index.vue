@@ -83,14 +83,6 @@
           </div>
         </div>
         <!-- <Sale class="mb-5" style="border-radius: 1rem !important" /> -->
-
-        <div class="row mt-2 mb-3" v-if="!loaded">
-          <div class="col-sm-12 text-center pt-3 pb-3 mb-3">
-            <div class="home-card mb-0" style="padding: 1rem 1rem 2rem 1rem">
-              <Loader :sticky="true" message="Loading more languages . . ." />
-            </div>
-          </div>
-        </div>
         <client-only>
           <div class="row mt-4" v-if="language('en')">
             <div class="col-sm-6 col-md-4 mb-4">
@@ -509,23 +501,6 @@
             </div>
           </div>
         </div>
-        <client-only>
-          <div :class="{ 'row mb-5': true, 'd-none': !hasDashboard }">
-            <div class="col-sm-12">
-              <div class="home-card mb-0" style="padding: 1rem 1rem 2rem 1rem">
-                <h5 class="text-center mt-3 mb-3 p-0">
-                  Your Words &amp; Phrases
-                </h5>
-                <LazyDashboard
-                  @hasDashboard="hasDashboardUpdate"
-                  :showVideos="false"
-                  :showFlags="true"
-                  style="padding-top: 0.5rem"
-                />
-              </div>
-            </div>
-          </div>
-        </client-only>
         <div class="row mb-5">
           <div class="col-sm-12">
             <div class="home-card">
