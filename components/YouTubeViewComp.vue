@@ -202,7 +202,7 @@ export default {
     this.unbindKeys();
   },
   beforeDestroy() {
-    if (this.unsubscribe) this.unsubscribe()
+    if (this.unsubscribe) this.unsubscribe();
   },
   watch: {
     /**
@@ -359,12 +359,21 @@ export default {
       if (this.previousEpisode)
         this.$router.push({
           name: "youtube-view",
-          params: this.previousEpisode,
+          params: {
+            youtube_id: this.previousEpisode.youtube_id,
+            lesson: this.previousEpisode.lesson,
+          },
         });
     },
     goToNextEpisode() {
       if (this.nextEpisode)
-        this.$router.push({ name: "youtube-view", params: this.nextEpisode });
+        this.$router.push({
+          name: "youtube-view",
+          params: {
+            youtube_id: this.nextEpisode.youtube_id,
+            lesson: this.nextEpisode.lesson,
+          },
+        });
     },
     close() {
       if (this.layout !== "mini") this.$router.push(this.minimizeVideoTo);
