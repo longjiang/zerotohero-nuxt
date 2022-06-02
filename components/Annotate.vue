@@ -444,8 +444,10 @@ export default {
       this.annotated = false;
       this.annotating = true;
       this.annotatedSlots = [];
+      let annotatedNode = await this.annotateRecursive(node.cloneNode(true))
+      let annotatedHtml = annotatedNode.outerHTML
       this.annotatedSlots.push(
-        $(await this.annotateRecursive(node.cloneNode(true)))[0].outerHTML
+        annotatedHtml
       );
       this.annotating = false;
       this.annotated = true;
@@ -455,6 +457,7 @@ export default {
       if (node && node.classList && node.classList.contains("sentence")) {
         // .sentence node
         let sentence = node.innerText;
+        sentence = sentence.replace(/"/g, "&#34;")
         if (
           this.$l2.code === "my" &&
           this.myanmarZawgyiDetector &&
@@ -490,6 +493,7 @@ export default {
       return sentences.filter((sentence) => sentence.trim() !== "");
     },
     async tokenize(text, batchId) {
+      text = text ? text.replace(/"/g, "&#34;") : ''
       let html = text;
       if (this.$l2.continua) {
         html = await this.tokenizeContinua(text, batchId);
