@@ -70,7 +70,7 @@
                 <a
                   href="https://apps.apple.com/us/app/zero-to-hero-languages/id1623985525"
                   target="_blank"
-                >hey
+                >
                   <img
                     data-not-lazy
                     src="/img/logo-ios-app.png"
