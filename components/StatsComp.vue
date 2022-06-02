@@ -1,6 +1,10 @@
 <template>
   <div class="stats" v-if="stats && $languages">
-    <div class="stats-summary" v-if="variant === 'summary'" style="margin: 0 auto; width: 15rem; line-height: 1.1">
+    <div
+      class="stats-summary"
+      v-if="variant === 'summary'"
+      style="margin: 0 auto; width: 15rem; line-height: 1.1"
+    >
       <div class="d-flex">
         <div style="flex: 1" class="text-center">
           <b class="stat-big-number">{{ formatNumber(stats.totalCount) }}</b>
@@ -47,7 +51,8 @@
 </template>
 
 <script>
-import axios from "axios";
+import Helper from '@/lib/helper';
+
 export default {
   props: {
     variant: {
@@ -60,8 +65,11 @@ export default {
     languageData: [],
   }),
   async created() {
-    let res = await axios.get("https://db2.zerotohero.ca/count-all.php");
-    this.stats = res.data;
+    let data = await Helper.proxy(
+      `https://db2.zerotohero.ca/count-all.php`,
+      { cacheLife: this.$adminMode ? 0 : 86400 } // cache the count for one day (86400 seconds)
+    );
+    this.stats = data;
     let languages = await this.$languagesPromise;
     let languageData = [];
     for (let langId in this.stats.langCounts) {
@@ -75,7 +83,12 @@ export default {
       this.languageData = languageData.sort((a, b) => b.count - a.count);
     }
   },
-  computed: {},
+  computed: {
+    $adminMode() {
+      if (typeof this.$store.state.settings.adminMode !== "undefined")
+        return this.$store.state.settings.adminMode;
+    },
+  },
   methods: {
     // https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
     formatNumber(num) {

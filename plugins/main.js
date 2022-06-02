@@ -163,7 +163,7 @@ export default async ({ app, store, route }, inject) => {
       let tableSuffix = Config.youtubeVideosTableName(l2Id).replace(`${Config.wiki}items/youtube_videos`, '')
       let data = await Helper.proxy(
         `https://db2.zerotohero.ca/count.php?table_suffix=${tableSuffix}&lang_id=${l2Id}&type=${showType}&id=${showId}`,
-        { cacheLife: adminMode ? 86400 : 0 } // cache the count for one day (86400 seconds)
+        { cacheLife: adminMode ? 0 : 86400 } // cache the count for one day (86400 seconds)
       );
       if (data) return data
     },
