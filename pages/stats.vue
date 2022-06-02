@@ -18,7 +18,6 @@
       <div class="row">
         <div class="col-sm-12 pt-5 pb-5">
           <h4 class="text-center mb-4">Zero to Hero Video Stats by Language</h4>
-          <StatsComp variant="summary" />
           <StatsComp />
         </div>
       </div>
