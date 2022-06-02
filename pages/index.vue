@@ -63,14 +63,14 @@
             </div>
           </div>
         </client-only>
-        <div class="row">
+        <div class="row" v-if="!native">
           <div class="col-sm-12">
             <div style="line-height: 1.2; color: white; text-align: center">
               <div class="mt-4 mb-4">
                 <a
                   href="https://apps.apple.com/us/app/zero-to-hero-languages/id1623985525"
                   target="_blank"
-                >
+                >hey
                   <img
                     data-not-lazy
                     src="/img/logo-ios-app.png"
@@ -599,6 +599,8 @@
 </template>
 
 <script>
+import { Capacitor } from '@capacitor/core';
+
 export default {
   data() {
     return {
@@ -613,6 +615,9 @@ export default {
     };
   },
   computed: {
+    native() {
+      return Capacitor.isNativePlatform()
+    },
     browserLanguage() {
       if (process.browser) {
         let code = navigator.language.replace(/-.*/, "");
