@@ -194,6 +194,9 @@ export default {
       }
     },
   },
+  async created() {
+    await this.$languagesPromise
+  },
   methods: {
     mapCodes(codes) {
       return codes.map((c) => this.$languages.getSmart(c)).filter((l) => l);

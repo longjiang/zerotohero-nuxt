@@ -643,7 +643,9 @@ export default {
       }
     },
   },
-  created() {},
+  async created() {
+    await this.$languagesPromise
+  },
   mounted() {
     this.loaded = true;
   },

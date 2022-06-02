@@ -83,12 +83,14 @@ export default async ({ app, store, route }, inject) => {
       let l1Code = route.params.l1
       let l2Code = route.params.l2
       if (l1Code && l2Code) {
-        let languages = await Languages.load([l1Code, l2Code])
-        inject('languages', languages)
+        let languagesPromise = Languages.load([l1Code, l2Code])
+        inject('languagesPromise', languagesPromise)
+        inject('languages', await languagesPromise)
       }
     } else {
-      let languages = await Languages.load()
-      inject('languages', languages)
+      let languagesPromise = Languages.load()
+      inject('languagesPromise', languagesPromise)
+      inject('languages', await languagesPromise)
     }
   }
 
