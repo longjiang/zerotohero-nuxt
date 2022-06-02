@@ -370,7 +370,7 @@ export default {
       }
     },
     async getVideos({ keyword, limit = this.perPage, offset = 0, sort = "title" } = {}) {
-      if (this.show.episodes && this.show.episodes.length >= offset + limit) return this.show.episodes.slice(offset, limit);
+      if (!keyword && this.show.episodes && this.show.episodes.length >= offset + limit) return this.show.episodes.slice(offset, limit);
       else {
         return await this.getVideosFromServer({ keyword, limit, offset, sort });
       }
