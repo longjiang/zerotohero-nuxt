@@ -93,7 +93,7 @@ export default {
   methods: {
     async getStats(refresh = false) {
       let data = await Helper.proxy(
-        `https://db2.zerotohero.ca/count-all.php`,
+        `https://db2.zerotohero.ca/count-all.php${refresh ? '?timestamp=' + Date.now() : ''}`,
         { cacheLife: refresh ? 0 : 86400 } // cache the count for one day (86400 seconds)
       );
       this.stats = data;
