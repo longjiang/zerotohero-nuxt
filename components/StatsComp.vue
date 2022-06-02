@@ -1,43 +1,60 @@
 <template>
   <div class="stats" v-if="stats && $languages">
-    <div class="total-count">
-      <b>Total Video Count:</b>
-      {{ formatNumber(stats.totalCount) }}
+    <div class="stats-summary" v-if="variant === 'summary'" style="margin: 0 auto; width: 15rem; line-height: 1.1">
+      <div class="d-flex">
+        <div style="flex: 1" class="text-center">
+          <b class="stat-big-number">{{ formatNumber(stats.totalCount) }}</b>
+          <br />
+          Videos
+        </div>
+        <div style="flex: 1" class="text-center">
+          <b class="stat-big-number">{{ stats.langs.length }}</b>
+          <br />
+          Languages
+        </div>
+      </div>
     </div>
-    <div class="total-count">
-      <b>Total Language Count:</b>
-      {{ stats.langs.length }}
+    <div class="stats-full" v-if="variant === 'full'">
+      <table class="mt-4 table">
+        <thead>
+          <tr>
+            <th>Language</th>
+            <th>Video Count</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="row in languageData"
+            :key="`lang-count-${row.language.id}`"
+          >
+            <td>
+              <router-link
+                :to="{
+                  name: 'all-media',
+                  params: { l1: 'en', l2: row.language.code },
+                }"
+              >
+                {{ row.language.name }}
+                <small>({{ row.language.code }}, #{{ row.language.id }})</small>
+              </router-link>
+            </td>
+            <td>{{ formatNumber(row.count) }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <table class="mt-4 table">
-      <thead>
-        <tr>
-          <th>Language</th>
-          <th>Video Count</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="row in languageData" :key="`lang-count-${row.language.id}`">
-          <td>
-            <router-link
-              :to="{
-                name: 'all-media',
-                params: { l1: 'en', l2: row.language.code },
-              }"
-            >
-              {{ row.language.name }}
-              <small>({{ row.language.code }}, #{{ row.language.id }})</small>
-            </router-link>
-          </td>
-          <td>{{ formatNumber(row.count) }}</td>
-        </tr>
-      </tbody>
-    </table>
   </div>
 </template>
 
 <script>
 import axios from "axios";
 export default {
+  props: {
+    variant: {
+      type: String,
+      default: "full", // or 'summary'
+    },
+  },
   data: () => ({
     stats: undefined,
     languageData: [],
@@ -72,6 +89,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.stat-big-number {
+  color: #1bd445;
+  font-size: 1.5rem;
+}
 .total-count {
   margin-top: 1rem;
 }

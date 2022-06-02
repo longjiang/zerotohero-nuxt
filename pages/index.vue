@@ -40,6 +40,14 @@
             <p class="blurb text-white text-center">
               Learn languages naturally with videos.
             </p>
+            <div class="text-center text-white mt-3">
+              <StatsComp variant="summary" />
+              <div class="mt-2">
+                <router-link :to="{ name: 'stats' }" style="color: #1bd445">
+                  <small>Full stats <i class="fas fa-angle-right ml-1"></i></small>
+                </router-link>
+              </div>
+            </div>
           </div>
         </div>
         <client-only>
@@ -338,10 +346,10 @@
             <div class="col-sm-12">
               <div class="home-card p-2">
                 <h5 class="text-center mt-3 mb-3">Learn More Languages</h5>
-                <div class="mb-3" style="display: flex;">
+                <div class="mb-3" style="display: flex">
                   <b-form-input
                     v-model="langKeyword"
-                    style="flex: 1; margin-right: 0.5rem;"
+                    style="flex: 1; margin-right: 0.5rem"
                     @compositionend.prevent.stop="() => false"
                     placeholder="Search languages"
                   />
@@ -350,7 +358,8 @@
                     to="/language-map"
                   >
                     <i class="fas fa-globe-asia mr-1"></i>
-                    <span class="d-none d-sm-inline">Language</span> Map
+                    <span class="d-none d-sm-inline">Language</span>
+                    Map
                     <i class="ml-1 fas fa-chevron-right"></i>
                   </router-link>
                 </div>
@@ -574,7 +583,7 @@
 </template>
 
 <script>
-import { Capacitor } from '@capacitor/core';
+import { Capacitor } from "@capacitor/core";
 
 export default {
   data() {
@@ -591,7 +600,7 @@ export default {
   },
   computed: {
     native() {
-      return Capacitor.isNativePlatform()
+      return Capacitor.isNativePlatform();
     },
     browserLanguage() {
       if (process.browser) {
@@ -644,7 +653,7 @@ export default {
     },
   },
   async created() {
-    await this.$languagesPromise
+    await this.$languagesPromise;
   },
   mounted() {
     this.loaded = true;
@@ -795,5 +804,9 @@ export default {
     text-shadow: 0 0 15px rgba(0, 0, 0);
     margin-left: 0.5rem;
   }
+}
+
+::v-deep .stats-summary {
+  color: #ccc;
 }
 </style>

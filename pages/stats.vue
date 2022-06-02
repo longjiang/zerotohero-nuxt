@@ -10,14 +10,15 @@
 <template>
   <div class="bg-white" style="min-height: 100vh">
     <SocialHead
-      title="Status | Zero to Hero Languages"
+      title="Stats | Zero to Hero Languages"
       description="How many videos we have for each language.”"
     />
     <SiteTopBar />
     <div class="container">
       <div class="row">
         <div class="col-sm-12 pt-5 pb-5">
-          <h3 class="text-center">Video Stats</h3>
+          <h4 class="text-center mb-4">Zero to Hero Video Stats by Language</h4>
+          <StatsComp variant="summary" />
           <StatsComp />
         </div>
       </div>
