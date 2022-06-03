@@ -76,7 +76,7 @@
       >
         <Loader :sticky="true" />
       </div>
-      <EndQuiz :lines="lines" :matchedParallelLines="matchedParallelLines" :hsk="hsk"  :skin="skin" />
+      <EndQuiz v-if="!single" :lines="lines" :matchedParallelLines="matchedParallelLines" :hsk="hsk"  :skin="skin" />
     </client-only>
   </div>
 </template>
