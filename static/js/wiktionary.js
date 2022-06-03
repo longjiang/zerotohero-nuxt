@@ -75,7 +75,7 @@ const Dictionary = {
   conjugations: undefined, // for french only
   romanizations: undefined, // for persian only
   accentCritical: false,
-  accentCriticalLangs: ["tur", "vie"], // Languages that should not strip accents when searching
+  accentCriticalLangs: ["tur", "vie", "fra"], // Languages that should not strip accents when searching
   credit() {
     let credit = `The dictionary is provided by <a href="https://en.wiktionary.org/wiki/Wiktionary:Main_Page">Wiktionary</a>, which is freely distribtued under the <a href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike License</a>. The dictionary is parsed by <a href="https://github.com/tatuylonen/wiktextract">wiktextract</a>.`;
     if (this.l2 === "fas")
