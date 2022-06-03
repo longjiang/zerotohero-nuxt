@@ -192,6 +192,7 @@ export default {
           `YouTube View (Fetch): Getting channel information with youtube api...`
         );
         videoFromApi = await YouTube.videoByApi(this.youtube_id);
+        if (!videoFromApi) videoFromApi = { youtube_id: this.youtube_id };
       }
       this.video = this.mergeVideos(savedVideo, videoFromApi);
     } catch (e) {

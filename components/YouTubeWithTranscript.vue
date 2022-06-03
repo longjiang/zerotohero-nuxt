@@ -63,6 +63,7 @@
         v-if="layout === 'horizontal'"
       >
         <h3
+          v-if="video.title"
           :class="{
             h4: video.title.length > 30,
             h5: video.title.length > 60,
@@ -72,7 +73,7 @@
           <span v-if="video" :key="`video-title-${video.title}`">
             <Annotate
               :phonetics="false"
-              :buttons="false"
+              :buttons="true"
               v-if="$l2.code !== 'tlh' && $l2.direction !== 'rtl'"
             >
               <span>{{ video.title }}</span>
