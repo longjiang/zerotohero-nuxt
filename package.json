@@ -38,7 +38,7 @@
     "html-entities": "^1.4.0",
     "idb": "^7.0.1",
     "idle-vue": "^2.0.5",
-    "iframe-translator": "^0.3.3",
+    "iframe-translator": "^0.3.4",
     "jquery": "^3.6.0",
     "leaflet": "^1.7.1",
     "marked": "^2.0.4",
