@@ -4,7 +4,7 @@
       :class="{
         'annotate-wrapper': true,
         'annotate-wrapper-wide': params.lg,
-        'annotate-with-translation': translation,
+        'annotate-with-translation': showTranslation && translation,
       }"
     >
       <component
