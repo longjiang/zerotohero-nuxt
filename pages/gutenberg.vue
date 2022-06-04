@@ -12,43 +12,18 @@
           class="col-sm-12 col-lg-8 col-xl-9 pt-3 pb-5"
           v-if="bookData && filteredHtml"
         >
-          <LazyTextWithSpeechBar :html="filteredHtml" :page="page" />
-
-          <div class="mt-5 text-center d-flex">
-            <router-link
-              v-if="Number(page) > 1"
-              class="btn btn-success btn-lg d-block w-100 mr-1 flex-1"
-              :to="{
-                name: 'gutenberg',
-                params: {
-                  id,
-                  book,
-                  title,
-                  page: page ? Number(page) - 1 : undefined,
-                },
-              }"
-            >
-              <i class="fas fa-chevron-left"></i>
-            </router-link>
-            <router-link
-              class="btn btn-success btn-lg w-100 d-block ml-1 flex-1"
-              :to="{
-                name: 'gutenberg',
-                params: {
-                  id,
-                  book,
-                  title,
-                  page: page ? Number(page) + 1 : undefined,
-                },
-              }"
-            >
-              Next Page
-              <i class="fas fa-chevron-right ml-1"></i>
-            </router-link>
-          </div>
+          <LazyTextWithSpeechBar
+            :html="filteredHtml"
+            :page="page"
+            @previousPage="onPreviousPage"
+            @nextPage="onNextPage"
+          />
         </div>
-        <div class="col-sm-12 col-lg-4 col-xl-3" style="border: 1px solid #ddd; border-radius: 0.5rem; padding: 1rem;">
-          <div style="max-width: 15rem; margin: 0 auto;">
+        <div
+          class="col-sm-12 col-lg-4 col-xl-3"
+          style="border: 1px solid #ddd; border-radius: 0.5rem; padding: 1rem"
+        >
+          <div style="max-width: 15rem; margin: 0 auto">
             <div class="book-info" v-if="bookData">
               <div class="p-4">
                 <router-link
@@ -121,9 +96,43 @@ export default {
     filteredHtml() {
       if (this.html) {
         let parsed = parse(this.html);
-        parsed.querySelectorAll('img').forEach(img => img.setAttribute('src', this.bookData.formats["image/jpeg"].replace(/(.*)\/.*?$/, '$1/') + img.getAttribute('src')))
+        parsed
+          .querySelectorAll("img")
+          .forEach((img) =>
+            img.setAttribute(
+              "src",
+              this.bookData.formats["image/jpeg"].replace(/(.*)\/.*?$/, "$1/") +
+                img.getAttribute("src")
+            )
+          );
         return parsed.querySelector("body").toString();
       }
+    },
+  },
+  methods: {
+    onPreviousPage() {
+      let to = {
+        name: "gutenberg",
+        params: {
+          id: this.id,
+          book: this.book,
+          title: this.title,
+          page: this.page ? Number(this.page) - 1 : undefined,
+        },
+      };
+      this.$router.push(to);
+    },
+    onNextPage() {
+      let to = {
+        name: "gutenberg",
+        params: {
+          id: this.id,
+          book: this.book,
+          title: this.title,
+          page: this.page ? Number(this.page) + 1 : undefined,
+        },
+      };
+      this.$router.push(to);
     },
   },
   async created() {

@@ -81,6 +81,22 @@
           </div>
         </div>
       </div>
+      <div class="speech-nav mt-5 text-center d-flex pb-4" v-if="page">
+        <button
+          v-if="Number(page) > 1"
+          class="btn btn-success btn-lg d-block w-100 mr-1 flex-1"
+          @click="$emit('previousPage')"
+        >
+          <i class="fas fa-chevron-left"></i> Previous
+        </button>
+        <button
+          class="btn btn-success btn-lg w-100 d-block ml-1 flex-1"
+          @click="$emit('nextPage')"
+        >
+          Next
+          <i class="fas fa-chevron-right ml-1"></i>
+        </button>
+      </div>
     </div>
   </container-query>
 </template>
