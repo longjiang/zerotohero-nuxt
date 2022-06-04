@@ -49,6 +49,7 @@
         :class="`speech-content ${params.lg ? 'speech-content-wide' : ''} ${
           translation ? 'with-translation' : ''
         }`"
+        :key="`speech-content-page-${page}`"
       >
         <div
           class="line w-100 mb-4"

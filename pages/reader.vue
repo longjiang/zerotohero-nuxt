@@ -43,8 +43,11 @@
           </p>
           <ReaderComp
             ref="reader"
+            :page="page"
             @readerTextChanged="readerTextChanged"
             @readerTranslationChanged="readerTranslationChanged"
+            @previousPage="onPreviousPage"
+            @nextPage="onNextPage"
           />
           <FeedbackPrompt
             class="mt-3"
@@ -129,12 +132,13 @@ export default {
       text: "",
       translation: "",
       dictionaryCredit: undefined,
+      page: 1
     };
   },
   watch: {
     $route() {
-      if (this.$route.name === "reader") {
-        this.route();
+      if (this.$route.query && this.$route.query.p) {
+        this.page = Number(this.$route.query.p)
       }
     },
     text() {
@@ -153,6 +157,9 @@ export default {
     let arg = this.arg;
     let text;
     let translation;
+    if (this.$route.query && this.$route.query.p) {
+      this.page = Number(this.$route.query.p)
+    }
     if (method === "shared") {
       try {
         let id = arg;
@@ -198,6 +205,33 @@ export default {
     },
   },
   methods: {
+    onPreviousPage() {
+      let to = {
+        name: "reader",
+        params: {
+          method: this.method,
+          arg: this.arg,
+        },
+        query: {
+          p: this.page ? this.page - 1 : undefined,
+        }
+      };
+      this.$router.push(to);
+    },
+    onNextPage() {
+      let to = {
+        name: "reader",
+        params: {
+          method: this.method,
+          arg: this.arg,
+        },
+        query: {
+          p: this.page ? this.page + 1 : undefined,
+        }
+      };
+      console.log({to})
+      this.$router.push(to);
+    },
     readerTextChanged(text) {
       this.save(text);
     },

@@ -45,7 +45,10 @@
             :html="marked"
             :translation="translation"
             :key="marked"
+            :page="page"
             @translation="onTranslation"
+            @previousPage="$emit('previousPage')"
+            @nextPage="$emit('nextPage')"
           />
         </div>
         <div v-if="savedWordIdsInText && savedWordIdsInText.length > 0" id="vocabulary-list" class="mb-4 pb-4">
@@ -227,6 +230,10 @@ export default {
     iconMode: {
       default: false,
     },
+    page: {
+      type: Number,
+      default: 1
+    }
   },
   computed: {
     ...mapState("savedWords", ["savedWords"]),
