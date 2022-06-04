@@ -45,6 +45,7 @@
             :html="marked"
             :translation="translation"
             :key="marked"
+            @translation="onTranslation"
           />
         </div>
         <div v-if="savedWordIdsInText && savedWordIdsInText.length > 0" id="vocabulary-list" class="mb-4 pb-4">
@@ -316,6 +317,9 @@ export default {
     },
   },
   methods: {
+    onTranslation(translation) {
+      this.translation = translation
+    },
     copyClick() {
       let text = this.shareURL;
       var tempInput = document.createElement("input");

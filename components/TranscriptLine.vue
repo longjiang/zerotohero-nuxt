@@ -50,6 +50,7 @@
             v-if="!showSubsEditing"
             style="flex: 1"
             @translation="onTranslation"
+            @translationLoading="translationLoading = true"
             @textChanged="lineChanged(line, ...arguments)"
             @annotated="updateAnnotated"
           >
@@ -64,19 +65,28 @@
           </div>
         </div>
         <div
-          v-if="line.line.length > 0 && (parallelLine || translation)"
           :class="{
             'transcript-line-l1': true,
             'transcript-line-l1-rtl': !single && $l2.direction === 'rtl',
             'transcript-line-l1-single': single,
             transparent: !annotated,
           }"
-          v-html="(translation || parallelLine).replace(/\n/g, '<br/>')"
-          :contenteditable="enableTranslationEditing"
-          :data-line-index="lineIndex"
-          @blur.capture="trasnlationLineBlur"
-          @keydown.capture="trasnlationLineKeydown"
-        ></div>
+        >
+          <beat-loader
+            v-if="translationLoading"
+            class="d-inline-block"
+            color="#28a745"
+            size="5px"
+          ></beat-loader>
+          <span
+            v-else-if="line.line.length > 0 && (parallelLine || translation)"
+            :data-line-index="lineIndex"
+            v-html="(translation || parallelLine).replace(/\n/g, '<br/>')"
+            :contenteditable="enableTranslationEditing"
+            @blur.capture="trasnlationLineBlur"
+            @keydown.capture="trasnlationLineKeydown"
+          ></span>
+        </div>
       </div>
     </div>
   </container-query>
@@ -85,10 +95,12 @@
 <script>
 import Helper from "@/lib/helper";
 import { ContainerQuery } from "vue-container-query";
+import BeatLoader from 'vue-spinner/src/BeatLoader.vue'
 
 export default {
   components: {
     ContainerQuery,
+    BeatLoader
   },
   props: {
     line: {
@@ -143,6 +155,7 @@ export default {
       lineStarted: false,
       durationPlayed: 0,
       animateOnceAnnotated: undefined,
+      translationLoading: false,
       translation: undefined, // From user's clicking the translate button inside <Anntoate>
       params: {},
       query: {
@@ -176,6 +189,7 @@ export default {
   methods: {
     onTranslation(translation) {
       this.translation = translation;
+      this.translationLoading = false;
     },
     updateAnnotated(annotated) {
       this.annotated = annotated;
@@ -229,7 +243,7 @@ export default {
           }"></PopupNote>`;
         });
       }
-      html = html.replace(/\n/g, '<br/>')
+      html = html.replace(/\n/g, "<br/>");
       return html;
     },
     highlightMultiple() {

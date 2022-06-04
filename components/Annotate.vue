@@ -132,7 +132,7 @@
           />
         </template>
       </component>
-      <div class="annotate-translation" v-if="translationLoading || translation">
+      <div class="annotate-translation" v-if="showTranslation && (translationLoading || translation)">
         <beat-loader class="d-inline-block" v-if="translationLoading" color="#28a745" size="5px"></beat-loader>
         {{ translation ? translation : '' }}
       </div>
@@ -291,25 +291,31 @@ export default {
   methods: {
     async translateClick() {
       let text = this.text;
-      const iframeTranslationClient = await getClient();
+      let iframeTranslationClient
       try {
         // https://www.npmjs.com/package/iframe-translator
         this.translationLoading = true
-        this.$emit("translationLoading")
+        this.$emit("translationLoading", true)
+        iframeTranslationClient = await getClient();
         let translation = await iframeTranslationClient.translate(
           text,
           this.$l1.code
         );
         this.translationLoading = false
+        this.$emit("translationLoading", false)
         if (translation) {
           this.$emit("translation", translation);
-          if (this.showTranslation) this.translation = translation;
+          this.translation = translation;
         }
+        iframeTranslationClient.destroy();
       } catch (err) {
+        this.translation = '[Translation error, please try again.]'
+        this.translationLoading = false
+        this.$emit("translation", this.translation);
+        this.$emit("translationLoading", false)
         Helper.logError(err);
         iframeTranslationClient.destroy(); // Make sure to destroy the client otherwise whenever there is an error and the translation is not returned, the client is never destroyed and ios users can't scroll
       }
-      iframeTranslationClient.destroy();
     },
     async playAnimation(startFrom) {
       if (!this.annotated) {

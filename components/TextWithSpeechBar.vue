@@ -2,7 +2,13 @@
   <container-query :query="query" v-model="params">
     <div id="speech-container">
       <div
-        v-if="(html && voices && voices.length > 0) && ($hasFeature('speech') || !foreign) && browser()"
+        v-if="
+          html &&
+          voices &&
+          voices.length > 0 &&
+          ($hasFeature('speech') || !foreign) &&
+          browser()
+        "
         class="speech-bar mb-4 bg-white pt-2 pb-2"
       >
         <client-only>
@@ -55,11 +61,23 @@
             :foreign="foreign"
             :emitSentenceTextAsAttr="true"
             :buttons="true"
+            :showTranslation="translation ? false : true"
+            @translation="onTranslation($event, lineIndex)"
+            @translationLoading="onTranslationLoading($event, lineIndex)"
           >
             <div v-html="line.trim()" />
           </Annotate>
-          <div v-if="translation" class="translation-line">
-            {{ parallellines[lineIndex] }}
+          <div
+            v-if="translation || translationLoading"
+            class="translation-line"
+          >
+            <beat-loader
+              v-if="translationLoading[lineIndex]"
+              class="d-inline-block"
+              color="#28a745"
+              size="5px"
+            ></beat-loader>
+            <span v-else-if="translation">{{ parallellines[lineIndex] }}</span>
           </div>
         </div>
       </div>
@@ -70,9 +88,12 @@
 <script>
 import { parse } from "node-html-parser";
 import { ContainerQuery } from "vue-container-query";
+import Vue from "vue";
+import BeatLoader from "vue-spinner/src/BeatLoader.vue";
 
 export default {
   components: {
+    BeatLoader,
     ContainerQuery,
   },
   props: {
@@ -99,6 +120,7 @@ export default {
       speed: 1,
       utterance: undefined,
       speaking: false,
+      translationLoading: {},
       voices: [],
       params: {},
       query: {
@@ -150,6 +172,25 @@ export default {
     },
   },
   methods: {
+    onTranslationLoading(translationLoading, lineIndex) {
+      Vue.set(this.translationLoading, lineIndex, translationLoading);
+    },
+    onTranslation(t, lineIndex) {
+      let parallellines = [];
+      if (this.translation) {
+        parallellines = this.translation
+          .replace(/\n+/g, "\n")
+          .trim()
+          .split("\n");
+      } else {
+        for (let i = 0; i < this.lines.length; i++) {
+          parallellines.push("-");
+        }
+      }
+      parallellines[lineIndex] = t;
+      let translation = parallellines.join("\n");
+      this.$emit("translation", translation);
+    },
     toggleSpeed() {
       let speeds = [1, 0.75, 0.5];
       let index = speeds.findIndex((s) => s === this.speed);
