@@ -82,7 +82,11 @@
           </div>
         </div>
       </div>
-      <div class="speech-nav mt-5 text-center d-flex pb-4" v-if="page" style="justify-content: center; align-items: center">
+      <div
+        class="speech-nav mt-5 text-center d-flex pb-4"
+        v-if="page"
+        style="justify-content: center; align-items: center"
+      >
         <button
           v-if="Number(page) > 1"
           class="btn btn-success btn-sm mr-1"
@@ -165,25 +169,39 @@ export default {
         .split("ANNOTATORSEPARATOR!!!");
       lines = lines.map((line) => this.augmentHtml(line));
       lines = lines.filter((l) => l.trim() !== "");
-      return lines
+      return lines;
     },
     lines() {
-      let lines = this.allLines
-      if (this.page) lines = lines.slice(this.linesPerPage * (this.page - 1), this.linesPerPage * this.page);
+      let lines = this.allLines;
+      if (this.page)
+        lines = lines.slice(
+          this.linesPerPage * (this.page - 1),
+          this.linesPerPage * this.page
+        );
       return lines;
     },
     pageCount() {
-      return Math.ceil(this.allLines.length / this.linesPerPage)
+      return Math.ceil(this.allLines.length / this.linesPerPage);
     },
     parallellines() {
-      if (this.translation)
-        return this.translation.replace(/\n+/g, "\n").split("\n");
+      if (this.translation) {
+        let parallelLines = this.translation.replace(/\n+/g, "\n").split("\n");
+        if (this.page)
+          parallelLines = parallelLines.slice(
+            this.linesPerPage * (this.page - 1),
+            this.linesPerPage * this.page
+          );
+        return parallelLines;
+      }
     },
   },
   mounted() {
     this.getVoices();
   },
   watch: {
+    page() {
+      this.current = 0
+    },
     speed() {
       if (this.speaking) {
         this.pause();
@@ -209,10 +227,11 @@ export default {
           .trim()
           .split("\n");
       } else {
-        for (let i = 0; i < this.lines.length; i++) {
+        for (let i = 0; i < this.allLines.length; i++) {
           parallellines.push("-");
         }
       }
+      if (this.page) lineIndex = Number(lineIndex) + (this.page - 1) * this.linesPerPage;
       parallellines[lineIndex] = t;
       let translation = parallellines.join("\n");
       this.$emit("translation", translation);

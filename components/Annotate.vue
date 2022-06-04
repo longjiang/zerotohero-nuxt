@@ -314,7 +314,12 @@ export default {
         this.$emit("translation", this.translation);
         this.$emit("translationLoading", false)
         Helper.logError(err);
-        iframeTranslationClient.destroy(); // Make sure to destroy the client otherwise whenever there is an error and the translation is not returned, the client is never destroyed and ios users can't scroll
+        try {
+          iframeTranslationClient.destroy(); // Make sure to destroy the client otherwise whenever there is an error and the translation is not returned, the client is never destroyed and ios users can't scroll
+        } catch(err) {
+          Helper.logError(err);
+        }
+        
       }
     },
     async playAnimation(startFrom) {
