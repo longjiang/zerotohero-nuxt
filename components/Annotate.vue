@@ -153,6 +153,7 @@ import { transliterate as tr } from "transliteration";
 import { mapState } from "vuex";
 import { ContainerQuery } from "vue-container-query";
 import { getClient } from "iframe-translator";
+import SmartQuotes from "smartquotes";
 
 export default {
   components: {
@@ -457,7 +458,11 @@ export default {
       if (node && node.classList && node.classList.contains("sentence")) {
         // .sentence node
         let sentence = node.innerText;
-        sentence = sentence.replace(/"/g, "&#34;")
+        // If the language is does not use apostrophes as part of the word (like Klingon)
+        if (!this.$l2.apostrophe) sentence = SmartQuotes.string(sentence) // We MUST do that otherwise the data-sentence-text attribute (10 lines down) will mess up the markup!
+        else {
+          sentence = SmartQuotes.string(sentence.replace(/'/g, "--do-not-smart-quote-single-quotes--")).replace(/--do-not-smart-quote-single-quotes--/g, "'")
+        }
         if (
           this.$l2.code === "my" &&
           this.myanmarZawgyiDetector &&
@@ -468,7 +473,7 @@ export default {
             sentence = this.myanmarZawgyiConverter.zawgyiToUnicode(sentence);
         }
         let html = await this.tokenize(sentence, this.batchId);
-        let dataSentenceText = this.emitSentenceTextAsAttr ? `data-sentence-text="${sentence.trim().replace(/"/g, '\"')}"` : ''
+        let dataSentenceText = this.emitSentenceTextAsAttr ? `data-sentence-text="${sentence.trim()}"` : ''
         let $tokenizedSentenceSpan = $(`<span class="sentence" ${dataSentenceText}>${html}</span>`);
         this.batchId = this.batchId + 1;
         $(node).before($tokenizedSentenceSpan);
@@ -493,8 +498,7 @@ export default {
       return sentences.filter((sentence) => sentence.trim() !== "");
     },
     async tokenize(text, batchId) {
-      text = text ? text.replace(/"/g, "&#34;") : ''
-      let html = text;
+      let html = text ? text : '';
       if (this.$l2.continua) {
         html = await this.tokenizeContinua(text, batchId);
       } else if (
@@ -627,7 +631,7 @@ export default {
         let sentences = this.breakSentences(text);
         for (let sentence of sentences) {
           // $(node).before(`<span id="sentence-placeholder-${this.batchId}">${sentence}</span>`)
-          let dataSentenceText = this.emitSentenceTextAsAttr ? `data-sentence-text="${sentence.trim().replace(/"/g, '\"')}"` : ''
+          let dataSentenceText = this.emitSentenceTextAsAttr ? `data-sentence-text="${sentence.trim()}"` : ''
           let sentenceSpan = $(`<span class="sentence" ${dataSentenceText}>${sentence}</span>`);
           $(node).before(sentenceSpan);
         }
