@@ -99,13 +99,13 @@
             />
             <client-only>
               <div class="text-center mb-3">
-                <Star :word="entry" />
+                <Star :word="entry" class="ml-1 mr-1"/>
                 <Paginator
-                  class="d-inline-block ml-2"
+                  class="d-inline-block ml-1 mr-1"
                   v-if="saved() && sW.length > 0"
                   :items="sW"
+                  :home="{ name: 'saved-words' }"
                   :findCurrent="(item) => item.id === entry.id"
-                  append=" Saved Words"
                   :url="
                     (item) =>
                       `/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${item.id}`
@@ -198,7 +198,10 @@
               style="margin-top: 10rem"
               :key="`${entry.id}-course-ad`"
             />
-            <FeedbackPrompt class="mb-5" :skin="$route.meta ? $route.meta.skin : 'light'"/>
+            <FeedbackPrompt
+              class="mb-5"
+              :skin="$route.meta ? $route.meta.skin : 'light'"
+            />
           </div>
         </div>
       </div>
