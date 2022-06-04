@@ -572,6 +572,18 @@ export default {
               shortcut: (e) => e.code === "KeyR" && e.metaKey && e.shiftKey,
             },
             {
+              name: "keyboard",
+              icon: "fas fa-keyboard",
+              title: "Keyboard",
+              show: this.hasFeature("keyboard"),
+            },
+            {
+              name: "bookmarklet",
+              icon: "fas fa-bookmark",
+              title: "Bookmarklet",
+              show: this.hasFeature("bookmarklet"),
+            },
+            {
               name: "books",
               title: "Books",
               icon: "fas fa-book-reader",
@@ -652,18 +664,6 @@ export default {
             {
               name: "grammar-view",
               show: false,
-            },
-            {
-              name: "keyboard",
-              icon: "fas fa-keyboard",
-              title: "Keyboard",
-              show: this.hasFeature("keyboard"),
-            },
-            {
-              name: "bookmarklet",
-              icon: "fas fa-bookmark",
-              title: "Bookmarklet",
-              show: this.hasFeature("bookmarklet"),
             },
             {
               name: "explore-related",
