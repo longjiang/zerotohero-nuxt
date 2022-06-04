@@ -775,7 +775,7 @@ export default {
         if (
           this.words &&
           this.words.find(
-            (w) => w.pos && ["proper noun", "noun", "Noun"].includes(w.pos)
+            (w) => w.pos && ["proper noun", "noun", "Noun", "name", "n"].includes(w.pos)
           )
         )
           this.loadImages();
