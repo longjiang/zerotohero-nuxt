@@ -86,10 +86,10 @@
     "wikimedia-commons-file-path": "^2.0.0"
   },
   "devDependencies": {
+    "@capacitor/android": "^3.5.1",
     "@capacitor/cli": "^3.5.1",
     "@capacitor/core": "^3.5.1",
     "@capacitor/ios": "^3.5.1",
-    "@capacitor/android": "^3.5.1",
     "@nuxt/types": "^2.15.3",
     "@nuxtjs/eslint-module": "^3.0.2",
     "@nuxtjs/google-fonts": "^1.3.0",

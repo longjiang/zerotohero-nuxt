@@ -69,7 +69,7 @@
                 title="Translate Inline"
                 @click="translateClick"
               >
-                <i class="fas fa-language"></i>
+                <i class="fas fa-language" ></i>
               </span>
               <span
                 class="
@@ -132,8 +132,9 @@
           />
         </template>
       </component>
-      <div class="annotate-translation" v-if="translation">
-        {{ translation }}
+      <div class="annotate-translation" v-if="translationLoading || translation">
+        <beat-loader class="d-inline-block" v-if="translationLoading" color="#28a745" size="5px"></beat-loader>
+        {{ translation ? translation : '' }}
       </div>
     </div>
 
@@ -154,7 +155,8 @@ import { mapState } from "vuex";
 import { ContainerQuery } from "vue-container-query";
 import { getClient } from "iframe-translator";
 import SmartQuotes from "smartquotes";
-
+import BeatLoader from 'vue-spinner/src/BeatLoader.vue'
+ 
 export default {
   components: {
     wordblock,
@@ -162,6 +164,7 @@ export default {
     booklink,
     VRuntimeTemplate,
     ContainerQuery,
+    BeatLoader,
   },
   props: {
     animationDuration: {
@@ -214,6 +217,7 @@ export default {
       annotated: false,
       annotating: false,
       translate: false,
+      translationLoading: false,
       fullscreenMode: false,
       selectedText: undefined,
       batchId: 0,
@@ -290,10 +294,13 @@ export default {
       const iframeTranslationClient = await getClient();
       try {
         // https://www.npmjs.com/package/iframe-translator
+        this.translationLoading = true
+        this.$emit("translationLoading")
         let translation = await iframeTranslationClient.translate(
           text,
           this.$l1.code
         );
+        this.translationLoading = false
         if (translation) {
           this.$emit("translation", translation);
           if (this.showTranslation) this.translation = translation;
