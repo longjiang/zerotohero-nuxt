@@ -82,19 +82,20 @@
           </div>
         </div>
       </div>
-      <div class="speech-nav mt-5 text-center d-flex pb-4" v-if="page">
+      <div class="speech-nav mt-5 text-center d-flex pb-4" v-if="page" style="justify-content: center; align-items: center">
         <button
           v-if="Number(page) > 1"
-          class="btn btn-success btn-lg d-block w-100 mr-1 flex-1"
+          class="btn btn-success btn-sm mr-1"
           @click="$emit('previousPage')"
         >
-          <i class="fas fa-chevron-left"></i> Previous
+          <i class="fas fa-chevron-left"></i>
         </button>
+        <div class="pl-2 pr-2">Page {{ page }} of {{ pageCount }}</div>
         <button
-          class="btn btn-success btn-lg w-100 d-block ml-1 flex-1"
+          v-if="Number(page) < pageCount"
+          class="btn btn-success btn-sm ml-1"
           @click="$emit('nextPage')"
         >
-          Next
           <i class="fas fa-chevron-right ml-1"></i>
         </button>
       </div>
@@ -135,6 +136,7 @@ export default {
       current: 0,
       voice: 0,
       speed: 1,
+      linesPerPage: 10,
       utterance: undefined,
       speaking: false,
       translationLoading: {},
@@ -156,15 +158,22 @@ export default {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
-    lines() {
+    allLines() {
       let html = this.html.trim();
       let lines = html
         .replace(/<(div|p|h1|h2|h3|h4|h5|h6|dd)/g, "ANNOTATORSEPARATOR!!!<$1")
         .split("ANNOTATORSEPARATOR!!!");
       lines = lines.map((line) => this.augmentHtml(line));
       lines = lines.filter((l) => l.trim() !== "");
-      if (this.page) lines = lines.slice(10 * (this.page - 1), 10 * this.page);
+      return lines
+    },
+    lines() {
+      let lines = this.allLines
+      if (this.page) lines = lines.slice(this.linesPerPage * (this.page - 1), this.linesPerPage * this.page);
       return lines;
+    },
+    pageCount() {
+      return Math.ceil(this.allLines.length / this.linesPerPage)
     },
     parallellines() {
       if (this.translation)

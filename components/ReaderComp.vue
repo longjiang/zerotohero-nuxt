@@ -16,11 +16,10 @@
           v-if="text && text.length > 0 && !loading"
           id="reader-annotated"
           :class="{
-            focus: true,
+            'focus': true,
             'reader-annotated-wide': params.lg,
             'with-translation': translation,
           }"
-          :style="`font-size: ${fontSize}rem; margin-bottom: 2rem;`"
         >
           <div
             v-if="text && text.length > 0 && !fullscreen"
@@ -51,7 +50,7 @@
             @nextPage="$emit('nextPage')"
           />
         </div>
-        <div v-if="savedWordIdsInText && savedWordIdsInText.length > 0" id="vocabulary-list" class="mb-4 pb-4">
+        <div v-if="savedWordIdsInText && savedWordIdsInText.length > 0" id="vocabulary-list" class="mt-4 mb-4 pb-4">
           <div
             style="font-size: 1rem; line-height: 1"
             class="mb-3"
@@ -84,12 +83,6 @@
               class="reader-button"
             >
               <i class="fa fa-times" />
-            </button>
-            <button @click="bigger" class="reader-button">
-              <span style="font-size: 1.25rem">A</span>
-            </button>
-            <button @click="smaller" class="reader-button">
-              <small>A</small>
             </button>
             <button
               @click="upload"
@@ -212,7 +205,6 @@ export default {
       translation: "",
       annotated: false,
       readerKey: 0, // used to force re-render this component
-      fontSize: this.iconMode ? 2 : 1.333,
       fullscreen: false,
       showTranslate: false,
       addTranslation: this.translation && this.translation !== "",
@@ -379,15 +371,6 @@ export default {
     },
     toggleButtons() {
       this.buttons = !this.buttons;
-    },
-    smaller() {
-      this.fontSize = this.fontSize * 0.8;
-    },
-    bigger() {
-      this.fontSize = this.fontSize * 1.25;
-    },
-    reset() {
-      this.fontSize = 1;
     },
     show() {
       const marked = Marked(this.text) || this.text;
