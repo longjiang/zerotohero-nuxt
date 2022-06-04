@@ -139,7 +139,7 @@ export default {
       }
     },
     mute() {
-      if (this.player) this.player.mute();
+      if (this.player && this.player.mute) this.player.mute();
     },
     unMute() {
       if (this.player) this.player.unMute();
