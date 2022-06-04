@@ -98,6 +98,7 @@ export default {
       );
       this.stats = data;
       let languages = await this.$languagesPromise;
+      if (!languages) return
       let languageData = [];
       for (let langId in this.stats.langCounts) {
         const count = this.stats.langCounts[langId];
@@ -114,8 +115,9 @@ export default {
     formatNumber(num) {
       return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
-    getLangById(langId) {
-      if (this.$languages) return this.$languages.getById(langId);
+    async getLangById(langId) {
+      let languages = await this.$languagesPromise;
+      if (languages) return languages.getById(langId);
     },
   },
 };

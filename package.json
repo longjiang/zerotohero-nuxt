@@ -13,6 +13,7 @@
     "analyze": "nuxt build --analyze"
   },
   "dependencies": {
+    "@capacitor/share": "^1.1.2",
     "@capacitor/splash-screen": "^1.2.2",
     "@nuxtjs/auth-next": "5.0.0-1648802546.c9880dc",
     "@nuxtjs/axios": "^5.13.1",
@@ -75,6 +76,7 @@
     "vue-mq": "^1.0.1",
     "vue-observe-visibility": "^1.0.0",
     "vue-simple-svg": "^2.0.2",
+    "vue-spinner": "^1.0.4",
     "vue-video-player": "^5.0.2",
     "vue2-leaflet": "^2.7.1",
     "vue2-smooth-scroll": "^1.6.0",
