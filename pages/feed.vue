@@ -84,6 +84,8 @@ export default {
       newsShow: undefined,
       loading: true,
       heroVideo: undefined,
+      numVideosPerLoad: 10,
+      numSavedWordsPerLoad: 10
     };
   },
   async mounted() {
@@ -163,8 +165,8 @@ export default {
     async loadMoreItems() {
       if (!this.$store.state.stats.statsLoaded[this.$l2.code]) return;
       if (!this.savedWords) return
-      let numVideos = 10;
-      let numWords = 2;
+      let numVideos = this.numVideosPerLoad;
+      let numWords = this.numSavedWordsPerLoad;
       let offset = this.randomOffset("allVideos", numVideos);
       let videos = await this.getVideos({
         numVideos,

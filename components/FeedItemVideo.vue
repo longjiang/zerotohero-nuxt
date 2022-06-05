@@ -1,13 +1,13 @@
 <template>
   <div :class="`feed-item feed-item-${skin}`">
     <div class="top-part pt-4 pr-4 pl-4 pb-2">
-      <div class="show-type-wrapper small text-success">
+      <div class="show-type-wrapper small text-success" v-if="show">
         <span class="show-type-icon">
           <i :class="show.icon"></i>
         </span>
         <span class="show-type ml-1" >{{ show.type }}</span>
       </div>
-      <h5 class="video-title mt-1" v-if="!['News', 'Movie', 'Music'].includes(show.show.title)">{{ show.show.title }}</h5>
+      <h5 class="show-title mt-1" v-if="show && !['News', 'Movie', 'Music'].includes(show.show.title)">{{ show.show.title }}</h5>
     </div>
     <div class="youtube-thumb">
       <router-link :to="to" class="aspect-wrapper play-button-wrapper d-block">
@@ -106,7 +106,7 @@ export default {
             ? "fa fa-book-open"
             : "fab fa-youtube";
         return { type, icon, show: talk };
-      } else {
+      } else if (this.video.tv_show) {
         let tvShow = this.video.tv_show;
         let type =
           tvShow.title === "Movies"
