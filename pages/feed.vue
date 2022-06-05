@@ -46,7 +46,7 @@
                 />
                 <FeedItemWord
                   v-if="item.type === 'word'"
-                  :word="item.word"
+                  :savedWord="item.word"
                   skin="dark"
                 />
               </div>
@@ -93,8 +93,11 @@ export default {
       if (mutation.type.startsWith("shows")) {
         this.loadShows();
       }
+      if (mutation.type = "savedWords/IMPORT_WORDS_FROM_JSON") {
+        this.loadSavedWords()
+      }
     });
-    await this.loadMoreItems();
+    this.loadSavedWords()
     this.loading = false; // Incase resources fail to load, at least show them
   },
   beforeDestroy() {
@@ -126,6 +129,14 @@ export default {
     },
   },
   methods: {
+    loadSavedWords() {
+      if (this.savedWordsShuffled.length === 0 && this.savedWords && this.savedWords[this.$l2.code]) {
+        this.savedWords[this.$l2.code]
+        let savedWordsShuffled = [...this.savedWords[this.$l2.code]]
+        this.savedWordsShuffled = Helper.shuffle(savedWordsShuffled)
+        this.loadMoreItems();
+      }
+    },
     async loadMoreItems() {
       let numVideos = 10;
       let numWords = 2;
@@ -137,11 +148,6 @@ export default {
       let items = videos.map((video) => {
         return { video, type: "video" };
       });
-      if (this.savedWordsShuffled.length === 0 && this.savedWords && this.savedWords[this.$l2.code]) {
-        this.savedWords[this.$l2.code]
-        let savedWordsShuffled = [...this.savedWords[this.$l2.code]]
-        this.savedWordsShuffled = Helper.shuffle(savedWordsShuffled)
-      }
       if (this.savedWordsShuffled.length > 0) {
         let savedWordItems = []
         for (let i = 0; i < numWords; i++) {
@@ -151,7 +157,6 @@ export default {
         items = items.concat(savedWordItems)
       }
       this.items = this.items.concat(Helper.shuffle(items))
-
       return true;
     },
     loadHeroVideo() {
