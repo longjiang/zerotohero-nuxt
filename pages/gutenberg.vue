@@ -21,9 +21,11 @@
         </div>
         <div
           class="col-sm-12 col-lg-4 col-xl-3"
-          style="border: 1px solid #ddd; border-radius: 0.5rem; padding: 1rem"
+          style=""
         >
-          <div style="max-width: 15rem; margin: 0 auto">
+          <div
+            style="max-width: 15rem; margin: 1.5rem auto; position: sticky; top: 0.5rem; border: 1px solid #ddd; border-radius: 0.5rem; padding: 1rem"
+          >
             <div class="book-info" v-if="bookData">
               <div class="p-4">
                 <router-link

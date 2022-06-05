@@ -614,6 +614,10 @@ export default {
               show: this.l2.code === "zh",
             },
             {
+              name: "gutenberg",
+              show: false,
+            },
+            {
               name: "book",
               show: false,
             },
