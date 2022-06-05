@@ -21,7 +21,7 @@
         :image="'/img/tv-shows.jpg'"
       />
       <div class="row mt-4">
-        <div class="col-sm-12">
+        <div class="pl-0 pr-0 col-sm-12">
           <div
             :class="{
               'loader text-center': true,
@@ -35,7 +35,7 @@
           <div v-if="!loading">
             <div v-if="items && items.length > 0">
               <div
-                class="feed-item"
+                class="feed-item-wrapper"
                 v-for="(item, index) in items"
                 :key="`item-${index}`"
               >
@@ -265,43 +265,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.media-section {
-  padding-bottom: 2rem;
-  border-bottom: 1px solid #111;
-}
-
-.media-seaction-heading {
-  margin-bottom: 2rem;
-}
-
-.zerotohero-wide {
-  .shows {
-    padding-left: 2rem;
-    padding-right: 2rem;
-  }
-}
-
-@media (max-width: 576px) {
-  .show-list-wrapper {
-    max-width: 423px;
-    margin: 0 auto;
-  }
-}
-
-::v-deep .synced-transcript {
-  height: 5rem;
+.feed-item-wrapper {
+  border-bottom: 0.5rem solid rgb(40, 40, 40);
   overflow: hidden;
-}
-
-h3 {
-  position: relative;
-  font-size: 1.3rem;
-}
-
-.show-all {
-  font-size: 1rem;
-  margin-left: 1rem;
-  display: inline-block;
-  color: #28a745;
 }
 </style>

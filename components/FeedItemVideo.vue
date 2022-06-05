@@ -1,6 +1,6 @@
 <template>
-  <div :class="`feed-item feed-item-${skin} row`">
-    <div class="col-sm-6">
+  <div :class="`feed-item feed-item-${skin}`">
+    <div>
       <router-link
         :to="to"
         class="aspect-wrapper play-button-wrapper d-block"
@@ -23,7 +23,7 @@
         />
       </router-link>
     </div>
-    <div class="col-sm-6">
+    <div class="p-4">
       <div class="youtube-title">
         <router-link
           :class="{
@@ -34,7 +34,7 @@
           {{ video.title }}
         </router-link>
       </div>
-      <div class="small">
+      <div class="youtube-date">
         {{ formatDate(video.date) }}
       </div>
     </div>
@@ -156,7 +156,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.youtube-title {
+  font-weight: bold;
+  font-size: 1.2rem;
+  line-height: 1.33;
+}
 .youtube-thumbnail-wrapper {
   overflow: hidden;
+}
+
+.youtube-date {
+  color: #666;
+  font-size: 0.8rem;
 }
 </style>
