@@ -1,0 +1,448 @@
+<router>
+  {
+    path: '/:l1/:l2/all-media-legacy',
+    props: true,
+    meta: {
+      skin: 'dark'
+    }
+  }
+</router>
+<template>
+  <div class="main-dark">
+    <VideoHero
+      v-if="heroVideo"
+      :video="heroVideo"
+      @videoUnavailable="onVideoUnavailable"
+    />
+    <div class="container pb-5">
+      <SocialHead
+        :title="`Learn ${$l2.name} with Videos | ${$l2.name} Zero to Hero`"
+        :description="`Learn ${$l2.name} with Videos`"
+        :image="'/img/tv-shows.jpg'"
+      />
+      <div class="row mt-4">
+        <div class="col-sm-12">
+          <!-- <Sale class="mt-5 mb-5" v-if="$l2.code === 'zh'" /> -->
+          <!-- <SimpleSearch placeholder="Search" ref="searchLibrary" skin="dark" class="mt-4 mb-5" style="flex: 1" :action="
+            (url) => {
+              this.$router.push({
+                path: `/${$l1.code}/${$l2.code
+                  }/youtube/search/${encodeURIComponent(
+                    url
+                  )}`,
+              });
+            }
+          " /> -->
+          <div
+            :class="{
+              'loader text-center': true,
+              'd-none': videos && !loading,
+            }"
+            style="margin: 7rem 0 15rem 0"
+          >
+            <Loader :sticky="true" message="Loading videos in our library..." />
+          </div>
+
+          <div class="media-sections" v-if="!loading">
+            <div v-if="videos && videos.length > 0" class="media-section">
+              <h3 class="media-seaction-heading">
+                {{ $l2.name }} Videos
+                <router-link :to="{ name: 'youtube-browse' }" class="show-all">
+                  More
+                  <i class="fas fa-chevron-right ml-1"></i>
+                </router-link>
+              </h3>
+              <LazyYouTubeVideoList
+                :videos="videos.slice(0, 12)"
+                :showAdminToolsInAdminMode="false"
+                skin="dark"
+              />
+            </div>
+            <FeedbackPrompt
+              class="mt-5 mb-4"
+              :skin="$route.meta ? $route.meta.skin : 'light'"
+            />
+            <div
+              v-if="videos && music && music.length > 0"
+              class="media-section"
+            >
+              <h3 class="media-seaction-heading">
+                {{ $l2.name }} Music
+                <router-link
+                  :to="{
+                    name: 'show',
+                    params: { type: 'tv-show', id: musicShow.id },
+                  }"
+                  class="show-all"
+                >
+                  More
+                  <i class="fas fa-chevron-right ml-1"></i>
+                </router-link>
+              </h3>
+              <LazyYouTubeVideoList
+                :videos="random(music).slice(0, 12)"
+                :showAdminToolsInAdminMode="false"
+                skin="dark"
+              />
+            </div>
+            <div v-if="videos && news && news.length > 0" class="media-section">
+              <h3 class="media-seaction-heading">
+                {{ $l2.name }} News
+                <router-link
+                  :to="{
+                    name: 'show',
+                    params: { type: 'talk', id: newsShow.id },
+                  }"
+                  class="show-all"
+                >
+                  More
+                  <i class="fas fa-chevron-right ml-1"></i>
+                </router-link>
+              </h3>
+              <LazyYouTubeVideoList
+                :videos="random(news).slice(0, 12)"
+                :showAdminToolsInAdminMode="false"
+                skin="dark"
+              />
+            </div>
+          </div>
+          <div
+            v-if="videos && movies && movies.length > 0"
+            class="media-section"
+          >
+            <h3 class="media-seaction-heading">
+              {{ $l2.name }} Movies
+              <router-link
+                :to="{
+                  name: 'show',
+                  params: { type: 'tv-show', id: moviesShow.id },
+                }"
+                class="show-all"
+              >
+                More
+                <i class="fas fa-chevron-right ml-1"></i>
+              </router-link>
+            </h3>
+            <LazyYouTubeVideoList
+              :videos="random(movies).slice(0, 12)"
+              :showAdminToolsInAdminMode="false"
+              skin="dark"
+            />
+          </div>
+          <div
+            v-if="videos && tvShows && tvShows.length > 0"
+            class="media-section"
+          >
+            <h3 class="media-seaction-heading">
+              {{ $l2.name }} TV Shows
+              <router-link :to="{ name: 'tv-shows' }" class="show-all">
+                More
+                <i class="fas fa-chevron-right ml-1"></i>
+              </router-link>
+            </h3>
+            <ShowList
+              :shows="
+                random(
+                  tvShows.filter((s) => !['Movies', 'Music'].includes(s.title)),
+                  6
+                )
+              "
+              type="tvShows"
+              :key="`tv-shows`"
+            />
+          </div>
+          <div v-if="videos && talks && talks.length > 0" class="media-section">
+            <h3 class="media-seaction-heading">
+              {{ $l2.name }} YouTube
+              <router-link :to="{ name: 'talks' }" class="show-all">
+                More
+                <i class="fas fa-chevron-right ml-1"></i>
+              </router-link>
+            </h3>
+            <ShowList
+              :shows="
+                random(
+                  talks.filter(
+                    (s) => !['News'].includes(s.title) && !s.audiobook
+                  ),
+                  6
+                )
+              "
+              type="talks"
+              :key="`tv-shows`"
+            />
+            <div class="text-center mt-1"></div>
+          </div>
+          <div
+            v-if="videos && talks && talks.length > 0 && audiobooks.length > 0"
+            class="media-section"
+          >
+            <h3 class="media-seaction-heading">
+              {{ $l2.name }} Audiobooks
+              <router-link :to="{ name: 'audiobooks' }" class="show-all">
+                More
+                <i class="fas fa-chevron-right ml-1"></i>
+              </router-link>
+            </h3>
+            <ShowList
+              :shows="random(audiobooks, 6)"
+              type="talks"
+              :key="`tv-shows`"
+            />
+          </div>
+
+          <client-only>
+            <LazyIdenticalLanguages
+              class="mt-5 mb-5"
+              routeName="all-media"
+              v-if="!loading"
+            />
+          </client-only>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import Helper from "@/lib/helper";
+import Config from "@/lib/config";
+import { mapState } from "vuex";
+
+export default {
+  data() {
+    return {
+      videos: undefined,
+      tvShows: undefined,
+      talks: undefined,
+      musicShow: undefined,
+      moviesShow: undefined,
+      newsShow: undefined,
+      music: [],
+      movies: [],
+      news: [],
+      loading: true,
+      heroVideo: undefined,
+    };
+  },
+  async fetch() {
+    if (this.$store.state.shows.showsLoaded[this.$l2.code]) this.loadShows();
+  },
+  async mounted() {
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (mutation.type.startsWith("shows")) {
+        this.loadShows();
+      }
+    });
+    if (!this.videos || this.videos.length === 0) {
+      let videos = await this.getVideos({
+        limit: 50,
+        sort: "youtube_id",
+        offset: this.randomOffset("allVideos", 50),
+      });
+      // Let's prioritize videos in tv shows or talks
+      this.videos = this.random(videos)
+        .sort((a, b) => (b.talk === a.talk ? 0 : b.tv_show ? 1 : -1))
+        .sort((a, b) => (b.tv_show === a.tv_show ? 0 : b.tv_show ? 1 : -1));
+    }
+    await Helper.timeout(5000);
+    this.loading = false; // Incase resources fail to load, at least show them
+  },
+  beforeDestroy() {
+    // you may call unsubscribe to stop the subscription
+    this.unsubscribe();
+  },
+  computed: {
+    ...mapState("stats", ["stats"]),
+    audiobooks() {
+      return this.talks.filter((t) => t.audiobook);
+    },
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
+    $adminMode() {
+      if (typeof this.$store.state.settings.adminMode !== "undefined")
+        return this.$store.state.settings.adminMode;
+    },
+  },
+  watch: {
+    loading() {
+      if (this.loading === false) this.loadHeroVideo();
+    },
+  },
+  methods: {
+    loadHeroVideo() {
+      let randomVideos = this.random([
+        ...(this.music || []),
+        ...(this.movies || []),
+        ...(this.news || []),
+        ...(this.videos || []).filter((v) => v.tv_show || v.talk), // Let's not feature non-tv-show non-talk videos
+      ]);
+      this.heroVideo = randomVideos[0];
+    },
+    onVideoUnavailable(youtube_id) {
+      if (this.heroVideo.youtube_id === youtube_id) {
+        this.videoUnavailable = true;
+        if (this.videos) {
+          this.videos = this.videos.filter(
+            (v) => v.youtube_id !== this.heroVideo.youtube_id
+          );
+        }
+        this.loadHeroVideo();
+      }
+    },
+    async loadShows() {
+      this.tvShows = this.$store.state.shows.tvShows[this.$l2.code];
+      this.talks = this.$store.state.shows.talks[this.$l2.code];
+      if (this.tvShows) {
+        this.musicShow = this.$store.state.shows.tvShows[this.$l2.code].find(
+          (s) => s.title === "Music"
+        );
+        this.moviesShow = this.$store.state.shows.tvShows[this.$l2.code].find(
+          (s) => s.title === "Movies"
+        );
+        if (this.musicShow)
+          this.music = await this.getVideos({
+            limit: 25,
+            tvShow: this.musicShow.id,
+            sort: "youtube_id",
+            offset: this.randomOffset("music", 25),
+          });
+        if (this.moviesShow)
+          this.movies = await this.getVideos({
+            limit: 25,
+            tvShow: this.moviesShow.id,
+            sort: "youtube_id",
+            offset: this.randomOffset("movies", 25),
+          });
+      }
+      if (this.talks) {
+        this.newsShow = this.$store.state.shows.talks[this.$l2.code].find(
+          (s) => s.title === "News"
+        );
+        if (this.newsShow)
+          this.news = await this.getVideos({
+            limit: 25,
+            talk: this.newsShow.id,
+            offset: this.randomOffset("news", 25),
+          });
+      }
+      this.loading = false;
+    },
+    /**
+     * @param statsKey key in the stats, one of: 'allVideos', 'movies', 'newVideos', 'music', 'news'
+     * @param max maximum number of array items
+     */
+    randomOffset(statsKey, max) {
+      if (this.stats && this.stats[this.$l2.code]) {
+        let stats = this.stats[this.$l2.code][statsKey];
+        // If we only have so many videos, we don't need arandom offset
+        if (stats < max) return 0;
+        else {
+          let offset = Math.floor(Math.random() * (stats - max));
+          return offset;
+        }
+      }
+      return 0;
+    },
+    random(array, max) {
+      let shuffled = Helper.shuffle([...array]);
+      return shuffled.slice(0, max);
+    },
+    /**
+     * Retrieve videos from Directus.
+     * @param limit maximum number of videos to retrieve
+     * @param tvShow id of the TV show,
+     * @param talk id of the talk
+     * @param sort how the resort should be sorted
+     */
+    async getVideos({
+      limit = 10,
+      tvShow = undefined,
+      talk = undefined,
+      sort = "-date",
+      offset = 0,
+    }) {
+      try {
+        let videos = [];
+        let filter = "";
+        if (tvShow) filter = `filter[tv_show][eq]=${tvShow}`;
+        if (talk) filter = `filter[talk][eq]=${talk}`;
+        // First find videos associated with a particular tv show, or talk
+        let response = await this.$authios.get(
+          `${Config.youtubeVideosTableName(
+            this.$l2.id
+          )}?sort=${sort}&filter[l2][eq]=${
+            this.$l2.id
+          }&${filter}&limit=${limit}&fields=l2,id,title,youtube_id,tv_show,talk,l2&offset=${offset}`
+        );
+        if (response.data.data && response.data.data.length > 0) {
+          videos = Helper.uniqueByValue(response.data.data, "youtube_id");
+        }
+        return videos;
+      } catch (err) {
+        return [];
+      }
+    },
+    randBase64(length) {
+      var result = "";
+      var characters =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      var charactersLength = characters.length;
+      for (var i = 0; i < length; i++) {
+        result += characters.charAt(
+          Math.floor(Math.random() * charactersLength)
+        );
+      }
+      return result;
+    },
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+.media-section {
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #111;
+}
+
+.media-seaction-heading {
+  margin-bottom: 2rem;
+}
+
+.zerotohero-wide {
+  .shows {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .show-list-wrapper {
+    max-width: 423px;
+    margin: 0 auto;
+  }
+}
+
+::v-deep .synced-transcript {
+  height: 5rem;
+  overflow: hidden;
+}
+
+h3 {
+  position: relative;
+  font-size: 1.3rem;
+}
+
+.show-all {
+  font-size: 1rem;
+  margin-left: 1rem;
+  display: inline-block;
+  color: #28a745;
+}
+</style>

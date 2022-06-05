@@ -374,7 +374,7 @@ export default {
           show: this.hasFeature("youtube"),
           children: [
             {
-              name: "feed",
+              name: "all-media",
               icon: "fa fa-photo-video",
               title: `Feed`,
               show: true,
