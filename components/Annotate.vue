@@ -720,7 +720,7 @@ export default {
   }
 }
 
-.use-serif .annotated * {
+.use-serif .annotate-template * {
   font-family: "Noto Serif SC", serif;
 }
 
