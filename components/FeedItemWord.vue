@@ -2,7 +2,14 @@
   <div :class="`feed-item feed-item-word feed-item-${skin}`">
     <div class="word-info pt-4 pl-4 pr-4 pb-3" v-if="word">
       <div class="head-and-pronunciation">
-        <h3 class="word-head">{{ word.head }}</h3>
+        <router-link
+          :to="{
+            name: 'dictionary',
+            params: { method: $dictionaryName, args: savedWord.id },
+          }"
+        >
+          <h3 class="word-head">{{ word.head }}</h3>
+        </router-link>
         <span>
           <span v-if="word.pronunciation" class="wordlist-item-pinyin">
             <span v-if="$l2.code !== 'zh'">[</span>
@@ -53,7 +60,7 @@
       :to="{
         name: 'youtube-view',
         params: { youtube_id: hit.video.youtube_id },
-        query: {t: hit.video.subs_l2[hit.lineIndex].starttime}
+        query: { t: hit.video.subs_l2[hit.lineIndex].starttime },
       }"
       class="hit-thumb"
       v-if="hit"
@@ -104,6 +111,9 @@ export default {
     };
   },
   computed: {
+    $dictionaryName() {
+      return this.$store.state.settings.dictionaryName;
+    },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
