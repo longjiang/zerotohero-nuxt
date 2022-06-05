@@ -75,6 +75,8 @@
 <script>
 import Helper from "@/lib/helper";
 import YouTube from "@/lib/youtube";
+import { transliterate } from "transliteration";
+
 export default {
   props: {
     savedWord: {
@@ -113,6 +115,9 @@ export default {
     this.hit = await this.getVideo();
   },
   methods: {
+    transliterate(...args) {
+      return transliterate(...args)
+    },
     highlightMultiple(...args) {
       return Helper.highlightMultiple(...args);
     },

@@ -38,7 +38,7 @@
           <div
             :class="colClasses"
             v-for="(item, index) in items"
-            :key="`item-${index}`"
+            :key="`item-${$l2.code}-${index}`"
           >
             <FeedItemVideo
               v-if="item.type === 'video'"
@@ -131,7 +131,6 @@ export default {
       }
     });
     this.loadSavedWords();
-    this.loading = false; // Incase resources fail to load, at least show them
   },
   beforeDestroy() {
     // you may call unsubscribe to stop the subscription
@@ -212,12 +211,13 @@ export default {
         let savedWordItems = [];
         for (let i = 0; i < numWords; i++) {
           let word = this.savedWordsShuffled.pop();
-          savedWordItems.push({ type: "word", word });
+          if (word) savedWordItems.push({ type: "word", word });
         }
         items = items.concat(savedWordItems);
       }
       this.items = this.items.concat(Helper.shuffle(items));
       if (!this.heroVideo) this.loadHeroVideo();
+      this.loading = false
       return true;
     },
     loadHeroVideo() {
