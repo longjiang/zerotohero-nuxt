@@ -91,6 +91,7 @@
           v-if="Number(page) > 1"
           class="btn btn-success btn-sm mr-1"
           @click="$emit('previousPage')"
+          style="width: 2rem"
         >
           <i class="fas fa-chevron-left"></i>
         </button>
@@ -99,8 +100,9 @@
           v-if="Number(page) < pageCount"
           class="btn btn-success btn-sm ml-1"
           @click="$emit('nextPage')"
+          style="width: 2rem"
         >
-          <i class="fas fa-chevron-right ml-1"></i>
+          <i class="fas fa-chevron-right"></i>
         </button>
       </div>
     </div>
