@@ -39,9 +39,6 @@
           :showCollapse="layout === 'horizontal'"
           :episodes="episodes"
           ref="videoControls"
-          :class="`${
-            neverPlayed && layout === 'horizontal' ? 'transparent' : ''
-          }`"
           @previous="$emit('previous')"
           @next="$emit('next')"
           @goToLine="goToLine"

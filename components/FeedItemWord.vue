@@ -1,6 +1,6 @@
 <template>
   <div :class="`feed-item feed-item-word feed-item-${skin}`">
-    <div class="word-info pt-4 pl-4 pr-4 pb-3" v-if="word" >
+    <div class="word-info pt-4 pl-4 pr-4 pb-3" v-if="word">
       <div class="head-and-pronunciation">
         <h3 class="word-head">{{ word.head }}</h3>
         <span>
@@ -49,7 +49,15 @@
         </span>
       </div>
     </div>
-    <div class="hit-thumb" v-if="hit">
+    <router-link
+      :to="{
+        name: 'youtube-view',
+        params: { youtube_id: hit.video.youtube_id },
+        query: {t: hit.video.subs_l2[hit.lineIndex].starttime}
+      }"
+      class="hit-thumb"
+      v-if="hit"
+    >
       <div class="youtube-thumbnail-wrapper aspect-wrapper play-button-wrapper">
         <button class="btn btn-unstyled play-button">
           <i class="fa fa-play"></i>
@@ -60,8 +68,8 @@
           :src="`https://img.youtube.com/vi/${this.hit.video.youtube_id}/hqdefault.jpg`"
         />
       </div>
-    </div>
-    <div class="hit-quote pb-4 pl-4 pr-4 pt-3 d-flex"  v-if="hit">
+    </router-link>
+    <div class="hit-quote pb-4 pl-4 pr-4 pt-3 d-flex" v-if="hit">
       <div class="text-success mr-2">
         <i class="fas fa-quote-left"></i>
       </div>
@@ -83,8 +91,8 @@ export default {
       type: Object,
     },
     maxDefinitions: {
-      type: Number, 
-      default: 2
+      type: Number,
+      default: 2,
     },
     skin: {
       default: "light", // or 'dark'
@@ -116,7 +124,7 @@ export default {
   },
   methods: {
     transliterate(...args) {
-      return transliterate(...args)
+      return transliterate(...args);
     },
     highlightMultiple(...args) {
       return Helper.highlightMultiple(...args);
