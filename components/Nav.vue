@@ -94,7 +94,7 @@
             :to="last(child) || child"
             :item="child"
             :level="2"
-            :showIcon="collapsed || variant !== 'side-bar'"
+            :showIcon="collapsed"
             :active="$route && $route.name === child.name"
             :badge="
               child.name === 'saved-words' && savedWordsCount > 0
@@ -374,15 +374,15 @@ export default {
           show: this.hasFeature("youtube"),
           children: [
             {
-              name: "all-media",
+              name: "feed",
               icon: "fa fa-photo-video",
-              title: `Recommended`,
+              title: `Feed`,
               show: true,
             },
             {
               name: "watch-history",
               icon: "fas fa-history",
-              title: "Watch History",
+              title: "History",
               show: true,
             },
             {

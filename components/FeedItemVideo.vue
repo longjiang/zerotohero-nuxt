@@ -1,10 +1,16 @@
 <template>
   <div :class="`feed-item feed-item-${skin}`">
-    <div>
-      <router-link
-        :to="to"
-        class="aspect-wrapper play-button-wrapper d-block"
-      >
+    <div class="top-part pt-4 pr-4 pl-4 pb-2">
+      <div class="show-type-wrapper small text-success">
+        <span class="show-type-icon">
+          <i :class="show.icon"></i>
+        </span>
+        <span class="show-type ml-1">{{ show.type }}</span>
+      </div>
+      <h5 class="video-title mt-1">{{ show.show.title }}</h5>
+    </div>
+    <div class="youtube-thumb">
+      <router-link :to="to" class="aspect-wrapper play-button-wrapper d-block">
         <div class="btn btn-unstyled play-button">
           <i class="fa fa-play"></i>
         </div>
@@ -23,7 +29,7 @@
         />
       </router-link>
     </div>
-    <div class="p-4">
+    <div class="bottom-part pt-3 pr-4 pl-4 pb-4">
       <div class="youtube-title">
         <router-link
           :class="{
@@ -34,7 +40,7 @@
           {{ video.title }}
         </router-link>
       </div>
-      <div class="youtube-date">
+      <div class="youtube-date mt-2" v-if="video.talk">
         {{ formatDate(video.date) }}
       </div>
     </div>
@@ -83,6 +89,39 @@ export default {
     },
     videoL2() {
       if (this.video.l2) return this.$languages.getById(this.video.l2);
+    },
+    show() {
+      if (this.video.talk) {
+        let talk = this.video.talk;
+        let type =
+          talk.title === "News"
+            ? "News Report"
+            : talk.audiobook
+            ? "Audiobook"
+            : "YouTube";
+        let icon =
+          talk.title === "News"
+            ? "fa fa-newspaper"
+            : talk.audiobook
+            ? "fa fa-book-open"
+            : "fab fa-youtube";
+        return { type, icon, show: talk };
+      } else {
+        let tvShow = this.video.tv_show;
+        let type =
+          tvShow.title === "Movies"
+            ? "Movie"
+            : tvShow.title === "Music"
+            ? "Song"
+            : "TV Show";
+        let icon =
+          tvShow.title === "Movies"
+            ? "fa fa-film"
+            : tvShow.title === "Music"
+            ? "fa fa-music"
+            : "fa fa-tv";
+        return { type, icon, show: tvShow };
+      }
     },
     to() {
       let to = {
@@ -158,15 +197,15 @@ export default {
 <style lang="scss" scoped>
 .youtube-title {
   font-weight: bold;
-  font-size: 1.2rem;
+  font-size: 1rem;
   line-height: 1.33;
+  color: #999;
 }
 .youtube-thumbnail-wrapper {
   overflow: hidden;
 }
 
 .youtube-date {
-  color: #666;
   font-size: 0.8rem;
 }
 </style>

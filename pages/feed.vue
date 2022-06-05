@@ -8,7 +8,7 @@
   }
 </router>
 <template>
-  <div class="main-dark">
+  <div class="main-dark pb-5">
     <VideoHero
       v-if="heroVideo"
       :video="heroVideo"
@@ -62,6 +62,7 @@
           </client-only>
         </div>
       </div>
+      <div v-observe-visibility="visibilityChanged"></div>
     </div>
   </div>
 </template>
@@ -129,6 +130,23 @@ export default {
     },
   },
   methods: {
+    visibilityChanged(visible) {
+      if (visible) {
+        this.loadMoreItems()
+      }
+    },
+    assignShowsToVideos(videos) {
+      for (let video of videos) {
+        if (this.tvShows) {
+          if (video.tv_show) {
+            video.tv_show = this.tvShows.find((s) => s.id === video.tv_show);
+          }
+          if (video.talk) {
+            video.talk = this.talks.find((s) => s.id === video.talk);
+          }
+        }
+      }
+    },
     loadSavedWords() {
       if (this.savedWordsShuffled.length === 0 && this.savedWords && this.savedWords[this.$l2.code]) {
         this.savedWords[this.$l2.code]
@@ -140,10 +158,11 @@ export default {
     async loadMoreItems() {
       let numVideos = 10;
       let numWords = 2;
+      let offset = this.randomOffset("allVideos", numVideos)
       let videos = await this.getVideos({
         numVideos,
         sort: "youtube_id",
-        offset: this.randomOffset("allVideos", numVideos),
+        offset,
       });
       let items = videos.map((video) => {
         return { video, type: "video" };
@@ -192,7 +211,6 @@ export default {
           (s) => s.title === "News"
         );
       }
-      this.loading = false;
     },
     /**
      * @param statsKey key in the stats, one of: 'allVideos', 'movies', 'newVideos', 'music', 'news'
@@ -239,20 +257,10 @@ export default {
             this.$l2.id
           )}?sort=${sort}&filter[l2][eq]=${
             this.$l2.id
-          }&${filter}&limit=${limit}&fields=l2,id,title,youtube_id,tv_show,talk,date,l2&offset=${offset}`
+          }&${filter}&limit=${limit}&fields=l2,id,title,youtube_id,tv_show.id,tv_show.title,talk.id,talk.title,talk.audiobook,date,l2&offset=${offset}`
         );
         if (response.data.data && response.data.data.length > 0) {
           videos = Helper.uniqueByValue(response.data.data, "youtube_id");
-        }
-        for (let video of videos) {
-          if (this.tvShows) {
-            if (video.tv_show) {
-              video.tv_show = this.tvShows.find((s) => s.id === video.tv_show);
-            }
-            if (video.talk) {
-              video.talk = this.talks.find((s) => s.id === video.talk);
-            }
-          }
         }
 
         return videos;

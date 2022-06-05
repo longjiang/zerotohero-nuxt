@@ -1,6 +1,6 @@
 <template>
   <div class="feed-item-word">
-    <div class="word-info p-3" v-if="word" >
+    <div class="word-info pt-4 pl-4 pr-4 pb-3" v-if="word" >
       <div class="head-and-pronunciation">
         <h3 class="word-head">{{ word.head }}</h3>
         <span>
@@ -61,7 +61,7 @@
         />
       </div>
     </div>
-    <div class="hit-quote p-3 d-flex"  v-if="hit">
+    <div class="hit-quote pb-4 pl-4 pr-4 pt-3 d-flex"  v-if="hit">
       <div class="text-success mr-2">
         <i class="fas fa-quote-left"></i>
       </div>
