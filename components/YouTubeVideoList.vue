@@ -168,7 +168,13 @@
           :class="colClasses(video, videoIndex)"
           :key="`youtube-video-wrapper-${video.youtube_id}-${videoIndex}`"
         >
+          <LazyFeedItem
+            v-if="view === 'feed'"
+            :video="video"
+            :skin="skin"
+          />
           <LazyYouTubeVideoCard
+            v-else
             ref="youTubeVideoCard"
             @newShow="newShow"
             @hasSubs="onHasSubs"
@@ -374,7 +380,14 @@ export default {
           },
           classes
         );
-        
+      } else if (this.view === "feed") {
+        classes = Object.assign(
+          {
+            "col-12": this.params.xs || this.params.sm || this.params.md,
+            "col-6": this.params.lg || this.params.xl,
+          },
+          classes
+        );
       }
       return classes
     },

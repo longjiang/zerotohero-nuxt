@@ -91,7 +91,7 @@
         <client-only>
           <div
             class="youtube-video-card-badges"
-            v-if="view !== 'list' && (showBadges || $adminMode)"
+            v-if="view === 'grid' && (showBadges || $adminMode)"
           >
             <div
               v-if="video.hasSubs || video.id"
@@ -342,7 +342,7 @@ export default {
     },
     view: {
       type: String,
-      default: "grid",
+      default: "grid", // or 'list'
     },
     video: {
       type: Object,

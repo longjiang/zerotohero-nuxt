@@ -40,6 +40,7 @@
                 :showDate="true"
                 :showBadges="true"
                 :showPlayButton="true"
+                view="feed"
                 skin="dark"
               />
             </div>
