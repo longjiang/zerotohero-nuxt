@@ -165,15 +165,7 @@
       <div class="youtube-videos row">
         <div
           v-for="(video, videoIndex) in shownVideos"
-          :class="{
-            'pb-3': true,
-            'col-sm-12': view === 'list' || singleColumn,
-            'col-compact': params.xs,
-            'col-6': (params.xs || params.sm) && view === 'grid' && !singleColumn,
-            'col-4': params.md && view === 'grid' && !singleColumn,
-            'col-3': (params.lg || params.xl) && view === 'grid' && !singleColumn,
-            'col-no-subs': !video.hasSubs,
-          }"
+          :class="colClasses(video, videoIndex)"
           :key="`youtube-video-wrapper-${video.youtube_id}-${videoIndex}`"
         >
           <LazyYouTubeVideoCard
@@ -368,6 +360,24 @@ export default {
     },
   },
   methods: {
+    colClasses(video, videoIndex) {
+      let classes = { "pb-3": true, "col-no-subs": !video.hasSubs };
+      if (this.view == "list" || this.singleColumn) {
+        classes["col-sm-12"] = true;
+      } else if (this.view === "grid") {
+        classes = Object.assign(
+          {
+            "col-compact": this.params.xs,
+            "col-6": this.params.xs || this.params.sm,
+            "col-4": this.params.md,
+            "col-3": this.params.lg || this.params.xl,
+          },
+          classes
+        );
+        
+      }
+      return classes
+    },
     onHasSubs(hasSubs) {
       this.subsChecked++;
     },
