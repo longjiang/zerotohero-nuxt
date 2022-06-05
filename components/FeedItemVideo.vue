@@ -5,9 +5,9 @@
         <span class="show-type-icon">
           <i :class="show.icon"></i>
         </span>
-        <span class="show-type ml-1">{{ show.type }}</span>
+        <span class="show-type ml-1" >{{ show.type }}</span>
       </div>
-      <h5 class="video-title mt-1">{{ show.show.title }}</h5>
+      <h5 class="video-title mt-1" v-if="!['News', 'Movie', 'Music'].includes(show.show.title)">{{ show.show.title }}</h5>
     </div>
     <div class="youtube-thumb">
       <router-link :to="to" class="aspect-wrapper play-button-wrapper d-block">
