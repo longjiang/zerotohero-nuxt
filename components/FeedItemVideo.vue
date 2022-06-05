@@ -5,9 +5,25 @@
         <span class="show-type-icon">
           <i :class="show.icon"></i>
         </span>
-        <span class="show-type ml-1" >{{ show.type }}</span>
+        <span class="show-type ml-1">{{ show.type }}</span>
       </div>
-      <h5 class="show-title mt-1" v-if="show && !['News', 'Movie', 'Music'].includes(show.show.title)">{{ show.show.title }}</h5>
+      <router-link
+        v-if="
+          video && show && !['News', 'Movie', 'Music'].includes(show.show.title)
+        "
+        :to="{
+          name: 'show',
+          params: {
+            type: video.tv_show ? 'tv-show' : 'talk',
+            id: video.tv_show ? video.tv_show.id : video.talk.id,
+          },
+        }"
+        class="text-white"
+      >
+        <h5 class="show-title mt-1">
+          {{ show.show.title }}
+        </h5>
+      </router-link>
     </div>
     <div class="youtube-thumb">
       <router-link :to="to" class="aspect-wrapper play-button-wrapper d-block">

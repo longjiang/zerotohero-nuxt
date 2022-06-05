@@ -7,6 +7,7 @@
             name: 'dictionary',
             params: { method: $dictionaryName, args: savedWord.id },
           }"
+          class="text-success"
         >
           <h3 class="word-head">{{ word.head }}</h3>
         </router-link>
@@ -174,8 +175,6 @@ export default {
 <style lang="scss" scoped>
 .feed-item-word {
   .word-head {
-    color: #28a745;
-    font-weight: bold;
     display: inline;
   }
 }
