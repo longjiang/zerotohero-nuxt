@@ -1,5 +1,5 @@
 <template>
-  <div :class="`feed-item feed-item-${skin}`">
+  <div :class="`feed-item feed-item-video feed-item-${skin}`">
     <div class="top-part pt-4 pr-4 pl-4 pb-2">
       <div class="show-type-wrapper small text-success" v-if="show">
         <span class="show-type-icon">

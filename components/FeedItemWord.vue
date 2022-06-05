@@ -1,5 +1,5 @@
 <template>
-  <div class="feed-item-word">
+  <div :class="`feed-item feed-item-word feed-item-${skin}`">
     <div class="word-info pt-4 pl-4 pr-4 pb-3" v-if="word" >
       <div class="head-and-pronunciation">
         <h3 class="word-head">{{ word.head }}</h3>
@@ -83,7 +83,10 @@ export default {
     maxDefinitions: {
       type: Number, 
       default: 2
-    }
+    },
+    skin: {
+      default: "light", // or 'dark'
+    },
   },
   data() {
     return {

@@ -317,7 +317,11 @@ export default {
 
 <style lang="scss" scoped>
 .feed-item-wrapper {
-  border-bottom: 0.5rem solid rgb(40, 40, 40);
   overflow: hidden;
+  padding: 0.5rem;
+  .feed-item {
+    background-color: #222;
+    height: 100%;
+  }
 }
 </style>
