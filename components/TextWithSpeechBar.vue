@@ -389,11 +389,14 @@ export default {
 
 .annotated-line {
   color: black;
+  ::v-deep .annotate-translation {
+    color: #444;
+  }
 }
 
 .translation-line {
   font-size: 0.8em;
-  color: #666;
+  color: #444;
 }
 
 .speech-content-wide.with-translation {
