@@ -29,7 +29,7 @@
             }"
             style="margin: 7rem 0 15rem 0"
           >
-            <Loader :sticky="true" message="Loading videos in our library..." />
+            <Loader :sticky="true" message="Loading your feed..." />
           </div>
 
           <div v-if="!loading">
@@ -86,19 +86,21 @@ export default {
       heroVideo: undefined,
     };
   },
-  async fetch() {
-    if (this.$store.state.shows.showsLoaded[this.$l2.code]) this.loadShows();
-  },
   async mounted() {
+    this.loadMoreItems();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type.startsWith("shows")) {
         this.loadShows();
       }
-      if (mutation.type = "savedWords/IMPORT_WORDS_FROM_JSON") {
-        this.loadSavedWords()
+      if (mutation.type.startsWith("stats/LOAD")) {
+        this.loadMoreItems()
+      }
+      if ((mutation.type = "savedWords/IMPORT_WORDS_FROM_JSON")) {
+        this.loadSavedWords();
+        this.loadMoreItems()
       }
     });
-    this.loadSavedWords()
+    this.loadSavedWords();
     this.loading = false; // Incase resources fail to load, at least show them
   },
   beforeDestroy() {
@@ -132,7 +134,7 @@ export default {
   methods: {
     visibilityChanged(visible) {
       if (visible) {
-        this.loadMoreItems()
+        this.loadMoreItems();
       }
     },
     assignShowsToVideos(videos) {
@@ -148,17 +150,22 @@ export default {
       }
     },
     loadSavedWords() {
-      if (this.savedWordsShuffled.length === 0 && this.savedWords && this.savedWords[this.$l2.code]) {
+      if (
+        this.savedWordsShuffled.length === 0 &&
+        this.savedWords &&
         this.savedWords[this.$l2.code]
-        let savedWordsShuffled = [...this.savedWords[this.$l2.code]]
-        this.savedWordsShuffled = Helper.shuffle(savedWordsShuffled)
-        this.loadMoreItems();
+      ) {
+        this.savedWords[this.$l2.code];
+        let savedWordsShuffled = [...this.savedWords[this.$l2.code]];
+        this.savedWordsShuffled = Helper.shuffle(savedWordsShuffled);
       }
     },
     async loadMoreItems() {
+      if (!this.$store.state.stats.statsLoaded[this.$l2.code]) return;
+      if (!this.savedWords) return
       let numVideos = 10;
       let numWords = 2;
-      let offset = this.randomOffset("allVideos", numVideos)
+      let offset = this.randomOffset("allVideos", numVideos);
       let videos = await this.getVideos({
         numVideos,
         sort: "youtube_id",
@@ -168,14 +175,14 @@ export default {
         return { video, type: "video" };
       });
       if (this.savedWordsShuffled.length > 0) {
-        let savedWordItems = []
+        let savedWordItems = [];
         for (let i = 0; i < numWords; i++) {
-          let word = this.savedWordsShuffled.pop()
-          savedWordItems.push({type: 'word', word})
+          let word = this.savedWordsShuffled.pop();
+          savedWordItems.push({ type: "word", word });
         }
-        items = items.concat(savedWordItems)
+        items = items.concat(savedWordItems);
       }
-      this.items = this.items.concat(Helper.shuffle(items))
+      this.items = this.items.concat(Helper.shuffle(items));
       return true;
     },
     loadHeroVideo() {

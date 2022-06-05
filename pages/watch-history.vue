@@ -16,6 +16,7 @@
             :l2="$l2"
             skin="dark"
             class="mt-3"
+            :limit="50"
           />
         </div>
       </div>

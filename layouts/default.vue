@@ -159,12 +159,6 @@ export default {
     },
     subscribeToVuexMutations() {
       this.unsubscribe = this.$store.subscribe((mutation) => {
-        if (mutation.type === "shows/LOAD_SHOWS") {
-          this.$store.dispatch("stats/load", {
-            l2: this.l2,
-            adminMode: this.$store.state.settings.adminMode,
-          });
-        }
         if (mutation.type.startsWith("settings")) {
           if (mutation.type === "settings/SET_L1") {
             this.updatei18n();
@@ -414,6 +408,12 @@ export default {
       }
       if (!this.$store.state.phrasebooks.phrasebooksLoaded[this.l2.code]) {
         this.$store.dispatch("phrasebooks/load", {
+          l2: this.l2,
+          adminMode: this.$store.state.settings.adminMode,
+        });
+      }
+      if (!this.$store.state.stats.statsLoaded[this.l2.code]) {
+        this.$store.dispatch("stats/load", {
           l2: this.l2,
           adminMode: this.$store.state.settings.adminMode,
         });

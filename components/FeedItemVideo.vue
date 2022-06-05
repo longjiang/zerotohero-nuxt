@@ -199,7 +199,6 @@ export default {
   font-weight: bold;
   font-size: 1rem;
   line-height: 1.33;
-  color: #999;
 }
 .youtube-thumbnail-wrapper {
   overflow: hidden;
@@ -207,5 +206,6 @@ export default {
 
 .youtube-date {
   font-size: 0.8rem;
+  color: #999;
 }
 </style>

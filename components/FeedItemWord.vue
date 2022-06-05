@@ -80,6 +80,10 @@ export default {
     savedWord: {
       type: Object,
     },
+    maxDefinitions: {
+      type: Number, 
+      default: 2
+    }
   },
   data() {
     return {
