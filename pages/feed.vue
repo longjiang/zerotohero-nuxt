@@ -112,9 +112,6 @@ export default {
   computed: {
     ...mapState("stats", ["stats"]),
     ...mapState("savedWords", ["savedWords"]),
-    audiobooks() {
-      return this.talks.filter((t) => t.audiobook);
-    },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -126,11 +123,6 @@ export default {
     $adminMode() {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
-    },
-  },
-  watch: {
-    loading() {
-      if (this.loading === false) this.loadHeroVideo();
     },
   },
   methods: {
@@ -185,13 +177,13 @@ export default {
         items = items.concat(savedWordItems);
       }
       this.items = this.items.concat(Helper.shuffle(items));
+      if (!this.heroVideo) this.loadHeroVideo()
       return true;
     },
     loadHeroVideo() {
-      let randomVideos = this.random([
-        ...(this.items || []).filter((item) => item.type === "video"), // Let's not feature non-tv-show non-talk videos
-      ]);
-      if (randomVideos[0]) this.heroVideo = randomVideos[0].video;
+      let videos = (this.items || []).filter((item) => item.type === "video").map(item => item.video)
+      let randomVideos = this.random(videos);
+      if (randomVideos[0]) this.heroVideo = randomVideos[0];
     },
     onVideoUnavailable(youtube_id) {
       if (this.heroVideo.youtube_id === youtube_id) {
