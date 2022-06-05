@@ -382,10 +382,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.translation-line {
-  font-size: 0.8em;
-  color: #999;
-}
 
 .reader-annotated-wide.with-translation {
   .line {

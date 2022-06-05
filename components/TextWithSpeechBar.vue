@@ -201,6 +201,7 @@ export default {
   watch: {
     page() {
       this.current = 0
+      this.translationLoading = {}
     },
     speed() {
       if (this.speaking) {
@@ -384,9 +385,13 @@ export default {
   }
 }
 
+.annotated-line {
+  color: black;
+}
+
 .translation-line {
   font-size: 0.8em;
-  color: #999;
+  color: #666;
 }
 
 .speech-content-wide.with-translation {

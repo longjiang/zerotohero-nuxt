@@ -297,6 +297,7 @@ export default {
         this.translationLoading = true
         this.$emit("translationLoading", true)
         iframeTranslationClient = await getClient();
+        await Helper.timeout(1000) // Add one second wait to prevent translation from 'freezing'
         let translation = await iframeTranslationClient.translate(
           text,
           this.$l1.code
@@ -719,8 +720,8 @@ export default {
   }
 }
 
-.use-serif .annotated .sentence * {
-  font-family: serif;
+.use-serif .annotated * {
+  font-family: "Noto Serif SC", serif;
 }
 
 .annotated.fullscreen {
