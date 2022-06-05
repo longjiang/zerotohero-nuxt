@@ -274,12 +274,12 @@ export default {
       hideVideosWithoutSubs: this.hideVideosWithoutSubsProp,
       keyword: undefined,
       over: false,
-      params: {},
       showChannels: false,
       showSubsEditing: false,
       subsChecked: 3,
       unavailableYouTubeIds: [],
       videosInfoKey: 0,
+      params: {},
       query: {
         xs: {
           minWidth: 0,

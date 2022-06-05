@@ -8,71 +8,77 @@
   }
 </router>
 <template>
-  <div class="main-dark pb-5">
-    <VideoHero
-      v-if="heroVideo"
-      :video="heroVideo"
-      @videoUnavailable="onVideoUnavailable"
-    />
-    <div class="container pb-5">
-      <SocialHead
-        :title="`Learn ${$l2.name} with Videos | ${$l2.name} Zero to Hero`"
-        :description="`Learn ${$l2.name} with Videos`"
-        :image="'/img/tv-shows.jpg'"
+  <container-query :query="query" v-model="params">
+    <div class="main-dark pb-5">
+      <VideoHero
+        v-if="heroVideo"
+        :video="heroVideo"
+        @videoUnavailable="onVideoUnavailable"
       />
-      <div class="row mt-4">
-        <div class="pl-0 pr-0 col-sm-12">
-          <div
-            :class="{
-              'loader text-center': true,
-              'd-none': !loading,
-            }"
-            style="margin: 7rem 0 15rem 0"
-          >
-            <Loader :sticky="true" message="Loading your feed..." />
-          </div>
-
-          <div v-if="!loading">
-            <div v-if="items && items.length > 0">
-              <div
-                class="feed-item-wrapper"
-                v-for="(item, index) in items"
-                :key="`item-${index}`"
-              >
-                <FeedItemVideo
-                  v-if="item.type === 'video'"
-                  :video="item.video"
-                  skin="dark"
-                />
-                <FeedItemWord
-                  v-if="item.type === 'word'"
-                  :savedWord="item.word"
-                  skin="dark"
-                />
-              </div>
+      <div class="container pb-5">
+        <SocialHead
+          :title="`Learn ${$l2.name} with Videos | ${$l2.name} Zero to Hero`"
+          :description="`Learn ${$l2.name} with Videos`"
+          :image="'/img/tv-shows.jpg'"
+        />
+        <div class="row mt-4">
+          <div class="col-sm-12">
+            <div
+              :class="{
+                'loader text-center': true,
+                'd-none': !loading,
+              }"
+              style="margin: 7rem 0 15rem 0"
+            >
+              <Loader :sticky="true" message="Loading your feed..." />
             </div>
           </div>
-
-          <client-only>
-            <LazyIdenticalLanguages
-              class="mt-5 mb-5"
-              routeName="all-media"
-              v-if="!loading"
-            />
-          </client-only>
         </div>
+        <div class="row" v-if="!loading && items && items.length > 0">
+          <div
+            :class="colClasses"
+            v-for="(item, index) in items"
+            :key="`item-${index}`"
+          >
+            <FeedItemVideo
+              v-if="item.type === 'video'"
+              :video="item.video"
+              skin="dark"
+            />
+            <FeedItemWord
+              v-if="item.type === 'word'"
+              :savedWord="item.word"
+              skin="dark"
+            />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <client-only>
+              <LazyIdenticalLanguages
+                class="mt-5 mb-5"
+                routeName="all-media"
+                v-if="!loading"
+              />
+            </client-only>
+          </div>
+        </div>
+        <div v-observe-visibility="visibilityChanged"></div>
       </div>
-      <div v-observe-visibility="visibilityChanged"></div>
     </div>
-  </div>
+  </container-query>
 </template>
 
 <script>
 import Helper from "@/lib/helper";
 import Config from "@/lib/config";
 import { mapState } from "vuex";
+import { ContainerQuery } from "vue-container-query";
 
 export default {
+  components: {
+    ContainerQuery,
+  },
   data() {
     return {
       items: [],
@@ -85,7 +91,29 @@ export default {
       loading: true,
       heroVideo: undefined,
       numVideosPerLoad: 10,
-      numSavedWordsPerLoad: 10
+      numSavedWordsPerLoad: 10,
+      params: {},
+      query: {
+        xs: {
+          minWidth: 0,
+          maxWidth: 423,
+        },
+        sm: {
+          minWidth: 423,
+          maxWidth: 720,
+        },
+        md: {
+          minWidth: 720,
+          maxWidth: 960,
+        },
+        lg: {
+          minWidth: 960,
+          maxWidth: 1140,
+        },
+        xl: {
+          minWidth: 1140,
+        },
+      },
     };
   },
   async mounted() {
@@ -95,11 +123,11 @@ export default {
         this.loadShows();
       }
       if (mutation.type.startsWith("stats/LOAD")) {
-        this.loadMoreItems()
+        this.loadMoreItems();
       }
       if ((mutation.type = "savedWords/IMPORT_WORDS_FROM_JSON")) {
         this.loadSavedWords();
-        this.loadMoreItems()
+        this.loadMoreItems();
       }
     });
     this.loadSavedWords();
@@ -112,6 +140,18 @@ export default {
   computed: {
     ...mapState("stats", ["stats"]),
     ...mapState("savedWords", ["savedWords"]),
+    colClasses() {
+      let classes = { "feed-item-wrapper": true };
+      classes = Object.assign(
+        {
+          "pl-0 pr-0 col-sm-12": this.params.xs || this.params.sm,
+          "col-6": this.params.md || this.params.lg,
+          "col-4": this.params.xl,
+        },
+        classes
+      );
+      return classes
+    },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -156,7 +196,7 @@ export default {
     },
     async loadMoreItems() {
       if (!this.$store.state.stats.statsLoaded[this.$l2.code]) return;
-      if (!this.savedWords) return
+      if (!this.savedWords) return;
       let numVideos = this.numVideosPerLoad;
       let numWords = this.numSavedWordsPerLoad;
       let offset = this.randomOffset("allVideos", numVideos);
@@ -177,11 +217,13 @@ export default {
         items = items.concat(savedWordItems);
       }
       this.items = this.items.concat(Helper.shuffle(items));
-      if (!this.heroVideo) this.loadHeroVideo()
+      if (!this.heroVideo) this.loadHeroVideo();
       return true;
     },
     loadHeroVideo() {
-      let videos = (this.items || []).filter((item) => item.type === "video").map(item => item.video)
+      let videos = (this.items || [])
+        .filter((item) => item.type === "video")
+        .map((item) => item.video);
       let randomVideos = this.random(videos);
       if (randomVideos[0]) this.heroVideo = randomVideos[0];
     },
