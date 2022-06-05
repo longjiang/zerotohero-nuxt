@@ -25,24 +25,31 @@
           <div
             :class="{
               'loader text-center': true,
-              'd-none': videos && !loading,
+              'd-none': !loading,
             }"
             style="margin: 7rem 0 15rem 0"
           >
             <Loader :sticky="true" message="Loading videos in our library..." />
           </div>
 
-          <div class="media-sections" v-if="!loading">
-            <div v-if="videos && videos.length > 0" class="media-section">
-              <LazyYouTubeVideoList
-                :videos="videos.slice(0, 12)"
-                :showAdminToolsInAdminMode="false"
-                :showDate="true"
-                :showBadges="true"
-                :showPlayButton="true"
-                view="feed"
-                skin="dark"
-              />
+          <div v-if="!loading">
+            <div v-if="items && items.length > 0">
+              <div
+                class="feed-item"
+                v-for="(item, index) in items"
+                :key="`item-${index}`"
+              >
+                <FeedItemVideo
+                  v-if="item.type === 'video'"
+                  :video="item.video"
+                  skin="dark"
+                />
+                <FeedItemWord
+                  v-if="item.type === 'word'"
+                  :word="item.word"
+                  skin="dark"
+                />
+              </div>
             </div>
           </div>
 
@@ -67,7 +74,8 @@ import { mapState } from "vuex";
 export default {
   data() {
     return {
-      videos: undefined,
+      items: [],
+      savedWordsShuffled: [],
       tvShows: undefined,
       talks: undefined,
       musicShow: undefined,
@@ -86,17 +94,7 @@ export default {
         this.loadShows();
       }
     });
-    if (!this.videos || this.videos.length === 0) {
-      let videos = await this.getVideos({
-        limit: 50,
-        sort: "youtube_id",
-        offset: this.randomOffset("allVideos", 50),
-      });
-      // Let's prioritize videos in tv shows or talks
-      this.videos = this.random(videos)
-        .sort((a, b) => (b.talk === a.talk ? 0 : b.tv_show ? 1 : -1))
-        .sort((a, b) => (b.tv_show === a.tv_show ? 0 : b.tv_show ? 1 : -1));
-    }
+    await this.loadMoreItems();
     this.loading = false; // Incase resources fail to load, at least show them
   },
   beforeDestroy() {
@@ -105,6 +103,7 @@ export default {
   },
   computed: {
     ...mapState("stats", ["stats"]),
+    ...mapState("savedWords", ["savedWords"]),
     audiobooks() {
       return this.talks.filter((t) => t.audiobook);
     },
@@ -127,11 +126,39 @@ export default {
     },
   },
   methods: {
+    async loadMoreItems() {
+      let numVideos = 10;
+      let numWords = 2;
+      let videos = await this.getVideos({
+        numVideos,
+        sort: "youtube_id",
+        offset: this.randomOffset("allVideos", numVideos),
+      });
+      let items = videos.map((video) => {
+        return { video, type: "video" };
+      });
+      if (this.savedWordsShuffled.length === 0 && this.savedWords && this.savedWords[this.$l2.code]) {
+        this.savedWords[this.$l2.code]
+        let savedWordsShuffled = [...this.savedWords[this.$l2.code]]
+        this.savedWordsShuffled = Helper.shuffle(savedWordsShuffled)
+      }
+      if (this.savedWordsShuffled.length > 0) {
+        let savedWordItems = []
+        for (let i = 0; i < numWords; i++) {
+          let word = this.savedWordsShuffled.pop()
+          savedWordItems.push({type: 'word', word})
+        }
+        items = items.concat(savedWordItems)
+      }
+      this.items = this.items.concat(Helper.shuffle(items))
+
+      return true;
+    },
     loadHeroVideo() {
       let randomVideos = this.random([
-        ...(this.videos || []).filter((v) => v.tv_show || v.talk), // Let's not feature non-tv-show non-talk videos
+        ...(this.items || []).filter((item) => item.type === "video"), // Let's not feature non-tv-show non-talk videos
       ]);
-      this.heroVideo = randomVideos[0];
+      if (randomVideos[0]) this.heroVideo = randomVideos[0].video;
     },
     onVideoUnavailable(youtube_id) {
       if (this.heroVideo.youtube_id === youtube_id) {
@@ -215,14 +242,14 @@ export default {
         for (let video of videos) {
           if (this.tvShows) {
             if (video.tv_show) {
-              video.tv_show = this.tvShows.find(s => s.id === video.tv_show)
+              video.tv_show = this.tvShows.find((s) => s.id === video.tv_show);
             }
             if (video.talk) {
-              video.talk = this.talks.find(s => s.id === video.talk)
+              video.talk = this.talks.find((s) => s.id === video.talk);
             }
           }
         }
-        
+
         return videos;
       } catch (err) {
         return [];
