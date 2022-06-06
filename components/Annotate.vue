@@ -528,29 +528,50 @@ export default {
       let sentences = text.split("SENTENCEENDING!!!");
       return sentences.filter((sentence) => sentence.trim() !== "");
     },
+    tokenizationType(l2) {
+      let tokenizationType = 'integral'
+      if (l2.continua) {
+        tokenizationType = 'continua'
+      } else if (
+        (l2.scripts &&
+          l2.scripts[0] &&
+          l2.scripts[0].script === "Arab") ||
+        ["hu"].includes(l2.code)
+      ) {
+        tokenizationType = 'integral'
+      } else if (
+        ["de", "gsw", "no", "en", "hy", "vi"].includes(l2.code)
+      ) {
+        tokenizationType = 'agglutenative'
+      } else if (
+        (l2.agglutinative || l2.indo) &&
+        l2.wiktionary &&
+        l2.wiktionary > 2000
+      ) {
+        tokenizationType = 'agglutenative'
+      }
+      return tokenizationType
+    },
     async tokenize(text, batchId) {
       let html = text ? text : "";
-      if (this.$l2.continua) {
-        html = await this.tokenizeContinua(text, batchId);
-      } else if (
-        (this.$l2.scripts &&
-          this.$l2.scripts[0] &&
-          this.$l2.scripts[0].script === "Arab") ||
-        ["hu"].includes(this.$l2.code)
-      ) {
-        html = await this.tokenizeIntegral(text);
-      } else if (
-        ["de", "gsw", "no", "en", "hy", "vi"].includes(this.$l2.code)
-      ) {
-        html = await this.tokenizeAgglutenative(text, batchId);
-      } else if (
-        (this.$l2.agglutinative || this.$l2.indo) &&
-        this.$l2.wiktionary &&
-        this.$l2.wiktionary > 2000
-      ) {
-        html = await this.tokenizeAgglutenative(text, batchId);
-      } else {
-        html = await this.tokenizeIntegral(text);
+      let tokenizationType = this.tokenizationType(this.$l2)
+      for (let code of ['en', 'zh', 'es', 'fr', 'ar', 'ru', 'it', 'de', 'hy']) {
+        let l2 = this.$languages.getSmart(code)
+        console.log(l2.name, this.tokenizationType(l2))
+      }
+      console.log({tokenizationType})
+      switch(tokenizationType) {
+        case 'integral':
+          html = await this.tokenizeIntegral(text);
+          break;
+        case 'agglutenative':
+          html = await this.tokenizeAgglutenative(text, batchId);
+          break;
+        case 'continua':
+          html = await this.tokenizeContinua(text, batchId);
+          break;
+        default:
+          // code block
       }
       return html;
     },
@@ -582,9 +603,8 @@ export default {
         phonetics: this.phonetics,
         sticky: this.sticky,
         explore: this.explore,
-        token: this.tokenized[batchId][index],
       };
-      if (token.candidates.length > 0) attrs.token = token
+      if (token.candidates && token.candidates.length > 0) attrs.token = token
       return attrs;
     },
     async tokenizeAgglutenative(text, batchId) {
