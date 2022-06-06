@@ -529,49 +529,45 @@ export default {
       return sentences.filter((sentence) => sentence.trim() !== "");
     },
     tokenizationType(l2) {
-      let tokenizationType = 'integral'
+      let tokenizationType = "integral";
       if (l2.continua) {
-        tokenizationType = 'continua'
+        tokenizationType = "continua";
       } else if (
-        (l2.scripts &&
-          l2.scripts[0] &&
-          l2.scripts[0].script === "Arab") ||
+        (l2.scripts && l2.scripts[0] && l2.scripts[0].script === "Arab") ||
         ["hu"].includes(l2.code)
       ) {
-        tokenizationType = 'integral'
-      } else if (
-        ["de", "gsw", "no", "en", "hy", "vi"].includes(l2.code)
-      ) {
-        tokenizationType = 'agglutenative'
+        tokenizationType = "integral";
+      } else if (["de", "gsw", "no", "en", "hy", "vi"].includes(l2.code)) {
+        tokenizationType = "agglutenative";
       } else if (
         (l2.agglutinative || l2.indo) &&
         l2.wiktionary &&
         l2.wiktionary > 2000
       ) {
-        tokenizationType = 'agglutenative'
+        tokenizationType = "agglutenative";
       }
-      return tokenizationType
+      return tokenizationType;
     },
     async tokenize(text, batchId) {
       let html = text ? text : "";
-      let tokenizationType = this.tokenizationType(this.$l2)
-      for (let code of ['en', 'zh', 'es', 'fr', 'ar', 'ru', 'it', 'de', 'hy']) {
-        let l2 = this.$languages.getSmart(code)
-        console.log(l2.name, this.tokenizationType(l2))
+      let tokenizationType = this.tokenizationType(this.$l2);
+      for (let code of ["en", "zh", "es", "fr", "ar", "ru", "it", "de", "hy"]) {
+        let l2 = this.$languages.getSmart(code);
+        console.log(l2.name, this.tokenizationType(l2));
       }
-      console.log({tokenizationType})
-      switch(tokenizationType) {
-        case 'integral':
+      console.log({ tokenizationType });
+      switch (tokenizationType) {
+        case "integral":
           html = await this.tokenizeIntegral(text);
           break;
-        case 'agglutenative':
+        case "agglutenative":
           html = await this.tokenizeAgglutenative(text, batchId);
           break;
-        case 'continua':
+        case "continua":
           html = await this.tokenizeContinua(text, batchId);
           break;
         default:
-          // code block
+        // code block
       }
       return html;
     },
@@ -598,13 +594,13 @@ export default {
       let attrs = {
         transliterationprop: tr(token.text).replace(/"/g, ""),
         checkSaved: this.checkSaved,
-        ref: 'word-block',
+        ref: "word-block",
         popup: this.popup,
         phonetics: this.phonetics,
         sticky: this.sticky,
         explore: this.explore,
       };
-      if (token.candidates && token.candidates.length > 0) attrs.token = token
+      if (token.candidates && token.candidates.length > 0) attrs.token = token;
       return attrs;
     },
     async tokenizeAgglutenative(text, batchId) {
@@ -636,16 +632,7 @@ export default {
         .replace(
           reg,
           (match, p1) =>
-            `<WordBlock transliterationprop="${tr(p1).replace(
-              '"',
-              ""
-            )}" :checkSaved="${
-              this.checkSaved
-            }" ref="word-block"  :phonetics="${this.phonetics}" :popup="${
-              this.popup
-            }" :sticky="${this.sticky}" :explore="${
-              this.explore
-            }">${p1}</WordBlock>`
+            `<WordBlock v-bind="wordBlockIntegralAttrs('${p1}')">${p1}</WordBlock>`
         )
         .replace(
           /!!!###!!!/gi,
@@ -654,6 +641,18 @@ export default {
           } word-block-unknown">&nbsp;</span>`
         );
       return html;
+    },
+    wordBlockIntegralAttrs(p1) {
+      let attrs = {
+        transliterationprop: tr(p1).replace('"', ""),
+        checkSaved: this.checkSaved,
+        ref: "word-block",
+        popup: this.popup,
+        phonetics: this.phonetics,
+        sticky: this.sticky,
+        explore: this.explore,
+      };
+      return attrs;
     },
     convertToSentencesRecursive(node) {
       if (node.nodeType === 3) {
