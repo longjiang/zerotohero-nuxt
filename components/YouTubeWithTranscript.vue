@@ -23,7 +23,7 @@
           @videoUnavailable="onVideoUnavailable"
           :speed="speed"
           :youtube="video.youtube_id"
-          :starttime="start"
+          :starttime="startTimeOrLineIndex"
           :autoload="autoload"
           :autoplay="autoplay"
           :startAtRandomTime="startAtRandomTime"
@@ -105,6 +105,7 @@
         :parallellines="video.subs_l1"
         :sticky="sticky"
         :startLineIndex="startLineIndex"
+        :starttime="startTimeOrLineIndex"
         :stopLineIndex="stopLineIndex"
         :showSubsEditing="showSubsEditing"
         :enableTranslationEditing="enableTranslationEditing"
@@ -265,15 +266,18 @@ export default {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
-    start() {
-      let starttime =
-        this.video.subs_l2 &&
-        this.video.subs_l2.length > 0 &&
-        this.startLineIndex &&
-        this.video.subs_l2 &&
-        this.video.subs_l2[this.startLineIndex]
-          ? this.video.subs_l2[this.startLineIndex].starttime
-          : this.starttime;
+    startTimeOrLineIndex() {
+      let starttime = 0;
+      if (this.starttime) starttime = this.starttime;
+      else if (this.startLineIndex) {
+        if (
+          this.video.subs_l2 &&
+          this.video.subs_l2.length > 0 &&
+          this.video.subs_l2[this.startLineIndex]
+        ) {
+          starttime = this.video.subs_l2[this.startLineIndex].starttime;
+        }
+      }
       return starttime;
     },
     $adminMode() {
@@ -298,7 +302,7 @@ export default {
   },
   async mounted() {
     this.updateLayout();
-    await this.getL1Transcript();
+    this.getL1Transcript();
   },
   async updated() {
     if (this.$refs.transcript) {
@@ -341,7 +345,7 @@ export default {
     },
     async getL1Transcript() {
       if (this.$l2.code === this.$l1.code) return;
-      let video = this.video;
+      let video = Object.assign({}, this.video);
       if (!video) return;
       let missingSubsL1 = !this.video.subs_l1;
       if (missingSubsL1) {
@@ -556,7 +560,7 @@ export default {
 .youtube-with-transcript-mini {
   display: flex;
   .main-dark {
-    background: rgba(0,0,0,0.5);
+    background: rgba(0, 0, 0, 0.5);
   }
   .youtube-video-column {
     height: 5rem;
@@ -569,7 +573,6 @@ export default {
       top: 1rem;
       background: none;
       height: 3.2rem;
-
 
       .quick-access-button-rewind,
       .quick-access-button-previous,

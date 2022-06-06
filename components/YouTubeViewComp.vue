@@ -49,11 +49,11 @@
         :autoload="true"
         :autoplay="false"
         :starttime="starttime"
+        :startLineIndex="startLineIndex"
         :show="show"
         :showType="showType"
         :episodes="episodes"
         :forcePortrait="false"
-        :startLineIndex="startLineIndex"
         :layout="layout"
         :largeEpisodeCount="largeEpisodeCount"
         @ended="updateEnded"
@@ -220,20 +220,21 @@ export default {
       if (!this.extrasLoaded && typeof this.video !== "undefined") {
         this.extrasLoaded = true;
         console.log(`YouTube View (on video change): load subs if missing...`);
-        this.video = await this.loadSubsIfMissing(this.video);
+        let video = await this.loadSubsIfMissing(this.video);
         if (!Helper.wide()) {
           let el = this.$refs["youtube"];
           if (el) Helper.scrollToTargetAdjusted(el.$el, 43);
         }
-        if (this.video && this.video.subs_l2 && this.video.subs_l2[0]) {
-          if (!this.video.subs_l2[0].duration)
-            this.video = await this.patchDuration(this.video);
+        if (video && video.subs_l2 && video.subs_l2[0]) {
+          if (!video.subs_l2[0].duration)
+            video = await this.patchDuration(video);
           else
             console.log(
               "YouTube View: Video subs have duration! 🎉 First line duration is ",
-              this.video.subs_l2[0].duration
+              video.subs_l2[0].duration
             );
         }
+        this.video = video
         this.saveHistory();
         this.bindKeys();
         if (this.$store.state.shows.showsLoaded[this.$l2.code]) {
@@ -621,6 +622,7 @@ export default {
       }
     },
     async patchDuration(video) {
+      if (!this.$adminMode) return video
       console.log(
         "YouTube View: Saved subtitles does not have duration, getting duration..."
       );
