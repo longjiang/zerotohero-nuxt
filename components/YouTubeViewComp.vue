@@ -131,7 +131,8 @@ export default {
     },
     minimizeVideoTo() {
       if (this.fullHistory) {
-        let lastNonYouTubeViewPath = this.fullHistory.find(
+        let fullHistoryReversed = [...this.fullHistory].reverse()
+        let lastNonYouTubeViewPath = fullHistoryReversed.find(
           (h) =>
             !h.includes("youtube/view") &&
             h.includes(this.$l1.code + "/" + this.$l2.code) // Must be the same language!
