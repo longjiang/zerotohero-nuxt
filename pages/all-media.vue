@@ -45,11 +45,11 @@
               :video="item.video"
               skin="dark"
             />
-            <!-- <FeedItemWord
+            <FeedItemWord
               v-if="item.type === 'word'"
               :savedWord="item.word"
               skin="dark"
-            /> -->
+            />
           </div>
         </div>
         <div class="row">
@@ -90,8 +90,8 @@ export default {
       newsShow: undefined,
       loading: false,
       heroVideo: undefined,
-      numVideosPerLoad: 10,
-      numSavedWordsPerLoad: 10,
+      numVideosPerLoad: 7,
+      numSavedWordsPerLoad: 3,
       params: {},
       query: {
         xs: {
