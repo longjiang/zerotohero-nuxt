@@ -37,6 +37,11 @@
             {{ word.cjk.canonical }}
           </span>
         </span>
+        <Star
+          v-if="word"
+          :word="word"
+          style="transform: scale(0.7); margin-left: -0.8rem;"
+        ></Star>
       </div>
       <div class="definitions-wrapper" v-if="word.definitions">
         <span class="word-type" v-if="word.pos" style="color: #999">

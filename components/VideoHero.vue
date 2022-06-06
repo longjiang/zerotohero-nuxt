@@ -8,12 +8,12 @@
       <div class="top-overlay"></div>
       <div class="bottom-overlay"></div>
       <LazyYouTubeVideo
-        autoload="!isMobile"
-        autoplay="!isMobile"
         ref="youtube"
+        @videoUnavailable="onVideoUnavailable"
+        :autoload="!isMobile"
+        :autoplay="!isMobile"
         :cc="false"
         :youtube="video.youtube_id"
-        @videoUnavailable="onVideoUnavailable"
         :posterOnly="isMobile"
         :icon="false"
       />
