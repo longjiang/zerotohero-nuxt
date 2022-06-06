@@ -69,7 +69,7 @@
                 title="Translate Inline"
                 @click="translateClick"
               >
-                <i class="fas fa-language" ></i>
+                <i class="fas fa-language"></i>
               </span>
               <span
                 class="
@@ -132,9 +132,17 @@
           />
         </template>
       </component>
-      <div class="annotate-translation" v-if="showTranslation && (translationLoading || translation)">
-        <beat-loader class="d-inline-block" v-if="translationLoading" color="#28a745" size="5px"></beat-loader>
-        {{ translation ? translation : '' }}
+      <div
+        class="annotate-translation"
+        v-if="showTranslation && (translationLoading || translation)"
+      >
+        <beat-loader
+          class="d-inline-block"
+          v-if="translationLoading"
+          color="#28a745"
+          size="5px"
+        ></beat-loader>
+        {{ translation ? translation : "" }}
       </div>
     </div>
 
@@ -155,8 +163,8 @@ import { mapState } from "vuex";
 import { ContainerQuery } from "vue-container-query";
 import { getClient } from "iframe-translator";
 import SmartQuotes from "smartquotes";
-import BeatLoader from 'vue-spinner/src/BeatLoader.vue'
- 
+import BeatLoader from "vue-spinner/src/BeatLoader.vue";
+
 export default {
   components: {
     wordblock,
@@ -291,36 +299,35 @@ export default {
   methods: {
     async translateClick() {
       let text = this.text;
-      let iframeTranslationClient
+      let iframeTranslationClient;
       try {
         // https://www.npmjs.com/package/iframe-translator
-        this.translationLoading = true
-        this.$emit("translationLoading", true)
+        this.translationLoading = true;
+        this.$emit("translationLoading", true);
         iframeTranslationClient = await getClient();
-        await Helper.timeout(1000) // Add one second wait to prevent translation from 'freezing'
+        await Helper.timeout(1000); // Add one second wait to prevent translation from 'freezing'
         let translation = await iframeTranslationClient.translate(
           text,
           this.$l1.code
         );
-        this.translationLoading = false
-        this.$emit("translationLoading", false)
+        this.translationLoading = false;
+        this.$emit("translationLoading", false);
         if (translation) {
           this.$emit("translation", translation);
           this.translation = translation;
         }
         iframeTranslationClient.destroy();
       } catch (err) {
-        this.translation = '[Translation error, please try again.]'
-        this.translationLoading = false
+        this.translation = "[Translation error, please try again.]";
+        this.translationLoading = false;
         this.$emit("translation", this.translation);
-        this.$emit("translationLoading", false)
+        this.$emit("translationLoading", false);
         Helper.logError(err);
         try {
           iframeTranslationClient.destroy(); // Make sure to destroy the client otherwise whenever there is an error and the translation is not returned, the client is never destroyed and ios users can't scroll
-        } catch(err) {
+        } catch (err) {
           Helper.logError(err);
         }
-        
       }
     },
     async playAnimation(startFrom) {
@@ -464,11 +471,9 @@ export default {
       this.annotated = false;
       this.annotating = true;
       this.annotatedSlots = [];
-      let annotatedNode = await this.annotateRecursive(node.cloneNode(true))
-      let annotatedHtml = annotatedNode.outerHTML
-      this.annotatedSlots.push(
-        annotatedHtml
-      );
+      let annotatedNode = await this.annotateRecursive(node.cloneNode(true));
+      let annotatedHtml = annotatedNode.outerHTML;
+      this.annotatedSlots.push(annotatedHtml);
       this.annotating = false;
       this.annotated = true;
       this.$emit("annotated", true);
@@ -478,9 +483,12 @@ export default {
         // .sentence node
         let sentence = node.innerText;
         // If the language is does not use apostrophes as part of the word (like Klingon)
-        if (!this.$l2.apostrophe) sentence = SmartQuotes.string(sentence) // We MUST do that otherwise the data-sentence-text attribute (10 lines down) will mess up the markup!
+        if (!this.$l2.apostrophe) sentence = SmartQuotes.string(sentence);
+        // We MUST do that otherwise the data-sentence-text attribute (10 lines down) will mess up the markup!
         else {
-          sentence = SmartQuotes.string(sentence.replace(/'/g, "--do-not-smart-quote-single-quotes--")).replace(/--do-not-smart-quote-single-quotes--/g, "'")
+          sentence = SmartQuotes.string(
+            sentence.replace(/'/g, "--do-not-smart-quote-single-quotes--")
+          ).replace(/--do-not-smart-quote-single-quotes--/g, "'");
         }
         if (
           this.$l2.code === "my" &&
@@ -492,8 +500,12 @@ export default {
             sentence = this.myanmarZawgyiConverter.zawgyiToUnicode(sentence);
         }
         let html = await this.tokenize(sentence, this.batchId);
-        let dataSentenceText = this.emitSentenceTextAsAttr ? `data-sentence-text="${sentence.trim()}"` : ''
-        let $tokenizedSentenceSpan = $(`<span class="sentence" ${dataSentenceText}>${html}</span>`);
+        let dataSentenceText = this.emitSentenceTextAsAttr
+          ? `data-sentence-text="${sentence.trim()}"`
+          : "";
+        let $tokenizedSentenceSpan = $(
+          `<span class="sentence" ${dataSentenceText}>${html}</span>`
+        );
         this.batchId = this.batchId + 1;
         $(node).before($tokenizedSentenceSpan);
         $(node).remove();
@@ -517,7 +529,7 @@ export default {
       return sentences.filter((sentence) => sentence.trim() !== "");
     },
     async tokenize(text, batchId) {
-      let html = text ? text : '';
+      let html = text ? text : "";
       if (this.$l2.continua) {
         html = await this.tokenizeContinua(text, batchId);
       } else if (
@@ -552,18 +564,7 @@ export default {
         if (typeof token === "object") {
           if (token && typeof token === "object") {
             if (token.candidates.length > 0) {
-              html += `<WordBlock transliterationprop="${tr(token.text).replace(
-                /"/g,
-                ""
-              )}" :checkSaved="${
-                this.checkSaved
-              }" ref="word-block" :phonetics="${this.phonetics}" :popup="${
-                this.popup
-              }" :sticky="${
-                this.sticky
-              }" :explore="explore" :token="tokenized[${batchId}][${index}]">${
-                token.text
-              }</WordBlock>`;
+              html += `<WordBlock v-bind="wordBlockAttrs(${batchId},${index})">${token.text}</WordBlock>`;
             } else {
               html += `<WordBlock transliterationprop="${tr(token.text).replace(
                 '"',
@@ -585,6 +586,18 @@ export default {
         }
       }
       return html;
+    },
+    wordBlockAttrs(batchId, index) {
+      let token = this.tokenized[batchId][index];
+      let attrs = {
+        transliterationprop: tr(token.text).replace(/"/g, ""),
+        checkSaved: this.checkSaved,
+        popup: this.popup,
+        sticky: this.sticky,
+        explore: this.explore,
+        token: this.tokenized[batchId][index],
+      };
+      return attrs;
     },
     async tokenizeAgglutenative(text, batchId) {
       let html = "";
@@ -650,8 +663,12 @@ export default {
         let sentences = this.breakSentences(text);
         for (let sentence of sentences) {
           // $(node).before(`<span id="sentence-placeholder-${this.batchId}">${sentence}</span>`)
-          let dataSentenceText = this.emitSentenceTextAsAttr ? `data-sentence-text="${sentence.trim()}"` : ''
-          let sentenceSpan = $(`<span class="sentence" ${dataSentenceText}>${sentence}</span>`);
+          let dataSentenceText = this.emitSentenceTextAsAttr
+            ? `data-sentence-text="${sentence.trim()}"`
+            : "";
+          let sentenceSpan = $(
+            `<span class="sentence" ${dataSentenceText}>${sentence}</span>`
+          );
           $(node).before(sentenceSpan);
         }
         $(node).remove();
