@@ -85,6 +85,10 @@ export default {
       type: String, // If the video is a "lesson video" (with lesson vocab highlighted), set this to "lesson"
       required: false,
     },
+    starttime: {
+      type: Number,
+      default: 0
+    },
     mini: {
       type: Boolean,
       default: false,
@@ -106,7 +110,6 @@ export default {
       show: undefined,
       showType: undefined,
       startLineIndex: 0,
-      starttime: 0,
       video: undefined,
       largeEpisodeCount: undefined,
     };
@@ -458,7 +461,6 @@ export default {
         if (video.subs_l2 && video.subs_l2.length > 0) {
           this.firstLineTime = video.subs_l2[0].starttime;
         }
-        this.starttime = this.$route.query.t ? Number(this.$route.query.t) : 0;
         if (video.subs_l2) {
           let startLineIndex = video.subs_l2.findIndex(
             (l) => Number(l.starttime) >= this.starttime
