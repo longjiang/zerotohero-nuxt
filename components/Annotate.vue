@@ -593,18 +593,11 @@ export default {
         await this.$getDictionary()
       ).tokenize(text);
       for (let index in this.tokenized[batchId]) {
-        let item = this.tokenized[batchId][index];
-        if (typeof item === "object") {
-          html += `<WordBlock transliterationprop="${tr(item.text).replace(
-            '"',
-            ""
-          )}" :checkSaved="${this.checkSaved}" ref="word-block" :phonetics="${
-            this.phonetics
-          }" :popup="${this.popup}" :sticky="${this.sticky}" :explore="${
-            this.explore
-          }" :token="tokenized[${batchId}][${index}]">${item.text}</WordBlock>`;
+        let token = this.tokenized[batchId][index];
+        if (typeof token === "object") {
+          html += `<WordBlock v-bind="wordBlockAttrs(${batchId},${index})">${token.text}</WordBlock>`;
         } else {
-          html += `<span class="word-block-unknown">${(item || "")
+          html += `<span class="word-block-unknown">${(token || "")
             .replace(/\s+([,.!?])/, "$1")
             .replace(/\s+/g, "&nbsp;")}</span>`;
         }
