@@ -1,36 +1,37 @@
 <template>
-  <div
-    :class="`alert-success p-4 rounded ${skin} ${closed ? 'd-none' : ''}`"
-    style="position: relative"
-  >
-    <b-button variant="unstyled" class="close-button">
-      <i class="fas fa-times" @click="closed = true"></i>
-    </b-button>
-    <h5 class="text-center">
-      {{ messages[parseInt(Math.random() * messages.length)] }}
-    </h5>
-    <p>
-      If have any questions, experience any problems, or would like to suggest a
-      feature, please
-      <router-link :to="{ name: 'discussions' }" class="strong text-success">
-        join the discussion
-      </router-link>
-      and post to our
-      <router-link :to="{ name: 'discussions' }" class="strong text-success">
-        Support Disqus Board
-      </router-link>
-      .
-    </p>
-    <div class="text-center">
-      <router-link
-        :to="
-          this.$l1 && this.$l2 ? { name: 'discussions' } : `/en/zh/discussions`
-        "
-        class="btn btn-bg btn-success strong"
-      >
-        <i class="fas fa-comment-alt mr-2"></i>
-        Post a Comment
-      </router-link>
+  <div>
+    <div
+      :class="`alert-success p-4 rounded ${skin} `"
+      style="position: relative"
+    >
+      <b-button variant="unstyled" class="close-button">
+        <i class="fas fa-times" @click="closed = true"></i>
+      </b-button>
+      <h5 class="text-center">
+        {{ messages[parseInt(Math.random() * messages.length)] }}
+      </h5>
+      <p class="text-center">
+        If have any questions, experience any problems, or would like to suggest
+        a feature, please
+        <a href="mailto:jon@chinesezerotohero.com" class="strong text-success">
+          send us an email.
+        </a>
+      </p>
+      <div class="text-center">
+        <a
+          href="mailto:jon@chinesezerotohero.com"
+          :to="
+            this.$l1 && this.$l2
+              ? { name: 'discussions' }
+              : `/en/zh/discussions`
+          "
+          class="btn btn-bg btn-success strong"
+        >
+          <i class="fas fa-paper-plane mr-2"></i>
+          Send Email
+        </a>
+        <div class="mt-2"><i class="fas fa-paperclip mr-1"></i> Make sure to attach a screen recording!</div>
+      </div>
     </div>
   </div>
 </template>
@@ -71,17 +72,21 @@ export default {
   },
   mounted() {
     if (typeof localStorage !== "undefined") {
-      if (localStorage.getItem("zthQuitNotice") === 'true' && localStorage.getItem("zthQuitNoticeAgain") === 'true') this.closed = true;
+      if (
+        localStorage.getItem("zthQuitNotice") === "true" &&
+        localStorage.getItem("zthQuitNoticeAgain") === "true"
+      )
+        this.closed = true;
     }
   },
   watch: {
     closed() {
       if (this.closed && typeof localStorage !== "undefined") {
-        if (localStorage.getItem("zthQuitNotice") === 'true') {
-          localStorage.setItem("zthQuitNoticeAgain", 'true');
+        if (localStorage.getItem("zthQuitNotice") === "true") {
+          localStorage.setItem("zthQuitNoticeAgain", "true");
         } else {
-          localStorage.setItem("zthQuitNotice", 'true');
-        }        
+          localStorage.setItem("zthQuitNotice", "true");
+        }
       }
     },
   },

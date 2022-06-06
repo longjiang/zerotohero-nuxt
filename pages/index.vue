@@ -406,7 +406,7 @@
           </div>
         </client-only>
 
-        <div class="row mb-3">
+        <div class="row mb-3" v-if="!native">
           <div class="col-sm-6 mb-4">
             <div class="home-card">
               <router-link to="/en/zh/all-media">

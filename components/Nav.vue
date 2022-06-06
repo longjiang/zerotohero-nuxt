@@ -154,6 +154,8 @@ feature-card-name-${child.name}`"
 </template>
 
 <script>
+import { Capacitor } from "@capacitor/core";
+
 export default {
   props: {
     l1: {
@@ -259,6 +261,9 @@ export default {
     },
   },
   computed: {
+    native() {
+      return Capacitor.isNativePlatform();
+    },
     savedWordsCount() {
       let count = this.$store.getters["savedWords/count"]({ l2: this.l2.code });
       // eslint-disable-next-line vue/no-parsing-error
@@ -322,7 +327,7 @@ export default {
         {
           icon: "fas fa-graduation-cap",
           title: "Courses",
-          show: this.hasFeature("courses"),
+          show: !this.native && this.hasFeature("courses"),
           children: [
             {
               name: "courses",
@@ -770,12 +775,12 @@ export default {
               shortcut: (e) => e.code === "KeyS" && e.metaKey && e.shiftKey,
               show: true,
             },
-            {
-              name: "discussions",
-              icon: "fas fa-comment",
-              show: true,
-              title: "Forum",
-            },
+            // {
+            //   name: "discussions",
+            //   icon: "fas fa-comment",
+            //   show: true,
+            //   title: "Forum",
+            // },
             {
               name: "updates",
               title: "What’s New",
