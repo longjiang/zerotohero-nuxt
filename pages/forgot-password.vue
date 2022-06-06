@@ -96,6 +96,7 @@
 <script>
 import Helper from "@/lib/helper";
 import Config from "@/lib/config";
+import axios from 'axios';
 
 export default {
   props: {
@@ -128,11 +129,12 @@ export default {
     async onSubmit(event) {
       try {
         this.emailSending = true;
-        let res = await this.$authios.post(
+        let host = process.server ? process.env.baseUrl : window.location.protocol + '//' + window.location.hostname + ':' + window.location.port
+        let res = await axios.post(
           `${Config.wiki}auth/password/request`,
           {
             email: this.form.email,
-            reset_url: "https://www.zerotohero.ca/password-reset",
+            reset_url: `${host}/password-reset`,
           }
         );
         if (res && res.status === 200) {

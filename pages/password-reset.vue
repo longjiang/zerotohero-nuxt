@@ -79,6 +79,7 @@
 <script>
 import Helper from "@/lib/helper";
 import Config from "@/lib/config";
+import axios from 'axios';
 
 export default {
   props: {
@@ -111,7 +112,7 @@ export default {
     async onSubmit(event) {
       try {
         this.resetting = true;
-        let res = await this.$authios.post(
+        let res = await axios.post(
           `${Config.wiki}auth/password/reset`,
           {
             token: this.token,
