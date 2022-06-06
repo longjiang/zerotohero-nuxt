@@ -21,7 +21,7 @@
           :description="`Learn ${$l2.name} with Videos`"
           :image="'/img/tv-shows.jpg'"
         />
-        <div class="row mt-4">
+        <div class="row">
           <div class="col-sm-12">
             <div
               :class="{

@@ -482,18 +482,10 @@ export default {
         style="z-index: 10"
       />
       <div class="zth-content">
-        <!-- These touch events block scrolling from iOS! -->
-        <!-- v-hammer:panstart.horizontal="onPanStart"
-        v-hammer:pan.horizontal="onPan" -->
-        <Nuxt id="main" v-if="$route.name !== 'youtube-view'" />
-        <!-- <LazyFooter
-          v-if="dictionaryCredit"
-          :dictionaryCredit="dictionaryCredit"
-          class="zth-footer"
-        /> -->
+        <Nuxt id="main" keep-alive :keep-alive-props="{ include: 'pages/all-media.vue' }"/>
         <YouTubeViewComp
           id="overlay-player"
-          v-if="overlayPlayerYouTubeId"
+          v-if="overlayPlayerYouTubeId && overlayPlayerMinimized"
           v-bind="{
             youtube_id: overlayPlayerYouTubeId,
             lesson: overlayPlayerLesson,
