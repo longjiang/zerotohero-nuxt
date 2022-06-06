@@ -21,20 +21,7 @@
           :description="`Learn ${$l2.name} with Videos`"
           :image="'/img/tv-shows.jpg'"
         />
-        <div class="row">
-          <div class="col-sm-12">
-            <div
-              :class="{
-                'loader text-center': true,
-                'd-none': !loading,
-              }"
-              style="margin: 7rem 0 15rem 0"
-            >
-              <Loader :sticky="true" message="Loading your feed..." />
-            </div>
-          </div>
-        </div>
-        <div class="row" v-if="!loading && items && items.length > 0">
+        <div class="row" v-if="items && items.length > 0">
           <div
             :class="colClasses"
             v-for="(item, index) in items"
@@ -50,6 +37,19 @@
               :savedWord="item.word"
               skin="dark"
             />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <div
+              :class="{
+                'loader text-center': true,
+                'd-none': !loading,
+              }"
+              style="margin: 7rem 0 15rem 0"
+            >
+              <Loader :sticky="true" message="Loading your feed..." />
+            </div>
           </div>
         </div>
         <div class="row">
