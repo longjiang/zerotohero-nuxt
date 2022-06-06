@@ -1,6 +1,6 @@
 <router>
   {
-    path: '/login',
+    path: '/forgot-password',
     props: true,
     meta: {
       skin: 'dark',
@@ -25,7 +25,7 @@
             <div class="text-center mb-4">
               <Logo skin="light" />
             </div>
-            <b-form @submit.prevent="onSubmit">
+            <div class="reset-form" v-if="!emailSent">
               <div class="alert alert-warning" v-if="$l2 && $l2.code === 'zh'">
                 <b>Friendly reminder:</b>
                 This does NOT login to your Chinese Zero to Hero online courses
@@ -38,41 +38,54 @@
                 </a>
                 .
               </div>
-              <div v-if="message" class="alert alert-danger mt-2">
-                {{ message }}
-              </div>
-              <b-form-group id="input-group-1" label-for="email">
-                <b-form-input
-                  id="email"
-                  v-model="form.email"
-                  type="email"
-                  placeholder="Email"
-                  required
-                ></b-form-input>
-              </b-form-group>
+              <b-form @submit.prevent="onSubmit">
+                <p class="mb-3">Enter your email to recover your password:</p>
+                <div v-if="message" class="alert alert-danger mt-2">
+                  {{ message }}
+                </div>
+                <b-form-group id="input-group-1" label-for="email">
+                  <b-form-input
+                    id="email"
+                    v-model="form.email"
+                    type="email"
+                    placeholder="Email"
+                    required
+                  ></b-form-input>
+                </b-form-group>
 
-              <b-form-group id="input-group-2" label-for="password">
-                <b-form-input
-                  id="password"
-                  type="password"
-                  v-model="form.password"
-                  placeholder="Password"
-                  required
-                ></b-form-input>
-              </b-form-group>
-
-              <b-button class="d-block w-100" type="submit" variant="success">
-                Login
-              </b-button>
-              <div class="mt-3 text-center">
-                <router-link :to="{ name: 'register' }">
-                  Register
-                </router-link>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <router-link :to="{ name: 'forgot-password' }">
-                  Forgot Password?
-                </router-link>
+                <b-button
+                  class="d-block w-100"
+                  type="submit"
+                  variant="success"
+                  v-if="!emailSending"
+                >
+                  Continue
+                </b-button>
+                <div class="text-center" v-else>
+                  <Loader
+                    :sticky="true"
+                    message="Sending password reset email..."
+                  />
+                </div>
+              </b-form>
+            </div>
+            <div class="email-sent" v-else>
+              <div class="alert alert-success">
+                <h5 class="mb-3">
+                  <i class="fas fa-check mr-1"></i>
+                  Email sent!
+                </h5>
+                <p>
+                  You'll receive a link to reset your password at
+                  <b>{{ form.email }}</b>
+                  shortly.
+                </p>
+                <p>
+                  Please check your spam or junk folder before submitting a new
+                  request.
+                </p>
               </div>
-            </b-form>
+            </div>
           </div>
         </div>
       </div>
@@ -82,6 +95,7 @@
 
 <script>
 import Helper from "@/lib/helper";
+import Config from "@/lib/config";
 
 export default {
   props: {
@@ -91,9 +105,10 @@ export default {
     return {
       form: {
         email: "",
-        password: "",
       },
       shaking: false,
+      emailSending: false,
+      emailSent: false,
     };
   },
   computed: {
@@ -112,20 +127,17 @@ export default {
   methods: {
     async onSubmit(event) {
       try {
-        let res = await this.$auth.loginWith("local", { data: this.form });
-        if (res && res.data && res.data.data && res.data.data.user) {
-          let user = res.data.data.user;
-          this.$auth.setUser(user);
-          this.$toast.success(`Welcome back, ${this.$auth.user.first_name}!`, {
-            position: "top-center",
-            duration: 5000,
-          });
-          if (this.$l1 && this.$l2)
-            this.$router.push({
-              name: "profile",
-              params: { l1: this.$l1.code, l2: this.$l2.code },
-            });
-          else this.$router.push("/");
+        this.emailSending = true;
+        let res = await this.$authios.post(
+          `${Config.wiki}auth/password/request`,
+          {
+            email: this.form.email,
+            reset_url: "https://www.zerotohero.ca/password-reset",
+          }
+        );
+        if (res && res.status === 200) {
+          this.emailSent = true;
+          this.emailSending = false;
         }
       } catch (err) {
         if (err.response && err.response.data) {
@@ -139,6 +151,7 @@ export default {
             duration: 5000,
           });
         }
+        this.emailSending = false;
         this.shake();
       }
     },
