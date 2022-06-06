@@ -551,11 +551,11 @@ export default {
     async tokenize(text, batchId) {
       let html = text ? text : "";
       let tokenizationType = this.tokenizationType(this.$l2);
-      for (let code of ["en", "zh", "es", "fr", "ar", "ru", "it", "de", "hy"]) {
-        let l2 = this.$languages.getSmart(code);
-        console.log(l2.name, this.tokenizationType(l2));
-      }
-      console.log({ tokenizationType });
+      // for (let code of ["en", "zh", "es", "fr", "ar", "ru", "it", "de", "hy"]) {
+      //   let l2 = this.$languages.getSmart(code);
+      //   console.log(l2.name, this.tokenizationType(l2));
+      // }
+      // console.log({ tokenizationType });
       switch (tokenizationType) {
         case "integral":
           html = await this.tokenizeIntegral(text);
@@ -579,7 +579,7 @@ export default {
       for (let index in this.tokenized[batchId]) {
         let token = this.tokenized[batchId][index];
         if (token && typeof token === "object") {
-          html += `<WordBlock v-bind="wordBlockAttrs(${batchId},${index})">${token.text}</WordBlock>`;
+          html += `<WordBlock v-bind="wordBlockTokenAttrs(${batchId},${index})">${token.text}</WordBlock>`;
         } else {
           html += `<span class="word-block-unknown">${token.replace(
             /\s+/,
@@ -589,10 +589,9 @@ export default {
       }
       return html;
     },
-    wordBlockAttrs(batchId, index) {
-      let token = this.tokenized[batchId][index];
+    wordBlockIntegralAttrs(p1) {
       let attrs = {
-        transliterationprop: tr(token.text).replace(/"/g, ""),
+        transliterationprop: tr(p1).replace(/"/g, ""),
         checkSaved: this.checkSaved,
         ref: "word-block",
         popup: this.popup,
@@ -600,6 +599,11 @@ export default {
         sticky: this.sticky,
         explore: this.explore,
       };
+      return attrs;
+    },
+    wordBlockTokenAttrs(batchId, index) {
+      let token = this.tokenized[batchId][index];
+      let attrs = this.wordBlockIntegralAttrs(token.text);
       if (token.candidates && token.candidates.length > 0) attrs.token = token;
       return attrs;
     },
@@ -611,7 +615,7 @@ export default {
       for (let index in this.tokenized[batchId]) {
         let token = this.tokenized[batchId][index];
         if (typeof token === "object") {
-          html += `<WordBlock v-bind="wordBlockAttrs(${batchId},${index})">${token.text}</WordBlock>`;
+          html += `<WordBlock v-bind="wordBlockTokenAttrs(${batchId},${index})">${token.text}</WordBlock>`;
         } else {
           html += `<span class="word-block-unknown">${(token || "")
             .replace(/\s+([,.!?])/, "$1")
@@ -641,18 +645,6 @@ export default {
           } word-block-unknown">&nbsp;</span>`
         );
       return html;
-    },
-    wordBlockIntegralAttrs(p1) {
-      let attrs = {
-        transliterationprop: tr(p1).replace('"', ""),
-        checkSaved: this.checkSaved,
-        ref: "word-block",
-        popup: this.popup,
-        phonetics: this.phonetics,
-        sticky: this.sticky,
-        explore: this.explore,
-      };
-      return attrs;
     },
     convertToSentencesRecursive(node) {
       if (node.nodeType === 3) {
