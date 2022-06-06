@@ -14,7 +14,7 @@
       @click="loadYouTubeiFrame()"
     >
       <div :id="youtubeIframeID" class="youtube-iframe"></div>
-      <div class="youtube-icon" v-if="!autoplay && !loading"></div>
+      <div class="youtube-icon" v-if="!posterOnly && !autoplay && !loading"></div>
     </div>
   </div>
 </template>
