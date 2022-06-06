@@ -1,0 +1,11 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "9CS9PCBX32.ca.zerotohero.app",
+        "paths": ["*"]
+      }
+    ]
+  }
+}

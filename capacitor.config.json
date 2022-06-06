@@ -1,4 +1,7 @@
 {
+  "server": {
+    "iosScheme": "zerotohero"
+  },
   "plugins": {
     "SplashScreen": {
       "launchShowDuration": 3000,
