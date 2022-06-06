@@ -45,11 +45,11 @@
               :video="item.video"
               skin="dark"
             />
-            <FeedItemWord
+            <!-- <FeedItemWord
               v-if="item.type === 'word'"
               :savedWord="item.word"
               skin="dark"
-            />
+            /> -->
           </div>
         </div>
         <div class="row">
@@ -116,18 +116,18 @@ export default {
       },
     };
   },
-  async mounted() {
+  async created() {
     this.loadMoreItems();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type.startsWith("shows")) {
         this.loadShows();
       }
       if (mutation.type.startsWith("stats/LOAD")) {
-        this.loadMoreItems();
+        if (this.items.length === 0) this.loadMoreItems();
       }
       if ((mutation.type = "savedWords/IMPORT_WORDS_FROM_JSON")) {
         this.loadSavedWords();
-        this.loadMoreItems();
+        if (this.items.length === 0) this.loadMoreItems();
       }
     });
     this.loadSavedWords();
