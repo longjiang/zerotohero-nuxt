@@ -807,7 +807,7 @@ export default {
             },
             {
               name: "page",
-              params: {id: 17},
+              params: { id: 17 },
               icon: "fas fa-file",
               title: "Privacy Policy",
               show: true,
@@ -1080,20 +1080,28 @@ export default {
         }
       }
     },
+    /**
+     * Returns the last path in the fullHistory that matches the item's name or the item's children's name
+     */
     last(item) {
       if (item) {
         if (item.to) return item.to;
-        let historyMatches = (this.fullHistory || []).filter((path) => {
-          if (path) {
-            let r = this.$router.resolve(path);
-            if (r && r.route) {
-              let childNames = item.children
-                ? item.children.map((child) => child.name)
-                : [item.name];
-              return childNames.includes(r.route.name);
+        let historyMatches = this.fullHistory || [];
+        let namesToMatch = [item.name];
+        if (item.children)
+          namesToMatch = item.children.map((child) => child.name);
+        historyMatches = historyMatches
+          .filter((path) => path)
+          .filter((path) => {
+            let resolvedPath = this.$router.resolve(path);
+            console.log({resolvedPath})
+            if (resolvedPath && resolvedPath.route) {
+              if (resolvedPath.route.params && resolvedPath.route.params.l2) {
+                if (resolvedPath.route.params.l2 !== this.$l2.code) return false // Never go back to a different language!
+              }
+              return namesToMatch.includes(resolvedPath.route.name);
             }
-          }
-        });
+          });
         let path = historyMatches.pop();
         return path;
       } else {
