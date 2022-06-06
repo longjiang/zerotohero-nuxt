@@ -561,23 +561,8 @@ export default {
       ).tokenize(text);
       for (let index in this.tokenized[batchId]) {
         let token = this.tokenized[batchId][index];
-        if (typeof token === "object") {
-          if (token && typeof token === "object") {
-            if (token.candidates.length > 0) {
-              html += `<WordBlock v-bind="wordBlockAttrs(${batchId},${index})">${token.text}</WordBlock>`;
-            } else {
-              html += `<WordBlock transliterationprop="${tr(token.text).replace(
-                '"',
-                ""
-              )}" :checkSaved="${
-                this.checkSaved
-              }" ref="word-block" :phonetics="${this.phonetics}" :popup="${
-                this.popup
-              }" :sticky="${this.sticky}" :explore="explore">${
-                token.text
-              }</WordBlock>`;
-            }
-          }
+        if (token && typeof token === "object") {
+          html += `<WordBlock v-bind="wordBlockAttrs(${batchId},${index})">${token.text}</WordBlock>`;
         } else {
           html += `<span class="word-block-unknown">${token.replace(
             /\s+/,
@@ -592,11 +577,14 @@ export default {
       let attrs = {
         transliterationprop: tr(token.text).replace(/"/g, ""),
         checkSaved: this.checkSaved,
+        ref: 'word-block',
         popup: this.popup,
+        phonetics: this.phonetics,
         sticky: this.sticky,
         explore: this.explore,
         token: this.tokenized[batchId][index],
       };
+      if (token.candidates.length > 0) attrs.token = token
       return attrs;
     },
     async tokenizeAgglutenative(text, batchId) {
