@@ -21,20 +21,7 @@
           :description="`Learn ${$l2.name} with Videos`"
           :image="'/img/tv-shows.jpg'"
         />
-        <div class="row">
-          <div class="col-sm-12">
-            <div
-              :class="{
-                'loader text-center': true,
-                'd-none': !loading,
-              }"
-              style="margin: 7rem 0 15rem 0"
-            >
-              <Loader :sticky="true" message="Loading your feed..." />
-            </div>
-          </div>
-        </div>
-        <div class="row" v-if="!loading && items && items.length > 0">
+        <div class="row" v-if="items && items.length > 0">
           <div
             :class="colClasses"
             v-for="(item, index) in items"
@@ -50,6 +37,19 @@
               :savedWord="item.word"
               skin="dark"
             />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <div
+              :class="{
+                'loader text-center': true,
+                'd-none': !loading,
+              }"
+              style="margin: 7rem 0 15rem 0"
+            >
+              <Loader :sticky="true" message="Loading your feed..." />
+            </div>
           </div>
         </div>
         <div class="row">
@@ -88,10 +88,10 @@ export default {
       musicShow: undefined,
       moviesShow: undefined,
       newsShow: undefined,
-      loading: true,
+      loading: false,
       heroVideo: undefined,
-      numVideosPerLoad: 10,
-      numSavedWordsPerLoad: 10,
+      numVideosPerLoad: 9,
+      numSavedWordsPerLoad: 3,
       params: {},
       query: {
         xs: {
@@ -117,17 +117,17 @@ export default {
     };
   },
   async mounted() {
-    this.loadMoreItems();
+    if (!this.loading) this.loadMoreItems();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type.startsWith("shows")) {
+      if (mutation.type === "shows/LOAD_SHOWS") {
         this.loadShows();
       }
-      if (mutation.type.startsWith("stats/LOAD")) {
-        this.loadMoreItems();
+      if (mutation.type === "stats/LOAD") {
+        if (this.items.length === 0 && !this.loading) this.loadMoreItems();
       }
       if ((mutation.type = "savedWords/IMPORT_WORDS_FROM_JSON")) {
         this.loadSavedWords();
-        this.loadMoreItems();
+        if (this.items.length === 0 && !this.loading) this.loadMoreItems();
       }
     });
     this.loadSavedWords();
@@ -149,7 +149,7 @@ export default {
         },
         classes
       );
-      return classes
+      return classes;
     },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
@@ -167,7 +167,7 @@ export default {
   methods: {
     visibilityChanged(visible) {
       if (visible) {
-        this.loadMoreItems();
+        if (!this.loading) this.loadMoreItems();
       }
     },
     assignShowsToVideos(videos) {
@@ -194,31 +194,35 @@ export default {
       }
     },
     async loadMoreItems() {
-      if (!this.$store.state.stats.statsLoaded[this.$l2.code]) return;
-      if (!this.savedWords) return;
-      let numVideos = this.numVideosPerLoad;
-      let numWords = this.numSavedWordsPerLoad;
-      let offset = this.randomOffset("allVideos", numVideos);
-      let videos = await this.getVideos({
-        numVideos,
-        sort: "youtube_id",
-        offset,
-      });
-      let items = videos.map((video) => {
-        return { video, type: "video" };
-      });
-      if (this.savedWordsShuffled.length > 0) {
-        let savedWordItems = [];
-        for (let i = 0; i < numWords; i++) {
-          let word = this.savedWordsShuffled.pop();
-          if (word) savedWordItems.push({ type: "word", word });
+      if (
+        this.$store.state.stats.statsLoaded[this.$l2.code] &&
+        this.savedWords
+      ) {
+        this.loading = true;
+        let numVideos = this.numVideosPerLoad;
+        let numWords = this.numSavedWordsPerLoad;
+        let offset = this.randomOffset("allVideos", numVideos);
+        let videos = await this.getVideos({
+          numVideos,
+          sort: "youtube_id",
+          offset,
+        });
+        let items = videos.map((video) => {
+          return { video, type: "video" };
+        });
+        if (this.savedWordsShuffled.length > 0) {
+          let savedWordItems = [];
+          for (let i = 0; i < numWords; i++) {
+            let word = this.savedWordsShuffled.pop();
+            if (word) savedWordItems.push({ type: "word", word });
+          }
+          items = items.concat(savedWordItems);
         }
-        items = items.concat(savedWordItems);
+        this.items = this.items.concat(Helper.shuffle(items));
+        if (!this.heroVideo) this.loadHeroVideo();
+        this.loading = false;
+        return true;
       }
-      this.items = this.items.concat(Helper.shuffle(items));
-      if (!this.heroVideo) this.loadHeroVideo();
-      this.loading = false
-      return true;
     },
     loadHeroVideo() {
       let videos = (this.items || [])
