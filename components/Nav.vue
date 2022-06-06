@@ -1094,7 +1094,6 @@ export default {
           .filter((path) => path)
           .filter((path) => {
             let resolvedPath = this.$router.resolve(path);
-            console.log({resolvedPath})
             if (resolvedPath && resolvedPath.route) {
               if (resolvedPath.route.params && resolvedPath.route.params.l2) {
                 if (resolvedPath.route.params.l2 !== this.$l2.code) return false // Never go back to a different language!
