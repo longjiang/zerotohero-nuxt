@@ -38,7 +38,7 @@ export default {
       type: Function
     },
     home: {
-      type: String
+      type: [String, Object]
     },
     append: {
       type: String
