@@ -51,7 +51,7 @@ import WordBlock from '@/components/WordBlock'
 import WordBlockDictionary from '@/components/WordBlockDictionary'
 import VRuntimeTemplate from 'v-runtime-template'
 import Helper from '@/lib/helper'
-import Config from '@/lib/config'
+import { reject } from '@/lib/utils/language-levels'
 
 export default {
   components: {
@@ -156,7 +156,7 @@ export default {
         var lemmatizer = new Lemmatizer()
         for (let seg of segs) {
           let word = seg.toLowerCase()
-          if (/.*([a-z0-9]+).*/.test(word) && (!Config.reject[this.$l2.code] || !Config.reject[this.$l2.code].includes(word))) {
+          if (/.*([a-z0-9]+).*/.test(word) && (!reject[this.$l2.code] || !reject[this.$l2.code].includes(word))) {
             let lemmas = lemmatizer.lemmas(word)
             lemmas = [[word, 'inflected']].concat(lemmas)
             let found = false
