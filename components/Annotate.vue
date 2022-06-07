@@ -321,7 +321,10 @@ export default {
         }
       }
     },
-    async playAnimation(startFrom) {
+    /**
+     * @param {Number} startFrom Starting time in seconds
+     */
+    async playAnimation(startFrom = 0) {
       if (!this.annotated) {
         return;
       } else {
