@@ -470,7 +470,7 @@ export default {
       this.$emit("annotated", true);
     },
     async annotateRecursive(node) {
-      if (node && node.classList && node.classList.contains("sentence")) {
+      if (node?.classList?.contains("sentence")) {
         // .sentence node
         let sentence = node.innerText;
         // If the language is does not use apostrophes as part of the word (like Klingon)
@@ -569,7 +569,7 @@ export default {
       ).tokenize(text);
       for (let index in this.tokenized[batchId]) {
         let token = this.tokenized[batchId][index];
-        if (token && typeof token === "object") {
+        if (typeof token === "object") {
           html += `<WordBlock v-bind="wordBlockTokenAttrs(${batchId},${index})">${token.text}</WordBlock>`;
         } else {
           html += `<span class="word-block-unknown">${token.replace(
@@ -595,7 +595,7 @@ export default {
     wordBlockTokenAttrs(batchId, index) {
       let token = this.tokenized[batchId][index];
       let attrs = this.wordBlockIntegralAttrs(token.text);
-      if (token.candidates && token.candidates.length > 0) attrs.token = token;
+      if (token.candidates?.length > 0) attrs.token = token;
       return attrs;
     },
     async tokenizeAgglutenative(text, batchId) {
