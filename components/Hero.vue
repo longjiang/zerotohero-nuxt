@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import { HSK_COLORS } from "@/lib/utils/levels";
+import { HSK_COLORS } from "~/lib/utils/language-levels";
 export default {
   data() {
     return {
