@@ -25,7 +25,7 @@
 
 <script>
 import Helper from "@/lib/helper";
-import LEVELS from '@/lib/utils/levels'
+import { LEVELS } from "@/lib/utils/levels";
 
 export default {
   props: {
