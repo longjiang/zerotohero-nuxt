@@ -82,10 +82,14 @@
             class="image-wall-image"
             v-for="(image, index) in images"
             :key="`web-images-${text}-${index}`"
-            :src="`${Config.imageProxy}?${image.src}`"
+            :src="`${imageProxy}?${image.src}`"
           />
         </div>
-        <button class="word-block-tool-tip-close" @click="$nuxt.$emit('popupClosed')" v-close-popover>
+        <button
+          class="word-block-tool-tip-close"
+          @click="$nuxt.$emit('popupClosed')"
+          v-close-popover
+        >
           <i class="fa fa-times"></i>
         </button>
         <div
@@ -283,8 +287,8 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
-import Config from "@/lib/config";
+import { timeout, uniqueId, unique, uniqueByValue, isMobile, ucFirst } from "@/lib/helper";
+import { imageProxy } from "@/lib/config";
 import WordPhotos from "@/lib/word-photos";
 import Klingon from "@/lib/klingon";
 import { mapState } from "vuex";
@@ -316,7 +320,7 @@ export default {
   data() {
     return {
       savedTransliteration: undefined,
-      id: `wordblock-${Helper.uniqueId()}`,
+      id: `wordblock-${uniqueId()}`,
       open: false,
       loading: true,
       text: this.$slots.default ? this.$slots.default[0].text : undefined,
@@ -330,12 +334,12 @@ export default {
       wordblockHover: false,
       tooltipHover: false,
       highlightHardWords: true,
-      Config,
       transliteration: undefined,
       farsiRomanizations: {},
       lastLookupWasQuick: false,
       loadingImages: false,
       t: 0,
+      imageProxy
     };
   },
   computed: {
@@ -392,7 +396,7 @@ export default {
             !bannedEndings.includes(head.charAt(head.length - 1))
           ) {
             let hanjas = this.token.candidates.map((c) => c.hanja);
-            if (this.$l2.code !== "vi") hanjas = Helper.unique(hanjas || []); // Vietnamese Han Tu is wiktionary CSV file has incorrect homophones
+            if (this.$l2.code !== "vi") hanjas = unique(hanjas || []); // Vietnamese Han Tu is wiktionary CSV file has incorrect homophones
             if (hanjas.length === 1 && hanjas[0] && !hanjas[0].includes(",")) {
               hanja = hanjas[0];
             } else if (this.$l2.code === "vi") {
@@ -484,11 +488,11 @@ export default {
       if ((this.words && this.words.length === 0) || this.lastLookupWasQuick) {
         this.lookup();
       }
-      await Helper.timeout(300);
+      await timeout(300);
       this.updateOpen();
     },
     async tooltipHover() {
-      await Helper.timeout(123);
+      await timeout(123);
       this.updateOpen();
     },
   },
@@ -532,7 +536,7 @@ export default {
       console.log(`Evaluated`, arg);
     },
     async visibilityChanged(isVisible) {
-      await Helper.timeout(123);
+      await timeout(123);
       if (isVisible && (!this.words || this.words.length === 0)) {
         if (this.$l2.code !== "fa") {
           let quick = true;
@@ -623,7 +627,7 @@ export default {
           path: `/${this.$l1.code}/${this.$l2.code}/explore/related/${this.token.candidates[0].id}`,
         });
       } else {
-        if (!Helper.isMobile()) this.togglePopup();
+        if (!isMobile()) this.togglePopup();
       }
     },
     transliterate(text) {
@@ -717,7 +721,7 @@ export default {
         if (this.text.match(/^.[\wА-ЯЁ]/)) {
           return text.toUpperCase();
         } else {
-          return Helper.ucFirst(text);
+          return ucFirst(text);
         }
       } else {
         return text;
@@ -775,12 +779,14 @@ export default {
         if (
           this.words &&
           this.words.find(
-            (w) => w.pos && ["proper noun", "noun", "Noun", "name", "n"].includes(w.pos)
+            (w) =>
+              w.pos &&
+              ["proper noun", "noun", "Noun", "name", "n"].includes(w.pos)
           )
         )
           this.loadImages();
         this.open = true;
-        await Helper.timeout(123);
+        await timeout(123);
         if (this.open) {
           if (this.$refs.speak && this.$refs.speak[0]) {
             this.$refs.speak[0].speak(0.75, 0.5); // Speed and volume
@@ -852,7 +858,7 @@ export default {
             })
           : [];
       }
-      words = Helper.uniqueByValue(words, "id");
+      words = uniqueByValue(words, "id");
       this.words = words;
       this.updateIPA();
       this.loading = false;
