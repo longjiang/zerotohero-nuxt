@@ -1,15 +1,13 @@
 <template>
   <div class="hero">
-    <div class="avatar-percentage-wrapper" >
+    <div class="avatar-percentage-wrapper">
       <div
-        :class="
-          `c100 p${Math.floor(
-            (parseInt(hero.score) / fullScore(hero.hsk)) * 100
-          )} percentage`
-        "
+        :class="`c100 p${Math.floor(
+          (parseInt(hero.score) / fullScore(hero.hsk)) * 100
+        )} percentage`"
       >
-        <span class="avatar-wrapper"
-          ><img
+        <span class="avatar-wrapper">
+          <img
             :src="
               hero.avatar
                 ? hero.avatar.data.thumbnails[0].url
@@ -17,15 +15,16 @@
             "
             alt=""
             class="avatar"
-        /></span>
+          />
+        </span>
         <div class="slice">
           <div
             class="bar"
-            :style="`border-color: ${Helper.hskColors[hero.hsk]}`"
+            :style="`border-color: ${HSK_COLORS[hero.hsk]}`"
           ></div>
           <div
             class="fill"
-            :style="`border-color: ${Helper.hskColors[hero.hsk]}`"
+            :style="`border-color: ${HSK_COLORS[hero.hsk]}`"
           ></div>
         </div>
       </div>
@@ -37,10 +36,17 @@
 
       <div class="p-3 text-center shadow" :data-bg-level="hero.hsk">
         <div>
-          HSK {{ hero.hsk }} Score: <span class="bigger"><b>{{ hero.score }}</b></span> /
+          HSK {{ hero.hsk }} Score:
+          <span class="bigger">
+            <b>{{ hero.score }}</b>
+          </span>
+          /
           {{ fullScore(hero.hsk) }}
         </div>
-        <div v-if="hero.official" class="mt-2"><i class="fa fa-certificate" /> Official Test</div>
+        <div v-if="hero.official" class="mt-2">
+          <i class="fa fa-certificate" />
+          Official Test
+        </div>
       </div>
       <div v-html="hero.body" class="body shadow"></div>
     </div>
@@ -48,28 +54,26 @@
 </template>
 
 <script>
-import Helper from '@/lib/helper'
+import { HSK_COLORS } from "@/lib/utils/levels";
 export default {
   data() {
     return {
-      Helper
-    }
+      HSK_COLORS,
+    };
   },
   props: {
     hero: {
-      type: Object
-    }
+      type: Object,
+    },
   },
-  mounted() {
-
-  },
+  mounted() {},
   methods: {
     fullScore(hsk) {
-      if (hsk < 3) return 200
-      return 300
-    }
-  }
-}
+      if (hsk < 3) return 200;
+      return 300;
+    },
+  },
+};
 </script>
 
 <style style="scss" scoped>
