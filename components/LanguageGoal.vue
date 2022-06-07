@@ -25,6 +25,8 @@
 
 <script>
 import Helper from "@/lib/helper";
+import LEVELS from '@/lib/utils/levels'
+
 export default {
   props: {
     $l1: Object,
@@ -38,7 +40,7 @@ export default {
     },
     targetHours() {
       if (this.level)
-        return Helper.levels[this.level].hoursMultiplier * this.$l2.hours;
+        return LEVELS[this.level].hoursMultiplier * this.$l2.hours;
     },
     level() {
       return this.$store.state.progress.progressLoaded
