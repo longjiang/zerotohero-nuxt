@@ -13,21 +13,10 @@
           callback: visibilityChanged,
           once: true,
         }"
-        :dir="
-          foreign &&
-          $l2.scripts &&
-          $l2.scripts.length > 0 &&
-          $l2.scripts[0].direction === 'rtl'
-            ? 'rtl'
-            : 'ltr'
-        "
+        :dir="dir()"
         :class="{
           annotated,
-          'text-right':
-            foreign &&
-            $l2.scripts &&
-            $l2.scripts.length > 0 &&
-            $l2.scripts[0].direction === 'rtl',
+          'text-right': dir() === 'rtl',
           'add-pinyin': l2Settings && l2Settings.showPinyin,
           phonetics,
           fullscreen: fullscreenMode,
@@ -261,8 +250,7 @@ export default {
   beforeDestroy() {
     try {
       this.tokenized = [];
-      if (this.$refs["run-time-template"] && this.$refs["run-time-template"][0])
-        this.$refs["run-time-template"][0].$destroy();
+      this.$refs["run-time-template"]?.[0]?.$destroy();
     } catch (err) {
       Helper.logError(err);
     }
@@ -297,6 +285,9 @@ export default {
     },
   },
   methods: {
+    dir() {
+      return this.foreign && this.$l2?.scripts?.[0]?.direction === 'rtl' ? 'rtl' : 'ltr'
+    },
     async translateClick() {
       let text = this.text;
       let iframeTranslationClient;
