@@ -35,7 +35,7 @@
 <script>
 import { ContainerQuery } from "vue-container-query";
 import { mapState } from "vuex";
-import Helper from "@/lib/helper";
+import SPECIAL_LANGUAGES from "@/lib/utils/special-languages";
 
 export default {
   components: {
@@ -45,7 +45,7 @@ export default {
   data() {
     return {
       params: {},
-      specials: Helper.specialLanguages,
+      specials: SPECIAL_LANGUAGES,
       query: {
         xs: {
           minWidth: 0,
