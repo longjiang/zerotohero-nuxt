@@ -4,7 +4,7 @@
       :class="{
         'annotate-wrapper': true,
         'annotate-wrapper-wide': params.lg,
-        'annotate-with-translation': showTranslation && translation,
+        'annotate-with-translation': showTranslation && translationData,
       }"
     >
       <component
@@ -37,7 +37,7 @@
             </template>
             <b-dropdown-item>
               <Saved
-                :item="phraseItem(text, translation)"
+                :item="phraseItem(text, translationData)"
                 store="savedPhrases"
                 icon="bookmark"
                 class="mr-1 annotator-button focus-exclude"
@@ -123,7 +123,7 @@
       </component>
       <div
         class="annotate-translation"
-        v-if="showTranslation && (translationLoading || translation)"
+        v-if="showTranslation && (translationLoading || translationData)"
       >
         <beat-loader
           class="d-inline-block"
@@ -131,7 +131,7 @@
           color="#28a745"
           size="5px"
         ></beat-loader>
-        {{ translation ? translation : "" }}
+        {{ translationData ? translationData : "" }}
       </div>
     </div>
 
@@ -206,6 +206,9 @@ export default {
     showTranslation: {
       default: true,
     },
+    translation: {
+      type: String,
+    }
   },
   data() {
     return {
@@ -223,7 +226,7 @@ export default {
       dictionary: undefined,
       myanmarZawgyiDetector: undefined,
       myanmarZawgyiConverter: undefined,
-      translation: undefined,
+      translationData: this.translation,
       text: undefined,
       params: {},
       query: {
@@ -276,6 +279,9 @@ export default {
     },
   },
   watch: {
+    translation() {
+      this.translationData = this.translation
+    },
     async textMode() {
       if (Helper.isMobile() && this.textMode) {
         let element = this.$el.querySelector(".annotate-input");
@@ -305,11 +311,11 @@ export default {
         this.$emit("translationLoading", false);
         if (translation) {
           this.$emit("translation", translation);
-          this.translation = translation;
+          this.translationData = translation;
         }
         iframeTranslationClient.destroy();
       } catch (err) {
-        this.translation = "[Translation error, please try again.]";
+        this.translationData = "[Translation error, please try again.]";
         this.translationLoading = false;
         this.$emit("translation", this.translation);
         this.$emit("translationLoading", false);
@@ -375,6 +381,7 @@ export default {
           translations: {},
         };
         if (translation) phraseItem.translations[this.$l1.code] = translation;
+        console.log({translation, phraseItem})
         return phraseItem;
       }
     },
@@ -421,7 +428,6 @@ export default {
       document.execCommand("copy");
       document.body.removeChild(tempInput);
     },
-    savePhraseClick() {},
     async visibilityChanged(isVisible) {
       if (this.delay) await Helper.timeout(this.delay);
       if (isVisible) {
