@@ -9,7 +9,6 @@
 </router>
 <template>
   <container-query :query="query" v-model="params">
-    
     <div class="main-dark">
       <div class="pb-5 container-fluid">
         <SocialHead
@@ -127,7 +126,7 @@
               v-if="channels"
               :class="{
                 'channel-buttons pt-2': true,
-                'channel-buttons-portrait': portrait,
+                'channel-buttons-two-cols': portrait && !params.xs,
               }"
             >
               <b-button
@@ -233,7 +232,7 @@ export default {
   },
   computed: {
     portrait() {
-      return this.params.xs || this.params.sm || this.params.md
+      return this.params.xs || this.params.sm || this.params.md;
     },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
@@ -428,14 +427,12 @@ export default {
   padding-left: 0.2;
 }
 
-@media (min-width: 540px) and (max-width: 992px) {
-  .channel-buttons-portrait {
-    .channel-button {
-      width: calc(50% - 0.25rem);
-    }
-    .channel-button:nth-child(even) {
-      margin-right: 0;
-    }
+.channel-buttons-two-cols {
+  .channel-button {
+    width: calc(50% - 0.25rem);
+  }
+  .channel-button:nth-child(even) {
+    margin-right: 0;
   }
 }
 </style>
