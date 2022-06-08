@@ -134,12 +134,13 @@ export const mutations = {
   }
 }
 export const actions = {
+  // If the user is offline or not logged in, load locally
   async load({ commit, dispatch }) {
+    if (state.savedWordsLoaded) return
     if (typeof localStorage !== 'undefined') {
       let json = localStorage.getItem('zthSavedWords') || '{}'
       commit('IMPORT_WORDS_FROM_JSON', json)
     }
-    if (!state.savedWordsLoaded) commit('LOAD_SAVED_WORDS_LOCALLY') // If the user is offline or not logged in, load locally
   },
   add({ dispatch, commit }, { l2, word, wordForms }) {
     commit('ADD_SAVED_WORD', { l2, word, wordForms })
