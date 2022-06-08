@@ -208,7 +208,7 @@ export default {
     },
     translation: {
       type: String,
-    }
+    },
   },
   data() {
     return {
@@ -280,7 +280,7 @@ export default {
   },
   watch: {
     translation() {
-      this.translationData = this.translation
+      this.translationData = this.translation;
     },
     async textMode() {
       if (Helper.isMobile() && this.textMode) {
@@ -292,33 +292,37 @@ export default {
   },
   methods: {
     dir() {
-      return this.foreign && this.$l2?.scripts?.[0]?.direction === 'rtl' ? 'rtl' : 'ltr'
+      return this.foreign && this.$l2?.scripts?.[0]?.direction === "rtl"
+        ? "rtl"
+        : "ltr";
+    },
+    setTranslation(translation) {
+      this.translationLoading = false;
+      this.translationData = translation;
+      this.$emit("translationLoading", false);
+      this.$emit("translation", translation);
     },
     async translateClick() {
       let text = this.text;
       let iframeTranslationClient;
+      let translation
       try {
         // https://www.npmjs.com/package/iframe-translator
         this.translationLoading = true;
         this.$emit("translationLoading", true);
         iframeTranslationClient = await getClient();
         await Helper.timeout(1000); // Add one second wait to prevent translation from 'freezing'
-        let translation = await iframeTranslationClient.translate(
+        translation = await iframeTranslationClient.translate(
           text,
           this.$l1.code
         );
         this.translationLoading = false;
-        this.$emit("translationLoading", false);
         if (translation) {
-          this.$emit("translation", translation);
-          this.translationData = translation;
+          this.setTranslation(translation);
         }
         iframeTranslationClient.destroy();
       } catch (err) {
-        this.translationData = "[Translation error, please try again.]";
-        this.translationLoading = false;
-        this.$emit("translation", this.translation);
-        this.$emit("translationLoading", false);
+        this.setTranslation(translation);
         Helper.logError(err);
         try {
           iframeTranslationClient.destroy(); // Make sure to destroy the client otherwise whenever there is an error and the translation is not returned, the client is never destroyed and ios users can't scroll
@@ -381,7 +385,6 @@ export default {
           translations: {},
         };
         if (translation) phraseItem.translations[this.$l1.code] = translation;
-        console.log({translation, phraseItem})
         return phraseItem;
       }
     },
