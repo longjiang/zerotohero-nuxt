@@ -297,6 +297,7 @@ export default {
         : "ltr";
     },
     setTranslation(translation) {
+      translation = translation || '[Please try again]'
       this.translationLoading = false;
       this.translationData = translation;
       this.$emit("translationLoading", false);
@@ -316,10 +317,7 @@ export default {
           text,
           this.$l1.code
         );
-        this.translationLoading = false;
-        if (translation) {
-          this.setTranslation(translation);
-        }
+        this.setTranslation(translation);
         iframeTranslationClient.destroy();
       } catch (err) {
         this.setTranslation(translation);
