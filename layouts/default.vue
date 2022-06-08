@@ -105,6 +105,7 @@ export default {
       this.onLanguageChange();
     }
     this.onAllLanguagesLoaded();
+    if (window) this.fullHistory.push(window.location.pathname + window.location.search)
   },
   beforeDestroy() {
     // you may call unsubscribe to stop the subscription
@@ -133,7 +134,7 @@ export default {
       this.onLanguageChange();
     },
     $route() {
-      this.addFullHistoryItem(this.$route.path);
+      this.addFullHistoryItem(this.$route.fullPath);
       if (
         this.$route.name === "youtube-view" &&
         this.$route.params.youtube_id
