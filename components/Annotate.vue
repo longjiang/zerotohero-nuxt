@@ -6,15 +6,23 @@
         'annotate-wrapper-wide': params.lg,
         'annotate-with-translation': showTranslation && translationData,
       }"
+      v-observe-visibility="{
+        callback: visibilityChanged,
+        once: true,
+      }"
     >
+      <div class="text-center" v-if="showLoading && !annotated">
+        <beat-loader
+          class="d-inline-block"
+          color="#28a745"
+          size="5px"
+        ></beat-loader>
+      </div>
       <component
         :is="tag"
-        v-observe-visibility="{
-          callback: visibilityChanged,
-          once: true,
-        }"
         :dir="dir()"
         :class="{
+          'd-none': showLoading && !annotated,
           annotated,
           'text-right': dir() === 'rtl',
           'add-pinyin': l2Settings && l2Settings.showPinyin,
@@ -206,6 +214,9 @@ export default {
     showTranslation: {
       default: true,
     },
+    showLoading: {
+      default: true,
+    },
     translation: {
       type: String,
     },
@@ -297,25 +308,29 @@ export default {
         : "ltr";
     },
     setTranslation(translation) {
-      translation = translation || '[Please try again]'
+      translation = translation || "[Please try again]";
       this.translationLoading = false;
       this.translationData = translation;
       this.$emit("translationLoading", false);
       this.$emit("translation", translation);
       try {
         iframeTranslationClient.destroy(); // Make sure to destroy the client otherwise whenever there is an error and the translation is not returned, the client is never destroyed and ios users can't scroll
-        } catch (err) {
-          Helper.logError(err);
-        }
+      } catch (err) {
+        Helper.logError(err);
+      }
     },
     async translateClick() {
       let text = this.text;
       let iframeTranslationClient;
-      let translation
+      let translation;
       try {
         // https://www.npmjs.com/package/iframe-translator
         this.translationLoading = true;
         this.$emit("translationLoading", true);
+        const timeout = setTimeout(() => {
+          setTranslation(translation);
+          clearTimeout(timeout);
+        }, 5000);
         iframeTranslationClient = await getClient();
         await Helper.timeout(1000); // Add one second wait to prevent translation from 'freezing'
         translation = await iframeTranslationClient.translate(

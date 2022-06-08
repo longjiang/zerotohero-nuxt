@@ -47,6 +47,7 @@
             :translation="parallelLine"
             :delay="single ? false : 123"
             :showTranslation="false"
+            :showLoading="true"
             v-if="!showSubsEditing"
             style="flex: 1"
             @translation="onTranslation"
@@ -327,10 +328,6 @@ export default {
   }
   .transcript-line-l2 {
     transition: 0.2s linear all;
-    opacity: 0;
-    &.annotated {
-      opacity: 1;
-    }
   }
   .transcript-line-l1 {
     opacity: 0.7;

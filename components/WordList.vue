@@ -221,6 +221,7 @@ export default {
         let words = await Promise.all(
           this.ids.map(async (id) => await dictionary.get(id))
         );
+        words = words ? words.filter((w) => w) : [];
         return words;
       }
     },
@@ -244,6 +245,7 @@ export default {
       if (transliteration !== text) return tr(text);
     },
     getUrl(word, index) {
+      if (!word) return;
       if (this.url) return this.url(word, index);
       else
         return `/${this.$l1.code}/${this.$l2.code}/dictionary/${this.$dictionaryName}/${word.id}`;
