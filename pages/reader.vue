@@ -233,6 +233,7 @@ export default {
       this.$router.push(to);
     },
     readerTextChanged(text) {
+      if (text === '') this.page = 1
       this.save(text);
     },
     readerTranslationChanged(text) {

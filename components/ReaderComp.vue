@@ -45,6 +45,7 @@
             :translation="translation"
             :key="marked"
             :page="page"
+            ref="text-with-speech-bar"
             @translation="onTranslation"
             @previousPage="$emit('previousPage')"
             @nextPage="$emit('nextPage')"
@@ -200,6 +201,7 @@ export default {
   data() {
     return {
       text: "",
+      textThrottled: "",
       shared: undefined, // The object corresponding to the text object shared (uploaded) to the server: {id: 1, text: '...', translation: '...'}
       sharing: false,
       translation: "",
@@ -262,7 +264,7 @@ export default {
     },
     marked() {
       return (
-        Marked(this.text.replace(/^ {4,}/gm, "")) || this.text // 4 spaces in a row would emit <code>!
+        Marked(this.textThrottled.replace(/^ {4,}/gm, "")) || this.textThrottled // 4 spaces in a row would emit <code>!
       );
     },
     translators() {
@@ -296,10 +298,10 @@ export default {
       let typing = this.text;
       await Helper.timeout(1000);
       if (typing === this.text) {
+        this.textThrottled = this.text
         if (this.shared && this.text !== this.shared.text)
           this.shared = undefined; // Unset link to the shared text on the server
         this.$emit("readerTextChanged", this.text);
-        this.readerKey++;
       }
     },
     async translation() {
