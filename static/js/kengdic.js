@@ -157,8 +157,19 @@ const Dictionary = {
     let strings = words.map(word => word.head);
     return this.unique(strings);
   },
-  get(id) {
-    return this.words.find(row => row.id === id);
+  /**
+   * Get a word by ID.
+   * @param {*} id the word's id
+   * @param {*} head (optional) the head of the word to check if matches the word retrieved; if mismatched, we'll look for a matching word instead.
+   * @returns 
+   */
+  get(id, head) {
+    let word
+    word = this.words.find(row => row.id === id);
+    if (head && word.head !== head) {
+      word = this.lookup(head)
+    }
+    return word
   },
   isChinese(text) {
     if (this.matchChinese(text)) return true;

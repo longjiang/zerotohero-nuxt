@@ -185,7 +185,7 @@ const Dictionary = {
     hak: 'dict-hakka/dict-hakka.csv.txt',
     nan: 'dict-twblg/dict-twblg.csv.txt'
   },
-  words: [],
+  words: {},
   name: 'dialect-dict',
   tokenizationCache: {},
   credit() {
@@ -236,7 +236,7 @@ const Dictionary = {
       for (let [index, row] of sorted.entries()) {
         let definitions = row.english ? row.english.split('/').map(d => d.trim()) : row.definitions ? row.definitions.split('|').map(d => d.trim()) : []
         let word = {
-          id: index.toString(),
+          id: index,
           head: row.traditional,
           bare: row.traditional,
           pinyin: row.pinyin ? this.parsePinyin(row.pinyin) : '',
@@ -251,9 +251,9 @@ const Dictionary = {
           traditional: row.traditional,
           simplified: row.simplified,
         }
-        words.push(word)
+        words[word.id] = word
       }
-      this.words = data.sort((a, b) => b.head && a.head ? b.head.length - a.head.length : 0)
+      this.words = words
       return this
     }
   },
@@ -298,9 +298,19 @@ const Dictionary = {
     }
     return uniqueArray
   },
-  get(id) {
-    let entry = this.words.find(row => row.id === id)
-    return entry
+  /**
+   * Get a word by ID.
+   * @param {*} id the word's id
+   * @param {*} head (optional) the head of the word to check if matches the word retrieved; if mismatched, we'll look for a matching word instead.
+   * @returns 
+   */
+  get(id, head) {
+    let word
+    word = this.words[id];
+    if (head && word.head !== head) {
+      word = this.lookup(head)
+    }
+    return word
   },
   getSize() {
     return this.words.length

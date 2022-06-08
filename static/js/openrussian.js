@@ -167,8 +167,19 @@ const Dictionary = {
     return word
   },
   */
-  get(id) {
-    return this.words[id]
+  /**
+   * Get a word by ID.
+   * @param {*} id the word's id
+   * @param {*} head (optional) the head of the word to check if matches the word retrieved; if mismatched, we'll look for a matching word instead.
+   * @returns 
+   */
+  get(id, head) {
+    let word
+    word = this.words[id]
+    if (head && word.head !== head) {
+      word = this.lookup(head)
+    }
+    return word
   },
   lookupByDef(text, limit = 30) {
     text = text.toLowerCase()
