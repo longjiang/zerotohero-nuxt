@@ -307,7 +307,7 @@ export default {
         this.tvShowChecked = this.tvShowChecked.filter((id) => id !== moviesId);
       }
       if (this.newsShow) {
-        let newsId = Number(this.moviesShow.id);
+        let newsId = Number(this.newsShow.id);
         this.newsChecked = this.talkFilter.includes(Number(this.newsShow.id));
         this.talkChecked = this.talkChecked.filter((id) => id !== newsId);
       }
