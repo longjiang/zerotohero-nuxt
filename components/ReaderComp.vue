@@ -16,7 +16,7 @@
           v-if="text && text.length > 0 && !loading"
           id="reader-annotated"
           :class="{
-            'focus': true,
+            focus: true,
             'reader-annotated-wide': params.lg,
             'with-translation': translation,
           }"
@@ -50,27 +50,35 @@
             @previousPage="$emit('previousPage')"
             @nextPage="$emit('nextPage')"
           />
-        </div>
-        <div v-if="savedWordIdsInText && savedWordIdsInText.length > 0" id="vocabulary-list" class="mt-4 mb-4 pb-4">
           <div
-            style="font-size: 1rem; line-height: 1"
-            class="mb-3"
+            v-if="savedWordIdsInText && savedWordIdsInText.length > 0"
+            id="vocabulary-list"
+            class="pb-4"
           >
-            <strong>
-              <i class="fas fa-star text-success mr-1" />
-              Vocabulary List
-            </strong>
-            <div class="mt-1">
-              <small>
-                These are the words you saved that appear in this text.
-              </small>
+            <hr class="mb-4" />
+            <div
+              style="font-size: 1rem; line-height: 1"
+              class="mb-3 text-center"
+            >
+              <strong>Vocabulary List</strong>
+              <div class="mt-1">
+                <small>
+                  Here are the words you saved that appear in this text:
+                </small>
+              </div>
+              <div class="mt-3">
+                <b-button variant="success" v-if="!showWords" size="sm" @click="showWords = true">
+                  Show {{ savedWordIdsInText.length }} Words
+                </b-button>
+              </div>
             </div>
-            <hr />
+            <div v-if="showWords">
+              <WordList :ids="savedWordIdsInText" :star="false" />
+            </div>
           </div>
-          <WordList :ids="savedWordIdsInText" :star="false" />
         </div>
         <div class="reader-editor">
-          <div class="mb-1">
+          <div class="mt-3 mb-3">
             <button
               v-if="!fullscreen"
               @click="toggleFullscreen"
@@ -212,6 +220,7 @@ export default {
       addTranslation: this.translation && this.translation !== "",
       loading: true,
       typing: undefined,
+      showWords: false,
       params: {},
       query: {
         lg: {
@@ -226,25 +235,26 @@ export default {
     },
     page: {
       type: Number,
-      default: 1
-    }
+      default: 1,
+    },
   },
   computed: {
     ...mapState("savedWords", ["savedWords"]),
     savedWordIdsInText() {
-      if (!this.text) return
+      if (!this.text) return;
       if (this.savedWords) {
         let savedWords = this.savedWords[this.$l2.code];
-        let foundWordIds = []
+        let foundWordIds = [];
         if (savedWords) {
           for (let word of savedWords) {
-            for (let form of (word.forms || [])) {
-              if ((this.text).includes(form) && form !== 'a') foundWordIds.push(word.id)
+            for (let form of word.forms || []) {
+              if (this.text.includes(form) && form !== "a")
+                foundWordIds.push(word.id);
             }
           }
         }
-        foundWordIds = Helper.unique(foundWordIds)
-        return foundWordIds
+        foundWordIds = Helper.unique(foundWordIds);
+        return foundWordIds;
       }
     },
     shareURL() {
@@ -298,7 +308,7 @@ export default {
       let typing = this.text;
       await Helper.timeout(1000);
       if (typing === this.text) {
-        this.textThrottled = this.text
+        this.textThrottled = this.text;
         if (this.shared && this.text !== this.shared.text)
           this.shared = undefined; // Unset link to the shared text on the server
         this.$emit("readerTextChanged", this.text);
@@ -319,7 +329,7 @@ export default {
   },
   methods: {
     onTranslation(translation) {
-      this.translation = translation
+      this.translation = translation;
     },
     copyClick() {
       let text = this.shareURL;
@@ -384,7 +394,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-
 .reader-annotated-wide.with-translation {
   .line {
     display: flex;
@@ -429,8 +438,7 @@ export default {
   color: red !important;
 }
 
-#reader-annotated,
-#vocabulary-list {
+#reader-annotated {
   background: white;
   padding: 1.5rem;
   border-radius: 0.25rem;
