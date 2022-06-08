@@ -302,6 +302,11 @@ export default {
       this.translationData = translation;
       this.$emit("translationLoading", false);
       this.$emit("translation", translation);
+      try {
+        iframeTranslationClient.destroy(); // Make sure to destroy the client otherwise whenever there is an error and the translation is not returned, the client is never destroyed and ios users can't scroll
+        } catch (err) {
+          Helper.logError(err);
+        }
     },
     async translateClick() {
       let text = this.text;
@@ -318,15 +323,9 @@ export default {
           this.$l1.code
         );
         this.setTranslation(translation);
-        iframeTranslationClient.destroy();
       } catch (err) {
-        this.setTranslation(translation);
+        this.setTranslation();
         Helper.logError(err);
-        try {
-          iframeTranslationClient.destroy(); // Make sure to destroy the client otherwise whenever there is an error and the translation is not returned, the client is never destroyed and ios users can't scroll
-        } catch (err) {
-          Helper.logError(err);
-        }
       }
     },
     /**
