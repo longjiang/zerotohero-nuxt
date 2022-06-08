@@ -8,186 +8,173 @@
   }
 </router>
 <template>
-  <div class="main-dark">
-    <div class="pt-5 pb-5 container-fluid">
-      <SocialHead
-        v-if="channels"
-        :title="title"
-        :description="description"
-        :image="image"
-      />
-      <div class="row">
-        <div
-          :class="{
-            'col-sm-12 mb-5': true,
-            'pl-0 pr-0': portrait,
-          }"
-        >
-          <h3 class="text-center">Learn {{ $l2.name }} from Live TV</h3>
-          <div v-if="channels" class="text-center">
-            {{ channels.length }} Channel(s)
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div
-          :class="{
-            'live-video-column': true,
-            'col-sm-12 pl-0 pr-0': portrait,
-            'col-sm-7 col-md-8': !portrait,
-          }"
-        >
-          <div class="live-tv-wrapper rounded shadow" style="overflow: hidden">
-            <LazyLiveVideo
-              v-if="currentChannel"
-              :url="currentChannel.url"
-              :key="`live-video-${currentChannel.url}`"
-              ref="liveVideo"
-            />
-          </div>
-        </div>
-        <div
-          :class="{
-            'channel-switch-wrapper': true,
-            'col-sm-12': portrait,
-            'col-sm-5 col-md-4 pl-0': !portrait,
-          }"
-        >
-          <b-input-group
-            :class="`${portrait ? 'mt-3' : ''} mb-3 input-group-ghost-dark`"
-            style="z-index: -1"
-          >
-            <b-form-input
-              v-model="keyword"
-              @compositionend.prevent.stop="() => false"
-              placeholder="Filter channels..."
-              class="input-ghost-dark"
-            />
-            <b-input-group-append>
-              <b-button variant="ghost-dark">
-                <i class="fas fa-filter"></i>
-              </b-button>
-            </b-input-group-append>
-          </b-input-group>
-          <div v-if="channels" class="tabs text-center channel-category-tabs">
-            <button
-              v-if="hasFeatured"
-              :key="`live-tv-cat-tab-featured`"
-              :class="{
-                'btn mr-1': true,
-                'btn-ghost-dark text-white': !featured,
-                'btn-primary': featured,
-              }"
-              @click="
-                keyword = undefined;
-                country = undefined;
-                category = undefined;
-                featured = true;
-              "
-            >
-              Featured
-            </button>
-            <button
-              :key="`live-tv-cat-tab-all`"
-              :class="{
-                'btn mr-1': true,
-                'btn-ghost-dark text-white': !all,
-                'btn-primary': all,
-              }"
-              @click="
-                keyword = undefined;
-                country = undefined;
-                category = undefined;
-                featured = false;
-              "
-            >
-              All
-            </button>
-            <button
-              v-for="c in countries"
-              :key="`live-tv-cat-tab-${c}`"
-              :class="{
-                'btn mr-1': true,
-                'btn-ghost-dark text-white': country !== c,
-                'btn-primary': country === c,
-              }"
-              @click="
-                keyword = undefined;
-                category = undefined;
-                country = c;
-                featured = false;
-              "
-            >
-              {{ c ? countryNameFromCode(c) : "Other countries" }}
-            </button>
-            <button
-              v-for="cat in categories"
-              :key="`live-tv-cat-tab-${cat}`"
-              :class="{
-                'btn btn-ghost-dark mr-1': true,
-                'text-white': category !== cat,
-                'btn-primary text-white': category === cat,
-              }"
-              @click="
-                keyword = undefined;
-                country = undefined;
-                category = cat;
-              "
-            >
-              {{ cat }}
-            </button>
-          </div>
+  <container-query :query="query" v-model="params">
+    
+    <div class="main-dark">
+      <div class="pb-5 container-fluid">
+        <SocialHead
+          v-if="channels"
+          :title="title"
+          :description="description"
+          :image="image"
+        />
+        <div class="row">
           <div
-            v-if="channels"
             :class="{
-              'channel-buttons pt-2': true,
-              'channel-buttons-portrait': portrait,
+              'live-video-column': true,
+              'col-sm-12 pl-0 pr-0': portrait,
+              'col-sm-7 col-md-8': !portrait,
             }"
           >
-            <b-button
-              variant="ghost-dark"
-              size="sm"
-              :class="{
-                'channel-button': true,
-                'channel-button-current': currentChannel === channel,
-              }"
-              v-for="channel in filteredChannels"
-              :key="`channel-button-${channel.url}`"
-              :data-url="channel.url"
-              @click="setChannel(channel)"
+            <div
+              class="live-tv-wrapper rounded shadow"
+              style="overflow: hidden"
             >
-              <img
-                v-if="channel.logo"
-                :src="channel.logo.replace('http:', 'https:')"
-                :alt="channel.name"
-                @error="logoLoadError(channel)"
+              <LazyLiveVideo
+                v-if="currentChannel"
+                :url="currentChannel.url"
+                :key="`live-video-${currentChannel.url}`"
+                ref="liveVideo"
               />
-              <div
-                style="
-                  display: inline-block;
-                  width: 4rem;
-                  line-height: 2rem;
-                  text-align: center;
-                  font-size: 1.5em;
-                  opacity: 0.5;
-                  margin-right: 0.5rem;
+            </div>
+          </div>
+          <div
+            :class="{
+              'channel-switch-wrapper': true,
+              'col-sm-12': portrait,
+              'col-sm-5 col-md-4 pl-0': !portrait,
+            }"
+          >
+            <b-input-group
+              :class="`${portrait ? 'mt-3' : ''} mb-3 input-group-ghost-dark`"
+            >
+              <b-form-input
+                v-model="keyword"
+                @compositionend.prevent.stop="() => false"
+                :placeholder="`Filter ${this.channels.length} channels...`"
+                class="input-ghost-dark"
+              />
+            </b-input-group>
+            <div v-if="channels" class="tabs text-center channel-category-tabs">
+              <button
+                v-if="hasFeatured"
+                :key="`live-tv-cat-tab-featured`"
+                :class="{
+                  'btn mr-1': true,
+                  'btn-ghost-dark-no-bg text-white': !featured,
+                  'btn-success': featured,
+                }"
+                @click="
+                  keyword = undefined;
+                  country = undefined;
+                  category = undefined;
+                  featured = true;
                 "
-                v-else
               >
-                <i class="fa fa-tv"></i>
-              </div>
-              <span>{{ channel.name }}</span>
-            </b-button>
+                Featured
+              </button>
+              <button
+                :key="`live-tv-cat-tab-all`"
+                :class="{
+                  'btn mr-1': true,
+                  'btn-ghost-dark-no-bg text-white': !all,
+                  'btn-success': all,
+                }"
+                @click="
+                  keyword = undefined;
+                  country = undefined;
+                  category = undefined;
+                  featured = false;
+                "
+              >
+                All
+              </button>
+              <button
+                v-for="c in countries"
+                :key="`live-tv-cat-tab-${c}`"
+                :class="{
+                  'btn mr-1': true,
+                  'btn-ghost-dark-no-bg text-white': country !== c,
+                  'btn-success': country === c,
+                }"
+                @click="
+                  keyword = undefined;
+                  category = undefined;
+                  country = c;
+                  featured = false;
+                "
+              >
+                {{ c ? countryNameFromCode(c) : "Other countries" }}
+              </button>
+              <button
+                v-for="cat in categories"
+                :key="`live-tv-cat-tab-${cat}`"
+                :class="{
+                  'btn btn-ghost-dark-no-bg mr-1': true,
+                  'text-white': category !== cat,
+                  'btn-success text-white': category === cat,
+                }"
+                @click="
+                  keyword = undefined;
+                  country = undefined;
+                  category = cat;
+                "
+              >
+                {{ cat }}
+              </button>
+            </div>
+            <div
+              v-if="channels"
+              :class="{
+                'channel-buttons pt-2': true,
+                'channel-buttons-portrait': portrait,
+              }"
+            >
+              <b-button
+                variant="ghost-dark-no-bg"
+                size="sm"
+                :class="{
+                  'channel-button': true,
+                  'channel-button-current': currentChannel === channel,
+                }"
+                v-for="channel in filteredChannels"
+                :key="`channel-button-${channel.url}`"
+                :data-url="channel.url"
+                @click="setChannel(channel)"
+              >
+                <img
+                  v-if="channel.logo"
+                  :src="channel.logo.replace('http:', 'https:')"
+                  :alt="channel.name"
+                  @error="logoLoadError(channel)"
+                />
+                <div
+                  style="
+                    display: inline-block;
+                    width: 4rem;
+                    line-height: 2rem;
+                    text-align: center;
+                    font-size: 1.5em;
+                    opacity: 0.5;
+                    margin-right: 0.5rem;
+                  "
+                  v-else
+                >
+                  <i class="fa fa-tv"></i>
+                </div>
+                <span>{{ channel.name }}</span>
+              </b-button>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="row mt-5">
-        <div class="col-sm-12">
-          <LazyIdenticalLanguages routeName="live-tv" />
+        <div class="row mt-5">
+          <div class="col-sm-12">
+            <LazyIdenticalLanguages routeName="live-tv" />
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </container-query>
 </template>
 
 <script>
@@ -197,8 +184,11 @@ import Papa from "papaparse";
 import Helper from "@/lib/helper";
 import Vue from "vue";
 import CountryCodeLookup from "country-code-lookup";
-
+import { ContainerQuery } from "vue-container-query";
 export default {
+  components: {
+    ContainerQuery,
+  },
   data() {
     return {
       channels: undefined,
@@ -206,7 +196,6 @@ export default {
       category: undefined,
       country: undefined,
       featured: false,
-      portrait: true,
       bannedChannels: {
         zh: [
           "http://174.127.67.246/live330/playlist.m3u8", // NTD
@@ -218,9 +207,34 @@ export default {
       categories: [],
       countries: [],
       keyword: undefined,
+      params: {},
+      query: {
+        xs: {
+          minWidth: 0,
+          maxWidth: 423,
+        },
+        sm: {
+          minWidth: 423,
+          maxWidth: 720,
+        },
+        md: {
+          minWidth: 720,
+          maxWidth: 960,
+        },
+        lg: {
+          minWidth: 960,
+          maxWidth: 1140,
+        },
+        xl: {
+          minWidth: 1140,
+        },
+      },
     };
   },
   computed: {
+    portrait() {
+      return this.params.xs || this.params.sm || this.params.md
+    },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -290,7 +304,6 @@ export default {
   created() {
     if (typeof window !== "undefined")
       window.addEventListener("resize", this.onResize);
-    this.portrait = Helper.portrait();
   },
   destroyed() {
     if (typeof window !== "undefined")
@@ -376,9 +389,6 @@ export default {
       countries = Helper.unique(countries);
       this.countries = countries;
     },
-    onResize() {
-      this.portrait = Helper.portrait();
-    },
     countryNameFromCode(code) {
       if (code === "cn") return "China (Mainland)";
       let country = CountryCodeLookup.byInternet(code.toUpperCase());
@@ -402,7 +412,7 @@ export default {
 }
 .channel-button {
   &.channel-button-current {
-    background-color: #fd4f1c;
+    background-color: #28a745;
     color: white;
   }
   img {
