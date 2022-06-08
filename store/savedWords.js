@@ -1,17 +1,3 @@
-// import { openDB, deleteDB, wrap, unwrap } from 'idb';
-
-// let db = undefined
-
-// let store = undefined
-
-// const setupDB = async () => {
-//   db = await openDB('zthSavedWords', 1, {
-//     upgrade(db, oldVersion, newVersion, transaction) {
-//       db.createObjectStore("zthSavedWords", { keyPath: "l2id" });
-//     },
-//   });
-//   store = db.transaction('zthSavedWords')
-// }
 import Config from '@/lib/config'
 import Helper from '@/lib/helper'
 
@@ -50,18 +36,6 @@ const parseSavedWordsCSV = (csv) => {
 }
 
 export const mutations = {
-  LOAD_SAVED_WORDS_LOCALLY(state) {
-    if (typeof localStorage !== 'undefined') {
-      let savedWords = JSON.parse(localStorage.getItem('zthSavedWords') || '{}')
-      state.savedWords = savedWords || state.savedWords
-      for (let l2 in state.savedWords) {
-        let { formIndex, idIndex } = buildIndex(l2, state)
-        state.formIndex[l2] = formIndex
-        state.idIndex[l2] = idIndex
-      }
-      state.savedWordsLoaded = true
-    }
-  },
   ADD_SAVED_WORD(state, { l2, word, wordForms }) {
     if (typeof localStorage !== 'undefined') {
       if (!state.savedWords[l2]) {
@@ -161,6 +135,10 @@ export const mutations = {
 }
 export const actions = {
   async load({ commit, dispatch }) {
+    if (typeof localStorage !== 'undefined') {
+      let json = localStorage.getItem('zthSavedWords') || '{}'
+      commit('IMPORT_WORDS_FROM_JSON', json)
+    }
     if (!state.savedWordsLoaded) commit('LOAD_SAVED_WORDS_LOCALLY') // If the user is offline or not logged in, load locally
   },
   add({ dispatch, commit }, { l2, word, wordForms }) {
