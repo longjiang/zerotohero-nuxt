@@ -5,7 +5,7 @@ importScripts('../vendor/localforage/localforage.js')
 
 const Dictionary = {
   file: undefined,
-  words: [],
+  words: {},
   tokenizationCache: {},
   name: 'edict',
   tokenizer: undefined,
@@ -116,7 +116,7 @@ const Dictionary = {
     let sorted = data.sort((a, b) =>
       a.kana && b.kana ? a.kana.length - b.kana.length : 0
     )
-    let words = []
+    let words = {}
     for (let row of sorted) {
       if (row.kanji === 'ー') delete row.kana
       let pos = row.english ? row.english.replace(/^\((.*?)\).*/gi, "$1").split(',')[0] : undefined
@@ -134,9 +134,9 @@ const Dictionary = {
         },
         romaji: wanakana.toRomaji(row.kana)
       })
-      if (word.id) words.push(word)
+      if (word.id) words[word.id] = word
     }
-    this.words = words.sort((a, b) => b.head && a.head ? b.head.length - a.head.length : 0)
+    this.words = words
     return this
   },
   async loadSmart(name) {
@@ -221,7 +221,7 @@ const Dictionary = {
     return results.slice(0, limit)
   },
   lookup(text) {
-    let word = this.words.find(word => word && word.bare === text)
+    let word = this.words.find(word => word && word.head === text)
     return word
   },
   lookupMultiple(text) {
@@ -235,9 +235,19 @@ const Dictionary = {
     }
     return uniqueArray
   },
-  get(id) {
-    let entry = this.words.find(row => row.id === id)
-    return entry
+  /**
+   * Get a word by ID.
+   * @param {*} id the word's id
+   * @param {*} head (optional) the head of the word to check if matches the word retrieved; if mismatched, we'll look for a matching word instead.
+   * @returns 
+   */
+  get(id, head) {
+    let word
+    word = this.words[id];
+    if (head && word.head !== head) {
+      word = this.lookup(head)
+    }
+    return word
   },
   isChinese(text) {
     if (this.matchChinese(text)) return true

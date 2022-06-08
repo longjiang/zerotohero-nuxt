@@ -248,7 +248,7 @@ export default {
         for (let savedWord of this.$store.state.savedWords.savedWords[
           this.$l2.code
         ]) {
-          let word = await (await this.$getDictionary()).get(savedWord.id);
+          let word = await (await this.$getDictionary()).get(savedWord.id, savedWord.forms[0]);
           if (word) {
             let r = Object.assign({}, savedWord);
             r.word = word;
