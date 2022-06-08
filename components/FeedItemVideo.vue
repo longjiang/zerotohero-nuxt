@@ -1,6 +1,6 @@
 <template>
   <div :class="`feed-item feed-item-video feed-item-${skin}`">
-    <div class="top-part pt-4 pr-4 pl-4 pb-2">
+    <div class="top-part pt-4 pr-4 pl-4 pb-3">
       <div class="show-type-wrapper small text-success" v-if="show">
         <span class="show-type-icon">
           <i :class="show.icon"></i>
@@ -20,7 +20,7 @@
         }"
         class="text-white"
       >
-        <h5 class="show-title mt-1">
+        <h5 class="show-title mt-1 mb-0">
           {{ show.show.title }}
         </h5>
       </router-link>

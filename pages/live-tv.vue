@@ -39,7 +39,7 @@
           </div>
           <div
             :class="{
-              'channel-switch-wrapper': true,
+              'channel-switch-wrapper mt-3': true,
               'col-sm-12': portrait,
               'col-sm-5 col-md-4 pl-0': !portrait,
             }"
@@ -50,7 +50,7 @@
               <b-form-input
                 v-model="keyword"
                 @compositionend.prevent.stop="() => false"
-                :placeholder="`Filter ${this.channels.length} channels...`"
+                :placeholder="`Filter ${this.channels ? this.channels.length : ''} channels...`"
                 class="input-ghost-dark"
               />
             </b-input-group>

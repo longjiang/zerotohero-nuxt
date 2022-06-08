@@ -37,6 +37,11 @@
               :savedWord="item.word"
               skin="dark"
             />
+            <FeedItemLiveTV
+              v-if="item.type === 'live-tv'"
+              :channel="item.channel"
+              skin="dark"
+            />
           </div>
         </div>
         <div class="row">
@@ -90,8 +95,10 @@ export default {
       newsShow: undefined,
       loading: false,
       heroVideo: undefined,
-      numVideosPerLoad: 7,
+      numVideosPerLoad: 6,
       numSavedWordsPerLoad: 3,
+      numLiveTVChannelsPerLoad: 1,
+      liveTVChannels: [],
       params: {},
       query: {
         xs: {
@@ -131,10 +138,16 @@ export default {
       }
     });
     this.loadSavedWords();
+    this.loadLiveTV()
   },
   beforeDestroy() {
     // you may call unsubscribe to stop the subscription
     this.unsubscribe();
+  },
+  watch: {
+    liveTVChannels() {
+      this.loadMoreItems()
+    }
   },
   computed: {
     ...mapState("stats", ["stats"]),
@@ -193,18 +206,60 @@ export default {
         this.savedWordsShuffled = Helper.shuffle(savedWordsShuffled);
       }
     },
+    async loadLiveTV() {
+      const bannedChannels =  {
+        zh: [
+          "http://174.127.67.246/live330/playlist.m3u8", // NTD
+        ],
+      }
+      const bannedKeywords = {
+        zh: ["arirang", "cgtn", "rt", "新唐人"],
+      }
+      let code = this.$l2["iso639-3"];
+      if (code === "nor") code = "nob"; // Use 'Bokmal' for Norwegian.
+      let res = await axios.get(
+        `${Config.server}data/live-tv-channels/${code}.csv.txt`
+      );
+      if (res && res.data) {
+        let channels = Papa.parse(res.data, { header: true }).data;
+        channels = Helper.uniqueByValue(channels, "url");
+        channels = channels
+          .filter((c) => c.url && c.url.startsWith("https://"))
+          .filter((c) => c.category !== "XXX")
+          .filter((c) => !c.name.includes("新唐人"));
+        if (this.$l2.code in bannedChannels) {
+          channels = channels.filter(
+            (c) => !bannedChannels[this.$l2.code].includes(c.url)
+          );
+        }
+        if (this.$l2.code in bannedKeywords) {
+          channels = channels.filter((c) => {
+            for (let keyword of bannedKeywords[this.$l2.code]) {
+              if (
+                c.url.includes(keyword) ||
+                c.name.toLowerCase().includes(keyword)
+              )
+                return false;
+            }
+            return true;
+          });
+        }
+        channels = channels.sort((a, b) =>
+          a.name.localeCompare(b.name, this.$l2.locales[0])
+        );
+        this.liveTVChannels = Helper.shuffle(channels)
+      }
+    },
     async loadMoreItems() {
-      if (this.loading) return
+      if (this.loading) return;
       if (
         this.$store.state.stats.statsLoaded[this.$l2.code] &&
         this.savedWords
       ) {
-        this.loading = true
-        let numVideos = this.numVideosPerLoad;
-        let numWords = this.numSavedWordsPerLoad;
-        let offset = this.randomOffset("allVideos", numVideos);
+        this.loading = true;
+        let offset = this.randomOffset("allVideos", this.numVideosPerLoad);
         let videos = await this.getVideos({
-          numVideos,
+          numVideos: this.numVideosPerLoad,
           sort: "youtube_id",
           offset,
         });
@@ -213,11 +268,19 @@ export default {
         });
         if (this.savedWordsShuffled.length > 0) {
           let savedWordItems = [];
-          for (let i = 0; i < numWords; i++) {
+          for (let i = 0; i < this.numSavedWordsPerLoad; i++) {
             let word = this.savedWordsShuffled.pop();
             if (word) savedWordItems.push({ type: "word", word });
           }
           items = items.concat(savedWordItems);
+        }
+        if (this.liveTVChannels.length > 0) {
+          let liveTVChannelItems = []
+          for (let i = 0; i < this.numLiveTVChannelsPerLoad; i++) {
+            let channel = this.liveTVChannels.pop();
+            if (channel) liveTVChannelItems.push({ type: "live-tv", channel });
+          }
+          items = items.concat(liveTVChannelItems);
         }
         this.items = this.items.concat(Helper.shuffle(items));
         if (!this.heroVideo) this.loadHeroVideo();
