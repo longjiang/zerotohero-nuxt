@@ -287,7 +287,14 @@
 </template>
 
 <script>
-import { timeout, uniqueId, unique, uniqueByValue, isMobile, ucFirst } from "@/lib/helper";
+import {
+  timeout,
+  uniqueId,
+  unique,
+  uniqueByValue,
+  isMobile,
+  ucFirst,
+} from "@/lib/helper";
 import { imageProxy } from "@/lib/config";
 import WordPhotos from "@/lib/word-photos";
 import Klingon from "@/lib/klingon";
@@ -339,7 +346,7 @@ export default {
       lastLookupWasQuick: false,
       loadingImages: false,
       t: 0,
-      imageProxy
+      imageProxy,
     };
   },
   computed: {
@@ -652,68 +659,67 @@ export default {
         .replace(/·(.)$/, "$1");
       //([ёеуюйыаоэяи])
     },
+    checkSavedWord() {
+      let savedWord, savedCandidate;
+      if (this.words.length > 0) {
+        for (let candidate of this.words) {
+          savedWord = this.$store.getters["savedWords/has"]({
+            l2: this.$l2.code,
+            id: candidate.id,
+          });
+          if (savedWord) {
+            savedCandidate = candidate;
+            break;
+          }
+        }
+      } else {
+        if (this.$slots?.default?.[0]?.text) {
+          savedWord = this.$store.getters["savedWords/has"]({
+            l2: this.$l2.code,
+            text: this.$slots.default[0].text,
+          });
+        }
+      }
+      return { savedWord, savedCandidate };
+    },
+    async getSavedTransliteration(savedWord, savedCandidate) {
+      let savedTransliteration = this.transliteration;
+      if (
+        ["ja", "zh", "nan", "hak", "en", "ko", "vi"].includes(this.$l2.code)
+      ) {
+        let dictionary = await this.$getDictionary();
+        savedWord = savedCandidate || (await dictionary.get(savedWord.id));
+        let text =
+          this.text ||
+          (this.token && this.token.candidates.length > 0
+            ? this.token.candidates[0].head
+            : undefined);
+        if (savedWord && savedWord.head && savedWord.head === text) {
+          let betterTransliteration =
+            savedWord.jyutping ||
+            savedWord.pinyin ||
+            savedWord.kana ||
+            savedWord.pronunciation;
+          savedTransliteration = betterTransliteration || savedTransliteration;
+        }
+      }
+      return savedTransliteration;
+    },
     async update() {
+      if (!this.transliteration || this.transliteration === "")
+        this.transliteration = await this.getTransliteration();
       if (this.$l1) this.classes[`l1-${this.$l1.code}`] = true;
       if (this.$l2) this.classes[`l2-${this.$l2.code}`] = true;
       if (this.$l2.han) this.classes["l2-zh"] = true;
       if (this.checkSaved) {
-        let savedCandidate = undefined;
-        let savedWord = false;
-        if (
-          this.token &&
-          this.token.candidates &&
-          this.token.candidates.length > 0
-        ) {
-          for (let candidate of this.token.candidates) {
-            savedWord = this.$store.getters["savedWords/has"]({
-              l2: this.$l2.code,
-              id: candidate.id,
-            });
-            if (savedWord) {
-              savedCandidate = candidate;
-              break;
-            }
-          }
-        } else {
-          if (
-            this.$slots.default &&
-            this.$slots.default &&
-            this.$slots.default[0] &&
-            this.$slots.default[0].text
-          ) {
-            savedWord = this.$store.getters["savedWords/has"]({
-              l2: this.$l2.code,
-              text: this.$slots.default[0].text.toLowerCase(),
-            });
-          }
-        }
-        if (
-          savedWord &&
-          savedWord.id &&
-          ["ja", "zh", "nan", "hak", "en", "ko", "vi"].includes(this.$l2.code)
-        ) {
-          let word =
-            savedCandidate ||
-            (await (await this.$getDictionary()).get(savedWord.id));
-          let text =
-            this.text ||
-            (this.token && this.token.candidates.length > 0
-              ? this.token.candidates[0].head
-              : undefined);
-          if (word && word.head && word.head === text) {
-            this.savedTransliteration =
-              word.jyutping ||
-              word.pinyin ||
-              word.kana ||
-              word.pronunciation ||
-              this.transliteration;
-          }
-          this.saved = word ? word : false;
-        } else {
+        let { savedWord, savedCandidate } = this.checkSavedWord();
+        if (savedWord?.id) {
           this.saved = savedWord ? savedWord : false;
+          this.savedTransliteration = await this.getSavedTransliteration(
+            savedWord,
+            savedCandidate
+          );
         }
-        if (!this.transliteration || this.transliteration === "")
-          this.transliteration = await this.getTransliteration();
       }
     },
     matchCase(text) {
@@ -758,7 +764,6 @@ export default {
         let word = this.words.find(
           (w) => w.pronunciation && w.pronunciation !== ""
         );
-        if (this.text === "traversiers") console.log(this.words);
         this.transliteration =
           word && word.pronunciation
             ? word.pronunciation.split(",")[0]
