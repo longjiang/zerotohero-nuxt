@@ -72,7 +72,7 @@
         :options="articleAudioOptions"
         ref="player"
       />
-      <button class="reference-status" @click="refStatusClick">
+      <button class="reference-status media-bar-button" @click="refStatusClick">
         {{ refStatus }}
       </button>
       <div class="verse-nav">
@@ -261,6 +261,37 @@ export default {
 </script>
 
 <style>
+.media-bar-button {
+  tab-size: 4;
+  -webkit-text-size-adjust: 100%;
+  box-sizing: border-box;
+  border-width: 0;
+  border-style: solid;
+  border-color: #e5e7eb;
+  font-family: inherit;
+  font-size: 100%;
+  margin: 0;
+  text-transform: none;
+  -webkit-appearance: button;
+  cursor: pointer;
+  display: block;
+  text-align: center;
+  color: white;
+  bottom: 0;
+  line-height: 2rem;
+  padding: 0;
+  background: #444;
+  border-radius: 0;
+}
+
+.media-bar-button:hover {
+  box-shadow: none !important;
+  border-bottom: none !important;
+  text-decoration: none !important;
+  color: white !important;
+  background: #767676;
+}
+
 .jw-study-aid-audio-bar {
   padding-top: 2rem;
 }
@@ -372,30 +403,10 @@ export default {
   background: #444444;
 }
 
-.media-bar-button {
-  cursor: pointer;
-  display: block;
-  text-align: center;
-  color: white;
-  bottom: 0;
-  line-height: 2rem;
-}
-
-.media-bar-button:hover {
-  box-shadow: none !important;
-  border-bottom: none !important;
-  text-decoration: none !important;
-  color: white !important;
-}
-
 .media-bar-button i {
   font-size: 1.2rem;
   position: relative;
   padding: 0 0.75rem;
-}
-
-.media-bar-button:hover {
-  background: #767676;
 }
 
 @media (max-width: 30em) {
