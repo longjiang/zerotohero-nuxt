@@ -242,18 +242,6 @@ export default class {
       }
     );
   }
-
-  /**
-   * Iterates through an array of footnotes, each with an array of renderings.
-   * Searches through the symbol table (json) and find matches in each rendering.refString
-   * @param {*} footnotes
-   * @param {*} callback
-   */
-  static loadSymbolTable(footnotes, callback) {
-    $.getJSON(config.data_url + "textual-symbols.json", function (symbolTable) {
-      callback(symbolTable);
-    });
-  }
 }
 </script>
 

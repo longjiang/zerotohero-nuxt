@@ -48,6 +48,7 @@ import Wol from "@/lib/jw/Wol";
 import Manuscripts from "@/lib/jw/Manuscripts";
 import langData from "@/lib/jw/languages/en-US";
 import $ from "jquery";
+import TEXTUAL_SYMBOLS from '@/lib/jw/Wol'
 
 export default {
   props: ["id", "vx", "studyElem"],
@@ -255,14 +256,13 @@ export default {
               );
             }
           }
-          let symbolTable = await Manuscripts.loadSymbolTable();
 
           for (let footnote of footnotes) {
             if (footnote.renderings) {
               for (let rendering of footnote.renderings) {
                 rendering.refs = Manuscripts.lookupSymbolTable(
                   rendering.refString,
-                  symbolTable
+                  TEXTUAL_SYMBOLS
                 );
               }
             }
