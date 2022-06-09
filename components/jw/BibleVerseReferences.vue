@@ -48,7 +48,6 @@ import Wol from "@/lib/jw/Wol";
 import Manuscripts from "@/lib/jw/Manuscripts";
 import langData from "@/lib/jw/languages/en-US";
 import $ from "jquery";
-import TEXTUAL_SYMBOLS from '@/lib/jw/Wol'
 
 export default {
   props: ["id", "vx", "studyElem"],
@@ -117,7 +116,7 @@ export default {
           this.verseNum
         );
         this.studyReferences = await this.getStudyNotesSnippets(this.verseId);
-        
+
         // this.mediaSnippets = await this.getMediaSnippets(this.id);
         // this.getSongs(verseNum);
         // this.getVideos(verseNum);
@@ -131,7 +130,7 @@ export default {
       var studyNotes = $(chapter.studyElem.innerHTML)
         .find(`.section[data-key="${verseId}"] .studyNote`)
         .get(0);
-      
+
       let studySnippets = [];
       if ($(studyNotes).find("p").length > 0) {
         $(studyNotes)
@@ -261,8 +260,7 @@ export default {
             if (footnote.renderings) {
               for (let rendering of footnote.renderings) {
                 rendering.refs = Manuscripts.lookupSymbolTable(
-                  rendering.refString,
-                  TEXTUAL_SYMBOLS
+                  rendering.refString
                 );
               }
             }
