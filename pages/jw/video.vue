@@ -20,10 +20,10 @@
 
 <script>
 import Helper from "@/lib/Helper";
-import Wol from "@/lib/Wol";
+import Wol from "@/lib/jw/Wol";
 import config from "@/lib/Config";
 import $ from "jquery";
-import langData from "@/lib/languages/en-US";
+import langData from "@/lib/jw/languages/en-US";
 
 export default {
   computed: {

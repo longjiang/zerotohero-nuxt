@@ -25,9 +25,9 @@
 <script>
 import Helper from "@/lib/Helper";
 import Config from "@/lib/Config";
-import EventsIterator from '@/lib/EventsIterator'
+import EventsIterator from '@/lib/jw/EventsIterator'
 import $ from 'jquery'
-import langData from "@/lib/languages/en-US";
+import langData from "@/lib/jw/languages/en-US";
 
 export default {
   data() {

@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import MixedQuestionSource from "@/lib/MixedQuestionSource";
+import MixedQuestionSource from "@/lib/jw/MixedQuestionSource";
 
 export default {
   props: {

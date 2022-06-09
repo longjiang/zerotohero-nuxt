@@ -18,8 +18,8 @@
 </template>
 
 <script>
-import Wol from "@/lib/Wol.js";
-import langData from "@/lib/languages/en-US";
+import Wol from "@/lib/jw/Wol.js";
+import langData from "@/lib/jw/languages/en-US";
 import VRuntimeTemplate from "v-runtime-template";
 import $ from "jquery";
 

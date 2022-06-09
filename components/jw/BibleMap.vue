@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Map from '@/lib/Map'
+import Map from '@/lib/jw/Map'
 import $ from "jquery";
 
 export default {

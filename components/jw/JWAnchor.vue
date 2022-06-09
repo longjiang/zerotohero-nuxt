@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import Wol from "@/lib/Wol";
+import Wol from "@/lib/jw/Wol";
 export default {
   props: ["href"],
   data() {

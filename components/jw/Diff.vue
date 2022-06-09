@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import Wol from "@/lib/Wol";
+import Wol from "@/lib/jw/Wol";
 import { parse } from "node-html-parser";
 export default {
   props: ["aUrl", "bUrl"],

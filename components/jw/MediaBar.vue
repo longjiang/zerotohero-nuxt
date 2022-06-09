@@ -121,9 +121,9 @@
 </template>
 
 <script>
-import Wol from "@/lib/Wol";
+import Wol from "@/lib/jw/Wol";
 import $ from "jquery";
-import langData from "@/lib/languages/en-US";
+import langData from "@/lib/jw/languages/en-US";
 
 export default {
   props: ["type"],

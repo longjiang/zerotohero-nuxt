@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import EventsIterator from '@/lib/EventsIterator'
+import EventsIterator from '@/lib/jw/EventsIterator'
 
 export default {
   methods: {

@@ -43,7 +43,7 @@
 
 <script>
 import config from "@/lib/Config";
-import Wikipedia from "@/lib/Wikipedia";
+import Wikipedia from "@/lib/jw/Wikipedia";
 import $ from "jquery";
 
 export default class {

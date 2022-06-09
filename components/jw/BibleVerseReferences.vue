@@ -41,9 +41,9 @@
 </template>
 
 <script>
-import Wol from "@/lib/Wol";
-import Manuscripts from "@/lib/Manuscripts";
-import langData from "@/lib/languages/en-US";
+import Wol from "@/lib/jw/Wol";
+import Manuscripts from "@/lib/jw/Manuscripts";
+import langData from "@/lib/jw/languages/en-US";
 import $ from "jquery";
 
 export default {
@@ -209,7 +209,7 @@ export default {
 
     async getReferenceBibleFootnotes(verseNum) {
       var chapter = this;
-      let enLangData = require("@/lib/languages/en-US").default;
+      let enLangData = require("@/lib/jw/languages/en-US").default;
 
       // Assuming locale is en-US
       for (let bible of enLangData.bibles) {

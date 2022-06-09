@@ -57,8 +57,8 @@
 </template>
 
 <script>
-import WatchtowerIndexEventSource from "@/lib/WatchtowerIndexEventSource";
-import Wol from "@/lib/Wol";
+import WatchtowerIndexEventSource from "@/lib/jw/WatchtowerIndexEventSource";
+import Wol from "@/lib/jw/Wol";
 import $ from "jquery";
 
 export default {

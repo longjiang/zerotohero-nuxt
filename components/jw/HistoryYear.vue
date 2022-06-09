@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import WatchtowerIndexEventSource from "@/lib/WatchtowerIndexEventSource";
+import WatchtowerIndexEventSource from "@/lib/jw/WatchtowerIndexEventSource";
 import Helper from "@/lib/Helper";
 import $ from "jquery";
 

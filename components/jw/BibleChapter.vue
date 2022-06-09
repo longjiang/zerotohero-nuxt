@@ -23,10 +23,10 @@
 </template>
 
 <script>
-import langData from "@/lib/languages/en-US";
+import langData from "@/lib/jw/languages/en-US";
 import Config from "@/lib/Config";
 import Helper from "@/lib/Helper";
-import Wol from "@/lib/Wol";
+import Wol from "@/lib/jw/Wol";
 import $ from "jquery";
 
 export default {

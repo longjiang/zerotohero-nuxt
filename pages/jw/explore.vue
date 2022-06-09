@@ -21,7 +21,7 @@
 
 <script>
 import Helper from "@/lib/Helper";
-import Wol from "@/lib/Wol";
+import Wol from "@/lib/jw/Wol";
 
 export default {
   data() {

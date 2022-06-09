@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import Wol from "@/lib/Wol";
+import Wol from "@/lib/jw/Wol";
 import $ from "jquery";
 
 export default {
@@ -143,7 +143,7 @@ export default {
     showPubsClick() {
       if (this.type === "scripture") {
         let ref = BibleChapter.parseVerseId("v" + this.verseIds[0] + "-1");
-        let enLangData = require("@/lib/languages/en-US").default;
+        let enLangData = require("@/lib/jw/languages/en-US").default;
         let chapter = new BibleChapter(
           enLangData,
           1,
