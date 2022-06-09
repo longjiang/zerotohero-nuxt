@@ -12,8 +12,9 @@ export const state = () => {
 
 export const mutations = {
   SAVE_LOCAL(state) {
-    localStorage.setItem(LOCAL_KEY, JSON.stringify(state.itemsByL2))},
-  LOAD(state,  { l2, itemsByL2 }) {
+    localStorage.setItem(LOCAL_KEY, JSON.stringify(state.itemsByL2))
+  },
+  LOAD(state, { l2, itemsByL2 }) {
     state.itemsByL2 = itemsByL2
     state.loadedByL2[l2.code] = true
   },
@@ -80,12 +81,13 @@ export const actions = {
       let res = await $nuxt.$authios.get(url);
       if (res.data && res.data.data) {
         let data = res.data.data;
-        commit('LOAD_ITEM', { l2, id, data  })
+        commit('LOAD_ITEM', { l2, id, data })
         commit('SAVE_LOCAL')
       }
     }
   },
   async add({ commit }, { l2, item }) {
+    item = item || { text: '', translation: '', title: '', l2: l2.id }
     commit('ADD', { l2, item })
     commit('SAVE_LOCAL')
     if ($nuxt.$auth.loggedIn) {
@@ -94,9 +96,10 @@ export const actions = {
         item
       );
       if (response?.data) {
-        return response.data.data
+        item = response.data.data
       }
     }
+    return item
   },
   async remove({ commit }, { l2, item }) {
     commit('REMOVE', { l2, item })

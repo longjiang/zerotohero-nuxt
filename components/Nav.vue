@@ -573,17 +573,15 @@ export default {
             this.hasFeature("dictionary") || this.hasFeature("transliteration"),
           children: [
             {
-              name: "reader",
+              name: "my-text",
               title: "Text Reader",
               icon: "fas fa-file-alt",
               show: true,
               shortcut: (e) => e.code === "KeyR" && e.metaKey && e.shiftKey,
             },
             {
-              name: "my-text",
-              title: "My Texts",
-              icon: "fas fa-file-alt",
-              show: true,
+              name: "reader",
+              show: false,
             },
             {
               name: "books",
