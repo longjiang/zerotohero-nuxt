@@ -261,6 +261,9 @@ export default {
     },
   },
   computed: {
+    userIsAdmin() {
+      return this.$auth.user && this.$auth.user.role == 1;
+    },
     native() {
       return Capacitor.isNativePlatform();
     },
@@ -577,6 +580,32 @@ export default {
               shortcut: (e) => e.code === "KeyR" && e.metaKey && e.shiftKey,
             },
             {
+              name: "books",
+              title: "Books",
+              icon: "fas fa-book-reader",
+              show: true,
+            },
+            {
+              name: "jw-bible",
+              title: "Bible",
+              icon: "fas fa-book",
+              show: this.userIsAdmin
+            },
+            {
+              name: "jw-bible-book",
+              show: false
+            },
+            {
+              name: "jw-bible-chapter",
+              show: false
+            },
+            {
+              name: "library",
+              title: "Books (Legacy)",
+              icon: "fas fa-book-reader",
+              show: true,
+            },
+            {
               name: "keyboard",
               icon: "fas fa-keyboard",
               title: "Keyboard",
@@ -587,18 +616,6 @@ export default {
               icon: "fas fa-bookmark",
               title: "Bookmarklet",
               show: this.hasFeature("bookmarklet"),
-            },
-            {
-              name: "books",
-              title: "Books",
-              icon: "fas fa-book-reader",
-              show: true,
-            },
-            {
-              name: "library",
-              title: "Books (Legacy)",
-              icon: "fas fa-book-reader",
-              show: true,
             },
             {
               name: "pinyin-list",
