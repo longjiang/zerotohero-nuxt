@@ -826,87 +826,88 @@ export default {
               name: "jw-bible",
               title: "Bible",
               icon: "fas fa-book",
-              show: this.userIsAdmin
+              show: this.userIsAdmin,
             },
             {
               name: "jw-daytext",
               title: "Daily Text",
               icon: "fas fa-book",
-              show: this.userIsAdmin
+              show: this.userIsAdmin,
             },
             {
               name: "jw-diff-view",
               title: "Diff",
               icon: "fas fa-book",
-              show: this.userIsAdmin
+              show: this.userIsAdmin,
             },
             {
               name: "jw-explore",
               title: "Explore",
               icon: "fas fa-book",
-              show: this.userIsAdmin
+              show: this.userIsAdmin,
             },
             {
               name: "jw-history",
               title: "History",
               icon: "fas fa-book",
-              show: this.userIsAdmin
+              show: this.userIsAdmin,
             },
             {
               name: "jw-jesus",
               title: "Jesus' Life",
               icon: "fas fa-book",
-              show: this.userIsAdmin
+              show: this.userIsAdmin,
             },
             {
               name: "jw-maps",
               title: "Maps",
               icon: "fas fa-book",
-              show: this.userIsAdmin
+              show: this.userIsAdmin,
             },
             {
               name: "jw-meeting",
               title: "Meeting",
               icon: "fas fa-book",
-              show: this.userIsAdmin
+              show: this.userIsAdmin,
             },
             {
               name: "jw-publications",
               title: "Publications",
               icon: "fas fa-book",
-              show: this.userIsAdmin
+              show: this.userIsAdmin,
             },
             {
               name: "jw-questions",
               title: "Questions",
               icon: "fas fa-book",
-              show: this.userIsAdmin
+              show: this.userIsAdmin,
             },
             {
               name: "jw-search",
               title: "Search",
               icon: "fas fa-book",
-              show: this.userIsAdmin
+              show: this.userIsAdmin,
             },
             {
               name: "jw-video",
               title: "Video",
+              params: { languageAgnosticNaturalKey: "pub-mwbv_202205_3_VIDEO" },
               icon: "fas fa-book",
-              show: this.userIsAdmin
+              show: this.userIsAdmin,
             },
             {
               name: "jw-bible-book",
-              show: false
+              show: false,
             },
             {
               name: "jw-bible-chapter",
-              show: false
+              show: false,
             },
             {
               name: "jw-article",
-              show: false
+              show: false,
             },
-          ]
+          ],
         },
         {
           icon: "fas fa-wrench",
@@ -1190,7 +1191,8 @@ export default {
             let resolvedPath = this.$router.resolve(path);
             if (resolvedPath && resolvedPath.route) {
               if (resolvedPath.route.params && resolvedPath.route.params.l2) {
-                if (resolvedPath.route.params.l2 !== this.$l2.code) return false // Never go back to a different language!
+                if (resolvedPath.route.params.l2 !== this.$l2.code)
+                  return false; // Never go back to a different language!
               }
               return namesToMatch.includes(resolvedPath.route.name);
             }
