@@ -8,6 +8,10 @@
   src: url("/fonts/Klingon-pIqaD-HaSta.ttf") format("truetype");
 }
 
+button {
+  border: none;
+}
+
 .safe-padding-top {
   padding-top: env(safe-area-inset-bottom);
 }
