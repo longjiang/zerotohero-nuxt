@@ -3,7 +3,7 @@
     <router-link v-if="loadable" :to="`/${$l1.code}/${$l2.code}/article?url=${href}`"><slot></slot></router-link>
     <a v-else :href="href" target="_blank"><slot></slot></a>
     <button
-      class="bg-gray-300 p-1 text-white rounded relative bottom-0.5"
+      class="btn btn-small text-white rounded relative bottom-0.5"
       style="font-size: 0.55em"
       @click="expand = !expand"
       v-if="loadable"

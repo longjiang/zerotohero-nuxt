@@ -2,7 +2,7 @@
   <span v-if="vx">
     <span :id="id"><slot></slot></span>
     <button
-      class="bg-gray-300 p-1 text-white rounded relative bottom-0.5 mr-1"
+      class="btn btn-small"
       style="font-size: 0.55em"
       @click="expand = !expand"
     >
