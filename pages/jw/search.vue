@@ -5,9 +5,9 @@
   }
 </router>
 <template>
-  <div class="main container mx-auto mt-10">
+  <div class="main container pt-5">
     <div id="jw-study-aid-search-wrapper">
-      <div class="jw-study-aid-search-controls">
+      <div class="jw-study-aid-search-controls mb-3">
         <input
           type="text"
           class="jw-study-aid-search-controls-field"
@@ -20,6 +20,7 @@
           Search
         </button>
       </div>
+      <div class="alert alert-danger">Cannot search. Video indexing server has not been set up.</div>
       <div class="jw-study-aid-search-videos">
         <div v-for="video in videos" :key="video.vid">
           <JWVideoCard
