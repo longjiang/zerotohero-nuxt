@@ -11,12 +11,24 @@
         <input
           type="text"
           class="jw-study-aid-search-controls-field"
-          value=""
-          placeholder=""
+          v-model="keyword"
+          @compositionend.prevent.stop="() => false"
+          @keyup.enter="search"
+          placeholder="Search"
         />
-        <button class="jw-study-aid-search-controls-button">Search</button>
+        <button class="jw-study-aid-search-controls-button" @click="search">
+          Search
+        </button>
       </div>
-      <ul class="jw-study-aid-search-videos"></ul>
+      <div class="jw-study-aid-search-videos">
+        <div v-for="video in videos" :key="video.vid">
+          <JWVideoCard
+            vid="result.vid"
+            :start="Number(result.items[0].start)"
+            :keyword="keyword"
+          />
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -24,6 +36,8 @@
 <script>
 import config from "@/lib/Config.js";
 import $ from "jquery";
+import axios from 'axios'
+import { VIDEO_TERM_SEARCH_BASE } from "@/lib/jw/Wol"
 
 export default {
   computed: {
@@ -35,6 +49,12 @@ export default {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
+  },
+  data() {
+    return {
+      keyword: "",
+      videos: [],
+    };
   },
   methods: {
     constructor(id) {
@@ -81,39 +101,30 @@ export default {
       }
     },
 
-    searchVideos(q = undefined) {
-      let jwsearch = this;
-      let url =
-        config.VIDEO_TERM_SEARCH_BASE +
-        $.param({
-          q: `${q}`,
-        });
-      $.getJSON({
-        url: url,
-        success: function (results) {
-          let videoResultsWrapper = $(jwsearch.element).find(
-            ".jw-study-aid-search-videos"
-          )[0];
-          $(videoResultsWrapper).html("");
-          for (let result of results) {
-            let videoSnippet = Video.getVideoSnippet(
-              result.vid,
-              Number(result.items[0].start),
-              q,
-              jwsearch
-            );
-            $(videoResultsWrapper).append(videoSnippet.element);
-          }
-        },
-      });
-    },
-
-    search(q) {
-      var jwsearch = this;
-      jwsearch.searchVideos(q);
+    async search() {
+      let url = VIDEO_TERM_SEARCH_BASE;
+      let params = { q: this.keyword };
+      let res = await axios.get(url, { params });
+      if (res) {
+        this.videos = res.data;
+      }
     },
   },
 };
+
+// let videoResultsWrapper = $(jwsearch.element).find(
+//   ".jw-study-aid-search-videos"
+// )[0];
+// $(videoResultsWrapper).html("");
+// for (let result of results) {
+//   let videoSnippet = Video.getVideoSnippet(
+//     result.vid,
+//     Number(result.items[0].start),
+//     this.keyword,
+//     jwsearch
+//   );
+//   $(videoResultsWrapper).append(videoSnippet.element);
+// }
 </script>
 
 <style>
