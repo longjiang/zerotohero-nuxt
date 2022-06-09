@@ -1,58 +1,125 @@
 <template>
-  <div class="jw-study-aid-bible-map" :id="mapId"></div>
+  <div class="bible-map">
+    <client-only>
+      <l-map
+        :zoom="initialZoom"
+        :minZoom="3"
+        :maxZoom="9"
+        :center="initialCenter"
+        @update:zoom="updateZoom"
+        @ready="mapLoaded"
+        ref="map"
+      >
+        <l-tile-layer :url="mapTileURL[mapStyle]"></l-tile-layer>
+        <l-control-scale
+          position="topright"
+          :imperial="false"
+          :metric="true"
+        ></l-control-scale>
+        <l-marker
+          v-for="(place, index) in places"
+          :lat-lng="[Number(place.lat), Number(place.lon)]"
+          :key="`place-marker-${index}`"
+        >
+          <l-icon>
+            <div
+              :class="{
+                'place-marker jw-study-aid-place-icon': true,
+                'jw-study-aid-place-icon-region': place.type === 'region',
+              }"
+            >
+              <span class="label-inner" v-if="place.type === 'region'">
+                {{ place.name }}
+              </span>
+              <span class="label-inner" v-else>
+                <i class="octicon octicon-primitive-dot"></i>
+                {{ place.name }}
+              </span>
+            </div>
+          </l-icon>
+        </l-marker>
+      </l-map>
+    </client-only>
+  </div>
 </template>
 
 <script>
-import Map from '@/lib/jw/Map'
+import Map from "@/lib/jw/Map";
 import $ from "jquery";
+import "leaflet/dist/leaflet.css";
 
 export default {
+  components: {
+    "l-map": async () => {
+      if (process.client) {
+        let { LMap } = await import("vue2-leaflet");
+        return LMap;
+      }
+    },
+    "l-tile-layer": async () => {
+      if (process.client) {
+        let { LTileLayer } = await import("vue2-leaflet");
+        return LTileLayer;
+      }
+    },
+    "l-marker": async () => {
+      if (process.client) {
+        let { LMarker } = await import("vue2-leaflet");
+        return LMarker;
+      }
+    },
+    "l-icon": async () => {
+      if (process.client) {
+        let { LIcon } = await import("vue2-leaflet");
+        return LIcon;
+      }
+    },
+    "l-control-scale": async () => {
+      if (process.client) {
+        let { LControlScale } = await import("vue2-leaflet");
+        return LControlScale;
+      }
+    },
+  },
   data() {
     return {
       map: undefined,
       plotmarks: [],
       mapId: "bible-map",
       places: [],
+      initialZoom: 3,
+      initialCenter: [35, 105],
+      currentZoom: 4,
+      mapStyle: "satellite",
+      mapTileURL: {
+        street: "http://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png",
+        satellite:
+          "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+      },
     };
   },
   props: {
-    placesProp: undefined
+    placesProp: undefined,
   },
   async mounted() {
-    this.places = this.placesProp || await this.getPlaces();
-    this.drawMap(this.mapId);
+    this.places = this.placesProp || (await this.getPlaces());
   },
   methods: {
-    drawMap(id) {
-      // Create a div with Leaflet map
-      this.map = new L.Map(id);
-
-      var EsriWorldImagery = L.tileLayer(
-        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-        {
-          attribution:
-            "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community",
-          maxZoom: 17, // Higher the number, closer you can zoom in
-        }
-      );
-
-      this.map.addLayer(EsriWorldImagery);
-
-      // Plot the locations on the leaflet map
-      var plotmarks = [];
-      for (let place of this.places) {
-        var plotmark = this.plotOnMap(place, this.map);
-        plotmarks.push(plotmark);
-      }
-      var group = new L.FeatureGroup(plotmarks);
-      this.map.fitBounds(group.getBounds());
-      if (this.map.getZoom() > 10) {
-        this.map.setZoom(10);
-      }
-      this.plotmarks = plotmarks;
-      this.$emit('mapLoaded')
+    mapLoaded() {
+      this.centerMapToPlotmarks();
+      this.$emit("mapLoaded");
     },
-
+    updateZoom(zoom) {
+      this.currentZoom = zoom;
+    },
+    centerMapToPlotmarks() {
+      let map = this.$refs.map;
+      console.log(map);
+      if (map) {
+        let latLongs = this.places.map((p) => [p.lat, p.lon]);
+        map.fitBounds(latLongs);
+      }
+    },
     async getPlaces() {
       let places = [];
       let results = await Map.getPlacesCSV();
@@ -65,29 +132,6 @@ export default {
       return places;
     },
 
-    plotOnMap(place, map) {
-      var plotll = new L.LatLng(place.lat, place.lon);
-
-      var myIcon = L.divIcon({
-        className: "jw-study-aid-place-icon",
-        iconSize: new L.Point(800, 16),
-        html:
-          '<span class="label-inner"><i class="octicon octicon-primitive-dot"></i> ' +
-          place.name +
-          "</span>", // (' + place.verse + ')
-      });
-      if (place.type === "region") {
-        myIcon = L.divIcon({
-          className: "jw-study-aid-place-icon-region",
-          iconSize: new L.Point(800, 16),
-          html: '<span class="label-inner">' + place.name + "</span>", // (' + place.verse + ')
-        });
-      }
-      var plotmark = new L.Marker(plotll, { icon: myIcon }); //
-      plotmark.data = place;
-      map.addLayer(plotmark);
-      return plotmark;
-    },
     showInsightArticle(name) {
       let maps = this;
       this.wol.getInsightArticle(name, function (html, url) {
@@ -133,7 +177,26 @@ export default {
 </script>
 
 <style>
-.jw-study-aid-bible-map {
-  height: 20rem;
+.bible-map {
+  height: 100%;
+  width: 100%;
 }
+
+.jw-study-aid-place-icon-region {
+  text-align: center;
+  font-size: 1.75em;
+  font-weight: bold;
+  color: #444;
+  text-transform: uppercase;
+  position: relative;
+}
+
+.jw-study-aid-place-icon-region .label-inner {
+  display: block;
+  position: relative;
+  bottom: 0.7em;
+  left: 0.7em;
+}
+
+
 </style>

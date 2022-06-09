@@ -17,7 +17,6 @@ import Languages from '@/lib/languages'
 import DateHelper from "@/lib/date-helper";
 import axios from 'axios'
 import AsyncComputed from 'vue-async-computed'
- 
 
 Vue.config.productionTip = false
 Vue.use(VTooltip)

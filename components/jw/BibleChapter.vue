@@ -1007,23 +1007,6 @@ a.leaflet-popup-close-button {
 .bible-place {
   cursor: pointer;
 }
-
-.jw-study-aid-place-icon-region {
-  text-align: center;
-  font-size: 1.75em;
-  font-weight: bold;
-  color: white;
-  text-transform: uppercase;
-  position: relative;
-}
-
-.jw-study-aid-place-icon-region .label-inner {
-  display: block;
-  position: relative;
-  bottom: 0.7em;
-  left: 0.7em;
-}
-
 .bible-chapter-timeline-container .jw-nav-tabs,
 .bible-chapter-timeline-container .jw-study-aid-search-controls {
   display: none;
