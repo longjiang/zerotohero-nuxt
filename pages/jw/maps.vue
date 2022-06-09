@@ -1,5 +1,11 @@
+<router>
+  {
+    path: '/:l1/:l2/maps/',
+    props: true
+  }
+</router>
 <template>
-  <div class="container mx-auto mt-10">
+  <div class="container main mt-10">
     <div class="jw-study-aid-search-controls">
       <input
         type="text"

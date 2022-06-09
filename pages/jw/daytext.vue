@@ -6,7 +6,7 @@
 </router>
 
 <template>
-  <div class="container mx-auto mt-10 mb-10">
+  <div class="main container mx-auto mt-10 mb-10">
     <div class="day-text">
       <JWArticle
         v-if="$l2.wol"
@@ -32,7 +32,7 @@ export default {
         m: today.getMonth() + 1,
         y: today.getFullYear(),
       };
-      this.$router.push({ name: "daytext", params });
+      this.$router.push({ name: "jw-daytext", params });
     }
   },
   computed: {

@@ -5,7 +5,7 @@
   }
 </router>
 <template>
-  <div class="container mx-auto mt-10">
+  <div class="main container mx-auto mt-10">
     <JWArticle
       :url="`https://wol.jw.org/${$l2.wol.locale}/wol/meetings/${$l2.wol.libs[0].researchConfigurationID}/${$l2.wol.libs[0].symbol}/2021/${week}`"
     />
@@ -34,7 +34,7 @@ export default {
           7
       );
 
-      this.$router.push({ name: "meeting", params: { week } });
+      this.$router.push({ name: "jw-meeting", params: { week } });
     }
   },
   methods: {

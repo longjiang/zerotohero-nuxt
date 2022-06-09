@@ -4,7 +4,7 @@
   }
 </router>
 <template>
-  <div class="container mx-auto mt-10">
+  <div class="main container mx-auto mt-10">
     <div
       class="jw-study-aid-explore"
       v-for="article in randomArticles"

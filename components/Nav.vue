@@ -586,24 +586,6 @@ export default {
               show: true,
             },
             {
-              name: "jw-bible",
-              title: "Bible",
-              icon: "fas fa-book",
-              show: this.userIsAdmin
-            },
-            {
-              name: "jw-bible-book",
-              show: false
-            },
-            {
-              name: "jw-bible-chapter",
-              show: false
-            },
-            {
-              name: "jw-history",
-              show: false
-            },
-            {
               name: "library",
               title: "Books (Legacy)",
               icon: "fas fa-book-reader",
@@ -834,6 +816,97 @@ export default {
               show: true,
             },
           ],
+        },
+        {
+          icon: "octicon octicon-briefcase",
+          title: "JW",
+          show: this.userIsAdmin,
+          children: [
+            {
+              name: "jw-bible",
+              title: "Bible",
+              icon: "fas fa-book",
+              show: this.userIsAdmin
+            },
+            {
+              name: "jw-daytext",
+              title: "Daily Text",
+              icon: "fas fa-book",
+              show: this.userIsAdmin
+            },
+            {
+              name: "jw-diff-view",
+              title: "Diff",
+              icon: "fas fa-book",
+              show: this.userIsAdmin
+            },
+            {
+              name: "jw-explore",
+              title: "Explore",
+              icon: "fas fa-book",
+              show: this.userIsAdmin
+            },
+            {
+              name: "jw-history",
+              title: "History",
+              icon: "fas fa-book",
+              show: this.userIsAdmin
+            },
+            {
+              name: "jw-jesus",
+              title: "Jesus' Life",
+              icon: "fas fa-book",
+              show: this.userIsAdmin
+            },
+            {
+              name: "jw-maps",
+              title: "Maps",
+              icon: "fas fa-book",
+              show: this.userIsAdmin
+            },
+            {
+              name: "jw-meeting",
+              title: "Meeting",
+              icon: "fas fa-book",
+              show: this.userIsAdmin
+            },
+            {
+              name: "jw-publications",
+              title: "Publications",
+              icon: "fas fa-book",
+              show: this.userIsAdmin
+            },
+            {
+              name: "jw-questions",
+              title: "Questions",
+              icon: "fas fa-book",
+              show: this.userIsAdmin
+            },
+            {
+              name: "jw-search",
+              title: "Search",
+              icon: "fas fa-book",
+              show: this.userIsAdmin
+            },
+            {
+              name: "jw-video",
+              title: "Video",
+              icon: "fas fa-book",
+              show: this.userIsAdmin
+            },
+            {
+              name: "jw-bible-book",
+              show: false
+            },
+            {
+              name: "jw-bible-chapter",
+              show: false
+            },
+            {
+              name: "jw-article",
+              show: false
+            },
+          ]
         },
         {
           icon: "fas fa-wrench",

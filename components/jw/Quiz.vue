@@ -1,6 +1,6 @@
 <template>
   <div id="jw-study-aid-questions-app">
-    <span class="throbber-loader" v-bind:class="{ hidden: dataLoaded }">
+    <span class="throbber-loader" v-if="!dataLoaded">
       Loading&#8230;
     </span>
     <div class="question-card-deck">
@@ -12,9 +12,7 @@
       >
         <template v-if="question.type === 'article'">
           <div class="question-card-question front">
-            <div class="question-card-question-prompt">
-              'Question:'
-            </div>
+            <div class="question-card-question-prompt">'Question:'</div>
             <div class="question-card-question-question">
               {{ question.question }}
             </div>
@@ -23,9 +21,7 @@
         </template>
         <template v-if="question.type === 'glossary'">
           <div class="question-card-term front">
-            <div class="question-card-term-prompt">
-              'Define this term:'
-            </div>
+            <div class="question-card-term-prompt">'Define this term:'</div>
             <div class="question-card-term-term">{{ question.term }}</div>
           </div>
           <div
@@ -81,7 +77,6 @@ import MixedQuestionSource from "@/lib/jw/MixedQuestionSource";
 
 export default {
   props: {
-    questionSource: undefined,
     articles: undefined,
   },
   mounted() {
@@ -89,6 +84,7 @@ export default {
   },
   data() {
     return {
+      questionSource: undefined,
       questions: [],
       dataLoaded: false,
     };
@@ -104,26 +100,19 @@ export default {
       }
     },
 
-    getQuestions() {
+    async getQuestions() {
       if (!this.questionSource && this.articles) {
-        this.questionSource = new MixedQuestionSource(articles);
+        this.questionSource = new MixedQuestionSource(this.articles);
       }
       if (this.questionSource) {
-        this.questionSource.getQuestions(function (questions) {
-          $(selector + " .throbber-loader").remove();
-          this.quizVue.questions = questions;
-        });
+        let questions = await this.questionSource.getQuestions();
+        this.dataLoaded = true
+        this.questions = questions;
       }
     }, // getQuestions();
     setQuestionSource(questionSource) {
       this.questionSource = questionSource;
-      this.quizVue.getQuestions();
-    },
-    getQuizVue() {
-      var selector = "#jw-study-aid-questions-app";
-      return new Vue({
-        el: selector,
-      });
+      this.getQuestions();
     },
   },
 };
@@ -131,112 +120,110 @@ export default {
 
 <style>
 #jw-study-aid-questions-app .throbber-loader {
-    margin-bottom: 2rem;
+  margin-bottom: 2rem;
 }
 
 #jw-study-aid-questions-app .question-card {
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
-    padding: 2rem;
-    height: calc(100vh);
-    max-height: 20rem;
-    overflow: hidden;
-    margin-bottom: 2rem;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  padding: 2rem;
+  height: calc(100vh);
+  max-height: 20rem;
+  overflow: hidden;
+  margin-bottom: 2rem;
 }
 
 #jw-study-aid-questions-app .question-card.revealed .back {
-    display: none;
+  display: none;
 }
 
 #jw-study-aid-questions-app .question-card:not(.revealed) .front {
-    display: none;
+  display: none;
 }
 
 #jw-study-aid-questions-app .question-card-image {
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    height: 100%;
-    justify-content: center;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  height: 100%;
+  justify-content: center;
 }
-
-
 
 #jw-study-aid-questions-app .question-card-question,
 #jw-study-aid-questions-app .question-card-definition {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
 #jw-study-aid-questions-app .question-card-image .question-card-image-prompt {
-    flex: 1;
-    flex-grow: 0;
-    margin-bottom: 0.5rem;
+  flex: 1;
+  flex-grow: 0;
+  margin-bottom: 0.5rem;
 }
 
 #jw-study-aid-questions-app .question-card-image img {
-    flex: 1;
-    object-fit: contain;
-    flex-grow: 0;
-    max-height: calc(100% - 1rem);
+  flex: 1;
+  object-fit: contain;
+  flex-grow: 0;
+  max-height: calc(100% - 1rem);
 }
 
 #jw-study-aid-questions-app .question-card-question {
-    text-align: center;
-    font-size: 1.15em;
+  text-align: center;
+  font-size: 1.15em;
 }
 
 #jw-study-aid-questions-app .question-card-question-scripture {
-    max-height:calc(100% - 2rem);
-    overflow-y: scroll;
+  max-height: calc(100% - 2rem);
+  overflow-y: scroll;
 }
 
 #jw-study-aid-questions-app .question-card-term,
 #jw-study-aid-questions-app .question-card-caption {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    align-items: center;
-    justify-content: center;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
 }
 
 #jw-study-aid-questions-app .question-card-definition {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 #jw-study-aid-questions-app .question-card-answer,
 #jw-study-aid-questions-app .question-card-definition {
-    height: 100%;
-    align-items: center;
-    overflow: scroll;
-    justify-content: center;
+  height: 100%;
+  align-items: center;
+  overflow: scroll;
+  justify-content: center;
 }
 
 #jw-study-aid-questions-app .question-card-term-term {
-    font-size: 1.7em;
-    font-weight: bold;
-    line-height: 1.2;
-    margin-top: 1rem;
+  font-size: 1.7em;
+  font-weight: bold;
+  line-height: 1.2;
+  margin-top: 1rem;
 }
 
 #jw-study-aid-questions-app .question-card-question-prompt {
-    font-weight: bold;
-    margin-bottom: 1rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
 }
 
 #jw-study-aid-questions-app #jw-study-aid-questions-app {
-    margin-bottom: 3rem;
+  margin-bottom: 3rem;
 }
 
 .question-card-question-scripture .sl {
-    display: block;
+  display: block;
 }
 
 .question.obscure {
@@ -260,6 +247,4 @@ export default {
   text-align: center;
   left: 0;
 }
-
-
 </style>

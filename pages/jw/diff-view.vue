@@ -16,9 +16,12 @@ export default {
   props: ["a", "b"],
   mounted() {
     if (!(this.a && this.b)) {
-      this.$router.push(
-        `/diff?a=https://wol.jw.org/cmn-Hans/wol/b/r23/lp-chs/bi12/1/1&b=https://wol.jw.org/cmn-Hans/wol/b/r23/lp-chs/nwtsty/1/1`
-      );
+      this.$router.push({
+        name: "jw-diff-view",
+        query: {
+          a: "https://wol.jw.org/cmn-Hans/wol/b/r23/lp-chs/bi12/1/1&b=https://wol.jw.org/cmn-Hans/wol/b/r23/lp-chs/nwtsty/1/1",
+        },
+      });
     }
   },
   data() {

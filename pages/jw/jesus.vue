@@ -6,7 +6,7 @@
 </router>
 
 <template>
-<div class="container mx-auto mt-10">
+<div class="main container mx-auto mt-10">
     <div class="jesus-life-panels">
     <div class="jesus-life-panel-navigation" v-if="!sectionId || !eventId">
       <h1 class="text-3xl font-bold mb-10">Jesus’ Life on Earth</h1>

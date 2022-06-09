@@ -5,7 +5,7 @@
   }
 </router>
 <template>
-  <div class="container mx-auto mt-10">
+  <div class="container main mx-auto mt-10">
     <div class="jw-study-aid-questions">
       <Quiz :articles="2" />
       <p>Refresh the page to see another set.</p>

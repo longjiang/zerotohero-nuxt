@@ -6,7 +6,7 @@
 </router>
 <template>
 
-  <div class="container mx-auto mt-10">
+  <div class="main container mx-auto mt-10">
     <JWArticle :url="`https://wol.jw.org/en/wol/library/r1/lp-e/all-publications`" selector="nav"/>
   </div>
 </template>
