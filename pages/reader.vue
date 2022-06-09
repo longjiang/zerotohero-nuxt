@@ -41,6 +41,40 @@
             </span>
             a popup dictionary!
           </p>
+          <button
+            @click="upload"
+            :class="{
+              'reader-button': true,
+            }"
+            style="font-size: 0.9em"
+            v-if="!shared"
+          >
+            <i class="fas fa-share"></i>
+            Share
+          </button>
+          <client-only>
+            <div v-if="shared || sharing" class="alert alert-success mt-2">
+              <div v-if="shared">
+                <div class="strong mb-2">
+                  <i class="fas fa-paper-plane"></i>
+                  Shareable via link:
+                </div>
+                <div class="border-gray rounded p-2 bg-white">
+                  {{ shareURL }}
+                </div>
+                <b-button
+                  variant="unstyled"
+                  @click="copyClick"
+                  class="copy-btn"
+                >
+                  <i class="fas fa-copy"></i>
+                </b-button>
+              </div>
+              <div v-if="sharing" class="strong">
+                Creating a shareable URL...
+              </div>
+            </div>
+          </client-only>
           <ReaderComp
             ref="reader"
             :page="page"
@@ -124,7 +158,7 @@ export default {
       type: String,
     },
     arg: {
-      type: String,
+      type: [String, Number],
     },
   },
   data() {
@@ -132,7 +166,9 @@ export default {
       text: "",
       translation: "",
       dictionaryCredit: undefined,
-      page: 1
+      page: 1,
+      shared: undefined, // The object corresponding to the text object shared (uploaded) to the server: {id: 1, text: '...', translation: '...'}
+      sharing: false,
     };
   },
   watch: {
@@ -168,7 +204,6 @@ export default {
           text = res.data.data.text;
           translation = res.data.data.translation;
           this.shared = res.data.data;
-          this.$refs.reader.shared = res.data.data
         }
       } catch (err) {
         Helper.logError(err);
@@ -203,8 +238,41 @@ export default {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
+    shareURL() {
+      if (this.shared)
+        return `${window.location.protocol}//${window.location.hostname}/${this.$l1.code}/${this.$l2.code}/reader/shared/${this.shared.id}`;
+    },
   },
   methods: {
+    copyClick() {
+      let text = this.shareURL;
+      var tempInput = document.createElement("input");
+      tempInput.style = "position: absolute; left: -1000px; top: -1000px";
+      tempInput.value = text;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand("copy");
+      document.body.removeChild(tempInput);
+      this.$toast.info("Copied!", { duration: 3000 });
+    },
+    async upload() {
+      this.sharing = true;
+      try {
+        let res = await this.$authios.post(`${Config.wiki}items/text`, {
+          title: this.text.trim().split(/\n+/)[0],
+          text: this.text,
+          translation: this.translation,
+          l2: this.$l2.id
+        });
+        if (res && res.data && res.data.data.id) {
+          this.shared = res.data.data;
+        }
+        this.sharing = false;
+      } catch (err) {
+        Helper.logError(err);
+        this.sharing = false;
+      }
+    },
     onPreviousPage() {
       let to = {
         name: "reader",
@@ -234,9 +302,13 @@ export default {
     },
     readerTextChanged(text) {
       if (text === '') this.page = 1
+      if (this.shared && this.text !== this.shared.text)
+        this.shared = undefined; // Unset link to the shared text on the server
       this.save(text);
     },
     readerTranslationChanged(text) {
+      if (this.shared && this.translation !== this.shared.translation)
+        this.shared = undefined; // Unset link to the shared text on the server
       this.saveTranslation(text);
     },
     getSaved() {
