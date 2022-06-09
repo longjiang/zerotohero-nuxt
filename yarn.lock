@@ -10,6 +10,16 @@
     "@jridgewell/gen-mapping" "^0.1.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
+<<<<<<< Updated upstream
+=======
+"@antfu/utils@^0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@antfu/utils/-/utils-0.4.0.tgz#df100ed9922d7359bf6c99083765b5207086b9a7"
+  integrity sha512-gqkpvjkgFUu+s3kP+Ly33OKpo5zvVY3FDFhv5BIb98SncS3KD6DNxPfNDjwHIoyXbz1leWo1j8DtRLZ1D2Jv+Q==
+  dependencies:
+    "@types/throttle-debounce" "^2.1.0"
+
+>>>>>>> Stashed changes
 "@babel/code-frame@7.12.11":
   version "7.12.11"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.12.11.tgz#f4ad435aa263db935b8f10f2c552d23fb716a63f"
@@ -29,7 +39,11 @@
   resolved "https://registry.yarnpkg.com/@babel/compat-data/-/compat-data-7.17.10.tgz#711dc726a492dfc8be8220028b1b92482362baab"
   integrity sha512-GZt/TCsG70Ms19gfZO1tM4CVnXsPgEPBCpJu+Qz3L0LUDsY5nZqFZglIoPC1kIYOtNBZlrnFT+klg12vFGZXrw==
 
+<<<<<<< Updated upstream
 "@babel/core@^7.1.0", "@babel/core@^7.12.3", "@babel/core@^7.14.0":
+=======
+"@babel/core@^7.1.0", "@babel/core@^7.12.3", "@babel/core@^7.14.0", "@babel/core@^7.16.7":
+>>>>>>> Stashed changes
   version "7.18.2"
   resolved "https://registry.yarnpkg.com/@babel/core/-/core-7.18.2.tgz#87b2fcd7cce9becaa7f5acebdc4f09f3dd19d876"
   integrity sha512-A8pri1YJiC5UnkdrWcmfZTJTV85b4UXTAfImGmCfYmax4TR9Cw8sDS0MOk++Gp2mE/BefVJ5nwy5yzqNJbP/DQ==
@@ -50,7 +64,11 @@
     json5 "^2.2.1"
     semver "^6.3.0"
 
+<<<<<<< Updated upstream
 "@babel/generator@^7.18.2":
+=======
+"@babel/generator@^7.16.8", "@babel/generator@^7.18.2":
+>>>>>>> Stashed changes
   version "7.18.2"
   resolved "https://registry.yarnpkg.com/@babel/generator/-/generator-7.18.2.tgz#33873d6f89b21efe2da63fe554460f3df1c5880d"
   integrity sha512-W1lG5vUwFvfMd8HVXqdfbuG7RuaSrTCCD8cl8fP8wOivdbtbIg2Db3IWUcgvfxKbbn6ZBGYRW/Zk1MIwK49mgw==
@@ -265,7 +283,11 @@
     chalk "^2.0.0"
     js-tokens "^4.0.0"
 
+<<<<<<< Updated upstream
 "@babel/parser@^7.1.0", "@babel/parser@^7.14.7", "@babel/parser@^7.14.9", "@babel/parser@^7.16.7", "@babel/parser@^7.18.0", "@babel/parser@^7.7.0", "@babel/parser@^7.9.6":
+=======
+"@babel/parser@^7.1.0", "@babel/parser@^7.14.7", "@babel/parser@^7.14.9", "@babel/parser@^7.16.4", "@babel/parser@^7.16.7", "@babel/parser@^7.16.8", "@babel/parser@^7.18.0", "@babel/parser@^7.7.0", "@babel/parser@^7.9.6":
+>>>>>>> Stashed changes
   version "7.18.4"
   resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.18.4.tgz#6774231779dd700e0af29f6ad8d479582d7ce5ef"
   integrity sha512-FDge0dFazETFcxGw/EXzOkN8uJp0PC7Qbm+Pe9T+av2zlBpOgunFHkQPPn+eRuClU73JF+98D531UgayY89tow==
@@ -1655,6 +1677,23 @@
     consola "^2.15.3"
     defu "^5.0.0"
 
+<<<<<<< Updated upstream
+=======
+"@nuxtjs/composition-api@^0.32.0":
+  version "0.32.0"
+  resolved "https://registry.yarnpkg.com/@nuxtjs/composition-api/-/composition-api-0.32.0.tgz#90a89f90899dc78d641a9d7da85b5d238eeb0cc7"
+  integrity sha512-/LYf0N5x5j8i2/Uldfw+n4o3SVXyCIYQyOwSL+2JTllyyEkO3zHJc8YAbJhp22kHh6gPEhmgBA/whDUbERY7mg==
+  dependencies:
+    "@vue/composition-api" "^1.4.6"
+    defu "^5.0.1"
+    estree-walker "^2.0.2"
+    fs-extra "^9.1.0"
+    magic-string "^0.25.7"
+    ufo "^0.7.9"
+    unplugin-vue2-script-setup "^0.9.3"
+    upath "^2.0.1"
+
+>>>>>>> Stashed changes
 "@nuxtjs/eslint-module@^3.0.2":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@nuxtjs/eslint-module/-/eslint-module-3.1.0.tgz#3e7d241f4b53fbc6ab59932054d11dd22a828a40"
@@ -1718,11 +1757,32 @@
     mustache "^2.3.0"
     stack-trace "0.0.10"
 
+<<<<<<< Updated upstream
+=======
+"@pinia/nuxt@^0.1.9":
+  version "0.1.9"
+  resolved "https://registry.yarnpkg.com/@pinia/nuxt/-/nuxt-0.1.9.tgz#96bd971ff5e280d401d1b2be1510b6ae4600a510"
+  integrity sha512-5YmfBOxXHM5eA5pE4mq5opJnSmVYn2qYJ2ak01FrCww0esxfRLkmuu4emynu0Ar5eQ/DDz9wI3ukgRwAubXqmg==
+  dependencies:
+    vue-demi "*"
+
+>>>>>>> Stashed changes
 "@polka/url@^1.0.0-next.20":
   version "1.0.0-next.21"
   resolved "https://registry.yarnpkg.com/@polka/url/-/url-1.0.0-next.21.tgz#5de5a2385a35309427f6011992b544514d559aa1"
   integrity sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==
 
+<<<<<<< Updated upstream
+=======
+"@rollup/pluginutils@^4.1.2":
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/@rollup/pluginutils/-/pluginutils-4.2.1.tgz#e6c6c3aba0744edce3fb2074922d3776c0af2a6d"
+  integrity sha512-iKnFXr7NkdZAIHiIWE+BX5ULi/ucVFYWD6TbAV+rZctiRTY2PL6tsIKhoIOaoskiWAkgu+VsbXgUVDNLHf+InQ==
+  dependencies:
+    estree-walker "^2.0.1"
+    picomatch "^2.2.2"
+
+>>>>>>> Stashed changes
 "@sindresorhus/is@^4.0.0":
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-4.6.0.tgz#3c7c9c46e678feefe7a2e5bb609d3dbd665ffb3f"
@@ -2114,6 +2174,14 @@
     "@types/webpack" "^4"
     terser "^4.6.13"
 
+<<<<<<< Updated upstream
+=======
+"@types/throttle-debounce@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@types/throttle-debounce/-/throttle-debounce-2.1.0.tgz#1c3df624bfc4b62f992d3012b84c56d41eab3776"
+  integrity sha512-5eQEtSCoESnh2FsiLTxE121IiE60hnMqcb435fShf4bpLRjEu1Eoekht23y6zXS9Ts3l+Szu3TARnTsA0GkOkQ==
+
+>>>>>>> Stashed changes
 "@types/uglify-js@*":
   version "3.13.3"
   resolved "https://registry.yarnpkg.com/@types/uglify-js/-/uglify-js-3.13.3.tgz#556fd2ac75cc649aba21f87e0be7b1a7e9915bfe"
@@ -2301,6 +2369,27 @@
     "@vue/babel-plugin-transform-vue-jsx" "^1.2.1"
     camelcase "^5.0.0"
 
+<<<<<<< Updated upstream
+=======
+"@vue/compiler-core@3.2.37", "@vue/compiler-core@^3.2.26":
+  version "3.2.37"
+  resolved "https://registry.yarnpkg.com/@vue/compiler-core/-/compiler-core-3.2.37.tgz#b3c42e04c0e0f2c496ff1784e543fbefe91e215a"
+  integrity sha512-81KhEjo7YAOh0vQJoSmAD68wLfYqJvoiD4ulyedzF+OEk/bk6/hx3fTNVfuzugIIaTrOx4PGx6pAiBRe5e9Zmg==
+  dependencies:
+    "@babel/parser" "^7.16.4"
+    "@vue/shared" "3.2.37"
+    estree-walker "^2.0.2"
+    source-map "^0.6.1"
+
+"@vue/compiler-dom@^3.2.26":
+  version "3.2.37"
+  resolved "https://registry.yarnpkg.com/@vue/compiler-dom/-/compiler-dom-3.2.37.tgz#10d2427a789e7c707c872da9d678c82a0c6582b5"
+  integrity sha512-yxJLH167fucHKxaqXpYk7x8z7mMEnXOw3G2q62FTkmsvNxu4FQSu5+3UMb+L7fjKa26DEzhrmCxAgFLLIzVfqQ==
+  dependencies:
+    "@vue/compiler-core" "3.2.37"
+    "@vue/shared" "3.2.37"
+
+>>>>>>> Stashed changes
 "@vue/component-compiler-utils@^3.1.0":
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/@vue/component-compiler-utils/-/component-compiler-utils-3.3.0.tgz#f9f5fb53464b0c37b2c8d2f3fbfe44df60f61dc9"
@@ -2317,6 +2406,35 @@
   optionalDependencies:
     prettier "^1.18.2 || ^2.0.0"
 
+<<<<<<< Updated upstream
+=======
+"@vue/composition-api@^1.4.6":
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/@vue/composition-api/-/composition-api-1.6.2.tgz#8e65cf60cd919f23649951ed14a67d43cd32131d"
+  integrity sha512-g6pCOaAB5Z987EwCBIDanRlramrgnWfrrYS8F/0axn2AL8EvyfAebDcLTSr48hac0G0rqC9ODp5LWaiupzl6Tw==
+
+"@vue/devtools-api@^6.1.4":
+  version "6.1.4"
+  resolved "https://registry.yarnpkg.com/@vue/devtools-api/-/devtools-api-6.1.4.tgz#b4aec2f4b4599e11ba774a50c67fa378c9824e53"
+  integrity sha512-IiA0SvDrJEgXvVxjNkHPFfDx6SXw0b/TUkqMcDZWNg9fnCAHbTpoo59YfJ9QLFkwa3raau5vSlRVzMSLDnfdtQ==
+
+"@vue/reactivity-transform@^3.2.26":
+  version "3.2.37"
+  resolved "https://registry.yarnpkg.com/@vue/reactivity-transform/-/reactivity-transform-3.2.37.tgz#0caa47c4344df4ae59f5a05dde2a8758829f8eca"
+  integrity sha512-IWopkKEb+8qpu/1eMKVeXrK0NLw9HicGviJzhJDEyfxTR9e1WtpnnbYkJWurX6WwoFP0sz10xQg8yL8lgskAZg==
+  dependencies:
+    "@babel/parser" "^7.16.4"
+    "@vue/compiler-core" "3.2.37"
+    "@vue/shared" "3.2.37"
+    estree-walker "^2.0.2"
+    magic-string "^0.25.7"
+
+"@vue/shared@3.2.37", "@vue/shared@^3.2.26":
+  version "3.2.37"
+  resolved "https://registry.yarnpkg.com/@vue/shared/-/shared-3.2.37.tgz#8e6adc3f2759af52f0e85863dfb0b711ecc5c702"
+  integrity sha512-4rSJemR2NQIo9Klm1vabqWjD8rs/ZaJSzMxkMNeJS6lHiUjjUeYFbooN19NgFjztubEKh3WlZUeOLVdbbUWHsw==
+
+>>>>>>> Stashed changes
 "@vue/test-utils@^1.1.3":
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/@vue/test-utils/-/test-utils-1.3.0.tgz#d563decdcd9c68a7bca151d4179a2bfd6d5c3e15"
@@ -4627,6 +4745,16 @@ domelementtype@^2.0.1, domelementtype@^2.2.0:
   resolved "https://registry.yarnpkg.com/domelementtype/-/domelementtype-2.3.0.tgz#5c45e8e869952626331d7aab326d01daf65d589d"
   integrity sha512-OLETBj6w0OsagBwdXnPdN0cnMfF9opN69co+7ZrbfPGrdpPVNBUj02spi6B1N7wChLQiPn4CSH/zJvXw56gmHw==
 
+<<<<<<< Updated upstream
+=======
+domhandler@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/domhandler/-/domhandler-3.3.0.tgz#6db7ea46e4617eb15cf875df68b2b8524ce0037a"
+  integrity sha512-J1C5rIANUbuYK+FuFL98650rihynUOEzRLxW+90bKZRWB6A1X1Tf82GxR1qAWLyfNPRvjqfip3Q5tdYlmAa9lA==
+  dependencies:
+    domelementtype "^2.0.1"
+
+>>>>>>> Stashed changes
 domhandler@^4.0.0, domhandler@^4.2.0, domhandler@^4.3.1:
   version "4.3.1"
   resolved "https://registry.yarnpkg.com/domhandler/-/domhandler-4.3.1.tgz#8d792033416f59d68bc03a5aa7b018c1ca89279c"
@@ -4642,7 +4770,11 @@ domutils@^1.7.0:
     dom-serializer "0"
     domelementtype "1"
 
+<<<<<<< Updated upstream
 domutils@^2.5.2, domutils@^2.8.0:
+=======
+domutils@^2.4.2, domutils@^2.5.2, domutils@^2.8.0:
+>>>>>>> Stashed changes
   version "2.8.0"
   resolved "https://registry.yarnpkg.com/domutils/-/domutils-2.8.0.tgz#4437def5db6e2d1f5d6ee859bd95ca7d02048135"
   integrity sha512-w96Cjofp72M5IIhpjgobBimYEfoPjx1Vx0BSX9P30WBdZW2WIKU0T1Bd0kz2eNZ9ikjKgHbEyKx8BB6H1L3h3A==
@@ -5066,6 +5198,14 @@ estraverse@^5.1.0, estraverse@^5.2.0:
   resolved "https://registry.yarnpkg.com/estraverse/-/estraverse-5.3.0.tgz#2eea5290702f26ab8fe5370370ff86c965d21123"
   integrity sha512-MMdARuVEQziNTeJD8DgMqmhwR11BRQ/cBP+pLtYdSTnf3MIO8fFeiINEbX36ZdNlfU/7A9f3gUw49B3oQsvwBA==
 
+<<<<<<< Updated upstream
+=======
+estree-walker@^2.0.1, estree-walker@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/estree-walker/-/estree-walker-2.0.2.tgz#52f010178c2a4c117a7757cfe942adb7d2da4cac"
+  integrity sha512-Rfkk/Mp/DL7JVje3u18FxFujQlTNR2q6QfMSMB7AvCBx91NGj/ba3kCfza0f6dVDbw7YlRf/nDrn7pQrCCyQ/w==
+
+>>>>>>> Stashed changes
 esutils@^2.0.2:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/esutils/-/esutils-2.0.3.tgz#74d2eb4de0b8da1293711910d50775b9b710ef64"
@@ -6091,6 +6231,19 @@ html-webpack-plugin@^4.5.1:
     tapable "^1.1.3"
     util.promisify "1.0.0"
 
+<<<<<<< Updated upstream
+=======
+htmlparser2@5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/htmlparser2/-/htmlparser2-5.0.1.tgz#7daa6fc3e35d6107ac95a4fc08781f091664f6e7"
+  integrity sha512-vKZZra6CSe9qsJzh0BjBGXo8dvzNsq/oGvsjfRdOrrryfeD9UOBEEQdeoqCRmKZchF5h2zOBMQ6YuQ0uRUmdbQ==
+  dependencies:
+    domelementtype "^2.0.1"
+    domhandler "^3.3.0"
+    domutils "^2.4.2"
+    entities "^2.0.0"
+
+>>>>>>> Stashed changes
 htmlparser2@^6.0.0, htmlparser2@^6.1.0:
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/htmlparser2/-/htmlparser2-6.1.0.tgz#c4d762b6c3371a05dbe65e94ae43a9f845fb8fb7"
@@ -7541,6 +7694,16 @@ m3u8-parser@4.7.1:
     "@videojs/vhs-utils" "^3.0.5"
     global "^4.4.0"
 
+<<<<<<< Updated upstream
+=======
+magic-string@^0.25.7:
+  version "0.25.9"
+  resolved "https://registry.yarnpkg.com/magic-string/-/magic-string-0.25.9.tgz#de7f9faf91ef8a1c91d02c2e5314c8277dbcdd1c"
+  integrity sha512-RmF0AsMzgt25qzqqLc1+MbHmhdx0ojF2Fvs4XnOqz2ZOBXzzkEwc/dJQZCYHAn7v1jbVOjAZfK8msRn4BxO4VQ==
+  dependencies:
+    sourcemap-codec "^1.4.8"
+
+>>>>>>> Stashed changes
 make-dir@^1.0.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/make-dir/-/make-dir-1.3.0.tgz#79c1033b80515bd6d24ec9933e860ca75ee27f0c"
@@ -8759,7 +8922,11 @@ picocolors@^1.0.0:
   resolved "https://registry.yarnpkg.com/picocolors/-/picocolors-1.0.0.tgz#cb5bdc74ff3f51892236eaf79d68bc44564ab81c"
   integrity sha512-1fygroTLlHu66zi26VoTDv8yRgm0Fccecssto+MhsZ0D/DGW2sm8E8AjW7NU5VVTRt5GxbeZ5qBuJr+HyLYkjQ==
 
+<<<<<<< Updated upstream
 picomatch@^2.0.4, picomatch@^2.2.1, picomatch@^2.3.1:
+=======
+picomatch@^2.0.4, picomatch@^2.2.1, picomatch@^2.2.2, picomatch@^2.3.1:
+>>>>>>> Stashed changes
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/picomatch/-/picomatch-2.3.1.tgz#3ba3833733646d9d3e4995946c1365a67fb07a42"
   integrity sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==
@@ -8784,6 +8951,17 @@ pify@^5.0.0:
   resolved "https://registry.yarnpkg.com/pify/-/pify-5.0.0.tgz#1f5eca3f5e87ebec28cc6d54a0e4aaf00acc127f"
   integrity sha512-eW/gHNMlxdSP6dmG6uJip6FXN0EQBwm2clYYd8Wul42Cwu/DK8HEftzsapcNdYe2MfLiIwZqsDk2RDEsTE79hA==
 
+<<<<<<< Updated upstream
+=======
+pinia@^2.0.14:
+  version "2.0.14"
+  resolved "https://registry.yarnpkg.com/pinia/-/pinia-2.0.14.tgz#0837898c20291ebac982bbfca95c8d3c6099925f"
+  integrity sha512-0nPuZR4TetT/WcLN+feMSjWJku3SQU7dBbXC6uw+R6FLQJCsg+/0pzXyD82T1FmAYe0lsx+jnEDQ1BLgkRKlxA==
+  dependencies:
+    "@vue/devtools-api" "^6.1.4"
+    vue-demi "*"
+
+>>>>>>> Stashed changes
 pirates@^4.0.1:
   version "4.0.5"
   resolved "https://registry.yarnpkg.com/pirates/-/pirates-4.0.5.tgz#feec352ea5c3268fb23a37c702ab1699f35a5f3b"
@@ -10619,6 +10797,14 @@ source-map@^0.7.3:
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.7.4.tgz#a9bbe705c9d8846f4e08ff6765acf0f1b0898656"
   integrity sha512-l3BikUxvPOcn5E74dZiq5BGsTb5yEwhaTSzccU6t4sDOH8NWJCstKO5QT2CvtFoK6F0saL7p9xHAqHOlCPJygA==
 
+<<<<<<< Updated upstream
+=======
+sourcemap-codec@^1.4.8:
+  version "1.4.8"
+  resolved "https://registry.yarnpkg.com/sourcemap-codec/-/sourcemap-codec-1.4.8.tgz#ea804bd94857402e6992d05a38ef1ae35a9ab4c4"
+  integrity sha512-9NykojV5Uih4lgo5So5dtw+f0JgJX30KCNI8gwhz2J9A15wD0Ml6tjHKwf6fTSa6fAdVBdZeNOs9eJ71qCk8vA==
+
+>>>>>>> Stashed changes
 spdx-correct@^3.0.0:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/spdx-correct/-/spdx-correct-3.1.1.tgz#dece81ac9c1e6713e5f7d1b6f17d468fa53d89a9"
@@ -11370,7 +11556,11 @@ ua-parser-js@^0.7.28:
   resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.31.tgz#649a656b191dffab4f21d5e053e27ca17cbff5c6"
   integrity sha512-qLK/Xe9E2uzmYI3qLeOmI0tEOt+TBBQyUIAh4aAgU05FVYzeZrKUdkAZfBNVGRaHVgV0TDkdEngJSw/SyQchkQ==
 
+<<<<<<< Updated upstream
 ufo@^0.7.4, ufo@^0.7.7:
+=======
+ufo@^0.7.4, ufo@^0.7.7, ufo@^0.7.9:
+>>>>>>> Stashed changes
   version "0.7.11"
   resolved "https://registry.yarnpkg.com/ufo/-/ufo-0.7.11.tgz#17defad497981290383c5d26357773431fdbadcb"
   integrity sha512-IT3q0lPvtkqQ8toHQN/BkOi4VIqoqheqM1FnkNWT9y0G8B3xJhwnoKBu5OHx8zHDOvveQzfKuFowJ0VSARiIDg==
@@ -11474,6 +11664,38 @@ unpipe@1.0.0, unpipe@~1.0.0:
   resolved "https://registry.yarnpkg.com/unpipe/-/unpipe-1.0.0.tgz#b2bf4ee8514aae6165b4817829d21b2ef49904ec"
   integrity sha1-sr9O6FFKrmFltIF4KdIbLvSZBOw=
 
+<<<<<<< Updated upstream
+=======
+unplugin-vue2-script-setup@^0.9.3:
+  version "0.9.3"
+  resolved "https://registry.yarnpkg.com/unplugin-vue2-script-setup/-/unplugin-vue2-script-setup-0.9.3.tgz#aec08378bace9f8d159db4b3a2073b244da5e326"
+  integrity sha512-m2QESHiFNmx0fIo/P0AiCrH6E5WtijRB/Ldrj8zjwRIYYbiOgmTfRmWQquW0H8ei5OwhYT30WAgepFjWrJ5oJg==
+  dependencies:
+    "@antfu/utils" "^0.4.0"
+    "@babel/core" "^7.16.7"
+    "@babel/generator" "^7.16.8"
+    "@babel/parser" "^7.16.8"
+    "@babel/traverse" "^7.16.8"
+    "@babel/types" "^7.16.8"
+    "@rollup/pluginutils" "^4.1.2"
+    "@vue/compiler-core" "^3.2.26"
+    "@vue/compiler-dom" "^3.2.26"
+    "@vue/reactivity-transform" "^3.2.26"
+    "@vue/shared" "^3.2.26"
+    defu "^5.0.0"
+    htmlparser2 "5.0.1"
+    magic-string "^0.25.7"
+    tslib "^2.3.1"
+    unplugin "^0.3.0"
+
+unplugin@^0.3.0:
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/unplugin/-/unplugin-0.3.3.tgz#e9b148f84cabef5e6529f232a10e674a7c020930"
+  integrity sha512-WjZWpUqqcYPQ/efR00Zm2m1+J1LitwoZ4uhHV4VdZ+IpW0Nh/qnDYtVf+nLhozXdGxslMPecOshVR7NiWFl4gA==
+  dependencies:
+    webpack-virtual-modules "^0.4.3"
+
+>>>>>>> Stashed changes
 unquote@~1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/unquote/-/unquote-1.1.1.tgz#8fded7324ec6e88a0ff8b905e7c098cdc086d544"
@@ -11791,6 +12013,14 @@ vue-container-query@^0.1.0:
     resize-observer-lite "^0.2.3"
     vue "^2.5.17"
 
+<<<<<<< Updated upstream
+=======
+vue-demi@*:
+  version "0.13.1"
+  resolved "https://registry.yarnpkg.com/vue-demi/-/vue-demi-0.13.1.tgz#7604904c88be338418a10abbc94d5b8caa14cb8c"
+  integrity sha512-xmkJ56koG3ptpLnpgmIzk9/4nFf4CqduSJbUM0OdPoU87NwRuZ6x49OLhjSa/fC15fV+5CbEnrxU4oyE022svg==
+
+>>>>>>> Stashed changes
 vue-disqus@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/vue-disqus/-/vue-disqus-4.0.1.tgz#9ec040c575f3b87f3ef4bf43477ff20f06cc57dc"
@@ -12096,6 +12326,14 @@ webpack-sources@^1.0.1, webpack-sources@^1.1.0, webpack-sources@^1.4.0, webpack-
     source-list-map "^2.0.0"
     source-map "~0.6.1"
 
+<<<<<<< Updated upstream
+=======
+webpack-virtual-modules@^0.4.3:
+  version "0.4.3"
+  resolved "https://registry.yarnpkg.com/webpack-virtual-modules/-/webpack-virtual-modules-0.4.3.tgz#cd597c6d51d5a5ecb473eea1983a58fa8a17ded9"
+  integrity sha512-5NUqC2JquIL2pBAAo/VfBP6KuGkHIZQXW/lNKupLPfhViwh8wNsu0BObtl09yuKZszeEUfbXz8xhrHvSG16Nqw==
+
+>>>>>>> Stashed changes
 webpack@^4.46.0:
   version "4.46.0"
   resolved "https://registry.yarnpkg.com/webpack/-/webpack-4.46.0.tgz#bf9b4404ea20a073605e0a011d188d77cb6ad542"

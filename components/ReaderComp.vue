@@ -346,8 +346,10 @@ export default {
       this.sharing = true;
       try {
         let res = await this.$authios.post(`${Config.wiki}items/text`, {
+          title: this.text.trim().split(/\n+/)[0],
           text: this.text,
           translation: this.translation,
+          l2: this.$l2.id
         });
         if (res && res.data && res.data.data.id) {
           this.shared = res.data.data;

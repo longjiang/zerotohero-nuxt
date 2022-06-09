@@ -580,6 +580,12 @@ export default {
               shortcut: (e) => e.code === "KeyR" && e.metaKey && e.shiftKey,
             },
             {
+              name: "my-text",
+              title: "My Texts",
+              icon: "fas fa-file-alt",
+              show: true,
+            },
+            {
               name: "books",
               title: "Books",
               icon: "fas fa-book-reader",
