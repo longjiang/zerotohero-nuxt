@@ -801,7 +801,7 @@ export default {
       let padFour = ["it-1", "it-2", "ct", "si"];
       let padNum = padFour.indexOf(englishSymbol) !== -1 ? 4 : 3;
       let scanImageUrl =
-        config.dataUploadsUrl +
+        config.DATA_UPLOADS_URL +
         "scans/" +
         englishSymbol +
         "/" +

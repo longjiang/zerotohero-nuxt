@@ -8,7 +8,10 @@
     >
       <i class="fas fa-ellipsis-h"></i>
     </button>
-    <div v-if="expand && references.length > 0" class="article-snippets mt-3 mb-3">
+    <div
+      v-if="expand && references.length > 0"
+      class="article-snippets mt-3 mb-3"
+    >
       <ArticleSnippet
         v-for="(reference, index) of footnoteReferences"
         :key="`bible-verse-snippet-${id}-${index}`"
@@ -74,8 +77,8 @@ export default {
       return this.parseVerseId(this.id).verseNum;
     },
     verseId() {
-      let verse = this.parseVerseId(this.id)
-      return `${verse.bookNum}-${verse.chapterNum}-${verse.verseNum}`
+      let verse = this.parseVerseId(this.id);
+      return `${verse.bookNum}-${verse.chapterNum}-${verse.verseNum}`;
     },
     visibleReferences() {
       return this.references.filter((ref) => ref.url || ref.html);
@@ -301,7 +304,7 @@ export default {
           });
           mediaSnippet.load_html(this.innerHTML);
           mediaSnippet.set_thumbnail(
-            Config.wolBaseUrl + chapter.langData.bible_thumb_url
+            Config.WOL_BASE_URL + chapter.langData.bible_thumb_url
           );
           mediaSnippet.activateSwipeToRemove();
           chapter.enhanceMediaSnippet(mediaSnippet);
@@ -446,7 +449,7 @@ export default {
     getVideos(verseNum = undefined) {
       let chapter = this;
       let url =
-        Config.videoScriptureSearchBase +
+        Config.VIDEO_SCRIPTURE_SEARCH_BASE +
         $.param({
           book: this.book.name === "Psalms" ? "Psalm" : this.book.name,
           chapter: this.chapterId,

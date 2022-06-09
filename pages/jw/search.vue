@@ -84,7 +84,7 @@ export default {
     searchVideos(q = undefined) {
       let jwsearch = this;
       let url =
-        config.videoTermSearchBase +
+        config.VIDEO_TERM_SEARCH_BASE +
         $.param({
           q: `${q}`,
         });

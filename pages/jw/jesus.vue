@@ -81,7 +81,7 @@ export default {
       // Load the section page containing the table of events
       var jesusLifeSections = this;
       let html = await Helper.proxy(
-        Config.wolBaseUrl + this.sections[i].url.replace(/^\//, "")
+        Config.WOL_BASE_URL + this.sections[i].url.replace(/^\//, "")
       );
 
       // Extract the table
