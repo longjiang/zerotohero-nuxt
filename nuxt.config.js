@@ -48,8 +48,12 @@ export default {
   },
 
   // Auto import components: https://go.nuxtjs.dev/config-components
-  components: true,
-
+  components: {
+    dirs: [
+      '~/components',
+      '~/components/jw' // Auto-import components in the sub dir while maintaining their names
+    ]
+  },
 
   pwa: {
     icon: {

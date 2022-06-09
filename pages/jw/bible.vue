@@ -10,7 +10,7 @@
       <div
         v-for="group in bibleBookGroups"
         :key="`bible-book-group-${group.title}`"
-        class="mt-5"
+        class="mt-3"
       >
         <h2 class="mb-3">{{ group.title }}</h2>
         <div class="">
@@ -18,7 +18,7 @@
             v-for="book in group.books"
             class="shadow bg-dark rounded p-3 text-white d-inline-block mr-1 mb-1"
             :key="`book-${book.number}`"
-            :to="{ name: 'bible-book', params: { id: book.number } }"
+            :to="{ name: 'jw-bible-book', params: { id: book.number } }"
           >
             {{ book.title }}
             <i

@@ -5,7 +5,7 @@
   }
 </router>
 <template>
-  <div class="container mx-auto mt-10 mb-10">
+  <div class="container main">
     <BibleChapter :bibleId="1" :bookId="bookId" :chapterId="chapterId" />
   </div>
 </template>

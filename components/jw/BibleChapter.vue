@@ -1,6 +1,6 @@
 <template>
   <div v-if="chapter" class="chapter">
-    <h1 class="text-4xl font-bold mb-10">{{ chapter.title }}</h1>
+    <h1 class="mt-3 mb-3">{{ chapter.title }}</h1>
     <MediaBar
       ref="mediaBar"
       :article="chapter"

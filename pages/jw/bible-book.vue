@@ -5,16 +5,16 @@
   }
 </router>
 <template>
-  <div class="container mx-auto mt-10 mb-10">
+  <div class="container main">
     <div v-if="book">
-      <h2 class="mb-6">{{ book.title }}</h2>
-      <div class="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-12 gap-2">
+      <h2 class="mt-3 mb-3">{{ book.title }}</h2>
+      <div class="">
         <NuxtLink
           v-for="chapter in book.chapters"
-          class="shadow-md bg-indigo-900 rounded-md p-3 text-white"
+          class="shadow bg-dark rounded p-3 text-white d-inline-block mr-1 mb-1"
           :key="`chapter-${chapter.number}`"
           :to="{
-            name: 'bible-chapter',
+            name: 'jw-bible-chapter',
             params: { bookId: id, chapterId: chapter.number },
           }"
         >
