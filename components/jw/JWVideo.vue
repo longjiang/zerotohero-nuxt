@@ -11,6 +11,12 @@
     <div class="video-processor-title"></div>
     <div class="video-processor-transcript">
       <span class="throbber-loader" v-if="loading">Loading&#8230;</span>
+      <SyncedTranscript
+        v-if="video"
+        ref="transcript"
+        :key="'transcript-' + languageAgnosticNaturalKey"
+        :lines="video.subtitles"
+      />
     </div>
     <div class="video-processor-link">
       <img class="video-processor-link-image" />
@@ -117,10 +123,6 @@ export default {
 </script>
 
 <style>
-.video-processor-transcript .current-marker {
-  background: #d7e6ff;
-  box-shadow: 0 0 4px 4px #d7e6ff;
-}
 
 .video-processor-controls {
   margin-bottom: 2rem;
@@ -163,20 +165,9 @@ export default {
   content: "< ";
 }
 
-.video-processor-transcript {
-  margin-bottom: 2rem;
-}
 
 .video-processor-transcript span {
   cursor: pointer;
-}
-
-.video-processor-transcript {
-  max-height: 16rem;
-  overflow: scroll;
-  padding: 1rem;
-  background: #f8f8f8;
-  box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.2) inset;
 }
 
 .video-processor-controls-bottom p {
