@@ -65,10 +65,6 @@
             @previousPage="onPreviousPage"
             @nextPage="onNextPage"
           />
-          <FeedbackPrompt
-            class="mt-3"
-            :skin="$route.meta ? $route.meta.skin : 'light'"
-          />
         </div>
       </div>
       <h5 class="mt-5">More about this {{ $l2.name }} Reader</h5>
@@ -121,7 +117,10 @@
         </div>
       </div>
     </div>
-    <!-- .container-fluid -->
+    <FeedbackPrompt
+      class="mt-3"
+      :skin="$route.meta ? $route.meta.skin : 'light'"
+    />
   </div>
 </template>
 
@@ -313,7 +312,22 @@ export default {
         (this.translation !== this.shared.translation ||
           this.text !== this.shared.text)
       ) {
-        this.$router.push({ name: "reader" });
+        if (
+          this.$auth.loggedIn &&
+          this.shared.owner === Number(this.$auth.user.id)
+        ) {
+          this.$store.dispatch("savedText/update", {
+            l2: this.$l2,
+            item: {
+              id: this.shared.id,
+              title: this.text.trim().split(/\n+/)[0],
+              text: this.text,
+              translation: this.translation,
+            },
+          });
+        } else {
+          this.$router.push({ name: "reader" });
+        }
       }
     },
     getSaved() {

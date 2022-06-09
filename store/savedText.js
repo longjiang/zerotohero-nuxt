@@ -30,6 +30,10 @@ export const mutations = {
   },
   UPDATE(state, { l2, item }) {
     let existing = state.itemsByL2[l2.code].find(i => i.id === item.id)
+    if (!existing) {
+      existing = {}
+      state.itemsByL2[l2.code].push(existing)
+    }
     for (let key in item) {
       existing[key] = item[key]
     }
@@ -87,7 +91,7 @@ export const actions = {
     }
   },
   async add({ commit }, { l2, item }) {
-    item = item || { text: '', translation: '', title: '', l2: l2.id }
+    item = item || { text: '', translation: '', title: 'Untitled', l2: l2.id }
     commit('ADD', { l2, item })
     commit('SAVE_LOCAL')
     if ($nuxt.$auth.loggedIn) {
