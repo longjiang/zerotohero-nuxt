@@ -600,6 +600,10 @@ export default {
               show: false
             },
             {
+              name: "jw-history",
+              show: false
+            },
+            {
               name: "library",
               title: "Books (Legacy)",
               icon: "fas fa-book-reader",

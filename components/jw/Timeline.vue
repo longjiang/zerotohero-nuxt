@@ -42,9 +42,11 @@
         >
           <span class="timeline-event-title">
             <span class="timeline-event-time">
-              <a :href="'/history#year=' + event.time.year">
+              <router-link
+                :to="{ name: 'jw-history', params: { yyyy: event.time.year } }"
+              >
                 {{ event.time.yearString }}
-              </a>
+              </router-link>
             </span>
             <span class="timeline-event-description">{{ event.title }}</span>
           </span>
@@ -342,36 +344,35 @@ export default {
 </script>
 
 <style>
-
 .jw-nav-tabs {
-    display: flex;
-    width: 100%;
-    margin-bottom: 1rem;
-    border-radius: 4px;
-    border: 1px solid black
+  display: flex;
+  width: 100%;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+  border: 1px solid black;
 }
 
 .jw-nav-tabs .nav-tab {
-    display: block;
-    border-right: 1px solid black;
-    padding: 0.5rem 1.5rem;
-    box-shadow: none;
-    text-align: center;
-    flex: 1;
-    cursor: pointer;
+  display: block;
+  border-right: 1px solid black;
+  padding: 0.5rem 1.5rem;
+  box-shadow: none;
+  text-align: center;
+  flex: 1;
+  cursor: pointer;
 }
 
 .jw-nav-tabs .nav-tab:hover {
-    box-shadow: none;
+  box-shadow: none;
 }
 
 .jw-nav-tabs .nav-tab:last-child {
-    border-right: none;
+  border-right: none;
 }
 
 .jw-nav-tabs .nav-tab.active {
-    background: black;
-    color: white;
+  background: black;
+  color: white;
 }
 
 .timeline-event-time {

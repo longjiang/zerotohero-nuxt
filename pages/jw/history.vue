@@ -6,7 +6,7 @@
 </router>
 
 <template>
-  <div class="container mx-auto mt-10">
+  <div class="container main mt-10">
     <div id="jw-study-aid-history">
       <div id="jw-study-aid-timeline-nav">
         <router-link

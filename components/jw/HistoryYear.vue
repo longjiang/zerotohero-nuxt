@@ -1,7 +1,7 @@
 <template>
   <div id="jw-study-aid-timeline-year" >
     <div>
-      <a v-bind:href="'/timeline#year=' + yyyy">Back to Timeline Overview</a>
+      <router-link :to="{name: 'jw-timeline', hash: `#year=${yyyy}`}">Back to Timeline Overview</router-link>
     </div>
     <h3 class="timeline-event-title">{{ title }}</h3>
     <ul class="timeline-events" v-if="events && events.length > 0">
