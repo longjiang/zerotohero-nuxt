@@ -174,7 +174,7 @@ export default {
   watch: {
     $route() {
       if (this.$route.query && this.$route.query.p) {
-        this.page = Number(this.$route.query.p)
+        this.page = Number(this.$route.query.p);
       }
     },
     text() {
@@ -194,7 +194,7 @@ export default {
     let text;
     let translation;
     if (this.$route.query && this.$route.query.p) {
-      this.page = Number(this.$route.query.p)
+      this.page = Number(this.$route.query.p);
     }
     if (method === "shared") {
       try {
@@ -218,8 +218,9 @@ export default {
     } else if (["md", "html", "txt"].includes(method)) {
       text = arg.replace(/\n/g, "<br>");
     } else {
-      text = this.get(); // from localstorage
-      translation = this.getTranslation();
+      let r = this.get(); // from localStorage
+      text = r.text;
+      translation = r.translation;
       if (!text) {
         if (Helper.sampleText[this.$l2.code]) {
           this.text = Helper.sampleText[this.$l2.code];
@@ -262,7 +263,7 @@ export default {
           title: this.text.trim().split(/\n+/)[0],
           text: this.text,
           translation: this.translation,
-          l2: this.$l2.id
+          l2: this.$l2.id,
         });
         if (res && res.data && res.data.data.id) {
           this.shared = res.data.data;
@@ -282,7 +283,7 @@ export default {
         },
         query: {
           p: this.page ? this.page - 1 : undefined,
-        }
+        },
       };
       this.$router.push(to);
     },
@@ -295,61 +296,58 @@ export default {
         },
         query: {
           p: this.page ? this.page + 1 : undefined,
-        }
+        },
       };
-      console.log({to})
+      console.log({ to });
       this.$router.push(to);
     },
     readerTextChanged(text) {
-      if (text === '') this.page = 1
-      if (this.shared && this.text !== this.shared.text)
-        this.shared = undefined; // Unset link to the shared text on the server
-      this.save(text);
+      this.text = text;
+      if (text === "") this.page = 1;
+      this.save();
     },
     readerTranslationChanged(text) {
-      if (this.shared && this.translation !== this.shared.translation)
-        this.shared = undefined; // Unset link to the shared text on the server
-      this.saveTranslation(text);
-    },
-    getSaved() {
-      let json = localStorage.getItem("zthReaderText");
-      try {
-        if (json) {
-          let saved = JSON.parse(json);
-          return saved;
-        }
-      } catch (e) {}
+      this.translation = text;
+      this.save();
     },
     get() {
-      let saved = this.getSaved();
-      if (saved) {
-        return saved[this.$l2.code];
+      let { savedTextByL2, savedTranslationByL2 } = this.getSaved();
+      return {
+        text: savedTextByL2[this.$l2.code],
+        translation: savedTranslationByL2[this.$l2.code],
+      };
+    },
+    save() {
+      let { savedTextByL2, savedTranslationByL2 } = this.getSaved();
+      savedTextByL2[this.$l2.code] = this.text;
+      savedTranslationByL2[this.$l2.code] = this.translation;
+      localStorage.setItem("zthReaderText", JSON.stringify(savedTextByL2));
+      localStorage.setItem(
+        "zthReaderTranslation",
+        JSON.stringify(savedTranslationByL2)
+      );
+      if (
+        this.shared &&
+        (this.translation !== this.shared.translation ||
+          this.text !== this.shared.text)
+      ) {
+        this.$router.push({ name: "reader" });
       }
     },
-    save(text) {
-      let saved = this.getSaved() || {};
-      saved[this.$l2.code] = text;
-      localStorage.setItem("zthReaderText", JSON.stringify(saved));
-    },
-    getSavedTranslation() {
-      let json = localStorage.getItem("zthReaderTranslation");
+    getSaved() {
+      let tejson = localStorage.getItem("zthReaderText");
+      let trjson = localStorage.getItem("zthReaderTranslation");
+      let savedTextByL2 = {};
+      let savedTranslationByL2 = {};
       try {
-        if (json) {
-          let saved = JSON.parse(json);
-          return saved;
+        if (tejson) {
+          savedTextByL2 = JSON.parse(tejson);
+        }
+        if (trjson) {
+          savedTranslationByL2 = JSON.parse(tejson);
         }
       } catch (e) {}
-    },
-    getTranslation() {
-      let saved = this.getSavedTranslation();
-      if (saved) {
-        return saved[this.$l2.code];
-      }
-    },
-    saveTranslation(text) {
-      let saved = this.getSavedTranslation() || {};
-      saved[this.$l2.code] = text;
-      localStorage.setItem("zthReaderTranslation", JSON.stringify(saved));
+      return { savedTextByL2, savedTranslationByL2 };
     },
   },
 };
