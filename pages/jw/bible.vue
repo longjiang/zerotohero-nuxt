@@ -51,7 +51,7 @@ export default {
         return this.$store.state.settings.l2;
     },
   },
-  async fetch() {
+  async created() {
     this.bibleBookGroups = await Wol.getBibleBookGroups(this.$l2);
   },
 };
