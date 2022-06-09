@@ -1,6 +1,6 @@
 <router>
   {
-    path: '/',
+    path: '/jw/',
   }
 </router>
 <template>
