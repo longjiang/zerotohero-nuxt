@@ -5,18 +5,18 @@
   }
 </router>
 <template>
-  <div class="container mx-auto mt-10 mb-10">
+  <div class="container main mx-auto mt-10 mb-10">
     <div v-if="bibleBookGroups">
       <div
         v-for="group in bibleBookGroups"
         :key="`bible-book-group-${group.title}`"
-        class="mt-6"
+        class="mt-5"
       >
-        <h2 class="mb-6">{{ group.title }}</h2>
-        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-2">
+        <h2 class="mb-3">{{ group.title }}</h2>
+        <div class="">
           <NuxtLink
             v-for="book in group.books"
-            class="shadow-md bg-blue-900 rounded-md p-3 text-white"
+            class="shadow bg-dark rounded p-3 text-white d-inline-block mr-1 mb-1"
             :key="`book-${book.number}`"
             :to="{ name: 'bible-book', params: { id: book.number } }"
           >
