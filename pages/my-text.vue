@@ -32,8 +32,8 @@
             a popup dictionary!
           </p>
           <div v-if="savedtexts.length > 0">
-            <div v-for="savedText in savedtexts" :key="savedText.id">
-              <TextCard :text="savedText" />
+            <div v-for="savedText in savedtexts" :key="savedText.id" class="mb-4">
+              <TextCard :text="savedText" @removed="onTextRemoved" />
             </div>
           </div>
           <div
@@ -103,6 +103,9 @@ export default {
     },
   },
   methods: {
+    onTextRemoved(id) {
+      this.$store.dispatch('savedText/remove', {l2: this.$l2, itemId: id })
+    },
     async newText() {
       let item = await this.$store.dispatch("savedText/add", { l2: this.$l2 });
       if (item) {

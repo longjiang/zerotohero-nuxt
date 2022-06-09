@@ -25,8 +25,8 @@ export const mutations = {
   ADD(state, { l2, item }) {
     state.itemsByL2[l2.code].push(item);
   },
-  REMOVE(state, { l2, item }) {
-    state.itemsByL2[l2.code] = state.itemsByL2[l2.code].filter((i) => i !== item);
+  REMOVE(state, { l2, itemId }) {
+    state.itemsByL2[l2.code] = state.itemsByL2[l2.code].filter((i) => i.id !== itemId);
   },
   UPDATE(state, { l2, item }) {
     let existing = state.itemsByL2[l2.code].find(i => i.id === item.id)
@@ -105,12 +105,12 @@ export const actions = {
     }
     return item
   },
-  async remove({ commit }, { l2, item }) {
-    commit('REMOVE', { l2, item })
+  async remove({ commit }, { l2, itemId }) {
+    commit('REMOVE', { l2, itemId })
     commit('SAVE_LOCAL')
     if ($nuxt.$auth.loggedIn) {
       let response = await $nuxt.$authios.delete(
-        `${Config.wiki}items/text/${item.id}`
+        `${Config.wiki}items/text/${itemId}`
       );
       if (response?.data) {
         return response.data
