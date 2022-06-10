@@ -3,7 +3,7 @@ import Config from '@/lib/config'
 
 export const state = () => {
   return {
-    item: [],
+    items: [],
     loaded: false
   }
 }
