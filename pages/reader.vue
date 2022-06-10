@@ -267,6 +267,7 @@ export default {
         return this.$store.state.settings.l2;
     },
     shareURL() {
+      this.page
       if (typeof location !== 'undefined')
         return location.href;
     },
