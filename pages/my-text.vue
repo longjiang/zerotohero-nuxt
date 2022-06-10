@@ -13,7 +13,7 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
-          <div v-if="loadedByL2 && loadedByL2[$l2.code]">
+          <div v-if="loadedByL2">
             <div v-if="savedtexts.length > 0">
               <div
                 v-for="savedText in savedtexts"
