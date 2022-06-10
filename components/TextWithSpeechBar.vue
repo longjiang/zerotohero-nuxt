@@ -84,7 +84,7 @@
       </div>
       <div
         class="speech-nav mt-5 text-center d-flex pb-4"
-        v-if="page"
+        v-if="page && pageCount > 1"
         style="justify-content: center; align-items: center"
       >
         <button

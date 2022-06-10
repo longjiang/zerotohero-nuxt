@@ -34,27 +34,26 @@
           <div
             v-if="savedWordIdsInText && savedWordIdsInText.length > 0"
             id="vocabulary-list"
-            class="pb-4"
+            class="pb-2"
           >
-            <div class="text-center mt-3" v-if="!showWords">
-              <b-button variant="success" size="sm" @click="showWords = true">
-                Show Vocabulary ({{ savedWordIdsInText.length }})
+            <div class="text-center mt-1" v-if="!showWords">
+              <b-button variant="unstyled text-success strong text-decoration-underline" size="sm" @click="showWords = true" >
+                Show Vocabulary List ({{ savedWordIdsInText.length }})
               </b-button>
             </div>
             <div v-if="showWords">
               <hr class="mt-0 mb-4" />
               <div
                 style="font-size: 1rem; line-height: 1"
-                class="mb-3 text-center"
+                class="mb-3"
               >
-                <strong>Vocabulary List</strong>
                 <div class="mt-1">
                   <small>
-                    Here are the words you saved that appear in this text:
+                    Here are your saved that appear in this text:
                   </small>
                 </div>
               </div>
-              <WordList :ids="savedWordIdsInText" :star="false" />
+              <WordList :ids="savedWordIdsInText" />
             </div>
           </div>
         </div>
@@ -229,9 +228,9 @@ export default {
         return this.$store.state.settings.l2;
     },
     marked() {
-      let text = this.textThrottled || ''
+      let text = this.textThrottled || this.text
       return (
-        Marked(text.replace(/^ {4,}/gm, "")) || this.textThrottled // 4 spaces in a row would emit <code>!
+        Marked(text.replace(/^ {4,}/gm, "")) || text // 4 spaces in a row would emit <code>!
       );
     },
     translators() {
