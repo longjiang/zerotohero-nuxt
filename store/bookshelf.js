@@ -41,6 +41,16 @@ export const mutations = {
       this._vm.$set(state, 'items', state.items)
     }
   },
+  UPDATE(state, itemData) {
+    if (typeof localStorage !== 'undefined') {
+      let prevVersionOfSameItemIndex = state.items.findIndex(i => i.id === itemData.id)
+      console.log({prevVersionOfSameItemIndex},itemData, itemData.id, state.items[0].id)
+      if (prevVersionOfSameItemIndex !== -1)
+        state.items[prevVersionOfSameItemIndex] = itemData
+      localStorage.setItem('zthBookshelf', JSON.stringify(state.items))
+      this._vm.$set(state, 'items', state.items)
+    }
+  },
   REMOVE(state, itemData) {
     if (typeof localStorage !== 'undefined' && state.items) {
       const keepers = state.items.filter(
@@ -68,6 +78,13 @@ export const actions = {
       dispatch('load')
     }
     commit('ADD', Object.assign({}, itemData))
+    dispatch('push')
+  },
+  update({ commit, dispatch }, itemData) {
+    if (!state.loaded) {
+      dispatch('load')
+    }
+    commit('UPDATE', Object.assign({}, itemData))
     dispatch('push')
   },
   remove({ commit, dispatch }, itemData) {

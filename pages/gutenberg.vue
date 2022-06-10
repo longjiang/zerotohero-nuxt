@@ -17,6 +17,7 @@
             :page="page"
             @previousPage="onPreviousPage"
             @nextPage="onNextPage"
+            @goToPage="goToPage"
           />
         </div>
         <div class="col-sm-12 col-lg-4 col-xl-3" style="">
@@ -121,7 +122,8 @@ export default {
   computed: {
     ...mapState("bookshelf", ["items"]),
     saved() {
-      if (this.bookData) return this.$store.getters["bookshelf/has"](this.bookData);
+      if (this.bookData)
+        return this.$store.getters["bookshelf/has"](this.bookData);
     },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
@@ -157,10 +159,11 @@ export default {
           this.bookData = bookData;
         }
       }
-      if (this.bookData.formats["text/html"]) {
-        let html = await Helper.proxy(this.bookData.formats["text/html"]);
-        if (html) this.html = html;
-      }
+        if (this.bookData.formats["text/html"]) {
+          let html = await Helper.proxy(this.bookData.formats["text/html"]);
+          if (html) this.html = html;
+        }
+        this.$store.dispatch("bookshelf/update", Object.assign(Object.assign({}, this.bookData), {currentPage: this.page}));
     } catch (err) {
       Helper.logError(err);
     }
@@ -171,6 +174,18 @@ export default {
     },
     addToBookshelf() {
       this.$store.dispatch("bookshelf/add", this.bookData);
+    },
+    goToPage(page) {
+      let to = {
+        name: "gutenberg",
+        params: {
+          id: this.id,
+          book: this.book,
+          title: this.title,
+          page,
+        },
+      };
+      this.$router.push(to);
     },
     onPreviousPage() {
       let to = {

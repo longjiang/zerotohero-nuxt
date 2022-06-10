@@ -402,6 +402,8 @@ export default {
 
 ::v-deep img {
   max-width: 100%;
+  object-fit: contain;
+  height: auto;
 }
 
 #zerotohero:not(.zerotohero-wide) {
