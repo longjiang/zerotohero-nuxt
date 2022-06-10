@@ -54,7 +54,7 @@
             >
               <div
                 v-if="!$auth.loggedIn"
-                class="text-center alert-success p-3 pb-4 rounded mt-4"
+                class="text-center alert-success p-3 pb-4 rounded mt-4 w-100"
               >
                 <p>To create new texts, please login.</p>
                 <router-link :to="{ name: 'login' }" class="btn btn-success">
@@ -116,6 +116,12 @@ export default {
     loaded() {
       return this.loadedByL2?.[this.$l2.code];
     },
+    hasLocalText() {
+      if (typeof localStorage !== 'undefined') {
+        let localText = localStorage.getItem("zthReaderText");
+        return localText
+      }
+    }
   },
   methods: {
     onTextRemoved(id) {

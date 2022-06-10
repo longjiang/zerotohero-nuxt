@@ -573,7 +573,7 @@ export default {
             this.hasFeature("dictionary") || this.hasFeature("transliteration"),
           children: [
             {
-              name: "my-text",
+              name: this.$auth.loggedIn ? "my-text" : "reader",
               title: "Text Reader",
               icon: "fas fa-file-alt",
               show: true,

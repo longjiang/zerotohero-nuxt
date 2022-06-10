@@ -1,8 +1,9 @@
 <template>
   <div class="text-card p-5">
-    <router-link class="link-unstyled" :to="{name: 'reader', params: {method: 'shared', arg: text.id}}"><h5 class="mb-0">{{ text.title }}</h5></router-link>
+    <router-link class="link-unstyled" :to="to"><h5 class="mb-0">{{ text.title }}</h5></router-link>
     <b-button
       class="youtube-video-card-badge border-0"
+      v-if="text.id"
       @click="remove()"
     >
       <i class="fa fa-trash"></i>
@@ -15,6 +16,17 @@ export default {
   props: {
     text: {
       type: Object // {id: 1, title: 'My Text', text: 'This is some text body...', translation: 'C\'est le corps de ce texte.' }
+    },
+    type: {
+      type: String,
+      default: 'remote' // or 'local
+    }
+  },
+  computed: {
+    to() {
+      let to = {name: 'reader' }
+      if (this.type === 'remote') to.params = {method: 'shared', arg: this.text.id}
+      return to
     }
   },
   methods: {

@@ -53,12 +53,14 @@ export const getters = {
 export const loadFromServer = async ({ l2, adminMode }) => {
   let items = []
   if ($nuxt.$auth.loggedIn) {
-    let res = await $nuxt.$authios.get(
-      `${Config.wiki}items/text?sort=title&filter[l2][eq]=${l2.id
-      }&filter[owner][eq]=${$nuxt.$auth.user.id}&fields=id,title&timestamp=${adminMode ? Date.now() : 0}`
-    );
-
-    items = res?.data?.data || []
+    try {
+      let res = await $nuxt.$authios.get(
+        `${Config.wiki}items/text?sort=title&filter[l2][eq]=${l2.id
+        }&filter[owner][eq]=${$nuxt.$auth.user.id}&fields=id,title&timestamp=${adminMode ? Date.now() : 0}`
+      );
+      items = res?.data?.data || []
+    } catch(e) {
+    }
   }
   return items
 }

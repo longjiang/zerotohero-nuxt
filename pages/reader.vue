@@ -128,6 +128,7 @@
 import ReaderComp from "@/components/ReaderComp";
 import Helper from "@/lib/helper";
 import Config from "@/lib/config";
+import SAMPLE_TEXT from '@/lib/utils/sample-text'
 
 export default {
   template: "#reader-template",
@@ -203,8 +204,9 @@ export default {
       text = r.text;
       translation = r.translation;
       if (!text) {
-        if (Helper.sampleText[this.$l2.code]) {
-          this.text = Helper.sampleText[this.$l2.code];
+        if (SAMPLE_TEXT[this.$l2.code]) {
+          this.text = SAMPLE_TEXT[this.$l2.code];
+      console.log(this.text)
         }
       }
     }
@@ -297,8 +299,8 @@ export default {
     get() {
       let { savedTextByL2, savedTranslationByL2 } = this.getSaved();
       return {
-        text: savedTextByL2[this.$l2.code],
-        translation: savedTranslationByL2[this.$l2.code],
+        text: savedTextByL2[this.$l2.code] || '',
+        translation: savedTranslationByL2[this.$l2.code] || '',
       };
     },
     save() {
