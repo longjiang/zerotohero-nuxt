@@ -13,7 +13,7 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
-          <div v-if="loaded">
+          <div v-if="loadedByL2 && loadedByL2[$l2.code]">
             <div v-if="savedtexts.length > 0">
               <div
                 v-for="savedText in savedtexts"
@@ -104,9 +104,6 @@ export default {
     },
     savedtexts() {
       return this.itemsByL2[this.$l2.code] || [];
-    },
-    loaded() {
-      return this.loadedByL2?.[this.$l2.code];
     },
     hasLocalText() {
       if (typeof localStorage !== "undefined") {
