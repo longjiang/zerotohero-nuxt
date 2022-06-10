@@ -1,6 +1,10 @@
 <template>
   <div :class="`feed-item feed-item-word feed-item-${skin}`">
-    <div class="word-info pt-4 pl-4 pr-4 pb-3" v-if="word">
+    <div
+      class="word-info pt-4 pl-4 pr-4 pb-3"
+      v-if="word"
+      v-observe-visibility="visibilityChanged"
+    >
       <div class="head-and-pronunciation">
         <router-link
           :to="{
@@ -40,7 +44,7 @@
         <Star
           v-if="word"
           :word="word"
-          style="transform: scale(0.7); margin-left: -0.8rem;"
+          style="transform: scale(0.7); margin-left: -0.8rem"
         ></Star>
       </div>
       <div class="definitions-wrapper" v-if="word.definitions">
@@ -135,10 +139,13 @@ export default {
       return await dictionary.get(this.savedWord.id);
     },
   },
-  async mounted() {
-    this.hit = await this.getVideo();
-  },
+  async mounted() {},
   methods: {
+    async visibilityChanged(visible) {
+      if (visible) {
+        // this.hit = await this.getVideo();
+      }
+    },
     transliterate(...args) {
       return transliterate(...args);
     },
