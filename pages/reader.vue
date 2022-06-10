@@ -74,6 +74,9 @@
               </div>
             </div>
           </client-only>
+          <div v-if="loading" class="text-center pt-5 pb-5">
+            <Loader :sticky="true" message="Loading your text..." />
+          </div>
           <ReaderComp
             v-if="!loading"
             :initialText="text"
@@ -128,19 +131,16 @@
         <li>Online {{ $l2.name }} NLP tool</li>
       </ul>
     </div>
-    <!-- .container -->
-    <!-- ANCHOR img/anchors/learn-this.png -->
-    <div class="container-fluid learn-this-bar">
-      <div class="container">
-        <div class="row">
-          <div class="col-sm-12 text-center"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12 text-center">
+          <FeedbackPrompt
+            class="mt-3"
+            :skin="$route.meta ? $route.meta.skin : 'light'"
+          />
         </div>
       </div>
     </div>
-    <FeedbackPrompt
-      class="mt-3"
-      :skin="$route.meta ? $route.meta.skin : 'light'"
-    />
   </div>
 </template>
 
@@ -149,6 +149,7 @@ import ReaderComp from "@/components/ReaderComp";
 import Helper from "@/lib/helper";
 import Config from "@/lib/config";
 import SAMPLE_TEXT from "@/lib/utils/sample-text";
+import {markdownToTxt} from 'markdown-to-txt'
 
 export default {
   template: "#reader-template",
@@ -233,7 +234,7 @@ export default {
     }
     this.text = text;
     this.translation = translation;
-    this.loading = false
+    this.loading = false;
   },
   computed: {
     $l1() {
@@ -249,7 +250,8 @@ export default {
         return `${window.location.protocol}//${window.location.hostname}/${this.$l1.code}/${this.$l2.code}/reader/shared/${this.shared.id}`;
     },
     title() {
-      return this.text.trim().split(/\n+/)[0];
+      let lines = this.text.trim().split(/\n+/) || ['']
+      return markdownToTxt(lines[0]);
     },
   },
   methods: {
@@ -376,7 +378,6 @@ export default {
 </script>
 
 <style lang="scss">
-
 .copy-btn {
   position: absolute;
   bottom: 0.75rem;

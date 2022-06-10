@@ -52,11 +52,19 @@
               variant="success"
               @click="newText"
             >
-              <i class="fas fa-plus mr-1"></i>
-              New Text
+              <span v-if="!creating">
+                <i class="fas fa-plus mr-1"></i>
+                New Text
+              </span>
+              <span v-else>
+                <i class="fas fa-sync-alt"></i>
+                Creating...
+              </span>
             </b-button>
           </div>
-          <div class="text-center mt-5 mb-5" v-else><Loader :sticky="true" message="Loading your text..." /></div>
+          <div class="text-center mt-5 mb-5" v-else>
+            <Loader :sticky="true" message="Loading your text..." />
+          </div>
         </div>
       </div>
     </div>
@@ -67,7 +75,9 @@
 import { mapState } from "vuex";
 export default {
   data() {
-    return {};
+    return {
+      creating: false
+    };
   },
   mounted() {
     if (!this.loadedByL2?.[this.$l2.code]) {
@@ -99,17 +109,18 @@ export default {
       return this.loadedByL2?.[this.$l2.code];
     },
     hasLocalText() {
-      if (typeof localStorage !== 'undefined') {
+      if (typeof localStorage !== "undefined") {
         let localText = localStorage.getItem("zthReaderText");
-        return localText
+        return localText;
       }
-    }
+    },
   },
   methods: {
     onTextRemoved(id) {
       this.$store.dispatch("savedText/remove", { l2: this.$l2, itemId: id });
     },
     async newText() {
+      this.creating = true
       let item = await this.$store.dispatch("savedText/add", { l2: this.$l2 });
       if (item) {
         this.$router.push({
@@ -117,6 +128,7 @@ export default {
           params: { method: "shared", arg: item.id },
         });
       }
+      this.creating = false
     },
   },
 };

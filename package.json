@@ -44,6 +44,7 @@
     "iframe-translator": "^0.3.4",
     "jquery": "^3.6.0",
     "leaflet": "^1.7.1",
+    "markdown-to-txt": "^2.0.1",
     "marked": "^2.0.4",
     "moment": "^2.29.1",
     "money": "^0.2.0",
