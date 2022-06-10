@@ -94,6 +94,8 @@
                 initialEditType="wysiwyg"
                 cols="30"
                 rows="5"
+                class="flex-1"
+                :style="`width: ${addTranslation ? '50%' : '100%'}`"
                 v-model="text"
                 ref="editor"
                 :initialValue="text"
@@ -105,12 +107,12 @@
             </client-only>
             <textarea
               v-if="addTranslation"
-              id="translation-textarea"
-              class="form-control ml-1"
+              class="form-control ml-1 flex-1"
               cols="30"
               rows="5"
-              :placeholder="$t('Paste translation text here', { l2: $l2.name })"
               v-model="translation"
+              id="translation-textarea"
+              :placeholder="$t('Paste translation text here', { l2: $l2.name })"
               :dir="$l2.direction === 'rtl' ? 'rtl' : 'ltr'"
             ></textarea>
           </div>
@@ -423,7 +425,4 @@ export default {
   }
 }
 
-#reader-textarea {
-  width: 100%;
-}
 </style>
