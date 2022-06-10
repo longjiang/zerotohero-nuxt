@@ -75,6 +75,9 @@
             </div>
           </client-only>
           <ReaderComp
+            v-if="!loading"
+            :initialText="text"
+            :initialTranslation="translation"
             ref="reader"
             :page="page"
             @readerTextChanged="readerTextChanged"
@@ -163,6 +166,7 @@ export default {
   data() {
     return {
       text: "",
+      loading: true,
       translation: "",
       dictionaryCredit: undefined,
       page: 1,
@@ -177,10 +181,10 @@ export default {
       }
     },
     text() {
-      this.$refs.reader.text = this.text;
+      if (this.$refs?.reader) this.$refs.reader.text = this.text;
     },
     translation() {
-      this.$refs.reader.translation = this.translation;
+      if (this.$refs?.reader) this.$refs.reader.translation = this.translation;
     },
   },
   async mounted() {
@@ -229,6 +233,7 @@ export default {
     }
     this.text = text;
     this.translation = translation;
+    this.loading = false
   },
   computed: {
     $l1() {
@@ -301,7 +306,6 @@ export default {
           p: this.page ? this.page + 1 : undefined,
         },
       };
-      console.log({ to });
       this.$router.push(to);
     },
     readerTextChanged(text) {

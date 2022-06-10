@@ -95,9 +95,8 @@
                 cols="30"
                 rows="5"
                 class="flex-1"
-                :style="`width: ${addTranslation ? '50%' : '100%'}`"
-                v-model="text"
                 ref="editor"
+                :style="`width: ${addTranslation ? '50%' : '100%'}`"
                 :initialValue="text"
                 :options="{ usageStatistics: false }"
                 :placeholder="$t('Paste {l2} text here', { l2: $l2.name })"
@@ -163,9 +162,9 @@ export default {
   },
   data() {
     return {
-      text: "",
+      text: this.initialText,
       textThrottled: "",
-      translation: "",
+      translation: this.initialTranslation,
       annotated: false,
       readerKey: 0, // used to force re-render this component
       fullscreen: false,
@@ -189,6 +188,14 @@ export default {
     page: {
       type: Number,
       default: 1,
+    },
+    initialText: {
+      type: String,
+      default: "",
+    },
+    initialTranslation: {
+      type: String,
+      default: "",
     },
   },
   computed: {
