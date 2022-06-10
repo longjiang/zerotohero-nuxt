@@ -136,6 +136,10 @@ export default {
     page: {
       type: [Number, String],
     },
+    baseUrl: {
+      type: String,
+      default: "",
+    },
   },
   data() {
     return {
@@ -202,8 +206,8 @@ export default {
   },
   watch: {
     page() {
-      this.current = 0
-      this.translationLoading = {}
+      this.current = 0;
+      this.translationLoading = {};
     },
     speed() {
       if (this.speaking) {
@@ -234,7 +238,8 @@ export default {
           parallellines.push("-");
         }
       }
-      if (this.page) lineIndex = Number(lineIndex) + (this.page - 1) * this.linesPerPage;
+      if (this.page)
+        lineIndex = Number(lineIndex) + (this.page - 1) * this.linesPerPage;
       parallellines[lineIndex] = t;
       let translation = parallellines.join("\n");
       this.$emit("translation", translation);
@@ -254,8 +259,8 @@ export default {
       as.forEach((a) => {
         let bookLinkHtml = a
           .toString()
-          .replace(/^<a/, "<BookLink")
-          .replace(/<\/a>$/, "</BookLink>");
+          .replace(/^<a/, `<ReaderLink alt="${this.baseUrl}"`)
+          .replace(/<\/a>$/, "</ReaderLink>");
         a.replaceWith(parse(bookLinkHtml));
       });
       html = dom.toString();

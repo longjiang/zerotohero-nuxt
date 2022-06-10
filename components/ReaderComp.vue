@@ -26,6 +26,7 @@
             :translation="translation"
             :key="marked"
             :page="page"
+            :baseUrl="baseUrl"
             ref="text-with-speech-bar"
             @translation="onTranslation"
             @previousPage="$emit('previousPage')"
@@ -181,6 +182,10 @@ export default {
     };
   },
   props: {
+    baseUrl: {
+      type: String,
+      default: ''
+    },
     iconMode: {
       default: false,
     },

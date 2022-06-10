@@ -4,7 +4,7 @@
     &nbsp;
     <router-link
       v-if="href && !href.endsWith('undefined')"
-      :to="href"
+      :to="{ name: 'reader', params: { method: 'html-url', arg: absoluteURL(alt, href) } }"
       :title="title"
       class="btn btn-small"
     >
@@ -14,6 +14,8 @@
 </template>
 
 <script>
+import { absoluteURL } from "@/lib/utils/url";
+
 export default {
   props: {
     href: {
@@ -22,6 +24,10 @@ export default {
     title: {
       type: String,
     },
+    alt: { // the base url
+      type: String,
+      default: "",
+    },
   },
   data() {
     return {
@@ -29,7 +35,11 @@ export default {
     };
   },
   mounted() {},
-  methods: {},
+  methods: {
+    absoluteURL(...args) {
+      return absoluteURL(...args)
+    }
+  },
 };
 </script>
 

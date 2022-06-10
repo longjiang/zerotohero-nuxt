@@ -83,6 +83,7 @@
             :initialTranslation="translation"
             ref="reader"
             :page="page"
+            :baseUrl="baseUrl"
             @readerTextChanged="readerTextChanged"
             @readerTranslationChanged="readerTranslationChanged"
             @previousPage="onPreviousPage"
@@ -149,7 +150,12 @@ import ReaderComp from "@/components/ReaderComp";
 import Helper from "@/lib/helper";
 import Config from "@/lib/config";
 import SAMPLE_TEXT from "@/lib/utils/sample-text";
-import {markdownToTxt} from 'markdown-to-txt'
+import { markdownToTxt } from "markdown-to-txt";
+import TurndownService from "turndown";
+import { parse } from "node-html-parser";
+import {baseUrl} from '@/lib/utils/url'
+
+const turndownService = new TurndownService();
 
 export default {
   template: "#reader-template",
@@ -167,6 +173,7 @@ export default {
   data() {
     return {
       text: "",
+      baseUrl: "",
       loading: true,
       translation: "",
       dictionaryCredit: undefined,
@@ -212,10 +219,23 @@ export default {
       } catch (err) {
         Helper.logError(err);
       }
-    } else if (method === "md-url" || method === "html-url") {
+    } else if (method === "html-url") {
+      this.baseUrl = baseUrl(this.arg)
       try {
-        let t = await Helper.proxy(arg);
-        text = t || "";
+        let html = await Helper.proxy(arg);
+        let dom = parse(html)
+        let body = dom.querySelector('body');
+        let article = dom.querySelector('article');
+        dom = article || body || dom
+        html = dom.toString();
+        text = turndownService.turndown(html) || "";
+      } catch (err) {
+        Helper.logError(err);
+      }
+    } else if (method === "md-url") {
+      try {
+        let md = await Helper.proxy(arg);
+        text = md || "";
       } catch (err) {
         Helper.logError(err);
       }
@@ -250,7 +270,7 @@ export default {
         return `${window.location.protocol}//${window.location.hostname}/${this.$l1.code}/${this.$l2.code}/reader/shared/${this.shared.id}`;
     },
     title() {
-      let lines = this.text.trim().split(/\n+/) || ['']
+      let lines = this.text.trim().split(/\n+/) || [""];
       return markdownToTxt(lines[0]);
     },
   },

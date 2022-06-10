@@ -152,7 +152,7 @@
 <script>
 import wordblock from "@/components/WordBlock";
 import popupnote from "@/components/PopupNote";
-import booklink from "@/components/BookLink";
+import readerlink from "@/components/ReaderLink";
 import VRuntimeTemplate from "v-runtime-template";
 import Helper from "@/lib/helper";
 import { transliterate as tr } from "transliteration";
@@ -164,9 +164,9 @@ import BeatLoader from "vue-spinner/src/BeatLoader.vue";
 
 export default {
   components: {
-    wordblock,
-    popupnote,
-    booklink,
+    wordblock, // Must be lower case for runtime template to work
+    popupnote, // Must be lower case for runtime template to work
+    readerlink, // Must be lower case for runtime template to work
     VRuntimeTemplate,
     ContainerQuery,
     BeatLoader,
