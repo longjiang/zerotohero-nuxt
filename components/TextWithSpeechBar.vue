@@ -217,6 +217,9 @@ export default {
       this.current = 0;
       this.translationLoading = {};
     },
+    goToPage() {
+      this.$emit('goToPage', this.goToPage)
+    },
     speed() {
       if (this.speaking) {
         this.pause();

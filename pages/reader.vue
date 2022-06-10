@@ -88,6 +88,7 @@
             @readerTranslationChanged="readerTranslationChanged"
             @previousPage="onPreviousPage"
             @nextPage="onNextPage"
+            @goToPage="goToPage"
           />
         </div>
       </div>
@@ -324,6 +325,20 @@ export default {
         },
       };
       this.$router.push(to);
+    },
+    goToPage(page) {
+      let to = {
+        name: "reader",
+        params: {
+          method: this.method,
+          arg: this.arg,
+        },
+        query: {
+          p: page,
+        },
+      };
+      this.$router.push(to);
+
     },
     onNextPage() {
       let to = {

@@ -31,6 +31,7 @@
             @translation="onTranslation"
             @previousPage="$emit('previousPage')"
             @nextPage="$emit('nextPage')"
+            @goToPage="goToPage"
           />
           <div
             v-if="savedWordIdsInText && savedWordIdsInText.length > 0"
@@ -284,6 +285,9 @@ export default {
     },
   },
   methods: {
+    goToPage(page) {
+      this.$emit('goToPage', page)
+    },
     onEditorChange() {
       this.text = this.$refs.editor.invoke("getMarkdown");
     },
