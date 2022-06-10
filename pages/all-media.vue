@@ -144,11 +144,6 @@ export default {
     // you may call unsubscribe to stop the subscription
     this.unsubscribe();
   },
-  watch: {
-    liveTVChannels() {
-      this.loadMoreItems()
-    }
-  },
   computed: {
     ...mapState("stats", ["stats"]),
     ...mapState("savedWords", ["savedWords"]),
@@ -252,6 +247,7 @@ export default {
     },
     async loadMoreItems() {
       if (this.loading) return;
+      console.log('💣 LOAD MORE ITEMS')
       if (
         this.$store.state.stats.statsLoaded[this.$l2.code] &&
         this.savedWords
