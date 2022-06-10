@@ -23,6 +23,7 @@ export const mutations = {
     item = Object.assign(item, data)
   },
   ADD(state, { l2, item }) {
+    if (!state.itemsByL2[l2.code]) state.itemsByL2[l2.code] = []
     state.itemsByL2[l2.code].push(item);
   },
   REMOVE(state, { l2, itemId }) {
