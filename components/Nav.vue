@@ -599,6 +599,12 @@ export default {
               show: true,
             },
             {
+              name: "bookshelf",
+              title: "My Bookshelf",
+              icon: "fas fa-book-reader",
+              show: true,
+            },
+            {
               name: "library",
               title: "Books (Legacy)",
               icon: "fas fa-book-open",
