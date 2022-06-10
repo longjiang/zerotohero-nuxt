@@ -95,7 +95,7 @@
         >
           <i class="fas fa-chevron-left"></i>
         </button>
-        <div class="pl-2 pr-2">Page {{ page }} of {{ pageCount }}</div>
+        <b-form-select size="md" v-model="goToPage" :options="pageOptions" class="pl-2 pr-2 text-center border-0">Page {{ page }} of {{ pageCount }}</b-form-select>
         <button
           v-if="Number(page) < pageCount"
           class="btn btn-success btn-sm ml-1"
@@ -143,6 +143,7 @@ export default {
   },
   data() {
     return {
+      goToPage: this.page, // What the user selects from the dropdown
       current: 0,
       voice: 0,
       speed: 1,
@@ -167,6 +168,13 @@ export default {
     $l2() {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
+    },
+    pageOptions() {
+      let options = []
+      for (let i = 1; i <= this.pageCount; i++) {
+        options.push({value: i, text: `Page ${i} of ${this.pageCount}`})
+      }
+      return options
     },
     allLines() {
       let html = this.html.trim();
