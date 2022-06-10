@@ -87,16 +87,19 @@
               Enter Translation
             </button>
           </div>
+
           <div class="d-flex">
-            <textarea
-              id="reader-textarea"
-              class="form-control"
-              cols="30"
-              rows="5"
-              :placeholder="$t('Paste {l2} text here', { l2: $l2.name })"
-              v-model="text"
-              :dir="$l2.direction === 'rtl' ? 'rtl' : 'ltr'"
-            ></textarea>
+            <client-only>
+              <editor
+                id="reader-textarea"
+                initialEditType="wysiwyg"
+                cols="30"
+                rows="5"
+                :placeholder="$t('Paste {l2} text here', { l2: $l2.name })"
+                v-model="text"
+                :dir="$l2.direction === 'rtl' ? 'rtl' : 'ltr'"
+              ></editor>
+            </client-only>
             <textarea
               v-if="addTranslation"
               id="translation-textarea"
@@ -108,6 +111,7 @@
               :dir="$l2.direction === 'rtl' ? 'rtl' : 'ltr'"
             ></textarea>
           </div>
+
           <div class="mt-2 p-1">
             <span
               v-for="translator of translators"
@@ -402,10 +406,6 @@ export default {
     position: fixed;
     bottom: 1rem;
     width: calc(100vw - 2rem);
-
-    #reader-textarea {
-      max-height: 15vh;
-    }
   }
 
   #reader-annotated,
@@ -415,5 +415,9 @@ export default {
     height: calc(100vh - 15vh - 5.5rem);
     overflow: scroll;
   }
+}
+
+#reader-textarea {
+  max-width: 100%;
 }
 </style>

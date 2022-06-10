@@ -19,6 +19,7 @@
     "@nuxtjs/axios": "^5.13.1",
     "@nuxtjs/toast": "^3.3.1",
     "@sindresorhus/transliterate": "^1.5.0",
+    "@toast-ui/vue-editor": "^3.1.7",
     "@videojs/http-streaming": "^2.10.0",
     "accounting": "^0.4.1",
     "ass-parser": "^0.2.0",
