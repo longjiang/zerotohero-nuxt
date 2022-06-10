@@ -580,6 +580,13 @@ export default {
               // shortcut: (e) => e.code === "KeyR" && e.metaKey && e.shiftKey,
             },
             {
+              name: "web-reader",
+              title: "Web Reader",
+              icon: "fas fa-globe-asia",
+              show: true,
+              // shortcut: (e) => e.code === "KeyR" && e.metaKey && e.shiftKey,
+            },
+            {
               name: this.$auth.loggedIn ? "my-text" : "reader",
               title: "My Text",
               icon: "fas fa-edit",

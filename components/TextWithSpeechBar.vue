@@ -263,6 +263,13 @@ export default {
           .replace(/<\/a>$/, "</ReaderLink>");
         a.replaceWith(parse(bookLinkHtml));
       });
+      let elms = dom.querySelectorAll("[src]");
+      elms.forEach((elm) => {
+        let src = elm.getAttribute('src')
+        if (src && !src.startsWith('http')) {
+          elm.setAttribute('src', this.baseUrl + src)
+        }
+      });
       html = dom.toString();
       return html;
     },

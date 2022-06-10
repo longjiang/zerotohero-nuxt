@@ -234,9 +234,8 @@ export default {
     },
     marked() {
       let text = this.textThrottled || this.text
-      return (
-        Marked(text.replace(/^ {4,}/gm, "")) || text // 4 spaces in a row would emit <code>!
-      );
+      let marked = Marked(text.replace(/^ {4,}/gm, "")) || text // 4 spaces in a row would emit <code>!
+      return marked
     },
     translators() {
       let translators = this.$languages.getTranslator(this.$l1, this.$l2) || [];

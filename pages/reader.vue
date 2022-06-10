@@ -151,11 +151,9 @@ import Helper from "@/lib/helper";
 import Config from "@/lib/config";
 import SAMPLE_TEXT from "@/lib/utils/sample-text";
 import { markdownToTxt } from "markdown-to-txt";
-import TurndownService from "turndown";
+import { NodeHtmlMarkdown, NodeHtmlMarkdownOptions } from 'node-html-markdown'
 import { parse } from "node-html-parser";
 import {baseUrl} from '@/lib/utils/url'
-
-const turndownService = new TurndownService();
 
 export default {
   template: "#reader-template",
@@ -229,7 +227,7 @@ export default {
         let wikipediaContent = dom.querySelector('#mw-content-text');
         dom = wikipediaContent || article || body || dom
         html = dom.toString();
-        text = turndownService.turndown(html) || "";
+        text = NodeHtmlMarkdown.translate(html) || "";
       } catch (err) {
         Helper.logError(err);
       }
@@ -267,7 +265,6 @@ export default {
         return this.$store.state.settings.l2;
     },
     shareURL() {
-      this.page
       if (typeof location !== 'undefined')
         return location.href;
     },

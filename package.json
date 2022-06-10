@@ -49,6 +49,7 @@
     "moment": "^2.29.1",
     "money": "^0.2.0",
     "net": "^1.0.2",
+    "node-html-markdown": "^1.2.0",
     "node-html-parser": "^3.3.6",
     "nuxt": "^2.15.8",
     "nuxt-i18n": "^6.27.0",
