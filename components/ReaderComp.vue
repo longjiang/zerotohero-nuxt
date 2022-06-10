@@ -87,7 +87,6 @@
               Enter Translation
             </button>
           </div>
-
           <div class="d-flex">
             <client-only>
               <editor
@@ -95,9 +94,13 @@
                 initialEditType="wysiwyg"
                 cols="30"
                 rows="5"
-                :placeholder="$t('Paste {l2} text here', { l2: $l2.name })"
                 v-model="text"
+                ref="editor"
+                :initialValue="text"
+                :options="{ usageStatistics: false }"
+                :placeholder="$t('Paste {l2} text here', { l2: $l2.name })"
                 :dir="$l2.direction === 'rtl' ? 'rtl' : 'ltr'"
+                @change="onEditorChange"
               ></editor>
             </client-only>
             <textarea
@@ -268,6 +271,9 @@ export default {
     },
   },
   methods: {
+    onEditorChange() {
+      this.text = this.$refs.editor.invoke("getMarkdown");
+    },
     onTranslation(translation) {
       this.translation = translation;
     },
@@ -418,6 +424,6 @@ export default {
 }
 
 #reader-textarea {
-  max-width: 100%;
+  width: 100%;
 }
 </style>
