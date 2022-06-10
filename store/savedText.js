@@ -29,7 +29,7 @@ export const mutations = {
     state.itemsByL2[l2.code] = state.itemsByL2[l2.code].filter((i) => i.id !== itemId);
   },
   UPDATE(state, { l2, item }) {
-    console.log('UPD', {item})
+    console.log(state.itemsByL2[l2.code][0].id, item.id)
     let existing = state.itemsByL2[l2.code].find(i => i.id === item.id)
     if (!existing) {
       existing = {}
@@ -129,9 +129,8 @@ export const actions = {
         `${Config.wiki}items/text/${item.id}`,
         item
       );
-      item = response?.data
     }
-    // commit('SAVE_LOCAL')
+    commit('UPDATE', { l2, item })
   }
 }
 

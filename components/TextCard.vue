@@ -1,13 +1,17 @@
 <template>
-  <div class="text-card p-5">
+  <div class="text-card p-4">
     <router-link class="link-unstyled" :to="to"><h5 class="mb-0">{{ text.title }}</h5></router-link>
-    <b-button
+    <div class="mt-3 text-right">
+      <b-button
       class="youtube-video-card-badge border-0"
       v-if="text.id"
+      size="sm"
+      variant="light text-secondary"
       @click="remove()"
     >
-      <i class="fa fa-trash"></i>
+      Delete
     </b-button>
+    </div>
   </div>
 </template>
 

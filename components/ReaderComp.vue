@@ -36,24 +36,24 @@
             id="vocabulary-list"
             class="pb-4"
           >
-            <hr class="mb-4" />
-            <div
-              style="font-size: 1rem; line-height: 1"
-              class="mb-3 text-center"
-            >
-              <strong>Vocabulary List</strong>
-              <div class="mt-1">
-                <small>
-                  Here are the words you saved that appear in this text:
-                </small>
-              </div>
-              <div class="mt-3">
-                <b-button variant="success" v-if="!showWords" size="sm" @click="showWords = true">
-                  Show {{ savedWordIdsInText.length }} Words
-                </b-button>
-              </div>
+            <div class="text-center mt-3" v-if="!showWords">
+              <b-button variant="success" size="sm" @click="showWords = true">
+                Show Vocabulary ({{ savedWordIdsInText.length }})
+              </b-button>
             </div>
             <div v-if="showWords">
+              <hr class="mt-0 mb-4" />
+              <div
+                style="font-size: 1rem; line-height: 1"
+                class="mb-3 text-center"
+              >
+                <strong>Vocabulary List</strong>
+                <div class="mt-1">
+                  <small>
+                    Here are the words you saved that appear in this text:
+                  </small>
+                </div>
+              </div>
               <WordList :ids="savedWordIdsInText" :star="false" />
             </div>
           </div>
@@ -416,5 +416,4 @@ export default {
     overflow: scroll;
   }
 }
-
 </style>
