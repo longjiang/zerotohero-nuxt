@@ -45,21 +45,21 @@
               a popup dictionary!
             </p>
           </div>
-          <div class="text-center mb-4" v-if="!shared && text">
+          <div class="text-center mb-4" v-if="canShare">
             <b-button @click="upload" variant="success" size="sm">
               <i class="fas fa-paper-plane"></i>
               Share Annotated Text
             </b-button>
           </div>
           <client-only>
-            <div v-if="shared || sharing" class="alert alert-success mt-2">
-              <div v-if="shared">
+            <div v-if="shared || sharing || !canShare" class="share-banner alert alert-success mt-2">
+              <div v-if="!sharing">
                 <div class="strong mb-2">
                   <i class="fas fa-paper-plane"></i>
                   Shareable via link:
                 </div>
-                <div class="border-gray rounded p-2 bg-white">
-                  {{ shareURL }}
+                <div class="share-banner-url border-gray rounded p-2 bg-white">
+                  <span>{{ shareURL }}</span>
                 </div>
                 <b-button
                   variant="unstyled"
@@ -266,13 +266,22 @@ export default {
         return this.$store.state.settings.l2;
     },
     shareURL() {
-      if (this.shared)
-        return `${window.location.protocol}//${window.location.hostname}/${this.$l1.code}/${this.$l2.code}/reader/shared/${this.shared.id}`;
+      if (typeof location !== 'undefined')
+        return location.href;
     },
     title() {
       let lines = this.text.trim().split(/\n+/) || [""];
       return markdownToTxt(lines[0]);
     },
+    /**
+     * Whether or not to show a "share this" button
+     */
+    canShare() {
+      if (this.shared) return false // already shared, url visible
+      if (!this.text) return false // nothing to share
+      if (this.method && this.method !== 'share') return false // already shareable
+      return true
+    }
   },
   methods: {
     copyClick() {
@@ -406,6 +415,15 @@ export default {
   font-size: 1.2rem;
   &:hover {
     color: #444;
+  }
+}
+.share-banner-url {
+  span {
+    width: calc(100% - 2rem);
+    white-space: nowrap;
+    display: block;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
 }
 </style>
