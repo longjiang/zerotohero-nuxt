@@ -29,6 +29,7 @@ export const mutations = {
     state.itemsByL2[l2.code] = state.itemsByL2[l2.code].filter((i) => i.id !== itemId);
   },
   UPDATE(state, { l2, item }) {
+    console.log('UPD', {item})
     let existing = state.itemsByL2[l2.code].find(i => i.id === item.id)
     if (!existing) {
       existing = {}
@@ -36,7 +37,9 @@ export const mutations = {
     }
     for (let key in item) {
       existing[key] = item[key]
+      console.log(existing)
     }
+    
   },
 }
 
@@ -66,9 +69,10 @@ export const actions = {
   },
   async load({ commit }, { l2, adminMode }) {
     let itemsByL2 = {}
-    if (typeof localStorage !== 'undefined') {
-      itemsByL2 = JSON.parse(localStorage.getItem(LOCAL_KEY) || '{}')
-    }
+    // Server only for now...
+    // if (typeof localStorage !== 'undefined') {
+    //   itemsByL2 = JSON.parse(localStorage.getItem(LOCAL_KEY) || '{}')
+    // }
     let items = await loadFromServer({ l2, adminMode })
     if (items.length !== 0) {
       items = items.sort((x, y) =>
@@ -77,7 +81,7 @@ export const actions = {
       itemsByL2[l2.code] = items
     }
     commit('LOAD', { l2, itemsByL2 })
-    commit('SAVE_LOCAL')
+    // commit('SAVE_LOCAL')
   },
   async loadItem({ commit }, { l2, id, adminMode }) {
     if ($nuxt.$auth.loggedIn) {
@@ -86,14 +90,12 @@ export const actions = {
       if (res.data && res.data.data) {
         let data = res.data.data;
         commit('LOAD_ITEM', { l2, id, data })
-        commit('SAVE_LOCAL')
+        // commit('SAVE_LOCAL')
       }
     }
   },
   async add({ commit }, { l2, item }) {
     item = item || { text: '', translation: '', title: 'Untitled', l2: l2.id }
-    commit('ADD', { l2, item })
-    commit('SAVE_LOCAL')
     if ($nuxt.$auth.loggedIn) {
       let response = await $nuxt.$authios.post(
         `${Config.wiki}items/text`,
@@ -103,11 +105,11 @@ export const actions = {
         item = response.data.data
       }
     }
+    commit('ADD', { l2, item })
+    // commit('SAVE_LOCAL')
     return item
   },
   async remove({ commit }, { l2, itemId }) {
-    commit('REMOVE', { l2, itemId })
-    commit('SAVE_LOCAL')
     if ($nuxt.$auth.loggedIn) {
       let response = await $nuxt.$authios.delete(
         `${Config.wiki}items/text/${itemId}`
@@ -116,17 +118,18 @@ export const actions = {
         return response.data
       }
     }
+    commit('REMOVE', { l2, itemId })
+    // commit('SAVE_LOCAL')
   },
   async update({ commit }, { l2, item }) {
-    commit('UPDATE', { l2, item })
-    commit('SAVE_LOCAL')
     if ($nuxt.$auth.loggedIn) {
       let response = await $nuxt.$authios.patch(
         `${Config.wiki}items/text/${item.id}`,
         item
       );
-      return response?.data
+      item = response?.data
     }
+    // commit('SAVE_LOCAL')
   }
 }
 

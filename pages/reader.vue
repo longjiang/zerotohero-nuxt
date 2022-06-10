@@ -224,6 +224,9 @@ export default {
       if (this.shared)
         return `${window.location.protocol}//${window.location.hostname}/${this.$l1.code}/${this.$l2.code}/reader/shared/${this.shared.id}`;
     },
+    title() {
+      return this.text.trim().split(/\n+/)[0]
+    }
   },
   methods: {
     copyClick() {
@@ -241,7 +244,7 @@ export default {
       this.sharing = true;
       try {
         let res = await this.$authios.post(`${Config.wiki}items/text`, {
-          title: this.text.trim().split(/\n+/)[0],
+          title: this.title,
           text: this.text,
           translation: this.translation,
           l2: this.$l2.id,
@@ -320,7 +323,7 @@ export default {
             l2: this.$l2,
             item: {
               id: this.shared.id,
-              title: this.text.trim().split(/\n+/)[0],
+              title: this.title,
               text: this.text,
               translation: this.translation,
             },
