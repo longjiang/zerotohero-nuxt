@@ -19,12 +19,17 @@
             @nextPage="onNextPage"
           />
         </div>
-        <div
-          class="col-sm-12 col-lg-4 col-xl-3"
-          style=""
-        >
+        <div class="col-sm-12 col-lg-4 col-xl-3" style="">
           <div
-            style="max-width: 15rem; margin: 1.5rem auto; position: sticky; top: 0.5rem; border: 1px solid #ddd; border-radius: 0.5rem; padding: 1rem"
+            style="
+              max-width: 15rem;
+              margin: 1.5rem auto;
+              position: sticky;
+              top: 0.5rem;
+              border: 1px solid #ddd;
+              border-radius: 0.5rem;
+              padding: 1rem;
+            "
           >
             <div class="book-info" v-if="bookData">
               <div class="p-4">
@@ -42,7 +47,7 @@
                   />
                 </router-link>
               </div>
-              <div class="info">
+              <div class="info text-center">
                 <div class="title">{{ bookData.title }}</div>
                 <div
                   class="author"
@@ -51,14 +56,22 @@
                 >
                   {{ author.name }}
                 </div>
-                <a
-                  :href="bookData.formats['text/html']"
-                  target="_blank"
-                  class="btn btn-sm mt-3 btn-gray"
-                >
-                  Gutenberg
-                  <i class="fas fa-chevron-right ml-1"></i>
-                </a>
+                <div class="mt-3 mb-3">
+                  <b-button variant="success" size="sm" @click="addToBookshelf" v-if="!saved">
+                    <i class="fas fa-plus mr-1"></i>
+                    Add to Bookshelf
+                  </b-button>
+                  <b-button variant="unstyled" v-else class="text-danger" @click="removeFromBookshelf"><i class="fas fa-minus-circle"></i> Remove</b-button>
+                </div>
+                <div>
+                  <a
+                    :href="bookData.formats['text/html']"
+                    target="_blank"
+                    class="text-secondary"
+                  >
+                    Read on Gutenberg
+                  </a>
+                </div>
               </div>
             </div>
           </div>
@@ -72,6 +85,7 @@
 import axios from "axios";
 import Helper from "@/lib/helper";
 import { parse } from "node-html-parser";
+import { mapState } from "vuex";
 
 export default {
   props: {
@@ -86,7 +100,16 @@ export default {
   data() {
     return { bookData: this.book, html: undefined };
   },
+  watch: {
+    items() {
+      this.saved
+    }
+  },
   computed: {
+    ...mapState("bookshelf", ["items"]),
+    saved() {
+      return this.$store.getters['bookshelf/has'](this.bookData)
+    },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -111,7 +134,31 @@ export default {
       }
     },
   },
+  async created() {
+    this.$store.dispatch('bookshelf/load')
+    try {
+      if (!this.bookData) {
+        let res = await axios.get(`http://gutendex.com/books/${this.id}`);
+        if (res && res.data) {
+          let bookData = res.data;
+          this.bookData = bookData;
+        }
+      }
+      if (this.bookData.formats["text/html"]) {
+        let html = await Helper.proxy(this.bookData.formats["text/html"]);
+        if (html) this.html = html;
+      }
+    } catch (err) {
+      Helper.logError(err);
+    }
+  },
   methods: {
+    removeFromBookshelf() {
+      this.$store.dispatch("bookshelf/remove", this.bookData);
+    },
+    addToBookshelf() {
+      this.$store.dispatch("bookshelf/add", this.bookData);
+    },
     onPreviousPage() {
       let to = {
         name: "gutenberg",
@@ -137,23 +184,6 @@ export default {
       this.$router.push(to);
     },
   },
-  async created() {
-    try {
-      if (!this.bookData) {
-        let res = await axios.get(`http://gutendex.com/books/${this.id}`);
-        if (res && res.data) {
-          let bookData = res.data;
-          this.bookData = bookData;
-        }
-      }
-      if (this.bookData.formats["text/html"]) {
-        let html = await Helper.proxy(this.bookData.formats["text/html"]);
-        if (html) this.html = html;
-      }
-    } catch (err) {
-      Helper.logError(err);
-    }
-  },
 };
 </script>
 
@@ -165,7 +195,7 @@ export default {
     border-radius: 0.25rem;
   }
   .info {
-    padding: 1.5rem;
+    padding: .75rem;
     color: black;
     .title {
       font-weight: bold;
