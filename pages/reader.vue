@@ -226,7 +226,8 @@ export default {
         let dom = parse(html)
         let body = dom.querySelector('body');
         let article = dom.querySelector('article');
-        dom = article || body || dom
+        let wikipediaContent = dom.querySelector('#mw-content-text');
+        dom = wikipediaContent || article || body || dom
         html = dom.toString();
         text = turndownService.turndown(html) || "";
       } catch (err) {
