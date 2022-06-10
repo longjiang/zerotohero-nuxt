@@ -222,8 +222,9 @@ export default {
         return this.$store.state.settings.l2;
     },
     marked() {
+      let text = this.textThrottled || ''
       return (
-        Marked(this.textThrottled.replace(/^ {4,}/gm, "")) || this.textThrottled // 4 spaces in a row would emit <code>!
+        Marked(text.replace(/^ {4,}/gm, "")) || this.textThrottled // 4 spaces in a row would emit <code>!
       );
     },
     translators() {
