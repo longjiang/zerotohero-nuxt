@@ -567,32 +567,34 @@ export default {
           ],
         },
         {
-          icon: "fas fa-book-open",
+          icon: "fas fa-file-alt",
           title: "Reading",
           show:
             this.hasFeature("dictionary") || this.hasFeature("transliteration"),
           children: [
             {
-              name: this.$auth.loggedIn ? "my-text" : "reader",
+              name: "reader",
               title: "Text Reader",
               icon: "fas fa-file-alt",
               show: true,
-              shortcut: (e) => e.code === "KeyR" && e.metaKey && e.shiftKey,
+              // shortcut: (e) => e.code === "KeyR" && e.metaKey && e.shiftKey,
             },
             {
-              name: "reader",
-              show: false,
+              name: this.$auth.loggedIn ? "my-text" : "reader",
+              title: "My Text",
+              icon: "fas fa-edit",
+              show: true,
             },
             {
               name: "books",
               title: "Books",
-              icon: "fas fa-book-reader",
+              icon: "fas fa-book",
               show: true,
             },
             {
               name: "library",
               title: "Books (Legacy)",
-              icon: "fas fa-book-reader",
+              icon: "fas fa-book-open",
               show: true,
             },
             {
