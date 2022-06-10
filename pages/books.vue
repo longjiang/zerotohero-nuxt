@@ -11,7 +11,7 @@
           <div class="col-sm-12">
             <!-- <Sale class="mt-5 mb-5" v-if="$l2.code === 'zh'" /> -->
             <h3 class="text-center mt-3">{{ $l2.name }} Books</h3>
-            <p class="text-center" v-if="count">({{ $n(count) }} books)</p>
+            <p class="text-center" v-if="count">({{ count }} books)</p>
           </div>
         </div>
         <div class="row mb-4 p-2">
