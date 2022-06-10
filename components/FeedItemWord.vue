@@ -143,7 +143,7 @@ export default {
   methods: {
     async visibilityChanged(visible) {
       if (visible) {
-        // this.hit = await this.getVideo();
+        this.hit = await this.getVideo();
       }
     },
     transliterate(...args) {
