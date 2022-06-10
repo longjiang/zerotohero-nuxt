@@ -57,11 +57,24 @@
                   {{ author.name }}
                 </div>
                 <div class="mt-3 mb-3">
-                  <b-button variant="success" size="sm" @click="addToBookshelf" v-if="!saved">
+                  <b-button
+                    variant="success"
+                    size="sm"
+                    @click="addToBookshelf"
+                    v-if="!saved"
+                  >
                     <i class="fas fa-plus mr-1"></i>
                     Add to Bookshelf
                   </b-button>
-                  <b-button variant="unstyled" v-else class="text-danger" @click="removeFromBookshelf"><i class="fas fa-minus-circle"></i> Remove</b-button>
+                  <b-button
+                    variant="unstyled"
+                    v-else
+                    class="text-danger"
+                    @click="removeFromBookshelf"
+                  >
+                    <i class="fas fa-minus-circle"></i>
+                    Remove
+                  </b-button>
                 </div>
                 <div>
                   <a
@@ -102,13 +115,13 @@ export default {
   },
   watch: {
     items() {
-      this.saved
-    }
+      this.saved;
+    },
   },
   computed: {
     ...mapState("bookshelf", ["items"]),
     saved() {
-      return this.$store.getters['bookshelf/has'](this.bookData)
+      if (this.bookData) return this.$store.getters["bookshelf/has"](this.bookData);
     },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
@@ -135,7 +148,7 @@ export default {
     },
   },
   async created() {
-    this.$store.dispatch('bookshelf/load')
+    this.$store.dispatch("bookshelf/load");
     try {
       if (!this.bookData) {
         let res = await axios.get(`http://gutendex.com/books/${this.id}`);
@@ -195,7 +208,6 @@ export default {
     border-radius: 0.25rem;
   }
   .info {
-    padding: .75rem;
     color: black;
     .title {
       font-weight: bold;
