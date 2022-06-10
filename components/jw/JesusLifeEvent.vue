@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import Helper from '@/lib/Helper'
+import Helper from '@/lib/helper'
 
 export default {
   data() {

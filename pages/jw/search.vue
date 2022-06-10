@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import config from "@/lib/Config.js";
+import config from "@/lib/config.js";
 import $ from "jquery";
 import axios from 'axios'
 import { VIDEO_TERM_SEARCH_BASE } from "@/lib/jw/Wol"

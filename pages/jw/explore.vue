@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import Helper from "@/lib/Helper";
+import Helper from "@/lib/helper";
 import Wol from "@/lib/jw/Wol";
 
 export default {

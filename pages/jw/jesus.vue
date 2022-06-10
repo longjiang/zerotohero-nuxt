@@ -23,8 +23,8 @@
 </template>
 
 <script>
-import Helper from "@/lib/Helper";
-import Config from "@/lib/Config";
+import Helper from "@/lib/helper";
+import Config from "@/lib/config";
 import EventsIterator from '@/lib/jw/EventsIterator'
 import $ from 'jquery'
 import langData from "@/lib/jw/languages/en-US";

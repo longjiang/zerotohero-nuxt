@@ -24,8 +24,8 @@
 
 <script>
 import langData from "@/lib/jw/languages/en-US";
-import Config from "@/lib/Config";
-import Helper from "@/lib/Helper";
+import Config from "@/lib/config";
+import Helper from "@/lib/helper";
 import Wol from "@/lib/jw/Wol";
 import $ from "jquery";
 
