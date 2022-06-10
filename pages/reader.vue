@@ -23,17 +23,34 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
-          <button
-            @click="upload"
-            :class="{
-              'reader-button': true,
-            }"
-            style="font-size: 0.9em"
-            v-if="!shared"
-          >
-            <i class="fas fa-share"></i>
-            Share
-          </button>
+          <div class="reader-header-message" v-if="!$auth.loggedIn">
+            <h3 class="text-center mt-3 mb-3">
+              {{ $l2.name }} Reader (Annotator)
+            </h3>
+            <p class="text-center mb-4">
+              I can
+              <b class="text-success">convert any {{ $l2.name }} text</b>
+              into a learner-friendly format, with
+              <span v-if="$hasFeature('transliteration')">
+                {{
+                  {
+                    zh: "pinyin annotation",
+                    ja: "furigana (Japanese alphabet) annotation",
+                    ko: "Hanja byeonggi (Chinese character annotation)",
+                    vi: "Hán tự (Chinese character) annotation",
+                  }[$l2.code] || "phonetic transcription"
+                }}
+                and
+              </span>
+              a popup dictionary!
+            </p>
+          </div>
+          <div class="text-center mb-4" v-if="!shared && text">
+            <b-button @click="upload" variant="success" size="sm">
+              <i class="fas fa-paper-plane"></i>
+              Share Annotated Text
+            </b-button>
+          </div>
           <client-only>
             <div v-if="shared || sharing" class="alert alert-success mt-2">
               <div v-if="shared">
@@ -128,7 +145,7 @@
 import ReaderComp from "@/components/ReaderComp";
 import Helper from "@/lib/helper";
 import Config from "@/lib/config";
-import SAMPLE_TEXT from '@/lib/utils/sample-text'
+import SAMPLE_TEXT from "@/lib/utils/sample-text";
 
 export default {
   template: "#reader-template",
@@ -203,10 +220,10 @@ export default {
       let r = this.get(); // from localStorage
       text = r.text;
       translation = r.translation;
-      if (!text) {
+      if (!text || text.length === "") {
         if (SAMPLE_TEXT[this.$l2.code]) {
           this.text = SAMPLE_TEXT[this.$l2.code];
-      console.log(this.text)
+          this.$refs.reader.text = SAMPLE_TEXT[this.$l2.code];
         }
       }
     }
@@ -227,8 +244,8 @@ export default {
         return `${window.location.protocol}//${window.location.hostname}/${this.$l1.code}/${this.$l2.code}/reader/shared/${this.shared.id}`;
     },
     title() {
-      return this.text.trim().split(/\n+/)[0]
-    }
+      return this.text.trim().split(/\n+/)[0];
+    },
   },
   methods: {
     copyClick() {
@@ -299,8 +316,8 @@ export default {
     get() {
       let { savedTextByL2, savedTranslationByL2 } = this.getSaved();
       return {
-        text: savedTextByL2[this.$l2.code] || '',
-        translation: savedTranslationByL2[this.$l2.code] || '',
+        text: savedTextByL2[this.$l2.code] || "",
+        translation: savedTranslationByL2[this.$l2.code] || "",
       };
     },
     save() {
@@ -345,7 +362,7 @@ export default {
           savedTextByL2 = JSON.parse(tejson);
         }
         if (trjson) {
-          savedTranslationByL2 = JSON.parse(tejson);
+          savedTranslationByL2 = JSON.parse(trjson);
         }
       } catch (e) {}
       return { savedTextByL2, savedTranslationByL2 };
@@ -355,4 +372,15 @@ export default {
 </script>
 
 <style lang="scss">
+
+.copy-btn {
+  position: absolute;
+  bottom: 0.75rem;
+  right: 1.1rem;
+  color: #888;
+  font-size: 1.2rem;
+  &:hover {
+    color: #444;
+  }
+}
 </style>

@@ -13,24 +13,6 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
-          <h3 class="text-center mb-3">{{ $l2.name }} Reader (Annotator)</h3>
-          <p class="text-center mb-5">
-            I can
-            <b class="text-success">convert any {{ $l2.name }} text</b>
-            into a learner-friendly format, with
-            <span v-if="$hasFeature('transliteration')">
-              {{
-                {
-                  zh: "pinyin annotation",
-                  ja: "furigana (Japanese alphabet) annotation",
-                  ko: "Hanja byeonggi (Chinese character annotation)",
-                  vi: "Hán tự (Chinese character) annotation",
-                }[$l2.code] || "phonetic transcription"
-              }}
-              and
-            </span>
-            a popup dictionary!
-          </p>
           <div v-if="loaded">
             <div v-if="savedtexts.length > 0">
               <div

@@ -21,25 +21,6 @@
             'with-translation': translation,
           }"
         >
-          <div
-            v-if="text && text.length > 0 && !fullscreen"
-            style="font-size: 1rem; line-height: 1"
-            class="mb-3"
-          >
-            <strong>
-              <i class="fas fa-check text-success mr-1" />
-              Converted
-            </strong>
-            <div class="mt-1">
-              <small>
-                Tap on any word for a popup dictionary. Tap on the three dots
-                "..." next to each line for translation. You can customize the
-                output in
-                <router-link to="settings">Settings</router-link>
-                .
-              </small>
-            </div>
-          </div>
           <LazyTextWithSpeechBar
             :html="marked"
             :translation="translation"
@@ -368,10 +349,7 @@ export default {
 
 #reader-annotated {
   background: white;
-  padding: 1.5rem;
   border-radius: 0.25rem;
-  box-shadow: 0px 3px 10px #191c553b;
-  border: 1px solid #d7d7d8;
 }
 
 #reader-annotated {
@@ -439,14 +417,4 @@ export default {
   }
 }
 
-.copy-btn {
-  position: absolute;
-  bottom: 0.75rem;
-  right: 1.1rem;
-  color: #888;
-  font-size: 1.2rem;
-  &:hover {
-    color: #444;
-  }
-}
 </style>
