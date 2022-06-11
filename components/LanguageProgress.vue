@@ -62,29 +62,47 @@
         <b>
           {{ formatDuration(time) }}
         </b>
-        on the
+        in this app learning
         <b>{{ $l2.name }}</b>
-        section of Zero to Hero.
+        .
       </div>
       <div class="mt-3" v-if="hours < hoursNeeded">
-        If you're typical L1 {{ $l1.name }} speaker at the
-        {{ levelText }} level, it is estimated that you need
+        Once you log
         <b>{{ Math.round(hoursNeeded) }} hours</b>
-        to get to
-        <span v-if="level < 7">
-          {{ goalText }}
-        </span>
-        <span v-else>native-like mastery</span>
-        . You're
-        <b>{{ Math.round((hours / hoursNeeded) * 100) }}%</b>
-        way there,
-        <b>{{ Math.round(hoursNeeded - hours) }} more hours</b>
-        to go!
+        , you'll most likely reach
+        <b>
+          <span v-if="level < 7">
+            {{ goalText }}
+          </span>
+          <span v-else>native-like mastery</span>
+        </b>
+        .
       </div>
       <div class="mt-3" v-else>
         Typically, {{ $l1.name }} speakers need
         <b>{{ Math.round(hoursNeeded) }} hours</b>
         {{ levelText }} from to {{ goalText }}.
+      </div>
+      <div class="mt-3">
+        Weekly goal: If you log
+        <b>
+          <b-form-select
+            type="number"
+            v-model="weeklyHours"
+            :options="weeklyHoursOptions"
+            size="sm"
+            class="d-inline-block strong text-success"
+            style="width: 6rem"
+          ></b-form-select>
+          a week
+        </b>
+        , you can reach {{ levelText }} C1 in
+        <b>{{ Math.ceil(hoursNeeded / weeklyHours) }} weeks</b>
+        (about
+        <span v-if="hoursNeeded / weeklyHours > 52">
+          {{ Math.floor(hoursNeeded / weeklyHours / 4.34 / 12) }} year and
+        </span>
+        {{ Math.ceil(hoursNeeded / weeklyHours / 4.34) % 12 }} months ) .
       </div>
     </div>
   </div>
@@ -156,11 +174,23 @@ export default {
       if (goal) return goal.exam.name + " " + goal.level;
       else return "Mastery";
     },
+    weeklyHoursOptions() {
+      let options = [1, 2, 3, 7, 14, 21, 28, 35, 42, 49, 56, 63].map(
+        (value) => {
+          return {
+            text: value + " hours",
+            value,
+          };
+        }
+      );
+      return options;
+    },
   },
   data() {
     return {
       showManuallySetHours: false,
       mannuallySetHours: undefined,
+      weeklyHours: 21,
     };
   },
   watch: {
