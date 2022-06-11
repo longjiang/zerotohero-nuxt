@@ -185,7 +185,7 @@ const Dictionary = {
     hak: 'dict-hakka/dict-hakka.csv.txt',
     nan: 'dict-twblg/dict-twblg.csv.txt'
   },
-  words: {},
+  words: [],
   name: 'dialect-dict',
   tokenizationCache: {},
   credit() {
@@ -236,7 +236,7 @@ const Dictionary = {
       for (let [index, row] of sorted.entries()) {
         let definitions = row.english ? row.english.split('/').map(d => d.trim()) : row.definitions ? row.definitions.split('|').map(d => d.trim()) : []
         let word = {
-          id: index,
+          id: index.toString(),
           head: row.traditional,
           bare: row.traditional,
           pinyin: row.pinyin ? this.parsePinyin(row.pinyin) : '',
@@ -251,9 +251,9 @@ const Dictionary = {
           traditional: row.traditional,
           simplified: row.simplified,
         }
-        words[word.id] = word
+        words.push(word)
       }
-      this.words = words
+      this.words = data.sort((a, b) => b.head && a.head ? b.head.length - a.head.length : 0)
       return this
     }
   },
@@ -306,7 +306,7 @@ const Dictionary = {
    */
   get(id, head) {
     let word
-    word = this.words[id];
+    word = this.words.find(row => row.id === id)
     if (head && word.head !== head) {
       word = this.lookup(head)
     }
