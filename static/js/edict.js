@@ -5,7 +5,7 @@ importScripts('../vendor/localforage/localforage.js')
 
 const Dictionary = {
   file: undefined,
-  words: {},
+  words: [],
   tokenizationCache: {},
   name: 'edict',
   tokenizer: undefined,
@@ -116,7 +116,7 @@ const Dictionary = {
     let sorted = data.sort((a, b) =>
       a.kana && b.kana ? a.kana.length - b.kana.length : 0
     )
-    let words = {}
+    let words = []
     for (let row of sorted) {
       if (row.kanji === 'ー') delete row.kana
       let pos = row.english ? row.english.replace(/^\((.*?)\).*/gi, "$1").split(',')[0] : undefined
@@ -134,9 +134,9 @@ const Dictionary = {
         },
         romaji: wanakana.toRomaji(row.kana)
       })
-      if (word.id) words[word.id] = word
+      if (word.id) words.push(word)
     }
-    this.words = words
+    this.words = words.sort((a, b) => b.head && a.head ? b.head.length - a.head.length : 0)
     return this
   },
   async loadSmart(name) {
@@ -242,12 +242,11 @@ const Dictionary = {
    * @returns 
    */
   get(id, head) {
-    let word
-    word = this.words[id];
+    let entry = this.words.find(row => row.id === id)
     if (head && word.head !== head) {
       word = this.lookup(head)
     }
-    return word
+    return entry
   },
   isChinese(text) {
     if (this.matchChinese(text)) return true
