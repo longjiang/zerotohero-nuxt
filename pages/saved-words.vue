@@ -17,17 +17,9 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12 pt-4">
-          <p
-            v-if="dictionaryLoaded && sWLoaded && sW.length <= 0"
-            class="alert alert-warning no-saved-words text-center p-5"
-          >
-            You don't have any words saved yet. Save words by tapping on the
-            <i class="far fa-star"></i>
-            icon next to it.
-          </p>
           <div
             v-if="dictionaryLoaded && !$auth.loggedIn"
-            class="text-center alert-success p-3 pb-4 rounded mt-4"
+            class="text-center alert-success p-3 pb-4 rounded mb-4"
           >
             <p>To sync words across devices, please login.</p>
             <router-link :to="{ name: 'login' }" class="btn btn-success">
@@ -35,6 +27,13 @@
               <i class="fas fa-chevron-right"></i>
             </router-link>
           </div>
+          <p
+            v-if="dictionaryLoaded && sWLoaded && sW.length <= 0"
+            class="no-saved-words text-center p-5"
+          >
+            You don't have any words saved yet. Save words by tapping on the
+            "<i class="far fa-star"></i> SAVE" button next to it.
+          </p>
           <div v-if="dictionaryLoaded && !sWLoaded" class="text-center">
             <Loader
               :sticky="true"
@@ -129,17 +128,6 @@
               Learn (Legacy)
             </router-link>
           </div>
-          <p class="mt-3 mb-3 text-left">
-            <b>How are my words saved?</b>
-            If you are logged in, your words are saved on our servers and are
-            synced automatically. If you are not logged in, your words are
-            stored permanently in your web browser's "local storage".
-          </p>
-
-          <FeedbackPrompt
-            class=""
-            :skin="$route.meta ? $route.meta.skin : 'light'"
-          />
         </div>
       </div>
     </div>

@@ -7,7 +7,20 @@
 <template>
   <div class="main pt-3 pb-5">
     <client-only>
-      <div class="container" v-if="$auth.user">
+      <div v-if="!$auth.loggedIn" class="container">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="text-center alert-success p-3 pb-4 rounded mt-4">
+              <p>To track your learning progress, please login.</p>
+              <router-link :to="{ name: 'login' }" class="btn btn-success">
+                Login
+                <i class="fas fa-chevron-right"></i>
+              </router-link>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container" v-else>
         <div class="row">
           <div class="col-sm-12 text-center">
             <h3>{{ $auth.user.first_name }} {{ $auth.user.last_name }}</h3>
@@ -204,7 +217,7 @@ export default {
         { duration: 5000 }
       );
       this.$router.push("/");
-      await Helper.timeout(3000) 
+      await Helper.timeout(3000);
       location.reload();
     },
   },

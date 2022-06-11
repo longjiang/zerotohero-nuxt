@@ -46,15 +46,7 @@ export default {
   data() {
     return {
       messages: [
-        "Need some help?",
-        "Confused?",
-        "Not sure what this feature is for?",
-        "Lost?",
-        "Stuck?",
-        "Want to suggest a feature?",
-        "Did you find what you need?",
-        "See a Problem?",
-        "Not sure how to use this?",
+        "Feedback",
       ],
       closed: false,
       closedAgain: false,
