@@ -57,13 +57,10 @@
       <div class="bottom-label-left">
         <b class="" style="color: #e6a000">
           {{
-            String(Math.round(hoursNeeded - hours)).replace(
-              /\B(?=(\d{3})+(?!\d))/g,
-              ","
-            )
+           Math.round(weeklyHours - hours % weeklyHours)
           }}
         </b>
-        hrs more to {{ goalText }}
+        hrs left this week
       </div>
     </div>
     <div v-if="description" class="description">
