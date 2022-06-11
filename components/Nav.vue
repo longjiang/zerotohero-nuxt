@@ -786,7 +786,7 @@ export default {
           ],
         },
         {
-          icon: "octicon octicon-briefcase",
+          icon: "fas fa-briefcase",
           title: "JW",
           show: this.userIsAdmin,
           children: [
