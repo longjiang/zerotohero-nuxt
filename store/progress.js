@@ -1,6 +1,9 @@
 import Config from '@/lib/config'
 import Helper from '@/lib/helper'
 
+export const DEFAULT_LEVEL = 1
+export const DEFAULT_WEEKLY_HOURS = 7
+
 export const state = () => {
   return {
     progress: {}, // Each language has its own progress
@@ -49,6 +52,17 @@ export const mutations = {
       this._vm.$set(state, 'progress', progress)
     }
   },
+  SET_WEEKLY_HOURS(state, { l2, weeklyHours }) {
+    if (typeof localStorage !== 'undefined') {
+      if (!state.progress[l2.code]) {
+        state.progress[l2.code] = {}
+      }
+      let progress = Object.assign({}, state.progress)
+      progress[l2.code].weeklyHours = weeklyHours
+      localStorage.setItem('zthProgress', JSON.stringify(progress))
+      this._vm.$set(state, 'progress', progress)
+    }
+  },
   SET_TIME(state, { l2, time }) {
     console.log(`⏳ Set time for ${l2.name} (${l2.code}): ${parseInt(time / 1000)} seconds`)
     if (typeof localStorage !== 'undefined') {
@@ -86,6 +100,10 @@ export const actions = {
     commit('SET_LEVEL', { l2, level })
     dispatch('push')
   },
+  setWeeklyHours({ dispatch, commit }, { l2, weeklyHours }) {
+    commit('SET_WEEKLY_HOURS', { l2, weeklyHours })
+    dispatch('push')
+  },
   removeL2Progress({ dispatch, commit }, { l2 }) {
     commit('REMOVE_L2_PROGRESS', { l2 })
     dispatch('push')
@@ -114,7 +132,7 @@ export const actions = {
       // every minute
       if (time % 60000 === 0) {
         let progress = await dispatch('fetchProgressFromServer')
-        if (progress) {
+        if (progress?.[l2.code]) {
           let timeFromServer = progress[l2.code].time
           if (time > timeFromServer) {
             commit('SET_TIME', { l2, time })
@@ -149,12 +167,17 @@ export const actions = {
 }
 export const getters = {
   level: state => l2 => {
-    if (state.progress[l2.code]) return state.progress[l2.code].level || 1
+    if (state.progress[l2.code]) return state.progress[l2.code].level || DEFAULT_LEVEL
   },
   time: state => l2 => {
     let time = 0
     if (state.progress[l2.code] && state.progress[l2.code].time) time = state.progress[l2.code].time
     return time
+  },
+  weeklyHours: state => l2 => {
+    let weeklyHours = DEFAULT_WEEKLY_HOURS
+    if (state.progress[l2.code] && state.progress[l2.code].weeklyHours) weeklyHours = state.progress[l2.code].weeklyHours || DEFAULT_WEEKLY_HOURS
+    return weeklyHours
   }
 }
 

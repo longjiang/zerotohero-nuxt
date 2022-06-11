@@ -3,7 +3,7 @@
     <div class="col-6 pr-1 text-center">
       Your current level
       <b-form-select
-        v-model="mannuallySetLevel"
+        v-model="manuallySetLevel"
         :options="levels"
         @change="levelChangedByUser"
       ></b-form-select>
@@ -66,7 +66,7 @@ export default {
   data() {
     return {
       showManuallySetHours: false,
-      mannuallySetLevel: this.level,
+      manuallySetLevel: this.level,
     };
   },
   beforeDestroy() {
@@ -74,12 +74,12 @@ export default {
   },
   mounted() {
     if (this.$store.state.progress.progressLoaded)
-      this.mannuallySetLevel = Number(
+      this.manuallySetLevel = Number(
         this.$store.getters["progress/level"](this.$l2)
       );
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type === "progress/LOAD") {
-        this.mannuallySetLevel = Number(
+        this.manuallySetLevel = Number(
           this.$store.getters["progress/level"](this.$l2)
         );
       }
@@ -92,7 +92,7 @@ export default {
     levelChangedByUser() {
       this.$store.dispatch("progress/setLevel", {
         l2: this.$l2,
-        level: this.mannuallySetLevel,
+        level: this.manuallySetLevel,
       });
     },
   },

@@ -17,7 +17,7 @@
     <div v-if="showManuallySetHours" class="mt-2 mb-3">
       Mannually set your total time on {{ $l2.name }} to
       <b-form-input
-        v-model="mannuallySetHours"
+        v-model="manuallySetHours"
         type="number"
         :lazy="true"
         placeholder="hours"
@@ -88,7 +88,7 @@
         <b>
           <b-form-select
             type="number"
-            v-model="weeklyHours"
+            v-model="manuallySetWeeklyHours"
             :options="weeklyHoursOptions"
             size="sm"
             class="d-inline-block strong text-success"
@@ -174,6 +174,11 @@ export default {
       if (goal) return goal.exam.name + " " + goal.level;
       else return "Mastery";
     },
+    weeklyHours() {
+      return this.$store.state.progress.progressLoaded
+        ? Number(this.$store.getters["progress/weeklyHours"](this.$l2))
+        : 7;
+    },
     weeklyHoursOptions() {
       let options = [1, 2, 3, 7, 14, 21, 28, 35, 42, 49, 56, 63].map(
         (value) => {
@@ -189,17 +194,39 @@ export default {
   data() {
     return {
       showManuallySetHours: false,
-      mannuallySetHours: undefined,
-      weeklyHours: 21,
+      manuallySetHours: undefined,
+      manuallySetWeeklyHours: 7,
     };
   },
   watch: {
-    mannuallySetHours() {
+    manuallySetHours() {
       this.$store.dispatch("progress/setTime", {
         l2: this.$l2,
-        time: this.mannuallySetHours * 60 * 60 * 1000,
+        time: this.manuallySetHours * 60 * 60 * 1000,
       });
     },
+    manuallySetWeeklyHours() {
+      this.$store.dispatch("progress/setWeeklyHours", {
+        l2: this.$l2,
+        weeklyHours: this.manuallySetWeeklyHours,
+      });
+    }
+  },
+  beforeDestroy() {
+    this.unsubscribe();
+  },
+  mounted() {
+    if (this.$store.state.progress.progressLoaded)
+      this.manuallySetWeeklyHours = Number(
+        this.$store.getters["progress/weeklyHours"](this.$l2)
+      );
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (mutation.type === "progress/LOAD") {
+        this.manuallySetWeeklyHours = Number(
+          this.$store.getters["progress/weeklyHours"](this.$l2)
+        );
+      }
+    });
   },
   methods: {
     levelObj(level) {
