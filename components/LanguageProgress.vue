@@ -36,9 +36,13 @@
         <div
           class="notch"
           v-for="(item, index) in Array(Math.ceil(hoursNeeded / weeklyHours))"
-          :style="`width: ${100 / Math.ceil(hoursNeeded / weeklyHours)}%; height: ${progressBarHeight}`"
+          :style="`width: ${
+            100 / Math.ceil(hoursNeeded / weeklyHours)
+          }%; height: ${progressBarHeight}`"
           :key="`notch-${index}`"
-        >&nbsp;</div>
+        >
+          &nbsp;
+        </div>
       </div>
       <b-progress
         class="mt-2"
@@ -56,9 +60,7 @@
     <div class="bottom-labels">
       <div class="bottom-label-left">
         <b class="" style="color: #e6a000">
-          {{
-           Math.round(weeklyHours - hours % weeklyHours)
-          }}
+          {{ Math.round(weeklyHours - (hours % weeklyHours)) }}
         </b>
         hrs left this week
       </div>
@@ -103,7 +105,12 @@
           ></b-form-select>
           a week
         </b>
-        , you can reach {{ levelText }} C1 in
+        , you can reach
+        <span v-if="level < 7">
+          {{ goalText }}
+        </span>
+        <span v-else>the next level</span>
+        in
         <b>{{ Math.ceil(hoursNeeded / weeklyHours) }} weeks</b>
         (about
         <span v-if="hoursNeeded / weeklyHours > 52">
@@ -374,7 +381,7 @@ export default {
   position: relative;
   .notches {
     position: absolute;
-    top: 0; 
+    top: 0;
     display: flex;
     width: 100%;
     white-space: nowrap;
