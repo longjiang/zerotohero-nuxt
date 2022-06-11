@@ -790,13 +790,13 @@ export default {
           title: "JW",
           show: this.userIsAdmin,
           children: [
-            {
-              name: "jw-video",
-              title: "Video",
-              params: { languageAgnosticNaturalKey: "pub-mwbv_202205_3_VIDEO" },
-              icon: "fas fa-book",
-              show: this.userIsAdmin,
-            },
+            // {
+            //   name: "jw-video",
+            //   title: "Video",
+            //   params: { languageAgnosticNaturalKey: "pub-mwbv_202205_3_VIDEO" },
+            //   icon: "fas fa-book",
+            //   show: this.userIsAdmin,
+            // },
             {
               name: "jw-bible",
               title: "Bible",
