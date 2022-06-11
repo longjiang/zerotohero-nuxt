@@ -31,18 +31,28 @@
         spellcheck="false"
       />
     </div>
-    <b-progress
-      class="mt-2"
-      :max="hoursNeeded"
-      :show-value="progressBarShowValue"
-      :height="progressBarHeight"
-    >
-      <b-progress-bar
-        :value="hours"
-        :animated="animated"
-        variant="success"
-      ></b-progress-bar>
-    </b-progress>
+    <div class="progress-bar-wrapper">
+      <div class="notches" v-if="hoursNeeded / weeklyHours < 25">
+        <div
+          class="notch"
+          v-for="(item, index) in Array(Math.ceil(hoursNeeded / weeklyHours))"
+          :style="`width: ${100 / Math.ceil(hoursNeeded / weeklyHours)}%; height: ${progressBarHeight}`"
+          :key="`notch-${index}`"
+        >&nbsp;</div>
+      </div>
+      <b-progress
+        class="mt-2"
+        :max="hoursNeeded"
+        :show-value="progressBarShowValue"
+        :height="progressBarHeight"
+      >
+        <b-progress-bar
+          :value="hours"
+          :animated="animated"
+          variant="success"
+        ></b-progress-bar>
+      </b-progress>
+    </div>
     <div class="bottom-labels">
       <div class="bottom-label-left">
         <b class="" style="color: #e6a000">
@@ -210,7 +220,7 @@ export default {
         l2: this.$l2,
         weeklyHours: this.manuallySetWeeklyHours,
       });
-    }
+    },
   },
   beforeDestroy() {
     this.unsubscribe();
@@ -361,6 +371,28 @@ export default {
   100% {
     opacity: 0;
     transform: scale(2.5);
+  }
+}
+.progress-bar-wrapper {
+  position: relative;
+  .notches {
+    position: absolute;
+    top: 0; 
+    display: flex;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    .notch {
+      border-left: 1px solid #ffffff22;
+      border-right: 1px solid #00000018;
+      display: inline-block;
+      &:first-child {
+        border-left: none;
+      }
+      &:last-child {
+        border-right: none;
+      }
+    }
   }
 }
 </style>
