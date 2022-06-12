@@ -169,6 +169,7 @@ export default {
   plugins: [
     '~plugins/main.js',
     '~plugins/jw.js',
+    { src: '~/plugins/stripe.js', mode: 'client' },
     { src: '~/plugins/tui_editor.client.js', mode: 'client' },
     { src: '~/plugins/pwa-update.js', mode: 'client' },
     { src: '~/plugins/vuex-persist.js', mode: 'client' },
