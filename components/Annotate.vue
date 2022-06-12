@@ -325,9 +325,8 @@ export default {
         const timeout = setTimeout(() => {
           this.setTranslation(translation);
           clearTimeout(timeout);
-        }, 5000);
+        }, 10000);
         iframeTranslationClient = await getClient();
-        await Helper.timeout(1000); // Add one second wait to prevent translation from 'freezing'
         translation = await iframeTranslationClient.translate(
           text,
           this.$l1.code === 'zh' ? 'zh-CN' : this.$l1.code

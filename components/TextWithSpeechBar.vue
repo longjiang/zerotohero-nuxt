@@ -262,8 +262,8 @@ export default {
       if (this.$refs.annotate?.[0]) {
         for (let a of this.$refs.annotate) {
           if (a.text?.trim() !== "") {
-            await timeout(3000);
             a.translateClick();
+            await timeout(3000);
           }
         }
       }
