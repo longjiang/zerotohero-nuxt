@@ -323,7 +323,7 @@ export default {
         this.translationLoading = true;
         this.$emit("translationLoading", true);
         const timeout = setTimeout(() => {
-          setTranslation(translation);
+          this.setTranslation(translation);
           clearTimeout(timeout);
         }, 5000);
         iframeTranslationClient = await getClient();
