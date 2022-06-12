@@ -228,6 +228,9 @@ const Dictionary = {
         }
       }
     }
+    for (let key in this.phraseIndex) {
+      this.phraseIndex[key] = this.phraseIndex[key].sort((a,b) => a.head.length - b.head.length)
+    }
   },
   parseDictionaryCSV(data) {
     console.log("Wiktionary: parsing words from CSV...");
@@ -670,7 +673,6 @@ const Dictionary = {
             words.push({ score: similarity, w: word });
             if (similarity === 1 && !quick) {
               words = words.concat(this.stemWordsWithScores(word.w, 1));
-              words = words.concat(this.phrasesWithScores(word.w, 1));
             }
           }
         }
@@ -684,11 +686,10 @@ const Dictionary = {
               words = words.concat(lemmaWords)
             }
           }
-          let phrases = this.phrasesWithScores(word.w, 1);
-          words = words.concat(phrases);
         }
       }
       words.forEach(w => {
+        if (!w.w.phrases || w.w.phrases.length === 0) w.w.phrases = this.phraseIndex[w.w.head]?.slice(0, 6) || []
         if (w.w.stems.length > 0) { w.score = w.score - 0.1 } // So that uninflected words bubble to the top.
       })
       words = words.sort((a, b) => b.score - a.score);
