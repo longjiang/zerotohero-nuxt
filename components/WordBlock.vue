@@ -250,6 +250,18 @@
               </li>
             </ol>
           </div>
+          <div class="phrases" v-if="word.phrases">
+            <div
+              v-for="phrase in word.phrases"
+              :key="`word-${word.id}-phrase-${phrase.id}`"
+              class="phrase-wrapper"
+            >
+              <Star :word="phrase" :label="false" style="transform: scale(0.9)" /><span class="btn-phrase text-success strong">
+                {{ phrase.head }}
+              </span>
+              <span class="word-translation-item">{{ phrase.definitions.join(', ') }}</span>
+            </div>
+          </div>
         </div>
         <EntryExternal
           v-if="text || token"
@@ -299,6 +311,7 @@ import { imageProxy } from "@/lib/config";
 import WordPhotos from "@/lib/word-photos";
 import Klingon from "@/lib/klingon";
 import { mapState } from "vuex";
+import Vue from 'vue';
 
 export default {
   props: {
@@ -329,6 +342,7 @@ export default {
       savedTransliteration: undefined,
       id: `wordblock-${uniqueId()}`,
       open: false,
+      showPhrase: {}, 
       loading: true,
       text: this.$slots.default ? this.$slots.default[0].text : undefined,
       saved: false,
@@ -504,6 +518,9 @@ export default {
     },
   },
   methods: {
+    togglePhrase(id) {
+      Vue.set(this.showPhrase, id, !this.showPhrase[id])
+    },
     stripAccents(str) {
       str = str
         .normalize("NFD")
