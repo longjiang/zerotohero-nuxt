@@ -248,7 +248,7 @@ export default {
       if (!text || text.length === "") {
         if (SAMPLE_TEXT[this.$l2.code]) {
           this.text = SAMPLE_TEXT[this.$l2.code];
-          this.$refs.reader.text = SAMPLE_TEXT[this.$l2.code];
+          if (this.$refs.reader) this.$refs.reader.text = SAMPLE_TEXT[this.$l2.code];
         }
       }
     }
