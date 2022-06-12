@@ -8,12 +8,16 @@ const Dictionary = {
   words: [],
   headIndex: {},
   searchIndex: {},
+  phraseIndex: {},
   cache: {},
   tables: [],
   NlpjsTFrDict: {},
   frequency: undefined,
   useJSON: [],
   hasFrequency: [],
+  indexDbVerByLang: {
+    fra: 2
+  },
   hanRegex: /[\u2E80-\u2E99\u2E9B-\u2EF3\u2F00-\u2FD5\u3005\u3007\u3021-\u3029\u3038-\u303B‌​\u3400-\u4DB5\u4E00-\u9FCC\uF900-\uFA6D\uFA70-\uFAD9]+/g,
   hanRegexStrict: /^[\u2E80-\u2E99\u2E9B-\u2EF3\u2F00-\u2FD5\u3005\u3007\u3021-\u3029\u3038-\u303B‌​\u3400-\u4DB5\u4E00-\u9FCC\uF900-\uFA6D\uFA70-\uFAD9]+$/,
   tokenizationCache: {},
@@ -178,6 +182,7 @@ const Dictionary = {
   async loadWords(file) {
     let data
     let indexedDBKey = `wiktionary-${this.l2}-${this.l1}`
+    if (this.indexDbVerByLang[this.l2]) indexedDBKey += '-v' + this.indexDbVerByLang[this.l2] // Force refresh a dictionary when it's outdated
     if (!this.useJSON.includes(this.l2)) {
       data = await localforage.getItem(indexedDBKey)
     }
@@ -215,6 +220,12 @@ const Dictionary = {
         this[indexType + "Index"][word[indexType]] = this[indexType + "Index"][
           word[indexType]
         ].concat(word);
+      }
+      if (word.head.includes(" ")) {
+        for (let w of word.head.split(/\s+/)) {
+          if (!this.phraseIndex[w]) this.phraseIndex[w] = [word]
+          else this.phraseIndex[w].push(word)
+        }
       }
     }
   },
@@ -563,8 +574,6 @@ const Dictionary = {
         word.frequency = Math.round((item.frequency / maxFrequency) * 1000);
       return word;
     });
-    words = words.filter(item => item.word && !item.word.includes(" "));
-    // words = words.filter(item => item.frequency)
     let csv = Papa.unparse(words);
     console.log("CSV exported.");
     return csv;
@@ -680,7 +689,7 @@ const Dictionary = {
         }
       }
       words.forEach(w => {
-        if (w.w.stems.length > 0) { w.score = w.score - 0.1} // So that uninflected words bubble to the top.
+        if (w.w.stems.length > 0) { w.score = w.score - 0.1 } // So that uninflected words bubble to the top.
       })
       words = words.sort((a, b) => b.score - a.score);
     }
@@ -1104,16 +1113,17 @@ const Dictionary = {
       return stemWordsWithScores;
     } else return [];
   },
+  /**
+   * Find phrases that contain a word
+   * @param {Object} word the word
+   * @param {Number} score (optional) the score
+   * @returns {Array} An array of phrases each wrapped in an object { w: word, score: score }
+   */
   phrasesWithScores(word, score = undefined) {
-    if (word.phrases && word.phrases.length > 0) {
-      let phrases = [];
-      for (let s of word.phrases) {
-        phrases = phrases.concat(this.lookupMultiple(s));
-      }
-      phrasesWithScores = phrases.map(w => {
-        return { score, w };
-      });
-      return phrasesWithScores;
+    let phraseObjs = this.phraseIndex[word.head]
+    if (phraseObjs) {
+      let mapped = phraseObjs.map(w => { return { w, score } })
+      return mapped
     } else return [];
   },
   unique(a) {
