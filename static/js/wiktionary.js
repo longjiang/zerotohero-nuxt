@@ -598,10 +598,7 @@ const Dictionary = {
    */
   get(id, head) {
     let word
-    if (this.supplementalLangs[this.l2]) {
-      // This comes from the supplemental dictionary
-      word = this.words.find(w => w.id === id);
-    } else word = this.words[id];
+    word = this.words.find(w => w.id === id);
     if (head && word?.head !== head) {
       word = this.lookup(head)
     }

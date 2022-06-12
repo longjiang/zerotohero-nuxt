@@ -203,6 +203,7 @@ export default {
         mapped = Object.assign(mapped, word);
         mapped.l2 = this.$l2.code
         mapped.definitions = word.definitions.join("; ");
+        mapped.date = savedWord.date
         if (word.simplified || word.kana || word.hangul) delete mapped.head;
         delete mapped.cjk;
         delete mapped.search;
