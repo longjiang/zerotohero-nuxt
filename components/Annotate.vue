@@ -330,7 +330,7 @@ export default {
         await Helper.timeout(1000); // Add one second wait to prevent translation from 'freezing'
         translation = await iframeTranslationClient.translate(
           text,
-          this.$l1.code
+          this.$l1.code === 'zh' ? 'zh-CN' : this.$l1.code
         );
         iframeTranslationClient.destroy()
         this.setTranslation(translation);
