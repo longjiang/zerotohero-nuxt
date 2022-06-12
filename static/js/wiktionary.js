@@ -1,5 +1,6 @@
 importScripts("../vendor/fastest-levenshtein/fastest-levenshtein.js");
 importScripts("../vendor/localforage/localforage.js")
+importScripts("../vendor/hash-string/hash-string.min.js")
 
 const Dictionary = {
   name: "wiktionary",
@@ -205,7 +206,7 @@ const Dictionary = {
       }
     });
     words = words.map((word, index) => {
-      word.id = String(index);
+      word.id = 'w' + hash(word.head + word.definitions[0]);
       return word;
     });
     console.log(`Wiktionary: ${file} loaded.`);
