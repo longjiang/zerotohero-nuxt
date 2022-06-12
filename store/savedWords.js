@@ -28,10 +28,10 @@ const buildIndex = (l2, state) => {
 const parseSavedWordsCSV = (csv) => {
   let parsed = Papa.parse(csv, { header: true })
   let rows = parsed.data
-  let savedWords = Helper.groupArrayBy(rows, 'l2')
-  for (let sW of savedWords) {
-    sW.forms = sW.forms.split(',')
+  for (let sW of rows) {
+    sW.forms = sW.forms?.split(',') || [sW.head]
   }
+  let savedWords = Helper.groupArrayBy(rows, 'l2')
   return savedWords
 }
 
@@ -66,7 +66,7 @@ export const mutations = {
         if (!state.savedWords[l2]) {
           state.savedWords[l2] = []
         }
-        for (let sW of savedWords) {
+        for (let sW of savedWords[l2]) {
           if (!state.idIndex[l2][sW.id])
             state.savedWords[l2].push(sW)
         }

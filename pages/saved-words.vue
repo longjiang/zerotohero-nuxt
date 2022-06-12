@@ -31,8 +31,9 @@
             v-if="dictionaryLoaded && sWLoaded && sW.length <= 0"
             class="no-saved-words text-center p-5"
           >
-            You don't have any words saved yet. Save words by tapping on the
-            "<i class="far fa-star"></i> SAVE" button next to it.
+            You don't have any words saved yet. Save words by tapping on the "
+            <i class="far fa-star"></i>
+            SAVE" button next to it.
           </p>
           <div v-if="dictionaryLoaded && !sWLoaded" class="text-center">
             <Loader
@@ -89,45 +90,59 @@
           </div>
         </div>
       </div>
-      <div class="row mt-4 text-center">
-        <div class="col-sm-12">
-          <div class="text-center">
-            <Loader class="mt-4" @loaded="updateLoaded" />
-          </div>
+    </div>
+    <div class="row mt-4 text-center">
+      <div class="col-sm-12">
+        <div class="text-center">
+          <Loader class="mt-4" @loaded="updateLoaded" />
+        </div>
 
-          <div>
-            <a
-              class="download-csv btn btn-success btn-small"
-              :href="csvHref"
-              :download="`${$l2.name
-                .toLowerCase()
-                .replace(/ /g, '-')}-saved-words.csv`"
-              variant="primary"
-              size="sm"
-              v-if="sW.length > 0"
-            >
-              <i class="fa fa-download mr-1"></i>
-              {{ $t("Export CSV") }}
-            </a>
-            <b-button
-              class="remove-all btn-small"
-              variant="danger"
-              size="sm"
-              v-on:click="removeAllClick"
-              v-if="this.sW.length > 0"
-            >
-              <i class="fas fa-times mr-1"></i>
-              {{ $t("Remove All") }}
-            </b-button>
-            <router-link
-              v-if="sW.length > 0"
-              class="btn btn-small"
-              :to="`/${$l1.code}/${$l2.code}/learn-interactive/saved`"
-            >
-              <i class="fa fa-chalkboard"></i>
-              Learn (Legacy)
-            </router-link>
-          </div>
+        <div>
+          <input
+            id="fileUpload"
+            ref="upload"
+            type="file"
+            hidden
+            @change="importCSV"
+          />
+          <button
+            class="btn btn-ghost-dark btn-small text-secondary"
+            @click="importButtonClick()"
+          >
+            <i class="fa fa-upload mr-1"></i>
+            Import CSV
+          </button>
+          <a
+            class="download-csv btn btn-success btn-small"
+            :href="csvHref"
+            :download="`${$l2.name
+              .toLowerCase()
+              .replace(/ /g, '-')}-saved-words.csv`"
+            variant="primary"
+            size="sm"
+            v-if="sW.length > 0"
+          >
+            <i class="fa fa-download mr-1"></i>
+            {{ $t("Export CSV") }}
+          </a>
+          <b-button
+            class="remove-all btn-small"
+            variant="danger"
+            size="sm"
+            v-on:click="removeAllClick"
+            v-if="this.sW.length > 0"
+          >
+            <i class="fas fa-times mr-1"></i>
+            {{ $t("Remove All") }}
+          </b-button>
+          <router-link
+            v-if="sW.length > 0"
+            class="btn btn-small"
+            :to="`/${$l1.code}/${$l2.code}/learn-interactive/saved`"
+          >
+            <i class="fa fa-chalkboard"></i>
+            Learn (Legacy)
+          </router-link>
         </div>
       </div>
     </div>
@@ -188,6 +203,7 @@ export default {
         let word = savedWord.word;
         let mapped = { id: word.id, head: word.head };
         mapped = Object.assign(mapped, word);
+        mapped.l2 = this.$l2.code
         mapped.definitions = word.definitions.join("; ");
         if (word.simplified || word.kana || word.hangul) delete mapped.head;
         delete mapped.cjk;
@@ -224,6 +240,27 @@ export default {
     this.unsubscribe();
   },
   methods: {
+    importButtonClick() {
+      this.$refs["upload"].click();
+    },
+    importCSV(event) {
+      let files = event.target.files;
+      for (let file of files) {
+        let reader = new FileReader();
+        reader.readAsText(file);
+        reader.onload = (event) => {
+          let csv = event.target.result;
+          let parsed = Papa.parse(csv, { header: true });
+          let rows = parsed.data;
+          if (rows && rows[0] && rows[0].id) {
+            this.importSavedWords(csv);
+          }
+        };
+      }
+    },
+    importSavedWords(csv) {
+      this.$store.dispatch("savedWords/importWords", csv);
+    },
     updateLoaded(loaded) {
       this.dictionaryLoaded = loaded;
     },
@@ -236,7 +273,9 @@ export default {
         for (let savedWord of this.$store.state.savedWords.savedWords[
           this.$l2.code
         ]) {
-          let word = await (await this.$getDictionary()).get(savedWord.id, savedWord.forms[0]);
+          let word = await (
+            await this.$getDictionary()
+          ).get(savedWord.id, savedWord.forms[0]);
           if (word) {
             let r = Object.assign({}, savedWord);
             r.word = word;
@@ -247,9 +286,6 @@ export default {
       this.sW = sW;
       this.sWLoaded = true;
     },
-    showImportClick() {
-      $(".import-wrapper").toggleClass("hidden");
-    },
     removeAllClick() {
       const confirmed = confirm(
         "Are you sure you want to remove all your saved words?"
@@ -258,7 +294,6 @@ export default {
         this.$store.dispatch("savedWords/removeAll", {
           l2: this.$l2.code,
         });
-        $(".export-wrapper").toggleClass("hidden", true);
       }
     },
   },

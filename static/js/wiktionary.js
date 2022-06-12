@@ -602,7 +602,7 @@ const Dictionary = {
       // This comes from the supplemental dictionary
       word = this.words.find(w => w.id === id);
     } else word = this.words[id];
-    if (head && word.head !== head) {
+    if (head && word?.head !== head) {
       word = this.lookup(head)
     }
     return word
