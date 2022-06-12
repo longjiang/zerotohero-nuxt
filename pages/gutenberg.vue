@@ -8,10 +8,7 @@
   <div class="main">
     <div class="container pt-4 pb-5">
       <div class="row">
-        <div
-          class="col-sm-12 col-lg-8 col-xl-9 pt-3 pb-5"
-          v-if="bookData && filteredHtml"
-        >
+        <div class="col-sm-12 pt-3 pb-5" v-if="bookData && filteredHtml">
           <LazyTextWithSpeechBar
             :html="filteredHtml"
             :page="page"
@@ -20,19 +17,15 @@
             @goToPage="goToPage"
           />
         </div>
-        <div class="col-sm-12 col-lg-4 col-xl-3" style="">
+        <div class="col-sm-12 mb-4">
           <div
-            style="
-              max-width: 15rem;
-              margin: 1.5rem auto;
-              position: sticky;
-              top: 0.5rem;
-              border: 1px solid #ddd;
-              border-radius: 0.5rem;
-              padding: 1rem;
-            "
+            style="border: 1px solid #ddd; border-radius: 0.5rem; padding: 1rem"
           >
-            <div class="book-info" v-if="bookData">
+            <div
+              class="book-info"
+              v-if="bookData"
+              style="max-width: 15rem; margin: 0 auto 1.5rem auto"
+            >
               <div class="p-4">
                 <router-link
                   :to="{
@@ -159,11 +152,16 @@ export default {
           this.bookData = bookData;
         }
       }
-        if (this.bookData.formats["text/html"]) {
-          let html = await Helper.proxy(this.bookData.formats["text/html"]);
-          if (html) this.html = html;
-        }
-        this.$store.dispatch("bookshelf/update", Object.assign(Object.assign({}, this.bookData), {currentPage: this.page}));
+      if (this.bookData.formats["text/html"]) {
+        let html = await Helper.proxy(this.bookData.formats["text/html"]);
+        if (html) this.html = html;
+      }
+      this.$store.dispatch(
+        "bookshelf/update",
+        Object.assign(Object.assign({}, this.bookData), {
+          currentPage: this.page,
+        })
+      );
     } catch (err) {
       Helper.logError(err);
     }
