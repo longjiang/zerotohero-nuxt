@@ -146,7 +146,7 @@ export default {
     this.$store.dispatch("bookshelf/load");
     try {
       if (!this.bookData) {
-        let res = await axios.get(`http://gutendex.com/books/${this.id}`);
+        let res = await axios.get(`https://gutendex.com/books/${this.id}`);
         if (res && res.data) {
           let bookData = res.data;
           this.bookData = bookData;
