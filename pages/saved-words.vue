@@ -106,14 +106,14 @@
             @change="importCSV"
           />
           <button
-            class="btn btn-ghost-dark btn-small text-secondary"
+            class="btn btn-sm text-secondary"
             @click="importButtonClick()"
           >
             <i class="fa fa-upload mr-1"></i>
             Import CSV
           </button>
           <a
-            class="download-csv btn btn-success btn-small"
+            class="download-csv btn btn-sm text-secondary"
             :href="csvHref"
             :download="`${$l2.name
               .toLowerCase()
@@ -125,19 +125,17 @@
             <i class="fa fa-download mr-1"></i>
             {{ $t("Export CSV") }}
           </a>
-          <b-button
-            class="remove-all btn-small"
-            variant="danger"
-            size="sm"
+          <button
+            class="remove-all text-danger btn btn-sm"
             v-on:click="removeAllClick"
             v-if="this.sW.length > 0"
           >
             <i class="fas fa-times mr-1"></i>
             {{ $t("Remove All") }}
-          </b-button>
+          </button>
           <router-link
             v-if="sW.length > 0"
-            class="btn btn-small"
+            class="btn btn-sm text-secondary"
             :to="`/${$l1.code}/${$l2.code}/learn-interactive/saved`"
           >
             <i class="fa fa-chalkboard"></i>
