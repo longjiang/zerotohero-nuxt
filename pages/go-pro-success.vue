@@ -11,9 +11,9 @@
         <div>
           <div v-if="$auth.loggedIn">
             <div>
-              You are logged in as
+              Welcome,
               <b>{{ $auth.user ? $auth.user.email : "" }}</b>
-              (User #{{ $auth.user.id }}) {{ pro ? '🚀' : '' }}
+              (User #{{ $auth.user.id }}) {{ pro ? "🚀" : "" }}
               <span class="ml-2" />
               <router-link to="/logout">Logout</router-link>
             </div>
@@ -32,9 +32,7 @@
               </router-link>
             </div>
           </div>
-          <div v-else>
-
-          </div>
+          <div v-else></div>
         </div>
       </div>
     </div>
@@ -42,11 +40,31 @@
 </template>
 
 <script>
+import Config from '@/lib/config'
+
 export default {
+  async mounted() {
+    if (this.$auth.loggedIn) {
+      let response = await this.$authios.get(`${Config.wiki}users/me`);
+      if (response.data && response.data.data) {
+        let user = response.data.data;
+        this.$auth.setUser(user);
+        if (this.pro) {
+          this.$toast.success(
+            `Congrats ${this.$auth.user.first_name}, you're now Pro!`,
+            {
+              position: "top-center",
+              duration: 5000,
+            }
+          );
+        }
+      }
+    }
+  },
   computed: {
     pro() {
-      return [1, 4].includes(Number(this.$auth.user?.role)) ? true : false
-    }
-  }
-}
+      return [1, 4].includes(Number(this.$auth.user?.role)) ? true : false;
+    },
+  },
+};
 </script>

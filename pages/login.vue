@@ -65,10 +65,18 @@
                 Login
               </b-button>
               <div class="mt-3 text-center">
-                <router-link :to="{ name: 'register' }">
+                <router-link
+                  :to="{ name: 'register', query: { redirect: $route.query.redirect } }"
+                >
                   Register
-                </router-link>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <router-link :to="{ name: 'forgot-password' }">
+                </router-link>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <router-link
+                  :to="{
+                    name: 'forgot-password',
+                    query: { redirect: $route.query.redirect },
+                  }"
+                >
                   Forgot Password?
                 </router-link>
               </div>
@@ -120,12 +128,16 @@ export default {
             position: "top-center",
             duration: 5000,
           });
-          if (this.$l1 && this.$l2)
-            this.$router.push({
-              name: "profile",
-              params: { l1: this.$l1.code, l2: this.$l2.code },
-            });
-          else this.$router.push("/");
+          if (this.$route.query.redirect) {
+            this.$router.push({ path: this.$route.query.redirect });
+          } else {
+            if (this.$l1 && this.$l2)
+              this.$router.push({
+                name: "profile",
+                params: { l1: this.$l1.code, l2: this.$l2.code },
+              });
+            else this.$router.push("/");
+          }
         }
       } catch (err) {
         if (err.response && err.response.data) {

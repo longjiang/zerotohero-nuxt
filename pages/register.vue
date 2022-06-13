@@ -68,7 +68,12 @@
               Sign Up
             </b-button>
             <div class="mt-3 text-center">
-              <router-link :to="{ name: 'login' }">
+              <router-link
+                :to="{
+                  name: 'login',
+                  query: { redirect: $route.query.redirect },
+                }"
+              >
                 I have an account
                 <i class="fas fa-chevron-right ml-1"></i>
               </router-link>
@@ -129,16 +134,23 @@ export default {
             if (response.data && response.data.data) {
               let user = response.data.data;
               this.$auth.setUser(user);
-              this.$toast.success(`Registration successful. Welcome aboard, ${this.form.first_name}!`, {
-                position: "top-center",
-                duration: 5000,
-              });
-              if (this.$l1 && this.$l2)
-                this.$router.push({
-                  name: "profile",
-                  params: { l1: this.$l1.code, l2: this.$l2.code },
-                });
-              else this.$router.push("/");
+              this.$toast.success(
+                `Registration successful. Welcome aboard, ${this.form.first_name}!`,
+                {
+                  position: "top-center",
+                  duration: 5000,
+                }
+              );
+              if (this.$route.query.redirect) {
+                this.$router.push({ path: this.$route.query.redirect });
+              } else {
+                if (this.$l1 && this.$l2)
+                  this.$router.push({
+                    name: "profile",
+                    params: { l1: this.$l1.code, l2: this.$l2.code },
+                  });
+                else this.$router.push("/");
+              }
             }
           }
         }
