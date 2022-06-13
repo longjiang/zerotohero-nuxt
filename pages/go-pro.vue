@@ -28,6 +28,7 @@
             <div>
               You are logged in as
               <b>{{ $auth.user ? $auth.user.email : "" }}</b>
+              (ID: {{ $auth.user.id }})
               <span class="ml-2" />
               <router-link to="/logout">Logout</router-link>
             </div>
@@ -74,11 +75,11 @@ export default {
       loading: false,
       lineItems: [
         {
-          price: "price_1L9yi0G5EbMGvOafLzk17HYw", // The id of the one-time price you created in your Stripe dashboard
+          price: "price_1L9zlDG5EbMGvOafpz7PnnGt", // The id of the one-time price you created in your Stripe dashboard
           quantity: 1,
         },
       ],
-      successURL: HOST + "/go-pro-success",
+      successURL: `https://solid-sheep-hang-23-82-193-163.loca.lt/order/success?user_id=${this.$auth.user.id}&session_id={CHECKOUT_SESSION_ID}`,
       cancelURL: HOST + "/go-pro-cancel",
     };
   },
