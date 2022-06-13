@@ -194,7 +194,7 @@ export default {
     largeEpisodeCount: {
       type: Number, // Mannually set the number of episode displayed in the episode navigator
     },
-    layout: {
+    initialLayout: {
       type: String,
       default: "horizontal", // or 'vertical', 'mini'
     },
@@ -240,21 +240,22 @@ export default {
   },
   data() {
     return {
-      speaking: false,
-      transcriptKey: 0,
+      audioMode: false,
+      collapsed: false,
+      currentTime: 0,
+      duration: undefined,
+      enableTranslationEditing: false,
+      layout: this.initialLayout,
       neverPlayed: true,
       paused: true,
       repeatMode: false,
-      audioMode: false,
       showSubsEditing: false,
-      enableTranslationEditing: false,
-      currentTime: 0,
-      videoInfoKey: 0,
+      speaking: false,
       speed: 1,
-      collapsed: false,
-      duration: undefined,
-      viewportWidth: undefined,
+      transcriptKey: 0,
+      videoInfoKey: 0,
       viewportHeight: undefined,
+      viewportWidth: undefined,
     };
   },
   computed: {

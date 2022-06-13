@@ -59,7 +59,7 @@
             @trasnlationLineKeydown="trasnlationLineKeydown"
           />
         </template>
-        <YouNeedPro v-if="filteredLines.length < lines.length && !pro" style="position: absolute; bottom: 0; width: 100%;" />
+        <YouNeedPro v-if="!single && filteredLines.length < lines.length && !pro" style="position: absolute; bottom: 0; width: 100%;" />
       </div>
       <div
         v-observe-visibility="visibilityChanged"

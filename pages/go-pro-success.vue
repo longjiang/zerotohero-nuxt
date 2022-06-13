@@ -5,49 +5,52 @@
   }
 </router>
 <template>
-  <div class="main container mt-5 p-4 rounded shadow">
-    <div class="row">
-      <div class="col-sm-12">
-        <h3>You’re now Pro!</h3>
-        <client-only>
-          <div v-if="$auth.loggedIn && $auth.user && pro">
-            <div>
-              Welcome,
-              <b>{{ $auth.user ? $auth.user.email : "" }}</b>
-              (User #{{ $auth.user.id }}) {{ pro ? "🚀" : "" }}
-              <span class="ml-2" />
-              <router-link to="/logout">Logout</router-link>
+  <div class="bg">
+    <SiteTopBar />
+    <div class="go-pro-wrapper container">
+      <div class="row">
+        <div class="col-sm-12">
+          <div>
+            <Logo :forcePro="true" skin="light" class="logo" />
+            <hr />
+          </div>
+          <div class="mt-4" />
+          <h3 class="text-center mt-3">🎉 You’re now Pro!</h3>
+          <div class="mt-4" />
+          <client-only>
+            <div v-if="$auth.loggedIn && $auth.user && pro" class="text-center">
+              <div>
+                Welcome
+                <b>{{ $auth.user ? $auth.user.first_name : "" }}</b>, you now enjoy the benefit of a Pro account across all languages.
+              </div>
+              <div class="mt-4"></div>
+              <div>
+                <router-link
+                  :to="{ path: '/' }"
+                  class="btn btn-primary pl-4 pr-4"
+                >
+                  Yay!
+                </router-link>
+              </div>
             </div>
-            <div class="mt-3"></div>
-            <div v-if="pro">
+            <div v-else class="text-center">
               <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed
-                praesentium ex excepturi rem magnam vitae inventore doloribus
-                voluptatem sunt magni alias quas deserunt animi ipsam, mollitia
-                nisi reprehenderit distinctio eum.
+                Your upgrade was successful. Please login again to activate your
+                Pro features.
               </p>
-              <div class="mt-3" />
-              <router-link class="btn btn-success" to="/">
-                Back to Homepage
-              </router-link>
+              <div class="mt-4" />
+              <div>
+                <router-link
+                  :to="{ path: '/login?redirect=/go-pro-success' }"
+                  class="btn btn-primary pl-4 pr-4"
+                >
+                  Login
+                  <i class="fas fa-chevron-right"></i>
+                </router-link>
+              </div>
             </div>
-          </div>
-          <div v-else>
-            <p>
-              Your upgrade was successful. Please login again to activate your Pro features.
-            </p>
-            <div class="mt-3" />
-            <div>
-              <router-link
-                :to="{ path: '/login?redirect=/go-pro-success' }"
-                class="btn btn-success"
-              >
-                Login
-                <i class="fas fa-chevron-right"></i>
-              </router-link>
-            </div>
-          </div>
-        </client-only>
+          </client-only>
+        </div>
       </div>
     </div>
   </div>
@@ -82,3 +85,21 @@ export default {
   },
 };
 </script>
+<style scoped>
+.bg {
+  min-height: 100vh;
+}
+.logo {
+  margin-top: -5.5rem;
+}
+.go-pro-wrapper {
+  margin-top: 10rem;
+  max-width: 30rem;
+  padding: 2rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.7333333333);
+  box-shadow: 0 0 30px rgb(0 0 0 / 48%);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+}
+</style>

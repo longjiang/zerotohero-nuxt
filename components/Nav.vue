@@ -1259,7 +1259,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .zth-nav-wrapper.zth-nav-side-bar {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);

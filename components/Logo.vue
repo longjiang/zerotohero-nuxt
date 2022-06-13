@@ -15,7 +15,8 @@
           class="rocket-icon"
         />
       </div>
-      <div class="mt-3" />
+      <div class="mt-3" v-if="pro" />
+      <div v-else />
       <div class="word-mark">
         Zero to Hero
         <img

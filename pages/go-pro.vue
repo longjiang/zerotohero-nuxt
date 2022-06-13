@@ -5,66 +5,66 @@
   }
 </router>
 <template>
-  <div class="main container mt-5 p-4 rounded shadow">
-    <div class="row">
-      <div class="col-sm-12">
-        <div v-if="!pro">
-          <h3>Pro benefits</h3>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum
-            porro quam praesentium dicta mollitia expedita tempore, eaque
-            cum placeat sunt odio maiores, doloribus illum aspernatur
-            temporibus quasi! Eveniet, tempore magnam.
-          </p>
-        </div>
-        <div v-if="$auth.loggedIn && $auth.user">
+  <div class="bg">
+    <SiteTopBar />
+    <div class="go-pro-wrapper container">
+      <div class="row">
+        <div class="col-sm-12">
           <div>
-            Welcome, 
-            <b>{{ $auth.user ? $auth.user.email : "" }}</b>
-            (ID: {{ $auth.user.id }})
-            <span class="ml-2" />
-            <router-link to="/logout">Logout</router-link>
+            <Logo :forcePro="true" skin="light" class="logo" />
+            <hr />
           </div>
-          <div class="mt-3"></div>
-          <div v-if="[1, 4].includes(Number($auth.user.role))">
-            <p>You are already Pro. Enjoy!</p>
-            <router-link class="btn btn-success" to="/">
-              Back to Homepage
-            </router-link>
+          <div v-if="$auth.loggedIn && $auth.user" class="text-center">
+            <p style="font-size: 1.2em">
+              Welcome
+              <b>{{ $auth.user ? $auth.user.first_name : "" }}</b>, let's get you started with a Pro account.
+            </p>
+            <div class="mt-4"></div>
+            <div v-if="[1, 4].includes(Number($auth.user.role))">
+              <p>You are already Pro. Enjoy!</p>
+              <router-link class="btn btn-primary mb-3" to="/">
+                Back to Homepage
+              </router-link>
+            </div>
+            <div v-else>
+              <stripe-checkout
+                ref="checkoutRef"
+                mode="payment"
+                :pk="publishableKey"
+                :line-items="lineItems"
+                :success-url="successURL"
+                :cancel-url="cancelURL"
+                @loading="(v) => (loading = v)"
+              />
+              <b-button @click="submit" variant="primary mb-3 pl-3 pr-3">
+                Proceed to Checkout
+                <i class="fas fa-chevron-right"></i>
+              </b-button>
+            </div>
           </div>
-          <div v-else>
-            <stripe-checkout
-              ref="checkoutRef"
-              mode="payment"
-              :pk="publishableKey"
-              :line-items="lineItems"
-              :success-url="successURL"
-              :cancel-url="cancelURL"
-              @loading="(v) => (loading = v)"
-            />
-            <b-button @click="submit" variant="success">
-              Buy Pro
-              <i class="fas fa-chevron-right"></i>
-            </b-button>
+          <div v-else class="text-center">
+            <p style="font-size: 1.2em">
+              Before you get Pro, you need to create an account.
+            </p>
+            <div>
+              <router-link
+                :to="{ path: '/register?redirect=/go-pro' }"
+                class="btn btn-primary mb-3"
+              >
+                Create an Account
+                <i class="fas fa-chevron-right"></i>
+              </router-link>
+              <br />
+              <router-link
+                :to="{ path: '/login?redirect=/go-pro' }"
+                class="text-secondary"
+              >
+                Already have an account? Please
+                <u>login</u>
+                .
+              </router-link>
+            </div>
           </div>
-        </div>
-        <div v-else>
-          <p>Before you get Pro, you need to login, or create an account.</p>
-          <router-link
-            :to="{ path: '/register?redirect=/go-pro' }"
-            class="btn btn-success"
-          >
-            Create an Account
-            <i class="fas fa-chevron-right"></i>
-          </router-link>
-          <span class="mr-1" />
-          <router-link
-            :to="{ path: '/login?redirect=/go-pro' }"
-            class="btn btn-secondary"
-          >
-            Login
-            <i class="fas fa-chevron-right"></i>
-          </router-link>
         </div>
       </div>
     </div>
@@ -93,8 +93,8 @@ export default {
   },
   computed: {
     pro() {
-      return [1, 4].includes(Number(this.$auth.user?.role)) ? true : false
-    }
+      return [1, 4].includes(Number(this.$auth.user?.role)) ? true : false;
+    },
   },
   methods: {
     submit() {
@@ -104,3 +104,21 @@ export default {
   },
 };
 </script>
+<style scoped>
+.bg {
+  min-height: 100vh;
+}
+.logo {
+  margin-top: -5.5rem;
+}
+.go-pro-wrapper {
+  margin-top: 10rem;
+  max-width: 30rem;
+  padding: 2rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.7333333333);
+  box-shadow: 0 0 30px rgb(0 0 0 / 48%);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+}
+</style>

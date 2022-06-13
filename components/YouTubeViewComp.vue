@@ -54,7 +54,7 @@
         :showType="showType"
         :episodes="episodes"
         :forcePortrait="false"
-        :layout="layout"
+        :initialLayout="layout"
         :largeEpisodeCount="largeEpisodeCount"
         @ended="updateEnded"
         @prev="goToPreviousEpisode"
@@ -386,7 +386,7 @@ export default {
       this.$emit("close", this.youtube_id);
     },
     onYouTubeUpdateLayout(layout) {
-      this.initialLayout = initialLayout;
+      this.initialLayout = layout;
     },
     async onVideoUnavailable(youtube_id) {
       if (this.video.youtube_id === youtube_id) {
