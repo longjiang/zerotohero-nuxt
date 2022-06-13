@@ -49,12 +49,12 @@
         </div>
         <div v-else>
           <p>Before you get Pro, you need to login, or create an account.</p>
-          <router-link to="/register" class="btn btn-success">
+          <router-link :to="{ path: '/register' }" class="btn btn-success">
             Create an Account
             <i class="fas fa-chevron-right"></i>
           </router-link>
           <span class="mr-1" />
-          <router-link to="/login" class="btn btn-secondary">
+          <router-link :to="{ path: '/login' }" class="btn btn-secondary">
             Login
             <i class="fas fa-chevron-right"></i>
           </router-link>
