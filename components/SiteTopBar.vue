@@ -102,12 +102,14 @@
             <span class="saved-words-count" v-if="badge && badge !== 0">
               {{ badge }}
             </span>
-            <img
-              v-if="pro"
-              src="/img/icon-rocket.png"
-              data-not-lazy
-              class="rocket-icon"
-            />
+            <client-only>
+              <img
+                v-if="pro"
+                src="/img/icon-rocket.png"
+                data-not-lazy
+                class="rocket-icon"
+              />
+            </client-only>
           </router-link>
         </div>
       </template>

@@ -8,23 +8,27 @@
           class="z2h-icon"
           data-not-lazy
         />
-        <img
-          v-if="pro"
-          src="/img/icon-rocket.png"
-          data-not-lazy
-          class="rocket-icon"
-        />
+        <client-only>
+          <img
+            v-if="pro"
+            src="/img/icon-rocket.png"
+            data-not-lazy
+            class="rocket-icon"
+          />
+        </client-only>
       </div>
       <div class="mt-3" v-if="pro" />
       <div v-else />
       <div class="word-mark">
         Zero to Hero
-        <img
-          v-if="pro"
-          src="/img/icon-pro.png"
-          data-not-lazy
-          class="pro-icon"
-        />
+        <client-only>
+          <img
+            v-if="pro"
+            src="/img/icon-pro.png"
+            data-not-lazy
+            class="pro-icon"
+          />
+        </client-only>
       </div>
     </router-link>
   </div>
@@ -38,11 +42,11 @@ export default {
     },
     forcePro: {
       default: false,
-    }
+    },
   },
   computed: {
     pro() {
-      if (this.forcePro) return true
+      if (this.forcePro) return true;
       return [1, 4].includes(Number(this.$auth.user?.role)) ? true : false;
     },
   },

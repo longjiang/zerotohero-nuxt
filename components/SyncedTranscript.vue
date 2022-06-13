@@ -8,58 +8,63 @@
   >
     <client-only>
       <div class="transcript-wrapper">
-        <template v-for="(line, index) in filteredLines">
-          <TranscriptLine
-            :line="line"
-            :parallelLine="
-              $l2.code !== $l1.code && parallellines
-                ? matchedParallelLines[
-                    single ? currentLineIndex : index + visibleMin
-                  ]
-                : undefined
-            "
-            :showParallelLine="parallellines && parallellines.length > 0"
-            :lineIndex="index + visibleMin"
-            :key="`line-${index + visibleMin}-${
-              line.starttime
-            }-${line.line.substr(0, 10)}`"
-            :abnormal="
-              $adminMode &&
-              lines[index + visibleMin - 1] &&
-              lines[index + visibleMin - 1].starttime > line.starttime
-            "
-            :current="currentLine === line"
-            :matched="
-              !single &&
-              highlight &&
-              line &&
-              new RegExp(highlight.join('|')).test(line.line)
-            "
-            :ref="`${single ? 'transcript-line' : 'transcript-line-'}${
-              !single ? index + visibleMin : ''
-            }`"
-            :duration="
-              line.duration
-                ? line.duration
-                : lines[single ? currentLineIndex + 1 : index + 1]
-                ? lines[single ? currentLineIndex + 1 : index + 1].starttime -
-                  line.starttime
-                : 5
-            "
-            :showSubsEditing="showSubsEditing"
-            :sticky="sticky"
-            :single="single"
-            :highlight="highlight"
-            :hsk="hsk"
-            :notes="notes"
-            :enableTranslationEditing="$adminMode && enableTranslationEditing"
-            @click="lineClick(line)"
-            @removeLineClick="removeLine(index + visibleMin)"
-            @trasnlationLineBlur="trasnlationLineBlur"
-            @trasnlationLineKeydown="trasnlationLineKeydown"
+        <client-only>
+          <template v-for="(line, index) in filteredLines">
+            <TranscriptLine
+              :line="line"
+              :parallelLine="
+                $l2.code !== $l1.code && parallellines
+                  ? matchedParallelLines[
+                      single ? currentLineIndex : index + visibleMin
+                    ]
+                  : undefined
+              "
+              :showParallelLine="parallellines && parallellines.length > 0"
+              :lineIndex="index + visibleMin"
+              :key="`line-${index + visibleMin}-${
+                line.starttime
+              }-${line.line.substr(0, 10)}`"
+              :abnormal="
+                $adminMode &&
+                lines[index + visibleMin - 1] &&
+                lines[index + visibleMin - 1].starttime > line.starttime
+              "
+              :current="currentLine === line"
+              :matched="
+                !single &&
+                highlight &&
+                line &&
+                new RegExp(highlight.join('|')).test(line.line)
+              "
+              :ref="`${single ? 'transcript-line' : 'transcript-line-'}${
+                !single ? index + visibleMin : ''
+              }`"
+              :duration="
+                line.duration
+                  ? line.duration
+                  : lines[single ? currentLineIndex + 1 : index + 1]
+                  ? lines[single ? currentLineIndex + 1 : index + 1].starttime -
+                    line.starttime
+                  : 5
+              "
+              :showSubsEditing="showSubsEditing"
+              :sticky="sticky"
+              :single="single"
+              :highlight="highlight"
+              :hsk="hsk"
+              :notes="notes"
+              :enableTranslationEditing="$adminMode && enableTranslationEditing"
+              @click="lineClick(line)"
+              @removeLineClick="removeLine(index + visibleMin)"
+              @trasnlationLineBlur="trasnlationLineBlur"
+              @trasnlationLineKeydown="trasnlationLineKeydown"
+            />
+          </template>
+          <YouNeedPro
+            v-if="!single && filteredLines.length < lines.length && !pro"
+            style="position: absolute; bottom: 0; width: 100%"
           />
-        </template>
-        <YouNeedPro v-if="!single && filteredLines.length < lines.length && !pro" style="position: absolute; bottom: 0; width: 100%;" />
+        </client-only>
       </div>
       <div
         v-observe-visibility="visibilityChanged"
