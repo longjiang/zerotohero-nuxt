@@ -8,137 +8,245 @@
   }
 </router>
 <template>
-  <container-query :query="query" v-model="params">
-    <div class="main-dark pb-5">
-      <VideoHero
-        v-if="heroVideo"
-        :video="heroVideo"
-        @videoUnavailable="onVideoUnavailable"
+  <div class="main-dark">
+    <VideoHero
+      v-if="heroVideo"
+      :video="heroVideo"
+      @videoUnavailable="onVideoUnavailable"
+    />
+    <div class="container pb-5">
+      <SocialHead
+        :title="`Learn ${$l2.name} with Videos | ${$l2.name} Zero to Hero`"
+        :description="`Learn ${$l2.name} with Videos`"
+        :image="'/img/tv-shows.jpg'"
       />
-      <div class="container pb-5">
-        <SocialHead
-          :title="`Learn ${$l2.name} with Videos | ${$l2.name} Zero to Hero`"
-          :description="`Learn ${$l2.name} with Videos`"
-          :image="'/img/tv-shows.jpg'"
-        />
-        <div class="row" v-if="items && items.length > 0">
+      <div class="row mt-4">
+        <div class="col-sm-12">
+          <!-- <Sale class="mt-5 mb-5" v-if="$l2.code === 'zh'" /> -->
+          <!-- <SimpleSearch placeholder="Search" ref="searchLibrary" skin="dark" class="mt-4 mb-5" style="flex: 1" :action="
+            (url) => {
+              this.$router.push({
+                path: `/${$l1.code}/${$l2.code
+                  }/youtube/search/${encodeURIComponent(
+                    url
+                  )}`,
+              });
+            }
+          " /> -->
           <div
-            :class="colClasses"
-            v-for="(item, index) in items"
-            :key="`item-${$l2.code}-${index}`"
+            :class="{
+              'loader text-center': true,
+              'd-none': videos && !loading,
+            }"
+            style="margin: 7rem 0 15rem 0"
           >
-            <FeedItemVideo
-              v-if="item.type === 'video'"
-              :video="item.video"
-              skin="dark"
-            />
-            <FeedItemWord
-              v-if="item.type === 'word'"
-              :savedWord="item.word"
-              skin="dark"
-            />
-            <FeedItemLiveTV
-              v-if="item.type === 'live-tv'"
-              :channel="item.channel"
-              skin="dark"
-            />
+            <Loader :sticky="true" message="Loading videos in our library..." />
           </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-12">
+
+          <div class="media-sections" v-if="!loading">
+            <div v-if="videos && videos.length > 0" class="media-section">
+              <h3 class="media-seaction-heading">
+                {{ $l2.name }} Videos
+                <router-link :to="{ name: 'youtube-browse' }" class="show-all">
+                  More
+                  <i class="fas fa-chevron-right ml-1"></i>
+                </router-link>
+              </h3>
+              <LazyYouTubeVideoList
+                :videos="videos.slice(0, 12)"
+                :showAdminToolsInAdminMode="false"
+                skin="dark"
+              />
+            </div>
+            <!-- <FeedbackPrompt
+              class="mt-5 mb-4"
+              :skin="$route.meta ? $route.meta.skin : 'light'"
+            /> -->
             <div
-              :class="{
-                'loader text-center': true,
-                'd-none': !loading,
-              }"
-              style="margin: 7rem 0 15rem 0"
+              v-if="videos && music && music.length > 0"
+              class="media-section"
             >
-              <Loader :sticky="true" message="Loading your feed..." />
+              <h3 class="media-seaction-heading">
+                {{ $l2.name }} Music
+                <router-link
+                  :to="{
+                    name: 'show',
+                    params: { type: 'tv-show', id: musicShow.id },
+                  }"
+                  class="show-all"
+                >
+                  More
+                  <i class="fas fa-chevron-right ml-1"></i>
+                </router-link>
+              </h3>
+              <LazyYouTubeVideoList
+                :videos="random(music).slice(0, 12)"
+                :showAdminToolsInAdminMode="false"
+                skin="dark"
+              />
+            </div>
+            <div v-if="videos && news && news.length > 0" class="media-section">
+              <h3 class="media-seaction-heading">
+                {{ $l2.name }} News
+                <router-link
+                  :to="{
+                    name: 'show',
+                    params: { type: 'talk', id: newsShow.id },
+                  }"
+                  class="show-all"
+                >
+                  More
+                  <i class="fas fa-chevron-right ml-1"></i>
+                </router-link>
+              </h3>
+              <LazyYouTubeVideoList
+                :videos="random(news).slice(0, 12)"
+                :showAdminToolsInAdminMode="false"
+                skin="dark"
+              />
             </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-12">
-            <client-only>
-              <LazyIdenticalLanguages
-                class="mt-5 mb-5"
-                routeName="all-media"
-                v-if="!loading"
-              />
-            </client-only>
+          <div
+            v-if="videos && movies && movies.length > 0"
+            class="media-section"
+          >
+            <h3 class="media-seaction-heading">
+              {{ $l2.name }} Movies
+              <router-link
+                :to="{
+                  name: 'show',
+                  params: { type: 'tv-show', id: moviesShow.id },
+                }"
+                class="show-all"
+              >
+                More
+                <i class="fas fa-chevron-right ml-1"></i>
+              </router-link>
+            </h3>
+            <LazyYouTubeVideoList
+              :videos="random(movies).slice(0, 12)"
+              :showAdminToolsInAdminMode="false"
+              skin="dark"
+            />
           </div>
+          <div
+            v-if="videos && tvShows && tvShows.length > 0"
+            class="media-section"
+          >
+            <h3 class="media-seaction-heading">
+              {{ $l2.name }} TV Shows
+              <router-link :to="{ name: 'tv-shows' }" class="show-all">
+                More
+                <i class="fas fa-chevron-right ml-1"></i>
+              </router-link>
+            </h3>
+            <ShowList
+              :shows="
+                random(
+                  tvShows.filter((s) => !['Movies', 'Music'].includes(s.title)),
+                  6
+                )
+              "
+              type="tvShows"
+              :key="`tv-shows`"
+            />
+          </div>
+          <div v-if="videos && talks && talks.length > 0" class="media-section">
+            <h3 class="media-seaction-heading">
+              {{ $l2.name }} YouTube
+              <router-link :to="{ name: 'talks' }" class="show-all">
+                More
+                <i class="fas fa-chevron-right ml-1"></i>
+              </router-link>
+            </h3>
+            <ShowList
+              :shows="
+                random(
+                  talks.filter(
+                    (s) => !['News'].includes(s.title) && !s.audiobook
+                  ),
+                  6
+                )
+              "
+              type="talks"
+              :key="`tv-shows`"
+            />
+            <div class="text-center mt-1"></div>
+          </div>
+          <div
+            v-if="videos && talks && talks.length > 0 && audiobooks.length > 0"
+            class="media-section"
+          >
+            <h3 class="media-seaction-heading">
+              {{ $l2.name }} Audiobooks
+              <router-link :to="{ name: 'audiobooks' }" class="show-all">
+                More
+                <i class="fas fa-chevron-right ml-1"></i>
+              </router-link>
+            </h3>
+            <ShowList
+              :shows="random(audiobooks, 6)"
+              type="talks"
+              :key="`tv-shows`"
+            />
+          </div>
+
+          <client-only>
+            <LazyIdenticalLanguages
+              class="mt-5 mb-5"
+              routeName="all-media"
+              v-if="!loading"
+            />
+          </client-only>
         </div>
-        <div v-observe-visibility="visibilityChanged"></div>
       </div>
     </div>
-  </container-query>
+  </div>
 </template>
 
 <script>
 import Helper from "@/lib/helper";
 import Config from "@/lib/config";
 import { mapState } from "vuex";
-import { ContainerQuery } from "vue-container-query";
 
 export default {
-  components: {
-    ContainerQuery,
-  },
   data() {
     return {
-      items: [],
-      savedWordsShuffled: [],
+      videos: undefined,
       tvShows: undefined,
       talks: undefined,
       musicShow: undefined,
       moviesShow: undefined,
       newsShow: undefined,
-      loading: false,
+      music: [],
+      movies: [],
+      news: [],
+      loading: true,
       heroVideo: undefined,
-      numVideosPerLoad: 6,
-      numSavedWordsPerLoad: 3,
-      numLiveTVChannelsPerLoad: 1,
-      liveTVChannels: [],
-      params: {},
-      query: {
-        xs: {
-          minWidth: 0,
-          maxWidth: 423,
-        },
-        sm: {
-          minWidth: 423,
-          maxWidth: 720,
-        },
-        md: {
-          minWidth: 720,
-          maxWidth: 960,
-        },
-        lg: {
-          minWidth: 960,
-          maxWidth: 1140,
-        },
-        xl: {
-          minWidth: 1140,
-        },
-      },
     };
   },
-  async created() {
-    this.loadMoreItems();
+  async fetch() {
+    if (this.$store.state.shows.showsLoaded[this.$l2.code]) this.loadShows();
+  },
+  async mounted() {
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type.startsWith("shows")) {
         this.loadShows();
       }
-      if (mutation.type.startsWith("stats/LOAD")) {
-        if (this.items.length === 0) this.loadMoreItems();
-      }
-      if ((mutation.type = "savedWords/IMPORT_WORDS_FROM_JSON")) {
-        this.loadSavedWords();
-        if (this.items.length === 0) this.loadMoreItems();
-      }
     });
-    this.loadSavedWords();
-    this.loadLiveTV()
+    if (!this.videos || this.videos.length === 0) {
+      let videos = await this.getVideos({
+        limit: 50,
+        sort: "youtube_id",
+        offset: this.randomOffset("allVideos", 50),
+      });
+      // Let's prioritize videos in tv shows or talks
+      this.videos = this.random(videos)
+        .sort((a, b) => (b.talk === a.talk ? 0 : b.tv_show ? 1 : -1))
+        .sort((a, b) => (b.tv_show === a.tv_show ? 0 : b.tv_show ? 1 : -1));
+    }
+    await Helper.timeout(5000);
+    this.loading = false; // Incase resources fail to load, at least show them
   },
   beforeDestroy() {
     // you may call unsubscribe to stop the subscription
@@ -146,18 +254,8 @@ export default {
   },
   computed: {
     ...mapState("stats", ["stats"]),
-    ...mapState("savedWords", ["savedWords"]),
-    colClasses() {
-      let classes = { "feed-item-wrapper": true };
-      classes = Object.assign(
-        {
-          "pl-0 pr-0 col-sm-12": this.params.xs || this.params.sm,
-          "col-6": this.params.md || this.params.lg,
-          "col-4": this.params.xl,
-        },
-        classes
-      );
-      return classes;
+    audiobooks() {
+      return this.talks.filter((t) => t.audiobook);
     },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
@@ -172,124 +270,20 @@ export default {
         return this.$store.state.settings.adminMode;
     },
   },
+  watch: {
+    loading() {
+      if (this.loading === false) this.loadHeroVideo();
+    },
+  },
   methods: {
-    visibilityChanged(visible) {
-      if (visible) {
-        this.loadMoreItems();
-      }
-    },
-    assignShowsToVideos(videos) {
-      for (let video of videos) {
-        if (this.tvShows) {
-          if (video.tv_show) {
-            video.tv_show = this.tvShows.find((s) => s.id === video.tv_show);
-          }
-          if (video.talk) {
-            video.talk = this.talks.find((s) => s.id === video.talk);
-          }
-        }
-      }
-    },
-    loadSavedWords() {
-      if (
-        this.savedWordsShuffled.length === 0 &&
-        this.savedWords &&
-        this.savedWords[this.$l2.code]
-      ) {
-        this.savedWords[this.$l2.code];
-        let savedWordsShuffled = [...this.savedWords[this.$l2.code]];
-        this.savedWordsShuffled = Helper.shuffle(savedWordsShuffled);
-      }
-    },
-    async loadLiveTV() {
-      const bannedChannels =  {
-        zh: [
-          "http://174.127.67.246/live330/playlist.m3u8", // NTD
-        ],
-      }
-      const bannedKeywords = {
-        zh: ["arirang", "cgtn", "rt", "新唐人"],
-      }
-      let code = this.$l2["iso639-3"];
-      if (code === "nor") code = "nob"; // Use 'Bokmal' for Norwegian.
-      let res = await axios.get(
-        `${Config.server}data/live-tv-channels/${code}.csv.txt`
-      );
-      if (res && res.data) {
-        let channels = Papa.parse(res.data, { header: true }).data;
-        channels = Helper.uniqueByValue(channels, "url");
-        channels = channels
-          .filter((c) => c.url && c.url.startsWith("https://"))
-          .filter((c) => c.category !== "XXX")
-          .filter((c) => !c.name.includes("新唐人"));
-        if (this.$l2.code in bannedChannels) {
-          channels = channels.filter(
-            (c) => !bannedChannels[this.$l2.code].includes(c.url)
-          );
-        }
-        if (this.$l2.code in bannedKeywords) {
-          channels = channels.filter((c) => {
-            for (let keyword of bannedKeywords[this.$l2.code]) {
-              if (
-                c.url.includes(keyword) ||
-                c.name.toLowerCase().includes(keyword)
-              )
-                return false;
-            }
-            return true;
-          });
-        }
-        channels = channels.sort((a, b) =>
-          a.name.localeCompare(b.name, this.$l2.locales[0])
-        );
-        this.liveTVChannels = Helper.shuffle(channels)
-      }
-    },
-    async loadMoreItems() {
-      if (this.loading) return;
-      console.log('💣 LOAD MORE ITEMS')
-      if (
-        this.$store.state.stats.statsLoaded[this.$l2.code] &&
-        this.savedWords
-      ) {
-        this.loading = true;
-        let offset = this.randomOffset("allVideos", this.numVideosPerLoad);
-        let videos = await this.getVideos({
-          numVideos: this.numVideosPerLoad,
-          sort: "youtube_id",
-          offset,
-        });
-        let items = videos.map((video) => {
-          return { video, type: "video" };
-        });
-        if (this.savedWordsShuffled.length > 0) {
-          let savedWordItems = [];
-          for (let i = 0; i < this.numSavedWordsPerLoad; i++) {
-            let word = this.savedWordsShuffled.pop();
-            if (word) savedWordItems.push({ type: "word", word });
-          }
-          items = items.concat(savedWordItems);
-        }
-        if (this.liveTVChannels.length > 0) {
-          let liveTVChannelItems = []
-          for (let i = 0; i < this.numLiveTVChannelsPerLoad; i++) {
-            let channel = this.liveTVChannels.pop();
-            if (channel) liveTVChannelItems.push({ type: "live-tv", channel });
-          }
-          items = items.concat(liveTVChannelItems);
-        }
-        this.items = this.items.concat(Helper.shuffle(items));
-        if (!this.heroVideo) this.loadHeroVideo();
-        this.loading = false;
-        return true;
-      }
-    },
     loadHeroVideo() {
-      let videos = (this.items || [])
-        .filter((item) => item.type === "video")
-        .map((item) => item.video);
-      let randomVideos = this.random(videos);
-      if (randomVideos[0]) this.heroVideo = randomVideos[0];
+      let randomVideos = this.random([
+        ...(this.music || []),
+        ...(this.movies || []),
+        ...(this.news || []),
+        ...(this.videos || []).filter((v) => v.tv_show || v.talk), // Let's not feature non-tv-show non-talk videos
+      ]);
+      this.heroVideo = randomVideos[0];
     },
     onVideoUnavailable(youtube_id) {
       if (this.heroVideo.youtube_id === youtube_id) {
@@ -312,12 +306,33 @@ export default {
         this.moviesShow = this.$store.state.shows.tvShows[this.$l2.code].find(
           (s) => s.title === "Movies"
         );
+        if (this.musicShow)
+          this.music = await this.getVideos({
+            limit: 25,
+            tvShow: this.musicShow.id,
+            sort: "youtube_id",
+            offset: this.randomOffset("music", 25),
+          });
+        if (this.moviesShow)
+          this.movies = await this.getVideos({
+            limit: 25,
+            tvShow: this.moviesShow.id,
+            sort: "youtube_id",
+            offset: this.randomOffset("movies", 25),
+          });
       }
       if (this.talks) {
         this.newsShow = this.$store.state.shows.talks[this.$l2.code].find(
           (s) => s.title === "News"
         );
+        if (this.newsShow)
+          this.news = await this.getVideos({
+            limit: 25,
+            talk: this.newsShow.id,
+            offset: this.randomOffset("news", 25),
+          });
       }
+      this.loading = false;
     },
     /**
      * @param statsKey key in the stats, one of: 'allVideos', 'movies', 'newVideos', 'music', 'news'
@@ -364,28 +379,70 @@ export default {
             this.$l2.id
           )}?sort=${sort}&filter[l2][eq]=${
             this.$l2.id
-          }&${filter}&limit=${limit}&fields=l2,id,title,youtube_id,tv_show.id,tv_show.title,talk.id,talk.title,talk.audiobook,date,l2&offset=${offset}`
+          }&${filter}&limit=${limit}&fields=l2,id,title,youtube_id,tv_show,talk,l2&offset=${offset}`
         );
         if (response.data.data && response.data.data.length > 0) {
           videos = Helper.uniqueByValue(response.data.data, "youtube_id");
         }
-
         return videos;
       } catch (err) {
         return [];
       }
+    },
+    randBase64(length) {
+      var result = "";
+      var characters =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      var charactersLength = characters.length;
+      for (var i = 0; i < length; i++) {
+        result += characters.charAt(
+          Math.floor(Math.random() * charactersLength)
+        );
+      }
+      return result;
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.feed-item-wrapper {
-  overflow: hidden;
-  padding: 0.5rem;
-  .feed-item {
-    background-color: #222;
-    height: 100%;
+.media-section {
+  padding-bottom: 2rem;
+  // border-bottom: 1px solid #111;
+}
+
+.media-seaction-heading {
+  margin-bottom: 2rem;
+}
+
+.zerotohero-wide {
+  .shows {
+    padding-left: 2rem;
+    padding-right: 2rem;
   }
+}
+
+@media (max-width: 576px) {
+  .show-list-wrapper {
+    max-width: 423px;
+    margin: 0 auto;
+  }
+}
+
+::v-deep .synced-transcript {
+  height: 5rem;
+  overflow: hidden;
+}
+
+h3 {
+  position: relative;
+  font-size: 1.3rem;
+}
+
+.show-all {
+  font-size: 1rem;
+  margin-left: 1rem;
+  display: inline-block;
+  color: #28a745;
 }
 </style>

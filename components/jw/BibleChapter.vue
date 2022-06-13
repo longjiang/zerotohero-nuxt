@@ -590,7 +590,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .load-more-btn {
   width: 100%;
   margin-bottom: 0.5rem;

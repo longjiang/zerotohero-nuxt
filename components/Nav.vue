@@ -383,6 +383,12 @@ export default {
           children: [
             {
               name: "all-media",
+              icon: "fas fa-home",
+              title: `Home`,
+              show: true,
+            },
+            {
+              name: "feed",
               icon: "fa fa-photo-video",
               title: `Feed`,
               show: true,

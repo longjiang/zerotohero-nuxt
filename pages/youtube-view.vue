@@ -4,7 +4,7 @@
     props: true,
     meta: {
       skin: 'dark',
-      collapseNav: true
+      // collapseNav: true
     },
   }
 </router>
