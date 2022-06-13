@@ -164,7 +164,6 @@
       :autoplay="navigated"
       :showLineList="false"
       :episodes="hits.map((h) => h.video)"
-      @videoUnavailable="onVideoUnavailable"
       @previous="goToPrevHit"
       @next="goToNextHit"
     />
@@ -465,16 +464,6 @@ export default {
     async onVideoUnavailable(youtube_id) {
       let video = this.currentHit.video;
       if (youtube_id && youtube_id !== video.youtube_id) return; // Always make sure the unavailable video is indeed what the user is looking at
-      // Log it
-      try {
-        let res = await this.$directus.reportUnavailableVideo({
-          youtube_id: video.youtube_id,
-          video_id: video.id,
-          l2Id: this.$l2.id,
-        });
-      } catch (err) {
-        Helper.logError(err);
-      }
       // Go to next video
       await Helper.timeout(2000);
       if (this.currentHit.video.youtube_id === youtube_id)

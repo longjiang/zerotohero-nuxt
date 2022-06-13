@@ -184,29 +184,6 @@ export default async ({ app, store, route }, inject) => {
         return false;
       }
     },
-
-    async reportUnavailableVideo({ youtube_id, video_id, l2Id }) {
-      try {
-        if (youtube_id) {
-          console.log("Directus: Reporting unavailable video - ", {
-            youtube_id,
-            video_id,
-            l2Id
-          });
-          // Log it
-          let payload = { youtube_id };
-          if (video_id) payload.video_id = video_id;
-          if (l2Id) payload.l2 = l2Id;
-          let response = await app.$authios.post(
-            `${Config.wiki}items/unavailable_videos`,
-            payload
-          );
-          return response;
-        }
-      } catch (err) {
-        Helper.logError(err);
-      }
-    },
     async saveVideo(video, l2, limit = false, tries = 0) {
       let lines = video.subs_l2 || [];
       if (limit) lines = lines.slice(0, limit);

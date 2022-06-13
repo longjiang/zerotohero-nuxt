@@ -61,7 +61,6 @@
         @next="goToNextEpisode"
         @currentTime="updateCurrentTimeQueryString"
         @updateLayout="onYouTubeUpdateLayout"
-        @videoUnavailable="onVideoUnavailable"
       />
     </div>
   </div>
@@ -387,26 +386,6 @@ export default {
     },
     onYouTubeUpdateLayout(layout) {
       this.initialLayout = layout;
-    },
-    async onVideoUnavailable(youtube_id) {
-      if (this.video.youtube_id === youtube_id) {
-        try {
-          await this.$directus.reportUnavailableVideo({
-            youtube_id,
-            video_id: this.video.id,
-            l2Id: this.$l2.id,
-          });
-          // Go to next video
-          if (this.nextEpisode && this.route.params.youtube_id === youtube_id)
-            // Make sure the user is still on the same video by the time
-            this.$router.push({
-              name: "youtube-view",
-              params: this.nextEpisode,
-            });
-        } catch (err) {
-          Helper.logError(err);
-        }
-      }
     },
     mergeVideos(video, youtube_video) {
       let merged = {};
