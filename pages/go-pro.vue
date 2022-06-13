@@ -18,21 +18,21 @@
           </p>
         </div>
         <div v-if="$auth.loggedIn">
-          <div v-if="[1, 4].includes($auth.user.role)">
+          <div>
+            You are logged in as
+            <b>{{ $auth.user ? $auth.user.email : "" }}</b>
+            (ID: {{ $auth.user.id }})
+            <span class="ml-2" />
+            <router-link to="/logout">Logout</router-link>
+          </div>
+          <div class="mt-3"></div>
+          <div v-if="[1, 4].includes(Number($auth.user.role))">
             <p>You already have Pro. Enjoy!</p>
             <router-link class="btn btn-success" to="/">
               Back to Homepage
             </router-link>
           </div>
           <div v-else>
-            <div>
-              You are logged in as
-              <b>{{ $auth.user ? $auth.user.email : "" }}</b>
-              (ID: {{ $auth.user.id }})
-              <span class="ml-2" />
-              <router-link to="/logout">Logout</router-link>
-            </div>
-            <div class="mt-3"></div>
             <stripe-checkout
               ref="checkoutRef"
               mode="payment"
