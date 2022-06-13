@@ -93,7 +93,7 @@
 import Helper from "@/lib/helper";
 import Vue from "vue";
 
-const NON_PRO_MAX_LINES = 20;
+const NON_PRO_MAX_LINES = 10;
 
 export default {
   props: {
@@ -173,7 +173,7 @@ export default {
   },
   computed: {
     pro() {
-      if ([this.$l2.code, this.$l1.code].includes("zh")) return true;
+      // if ([this.$l2.code, this.$l1.code].includes("zh")) return true;
       return [1, 4].includes(Number(this.$auth.user?.role)) ? true : false;
     },
     $l1() {

@@ -16,15 +16,15 @@
       </div>
       <div class="mt-2" />
       <div class="strong text-white mb-2" style="font-size: 0.85em">Pay only once, enjoy it forever!</div>
-      <div style="font-size: 0.85em">
+      <!-- <div style="font-size: 0.85em">
         Compare prices with subscription-based services:
-        <a href="https://www.fluentu.com/chinese/home/#all" class="text-primary">FluentU</a>
+        <a href="https://www.fluentu.com/en/pricing/" class="text-primary">FluentU</a>
         ,
         <a href="https://www.yabla.com/" class="text-primary">Yabla</a>
         , and
         <a href="https://www.lingq.com/en/" class="text-primary">LingQ</a>
         .
-      </div>
+      </div> -->
       <div class="mt-4" />
       <div>
         <router-link class="btn btn-primary pl-3 pr-3" :to="{ name: 'go-pro' }">

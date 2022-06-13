@@ -146,25 +146,28 @@
             dragging &amp; dropping it above.
           </div>
         </div>
-        <EpisodeNav
-          :video="video"
-          :skin="skin"
-          :episodes="episodes"
-          :show="show"
-          :showType="showType"
-          :largeEpisodeCount="largeEpisodeCount"
-          class="mb-5"
-        />
-        <VideoAdmin
-          v-if="$adminMode"
-          :class="{ 'mt-5': true }"
-          :video="video"
-          ref="videoAdmin2"
-          @showSubsEditing="toggleShowSubsEditing"
-          @updateTranslation="updateTranslation"
-          @updateOriginalText="updateOriginalText"
-          @enableTranslationEditing="toggleEnableTranslationEditing"
-        />
+        <client-only>
+          <EpisodeNav
+            :video="video"
+            v-if="pro"
+            :skin="skin"
+            :episodes="episodes"
+            :show="show"
+            :showType="showType"
+            :largeEpisodeCount="largeEpisodeCount"
+            class="mb-5"
+          />
+          <VideoAdmin
+            v-if="$adminMode"
+            :class="{ 'mt-5': true }"
+            :video="video"
+            ref="videoAdmin2"
+            @showSubsEditing="toggleShowSubsEditing"
+            @updateTranslation="updateTranslation"
+            @updateOriginalText="updateOriginalText"
+            @enableTranslationEditing="toggleEnableTranslationEditing"
+          />
+        </client-only>
       </div>
     </div>
   </div>
@@ -259,6 +262,10 @@ export default {
     };
   },
   computed: {
+    pro() {
+      // if ([this.$l2.code, this.$l1.code].includes("zh")) return true;
+      return [1, 4].includes(Number(this.$auth.user?.role)) ? true : false;
+    },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
