@@ -102,6 +102,12 @@
             <span class="saved-words-count" v-if="badge && badge !== 0">
               {{ badge }}
             </span>
+            <img
+              v-if="pro"
+              src="/img/icon-rocket.png"
+              data-not-lazy
+              class="rocket-icon"
+            />
           </router-link>
         </div>
       </template>
@@ -218,6 +224,9 @@ export default {
     },
   },
   computed: {
+    pro() {
+      return [1, 4].includes(Number(this.$auth.user?.role)) ? true : false;
+    },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -311,6 +320,13 @@ export default {
     bottom: 18px;
     top: inherit;
     right: -5px;
+  }
+  .rocket-icon {
+    height: 1.5rem;
+    width: auto;
+    position: absolute;
+    bottom: -0.4rem;
+    right: -0.5rem;
   }
 }
 .site-top-bar {
