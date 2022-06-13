@@ -68,6 +68,9 @@
               </div>
             </div>
           </client-only>
+          <div class="text-center">
+            If you have any questions or issues, please <a href="mailto:jon@chinesezerotohero.com">email us</a>.
+          </div>
         </div>
       </div>
     </div>
