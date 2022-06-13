@@ -8,8 +8,8 @@
   <div class="main container mt-5 p-4 rounded shadow">
     <div class="row">
       <div class="col-sm-12">
-        <div>
-          <div v-if="$auth.loggedIn">
+        <client-only>
+          <div v-if="$auth.loggedIn && $auth.user">
             <div>
               Welcome,
               <b>{{ $auth.user ? $auth.user.email : "" }}</b>
@@ -32,17 +32,37 @@
               </router-link>
             </div>
           </div>
-          <div v-else></div>
-        </div>
+          <div v-else>
+            <h3>Welcome to Pro!</h3>
+            <p>
+              Your upgrade was successful. Please login again to activate your Pro features.
+            </p>
+            <div class="mt-3" />
+            <div>
+              <router-link
+                :to="{ path: '/login' }"
+                class="btn btn-success"
+              >
+                Login
+                <i class="fas fa-chevron-right"></i>
+              </router-link>
+            </div>
+          </div>
+        </client-only>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import Config from '@/lib/config'
+import Config from "@/lib/config";
 
 export default {
+  computed: {
+    pro() {
+      return [1, 4].includes(Number(this.$auth.user?.role)) ? true : false;
+    },
+  },
   async mounted() {
     if (this.$auth.loggedIn) {
       let response = await this.$authios.get(`${Config.wiki}users/me`);
@@ -60,11 +80,6 @@ export default {
         }
       }
     }
-  },
-  computed: {
-    pro() {
-      return [1, 4].includes(Number(this.$auth.user?.role)) ? true : false;
-    },
   },
 };
 </script>

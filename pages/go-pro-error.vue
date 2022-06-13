@@ -11,7 +11,7 @@
         <div>
           <h3>Sorry, there was a problem.</h3>
           <p>
-            There was a problem with your payment with our payment processor Stripe. If you need the following assistance, please contact us. Make sure to inclue the following information:
+            There was a problem with your payment with our payment processor Stripe. If you need assistance, please contact us. Make sure to include the following information:
           </p>
           <div class="mt-3" />
           <p class="strong">👇 Include this in your email:</p>
