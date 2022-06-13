@@ -7,13 +7,7 @@
     }"
   >
     <client-only>
-      <template
-        v-for="(line, index) in single
-          ? [lines[currentLineIndex || 0]].filter((line) => line)
-          : lines
-              .slice(visibleMin, visibleMax - visibleMin)
-              .filter((line) => line)"
-      >
+      <template v-for="(line, index) in filteredLines">
         <TranscriptLine
           :line="line"
           :parallelLine="
@@ -64,6 +58,7 @@
           @trasnlationLineKeydown="trasnlationLineKeydown"
         />
       </template>
+      <YouNeedPro />
       <div
         v-observe-visibility="visibilityChanged"
         style="
@@ -72,11 +67,17 @@
           align-items: center;
           justify-content: center;
         "
-        v-if="!single && lines.length > visibleMax"
+        v-if="!single && filteredLines.length > visibleMax"
       >
         <Loader :sticky="true" />
       </div>
-      <EndQuiz v-if="!single" :lines="lines" :matchedParallelLines="matchedParallelLines" :hsk="hsk"  :skin="skin" />
+      <EndQuiz
+        v-if="!single"
+        :lines="lines"
+        :matchedParallelLines="matchedParallelLines"
+        :hsk="hsk"
+        :skin="skin"
+      />
     </client-only>
   </div>
 </template>
@@ -84,6 +85,8 @@
 <script>
 import Helper from "@/lib/helper";
 import Vue from "vue";
+
+const NON_PRO_MAX_LINES = 20;
 
 export default {
   props: {
@@ -162,6 +165,10 @@ export default {
     };
   },
   computed: {
+    pro() {
+      if ([this.$l2.code, this.$l1.code].includes('zh')) return true
+      return [1, 4].includes(Number(this.$auth.user?.role)) ? true : false;
+    },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -188,6 +195,17 @@ export default {
       return this.lines && this.lines[previousIndex]
         ? this.lines[previousIndex]
         : false;
+    },
+    filteredLines() {
+      let filteredLines = this.lines;
+      if (!this.pro) filteredLines = filteredLines.slice(0, NON_PRO_MAX_LINES);
+      if (this.single) {
+        return [filteredLines[this.currentLineIndex || 0]].filter((line) => line);
+      } else {
+        return filteredLines
+          .slice(this.visibleMin, this.visibleMax - this.visibleMin)
+          .filter((line) => line);
+      }
     },
   },
   async created() {

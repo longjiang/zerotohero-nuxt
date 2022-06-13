@@ -1,5 +1,5 @@
 <template>
-  <div :class="`z2h-logo z2h-logo-${skin}`" style="font-size: 2rem">
+  <div :class="`z2h-logo z2h-logo-${skin}`">
     <router-link to="/" class="link-unstyled">
       <div class="z2h-icon-wrapper">
         <img
@@ -15,8 +15,8 @@
           class="rocket-icon"
         />
       </div>
-      <br />
-      <b>
+      <div class="mt-3" />
+      <div class="word-mark">
         Zero to Hero
         <img
           v-if="pro"
@@ -24,7 +24,7 @@
           data-not-lazy
           class="pro-icon"
         />
-      </b>
+      </div>
     </router-link>
   </div>
 </template>
@@ -35,9 +35,13 @@ export default {
     skin: {
       default: "dark", // or light
     },
+    forcePro: {
+      default: false,
+    }
   },
   computed: {
     pro() {
+      if (this.forcePro) return true
       return [1, 4].includes(Number(this.$auth.user?.role)) ? true : false;
     },
   },
@@ -70,9 +74,13 @@ export default {
   }
   .pro-icon {
     display: inline-block;
-    height: 2.5rem;
+    height: 2rem;
     position: relative;
-    bottom: 0.75rem;
+    bottom: 0.5rem;
+  }
+  .word-mark {
+    font-size: 1.5rem;
+    font-weight: bold;
   }
 }
 </style>
