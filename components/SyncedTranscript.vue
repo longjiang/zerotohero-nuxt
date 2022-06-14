@@ -207,7 +207,7 @@ export default {
     },
     filteredLines() {
       let filteredLines = this.lines;
-      if (!this.pro) filteredLines = filteredLines.slice(0, NON_PRO_MAX_LINES);
+      if (!this.pro && !this.single) filteredLines = filteredLines.slice(0, NON_PRO_MAX_LINES);
       if (this.single) {
         return [filteredLines[this.currentLineIndex || 0]].filter(
           (line) => line
