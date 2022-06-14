@@ -151,23 +151,32 @@
         Refresh
       </b-button>
     </div>
-    <LazyYouTubeWithTranscript
-      class="main-dark"
-      v-if="currentHit"
-      initialLayout="vertical"
-      :video="currentHit.video"
-      :ref="`youtube-${hitIndex}`"
-      :speed="speed"
-      :startLineIndex="startLineIndex"
-      :showFullscreenToggle="false"
-      :autoload="true"
-      :autoplay="navigated"
-      :showLineList="false"
-      :episodes="hits.map((h) => h.video)"
-      :forcePro="true"
-      @previous="goToPrevHit"
-      @next="goToNextHit"
-    />
+    <template v-if="pro || hitIndex < NON_PRO_MAX_SUBS_SEARCH_HITS">
+      <LazyYouTubeWithTranscript
+        class="main-dark"
+        v-if="currentHit"
+        initialLayout="vertical"
+        :video="currentHit.video"
+        :ref="`youtube-${hitIndex}`"
+        :speed="speed"
+        :startLineIndex="startLineIndex"
+        :showFullscreenToggle="false"
+        :autoload="true"
+        :autoplay="navigated"
+        :showLineList="false"
+        :episodes="hits.map((h) => h.video)"
+        :forcePro="true"
+        @previous="goToPrevHit"
+        @next="goToNextHit"
+      />
+    </template>
+    <template v-if="!pro">
+      <YouNeedPro
+        v-if="hitIndex > NON_PRO_MAX_SUBS_SEARCH_HITS - 1"
+        :message="`See all ${hits.length} search results with a Pro account`"
+      />
+    </template>
+
     <b-modal
       ref="playlist-modal"
       size="lg"
@@ -284,9 +293,13 @@
 </template>
 
 <script>
-import Config from "@/lib/config";
 import Helper from "@/lib/helper";
 import YouTube from "@/lib/youtube";
+import {
+  NON_PRO_MAX_SUBS_SEARCH_HITS,
+  POPULAR_LANGS,
+  youtubeVideosTableName,
+} from "@/lib/config";
 
 export default {
   props: {
@@ -338,6 +351,7 @@ export default {
       sort: "length",
       tvShowFilter: this.tvShow ? [this.tvShow.id] : "all",
       talkFilter: "all",
+      NON_PRO_MAX_SUBS_SEARCH_HITS,
       youglishLang: {
         zh: "chinese",
         en: "english",
@@ -358,6 +372,10 @@ export default {
     };
   },
   computed: {
+    pro() {
+      if (!POPULAR_LANGS.includes(this.$l2.code)) return true; // Let's not charge for less popular languages
+      return [1, 4].includes(Number(this.$auth.user?.role)) ? true : false;
+    },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -510,7 +528,7 @@ export default {
       let response;
       try {
         response = await this.$authios.delete(
-          `${Config.youtubeVideosTableName(this.$l2.id)}/${id}`
+          `${youtubeVideosTableName(this.$l2.id)}/${id}`
         );
         this.removeCurrentHitAndGoToNext();
       } catch (err) {}

@@ -95,9 +95,7 @@
 import Helper from "@/lib/helper";
 import Vue from "vue";
 
-const NON_PRO_MAX_LINES = 19; // The 'you need pro' prompt obscures 7 lines, so only NON_PRO_MAX_LINES - 7 are actually visible to non-pro users
-
-const POPULAR_LANGS = 'zh ja en fr de es ko ru yue it'.split(' ')
+import { NON_PRO_MAX_LINES, POPULAR_LANGS } from '@/lib/config'
 
 export default {
   props: {

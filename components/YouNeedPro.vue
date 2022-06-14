@@ -5,7 +5,8 @@
       <div class="mt-3" />
       <div>
         <p class="text-white mb-1 strong" style="font-size: 1.2em">
-          See full transcript of {{ stats && stats[$l2.code] ? $n(stats[$l2.code].allVideos) : '' }} {{ $l2.name }} videos with a Pro account.
+          <template v-if="message">{{ message }}</template>
+          <template v-else>See full transcript of {{ stats && stats[$l2.code] ? $n(stats[$l2.code].allVideos) : '' }} {{ $l2.name }} videos with a Pro account.</template>
         </p>
       </div>
       <div class="mt-3" />
@@ -38,6 +39,11 @@
 <script>
 import { mapState } from 'vuex'
 export default {
+  props: {
+    message: {
+      type: String
+    }
+  },
   computed: {
     ...mapState('stats', ['stats']),
     $l1() {
