@@ -706,7 +706,6 @@ export default {
     top: 0;
     width: 100%;
     right: 0;
-    padding-left: calc(100% - 6rem);
     background: linear-gradient(180deg, black, transparent);
   }
   &.minimized {
@@ -730,6 +729,9 @@ export default {
 }
 
 .zerotohero-wide {
+  .toggle-wrapper {
+    width: calc(100vw - 26rem);
+  }
   .youtube-view-content {
     ::v-deep .youtube-with-transcript-landscape {
       .youtube {
