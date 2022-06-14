@@ -1,6 +1,6 @@
 
 <template>
-  <div>
+  <div class="youtube-view">
     <SocialHead
       :title="`${video ? video.title + ' | ' : ''}Learn ${
         $l2.name
@@ -26,9 +26,9 @@
     </div>
     <div
       :class="{
-        'youtube-view pb-5 ': true,
+        'pb-5': true,
         'main-dark main-dark-performant': true,
-        'youtube-view-wrapper': true,
+        'youtube-view-content': true,
         'youtube-view-landscape': landscape,
         fullscreen: layout === 'vertical',
       }"
@@ -86,7 +86,7 @@ export default {
     },
     starttime: {
       type: Number,
-      default: 0
+      default: 0,
     },
     mini: {
       type: Boolean,
@@ -133,7 +133,7 @@ export default {
     },
     minimizeVideoTo() {
       if (this.fullHistory) {
-        let fullHistoryReversed = [...this.fullHistory].reverse()
+        let fullHistoryReversed = [...this.fullHistory].reverse();
         let lastNonYouTubeViewPath = fullHistoryReversed.find(
           (h) =>
             !h.includes("youtube/view") &&
@@ -233,7 +233,7 @@ export default {
               video.subs_l2[0].duration
             );
         }
-        this.video = video
+        this.video = video;
         this.saveHistory();
         this.bindKeys();
         if (this.$store.state.shows.showsLoaded[this.$l2.code]) {
@@ -601,7 +601,7 @@ export default {
       }
     },
     async patchDuration(video) {
-      if (!this.$adminMode) return video
+      if (!this.$adminMode) return video;
       console.log(
         "YouTube View: Saved subtitles does not have duration, getting duration..."
       );
@@ -697,11 +697,17 @@ export default {
   height: 5rem;
   display: flex;
   align-items: center;
-  z-index: 9;
+  justify-content: flex-end;
+  padding-right: 1rem;
+  z-index: 10;
   position: fixed;
   right: 1rem;
   &.maximized {
     top: 0;
+    width: 100%;
+    right: 0;
+    padding-left: calc(100% - 6rem);
+    background: linear-gradient(180deg, black, transparent);
   }
   &.minimized {
   }
@@ -724,7 +730,7 @@ export default {
 }
 
 .zerotohero-wide {
-  .youtube-view-wrapper {
+  .youtube-view-content {
     ::v-deep .youtube-with-transcript-landscape {
       .youtube {
         border-radius: 0.3rem 0.3rem 0 0;
@@ -742,7 +748,7 @@ export default {
   }
 }
 
-.youtube-view-wrapper {
+.youtube-view-content {
   &.fullscreen {
     position: fixed;
     top: 0;

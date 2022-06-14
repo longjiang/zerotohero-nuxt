@@ -9,7 +9,7 @@
   }
 </router>
 <template>
-  <div>
+  <div class="youtube-view-page">
     <YouTubeViewComp :youtube_id="youtube_id" :lesson="lesson" :starttime="starttime" />
   </div>
 </template>
