@@ -222,8 +222,8 @@ const Dictionary = {
           word[indexType]
         ].concat(word);
       }
-      if (word.head.includes(" ")) {
-        for (let w of word.head.split(/\s+/)) {
+      if (/[\s']/.test(word.head)) {
+        for (let w of word.head.split(/[\s']/)) {
           if (!this.phraseIndex[w]) this.phraseIndex[w] = [word]
           else this.phraseIndex[w].push(word)
         }
