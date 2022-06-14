@@ -57,7 +57,7 @@
         :initialLayout="layout"
         :largeEpisodeCount="largeEpisodeCount"
         @ended="updateEnded"
-        @prev="goToPreviousEpisode"
+        @previous="goToPreviousEpisode"
         @next="goToNextEpisode"
         @currentTime="updateCurrentTimeQueryString"
         @updateLayout="onYouTubeUpdateLayout"
@@ -546,7 +546,10 @@ export default {
           if (this.nextEpisode)
             this.$router.push({
               name: "youtube-view",
-              params: this.nextEpisode,
+              params: {
+                youtube_id: this.nextEpisode.youtube_id,
+                lesson: this.nextEpisode.lesson
+              },
             });
         }
       }
