@@ -72,10 +72,12 @@
           >
             <Loader :sticky="true" />
           </div>
-          <YouNeedPro
-            v-if="!single && filteredLines.length < lines.length && !pro"
-            style="position: absolute; bottom: 0; width: 100%"
-          />
+          <template v-if="!pro">
+            <YouNeedPro
+              v-if="(!single && filteredLines.length < lines.length) || (single && currentLineIndex > NON_PRO_MAX_LINES - 7)"
+              style="position: absolute; bottom: 0; width: 100%"
+            />
+          </template>
         </client-only>
       </div>
       <EndQuiz
@@ -150,6 +152,9 @@ export default {
     landscape: {
       default: false,
     },
+    forcePro: {
+      default: false
+    }
   },
   data() {
     return {
@@ -171,6 +176,7 @@ export default {
       visibleMax: this.startLineIndex ? Number(this.startLineIndex) + 30 : 30,
       visibleRange: 30,
       preventJumpingAtStart: typeof this.startLineIndex !== "undefined",
+      NON_PRO_MAX_LINES
     };
   },
   computed: {
@@ -207,7 +213,7 @@ export default {
     },
     filteredLines() {
       let filteredLines = this.lines;
-      if (!this.pro && !this.single) filteredLines = filteredLines.slice(0, NON_PRO_MAX_LINES);
+      if (!this.pro && !this.forcePro) filteredLines = filteredLines.slice(0, NON_PRO_MAX_LINES);
       if (this.single) {
         return [filteredLines[this.currentLineIndex || 0]].filter(
           (line) => line

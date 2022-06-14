@@ -164,6 +164,7 @@
       :autoplay="navigated"
       :showLineList="false"
       :episodes="hits.map((h) => h.video)"
+      :forcePro="true"
       @previous="goToPrevHit"
       @next="goToNextHit"
     />

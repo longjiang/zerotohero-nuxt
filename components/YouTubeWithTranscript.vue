@@ -114,6 +114,7 @@
         :skin="skin"
         :landscape="landscape"
         :single="['vertical', 'mini'].includes(layout)"
+        :forcePro="forcePro"
         @seek="seekYouTube"
         @pause="pause"
         @play="play"
@@ -239,6 +240,9 @@ export default {
     },
     showControls: {
       default: true,
+    },
+    forcePro: {
+      default: false,
     },
   },
   data() {
