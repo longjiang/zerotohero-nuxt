@@ -9,7 +9,7 @@
     <client-only>
       <div class="transcript-wrapper">
         <client-only>
-          <template v-for="(line, index) in filteredLines">
+          <template v-for="(line, index) in filteredLines.slice(this.visibleMin, this.visibleMax - this.visibleMin)">
             <TranscriptLine
               :line="line"
               :parallelLine="
@@ -60,23 +60,23 @@
               @trasnlationLineKeydown="trasnlationLineKeydown"
             />
           </template>
+          <div
+            v-observe-visibility="visibilityChanged"
+            style="
+              height: 100vh;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            "
+            v-if="!single && filteredLines.length > visibleMax"
+          >
+            <Loader :sticky="true" />
+          </div>
           <YouNeedPro
             v-if="!single && filteredLines.length < lines.length && !pro"
             style="position: absolute; bottom: 0; width: 100%"
           />
         </client-only>
-      </div>
-      <div
-        v-observe-visibility="visibilityChanged"
-        style="
-          height: 100vh;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        "
-        v-if="!single && filteredLines.length > visibleMax"
-      >
-        <Loader :sticky="true" />
       </div>
       <EndQuiz
         v-if="!single"
@@ -93,7 +93,9 @@
 import Helper from "@/lib/helper";
 import Vue from "vue";
 
-const NON_PRO_MAX_LINES = 10;
+const NON_PRO_MAX_LINES = 19; // The 'you need pro' prompt obscures 7 lines, so only NON_PRO_MAX_LINES - 7 are actually visible to non-pro users
+
+const POPULAR_LANGS = 'zh ja en fr de es ko ru yue it'.split(' ')
 
 export default {
   props: {
@@ -173,7 +175,7 @@ export default {
   },
   computed: {
     pro() {
-      // if ([this.$l2.code, this.$l1.code].includes("zh")) return true;
+      if (!POPULAR_LANGS.includes(this.$l2.code)) return true; // Let's not charge for less popular languages
       return [1, 4].includes(Number(this.$auth.user?.role)) ? true : false;
     },
     $l1() {
@@ -211,9 +213,7 @@ export default {
           (line) => line
         );
       } else {
-        return filteredLines
-          .slice(this.visibleMin, this.visibleMax - this.visibleMin)
-          .filter((line) => line);
+        return filteredLines.filter((line) => line)
       }
     },
   },

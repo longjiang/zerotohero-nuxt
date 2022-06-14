@@ -13,8 +13,25 @@
           <client-only>
             <div>
               <Logo :forcePro="true" skin="light" class="logo" />
-              <hr />
             </div>
+            <div class="mt-4"></div>
+            <div class="text-center text-seoncdary bg-white p-3 rounded">
+              <p style="font-size: 1.2em">
+                With Pro 🚀, you'll have access to full transcripts of an
+                <em><b>ocean</b></em>
+                of language-learning videos!
+              </p>
+              <StatsComp skin="light" variant="summary" />
+              <div class="mt-2 text-center">
+                <router-link :to="{ name: 'stats' }" class="text-primary">
+                  <small>
+                    Full stats of all languages
+                    <i class="fas fa-angle-right ml-1"></i>
+                  </small>
+                </router-link>
+              </div>
+            </div>
+            <div class="mt-4"></div>
             <div v-if="$auth.loggedIn && $auth.user" class="text-center">
               <p style="font-size: 1.2em">
                 Welcome
@@ -69,7 +86,9 @@
             </div>
           </client-only>
           <div class="text-center">
-            If you have any questions or issues, please <a href="mailto:jon@chinesezerotohero.com">email us</a>.
+            If you have any questions or issues, please
+            <a href="mailto:jon@chinesezerotohero.com">email us</a>
+            .
           </div>
         </div>
       </div>
@@ -113,6 +132,7 @@ export default {
 <style scoped>
 .bg {
   min-height: 100vh;
+  color: rgb(40, 40, 40);
 }
 .logo {
   margin-top: -5.5rem;

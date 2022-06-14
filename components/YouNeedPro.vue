@@ -5,7 +5,7 @@
       <div class="mt-3" />
       <div>
         <p class="text-white mb-1 strong" style="font-size: 1.2em">
-          See full transcript with a Pro account.
+          See full transcript of {{ stats && stats[$l2.code] ? $n(stats[$l2.code].allVideos) : '' }} {{ $l2.name }} videos with a Pro account.
         </p>
       </div>
       <div class="mt-3" />
@@ -36,7 +36,25 @@
 </template>
 
 <script>
-export default {};
+import { mapState } from 'vuex'
+export default {
+  computed: {
+    ...mapState('stats', ['stats']),
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
+
+    $adminMode() {
+      if (typeof this.$store.state.settings.adminMode !== "undefined")
+        return this.$store.state.settings.adminMode;
+    },
+  }
+};
 </script>
 
 <style scoped>

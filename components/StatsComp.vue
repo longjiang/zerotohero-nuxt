@@ -1,5 +1,5 @@
 <template>
-  <div class="stats" v-if="stats && $languages">
+  <div :class="`stats stats-${skin}`" v-if="stats && $languages">
     <div
       class="stats-summary"
       v-if="variant === 'summary'"
@@ -82,6 +82,10 @@ export default {
       type: String,
       default: "full", // or 'summary'
     },
+    skin: {
+      type: String,
+      default: "dark", // or 'light
+    },
   },
   data: () => ({
     stats: undefined,
@@ -93,12 +97,14 @@ export default {
   methods: {
     async getStats(refresh = false) {
       let data = await Helper.proxy(
-        `https://db2.zerotohero.ca/count-all.php${refresh ? '?timestamp=' + Date.now() : ''}`,
+        `https://db2.zerotohero.ca/count-all.php${
+          refresh ? "?timestamp=" + Date.now() : ""
+        }`,
         { cacheLife: refresh ? 0 : 86400 } // cache the count for one day (86400 seconds)
       );
       this.stats = data;
       let languages = await this.$languagesPromise;
-      if (!languages) return
+      if (!languages) return;
       let languageData = [];
       for (let langId in this.stats.langCounts) {
         const count = this.stats.langCounts[langId];
@@ -124,8 +130,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.stats-dark {
+  .stat-big-number {
+    color: #1bd445;
+  }
+}
+
+.stats-light {
+  .stat-big-number {
+    color: #fd4f1c;
+  }
+}
+
 .stat-big-number {
-  color: #1bd445;
   font-size: 1.5rem;
 }
 .total-count {
