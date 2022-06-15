@@ -33,19 +33,29 @@
             </div>
             <div class="mt-4"></div>
             <div v-if="$auth.loggedIn && $auth.user" class="text-center">
-              <p style="font-size: 1.2em">
+              <p style="font-size: 1.2em" v-if="![1, 4].includes(Number($auth.user.role))">
                 Welcome
                 <b>{{ $auth.user ? $auth.user.first_name : "" }}</b>
                 , let's get you started with a Pro account.
               </p>
               <div class="mt-4"></div>
               <div v-if="[1, 4].includes(Number($auth.user.role))">
-                <p>You are already Pro. Enjoy!</p>
+                <h5 class="mb-4">🎉 You are already Pro! 🚀 Enjoy!</h5>
                 <router-link class="btn btn-primary mb-3" to="/">
-                  Back to Homepage
+                  Start Using Pro
                 </router-link>
               </div>
               <div v-else class="mb-3">
+                <div class="alert alert-success p-3 text-center" v-if="paymentStatus === 'success'">
+                  <Loader :sticky="true" message="Payment successful, activating your Pro account..." />
+                </div>
+                <div class="alert alert-warning p-3 text-center" v-if="paymentStatus === 'cancelled'">
+                  It seems like you've cancelled the checkout, please try again.
+                </div>
+                <div class="alert alert-warning p-3 text-center" v-if="paymentStatus === 'error'">
+                  <p>We're sorry, your payment didn't work this time, please try again.</p>
+                  <p>If you need further assistance, please contact support by <a href="mailto:jon@chinesezerotohero.com">email</a>.</p>
+                </div>
                 <div class="mb-3">Please choose your method of payment:</div>
                 <div>
                   <stripe-checkout
@@ -61,7 +71,7 @@
                     <i class="fas fa-credit-card mr-1"></i> Credit Card
                   </b-button>
                   <PayPal
-                      amount="0.50"
+                      amount="89.00"
                       currency="USD"
                       :client="paypalCredentials"
                       :items="paypalItems"
@@ -124,6 +134,7 @@ export default {
     this.publishableKey = "pk_live_9lnc7wrGHtcFdPKIWZdy9p17";
     return {
       loading: false,
+      paymentStatus: undefined,
       paypalCredentials: {
         sandbox:
           "AU6fgxWMbyvtTHB-xv2WGb91HI21q9zkhG9IXthI62cCvasfpsO2DA5scSSx_r9R81r19J-yyexvd97A",
@@ -135,7 +146,7 @@ export default {
           name: "zero-to-hero-pro",
           description: "Zero to Hero Pro features",
           quantity: "1",
-          price: "0.50",
+          price: "89.00",
           currency: "USD",
         },
       ],
@@ -264,13 +275,16 @@ export default {
       // }
       if (e.state == 'approved') {
         // Payment successful
+        this.paymentStatus = 'approved'
         let paymentID = e.id
         window.location = `https://python.zerotohero.ca/paypal_checkout_success?pay_id=${paymentID}&user_id=${this.$auth.user.id}&host=${HOST}`
       } else {
+        this.paymentStatus = 'error'
         // Payment unsuccessful
       }
     },
     onPayPalPaymentCancelled(e) {
+      this.paymentStatus = 'cancelled'
       console.log({paypalCancelledEvent: e})
     },
   },
