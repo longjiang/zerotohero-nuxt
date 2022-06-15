@@ -16,8 +16,9 @@
             </div>
             <div class="mt-4"></div>
             <div class="text-center text-seoncdary bg-white p-3 rounded">
-              <p style="font-size: 1.2em">
-                With Pro 🚀, you'll have access to full transcripts of an
+              <h5>Why Pro?</h5>
+              <p>
+                With Pro, you'll have access to an
                 <em><b>ocean</b></em>
                 of language-learning videos!
               </p>
@@ -33,7 +34,7 @@
             </div>
             <div class="mt-4"></div>
             <div v-if="$auth.loggedIn && $auth.user" class="text-center">
-              <p style="font-size: 1.2em" v-if="![1, 4].includes(Number($auth.user.role))">
+              <p v-if="![1, 4].includes(Number($auth.user.role))">
                 Welcome
                 <b>{{ $auth.user ? $auth.user.first_name : "" }}</b>
                 , let's get you started with a Pro account.
@@ -46,17 +47,43 @@
                 </router-link>
               </div>
               <div v-else class="mb-3">
-                <div class="alert alert-success p-3 text-center" v-if="paymentStatus === 'success'">
-                  <Loader :sticky="true" message="Payment successful, activating your Pro account..." />
+                <div
+                  class="alert alert-success p-3 text-center"
+                  v-if="paymentStatus === 'success'"
+                >
+                  <Loader
+                    :sticky="true"
+                    message="Payment successful, activating your Pro account..."
+                  />
                 </div>
-                <div class="alert alert-warning p-3 text-center" v-if="paymentStatus === 'cancelled'">
+                <div
+                  class="alert alert-warning p-3 text-center"
+                  v-if="paymentStatus === 'cancelled'"
+                >
                   It seems like you've cancelled the checkout, please try again.
                 </div>
-                <div class="alert alert-warning p-3 text-center" v-if="paymentStatus === 'error'">
-                  <p>We're sorry, your payment didn't work this time, please try again.</p>
-                  <p>If you need further assistance, please contact support by <a href="mailto:jon@chinesezerotohero.com">email</a>.</p>
+                <div
+                  class="alert alert-warning p-3 text-center"
+                  v-if="paymentStatus === 'error'"
+                >
+                  <p>
+                    We're sorry, your payment didn't work this time, please try
+                    again.
+                  </p>
+                  <p>
+                    If you need further assistance, please contact support by
+                    <a href="mailto:jon@chinesezerotohero.com">email</a>
+                    .
+                  </p>
                 </div>
-                <div class="mb-3">Please choose your method of payment:</div>
+                <div>
+                  <div class="pl-5">
+                    <sup style="font-size: 1rem">$</sup>
+                    <span style="font-size: 2.2rem; font-weight: bold">89</span>
+                    <sup style="font-size: 1rem">/ lifetime</sup>
+                  </div>
+                </div>
+                <div class="mt-3 mb-4">Please choose your method of payment:</div>
                 <div>
                   <stripe-checkout
                     ref="checkoutRef"
@@ -67,27 +94,69 @@
                     :cancel-url="cancelURL"
                     @loading="(v) => (loading = v)"
                   />
-                  <b-button @click="submit" variant="success pl-3 pr-3" size="sm" style="position: relative; bottom: 0.5rem; padding: 0.1rem;">
-                    <i class="fas fa-credit-card mr-1"></i> Credit Card
+                  <b-button
+                    @click="submit"
+                    variant=" pl-3 pr-3"
+                    size="sm"
+                    style="
+                      position: relative;
+                      bottom: 0.5rem;
+                      padding: 0.1rem;
+                      background-color: #ffc439;
+                    "
+                  >
+                    <i class="fas fa-credit-card"></i>
+                    <i class="fab fa-cc-apple-pay"></i>
+                    <i class="fab fa-google-pay mr-1"></i>
+                    Credit Card
                   </b-button>
+                  <b-button
+                    @click="submit"
+                    variant=" pl-3 pr-3"
+                    size="sm"
+                    style="
+                      position: relative;
+                      bottom: 0.5rem;
+                      padding: 0.1rem;
+                      background-color: #ffc439;
+                    "
+                  >
+                    <i class="fab fa-weixin mr-1"></i>
+                    WeChat Pay
+                  </b-button>
+                  <b-button
+                    @click="submit"
+                    variant=" pl-3 pr-3"
+                    size="sm"
+                    style="
+                      position: relative;
+                      bottom: 0.5rem;
+                      padding: 0.1rem;
+                      background-color: #ffc439;
+                    "
+                  >
+                    <i class="fab fa-alipay mr-1"></i>
+                    Alipay
+                  </b-button>
+
                   <PayPal
-                      amount="89.00"
-                      currency="USD"
-                      :client="paypalCredentials"
-                      :items="paypalItems"
-                      :experience="paypalExperienceOptions"
-                      :button-style="{
-                        shape: 'rect',
-                        size: 'responsive',
-                        label: '',
-                        color: 'gold',
-                      }"
-                      env="production"
-                      class="d-inline-block"
-                      @payment-authorized="onPayPalPaymentAuthorized"
-                      @payment-completed="onPayPalPaymentCompleted"
-                      @payment-cancelled="onPayPalPaymentCancelled"
-                    ></PayPal>
+                    amount="89.00"
+                    currency="USD"
+                    :client="paypalCredentials"
+                    :items="paypalItems"
+                    :experience="paypalExperienceOptions"
+                    :button-style="{
+                      shape: 'rect',
+                      size: 'responsive',
+                      label: '',
+                      color: 'gold',
+                    }"
+                    env="production"
+                    class="d-inline-block"
+                    @payment-authorized="onPayPalPaymentAuthorized"
+                    @payment-completed="onPayPalPaymentCompleted"
+                    @payment-cancelled="onPayPalPaymentCancelled"
+                  ></PayPal>
                 </div>
               </div>
             </div>
@@ -187,7 +256,7 @@ export default {
       //   "returnUrl": "https://www.paypal.com/checkoutnow/error?paymentId=PAYID-MKUWKFQ71N57282RA848534U&token=EC-7A438886YD7979014&PayerID=EACR8MEZXSQPN",
       //   "button_version": "4.0.37"
       // }
-      console.log({paypalAuthorizedEvent: e})
+      console.log({ paypalAuthorizedEvent: e });
     },
     onPayPalPaymentCompleted(e) {
       // Example of failed return event:
@@ -273,19 +342,19 @@ export default {
       //         }
       //     ]
       // }
-      if (e.state == 'approved') {
+      if (e.state == "approved") {
         // Payment successful
-        this.paymentStatus = 'approved'
-        let paymentID = e.id
-        window.location = `https://python.zerotohero.ca/paypal_checkout_success?pay_id=${paymentID}&user_id=${this.$auth.user.id}&host=${HOST}`
+        this.paymentStatus = "approved";
+        let paymentID = e.id;
+        window.location = `https://python.zerotohero.ca/paypal_checkout_success?pay_id=${paymentID}&user_id=${this.$auth.user.id}&host=${HOST}`;
       } else {
-        this.paymentStatus = 'error'
+        this.paymentStatus = "error";
         // Payment unsuccessful
       }
     },
     onPayPalPaymentCancelled(e) {
-      this.paymentStatus = 'cancelled'
-      console.log({paypalCancelledEvent: e})
+      this.paymentStatus = "cancelled";
+      console.log({ paypalCancelledEvent: e });
     },
   },
 };
@@ -299,7 +368,8 @@ export default {
   margin-top: -5.5rem;
 }
 .go-pro-wrapper {
-  margin-top: 10rem;
+  margin-top: 5rem;
+  margin-bottom: 5rem;
   max-width: 30rem;
   padding: 2rem;
   border-radius: 1rem;
