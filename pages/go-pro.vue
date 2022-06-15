@@ -72,7 +72,7 @@
                         label: '',
                         color: 'gold',
                       }"
-                      env="sandbox"
+                      env="production"
                       class="d-inline-block"
                       @payment-authorized="onPayPalPaymentAuthorized"
                       @payment-completed="onPayPalPaymentCompleted"
@@ -167,13 +167,13 @@ export default {
       this.$refs.checkoutRef.redirectToCheckout();
     },
     onPayPalPaymentAuthorized(e) {
-      console.log(e);
+      console.log({paypalAuthorizedEvent: e})
     },
     onPayPalPaymentCompleted(e) {
-      console.log(e);
+      console.log({paypalCompletedEvent: e})
     },
     onPayPalPaymentCancelled(e) {
-      console.log(e);
+      console.log({paypalCancelledEvent: e})
     },
   },
 };
