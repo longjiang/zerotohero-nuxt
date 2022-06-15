@@ -86,16 +86,31 @@
                 <div class="mt-3 mb-4">Please choose your method of payment:</div>
                 <div>
                   <stripe-checkout
-                    ref="checkoutRef"
+                    ref="stripeCheckoutCNYRef"
                     mode="payment"
                     :pk="publishableKey"
-                    :line-items="stripeLineItems"
+                    :line-items="[{
+                      price: 'price_1LAr9NG5EbMGvOafz1UBoihK', // CNY price for WeChat Pay and Alipay
+                      quantity: 1,
+                    }]"
+                    :success-url="successURL"
+                    :cancel-url="cancelURL"
+                    @loading="(v) => (loading = v)"
+                  />
+                  <stripe-checkout
+                    ref="stripeCheckoutUSDRef"
+                    mode="payment"
+                    :pk="publishableKey"
+                    :line-items="[{
+                      price: 'price_1LArBtG5EbMGvOaflIKUthub', // USD price for all other payment methods
+                      quantity: 1,
+                    }]"
                     :success-url="successURL"
                     :cancel-url="cancelURL"
                     @loading="(v) => (loading = v)"
                   />
                   <b-button
-                    @click="submit"
+                    @click="submitStripeUSD"
                     variant=" pl-3 pr-3"
                     size="sm"
                     style="
@@ -111,7 +126,7 @@
                     Credit Card
                   </b-button>
                   <b-button
-                    @click="submit"
+                    @click="submitStripeCNY"
                     variant=" pl-3 pr-3"
                     size="sm"
                     style="
@@ -125,7 +140,7 @@
                     WeChat Pay
                   </b-button>
                   <b-button
-                    @click="submit"
+                    @click="submitStripeCNY"
                     variant=" pl-3 pr-3"
                     size="sm"
                     style="
@@ -224,12 +239,6 @@ export default {
           no_shipping: 1,
         },
       },
-      stripeLineItems: [
-        {
-          price: "price_1LABcPG5EbMGvOaffNy5LykY", // The id of the one-time price you created in your Stripe dashboard
-          quantity: 1,
-        },
-      ],
       successURL: this.$auth.user
         ? `https://python.zerotohero.ca/stripe_checkout_success?user_id=${this.$auth.user.id}&host=${HOST}&session_id={CHECKOUT_SESSION_ID}`
         : undefined, // Make sure we have the user's id
@@ -242,9 +251,13 @@ export default {
     },
   },
   methods: {
-    submit() {
+    submitStripeUSD() {
       // You will be redirected to Stripe's secure checkout page
-      this.$refs.checkoutRef.redirectToCheckout();
+      this.$refs.stripeCheckoutUSDRef.redirectToCheckout();
+    },
+    submitStripeCNY() {
+      // You will be redirected to Stripe's secure checkout page
+      this.$refs.stripeCheckoutCNYRef.redirectToCheckout();
     },
     onPayPalPaymentAuthorized(e) {
       // {
