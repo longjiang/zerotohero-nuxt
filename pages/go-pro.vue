@@ -45,20 +45,40 @@
                   Back to Homepage
                 </router-link>
               </div>
-              <div v-else>
-                <stripe-checkout
-                  ref="checkoutRef"
-                  mode="payment"
-                  :pk="publishableKey"
-                  :line-items="lineItems"
-                  :success-url="successURL"
-                  :cancel-url="cancelURL"
-                  @loading="(v) => (loading = v)"
-                />
-                <b-button @click="submit" variant="primary mb-3 pl-3 pr-3">
-                  Proceed to Checkout
-                  <i class="fas fa-chevron-right"></i>
-                </b-button>
+              <div v-else class="mb-3">
+                <div class="mb-3">Please choose your method of payment:</div>
+                <div>
+                  <stripe-checkout
+                    ref="checkoutRef"
+                    mode="payment"
+                    :pk="publishableKey"
+                    :line-items="stripeLineItems"
+                    :success-url="successURL"
+                    :cancel-url="cancelURL"
+                    @loading="(v) => (loading = v)"
+                  />
+                  <b-button @click="submit" variant="success pl-3 pr-3" size="sm" style="position: relative; bottom: 0.5rem; padding: 0.1rem;">
+                    <i class="fas fa-credit-card mr-1"></i> Credit Card
+                  </b-button>
+                  <PayPal
+                      amount="0.50"
+                      currency="USD"
+                      :client="paypalCredentials"
+                      :items="paypalItems"
+                      :experience="paypalExperienceOptions"
+                      :button-style="{
+                        shape: 'rect',
+                        size: 'responsive',
+                        label: '',
+                        color: 'gold',
+                      }"
+                      env="sandbox"
+                      class="d-inline-block"
+                      @payment-authorized="onPayPalPaymentAuthorized"
+                      @payment-completed="onPayPalPaymentCompleted"
+                      @payment-cancelled="onPayPalPaymentCancelled"
+                    ></PayPal>
+                </div>
               </div>
             </div>
             <div v-else class="text-center">
@@ -104,7 +124,27 @@ export default {
     this.publishableKey = "pk_live_9lnc7wrGHtcFdPKIWZdy9p17";
     return {
       loading: false,
-      lineItems: [
+      paypalCredentials: {
+        sandbox:
+          "AU6fgxWMbyvtTHB-xv2WGb91HI21q9zkhG9IXthI62cCvasfpsO2DA5scSSx_r9R81r19J-yyexvd97A",
+        production:
+          "AeP7eWXUym5m7yGiNWAjV7hEgeS42FhEbU0l24UaqVa-8PgJf0L_OlQwTGHZXGOeVMkxs4l5-TSKc8xu",
+      },
+      paypalItems: [
+        {
+          name: "zero-to-hero-pro",
+          description: "Zero to Hero Pro features",
+          quantity: "1",
+          price: "0.50",
+          currency: "USD",
+        },
+      ],
+      paypalExperienceOptions: {
+        input_fields: {
+          no_shipping: 1,
+        },
+      },
+      stripeLineItems: [
         {
           price: "price_1LABcPG5EbMGvOaffNy5LykY", // The id of the one-time price you created in your Stripe dashboard
           quantity: 1,
@@ -125,6 +165,15 @@ export default {
     submit() {
       // You will be redirected to Stripe's secure checkout page
       this.$refs.checkoutRef.redirectToCheckout();
+    },
+    onPayPalPaymentAuthorized(e) {
+      console.log(e);
+    },
+    onPayPalPaymentCompleted(e) {
+      console.log(e);
+    },
+    onPayPalPaymentCancelled(e) {
+      console.log(e);
     },
   },
 };
