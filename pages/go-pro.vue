@@ -167,10 +167,104 @@ export default {
       this.$refs.checkoutRef.redirectToCheckout();
     },
     onPayPalPaymentAuthorized(e) {
+      // {
+      //   "intent": "sale",
+      //   "orderID": "EC-7A438886YD7979014",
+      //   "payerID": "EACR8MEZXSQPN",
+      //   "paymentID": "PAYID-MKUWKFQ71N57282RA848534U",
+      //   "paymentToken": "EC-7A438886YD7979014",
+      //   "returnUrl": "https://www.paypal.com/checkoutnow/error?paymentId=PAYID-MKUWKFQ71N57282RA848534U&token=EC-7A438886YD7979014&PayerID=EACR8MEZXSQPN",
+      //   "button_version": "4.0.37"
+      // }
       console.log({paypalAuthorizedEvent: e})
     },
     onPayPalPaymentCompleted(e) {
-      console.log({paypalCompletedEvent: e})
+      // Example of failed return event:
+      // {
+      //   "intent": "sale",
+      //   "orderID": "EC-7A438886YD7979014",
+      //   "payerID": "EACR8MEZXSQPN",
+      //   "paymentID": "PAYID-MKUWKFQ71N57282RA848534U",
+      //   "paymentToken": "EC-7A438886YD7979014",
+      //   "returnUrl": "https://www.paypal.com/checkoutnow/error?paymentId=PAYID-MKUWKFQ71N57282RA848534U&token=EC-7A438886YD7979014&PayerID=EACR8MEZXSQPN",
+      //   "button_version": "4.0.37"
+      // }
+
+      // Example of successful return event
+      // {
+      //     "id": "PAYID-MKUWOHA0VA868519Y941683S",
+      //     "intent": "sale",
+      //     "state": "approved",
+      //     "cart": "31M3697021347521V",
+      //     "create_time": "2022-06-15T04:59:08Z",
+      //     "payer": {
+      //         "payment_method": "paypal",
+      //         "status": "VERIFIED",
+      //         "payer_info": {
+      //             "email": "jianglong@me.com",
+      //             "first_name": "Jiang",
+      //             "middle_name": "Jiang",
+      //             "last_name": "Long",
+      //             "payer_id": "CS8T74VURZALQ",
+      //             "country_code": "CA"
+      //         }
+      //     },
+      //     "transactions": [
+      //         {
+      //             "amount": {
+      //                 "total": "0.50",
+      //                 "currency": "USD",
+      //                 "details": {
+      //                     "subtotal": "0.50",
+      //                     "shipping": "0.00",
+      //                     "handling_fee": "0.00",
+      //                     "insurance": "0.00",
+      //                     "shipping_discount": "0.00"
+      //                 }
+      //             },
+      //             "item_list": {
+      //                 "items": [
+      //                     {
+      //                         "name": "zero-to-hero-pro",
+      //                         "price": "0.50",
+      //                         "currency": "USD",
+      //                         "quantity": 1,
+      //                         "description": "Zero to Hero Pro features",
+      //                         "tax": "0.00"
+      //                     }
+      //                 ]
+      //             },
+      //             "related_resources": [
+      //                 {
+      //                     "sale": {
+      //                         "id": "9T618036YK2139359",
+      //                         "state": "pending",
+      //                         "payment_mode": "ECHECK",
+      //                         "protection_eligibility": "INELIGIBLE",
+      //                         "parent_payment": "PAYID-MKUWOHA0VA868519Y941683S",
+      //                         "create_time": "2022-06-15T04:59:47Z",
+      //                         "update_time": "2022-06-15T04:59:47Z",
+      //                         "reason_code": "ECHECK",
+      //                         "amount": {
+      //                             "total": "0.50",
+      //                             "currency": "USD",
+      //                             "details": {
+      //                                 "subtotal": "0.50",
+      //                                 "shipping": "0.00",
+      //                                 "handling_fee": "0.00",
+      //                                 "insurance": "0.00",
+      //                                 "shipping_discount": "0.00"
+      //                             }
+      //                         }
+      //                     }
+      //                 }
+      //             ]
+      //         }
+      //     ]
+      // }
+      if (e.state == 'approved') {
+        
+      }
     },
     onPayPalPaymentCancelled(e) {
       console.log({paypalCancelledEvent: e})
