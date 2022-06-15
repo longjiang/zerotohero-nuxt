@@ -65,7 +65,7 @@
             </b-form-group>
 
             <b-button class="d-block w-100" type="submit" variant="success">
-              Sign Up
+              <b-spinner small v-if="loading" /><span v-else>Sign Up</span>
             </b-button>
             <div class="mt-3 text-center">
               <router-link
@@ -101,6 +101,7 @@ export default {
         status: "active",
       },
       show: true,
+      loading: false
     };
   },
   computed: {
@@ -119,6 +120,7 @@ export default {
   methods: {
     async onSubmit(event) {
       try {
+        this.loading = true
         const res = await axios.post(
           `https://db2.zerotohero.ca/zerotohero/users`,
           this.form
@@ -155,6 +157,7 @@ export default {
           }
         }
       } catch (err) {
+        this.loading = false
         Helper.logError(err);
         if (err.response && err.response.data) {
           let message = err.response.data.error.message;

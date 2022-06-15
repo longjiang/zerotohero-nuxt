@@ -62,7 +62,7 @@
               </b-form-group>
 
               <b-button class="d-block w-100" type="submit" variant="success">
-                Login
+                <b-spinner small v-if="loading" /><span v-else>Login</span>
               </b-button>
               <div class="mt-3 text-center">
                 <router-link
@@ -102,6 +102,7 @@ export default {
         password: "",
       },
       shaking: false,
+      loading: false
     };
   },
   computed: {
@@ -120,6 +121,7 @@ export default {
   methods: {
     async onSubmit(event) {
       try {
+        this.loading = true
         let res = await this.$auth.loginWith("local", { data: this.form });
         if (res && res.data && res.data.data && res.data.data.user) {
           let user = res.data.data.user;
@@ -151,6 +153,7 @@ export default {
             duration: 5000,
           });
         }
+        this.loading = false
         this.shake();
       }
     },
