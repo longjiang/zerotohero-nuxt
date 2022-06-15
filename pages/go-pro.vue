@@ -263,7 +263,11 @@ export default {
       //     ]
       // }
       if (e.state == 'approved') {
-        
+        // Payment successful
+        let paymentID = e.id
+        window.location = `https://python.zerotohero.ca/paypal_checkout_success?pay_id=${paymentID}&user_id=${this.$auth.user.id}&host=${HOST}`
+      } else {
+        // Payment unsuccessful
       }
     },
     onPayPalPaymentCancelled(e) {

@@ -29,7 +29,7 @@
                   :to="{ path: '/' }"
                   class="btn btn-primary pl-4 pr-4"
                 >
-                  Yay!
+                  Start Using Pro
                 </router-link>
               </div>
             </div>
