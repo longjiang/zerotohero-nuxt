@@ -9,6 +9,7 @@
 </router>
 <template>
   <div>
+    <SiteTopBar />
     <SocialHead
       title="Zero to Hero Languages | Master any language by comprehensible input."
       description="We provide live TV channels in the target language, TV shows with subtitles, music with lyrics, phrasebooks with video examples... everything that can help you to learn a language “by osmosis.” We are also known for our “Chinese Zero to Hero” and “English Zero to Hero” online language courses."
@@ -22,19 +23,6 @@
       <div class="container">
         <div class="row pt-3">
           <div class="col-sm-12">
-            <div class="user-links">
-              <span
-                to="/profile"
-                v-if="
-                  $auth && $auth.loggedIn && $auth.user && $auth.user.first_name
-                "
-              >
-                <router-link to="/logout">Logout</router-link>
-              </span>
-              <span v-else>
-                <router-link to="/login">Login</router-link>
-              </span>
-            </div>
             <!-- <FeedbackPrompt /> -->
             <Logo class="mt-4 mb-3" />
             <p class="blurb text-white text-center">
@@ -44,7 +32,10 @@
               <StatsComp variant="summary" />
               <div class="mt-2">
                 <router-link :to="{ name: 'stats' }" style="color: #1bd445">
-                  <small>Full stats <i class="fas fa-angle-right ml-1"></i></small>
+                  <small>
+                    Full stats
+                    <i class="fas fa-angle-right ml-1"></i>
+                  </small>
                 </router-link>
               </div>
             </div>
@@ -599,6 +590,9 @@ export default {
     };
   },
   computed: {
+    pro() {
+      return [1, 4].includes(Number(this.$auth.user?.role)) ? true : false;
+    },
     native() {
       return Capacitor.isNativePlatform();
     },
@@ -794,9 +788,9 @@ export default {
   line-height: 1.5;
 }
 
+.go-pro-link,
 .user-links {
   position: absolute;
-  right: 1rem;
   top: 0;
   a {
     color: white;
@@ -804,6 +798,14 @@ export default {
     text-shadow: 0 0 15px rgba(0, 0, 0);
     margin-left: 0.5rem;
   }
+}
+
+.go-pro-link {
+  left: 1rem;
+}
+
+.user-links {
+  right: 1rem;
 }
 
 ::v-deep .stats-summary {

@@ -113,6 +113,25 @@
           </router-link>
         </div>
       </template>
+      <template v-else>
+        <client-only>
+          <div>
+            <router-link to="/go-pro" v-if="!pro" class="mr-2">🚀 Go Pro</router-link>
+            <span
+              to="/profile"
+              class="mr-1"
+              v-if="
+                $auth && $auth.loggedIn && $auth.user && $auth.user.first_name
+              "
+            >
+              <router-link to="/logout">Logout</router-link>
+            </span>
+            <span v-else>
+              <router-link to="/login">Login</router-link>
+            </span>
+          </div>
+        </client-only>
+      </template>
       <b-modal
         ref="languages-modal"
         size="xl"
