@@ -34,14 +34,18 @@
             </div>
             <div class="mt-4"></div>
             <div v-if="$auth.loggedIn && $auth.user" class="text-center">
-              <p v-if="![1, 4].includes(Number($auth.user.role))">
-                Welcome
-                <b>{{ $auth.user ? $auth.user.first_name : "" }}</b>
-                , let's get you started with a Pro account.
-              </p>
-              <div class="mt-4"></div>
+              <div v-if="![1, 4].includes(Number($auth.user.role))">
+                <div class="text-center bg-white rounded p-3">
+                  <div class="user-avatar"><i class="fas fa-user"></i></div>
+                  <h6>{{ $auth.user.first_name }} {{ $auth.user.last_name }}</h6>
+                  <div>{{ $auth.user.email }}</div>
+                </div>
+                <div class="mt-4"></div>
+                <p>Let's get make you Pro.</p>
+              </div>
+              <div class="mt-3"></div>
               <div v-if="[1, 4].includes(Number($auth.user.role))">
-                <h5 class="mb-4">🎉 You are already Pro! 🚀 Enjoy!</h5>
+                <h5 class="mb-3">🎉 You are already Pro! 🚀 Enjoy!</h5>
                 <router-link class="btn btn-primary mb-3" to="/">
                   Start Using Pro
                 </router-link>
@@ -372,7 +376,7 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style scoped lang="scss">
 .bg {
   min-height: 100vh;
   color: rgb(40, 40, 40);
@@ -390,5 +394,20 @@ export default {
   box-shadow: 0 0 30px rgb(0 0 0 / 48%);
   -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
+}
+
+.user-avatar {
+  background-color: #fd5f22;
+  color: white;
+  border-radius: 100%;
+  height: 3rem;
+  width: 3em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem auto;
+  i {
+    font-size: 1.5rem;
+  }
 }
 </style>
