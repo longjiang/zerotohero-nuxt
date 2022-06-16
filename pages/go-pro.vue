@@ -90,18 +90,6 @@
                 <div class="mt-3 mb-4">Please choose your method of payment:</div>
                 <div>
                   <stripe-checkout
-                    ref="stripeCheckoutCNYRef"
-                    mode="payment"
-                    :pk="publishableKey"
-                    :line-items="[{
-                      price: 'price_1LAr9NG5EbMGvOafz1UBoihK', // CNY price for WeChat Pay and Alipay
-                      quantity: 1,
-                    }]"
-                    :success-url="successURL"
-                    :cancel-url="cancelURL"
-                    @loading="(v) => (loading = v)"
-                  />
-                  <stripe-checkout
                     ref="stripeCheckoutUSDRef"
                     mode="payment"
                     :pk="publishableKey"
@@ -129,10 +117,9 @@
                     <i class="fab fa-google-pay mr-1"></i>
                     Credit Card
                   </b-button>
-                  <b-button
-                    @click="submitStripeCNY"
-                    variant=" pl-3 pr-3"
-                    size="sm"
+                  <a
+                    href="https://buy.stripe.com/4gw2bz7ELbvR8CccMN"
+                    class="btn btn-sm pl-3 pr-3"
                     style="
                       position: relative;
                       bottom: 0.5rem;
@@ -142,11 +129,10 @@
                   >
                     <i class="fab fa-weixin mr-1"></i>
                     WeChat Pay
-                  </b-button>
-                  <b-button
-                    @click="submitStripeCNY"
-                    variant=" pl-3 pr-3"
-                    size="sm"
+                  </a>
+                  <a
+                    href="https://buy.stripe.com/4gw2bz7ELbvR8CccMN"
+                    class="btn btn-sm pl-3 pr-3"
                     style="
                       position: relative;
                       bottom: 0.5rem;
@@ -156,8 +142,7 @@
                   >
                     <i class="fab fa-alipay mr-1"></i>
                     Alipay
-                  </b-button>
-
+                  </a>
                   <PayPal
                     amount="89.00"
                     currency="USD"
@@ -258,10 +243,6 @@ export default {
     submitStripeUSD() {
       // You will be redirected to Stripe's secure checkout page
       this.$refs.stripeCheckoutUSDRef.redirectToCheckout();
-    },
-    submitStripeCNY() {
-      // You will be redirected to Stripe's secure checkout page
-      this.$refs.stripeCheckoutCNYRef.redirectToCheckout();
     },
     onPayPalPaymentAuthorized(e) {
       // {
