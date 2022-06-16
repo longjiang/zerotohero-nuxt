@@ -41,7 +41,7 @@
               <div class="mt-4" />
               <div>
                 <router-link
-                  :to="{ path: '/login?redirect=/go-pro-success' }"
+                  :to="{ path: '/login?redirect=/' }"
                   class="btn btn-primary pl-4 pr-4"
                 >
                   Login
