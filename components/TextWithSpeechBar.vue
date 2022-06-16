@@ -112,7 +112,7 @@
         </button>
         <b-form-select
           size="md"
-          v-model="goToPage"
+          v-model="page"
           :options="pageOptions"
           class="text-center border-0"
           style="width: auto; padding-right: 1.25rem !important; margin: auto"
