@@ -9,7 +9,7 @@
         .pop()}`"
       :to="to"
     >
-      <i class="fas fa-comment-alt phrasebook-icon"></i>
+      <i class="fas fa-book-open phrasebook-icon"></i>
     </router-link>
     <div class="media-body" style="position: relative">
       <router-link class="link-unstyled" :to="to">
@@ -135,7 +135,7 @@ export default {
   flex-direction: column;
   .phrasebook-thumb {
     width: 100%;
-    padding-top: 25%;
+    padding-top: 50%;
     padding-left: 1.5rem;
     display: block;
     color: rgba(255, 255, 255, 0.4);
@@ -145,6 +145,7 @@ export default {
       font-size: 2em;
       position: absolute;
       top: calc(50% - 0.5em);
+      left: calc(50% - 0.5em);
       text-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     }
   }
@@ -155,6 +156,8 @@ export default {
     flex: 1;
     .phrasebook-title {
       color: #444;
+      text-align: center;
+      font-size: 1.1rem;
     }
   }
   .phrasebook-card-progress {
@@ -186,7 +189,6 @@ export default {
   }
   &:hover {
     .phrasebook-icon {
-      transform: scale(1.3) rotate(-2deg);
       color: rgba(255, 255, 255, 0.5);
       transition: 200ms all ease-in-out;
     }

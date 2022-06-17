@@ -14,7 +14,7 @@
             <!-- <Sale class="mt-5 mb-5" v-if="$l2.code === 'zh'" /> -->
 
             <FeedbackPrompt class="mt-5" :skin="$route.meta ? $route.meta.skin : 'light'"/>
-            <h3 class="text-center mt-5 mb-5">{{ $l2.name }} Phrasebooks</h3>
+            
             <div class="mb-5">
               <div
                 :class="{
@@ -38,10 +38,10 @@
           <div
             v-for="(phrasebook, phrasebookIndex) in phrasebooks"
             :class="{
-              'col-12': params.xs,
-              'col-6': params.sm,
-              'col-4': params.md,
-              'col-3': params.lg,
+              'col-6': params.xs,
+              'col-4': params.sm,
+              'col-3': params.md,
+              'col-2': params.lg,
             }"
             :key="`phrasebook-${phrasebookIndex}`"
             style="padding-bottom: 2rem"
@@ -146,7 +146,7 @@ export default {
 
 <style scoped lang="scss">
 .phrasebook:hover {
-  transform: scale(1.1) rotate(2deg);
+  transform: scale(1.1);
   transition: 200ms all ease-in-out;
 }
 </style>
