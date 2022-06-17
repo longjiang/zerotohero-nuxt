@@ -220,7 +220,7 @@ export default {
         this.extrasLoaded = true;
         console.log(`YouTube View (on video change): load subs if missing...`);
         let video = await this.loadSubsIfMissing(this.video);
-        if (!Helper.wide()) {
+        if (this.layout !== 'mini' && !Helper.wide()) {
           let el = this.$refs["youtube"];
           if (el) Helper.scrollToTargetAdjusted(el.$el, 43);
         }
