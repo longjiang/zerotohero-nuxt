@@ -225,6 +225,7 @@
 import Resource from "@/components/Resource";
 import Config from "@/lib/config";
 import Helper from "@/lib/helper";
+import { LEVELS } from '@/lib/utils/language-levels'
 
 export default {
   components: {
@@ -247,8 +248,8 @@ export default {
         return this.$store.state.settings.l2;
     },
     levels() {
-      let levels = Object.keys(Helper.levels).map((key) => {
-        return { number: key, ...Helper.levels[key] };
+      let levels = Object.keys(LEVELS).map((key) => {
+        return { number: key, ...LEVELS[key] };
       });
       let hours = Helper.languageHours(this.$l2);
       for (let level in levels) {
