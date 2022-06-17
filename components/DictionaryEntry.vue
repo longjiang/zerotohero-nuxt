@@ -40,7 +40,7 @@
     <div class="dictionary-entry-sections">
       <div
         class="dictionary-entry-section"
-        v-if="sections[currentSection].title === 'Videos'"
+        v-if="sections[currentSection].title === 'Media'"
       >
         <div
           :class="{ 'widget widget-dark': true }"
@@ -75,13 +75,7 @@
           class="mt-4 mb-4 text-center"
         />
         <EntryYouTube :text="entry.head" v-if="$adminMode" class="" />
-      </div>
-
-      <div
-        class="dictionary-entry-section"
-        v-if="sections[currentSection].title === 'Images' && showImages"
-      >
-        <div class="web-images widget">
+        <div class="web-images widget" v-if="showImages">
           <div class="widget-title">
             {{ $t("Images of “{text}” on the Web", { text: entry.head }) }}
           </div>
@@ -113,6 +107,7 @@
         </div>
       </div>
 
+
       <div
         class="dictionary-entry-section"
         v-if="sections[currentSection].title === 'Inflections'"
@@ -128,6 +123,30 @@
           @collocationsReady="collocationsReady = true"
           :level="entry.newHSK && entry.newHSK === '7-9' ? '7-9' : entry.level"
         />
+      </div>
+      <div
+        class="dictionary-entry-section"
+        v-if="sections[currentSection].title === 'Phrases'"
+      >
+        <div class="phrases mt-2" v-if="entry.phrases">
+          <div
+            v-for="phrase in entry.phrases"
+            :key="`word-${entry.id}-phrase-${phrase.id}`"
+            class="phrase-wrapper"
+          >
+            <Star
+              :word="phrase"
+              :label="false"
+              style="transform: scale(0.9)"
+            />
+            <span class="btn-phrase text-success strong">
+              {{ phrase.head }}
+            </span>
+            <span class="word-translation-item">
+              {{ phrase.definitions.join(", ") }}
+            </span>
+          </div>
+        </div>
       </div>
 
       <div
@@ -304,16 +323,12 @@ export default {
     sections() {
       return [
         {
-          title: "Videos",
+          title: "Media",
           visible: this.entry && this.showSearchSubs && this.searchTerms,
         },
         {
-          title: "Images",
-          visible: this.showImages,
-        },
-        {
-          title: "Inflections",
-          visible: this.hasForms,
+          title: "Phrases",
+          visible: this.entry?.phrases,
         },
         {
           title: "Collocations",
@@ -326,6 +341,10 @@ export default {
         {
           title: "Mistakes",
           visible: this.$l2.code === 'zh',
+        },
+        {
+          title: "Inflections",
+          visible: this.hasForms,
         },
         {
           title: "Related",

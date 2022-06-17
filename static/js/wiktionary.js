@@ -602,7 +602,12 @@ const Dictionary = {
     if (head && word?.head !== head) {
       word = this.lookup(head)
     }
+    this.addPhrasesToWord(word)
     return word
+  },
+  addPhrasesToWord(word) {
+    if (word)
+      if (!word.phrases || word.phrases.length === 0) word.phrases = this.phraseIndex[word.head] || []
   },
   lookup(text) {
     let words = this.searchIndex[text.toLowerCase()];
@@ -687,7 +692,7 @@ const Dictionary = {
         }
       }
       words.forEach(w => {
-        if (!w.w.phrases || w.w.phrases.length === 0) w.w.phrases = this.phraseIndex[w.w.head]?.slice(0, 6) || []
+        this.addPhrasesToWord(w.w)
         if (w.w.stems.length > 0) { w.score = w.score - 0.1 } // So that uninflected words bubble to the top.
       })
       words = words.sort((a, b) => b.score - a.score);
