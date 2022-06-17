@@ -73,6 +73,7 @@
             :emitSentenceTextAsAttr="true"
             :buttons="true"
             :showTranslation="translation ? false : true"
+            :showLoading="showLoading"
             ref="annotate"
             @translation="onTranslation($event, lineIndex)"
             @translationLoading="onTranslationLoading($event, lineIndex)"
@@ -150,6 +151,9 @@ export default {
     },
     translation: {
       type: String,
+    },
+    showLoading: {
+      default: false
     },
     lang: {
       default: undefined,

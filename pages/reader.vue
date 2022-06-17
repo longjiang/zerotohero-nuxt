@@ -84,6 +84,7 @@
             ref="reader"
             :page="page"
             :baseUrl="baseUrl"
+            :showLoading="false"
             @readerTextChanged="readerTextChanged"
             @readerTranslationChanged="readerTranslationChanged"
             @previousPage="onPreviousPage"

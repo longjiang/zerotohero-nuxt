@@ -24,6 +24,7 @@
           <LazyTextWithSpeechBar
             :html="marked"
             :translation="translation"
+            :showLoading="showLoading"
             :key="marked"
             :page="page"
             :baseUrl="baseUrl"
@@ -39,20 +40,19 @@
             class="pb-2"
           >
             <div class="text-center mt-1" v-if="!showWords">
-              <b-button variant="unstyled text-success strong text-decoration-underline" size="sm" @click="showWords = true" >
+              <b-button
+                variant="unstyled text-success strong text-decoration-underline"
+                size="sm"
+                @click="showWords = true"
+              >
                 Show Vocabulary List ({{ savedWordIdsInText.length }})
               </b-button>
             </div>
             <div v-if="showWords">
               <hr class="mt-0 mb-4" />
-              <div
-                style="font-size: 1rem; line-height: 1"
-                class="mb-3"
-              >
+              <div style="font-size: 1rem; line-height: 1" class="mb-3">
                 <div class="mt-1">
-                  <small>
-                    Here are your saved that appear in this text:
-                  </small>
+                  <small>Here are your saved that appear in this text:</small>
                 </div>
               </div>
               <WordList :ids="savedWordIdsInText" />
@@ -185,7 +185,7 @@ export default {
   props: {
     baseUrl: {
       type: String,
-      default: ''
+      default: "",
     },
     iconMode: {
       default: false,
@@ -201,6 +201,10 @@ export default {
     initialTranslation: {
       type: String,
       default: "",
+    },
+    showLoading: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {
@@ -234,9 +238,9 @@ export default {
         return this.$store.state.settings.l2;
     },
     marked() {
-      let text = this.textThrottled || this.text
-      let marked = Marked(text.replace(/^ {4,}/gm, "")) || text // 4 spaces in a row would emit <code>!
-      return marked
+      let text = this.textThrottled || this.text;
+      let marked = Marked(text.replace(/^ {4,}/gm, "")) || text; // 4 spaces in a row would emit <code>!
+      return marked;
     },
     translators() {
       let translators = this.$languages.getTranslator(this.$l1, this.$l2) || [];
@@ -286,7 +290,7 @@ export default {
   },
   methods: {
     goToPage(page) {
-      this.$emit('goToPage', page)
+      this.$emit("goToPage", page);
     },
     onEditorChange() {
       this.text = this.$refs.editor.invoke("getMarkdown");
@@ -439,5 +443,4 @@ export default {
     overflow: scroll;
   }
 }
-
 </style>
