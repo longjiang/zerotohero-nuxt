@@ -994,7 +994,7 @@ export default {
 .quick-gloss {
   font-size: 7em;
   display: inline;
-  opacity: 0.5;
+  opacity: 0.7;
   font-weight: normal;
 }
 

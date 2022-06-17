@@ -1338,7 +1338,7 @@ export default {
     padding: 1rem;
     padding-bottom: 2rem;
     position: fixed;
-    top: 3rem;
+    top: env(safe-area-inset-top) + 3rem;
     z-index: 99;
   }
 }
