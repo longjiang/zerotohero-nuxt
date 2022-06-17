@@ -1104,7 +1104,7 @@ export default {
       if (this.bottom) {
         var prevScrollpos = window.pageYOffset;
         window.onscroll = () => {
-          if (this.bottom && this.collapsed) {
+          if (this.bottom) {
             var currentScrollPos = window.pageYOffset;
             if (prevScrollpos > currentScrollPos + 5) {
               this.hidden = false;
