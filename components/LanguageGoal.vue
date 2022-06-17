@@ -117,7 +117,7 @@ export default {
     height: 1.3rem;
     position: absolute;
     left: 0.5rem;
-    z-index: 9;
+    z-index: 1;
   }
 }
 
