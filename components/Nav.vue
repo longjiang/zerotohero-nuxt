@@ -384,7 +384,8 @@ export default {
             {
               name: "all-media",
               icon: "fas fa-home",
-              title: `Home`,
+              title: `All`,
+              count: this.stats ? this.stats.allVideos : undefined,
               show: true,
             },
             {
@@ -396,7 +397,7 @@ export default {
             {
               name: "watch-history",
               icon: "fas fa-history",
-              title: "History",
+              title: "My History",
               show: true,
             },
             {
@@ -443,7 +444,7 @@ export default {
             },
             {
               name: "youtube-browse",
-              title: `Newly Added`,
+              title: `Misc`,
               count: this.stats ? this.stats.newVideos : undefined,
               icon: "fa fa-play",
               show: true,
@@ -451,7 +452,6 @@ export default {
             {
               name: "youtube-search",
               title: `Search`,
-              count: this.stats ? this.stats.allVideos : undefined,
               icon: "fas fa-search",
               show: true,
             },
