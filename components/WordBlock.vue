@@ -62,9 +62,11 @@
             class="word-block-text-byeonggi d-inline-block"
             v-html="hanja"
           />
+          <span v-if="quickGloss" class="quick-gloss ml-1">{{ quickGloss }}</span>
         </span>
       </template>
     </span>
+    
 
     <template slot="popover">
       <div
@@ -371,10 +373,13 @@ export default {
   computed: {
     ...mapState("settings", ["l2Settings"]),
     ...mapState("savedWords", ["savedWords"]),
+    quickGloss() {
+      return this.saved?.definitions?.[0]?.split(/[,;]\s*/)[0]?.replace(/\s*\(.*\)/, '')
+    },
     saved() {
       if (!this.checkSaved) return false;
       let saved;
-      let word = this.words[0] | this.tokens?.[0];
+      let word = this.words[0] || this.tokens?.[0];
       let text = this.text;
       if (word) {
         saved = this.$store.getters["savedWords/has"]({
@@ -388,7 +393,7 @@ export default {
           l2: this.$l2.code,
         });
       }
-      return saved ? true : false;
+      return saved;
     },
     savedTransliteration() {
       let savedTransliteration = this.transliteration;
@@ -986,12 +991,20 @@ export default {
   background-color: #00000066;
 }
 
+.quick-gloss {
+  font-size: 7em;
+  display: inline;
+  opacity: 0.5;
+  font-weight: normal;
+}
+
 .word-block-text-byeonggi-wrapper {
   font-size: 0.1em;
 
   .word-block-text {
     font-size: 10em;
   }
+
 
   .word-block-text-byeonggi {
     color: rgba(143, 158, 172, 0.8);
@@ -1007,7 +1020,12 @@ export default {
     position: relative;
     text-indent: 0;
 
-    span {
+    &.saved {
+      text-align: left;
+    }
+
+    .word-block-pinyin,
+    .word-block-text-byeonggi-wrapper {
       display: block;
       line-height: 1.3;
       text-indent: 0;
