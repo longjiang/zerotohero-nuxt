@@ -135,7 +135,7 @@ export default {
       if (savedWords.length > 1) {
         savedWords = savedWords.map((s) =>
           Object.assign(
-            { distance: FastestLevenshtein.distance(s.forms[0], text) },
+            { distance: FastestLevenshtein.distance(s.forms[0] || s.simplified, text) },
             s
           )
         );
