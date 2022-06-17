@@ -552,6 +552,9 @@ export default {
   .overlay-player-minimized {
     width: 100%;
   }
+  .zth-content {
+    padding-top: 4rem;
+  }
 }
 
 .zerotohero-wide #overlay-player.overlay-player-minimized {

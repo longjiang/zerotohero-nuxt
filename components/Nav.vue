@@ -1310,6 +1310,11 @@ export default {
       background: rgba(255, 255, 255, 0.75);
     }
   }
+  .nav-menu-bar {
+    .secondary-nav {
+      background: linear-gradient(white 0%, white 66%, transparent 100%);
+    }
+  }
 }
 
 .zth-nav-dark {
@@ -1320,17 +1325,21 @@ export default {
   }
   .nav-menu-bar {
     .secondary-nav {
-      background: #010416;
+      background: linear-gradient(black 0%, black 66%, transparent 100%);
     }
   }
 }
 
 .zth-nav-menu-bar {
   .zth-header {
-    background: rgb(1, 4, 22);
+    background: rgb(0, 0, 0);
   }
   .secondary-nav {
     padding: 1rem;
+    padding-bottom: 2rem;
+    position: fixed;
+    top: 3rem;
+    z-index: 99;
   }
 }
 
@@ -1357,7 +1366,7 @@ export default {
 .zth-nav-bottom {
   position: fixed;
   bottom: 0;
-  z-index: 9;
+  z-index: 99;
   width: 100%;
   box-shadow: 0 0px 20px rgba(0, 0, 0, 0.15);
   padding-bottom: calc(env(safe-area-inset-bottom) + 0.25rem);

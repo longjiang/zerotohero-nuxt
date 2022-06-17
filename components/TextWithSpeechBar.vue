@@ -37,7 +37,7 @@
                 <i class="fas fa-arrow-down"></i>
               </b-button>
               <b-button variant="light" @click="toggleSpeed">
-                <span>{{ speed }}x Speed</span>
+                <span>{{ speed }}x</span>
               </b-button>
               <b-dropdown variant="light" right text="Voice" style="flex: 1">
                 <b-dropdown-item
@@ -435,7 +435,7 @@ export default {
 .speech-bar {
   position: sticky;
   top: 0;
-  z-index: 1;
+  z-index: 11;
 }
 
 ::v-deep img {
@@ -446,7 +446,7 @@ export default {
 
 #zerotohero:not(.zerotohero-wide) {
   .speech-bar {
-    top: calc(env(safe-area-inset-top, 0) + 2.7rem);
+    top: calc(env(safe-area-inset-top, 0) + 7rem);
   }
 }
 

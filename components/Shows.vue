@@ -29,6 +29,7 @@
                   :placeholder="`Filter ${
                     filteredShows ? filteredShows.length : ''
                   } ${$l2.name} ${routeTitles[routeType]}`"
+                  ref="filter"
                   class="input-ghost-dark"
                 />
               </b-input-group>
@@ -67,6 +68,7 @@
 <script>
 import Config from "@/lib/config";
 import { tify } from "chinese-conv";
+import { scrollToTargetAdjusted } from '@/lib/utils'
 
 export default {
   props: {
@@ -142,6 +144,12 @@ export default {
         }
       }
     },
+  },
+  watch: {
+    keyword() {
+      let filterElement = this.$refs.filter?.$el
+      if (filterElement) scrollToTargetAdjusted(filterElement, 60)
+    }
   },
   methods: {
     onVideoUnavailable(youtube_id) {

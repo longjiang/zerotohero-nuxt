@@ -355,7 +355,7 @@ export default {
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
-  z-index: 4;
+  z-index: 20;
   line-height: 2.3;
   background-color: rgb(29, 29, 29);
   padding: calc(env(safe-area-inset-top) + 0.25rem) 0.75rem 0.25rem 0.75rem;
@@ -378,7 +378,7 @@ export default {
     width: 100vw;
     position: sticky;
     top: 0;
-    z-index: 9;
+    z-index: 99;
   }
 
   .language-flag-and-name {
