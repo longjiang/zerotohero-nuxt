@@ -266,7 +266,7 @@ export default {
     },
     shareURL() {
       if (typeof location !== 'undefined')
-        return location.href;
+        return location.href?.replace(location.protocol + '//' + location.host, 'https://www.zerotohero.ca');
     },
     title() {
       let lines = this.text.trim().split(/\n+/) || [""];
