@@ -329,13 +329,13 @@ export default {
         iframeTranslationClient = await getClient();
         translation = await iframeTranslationClient.translate(
           text,
-          this.$l1.code === 'zh' ? 'zh-CN' : this.$l1.code
+          this.$l1.code === "zh" ? "zh-CN" : this.$l1.code
         );
-        iframeTranslationClient.destroy()
+        iframeTranslationClient.destroy();
         this.setTranslation(translation);
       } catch (err) {
         this.setTranslation();
-        iframeTranslationClient.destroy()
+        iframeTranslationClient.destroy();
         Helper.logError(err);
       }
     },
@@ -482,9 +482,11 @@ export default {
       this.annotated = false;
       this.annotating = true;
       this.annotatedSlots = [];
-      let annotatedNode = await this.annotateRecursive(node.cloneNode(true));
-      let annotatedHtml = annotatedNode.outerHTML;
-      this.annotatedSlots.push(annotatedHtml);
+      if (typeof node !== "undefined") {
+        let annotatedNode = await this.annotateRecursive(node.cloneNode(true));
+        let annotatedHtml = annotatedNode.outerHTML;
+        this.annotatedSlots.push(annotatedHtml);
+      }
       this.annotating = false;
       this.annotated = true;
       this.$emit("annotated", true);
@@ -658,6 +660,7 @@ export default {
       return html;
     },
     convertToSentencesRecursive(node) {
+      if (typeof node === "undefined") return node;
       if (node.nodeType === 3) {
         // textNode
         // break setnences
