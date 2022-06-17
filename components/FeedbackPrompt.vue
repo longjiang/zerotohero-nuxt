@@ -3,6 +3,7 @@
     <div
       :class="`alert-success p-4 rounded ${skin} `"
       style="position: relative"
+      v-if="!closed"
     >
       <b-button variant="unstyled" class="close-button">
         <i class="fas fa-times" @click="closed = true"></i>
@@ -30,7 +31,10 @@
           <i class="fas fa-paper-plane mr-2"></i>
           Send Email
         </a>
-        <div class="mt-2"><i class="fas fa-paperclip mr-1"></i> Make sure to attach a screen recording!</div>
+        <div class="mt-2">
+          <i class="fas fa-paperclip mr-1"></i>
+          Make sure to attach a screen recording!
+        </div>
       </div>
     </div>
   </div>
@@ -45,9 +49,7 @@ export default {
   },
   data() {
     return {
-      messages: [
-        "Feedback",
-      ],
+      messages: ["Feedback"],
       closed: false,
       closedAgain: false,
     };
