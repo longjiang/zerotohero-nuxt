@@ -99,7 +99,7 @@
                 ref="editor"
                 :style="`width: ${addTranslation ? '50%' : '100%'}`"
                 :initialValue="text"
-                :options="{ usageStatistics: false }"
+                :options="{ usageStatistics: false, autofocus: false }"
                 :placeholder="$t('Paste {l2} text here', { l2: $l2.name })"
                 :dir="$l2.direction === 'rtl' ? 'rtl' : 'ltr'"
                 @change="onEditorChange"
