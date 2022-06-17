@@ -115,14 +115,14 @@
               {{ word.morphology }} of
             </div>
             <div>
-              <span class="word-pronunciation">{{ pronunciation(word) }}</span>
               <Speak
                 :text="word.kana || word.head"
                 :mp3="word.audio"
                 :wiktionary="word.wiktionary"
-                class="ml-1"
+                class="mr-1"
                 ref="speak"
               />
+              <span class="word-pronunciation">{{ pronunciation(word) }}</span>
               <Star
                 :word="word"
                 :text="text"
@@ -130,18 +130,25 @@
                 style="font-size: 0.8rem"
               ></Star>
             </div>
-            <b
-              :data-level="word.level || 'outside'"
-              style="font-size: 1.5rem"
-              :class="{
-                klingon: $l2.code === 'tlh',
-              }"
+
+            <router-link
+              :to="`/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${word.id}`"
+              class="text-success"
             >
-              <span v-if="$l2.code === 'de' && word.gender">
-                {{ { n: "das", m: "der", f: "die" }[word.gender] }}
-              </span>
-              {{ transform(word.head) }}
-            </b>
+              <b
+                :data-level="word.level || 'outside'"
+                style="font-size: 1.5rem"
+                :class="{
+                  klingon: $l2.code === 'tlh',
+                }"
+              >
+                <span v-if="$l2.code === 'de' && word.gender">
+                  {{ { n: "das", m: "der", f: "die" }[word.gender] }}
+                </span>
+                {{ transform(word.head) }}
+              </b>
+              <i class="fas fa-chevron-right"></i>
+            </router-link>
             <span
               v-if="word.traditional && word.traditional !== word.simplified"
               class="ml-1"
@@ -182,13 +189,6 @@
             <span v-if="word.unit" style="font-size: 0.8em" class="ml-1">
               Unit {{ word.unit }}
             </span>
-            <router-link
-              :to="`/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${word.id}`"
-              class="ml-1 link-unstyled"
-              style="color: #999"
-            >
-              <i class="fas fa-book"></i>
-            </router-link>
           </div>
           <div>
             <span
@@ -250,16 +250,23 @@
               </li>
             </ol>
           </div>
-          <div class="phrases" v-if="word.phrases">
+          <div class="phrases mt-2" v-if="word.phrases">
             <div
               v-for="phrase in word.phrases"
               :key="`word-${word.id}-phrase-${phrase.id}`"
               class="phrase-wrapper"
             >
-              <Star :word="phrase" :label="false" style="transform: scale(0.9)" /><span class="btn-phrase text-success strong">
+              <Star
+                :word="phrase"
+                :label="false"
+                style="transform: scale(0.9)"
+              />
+              <span class="btn-phrase text-success strong">
                 {{ phrase.head }}
               </span>
-              <span class="word-translation-item">{{ phrase.definitions.join(', ') }}</span>
+              <span class="word-translation-item">
+                {{ phrase.definitions.join(", ") }}
+              </span>
             </div>
           </div>
         </div>
@@ -311,7 +318,7 @@ import { imageProxy } from "@/lib/config";
 import WordPhotos from "@/lib/word-photos";
 import Klingon from "@/lib/klingon";
 import { mapState } from "vuex";
-import Vue from 'vue';
+import Vue from "vue";
 
 export default {
   props: {
@@ -341,7 +348,7 @@ export default {
     return {
       id: `wordblock-${uniqueId()}`,
       open: false,
-      showPhrase: {}, 
+      showPhrase: {},
       loading: true,
       text: this.$slots.default ? this.$slots.default[0].text : undefined,
       images: [],
@@ -365,16 +372,16 @@ export default {
     ...mapState("settings", ["l2Settings"]),
     ...mapState("savedWords", ["savedWords"]),
     saved() {
-      if (!this.checkSaved) return false
+      if (!this.checkSaved) return false;
       let saved;
-      let word = this.words[0] | this.tokens?.[0]
-      let text = this.text
+      let word = this.words[0] | this.tokens?.[0];
+      let text = this.text;
       if (word) {
         saved = this.$store.getters["savedWords/has"]({
           id: word.id,
           l2: this.$l2.code,
         });
-        if (saved) saved = word
+        if (saved) saved = word;
       } else if (text) {
         saved = this.$store.getters["savedWords/has"]({
           text: text.toLowerCase(),
@@ -385,21 +392,22 @@ export default {
     },
     savedTransliteration() {
       let savedTransliteration = this.transliteration;
-      let savedWord = this.saved
+      let savedWord = this.saved;
       if (savedWord?.head) {
         if (
           ["ja", "zh", "nan", "hak", "en", "ko", "vi"].includes(this.$l2.code)
         ) {
-          let text = this.text
+          let text = this.text;
           if (this.token?.candidates.length > 0)
-            text = this.token.candidates[0].head
+            text = this.token.candidates[0].head;
           if (savedWord.head === text) {
             let betterTransliteration =
               savedWord.jyutping ||
               savedWord.pinyin ||
               savedWord.kana ||
               savedWord.pronunciation;
-            savedTransliteration = betterTransliteration || savedTransliteration;
+            savedTransliteration =
+              betterTransliteration || savedTransliteration;
           }
         }
       }
@@ -559,7 +567,7 @@ export default {
   },
   methods: {
     togglePhrase(id) {
-      Vue.set(this.showPhrase, id, !this.showPhrase[id])
+      Vue.set(this.showPhrase, id, !this.showPhrase[id]);
     },
     stripAccents(str) {
       str = str
