@@ -102,7 +102,6 @@
         </div>
         <div
           :class="{ 'annotate-slot': true, 'd-none': annotated }"
-          style="display: inline"
         >
           <slot></slot>
         </div>
@@ -785,7 +784,7 @@ export default {
   padding-right: 1rem;
 }
 
-.annotated.with-buttons {
+.with-buttons {
   min-width: 61.8%;
   width: 100%;
   display: flex;
@@ -793,6 +792,10 @@ export default {
   flex-direction: row;
 
   .annotate-template {
+    flex: 1;
+  }
+
+  .annotate-slot {
     flex: 1;
   }
 
