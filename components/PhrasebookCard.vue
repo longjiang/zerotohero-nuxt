@@ -154,9 +154,9 @@ export default {
     position: relative;
     width: 100%;
     flex: 1;
+    text-align: center;
     .phrasebook-title {
       color: #444;
-      text-align: center;
       font-size: 1.1rem;
     }
   }

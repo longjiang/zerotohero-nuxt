@@ -34,6 +34,26 @@
             </div>
           </div>
         </div>
+        <h6>Featured Phrasebooks</h6>
+        <hr />
+        <div class="row" v-if="featuredPhrasebooks && featuredPhrasebooks.length > 0">
+          <div
+            v-for="(phrasebook, phrasebookIndex) in featuredPhrasebooks"
+            :class="{
+              'col-6': params.xs,
+              'col-4': params.sm,
+              'col-3': params.md,
+              'col-2': params.lg,
+            }"
+            :key="`phrasebook-${phrasebookIndex}`"
+            style="padding-bottom: 2rem"
+          >
+            <PhrasebookCard :phrasebook="phrasebook" />
+          </div>
+        </div>
+        <div class="mt-4"></div>
+        <h6>All Phrasebooks</h6>
+        <hr />
         <div class="row" v-if="phrasebooks && phrasebooks.length > 0">
           <div
             v-for="(phrasebook, phrasebookIndex) in phrasebooks"
@@ -119,6 +139,18 @@ export default {
         return "/img/zth-share-image.jpg";
       }
     },
+    featuredPhrasebooks() {
+      if (this.phrasebooks) {
+        return this.phrasebooks.filter(pb => {
+          let title = pb.title.toLowerCase()
+          if (title.includes(`${this.$l2.name} Drama Phrases`.toLowerCase())) return true
+          if (title.includes(`${this.$l2.name} Song Phrases`.toLowerCase())) return true
+          if (title.includes(`${this.$l2.name} Music Phrases`.toLowerCase())) return true
+          if (title.includes(`${this.$l2.name} News Phrases`.toLowerCase())) return true
+          if (title.includes(`${this.$l2.name} Phrases`.toLowerCase())) return true
+        })
+      }
+    }
   },
   async fetch() {
     this.phrasebooks = this.getPhrasebooksFromStore();
