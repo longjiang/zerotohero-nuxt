@@ -184,6 +184,14 @@ export default {
             this.l2
           );
         }
+        if (mutation.type === 'shows/LOAD_SHOWS') {
+          if (!this.$store.state.stats.statsLoaded[this.l2.code]) {
+            this.$store.dispatch("stats/load", {
+              l2: this.l2,
+              adminMode: this.$store.state.settings.adminMode,
+            });
+          }
+        }
       });
     },
     startLoggingUserTime() {
@@ -409,12 +417,6 @@ export default {
       }
       if (!this.$store.state.phrasebooks.phrasebooksLoaded[this.l2.code]) {
         this.$store.dispatch("phrasebooks/load", {
-          l2: this.l2,
-          adminMode: this.$store.state.settings.adminMode,
-        });
-      }
-      if (!this.$store.state.stats.statsLoaded[this.l2.code]) {
-        this.$store.dispatch("stats/load", {
           l2: this.l2,
           adminMode: this.$store.state.settings.adminMode,
         });
