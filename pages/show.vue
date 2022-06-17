@@ -54,7 +54,7 @@
               ></i>
             </h3>
             <p style="opacity: 0.6" class="mb-3">
-              <span v-if="episodeCount">{{ episodeCount }} Episodes</span>
+              <span v-if="episodeCount">{{ episodeCount }} Videos</span>
               <span v-if="$adminMode && show">
                 Cover youtube_id:
                 <span contenteditable="true" @blur="saveCover">
@@ -180,6 +180,7 @@ export default {
       tries: 0,
       videos: undefined,
       view: "grid",
+      musicOffset: 0
     };
   },
   computed: {
@@ -228,6 +229,7 @@ export default {
       this.sort =
         this.type === "talk" && !this.show.audiobook ? "-date" : "title";
       this.episodeCount = await this.getEpisodeCount()
+      this.musicOffset = Math.ceil(Math.random() * this.episodeCount)
       this.videos = await this.getVideos({
         limit: this.perPage,
         offset: this.moreVideos,
@@ -370,6 +372,7 @@ export default {
       }
     },
     async getVideos({ keyword, limit = this.perPage, offset = 0, sort = "title" } = {}) {
+      if (this.show.title === 'Music' && this.episodeCount > 500 ) offset = offset + this.musicOffset
       if (!keyword && this.show.episodes && this.show.episodes.length >= offset + limit) return this.show.episodes.slice(offset, limit);
       else {
         return await this.getVideosFromServer({ keyword, limit, offset, sort });

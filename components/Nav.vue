@@ -431,7 +431,7 @@ export default {
             {
               path: this.musicPath,
               icon: "fa fa-music",
-              title: `Songs`,
+              title: `Music`,
               count: this.stats ? this.stats.music : undefined,
               show: this.musicPath,
             },
