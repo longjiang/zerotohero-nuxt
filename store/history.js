@@ -85,6 +85,7 @@ export const actions = {
     commit('IMPORT_HISTORY_FROM_JSON', json)
   },
   async push({ rootState }) {
+    if (!$nuxt.$auth.loggedIn) return
     let user = rootState.auth.user
     let token = $nuxt.$auth.strategy.token.get()
     let dataId = this.$auth.$storage.getUniversal('dataId');

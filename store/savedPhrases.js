@@ -123,6 +123,7 @@ export const actions = {
     dispatch('push')
   },
   async push({ commit, state, rootState }) {
+    if (!$nuxt.$auth.loggedIn) return
     let user = rootState.auth.user
     let token = $nuxt.$auth.strategy.token.get()
     let dataId = this.$auth.$storage.getUniversal('dataId');

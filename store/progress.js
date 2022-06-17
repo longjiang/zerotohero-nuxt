@@ -109,6 +109,7 @@ export const actions = {
     dispatch('push')
   },
   async fetchProgressFromServer() {
+    if (!$nuxt.$auth.loggedIn) return
     let dataId = this.$auth.$storage.getUniversal('dataId');
     let url = `${Config.wiki}items/user_data/${dataId}?fields=id,progress`
     let res = await this.$authios.get(url)
@@ -151,6 +152,7 @@ export const actions = {
     }
   },
   async push({ rootState }) {
+    if (!$nuxt.$auth.loggedIn) return
     let user = rootState.auth.user
     let token = $nuxt.$auth.strategy.token.get()
     let dataId = this.$auth.$storage.getUniversal('dataId');
