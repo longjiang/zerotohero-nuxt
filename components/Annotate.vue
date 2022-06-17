@@ -334,7 +334,11 @@ export default {
         this.setTranslation(translation);
       } catch (err) {
         this.setTranslation();
-        iframeTranslationClient.destroy();
+        try{
+          iframeTranslationClient.destroy();
+        } catch(err) {
+          Helper.logError(err);
+        }
         Helper.logError(err);
       }
     },
