@@ -13,8 +13,11 @@
           <div class="col-sm-12">
             <!-- <Sale class="mt-5 mb-5" v-if="$l2.code === 'zh'" /> -->
 
-            <FeedbackPrompt class="mt-5" :skin="$route.meta ? $route.meta.skin : 'light'"/>
-            
+            <FeedbackPrompt
+              class="mt-5"
+              :skin="$route.meta ? $route.meta.skin : 'light'"
+            />
+
             <div class="mb-5">
               <div
                 :class="{
@@ -36,7 +39,10 @@
         </div>
         <h6>Featured Phrasebooks</h6>
         <hr />
-        <div class="row" v-if="featuredPhrasebooks && featuredPhrasebooks.length > 0">
+        <div
+          class="row"
+          v-if="featuredPhrasebooks && featuredPhrasebooks.length > 0"
+        >
           <div
             v-for="(phrasebook, phrasebookIndex) in featuredPhrasebooks"
             :class="{
@@ -141,16 +147,33 @@ export default {
     },
     featuredPhrasebooks() {
       if (this.phrasebooks) {
-        return this.phrasebooks.filter(pb => {
-          let title = pb.title.toLowerCase()
-          if (title.includes(`${this.$l2.name} Drama Phrases`.toLowerCase())) return true
-          if (title.includes(`${this.$l2.name} Song Phrases`.toLowerCase())) return true
-          if (title.includes(`${this.$l2.name} Music Phrases`.toLowerCase())) return true
-          if (title.includes(`${this.$l2.name} News Phrases`.toLowerCase())) return true
-          if (title.includes(`${this.$l2.name} Phrases`.toLowerCase())) return true
-        })
+        let first = this.phrasebooks.filter((pb) => {
+          let title = pb.title.toLowerCase();
+          if (title.includes(`${this.$l2.name} Phrases`.toLowerCase()))
+            return true;
+        });
+        let second = this.phrasebooks.filter((pb) => {
+          let title = pb.title.toLowerCase();
+          if (title.includes(`${this.$l2.name} Drama Phrases`.toLowerCase()))
+            return true;
+          if (title.includes(`${this.$l2.name} TV Phrases`.toLowerCase()))
+            return true;
+        });
+        let third = this.phrasebooks.filter((pb) => {
+          let title = pb.title.toLowerCase();
+          if (title.includes(`${this.$l2.name} News Phrases`.toLowerCase()))
+            return true;
+        });
+        let fourth = this.phrasebooks.filter((pb) => {
+          let title = pb.title.toLowerCase();
+          if (title.includes(`${this.$l2.name} Song Phrases`.toLowerCase()))
+            return true;
+          if (title.includes(`${this.$l2.name} Music Phrases`.toLowerCase()))
+            return true;
+        });
+        return [...first, ...second, ...third, ...fourth];
       }
-    }
+    },
   },
   async fetch() {
     this.phrasebooks = this.getPhrasebooksFromStore();
