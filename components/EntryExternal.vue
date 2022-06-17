@@ -109,6 +109,7 @@
       <iframe
         v-if="iframe"
         :src="iframe"
+        ref="iframe"
         class="ext-dictinoary-iframe"
         data-not-lazy
       ></iframe>
@@ -118,6 +119,7 @@
 
 <script>
 import { tify } from 'chinese-conv'
+import { timeout } from '@/lib/utils'
 export default {
   props: {
     term: '',
@@ -144,10 +146,12 @@ export default {
     },
   },
   methods: {
-    toggleIframe(e) {
+    async toggleIframe(e) {
       let href = e.target.getAttribute('href')
       if (this.iframe === href) this.iframe = undefined
       else this.iframe = href
+      await timeout(500)
+      this.$refs.iframe?.scrollIntoView({ behavior: 'smooth' })
     },
     tify(string) {
       return tify(string)
