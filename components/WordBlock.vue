@@ -345,7 +345,6 @@ export default {
       showPhrase: {}, 
       loading: true,
       text: this.$slots.default ? this.$slots.default[0].text : undefined,
-      saved: false,
       images: [],
       words: [],
       classes: {
@@ -365,6 +364,26 @@ export default {
   },
   computed: {
     ...mapState("settings", ["l2Settings"]),
+    ...mapState("savedWords", ["savedWords"]),
+    saved() {
+      if (!this.checkSaved) return false
+      let saved;
+      let word = this.words[0] | this.tokens?.[0]
+      let text = this.text
+      if (word) {
+        saved = this.$store.getters["savedWords/has"]({
+          id: word.id,
+          l2: this.$l2.code,
+        });
+        word.saved = saved;
+      } else if (text) {
+        saved = this.$store.getters["savedWords/has"]({
+          text: text.toLowerCase(),
+          l2: this.$l2.code,
+        });
+      }
+      return saved ? true : false;
+    },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -728,16 +747,6 @@ export default {
       if (this.$l1) this.classes[`l1-${this.$l1.code}`] = true;
       if (this.$l2) this.classes[`l2-${this.$l2.code}`] = true;
       if (this.$l2.han) this.classes["l2-zh"] = true;
-      if (this.checkSaved) {
-        let { savedWord, savedCandidate } = this.checkSavedWord();
-        if (savedWord?.id) {
-          this.saved = savedWord ? savedWord : false;
-          this.savedTransliteration = await this.getSavedTransliteration(
-            savedWord,
-            savedCandidate
-          );
-        }
-      }
     },
     matchCase(text) {
       if (this.text.match(/^[\wА-ЯЁ]/)) {
