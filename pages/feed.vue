@@ -10,11 +10,11 @@
 <template>
   <container-query :query="query" v-model="params">
     <div class="main-dark pb-5">
-      <VideoHero
+      <!-- <VideoHero
         v-if="heroVideo"
         :video="heroVideo"
         @videoUnavailable="onVideoUnavailable"
-      />
+      /> -->
       <div class="container pb-5">
         <SocialHead
           :title="`Learn ${$l2.name} with Videos | ${$l2.name} Zero to Hero`"
@@ -279,7 +279,7 @@ export default {
           items = items.concat(liveTVChannelItems);
         }
         this.items = this.items.concat(Helper.shuffle(items));
-        if (!this.heroVideo) this.loadHeroVideo();
+        // if (!this.heroVideo) this.loadHeroVideo();
         this.loading = false;
         return true;
       }
