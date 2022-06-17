@@ -15,6 +15,51 @@
 <template>
   <div class="main pb-4" v-cloak>
     <div class="container">
+      <div class="row mt-4 text-center">
+        <div class="col-sm-12">
+          <div class="text-center">
+            <Loader class="mt-4" @loaded="updateLoaded" />
+          </div>
+
+          <div>
+            <input
+              id="fileUpload"
+              ref="upload"
+              type="file"
+              hidden
+              @change="importCSV"
+            />
+            <button
+              class="btn btn-sm text-secondary"
+              @click="importButtonClick()"
+            >
+              <i class="fa fa-upload mr-1"></i>
+              Import CSV
+            </button>
+            <a
+              class="download-csv btn btn-sm text-secondary"
+              :href="csvHref"
+              :download="`${$l2.name
+                .toLowerCase()
+                .replace(/ /g, '-')}-saved-words.csv`"
+              variant="primary"
+              size="sm"
+              v-if="sW.length > 0"
+            >
+              <i class="fa fa-download mr-1"></i>
+              {{ $t("Export CSV") }}
+            </a>
+            <button
+              class="remove-all text-danger btn btn-sm"
+              v-on:click="removeAllClick"
+              v-if="this.sW.length > 0"
+            >
+              <i class="fas fa-times mr-1"></i>
+              {{ $t("Remove All") }}
+            </button>
+          </div>
+        </div>
+      </div>
       <div class="row">
         <div class="col-sm-12 pt-4">
           <div
@@ -86,61 +131,16 @@
             >
               Review All {{ sWLoaded ? sW.length : "" }} Words
               <i class="fas fa-chevron-right ml-1"></i>
+            </router-link><br/>
+            <router-link
+              v-if="sW.length > 0"
+              class="mt-2 btn btn-sm text-secondary"
+              :to="`/${$l1.code}/${$l2.code}/learn-interactive/saved`"
+            >
+              <i class="fa fa-chalkboard"></i>
+              Learn (Legacy)
             </router-link>
           </div>
-        </div>
-      </div>
-    </div>
-    <div class="row mt-4 text-center">
-      <div class="col-sm-12">
-        <div class="text-center">
-          <Loader class="mt-4" @loaded="updateLoaded" />
-        </div>
-
-        <div>
-          <input
-            id="fileUpload"
-            ref="upload"
-            type="file"
-            hidden
-            @change="importCSV"
-          />
-          <button
-            class="btn btn-sm text-secondary"
-            @click="importButtonClick()"
-          >
-            <i class="fa fa-upload mr-1"></i>
-            Import CSV
-          </button>
-          <a
-            class="download-csv btn btn-sm text-secondary"
-            :href="csvHref"
-            :download="`${$l2.name
-              .toLowerCase()
-              .replace(/ /g, '-')}-saved-words.csv`"
-            variant="primary"
-            size="sm"
-            v-if="sW.length > 0"
-          >
-            <i class="fa fa-download mr-1"></i>
-            {{ $t("Export CSV") }}
-          </a>
-          <button
-            class="remove-all text-danger btn btn-sm"
-            v-on:click="removeAllClick"
-            v-if="this.sW.length > 0"
-          >
-            <i class="fas fa-times mr-1"></i>
-            {{ $t("Remove All") }}
-          </button>
-          <router-link
-            v-if="sW.length > 0"
-            class="btn btn-sm text-secondary"
-            :to="`/${$l1.code}/${$l2.code}/learn-interactive/saved`"
-          >
-            <i class="fa fa-chalkboard"></i>
-            Learn (Legacy)
-          </router-link>
         </div>
       </div>
     </div>
@@ -201,9 +201,9 @@ export default {
         let word = savedWord.word;
         let mapped = { id: word.id, head: word.head };
         mapped = Object.assign(mapped, word);
-        mapped.l2 = this.$l2.code
+        mapped.l2 = this.$l2.code;
         mapped.definitions = word.definitions.join("; ");
-        mapped.date = savedWord.date
+        mapped.date = savedWord.date;
         if (word.simplified || word.kana || word.hangul) delete mapped.head;
         delete mapped.cjk;
         delete mapped.search;

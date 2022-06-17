@@ -8,7 +8,6 @@
   <div class="main">
     <div class="container pt-5 pb-5">
       <SocialHead :title="title" :description="description" :image="image" />
-      <FeedbackPrompt class="" :skin="$route.meta ? $route.meta.skin : 'light'"/>
       <client-only>
         <PhrasebookComp
           v-if="phrasebook"
