@@ -19,55 +19,56 @@
           $l2.scripts[0].direction === 'rtl',
       }"
     >
-      <div
-        style="float: left; margin-right: 0.5rem; margin-bottom: 0.5rem; height: 2rem; width: 2.5rem"
-      >
-        <img
-          src="/img/face-happy.gif"
-          alt=""
-          style="width: 100%"
-          v-if="showAnswer"
-        />
-        <img
-          src="/img/face-surprise.gif"
-          alt=""
-          style="width: 100%"
-          v-else-if="wrong"
-        />
-        <img src="/img/face-straight.gif" alt="" style="width: 100%" v-else />
-      </div>
-      <Annotate tag="span" :buttons="true" class="transcript-line-l2">
-        <span
-          v-if="$l2.han && $l2.code !== 'ja'"
-          v-html="
-            highlightMultiple(
-              reviewItem.line.line,
-              unique([reviewItem.simplified, reviewItem.traditional]),
-              hsk
-            )
-          "
-        />
-        <span
-          v-else
-          v-html="highlight(reviewItem.line.line, reviewItem.text, hsk)"
-        />
-      </Annotate>
-      <small style="opacity: 0.5; cursor: pointer" @click="scrollToLine">
-        <i class="fa fa-arrow-up"></i>
-      </small>
-      <div
-        v-if="$l2.code !== $l1.code && reviewItem.parallelLines"
-        :dir="$l1.direction === 'rtl' ? 'rtl' : 'ltr'"
-        :class="{
-          'transcript-line-l1 text-left mt-2': true,
-          'text-right':
-            $l1.scripts &&
-            $l1.scripts.length > 0 &&
-            $l1.scripts[0].direction === 'rtl',
-        }"
-        style="opacity: 0.7"
-      >
-        <span v-html="reviewItem.parallelLines" />
+      <div class="smiley-line-wrapper">
+        <div class="smiley">
+          <img
+            src="/img/face-happy.gif"
+            alt=""
+            style="width: 100%"
+            v-if="showAnswer"
+          />
+          <img
+            src="/img/face-surprise.gif"
+            alt=""
+            style="width: 100%"
+            v-else-if="wrong"
+          />
+          <img src="/img/face-straight.gif" alt="" style="width: 100%" v-else />
+        </div>
+        <div class="line-wrapper">
+          <Annotate tag="span" :buttons="true" class="transcript-line-l2">
+            <span
+              v-if="$l2.han && $l2.code !== 'ja'"
+              v-html="
+                highlightMultiple(
+                  reviewItem.line.line,
+                  unique([reviewItem.simplified, reviewItem.traditional]),
+                  hsk
+                )
+              "
+            />
+            <span
+              v-else
+              v-html="highlight(reviewItem.line.line, reviewItem.text, hsk)"
+            />
+          </Annotate>
+          <div
+            :dir="$l1.direction === 'rtl' ? 'rtl' : 'ltr'"
+            :class="{
+              'transcript-line-l1 text-left mt-2': true,
+              'text-right':
+                $l1.scripts &&
+                $l1.scripts.length > 0 &&
+                $l1.scripts[0].direction === 'rtl',
+            }"
+            style="opacity: 0.7"
+          >
+            <span v-if="$l2.code !== $l1.code && reviewItem.parallelLines" v-html="reviewItem.parallelLines" />
+            <small class="ml-1" style="cursor: pointer" @click="scrollToLine">
+              <i class="fa fa-arrow-up"></i>
+            </small>
+          </div>
+        </div>
       </div>
       <div class="mt-2" v-if="answers">
         <ReviewAnswerButton
@@ -155,7 +156,8 @@ export default {
         );
       }
       words = words.filter(
-        (word) => word && word.head && word.head.toLowerCase() !== text.toLowerCase()
+        (word) =>
+          word && word.head && word.head.toLowerCase() !== text.toLowerCase()
       );
       words = Helper.uniqueByValue(words, "head");
       return words;
@@ -201,7 +203,7 @@ export default {
         audio.play();
       } else {
         this.wrong = false;
-        await Helper.timeout(100)
+        await Helper.timeout(100);
         this.wrong = true;
       }
     },
@@ -329,6 +331,19 @@ export default {
   40%,
   60% {
     transform: translate3d(4px, 0, 0);
+  }
+}
+.smiley-line-wrapper {
+  display: flex;
+  .smiley {
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+    height: 2rem;
+    width: 2.5rem;
+  }
+  .line-wrapper {
+    padding-left: 0.5rem;
+    flex: 1;
   }
 }
 </style>
