@@ -339,7 +339,6 @@ export default {
   },
   data() {
     return {
-      savedTransliteration: undefined,
       id: `wordblock-${uniqueId()}`,
       open: false,
       showPhrase: {}, 
@@ -375,7 +374,7 @@ export default {
           id: word.id,
           l2: this.$l2.code,
         });
-        word.saved = saved;
+        if (saved) saved = word
       } else if (text) {
         saved = this.$store.getters["savedWords/has"]({
           text: text.toLowerCase(),
@@ -383,6 +382,28 @@ export default {
         });
       }
       return saved ? true : false;
+    },
+    savedTransliteration() {
+      let savedTransliteration = this.transliteration;
+      let savedWord = this.saved
+      if (savedWord?.head) {
+        if (
+          ["ja", "zh", "nan", "hak", "en", "ko", "vi"].includes(this.$l2.code)
+        ) {
+          let text = this.text
+          if (this.token?.candidates.length > 0)
+            text = this.token.candidates[0].head
+          if (savedWord.head === text) {
+            let betterTransliteration =
+              savedWord.jyutping ||
+              savedWord.pinyin ||
+              savedWord.kana ||
+              savedWord.pronunciation;
+            savedTransliteration = betterTransliteration || savedTransliteration;
+          }
+        }
+      }
+      return savedTransliteration;
     },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
@@ -717,29 +738,6 @@ export default {
         }
       }
       return { savedWord, savedCandidate };
-    },
-    async getSavedTransliteration(savedWord, savedCandidate) {
-      let savedTransliteration = this.transliteration;
-      if (
-        ["ja", "zh", "nan", "hak", "en", "ko", "vi"].includes(this.$l2.code)
-      ) {
-        let dictionary = await this.$getDictionary();
-        savedWord = savedCandidate || (await dictionary.get(savedWord.id));
-        let text =
-          this.text ||
-          (this.token && this.token.candidates.length > 0
-            ? this.token.candidates[0].head
-            : undefined);
-        if (savedWord && savedWord.head && savedWord.head === text) {
-          let betterTransliteration =
-            savedWord.jyutping ||
-            savedWord.pinyin ||
-            savedWord.kana ||
-            savedWord.pronunciation;
-          savedTransliteration = betterTransliteration || savedTransliteration;
-        }
-      }
-      return savedTransliteration;
     },
     async update() {
       if (!this.transliteration || this.transliteration === "")
