@@ -200,6 +200,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    autoHide: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
@@ -1101,7 +1105,7 @@ export default {
     /* When the user scrolls down, hide the navbar. When the user scrolls up, show the navbar */
     /* https://www.w3schools.com/howto/howto_js_navbar_hide_scroll.asp */
     bindAutoHideBottomBarEvent() {
-      if (this.bottom) {
+      if (this.bottom && this.autoHide) {
         var prevScrollpos = window.pageYOffset;
         window.onscroll = () => {
           if (this.bottom) {
