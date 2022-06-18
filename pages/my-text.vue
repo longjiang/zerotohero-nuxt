@@ -76,16 +76,27 @@ import { mapState } from "vuex";
 export default {
   data() {
     return {
+      loaded: false,
       creating: false
     };
   },
   mounted() {
+    this.updateLoaded()
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (mutation.type === "savedText/LOAD") {
+        console.log('savedText/LOAD mutation detected')
+        this.updateLoaded()
+      }
+    });
     if (!this.loadedByL2?.[this.$l2.code]) {
       this.$store.dispatch("savedText/load", {
         l2: this.$l2,
         adminMode: this.$adminMode,
       });
     }
+  },
+  beforeDestroy() {
+    this.unsubscribe()
   },
   computed: {
     ...mapState("savedText", ["loadedByL2"]),
@@ -102,9 +113,6 @@ export default {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
-    loaded() {
-      return this.loadedByL2?.[this.$l2.code]
-    },
     savedtexts() {
       return this.itemsByL2[this.$l2.code] || [];
     },
@@ -116,6 +124,9 @@ export default {
     },
   },
   methods: {
+    updateLoaded() {
+      this.loaded = this.loadedByL2?.[this.$l2.code]
+    },
     onTextRemoved(id) {
       this.$store.dispatch("savedText/remove", { l2: this.$l2, itemId: id });
     },

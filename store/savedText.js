@@ -55,11 +55,13 @@ export const loadFromServer = async ({ l2, adminMode }) => {
   let items = []
   if ($nuxt.$auth.loggedIn) {
     try {
+      console.log('savedTexts store: getting saved texts...')
       let res = await $nuxt.$authios.get(
         `${Config.wiki}items/text?sort=title&filter[l2][eq]=${l2.id
         }&filter[owner][eq]=${$nuxt.$auth.user.id}&fields=id,title&timestamp=${adminMode ? Date.now() : 0}`
       );
       items = res?.data?.data || []
+      console.log('savedTexts store: got items:', {items})
     } catch(e) {
     }
   }
@@ -84,7 +86,6 @@ export const actions = {
       itemsByL2[l2.code] = items
     }
     commit('LOAD', { l2, itemsByL2 })
-    // commit('SAVE_LOCAL')
   },
   async loadItem({ commit }, { l2, id, adminMode }) {
     if ($nuxt.$auth.loggedIn) {
