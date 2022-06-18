@@ -88,12 +88,11 @@ export const actions = {
   },
   async loadItem({ commit }, { l2, id, adminMode }) {
     if ($nuxt.$auth.loggedIn) {
-      let url = `${Config.wiki}items/text/${id}?timestamp=${adminMode ? Date.now() : 0}`;
+      let url = `${Config.wiki}items/text/${id}?timestamp=${Date.now()}`;
       let res = await $nuxt.$authios.get(url);
       if (res.data && res.data.data) {
         let data = res.data.data;
         commit('LOAD_ITEM', { l2, id, data })
-        // commit('SAVE_LOCAL')
       }
     }
   },
