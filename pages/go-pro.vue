@@ -15,13 +15,24 @@
               <Logo :forcePro="true" skin="light" class="logo" />
             </div>
             <div class="mt-4"></div>
-            <div class="text-center text-seoncdary bg-white p-3 rounded">
-              <h5>Why Pro?</h5>
-              <p>
-                With Pro, you'll have access to an
-                <em><b>ocean</b></em>
-                of language-learning videos!
-              </p>
+            <div class="text-seoncdary bg-white p-3 rounded">
+              <h5 class="text-center">Pro users can</h5>
+              <ul class="list-unstyled">
+                <li>
+                  <i class="fas fa-check-circle text-success"></i>
+                  See full transcripts of videos
+                </li>
+                <li>
+                  <i class="fas fa-check-circle text-success"></i>
+                  See all video search results from the dictionary
+                </li>
+                <li>
+                  <i class="fas fa-check-circle text-success"></i>
+                  Have access to an
+                  <em><b>ocean</b></em>
+                  of language-learning material
+                </li>
+              </ul>
               <StatsComp skin="light" variant="summary" />
               <div class="mt-2 text-center">
                 <router-link :to="{ name: 'stats' }" class="text-primary">
@@ -37,7 +48,9 @@
               <div v-if="![1, 4].includes(Number($auth.user.role))">
                 <div class="text-center bg-white rounded p-3">
                   <div class="user-avatar"><i class="fas fa-user"></i></div>
-                  <h6>{{ $auth.user.first_name }} {{ $auth.user.last_name }}</h6>
+                  <h6>
+                    {{ $auth.user.first_name }} {{ $auth.user.last_name }}
+                  </h6>
                   <div>{{ $auth.user.email }}</div>
                 </div>
                 <div class="mt-4"></div>
@@ -87,16 +100,20 @@
                     <sup style="font-size: 1rem">/ lifetime</sup>
                   </div>
                 </div>
-                <div class="mt-3 mb-4">Please choose your method of payment:</div>
+                <div class="mt-3 mb-4">
+                  Please choose your method of payment:
+                </div>
                 <div>
                   <stripe-checkout
                     ref="stripeCheckoutUSDRef"
                     mode="payment"
                     :pk="publishableKey"
-                    :line-items="[{
-                      price: 'price_1LArBtG5EbMGvOaflIKUthub', // USD price for all other payment methods
-                      quantity: 1,
-                    }]"
+                    :line-items="[
+                      {
+                        price: 'price_1LArBtG5EbMGvOaflIKUthub', // USD price for all other payment methods
+                        quantity: 1,
+                      },
+                    ]"
                     :success-url="successURL"
                     :cancel-url="cancelURL"
                     @loading="(v) => (loading = v)"

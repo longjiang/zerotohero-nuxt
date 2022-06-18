@@ -6,31 +6,31 @@
       <div>
         <p class="text-white mb-1 strong" style="font-size: 1.2em">
           <template v-if="message">{{ message }}</template>
-          <template v-else>See full transcript of {{ stats && stats[$l2.code] ? $n(stats[$l2.code].allVideos) : '' }} {{ $l2.name }} videos with a Pro account.</template>
+          <template v-else>See full transcripts of {{ stats && stats[$l2.code] ? $n(stats[$l2.code].allVideos) : '' }} {{ $l2.name }} videos with a Pro account.</template>
         </p>
       </div>
       <div class="mt-3" />
       <div class="text-white pl-5">
         <sup style="font-size: 1rem">$</sup>
         <span style="font-size: 2.2rem; font-weight: bold">89</span>
-        <sup style="font-size: 1rem">/ lifetime</sup>
+        <sup style="font-size: 1rem" class="text-success"><b>/ lifetime!</b></sup>
       </div>
       <div class="mt-2" />
-      <div class="strong text-white mb-2" style="font-size: 0.85em">Pay only once, enjoy it forever!</div>
-      <!-- <div style="font-size: 0.85em">
-        Compare prices with subscription-based services:
-        <a href="https://www.fluentu.com/en/pricing/" class="text-primary">FluentU</a>
-        ,
-        <a href="https://www.yabla.com/" class="text-primary">Yabla</a>
-        , and
-        <a href="https://www.lingq.com/en/" class="text-primary">LingQ</a>
-        .
-      </div> -->
+      <div class="strong text-white mb-2" style="font-size: 0.85em">Pay only once, enjoy forever!</div>
       <div class="mt-4" />
       <div>
-        <router-link class="btn btn-primary pl-3 pr-3" :to="{ name: 'go-pro' }">
-          Get Pro
+        <router-link class="btn btn-success pl-3 pr-3" :to="{ name: 'go-pro' }">
+          🚀 Upgrade to Pro
         </router-link>
+      </div>
+      <div style="font-size: 0.8em; opacity: 0.7" class="mt-3">
+        Compare prices with:
+        <a href="https://www.fluentu.com/en/pricing/" target="_blank" class="text-primary">FluentU</a>
+        ,
+        <a href="https://spanish.yabla.com/subscribe.php" target="_blank" class="text-primary">Yabla</a>
+        , and
+        <a href="https://www.lingq.com/en/signup/" target="_blank" class="text-primary">LingQ</a>
+        .
       </div>
     </div>
   </div>
