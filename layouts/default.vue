@@ -53,6 +53,7 @@ export default {
         "zerotohero-dark": this.$route.meta && this.$route.meta.skin === "dark",
         "zerotohero-light":
           this.$route.meta && this.$route.meta.skin === "light",
+        "zerotohero-with-mini-player": this.overlayPlayerYouTubeId && this.overlayPlayerMinimized
       };
       classes[`route-${this.$route.name}`] = true;
       classes[`zerotohero-zoom-${this.zoomLevel}`] = true;
@@ -556,6 +557,7 @@ export default {
   }
   .zth-content {
     padding-top: 4rem;
+    padding-bottom: 5rem;
   }
 }
 
@@ -587,6 +589,13 @@ export default {
     #main {
       flex: 1;
     }
+  }
+}
+
+
+.zerotohero-with-mini-player {
+  .zth-content {
+    padding-bottom: 5rem;
   }
 }
 

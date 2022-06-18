@@ -13,7 +13,7 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
-          <div v-if="loadedByL2">
+          <div v-if="loaded">
             <div v-if="savedtexts.length > 0">
               <div
                 v-for="savedText in savedtexts"
@@ -102,6 +102,9 @@ export default {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
+    loaded() {
+      return this.loadedByL2?.[this.$l2.code]
+    },
     savedtexts() {
       return this.itemsByL2[this.$l2.code] || [];
     },
@@ -137,9 +140,21 @@ export default {
   right: 1rem;
   bottom: 1rem;
 }
+.zerotohero-with-mini-player {
+  .new-button {
+    bottom: 6rem;
+  }
+}
 .zerotohero-not-wide {
   .new-button {
     bottom: 6rem;
+  }
+}
+
+
+.zerotohero-not-wide.zerotohero-with-mini-player {
+  .new-button {
+    bottom: 11rem;
   }
 }
 </style>
