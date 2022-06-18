@@ -40,7 +40,7 @@ export const mutations = {
       existing[key] = item[key]
       console.log(existing)
     }
-    
+
   },
 }
 
@@ -55,14 +55,13 @@ export const loadFromServer = async ({ l2, adminMode }) => {
   let items = []
   if ($nuxt.$auth.loggedIn) {
     try {
-      console.log('savedTexts store: getting saved texts...')
-      let res = await $nuxt.$authios.get(
-        `${Config.wiki}items/text?sort=title&filter[l2][eq]=${l2.id
-        }&filter[owner][eq]=${$nuxt.$auth.user.id}&fields=id,title&timestamp=${adminMode ? Date.now() : 0}`
-      );
+      let url = `${Config.wiki}items/text?sort=title&filter[l2][eq]=${l2.id
+        }&filter[owner][eq]=${$nuxt.$auth.user.id}&fields=id,title&timestamp=${Date.now()}`
+      console.log(`savedTexts store: getting saved texts from ${url}`)
+      let res = await $nuxt.$authios.get(url);
       items = res?.data?.data || []
-      console.log('savedTexts store: got items:', {items})
-    } catch(e) {
+      console.log('savedTexts store: got items:', { items })
+    } catch (e) {
     }
   }
   return items
