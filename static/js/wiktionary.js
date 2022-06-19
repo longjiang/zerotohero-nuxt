@@ -275,16 +275,10 @@ const Dictionary = {
     if (this.l2.agglutinative) item.search = item.search.replace(/^-/, "");
     item.head = item.word;
     delete item.word;
+    delete item.stems
     item.wiktionary = true;
     item.definitions = item.definitions ? item.definitions.split("|") : [];
-    item.stems = item.stems ? item.stems.split("|") : [];
-    if (findStems) {
-      for (let definition of item.definitions.filter(d => d.includes(" of "))) {
-        let lemma = this.lemmaFromDefinition(definition);
-        if (lemma) item.stems.push(lemma.lemma);
-      }
-      item.stems = this.unique(item.stems);
-    }
+    
     item.phrases = item.phrases ? item.phrases.split("|") : [];
 
     if (this.frequency && !item.frequency)
@@ -592,8 +586,6 @@ const Dictionary = {
         definitions: item.definitions.join("|"),
         pos: item.pos,
         gender: item.gender
-        // stems: item.stems.join("|"),
-        // phrases: item.phrases.join("|")
       };
       if (["vie", "kor"].includes(this.l2)) {
         word.han =
