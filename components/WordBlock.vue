@@ -386,14 +386,15 @@ export default {
           id: word.id,
           l2: this.$l2.code,
         });
-        if (saved) saved = word;
-      } else if (text) {
+        if (saved) return saved;
+      }
+      if (text) {
         saved = this.$store.getters["savedWords/has"]({
           text: text.toLowerCase(),
           l2: this.$l2.code,
         });
+        return saved
       }
-      return saved;
     },
     savedTransliteration() {
       let savedTransliteration = this.transliteration;
