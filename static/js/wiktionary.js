@@ -1125,13 +1125,12 @@ const Dictionary = {
     return words;
   },
   stemWordsWithScores(word, score = undefined) {
-    if (word.stems && word.stems.length > 0) {
-      let stemWords = this.stringsToWords(word.stems);
-      stemWordsWithScores = stemWords.map(w => {
-        return { score, w };
-      });
-      return stemWordsWithScores;
-    } else return [];
+    let stemWords = this.inflectionIndex(word.head);
+    stemWordsWithScores = stemWords.map(w => {
+      return { score, w };
+    });
+    return stemWordsWithScores;
+
   },
   /**
    * Find phrases that contain a word
