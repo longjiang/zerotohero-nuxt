@@ -702,7 +702,7 @@ const Dictionary = {
 
       let lemmaWords = []
 
-      for (let word of words) {
+      for (let word of words.slice(0, 10)) {
         lemmaWords = lemmaWords.concat(this.inflectionIndex[word.w.head.toLowerCase()])
       }
       words = [...lemmaWords.map(w => { return { w, score: 1 } }), ...words]
