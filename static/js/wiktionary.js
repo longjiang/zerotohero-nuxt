@@ -247,7 +247,7 @@ const Dictionary = {
         if (lemma) {
           let lemmaWords = this.searchIndex[lemma.lemma.toLowerCase()]
           if (lemmaWords) {
-            let lemmaKey = this.lemmaKey(lemma)
+            let lemmaKey = this.lemmaKey(lemma.lemma)
             this.inflectionIndex[word.head] = this.inflectionIndex[word.head] || []
             this.inflectionIndex[word.head] = this.inflectionIndex[word.head].concat(lemmaWords)
             this.lemmaIndex[lemmaKey] = this.lemmaIndex[lemmaKey] || []
@@ -259,8 +259,9 @@ const Dictionary = {
     for (let form in this.inflectionIndex) {
       this.inflectionIndex[form] = this.uniqueByValue(this.inflectionIndex[form], 'id')
     }
-    for (let lemma in this.lemmaIndex) {
-      this.lemmaIndex[this.lemmaKey(lemma)] = this.uniqueByValue(this.lemmaIndex[this.lemmaKey(lemma)], 'id')
+
+    for (let lemmaKey in this.lemmaIndex) {
+      this.lemmaIndex[lemmaKey] = this.uniqueByValue(this.lemmaIndex[lemmaKey], 'id')
     }
   },
   parseDictionaryCSV(data) {
@@ -283,7 +284,7 @@ const Dictionary = {
     delete item.stems
     item.wiktionary = true;
     item.definitions = item.definitions ? item.definitions.split("|") : [];
-    
+
     item.phrases = item.phrases ? item.phrases.split("|") : [];
 
     if (this.frequency && !item.frequency)
