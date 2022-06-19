@@ -91,7 +91,7 @@
               color="#28a745"
               size="5px"
             ></beat-loader>
-            <span v-else-if="translation">{{ parallellines[lineIndex] }}</span>
+            <span v-else-if="translation" v-html="translationHtml(parallellines[lineIndex])" />
           </div>
         </div>
       </div>
@@ -271,6 +271,20 @@ export default {
     },
   },
   methods: {
+    translationHtml(text) {
+      let sentences = this.breakSentences(text)
+      let html = ''
+      for (let s of sentences) {
+        html += `<span class="translation-sentence">${s}</span>`
+      }
+      return html
+    },
+    breakSentences(text) {
+      text = text.replace(/([!?:。！？：])/g, "$1SENTENCEENDING!!!");
+      text = text.replace(/(\. )/g, "$1SENTENCEENDING!!!");
+      let sentences = text.split("SENTENCEENDING!!!");
+      return sentences.filter((sentence) => sentence.trim() !== "");
+    },
     onSentenceClick(sentenceEl) {
       let sentences = this.getSentences();
       let index = sentences.findIndex((el) => el === sentenceEl);
@@ -339,17 +353,6 @@ export default {
     browser() {
       return typeof document !== "undefined";
     },
-    getSentences() {
-      let sentences = [];
-      for (let annotate of this.$children) {
-        for (let sentence of annotate.$el.querySelectorAll(
-          ".annotate-template .sentence"
-        )) {
-          sentences.push(sentence);
-        }
-      }
-      return sentences;
-    },
     getVoices() {
       let voices = speechSynthesis
         .getVoices()
@@ -367,12 +370,41 @@ export default {
       let textAttr = sentence.getAttribute("data-sentence-text");
       return textAttr || "";
     },
+    getSentences() {
+      let sentences = [];
+      for (let annotate of this.$children) {
+        for (let sentence of annotate.$el.querySelectorAll(
+          ".annotate-template .sentence"
+        )) {
+          sentences.push(sentence);
+        }
+      }
+      return sentences;
+    },
+    getTranslationSentences() {
+      let sentences = [];
+      for (let annotate of this.$children) {
+        for (let sentence of annotate.$el.querySelectorAll(
+          ".translation-sentence"
+        )) {
+          sentences.push(sentence);
+        }
+      }
+      return sentences;
+    },
     update() {
-      for (let sentence of this.getSentences()) {
+      let sentences = this.getSentences()
+      for (let sentence of sentences) {
         $(sentence).removeClass("current");
       }
-      const sentence = this.getSentences()[this.current];
+      const sentence = sentences[this.current];
       $(sentence).addClass("current");
+      let translationSentences = this.getTranslationSentences()
+      for (let translationSentence of translationSentences) {
+        $(translationSentence).removeClass('current')
+      }
+      const translationSentence = translationSentences[this.current];
+      $(translationSentence).addClass('current')
     },
     speak(text) {
       if (this.voices.length === 0) this.getVoices();
@@ -440,7 +472,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::v-deep .sentence.current {
+::v-deep .sentence.current,
+::v-deep .translation-sentence.current {
   background-color: rgba(212, 212, 255, 0.5);
 }
 
