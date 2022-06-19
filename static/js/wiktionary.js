@@ -243,7 +243,6 @@ const Dictionary = {
           this.inflectionIndex[word.head] = this.inflectionIndex[word.head] || []
           let lemmaWords = this.searchIndex[lemma.lemma.toLowerCase()]
           if (lemmaWords) {
-            lemmaWords = lemmaWords.filter(w => w.pos === 'verb')
             this.inflectionIndex[word.head] = this.inflectionIndex[word.head].concat(lemmaWords)
           }
         }
@@ -701,16 +700,12 @@ const Dictionary = {
         }
       }
 
+      let lemmaWords = []
+
       for (let word of words) {
-        for (let d of word.w.definitions) {
-          let lemma = this.lemmaFromDefinition(d)
-          if (lemma) {
-            let lemmaWords = this.lookupMultiple(lemma.lemma)
-            lemmaWords = lemmaWords.map(l => { return { w: l, score: 1 } })
-            words = words.concat(lemmaWords)
-          }
-        }
+        lemmaWords = lemmaWords.concat(this.inflectionIndex[word.w.head.toLowerCase()])
       }
+      words = [...lemmaWords.map(w => { return { w, score: 1 } }), ...words]
 
       words.forEach(w => {
         this.addPhrasesToWord(w.w)
