@@ -155,9 +155,9 @@ export default {
           autoFetch: false
         },
         endpoints: {
-          login: { url: 'https://db2.zerotohero.ca/zerotohero/auth/authenticate', method: 'post' },
-          refresh: { url: 'https://db2.zerotohero.ca/zerotohero/auth/refresh', method: 'post' },
-          logout: { url: 'https://db2.zerotohero.ca/zerotohero/auth/logout', method: 'post' },
+          login: { url: 'https://directusvps.zerotohero.ca/zerotohero/auth/authenticate', method: 'post' },
+          refresh: { url: 'https://directusvps.zerotohero.ca/zerotohero/auth/refresh', method: 'post' },
+          logout: { url: 'https://directusvps.zerotohero.ca/zerotohero/auth/logout', method: 'post' },
           user: false
         }
       }

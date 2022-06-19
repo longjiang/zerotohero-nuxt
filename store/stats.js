@@ -22,7 +22,7 @@ export const actions = {
       let stats = {}
       let tableSuffix = Config.youtubeVideosTableName(l2.id).replace(`${Config.wiki}items/youtube_videos`, '')
       let data = await Helper.proxy(
-        `https://db2.zerotohero.ca/count.php?table_suffix=${tableSuffix}&lang_id=${l2.id}&type=new_videos`,
+        `https://directusvps.zerotohero.ca/count.php?table_suffix=${tableSuffix}&lang_id=${l2.id}&type=new_videos`,
         { cacheLife: adminMode ? 0 : 86400 } // cache the count for one day (86400 seconds)
       );
       if (data) stats.newVideos = data
@@ -30,7 +30,7 @@ export const actions = {
       let music = rootGetters["shows/music"]({ l2 })
       if (music) {
         data = await Helper.proxy(
-          `https://db2.zerotohero.ca/count.php?table_suffix=${tableSuffix}&lang_id=${l2.id}&type=tv_show&id=${music.id}`,
+          `https://directusvps.zerotohero.ca/count.php?table_suffix=${tableSuffix}&lang_id=${l2.id}&type=tv_show&id=${music.id}`,
           { cacheLife: adminMode ? 0 : 86400 } // cache the count for one day (86400 seconds)
         );
         if (data) stats.music = data
@@ -40,7 +40,7 @@ export const actions = {
       let movies = rootGetters["shows/movies"]({ l2 })
       if (movies) {
         data = await Helper.proxy(
-          `https://db2.zerotohero.ca/count.php?table_suffix=${tableSuffix}&lang_id=${l2.id}&type=tv_show&id=${movies.id}`,
+          `https://directusvps.zerotohero.ca/count.php?table_suffix=${tableSuffix}&lang_id=${l2.id}&type=tv_show&id=${movies.id}`,
           { cacheLife: adminMode ? 0 : 86400 } // cache the count for one day (86400 seconds)
         );
         if (data) stats.movies = data
@@ -50,7 +50,7 @@ export const actions = {
       let news = rootGetters["shows/news"]({ l2 })
       if (news) {
         data = await Helper.proxy(
-          `https://db2.zerotohero.ca/count.php?table_suffix=${tableSuffix}&lang_id=${l2.id}&type=talk&id=${news.id}`,
+          `https://directusvps.zerotohero.ca/count.php?table_suffix=${tableSuffix}&lang_id=${l2.id}&type=talk&id=${news.id}`,
           { cacheLife: adminMode ? 0 : 86400 } // cache the count for one day (86400 seconds)
         );
         if (data) stats.news = data
@@ -58,7 +58,7 @@ export const actions = {
 
 
       data = await Helper.proxy(
-        `https://db2.zerotohero.ca/count.php?table_suffix=${tableSuffix}&lang_id=${l2.id}`,
+        `https://directusvps.zerotohero.ca/count.php?table_suffix=${tableSuffix}&lang_id=${l2.id}`,
         { cacheLife: adminMode ? 0 : 86400 } // cache the count for one day (86400 seconds)
       );
       if (data) stats.allVideos = data

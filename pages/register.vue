@@ -122,7 +122,7 @@ export default {
       try {
         this.loading = true
         const res = await axios.post(
-          `https://db2.zerotohero.ca/zerotohero/users`,
+          `https://directusvps.zerotohero.ca/zerotohero/users`,
           this.form
         );
         if (res && res.data && res.data.public === true) {
