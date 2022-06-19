@@ -247,7 +247,6 @@ export default {
     },
     async loadMoreItems() {
       if (this.loading) return;
-      console.log('💣 LOAD MORE ITEMS')
       if (
         this.$store.state.stats.statsLoaded[this.$l2.code] &&
         this.savedWords

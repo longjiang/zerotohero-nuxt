@@ -214,17 +214,6 @@
                   ? word.heads[0][1]
                   : ""
               }}
-              <span class="word-counters" v-if="word.counters">
-                (<Annotate tag="span" :buttons="false" :popup="false">
-                  <span>
-                    {{
-                      word.counters
-                        .map((counter) => "一" + counter.simplified)
-                        .join(word.simplified + "、") + word.simplified
-                    }}
-                  </span>
-                </Annotate>)
-              </span>
             </span>
             <span
               v-if="word.supplementalLang"
@@ -251,6 +240,22 @@
               </li>
             </ol>
           </div>
+
+          <Annotate
+            v-if="word.counters"
+            tag="span"
+            class="word-counters"
+            :buttons="false"
+            :popup="false"
+          >
+            <span>
+              {{
+                word.counters
+                  .map((counter) => "一" + counter.simplified)
+                  .join(word.simplified + "、") + word.simplified
+              }}
+            </span>
+          </Annotate>
           <div class="phrases mt-2" v-if="word.phrases">
             <div
               v-for="phrase in word.phrases.slice(0, 6)"
@@ -388,7 +393,7 @@ export default {
           l2: this.$l2.code,
         });
         if (saved) {
-          saved = Object.assign({ word }, saved)
+          saved = Object.assign({ word }, saved);
           return saved;
         }
       }
