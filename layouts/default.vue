@@ -45,7 +45,7 @@
               :key="`nav-${l1.code}-${l2.code}`"
               :variant="wide ? 'side-bar' : 'menu-bar'"
               :skin="$route.meta.skin ? $route.meta.skin : 'light'"
-              :fullHistory="l2FullHistoryPaths"
+              :fullHistory="fullHistoryPathsByL1L2"
               @collapsed="updateCollapsed"
               :showMainNav="wide"
               mode="pill"
@@ -58,7 +58,7 @@
               :key="`nav-bottom-${l1.code}-${l2.code}`"
               variant="menu-bar"
               :skin="$route.meta.skin ? $route.meta.skin : 'light'"
-              :fullHistory="l2FullHistoryPaths"
+              :fullHistory="fullHistoryPathsByL1L2"
               @collapsed="updateCollapsed"
               :showLogo="false"
               :showMainNav="true"
@@ -81,7 +81,7 @@
                 youtube_id: overlayPlayerYouTubeId,
                 lesson: overlayPlayerLesson,
                 mini: overlayPlayerMinimized,
-                fullHistory: l2FullHistoryPaths,
+                fullHistory: fullHistoryPathsByL1L2,
                 class: `${
                   overlayPlayerMinimized ? 'overlay-player-minimized' : ''
                 }`,
@@ -134,10 +134,8 @@ export default {
     ...mapState("settings", ["l2Settings", "l1", "l2"]),
     ...mapState("history", ["history"]),
     ...mapState("fullHistory", ["fullHistory"]),
-    l2FullHistoryPaths() {
-      return this.fullHistory
-        .filter((h) => h.path.includes(`/${this.l1.code}/${this.l2.code}`))
-        .map((h) => h.path);
+    fullHistoryPathsByL1L2() {
+      return this.$store.getters['fullHistory/fullHistoryPathsByL1L2']({l1: this.l1, l2: this.l2})
     },
     savedWordsCount() {
       let count = this.$store.getters["savedWords/count"]({ l2: this.l2.code });

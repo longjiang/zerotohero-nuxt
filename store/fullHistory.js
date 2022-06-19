@@ -97,6 +97,11 @@ export const getters = {
     } else {
       return 0
     }
-  }
+  },
+  fullHistoryPathsByL1L2: state => ({l1, l2}) => {
+    return state.fullHistory
+      .filter((h) => h.path.includes(`/${l1.code}/${l2.code}`))
+      .map((h) => h.path);
+  },
 }
 
