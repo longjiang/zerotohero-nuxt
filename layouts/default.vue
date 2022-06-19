@@ -132,7 +132,10 @@ export default {
     ...mapState("history", ["history"]),
     ...mapState("fullHistory", ["fullHistory"]),
     fullHistoryPathsByL1L2() {
-      return this.$store.getters['fullHistory/fullHistoryPathsByL1L2']({l1: this.l1, l2: this.l2})
+      return this.$store.getters["fullHistory/fullHistoryPathsByL1L2"]({
+        l1: this.l1,
+        l2: this.l2,
+      });
     },
     savedWordsCount() {
       let count = this.$store.getters["savedWords/count"]({ l2: this.l2.code });
@@ -298,6 +301,15 @@ export default {
               l2: this.l2,
               adminMode: this.$store.state.settings.adminMode,
             });
+          }
+        }
+        if (mutation.type === "fullHistory/LOAD") {
+          if (this.fullHistory) {
+            let lastFullHistoryItem =
+              this.fullHistory[this.fullHistory.length - 1];
+            if (lastFullHistoryItem && lastFullHistoryItem.path) {
+              this.$router.push({ path: lastFullHistoryItem.path });
+            }
           }
         }
       });
