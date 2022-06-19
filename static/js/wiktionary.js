@@ -237,6 +237,9 @@ const Dictionary = {
       this.phraseIndex[key] = this.phraseIndex[key].sort((a, b) => a.head.length - b.head.length)
     }
   },
+  lemmaKey(lemma) {
+    return 'l' + lemma
+  },
   buildInflectionIndex() {
     for (let word of this.words) {
       for (let definition of word.definitions) {
@@ -244,10 +247,11 @@ const Dictionary = {
         if (lemma) {
           let lemmaWords = this.searchIndex[lemma.lemma.toLowerCase()]
           if (lemmaWords) {
+            let lemmaKey = this.lemmaKey(lemma)
             this.inflectionIndex[word.head] = this.inflectionIndex[word.head] || []
             this.inflectionIndex[word.head] = this.inflectionIndex[word.head].concat(lemmaWords)
-            this.lemmaIndex[lemma.lemma] = this.lemmaIndex[lemma.lemma] || []
-            this.lemmaIndex[lemma.lemma].push(word)
+            this.lemmaIndex[lemmaKey] = this.lemmaIndex[lemmaKey] || []
+            this.lemmaIndex[lemmaKey].push(word)
           }
         }
       }
@@ -256,7 +260,7 @@ const Dictionary = {
       this.inflectionIndex[form] = this.uniqueByValue(this.inflectionIndex[form], 'id')
     }
     for (let lemma in this.lemmaIndex) {
-      this.lemmaIndex[lemma] = this.uniqueByValue(this.lemmaIndex[lemma], 'id')
+      this.lemmaIndex[this.lemmaKey(lemma)] = this.uniqueByValue(this.lemmaIndex[this.lemmaKey(lemma)], 'id')
     }
   },
   parseDictionaryCSV(data) {
@@ -799,7 +803,7 @@ const Dictionary = {
       );
     }
     // Find all forms of the word, that is, words whose stem matches word.head
-    let words = this.lemmaIndex[word.head] || []
+    let words = this.lemmaIndex[this.lemmaKey(word.head)] || []
     let moreForms = [];
     let heads = [word.head];
     for (let w of words) {
