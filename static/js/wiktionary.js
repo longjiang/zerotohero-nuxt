@@ -709,7 +709,6 @@ const Dictionary = {
 
       words.forEach(w => {
         this.addPhrasesToWord(w.w)
-        if (w.w.stems.length > 0) { w.score = w.score - 0.1 } // So that uninflected words bubble to the top.
       })
       words = words.sort((a, b) => b.score - a.score);
     }
