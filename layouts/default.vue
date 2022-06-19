@@ -14,83 +14,83 @@
         "
       >
         <!-- <delay-hydration> -->
-          <div>
-            <Nuxt id="main" />
-          </div>
+        <div>
+          <Nuxt id="main" />
+        </div>
         <!-- </delay-hydration> -->
       </template>
       <template v-else>
         <!-- <delay-hydration> -->
-          <div>
-            <HydrationNotice />
-            <client-only>
-              <SiteTopBar
-                v-if="!wide && $route.params.l1 && $route.params.l1 && l1 && l2"
-                variant="menu-bar"
-                :badge="savedWordsCount + savedPhrasesCount"
-              />
-            </client-only>
-            <client-only>
-              <Nav
-                v-if="
-                  $route.params.l1 &&
-                  $route.params.l1 &&
-                  l1 &&
-                  l2 &&
-                  !(!wide && $route.name === 'youtube-view')
-                "
-                class="zth-nav-wrapper"
-                :l1="l1"
-                :l2="l2"
-                :key="`nav-${l1.code}-${l2.code}`"
-                :variant="wide ? 'side-bar' : 'menu-bar'"
-                :skin="$route.meta.skin ? $route.meta.skin : 'light'"
-                :fullHistory="fullHistory"
-                @collapsed="updateCollapsed"
-                :showMainNav="wide"
-                mode="pill"
-              />
+        <div>
+          <HydrationNotice />
+          <client-only>
+            <SiteTopBar
+              v-if="!wide && $route.params.l1 && $route.params.l1 && l1 && l2"
+              variant="menu-bar"
+              :badge="savedWordsCount + savedPhrasesCount"
+            />
+          </client-only>
+          <client-only>
+            <Nav
+              v-if="
+                $route.params.l1 &&
+                $route.params.l1 &&
+                l1 &&
+                l2 &&
+                !(!wide && $route.name === 'youtube-view')
+              "
+              class="zth-nav-wrapper"
+              :l1="l1"
+              :l2="l2"
+              :key="`nav-${l1.code}-${l2.code}`"
+              :variant="wide ? 'side-bar' : 'menu-bar'"
+              :skin="$route.meta.skin ? $route.meta.skin : 'light'"
+              :fullHistory="l2FullHistoryPaths"
+              @collapsed="updateCollapsed"
+              :showMainNav="wide"
+              mode="pill"
+            />
 
-              <Nav
-                v-if="$route.params.l1 && $route.params.l1 && l1 && l2 && !wide"
-                :l1="l1"
-                :l2="l2"
-                :key="`nav-bottom-${l1.code}-${l2.code}`"
-                variant="menu-bar"
-                :skin="$route.meta.skin ? $route.meta.skin : 'light'"
-                :fullHistory="fullHistory"
-                @collapsed="updateCollapsed"
-                :showLogo="false"
-                :showMainNav="true"
-                :showSecondaryNav="false"
-                :bottom="true"
-                mode="small-icon"
-                style="z-index: 10"
-              />
-            </client-only>
-            <div class="zth-content">
-              <Nuxt
-                id="main"
-                keep-alive
-                :keep-alive-props="{ include: 'pages/all-media.vue' }"
-              />
-              <YouTubeViewComp
-                id="overlay-player"
-                v-if="overlayPlayerYouTubeId && overlayPlayerMinimized"
-                v-bind="{
-                  youtube_id: overlayPlayerYouTubeId,
-                  lesson: overlayPlayerLesson,
-                  mini: overlayPlayerMinimized,
-                  fullHistory,
-                  class: `${
-                    overlayPlayerMinimized ? 'overlay-player-minimized' : ''
-                  }`,
-                  key: `youtube-view-comp-${overlayPlayerYouTubeId}`,
-                }"
-                @close="overlayPlayerClose"
-              />
-            </div>
+            <Nav
+              v-if="$route.params.l1 && $route.params.l1 && l1 && l2 && !wide"
+              :l1="l1"
+              :l2="l2"
+              :key="`nav-bottom-${l1.code}-${l2.code}`"
+              variant="menu-bar"
+              :skin="$route.meta.skin ? $route.meta.skin : 'light'"
+              :fullHistory="l2FullHistoryPaths"
+              @collapsed="updateCollapsed"
+              :showLogo="false"
+              :showMainNav="true"
+              :showSecondaryNav="false"
+              :bottom="true"
+              mode="small-icon"
+              style="z-index: 10"
+            />
+          </client-only>
+          <div class="zth-content">
+            <Nuxt
+              id="main"
+              keep-alive
+              :keep-alive-props="{ include: 'pages/all-media.vue' }"
+            />
+            <YouTubeViewComp
+              id="overlay-player"
+              v-if="overlayPlayerYouTubeId && overlayPlayerMinimized"
+              v-bind="{
+                youtube_id: overlayPlayerYouTubeId,
+                lesson: overlayPlayerLesson,
+                mini: overlayPlayerMinimized,
+                fullHistory: l2FullHistoryPaths,
+                class: `${
+                  overlayPlayerMinimized ? 'overlay-player-minimized' : ''
+                }`,
+                key: `youtube-view-comp-${overlayPlayerYouTubeId}`,
+              }"
+              @close="overlayPlayerClose"
+            />
           </div>
+        </div>
         <!-- </delay-hydration> -->
       </template>
     </div>
@@ -119,7 +119,6 @@ export default {
       dictionaryCredit: "",
       settingsLoaded: undefined,
       fullPageRoutes: ["index", "sale"],
-      fullHistory: [],
       collapsed: false,
       overlayPlayerYouTubeId: undefined,
       overlayPlayerLesson: undefined,
@@ -134,6 +133,12 @@ export default {
   computed: {
     ...mapState("settings", ["l2Settings", "l1", "l2"]),
     ...mapState("history", ["history"]),
+    ...mapState("fullHistory", ["fullHistory"]),
+    l2FullHistoryPaths() {
+      return this.fullHistory
+        .filter((h) => h.path.includes(`/${this.l1.code}/${this.l2.code}`))
+        .map((h) => h.path);
+    },
     savedWordsCount() {
       let count = this.$store.getters["savedWords/count"]({ l2: this.l2.code });
       // eslint-disable-next-line vue/no-parsing-error
@@ -212,7 +217,9 @@ export default {
     }
     this.onAllLanguagesLoaded();
     if (window)
-      this.fullHistory.push(window.location.pathname + window.location.search);
+      this.addFullHistoryItem(
+        window.location.pathname + window.location.search
+      );
   },
   beforeDestroy() {
     // you may call unsubscribe to stop the subscription
@@ -261,9 +268,8 @@ export default {
     overlayPlayerClose(youtube_id) {
       this.overlayPlayerYouTubeId = undefined;
       this.overlayPlayerLesson = undefined;
-      this.fullHistory = this.fullHistory.filter(
-        (path) => !path.includes(`/youtube/view/${youtube_id}`)
-      ); // If the user closes the youtube overlay player, we should never go back to it in history
+      // TODO
+      // If the user closes the youtube overlay player, we should never go back to it in history
     },
     subscribeToVuexMutations() {
       this.unsubscribe = this.$store.subscribe((mutation) => {
@@ -473,7 +479,7 @@ export default {
       }
     },
     addFullHistoryItem(path) {
-      this.fullHistory.push(path);
+      this.$store.dispatch("fullHistory/add", path);
     },
     onSkin(skin) {
       this.skin = skin;
@@ -494,9 +500,6 @@ export default {
       if (dictionary) {
         this.dictionaryCredit = await dictionary.credit();
       }
-      this.fullHistory = this.fullHistory.filter((h) =>
-        h.includes(`/${this.l1.code}/${this.l2.code}`)
-      );
       this.stopAndRestartLoggingUserTimeOnLanguageChange();
     },
     loadLanguageSpecificSettings() {

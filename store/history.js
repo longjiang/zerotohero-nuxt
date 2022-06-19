@@ -33,9 +33,6 @@ export const mutations = {
   },
   ADD_HISTORY_ITEM(state, historyItem) {
     if (typeof localStorage !== 'undefined') {
-      if (!state.historyLoaded) {
-        this.dispatch('load')
-      }
       let history = state.history
       let prevVersionOfSameItemIndex = history.findIndex(i => i.id === historyItem.id)
       if (prevVersionOfSameItemIndex !== -1)
@@ -69,7 +66,10 @@ export const actions = {
   load({ commit }) {
     if (!state.historyLoaded) commit('LOAD_HISTORY')
   },
-  add({ commit, dispatch }, historyItem) {
+  add({ state, commit, dispatch }, historyItem) {
+    if (!state.historyLoaded) {
+      this.dispatch('load')
+    }
     commit('ADD_HISTORY_ITEM', Object.assign({}, historyItem))
     dispatch('push')
   },
