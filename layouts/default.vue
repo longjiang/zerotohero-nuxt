@@ -53,7 +53,8 @@ export default {
         "zerotohero-dark": this.$route.meta && this.$route.meta.skin === "dark",
         "zerotohero-light":
           this.$route.meta && this.$route.meta.skin === "light",
-        "zerotohero-with-mini-player": this.overlayPlayerYouTubeId && this.overlayPlayerMinimized
+        "zerotohero-with-mini-player":
+          this.overlayPlayerYouTubeId && this.overlayPlayerMinimized,
       };
       classes[`route-${this.$route.name}`] = true;
       classes[`zerotohero-zoom-${this.zoomLevel}`] = true;
@@ -106,7 +107,8 @@ export default {
       this.onLanguageChange();
     }
     this.onAllLanguagesLoaded();
-    if (window) this.fullHistory.push(window.location.pathname + window.location.search)
+    if (window)
+      this.fullHistory.push(window.location.pathname + window.location.search);
   },
   beforeDestroy() {
     // you may call unsubscribe to stop the subscription
@@ -185,7 +187,7 @@ export default {
             this.l2
           );
         }
-        if (mutation.type === 'shows/LOAD_SHOWS') {
+        if (mutation.type === "shows/LOAD_SHOWS") {
           if (!this.$store.state.stats.statsLoaded[this.l2.code]) {
             this.$store.dispatch("stats/load", {
               l2: this.l2,
@@ -388,7 +390,9 @@ export default {
       if (dictionary) {
         this.dictionaryCredit = await dictionary.credit();
       }
-      this.fullHistory = this.fullHistory.filter(h => h.includes(`/${this.l1.code}/${this.l2.code}`))
+      this.fullHistory = this.fullHistory.filter((h) =>
+        h.includes(`/${this.l1.code}/${this.l2.code}`)
+      );
       this.stopAndRestartLoggingUserTimeOnLanguageChange();
     },
     loadLanguageSpecificSettings() {
@@ -443,50 +447,57 @@ export default {
       <Nuxt id="main" />
     </template>
     <template v-else>
-      <SiteTopBar
-        v-if="!wide && $route.params.l1 && $route.params.l1 && l1 && l2"
-        variant="menu-bar"
-        :badge="savedWordsCount + savedPhrasesCount"
-      />
+      <client-only>
+        <SiteTopBar
+          v-if="!wide && $route.params.l1 && $route.params.l1 && l1 && l2"
+          variant="menu-bar"
+          :badge="savedWordsCount + savedPhrasesCount"
+        />
+      </client-only>
+      <client-only>
+        <Nav
+          v-if="
+            $route.params.l1 &&
+            $route.params.l1 &&
+            l1 &&
+            l2 &&
+            !(!wide && $route.name === 'youtube-view')
+          "
+          class="zth-nav-wrapper"
+          :l1="l1"
+          :l2="l2"
+          :key="`nav-${l1.code}-${l2.code}`"
+          :variant="wide ? 'side-bar' : 'menu-bar'"
+          :skin="$route.meta.skin ? $route.meta.skin : 'light'"
+          :fullHistory="fullHistory"
+          @collapsed="updateCollapsed"
+          :showMainNav="wide"
+          mode="pill"
+        />
 
-      <Nav
-        v-if="
-          $route.params.l1 &&
-          $route.params.l1 &&
-          l1 &&
-          l2 &&
-          !(!wide && $route.name === 'youtube-view')
-        "
-        class="zth-nav-wrapper"
-        :l1="l1"
-        :l2="l2"
-        :key="`nav-${l1.code}-${l2.code}`"
-        :variant="wide ? 'side-bar' : 'menu-bar'"
-        :skin="$route.meta.skin ? $route.meta.skin : 'light'"
-        :fullHistory="fullHistory"
-        @collapsed="updateCollapsed"
-        :showMainNav="wide"
-        mode="pill"
-      />
-
-      <Nav
-        v-if="$route.params.l1 && $route.params.l1 && l1 && l2 && !wide"
-        :l1="l1"
-        :l2="l2"
-        :key="`nav-bottom-${l1.code}-${l2.code}`"
-        variant="menu-bar"
-        :skin="$route.meta.skin ? $route.meta.skin : 'light'"
-        :fullHistory="fullHistory"
-        @collapsed="updateCollapsed"
-        :showLogo="false"
-        :showMainNav="true"
-        :showSecondaryNav="false"
-        :bottom="true"
-        mode="small-icon"
-        style="z-index: 10"
-      />
+        <Nav
+          v-if="$route.params.l1 && $route.params.l1 && l1 && l2 && !wide"
+          :l1="l1"
+          :l2="l2"
+          :key="`nav-bottom-${l1.code}-${l2.code}`"
+          variant="menu-bar"
+          :skin="$route.meta.skin ? $route.meta.skin : 'light'"
+          :fullHistory="fullHistory"
+          @collapsed="updateCollapsed"
+          :showLogo="false"
+          :showMainNav="true"
+          :showSecondaryNav="false"
+          :bottom="true"
+          mode="small-icon"
+          style="z-index: 10"
+        />
+      </client-only>
       <div class="zth-content">
-        <Nuxt id="main" keep-alive :keep-alive-props="{ include: 'pages/all-media.vue' }"/>
+        <Nuxt
+          id="main"
+          keep-alive
+          :keep-alive-props="{ include: 'pages/all-media.vue' }"
+        />
         <YouTubeViewComp
           id="overlay-player"
           v-if="overlayPlayerYouTubeId && overlayPlayerMinimized"
@@ -591,7 +602,6 @@ export default {
     }
   }
 }
-
 
 .zerotohero-with-mini-player {
   .zth-content {
