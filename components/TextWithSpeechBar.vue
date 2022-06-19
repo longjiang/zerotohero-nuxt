@@ -473,9 +473,11 @@ export default {
 
 <style lang="scss" scoped>
 ::v-deep .sentence.current,
-::v-deep .translation-sentence.current {
+::v-deep .translation-sentence.current,
+::v-deep .annotate-translation-sentence.current {
   background-color: rgba(212, 212, 255, 0.5);
 }
+
 
 .speech-bar {
   position: sticky;

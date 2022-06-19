@@ -235,7 +235,6 @@ export default {
       selectedText: undefined,
       batchId: 0,
       textMode: false,
-      current: 0, //  current sentence
       tokenized: [],
       dictionary: undefined,
       myanmarZawgyiDetector: undefined,
@@ -293,9 +292,6 @@ export default {
     },
   },
   watch: {
-    current() {
-      this.update();
-    },
     translation() {
       this.translationData = this.translation;
     },
@@ -320,7 +316,7 @@ export default {
     getTranslationSentences() {
       let sentences = [];
       for (let sentence of this.$el.querySelectorAll(
-        ".translation-sentence"
+        ".annotate-translation-sentence"
       )) {
         sentences.push(sentence);
       }
@@ -514,12 +510,12 @@ export default {
         }
       }
     },
-    update() {
+    highlightTranslation(current) {
       let translationSentences = this.getTranslationSentences();
       for (let translationSentence of translationSentences) {
         $(translationSentence).removeClass("current");
       }
-      const translationSentence = translationSentences[this.current];
+      const translationSentence = translationSentences[current];
       $(translationSentence).addClass("current");
     },
     async annotate(node) {
@@ -735,8 +731,13 @@ export default {
       return node;
     },
     onSentenceClick(e) {
-      this.$emit('sentenceClick', e.currentTarget)
-    }
+      let sentenceEl = e.currentTarget;
+      let sentences = this.getSentences();
+      let index = sentences.findIndex((el) => el === sentenceEl);
+      let current = Math.max(index, 0); // cannot set this as a data property because reactivity makes it impossible for the parent 
+      this.highlightTranslation(current)
+      this.$emit("sentenceClick", sentenceEl);
+    },
   },
 };
 </script>
