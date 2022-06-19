@@ -786,7 +786,6 @@ const Dictionary = {
     }
   },
   findForms(word) {
-    let heads = [word.head];
     let forms = [];
     let lemmaWords = this.inflectionIndex[word.search]
     if (lemmaWords) {
@@ -802,10 +801,11 @@ const Dictionary = {
     }
     // Find all forms of the word, that is, words whose stem matches word.head
     let words = this.words.filter(w => {
-      let found = w.stems.filter(s => heads.includes(s));
+      let found = w.stems.filter(s => s === word.head);
       return found.length > 0;
     });
     let moreForms = [];
+    let heads = [word.head];
     for (let w of words) {
       for (let d of w.definitions) {
         let lemma = this.lemmaFromDefinition(d);
