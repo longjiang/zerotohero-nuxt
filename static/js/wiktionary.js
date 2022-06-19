@@ -4,6 +4,7 @@ importScripts("../vendor/hash-string/hash-string.min.js")
 
 const Dictionary = {
   name: "wiktionary",
+  version: '1.1.1',
   file: undefined,
   dictionary: undefined,
   words: [],
