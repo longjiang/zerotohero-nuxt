@@ -93,9 +93,6 @@ export default {
       default: false,
       required: false,
     },
-    fullHistory: {
-      type: Array,
-    },
   },
   data() {
     return {
@@ -115,6 +112,10 @@ export default {
   },
   computed: {
     ...mapState("stats", ["stats"]),
+    ...mapState("fullHistory", ["fullHistory"]),
+    fullHistoryPathsByL1L2() {
+      return this.$store.getters['fullHistory/fullHistoryPathsByL1L2']({l1: this.$l1, l2: this.$l2})
+    },
     landscape() {
       if (this.forcePortrait) return false;
       if (process.browser && this.viewportWidth && this.viewportHeight) {
@@ -132,8 +133,8 @@ export default {
       };
     },
     minimizeVideoTo() {
-      if (this.fullHistory) {
-        let fullHistoryReversed = [...this.fullHistory].reverse();
+      if (this.fullHistoryPathsByL1L2) {
+        let fullHistoryReversed = [...this.fullHistoryPathsByL1L2].reverse();
         let lastNonYouTubeViewPath = fullHistoryReversed.find(
           (h) =>
             !h.includes("youtube/view") &&
