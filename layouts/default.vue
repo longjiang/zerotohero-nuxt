@@ -79,7 +79,6 @@
                 youtube_id: overlayPlayerYouTubeId,
                 lesson: overlayPlayerLesson,
                 mini: overlayPlayerMinimized,
-                fullHistory: fullHistoryPathsByL1L2,
                 class: `${
                   overlayPlayerMinimized ? 'overlay-player-minimized' : ''
                 }`,

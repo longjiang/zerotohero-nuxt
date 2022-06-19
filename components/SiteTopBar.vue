@@ -116,7 +116,9 @@
       <template v-else>
         <client-only>
           <div>
-            <router-link to="/go-pro" v-if="!pro" class="mr-2">🚀 Go Pro</router-link>
+            <router-link to="/go-pro" v-if="!pro" class="mr-2">
+              🚀 Go Pro
+            </router-link>
             <span
               to="/profile"
               class="mr-1"
@@ -210,6 +212,7 @@
 <script>
 import AnnotationSettings from "./AnnotationSettings.vue";
 import { ContainerQuery } from "vue-container-query";
+import { mapState } from "vuex";
 
 export default {
   components: { AnnotationSettings, ContainerQuery },
@@ -245,6 +248,7 @@ export default {
     },
   },
   computed: {
+    ...mapState("fullHistory", ["fullHistory"]),
     pro() {
       return [1, 4].includes(Number(this.$auth.user?.role)) ? true : false;
     },
@@ -265,7 +269,7 @@ export default {
     },
     languageMapPath() {
       if (this.fullHistory) {
-        let historyMatches = this.fullHistory.filter((path) => {
+        let historyMatches = this.fullHistory.map(h => h.path).filter((path) => {
           if (path) {
             let r = this.$router.resolve(path);
             return r && r.route && ["language-map"].includes(r.route.name);
