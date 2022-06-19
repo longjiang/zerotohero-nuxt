@@ -1,7 +1,7 @@
 <template>
   <client-only>
     <div class="toggle-saved-word focus-exclude">
-      <i class="fas fa-star star-animation animate"></i>
+      <i class="fas fa-star star-animation animate" style="pointer-events: none"></i>
       <button
         class="btn btn-unstyled not-saved btn-toggle-saved-word add-word"
         v-if="!saved"

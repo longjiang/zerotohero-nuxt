@@ -107,7 +107,6 @@
         </div>
       </div>
 
-
       <div
         class="dictionary-entry-section"
         v-if="sections[currentSection].title === 'Inflections'"
@@ -129,23 +128,7 @@
         v-if="sections[currentSection].title === 'Phrases'"
       >
         <div class="phrases mt-2" v-if="entry.phrases">
-          <div
-            v-for="phrase in entry.phrases"
-            :key="`word-${entry.id}-phrase-${phrase.id}`"
-            class="phrase-wrapper"
-          >
-            <Star
-              :word="phrase"
-              :label="false"
-              style="transform: scale(0.9)"
-            />
-            <span class="btn-phrase text-success strong">
-              {{ phrase.head }}
-            </span>
-            <span class="word-translation-item">
-              {{ phrase.definitions.join(", ") }}
-            </span>
-          </div>
+          <WordList :words="entry.phrases" />
         </div>
       </div>
 
@@ -340,7 +323,7 @@ export default {
         },
         {
           title: "Mistakes",
-          visible: this.$l2.code === 'zh',
+          visible: this.$l2.code === "zh",
         },
         {
           title: "Inflections",
