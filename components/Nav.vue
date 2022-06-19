@@ -155,6 +155,7 @@ feature-card-name-${child.name}`"
 
 <script>
 import { Capacitor } from "@capacitor/core";
+import { mapState } from 'vuex';
 
 export default {
   props: {
@@ -177,9 +178,6 @@ export default {
     mode: {
       type: String,
       default: "pill", // or 'icon'
-    },
-    fullHistory: {
-      type: Array,
     },
     showOnly: {
       type: Array,
@@ -265,6 +263,10 @@ export default {
     },
   },
   computed: {
+    ...mapState("fullHistory", ["fullHistory"]),
+    fullHistoryPathsByL1L2() {
+      return this.$store.getters['fullHistory/fullHistoryPathsByL1L2']({l1: this.l1, l2: this.l2})
+    },
     userIsAdmin() {
       return this.$auth.user && this.$auth.user.role == 1;
     },
@@ -1210,7 +1212,7 @@ export default {
     last(item) {
       if (item) {
         if (item.to) return item.to;
-        let historyMatches = this.fullHistory || [];
+        let historyMatches = this.fullHistoryPathsByL1L2 || [];
         let namesToMatch = [item.name];
         if (item.children)
           namesToMatch = item.children.map((child) => child.name);
