@@ -62,11 +62,12 @@
             class="word-block-text-byeonggi d-inline-block"
             v-html="hanja"
           />
-          <span v-if="quickGloss" class="quick-gloss ml-1">{{ quickGloss }}</span>
+          <span v-if="quickGloss" class="quick-gloss">
+            {{ quickGloss }}
+          </span>
         </span>
       </template>
     </span>
-    
 
     <template slot="popover">
       <div
@@ -214,8 +215,7 @@
                   : ""
               }}
               <span class="word-counters" v-if="word.counters">
-                (
-                <Annotate tag="span" :buttons="false" :popup="false">
+                (<Annotate tag="span" :buttons="false" :popup="false">
                   <span>
                     {{
                       word.counters
@@ -223,8 +223,7 @@
                         .join(word.simplified + "、") + word.simplified
                     }}
                   </span>
-                </Annotate>
-                )
+                </Annotate>)
               </span>
             </span>
             <span
@@ -374,7 +373,9 @@ export default {
     ...mapState("settings", ["l2Settings"]),
     ...mapState("savedWords", ["savedWords"]),
     quickGloss() {
-      return this.saved?.definitions?.[0]?.split(/[,;]\s*/)[0]?.replace(/\s*\(.*\)/, '')
+      return this.saved?.word?.definitions?.[0]
+        ?.replace(/\s*\(.*\)/, "")
+        ?.split(/[,;]\s*/)[0];
     },
     saved() {
       if (!this.checkSaved) return false;
@@ -386,14 +387,17 @@ export default {
           id: word.id,
           l2: this.$l2.code,
         });
-        if (saved) return saved;
+        if (saved) {
+          saved = Object.assign({ word }, saved)
+          return saved;
+        }
       }
       if (text) {
         saved = this.$store.getters["savedWords/has"]({
           text: text.toLowerCase(),
           l2: this.$l2.code,
         });
-        return saved
+        return saved;
       }
     },
     savedTransliteration() {
@@ -995,7 +999,7 @@ export default {
 .quick-gloss {
   font-size: 7em;
   display: inline;
-  opacity: 0.7;
+  opacity: 0.8;
   font-weight: normal;
 }
 
@@ -1005,7 +1009,6 @@ export default {
   .word-block-text {
     font-size: 10em;
   }
-
 
   .word-block-text-byeonggi {
     color: rgba(143, 158, 172, 0.8);
