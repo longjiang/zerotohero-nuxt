@@ -234,7 +234,6 @@ const Dictionary = {
     for (let key in this.phraseIndex) {
       this.phraseIndex[key] = this.phraseIndex[key].sort((a, b) => a.head.length - b.head.length)
     }
-    console.log(this.inflectionIndex['manque'])
   },
   buildInflectionIndex() {
     for (let word of this.words) {
@@ -242,9 +241,11 @@ const Dictionary = {
         let lemma = this.lemmaFromDefinition(definition)
         if (lemma) {
           this.inflectionIndex[word.head] = this.inflectionIndex[word.head] || []
-          let lemmaWords = this.searchIndex[word.head.toLowerCase()]
-          lemmaWords = lemmaWords.filter(w => w.pos === 'verb')
-          this.inflectionIndex[word.head] = this.inflectionIndex[word.head].concat(lemmaWords)
+          let lemmaWords = this.searchIndex[lemma.lemma.toLowerCase()]
+          if (lemmaWords) {
+            lemmaWords = lemmaWords.filter(w => w.pos === 'verb')
+            this.inflectionIndex[word.head] = this.inflectionIndex[word.head].concat(lemmaWords)
+          }
         }
       }
     }
@@ -698,18 +699,19 @@ const Dictionary = {
             }
           }
         }
-      } else {
-        for (let word of words) {
-          for (let d of word.w.definitions) {
-            let lemma = this.lemmaFromDefinition(d)
-            if (lemma) {
-              let lemmaWords = this.lookupMultiple(lemma.lemma)
-              lemmaWords = lemmaWords.map(l => { return { w: l, score: 1 } })
-              words = words.concat(lemmaWords)
-            }
+      }
+
+      for (let word of words) {
+        for (let d of word.w.definitions) {
+          let lemma = this.lemmaFromDefinition(d)
+          if (lemma) {
+            let lemmaWords = this.lookupMultiple(lemma.lemma)
+            lemmaWords = lemmaWords.map(l => { return { w: l, score: 1 } })
+            words = words.concat(lemmaWords)
           }
         }
       }
+
       words.forEach(w => {
         this.addPhrasesToWord(w.w)
         if (w.w.stems.length > 0) { w.score = w.score - 0.1 } // So that uninflected words bubble to the top.
