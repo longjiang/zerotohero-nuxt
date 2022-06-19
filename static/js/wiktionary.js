@@ -10,6 +10,7 @@ const Dictionary = {
   headIndex: {},
   searchIndex: {},
   phraseIndex: {},
+  inflectionIndex: {},
   cache: {},
   tables: [],
   NlpjsTFrDict: {},
@@ -229,8 +230,26 @@ const Dictionary = {
         }
       }
     }
+    this.buildInflectionIndex()
     for (let key in this.phraseIndex) {
-      this.phraseIndex[key] = this.phraseIndex[key].sort((a,b) => a.head.length - b.head.length)
+      this.phraseIndex[key] = this.phraseIndex[key].sort((a, b) => a.head.length - b.head.length)
+    }
+    console.log(this.inflectionIndex['manque'])
+  },
+  buildInflectionIndex() {
+    for (let word of this.words) {
+      for (let definition of word.definitions) {
+        let lemma = this.lemmaFromDefinition(definition)
+        if (lemma) {
+          this.inflectionIndex[word.head] = this.inflectionIndex[word.head] || []
+          let lemmaWords = this.searchIndex[word.head.toLowerCase()]
+          lemmaWords = lemmaWords.filter(w => w.pos === 'verb')
+          this.inflectionIndex[word.head] = this.inflectionIndex[word.head].concat(lemmaWords)
+        }
+      }
+    }
+    for (let form in this.inflectionIndex) {
+      this.inflectionIndex[form] = this.uniqueByValue(this.inflectionIndex[form], 'id')
     }
   },
   parseDictionaryCSV(data) {
