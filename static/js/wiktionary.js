@@ -790,13 +790,14 @@ const Dictionary = {
   findForms(word) {
     let heads = [word.head];
     let forms = [];
-    if (word.stems && word.stems[0]) {
+    let lemmaWords = this.inflectionIndex[word.search]
+    if (lemmaWords) {
       forms = forms.concat(
-        word.stems.map(s => {
+        lemmaWords.map(s => {
           return {
             table: "lemma",
             field: "lemma",
-            form: s
+            form: s.head
           };
         })
       );
