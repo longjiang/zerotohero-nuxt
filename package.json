@@ -54,6 +54,7 @@
     "node-html-markdown": "^1.2.0",
     "node-html-parser": "^3.3.6",
     "nuxt": "^2.15.8",
+    "nuxt-delay-hydration": "^0.3.2",
     "nuxt-i18n": "^6.27.0",
     "nuxt-lazy-load": "^1.2.6",
     "ogv": "^1.8.4",

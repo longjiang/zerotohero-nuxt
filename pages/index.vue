@@ -30,17 +30,19 @@
             <p class="blurb text-white text-center">
               Learn languages naturally with videos.
             </p>
-            <div class="text-center text-white mt-3">
-              <StatsComp variant="summary" />
-              <div class="mt-2">
-                <router-link :to="{ name: 'stats' }" style="color: #1bd445">
-                  <small>
-                    Full stats
-                    <i class="fas fa-angle-right ml-1"></i>
-                  </small>
-                </router-link>
+            <client-only>
+              <div class="text-center text-white mt-3">
+                <StatsComp variant="summary" />
+                <div class="mt-2">
+                  <router-link :to="{ name: 'stats' }" style="color: #1bd445">
+                    <small>
+                      Full stats
+                      <i class="fas fa-angle-right ml-1"></i>
+                    </small>
+                  </router-link>
+                </div>
               </div>
-            </div>
+            </client-only>
           </div>
         </div>
         <client-only>
@@ -64,25 +66,27 @@
             </div>
           </div>
         </client-only>
-        <div class="row" v-if="!native">
-          <div class="col-sm-12">
-            <div style="line-height: 1.2; color: white; text-align: center">
-              <div class="mt-4 mb-4">
-                <a
-                  href="https://apps.apple.com/us/app/zero-to-hero-languages/id1623985525"
-                  target="_blank"
-                >
-                  <img
-                    data-not-lazy
-                    src="/img/logo-ios-app.png"
-                    alt="Download on the App Store"
-                    style="width: 10rem"
-                  />
-                </a>
+        <client-only>
+          <div class="row" v-if="!native">
+            <div class="col-sm-12">
+              <div style="line-height: 1.2; color: white; text-align: center">
+                <div class="mt-4 mb-4">
+                  <a
+                    href="https://apps.apple.com/us/app/zero-to-hero-languages/id1623985525"
+                    target="_blank"
+                  >
+                    <img
+                      data-not-lazy
+                      src="/img/logo-ios-app.png"
+                      alt="Download on the App Store"
+                      style="width: 10rem"
+                    />
+                  </a>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </client-only>
         <!-- <Sale class="mb-5" style="border-radius: 1rem !important" /> -->
         <client-only>
           <div class="row mt-4" v-if="language('en')">
@@ -398,110 +402,121 @@
             </div>
           </div>
         </client-only>
-
-        <div class="row mb-3" v-if="!native">
-          <div class="col-sm-6 mb-4">
-            <div class="home-card">
-              <router-link to="/en/zh/all-media">
-                <img
-                  src="/img/czh-logo-dark.png"
-                  class="czh-logo"
-                  data-not-lazy
-                />
-              </router-link>
-              <hr />
-              <ul class="czh-links mb-0">
-                <li>
-                  <router-link
-                    to="/en/zh/online-courses"
-                    style="color: #fd4f1c; font-weight: bold"
-                  >
-                    HSK Courses
-                  </router-link>
-                </li>
-                <li>
-                  <router-link to="/en/zh/tv-shows">TV Shows</router-link>
-                </li>
-                <li>
-                  <router-link to="/en/zh/dictionary">
-                    Video Dictionary
-                  </router-link>
-                </li>
-                <li>
-                  <router-link to="/en/zh/phrasebooks">Phrasebooks</router-link>
-                </li>
-                <li>
-                  <router-link to="/en/zh/reader">Reader</router-link>
-                </li>
-                <li>
-                  <router-link to="/en/zh/grammar">Grammar</router-link>
-                </li>
-                <li>
-                  <router-link to="/en/zh/live-tv">Live TV</router-link>
-                </li>
-                <li>
-                  <router-link to="/en/zh/resource/list/all/all">
-                    Resources
-                  </router-link>
-                </li>
-              </ul>
+        <client-only>
+          <div class="row mb-3" v-if="!native">
+            <div class="col-sm-6 mb-4">
+              <div class="home-card">
+                <router-link to="/en/zh/all-media">
+                  <img
+                    src="/img/czh-logo-dark.png"
+                    class="czh-logo"
+                    data-not-lazy
+                  />
+                </router-link>
+                <hr />
+                <ul class="czh-links mb-0">
+                  <li>
+                    <router-link
+                      to="/en/zh/online-courses"
+                      style="color: #fd4f1c; font-weight: bold"
+                    >
+                      HSK Courses
+                    </router-link>
+                  </li>
+                  <li>
+                    <router-link to="/en/zh/tv-shows">TV Shows</router-link>
+                  </li>
+                  <li>
+                    <router-link to="/en/zh/dictionary">
+                      Video Dictionary
+                    </router-link>
+                  </li>
+                  <li>
+                    <router-link to="/en/zh/phrasebooks">
+                      Phrasebooks
+                    </router-link>
+                  </li>
+                  <li>
+                    <router-link to="/en/zh/reader">Reader</router-link>
+                  </li>
+                  <li>
+                    <router-link to="/en/zh/grammar">Grammar</router-link>
+                  </li>
+                  <li>
+                    <router-link to="/en/zh/live-tv">Live TV</router-link>
+                  </li>
+                  <li>
+                    <router-link to="/en/zh/resource/list/all/all">
+                      Resources
+                    </router-link>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-sm-6 mb-4">
+              <div class="home-card">
+                <router-link to="/zh/en/all-media">
+                  <img
+                    src="/img/ezh-logo-dark.png"
+                    class="ezh-logo"
+                    data-not-lazy
+                  />
+                </router-link>
+                <hr />
+                <ul class="ezh-links mb-0">
+                  <li>
+                    <router-link
+                      to="/zh/en/online-courses"
+                      style="color: #1b3e76; font-weight: bold"
+                    >
+                      CEFR Courses 视频教程
+                    </router-link>
+                  </li>
+                  <li>
+                    <router-link to="/zh/en/dictionary">
+                      Dictionary 视频词典
+                    </router-link>
+                  </li>
+                  <li>
+                    <router-link to="/zh/en/phrasebooks">
+                      Phrasebooks 短语集
+                    </router-link>
+                  </li>
+                  <li>
+                    <router-link to="/zh/en/tv-shows">
+                      TV Shows 电视节目
+                    </router-link>
+                  </li>
+                  <li>
+                    <router-link to="/zh/en/talks">
+                      Channels 油管频道
+                    </router-link>
+                  </li>
+                  <li>
+                    <router-link to="/zh/en/audiobooks">
+                      Audiobooks 有声书
+                    </router-link>
+                  </li>
+                  <li>
+                    <router-link to="/zh/en/live-tv">
+                      Live TV 电视直播
+                    </router-link>
+                  </li>
+                  <li>
+                    <router-link to="/zh/en/reader">
+                      Reader 文字阅读器
+                    </router-link>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
-          <div class="col-sm-6 mb-4">
-            <div class="home-card">
-              <router-link to="/zh/en/all-media">
-                <img
-                  src="/img/ezh-logo-dark.png"
-                  class="ezh-logo"
-                  data-not-lazy
-                />
-              </router-link>
-              <hr />
-              <ul class="ezh-links mb-0">
-                <li>
-                  <router-link
-                    to="/zh/en/online-courses"
-                    style="color: #1b3e76; font-weight: bold"
-                  >
-                    CEFR Courses 视频教程
-                  </router-link>
-                </li>
-                <li>
-                  <router-link to="/zh/en/dictionary">
-                    Dictionary 视频词典
-                  </router-link>
-                </li>
-                <li>
-                  <router-link to="/zh/en/phrasebooks">
-                    Phrasebooks 短语集
-                  </router-link>
-                </li>
-                <li>
-                  <router-link to="/zh/en/tv-shows">
-                    TV Shows 电视节目
-                  </router-link>
-                </li>
-                <li>
-                  <router-link to="/zh/en/talks">Channels 油管频道</router-link>
-                </li>
-                <li>
-                  <router-link to="/zh/en/audiobooks">
-                    Audiobooks 有声书
-                  </router-link>
-                </li>
-                <li>
-                  <router-link to="/zh/en/live-tv">
-                    Live TV 电视直播
-                  </router-link>
-                </li>
-                <li>
-                  <router-link to="/zh/en/reader">
-                    Reader 文字阅读器
-                  </router-link>
-                </li>
-              </ul>
-            </div>
-          </div>
+        </client-only>
+        <div class="mt-5 text-center mb-5" v-if="!loaded">
+          <router-link :to="{ path: '/' }" class="btn btn-success">
+            Choose your language
+            <i class="fas fa-chevron-right"></i>
+          </router-link>
         </div>
         <div class="row mb-5">
           <div class="col-sm-12">
@@ -511,50 +526,52 @@
             </div>
           </div>
         </div>
+        <client-only>
+          <div class="row">
+            <div class="col-sm-6 mb-5">
+              <div class="home-card text-center">
+                <h5 class="mb-3">Discover TV Shows Across Languages</h5>
+                <router-link to="/discover-shows">
+                  <img
+                    src="/img/thumbnail-discover-shows.jpg"
+                    alt="Discover TV Shows Across Languages"
+                    class="rounded shadow img-fluid"
+                    data-not-lazy
+                  />
+                </router-link>
+              </div>
+            </div>
+            <div class="col-sm-6 mb-5">
+              <div class="home-card">
+                <h5 class="mb-3 text-center">Other Interlingual Features</h5>
+                <ul>
+                  <li class="mt-1 mb-1">
+                    <router-link to="/compare-languages">
+                      <b>Compare Phrases Across Languages</b>
+                    </router-link>
+                    – Search for any word or phrase in English, and see the same
+                    phrase across all languages on a map.
+                  </li>
+                  <li class="mt-1 mb-1">
+                    <router-link to="/language-icons">
+                      <b>Face of the Language</b>
+                    </router-link>
+                    – Images of famous people who speak one of the 300 languages
+                    listed.
+                  </li>
+                  <li class="mt-1 mb-1">
+                    <router-link to="/translators">
+                      <b>Compare Online Translators</b>
+                    </router-link>
+                    – Find out which online translator (e.g. Google Translate)
+                    has the ability to translate which language.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </client-only>
 
-        <div class="row">
-          <div class="col-sm-6 mb-5">
-            <div class="home-card text-center">
-              <h5 class="mb-3">Discover TV Shows Across Languages</h5>
-              <router-link to="/discover-shows">
-                <img
-                  src="/img/thumbnail-discover-shows.jpg"
-                  alt="Discover TV Shows Across Languages"
-                  class="rounded shadow img-fluid"
-                  data-not-lazy
-                />
-              </router-link>
-            </div>
-          </div>
-          <div class="col-sm-6 mb-5">
-            <div class="home-card">
-              <h5 class="mb-3 text-center">Other Interlingual Features</h5>
-              <ul>
-                <li class="mt-1 mb-1">
-                  <router-link to="/compare-languages">
-                    <b>Compare Phrases Across Languages</b>
-                  </router-link>
-                  – Search for any word or phrase in English, and see the same
-                  phrase across all languages on a map.
-                </li>
-                <li class="mt-1 mb-1">
-                  <router-link to="/language-icons">
-                    <b>Face of the Language</b>
-                  </router-link>
-                  – Images of famous people who speak one of the 300 languages
-                  listed.
-                </li>
-                <li class="mt-1 mb-1">
-                  <router-link to="/translators">
-                    <b>Compare Online Translators</b>
-                  </router-link>
-                  – Find out which online translator (e.g. Google Translate) has
-                  the ability to translate which language.
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
         <client-only>
           <div class="row">
             <div class="col-sm-12">
@@ -579,9 +596,6 @@
 import { Capacitor } from "@capacitor/core";
 
 export default {
-  created() {
-    this.$router.push("/");
-  },
   data() {
     return {
       langKeyword: undefined,

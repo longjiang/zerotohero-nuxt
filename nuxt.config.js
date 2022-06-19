@@ -115,9 +115,14 @@ export default {
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
+    'nuxt-delay-hydration',
     ['@nuxtjs/router-extras', { /* module options */ }],
     '@nuxtjs/pwa'
   ],
+
+  delayHydration: {
+    mode: 'manual',
+  },
 
   toast: {
     position: 'top-center'

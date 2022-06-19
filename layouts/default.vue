@@ -1,10 +1,114 @@
+<template>
+  <div id="zerotohero" :class="classes">
+    <div>
+      <div
+        class="zerotohero-background"
+        :style="`background-image: url(${background})`"
+        v-if="wide || !($route.params.l1 && $route.params.l1 && l1 && l2)"
+      />
+
+      <template
+        v-if="
+          $route.meta.layout === 'full' ||
+          !($route.params.l1 && $route.params.l1 && l1 && l2)
+        "
+      >
+        <!-- <delay-hydration> -->
+          <div>
+            <Nuxt id="main" />
+          </div>
+        <!-- </delay-hydration> -->
+      </template>
+      <template v-else>
+        <!-- <delay-hydration> -->
+          <div>
+            <HydrationNotice />
+            <client-only>
+              <SiteTopBar
+                v-if="!wide && $route.params.l1 && $route.params.l1 && l1 && l2"
+                variant="menu-bar"
+                :badge="savedWordsCount + savedPhrasesCount"
+              />
+            </client-only>
+            <client-only>
+              <Nav
+                v-if="
+                  $route.params.l1 &&
+                  $route.params.l1 &&
+                  l1 &&
+                  l2 &&
+                  !(!wide && $route.name === 'youtube-view')
+                "
+                class="zth-nav-wrapper"
+                :l1="l1"
+                :l2="l2"
+                :key="`nav-${l1.code}-${l2.code}`"
+                :variant="wide ? 'side-bar' : 'menu-bar'"
+                :skin="$route.meta.skin ? $route.meta.skin : 'light'"
+                :fullHistory="fullHistory"
+                @collapsed="updateCollapsed"
+                :showMainNav="wide"
+                mode="pill"
+              />
+
+              <Nav
+                v-if="$route.params.l1 && $route.params.l1 && l1 && l2 && !wide"
+                :l1="l1"
+                :l2="l2"
+                :key="`nav-bottom-${l1.code}-${l2.code}`"
+                variant="menu-bar"
+                :skin="$route.meta.skin ? $route.meta.skin : 'light'"
+                :fullHistory="fullHistory"
+                @collapsed="updateCollapsed"
+                :showLogo="false"
+                :showMainNav="true"
+                :showSecondaryNav="false"
+                :bottom="true"
+                mode="small-icon"
+                style="z-index: 10"
+              />
+            </client-only>
+            <div class="zth-content">
+              <Nuxt
+                id="main"
+                keep-alive
+                :keep-alive-props="{ include: 'pages/all-media.vue' }"
+              />
+              <YouTubeViewComp
+                id="overlay-player"
+                v-if="overlayPlayerYouTubeId && overlayPlayerMinimized"
+                v-bind="{
+                  youtube_id: overlayPlayerYouTubeId,
+                  lesson: overlayPlayerLesson,
+                  mini: overlayPlayerMinimized,
+                  fullHistory,
+                  class: `${
+                    overlayPlayerMinimized ? 'overlay-player-minimized' : ''
+                  }`,
+                  key: `youtube-view-comp-${overlayPlayerYouTubeId}`,
+                }"
+                @close="overlayPlayerClose"
+              />
+            </div>
+          </div>
+        <!-- </delay-hydration> -->
+      </template>
+    </div>
+    <i class="fas fa-star star-animation"></i>
+  </div>
+</template>
+
 <script lang="javascript">
 import Config from "@/lib/config";
 import smoothscroll from "smoothscroll-polyfill";
 import Helper from "@/lib/helper";
 import { mapState } from "vuex";
+import { DelayHydration } from "nuxt-delay-hydration/dist/components";
 
 export default {
+  components: {
+    DelayHydration,
+  },
   data() {
     return {
       Config,
@@ -431,93 +535,7 @@ export default {
 };
 </script>
 
-<template>
-  <div id="zerotohero" :class="classes">
-    <div
-      class="zerotohero-background"
-      :style="`background-image: url(${background})`"
-      v-if="wide || !($route.params.l1 && $route.params.l1 && l1 && l2)"
-    />
-    <template
-      v-if="
-        $route.meta.layout === 'full' ||
-        !($route.params.l1 && $route.params.l1 && l1 && l2)
-      "
-    >
-      <Nuxt id="main" />
-    </template>
-    <template v-else>
-      <client-only>
-        <SiteTopBar
-          v-if="!wide && $route.params.l1 && $route.params.l1 && l1 && l2"
-          variant="menu-bar"
-          :badge="savedWordsCount + savedPhrasesCount"
-        />
-      </client-only>
-      <client-only>
-        <Nav
-          v-if="
-            $route.params.l1 &&
-            $route.params.l1 &&
-            l1 &&
-            l2 &&
-            !(!wide && $route.name === 'youtube-view')
-          "
-          class="zth-nav-wrapper"
-          :l1="l1"
-          :l2="l2"
-          :key="`nav-${l1.code}-${l2.code}`"
-          :variant="wide ? 'side-bar' : 'menu-bar'"
-          :skin="$route.meta.skin ? $route.meta.skin : 'light'"
-          :fullHistory="fullHistory"
-          @collapsed="updateCollapsed"
-          :showMainNav="wide"
-          mode="pill"
-        />
 
-        <Nav
-          v-if="$route.params.l1 && $route.params.l1 && l1 && l2 && !wide"
-          :l1="l1"
-          :l2="l2"
-          :key="`nav-bottom-${l1.code}-${l2.code}`"
-          variant="menu-bar"
-          :skin="$route.meta.skin ? $route.meta.skin : 'light'"
-          :fullHistory="fullHistory"
-          @collapsed="updateCollapsed"
-          :showLogo="false"
-          :showMainNav="true"
-          :showSecondaryNav="false"
-          :bottom="true"
-          mode="small-icon"
-          style="z-index: 10"
-        />
-      </client-only>
-      <div class="zth-content">
-        <Nuxt
-          id="main"
-          keep-alive
-          :keep-alive-props="{ include: 'pages/all-media.vue' }"
-        />
-        <YouTubeViewComp
-          id="overlay-player"
-          v-if="overlayPlayerYouTubeId && overlayPlayerMinimized"
-          v-bind="{
-            youtube_id: overlayPlayerYouTubeId,
-            lesson: overlayPlayerLesson,
-            mini: overlayPlayerMinimized,
-            fullHistory,
-            class: `${
-              overlayPlayerMinimized ? 'overlay-player-minimized' : ''
-            }`,
-            key: `youtube-view-comp-${overlayPlayerYouTubeId}`,
-          }"
-          @close="overlayPlayerClose"
-        />
-      </div>
-    </template>
-    <i class="fas fa-star star-animation"></i>
-  </div>
-</template>
 
 <style lang="scss" scoped>
 .transition {
