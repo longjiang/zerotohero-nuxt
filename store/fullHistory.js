@@ -67,7 +67,7 @@ export const actions = {
   },
   add({ state, commit, dispatch }, path) {
     if (!state.loaded) {
-      this.dispatch('load')
+      dispatch('load')
     }
     commit('ADD', path)
   },

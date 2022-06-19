@@ -68,7 +68,7 @@ export const actions = {
   },
   add({ state, commit, dispatch }, historyItem) {
     if (!state.historyLoaded) {
-      this.dispatch('load')
+      dispatch('load')
     }
     commit('ADD_HISTORY_ITEM', Object.assign({}, historyItem))
     dispatch('push')
