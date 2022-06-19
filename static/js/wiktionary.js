@@ -798,7 +798,7 @@ const Dictionary = {
       );
     }
     // Find all forms of the word, that is, words whose stem matches word.head
-    let words = this.lemmaIndex[word.head]
+    let words = this.lemmaIndex[word.head] || []
     let moreForms = [];
     let heads = [word.head];
     for (let w of words) {
