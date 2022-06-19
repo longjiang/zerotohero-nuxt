@@ -513,9 +513,9 @@
           </div>
         </client-only>
         <div class="mt-5 text-center mb-5" v-if="!loaded">
-          <router-link :to="{ path: '/' }" class="btn btn-success">
-            Choose your language
-            <i class="fas fa-chevron-right"></i>
+          <p>App is asleep due to inactivity.</p>
+          <router-link :to="{ path: lastFullHistoryPath || '/' }" class="btn btn-success">
+            Reactivate
           </router-link>
         </div>
         <div class="row mb-5">
@@ -594,6 +594,7 @@
 
 <script>
 import { Capacitor } from "@capacitor/core";
+import { mapState } from "vuex";
 
 export default {
   data() {
@@ -609,6 +610,15 @@ export default {
     };
   },
   computed: {
+    ...mapState("fullHistory", ["fullHistory"]),
+    lastFullHistoryPath() {
+      if (this.fullHistory) {
+        let lastFullHistoryItem = this.fullHistory[this.fullHistory.length - 1];
+        if (lastFullHistoryItem && lastFullHistoryItem.path) {
+          return lastFullHistoryItem.path;
+        }
+      }
+    },
     pro() {
       return [1, 4].includes(Number(this.$auth.user?.role)) ? true : false;
     },

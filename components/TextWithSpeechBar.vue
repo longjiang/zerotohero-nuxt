@@ -77,6 +77,7 @@
             ref="annotate"
             @translation="onTranslation($event, lineIndex)"
             @translationLoading="onTranslationLoading($event, lineIndex)"
+            @sentenceClick="onSentenceClick"
           >
             <div v-html="line.trim()" />
           </Annotate>
@@ -153,7 +154,7 @@ export default {
       type: String,
     },
     showLoading: {
-      default: false
+      default: false,
     },
     lang: {
       default: undefined,
@@ -189,6 +190,11 @@ export default {
     };
   },
   computed: {
+    currentSentence() {
+      let sentences = this.getSentences();
+      let currentSentence = sentences?.[this.current];
+      return currentSentence;
+    },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -241,6 +247,9 @@ export default {
     this.getVoices();
   },
   watch: {
+    current() {
+      this.update()
+    },
     page() {
       this.current = 0;
       this.translationLoading = {};
@@ -262,6 +271,11 @@ export default {
     },
   },
   methods: {
+    onSentenceClick(sentenceEl) {
+      let sentences = this.getSentences();
+      let index = sentences.findIndex((el) => el === sentenceEl);
+      this.current = Math.max(index, 0);
+    },
     async translateAll() {
       if (this.$refs.annotate?.[0]) {
         for (let a of this.$refs.annotate) {
@@ -407,7 +421,6 @@ export default {
     },
     previous() {
       this.current = Math.max(0, this.current - 1);
-      this.update();
       if (this.speaking) {
         this.pause();
         this.play();
@@ -416,7 +429,6 @@ export default {
     next() {
       if (this.current + 1 < this.getSentences().length) {
         this.current++;
-        this.update();
         if (this.speaking) {
           this.pause();
           this.play();

@@ -520,7 +520,7 @@ export default {
           ? `data-sentence-text="${sentence.trim()}"`
           : "";
         let $tokenizedSentenceSpan = $(
-          `<span class="sentence" ${dataSentenceText}>${html}</span>`
+          `<span class="sentence" @click.capture="onSentenceClick" ${dataSentenceText}>${html}</span>`
         );
         this.batchId = this.batchId + 1;
         $(node).before($tokenizedSentenceSpan);
@@ -676,7 +676,7 @@ export default {
             ? `data-sentence-text="${sentence.trim()}"`
             : "";
           let sentenceSpan = $(
-            `<span class="sentence" ${dataSentenceText}>${sentence}</span>`
+            `<span class="sentence" @click.capture="onSentenceClick" ${dataSentenceText}>${sentence}</span>`
           );
           $(node).before(sentenceSpan);
         }
@@ -693,6 +693,9 @@ export default {
       }
       return node;
     },
+    onSentenceClick(e) {
+      this.$emit('sentenceClick', e.currentTarget)
+    }
   },
 };
 </script>
