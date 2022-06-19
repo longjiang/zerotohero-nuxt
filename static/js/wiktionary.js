@@ -11,6 +11,7 @@ const Dictionary = {
   searchIndex: {},
   phraseIndex: {},
   inflectionIndex: {},
+  lemmaIndex: {},
   cache: {},
   tables: [],
   NlpjsTFrDict: {},
@@ -240,16 +241,21 @@ const Dictionary = {
       for (let definition of word.definitions) {
         let lemma = this.lemmaFromDefinition(definition)
         if (lemma) {
-          this.inflectionIndex[word.head] = this.inflectionIndex[word.head] || []
           let lemmaWords = this.searchIndex[lemma.lemma.toLowerCase()]
           if (lemmaWords) {
+            this.inflectionIndex[word.head] = this.inflectionIndex[word.head] || []
             this.inflectionIndex[word.head] = this.inflectionIndex[word.head].concat(lemmaWords)
+            this.lemmaIndex[lemma.lemma] = this.lemmaIndex[lemma.lemma] || []
+            this.lemmaIndex[lemma.lemma].push(word)
           }
         }
       }
     }
     for (let form in this.inflectionIndex) {
       this.inflectionIndex[form] = this.uniqueByValue(this.inflectionIndex[form], 'id')
+    }
+    for (let lemma in this.lemmaIndex) {
+      this.lemmaIndex[lemma] = this.uniqueByValue(this.lemmaIndex[lemma], 'id')
     }
   },
   parseDictionaryCSV(data) {
@@ -800,10 +806,7 @@ const Dictionary = {
       );
     }
     // Find all forms of the word, that is, words whose stem matches word.head
-    let words = this.words.filter(w => {
-      let found = w.stems.filter(s => s === word.head);
-      return found.length > 0;
-    });
+    let words = this.lemmaIndex[word.head]
     let moreForms = [];
     let heads = [word.head];
     for (let w of words) {
