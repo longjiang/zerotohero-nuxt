@@ -693,9 +693,6 @@ const Dictionary = {
             let max = Math.max(text.length, search.length);
             let similarity = (max - distance) / max;
             words.push({ score: similarity, w: word });
-            if (similarity === 1 && !quick) {
-              words = words.concat(this.stemWordsWithScores(word.w, 1));
-            }
           }
         }
       }
@@ -703,9 +700,10 @@ const Dictionary = {
       let lemmaWords = []
 
       for (let word of words.slice(0, 10)) {
-        lemmaWords = lemmaWords.concat(this.inflectionIndex[word.w.head.toLowerCase()])
+        let lemmas = this.inflectionIndex[word.w.head.toLowerCase()]
+        if (lemmas) lemmaWords = lemmaWords.concat(lemmas.map(w => { return { w, score: 1 } }))
       }
-      words = [...lemmaWords.map(w => { return { w, score: 1 } }), ...words]
+      words = [...lemmaWords, ...words]
 
       words.forEach(w => {
         this.addPhrasesToWord(w.w)
@@ -1125,12 +1123,13 @@ const Dictionary = {
     return words;
   },
   stemWordsWithScores(word, score = undefined) {
-    let stemWords = this.inflectionIndex(word.head);
-    stemWordsWithScores = stemWords.map(w => {
-      return { score, w };
-    });
-    return stemWordsWithScores;
-
+    let stemWords = this.inflectionIndex[word.head];
+    if (stemWords) {
+      let stemWordsWithScores = stemWords.map(w => {
+        return { score, w };
+      });
+      return stemWordsWithScores;
+    } else return []
   },
   /**
    * Find phrases that contain a word
