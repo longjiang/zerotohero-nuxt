@@ -138,7 +138,10 @@
           color="#28a745"
           size="5px"
         ></beat-loader>
-        {{ translationData ? translationData : "" }}
+        <div
+          v-else
+          v-html="translationHtml(translationData ? translationData : '')"
+        />
       </div>
     </div>
 
@@ -232,6 +235,7 @@ export default {
       selectedText: undefined,
       batchId: 0,
       textMode: false,
+      current: 0, //  current sentence
       tokenized: [],
       dictionary: undefined,
       myanmarZawgyiDetector: undefined,
@@ -289,6 +293,9 @@ export default {
     },
   },
   watch: {
+    current() {
+      this.update();
+    },
     translation() {
       this.translationData = this.translation;
     },
@@ -301,6 +308,32 @@ export default {
     },
   },
   methods: {
+    getSentences() {
+      let sentences = [];
+      for (let sentence of this.$el.querySelectorAll(
+        ".annotate-template .sentence"
+      )) {
+        sentences.push(sentence);
+      }
+      return sentences;
+    },
+    getTranslationSentences() {
+      let sentences = [];
+      for (let sentence of this.$el.querySelectorAll(
+        ".translation-sentence"
+      )) {
+        sentences.push(sentence);
+      }
+      return sentences;
+    },
+    translationHtml(text) {
+      let sentences = this.breakSentences(text);
+      let html = "";
+      for (let s of sentences) {
+        html += `<span class="annotate-translation-sentence">${s}</span>`;
+      }
+      return html;
+    },
     dir() {
       return this.foreign && this.$l2?.scripts?.[0]?.direction === "rtl"
         ? "rtl"
@@ -480,6 +513,14 @@ export default {
           else this.$emit("annotated", true);
         }
       }
+    },
+    update() {
+      let translationSentences = this.getTranslationSentences();
+      for (let translationSentence of translationSentences) {
+        $(translationSentence).removeClass("current");
+      }
+      const translationSentence = translationSentences[this.current];
+      $(translationSentence).addClass("current");
     },
     async annotate(node) {
       this.annotated = false;
