@@ -45,14 +45,45 @@
               a popup dictionary!
             </p>
           </div>
-          <div class="text-center mb-4" v-if="canShare">
-            <b-button @click="upload" variant="success" size="sm">
-              <i class="fas fa-paper-plane"></i>
-              Share Annotated Text
-            </b-button>
-          </div>
           <client-only>
-            <div v-if="shared || sharing || !canShare" class="share-banner alert alert-success mt-2">
+            <router-link
+              v-if="shared"
+              class="text-success mb-2"
+              :to="{ name: 'my-text' }"
+            >
+              <i class="fa fa-chevron-left"></i>
+              My Texts
+            </router-link>
+            <h4 class="mt-3 mb-3" v-if="shared">{{ shared.title }}</h4>
+          </client-only>
+          <div v-if="loading" class="text-center pt-5 pb-5">
+            <Loader :sticky="true" message="Loading your text..." />
+          </div>
+          <ReaderComp
+            v-if="!loading"
+            :initialText="text"
+            :initialTranslation="translation"
+            ref="reader"
+            :page="page"
+            :baseUrl="baseUrl"
+            :showLoading="false"
+            @readerTextChanged="readerTextChanged"
+            @readerTranslationChanged="readerTranslationChanged"
+            @previousPage="onPreviousPage"
+            @nextPage="onNextPage"
+            @goToPage="goToPage"
+          />
+          <client-only>
+            <div class="text-center mt-4" v-if="canShare">
+              <b-button @click="upload" variant="success" size="sm">
+                <i class="fas fa-paper-plane"></i>
+                Share Annotated Text
+              </b-button>
+            </div>
+            <div
+              v-if="shared || sharing || !canShare"
+              class="share-banner alert alert-success mt-2"
+            >
               <div v-if="!sharing">
                 <div class="strong mb-2">
                   <i class="fas fa-paper-plane"></i>
@@ -74,23 +105,6 @@
               </div>
             </div>
           </client-only>
-          <div v-if="loading" class="text-center pt-5 pb-5">
-            <Loader :sticky="true" message="Loading your text..." />
-          </div>
-          <ReaderComp
-            v-if="!loading"
-            :initialText="text"
-            :initialTranslation="translation"
-            ref="reader"
-            :page="page"
-            :baseUrl="baseUrl"
-            :showLoading="false"
-            @readerTextChanged="readerTextChanged"
-            @readerTranslationChanged="readerTranslationChanged"
-            @previousPage="onPreviousPage"
-            @nextPage="onNextPage"
-            @goToPage="goToPage"
-          />
         </div>
       </div>
       <h5 class="mt-5">More about this {{ $l2.name }} Reader</h5>
@@ -153,9 +167,9 @@ import Helper from "@/lib/helper";
 import Config from "@/lib/config";
 import SAMPLE_TEXT from "@/lib/utils/sample-text";
 import { markdownToTxt } from "markdown-to-txt";
-import { NodeHtmlMarkdown, NodeHtmlMarkdownOptions } from 'node-html-markdown'
+import { NodeHtmlMarkdown, NodeHtmlMarkdownOptions } from "node-html-markdown";
 import { parse } from "node-html-parser";
-import {baseUrl} from '@/lib/utils/url'
+import { baseUrl } from "@/lib/utils/url";
 
 export default {
   template: "#reader-template",
@@ -220,14 +234,14 @@ export default {
         Helper.logError(err);
       }
     } else if (method === "html-url") {
-      this.baseUrl = baseUrl(this.arg)
+      this.baseUrl = baseUrl(this.arg);
       try {
         let html = await Helper.proxy(arg);
-        let dom = parse(html)
-        let body = dom.querySelector('body');
-        let article = dom.querySelector('article');
-        let wikipediaContent = dom.querySelector('#mw-content-text');
-        dom = wikipediaContent || article || body || dom
+        let dom = parse(html);
+        let body = dom.querySelector("body");
+        let article = dom.querySelector("article");
+        let wikipediaContent = dom.querySelector("#mw-content-text");
+        dom = wikipediaContent || article || body || dom;
         html = dom.toString();
         text = NodeHtmlMarkdown.translate(html) || "";
       } catch (err) {
@@ -266,8 +280,11 @@ export default {
         return this.$store.state.settings.l2;
     },
     shareURL() {
-      if (typeof location !== 'undefined')
-        return location.href?.replace(location.protocol + '//' + location.host, 'https://www.zerotohero.ca');
+      if (typeof location !== "undefined")
+        return location.href?.replace(
+          location.protocol + "//" + location.host,
+          "https://www.zerotohero.ca"
+        );
     },
     title() {
       let lines = this.text.trim().split(/\n+/) || [""];
@@ -277,11 +294,11 @@ export default {
      * Whether or not to show a "share this" button
      */
     canShare() {
-      if (this.shared) return false // already shared, url visible
-      if (!this.text) return false // nothing to share
-      if (this.method && this.method !== 'share') return false // already shareable
-      return true
-    }
+      if (this.shared) return false; // already shared, url visible
+      if (!this.text) return false; // nothing to share
+      if (this.method && this.method !== "share") return false; // already shareable
+      return true;
+    },
   },
   methods: {
     copyClick() {
@@ -338,7 +355,6 @@ export default {
         },
       };
       this.$router.push(to);
-
     },
     onNextPage() {
       let to = {
