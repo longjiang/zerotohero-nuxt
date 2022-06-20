@@ -39,7 +39,7 @@
           class="d-inline-block"
           @mouseover="cycleFlags"
           @mouseleave="stopCycling"
-          v-if="params.md !== false && $l1 && $l2 && $l1.code & $l2.code"
+          v-if="params.md !== false && $route.params.l2"
         >
           <span
             :class="`text-white`"
