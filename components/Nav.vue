@@ -600,7 +600,7 @@ export default {
             },
             {
               name: this.$auth.loggedIn ? "my-text" : "reader",
-              title: "My Text",
+              title: "My Texts",
               icon: "fas fa-edit",
               show: true,
             },

@@ -28,19 +28,11 @@
             <!-- <FeedbackPrompt /> -->
             <Logo class="mt-4 mb-3" />
             <p class="blurb text-white text-center">
-              Learn languages with videos
+              Learn languages with videos.
             </p>
             <client-only>
-              <div class="text-center text-white mt-3">
+              <div class="text-center text-white mt-4">
                 <StatsComp variant="summary" />
-                <div class="mt-2">
-                  <router-link :to="{ name: 'stats' }" style="color: #1bd445">
-                    <small>
-                      Full stats
-                      <i class="fas fa-angle-right ml-1"></i>
-                    </small>
-                  </router-link>
-                </div>
               </div>
             </client-only>
           </div>
@@ -255,10 +247,10 @@
                         </li>
                         <li style="white-space: nowrap">
                           <router-link
-                            to="/it/en/all-media"
+                            to="/zh/en/all-media"
                             class="link-unstyled"
                           >
-                            Impara l’inglese
+                            学英语
                           </router-link>
                         </li>
                         <li style="white-space: nowrap">
@@ -272,11 +264,11 @@
                         <li style="white-space: nowrap">
                           <b
                             href="#englishLanguageList"
-                            class="link-unstyled"
+                            class="link-unstyled text-success"
                             style="cursor: pointer"
                             @click="scrollTo('#englishLanguageList')"
                           >
-                            Learn English
+                            More <i class="fa fa-chevron-down"></i>
                           </b>
                         </li>
                       </ul>

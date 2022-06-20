@@ -7,12 +7,16 @@
     >
       <div class="d-flex">
         <div style="flex: 1" class="text-center">
-          <b class="stat-big-number">{{ formatNumber(stats.totalCount) }}</b>
+          <router-link :to="{ name: 'stats' }">
+            <b class="stat-big-number">{{ formatNumber(stats.totalCount) }}</b>
+          </router-link>
           <br />
           Videos
         </div>
         <div style="flex: 1" class="text-center">
-          <b class="stat-big-number">{{ stats.langs.length }}</b>
+          <router-link :to="{ name: 'stats' }">
+            <b class="stat-big-number">{{ stats.langs.length }}</b>
+          </router-link>
           <br />
           Languages
         </div>
