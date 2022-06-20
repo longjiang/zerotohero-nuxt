@@ -25,7 +25,7 @@
             <div class="hero-video-info">
               <div class="hero-video-show-type" v-if="show">
                 <i :class="`${show.icon} mr-1`"></i>
-                {{ show.type }}
+                {{ $t(show.type) }}
               </div>
               <h4 class="hero-video-title">
                 {{ displayTitle }}
@@ -40,7 +40,7 @@
                   class="btn btn-success"
                 >
                   <i :class="`${playButtonIcon} mr-1`"></i>
-                  {{ playButtonText }}
+                  {{ $t(playButtonText) }}
                 </router-link>
                 <router-link
                   v-if="(video.tv_show || video.talk) && showEpisodes"
@@ -55,7 +55,7 @@
                   class="ml-1 btn btn-ghost-dark-no-bg"
                 >
                   <i :class="`${episodesButtonIcon} mr-1`"></i>
-                  {{ episodesButtonText }}
+                  {{ $t(episodesButtonText) }}
                 </router-link>
                 <b-button
                   variant="ghost-dark-no-bg"
@@ -167,11 +167,11 @@ export default {
     },
     playButtonText() {
       if (this.show) {
-        if (this.show.type === "Audiobook") return "Read Chapter 1";
+        if (this.show.type === "Audiobook") return "Read & Listen";
         if (this.show.type === "Song") return "Listen & Learn";
-        if (this.show.type === "TV Show") return "Play Episode 1";
-        if (this.show.type === "YouTube Channel") return "Latest Upload";
-        if (this.show.type === "News Report") return "Latest News";
+        if (this.show.type === "TV Show") return "Play & Learn";
+        if (this.show.type === "YouTube Channel") return "Play & Learn";
+        if (this.show.type === "News Report") return "Play & Learn";
       }
       return "Play & Learn";
     },
@@ -184,11 +184,11 @@ export default {
     },
     episodesButtonText() {
       if (this.show) {
-        if (this.show.type === "Audiobook") return "Contents";
-        if (this.show.type === "Song") return "All Songs";
-        if (this.show.type === "YouTube Channel") return "All Uploads";
+        if (this.show.type === "Audiobook") return "Choose Chapter";
+        if (this.show.type === "Song") return "Choose Song";
+        if (this.show.type === "YouTube Channel") return "Choose Video";
       }
-      return "All Episodes";
+      return "Choose Episode";
     },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")

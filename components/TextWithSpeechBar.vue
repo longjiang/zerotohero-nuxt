@@ -39,7 +39,12 @@
               <b-button variant="light" @click="toggleSpeed">
                 <span>{{ speed }}x</span>
               </b-button>
-              <b-dropdown variant="light" right text="Voice" style="flex: 1">
+              <b-dropdown
+                variant="light"
+                right
+                :text="$t('Voice')"
+                style="flex: 1"
+              >
                 <b-dropdown-item
                   v-for="(voice, index) in voices"
                   :key="`speech-bar-voice-${index}-${voice.name}`"
@@ -50,7 +55,7 @@
               </b-dropdown>
             </template>
             <b-button variant="light" @click="translateAll()">
-              Translate
+              {{ $t("Translate") }}
             </b-button>
           </b-button-group>
         </client-only>
@@ -91,7 +96,10 @@
               color="#28a745"
               size="5px"
             ></beat-loader>
-            <span v-else-if="translation" v-html="translationHtml(parallellines[lineIndex])" />
+            <span
+              v-else-if="translation"
+              v-html="translationHtml(parallellines[lineIndex])"
+            />
           </div>
         </div>
       </div>
@@ -117,10 +125,7 @@
           v-model="goToPage"
           :options="pageOptions"
           class="text-center border-0"
-          style="width: auto; padding-right: 1.25rem !important; margin: auto"
-        >
-          Page {{ page }} of {{ pageCount }}
-        </b-form-select>
+          style="width: auto; padding-right: 1.25rem !important; margin: auto" />
         <button
           v-if="Number(page) < pageCount"
           class="btn text-success btn-sm ml-1"
@@ -206,7 +211,7 @@ export default {
     pageOptions() {
       let options = [];
       for (let i = 1; i <= this.pageCount; i++) {
-        options.push({ value: i, text: `Page ${i} of ${this.pageCount}` });
+        options.push({ value: i, text: this.$t('Page') + ` ${i} / ${this.pageCount}` });
       }
       return options;
     },
@@ -248,7 +253,7 @@ export default {
   },
   watch: {
     current() {
-      this.update()
+      this.update();
     },
     page() {
       this.current = 0;
@@ -272,12 +277,12 @@ export default {
   },
   methods: {
     translationHtml(text) {
-      let sentences = this.breakSentences(text)
-      let html = ''
+      let sentences = this.breakSentences(text);
+      let html = "";
       for (let s of sentences) {
-        html += `<span class="translation-sentence">${s}</span>`
+        html += `<span class="translation-sentence">${s}</span>`;
       }
-      return html
+      return html;
     },
     breakSentences(text) {
       text = text.replace(/([!?:。！？：])/g, "$1SENTENCEENDING!!!");
@@ -393,18 +398,18 @@ export default {
       return sentences;
     },
     update() {
-      let sentences = this.getSentences()
+      let sentences = this.getSentences();
       for (let sentence of sentences) {
         $(sentence).removeClass("current");
       }
       const sentence = sentences[this.current];
       $(sentence).addClass("current");
-      let translationSentences = this.getTranslationSentences()
+      let translationSentences = this.getTranslationSentences();
       for (let translationSentence of translationSentences) {
-        $(translationSentence).removeClass('current')
+        $(translationSentence).removeClass("current");
       }
       const translationSentence = translationSentences[this.current];
-      $(translationSentence).addClass('current')
+      $(translationSentence).addClass("current");
     },
     speak(text) {
       if (this.voices.length === 0) this.getVoices();
@@ -477,7 +482,6 @@ export default {
 ::v-deep .annotate-translation-sentence.current {
   background-color: rgba(212, 212, 255, 0.5);
 }
-
 
 .speech-bar {
   position: sticky;

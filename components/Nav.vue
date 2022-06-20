@@ -687,7 +687,7 @@ export default {
             },
             {
               name: "language-info",
-              title: `About ${this.l2.name}`,
+              title: `About {l2}`,
               icon: "fas fa-flag",
               show: true,
             },

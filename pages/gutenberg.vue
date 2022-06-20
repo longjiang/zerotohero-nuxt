@@ -58,7 +58,7 @@
                     v-if="!saved"
                   >
                     <i class="fas fa-plus mr-1"></i>
-                    Add to Bookshelf
+                    {{ $t('Add to Bookshelf') }}
                   </b-button>
                   <b-button
                     variant="unstyled"
@@ -76,7 +76,7 @@
                     target="_blank"
                     class="text-secondary"
                   >
-                    Read on Gutenberg
+                    {{ $t('Read on Gutenberg') }}
                   </a>
                 </div>
               </div>
