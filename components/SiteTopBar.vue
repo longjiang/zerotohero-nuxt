@@ -39,7 +39,7 @@
           class="d-inline-block"
           @mouseover="cycleFlags"
           @mouseleave="stopCycling"
-          v-if="params.md !== false"
+          v-if="params.md !== false && $l1 && $l2 && $l1.code & $l2.code"
         >
           <span
             :class="`text-white`"
@@ -74,9 +74,9 @@
         </div>
       </div>
       <client-only>
-        <AnnotationSettings v-if="$l2 && params.lg" variant="toolbar" />
+        <AnnotationSettings v-if="$route.params.l1 && $route.params.l2 && params.lg" variant="toolbar" />
       </client-only>
-      <template v-if="$l1 && $l2">
+      <template v-if="$route.params.l1 && $route.params.l2">
         <div>
           <router-link
             id="site-top-bar-saved-words"
