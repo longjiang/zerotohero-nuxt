@@ -3,7 +3,7 @@
     <router-link to="/" class="link-unstyled">
       <div class="z2h-icon-wrapper">
         <img
-          src="/img/czh-icon.png"
+          src="/img/logo-play-circle-light.png"
           style="height: 5.5rem; margin-bottom: 1rem"
           class="z2h-icon"
           data-not-lazy

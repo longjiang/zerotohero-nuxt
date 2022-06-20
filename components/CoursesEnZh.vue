@@ -10,7 +10,8 @@
       <div class="row">
         <div class="col-sm-12 text-center">
           <!-- <Sale class="mb-5" /> -->
-          <h3 class="mb-5">Chinese Language Video Courses</h3>
+          <img src="/img/czh-logo-dark.png" alt="Chinese Zero to Hero" style="max-height: 5rem" class="mb-4">
+          <p class="mb-5">Chinese Language Video Courses</p> 
           <VideoComp
             class="intro-video mb-5"
             thumbnail="/img/video-thumbnail-hsk-courses.jpeg"

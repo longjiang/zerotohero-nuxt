@@ -28,7 +28,7 @@
             <!-- <FeedbackPrompt /> -->
             <Logo class="mt-4 mb-3" />
             <p class="blurb text-white text-center">
-              Learn languages naturally with videos.
+              Learn languages with videos
             </p>
             <client-only>
               <div class="text-center text-white mt-3">
