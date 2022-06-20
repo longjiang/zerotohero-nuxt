@@ -28,7 +28,7 @@
             <!-- <FeedbackPrompt /> -->
             <Logo class="mt-4 mb-3" />
             <p class="blurb text-white text-center">
-              Learn languages with videos.
+              {{ translate("Learn languages with videos.", browserLanguage) }}
             </p>
             <client-only>
               <div class="text-center text-white mt-4">
@@ -51,7 +51,8 @@
             <div class="col-sm-12">
               <div class="home-card p-2 pt-4 pb-4 bg-white">
                 <h5 class="text-center mt-2 mb-1">
-                  {{ $auth.user.first_name }}’s Language Dashboard
+                  {{ $auth.user.first_name
+                  }}{{ translate("’s Language Dashboard", browserLanguage) }}
                 </h5>
                 <LazyDashboard />
               </div>
@@ -268,7 +269,8 @@
                             style="cursor: pointer"
                             @click="scrollTo('#englishLanguageList')"
                           >
-                            More <i class="fa fa-chevron-down"></i>
+                            More
+                            <i class="fa fa-chevron-down"></i>
                           </b>
                         </li>
                       </ul>
@@ -334,21 +336,29 @@
           <div class="row mt-3 mb-5" id="mainLanguageList">
             <div class="col-sm-12">
               <div class="home-card p-2">
-                <h5 class="text-center mt-3 mb-3">Learn More Languages</h5>
+                <h5 class="text-center mt-3 mb-3">
+                  {{ translate("Learn More Languages", browserLanguage) }}
+                </h5>
                 <div class="mb-3" style="display: flex">
                   <b-form-input
                     v-model="langKeyword"
                     style="flex: 1; margin-right: 0.5rem"
                     @compositionend.prevent.stop="() => false"
-                    placeholder="Search languages"
+                    :placeholder="
+                      translate('Search languages', browserLanguage)
+                    "
                   />
                   <router-link
                     class="btn btn-success d-block"
                     to="/language-map"
                   >
                     <i class="fas fa-globe-asia mr-1"></i>
-                    <span class="d-none d-sm-inline">Language</span>
-                    Map
+                    <span class="d-none d-sm-inline">
+                      {{ translate("Language Map", browserLanguage) }}
+                    </span>
+                    <span class="d-xs-inline d-sm-none">
+                      {{ translate("Map", browserLanguage) }}
+                    </span>
                     <i class="ml-1 fas fa-chevron-right"></i>
                   </router-link>
                 </div>
@@ -506,7 +516,10 @@
         </client-only>
         <div class="mt-5 text-center mb-5" v-if="!loaded">
           <p>App is asleep due to inactivity.</p>
-          <router-link :to="{ path: lastFullHistoryPath || '/' }" class="btn btn-success">
+          <router-link
+            :to="{ path: lastFullHistoryPath || '/' }"
+            class="btn btn-success"
+          >
             Reactivate
           </router-link>
         </div>
