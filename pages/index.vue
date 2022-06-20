@@ -118,18 +118,18 @@
                         </li>
                         <li style="white-space: nowrap">
                           <router-link
-                            to="/zh/nan/all-media"
+                            to="/en/ltc/all-media"
                             class="link-unstyled"
                           >
-                            Min Nan
+                            Middle Chinese
                           </router-link>
                         </li>
                         <li style="white-space: nowrap">
                           <router-link
-                            to="/zh/hak/all-media"
+                            to="/en/och/all-media"
                             class="link-unstyled"
                           >
-                            Hakka
+                            Old Chinese
                           </router-link>
                         </li>
                       </ul>
@@ -149,26 +149,26 @@
                         </li>
                         <li style="white-space: nowrap">
                           <router-link
-                            to="/en/lzh/all-media"
+                            to="/zh/nan/all-media"
                             class="link-unstyled"
                           >
-                            Classical Chinese
+                            学习闽南话
                           </router-link>
                         </li>
                         <li style="white-space: nowrap">
                           <router-link
-                            to="/en/ltc/all-media"
+                            to="/zh/hak/all-media"
                             class="link-unstyled"
                           >
-                            Middle Chinese
+                            学习客家话
                           </router-link>
                         </li>
                         <li style="white-space: nowrap">
                           <router-link
-                            to="/en/och/all-media"
+                            to="/zh/lzh/all-media"
                             class="link-unstyled"
                           >
-                            Old Chinese
+                            学习文言文
                           </router-link>
                         </li>
                       </ul>
