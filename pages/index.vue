@@ -81,6 +81,15 @@
           </div>
         </client-only>
         <!-- <Sale class="mb-5" style="border-radius: 1rem !important" /> -->
+        <div class="row mt-3">
+          <div class="col-sm-12 mb-3" style="max-width: 40rem; margin: 0 auto">
+            <YouTubeVideo
+              youtube="mzpu-2FV4E4"
+              :autoload="true"
+              style="overflow: hidden; border-radius: 1rem"
+            />
+          </div>
+        </div>
         <client-only>
           <div class="row mt-4" v-if="language('en')">
             <div class="col-sm-6 col-md-4 mb-4">
