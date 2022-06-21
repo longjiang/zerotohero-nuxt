@@ -689,7 +689,7 @@ export default {
         .replace(
           reg,
           (match, p1) =>
-            `<WordBlock v-bind="wordBlockIntegralAttrs('${p1}')">${p1}</WordBlock>`
+            `<WordBlock v-bind="wordBlockIntegralAttrs('${p1.replace(/'/g, "\\'")}')">${p1}</WordBlock>`
         )
         .replace(
           /!!!###!!!/gi,
