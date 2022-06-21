@@ -186,6 +186,7 @@ const Dictionary = {
     nan: 'dict-twblg/dict-twblg.csv.txt'
   },
   words: [],
+  version: '1.1.3',
   name: 'dialect-dict',
   tokenizationCache: {},
   credit() {
@@ -253,7 +254,7 @@ const Dictionary = {
         }
         words.push(word)
       }
-      this.words = data.sort((a, b) => b.head && a.head ? b.head.length - a.head.length : 0)
+      this.words = words
       return this
     }
   },
