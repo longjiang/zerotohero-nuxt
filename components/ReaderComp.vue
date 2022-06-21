@@ -92,7 +92,7 @@
             <client-only>
               <editor
                 id="reader-textarea"
-                initialEditType="wysiwyg"
+                initialEditType="markdown"
                 cols="30"
                 rows="5"
                 class="flex-1"
