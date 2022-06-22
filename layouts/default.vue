@@ -307,7 +307,7 @@ export default {
           if (this.fullHistory) {
             let lastFullHistoryItem =
               this.fullHistory[this.fullHistory.length - 1];
-            if (lastFullHistoryItem && lastFullHistoryItem.path) {
+            if (lastFullHistoryItem && lastFullHistoryItem.path && this.$route.path === '/') {
               this.$router.push({ path: lastFullHistoryItem.path });
             }
           }
