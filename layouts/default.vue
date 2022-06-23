@@ -186,7 +186,7 @@ export default {
       return classes;
     },
     background() {
-      return Helper.background(this.l2);
+      return this.$route.params.l2 ? Helper.background(this.l2) : Helper.background()
     },
   },
   created() {
