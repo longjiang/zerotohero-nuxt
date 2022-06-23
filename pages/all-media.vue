@@ -44,24 +44,29 @@
           </div>
 
           <div class="media-sections" v-if="!loading">
-            <div v-if="videos && videos.length > 0" class="media-section">
+            <div
+              v-if="videos && movies && movies.length > 0"
+              class="media-section"
+            >
               <h3 class="media-seaction-heading">
-                {{ $l2.name }} Videos
-                <router-link :to="{ name: 'youtube-browse' }" class="show-all">
+                {{ $l2.name }} Movies
+                <router-link
+                  :to="{
+                    name: 'show',
+                    params: { type: 'tv-show', id: moviesShow.id },
+                  }"
+                  class="show-all"
+                >
                   More
                   <i class="fas fa-chevron-right ml-1"></i>
                 </router-link>
               </h3>
               <LazyYouTubeVideoList
-                :videos="videos.slice(0, 12)"
+                :videos="random(movies).slice(0, 12)"
                 :showAdminToolsInAdminMode="false"
                 skin="dark"
               />
             </div>
-            <!-- <FeedbackPrompt
-              class="mt-5 mb-4"
-              :skin="$route.meta ? $route.meta.skin : 'light'"
-            /> -->
             <div
               v-if="videos && music && music.length > 0"
               class="media-section"
@@ -85,6 +90,7 @@
                 skin="dark"
               />
             </div>
+
             <div v-if="videos && news && news.length > 0" class="media-section">
               <h3 class="media-seaction-heading">
                 {{ $l2.name }} News
@@ -106,29 +112,7 @@
               />
             </div>
           </div>
-          <div
-            v-if="videos && movies && movies.length > 0"
-            class="media-section"
-          >
-            <h3 class="media-seaction-heading">
-              {{ $l2.name }} Movies
-              <router-link
-                :to="{
-                  name: 'show',
-                  params: { type: 'tv-show', id: moviesShow.id },
-                }"
-                class="show-all"
-              >
-                More
-                <i class="fas fa-chevron-right ml-1"></i>
-              </router-link>
-            </h3>
-            <LazyYouTubeVideoList
-              :videos="random(movies).slice(0, 12)"
-              :showAdminToolsInAdminMode="false"
-              skin="dark"
-            />
-          </div>
+
           <div
             v-if="videos && tvShows && tvShows.length > 0"
             class="media-section"
@@ -190,7 +174,20 @@
               :key="`tv-shows`"
             />
           </div>
-
+          <div v-if="videos && videos.length > 0" class="media-section">
+            <h3 class="media-seaction-heading">
+              New Videos in {{ $l2.name }}
+              <router-link :to="{ name: 'youtube-browse' }" class="show-all">
+                More
+                <i class="fas fa-chevron-right ml-1"></i>
+              </router-link>
+            </h3>
+            <LazyYouTubeVideoList
+              :videos="videos.slice(0, 12)"
+              :showAdminToolsInAdminMode="false"
+              skin="dark"
+            />
+          </div>
           <client-only>
             <LazyIdenticalLanguages
               class="mt-5 mb-5"
