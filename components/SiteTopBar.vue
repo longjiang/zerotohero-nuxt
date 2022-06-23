@@ -22,20 +22,25 @@
           @click="$router.back()"
           variant="unstyled"
           style="color: #ccc"
-          v-if="params.lg !== false"
+          v-if="$route.path !== '/' && params.lg !== false"
         >
-          <i class="fas fa-chevron-left"></i>
+          <i class="fas fa-chevron-left"></i> Back
         </b-button>
-        <b-button
-          @click="$router.forward()"
-          variant="unstyled"
-          style="color: #ccc"
-          class="ml-3"
-          v-if="params.lg !== false"
-        >
-          <i class="fas fa-chevron-right"></i>
-        </b-button>
-        <div
+      </div>
+      <client-only>
+        <AnnotationSettings v-if="$route.params.l1 && $route.params.l2 && params.lg" variant="toolbar" />
+      </client-only>
+      <template v-if="$route.params.l1 && $route.params.l2">
+        <div>
+          <router-link
+            id="site-top-bar-saved-words"
+            :to="{ name: 'youtube-search' }"
+            :class="`btn top-bar-buttontop btn-unstyled link-unstyled mr-1`"
+            v-if="params.xs !== false"
+            title="Search Videos"
+          >
+            <i class="fas fa-search"></i>
+          </router-link><div
           class="d-inline-block"
           @mouseover="cycleFlags"
           @mouseleave="stopCycling"
@@ -72,21 +77,6 @@
             </span>
           </span>
         </div>
-      </div>
-      <client-only>
-        <AnnotationSettings v-if="$route.params.l1 && $route.params.l2 && params.lg" variant="toolbar" />
-      </client-only>
-      <template v-if="$route.params.l1 && $route.params.l2">
-        <div>
-          <router-link
-            id="site-top-bar-saved-words"
-            :to="{ name: 'youtube-search' }"
-            :class="`btn top-bar-buttontop btn-unstyled link-unstyled mr-1`"
-            v-if="params.xs !== false"
-            title="Search Videos"
-          >
-            <i class="fas fa-search"></i>
-          </router-link>
           <router-link
             id="site-top-bar-saved-words"
             :to="
