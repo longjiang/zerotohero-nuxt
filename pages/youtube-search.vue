@@ -19,7 +19,7 @@
     <div class="container pt-3 pb-5 youtube-search">
       <div style="font-size: 1.5rem; color: white; text-align: center">
         <img
-          src="/img/czh-icon.png"
+          src="/img/logo-play-circle-light.png"
           style="height: 4rem; margin-bottom: 1rem; margin-top: 3rem"
           data-not-lazy
         />

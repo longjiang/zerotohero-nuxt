@@ -25,7 +25,7 @@
                   v-if="!args"
                 >
                   <img
-                    src="/img/czh-icon.png"
+                    src="/img/logo-play-circle-light.png"
                     style="height: 4rem; margin-bottom: 1rem; margin-top: 3rem"
                     data-not-lazy
                   />
