@@ -303,15 +303,16 @@ export default {
             });
           }
         }
-        if (mutation.type === "fullHistory/LOAD") {
-          if (this.fullHistory) {
-            let lastFullHistoryItem =
-              this.fullHistory[this.fullHistory.length - 1];
-            if (lastFullHistoryItem && lastFullHistoryItem.path && this.$route.path === '/') {
-              this.$router.push({ path: lastFullHistoryItem.path });
-            }
-          }
-        }
+        // Auto redirect to last seen page of last language doesn't seem to be a good idea, need to rework this
+        // if (mutation.type === "fullHistory/LOAD") {
+        //   if (this.fullHistory) {
+        //     let lastFullHistoryItem =
+        //       this.fullHistory[this.fullHistory.length - 1];
+        //     if (lastFullHistoryItem && lastFullHistoryItem.path && this.$route.path === '/') {
+        //       this.$router.push({ path: lastFullHistoryItem.path });
+        //     }
+        //   }
+        // }
       });
     },
     startLoggingUserTime() {
