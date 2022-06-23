@@ -177,7 +177,7 @@
             ,
             <a href="https://amikumu.com/">Amikumu</a>
             ,
-            <a href="https://www.italki.com/">iTalki</a>
+            <a href="https://www.italki.com/affshare?ref=zerotohero">iTalki</a>
             ,
             <a href="https://www.hellotalk.com/">HelloTalk</a>
             or
