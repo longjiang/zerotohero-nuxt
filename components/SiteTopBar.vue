@@ -24,59 +24,72 @@
           style="color: #ccc"
           v-if="$route.path !== '/' && params.lg !== false"
         >
-          <i class="fas fa-chevron-left"></i> Back
+          <i class="fas fa-chevron-left"></i>
+          Back
         </b-button>
       </div>
-      <client-only>
-        <AnnotationSettings v-if="$route.params.l1 && $route.params.l2 && params.lg" variant="toolbar" />
-      </client-only>
       <template v-if="$route.params.l1 && $route.params.l2">
         <div>
           <router-link
-            id="site-top-bar-saved-words"
             :to="{ name: 'youtube-search' }"
             :class="`btn top-bar-buttontop btn-unstyled link-unstyled mr-1`"
             v-if="params.xs !== false"
             title="Search Videos"
           >
             <i class="fas fa-search"></i>
-          </router-link><div
-          class="d-inline-block"
-          @mouseover="cycleFlags"
-          @mouseleave="stopCycling"
-          v-if="params.md !== false && $route.params.l2"
-        >
-          <span
-            :class="`text-white`"
-            @click="showPlaylistModal"
-            class="language-flag-and-name"
-            style="cursor: pointer"
+          </router-link>
+          <b-button
+            :class="`top-bar-buttontop ml-1`"
+            variant="unstyled"
+            v-if="params.xs !== false && $route.params.l1 && $route.params.l2"
+            title="Quick Settings"
+            style="color: #ccc"
+            @click="showSettingsModal"
           >
-            <LanguageFlag
-              v-if="$l2 && flagCode && params.md !== false"
-              ref="flag"
-              style="
-                transform: scale(0.7);
-                margin-right: -0.5rem;
-                margin-bottom: -0.3rem;
-              "
-              :key="`top-bar-flag-${$l2.code}`"
-              :autocycle="false"
-              :language="$l2"
-              class="ml-2"
+            <i class="fas fa-cog"></i>
+          </b-button>
+          <!-- <client-only>
+            <AnnotationSettings
+              v-if="$route.params.l1 && $route.params.l2 && params.lg"
             />
+          </client-only> -->
+          <div
+            class="d-inline-block"
+            @mouseover="cycleFlags"
+            @mouseleave="stopCycling"
+            v-if="params.md !== false && $route.params.l2"
+          >
             <span
-              :class="`${
-                !$route.params.l2 || params.md === false ? 'd-none' : ''
-              } ml-1`"
+              :class="`text-white`"
+              @click="showPlaylistModal"
+              class="language-flag-and-name"
+              style="cursor: pointer"
             >
-              <i
-                class="fas fa-sort-down"
-                style="position: relative; bottom: 0.2rem; opacity: 0.7"
-              ></i>
+              <LanguageFlag
+                v-if="$l2 && flagCode && params.md !== false"
+                ref="flag"
+                style="
+                  transform: scale(0.7);
+                  margin-right: -0.5rem;
+                  margin-bottom: -0.3rem;
+                "
+                :key="`top-bar-flag-${$l2.code}`"
+                :autocycle="false"
+                :language="$l2"
+                class="ml-2"
+              />
+              <span
+                :class="`${
+                  !$route.params.l2 || params.md === false ? 'd-none' : ''
+                } ml-1`"
+              >
+                <i
+                  class="fas fa-sort-down"
+                  style="position: relative; bottom: 0.2rem; opacity: 0.7"
+                ></i>
+              </span>
             </span>
-          </span>
-        </div>
+          </div>
           <router-link
             id="site-top-bar-saved-words"
             :to="
@@ -124,6 +137,17 @@
           </div>
         </client-only>
       </template>
+      <b-modal
+        ref="settings-modal"
+        size="xl"
+        centered
+        hide-footer
+        title="Quick Settings"
+        modal-class="safe-padding-top mt-4"
+        body-class="settings-modal-wrapper"
+      >
+        <div class="settings-modal"><AnnotationSettings variant="toolbar" /></div>
+      </b-modal>
       <b-modal
         ref="languages-modal"
         size="xl"
@@ -259,12 +283,14 @@ export default {
     },
     languageMapPath() {
       if (this.fullHistory) {
-        let historyMatches = this.fullHistory.map(h => h.path).filter((path) => {
-          if (path) {
-            let r = this.$router.resolve(path);
-            return r && r.route && ["language-map"].includes(r.route.name);
-          }
-        });
+        let historyMatches = this.fullHistory
+          .map((h) => h.path)
+          .filter((path) => {
+            if (path) {
+              let r = this.$router.resolve(path);
+              return r && r.route && ["language-map"].includes(r.route.name);
+            }
+          });
         let path = historyMatches.pop();
         if (path) return path;
       }
@@ -291,6 +317,12 @@ export default {
     },
     hideLanguagesModal() {
       this.$refs["languages-modal"].hide();
+    },
+    showSettingsModal() {
+      this.$refs["settings-modal"].show();
+    },
+    hideSettingsModal() {
+      this.$refs["settings-modal"].hide();
     },
     onLanguagesModalShown() {},
     backgroundClick() {

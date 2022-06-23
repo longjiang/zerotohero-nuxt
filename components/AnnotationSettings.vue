@@ -1,7 +1,7 @@
 <template>
   <div :class="`annotation-settings annotation-settings-${variant}`">
     <div v-if="variant === 'toolbar'">
-      <span
+      <div
         v-if="onceAdmin"
         @click="adminMode = !adminMode"
         style="display: inline-block"
@@ -9,83 +9,103 @@
           adminMode ? 'annotation-setting-toggle-active' : ''
         }`"
       >
-        <i class="fa fa-wrench"></i>
-      </span>
-      <span
+        <span class="annotation-setting-icon">
+          <i class="fa fa-wrench"></i>
+        </span>
+        Admin Mode
+      </div>
+      <div
         @click="showPinyin = !showPinyin"
         :class="`annotation-setting-toggle ${
           showPinyin ? 'annotation-setting-toggle-active' : ''
         }`"
       >
-        <ruby v-if="$l2.han" style="position: relative; bottom: -0.1rem">
-          拼
-          <rt>pīn</rt>
-        </ruby>
-        <ruby v-else-if="$l2.code === 'ja'">
-          假
-          <rt>か</rt>
-        </ruby>
-        <ruby
-          v-else-if="
-            $l2.scripts && $l2.scripts[0] && $l2.scripts[0].script === 'Arab'
-          "
-        >
-          نص
-          <rt>naṣṣ</rt>
-        </ruby>
-        <span v-else>[pʰ]</span>
-      </span>
-      <span
+        <span class="annotation-setting-icon">
+          <ruby v-if="$l2.han" style="position: relative; bottom: -0.1rem">
+            拼
+            <rt>pīn</rt>
+          </ruby>
+          <ruby v-else-if="$l2.code === 'ja'">
+            假
+            <rt>か</rt>
+          </ruby>
+          <ruby
+            v-else-if="
+              $l2.scripts && $l2.scripts[0] && $l2.scripts[0].script === 'Arab'
+            "
+          >
+            نص
+            <rt>naṣṣ</rt>
+          </ruby>
+          <span v-else>[pʰ]</span>
+        </span>
+        {{ showPinyin ? "Phonetics On" : "Phonetics Off" }}
+      </div>
+      <div
         v-if="$l2.han"
         @click="useTraditional = !useTraditional"
         :class="`annotation-setting-toggle ${
           useTraditional ? 'annotation-setting-toggle-active' : ''
         }`"
       >
-        <span v-if="useTraditional">繁</span>
-        <span v-if="!useTraditional">简</span>
-      </span>
-      <span
+        <span class="annotation-setting-icon">
+          <span v-if="useTraditional">繁</span>
+          <span v-if="!useTraditional">简</span>
+        </span>
+        {{
+          useTraditional ? "Traditional Characters" : "Simplified Characters"
+        }}
+      </div>
+      <div
         @click="showTranslation = !showTranslation"
         :class="`annotation-setting-toggle ${
           showTranslation ? 'annotation-setting-toggle-active' : ''
         }`"
       >
-        <i class="fas fa-language"></i>
-      </span>
-      <span
+        <span class="annotation-setting-icon">
+          <i class="fas fa-language"></i>
+        </span>
+        {{ showTranslation ? "Translation On" : "Translation Off" }}
+      </div>
+      <div
         v-if="$l2.code === 'ko'"
         @click="showByeonggi = !showByeonggi"
         :class="`annotation-setting-toggle ${
           showByeonggi ? 'annotation-setting-toggle-active' : ''
         }`"
       >
-        자
-        <small style="font-size: 0.5em">字</small>
-      </span>
-      <span
+        <span class="annotation-setting-icon">
+          자
+          <small style="font-size: 0.5em">字</small>
+        </span>
+        {{ showByeonggi ? "Hanja On" : "Hanja Off" }}
+      </div>
+      <div
         v-if="$l2.code === 'vi'"
         @click="showByeonggi = !showByeonggi"
         :class="`annotation-setting-toggle ${
           showByeonggi ? 'annotation-setting-toggle-active' : ''
         }`"
       >
-        Tự
-        <small style="font-size: 0.5em">字</small>
-      </span>
+        <span class="annotation-setting-icon">
+          Tự
+          <small style="font-size: 0.5em">字</small>
+        </span>
+        {{ showByeonggi ? "Han Tự On" : "Han Tự Off" }}
+      </div>
 
-      <span
+      <div
         class="annotation-setting-toggle"
         @click="zoomLevel = zoomLevel > 0 ? zoomLevel - 1 : zoomLevel"
       >
-        ᴛ
-      </span>
-      <span
+        <span class="annotation-setting-icon">ᴛ</span> Smaller Text
+      </div>
+      <div
         class="annotation-setting-toggle"
         @click="zoomLevel = zoomLevel < 4 ? zoomLevel + 1 : zoomLevel"
       >
-        T
-      </span>
+        <span class="annotation-setting-icon">T</span> Bigger Text
+      </div>
     </div>
     <div v-if="variant === 'page'">
       <div class="mt-3">
@@ -442,9 +462,14 @@ export default {
 
 .annotation-settings-toolbar {
   display: inline-block;
-  color: rgba(255, 255, 255, 0.6);
   border-radius: 0.2rem;
   position: relative;
   bottom: -0.1rem;
+}
+
+.annotation-setting-icon {
+  width: 2rem;
+  text-align: center;
+  display: inline-block;
 }
 </style>
