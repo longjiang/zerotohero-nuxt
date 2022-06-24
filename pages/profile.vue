@@ -112,15 +112,32 @@
               </div>
               <div class="mt-4 pb-5">
                 <h5 class="mb-4">Danger Zone</h5>
-                <div class="text-center alert-danger rounded p-4">
-                  <b-button variant="danger" @click="removeProgress">
-                    <i class="fas fa-trash mr-2"></i>
-                    Remove {{ $l2.name }}
-                  </b-button>
-                  <p class="mt-3 mb-0">
-                    This will remove your logged time for {{ $l2.name }}, and
-                    remove {{ $l2.name }} from your home screen Dashboard.
-                  </p>
+                <div class="row">
+                  <div class="col-sm-12 col-md-6 mb-2">
+                    <div class="text-center alert-danger rounded p-4">
+                      <b-button variant="danger" @click="removeProgress">
+                        <i class="fas fa-trash mr-2"></i>
+                        Remove {{ $l2.name }}
+                      </b-button>
+                      <p class="mt-3 mb-0">
+                        This will remove your logged time for {{ $l2.name }},
+                        and remove {{ $l2.name }} from your home screen
+                        Dashboard.
+                      </p>
+                    </div>
+                  </div>
+                  <div class="col-sm-12 col-md-6 mb-2">
+                    <div class="text-center alert-danger rounded p-4" style="height: 100%">
+                      <b-button variant="danger" @click="deleteAccount">
+                        <i class="fas fa-times-circle mr-2"></i>
+                        Delete my account
+                      </b-button>
+                      <p class="mt-3 mb-0">
+                        This will permanently remove your account. There is no
+                        undo.
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
               <FeedbackPrompt
@@ -137,6 +154,7 @@
 
 <script>
 import Helper from "@/lib/helper";
+import Config from "@/lib/config";
 import { mapState } from "vuex";
 export default {
   computed: {
@@ -206,21 +224,6 @@ export default {
       }
     });
   },
-  methods: {
-    levelObj(level) {
-      return Helper.languageLevels(this.$l2)[level];
-    },
-    async removeProgress() {
-      this.$store.dispatch("progress/removeL2Progress", { l2: this.$l2 });
-      this.$toast.success(
-        `${this.$l2.name} has been removed from your languages.`,
-        { duration: 5000 }
-      );
-      this.$router.push("/");
-      await Helper.timeout(3000);
-      location.reload();
-    },
-  },
   watch: {
     mannuallySetLevel() {
       this.$store.dispatch("progress/setLevel", {
@@ -233,6 +236,58 @@ export default {
         l2: this.$l2,
         time: this.mannuallySetHours * 60 * 60 * 1000,
       });
+    },
+  },
+  methods: {
+    levelObj(level) {
+      return Helper.languageLevels(this.$l2)[level];
+    },
+    async removeProgress() {
+      if (
+        confirm(
+          `Are you sure you want to remove your progress and saved items for ${this.$l2.name}?`
+        )
+      ) {
+        // Save it!
+        this.$store.dispatch("progress/removeL2Progress", { l2: this.$l2 });
+        this.$toast.success(
+          `${this.$l2.name} has been removed from your languages.`,
+          { duration: 5000 }
+        );
+        this.$router.push("/");
+        await Helper.timeout(3000);
+        location.reload();
+      } else {
+        // Do nothing!
+      }
+    },
+    async deleteAccount() {
+      if (
+        confirm(`Are you sure you want to permanently delete your account?`)
+      ) {
+        let res = await this.$authios.get(`${Config.wiki}users/me`);
+        let user = res?.data?.data;
+        if (user) {
+          if (user.role !== 1) {
+            let url = `${Config.wiki}users/${user.id}`;
+            res = await this.$authios.patch(url, { status: "inactive" });
+            this.$toast.success("Success: User account has been deleted.", {
+              duration: 5000,
+            });
+            this.$router.push('/logout')
+          } else {
+            this.$toast.error("Error: Cannot delete admin users.", {
+              duration: 5000,
+            });
+          }
+        } else {
+          this.$toast.error(
+            "Error: Cannot delete user because user information canot be retrieved.",
+            { duration: 5000 }
+          );
+        }
+      } else {
+      }
     },
   },
 };
