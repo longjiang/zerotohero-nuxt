@@ -115,9 +115,14 @@ export default {
             const childCharacter = (await this.$getHanzi()).lookupShallow(
               node.character
             );
+            let characterHTML = childCharacter.character
+            const word = await (await this.$dictionary).lookup(childCharacter.character)
+            if (word) {
+              characterHTML = `<a href="/${this.$l1.code}/${this.$l2.code}/dictionary/${this.$dictionaryName}/${word.id}">${childCharacter.character}</a>`
+            }
             $template = $(`
             <div class="part-pinyin part-pinyin-${node.character}">${childCharacter.pinyin}</div>
-            <div class="part-character part-character-${node.character}">${childCharacter.character}</div>`);
+            <div class="part-character part-character-${node.character}">${characterHTML}</div>`);
           }
           if (node.parent) {
             node.selector = `${node.parent.selector} > .description-${
