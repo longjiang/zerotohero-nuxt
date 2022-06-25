@@ -105,10 +105,17 @@
                     <b-button
                       size="sm"
                       variant="success"
-                      @click="inAppPurchase"
+                      @click="executeiOSInAppPurchase"
                     >
                       <i class="fab fa-apple mr-1"></i>
                       Pay with In-App Purchase
+                    </b-button>
+                    <b-button
+                      size="sm"
+                      variant="secondary"
+                      @click="restoreiOSInAppPurchase"
+                    >
+                      Restore Purchase
                     </b-button>
                   </div>
                 </div>
@@ -235,6 +242,8 @@ import { HOST } from "@/lib/utils/url";
 import { Capacitor } from "@capacitor/core";
 import { InAppPurchase2 } from "@ionic-native/in-app-purchase-2";
 
+const IOS_IAP_PRODUCT_ID = "pro";
+
 export default {
   data() {
     this.publishableKey = "pk_live_9lnc7wrGHtcFdPKIWZdy9p17";
@@ -275,41 +284,66 @@ export default {
       return Capacitor.isNativePlatform();
     },
   },
+  mounted() {
+    this.registeriOSInAppPurchaseProducts()
+    this.setupiOSInAppPurchaseListeners()
+  },
   methods: {
-    inAppPurchase() {
+    registeriOSInAppPurchaseProducts() {
       InAppPurchase2.register([
-        { id: "pro", type: InAppPurchase2.NON_CONSUMABLE },
+        { id: IOS_IAP_PRODUCT_ID, type: InAppPurchase2.NON_CONSUMABLE },
       ]);
-      InAppPurchase2.when("pro").approved(function (product) {
-        // synchronous
-        console.log("approved", { product });
-        product.finish();
-      });
-      InAppPurchase2.when("pro").loaded(function (product) {
+      InAppPurchase2.refresh();
+    },
+    setupiOSInAppPurchaseListeners() {
+      InAppPurchase2.when(IOS_IAP_PRODUCT_ID)
+        .approved(function (product) {
+          // synchronous
+          console.log("approved", { product });
+          return product.verify();
+        })
+        .verified((product) => {
+          console.log("verified", { product });
+          product.finish();
+        });
+      InAppPurchase2.when(IOS_IAP_PRODUCT_ID).loaded(function (product) {
         console.log("loaded", { product });
       });
-      InAppPurchase2.when("pro").updated(function (product) {
+      InAppPurchase2.when(IOS_IAP_PRODUCT_ID).updated(function (product) {
         console.log("updated", { product });
       });
-      InAppPurchase2.when("pro").cancelled(function (product) {
+      InAppPurchase2.when(IOS_IAP_PRODUCT_ID).cancelled(function (product) {
         console.log("cancelled", { product });
       });
-      InAppPurchase2.when("pro").refunded(function (product) {
+      InAppPurchase2.when(IOS_IAP_PRODUCT_ID).refunded(function (product) {
         console.log("refunded", { product });
       });
-      InAppPurchase2.when("pro").verified(function (product) {
+      InAppPurchase2.when(IOS_IAP_PRODUCT_ID).verified(function (product) {
         console.log("verified", { product });
       });
-      InAppPurchase2.when("pro").unverified(function (product) {
+      InAppPurchase2.when(IOS_IAP_PRODUCT_ID).unverified(function (product) {
         console.log("unverified", { product });
       });
-      InAppPurchase2.when("pro").expired(function (product) {
+      InAppPurchase2.when(IOS_IAP_PRODUCT_ID).expired(function (product) {
         console.log("expired", { product });
       });
-      InAppPurchase2.when("pro").error(function (err) {
+      InAppPurchase2.when(IOS_IAP_PRODUCT_ID).error(function (err) {
         console.log("error", { err });
       });
+    },
+    restoreiOSInAppPurchase() {
       InAppPurchase2.refresh();
+    },
+    executeiOSInAppPurchase() {
+      InAppPurchase2.order(IOS_IAP_PRODUCT_ID).then(
+        (product) => {
+          // Purchase in progress!
+          console.log("order", { product });
+        },
+        (err) => {
+          this.$toast.error(`Failed to purchase: ${err}`, { duration: 5000 });
+        }
+      );
     },
     submitStripeUSD() {
       // You will be redirected to Stripe's secure checkout page
