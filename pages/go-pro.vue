@@ -309,6 +309,7 @@ export default {
       InAppPurchase2.when("pro").error(function (err) {
         console.log("error", { err });
       });
+      InAppPurchase2.refresh();
     },
     submitStripeUSD() {
       // You will be redirected to Stripe's secure checkout page
