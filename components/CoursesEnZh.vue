@@ -15,7 +15,7 @@
           <VideoComp
             class="intro-video mb-5"
             thumbnail="/img/video-thumbnail-hsk-courses.jpeg"
-            url="https://www.chinesezerotohero.com/wp-content/uploads/2021/01/Intro-2021-small.mp4"
+            url="https://server.chinesezerotohero.com/data/video/website-intro-2022.mp4"
           />
         </div>
       </div>
