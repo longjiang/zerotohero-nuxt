@@ -233,7 +233,7 @@
 <script>
 import { HOST } from "@/lib/utils/url";
 import { Capacitor } from "@capacitor/core";
-import { InAppPurchase2 } from '@ionic-native/in-app-purchase-2'
+import { InAppPurchase2 } from "@ionic-native/in-app-purchase-2";
 
 export default {
   data() {
@@ -277,11 +277,37 @@ export default {
   },
   methods: {
     inAppPurchase() {
-      InAppPurchase2.register([{id: 'pro', type: InAppPurchase2.NON_CONSUMABLE}])
-      InAppPurchase2.when("pro").approved(function(product){
-          // synchronous
-          console.log({product})
-          product.finish();
+      InAppPurchase2.register([
+        { id: "pro", type: InAppPurchase2.NON_CONSUMABLE },
+      ]);
+      InAppPurchase2.when("pro").approved(function (product) {
+        // synchronous
+        console.log("approved", { product });
+        product.finish();
+      });
+      InAppPurchase2.when("pro").loaded(function (product) {
+        console.log("loaded", { product });
+      });
+      InAppPurchase2.when("pro").updated(function (product) {
+        console.log("updated", { product });
+      });
+      InAppPurchase2.when("pro").cancelled(function (product) {
+        console.log("cancelled", { product });
+      });
+      InAppPurchase2.when("pro").refunded(function (product) {
+        console.log("refunded", { product });
+      });
+      InAppPurchase2.when("pro").verified(function (product) {
+        console.log("verified", { product });
+      });
+      InAppPurchase2.when("pro").unverified(function (product) {
+        console.log("unverified", { product });
+      });
+      InAppPurchase2.when("pro").expired(function (product) {
+        console.log("expired", { product });
+      });
+      InAppPurchase2.when("pro").error(function (err) {
+        console.log("error", { err });
       });
     },
     submitStripeUSD() {
