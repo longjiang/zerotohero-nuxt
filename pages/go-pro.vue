@@ -105,6 +105,7 @@
                     <b-button
                       size="sm"
                       variant="success"
+                      @click="inAppPurchase"
                     >
                       <i class="fab fa-apple mr-1"></i>
                       Pay with In-App Purchase
@@ -232,6 +233,7 @@
 <script>
 import { HOST } from "@/lib/utils/url";
 import { Capacitor } from "@capacitor/core";
+import { InAppPurchase2 } from '@ionic-native/in-app-purchase-2'
 
 export default {
   data() {
@@ -274,6 +276,14 @@ export default {
     },
   },
   methods: {
+    inAppPurchase() {
+      InAppPurchase2.register([{id: 'pro', type: InAppPurchase2.NON_CONSUMABLE}])
+      InAppPurchase2.when("pro").approved(function(product){
+          // synchronous
+          console.log({product})
+          product.finish();
+      });
+    },
     submitStripeUSD() {
       // You will be redirected to Stripe's secure checkout page
       this.$refs.stripeCheckoutUSDRef.redirectToCheckout();

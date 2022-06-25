@@ -1119,6 +1119,20 @@
     js-yaml "^3.13.1"
     json5 "^2.1.1"
 
+"@ionic-native/core@^5.36.0":
+  version "5.36.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/core/-/core-5.36.0.tgz#712c40a530b119b0039e8d16cb577899f50541d4"
+  integrity sha512-lOrkktadlKYbYf1LrDyAtsu1JnQ0oCCdkOU7iHQ8oXnNOkMwobFfD2m62F1CoOr0u9LIkpYnZSPjng8lZbmbNw==
+  dependencies:
+    "@types/cordova" latest
+
+"@ionic-native/in-app-purchase-2@^5.36.0":
+  version "5.36.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/in-app-purchase-2/-/in-app-purchase-2-5.36.0.tgz#423a8100bf05f54b984dd8fcccc5228710008181"
+  integrity sha512-Mr4ZzqaQzXEldS5CzUoEHe/1O16m+//dWuYAYoJGBc0U2+WMU9iJV7y+c+IlPCB+rfU1yfmfgj06QX8wqvHIWw==
+  dependencies:
+    "@types/cordova" latest
+
 "@ionic/cli-framework-output@^2.2.1":
   version "2.2.4"
   resolved "https://registry.npmjs.org/@ionic/cli-framework-output/-/cli-framework-output-2.2.4.tgz"
@@ -1983,6 +1997,11 @@
   integrity sha512-ePPA/JuI+X0vb+gSWlPKOY0NdNAie/rPUqX2GUPpbZwiKTkSPhjXWuee47E4MtE54QVzGCQMQkAL6JhV2E1+cQ==
   dependencies:
     "@types/node" "*"
+
+"@types/cordova@latest":
+  version "0.0.34"
+  resolved "https://registry.yarnpkg.com/@types/cordova/-/cordova-0.0.34.tgz#ea7addf74ecec3d7629827a0c39e2c9addc73d04"
+  integrity sha512-rkiiTuf/z2wTd4RxFOb+clE7PF4AEJU0hsczbUdkHHBtkUmpWQpEddynNfJYKYtZFJKbq4F+brfekt1kx85IZA==
 
 "@types/eslint@^7.28.2":
   version "7.29.0"

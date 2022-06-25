@@ -15,6 +15,8 @@
   "dependencies": {
     "@capacitor/share": "^1.1.2",
     "@capacitor/splash-screen": "^1.2.2",
+    "@ionic-native/core": "^5.36.0",
+    "@ionic-native/in-app-purchase-2": "^5.36.0",
     "@nuxtjs/auth-next": "5.0.0-1648802546.c9880dc",
     "@nuxtjs/axios": "^5.13.1",
     "@nuxtjs/toast": "^3.3.1",
