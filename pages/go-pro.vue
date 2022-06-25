@@ -100,84 +100,97 @@
                     <sup style="font-size: 1rem">/ lifetime</sup>
                   </div>
                 </div>
-                <div class="mt-3 mb-4">
-                  Please choose your method of payment:
+                <div v-if="native">
+                  <div class="mt-3 mb-4">
+                    <b-button
+                      size="sm"
+                      variant="success"
+                    >
+                      <i class="fab fa-apple mr-1"></i>
+                      Pay with In-App Purchase
+                    </b-button>
+                  </div>
                 </div>
-                <div>
-                  <stripe-checkout
-                    ref="stripeCheckoutUSDRef"
-                    mode="payment"
-                    :pk="publishableKey"
-                    :line-items="[
-                      {
-                        price: 'price_1LArBtG5EbMGvOaflIKUthub', // USD price for all other payment methods
-                        quantity: 1,
-                      },
-                    ]"
-                    :success-url="successURL"
-                    :cancel-url="cancelURL"
-                    @loading="(v) => (loading = v)"
-                  />
-                  <b-button
-                    @click="submitStripeUSD"
-                    variant=" pl-3 pr-3"
-                    size="sm"
-                    style="
-                      position: relative;
-                      bottom: 0.5rem;
-                      padding: 0.1rem;
-                      background-color: #ffc439;
-                    "
-                  >
-                    <i class="fas fa-credit-card"></i>
-                    <i class="fab fa-cc-apple-pay"></i>
-                    <i class="fab fa-google-pay mr-1"></i>
-                    Credit Card
-                  </b-button>
-                  <a
-                    href="https://buy.stripe.com/4gw2bz7ELbvR8CccMN"
-                    class="btn btn-sm pl-3 pr-3"
-                    style="
-                      position: relative;
-                      bottom: 0.5rem;
-                      padding: 0.1rem;
-                      background-color: #ffc439;
-                    "
-                  >
-                    <i class="fab fa-weixin mr-1"></i>
-                    WeChat Pay
-                  </a>
-                  <a
-                    href="https://buy.stripe.com/4gw2bz7ELbvR8CccMN"
-                    class="btn btn-sm pl-3 pr-3"
-                    style="
-                      position: relative;
-                      bottom: 0.5rem;
-                      padding: 0.1rem;
-                      background-color: #ffc439;
-                    "
-                  >
-                    <i class="fab fa-alipay mr-1"></i>
-                    Alipay
-                  </a>
-                  <PayPal
-                    amount="89.00"
-                    currency="USD"
-                    :client="paypalCredentials"
-                    :items="paypalItems"
-                    :experience="paypalExperienceOptions"
-                    :button-style="{
-                      shape: 'rect',
-                      size: 'responsive',
-                      label: '',
-                      color: 'gold',
-                    }"
-                    env="production"
-                    class="d-inline-block"
-                    @payment-authorized="onPayPalPaymentAuthorized"
-                    @payment-completed="onPayPalPaymentCompleted"
-                    @payment-cancelled="onPayPalPaymentCancelled"
-                  ></PayPal>
+                <div v-else>
+                  <div class="mt-3 mb-4">
+                    Please choose your method of payment:
+                  </div>
+                  <div>
+                    <stripe-checkout
+                      ref="stripeCheckoutUSDRef"
+                      mode="payment"
+                      :pk="publishableKey"
+                      :line-items="[
+                        {
+                          price: 'price_1LArBtG5EbMGvOaflIKUthub', // USD price for all other payment methods
+                          quantity: 1,
+                        },
+                      ]"
+                      :success-url="successURL"
+                      :cancel-url="cancelURL"
+                      @loading="(v) => (loading = v)"
+                    />
+                    <b-button
+                      @click="submitStripeUSD"
+                      variant=" pl-3 pr-3"
+                      size="sm"
+                      style="
+                        position: relative;
+                        bottom: 0.5rem;
+                        padding: 0.1rem;
+                        background-color: #ffc439;
+                      "
+                    >
+                      <i class="fas fa-credit-card"></i>
+                      <i class="fab fa-cc-apple-pay"></i>
+                      <i class="fab fa-google-pay mr-1"></i>
+                      Credit Card
+                    </b-button>
+                    <a
+                      href="https://buy.stripe.com/4gw2bz7ELbvR8CccMN"
+                      class="btn btn-sm pl-3 pr-3"
+                      style="
+                        position: relative;
+                        bottom: 0.5rem;
+                        padding: 0.1rem;
+                        background-color: #ffc439;
+                      "
+                    >
+                      <i class="fab fa-weixin mr-1"></i>
+                      WeChat Pay
+                    </a>
+                    <a
+                      href="https://buy.stripe.com/4gw2bz7ELbvR8CccMN"
+                      class="btn btn-sm pl-3 pr-3"
+                      style="
+                        position: relative;
+                        bottom: 0.5rem;
+                        padding: 0.1rem;
+                        background-color: #ffc439;
+                      "
+                    >
+                      <i class="fab fa-alipay mr-1"></i>
+                      Alipay
+                    </a>
+                    <PayPal
+                      amount="89.00"
+                      currency="USD"
+                      :client="paypalCredentials"
+                      :items="paypalItems"
+                      :experience="paypalExperienceOptions"
+                      :button-style="{
+                        shape: 'rect',
+                        size: 'responsive',
+                        label: '',
+                        color: 'gold',
+                      }"
+                      env="production"
+                      class="d-inline-block"
+                      @payment-authorized="onPayPalPaymentAuthorized"
+                      @payment-completed="onPayPalPaymentCompleted"
+                      @payment-cancelled="onPayPalPaymentCancelled"
+                    ></PayPal>
+                  </div>
                 </div>
               </div>
             </div>
@@ -218,6 +231,7 @@
 
 <script>
 import { HOST } from "@/lib/utils/url";
+import { Capacitor } from "@capacitor/core";
 
 export default {
   data() {
@@ -254,6 +268,9 @@ export default {
   computed: {
     pro() {
       return [1, 4].includes(Number(this.$auth.user?.role)) ? true : false;
+    },
+    native() {
+      return Capacitor.isNativePlatform();
     },
   },
   methods: {
