@@ -110,13 +110,14 @@
                       <i class="fab fa-apple mr-1"></i>
                       Pay with In-App Purchase
                     </b-button>
-                    <b-button
-                      size="sm"
-                      variant="secondary"
-                      @click="restoreiOSInAppPurchase"
-                    >
-                      Restore Purchase
-                    </b-button>
+                    <div class="mt-3">
+                      <u
+                        class="text-secondary"
+                        @click="restoreiOSInAppPurchase"
+                      >
+                        Restore Purchase
+                      </u>
+                    </div>
                   </div>
                 </div>
                 <div v-else>
@@ -285,8 +286,8 @@ export default {
     },
   },
   mounted() {
-    this.registeriOSInAppPurchaseProducts()
-    this.setupiOSInAppPurchaseListeners()
+    this.registeriOSInAppPurchaseProducts();
+    this.setupiOSInAppPurchaseListeners();
   },
   methods: {
     registeriOSInAppPurchaseProducts() {
