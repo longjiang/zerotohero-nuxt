@@ -30,6 +30,7 @@
     "bootstrap-vue": "^2.21.2",
     "child_process": "^1.0.2",
     "chinese-conv": "^1.0.1",
+    "cordova-plugin-purchase": "^11.0.0",
     "core-js": "^3.9.1",
     "country-code-lookup": "^0.0.19",
     "country-flag-icons": "^1.4.26",

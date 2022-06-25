@@ -4205,6 +4205,11 @@ copy-descriptor@^0.1.0:
   resolved "https://registry.npmjs.org/copy-descriptor/-/copy-descriptor-0.1.1.tgz"
   integrity sha512-XgZ0pFcakEUlbwQEVNg3+QAis1FyTL3Qel9FYy8pSkQqoG3PNoT0bOCQtOXcOkur21r2Eq2kI+IE+gsmAEVlYw==
 
+cordova-plugin-purchase@^11.0.0:
+  version "11.0.0"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-purchase/-/cordova-plugin-purchase-11.0.0.tgz#d49ddd0d521c4bae4022a5db3eec5bd22a6c7adb"
+  integrity sha512-FkgOyWBYS989dYpM6d3R36VrdsHweTbmp5y7ELa1GwMYq2AG+ImdB6DJcVpyU/se/zpTndBWH/zN9s3AFKfsLg==
+
 core-js-compat@^3.12.1, core-js-compat@^3.21.0, core-js-compat@^3.22.1:
   version "3.22.8"
   resolved "https://registry.npmjs.org/core-js-compat/-/core-js-compat-3.22.8.tgz"
