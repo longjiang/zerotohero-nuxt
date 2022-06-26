@@ -184,11 +184,11 @@ export default {
     },
     episodesButtonText() {
       if (this.show) {
-        if (this.show.type === "Audiobook") return "Choose Chapter";
-        if (this.show.type === "Song") return "Choose Song";
-        if (this.show.type === "YouTube Channel") return "Choose Video";
+        if (this.show.type === "Audiobook") return "Chapters";
+        if (this.show.type === "Song") return "Songs";
+        if (this.show.type === "YouTube Channel") return "Uploads";
       }
-      return "Choose Episode";
+      return "Episodes";
     },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")

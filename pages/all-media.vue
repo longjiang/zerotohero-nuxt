@@ -274,12 +274,20 @@ export default {
   },
   methods: {
     loadHeroVideo() {
-      let randomVideos = this.random([
-        ...(this.music || []),
+      let randomVideos = [
         ...(this.movies || []),
-        ...(this.news || []),
-        ...(this.videos || []).filter((v) => v.tv_show || v.talk), // Let's not feature non-tv-show non-talk videos
-      ]);
+        ...(this.music || []),
+        ...(this.videos || []).filter((v) => v.tv_show),
+      ];
+      if (randomVideos.length < 50) {
+        randomVideos = randomVideos.concat(this.news || []);
+      }
+      if (randomVideos.length < 50) {
+        randomVideos = randomVideos.concat(
+          (this.videos || []).filter((v) => v.talk)
+        ); // Let's not feature non-tv-show non-talk videos
+      }
+      randomVideos = this.random(randomVideos);
       this.heroVideo = randomVideos[0];
     },
     onVideoUnavailable(youtube_id) {
