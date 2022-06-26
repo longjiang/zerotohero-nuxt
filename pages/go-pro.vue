@@ -288,8 +288,10 @@ export default {
     },
   },
   mounted() {
-    this.registeriOSInAppPurchaseProducts();
-    this.setupiOSInAppPurchaseListeners();
+    if (this.native) {
+      this.registeriOSInAppPurchaseProducts();
+      this.setupiOSInAppPurchaseListeners();
+    }
   },
   beforeDestroy() {
     InAppPurchase2.off(this.oniOSProductApproved);
