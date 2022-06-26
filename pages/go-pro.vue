@@ -292,10 +292,10 @@ export default {
     this.setupiOSInAppPurchaseListeners();
   },
   beforeDestroy() {
-    InAppPurchase2.off(this.onProductApproved);
-    InAppPurchase2.off(this.onProductVerified);
-    InAppPurchase2.off(this.onProductOrder);
-    InAppPurchase2.off(this.onProductOrderErr);
+    InAppPurchase2.off(this.oniOSProductApproved);
+    InAppPurchase2.off(this.oniOSProductVerified);
+    InAppPurchase2.off(this.oniOSProductOrder);
+    InAppPurchase2.off(this.oniOSProductOrderErr);
   },
   methods: {
     registeriOSInAppPurchaseProducts() {
@@ -304,12 +304,12 @@ export default {
       ]);
       InAppPurchase2.refresh();
     },
-    onProductApproved(product) {
+    oniOSProductApproved(product) {
       // synchronous
       console.log("approved");
       return product.verify();
     },
-    async onProductVerified(product) {
+    async oniOSProductVerified(product) {
       console.log("verified");
       // let receipt = product?.transaction?.appStoreReceipt
       // if (receipt) {
@@ -326,25 +326,25 @@ export default {
       // }
       product.finish();
     },
-    onProductOrder(product) {
+    oniOSProductOrder(product) {
       // Purchase in progress!
       console.log("order");
     },
-    onProductOrderErr(err) {
+    oniOSProductOrderErr(err) {
       this.$toast.error(`Failed to purchase: ${err}`, { duration: 5000 });
     },
     setupiOSInAppPurchaseListeners() {
       InAppPurchase2.when(IOS_IAP_PRODUCT_ID)
-        .approved(this.onProductApproved)
-        .verified(this.onProductVerified);
+        .approved(this.oniOSProductApproved)
+        .verified(this.oniOSProductVerified);
     },
     restoreiOSInAppPurchase() {
       InAppPurchase2.refresh();
     },
     executeiOSInAppPurchase() {
       InAppPurchase2.order(IOS_IAP_PRODUCT_ID).then(
-        this.onProductOrder,
-        this.onProductOrderError
+        this.oniOSProductOrder,
+        this.oniOSProductOrderError
       );
     },
     submitStripeUSD() {
