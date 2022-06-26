@@ -22,8 +22,15 @@
           <div class="col-sm-12">
             <!-- <Sale class="mt-5 mb-5" v-if="$l2.code === 'zh'" /> -->
             <div class="show-list-wrapper">
-              <div class="tags mb-3">
-                <span v-for="tag of tags.slice(0,10)" :key="`tag-${tag.tag}`" class="btn bg-black btn-sm text-white">{{ tag.tag }}</span>
+              <div class="tags mb-3" v-if="tags">
+                <router-link
+                  v-for="tag of tags.slice(0, 10)"
+                  :key="`tag-${tag.tag}`"
+                  :class="{'btn btn-sm tag text-white bg-black': true}"
+                  :to="{ name: routeType, params: { tag: tag.tag } }"
+                >
+                  {{ tag.tag }}
+                </router-link>
               </div>
               <b-input-group class="mb-5 input-group-ghost-dark">
                 <b-form-input
@@ -79,6 +86,7 @@ import { scrollToTargetAdjusted } from "@/lib/utils";
 export default {
   props: {
     routeType: String, // "tv-shows" or "talks"
+    tag: String
   },
   data() {
     return {
@@ -156,6 +164,9 @@ export default {
           shows = shows.filter((s) => s.audiobook);
         } else {
           shows = shows.filter((s) => !s.audiobook);
+        }
+        if (this.tag) {
+          shows = shows.filter((s) => (s.tags || []).includes(this.tag))
         }
         if (this.keyword) {
           let k = this.$l2.han ? tify(this.keyword) : this.keyword;
@@ -262,5 +273,9 @@ export default {
 ::v-deep .synced-transcript {
   height: 5rem;
   overflow: hidden;
+}
+
+.tag.nuxt-link-active {
+  background-color: #28a745;
 }
 </style>
