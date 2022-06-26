@@ -98,7 +98,8 @@
       </div>
 
       <SyncedTranscript
-        v-if="layout !== 'mini' && video.subs_l2 && video.subs_l2.length > 0"
+        v-if="video.subs_l2 && video.subs_l2.length > 0"
+        :class="{ 'd-none': layout === 'mini' }"
         ref="transcript"
         :key="'transcript-' + video.youtube_id"
         :lines="video.subs_l2"
@@ -343,6 +344,9 @@ export default {
       ) {
         this.rewind();
       }
+    },
+    initialLayout() {
+      this.layout = this.initialLayout;
     },
   },
   methods: {
@@ -663,5 +667,4 @@ export default {
   padding-left: 1rem;
   padding-right: 1rem;
 }
-
 </style>

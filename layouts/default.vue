@@ -67,14 +67,9 @@
             />
           </client-only>
           <div class="zth-content">
-            <Nuxt
-              id="main"
-              keep-alive
-              :keep-alive-props="{ include: 'pages/all-media.vue' }"
-            />
             <YouTubeViewComp
               id="overlay-player"
-              v-if="overlayPlayerYouTubeId && overlayPlayerMinimized"
+              v-if="overlayPlayerYouTubeId"
               v-bind="{
                 youtube_id: overlayPlayerYouTubeId,
                 lesson: overlayPlayerLesson,
@@ -85,6 +80,10 @@
                 key: `youtube-view-comp-${overlayPlayerYouTubeId}`,
               }"
               @close="overlayPlayerClose"
+            />
+            <Nuxt
+              id="main"
+              v-if="overlayPlayerMinimized"
             />
           </div>
         </div>
