@@ -70,7 +70,6 @@
               </b-form>
               <div class="mt-4 text-center">
                 <router-link to="/login">Go back</router-link>
-                <!-- <p @click="$router.go(-1)" class="text-secondary">Go back</p> -->
               </div>
             </div>
             <div class="email-sent" v-else>
