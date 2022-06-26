@@ -52,7 +52,7 @@ export const actions = {
 
       if (response.data.data) {
         tvShows = response.data.data
-        tvShows.forEach(show => { if (show.tags) show.tags = Helper.unique(show.tags.split(',')) })
+        tvShows.forEach(show => { show.tags = Helper.unique((show.tags || '').split(',')) })
         tvShows = tvShows.sort((x, y) => {
           let sort = 0
           if (x.title && y.title)
@@ -67,7 +67,7 @@ export const actions = {
       );
       if (response.data.data) {
         talks = response.data.data
-        talks.forEach(show => { if (show.tags) show.tags = Helper.unique(show.tags.split(',')) })
+        talks.forEach(show => { show.tags = Helper.unique((show.tags || '').split(',')) })
         talks = talks.sort((x, y) => {
           let sort = 0
           if (x.title && y.title)

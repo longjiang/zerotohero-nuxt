@@ -24,6 +24,27 @@
             <div class="show-list-wrapper">
               <div class="tags mb-3" v-if="tags">
                 <router-link
+                  :key="`tag-all`"
+                  :class="{ 'btn btn-sm tag text-white bg-black': true }"
+                  :to="{ name: routeType }"
+                >
+                  All
+                  <small style="color: #888">
+                    ({{ filteredShowsByAudiobook.length }})
+                  </small>
+                </router-link>
+                <router-link
+                  v-if="filterShowsMadeForKids && filterShowsMadeForKids.length > 0"
+                  :key="`tag-kids`"
+                  :class="{ 'btn btn-sm tag text-white bg-black': true }"
+                  :to="{ name: routeType, params: { tag: 'kids' } }"
+                >
+                  Kids
+                  <small style="color: #888">
+                    ({{ filterShowsMadeForKids.length }})
+                  </small>
+                </router-link>
+                <router-link
                   v-for="tag of tags.slice(0, 15)"
                   :key="`tag-${tag.tag}`"
                   :class="{ 'btn btn-sm tag text-white bg-black': true }"
@@ -83,6 +104,7 @@
 import Config from "@/lib/config";
 import { tify } from "chinese-conv";
 import { scrollToTargetAdjusted } from "@/lib/utils";
+import { uniqueByValue } from "@/lib/utils/array";
 
 export default {
   props: {
@@ -169,11 +191,17 @@ export default {
       }
       return shows;
     },
+    filterShowsMadeForKids() {
+      return this.filteredShowsByAudiobook.filter((s) => s.made_for_kids || (s.tags || []).includes('kids'));
+    },
     filteredShows() {
       if (this.shows) {
         let shows = this.filteredShowsByAudiobook;
         if (this.tag) {
-          shows = shows.filter((s) => (s.tags || []).includes(this.tag));
+          if (this.tag === "kids")
+            shows = this.filterShowsMadeForKids
+          else
+            shows = shows.filter((s) => (s.tags || []).includes(this.tag));
         }
         if (this.keyword) {
           let k = this.$l2.han ? tify(this.keyword) : this.keyword;
@@ -285,7 +313,7 @@ export default {
   padding: 0.5rem;
 }
 
-.tag.nuxt-link-active {
+.tag.nuxt-link-exact-active {
   background-image: linear-gradient(
     rgba(40, 167, 69, 0.8),
     rgba(40, 167, 69, 0.8)
@@ -294,7 +322,7 @@ export default {
   background-size: 70% 0.35rem;
   background-repeat: no-repeat;
 }
-.tag:not(.nuxt-link-active):hover {
+.tag:not(.nuxt-link-exact-active):hover {
   background-image: linear-gradient(
     rgba(40, 167, 69, 0.4),
     rgba(40, 167, 69, 0.4)
