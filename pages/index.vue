@@ -43,10 +43,45 @@
             </client-only>
           </div>
         </div>
+
+        <div class="mt-5 text-center mb-5" v-if="!loaded">
+          <p>App is asleep due to inactivity.</p>
+          <router-link
+            :to="{ path: lastFullHistoryPath || '/' }"
+            class="btn btn-success"
+          >
+            Reactivate
+          </router-link>
+        </div>
+
         <div class="row pt-3">
-          <div class="col-sm-12 mt-5 text-center">
-            <router-link class="btn btn-success" to="/register">Create a Free Account <i class="ml-1 fas fa-chevron-right"></i></router-link>
-            <p class="mt-4 text-white">Already have an account? <router-link to="/login" class="text-white"><u>Login</u></router-link></p>
+          <div class="col-sm-12 mt-4 text-center">
+            <template v-if="$auth.loggedIn">
+              <p class="text-white">
+                Welcome back {{ $auth.user.first_name }}.
+              </p>
+              <router-link class="btn btn-success" to="/dashboard">
+                Go to Dashboard
+                <i class="ml-1 fas fa-chevron-right"></i>
+              </router-link>
+              <p class="mt-2 text-white">
+                <router-link to="/logout" class="text-white">
+                  Or <u>logout</u>
+                </router-link>
+              </p>
+            </template>
+            <template v-else>
+              <router-link class="btn btn-success" to="/register">
+                Create a Free Account
+                <i class="ml-1 fas fa-chevron-right"></i>
+              </router-link>
+              <p class="mt-4 text-white">
+                Already have an account?
+                <router-link to="/login" class="text-white">
+                  <u>Login</u>
+                </router-link>
+              </p>
+            </template>
           </div>
         </div>
 
@@ -72,16 +107,6 @@
           </div>
         </client-only>
         <!-- <Sale class="mb-5" style="border-radius: 1rem !important" /> -->
-        
-        <div class="mt-5 text-center mb-5" v-if="!loaded">
-          <p>App is asleep due to inactivity.</p>
-          <router-link
-            :to="{ path: lastFullHistoryPath || '/' }"
-            class="btn btn-success"
-          >
-            Reactivate
-          </router-link>
-        </div>
       </div>
       <div class="row mt-5 bg-light">
         <div class="col-sm-12 pt-5">
