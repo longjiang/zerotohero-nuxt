@@ -595,7 +595,7 @@ export default {
   .overlay-player-minimized {
     width: 100%;
   }
-  .zth-content {
+  &:not(.route-youtube-view) .zth-content {
     padding-top: 4rem;
     padding-bottom: 5rem;
   }

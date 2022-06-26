@@ -651,9 +651,6 @@ export default {
   .youtube-transcript-column {
     flex: 1;
   }
-  .youtube-video-info-top {
-    padding-top: 5rem;
-  }
 }
 
 .youtube-transcript-column {

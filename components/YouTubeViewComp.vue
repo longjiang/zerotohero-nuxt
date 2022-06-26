@@ -10,6 +10,7 @@
     />
     <div
       :class="`toggle-wrapper ${layout !== 'mini' ? 'maximized' : 'minimized'}`"
+      v-if="layout === 'mini'" 
     >
       <router-link
         :class="`btn btn-unstyled ${
@@ -706,23 +707,20 @@ export default {
   z-index: 10;
   position: fixed;
   right: 1rem;
+  .btn {
+    color: white;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    border-radius: 0;
+  }
   &.maximized {
     top: 0;
     width: 100%;
     right: 0;
-    background: linear-gradient(180deg, black, transparent);
-  }
-  &.minimized {
-  }
-  .btn {
-    color: white;
-    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-  }
-  .btn-maximize-toggle {
-  }
-  .btn-minimize-toggle {
-  }
-  .btn-close {
+    height: 4rem;
+    .btn {
+      background: rgba(0,0,0,0.8);
+      padding: 0.6rem 1.3rem;
+    }
   }
 }
 
