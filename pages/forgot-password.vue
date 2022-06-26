@@ -68,6 +68,10 @@
                   />
                 </div>
               </b-form>
+              <div class="mt-4 text-center">
+                <router-link to="/login">Go back</router-link>
+                <!-- <p @click="$router.go(-1)" class="text-secondary">Go back</p> -->
+              </div>
             </div>
             <div class="email-sent" v-else>
               <div class="alert alert-success">
@@ -96,7 +100,7 @@
 <script>
 import Helper from "@/lib/helper";
 import Config from "@/lib/config";
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   props: {
@@ -129,14 +133,17 @@ export default {
     async onSubmit(event) {
       try {
         this.emailSending = true;
-        let host = process.server ? process.env.baseUrl : window.location.protocol + '//' + window.location.hostname + ':' + window.location.port
-        let res = await axios.post(
-          `${Config.wiki}auth/password/request`,
-          {
-            email: this.form.email,
-            reset_url: `${host}/password-reset`,
-          }
-        );
+        let host = process.server
+          ? process.env.baseUrl
+          : window.location.protocol +
+            "//" +
+            window.location.hostname +
+            ":" +
+            window.location.port;
+        let res = await axios.post(`${Config.wiki}auth/password/request`, {
+          email: this.form.email,
+          reset_url: `${host}/password-reset`,
+        });
         if (res && res.status === 200) {
           this.emailSent = true;
           this.emailSending = false;
