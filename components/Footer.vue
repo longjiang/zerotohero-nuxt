@@ -1,18 +1,10 @@
 <template>
   <footer style="padding-bottom: 6rem">
-    <div
-      class="text-center pt-5 pb-2"
-      style="line-height: 1.2; font-size: 1.1em"
-    >
-      <router-link class="link-unstyled text-white" to="/">
-        <h4>Zero to Hero</h4>
-      </router-link>
-    </div>
     
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
-          <Choose :showLanguageList="false" skin="dark" />
+          <!-- <Choose :showLanguageList="false" skin="dark" /> -->
           <div>
             <p>
               <strong>This is an open-source project.</strong>
@@ -44,6 +36,7 @@
                 Background Vectors by Vecteezy
               </a>
             </p>
+            <p>© {{ new Date().getFullYear() }} Zero to Hero Education, Canada.</p>
           </div>
         </div>
       </div>

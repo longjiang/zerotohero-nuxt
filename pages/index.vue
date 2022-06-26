@@ -9,9 +9,6 @@
 </router>
 <template>
   <div>
-    <client-only>
-      <SiteTopBar />
-    </client-only>
     <SocialHead
       title="Zero to Hero Languages | Master any language by comprehensible input."
       description="We provide live TV channels in the target language, TV shows with subtitles, music with lyrics, phrasebooks with video examples... everything that can help you to learn a language “by osmosis.” We are also known for our “Chinese Zero to Hero” and “English Zero to Hero” online language courses."
@@ -23,10 +20,19 @@
       style="overflow: hidden; position: relative"
     >
       <div class="container">
+        <div class="row mt-5">
+          <div class="col-sm-12 mb-3" style="max-width: 40rem; margin: 0 auto">
+            <YouTubeVideo
+              youtube="mzpu-2FV4E4"
+              :autoload="true"
+              style="overflow: hidden; border-radius: 1rem"
+            />
+          </div>
+        </div>
         <div class="row pt-3">
           <div class="col-sm-12">
             <!-- <FeedbackPrompt /> -->
-            <Logo class="mt-4 mb-3" />
+            <!-- <Logo class="mt-4 mb-3" /> -->
             <p class="blurb text-white text-center">
               {{ translate("Learn languages with videos.", browserLanguage) }}
             </p>
@@ -37,28 +43,13 @@
             </client-only>
           </div>
         </div>
-        <client-only>
-          <div
-            class="row pt-4 mb-3"
-            v-if="
-              $auth.loggedIn &&
-              $auth.user &&
-              $auth.user.first_name &&
-              $store.state.progress.progress &&
-              Object.keys($store.state.progress.progress).length > 0
-            "
-          >
-            <div class="col-sm-12">
-              <div class="home-card p-2 pt-4 pb-4 bg-white">
-                <h5 class="text-center mt-2 mb-1">
-                  {{ $auth.user.first_name
-                  }}{{ translate("’s Language Dashboard", browserLanguage) }}
-                </h5>
-                <LazyDashboard />
-              </div>
-            </div>
+        <div class="row pt-3">
+          <div class="col-sm-12 mt-5 text-center">
+            <router-link class="btn btn-success" to="/register">Create a Free Account <i class="ml-1 fas fa-chevron-right"></i></router-link>
+            <p class="mt-4 text-white">Already have an account? <router-link to="/login" class="text-white"><u>Login</u></router-link></p>
           </div>
-        </client-only>
+        </div>
+
         <client-only>
           <div class="row" v-if="!native">
             <div class="col-sm-12">
@@ -81,448 +72,7 @@
           </div>
         </client-only>
         <!-- <Sale class="mb-5" style="border-radius: 1rem !important" /> -->
-        <div class="row mt-3">
-          <div class="col-sm-12 mb-3" style="max-width: 40rem; margin: 0 auto">
-            <YouTubeVideo
-              youtube="mzpu-2FV4E4"
-              :autoload="true"
-              style="overflow: hidden; border-radius: 1rem"
-            />
-          </div>
-        </div>
-        <client-only>
-          <div class="row mt-4" v-if="language('en')">
-            <div class="col-sm-6 col-md-4 mb-4">
-              <div class="home-card p-4">
-                <div class="text-center">
-                  <router-link :to="`/en/zh/all-media`" class="link-unstyled">
-                    <LanguageFlag
-                      :language="language('zh')"
-                      style="transform: scale(2); margin: 1rem"
-                      :autocycle="true"
-                    />
-                    <h5 class="strong mt-2">Learn Chinese</h5>
-                  </router-link>
-                  <div class="row mt-4">
-                    <div class="col-6 col-sm-12 col-md-12 col-lg-6">
-                      <ul
-                        style="font-size: 0.9em"
-                        class="list-unstyled text-left mb-0"
-                      >
-                        <li style="white-space: nowrap">
-                          <router-link
-                            to="/en/zh/all-media"
-                            class="link-unstyled"
-                          >
-                            <b>Mandarin</b>
-                          </router-link>
-                        </li>
-                        <li style="white-space: nowrap">
-                          <router-link
-                            to="/en/yue/all-media"
-                            class="link-unstyled"
-                          >
-                            <b>Cantonese</b>
-                          </router-link>
-                        </li>
-                        <li style="white-space: nowrap">
-                          <router-link
-                            to="/en/ltc/all-media"
-                            class="link-unstyled"
-                          >
-                            Middle Chinese
-                          </router-link>
-                        </li>
-                        <li style="white-space: nowrap">
-                          <router-link
-                            to="/en/och/all-media"
-                            class="link-unstyled"
-                          >
-                            Old Chinese
-                          </router-link>
-                        </li>
-                      </ul>
-                    </div>
-                    <div class="col-6 col-sm-12 col-md-12 col-lg-6">
-                      <ul
-                        style="font-size: 0.9em"
-                        class="list-unstyled text-left mb-0"
-                      >
-                        <li style="white-space: nowrap">
-                          <router-link
-                            to="/en/wuu/all-media"
-                            class="link-unstyled"
-                          >
-                            Wu
-                          </router-link>
-                        </li>
-                        <li style="white-space: nowrap">
-                          <router-link
-                            to="/zh/nan/all-media"
-                            class="link-unstyled"
-                          >
-                            学习闽南话
-                          </router-link>
-                        </li>
-                        <li style="white-space: nowrap">
-                          <router-link
-                            to="/zh/hak/all-media"
-                            class="link-unstyled"
-                          >
-                            学习客家话
-                          </router-link>
-                        </li>
-                        <li style="white-space: nowrap">
-                          <router-link
-                            to="/zh/lzh/all-media"
-                            class="link-unstyled"
-                          >
-                            学习文言文
-                          </router-link>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-6 col-md-4 mb-4">
-              <div class="home-card p-4">
-                <div class="text-center">
-                  <router-link
-                    :to="`/${browserLanguage}/en/all-media`"
-                    class="link-unstyled"
-                  >
-                    <LanguageFlag
-                      :language="language('en')"
-                      style="transform: scale(2); margin: 1rem"
-                      :autocycle="true"
-                    />
-                    <h5 class="strong mt-2">
-                      {{ translate("Learn English", browserLanguage) }}
-                    </h5>
-                  </router-link>
-                  <div class="row mt-4">
-                    <div class="col-6 col-sm-12 col-md-12 col-lg-6">
-                      <ul
-                        style="font-size: 0.9em"
-                        class="list-unstyled text-left mb-0"
-                      >
-                        <li style="white-space: nowrap">
-                          <router-link
-                            to="/ru/en/all-media"
-                            class="link-unstyled"
-                          >
-                            Выучить англ. язык
-                          </router-link>
-                        </li>
-                        <li style="white-space: nowrap">
-                          <router-link
-                            to="/de/en/all-media"
-                            class="link-unstyled"
-                          >
-                            Lerne Englisch
-                          </router-link>
-                        </li>
-                        <li style="white-space: nowrap">
-                          <router-link
-                            to="/pt/en/all-media"
-                            class="link-unstyled"
-                          >
-                            Aprender inglês
-                          </router-link>
-                        </li>
-                        <li style="white-space: nowrap">
-                          <router-link
-                            to="/es/en/all-media"
-                            class="link-unstyled"
-                          >
-                            Aprende inglés
-                          </router-link>
-                        </li>
-                      </ul>
-                    </div>
-                    <div class="col-6 col-sm-12 col-md-12 col-lg-6">
-                      <ul
-                        style="font-size: 0.9em"
-                        class="list-unstyled text-left mb-0"
-                      >
-                        <li style="white-space: nowrap">
-                          <router-link
-                            to="/fr/en/all-media"
-                            class="link-unstyled"
-                          >
-                            Apprendre l’anglais
-                          </router-link>
-                        </li>
-                        <li style="white-space: nowrap">
-                          <router-link
-                            to="/zh/en/all-media"
-                            class="link-unstyled"
-                          >
-                            学英语
-                          </router-link>
-                        </li>
-                        <li style="white-space: nowrap">
-                          <router-link
-                            to="/ja/en/all-media"
-                            class="link-unstyled"
-                          >
-                            英語を習う
-                          </router-link>
-                        </li>
-                        <li style="white-space: nowrap">
-                          <b
-                            href="#englishLanguageList"
-                            class="link-unstyled text-success"
-                            style="cursor: pointer"
-                            @click="scrollTo('#englishLanguageList')"
-                          >
-                            More
-                            <i class="fa fa-chevron-down"></i>
-                          </b>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-12 col-md-4 mb-4">
-              <div class="home-card pb-2 pt-4">
-                <h5 class="text-center mb-3">Learn</h5>
-                <div class="row">
-                  <div
-                    v-for="code in ['es', 'de', 'fr', 'it', 'ja', 'ko']"
-                    :key="`quick-lang-${code}`"
-                    class="
-                      text-center
-                      col-4 col-sm-4 col-md-6 col-lg-4
-                      mt-2
-                      mb-2
-                    "
-                  >
-                    <router-link
-                      :to="`/en/${code}/all-media`"
-                      class="link-unstyled"
-                    >
-                      <LanguageFlag
-                        :language="language(code)"
-                        :autocycle="true"
-                        style="transform: scale(1.5); margin: 0 1rem 1rem 1rem"
-                      />
-                      <h6 class="strong" style="font-size: 0.9em">
-                        {{ language(code).name }}
-                      </h6>
-                    </router-link>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-6 col-md-4"></div>
-          </div>
-          <div
-            class="row mb-4"
-            id="chineseLanguageList"
-            v-if="browserLanguage && browserLanguage === 'zh'"
-          >
-            <div class="col-sm-12">
-              <div class="home-card p-2">
-                <h5 class="text-center mt-3 mb-3">可用汉语界面学习的语言</h5>
-                <LanguageList
-                  :showSpeakers="false"
-                  :showFeatures="false"
-                  :keyword="langKeyword"
-                  :pairs="learnFromChineseLanguagePairs"
-                  class="mt-4"
-                  :sort="true"
-                  :showFlags="true"
-                  variant="grid"
-                />
-              </div>
-            </div>
-          </div>
-          <div class="row mt-3 mb-5" id="mainLanguageList">
-            <div class="col-sm-12">
-              <div class="home-card p-2">
-                <h5 class="text-center mt-3 mb-3">
-                  {{ translate("Learn More Languages", browserLanguage) }}
-                </h5>
-                <div class="mb-3" style="display: flex">
-                  <b-form-input
-                    v-model="langKeyword"
-                    style="flex: 1; margin-right: 0.5rem"
-                    @compositionend.prevent.stop="() => false"
-                    :placeholder="
-                      translate('Search languages', browserLanguage)
-                    "
-                  />
-                  <router-link
-                    class="btn btn-success d-block"
-                    to="/language-map"
-                  >
-                    <i class="fas fa-globe-asia mr-1"></i>
-                    <span class="d-none d-sm-inline">
-                      {{ translate("Language Map", browserLanguage) }}
-                    </span>
-                    <span class="d-xs-inline d-sm-none">
-                      {{ translate("Map", browserLanguage) }}
-                    </span>
-                    <i class="ml-1 fas fa-chevron-right"></i>
-                  </router-link>
-                </div>
-                <!-- a shorter language list is 'ar,az,bn,br,bs,bul,cat,ces,cy,dan,de,el,en,epo,es,eu,fa,fin,fr,gle,glg,hak,he,hi,hun,hr,hye,id,isl,it,ja,ko,lat,lav,lit,lzh,msa,nan,nl,no,pa,pl,pt,ron,ru,sr,swe,ta,th,tl,tlh,tr,uk,vi,yue,zh' -->
-                <LanguageList
-                  :showSpeakers="false"
-                  :showFeatures="false"
-                  :keyword="langKeyword"
-                  :codes="languagesWithVideos"
-                  class="mt-2"
-                  :sort="true"
-                  :showFlags="true"
-                  variant="grid"
-                />
-                <div class="text-center mt-1 p-1">
-                  <router-link
-                    class="btn btn-success d-block"
-                    to="/language-map"
-                  >
-                    <i class="fas fa-globe-asia mr-1"></i>
-                    See Even More Languages on a Map
-                    <i class="ml-1 fas fa-chevron-right"></i>
-                  </router-link>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row mt-4 mb-5" id="englishLanguageList">
-            <div class="col-sm-12">
-              <div class="home-card p-2">
-                <h5 class="text-center mt-3 mb-3">Learn English from...</h5>
-                <LanguageList
-                  :showSpeakers="false"
-                  :showFeatures="false"
-                  :keyword="langKeyword"
-                  :pairs="learnEnglishLanguagePairs"
-                  class="mt-4"
-                  :sort="true"
-                  :showFlags="true"
-                  variant="grid"
-                />
-              </div>
-            </div>
-          </div>
-        </client-only>
-        <client-only>
-          <div class="row mb-3" v-if="!native">
-            <div class="col-sm-6 mb-4">
-              <div class="home-card">
-                <router-link to="/en/zh/all-media">
-                  <img
-                    src="/img/czh-logo-dark.png"
-                    class="czh-logo"
-                    data-not-lazy
-                  />
-                </router-link>
-                <hr />
-                <ul class="czh-links mb-0">
-                  <li>
-                    <router-link
-                      to="/en/zh/online-courses"
-                      style="color: #fd4f1c; font-weight: bold"
-                    >
-                      HSK Courses
-                    </router-link>
-                  </li>
-                  <li>
-                    <router-link to="/en/zh/tv-shows">TV Shows</router-link>
-                  </li>
-                  <li>
-                    <router-link to="/en/zh/dictionary">
-                      Video Dictionary
-                    </router-link>
-                  </li>
-                  <li>
-                    <router-link to="/en/zh/phrasebooks">
-                      Phrasebooks
-                    </router-link>
-                  </li>
-                  <li>
-                    <router-link to="/en/zh/reader">Reader</router-link>
-                  </li>
-                  <li>
-                    <router-link to="/en/zh/grammar">Grammar</router-link>
-                  </li>
-                  <li>
-                    <router-link to="/en/zh/live-tv">Live TV</router-link>
-                  </li>
-                  <li>
-                    <router-link to="/en/zh/resource/list/all/all">
-                      Resources
-                    </router-link>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div class="col-sm-6 mb-4">
-              <div class="home-card">
-                <router-link to="/zh/en/all-media">
-                  <img
-                    src="/img/ezh-logo-dark.png"
-                    class="ezh-logo"
-                    data-not-lazy
-                  />
-                </router-link>
-                <hr />
-                <ul class="ezh-links mb-0">
-                  <li>
-                    <router-link
-                      to="/zh/en/online-courses"
-                      style="color: #1b3e76; font-weight: bold"
-                    >
-                      CEFR Courses 视频教程
-                    </router-link>
-                  </li>
-                  <li>
-                    <router-link to="/zh/en/dictionary">
-                      Dictionary 视频词典
-                    </router-link>
-                  </li>
-                  <li>
-                    <router-link to="/zh/en/phrasebooks">
-                      Phrasebooks 短语集
-                    </router-link>
-                  </li>
-                  <li>
-                    <router-link to="/zh/en/tv-shows">
-                      TV Shows 电视节目
-                    </router-link>
-                  </li>
-                  <li>
-                    <router-link to="/zh/en/talks">
-                      Channels 油管频道
-                    </router-link>
-                  </li>
-                  <li>
-                    <router-link to="/zh/en/audiobooks">
-                      Audiobooks 有声书
-                    </router-link>
-                  </li>
-                  <li>
-                    <router-link to="/zh/en/live-tv">
-                      Live TV 电视直播
-                    </router-link>
-                  </li>
-                  <li>
-                    <router-link to="/zh/en/reader">
-                      Reader 文字阅读器
-                    </router-link>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </client-only>
+        
         <div class="mt-5 text-center mb-5" v-if="!loaded">
           <p>App is asleep due to inactivity.</p>
           <router-link
@@ -532,73 +82,12 @@
             Reactivate
           </router-link>
         </div>
-        <div class="row mb-5">
-          <div class="col-sm-12">
-            <div class="home-card">
-              <h5 class="text-center mb-3">Find Us On</h5>
-              <SocialLogos />
-            </div>
-          </div>
-        </div>
-        <client-only>
-          <div class="row">
-            <div class="col-sm-6 mb-5">
-              <div class="home-card text-center">
-                <h5 class="mb-3">Discover TV Shows Across Languages</h5>
-                <router-link to="/discover-shows">
-                  <img
-                    src="/img/thumbnail-discover-shows.jpg"
-                    alt="Discover TV Shows Across Languages"
-                    class="rounded shadow img-fluid"
-                    data-not-lazy
-                  />
-                </router-link>
-              </div>
-            </div>
-            <div class="col-sm-6 mb-5">
-              <div class="home-card">
-                <h5 class="mb-3 text-center">Other Interlingual Features</h5>
-                <ul>
-                  <li class="mt-1 mb-1">
-                    <router-link to="/compare-languages">
-                      <b>Compare Phrases Across Languages</b>
-                    </router-link>
-                    – Search for any word or phrase in English, and see the same
-                    phrase across all languages on a map.
-                  </li>
-                  <li class="mt-1 mb-1">
-                    <router-link to="/language-icons">
-                      <b>Face of the Language</b>
-                    </router-link>
-                    – Images of famous people who speak one of the 300 languages
-                    listed.
-                  </li>
-                  <li class="mt-1 mb-1">
-                    <router-link to="/translators">
-                      <b>Compare Online Translators</b>
-                    </router-link>
-                    – Find out which online translator (e.g. Google Translate)
-                    has the ability to translate which language.
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </client-only>
-
-        <client-only>
-          <div class="row">
-            <div class="col-sm-12">
-              <div class="home-card">
-                <h5 class="text-center">Languages by % of World GDP</h5>
-                <LazyLanguagesGDP />
-              </div>
-            </div>
-          </div>
-        </client-only>
       </div>
-      <div class="row mt-5 bg-dark text-white">
-        <div class="col-sm-12">
+      <div class="row mt-5 bg-light">
+        <div class="col-sm-12 pt-5">
+          <h5 class="text-center mb-3">Follow us on ...</h5>
+          <SocialLogos />
+          <div class="mb-5" />
           <LazyFooter />
         </div>
       </div>

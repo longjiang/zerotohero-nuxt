@@ -11,7 +11,7 @@
             <b class="stat-big-number">{{ formatNumber(stats.totalCount) }}</b>
           </router-link>
           <br />
-          {{ translate('Videos', browserLanguage) }}
+          {{ translate('Videos with Subs', browserLanguage) }}
         </div>
         <div style="flex: 1" class="text-center">
           <router-link :to="{ name: 'stats' }">
