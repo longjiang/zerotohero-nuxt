@@ -242,6 +242,8 @@
 import { HOST } from "@/lib/utils/url";
 import { Capacitor } from "@capacitor/core";
 import { InAppPurchase2 } from "@ionic-native/in-app-purchase-2";
+import axios from "axios";
+import logError from "@/lib/utils/error";
 
 const IOS_IAP_PRODUCT_ID = "pro";
 
@@ -289,6 +291,12 @@ export default {
     this.registeriOSInAppPurchaseProducts();
     this.setupiOSInAppPurchaseListeners();
   },
+  beforeDestroy() {
+    InAppPurchase2.off(this.onProductApproved);
+    InAppPurchase2.off(this.onProductVerified);
+    InAppPurchase2.off(this.onProductOrder);
+    InAppPurchase2.off(this.onProductOrderErr);
+  },
   methods: {
     registeriOSInAppPurchaseProducts() {
       InAppPurchase2.register([
@@ -296,54 +304,47 @@ export default {
       ]);
       InAppPurchase2.refresh();
     },
+    onProductApproved(product) {
+      // synchronous
+      console.log("approved");
+      return product.verify();
+    },
+    async onProductVerified(product) {
+      console.log("verified");
+      // let receipt = product?.transaction?.appStoreReceipt
+      // if (receipt) {
+      //   let url = `https://python.zerotohero.ca/in_app_purchase_success?user_id=${this.$auth.user.id}&receipt=${encodeURIComponent(receipt)}`
+      //   console.log(url)
+      //   try {
+      //     let res = await axios.get(url)
+      //     console.log({res})
+      //     let data = res.data
+      //     console.log({data})
+      //   } catch(err) {
+      //     logError(err)
+      //   }
+      // }
+      product.finish();
+    },
+    onProductOrder(product) {
+      // Purchase in progress!
+      console.log("order");
+    },
+    onProductOrderErr(err) {
+      this.$toast.error(`Failed to purchase: ${err}`, { duration: 5000 });
+    },
     setupiOSInAppPurchaseListeners() {
       InAppPurchase2.when(IOS_IAP_PRODUCT_ID)
-        .approved(function (product) {
-          // synchronous
-          console.log("approved", { product });
-          return product.verify();
-        })
-        .verified((product) => {
-          console.log("verified", { product });
-          product.finish();
-        });
-      InAppPurchase2.when(IOS_IAP_PRODUCT_ID).loaded(function (product) {
-        console.log("loaded", { product });
-      });
-      InAppPurchase2.when(IOS_IAP_PRODUCT_ID).updated(function (product) {
-        console.log("updated", { product });
-      });
-      InAppPurchase2.when(IOS_IAP_PRODUCT_ID).cancelled(function (product) {
-        console.log("cancelled", { product });
-      });
-      InAppPurchase2.when(IOS_IAP_PRODUCT_ID).refunded(function (product) {
-        console.log("refunded", { product });
-      });
-      InAppPurchase2.when(IOS_IAP_PRODUCT_ID).verified(function (product) {
-        console.log("verified", { product });
-      });
-      InAppPurchase2.when(IOS_IAP_PRODUCT_ID).unverified(function (product) {
-        console.log("unverified", { product });
-      });
-      InAppPurchase2.when(IOS_IAP_PRODUCT_ID).expired(function (product) {
-        console.log("expired", { product });
-      });
-      InAppPurchase2.when(IOS_IAP_PRODUCT_ID).error(function (err) {
-        console.log("error", { err });
-      });
+        .approved(this.onProductApproved)
+        .verified(this.onProductVerified);
     },
     restoreiOSInAppPurchase() {
       InAppPurchase2.refresh();
     },
     executeiOSInAppPurchase() {
       InAppPurchase2.order(IOS_IAP_PRODUCT_ID).then(
-        (product) => {
-          // Purchase in progress!
-          console.log("order", { product });
-        },
-        (err) => {
-          this.$toast.error(`Failed to purchase: ${err}`, { duration: 5000 });
-        }
+        this.onProductOrder,
+        this.onProductOrderError
       );
     },
     submitStripeUSD() {
