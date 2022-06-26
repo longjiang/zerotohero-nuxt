@@ -37,6 +37,15 @@
               <h6>
                 {{ show.title }}
               </h6>
+              <div class="show-tags">
+                <span
+                  class="show-tag"
+                  v-for="tag in (show.tags || []).slice(0, 2)"
+                  :key="`show-${show.id}-tag-${tag}`"
+                >
+                  #{{ tag }}
+                </span>
+              </div>
               <b-button
                 v-if="$adminMode"
                 size="sm"
@@ -143,13 +152,11 @@ export default {
       let toggled = !show[property]; // If true, make it false, and vice versa
       try {
         let url = `${Config.wiki}items/${this.field}s/${show.id}`;
-        let payload = {}
-        payload[property] = toggled
-        let response = await this.$authios.patch(
-          url,
-          payload,
-          { contentType: "application/json" }
-        );
+        let payload = {};
+        payload[property] = toggled;
+        let response = await this.$authios.patch(url, payload, {
+          contentType: "application/json",
+        });
         if (response && response.data.data) {
           Vue.set(show, property, toggled);
         }
@@ -162,6 +169,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.show-tag {
+  font-size: 0.8em;
+  color: #28a745;
+}
+.show-tags {
+  line-height: 1;
+}
 .tv-show-card {
   height: 100%;
   box-shadow: 0 -1px 1px #ffffff69;
