@@ -731,9 +731,6 @@ export default {
 }
 
 .zerotohero-wide {
-  .toggle-wrapper {
-    width: calc(100vw - 26rem);
-  }
   .youtube-view-content {
     ::v-deep .youtube-with-transcript-landscape {
       .youtube {
