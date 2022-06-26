@@ -586,10 +586,12 @@ export default {
       background: none;
       height: 3.2rem;
 
+      .quick-access-button-previous-line,
+      .quick-access-button-next-line,
       .quick-access-button-rewind,
-      .quick-access-button-previous,
+      // .quick-access-button-previous,
       .quick-access-button-speed,
-      .quick-access-button-next,
+      // .quick-access-button-next,
       .quick-access-button-fullscreen {
         display: none !important;
       }

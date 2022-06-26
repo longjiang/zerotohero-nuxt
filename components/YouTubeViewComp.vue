@@ -706,7 +706,7 @@ export default {
   padding-right: 1rem;
   z-index: 10;
   position: fixed;
-  right: 1rem;
+  right: 0;
   .btn {
     color: white;
     text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
