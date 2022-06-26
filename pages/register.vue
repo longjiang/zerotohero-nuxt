@@ -8,7 +8,6 @@
 </router>
 <template>
   <div
-    class="container-fluid pt-5"
     :style="`min-height: 100vh; ${
       backgroundImage
         ? 'background-image: url(' +
@@ -17,8 +16,11 @@
         : ''
     }`"
   >
+    <client-only>
+      <SiteTopBar />
+    </client-only>
     <div class="row">
-      <div class="col-sm-12">
+      <div class="col-sm-12 pt-5">
         <div class="login-page">
           <div class="text-center mb-4">
             <Logo skin="light" />

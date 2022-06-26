@@ -9,7 +9,6 @@
 </router>
 <template>
   <div
-    class="container-fluid pt-5"
     :style="`min-height: 100vh; ${
       backgroundImage
         ? 'background-image: url(' +
@@ -18,14 +17,17 @@
         : ''
     }`"
   >
+    <client-only>
+      <SiteTopBar />
+    </client-only>
     <div class="container">
       <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-12 pt-5">
           <div :class="{ 'login-page': true, shaking }">
             <div class="text-center mb-4">
               <Logo skin="light" />
             </div>
-            <b-form @submit.prevent="onSubmit">
+            <b-form @submit.prevent="login">
               <div class="alert alert-warning" v-if="$l2 && $l2.code === 'zh'">
                 <b>Friendly reminder:</b>
                 This does NOT login to your Chinese Zero to Hero online courses
@@ -62,11 +64,15 @@
               </b-form-group>
 
               <b-button class="d-block w-100" type="submit" variant="success">
-                <b-spinner small v-if="loading" /><span v-else>Login</span>
+                <b-spinner small v-if="loading" />
+                <span v-else>Login</span>
               </b-button>
               <div class="mt-3 text-center">
                 <router-link
-                  :to="{ name: 'register', query: { redirect: $route.query.redirect } }"
+                  :to="{
+                    name: 'register',
+                    query: { redirect: $route.query.redirect },
+                  }"
                 >
                   Register
                 </router-link>
@@ -102,7 +108,7 @@ export default {
         password: "",
       },
       shaking: false,
-      loading: false
+      loading: false,
     };
   },
   computed: {
@@ -118,10 +124,27 @@ export default {
         return this.$store.state.settings.l2;
     },
   },
+  mounted() {
+    if (this.$auth.loggedIn) {
+      this.redirect()
+    }
+  },
   methods: {
-    async onSubmit(event) {
+    redirect() {
+      if (this.$route.query.redirect) {
+        this.$router.push({ path: this.$route.query.redirect });
+      } else {
+        if (this.$l1 && this.$l2)
+          this.$router.push({
+            name: "profile",
+            params: { l1: this.$l1.code, l2: this.$l2.code },
+          });
+        else this.$router.push("/dashboard");
+      }
+    },
+    async login(event) {
       try {
-        this.loading = true
+        this.loading = true;
         let res = await this.$auth.loginWith("local", { data: this.form });
         if (res && res.data && res.data.data && res.data.data.user) {
           let user = res.data.data.user;
@@ -130,16 +153,7 @@ export default {
             position: "top-center",
             duration: 5000,
           });
-          if (this.$route.query.redirect) {
-            this.$router.push({ path: this.$route.query.redirect });
-          } else {
-            if (this.$l1 && this.$l2)
-              this.$router.push({
-                name: "profile",
-                params: { l1: this.$l1.code, l2: this.$l2.code },
-              });
-            else this.$router.push("/");
-          }
+          this.redirect();
         }
       } catch (err) {
         if (err.response && err.response.data) {
@@ -153,7 +167,7 @@ export default {
             duration: 5000,
           });
         }
-        this.loading = false
+        this.loading = false;
         this.shake();
       }
     },
