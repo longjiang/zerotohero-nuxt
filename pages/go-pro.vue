@@ -107,8 +107,11 @@
                       variant="success"
                       @click="executeiOSInAppPurchase"
                     >
-                      <i class="fab fa-apple mr-1"></i>
-                      Pay with In-App Purchase
+                      <b-spinner small v-if="iOSPurchaseProcessing"></b-spinner>
+                      <span v-else>
+                        <i class="fab fa-apple mr-1"></i>
+                        Pay with In-App Purchase
+                      </span>
                     </b-button>
                     <div class="mt-3">
                       <u
@@ -277,6 +280,7 @@ export default {
         ? `https://python.zerotohero.ca/stripe_checkout_success?user_id=${this.$auth.user.id}&host=${HOST}&session_id={CHECKOUT_SESSION_ID}`
         : undefined, // Make sure we have the user's id
       cancelURL: HOST + "/go-pro",
+      iOSPurchaseProcessing: false,
     };
   },
   computed: {
@@ -298,6 +302,7 @@ export default {
     InAppPurchase2.off(this.oniOSProductVerified);
     InAppPurchase2.off(this.oniOSProductOrder);
     InAppPurchase2.off(this.oniOSProductOrderErr);
+    InAppPurchase2.off(this.oniOSProductChancelled);
   },
   methods: {
     registeriOSInAppPurchaseProducts() {
@@ -312,11 +317,13 @@ export default {
       return product.verify();
     },
     async elevateiOSUserToPro(receipt) {
+      console.log({receipt})
       let url = `https://python.zerotohero.ca/in_app_purchase_success`;
       let body = { user_id: this.$auth.user.id, receipt };
       try {
         let res = await axios.post(url, body);
         if (res?.data?.type === "success") {
+          console.log(res.data)
           this.$router.push("/go-pro-success");
         }
       } catch (err) {
@@ -335,14 +342,20 @@ export default {
     oniOSProductOrder(product) {
       // Purchase in progress!
       console.log("order");
+      this.iOSPurchaseProcessing = true;
     },
     oniOSProductOrderErr(err) {
+      this.iOSPurchaseProcessing = false;
       this.$toast.error(`Failed to purchase: ${err}`, { duration: 5000 });
+    },
+    oniOSProductChancelled(product) {
+      this.iOSPurchaseProcessing = false;
     },
     setupiOSInAppPurchaseListeners() {
       InAppPurchase2.when(IOS_IAP_PRODUCT_ID)
         .approved(this.oniOSProductApproved)
-        .verified(this.oniOSProductVerified);
+        .verified(this.oniOSProductVerified)
+        .cancelled(this.oniOSProductChancelled);
     },
     restoreiOSInAppPurchase() {
       InAppPurchase2.refresh();
