@@ -22,6 +22,9 @@
           <div class="col-sm-12">
             <!-- <Sale class="mt-5 mb-5" v-if="$l2.code === 'zh'" /> -->
             <div class="show-list-wrapper">
+              <div class="tags mb-3">
+                <span v-for="tag of tags.slice(0,10)" :key="`tag-${tag.tag}`" class="btn bg-black btn-sm text-white">{{ tag.tag }}</span>
+              </div>
               <b-input-group class="mb-5 input-group-ghost-dark">
                 <b-form-input
                   v-model="keyword"
@@ -59,7 +62,10 @@
             </div>
           </div>
         </div>
-        <FeedbackPrompt class="mb-5" :skin="$route.meta ? $route.meta.skin : 'light'"/>
+        <FeedbackPrompt
+          class="mb-5"
+          :skin="$route.meta ? $route.meta.skin : 'light'"
+        />
       </div>
     </div>
   </div>
@@ -68,7 +74,7 @@
 <script>
 import Config from "@/lib/config";
 import { tify } from "chinese-conv";
-import { scrollToTargetAdjusted } from '@/lib/utils'
+import { scrollToTargetAdjusted } from "@/lib/utils";
 
 export default {
   props: {
@@ -123,6 +129,26 @@ export default {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
     },
+    tags() {
+      let tags = [];
+      if (this.shows?.length > 0) {
+        let allTags = [];
+        for (let show of this.shows) {
+          allTags = allTags.concat(show.tags);
+        }
+        allTags = allTags
+          .filter((tag) => tag)
+          .sort((a, b) =>
+            typeof b === "string" ? b.localeCompare(a, this.$l2.code) : 0
+          );
+        for (let tag of allTags) {
+          let foundTag = tags.find((t) => t.tag === tag);
+          if (foundTag) foundTag.count++;
+          else tags.push({ tag, count: 1 });
+        }
+        return tags.sort((a, b) => b.count - a.count);
+      }
+    },
     filteredShows() {
       if (this.shows) {
         let shows = this.shows;
@@ -147,9 +173,9 @@ export default {
   },
   watch: {
     keyword() {
-      let filterElement = this.$refs.filter?.$el
-      if (filterElement) scrollToTargetAdjusted(filterElement, 60)
-    }
+      let filterElement = this.$refs.filter?.$el;
+      if (filterElement) scrollToTargetAdjusted(filterElement, 60);
+    },
   },
   methods: {
     onVideoUnavailable(youtube_id) {
@@ -216,7 +242,10 @@ export default {
             ["Music", "Movies"].includes(s.title)
           )
             return false;
-          if (this.routeType === "talks" && (["News"].includes(s.title) || s.audiobook))
+          if (
+            this.routeType === "talks" &&
+            (["News"].includes(s.title) || s.audiobook)
+          )
             return false;
           if (this.routeType === "audiobooks") return s.audiobook;
           return true;

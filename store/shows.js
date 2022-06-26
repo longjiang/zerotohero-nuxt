@@ -33,7 +33,7 @@ export const mutations = {
     }
     show.episodes = episodes
   },
-  SET_EPISODE_COUNT(state, {  l2, collection, showId, episodeCount }) {
+  SET_EPISODE_COUNT(state, { l2, collection, showId, episodeCount }) {
     let show = state[collection][l2.code].find(s => s.id === Number(showId))
     show.episodeCount = episodeCount
   }
@@ -51,7 +51,9 @@ export const actions = {
       );
 
       if (response.data.data) {
-        tvShows = response.data.data.sort((x, y) => {
+        tvShows = response.data.data
+        tvShows.forEach(show => { if (show.tags) show.tags = show.tags.split(',') })
+        tvShows = tvShows.sort((x, y) => {
           let sort = 0
           if (x.title && y.title)
             sort = (x.title || '').localeCompare(y.title, l2.locales[0])
@@ -64,7 +66,9 @@ export const actions = {
         }${adminMode ? '' : '&filter[hidden][empty]=true'}&limit=${limit}&timestamp=${adminMode ? Date.now() : 0}`
       );
       if (response.data.data) {
-        talks = response.data.data.sort((x, y) => {
+        talks = response.data.data
+        talks.forEach(show => { if (show.tags) show.tags = show.tags.split(',') })
+        talks = talks.sort((x, y) => {
           let sort = 0
           if (x.title && y.title)
             sort = (x.title || "").localeCompare(y.title, l2.locales[0])
