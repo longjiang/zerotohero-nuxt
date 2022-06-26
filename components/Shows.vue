@@ -29,7 +29,8 @@
                   :class="{ 'btn btn-sm tag text-white bg-black': true }"
                   :to="{ name: routeType, params: { tag: tag.tag } }"
                 >
-                  {{ tag.tag }} <small style="color: #888">({{ tag.count }})</small>
+                  {{ tag.tag }}
+                  <small style="color: #888">({{ tag.count }})</small>
                 </router-link>
               </div>
               <b-input-group class="mb-5 input-group-ghost-dark">
@@ -141,11 +142,11 @@ export default {
       let tags = [];
       if (this.shows?.length > 0) {
         let allTags = [];
-        for (let show of this.shows) {
+        for (let show of this.filteredShowsByAudiobook) {
           allTags = allTags.concat(show.tags);
         }
         allTags = allTags
-          .filter((tag) => tag && !tag.startsWith('yt:'))
+          .filter((tag) => tag && !tag.startsWith("yt:"))
           .sort((a, b) =>
             typeof b === "string" ? b.localeCompare(a, this.$l2.code) : 0
           );
@@ -154,17 +155,23 @@ export default {
           if (foundTag) foundTag.count++;
           else tags.push({ tag, count: 1 });
         }
-        return tags.sort((a, b) => b.count - a.count).filter(t => t.count > 1);
+        return tags
+          .sort((a, b) => b.count - a.count)
+          .filter((t) => t.count > 1);
       }
+    },
+    filteredShowsByAudiobook() {
+      let shows = this.shows;
+      if (this.routeType === "audiobooks") {
+        shows = shows.filter((s) => s.audiobook);
+      } else {
+        shows = shows.filter((s) => !s.audiobook);
+      }
+      return shows;
     },
     filteredShows() {
       if (this.shows) {
-        let shows = this.shows;
-        if (this.routeType === "audiobooks") {
-          shows = shows.filter((s) => s.audiobook);
-        } else {
-          shows = shows.filter((s) => !s.audiobook);
-        }
+        let shows = this.filteredShowsByAudiobook;
         if (this.tag) {
           shows = shows.filter((s) => (s.tags || []).includes(this.tag));
         }

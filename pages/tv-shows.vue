@@ -1,6 +1,6 @@
 <router>
   {
-    path: '/:l1/:l2/tv-shows',
+    path: '/:l1/:l2/tv-shows/:tag?',
     props: true,
     meta: {
       skin: 'dark'
@@ -9,12 +9,17 @@
 </router>
 <template>
   <div class="tv-shows">
-    <Shows routeType="tv-shows" />
+    <Shows routeType="tv-shows" :tag="tag" />
   </div>
 </template>
 
 <script>
 export default {
+  props: {
+    tag: {
+      type: String
+    }
+  },
   computed: {
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
