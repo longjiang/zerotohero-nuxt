@@ -24,12 +24,12 @@
             <div class="show-list-wrapper">
               <div class="tags mb-3" v-if="tags">
                 <router-link
-                  v-for="tag of tags.slice(0, 10)"
+                  v-for="tag of tags.slice(0, 15)"
                   :key="`tag-${tag.tag}`"
-                  :class="{'btn btn-sm tag text-white bg-black': true}"
+                  :class="{ 'btn btn-sm tag text-white bg-black': true }"
                   :to="{ name: routeType, params: { tag: tag.tag } }"
                 >
-                  {{ tag.tag }}
+                  {{ tag.tag }} <small style="color: #888">({{ tag.count }})</small>
                 </router-link>
               </div>
               <b-input-group class="mb-5 input-group-ghost-dark">
@@ -86,7 +86,7 @@ import { scrollToTargetAdjusted } from "@/lib/utils";
 export default {
   props: {
     routeType: String, // "tv-shows" or "talks"
-    tag: String
+    tag: String,
   },
   data() {
     return {
@@ -145,7 +145,7 @@ export default {
           allTags = allTags.concat(show.tags);
         }
         allTags = allTags
-          .filter((tag) => tag)
+          .filter((tag) => tag && !tag.startsWith('yt:'))
           .sort((a, b) =>
             typeof b === "string" ? b.localeCompare(a, this.$l2.code) : 0
           );
@@ -154,7 +154,7 @@ export default {
           if (foundTag) foundTag.count++;
           else tags.push({ tag, count: 1 });
         }
-        return tags.sort((a, b) => b.count - a.count);
+        return tags.sort((a, b) => b.count - a.count).filter(t => t.count > 1);
       }
     },
     filteredShows() {
@@ -166,7 +166,7 @@ export default {
           shows = shows.filter((s) => !s.audiobook);
         }
         if (this.tag) {
-          shows = shows.filter((s) => (s.tags || []).includes(this.tag))
+          shows = shows.filter((s) => (s.tags || []).includes(this.tag));
         }
         if (this.keyword) {
           let k = this.$l2.han ? tify(this.keyword) : this.keyword;
@@ -198,7 +198,7 @@ export default {
       let type = this.routeType.replace("-", "_");
       let url = `${Config.wiki}items/${type}?filter[l2][eq]=${langId}&fields=id,title`;
       let response = await this.$authios.get(url);
-      if (response.data && response.data.data.length > 0) {
+      if (response.data && response.data.data.length > 1) {
         let shows = response.data.data;
         return shows;
       }
@@ -274,8 +274,26 @@ export default {
   height: 5rem;
   overflow: hidden;
 }
+.tag {
+  padding: 0.5rem;
+}
 
 .tag.nuxt-link-active {
-  background-color: #28a745;
+  background-image: linear-gradient(
+    rgba(40, 167, 69, 0.8),
+    rgba(40, 167, 69, 0.8)
+  );
+  background-position: 50% 100%;
+  background-size: 70% 0.35rem;
+  background-repeat: no-repeat;
+}
+.tag:not(.nuxt-link-active):hover {
+  background-image: linear-gradient(
+    rgba(40, 167, 69, 0.4),
+    rgba(40, 167, 69, 0.4)
+  );
+  background-position: 50% 100%;
+  background-size: 70% 0.35rem;
+  background-repeat: no-repeat;
 }
 </style>
