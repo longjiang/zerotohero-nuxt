@@ -22,7 +22,7 @@
           <div class="col-sm-12">
             <!-- <Sale class="mt-5 mb-5" v-if="$l2.code === 'zh'" /> -->
             <div class="show-list-wrapper">
-              <div class="tags mb-3" v-if="tags">
+              <div class="tags mt-3 mb-3" v-if="tags">
                 <b style="margin-left: 0.25rem; color: rgb(40, 167, 69)">Browse by tags:</b>
                 <router-link
                   :key="`tag-all`"
