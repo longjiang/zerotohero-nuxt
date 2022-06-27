@@ -1,7 +1,7 @@
 <template>
   <div class="main-dark pt-5">
     <VideoHero
-      v-if="featureEpisode"
+      v-if="!tag && featureEpisode"
       :video="featureEpisode"
       @videoUnavailable="onVideoUnavailable"
     />

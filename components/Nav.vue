@@ -431,7 +431,7 @@ export default {
             {
               name: "talks",
               icon: "fab fa-youtube",
-              title: `Channels`,
+              title: `YouTube`,
               count: this.talksCount,
               show: this.talksCount,
             },
