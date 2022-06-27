@@ -50,7 +50,7 @@
                   class="show-tag"
                   v-for="tag in (show.tags || [])
                     .filter((t) => t !== '')
-                    .slice(0, 2)"
+                    .slice(0, 1)"
                   :key="`show-${show.id}-tag-${tag}`"
                 >
                   #{{ tag }}
@@ -185,7 +185,7 @@ export default {
 <style lang="scss" scoped>
 .show-tag {
   font-size: 0.8em;
-  color: #28a745;
+  color: #888;
 }
 .show-tags {
   line-height: 1;

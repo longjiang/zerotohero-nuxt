@@ -9,6 +9,7 @@
                 margin-left: 0.25rem;
                 position: relative;
                 bottom: -0.1rem;
+                color: #888;
               "
             >
               By tags:
@@ -50,6 +51,7 @@
                 margin-left: 0.25rem;
                 position: relative;
                 bottom: -0.1rem;
+                color: #888;
               "
             >
               By level:
@@ -61,7 +63,7 @@
             >
               All
               <small style="color: #888">
-                ({{ filteredShowsByAudiobook.length }})
+                ({{ filteredShowsByAudiobookAndTags.length }})
               </small>
             </router-link>
             <router-link
@@ -70,7 +72,10 @@
               v-for="(level, index) in levels"
               :key="`filter-level-${level}-${index}`"
             >
-              {{ index === 0 ? level.name : level.level }}
+              {{ index === 0 ? level.name : level.exam === 'CEFR' ? level.level : level.name }}
+              <small style="color: #888">
+                ({{ showCountByLevel(level.numeric) }})
+              </small>
             </router-link>
           </div>
         </div>
@@ -229,9 +234,9 @@ export default {
       }
     },
     levels() {
-      if (this.filteredShowsByAudiobookAngTags?.length > 0) {
+      if (this.filteredShowsByAudiobookAndTags?.length > 0) {
         let langLevels = languageLevels(this.$l2);
-        let levels = this.filteredShowsByAudiobookAngTags.map((s) => s.level).filter((l) => l);
+        let levels = this.filteredShowsByAudiobookAndTags.map((s) => s.level).filter((l) => l);
         levels = unique(levels);
         levels = levels.sort((a, b) => a - b);
         return levels.map((l) => langLevels[l]);
@@ -246,7 +251,7 @@ export default {
       }
       return shows;
     },
-    filteredShowsByAudiobookAngTags() {
+    filteredShowsByAudiobookAndTags() {
       if (this.shows) {
         let shows = this.filteredShowsByAudiobook;
         if (this.tag && this.tag !== 'all') {
@@ -263,7 +268,7 @@ export default {
     },
     filteredShows() {
       if (this.shows) {
-        let shows = this.filteredShowsByAudiobookAngTags;
+        let shows = this.filteredShowsByAudiobookAndTags;
         if (this.level && this.level !== 'all') {
           shows = shows.filter((s) => s.level == this.level);
         }
@@ -288,6 +293,9 @@ export default {
     },
   },
   methods: {
+    showCountByLevel(level) {
+      return this.filteredShowsByAudiobookAndTags?.filter(s => s.level == level).length
+    },
     onVideoUnavailable(youtube_id) {
       if (youtube_id === this.featureEpisode.youtube_id)
         this.loadFeatureShowAndEpisode();
