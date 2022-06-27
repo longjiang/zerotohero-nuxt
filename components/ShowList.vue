@@ -34,13 +34,23 @@
           </router-link>
           <div class="tv-show-card-title">
             <router-link :to="path(show)" class="link-unstyled">
+              <div v-if="show.level" class="mb-2" >
+                <span
+                  :data-bg-level="levels[show.level].level"
+                  class="level-tag"
+                >
+                  {{ levels[show.level].name }}
+                </span>
+              </div>
               <h6>
                 {{ show.title }}
               </h6>
               <div class="show-tags">
                 <span
                   class="show-tag"
-                  v-for="tag in (show.tags || []).filter(t => t !== '').slice(0, 2)"
+                  v-for="tag in (show.tags || [])
+                    .filter((t) => t !== '')
+                    .slice(0, 2)"
                   :key="`show-${show.id}-tag-${tag}`"
                 >
                   #{{ tag }}
@@ -82,6 +92,7 @@
 
 <script>
 import { ContainerQuery } from "vue-container-query";
+import { languageLevels } from "@/lib/utils";
 import Config from "@/lib/config";
 import Vue from "vue";
 
@@ -133,6 +144,9 @@ export default {
     $adminMode() {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
+    },
+    levels() {
+      return languageLevels(this.$l2);
     },
   },
   methods: {
@@ -238,5 +252,12 @@ export default {
   position: absolute;
   bottom: 0.5rem;
   left: 2rem;
+}
+
+.level-tag {
+  font-size: 0.7em;
+  border-radius: 0.25rem;
+  display: inline-block;
+  padding: 0 0.5rem;
 }
 </style>

@@ -39,6 +39,26 @@ export const mutations = {
   }
 }
 
+export const getMinLexDivByLevel = (shows) => {
+  let lexDivs = shows.map(s => s.lex_div).filter(l => l > 0)
+  lexDivs = lexDivs.sort((a, b) => a - b)
+  let minLexDivByLevel = {}
+  minLexDivByLevel[7] = lexDivs[Math.ceil(lexDivs.length / 2)]
+  minLexDivByLevel[6] = lexDivs[Math.ceil(lexDivs.length / 2 / 2)]
+  minLexDivByLevel[5] = lexDivs[Math.ceil(lexDivs.length / 2 / 2 / 2)]
+  minLexDivByLevel[4] = lexDivs[Math.ceil(lexDivs.length / 2 / 2 / 2 / 2)]
+  minLexDivByLevel[3] = lexDivs[Math.ceil(lexDivs.length / 2 / 2 / 2 / 2 / 2)]
+  minLexDivByLevel[2] = lexDivs[Math.ceil(lexDivs.length / 2 / 2 / 2 / 2 / 2 / 2)]
+  minLexDivByLevel[1] = lexDivs[0]
+  return minLexDivByLevel
+}
+
+export const levelByLexDiv = (lexDiv, minLexDivByLevel) => {
+  for (let i = 1; i <= 7; i++) {
+    if (lexDiv < minLexDivByLevel[i]) return i
+  }
+}
+
 export const actions = {
   async load(context, { l2, adminMode, limit = 500 }) {
     let tvShows = []
@@ -77,7 +97,15 @@ export const actions = {
       }
     } catch (err) {
     }
-
+    let minLexDivByLevel = getMinLexDivByLevel([...tvShows, ...talks])
+    for (let show of talks) {
+      let level = levelByLexDiv(show.lex_div, minLexDivByLevel)
+      show.level = level
+    }
+    for (let show of tvShows) {
+      let level = levelByLexDiv(show.lex_div, minLexDivByLevel)
+      show.level = level
+    }
     context.commit('LOAD_SHOWS', { l2, tvShows, talks })
   },
   async add(context, { l2, type, show }) {
