@@ -43,12 +43,12 @@ export const getMinLexDivByLevel = (shows) => {
   let lexDivs = shows.map(s => s.lex_div).filter(l => l > 0)
   lexDivs = lexDivs.sort((a, b) => a - b)
   let minLexDivByLevel = {}
-  minLexDivByLevel[7] = lexDivs[Math.ceil(lexDivs.length / 2)]
-  minLexDivByLevel[6] = lexDivs[Math.ceil(lexDivs.length / 2 / 2)]
-  minLexDivByLevel[5] = lexDivs[Math.ceil(lexDivs.length / 2 / 2 / 2)]
-  minLexDivByLevel[4] = lexDivs[Math.ceil(lexDivs.length / 2 / 2 / 2 / 2)]
-  minLexDivByLevel[3] = lexDivs[Math.ceil(lexDivs.length / 2 / 2 / 2 / 2 / 2)]
-  minLexDivByLevel[2] = lexDivs[Math.ceil(lexDivs.length / 2 / 2 / 2 / 2 / 2 / 2)]
+  minLexDivByLevel[7] = lexDivs[lexDivs.length - 1]
+  minLexDivByLevel[6] = lexDivs[Math.ceil(lexDivs.length / 2)]
+  minLexDivByLevel[5] = lexDivs[Math.ceil(lexDivs.length / 2 / 2)]
+  minLexDivByLevel[4] = lexDivs[Math.ceil(lexDivs.length / 2 / 2 / 2)]
+  minLexDivByLevel[3] = lexDivs[Math.ceil(lexDivs.length / 2 / 2 / 2 / 2)]
+  minLexDivByLevel[2] = lexDivs[Math.ceil(lexDivs.length / 2 / 2 / 2 / 2 / 2)]
   return minLexDivByLevel
 }
 
