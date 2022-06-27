@@ -40,7 +40,7 @@
               <div class="show-tags">
                 <span
                   class="show-tag"
-                  v-for="tag in (show.tags || []).slice(0, 2)"
+                  v-for="tag in (show.tags || []).filter(t => t !== '').slice(0, 2)"
                   :key="`show-${show.id}-tag-${tag}`"
                 >
                   #{{ tag }}
