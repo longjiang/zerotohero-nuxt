@@ -1,7 +1,48 @@
 <template>
   <div class="main-dark">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="tags mt-3 mb-3" v-if="tags">
+            <b style="margin-left: 0.25rem; color: rgb(40, 167, 69)">
+              Browse by tags:
+            </b>
+            <router-link
+              :key="`tag-all`"
+              :class="{ 'btn btn-sm tag text-white bg-black': true }"
+              :to="{ name: routeType }"
+            >
+              All
+              <small style="color: #888">
+                ({{ filteredShowsByAudiobook.length }})
+              </small>
+            </router-link>
+            <router-link
+              v-if="filterShowsMadeForKids && filterShowsMadeForKids.length > 0"
+              :key="`tag-kids`"
+              :class="{ 'btn btn-sm tag text-white bg-black': true }"
+              :to="{ name: routeType, params: { tag: 'kids' } }"
+            >
+              Kids
+              <small style="color: #888">
+                ({{ filterShowsMadeForKids.length }})
+              </small>
+            </router-link>
+            <router-link
+              v-for="tag of tags.slice(0, 15)"
+              :key="`tag-${tag.tag}`"
+              :class="{ 'btn btn-sm tag text-white bg-black': true }"
+              :to="{ name: routeType, params: { tag: tag.tag } }"
+            >
+              {{ tag.tag.toLowerCase() }}
+              <small style="color: #888">({{ tag.count }})</small>
+            </router-link>
+          </div>
+        </div>
+      </div>
+    </div>
     <VideoHero
-      v-if="!tag && featureEpisode"
+      v-if="featureEpisode"
       :video="featureEpisode"
       @videoUnavailable="onVideoUnavailable"
     />
@@ -22,40 +63,7 @@
           <div class="col-sm-12">
             <!-- <Sale class="mt-5 mb-5" v-if="$l2.code === 'zh'" /> -->
             <div class="show-list-wrapper">
-              <div class="tags mt-3 mb-3" v-if="tags">
-                <b style="margin-left: 0.25rem; color: rgb(40, 167, 69)">Browse by tags:</b>
-                <router-link
-                  :key="`tag-all`"
-                  :class="{ 'btn btn-sm tag text-white bg-black': true }"
-                  :to="{ name: routeType }"
-                >
-                  All
-                  <small style="color: #888">
-                    ({{ filteredShowsByAudiobook.length }})
-                  </small>
-                </router-link>
-                <router-link
-                  v-if="filterShowsMadeForKids && filterShowsMadeForKids.length > 0"
-                  :key="`tag-kids`"
-                  :class="{ 'btn btn-sm tag text-white bg-black': true }"
-                  :to="{ name: routeType, params: { tag: 'kids' } }"
-                >
-                  Kids
-                  <small style="color: #888">
-                    ({{ filterShowsMadeForKids.length }})
-                  </small>
-                </router-link>
-                <router-link
-                  v-for="tag of tags.slice(0, 15)"
-                  :key="`tag-${tag.tag}`"
-                  :class="{ 'btn btn-sm tag text-white bg-black': true }"
-                  :to="{ name: routeType, params: { tag: tag.tag } }"
-                >
-                  {{ tag.tag.toLowerCase() }}
-                  <small style="color: #888">({{ tag.count }})</small>
-                </router-link>
-              </div>
-              <b-input-group class="mb-5 input-group-ghost-dark">
+              <b-input-group class="mb-5 mt-3 input-group-ghost-dark">
                 <b-form-input
                   v-model="keyword"
                   @compositionend.prevent.stop="() => false"
@@ -105,7 +113,6 @@
 import Config from "@/lib/config";
 import { tify } from "chinese-conv";
 import { scrollToTargetAdjusted } from "@/lib/utils";
-import { uniqueByValue } from "@/lib/utils/array";
 
 export default {
   props: {
@@ -193,16 +200,16 @@ export default {
       return shows;
     },
     filterShowsMadeForKids() {
-      return this.filteredShowsByAudiobook.filter((s) => s.made_for_kids || (s.tags || []).includes('kids'));
+      return this.filteredShowsByAudiobook.filter(
+        (s) => s.made_for_kids || (s.tags || []).includes("kids")
+      );
     },
     filteredShows() {
       if (this.shows) {
         let shows = this.filteredShowsByAudiobook;
         if (this.tag) {
-          if (this.tag === "kids")
-            shows = this.filterShowsMadeForKids
-          else
-            shows = shows.filter((s) => (s.tags || []).includes(this.tag));
+          if (this.tag === "kids") shows = this.filterShowsMadeForKids;
+          else shows = shows.filter((s) => (s.tags || []).includes(this.tag));
         }
         if (this.keyword) {
           let k = this.$l2.han ? tify(this.keyword) : this.keyword;
@@ -282,21 +289,8 @@ export default {
       }
     },
     getRandomShow() {
-      if (this.shows) {
-        let shows = this.shows.filter((s) => {
-          if (
-            this.routeType === "tv-shows" &&
-            ["Music", "Movies"].includes(s.title)
-          )
-            return false;
-          if (
-            this.routeType === "talks" &&
-            (["News"].includes(s.title) || s.audiobook)
-          )
-            return false;
-          if (this.routeType === "audiobooks") return s.audiobook;
-          return true;
-        });
+      if (this.filteredShows) {
+        let shows = this.filteredShows;
         let randomShow = shows[Math.floor(Math.random() * shows.length)];
         return randomShow;
       }
