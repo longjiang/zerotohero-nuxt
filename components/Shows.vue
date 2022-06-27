@@ -4,8 +4,14 @@
       <div class="row">
         <div class="col-sm-12">
           <div class="tags mt-3 mb-3" v-if="tags">
-            <b style="margin-left: 0.25rem; color: rgb(40, 167, 69)">
-              Browse by tags:
+            <b
+              style="
+                margin-left: 0.25rem;
+                position: relative;
+                bottom: -0.1rem;
+              "
+            >
+              By tags:
             </b>
             <router-link
               :key="`tag-all`"
@@ -36,6 +42,35 @@
             >
               {{ tag.tag.toLowerCase() }}
               <small style="color: #888">({{ tag.count }})</small>
+            </router-link>
+          </div>
+          <div class="tags mt-3 mb-3" v-if="levels">
+            <b
+              style="
+                margin-left: 0.25rem;
+                position: relative;
+                bottom: -0.1rem;
+              "
+            >
+              By level:
+            </b>
+            <router-link
+              :key="`tag-all`"
+              :class="{ 'btn btn-sm tag text-white bg-black': true }"
+              :to="{ name: routeType, params: { tag } }"
+            >
+              All
+              <small style="color: #888">
+                ({{ filteredShowsByAudiobook.length }})
+              </small>
+            </router-link>
+            <router-link
+              :class="{ 'btn btn-sm tag text-white bg-black': true }"
+              :to="{ name: routeType, params: { tag: tag || 'all', level: level.numeric } }"
+              v-for="(level, index) in levels"
+              :key="`filter-level-${level}-${index}`"
+            >
+              {{ index === 0 ? level.name : level.level }}
             </router-link>
           </div>
         </div>
@@ -113,11 +148,14 @@
 import Config from "@/lib/config";
 import { tify } from "chinese-conv";
 import { scrollToTargetAdjusted } from "@/lib/utils";
+import { unique } from "@/lib/utils";
+import { languageLevels } from "@/lib/utils";
 
 export default {
   props: {
     routeType: String, // "tv-shows" or "talks"
     tag: String,
+    level: String
   },
   data() {
     return {
@@ -190,6 +228,15 @@ export default {
           .filter((t) => t.count > 1);
       }
     },
+    levels() {
+      if (this.filteredShowsByAudiobookAngTags?.length > 0) {
+        let langLevels = languageLevels(this.$l2);
+        let levels = this.filteredShowsByAudiobookAngTags.map((s) => s.level).filter((l) => l);
+        levels = unique(levels);
+        levels = levels.sort((a, b) => a - b);
+        return levels.map((l) => langLevels[l]);
+      }
+    },
     filteredShowsByAudiobook() {
       let shows = this.shows;
       if (this.routeType === "audiobooks") {
@@ -199,6 +246,16 @@ export default {
       }
       return shows;
     },
+    filteredShowsByAudiobookAngTags() {
+      if (this.shows) {
+        let shows = this.filteredShowsByAudiobook;
+        if (this.tag && this.tag !== 'all') {
+          if (this.tag === "kids") shows = this.filterShowsMadeForKids;
+          else shows = shows.filter((s) => (s.tags || []).includes(this.tag));
+        }
+        return shows
+      }
+    },
     filterShowsMadeForKids() {
       return this.filteredShowsByAudiobook.filter(
         (s) => s.made_for_kids || (s.tags || []).includes("kids")
@@ -206,10 +263,9 @@ export default {
     },
     filteredShows() {
       if (this.shows) {
-        let shows = this.filteredShowsByAudiobook;
-        if (this.tag) {
-          if (this.tag === "kids") shows = this.filterShowsMadeForKids;
-          else shows = shows.filter((s) => (s.tags || []).includes(this.tag));
+        let shows = this.filteredShowsByAudiobookAngTags;
+        if (this.level && this.level !== 'all') {
+          shows = shows.filter((s) => s.level == this.level);
         }
         if (this.keyword) {
           let k = this.$l2.han ? tify(this.keyword) : this.keyword;
@@ -271,6 +327,7 @@ export default {
       );
     },
     async getFirstEpisodeOfShow(show, showType, l2Id) {
+      if (!show) return
       let sort = "-date";
       if (show.audiobook || showType === "tv_show") {
         sort = "title";

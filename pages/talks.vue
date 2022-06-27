@@ -1,6 +1,6 @@
 <router>
   {
-    path: '/:l1/:l2/talks/:tag?',
+    path: '/:l1/:l2/talks/:tag?/:level?',
     props: true,
     meta: {
       skin: 'dark'
@@ -9,17 +9,16 @@
 </router>
 <template>
   <div class="talks">
-    <Shows routeType="talks" :tag="tag" />
+    <Shows routeType="talks" :tag="tag" :level="level" />
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    tag: {
-      type: String
-    }
-  }
+    tag: String,
+    level: String,
+  },
 };
 </script>
 

@@ -1,6 +1,6 @@
 <router>
   {
-    path: '/:l1/:l2/audiobooks/:tag?',
+    path: '/:l1/:l2/audiobooks/:tag?/:level?',
     props: true,
     meta: {
       skin: 'dark'
@@ -9,16 +9,15 @@
 </router>
 <template>
   <div class="audiobooks">
-    <Shows routeType="audiobooks" :tag="tag" />
+    <Shows routeType="audiobooks" :tag="tag" :level="level" />
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    tag: {
-      type: String,
-    },
+    tag: String,
+    level: String,
   },
 };
 </script>

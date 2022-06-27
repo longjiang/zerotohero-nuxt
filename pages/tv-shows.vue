@@ -1,6 +1,6 @@
 <router>
   {
-    path: '/:l1/:l2/tv-shows/:tag?',
+    path: '/:l1/:l2/tv-shows/:tag?/:level?',
     props: true,
     meta: {
       skin: 'dark'
@@ -9,16 +9,15 @@
 </router>
 <template>
   <div class="tv-shows">
-    <Shows routeType="tv-shows" :tag="tag" />
+    <Shows routeType="tv-shows" :tag="tag" :level="level" />
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    tag: {
-      type: String
-    }
+    tag: String,
+    level: String,
   },
   computed: {
     $l1() {
