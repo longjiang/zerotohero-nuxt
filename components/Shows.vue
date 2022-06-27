@@ -1,5 +1,5 @@
 <template>
-  <div class="main-dark pt-5">
+  <div class="main-dark">
     <VideoHero
       v-if="!tag && featureEpisode"
       :video="featureEpisode"
@@ -23,6 +23,7 @@
             <!-- <Sale class="mt-5 mb-5" v-if="$l2.code === 'zh'" /> -->
             <div class="show-list-wrapper">
               <div class="tags mb-3" v-if="tags">
+                <b style="margin-left: 0.25rem; color: rgb(40, 167, 69)">Browse by tags:</b>
                 <router-link
                   :key="`tag-all`"
                   :class="{ 'btn btn-sm tag text-white bg-black': true }"
@@ -50,7 +51,7 @@
                   :class="{ 'btn btn-sm tag text-white bg-black': true }"
                   :to="{ name: routeType, params: { tag: tag.tag } }"
                 >
-                  {{ tag.tag }}
+                  {{ tag.tag.toLowerCase() }}
                   <small style="color: #888">({{ tag.count }})</small>
                 </router-link>
               </div>
@@ -309,26 +310,20 @@ export default {
   height: 5rem;
   overflow: hidden;
 }
+
+.tags {
+  line-height: 1;
+}
+
 .tag {
-  padding: 0.5rem;
+  padding: 0 0.25rem 0 0.25rem;
+  color: #ccc !important;
 }
 
 .tag.nuxt-link-exact-active {
-  background-image: linear-gradient(
-    rgba(40, 167, 69, 0.8),
-    rgba(40, 167, 69, 0.8)
-  );
-  background-position: 50% 100%;
-  background-size: 70% 0.35rem;
-  background-repeat: no-repeat;
+  color: rgba(40, 167, 69) !important;
 }
 .tag:not(.nuxt-link-exact-active):hover {
-  background-image: linear-gradient(
-    rgba(40, 167, 69, 0.4),
-    rgba(40, 167, 69, 0.4)
-  );
-  background-position: 50% 100%;
-  background-size: 70% 0.35rem;
-  background-repeat: no-repeat;
+  color: rgba(40, 167, 69);
 }
 </style>
