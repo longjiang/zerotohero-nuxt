@@ -221,7 +221,7 @@ export default {
     );
     readings = readings.data.data;
     let youtubeVideos = await this.$directus.get(
-      `${Config.youtubeVideosTableName(this.$l2.id)}?filter[l2][eq]=${this.$l2.id}&filter[lesson][eq]=${this.id}`
+      `${this.$directus.youtubeVideosTableName(this.$l2.id)}?filter[l2][eq]=${this.$l2.id}&filter[lesson][eq]=${this.id}`
     );
     youtubeVideos = youtubeVideos.data.data.map((video) => {
       return {

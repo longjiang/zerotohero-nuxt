@@ -56,7 +56,7 @@ export default {
       let reportedYouTubeIds = reports.map((r) => r.youtube_id);
       let reportedLanguages = Helper.unique(reports.map((r) => r.l2));
       let dbTablesOfReportedLanguages = Helper.unique(
-        reportedLanguages.map((l) => Config.youtubeVideosTableName(l))
+        reportedLanguages.map((l) => this.$directus.youtubeVideosTableName(l))
       );
       let videos = [];
 

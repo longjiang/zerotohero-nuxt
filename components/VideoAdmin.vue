@@ -481,13 +481,14 @@ export default {
       this.$emit("updateTranslation", translation);
     },
     async unassignShow(type) {
-      let data = {};
-      data[type] = null;
-      let response = await this.$directus.patch(
-        `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}`,
-        data
-      );
-      if (response && response.data) {
+      let payload = {};
+      payload[type] = null;
+      let data = await this.$directus.patchVideo({
+        l2Id: this.$l2.id,
+        id: this.video.id,
+        payload,
+      });
+      if (data) {
         this.video[type] = undefined;
         this.videoInfoKey++;
       }
@@ -508,19 +509,19 @@ export default {
     },
     async saveShow(show, type) {
       if (!this.video[type] || this.video[type].id !== show.id) {
-        let data = {};
-        data[type] = show.id;
-        let response = await this.$directus.patch(
-          `${Config.youtubeVideosTableName(this.$l2.id)}/${
-            this.video.id
-          }?fields=${type}.*`, // type is 'tv_show' or 'talk'
-          data
-        );
-        response = response.data;
-        if (response && response.data) {
+        let payload = {};
+        payload[type] = show.id;
+        let query = `fields=${type}.*`;
+        let data = await this.$directus.patchVideo({
+          l2Id: this.$l2.id,
+          id: this.video.id,
+          query,
+          payload,
+        });
+        if (data) {
           Vue.set(this.video, type, {
-            id: response.data[type].id,
-            title: response.data[type].title,
+            id: data[type].id,
+            title: data[type].title,
           });
         }
       }
@@ -546,74 +547,58 @@ export default {
       };
     },
     async changeLevel(slug) {
-      let response = await $.ajax({
-        url: `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}`,
-        data: JSON.stringify({ level: slug }),
-        type: "PATCH",
-        contentType: "application/json",
-        xhr: function () {
-          return window.XMLHttpRequest == null ||
-            new window.XMLHttpRequest().addEventListener == null
-            ? new window.ActiveXObject("Microsoft.XMLHTTP")
-            : $.ajaxSettings.xhr();
-        },
+      let payload = { level: slug };
+      let updatedVideo = await this.$directus.patchVideo({
+        id: this.video.id,
+        l2Id: this.$l2.id,
+        payload,
       });
-      if (response && response.data) {
-        this.video = response.data;
-      }
+      if (updatedVideo) this.video = updatedVideo;
     },
     async updateSubs() {
       this.updating = true;
-      let token = this.$auth.strategy.token.get();
-      try {
-        let response = await this.$directus.patch(
-          `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}`,
-          {
-            subs_l2: this.video.subs_l2
-              ? YouTube.unparseSubs(this.video.subs_l2, this.$l2.code)
-              : undefined,
-            subs_l1: this.video.subs_l1
-              ? YouTube.unparseSubs(this.video.subs_l1)
-              : undefined,
-            notes: this.video.notes
-              ? YouTube.unparseNotes(this.video.notes)
-              : undefined,
-          }
-        );
-        if (response && response.data) {
-          this.updating = false;
-          this.subsUpdated = true;
-          await Helper.timeout(2000);
-          this.subsUpdated = false;
-        }
-      } catch (err) {}
+      let payload = {
+        subs_l2: this.video.subs_l2
+          ? YouTube.unparseSubs(this.video.subs_l2, this.$l2.code)
+          : undefined,
+        subs_l1: this.video.subs_l1
+          ? YouTube.unparseSubs(this.video.subs_l1)
+          : undefined,
+        notes: this.video.notes
+          ? YouTube.unparseNotes(this.video.notes)
+          : undefined,
+      };
+
+      let data = await this.$directus.patchVideo({
+        l2Id: this.$l2.id,
+        id: this.video.id,
+        payload,
+      });
+      if (data) {
+        this.updating = false;
+        this.subsUpdated = true;
+        await Helper.timeout(2000);
+        this.subsUpdated = false;
+      }
     },
     async changeTopic(slug) {
-      let response = await $.ajax({
-        url: `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}`,
-        data: JSON.stringify({ topic: slug }),
-        type: "PATCH",
-        contentType: "application/json",
-        xhr: function () {
-          return window.XMLHttpRequest == null ||
-            new window.XMLHttpRequest().addEventListener == null
-            ? new window.ActiveXObject("Microsoft.XMLHTTP")
-            : $.ajaxSettings.xhr();
-        },
-      });
-      if (response && response.data) {
-        this.video = response.data;
+      let data = await this.$directus.patch({
+        l2Id: this.$l2.id,
+        id: this.video.id,
+        payload: { topic: slug }
+      })
+      if (data) {
+        this.video = data;
       }
     },
     async remove() {
-      try {
-        let response = await this.$directus.delete(
-          `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}`
-        );
-        if (response) {
-          this.deleted = true;
-        }
-      } catch (err) {}
+      let data = await this.$directus.delete({
+        l2Id: this.$l2.id,
+        id: this.video.id
+      })
+      if (data) {
+        this.deleted = true
+      }
     },
   },
 };

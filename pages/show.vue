@@ -410,7 +410,7 @@ export default {
     async getVideosFromServer({ keyword, limit, offset, sort } = {}) {
       let keywordFilter = keyword ? `&filter[title][contains]=${keyword}` : "";
       let response = await this.$directus.get(
-        `${Config.youtubeVideosTableName(this.$l2.id)}?filter[l2][eq]=${
+        `${this.$directus.youtubeVideosTableName(this.$l2.id)}?filter[l2][eq]=${
           this.$l2.id
         }&filter[${this.collection}][eq]=${
           this.show.id

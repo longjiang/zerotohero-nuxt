@@ -68,11 +68,20 @@
             </router-link>
             <router-link
               :class="{ 'btn btn-sm tag text-white bg-black': true }"
-              :to="{ name: routeType, params: { tag: tag || 'all', level: level.numeric } }"
+              :to="{
+                name: routeType,
+                params: { tag: tag || 'all', level: level.numeric },
+              }"
               v-for="(level, index) in levels"
               :key="`filter-level-${level}-${index}`"
             >
-              {{ index === 0 ? level.name : level.exam === 'CEFR' ? level.level : level.name }}
+              {{
+                index === 0
+                  ? level.name
+                  : level.exam === "CEFR"
+                  ? level.level
+                  : level.name
+              }}
               <small style="color: #888">
                 ({{ showCountByLevel(level.numeric) }})
               </small>
@@ -160,7 +169,7 @@ export default {
   props: {
     routeType: String, // "tv-shows" or "talks"
     tag: String,
-    level: String
+    level: String,
   },
   data() {
     return {
@@ -236,7 +245,9 @@ export default {
     levels() {
       if (this.filteredShowsByAudiobookAndTags?.length > 0) {
         let langLevels = languageLevels(this.$l2);
-        let levels = this.filteredShowsByAudiobookAndTags.map((s) => s.level).filter((l) => l);
+        let levels = this.filteredShowsByAudiobookAndTags
+          .map((s) => s.level)
+          .filter((l) => l);
         levels = unique(levels);
         levels = levels.sort((a, b) => a - b);
         return levels.map((l) => langLevels[l]);
@@ -254,11 +265,11 @@ export default {
     filteredShowsByAudiobookAndTags() {
       if (this.shows) {
         let shows = this.filteredShowsByAudiobook;
-        if (this.tag && this.tag !== 'all') {
+        if (this.tag && this.tag !== "all") {
           if (this.tag === "kids") shows = this.filterShowsMadeForKids;
           else shows = shows.filter((s) => (s.tags || []).includes(this.tag));
         }
-        return shows
+        return shows;
       }
     },
     filterShowsMadeForKids() {
@@ -269,7 +280,7 @@ export default {
     filteredShows() {
       if (this.shows) {
         let shows = this.filteredShowsByAudiobookAndTags;
-        if (this.level && this.level !== 'all') {
+        if (this.level && this.level !== "all") {
           shows = shows.filter((s) => s.level == this.level);
         }
         if (this.keyword) {
@@ -294,7 +305,9 @@ export default {
   },
   methods: {
     showCountByLevel(level) {
-      return this.filteredShowsByAudiobookAndTags?.filter(s => s.level == level).length
+      return this.filteredShowsByAudiobookAndTags?.filter(
+        (s) => s.level == level
+      ).length;
     },
     onVideoUnavailable(youtube_id) {
       if (youtube_id === this.featureEpisode.youtube_id)
@@ -335,23 +348,15 @@ export default {
       );
     },
     async getFirstEpisodeOfShow(show, showType, l2Id) {
-      if (!show) return
+      if (!show) return;
       let sort = "-date";
       if (show.audiobook || showType === "tv_show") {
         sort = "title";
       }
-      let url = `${Config.youtubeVideosTableName(
-        l2Id
-      )}?filter[${showType}][eq]=${
-        show.id
-      }&limit=1&fields=youtube_id,id,l2,tv_show,talk,title&sort=${sort}`;
-      let response = await this.$directus.get(url);
-
-      if (response.data && response.data.data.length > 0) {
-        let videos = response.data.data;
-        let firstEpisode = videos[0];
-        return firstEpisode;
-      }
+      let query = `filter[${showType}][eq]=${show.id}&limit=1&fields=youtube_id,id,l2,tv_show,talk,title&sort=${sort}`;
+      let videos = await this.$directus.getVideos({ l2Id, query });
+      let firstEpisode = videos[0];
+      return firstEpisode;
     },
     getRandomShow() {
       if (this.filteredShows) {

@@ -354,18 +354,11 @@ export default {
     },
     async loadDataForRowKey(row, key, forceRefresh) {
       let config = {};
-      if (forceRefresh)
-        config.headers = {
-          // "Cache-Control": "no-cache", // Can't set CORS headers in directus config for some reason
-        };
       if (["Music", "Movies", "News"].includes(key)) {
         let collection = "News" === key ? "talk" : "tv_show";
-        let res = await this.$directus.get(
-          `${Config.youtubeVideosTableName(this.$l2.id)}?filter[l2][eq]=${row.l2.id}&filter[${collection}.title][eq]=${key}&limit=1&meta=filter_count`,
-          config
-        );
-        if (res && res.data) {
-          if (res.data.data[0])
+        let videos = this.$directus.getVideos({l2Id: this.$l2.id, query: `filter[l2][eq]=${row.l2.id}&filter[${collection}.title][eq]=${key}&limit=1&meta=filter_count` })
+        if (videos) {
+          if (videos[0])
             Vue.set(row, `${key}Id`, res.data.data[0][collection]);
           Vue.set(row, key, res.data.meta.filter_count);
         }

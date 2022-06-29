@@ -30,7 +30,10 @@
       "
       class="no-subs-badge"
     >
-      <span v-if="!over"><i class="fa fa-times"></i> NO SUBS</span>
+      <span v-if="!over">
+        <i class="fa fa-times"></i>
+        NO SUBS
+      </span>
     </div>
     <div
       :class="{
@@ -431,8 +434,8 @@ export default {
       );
     },
     topics() {
-      return Helper.topics
-    }
+      return Helper.topics;
+    },
   },
   async mounted() {
     if (this.checkSubs) {
@@ -461,10 +464,10 @@ export default {
   },
   methods: {
     level(...args) {
-      return Helper.level(...args)
+      return Helper.level(...args);
     },
     level(...args) {
-      return Helper.level(...args)
+      return Helper.level(...args);
     },
     thumbnailError(e) {
       console.log("❌ ERROR", this.video.title);
@@ -483,16 +486,17 @@ export default {
         this.showSaved = false;
         Vue.set(this.video, type, show);
         if (this.video.id) {
-          let data = {};
-          data[type] = show.id;
-          let response = await this.$directus.patch(
-            `${Config.youtubeVideosTableName(
-              this.video.l2 ? this.video.l2.id || this.video.l2 : this.$l2.id
-            )}/${this.video.id}?fields=id`,
-            data
-          );
-          response = response.data;
-          if (response && response.data) {
+          let payload = {};
+          payload[type] = show.id;
+          let data = await this.$directus.patchVideo({
+            l2Id: this.video.l2
+              ? this.video.l2.id || this.video.l2
+              : this.$l2.id,
+            id: this.video.id,
+            query: `fields=id`,
+            payload,
+          });
+          if (data) {
             this.showSaved = true;
           }
         }
@@ -500,35 +504,27 @@ export default {
       return true;
     },
     async unassignShow(type) {
-      let data = {};
-      data[type] = null;
-      let response = await this.$directus.patch(
-        `${Config.youtubeVideosTableName(
-          this.video.l2 ? this.video.l2.id || this.video.l2 : this.$l2.id
-        )}/${this.video.id}`,
-        data
-      );
-      if (response && response.data) {
+      let payload = {};
+      payload[type] = null;
+      let data = await this.$directus.patchVideo({
+        l2Id: this.video.l2 ? this.video.l2.id || this.video.l2 : this.$l2.id,
+        id: this.video.id,
+        payload,
+      });
+      if (data) {
         Vue.delete(this.video, type);
       }
     },
     async saveTitle(e) {
       let newTitle = e.target.innerText;
       if (this.video.title !== newTitle) {
-        try {
-          let response = await this.$directus.patch(
-            `${Config.youtubeVideosTableName(
-              this.video.l2 ? this.video.l2.id || this.video.l2 : this.$l2.id
-            )}/${this.video.id}`,
-            { title: newTitle },
-            { contentType: "application/json" }
-          );
-          response = response.data;
-          if (response && response.data) {
-            this.titleUpdated = true;
-          }
-        } catch (err) {
-          // Direcuts bug
+        let data = await this.$directus.patchVideo({
+          l2Id: this.video.l2 ? this.video.l2.id || this.video.l2 : this.$l2.id,
+          id: this.video.id,
+          payload: { title: newTitle },
+        });
+        if (data) {
+          this.titleUpdated = true;
         }
       }
     },
@@ -554,30 +550,24 @@ export default {
     },
     async remove() {
       if (this.video.id) {
-        try {
-          let response = await this.$directus.delete(
-            `${Config.youtubeVideosTableName(
-              this.video.l2 ? this.video.l2.id || this.video.l2 : this.$l2.id
-            )}/${this.video.id}`
-          );
-          if (response) {
-            Vue.delete(this.video, "id");
-          }
-        } catch (err) {
-          Helper.logError(err);
+        let data = await this.$directus.deleteVideo({
+          l2Id: this.video.l2 ? this.video.l2.id || this.video.l2 : this.$l2.id,
+          id: this.video.id,
+        });
+        if (data) {
+          Vue.delete(this.video, "id");
         }
       }
       return true;
     },
     async updateSubs() {
-      let response = await this.$directus.patch(
-        `${Config.youtubeVideosTableName(
-          this.video.l2 ? this.video.l2.id || this.video.l2 : this.$l2.id
-        )}/${this.video.id}`,
-        { subs_l2: YouTube.unparseSubs(this.video.subs_l2) }
-      );
-      response = response.data;
-      if (response && response.data) {
+      let data = await this.$directus.patchVideo({
+        l2Id: this.video.l2 ? this.video.l2.id || this.video.l2 : this.$l2.id,
+        id: this.video.id,
+        query: `fields=id`,
+        payload: { subs_l2: YouTube.unparseSubs(this.video.subs_l2) },
+      });
+      if (data) {
         this.subsUpdated = true;
       }
     },
@@ -638,14 +628,13 @@ export default {
     },
     async addChannelID(video) {
       let channelId = await this.getChannelID(video);
-      let response = await this.$directus.patch(
-        `${Config.youtubeVideosTableName(
-          this.video.l2 ? this.video.l2.id || this.video.l2 : this.$l2.id
-        )}/${video.id}`,
-        { channel_id: channelId }
-      );
-      if (response && response.data) {
-        Vue.set(video, "channel_id", response.data.channel_id);
+      let data = await this.$directus.patchVideo({
+        l2Id: this.video.l2 ? this.video.l2.id || this.video.l2 : this.$l2.id,
+        id: this.video.id,
+        payload: { channel_id: channelId },
+      });
+      if (data) {
+        Vue.set(video, "channel_id", data.channel_id);
       }
     },
     async getSubsAndSave(video = this.video) {

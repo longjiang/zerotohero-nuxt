@@ -214,7 +214,7 @@ export default {
   async created() {
     this.lessonVideos = [];
     let response = await this.$directus.get(
-      `${Config.youtubeVideosTableName(this.$l2.id)}?sort=-id&filter[l2][eq]=${
+      `${this.$directus.youtubeVideosTableName(this.$l2.id)}?sort=-id&filter[l2][eq]=${
         this.$l2.id
       }&filter[level][eq]=${this.level}&filter[lesson][eq]=${this.lesson}`
     );

@@ -373,26 +373,18 @@ export default {
       sort = "-date",
       offset = 0,
     }) {
-      try {
-        let videos = [];
-        let filter = "";
-        if (tvShow) filter = `filter[tv_show][eq]=${tvShow}`;
-        if (talk) filter = `filter[talk][eq]=${talk}`;
-        // First find videos associated with a particular tv show, or talk
-        let response = await this.$directus.get(
-          `${Config.youtubeVideosTableName(
-            this.$l2.id
-          )}?sort=${sort}&filter[l2][eq]=${
-            this.$l2.id
-          }&${filter}&limit=${limit}&fields=l2,id,title,youtube_id,tv_show,talk,l2&offset=${offset}`
-        );
-        if (response.data.data && response.data.data.length > 0) {
-          videos = Helper.uniqueByValue(response.data.data, "youtube_id");
-        }
-        return videos;
-      } catch (err) {
-        return [];
+      let filter = "";
+      if (tvShow) filter = `filter[tv_show][eq]=${tvShow}`;
+      if (talk) filter = `filter[talk][eq]=${talk}`;
+      // First find videos associated with a particular tv show, or talk
+      let videos = await this.$directus.getVideos({
+        l2Id: this.$l2.id,
+        query: `sort=${sort}&filter[l2][eq]=${this.$l2.id}&${filter}&limit=${limit}&fields=l2,id,title,youtube_id,tv_show,talk,l2&offset=${offset}`,
+      });
+      if (videos?.length > 0) {
+        videos = Helper.uniqueByValue(videos, "youtube_id");
       }
+      return videos;
     },
     randBase64(length) {
       var result = "";

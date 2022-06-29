@@ -419,17 +419,13 @@ export default {
         .filter((id) => !id.includes("0x"));
       let chunks = Helper.arrayChunk(youtube_ids, 100);
       for (let youtube_ids of chunks) {
-        let response = await this.$directus.get(
-          `${Config.youtubeVideosTableName(
-            this.$l2.id
-          )}?filter[youtube_id][in]=${youtube_ids}&fields=id,title,channel_id,youtube_id,tv_show.*,talk.*${
+        let query = `filter[youtube_id][in]=${youtube_ids}&fields=id,title,channel_id,youtube_id,tv_show.*,talk.*${
             this.showSubsEditing ? ",subs_l2" : ""
           }&filter[l2][eq]=${this.$l2.id}&timestamp=${
             this.$adminMode ? Date.now() : 0
           }`
-        );
-        if (response.data && response.data.data && response.data.data[0]) {
-          let savedVideos = response.data.data;
+        let savedVideos = await this.$directus.getVideos({l2Id: this.$l2.id, query})
+        if (savedVideos[0]) {
           for (let video of videos) {
             let savedVideo = savedVideos.find(
               (v) => v.youtube_id === video.youtube_id

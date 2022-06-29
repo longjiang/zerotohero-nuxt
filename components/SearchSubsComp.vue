@@ -298,7 +298,6 @@ import YouTube from "@/lib/youtube";
 import {
   NON_PRO_MAX_SUBS_SEARCH_HITS,
   POPULAR_LANGS,
-  youtubeVideosTableName,
 } from "@/lib/config";
 
 export default {
@@ -522,16 +521,6 @@ export default {
     vueSlickCarouselAfterChange(slideIndex) {
       this.goToHitIndex(this.hitIndexFromSlideIndex(slideIndex));
       this.slideIndex = slideIndex;
-    },
-    async remove() {
-      let id = this.currentHit.video.id;
-      let response;
-      try {
-        response = await this.$directus.delete(
-          `${youtubeVideosTableName(this.$l2.id)}/${id}`
-        );
-        this.removeCurrentHitAndGoToNext();
-      } catch (err) {}
     },
     removeCurrentHitAndGoToNext() {
       let hits = [];

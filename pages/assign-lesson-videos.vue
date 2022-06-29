@@ -142,7 +142,7 @@ export default {
     async getLessonVideos() {
       this.lessonVideos = [];
       let response = await $.getJSON(
-        `${Config.youtubeVideosTableName(
+        `${this.$directus.youtubeVideosTableName(
           this.$l2.id
         )}?sort=-id&filter[l2][eq]=${this.$l2.id}&filter[level][eq]=${
           this.level
@@ -183,7 +183,7 @@ export default {
               promises.push(
                 new Promise((resolve, reject) => {
                   $.getJSON(
-                    `${Config.youtubeVideosTableName(
+                    `${this.$directus.youtubeVideosTableName(
                       this.$l2.id
                     )}?sort=-id&filter[l2][eq]=${
                       this.$l2.id
@@ -248,7 +248,7 @@ export default {
     },
     async removeVideo(video) {
       let response = await $.ajax({
-        url: `${Config.youtubeVideosTableName(this.$l2.id)}/${video.id}`,
+        url: `${this.$directus.youtubeVideosTableName(this.$l2.id)}/${video.id}`,
         type: "DELETE",
         contentType: "application/json",
         xhr: function () {
@@ -265,7 +265,7 @@ export default {
     },
     async removeVideoFromLesson(video) {
       let response = await $.ajax({
-        url: `${Config.youtubeVideosTableName(this.$l2.id)}/${video.id}`,
+        url: `${this.$directus.youtubeVideosTableName(this.$l2.id)}/${video.id}`,
         data: JSON.stringify({ level: null, lesson: null }),
         type: "PATCH",
         contentType: "application/json",
@@ -285,7 +285,7 @@ export default {
     },
     async addVideoToLesson(video) {
       let response = await $.ajax({
-        url: `${Config.youtubeVideosTableName(this.$l2.id)}/${video.id}`,
+        url: `${this.$directus.youtubeVideosTableName(this.$l2.id)}/${video.id}`,
         data: JSON.stringify({ level: this.level, lesson: this.lesson }),
         type: "PATCH",
         contentType: "application/json",

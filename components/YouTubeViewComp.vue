@@ -10,7 +10,7 @@
     />
     <div
       :class="`toggle-wrapper ${layout !== 'mini' ? 'maximized' : 'minimized'}`"
-      v-if="layout === 'mini'" 
+      v-if="layout === 'mini'"
     >
       <router-link
         :class="`btn btn-unstyled ${
@@ -115,7 +115,10 @@ export default {
     ...mapState("stats", ["stats"]),
     ...mapState("fullHistory", ["fullHistory"]),
     fullHistoryPathsByL1L2() {
-      return this.$store.getters['fullHistory/fullHistoryPathsByL1L2']({l1: this.$l1, l2: this.$l2})
+      return this.$store.getters["fullHistory/fullHistoryPathsByL1L2"]({
+        l1: this.$l1,
+        l2: this.$l2,
+      });
     },
     landscape() {
       if (this.forcePortrait) return false;
@@ -222,7 +225,7 @@ export default {
         this.extrasLoaded = true;
         console.log(`YouTube View (on video change): load subs if missing...`);
         let video = await this.loadSubsIfMissing(this.video);
-        if (this.layout !== 'mini' && !Helper.wide()) {
+        if (this.layout !== "mini" && !Helper.wide()) {
           let el = this.$refs["youtube"];
           if (el) Helper.scrollToTargetAdjusted(el.$el, 43);
         }
@@ -297,18 +300,13 @@ export default {
           postParams["filter[date][lt]"] = this.video.date;
         }
       }
-      let response;
-      try {
-        response = await $directus.get(
-          Config.youtubeVideosTableName(this.$l2.id) +
-            "?" +
-            Helper.queryString(postParams)
-        );
-        if (response.data && response.data.data) {
-          videos = [...videos, ...response.data.data];
-        }
-      } catch (err) {
-        Helper.logError(err);
+
+      let moreVideos = await $directus.getVideo({
+        l2Id: this.$l2.id,
+        query: Helper.queryString(postParams),
+      });
+      if (moreVideos) {
+        videos = [...videos, moreVideos];
       }
 
       // Make sure this video is included in the collection
@@ -456,28 +454,14 @@ export default {
       return video;
     },
     async getSaved() {
-      let response;
-      try {
-        response = await this.$directus.get(
-          `${Config.youtubeVideosTableName(
-            this.$l2.id
-          )}?filter[youtube_id][eq]=${
-            this.youtube_id
-          }&fields=*,tv_show.*,talk.*&timestamp=${
-            this.$adminMode ? Date.now() : 0
-          }`
-        );
-      } catch (err) {
-        Helper.logError(err);
-        return;
-      }
-      if (
-        response &&
-        response.data &&
-        response.data.data &&
-        response.data.data.length > 0
-      ) {
-        let video = response.data.data[0];
+      let query = `filter[youtube_id][eq]=${
+        this.youtube_id
+      }&fields=*,tv_show.*,talk.*&timestamp=${
+        this.$adminMode ? Date.now() : 0
+      }`;
+      let videos = await this.$directus.getVideos({ l2Id: this.$l2.id, query });
+      if (videos?.length > 0) {
+        let video = videos[0];
         for (let field of ["subs_l2", "subs_l1"]) {
           if (video[field] && typeof video[field] === "string") {
             let savedSubs = YouTube.parseSavedSubs(video[field]);
@@ -550,7 +534,7 @@ export default {
               name: "youtube-view",
               params: {
                 youtube_id: this.nextEpisode.youtube_id,
-                lesson: this.nextEpisode.lesson
+                lesson: this.nextEpisode.lesson,
               },
             });
         }
@@ -595,14 +579,14 @@ export default {
       }
     },
     async patchChannelID(video, channelId) {
-      let response = await this.$directus.patch(
-        `${Config.youtubeVideosTableName(this.$l2.id)}/${
-          video.id
-        }?fields=id,channel_id`,
-        { channel_id: channelId }
-      );
-      if (response && response.data) {
-        video.channel_id = response.data;
+      let data = await this.$directus.patchVideo({
+        l2Id: this.$l2.id,
+        id: video.id,
+        query: "fields=id,channel_id",
+        payload: { channel_id: channelId },
+      });
+      if (data) {
+        video.channel_id = channelId;
       }
     },
     async patchDuration(video) {
@@ -614,16 +598,15 @@ export default {
       video = await this.getTranscript(video);
       if (video.subs_l2 && video.subs_l2[0] && video.subs_l2[0].duration) {
         let subs_l2 = YouTube.unparseSubs(video.subs_l2);
-        try {
-          await this.$directus.patch(
-            `${Config.youtubeVideosTableName(this.$l2.id)}/${
-              video.id
-            }?fields=id`,
-            { subs_l2 }
-          );
-          console.log("Missing duration information added.");
-        } catch (err) {
-          Helper.logError(err);
+        let data = await this.$directus.patchVideo({
+          l2Id: this.$l2.id,
+          id: video.id,
+          query: "fields=id",
+          payload: { subs_l2 },
+        });
+        console.log("Missing duration information added.");
+        if (data) {
+          video.channel_id = channelId;
         }
       }
       return video;
@@ -718,7 +701,7 @@ export default {
     right: 0;
     height: 4rem;
     .btn {
-      background: rgba(0,0,0,0.8);
+      background: rgba(0, 0, 0, 0.8);
       padding: 0.6rem 1.3rem;
     }
   }

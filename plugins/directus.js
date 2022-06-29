@@ -3,11 +3,41 @@ import axios from 'axios'
 import SmartQuotes from "smartquotes";
 import he from "he"; // html entities
 import YouTube from '@/lib/youtube'
-import Config from '@/lib/config'
 import Helper from '@/lib/helper'
 import { logError } from '@/lib/utils/error'
 
 export const DIRECTUS_API_URL = 'https://directusvps.zerotohero.ca/zerotohero/'
+
+export const YOUTUBE_VIDEOS_TABLES = {
+  2: [
+    1874, // Basque
+    6858, // Vietnamese
+  ],
+  3: [
+    3179 // Korean
+  ],
+  4: [
+    7731 // Chinese
+  ],
+  5: [
+    1824 // English
+  ],
+  6: [
+    1540 // German
+  ],
+  7: [
+    2645, // Italian
+    2780 // Japanese
+  ],
+  8: [
+    1943, // French
+  ],
+  9: [
+    5980, // Spanish
+    1167, // Catalan
+    5644, // Russian
+  ]
+}
 
 export default ({ app }, inject) => {
   inject('directus', {
@@ -53,7 +83,7 @@ export default ({ app }, inject) => {
      * @returns 
      */
     async countShowEpisodes(showType, showId, l2Id, adminMode = false) {
-      let tableSuffix = Config.youtubeVideosTableName(l2Id).replace(`items/youtube_videos`, '')
+      let tableSuffix = this.youtubeVideosTableName(l2Id).replace(`items/youtube_videos`, '')
       let data = await Helper.proxy(
         `https://directusvps.zerotohero.ca/count.php?table_suffix=${tableSuffix}&lang_id=${l2Id}&type=${showType}&id=${showId}`,
         { cacheLife: adminMode ? 0 : 86400 } // cache the count for one day (86400 seconds)
@@ -63,7 +93,7 @@ export default ({ app }, inject) => {
     async getRandomEpisodeYouTubeId(langId, type) {
       let showFilter = type ? `&filter[${type}][nnull]=1` : "";
       let randBase64Char = Helper.randBase64(1);
-      let url = `${Config.youtubeVideosTableName(
+      let url = `${this.youtubeVideosTableName(
         langId
       )}?filter[l2][eq]=${langId}${showFilter}&filter[youtube_id][contains]=${randBase64Char}&fields=youtube_id`;
       try {
@@ -78,17 +108,31 @@ export default ({ app }, inject) => {
         return false;
       }
     },
-    async deleteVideo() {
+    async deleteVideo({ id, l2Id }) {
+      let res = await this.delete(`${this.youtubeVideosTableName(l2Id)}/${id}`)
+      if (res?.data?.data) {
+        let data = res.data.data
+        return data
+      }
 
     },
-    async patchVideo() {
-
+    async patchVideo({ id, l2Id, payload, query }) {
+      query = query ? `?${query}` : ''
+      let res = await this.patch(`${this.youtubeVideosTableName(l2Id)}/${id}${query}`, payload)
+      if (res?.data?.data) {
+        let data = res.data.data
+        return data
+      }
     },
-    async getVideo() {
-
+    async getVideo({ id, l2Id }) {
+      let res = await this.get(`${this.youtubeVideosTableName(l2Id)}/${id}`)
+      if (res?.data?.data) {
+        let video = res.data.data
+        return video
+      }
     },
     async getVideos({ l2Id, query } = {}) {
-      let res = await this.get(`${Config.youtubeVideosTableName(l2Id)}?${query}`)
+      let res = await this.get(`${this.youtubeVideosTableName(l2Id)}?${query}`)
       if (res?.data?.data) {
         let videos = res.data.data
         return videos
@@ -115,7 +159,7 @@ export default ({ app }, inject) => {
       if (video.talk) data.talk = video.talk.id;
       try {
         let response = await this.post(
-          `${Config.youtubeVideosTableName(l2.id)}?fields=id,tv_show.*,talk.*`,
+          `${this.youtubeVideosTableName(l2.id)}?fields=id,tv_show.*,talk.*`,
           data
         );
         response = response.data;
@@ -129,6 +173,19 @@ export default ({ app }, inject) => {
           return this.saveVideo(video, l2, Math.floor(limit / 2), tries + 1); // Try with half the lines each time
         }
       }
+    },
+    youtubeVideosTableSuffix(langId) {
+      if (!langId) throw 'Directus.youtubeVideosTableSuffix: langId is not set!'
+      let suffix = ''
+      for (let key in YOUTUBE_VIDEOS_TABLES) {
+        if (YOUTUBE_VIDEOS_TABLES[key].includes(langId)) {
+          suffix = `_${key}`
+        }
+      }
+      return suffix
+    },    
+    youtubeVideosTableName(langId) {
+      return `items/youtube_videos${this.youtubeVideosTableSuffix(langId)}`
     }
   })
 }
