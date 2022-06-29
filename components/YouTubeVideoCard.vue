@@ -677,7 +677,7 @@ export default {
     },
     async save(video, limit = false, tries = 0) {
       try {
-        let id = await this.$directus.saveVideo(video, this.$l2, limit, tries);
+        let id = await this.$directus.postVideo(video, this.$l2, limit, tries);
         if (id) {
           Vue.set(video, "id", id);
           this.showSaved = true;

@@ -77,7 +77,16 @@ export default ({ app }, inject) => {
         return false;
       }
     },
-    async saveVideo(video, l2, limit = false, tries = 0) {
+    async deleteVideo() {
+
+    },
+    async patchVideo() {
+
+    },
+    async getVideo() {
+
+    },
+    async postVideo(video, l2, limit = false, tries = 0) {
       let lines = video.subs_l2 || [];
       if (limit) lines = lines.slice(0, limit);
       for (let line of lines) {
