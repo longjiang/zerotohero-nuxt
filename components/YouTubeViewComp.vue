@@ -74,7 +74,6 @@ import DateHelper from "@/lib/date-helper";
 import Config from "@/lib/config";
 import Vue from "vue";
 import { mapState } from "vuex";
-import { parseSavedSubs } from '@/lib/directus'
 
 export default {
   props: {
@@ -481,7 +480,7 @@ export default {
         let video = response.data.data[0];
         for (let field of ["subs_l2", "subs_l1"]) {
           if (video[field] && typeof video[field] === "string") {
-            let savedSubs = parseSavedSubs(video[field]);
+            let savedSubs = YouTube.parseSavedSubs(video[field]);
             if (savedSubs) {
               let filtered = savedSubs.filter(
                 (line) =>

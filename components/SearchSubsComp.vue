@@ -294,7 +294,7 @@
 
 <script>
 import Helper from "@/lib/helper";
-import Directus from "@/lib/directus";
+import YouTube from "@/lib/youtube";
 import {
   NON_PRO_MAX_SUBS_SEARCH_HITS,
   POPULAR_LANGS,
@@ -575,7 +575,7 @@ export default {
       this.excludeTerms = excludeTerms.filter(
         (s) => s !== "" && !this.terms.includes(s)
       );
-      let hits = await Directus.searchSubs({
+      let hits = await YouTube.searchSubs({
         terms: this.terms,
         excludeTerms: this.excludeTerms,
         langId: this.$l2.id,

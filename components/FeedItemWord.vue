@@ -99,7 +99,7 @@
 
 <script>
 import Helper from "@/lib/helper";
-import Directus from "@/lib/directus";
+import YouTube from "@/lib/youtube";
 import { transliterate } from "transliteration";
 
 export default {
@@ -154,7 +154,7 @@ export default {
     },
     async getVideo() {
       try {
-        let hits = await Directus.searchSubs({
+        let hits = await YouTube.searchSubs({
           terms: [this.savedWord.forms[0]],
           langId: this.$l2.id,
           continua: this.$l2.continua,

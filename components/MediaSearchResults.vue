@@ -111,7 +111,7 @@ import SimpleSearch from "@/components/SimpleSearch";
 import Config from "@/lib/config";
 import Helper from "@/lib/helper";
 import YouTube from "@/lib/youtube";
-import { parseSavedSubs } from '@/lib/directus'
+import axios from "axios";
 
 export default {
   components: {
@@ -261,7 +261,7 @@ export default {
           for (let video of videos) {
             try {
               if (video.subs_l2)
-                video.subs_l2 = parseSavedSubs(video.subs_l2);
+                video.subs_l2 = YouTube.parseSavedSubs(video.subs_l2);
             } catch (err) {}
           }
         }

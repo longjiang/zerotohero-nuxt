@@ -79,7 +79,6 @@
 import WordList from "@/components/WordList";
 import Config from "@/lib/config";
 import Helper from "@/lib/helper";
-import { parseSavedSubs } from '@/lib/directus'
 
 export default {
   data() {
@@ -209,7 +208,7 @@ export default {
         if (videos.length > 0) {
           videos = videos.map((video) => {
             if (video.subs_l2) {
-              video.subs_l2 = parseSavedSubs(video.subs_l2);
+              video.subs_l2 = YouTube.parseSavedSubs(video.subs_l2);
               video.matches = this.matchWords(video).filter(
                 (word) => !this.matchedWords.map((w) => w.id).includes(word.id)
               );
