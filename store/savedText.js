@@ -38,7 +38,6 @@ export const mutations = {
     }
     for (let key in item) {
       existing[key] = item[key]
-      console.log(existing)
     }
 
   },
