@@ -96,7 +96,7 @@ export default ({ app }, inject) => {
         console.log({limit, limitQuery})
         let videos = await app.$directus.getVideos({
           l2Id: langId,
-          query: `filter[l2][eq]=${langId}${showFilter}&${subsFilter}${limitQuery}&sort=-date&timestamp=${adminMode ? Date.now() : 0
+          query: `sort=-date${showFilter}${limitQuery}${subsFilter}&timestamp=${adminMode ? Date.now() : 0
           }`
         })
         if (

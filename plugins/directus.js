@@ -130,8 +130,15 @@ export default ({ app }, inject) => {
         return video
       }
     },
-    async getVideos({ l2Id, query } = {}) {
-      let res = await this.get(`${this.youtubeVideosTableName(l2Id)}?${query}`)
+    async getVideos({ l2Id, query = '' } = {}) {
+      if (this.youtubeVideosTableHasOnlyOneLanguage(l2Id)) {
+        // No language filter is necessary since the table only has one language
+      } else {
+        if (query !== '') query += `&`
+        query += `filter[l2][eq]=${l2Id}`
+      }
+      query = query ? '?' + query : ''
+      let res = await this.get(`${this.youtubeVideosTableName(l2Id)}${query}`)
       if (res?.data?.data) {
         let videos = res.data.data
         return videos
@@ -182,7 +189,15 @@ export default ({ app }, inject) => {
         }
       }
       return suffix
-    },    
+    },
+    youtubeVideosTableHasOnlyOneLanguage(langId) {
+      if (!langId) throw 'Directus.youtubeVideosTableHasOnlyOneLanguage: langId is not set!'
+      for (let key in YOUTUBE_VIDEOS_TABLES) {
+        if (YOUTUBE_VIDEOS_TABLES[key].includes(langId)) {
+          return YOUTUBE_VIDEOS_TABLES[key].length === 1
+        }
+      }
+    },
     youtubeVideosTableName(langId) {
       return `items/youtube_videos${this.youtubeVideosTableSuffix(langId)}`
     },
