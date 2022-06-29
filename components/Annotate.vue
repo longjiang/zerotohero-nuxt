@@ -157,6 +157,7 @@ import popupnote from "@/components/PopupNote";
 import readerlink from "@/components/ReaderLink";
 import VRuntimeTemplate from "v-runtime-template";
 import Helper from "@/lib/helper";
+import { breakSentences } from '@/lib/utils/string'
 import { transliterate as tr } from "transliteration";
 import { mapState } from "vuex";
 import { ContainerQuery } from "vue-container-query";
@@ -323,7 +324,7 @@ export default {
       return sentences;
     },
     translationHtml(text) {
-      let sentences = this.breakSentences(text);
+      let sentences = breakSentences(text);
       let html = "";
       for (let s of sentences) {
         html += `<span class="annotate-translation-sentence">${s}</span>`;
@@ -575,12 +576,6 @@ export default {
 
       return node;
     },
-    breakSentences(text) {
-      text = text.replace(/([!?:。！？：])/g, "$1SENTENCEENDING!!!");
-      text = text.replace(/(\. )/g, "$1SENTENCEENDING!!!");
-      let sentences = text.split("SENTENCEENDING!!!");
-      return sentences.filter((sentence) => sentence.trim() !== "");
-    },
     tokenizationType(l2) {
       let tokenizationType = "integral";
       if (l2.continua) {
@@ -706,7 +701,7 @@ export default {
         // break setnences
         let text = node.nodeValue;
         text = text.replace(/\n\u200e/g, "\n"); // Fix error when \n and a left-to-right mark are found together and mess up with the order of words.
-        let sentences = this.breakSentences(text);
+        let sentences = breakSentences(text);
         for (let sentence of sentences) {
           // $(node).before(`<span id="sentence-placeholder-${this.batchId}">${sentence}</span>`)
           let dataSentenceText = this.emitSentenceTextAsAttr

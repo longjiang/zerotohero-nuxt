@@ -96,10 +96,16 @@
               color="#28a745"
               size="5px"
             ></beat-loader>
-            <span
-              v-else-if="translation"
-              v-html="translationHtml(parallellines[lineIndex])"
-            />
+            <template v-else-if="translation && parallellines[lineIndex]">
+              <span
+                class="translation-sentence"
+                v-for="(sentence, index) in parallellines[lineIndex]"
+                :key="`parallel-line-${lineIndex}-sent-${index}`"
+                @click="onTranslationSentenceClick"
+              >
+                {{ sentence }}
+              </span>
+            </template>
           </div>
         </div>
       </div>
@@ -125,7 +131,8 @@
           v-model="goToPage"
           :options="pageOptions"
           class="text-center border-0"
-          style="width: auto; padding-right: 1.25rem !important; margin: auto" />
+          style="width: auto; padding-right: 1.25rem !important; margin: auto"
+        />
         <button
           v-if="Number(page) < pageCount"
           class="btn text-success btn-sm ml-1"
@@ -143,6 +150,7 @@
 import { parse } from "node-html-parser";
 import { ContainerQuery } from "vue-container-query";
 import { timeout } from "@/lib/utils/timeout";
+import { breakSentences } from "@/lib/utils/string";
 import Vue from "vue";
 import BeatLoader from "vue-spinner/src/BeatLoader.vue";
 
@@ -179,6 +187,7 @@ export default {
     return {
       goToPage: this.page, // What the user selects from the dropdown
       current: 0,
+      translationOffset: 0, // When translation and content is out of sync, the user can click on the translation to put them in sync.
       voice: 0,
       speed: 1,
       linesPerPage: 10,
@@ -211,7 +220,10 @@ export default {
     pageOptions() {
       let options = [];
       for (let i = 1; i <= this.pageCount; i++) {
-        options.push({ value: i, text: this.$t('Page') + ` ${i} / ${this.pageCount}` });
+        options.push({
+          value: i,
+          text: this.$t("Page") + ` ${i} / ${this.pageCount}`,
+        });
       }
       return options;
     },
@@ -244,7 +256,7 @@ export default {
             this.linesPerPage * (this.page - 1),
             this.linesPerPage * this.page
           );
-        return parallelLines;
+        return parallelLines.map((l) => breakSentences(l));
       }
     },
   },
@@ -257,8 +269,9 @@ export default {
     },
     page() {
       this.current = 0;
+      this.translationOffset = 0; // When translation and content is out of sync, the user can click on the translation to put them in sync.
       this.translationLoading = {};
-      this.goToPage = this.page
+      this.goToPage = this.page;
     },
     goToPage() {
       this.$emit("goToPage", this.goToPage);
@@ -277,19 +290,14 @@ export default {
     },
   },
   methods: {
-    translationHtml(text) {
-      let sentences = this.breakSentences(text);
-      let html = "";
-      for (let s of sentences) {
-        html += `<span class="translation-sentence">${s}</span>`;
+    onTranslationSentenceClick(e) {
+      if (this.current > 0) {
+        let translationSentences = Array.from(this.$el.querySelectorAll('.translation-sentence'))
+        let translationIndex = translationSentences.findIndex(el => el === e.target)
+        let translationOffset = translationIndex - this.current
+        this.translationOffset = translationOffset
+        this.update()
       }
-      return html;
-    },
-    breakSentences(text) {
-      text = text.replace(/([!?:。！？：])/g, "$1SENTENCEENDING!!!");
-      text = text.replace(/(\. )/g, "$1SENTENCEENDING!!!");
-      let sentences = text.split("SENTENCEENDING!!!");
-      return sentences.filter((sentence) => sentence.trim() !== "");
     },
     onSentenceClick(sentenceEl) {
       let sentences = this.getSentences();
@@ -409,7 +417,7 @@ export default {
       for (let translationSentence of translationSentences) {
         $(translationSentence).removeClass("current");
       }
-      const translationSentence = translationSentences[this.current];
+      const translationSentence = translationSentences[this.current + this.translationOffset];
       $(translationSentence).addClass("current");
     },
     speak(text) {
@@ -482,6 +490,10 @@ export default {
 ::v-deep .translation-sentence.current,
 ::v-deep .annotate-translation-sentence.current {
   background-color: rgba(212, 212, 255, 0.5);
+}
+
+.translation-sentence {
+  cursor: pointer;
 }
 
 .speech-bar {
