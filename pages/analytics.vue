@@ -356,7 +356,7 @@ export default {
       let config = {};
       if (["Music", "Movies", "News"].includes(key)) {
         let collection = "News" === key ? "talk" : "tv_show";
-        let videos = this.$directus.getVideos({l2Id: this.$l2.id, query: `filter[l2][eq]=${row.l2.id}&filter[${collection}.title][eq]=${key}&limit=1&meta=filter_count` })
+        let videos = this.$directus.getVideos({l2Id: row.l2.id, query: `filter[${collection}.title][eq]=${key}&limit=1&meta=filter_count` })
         if (videos) {
           if (videos[0])
             Vue.set(row, `${key}Id`, res.data.data[0][collection]);

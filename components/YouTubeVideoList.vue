@@ -419,7 +419,7 @@ export default {
       for (let youtube_ids of chunks) {
         let query = `filter[youtube_id][in]=${youtube_ids}&fields=id,title,channel_id,youtube_id,tv_show.*,talk.*${
             this.showSubsEditing ? ",subs_l2" : ""
-          }&filter[l2][eq]=${this.$l2.id}&timestamp=${
+          }&timestamp=${
             this.$adminMode ? Date.now() : 0
           }`
         let savedVideos = await this.$directus.getVideos({l2Id: this.$l2.id, query})

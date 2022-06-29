@@ -243,9 +243,7 @@ export default {
       }
       let limit = this.perPage;
 
-      let query = `sort=-id&filter[l2][eq]=${
-        this.$l2.id
-      }${filters}&limit=${limit}&offset=${start}&fields=id,l2,title,youtube_id,tv_show.*,talk.*&timestamp=${
+      let query = `sort=-id${filters}&limit=${limit}&offset=${start}&fields=id,l2,title,youtube_id,tv_show.*,talk.*&timestamp=${
         this.$adminMode ? Date.now() : 0
       }`;
       let videos = await this.$directus.getVideos({ l2Id: this.$l2.id, query });

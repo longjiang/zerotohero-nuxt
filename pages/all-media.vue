@@ -379,7 +379,7 @@ export default {
       // First find videos associated with a particular tv show, or talk
       let videos = await this.$directus.getVideos({
         l2Id: this.$l2.id,
-        query: `sort=${sort}&filter[l2][eq]=${this.$l2.id}&${filter}&limit=${limit}&fields=l2,id,title,youtube_id,tv_show,talk,l2&offset=${offset}`,
+        query: `sort=${sort}&${filter}&limit=${limit}&fields=l2,id,title,youtube_id,tv_show,talk,l2&offset=${offset}`,
       });
       if (videos?.length > 0) {
         videos = Helper.uniqueByValue(videos, "youtube_id");
