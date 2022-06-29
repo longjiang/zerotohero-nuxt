@@ -18,7 +18,7 @@
       </client-only>
       <a
         v-if="edit"
-        :href="`${Config.wikiAdmin}collections/articles/${article.id}`"
+        :href="`${DIRECTUS_ADMIN_URL}collections/articles/${article.id}`"
         class="btn btn-default"
         target="_blank"
       >
@@ -29,14 +29,14 @@
 </template>
 
 <script>
-import Config from "@/lib/config";
 import Helper from "@/lib/helper";
+import { DIRECTUS_ADMIN_URL } from '@/lib/directus'
 
 export default {
   props: ["article", "edit", "social"],
   data() {
     return {
-      Config,
+      DIRECTUS_ADMIN_URL
     };
   },
   computed: {
