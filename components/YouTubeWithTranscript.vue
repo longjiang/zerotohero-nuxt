@@ -23,6 +23,8 @@
           @videoUnavailable="onVideoUnavailable"
           :speed="speed"
           :youtube="video.youtube_id"
+          :controls="controls"
+          :cc="cc"
           :starttime="startTimeOrLineIndex"
           :autoload="autoload"
           :autoplay="autoplay"
@@ -192,6 +194,14 @@ export default {
     },
     showType: {
       type: String,
+    },
+    cc: {
+      type: Boolean, // Whether to show cc inside the iframe player
+      default: true
+    },
+    controls: {
+      type: Boolean,
+      default: true, // Whether or not to show controls in the iframe player
     },
     episodes: {
       type: Array,

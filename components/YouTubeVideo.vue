@@ -50,8 +50,8 @@ export default {
       default: false,
     },
     cc: {
-      type: Boolean,
-      default: true,
+      type: Boolean, // Whether to show cc inside the iframe player
+      default: true
     },
     icon: {
       type: Boolean,
@@ -60,6 +60,10 @@ export default {
     posterOnly: {
       type: Boolean,
       default: false,
+    },
+    controls: {
+      type: Boolean,
+      default: true, // Whether or not to show controls in the iframe player
     },
   },
   data() {
@@ -159,13 +163,17 @@ export default {
             autoplay: this.autoplay ? 1 : 0,
             cc_load_policy: this.cc ? 1 : 0,
             cc_lang_pref: this.langPref,
+            iv_load_policy: 0,
             showinfo: 0,
             playsinline: 1,
+            color: 'white',
+            controls: this.controls ? 1 : 0,
             rel: 0,
             fs: 1,
             hl: this.$l1 ? this.$l1.code : "en",
             iv_load_policy: 3,
             modestbranding: 1,
+            disablekb: 1,
             id,
           },
           events: {
