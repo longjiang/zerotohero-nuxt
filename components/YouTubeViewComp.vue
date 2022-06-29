@@ -299,7 +299,7 @@ export default {
       }
       let response;
       try {
-        response = await axios.get(
+        response = await $directus.get(
           Config.youtubeVideosTableName(this.$l2.id) +
             "?" +
             Helper.queryString(postParams)

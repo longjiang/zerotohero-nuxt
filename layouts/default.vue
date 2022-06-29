@@ -411,16 +411,13 @@ export default {
           } else {
             document.cookie = "directus-zerotohero-session=" + token;
             token = token.replace("Bearer ", "");
-            let userDataRes = await axios
+            let userDataRes = await this.$directus
               .get(
                 `items/user_data?filter[owner][eq]=${
                   user.id
                 }&timestamp=${Date.now()}`,
                 { headers: { Authorization: `Bearer ${token}` } }
               )
-              .catch(async (err) => {
-                Helper.logError(err);
-              });
             if (userDataRes && userDataRes.data && userDataRes.data.data) {
               if (userDataRes.data.data[0]) {
                 let { id, saved_words, saved_phrases, history, progress } =

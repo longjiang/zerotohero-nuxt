@@ -7,18 +7,9 @@ import ModuleLoader from '~/lib/module-loader'
 import WorkerModuleLoader from '~/lib/worker-module-loader'
 import VueMq from 'vue-mq'
 import VueSmoothScroll from 'vue2-smooth-scroll'
-import SmartQuotes from "smartquotes";
-import he from "he"; // html entities
-import YouTube from '@/lib/youtube'
-import Config from '@/lib/config'
-import Helper from '@/lib/helper'
 import Languages from '@/lib/languages'
-import DateHelper from "@/lib/date-helper";
-import axios from 'axios'
 import AsyncComputed from 'vue-async-computed'
 import { i18n } from '~/plugins/i18n.js'
-import { DIRECTUS_API_URL } from '@/lib/directus'
-import { logError } from '@/lib/utils/error'
 
 Vue.config.productionTip = false
 Vue.use(VTooltip)

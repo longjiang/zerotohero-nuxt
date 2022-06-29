@@ -1,3 +1,13 @@
+import DateHelper from "@/lib/date-helper";
+import axios from 'axios'
+import SmartQuotes from "smartquotes";
+import he from "he"; // html entities
+import YouTube from '@/lib/youtube'
+import Config from '@/lib/config'
+import Helper from '@/lib/helper'
+import { DIRECTUS_API_URL } from '@/lib/directus'
+import { logError } from '@/lib/utils/error'
+
 export default ({ app }, inject) => {
   inject('directus', {
     tokenOptions() {
