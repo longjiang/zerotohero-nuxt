@@ -597,7 +597,7 @@ export default {
       video = await this.checkSubsAndAddLocalesIfNeeded(video);
       video = await this.getTranscript(video);
       if (video.subs_l2 && video.subs_l2[0] && video.subs_l2[0].duration) {
-        let subs_l2 = YouTube.unparseSubs(video.subs_l2);
+        let subs_l2 = Subs.unparseSubs(video.subs_l2);
         let data = await this.$directus.patchVideo({
           l2Id: this.$l2.id,
           id: video.id,

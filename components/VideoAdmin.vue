@@ -331,7 +331,7 @@ import { Drag, Drop } from "vue-drag-drop";
 import { parseSync } from "subtitle";
 import Helper from "@/lib/helper";
 import DateHelper from "@/lib/date-helper";
-import Config from "@/lib/config";
+import Subs from "@/lib/subs";
 import YouTube from "@/lib/youtube";
 import Vue from "vue";
 import SmartQuotes from "smartquotes";
@@ -559,10 +559,10 @@ export default {
       this.updating = true;
       let payload = {
         subs_l2: this.video.subs_l2
-          ? YouTube.unparseSubs(this.video.subs_l2, this.$l2.code)
+          ? Subs.unparseSubs(this.video.subs_l2, this.$l2.code)
           : undefined,
         subs_l1: this.video.subs_l1
-          ? YouTube.unparseSubs(this.video.subs_l1)
+          ? Subs.unparseSubs(this.video.subs_l1)
           : undefined,
         notes: this.video.notes
           ? YouTube.unparseNotes(this.video.notes)

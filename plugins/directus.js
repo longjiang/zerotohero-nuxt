@@ -2,7 +2,7 @@ import DateHelper from "@/lib/date-helper";
 import axios from 'axios'
 import SmartQuotes from "smartquotes";
 import he from "he"; // html entities
-import YouTube from '@/lib/youtube'
+import Subs from '@/lib/Subs'
 import Helper from '@/lib/helper'
 import { logError } from '@/lib/utils/error'
 
@@ -146,7 +146,7 @@ export default ({ app }, inject) => {
         let qline = l2.apostrophe ? hline : SmartQuotes.string(hline); // convert to smartquotes
         line.line = qline;
       }
-      let csv = YouTube.unparseSubs(lines, l2.code);
+      let csv = Subs.unparseSubs(lines, l2.code);
       let data = {
         youtube_id: video.youtube_id,
         title: video.title || "Untitled",
