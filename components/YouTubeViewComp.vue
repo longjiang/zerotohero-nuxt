@@ -71,7 +71,7 @@
 import YouTube from "@/lib/youtube";
 import Helper from "@/lib/helper";
 import DateHelper from "@/lib/date-helper";
-import Subs from "@/lib/utils/subs";
+import Subs from "~/lib/subs";
 import Vue from "vue";
 import { mapState } from "vuex";
 
@@ -474,7 +474,7 @@ export default {
             }
           }
         }
-        if (video.notes) video.notes = YouTube.parseNotes(video.notes);
+        if (video.notes) video.notes = Subs.parseNotes(video.notes);
         if (!video.channel && video.channel_id) {
           video.channel = {
             id: video.channel_id,
