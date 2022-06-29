@@ -16,9 +16,16 @@
     <div class="text-center pt-5 pb-5" v-if="!randomShowRandomEpisode">
       <Loader :sticky="true" message="Getting shows..." />
     </div>
-    <LazyYouTubeVideo v-if="randomShowRandomEpisode" layout="vertical"
-      :youtube="randomShowRandomEpisode.youtube_id" :ref="`youtube`" :autoload="true" :autoplay="true"
-      :startAtRandomTime="true" @currentTime="updateCurrentTime" />
+    <LazyYouTubeVideo
+      v-if="randomShowRandomEpisode"
+      layout="vertical"
+      :youtube="randomShowRandomEpisode.youtube_id"
+      :ref="`youtube`"
+      :autoload="true"
+      :autoplay="true"
+      :startAtRandomTime="true"
+      @currentTime="updateCurrentTime"
+    />
     <div class="text-center pt-3 pb-3" v-if="randomShowRandomEpisode">
       <b-button
         variant="ghost-dark-no-bg"
@@ -65,11 +72,11 @@ export default {
       default: undefined,
     },
     l1: {
-      default: undefined
+      default: undefined,
     },
     l2: {
-      default: undefined
-    }
+      default: undefined,
+    },
   },
   data() {
     return {
@@ -121,7 +128,8 @@ export default {
       let randomShow = this.getRandomShow();
       let randomShowRandomEpisode = await this.getRandomEpisodeOfShow(
         randomShow ? randomShow.id : undefined,
-        this.routeType.replace(/s$/, "").replace("-", "_"), randomShow ? randomShow.l2 : this.l2 ? this.l2.id : undefined
+        this.routeType.replace(/s$/, "").replace("-", "_"),
+        randomShow ? randomShow.l2 : this.l2 ? this.l2.id : undefined
       );
       this.randomShow = randomShow;
       this.randomShowRandomEpisode = randomShowRandomEpisode;
@@ -152,26 +160,20 @@ export default {
       }
     },
     async getFirstEpisodeOfShow(showId, showType, l2Id) {
-      let params = {}
-      params[`filter[${showType}][eq]`] = showId
-      params['fields'] = 'youtube_id,id,l2'
-      let videos = await this.$directus.getVideos({ l2Id, params })
+      let query = `filter[${showType}][eq]=${showId}&fields=youtube_id,id,l2`;
+      let videos = await this.$directus.getVideos({ l2Id, query });
       let firstEpisode = videos[0];
       return firstEpisode;
     },
     async getRandomEpisodeOfShow(showId, showType, l2Id) {
-      let langFilter = l2Id ? `&filter[l2][eq]=${l2Id}` : ''
+      let langFilter = l2Id ? `&filter[l2][eq]=${l2Id}` : "";
       let showFilter = showId
         ? `filter[${showType}][eq]=${showId}`
         : `filter[tv_show][null]=1&filter[talk][null]=1${langFilter}`;
-      let path = `${Config.youtubeVideosTableName(l2Id)}?${showFilter}&fields=youtube_id,id,l2`;
-      let response = await this.$directus.get(path);
-
-      if (response.data && response.data.data.length > 0) {
-        let videos = response.data.data;
-        let randomEpisode = videos[Math.floor(Math.random() * videos.length)];
-        return randomEpisode;
-      }
+      let query = `${showFilter}&fields=youtube_id,id,l2`;
+      let videos = await this.$directus.getVideos({ l2Id, query });
+      let randomEpisode = videos[Math.floor(Math.random() * videos.length)];
+      return randomEpisode;
     },
   },
 };

@@ -87,8 +87,8 @@ export default ({ app }, inject) => {
     async getVideo() {
 
     },
-    async getVideos({ l2Id, params } = {}) {
-      let res = await this.get(`${Config.youtubeVideosTableName(l2Id)}`, params)
+    async getVideos({ l2Id, query } = {}) {
+      let res = await this.get(`${Config.youtubeVideosTableName(l2Id)}?${query}`)
       if (res?.data?.data) {
         let videos = res.data.data
         return videos
