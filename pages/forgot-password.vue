@@ -133,7 +133,7 @@ export default {
         this.emailSending = true;
         let host = process.server ? process.env.baseUrl : window.location.protocol + '//' + window.location.hostname + ':' + window.location.port
         let res = await axios.post(
-          `${Config.wiki}auth/password/request`,
+          `auth/password/request`,
           {
             email: this.form.email,
             reset_url: `${host}/password-reset`,

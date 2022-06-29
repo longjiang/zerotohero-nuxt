@@ -56,8 +56,8 @@ export default {
     async loadVariants() {
       let variants = await (await this.$getUnihan()).variants(this.text);
       for (let variant of variants) {
-        let response = await this.$authios.get(
-          `${Config.wiki}items/hsk_cedict?filter[traditional][eq]=${variant}`
+        let response = await this.$directus.get(
+          `items/hsk_cedict?filter[traditional][eq]=${variant}`
         );
         this.words = this.words.concat(response.data.data);
       }

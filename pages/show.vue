@@ -314,8 +314,8 @@ export default {
       let newTitle = e.target.innerText;
       if (this.show.title !== newTitle) {
         try {
-          let response = await this.$authios.patch(
-            `${Config.wiki}items/${this.collection}s/${this.show.id}`,
+          let response = await this.$directus.patch(
+            `items/${this.collection}s/${this.show.id}`,
             { title: newTitle },
             { contentType: "application/json" }
           );
@@ -335,8 +335,8 @@ export default {
       let newCover = e.target.innerText;
       if (this.show.title !== newCover) {
         try {
-          let response = await this.$authios.patch(
-            `${Config.wiki}items/${this.collection}s/${this.show.id}`,
+          let response = await this.$directus.patch(
+            `items/${this.collection}s/${this.show.id}`,
             { youtube_id: newCover },
             { contentType: "application/json" }
           );
@@ -364,8 +364,8 @@ export default {
       }
     },
     async getShowFromServer(id, collection) {
-      let response = await this.$authios.get(
-        `${Config.wiki}items/${collection}s/${id}`
+      let response = await this.$directus.get(
+        `items/${collection}s/${id}`
       );
       if (response && response.data) {
         return response.data.data;
@@ -409,7 +409,7 @@ export default {
     },
     async getVideosFromServer({ keyword, limit, offset, sort } = {}) {
       let keywordFilter = keyword ? `&filter[title][contains]=${keyword}` : "";
-      let response = await this.$authios.get(
+      let response = await this.$directus.get(
         `${Config.youtubeVideosTableName(this.$l2.id)}?filter[l2][eq]=${
           this.$l2.id
         }&filter[${this.collection}][eq]=${

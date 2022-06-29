@@ -130,11 +130,8 @@ export const actions = {
     if (user && user.id && dataId && token) {
       token = token.replace('Bearer ', '')
       let payload = { saved_phrases: localStorage.getItem('zthSavedPhrases') }
-      let url = `${Config.wiki}items/user_data/${dataId}?fields=id`
-      await this.$authios.patch(url, payload)
-        .catch(async (err) => {
-          console.log('Axios error in savedPhrases.js: err, url, payload', err, url, payload)
-        })
+      let path = `items/user_data/${dataId}?fields=id`
+      await this.$directus.patch(path, payload)
     }
   },
   async importFromJSON({ commit, dispatch }, json) {

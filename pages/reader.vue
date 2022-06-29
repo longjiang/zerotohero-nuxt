@@ -224,7 +224,7 @@ export default {
     if (method === "shared") {
       try {
         let id = arg;
-        let res = await this.$authios.get(`${Config.wiki}items/text/${id}`);
+        let res = await this.$directus.get(`items/text/${id}`);
         if (res && res.data && res.data.data) {
           text = res.data.data.text;
           translation = res.data.data.translation;
@@ -315,7 +315,7 @@ export default {
     async upload() {
       this.sharing = true;
       try {
-        let res = await this.$authios.post(`${Config.wiki}items/text`, {
+        let res = await this.$directus.post(`items/text`, {
           title: this.title,
           text: this.text,
           translation: this.translation,

@@ -214,13 +214,13 @@ export default {
     };
   },
   async fetch() {
-    let lesson = await this.$authios.get(`${Config.wiki}items/tutoring_kit/${this.id}`);
+    let lesson = await this.$directus.get(`items/tutoring_kit/${this.id}`);
     lesson = lesson.data.data;
-    let readings = await this.$authios.get(
-      `${Config.wiki}items/reading?filter[l2][eq]=${this.$l2.id}&filter[lesson][eq]=${this.id}`
+    let readings = await this.$directus.get(
+      `items/reading?filter[l2][eq]=${this.$l2.id}&filter[lesson][eq]=${this.id}`
     );
     readings = readings.data.data;
-    let youtubeVideos = await this.$authios.get(
+    let youtubeVideos = await this.$directus.get(
       `${Config.youtubeVideosTableName(this.$l2.id)}?filter[l2][eq]=${this.$l2.id}&filter[lesson][eq]=${this.id}`
     );
     youtubeVideos = youtubeVideos.data.data.map((video) => {

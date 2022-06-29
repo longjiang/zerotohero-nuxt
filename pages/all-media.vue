@@ -379,7 +379,7 @@ export default {
         if (tvShow) filter = `filter[tv_show][eq]=${tvShow}`;
         if (talk) filter = `filter[talk][eq]=${talk}`;
         // First find videos associated with a particular tv show, or talk
-        let response = await this.$authios.get(
+        let response = await this.$directus.get(
           `${Config.youtubeVideosTableName(
             this.$l2.id
           )}?sort=${sort}&filter[l2][eq]=${

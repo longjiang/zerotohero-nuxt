@@ -147,8 +147,8 @@ export default {
       if (this.type !== "all") {
         filters += "&filter[type][eq]=" + this.type;
       }
-      let response = await this.$authios.get(
-        `${Config.wiki}items/resources?filter[l2][eq]=${this.$l2.id}${filters}&fields=*,thumbnail.*`
+      let response = await this.$directus.get(
+        `items/resources?filter[l2][eq]=${this.$l2.id}${filters}&fields=*,thumbnail.*`
       );
       this.resources =
         response.data.data.map((resource) => {

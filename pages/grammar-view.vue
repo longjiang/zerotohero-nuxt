@@ -149,8 +149,8 @@ export default {
     },
     async getDrill(grammarID) {
       try {
-        let response = await this.$authios.get(
-          `${Config.wiki}items/drills?filter[grammar_id][eq]=${grammarID}&fields=*,file.*`
+        let response = await this.$directus.get(
+          `items/drills?filter[grammar_id][eq]=${grammarID}&fields=*,file.*`
         );
         response = response.data;
         if (response && response.data && response.data[0]) {

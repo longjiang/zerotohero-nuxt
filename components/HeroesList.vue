@@ -79,8 +79,8 @@ export default {
     },
   },
   async fetch() {
-    let response = await this.$authios.get(
-      `${Config.wiki}items/heroes?fields=*,avatar.*`
+    let response = await this.$directus.get(
+      `items/heroes?fields=*,avatar.*`
     );
     this.heroes = response.data.data
       .sort((a, b) => {

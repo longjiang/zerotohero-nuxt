@@ -224,7 +224,7 @@ export default {
         else if (show.startsWith("talk-"))
           showFilter = `&filter[talk][eq]=${show.replace("talk-", "")}`;
       }
-      let response = await this.$authios.get(
+      let response = await this.$directus.get(
         `${Config.youtubeVideosTableName(this.$l2.id)}?sort=-id&limit=${limit}&offset=${start}&filter[l2][eq]=${this.$l2.id}${showFilter}&fields=*,tv_show.*,talk.*`
       );
       let videos = response.data.data || [];

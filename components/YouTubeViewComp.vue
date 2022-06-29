@@ -458,7 +458,7 @@ export default {
     async getSaved() {
       let response;
       try {
-        response = await this.$authios.get(
+        response = await this.$directus.get(
           `${Config.youtubeVideosTableName(
             this.$l2.id
           )}?filter[youtube_id][eq]=${
@@ -595,7 +595,7 @@ export default {
       }
     },
     async patchChannelID(video, channelId) {
-      let response = await this.$authios.patch(
+      let response = await this.$directus.patch(
         `${Config.youtubeVideosTableName(this.$l2.id)}/${
           video.id
         }?fields=id,channel_id`,
@@ -615,7 +615,7 @@ export default {
       if (video.subs_l2 && video.subs_l2[0] && video.subs_l2[0].duration) {
         let subs_l2 = YouTube.unparseSubs(video.subs_l2);
         try {
-          await this.$authios.patch(
+          await this.$directus.patch(
             `${Config.youtubeVideosTableName(this.$l2.id)}/${
               video.id
             }?fields=id`,

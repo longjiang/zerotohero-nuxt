@@ -485,7 +485,7 @@ export default {
         if (this.video.id) {
           let data = {};
           data[type] = show.id;
-          let response = await this.$authios.patch(
+          let response = await this.$directus.patch(
             `${Config.youtubeVideosTableName(
               this.video.l2 ? this.video.l2.id || this.video.l2 : this.$l2.id
             )}/${this.video.id}?fields=id`,
@@ -502,7 +502,7 @@ export default {
     async unassignShow(type) {
       let data = {};
       data[type] = null;
-      let response = await this.$authios.patch(
+      let response = await this.$directus.patch(
         `${Config.youtubeVideosTableName(
           this.video.l2 ? this.video.l2.id || this.video.l2 : this.$l2.id
         )}/${this.video.id}`,
@@ -516,7 +516,7 @@ export default {
       let newTitle = e.target.innerText;
       if (this.video.title !== newTitle) {
         try {
-          let response = await this.$authios.patch(
+          let response = await this.$directus.patch(
             `${Config.youtubeVideosTableName(
               this.video.l2 ? this.video.l2.id || this.video.l2 : this.$l2.id
             )}/${this.video.id}`,
@@ -555,7 +555,7 @@ export default {
     async remove() {
       if (this.video.id) {
         try {
-          let response = await this.$authios.delete(
+          let response = await this.$directus.delete(
             `${Config.youtubeVideosTableName(
               this.video.l2 ? this.video.l2.id || this.video.l2 : this.$l2.id
             )}/${this.video.id}`
@@ -570,7 +570,7 @@ export default {
       return true;
     },
     async updateSubs() {
-      let response = await this.$authios.patch(
+      let response = await this.$directus.patch(
         `${Config.youtubeVideosTableName(
           this.video.l2 ? this.video.l2.id || this.video.l2 : this.$l2.id
         )}/${this.video.id}`,
@@ -638,7 +638,7 @@ export default {
     },
     async addChannelID(video) {
       let channelId = await this.getChannelID(video);
-      let response = await this.$authios.patch(
+      let response = await this.$directus.patch(
         `${Config.youtubeVideosTableName(
           this.video.l2 ? this.video.l2.id || this.video.l2 : this.$l2.id
         )}/${video.id}`,

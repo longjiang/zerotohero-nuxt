@@ -113,7 +113,7 @@ export default {
       try {
         this.resetting = true;
         let res = await axios.post(
-          `${Config.wiki}auth/password/reset`,
+          `auth/password/reset`,
           {
             token: this.token,
             password: this.form.password,

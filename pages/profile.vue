@@ -265,12 +265,12 @@ export default {
       if (
         confirm(`Are you sure you want to permanently delete your account?`)
       ) {
-        let res = await this.$authios.get(`${Config.wiki}users/me`);
+        let res = await this.$directus.get(`users/me`);
         let user = res?.data?.data;
         if (user) {
           if (user.role !== 1) {
-            let url = `${Config.wiki}users/${user.id}`;
-            res = await this.$authios.patch(url, { status: "inactive" });
+            let url = `users/${user.id}`;
+            res = await this.$directus.patch(url, { status: "inactive" });
             this.$toast.success("Success: User account has been deleted.", {
               duration: 5000,
             });

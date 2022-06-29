@@ -36,8 +36,8 @@ export default {
   },
   methods: {
     async load() {
-      let response = await this.$authios.get(
-        `${Config.wiki}items/pages/${this.id}?${Date.now()}`
+      let response = await this.$directus.get(
+        `items/pages/${this.id}?${Date.now()}`
       );
       response = response.data
       this.title = response.data.title;

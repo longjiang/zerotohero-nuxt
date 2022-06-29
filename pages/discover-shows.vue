@@ -72,8 +72,8 @@ export default {
   methods: {
     async getLastShowId() {
       let key = this.type.replace("-", "_");
-      let res = await this.$authios.get(
-        `${Config.wiki}items/${key}?filter[title][nin]=Movies,Music,News&sort=-id&limit=1`
+      let res = await this.$directus.get(
+        `items/${key}?filter[title][nin]=Movies,Music,News&sort=-id&limit=1`
       );
       if (res && res.data && res.data.data && res.data.data[0]) {
         return res.data.data[0].id;
@@ -87,8 +87,8 @@ export default {
       return Helper.unique(randIds);
     },
     async loadRandomShowsMatchingIds(ids, adminMode) {
-      let response = await this.$authios.get(
-        `${Config.wiki}items/tv_shows?filter${
+      let response = await this.$directus.get(
+        `items/tv_shows?filter${
           adminMode ? "" : "&filter[hidden][empty]=true"
         }&filter[id][in]=${ids.join(
           ","

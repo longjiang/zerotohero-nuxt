@@ -51,8 +51,8 @@ export default {
     async loadVariants() {
       let variants = await (await this.$getUnihan()).variants(this.text)
       for (let variant of variants) {
-        let response = await this.$authios.get(
-          `${Config.wiki}items/kengdic?filter[hanja][eq]=${variant}`
+        let response = await this.$directus.get(
+          `items/kengdic?filter[hanja][eq]=${variant}`
         )
         response = response.data
         this.words = this.words.concat(response.data)

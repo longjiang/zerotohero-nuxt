@@ -111,8 +111,8 @@ export const actions = {
   async fetchProgressFromServer() {
     if (!$nuxt.$auth.loggedIn) return
     let dataId = this.$auth.$storage.getUniversal('dataId');
-    let url = `${Config.wiki}items/user_data/${dataId}?fields=id,progress`
-    let res = await this.$authios.get(url)
+    let path = `items/user_data/${dataId}?fields=id,progress`
+    let res = await this.$directus.get(path)
       .catch(async (err) => {
         Helper.logError(err, 'progress.js: setTime()')
       })
@@ -158,9 +158,9 @@ export const actions = {
     let dataId = this.$auth.$storage.getUniversal('dataId');
     if (user && user.id && dataId && token) {
       let payload = { progress: localStorage.getItem('zthProgress') }
-      let url = `${Config.wiki}items/user_data/${dataId}?fields=id`
+      let path = `items/user_data/${dataId}?fields=id`
       console.log('🕙 Saving progress to the server...')
-      await this.$authios.patch(url, payload)
+      await this.$directus.patch(path, payload)
         .catch(async (err) => {
           Helper.logError(err, 'progress.js: push()')
         })

@@ -275,8 +275,8 @@ export default {
   },
   methods: {
     async loadExams() {
-      let response = await this.$authios.get(
-        `${Config.wiki}items/exams?filter[l2][eq]=${this.$l2.id}`
+      let response = await this.$directus.get(
+        `items/exams?filter[l2][eq]=${this.$l2.id}`
       );
       response = response.data;
       let exams = response.data || [];
@@ -292,8 +292,8 @@ export default {
       return result;
     },
     async loadCourses() {
-      let response = await this.$authios.get(
-        `${Config.wiki}items/resources?filter[l2][eq]=${this.$l2.id}&filter[type][eq]=courses&filter[featured][eq]=1&fields=*,thumbnail.*`
+      let response = await this.$directus.get(
+        `items/resources?filter[l2][eq]=${this.$l2.id}&filter[type][eq]=courses&filter[featured][eq]=1&fields=*,thumbnail.*`
       );
       response = response.data;
       let courses = response.data || [];
@@ -309,8 +309,8 @@ export default {
       return result;
     },
     async loadResources() {
-      let response = await this.$authios.get(
-        `${Config.wiki}items/resources?filter[l2][eq]=${this.$l2.id}&filter[type][neq]=courses&filter[featured][eq]=1&fields=*,thumbnail.*`
+      let response = await this.$directus.get(
+        `items/resources?filter[l2][eq]=${this.$l2.id}&filter[type][neq]=courses&filter[featured][eq]=1&fields=*,thumbnail.*`
       );
       response = response.data;
       let result = {};

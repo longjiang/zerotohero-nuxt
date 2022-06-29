@@ -134,7 +134,7 @@ export default {
             data: this.form,
           });
           if (response && response.data) {
-            response = await this.$authios.get(`${Config.wiki}users/me`);
+            response = await this.$directus.get(`users/me`);
             if (response.data && response.data.data) {
               let user = response.data.data;
               this.$auth.setUser(user);

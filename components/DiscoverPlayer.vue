@@ -127,7 +127,7 @@ export default {
       return Helper.l1Code(...arguments);
     },
     async removeEpisode(randomShowRandomEpisode) {
-      let response = await this.$authios.delete(
+      let response = await this.$directus.delete(
         `${Config.youtubeVideosTableName(randomShowRandomEpisode.l2)}/${randomShowRandomEpisode.id}`
       );
       
@@ -171,7 +171,7 @@ export default {
     },
     async getFirstEpisodeOfShow(showId, showType, l2Id) {
       let url = `${Config.youtubeVideosTableName(l2Id)}?filter[${showType}][eq]=${showId}&fields=youtube_id,id,l2`;
-      let response = await this.$authios.get(url);
+      let response = await this.$directus.get(url);
 
       if (response.data && response.data.data.length > 0) {
         let videos = response.data.data;
@@ -184,8 +184,8 @@ export default {
       let showFilter = showId
         ? `filter[${showType}][eq]=${showId}`
         : `filter[tv_show][null]=1&filter[talk][null]=1${langFilter}`;
-      let url = `${Config.youtubeVideosTableName(l2Id)}?${showFilter}&fields=youtube_id,id,l2`;
-      let response = await this.$authios.get(url);
+      let path = `${Config.youtubeVideosTableName(l2Id)}?${showFilter}&fields=youtube_id,id,l2`;
+      let response = await this.$directus.get(path);
 
       if (response.data && response.data.data.length > 0) {
         let videos = response.data.data;

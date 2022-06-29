@@ -41,8 +41,8 @@ export default {
   },
   async mounted() {
     try {
-      let res = await this.$authios.get(
-        `${Config.wiki}items/unavailable_videos?fields=youtube_id,l2,created_on&sort=-created_on&timestamp=${Date.now()}`
+      let res = await this.$directus.get(
+        `items/unavailable_videos?fields=youtube_id,l2,created_on&sort=-created_on&timestamp=${Date.now()}`
       );
       if (res) {
         let reports = res.data.data;
@@ -63,7 +63,7 @@ export default {
       for (let table of dbTablesOfReportedLanguages) {
         let url = `${table}?filter[youtube_id][in]=${reportedYouTubeIds}&fields=id,youtube_id,title,tv_show,talk,l2`;
         try {
-          let res = await this.$authios.get(url);
+          let res = await this.$directus.get(url);
           if (res && res.data) videos = videos.concat(res.data.data);
         } catch (err) {
           Helper.logError(err);

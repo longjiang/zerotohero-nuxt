@@ -20,7 +20,7 @@ export const actions = {
     if (state.statsLoaded[l2.code]) return
     try {
       let stats = {}
-      let tableSuffix = Config.youtubeVideosTableName(l2.id).replace(`${Config.wiki}items/youtube_videos`, '')
+      let tableSuffix = Config.youtubeVideosTableName(l2.id).replace(`items/youtube_videos`, '')
       let data = await Helper.proxy(
         `https://directusvps.zerotohero.ca/count.php?table_suffix=${tableSuffix}&lang_id=${l2.id}&type=new_videos`,
         { cacheLife: adminMode ? 0 : 86400 } // cache the count for one day (86400 seconds)

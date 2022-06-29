@@ -55,10 +55,10 @@ export const loadFromServer = async ({ l2, adminMode }) => {
   let items = []
   if ($nuxt.$auth.loggedIn) {
     try {
-      let url = `${Config.wiki}items/text?sort=title&filter[l2][eq]=${l2.id
+      let path = `items/text?sort=title&filter[l2][eq]=${l2.id
         }&filter[owner][eq]=${$nuxt.$auth.user.id}&fields=id,title&timestamp=${Date.now()}`
-      console.log(`savedTexts store: getting saved texts from ${url}`)
-      let res = await $nuxt.$authios.get(url);
+      console.log(`savedTexts store: getting saved texts from ${path}`)
+      let res = await $nuxt.$directus.get(path);
       items = res?.data?.data || []
       console.log('savedTexts store: got items:', { items })
     } catch (e) {
@@ -88,8 +88,8 @@ export const actions = {
   },
   async loadItem({ commit }, { l2, id, adminMode }) {
     if ($nuxt.$auth.loggedIn) {
-      let url = `${Config.wiki}items/text/${id}?timestamp=${Date.now()}`;
-      let res = await $nuxt.$authios.get(url);
+      let path = `items/text/${id}?timestamp=${Date.now()}`;
+      let res = await $nuxt.$directus.get(path);
       if (res.data && res.data.data) {
         let data = res.data.data;
         commit('LOAD_ITEM', { l2, id, data })
@@ -99,8 +99,8 @@ export const actions = {
   async add({ commit }, { l2, item }) {
     item = item || { text: '', translation: '', title: 'Untitled', l2: l2.id }
     if ($nuxt.$auth.loggedIn) {
-      let response = await $nuxt.$authios.post(
-        `${Config.wiki}items/text`,
+      let response = await $nuxt.$directus.post(
+        `items/text`,
         item
       );
       if (response?.data) {
@@ -113,8 +113,8 @@ export const actions = {
   },
   async remove({ commit }, { l2, itemId }) {
     if ($nuxt.$auth.loggedIn) {
-      let response = await $nuxt.$authios.delete(
-        `${Config.wiki}items/text/${itemId}`
+      let response = await $nuxt.$directus.delete(
+        `items/text/${itemId}`
       );
       if (response?.data) {
         return response.data
@@ -125,8 +125,8 @@ export const actions = {
   },
   async update({ commit }, { l2, item }) {
     if ($nuxt.$auth.loggedIn) {
-      let response = await $nuxt.$authios.patch(
-        `${Config.wiki}items/text/${item.id}`,
+      let response = await $nuxt.$directus.patch(
+        `items/text/${item.id}`,
         item
       );
     }

@@ -303,8 +303,8 @@ export default {
     async getShowsOverNetwork() {
       let langId = this.$l2.id;
       let type = this.routeType.replace("-", "_");
-      let url = `${Config.wiki}items/${type}?filter[l2][eq]=${langId}&fields=id,title`;
-      let response = await this.$authios.get(url);
+      let path = `items/${type}?filter[l2][eq]=${langId}&fields=id,title`;
+      let response = await this.$directus.get(path);
       if (response.data && response.data.data.length > 1) {
         let shows = response.data.data;
         return shows;
@@ -345,7 +345,7 @@ export default {
       )}?filter[${showType}][eq]=${
         show.id
       }&limit=1&fields=youtube_id,id,l2,tv_show,talk,title&sort=${sort}`;
-      let response = await this.$authios.get(url);
+      let response = await this.$directus.get(url);
 
       if (response.data && response.data.data.length > 0) {
         let videos = response.data.data;

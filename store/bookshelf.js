@@ -104,11 +104,8 @@ export const actions = {
     let dataId = this.$auth.$storage.getUniversal('dataId');
     if (user && user.id && dataId && token) {
       let payload = { bookshelf: localStorage.getItem('zthBookshelf') }
-      let url = `${Config.wiki}items/user_data/${dataId}?fields=id`
-      await this.$authios.patch(url, payload)
-        .catch(async (err) => {
-          console.log('Axios error in item.js: err, url, payload', err, url, payload)
-        })
+      let path = `items/user_data/${dataId}?fields=id`
+      await this.$directus.patch(path, payload)
     }
   }
 }

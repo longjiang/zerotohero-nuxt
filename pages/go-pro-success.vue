@@ -67,7 +67,7 @@ export default {
   },
   async mounted() {
     if (this.$auth.loggedIn) {
-      let response = await this.$authios.get(`${Config.wiki}users/me`);
+      let response = await this.$directus.get(`users/me`);
       if (response.data && response.data.data) {
         let user = response.data.data;
         this.$auth.setUser(user);

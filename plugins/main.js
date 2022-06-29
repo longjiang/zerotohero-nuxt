@@ -9,7 +9,6 @@ import VueMq from 'vue-mq'
 import VueSmoothScroll from 'vue2-smooth-scroll'
 import SmartQuotes from "smartquotes";
 import he from "he"; // html entities
-import { i18n } from '~/plugins/i18n.js'
 import YouTube from '@/lib/youtube'
 import Config from '@/lib/config'
 import Helper from '@/lib/helper'
@@ -17,6 +16,9 @@ import Languages from '@/lib/languages'
 import DateHelper from "@/lib/date-helper";
 import axios from 'axios'
 import AsyncComputed from 'vue-async-computed'
+import { i18n } from '~/plugins/i18n.js'
+import { DIRECTUS_API_URL } from '@/lib/directus'
+import { logError } from '@/lib/utils/error'
 
 Vue.config.productionTip = false
 Vue.use(VTooltip)
@@ -115,7 +117,7 @@ export default async ({ app, store, route }, inject) => {
       */
     }
   })
-  inject('authios', {
+  inject('directus', {
     tokenOptions() {
       let token = app.$auth.strategy.token.get()
       if (token) {
@@ -133,24 +135,22 @@ export default async ({ app, store, route }, inject) => {
       let joiner = url.includes('?') ? '&' : '?'
       return url + joiner + `cors=${this.host}`
     },
-    async patch(url, payload) {
-      let res = await axios.patch(this.appendHostCors(url), payload, this.tokenOptions())
+    async patch(path, payload) {
+      let res = await axios.patch(this.appendHostCors(DIRECTUS_API_URL + path), payload, this.tokenOptions()).catch(err => logError(err))
       if (res) return res
     },
-    async post(url, payload) {
-      let res = await axios.post(this.appendHostCors(url), payload, this.tokenOptions())
+    async post(path, payload) {
+      let res = await axios.post(this.appendHostCors(DIRECTUS_API_URL + path), payload, this.tokenOptions()).catch(err => logError(err))
       if (res) return res
     },
-    async delete(url, payload) {
-      let res = await axios.delete(this.appendHostCors(url), this.tokenOptions())
+    async delete(path) {
+      let res = await axios.delete(this.appendHostCors(DIRECTUS_API_URL + path), this.tokenOptions()).catch(err => logError(err))
       if (res) return res
     },
-    async get(url, payload) {
-      let res = await axios.get(this.appendHostCors(url), this.tokenOptions())
+    async get(path) {
+      let res = await axios.get(this.appendHostCors(DIRECTUS_API_URL + path), this.tokenOptions()).catch(err => logError(err))
       if (res) return res
-    }
-  })
-  inject('directus', {
+    },
     /**
      * Count the number of episodes in a show
      * @param {string} showType 'tv_show' or 'talk'
@@ -159,7 +159,7 @@ export default async ({ app, store, route }, inject) => {
      * @returns 
      */
     async countShowEpisodes(showType, showId, l2Id, adminMode = false) {
-      let tableSuffix = Config.youtubeVideosTableName(l2Id).replace(`${Config.wiki}items/youtube_videos`, '')
+      let tableSuffix = Config.youtubeVideosTableName(l2Id).replace(`items/youtube_videos`, '')
       let data = await Helper.proxy(
         `https://directusvps.zerotohero.ca/count.php?table_suffix=${tableSuffix}&lang_id=${l2Id}&type=${showType}&id=${showId}`,
         { cacheLife: adminMode ? 0 : 86400 } // cache the count for one day (86400 seconds)
@@ -173,7 +173,7 @@ export default async ({ app, store, route }, inject) => {
         langId
       )}?filter[l2][eq]=${langId}${showFilter}&filter[youtube_id][contains]=${randBase64Char}&fields=youtube_id`;
       try {
-        let response = await app.$authios.get(url);
+        let response = await this.get(url);
         if (response.data && response.data.data.length > 0) {
           response = response.data;
           let randomVideo =
@@ -204,7 +204,7 @@ export default async ({ app, store, route }, inject) => {
       if (video.tv_show) data.tv_show = video.tv_show.id;
       if (video.talk) data.talk = video.talk.id;
       try {
-        let response = await app.$authios.post(
+        let response = await this.post(
           `${Config.youtubeVideosTableName(l2.id)}?fields=id,tv_show.*,talk.*`,
           data
         );

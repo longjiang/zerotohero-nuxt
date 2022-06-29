@@ -376,8 +376,8 @@ export default {
     },
     // Initialize the user data record if there isn't one
     async createNewUserDataRecord(token, payload = {}) {
-      let res = await this.$authios
-        .post(`${Config.wiki}items/user_data`, payload)
+      let res = await this.$directus
+        .post(`items/user_data`, payload)
         .catch((err) => {
           console.log(
             "Axios error in savedWords.js: err, url, payload",
@@ -413,7 +413,7 @@ export default {
             token = token.replace("Bearer ", "");
             let userDataRes = await axios
               .get(
-                `${Config.wiki}items/user_data?filter[owner][eq]=${
+                `items/user_data?filter[owner][eq]=${
                   user.id
                 }&timestamp=${Date.now()}`,
                 { headers: { Authorization: `Bearer ${token}` } }

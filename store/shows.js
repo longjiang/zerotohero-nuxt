@@ -65,8 +65,8 @@ export const actions = {
     let talks = []
     try {
 
-      let response = await this.$authios.get(
-        `${Config.wiki}items/tv_shows?filter[l2][eq]=${l2.id
+      let response = await this.$directus.get(
+        `items/tv_shows?filter[l2][eq]=${l2.id
         }${adminMode ? '' : '&filter[hidden][empty]=true'}&limit=${limit}&timestamp=${adminMode ? Date.now() : 0}`
       );
 
@@ -81,8 +81,8 @@ export const actions = {
         });
       }
 
-      response = await this.$authios.get(
-        `${Config.wiki}items/talks?filter[l2][eq]=${l2.id
+      response = await this.$directus.get(
+        `items/talks?filter[l2][eq]=${l2.id
         }${adminMode ? '' : '&filter[hidden][empty]=true'}&limit=${limit}&timestamp=${adminMode ? Date.now() : 0}`
       );
       if (response.data.data) {
@@ -109,8 +109,8 @@ export const actions = {
     context.commit('LOAD_SHOWS', { l2, tvShows, talks })
   },
   async add(context, { l2, type, show }) {
-    let response = await this.$authios.post(
-      `${Config.wiki}items/${type === 'tvShows' ? 'tv_shows' : 'talks'}`,
+    let response = await this.$directus.post(
+      `items/${type === 'tvShows' ? 'tv_shows' : 'talks'}`,
       show
     );
     if (response && response.data) {
@@ -125,8 +125,8 @@ export const actions = {
     let token = $nuxt.$auth.strategy.token.get()
     if (!token) return
     token = token.replace('Bearer ', '')
-    let response = await this.$authios.delete(
-      `${Config.wiki}items/${type === 'tvShows' ? 'tv_shows' : 'talks'}/${show.id}`
+    let response = await this.$directus.delete(
+      `items/${type === 'tvShows' ? 'tv_shows' : 'talks'}/${show.id}`
     );
     // response.data could be "" (empty string), which evaluates to undefined.
     if (response) {

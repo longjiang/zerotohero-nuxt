@@ -68,8 +68,8 @@ export default {
         let kyujitai = new Kyujitai(async (error) => {
           this.shinjitai = kyujitai.decode(variant);
           if (this.shinjitai) {
-            let response = await this.$authios.get(
-              `${Config.wiki}items/edict?filter[kanji][eq]=${this.shinjitai}`
+            let response = await this.$directus.get(
+              `items/edict?filter[kanji][eq]=${this.shinjitai}`
             );
             if (response.data.data.length > 0) {
               let data = response.data.data.filter((row) => {

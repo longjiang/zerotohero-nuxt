@@ -483,7 +483,7 @@ export default {
     async unassignShow(type) {
       let data = {};
       data[type] = null;
-      let response = await this.$authios.patch(
+      let response = await this.$directus.patch(
         `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}`,
         data
       );
@@ -510,7 +510,7 @@ export default {
       if (!this.video[type] || this.video[type].id !== show.id) {
         let data = {};
         data[type] = show.id;
-        let response = await this.$authios.patch(
+        let response = await this.$directus.patch(
           `${Config.youtubeVideosTableName(this.$l2.id)}/${
             this.video.id
           }?fields=${type}.*`, // type is 'tv_show' or 'talk'
@@ -566,7 +566,7 @@ export default {
       this.updating = true;
       let token = this.$auth.strategy.token.get();
       try {
-        let response = await this.$authios.patch(
+        let response = await this.$directus.patch(
           `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}`,
           {
             subs_l2: this.video.subs_l2
@@ -607,7 +607,7 @@ export default {
     },
     async remove() {
       try {
-        let response = await this.$authios.delete(
+        let response = await this.$directus.delete(
           `${Config.youtubeVideosTableName(this.$l2.id)}/${this.video.id}`
         );
         if (response) {

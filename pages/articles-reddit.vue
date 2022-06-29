@@ -108,8 +108,8 @@ export default {
         this.articleId = this.args.split(",")[0];
       } else if (this.method === "list") {
         if (!this.subreddits) {
-          let response = await this.$authios.get(
-            `${Config.wiki}items/subreddits?filter[l2][eq]=${this.$l2.id}`
+          let response = await this.$directus.get(
+            `items/subreddits?filter[l2][eq]=${this.$l2.id}`
           );
           if (response.data) {
             this.subreddits = response.data.data;

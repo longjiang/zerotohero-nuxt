@@ -158,8 +158,8 @@ export default {
     },
   },
   async created() {
-    let response = await this.$authios.get(
-      `${Config.wiki}items/tutoring_kit?fields=id,name,reading,free_talk,writing,level`
+    let response = await this.$directus.get(
+      `items/tutoring_kit?fields=id,name,reading,free_talk,writing,level`
     );
     this.lessons = response.data.data || [];
   },

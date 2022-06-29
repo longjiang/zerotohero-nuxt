@@ -201,8 +201,8 @@ export default {
       }
       this.saving = true;
       try {
-        let res = await this.$authios.post(
-          `${Config.wiki}items/phrasebook`,
+        let res = await this.$directus.post(
+          `items/phrasebook`,
           phrasebook
         );
         if (res && res.data) {

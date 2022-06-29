@@ -419,7 +419,7 @@ export default {
         .filter((id) => !id.includes("0x"));
       let chunks = Helper.arrayChunk(youtube_ids, 100);
       for (let youtube_ids of chunks) {
-        let response = await this.$authios.get(
+        let response = await this.$directus.get(
           `${Config.youtubeVideosTableName(
             this.$l2.id
           )}?filter[youtube_id][in]=${youtube_ids}&fields=id,title,channel_id,youtube_id,tv_show.*,talk.*${

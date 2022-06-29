@@ -187,7 +187,7 @@ export default {
   methods: {
     async getVideos() {
       let limit = this.perPage;
-      let response = await this.$authios.get(
+      let response = await this.$directus.get(
         `${Config.youtubeVideosTableName(this.$l2.id)}?sort=-id&limit=${limit}&offset=${
           this.start
         }&fields=id,youtube_id,l2,title,subs_l2,channel_id,topic,level,lesson&timestamp=${
@@ -210,7 +210,7 @@ export default {
     },
     async remove(video) {
       try {
-        let response = await this.$authios.delete(
+        let response = await this.$directus.delete(
           `${Config.youtubeVideosTableName(this.$l2.id)}/${video.id}`
         );
         if (response.data) {
@@ -256,7 +256,7 @@ export default {
         })
       );
       try {
-        let response = await this.$authios.patch(
+        let response = await this.$directus.patch(
           `${Config.youtubeVideosTableName(this.$l2.id)}/${video.id}`,
           {
             subs_l2: csv,

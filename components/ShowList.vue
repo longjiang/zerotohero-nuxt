@@ -165,10 +165,10 @@ export default {
     async toggle(show, property) {
       let toggled = !show[property]; // If true, make it false, and vice versa
       try {
-        let url = `${Config.wiki}items/${this.field}s/${show.id}`;
+        let path = `items/${this.field}s/${show.id}`;
         let payload = {};
         payload[property] = toggled;
-        let response = await this.$authios.patch(url, payload, {
+        let response = await this.$directus.patch(path, payload, {
           contentType: "application/json",
         });
         if (response && response.data.data) {
