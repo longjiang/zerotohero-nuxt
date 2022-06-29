@@ -5,8 +5,9 @@ import he from "he"; // html entities
 import YouTube from '@/lib/youtube'
 import Config from '@/lib/config'
 import Helper from '@/lib/helper'
-import { DIRECTUS_API_URL } from '@/lib/directus'
 import { logError } from '@/lib/utils/error'
+
+export const DIRECTUS_API_URL = 'https://directusvps.zerotohero.ca/zerotohero/'
 
 export default ({ app }, inject) => {
   inject('directus', {

@@ -32,6 +32,8 @@
 import Helper from "@/lib/helper";
 import { DIRECTUS_ADMIN_URL } from '@/lib/directus'
 
+const DIRECTUS_ADMIN_URL = 'https://directusvps.zerotohero.ca/admin/#/'
+
 export default {
   props: ["article", "edit", "social"],
   data() {
