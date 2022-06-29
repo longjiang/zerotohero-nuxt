@@ -86,9 +86,9 @@ export default ({ app }, inject) => {
       let hits = [];
       for (let term of terms) {
         term = term.replace(/'/g, "&#39;");
-        let subsFilter = `filter[subs_l2][contains]=${encodeURIComponent(term)}`;
+        let subsFilter = `&filter[subs_l2][contains]=${encodeURIComponent(term)}`;
         if (term.includes("_") || term.includes("*")) {
-          subsFilter = `filter[subs_l2][rlike]=${encodeURIComponent(
+          subsFilter = `&filter[subs_l2][rlike]=${encodeURIComponent(
             "%" + term.replace(/\*/g, "%") + "%"
           )}`;
         }
