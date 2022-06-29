@@ -89,22 +89,15 @@
             </button>
           </div>
           <div class="d-flex">
-            <client-only>
-              <editor
-                id="reader-textarea"
-                initialEditType="markdown"
-                cols="30"
-                rows="5"
-                class="flex-1"
-                ref="editor"
-                :style="`width: ${addTranslation ? '50%' : '100%'}`"
-                :initialValue="text"
-                :options="{ usageStatistics: false, autofocus: false }"
-                :placeholder="$t('Paste {l2} text here', { l2: $l2.name })"
-                :dir="$l2.direction === 'rtl' ? 'rtl' : 'ltr'"
-                @change="onEditorChange"
-              ></editor>
-            </client-only>
+            <textarea
+              id="reader-textarea"
+              class="form-control"
+              cols="30"
+              rows="5"
+              :placeholder="$t('Paste {l2} text here', { l2: $l2.name })"
+              v-model="text"
+              :dir="$l2.direction === 'rtl' ? 'rtl' : 'ltr'"
+            ></textarea>
             <textarea
               v-if="addTranslation"
               class="form-control ml-1 flex-1"
