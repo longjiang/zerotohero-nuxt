@@ -49,15 +49,6 @@
       <b-button variant="ghost-dark-no-bg" class="ml-2" @click="loadRandomShow">
         <i class="fas fa-step-forward mr-1"></i>
       </b-button>
-      <b-button
-        variant="ghost-dark-no-bg"
-        size="sm"
-        style="float: right"
-        v-if="$adminMode"
-        @click="removeEpisode(randomShowRandomEpisode)"
-      >
-        <i class="fas fa-trash"></i>
-      </b-button>
     </div>
   </div>
 </template>
@@ -126,15 +117,6 @@ export default {
     l1Code() {
       return Helper.l1Code(...arguments);
     },
-    async removeEpisode(randomShowRandomEpisode) {
-      let response = await this.$directus.delete(
-        `${Config.youtubeVideosTableName(randomShowRandomEpisode.l2)}/${randomShowRandomEpisode.id}`
-      );
-      
-      if (response) {
-        this.loadRandomShow();
-      }
-    },
     async loadRandomShow() {
       let randomShow = this.getRandomShow();
       let randomShowRandomEpisode = await this.getRandomEpisodeOfShow(
@@ -170,14 +152,12 @@ export default {
       }
     },
     async getFirstEpisodeOfShow(showId, showType, l2Id) {
-      let url = `${Config.youtubeVideosTableName(l2Id)}?filter[${showType}][eq]=${showId}&fields=youtube_id,id,l2`;
-      let response = await this.$directus.get(url);
-
-      if (response.data && response.data.data.length > 0) {
-        let videos = response.data.data;
-        let firstEpisode = videos[0];
-        return firstEpisode;
-      }
+      let params = {}
+      params[`filter[${showType}][eq]`] = showId
+      params['fields'] = 'youtube_id,id,l2'
+      let videos = await this.$directus.getVideos({ l2Id, params })
+      let firstEpisode = videos[0];
+      return firstEpisode;
     },
     async getRandomEpisodeOfShow(showId, showType, l2Id) {
       let langFilter = l2Id ? `&filter[l2][eq]=${l2Id}` : ''

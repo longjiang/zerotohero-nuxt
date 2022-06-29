@@ -11,12 +11,13 @@ export const DIRECTUS_API_URL = 'https://directusvps.zerotohero.ca/zerotohero/'
 
 export default ({ app }, inject) => {
   inject('directus', {
-    tokenOptions() {
+    tokenOptions(options = {}) {
       let token = app.$auth.strategy.token.get()
       if (token) {
-        let options = { headers: { Authorization: token } }
+        if (!options.headers) options.headers = {}
+        options.headers.Authorization = token
         return options
-      } else return {}
+      } else return options
     },
     host: process.server ? process.env.baseUrl : window.location.protocol + '//' + window.location.hostname + ':' + window.location.port,
     /**
@@ -40,8 +41,8 @@ export default ({ app }, inject) => {
       let res = await axios.delete(this.appendHostCors(DIRECTUS_API_URL + path), this.tokenOptions()).catch(err => logError(err))
       if (res) return res
     },
-    async get(path) {
-      let res = await axios.get(this.appendHostCors(DIRECTUS_API_URL + path), this.tokenOptions()).catch(err => logError(err))
+    async get(path, params = {}) {
+      let res = await axios.get(this.appendHostCors(DIRECTUS_API_URL + path), this.tokenOptions({ params })).catch(err => logError(err))
       if (res) return res
     },
     /**
@@ -85,6 +86,13 @@ export default ({ app }, inject) => {
     },
     async getVideo() {
 
+    },
+    async getVideos({ l2Id, params } = {}) {
+      let res = await this.get(`${Config.youtubeVideosTableName(l2Id)}`, params)
+      if (res?.data?.data) {
+        let videos = res.data.data
+        return videos
+      }
     },
     async postVideo(video, l2, limit = false, tries = 0) {
       let lines = video.subs_l2 || [];
