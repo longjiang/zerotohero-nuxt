@@ -92,7 +92,7 @@ export default ({ app }, inject) => {
       if (res?.data?.data) {
         let videos = res.data.data
         return videos
-      }
+      } else return []
     },
     async postVideo(video, l2, limit = false, tries = 0) {
       let lines = video.subs_l2 || [];

@@ -245,30 +245,23 @@ export default {
         filters += "&sort=title";
       }
       let limit = this.perPage;
-      try {
-        let response = await this.$directus.get(
-          `${Config.youtubeVideosTableName(
-            this.$l2.id
-          )}?sort=-id&filter[l2][eq]=${
-            this.$l2.id
-          }${filters}&limit=${limit}&offset=${start}&fields=id,l2,title,youtube_id,tv_show.*,talk.*&timestamp=${
-            this.$adminMode ? Date.now() : 0
-          }`
-        );
-        let videos = response.data.data || [];
-        if (videos && this.$adminMode) {
-          videos = await YouTube.checkShows(videos, this.$l2.id);
-          for (let video of videos) {
-            try {
-              if (video.subs_l2)
-                video.subs_l2 = YouTube.parseSavedSubs(video.subs_l2);
-            } catch (err) {}
-          }
+
+      let query = `sort=-id&filter[l2][eq]=${
+          this.$l2.id
+        }${filters}&limit=${limit}&offset=${start}&fields=id,l2,title,youtube_id,tv_show.*,talk.*&timestamp=${
+          this.$adminMode ? Date.now() : 0
+        }`
+      let videos = await this.$directus.getVideos({l2Id: this.$l2.id, query})
+      if (videos && this.$adminMode) {
+        videos = await YouTube.checkShows(videos, this.$l2.id);
+        for (let video of videos) {
+          try {
+            if (video.subs_l2)
+              video.subs_l2 = YouTube.parseSavedSubs(video.subs_l2);
+          } catch (err) {}
         }
-        return videos;
-      } catch (err) {
-        return [];
       }
+      return videos
     },
     async getChannels() {
       let response = await this.$directus.get(
