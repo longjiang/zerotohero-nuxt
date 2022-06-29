@@ -258,6 +258,7 @@ export default {
     page() {
       this.current = 0;
       this.translationLoading = {};
+      this.goToPage = this.page
     },
     goToPage() {
       this.$emit("goToPage", this.goToPage);
