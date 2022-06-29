@@ -427,6 +427,12 @@ export default {
       $(translationSentence).addClass("current");
     },
     speak(text) {
+      if (speechSynthesis.paused) {
+        if (this.utterance) {
+          this.utterance.onend = undefined;
+        }
+        speechSynthesis.cancel();
+      }
       if (this.voices.length === 0) this.getVoices();
       this.utterance = new SpeechSynthesisUtterance(text);
       // this.utterance.lang = this.lang || this.$l2.code
@@ -434,21 +440,12 @@ export default {
       if (this.voices[this.voice]) {
         this.utterance.voice = this.voices[this.voice];
       }
-      if (speechSynthesis.paused) {
-        if (this.utterance) {
-          this.utterance.onend = undefined;
-        }
-        speechSynthesis.cancel();
-      } else {
-        if (this.utterance) {
-          this.utterance.onend = () => {
-            console.log("going next");
-            this.next();
-          };
-        }
-      }
-      console.log("speaking");
       speechSynthesis.speak(this.utterance);
+      if (this.utterance) {
+        this.utterance.onend = () => {
+          this.next();
+        };
+      }
     },
     scroll(sentence) {
       if (sentence.offsetHeight > 0) {
