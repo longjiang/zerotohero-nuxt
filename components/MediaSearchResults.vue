@@ -108,7 +108,6 @@
 import YouTubeNav from "@/components/YouTubeNav";
 import YouTubeChannelCard from "@/components/YouTubeChannelCard";
 import SimpleSearch from "@/components/SimpleSearch";
-import Subs from "@/lib/subs";
 import Helper from "@/lib/helper";
 
 export default {
@@ -254,7 +253,7 @@ export default {
         videos = await this.$directus.checkShows(videos, this.$l2.id);
         for (let video of videos) {
           try {
-            if (video.subs_l2) video.subs_l2 = Subs.parseSavedSubs(video.subs_l2);
+            if (video.subs_l2) video.subs_l2 = this.$subs.parseSavedSubs(video.subs_l2);
           } catch (err) {}
         }
       }

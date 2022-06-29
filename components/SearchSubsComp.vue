@@ -9,15 +9,6 @@
   >
     <div class="text-center pb-2">
       <span v-if="hits.length > 0">
-        <div :class="{ 'float-left ml-1': true, 'd-none': !$adminMode }">
-          <b-button
-            :variant="skin === 'dark' ? 'ghost-dark-no-bg' : 'gray'"
-            size="sm"
-            @click="remove"
-          >
-            <i class="fas fa-trash"></i>
-          </b-button>
-        </div>
         <b-button
           size="sm"
           :variant="skin === 'light' ? 'gray' : 'ghost-dark-no-bg'"
@@ -294,11 +285,7 @@
 
 <script>
 import Helper from "@/lib/helper";
-import YouTube from "@/lib/youtube";
-import {
-  NON_PRO_MAX_SUBS_SEARCH_HITS,
-  POPULAR_LANGS,
-} from "@/lib/config";
+import { NON_PRO_MAX_SUBS_SEARCH_HITS, POPULAR_LANGS } from "@/lib/config";
 
 export default {
   props: {
@@ -549,6 +536,29 @@ export default {
       );
       return excludeTerms;
     },
+    calculateLimit() {
+      // No limit unless set
+      if (this.subsSearchLimit) return false;
+      else {
+        if (this.exact) {
+          // Exact search while limit is set
+          let l2HasScriptLearningFeature = ["hy", "ka", "ko"].includes(
+            this.$l2.code
+          );
+          if (l2HasScriptLearningFeature) {
+            return this.terms[0].length < 5
+              ? this.terms[0].length < 4
+                ? this.terms[0].length < 3
+                  ? 100
+                  : 80
+                : 70
+              : 60;
+          } else return 50;
+        } else {
+          return 25;
+        }
+      }
+    },
     async checkHits() {
       this.checking = true;
       let excludeTerms = [];
@@ -564,25 +574,13 @@ export default {
       this.excludeTerms = excludeTerms.filter(
         (s) => s !== "" && !this.terms.includes(s)
       );
-      let hits = await YouTube.searchSubs({
+      let hits = await this.$subs.searchSubs({
         terms: this.terms,
         excludeTerms: this.excludeTerms,
         langId: this.$l2.id,
         adminMode: false,
         continua: this.$l2.continua,
-        limit: this.$subsSearchLimit
-          ? this.exact
-            ? ["hy", "ka", "ko"].includes(this.$l2.code) // Give more room to less popular languages with alphebet-learning features (short words)
-              ? this.terms[0].length < 5
-                ? this.terms[0].length < 4
-                  ? this.terms[0].length < 3
-                    ? 100
-                    : 80
-                  : 70
-                : 60
-              : 50
-            : 25
-          : false,
+        limit: this.calculateLimit(),
         tvShowFilter: this.tvShowFilter,
         talkFilter: this.talkFilter,
         exact: this.exact,

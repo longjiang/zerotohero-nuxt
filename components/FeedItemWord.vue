@@ -99,7 +99,6 @@
 
 <script>
 import Helper from "@/lib/helper";
-import YouTube from "@/lib/youtube";
 import { transliterate } from "transliteration";
 
 export default {
@@ -154,7 +153,7 @@ export default {
     },
     async getVideo() {
       try {
-        let hits = await YouTube.searchSubs({
+        let hits = await this.$subs.searchSubs({
           terms: [this.savedWord.forms[0]],
           langId: this.$l2.id,
           continua: this.$l2.continua,

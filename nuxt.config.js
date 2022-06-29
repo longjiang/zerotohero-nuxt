@@ -175,6 +175,7 @@ export default {
     '~plugins/main.js',
     '~plugins/jw.js',
     '~plugins/directus.js',
+    '~plugins/subs.js',
     { src: '~/plugins/stripe.js', mode: 'client' },
     { src: '~/plugins/paypal.js', mode: 'client' },
     // { src: '~/plugins/tui_editor.client.js', mode: 'client' },

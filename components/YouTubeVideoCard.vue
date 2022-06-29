@@ -565,7 +565,7 @@ export default {
         l2Id: this.video.l2 ? this.video.l2.id || this.video.l2 : this.$l2.id,
         id: this.video.id,
         query: `fields=id`,
-        payload: { subs_l2: Subs.unparseSubs(this.video.subs_l2) },
+        payload: { subs_l2: this.$subs.unparseSubs(this.video.subs_l2) },
       });
       if (data) {
         this.subsUpdated = true;

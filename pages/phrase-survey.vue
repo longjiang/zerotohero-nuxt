@@ -137,7 +137,6 @@
 </template>
 
 <script>
-import Subs from "@/lib/subs";
 import Helper from "@/lib/helper";
 import Vue from "vue";
 import he from "he";
@@ -343,7 +342,7 @@ export default {
       }
       console.log(`Got ${videos.length} videos.`);
       for (let video of videos) {
-        video.subs_l2 = Subs.parseSavedSubs(video.subs_l2);
+        video.subs_l2 = this.$subs.parseSavedSubs(video.subs_l2);
       }
       return videos;
     },

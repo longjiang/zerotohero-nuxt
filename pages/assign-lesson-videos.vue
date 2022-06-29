@@ -77,7 +77,6 @@
 
 <script>
 import WordList from "@/components/WordList";
-import Subs from "@/lib/subs";
 import Helper from "@/lib/helper";
 
 export default {
@@ -151,7 +150,7 @@ export default {
       let videos = response.data || [];
       if (videos.length > 0) {
         videos = videos.map((video) => {
-          video.subs_l2 = Subs.parseSavedSubs(video.subs_l2);
+          video.subs_l2 = this.$subs.parseSavedSubs(video.subs_l2);
           video.matches = this.matchWords(video);
           return video;
         });
@@ -208,7 +207,7 @@ export default {
         if (videos.length > 0) {
           videos = videos.map((video) => {
             if (video.subs_l2) {
-              video.subs_l2 = Subs.parseSavedSubs(video.subs_l2);
+              video.subs_l2 = this.$subs.parseSavedSubs(video.subs_l2);
               video.matches = this.matchWords(video).filter(
                 (word) => !this.matchedWords.map((w) => w.id).includes(word.id)
               );

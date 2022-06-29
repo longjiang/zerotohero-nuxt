@@ -36,7 +36,7 @@
               v-if="
                 checkSavedData &&
                 checkSavedDone &&
-                (generated ? shownVideos.length : videosWithSubs.length) -
+                (generated ? shownVideos.length : videosWiththis.$subs.length) -
                   savedVideos.length >
                   0
               "
@@ -200,7 +200,6 @@
 <script>
 import Vue from "vue";
 import Helper from "@/lib/helper";
-import Subs from "@/lib/subs";
 import { Drag, Drop } from "vue-drag-drop";
 import { ContainerQuery } from "vue-container-query";
 
@@ -433,7 +432,7 @@ export default {
               video.tv_show = savedVideo.tv_show;
               video.talk = savedVideo.talk;
               if (savedVideo.subs_l2) {
-                let subs_l2 = Subs.parseSavedSubs(savedVideo.subs_l2);
+                let subs_l2 = this.$subs.parseSavedSubs(savedVideo.subs_l2);
                 if (subs_l2[0]) {
                   video.subs_l2 = subs_l2;
                   this.firstLineTime = video.subs_l2[0].starttime;

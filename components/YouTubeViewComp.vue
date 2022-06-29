@@ -71,7 +71,6 @@
 import YouTube from "@/lib/youtube";
 import Helper from "@/lib/helper";
 import DateHelper from "@/lib/date-helper";
-import Subs from "~/lib/subs";
 import Vue from "vue";
 import { mapState } from "vuex";
 
@@ -464,7 +463,7 @@ export default {
         let video = videos[0];
         for (let field of ["subs_l2", "subs_l1"]) {
           if (video[field] && typeof video[field] === "string") {
-            let savedSubs = Subs.parseSavedSubs(video[field]);
+            let savedSubs = this.$subs.parseSavedSubs(video[field]);
             if (savedSubs) {
               let filtered = savedSubs.filter(
                 (line) =>
@@ -474,7 +473,7 @@ export default {
             }
           }
         }
-        if (video.notes) video.notes = Subs.parseNotes(video.notes);
+        if (video.notes) video.notes = this.$subs.parseNotes(video.notes);
         if (!video.channel && video.channel_id) {
           video.channel = {
             id: video.channel_id,
@@ -597,7 +596,7 @@ export default {
       video = await this.checkSubsAndAddLocalesIfNeeded(video);
       video = await this.getTranscript(video);
       if (video.subs_l2 && video.subs_l2[0] && video.subs_l2[0].duration) {
-        let subs_l2 = Subs.unparseSubs(video.subs_l2);
+        let subs_l2 = this.$subs.unparseSubs(video.subs_l2);
         let data = await this.$directus.patchVideo({
           l2Id: this.$l2.id,
           id: video.id,
