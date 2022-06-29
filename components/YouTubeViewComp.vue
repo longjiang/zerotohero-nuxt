@@ -71,7 +71,7 @@
 import YouTube from "@/lib/youtube";
 import Helper from "@/lib/helper";
 import DateHelper from "@/lib/date-helper";
-import Config from "@/lib/config";
+import Subs from "@/lib/utils/subs";
 import Vue from "vue";
 import { mapState } from "vuex";
 
@@ -301,7 +301,7 @@ export default {
         }
       }
 
-      let moreVideos = await $directus.getVideo({
+      let moreVideos = await this.$directus.getVideos({
         l2Id: this.$l2.id,
         query: Helper.queryString(postParams),
       });
@@ -464,7 +464,7 @@ export default {
         let video = videos[0];
         for (let field of ["subs_l2", "subs_l1"]) {
           if (video[field] && typeof video[field] === "string") {
-            let savedSubs = YouTube.parseSavedSubs(video[field]);
+            let savedSubs = Subs.parseSavedSubs(video[field]);
             if (savedSubs) {
               let filtered = savedSubs.filter(
                 (line) =>

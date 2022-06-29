@@ -186,6 +186,24 @@ export default ({ app }, inject) => {
     },    
     youtubeVideosTableName(langId) {
       return `items/youtube_videos${this.youtubeVideosTableSuffix(langId)}`
-    }
+    },
+    async checkShows(videos, langId, adminMode = false) {
+      let response = await this.get(
+        `items/tv_shows?filter[l2][eq]=${langId}&limit=500&timestamp=${
+          adminMode ? Date.now() : 0
+        }`
+      );
+      let shows = response.data || [];
+      let showTitles = shows.map(show => show.title);
+      let regex = new RegExp(
+        showTitles.map(t => Helper.escapeRegExp(t)).join("|")
+      );
+      for (let video of videos) {
+        if (regex.test(video.title)) {
+          video.show = shows.find(show => video.title.includes(show.title));
+        }
+      }
+      return videos;
+    },
   })
 }

@@ -108,10 +108,8 @@
 import YouTubeNav from "@/components/YouTubeNav";
 import YouTubeChannelCard from "@/components/YouTubeChannelCard";
 import SimpleSearch from "@/components/SimpleSearch";
-import Config from "@/lib/config";
+import { parseSavedSubs } from "@/lib/utils/subs";
 import Helper from "@/lib/helper";
-import YouTube from "@/lib/youtube";
-import axios from "axios";
 
 export default {
   components: {
@@ -181,7 +179,7 @@ export default {
     if (!this.keyword || this.keyword.includes("channel:"))
       this.includeShows = false;
     this.videos = await this.getVideos(this.start);
-    this.$emit('videosLoaded', this.videos)
+    this.$emit("videosLoaded", this.videos);
   },
   watch: {
     async includeShows() {
@@ -247,21 +245,20 @@ export default {
       let limit = this.perPage;
 
       let query = `sort=-id&filter[l2][eq]=${
-          this.$l2.id
-        }${filters}&limit=${limit}&offset=${start}&fields=id,l2,title,youtube_id,tv_show.*,talk.*&timestamp=${
-          this.$adminMode ? Date.now() : 0
-        }`
-      let videos = await this.$directus.getVideos({l2Id: this.$l2.id, query})
+        this.$l2.id
+      }${filters}&limit=${limit}&offset=${start}&fields=id,l2,title,youtube_id,tv_show.*,talk.*&timestamp=${
+        this.$adminMode ? Date.now() : 0
+      }`;
+      let videos = await this.$directus.getVideos({ l2Id: this.$l2.id, query });
       if (videos && this.$adminMode) {
-        videos = await YouTube.checkShows(videos, this.$l2.id);
+        videos = await this.$directus.checkShows(videos, this.$l2.id);
         for (let video of videos) {
           try {
-            if (video.subs_l2)
-              video.subs_l2 = YouTube.parseSavedSubs(video.subs_l2);
+            if (video.subs_l2) video.subs_l2 = parseSavedSubs(video.subs_l2);
           } catch (err) {}
         }
       }
-      return videos
+      return videos;
     },
     async getChannels() {
       let response = await this.$directus.get(
