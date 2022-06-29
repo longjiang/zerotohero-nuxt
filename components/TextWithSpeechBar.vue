@@ -193,6 +193,7 @@ export default {
       linesPerPage: 10,
       utterance: undefined,
       speaking: false,
+      speakingLineIndex: undefined,
       translationLoading: {},
       voices: [],
       params: {},
@@ -292,11 +293,15 @@ export default {
   methods: {
     onTranslationSentenceClick(e) {
       if (this.current > 0) {
-        let translationSentences = Array.from(this.$el.querySelectorAll('.translation-sentence'))
-        let translationIndex = translationSentences.findIndex(el => el === e.target)
-        let translationOffset = translationIndex - this.current
-        this.translationOffset = translationOffset
-        this.update()
+        let translationSentences = Array.from(
+          this.$el.querySelectorAll(".translation-sentence")
+        );
+        let translationIndex = translationSentences.findIndex(
+          (el) => el === e.target
+        );
+        let translationOffset = translationIndex - this.current;
+        this.translationOffset = translationOffset;
+        this.update();
       }
     },
     onSentenceClick(sentenceEl) {
@@ -417,7 +422,8 @@ export default {
       for (let translationSentence of translationSentences) {
         $(translationSentence).removeClass("current");
       }
-      const translationSentence = translationSentences[this.current + this.translationOffset];
+      const translationSentence =
+        translationSentences[this.current + this.translationOffset];
       $(translationSentence).addClass("current");
     },
     speak(text) {
@@ -428,6 +434,20 @@ export default {
       if (this.voices[this.voice]) {
         this.utterance.voice = this.voices[this.voice];
       }
+      if (speechSynthesis.paused) {
+        if (this.utterance) {
+          this.utterance.onend = undefined;
+        }
+        speechSynthesis.cancel();
+      } else {
+        if (this.utterance) {
+          this.utterance.onend = () => {
+            console.log("going next");
+            this.next();
+          };
+        }
+      }
+      console.log("speaking");
       speechSynthesis.speak(this.utterance);
     },
     scroll(sentence) {
@@ -441,29 +461,33 @@ export default {
       }
     },
     play() {
-      this.update();
       this.speaking = true;
-      const sentence = this.getSentences()[this.current];
-      let text = this.sentenceText(sentence);
-      text = text.replace(/[\n\s]+/g, " ");
-      if (this.$l2.continua) text = text.replace(/\s/g, "");
-      if (text.length === 0) {
-        this.next();
-        return;
-      }
-      this.speak(text);
-      if (this.utterance) {
-        this.utterance.onend = () => {
+      if (speechSynthesis.paused && this.speakingLineIndex === this.current) {
+        speechSynthesis.resume();
+      } else {
+        this.update();
+        this.speakingLineIndex = this.current;
+        const sentence = this.getSentences()[this.current];
+        let text = this.sentenceText(sentence);
+        text = text.replace(/[\n\s]+/g, " ");
+        if (this.$l2.continua) text = text.replace(/\s/g, "");
+        if (text.length === 0) {
           this.next();
-        };
+          return;
+        }
+        this.speak(text);
       }
     },
     pause() {
-      speechSynthesis.cancel();
-      if (this.utterance) {
-        this.utterance.onend = undefined;
-      }
       this.speaking = false;
+      if (this.speakingLineIndex === this.current) {
+        speechSynthesis.pause();
+      } else {
+        if (this.utterance) {
+          this.utterance.onend = undefined;
+        }
+        speechSynthesis.cancel();
+      }
     },
     previous() {
       this.current = Math.max(0, this.current - 1);
