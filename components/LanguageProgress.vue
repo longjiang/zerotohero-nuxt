@@ -66,57 +66,62 @@
       </div>
     </div>
     <div v-if="description" class="description">
-      <div v-if="$store.state.progress.progressLoaded">
-        You've spent
-        <b>
-          {{ formatDuration(time) }}
-        </b>
-        in this app learning
-        <b>{{ $l2.name }}</b>
-        .
-      </div>
-      <div class="mt-3" v-if="hours < hoursNeeded">
-        Once you log
-        <b>{{ Math.round(hoursNeeded) }} hours</b>
-        , you'll most likely reach
-        <b>
+      <b-button variant="unstyled p-0 text-success" @click="showDescriptionDetails = !showDescriptionDetails">
+        <i v-if="!showDescriptionDetails" class="fas fa-chevron-down mr-1"></i><i class="fas fa-chevron-up mr-1" v-else></i> What do the numbers mean?
+      </b-button>
+      <div v-if="showDescriptionDetails" class="mt-3">
+        <div v-if="$store.state.progress.progressLoaded">
+          You've spent
+          <b>
+            {{ formatDuration(time) }}
+          </b>
+          in this app learning
+          <b>{{ $l2.name }}</b>
+          .
+        </div>
+        <div class="mt-3" v-if="hours < hoursNeeded">
+          Once you log
+          <b>{{ Math.round(hoursNeeded) }} hours</b>
+          , you'll most likely reach
+          <b>
+            <span v-if="level < 7">
+              {{ goalText }}
+            </span>
+            <span v-else>native-like mastery</span>
+          </b>
+          .
+        </div>
+        <div class="mt-3" v-else>
+          Typically, {{ $l1.name }} speakers need
+          <b>{{ Math.round(hoursNeeded) }} hours</b>
+          {{ levelText }} from to {{ goalText }}.
+        </div>
+        <div class="mt-3">
+          Weekly goal: If you log
+          <b>
+            <b-form-select
+              type="number"
+              v-model="manuallySetWeeklyHours"
+              :options="weeklyHoursOptions"
+              size="sm"
+              class="d-inline-block strong text-success"
+              style="width: 6rem"
+            ></b-form-select>
+            a week
+          </b>
+          , you can reach
           <span v-if="level < 7">
             {{ goalText }}
           </span>
-          <span v-else>native-like mastery</span>
-        </b>
-        .
-      </div>
-      <div class="mt-3" v-else>
-        Typically, {{ $l1.name }} speakers need
-        <b>{{ Math.round(hoursNeeded) }} hours</b>
-        {{ levelText }} from to {{ goalText }}.
-      </div>
-      <div class="mt-3">
-        Weekly goal: If you log
-        <b>
-          <b-form-select
-            type="number"
-            v-model="manuallySetWeeklyHours"
-            :options="weeklyHoursOptions"
-            size="sm"
-            class="d-inline-block strong text-success"
-            style="width: 6rem"
-          ></b-form-select>
-          a week
-        </b>
-        , you can reach
-        <span v-if="level < 7">
-          {{ goalText }}
-        </span>
-        <span v-else>the next level</span>
-        in
-        <b>{{ Math.ceil(hoursNeeded / weeklyHours) }} weeks</b>
-        (about
-        <span v-if="hoursNeeded / weeklyHours > 52">
-          {{ Math.floor(hoursNeeded / weeklyHours / 4.34 / 12) }} year and
-        </span>
-        {{ Math.ceil(hoursNeeded / weeklyHours / 4.34) % 12 }} months ) .
+          <span v-else>the next level</span>
+          in
+          <b>{{ Math.ceil(hoursNeeded / weeklyHours) }} weeks</b>
+          (about
+          <span v-if="hoursNeeded / weeklyHours > 52">
+            {{ Math.floor(hoursNeeded / weeklyHours / 4.34 / 12) }} year and
+          </span>
+          {{ Math.ceil(hoursNeeded / weeklyHours / 4.34) % 12 }} months ) .
+        </div>
       </div>
     </div>
   </div>
@@ -210,6 +215,7 @@ export default {
       showManuallySetHours: false,
       manuallySetHours: undefined,
       manuallySetWeeklyHours: 7,
+      showDescriptionDetails: false,
     };
   },
   watch: {

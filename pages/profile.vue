@@ -21,13 +21,13 @@
         </div>
       </div>
       <div class="container" v-else>
-        <div class="row">
+        <!-- <div class="row">
           <div class="col-sm-12 text-center">
             <h3>{{ $auth.user.first_name }} {{ $auth.user.last_name }}</h3>
             <p>{{ $auth.user.email }}</p>
             <p>{{ $auth.user.avatar }}</p>
           </div>
-        </div>
+        </div> -->
         <template v-if="level">
           <div class="row">
             <div class="col-sm-12 text-center">
@@ -44,7 +44,7 @@
                 {{ $auth.user.first_name }}’s {{ $l2.name }}-Learning Progress
               </h5>
               <router-link
-                to="/"
+                to="/dashboard"
                 class="text-success"
                 style="
                   font-size: 0.8em;
@@ -53,8 +53,8 @@
                   display: block;
                 "
               >
-                <i class="fas fa-chevron-left"></i>
-                All languages
+                <i class="fas fa-tachometer-alt mr-1"></i>
+                Dashboard
               </router-link>
             </div>
           </div>
