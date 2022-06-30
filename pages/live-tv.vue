@@ -10,7 +10,12 @@
 <template>
   <container-query :query="query" v-model="params">
     <div class="main-dark">
-      <div class="pb-5 container-fluid">
+      <div class="container" v-if="!isSafari">
+        <div class="row">
+          <div class="col-sm-12 pt-4"><div class="text-center pt-3 pb3 alert alert-danger rounded">Currently this feature only works with the Safari browser due to a recent change in Chrome/Firefox/Edge.</div></div>
+        </div>
+      </div>
+      <div class="pb-5 container-fluid" v-else>
         <SocialHead
           v-if="channels"
           :title="title"
@@ -35,6 +40,7 @@
                 :key="`live-video-${currentChannel.url}`"
                 ref="liveVideo"
               />
+              
             </div>
           </div>
           <div
@@ -50,7 +56,9 @@
               <b-form-input
                 v-model="keyword"
                 @compositionend.prevent.stop="() => false"
-                :placeholder="`Filter ${this.channels ? this.channels.length : ''} channels...`"
+                :placeholder="`Filter ${
+                  this.channels ? this.channels.length : ''
+                } channels...`"
                 class="input-ghost-dark"
               />
             </b-input-group>
@@ -207,6 +215,7 @@ export default {
       countries: [],
       keyword: undefined,
       params: {},
+      isSafari: false,
       query: {
         xs: {
           minWidth: 0,
@@ -300,68 +309,70 @@ export default {
       }
     },
   },
-  created() {
-    if (typeof window !== "undefined")
-      window.addEventListener("resize", this.onResize);
-  },
   destroyed() {
     if (typeof window !== "undefined")
       window.removeEventListener("resize", this.onResize);
   },
-  async fetch() {
-    let code = this.$l2["iso639-3"];
-    if (code === "nor") code = "nob"; // Use 'Bokmal' for Norwegian.
-    let res = await axios.get(
-      `${Config.server}data/live-tv-channels/${code}.csv.txt`
-    );
-    if (res && res.data) {
-      let channels = Papa.parse(res.data, { header: true }).data;
-      channels = Helper.uniqueByValue(channels, "url");
-      channels = channels
-        .filter((c) => c.url && c.url.startsWith("https://"))
-        .filter((c) => c.category !== "XXX")
-        .filter((c) => !c.name.includes("新唐人"));
-      if (this.$l2.code in this.bannedChannels) {
-        channels = channels.filter(
-          (c) => !this.bannedChannels[this.$l2.code].includes(c.url)
-        );
-      }
-      if (this.$l2.code in this.bannedKeywords) {
-        channels = channels.filter((c) => {
-          for (let keyword of this.bannedKeywords[this.$l2.code]) {
-            if (
-              c.url.includes(keyword) ||
-              c.name.toLowerCase().includes(keyword)
-            )
-              return false;
-          }
-          return true;
-        });
-      }
-      channels = channels.sort((a, b) =>
-        a.name.localeCompare(b.name, this.$l2.locales[0])
-      );
-      this.channels = channels;
-
-      if (channels[0]) {
-        if (this.$route.query.tvgID) {
-          let channel = this.channels.find(
-            (c) => c.tvgID === this.$route.query.tvgID
-          );
-          this.setChannel(channel);
-        } else {
-          if (this.hasFeatured) {
-            let featuredChannel = channels.find((c) => c.featured);
-            this.setChannel(featuredChannel);
-          } else this.setChannel(channels[0]);
-        }
-      }
-      if (this.hasFeatured) this.featured = true;
-      this.loadCategories();
-      this.loadCountries();
-    }
+  async mounted() {
+    if (typeof window !== "undefined")
+      window.addEventListener("resize", this.onResize);
+    if (!this.channels) this.loadChannels()
+    if(/^((?!chrome|android).)*safari/i.test(navigator?.userAgent)) this.isSafari = true
   },
   methods: {
+    async loadChannels() {
+      let code = this.$l2["iso639-3"];
+      if (code === "nor") code = "nob"; // Use 'Bokmal' for Norwegian.
+      let res = await axios.get(
+        `${Config.server}data/live-tv-channels/${code}.csv.txt`
+      );
+      if (res && res.data) {
+        let channels = Papa.parse(res.data, { header: true }).data;
+        channels = Helper.uniqueByValue(channels, "url");
+        channels = channels
+          .filter((c) => c.url && c.url.startsWith("https://"))
+          .filter((c) => c.category !== "XXX")
+          .filter((c) => !c.name.includes("新唐人"));
+        if (this.$l2.code in this.bannedChannels) {
+          channels = channels.filter(
+            (c) => !this.bannedChannels[this.$l2.code].includes(c.url)
+          );
+        }
+        if (this.$l2.code in this.bannedKeywords) {
+          channels = channels.filter((c) => {
+            for (let keyword of this.bannedKeywords[this.$l2.code]) {
+              if (
+                c.url.includes(keyword) ||
+                c.name.toLowerCase().includes(keyword)
+              )
+                return false;
+            }
+            return true;
+          });
+        }
+        channels = channels.sort((a, b) =>
+          a.name.localeCompare(b.name, this.$l2.locales[0])
+        );
+        this.channels = channels;
+
+        if (channels[0]) {
+          if (this.$route.query.tvgID) {
+            let channel = this.channels.find(
+              (c) => c.tvgID === this.$route.query.tvgID
+            );
+            this.setChannel(channel);
+          } else {
+            if (this.hasFeatured) {
+              let featuredChannel = channels.find((c) => c.featured);
+              this.setChannel(featuredChannel);
+            } else this.setChannel(channels[0]);
+          }
+        }
+        if (this.hasFeatured) this.featured = true;
+        this.loadCategories();
+        this.loadCountries();
+      }
+    },
     setChannel(channel) {
       this.currentChannel = channel;
       if (typeof window !== "undefined")
