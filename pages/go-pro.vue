@@ -246,7 +246,7 @@ import { HOST } from "@/lib/utils/url";
 import { Capacitor } from "@capacitor/core";
 import { InAppPurchase2 } from "@ionic-native/in-app-purchase-2";
 import axios from "axios";
-import logError from "@/lib/utils/error";
+import { logError } from "@/lib/utils/error";
 
 const IOS_IAP_PRODUCT_ID = "pro";
 
