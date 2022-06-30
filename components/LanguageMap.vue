@@ -238,7 +238,7 @@ export default {
     },
     initLangs() {
       if (this.phrases) {
-        let languages = this.phrases.map((p) => p.l2);
+        let languages = this.phrases.map((p) => p.l2).filter(l2 => l2);
         languages = Helper.uniqueByValue(languages, "id");
         languages = languages.sort((a, b) => b.speakers - a.speakers);
         this.languages = languages;
