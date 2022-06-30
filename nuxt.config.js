@@ -133,7 +133,7 @@ export default {
       login: false,
       logout: false,
       callback: false,
-      home: false
+      home: '/dashboard'
     },
     strategies: {
       local: {

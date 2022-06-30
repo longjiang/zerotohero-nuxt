@@ -81,10 +81,7 @@
               }"
               @close="overlayPlayerClose"
             />
-            <Nuxt
-              id="main"
-              v-if="overlayPlayerMinimized"
-            />
+            <Nuxt id="main" v-if="overlayPlayerMinimized" />
           </div>
         </div>
         <!-- </delay-hydration> -->
@@ -185,7 +182,9 @@ export default {
       return classes;
     },
     background() {
-      return this.$route.params.l2 ? Helper.background(this.l2) : Helper.background()
+      return this.$route.params.l2
+        ? Helper.background(this.l2)
+        : Helper.background();
     },
   },
   created() {
@@ -213,10 +212,14 @@ export default {
       this.onLanguageChange();
     }
     this.onAllLanguagesLoaded();
-    if (window)
-      this.addFullHistoryItem(
-        window.location.pathname + window.location.search
-      );
+    if (this.$auth.loggedIn && this.$route.path === "/") {
+      this.$router.push({ path: "/dashboard" });
+    } else {
+      if (window)
+        this.addFullHistoryItem(
+          window.location.pathname + window.location.search
+        );
+    }
   },
   beforeDestroy() {
     // you may call unsubscribe to stop the subscription
@@ -302,16 +305,6 @@ export default {
             });
           }
         }
-        // Auto redirect to last seen page of last language doesn't seem to be a good idea, need to rework this
-        // if (mutation.type === "fullHistory/LOAD") {
-        //   if (this.fullHistory) {
-        //     let lastFullHistoryItem =
-        //       this.fullHistory[this.fullHistory.length - 1];
-        //     if (lastFullHistoryItem && lastFullHistoryItem.path && this.$route.path === '/') {
-        //       this.$router.push({ path: lastFullHistoryItem.path });
-        //     }
-        //   }
-        // }
       });
     },
     startLoggingUserTime() {
@@ -411,13 +404,12 @@ export default {
           } else {
             document.cookie = "directus-zerotohero-session=" + token;
             token = token.replace("Bearer ", "");
-            let userDataRes = await this.$directus
-              .get(
-                `items/user_data?filter[owner][eq]=${
-                  user.id
-                }&timestamp=${Date.now()}`,
-                { headers: { Authorization: `Bearer ${token}` } }
-              )
+            let userDataRes = await this.$directus.get(
+              `items/user_data?filter[owner][eq]=${
+                user.id
+              }&timestamp=${Date.now()}`,
+              { headers: { Authorization: `Bearer ${token}` } }
+            );
             if (userDataRes && userDataRes.data && userDataRes.data.data) {
               if (userDataRes.data.data[0]) {
                 let { id, saved_words, saved_phrases, history, progress } =
