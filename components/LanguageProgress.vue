@@ -67,9 +67,9 @@
     </div>
     <div v-if="description" class="description">
       <b-button variant="unstyled p-0 text-success" @click="showDescriptionDetails = !showDescriptionDetails">
-        <i v-if="!showDescriptionDetails" class="fas fa-chevron-down mr-1"></i><i class="fas fa-chevron-up mr-1" v-else></i> What do the numbers mean?
+        <i v-if="!showDescriptionDetails" class="fas fa-question-circle mr-1"></i><i class="fas fa-chevron-up mr-1" v-else></i> What do the numbers mean?
       </b-button>
-      <div v-if="showDescriptionDetails" class="mt-3">
+      <div v-if="showDescriptionDetails" class="mt-2">
         <div v-if="$store.state.progress.progressLoaded">
           You've spent
           <b>
@@ -271,7 +271,7 @@ export default {
 
 <style lang="scss" scoped>
 .description {
-  margin-top: 3rem;
+  margin-top: 2rem;
   clear: both;
 }
 

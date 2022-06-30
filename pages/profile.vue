@@ -34,28 +34,11 @@
               <LanguageFlag
                 :language="$l2"
                 :autocycle="true"
-                style="
-                  transform: scale(1.5);
-                  margin-top: 1rem;
-                  margin-bottom: 2rem;
-                "
+                class="mb-2"
               />
-              <h5 class="mb-2">
-                {{ $auth.user.first_name }}’s {{ $l2.name }}-Learning Progress
+              <h5 class="mb-4">
+                {{ $auth.user.first_name }}’s {{ $l2.name }} Language Progress
               </h5>
-              <router-link
-                to="/dashboard"
-                class="text-success"
-                style="
-                  font-size: 0.8em;
-                  font-weight: bold;
-                  margin-bottom: 2rem;
-                  display: block;
-                "
-              >
-                <i class="fas fa-tachometer-alt mr-1"></i>
-                Dashboard
-              </router-link>
             </div>
           </div>
           <LanguageGoal :$l1="$l1" :$l2="$l2" />
@@ -73,7 +56,7 @@
                 :progressBarShowValue="false"
               />
               <div v-if="wordIds">
-                <h5 class="mt-5 mb-3">
+                <h5 class="mt-4 mb-3">
                   Your {{ $l2.name }} Words
                   <router-link
                     class="text-success ml-2"
