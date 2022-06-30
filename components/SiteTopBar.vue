@@ -27,6 +27,15 @@
           <i class="fas fa-chevron-left"></i>
           Back
         </b-button>
+        <router-link
+          to="/dashboard"
+          class="btn btn-unstyled ml-2"
+          style="color: #ccc"
+          v-if="$auth.loggedIn && $route.path !== '/dashboard' && params.lg !== false"
+          title="Dashboard"
+        >
+          <i class="fas fa-tachometer-alt"></i>
+        </router-link>
       </div>
       <template v-if="$route.params.l1 && $route.params.l2">
         <div>
@@ -39,7 +48,7 @@
             <i class="fas fa-search"></i>
           </router-link>
           <b-button
-            :class="`top-bar-buttontop ml-1`"
+            :class="`top-bar-buttontop ml-2`"
             variant="unstyled"
             v-if="params.xs !== false && $route.params.l1 && $route.params.l2"
             title="Quick Settings"
