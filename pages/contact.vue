@@ -56,16 +56,22 @@
                 <div>Co-founder, instructor, designer &amp; dev</div>
               </div>
               <div>
-                <span>
-                  <strong>{{ $t("Email:") }}</strong>
-                  <a href="mailto:jon@chinesezerotohero.com">
-                    jon@chinesezerotohero.com
-                  </a>
-                </span>
+                <strong>{{ $t("Email:") }}</strong>
+                <a href="mailto:jon@chinesezerotohero.com">
+                  jon@chinesezerotohero.com
+                </a>
               </div>
               <div>
                 <strong>{{ $t("WeChat:") }}</strong>
                 longjiang2005bby
+              </div>
+              <div>
+                <strong>{{ $t("Discord:") }}</strong>
+                Jiang#2737
+              </div>
+              <div>
+                <strong>{{ $t("Telegram:") }}</strong>
+                jon_zerotohero
               </div>
             </div>
           </div>
