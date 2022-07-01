@@ -110,14 +110,6 @@
                   </div>
                 </div>
               </div>
-              <div
-                :class="{
-                  'text-center': true,
-                  'd-none': !videos || videos.length > 0,
-                }"
-              >
-                No more videos.
-              </div>
               <template v-if="videos && videos.length > 0">
                 <LazyYouTubeVideoList
                   ref="youtubeVideoList"
@@ -134,6 +126,21 @@
                 />
                 <div v-observe-visibility="visibilityChanged"></div>
               </template>
+              <div v-if="keyword">
+                <MediaSearchResults :keyword="keyword" class="mt-4" />
+                <YouTubeSearchResults
+                  :term="keyword"
+                  :start="start"
+                  :captions="captions"
+                  :key="searchResultKey"
+                  :long="long"
+                  :infinite="true"
+                  :showProgress="false"
+                  skin="dark"
+                  ref="youtubeSearchResults"
+                  :cloakVideosWithoutSubs="!$adminMode"
+                />
+              </div>
             </div>
             <LazyIdenticalLanguages class="mt-3" routeName="home" />
           </div>

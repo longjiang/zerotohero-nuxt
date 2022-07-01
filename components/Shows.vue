@@ -32,7 +32,7 @@
             </b-input-group>
           </div>
         </div>
-        <div class="row mb-5">
+        <div class="row mb-3">
           <div class="col-sm-12">
             <div class="tags mb-3" v-if="tags">
               <b
@@ -147,6 +147,21 @@
                   :type="type"
                   :key="`shows-filtered-${this.keyword}`"
                 />
+                <div v-if="keyword && filteredShows && filteredShows.length === 0">
+                  <MediaSearchResults :keyword="keyword" />
+                  <YouTubeSearchResults
+                    :term="keyword"
+                    :start="start"
+                    :captions="captions"
+                    :key="searchResultKey"
+                    :long="long"
+                    :infinite="true"
+                    :showProgress="false"
+                    skin="dark"
+                    ref="youtubeSearchResults"
+                    :cloakVideosWithoutSubs="!$adminMode"
+                  />
+                </div>
                 <LazyIdenticalLanguages class="mt-3" :routeName="routeType" />
               </div>
             </div>
