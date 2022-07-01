@@ -10,7 +10,7 @@
 <template>
   <container-query :query="query" v-model="params">
     <div class="main-dark">
-      <div class="container" v-if="!isSafari">
+      <div class="container" v-if="!native && !isSafari">
         <div class="row">
           <div class="col-sm-12 pt-4"><div class="text-center pt-3 pb3 alert alert-danger rounded">Currently this feature only works with the Safari browser due to a recent change in Chrome/Firefox/Edge.</div></div>
         </div>
@@ -192,6 +192,7 @@ import Helper from "@/lib/helper";
 import Vue from "vue";
 import CountryCodeLookup from "country-code-lookup";
 import { ContainerQuery } from "vue-container-query";
+import { Capacitor } from "@capacitor/core";
 export default {
   components: {
     ContainerQuery,
@@ -320,6 +321,9 @@ export default {
     if(/^((?!chrome|android).)*safari/i.test(navigator?.userAgent)) this.isSafari = true
   },
   methods: {
+    native() {
+      return Capacitor.isNativePlatform();
+    },
     async loadChannels() {
       let code = this.$l2["iso639-3"];
       if (code === "nor") code = "nob"; // Use 'Bokmal' for Norwegian.
