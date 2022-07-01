@@ -846,7 +846,7 @@ export default {
           this.loadImages();
         this.open = true;
         await timeout(123);
-        if (this.open) {
+        if (this.open && this.$store.state.settings.autoPronounce) {
           if (this.$refs.speak && this.$refs.speak[0]) {
             this.$refs.speak[0].speak(0.75, 0.5); // Speed and volume
           }

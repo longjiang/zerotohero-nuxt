@@ -11,6 +11,7 @@ export const state = () => {
     hidePhonetics: false,
     hideDefinitions: false,
     subsSearchLimit: true,
+    autoPronounce: true, // Whether or not to play the audio automatically when opening a WordBlock popup
     settingsLoaded: {},
     l2Settings: {
       showDefinition: false,
@@ -86,6 +87,14 @@ export const mutations = {
       localStorage.setItem("zthSettings", JSON.stringify(settings));
     }
   },
+  SET_AUTO_PRONOUNCE(state, autoPronounce) {
+    state.autoPronounce = autoPronounce;
+    if (typeof localStorage !== "undefined") {
+      let settings = loadSettingsFromLocalStorage();
+      settings.autoPronounce = autoPronounce;
+      localStorage.setItem("zthSettings", JSON.stringify(settings));
+    }
+  },
   SET_HIDE_WORD(state, hideWord) {
     state.hideWord = hideWord;
     if (typeof localStorage !== "undefined") {
@@ -137,6 +146,9 @@ export const actions = {
   },
   setAdminMode({ dispatch, commit }, value) {
     commit("SET_ADMIN_MODE", value);
+  },
+  setAutoPronounce({ commit }, value) {
+    commit('SET_AUTO_PRONOUNCE', value)
   },
   setHideWord({ dispatch, commit }, value) {
     commit("SET_HIDE_WORD", value);

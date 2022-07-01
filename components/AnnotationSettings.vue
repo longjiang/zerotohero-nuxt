@@ -15,6 +15,20 @@
         Admin Mode
       </div>
       <div
+        @click="autoPronounce = !autoPronounce"
+        style="display: inline-block"
+        :class="`annotation-setting-toggle ${
+          autoPronounce ? 'annotation-setting-toggle-active' : ''
+        }`"
+      >
+        <span class="annotation-setting-icon">
+          <i class="fa fa-volume-up" v-if="autoPronounce"></i>
+          <i class="fas fa-volume-mute" v-else></i>
+        </span>
+        <span v-if="autoPronounce">Pronounce word when opening popup</span>
+        <span v-else>Silent when opening popup</span>
+      </div>
+      <div
         @click="showPinyin = !showPinyin"
         :class="`annotation-setting-toggle ${
           showPinyin ? 'annotation-setting-toggle-active' : ''
@@ -39,7 +53,7 @@
           </ruby>
           <span v-else>[pʰ]</span>
         </span>
-        {{ showPinyin ? "Phonetics On" : "Phonetics Off" }}
+        {{ showPinyin ? "Phonetics on" : "Phonetics off" }}
       </div>
       <div
         v-if="$l2.han"
@@ -53,7 +67,7 @@
           <span v-if="!useTraditional">简</span>
         </span>
         {{
-          useTraditional ? "Traditional Characters" : "Simplified Characters"
+          useTraditional ? "Traditional characters" : "Simplified characters"
         }}
       </div>
       <div
@@ -65,7 +79,7 @@
         <span class="annotation-setting-icon">
           <i class="fas fa-language"></i>
         </span>
-        {{ showTranslation ? "Translation On" : "Translation Off" }}
+        {{ showTranslation ? "Translation on" : "Translation off" }}
       </div>
       <div
         v-if="$l2.code === 'ko'"
@@ -98,13 +112,13 @@
         class="annotation-setting-toggle"
         @click="zoomLevel = zoomLevel > 0 ? zoomLevel - 1 : zoomLevel"
       >
-        <span class="annotation-setting-icon">ᴛ</span> Smaller Text
+        <span class="annotation-setting-icon">ᴛ</span> Smaller text
       </div>
       <div
         class="annotation-setting-toggle"
         @click="zoomLevel = zoomLevel < 4 ? zoomLevel + 1 : zoomLevel"
       >
-        <span class="annotation-setting-icon">T</span> Bigger Text
+        <span class="annotation-setting-icon">T</span> Bigger text
       </div>
     </div>
     <div v-if="variant === 'page'">
@@ -174,6 +188,9 @@
         </b-form-checkbox>
         <b-form-checkbox class="mb-2" v-model="showQuiz">
           Show pop quiz
+        </b-form-checkbox>
+        <b-form-checkbox class="mb-2" v-model="autoPronounce">
+          Pronounce word when opening popup
         </b-form-checkbox>
         <b-form-checkbox class="mb-2" v-model="disableAnnotation">
           Disable popup dictionary
@@ -337,6 +354,7 @@ export default {
   data() {
     return {
       zoomLevel: 0,
+      autoPronounce: true,
       showDefinition: undefined,
       showTranslation: undefined,
       showPinyin: undefined,
@@ -383,6 +401,7 @@ export default {
       this.disableAnnotation =
         this.$store.state.settings.l2Settings.disableAnnotation;
       this.adminMode = this.$store.state.settings.adminMode;
+      this.autoPronounce = this.$store.state.settings.autoPronounce;
       if (this.adminMode) this.onceAdmin = true;
     },
   },
@@ -392,6 +411,9 @@ export default {
     },
     adminMode() {
       this.$store.dispatch("settings/setAdminMode", this.adminMode);
+    },
+    autoPronounce() {
+      this.$store.dispatch("settings/setAutoPronounce", this.autoPronounce);
     },
     showDefinition() {
       this.$store.dispatch("settings/setL2Settings", {

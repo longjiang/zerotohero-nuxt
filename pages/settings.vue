@@ -13,22 +13,7 @@
   }
 </router>
 <template>
-  <div class="main pt-5 pb-5" v-cloak>
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-12">
-          <FeedbackPrompt class="mb-5" :skin="$route.meta ? $route.meta.skin : 'light'"/>
-          <h3 class="page-title text-center">
-            {{ $t("Settings") }}
-          </h3>
-          <div class="jumbotron mt-4 p-4 bg-warning text-dark text-center">
-            Settings are
-            <b>automatically saved</b>
-            as soon as you make the change.
-          </div>
-        </div>
-      </div>
-    </div>
+  <div class="main pt-3 pb-5" v-cloak>
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
