@@ -203,7 +203,6 @@ export default {
                   this.seek(startAtRandomTime);
                 }
                 if (state === PLAYING) {
-                  if (this.muted) this.player.mute()
                   window.speechSynthesis.cancel();
                   if (
                     this.playerIsThisPlayerNotSomeOtherPlayer() &&
@@ -220,6 +219,7 @@ export default {
               }
             },
             onReady: (event) => {
+              if (this.muted) this.player.mute()
               this.reportIfVideoUnavailableUponAutoload(this.youtube);
             },
           },
