@@ -8,7 +8,7 @@
         :hsk="hsk"
         :skin="skin"
       />
-      <div class="text-center mt-2" v-if="review.length > 1">
+      <!-- <div class="text-center mt-2" v-if="review.length > 1">
         <span
           class="d-inline-block"
           style="
@@ -29,7 +29,7 @@
             Show Fewer Questions
           </span>
         </span>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -57,7 +57,7 @@ export default {
     return {
       active: false, // activate only when visible the first time
       review: [],
-      reviewOpen: false,
+      reviewOpen: true,
     };
   },
   computed: {
