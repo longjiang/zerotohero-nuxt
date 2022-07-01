@@ -12,6 +12,7 @@
         @videoUnavailable="onVideoUnavailable"
         :autoload="!isMobile"
         :autoplay="!isMobile"
+        :muted="muted"
         :cc="false"
         :youtube="video.youtube_id"
         :posterOnly="isMobile"
@@ -90,7 +91,7 @@ export default {
   data() {
     return {
       videoUnavailable: false,
-      muted: false,
+      muted: true,
     };
   },
   computed: {

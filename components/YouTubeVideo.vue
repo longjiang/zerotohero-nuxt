@@ -65,6 +65,10 @@ export default {
       type: Boolean,
       default: true, // Whether or not to show controls in the iframe player
     },
+    muted: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
@@ -199,6 +203,7 @@ export default {
                   this.seek(startAtRandomTime);
                 }
                 if (state === PLAYING) {
+                  if (this.muted) this.player.mute()
                   window.speechSynthesis.cancel();
                   if (
                     this.playerIsThisPlayerNotSomeOtherPlayer() &&
