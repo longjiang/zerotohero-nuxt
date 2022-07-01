@@ -258,7 +258,7 @@
           </Annotate>
           <div class="phrases mt-2" v-if="word.phrases">
             <div
-              v-for="phrase in word.phrases.slice(0, 6).filter(p => p)"
+              v-for="phrase in word.phrases.slice(0, 6).filter(p => typeof p === 'object')"
               :key="`word-${word.id}-phrase-${phrase.id}`"
               class="phrase-wrapper"
             >
