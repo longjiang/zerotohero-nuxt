@@ -126,8 +126,8 @@ export default {
   },
   methods: {
     scrollToLine() {
-      this.$parent.seekVideoTo(this.reviewItem.line.starttime);
-      this.$parent.play();
+      this.$parent.$parent.seekVideoTo(this.reviewItem.line.starttime);
+      this.$parent.$parent.play();
     },
     async findSimilarWords(text) {
       let words = [];
