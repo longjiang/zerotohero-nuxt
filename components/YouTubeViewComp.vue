@@ -1,6 +1,6 @@
 
 <template>
-  <div class="youtube-view">
+  <div class="youtube-view" style="transition: all 0.5s ease-in-out">
     <SocialHead
       :title="`${video ? video.title + ' | ' : ''}Learn ${
         $l2.name

@@ -568,7 +568,7 @@ export default {
     overflow: hidden;
     z-index: 9;
     ::v-deep .main-dark {
-      background: rgba(0, 0, 0, 0.8);
+      background: #28a74588;
       backdrop-filter: blur(20px);
     }
   }

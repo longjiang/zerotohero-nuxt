@@ -307,7 +307,7 @@ export default {
   color: #ccc;
   margin: 0 0.2rem;
   &:disabled {
-    color: #444;
+    color: #cccccc44;
   }
 }
 
