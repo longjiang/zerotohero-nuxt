@@ -54,7 +54,6 @@
               ></i>
             </h3>
             <p style="opacity: 0.6" class="mb-3">
-              <span v-if="episodeCount">{{ episodeCount }} Videos</span>
               <span v-if="$adminMode && show">
                 Cover youtube_id:
                 <span contenteditable="true" @blur="saveCover">
@@ -78,14 +77,25 @@
                         v-model="keyword"
                         :lazy="true"
                         @compositionend.prevent.stop="() => false"
-                        placeholder="Filter..."
+                        :placeholder="episodeCount ? `Filter ${episodeCount} videos...` : 'Filter videos...'"
                         class="input-ghost-dark"
                       />
                     </b-input-group>
+                    <router-link
+                      class="btn btn-ghost-dark-no-bg ml-2"
+                      style="opacity: 0.6; line-height: 1.7"
+                      v-if="randomEpisodeYouTubeId"
+                      :to="{
+                        name: 'youtube-view',
+                        params: { youtube_id: randomEpisodeYouTubeId },
+                      }"
+                    >
+                      <i class="fas fa-random"></i>
+                    </router-link>
                     <b-button-group style="opacity: 0.6">
                       <b-button
                         variant="ghost-dark-no-bg"
-                        class="ml-2"
+                        class="ml-1"
                         @click="view = view === 'grid' ? 'list' : 'grid'"
                       >
                         <i class="fas fa-th" v-if="view === 'grid'"></i>
@@ -179,7 +189,6 @@ export default {
       keyword: "",
       moreVideos: 0,
       perPage: 96,
-      randomEpisode: undefined,
       show: undefined,
       showDiscover: false,
       sort: "title",
@@ -187,7 +196,7 @@ export default {
       tries: 0,
       videos: undefined,
       view: "grid",
-      musicOffset: 0
+      musicOffset: 0,
     };
   },
   computed: {
@@ -198,6 +207,12 @@ export default {
     $l2() {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
+    },
+    randomEpisodeYouTubeId() {
+      if (this.videos) {
+        let episode = Helper.randomArrayItem(this.videos);
+        return episode.youtube_id;
+      }
     },
     $adminMode() {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
@@ -235,8 +250,8 @@ export default {
     async show() {
       this.sort =
         this.type === "talk" && !this.show.audiobook ? "-date" : "title";
-      this.episodeCount = await this.getEpisodeCount()
-      this.musicOffset = Math.ceil(Math.random() * this.episodeCount)
+      this.episodeCount = await this.getEpisodeCount();
+      this.musicOffset = Math.ceil(Math.random() * this.episodeCount);
       this.videos = await this.getVideos({
         limit: this.perPage,
         offset: this.moreVideos,
@@ -371,16 +386,25 @@ export default {
       }
     },
     async getShowFromServer(id, collection) {
-      let response = await this.$directus.get(
-        `items/${collection}s/${id}`
-      );
+      let response = await this.$directus.get(`items/${collection}s/${id}`);
       if (response && response.data) {
         return response.data.data;
       }
     },
-    async getVideos({ keyword, limit = this.perPage, offset = 0, sort = "title" } = {}) {
-      if (this.show.title === 'Music' && this.episodeCount > 500 ) offset = offset + this.musicOffset
-      if (!keyword && this.show.episodes && this.show.episodes.length >= offset + limit) return this.show.episodes.slice(offset, limit);
+    async getVideos({
+      keyword,
+      limit = this.perPage,
+      offset = 0,
+      sort = "title",
+    } = {}) {
+      if (this.show.title === "Music" && this.episodeCount > 500)
+        offset = offset + this.musicOffset;
+      if (
+        !keyword &&
+        this.show.episodes &&
+        this.show.episodes.length >= offset + limit
+      )
+        return this.show.episodes.slice(offset, limit);
       else {
         return await this.getVideosFromServer({ keyword, limit, offset, sort });
       }
