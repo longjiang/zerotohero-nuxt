@@ -13,13 +13,13 @@
           class="gramrel-item list-unstyled"
           :key="`${term}-collocation-${type}-${index}`"
         >
-          <SmallStar
+          <!-- <SmallStar
             :item="line"
             :saved="(line) => line.saved"
             :save="saveLine"
             :remove="removeSavedLine"
             style="overflow: hidden; float: left"
-          />
+          /> -->
           <Annotate tag="div" :checkSaved="false" :buttons="true">
             <span
               v-html="
