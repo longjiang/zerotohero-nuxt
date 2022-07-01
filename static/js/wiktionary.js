@@ -281,11 +281,11 @@ const Dictionary = {
     if (this.l2.agglutinative) item.search = item.search.replace(/^-/, "");
     item.head = item.word;
     delete item.word;
-    delete item.stems
+    delete item.stems;
+    delete item.phrases;
     item.wiktionary = true;
     item.definitions = item.definitions ? item.definitions.split("|") : [];
-
-    item.phrases = item.phrases ? item.phrases.split("|") : [];
+    // item.phrases = item.phrases ? item.phrases.split("|") : [];
 
     if (this.frequency && !item.frequency)
       item.frequency = this.frequency[item.search];
@@ -629,8 +629,13 @@ const Dictionary = {
     return word
   },
   addPhrasesToWord(word) {
-    if (word)
-      if (!word.phrases || word.phrases.length === 0) word.phrases = this.phraseIndex[word.head] || []
+    if (word) {
+      if (!word.phrases || word.phrases.length === 0) {
+        word.phrases = this.phraseIndex[word.head] || []
+      }
+    }
+      
+    
   },
   lookup(text) {
     let words = this.searchIndex[text.toLowerCase()];
@@ -954,6 +959,7 @@ const Dictionary = {
         }
       }
       if (matched) {
+        this.addPhrasesToWord(word)
         matches.push({
           word,
           matchedIndex,
