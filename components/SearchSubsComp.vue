@@ -538,7 +538,7 @@ export default {
     },
     calculateLimit() {
       // No limit unless set
-      if (this.subsSearchLimit) return false;
+      if (!this.subsSearchLimit) return false;
       else {
         if (this.exact) {
           // Exact search while limit is set
@@ -574,6 +574,7 @@ export default {
       this.excludeTerms = excludeTerms.filter(
         (s) => s !== "" && !this.terms.includes(s)
       );
+      console.log({limit: this.calculateLimit()})
       let hits = await this.$subs.searchSubs({
         terms: this.terms,
         excludeTerms: this.excludeTerms,
