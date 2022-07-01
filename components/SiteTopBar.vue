@@ -34,7 +34,7 @@
           v-if="$auth.loggedIn && $route.path !== '/dashboard' && params.lg !== false"
           title="Dashboard"
         >
-          <i class="fas fa-tachometer-alt"></i>
+          <i class="fas fa-home"></i>
         </router-link>
       </div>
       <template v-if="$route.params.l1 && $route.params.l2">
