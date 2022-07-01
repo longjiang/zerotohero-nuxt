@@ -276,12 +276,12 @@
             </div>
           </div>
         </div>
-        <EntryExternal
+        <!-- <EntryExternal
           v-if="text || token"
           :term="text ? text : token.candidates[0].head"
           :sticky="false"
           class="mt-2"
-        />
+        /> -->
         <div v-if="loading === true">
           <Loader
             :sticky="true"
