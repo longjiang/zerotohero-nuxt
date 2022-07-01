@@ -4,7 +4,7 @@
     :class="{ unavailable: videoUnavailable }"
     v-observe-visibility="visibilityChanged"
   >
-    <div class="video-hero" @click="play">
+    <div class="video-hero" @click="play" v-if="wide">
       <div class="top-overlay"></div>
       <div class="bottom-overlay"></div>
       <LazyYouTubeVideo
@@ -92,7 +92,11 @@ export default {
     return {
       videoUnavailable: false,
       muted: true,
+      wide: false,
     };
+  },
+  mounted() {
+    this.wide = Helper.wide();
   },
   computed: {
     isMobile() {

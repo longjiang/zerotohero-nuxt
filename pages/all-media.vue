@@ -10,7 +10,7 @@
 <template>
   <div class="main-dark">
     <VideoHero
-      v-if="wide && heroVideo"
+      v-if="heroVideo"
       :video="heroVideo"
       @videoUnavailable="onVideoUnavailable"
     />
@@ -219,14 +219,12 @@ export default {
       news: [],
       loading: true,
       heroVideo: undefined,
-      wide: false,
     };
   },
   async fetch() {
     if (this.$store.state.shows.showsLoaded[this.$l2.code]) this.loadShows();
   },
   async mounted() {
-    this.wide = Helper.wide();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type.startsWith("shows")) {
         this.loadShows();
