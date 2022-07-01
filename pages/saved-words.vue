@@ -101,8 +101,8 @@
             :key="`group-${index}`"
             style="color: #ccc"
           >
-            <div v-if="group.date === '0'" class="small mb-3">Earlier</div>
-            <div v-else class="small mb-3">
+            <div v-if="group.date === '0'" class="small mb-3 mt-3">Earlier</div>
+            <div v-else class="small mt-3 mb-3">
               {{
                 new Date(group.date).toLocaleDateString("en-US", {
                   year: "numeric",

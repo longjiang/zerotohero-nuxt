@@ -6,9 +6,9 @@
       @click="hideWord = !hideWord"
       class="mr-2"
     >
-      <i class="far fa-eye-slash" v-if="hideWord"></i>
+      <i class="far fa-eye-slash" v-if="!hideWord"></i>
       <i class="far fa-eye" v-else></i>
-      <span class="ml-1">Word</span>
+      <span class="ml-1">{{ hideWord ? 'Show' : 'Hide' }} Word</span>
     </b-button>
     <b-button
       variant="unstyled"
@@ -16,19 +16,19 @@
       @click="hidePhonetics = !hidePhonetics"
       class="mr-2"
     >
-      <i class="far fa-eye-slash" v-if="hidePhonetics"></i>
+      <i class="far fa-eye-slash" v-if="!hidePhonetics"></i>
       <i class="far fa-eye" v-else></i>
       <span class="ml-1" v-if="$l2.code === 'ko'">Hanja</span>
-      <span class="ml-1" v-else>Phonetics</span>
+      <span class="ml-1" v-else>{{ hidePhonetics ? 'Show' : 'Hide' }} Phonetics</span>
     </b-button>
     <b-button
       variant="unstyled"
       size="sm"
       @click="hideDefinitions = !hideDefinitions"
     >
-      <i class="far fa-eye-slash" v-if="hideDefinitions"></i>
+      <i class="far fa-eye-slash" v-if="!hideDefinitions"></i>
       <i class="far fa-eye" v-else></i>
-      <span class="ml-1">Defs</span>
+      <span class="ml-1">{{ hideDefinitions ? 'Show' : 'Hide' }} Defs</span>
     </b-button>
   </div>
 </template>
