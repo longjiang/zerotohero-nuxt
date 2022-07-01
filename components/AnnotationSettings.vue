@@ -25,8 +25,8 @@
           <i class="fa fa-volume-up" v-if="autoPronounce"></i>
           <i class="fas fa-volume-mute" v-else></i>
         </span>
-        <span v-if="autoPronounce">Pronounce word when opening popup</span>
-        <span v-else>Silent when opening popup</span>
+        <span v-if="autoPronounce">Auto pronounce words</span>
+        <span v-else>Do not auto pronounce words</span>
       </div>
       <div
         @click="showPinyin = !showPinyin"

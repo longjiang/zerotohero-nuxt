@@ -222,7 +222,7 @@ export default {
   async mounted() {
     this.prevPath = await this.prevWord();
     this.nextPath = await this.nextWord();
-    if (this.$refs.speak) {
+    if (this.$refs.speak && this.$store.state.settings.autoPronounce) {
       this.$refs.speak.speak(0.75, 0.5); // Speed and volume
     }
   },
