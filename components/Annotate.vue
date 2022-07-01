@@ -48,61 +48,67 @@
                 :item="phraseItem(text, translationData)"
                 store="savedPhrases"
                 icon="bookmark"
-                class="mr-1 annotator-button focus-exclude"
+                class="annotator-button focus-exclude"
                 title="Save Phrase"
-              />
+              /><span>Save as Phrase</span>
+            </b-dropdown-item>
+            <b-dropdown-item>
               <Speak
                 :text="text"
-                class="annotator-button ml-1 mr-1"
+                class="annotator-button"
                 title="Speak"
-              />
+                ref="speak"
+              /><span @click="readAloud">Read Aloud</span>
+            </b-dropdown-item>
+
+            <b-dropdown-item>
               <span
                 class="
                   annotator-button annotator-translate
-                  ml-1
-                  mr-1
                   focus-exclude
                 "
                 title="Translate Inline"
                 @click="translateClick"
               >
                 <i class="fas fa-language"></i>
-              </span>
+              </span><span>Show Translation</span>
+            </b-dropdown-item>
+            <b-dropdown-item>
               <span
                 class="
                   annotator-button annotator-external-translate
-                  ml-1
-                  mr-1
                   focus-exclude
                 "
                 title="Translate with External Translator"
                 @click="externalTranslateClick"
               >
                 <i class="fas fa-globe"></i>
-              </span>
+              </span><span>Open Translator <small><i class="fas fa-external-link-alt"></i></small></span>
+            </b-dropdown-item>
+            <!-- <b-dropdown-item>
               <span
                 :class="{
-                  'annotator-button annotator-text-mode ml-1 mr-1 focus-exclude': true,
+                  'annotator-button annotator-text-mode focus-exclude': true,
                   active: textMode,
                 }"
                 title="Edit"
                 @click="textMode = !textMode"
               >
                 <i class="fas fa-edit"></i>
-              </span>
+              </span> Edit
+            </b-dropdown-item> -->
+            <b-dropdown-item>
               <span
                 @click="copyClick"
                 title="Copy"
-                class="annotator-button annotator-copy ml-1 mr-1 focus-exclude"
+                class="annotator-button annotator-copy focus-exclude"
               >
                 <i class="fas fa-copy"></i>
-              </span>
+              </span><span>Copy</span>
             </b-dropdown-item>
           </b-dropdown>
         </div>
-        <div
-          :class="{ 'annotate-slot': true, 'd-none': annotated }"
-        >
+        <div :class="{ 'annotate-slot': true, 'd-none': annotated }">
           <slot></slot>
         </div>
         <div :class="{ 'd-none': !textMode }">
@@ -157,7 +163,7 @@ import popupnote from "@/components/PopupNote";
 import readerlink from "@/components/ReaderLink";
 import VRuntimeTemplate from "v-runtime-template";
 import Helper from "@/lib/helper";
-import { breakSentences } from '@/lib/utils/string'
+import { breakSentences } from "@/lib/utils/string";
 import { transliterate as tr } from "transliteration";
 import { mapState } from "vuex";
 import { ContainerQuery } from "vue-container-query";
@@ -305,6 +311,9 @@ export default {
     },
   },
   methods: {
+    readAloud() {
+      this.$refs['speak'].speak()
+    },
     getSentences() {
       let sentences = [];
       for (let sentence of this.$el.querySelectorAll(
@@ -364,9 +373,9 @@ export default {
         this.setTranslation(translation);
       } catch (err) {
         this.setTranslation();
-        try{
+        try {
           iframeTranslationClient.destroy();
-        } catch(err) {
+        } catch (err) {
           Helper.logError(err);
         }
         Helper.logError(err);
@@ -684,7 +693,10 @@ export default {
         .replace(
           reg,
           (match, p1) =>
-            `<WordBlock v-bind="wordBlockIntegralAttrs('${p1.replace(/'/g, "\\'")}')">${p1}</WordBlock>`
+            `<WordBlock v-bind="wordBlockIntegralAttrs('${p1.replace(
+              /'/g,
+              "\\'"
+            )}')">${p1}</WordBlock>`
         )
         .replace(
           /!!!###!!!/gi,
@@ -729,8 +741,8 @@ export default {
       let sentenceEl = e.currentTarget;
       let sentences = this.getSentences();
       let index = sentences.findIndex((el) => el === sentenceEl);
-      let current = Math.max(index, 0); // cannot set this as a data property because reactivity makes it impossible for the parent 
-      this.highlightTranslation(current)
+      let current = Math.max(index, 0); // cannot set this as a data property because reactivity makes it impossible for the parent
+      this.highlightTranslation(current);
       this.$emit("sentenceClick", sentenceEl);
     },
   },
@@ -876,7 +888,8 @@ export default {
 }
 
 .annotator-buttons .dropdown-item {
-  padding: 0 0.75rem;
+  padding: 0.1rem 0.75rem;
+  font-size: 0.8em;
   &:hover {
     background: none;
   }
@@ -890,10 +903,9 @@ export default {
   }
 
   .annotator-button {
-    padding: 0.3rem 0.3rem;
+    width: 1.7rem;
+    text-align: center;
     border-radius: 0.2rem;
-    line-height: 16px;
-    height: 1.6rem;
     display: inline-block;
   }
 
