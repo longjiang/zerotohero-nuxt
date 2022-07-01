@@ -19,7 +19,7 @@
         :icon="false"
       />
     </div>
-    <div class="hero-video-info-wrapper">
+    <div class="hero-video-info-wrapper" v-if="wide">
       <div class="container">
         <div class="row">
           <div class="col-sm-12">

@@ -1,95 +1,5 @@
 <template>
   <div class="main-dark">
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-12">
-          <div class="tags mt-3 mb-3" v-if="tags">
-            <b
-              style="
-                margin-left: 0.25rem;
-                position: relative;
-                bottom: -0.1rem;
-                color: #888;
-              "
-            >
-              By tags:
-            </b>
-            <router-link
-              :key="`tag-all`"
-              :class="{ 'btn btn-sm tag text-white bg-black': true }"
-              :to="{ name: routeType }"
-            >
-              All
-              <small style="color: #888">
-                ({{ filteredShowsByAudiobook.length }})
-              </small>
-            </router-link>
-            <router-link
-              v-if="filterShowsMadeForKids && filterShowsMadeForKids.length > 0"
-              :key="`tag-kids`"
-              :class="{ 'btn btn-sm tag text-white bg-black': true }"
-              :to="{ name: routeType, params: { tag: 'kids' } }"
-            >
-              Kids
-              <small style="color: #888">
-                ({{ filterShowsMadeForKids.length }})
-              </small>
-            </router-link>
-            <router-link
-              v-for="tag of tags.slice(0, 15)"
-              :key="`tag-${tag.tag}`"
-              :class="{ 'btn btn-sm tag text-white bg-black': true }"
-              :to="{ name: routeType, params: { tag: tag.tag } }"
-            >
-              {{ tag.tag.toLowerCase() }}
-              <small style="color: #888">({{ tag.count }})</small>
-            </router-link>
-          </div>
-          <div class="tags mt-3 mb-3" v-if="levels">
-            <b
-              style="
-                margin-left: 0.25rem;
-                position: relative;
-                bottom: -0.1rem;
-                color: #888;
-              "
-            >
-              By level:
-            </b>
-            <router-link
-              :key="`tag-all`"
-              :class="{ 'btn btn-sm tag text-white bg-black': true }"
-              :to="{ name: routeType, params: { tag } }"
-            >
-              All
-              <small style="color: #888">
-                ({{ filteredShowsByAudiobookAndTags.length }})
-              </small>
-            </router-link>
-            <router-link
-              :class="{ 'btn btn-sm tag text-white bg-black': true }"
-              :to="{
-                name: routeType,
-                params: { tag: tag || 'all', level: level.numeric },
-              }"
-              v-for="(level, index) in levels"
-              :key="`filter-level-${level}-${index}`"
-            >
-              {{
-                index === 0
-                  ? level.name
-                  : level.exam === "CEFR"
-                  ? level.level
-                  : level.name
-              }}
-              <small style="color: #888">
-                ({{ showCountByLevel(level.numeric) }})
-              </small>
-            </router-link>
-          </div>
-        </div>
-      </div>
-    </div>
     <VideoHero
       v-if="featureEpisode"
       :video="featureEpisode"
@@ -107,22 +17,115 @@
               : `https://img.youtube.com/vi/${shows[0].youtube_id}/hqdefault.jpg`
           "
         />
-
+        <div class="row">
+          <div class="col-sm-12">
+            <b-input-group class="mb-3 mt-3 input-group-ghost-dark">
+              <b-form-input
+                v-model="keyword"
+                @compositionend.prevent.stop="() => false"
+                :placeholder="`Filter ${
+                  filteredShows ? filteredShows.length : ''
+                } ${$l2.name} ${routeTitles[routeType]}`"
+                ref="filter"
+                class="input-ghost-dark"
+              />
+            </b-input-group>
+          </div>
+        </div>
+        <div class="row mb-5">
+          <div class="col-sm-12">
+            <div class="tags mb-3" v-if="tags">
+              <b
+                style="
+                  margin-left: 0.25rem;
+                  position: relative;
+                  bottom: -0.1rem;
+                  color: #888;
+                "
+              >
+                By tags:
+              </b>
+              <router-link
+                :key="`tag-all`"
+                :class="{ 'btn btn-sm tag text-white bg-black': true }"
+                :to="{ name: routeType }"
+              >
+                All
+                <small style="color: #888">
+                  ({{ filteredShowsByAudiobook.length }})
+                </small>
+              </router-link>
+              <router-link
+                v-if="
+                  filterShowsMadeForKids && filterShowsMadeForKids.length > 0
+                "
+                :key="`tag-kids`"
+                :class="{ 'btn btn-sm tag text-white bg-black': true }"
+                :to="{ name: routeType, params: { tag: 'kids' } }"
+              >
+                Kids
+                <small style="color: #888">
+                  ({{ filterShowsMadeForKids.length }})
+                </small>
+              </router-link>
+              <router-link
+                v-for="tag of tags.slice(0, 15)"
+                :key="`tag-${tag.tag}`"
+                :class="{ 'btn btn-sm tag text-white bg-black': true }"
+                :to="{ name: routeType, params: { tag: tag.tag } }"
+              >
+                {{ tag.tag.toLowerCase() }}
+                <small style="color: #888">({{ tag.count }})</small>
+              </router-link>
+            </div>
+            <div class="tags mt-3 mb-3" v-if="levels">
+              <b
+                style="
+                  margin-left: 0.25rem;
+                  position: relative;
+                  bottom: -0.1rem;
+                  color: #888;
+                "
+              >
+                By level:
+              </b>
+              <router-link
+                :key="`tag-all`"
+                :class="{ 'btn btn-sm tag text-white bg-black': true }"
+                :to="{ name: routeType, params: { tag } }"
+              >
+                All
+                <small style="color: #888">
+                  ({{ filteredShowsByAudiobookAndTags.length }})
+                </small>
+              </router-link>
+              <router-link
+                :class="{ 'btn btn-sm tag text-white bg-black': true }"
+                :to="{
+                  name: routeType,
+                  params: { tag: tag || 'all', level: level.numeric },
+                }"
+                v-for="(level, index) in levels"
+                :key="`filter-level-${level}-${index}`"
+              >
+                {{
+                  index === 0
+                    ? level.name
+                    : level.exam === "CEFR"
+                    ? level.level
+                    : level.name
+                }}
+                <small style="color: #888">
+                  ({{ showCountByLevel(level.numeric) }})
+                </small>
+              </router-link>
+            </div>
+          </div>
+        </div>
         <div class="row">
           <div class="col-sm-12">
             <!-- <Sale class="mt-5 mb-5" v-if="$l2.code === 'zh'" /> -->
             <div class="show-list-wrapper">
-              <b-input-group class="mb-5 mt-3 input-group-ghost-dark">
-                <b-form-input
-                  v-model="keyword"
-                  @compositionend.prevent.stop="() => false"
-                  :placeholder="`Filter ${
-                    filteredShows ? filteredShows.length : ''
-                  } ${$l2.name} ${routeTitles[routeType]}`"
-                  ref="filter"
-                  class="input-ghost-dark"
-                />
-              </b-input-group>
               <div class="mb-5">
                 <div
                   :class="{
