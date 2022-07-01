@@ -309,6 +309,9 @@ export default {
         return channelsWithLogos[0].logo;
       }
     },
+    native() {
+      return Capacitor.isNativePlatform();
+    },
   },
   destroyed() {
     if (typeof window !== "undefined")
@@ -321,9 +324,6 @@ export default {
     if(/^((?!chrome|android).)*safari/i.test(navigator?.userAgent)) this.isSafari = true
   },
   methods: {
-    native() {
-      return Capacitor.isNativePlatform();
-    },
     async loadChannels() {
       let code = this.$l2["iso639-3"];
       if (code === "nor") code = "nob"; // Use 'Bokmal' for Norwegian.
