@@ -62,7 +62,7 @@
             class="word-block-text-byeonggi d-inline-block"
             v-html="hanja"
           />
-          <span v-if="quickGloss" class="quick-gloss">
+          <span v-if="quickGloss && quickGloss.length < 20" class="quick-gloss">
             {{ quickGloss }}
           </span>
         </span>
