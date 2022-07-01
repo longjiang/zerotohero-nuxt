@@ -394,6 +394,7 @@ export default {
     async updateWords() {
       let sW = [];
       if (
+        this.entry &&
         this.$store.state.savedWords.savedWords &&
         this.$store.state.savedWords.savedWords[this.$l2.code]
       ) {
