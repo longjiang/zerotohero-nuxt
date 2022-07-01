@@ -10,7 +10,7 @@
 <template>
   <div class="main-dark">
     <VideoHero
-      v-if="heroVideo"
+      v-if="wide && heroVideo"
       :video="heroVideo"
       @videoUnavailable="onVideoUnavailable"
     />
@@ -203,7 +203,6 @@
 
 <script>
 import Helper from "@/lib/helper";
-import Config from "@/lib/config";
 import { mapState } from "vuex";
 
 export default {
@@ -220,12 +219,14 @@ export default {
       news: [],
       loading: true,
       heroVideo: undefined,
+      wide: false,
     };
   },
   async fetch() {
     if (this.$store.state.shows.showsLoaded[this.$l2.code]) this.loadShows();
   },
   async mounted() {
+    this.wide = Helper.wide();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type.startsWith("shows")) {
         this.loadShows();
