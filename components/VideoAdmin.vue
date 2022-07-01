@@ -1,26 +1,12 @@
 <template>
   <div class="video-edit">
     <div class="video-details">
-      <router-link
-        class="link-unstyled"
-        v-if="video.channel"
-        :to="{
-          name: 'youtube-channel',
-          params: {
-            channel_id: video.channel.id,
-            title: video.channel.title || undefined,
-          },
-        }"
-      >
-        <i class="fab fa-youtube mr-1"></i>
-        {{ video.channel.title || "Channel" }}
-      </router-link>
       <span v-if="video.subs_l2 && video.subs_l2.length > 0">
         <a
           :href="originalTextHref"
           :download="`${video.title}.txt`"
           target="_blank"
-          class="link-unstyled ml-2"
+          class="link-unstyled"
         >
           <i class="fas fa-file-alt mr-1"></i>
           Transcript
@@ -34,9 +20,23 @@
       <div>
         <span v-if="video.date">{{ formatDate(video.date) }}</span>
       </div>
+      <router-link
+        class="link-unstyled"
+        v-if="$adminMode && video.channel"
+        :to="{
+          name: 'youtube-channel',
+          params: {
+            channel_id: video.channel.id,
+            title: video.channel.title || undefined,
+          },
+        }"
+      >
+        <i class="fab fa-youtube ml-2"></i>
+        {{ video.channel.title || "Channel" }}
+      </router-link>
     </div>
     <client-only>
-      <div class="video-edit-public">
+      <div class="video-edit-public" v-if="$adminMode">
         <drop
           @drop="handleDrop"
           :class="{
