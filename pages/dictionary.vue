@@ -408,7 +408,7 @@ export default {
         }
       }
       this.sW = sW
-      // this.sW = sW.sort((a, b) => a.head.localeCompare(b.head));
+      // .sort((a, b) => a.head.localeCompare(b.head));
     },
     dateStr(date) {
       return date ? new Date(Number(date)).toISOString().replace(/T.*/, "") : 0

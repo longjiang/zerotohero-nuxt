@@ -122,24 +122,25 @@
             ></WordList>
           </div>
           <div class="text-center mt-5" v-if="$dictionaryName && sW && sW[0]">
-            <router-link
-              :to="{
-                name: 'dictionary',
-                params: { method: $dictionaryName, args: sW[0].id },
-              }"
-              class="btn btn-success"
+            <b-button
+              variant="unstyled p-0 text-success"
+              @click="showLegacy = !showLegacy"
             >
-              Review All {{ sWLoaded ? sW.length : "" }} Words
-              <i class="fas fa-chevron-right ml-1"></i>
-            </router-link><br/>
-            <router-link
-              v-if="sW.length > 0"
-              class="mt-2 btn btn-sm text-secondary"
-              :to="`/${$l1.code}/${$l2.code}/learn-interactive/saved`"
-            >
-              <i class="fa fa-chalkboard"></i>
-              Learn (Legacy)
-            </router-link>
+              Legacy Features
+              <span class="mr-1" />
+              <i v-if="!showLegacy" class="fas fa-chevron-right"></i>
+              <i class="fas fa-chevron-up" v-else></i>
+            </b-button>
+            <div class="mt-1">
+              <router-link
+                v-if="showLegacy"
+                class="mt-2 btn btn-sm text-secondary"
+                :to="`/${$l1.code}/${$l2.code}/learn-interactive/saved`"
+              >
+                <i class="fa fa-chalkboard"></i>
+                Learn (Legacy)
+              </router-link>
+            </div>
           </div>
         </div>
       </div>
@@ -160,6 +161,7 @@ export default {
       dictionaryLoaded: false,
       sWLoaded: false,
       showExport: false,
+      showLegacy: false,
       sW: [],
     };
   },
