@@ -4,7 +4,7 @@ importScripts("../vendor/hash-string/hash-string.min.js")
 
 const Dictionary = {
   name: "wiktionary",
-  version: '1.1.1',
+  version: '1.1.10',
   file: undefined,
   dictionary: undefined,
   words: [],
@@ -1065,9 +1065,7 @@ const Dictionary = {
     }
     if (longest.matches.length > 0) {
       for (let word of longest.matches) {
-        longest.matches = longest.matches.concat(
-          this.stemWordsWithScores(word, 1).map(w => w.w)
-        );
+        longest.matches = this.stemWordsWithScores(word, 1).map(w => w.w).concat(longest.matches);
         // longest.matches = longest.matches.concat(this.phrasesWithScores(word, 1)) // This is very slow
       }
       let result = [];
