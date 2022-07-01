@@ -258,7 +258,7 @@
           </Annotate>
           <div class="phrases mt-2" v-if="word.phrases">
             <div
-              v-for="phrase in word.phrases.slice(0, 6)"
+              v-for="phrase in word.phrases.slice(0, 6).filter(p => p)"
               :key="`word-${word.id}-phrase-${phrase.id}`"
               class="phrase-wrapper"
             >
@@ -270,7 +270,7 @@
               <span class="btn-phrase text-success strong">
                 {{ phrase.head }}
               </span>
-              <span class="word-translation-item">
+              <span class="word-translation-item" v-if="phrase.definitions">
                 {{ phrase.definitions.join(", ") }}
               </span>
             </div>
