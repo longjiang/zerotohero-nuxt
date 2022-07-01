@@ -99,7 +99,7 @@
             />
             <client-only>
               <div class="text-center mb-3">
-                <Star :word="entry" class="ml-1 mr-1"/>
+                <Star :word="entry" class="ml-1 mr-1" />
                 <Paginator
                   class="d-inline-block ml-1 mr-1"
                   v-if="saved() && sW.length > 0"
@@ -397,16 +397,21 @@ export default {
         this.$store.state.savedWords.savedWords &&
         this.$store.state.savedWords.savedWords[this.$l2.code]
       ) {
-        for (let savedWord of this.$store.state.savedWords.savedWords[
-          this.$l2.code
-        ]) {
+        let savedWords = this.$store.state.savedWords.savedWords[this.$l2.code];
+        let currentSavedWord = savedWords.find(w => w.id === this.entry.id)        
+        savedWords = savedWords.filter(w => this.dateStr(w.date) === this.dateStr(currentSavedWord.date))
+        for (let savedWord of savedWords) {
           let word = await (await this.$getDictionary()).get(savedWord.id);
           if (word) {
             sW.push(word);
           }
         }
       }
-      this.sW = sW.sort((a, b) => a.head.localeCompare(b.head));
+      this.sW = sW
+      // this.sW = sW.sort((a, b) => a.head.localeCompare(b.head));
+    },
+    dateStr(date) {
+      return date ? new Date(Number(date)).toISOString().replace(/T.*/, "") : 0
     },
     saved() {
       return (
