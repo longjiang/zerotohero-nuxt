@@ -113,14 +113,14 @@
                         Pay with In-App Purchase
                       </span>
                     </b-button>
-                    <div class="mt-3">
+                    <!-- <div class="mt-3">
                       <u
                         class="text-secondary"
                         @click="restoreiOSInAppPurchase"
                       >
                         Restore Purchase
                       </u>
-                    </div>
+                    </div> -->
                   </div>
                 </div>
                 <div v-else>
@@ -230,7 +230,7 @@
               </div>
             </div>
           </client-only>
-          <div class="text-center">
+          <div class="text-center" v-if="!native">
             If you have any questions or issues, please
             <a href="mailto:jon@chinesezerotohero.com">email us</a>
             .
