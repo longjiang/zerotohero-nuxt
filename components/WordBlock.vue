@@ -2,7 +2,6 @@
   <v-popover
     :open="popup && open"
     :open-group="`id${_uid}`"
-    :id="id"
     placement="top"
     trigger="manual"
   >
@@ -320,7 +319,6 @@
 <script>
 import {
   timeout,
-  uniqueId,
   unique,
   uniqueByValue,
   isMobile,
@@ -358,7 +356,6 @@ export default {
   },
   data() {
     return {
-      id: `wordblock-${uniqueId()}`,
       open: false,
       showPhrase: {},
       loading: true,
