@@ -279,6 +279,7 @@ export default {
           }
           if (mutation.type === "settings/SET_L2") {
             this.loadLanguageSpecificSettings();
+            this.overlayPlayerYouTubeId = undefined
           }
         }
         if (
