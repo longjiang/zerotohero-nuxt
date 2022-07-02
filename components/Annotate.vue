@@ -686,9 +686,10 @@ export default {
         )
         .replace(
           /!!!###!!!/gi,
-          `<span class="${
-            this.$l2.code === "tlh" ? "klingon" : ""
-          } word-block-unknown">&nbsp;</span>`
+          ' '
+          // `<span class="${
+          //   this.$l2.code === "tlh" ? "klingon" : ""
+          // } word-block-unknown">&nbsp;</span>`
         );
       return html;
     },
