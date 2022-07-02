@@ -9,6 +9,7 @@
 </router>
 <template>
   <div>
+    <div v-if="featuredVideo">{{ featuredVideo.show }}</div>
     <VideoHero
       v-if="featuredVideo"
       :video="featuredVideo"
@@ -41,7 +42,7 @@
               }"
               style="flex: 1"
             >
-              <Loader :sticky="true" message="Loading videos..." />
+              <Loader :sticky="true" :message="`Loading videos...`" />
             </div>
             <!-- <Sale class="mb-4" v-if="$l2.code === 'zh'" /> -->
             <h3 v-if="show">
@@ -69,7 +70,7 @@
 
           <div class="col-sm-12 mb-5">
             <div class="youtube-video-list-wrapper">
-              <div class="row mb-5">
+              <div class="row mb-5" v-if="videos">
                 <div class="col-sm-12 mb-2">
                   <div class="d-flex">
                     <b-input-group class="flex-1 input-group-ghost-dark">
@@ -77,7 +78,7 @@
                         v-model="keyword"
                         :lazy="true"
                         @compositionend.prevent.stop="() => false"
-                        :placeholder="episodeCount ? `Filter ${episodeCount} videos...` : 'Filter videos...'"
+                        :placeholder="episodeCount ? `Search inside this collection (${episodeCount} videos)` : 'Filter videos...'"
                         class="input-ghost-dark"
                       />
                     </b-input-group>
@@ -209,7 +210,7 @@ export default {
         return this.$store.state.settings.l2;
     },
     randomEpisodeYouTubeId() {
-      if (this.videos) {
+      if (this.videos?.length > 0) {
         let episode = Helper.randomArrayItem(this.videos);
         return episode.youtube_id;
       }

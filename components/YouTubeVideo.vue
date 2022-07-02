@@ -219,7 +219,7 @@ export default {
               }
             },
             onReady: (event) => {
-              if (this.muted) this.player.mute()
+              if (this.muted && this.player) this.player.mute()
               this.reportIfVideoUnavailableUponAutoload(this.youtube);
             },
           },
