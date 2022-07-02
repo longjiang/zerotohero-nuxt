@@ -279,7 +279,7 @@ export default {
           }
           if (mutation.type === "settings/SET_L2") {
             this.loadLanguageSpecificSettings();
-            this.overlayPlayerYouTubeId = undefined
+            if (this.overlayPlayerMinimized) this.overlayPlayerYouTubeId = undefined // Close the mini player when switching languages
           }
         }
         if (
