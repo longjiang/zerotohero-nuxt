@@ -42,7 +42,7 @@
           <router-link
             :to="{ name: 'youtube-search' }"
             :class="`btn top-bar-buttontop btn-unstyled link-unstyled mr-1`"
-            v-if="params.xs !== false"
+            v-if="params.md !== false"
             title="Search Videos"
           >
             <i class="fas fa-search"></i>
@@ -50,7 +50,7 @@
           <b-button
             :class="`top-bar-buttontop ml-2`"
             variant="unstyled"
-            v-if="params.xs !== false && $route.params.l1 && $route.params.l2"
+            v-if="params.sm !== false && $route.params.l1 && $route.params.l2"
             title="Quick Settings"
             style="color: #ccc"
             @click="showSettingsModal"
