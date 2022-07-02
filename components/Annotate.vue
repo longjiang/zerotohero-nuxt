@@ -49,7 +49,11 @@
                 icon="bookmark"
                 class="annotator-button focus-exclude"
                 title="Save Phrase"
-              /><span>Save as Phrase</span>
+                ref="savePhrase"
+              />
+              <span @click.stop.prevent="saveAsPhraseClick">
+                {{ $refs['savePhrase'] && !$refs['savePhrase'].saved ? 'Save as' : 'Remove' }} Phrase
+              </span>
             </b-dropdown-item>
             <b-dropdown-item>
               <Speak
@@ -57,20 +61,20 @@
                 class="annotator-button"
                 title="Speak"
                 ref="speak"
-              /><span @click="readAloud">Read Aloud</span>
+              />
+              <span @click="readAloud">Read Aloud</span>
             </b-dropdown-item>
 
             <b-dropdown-item>
               <span
-                class="
-                  annotator-button annotator-translate
-                  focus-exclude
-                "
+                class="annotator-button annotator-translate focus-exclude"
                 title="Translate Inline"
                 @click="translateClick"
+                ref="translation"
               >
                 <i class="fas fa-language"></i>
-              </span><span>Show Translation</span>
+              </span>
+              <span @click="translateClick">Show Translation</span>
             </b-dropdown-item>
             <b-dropdown-item>
               <span
@@ -82,7 +86,11 @@
                 @click="externalTranslateClick"
               >
                 <i class="fas fa-globe"></i>
-              </span><span>Open Translator <small><i class="fas fa-external-link-alt"></i></small></span>
+              </span>
+              <span @click="externalTranslateClick">
+                Open Translator
+                <small><i class="fas fa-external-link-alt"></i></small>
+              </span>
             </b-dropdown-item>
             <!-- <b-dropdown-item>
               <span
@@ -103,7 +111,8 @@
                 class="annotator-button annotator-copy focus-exclude"
               >
                 <i class="fas fa-copy"></i>
-              </span><span>Copy</span>
+              </span>
+              <span @click="copyClick">Copy</span>
             </b-dropdown-item>
           </b-dropdown>
         </div>
@@ -297,8 +306,13 @@ export default {
     },
   },
   methods: {
+    saveAsPhraseClick() {
+      let s = this.$refs["savePhrase"];
+      if (!s.saved) s.save();
+      else s.remove();
+    },
     readAloud() {
-      this.$refs['speak'].speak()
+      this.$refs["speak"].$el.click();
     },
     getSentences() {
       let sentences = [];
@@ -624,7 +638,7 @@ export default {
         if (typeof token === "object") {
           html += `<WordBlock v-bind="wordBlockTokenAttrs(${batchId},${index})">${token.text}</WordBlock>`;
         } else {
-          html += token
+          html += token;
           // html += `<span class="word-block-unknown">${token.replace(
           //   /\s+/,
           //   "&nbsp;"
@@ -686,7 +700,7 @@ export default {
         )
         .replace(
           /!!!###!!!/gi,
-          ' '
+          " "
           // `<span class="${
           //   this.$l2.code === "tlh" ? "klingon" : ""
           // } word-block-unknown">&nbsp;</span>`
