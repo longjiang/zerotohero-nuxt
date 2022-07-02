@@ -94,7 +94,7 @@
             :to="last(child) || child"
             :item="child"
             :level="2"
-            :showIcon="collapsed"
+            :showIcon="true"
             :active="$route && $route.name === child.name"
             :badge="
               child.name === 'saved-words' && savedWordsCount > 0
@@ -389,66 +389,60 @@ export default {
           children: [
             {
               name: "all-media",
-              icon: "fas fa-home",
-              title: `All`,
-              count: this.stats ? this.stats.allVideos : undefined,
+              icon: "fas fa-telescope",
+              title: `Explore`,
+              // count: this.stats ? this.stats.allVideos : undefined,
               show: true,
-            },
-            {
-              path: this.moviesPath,
-              icon: "fa fa-film",
-              title: `Movies`,
-              count: this.stats ? this.stats.movies : undefined,
-              show: this.moviesPath,
-            },
-            {
-              path: this.musicPath,
-              icon: "fa fa-music",
-              title: `Music`,
-              count: this.stats ? this.stats.music : undefined,
-              show: this.musicPath,
-            },
-            {
-              path: this.newsPath,
-              icon: "fa fa-newspaper",
-              title: `News`,
-              count: this.stats ? this.stats.news : undefined,
-              show: this.newsPath,
             },
             // {
-            //   name: "watch-history",
-            //   icon: "fas fa-history",
-            //   title: "My History",
+            //   path: this.moviesPath,
+            //   icon: "fa fa-film",
+            //   title: `Movies`,
+            //   count: this.stats ? this.stats.movies : undefined,
+            //   show: this.moviesPath,
+            // },
+            // {
+            //   path: this.musicPath,
+            //   icon: "fa fa-music",
+            //   title: `Music`,
+            //   count: this.stats ? this.stats.music : undefined,
+            //   show: this.musicPath,
+            // },
+            // {
+            //   path: this.newsPath,
+            //   icon: "fa fa-newspaper",
+            //   title: `News`,
+            //   count: this.stats ? this.stats.news : undefined,
+            //   show: this.newsPath,
+            // },
+            // {
+            //   name: "tv-shows",
+            //   icon: "fa fa-tv",
+            //   title: `TV Shows`,
+            //   count: this.tvShowsCount,
+            //   show: this.tvShowsCount,
+            // },
+            // {
+            //   name: "talks",
+            //   icon: "fab fa-youtube",
+            //   title: `YouTube`,
+            //   count: this.talksCount,
+            //   show: this.talksCount,
+            // },
+            // {
+            //   name: "audiobooks",
+            //   icon: "fa fa-book-open",
+            //   title: `Audiobooks`,
+            //   count: this.audioBooksCount,
+            //   show: this.audioBooksCount,
+            // },
+            // {
+            //   name: "youtube-browse",
+            //   title: `Misc`,
+            //   count: this.stats ? this.stats.newVideos : undefined,
+            //   icon: "fa fa-play",
             //   show: true,
             // },
-            {
-              name: "tv-shows",
-              icon: "fa fa-tv",
-              title: `TV Shows`,
-              count: this.tvShowsCount,
-              show: this.tvShowsCount,
-            },
-            {
-              name: "talks",
-              icon: "fab fa-youtube",
-              title: `YouTube`,
-              count: this.talksCount,
-              show: this.talksCount,
-            },
-            {
-              name: "audiobooks",
-              icon: "fa fa-book-open",
-              title: `Audiobooks`,
-              count: this.audioBooksCount,
-              show: this.audioBooksCount,
-            },
-            {
-              name: "youtube-browse",
-              title: `Misc`,
-              count: this.stats ? this.stats.newVideos : undefined,
-              icon: "fa fa-play",
-              show: true,
-            },
             // {
             //   name: "youtube-search",
             //   title: `Search`,
@@ -456,27 +450,33 @@ export default {
             //   show: true,
             // },
             {
+              name: "watch-history",
+              icon: "fas fa-history",
+              title: "My History",
+              show: true,
+            },
+            {
               name: "live-tv",
-              icon: "fa fa-broadcast-tower",
+              icon: "fa fa-tv-retro",
               title: "Live TV",
               show: this.hasLiveTV,
             },
-            {
-              name: "lesson-videos",
-              title: "Lesson Expansion",
-              icon: "fa fa-chalkboard-teacher",
-              show: this.l2.code === "zh",
-            },
+            // {
+            //   name: "lesson-videos",
+            //   title: "Lesson Expansion",
+            //   icon: "fa fa-chalkboard-teacher",
+            //   show: this.l2.code === "zh",
+            // },
             {
               name: "feed",
-              icon: "fa fa-photo-video",
+              icon: "fas fa-stream",
               title: `Feed`,
               show: true,
             },
             {
               name: "discover-shows",
-              title: "Discover Shows",
-              icon: "fas fa-lightbulb",
+              title: "Random",
+              icon: "fas fa-random",
               show: true,
               params: { l1: this.l1.code, l2: this.l2.code },
             },
