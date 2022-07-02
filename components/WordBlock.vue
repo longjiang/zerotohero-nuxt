@@ -3,7 +3,6 @@
     :open="popup && open"
     :open-group="`id${_uid}`"
     placement="top"
-    trigger="manual"
   >
     <span
       :class="{

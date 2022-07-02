@@ -107,14 +107,13 @@
             </b-dropdown-item>
           </b-dropdown>
         </div>
-        <div :class="{ 'annotate-slot': true, 'd-none': annotated }">
+        <div :class="{ 'annotate-slot': true }" v-if="!annotated">
           <slot></slot>
         </div>
-        <div :class="{ 'd-none': !textMode }">
+        <div v-if="textMode && annotated">
           <input
             :class="{
               'annotate-input': true,
-              'd-none': !textMode || !annotated,
             }"
             @select="select"
             @blur="annotateInputBlur"
