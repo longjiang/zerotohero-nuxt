@@ -110,17 +110,17 @@
                       <b-spinner small v-if="iOSPurchaseProcessing"></b-spinner>
                       <span v-else>
                         <i class="fab fa-apple mr-1"></i>
-                        In-App Purchase
+                        Pay with In-App Purchase
                       </span>
                     </b-button>
-                    <!-- <div class="mt-3">
+                    <div class="mt-3">
                       <u
                         class="text-secondary"
                         @click="restoreiOSInAppPurchase"
                       >
                         Restore Purchase
                       </u>
-                    </div> -->
+                    </div>
                   </div>
                 </div>
                 <div v-else>
@@ -295,7 +295,6 @@ export default {
     if (this.native) {
       this.registeriOSInAppPurchaseProducts();
       this.setupiOSInAppPurchaseListeners();
-      this.executeiOSInAppPurchase(); // Automatically execute the purchase
     }
   },
   beforeDestroy() {
