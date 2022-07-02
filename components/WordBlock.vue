@@ -5,7 +5,6 @@
     :id="id"
     placement="top"
     trigger="manual"
-    style="display: inline-block"
   >
     <span
       :class="{
@@ -950,6 +949,9 @@ export default {
 </script>
 
 <style lang="scss">
+.v-popover {
+  display: inline-block
+}
 .main-dark {
   .word-block,
   .word-block-unknown {

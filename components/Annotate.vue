@@ -3,7 +3,6 @@
     <div
       :class="{
         'annotate-wrapper': true,
-        'annotate-wrapper-wide': params.lg,
         'annotate-with-translation': showTranslation && translationData,
       }"
       v-observe-visibility="{
@@ -150,10 +149,6 @@
         />
       </div>
     </div>
-
-    <container-query :query="query" v-model="params">
-      <div></div>
-    </container-query>
   </div>
 </template>
 
@@ -166,7 +161,6 @@ import Helper from "@/lib/helper";
 import { breakSentences } from "@/lib/utils/string";
 import { transliterate as tr } from "transliteration";
 import { mapState } from "vuex";
-import { ContainerQuery } from "vue-container-query";
 import { getClient } from "iframe-translator";
 import SmartQuotes from "smartquotes";
 import BeatLoader from "vue-spinner/src/BeatLoader.vue";
@@ -177,7 +171,6 @@ export default {
     popupnote, // Must be lower case for runtime template to work
     readerlink, // Must be lower case for runtime template to work
     VRuntimeTemplate,
-    ContainerQuery,
     BeatLoader,
   },
   props: {
@@ -248,12 +241,6 @@ export default {
       myanmarZawgyiConverter: undefined,
       translationData: this.translation,
       text: undefined,
-      params: {},
-      query: {
-        lg: {
-          minWidth: 600,
-        },
-      },
     };
   },
   mounted() {
@@ -649,7 +636,6 @@ export default {
     wordBlockIntegralAttrs(p1) {
       let attrs = {
         transliterationprop: tr(p1).replace(/"/g, ""),
-        checkSaved: this.checkSaved,
         ref: "word-block",
         popup: this.popup,
         phonetics: this.phonetics,
@@ -750,18 +736,6 @@ export default {
 </script>
 
 <style lang="scss">
-.annotate-wrapper.annotate-wrapper-wide.annotate-with-translation {
-  display: flex;
-  gap: 1.5rem;
-  align-items: flex-start;
-  .annotated {
-    width: 61.8%;
-  }
-  .annotated-translation {
-    min-width: 38.2%;
-  }
-}
-
 .annotate-translation {
   font-size: 0.8em;
   opacity: 0.7;
