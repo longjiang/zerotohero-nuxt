@@ -4,6 +4,7 @@ const Dictionary = {
   file: undefined,
   characterFile: undefined,
   newHSKFile: undefined,
+  version: '1.1.11',
   words: [],
   characters: [],
   newHSK: [],
@@ -454,9 +455,9 @@ const Dictionary = {
     }
     const longest = subdict.longest(text, traditional)
     if (longest.matches.length > 0) {
-      for (let word of longest.matches) {
-        longest.matches = longest.matches.concat(this.variants(word))
-      }
+      // for (let word of longest.matches) {
+      //   longest.matches = longest.matches.concat(this.variants(word)) // possbily too slow
+      // }
       let result = []
       /* 
       result = [
