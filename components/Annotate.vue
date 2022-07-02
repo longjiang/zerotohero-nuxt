@@ -213,7 +213,7 @@ export default {
       default: false,
     },
     showTranslation: {
-      default: true,
+      default: false,
     },
     showLoading: {
       default: true,

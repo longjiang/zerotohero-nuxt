@@ -399,20 +399,24 @@ export default {
         this.$store.state.savedWords.savedWords[this.$l2.code]
       ) {
         let savedWords = this.$store.state.savedWords.savedWords[this.$l2.code];
-        let currentSavedWord = savedWords.find(w => w.id === this.entry.id)        
-        savedWords = savedWords.filter(w => this.dateStr(w.date) === this.dateStr(currentSavedWord.date))
-        for (let savedWord of savedWords) {
-          let word = await (await this.$getDictionary()).get(savedWord.id);
-          if (word) {
-            sW.push(word);
+        let currentSavedWord = savedWords.find((w) => w.id === this.entry.id);
+        if (currentSavedWord) {
+          savedWords = savedWords.filter(
+            (w) => this.dateStr(w.date) === this.dateStr(currentSavedWord.date)
+          );
+          for (let savedWord of savedWords) {
+            let word = await (await this.$getDictionary()).get(savedWord.id);
+            if (word) {
+              sW.push(word);
+            }
           }
         }
       }
-      this.sW = sW
+      this.sW = sW;
       // .sort((a, b) => a.head.localeCompare(b.head));
     },
     dateStr(date) {
-      return date ? new Date(Number(date)).toISOString().replace(/T.*/, "") : 0
+      return date ? new Date(Number(date)).toISOString().replace(/T.*/, "") : 0;
     },
     saved() {
       return (

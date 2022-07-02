@@ -47,7 +47,7 @@
             :translation="parallelLine"
             :delay="single ? false : 123"
             :showTranslation="false"
-            :showLoading="true"
+            :showLoading="false"
             v-if="!showSubsEditing"
             style="flex: 1"
             @translation="onTranslation"
@@ -70,7 +70,6 @@
             'transcript-line-l1': true,
             'transcript-line-l1-rtl': !single && $l2.direction === 'rtl',
             'transcript-line-l1-single': single,
-            transparent: !annotated,
           }"
         >
           <beat-loader
