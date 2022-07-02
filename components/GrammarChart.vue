@@ -38,19 +38,20 @@
       </a>
     </div>
     <div class="tabs text-center">
-      <button @click="level = undefined" class="tab text-light bg-dark">
-        All 🤦
-      </button>
       <button
         v-for="n in 6"
         class="tab text-dark"
         :data-bg-level="n"
         @click="level = n"
+        :key="`grammar-tab-level-${n}`"
       >
         HSK {{ n }}
       </button>
       <button class="tab text-dark" data-bg-level="7-9" @click="level = '7-9'">
         新 HSK 7-9
+      </button>
+      <button @click="level = undefined" class="tab text-light bg-dark">
+        All
       </button>
       <div
         style="height: 0.5rem"
@@ -74,6 +75,7 @@
       <tbody>
         <tr
           v-for="row in grammar"
+          :key="`grammar-row-${row.id}`"
           :class="{
             'grammar-table-row': true,
             hidden: !(
@@ -131,7 +133,7 @@ export default {
   data() {
     return {
       search: "",
-      level: undefined,
+      level: 1,
       grammar: [],
     };
   },

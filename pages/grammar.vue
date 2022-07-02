@@ -37,16 +37,15 @@
               <b>Download</b>
               the list as a
               <a
-                href="https://server.chinesezerotohero.com/data/zh-grammar/zh-grammar.csv.txt"
+                href="/data/zh-grammar/zh-grammar.csv.txt"
                 download="Chinese Zero to Hero Grammar Chart.csv"
               >
                 CSV
               </a>
               ,
-              <a href="/files/grammar.numbers">Apple Numbers file</a>
+              <a href="/files/grammar.numbers" download>Apple Numbers file</a>
               (recommended), or
-              <a href="/files/grammar.xlsx">Microsoft Excel file</a>
-              🤦‍♂️.
+              <a href="/files/grammar.xlsx" download>Microsoft Excel file</a>.
             </p>
           </div>
           <FeedbackPrompt class="mb-5" :skin="$route.meta ? $route.meta.skin : 'light'"/>

@@ -1,0 +1,1060 @@
+id,code,structure,pattern,pinyin,english,review,example,exampleTranslation,url
+1,1.03.1,什么,,shénme ,what,,这是什么?,What is this?,https://chinesezerotohero.teachable.com/courses/185499/lectures/2839923
+2,1.03.1,什么 N,,shénme N ,what kind of N,,那是什么书?,What book is that?,https://chinesezerotohero.teachable.com/courses/185499/lectures/2839924
+3,1.03.2,不是,,bùshì ,not to be,,我不是美国人。,I am not an American.,https://chinesezerotohero.teachable.com/courses/185499/lectures/2839924
+4,1.03.2,是,,shì ,to be,,她是老师。,She is a teacher.,https://chinesezerotohero.teachable.com/courses/185499/lectures/2839924
+5,1.03.3,吗?,,ma? ,right?,,你是老师吗?,"You’re a teacher, right?",https://chinesezerotohero.teachable.com/courses/185499/lectures/2839920
+6,1.04.1,谁,,shéi ,who,,她是谁?,Who is she?,https://chinesezerotohero.teachable.com/courses/185499/lectures/2843816
+7,1.04.1,哪 M N,,nǎ M N ,which N,,哪个人?,Which person?,https://chinesezerotohero.teachable.com/courses/185499/lectures/2843816
+8,1.04.2,(的),,( de) ,’s,,她是我 (的) 老师。,She is my teacher.,https://chinesezerotohero.teachable.com/courses/185499/lectures/2843817
+9,1.04.3,N 呢?,,N ne? ,what about N?,,我是中国人，你呢?,"I am Chinese, what about you?",https://chinesezerotohero.teachable.com/courses/185499/lectures/2843821
+10,1.05.1,几 M N,,jǐ M N ,how many N,,你有几个汉语老师?,How many teachers do you have?,https://chinesezerotohero.teachable.com/courses/185499/lectures/2843846
+11,1.05.2,一～九十九,,yī～ jiǔ shíjiǔ ,1 ~ 99,,九十一,1 - 99,https://chinesezerotohero.teachable.com/courses/185499/lectures/2843842
+12,1.05.3,AGE 了,,AGE le ,became AGE,,我40岁了。,I’m 40 years old.,https://chinesezerotohero.teachable.com/courses/185499/lectures/2843845
+13,1.05.4,多大,,duōdà ,how old,,你女儿多大了？,How old is your daughter?,https://chinesezerotohero.teachable.com/courses/185499/lectures/2843844
+14,1.06.1,会 V,,huì V ,know how to V,,我会写。,I know how to write.,https://chinesezerotohero.teachable.com/courses/185499/lectures/2844550
+15,1.06.2,很,,hěn ,very,,我很好,I am good.,https://chinesezerotohero.teachable.com/courses/185499/lectures/2843971
+16,1.06.3,怎么 V,,zěnme V ,how to V,,这个怎么读?,How do you read this?,https://chinesezerotohero.teachable.com/courses/185499/lectures/2843972
+17,1.07.1,月、号/日、星期,,yuè、 hào/ rì、 xīngqī ,(telling dates),,九月二号/日星期四,Thursday September 2,https://chinesezerotohero.teachable.com/courses/185499/lectures/2843976
+18,1.07.2,,,,(omitting 是),,我汉语老师33岁。,My Chinese teacher is 33.,https://chinesezerotohero.teachable.com/courses/185499/lectures/2843973
+19,1.07.3,去 PLACE V,,qù PLACE V ,go to PLACE to do V,,我去学校学习。,I go to school to study.,https://chinesezerotohero.teachable.com/courses/185499/lectures/2843974
+20,1.08.1,想,,xiǎng ,to want,,我想看书,I want to read books.,https://chinesezerotohero.teachable.com/courses/185499/lectures/2843981
+21,1.08.2,多少 N,,duōshao N ,how much N,,你有多少汉语老师?,How many Chinese teachers do you have?,https://chinesezerotohero.teachable.com/courses/185499/lectures/2843978
+22,1.08.3,个,,gè ,(measure word),,五个学生,5 students,https://chinesezerotohero.teachable.com/courses/185499/lectures/2843979
+23,1.08.3,口,,kǒu ,(measure word),,我家有五口人。,There are 5 people in our family.,https://chinesezerotohero.teachable.com/courses/185499/lectures/2843979
+24,1.08.4,元／块,,yuán／ kuài ,(currency),,一元／块,one yuan,https://chinesezerotohero.teachable.com/courses/185499/lectures/2843980
+25,1.09.1,在,,zài ,at,,他在椅子下面,He’s under the chair.,https://chinesezerotohero.teachable.com/courses/188342/lectures/2863638
+26,1.09.2,哪儿？,,nǎr？ ,where,,我的杯子在哪儿?,Where is my cup?,https://chinesezerotohero.teachable.com/courses/188342/lectures/2863635
+27,1.09.3,在 PLACE V,,zài PLACE V ,V at PLACE,,我在朋友家喝茶。,I am having tea at my friend’s home.,https://chinesezerotohero.teachable.com/courses/188342/lectures/2863639
+28,1.09.4,Q 呢,,Q ne ,I wonder,,他在哪儿呢?,"Where is he, I wonder?",https://chinesezerotohero.teachable.com/courses/188342/lectures/2863634
+29,1.09.4,N 呢？,,N ne？ ,where is N,,我的杯子呢?,Where is my cup?,https://chinesezerotohero.teachable.com/courses/188342/lectures/2863634
+30,1.10.1,PLACE 有 N,,PLACE yǒu N ,there is N at PLACE,,椅子下面有一只小狗,There is a dog under the chair.,https://chinesezerotohero.teachable.com/courses/188342/lectures/2863637
+31,1.10.1,PLACE 没有 N,,PLACE méiyǒu N ,there isn’t N at PLACE,,这儿没有人。,There isn’t anyone here.,https://chinesezerotohero.teachable.com/courses/188342/lectures/2863637
+32,1.10.2,和,,hé ,and,,爸爸、妈妈和我,"dad, mom and I",https://chinesezerotohero.teachable.com/courses/188342/lectures/2863641
+33,1.10.3,能,,néng ,can,,我能坐这儿吗?。,Can I sit here?,https://chinesezerotohero.teachable.com/courses/188342/lectures/2863640
+34,1.10.4,请 V,,qǐng V ,please V,,请坐。,Please sit.,https://chinesezerotohero.teachable.com/courses/188342/lectures/2863643
+35,1.11.1,# 点 # 分,,# diǎn # fēn ,# hour # minute,,十一点十分,11:10,https://chinesezerotohero.teachable.com/courses/188342/lectures/2863644
+36,1.11.1,上午／下午,,shàngwǔ／ xiàwǔ ,AM/PM,,下午三点十分,3:10 PM,https://chinesezerotohero.teachable.com/courses/188342/lectures/2863644
+37,1.11.2,S TIME V,,S TIME V ,(time phrase),,妈妈六点做饭。,Mom cooks at six.,https://chinesezerotohero.teachable.com/courses/188342/lectures/2863645
+38,1.11.2,TIME S V,,TIME S V ,(time phrase),,七点我吃饭。,I eat at seven.,https://chinesezerotohero.teachable.com/courses/188342/lectures/2863645
+39,1.11.3,TIME 前,,TIME qián ,before TIME,,星期五前,before Friday,https://chinesezerotohero.teachable.com/courses/188342/lectures/2863647
+40,1.11.3,DURATION 前,,DURATION qián ,DURATION ago,,一个星期前,a week ago,https://chinesezerotohero.teachable.com/courses/188342/lectures/2863647
+41,1.12.1,N 怎么样？,,N zěnmeyàng？ ,how is N?,,你的汉语怎么样？,How is your Chinese?,https://chinesezerotohero.teachable.com/courses/188342/lectures/2863649
+42,1.12.2,(的),,( de) ,(omission of 的),,我身体不太好。,My health isn’t very good.,https://chinesezerotohero.teachable.com/courses/188342/lectures/2863650
+43,1.12.3,太 A (了),,tài A ( le) ,too A,,天气太冷 (了)。,The weather’s too cold.,https://chinesezerotohero.teachable.com/courses/188342/lectures/2863651
+44,1.12.3,(不) 太 A,,( bù) tài A ,not too A,,我身体不太好。,My health is not too good.,https://chinesezerotohero.teachable.com/courses/188342/lectures/2863651
+45,1.12.4,会 V,,huì V ,will V,,你会回家吗？,Will you come home?,https://chinesezerotohero.teachable.com/courses/188342/lectures/2863652
+46,1.13.1,喂,,wèi ,hello,,喂，李老师在家吗？,"Hello, is Teacher Li home?",https://chinesezerotohero.teachable.com/courses/188342/lectures/2863654
+47,1.13.2,在 V (呢),,zài V ( ne) ,V-ing,,我在睡觉 (呢)。,I’m sleeping.,https://chinesezerotohero.teachable.com/courses/188342/lectures/2863656
+48,1.13.2,没 在 V (呢),,méi zài V ( ne) ,not V-ing,,他们没在看电视 (呢)。,They’re not watching TV.,https://chinesezerotohero.teachable.com/courses/188342/lectures/2863655
+49,1.13.3,1 (yāo),,1 (yāo),(1 in telephony),,138-0156-7749,1 reads as yāo.,https://chinesezerotohero.teachable.com/courses/188342/lectures/2863655
+50,1.13.4,V 吧。,,V ba。 ,feel free to V,,这儿没有人，坐吧。,"Nobody’s here, (feel free to) sit.",https://chinesezerotohero.teachable.com/courses/188342/lectures/2863657
+51,1.14.1,V O 了,,V O le ,have V’ed O,,他去学校了。,He went to learn how to drive.,https://chinesezerotohero.teachable.com/courses/188342/lectures/2863659
+52,1.14.1,V 了 O,,V le O ,have V’ed O,,我买了不少衣服。,I bought a lot of clothes.,https://chinesezerotohero.teachable.com/courses/188342/lectures/2863659
+53,1.14.1,没 V O,,méi V O ,have not V’ed O,,她没去商店。,She didn’t go to the store.,https://chinesezerotohero.teachable.com/courses/188342/lectures/2863659
+54,1.14.2,TIME 后,,TIME hòu ,after TIME,,五点后,after 5,https://chinesezerotohero.teachable.com/courses/188342/lectures/2863661
+55,1.14.2,DURATION 后,,DURATION hòu ,after DURATION,,四十分钟后,after 40 minutes,https://chinesezerotohero.teachable.com/courses/188342/lectures/2863661
+56,1.14.3,……啊,,…… ā ,(exclamation),,好啊。是啊。,Sure! Yeah!,https://chinesezerotohero.teachable.com/courses/188342/lectures/2863660
+57,1.14.4,都 N,,dōu N ,both Ns,,我们都是中国人。,We both are Chinese.,https://chinesezerotohero.teachable.com/courses/188342/lectures/2863662
+58,1.15.1,S 是 MANNER V 的,,S shì MANNER V de ,it is MANNER that S V,,我们是开车来的。,We drove here. (Lit. It is [by] driving that we came here.),https://chinesezerotohero.teachable.com/courses/188342/lectures/2863664
+59,1.15.2,年,,nián ,year,,二零一七年,Year 2017,https://chinesezerotohero.teachable.com/courses/188342/lectures/2863666
+60,2.01.1,要,,yào ,"want to, will",,王芳要学英语。,Wang Fang wants to / will learn English.,https://chinesezerotohero.teachable.com/courses/191818/lectures/2949023
+61,2.01.2,最,,zuì ,the most,,它的眼睛最漂亮。,Its eyes are the prettiest.,https://chinesezerotohero.teachable.com/courses/191818/lectures/2949025
+62,2.01.3,几,,jǐ ,several,,几本书,several books,https://chinesezerotohero.teachable.com/courses/191818/lectures/2949022
+63,2.01.3,十几,,shíjǐ ,(any # from 11 to 19),,十几本书,a dozen or more books,https://chinesezerotohero.teachable.com/courses/191818/lectures/2949022
+64,2.01.3,几十,,jǐ shí ,tens of,,几十本书,tens of people,https://chinesezerotohero.teachable.com/courses/191818/lectures/2949022
+65,2.01.3,# 几/多,,# jǐ/ duō ,over #,,二十几本书/二十多本书,twenty something books,https://chinesezerotohero.teachable.com/courses/191818/lectures/2949022
+66,2.01.3,# M 多 月/星期,,# M duō yuè/ xīngqī ,over # of months/weeks,,两个多月，三个多星期,"over two months, over three weeks",https://chinesezerotohero.teachable.com/courses/191818/lectures/2949022
+67,2.02.1,V不V or A不A,,V bùV or A bùA ,(questions),,我去商店，你去不去？,"I’m going to the shop, are you going?",https://chinesezerotohero.teachable.com/courses/191818/lectures/2949022
+68,2.02.1,是不是……？,,shìbùshì……？ ,Is it true that…?,,你是不是喜欢运动？,Is it true that you like to exercise?,https://chinesezerotohero.teachable.com/courses/191818/lectures/2949020
+69,2.02.2,每 M N (都) V,,měi M N ( dōu) V ,every N V,,你每个星期六(都)工作吗？,Do you work every Saturday (without exception)?,https://chinesezerotohero.teachable.com/courses/191818/lectures/2949026
+70,2.02.3,多 A,,duō A ,how A,,他多高？,How tall is he?,https://chinesezerotohero.teachable.com/courses/191818/lectures/2949027
+71,2.03.1,的 (N),,de (N) ,(omitting nouns after 的),,这个杯子是昨天买的(杯子)。,This cup is the one (cup) that was bought yesterday.,https://chinesezerotohero.teachable.com/courses/191818/lectures/2949031
+72,2.03.2,一下,,yīxià ,once (quickly/easily),,你去给老师送一下报纸。,Go and deliver the newspaper to your teacher.,https://chinesezerotohero.teachable.com/courses/191818/lectures/2949030
+73,2.03.3,真,,zhēn ,"very, truly",,牛奶真好喝啊！,The milk is so tasty!,https://chinesezerotohero.teachable.com/courses/191818/lectures/2949033
+74,2.04.1,O 是 S V 的,,O shì S V de ,it’s S who V’ed O,,这本书是我买的。,(It’s) I (who) bought the book.,https://chinesezerotohero.teachable.com/courses/191818/lectures/2949035
+75,2.04.2,……的时候,,…… de shíhou ,the time when …,,我18岁的时候来过北京。,I’ve come to Beijing when I was 18.,https://chinesezerotohero.teachable.com/courses/191818/lectures/2949037
+76,2.04.3,已经 V/A 了,,yǐjīng V/A le ,already V/A,,我已经工作两年多了。,I already worked for over two years.,https://chinesezerotohero.teachable.com/courses/191818/lectures/2949036
+77,2.05.1,就,,jiù ,just V then,,你不想去，就在家休息吧。,"If you don't want to go, just rest at home then.",https://chinesezerotohero.teachable.com/courses/191818/lectures/2949040
+78,2.05.2,还 A,,hái A ,somewhat A,,昨天的考试还好。,Yesterday’s test was so-so (lit. somewhat OK).,https://chinesezerotohero.teachable.com/courses/191818/lectures/2949041
+79,2.05.3,有点儿 A,,yǒudiǎnr A ,a bit A,,今天天气有点儿冷。,It's a bit cold today.,https://chinesezerotohero.teachable.com/courses/191818/lectures/2949042
+80,2.06.1,怎么,,zěnme ,how come,,你怎么不高兴?,How come you’re unhappy?,https://chinesezerotohero.teachable.com/courses/191818/lectures/2949048
+81,2.06.2,N M M 都,,N M M dōu ,every N,,同学个个都很高兴。,Every student is very happy.,https://chinesezerotohero.teachable.com/courses/191818/lectures/2949045
+82,2.06.3,因为……所以……,,yīnwèi…… suǒyǐ…… ,because… so…,,因为不好吃，所以我不吃。,"Because it’s not tasty, so I won’t eat it.",https://chinesezerotohero.teachable.com/courses/191818/lectures/2949046
+83,2.07.1,还 V,,hái V ,still V-ing,,八点了，他还在睡觉。,"It’s 8, he’s still sleeping.",https://chinesezerotohero.teachable.com/courses/191818/lectures/2949051
+84,2.07.1,还没 V,,hái méi V ,still haven’t V’ed,,你怎么还没吃饭？,How come you still haven’t eaten?,https://chinesezerotohero.teachable.com/courses/191818/lectures/2949051
+85,2.07.2,TIME 就 V,,TIME jiù V ,V as early as TIME,,同学们七点半就来教室了。,The students got to the classroom as early as 7:30.,https://chinesezerotohero.teachable.com/courses/191818/lectures/2949052
+86,2.07.3,N1 离 N2 DISTANCE,,N1 lí N2 DISTANCE,N1 is DISTANCE away from N2,,学校离机场20多公里。,The school is over 20 km away from the airport.,https://chinesezerotohero.teachable.com/courses/191818/lectures/2949050
+87,2.07.4,……呢!,,…… ne! ,(adding emphasis),,他还在学习呢！,He is still studying!,https://chinesezerotohero.teachable.com/courses/191818/lectures/2949053
+88,2.08.1,……好吗?,,…… hǎo ma? ,…okay?,,你明天下午给我打电话好吗？,"Call me tomorrow afternoon, okay?",https://chinesezerotohero.teachable.com/courses/191818/lectures/2949057
+89,2.08.2,再 V,,zài V ,again,,你再看一下这本书吧。,Take another look at this book.,https://chinesezerotohero.teachable.com/courses/191818/lectures/2949056
+90,2.08.2,再 V,,zài V ,then,,让我想想再告诉你。,"Let me think about it, then I’ll let you know.",https://chinesezerotohero.teachable.com/courses/191818/lectures/2949056
+91,2.08.2,TIME 再 V,,TIME zài V ,V only until TIME,,我明天再去。,I’ll go (only until) tomorrow.,https://chinesezerotohero.teachable.com/courses/191818/lectures/2949056
+92,2.08.3,请/让/叫 O V,,qǐng/ ràng/ jiào O V ,invite/let/ask O to V,,我请你吃饭。,I’m inviting you to have a meal.,https://chinesezerotohero.teachable.com/courses/191818/lectures/2949058
+93,2.08.4,V V,,V V ,V for a bit,,你看看这几件衣服。,Take a look at these clothes.,https://chinesezerotohero.teachable.com/courses/191818/lectures/2949059
+94,2.08.4,V一V,,V yīV ,V for a bit,,你看一看这几件衣服。,Take a look at these clothes.,https://chinesezerotohero.teachable.com/courses/191818/lectures/2949059
+95,2.09.1,V result,,V result ,(result complements),,我看到你的女朋友了。,I saw your girlfriend.,https://chinesezerotohero.teachable.com/courses/191830/lectures/2949092
+96,2.09.1,没 V result,,méi V result ,(result complements),,我没看到你的女朋友。,I didn’t see your girlfriend.,https://chinesezerotohero.teachable.com/courses/191830/lectures/2949092
+97,2.09.2,从 N1 到 N2,,cóng N1 dào N2,from N1 to N2,,从老人到孩子都喜欢吃苹果。,"From old to young, all like to eat apples.",https://chinesezerotohero.teachable.com/courses/191830/lectures/2949088
+98,2.09.3,第 # M N,,dì # M N ,#-th N,,第四件事情还没做。,We haven't done the fourth thing yet.,https://chinesezerotohero.teachable.com/courses/191830/lectures/2949090
+99,2.10.1,不要/别 V,,bùyào/ bié V ,don’t do V,,不要/别玩儿手机！,Don’t play with your phone!,https://chinesezerotohero.teachable.com/courses/191830/lectures/2949093
+100,2.10.1,不要/别 V 了,,bùyào/ bié V le ,stop doing V,,不要/别玩儿手机了！,Stop playing with your phone!,https://chinesezerotohero.teachable.com/courses/191830/lectures/2949093
+101,2.10.2,对 N A,,duì N A ,Is A for N,,学汉语对在中国工作有帮助。,Learning Chinese is helpful for working in China.,https://chinesezerotohero.teachable.com/courses/191830/lectures/2949094
+102,2.11.1,S V 的 N,,S V de N ,the N which S V’ed,,我妈妈做的饭非常好吃。,The food that mom makes is very delicious.,https://chinesezerotohero.teachable.com/courses/191830/lectures/2949099
+103,2.11.2,N1 比 N2 A,,N1 bǐ N2 A,N2 is more A than N1,,哥哥比姐姐高。,My (older) brother is taller than my (older) sister.,https://chinesezerotohero.teachable.com/courses/191830/lectures/2949098
+104,2.11.2,N1 没有 N2 A,,N1 méiyǒu N2 A,N2 is not as A than N1,,哥哥没有姐姐高。,My (older) brother is not as tall as my (older) sister.,https://chinesezerotohero.teachable.com/courses/191830/lectures/2949098
+105,2.11.3,可能,,kěnéng ,probably,,她可能不会唱歌。,Maybe she cannot sing.,https://chinesezerotohero.teachable.com/courses/191830/lectures/2949097
+106,2.12.1,V 得 A,,V dé A ,(using adverbs),,我跑得很快。,I run very quickly.,https://chinesezerotohero.teachable.com/courses/191830/lectures/2949102
+107,2.12.1,V O V 得 A,,V O V dé A ,(using adverbs),,姐姐唱歌唱得很好。,My (older) sister sings brilliantly.,https://chinesezerotohero.teachable.com/courses/191830/lectures/2949102
+108,2.12.2,V (O V) 得 比 N A,,V (O V) dé bǐ N A ,V (O) more A than N,,他学(汉语学)得比我快。,He learns (Chinese) more quickly than I do.,https://chinesezerotohero.teachable.com/courses/191830/lectures/2949103
+109,2.12.2,比 N V (O V) 得 A,,bǐ N V (O V) dé A ,V (O) more A than N,,他比我学(汉语学)得快。,He learns (Chinese) more quickly than I do.,https://chinesezerotohero.teachable.com/courses/191830/lectures/2949103
+110,2.13.1,V 着 O,,V zhe O ,V-ing O,,他们穿着西服。,They are wearing suites.,https://chinesezerotohero.teachable.com/courses/191830/lectures/2949107
+111,2.13.1,没 V 着 O,,méi V zhe O ,not V-ing O,,他没拿着铅笔。,He’s not holding a pencil.,https://chinesezerotohero.teachable.com/courses/191830/lectures/2949107
+112,2.13.2,N 不是……吗？,,N bùshì…… ma？ ,is N not…,,你不是北京人吗？,Aren’t you a Beijinger?,https://chinesezerotohero.teachable.com/courses/191830/lectures/2949108
+113,2.13.3,往 DIRECTION V,,wǎng DIRECTION V ,V toward DIRECTION,,从这儿一直往东走。,Walk straight toward the east from here.,https://chinesezerotohero.teachable.com/courses/191830/lectures/2949106
+114,2.14.1,V 过,,V guò ,V’ed before,,我去过中国。,I've been to China.,https://chinesezerotohero.teachable.com/courses/191830/lectures/2949111
+115,2.14.1,没有 V 过,,méiyǒu V guò ,haven’t V’ed,,他们没有来过我家。,They have never been to my place.,https://chinesezerotohero.teachable.com/courses/191830/lectures/2949111
+116,2.14.2,虽然……但是,,suīrán…… dànshì ,although…,,虽然是晴天，但是还是很冷。,"Even though it's sunny, it's still cold.",https://chinesezerotohero.teachable.com/courses/191830/lectures/2949113
+117,2.14.3,V 过 # 次 O,,V guò # cì O ,V’ed O # times,,他们坐过三次飞机。,They have taken a plane three times.,https://chinesezerotohero.teachable.com/courses/191830/lectures/2949112
+118,2.14.3,V 过 PLACE # 次,,V guò PLACE # cì ,V’ed to PLACE # times,,我们来过三次中国。,We have been to China three times.,https://chinesezerotohero.teachable.com/courses/191830/lectures/2949112
+119,2.15.1,TIME (就) 要 V 了,,TIME ( jiù) yào V le ,about to V in TIME,,下个星期我们(就)要考试了。,We are about to have an exam in just a week.,https://chinesezerotohero.teachable.com/courses/191830/lectures/2949117
+120,2.15.2,都 TIME/A/V 了,,dōu TIME/A/V le ,"It’s already TIME, is already A, has already V’ed",,都8点了，快点儿起床吧。,"It’s already 8, get up quick!",https://chinesezerotohero.teachable.com/courses/191830/lectures/2949116
+121,3.01.1,V 好,,V hǎo ,done V-ing,,饭还没做好，请你等一会儿。,"The food is not cooked yet, please wait awhile.",https://chinesezerotohero.teachable.com/courses/182498/lectures/2763802
+122,3.01.2,一 + M + N + 也／都 + 不 + V,,yī + M + N + yě／ dōu + bù + V ,not V even one N,,我一个苹果也不吃。,I’m not eating any apples. (Lit. I don’t eat even one apple.),https://chinesezerotohero.teachable.com/courses/182498/lectures/2763808
+123,3.01.3,那,,nà ,so then,,你不去，那我也不去了。,"[If] you don’t go, then I won’t go either.",https://chinesezerotohero.teachable.com/courses/182498/lectures/2763809
+124,3.01.3,那也,,nà yě ,but still,,A: 我早就复习好了。B: 那也不能一直玩儿啊。,"A: I’ve done my reviewed a long time ago already.
+B: But still [you] shouldn’t be playing all the time.",https://chinesezerotohero.teachable.com/courses/182498/lectures/2763809
+125,3.02.1,V1了就 V2,,V1 le jiù V2,V2 as soon as V1,,爸爸回来了我们就吃饭。,We’ll eat when dad comes back.,https://chinesezerotohero.teachable.com/courses/182498/lectures/2763990
+126,3.02.2,V 来／去,,V lái／ qù ,(complements of direction),,我们在楼上等你呢，你上来吧。,"We are upstairs waiting, please come up.",https://chinesezerotohero.teachable.com/courses/182498/lectures/2763993
+127,3.02.2,V somewhere 来／去,,V somewhere lái／ qù ,(complements of direction),,朋友回家去了。,[My] friend went back home.,https://chinesezerotohero.teachable.com/courses/182498/lectures/2763993
+128,3.02.2,V O 来／去,,V O lái／ qù ,(complements of direction),,明天要带作业来。,You need to bring [your] homework tomorrow.,https://chinesezerotohero.teachable.com/courses/182498/lectures/2763993
+129,3.02.2,V 来／去 O,,V lái／ qù O ,(complements of direction),,明天要带来作业。,Bring [your] homework tomorrow.,https://chinesezerotohero.teachable.com/courses/182498/lectures/2763993
+130,3.02.3,能……吗？,,néng…… ma？ ,how can you…?,,你不做作业，也不练习，能学好汉语吗？,"You don't do [your] homework, don't practice, how can you [possibly] learn Chinese well?",https://chinesezerotohero.teachable.com/courses/182498/lectures/2763994
+131,3.03.1,N1 还是 N2 ?,,N1 háishi N2 ?,N1 or N2 ?,,你要喝咖啡还是喝茶？,Do you want coffee or tea?,https://chinesezerotohero.teachable.com/courses/182498/lectures/2764004
+132,3.03.1,N1 或者 N2,,N1 huòzhě N2,either N1 or N21,,天冷了或者工作累了的时候，喝杯热茶很舒服。,"When the weather is cold or when you’re tired from work, it is very comfortable to drink a cup of hot tea.",https://chinesezerotohero.teachable.com/courses/182498/lectures/2764004
+133,3.03.1,N1 还是 N2,,N1 háishi N2,N1 or N2 (in question-like clauses),,我还没想好去爬山还是去看电影。,I haven't decided whether to go hiking or to go to the movies.,https://chinesezerotohero.teachable.com/courses/182498/lectures/2764004
+134,3.03.2,PLACE + V + 着 + N,,PLACE + V + zhe + N ,There is N V’ed in PLACE.,,桌子上放着一杯咖啡。,There is a cup of coffee placed on the table.,https://chinesezerotohero.teachable.com/courses/182498/lectures/2764006
+135,3.03.2,PLACE + 没 + V + 着 + N,,PLACE + méi + V + zhe + N ,There is not N V’ed in PLACE.,,桌子上没放着咖啡。,There was no coffee placed on the table.,https://chinesezerotohero.teachable.com/courses/182498/lectures/2764006
+136,3.03.3,会 + V / A + (的）,,huì + V / A + ( de） ,"will V, will be A",,你穿得那么少，会感冒的。,"You wear so little, you will catch a cold.",https://chinesezerotohero.teachable.com/courses/182498/lectures/2764008
+137,3.04.1,又……又……,,yòu…… yòu…… ,not only… but also…,,这个西瓜又大又甜。,This watermelon is big and sweet.,https://chinesezerotohero.teachable.com/courses/182498/lectures/2764056
+138,3.04.2,V1 + 着 + V2,,V1 + zhe + V2,V1-ing while V2-ing,,弟弟吃着苹果写作业。,The younger brother is doing homework while eating [an] apple.,https://chinesezerotohero.teachable.com/courses/182498/lectures/2764058
+139,3.05.1,A 了,,A le ,become A,,昨天吃了感冒药，现在好一些了。,"I took flu medicine yesterday, and I’m better now.",https://chinesezerotohero.teachable.com/courses/182498/lectures/2764062
+140,3.05.1,V 了,,V le ,(didn’t V but) now V,,现在我可以穿漂亮的裙子了。,Now I can wear a beautiful dress.,https://chinesezerotohero.teachable.com/courses/182498/lectures/2764062
+141,3.05.2,越来越 + A + (了),,yuèláiyuè + A + ( le) ,more and more A,,你最近越来越帅了。,You’re more and more handsome these days.,https://chinesezerotohero.teachable.com/courses/182498/lectures/2764067
+142,3.06.1,V + 得 + RESULT,,V + dé + RESULT ,can V to RESULT,,我看得清楚那个汉字。,I can see the Chinese character clearly.,https://chinesezerotohero.teachable.com/courses/182498/lectures/2764075
+143,3.06.1,V + 得 + DIRECTION,,V + dé + DIRECTION ,can V to DIRECTION,,楼这么高，你上得来吗？,"The building is so high, are you able to come up?",https://chinesezerotohero.teachable.com/courses/182498/lectures/2764075
+144,3.06.1,V + 不 + result,,V + bù + result ,cannot V to RESULT,,我找不到好饭馆。,I can't seek out a good restaurant.,https://chinesezerotohero.teachable.com/courses/182498/lectures/2764075
+145,3.06.1,V + 不 + direction,,V + bù + direction ,cannot V to DIRECTION,,楼太高了，我上不去。,"The building is too high, I can't go up.",https://chinesezerotohero.teachable.com/courses/182498/lectures/2764075
+146,3.06.2,N 呢?,,N ne? ,where is N?,,你的书呢？,Where is your book?,https://chinesezerotohero.teachable.com/courses/182498/lectures/2764079
+147,3.06.3,刚 V,,gāng V ,just V,,儿子刚做完作业。 ,The son just finished his homework.,https://chinesezerotohero.teachable.com/courses/182498/lectures/2764078
+148,3.06.3,刚才,,gāngcái ,moments ago,,刚才儿子在做作业。,My son is doing homework moments ago.,https://chinesezerotohero.teachable.com/courses/182498/lectures/2764078
+149,3.07.1,V + 了 + DURATION + O,,V + le + DURATION + O ,V’ed O for DURATION,,我们坐了一个小时公共汽车。,We took a bus for an hour.,https://chinesezerotohero.teachable.com/courses/182498/lectures/2764093
+150,3.07.1,V + 了 + DURATION + O + 了,,V + le + DURATION + O + le ,have been V-ing O for DURATION,,我学习了一年汉语了。,I have studied Chinese for a year.,https://chinesezerotohero.teachable.com/courses/182498/lectures/2764093
+151,3.07.2,对 N 感兴趣/有兴趣,,duì N gǎnxìngqù/ yǒuxìngqù ,interested in N,,他们对中国电影感兴趣。,They are interested in Chinese movies.,https://chinesezerotohero.teachable.com/courses/182498/lectures/2764090
+152,3.07.2,对 N 没兴趣,,duì N méi xìngqù ,not interested in N,,他们对中国电影没兴趣。,They are not interested in Chinese movies.,https://chinesezerotohero.teachable.com/courses/182498/lectures/2764090
+153,3.07.3,半,,bàn ,half hour,,现在七点半。,It’s half past seven.,https://chinesezerotohero.teachable.com/courses/182498/lectures/2764096
+154,3.07.3,一刻,,yī kè ,quarter hour (when telling time),,现在七点一刻。,Now it’s quarter past seven.,https://chinesezerotohero.teachable.com/courses/182498/lectures/2764096
+155,3.07.3,一刻钟,,yī kè zhōng ,quarter hour (duration),,你迟到了一刻钟。,You are late for 15 minutes.,https://chinesezerotohero.teachable.com/courses/182498/lectures/2764096
+156,3.07.3,差 (chà),,chà (chà) ,to (when telling time),,已经差一刻八点了！,It’s already a quarter to eight!,https://chinesezerotohero.teachable.com/courses/182498/lectures/2764096
+157,3.08.1,再 V,,zài V ,again (later),,我明天还要再去看看。,I will go see it again tomorrow.,https://chinesezerotohero.teachable.com/courses/182498/lectures/2764099
+158,3.08.1,又 V,,yòu V ,(did) again,,你今天怎么又迟到了?,Why are you late again today?,https://chinesezerotohero.teachable.com/courses/182498/lectures/2764099
+159,3.08.2,S + Q1 + 就 + Q2,,S + Q1 + jiù + Q2,(S acts in a way so that the answer to Q1 is the same as the answer to Q2.),,我想喝什么就喝什么。,I drink whatever I want to drink.,https://chinesezerotohero.teachable.com/courses/182498/lectures/2764104
+160,3.08.2,S1 + Q + S2 + 就 + Q,,S1 + Q + S2 + jiù + Q,(S2 acts in a way that the answer to Q is true for both S1 and S2.),,你喝什么我就喝什么。,I drink whatever you drink.,https://chinesezerotohero.teachable.com/courses/182498/lectures/2764104
+161,3.09.1,越 V1/A1 越 V2/A2,,yuè V1/A1 yuè V2/A2,the more V1/A1 the more V2/A2,,我们越聊越开心。,"The more we chat, the more joyous we are.",https://chinesezerotohero.teachable.com/courses/182498/lectures/2764111
+162,3.09.2,N1 跟 N2 一样,,N1 gēn N2 yīyàng,N1 is like N2,,你的眼睛跟大熊猫一样。,Your eyes are like pandas’ [eyes].,https://chinesezerotohero.teachable.com/courses/182498/lectures/2764113
+163,3.09.2,N1 跟 N2 一样 A,,N1 gēn N2 yīyàng A,N1 is as A as N2,,儿子跟爸爸一样高。,The son is as tall as his father.,https://chinesezerotohero.teachable.com/courses/182498/lectures/2764113
+164,3.10.1,没有 N (这么/那么) A,,méiyǒu N ( zhème/ nàme) A ,not as A as N,,我的汉语没有他那么好。,My Chinese is not as good as his.,https://chinesezerotohero.teachable.com/courses/182498/lectures/2764118
+165,3.10.1,A 一点儿/一些,,A yīdiǎnr/ yīxiē ,A little more A,,大山比大卫矮一点儿。,Dashan is a little shorter than David.,https://chinesezerotohero.teachable.com/courses/182498/lectures/2764118
+166,3.10.1,A 得多/多了,,A dé duō/ duō le ,much more A,,今天的作业比昨天多得多。,Today's homework is much more than yesterday’s.,https://chinesezerotohero.teachable.com/courses/182498/lectures/2764118
+167,3.10.2,# #+1,,# #+1,# or #+1,,我每天学习一两个小时汉语。,I study Chinese for one or two hours a day.,https://chinesezerotohero.teachable.com/courses/182498/lectures/2764122
+168,3.11.1,把 + Ｏ + Ｖ + 了,,bǎ + Ｏ + Ｖ + le ,V’ed the O,,我把钱包忘了。,I forgot my/the wallet.,https://chinesezerotohero.teachable.com/courses/183827/lectures/2785318
+169,3.11.1,不要/别/没把 + Ｏ + Ｖ + 了,,bùyào/ bié/ méi bǎ + Ｏ + Ｖ + le ,don’t/don’t/haven’t V’ed the O,,别把手机忘了。,Don't forget your/the phone.,https://chinesezerotohero.teachable.com/courses/183827/lectures/2785318
+170,3.11.2,# 左右,,# zuǒyòu ,approximately #,,周末我一般十点左右起床。,I usually get up at around 10 o'clock on weekends.,https://chinesezerotohero.teachable.com/courses/183827/lectures/2785322
+171,3.12.1,就 V/A,,jiù V/A ,just (better than expected),,坐飞机一个小时就到了。,It takes only an hour to get there by plane.,https://chinesezerotohero.teachable.com/courses/183827/lectures/2785150
+172,3.12.1,才 V/A,,cái V/A ,just (worse than expected),,你怎么才来？,How come you only came just now? (Why are you so late?),https://chinesezerotohero.teachable.com/courses/183827/lectures/2785150
+173,3.12.2,把 + O + V + 在/到 +  PLACE,,bǎ + O + V + zài/ dào + PLACE ,V’d the O to PLACE,,我把照片放在你包里了。,I put the photo in your bag.,https://chinesezerotohero.teachable.com/courses/183827/lectures/2785153
+174,3.13.1,V + motion V + 来/去,,V + motion V + lái/ qù ,(compound complements of direction),,明天我们一起把礼物送过去。,Let's send the gift over together tomorrow.,https://chinesezerotohero.teachable.com/courses/183827/lectures/2785253
+175,3.13.2,一边 + V1 + 一边 + V2,,yībiān + V1 + yībiān + V2,V1 while V2,,他一边唱歌一边跳舞。,He sang while he danced.,https://chinesezerotohero.teachable.com/courses/183827/lectures/2785257
+176,3.14.1,把 + O + V + result,,bǎ + O + V + result ,V the O until RESULT,,我把衣服洗干净了。,I washed my clothes clean.,https://chinesezerotohero.teachable.com/courses/183827/lectures/2785206
+177,3.14.1,把 + O + V + direction,,bǎ + O + V + direction ,V the O to DIRECTION,,他把水果拿过来了。,He took the fruit over.,https://chinesezerotohero.teachable.com/courses/183827/lectures/2785206
+178,3.14.2,先……再/又……然后……,,xiān…… zài/ yòu…… ránhòu…… ,"First, then, then, …",,我先坐了公共汽车，又坐了地铁，然后才到小刚家。,"I first took the bus, then took the subway, and then went to Xiaogang's house.",https://chinesezerotohero.teachable.com/courses/183827/lectures/2785210
+179,3.15.1,除了 N 以外,,chúle N yǐwài ,except N,,除了这个汉字以外，别的我都认识。,"Except for this Chinese character, I know everything else.",https://chinesezerotohero.teachable.com/courses/183827/lectures/2785159
+180,3.15.1,除了……(以外)，还……,,chúle……( yǐwài)， hái…… ,"not only…, but also…",,上网除了看新闻(以外)，还可以听音乐。,"In addition to watching the news, you can listen to music too.",https://chinesezerotohero.teachable.com/courses/183827/lectures/2785159
+181,3.15.2,什么,,shénme ,any,,周末你有什么打算吗?,Do you have any plans for the weekend?,https://chinesezerotohero.teachable.com/courses/183827/lectures/2785163
+182,3.15.3,A 极了,,A jíle ,extremely A,,今天天气冷极了。,The weather is extremely cold today.,https://chinesezerotohero.teachable.com/courses/183827/lectures/2785164
+183,3.16.1,"如果……(的话), 就……",,"rúguǒ……( dehuà), jiù…… ","if …, then…",,如果你太累的话，就休息一会儿。,"If you are too tired, take a break.",https://chinesezerotohero.teachable.com/courses/183827/lectures/2785196
+184,3.16.2,A + 得 + CLAUSE,,A + dé + CLAUSE ,so A that + CLAUSE,,儿子累得下了班就睡觉了。,The son was so tired that he went to sleep as soon as he got off work.,https://chinesezerotohero.teachable.com/courses/183827/lectures/2785200
+185,3.16.3,A + A + 的,,A + A + de ,A (with characteristics),,她鼻子小小的，头发黑黑的。,Her nose is teeny tiny and her hair is black.,https://chinesezerotohero.teachable.com/courses/183827/lectures/2785201
+186,3.17.1,V + V,,V + V ,V for a bit,,我带你去医院检查检查吧。,Let me take you to the hospital for to check up a bit.,https://chinesezerotohero.teachable.com/courses/183827/lectures/2785327
+187,3.17.2,Q + 都,,Q + dōu ,Q-ever,,小刚什么都喜欢吃。,Xiao Gang likes to eat anything (lit. whatever).,https://chinesezerotohero.teachable.com/courses/183827/lectures/2785331
+188,3.18.1,只要……就……,,zhǐyào…… jiù…… ,as long as,,只要我有时间，就一定跟你去旅游。,"As long as I have time, I will definitely travel with you.",https://chinesezerotohero.teachable.com/courses/183827/lectures/2785169
+189,3.18.2,关于,,guānyú ,about,,关于这件事，我们还没有决定呢。,We have not decided on this matter yet.,https://chinesezerotohero.teachable.com/courses/183827/lectures/2785173
+190,3.19.1,V + 出来,,V + chūlái ,V and produce an outcome,,这个字你能写出来吗?,Can you write (out) this word?,https://chinesezerotohero.teachable.com/courses/183827/lectures/2785178
+191,3.19.1,V + 出来,,V + chūlái ,V and recognize,,你听出来了吗？这是谁的声音？,"After listening, did you recognize [it]? Whose voice is this?",https://chinesezerotohero.teachable.com/courses/183827/lectures/2785178
+192,3.19.1,V + 下来,,V + xiàlai ,V down,,我真希望时间能慢下来。,I really hope that time can slow down.,https://chinesezerotohero.teachable.com/courses/183827/lectures/2785178
+193,3.19.1,想起来,,xiǎngqilai ,to recall,,我想不起来他的名字了。,I can't think of (lit. think up) his name.,https://chinesezerotohero.teachable.com/courses/183827/lectures/2785178
+194,3.19.1,看起来/看上去,,kànqǐlái/ kànshangqu ,to seem,,他看上去/看起来像40多岁。,He looks like he is in his 40s.,https://chinesezerotohero.teachable.com/courses/183827/lectures/2785178
+195,3.19.2,使/叫/让 + O + A/V,,shǐ/ jiào/ ràng + O + A/V ,make O A/V,,读书使/叫/让我快乐。,Reading makes me happy.,https://chinesezerotohero.teachable.com/courses/183827/lectures/2785182
+196,3.20.1,O + 被/叫/让 + S + V,,O + bèi/ jiào/ ràng + S + V ,O is V’ed by S,,我的照相机被/叫/让谁拿走了?,My camera was taken by who?,https://chinesezerotohero.teachable.com/courses/183827/lectures/2785187
+197,3.20.1,O + 不/没 + 被/叫/让 + S + V,,O + bù/ méi + bèi/ jiào/ ràng + S + V ,O is not V’ed by S,,问题还没有被解决呢。,The problem has not been solved yet.,https://chinesezerotohero.teachable.com/courses/183827/lectures/2785187
+198,3.20.2,只有……才……,,zhǐyǒu…… cái…… ,only if,,只有写完作业，才能看电视。,You can watch TV only if you finish your homework.,https://chinesezerotohero.teachable.com/courses/183827/lectures/2785191
+199,4.01.1,不仅……也/还/而且……,,bùjǐn…… yě/ hái/ érqiě…… ,Not only… but also…,,我不仅看过《泰坦尼克号》，也看过《诺丁山》。,"I have not only seen Titanic, but also Notting Hill.",https://chinesezerotohero.teachable.com/courses/281078/lectures/4332370
+200,4.01.1,不仅 S1……，S2 也……,,bùjǐn S1……，S2 yě……,"Not only S1…, S2 also…",,不仅马克看过《诺丁山》，我也看过《诺丁山》。,"Not only did Mark see Notting Hill, I also saw Notting Hill.",https://chinesezerotohero.teachable.com/courses/281078/lectures/4332370
+201,4.01.2,从来不 V,,cóngláibù V ,never V,,我中午从来不睡觉。,I never sleep at noon.,https://chinesezerotohero.teachable.com/courses/281078/lectures/4332374
+202,4.01.2,从来没 V/A 过,,cóngláiméi V/A guò ,"never have V’ed, never have been A",,他爸爸妈妈从来没这么高兴过。,His father and mother have never been so happy.,https://chinesezerotohero.teachable.com/courses/281078/lectures/4332374
+203,4.01.3,刚/刚刚 V,,gāng/ gānggang V ,just V’ed,,我上个月刚结婚。,I just got married last month.,https://chinesezerotohero.teachable.com/courses/281078/lectures/4332378
+204,4.01.3,刚 + V + DURATION,,gāng + V + DURATION ,have V’ed for just DURATION,,他刚来一个月。,He’s been [lit. come] here for just a month.,https://chinesezerotohero.teachable.com/courses/281078/lectures/4332378
+205,4.01.3,刚才,,gāngcái ,moments ago,,刚才我收到了一封电子邮件。,I just received an email.,https://chinesezerotohero.teachable.com/courses/281078/lectures/4332378
+206,4.01.4,即使……也……,,jíshǐ…… yě…… ,"even if…, still…",,即使冬天很冷，他也每天去操场跑步。,"Even if it’s very cold in winter, he still goes to the playground to job every day.",https://chinesezerotohero.teachable.com/courses/281078/lectures/4332387
+207,4.01.5,(在) N 上,,( zài) N shàng ,with regard to N,,在爱好上，我更像我妈妈。,"In terms of hobbies, I am more like my mother.",https://chinesezerotohero.teachable.com/courses/281078/lectures/4332388
+208,4.02.1,正好,,zhènghǎo ,just right,,衣服大小正好。,The clothes are just the right size.,https://chinesezerotohero.teachable.com/courses/281078/lectures/4421985
+209,4.02.1,V 得正好,,V dé zhènghǎo ,V’ed at just the right time,,你来得正好。,You came at just the right time.,https://chinesezerotohero.teachable.com/courses/281078/lectures/4421985
+210,4.02.2,N & N 差不多,,N & N chàbuduō ,N & N are about the same,,这辆车的颜色和那辆车的颜色差不多。,The color of this car is similar to the color of that car.,https://chinesezerotohero.teachable.com/courses/281078/lectures/4422049
+211,4.02.2,差不多 #,,chàbuduō # ,about #,,这台电脑差不多5000块。,"This computer is about 5,000 yuan.",https://chinesezerotohero.teachable.com/courses/281078/lectures/4422049
+212,4.02.2,差不多 A,,chàbuduō A ,about A,,女儿个子跟我差不多一样高。,My daughter is about as tall as me.,https://chinesezerotohero.teachable.com/courses/281078/lectures/4422049
+213,4.02.2,差不多 V,,chàbuduō V ,about V’ed,,工作差不多干完了。,Work is about finished.,https://chinesezerotohero.teachable.com/courses/281078/lectures/4422049
+214,4.02.2,几乎 #,,jīhū # ,almost #,,这台电脑几乎5000块。,"This computer is almost 5,000 yuan.",https://chinesezerotohero.teachable.com/courses/281078/lectures/4422049
+215,4.02.2,几乎 A,,jīhū A ,almost,,得失几乎相当。,The loss and the gain are almost the same.,https://chinesezerotohero.teachable.com/courses/281078/lectures/4422049
+216,4.02.2,几乎 V,,jīhū V ,almost,,这件事我几乎忘了告诉你了。,I almost forgot to tell you about this.,https://chinesezerotohero.teachable.com/courses/281078/lectures/4422049
+217,4.02.3,尽管,,jǐnguǎn ,although,,尽管今天很冷，可是他穿的衣服很少。,"Although it is very cold today, he wears very little clothes.",https://chinesezerotohero.teachable.com/courses/281078/lectures/4422084
+218,4.02.4,(虽然/尽管) …… 却,,( suīrán/ jǐnguǎn) …… què ,(although)… but,,(虽然/尽管) 工作很忙，她们却每天坚持锻炼。,"(Although) they are busy at work, but they insist on exercising every day.",https://chinesezerotohero.teachable.com/courses/281078/lectures/4422102
+219,4.02.5,而,,ér ,and/but,,听、说能力很重要，而写汉字的能力也重要。,"Listening and speaking abilities are very important, and (on the other hand) the ability to write Chinese characters is also important.",https://chinesezerotohero.teachable.com/courses/281078/lectures/4422160
+220,4.03.1,挺 A 的,,tǐng A de ,quite A,,我挺喜欢这个地方的。,I quite like this place.,https://chinesezerotohero.teachable.com/courses/281078/lectures/4422169
+221,4.03.2,本来 V/A,,běnlái V/A ,originally V/A,,她本来想学新闻，但是现在学习法律。,"She originally wanted to learn the news, but now she is studying law.",https://chinesezerotohero.teachable.com/courses/281078/lectures/4422183
+222,4.03.2,本来就 V/A,,běnlái jiù V/A ,V/A in the first place,,学生本来就不应该上课迟到。,Students should not be late for class in the first place.,https://chinesezerotohero.teachable.com/courses/281078/lectures/4422183
+223,4.03.3,另/另外/另外的 + # + N,,lìng/ lìngwài/ lìngwài de + # + N ,another # N,,他拿出另/另外/另外的一本书。,He took out another book.,https://chinesezerotohero.teachable.com/courses/281078/lectures/4422189
+224,4.03.3,另外的/其他的/别的 N,,lìngwài de/ qítā de/ biéde N ,other N,,不要看这本书，请看另外的/其他的/别的书。,"Don't read this book, please read other books.",https://chinesezerotohero.teachable.com/courses/281078/lectures/4422189
+225,4.03.3,另/另外 V,,lìng/ lìngwài V ,V another,,他另/另外给了我三十元。,He gave me another 30 yuan.,https://chinesezerotohero.teachable.com/courses/281078/lectures/4422189
+226,4.03.3,另外，……,,lìngwài，…… ,"In addition, …",,多吃水果。另外，还要记得多喝水。,"Eat more fruits. Also, remember to drink more water.",https://chinesezerotohero.teachable.com/courses/281078/lectures/4422189
+227,4.03.4,首先……其次……,,shǒuxiān…… qícì…… ,First… second…,,应聘时，首先要穿正式的衣服，其次不要紧张。,"At the job interview, first [you] should wear formal clothing, and second don't be nervous.",https://chinesezerotohero.teachable.com/courses/281078/lectures/4422195
+228,4.03.5,不管,,bùguǎn ,no matter,,不管什么电影，我都喜欢看。,"I like to watch all kinds of movies. (Lit. No matter what movie, I like to watch them all.)",https://chinesezerotohero.teachable.com/courses/281078/lectures/4423053
+229,4.04.1,以为,,yǐwéi ,to believe falsely,,我以为东西是给我的，其实是给爸爸的。,"I thought the thing was for me, but actually it was for my father.",https://chinesezerotohero.teachable.com/courses/281078/lectures/4423130
+230,4.04.2,原来/本来,,yuánlái/ běnlái ,originally,,原来/本来需要12个小时。,It originally required 12 hours.,https://chinesezerotohero.teachable.com/courses/281078/lectures/4423168
+231,4.04.2,原来 clause,,yuánlái clause ,it turns out,,我还以为是谁帮我打扫房间呢，原来是你啊！,I was wondering who was cleaning the room for me. It turns out it’s you!,https://chinesezerotohero.teachable.com/courses/281078/lectures/4423168
+232,4.04.2,本来就 V/A,,běnlái jiù V/A ,(see 4.03.2),,-,-,https://chinesezerotohero.teachable.com/courses/281078/lectures/4423168
+233,4.04.3,并不/并没 V/A,,bìngbù/ bìng méi V/A ,(emphasize the negative),,大家说外面很冷，但我并不觉得冷。,"Everyone said that it was cold outside, but I (rather) didn’t feel cold.",https://chinesezerotohero.teachable.com/courses/281078/lectures/4423171
+234,4.04.4,按照 N,,ànzhào N ,according to N,,我们还是按照原来的计划进行。,We are still proceeding according to the original plan.,https://chinesezerotohero.teachable.com/courses/281078/lectures/4423204
+235,4.04.5,甚至 V/A,,shènzhì V/A ,even V/A,,他工作很努力，甚至忘了吃饭。,He worked hard and even forgot to eat.,https://chinesezerotohero.teachable.com/courses/281078/lectures/4423210
+236,4.05.1,肯定 V/A,,kěndìng V/A ,certainly V/A,,运动对身体健康肯定有好处。,Exercise is definitely good for your health.,https://chinesezerotohero.teachable.com/courses/281078/lectures/4423222
+237,4.05.1,肯定,,kěndìng ,certain,,我能肯定，张远一定会来。,I can be sure that Zhang Yuan will definitely come.,https://chinesezerotohero.teachable.com/courses/281078/lectures/4423222
+238,4.05.1,肯定的,,kěndìng de ,"affirmative, positive",,他的回答是肯定的。,His answer is yes (in the affirmative).,https://chinesezerotohero.teachable.com/courses/281078/lectures/4423222
+239,4.05.2,再说,,zàishuō ,talk about it / deal with it until a later time,,现在学习忙，考完再说吧。,"I’m busy studying now, let’s talk about it / deal with it (until) after the exam.",https://chinesezerotohero.teachable.com/courses/281078/lectures/4423226
+240,4.05.2,再说,,zàishuō ,besides,,毕业后大家都很忙，再说，很多同学不在一个城市。,"After graduation, everyone was very busy. Besides, many students are not in a city.",https://chinesezerotohero.teachable.com/courses/281078/lectures/4423226
+241,4.05.3,实际的,,shíjì de ,real,,实际的东西跟广告上的不一样。,The actual thing is different from the one on the advertisement.,https://chinesezerotohero.teachable.com/courses/281078/lectures/4423230
+242,4.05.3,实际,,shíjì ,reality,,广告跟实际不一样。,Advertising is not the same as the actual [thing].,https://chinesezerotohero.teachable.com/courses/281078/lectures/4423230
+243,4.05.3,实际上,,shíjìshàng ,in reality,,广告说得好，实际上不一定好。,"The advertisement is well said, but it is not necessarily good in reality.",https://chinesezerotohero.teachable.com/courses/281078/lectures/4423230
+244,4.05.4,对……来说,,duì…… láishuō ,"for, as for",,对我来说，学习机会更重要。,"For me, learning opportunities are more important.",https://chinesezerotohero.teachable.com/courses/281078/lectures/4423233
+245,4.05.5,特别,,tèbié ,"very much, extremely",,您女儿长得特别像您。,Your daughter looks especially like you.,https://chinesezerotohero.teachable.com/courses/281078/lectures/4423240
+246,4.05.5,特别/尤其,,tèbié/ yóuqí ,"especially, particularly",,您女儿长得真像您，特别是/尤其眼睛。,"Your daughter looks like you, especially her eyes.",https://chinesezerotohero.teachable.com/courses/281078/lectures/4423240
+247,4.05.5,特别的,,tèbié de ,special,,我有一个特别的要求。,I have a special request.,https://chinesezerotohero.teachable.com/courses/281078/lectures/4423240
+248,4.06.1,竟然 V/A,,jìngrán V/A ,(expressing surprise),,这个歌特别好听，最近很流行，你竟然没听过？,"This song is particularly nice, it has been very popular recently, you’re telling me you’ve never heard of it?",https://chinesezerotohero.teachable.com/courses/292789/lectures/4505534
+249,4.06.2,# 倍,,# bèi ,# times,,二的五倍是十。,"2, multiplied 5 times, is 10.",https://chinesezerotohero.teachable.com/courses/292789/lectures/4505533
+250,4.06.3,值得 V,,zhíde V ,is worth,,您看看这个，不管从价格方面看， 还是从质量上看， 都是值得考虑的。,"Look at this, both in terms of price and quality, it is worth considering.",https://chinesezerotohero.teachable.com/courses/292789/lectures/4505535
+251,4.06.3,值/值得,,zhí/ zhíde ,is worth it,,别总是为一点儿小事生气，不值/值得。,"Don't always be angry with a little thing, it’s not worth it.",https://chinesezerotohero.teachable.com/courses/292789/lectures/4505535
+252,4.06.3,值 $,,zhí $ ,is worth $,,这个手表值五十块。,This watch is worth fifty yuan.,https://chinesezerotohero.teachable.com/courses/292789/lectures/4505535
+253,4.06.4,其中,,qízhōng ,among them,,我们不仅要会读书，还要会选择其中的好书来读。,"Not only do we have to read books, but we also need to know how to choose the good ones among them to read.",https://chinesezerotohero.teachable.com/courses/292789/lectures/4505536
+254,4.06.5,(在) SITUATION 下,,( zài) SITUATION xià ,under SITUATION,,(在) 一般情况下，你花的钱越多，买的东西也就越好。,"In general (lit. under general circumstances), the more money you spend, the better the goods you buy.",https://chinesezerotohero.teachable.com/courses/292789/lectures/4505538
+255,4.07.1,估计/可能 CLAUSE,,gūjì/ kěnéng CLAUSE ,perhaps CLAUSE,,你有没有去问问小王？估计/可能他应该有办法。,Have you asked Xiao Wang? Perhaps he should have a solution.,https://chinesezerotohero.teachable.com/courses/292789/lectures/4505570
+256,4.07.1,估计/可能 V,,gūjì/ kěnéng V ,perhaps V,,我还不习惯北方的气候，估计/可能是天气太干。,I am not used to the climate in the north. Perhaps it’s because the weather is too dry.,https://chinesezerotohero.teachable.com/courses/292789/lectures/4505570
+257,4.07.1,可能的 N,,kěnéng de N ,probable,,他这么多天没来上课，最可能的原因就是他回国了。,He did not come to class for so many days. The most probable reason is that he returned to China.,https://chinesezerotohero.teachable.com/courses/292789/lectures/4505570
+258,4.07.2,来不及,,láibují ,be too late,,等你身体出现问题了，后悔就来不及了。,"When you have a problem with your health, it’ll be too late to regret it.",https://chinesezerotohero.teachable.com/courses/292789/lectures/4505571
+259,4.07.3,V + V + O,,V + V + O ,VO for a bit (reduplication),,咱们午饭后就去附近的公园散散步吧。,Let's go for a walk in the nearby park after lunch.,https://chinesezerotohero.teachable.com/courses/292789/lectures/4505572
+260,4.07.3,V + 了 + V + O,,V + le + V + O ,V’ed O for a bit (reduplication),,星期天我睡了睡觉，游了游泳，做了做作业。,"On Sunday, I slept a bit, did some swimming, [and] did some homework.",https://chinesezerotohero.teachable.com/courses/292789/lectures/4505572
+261,4.07.4,要是,,yàoshi ,if,,要是质量好的话，那么价格贵一点儿也没关系。,"If the quality is good, then it doesn't matter if the price is a little bit expensive.",https://chinesezerotohero.teachable.com/courses/292789/lectures/4505573
+262,4.07.5,既..... 又/也/还……,,jì..... yòu/ yě/ hái…… ,not only… but also…,,散步既可以活动身体，又可以减肥。,Walking can [allow you to] both move the body and lose weight.,https://chinesezerotohero.teachable.com/courses/292789/lectures/4505574
+263,4.08.1,使 O A/V,,shǐ O A/V ,make O A/V,,怎么样才能使她喜欢我呢？,How can I make her like me?,https://chinesezerotohero.teachable.com/courses/292789/lectures/4505625
+264,4.08.2,只要……(就)……,,zhǐyào……( jiù)…… ,as long as… (then)…,,只要这次你好好儿准备，(就) 一定能把比赛踢好。,"As long as you are ready this time, you will be able to play the match well.",https://chinesezerotohero.teachable.com/courses/292789/lectures/4505626
+265,4.08.3,可不是！,,kěbushì！ ,No kidding!,,A: 没想到咱们毕业都已经十年了。B: 可不是！时间过得太快了， 真想大家。,"A: I didn't expect that we have graduated for ten years.
+B: Tell me about it! Time flies too fast, I really miss everyone. ",https://chinesezerotohero.teachable.com/courses/292789/lectures/4505628
+266,4.08.4,因此,,yīncǐ ,therefore,,我认识他很多年，因此，很了解他的性格。,"I have known him for many years, so I know his character very well.",https://chinesezerotohero.teachable.com/courses/292789/lectures/4505627
+267,4.08.5,往往,,wǎngwǎng ,"usually, often",,女孩子对衣服颜色的选择往往与她们的性格有关。,Girls' choice of clothing color is often related to their personality.,https://chinesezerotohero.teachable.com/courses/292789/lectures/4505629
+268,4.08.5,经常/常,,jīngcháng/ cháng ,often,,上大学时我很喜欢运动，经常/常打篮球、踢足球。,"When I was in college, I liked sports very much. I often played basketball and football.",https://chinesezerotohero.teachable.com/courses/292789/lectures/4505629
+269,4.09.1,难道,,nándào ,could it be that,,怎么又买了这么多饼干和巧克力？难道你不减肥了？,How did you buy so many cookies and chocolates? Could it be that you’re not dieting any more?,https://chinesezerotohero.teachable.com/courses/292789/lectures/4505649
+270,4.09.2,通过,,tōngguò ,through,,任何成功都要通过努力才能得到。,Any success must be achieved through hard work.,https://chinesezerotohero.teachable.com/courses/292789/lectures/4505650
+271,4.09.2,经过,,jīngguò ,after having gone through,,经过一次次失败之后，他终于成功了。,"Having gone through many failures, he finally succeeded.",https://chinesezerotohero.teachable.com/courses/292789/lectures/4505650
+272,4.09.2,通过,,tōngguò ,pass through,,这条街只能步行通过。,You can only go through this street on foot.,https://chinesezerotohero.teachable.com/courses/292789/lectures/4505650
+273,4.09.2,经过,,jīngguò ,pass by,,我正好经过这儿，顺便过来看看你。,"It just so happened that I’m passing by, [so I] came to see you on the way.",https://chinesezerotohero.teachable.com/courses/292789/lectures/4505650
+274,4.09.2,通过,,tōngguò ,"to pass (an exam, interview or resolution)",,我通过那家公司的面试了。,I passed the interview with that company.,https://chinesezerotohero.teachable.com/courses/292789/lectures/4505650
+275,4.09.2,经过,,jīngguò ,the whole story,,小王把事情的经过告诉我了。,Xiao Wang told me the whole story of [how] the event [happened].,https://chinesezerotohero.teachable.com/courses/292789/lectures/4505650
+276,4.09.3,可是,,kěshì ,but,,当时她的父母和亲戚都不支持她，可是她坚持自己的选择。,"At that time her parents and relatives did not support her, but she insisted on her choice.",https://chinesezerotohero.teachable.com/courses/292789/lectures/4505652
+277,4.09.4,结果,,jiéguǒ ,result,,请把调查结果交上来。,Please submit the results of the investigation.,https://chinesezerotohero.teachable.com/courses/292789/lectures/4505651
+278,4.09.4,结果……,,jiéguǒ…… ,"As a result, …",,上学期他学习很用功，结果考试及格了。,"He studied hard last term and, as a result, he passed the examination.",https://chinesezerotohero.teachable.com/courses/292789/lectures/4505651
+279,4.09.5,上 #,,shàng # ,over #,,这个城市的地铁已经有上百年的历史了。,The city's subway has been around for over a hundred years.,https://chinesezerotohero.teachable.com/courses/292789/lectures/4505656
+280,4.10.1,不过,,bùguò ,nevertheless,,我本来想当律师，不过后来我发现自己对新闻更感兴趣。,"I originally wanted to be a lawyer, nevertheless I found myself more interested in news.",https://chinesezerotohero.teachable.com/courses/292789/lectures/4505670
+281,4.10.1,不过 V,,bùguò V ,only V,,我们不过谈了点儿工作方面的问题，别的都没谈。,"We only talked about some work problems (and nothing more), and we didn’t talk about anything else.",https://chinesezerotohero.teachable.com/courses/292789/lectures/4505670
+282,4.10.2,确实,,quèshí ,indeed,,爱情确实是结婚的重要原因，但仅有爱情是不够的。,"Love is indeed an important reason for marriage, but only love is not enough.",https://chinesezerotohero.teachable.com/courses/292789/lectures/4505683
+283,4.10.3,在 S 看来,,zài S kànlai ,the way S see it,,在很多人看来，听流行音乐仅仅是年轻人的爱好。,The way a lot of people sees it [is that] listening to pop music is only a hobby of young people.,https://chinesezerotohero.teachable.com/courses/292789/lectures/4505671
+284,4.10.4,由于……,,yóuyú…… ,because …,,由于我们的共同努力，任务提前完成了。,"Owing to our joint efforts, the task was fulfilled ahead of schedule.",https://chinesezerotohero.teachable.com/courses/292789/lectures/4505673
+285,4.10.4,由于 N,,yóuyú N ,due to N,,由于种种原因，我们不得不改变原来的计划。,"For various reasons, we had to change the original plan.",https://chinesezerotohero.teachable.com/courses/292789/lectures/4505673
+286,4.10.5,比如……,,bǐrú…… ,"for example, ……",,旅游前最好做个计划，比如要去几个地方，怎么坐车等。,"It is best to make a plan before the trip, for example, how many places to go to, how to take transit, etc.",https://chinesezerotohero.teachable.com/courses/292789/lectures/4505672
+287,4.11.1,连 O 也/都 V,,lián O yě/ dōu V ,even V O,甚至,你太厉害了，连中文报纸都看得懂。,You are so awesome/skilled you can even understand Chinese newspapers.,https://chinesezerotohero.teachable.com/courses/299571/lectures/4606432
+288,4.11.1,连 S 也/都 V,,lián S yě/ dōu V ,even S V,,如果连你自己都不喜欢自己，又怎么能让别人喜欢你呢？,"If even you don’t like yourself, how can you let others like you?",https://chinesezerotohero.teachable.com/courses/299571/lectures/4606432
+289,4.11.2,否则,,fǒuzé ,"if not, otherwise",如果不,他一定有重要的事找你，否则不会打这么多次电话来。,"He must have something important to see (lit. look for) you about, otherwise he won't call so many times.",https://chinesezerotohero.teachable.com/courses/299571/lectures/4606436
+290,4.11.3,无论/不管 Q 都,,wúlùn/ bùguǎn Q dōu ,regardless of Q,"3.17.2 谁都，怎么都
+4.12.2 再……也",无论/不管做什么事都要注意方法，正确的方法可以让我们做得更好。,"Regardless of what you do, choose the right [lit. pay attention to] your methods. The right way can make us do better.",https://chinesezerotohero.teachable.com/courses/299571/lectures/4606434
+291,4.11.4,然而,,rán'ér ,but,"2.14.2 但是
+4.2.4 却
+4.9.3 可是
+4.10.1 不过",很多人觉得自己的生活是幸福的， 然而每个人对幸福的看法却不完全相同。,"Many people feel that their lives are happy, but everyone's views on happiness are not exactly the same.",https://chinesezerotohero.teachable.com/courses/299571/lectures/4606433
+292,4.11.5,同时……,,tóngshí…… ,"at the same time, …",2.4.2 的时候,阅读能丰富你的知识，同时还会丰富你的情感。,Reading can enrich your knowledge and (at the same time) [it will] enrich your affects.,https://chinesezerotohero.teachable.com/courses/299571/lectures/4606435
+293,4.11.5,……的同时,,…… de tóngshí ,at the same time when…,,在学习汉语的同时，我还了解了中国的文化。,"While learning Chinese (at the same time), I also learned about Chinese culture.",https://chinesezerotohero.teachable.com/courses/299571/lectures/4606435
+294,4.12.1,并/并且 V,,bìng/ bìngqiě V ,and V,"4.1.1 不仅/不但……而且
+4.5.2 再说",他做事很认真，并且有丰富的经验，让他负责很合适。,"He is very serious in his work and has a wealth of experience, which makes him very suitable to be responsible [for this].",https://chinesezerotohero.teachable.com/courses/299571/lectures/4606454
+295,4.12.2,再……也......,,zài…… yě...... ,no matter how… still…,4.11.3 不管，无论,事情已经发生了，你再后悔也无法改变，别伤心了。,"Things have already happened, no matter how you regret it you (still) won’t be able to change it, don't be sad.",https://chinesezerotohero.teachable.com/courses/299571/lectures/4606464
+296,4.12.3,对于 N,,duìyú N ,regarding N,"5.4 对……来说
+4.1.5 在……上
+4.10.3 在……看来",对于这件事， 我跟大家的看法不同。,My opinion on it (lit. regarding this matter) is different from everyone else’s.,https://chinesezerotohero.teachable.com/courses/299571/lectures/4606457
+297,4.12.3,关于 N,,guānyú N ,about N,3.18.2 关于,关于这次调查计划，经理说有很多不清楚的地方。,"About the survey plan, the manager said that there are many unclear places.",https://chinesezerotohero.teachable.com/courses/299571/lectures/4606457
+298,4.12.4,M + M + (N) + 都,,M + M + (N) + dōu ,every N,2.6.2 MM都,件件小事都应该被看成是一次学习的机会。,Each small thing should (all) be seen as an opportunity to learn.,https://chinesezerotohero.teachable.com/courses/299571/lectures/4606455
+299,4.12.5,相反，……,,xiāngfǎn，…… ,"on the other hand, …","2.14.2 但是
+4.2.4 却
+4.9.3 可是
+4.10.1 不过
+4.11.4 然而",使用正确的方法就能“事半功倍”，相反就会“事倍功半”。,"Using the right method will be able to “do more with less”, but if we do the opposite we will “do less with more”.",https://chinesezerotohero.teachable.com/courses/299571/lectures/4606456
+300,4.12.5,和/跟 N 相反,,hé/ gēn N xiāngfǎn ,to be the opposite of N,,调查结果和他们想的几乎完全相反。,The results of the survey are almost completely the opposite of what they thought.,https://chinesezerotohero.teachable.com/courses/299571/lectures/4606456
+301,4.13.1,大概/也许 V/A,,dàgài/ yěxǔ V/A ,probably/perhaps V/A,"2.11.3 可能
+4.7.1 估计，可能",我想校长大概/也许会同意。,I think the principal probably will agree.,https://chinesezerotohero.teachable.com/courses/299571/lectures/4606474
+302,4.13.1,大概的 N,,dàgài de N ,approximate N,,请给我一个大概的数字。,Please give me an approximate number.,https://chinesezerotohero.teachable.com/courses/299571/lectures/4606474
+303,4.13.1,大概 #,,dàgài # ,about #,"3.11.2 左右
+4.2.2 差不多，几乎",他8岁就开始上台演出，到现在大概唱了60多年了。,"He started performing on stage at the age of eight, and has been singing for about over 60 years.",https://chinesezerotohero.teachable.com/courses/299571/lectures/4606474
+304,4.13.2,偶尔,,ǒu'ěr ,occasionally,"有时候
+4.8.5 经常，常，常常",我常常跟着电视学唱京剧，偶尔跟中国人一起唱上几句。,"I often learn to sing Beijing opera with [lit. by following] TV programs, and occasionally sing a few lines with Chinese people.",https://chinesezerotohero.teachable.com/courses/299571/lectures/4606472
+305,4.13.3,由 S V,,yóu S V ,V’ed by S,3.20.1 被，叫，让,按照规定，这件事情应该由王大夫负责。,"According to regulations, this matter should be handled by Dr. Wang.",https://chinesezerotohero.teachable.com/courses/299571/lectures/4606471
+306,4.13.4,进行,,jìnxíng ,to proceed,做,10点30分会议继续进行。,The meeting will continue to proceed at half past 10.,https://chinesezerotohero.teachable.com/courses/299571/lectures/4606476
+307,4.13.4,进行 O,,jìnxíng O ,to carry out O,,进行观察,carry out an observation,https://chinesezerotohero.teachable.com/courses/299571/lectures/4606476
+308,4.13.5,随着 N,,suízhe N ,with N (as N happens),"3.5.1 越来越
+3.9.1 越……越……",随着社会的发展，京剧也在改变。,"With the development of society, Peking Opera is also changing.",https://chinesezerotohero.teachable.com/courses/299571/lectures/4606473
+309,4.14.1,够,,gòu ,sufficient,够,钱不够。,The money is not enough.,https://chinesezerotohero.teachable.com/courses/299571/lectures/4606491
+310,4.14.1,V 够 (#),,V gòu (#) ,V (and fulfill) #,,睡觉时间太长并不好，一般睡够八小时就可以了。,It’s not good if [your] sleeping time is too long. Usually it’s enough just to sleep for a good eight hours (lit. sleep to fulfill 8 hours).,https://chinesezerotohero.teachable.com/courses/299571/lectures/4606491
+311,4.14.1,够 A,,gòu A ,(good) enough,,不用装这些，箱子已经够重的了！,"No need to load these, the box is already heavy enough!",https://chinesezerotohero.teachable.com/courses/299571/lectures/4606491
+312,4.14.2,以 N,,yǐ N ,"with N (speed, standard)","4.9.2 通过, 经过",经理您放心，我一定以最快的速度完成。,"Manager, you can rest assured that I will finish at the fastest speed.",https://chinesezerotohero.teachable.com/courses/299571/lectures/4606502
+313,4.14.2,以 N1 为 N2,,yǐ N1 wéi N2,consider N1 as N2,,我们应该以历史为镜子。,We should use history as a mirror.,https://chinesezerotohero.teachable.com/courses/299571/lectures/4606502
+314,4.14.2,以,,yǐ ,in order to,,她送来了一份礼物以表示感谢。,She sent a gift to express her gratitude.,https://chinesezerotohero.teachable.com/courses/299571/lectures/4606502
+315,4.14.3,既然,,jìrán ,now that,"3.16.1 如果
+4.7.4 要是",你既然不愿意打球，为什么还要打？,"Since you don't want to play, why [bother] playing?",https://chinesezerotohero.teachable.com/courses/299571/lectures/4606493
+316,4.14.4,于是……,,yúshì…… ,consequently…,"2.6.3 所以
+3.14.2 然后",小时候，他经常生病，于是每天都去跑步锻炼身体。,"When he was a child, he was often ill, consequently he went to run and exercise every day.",https://chinesezerotohero.teachable.com/courses/299571/lectures/4606495
+317,4.14.4,因此……,,yīncǐ…… ,therefore…,4.8.4 因此,小时候，他经常生病，因此每天都去跑步锻炼身体。,"When he was a child, he was often ill, [and] as a result he went to run and exercise every day.",https://chinesezerotohero.teachable.com/courses/299571/lectures/4606495
+318,4.14.5,什么的,,shénmede ,and stuff like that,第10课课文4 等,明天出去玩儿，得买点儿饼干、面包什么的。,"Go out to play tomorrow, you have to buy some biscuits, bread or things like that.",https://chinesezerotohero.teachable.com/courses/299571/lectures/4606492
+319,4.15.1,V 起来,,V qilai ,V up,"3.2.2 拿来
+3.13.1 拿出来",你这样躺着看书对眼晴不好，快坐起来！,"If you lie down and read a book, it is not good for your eyes. Sit up quick!",https://chinesezerotohero.teachable.com/courses/299571/lectures/4606516
+320,4.15.1,想起来,,xiǎngqilai ,"remember, call to mind","3.6.1 V得、V不
+3.19.1 写出来，想起来",现在我全都想起来了。,Now I recall (lit. think up) everything.,https://chinesezerotohero.teachable.com/courses/299571/lectures/4606516
+321,4.15.2,弄 A O,,nòng A O ,cause O to be A,3.1.1 V好,搬的时候要小心点儿，别弄坏沙发了。,"Be careful when moving, don't break the sofa.",https://chinesezerotohero.teachable.com/courses/299571/lectures/4606508
+322,4.15.2,弄得 O CLAUSE,,nòng dé O CLAUSE ,make O CLAUSE,3.16.2 高兴得跳了起来,每天因为这些小事批评她，弄得我俩心情都不好。,"Every day I tell her off for these small things, [which] makes the two of us both in a bad mood.",https://chinesezerotohero.teachable.com/courses/299571/lectures/4606508
+323,4.15.3,千万不能/不要/别 V,,qiānwàn bùnéng/ bùyào/ bié V ,make sure not to V,2.10.1 不要，别,我要等她生日那天再送给她这个礼物，你现在千万别告诉她。,"I have to give her this gift on her birthday, make sure you don’t tell her now.",https://chinesezerotohero.teachable.com/courses/299571/lectures/4606509
+324,4.15.3,一定要/得 V/A,,yīdìngyào/ dé V/A ,"must V, must be A","HSK 3第17课生词 必须
+HSK 3第9课生词 一定
+第9课生词 得",比赛前一定要把动作练好。,You must practice your moves before the game.,https://chinesezerotohero.teachable.com/courses/299571/lectures/4606509
+325,4.15.3,一定(会) V/A,,yīdìng( huì) V/A ,definitely V/A,,感谢您的支持和鼓励，我一定会继续努力。,"Thank you for your support and encouragement, I will definitely continue to work hard.",https://chinesezerotohero.teachable.com/courses/299571/lectures/4606509
+326,4.15.3,不一定,,bùyīdìng ,not necessarily,,个子高不一定力气大。,If someone is tall he/she is not necessarily strong.,https://chinesezerotohero.teachable.com/courses/299571/lectures/4606509
+327,4.15.3,一定的,,yīdìng de ,"some, a certain",HSK 1第12课 一些,如果有一定的语言基础，那么出国学习外语是最好的选择。,"If you have a certain language foundation, then studying a foreign language abroad is the best choice.",https://chinesezerotohero.teachable.com/courses/299571/lectures/4606509
+328,4.15.4,来 V,,lái V ,"(verb prefix, indicating the verb hasn’t happened)",,这个沙发这么大，我来帮你们一起抬。,"This sofa is so big, I will help you carry it together.",https://chinesezerotohero.teachable.com/courses/299571/lectures/4606510
+329,4.15.4,通过/用 N 来 V,,tōngguò/ yòng N lái V ,V through N,"4.9.2 通过, 经过
+4.14.2 以",有的孩子会通过哭或者扔东西来引起父母的注意。,Some children will get their parents' attention by crying or throwing things.,https://chinesezerotohero.teachable.com/courses/299571/lectures/4606510
+330,4.15.5,# 左右,,# zuǒyòu ,around #,"3.11.2 左右
+4.2.2 差不多，几乎
+4.13.1 大概",网上买的那本书估计三天左右就能到。,The book bought online is estimated to be available in about three days.,https://chinesezerotohero.teachable.com/courses/299571/lectures/4606511
+331,4.16.1,可 V/A 了,,kě V/A le ,really A/V,4.5.5 特别,今天天气可热了。,The weather is really hot today.,https://chinesezerotohero.teachable.com/courses/301751/lectures/4834116
+332,4.16.1,可 Q,,kě Q ,Q on earth?,,下个星期就要去使馆办签证了，这可怎么办？,"I am going to the embassy to apply for a visa next week, what on earth am I supposed to do?",https://chinesezerotohero.teachable.com/courses/301751/lectures/4834116
+333,4.16.1,可 V,,kě V ,indeed,,这可是个大问题，我也不太清楚。,"Now this (this indeed) is a big question, and I am not too sure about it.",https://chinesezerotohero.teachable.com/courses/301751/lectures/4834116
+334,4.16.2,怕/害怕,,pà/ hàipà ,to be afraid,,我的工作经验还比较少，那份工作我怕/害怕完成不了。,"My work experience is still relatively small, I am afraid the job cannot be completed.",https://chinesezerotohero.teachable.com/courses/301751/lectures/4834117
+335,4.16.2,恐怕……,,kǒngpà…… ,I guess I’m afraid…,4.7.1 估计,听完我的回答，恐怕你已经知道我的答案了吧。,"After listening to my response, I guess I’m afraid you already know the answer.",https://chinesezerotohero.teachable.com/courses/301751/lectures/4834117
+336,4.16.2,怕/恐怕 V,,pà/ kǒngpà V ,probably I’m afraid,,他离开这里怕/恐怕有二十天了。,He left here for probably 20 days (I’m afraid).,https://chinesezerotohero.teachable.com/courses/301751/lectures/4834117
+337,4.16.3,到底,,dàodǐ ,to the end,,今天我一定陪你逛街逛到底，保证让你买到合适的衣服。,Today I will go shopping with you to the end. [I can] guarantee that you will buy the right clothes.,https://chinesezerotohero.teachable.com/courses/301751/lectures/4834119
+338,4.16.3,到底 Q,,dàodǐ Q ,in the world,,到底你怎么打算的呀？,What in the world are you planning?,https://chinesezerotohero.teachable.com/courses/301751/lectures/4834119
+339,4.16.4,拿……来说,,ná…… láishuō ,take… for example,10.5 比如,拿我来说，我已经学了十年汉语了。,"Take me, for example, I’ve been learning Chinese for 10 years.",https://chinesezerotohero.teachable.com/courses/301751/lectures/4834118
+340,4.16.5,敢 V,,gǎn V ,to dare to V,,谁也不敢说他的坏话。,No one dares to say bad things about her.,https://chinesezerotohero.teachable.com/courses/301751/lectures/4834121
+341,4.17.1,倒,,dǎo ,to pour,,我给你倒杯水吧。,I will pour you a glass of water.,https://chinesezerotohero.teachable.com/courses/301751/lectures/4834143
+342,4.17.1,倒,,dǎo ,to reverse,,“我爱你”，倒过来就是“你爱我”。,“I love you” said in reverse is “you love me.”,https://chinesezerotohero.teachable.com/courses/301751/lectures/4834143
+343,4.17.1,S 倒 V,,S dǎo V ,although S V,2.4 却（“却”只能在句子的后面一半用，而”倒“可以在后面一半用，也可以在前面一半用）,你说得倒是容易，做起来可就难了！,"Although you say [it as if] it is easy, it’s hard to do it!",https://chinesezerotohero.teachable.com/courses/301751/lectures/4834143
+344,4.17.2,干 (gān),,gàn (gān) ,dry,,把头发擦干。,Wipe your hair dry.,https://chinesezerotohero.teachable.com/courses/301751/lectures/4834142
+345,4.17.2,干 (gàn),,gàn (gàn) ,to do,,你在干什么呢？,What are you doing?,https://chinesezerotohero.teachable.com/courses/301751/lectures/4834142
+346,4.17.3,# 趟,,# tàng ,# times (of trips),"2.14.3 “次”
+“回”也有“次”的意思
+第13课生词“遍”",回来的路上我顺便去了趟银行。,"On the way back, I made a visit to the bank along the way.",https://chinesezerotohero.teachable.com/courses/301751/lectures/4834144
+347,4.17.3,# 次,,# cì ,No. # (bus/train route),,502次公交车很快就要到了。,Bus No. 502 are coming soon.,https://chinesezerotohero.teachable.com/courses/301751/lectures/4834144
+348,4.17.4,为了 V1 而 V2,,wèile V1 ér V2,V2 in order to V1,"4.9.2 通过, 经过：不少动物通过改变身体的颜色保护自己。
+4.14.2 以：不少动物改变身体的颜色以保护自己。
+4.15.4 来：不少动物改变身体的颜色来保护自己。",不少动物为了保护自己而改变身体的颜色。,Many animals change the color of their body in order to protect themselves.,https://chinesezerotohero.teachable.com/courses/301751/lectures/4834145
+349,4.17.4,为了 N 而 V,,wèile N ér V ,V for N,,植物会为了阳光、空气和水而竞争。,"Plants compete for sunlight, air, and water.",https://chinesezerotohero.teachable.com/courses/301751/lectures/4834145
+350,4.17.5,仍然 V/A,,réngrán V/A ,still V/A,,就算在几公里深的海底也仍然能看到东西。,"Even at a few kilometers deep on the sea floor, you can still see things.",https://chinesezerotohero.teachable.com/courses/301751/lectures/4834146
+351,4.18.1,是否,,shìfǒu ,"if, whether",11.2 否则,不过她这么小，这本书我不知道她是否能读懂。,"But she is so young, I don't know if she can read this book.",https://chinesezerotohero.teachable.com/courses/301751/lectures/4852498
+352,4.18.2,受不了,,shòubùliǎo ,tolerate,,我真的受不了你了，你到底还要逛多久？,"I really can't tolerate you, how long do you have to keep shopping?",https://chinesezerotohero.teachable.com/courses/301751/lectures/4852499
+353,4.18.3,接着 V,,jiēzhe V ,continue to V,,你看完这本书以后先不要还，我接着看。,"Don't pay back after reading this book, I will continue to watch.",https://chinesezerotohero.teachable.com/courses/301751/lectures/4852506
+354,4.18.3,接着,,jiēzhe ,then,4.14.4 于是,他毕业后在老家工作了一年，接着又考上了北京大学，读研究生。,"After graduating, he worked in his hometown for a year. And then he was admitted to Peking University to study for graduate students.",https://chinesezerotohero.teachable.com/courses/301751/lectures/4852506
+355,4.18.4,除此以外,,chú cǐ yǐwài ,other than that,3.15.1 除了……以外,他和弟弟同一天出生，兄弟俩长得很像，但除此以外几乎再找不到其他共同点。,"He and his brother were born on the same day. The two brothers look very much alike, but other than that they can hardly find other things in common.",https://chinesezerotohero.teachable.com/courses/301751/lectures/4852501
+356,4.18.5,把 N1 叫作 N2,,bǎ N1 jiàozuò N2,call N1 N2,,中国人把黄河叫作“母亲河” 。,"The Chinese call the Yellow River ""Mother River.""",https://chinesezerotohero.teachable.com/courses/301751/lectures/4852500
+357,4.19.1,(无论/不管) Q 都,,( wúlùn/ bùguǎn) Q dōu ,no matter Q,4.11.3 无论，不管,没关系，不用道歉，(无论/不管) 谁都有粗心填错的时候。,"It doesn't matter, don't apologize, anyone (lit. no matter who) can make a mistake.",https://chinesezerotohero.teachable.com/courses/301751/lectures/4852513
+358,4.19.2,V 上,,V shàng ,get to V,2.9.1 结果补语,看来今天吃不上羊肉饺子了。,It seems that I don’t get to eat lamb dumplings today.,https://chinesezerotohero.teachable.com/courses/301751/lectures/4852514
+359,4.19.3,V 出来,,V chūlái ,V out (an outcome is produced),"4.15.1 想起来
+第11课课文2难点 想出来",有几个选择题，实在想不出来该选哪个，只好随便选一个。,"There were a few multiple-choice questions. I really couldn’t think of (lit. think out) which [answer] one to choose, [so I could only] choose one at random.",https://chinesezerotohero.teachable.com/courses/301751/lectures/4852516
+360,4.19.4,总的来说,,zǒngdeláishuō ,overall,,这个公司总的来说还不错。,"Overall, this company is good.",https://chinesezerotohero.teachable.com/courses/301751/lectures/4852515
+361,4.19.5,在于,,zàiyú ,is all about,,人们常说“生命在于运动”。,"People often say that ""life is all about moving/exercising.”",https://chinesezerotohero.teachable.com/courses/301751/lectures/4852518
+362,4.20.1,V1 着 V1 着 V2了,,V1 zhe V1 zhe V2 le,V2’ed while V1-ing,2.13.1 动 着：拿着铅笔，穿着白衣服；3.3.2 地方 动 着 名：桌子上放着很多饮料；3.4.2 动1 着 动2 吃着苹果写作业,她讲着讲着就笑了。,"As she was speaking, she started to laugh.",https://chinesezerotohero.teachable.com/courses/301751/lectures/4852541
+363,4.20.2,一……就……,,yī…… jiù…… ,as soon as … then …,3.6.3 刚，4.1.3 复习“刚”：刚回家就看电视,她一回家就看电视。,"As soon as she gets home, (then) she watches TV.",https://chinesezerotohero.teachable.com/courses/301751/lectures/4852539
+364,4.20.2,一……就……,,yī…… jiù…… ,每次只要,,儿子小时候一说话就脸红。,"When [my] son was a child, as soon as he speaks, (then) he blushes.",https://chinesezerotohero.teachable.com/courses/301751/lectures/4852539
+365,4.20.3,究竟 Q,,jiūjìng Q ,Q exactly,2.16.3 到底,究竟哪个季节去旅游比较好呢？,Which season exactly is better to travel?,https://chinesezerotohero.teachable.com/courses/301751/lectures/4852538
+366,4.20.4,V 起(来),,V qǐ( lái) ,V up,4.15.1 想起来：我想起来了，你叫小王。,你先把桌子上的东西拿起(来)，我擦完之后你再放下来。,"You pick up the things on the table first, and then you [can] put them down after I clean it.",https://chinesezerotohero.teachable.com/courses/301751/lectures/4852537
+367,4.20.4,V 起来,,V qilai ,to start to V,,小王又唱起来了。,Xiao Wang started singing again.,https://chinesezerotohero.teachable.com/courses/301751/lectures/4852537
+368,4.20.4,V 起来,,V qilai ,"seems like, sounds like",,上海话听起来就像外语一样。,The Shanghai dialect sounds like a foreign language.,https://chinesezerotohero.teachable.com/courses/301751/lectures/4852537
+369,4.20.5,说起 O,,shuōqǐ O ,speaking of O,4.20.4 动 起来：说起来,说起吃的东西，给我印象最深的是湖南菜。,"Speaking of food, the one that impressed me the most is Hunan cuisine.",https://chinesezerotohero.teachable.com/courses/301751/lectures/4852540
+370,5.01.1,如何,,rúhé ,how,,评委叫第一对夫妻说说他俩是如何恩爱的。,The judge called the first couple to talk about how they loved each other.,https://chinesezerotohero.teachable.com/courses/302461/lectures/4914007
+371,5.01.1,如何,,rúhé ,how is,,“80后”们月收入情况如何？,How is the monthly income situation with those born in the 80s?,https://chinesezerotohero.teachable.com/courses/302461/lectures/4914007
+372,5.01.1,怎么，……,,zěnme，…… ,(expression of surprise),,怎么，你不认识我了？！,"What, you don't know me anymore?!",https://chinesezerotohero.teachable.com/courses/302461/lectures/4914007
+373,5.01.2,靠,,kào ,to lean,,王老师喜欢靠着桌子讲课。,Teacher Wang likes to give her lecture while leaning on the table.,https://chinesezerotohero.teachable.com/courses/302461/lectures/4921891
+374,5.01.2,靠,,kào ,beside,,我的座位是17号，是靠窗的座位。,"My seat is No. 17, which is (a seat) by the window.",https://chinesezerotohero.teachable.com/courses/302461/lectures/4921891
+375,5.01.2,靠,,kào ,to depend,,在家靠父母，出门靠朋友。,"At home [you] relies on [your] parents, [when you] go out [you] rely on [your] friends.",https://chinesezerotohero.teachable.com/courses/302461/lectures/4921891
+376,5.01.3,居然,,jūrán ,(See 竟然),,这么简单的题，你居然也不会做？,"[For] such a simple question, [you’re telling me that] you don’t know how to do it?",https://chinesezerotohero.teachable.com/courses/302461/lectures/4921893
+377,5.02.1,以来,,yǐlái ,since,4.1.2 从来,改革开放以来，中国发生了巨大的变化。,"Since the reform and opening up, China has undergone tremendous changes.",https://chinesezerotohero.teachable.com/courses/302461/lectures/4991672
+378,5.02.2,临,,lín ,adjacent to,5.1.2 靠,我想买一套不临街的房子，这样不会太吵。,"I want to buy a house that is not adjacent to a street, so it won't be too noisy.",https://chinesezerotohero.teachable.com/courses/302461/lectures/4991673
+379,5.02.2,临,,lín ,just before,,临走那天，父亲从老家赶来送我们。,"On the day (just before) he left, my father came to us from my hometown.",https://chinesezerotohero.teachable.com/courses/302461/lectures/4991673
+380,5.02.3,立刻,,lìkè ,immediately,,我们回来时，立刻感受到了家的温暖。,"When we came back, we immediately felt the warmth of home.",https://chinesezerotohero.teachable.com/courses/302461/lectures/4991674
+381,5.03.1,包括,,bāokuò ,to include,,汉语技能教学包括听、说、读、写四个方面。,"Chinese language skills teaching includes listening, speaking, reading and writing.",https://chinesezerotohero.teachable.com/courses/302461/lectures/4991675
+382,5.03.2,各自,,gèzì ,each by themselves,4.12.4 MM都,中场休息时间到了，比赛双方队员各自回场外休息。,"The intermission time has arrived, and the players on both sides of the game (each by themselves) went back out of the court to rest.",https://chinesezerotohero.teachable.com/courses/302461/lectures/4991676
+383,5.03.3,勿,,wù ,do not,,非工作人员，请勿入内。,"If you’re not a staff member, please do not enter.",https://chinesezerotohero.teachable.com/courses/302461/lectures/4991678
+384,5.03.4,时刻,,shíkè ,moment,,在最后时刻，他为本队踢进了关键一球。,"At the last moment, he scored the key goal for the team.",https://chinesezerotohero.teachable.com/courses/302461/lectures/4991677
+385,5.03.4,时刻，时时刻刻,,shíkè， shíshíkèkè ,at all times,,工作中，他时时刻刻提醒自已： 乘客的安全是最重要的。,"At work, he reminds himself at all times: The safety of passengers is the most important.",https://chinesezerotohero.teachable.com/courses/302461/lectures/4991677
+386,5.04.1,至今,,zhìjīn ,to this day,4.1.2 从来,我在北京出生、长大，至今还没离开过呢。,I was born and raised in Beijing and have never left to this day.,https://chinesezerotohero.teachable.com/courses/302461/lectures/5044306
+387,5.04.2,顶,,dǐng ,(measure word for hats),,我这顶新帽子怎么样？,How [what do you think of] this new hat of mine?,https://chinesezerotohero.teachable.com/courses/302461/lectures/5044307
+388,5.04.2,顶,,dǐng ,the top of,,请把手举过头顶。,Please raise your hand over (the top of) your head.,https://chinesezerotohero.teachable.com/courses/302461/lectures/5044307
+389,5.04.2,顶,,dǐng ,to lift,,他能用头顶起20斤重的东西。,He can use his head to lift 20 pounds.,https://chinesezerotohero.teachable.com/courses/302461/lectures/5044307
+390,5.04.2,顶着,,dǐng zhe ,against,,天气非常寒冷，子路顶着大雪往前走。,"The weather is very cold, and Zilu was trudging ahead against heavy snow.",https://chinesezerotohero.teachable.com/courses/302461/lectures/5044307
+391,5.04.3,……得很/得不行/得不得了,,…… dehěn/ dé bùxíng/ dé bùdéliǎo ,very/so/extremely,4.16.1 可……了,这个地方这么热闹，孩子们高兴得很/得不行/得不得了。,"The place is so lively, the children are very/so/extremely happy.",https://chinesezerotohero.teachable.com/courses/302461/lectures/5044309
+392,5.04.4,反而,,fǎn'ér ,actually (opposite to what one expects),4.17.1 倒,大城市的生活虽然很精彩，但一辈子生活在农村的父母反而会不适应。,"Although the life in a big city is very exciting, [my] parents who have lived in rural areas for a lifetime will actually (opposite to what one expects) find themselves ill-adapted.",https://chinesezerotohero.teachable.com/courses/302461/lectures/5044308
+393,5.05.1,从而,,cóng'ér ,consequently,4.14.4 于是,比赛前做好思想准备可以减少运动员的压力，从而取得比赛的成功。,Preparing mentally before the game can reduce the stress on the athletes [and] consequently achieve the success of the game.,https://chinesezerotohero.teachable.com/courses/302461/lectures/5044263
+394,5.05.2,V 于 N,,V yú N ,V in N,,这家公司成立于1997年。,This company was founded in 1997.,https://chinesezerotohero.teachable.com/courses/302461/lectures/5044264
+395,5.05.2,V 于 N,,V yú N ,V to N,,李明没办法，只好求助于当经理的老同学王峰。,"Li Ming had no choice but to turn to Wang Feng (for help), the old classmate of the manager.",https://chinesezerotohero.teachable.com/courses/302461/lectures/5044264
+396,5.05.2,V 于 N,,V yú N ,V from N,,他出身于知识分子家庭。,He came from an intellectual family.,https://chinesezerotohero.teachable.com/courses/302461/lectures/5044264
+397,5.05.2,A 于 N,,A yú N ,A to N,,运动有助于健康。,Exercise is beneficial to health.,https://chinesezerotohero.teachable.com/courses/302461/lectures/5044264
+398,5.05.2,A 于 N,,A yú N ,A from/than N,,水生动物不同于陆地动物。,Aquatic creatures are different from terrestrial ones.,https://chinesezerotohero.teachable.com/courses/302461/lectures/5044264
+399,5.05.3,V 为 (wéi) N,,V wéi (wéi) N ,V into N,,压力也可以变为动力。,Stress can also be turned into strength.,https://chinesezerotohero.teachable.com/courses/302461/lectures/5044265
+400,5.05.3,V 为 (wéi) N,,V wéi (wéi) N ,V as N,,在他看来，没有工作的生活就不能称其为生活。,"In his view, life without work cannot be called (as) life.",https://chinesezerotohero.teachable.com/courses/302461/lectures/5044265
+401,5.05.4,V 起来,,V qilai ,V up,4.20.4 起来,地下水积蓄起来，越积越多。,The groundwater is store (up) and accumulates.,https://chinesezerotohero.teachable.com/courses/302461/lectures/5044266
+402,5.05.4,藏起来/躲起来,,cáng qilai/ duǒ qilai ,V away,,刘丽知道自己做得不对，躲起来不敢见我。,"Liu Li knows that she is doing something wrong, and she hides [herself] away and does not dare to see me.",https://chinesezerotohero.teachable.com/courses/302461/lectures/5044266
+403,5.06.1,替,,tì ,to replace,,见了外公，请替我向他问好。,"When you see my grandfather, please say hello to him (on my behalf).",https://chinesezerotohero.teachable.com/courses/302461/lectures/5044269
+404,5.06.1,替,,tì ,on behalf of,,李阳要去留学了，我们都替他高兴。,"Li Yang is going to study abroad, and we are all happy for him.",https://chinesezerotohero.teachable.com/courses/302461/lectures/5044269
+405,5.06.2,说不定,,shuōbudìng ,uncertain,,这事儿经理已经同意了，只是出发的时间还说不定。,"The manager has already agreed, but the time of departure is still uncertain.",https://chinesezerotohero.teachable.com/courses/302461/lectures/5044271
+406,5.06.2,说不定,,shuōbudìng ,maybe,"4.7.1 估计4.13.1 大概/也许
+4.16.2 恐怕",别随随便便就说放弃，说不定下次就成功了。,"Don't just give up so easily, maybe you will succeed next time.",https://chinesezerotohero.teachable.com/courses/302461/lectures/5044271
+407,5.06.3,N 似的,,N shìde ,like N,,我不敢相信这是真的，好像做梦似的。,"I can't believe this is true, it seems like a dream.",https://chinesezerotohero.teachable.com/courses/302461/lectures/5044272
+408,5.06.3,A 得什么似的,,A dé shénme shìde ,so A (to an extreme),5.4.3 不得了,他背着重重的电脑包挤地铁，下班回到家累得什么似的。,"He squeezed into the [crowded] subway with [his] heavy computer bag, and he was so tired when he got home from work.",https://chinesezerotohero.teachable.com/courses/302461/lectures/5044272
+409,5.06.4,纷纷 V,,fēnfēn V ,V in quick succession,,要下雨了， 路上的人纷纷往家里跑。,"It’s going to rain, and people on the road are running home (one after another in quick succession).",https://chinesezerotohero.teachable.com/courses/302461/lectures/5044270
+410,5.07.1,瞎,,xiā ,blind,,一天， 他让士兵们去找一头大象和一些出生时眼晴就瞎了的人回来。,"One day, he asked the soldiers to find an elephant and some people who were blind when they were born.",https://chinesezerotohero.teachable.com/courses/302461/lectures/5044274
+411,5.07.1,瞎,,xiā ,thoughtlessly,,他会想办法的，你就别替他瞎担心了。,"He will find a way, you don't (thoughtlessly) worry about him.",https://chinesezerotohero.teachable.com/courses/302461/lectures/5044274
+412,5.07.2,分别,,fēnbié ,to separate,,分别是暂时的，我们以后一定会再见。,The separation is temporary. We will definitely see each other again in the future.,https://chinesezerotohero.teachable.com/courses/302461/lectures/5044277
+413,5.07.2,分别,,fēnbié ,difference,,我不知道这两种做法有什么分别。,I don't know the difference between the two approaches.,https://chinesezerotohero.teachable.com/courses/302461/lectures/5044277
+414,5.07.2,分别,,fēnbié ,separately,第3课生词 “各自”,我分别找两个人打听了这件事，他们的说法都是一样的。,"I asked two people (separately) to ask about this, and they all said the same thing.",https://chinesezerotohero.teachable.com/courses/302461/lectures/5044277
+415,5.07.2,分别,,fēnbié ,respectively,,砂岩和砾岩分别是砂和砾石固结的产物。,"Sandstone and conglomerate are the consolidated equivalent of sand and gravel, respectively.",https://chinesezerotohero.teachable.com/courses/302461/lectures/5044277
+416,5.07.3,根,,gēn ,(measure word),,摸到尾巴的盲人说大象像一根绳子。,The blind man who touched the tail said that the elephant is like a rope.,https://chinesezerotohero.teachable.com/courses/302461/lectures/5044275
+417,5.07.3,根,,gēn ,root,,这棵树的根又粗又长。,The root of this tree is thick and long.,https://chinesezerotohero.teachable.com/courses/302461/lectures/5044275
+418,5.07.4,便,,biàn ,then,,楼上新买了一架钢琴，我们家便多了一些不安静。,"A new piano was bought upstairs, and then there were more noise (lit. unquiet) [heard] in our home.",https://chinesezerotohero.teachable.com/courses/302461/lectures/5044276
+419,5.08.1,倒/反倒,,dǎo/ fǎndào ,contrary to logic,"4.17.1 倒
+4.2.4 却",少年不解地问：“怎么勇敢反倒成为缺点了？”,"Puzzled, the teenager asked: ""How is it that bravery is a fault now (which is contrary to logic)?”",https://chinesezerotohero.teachable.com/courses/302461/lectures/5044279
+420,5.08.1,倒,,dǎo ,despite all,,质量倒是挺好，就是价格太贵了。,"(Despite all) the quality is (actually) pretty good, it’s just that the price is too expensive.",https://chinesezerotohero.teachable.com/courses/302461/lectures/5044279
+421,5.08.1,倒,,dǎo ,for crying out loud,,你倒是说说看，这件事你不负责谁负责？,"Now you tell us, for crying out loud, if you’re not responsible for this, then who is?",https://chinesezerotohero.teachable.com/courses/302461/lectures/5044279
+422,5.08.2,V 来 V 去,,V lái V qù ,V around,,小狗追着自己的尾巴， 在草地上跑来跑去。,The dog chased his tail and ran around on the grass.,https://chinesezerotohero.teachable.com/courses/302461/lectures/5044280
+423,5.08.3,要不/不然/要不然,,yàobù/ bùrán/ yàobùrán ,otherwise,4.11.2 否则,还好碰见你了，要不/不然/要不然我今天肯定要迟到了。,"Fortunately, I ran into you, otherwise I must have been late today.",https://chinesezerotohero.teachable.com/courses/302461/lectures/5044281
+424,5.08.3,要不/不然/要不然,,yàobù/ bùrán/ yàobùrán ,why not try,,今天太晚了，要不/不然/要不然你明天再走吧。,"It’s too late today, why don’t (you) leave tomorrow instead?",https://chinesezerotohero.teachable.com/courses/302461/lectures/5044281
+425,5.08.4,彼此 V,,bǐcǐ V ,each other,HSK4第1课课文5生词“互相”,好朋友应该彼此帮助。,Good friends should help each other.,https://chinesezerotohero.teachable.com/courses/302461/lectures/5044282
+426,5.08.4,彼此,,bǐcǐ ,(pronoun for 2 people),,我们彼此的爱好相同。,We (us two) have the same hobbies.,https://chinesezerotohero.teachable.com/courses/302461/lectures/5044282
+427,5.08.4,彼此彼此,,bǐcǐbǐcǐ ,about the same,,咱们俩彼此彼此， 我画得比你好不了多少。,"We (the two of us) are pretty much the same, I can't paint much better than you.",https://chinesezerotohero.teachable.com/courses/302461/lectures/5044282
+428,5.09.1,算,,suàn ,counts as,5.5.3 为 (wéi),这钱就算我借给你的，将来你有了的时候再还我。,"Let’s just say that the money is loaned to you, you can pay me back when you have [more money].",https://chinesezerotohero.teachable.com/courses/302461/lectures/5044298
+429,5.09.1,V 了/掉 算了,,V le/ diào suànle ,might as well V,,不就是一个空瓶子吗？扔掉算了。,Isn't it just an empty bottle? Might as well throw it away.,https://chinesezerotohero.teachable.com/courses/302461/lectures/5044298
+430,5.09.2,作为 N,,zuòwéi N ,as N,,作为大作家、大学问家，鲁迅对吃很讲究。,"As a great writer and a great intellectual, Lu Xun is very particular about eating.",https://chinesezerotohero.teachable.com/courses/302461/lectures/5044299
+431,5.09.3,曾经,,céngjīng ,once,,孔子曾经带着学生周游各国14年，传播他的思想。,"Confucius once took students around the country for 14 years, spreading his thoughts.",https://chinesezerotohero.teachable.com/courses/302461/lectures/5044300
+432,5.10.1,毕竟,,bìjìng ,after all ,,虽然我们遇到了很多困难，但毕竟完成了任务。,"Although we have encountered a lot of difficulties, we have completed the task after all.",https://chinesezerotohero.teachable.com/courses/302482/lectures/5157349
+433,5.10.2,逐渐,,zhújiàn ,gradually,,食物越来越少，老人不得不逐渐限制猴子的食量。,"With less and less food, the elderly have to gradually limit the amount of food they eat.",https://chinesezerotohero.teachable.com/courses/302482/lectures/5157347
+434,5.10.3,或许,,huòxǔ ,maybe,4.13.1 大概，也许,虽然以前她不支持你，但或许这次会有变化。,"Although she did not support you before, maybe this time things will change.",https://chinesezerotohero.teachable.com/courses/302482/lectures/5157348
+435,5.11.1,V 过来,,V guòlái ,V and recover,,过了半天，脑子才清醒过来。,"My head cleared up only after a long time, ",https://chinesezerotohero.teachable.com/courses/302482/lectures/5157446
+436,5.11.1,V 得过来 / V 不过来,,V dé guòlái / V bùguò lái ,can finish V / cannot finish V,,天上的星星那么多，谁数得过来呀？,"There are so many stars in the sky, who can count them (out)?",https://chinesezerotohero.teachable.com/courses/302482/lectures/5157446
+437,5.11.2,所,,suǒ ,(measure word for institutions),,他来自北京的一所大学。,He is from a university in Beijing.,https://chinesezerotohero.teachable.com/courses/302482/lectures/5157448
+438,5.11.2,S + (所) + V + 的,,S + ( suǒ) + V + de ,what S V,,山水画(所)表现的是人与自然的关系。,What the landscape painting shows is the relationship between man and nature.,https://chinesezerotohero.teachable.com/courses/302482/lectures/5157448
+439,5.11.2,有所 V,,yǒusuǒ V ,has/have V’ed ,,随着年龄的增大，女性的职场幸福感有所提高。,"As [their] age increases, women’s happiness at work has increased.",https://chinesezerotohero.teachable.com/courses/302482/lectures/5157448
+440,5.11.2,无所 V,,wú suǒ V ,have nothing to V,,你要是坚持真理就可以无所畏惧。,"If you stick to the truth, you've nothing to fear.",https://chinesezerotohero.teachable.com/courses/302482/lectures/5157448
+441,5.11.3,与 N 相当,,yǔ N xiāngdāng ,equivalent to N,,开车打电话的人的反应速度与醉酒者相当。,The reaction speed of the person who calls while driving is equivalent to a drunk.,https://chinesezerotohero.teachable.com/courses/302482/lectures/5157447
+442,5.11.3,相当于 N,,xiāngdāngyú N ,equivalent to N,,这种鸟一天所食的害虫相当于自己的体重。,The pests that this bird eats a day are equivalent to its own weight.,https://chinesezerotohero.teachable.com/courses/302482/lectures/5157447
+443,5.11.3,相当,,xiāngdāng ,quite,,菜的味道好极了，服务也周到，我相当满意。,"The dish is very delicious, the service is also thoughtful, I am quite satisfied.",https://chinesezerotohero.teachable.com/courses/302482/lectures/5157447
+444,5.11.3,相当,,xiāngdāng ,considerable,,相当一部分人会以收入多少作为幸福的标准。,A considerable number of people will regard their income as a standard of happiness.,https://chinesezerotohero.teachable.com/courses/302482/lectures/5157447
+445,5.11.4,数 (shǔ),,shǔ (shǔ) ,to count,,我大概数了一下，车上有32个学生。,"I roughly counted it, there are 32 students in the vehicle.",https://chinesezerotohero.teachable.com/courses/302482/lectures/5157449
+446,5.11.4,数 (shǔ),,shǔ (shǔ) ,to be reckoned as,,要说我们班跑得最快的，那就数李阳了。,"If we were to discuss who our class runs the fastest, then it’s no other than Li Yang.",https://chinesezerotohero.teachable.com/courses/302482/lectures/5157449
+447,5.11.4,数 (shù),,shǔ (shù) ,several,,这里夏季的雷阵雨一般可持续数小时或者更久的时间。,The thunderstorms in summer here generally last for several hours or longer.,https://chinesezerotohero.teachable.com/courses/302482/lectures/5157449
+448,5.12.1,以及,,yǐjí ,and,,学校的领导、教师以及一些学生代表观看了演出。,"School leaders, teachers, and some student representatives watched the show.",https://chinesezerotohero.teachable.com/courses/302482/lectures/5157510
+449,5.12.2,程度,,chéngdù ,degree,,问题已经发展到了十分严重的程度。,The problem has grown to a very serious degree.,https://chinesezerotohero.teachable.com/courses/302482/lectures/5157511
+450,5.13.1,(更)何况,,( gèng) hékuàng ,let alone,,连运动员都不满意，更何况看比赛的球迷呢？,"Even the athletes are not satisfied, let alone the fans watching the game?",https://chinesezerotohero.teachable.com/courses/302482/lectures/5157484
+451,5.13.2,何必,,hébì ,What for? Why do you have to…?,,你何必亲自送一趟呢？叫个快递不就行了？,Why do you have to deliver it yourself? Calling a courier is not enough?,https://chinesezerotohero.teachable.com/courses/302482/lectures/5157485
+452,5.13.3,多亏,,duōkuī ,thanks to,,多亏了他这句话，人们如梦初醒。,"Thanks to his words, people wake up like a dream.",https://chinesezerotohero.teachable.com/courses/302482/lectures/5157486
+453,5.14.1,所谓,,suǒwèi ,so-called,5.11.2 (所) verb 的,他所谓的“新闻”， 其实我们早就知道了！,"His so-called ""news"", in fact, we already know!",https://chinesezerotohero.teachable.com/courses/302482/lectures/5157514
+454,5.14.2,N 则 V/A,,N zé V/A ,whereas N V,,他高中毕业以后出国留学了，而我则一直留在国内。,"After graduating from high school, he went abroad to study, whereas I stayed at home.",https://chinesezerotohero.teachable.com/courses/302482/lectures/5157515
+455,5.14.2,……则……,,…… zé…… ,if… then…,,北京的冬天，有风则寒，无风则暖。,"Beijing in the winter, if it’s windy then it’s cold, and if not then it’s warm.",https://chinesezerotohero.teachable.com/courses/302482/lectures/5157515
+456,5.14.2,# 则,,# zé ,(measure word for stories),,今天的报纸上有一则非常重要的新闻。,There is a very important news in today's newspaper.,https://chinesezerotohero.teachable.com/courses/302482/lectures/5157515
+457,5.14.3,为 S 所 V,,wéi S suǒ V ,is V’ed by S,5.11.2 所,有了科学，大自然就可以更好地为人所用。,"With science, nature can be better used by mankind.",https://chinesezerotohero.teachable.com/courses/302482/lectures/5157516
+458,5.14.4,V 起,,V qǐ ,V up,"4.19.2 上
+4.20.5 V起",拉起手，我们就是好朋友。,"Joining (lit. grab/pull up) our hands, we are good friends.",https://chinesezerotohero.teachable.com/courses/302482/lectures/5157517
+459,5.15.1,V 得过,,V dé guò ,can V and overcome,,跟别人谈论起军事来，没有人说得过他。,"Talking to others about military affairs, no one can win arguments (lit. talk) over him.",https://chinesezerotohero.teachable.com/courses/302482/lectures/5157519
+460,5.15.2,迟早,,chízǎo ,sooner or later,,随着网络技术的发展，这些问题迟早都会得到解决。,"With the development of network technology, these problems will be solved sooner or later.",https://chinesezerotohero.teachable.com/courses/302482/lectures/5157520
+461,5.15.3,再三,,zàisān ,repeatedly,,赵括的母亲再三阻止赵王任命儿子为大将。,Zhao Kuo’s mother repeatedly prevented Zhao Wang from appointing his son as a general.,https://chinesezerotohero.teachable.com/courses/302482/lectures/5157521
+462,5.16.1,即,,jí ,that is,,“旦”是象形字，即太阳从地平线上升起。,"“旦” is a pictograph, that is, the sun rising from the horizon.",https://chinesezerotohero.teachable.com/courses/302482/lectures/5157621
+463,5.16.1,……即……,,…… jí…… ,if… then…,,不懂即问是他最大的优点，也是他成功的主要原因。,"If he doesn’t understand something, (then) he’ll just ask. This is his greatest strength, but also the main reason for his success.",https://chinesezerotohero.teachable.com/courses/302482/lectures/5157621
+464,5.16.2,个别 V,,gèbié V ,"individually V, separately V",,他经常采取个别谈话的方式了解情况和解决问题。,He often uses individual conversations to understand the situation and solve problems.,https://chinesezerotohero.teachable.com/courses/302482/lectures/5157622
+465,5.16.2,个别 N,,gèbié N ,only a few N (as an exception),,除了个别人以外，多数人体重的增加会从周六开始。,"Except for a few individual [persons], the weight gain of most people starts on Saturday.",https://chinesezerotohero.teachable.com/courses/302482/lectures/5157622
+466,5.16.3,非,,fēi ,to insist on,,他非要离婚，我们谁拦也拦不住。,"He insists on divorcing, and we can’t stop it.",https://chinesezerotohero.teachable.com/courses/302482/lectures/5157623
+467,5.16.3,非,,fēi ,"not, un-",,出现非正常情况时请不要紧张。,Please do not be nervous when emergencies (lit. abnormal conditions) occur.,https://chinesezerotohero.teachable.com/courses/302482/lectures/5157623
+468,5.16.3,并非,,bìngfēi ,not,,成功有时候并非想象中那么难。,Success is sometimes not as difficult as it might seem.,https://chinesezerotohero.teachable.com/courses/302482/lectures/5157623
+469,5.17.1,以,,yǐ ,(see 4.14.2 “以”),4.14.2 以,-,-,https://chinesezerotohero.teachable.com/courses/302482/lectures/5157641
+470,5.17.2,平常,,píngcháng ,ordinary,,对小王来说，今天是一个不平常的日子。,"For Xiao Wang, today is an extraordinary day.",https://chinesezerotohero.teachable.com/courses/302482/lectures/5157638
+471,5.17.2,平常,,píngcháng ,usually,HSK4第2课课文1生词 “平时”,他平常总是来得很早，今天却迟到了。,"He usually comes very early, but he is late today.",https://chinesezerotohero.teachable.com/courses/302482/lectures/5157638
+472,5.17.3,宁可,,nìngkě ,would rather,,作为母亲，她宁可自已累一点儿，也不想委屈了孩子。,"As a mother, she would rather be tired of herself and would not want to wrong her child.",https://chinesezerotohero.teachable.com/courses/302482/lectures/5157639
+473,5.18.1,极其,,jíqí ,extremely,"4.16.1 可……了
+5.4.3 得很，得不行，得不得了",在中国，餐桌上放一把刀是极其少见的现象。,"In China, putting a knife on the table is an extremely rare phenomenon.",https://chinesezerotohero.teachable.com/courses/302482/lectures/5157799
+474,5.18.2,其余,,qíyú ,the rest,,怎么只有你们两个人？其余的同学呢？,How come you two people? What about the rest of the classmates?,https://chinesezerotohero.teachable.com/courses/302482/lectures/5157800
+475,5.18.3,(由此) 可见,,( yóucǐ) kějiàn ,This shows that,,由此可见，成功是需要努力的。,This shows that success requires hard work.,https://chinesezerotohero.teachable.com/courses/302482/lectures/5157801
+476,5.19.1,N 般,,N bān ,like N,,她的脸上露出了阳光般的笑容。,Her face showed a sunny (lit. like sunlight) smile.,https://chinesezerotohero.teachable.com/courses/302483/lectures/5517723
+477,5.19.2,闻,,wén ,to smell,,他把壶盖儿打开，闻了闻，原来是酒。,He opened the lid of the pot and smelled it. It turned out to be alcohol.,https://chinesezerotohero.teachable.com/courses/302483/lectures/5517724
+478,5.19.2,闻,,wén ,to hear,,百闻不如一见。,Seeing is believing. (Lit. hearing about something 100 times is not as good as seeing it once.),https://chinesezerotohero.teachable.com/courses/302483/lectures/5517724
+479,5.19.3,趁,,chèn ,while (an opportunity exists),4.14.3 既然,趁电影还没开始，我去买两瓶矿泉水。,"The movie hasn’t started, I’ll make use of the opportunity and get two bottles of mineral water.",https://chinesezerotohero.teachable.com/courses/302483/lectures/5517727
+480,5.20.1,V 不起,,V bù qǐ ,cannot,,他家里很穷，买不起灯，一到晚上就不能读书。,"His family is very poor and can't afford a lamp, [so he] can’t read at night.",https://chinesezerotohero.teachable.com/courses/302483/lectures/5517726
+481,5.20.1,V 得起,,V dé qǐ ,can stand/tolerate,,经得起时间考验的朋友才算是真正的朋友。,A friend who can stand the test of time is a true friend.,https://chinesezerotohero.teachable.com/courses/302483/lectures/5517726
+482,5.20.2,支,,zhī ,"to prop up, to support",,他的两只手放在桌上，支着脑袋，想着事情。,"His two hands were on the table, propping up his head, and he thought about things.",https://chinesezerotohero.teachable.com/courses/302483/lectures/5517725
+483,5.20.2,支,,zhī ,"(measure word for guns, songs, or armies)",5.07.3 根,给他十支枪，他就能拉起一支军队来。,Give him ten guns and he can raise an army.,https://chinesezerotohero.teachable.com/courses/302483/lectures/5517725
+484,5.20.3,凭,,píng ,to reply on,5.01.2 靠,干工作不能光凭经验，还要有创新。,"When we work, we can’t just rely on experience, we also need to innovate.",https://chinesezerotohero.teachable.com/courses/302483/lectures/5517728
+485,5.21.1,硬 V,,yìng V ,by brute force,,虽然中药有点儿苦，但他还是硬喝下去了。,"Although the Chinese medicine is a bit bitter, he still bit the bullet and drank it.",https://chinesezerotohero.teachable.com/courses/302483/lectures/5517729
+486,5.21.1,硬 V,,yìng V ,to insist on V-ing,5.16.3 非,我不让他去，他硬要去。,"I won’t let him go, he just insists on going.",https://chinesezerotohero.teachable.com/courses/302483/lectures/5517729
+487,5.21.2,偶然的,,ǒurán de ,accidental (opportunity),,那是一次偶然的相遇。,It was an accidental encounter.,https://chinesezerotohero.teachable.com/courses/302483/lectures/5517734
+488,5.21.2,偶然 V,,ǒurán V ,occasionally,,她专心地织着毛衣，偶然也会抬眼看一下墙上的挂钟。,"She focused on knitting a sweater, and occasionally glances at the clock on the wall.",https://chinesezerotohero.teachable.com/courses/302483/lectures/5517734
+489,5.21.3,尽快 V,,jǐnkuài V ,as soon as possible,3.05.2 越……越……,新产品出了点儿问题，你和严经理尽快商量一下这事。,The new product has some problems. You should discuss with Manager Yan as soon as you can.,https://chinesezerotohero.teachable.com/courses/302483/lectures/5517730
+490,5.22.1,一旦 V,,yīdàn V ,once (something happens),"3.18.1， 4.08.2 只要
+4.20.2 一……就",女人一旦做了母亲，就变得矛盾了。,"Once a woman becomes a mother, she becomes torn (by conflicting [emotions])",https://chinesezerotohero.teachable.com/courses/302483/lectures/5517731
+491,5.22.2,难免,,nánmiǎn ,inevitable,第11课生词“避免”,刚开始工作，这样的错误是难免的。,"At the beginning of work, such mistakes are inevitable.",https://chinesezerotohero.teachable.com/courses/302483/lectures/5517732
+492,5.22.3,自从 TIME,,zìcóng TIME ,since TIME,,自从我到北京以后，身体越来越好了。,"Since I arrived in Beijing, my body has gotten better and better.",https://chinesezerotohero.teachable.com/courses/302483/lectures/5517733
+493,5.23.1,一致,,yīzhì ,in agreement,反义词是“有分歧”,他们的意见不一致。,Their opinions do not agree.,https://chinesezerotohero.teachable.com/courses/302483/lectures/5607687
+494,5.23.1,一致 V,,yīzhì V ,unanimously,,专家们一致认为这是一种成功的产品。,Experts agree (lit. unanimously think) that this is a successful product.,https://chinesezerotohero.teachable.com/courses/302483/lectures/5607687
+495,5.23.2,某 (M) N,,mǒu (M) N ,certain,3.15.2 什么 any,进行某(个)方面的训练，就可以在那方面的能力提高。,"If you receiving training in a certain discipline (lit. aspect), you will be able to improve your ability in that discipline.",https://chinesezerotohero.teachable.com/courses/302483/lectures/5607689
+496,5.23.2,某某,,mǒumǒu ,so-and-so,,在墙上写“某某到此一游”的行为是不文明的。,It is not civil to write “so-and-so visited here” on the wall.,https://chinesezerotohero.teachable.com/courses/302483/lectures/5607689
+497,5.23.2,name 某/某某,,name mǒu/ mǒumǒu ,placeholder for a name,,公司业务员李某/李某某闻之大喜。,Company salesman Li (So-and-so) heard the big joy.,https://chinesezerotohero.teachable.com/courses/302483/lectures/5607689
+498,5.23.3,幸亏……,,xìngkuī…… ,thankfully…,"5.13.3 多亏
+幸亏后面不能是noun，这一点和“多亏”不同。",幸亏你提醒了我，我今天就去报名。,Thankfully you reminded me. I am going to sign up today.,https://chinesezerotohero.teachable.com/courses/302483/lectures/5607690
+499,5.24.1,行动,,xíngdòng ,"activity, action","HSK 4生词“活动”
+HSK 2生词“运动”",我们应该勇敢面对困难，迅速采取行动。,We should meet difficulties with courage and act quickly.,https://chinesezerotohero.teachable.com/courses/302483/lectures/5607688
+500,5.24.1,行动,,xíngdòng ,move around,,他运动时受伤了，行动不便。,"When he was doing sports he injured his feet, so it’s hard for him to move around.",https://chinesezerotohero.teachable.com/courses/302483/lectures/5607688
+501,5.24.1,行动,,xíngdòng ,act,,有些鸟类喜欢单独行动。,Some birds like to act alone.,https://chinesezerotohero.teachable.com/courses/302483/lectures/5607688
+502,5.24.2,义务,,yìwù ,obligation,HSK 4生词“责任”,建设家乡，人人有责，我们也要承担这个义务。,"Everyone has the responsibility of building his/her hometown, and we should also take up this obligation.",https://chinesezerotohero.teachable.com/courses/302483/lectures/5607691
+503,5.24.2,义务,,yìwù ,compulsory,,我们每个学期都要至少参加三次义务劳动。,We must participate in at least three compulsory labor per semester.,https://chinesezerotohero.teachable.com/courses/302483/lectures/5607691
+504,5.25.1,朝,,cháo ,toward,"向（只是“朝N”不能在verb后面）
+往",我仿佛看到胜利正朝我们走来。,I seem to see victory coming towards us.,https://chinesezerotohero.teachable.com/courses/302483/lectures/5607692
+505,5.25.1,朝,,cháo ,to face toward,,我们学校的正门坐西朝东。,The main entrance of our school is situated in the west and oriented toward the east.,https://chinesezerotohero.teachable.com/courses/302483/lectures/5607692
+506,5.25.2,简直,,jiǎnzhí ,"practically, in essence ",,船长简直是疯了！,The captain is practically mad!,https://chinesezerotohero.teachable.com/courses/302483/lectures/5607694
+507,5.26.1,来,,lái ,over,4.09.5 上千,他几乎每天都能钓到5斤来重的大鱼。,He can catch over 5 pounds (weight) of fish almost every day.,https://chinesezerotohero.teachable.com/courses/302483/lectures/5607693
+508,5.26.1,一来(是)……二来(是)……,,yīlái( shì)…… èrlái( shì)…… ,First… secondly…,,我到这里看看大家，一(来)是给大家送水果，二(来)是看看大家过节还有什么难处。,"I am here to see everyone, one [reason] is to bring fruit to everyone, another [reason] is to see if anyone has any difficulties over the holidays.",https://chinesezerotohero.teachable.com/courses/302483/lectures/5607693
+509,5.26.2,至于,,zhìyú ,as for,,我们决定明年结婚，至于具体时间还要再商量。,"We decided to get married next year. As for the specific time, we’ll have to discuss later.",https://chinesezerotohero.teachable.com/courses/302483/lectures/5607695
+510,5.26.2,至于,,zhìyú ,go so far as,,他不至于撒谎。,He won’t go so far as to tell a lie.,https://chinesezerotohero.teachable.com/courses/302483/lectures/5607695
+511,5.26.3,总算,,zǒngsuàn ,finally,HSK 3生词“终于”,经过沟通，大导演总算搞明白了。,"After communicating, the principal director has finally figured it out.",https://chinesezerotohero.teachable.com/courses/302483/lectures/5607696
+512,5.26.3,总算,,zǒngsuàn ,finally,,虽然这家宾馆不太好，但总算有个睡觉的地方了。,"Although this hotel is not very good, there is finally a place to sleep.",https://chinesezerotohero.teachable.com/courses/302483/lectures/5607696
+513,5.27.1,V 下来,,V xiàlai ,V down,5.5.4 起来,你的论文大概什么时候发表？定下来了吗？,When will your paper be published? Have you decided (lit. decided down)?,https://chinesezerotohero.teachable.com/courses/302483/lectures/5607698
+514,5.27.2,舍得,,shěde ,willing (to to let go),,把你最喜欢的玩具送给小朋友，你舍得吗？,"Give your favorite toys to children, are you willing (to let go)?",https://chinesezerotohero.teachable.com/courses/302483/lectures/5607697
+515,5.27.2,舍不得,,shěbude ,unwilling (to to let go),,有些人舍不得把钱花在有意思的事情上。,Some people are reluctant to spend money on fun things.,https://chinesezerotohero.teachable.com/courses/302483/lectures/5607697
+516,5.28.1,从此,,cóngcǐ ,since then,5.22.3 自从,从此李白刻苦用功，最后成了一位伟大的诗人。,"Since then, Li Bai has worked hard and finally became a great poet.",https://chinesezerotohero.teachable.com/courses/302483/lectures/5607701
+517,5.28.2,假设……,,jiǎshè…… ,suppose …,,假设你的钱用完了呢？你该怎么办呢？,Suppose your money is running out? What would you do?,https://chinesezerotohero.teachable.com/courses/302483/lectures/5607699
+518,5.28.2,假设,,jiǎshè ,supposition,,您当年的假设已经被证明是对的。,Your assumptions for the year have been proven to be correct.,https://chinesezerotohero.teachable.com/courses/302483/lectures/5607699
+519,5.28.3,堆,,duī ,"a pile, a heap",,工厂旁边有一个建筑材料堆。,There is a pile of building materials next to the factory.,https://chinesezerotohero.teachable.com/courses/302483/lectures/5607700
+520,5.28.3,堆,,duī ,"to pile, to heap",,这些零件怎么都堆在这儿啊？,How are these parts piled up here?,https://chinesezerotohero.teachable.com/courses/302483/lectures/5607700
+521,5.29.1,不如 N A,,bùrú N A ,not as A as N,,三家的营业额加起来还不如他一家高。,The turnover of the three companies is not as high as his family.,https://chinesezerotohero.teachable.com/courses/302490/lectures/5607729
+522,5.29.1,(与其)……不如……,,( yǔqí)…… bùrú…… ,rather than… it’s better to,5.17.3 宁可,与其待在家里，不如去外边走走。,"Instead of staying at home, it is better to go outside.",https://chinesezerotohero.teachable.com/courses/302490/lectures/5607729
+523,5.29.2,干脆 V,,gāncuì V ,"simply, quick and dirty",5.09.1 算了,许多亲朋好友建议他干脆把另三家书店挤垮。,"Many relatives and friends suggested that he simply “squeeze out” the other three bookstores, [quick and dirty]. [That its, drive them out of their business.]",https://chinesezerotohero.teachable.com/courses/302490/lectures/5607728
+524,5.29.2,干脆,,gāncuì ,decisive,,我求他帮忙，他答应得很干脆。,"I asked him for help, and he readily agreed.",https://chinesezerotohero.teachable.com/courses/302490/lectures/5607728
+525,5.29.3,万一,,wànyī ,in the unlikely case where,,如果鸡蛋都放在一个篮子里，万一不小心就有可能全部打碎。,"If all [your] eggs are placed in one basket, should an accident happen they would all be crushed.",https://chinesezerotohero.teachable.com/courses/302490/lectures/5607731
+526,5.29.3,万一,,wànyī ,"unlikely case, mishap",,不怕一万，就怕万一。,"We’re not afraid of the usual, just the unexpected mishap.",https://chinesezerotohero.teachable.com/courses/302490/lectures/5607731
+527,5.30.1,无意中/无意地,,wúyìzhōng/ wúyì dì ,accidentally,5.21.2 偶然,她在收拾花园时，无意中/无意地找到了这只耳环。,"When she was cleaning up the garden, she accidentally found this earring.",https://chinesezerotohero.teachable.com/courses/302490/lectures/5607730
+528,5.30.1,无意,,wúyì ,no intention to,,他无意伤害任何人。,He has no intention to hurt anyone.,https://chinesezerotohero.teachable.com/courses/302490/lectures/5607730
+529,5.30.2,有利,,yǒulì ,to be beneficial,,适度的压力有利于我们保持良好的状态。,Moderate pressure helps us stay in good shape.,https://chinesezerotohero.teachable.com/courses/302490/lectures/5607732
+530,5.30.3,的确,,díquè ,indeed,"4.10.2 确实
+HSK 4生词“实在”",他的确是我所教过的学生中最聪明的。,He is indeed the smartest of the students I have taught.,https://chinesezerotohero.teachable.com/courses/302490/lectures/5607733
+531,5.31.1,嗯,,èn ,Yep,,A：吃了吗？B：嗯，吃了。,"A: Have you eaten? B: Yep, I did.",https://chinesezerotohero.teachable.com/courses/302490/lectures/5607734
+532,5.31.1,嗯？,,èn？ ,Huh?,,嗯？难道是我记错了？,Hmm… Is it that I remember correctly?,https://chinesezerotohero.teachable.com/courses/302490/lectures/5607734
+533,5.31.1,嗯！,,èn！ ,Man…!,,嗯！你怎么还没走啊？,(Man…) Why haven't you left yet?,https://chinesezerotohero.teachable.com/courses/302490/lectures/5607734
+534,5.31.2,轻易地 V,,qīngyì dì V ,easily,HSK 4生词“随便”,他学什么都可以很轻易地记住。,What he can learn can be easily remembered.,https://chinesezerotohero.teachable.com/courses/302490/lectures/5607734
+535,5.31.2,轻易 V,,qīngyì V ,frivolously ,,他从不轻易决定，决定了就不轻易转变。,"He never decided easily, and he decided not to change easily.",https://chinesezerotohero.teachable.com/courses/302490/lectures/5607734
+536,5.32.1,密切,,mìqiè ,closely,,污染和我们的日常生活密切相关。,Pollution is closely related to our daily lives.,https://chinesezerotohero.teachable.com/courses/302490/lectures/5607735
+537,5.32.1,密切,,mìqiè ,close (in relationship),,从此，两人来往比先前密切了。,"Since then, the two have been closer than [ever] before.",https://chinesezerotohero.teachable.com/courses/302490/lectures/5607736
+538,5.32.1,密切,,mìqiè ,to strengthen,,这条铁路大大密切了西南地区与首都的联系。,This railway has greatly strengthened the connection between the southwest and the capital.,https://chinesezerotohero.teachable.com/courses/302490/lectures/5607736
+539,5.32.2,尽量 (jǐnliàng),,jǐnliàng (jǐnliàng) ,as … as possible,5.21.3 尽快,尽量多骑自行车，多选择公共交通。,"Try to cycle as much as possible, and choose [to use] public transportation as much as possible.",https://chinesezerotohero.teachable.com/courses/302490/lectures/5607737
+540,5.32.3,逐步,,zhúbù ,step by step,5.10.2 逐渐,调整能源消费结构，逐步向可再生能源转变。,Adjust energy consumption structure and gradually shift to renewable energy.,https://chinesezerotohero.teachable.com/courses/302490/lectures/5607739
+541,5.33.1,照常,,zhàocháng ,as usual,5.17.2 平常,虽然战争临近，但这里的日常生活，一切照常。,"Although the war is approaching, everyday life here is as usual.",https://chinesezerotohero.teachable.com/courses/302490/lectures/5607738
+542,5.33.2,难怪/怪不得,,nánguài/ guàibude ,no wonder,,你的抽屉真乱，难怪/怪不得总是找不到东西。,"Your drawer is really messy, no wonder you can never find [your] things.",https://chinesezerotohero.teachable.com/courses/302490/lectures/5607740
+543,5.33.2,难怪/怪不得,,nánguài/ guàibude ,understandable,,他从来不操心孩子的事。这也难怪/怪不得，他那么忙，哪儿有时间啊。,"He never concerns [himself] with his children’s problems (lit. matters). But that’s no surprise. He’s so busy, how could he find the time?",https://chinesezerotohero.teachable.com/courses/302490/lectures/5607741
+544,5.33.3,与其……(倒)不如……,,yǔqí……( dǎo) bùrú…… ,Instead of… it’s better to…,"5.17.3 宁可
+5.29.1 不如",与其堵在路上，倒不如改乘公交出行。,"Instead of being stuck on the road, it would be better to use public transit instead.",https://chinesezerotohero.teachable.com/courses/302490/lectures/5607741
+545,5.34.1,总之,,zǒngzhī ,In short,4.19.4 总的来说,我想去上海、南京，杭州……总之想去南方转转。,"I want to go to Shanghai, Nanjing, Hangzhou... In short, I want to go south.",https://chinesezerotohero.teachable.com/courses/302490/lectures/5607742
+546,5.34.2,V 过,,V guò ,V away,,他转过身，一句话也不说。,"He turned (his body) away, and didn’t say a word.",https://chinesezerotohero.teachable.com/courses/302490/lectures/5607743
+547,5.34.2,V 过,,V guò ,"V over, V by",,短短的几分钟里，我的脑子里闪过了很多想法。,"In as little as a few minutes, many thoughts flashed by my mind.",https://chinesezerotohero.teachable.com/courses/302490/lectures/5607743
+548,5.34.3,V 开,,V kāi ,V open,,猴子突然站了起来，张开手臂抱住了管理员。,The monkey suddenly stood up and opened his arm and hugged the zookeeper.,https://chinesezerotohero.teachable.com/courses/302490/lectures/5607744
+549,5.35.1,赶快,,gǎnkuài ,"quickly, urgently",5.21.3 尽快,我下个月要搬家， 得赶快找房子。,"I have to move next month, I have to find housing quickly.",https://chinesezerotohero.teachable.com/courses/302490/lectures/5607745
+550,5.35.2,片,,piàn ,a piece of,,天上飘着一片云。,There is a cloud in the sky.,https://chinesezerotohero.teachable.com/courses/302490/lectures/5607746
+551,5.35.2,片,,piàn ,a wave of,,同学们听了，发出一片热烈的欢呼声。,The students listened and gave a (wave of) warm cheer.,https://chinesezerotohero.teachable.com/courses/302490/lectures/5607746
+552,5.35.3,根本 + negative,,gēnběn + negative ,at all,,我发现自己根本读不懂考试题。,I found myself unable to read the exam questions at all.,https://chinesezerotohero.teachable.com/courses/302490/lectures/5607747
+553,5.35.3,根本,,gēnběn ,"root cause, fundamental",5.07.3 根，基础,教育是国家的根本。,Education is the foundation of the country.,https://chinesezerotohero.teachable.com/courses/302490/lectures/5607747
+554,5.35.3,根本 肯定,,gēnběn kěndìng ,completely,,事情已经根本解决了。,Things have been completely (lit. from the root) solved.,https://chinesezerotohero.teachable.com/courses/302490/lectures/5607747
+555,5.35.3,根本(就)是,,gēnběn( jiù) shì ,simply,5.25.2 简直,他根本就是在故意找我们的麻烦。,He is simply trying to make trouble for us.,https://chinesezerotohero.teachable.com/courses/302490/lectures/5607747
+556,5.36.1,除非……否则……,,chúfēi…… fǒuzé…… ,unless,,除非再给我一个星期，否则我们无法完成任务。,"Unless you give me another week, (otherwise) we can't complete the task.",https://chinesezerotohero.teachable.com/courses/302490/lectures/5607748
+557,5.36.1,(除非)……才……,,( chúfēi)…… cái…… ,unless,,(除非)你答应我的条件，我才告诉你。,"(Unless) you promise me, I won’t tell you.",https://chinesezerotohero.teachable.com/courses/302490/lectures/5607748
+558,5.36.1,除非,,chúfēi ,except,3.15.1 除了,这种机器，除非李阳，没人修得好。,"This kind of machine, except Li Yang, no one can fix.",https://chinesezerotohero.teachable.com/courses/302490/lectures/5607748
+559,5.36.2,V1 得 (O) 直 V2,,V1 dé (O) zhí V2,V1 O so much that O V2,,父亲听说儿子卖了房子，气得(他)直发抖。,The father heard that his son had sold the house. He was so angry that he kept on shivering.,https://chinesezerotohero.teachable.com/courses/302490/lectures/5607749
+560,5.36.2,直到,,zhídào ,untill,,直到今天，我也不明白他当时为什么发那么大脾气。,"Until today, I don’t understand why he had such a bad temper at the time.",https://chinesezerotohero.teachable.com/courses/302490/lectures/5607749
+561,5.36.3,反正,,fǎnzhèng ,anyway,4.11.3 不管/无论,不管你们谁去，反正我不会去。,I don’t care if any of you go. I won’t go anyway.,https://chinesezerotohero.teachable.com/courses/302490/lectures/5607750
+562,5.A01,# 点 ##,,# diǎn ## ,# point ##,,三点一四,3.14,
+563,5.A02,#1 分之 #2,,#1 fēnzhī #2,#2 #1-th (fraction),,五分之一,1/5,
+564,5.A02,百分之 #,,bǎifēnzhī # ,# percent,,百分之九,9 percent,
+565,5.A03,甲乙丙丁,,jiǎyǐ bǐng dīng ,"A, B, C, D (series)",,如果乙方同意，甲方可以可以提前把产品交给乙方。,"If Party B agrees, Party A may give the product to Party B in advance.",
+566,5.A04,顺(着),,shùn( zhe) ,along,,汗水顺着他的脸往下流。 ,The sweat flowed down (along) his face.,
+567,5.A05,自,,zì ,from,,鸟类能觉察得出地球自北向南磁极的磁力线。,Birds can perceive the magnetic field lines from the earth’s north magnetic pole to the south magnetic pole.,
+568,5.A06,把……V 着,,bǎ……V zhe ,(imperative),,你把书带着。,Bring your book.,
+569,5.A06,把 O (给) V 了,,bǎ O ( gěi) V le ,have V’ed the O,,我把这事(给)忘了。,I forgot about this matter.,
+570,5.A07,给,,gěi ,(See 被),,我的手机给小偷偷走了。 ,My mobile phone was stolen by the thief.,
+571,5.A08,何不,,hébù ,why not,,天气这么好，何不出去玩儿玩儿呢？,"The weather is so good, why not go out and play?",
+572,5.A09,何尝,,hécháng ,why wouldn’t,,我何尝不想买一所大房子呢？,Why wouldn’t I want to buy a big house?,
+573,5.A10,何至于,,hé zhìyú ,why must,5.13.2 何必,你何至于生这么大的气呢？ ,Why do you have to get so angry?,
+574,5.A11,V 了个 RESULT,,V le gè RESULT ,V to RESULT,,我们喝了个痛快。,We drank to [our] satisfaction.,
+575,5.A12,据说……,,jùshuō…… ,It is said that…,,据说，他年轻时曾经一个人去过非洲大森林。,It is said that at one time he went to the great forest in Africa when he was young.,
+576,5.A13,因而,,yīn'ér ,therefore,,这条河河道很窄，因而容易发生水灾。,The river is narrow and is therefore prone to flooding.,
+577,5.A14,也,,yě ,still,,你不想干也得干。 ,You still have to do it even if you don’t want to.,
+578,5.A15,再……也……,,zài…… yě…… ,no matter how,4.12.2 再……也……,我再累也要把作业做完。 ,"No matter how tired I am, I need to finish my homework.",
+579,6.01.1,巴不得,,bābude ,be only too eager to,,我巴不得他们能真的和好，从此以后和和睦睦过日子。,I only wish that they could really be reconciled and lived in harmony from now on.,https://chinesezerotohero.teachable.com/courses/302494/lectures/6103026
+580,6.01.2,别提多……了,,bié tíduō…… le ,indescribably,,这个人办事，别提多负责了。,"This person does things, don't mention more responsibility.",https://chinesezerotohero.teachable.com/courses/302494/lectures/6103027
+581,6.01.3,具有语体差别的同义词,,jùyǒu yǔ tǐ chà biéde tóngyìcí ,synonyms that differ by style,,他便/就回答说/道：“将/把这只戒指拿去吧。”,"Then he just said, “Take this ring.”",https://chinesezerotohero.teachable.com/courses/302494/lectures/6103030
+582,6.02.1,恨不得,,hènbude ,to wish (badly),6.01.1,工作忙的时候，她恨不得一个人干两个人的活儿。,"When the work [gets] busy, she wished [she could] do two people’s work all by herself.",https://chinesezerotohero.teachable.com/courses/302494/lectures/6103029
+583,6.02.2,顿时,,dùnshí ,suddenly,,听了医生的话，顿时，他的心里又燃起了希望。,"After hearing to the doctor's words, suddenly, his heart lit up hope again.",https://chinesezerotohero.teachable.com/courses/302494/lectures/6103028
+584,6.02.3,不由得,,bùyóude ,can’t help but to,,李朋带病上场参加比赛了，我不由得有些担心。,Li Peng was sick and went to the competition. I couldn't help but worry (somewhat).,https://chinesezerotohero.teachable.com/courses/302494/lectures/6110312
+585,6.03.1,V # 番,,V # fān ,V’ed # times over,,他打量了我一番，到嘴边的话又不说了。,"He sized me up (once over) and swallowed his words. (Lit. [As for] the words that [came] to the edge of his mouth, he [changed his mind] again and didn’t utter them.)",https://chinesezerotohero.teachable.com/courses/302494/lectures/6125593
+586,6.03.1,番,,fān ,(measure word for tumultuous events),,经过了几番风雨，他才懂得人生的价值。,"Only after a few (times of) setbacks (lit. storms), he understood the value of life.",https://chinesezerotohero.teachable.com/courses/302494/lectures/6125593
+587,6.03.1,翻 (#) 番,,fān (#) fān ,multiply # times,,和五年前比，多数人的工资已经翻番了。,"Compared to five years ago, most people’s wages have doubled.",https://chinesezerotohero.teachable.com/courses/302494/lectures/6125599
+588,6.03.2,过于,,guòyú ,too,,他出来得过于匆忙，居然忘了带手机。,He came out too hurriedly and forgot to bring his mobile phone.,https://chinesezerotohero.teachable.com/courses/302494/lectures/6125599
+589,6.03.3,着呢,,zhene ,state + emphasis,,这儿坐吧，这个位空着呢。,"Sit here, this seat is vacant (which you perhaps didn’t know).",https://chinesezerotohero.teachable.com/courses/302494/lectures/6125594
+590,6.04.1,乘机,,chéngjī ,take this opportunity and,,这次出差去北京，我们可以乘机游览一下长城。,"On this business trip to Beijing, we can take the opportunity and take a tour of the Great Wall.",https://chinesezerotohero.teachable.com/courses/302494/lectures/6125595
+591,6.04.2,不料,,bùliào ,who would have thought,,我只想和她开个玩笑，不料她却生气了。,"I just wanted to joke with her, but who would have thought she got angry.",https://chinesezerotohero.teachable.com/courses/302494/lectures/6125596
+592,6.04.3,未免+太+A+了,,wèimiǎn+ tài+A+ le ,can’t say it’s not too A,,警察赶到时未免太迟了。,The police arrived rather too late. (Lit. you can’t say they didn’t arrive too late.),https://chinesezerotohero.teachable.com/courses/302494/lectures/6125597
+593,6.04.3,未免+有些/有点+A,,wèimiǎn+ yǒuxiē/ yǒudiǎn+A ,can’t say it’s not a bit A,,拒绝他的建议未免有些/有点失礼。,It’s rather a bit rude to reject his suggestions. (Lit. you can’t say it’s not rude.),https://chinesezerotohero.teachable.com/courses/302494/lectures/6125597
+594,6.05.1,仅仅/只不过……而已,,jǐnjǐn/ zhǐbuguò…… éryǐ ,only,,他的工作是警察， 写小说仅仅是他的业余爱好而已。,"His works as a policeman, and writing novels is just his hobby (that’s all).",https://chinesezerotohero.teachable.com/courses/302494/lectures/6144561
+595,6.05.2,固然,,gùrán ,granted,,考上大学固然好，没考上大学也不是就没有出路了。,"Granted, it’s good to go to college, [but even if] you don’t go to college it doesn’t mean you have no way out.",https://chinesezerotohero.teachable.com/courses/302494/lectures/6144560
+596,6.05.3,无非,,wúfēi ,simply,,他这么努力地工作，无非想多挣些钱，让妻子、孩子生活得更舒适。,"He works so hard, simply [because] he wants to make more money and make his wife and children live more comfortably.",https://chinesezerotohero.teachable.com/courses/302494/lectures/6144563
+597,6.06.1,唯独,,wéidú ,only,,那次旅行大家都去了，唯独你没有去成。,"Everyone went on that trip, only you didn't go.",https://chinesezerotohero.teachable.com/courses/302494/lectures/6144562
+598,6.06.2,明明,,míngmíng ,obviously,,你唱的明明是流行歌曲，哪里是京剧啊？,"What you are singing is obviously a pop song, how can you [say] it’s Beijing opera?",https://chinesezerotohero.teachable.com/courses/302494/lectures/6144565
+599,6.06.3,大不了……,,dàbùliǎo…… ,"If the worst came to the worst, …",,失败了不要紧，大不了从头再来。,"It doesn't matter if you fail. If the worst came to the worst, you can start from scratch again.",https://chinesezerotohero.teachable.com/courses/302494/lectures/6144564
+600,6.06.3,大不了的,,dàbùliǎo de ,big deal,,接个吻有什么大不了的？,What's the big deal with a kiss?,https://chinesezerotohero.teachable.com/courses/302494/lectures/6144564
+601,6.07.1,V 于 PLACE,,V yú PLACE ,V in PLACE,5.05.2,著名的西湖龙井茶产于浙江看的西湖一带。,The famous West Lake Longjing tea is produced in the West Lake area in Zhejiang.,https://chinesezerotohero.teachable.com/courses/302494/lectures/6282874
+602,6.07.1,A 于 V,,A yú V ,A to V,5.05.2,做决定，需要勇于承担责任。,"To make a decision, you need to be courageous to take responsibility.",https://chinesezerotohero.teachable.com/courses/302494/lectures/6282874
+603,6.07.2,致使,,zhìshǐ ,to cause,,他的粗心致使试验失败。,His carelessness caused the test to fail.,https://chinesezerotohero.teachable.com/courses/302494/lectures/6282875
+604,6.07.3,并非,,bìngfēi ,"not (with emphasis, see “并”4.04.3)",,类似小王这样的年轻人并非少数。,Young people like Xiao Wang are not a minority.,https://chinesezerotohero.teachable.com/courses/302494/lectures/6282876
+605,6.08.1,对 N 而言,,duì N éryán ,for N (see 4.05.4 “对……来说”),,对今天的中国而言，经济发展必须坚持走可持续发展的道路。,"For today's China, economic development must adhere to the path of sustainable development.",https://chinesezerotohero.teachable.com/courses/302494/lectures/6282877
+606,6.08.2,有关 N,,yǒuguān N ,about N,,他查阅了大量有关服饰问题的资料。,He consulted a lot of information about clothing issues.,https://chinesezerotohero.teachable.com/courses/302494/lectures/6282878
+607,6.08.2,和 N 有关,,hé N yǒuguān ,related to N,,中国的语文教学向来重视识字，这固然和汉字的特点有关。 ,"Chinese language teaching has always attached importance to literacy, which is of course related to the characteristics of Chinese characters.",https://chinesezerotohero.teachable.com/courses/302494/lectures/6282878
+608,6.08.3,不瞒你说,,bù mán nǐ shuō ,actually,,不瞒你说，对这个问题，我是这样想的。,"To tell you the truth, regarding this question, this is what I think.",https://chinesezerotohero.teachable.com/courses/302494/lectures/6282881
+609,6.08.3,说真的/说实在的,,shuō zhēn de/ shuō shízài de ,"indeed, truthfully",,说真的，这次真是孩子给我上了一课。,"Seriously, this time the child really gave me a lesson.",https://chinesezerotohero.teachable.com/courses/302494/lectures/6282881
+610,6.09.1,通红、雪白,,tōnghóng、 xuěbái ,"very red, very white",,我脸憋得通红。,My face is red from suffocation.,https://chinesezerotohero.teachable.com/courses/302494/lectures/6282879
+611,6.09.2,说 V/A 就 V/A,,shuō V/A jiù V/A ,"V without thinking, be A without thinking",,挺好的工作，怎么说不干就不干了？,"Very good job, how come you quit just like that (without thinking)?",https://chinesezerotohero.teachable.com/courses/302494/lectures/6282880
+612,6.09.3,V/A 得要命,,V/A dé yàomìng ,"V so much one could die, so A one could die",,五个小时没碰手机，我空虚得要命。,"I didn't touch my cell phone for five hours, and I feel so empty [from not having anythnig to do] I could die.",https://chinesezerotohero.teachable.com/courses/302494/lectures/6282882
+613,6.10.1,以至 (于),,yǐzhì ( yú) ,as a result,,中国的饮食文化汲收不同国家的优异之处，以至于辉煌至今。,"China's food culture has absorbed the excellence of different countries, [and] as a result its brilliance [has shone] to this day.",https://chinesezerotohero.teachable.com/courses/302494/lectures/6282883
+614,6.10.2,即便,,jíbiàn ,even if,,她最近心情不好，即便有些不讲理，你也要原谅她。,"She has a bad mood recently. Even if she is a little unreasonable, you still have to forgive her.",https://chinesezerotohero.teachable.com/courses/302494/lectures/6282884
+615,6.10.3,所在,,suǒzài ,where … lies,,培养人是教育的立足点，是教育价值的根本所在，是教育的本体功能。,"Cultivating people is the foothold of education, is where the foundation of education’s value lies, and the ontological function of education.",https://chinesezerotohero.teachable.com/courses/302494/lectures/6282885
+616,6.10.3,所在,,suǒzài ,place,,他选择了风景秀美、气候宜人的所在。,He chose a place with beautiful scenery and a pleasant climate.,https://chinesezerotohero.teachable.com/courses/302494/lectures/6282885
+617,6.11.1,统统,,tǒngtǒng ,all,,影院、酒吧，统统与他无缘。,Theaters and bars (all) have nothing to do with him.,https://chinesezerotohero.teachable.com/courses/302498/lectures/6429518
+618,6.11.2,以 A 为 B,,yǐ A wéi B ,regard A as B,4.14.2 以5.17.1 以,高级阶段的汉语学习应以阅读吸收为主，语法学习为辅。,"At the advanced stage of Chinese learning, [we] should consider reading and input should as the primary, [and] consider grammar learning as secondary.",https://chinesezerotohero.teachable.com/courses/302498/lectures/6429516
+619,6.11.3,该 V (就)(得) V,,gāi V ( jiù)( dé) V ,if one should V then one must V,,中国过年过节的时候商店最忙了，根本不放假，该开门就得开门。,"When the Chinese New Year is over, the store is the busiest, and there is no holiday at all. We have no choice but to stay open. (Lit. If we should open the door [for business] then we must open the door [for business].)",https://chinesezerotohero.teachable.com/courses/302498/lectures/6429519
+620,6.12.1,不妨 V,,bùfáng V ,it won’t hurt to V,5.08.3 要不,有什么意见，你不妨直说。,"If you have any comments, it won’t hurt for you to say it frankly. (You’re welcome to say it frankly. There’s nothing preventing you to say it frankly.)",https://chinesezerotohero.teachable.com/courses/302498/lectures/6429517
+621,6.12.2,务必,,wùbì ,must,,飞机起飞前务必系好安全带。,you must fasten your seatbelt before the plane takes off.,https://chinesezerotohero.teachable.com/courses/302498/lectures/6429515
+622,6.12.3,鉴于,,jiànyú ,in view of,,鉴于农村教师严重缺乏，他决定大学毕业以后，到农村去当老师。,"In view of the serious shortage of rural teachers, he decided to go to the countryside to become a teacher after graduating from college.",https://chinesezerotohero.teachable.com/courses/302498/lectures/6429520
+623,6.13.1,便于,,biànyú ,easy to,,科普文章应该写得简明易懂、便于理解。,"Popular science articles should be written in a concise way, [so it’s] easy to understand.",https://chinesezerotohero.teachable.com/courses/302498/lectures/6429522
+624,6.13.2,犹如 N (一般/般) A,,yóurú N ( yībān/ bān) A ,as A as N (metaphorically),,公司的劣质产品气坏了消费者，顾客的愤怒情绪犹如火山爆发(一般/般)难以控制。,"The company's inferior products have angered consumers, and their anger is as difficult to control as a volcanic eruption.",https://chinesezerotohero.teachable.com/courses/302498/lectures/6429523
+625,6.13.3,和……相比,,hé…… xiāngbǐ ,compared to…,,和10年前相比，人们要经历更多次的职业选择。,People have to go through more career choices compared to 10 years ago.,https://chinesezerotohero.teachable.com/courses/302498/lectures/6429521
+626,6.14.1,一 + M + M,,yī + M + M ,one batch after another,,每天都会有一拨拨同行前来考察访问。,"Every day, there are group after group of people from the same profession coming to tour [the facilities] and visit.",https://chinesezerotohero.teachable.com/courses/302498/lectures/6429525
+627,6.14.2,难以 V,,nányǐ V ,hard to,,他能否成功尚难以预料。,It’s still hard to predict whether he will be successful.,https://chinesezerotohero.teachable.com/courses/302498/lectures/6429528
+628,6.14.3,免得,,miǎnde ,lest,,今天大家晚点儿走，把活儿都干完，免得明天再来。,"Everyone [please] leave a little later today and finish all the work, lest you [have to] come again tomorrow.",https://chinesezerotohero.teachable.com/courses/302498/lectures/6429526
+629,6.15.1,时而……时而……,,shí'ér…… shí'ér…… ,sometimes… sometimes…,,阳光下，蝴蝶的颜色鲜艳极了，时而金黄，时而翠绿，时而由紫变蓝。,"In the sun, the color of the butterfly is very bright, sometimes golden, sometimes green, sometimes from purple to blue.",https://chinesezerotohero.teachable.com/courses/302498/lectures/6429527
+630,6.15.1,时而,,shí'ér ,from time to time,,主人去世以后，那狗没有了往日的精神，时而发出令人伤心的叫声。,"After the death of the owner, the dog did not have the spirit like it did in the past, and it sometimes makes a sad call.",https://chinesezerotohero.teachable.com/courses/302498/lectures/6429527
+631,6.15.2,不禁 V,,bùjīn V ,can’t help but to V,,听到这个消息，大家不禁兴奋起来。,"When you heard the news, everyone couldn't help but get excited.",https://chinesezerotohero.teachable.com/courses/302498/lectures/6429529
+632,6.15.3,无不 V,,wúbù V ,there is nothing that doesn’t V,,你的一言一行，一举一动，无不影响着你周围的人们。,"Your words and deeds, every move, they all (lit. there is nothing that doesn’t) affect the people around you.",https://chinesezerotohero.teachable.com/courses/302498/lectures/6429524
+633,6.16.1,换句话说/(也)就是说,,huànjùhuàshuō/( yě) jiùshìshuō ,in other words,,每个国家都应与他国和睦相处。换句话说/(也)就是说，国家不能为所欲为。,"Every country should live in harmony with other countries. In other words, a country can't do whatever it wants.",https://chinesezerotohero.teachable.com/courses/302498/lectures/6429535
+634,6.16.2,为 S 所 V,,wéi S suǒ V ,V’ed by S,5.14.3 为……所……,没有一个人不为这部电影中的人物所感动。,No one is [left] untouched by the characters in this movie.,https://chinesezerotohero.teachable.com/courses/302498/lectures/6429531
+635,6.16.3,足以,,zúyǐ ,is enough to,,对这样的坏人不严惩就不足以平民愤。,"If they do not severely punish such bad people, it won’t be enough to calm the anger civilians.",https://chinesezerotohero.teachable.com/courses/302498/lectures/6429530
+636,6.17.1,东 # M 西 # M ,,dōng # M xī # M ,"one here and one there, willy nilly",,客人还不走，我只好跟他东一句西一句地没话找话说。,"The guest is not leaving yet, so I have to talk aimlessly to him.",https://chinesezerotohero.teachable.com/courses/302498/lectures/6429532
+637,6.17.2,V 中 (zhòng) ,,V zhōng (zhòng) ,V on the mark,,飞来一只苍蝇，人动手去打，却总是打不中。,A fly flew in. People tried to hit it with their hands but always missed it.,https://chinesezerotohero.teachable.com/courses/302498/lectures/6429533
+638,6.17.2,中 (zhòng) N,,zhōng (zhòng) N ,hit by N,,这种蘑菇不能吃，吃了会中毒的。,This kind of mushroom can't be eaten. You will be poisoned if you eat it.,https://chinesezerotohero.teachable.com/courses/302498/lectures/6429533
+639,6.17.3,姑且,,gūqiě ,for now,,这件事，你姑且先答应下来，然后再慢慢想办法。,"As for this matter, you can agree to it for now, and then take your time and think about how to deal with it.",https://chinesezerotohero.teachable.com/courses/302498/lectures/6429534
+640,6.18.1,随即,,suíjí ,as soon as,,耶稣受了洗，随即从水里上来。,"As soon as Jesus was baptized, he went up out of the water.",https://chinesezerotohero.teachable.com/courses/302498/lectures/6429536
+641,6.18.2,宁愿,,nìngyuàn ,would rather,,咱们宁愿多花点儿钱，也要买个质量好的。,We'd rather spend more money than buy a good one.,https://chinesezerotohero.teachable.com/courses/302498/lectures/6429538
+642,6.18.3,N 归 N,,N guī N ,although N is N,,朋友之间，开玩笑归开玩笑，但千万别过了头。,"Between friends, [although] jokes are jokes, but don't go too far.",https://chinesezerotohero.teachable.com/courses/302498/lectures/6429544
+643,6.19.1,进而,,jìn'ér ,and then,,人是在实践中接受环境的影响，进而改造自己的。,"It is through trial and error, mankind is influenced by their environment, and then transform themselves.",https://chinesezerotohero.teachable.com/courses/302498/lectures/6429537
+644,6.19.2,得以 V,,déyǐ V ,be enabled to V,,他因为年轻，得以免除惩罚。,"He is young, [which] enabled [him] to be exempt from punishment.
+",https://chinesezerotohero.teachable.com/courses/302498/lectures/6429543
+645,6.19.3,偏偏 V,,piānpiān V ,"just V, to insist on V",,那里太危险了，大家都劝他不要去，他偏偏要去。,It's too dangerous there. Everyone advised him not to go. He just wanted to go. (He insisted on going.),https://chinesezerotohero.teachable.com/courses/302498/lectures/6429542
+646,6.19.3,偏偏 CLAUSE,,piānpiān CLAUSE ,(CLAUSE is an undesirable occurence by chance),,"正当我坐下来吃晚饭时, 偏偏电话来了。",It just have to [be] when I sit down and eat supper that a call came.,https://chinesezerotohero.teachable.com/courses/302498/lectures/6429542
+647,6.20.1,况且,,kuàngqiě ,besides,,这套房子交通方便，附近有书店，况且房租又不贵，真是再合适不过了。,"This apartment has convenient transportation, a bookstore nearby. And besides, the rent is not expensive. It's perfect.",https://chinesezerotohero.teachable.com/courses/302498/lectures/6429539
+648,6.20.2,大 TIME,,dà TIME ,(emphasize on TIME),,那辆汽车大白天被人偷走了。,The car was stolen in broad daylight.,https://chinesezerotohero.teachable.com/courses/302498/lectures/6429540
+649,6.20.3,(与其) V 倒不如 V,,( yǔqí) V dǎo bùrú V ,"rather than V, it’s better to V","5.33.3 与其
+5.08.1 倒",(与其)说这是一本像册，倒不如说这是他大半生的历史。,"This is not so much a photo album as the history of most of his life. (Lit. Rather than saying it’s a photo album, it’s better to say it’s the history of most of his life.)",https://chinesezerotohero.teachable.com/courses/302498/lectures/6429540
+650,6.21.1,以免,,yǐmiǎn ,为了避免,,感冒时应尽量少去公共场所，以免传染别人。,"When you have a cold, you should go to public places as little as possible so as not to infect others.",https://chinesezerotohero.teachable.com/courses/302505/lectures/6993032
+651,6.21.2,嫌,,xián ,"dislike, have a strong negative opinion about",,大家都嫌这个旅行计划不够合理。,Everyone feels (badly) that travel plan is unreasonable.,https://chinesezerotohero.teachable.com/courses/302505/lectures/6993035
+652,6.22.1,动不动就 V,,dòngbudòng jiù V ,on a whim,,他最近工作忙、压力大，动不动就着急、发脾气。,He's been busy and stressed recently. He gets angry on a whim.,https://chinesezerotohero.teachable.com/courses/302505/lectures/6993037
+653,6.22.2,甲乙丙丁,,jiǎyǐ bǐng dīng ,"A, B, C, D (series)",,甲、乙、丙、丁是一个序列，相当于英文的A、B、C、D。,"A, B, C and D are sequences equivalent to A, B, C and D in English.",https://chinesezerotohero.teachable.com/courses/302505/lectures/6993039
+654,6.23.1,加以 V,,jiāyǐ V ,proceed with V,,对于你的意见和建议，我们会认真加以研究。,"As for your opinions and suggestions, we will carefully (conduct a) study.",https://chinesezerotohero.teachable.com/courses/302505/lectures/6993041
+655,6.23.2,大大/远远 V,,dàdà/ yuǎnyuǎn V ,V by far,,你的能力大大/远远超出了我们的想象。,Your abilities exceeded our imagination by far.,https://chinesezerotohero.teachable.com/courses/302505/lectures/6993128
+656,6.23.2,远远 + 不/没 + V/A,,yuǎnyuǎn + bù/ méi + V/A ,"far from V-ing, far from A",,你现在的知识、能力都远远不能胜任你理想中的工作。,Your current knowledge and abilities are far from [sufficient for you to be] competent for your ideal job.,https://chinesezerotohero.teachable.com/courses/302505/lectures/6993128
+657,6.24.1,紧缩句,,jǐnsuō jù ,(omitting “if” words),,站住！(要是) 不站住，我就开枪了。,"Stop! If you don't stop, I'll shoot.",https://chinesezerotohero.teachable.com/courses/302505/lectures/6993315
+658,6.24.2,特意,,tèyì ,on purpose,,那一年我出差去天津，特意绕道北京，去了趟圆明园。,"That year, I went to Tianjin on business. On purpose, I made a detour to Beijing and went to Yuanmingyuan.",https://chinesezerotohero.teachable.com/courses/302505/lectures/7007909
+659,6.25.1,即将,,jíjiāng ,about,,我们已经完成了学业，即将走上工作岗位，开始人生新的一页。,We have finished our studies and about to go to work and start a new page in our lives.,https://chinesezerotohero.teachable.com/courses/302505/lectures/7008583
+660,6.25.2,能 + V + 就 + V,,néng + V + jiù + V ,V if possible,,这个手机没用多久，能修就修，尽量别换新的。,"This mobile phone hasn’t been used for long. If it can be repaired, (then) repair it. Try not to replace it.",https://chinesezerotohero.teachable.com/courses/302505/lectures/7009070
+661,6.26.1,别说,,bié shuō ,let alone,,晚上看书别说蜡烛了，就是灯油也要节省着用。,"When [I] read at night, let alone candles, I had to scrooge even on the lamp oil.",https://chinesezerotohero.teachable.com/courses/302505/lectures/7010390
+662,6.26.2,V1V1V2V2,,V1V1V2V2,(repeated action),,小孩子就喜欢打打闹闹，磕磕碰碰是难免的，过几天就好了， 别担心。,Children like to make a lot of noise. It's inevitable to bump into each other. It'll be all right in a few days. Don't worry.,https://chinesezerotohero.teachable.com/courses/302505/lectures/7010394
+663,6.27.1,左 # M N 右 # M N,,zuǒ # M N yòu # M N ,one N after another,,妈妈左一个电话右一个电话地催他回家。,"Mother called him left and right (lit. with one call after another), trying to hurry him to come home.",https://chinesezerotohero.teachable.com/courses/302505/lectures/7010602
+664,6.27.2,莫非/难道 …… 不成,,mòfēi/ nándào …… bùchéng ,could it be that,,他大吃一惊，头脑中一片空白——莫非受了骗不成? ,He was shocked and his mind was blank - could he possibly be deceived?,https://chinesezerotohero.teachable.com/courses/302505/lectures/8414339
+665,6.28.1,一个 N,,yī gè N ,with a…,,他手没抓住栏杆，一个跟头栽了下来。,He missed the railing and fell with a flip.,https://chinesezerotohero.teachable.com/courses/302505/lectures/8421523
+666,6.28.1,(了) 个 A,,( le) gè A ,to the extent that it became A,,他把心爱的琴摔了个粉碎。,He smashed his beloved violin to pieces (lit. to the extent that it became shattered).,https://chinesezerotohero.teachable.com/courses/302505/lectures/8421523
+667,6.28.2,向来 V/A,,xiànglái V/A ,always have (been) V/A,,他们向来忠厚、老实，为人诚恳。,"They have always been loyal, honest and sincere.",https://chinesezerotohero.teachable.com/courses/302505/lectures/8421528
+668,6.29.1,预先,,yùxiān ,ahead of time,,大家预先都没有想到，本届绘画展览竟然这么受欢迎。,It was never expected (ahead of time) that this painting exhibition would be so popular.,https://chinesezerotohero.teachable.com/courses/302505/lectures/8421662
+669,6.29.2,CLAUSE1 也好 CLAUSE2 也罢,,CLAUSE1 yě hǎo CLAUSE2 yěbà,it doesn’t matter whether CLAUSE1 or CLAUSE2,,开汽车也好，骑自行车也罢，行进中打电话都会影响注意力与反应能力。,"It doesn’t matter whether [you are] driving a car or riding a bicycle, making phone calls during the journey can affect attention and reaction ability.",https://chinesezerotohero.teachable.com/courses/302505/lectures/8455699
+670,6.30.1,不时,,bùshí ,from time to time,,不时传来的几声鸟叫提醒我们，新的一天又开始了。,A few bird calls from time to time remind us that a new day has begun.,https://chinesezerotohero.teachable.com/courses/302505/lectures/8455704
+671,6.30.2,多多少少,,duōduōshǎoshǎo ,more or less,,他的话多多少少有些真实。,What he said was more or less truthful.,https://chinesezerotohero.teachable.com/courses/302505/lectures/8464345
+672,6.31.1,逐 M,,zhú M ,one by one,,雨季快到了，水库要逐个检查，以排除安全隐患。,"As the rainy season is approaching, reservoirs should be inspected one by one to eliminate potential safety hazards.",https://chinesezerotohero.teachable.com/courses/302506/lectures/8464396
+673,6.31.2,归根到底,,guīgēndàodǐ ,after all,,运动健身归根到底是自己的事，胡乱对付其实是在骗自己。,"Exercise and fitness is after all [your] own business. If you just try to scrape through it, you are actually deceiving yourself.",https://chinesezerotohero.teachable.com/courses/302506/lectures/8464400
+674,6.32.1,哪怕,,nǎpà ,even if,,您放心，我们 一定会尽全力抢救病人，哪怕只有一线希望。 ,"You can rest assured that we will do our best to save the patients, even if there is only a glimmer of hope.",https://chinesezerotohero.teachable.com/courses/302506/lectures/8464774
+675,6.32.2,反之,,fǎnzhī ,on the contrary,,经济发展了，百姓的收入增加了，消费能力就强，反之，百姓的消费能力就差。 ,"If the economy develops, people's income increases, and their buying power increases. On the contrary [if the opposite is true], people's buying power will be less.",https://chinesezerotohero.teachable.com/courses/302506/lectures/8466873
+676,6.33.1,V/A1 的 V/A1，V/A2 的 V/A2,,V/A1 de V/A1，V/A2 de V/A2,"some V/A1, some V/A2",,进了果园，大家看到一树的桃 ，红的红，绿的绿，漂亮极了。,"Entering the orchard, you can see a tree of peaches, some red, some green, very beautiful.",https://chinesezerotohero.teachable.com/courses/302506/lectures/8473267
+677,6.33.2,一时,,yīshí ,momentarily,,她一时心急，连门都没有锁就冲出家门。,She was anxious at the time and she rushed out without locking the door.,https://chinesezerotohero.teachable.com/courses/302506/lectures/8474050
+678,6.34.1,(CLAUSE) S 尚且 V,,(CLAUSE) S shàngqiě V ,even (CLAUSE) S V,,经济增长时，这个企业尚且如此，经济衰退时，企业肯定会出现生存问题。,"Even during economic growth, the company is (yet) like this. It will certainly face survival problems in economic recession.",https://chinesezerotohero.teachable.com/courses/302506/lectures/8474239
+679,6.34.2,当年、当时、当代,,dāngnián、 dāngshí、 dāngdài ,at that time,,他已不是当年的他了。,He is not the same man as he used to be (back in those days).,https://chinesezerotohero.teachable.com/courses/302506/lectures/8474340
+680,6.35.1,终究,,zhōngjiū ,after all,,猫终究是动物，动物急了咬人也是常的。 ,"Cats are animals after all, and it is normal for animals to bite people when they get frantic.",https://chinesezerotohero.teachable.com/courses/302506/lectures/8476018
+681,6.35.2,愈……愈……,,yù…… yù…… ,the more… the more…,,愈是经营年画久了，他对年画就愈是热爱。,"The longer he has been selling New Year's paintings, the more he loves them.",https://chinesezerotohero.teachable.com/courses/302506/lectures/8512597
+682,6.36.1,一经,,yī jīng ,once,,领导集团会对重大问题做出决定。一经决定，集团成员必须共同遵守。,"Leading groups will make decisions on major issues. Once a decision has been made, the members of the group must abide by it together.",https://chinesezerotohero.teachable.com/courses/302506/lectures/8512641
+683,6.36.2,本着 N,,běnzhe N ,based on,,两国谈判代表本着互谅互让的精神，解决了拖延多年的问题。,"In the spirit of mutual understanding and compromise, the negotiators of the two countries solved the problem of many years’ delay.",https://chinesezerotohero.teachable.com/courses/302506/lectures/8514276
+684,6.37.1,为……起见,,wéi…… qǐjiàn ,for the sake of,,购买餐具后，为安全起见可先将餐具进行消毒处理。  ,"After you purchasing tableware, they can be disinfected in view of safety.",https://chinesezerotohero.teachable.com/courses/302506/lectures/8514497
+685,6.37.2,暂且,,zànqiě ,for now,,干了几天，小王就不想干了。大家没办法，只得暂且由他去。,"After a few days, Xiao Wang didn't want to work [that job] anymore. Everyone had no choice but to leave him for the time being.",https://chinesezerotohero.teachable.com/courses/302506/lectures/8517078
+686,6.38.1,屡次,,lǚcì ,repeatedly,,屡次创业，却屡次惨遭失败的人总想知道，创业有窍门吗?,"People who repeatedly start businesses but repeatedly fail miserably often wonder, “Are there any secrets to starting a [successful] business?”",https://chinesezerotohero.teachable.com/courses/302506/lectures/8524441
+687,6.38.2,依据,,yījù ,basis,,你们这样做有法律依据吗?,Do you have any legal basis for doing so?,https://chinesezerotohero.teachable.com/courses/302506/lectures/8524255
+688,6.38.2,依据,,yījù ,based on,,创业必须依据市场需求，这是一条永恒的真理。,It is an eternal truth that entrepreneurship must be based on market demand.,https://chinesezerotohero.teachable.com/courses/302506/lectures/8524255
+689,6.39.1,任意,,rènyì ,arbitrary,,合同一旦生效，任何一方都不能任意反悔了。,"Once the contract comes into force, neither party can change their minds arbitrarily.",https://chinesezerotohero.teachable.com/courses/302506/lectures/8533193
+690,6.39.2,尚未,,shàngwèi ,not yet,,所谓潜在的市场，就是尚未被人们认识的市场。,The so-called potential market is the market not yet recognized by people.,https://chinesezerotohero.teachable.com/courses/302506/lectures/8591529
+691,6.40.1,(把)……放在眼里 ,,( bǎ)…… fàngzàiyǎnlǐ ,take … seriously,,这点困难她根本不放在眼里。,"[As for] this (little bit of) difficulty, she didn't take it seriously  at all.",https://chinesezerotohero.teachable.com/courses/302506/lectures/8591531
+692,6.40.2,不无,,bùwú,not without,,她说工资低，这也不无道理。,She says that her salary is low. This is not without reason.,https://chinesezerotohero.teachable.com/courses/302506/lectures/8591532
+693,7-9.001,需,需,,,,父亲的身体需休养一段时间。,Father's body needs a period of rest.,
+694,7-9.001,需,需,,,,我们仍需耐心等待。,We still have to be patient.,
+695,7-9.002,何,何时,,,,我们何时出发？,When shall we start?,
+696,7-9.002,何,有何,,,,不管你有何疑问，都可以到办公室找我。,"No matter what questions you have, you can come to my office.",
+697,7-9.003,该、另、兹,该项目,,,,该企业,The enterprise,
+698,7-9.003,该、另、兹,另一,,,,另一回事,something else,
+699,7-9.003,该、另、兹,兹,,,,兹日,This day,
+700,7-9.004 (1),栋、粒、枚、则、盏,栋,,,,四栋楼,Four buildings,
+701,7-9.004 (1),栋、粒、枚、则、盏,粒,,,,三粒药,Three pills,
+702,7-9.004 (1),栋、粒、枚、则、盏,枚,,,,五枚硬币,Five coins,
+703,7-9.004 (1),栋、粒、枚、则、盏,一则,,,,一则新闻,A piece of news,
+704,7-9.004 (1),栋、粒、枚、则、盏,盏,,,,一盏灯,A lamp,
+705,7-9.004 (2),人次,人次,,,,接待三千人次,We received 3000 people,
+706,7-9.005,极为,极为,,,,齐白石是极为杰出的画家。,Qi Baishi is an outstanding painter.,
+707,7-9.005,极为,极为,,,,新能源汽车的发展前景极为广阔。,The development prospect of new energy vehicles is very broad.,
+708,7-9.006,尽,,,,,坐在尽前头的是我女朋友。,At the top of the table is my girlfriend.,
+709,7-9.006,尽,,,,,尽北边有一个空位，您可以考虑这个位置。,There is a vacancy as far north as possible. You can consider this position.,
+710,7-9.007,蛮,蛮,,,,她的分数蛮高的，大学肯定能考上。,Her score is quite high. She is sure to be admitted to the University.,
+711,7-9.007,蛮,蛮,,,,昨天刚下完雪，今天蛮冷的。,It just snowed yesterday. It's cold today.,
+712,7-9.008,颇,颇,,,,我对这部电影的印象颇深。,I'm quite impressed with the film.,
+713,7-9.008,颇,颇,,,,他对导游这份工作颇有兴趣。,He is interested in the job of tour guide.,
+714,7-9.009,稍稍,稍稍,,,,听了他的话，我稍稍松了一口气。,I was a little relieved at his words.,
+715,7-9.009,稍稍,稍稍,,,,上海的夏天又闷又热，稍稍一动就会出汗。,"The summer in Shanghai is stuffy and hot. If you move a little, you will sweat.",
+716,7-9.010,尤为,尤为,,,,葡萄中的维生素含量尤为丰厚。,Grapes are especially rich in vitamins.,
+717,7-9.010,尤为,尤为,,,,他对自己的要求尤为严格。,He is especially strict with himself.,
+718,7-9.011,越发,越发,,,,听到这个消息，同学们越发有热情了。,"Hearing the news, the students became more and more enthusiastic.",
+719,7-9.011,越发,越发,,,,随着年龄的增长，他越发不喜欢出去旅行了。,"As he gets older, he doesn't like to travel any more.",
+720,7-9.012,凡,凡事,,,,凡事自己努力去做就好。,Try to do everything yourself.,
+721,7-9.012,凡,但凡,,,,凡年龄满十八岁的公民都有选举与被选举的权利。,All citizens over the age of 18 have the right to vote and be elected.,
+722,7-9.013,皆,人人皆知,,,,这已是人人皆知的事实。,This is a well-known fact.,
+723,7-9.013,皆,皆可,,,,这个比赛十六到十九岁的男性青少年皆可报名参加。,This competition is open to young men aged 16 to 19.,
+724,7-9.014,统统,统统,,,,我们不得不承认这些材料统统没有价值。,We have to admit that all these materials have no value.,
+725,7-9.014,统统,统统,,,,时间、地点、人物、事件，她统统不记得。,"She didn't remember the time, place, people or events.",
+726,7-9.015,唯独,唯独,,,,全班同学都在认真听讲，唯独他在睡觉。,"The whole class is listening carefully, but he is sleeping.",
+727,7-9.015,唯独,唯独,,,,他什么都不在乎，唯独受不了家人的不理解。,"He doesn't care about anything, but he can't stand the incomprehension of his family.",
+728,7-9.016,即,即,,,,对待教育问题，不宜忽视，要严肃对待，有错即改。,"When dealing with education, we should not ignore it. We should take it seriously and correct it when there are mistakes.",
+729,7-9.016,即,即,,,,西北人张口即来的这种民歌，是高原上一道美丽的风景。,This kind of folk song from the northwest is a beautiful scenery on the plateau.,
+730,7-9.017,历来,历来,,,,王老师历来重视培养学生的动手能力。,Mr. Wang has always attached great importance to the cultivation of students' practical ability.,
+731,7-9.017,历来,历来,,,,流行歌曲历来是社会文化不可以缺少的一部分。,Pop songs have always been an indispensable part of social culture.,
+732,7-9.018,尚,尚,,,,这个调查到现在为止尚无进展。,"So far, there has been no progress in this investigation.",
+733,7-9.018,尚,尚,,,,这个问题想研究明白，尚需努力。,We still need to work hard to understand this problem.,
+734,7-9.019,向来,向来,,,,他这个人向来吃软不吃硬，你不能硬来。,"He has always been a soft man, but you can't be hard.",
+735,7-9.019,向来,向来,,,,他向来第一个到学校，从未迟到过。,He is always the first to go to school and never late.,
+736,7-9.020,频频,频频,,,,他频频与朋友们以及他的竞争者们打招呼。,He often greets his friends and competitors.,
+737,7-9.020,频频,频频,,,,气氛十分热烈，大家频频举杯，说笑不停，非常高兴。,The atmosphere was very warm. Everyone raised their glasses and talked and laughed. I was very happy.,
+738,7-9.021,再度,再度,,,,这个班再度被评为“优秀班集体” 。,"This class was once again rated as ""excellent class group"".",
+739,7-9.021,再度,再度,,,,两位好友三十年后再度相遇。,The two friends met again 30 years later.,
+740,7-9.022,亦,亦,,,,此人并不存在， 将来亦不会出现，永远不会。,"This person does not exist, will not appear, and will never be.",
+741,7-9.022,亦,亦,,,,若能从失败中获得教训，失败亦是成功。,"If we can learn from failure, failure is also success.",
+742,7-9.023,未,未,,,,他至今还未和我联系。,He hasn't contacted me yet.,
+743,7-9.023,未,未,,,,虽然他四十未到，但已经是很成熟的经理了。,"Although he is not forty, he is a mature manager.",
+744,7-9.024,勿,勿,,,,希望各位勿忘十年后的约定。,I hope you will not forget the agreement ten years from now.,
+745,7-9.024,勿,勿,,,,我在国外一切都很好，勿念。,I'm doing well abroad. Don't worry about it.,
+746,7-9.025,不由得,不由得,,,,看着父亲粗糙的手，我不由得流下了眼泪。,"Looking at my father's rough hands, I couldn't help but shed tears.",
+747,7-9.025,不由得,不由得,,,,看着毕业照，我不由得开始回忆起往事。,"Looking at the graduation photos, I can't help recalling the past.",
+748,7-9.026,顺便,顺便,,,,去老师办公室的时候，他顺便把我的作业也交了。,"When I went to the teacher's office, he handed in my homework by the way.",
+749,7-9.026,顺便,顺便,,,,我到了上海，顺便去看望了小学老师。,"When I arrived in Shanghai, I went to see my primary school teacher.",
+750,7-9.027,一连,一连,,,,这场大雨一连下了十多天，也就把工人们困在这里十多天。,"The heavy rain lasted for more than ten days, and the workers were trapped here for more than ten days.",
+751,7-9.027,一连,一连,,,,他上了床，在一连三天三夜没睡好以后终于能舒舒服服地睡上一觉了。,He went to bed and finally got a comfortable sleep after three days and nights of sleep.,
+752,7-9.028,按说,按说,,,,按说现在是蔬菜供应淡季，可是这里的蔬菜种类还是不少。,"It's the off-season of vegetable supply, but there are still many kinds of vegetables here.",
+753,7-9.028,按说,按说,,,,按说这个时候应该下雪了，可今年一场雪还没下。,"It should have snowed at this time, but it hasn't snowed this year.",
+754,7-9.029,必定,必定,,,,若是有个太太照顾着他，他的生活必定不会那么乱七八糟了。,"If he had a wife to take care of him, his life would not be so messy.",
+755,7-9.029,必定,必定,,,,倘若他们想要人为地挽救这一文明，必定会失败。,"If they want to save this civilization artificially, they will surely fail.",
+756,7-9.030,不妨,不妨,,,,据说这个药效果很好，你不妨试一试。,It is said that this medicine works very well. You might as well have a try.,
+757,7-9.030,不妨,不妨,,,,关于这个问题，咱们不妨听一听别人的建议。,We might as well listen to other people's advice on this problem.,
+758,7-9.031,何必,何必,,,,我只是和你开玩笑，何必当真呢？,I'm just joking with you. Why take it seriously?,
+759,7-9.031,何必,何必,,,,咱们是老同学，何必这么客气。,We are old classmates. Why are you so polite.,
+760,7-9.032,莫非,莫非,,,,她今天没来学校，莫非出了什么事？,She didn't come to school today. What happened?,
+761,7-9.032,莫非,莫非,,,,你平时不认真学习，莫非要等到期末考试了才开始紧张吗？,You don't study hard at ordinary times. Do you have to wait until the final exam?,
+762,7-9.033,白白,白白,,,,她忘了关水龙头，白白浪费了很多水。,She forgot to turn off the tap and wasted a lot of water.,
+763,7-9.033,白白,白白,,,,这次投资失败了，让公司白白损失了很多钱。,The failure of the investment cost the company a lot of money.,
+764,7-9.034,反倒,反倒,,,,明明是你的错，怎么反倒怪我了？,It's obviously your fault. Why do you blame me?,
+765,7-9.034,反倒,反倒,,,,他越是在困难的时候反倒越能坚持。,"The more difficult he is, the more persistent he is.",
+766,7-9.035,分明,分明,,,,我分明看他走过来了，怎么一下子就不见了呢？,I can see clearly that he has come. How can he disappear all of a sudden?,
+767,7-9.035,分明,分明,,,,让我三天就完成，你分明是在为难我。,"Let me finish it in three days, you are obviously in a dilemma.",
+768,7-9.036,怪不得,怪不得,,,,怪不得她没去爬山，原来昨天下雨了。,No wonder she didn't go climbing. It rained yesterday.,
+769,7-9.036,怪不得,怪不得,,,,这姑娘漂亮，人品也好，怪不得有很多男孩儿喜欢她。,The girl is beautiful and of good character. No wonder many boys like her.,
+770,7-9.037,好在,好在,,,,好在你现在也在北京，你们可以互相照顾。,"Fortunately, you are also in Beijing now. You can take care of each other.",
+771,7-9.037,好在,好在,,,,好在他病得不重，应该马上就能上班了。,"Fortunately, he is not seriously ill and should be able to go to work soon.",
+772,7-9.038,乃,乃,,,,《红楼梦》乃古代小说的杰出代表。,A dream of Red Mansions is an outstanding representative of ancient novels.,
+773,7-9.038,乃,乃,,,,失败乃成功之母。,Failure is the mother of success.,
+774,7-9.039,难怪,难怪,,,,这道题非常难，难怪她一时答不出来。,This question is very difficult. No wonder she can't answer it at the moment.,
+775,7-9.039,难怪,难怪,,,,他是个东北人，难怪他不怕冷。,He is a northeasterner. No wonder he is not afraid of cold.,
+776,7-9.040,偏偏,偏偏,,,,周围这么多漂亮的女生，你怎么偏偏喜欢她？,"There are so many beautiful girls around, how do you like her?",
+777,7-9.040,偏偏,偏偏,,,,我们已经穿好衣服准备要走了，可孩子偏偏又醒了。,"We were dressed and ready to go, but the child woke up again.",
+778,7-9.041,索性,索性,,,,衣服已经被雨淋湿了，我索性就合上了伞，直接在雨中散步了。,"Clothes have been wet in the rain, so I simply closed my umbrella and went for a walk in the rain.",
+779,7-9.041,索性,索性,,,,现在已经很晚了，我索性直接在外面吃完饭再回家好了。,It's very late now. I'll just eat out and go home.,
+780,7-9.042,万万,万万,,,,万万不能开着煤气出门。,Never go out with the gas on.,
+781,7-9.042,万万,万万,,,,触犯法律的事情是万万干不得的。,You can't do anything that violates the law.,
+782,7-9.043,未免,未免,,,,这道题未免也太难了吧。,This question is too difficult.,
+783,7-9.043,未免,未免,,,,你这样说她，未免也太过分了。,It's too much for you to say that about her.,
+784,7-9.044,无非,无非,,,,他这么做，无非是为了早点儿回家。,He did it just to get home early.,
+785,7-9.044,无非,无非,,,,她想要的无非是一份稳定的工作。,All she wants is a stable job.,
+786,7-9.045,幸好,幸好,,,,他来的时候，幸好我在家，不然他又该生气了。,"Fortunately I was at home when he came, otherwise he would be angry again.",
+787,7-9.045,幸好,幸好,,,,幸好你提醒了我，要不我就忘了。,"I'm glad you reminded me, or I'll forget.",
+788,7-9.046,幸亏,幸亏,,,,幸亏你回来得早，不然我就不知道怎么办才好了。,"Fortunately you came back early, otherwise I don't know what to do.",
+789,7-9.046,幸亏,幸亏,,,,我们幸亏走了这条路，才没碰到堵车。,"Thanks to this road, we didn't meet the traffic jam.",
+790,7-9.047,终究,终究,,,,他终究是个孩子，你得耐心一点儿。,He is a child after all. You have to be patient.,
+791,7-9.047,终究,终究,,,,你们对工作这么不负责任，终究会出问题的。,"If you are so irresponsible to your work, there will be problems in the end.",
+792,7-9.048,顺着,顺着,,,,雨水顺着我的头发滴了下来。,The rain dripped down my hair.,
+793,7-9.048,顺着,顺着,,,,我们就顺着这条路走，走到哪儿算哪儿。,"We'll go along this road, where we go.",
+794,7-9.049,当着,当着,,,,当着我的面，你有什么想说的就都说出来吧。,"In front of me, say what you want to say.",
+795,7-9.049,当着,当着,,,,我当着大家的面把礼物拆开了。,I opened the present in front of everyone.,
+796,7-9.050,就,就这个问题,,,,他已就这个问题做了检讨。,He has reviewed the issue.,
+797,7-9.050,就,就此,,,,我想就如何找到自己满意的工作这个问题来谈一谈。,I want to talk about how to find a satisfactory job.,
+798,7-9.051,趁,趁,,,,趁你还年轻，一定要多尝试。,Try more while you are young.,
+799,7-9.051,趁,趁,,,,趁火车还没开，你现在还能下车。,"Before the train leaves, you can get off now.",
+800,7-9.052,基于,基于,,,,这两种不同的人生态度是基于对人生不同的理解。,These two different attitudes towards life are based on different understandings of life.,
+801,7-9.052,基于,基于,,,,你的结论都基于假设，所以不可信。,"Your conclusions are based on assumptions, so they are not credible.",
+802,7-9.053,依,依,,,,依你看，这件事该怎么解决？,"In your opinion, how should this matter be solved?",
+803,7-9.053,依,依,,,,这件事就依你的方案做吧。,Let's do it according to your plan.,
+804,7-9.054,及,及,,,,工人、农民及士兵都参加了此次会议。,"Workers, farmers and soldiers all attended the meeting.",
+805,7-9.054,及,及,,,,现急需煤炭、石油、电力及其他能源。,"There is an urgent need for coal, oil, electricity and other energy.",
+806,7-9.055,继而、要不是,继而,,,,他本来不同意的，可继而一想，又觉得是一个好机会。,"He didn't agree, but when he thought about it, he thought it was a good opportunity.",
+807,7-9.055,继而、要不是,继而,,,,人民币升值将会影响到中国的出口，继而影响中国的经济增长。,"RMB appreciation will affect China's exports, and then affect China's economic growth.",
+808,7-9.055,继而、要不是,要不是,,,,要不是老师帮我，我也不能写好这篇文章。,"If the teacher didn't help me, I couldn't write this article well.",
+809,7-9.055,继而、要不是,要不是,,,,要不是他推迟回国，也不会赶不上面试。,"If he had not delayed his return, he would not have missed the interview.",
+810,7-9.056,之,之,,,,我们可以将北京描绘为一本梦之书。,We can describe Beijing as a Book of dreams.,
+811,7-9.056,之,之,,,,由于做了好事，做出了贡献，因此他得到所爱之人的欣赏。,He is appreciated by his loved ones for his good deeds and contributions.,
+812,7-9.057,而已,而已,,,,这算什么，只是一堆纸而已。,It's nothing but a pile of paper.,
+813,7-9.057,而已,而已,,,,我不过是出于好奇，随便问问而已。,I just asked out of curiosity.,
+814,7-9.058,矣,矣,,,,人生得一知己足矣。,It is enough to have a confidant in life.,
+815,7-9.058,矣,矣,,,,他的想法可谓多矣。,He has many ideas.,
+816,7-9.059,数词＋量词＋抽象事物,一身,,,,他有一身本领，颇有才华。,He has a lot of talent.,
+817,7-9.059,数词＋量词＋抽象事物,一团,,,,这里虽然听不见什么争吵声，但并不是一团和气。,"Although there is no quarrel here, it is not a peaceful one.",
+818,7-9.060,爱A不A,爱_不_,,,,他瞧不起她，对她总是一副爱理不理的样子。,He looks down on her and always looks indifferent to her.,
+819,7-9.060,爱A不A,爱_不_,,,,这是我的想法，你爱听不听。,That's my idea. Do you like it or not.,
+820,7-9.061,半A半B,半_半_,,,,他说话半真半假，你不要完全相信他。,He is half true and half false. Don't trust him completely.,
+821,7-9.061,半A半B,半_半_,,,,突然听到明天放假的消息，我一直半信半疑。,"When I heard the news of tomorrow's holiday, I was always dubious.",
+822,7-9.062,东A西B,东_西_,,,,她买东西就喜欢东挑西选。,She likes to pick things up.,
+823,7-9.062,东A西B,东_西_,,,,为了买到一张火车票，我东奔西跑，累得一身汗。,"In order to buy a train ticket, I ran around, sweating all over.",
+824,7-9.063,非A非B,非_非_,,,,这场悲剧的制造者非你非我，另有他人。,"It's not you, it's not me, it's someone else.",
+825,7-9.063,非A非B,非_非_,,,,我们非敌非友，只是那天见过一面而已。,We are neither enemies nor friends. We just met once that day.,
+826,7-9.064,忽A忽B,忽_忽_,,,,叔叔书房的门关着，里边的说话声忽高忽低。,"The door of uncle's study was closed, and the voice inside was high and low.",
+827,7-9.064,忽A忽B,忽_忽_,,,,他十分紧张，心跳得忽快忽慢。,He was very nervous and his heart beat fast and slow.,
+828,7-9.065,连A带B,连_带_,,,,几个小孩儿吓得连哭带叫。,Several children were so scared that they cried and screamed.,
+829,7-9.065,连A带B,连_带_,,,,信是男朋友写的，她高兴得连蹦带跳。,The letter was written by her boyfriend. She was so happy.,
+830,7-9.066,时A时B,时_时_,,,,小鸟发出的声音时长时短。,The sound of a bird lasts for a short time.,
+831,7-9.066,时A时B,时_时_,,,,他的成绩时好时坏，老师也拿他没办法。,"His grades are good and bad, and the teacher can't help him.",
+832,7-9.067,自A自B,自_自_,,,,一路上老板自说自话捞叨了半天。,The boss talked to himself all the way.,
+833,7-9.067,自A自B,自_自_,,,,想到你对我们工作的破坏，我应该让你自作自受才对。,"Thinking of the damage you have done to our work, I should let you suffer.",
+834,7-9.068,巴不得,巴不得,,,,他一口气跑了半个多小时，巴不得一步就到家。,"After running for more than half an hour, he was eager to get home in one step.",
+835,7-9.068,巴不得,巴不得,,,,我恨这个行业，巴不得早点儿离开。,I hate this industry and I'm eager to leave early.,
+836,7-9.069,别提了,别提了,,,,晚饭还没开始吃他就已经醉了，后来就更别提了。,"He was drunk before dinner, let alone later.",
+837,7-9.069,别提了,别提了,,,,别提了，我根本都不认识那个人，他硬拉着我不让我走。,Don't mention it. I don't know that man at all. He holds me back.,
+838,7-9.070,除此之外,除此之外,,,,他是个老师，除此之外，我不知道别的。,He is a teacher. I don't know anything else.,
+839,7-9.070,除此之外,除此之外,,,,我只带了一个书包，除此之外什么都没带。,I have only one schoolbag with me and nothing else.,
+840,7-9.071,归根到底,归根到底,,,,人生归根到底是一个人的旅行。,"In the final analysis, life is a person's journey.",
+841,7-9.071,归根到底,归根到底,,,,归根到底，成长是一种幸福。,"In the final analysis, growth is a kind of happiness.",
+842,7-9.072,可不是,可不是,,,,甲：什么？ 我们家出事了？,A: what? What happened to our family?,
+843,7-9.072,可不是,可不是,,,,乙：可不是，警察都已经来了。,"B: Indeed, the police are already here.",
+844,7-9.072,可不是,可不是,,,,甲：小孩子长得真快啊！,A: how fast children grow!,
+845,7-9.072,可不是,可不是,,,,乙：可不是，已经要上小学了。,"B: Indeed, I'm going to primary school.",
+846,7-9.073,没说的,没说的,,,,我愿意做这件事，那是没说的，只是我不知道还能做多长时间。,"I'm willing to do it, that’s for sure, but I don't know how long I can do it.",
+847,7-9.073,没说的,没说的,,,,新来的领导我都见过了，真是没说的！,I've met all the new leaders. I really didn't say that!,
+848,7-9.074,无论如何,无论如何,,,,无论如何，他没有别的选择。,"In any case, he has no other choice.",
+849,7-9.074,无论如何,无论如何,,,,听到这里，他无论如何也不答应。,"Hearing this, he would not agree at all.",
+850,7-9.075,由此可见,由此可见,,,,很多中国孩子从小学习书法，由此可见书法在中国教育中的重要地位。,"Many Chinese children learn calligraphy from childhood, which shows the important position of calligraphy in Chinese education.",
+853,7-9.076,与此同时,与此同时,,,,太阳落山了，几乎与此同时下起了大雨。,The sun set and it rained almost at the same time.,
+854,7-9.076,与此同时,与此同时,,,,几个月之后，他的眼睛开始不停地流眼泪，与此同时他的视力也变得越来越差。,"A few months later, his eyes began to shed tears, while his eyesight became worse and worse.",
+855,7-9.077,这样一来,这样一来,,,,这些小鸟总是在唱歌，这样一来，我家门前可热闹了。,"These birds are always singing. In this way, my house is very busy.",
+856,7-9.077,这样一来,这样一来,,,,他听了医生的话，每天都去外面散步，这样一来，他的病很快就好了。,"He listened to the doctor's advice and went out for a walk every day. In this way, he soon recovered.",
+857,7-9.078,综上所述,综上所述,,,,综上所述，如果希望交流顺利地进行，需要大家共同努力。,"To sum up, if we want the exchange to go smoothly, we need to work together.",
+858,7-9.078,综上所述,综上所述,,,,综上所述，随着科技的发展，人们越来越依赖手机。,"To sum up, with the development of science and technology, people are more and more dependent on mobile phones.",
+859,7-9.079,总的来说／总而言之,总的来说,,,,总的来说，他的身体状态还算不错。,"On the whole, he is in good shape.",
+860,7-9.079,总的来说／总而言之,总的来说,,,,她的专业能力很不错，工作态度总的来说也很端正，是个很好的合作伙伴。,"Her professional ability is very good, working attitude is also very good, is a very good partner.",
+861,7-9.079,总的来说／总而言之,总而言之,,,,总而言之，最重要的应该是过程，而不是结果。,"In a word, the most important thing is the process, not the result.",
+862,7-9.079,总的来说／总而言之,总而言之,,,,总而言之一句话，我不喜欢他。,"In a word, I don't like him.",
+863,7-9.080,不知…… 好,不知___好,,,,这件事很复杂，不知如何解决才好。,This matter is very complicated. I don't know how to solve it.,
+864,7-9.080,不知…… 好,说什么好,,,,看他紧张得手心都是汗，我也不知说什么好。,I don't know what to say when he is so nervous that his palms are sweaty.,
+865,7-9.081,所谓…… 就是……,所谓*就是*,,,,房内没有一样值钱的东西，所谓家具就是这几把椅子。,There is nothing valuable in the room. The so-called furniture is these chairs.,
+866,7-9.081,所谓…… 就是……,所谓*就是*,,,,他所谓的好家庭就是住在一栋大房子里，妻子穿着漂亮的衣服。,His so-called good family is living in a big house with his wife in beautiful clothes.,
+867,7-9.082,无非／不过／只不过／只是…… 而已／罢了,无非*罢了,,,,不要相信他，这无非是他的借口罢了。,Don't believe him. It's just his excuse.,
+868,7-9.082,无非／不过／只不过／只是…… 而已／罢了,不过*而已,,,,我这么说没有其他意思，不过是想鼓励他而已。,"I don't mean anything else, but I just want to encourage him.",
+869,7-9.082,无非／不过／只不过／只是…… 而已／罢了,只不过*而已,,,,她会做这道题，只不过假装不会而已。,"She can do the problem, just pretending not to.",
+870,7-9.082,无非／不过／只不过／只是…… 而已／罢了,只是*罢了,,,,大家都说爱情很快就会过去，剩下的只是习惯罢了。,"Everyone said that love will soon pass, the rest is just habits.",
+871,7-9.083,以…… 为……,以*为*,,,,我们不能以自己为中心，要考虑别人的感受。,"We can't take ourselves as the center, we should consider the feelings of others.",
+872,7-9.083,以…… 为……,以*为*,,,,她以和平为主题，创作了一部小说。,She wrote a novel with the theme of peace.,
+873,7-9.084,因…… 而……,因*而*,,,,我经常看到他因一件小事而快乐的场景。,I often see him happy because of a small thing.,
+874,7-9.084,因…… 而……,因*而*,,,,她胆子很大，不会因一些奇怪的声音而害怕。,She is brave enough not to be afraid of strange sounds.,
+875,7-9.085 ,（方式宾语）,踢正步,,(means as object),,为了方便取出来，他把钱存了个活期。,"In order to get it out easily, he put the money in a current account.",
+876,7-9.085 ,（方式宾语）,踢正步,,(means as object),,为了节省时间，这封信还是寄航空吧。,"To save time, send this letter by air.",
+877,7-9.085 ,（工具宾语）,打电脑,,(instrument as object),,他坚持每天写毛笔。,He insisted on writing brush every day.,
+878,7-9.085 ,（工具宾语）,打电脑,,(instrument as object),,他吃大碗，我吃小碗。,"He eats big bowl, I eat small bowl.",
+879,7-9.085 ,（材料宾语）,,,(material as object),,新手养菊花，该如何浇水？,"Novice raise chrysanthemum, how to water?",
+880,7-9.085 ,（材料宾语）,,,(material as object),,他在脸上盖一张报纸睡着了。,He put a newspaper on his face and fell asleep.,
+881,7-9.085 ,（目的宾语）,拉关系,,(purpose as object),,为了拍这部电影，他到处去拉赞助。,"In order to make the film, he went all over for sponsorship.",
+882,7-9.085 ,（目的宾语）,跑生意,,(purpose as object),,他在我们公司主要跑项目。,He is mainly engaged in sports in our company.,
+883,7-9.086 ,形容词／动词＋得＋不行,得不行,,,,终于要去旅游了，儿子兴奋得不行。,"Finally, I'm going to travel. My son is so excited.",
+884,7-9.086 ,形容词／动词＋得＋不行,得不行,,,,上学时我对体育课也是讨厌得不行。,"When I was in school, I hated physical education too much.",
+885,7-9.086 ,形容词／动词＋得＋要命／要死,得要命,,,,他人不大，但是脾气大得要命。,"He is not big, but he has a terrible temper.",
+886,7-9.086 ,形容词／动词＋得＋要命／要死,得要死,,,,我最近太忙了，每天累得要死。,I've been so busy recently that I'm tired to death every day.,
+887,7-9.087,状态补语3：“个”引导的补语,哭个,,,,那个小女孩儿哭个不停，说是找不到妈妈了。,The little girl cried and said she couldn't find her mother.,
+888,7-9.087,状态补语3：“个”引导的补语,说个清楚,,,,他在我们面前说个没完。,He talked endlessly in front of us.,
+889,7-9.088,“把”字句5：表致使,,,,,去年她把丈夫死了，后来父母也去世了。,She killed her husband last year and then her parents.,
+890,7-9.088,“把”字句5：表致使,,,,,钱没挣着，却把老公跑了。,"I didn't earn money, but I ran away from my husband.",
+891,7-9.089 ,被……所……,被*所*,,,,这是我第一次感到自己被一个人所吸引。,This is the first time I feel attracted to a person.,
+892,7-9.089 ,被……所……,被*所*,,,,没想到，他竟然会被一个小学生所欺骗。,"Unexpectedly, he would be cheated by a primary school student.",
+893,7-9.089 ,为……所……,为*所*,,,,他这种行为，为人类社会所不容。,His behavior is not allowed by human society.,
+894,7-9.089 ,为……所……,为*所*,,,,领导的这种行为往往不为人所信任。,This kind of behavior of leaders is often not trusted.,
+895,7-9.090 ,比起……（来）,比起,,,,比起其他人，我的想法太简单了。,"Compared with other people, my idea is too simple.",
+896,7-9.090 ,比起……（来）,比起*来,,,,比起唱歌来，他更喜欢跳舞。,He prefers dancing to singing.,
+897,7-9.090 ,A＋形容词＋于＋B,大于,,,,人的自我实现过程重于结果。,The process of human self realization is more important than the result.,
+898,7-9.090 ,A＋形容词＋于＋B,高于,,,,在施工现场，工人们的安全高于一切，大于一切。,"In the construction site, the safety of workers is above everything, above all.",
+899,7-9.090 ,A+ 比＋名词＋还＋名词,,,,,他简直比强盗还强盗！,He is more than a robber!,
+900,7-9.090 ,A+ 比＋名词＋还＋名词,,,,,在上流社会里，他装得比绅士还绅士。,"In high society, he pretends to be a gentleman more than a gentleman.",
+901,7-9.091,一面……， 一面……,一面*一面*,,,,他一面听老师讲课，一面认真记笔记。,He took notes carefully while listening to the teacher.,
+902,7-9.091,一面……， 一面……,一面*一面*,,,,他一面做作业，一面看电视，做事一点儿都不用心。,He does his homework and watches TV at the same time. He doesn't pay attention to it at all.,
+903,7-9.092,……， 此后……,此后,,,,我们三年前见过一面，此后再也没有见过。,We met once three years ago and haven't seen each other since.,
+904,7-9.092,……， 此后……,此后,,,,她二十岁结了婚，此后丈夫生病，她照顾了四年。,"She married at the age of 20, and since then her husband has been ill and she has been taking care of her for four years.",
+905,7-9.093,起初……，……才……,起初,,,,他起初没明白，后来才理解了游戏的规则。,"He didn't understand at first, but later he understood the rules of the game.",
+906,7-9.093,起初……，……才……,起初,,,,我们起初不想参加的，只是不好意思拒绝，才去了那里。,"We didn't want to participate at first, but we were sorry to refuse, so we went there.",
+907,7-9.094,别说……，连/即使是……也／都…… ,别说*了*都,,,,别说是大学生了，连小学生都比他写得好。,"Let alone college students, even primary school students write better than him.",
+908,7-9.094,别说……，连/即使是……也／都…… ,也*别说*了,,,,我现在穷得连饭也吃不起了，别说买新衣服了。,"I'm so poor that I can't afford to eat now, let alone buy new clothes.",
+909,7-9.094,别说……，连/即使是……也／都…… ,别说*即使*,,,,别说爸爸，即使是老师，也说不出这种植物的名字。,"Don't say dad, even the teacher can't say the name of this plant.",
+910,7-9.094,别说……，连/即使是……也／都…… ,即使*别说*,,,,即使是稍微有钱的家庭，也禁不住她这么花钱，别说普通家庭了。,"Even a family with a little money can't help her spending so much, let alone an ordinary family.",
+911,7-9.095,……，何况……,何况,,,,我不道歉，何况根本不是我的错！,"I don't apologize, and it's not my fault at all!",
+912,7-9.095,……，何况……,何况,,,,也*别说*了,"It takes a lot of time to do it, and there are so many customers today.",
+913,7-9.096,……，进而……,进而,,,,只有在这样的国家里，教师才能充分发展，进而保护他自己和公共利益。,Only in such a country can teachers fully develop and then protect themselves and the public interest.,
+914,7-9.096,……，进而……,进而,,,,遇到困难不要回避，挺起身来向它挑战，进而战胜它。,"Don't avoid difficulties, stand up to challenge them and overcome them.",
+915,7-9.097,……， 况且……,况且,,,,北京这么大，况且你又是第一次来，怎么能一下子就找到我家呢？,"Beijing is so big. Besides, it's your first time here. How can you find my home all at once?",
+916,7-9.097,……， 况且……,况且,,,,那时天已经黑了，况且人又坐在车上，肯定看不清楚。,"At that time, it was already dark. Besides, I couldn't see clearly when I was sitting in the car.",
+917,7-9.098,连……，更不用说……,更不用说,,,,连他都不会，更不用说我了。,"Not even him, let alone me.",
+918,7-9.098,连……，更不用说……,更不用说,,,,我连上次的考试都没通过，更不用说这次的了。,"I didn't even pass the last exam, let alone this one.",
+919,7-9.098,连……，更不用说……,更不用说,,,,他连这几个字都不会写，更不用说写篇作文了。,"He can't even write these words, let alone write a composition.",
+920,7-9.099,……，乃至……,乃至,,,,他的脸色、眼神，乃至一举一动，都被别人看得清清楚楚。,"His face, eyes and even every move were clearly seen by others.",
+921,7-9.099,……，乃至……,乃至,,,,他熟悉北京，也熟悉巴黎，乃至全世界。,"He is familiar with Beijing, Paris and even the world.",
+922,7-9.100,……，且……,且,,,,他办事严谨而认真，且十分负责，获得了领导的信任。,"He is rigorous and serious, and very responsible, and won the trust of the leadership.",
+923,7-9.100,……，且……,且,,,,这一条街又脏又乱，总是很潮湿，且一年四季总不免有种古怪气味。,The street is dirty and messy. It's always wet and has a strange smell all year round.,
+924,7-9.101,……，甚至于……,甚至于,,,,她不能忍受这种想法，甚至于一秒钟也受不了。,"She couldn't stand the thought, even for a second.",
+925,7-9.101,……，甚至于……,甚至于,,,,这个小姑娘始终都是那副模样，甚至于一点儿也没长高。,"The little girl was always like that, and she didn't even grow tall.",
+926,7-9.102,或……，或……,或*或*,,,,他把信藏在某个秘密的地方了，或一块石头下面，或一棵树后面。,"He hid the letter in a secret place, under a stone or behind a tree.",
+927,7-9.102,或……，或……,或*或*,,,,阿姨每次来我家都带着一群朋友，或二三人，或三四人，大家说说笑笑。,"Every time my aunt comes to my home, she brings a group of friends, or two or three or three or four. We talk and laugh.",
+928,7-9.103,宁可／宁愿……，也……,宁可*也*,,,,他宁可饿着肚子去上课，也不愿意吃垃圾食品。,He would rather go to class hungry than eat junk food.,
+929,7-9.103,宁可／宁愿……，也……,宁愿*也*,,,,他宁愿自己承担，也不肯把责任推给别人。,He would rather bear the responsibility himself than shift it to others.,
+930,7-9.104,与其……，不如……,与其*不如*,,,,与其去爬山， 还不如在家看电视。,It's better to watch TV at home than to climb mountains.,
+931,7-9.104,与其……，不如……,与其*不如*,,,,与其在这里浪费时间， 我们不如认真复习。,"Instead of wasting time here, we'd better review carefully.",
+932,7-9.105,与其……，宁可／宁愿……,与其*宁可*,,,,与其在这里洗半天的衣服，我宁可去买新的。,"Instead of washing clothes here for half a day, I'd rather buy new ones.",
+933,7-9.105,与其……，宁可／宁愿……,与其*宁愿*,,,,与其跟他一组，我宁愿一个人做这个项目。,"Instead of working with him, I'd rather do this project alone.",
+934,7-9.106,……，而……（则）……,而*却*,,,,绝大多数的人用感觉来思考，而我却用思考来感觉。,"Most people think by feeling, but I feel by thinking.",
+935,7-9.106,……，而……（则）……,而*则*,,,,北方人过春节往往吃饺子，而南方人的习俗则是吃汤圆。,"People in the north often eat dumplings during the Spring Festival, while the custom of people in the south is to eat tangyuan.",
+936,7-9.107,……，……倒／反倒……,倒把,,,,我好心劝他，他倒怪我，真是好笑！,"I tried to persuade him, but he blamed me. It's funny!",
+937,7-9.107,……，……倒／反倒……,反倒,,,,听护士这么一说，他反倒放松了下来。,He relaxed when the nurse said that.,
+938,7-9.108,倘若／若……，……,若,,,,倘若这几个问题你都能解决，你一定会获得成功。,"If you can solve all these problems, you will succeed.",
+939,7-9.108,倘若／若……，……,倘若,,,,若不小心，是不是又会发生纠纷？,"If you are not careful, will there be another dispute?",
+940,7-9.109,倘若／假设／假使／若……，就／那（么）……,倘若,,,,倘若一点儿音乐知识都没有，就会遇到困难。,"If there is no knowledge of music, there will be difficulties.",
+941,7-9.109,倘若／假设／假使／若……，就／那（么）……,假设,,,,假设这是我们未来的家园，那这个世界就不会再有饥饿的儿童。,"If this is our future home, there will be no hungry children in this world.",
+942,7-9.109,倘若／假设／假使／若……，就／那（么）……,假使,,,,假使一切能重新开始，那么我绝不会选择这一条路。,"If everything can start again, then I will never choose this road.",
+943,7-9.110,幸亏……，要不然／不然／要不／否则……,幸亏,,,,幸亏你提醒了我，要不然我就忘了。,"Thank you for reminding me, otherwise I would have forgotten.",
+944,7-9.110,幸亏……，要不然／不然／要不／否则……,否则,,,,幸亏有你帮忙，不然我真不知道怎么办才好。,"Thanks for your help, otherwise I don't know what to do.",
+945,7-9.111,别管……，都……,别管*都*,,,,别管台下坐的是谁，你都要充满信心。,"No matter who is sitting under the stage, you have to be confident.",
+946,7-9.111,别管……，都……,别管*都*,,,,这样的话一出口，别管是谁，都得挨骂。,"In this case, no matter who it is, you will be scolded.",
+947,7-9.112,任……，也……,任他,,,,任他们怎么推，也推不动。,"No matter how they push, they can't push.",
+948,7-9.112,任……，也……,任你,,,,任他是什么高职位的人，也管不了我。,"No matter what high position he is, it doesn't matter to me.",
+949,7-9.113,（因）……，故……,故不,,,,因不是体面的事情，故不敢说出来。,"It's not a respectable thing, so I dare not say it.",
+950,7-9.113,（因）……，故……,故,,,,他已经适应了国外的生活，故不打算再回国。,"He has adapted to life abroad, so he doesn't plan to return home.",
+951,7-9.114,鉴于……，……,鉴于,,,,鉴于他的表现良好，学校决定允许他回来上课。,"In view of his good performance, the school decided to allow him to come back to class.",
+952,7-9.114,鉴于……，……,鉴于,,,,鉴于他在处理这种问题上毫无经验，公司决定派我来帮助他。,"In view of his inexperience in dealing with this kind of problem, the company decided to send me to help him.",
+953,7-9.115,（由于）……，以致……,以致,,,,他睡过头了，以致错过了第一节课。,He overslept and missed the first class.,
+954,7-9.115,（由于）……，以致……,以致,,,,他由于学习不认真，以致考了最后一名。,"Because he didn't study hard, he came last in the exam.",
+955,7-9.116,……，以至于……,以至于,,,,事情发展得太快，以至于大家都难以反应。,Things are moving so fast that it's hard for everyone to react.,
+956,7-9.116,……，以至于……,以至于,,,,这篇课文他读了很多遍，以至于全文都背得出来。,He read the text so many times that he could recite the whole text.,
+957,7-9.117,之所以……，是因为／是由于……,之所以,,,,这部电影之所以好看，是因为内容很有趣。,The reason why the film is good is that the content is very interesting.,
+958,7-9.117,之所以……，是因为／是由于……,之所以,,,,妈妈之所以生气了，是由于他不肯承认自己的错误。,Mother was angry because he refused to admit his mistake.,
+959,7-9.118,固然……，也……,固然,,,,那固然是我们的习惯，也还需要有另外的理由。,"That's our habit, of course, and there are other reasons.",
+960,7-9.118,固然……，也……,固然,,,,他的话固然给我安慰，也使我难过。,"His words, of course, comforted and saddened me.",
+961,7-9.119,……固然……，但是／可是／不过……,固然,,,,一个人的成功，聪明固然重要，但是努力更重要。,"A person's success, smart is important, but efforts are more important.",
+962,7-9.119,……固然……，但是／可是／不过……,固然,,,,网络固然给我们带来了便利，可是也给我们带来了麻烦。,"Network brings us convenience, but it also brings us trouble.",
+963,7-9.119,……固然……，但是／可是／不过……,固然,,,,这种方法固然有用，不过也不能解决根本问题。,"Although this method is useful, it can not solve the fundamental problem.",
+964,7-9.120,即便……，也……,即便,,,,即便你成绩好，也不能骄傲。,"Even if you do well, you can't be proud.",
+965,7-9.120,即便……，也……,即便,,,,他眼神中充满的即便不是感动，至少也是同情。,"His eyes were filled with sympathy, if not emotion.",
+966,7-9.121,虽说……，但是／可是／不过……,虽说,,,,虽说他年纪小，但是也不能过于任性。,"Although he is young, he can't be too headstrong.",
+967,7-9.121,虽说……，但是／可是／不过……,虽说,,,,虽说中文很难，可是它很有趣。,"Chinese is very difficult, but it's very interesting.",
+968,7-9.121,虽说……，但是／可是／不过……,虽说,,,,虽说这是件小事，不过我们应该重视起来。,"Although this is a small matter, we should pay attention to it.",
+969,7-9.122,纵然……，也……,纵然,,,,我们的意见纵然不一致，也应当互相理解。,We should understand each other even if we disagree.,
+970,7-9.122,纵然……，也……,纵然,,,,这事纵然不好，也是他们之间的事，就让他们自己处理吧。,"Even if it's not good, it's between them. Let them deal with it by themselves.",
+971,7-9.123,……，以……,以,,,,政府用他们的名字命名这条街，以纪念在战争中牺牲的战士。,The government named the street after them in memory of the soldiers who died in the war.,
+972,7-9.123,……，以……,以,,,,老师采用新的教学方法上课，以调动学生的积极性。,Teachers adopt new teaching methods to arouse students' enthusiasm.,
+973,7-9.124,……，以免／免得……,以免,,,,出门在外看好你的东西，以免丢失。,Go out and watch your things to avoid losing them.,
+974,7-9.124,……，以免／免得……,免得,,,,你把这个写下来，免得过后忘记。,You write this down so you don't forget it later.,
+975,7-9.125,……，也就是说……,也就是说,,,,这是我的决定，也就是说不关你的事。,"It's my decision, which means it's none of your business.",
+976,7-9.125,……，也就是说……,也就是说,,,,他说这是他新买的书，也就是说他不想借给我们看。,"He said it was his new book, which means he didn't want to lend it to us.",
+977,7-9.126,紧缩复句,玩儿个,,,,要玩儿就玩儿个痛快，别总想工作。,"If you want to have a good time, don't always want to work.",
+978,7-9.126,紧缩复句,喝个,,,,喝就喝个够，今天不醉不回家。,I'll drink enough. I won't go home until I'm drunk today.,
+979,7-9.127,动词（＋宾语1) ＋就＋动词（＋宾语1) ，别……,走就走,,,,走就走，别用这个威胁我！,Just go. Don't threaten me with this!,
+980,7-9.127,动词（＋宾语1) ＋就＋动词（＋宾语1) ，别……,离就离,,,,说几句就说几句，别太在意。,"Just say a few words, don't care too much.",
+981,7-9.128,三重或三重以上的复句,而且,,,,他对中文感兴趣，而且对中国文化也十分好奇，所以决定去中国留学，但遭到了父母的反对。,"He was interested in Chinese and curious about Chinese culture, so he decided to study in China, but his parents opposed him.",
+982,7-9.128,三重或三重以上的复句,以免,,,,大家不要只看外面的风景，也不要只顾看手机，要看好自己的物品，以免产生不必要的损失。,"We should not only look at the scenery outside, nor just look at the mobile phone. We should look after our own goods to avoid unnecessary losses.",
+983,7-9.128,三重或三重以上的复句,自然也,,,,只要多练习，你的中文水平就会有进步，成绩也会提高， 自然也会得到奖学金。,"As long as you practice more, your Chinese level will be improved, your grades will be improved, and you will naturally get a scholarship.",
+984,7-9.129,何必／何苦……呢？,何必,,,,这么简单的事我又何必一件事分两次做呢？,Why should I do such a simple thing twice?,
+985,7-9.129,何必／何苦……呢？,何苦,,,,我对谁都没有讲，何苦事先就让他们伤心呢？,I didn't tell anyone. Why should I make them sad in advance?,
+986,7-9.130,（不过／但／可是）话又说回来，……,话又说回来,,,,话又说回来，不能因为生病就失去希望。,"Then again, you can't lose hope just because you're sick.",
+987,7-9.130,（不过／但／可是）话又说回来，……,话又说回来,,,,但话又说回来，我们为什么不能把事情处理得对我们更有利呢？,"But then again, why can't we make things better for us?",
+988,7-9.131,X（也）不是，不X也不是,*也不是*也不是,,,,走不是，不走也不是，弄得我们不知道怎么办才好。,"It's not going, it's not going, we don't know what to do.",
+989,7-9.131,X（也）不是，不X也不是,*也不行*也不行,,,,笑也不是，不笑也不是，真让人尴尬。,It's embarrassing to laugh or not.,
+990,7-9.132,X也好／也罢， Y也好／也罢,*也好*也好,,,,去也好，不去也好，反正不是什么大不了的事。,It's no big deal whether you go or not.,
+991,7-9.132,X也好／也罢， Y也好／也罢,*也好*也好,,,,快乐也好，伤心也好，这个故事就要结束了。,"Happy or sad, the story is coming to an end.",
+992,7-9.132,X也好／也罢， Y也好／也罢,*也好*也罢,,,,你也罢，我也罢，都帮不了什么忙。,Neither you nor I can help.,
+993,7-9.132,X也好／也罢， Y也好／也罢,*也罢*也罢,,,,喜欢也罢，愤怒也罢，终究都是一种情绪。,"Like or angry, after all, is a kind of emotion.",
+994,7-9.133,X了又Y，Y了又X,了又*了又,,,,他装了又拆，拆了又装，修理了一整天。,"He installed and disassembled, disassembled and installed, and repaired all day.",
+995,7-9.133,X了又Y，Y了又X,了又*了又,,,,小朋友写了又擦，擦了又写，正在认真地练习写汉字。,"Children write and erase, erase and write, are seriously practicing writing Chinese characters.",
+996,7-9.134,X也X不……，Y也Y不……,也*不*也*不,,,,妈妈还处于担心的状态中，吃也吃不下，睡也睡不着。,"Mother is still in a state of worry, can't eat, can't sleep.",
+997,7-9.134,X也X不……，Y也Y不……,也*不*也*不,,,,父母与孩子的关系就是这样，赶也赶不走，留也留不住。,This is the relationship between parents and children. They can't get rid of it or stay.,
+998,7-9.135,别提（有）多X了,别提有多*了,,,,刚才买的那件衣服，别提多好看了。,The dress I bought just now is very beautiful.,
+999,7-9.135,别提（有）多X了,别提多*了,,,,听到爸爸的声音，她别提有多兴奋了。,She was excited to hear her father's voice.,
+1000,7-9.136,不知X的,不知*的,,,,不知怎么的，我的眼泪止不住地往下流。,"Somehow, my tears couldn't stop flowing down.",
+1001,7-9.136,不知X的,不知*的,,,,不知谁说的，他才是凶手。,I don't know who said that. He's the killer.,
+1002,7-9.137,话（说）是这么说， 不过／可／可是……,话是这么说,,,,话是这么说，不过她还是不习惯。,"That's right, but she's not used to it.",
+1003,7-9.137,话（说）是这么说， 不过／可／可是……,话是这么说,,,,说是这么说，可对方要是真这么干，那我们也做不了什么。,"That's what they say, but if they do, we can't do anything.",
+1004,7-9.138,看／瞧你那（X）样,瞧你那*样,,,,看你那伤心样，还以为你这回真的好不到哪里去了。,You look so sad. I think you are really not so good this time.,
+1005,7-9.138,看／瞧你那（X）样,看你那*样,,,,瞧你那样，还挺得意。,You're proud of that.,
+1006,7-9.139,看在X的面子上,看在*的面子上,,,,我是看在她的面子上才答应的。,I agreed just because of her face.,
+1007,7-9.139,看在X的面子上,看在*的份,,,,三位客人看在老人的面子上又坐下了。,The three guests sat down again in the face of the old man.,
+1008,7-9.140,哪有X这么Y的／有X这样Y的吗,哪有_这么*的,,,,哪有你这么过分的？ 好处全让你给占了。,How can you go so far? You've got all the benefits.,
+1009,7-9.140,哪有X这么Y的／有X这样Y的吗,有这样*的吗,,,,哪有你这么直接的？ 给他留点儿面子呀。,How can you be so direct? Save him some face.,
+1010,7-9.140,哪有X这么Y的／有X这样Y的吗,有_这么*的吗,,,,有他这样做人的吗？ 总是在背后说人家坏话。,Is there a man like him? Always speak ill of others behind their backs.,
+1011,7-9.141,什么X的Y的,什么_的_的,,,,什么你的我的，都是大家的。,What's yours and mine? It's everybody's.,
+1012,7-9.141,什么X的Y的,什么_的_的,,,,什么好的坏的，我们买的都是一样的。,"What's good and what's bad, we buy the same.",
+1013,7-9.142,说到／想到哪儿去了,说到哪儿去了,,,,你看你，说到哪儿去了，我说的是买蛋糕的问题。,"You see, where are you? I'm talking about buying cakes.",
+1014,7-9.142,说到／想到哪儿去了,想到哪儿去了,,,,你想到哪儿去了！ 我肯定不会跟别人说的。,Where do you want to go! I won't tell anyone.,
+1015,7-9.143,无所谓X不X,无所谓_不_,,,,无所谓好看不好看，我满意就行。,It doesn't matter whether it looks good or not. I'm satisfied with it.,
+1016,7-9.143,无所谓X不X,无所谓_不_,,,,无所谓贵不贵，质量好就可以。,"It doesn't matter whether it's expensive or not, just good quality.",
+1017,7-9.144,"要X有／没X , 要Y有／没Y",要钱有钱,,,,她要成绩有成绩，要形象有形象。,She wants achievements and image.,
+1018,7-9.144,"要X有／没X , 要Y有／没Y",要钱没钱,,,,他要学历没学历，要胆子没胆子。,"If he wants a degree, he needs courage.",
