@@ -494,7 +494,7 @@ export default {
                     params: { topic: key, level: "all" },
                     title,
                     show: true,
-                    icon: "fa fa-grid-2",
+                    icon: "fa-solid fa-films",
                   };
                 }),
                 ...Object.keys(this.levels).map((key) => {
@@ -504,14 +504,14 @@ export default {
                     params: { topic: "all", level: key },
                     title,
                     show: true,
-                    icon: "fa fa-grid-2",
+                    icon: "fa-solid fa-films",
                   };
                 }),
                 {
                   name: "youtube-browse",
                   title: `Other`,
                   count: this.stats ? this.stats.newVideos : undefined,
-                  icon: "fa fa-grid-2",
+                  icon: "fa-solid fa-films",
                   show: true,
                 },
               ],
