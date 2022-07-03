@@ -1,6 +1,7 @@
 <template>
   <component
-    :is="`${item.href ? 'a' : 'NuxtLink'}`"
+    :is="`${item.href ? 'a' : level === 2 && item.children ? 'b-button' : 'NuxtLink'}`"
+    variant="ghost-dark-no-bg text-left"
     :class="{
       'main-nav-item': mode !== 'large-icon' && level === 1,
       'secondary-nav-item': mode !== 'large-icon' && level === 2,
@@ -33,6 +34,7 @@
       <span class="saved-words-count" v-cloak v-if="badge">
         {{ badge }}
       </span>
+      <i class="fa-solid fa-caret-down" v-if="level === 2 && item.children"></i>
     </span>
   </component>
 </template>
