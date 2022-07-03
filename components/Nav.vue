@@ -156,7 +156,7 @@ feature-card-name-${child.name}`"
 <script>
 import { Capacitor } from "@capacitor/core";
 import { mapState } from "vuex";
-import { topics as TOPICS } from "@/lib/utils/language-levels";
+import { topics as TOPICS, languageLevels } from "@/lib/utils/language-levels";
 
 export default {
   props: {
@@ -311,6 +311,11 @@ export default {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
     },
+    levels() {
+      if (this.$l2) {
+        return languageLevels(this.$l2)
+      }
+    },
     menu() {
       let items = [
         // {
@@ -402,8 +407,14 @@ export default {
               show: true,
             },
             {
+              name: "live-tv",
+              icon: "fa fa-tv-retro",
+              title: "Live TV",
+              show: this.hasLiveTV,
+            },
+            {
               icon: "fa fa-grid-2",
-              title: `Categories`,
+              title: `Topics`,
               // count: this.stats ? this.stats.allVideos : undefined,
               show: true,
               children: [
@@ -412,12 +423,6 @@ export default {
                   icon: "fas fa-history",
                   title: "My History",
                   show: true,
-                },
-                {
-                  name: "live-tv",
-                  icon: "fa fa-tv-retro",
-                  title: "Live TV",
-                  show: this.hasLiveTV,
                 },
                 {
                   path: this.moviesPath,
@@ -464,6 +469,16 @@ export default {
                   icon: "fa fa-grid-2",
                   show: true,
                 },
+                ...Object.keys(this.levels).map((key) => {
+                  let title = this.levels[key].name;
+                  return {
+                    name: "youtube-browse",
+                    params: { topic: 'all', level: key },
+                    title,
+                    show: true,
+                    icon: "fa fa-grid-2",
+                  };
+                }),
                 {
                   name: "feed",
                   icon: "fas fa-stream",
