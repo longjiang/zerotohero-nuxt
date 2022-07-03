@@ -428,6 +428,13 @@ export default {
               show: true,
               children: [
                 {
+                  name: "all-media",
+                  icon: "fas fa-telescope",
+                  title: `Explore`,
+                  // count: this.stats ? this.stats.allVideos : undefined,
+                  show: true,
+                },
+                {
                   name: "watch-history",
                   icon: "fas fa-history",
                   title: "My History",
@@ -456,7 +463,7 @@ export default {
                 },
                 {
                   name: "talks",
-                  title: `YouTube Channels`,
+                  title: `YouTube`,
                   count: this.stats ? this.stats.newVideos : undefined,
                   icon: "fab fa-youtube",
                   show: true,
@@ -466,6 +473,19 @@ export default {
                   title: "Lesson Expansion",
                   icon: "fa fa-chalkboard-teacher",
                   show: this.l2.code === "zh",
+                },
+                {
+                  name: "feed",
+                  icon: "fas fa-stream",
+                  title: `Feed`,
+                  show: true,
+                },
+                {
+                  name: "discover-shows",
+                  title: "Random",
+                  icon: "fas fa-random",
+                  show: true,
+                  params: { l1: this.l1.code, l2: this.l2.code },
                 },
                 ...Object.keys(TOPICS).map((key) => {
                   let title = TOPICS[key];
@@ -493,19 +513,6 @@ export default {
                   count: this.stats ? this.stats.newVideos : undefined,
                   icon: "fa fa-grid-2",
                   show: true,
-                },
-                {
-                  name: "feed",
-                  icon: "fas fa-stream",
-                  title: `Feed`,
-                  show: true,
-                },
-                {
-                  name: "discover-shows",
-                  title: "Random",
-                  icon: "fas fa-random",
-                  show: true,
-                  params: { l1: this.l1.code, l2: this.l2.code },
                 },
               ],
             },

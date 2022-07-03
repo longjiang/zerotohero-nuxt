@@ -47,27 +47,31 @@
     </component>
     <b-modal
       ref="dropdownMenuModal"
-      size="xl"
+      size="lg"
       centered
       hide-footer
       modal-class="safe-padding-top mt-4"
       body-class="dropdown-menu-modal-wrapper"
       :title="this.item.title"
     >
-      <div
-        v-for="(child, index) in item.children"
-        :key="`dropdown-menu-item-${index}`"
-        class="mb-1"
-      >
-        <router-link
-          :to="
-            child.path ? child.path : { name: child.name, params: child.params }
-          "
-          class="link-unstyled"
+      <div class="row">
+        <div
+          v-for="(child, index) in item.children"
+          :key="`dropdown-menu-item-${index}`"
+          class="mb-1 col-6 col-lg-4"
         >
-          <i :class="`nav-item-icon ${child.icon} mr-1`"></i>
-          {{ child.title }}
-        </router-link>
+          <router-link
+            :to="
+              child.path
+                ? child.path
+                : { name: child.name, params: child.params }
+            "
+            class="link-unstyled dropdown-nav-child"
+          >
+            <i :class="`nav-item-icon ${child.icon} mr-1`"></i>
+            {{ child.title }}
+          </router-link>
+        </div>
       </div>
     </b-modal>
   </span>
