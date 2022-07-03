@@ -837,7 +837,7 @@ export default {
         {
           icon: "fas fa-briefcase",
           title: "JW",
-          show: this.userIsAdmin,
+          show: this.userIsAdmin && this.$adminMode,
           children: [
             // {
             //   name: "jw-video",
