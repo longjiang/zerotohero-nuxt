@@ -22,7 +22,6 @@
     </div>
     <div class="container">
       <Courses />
-      <FeedbackPrompt class="mt-5" :skin="$route.meta ? $route.meta.skin : 'light'"/>
       <h3 class="pb-5 pt-5 text-center">Follow Us</h3>
       <div class="row">
         <div class="col-md-6 col-lg-4 mb-5">
@@ -251,9 +250,6 @@
             learning community.
           </p>
           
-        </div>
-        <div class="col-sm-12">
-          <FeedbackPrompt class="mt-5" :skin="$route.meta ? $route.meta.skin : 'light'"/>
         </div>
       </div>
     </div>

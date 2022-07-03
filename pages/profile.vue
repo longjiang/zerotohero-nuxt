@@ -123,10 +123,6 @@
                   </div>
                 </div>
               </div>
-              <FeedbackPrompt
-                class="mt-5 mb-4"
-                :skin="$route.meta ? $route.meta.skin : 'light'"
-              />
             </div>
           </div>
         </template>

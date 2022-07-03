@@ -9,7 +9,6 @@
     <div class="container pt-3 pb-5">
       <div class="row">
         <div class="col-sm-12">
-          <FeedbackPrompt :skin="$route.meta ? $route.meta.skin : 'light'"/>
           <h3 class="mb-5 text-center">{{ $l2.name }} Minimal Pairs</h3>
           <p class="text-center mb-3">Enter two distinct phonetic segments:</p>
           <div style="max-width: 20rem; margin: 0 auto">

@@ -151,10 +151,6 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12 text-center">
-          <FeedbackPrompt
-            class="mt-3"
-            :skin="$route.meta ? $route.meta.skin : 'light'"
-          />
         </div>
       </div>
     </div>

@@ -103,7 +103,6 @@
           :cloakVideosWithoutSubs="!$adminMode"
         />
       </div>
-      <!-- <FeedbackPrompt class="mt-5 mb-4" :skin="$route.meta ? $route.meta.skin : 'light'"/> -->
       <div v-if="term && term !== ''">
         <client-only>
           <Nav

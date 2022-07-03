@@ -77,11 +77,6 @@
                       <b>{{ $n(dictionarySize) }} words</b>
                     </li>
                   </ul>
-
-                  <FeedbackPrompt
-                    class="mt-5"
-                    :skin="$route.meta ? $route.meta.skin : 'light'"
-                  />
                 </div>
               </div>
             </div>
@@ -197,10 +192,6 @@
               class="focus-exclude mb-2"
               style="margin-top: 10rem"
               :key="`${entry.id}-course-ad`"
-            />
-            <FeedbackPrompt
-              class="mb-5"
-              :skin="$route.meta ? $route.meta.skin : 'light'"
             />
           </div>
         </div>

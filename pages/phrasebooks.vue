@@ -13,11 +13,6 @@
           <div class="col-sm-12">
             <!-- <Sale class="mt-5 mb-5" v-if="$l2.code === 'zh'" /> -->
 
-            <FeedbackPrompt
-              class="mt-5"
-              :skin="$route.meta ? $route.meta.skin : 'light'"
-            />
-
             <div class="mb-5">
               <div
                 :class="{

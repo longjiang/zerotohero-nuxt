@@ -48,7 +48,6 @@
               <a href="/files/grammar.xlsx" download>Microsoft Excel file</a>.
             </p>
           </div>
-          <FeedbackPrompt class="mb-5" :skin="$route.meta ? $route.meta.skin : 'light'"/>
         </div>
           
       </div>

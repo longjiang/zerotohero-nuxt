@@ -31,7 +31,6 @@
         </div>
         <div class="row pt-3">
           <div class="col-sm-12">
-            <!-- <FeedbackPrompt /> -->
             <!-- <Logo class="mt-4 mb-3" /> -->
             <p class="blurb text-white text-center">
               {{ translate("Learn languages with videos.", browserLanguage) }}
