@@ -41,8 +41,25 @@
         <i class="fa-solid fa-caret-down" v-if="isDropdown"></i>
       </span>
     </component>
-    <b-modal ref="dropdownMenuModal" title="BootstrapVue">
-      <p class="my-4">Hello from modal!</p>
+    <b-modal
+      ref="dropdownMenuModal"
+      size="xl"
+      centered
+      hide-footer
+      modal-class="safe-padding-top mt-4"
+      body-class="dropdown-menu-modal-wrapper"
+      :title="this.item.title"
+    >
+      <div
+        v-for="(child, index) in item.children"
+        :key="`dropdown-menu-item-${index}`"
+        class="mb-1"
+      >
+        <router-link :to="{name: child.name}" class="link-unstyled">
+          <i :class="`nav-item-icon ${child.icon} mr-1`"></i>
+          {{ child.title }}
+        </router-link>
+      </div>
     </b-modal>
   </span>
 </template>
@@ -108,13 +125,16 @@ export default {
 </script>
 
 <style lang="scss">
+.nav-item-icon {
+  width: 1.25rem;
+  text-align: center;
+}
+
 .main-nav-item,
 .secondary-nav-item {
   cursor: pointer;
 }
 
-.nav-item-wrapper {
-}
 
 .secondary-nav-item {
   padding-bottom: 0.5rem;
