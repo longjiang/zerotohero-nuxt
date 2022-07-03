@@ -1,7 +1,7 @@
 <template>
   <div class="media-search-results">
     <div class="row">
-      <div class="col-sm-12 mb-4">
+      <div class="col-sm-12">
         <client-only>
           <div v-if="showSearchBar">
             <div
@@ -83,14 +83,13 @@
           <Loader :sticky="true" message="Loading videos in our library..." />
         </div>
         <div v-observe-visibility="visibilityChanged"></div>
-        <div
+        <!-- <div
           :class="{
             'no-videos-message': true,
           }"
           v-if="showNoVideosMessage && videos && videos.length === 0"
         >
-          No videos matching the filter criteria.
-          <!-- <h5 v-if="!keyword && videos && videos.length === 0">
+          <h5 v-if="!keyword && videos && videos.length === 0">
             Oh no, we don't have any new {{ $l2.name }} videos. We need your
             help to expand our library!
           </h5>

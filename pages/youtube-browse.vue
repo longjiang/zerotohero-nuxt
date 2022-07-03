@@ -33,6 +33,17 @@
         :showSearchBar="false"
         @videosLoaded="onVideosLoaded"
       />
+      <MediaSearchResults :keyword="topic" v-if="topic !== 'all'" />
+      <YouTubeSearchResults
+        :term="topic"
+        :infinite="true"
+        :showProgress="false"
+        skin="dark"
+        ref="youtubeSearchResults"
+        :showBadges="false"
+        :cloakVideosWithoutSubs="!$adminMode"
+        v-if="topic !== 'all'"
+      />
       <div class="row"></div>
     </div>
   </div>

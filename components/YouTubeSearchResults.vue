@@ -13,7 +13,7 @@
       :checkSaved="checkSaved"
       :hideVideosWithoutSubsProp="hideVideosWithoutSubs"
       :cloakVideosWithoutSubs="cloakVideosWithoutSubs"
-      :showBadges="true"
+      :showBadges="showBadges"
       :showProgress="false"
       :skin="skin"
     />
@@ -94,6 +94,9 @@ export default {
     },
     cloakVideosWithoutSubs: {
       default: "true"
+    },
+    showBadges: {
+      default: true,
     }
   },
   data() {

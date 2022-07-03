@@ -453,6 +453,12 @@ export default {
                   icon: "fab fa-youtube",
                   show: true,
                 },
+                {
+                  name: "lesson-videos",
+                  title: "Lesson Expansion",
+                  icon: "fa fa-chalkboard-teacher",
+                  show: this.l2.code === "zh",
+                },
                 ...Object.keys(TOPICS).map((key) => {
                   let title = TOPICS[key];
                   return {
@@ -480,12 +486,6 @@ export default {
                     icon: "fa fa-grid-2",
                   };
                 }),
-                {
-                  name: "lesson-videos",
-                  title: "Lesson Expansion",
-                  icon: "fa fa-chalkboard-teacher",
-                  show: this.l2.code === "zh",
-                },
                 {
                   name: "feed",
                   icon: "fas fa-stream",
