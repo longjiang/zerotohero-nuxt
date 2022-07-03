@@ -55,7 +55,7 @@
         :key="`dropdown-menu-item-${index}`"
         class="mb-1"
       >
-        <router-link :to="{name: child.name}" class="link-unstyled">
+        <router-link :to="child.path ? child.path : {name: child.name}" class="link-unstyled">
           <i :class="`nav-item-icon ${child.icon} mr-1`"></i>
           {{ child.title }}
         </router-link>
@@ -116,6 +116,11 @@ export default {
       return this.level === 2 && this.item.children;
     },
   },
+  watch: {
+    $route() {
+      this.$refs['dropdownMenuModal'].hide()
+    }
+  },
   methods: {
     showModal() {
       this.$refs["dropdownMenuModal"].show();
@@ -157,7 +162,7 @@ export default {
     }
   }
 
-  a.secondary-nav-item {
+  .secondary-nav-item a {
     color: #444;
   }
 }

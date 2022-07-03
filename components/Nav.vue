@@ -293,25 +293,7 @@ export default {
       );
     },
     currentParent() {
-      let parent = this.menu.find((item) => {
-        if (item.name === "index") return false;
-        let nameOfItemOrFirstChild = this.nameOfSelfOrFirstChild(item, true);
-        if (
-          nameOfItemOrFirstChild &&
-          this.$route.name === nameOfItemOrFirstChild
-        )
-          return true;
-        let href = this.$router.resolve({
-          name: nameOfItemOrFirstChild,
-        }).href;
-        if (nameOfItemOrFirstChild && this.$route.path.includes(href))
-          return true;
-        if (item.children) {
-          let childrenNames = item.children.map((child) => child.name);
-          if (childrenNames.includes(this.$route.name)) return true;
-        }
-      });
-      return parent;
+      return this.findParent(this.$route.name)
     },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
@@ -1112,6 +1094,33 @@ export default {
     },
   },
   methods: {
+    findParent(name) {
+      let parent = this.menu.find((item) => {
+        if (item.name === "index") return false;
+        let nameOfItemOrFirstChild = this.nameOfSelfOrFirstChild(item, true);
+        if (
+          nameOfItemOrFirstChild &&
+          name === nameOfItemOrFirstChild
+        )
+          return true;
+        let href = this.$router.resolve({
+          name: nameOfItemOrFirstChild,
+        }).href;
+        if (nameOfItemOrFirstChild && this.$route.path.includes(href))
+          return true;
+        if (item.children) {
+          for (let child of item.children) {
+            if (child.name === name) return true;
+            if (child.children) {
+              for (let grandchild of child.children) {
+                if (grandchild.name === name) return true
+              }
+            }
+          }          
+        }
+      });
+      return parent;
+    },
     /* When the user scrolls down, hide the navbar. When the user scrolls up, show the navbar */
     /* https://www.w3schools.com/howto/howto_js_navbar_hide_scroll.asp */
     bindAutoHideBottomBarEvent() {
