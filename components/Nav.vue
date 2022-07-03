@@ -43,6 +43,7 @@
                 (item) => item.show && to(item)
               )"
             >
+              <!-- main nav items -->
               <NavItem
                 :to="to(item)"
                 :item="item"
@@ -85,26 +86,33 @@
           v-if="showSecondaryNav && currentParent && currentParent.children"
           class="secondary-nav"
         >
-          <NavItem
+          <!-- secondary nav items -->
+
+          <router-link
+            :to="last(child) || child"
             v-for="(child, index) in currentParent.children.filter(
               (child) => child.show
             )"
             :key="`subnav-item-${child.name || child.href}-${index}`"
-            :mode="mode"
-            :to="last(child) || child"
-            :item="child"
-            :level="2"
-            :showIcon="variant === 'sidebar'"
-            :active="$route && $route.name === child.name"
-            :badge="
-              child.name === 'saved-words' && savedWordsCount > 0
-                ? savedWordsCount
-                : child.name === 'saved-phrases' && savedPhrasesCount > 0
-                ? savedPhrasesCount
-                : undefined
-            "
-            :href="child.href"
-          />
+            v-slot="{ href, route, navigate, isActive, isExactActive }"
+          >
+            <NavItem
+              :mode="mode"
+              :to="route.path"
+              :item="child"
+              :level="2"
+              :showIcon="variant === 'sidebar'"
+              :active="isExactActive"
+              :badge="
+                child.name === 'saved-words' && savedWordsCount > 0
+                  ? savedWordsCount
+                  : child.name === 'saved-phrases' && savedPhrasesCount > 0
+                  ? savedPhrasesCount
+                  : undefined
+              "
+              :href="child.href"
+            />
+          </router-link>
         </nav>
       </template>
       <template v-if="variant === 'page'">
