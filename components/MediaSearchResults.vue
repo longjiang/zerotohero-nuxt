@@ -87,9 +87,10 @@
           :class="{
             'no-videos-message': true,
           }"
-          v-if="showNoVideosMessage"
+          v-if="showNoVideosMessage && videos && videos.length === 0"
         >
-          <h5 v-if="!keyword && videos && videos.length === 0">
+          No videos matching the filter criteria.
+          <!-- <h5 v-if="!keyword && videos && videos.length === 0">
             Oh no, we don't have any new {{ $l2.name }} videos. We need your
             help to expand our library!
           </h5>
@@ -97,7 +98,7 @@
             No search results matching your keywords. Help us add some!
           </h5>
           <h5 v-else>Help us expand our library!</h5>
-          <LazyHowToContribute />
+          <LazyHowToContribute /> -->
         </div>
       </div>
     </div>
