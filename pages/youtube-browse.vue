@@ -28,7 +28,7 @@
         :start="start"
         :showLatestIfKeywordMissing="true"
         :showNoVideosMessage="true"
-        :showSearchBar="true"
+        :showSearchBar="false"
         @videosLoaded="onVideosLoaded"
       />
       <div class="row"></div>

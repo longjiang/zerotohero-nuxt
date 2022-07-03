@@ -55,7 +55,7 @@
         :key="`dropdown-menu-item-${index}`"
         class="mb-1"
       >
-        <router-link :to="child.path ? child.path : {name: child.name}" class="link-unstyled">
+        <router-link :to="child.path ? child.path : {name: child.name, params: child.params}" class="link-unstyled">
           <i :class="`nav-item-icon ${child.icon} mr-1`"></i>
           {{ child.title }}
         </router-link>

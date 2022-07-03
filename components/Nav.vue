@@ -94,7 +94,7 @@
             :to="last(child) || child"
             :item="child"
             :level="2"
-            :showIcon="true"
+            :showIcon="variant === 'sidebar'"
             :active="$route && $route.name === child.name"
             :badge="
               child.name === 'saved-words' && savedWordsCount > 0
@@ -155,7 +155,8 @@ feature-card-name-${child.name}`"
 
 <script>
 import { Capacitor } from "@capacitor/core";
-import { mapState } from 'vuex';
+import { mapState } from "vuex";
+import { topics as TOPICS } from "@/lib/utils/language-levels";
 
 export default {
   props: {
@@ -265,7 +266,10 @@ export default {
   computed: {
     ...mapState("fullHistory", ["fullHistory"]),
     fullHistoryPathsByL1L2() {
-      return this.$store.getters['fullHistory/fullHistoryPathsByL1L2']({l1: this.l1, l2: this.l2})
+      return this.$store.getters["fullHistory/fullHistoryPathsByL1L2"]({
+        l1: this.l1,
+        l2: this.l2,
+      });
     },
     userIsAdmin() {
       return this.$auth.user && this.$auth.user.role == 1;
@@ -293,7 +297,7 @@ export default {
       );
     },
     currentParent() {
-      return this.findParent(this.$route.name)
+      return this.findParent(this.$route.name);
     },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
@@ -377,13 +381,6 @@ export default {
               show: false,
             },
             {
-              path: this.moviesPath,
-              icon: "fa fa-film",
-              title: `Movies`,
-              // count: this.stats ? this.stats.movies : undefined,
-              show: this.moviesPath,
-            },
-            {
               name: "tv-shows",
               icon: "fa fa-tv",
               title: `TV Shows`,
@@ -395,7 +392,14 @@ export default {
               icon: "fa fa-music",
               title: `Music`,
               // count: this.stats ? this.stats.music : undefined,
-              show: true
+              show: true,
+            },
+            {
+              path: this.musicPath,
+              icon: "fas fa-baby",
+              title: `Kids`,
+              // count: this.stats ? this.stats.music : undefined,
+              show: true,
             },
             {
               icon: "fa fa-grid-2",
@@ -416,6 +420,13 @@ export default {
                   show: this.hasLiveTV,
                 },
                 {
+                  path: this.moviesPath,
+                  icon: "fa fa-film",
+                  title: `Movies`,
+                  // count: this.stats ? this.stats.movies : undefined,
+                  show: this.moviesPath,
+                },
+                {
                   path: this.newsPath,
                   icon: "fa fa-newspaper",
                   title: `News`,
@@ -431,9 +442,26 @@ export default {
                 },
                 {
                   name: "youtube-browse",
-                  title: `Uncategorized`,
+                  title: `YouTube Channels`,
                   count: this.stats ? this.stats.newVideos : undefined,
-                  icon: "fa fa-play",
+                  icon: "fab fa-youtube",
+                  show: true,
+                },
+                ...Object.keys(TOPICS).map((key) => {
+                  let title = TOPICS[key];
+                  return {
+                    name: "youtube-browse",
+                    params: { topic: key, level: 'all' },
+                    title,
+                    show: true,
+                    icon: "fa fa-grid-2",
+                  };
+                }),
+                {
+                  name: "youtube-browse",
+                  title: `Other`,
+                  count: this.stats ? this.stats.newVideos : undefined,
+                  icon: "fa fa-grid-2",
                   show: true,
                 },
                 {
@@ -449,7 +477,7 @@ export default {
                   show: true,
                   params: { l1: this.l1.code, l2: this.l2.code },
                 },
-              ]
+              ],
             },
             // {
             //   name: "talks",
@@ -1098,10 +1126,7 @@ export default {
       let parent = this.menu.find((item) => {
         if (item.name === "index") return false;
         let nameOfItemOrFirstChild = this.nameOfSelfOrFirstChild(item, true);
-        if (
-          nameOfItemOrFirstChild &&
-          name === nameOfItemOrFirstChild
-        )
+        if (nameOfItemOrFirstChild && name === nameOfItemOrFirstChild)
           return true;
         let href = this.$router.resolve({
           name: nameOfItemOrFirstChild,
@@ -1113,10 +1138,10 @@ export default {
             if (child.name === name) return true;
             if (child.children) {
               for (let grandchild of child.children) {
-                if (grandchild.name === name) return true
+                if (grandchild.name === name) return true;
               }
             }
-          }          
+          }
         }
       });
       return parent;
