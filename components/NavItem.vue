@@ -31,7 +31,11 @@
       </div>
       <i v-else-if="showIcon" :class="`nav-item-icon mr-1 ${item.icon}`"></i>
       <span class="nav-item-title">
-        {{ $t(item.title, { l2: $t($l2.name) }) }}
+        {{
+          $t(isDropdown ? selfOrCurrentChild.title : item.title, {
+            l2: $t($l2.name),
+          })
+        }}
         <span class="nav-item-count" v-cloak v-if="item.count">
           {{ $n(item.count) }}
         </span>
@@ -55,7 +59,12 @@
         :key="`dropdown-menu-item-${index}`"
         class="mb-1"
       >
-        <router-link :to="child.path ? child.path : {name: child.name, params: child.params}" class="link-unstyled">
+        <router-link
+          :to="
+            child.path ? child.path : { name: child.name, params: child.params }
+          "
+          class="link-unstyled"
+        >
           <i :class="`nav-item-icon ${child.icon} mr-1`"></i>
           {{ child.title }}
         </router-link>
@@ -115,11 +124,32 @@ export default {
     isDropdown() {
       return this.level === 2 && this.item.children;
     },
+    selfOrCurrentChild() {
+      let item = this.item
+      if (item.children) {
+        let currentChild = item.children.find((c) => {
+            if (c.path) return this.$route.path.includes(c.path)
+          if (c.name === this.$route.name) {
+            
+            if (c.params) {
+              for (let key in c.params) {
+                if (this.$route.params?.[key] != c.params[key]) {
+                  return false
+                }
+              }
+              return true
+            }
+            else return true
+          }
+        });
+        return currentChild ? currentChild : item
+      }
+    },
   },
   watch: {
     $route() {
-      this.$refs['dropdownMenuModal'].hide()
-    }
+      this.$refs["dropdownMenuModal"].hide();
+    },
   },
   methods: {
     showModal() {
@@ -139,7 +169,6 @@ export default {
 .secondary-nav-item {
   cursor: pointer;
 }
-
 
 .secondary-nav-item {
   padding-bottom: 0.5rem;

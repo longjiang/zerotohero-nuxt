@@ -446,7 +446,7 @@ export default {
                   show: this.audioBooksCount,
                 },
                 {
-                  name: "youtube-browse",
+                  name: "talks",
                   title: `YouTube Channels`,
                   count: this.stats ? this.stats.newVideos : undefined,
                   icon: "fab fa-youtube",
@@ -480,6 +480,12 @@ export default {
                   };
                 }),
                 {
+                  name: "lesson-videos",
+                  title: "Lesson Expansion",
+                  icon: "fa fa-chalkboard-teacher",
+                  show: this.l2.code === "zh",
+                },
+                {
                   name: "feed",
                   icon: "fas fa-stream",
                   title: `Feed`,
@@ -506,12 +512,6 @@ export default {
             //   title: `Search`,
             //   icon: "fas fa-search",
             //   show: true,
-            // },
-            // {
-            //   name: "lesson-videos",
-            //   title: "Lesson Expansion",
-            //   icon: "fa fa-chalkboard-teacher",
-            //   show: this.l2.code === "zh",
             // },
             {
               name: "show",
