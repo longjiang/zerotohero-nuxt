@@ -1,12 +1,12 @@
 <template>
-  <div class="main-dark">
+  <div>
     <VideoHero
       v-if="featureEpisode"
       :video="featureEpisode"
       @videoUnavailable="onVideoUnavailable"
     />
-    <div class="shows">
-      <div class="container">
+    <div>
+      <div>
         <SocialHead
           v-if="shows && shows[0]"
           :title="`Learn ${$l2.name} with ${routeTitles[routeType]} | ${$l2.name} Zero to Hero`"
@@ -17,7 +17,7 @@
               : `https://img.youtube.com/vi/${shows[0].youtube_id}/hqdefault.jpg`
           "
         />
-        <div class="row">
+        <div class="row" v-if="showFilter">
           <div class="col-sm-12">
             <b-input-group class="mb-3 mt-3 input-group-ghost-dark">
               <b-form-input
@@ -32,7 +32,7 @@
             </b-input-group>
           </div>
         </div>
-        <div class="row mb-3">
+        <div class="row mb-3" v-if="showFilter">
           <div class="col-sm-12">
             <div class="tags mb-3" v-if="tags">
               <b
@@ -126,58 +126,53 @@
           <div class="col-sm-12">
             <!-- <Sale class="mt-5 mb-5" v-if="$l2.code === 'zh'" /> -->
             <div class="show-list-wrapper">
-              <div class="mb-5">
-                <div
-                  :class="{
-                    'loader text-center': true,
-                    'd-none': shows,
-                  }"
-                  style="flex: 1"
-                >
-                  <Loader :sticky="true" message="Getting shows..." />
-                </div>
-                <div class="text-center" v-if="shows && shows.length === 0">
-                  Sorry, we could not find any
-                  {{ routeTitles[routeType] }}
-                  in {{ $l2.name }}.
-                </div>
-                <ShowList
-                  v-if="shows && shows.length > 0"
-                  :shows="filteredShows"
-                  :type="type"
-                  :key="`shows-filtered-${this.keyword}`"
-                />
-                <div v-if="keyword && filteredShows && filteredShows.length === 0">
-                  <MediaSearchResults :keyword="keyword" />
-                  <YouTubeSearchResults
-                    :term="keyword"
-                    :start="start"
-                    :captions="captions"
-                    :key="searchResultKey"
-                    :long="long"
-                    :infinite="true"
-                    :showProgress="false"
-                    skin="dark"
-                    ref="youtubeSearchResults"
-                    :cloakVideosWithoutSubs="!$adminMode"
-                  />
-                </div>
-                <LazyIdenticalLanguages class="mt-3" :routeName="routeType" />
+              <div
+                :class="{
+                  'loader text-center': true,
+                  'd-none': shows,
+                }"
+                style="flex: 1"
+              >
+                <Loader :sticky="true" message="Getting shows..." />
               </div>
+              <div class="text-center" v-if="shows && shows.length === 0">
+                Sorry, we could not find any
+                {{ routeTitles[routeType] }}
+                in {{ $l2.name }}.
+              </div>
+              <ShowList
+                v-if="shows && shows.length > 0"
+                :shows="filteredShows"
+                :type="type"
+                :key="`shows-filtered-${this.keyword}`"
+              />
+              <div
+                v-if="keyword && filteredShows && filteredShows.length === 0"
+              >
+                <MediaSearchResults :keyword="keyword" />
+                <YouTubeSearchResults
+                  :term="keyword"
+                  :start="start"
+                  :captions="captions"
+                  :key="searchResultKey"
+                  :long="long"
+                  :infinite="true"
+                  :showProgress="false"
+                  skin="dark"
+                  ref="youtubeSearchResults"
+                  :cloakVideosWithoutSubs="!$adminMode"
+                />
+              </div>
+              <LazyIdenticalLanguages class="mt-3" :routeName="routeType" />
             </div>
           </div>
         </div>
-        <FeedbackPrompt
-          class="mb-5"
-          :skin="$route.meta ? $route.meta.skin : 'light'"
-        />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import Config from "@/lib/config";
 import { tify } from "chinese-conv";
 import { scrollToTargetAdjusted } from "@/lib/utils";
 import { unique } from "@/lib/utils";
@@ -188,6 +183,10 @@ export default {
     routeType: String, // "tv-shows" or "talks"
     tag: String,
     level: String,
+    showFilter: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {

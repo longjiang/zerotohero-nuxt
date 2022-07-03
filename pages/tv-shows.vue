@@ -8,7 +8,7 @@
   }
 </router>
 <template>
-  <div class="tv-shows">
+  <div class="tv-shows container">
     <Shows routeType="tv-shows" :tag="tag" :level="level" />
   </div>
 </template>

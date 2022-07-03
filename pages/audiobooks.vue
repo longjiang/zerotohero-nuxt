@@ -8,7 +8,7 @@
   }
 </router>
 <template>
-  <div class="audiobooks">
+  <div class="audiobooks container">
     <Shows routeType="audiobooks" :tag="tag" :level="level" />
   </div>
 </template>

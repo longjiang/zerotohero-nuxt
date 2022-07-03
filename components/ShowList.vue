@@ -93,7 +93,6 @@
 <script>
 import { ContainerQuery } from "vue-container-query";
 import { languageLevels } from "@/lib/utils";
-import Config from "@/lib/config";
 import Vue from "vue";
 
 export default {

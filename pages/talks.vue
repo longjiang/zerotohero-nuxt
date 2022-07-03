@@ -8,7 +8,7 @@
   }
 </router>
 <template>
-  <div class="talks">
+  <div class="talks container">
     <Shows routeType="talks" :tag="tag" :level="level" />
   </div>
 </template>

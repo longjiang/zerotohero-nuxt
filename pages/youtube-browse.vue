@@ -14,13 +14,15 @@
       :video="heroVideo"
       @videoUnavailable="onVideoUnavailable"
     />
-    <div class="youtube-browse container pb-5">
+    <div class="youtube-browse container pt-4 pb-5">
       <SocialHead
         :title="`Study ${$l2.name} videos with subs | ${$l2.name} Zero to Hero`"
         :description="`Watch ${$l2.name} videos and study the ${
           $l2.code === 'zh' ? 'Pinyin' : $l2.name
         } subtitles.`"
       />
+      <Shows routeType="tv-shows" :tag="topic" :level="level" :showFilter="false" />
+      <Shows routeType="talks" :tag="topic" :level="level" :showFilter="false" />
       <MediaSearchResults
         :topic="topic"
         :level="level"
