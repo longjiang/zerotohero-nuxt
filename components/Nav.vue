@@ -477,13 +477,6 @@ export default {
                     icon: "fa fa-grid-2",
                   };
                 }),
-                {
-                  name: "youtube-browse",
-                  title: `Other`,
-                  count: this.stats ? this.stats.newVideos : undefined,
-                  icon: "fa fa-grid-2",
-                  show: true,
-                },
                 ...Object.keys(this.levels).map((key) => {
                   let title = this.levels[key].name;
                   return {
@@ -494,6 +487,13 @@ export default {
                     icon: "fa fa-grid-2",
                   };
                 }),
+                {
+                  name: "youtube-browse",
+                  title: `Other`,
+                  count: this.stats ? this.stats.newVideos : undefined,
+                  icon: "fa fa-grid-2",
+                  show: true,
+                },
                 {
                   name: "feed",
                   icon: "fas fa-stream",
