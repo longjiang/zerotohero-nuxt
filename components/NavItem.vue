@@ -1,42 +1,50 @@
 <template>
-  <component
-    :is="`${item.href ? 'a' : level === 2 && item.children ? 'b-button' : 'NuxtLink'}`"
-    variant="ghost-dark-no-bg text-left"
+  <span
     :class="{
       'main-nav-item': mode !== 'large-icon' && level === 1,
       'secondary-nav-item': mode !== 'large-icon' && level === 2,
       'nav-item-pill': mode === 'pill',
       'nav-item-small-icon': mode === 'small-icon',
-      'nav-item-large-icon nav-item-large-icon-dark link-unstyled':
-        mode === 'large-icon',
+      'nav-item-large-icon nav-item-large-icon-dark': mode === 'large-icon',
       'nav-item-active': active,
     }"
-    :href="item.href"
-    :to="to"
-    :title="item.title"
-    :target="item.href ? '_blank' : undefined"
   >
-    <div
-      v-if="['large-icon', 'small-icon'].includes(mode)"
-      class="icon-wrapper"
+    <component
+      :is="`${item.href ? 'a' : isDropdown ? 'span' : 'NuxtLink'}`"
+      :href="item.href"
+      class="link-unstyled"
+      :to="isDropdown ? undefined : to"
+      :title="item.title"
+      :target="item.href ? '_blank' : undefined"
+      @click="isDropdown ? showModal() : undefined"
     >
-      <i
-        v-if="showIcon"
-        :class="`nav-item-icon ${item.icon} ${
-          mode === 'large-icon' ? gradientClasses : ''
-        }`"
-      ></i>
-    </div>
-    <i v-else-if="showIcon" :class="`nav-item-icon mr-1 ${item.icon}`"></i>
-    <span class="nav-item-title">
-      {{ $t(item.title, { l2: $t($l2.name) }) }}
-      <span class="nav-item-count" v-cloak v-if="item.count">{{ $n(item.count) }}</span>
-      <span class="saved-words-count" v-cloak v-if="badge">
-        {{ badge }}
+      <div
+        v-if="['large-icon', 'small-icon'].includes(mode)"
+        class="icon-wrapper"
+      >
+        <i
+          v-if="showIcon"
+          :class="`nav-item-icon ${item.icon} ${
+            mode === 'large-icon' ? gradientClasses : ''
+          }`"
+        ></i>
+      </div>
+      <i v-else-if="showIcon" :class="`nav-item-icon mr-1 ${item.icon}`"></i>
+      <span class="nav-item-title">
+        {{ $t(item.title, { l2: $t($l2.name) }) }}
+        <span class="nav-item-count" v-cloak v-if="item.count">
+          {{ $n(item.count) }}
+        </span>
+        <span class="saved-words-count" v-cloak v-if="badge">
+          {{ badge }}
+        </span>
+        <i class="fa-solid fa-caret-down" v-if="isDropdown"></i>
       </span>
-      <i class="fa-solid fa-caret-down" v-if="level === 2 && item.children"></i>
-    </span>
-  </component>
+    </component>
+    <b-modal ref="dropdownMenuModal" title="BootstrapVue">
+      <p class="my-4">Hello from modal!</p>
+    </b-modal>
+  </span>
 </template>
 
 <script>
@@ -87,6 +95,14 @@ export default {
         .split("")
         .pop()} gradient-text`;
     },
+    isDropdown() {
+      return this.level === 2 && this.item.children;
+    },
+  },
+  methods: {
+    showModal() {
+      this.$refs["dropdownMenuModal"].show();
+    },
   },
 };
 </script>
@@ -95,6 +111,9 @@ export default {
 .main-nav-item,
 .secondary-nav-item {
   cursor: pointer;
+}
+
+.nav-item-wrapper {
 }
 
 .secondary-nav-item {
@@ -187,10 +206,10 @@ export default {
   color: #888;
   font-weight: bold;
   &::before {
-    content: '(';
+    content: "(";
   }
   &::after {
-    content: ')';
+    content: ")";
   }
   // background: #53545f;
   // padding: 0.1rem 0.2rem;
