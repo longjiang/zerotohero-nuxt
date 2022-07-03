@@ -102,7 +102,7 @@
               :item="child"
               :level="2"
               :showIcon="variant === 'sidebar'"
-              :active="isExactActive"
+              :active="isExactActive && $route.name !== 'all-media'"
               :badge="
                 child.name === 'saved-words' && savedWordsCount > 0
                   ? savedWordsCount
@@ -384,7 +384,7 @@ export default {
         {
           icon: "fas fa-photo-video",
           title: "Media",
-          show: this.hasFeature("youtube"),
+          show: true,
           children: [
             {
               name: "all-media",
@@ -398,14 +398,14 @@ export default {
               icon: "fa fa-tv",
               title: `TV Shows`,
               // count: this.tvShowsCount,
-              show: true,
+              show: this.tvShowsCount,
             },
             {
               path: this.musicPath,
               icon: "fa fa-music",
               title: `Music`,
               // count: this.stats ? this.stats.music : undefined,
-              show: true,
+              show: this.musicPath,
             },
             {
               name: "youtube-browse",
@@ -432,7 +432,7 @@ export default {
                   icon: "fas fa-telescope",
                   title: `Explore`,
                   // count: this.stats ? this.stats.allVideos : undefined,
-                  show: true,
+                  show: this.$route.name !== 'all-media',
                 },
                 {
                   name: "watch-history",
@@ -466,7 +466,7 @@ export default {
                   title: `YouTube`,
                   count: this.stats ? this.stats.newVideos : undefined,
                   icon: "fab fa-youtube",
-                  show: true,
+                  show: this.talksCount,
                 },
                 {
                   name: "lesson-videos",

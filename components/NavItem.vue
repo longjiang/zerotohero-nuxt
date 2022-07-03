@@ -53,10 +53,11 @@
       modal-class="safe-padding-top mt-4"
       body-class="dropdown-menu-modal-wrapper"
       :title="this.item.title"
+      v-if="isDropdown"
     >
       <div class="row">
         <div
-          v-for="(child, index) in item.children"
+          v-for="(child, index) in item.children.filter(c => c.show)"
           :key="`dropdown-menu-item-${index}`"
           class="mb-1 col-6 col-lg-4"
         >
@@ -132,6 +133,7 @@ export default {
       let item = this.item;
       if (item.children) {
         let currentChild = item.children.find((c) => {
+          if (!c.show) return false
           if (c.path) return this.$route.path.includes(c.path);
           if (c.name === this.$route.name) {
             if (c.params) {
@@ -150,12 +152,12 @@ export default {
   },
   watch: {
     $route() {
-      this.$refs["dropdownMenuModal"].hide();
+      this.$refs["dropdownMenuModal"]?.hide();
     },
   },
   methods: {
     showModal() {
-      this.$refs["dropdownMenuModal"].show();
+      this.$refs["dropdownMenuModal"]?.show();
     },
   },
 };
