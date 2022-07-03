@@ -21,8 +21,20 @@
           $l2.code === 'zh' ? 'Pinyin' : $l2.name
         } subtitles.`"
       />
-      <Shows routeType="tv-shows" :tag="topic" :level="level" :showFilter="false" />
-      <Shows routeType="talks" :tag="topic" :level="level" :showFilter="false" />
+      <Shows
+        routeType="tv-shows"
+        :tag="topic"
+        :level="level"
+        :showFilter="false"
+        :showHero="false"
+      />
+      <Shows
+        routeType="talks"
+        :tag="topic"
+        :level="level"
+        :showFilter="false"
+        :showHero="false"
+      />
       <MediaSearchResults
         :topic="topic"
         :level="level"

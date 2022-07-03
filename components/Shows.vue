@@ -1,7 +1,7 @@
 <template>
   <div>
     <VideoHero
-      v-if="featureEpisode"
+      v-if="showHero && featureEpisode"
       :video="featureEpisode"
       @videoUnavailable="onVideoUnavailable"
     />
@@ -183,6 +183,10 @@ export default {
     routeType: String, // "tv-shows" or "talks"
     tag: String,
     level: String,
+    showHero: {
+      type: Boolean,
+      default: true,
+    },
     showFilter: {
       type: Boolean,
       default: true,
