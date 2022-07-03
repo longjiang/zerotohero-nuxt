@@ -313,7 +313,7 @@ export default {
     },
     levels() {
       if (this.$l2) {
-        return languageLevels(this.$l2)
+        return languageLevels(this.$l2);
       }
     },
     menu() {
@@ -400,10 +400,11 @@ export default {
               show: true,
             },
             {
-              path: this.musicPath,
+              name: "youtube-browse",
               icon: "fas fa-baby",
               title: `Kids`,
               // count: this.stats ? this.stats.music : undefined,
+              params: { topic: "kids", level: "all" },
               show: true,
             },
             {
@@ -456,7 +457,7 @@ export default {
                   let title = TOPICS[key];
                   return {
                     name: "youtube-browse",
-                    params: { topic: key, level: 'all' },
+                    params: { topic: key, level: "all" },
                     title,
                     show: true,
                     icon: "fa fa-grid-2",
@@ -473,7 +474,7 @@ export default {
                   let title = this.levels[key].name;
                   return {
                     name: "youtube-browse",
-                    params: { topic: 'all', level: key },
+                    params: { topic: "all", level: key },
                     title,
                     show: true,
                     icon: "fa fa-grid-2",
@@ -1282,7 +1283,14 @@ export default {
                 if (resolvedPath.route.params.l2 !== this.$l2.code)
                   return false; // Never go back to a different language!
               }
-              return namesToMatch.includes(resolvedPath.route.name);
+              if (namesToMatch.includes(resolvedPath.route.name)) {
+                if (item.params) {
+                  for (let key in item.params) {
+                    if (resolvedPath.route.params?.[key] !== item.params[key]) return false
+                  }
+                }
+                return true;
+              }
             }
           });
         let path = historyMatches.pop();

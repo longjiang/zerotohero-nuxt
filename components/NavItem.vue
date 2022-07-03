@@ -125,24 +125,22 @@ export default {
       return this.level === 2 && this.item.children;
     },
     selfOrCurrentChild() {
-      let item = this.item
+      let item = this.item;
       if (item.children) {
         let currentChild = item.children.find((c) => {
-            if (c.path) return this.$route.path.includes(c.path)
+          if (c.path) return this.$route.path.includes(c.path);
           if (c.name === this.$route.name) {
-            
             if (c.params) {
               for (let key in c.params) {
                 if (this.$route.params?.[key] != c.params[key]) {
-                  return false
+                  return false;
                 }
               }
-              return true
-            }
-            else return true
+              return true;
+            } else return true;
           }
         });
-        return currentChild ? currentChild : item
+        return currentChild ? currentChild : item;
       }
     },
   },
