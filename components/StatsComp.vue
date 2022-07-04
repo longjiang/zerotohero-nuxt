@@ -11,14 +11,14 @@
             <b class="stat-big-number">{{ formatNumber(stats.totalCount) }}</b>
           </router-link>
           <br />
-          {{ translate('Videos with Subs', browserLanguage) }}
+          {{ translate("Videos with Subs", browserLanguage) }}
         </div>
         <div style="flex: 1" class="text-center">
           <router-link :to="{ name: 'stats' }">
             <b class="stat-big-number">{{ stats.langs.length }}</b>
           </router-link>
           <br />
-          {{ translate('Languages', browserLanguage) }}
+          {{ translate("Languages", browserLanguage) }}
         </div>
       </div>
     </div>
@@ -31,12 +31,12 @@
           <div style="flex: 1" class="text-center">
             <b class="stat-big-number">{{ formatNumber(stats.totalCount) }}</b>
             <br />
-            {{ translate('Videos', browserLanguage) }}
+            {{ translate("Videos", browserLanguage) }}
           </div>
           <div style="flex: 1" class="text-center">
             <b class="stat-big-number">{{ stats.langs.length }}</b>
             <br />
-            {{ translate('Languages', browserLanguage) }}
+            {{ translate("Languages", browserLanguage) }}
           </div>
         </div>
       </div>
@@ -131,24 +131,26 @@ export default {
         }`,
         { cacheLife: refresh ? 0 : 86400 } // cache the count for one day (86400 seconds)
       );
-      this.stats = data;
-      let languages = await this.$languagesPromise;
-      if (!languages) return;
-      let languageData = [];
-      for (let langId in this.stats.langCounts) {
-        const count = this.stats.langCounts[langId];
-        const language = languages.getById(langId);
-        if (language)
-          languageData.push({
-            count,
-            language,
-          });
-        this.languageData = languageData.sort((a, b) => b.count - a.count);
+      if (data?.langCounts) {
+        this.stats = data;
+        let languages = await this.$languagesPromise;
+        if (!languages) return;
+        let languageData = [];
+        for (let langId in this.stats.langCounts) {
+          const count = this.stats.langCounts[langId];
+          const language = languages.getById(langId);
+          if (language)
+            languageData.push({
+              count,
+              language,
+            });
+          this.languageData = languageData.sort((a, b) => b.count - a.count);
+        }
       }
     },
     // https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
     formatNumber(num) {
-      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      if (num) return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
     async getLangById(langId) {
       let languages = await this.$languagesPromise;
