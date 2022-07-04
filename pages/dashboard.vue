@@ -23,7 +23,7 @@
       >
         <div class="container pt-5 pb-5">
           <div
-            class="row mb-5"
+            :class="{ 'row mb-5': true }"
             v-if="
               $auth.loggedIn &&
               $auth.user &&
@@ -38,7 +38,7 @@
                   {{ $auth.user.first_name
                   }}{{ translate("’s Language Dashboard", browserLanguage) }}
                 </h5>
-                <LazyDashboard />
+                <LazyDashboard ref="dashboard" />
               </div>
             </div>
           </div>
@@ -71,6 +71,9 @@ export default {
   },
   computed: {
     ...mapState("fullHistory", ["fullHistory"]),
+    hasDashboard() {
+      return this.$refs["dashboard"]?.sortedProgress;
+    },
     lastFullHistoryPath() {
       if (this.fullHistory) {
         let lastFullHistoryItem = this.fullHistory[this.fullHistory.length - 1];
