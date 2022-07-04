@@ -77,19 +77,19 @@
             }}*) level
           </h4>
           <p>
-            <b :data-level="level.cefr">Time estimate:</b>
+            <b :data-level="level.cefr"><i class="fas fa-clock"></i> Time investment:</b>
             <b>{{ Math.ceil(level.hours / 10) * 10 }} hours</b>
           </p>
           <template>
+            <p v-if="courses[level.cefr]">
+              <b :data-level="level.cefr"><i class="fa-solid fa-spell-check"></i> Vocabulary &amp; Syntax:</b>
+              {{ Math.ceil(level.hours / Math.pow(1.5, level.number - 1) / 10) * 10 }} hours
+            </p>
             <div
               v-for="(course, index) in courses[level.cefr]"
               class="level-activity"
               :key="`learning-path-course-${level.cefr}-${index}`"
             >
-              <p>
-                <b :data-level="level.cefr">Activity:</b>
-                Take (or continue to take) the online course:
-              </p>
               <Resource
                 :resource="{
                   title: course.title,
@@ -436,8 +436,8 @@ export default {
     }
 
     .level-activity {
-      margin-top: 3rem;
-      margin-bottom: 3rem;
+      margin-top: 1.5rem;
+      margin-bottom: 1.5rem;
     }
 
     .level-milestone {
