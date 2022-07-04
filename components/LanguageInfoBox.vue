@@ -2,7 +2,7 @@
   <div class="language-info-box">
     <client-only>
       <WebImages
-        v-if="lang"
+        v-if="lang && showImages"
         :text="`${lang.name} people${
           (!lang.speakers || lang.speakers < 500000) &&
           lang.country &&
@@ -16,25 +16,31 @@
       />
     </client-only>
     <div class="language-info-box-wikipedia" v-if="page">
-      {{ wikipediaSummary }} —
-      <a
-        target="blank"
-        :href="page.url()"
-        class="link-unstyled font-weight-bold"
-        style="text-decoration: underline"
-      >
-        Wikipedia
-      </a>
-      <span v-if="lang.omniglot" class="ml-1">
+      {{ wikipediaSummary }}
+      <div>
+        <i class="fa-solid fa-arrow-right"></i>
+        Learn more on
         <a
           target="blank"
-          class="link-unstyled font-weight-bold"
+          :href="page.url()"
+          class="link-unstyled font-weight-bold text-success"
+          style="text-decoration: underline"
+        >
+          Wikipedia
+        </a>
+      </div>
+      <div v-if="lang.omniglot">
+        <i class="fa-solid fa-arrow-right"></i>
+        Learn useful phrases on
+        <a
+          target="blank"
+          class="link-unstyled font-weight-bold  text-success"
           style="text-decoration: underline"
           :href="`https://omniglot.com/writing/${lang.omniglot}`"
         >
           Omniglot
         </a>
-      </span>
+      </div>
     </div>
   </div>
 </template>
@@ -46,6 +52,14 @@ export default {
   props: {
     lang: {
       type: Object,
+    },
+    showImages: {
+      type: Boolean,
+      default: true,
+    },
+    brief: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -75,6 +89,7 @@ export default {
           .replace(/\(.*?\)/g, "")
           .replace(/[()]/g, "")
           .replace(/(.*?\. .*?\. .*?\. .*?\. .*?\. .*?\.) .*/, "$1 . . .");
+        if (this.brief) shortSummary = shortSummary.replace(/(.*?\. ).*/, "$1");
         this.wikipediaSummary = shortSummary;
       } catch (err) {}
     }

@@ -14,7 +14,21 @@
 </router>
 <template>
   <div class="main">
-    <div class="container pt-5 pb-5">
+    <div class="container-fluid">
+      <div class="row">
+        <div style="max-height: 8rem; overflow: hidden">
+          <img :src="background(this.$l2)" class="img-fluid" />
+        </div>
+      </div>
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-12 p-0">
+            <LanguageFlag :language="$l2" class="flag" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
       <SocialHead
         v-if="courses && courses['A1'] && courses['A1'][0]"
         :title="`Complete Guide to Mastering the ${$l2.name} Language | ${$l2.name} Zero to Hero`"
@@ -32,9 +46,10 @@
           .toString()
           .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} hours`"
       />
-      <h3>{{ $l2.name }} Learning Path</h3>
-      <p class="mb-5">
-        From zero to mastery in
+
+      <h3 class="mt-3">{{ $l2.name }} Learning Path</h3>
+      <p class="mb-4">
+        Total time investment:
         <b>
           {{
             (($l2.hours || 1100) * 4)
@@ -46,10 +61,7 @@
       </p>
       <div class="learning-path">
         <div class="level">
-          <h4 class="level-title">Getting to know {{ $l2.name }}</h4>
-          <div v-if="$l2.omniglot" class="level-activity">
-            <Resource :resource="omniglot" :internal="false" />
-          </div>
+          <LazyLanguageInfoBox :lang="$l2" class="mb-4" :showImages="false" :brief="true"/>
         </div>
         <div
           v-for="(level, index) in levels"
@@ -223,9 +235,9 @@
 
 <script>
 import Resource from "@/components/Resource";
-import Config from "@/lib/config";
+import { background, backgroundKeyword } from "@/lib/utils/background";
 import Helper from "@/lib/helper";
-import { LEVELS } from '@/lib/utils/language-levels'
+import { LEVELS } from "@/lib/utils/language-levels";
 
 export default {
   components: {
@@ -253,7 +265,7 @@ export default {
       });
       let hours = Helper.languageHours(this.$l2);
       for (let level in levels) {
-        level = Number(level)
+        level = Number(level);
         levels[level].hours = hours[level + 1];
       }
       return levels;
@@ -274,6 +286,12 @@ export default {
     this.resources = await this.loadResources();
   },
   methods: {
+    background(l2) {
+      return background(l2);
+    },
+    backgroundKeyword(l2) {
+      return backgroundKeyword(l2);
+    },
     async loadExams() {
       let response = await this.$directus.get(
         `items/exams?filter[l2][eq]=${this.$l2.id}`
@@ -295,18 +313,20 @@ export default {
       let response = await this.$directus.get(
         `items/resources?filter[l2][eq]=${this.$l2.id}&filter[type][eq]=courses&filter[featured][eq]=1&fields=*,thumbnail.*`
       );
-      response = response.data;
-      let courses = response.data || [];
-      let result = {};
-      for (let course of courses) {
-        for (let level of this.levels) {
-          if (course.level && course.level.includes(level.number)) {
-            result[level.cefr] = result[level.cefr] || [];
-            result[level.cefr].push(course);
+      if (response.data?.data) {
+        let courses = response.data.data || [];
+        let result = {};
+        for (let course of courses) {
+          for (let level of this.levels) {
+            if (course.level && course.level.includes(level.number)) {
+              result[level.cefr] = result[level.cefr] || [];
+              result[level.cefr].push(course);
+            }
           }
         }
+        return result;
+
       }
-      return result;
     },
     async loadResources() {
       let response = await this.$directus.get(
@@ -329,10 +349,10 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .learning-path {
   .level {
-    padding-bottom: 3rem;
+    padding-bottom: 1.5rem;
     padding-left: 1.5rem;
     border-left: 0.5rem solid #ccc;
     position: relative;
@@ -432,6 +452,16 @@ export default {
         width: 1.25rem;
       }
     }
+  }
+}
+
+::v-deep .flag {
+  top: -1rem;
+  left: 0;
+  position: relative;
+  transform: scale(2.5) translateX(0.5rem);
+  img {
+    border: 2px solid white;
   }
 }
 </style>
