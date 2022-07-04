@@ -3,27 +3,28 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
-          <div class="text-center">Which language would you like to learn?</div>
+          <div class="mb-2">Which language would you like to learn?</div>
           <b-form-select :options="l2Options" v-model="l2"></b-form-select>
         </div>
       </div>
-      <div class="row" v-if="l2 && l1Options.length > 1">
+      <div class="row mt-3" v-if="l2 && l1Options.length > 1">
         <div class="col-sm-12">
-          <div class="text-center">
-            What is your mother tongue (your first/native language)?
+          <div class="mb-2">
+            What is your mother tongue (first/native language)?
           </div>
           <b-form-select :options="l1Options" v-model="l1"></b-form-select>
         </div>
       </div>
-      <div class="row" v-if="l1 && l2">
-        <div class="col-sm-12">
+      <div class="row mt-3" v-if="l1 && l2">
+        <div class="col-sm-12 text-center">
           <router-link
+            class="btn btn-success"
             :to="{
               name: 'learning-path',
               params: { l1: l1.code, l2: l2.code },
             }"
           >
-            Start Learning {{ l2.name }}
+            Start Learning <i class="fa-solid fa-chevron-right"></i>
           </router-link>
         </div>
       </div>
@@ -61,6 +62,7 @@ export default {
         };
       });
       if (options.length === 1) this.l1 = options[0].value // If only one l1 is possible, use that
+      else this.l1 = undefined
       return options;
     },
   },

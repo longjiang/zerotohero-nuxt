@@ -35,16 +35,7 @@
               </div>
             </div>
           </div>
-          <div
-            :class="{ 'row mb-5': true }"
-            v-if="
-              $auth.loggedIn &&
-              $auth.user &&
-              $auth.user.first_name &&
-              $store.state.progress.progress &&
-              Object.keys($store.state.progress.progress).length > 0
-            "
-          >
+          <div :class="{ 'row mb-5': true }" v-if="hasDashboard">
             <div class="col-sm-12">
               <div class="home-card p-2 pt-4 pb-4 bg-white">
                 <h5 class="text-center mt-2 mb-1">
@@ -58,6 +49,9 @@
           <div class="row">
             <div class="col-sm-12">
               <div class="home-card p-2 pt-4 pb-4 bg-white">
+                <h5 class="text-center mb-2" v-if="hasDashboard">
+                  Learn another language
+                </h5>
                 <Triage />
               </div>
             </div>
@@ -80,7 +74,12 @@ export default {
   computed: {
     ...mapState("fullHistory", ["fullHistory"]),
     hasDashboard() {
-      return this.$refs["dashboard"]?.sortedProgress;
+      return (
+        this.$auth.loggedIn &&
+        this.$auth.user?.first_name &&
+        this.$store.state.progress.progress &&
+        Object.keys(this.$store.state.progress.progress).length > 0
+      );
     },
     lastFullHistoryPath() {
       if (this.fullHistory) {
