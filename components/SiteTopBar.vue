@@ -31,7 +31,11 @@
           to="/dashboard"
           class="btn btn-unstyled ml-2"
           style="color: #ccc"
-          v-if="$auth.loggedIn && $route.path !== '/dashboard' && params.lg !== false"
+          v-if="
+            $auth.loggedIn &&
+            $route.path !== '/dashboard' &&
+            params.lg !== false
+          "
           title="Dashboard"
         >
           <i class="fas fa-home"></i>
@@ -155,7 +159,9 @@
         modal-class="safe-padding-top mt-4"
         body-class="settings-modal-wrapper"
       >
-        <div class="settings-modal"><AnnotationSettings variant="toolbar" /></div>
+        <div class="settings-modal">
+          <AnnotationSettings variant="toolbar" />
+        </div>
       </b-modal>
       <b-modal
         ref="languages-modal"
@@ -169,64 +175,18 @@
       >
         <div class="languages-modal">
           <div class="mb-3">
-            <router-link to="/" class="text-success">
+            <router-link to="/dashboard" class="text-success">
               <i class="fas fa-chevron-left"></i>
-              Back to The Home Page
+              Back to Dashboard
             </router-link>
           </div>
-          <LazyDashboard class="mb-5" />
-          <LanguageList
-            @click="hideLanguagesModal"
-            :showSpeakers="false"
-            :keyword="keyword"
-            variant="grid"
-            :showFeatures="false"
-            :sort="false"
-            :showFlags="true"
-            :codes="[
-              'en',
-              'zh',
-              'es',
-              'de',
-              'fr',
-              'it',
-              'ja',
-              'ko',
-              'yue',
-              'he',
-              'ar',
-              'lzh',
-            ]"
-          />
-          <h4 class="text-center mt-5 mb-3">More Languages</h4>
-          <div class="row pl-1 pr-1">
-            <div class="col-12 col-md-7 col-lg-9 pr-1">
-              <b-form-input
-                v-model="keyword"
-                @compositionend.prevent.stop="() => false"
-                placeholder="Search for more languages"
-                class="mb-3"
-              />
-            </div>
-            <div class="col-12 col-md-5 col-lg-3 pl-0">
-              <div class="text-center mb-3">
-                <router-link class="btn btn-success d-block" to="/language-map">
-                  <i class="fas fa-globe-asia mr-1"></i>
-                  Languages Map
-                  <i class="ml-1 fas fa-chevron-right"></i>
-                </router-link>
-              </div>
-            </div>
+          <LazyDashboard class="mb-5" v-if="hasDashboard" />
+          <div class="pb-5">
+            <h5 class="text-center mb-2">
+              Learn another language
+            </h5>
+            <Triage />
           </div>
-          <LanguageList
-            @click="hideLanguagesModal"
-            :showSpeakers="false"
-            :keyword="keyword"
-            variant="grid"
-            :showFeatures="false"
-            :sort="true"
-            :showFlags="true"
-          />
         </div>
       </b-modal>
     </div>
@@ -315,6 +275,14 @@ export default {
     },
   },
   methods: {
+    hasDashboard() {
+      return (
+        this.$auth.loggedIn &&
+        this.$auth.user?.first_name &&
+        this.$store.state.progress.progress &&
+        Object.keys(this.$store.state.progress.progress).length > 0
+      );
+    },
     cycleFlags() {
       if (this.$refs.flag) this.$refs.flag.cycleFlags();
     },
