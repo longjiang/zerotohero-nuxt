@@ -9,7 +9,7 @@
       </div>
     </div>
     <div v-else class="resources">
-      <Resource v-for="(resource, index) of resources" :resource="resource" :internal="resource.internal" :key="`resource-${index}`" />
+      <Resource v-for="(resource, index) of resources" :resource="resource" :internal="resource.internal" :key="`resource-${index}`" class="m-1" />
     </div>
   </div>
 </template>

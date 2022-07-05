@@ -23,7 +23,15 @@
 
 <script>
 export default {
-  props: ["resource", "internal"],
+  props: {
+    resource: {
+      type: Object
+    },
+    internal: { // Whether this is a resource that is part of this app, linked through router-link
+      type: Boolean,
+      default: false
+    },
+  }
 };
 </script>
 
@@ -32,7 +40,6 @@ export default {
   min-width: 15rem;
   max-width: 480px;
   flex: 1;
-  margin: 1rem;
 }
 .resource-thumbnail {
   width: 100%;
