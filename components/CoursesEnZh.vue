@@ -137,7 +137,7 @@
             plenty of practice, both written and oral. &nbsp;We help and
             encourage students to practice with a language exchange partner via
             sites such as
-            <a href="https://www.italki.com/affshare?ref=zerotohero ">iTalki</a>
+            <a href="https://www.italki.com/affshare?ref=zerotohero">iTalki</a>
             .&nbsp; This way students learn to use the language in real life,
             not just to pass tests.
           </p>

@@ -13,7 +13,7 @@
   }
 </router>
 <template>
-  <div class="main">
+  <div class="main pb-5">
     <div class="container-fluid">
       <div class="row">
         <img
@@ -129,11 +129,11 @@
             <div class="pl-3">
               <Resource
                 :resource="{
-                  title: `Online tutoring lesson plans (${level.cefr} level)`,
-                  url: `/${$l1.code}/${$l2.code}/tutoring/${level.number}`,
-                  thumbnail: '/img/online-tutoring.jpg',
+                  title: 'iTalki Lessons',
+                  url: 'https://www.italki.com/affshare?ref=zerotohero',
+                  thumbnail: '/img/italki-banner.jpg',
+                  description: 'Take one-on-one online conversation practice sessions at iTalki. New sign-ups get $10 off.'
                 }"
-                :internal="true"
               />
             </div>
           </div>
@@ -149,7 +149,7 @@
               <Resource
                 :resource="{
                   title: `${$l2.name} YouTube Study Tool`,
-                  url: `/${$l1.code}/${$l2.code}/youtube/browse`,
+                  url: `/${$l1.code}/${$l2.code}/all-media`,
                   thumbnail: '/img/youtube-banner.jpg',
                   description: `Study transcripts of ${$l2.name} videos with a popup dictionary.`,
                 }"
@@ -209,11 +209,12 @@
                   Milestone:
                 </b>
                 <b>
-                  Pass the 
+                  Pass the
                   <a :href="exam.url" target="_blank">
                     {{ exam.title }}
                     <span v-if="exam.level === 'all'">({{ level.cefr }})</span>
-                  </a> exam
+                  </a>
+                  exam
                 </b>
               </div>
             </template>
@@ -312,10 +313,11 @@ export default {
       let levelVocabularyAndSyntaxHours =
         Math.ceil((level.hours * 0.5) / 10) * 10;
       if (level.number >= 3) {
-        Math.ceil(
-          (levelVocabularyAndSyntaxHours =
-            levelVocabularyAndSyntaxHours * Math.pow(0.5, level.number - 2))
-        );
+        levelVocabularyAndSyntaxHours =
+          Math.ceil(
+            (levelVocabularyAndSyntaxHours * Math.pow(0.7, level.number - 2)) /
+              10
+          ) * 10;
       }
       return levelVocabularyAndSyntaxHours;
     },
