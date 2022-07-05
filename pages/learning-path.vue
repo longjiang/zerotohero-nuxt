@@ -16,9 +16,7 @@
   <div class="main">
     <div class="container-fluid">
       <div class="row">
-        <div style="max-height: 8rem; overflow: hidden">
-          <img :src="background(this.$l2)" class="img-fluid" />
-        </div>
+        <img :src="background(this.$l2)" class="img-fluid w-100" style="max-height: 8rem; overflow: hidden; object-fit: cover; object-position: center center;" />
       </div>
       <div class="container">
         <div class="row">
