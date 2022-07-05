@@ -38,7 +38,7 @@
           "
           title="Dashboard"
         >
-          <i class="fas fa-home"></i>
+          <i class="fas fa-grid mr-1"></i> Dashboard
         </router-link>
       </div>
       <template v-if="$route.params.l1 && $route.params.l2">
