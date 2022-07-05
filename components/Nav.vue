@@ -505,8 +505,8 @@ export default {
           ],
         },
         {
-          icon: "fas fa-photo-video",
-          title: "Media",
+          icon: "fas fa-headphones",
+          title: "Listening",
           show: true,
           children: [
             {
@@ -671,87 +671,7 @@ export default {
           ],
         },
         {
-          icon: "fa fa-book",
-          title: "Dictionary",
-          name: "dictionary",
-          show: this.hasFeature("dictionary") || this.hasPhrasebooks,
-          children: [
-            {
-              name: "dictionary",
-              icon: "fa fa-search",
-              title: "Dictionary",
-              show: this.hasFeature("dictionary"),
-              shortcut: (e) => e.code === "KeyD" && e.metaKey && e.shiftKey,
-            },
-            {
-              name: "phrasebooks",
-              icon: "fa fa-comment-alt",
-              title: "Phrasebooks",
-              show: this.hasPhrasebooks,
-            },
-            {
-              name: "saved-words",
-              icon: "fas fa-star",
-              title: "Saved Words",
-              show: true,
-            },
-            {
-              name: "saved-phrases",
-              icon: "fas fa-bookmark",
-              title: "Saved Phrases",
-              show: true,
-            },
-            {
-              name: "phrasebook",
-              show: false,
-            },
-            {
-              name: "phrasebook-phrase",
-              show: false,
-            },
-            {
-              name: "phrase",
-              icon: "fas fa-search",
-              title: "Look Up Phrases",
-              show: false,
-              shortcut: (e) => e.code === "KeyP" && e.metaKey && e.shiftKey,
-            },
-            {
-              name: "minimal-pairs",
-              icon: "fa fa-adjust",
-              title: "Minimal Pairs",
-              show: this.hasFeature("dictionary"),
-            },
-            {
-              name: "levels",
-              icon: "fa fa-signal",
-              title: "HSK Words",
-              show: this.hasFeature("levels"),
-            },
-            {
-              name: "new-levels",
-              icon: "fa fa-signal",
-              title: "New HSK Words",
-              show: this.hasFeature("levels"),
-            },
-            {
-              name: "new-levels-graphic",
-              icon: "fas fa-exchange-alt",
-              title: "Old vs New HSK",
-              show: this.hasFeature("levels"),
-            },
-            {
-              name: "compare",
-              show: false,
-            },
-            {
-              name: "compare-phrases",
-              show: false,
-            },
-          ],
-        },
-        {
-          icon: "fas fa-file-alt",
+          icon: "fas fa-book-open",
           title: "Reading",
           show:
             this.hasFeature("dictionary") || this.hasFeature("transliteration"),
@@ -830,6 +750,86 @@ export default {
             },
             {
               name: "book-chapter",
+              show: false,
+            },
+          ],
+        },
+        {
+          icon: "fas fa-spell-check",
+          title: "Vocabulary",
+          name: "dictionary",
+          show: this.hasFeature("dictionary") || this.hasPhrasebooks,
+          children: [
+            {
+              name: "dictionary",
+              icon: "fa fa-search",
+              title: "Dictionary",
+              show: this.hasFeature("dictionary"),
+              shortcut: (e) => e.code === "KeyD" && e.metaKey && e.shiftKey,
+            },
+            {
+              name: "phrasebooks",
+              icon: "fa fa-comment-alt",
+              title: "Phrasebooks",
+              show: this.hasPhrasebooks,
+            },
+            {
+              name: "saved-words",
+              icon: "fas fa-star",
+              title: "Saved Words",
+              show: true,
+            },
+            {
+              name: "saved-phrases",
+              icon: "fas fa-bookmark",
+              title: "Saved Phrases",
+              show: true,
+            },
+            {
+              name: "phrasebook",
+              show: false,
+            },
+            {
+              name: "phrasebook-phrase",
+              show: false,
+            },
+            {
+              name: "phrase",
+              icon: "fas fa-search",
+              title: "Look Up Phrases",
+              show: false,
+              shortcut: (e) => e.code === "KeyP" && e.metaKey && e.shiftKey,
+            },
+            {
+              name: "minimal-pairs",
+              icon: "fa fa-adjust",
+              title: "Minimal Pairs",
+              show: this.hasFeature("dictionary"),
+            },
+            {
+              name: "levels",
+              icon: "fa fa-signal",
+              title: "HSK Words",
+              show: this.hasFeature("levels"),
+            },
+            {
+              name: "new-levels",
+              icon: "fa fa-signal",
+              title: "New HSK Words",
+              show: this.hasFeature("levels"),
+            },
+            {
+              name: "new-levels-graphic",
+              icon: "fas fa-exchange-alt",
+              title: "Old vs New HSK",
+              show: this.hasFeature("levels"),
+            },
+            {
+              name: "compare",
+              show: false,
+            },
+            {
+              name: "compare-phrases",
               show: false,
             },
           ],

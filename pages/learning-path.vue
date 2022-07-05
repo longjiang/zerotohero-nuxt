@@ -160,7 +160,7 @@
                 v-if="level.number > 3 && $hasFeature('dictionary')"
                 :resource="{
                   title: `${$l2.name} reading with popup dictionary`,
-                  url: `/${$l1.code}/${$l2.code}/library`,
+                  url: `/${$l1.code}/${$l2.code}/books`,
                   thumbnail: '/img/library-banner.jpg',
                   description: `Read books and text in ${$l2.name} with the help of our popup dictionary.`,
                 }"
