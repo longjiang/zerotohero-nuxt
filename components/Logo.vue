@@ -20,7 +20,7 @@
       <div class="mt-3" v-if="pro" />
       <div v-else />
       <div class="word-mark">
-        Zero to Hero
+        Language Player
         <client-only>
           <img
             v-if="pro"
