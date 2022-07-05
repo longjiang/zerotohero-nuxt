@@ -16,7 +16,16 @@
   <div class="main">
     <div class="container-fluid">
       <div class="row">
-        <img :src="background(this.$l2)" class="img-fluid w-100" style="max-height: 8rem; overflow: hidden; object-fit: cover; object-position: center center;" />
+        <img
+          :src="background(this.$l2)"
+          class="img-fluid w-100"
+          style="
+            max-height: 8rem;
+            overflow: hidden;
+            object-fit: cover;
+            object-position: center center;
+          "
+        />
       </div>
       <div class="container">
         <div class="row">
@@ -59,7 +68,12 @@
       </p>
       <div class="learning-path">
         <div class="level">
-          <LazyLanguageInfoBox :lang="$l2" class="mb-4" :showImages="false" :brief="true"/>
+          <LazyLanguageInfoBox
+            :lang="$l2"
+            class="mb-4"
+            :showImages="false"
+            :brief="true"
+          />
         </div>
         <div
           v-for="(level, index) in levels"
@@ -75,82 +89,84 @@
             }}*) level
           </h4>
           <p>
-            <b :data-level="level.cefr"><i class="fas fa-clock"></i> Time investment:</b>
-            <b>{{ Math.ceil(level.hours / 10) * 10 }} hours</b>
+            <b :data-level="level.cefr">
+              <i class="fas fa-clock"></i>
+              Time investment:
+            </b>
+            <b>{{ levelHours(level) }} hours</b>
           </p>
           <template>
-            <p v-if="courses[level.cefr]">
-              <b :data-level="level.cefr"><i class="fa-solid fa-spell-check"></i> Vocabulary &amp; Syntax:</b>
-              {{ Math.ceil(level.hours / Math.pow(1.5, level.number - 1) / 10) * 10 }} hours
-            </p>
-            <div
-              v-for="(course, index) in courses[level.cefr]"
-              class="level-activity"
-              :key="`learning-path-course-${level.cefr}-${index}`"
-            >
-              <Resource
-                :resource="{
-                  title: course.title,
-                  url: course.url,
-                  thumbnail: course.thumbnail.data.full_url,
-                }"
-              />
+            <div class="level-activity">
+              <div v-if="courses[level.cefr]">
+                <b :data-level="level.cefr">
+                  <i class="fa-solid fa-spell-check"></i>
+                  Vocabulary &amp; Syntax:
+                </b>
+                {{ levelVocabularyAndSyntaxHours(level) }} hours
+              </div>
+              <div class="pl-3">
+                <Resource
+                  :key="`learning-path-course-${level.cefr}-${index}`"
+                  class="mt-3"
+                  v-for="(course, index) in courses[level.cefr]"
+                  :resource="{
+                    title: course.title,
+                    url: course.url,
+                    thumbnail: course.thumbnail.data.full_url,
+                  }"
+                />
+              </div>
             </div>
           </template>
-          <div
-            class="level-activity"
-            v-if="level.number > 1 && $hasFeature('youtube')"
-          >
+          <div class="level-activity">
             <p>
-              <b :data-level="level.cefr">Activity:</b>
-              Watch lots of videos in
-              {{ $l2.name }} and study the subtitles with the help of our video
-              transcript study tool.
+              <b :data-level="level.cefr">
+                <i class="fa-solid fa-comment-alt"></i>
+                Conversation Practice:
+              </b>
+              {{ levelConverstionHours(level) }} hours
             </p>
-            <Resource
-              :resource="{
-                title: `${$l2.name} YouTube Study Tool`,
-                url: `/${$l1.code}/${$l2.code}/youtube/browse`,
-                thumbnail: '/img/youtube-banner.jpg',
-              }"
-              :internal="true"
-            />
+            <div class="pl-3">
+              <Resource
+                :resource="{
+                  title: `Online tutoring lesson plans (${level.cefr} level)`,
+                  url: `/${$l1.code}/${$l2.code}/tutoring/${level.number}`,
+                  thumbnail: '/img/online-tutoring.jpg',
+                }"
+                :internal="true"
+              />
+            </div>
           </div>
-          <div
-            class="level-activity"
-            v-if="level.number > 3 && $hasFeature('dictionary')"
-          >
+          <div class="level-activity">
             <p>
-              <b :data-level="level.cefr">Activity:</b>
-              Read books and text in
-              {{ $l2.name }} with the help of our popup dictionary.
+              <b :data-level="level.cefr">
+                <i class="fa-solid fa-headphones"></i>
+                Input by Audio & Text:
+              </b>
+              {{ levelInputHours(level) }} hours
             </p>
-            <Resource
-              :resource="{
-                title: `${$l2.name} reading with popup dictionary`,
-                url: `/${$l1.code}/${$l2.code}/library`,
-                thumbnail: '/img/library-banner.jpg',
-              }"
-              :internal="true"
-            />
-          </div>
-          <div
-            class="level-activity"
-            v-if="$l2.code !== 'zh' || level.number > 6"
-          >
-            <p>
-              <b :data-level="level.cefr">Activity:</b>
-              Practice conversation through online language exchanges with the
-              help of our Tutoring Kit
-            </p>
-            <Resource
-              :resource="{
-                title: `Online tutoring lesson plans (${level.cefr} level)`,
-                url: `/${$l1.code}/${$l2.code}/tutoring/${level.number}`,
-                thumbnail: '/img/online-tutoring.jpg',
-              }"
-              :internal="true"
-            />
+            <div class="pl-3">
+              <Resource
+                :resource="{
+                  title: `${$l2.name} YouTube Study Tool`,
+                  url: `/${$l1.code}/${$l2.code}/youtube/browse`,
+                  thumbnail: '/img/youtube-banner.jpg',
+                  description: `Study transcripts of ${$l2.name} videos with a popup dictionary.`,
+                }"
+                :internal="true"
+              />
+              <Resource
+                class="mt-3"
+                v-if="level.number > 3 && $hasFeature('dictionary')"
+                :resource="{
+                  title: `${$l2.name} reading with popup dictionary`,
+                  url: `/${$l1.code}/${$l2.code}/library`,
+                  thumbnail: '/img/library-banner.jpg',
+                  description: `Read books and text in ${$l2.name} with the help of our popup dictionary.`,
+                }"
+                :internal="true"
+              />
+            </div>
           </div>
           <template
             v-if="resources[level.cefr] && resources[level.cefr].length > 0"
@@ -188,12 +204,17 @@
                   class="level-milestone-dot"
                   :data-bg-level="level.cefr"
                 ></div>
-                <b :data-level="level.cefr">Milestone:</b>
-                Pass the exam:
-                <a :href="exam.url" target="_blank">
-                  {{ exam.title }}
-                  <span v-if="exam.level === 'all'">({{ level.cefr }})</span>
-                </a>
+                <b :data-level="level.cefr">
+                  <i class="fa-solid fa-trophy"></i>
+                  Milestone:
+                </b>
+                <b>
+                  Pass the 
+                  <a :href="exam.url" target="_blank">
+                    {{ exam.title }}
+                    <span v-if="exam.level === 'all'">({{ level.cefr }})</span>
+                  </a> exam
+                </b>
               </div>
             </template>
           </template>
@@ -284,6 +305,32 @@ export default {
     this.resources = await this.loadResources();
   },
   methods: {
+    levelHours(level) {
+      return Math.ceil(level.hours / 10) * 10;
+    },
+    levelVocabularyAndSyntaxHours(level) {
+      let levelVocabularyAndSyntaxHours =
+        Math.ceil((level.hours * 0.5) / 10) * 10;
+      if (level.number >= 3) {
+        Math.ceil(
+          (levelVocabularyAndSyntaxHours =
+            levelVocabularyAndSyntaxHours * Math.pow(0.5, level.number - 2))
+        );
+      }
+      return levelVocabularyAndSyntaxHours;
+    },
+    levelConverstionHours(level) {
+      if (level.number <= 2)
+        return Math.ceil(this.levelVocabularyAndSyntaxHours(level) / 2);
+      else return this.levelVocabularyAndSyntaxHours(level);
+    },
+    levelInputHours(level) {
+      return (
+        this.levelHours(level) -
+        this.levelVocabularyAndSyntaxHours(level) -
+        this.levelConverstionHours(level)
+      );
+    },
     background(l2) {
       return background(l2);
     },
@@ -323,7 +370,6 @@ export default {
           }
         }
         return result;
-
       }
     },
     async loadResources() {
