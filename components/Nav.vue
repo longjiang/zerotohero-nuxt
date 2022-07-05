@@ -717,18 +717,6 @@ export default {
           show: true,
           children: [
             {
-              name: "noun-cases",
-              icon: "fas fa-list-ul",
-              title: "Grammar",
-              show: this.hasFeature("noun-cases"),
-            },
-            {
-              name: "language-info",
-              title: `About {l2}`,
-              icon: "fas fa-flag",
-              show: true,
-            },
-            {
               name: "learning-path",
               title: "Learning Path",
               icon: "fas fa-road",
@@ -740,6 +728,12 @@ export default {
               title: "Grammar",
               show: this.hasFeature("grammar"),
               shortcut: (e) => e.code === "KeyG" && e.metaKey && e.shiftKey,
+            },
+            {
+              name: "noun-cases",
+              icon: "fas fa-list-ul",
+              title: "Grammar",
+              show: this.hasFeature("noun-cases"),
             },
             {
               name: "grammar-view",
@@ -797,12 +791,6 @@ export default {
               show: false,
             },
             {
-              name: "tutoring",
-              title: "Tutoring Kit",
-              icon: "fas fa-folder",
-              show: true,
-            },
-            {
               name: "resources",
               title: "Resources",
               icon: "fas fa-gem",
@@ -810,8 +798,20 @@ export default {
             },
             {
               name: "articles-reddit",
-              title: "Reddit",
+              title: "Forum",
               icon: "fab fa-reddit",
+              show: true,
+            },
+            {
+              name: "language-info",
+              title: `About {l2}`,
+              icon: "fas fa-flag",
+              show: true,
+            },
+            {
+              name: "tutoring",
+              title: "Tutoring Kit",
+              icon: "fas fa-folder",
               show: true,
             },
             {
