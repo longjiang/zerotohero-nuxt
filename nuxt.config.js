@@ -1,3 +1,5 @@
+import { DIRECTUS_API_URL } from './plugins/directus'
+
 export default {
   env: {
     baseUrl: process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'
@@ -139,15 +141,15 @@ export default {
       local: {
         scheme: 'refresh',
         token: {
-          property: 'data.token',
+          property: 'data.access_token',
           global: true,
           maxAge: 60 * 60 * 24 * 30, // Set in Directus settings
           // required: true,
           // type: 'Bearer'
         },
         refreshToken: {
-          property: 'data.token',
-          data: 'token',
+          property: 'data.refresh_token',
+          data: 'refresh_token', // name of the property you want to send in the request
           maxAge: 60 * 60 * 24 * 30
         },
         user: {
@@ -155,9 +157,9 @@ export default {
           autoFetch: false
         },
         endpoints: {
-          login: { url: 'https://directusvps.zerotohero.ca/zerotohero/auth/authenticate', method: 'post' },
-          refresh: { url: 'https://directusvps.zerotohero.ca/zerotohero/auth/refresh', method: 'post' },
-          logout: { url: 'https://directusvps.zerotohero.ca/zerotohero/auth/logout', method: 'post' },
+          login: { url: DIRECTUS_API_URL + 'auth/login', method: 'post' },
+          refresh: { url: DIRECTUS_API_URL + 'auth/refresh', method: 'post' },
+          logout: { url: DIRECTUS_API_URL + 'auth/logout', method: 'post' },
           user: false
         }
       }

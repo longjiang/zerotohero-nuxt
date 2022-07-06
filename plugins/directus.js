@@ -1,11 +1,13 @@
-import DateHelper from "@/lib/date-helper";
+import DateHelper from "../lib/date-helper";
 import axios from 'axios'
 import SmartQuotes from "smartquotes";
 import he from "he"; // html entities
-import Helper from '@/lib/helper'
-import { logError } from '@/lib/utils/error'
+import { randBase64 } from "../lib/utils/random";
+import { logError } from '../lib/utils/error'
+import { escapeRegExp } from '../lib/utils/regex'
+import { proxy } from '../lib/utils/proxy'
 
-export const DIRECTUS_API_URL = 'https://directusvps.zerotohero.ca/zerotohero/'
+export const DIRECTUS_API_URL = 'https://zerotohero.directus.app/'
 
 export const YOUTUBE_VIDEOS_TABLES = {
   2: [
@@ -83,7 +85,7 @@ export default ({ app }, inject) => {
      */
     async countShowEpisodes(showType, showId, l2Id, adminMode = false) {
       let tableSuffix = this.youtubeVideosTableName(l2Id).replace(`items/youtube_videos`, '')
-      let data = await Helper.proxy(
+      let data = await proxy(
         `https://directusvps.zerotohero.ca/count.php?table_suffix=${tableSuffix}&lang_id=${l2Id}&type=${showType}&id=${showId}`,
         { cacheLife: adminMode ? 0 : 86400 } // cache the count for one day (86400 seconds)
       );
@@ -91,7 +93,7 @@ export default ({ app }, inject) => {
     },
     async getRandomEpisodeYouTubeId(langId, type) {
       let showFilter = type ? `&filter[${type}][nnull]=1` : "";
-      let randBase64Char = Helper.randBase64(1);
+      let randBase64Char = randBase64(1);
       let url = `${this.youtubeVideosTableName(
         langId
       )}?filter[l2][eq]=${langId}${showFilter}&filter[youtube_id][contains]=${randBase64Char}&fields=youtube_id`;
@@ -203,14 +205,13 @@ export default ({ app }, inject) => {
     },
     async checkShows(videos, langId, adminMode = false) {
       let response = await this.get(
-        `items/tv_shows?filter[l2][eq]=${langId}&limit=500&timestamp=${
-          adminMode ? Date.now() : 0
+        `items/tv_shows?filter[l2][eq]=${langId}&limit=500&timestamp=${adminMode ? Date.now() : 0
         }`
       );
       let shows = response.data || [];
       let showTitles = shows.map(show => show.title);
       let regex = new RegExp(
-        showTitles.map(t => Helper.escapeRegExp(t)).join("|")
+        showTitles.map(t => escapeRegExp(t)).join("|")
       );
       for (let video of videos) {
         if (regex.test(video.title)) {

@@ -89,7 +89,7 @@
 
 <script>
 import Helper from "@/lib/helper";
-import Config from "@/lib/config";
+import { DIRECTUS_API_URL } from '@/plugins/directus.js'
 
 export default {
   data() {
@@ -124,7 +124,7 @@ export default {
       try {
         this.loading = true
         const res = await axios.post(
-          `https://directusvps.zerotohero.ca/zerotohero/users`,
+          `${DIRECTUS_API_URL}users`,
           this.form
         );
         if (res && res.data && res.data.public === true) {

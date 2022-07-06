@@ -139,7 +139,7 @@
               to="/profile"
               class="mr-1"
               v-if="
-                $auth && $auth.loggedIn && $auth.user && $auth.user.first_name
+                $auth && $auth.loggedIn
               "
             >
               <router-link to="/logout">Logout</router-link>

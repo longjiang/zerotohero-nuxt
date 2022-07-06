@@ -104,8 +104,8 @@ export default {
   data() {
     return {
       form: {
-        email: "",
-        password: "",
+        email: "longjiang2005@gmail.com",
+        password: "s3Y22Qp3ASKxDKXe",
       },
       shaking: false,
       loading: false,
@@ -146,14 +146,17 @@ export default {
       try {
         this.loading = true;
         let res = await this.$auth.loginWith("local", { data: this.form });
-        if (res && res.data && res.data.data && res.data.data.user) {
-          let user = res.data.data.user;
-          this.$auth.setUser(user);
-          this.$toast.success(`Welcome back, ${this.$auth.user.first_name}!`, {
-            position: "top-center",
-            duration: 5000,
-          });
-          this.redirect();
+        if (res.data?.data) {
+          let userRes = await this.$directus.get('users/me')
+          if (userRes.data?.data?.id) {
+            let user = userRes.data.data;
+            this.$auth.setUser(user);
+            this.$toast.success(`Welcome back, ${this.$auth.user.first_name}!`, {
+              position: "top-center",
+              duration: 5000,
+            });
+            this.redirect();
+          }
         }
       } catch (err) {
         if (err.response && err.response.data) {
