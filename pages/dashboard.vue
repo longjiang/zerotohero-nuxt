@@ -37,6 +37,7 @@
           </div>
           <div :class="{ 'row mb-5': true }" v-if="hasDashboard">
             <div class="col-sm-12">
+              <Logo class="mb-4" />
               <div class="home-card p-2 pt-4 pb-4 bg-white">
                 <h5 class="text-center mt-2 mb-1">
                   {{ $auth.user.first_name

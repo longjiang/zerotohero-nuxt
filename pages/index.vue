@@ -22,11 +22,12 @@
       <div class="container">
         <div class="row mt-5">
           <div class="col-sm-12 mb-3" style="max-width: 40rem; margin: 0 auto">
-            <YouTubeVideo
+            <!-- <YouTubeVideo
               youtube="mzpu-2FV4E4"
               :autoload="true"
               style="overflow: hidden; border-radius: 1rem"
-            />
+            /> -->
+            <Logo />
           </div>
         </div>
         <div class="row pt-3">
