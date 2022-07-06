@@ -1,0 +1,10 @@
+[[redirects]]
+from = "https://www.zerotohero.ca/*"
+to = "https://languageplayer.io/:splat"
+status = 301
+force = true
+[[redirects]]
+from = "https://beta.zerotohero.ca/*"
+to = "https://beta.languageplayer.io/:splat"
+status = 301
+force = true
