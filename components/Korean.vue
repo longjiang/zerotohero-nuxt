@@ -52,7 +52,7 @@ export default {
       let variants = await (await this.$getUnihan()).variants(this.text)
       for (let variant of variants) {
         let response = await this.$directus.get(
-          `items/kengdic?filter[hanja][eq]=${variant}`
+          `items/kengdic?filter[hanja][_eq]=${variant}`
         )
         response = response.data
         this.words = this.words.concat(response.data)

@@ -113,7 +113,7 @@ export default {
       if (this.method === "list") {
         this.articles = [];
         let response = await this.$directus.get(
-          `items/articles?filter[l2][eq]=${this.$l2.id}`
+          `items/articles?filter[l2][_eq]=${this.$l2.id}`
         );
 
         this.articles = response.data.data.map((article) => {

@@ -337,7 +337,7 @@ export default {
     async getShowsOverNetwork() {
       let langId = this.$l2.id;
       let type = this.routeType.replace("-", "_");
-      let path = `items/${type}?filter[l2][eq]=${langId}&fields=id,title`;
+      let path = `items/${type}?filter[l2][_eq]=${langId}&fields=id,title`;
       let response = await this.$directus.get(path);
       if (response.data && response.data.data.length > 1) {
         let shows = response.data.data;
@@ -374,7 +374,7 @@ export default {
       if (show.audiobook || showType === "tv_show") {
         sort = "title";
       }
-      let query = `filter[${showType}][eq]=${show.id}&limit=1&fields=youtube_id,id,l2,tv_show,talk,title&sort=${sort}`;
+      let query = `filter[${showType}][_eq]=${show.id}&limit=1&fields=youtube_id,id,l2,tv_show,talk,title&sort=${sort}`;
       let videos = await this.$directus.getVideos({ l2Id, query });
       let firstEpisode = videos[0];
       return firstEpisode;

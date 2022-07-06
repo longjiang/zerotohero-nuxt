@@ -80,13 +80,13 @@ export default ({ app }, inject) => {
         }
       }
       if (filter === false) {
-        showFilter = `&filter[tv_show][null]=1&filter[talk][null]=1`;
+        showFilter = `&filter[tv_show][_null]=true&filter[talk][_null]=true`;
       }
 
       let hits = [];
       for (let term of terms) {
         term = term.replace(/'/g, "&#39;");
-        let subsFilter = `&filter[subs_l2][contains]=${encodeURIComponent(term)}`;
+        let subsFilter = `&filter[subs_l2][_contains]=${encodeURIComponent(term)}`;
         if (term.includes("_") || term.includes("*")) {
           subsFilter = `&filter[subs_l2][rlike]=${encodeURIComponent(
             "%" + term.replace(/\*/g, "%") + "%"

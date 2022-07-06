@@ -69,7 +69,7 @@ export default {
           this.shinjitai = kyujitai.decode(variant);
           if (this.shinjitai) {
             let response = await this.$directus.get(
-              `items/edict?filter[kanji][eq]=${this.shinjitai}`
+              `items/edict?filter[kanji][_eq]=${this.shinjitai}`
             );
             if (response.data.data.length > 0) {
               let data = response.data.data.filter((row) => {

@@ -391,8 +391,8 @@ export default {
       offset = 0,
     }) {
       let filter = "";
-      if (tvShow) filter = `filter[tv_show][eq]=${tvShow}`;
-      if (talk) filter = `filter[talk][eq]=${talk}`;
+      if (tvShow) filter = `filter[tv_show][_eq]=${tvShow}`;
+      if (talk) filter = `filter[talk][_eq]=${talk}`;
       // First find videos associated with a particular tv show, or talk
       let videos = await this.$directus.getVideos({
         l2Id: this.$l2.id,

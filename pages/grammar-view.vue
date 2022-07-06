@@ -150,7 +150,7 @@ export default {
     async getDrill(grammarID) {
       try {
         let response = await this.$directus.get(
-          `items/drills?filter[grammar_id][eq]=${grammarID}&fields=*,file.*`
+          `items/drills?filter[grammar_id][_eq]=${grammarID}&fields=*,file.*`
         );
         response = response.data;
         if (response && response.data && response.data[0]) {

@@ -355,13 +355,13 @@ export default {
       try {
         let videos = [];
         let filter = "";
-        if (tvShow) filter = `filter[tv_show][eq]=${tvShow}`;
-        if (talk) filter = `filter[talk][eq]=${talk}`;
+        if (tvShow) filter = `filter[tv_show][_eq]=${tvShow}`;
+        if (talk) filter = `filter[talk][_eq]=${talk}`;
         // First find videos associated with a particular tv show, or talk
         let response = await this.$directus.get(
           `${this.$directus.youtubeVideosTableName(
             this.$l2.id
-          )}?sort=${sort}&filter[l2][eq]=${
+          )}?sort=${sort}&filter[l2][_eq]=${
             this.$l2.id
           }&${filter}&limit=${limit}&fields=l2,id,title,youtube_id,tv_show.id,tv_show.title,talk.id,talk.title,talk.audiobook,date,l2&offset=${offset}`
         );

@@ -160,16 +160,16 @@ export default {
       }
     },
     async getFirstEpisodeOfShow(showId, showType, l2Id) {
-      let query = `filter[${showType}][eq]=${showId}&fields=youtube_id,id,l2`;
+      let query = `filter[${showType}][_eq]=${showId}&fields=youtube_id,id,l2`;
       let videos = await this.$directus.getVideos({ l2Id, query });
       let firstEpisode = videos[0];
       return firstEpisode;
     },
     async getRandomEpisodeOfShow(showId, showType, l2Id) {
-      let langFilter = l2Id ? `&filter[l2][eq]=${l2Id}` : "&filter[l2][nnull]=1";
+      let langFilter = l2Id ? `&filter[l2][_eq]=${l2Id}` : "&filter[l2][nnull]=1";
       let showFilter = showId
-        ? `filter[${showType}][eq]=${showId}`
-        : `filter[tv_show][null]=1&filter[talk][null]=1${langFilter}`;
+        ? `filter[${showType}][_eq]=${showId}`
+        : `filter[tv_show][_null]=true&filter[talk][_null]=true${langFilter}`;
       let query = `${showFilter}&fields=youtube_id,id,l2`;
       let videos = await this.$directus.getVideos({ l2Id, query });
       let randomEpisode = videos[Math.floor(Math.random() * videos.length)];

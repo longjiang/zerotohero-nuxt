@@ -64,10 +64,28 @@ export const actions = {
     let tvShows = []
     let talks = []
     try {
+      let filter = {
+        '_and': [
+          {
+            'l2': {
+              '_eq': l2.id
+            }
+          }
+        ]
+
+      }
+      if (!adminMode) {
+        filter['_and'].push = {
+          'hidden': { '_empty': true }
+        }
+      }
+      let params = {
+        filter,
+        limit
+      }
 
       let response = await this.$directus.get(
-        `items/tv_shows?filter[l2][eq]=${l2.id
-        }${adminMode ? '' : '&filter[hidden][empty]=true'}&limit=${limit}&timestamp=${adminMode ? Date.now() : 0}`
+        `items/tv_shows`, params
       );
 
       if (response.data.data) {
@@ -80,10 +98,8 @@ export const actions = {
           return sort
         });
       }
-
       response = await this.$directus.get(
-        `items/talks?filter[l2][eq]=${l2.id
-        }${adminMode ? '' : '&filter[hidden][empty]=true'}&limit=${limit}&timestamp=${adminMode ? Date.now() : 0}`
+        `items/talks`, params
       );
       if (response.data.data) {
         talks = response.data.data

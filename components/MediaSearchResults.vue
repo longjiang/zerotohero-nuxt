@@ -224,21 +224,21 @@ export default {
       this.noMoreVideos = false;
       let filters = "";
       if (!this.includeShows)
-        filters = "&filter[tv_show][null]=1&filter[talk][null]=1";
+        filters = "&filter[tv_show][_null]=true&filter[talk][_null]=true";
       if (this.topic !== "all") {
-        filters += "&filter[topic][eq]=" + this.topic;
+        filters += "&filter[topic][_eq]=" + this.topic;
       }
       if (this.level !== "all") {
-        filters += "&filter[level][eq]=" + this.level;
+        filters += "&filter[level][_eq]=" + this.level;
       }
       if (this.keyword !== "") {
         if (this.keyword.startsWith("channel:"))
           filters +=
-            "&filter[channel_id][eq]=" +
+            "&filter[channel_id][_eq]=" +
             encodeURIComponent(this.keyword.replace("channel:", ""));
         else
           filters +=
-            "&filter[title][contains]=" + encodeURIComponent(this.keyword);
+            "&filter[title][_contains]=" + encodeURIComponent(this.keyword);
         filters += "&sort=title";
       }
       let limit = this.perPage;
@@ -259,7 +259,7 @@ export default {
     },
     async getChannels() {
       let response = await this.$directus.get(
-        `items/youtube_channels?filter[language][eq]=${this.$l2.id}&fields=*,avatar.*`
+        `items/youtube_channels?filter[language][_eq]=${this.$l2.id}&fields=*,avatar.*`
       );
       if (response.data && response.data.length > 0) {
         let channels = response.data.data.map((channel) => {

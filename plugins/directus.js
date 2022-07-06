@@ -96,7 +96,7 @@ export default ({ app }, inject) => {
       let randBase64Char = randBase64(1);
       let url = `${this.youtubeVideosTableName(
         langId
-      )}?filter[l2][eq]=${langId}${showFilter}&filter[youtube_id][contains]=${randBase64Char}&fields=youtube_id`;
+      )}?filter[l2][_eq]=${langId}${showFilter}&filter[youtube_id][_contains]=${randBase64Char}&fields=youtube_id`;
       try {
         let response = await this.get(url);
         if (response.data && response.data.data.length > 0) {
@@ -137,7 +137,7 @@ export default ({ app }, inject) => {
         // No language filter is necessary since the table only has one language
       } else {
         if (query !== '') query += `&`
-        query += `filter[l2][eq]=${l2Id}`
+        query += `filter[l2][_eq]=${l2Id}`
       }
       query = query ? '?' + query : ''
       let res = await this.get(`${this.youtubeVideosTableName(l2Id)}${query}`)
@@ -205,7 +205,7 @@ export default ({ app }, inject) => {
     },
     async checkShows(videos, langId, adminMode = false) {
       let response = await this.get(
-        `items/tv_shows?filter[l2][eq]=${langId}&limit=500&timestamp=${adminMode ? Date.now() : 0
+        `items/tv_shows?filter[l2][_eq]=${langId}&limit=500&timestamp=${adminMode ? Date.now() : 0
         }`
       );
       let shows = response.data || [];

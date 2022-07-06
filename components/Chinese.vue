@@ -57,7 +57,7 @@ export default {
       let variants = await (await this.$getUnihan()).variants(this.text);
       for (let variant of variants) {
         let response = await this.$directus.get(
-          `items/hsk_cedict?filter[traditional][eq]=${variant}`
+          `items/hsk_cedict?filter[traditional][_eq]=${variant}`
         );
         this.words = this.words.concat(response.data.data);
       }

@@ -143,9 +143,9 @@ export default {
       let response = await $.getJSON(
         `${this.$directus.youtubeVideosTableName(
           this.$l2.id
-        )}?sort=-id&filter[l2][eq]=${this.$l2.id}&filter[level][eq]=${
+        )}?sort=-id&filter[l2][_eq]=${this.$l2.id}&filter[level][_eq]=${
           this.level
-        }&filter[lesson][eq]=${this.lesson}`
+        }&filter[lesson][_eq]=${this.lesson}`
       );
       let videos = response.data || [];
       if (videos.length > 0) {
@@ -184,9 +184,9 @@ export default {
                   $.getJSON(
                     `${this.$directus.youtubeVideosTableName(
                       this.$l2.id
-                    )}?sort=-id&filter[l2][eq]=${
+                    )}?sort=-id&filter[l2][_eq]=${
                       this.$l2.id
-                    }&filter[lesson][null]&filter[subs_l2][contains]=${JSON.stringify(
+                    }&filter[lesson][null]&filter[subs_l2][_contains]=${JSON.stringify(
                       wordForm
                     ).replace(/"/gi, "")}&limit=200`
                   ).then((response) => {

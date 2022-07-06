@@ -142,13 +142,13 @@ export default {
       this.$router.push({ path: canonical });
     } else {
       if (this.topic !== "all") {
-        filters += "&filter[topic][eq]=" + this.topic;
+        filters += "&filter[topic][_eq]=" + this.topic;
       }
       if (this.type !== "all") {
-        filters += "&filter[type][eq]=" + this.type;
+        filters += "&filter[type][_eq]=" + this.type;
       }
       let response = await this.$directus.get(
-        `items/resources?filter[l2][eq]=${this.$l2.id}${filters}&fields=*,thumbnail.*`
+        `items/resources?filter[l2][_eq]=${this.$l2.id}${filters}&fields=*,thumbnail.*`
       );
       this.resources =
         response.data.data.map((resource) => {

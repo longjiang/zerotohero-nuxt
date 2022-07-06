@@ -44,7 +44,7 @@
         } hours. From zero to mastery in ${(($l2.hours || 1100) * 4)
           .toString()
           .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} hours!`"
-        :image="courses['A1'][0].thumbnail.data.full_url"
+        :image="courses['A1'][0].thumbnail? courses['A1'][0].thumbnail.data.full_url : undefined"
       />
       <SocialHead
         v-else
@@ -112,7 +112,7 @@
                   :resource="{
                     title: course.title,
                     url: course.url,
-                    thumbnail: course.thumbnail.data.full_url,
+                    thumbnail: course.thumbnail ? course.thumbnail.data.full_url : undefined,
                   }"
                 />
               </div>
@@ -186,7 +186,7 @@
                   :resource="{
                     title: resource.title,
                     url: resource.url,
-                    thumbnail: resource.thumbnail.data.full_url,
+                    thumbnail: resource.thumbnail ? resource.thumbnail.data.full_url : undefined,
                   }"
                   :internal="true"
                 />
@@ -341,7 +341,7 @@ export default {
     },
     async loadExams() {
       let response = await this.$directus.get(
-        `items/exams?filter[l2][eq]=${this.$l2.id}`
+        `items/exams?filter[l2][_eq]=${this.$l2.id}`
       );
       response = response.data;
       let exams = response.data || [];
@@ -358,7 +358,7 @@ export default {
     },
     async loadCourses() {
       let response = await this.$directus.get(
-        `items/resources?filter[l2][eq]=${this.$l2.id}&filter[type][eq]=courses&filter[featured][eq]=1&fields=*,thumbnail.*`
+        `items/resources?filter[l2][_eq]=${this.$l2.id}&filter[type][_eq]=courses&filter[featured][_eq]=1&fields=*,thumbnail.*`
       );
       if (response.data?.data) {
         let courses = response.data.data || [];
@@ -376,7 +376,7 @@ export default {
     },
     async loadResources() {
       let response = await this.$directus.get(
-        `items/resources?filter[l2][eq]=${this.$l2.id}&filter[type][neq]=courses&filter[featured][eq]=1&fields=*,thumbnail.*`
+        `items/resources?filter[l2][_eq]=${this.$l2.id}&filter[type][_neq]=courses&filter[featured][_eq]=1&fields=*,thumbnail.*`
       );
       response = response.data;
       let result = {};

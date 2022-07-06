@@ -55,8 +55,8 @@ export const loadFromServer = async ({ l2, adminMode }) => {
   let items = []
   if ($nuxt.$auth.loggedIn) {
     try {
-      let path = `items/text?sort=title&filter[l2][eq]=${l2.id
-        }&filter[owner][eq]=${$nuxt.$auth.user.id}&fields=id,title&timestamp=${Date.now()}`
+      let path = `items/text?sort=title&filter[l2][_eq]=${l2.id
+        }&filter[owner][_eq]=${$nuxt.$auth.user.id}&fields=id,title&timestamp=${Date.now()}`
       console.log(`savedTexts store: getting saved texts from ${path}`)
       let res = await $nuxt.$directus.get(path);
       items = res?.data?.data || []

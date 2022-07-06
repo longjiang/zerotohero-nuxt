@@ -109,7 +109,7 @@ export default {
       } else if (this.method === "list") {
         if (!this.subreddits) {
           let response = await this.$directus.get(
-            `items/subreddits?filter[l2][eq]=${this.$l2.id}`
+            `items/subreddits?filter[l2][_eq]=${this.$l2.id}`
           );
           if (response.data) {
             this.subreddits = response.data.data;

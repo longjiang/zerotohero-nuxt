@@ -217,11 +217,11 @@ export default {
     let lesson = await this.$directus.get(`items/tutoring_kit/${this.id}`);
     lesson = lesson.data.data;
     let readings = await this.$directus.get(
-      `items/reading?filter[l2][eq]=${this.$l2.id}&filter[lesson][eq]=${this.id}`
+      `items/reading?filter[l2][_eq]=${this.$l2.id}&filter[lesson][_eq]=${this.id}`
     );
     readings = readings.data.data;
     let youtubeVideos = await this.$directus.get(
-      `${this.$directus.youtubeVideosTableName(this.$l2.id)}?filter[l2][eq]=${this.$l2.id}&filter[lesson][eq]=${this.id}`
+      `${this.$directus.youtubeVideosTableName(this.$l2.id)}?filter[l2][_eq]=${this.$l2.id}&filter[lesson][_eq]=${this.id}`
     );
     youtubeVideos = youtubeVideos.data.data.map((video) => {
       return {

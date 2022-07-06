@@ -45,7 +45,7 @@ export const mutations = {
 export const actions = {
   async load(context, { l2, adminMode }) {
     let response = await this.$directus.get(
-      `items/phrasebook?sort=title&filter[l2][eq]=${l2.id
+      `items/phrasebook?sort=title&filter[l2][_eq]=${l2.id
       }&fields=id,description,exact,title,l2,tv_show.*&limit=500&timestamp=${adminMode ? Date.now() : 0}`
     );
     let phrasebooks =

@@ -283,7 +283,7 @@ export default {
       let fields = "youtube_id,title,date";
       let timestamp = this.$adminMode ? Date.now() : 0;
       let params = { limit, sort, fields, timestamp };
-      params[`filter[${this.showType}][eq]`] = this.show.id;
+      params[`filter[${this.showType}][_eq]`] = this.show.id;
 
       let postParams = Object.assign({}, params);
 
@@ -453,7 +453,7 @@ export default {
       return video;
     },
     async getSaved() {
-      let query = `filter[youtube_id][eq]=${
+      let query = `filter[youtube_id][_eq]=${
         this.youtube_id
       }&fields=*,tv_show.*,talk.*&timestamp=${
         this.$adminMode ? Date.now() : 0

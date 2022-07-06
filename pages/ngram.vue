@@ -217,12 +217,12 @@ export default {
         showFilter = "";
       } else {
         if (show.startsWith("show-"))
-          showFilter = `&filter[tv_show][eq]=${show.replace("show-", "")}`;
+          showFilter = `&filter[tv_show][_eq]=${show.replace("show-", "")}`;
         else if (show.startsWith("talk-"))
-          showFilter = `&filter[talk][eq]=${show.replace("talk-", "")}`;
+          showFilter = `&filter[talk][_eq]=${show.replace("talk-", "")}`;
       }
       let response = await this.$directus.get(
-        `${this.$directus.youtubeVideosTableName(this.$l2.id)}?sort=-id&limit=${limit}&offset=${start}&filter[l2][eq]=${this.$l2.id}${showFilter}&fields=*,tv_show.*,talk.*`
+        `${this.$directus.youtubeVideosTableName(this.$l2.id)}?sort=-id&limit=${limit}&offset=${start}&filter[l2][_eq]=${this.$l2.id}${showFilter}&fields=*,tv_show.*,talk.*`
       );
       let videos = response.data.data || [];
       if (["all-tv-shows", "all-videos"].includes(show)) {

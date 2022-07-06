@@ -89,7 +89,7 @@ export default {
     async loadRandomShowsMatchingIds(ids, adminMode) {
       let response = await this.$directus.get(
         `items/tv_shows?filter${
-          adminMode ? "" : "&filter[hidden][empty]=true"
+          adminMode ? "" : "&filter[hidden][_empty]=true"
         }&filter[id][in]=${ids.join(
           ","
         )}&filter[title][nin]=Movies,Music,News&timestamp=${

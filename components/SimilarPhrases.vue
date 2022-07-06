@@ -231,7 +231,7 @@ export default {
       this.updating = false;
     },
     async getVousFromWiktionary() {
-      let path = `items/wiktionary?filter[word][eq]=${encodeURIComponent(
+      let path = `items/wiktionary?filter[word][_eq]=${encodeURIComponent(
         this.phrase
       )}&timestamp=${this.$adminMode ? Date.now() : 0}`;
       try {
@@ -301,8 +301,8 @@ export default {
     },
     async getPhrasebooksThatContain(term) {
       if (term) {
-        // [contains] filter seems to be case INSENSITIVE
-        let path = `items/phrasebook?sort=title&filter[phrases][contains]=${encodeURIComponent(
+        // [_contains] filter seems to be case INSENSITIVE
+        let path = `items/phrasebook?sort=title&filter[phrases][_contains]=${encodeURIComponent(
           term
         )}&fields=*,tv_show.*&limit=500&timestamp=${
           this.$adminMode ? Date.now() : 0

@@ -440,11 +440,11 @@ export default {
       return episodeCount;
     },
     async getVideosFromServer({ keyword, limit, offset, sort } = {}) {
-      let keywordFilter = keyword ? `&filter[title][contains]=${keyword}` : "";
+      let keywordFilter = keyword ? `&filter[title][_contains]=${keyword}` : "";
       let response = await this.$directus.get(
-        `${this.$directus.youtubeVideosTableName(this.$l2.id)}?filter[l2][eq]=${
+        `${this.$directus.youtubeVideosTableName(this.$l2.id)}?filter[l2][_eq]=${
           this.$l2.id
-        }&filter[${this.collection}][eq]=${
+        }&filter[${this.collection}][_eq]=${
           this.show.id
         }${keywordFilter}&fields=id,title,l2,youtube_id,date,tv_show.*,talk.*&sort=${sort}&limit=${limit}&offset=${offset}&timestamp=${
           this.$adminMode ? Date.now() : 0
