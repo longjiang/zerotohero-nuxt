@@ -104,8 +104,8 @@ export default {
   data() {
     return {
       form: {
-        email: "longjiang2005@gmail.com",
-        password: "s3Y22Qp3ASKxDKXe",
+        email: "",
+        password: "",
       },
       shaking: false,
       loading: false,
