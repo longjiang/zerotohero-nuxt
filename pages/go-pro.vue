@@ -45,7 +45,7 @@
             </div>
             <div class="mt-4"></div>
             <div v-if="$auth.loggedIn && $auth.user" class="text-center">
-              <div v-if="![1, 4].includes(Number($auth.user.role))">
+              <div v-if="pro">
                 <div class="text-center bg-white rounded p-3">
                   <div class="user-avatar"><i class="fas fa-user"></i></div>
                   <h6>
@@ -57,7 +57,7 @@
                 <p>Let's get make you Pro.</p>
               </div>
               <div class="mt-3"></div>
-              <div v-if="[1, 4].includes(Number($auth.user.role))">
+              <div v-if="pro">
                 <h5 class="mb-3">🎉 You are already Pro! 🚀 Enjoy!</h5>
                 <router-link class="btn btn-primary mb-3" to="/">
                   Start Using Pro
@@ -285,7 +285,7 @@ export default {
   },
   computed: {
     pro() {
-      return [1, 4].includes(Number(this.$auth.user?.role)) ? true : false;
+      return this.$directus.isPro();
     },
     native() {
       return Capacitor.isNativePlatform();

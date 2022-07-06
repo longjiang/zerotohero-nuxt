@@ -337,7 +337,7 @@ export default {
   },
   computed: {
     pro() {
-      return [1, 4].includes(Number(this.$auth.user?.role)) ? true : false;
+      return this.$directus.isPro();
     },
     browserLanguage() {
       if (process.browser) {

@@ -148,7 +148,7 @@ export default {
       }
     },
     pro() {
-      return [1, 4].includes(Number(this.$auth.user?.role)) ? true : false;
+      return this.$directus.isPro();
     },
     native() {
       return Capacitor.isNativePlatform();

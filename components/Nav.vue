@@ -280,7 +280,7 @@ export default {
       });
     },
     userIsAdmin() {
-      return this.$auth.user && this.$auth.user.role == 1;
+      return this.$auth.user && this.$auth.user.role == this.$directus.DIRECTUS_ROLE_ADMIN;
     },
     native() {
       return Capacitor.isNativePlatform();

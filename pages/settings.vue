@@ -112,7 +112,7 @@ export default {
         return this.$store.state.settings.l2;
     },
     userIsAdmin() {
-      return this.$auth.user && this.$auth.user.role == 1;
+      return this.$auth.user && this.$auth.user.role == this.$directus.DIRECTUS_ROLE_ADMIN;
     },
     ...mapState("settings", ["l2Settings", "l1", "l2"]),
   },

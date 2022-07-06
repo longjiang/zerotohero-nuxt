@@ -360,7 +360,7 @@ export default {
   computed: {
     pro() {
       if (!POPULAR_LANGS.includes(this.$l2.code)) return true; // Let's not charge for less popular languages
-      return [1, 4].includes(Number(this.$auth.user?.role)) ? true : false;
+      return this.$directus.isPro();
     },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")

@@ -47,7 +47,7 @@ export default {
   computed: {
     pro() {
       if (this.forcePro) return true;
-      return [1, 4].includes(Number(this.$auth.user?.role)) ? true : false;
+      return this.$directus.isPro()
     },
   },
 };

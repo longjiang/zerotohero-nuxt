@@ -9,6 +9,12 @@ import { proxy } from '../lib/utils/proxy'
 
 export const DIRECTUS_API_URL = 'https://zerotohero.directus.app/'
 
+export const DIRECTUS_ROLE_ADMIN = 'ea52e89f-13f1-424a-9552-b07b1036f3f4'
+
+export const DIRECTUS_ROLE_GUEST = 'ca9183ab-ef9d-4fee-9377-92b7b2a9b303'
+
+export const DIRECTUS_ROLE_PRO = 'ddc7e067-bb98-4bfa-87b3-18a756ee2186'
+
 export const YOUTUBE_VIDEOS_TABLES = {
   2: [
     1874, // Basque
@@ -42,6 +48,16 @@ export const YOUTUBE_VIDEOS_TABLES = {
 
 export default ({ app }, inject) => {
   inject('directus', {
+    DIRECTUS_API_URL,
+    DIRECTUS_ROLE_ADMIN,
+    DIRECTUS_ROLE_GUEST,
+    DIRECTUS_ROLE_PRO,
+    YOUTUBE_VIDEOS_TABLES,
+    isPro() {
+      let user = app.$auth?.user
+      let role = user?.role
+      return [DIRECTUS_ROLE_ADMIN, DIRECTUS_ROLE_PRO].includes(role) ? true : false;
+    },
     tokenOptions(options = {}) {
       let token = app.$auth.strategy.token.get()
       if (token) {
