@@ -1,7 +1,7 @@
 <template>
   <container-query :query="query" v-model="params">
     <div :class="`watch-history watch-history-${skin}`">
-      <div class="history-items container" v-if="itemsFiltered.length > 0">
+      <div class="history-items" v-if="itemsFiltered.length > 0">
         <div class="row" v-if="showClear">
           <div
             class="col-12 text-right"
@@ -18,9 +18,9 @@
             </button>
           </div>
         </div>
-        <div v-for="group in groups" :key="group.date">
-          <div class="row" v-if="showDate">
-            <div class="col-sm-12">
+        <div class="row">
+          <template v-for="group in groups">
+            <div class="col-sm-12" v-if="showDate" :key="`date-${group.date}`">
               <p v-if="group.date === '0'" class="mb-4 mt-4">
                 Watched earlier:
               </p>
@@ -35,11 +35,9 @@
                 }}:
               </p>
             </div>
-          </div>
-          <div class="row">
             <div
               v-for="(item, itemIndex) of group.items"
-              :key="`history-item-${itemIndex}`"
+              :key="`history-item-${group.date}-${itemIndex}`"
               :class="{
                 'pb-4 history-item-column': true,
                 'col-12': params.xs,
@@ -85,7 +83,7 @@
                 <i class="fa fa-times"></i>
               </button>
             </div>
-          </div>
+          </template>
         </div>
       </div>
       <div class="w-100" v-if="itemsFiltered.length === 0">
@@ -95,7 +93,7 @@
               skin === 'dark' ? 'ghost-dark' : ''
             }`"
           >
-            You haven't watched any {{ l2 ? l2.name : '' }} videos yet.
+            You haven't watched any {{ l2 ? l2.name : "" }} videos yet.
             <br />
             <br />
             <router-link :to="{ name: 'all-media' }" class="btn btn-success">

@@ -42,6 +42,68 @@
           >
             <Loader :sticky="true" message="Loading videos in our library..." />
           </div>
+          <div
+            v-if="videos && tvShows && tvShows.length > 0"
+            class="media-section"
+          >
+            <h3 class="media-seaction-heading">
+              TV Shows
+              <router-link :to="{ name: 'tv-shows' }" class="show-all">
+                More
+                <i class="fas fa-chevron-right ml-1"></i>
+              </router-link>
+            </h3>
+            <ShowList
+              :shows="
+                random(
+                  tvShows.filter((s) => !['Movies', 'Music'].includes(s.title)),
+                  6
+                )
+              "
+              type="tvShows"
+              :key="`tv-shows`"
+            />
+          </div>
+          <div
+            v-if="videos && tvShows && tvShows.length > 0"
+            class="media-section"
+          >
+            <h3 class="media-seaction-heading">
+              Continue Watching
+              <router-link :to="{ name: 'watch-history' }" class="show-all">
+                More
+                <i class="fas fa-chevron-right ml-1"></i>
+              </router-link>
+            </h3>
+            <WatchHistoryComp
+              :l2="$l2"
+              skin="dark"
+              class="mt-3"
+              :showDate="false"
+              :showClear="false"
+              :limit="12"
+            />
+          </div>
+          <div v-if="videos && music && music.length > 0" class="media-section">
+            <h3 class="media-seaction-heading">
+              Music
+              <router-link
+                :to="{
+                  name: 'show',
+                  params: { type: 'tv-show', id: musicShow.id },
+                }"
+                class="show-all"
+              >
+                More
+                <i class="fas fa-chevron-right ml-1"></i>
+              </router-link>
+            </h3>
+            <LazyYouTubeVideoList
+              :videos="random(music).slice(0, 12)"
+              :showAdminToolsInAdminMode="false"
+              skin="dark"
+            />
+          </div>
 
           <div class="media-sections" v-if="!loading">
             <div
@@ -49,7 +111,7 @@
               class="media-section"
             >
               <h3 class="media-seaction-heading">
-                {{ $l2.name }} Movies
+                Movies
                 <router-link
                   :to="{
                     name: 'show',
@@ -67,33 +129,10 @@
                 skin="dark"
               />
             </div>
-            <div
-              v-if="videos && music && music.length > 0"
-              class="media-section"
-            >
-              <h3 class="media-seaction-heading">
-                {{ $l2.name }} Music
-                <router-link
-                  :to="{
-                    name: 'show',
-                    params: { type: 'tv-show', id: musicShow.id },
-                  }"
-                  class="show-all"
-                >
-                  More
-                  <i class="fas fa-chevron-right ml-1"></i>
-                </router-link>
-              </h3>
-              <LazyYouTubeVideoList
-                :videos="random(music).slice(0, 12)"
-                :showAdminToolsInAdminMode="false"
-                skin="dark"
-              />
-            </div>
 
             <div v-if="videos && news && news.length > 0" class="media-section">
               <h3 class="media-seaction-heading">
-                {{ $l2.name }} News
+                News
                 <router-link
                   :to="{
                     name: 'show',
@@ -112,32 +151,27 @@
               />
             </div>
           </div>
-
           <div
-            v-if="videos && tvShows && tvShows.length > 0"
+            v-if="videos && talks && talks.length > 0 && audiobooks.length > 0"
             class="media-section"
           >
             <h3 class="media-seaction-heading">
-              {{ $l2.name }} TV Shows
-              <router-link :to="{ name: 'tv-shows' }" class="show-all">
+              Audiobooks
+              <router-link :to="{ name: 'audiobooks' }" class="show-all">
                 More
                 <i class="fas fa-chevron-right ml-1"></i>
               </router-link>
             </h3>
             <ShowList
-              :shows="
-                random(
-                  tvShows.filter((s) => !['Movies', 'Music'].includes(s.title)),
-                  6
-                )
-              "
-              type="tvShows"
+              :shows="random(audiobooks, 6)"
+              type="talks"
               :key="`tv-shows`"
             />
           </div>
+
           <div v-if="videos && talks && talks.length > 0" class="media-section">
             <h3 class="media-seaction-heading">
-              {{ $l2.name }} YouTube
+              YouTube
               <router-link :to="{ name: 'talks' }" class="show-all">
                 More
                 <i class="fas fa-chevron-right ml-1"></i>
@@ -157,26 +191,10 @@
             />
             <div class="text-center mt-1"></div>
           </div>
-          <div
-            v-if="videos && talks && talks.length > 0 && audiobooks.length > 0"
-            class="media-section"
-          >
-            <h3 class="media-seaction-heading">
-              {{ $l2.name }} Audiobooks
-              <router-link :to="{ name: 'audiobooks' }" class="show-all">
-                More
-                <i class="fas fa-chevron-right ml-1"></i>
-              </router-link>
-            </h3>
-            <ShowList
-              :shows="random(audiobooks, 6)"
-              type="talks"
-              :key="`tv-shows`"
-            />
-          </div>
+
           <div v-if="videos && videos.length > 0" class="media-section">
             <h3 class="media-seaction-heading">
-              New Videos in {{ $l2.name }}
+              Newly Added
               <router-link :to="{ name: 'youtube-browse' }" class="show-all">
                 More
                 <i class="fas fa-chevron-right ml-1"></i>
