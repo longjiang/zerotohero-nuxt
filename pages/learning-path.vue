@@ -95,6 +95,37 @@
             </b>
             <b>{{ levelHours(level) }} hours</b>
           </p>
+          <div class="level-activity">
+            <p>
+              <b :data-level="level.cefr">
+                <i class="fa-solid fa-headphones"></i>
+                Input by Audio & Text:
+              </b>
+              {{ levelInputHours(level) }} hours
+            </p>
+            <div class="pl-3">
+              <Resource
+                :resource="{
+                  title: `Watch videos in ${$l2.name}`,
+                  url: `/${$l1.code}/${$l2.code}/all-media`,
+                  thumbnail: '/img/youtube-banner.jpg',
+                  description: `and study transcripts of ${$l2.name} videos with a popup dictionary.`,
+                }"
+                :internal="true"
+              />
+              <Resource
+                class="mt-3"
+                v-if="level.number > 3 && $hasFeature('dictionary')"
+                :resource="{
+                  title: `${$l2.name} reading with popup dictionary`,
+                  url: `/${$l1.code}/${$l2.code}/books`,
+                  thumbnail: '/img/library-banner.jpg',
+                  description: `Read books and text in ${$l2.name} with the help of our popup dictionary.`,
+                }"
+                :internal="true"
+              />
+            </div>
+          </div>
           <template>
             <div class="level-activity">
               <div v-if="courses[level.cefr]">
@@ -134,37 +165,6 @@
                   thumbnail: '/img/italki-banner.jpg',
                   description: 'Take one-on-one online conversation practice sessions at iTalki. New sign-ups get $10 off.'
                 }"
-              />
-            </div>
-          </div>
-          <div class="level-activity">
-            <p>
-              <b :data-level="level.cefr">
-                <i class="fa-solid fa-headphones"></i>
-                Input by Audio & Text:
-              </b>
-              {{ levelInputHours(level) }} hours
-            </p>
-            <div class="pl-3">
-              <Resource
-                :resource="{
-                  title: `${$l2.name} YouTube Study Tool`,
-                  url: `/${$l1.code}/${$l2.code}/all-media`,
-                  thumbnail: '/img/youtube-banner.jpg',
-                  description: `Study transcripts of ${$l2.name} videos with a popup dictionary.`,
-                }"
-                :internal="true"
-              />
-              <Resource
-                class="mt-3"
-                v-if="level.number > 3 && $hasFeature('dictionary')"
-                :resource="{
-                  title: `${$l2.name} reading with popup dictionary`,
-                  url: `/${$l1.code}/${$l2.code}/books`,
-                  thumbnail: '/img/library-banner.jpg',
-                  description: `Read books and text in ${$l2.name} with the help of our popup dictionary.`,
-                }"
-                :internal="true"
               />
             </div>
           </div>
