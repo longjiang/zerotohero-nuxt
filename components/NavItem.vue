@@ -8,15 +8,17 @@
       'nav-item-large-icon nav-item-large-icon-dark': mode === 'large-icon',
       'nav-item-active': active,
     }"
+    @click="wrapperClick"
   >
     <component
       :is="`${item.href ? 'a' : isDropdown ? 'span' : 'NuxtLink'}`"
       :href="item.href"
-      class="link-unstyled"
       :to="isDropdown ? undefined : to"
       :title="item.title"
       :target="item.href ? '_blank' : undefined"
       @click="isDropdown ? showModal() : undefined"
+      class="link-unstyled"
+      ref="link"
     >
       <div
         v-if="['large-icon', 'small-icon'].includes(mode)"
@@ -156,6 +158,9 @@ export default {
     },
   },
   methods: {
+    wrapperClick() {
+      this.$refs['link']?.$el.click()
+    },
     showModal() {
       this.$refs["dropdownMenuModal"]?.show();
     },
