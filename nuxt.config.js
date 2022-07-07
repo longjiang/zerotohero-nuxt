@@ -143,24 +143,24 @@ export default {
         token: {
           property: 'data.access_token',
           global: true,
-          maxAge: 60 * 60 * 24 * 30, // Set in Directus settings
+          maxAge: 900, // In seconds. This is only a fallback, the actual time-to-live (TTL) is encoded in the token itself.
           // required: true,
           // type: 'Bearer'
         },
         refreshToken: {
           property: 'data.refresh_token',
           data: 'refresh_token', // name of the property you want to send in the request
-          maxAge: 60 * 60 * 24 * 30
+          maxAge: 60 * 60 * 24 * 30 // 30 days
         },
         user: {
-          property: 'data.user',
-          autoFetch: false
+          property: 'data',
+          autoFetch: true
         },
         endpoints: {
           login: { url: DIRECTUS_API_URL + 'auth/login', method: 'post' },
           refresh: { url: DIRECTUS_API_URL + 'auth/refresh', method: 'post' },
           logout: { url: DIRECTUS_API_URL + 'auth/logout', method: 'post' },
-          user: false
+          user: { url: DIRECTUS_API_URL + 'users/me', method: 'get' },
         }
       }
     }

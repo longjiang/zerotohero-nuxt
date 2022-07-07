@@ -40,7 +40,6 @@
                   required
                 ></b-form-input>
               </b-form-group>
-
               <b-form-group id="input-group-2" label-for="password">
                 <b-form-input
                   id="password"
@@ -148,7 +147,7 @@ export default {
         }
       } catch (err) {
         if (err.response && err.response.data) {
-          this.$toast.error(err.response.data.error.message, {
+          this.$toast.error(err.response.data.error?.message ? err.response.data.error?.message : 'There has been an error', {
             position: "top-center",
             duration: 5000,
           });
