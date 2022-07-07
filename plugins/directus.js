@@ -151,7 +151,7 @@ export default ({ app }, inject) => {
       if (data) return data
     },
     async getRandomEpisodeYouTubeId(langId, type) {
-      let showFilter = type ? `&filter[${type}][nnull]=1` : "";
+      let showFilter = type ? `&filter[${type}][_nnull]=true` : "";
       let randBase64Char = randBase64(1);
       let url = `${this.youtubeVideosTableName(
         langId

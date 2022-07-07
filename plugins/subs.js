@@ -67,16 +67,16 @@ export default ({ app }, inject) => {
       let showFilter = "";
       if (filter === "tv_show") {
         if (tvShowFilter === "all") {
-          showFilter = `&filter[tv_show][nnull]=1`;
+          showFilter = `&filter[tv_show][_nnull]=true`;
         } else {
           showFilter = `&filter[tv_show][in]=${tvShowFilter.join(",")}`;
         }
       }
       if (filter === "talk") {
         if (talkFilter === "all") {
-          showFilter = `&filter[talk][nnull]=1`;
+          showFilter = `&filter[talk][_nnull]=true`;
         } else {
-          showFilter = `&filter[talk][in]=${talkFilter.join(",")}`;
+          showFilter = `&filter[talk][_in]=${talkFilter.join(",")}`;
         }
       }
       if (filter === false) {
@@ -87,11 +87,11 @@ export default ({ app }, inject) => {
       for (let term of terms) {
         term = term.replace(/'/g, "&#39;");
         let subsFilter = `&filter[subs_l2][_contains]=${encodeURIComponent(term)}`;
-        if (term.includes("_") || term.includes("*")) {
-          subsFilter = `&filter[subs_l2][rlike]=${encodeURIComponent(
-            "%" + term.replace(/\*/g, "%") + "%"
-          )}`;
-        }
+        // if (term.includes("_") || term.includes("*")) {
+        //   subsFilter = `&filter[subs_l2][_rlike]=${encodeURIComponent(
+        //     "%" + term.replace(/\*/g, "%") + "%"
+        //   )}`;
+        // }
         let limitQuery = limit ? `&limit=${limit}` : ''
         let videos = await app.$directus.getVideos({
           l2Id: langId,

@@ -166,7 +166,7 @@ export default {
       return firstEpisode;
     },
     async getRandomEpisodeOfShow(showId, showType, l2Id) {
-      let langFilter = l2Id ? `&filter[l2][_eq]=${l2Id}` : "&filter[l2][nnull]=1";
+      let langFilter = l2Id ? `&filter[l2][_eq]=${l2Id}` : "&filter[l2][_nnull]=true";
       let showFilter = showId
         ? `filter[${showType}][_eq]=${showId}`
         : `filter[tv_show][_null]=true&filter[talk][_null]=true${langFilter}`;

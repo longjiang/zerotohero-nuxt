@@ -320,9 +320,9 @@ export default {
       console.log(`Getting ${limit} videos...`);
       let showFilter;
       if (show === "all-tv-shows") {
-        showFilter = "&filter[tv_show][nnull]=1";
+        showFilter = "&filter[tv_show][_nnull]=true";
       } else if (show === "all-talks") {
-        showFilter = "&filter[talk][nnull]=1";
+        showFilter = "&filter[talk][_nnull]=true";
       } else if (show === "all-videos") {
         showFilter = "";
       } else {
