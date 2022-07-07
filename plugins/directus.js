@@ -80,12 +80,12 @@ export default ({ app }, inject) => {
         }
       } catch (err) {
         if (err.response?.data?.error?.message) {
-          this.$toast.error(err.response.data.error.message, {
+          app.$toast.error(err.response.data.error.message, {
             position: "top-center",
             duration: 5000,
           });
         } else {
-          this.$toast.error("There has been an error.", {
+          app.$toast.error("There has been an error.", {
             position: "top-center",
             duration: 5000,
           });
@@ -191,7 +191,7 @@ export default ({ app }, inject) => {
         return video
       }
     },
-    async getVideos({ l2Id, query = '' } = {}) {
+    async getVideos({ l2Id, query = '', params = {} } = {}) {
       if (this.youtubeVideosTableHasOnlyOneLanguage(l2Id)) {
         // No language filter is necessary since the table only has one language
       } else {
@@ -199,7 +199,7 @@ export default ({ app }, inject) => {
         query += `filter[l2][_eq]=${l2Id}`
       }
       query = query ? '?' + query : ''
-      let res = await this.get(`${this.youtubeVideosTableName(l2Id)}${query}`)
+      let res = await this.get(`${this.youtubeVideosTableName(l2Id)}${query}`, params)
       if (res?.data?.data) {
         let videos = res.data.data
         return videos

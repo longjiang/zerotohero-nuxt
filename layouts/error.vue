@@ -7,7 +7,7 @@
         <div class="col-sm-12 text-center pt-4">
           <div style="font-size: 2rem; color: white">
             <div style="font-size: 3rem">😭</div>
-            <b>“Hero to Zero”</b>
+            <b>Oh no!</b>
           </div>
           <div class="error-page">
             <h3 v-if="error.statusCode === 404">Route Not Found</h3>
