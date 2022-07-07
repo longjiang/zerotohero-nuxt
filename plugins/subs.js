@@ -64,39 +64,79 @@ export default ({ app }, inject) => {
       apostrophe = false,
       convertToSimplified = false
     } = {}) {
-      let showFilter = "";
+      let showFilter = {};
       if (filter === "tv_show") {
         if (tvShowFilter === "all") {
-          showFilter = `&filter[tv_show][_nnull]=true`;
+          showFilter = {
+            'tv_show': {
+              '_nnull': true
+            }
+          }
         } else {
-          showFilter = `&filter[tv_show][in]=${tvShowFilter.join(",")}`;
+          showFilter = {
+            'tv_show': {
+              '_in': tvShowFilter
+            }
+          }
         }
       }
       if (filter === "talk") {
         if (talkFilter === "all") {
-          showFilter = `&filter[talk][_nnull]=true`;
+          showFilter = {
+            'talk': {
+              '_nnull': true
+            }
+          }
         } else {
-          showFilter = `&filter[talk][_in]=${talkFilter.join(",")}`;
+          showFilter = {
+            'tv_show': {
+              '_in': talkFilter
+            }
+          }
         }
       }
       if (filter === false) {
-        showFilter = `&filter[tv_show][_null]=true&filter[talk][_null]=true`;
+        showFilter = {
+          '_and': [
+            {
+              'tv_show': {
+                '_null': true
+              }
+            },
+            {
+              'talk': {
+                '_null': true
+              }
+            },
+          ]
+        }
       }
 
       let hits = [];
       for (let term of terms) {
         term = term.replace(/'/g, "&#39;");
-        let subsFilter = `&filter[subs_l2][_contains]=${encodeURIComponent(term)}`;
+        let subsFilter = {
+          'subs_l2': {
+            '_contains': term
+          }
+        }
         // if (term.includes("_") || term.includes("*")) {
         //   subsFilter = `&filter[subs_l2][_rlike]=${encodeURIComponent(
         //     "%" + term.replace(/\*/g, "%") + "%"
         //   )}`;
         // }
-        let limitQuery = limit ? `&limit=${limit}` : ''
+
+        let filter = {
+          '_and': [
+            showFilter,
+            subsFilter
+          ]
+        }
+        let params = { filter, sort: '-date', timestamp: adminMode ? Date.now() : 0 }
+        if (limit) params.limit = limit
         let videos = await app.$directus.getVideos({
           l2Id: langId,
-          query: `sort=-date${showFilter}${limitQuery}${subsFilter}&timestamp=${adminMode ? Date.now() : 0
-          }`
+          params
         })
         if (
           videos?.length > 0
