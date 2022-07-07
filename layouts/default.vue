@@ -406,7 +406,7 @@ export default {
             document.cookie = "directus-zerotohero-session=" + token;
             token = token.replace("Bearer ", "");
             let userDataRes = await this.$directus.get(
-              `items/user_data?filter[owner][_eq]=${
+              `items/user_data?filter[user_created][_eq]=${
                 user.id
               }&timestamp=${Date.now()}`,
               { headers: { Authorization: `Bearer ${token}` } }

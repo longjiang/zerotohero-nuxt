@@ -58,6 +58,36 @@ export default ({ app }, inject) => {
       let role = user?.role
       return [DIRECTUS_ROLE_ADMIN, DIRECTUS_ROLE_PRO].includes(role) ? true : false;
     },
+    async login({ email, password }) {
+      try {
+        let res = await app.$auth.loginWith("local", { data: { email, password } });
+        if (res.data?.data) {
+          let userRes = await this.get('users/me')
+          if (userRes.data?.data?.id) {
+            let user = userRes.data.data;
+            app.$auth.setUser(user);
+            app.$toast.success(`Welcome back, ${app.$auth.user.first_name}!`, {
+              position: "top-center",
+              duration: 5000,
+            });
+            return true
+          }
+        }
+      } catch (err) {
+        if (err.response?.data?.error?.message) {
+          this.$toast.error(err.response.data.error.message, {
+            position: "top-center",
+            duration: 5000,
+          });
+        } else {
+          this.$toast.error("There has been an error.", {
+            position: "top-center",
+            duration: 5000,
+          });
+        }
+        return false
+      }
+    },
     tokenOptions(options = {}) {
       let token = app.$auth.strategy.token.get()
       if (token) {

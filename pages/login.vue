@@ -130,36 +130,11 @@ export default {
       }
     },
     async login(event) {
-      try {
-        this.loading = true;
-        let res = await this.$auth.loginWith("local", { data: this.form });
-        if (res.data?.data) {
-          let userRes = await this.$directus.get('users/me')
-          if (userRes.data?.data?.id) {
-            let user = userRes.data.data;
-            this.$auth.setUser(user);
-            this.$toast.success(`Welcome back, ${this.$auth.user.first_name}!`, {
-              position: "top-center",
-              duration: 5000,
-            });
-            this.redirect();
-          }
-        }
-      } catch (err) {
-        if (err.response && err.response.data) {
-          this.$toast.error(err.response.data.error?.message ? err.response.data.error?.message : 'There has been an error', {
-            position: "top-center",
-            duration: 5000,
-          });
-        } else {
-          this.$toast.error("There has been an error.", {
-            position: "top-center",
-            duration: 5000,
-          });
-        }
-        this.loading = false;
-        this.shake();
-      }
+      this.loading = true;
+      let loggedIn = await this.$directus.login(this.form)
+      if (loggedIn) this.redirect();
+      else this.shake();
+      this.loading = false;  
     },
     async shake() {
       this.shaking = true;
