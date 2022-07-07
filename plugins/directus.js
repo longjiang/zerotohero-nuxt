@@ -15,6 +15,8 @@ export const DIRECTUS_ROLE_GUEST = 'ca9183ab-ef9d-4fee-9377-92b7b2a9b303'
 
 export const DIRECTUS_ROLE_PRO = 'ddc7e067-bb98-4bfa-87b3-18a756ee2186'
 
+export const DIRECTUS_TOKEN_MAX_AGE = 15 * 60 * 1000 // milliseconds
+
 export const YOUTUBE_VIDEOS_TABLES = {
   2: [
     1874, // Basque
@@ -53,6 +55,8 @@ export default ({ app }, inject) => {
     DIRECTUS_ROLE_GUEST,
     DIRECTUS_ROLE_PRO,
     YOUTUBE_VIDEOS_TABLES,
+    DIRECTUS_TOKEN_MAX_AGE,
+    lastTokenRefreshTime: 0, // Date.now() timestamp (in milliseconds) of the last login
     isPro() {
       let user = app.$auth?.user
       let role = user?.role
@@ -60,6 +64,7 @@ export default ({ app }, inject) => {
     },
     async login({ email, password }) {
       try {
+        this.lastTokenRefreshTime = Date.now()
         let res = await app.$auth.loginWith("local", { data: { email, password } });
         if (res.data?.data) {
           let userRes = await this.get('users/me')
@@ -88,7 +93,15 @@ export default ({ app }, inject) => {
         return false
       }
     },
-    tokenOptions(options = {}) {
+    async tokenOptions(options = {}) {
+      if (Date.now() > this.lastTokenRefreshTime + DIRECTUS_TOKEN_MAX_AGE) {
+        try {
+          const res = await app.$auth.refreshTokens()
+          this.lastTokenRefreshTime = Date.now()
+        } catch(err) {
+          logError(err)
+        }
+      }
       let token = app.$auth.strategy.token.get()
       if (token) {
         if (!options.headers) options.headers = {}
@@ -107,19 +120,19 @@ export default ({ app }, inject) => {
       return url + joiner + `cors=${this.host}`
     },
     async patch(path, payload) {
-      let res = await axios.patch(this.appendHostCors(DIRECTUS_API_URL + path), payload, this.tokenOptions()).catch(err => logError(err))
+      let res = await axios.patch(this.appendHostCors(DIRECTUS_API_URL + path), payload, await this.tokenOptions()).catch(err => logError(err))
       if (res) return res
     },
     async post(path, payload) {
-      let res = await axios.post(this.appendHostCors(DIRECTUS_API_URL + path), payload, this.tokenOptions()).catch(err => logError(err))
+      let res = await axios.post(this.appendHostCors(DIRECTUS_API_URL + path), payload, await this.tokenOptions()).catch(err => logError(err))
       if (res) return res
     },
     async delete(path) {
-      let res = await axios.delete(this.appendHostCors(DIRECTUS_API_URL + path), this.tokenOptions()).catch(err => logError(err))
+      let res = await axios.delete(this.appendHostCors(DIRECTUS_API_URL + path), await this.tokenOptions()).catch(err => logError(err))
       if (res) return res
     },
     async get(path, params = {}) {
-      let res = await axios.get(this.appendHostCors(DIRECTUS_API_URL + path), this.tokenOptions({ params })).catch(err => logError(err))
+      let res = await axios.get(this.appendHostCors(DIRECTUS_API_URL + path), await this.tokenOptions({ params })).catch(err => logError(err))
       if (res) return res
     },
     /**
