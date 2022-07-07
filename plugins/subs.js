@@ -53,7 +53,7 @@ export default ({ app }, inject) => {
     async searchWithLike({
       terms,
       langId,
-      filter,
+      filterType,
       adminMode,
       excludeTerms = [],
       continua,
@@ -65,7 +65,7 @@ export default ({ app }, inject) => {
       convertToSimplified = false
     } = {}) {
       let showFilter = {};
-      if (filter === "tv_show") {
+      if (filterType === "tv_show") {
         if (tvShowFilter === "all") {
           showFilter = {
             'tv_show': {
@@ -80,7 +80,7 @@ export default ({ app }, inject) => {
           }
         }
       }
-      if (filter === "talk") {
+      if (filterType === "talk") {
         if (talkFilter === "all") {
           showFilter = {
             'talk': {
@@ -95,7 +95,7 @@ export default ({ app }, inject) => {
           }
         }
       }
-      if (filter === false) {
+      if (filterType === false) {
         showFilter = {
           '_and': [
             {
@@ -113,55 +113,55 @@ export default ({ app }, inject) => {
       }
 
       let hits = [];
+      let subsFilter = { '_or': [] }
       for (let term of terms) {
         term = term.replace(/'/g, "&#39;");
-        let subsFilter = {
+        subsFilter['_or'].push({
           'subs_l2': {
             '_contains': term
           }
-        }
-        // if (term.includes("_") || term.includes("*")) {
-        //   subsFilter = `&filter[subs_l2][_rlike]=${encodeURIComponent(
-        //     "%" + term.replace(/\*/g, "%") + "%"
-        //   )}`;
-        // }
-
-        let filter = {
-          '_and': [
-            showFilter,
-            subsFilter
-          ]
-        }
-        let params = { filter, sort: '-date', timestamp: adminMode ? Date.now() : 0 }
-        if (limit) params.limit = limit
-        let videos = await app.$directus.getVideos({
-          l2Id: langId,
-          params
         })
-        if (
-          videos?.length > 0
-        ) {
-          for (let video of videos) {
-            if (video.subs_l2)
-              video.subs_l2 = this.parseSavedSubs(video.subs_l2).filter(
-                line => line.starttime
-              );
-            if (video.subs_l1) video.subs_l1 = this.parseSavedSubs(video.subs_l1);
-            if (video.notes) video.notes = this.parseNotes(video.notes);
-          }
-          hits = hits.concat(
-            this.getHits(
-              videos,
-              terms,
-              excludeTerms,
-              continua,
-              convertToSimplified,
-              exact,
-              apostrophe
-            )
-          );
-          if (limit && hits.length > limit) break;
+      }
+      // if (term.includes("_") || term.includes("*")) {
+      //   subsFilter = `&filter[subs_l2][_rlike]=${encodeURIComponent(
+      //     "%" + term.replace(/\*/g, "%") + "%"
+      //   )}`;
+      // }
+
+      let filter = {
+        '_and': [
+          showFilter,
+          subsFilter
+        ]
+      }
+      let params = { filter, sort: '-date', timestamp: adminMode ? Date.now() : 0 }
+      if (limit) params.limit = limit
+      let videos = await app.$directus.getVideos({
+        l2Id: langId,
+        params
+      })
+      if (
+        videos?.length > 0
+      ) {
+        for (let video of videos) {
+          if (video.subs_l2)
+            video.subs_l2 = this.parseSavedSubs(video.subs_l2).filter(
+              line => line.starttime
+            );
+          if (video.subs_l1) video.subs_l1 = this.parseSavedSubs(video.subs_l1);
+          if (video.notes) video.notes = this.parseNotes(video.notes);
         }
+        hits = hits.concat(
+          this.getHits(
+            videos,
+            terms,
+            excludeTerms,
+            continua,
+            convertToSimplified,
+            exact,
+            apostrophe
+          )
+        );
       }
       return hits;
     },
