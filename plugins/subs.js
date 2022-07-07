@@ -135,7 +135,7 @@ export default ({ app }, inject) => {
         ]
       }
       let params = { filter, sort: '-date', timestamp: adminMode ? Date.now() : 0 }
-      if (limit) params.limit = limit
+      params.limit = limit ? limit : 200
       let videos = await app.$directus.getVideos({
         l2Id: langId,
         params
@@ -185,7 +185,7 @@ export default ({ app }, inject) => {
           await this.searchWithLike({
             terms,
             langId,
-            filter: "tv_show",
+            filterType: "tv_show",
             tvShowFilter,
             talkFilter,
             adminMode,
@@ -207,7 +207,7 @@ export default ({ app }, inject) => {
           await this.searchWithLike({
             terms,
             langId,
-            filter: "talk",
+            filterType: "talk",
             tvShowFilter,
             talkFilter,
             adminMode,
@@ -231,7 +231,7 @@ export default ({ app }, inject) => {
           await this.searchWithLike({
             terms,
             langId,
-            filter: false,
+            filterType: false,
             tvShowFilter,
             talkFilter,
             adminMode,
