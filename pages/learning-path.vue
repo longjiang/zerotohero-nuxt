@@ -111,17 +111,21 @@
                   thumbnail: '/img/youtube-banner.jpg',
                   description: `and study transcripts of ${$l2.name} videos with a popup dictionary.`,
                 }"
+                :level="level.cefr"
+                buttonText="Browse Videos"
                 :internal="true"
               />
               <Resource
                 class="mt-3"
                 v-if="level.number > 3 && $hasFeature('dictionary')"
+                :level="level.cefr"
                 :resource="{
                   title: `${$l2.name} reading with popup dictionary`,
                   url: `/${$l1.code}/${$l2.code}/books`,
                   thumbnail: '/img/library-banner.jpg',
                   description: `Read books and text in ${$l2.name} with the help of our popup dictionary.`,
                 }"
+                buttonText="Browse Books"
                 :internal="true"
               />
             </div>
@@ -138,6 +142,7 @@
               <div class="pl-3">
                 <Resource
                   :key="`learning-path-course-${level.cefr}-${index}`"
+                  :level="level.cefr"
                   class="mt-3"
                   v-for="(course, index) in courses[level.cefr]"
                   :resource="{
@@ -145,6 +150,7 @@
                     url: course.url,
                     thumbnail: course.thumbnail.data.full_url,
                   }"
+                  buttonText="Open Course"
                 />
               </div>
             </div>
@@ -159,12 +165,14 @@
             </p>
             <div class="pl-3">
               <Resource
+                :level="level.cefr"
                 :resource="{
                   title: 'iTalki Lessons',
                   url: 'https://www.italki.com/affshare?ref=zerotohero',
                   thumbnail: '/img/italki-banner.jpg',
                   description: 'Take one-on-one online conversation practice sessions at iTalki. New sign-ups get $10 off.'
                 }"
+                buttonText="Open iTalki"
               />
             </div>
           </div>
@@ -183,6 +191,7 @@
                 :key="`learning-path-resource-${level.cefr}-${index}`"
               >
                 <Resource
+                  :level="level.cefr"
                   :resource="{
                     title: resource.title,
                     url: resource.url,

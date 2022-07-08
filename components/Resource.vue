@@ -3,19 +3,31 @@
     <router-link :to="resource.url" v-if="internal" class="link-unstyled">
       <img :src="resource.thumbnail" class="resource-thumbnail img-fluid" />
       <div class="media-body">
-        <h6>
+        <h6 :data-level="level">
           <span>{{ resource.title }}</span>
         </h6>
         <div>{{ resource.description }}</div>
+        <div class="mt-3 text-right">
+          <router-link :to="resource.url" :data-level="level">
+            {{ buttonText }}
+            <i class="fa-solid fa-chevron-right"></i>
+          </router-link>
+        </div>
       </div>
     </router-link>
     <a :href="resource.url" v-else target="_blank" class="link-unstyled">
       <img :src="resource.thumbnail" class="resource-thumbnail img-fluid" />
       <div class="media-body">
-        <h6>
+        <h6 :data-level="level">
           <span>{{ resource.title }}</span>
         </h6>
         <div>{{ resource.description }}</div>
+        <div class="mt-3 text-right">
+          <a :href="resource.url" target="_blank" :data-level="level">
+            {{ buttonText }}
+            <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i>
+          </a>
+        </div>
       </div>
     </a>
   </div>
@@ -24,14 +36,22 @@
 <script>
 export default {
   props: {
+    buttonText: {
+      type: String,
+      default: "Open Resource",
+    },
     resource: {
-      type: Object
+      type: Object,
     },
-    internal: { // Whether this is a resource that is part of this app, linked through router-link
+    level: {
+      type: String,
+    },
+    internal: {
+      // Whether this is a resource that is part of this app, linked through router-link
       type: Boolean,
-      default: false
+      default: false,
     },
-  }
+  },
 };
 </script>
 
