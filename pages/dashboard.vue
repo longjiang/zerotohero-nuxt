@@ -35,9 +35,13 @@
               </div>
             </div>
           </div>
-          <div :class="{ 'row mb-5': true }" v-if="hasDashboard">
+          <div class="row">
             <div class="col-sm-12">
               <Logo class="mb-4" />
+            </div>
+          </div>
+          <div :class="{ 'row mb-5': true }" v-if="hasDashboard">
+            <div class="col-sm-12">
               <div class="home-card p-2 pt-4 pb-4 bg-white">
                 <h5 class="text-center mt-2 mb-1">
                   {{ $auth.user.first_name
@@ -47,11 +51,14 @@
               </div>
             </div>
           </div>
-          <div class="row">
+          <div class="row mt-5">
             <div class="col-sm-12">
               <div class="home-card p-2 pt-4 pb-4 bg-white">
                 <h5 class="text-center mb-2" v-if="hasDashboard">
                   Learn another language
+                </h5>
+                <h5 class="text-center mb-2" v-else-if="$auth.user">
+                  Welcome, {{ $auth.user.first_name }}.
                 </h5>
                 <Triage />
               </div>
