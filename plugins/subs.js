@@ -53,7 +53,6 @@ export default ({ app }, inject) => {
     async searchWithLike({
       terms,
       langId,
-      filter,
       adminMode,
       excludeTerms = [],
       continua,
@@ -66,7 +65,6 @@ export default ({ app }, inject) => {
     } = {}) {
       let tv_show = tvShowFilter === "all" ? "nnull" : tvShowFilter.join(",")
       let talk = talkFilter === "all" ? "nnull" : talkFilter.join(",")
-
       let hits = [];
       terms = terms.map(t => t.replace(/'/g, "&#39;"));
       let timestamp = adminMode ? Date.now() : 0;
@@ -107,7 +105,6 @@ export default ({ app }, inject) => {
     async searchSubs({
       terms,
       excludeTerms = [],
-      lang = "en",
       langId = 1824,
       tvShowFilter = "all",
       talkFilter = "all",
@@ -124,7 +121,6 @@ export default ({ app }, inject) => {
           await this.searchWithLike({
             terms,
             langId,
-            filter: "tv_show",
             tvShowFilter,
             talkFilter,
             adminMode,
@@ -137,52 +133,6 @@ export default ({ app }, inject) => {
           })
         );
       }
-      // if (
-      //   (!limit || hits.length < limit) &&
-      //   hits.length < 30 &&
-      //   talkFilter !== []
-      // ) {
-      //   hits = hits.concat(
-      //     await this.searchWithLike({
-      //       terms,
-      //       langId,
-      //       filter: "talk",
-      //       tvShowFilter,
-      //       talkFilter,
-      //       adminMode,
-      //       excludeTerms,
-      //       continua,
-      //       limit,
-      //       exact,
-      //       apostrophe,
-      //       convertToSimplified
-      //     })
-      //   );
-      // }
-      // if (
-      //   (!limit || hits.length < limit) &&
-      //   ![].includes(lang) &&
-      //   hits.length < 30 &&
-      //   tvShowFilter === "all" &&
-      //   talkFilter === "all"
-      // ) {
-      //   hits = hits.concat(
-      //     await this.searchWithLike({
-      //       terms,
-      //       langId,
-      //       filter: false,
-      //       tvShowFilter,
-      //       talkFilter,
-      //       adminMode,
-      //       excludeTerms,
-      //       continua,
-      //       limit,
-      //       exact,
-      //       apostrophe,
-      //       convertToSimplified
-      //     })
-      //   );
-      // }
       hits = Helper.uniqueByValue(hits, "id");
       if (limit) hits = hits.slice(0, limit);
       return hits.sort((a, b) => a.lineIndex - b.lineIndex);
