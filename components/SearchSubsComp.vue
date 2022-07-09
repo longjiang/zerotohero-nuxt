@@ -380,13 +380,6 @@ export default {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
     },
-    $subsSearchLimit() {
-      if (typeof this.$store.state.settings.subsSearchLimit !== "undefined")
-        return this.$store.state.settings.subsSearchLimit;
-      else {
-        return true;
-      }
-    },
     hitIndex() {
       let hits = this.hits;
       return hits.findIndex((hit) => hit === this.currentHit);
@@ -538,7 +531,7 @@ export default {
     },
     calculateLimit() {
       // No limit unless set
-      if (!this.subsSearchLimit) return false;
+      if (!this.$store.state.settings.subsSearchLimit) return false;
       else {
         if (this.exact) {
           // Exact search while limit is set
