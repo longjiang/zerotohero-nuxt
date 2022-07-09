@@ -574,7 +574,6 @@ export default {
       this.excludeTerms = excludeTerms.filter(
         (s) => s !== "" && !this.terms.includes(s)
       );
-      console.log({limit: this.calculateLimit()})
       let hits = await this.$subs.searchSubs({
         terms: this.terms,
         excludeTerms: this.excludeTerms,

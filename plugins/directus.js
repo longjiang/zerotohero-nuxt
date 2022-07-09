@@ -5,7 +5,11 @@ import he from "he"; // html entities
 import Helper from '@/lib/helper'
 import { logError } from '@/lib/utils/error'
 
-export const DIRECTUS_API_URL = 'https://directusvps.zerotohero.ca/zerotohero/'
+export const DIRECTUS_URL = 'https://directusvps.zerotohero.ca/'
+
+export const DIRECTUS_API_URL = DIRECTUS_URL + 'zerotohero/'
+
+export const LP_DIRECTUS_TOOLS_URL = DIRECTUS_URL + 'lp-directus8-tools/'
 
 export const YOUTUBE_VIDEOS_TABLES = {
   2: [
@@ -144,6 +148,28 @@ export default ({ app }, inject) => {
         return videos
       } else return []
     },
+    async searchCaptions({ l2Id,
+      tv_show,
+      talk,
+      terms,
+      timestamp }) {
+      let params = {}
+      params.suffix = this.youtubeVideosTableSuffix(l2Id)
+      if (this.youtubeVideosTableHasOnlyOneLanguage(l2Id)) {
+        // No language filter is necessary since the table only has one language
+      } else {
+        params.l2 = l2Id
+      }
+      if (tv_show) params.tv_show = tv_show
+      if (talk) params.talk = talk
+      if (terms) params.terms = terms.join(',')
+      if (timestamp) params.timestamp = timestamp
+      let res = await axios.get(this.appendHostCors(LP_DIRECTUS_TOOLS_URL + 'videos'), { params }).catch(err => logError(err))
+      if (res?.data) {
+        let videos = res.data
+        return videos
+      } else return []
+    },
     async postVideo(video, l2, limit = false, tries = 0) {
       let lines = video.subs_l2 || [];
       if (limit) lines = lines.slice(0, limit);
@@ -203,8 +229,7 @@ export default ({ app }, inject) => {
     },
     async checkShows(videos, langId, adminMode = false) {
       let response = await this.get(
-        `items/tv_shows?filter[l2][eq]=${langId}&limit=500&timestamp=${
-          adminMode ? Date.now() : 0
+        `items/tv_shows?filter[l2][eq]=${langId}&limit=500&timestamp=${adminMode ? Date.now() : 0
         }`
       );
       let shows = response.data || [];

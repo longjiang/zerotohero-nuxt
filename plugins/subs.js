@@ -64,64 +64,43 @@ export default ({ app }, inject) => {
       apostrophe = false,
       convertToSimplified = false
     } = {}) {
-      let showFilter = "";
-      if (filter === "tv_show") {
-        if (tvShowFilter === "all") {
-          showFilter = `&filter[tv_show][nnull]=1`;
-        } else {
-          showFilter = `&filter[tv_show][in]=${tvShowFilter.join(",")}`;
-        }
-      }
-      if (filter === "talk") {
-        if (talkFilter === "all") {
-          showFilter = `&filter[talk][nnull]=1`;
-        } else {
-          showFilter = `&filter[talk][in]=${talkFilter.join(",")}`;
-        }
-      }
-      if (filter === false) {
-        showFilter = `&filter[tv_show][null]=1&filter[talk][null]=1`;
-      }
+      let tv_show = tvShowFilter === "all" ? "nnull" : tvShowFilter.join(",")
+      let talk = talkFilter === "all" ? "nnull" : talkFilter.join(",")
 
       let hits = [];
-      for (let term of terms) {
-        term = term.replace(/'/g, "&#39;");
-        let subsFilter = `&filter[subs_l2][contains]=${encodeURIComponent(term)}`;
-        if (term.includes("_") || term.includes("*")) {
-          subsFilter = `&filter[subs_l2][rlike]=${encodeURIComponent(
-            "%" + term.replace(/\*/g, "%") + "%"
-          )}`;
+      terms = terms.map(t => t.replace(/'/g, "&#39;"));
+      let timestamp = adminMode ? Date.now() : 0;
+      let params = {
+        l2Id: langId,
+        tv_show,
+        talk,
+        terms,
+        limit,
+        timestamp
+      }
+      let videos = await app.$directus.searchCaptions(params)
+      if (
+        videos?.length > 0
+      ) {
+        for (let video of videos) {
+          if (video.subs_l2)
+            video.subs_l2 = this.parseSavedSubs(video.subs_l2).filter(
+              line => line.starttime
+            );
+          if (video.subs_l1) video.subs_l1 = this.parseSavedSubs(video.subs_l1);
+          if (video.notes) video.notes = this.parseNotes(video.notes);
         }
-        let limitQuery = limit ? `&limit=${limit}` : ''
-        let videos = await app.$directus.getVideos({
-          l2Id: langId,
-          query: `sort=-date${showFilter}${limitQuery}${subsFilter}&timestamp=${adminMode ? Date.now() : 0
-          }`
-        })
-        if (
-          videos?.length > 0
-        ) {
-          for (let video of videos) {
-            if (video.subs_l2)
-              video.subs_l2 = this.parseSavedSubs(video.subs_l2).filter(
-                line => line.starttime
-              );
-            if (video.subs_l1) video.subs_l1 = this.parseSavedSubs(video.subs_l1);
-            if (video.notes) video.notes = this.parseNotes(video.notes);
-          }
-          hits = hits.concat(
-            this.getHits(
-              videos,
-              terms,
-              excludeTerms,
-              continua,
-              convertToSimplified,
-              exact,
-              apostrophe
-            )
-          );
-          if (limit && hits.length > limit) break;
-        }
+        hits = hits.concat(
+          this.getHits(
+            videos,
+            terms,
+            excludeTerms,
+            continua,
+            convertToSimplified,
+            exact,
+            apostrophe
+          )
+        );
       }
       return hits;
     },
