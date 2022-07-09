@@ -47,7 +47,7 @@ export const mutations = {
   LOAD_SETTINGS(state) {
     if (typeof localStorage !== "undefined") {
       let settings = loadSettingsFromLocalStorage();
-      for (let property of ['adminMode', 'hideWord', 'hidePhonetics', 'hideDefinitions', 'subsSearchLimit']) {
+      for (let property of ['adminMode', 'hideWord', 'hidePhonetics', 'hideDefinitions', 'subsSearchLimit', 'autoPronounce']) {
         if (typeof settings[property] !== "undefined")
           state[property] = settings[property];
       }
