@@ -152,6 +152,7 @@ export default ({ app }, inject) => {
       tv_show,
       talk,
       terms,
+      limit,
       timestamp }) {
       let params = {}
       params.suffix = this.youtubeVideosTableSuffix(l2Id)
@@ -164,6 +165,7 @@ export default ({ app }, inject) => {
       if (talk) params.talk = talk
       if (terms) params.terms = terms.join(',')
       if (timestamp) params.timestamp = timestamp
+      if (limit) params.limit = limit
       let res = await axios.get(this.appendHostCors(LP_DIRECTUS_TOOLS_URL + 'videos'), { params }).catch(err => logError(err))
       if (res?.data) {
         let videos = res.data
