@@ -407,16 +407,15 @@ export default {
         }
         terms = [this.entry.head].concat(terms);
         terms = Helper.unique(terms);
-        // Now we have a better search algorithm we don't need to limit the number of terms
-        // let optimalLength = this.entry.head.length - 1;
-        // terms = terms
-        //   .sort(
-        //     (a, b) =>
-        //       Math.abs(a.length - optimalLength) -
-        //       Math.abs(b.length - optimalLength)
-        //   )
-        // .slice(0, 6); 
-        // terms = Helper.mutuallyExclusive(terms).slice(0, 3);
+        let optimalLength = this.entry.head.length - 1;
+        terms = terms
+          .sort(
+            (a, b) =>
+              Math.abs(a.length - optimalLength) -
+              Math.abs(b.length - optimalLength)
+          )
+          .slice(0, 6);
+        terms = Helper.mutuallyExclusive(terms).slice(0, 3);
       }
       return terms;
     },
