@@ -67,6 +67,7 @@ export default ({ app }, inject) => {
       let talk = talkFilter === "all" ? "nnull" : talkFilter.join(",")
       let hits = [];
       terms = terms.map(t => t.replace(/'/g, "&#39;"));
+      terms = Helper.mutuallyExclusive(terms) // So if terms are ['dièdres', 'dièdre'], we search only 'dièdre' since results of the plural will be included automatically.
       let timestamp = adminMode ? Date.now() : 0;
       let params = {
         l2Id: langId,

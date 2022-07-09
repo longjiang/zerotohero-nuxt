@@ -415,7 +415,7 @@ export default {
               Math.abs(b.length - optimalLength)
           )
           .slice(0, 6);
-        terms = Helper.mutuallyExclusive(terms).slice(0, 3);
+        terms = terms.slice(0, 3);
       }
       return terms;
     },
