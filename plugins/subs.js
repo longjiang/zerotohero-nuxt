@@ -134,7 +134,7 @@ export default ({ app }, inject) => {
         );
       }
       hits = Helper.uniqueByValue(hits, "id");
-      if (limit) hits = hits.slice(0, limit);
+      if (limit) hits = hits.slice(0, 1000 ); // For device performance
       return hits.sort((a, b) => a.lineIndex - b.lineIndex);
     },
 
