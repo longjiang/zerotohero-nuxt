@@ -1,9 +1,5 @@
 <template>
-  <v-popover
-    :open="popup && open"
-    :open-group="`id${_uid}`"
-    placement="top"
-  >
+  <v-popover :open="popup && open" :open-group="`id${_uid}`" placement="top">
     <span
       :class="{
         'word-block': true,
@@ -236,7 +232,14 @@
                 {{ def }}
               </li>
             </ol> -->
-            <DefinitionsList v-if="word.definitions" class="word-translation" :entry="word" :definitions="word.definitions" :singleColumn="true" :alwaysShowAsList="true" />
+            <DefinitionsList
+              v-if="word.definitions"
+              class="word-translation"
+              :entry="word"
+              :definitions="word.definitions"
+              :singleColumn="true"
+              :alwaysShowAsList="true"
+            />
           </div>
 
           <Annotate
@@ -255,23 +258,12 @@
             </span>
           </Annotate>
           <div class="phrases mt-2" v-if="word.phrases">
-            <div
-              v-for="phrase in word.phrases.slice(0, 6).filter(p => typeof p === 'object')"
-              :key="`word-${word.id}-phrase-${phrase.id}`"
-              class="phrase-wrapper"
-            >
-              <Star
-                :word="phrase"
-                :label="false"
-                style="transform: scale(0.9)"
-              />
-              <span class="btn-phrase text-success strong">
-                {{ phrase.head }}
-              </span>
-              <span class="word-translation-item" v-if="phrase.definitions">
-                {{ phrase.definitions.join(", ") }}
-              </span>
-            </div>
+            <WordList
+              :words="
+                word.phrases.slice(0, 6).filter((p) => typeof p === 'object')
+              "
+              :showSpeak="false"
+            />
           </div>
         </div>
         <!-- <EntryExternal
@@ -855,6 +847,7 @@ export default {
       this.$nuxt.$emit("popupClosed");
     },
     async lookup(quick = false) {
+      let dictionary = await this.$getDictionary();
       if (this.words.length > 0) {
         if (quick) return;
         else if (!this.lastLookupWasQuick) return;
@@ -869,9 +862,7 @@ export default {
         words = this.token.candidates;
       } else if (this.text) {
         if (!this.text && this.token) this.text = this.token.candidates[0].head;
-        words = await (
-          await this.$getDictionary()
-        ).lookupFuzzy(this.text, 20, quick);
+        words = await dictionary.lookupFuzzy(this.text, 20, quick);
         if (words && !quick) {
           for (let word of words) {
             if (this.$l2.code === "fa") {
@@ -881,18 +872,10 @@ export default {
             // Russian
             if (word && word.matches) {
               for (let match of word.matches) {
-                match.form = await (
-                  await this.$getDictionary()
-                ).accent(match.form);
-                match.field = await (
-                  await this.$getDictionary()
-                ).stylize(match.field);
-                match.number = await (
-                  await this.$getDictionary()
-                ).stylize(match.number);
-                match.table = await (
-                  await this.$getDictionary()
-                ).stylize(match.table);
+                match.form = await dictionary.accent(match.form);
+                match.field = await dictionary.stylize(match.field);
+                match.number = await dictionary.stylize(match.number);
+                match.table = await dictionary.stylize(match.table);
               }
             }
           }
@@ -912,9 +895,22 @@ export default {
               return asaved === bsaved ? 0 : asaved ? -1 : 1;
             })
           : [];
+        if (this.$dictionaryName === "hsk-cedict") {
+          let allLemmas = [];
+          for (let index in words) {
+            words[index] = await dictionary.addNewHSK(words[index]);
+            let word = words[index];
+            word.phrases = await dictionary.findPhrases(word);
+            let lemmas = await dictionary.getLemmas(word.traditional);
+            if (lemmas) allLemmas = allLemmas.concat(lemmas);
+          }
+          if (allLemmas.length > 0) words = words.concat(allLemmas);
+        }
       }
+
       words = uniqueByValue(words, "id");
       this.words = words;
+
       this.updateIPA();
       this.loading = false;
     },
@@ -947,7 +943,7 @@ export default {
 
 <style lang="scss">
 .v-popover {
-  display: inline-block
+  display: inline-block;
 }
 .main-dark {
   .word-block,
@@ -1317,6 +1313,18 @@ export default {
     .word-pronunciation span {
       color: #779bb5;
       font-family: AndikaW, Andika, Arial, sans-serif;
+    }
+
+    .wordlist-item {
+      .toggle-saved-word {
+        padding-right: 0 !important;
+      }
+      .wordlist-item-word {
+        font-size: 1rem !important;
+      }
+      .btn-toggle-saved-word {
+        font-size: 0.8em !important;
+      }
     }
   }
 }

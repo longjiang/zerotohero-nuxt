@@ -10,6 +10,8 @@ const Dictionary = {
   newHSK: [],
   _maxWeight: 0,
   tokenizationCache: {},
+  traditionalIndex: {},
+  variantIndex: {},
   credit() {
     return 'The Chinese dictionary is provided by <a href="https://www.mdbg.net/chinese/dictionary?page=cedict">CC-CEDICT</a>, open-source and distribtued under a <a href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>. We also added HSK information on top.'
   },
@@ -28,6 +30,17 @@ const Dictionary = {
     }
     this.characters = characters
     this.newHSK = newHSK
+    this.createIndices()
+  },
+  lemmaFromDefinition(text) {
+    let m = text.match(/(.*?)([^\s]+?)\|([^\s]+?)\[(.+?)\](.*?)/);
+    if (!m) m = text.match(/(.*?)([^\s]+?)\[(.+?)\](.*?)/);
+    if (m) {
+      stringBefore = m[1];
+      lemma = m[2].replace(/\u200e/g, ""); // Left-to-Right Mark
+      stringAfter = m[m.length - 1];
+    }
+    return { lemma, morphology: stringBefore.trim() }
   },
   async loadSmart(name) {
     const server = 'https://server.chinesezerotohero.com/'
@@ -50,8 +63,54 @@ const Dictionary = {
       return results.data
     }
   },
+  createIndices() {
+    console.log('HSK CEDICT: Indexing...')
+    for (let word of this.words) {
+      for (let indexType of ["traditional"]) {
+        if (!Array.isArray(this[indexType + "Index"][word[indexType]]))
+          this[indexType + "Index"][word[indexType]] = [];
+        this[indexType + "Index"][word[indexType]] = this[indexType + "Index"][
+          word[indexType]
+        ].concat(word);
+      }
+    }
+    this.buildVariantIndex()
+  },
+  buildVariantIndex() {
+    for (let word of this.words) {
+      // if (word.simplified !== '殒落') continue;
+      for (let definition of word.definitions.filter(d => d.includes('['))) {
+        let lemma = this.lemmaFromDefinition(definition)
+        // console.log({lemma, definition})
+        if (lemma) {
+          let lemmaWords = this.traditionalIndex[lemma.lemma]
+          if (lemmaWords?.length > 0) {
+            this.variantIndex[word.traditional] = this.variantIndex[word.traditional] || []
+            this.variantIndex[word.traditional] = this.variantIndex[word.traditional].concat(lemmaWords)
+          }
+        }
+      }
+    }
+    for (let lemmaKey in this.variantIndex) {
+      this.variantIndex[lemmaKey] = this.uniqueByValue(this.variantIndex[lemmaKey], 'id')
+    }
+  },
   getWords() {
     return this.words
+  },
+  findPhrases(word) {
+    if (word) {
+      if (!word.phrases || word.phrases.length === 0) {
+        let phrases = []
+        for (let w of this.words) {
+          if (w.traditional.length > word.traditional.length && w.traditional.includes(word.traditional)) phrases.push(w)
+        }
+        word.phrases = phrases.sort((a,b) => a.traditional.length - b.traditional.length)
+        return phrases
+      } else {
+        return word.phrases
+      }
+    }
   },
   getWordsThatContain(text) {
     let words = this.words.filter(w => (w.simplified && w.simplified.includes(text)) || (w.traditional && w.traditional.includes(text)))
@@ -421,10 +480,14 @@ const Dictionary = {
       .sort((a, b) => {
         return b.weight - a.weight
       })
+    
     return {
-      matches: matches.map(candidate => this.addNewHSK(candidate)),
+      matches,
       text: matches && matches.length > 0 ? matches[0][tradOrSimp] : ''
     }
+  },
+  getLemmas(traditional) {
+    return this.variantIndex[traditional]
   },
   tokenize(text) {
     if (this.tokenizationCache[text]) return this.tokenizationCache[text]

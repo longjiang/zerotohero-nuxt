@@ -19,6 +19,7 @@
           class="pr-2"
         ></Star>
         <Speak
+          v-if="showSpeak"
           :text="word.kana || word.head"
           :l2="$l2"
           class="text-secondary"
@@ -48,20 +49,16 @@
 
           <span :class="{ transparent: hidePhonetics }">
             <span v-if="word.pronunciation" class="wordlist-item-pinyin">
-              <span v-if="$l2.code !== 'zh'">[</span>
-              <span v-else>(</span>
               <span
                 v-if="$l2.code === 'vi'"
                 v-html="
-                  word.pronunciation.replace(
+                  '[' + word.pronunciation.replace(
                     /\[\[(.+?)#Vietnamese\|.+?]]/g,
                     '$1'
-                  )
+                  ) + ']'
                 "
               />
-              <span v-else>{{ word.pronunciation }}</span>
-              <span v-if="$l2.code !== 'zh'">]</span>
-              <span v-else>)</span>
+              <span v-else>[{{ word.pronunciation }}]</span>
             </span>
             <span v-if="word.kana" class="wordlist-item-pinyin">
               ( {{ word.kana }}, {{ transliterate(word.kana) }} )
@@ -184,6 +181,9 @@ export default {
     removeSymbol: {
       default: false,
     },
+    showSpeak: {
+      default: true
+    }
   },
   computed: {
     $l1() {
