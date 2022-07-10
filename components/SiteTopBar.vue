@@ -25,7 +25,7 @@
           v-if="$route.path !== '/' && params.lg !== false"
         >
           <i class="fas fa-chevron-left"></i>
-          Back
+          {{ $t('Back') }}
         </b-button>
         <router-link
           to="/dashboard"
@@ -38,7 +38,7 @@
           "
           title="Dashboard"
         >
-          <i class="fas fa-grid mr-1"></i> Dashboard
+          <i class="fas fa-grid mr-1"></i> {{ $t('Dashboard') }}
         </router-link>
       </div>
       <template v-if="$route.params.l1 && $route.params.l2">
