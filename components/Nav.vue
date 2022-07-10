@@ -95,6 +95,7 @@
             )"
             :key="`subnav-item-${child.name || child.href}-${index}`"
             v-slot="{ href, route, navigate, isActive, isExactActive }"
+            custom
           >
             <NavItem
               :mode="mode"

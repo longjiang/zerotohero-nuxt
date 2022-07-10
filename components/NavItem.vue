@@ -17,7 +17,7 @@
       :title="item.title"
       :target="item.href ? '_blank' : undefined"
       @click="isDropdown ? showModal() : undefined"
-      class="link-unstyled"
+      class="link-unstyled nav-item-link"
       ref="link"
     >
       <div
@@ -159,7 +159,8 @@ export default {
   },
   methods: {
     wrapperClick() {
-      this.$refs['link']?.$el.click()
+      let linkElement = this.$refs['link']?.$el || this.$el.querySelector('.nav-item-link')
+      if (linkElement) linkElement.click()
     },
     showModal() {
       this.$refs["dropdownMenuModal"]?.show();
