@@ -38,7 +38,7 @@
             l2: $t($l2.name),
           })
         }}
-        <span class="nav-item-count" v-cloak v-if="item.count">{{ $n(item.count) }}</span>
+        <span class="nav-item-count" v-cloak v-if="item.count && mode !== 'large-icon'">{{ $n(item.count) }}</span>
         <span class="saved-words-count" v-cloak v-if="badge">
           {{ badge }}
         </span>

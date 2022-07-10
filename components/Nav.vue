@@ -129,7 +129,7 @@
             >
               <template v-if="typeof item !== 'undefined' && item.children">
                 <div
-                  v-for="(child, index) in childrenAndGrandchildren(item)"
+                  v-for="(child, index) in childrenAndGrandchildren(item).filter(child => child.show)"
                   :key="`subnav-${child.name || child.href}-${index}`"
                   :class="`col-6 col-sm-4 col-lg-3 col-xl-2
 mb-1
