@@ -38,9 +38,7 @@
             l2: $t($l2.name),
           })
         }}
-        <span class="nav-item-count" v-cloak v-if="item.count">
-          {{ $n(item.count) }}
-        </span>
+        <span class="nav-item-count" v-cloak v-if="item.count">{{ $n(item.count) }}</span>
         <span class="saved-words-count" v-cloak v-if="badge">
           {{ badge }}
         </span>
@@ -272,12 +270,6 @@ export default {
   font-size: 0.8rem;
   color: #888;
   font-weight: bold;
-  &::before {
-    content: "(";
-  }
-  &::after {
-    content: ")";
-  }
   // background: #53545f;
   // padding: 0.1rem 0.2rem;
   // border-radius: 0.15rem;

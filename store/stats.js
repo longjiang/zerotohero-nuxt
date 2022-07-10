@@ -14,7 +14,7 @@ export const mutations = {
   },
 }
 
-const LP_DIRECTUS8_TOOLS_URL = 'https://directusvps.zerotohero.ca/lp-directus8-tools'
+const LP_DIRECTUS8_TOOLS_URL = 'https://directusvps.zerotohero.ca/lp-directus8-tools/'
 
 export const actions = {
   async load({ state, rootGetters, commit }, { l2, adminMode }) {
