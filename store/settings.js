@@ -14,6 +14,7 @@ export const state = () => {
     autoPronounce: true, // Whether or not to play the audio automatically when opening a WordBlock popup
     settingsLoaded: {},
     l2Settings: {
+      l1: 'en',
       showDefinition: false,
       showPinyin: true,
       useTraditional: false,
@@ -55,13 +56,12 @@ export const mutations = {
         state.l2Settings,
         settings[state.l2.code]
       );
+      state.l2Settings.l1 = state.l1.code
     }
     state.settingsLoaded[state.l2.code] = true;
   },
-  SET_L1(state, l1) {
+  SET_L1_L2(state, { l1, l2 }) {
     state.l1 = l1;
-  },
-  SET_L2(state, l2) {
     if (typeof l2 === "undefined") return;
     state.l2 = l2;
     if (
@@ -136,6 +136,13 @@ export const mutations = {
     }
   }
 };
+
+export const getters = {
+  l2Settings: state => (l2Code) => {
+    let settings = loadSettingsFromLocalStorage();
+    return settings[l2Code]
+  },
+}
 
 export const actions = {
   load({ dispatch, commit }) {

@@ -71,7 +71,6 @@ export default {
   },
   computed: {
     ...mapState("progress", ["progress"]),
-    ...mapState("fullHistory", ["fullHistory"]),
     sortedProgress() {
       let sorted = Object.keys(this.progress)
         .map((l2Code) => {
@@ -88,12 +87,9 @@ export default {
   watch: {},
   methods: {
     getL1Code(l2) {
-      if (this.fullHistory) {
-        for (let item of this.fullHistory.slice().reverse()) {
-          if (item.path.includes(`/${l2.code}/`)) {
-            return item.path.replace(/\/(.+?)\/.*/, '$1')
-          }
-        }
+      let l2Settings = this.$store.getters['settings/l2Settings'](l2.code)
+      if (l2Settings?.l1) {
+        return l2Settings.l1
       }
       return 'en'
     }

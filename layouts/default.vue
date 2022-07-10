@@ -274,10 +274,8 @@ export default {
     subscribeToVuexMutations() {
       this.unsubscribe = this.$store.subscribe((mutation) => {
         if (mutation.type.startsWith("settings")) {
-          if (mutation.type === "settings/SET_L1") {
+          if (mutation.type === "settings/SET_L1_L2") {
             this.updatei18n();
-          }
-          if (mutation.type === "settings/SET_L2") {
             this.loadLanguageSpecificSettings();
             this.overlayPlayerYouTubeId = undefined // Close the mini player when switching languages
           }
@@ -471,8 +469,7 @@ export default {
       if (this.l1 && this.l2) {
         let l1 = this.$languages.getSmart(this.l1.code);
         let l2 = this.$languages.getSmart(this.l2.code);
-        this.$store.commit("settings/SET_L1", l1);
-        this.$store.commit("settings/SET_L2", l2);
+        this.$store.commit("settings/SET_L1_L2", {l1, l2});
       }
     },
     addFullHistoryItem(path) {
