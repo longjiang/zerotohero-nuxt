@@ -206,6 +206,16 @@
               skin="dark"
             />
           </div>
+
+          <client-only>
+            <Nav
+              :l1="$l1"
+              :l2="$l2"
+              variant="page"
+              class="youtube-browse-nav mt-5"
+              :showOnly="['Listening']"
+            />
+          </client-only>
           <client-only>
             <LazyIdenticalLanguages
               class="mt-5 mb-5"

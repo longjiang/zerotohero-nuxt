@@ -110,7 +110,7 @@
             :l2="$l2"
             variant="page"
             class="youtube-browse-nav mt-5"
-            :showOnly="['Media']"
+            :showOnly="['Listening']"
           />
         </client-only>
         <LazyIdenticalLanguages routeName="youtube-search" class="mt-5" />

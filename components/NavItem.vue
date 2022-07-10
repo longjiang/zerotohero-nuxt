@@ -59,7 +59,7 @@
     >
       <div class="row">
         <div
-          v-for="(child, index) in item.children.filter(c => c.show)"
+          v-for="(child, index) in item.children.filter((c) => c.show)"
           :key="`dropdown-menu-item-${index}`"
           class="mb-1 col-6 col-lg-4"
         >
@@ -135,7 +135,7 @@ export default {
       let item = this.item;
       if (item.children) {
         let currentChild = item.children.find((c) => {
-          if (!c.show) return false
+          if (!c.show) return false;
           if (c.path) return this.$route.path.includes(c.path);
           if (c.name === this.$route.name) {
             if (c.params) {
@@ -159,8 +159,9 @@ export default {
   },
   methods: {
     wrapperClick() {
-      let linkElement = this.$refs['link']?.$el || this.$el.querySelector('.nav-item-link')
-      if (linkElement) linkElement.click()
+      let linkElement =
+        this.$refs["link"]?.$el || this.$el.querySelector(".nav-item-link");
+      if (linkElement) linkElement.click();
     },
     showModal() {
       this.$refs["dropdownMenuModal"]?.show();
@@ -170,9 +171,11 @@ export default {
 </script>
 
 <style lang="scss">
-.nav-item-icon {
-  width: 1.25rem;
-  text-align: center;
+.nav-item-small-icon {
+  .nav-item-icon {
+    width: 1.25rem;
+    text-align: center;
+  }
 }
 
 .main-nav-item,
@@ -380,6 +383,7 @@ export default {
   display: block;
   text-align: center;
   height: 100%;
+  cursor: pointer;
 
   &:hover {
     transform: scale(115%);

@@ -56,7 +56,15 @@
         :cloakVideosWithoutSubs="!$adminMode"
         v-if="topic !== 'all'"
       />
-      <div class="row"></div>
+      <client-only>
+        <Nav
+          :l1="$l1"
+          :l2="$l2"
+          variant="page"
+          class="youtube-browse-nav mt-5"
+          :showOnly="['Listening']"
+        />
+      </client-only>
     </div>
   </div>
 </template>

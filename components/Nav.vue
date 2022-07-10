@@ -129,9 +129,7 @@
             >
               <template v-if="typeof item !== 'undefined' && item.children">
                 <div
-                  v-for="(child, index) in item.children.filter(
-                    (child) => child.show
-                  )"
+                  v-for="(child, index) in childrenAndGrandchildren(item)"
                   :key="`subnav-${child.name || child.href}-${index}`"
                   :class="`col-6 col-sm-4 col-lg-3 col-xl-2
 mb-1
@@ -140,6 +138,7 @@ feature-card-column
 feature-card-name-${child.name}`"
                 >
                   <NavItem
+                    v-if="!child.children"
                     :to="last(child) || child"
                     :item="child"
                     mode="large-icon"
@@ -556,7 +555,7 @@ export default {
                   icon: "fas fa-telescope",
                   title: `Explore`,
                   // count: this.stats ? this.stats.allVideos : undefined,
-                  show: this.$route.name !== 'all-media',
+                  show: this.$route.name !== "all-media",
                 },
                 {
                   name: "watch-history",
@@ -1280,6 +1279,16 @@ export default {
         }
       }
     },
+    childrenAndGrandchildren(parent) {
+      let items = []
+      let children = parent.children.filter((child) => child.show);
+      for (let child of children) {
+        if (child.children) {
+          items = items.concat(child.children)
+        } else items.push(child)
+      }
+      return items
+    },
     /**
      * Returns the last path in the fullHistory that matches the item's name or the item's children's name
      */
@@ -1302,7 +1311,8 @@ export default {
               if (namesToMatch.includes(resolvedPath.route.name)) {
                 if (item.params) {
                   for (let key in item.params) {
-                    if (resolvedPath.route.params?.[key] !== item.params[key]) return false
+                    if (resolvedPath.route.params?.[key] !== item.params[key])
+                      return false;
                   }
                 }
                 return true;
