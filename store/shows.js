@@ -49,6 +49,7 @@ export const getMinLexDivByLevel = (shows) => {
   minLexDivByLevel[4] = lexDivs[Math.ceil(lexDivs.length / 2 / 2 / 2)]
   minLexDivByLevel[3] = lexDivs[Math.ceil(lexDivs.length / 2 / 2 / 2 / 2)]
   minLexDivByLevel[2] = lexDivs[Math.ceil(lexDivs.length / 2 / 2 / 2 / 2 / 2)]
+  minLexDivByLevel[1] = lexDivs[Math.ceil(lexDivs.length / 2 / 2 / 2 / 2 / 2 / 2)]
   return minLexDivByLevel
 }
 
