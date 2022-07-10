@@ -1,5 +1,4 @@
 import Helper from '@/lib/helper'
-import Config from '@/lib/config'
 
 export const state = () => {
   return {

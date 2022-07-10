@@ -15,14 +15,14 @@
           <router-link
             class="language-overview-item"
             v-if="language && language.name"
-            :to="{ name: 'learning-path', params: { l1: 'en', l2: language.code } }"
+            :to="{ name: 'all-media', params: { l1: getL1Code(language), l2: language.code } }"
           >
             <div class="language-flag-wrapper">
               <LanguageFlag :language="language" :autocycle="true" />
               <span class="language-name">{{ language.name }}</span>
             </div>
             <LanguageProgress
-              :$l1="$languages.getSmart('en')"
+              :$l1="$languages.getSmart(getL1Code(language))"
               :$l2="language"
             />
           </router-link>
@@ -71,6 +71,7 @@ export default {
   },
   computed: {
     ...mapState("progress", ["progress"]),
+    ...mapState("fullHistory", ["fullHistory"]),
     sortedProgress() {
       let sorted = Object.keys(this.progress)
         .map((l2Code) => {
@@ -85,7 +86,18 @@ export default {
     },
   },
   watch: {},
-  methods: {},
+  methods: {
+    getL1Code(l2) {
+      if (this.fullHistory) {
+        for (let item of this.fullHistory.slice().reverse()) {
+          if (item.path.includes(`/${l2.code}/`)) {
+            return item.path.replace(/\/(.+?)\/.*/, '$1')
+          }
+        }
+      }
+      return 'en'
+    }
+  },
 };
 </script>
 
