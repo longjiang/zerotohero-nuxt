@@ -234,7 +234,7 @@ const Dictionary = {
     }
     this.buildInflectionIndex()
     for (let key in this.phraseIndex) {
-      this.phraseIndex[key] = this.phraseIndex[key]?.sort((a, b) => a.head?.length || 0 - b.head?.length || 0)
+      this.phraseIndex[key] = this.phraseIndex[key].sort((a, b) => a.head.length - b.head.length)
     }
   },
   addToPhraseIndex(head, word) {
