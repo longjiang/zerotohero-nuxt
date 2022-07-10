@@ -109,10 +109,11 @@ export default {
       let lemma, stringBefore, stringAfter;
       if (this.$dictionaryName === "hsk-cedict") {
         let m = text.match(/(.*?)([^\s]+?)\|([^\s]+?)\[(.+?)\](.*?)/);
+        if (!m) m = text.match(/(.*?)([^\s]+?)\[(.+?)\](.*?)/);
         if (m) {
           stringBefore = m[1];
           lemma = m[2].replace(/\u200e/g, ""); // Left-to-Right Mark
-          stringAfter = m[5];
+          stringAfter = m[m.length - 1];
         }
       } else {
         if (this.$l2.code !== "en") {
