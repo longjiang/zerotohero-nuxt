@@ -4,7 +4,7 @@ importScripts("../vendor/hash-string/hash-string.min.js")
 
 const Dictionary = {
   name: "wiktionary",
-  version: '1.1.10',
+  version: '1.1.14',
   file: undefined,
   dictionary: undefined,
   words: [],
@@ -20,7 +20,8 @@ const Dictionary = {
   useJSON: [],
   hasFrequency: [],
   indexDbVerByLang: {
-    fra: 2
+    fra: 2,
+    eng: 2
   },
   hanRegex: /[\u2E80-\u2E99\u2E9B-\u2EF3\u2F00-\u2FD5\u3005\u3007\u3021-\u3029\u3038-\u303B‌​\u3400-\u4DB5\u4E00-\u9FCC\uF900-\uFA6D\uFA70-\uFAD9]+/g,
   hanRegexStrict: /^[\u2E80-\u2E99\u2E9B-\u2EF3\u2F00-\u2FD5\u3005\u3007\u3021-\u3029\u3038-\u303B‌​\u3400-\u4DB5\u4E00-\u9FCC\uF900-\uFA6D\uFA70-\uFAD9]+$/,
@@ -227,15 +228,24 @@ const Dictionary = {
       }
       if (/[\s']/.test(word.head)) {
         for (let w of word.head.split(/[\s']/)) {
-          if (!this.phraseIndex[w]) this.phraseIndex[w] = [word]
-          else this.phraseIndex[w].push(word)
+          this.addToPhraseIndex(w, word)
         }
       }
     }
     this.buildInflectionIndex()
     for (let key in this.phraseIndex) {
-      this.phraseIndex[key] = this.phraseIndex[key].sort((a, b) => a.head.length - b.head.length)
+      this.phraseIndex[key] = this.phraseIndex[key]?.sort((a, b) => a.head?.length || 0 - b.head?.length || 0)
     }
+  },
+  addToPhraseIndex(head, word) {
+    let w = '@' + head
+    if (!this.phraseIndex[w]) this.phraseIndex[w] = []
+    this.phraseIndex[w].push(word)
+  },
+  getPhraseIndex(head) {
+    let w = '@' + head
+    if (!this.phraseIndex[w]) this.phraseIndex[w] = []
+    return this.phraseIndex[w]
   },
   lemmaKey(lemma) {
     return 'l' + lemma
@@ -631,7 +641,7 @@ const Dictionary = {
   addPhrasesToWord(word) {
     if (word) {
       if (!word.phrases || word.phrases.length === 0) {
-        word.phrases = this.phraseIndex[word.head] || []
+        word.phrases = this.getPhraseIndex(word.head) || []
       }
     }
       
@@ -1143,7 +1153,7 @@ const Dictionary = {
    * @returns {Array} An array of phrases each wrapped in an object { w: word, score: score }
    */
   phrasesWithScores(word, score = undefined) {
-    let phraseObjs = this.phraseIndex[word.head]
+    let phraseObjs = this.getPhraseIndex(word.head)
     if (phraseObjs) {
       let mapped = phraseObjs.map(w => { return { w, score } })
       return mapped

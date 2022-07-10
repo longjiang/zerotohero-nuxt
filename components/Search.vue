@@ -44,10 +44,11 @@
       <router-link
         class="suggestion"
         v-if="
-          suggestions.filter((s) => s.score === 1).length === 0 &&
+          lookingUp === false &&
+          suggestions.filter((s) => s.head.toLowerCase() === text.trim().toLowerCase()).length === 0 &&
           type === 'dictionary'
         "
-        :to="`/${$l1.code}/${$l2.code}/phrase/search/${text}`"
+        :to="`/${$l1.code}/${$l2.code}/phrase/search/${text.trim()}`"
       >
         <span class="suggestion-not-found">
           Look up “
@@ -78,24 +79,10 @@
           <span
             class="suggestion-l1"
             v-if="suggestion.definitions"
-            v-html="highlight(suggestion.definitions.join(', '), text)"
+            v-html="highlight(suggestion.definitions.slice(0,3).join(', '), text)"
           ></span>
         </span>
       </a>
-      <router-link
-        class="suggestion"
-        v-if="
-          suggestions.filter((s) => s.score === 1).length > 0 &&
-          type === 'dictionary'
-        "
-        :to="`/${$l1.code}/${$l2.code}/phrase/search/${text}`"
-      >
-        <span class="suggestion-not-found">
-          Look up “
-          <b data-level="outside">{{ text }}</b>
-          ” as a phrase
-        </span>
-      </router-link>
       <div
         class="suggestion"
         v-if="suggestions.length === 0 && type === 'generic'"
@@ -162,6 +149,7 @@ export default {
       active: false,
       preventEnter: false,
       suggestionsKey: 0,
+      lookingUp: false
     };
   },
   computed: {
@@ -191,13 +179,14 @@ export default {
       if (!this.nav && this.text !== "") {
         this.active = true;
       }
+      this.lookingUp = true
       if (this.type === "dictionary") {
         let def = await (
           await this.$getDictionary()
         ).lookupByDef(this.text, 10);
         let fuzzy = await (
           await this.$getDictionary()
-        ).lookupFuzzy(this.text, 10);
+        ).lookupFuzzy(this.text.trim(), 10, true);
         this.suggestions = fuzzy
           .concat(def)
           .sort((a, b) =>
@@ -206,6 +195,7 @@ export default {
       } else if (this.suggestionsFunc) {
         this.suggestions = this.suggestionsFunc(this.text);
       }
+      this.lookingUp = false
     },
   },
   methods: {
