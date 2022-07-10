@@ -56,7 +56,12 @@ export const mutations = {
         state.l2Settings,
         settings[state.l2.code]
       );
-      state.l2Settings.l1 = state.l1.code
+      // Remember the L1 the user picked, so next time when switching L2, this L1 is used.
+      if (state.l1) {
+        state.l2Settings.l1 = state.l1.code
+        settings[state.l2.code] = state.l2Settings;
+        localStorage.setItem("zthSettings", JSON.stringify(settings));
+      }
     }
     state.settingsLoaded[state.l2.code] = true;
   },
