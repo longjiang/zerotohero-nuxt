@@ -102,11 +102,20 @@ export default {
       }
     },
     async definitionHtml(text) {
-      let m = text.match(/(.* of )([^\s]+)(.*)/);
-      if (m && this.$l2.code !== "en") {
-        let stringBefore = m[1];
-        let lemma = m[2].replace(/\u200e/g, ""); // Left-to-Right Mark
-        let stringAfter = m[3];
+      let lemma, stringBefore, stringAfter
+      if (this.$dictionaryName === 'hsk-cedict') {
+
+      } else {
+        if (this.$l2.code !== "en") {
+          let m = text.match(/(.* of )([^\s]+)(.*)/);
+          if (m) {
+            stringBefore = m[1];
+            lemma = m[2].replace(/\u200e/g, ""); // Left-to-Right Mark
+            stringAfter = m[3];
+          }
+        }
+      }
+      if (lemma) {
         let lemmaWord = await this.getWord(lemma);
         if (lemmaWord) {
           return `${stringBefore}<router-link data-level="${
@@ -114,12 +123,9 @@ export default {
           }" to="/${this.$l1.code}/${this.$l2.code}/dictionary/${
             this.$dictionaryName
           }/${lemmaWord.id}">${lemma}</router-link>${stringAfter}`;
-        } else {
-          return text;
         }
-      } else {
-        return text;
       }
+      return text;
     },
   },
 };
