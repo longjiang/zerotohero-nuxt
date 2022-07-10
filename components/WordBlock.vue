@@ -227,7 +227,7 @@
             >
               {{ $languages.getSmart(word.supplementalLang).name }}
             </span>
-            <ol class="word-translation" v-if="word.definitions">
+            <!-- <ol class="word-translation" v-if="word.definitions">
               <li
                 v-for="(def, index) in unique(word.definitions || [])"
                 :key="`wordblock-def-${index}`"
@@ -235,7 +235,8 @@
               >
                 {{ def }}
               </li>
-            </ol>
+            </ol> -->
+            <DefinitionsList v-if="word.definitions" class="word-translation" :entry="word" :definitions="word.definitions" :singleColumn="true" :alwaysShowAsList="true" />
           </div>
 
           <Annotate
@@ -1164,6 +1165,10 @@ export default {
 
 .word-translation-item::marker {
   margin-right: 0;
+}
+
+::v-deep .definition-list-item {
+  font-size: 1rem;
 }
 
 .tooltip {

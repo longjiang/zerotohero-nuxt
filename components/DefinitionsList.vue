@@ -1,11 +1,12 @@
 <template>
   <div class="definitions-list" style="max-width: 50rem; margin: 0 auto">
     <template v-if="augmentedDefinitions.length > 0">
-      <ul
+      <ol
         :class="{
           'definitions mb-2': true,
           single: singleColumn,
-          'definitions-many': augmentedDefinitions.length > 3,
+          'definitions-many':
+            alwaysShowAsList || augmentedDefinitions.length > 3,
         }"
       >
         <li
@@ -15,7 +16,7 @@
         >
           <span
             class="word-type mt-3"
-            v-if="index === 0 && entry && entry.pos"
+            v-if="showPOS && index === 0 && entry && entry.pos"
             style="color: #999"
           >
             {{
@@ -33,6 +34,7 @@
           <v-runtime-template :template="`<span>${definition.html}</span>`" />
           <span
             v-if="
+              !alwaysShowAsList &&
               augmentedDefinitions.length < 4 &&
               index < augmentedDefinitions.length - 1
             "
@@ -40,7 +42,7 @@
             ;
           </span>
         </li>
-      </ul>
+      </ol>
     </template>
     <template v-else>
       <div class="l1">{{ nodef }}</div>
@@ -60,6 +62,8 @@ export default {
     entry: Object,
     definitions: Array,
     singleColumn: false,
+    showPOS: true,
+    alwaysShowAsList: false,
     nodef: {
       type: String,
       default: "",
@@ -102,9 +106,14 @@ export default {
       }
     },
     async definitionHtml(text) {
-      let lemma, stringBefore, stringAfter
-      if (this.$dictionaryName === 'hsk-cedict') {
-
+      let lemma, stringBefore, stringAfter;
+      if (this.$dictionaryName === "hsk-cedict") {
+        let m = text.match(/(.*?)([^\s]+?)\|([^\s]+?)\[(.+?)\](.*?)/);
+        if (m) {
+          stringBefore = m[1];
+          lemma = m[2].replace(/\u200e/g, ""); // Left-to-Right Mark
+          stringAfter = m[5];
+        }
       } else {
         if (this.$l2.code !== "en") {
           let m = text.match(/(.* of )([^\s]+)(.*)/);
@@ -137,12 +146,10 @@ export default {
   list-style: none;
 
   .definition-list-item {
-    font-size: 1.1rem;
     display: inline;
   }
   &.definitions-many {
-    padding-left: 1rem;
-    list-style: inherit;
+    list-style: decimal;
     .definition-list-item {
       text-align: left;
       display: list-item;

@@ -141,7 +141,7 @@
                 :entry="entry"
                 :key="`def-list-${entry.id}`"
                 :definitions="entry.definitions"
-                :class="{ 'mt-3': true, transparent: hideDefinitions }"
+                :class="{ 'pl-3 pr-3 mt-3': true, transparent: hideDefinitions }"
               ></DefinitionsList>
               <EntryCourseAd
                 v-if="$l2.code === 'zh' && wide"
