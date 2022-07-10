@@ -526,7 +526,7 @@ export default {
             {
               name: "talks",
               title: `YouTube`,
-              count: this.stats ? this.stats.newVideos : undefined,
+              count: this.talksCount,
               icon: "fab fa-youtube",
               show: this.talksCount,
             },
