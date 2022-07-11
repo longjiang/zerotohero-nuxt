@@ -422,6 +422,7 @@ export default {
               title: "Forum",
               icon: "fab fa-reddit",
               show: true,
+              params: { method: 'list' }
             },
             {
               name: "language-info",
