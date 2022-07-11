@@ -178,6 +178,7 @@ export default {
     '~plugins/subs.js',
     { src: '~/plugins/stripe.js', mode: 'client' },
     { src: '~/plugins/paypal.js', mode: 'client' },
+    { src: '~/plugins/ios-in-app-purchase.js', mode: 'client' },
     // { src: '~/plugins/tui_editor.client.js', mode: 'client' },
     { src: '~/plugins/pwa-update.js', mode: 'client' },
     { src: '~/plugins/vuex-persist.js', mode: 'client' },

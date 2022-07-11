@@ -100,110 +100,93 @@
                     <sup style="font-size: 1rem">/ lifetime</sup>
                   </div>
                 </div>
-                <div v-if="native">
-                  <div class="mt-3 mb-4">
-                    <b-button
-                      size="sm"
-                      variant="success"
-                      @click="executeiOSInAppPurchase"
-                    >
-                      <b-spinner small v-if="iOSPurchaseProcessing"></b-spinner>
-                      <span v-else>
-                        <i class="fab fa-apple mr-1"></i>
-                        Pay with In-App Purchase
-                      </span>
-                    </b-button>
-                    <!-- <div class="mt-3">
-                      <u
-                        class="text-secondary"
-                        @click="restoreiOSInAppPurchase"
+                <client-only>
+                  <div v-if="native">
+                    <div class="mt-3 mb-4">
+                    </div>
+                  </div>
+                  <div v-else>
+                    <div class="mt-3 mb-4">
+                      Please choose your method of payment:
+                    </div>
+                    <div>
+                      <stripe-checkout
+                        ref="stripeCheckoutUSDRef"
+                        mode="payment"
+                        :pk="stripePublishableKey"
+                        :line-items="[
+                          {
+                            price: 'price_1LArBtG5EbMGvOaflIKUthub', // USD price for all other payment methods
+                            quantity: 1,
+                          },
+                        ]"
+                        :success-url="stripeSuccessURL"
+                        :cancel-url="stripeCancelURL"
+                        @loading="(v) => (loading = v)"
+                      />
+                      <b-button
+                        @click="submitStripeUSD"
+                        variant=" pl-3 pr-3"
+                        size="sm"
+                        style="
+                          position: relative;
+                          bottom: 0.5rem;
+                          padding: 0.1rem;
+                          background-color: #ffc439;
+                        "
                       >
-                        Restore Purchase
-                      </u>
-                    </div> -->
+                        <i class="fas fa-credit-card"></i>
+                        <i class="fab fa-cc-apple-pay"></i>
+                        <i class="fab fa-google-pay mr-1"></i>
+                        Credit Card
+                      </b-button>
+                      <a
+                        href="https://buy.stripe.com/4gw2bz7ELbvR8CccMN"
+                        class="btn btn-sm pl-3 pr-3"
+                        style="
+                          position: relative;
+                          bottom: 0.5rem;
+                          padding: 0.1rem;
+                          background-color: #ffc439;
+                        "
+                      >
+                        <i class="fab fa-weixin mr-1"></i>
+                        WeChat Pay
+                      </a>
+                      <a
+                        href="https://buy.stripe.com/4gw2bz7ELbvR8CccMN"
+                        class="btn btn-sm pl-3 pr-3"
+                        style="
+                          position: relative;
+                          bottom: 0.5rem;
+                          padding: 0.1rem;
+                          background-color: #ffc439;
+                        "
+                      >
+                        <i class="fab fa-alipay mr-1"></i>
+                        Alipay
+                      </a>
+                      <PayPal
+                        amount="89.00"
+                        currency="USD"
+                        :client="paypalCredentials"
+                        :items="paypalItems"
+                        :experience="paypalExperienceOptions"
+                        :button-style="{
+                          shape: 'rect',
+                          size: 'responsive',
+                          label: '',
+                          color: 'gold',
+                        }"
+                        env="production"
+                        class="d-inline-block"
+                        @payment-authorized="onPayPalPaymentAuthorized"
+                        @payment-completed="onPayPalPaymentCompleted"
+                        @payment-cancelled="onPayPalPaymentCancelled"
+                      ></PayPal>
+                    </div>
                   </div>
-                </div>
-                <div v-else>
-                  <div class="mt-3 mb-4">
-                    Please choose your method of payment:
-                  </div>
-                  <div>
-                    <stripe-checkout
-                      ref="stripeCheckoutUSDRef"
-                      mode="payment"
-                      :pk="stripePublishableKey"
-                      :line-items="[
-                        {
-                          price: 'price_1LArBtG5EbMGvOaflIKUthub', // USD price for all other payment methods
-                          quantity: 1,
-                        },
-                      ]"
-                      :success-url="stripeSuccessURL"
-                      :cancel-url="stripeCancelURL"
-                      @loading="(v) => (loading = v)"
-                    />
-                    <b-button
-                      @click="submitStripeUSD"
-                      variant=" pl-3 pr-3"
-                      size="sm"
-                      style="
-                        position: relative;
-                        bottom: 0.5rem;
-                        padding: 0.1rem;
-                        background-color: #ffc439;
-                      "
-                    >
-                      <i class="fas fa-credit-card"></i>
-                      <i class="fab fa-cc-apple-pay"></i>
-                      <i class="fab fa-google-pay mr-1"></i>
-                      Credit Card
-                    </b-button>
-                    <a
-                      href="https://buy.stripe.com/4gw2bz7ELbvR8CccMN"
-                      class="btn btn-sm pl-3 pr-3"
-                      style="
-                        position: relative;
-                        bottom: 0.5rem;
-                        padding: 0.1rem;
-                        background-color: #ffc439;
-                      "
-                    >
-                      <i class="fab fa-weixin mr-1"></i>
-                      WeChat Pay
-                    </a>
-                    <a
-                      href="https://buy.stripe.com/4gw2bz7ELbvR8CccMN"
-                      class="btn btn-sm pl-3 pr-3"
-                      style="
-                        position: relative;
-                        bottom: 0.5rem;
-                        padding: 0.1rem;
-                        background-color: #ffc439;
-                      "
-                    >
-                      <i class="fab fa-alipay mr-1"></i>
-                      Alipay
-                    </a>
-                    <PayPal
-                      amount="89.00"
-                      currency="USD"
-                      :client="paypalCredentials"
-                      :items="paypalItems"
-                      :experience="paypalExperienceOptions"
-                      :button-style="{
-                        shape: 'rect',
-                        size: 'responsive',
-                        label: '',
-                        color: 'gold',
-                      }"
-                      env="production"
-                      class="d-inline-block"
-                      @payment-authorized="onPayPalPaymentAuthorized"
-                      @payment-completed="onPayPalPaymentCompleted"
-                      @payment-cancelled="onPayPalPaymentCancelled"
-                    ></PayPal>
-                  </div>
-                </div>
+                </client-only>
               </div>
             </div>
             <div v-else class="text-center">
@@ -244,11 +227,6 @@
 <script>
 import { HOST } from "@/lib/utils/url";
 import { Capacitor } from "@capacitor/core";
-import { InAppPurchase2 } from "@ionic-native/in-app-purchase-2";
-import axios from "axios";
-import { logError } from "@/lib/utils/error";
-
-const IOS_IAP_PRODUCT_ID = "pro";
 
 export default {
   data() {
@@ -280,7 +258,6 @@ export default {
         ? `https://python.zerotohero.ca/stripe_checkout_success?user_id=${this.$auth.user.id}&host=${HOST}&session_id={CHECKOUT_SESSION_ID}`
         : undefined, // Make sure we have the user's id
       stripeCancelURL: HOST + "/go-pro",
-      iOSPurchaseProcessing: false,
     };
   },
   computed: {
@@ -291,81 +268,7 @@ export default {
       return Capacitor.isNativePlatform();
     },
   },
-  mounted() {
-    if (this.native) {
-      this.registeriOSInAppPurchaseProducts();
-      this.setupiOSInAppPurchaseListeners();
-    }
-  },
-  beforeDestroy() {
-    InAppPurchase2.off(this.oniOSProductApproved);
-    InAppPurchase2.off(this.oniOSProductVerified);
-    InAppPurchase2.off(this.oniOSProductOrder);
-    InAppPurchase2.off(this.oniOSProductOrderErr);
-    InAppPurchase2.off(this.oniOSProductChancelled);
-  },
   methods: {
-    registeriOSInAppPurchaseProducts() {
-      InAppPurchase2.register([
-        { id: IOS_IAP_PRODUCT_ID, type: InAppPurchase2.NON_CONSUMABLE },
-      ]);
-      InAppPurchase2.refresh();
-    },
-    oniOSProductApproved(product) {
-      // synchronous
-      console.log("approved");
-      return product.verify();
-    },
-    async elevateiOSUserToPro(receipt) {
-      console.log({receipt})
-      let url = `https://python.zerotohero.ca/in_app_purchase_success`;
-      let body = { user_id: this.$auth.user.id, receipt };
-      try {
-        let res = await axios.post(url, body);
-        if (res?.data?.type === "success") {
-          console.log(res.data)
-          this.$router.push("/go-pro-success");
-        }
-      } catch (err) {
-        logError(err);
-      }
-    },
-    async oniOSProductVerified(product) {
-      console.log("verified");
-      let receipt = product?.transaction?.appStoreReceipt;
-      if (receipt && !this.iOSPurchaseVerified) {
-        this.iOSPurchaseVerified = true;
-        this.elevateiOSUserToPro(receipt);
-      }
-      product.finish();
-    },
-    oniOSProductOrder(product) {
-      // Purchase in progress!
-      console.log("order");
-      this.iOSPurchaseProcessing = true;
-    },
-    oniOSProductOrderErr(err) {
-      this.iOSPurchaseProcessing = false;
-      this.$toast.error(`Failed to purchase: ${err}`, { duration: 5000 });
-    },
-    oniOSProductChancelled(product) {
-      this.iOSPurchaseProcessing = false;
-    },
-    setupiOSInAppPurchaseListeners() {
-      InAppPurchase2.when(IOS_IAP_PRODUCT_ID)
-        .approved(this.oniOSProductApproved)
-        .verified(this.oniOSProductVerified)
-        .cancelled(this.oniOSProductChancelled);
-    },
-    restoreiOSInAppPurchase() {
-      InAppPurchase2.refresh();
-    },
-    executeiOSInAppPurchase() {
-      InAppPurchase2.order(IOS_IAP_PRODUCT_ID).then(
-        this.oniOSProductOrder,
-        this.oniOSProductOrderError
-      );
-    },
     submitStripeUSD() {
       // You will be redirected to Stripe's secure checkout page
       this.$refs.stripeCheckoutUSDRef.redirectToCheckout();
