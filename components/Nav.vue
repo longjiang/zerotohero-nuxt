@@ -102,7 +102,7 @@
               :to="route.path"
               :item="child"
               :level="2"
-              :showIcon="variant === 'sidebar'"
+              :showIcon="variant === 'side-bar'"
               :active="isExactActive && $route.name !== 'all-media'"
               :badge="
                 child.name === 'saved-words' && savedWordsCount > 0
@@ -1457,6 +1457,9 @@ export default {
     overflow-y: hidden;
     text-align: center;
     min-height: 61px;
+    ::v-deep .nav-item-count {
+      display: none;
+    }
   }
 }
 

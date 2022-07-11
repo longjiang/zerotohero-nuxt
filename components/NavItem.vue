@@ -82,7 +82,7 @@
 export default {
   props: {
     mode: {
-      default: "pill", // or "icon", "large-icon"
+      default: "pill", // or "small-icon" (for bottom nav), "large-icon" (for "page" nav)
     },
     showIcon: {
       default: true,
