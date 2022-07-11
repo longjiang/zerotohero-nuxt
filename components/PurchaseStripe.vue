@@ -56,10 +56,12 @@
       <i class="fab fa-alipay mr-1"></i>
       Alipay
     </a>
-  </span  class="purchase-paypal">
+  </span>
 </template>
 
 <script>
+import { HOST } from "@/lib/utils/url";
+
 export default {
   data() {
     this.stripePublishableKey = "pk_live_9lnc7wrGHtcFdPKIWZdy9p17";

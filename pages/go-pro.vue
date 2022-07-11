@@ -64,35 +64,6 @@
                 </router-link>
               </div>
               <div v-else class="mb-3">
-                <div
-                  class="alert alert-success p-3 text-center"
-                  v-if="paypalPaymentStatus === 'success'"
-                >
-                  <Loader
-                    :sticky="true"
-                    message="Payment successful, activating your Pro account..."
-                  />
-                </div>
-                <div
-                  class="alert alert-warning p-3 text-center"
-                  v-if="paypalPaymentStatus === 'cancelled'"
-                >
-                  It seems like you've cancelled the checkout, please try again.
-                </div>
-                <div
-                  class="alert alert-warning p-3 text-center"
-                  v-if="paypalPaymentStatus === 'error'"
-                >
-                  <p>
-                    We're sorry, your payment didn't work this time, please try
-                    again.
-                  </p>
-                  <p>
-                    If you need further assistance, please contact support by
-                    <a href="mailto:jon@chinesezerotohero.com">email</a>
-                    .
-                  </p>
-                </div>
                 <div>
                   <div class="pl-5">
                     <sup style="font-size: 1rem">$</sup>

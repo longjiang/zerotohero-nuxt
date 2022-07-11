@@ -1,5 +1,36 @@
 <template>
-  <span class="purchase-paypal">
+  <div class="purchase-paypal">
+    <div class="purchase-paypal-alerts">
+      <div
+        class="alert alert-success p-3 text-center"
+        v-if="paypalPaymentStatus === 'success'"
+      >
+        <Loader
+          :sticky="true"
+          message="Payment successful, activating your Pro account..."
+        />
+      </div>
+      <div
+        class="alert alert-warning p-3 text-center"
+        v-if="paypalPaymentStatus === 'cancelled'"
+      >
+        It seems like you've cancelled the checkout, please try again.
+      </div>
+      <div
+        class="alert alert-warning p-3 text-center"
+        v-if="paypalPaymentStatus === 'error'"
+      >
+        <p>
+          We're sorry, your payment didn't work this time, please try
+          again.
+        </p>
+        <p>
+          If you need further assistance, please contact support by
+          <a href="mailto:jon@chinesezerotohero.com">email</a>
+          .
+        </p>
+      </div>
+    </div>
     <PayPal
       amount="89.00"
       currency="USD"
@@ -13,12 +44,12 @@
         color: 'gold',
       }"
       env="production"
-      class="d-inline-block"
+      class="btn-purchase-paypal d-inline-block"
       @payment-authorized="onPayPalPaymentAuthorized"
       @payment-completed="onPayPalPaymentCompleted"
       @payment-cancelled="onPayPalPaymentCancelled"
     ></PayPal>
-  </span>
+  </div>
 </template>
 
 <script>
@@ -27,7 +58,6 @@ import { HOST } from "@/lib/utils/url";
 export default {
   data() {
     return {
-
       paypalPaymentStatus: undefined,
       paypalCredentials: {
         sandbox:
