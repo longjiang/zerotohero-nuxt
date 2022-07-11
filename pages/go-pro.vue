@@ -66,7 +66,7 @@
               <div v-else class="mb-3">
                 <div
                   class="alert alert-success p-3 text-center"
-                  v-if="paymentStatus === 'success'"
+                  v-if="paypalPaymentStatus === 'success'"
                 >
                   <Loader
                     :sticky="true"
@@ -75,13 +75,13 @@
                 </div>
                 <div
                   class="alert alert-warning p-3 text-center"
-                  v-if="paymentStatus === 'cancelled'"
+                  v-if="paypalPaymentStatus === 'cancelled'"
                 >
                   It seems like you've cancelled the checkout, please try again.
                 </div>
                 <div
                   class="alert alert-warning p-3 text-center"
-                  v-if="paymentStatus === 'error'"
+                  v-if="paypalPaymentStatus === 'error'"
                 >
                   <p>
                     We're sorry, your payment didn't work this time, please try
@@ -131,15 +131,15 @@
                     <stripe-checkout
                       ref="stripeCheckoutUSDRef"
                       mode="payment"
-                      :pk="publishableKey"
+                      :pk="stripePublishableKey"
                       :line-items="[
                         {
                           price: 'price_1LArBtG5EbMGvOaflIKUthub', // USD price for all other payment methods
                           quantity: 1,
                         },
                       ]"
-                      :success-url="successURL"
-                      :cancel-url="cancelURL"
+                      :success-url="stripeSuccessURL"
+                      :cancel-url="stripeCancelURL"
                       @loading="(v) => (loading = v)"
                     />
                     <b-button
@@ -252,10 +252,10 @@ const IOS_IAP_PRODUCT_ID = "pro";
 
 export default {
   data() {
-    this.publishableKey = "pk_live_9lnc7wrGHtcFdPKIWZdy9p17";
+    this.stripePublishableKey = "pk_live_9lnc7wrGHtcFdPKIWZdy9p17";
     return {
       loading: false,
-      paymentStatus: undefined,
+      paypalPaymentStatus: undefined,
       paypalCredentials: {
         sandbox:
           "AU6fgxWMbyvtTHB-xv2WGb91HI21q9zkhG9IXthI62cCvasfpsO2DA5scSSx_r9R81r19J-yyexvd97A",
@@ -276,10 +276,10 @@ export default {
           no_shipping: 1,
         },
       },
-      successURL: this.$auth.user
+      stripeSuccessURL: this.$auth.user
         ? `https://python.zerotohero.ca/stripe_checkout_success?user_id=${this.$auth.user.id}&host=${HOST}&session_id={CHECKOUT_SESSION_ID}`
         : undefined, // Make sure we have the user's id
-      cancelURL: HOST + "/go-pro",
+      stripeCancelURL: HOST + "/go-pro",
       iOSPurchaseProcessing: false,
     };
   },
@@ -468,16 +468,16 @@ export default {
       // }
       if (e.state == "approved") {
         // Payment successful
-        this.paymentStatus = "approved";
+        this.paypalPaymentStatus = "approved";
         let paymentID = e.id;
         window.location = `https://python.zerotohero.ca/paypal_checkout_success?pay_id=${paymentID}&user_id=${this.$auth.user.id}&host=${HOST}`;
       } else {
-        this.paymentStatus = "error";
+        this.paypalPaymentStatus = "error";
         // Payment unsuccessful
       }
     },
     onPayPalPaymentCancelled(e) {
-      this.paymentStatus = "cancelled";
+      this.paypalPaymentStatus = "cancelled";
       console.log({ paypalCancelledEvent: e });
     },
   },
