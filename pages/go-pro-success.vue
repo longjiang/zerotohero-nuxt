@@ -67,20 +67,8 @@ export default {
   },
   async mounted() {
     if (this.$auth.loggedIn) {
-      let response = await this.$directus.get(`users/me`);
-      if (response.data && response.data.data) {
-        let user = response.data.data;
-        this.$auth.setUser(user);
-        if (this.pro) {
-          this.$toast.success(
-            `Congrats ${this.$auth.user.first_name}, you're now Pro!`,
-            {
-              position: "top-center",
-              duration: 5000,
-            }
-          );
-        }
-      }
+      await this.$auth.logout();
+      await this.$auth.setUser(null);
     }
   },
 };
