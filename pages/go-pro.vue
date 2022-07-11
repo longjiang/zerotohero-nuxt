@@ -103,6 +103,7 @@
                 <client-only>
                   <div v-if="native">
                     <div class="mt-3 mb-4">
+                      <PurchaseiOS />
                     </div>
                   </div>
                   <div v-else>
