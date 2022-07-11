@@ -28,18 +28,6 @@
               <Logo skin="light" />
             </div>
             <b-form @submit.prevent="login">
-              <div class="alert alert-warning" v-if="$l2 && $l2.code === 'zh'">
-                <b>Friendly reminder:</b>
-                This does NOT login to your Chinese Zero to Hero online courses
-                on Teachable. For course login
-                <a
-                  href="https://chinesezerotohero.teachable.com/"
-                  target="_blank"
-                >
-                  click here
-                </a>
-                .
-              </div>
               <div v-if="message" class="alert alert-danger mt-2">
                 {{ message }}
               </div>

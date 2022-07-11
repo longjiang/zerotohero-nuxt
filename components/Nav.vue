@@ -1125,18 +1125,18 @@ export default {
               show: !(this.$auth && this.$auth.loggedIn),
               params: { l1: this.l1.code, l2: this.l2.code },
             },
-            {
-              href: "https://sso.teachable.com/secure/133035/identity/login",
-              icon: "fas fa-graduation-cap",
-              title: "My Teachable Courses",
-              show: this.$l2 && this.$l2.code === "zh",
-            },
-            {
-              href: "https://m.cctalk.com/inst/stevmab3",
-              icon: "fas fa-graduation-cap",
-              title: "My CCtalk Courses",
-              show: this.$l2 && this.$l2.code === "en",
-            },
+            // {
+            //   href: "https://sso.teachable.com/secure/133035/identity/login",
+            //   icon: "fas fa-graduation-cap",
+            //   title: "My Teachable Courses",
+            //   show: this.$l2 && this.$l2.code === "zh",
+            // },
+            // {
+            //   href: "https://m.cctalk.com/inst/stevmab3",
+            //   icon: "fas fa-graduation-cap",
+            //   title: "My CCtalk Courses",
+            //   show: this.$l2 && this.$l2.code === "en",
+            // },
             {
               name: "logout",
               icon: "fas fa-sign-out-alt",
