@@ -28,18 +28,6 @@
               <Logo skin="light" />
             </div>
             <div class="reset-form" v-if="!emailSent">
-              <div class="alert alert-warning" v-if="$l2 && $l2.code === 'zh'">
-                <b>Friendly reminder:</b>
-                This does NOT login to your Chinese Zero to Hero online courses
-                on Teachable. For course login
-                <a
-                  href="https://chinesezerotohero.teachable.com/"
-                  target="_blank"
-                >
-                  click here
-                </a>
-                .
-              </div>
               <b-form @submit.prevent="onSubmit">
                 <p class="mb-3">Enter your email to recover your password:</p>
                 <div v-if="message" class="alert alert-danger mt-2">
@@ -131,21 +119,15 @@ export default {
     async onSubmit(event) {
       try {
         this.emailSending = true;
-        let host = process.server ? process.env.baseUrl : window.location.protocol + '//' + window.location.hostname + ':' + window.location.port
-        let res = await axios.post(
-          `auth/password/request`,
-          {
-            email: this.form.email,
-            reset_url: `${host}/password-reset`,
-          }
-        );
-        if (res && res.status === 200) {
+        let email = this.form.email
+        let sent = await this.$directus.sendPasswordResetEmail({ email })
+        if (sent) {
           this.emailSent = true;
           this.emailSending = false;
         }
       } catch (err) {
-        if (err.response && err.response.data) {
-          this.$toast.error(err.response.data.error.message, {
+        if (err.response?.data?.error?.message) {
+          this.$toast.error(err.response?.data?.error?.message, {
             position: "top-center",
             duration: 5000,
           });

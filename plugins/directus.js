@@ -246,5 +246,27 @@ export default ({ app }, inject) => {
       }
       return videos;
     },
+    async sendPasswordResetEmail({email}) {
+      let host = process.server ? process.env.baseUrl : window.location.protocol + '//' + window.location.hostname + ':' + window.location.port
+      let reset_url = `${host}/password-reset`
+      let res = await this.post(
+        `auth/password/request`,
+        {
+          email,
+          reset_url,
+        }
+      );
+      return res && res.status === 200
+    },
+    async resetPassword({token, password}) {
+      let res = await this.post(
+        `auth/password/reset`,
+        {
+          token,
+          password,
+        }
+      );
+      return res && res.status === 200
+    }
   })
 }

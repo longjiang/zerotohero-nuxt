@@ -26,18 +26,6 @@
               <Logo skin="light" />
             </div>
             <b-form @submit.prevent="onSubmit" v-if="token">
-              <div class="alert alert-warning" v-if="$l2 && $l2.code === 'zh'">
-                <b>Friendly reminder:</b>
-                This does NOT login to your Chinese Zero to Hero online courses
-                on Teachable. For course login
-                <a
-                  href="https://chinesezerotohero.teachable.com/"
-                  target="_blank"
-                >
-                  click here
-                </a>
-                .
-              </div>
               <div class="alert alert-success">
                 <i class="fas fa-check mr-1"></i>
                 Email verified.
@@ -63,10 +51,7 @@
                 Reset Password
               </b-button>
               <div class="text-center" v-else>
-                <Loader
-                  :sticky="true"
-                  message="Changing your password..."
-                />
+                <Loader :sticky="true" message="Changing your password..." />
               </div>
             </b-form>
           </div>
@@ -78,8 +63,7 @@
 
 <script>
 import Helper from "@/lib/helper";
-import Config from "@/lib/config";
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   props: {
@@ -112,25 +96,21 @@ export default {
     async onSubmit(event) {
       try {
         this.resetting = true;
-        let res = await axios.post(
-          `auth/password/reset`,
-          {
-            token: this.token,
-            password: this.form.password,
-          }
-        );
-        if (res && res.status === 200) {
+        let token = this.token;
+        let password = this.form.password;
+        let reset = this.$directus.resetPassword({ token, password })
+        if (reset) {
           this.$toast.success("Your password has been reset, please login.", {
             position: "top-center",
             duration: 5000,
           });
-          this.$router.push({ name: "login" });
+          this.$router.push({path: '/login' });
           this.resetting = false;
         }
       } catch (err) {
         Helper.logError(err);
-        if (err.response && err.response.data) {
-          this.$toast.error(err.response.data.error.message, {
+        if (err.response?.data?.error?.message) {
+          this.$toast.error(err.response?.data?.error?.message, {
             position: "top-center",
             duration: 5000,
           });
