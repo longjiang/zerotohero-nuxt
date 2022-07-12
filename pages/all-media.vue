@@ -82,6 +82,9 @@
               :showDate="false"
               :showClear="false"
               :limit="12"
+              :showLanguage="false"
+              :showRemove="false"
+              :showPlayButton="false"
             />
           </div>
           <div v-if="videos && music && music.length > 0" class="media-section">

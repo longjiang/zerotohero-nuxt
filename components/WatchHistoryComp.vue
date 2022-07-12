@@ -40,15 +40,15 @@
               :key="`history-item-${group.date}-${itemIndex}`"
               :class="{
                 'pb-4 history-item-column': true,
-                'col-12': params.xs,
-                'col-6': params.sm,
+                'col-compact': params.xs,
+                'col-6': params.xs || params.sm,
                 'col-4': params.md,
-                'col-3': params.lg,
+                'col-3': params.lg || params.xl,
               }"
               :set="(itemL1 = $languages.getSmart(item.l1))"
               :set2="(itemL2 = $languages.getSmart(item.l2))"
             >
-              <div class="history-item-language-badge" v-if="itemL1 && itemL2">
+              <div class="history-item-language-badge" v-if="showLanguage && itemL1 && itemL2">
                 {{ itemL2.name }}
               </div>
               <LazyYouTubeVideoCard
@@ -58,7 +58,7 @@
                 :l1="itemL1"
                 :l2="itemL2"
                 :showProgress="true"
-                :showPlayButton="true"
+                :showPlayButton="showPlayButton"
                 :showAdmin="false"
               />
               <LazyPhrasebookCard
@@ -79,6 +79,7 @@
                   history-item-remove-btn
                 "
                 @click.stop.prevent="$store.dispatch('history/remove', item)"
+                v-if="showRemove"
               >
                 <i class="fa fa-times"></i>
               </button>
@@ -118,6 +119,9 @@ export default {
   },
   props: {
     l2: undefined,
+    showLanguage: {
+      default: true,
+    },
     skin: {
       default: "light",
     },
@@ -132,6 +136,14 @@ export default {
       type: Boolean,
       default: true,
     },
+    showRemove: {
+      type: Boolean,
+      default: true,
+    },
+    showPlayButton: {
+      type: Boolean,
+      default: true,
+    }
   },
   data() {
     return {
@@ -243,6 +255,13 @@ export default {
 ::v-deep .phrasebook-title {
   font-size: 1rem;
   line-height: 1.33rem !important;
+}
+
+.col-compact {
+  padding: 0.5rem;
+  ::v-deep .media-body {
+    font-size: 0.9em;
+  }
 }
 
 .history-items {
