@@ -67,7 +67,9 @@
             />
             <PopQuiz
               :key="`pop-quiz-${index}`"
-              v-if="popQuizExistsAfterLine(index)"
+              v-if="!single && quizChunks[index]"
+              :lines="lines"
+              :quizContent="quizChunks[index].map(i => $refs[`transcript-line-${i + visibleMin}`][0])"
             />
           </template>
           <div
@@ -93,13 +95,13 @@
           </template>
         </client-only>
       </div>
-      <EndQuiz
+      <!-- <EndQuiz
         v-if="!single"
         :lines="lines"
         :matchedParallelLines="matchedParallelLines"
         :hsk="hsk"
         :skin="skin"
-      />
+      /> -->
     </client-only>
   </div>
 </template>
@@ -193,6 +195,24 @@ export default {
     };
   },
   computed: {
+    /**
+     * A map of line indices after which to show a pop quiz to the lines this quiz is based on.
+     * Key is the transcript line number (starting from 0) after which the quiz is shown
+     * Values are the transcript line indices on which the quiz is based
+     */
+    quizChunks() {
+      let quizChunks = {}
+      let seenLineIndices = []
+      for (let index in this.lines) {
+        index = Number(index)
+        seenLineIndices.push(index)
+        if (this.popQuizExistsAfterLine(index)) {
+          quizChunks[index] = seenLineIndices
+          seenLineIndices = []
+        }
+      }
+      return quizChunks
+    },
     pro() {
       if (this.forcePro) return true;
       if (!POPULAR_LANGS.includes(this.$l2.code)) return true; // Let's not charge for less popular languages
@@ -322,6 +342,7 @@ export default {
     popQuizExistsAfterLine(index) {
       let thisLine = this.lines[index + this.visibleMin]
       let nextLine = this.lines[index + this.visibleMin + 1]
+      if (!thisLine) return false
       if (!nextLine) return true  // this is the last line
       let endTimeOfThisLine = thisLine.starttime + thisLine.duration
       let intervalAfterThisLine = nextLine.starttime - endTimeOfThisLine
