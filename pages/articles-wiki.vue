@@ -8,7 +8,7 @@
     <div v-if="method === 'list'" class="container">
       <SocialHead
         v-if="articles"
-        :title="`Articles from the ${$l2.name} Learning Wiki | ${$l2.name} Zero to Hero`"
+        :title="`Articles from the ${$l2.name} Learning Wiki | Language Player`"
         :description="articles.map((article) => article.title).join('. ')"
       />
       <template v-if="articles && articles.length > 0">
@@ -54,7 +54,7 @@
     </div>
     <div v-if="method === 'view' && article" class="container">
       <SocialHead
-        :title="`${article.title} | Wiki | ${$l2.name} Zero to Hero`"
+        :title="`${article.title} | Wiki | Language Player`"
         :description="`${
           article.body ? stripTags(unescape(article.body)) : 'Read article'
         }`"

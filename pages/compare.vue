@@ -222,11 +222,9 @@ export default {
       if (this.a && this.b) {
         return `“${this.a.head}” vs “${this.b.head}” - ${
           this.$l2 ? this.$l2.name : ""
-        } Words Compared | ${this.$l2 ? this.$l2.name : ""} Zero to Hero`;
+        } Words Compared | Language Player`;
       }
-      return `${this.$l2 ? this.$l2.name : ""} Words Compared | ${
-        this.$l2 ? this.$l2.name : ""
-      } Zero to Hero`;
+      return `${this.$l2 ? this.$l2.name : ""} Words Compared | Language Player`;
     },
     description() {
       if (this.a && this.b) {

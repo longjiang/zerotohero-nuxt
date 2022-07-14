@@ -168,11 +168,9 @@ export default {
       if (this.term && this.compareTerm) {
         return `“${this.term}” vs “${this.compareTerm}” - ${
           this.$l2 ? this.$l2.name : ""
-        } Phrases Compared | ${this.$l2 ? this.$l2.name : ""} Zero to Hero`;
+        } Phrases Compared | Language Player`;
       }
-      return `${this.$l2 ? this.$l2.name : ""} Phrases Compared | ${
-        this.$l2 ? this.$l2.name : ""
-      } Zero to Hero`;
+      return `${this.$l2 ? this.$l2.name : ""} Phrases Compared | Language Player`;
     },
     description() {
       if (this.a && this.b) {

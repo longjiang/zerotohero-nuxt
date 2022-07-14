@@ -2,15 +2,15 @@
   {
     path: '/:l1/:l2/pinyin-squared',
     meta: {
-      title: 'Pinyin Squared | Zero to Hero'
+      title: 'Pinyin Squared | Language Player'
     }
   }
 </router>
 <template>
   <div class="main">
     <SocialHead
-      :title="`Chinese Zero to Hero - Online Chinese Courses`"
-      :description="`Online Chinese Courses from HSK 1 to HSK 9. Free courses include “Phonetics with Chinese Characteristics”, “Learn Chinese with Songs“, “Learn Chinese with Poems“.`"
+      :title="`Pinyin Squared | Language Player`"
+      :description="`An experiment in writing Chinese with phonetic character blocks.`"
       :image="`/img/courses/bundle-ultimate.jpg`"
     />
 

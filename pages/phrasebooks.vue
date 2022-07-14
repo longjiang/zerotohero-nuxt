@@ -128,7 +128,7 @@ export default {
         return this.$store.state.settings.adminMode;
     },
     title() {
-      return `${this.$l2.name} Phrasebooks with Videos | ${this.$l2.name} Zero to Hero`;
+      return `${this.$l2.name} Phrasebooks with Videos | Language Player`;
     },
     description() {
       return `Learn ${this.$l2.name} phrases with multimedia phrasebooks! See how each phrase is used in TV shows, movies, music, etc.`;

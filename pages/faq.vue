@@ -7,16 +7,16 @@
   <div class="main">
     <div class="faq container pt-5 pb-5">
       <SocialHead
-        :title="`Frequently Asked Questions | ${$l2.name} Zero to Hero`"
+        :title="`Frequently Asked Questions | Language Player`"
       />
       <div class="row">
         <div class="col-sm-12">
           <div>
             <h3 class="text-center mb-5">Frequently Asked Questions</h3>
             <div class="faq-item">
-              <h5>What is Zero to Hero?</h5>
+              <h5>What is Language Player?</h5>
               <p>
-                Zero to Hero is an
+                Language Player is an
                 <a href="https://github.com/longjiang/zerotohero-nuxt">
                   open-source
                 </a>
@@ -24,7 +24,7 @@
                 natually via comprehensible input.
               </p>
               <p>
-                We have also produced online video lessons for the Chinese and
+                Our company, Zero to Hero Education, have also produced online video lessons for the Chinese and
                 English languages: Chinese Zero to Hero (hosted on Teachable)
                 and Enlgish Zero to Hero (hosted on CCtalk).
               </p>
@@ -44,7 +44,7 @@
                 not infringe on copyright simply by embedding YouTube videos.
               </p>
               <p>
-                Nevertheless, the community behind Zero to Hero wants to be on
+                Nevertheless, the community behind Language Player wants to be on
                 good terms with all content creators. If you wish to have your
                 content removed, you can easily do so by following the
                 instructions in the next section.
@@ -53,7 +53,7 @@
             <div class="faq-item">
               <h5>How can I prevent my videos from showing up on this site?</h5>
               <p>
-                By allowing websites like Zero to Hero, your videos will get
+                By allowing websites like Language Player, your videos will get
                 views and generate ad revenue for you as if the videos are
                 viewed on YouTube. The YouTube embed player on this website also
                 recommends other videos from you channel, which can potentially
@@ -68,7 +68,7 @@
               <ol>
                 <li>
                   <b>Restrict embedding for specific websites.</b>
-                  You can blacklist certain domains (such as www.Zero to Hero)
+                  You can blacklist certain domains (such as this one, www.languageplayer.io)
                   to prevent them from displaying your YouTube videos. For
                   instructions, see
                   <a

@@ -2,7 +2,7 @@
   {
     path: '/:l1/:l2/settings',
     meta: {
-      title: 'Settings | Zero to Hero',
+      title: 'Settings | Language Player',
       metaTags: [
         {
           name: 'description',

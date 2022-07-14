@@ -70,9 +70,7 @@ export default {
         },
         {
           property: "og:site_name",
-          content: this.$l2
-            ? `${this.$l2.name} Zero to Hero`
-            : "Language Player",
+          content: "Language Player",
         },
         { hid: "og:type", property: "og:type", content: "website" },
         {

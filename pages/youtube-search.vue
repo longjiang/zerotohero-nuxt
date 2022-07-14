@@ -3,7 +3,7 @@
     path: '/:l1/:l2/youtube/search/:term?/:start?',
     props: true,
     meta: {
-      title: 'Search Media Library | Zero to Hero',
+      title: 'Search Media Library | Language Player',
       metaTags: [
         {
           name: 'description',
@@ -25,12 +25,13 @@
         />
       </div>
       <h4 class="mt-3 mb-5 text-center">
-        Zero to Hero
-        <LanguageFlag :autocycle="true" :language="$l2" style="position: relative; bottom: 0.2rem; margin: 0 0.4rem" />
-        Video Search
+        Search
+        {{ $l2.name }} Content
       </h4>
       <SimpleSearch
-        :placeholder="`Search ${stats && stats[$l2.code] ? $n(stats[$l2.code].allVideos) : ''} ${$l2.name} videos`"
+        :placeholder="`Search ${
+          stats && stats[$l2.code] ? $n(stats[$l2.code].allVideos) : ''
+        } ${$l2.name} videos`"
         skin="dark"
         :action="
           (url) => {
@@ -127,7 +128,7 @@
 <script>
 import SimpleSearch from "@/components/SimpleSearch";
 import YouTubeSearchResults from "@/components/YouTubeSearchResults";
-import { mapState } from 'vuex';
+import { mapState } from "vuex";
 export default {
   components: {
     SimpleSearch,
@@ -144,7 +145,7 @@ export default {
     };
   },
   computed: {
-    ...mapState('stats', ['stats']),
+    ...mapState("stats", ["stats"]),
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;

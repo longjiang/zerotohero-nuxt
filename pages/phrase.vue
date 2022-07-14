@@ -12,7 +12,7 @@
       'phrase-wide': wide,
     }">
       <SocialHead v-if="term === ''" :title="`Look up ${this.$l2 ? this.$l2.name : ''}
-      Phrases | ${this.$l2 ? this.$l2.name : ''} Zero to Hero`" :description="`Look up ${this.$l2 ? this.$l2.name : ''} phrases and see
+      Phrases | Language Player`" :description="`Look up ${this.$l2 ? this.$l2.name : ''} phrases and see
       how they are used in TV shows.`" />
       <client-only>
         <div class="phrase-search-bar">

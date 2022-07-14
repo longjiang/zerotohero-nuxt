@@ -6,7 +6,7 @@
 <template>
   <div class="main pt-4 pb-5">
     <SocialHead
-      :title="`${$l2.name} Study Sheet (PDF) Creator | ${$l2.name} Zero to Hero`"
+      :title="`${$l2.name} Study Sheet (PDF) Creator | Language Player`"
       :description="`Generate ${$l2.name} guided readers for language learning.'`"
     />
     <div class="container">

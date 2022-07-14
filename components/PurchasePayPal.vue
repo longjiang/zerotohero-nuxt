@@ -68,7 +68,7 @@ export default {
       paypalItems: [
         {
           name: "zero-to-hero-pro",
-          description: "Zero to Hero Pro features",
+          description: "Language Player Pro features",
           quantity: "1",
           price: "89.00",
           currency: "USD",
@@ -146,7 +146,7 @@ export default {
       //                         "price": "0.50",
       //                         "currency": "USD",
       //                         "quantity": 1,
-      //                         "description": "Zero to Hero Pro features",
+      //                         "description": "Language Player Pro features",
       //                         "tax": "0.00"
       //                     }
       //                 ]

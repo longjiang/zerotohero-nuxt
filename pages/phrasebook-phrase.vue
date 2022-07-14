@@ -200,10 +200,9 @@ export default {
     title() {
       if (this.phrase) {
         return `Learn the ${this.$l2 ? this.$l2.name : ""} Phrase “${this.phrase
-          }” | ${this.$l2 ? this.$l2.name : ""} Zero to Hero Dictionary`;
+          }” | Language Player Dictionary`;
       }
-      return `Lookup ${this.$l2 ? this.$l2.name : ""} Phrases | ${this.$l2 ? this.$l2.name : ""
-        } Zero to Hero`;
+      return `Lookup ${this.$l2 ? this.$l2.name : ""} Phrases | Language Player`;
     },
     description() {
       if (this.phrase) {

@@ -2,7 +2,7 @@
   {
     path: '/:l1/:l2/explore/topics',
     meta: {
-      title: 'Words by Topic | Zero to Hero',
+      title: 'Words by Topic | Language Player',
       metaTags: [
         {
           name: 'description',

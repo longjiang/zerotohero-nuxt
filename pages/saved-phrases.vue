@@ -57,13 +57,9 @@ export default {
     },
     title() {
       if (this.phrasebook) {
-        return `${this.phrasebook.title} | ${
-          this.$l2 ? this.$l2.name : ""
-        } Zero to Hero`;
+        return `${this.phrasebook.title} | Language Player`;
       }
-      return `${this.$l2 ? this.$l2.name : ""} Phrasebook | ${
-        this.$l2 ? this.$l2.name : ""
-      } Zero to Hero`;
+      return `${this.$l2 ? this.$l2.name : ""} Phrasebook | Language Player`;
     },
     description() {
       if (this.phrasebook) {

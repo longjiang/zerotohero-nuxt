@@ -2,7 +2,7 @@
   {
     path: '/:l1/:l2/bookmarklet',
     meta: {
-      title: 'Keyboard | Zero to Hero',
+      title: 'Keyboard | Language Player',
       metaTags: [
         {
           name: 'description',

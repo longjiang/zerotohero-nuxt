@@ -3,7 +3,7 @@
     path: '/:l1/:l2/youtube/channel/:channel_id?/:title?',
     props: true,
     meta: {
-      title: 'Study YouTube Subtitles | Zero to Hero',
+      title: 'Study YouTube Subtitles | Language Player',
       skin: 'dark',
       metaTags: [
         {

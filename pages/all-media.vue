@@ -16,7 +16,7 @@
     />
     <div class="container pb-5">
       <SocialHead
-        :title="`Learn ${$l2.name} with Videos | ${$l2.name} Zero to Hero`"
+        :title="`Learn ${$l2.name} with Videos | Language Player`"
         :description="`Learn ${$l2.name} with Videos`"
         :image="'/img/tv-shows.jpg'"
       />

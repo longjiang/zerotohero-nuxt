@@ -3,7 +3,7 @@
     path: '/:l1/:l2/book/list',
     props: route => ({ args: route.query.url }),
     meta: {
-      title: 'Books | Zero to Hero',
+      title: 'Books | Language Player',
       metaTags: [
         {
           name: 'description',
@@ -22,7 +22,7 @@
         :title="`${$l2.name} Guided Readers: ${booklist
           .slice(0, 2)
           .map((b) => b.title)
-          .join(', ')} and more | ${$l2.name} Zero to Hero`"
+          .join(', ')} and more | Language Player`"
         :image="`${
           booklist[0] && booklist[0].thumbnail
             ? booklist[0].thumbnail

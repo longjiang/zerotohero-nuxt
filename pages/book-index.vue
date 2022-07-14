@@ -12,7 +12,7 @@
         v-if="book"
         :title="`${$l2.name} Guided Reader: ${book.title}${
           book.author ? ' by ' + book.author : ''
-        } | ${$l2.name} Zero to Hero`"
+        } | Language Player`"
         :image="`${book.thumbnail ? book.thumbnail : '/img/books-1.png'}`"
         :description="`Annoated ${
           $l2.name

@@ -5,7 +5,7 @@
       :image="`${
         article.post_hint === 'image' ? article.url : '/img/zth-share-image.jpg'
       }`"
-      :title="`Reddit Post: ${article.title} | from r/${article.subreddit} | ${$l2.name} Zero to Hero`"
+      :title="`Reddit Post: ${article.title} | from r/${article.subreddit} | Language Player`"
       :description="`${
         article.selftext_html
           ? stripTags(unescape(article.selftext_html))

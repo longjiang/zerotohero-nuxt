@@ -132,11 +132,9 @@ export default {
       if (this.term) {
         return `Learn the ${this.$l2 ? this.$l2.name : ""} Phrase “${
           this.term
-        }” | ${this.$l2 ? this.$l2.name : ""} Zero to Hero Dictionary`;
+        }” | Language Player ${this.$l2 ? this.$l2.name : ""} Dictionary`;
       }
-      return `Lookup ${this.$l2 ? this.$l2.name : ""} Phrases | ${
-        this.$l2 ? this.$l2.name : ""
-      } Zero to Hero`;
+      return `Lookup ${this.$l2 ? this.$l2.name : ""} Phrases | Language Player`;
     },
     description() {
       if (this.term) {

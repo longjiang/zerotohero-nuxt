@@ -2,7 +2,7 @@
   <div>
     <SocialHead
       v-if="grammar"
-      :title="`HSK 1-9 Chinese Grammar Cheatsheet  | ${$l2.name} Zero to Hero`"
+      :title="`HSK 1-9 Chinese Grammar Cheatsheet | Language Player`"
       :description="`${grammar
         .slice(0, 10)
         .map((g) => g.structure + ' (' + g.english + ')')

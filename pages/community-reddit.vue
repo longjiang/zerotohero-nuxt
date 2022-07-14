@@ -3,7 +3,7 @@
     path: '/:l1/:l2/community/:method?/:args?',
     props: true,
     meta: {
-      title: 'Community | Zero to Hero',
+      title: 'Community | Language Player',
       metaTags: [
         {
           name: 'description',

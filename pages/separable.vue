@@ -3,7 +3,7 @@
     path: '/:l1/:l2/separable/:method?/:args?',
     props: true,
     meta: {
-      title: 'Separable Words | Zero to Hero',
+      title: 'Separable Chinese Verbs | Language Player',
       metaTags: [
         {
           name: 'description',
@@ -17,7 +17,7 @@
   <div class="main">
     <div class="container-fluid pt-5 pb-5">
       <SocialHead
-        :title="`Which Chinese Verbs are Separable? (离合词 lí-hé cí) | Chinese Zero to Hero`"
+        :title="`Separable Chinese Verbs (离合词) | Language Player`"
         :description="`A list all seperable verbs and their various patterns.`"
         :image="`/img/placeholder.jpg`"
       />

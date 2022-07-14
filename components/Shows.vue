@@ -9,7 +9,7 @@
       <div>
         <SocialHead
           v-if="shows && shows[0]"
-          :title="`Learn ${$l2.name} with ${routeTitles[routeType]} | ${$l2.name} Zero to Hero`"
+          :title="`Learn ${$l2.name} with ${routeTitles[routeType]} | Language Player`"
           :description="`Learn ${$l2.name} with ${routeTitles[routeType]}.`"
           :image="
             routeType === 'tv-shows' && $l2.code === 'zh'

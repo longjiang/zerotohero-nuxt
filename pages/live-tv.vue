@@ -281,7 +281,7 @@ export default {
       if (this.currentChannel) {
         title = `Watch Live: ${this.currentChannel.name}`;
       }
-      title = `${title} | ${this.$l2.name} Zero to Hero`;
+      title = `${title} | Language Player`;
       return title;
     },
     description() {

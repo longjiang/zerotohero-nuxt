@@ -31,7 +31,7 @@
                   />
                 </div>
                 <h5 class="text-center pb-4" v-if="!args">
-                  Zero to Hero
+                  Language Player
                   <LanguageFlag
                     :language="$l2"
                     style="position: relative; bottom: 0.2rem; margin: 0 0.3rem"
@@ -266,11 +266,9 @@ export default {
           this.entry.definitions
             ? this.entry.definitions.slice(0, 2).join("; ")
             : ""
-        } | ${this.$l2 ? this.$l2.name : ""} Zero to Hero Dictionary`;
+        } | Language Player ${this.$l2 ? this.$l2.name : ""} Dictionary`;
       }
-      return `${this.$l2 ? this.$l2.name : ""} Dictionary | ${
-        this.$l2 ? this.$l2.name : ""
-      } Zero to Hero`;
+      return `${this.$l2 ? this.$l2.name : ""} Dictionary | Language Player`;
     },
     description() {
       if (this.entry) {

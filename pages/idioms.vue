@@ -8,7 +8,7 @@
   <div class="main">
     <div class="container pt-5 mb-5">
       <SocialHead
-        :title="`Learn idioms (成语 chéngyǔ) | Chinese Zero to Hero`"
+        :title="`Learn Chinese Idioms (成语 chéngyǔ) | Language Player`"
         :description="`A list of idioms in the HSK curriculum, and their origins.`"
         :image="`/img/placeholder.jpg`"
       />

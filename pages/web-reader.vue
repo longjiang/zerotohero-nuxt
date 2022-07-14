@@ -3,7 +3,7 @@
     path: '/:l1/:l2/web-reader/',
     props: true,
     meta: {
-      title: 'Reader | Zero to Hero',
+      title: 'Reader | Language Player',
       metaTags: [
         {
           name: 'description',

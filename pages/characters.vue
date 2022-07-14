@@ -6,7 +6,7 @@
 <template>
   <div class="main pt-5 pb-4">
     <SocialHead
-      :title="`Chinese Characters by HSK Level | Chinese Zero to Hero`"
+      :title="`Chinese Characters by HSK Level | Language Player`"
       :description="`A list of all characters from the simpliest to the most difficult, and the words that include them.`"
       :image="`/img/placeholder.jpg`"
     />

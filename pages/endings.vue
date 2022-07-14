@@ -2,7 +2,7 @@
   {
     path: '/:l1/:l2/endings',
     meta: {
-      title: 'Lookup Case Endings | Zero to Hero',
+      title: 'Lookup Case Endings | Language Player',
       metaTags: [
         {
           name: 'description',

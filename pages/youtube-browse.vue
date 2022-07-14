@@ -16,7 +16,7 @@
     />
     <div class="youtube-browse container pt-4 pb-5">
       <SocialHead
-        :title="`Study ${$l2.name} videos with subs | ${$l2.name} Zero to Hero`"
+        :title="`Study ${$l2.name} videos with subs | Language Player`"
         :description="`Watch ${$l2.name} videos and study the ${
           $l2.code === 'zh' ? 'Pinyin' : $l2.name
         } subtitles.`"

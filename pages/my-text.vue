@@ -7,7 +7,7 @@
 <template>
   <div class="main pt-5 pb-5">
     <SocialHead
-      :title="`My ${$l2.name} Text | Zero to Hero`"
+      :title="`My ${$l2.name} Text | Language Player`"
       :description="`Read ${$l2.name} text with phonetic annotation dictionary lookup. Save new words for review.`"
     />
     <div class="container">

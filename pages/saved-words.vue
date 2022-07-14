@@ -2,7 +2,7 @@
   {
     path: '/:l1/:l2/saved-words',
     meta: {
-      title: 'Saved Words | Zero to Hero',
+      title: 'Saved Words | Language Player',
       metaTags: [
         {
           name: 'description',

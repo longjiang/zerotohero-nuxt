@@ -6,7 +6,7 @@
 <template>
   <div class="main">
     <SocialHead
-      title="Pinyin List Tool | Chinese Zero to Hero"
+      title="Pinyin List Tool | Language Player"
       description="Enter a list of Chinese words and convert them into a list of pinyin transcriptions."
     />
     <div class="container pt-5 pb-5">

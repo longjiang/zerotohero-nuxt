@@ -30,10 +30,10 @@
     <h6 class="mt-4">METHOD 2: Search on YouTube directly</h6>
     <ol>
       <li>
-        Install the "Open in Zero to Hero" this bookmarklet. Drag this link to
+        Install the "Open in Language Player" this bookmarklet. Drag this link to
         your browser's bookmarks bar:
         <a :href="bookmarkletHref" class="btn btn-small btn-ghost-dark">
-          Open in Zero to Hero
+          Open in Language Player
         </a>
       </li>
       <li>

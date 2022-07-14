@@ -2,7 +2,7 @@
   {
     path: '/:l1/:l2/contact-us',
     meta: {
-      title: 'Contact Us | Zero to Hero',
+      title: 'Contact Us | Language Player',
       metaTags: [
         {
           name: 'description',
@@ -15,7 +15,7 @@
 <template>
   <div class="main">
     <div class="container pt-5 pb-5">
-      <SocialHead :title="`Support and Contact | ${$l2.name} Zero to Hero`" />
+      <SocialHead :title="`Support and Contact | Language Player`" />
       <template>
         <div class="row">
           <div class="col-12">

@@ -2,7 +2,7 @@
   {
     path: '/:l1/:l2/explore/new-levels-graphic',
     meta: {
-      title: 'Words in the New HSK 3.0 Visualized | Zero to Hero',
+      title: 'Words in the New HSK 3.0 Visualized | Language Player',
       metaTags: [
         {
           name: 'description',

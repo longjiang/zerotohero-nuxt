@@ -3,7 +3,7 @@
       path: '/:l1/:l2/assign-lesson-videos/:level?/:lesson?',
       props: true,
       meta: {
-        title: 'Lesson Videos | Zero to Hero',
+        title: 'Lesson Videos | Language Player',
         metaTags: [
           {
             name: 'description',

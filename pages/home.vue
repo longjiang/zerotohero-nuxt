@@ -6,7 +6,7 @@
 <template>
   <div class="home main-dark">
     <SocialHead
-      :title="`${$l2.name} Zero to Hero`"
+      :title="`Language Player ${$l2.name}`"
       :description="`Learn ${$l2.name} language from zero to fluency with ${
         ['zh', 'en'].includes($l2.code) ? 'online courses and ' : ''
       } comprehensible input.`"

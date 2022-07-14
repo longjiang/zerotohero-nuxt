@@ -19,7 +19,7 @@
             <section class="comments" aria-labelledby="comment">
               <Disqus shortname="zero-to-hero" :pageConfig="{
                   identifier: 'comments-feedback',
-                  title: 'Zero to Hero Comments & Feedback'
+                  title: 'Language Player Comments & Feedback'
                 }" />
             </section>
           </client-only>

@@ -8,7 +8,7 @@
   <div class="main pt-5 pb-5">
     <SocialHead
       v-if="subreddits && subreddits.length > 0"
-      :title="`Reddit Posts from r/${subreddits[0].sub} | ${$l2.name} Zero to Hero`"
+      :title="`Reddit Posts from r/${subreddits[0].sub} | Language Player`"
     />
     <div v-if="method === 'list'" class="container" :key="`subreddits-${key}`">
       <div class="row">

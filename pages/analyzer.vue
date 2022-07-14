@@ -2,7 +2,7 @@
   {
     path: '/:l1/:l2/analyzer',
     meta: {
-      title: 'Analyze Cases in Text | Zero to Hero',
+      title: 'Analyze Cases in Text | Language Player',
       metaTags: [
         {
           name: 'description',

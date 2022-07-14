@@ -3,7 +3,7 @@
     path: '/:l1/:l2/tutoring/:level?',
     props: true,
     meta: {
-      title: 'Tutoring Kit | Zero to Hero',
+      title: 'Tutoring Kit | Language Player',
       metaTags: [
         {
           name: 'description',
@@ -16,7 +16,7 @@
 <template>
   <div class="main pt-5 pb-5">
     <SocialHead
-      :title="`Tutoring Kit | ${$l2.name} Zero to Hero`"
+      :title="`Tutoring Kit | Language Player`"
       :description="`A resource kit to help you get most out of your ${$l2.name} tutoring lessons, including topics for descussion and activities!`"
     />
     <div class="container">

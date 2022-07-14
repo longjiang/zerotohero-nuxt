@@ -7,7 +7,7 @@
   <div class="main">
     <div class="container pt-4 pb-4" v-cloak>
       <SocialHead
-        :title="`Words in the New HSK (9 Levels) | Chinese Zero to Hero`"
+        :title="`Chinese Words in the New HSK (9 Levels) | Language Player`"
         :description="`Browse through and learn the 11,000 new HSK words.`"
         :image="`/img/placeholder.jpg`"
       />

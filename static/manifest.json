@@ -1,6 +1,6 @@
 {
-  "name": "Zero to Hero",
-  "short_name": "zerotohero",
+  "name": "Language Player",
+  "short_name": "languageplayer",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#000000",
