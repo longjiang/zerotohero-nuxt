@@ -45,18 +45,20 @@
         v-if="video"
         ref="youtube"
         skin="dark"
-        :video="video"
+        v-bind="{
+          video,
+          starttime,
+          startLineIndex,
+          show,
+          showType,
+          episodes,
+          largeEpisodeCount,
+          autoload: true,
+          autoplay: false,
+          forcePortrait: false,
+          initialLayout: layout
+        }"
         :key="`transcript-${video.youtube_id}`"
-        :autoload="true"
-        :autoplay="false"
-        :starttime="starttime"
-        :startLineIndex="startLineIndex"
-        :show="show"
-        :showType="showType"
-        :episodes="episodes"
-        :forcePortrait="false"
-        :initialLayout="layout"
-        :largeEpisodeCount="largeEpisodeCount"
         @ended="updateEnded"
         @previous="goToPreviousEpisode"
         @next="goToNextEpisode"
