@@ -175,7 +175,8 @@ export default {
       visibleMax: this.startLineIndex ? Number(this.startLineIndex) + 30 : 30,
       visibleRange: 30,
       preventJumpingAtStart: typeof this.startLineIndex !== "undefined",
-      wordblocksInLine: {},
+      wordBlocksInLine: {},
+      savedWordsInLine: {},
       NON_PRO_MAX_LINES
     };
   },
@@ -305,8 +306,10 @@ export default {
     },
   },
   methods: {
-    wordblocksMounted(wordblocks, index) {
-      this.wordblocksInLine[index] = wordblocks
+    async wordblocksMounted(wordblocks, index) {
+      this.wordBlocksInLine[index] = wordblocks
+      await Helper.timeout(3000)
+      this.savedWordsInLine[index] = wordblocks.filter(wb => wb.saved).map(wb => wb.saved)
     },
     play() {
       this.$emit("play");
