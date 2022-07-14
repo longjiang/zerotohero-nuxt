@@ -2,6 +2,9 @@ export default {
   env: {
     baseUrl: process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'
   },
+  // server: {
+  //   host: '0.0.0.0' // default: 'localhost'
+  // },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: 'Language Player',
@@ -63,10 +66,10 @@ export default {
       purpose: 'maskable', // So that the user's os will add masking/padding around the icon (rounded corner, circle, etc)
     },
     manifest: {
-      name: 'Zero to Hero Education',
-      short_name: 'Zero to Hero',
-      description: 'Language education done right.',
-      theme_color: '#343a40',
+      name: 'Language Player',
+      short_name: 'Language Player',
+      description: 'Learn languages with videos.',
+      theme_color: '#1d1d1d',
       useWebmanifestExtension: false
     },
     workbox: {
