@@ -36,21 +36,21 @@
       </router-link>
     </div>
     <client-only>
+      <drop
+        @drop="handleDrop"
+        :class="{
+          'd-none': video.subs_l2 && video.subs_l2.length > 0,
+          over: over,
+          'subs-drop drop p-4': true,
+        }"
+        :key="`drop-${transcriptKey}`"
+        @dragover="over = true"
+        @dragleave="over = false"
+      >
+        <i class="fa fa-file mr-2"></i>
+        Drop .srt or .ass files here to add subtitles
+      </drop>
       <div class="video-edit-public" v-if="$adminMode">
-        <drop
-          @drop="handleDrop"
-          :class="{
-            'd-none': video.subs_l2 && video.subs_l2.length > 0,
-            over: over,
-            'subs-drop drop p-4': true,
-          }"
-          :key="`drop-${transcriptKey}`"
-          @dragover="over = true"
-          @dragleave="over = false"
-        >
-          <i class="fa fa-file mr-2"></i>
-          Drop .srt or .ass files here to add subtitles
-        </drop>
         <b-button
           size="small"
           :class="{
@@ -542,6 +542,7 @@ export default {
         this.video.subs_l2 = Helper.uniqueByValue(parsed, "starttime");
         this.firstLineTime = this.video.subs_l2[0].starttime;
         this.transcriptKey++;
+        this.$emit('updateTranscript', true)
       };
     },
     async changeLevel(slug) {

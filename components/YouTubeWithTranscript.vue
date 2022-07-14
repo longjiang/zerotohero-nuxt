@@ -88,6 +88,7 @@
           @updateTranslation="updateTranslation"
           @updateOriginalText="updateOriginalText"
           @enableTranslationEditing="toggleEnableTranslationEditing"
+          @updateTranscript="updateTranscript"
         />
         <EpisodeNav
           :video="video"
@@ -99,12 +100,13 @@
           class="mt-3"
         />
       </div>
-
+      <!-- this is necessary for updating the transcript upon srt drop -->
+      <div class="d-none">{{ transcriptKey }}</div>
       <SyncedTranscript
         v-if="video.subs_l2 && video.subs_l2.length > 0"
-        :class="{ 'd-none': layout === 'mini' }"
         ref="transcript"
-        :key="'transcript-' + video.youtube_id"
+        :class="{ 'd-none': layout === 'mini' }"
+        :key="'transcript-' + video.youtube_id + '-' + transcriptKey"
         :lines="video.subs_l2"
         :parallellines="video.subs_l1"
         :sticky="sticky"
@@ -170,6 +172,7 @@
             @showSubsEditing="toggleShowSubsEditing"
             @updateTranslation="updateTranslation"
             @updateOriginalText="updateOriginalText"
+            @updateTranscript="updateTranscript"
             @enableTranslationEditing="toggleEnableTranslationEditing"
           />
         </client-only>
@@ -361,6 +364,9 @@ export default {
     },
   },
   methods: {
+    updateTranscript() {
+      this.transcriptKey++
+    },
     onVideoUnavailable(youtube_id) {
       if (youtube_id === this.video.youtube_id) {
         this.$emit("videoUnavailable", youtube_id);
