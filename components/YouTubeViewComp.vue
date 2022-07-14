@@ -191,9 +191,6 @@ export default {
       console.log(`YouTube View (Fetch): Getting saved video...`);
       let savedVideo, videoFromApi;
       savedVideo = await this.getSaved();
-      if (this.lesson && savedVideo.level && savedVideo.lesson) {
-        this.saveWords(savedVideo.level, savedVideo.lesson);
-      }
       if (!savedVideo || (!savedVideo.channel && this.$adminMode)) {
         console.log(
           `YouTube View (Fetch): Getting channel information with youtube api...`
@@ -539,44 +536,6 @@ export default {
         }
       }
     },
-    wordSaved(word) {
-      let saved = false;
-      if (word) {
-        saved = this.$store.getters["savedWords/has"]({
-          id: word.id,
-          l2: this.$l2.code,
-        });
-      }
-      return saved;
-    },
-    async allForms(word) {
-      let wordForms =
-        (await (await this.$getDictionary()).wordForms(word)) || [];
-      wordForms = wordForms.filter((form) => form !== "");
-      wordForms = [word.head.toLowerCase()].concat(
-        wordForms.map((form) => form.form.replace(/'/g, ""))
-      );
-      wordForms = Helper.unique(wordForms).filter(
-        (form) => form && form !== "" && form !== "-"
-      );
-      return wordForms;
-    },
-    async saveWords(level, lesson) {
-      let dictionary = await this.$getDictionary();
-      if (typeof dictionary !== "undefined") {
-        let words = await dictionary.lookupByLesson(level, lesson);
-        for (let word of words) {
-          if (word && !this.wordSaved(word)) {
-            let wordForms = await this.allForms(word);
-            this.$store.dispatch("savedWords/add", {
-              word: word,
-              wordForms: wordForms,
-              l2: this.$l2.code,
-            });
-          }
-        }
-      }
-    },
     async patchChannelID(video, channelId) {
       let data = await this.$directus.patchVideo({
         l2Id: this.$l2.id,
@@ -609,9 +568,6 @@ export default {
         }
       }
       return video;
-    },
-    scrollToComments() {
-      document.getElementById("comments").scrollIntoView();
     },
     bindKeys() {
       window.onkeydown = (e) => {
