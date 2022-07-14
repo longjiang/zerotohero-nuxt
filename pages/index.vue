@@ -10,7 +10,7 @@
 <template>
   <div>
     <SocialHead
-      title="Zero to Hero Languages | Master any language by comprehensible input."
+      title="Language Player | Master any language by comprehensible input."
       description="We provide live TV channels in the target language, TV shows with subtitles, music with lyrics, phrasebooks with video examples... everything that can help you to learn a language “by osmosis.” We are also known for our “Chinese Zero to Hero” and “English Zero to Hero” online language courses."
     />
     <div class="gradient-backdrop"></div>

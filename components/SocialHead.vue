@@ -10,7 +10,7 @@ export default {
   props: {
     title: {
       type: String,
-      default: "Zero to Hero Languages",
+      default: "Language Player",
     },
     description: {
       type: String,
@@ -72,7 +72,7 @@ export default {
           property: "og:site_name",
           content: this.$l2
             ? `${this.$l2.name} Zero to Hero`
-            : "Zero to Hero Languages",
+            : "Language Player",
         },
         { hid: "og:type", property: "og:type", content: "website" },
         {

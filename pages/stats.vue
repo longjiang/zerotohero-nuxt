@@ -10,7 +10,7 @@
 <template>
   <div class="bg-white" style="min-height: 100vh">
     <SocialHead
-      title="Stats | Zero to Hero Languages"
+      title="Stats | Language Player"
       description="How many videos we have for each language.”"
     />
     <SiteTopBar />

@@ -10,7 +10,7 @@
 <template>
   <div class="bg-white" style="min-height: 100vh">
     <SocialHead
-      title="Online Translators | Zero to Hero Languages"
+      title="Online Translators | Language Player"
       description="Check the availability of online translators for any given language."
       image="/img/thumbnail-language-icons.jpg"
     />
@@ -26,7 +26,7 @@
           >
             <router-link to="/" class="link-unstyled d-block">
               <i class="fa fa-chevron-left mr-2"></i>
-              Zero to Hero Languages
+              Language Player
             </router-link>
             <router-link
               to="/language-map"

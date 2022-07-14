@@ -10,7 +10,7 @@
 <template>
   <div>
     <SocialHead
-      title="Compare Languages on a Map | Zero to Hero Languages"
+      title="Compare Languages on a Map | Language Player"
       description="See on a map how people say words like 'yes', 'no', 'thanks' on a map!"
       image="/img/thumbnail-compare-languages.jpg"
     />
