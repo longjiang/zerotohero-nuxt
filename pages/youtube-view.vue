@@ -10,7 +10,7 @@
 </router>
 <template>
   <div class="youtube-view-page">
-    <YouTubeViewComp :youtube_id="youtube_id" :lesson="lesson" :starttime="starttime" />
+    <YouTubeViewComp :youtube_id="youtube_id" :lesson="lesson" />
   </div>
 </template>
 
@@ -26,14 +26,6 @@ export default {
       required: false,
     },
   },
-  data() {
-    return {
-      starttime: 0
-    }
-  },
-  mounted() {
-    this.starttime = this.$route.query.t ? Number(this.$route.query.t) : 0;
-  }
 };
 </script>
 

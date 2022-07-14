@@ -86,10 +86,6 @@ export default {
       type: String, // If the video is a "lesson video" (with lesson vocab highlighted), set this to "lesson"
       required: false,
     },
-    starttime: {
-      type: Number,
-      default: 0,
-    },
     mini: {
       type: Boolean,
       default: false,
@@ -110,6 +106,7 @@ export default {
       startLineIndex: 0,
       video: undefined,
       largeEpisodeCount: undefined,
+      starttime: 0
     };
   },
   computed: {
@@ -210,6 +207,9 @@ export default {
   },
   beforeDestroy() {
     if (this.unsubscribe) this.unsubscribe();
+  },
+  mounted() {
+    this.starttime = this.$route.query.t ? Number(this.$route.query.t) : 0;
   },
   watch: {
     /**
