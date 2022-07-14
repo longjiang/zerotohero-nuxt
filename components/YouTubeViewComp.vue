@@ -251,7 +251,7 @@ export default {
       }
     },
     /**
-     * Called when the show is loaded from this.setShows() after the shows.js store retrieves TV shows
+     * Called when the show is loaded from this.setShow() after the shows.js store retrieves TV shows
      */
     async show() {
       console.log("YouTube View: 📀 Show changed, getting episodes...");
@@ -304,11 +304,12 @@ export default {
         query: Helper.queryString(postParams),
       });
       if (moreVideos) {
-        videos = [...videos, moreVideos];
+        videos = [...videos, ...moreVideos];
       }
 
       // Make sure this video is included in the collection
       videos = [this.video, ...videos];
+
       videos = Helper.uniqueByValue(videos, "youtube_id");
       if (sort === "-date") {
         videos = videos.sort((a, b) =>
