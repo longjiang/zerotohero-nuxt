@@ -548,6 +548,7 @@ export default {
           wordblocks = wordblocks.concat(template.$children?.[0]?.$children)
         }
         this.wordblocks = wordblocks
+        this.$emit("wordblocksMounted", wordblocks)
       }
     },
     async annotateRecursive(node) {

@@ -54,6 +54,7 @@
             @translationLoading="translationLoading = true"
             @textChanged="lineChanged(line, ...arguments)"
             @annotated="updateAnnotated"
+            @wordblocksMounted="wordblocksMounted"
           >
             <span v-html="lineHtml(line).trim()" />
           </Annotate>
@@ -187,6 +188,9 @@ export default {
     },
   },
   methods: {
+    wordblocksMounted(wordblocks) {
+      this.$emit('wordblocksMounted', wordblocks)
+    },
     onTranslation(translation) {
       this.translation = translation;
       this.translationLoading = false;

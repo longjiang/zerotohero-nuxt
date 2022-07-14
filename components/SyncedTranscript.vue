@@ -58,6 +58,7 @@
               @removeLineClick="removeLine(index + visibleMin)"
               @trasnlationLineBlur="trasnlationLineBlur"
               @trasnlationLineKeydown="trasnlationLineKeydown"
+              @wordblocksMounted="wordblocksMounted($event, index + visibleMin)"
             />
           </template>
           <div
@@ -174,6 +175,7 @@ export default {
       visibleMax: this.startLineIndex ? Number(this.startLineIndex) + 30 : 30,
       visibleRange: 30,
       preventJumpingAtStart: typeof this.startLineIndex !== "undefined",
+      wordblocksInLine: {},
       NON_PRO_MAX_LINES
     };
   },
@@ -303,6 +305,9 @@ export default {
     },
   },
   methods: {
+    wordblocksMounted(wordblocks, index) {
+      this.wordblocksInLine[index] = wordblocks
+    },
     play() {
       this.$emit("play");
     },
