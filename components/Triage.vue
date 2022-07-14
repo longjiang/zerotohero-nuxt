@@ -21,7 +21,7 @@
             class="btn btn-success"
             :to="{
               name: 'learning-path',
-              params: { l1: l1.code, l2: l2.code },
+              params: { l1: l1.code, l2: l2.code === 'cmn' ? 'zh' : l2.code },
             }"
           >
             Start Learning <i class="fa-solid fa-chevron-right"></i>
