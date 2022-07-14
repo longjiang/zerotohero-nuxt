@@ -10,12 +10,7 @@
 <template>
   <container-query :query="query" v-model="params">
     <div class="main-dark">
-      <div class="container" v-if="!native && !isSafari">
-        <div class="row">
-          <div class="col-sm-12 pt-4"><div class="text-center pt-3 pb3 alert alert-danger rounded">Currently the Live TV feature only works with the Safari browser due to a recent change in Chrome/Firefox/Edge.</div></div>
-        </div>
-      </div>
-      <div class="pb-5 container-fluid" v-else>
+      <div class="pb-5 container-fluid">
         <SocialHead
           v-if="channels"
           :title="title"

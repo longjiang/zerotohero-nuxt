@@ -26,6 +26,7 @@ export default {
       { hid: 'jquery', src: '/vendor/jquery/jquery.min.js', defer: true },
       { hid: 'axios', src: '/vendor/axios/axios.min.js', defer: true },
       { hid: 'underscore', src: '/vendor/underscore/underscore.js', defer: true },
+      { hid: 'hls', src: 'https://cdn.jsdelivr.net/npm/hls.js@latest', defer: true }
     ]
   },
 
@@ -176,6 +177,7 @@ export default {
     '~plugins/jw.js',
     '~plugins/directus.js',
     '~plugins/subs.js',
+    { src: '~plugins/d-player.js', mode: 'client' },
     { src: '~/plugins/stripe.js', mode: 'client' },
     { src: '~/plugins/paypal.js', mode: 'client' },
     { src: '~/plugins/ios-in-app-purchase.js', mode: 'client' },
