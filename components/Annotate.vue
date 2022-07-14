@@ -249,6 +249,7 @@ export default {
       myanmarZawgyiConverter: undefined,
       translationData: this.translation,
       text: undefined,
+      wordblocks: []
     };
   },
   mounted() {
@@ -540,6 +541,14 @@ export default {
       this.annotating = false;
       this.annotated = true;
       this.$emit("annotated", true);
+      await Helper.timeout(3000);
+      if (this.$refs["run-time-template"]?.length > 0) {
+        let wordblocks = []
+        for (let template of this.$refs["run-time-template"]) {
+          wordblocks = wordblocks.concat(template.$children?.[0]?.$children)
+        }
+        this.wordblocks = wordblocks
+      }
     },
     async annotateRecursive(node) {
       if (node?.classList?.contains("sentence")) {
