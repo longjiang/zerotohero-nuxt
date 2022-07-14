@@ -9,7 +9,12 @@
     <client-only>
       <div class="transcript-wrapper">
         <client-only>
-          <template v-for="(line, index) in filteredLines.slice(this.visibleMin, this.visibleMax - this.visibleMin)">
+          <template
+            v-for="(line, index) in filteredLines.slice(
+              this.visibleMin,
+              this.visibleMax - this.visibleMin
+            )"
+          >
             <TranscriptLine
               :line="line"
               :parallelLine="
@@ -60,6 +65,10 @@
               @trasnlationLineKeydown="trasnlationLineKeydown"
               @wordblocksMounted="wordblocksMounted($event, index + visibleMin)"
             />
+            <PopQuiz
+              :key="`pop-quiz-${index}`"
+              v-if="popQuizExistsAfterLine(index)"
+            />
           </template>
           <div
             v-observe-visibility="visibilityChanged"
@@ -75,7 +84,10 @@
           </div>
           <template v-if="!pro">
             <YouNeedPro
-              v-if="(!single && filteredLines.length < lines.length) || (single && currentLineIndex > NON_PRO_MAX_LINES - 7)"
+              v-if="
+                (!single && filteredLines.length < lines.length) ||
+                (single && currentLineIndex > NON_PRO_MAX_LINES - 7)
+              "
               style="position: absolute; bottom: 0; width: 100%"
             />
           </template>
@@ -96,7 +108,7 @@
 import Helper from "@/lib/helper";
 import Vue from "vue";
 
-import { NON_PRO_MAX_LINES, POPULAR_LANGS } from '@/lib/config'
+import { NON_PRO_MAX_LINES, POPULAR_LANGS } from "@/lib/config";
 
 export default {
   props: {
@@ -152,8 +164,8 @@ export default {
       default: false,
     },
     forcePro: {
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
@@ -177,7 +189,7 @@ export default {
       preventJumpingAtStart: typeof this.startLineIndex !== "undefined",
       wordBlocksInLine: {},
       savedWordsInLine: {},
-      NON_PRO_MAX_LINES
+      NON_PRO_MAX_LINES,
     };
   },
   computed: {
@@ -215,13 +227,14 @@ export default {
     },
     filteredLines() {
       let filteredLines = this.lines;
-      if (!this.pro && !this.forcePro) filteredLines = filteredLines.slice(0, NON_PRO_MAX_LINES);
+      if (!this.pro && !this.forcePro)
+        filteredLines = filteredLines.slice(0, NON_PRO_MAX_LINES);
       if (this.single) {
         return [filteredLines[this.currentLineIndex || 0]].filter(
           (line) => line
         );
       } else {
-        return filteredLines.filter((line) => line)
+        return filteredLines.filter((line) => line);
       }
     },
   },
@@ -306,10 +319,20 @@ export default {
     },
   },
   methods: {
+    popQuizExistsAfterLine(index) {
+      let thisLine = this.lines[index + this.visibleMin]
+      let nextLine = this.lines[index + this.visibleMin + 1]
+      if (!nextLine) return true  // this is the last line
+      let endTimeOfThisLine = thisLine.starttime + thisLine.duration
+      let intervalAfterThisLine = nextLine.starttime - endTimeOfThisLine
+      if (intervalAfterThisLine > 2) return true
+    },
     async wordblocksMounted(wordblocks, index) {
-      this.wordBlocksInLine[index] = wordblocks
-      await Helper.timeout(3000)
-      this.savedWordsInLine[index] = wordblocks.filter(wb => wb.saved).map(wb => wb.saved)
+      this.wordBlocksInLine[index] = wordblocks;
+      await Helper.timeout(3000);
+      this.savedWordsInLine[index] = wordblocks
+        .filter((wb) => wb.saved)
+        .map((wb) => wb.saved);
     },
     play() {
       this.$emit("play");
