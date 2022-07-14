@@ -45,8 +45,8 @@
         :showSearchBar="false"
         @videosLoaded="onVideosLoaded"
       />
-      <MediaSearchResults :keyword="topic" v-if="topic !== 'all'" />
-      <YouTubeSearchResults
+      <!-- <MediaSearchResults :keyword="topic" v-if="topic !== 'all' && topic !== 'kids'" /> -->
+      <!-- <YouTubeSearchResults
         :term="topic"
         :infinite="true"
         :showProgress="false"
@@ -55,7 +55,7 @@
         :showBadges="false"
         :cloakVideosWithoutSubs="!$adminMode"
         v-if="topic !== 'all'"
-      />
+      /> -->
       <client-only>
         <Nav
           :l1="$l1"
