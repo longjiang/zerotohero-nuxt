@@ -94,13 +94,13 @@
           </template>
         </client-only>
       </div>
-      <!-- <EndQuiz
+      <EndQuiz
         v-if="!single"
         :lines="lines"
         :matchedParallelLines="matchedParallelLines"
         :hsk="hsk"
         :skin="skin"
-      /> -->
+      />
     </client-only>
   </div>
 </template>
@@ -200,12 +200,17 @@ export default {
     quizChunks() {
       let quizChunks = {}
       let seenLineIndices = []
+      let lastIndex = 0
+      let MIN_SEPARATION = 10 // minimum number of lines that separate two quizzes
       for (let index in this.lines) {
         index = Number(index)
         seenLineIndices.push(index)
-        if (this.popQuizExistsAfterLine(index)) {
-          quizChunks[index + 1] = seenLineIndices // Quiz the lines at the next checkpoint
-          seenLineIndices = []
+        if (this.longPauseAfterLine(index)  || index > lastIndex + MIN_SEPARATION * 2) {
+          if (index > lastIndex + MIN_SEPARATION) {
+            quizChunks[index + 1] = seenLineIndices // Quiz the lines at the next checkpoint
+            seenLineIndices = []
+            lastIndex = index
+          }
         }
       }
       return quizChunks
@@ -336,14 +341,14 @@ export default {
     },
   },
   methods: {
-    popQuizExistsAfterLine(index) {
+    longPauseAfterLine(index) {
       let thisLine = this.lines[index + this.visibleMin]
       let nextLine = this.lines[index + this.visibleMin + 1]
       if (!thisLine) return false
       if (!nextLine) return true  // this is the last line
       let endTimeOfThisLine = thisLine.starttime + thisLine.duration
       let intervalAfterThisLine = nextLine.starttime - endTimeOfThisLine
-      if (intervalAfterThisLine > 2) return true
+      if (intervalAfterThisLine > 1) return true
     },
     play() {
       this.$emit("play");

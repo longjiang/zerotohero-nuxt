@@ -17,7 +17,8 @@
 </template>
 
 <script>
-import { shuffle } from '@/lib/utils/array'
+import { shuffle } from '@/lib/utils'
+
 export default {
   props: {
     quizContent: {
@@ -27,15 +28,17 @@ export default {
   data() {
     return {
       reviewItems: [],
-      showQuiz: false
+      showQuiz: false,
+    }
+  },
+  computed: {
+    lines() {
+      return this.quizContent.map(c => c.line.line)
     }
   },
   methods: {
     visibilityChanged(visible) {
       if(visible && this.reviewItems.length === 0) {
-        for (let transcriptLineComp of this.quizContent ) {
-          if (!transcriptLineComp.annotated) return // Proceed only if all transcript lines are annotated already
-        }
         this.generateReviewItems()
       }
     },
@@ -43,7 +46,7 @@ export default {
       let reviewItems = []
       for (let transcriptLineComp of this.quizContent ) {
         let savedWords = transcriptLineComp.getSavedWords()
-        if (savedWords.length > 0) {
+        if (savedWords?.length > 0) {
           for (let saved of savedWords) {
             let savedForm
             for (let form of saved.forms) {
