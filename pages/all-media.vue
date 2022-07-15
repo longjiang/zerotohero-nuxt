@@ -33,34 +33,6 @@
               });
             }
           " /> -->
-          <div
-            :class="{
-              'loader text-center': true,
-              'd-none': showsLoaded,
-            }"
-            style="margin: 7rem 0 15rem 0"
-          >
-            <Loader :sticky="true" message="Loading videos in our library..." />
-          </div>
-          <div v-if="tvShows && tvShows.length > 0" class="media-section">
-            <h3 class="media-seaction-heading">
-              TV Shows
-              <router-link :to="{ name: 'tv-shows' }" class="show-all">
-                More
-                <i class="fas fa-chevron-right ml-1"></i>
-              </router-link>
-            </h3>
-            <ShowList
-              :shows="
-                random(
-                  tvShows.filter((s) => !['Movies', 'Music'].includes(s.title)),
-                  6
-                )
-              "
-              type="tvShows"
-              :key="`tv-shows`"
-            />
-          </div>
           <div :class="{ 'media-section': true, 'd-none': !hasWatchHistory }">
             <h3 class="media-seaction-heading">
               Continue Watching
@@ -83,6 +55,59 @@
               @hasWatchHistory="onHasWatchHistory"
             />
           </div>
+          
+          <div
+            :class="{
+              'loader text-center': true,
+              'd-none': showsLoaded,
+            }"
+            style="margin: 7rem 0 15rem 0"
+          >
+            <Loader :sticky="true" message="Loading videos in our library..." />
+          </div>
+          <div v-if="tvShows && tvShows.length > 0" class="media-section">
+            <h3 class="media-seaction-heading">
+              TV Shows
+              <router-link :to="{ name: 'tv-shows' }" class="show-all">
+                More
+                <i class="fas fa-chevron-right ml-1"></i>
+              </router-link>
+            </h3>
+            <ShowList
+              :shows="
+                random(
+                  tvShows.filter((s) => !['Movies', 'Music'].includes(s.title)),
+                  12
+                )
+              "
+              type="tvShows"
+              :key="`tv-shows`"
+            />
+          </div>
+
+          <div v-if="talks && talks.length > 0" class="media-section">
+            <h3 class="media-seaction-heading">
+              YouTube
+              <router-link :to="{ name: 'talks' }" class="show-all">
+                More
+                <i class="fas fa-chevron-right ml-1"></i>
+              </router-link>
+            </h3>
+            <ShowList
+              :shows="
+                random(
+                  talks.filter(
+                    (s) => !['News'].includes(s.title) && !s.audiobook
+                  ),
+                  6
+                )
+              "
+              type="talks"
+              :key="`tv-shows`"
+            />
+            <div class="text-center mt-1"></div>
+          </div>
+
           <div v-if="music && music.length > 0" class="media-section">
             <h3 class="media-seaction-heading">
               Music
@@ -165,29 +190,6 @@
               type="talks"
               :key="`tv-shows`"
             />
-          </div>
-
-          <div v-if="talks && talks.length > 0" class="media-section">
-            <h3 class="media-seaction-heading">
-              YouTube
-              <router-link :to="{ name: 'talks' }" class="show-all">
-                More
-                <i class="fas fa-chevron-right ml-1"></i>
-              </router-link>
-            </h3>
-            <ShowList
-              :shows="
-                random(
-                  talks.filter(
-                    (s) => !['News'].includes(s.title) && !s.audiobook
-                  ),
-                  6
-                )
-              "
-              type="talks"
-              :key="`tv-shows`"
-            />
-            <div class="text-center mt-1"></div>
           </div>
 
           <div v-if="videos && videos.length > 0" class="media-section">

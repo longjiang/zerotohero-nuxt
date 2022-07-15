@@ -180,8 +180,8 @@ export default {
   left: 1rem;
   width: calc(100% - 2rem);
   border-radius: 0.25rem;
-  background-color: #565656;
-  border: 1px solid rgb(91, 91, 91);
+  background-color: #767676;
+  border: 1px solid rgb(138, 138, 138);
   box-shadow: 1px -3px 4px #00000070;
 }
 .deck1 {
