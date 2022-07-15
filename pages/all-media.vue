@@ -190,7 +190,7 @@
             <div class="text-center mt-1"></div>
           </div>
 
-          <!-- <div v-if="videos && videos.length > 0" class="media-section">
+          <div v-if="videos && videos.length > 0" class="media-section">
             <h3 class="media-seaction-heading">
               Newly Added
               <router-link :to="{ name: 'youtube-browse' }" class="show-all">
@@ -203,7 +203,7 @@
               :showAdminToolsInAdminMode="false"
               skin="dark"
             />
-          </div> -->
+          </div>
 
           <client-only>
             <Nav
