@@ -7,7 +7,7 @@
         data-not-lazy
       />
     </a>
-    <a href="https://www.youtube.com/channel/UCQ3IlLg5VGeydxtswBoyt6A">
+    <!-- <a href="https://www.youtube.com/channel/UCQ3IlLg5VGeydxtswBoyt6A">
       <img
         src="/img/logo-youtube.png"
         style="height: 1.2rem; padding: 0 0.5rem"
@@ -53,7 +53,7 @@
         style="height: 1.4rem"
         data-not-lazy
       />
-    </a>
+    </a> -->
     <!-- &nbsp;&nbsp;
                 <router-link to="/zh/en/contact-us">
                   <img
