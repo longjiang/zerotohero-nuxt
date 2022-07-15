@@ -129,7 +129,9 @@
             >
               <template v-if="typeof item !== 'undefined' && item.children">
                 <div
-                  v-for="(child, index) in childrenAndGrandchildren(item).filter(child => child.show)"
+                  v-for="(child, index) in childrenAndGrandchildren(
+                    item
+                  ).filter((child) => child.show)"
                   :key="`subnav-${child.name || child.href}-${index}`"
                   :class="`col-6 col-sm-4 col-lg-3 col-xl-2
 mb-1
@@ -331,55 +333,6 @@ export default {
           name: "learning-path",
           title: "Home",
           show: true,
-        },
-        {
-          icon: "fas fa-graduation-cap",
-          title: "Courses",
-          show: !this.native && this.hasFeature("courses"),
-          children: [
-            {
-              name: "courses",
-              title: "Courses",
-              icon: "fas fa-graduation-cap",
-              show: ["zh", "en"].includes(this.l2.code),
-            },
-            {
-              name: "hall-of-heroes",
-              icon: "fa fa-trophy",
-              title: "Heroes",
-              show: this.l1.code === "en" && this.l2.code === "zh",
-            },
-            {
-              name: "textbooks-workbooks",
-              title: "Textbooks",
-              icon: "fas fa-book",
-              show: ["zh", "en"].includes(this.l2.code),
-            },
-            {
-              name: "video-count",
-              title: "Video Count",
-              icon: "fas fa-list-ol",
-              show: this.l2.code === "zh",
-            },
-            {
-              name: "pricing",
-              title: "Pricing",
-              icon: "fas fa-tag",
-              show: this.l2.code === "zh",
-            },
-            {
-              name: "course-release-schedule",
-              title: "Schedule",
-              icon: "fas fa-clock",
-              show: this.l2.code === "zh",
-            },
-            {
-              name: "affiliate-program",
-              icon: "fas fa-money-check-alt",
-              show: this.l2.code === "zh",
-              title: "Affiliate Program",
-            },
-          ],
         },
         {
           icon: "fas fa-play",
@@ -747,55 +700,10 @@ export default {
               show: false,
             },
             {
-              name: "explore-related",
-              icon: "fas fa-project-diagram",
-              title: "Word Explorer",
-              params: { arg: "中國,zhōng_guó,0" },
-              show: this.hasFeature("related"),
-            },
-            {
-              name: "explore-roots",
-              icon: "fa fa-wrench",
-              title: "Word Builder",
-              show: this.hasFeature("roots"),
-            },
-            {
-              name: "idioms",
-              icon: "fa fa-border-all",
-              title: "Idioms",
-              show: this.l2.code === "zh",
-            },
-            {
-              name: "radicals",
-              icon: "fa fa-code-branch",
-              title: "Radicals",
-              show: this.hasFeature("radicals"),
-            },
-            {
-              name: "characters",
-              icon: "fa fa-pen-alt",
-              title: "Characters",
-              show: this.hasFeature("characters"),
-            },
-            {
-              name: "separable",
-              icon: "fa fa-angle-double-right",
-              title: "Separables",
-              show: this.l2.code === "zh",
-            },
-            {
-              name: "explore-topics",
-              icon: "fas fa-certificate",
-              title: "Words by Topic",
-              show: this.hasFeature("explore-topics"),
-            },
-            {
-              name: "learn",
-              show: false,
-            },
-            {
-              name: "learn-interactive",
-              show: false,
+              name: "courses",
+              title: "Courses",
+              icon: "fas fa-graduation-cap",
+              show: ["zh", "en"].includes(this.l2.code),
             },
             {
               name: "resources",
@@ -808,37 +716,133 @@ export default {
               title: "Forum",
               icon: "fab fa-reddit",
               show: true,
-              params: { method: 'list' }
+              params: { method: "list" },
             },
             {
-              name: "language-info",
-              title: `About {l2}`,
-              icon: "fas fa-flag",
-              show: true,
-            },
-            {
+              icon: "fa fa-grid-2",
+              title: `More`,
+              // count: this.stats ? this.stats.allVideos : undefined,
               name: "tutoring",
-              title: "Tutoring Kit",
-              icon: "fas fa-folder",
               show: true,
-            },
-            {
-              name: "language-icons",
-              title: "Language Users",
-              icon: "fas fa-user",
-              show: true,
-            },
-            {
-              name: "compare-languages",
-              title: "Compare Langs",
-              icon: "fas fa-globe-asia",
-              show: true,
-            },
-            {
-              name: "translators",
-              title: "Web Translators",
-              icon: "fas fa-language",
-              show: true,
+              children: [
+                {
+                  name: "hall-of-heroes",
+                  icon: "fa fa-trophy",
+                  title: "Heroes",
+                  show: this.l1.code === "en" && this.l2.code === "zh",
+                },
+                {
+                  name: "textbooks-workbooks",
+                  title: "Textbooks",
+                  icon: "fas fa-book",
+                  show: ["zh", "en"].includes(this.l2.code),
+                },
+                {
+                  name: "video-count",
+                  title: "Video Count",
+                  icon: "fas fa-list-ol",
+                  show: this.l2.code === "zh",
+                },
+                {
+                  name: "pricing",
+                  title: "Course Pricing",
+                  icon: "fas fa-tag",
+                  show: this.l2.code === "zh",
+                },
+                {
+                  name: "course-release-schedule",
+                  title: "Schedule",
+                  icon: "fas fa-clock",
+                  show: this.l2.code === "zh",
+                },
+                {
+                  name: "affiliate-program",
+                  icon: "fas fa-money-check-alt",
+                  show: this.l2.code === "zh",
+                  title: "Affiliate Program",
+                },
+                {
+                  name: "explore-related",
+                  icon: "fas fa-project-diagram",
+                  title: "Word Explorer",
+                  params: { arg: "中國,zhōng_guó,0" },
+                  show: this.hasFeature("related"),
+                },
+                {
+                  name: "explore-roots",
+                  icon: "fa fa-wrench",
+                  title: "Word Builder",
+                  show: this.hasFeature("roots"),
+                },
+                {
+                  name: "idioms",
+                  icon: "fa fa-border-all",
+                  title: "Idioms",
+                  show: this.l2.code === "zh",
+                },
+                {
+                  name: "radicals",
+                  icon: "fa fa-code-branch",
+                  title: "Radicals",
+                  show: this.hasFeature("radicals"),
+                },
+                {
+                  name: "characters",
+                  icon: "fa fa-pen-alt",
+                  title: "Characters",
+                  show: this.hasFeature("characters"),
+                },
+                {
+                  name: "separable",
+                  icon: "fa fa-angle-double-right",
+                  title: "Separables",
+                  show: this.l2.code === "zh",
+                },
+                {
+                  name: "explore-topics",
+                  icon: "fas fa-certificate",
+                  title: "Words by Topic",
+                  show: this.hasFeature("explore-topics"),
+                },
+                {
+                  name: "learn",
+                  show: false,
+                },
+                {
+                  name: "learn-interactive",
+                  show: false,
+                },
+                {
+                  name: "language-info",
+                  title: `About {l2}`,
+                  icon: "fas fa-flag",
+                  show: true,
+                },
+                {
+                  name: "tutoring",
+                  title: "Tutoring Kit",
+                  icon: "fas fa-folder",
+                  show: true,
+                },
+                {
+                  name: "language-icons",
+                  title: "Language Users",
+                  icon: "fas fa-user",
+                  show: true,
+                },
+                {
+                  name: "compare-languages",
+                  title: "Compare Languages",
+                  icon: "fas fa-globe-asia",
+                  show: true,
+                },
+                {
+                  name: "translators",
+                  title: "Web Translators",
+                  icon: "fas fa-language",
+                  show: true,
+                },
+              ],
             },
           ],
         },
@@ -1288,14 +1292,14 @@ export default {
       }
     },
     childrenAndGrandchildren(parent) {
-      let items = []
+      let items = [];
       let children = parent.children.filter((child) => child.show);
       for (let child of children) {
         if (child.children) {
-          items = items.concat(child.children)
-        } else items.push(child)
+          items = items.concat(child.children);
+        } else items.push(child);
       }
-      return items
+      return items;
     },
     /**
      * Returns the last path in the fullHistory that matches the item's name or the item's children's name

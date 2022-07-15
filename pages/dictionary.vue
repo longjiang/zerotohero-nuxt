@@ -32,11 +32,6 @@
                 </div>
                 <h5 class="text-center pb-4" v-if="!args">
                   Language Player
-                  <LanguageFlag
-                    :language="$l2"
-                    style="position: relative; bottom: 0.2rem; margin: 0 0.3rem"
-                    :autocycle="true"
-                  />
                   {{ $l2.name }} Dictionary
                 </h5>
                 <SearchCompare
