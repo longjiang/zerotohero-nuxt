@@ -333,8 +333,8 @@ export default {
         //   show: true,
         // },
         {
-          icon: "fas fa-flag",
-          title: "Guide",
+          icon: "fas fa-home",
+          title: "Home",
           show: true,
           children: [
             {
@@ -506,8 +506,8 @@ export default {
           ],
         },
         {
-          icon: "fas fa-headphones",
-          title: "Listening",
+          icon: "fas fa-play",
+          title: "Media",
           show: true,
           children: [
             {
@@ -515,7 +515,7 @@ export default {
               icon: "fas fa-telescope",
               title: `Explore`,
               // count: this.stats ? this.stats.allVideos : undefined,
-              show: false,
+              show: true,
             },
             {
               name: "tv-shows",
@@ -530,13 +530,6 @@ export default {
               count: this.talksCount,
               icon: "fab fa-youtube",
               show: this.talksCount,
-            },
-            {
-              name: "audiobooks",
-              icon: "fa fa-book-open",
-              title: `Audiobooks`,
-              count: this.audioBooksCount,
-              show: this.audioBooksCount,
             },
             {
               icon: "fa fa-grid-2",
@@ -572,12 +565,11 @@ export default {
                   show: this.musicPath,
                 },
                 {
-                  name: "youtube-browse",
-                  icon: "fas fa-baby",
-                  title: `Kids`,
-                  // count: this.stats ? this.stats.music : undefined,
-                  params: { topic: "kids", level: "all" },
-                  show: true,
+                  name: "audiobooks",
+                  icon: "fa fa-book-open",
+                  title: `Audiobooks`,
+                  count: this.audioBooksCount,
+                  show: this.audioBooksCount,
                 },
                 {
                   path: this.newsPath,
@@ -585,6 +577,14 @@ export default {
                   title: `News`,
                   count: this.stats ? this.stats.news : undefined,
                   show: this.newsPath,
+                },
+                {
+                  name: "youtube-browse",
+                  icon: "fas fa-baby",
+                  title: `Kids`,
+                  // count: this.stats ? this.stats.music : undefined,
+                  params: { topic: "kids", level: "all" },
+                  show: true,
                 },
                 {
                   name: "live-tv",

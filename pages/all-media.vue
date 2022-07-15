@@ -36,14 +36,14 @@
           <div
             :class="{
               'loader text-center': true,
-              'd-none': videos && !loading,
+              'd-none': showsLoaded,
             }"
             style="margin: 7rem 0 15rem 0"
           >
             <Loader :sticky="true" message="Loading videos in our library..." />
           </div>
           <div
-            v-if="videos && tvShows && tvShows.length > 0"
+            v-if="tvShows && tvShows.length > 0"
             class="media-section"
           >
             <h3 class="media-seaction-heading">
@@ -65,8 +65,7 @@
             />
           </div>
           <div
-            v-if="videos && tvShows && tvShows.length > 0"
-            class="media-section"
+            :class="{'media-section': true, 'd-none': !hasWatchHistory}"
           >
             <h3 class="media-seaction-heading">
               Continue Watching
@@ -77,17 +76,19 @@
             </h3>
             <WatchHistoryComp
               :l2="$l2"
+              ref="watch-history"
               skin="dark"
-              class="mt-3"
+              :class="{'mt-3': true, 'd-none': !hasWatchHistory}"
               :showDate="false"
               :showClear="false"
               :limit="12"
               :showLanguage="false"
               :showRemove="false"
               :showPlayButton="false"
+              @hasWatchHistory="onHasWatchHistory"
             />
           </div>
-          <div v-if="videos && music && music.length > 0" class="media-section">
+          <div v-if="music && music.length > 0" class="media-section">
             <h3 class="media-seaction-heading">
               Music
               <router-link
@@ -110,7 +111,7 @@
 
           <div class="media-sections" v-if="!loading">
             <div
-              v-if="videos && movies && movies.length > 0"
+              v-if="movies && movies.length > 0"
               class="media-section"
             >
               <h3 class="media-seaction-heading">
@@ -133,7 +134,7 @@
               />
             </div>
 
-            <div v-if="videos && news && news.length > 0" class="media-section">
+            <div v-if="news && news.length > 0" class="media-section">
               <h3 class="media-seaction-heading">
                 News
                 <router-link
@@ -155,7 +156,7 @@
             </div>
           </div>
           <div
-            v-if="videos && talks && talks.length > 0 && audiobooks.length > 0"
+            v-if="talks && talks.length > 0 && audiobooks && audiobooks.length > 0"
             class="media-section"
           >
             <h3 class="media-seaction-heading">
@@ -172,7 +173,7 @@
             />
           </div>
 
-          <div v-if="videos && talks && talks.length > 0" class="media-section">
+          <div v-if="talks && talks.length > 0" class="media-section">
             <h3 class="media-seaction-heading">
               YouTube
               <router-link :to="{ name: 'talks' }" class="show-all">
@@ -195,7 +196,7 @@
             <div class="text-center mt-1"></div>
           </div>
 
-          <div v-if="videos && videos.length > 0" class="media-section">
+          <!-- <div v-if="videos && videos.length > 0" class="media-section">
             <h3 class="media-seaction-heading">
               Newly Added
               <router-link :to="{ name: 'youtube-browse' }" class="show-all">
@@ -208,7 +209,7 @@
               :showAdminToolsInAdminMode="false"
               skin="dark"
             />
-          </div>
+          </div> -->
 
           <client-only>
             <Nav
@@ -250,6 +251,8 @@ export default {
       news: [],
       loading: true,
       heroVideo: undefined,
+      hasWatchHistory: false,
+      showsLoaded: false,
     };
   },
   async fetch() {
@@ -303,6 +306,9 @@ export default {
     },
   },
   methods: {
+    onHasWatchHistory() {
+      this.hasWatchHistory = true
+    },
     loadHeroVideo() {
       let randomVideos = [
         ...(this.movies || []),
@@ -332,6 +338,8 @@ export default {
       }
     },
     async loadShows() {
+      if (this.showsLoaded) return
+      else this.showsLoaded = true
       this.tvShows = this.$store.state.shows.tvShows[this.$l2.code];
       this.talks = this.$store.state.shows.talks[this.$l2.code];
       if (this.tvShows) {
