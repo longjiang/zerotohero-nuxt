@@ -4,8 +4,8 @@
       callback: visibilityChanged,
     }"
   >
-    <h6>POP QUIZ</h6>
-    <div v-if="reviewItems.length > 0">
+    <div class="text-center mt-2 mb-2" v-if="reviewItems.length > 0 && !showQuiz"><b-button @click="showQuiz = true" variant="success"><i class="fa-solid fa-ballot-check mr-2"></i> Do Pop Quiz ({{ reviewItems.length }}) <i class="ml-2 fa-solid fa-chevron-down"></i></b-button></div>
+    <div v-if="reviewItems.length > 0 && showQuiz">
       <Review
         v-for="(reviewItem, reviewItemIndex) in reviewItems"
         :key="`review-${reviewItemIndex}`"
@@ -25,7 +25,8 @@ export default {
   },
   data() {
     return {
-      reviewItems: []
+      reviewItems: [],
+      showQuiz: false
     }
   },
   methods: {
