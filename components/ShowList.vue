@@ -2,15 +2,10 @@
   <container-query :query="query" v-model="params">
     <div class="tv-shows row">
       <div
-        :class="{
-          'col-6': params.xs,
-          'col-4': params.sm,
-          'col-3': params.md,
-          'col-2': params.lg,
-        }"
         v-for="show of shows"
+        :class="colClasses"
         :key="`tv-show-card-wrapper-${show.id}`"
-        style="padding-bottom: 2rem"
+        style="padding-bottom: 1rem"
       >
         <div
           :class="{
@@ -19,43 +14,26 @@
           }"
         >
           <router-link
-            class="
-              youtube-thumbnail-wrapper
-              eight-to-nine-aspect-wrapper
-              d-block
-            "
+            class="youtube-thumbnail-wrapper aspect-wrapper d-block"
             :to="path(show)"
           >
             <img
               :src="`https://img.youtube.com/vi/${show.youtube_id}/hqdefault.jpg`"
               class="youtube-thumbnail aspect"
-              style="transform: scale(1.4)"
             />
           </router-link>
           <div class="tv-show-card-title">
             <router-link :to="path(show)" class="link-unstyled">
-              <div v-if="show.level" class="mb-2" >
+              <h6>
+                {{ show.title }}
                 <span
+                  v-if="show.level"
                   :data-bg-level="levels[show.level].level"
                   class="level-tag"
                 >
                   {{ levels[show.level].name }}
                 </span>
-              </div>
-              <h6>
-                {{ show.title }}
               </h6>
-              <div class="show-tags">
-                <span
-                  class="show-tag"
-                  v-for="tag in (show.tags || [])
-                    .filter((t) => t !== '')
-                    .slice(0, 1)"
-                  :key="`show-${show.id}-tag-${tag}`"
-                >
-                  #{{ tag }}
-                </span>
-              </div>
               <b-button
                 v-if="$adminMode"
                 size="sm"
@@ -132,6 +110,15 @@ export default {
     };
   },
   computed: {
+    colClasses() {
+      let classes = {
+        "col-compact": this.params.xs,
+        "col-6": this.params.xs || this.params.sm,
+        "col-4": this.params.md,
+        "col-3": this.params.lg || this.params.xl,
+      };
+      return classes;
+    },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -182,6 +169,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.col-compact {
+  padding: 0.5rem;
+  ::v-deep .media-body {
+    font-size: 0.9em;
+  }
+}
 .show-tag {
   font-size: 0.8em;
   color: #888;
@@ -192,7 +185,6 @@ export default {
 .tv-show-card {
   height: 100%;
   box-shadow: 0 -1px 1px #ffffff69;
-  border-radius: 0.25rem;
   &.tv-show-card-hidden {
     opacity: 0.3;
   }
@@ -200,39 +192,15 @@ export default {
   //   transform: scale(110%);
   //   transition: all 200ms ease-out;
   // }
-  .tv-show-thumbnail {
-    width: 100%;
-    max-height: 270px;
-    object-fit: cover;
+  .youtube-thumbnail {
+    border-radius: 0.25rem;
   }
   .tv-show-card-title {
-    overflow: hidden;
-    padding: 44% 1.5rem;
-    position: relative;
-    height: 5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgb(78, 75, 75);
-    background: radial-gradient(
-      circle,
-      rgb(58, 57, 57) 0%,
-      rgb(26, 26, 26) 100%
-    );
+    padding-top: 0.5rem;
+    color: #fff;
     a {
       z-index: 1;
       width: 100%;
-      text-align: center;
-    }
-    .tv-show-card-title-image {
-      object-fit: cover;
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      filter: blur(15px);
-      z-index: 0;
-      opacity: 0.25;
-      transform: scale(1.5);
     }
   }
 }
@@ -257,6 +225,6 @@ export default {
   font-size: 0.7em;
   border-radius: 0.25rem;
   display: inline-block;
-  padding: 0 0.5rem;
+  padding: 0.1rem 0.5rem;
 }
 </style>
