@@ -42,10 +42,7 @@
           >
             <Loader :sticky="true" message="Loading videos in our library..." />
           </div>
-          <div
-            v-if="tvShows && tvShows.length > 0"
-            class="media-section"
-          >
+          <div v-if="tvShows && tvShows.length > 0" class="media-section">
             <h3 class="media-seaction-heading">
               TV Shows
               <router-link :to="{ name: 'tv-shows' }" class="show-all">
@@ -64,9 +61,7 @@
               :key="`tv-shows`"
             />
           </div>
-          <div
-            :class="{'media-section': true, 'd-none': !hasWatchHistory}"
-          >
+          <div :class="{ 'media-section': true, 'd-none': !hasWatchHistory }">
             <h3 class="media-seaction-heading">
               Continue Watching
               <router-link :to="{ name: 'watch-history' }" class="show-all">
@@ -78,7 +73,7 @@
               :l2="$l2"
               ref="watch-history"
               skin="dark"
-              :class="{'mt-3': true, 'd-none': !hasWatchHistory}"
+              :class="{ 'mt-3': true, 'd-none': !hasWatchHistory }"
               :showDate="false"
               :showClear="false"
               :limit="12"
@@ -110,10 +105,7 @@
           </div>
 
           <div class="media-sections" v-if="!loading">
-            <div
-              v-if="movies && movies.length > 0"
-              class="media-section"
-            >
+            <div v-if="movies && movies.length > 0" class="media-section">
               <h3 class="media-seaction-heading">
                 Movies
                 <router-link
@@ -156,7 +148,9 @@
             </div>
           </div>
           <div
-            v-if="talks && talks.length > 0 && audiobooks && audiobooks.length > 0"
+            v-if="
+              talks && talks.length > 0 && audiobooks && audiobooks.length > 0
+            "
             class="media-section"
           >
             <h3 class="media-seaction-heading">
@@ -307,7 +301,7 @@ export default {
   },
   methods: {
     onHasWatchHistory() {
-      this.hasWatchHistory = true
+      this.hasWatchHistory = true;
     },
     loadHeroVideo() {
       let randomVideos = [
@@ -338,8 +332,8 @@ export default {
       }
     },
     async loadShows() {
-      if (this.showsLoaded) return
-      else this.showsLoaded = true
+      if (this.showsLoaded) return;
+      else this.showsLoaded = true;
       this.tvShows = this.$store.state.shows.tvShows[this.$l2.code];
       this.talks = this.$store.state.shows.talks[this.$l2.code];
       if (this.tvShows) {
@@ -387,15 +381,27 @@ export default {
         // If we only have so many videos, we don't need arandom offset
         if (stats < max) return 0;
         else {
-          let offset = Math.floor(Math.random() * (stats - max));
+          let random = this.dayOfTheYear() / 366
+          let offset = Math.floor(random * (stats - max));
           return offset;
         }
       }
       return 0;
     },
+    // https://stackoverflow.com/questions/8619879/javascript-calculate-the-day-of-the-year-1-366
+    dayOfTheYear() {
+      var now = new Date();
+      var start = new Date(now.getFullYear(), 0, 0);
+      var diff = now - start;
+      var oneDay = 1000 * 60 * 60 * 24;
+      var day = Math.floor(diff / oneDay);
+      return day;
+    },
     random(array, max) {
-      let shuffled = Helper.shuffle([...array]);
-      return shuffled.slice(0, max);
+      let random = this.dayOfTheYear() / 366
+      let offset = Math.min(Math.floor(array.length * random), array.length - max)
+      let sliced = array.slice(offset, offset + max || 12);
+      return sliced
     },
     /**
      * Retrieve videos from Directus.
