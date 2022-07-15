@@ -644,8 +644,6 @@ const Dictionary = {
         word.phrases = this.getPhraseIndex(word.head) || []
       }
     }
-      
-    
   },
   lookup(text) {
     let words = this.searchIndex[text.toLowerCase()];

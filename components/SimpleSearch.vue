@@ -58,7 +58,7 @@ export default {
     return {
       text: undefined,
     };
-  },
+  }
 };
 </script>
 

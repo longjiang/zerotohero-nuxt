@@ -16,11 +16,11 @@
 </router>
 <template>
   <div class="main main-dark">
-    <div class="container pt-3 pb-5 youtube-search">
+    <div class="container pb-5 youtube-search">
       <div style="font-size: 1.5rem; color: white; text-align: center">
         <img
           src="/img/logo-play-circle-light.png"
-          style="height: 4rem; margin-bottom: 1rem; margin-top: 3rem"
+          style="height: 4rem; margin-bottom: 1rem;"
           data-not-lazy
         />
       </div>
@@ -90,6 +90,12 @@
         </b-form-group>
       </client-only>
       <div v-if="term">
+        <router-link
+          :to="{ name: 'phrase', params: { term } }"
+          class="d-block alert text-success text-center mt-4" style="background: #28a74533; border: 1px solid #28a74566;"
+          ><i class="fa fa-search mr-2"></i>Search for "{{ term }}"
+          <i>inside</i> videos <i class="fa fa-chevron-right ml-2"></i
+        ></router-link>
         <Shows
           class="mt-5"
           routeType="tv-shows"
