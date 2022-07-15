@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import { shuffle } from '@/lib/utils/array'
 export default {
   props: {
     quizContent: {
@@ -43,28 +44,29 @@ export default {
       for (let transcriptLineComp of this.quizContent ) {
         let savedWords = transcriptLineComp.getSavedWords()
         if (savedWords.length > 0) {
-          let saved = savedWords[0]
-          let savedForm
-          for (let form of saved.forms) {
-            if (transcriptLineComp.line.line.toLowerCase().includes(form.toLowerCase())) savedForm = form
-          }
-          let dictionary = await this.$getDictionary()
-          let savedWord = await dictionary.get(saved.id)
-          if (savedForm && savedWord) {
-            let reviewItem = {
-              line: transcriptLineComp.line,
-              lineIndex: transcriptLineComp.lineIndex,
-              parallelLines: transcriptLineComp.parallelLine,
-              text: savedForm,
-              word: savedWord,
-              simplified: savedWord.simplified,
-              traditional: savedWord.traditional,
-            };
-            reviewItems.push(reviewItem)
+          for (let saved of savedWords) {
+            let savedForm
+            for (let form of saved.forms) {
+              if (transcriptLineComp.line.line.toLowerCase().includes(form.toLowerCase())) savedForm = form
+            }
+            let dictionary = await this.$getDictionary()
+            let savedWord = await dictionary.get(saved.id)
+            if (savedForm && savedWord) {
+              let reviewItem = {
+                line: transcriptLineComp.line,
+                lineIndex: transcriptLineComp.lineIndex,
+                parallelLines: transcriptLineComp.parallelLine,
+                text: savedForm,
+                word: savedWord,
+                simplified: savedWord.simplified,
+                traditional: savedWord.traditional,
+              };
+              reviewItems.push(reviewItem)
+            }
           }
         }
       }
-      this.reviewItems = reviewItems
+      this.reviewItems = shuffle(reviewItems)
     }
   }
 };
