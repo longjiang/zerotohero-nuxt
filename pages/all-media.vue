@@ -249,10 +249,8 @@ export default {
       showsLoaded: false,
     };
   },
-  async fetch() {
-    if (this.$store.state.shows.showsLoaded[this.$l2.code]) this.loadShows();
-  },
   async mounted() {
+    if (this.$store.state.shows.showsLoaded[this.$l2.code]) this.loadShows();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type.startsWith("shows")) {
         this.loadShows();
