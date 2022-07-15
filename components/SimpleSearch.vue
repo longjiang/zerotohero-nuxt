@@ -3,7 +3,7 @@
     <b-form-input
       v-model="text"
       @compositionend.prevent.stop="() => false"
-      @keyup.enter="action(text)"
+      @keyup.enter="action(text.trim())"
       :placeholder="placeholder"
       :class="{ 'input-ghost-dark': skin === 'dark' }"
     />
@@ -23,7 +23,7 @@
       <b-button
         
         :variant="skin === 'dark' ? 'ghost-dark' : 'primary'"
-        @click="action(text)"
+        @click="action(text.trim())"
       >
         <span v-if="buttonText">{{ $t(buttonText) }}</span>
         <span v-else><i class="fas fa-search"></i></span>
