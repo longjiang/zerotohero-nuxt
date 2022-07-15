@@ -5,8 +5,11 @@
         v-for="show of shows"
         :class="colClasses"
         :key="`tv-show-card-wrapper-${show.id}`"
-        style="padding-bottom: 1rem"
+        style="padding-bottom: 2rem"
       >
+        <div class="deck3"></div>
+        <div class="deck2"></div>
+        <div class="deck1"></div>
         <div
           :class="{
             'tv-show-card media': true,
@@ -169,6 +172,32 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.deck1,
+.deck2,
+.deck3 {
+  height: 4rem;
+  position: absolute;
+  left: 1rem;
+  width: calc(100% - 2rem);
+  border-radius: 0.25rem;
+  background-color: #565656;
+  border: 1px solid rgb(91, 91, 91);
+  box-shadow: 1px -3px 4px #00000070;
+}
+.deck1 {
+  top: -0.5rem;
+  transform: scale(0.95);
+}
+.deck2 {
+  top: -1rem;
+  transform: scale(0.9);
+  opacity: 0.75;
+}
+.deck3 {
+  top: -1.5rem;
+  transform: scale(0.85);
+  opacity: 0.5;
+}
 .col-compact {
   padding: 0.5rem;
   ::v-deep .media-body {
@@ -183,6 +212,7 @@ export default {
   line-height: 1;
 }
 .tv-show-card {
+  position: relative;
   height: 100%;
   box-shadow: 0 -1px 1px #ffffff69;
   &.tv-show-card-hidden {
