@@ -184,7 +184,7 @@ export default {
 .secondary-nav-item {
   padding-bottom: 0.5rem;
   + .secondary-nav-item {
-    margin-left: 1rem;
+    margin-left: 0.5rem;
   }
   &.nav-item-active {
     font-weight: bold;

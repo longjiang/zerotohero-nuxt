@@ -89,10 +89,10 @@
           <!-- secondary nav items -->
 
           <router-link
-            :to="last(child) || child"
             v-for="(child, index) in currentParent.children.filter(
               (child) => child.show
             )"
+            :to="last(child) || child"
             :key="`subnav-item-${child.name || child.href}-${index}`"
             v-slot="{ href, route, navigate, isActive, isExactActive }"
             custom
@@ -103,7 +103,7 @@
               :item="child"
               :level="2"
               :showIcon="variant === 'side-bar'"
-              :active="isExactActive && $route.name !== 'all-media'"
+              :active="isExactActive"
               :badge="
                 child.name === 'saved-words' && savedWordsCount > 0
                   ? savedWordsCount
@@ -532,18 +532,25 @@ export default {
               show: this.talksCount,
             },
             {
+              name: "live-tv",
+              icon: "fa fa-tv-retro",
+              title: "Live TV",
+              show: this.hasLiveTV,
+            },
+            {
               icon: "fa fa-grid-2",
               title: `Topics`,
               // count: this.stats ? this.stats.allVideos : undefined,
+              name: "watch-history",
               show: true,
               children: [
-                {
-                  name: "all-media",
-                  icon: "fas fa-telescope",
-                  title: `Explore`,
-                  // count: this.stats ? this.stats.allVideos : undefined,
-                  show: this.$route.name !== "all-media",
-                },
+                // {
+                //   name: "all-media",
+                //   icon: "fas fa-telescope",
+                //   title: `Explore`,
+                //   // count: this.stats ? this.stats.allVideos : undefined,
+                //   show: this.$route.name !== "all-media",
+                // },
                 {
                   name: "watch-history",
                   icon: "fas fa-history",
@@ -586,12 +593,12 @@ export default {
                   params: { topic: "kids", level: "all" },
                   show: true,
                 },
-                {
-                  name: "live-tv",
-                  icon: "fa fa-tv-retro",
-                  title: "Live TV",
-                  show: this.hasLiveTV,
-                },
+                // {
+                //   name: "live-tv",
+                //   icon: "fa fa-tv-retro",
+                //   title: "Live TV",
+                //   show: this.hasLiveTV,
+                // },
                 {
                   name: "lesson-videos",
                   title: "Lesson Expansion",
