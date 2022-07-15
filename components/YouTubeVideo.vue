@@ -173,7 +173,7 @@ export default {
             color: 'white',
             controls: this.controls ? 1 : 0,
             rel: 0,
-            fs: 1,
+            fs: 0,
             hl: this.$l1 ? this.$l1.code : "en",
             iv_load_policy: 3,
             modestbranding: 1,

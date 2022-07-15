@@ -304,7 +304,7 @@ export default {
   border: none;
   padding: 0.5rem;
   background: none;
-  color: #ccc;
+  color: #ffffffcc;
   margin: 0 0.2rem;
   &:disabled {
     color: #cccccc44;
