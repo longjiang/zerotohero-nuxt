@@ -515,7 +515,7 @@ export default {
           children: [
             {
               name: "reader",
-              title: "Text Reader",
+              title: "Reader",
               icon: "fas fa-file-alt",
               show: true,
               // shortcut: (e) => e.code === "KeyR" && e.metaKey && e.shiftKey,
@@ -533,6 +533,10 @@ export default {
               show: true,
             },
             {
+              name: "gutenberg",
+              show: false,
+            },
+            {
               name: "web-reader",
               title: "Web Reader",
               icon: "fas fa-globe-asia",
@@ -540,60 +544,35 @@ export default {
               // shortcut: (e) => e.code === "KeyR" && e.metaKey && e.shiftKey,
             },
             {
+              icon: "fa fa-grid-2",
+              title: `More`,
+              // count: this.stats ? this.stats.allVideos : undefined,
               name: "library",
-              title: "Books (Legacy)",
-              icon: "fas fa-book-open",
               show: true,
-            },
-            {
-              name: "keyboard",
-              icon: "fas fa-keyboard",
-              title: "Keyboard",
-              show: this.hasFeature("keyboard"),
-            },
-            {
-              name: "bookmarklet",
-              icon: "fas fa-bookmark",
-              title: "Bookmarklet",
-              show: this.hasFeature("bookmarklet"),
-            },
-            {
-              name: "pinyin-list",
-              title: "Pinyin List",
-              icon: "fa fa-list",
-              show: this.l2.code === "zh",
-            },
-            {
-              name: "studysheet",
-              title: "Study Sheet",
-              icon: "fas fa-print",
-              show: ["ru", "en", "zh"].includes(this.$l2.code),
-            },
-            {
-              name: "pinyin-squared",
-              title: "Pinyin Squared",
-              icon: "fa fa-superscript",
-              show: this.l2.code === "zh",
-            },
-            {
-              name: "gutenberg",
-              show: false,
-            },
-            {
-              name: "book",
-              show: false,
-            },
-            {
-              name: "book-list",
-              show: false,
-            },
-            {
-              name: "book-index",
-              show: false,
-            },
-            {
-              name: "book-chapter",
-              show: false,
+              children: [
+                {
+                  name: "library",
+                  title: "Books (Legacy)",
+                  icon: "fas fa-book-open",
+                  show: true,
+                },
+                {
+                  name: "book",
+                  show: false,
+                },
+                {
+                  name: "book-list",
+                  show: false,
+                },
+                {
+                  name: "book-index",
+                  show: false,
+                },
+                {
+                  name: "book-chapter",
+                  show: false,
+                },
+              ],
             },
           ],
         },
@@ -823,6 +802,37 @@ export default {
                   title: "Tutoring Kit",
                   icon: "fas fa-folder",
                   show: true,
+                },
+
+                {
+                  name: "keyboard",
+                  icon: "fas fa-keyboard",
+                  title: "Keyboard",
+                  show: this.hasFeature("keyboard"),
+                },
+                {
+                  name: "bookmarklet",
+                  icon: "fas fa-bookmark",
+                  title: "Bookmarklet",
+                  show: this.hasFeature("bookmarklet"),
+                },
+                {
+                  name: "pinyin-list",
+                  title: "Pinyin List",
+                  icon: "fa fa-list",
+                  show: this.l2.code === "zh",
+                },
+                {
+                  name: "studysheet",
+                  title: "Study Sheet",
+                  icon: "fas fa-print",
+                  show: ["ru", "en", "zh"].includes(this.$l2.code),
+                },
+                {
+                  name: "pinyin-squared",
+                  title: "Pinyin Squared",
+                  icon: "fa fa-superscript",
+                  show: this.l2.code === "zh",
                 },
                 {
                   name: "language-icons",
