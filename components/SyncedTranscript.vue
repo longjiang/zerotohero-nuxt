@@ -69,7 +69,7 @@
               :key="`pop-quiz-${index}`"
               v-if="!single && quizChunks[index]"
               :lines="lines"
-              :quizContent="quizChunks[index].map(i => $refs[`transcript-line-${i + visibleMin}`][0])"
+              :quizContent="quizChunks[index].filter(i => $refs[`transcript-line-${i + visibleMin}`]).map(i => $refs[`transcript-line-${i + visibleMin}`][0])"
             />
           </template>
           <div
