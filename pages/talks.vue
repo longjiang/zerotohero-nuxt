@@ -9,7 +9,7 @@
 </router>
 <template>
   <div class="talks container">
-    <Shows routeType="talks" :tag="tag" :level="level" />
+    <Shows routeType="talks" :tag="tag" :level="level" :showExtraSearchResults="true" />
   </div>
 </template>
 

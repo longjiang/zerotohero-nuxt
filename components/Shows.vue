@@ -147,14 +147,12 @@
                 :key="`shows-filtered-${this.keyword}`"
               />
               <div
-                v-if="keyword && filteredShows && filteredShows.length === 0"
+                v-if="keyword && filteredShows && filteredShows.length === 0 && showExtraSearchResults"
               >
                 <MediaSearchResults :keyword="keyword" />
                 <YouTubeSearchResults
                   :term="keyword"
                   :start="start"
-                  :captions="captions"
-                  :key="searchResultKey"
                   :long="long"
                   :infinite="true"
                   :showProgress="false"
@@ -191,6 +189,14 @@ export default {
       type: Boolean,
       default: true,
     },
+    initialKeyword: {
+      type: String,
+      default: ''
+    },
+    showExtraSearchResults: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
@@ -200,7 +206,7 @@ export default {
         audiobooks: "talks",
       }[this.routeType],
       shows: undefined,
-      keyword: "",
+      keyword: this.initialKeyword,
       showDiscover: false,
       featureShow: undefined,
       featureEpisode: undefined,

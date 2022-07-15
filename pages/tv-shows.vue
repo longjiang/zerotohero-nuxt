@@ -9,7 +9,7 @@
 </router>
 <template>
   <div class="tv-shows container">
-    <Shows routeType="tv-shows" :tag="tag" :level="level" />
+    <Shows routeType="tv-shows" :tag="tag" :level="level" :showExtraSearchResults="true" />
   </div>
 </template>
 

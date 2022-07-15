@@ -90,6 +90,19 @@
         </b-form-group>
       </client-only>
       <div v-if="term">
+        <Shows
+          class="mt-5"
+          routeType="tv-shows"
+          :showFilter="false"
+          :showHero="false"
+          :initialKeyword="term"
+        />
+        <Shows
+          routeType="talks"
+          :showFilter="false"
+          :showHero="false"
+          :initialKeyword="term"
+        />
         <MediaSearchResults :keyword="term" class="mt-4" />
         <YouTubeSearchResults
           :term="term"
