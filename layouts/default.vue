@@ -277,7 +277,8 @@ export default {
           if (mutation.type === "settings/SET_L1_L2") {
             this.updatei18n();
             this.loadLanguageSpecificSettings();
-            if (this.$route.name !== 'youtube-view') this.overlayPlayerYouTubeId = undefined // Close the mini player when switching languages
+            if (this.$route.name !== "youtube-view")
+              this.overlayPlayerYouTubeId = undefined; // Close the mini player when switching languages
           }
         }
         if (
@@ -469,7 +470,7 @@ export default {
       if (this.l1 && this.l2) {
         let l1 = this.$languages.getSmart(this.l1.code);
         let l2 = this.$languages.getSmart(this.l2.code);
-        this.$store.commit("settings/SET_L1_L2", {l1, l2});
+        this.$store.commit("settings/SET_L1_L2", { l1, l2 });
       }
     },
     addFullHistoryItem(path) {
@@ -515,7 +516,13 @@ export default {
       if (!this.$store.state.savedHits.savedHitsLoaded) {
         this.$store.commit("savedHits/LOAD_SAVED_HITS");
       }
-      if (!this.$store.state.shows.showsLoaded[this.l2.code]) {
+      if (
+        !(
+          this.$store.state.shows.showsLoaded[this.l2.code] &&
+          this.$store.state.tvShows && this.$store.state.tvShows[this.l2.code].length > 0 &&
+          this.$store.state.talks && this.$store.state.talks[this.l2.code].length > 0
+        )
+      ) {
         this.$store.dispatch("shows/load", {
           l2: this.l2,
           adminMode: this.$store.state.settings.adminMode,
