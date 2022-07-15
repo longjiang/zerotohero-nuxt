@@ -164,6 +164,8 @@ export default {
           minWidth: 600,
         },
       },
+      wordblocks: [],
+      savedWordblocks: []
     };
   },
   computed: {
@@ -188,7 +190,11 @@ export default {
     },
   },
   methods: {
-    wordblocksMounted(wordblocks) {
+    async wordblocksMounted(wordblocks) {
+      this.wordblocks = wordblocks;
+      await Helper.timeout(3000);
+      this.savedWordblocks = wordblocks
+        .filter((wb) => wb.saved)
       this.$emit('wordblocksMounted', wordblocks)
     },
     onTranslation(translation) {

@@ -2,11 +2,17 @@
   <div
     v-observe-visibility="{
       callback: visibilityChanged,
-      once: true,
     }"
   >
     <h6>POP QUIZ</h6>
-    <div v-if="reviewItems"></div>
+    <div v-if="reviewItems.length > 0">
+      <Review
+        v-for="(reviewItem, reviewItemIndex) in reviewItems"
+        :key="`review-${reviewItemIndex}`"
+        :reviewItem="reviewItem"
+        skin="dark"
+      />
+    </div>
   </div>
 </template>
 
@@ -19,17 +25,44 @@ export default {
   },
   data() {
     return {
-      reviewItems: undefined
+      reviewItems: []
     }
   },
   methods: {
     visibilityChanged(visible) {
-      if(visible) {
+      if(visible && this.reviewItems.length === 0) {
+        for (let transcriptLineComp of this.quizContent ) {
+          if (!transcriptLineComp.annotated) return // Proceed only if all transcript lines are annotated already
+        }
         this.generateReviewItems()
       }
     },
-    generateReviewItems() {
-      console.log({ quizContent: this.quizContent})
+    async generateReviewItems() {
+      let reviewItems = []
+      for (let transcriptLineComp of this.quizContent ) {
+        if (transcriptLineComp.savedWordblocks.length > 0) {
+          let saved = transcriptLineComp.savedWordblocks[0].saved
+          let savedForm
+          for (let form of saved.forms) {
+            if (transcriptLineComp.line.line.includes(form)) savedForm = form
+          }
+          let dictionary = await this.$getDictionary()
+          let savedWord = await dictionary.get(saved.id)
+          if (savedForm && savedWord) {
+            let reviewItem = {
+              line: transcriptLineComp.line,
+              lineIndex: transcriptLineComp.lineIndex,
+              parallelLines: transcriptLineComp.parallelLine,
+              text: savedForm,
+              word: savedWord,
+              simplified: savedWord.simplified,
+              traditional: savedWord.traditional,
+            };
+            reviewItems.push(reviewItem)
+          }
+        }
+      }
+      this.reviewItems = reviewItems
     }
   }
 };
