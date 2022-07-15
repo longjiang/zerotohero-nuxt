@@ -52,7 +52,12 @@
                 ref="savePhrase"
               />
               <span @click.stop.prevent="saveAsPhraseClick">
-                {{ $refs['savePhrase'] && !$refs['savePhrase'].saved ? 'Save as' : 'Remove' }} Phrase
+                {{
+                  $refs["savePhrase"] && !$refs["savePhrase"].saved
+                    ? "Save as"
+                    : "Remove"
+                }}
+                Phrase
               </span>
             </b-dropdown-item>
             <b-dropdown-item>
@@ -249,7 +254,7 @@ export default {
       myanmarZawgyiConverter: undefined,
       translationData: this.translation,
       text: undefined,
-      wordblocks: []
+      wordblocks: [],
     };
   },
   mounted() {
@@ -541,14 +546,17 @@ export default {
       this.annotating = false;
       this.annotated = true;
       this.$emit("annotated", true);
-      await Helper.timeout(3000);
+    },
+    getSavedWords() {
       if (this.$refs["run-time-template"]?.length > 0) {
-        let wordblocks = []
+        let savedWords = [];
         for (let template of this.$refs["run-time-template"]) {
-          wordblocks = wordblocks.concat(template.$children?.[0]?.$children)
+          let wordblocks = template.$children?.[0]?.$children;
+          savedWords = savedWords.concat(
+            wordblocks.filter((wb) => wb.saved).map((wb) => wb.saved)
+          );
         }
-        this.wordblocks = wordblocks
-        this.$emit("wordblocksMounted", wordblocks)
+        return savedWords;
       }
     },
     async annotateRecursive(node) {

@@ -41,11 +41,12 @@ export default {
     async generateReviewItems() {
       let reviewItems = []
       for (let transcriptLineComp of this.quizContent ) {
-        if (transcriptLineComp.savedWordblocks.length > 0) {
-          let saved = transcriptLineComp.savedWordblocks[0].saved
+        let savedWords = transcriptLineComp.getSavedWords()
+        if (savedWords.length > 0) {
+          let saved = savedWords[0]
           let savedForm
           for (let form of saved.forms) {
-            if (transcriptLineComp.line.line.includes(form)) savedForm = form
+            if (transcriptLineComp.line.line.toLowerCase().includes(form.toLowerCase())) savedForm = form
           }
           let dictionary = await this.$getDictionary()
           let savedWord = await dictionary.get(saved.id)

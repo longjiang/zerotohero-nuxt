@@ -63,7 +63,6 @@
               @removeLineClick="removeLine(index + visibleMin)"
               @trasnlationLineBlur="trasnlationLineBlur"
               @trasnlationLineKeydown="trasnlationLineKeydown"
-              @wordblocksMounted="wordblocksMounted($event, index + visibleMin)"
             />
             <PopQuiz
               :key="`pop-quiz-${index}`"
@@ -189,8 +188,6 @@ export default {
       visibleMax: this.startLineIndex ? Number(this.startLineIndex) + 30 : 30,
       visibleRange: 30,
       preventJumpingAtStart: typeof this.startLineIndex !== "undefined",
-      wordBlocksInLine: {},
-      savedWordsInLine: {},
       NON_PRO_MAX_LINES,
     };
   },
@@ -207,7 +204,7 @@ export default {
         index = Number(index)
         seenLineIndices.push(index)
         if (this.popQuizExistsAfterLine(index)) {
-          quizChunks[index] = seenLineIndices
+          quizChunks[index + 1] = seenLineIndices // Quiz the lines at the next checkpoint
           seenLineIndices = []
         }
       }
@@ -347,13 +344,6 @@ export default {
       let endTimeOfThisLine = thisLine.starttime + thisLine.duration
       let intervalAfterThisLine = nextLine.starttime - endTimeOfThisLine
       if (intervalAfterThisLine > 2) return true
-    },
-    async wordblocksMounted(wordblocks, index) {
-      this.wordBlocksInLine[index] = wordblocks;
-      await Helper.timeout(3000);
-      this.savedWordsInLine[index] = wordblocks
-        .filter((wb) => wb.saved)
-        .map((wb) => wb.saved);
     },
     play() {
       this.$emit("play");

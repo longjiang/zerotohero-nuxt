@@ -54,7 +54,6 @@
             @translationLoading="translationLoading = true"
             @textChanged="lineChanged(line, ...arguments)"
             @annotated="updateAnnotated"
-            @wordblocksMounted="wordblocksMounted"
           >
             <span v-html="lineHtml(line).trim()" />
           </Annotate>
@@ -164,8 +163,6 @@ export default {
           minWidth: 600,
         },
       },
-      wordblocks: [],
-      savedWordblocks: []
     };
   },
   computed: {
@@ -190,12 +187,8 @@ export default {
     },
   },
   methods: {
-    async wordblocksMounted(wordblocks) {
-      this.wordblocks = wordblocks;
-      await Helper.timeout(3000);
-      this.savedWordblocks = wordblocks
-        .filter((wb) => wb.saved)
-      this.$emit('wordblocksMounted', wordblocks)
+    getSavedWords() {
+      return this.$refs.annotate.getSavedWords()
     },
     onTranslation(translation) {
       this.translation = translation;
