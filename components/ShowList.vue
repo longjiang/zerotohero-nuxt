@@ -191,12 +191,12 @@ export default {
 .deck2 {
   top: -1rem;
   transform: scale(0.9);
-  opacity: 0.75;
+  opacity: 0.66;
 }
 .deck3 {
-  top: -1.5rem;
+  top: -1.4rem;
   transform: scale(0.85);
-  opacity: 0.5;
+  opacity: 0.33;
 }
 .col-compact {
   padding: 0.5rem;
@@ -214,14 +214,9 @@ export default {
 .tv-show-card {
   position: relative;
   height: 100%;
-  box-shadow: 0 -1px 1px #ffffff69;
   &.tv-show-card-hidden {
     opacity: 0.3;
   }
-  // &:hover {
-  //   transform: scale(110%);
-  //   transition: all 200ms ease-out;
-  // }
   .youtube-thumbnail {
     border-radius: 0.25rem;
   }
@@ -256,5 +251,7 @@ export default {
   border-radius: 0.25rem;
   display: inline-block;
   padding: 0.1rem 0.5rem;
+  position: relative;
+  bottom: 0.1rem;
 }
 </style>

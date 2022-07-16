@@ -99,7 +99,7 @@
                   talks.filter(
                     (s) => !['News'].includes(s.title) && !s.audiobook
                   ),
-                  6
+                  12
                 )
               "
               type="talks"
@@ -186,7 +186,7 @@
               </router-link>
             </h3>
             <ShowList
-              :shows="random(audiobooks, 6)"
+              :shows="random(audiobooks, 12)"
               type="talks"
               :key="`tv-shows`"
             />
