@@ -310,11 +310,11 @@ export default {
           if (!this.show) this.getShowFromStore();
         }
         if (mutation.type === "shows/REMOVE_SHOW") {
-          this.$toast.success('Show removed.', { duration: 5000 })
-          this.$router.go(-1)
+          this.$toast.success("Show removed.", { duration: 5000 });
+          this.$router.go(-1);
         }
         if (mutation.type === "shows/UPDATE_SHOW") {
-          this.$toast.success('Show updated.', { duration: 5000 })
+          this.$toast.success("Show updated.", { duration: 5000 });
         }
       });
     }
@@ -324,7 +324,7 @@ export default {
       if (confirm("Are you sure you want to DELETE this show?")) {
         this.$store.dispatch("shows/remove", {
           l2: this.$l2,
-          type: this.type === 'tv-show' ? 'tvShows' : 'talks',
+          type: this.type === "tv-show" ? "tvShows" : "talks",
           show: this.show,
         });
       }
@@ -444,12 +444,16 @@ export default {
     },
     async getVideosFromServer({ keyword, limit, offset, sort } = {}) {
       let keywordFilter = keyword ? `&filter[title][contains]=${keyword}` : "";
+      let fields = "id,title,l2,youtube_id,date,tv_show,talk,channel_id";
+      if (this.$l2.code === "vi")
+        fields = fields +
+          ",views,tags,category,locale,duration,made_for_kids,views,likes,comments";
       let response = await this.$directus.get(
         `${this.$directus.youtubeVideosTableName(this.$l2.id)}?filter[l2][eq]=${
           this.$l2.id
         }&filter[${this.collection}][eq]=${
           this.show.id
-        }${keywordFilter}&fields=id,title,l2,youtube_id,date,tv_show,talk,channel_id,views,date,tags,category,locale,duration,made_for_kids,views,likes,comments&sort=${sort}&limit=${limit}&offset=${offset}&timestamp=${
+        }${keywordFilter}&fields=${fields}&sort=${sort}&limit=${limit}&offset=${offset}&timestamp=${
           this.$adminMode ? Date.now() : 0
         }`
       );

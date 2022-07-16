@@ -262,5 +262,6 @@ export default {
 .statistics {
   opacity: 0.5;
   font-size: 0.8em;
+  margin-top: 0.25rem;
 }
 </style>
