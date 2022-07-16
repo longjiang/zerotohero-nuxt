@@ -17,22 +17,7 @@
               : `https://img.youtube.com/vi/${shows[0].youtube_id}/hqdefault.jpg`
           "
         />
-        <div class="row" v-if="showFilter">
-          <div class="col-sm-12">
-            <b-input-group class="mb-3 mt-3 input-group-ghost-dark">
-              <b-form-input
-                v-model="keyword"
-                @compositionend.prevent.stop="() => false"
-                :placeholder="`Filter ${
-                  filteredShows ? filteredShows.length : ''
-                } ${$l2.name} ${routeTitles[routeType]}`"
-                ref="filter"
-                class="input-ghost-dark"
-              />
-            </b-input-group>
-          </div>
-        </div>
-        <div class="row mb-3" v-if="showFilter">
+        <div class="row mt-3 mb-2" v-if="showFilter">
           <div class="col-sm-12 text-center mb-4">
             <span
               v-if="categoriesFiltered !== {}"
@@ -54,6 +39,21 @@
               Sort by {{ sort }}
               <i class="fa-solid fa-caret-down"></i>
             </span>
+          </div>
+        </div>
+        <div class="row" v-if="showFilter">
+          <div class="col-sm-12">
+            <b-input-group class="mb-5 input-group-ghost-dark">
+              <b-form-input
+                v-model="keyword"
+                @compositionend.prevent.stop="() => false"
+                :placeholder="`Filter ${
+                  filteredShows ? filteredShows.length : ''
+                } ${$l2.name} ${routeTitles[routeType]}`"
+                ref="filter"
+                class="input-ghost-dark"
+              />
+            </b-input-group>
           </div>
         </div>
         <div class="row">
