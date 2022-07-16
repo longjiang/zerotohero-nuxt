@@ -1,6 +1,6 @@
 <router>
   {
-    path: '/:l1/:l2/tv-shows/:tag?/:level?',
+    path: '/:l1/:l2/tv-shows/:category?/:tag?/:level?',
     props: true,
     meta: {
       skin: 'dark'
@@ -9,13 +9,14 @@
 </router>
 <template>
   <div class="tv-shows container">
-    <Shows routeType="tv-shows" :tag="tag" :level="level" :showExtraSearchResults="true" />
+    <Shows routeType="tv-shows" :category="category" :tag="tag" :level="level" :showExtraSearchResults="true" />
   </div>
 </template>
 
 <script>
 export default {
   props: {
+    category: String,
     tag: String,
     level: String,
   },

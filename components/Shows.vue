@@ -34,7 +34,7 @@
         </div>
         <div class="row mb-3" v-if="showFilter">
           <div class="col-sm-12 text-center mb-4">
-            <span @click="showModal('categories')" class="filter-dropdown mr-2">Categories <i class="fa-solid fa-caret-down"></i></span>
+            <span @click="showModal('categories')" class="filter-dropdown mr-2">{{ category ? categoriesFiltered[category] : 'Categories' }} <i class="fa-solid fa-caret-down"></i></span>
             <span @click="showModal('levels')" class="filter-dropdown mr-2">Levels <i class="fa-solid fa-caret-down"></i></span>
             <span @click="showModal('sort')" class="filter-dropdown">Sort by Popularity <i class="fa-solid fa-caret-down"></i></span>
           </div>
@@ -102,7 +102,7 @@
           :key="`dropdown-menu-item-category-${index}`"
           class="mb-1 col-6 col-lg-4"
         >
-          {{ category }}
+          <router-link :to="{name: 'tv-shows', params: {category: index, tag, level}}">{{ category }}</router-link>
         </div>
       </div>
     </b-modal>
@@ -119,6 +119,7 @@ import { CATEGORIES } from '@/lib/youtube'
 export default {
   props: {
     routeType: String, // "tv-shows" or "talks"
+    category: String,
     tag: String,
     level: String,
     showHero: {
@@ -244,6 +245,9 @@ export default {
         if (this.tag && this.tag !== "all") {
           if (this.tag === "kids") shows = this.filterShowsMadeForKids;
           else shows = shows.filter((s) => (s.tags || []).includes(this.tag));
+        }
+        if (this.category && this.category !== "all") {
+          shows = shows.filter((s) => s.category === Number(this.category));
         }
         return shows;
       }
