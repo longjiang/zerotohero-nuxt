@@ -46,7 +46,7 @@
             </div>
             <!-- <Sale class="mb-4" v-if="$l2.code === 'zh'" /> -->
             <h3 v-if="show">
-              <span v-if="$adminMode" contenteditable="true" @blur="saveTitle">
+              <span v-if="$adminMode" contenteditable="true" @blur="rename">
                 {{ show.title }}
               </span>
               <i
@@ -313,6 +313,9 @@ export default {
           this.$toast.success('Show removed.', { duration: 5000 })
           this.$router.go(-1)
         }
+        if (mutation.type === "shows/UPDATE_SHOW") {
+          this.$toast.success('Show updated.', { duration: 5000 })
+        }
       });
     }
   },
@@ -353,46 +356,26 @@ export default {
         this.loadFeaturedVideo();
       }
     },
-    async saveTitle(e) {
-      let newTitle = e.target.innerText;
-      if (this.show.title !== newTitle) {
-        try {
-          let response = await this.$directus.patch(
-            `items/${this.collection}s/${this.show.id}`,
-            { title: newTitle },
-            { contentType: "application/json" }
-          );
-          response = response.data;
-          if (response && response.data) {
-            this.show.title = newTitle;
-            this.titleUpdated = true;
-            await Helper.timeout(3000);
-            this.titleUpdated = false;
-          }
-        } catch (err) {
-          // Direcuts bug
-        }
+    async rename(e) {
+      let title = e.target.innerText;
+      if (this.show.title !== title) {
+        this.$store.dispatch("shows/update", {
+          l2: this.$l2,
+          type: this.collection === "tv_show" ? "tvShows" : "talks",
+          id: this.show.id,
+          payload: { title },
+        });
       }
     },
     async saveCover(e) {
-      let newCover = e.target.innerText;
-      if (this.show.title !== newCover) {
-        try {
-          let response = await this.$directus.patch(
-            `items/${this.collection}s/${this.show.id}`,
-            { youtube_id: newCover },
-            { contentType: "application/json" }
-          );
-          response = response.data;
-          if (response && response.data) {
-            this.show.youtube_id = newCover;
-            this.coverUpdated = true;
-            await Helper.timeout(3000);
-            this.coverUpdated = false;
-          }
-        } catch (err) {
-          // Direcuts bug
-        }
+      let youtube_id = e.target.innerText;
+      if (this.show.youtube_id !== youtube_id) {
+        this.$store.dispatch("shows/update", {
+          l2: this.$l2,
+          type: this.collection === "tv_show" ? "tvShows" : "talks",
+          id: this.show.id,
+          payload: { youtube_id },
+        });
       }
     },
     async visibilityChanged(isVisible) {

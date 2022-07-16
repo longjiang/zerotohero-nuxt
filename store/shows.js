@@ -22,6 +22,14 @@ export const mutations = {
   REMOVE_SHOW(state, { l2, type, show }) {
     state[type][l2.code] = state[type][l2.code].filter((s) => s !== show);
   },
+  UPDATE_SHOW(state, { l2, type, id, payload}) {
+    let show = state[type][l2.code].find((s) => s.id === id);
+    if (show) {
+      for (let key in payload) {
+        show[key] = payload[key]
+      }
+    }
+  },
   ADD_EPISODES_TO_SHOW(state, { l2, collection = 'tvShows', showId, episodes, sort = '-date' }) {
     let show = state[collection][l2.code].find(s => s.id === showId)
     if (show.episodes && show.episodes.length > 0) episodes = episodes.concat(show.episodes)
@@ -126,9 +134,18 @@ export const actions = {
     let response = await this.$directus.delete(
       `items/${type === 'tvShows' ? 'tv_shows' : 'talks'}/${show.id}`
     );
-    // response.data could be "" (empty string), which evaluates to undefined.
     if (response?.status === 204) {
       context.commit('REMOVE_SHOW', { l2, type, show })
+    }
+    return true
+  },
+  async update(context, { l2, type, id, payload }) {
+    let response = await this.$directus.patch(
+      `items/${type === 'tvShows' ? 'tv_shows' : 'talks'}/${id}`,
+      payload
+    );
+    if (response) {
+      context.commit('UPDATE_SHOW', { l2, type, id, payload })
     }
     return true
   },
