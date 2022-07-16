@@ -20,7 +20,7 @@
         <div class="row mt-3 mb-2" v-if="showFilter">
           <div class="col-sm-12 text-center mb-4">
             <span
-              v-if="categoriesFiltered !== {}"
+              v-if="Object.keys(categoriesFiltered).length > 0"
               @click="showModal('categories')"
               class="filter-dropdown mr-2"
             >
@@ -32,7 +32,7 @@
               @click="showModal('levels')"
               class="filter-dropdown mr-2"
             >
-              Levels
+              {{ level && levels[level - 1] ? levels[level - 1].name : "All Levels" }}
               <i class="fa-solid fa-caret-down"></i>
             </span>
             <span @click="showModal('sort')" class="filter-dropdown">
@@ -189,23 +189,6 @@
           :key="`dropdown-menu-item-level-${index}`"
           class="mb-1 col-6 col-lg-4"
         >
-          {{ level }}
-          <router-link
-            :to="{
-              name: routeType,
-              params: { category, tag, level: 'all' },
-            }"
-            class="link-unstyled"
-          >
-            {{
-              index === 0
-                ? level.name
-                : level.exam === "CEFR"
-                ? level.level
-                : level.name
-            }}
-            ({{ showCountByLevel(level.numeric) }})
-          </router-link>
           <router-link
             :to="{
               name: routeType,
@@ -220,7 +203,7 @@
                 ? level.level
                 : level.name
             }}
-            ({{ showCountByLevel(level.numeric) }})
+            <span class="item-count">({{ showCountByLevel(level.numeric) }} shows)</span>
           </router-link>
         </div>
       </div>
@@ -507,5 +490,11 @@ export default {
 }
 .tag:not(.nuxt-link-exact-active):hover {
   color: rgba(40, 167, 69);
+}
+
+.item-count {
+  font-size: 0.8rem;
+  color: #888;
+  font-weight: bold;
 }
 </style>
