@@ -550,11 +550,11 @@ export default {
     },
     async remove() {
       if (this.video.id) {
-        let data = await this.$directus.deleteVideo({
+        let deleted = await this.$directus.deleteVideo({
           l2Id: this.video.l2 ? this.video.l2.id || this.video.l2 : this.$l2.id,
           id: this.video.id,
         });
-        if (data) {
+        if (deleted) {
           Vue.delete(this.video, "id");
         }
       }

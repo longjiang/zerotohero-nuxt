@@ -113,11 +113,9 @@ export default ({ app }, inject) => {
     },
     async deleteVideo({ id, l2Id }) {
       let res = await this.delete(`${this.youtubeVideosTableName(l2Id)}/${id}`)
-      if (res?.data?.data) {
-        let data = res.data.data
-        return data
+      if (res?.status === 204) {
+        return true
       }
-
     },
     async patchVideo({ id, l2Id, payload, query }) {
       query = query ? `?${query}` : ''
