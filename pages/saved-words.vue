@@ -34,7 +34,7 @@
               @click="importButtonClick()"
             >
               <i class="fa fa-upload mr-1"></i>
-              Import CSV
+              Import
             </button>
             <a
               class="download-csv btn btn-sm text-secondary"
@@ -47,7 +47,7 @@
               v-if="sW.length > 0"
             >
               <i class="fa fa-download mr-1"></i>
-              {{ $t("Export CSV") }}
+              {{ $t("Export") }}
             </a>
             <button
               class="remove-all text-danger btn btn-sm"

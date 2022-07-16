@@ -25,7 +25,7 @@
           v-if="$route.path !== '/' && params.lg !== false"
         >
           <i class="fas fa-chevron-left"></i>
-          {{ $t('Back') }}
+          {{ $t("Back") }}
         </b-button>
         <router-link
           to="/dashboard"
@@ -38,7 +38,8 @@
           "
           title="Dashboard"
         >
-          <i class="fas fa-grid mr-1"></i> {{ $t('Dashboard') }}
+          <i class="fas fa-grid mr-1"></i>
+          {{ $t("Dashboard") }}
         </router-link>
       </div>
       <template v-if="$route.params.l1 && $route.params.l2">
@@ -61,11 +62,6 @@
           >
             <i class="fas fa-cog"></i>
           </b-button>
-          <!-- <client-only>
-            <AnnotationSettings
-              v-if="$route.params.l1 && $route.params.l2 && params.lg"
-            />
-          </client-only> -->
           <div
             class="d-inline-block"
             @mouseover="cycleFlags"
@@ -106,11 +102,9 @@
           <router-link
             id="site-top-bar-saved-words"
             :to="
-              $route.name === 'profile'
-                ? '/'
-                : $auth.loggedIn
+              $auth.loggedIn
                 ? { name: 'profile', params: { l1: $l1.code, l2: $l2.code } }
-                : { name: 'saved-words' }
+                : { name: 'login' }
             "
             :class="`btn top-bar-button top-bar-user-button  btn-unstyled link-unstyled ml-2`"
           >
@@ -182,9 +176,7 @@
           </div>
           <LazyDashboard class="mb-5" v-if="hasDashboard" />
           <div class="pb-5">
-            <h5 class="text-center mb-2">
-              Learn another language
-            </h5>
+            <h5 class="text-center mb-2">Learn another language</h5>
             <Triage />
           </div>
         </div>
