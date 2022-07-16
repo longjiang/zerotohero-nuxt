@@ -141,10 +141,8 @@
                 <span v-if="$l2.code === 'de' && word.gender">
                   {{ { n: "das", m: "der", f: "die" }[word.gender] }}
                 </span>
-                {{ transform(word.head) }}
-              </b>
-              <i class="fas fa-chevron-right"></i>
-            </router-link>
+                {{ transform(word.head) }}</b></router-link>
+            <i class="fas fa-chevron-right text-success"></i>
             <span
               v-if="word.traditional && word.traditional !== word.simplified"
               class="ml-1"
