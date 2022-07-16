@@ -310,7 +310,7 @@ export default {
           if (!this.show) this.getShowFromStore();
         }
         if (mutation.type === "shows/REMOVE_SHOW") {
-          this.$toast.message('Show removed.', { duration: 5000 })
+          this.$toast.success('Show removed.', { duration: 5000 })
           this.$router.go(-1)
         }
       });
