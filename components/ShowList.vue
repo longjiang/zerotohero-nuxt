@@ -27,7 +27,7 @@
           </router-link>
           <div class="tv-show-card-title">
             <router-link :to="path(show)" class="link-unstyled">
-              <h6>
+              <h6 class="mb-0">
                 {{ show.title }}
                 <span
                   v-if="show.level"
@@ -64,6 +64,7 @@
                 <i class="fa fa-trash"></i>
               </b-button>
             </router-link>
+            <div v-if="show.avg_views" class="statistics"><i class="fa-solid fa-eye"></i> {{ formatK(show.avg_views) }}</div>
           </div>
         </div>
       </div>
@@ -73,7 +74,7 @@
 
 <script>
 import { ContainerQuery } from "vue-container-query";
-import { languageLevels } from "@/lib/utils";
+import { languageLevels, formatK } from "@/lib/utils";
 import Vue from "vue";
 
 export default {
@@ -139,6 +140,9 @@ export default {
     },
   },
   methods: {
+    formatK(number) {
+      return formatK(number)
+    },
     async remove(show) {
       this.$store.dispatch("shows/remove", {
         l2: this.$l2,
@@ -253,5 +257,10 @@ export default {
   padding: 0.1rem 0.5rem;
   position: relative;
   bottom: 0.1rem;
+}
+
+.statistics {
+  opacity: 0.5;
+  font-size: 0.8em;
 }
 </style>

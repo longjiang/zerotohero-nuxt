@@ -147,7 +147,12 @@
                 :key="`shows-filtered-${this.keyword}`"
               />
               <div
-                v-if="keyword && filteredShows && filteredShows.length === 0 && showExtraSearchResults"
+                v-if="
+                  keyword &&
+                  filteredShows &&
+                  filteredShows.length === 0 &&
+                  showExtraSearchResults
+                "
               >
                 <MediaSearchResults :keyword="keyword" />
                 <YouTubeSearchResults
@@ -189,12 +194,12 @@ export default {
     },
     initialKeyword: {
       type: String,
-      default: ''
+      default: "",
     },
     showExtraSearchResults: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
@@ -353,6 +358,7 @@ export default {
         shows.sort((x, y) =>
           x.title.localeCompare(y.title, this.$l2.locales[0])
         ) || [];
+      shows = shows.sort((x, y) => y.avg_views - x.avg_views) || [];
       return shows;
     },
     async loadShows() {

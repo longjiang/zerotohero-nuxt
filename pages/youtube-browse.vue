@@ -22,6 +22,7 @@
         } subtitles.`"
       />
       <Shows
+        v-if="!(topic === 'all' && level ==='all')"
         routeType="tv-shows"
         :tag="topic"
         :level="level"
@@ -29,6 +30,7 @@
         :showHero="false"
       />
       <Shows
+        v-if="!(topic === 'all' && level ==='all')"
         routeType="talks"
         :tag="topic"
         :level="level"
