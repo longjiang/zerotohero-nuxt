@@ -20,6 +20,11 @@ export default {
     tag: String,
     level: String,
   },
+  mounted() {
+    if (this.category !== 'all' && isNaN(Number(this.category))) {
+      this.$router.push({ name: "audiobooks", params: { category: undefined } });
+    }
+  },
 };
 </script>
 

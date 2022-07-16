@@ -24,7 +24,7 @@
               @click="showModal('categories')"
               class="filter-dropdown mr-2"
             >
-              {{ category ? categoriesFiltered[category] : "All Categories" }}
+              {{ category && categoriesFiltered[category] ? categoriesFiltered[category] : "All Categories" }}
               <i class="fa-solid fa-caret-down"></i>
             </span>
             <span
@@ -116,7 +116,7 @@
       <div class="row">
         <div class="mb-1 col-6 col-lg-4">
           <router-link
-            :to="{ name: routeType, params: { tag, level } }"
+            :to="{ name: routeType, params: { category: 'all', tag, level } }"
             class="link-unstyled"
           >
             All Categories
@@ -177,7 +177,7 @@
           <router-link
             :to="{
               name: routeType,
-              params: { category, tag },
+              params: { category, tag, level: 'all' },
             }"
             class="link-unstyled"
           >
@@ -221,9 +221,18 @@ import { CATEGORIES } from "@/lib/youtube";
 export default {
   props: {
     routeType: String, // "tv-shows" or "talks"
-    category: String,
-    tag: String,
-    level: String,
+    category: {
+      type: String,
+      default: 'all'
+    },
+    tag: {
+      type: String,
+      default: 'all'
+    },
+    level: {
+      type: String,
+      default: 'all'
+    },
     showHero: {
       type: Boolean,
       default: true,

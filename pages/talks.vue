@@ -9,7 +9,13 @@
 </router>
 <template>
   <div class="talks container">
-    <Shows routeType="talks" :category="category" :tag="tag" :level="level" :showExtraSearchResults="true" />
+    <Shows
+      routeType="talks"
+      :category="category"
+      :tag="tag"
+      :level="level"
+      :showExtraSearchResults="true"
+    />
   </div>
 </template>
 
@@ -19,6 +25,11 @@ export default {
     category: String,
     tag: String,
     level: String,
+  },
+  mounted() {
+    if (this.category !== 'all' && isNaN(Number(this.category))) {
+      this.$router.push({ name: "talks", params: { category: undefined } });
+    }
   },
 };
 </script>

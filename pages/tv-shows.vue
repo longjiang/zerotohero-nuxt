@@ -30,6 +30,11 @@ export default {
         return this.$store.state.settings.l2;
     },
   },
+  mounted() {
+    if (this.category !== 'all' && isNaN(Number(this.category))) {
+      this.$router.push({ name: "tv-shows", params: { category: undefined } });
+    }
+  },
 };
 </script>
 
