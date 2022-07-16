@@ -34,9 +34,18 @@
         </div>
         <div class="row mb-3" v-if="showFilter">
           <div class="col-sm-12 text-center mb-4">
-            <span @click="showModal('categories')" class="filter-dropdown mr-2">{{ category ? categoriesFiltered[category] : 'Categories' }} <i class="fa-solid fa-caret-down"></i></span>
-            <span @click="showModal('levels')" class="filter-dropdown mr-2">Levels <i class="fa-solid fa-caret-down"></i></span>
-            <span @click="showModal('sort')" class="filter-dropdown">Sort by Popularity <i class="fa-solid fa-caret-down"></i></span>
+            <span  v-if="categoriesFiltered !== {}" @click="showModal('categories')" class="filter-dropdown mr-2">
+              {{ category ? categoriesFiltered[category] : "Categories" }}
+              <i class="fa-solid fa-caret-down"></i>
+            </span>
+            <span v-if="levels && levels.length > 0" @click="showModal('levels')" class="filter-dropdown mr-2">
+              Levels
+              <i class="fa-solid fa-caret-down"></i>
+            </span>
+            <span @click="showModal('sort')" class="filter-dropdown">
+              Sort by Popularity
+              <i class="fa-solid fa-caret-down"></i>
+            </span>
           </div>
         </div>
         <div class="row">
@@ -98,11 +107,90 @@
     >
       <div class="row">
         <div
+          class="mb-1 col-6 col-lg-4"
+        >
+          <router-link
+            :to="{ name: routeType, params: { tag, level } }"
+            class="link-unstyled"
+          >
+            All Categories
+          </router-link>
+        </div>
+        <div
           v-for="(category, index) in categoriesFiltered"
           :key="`dropdown-menu-item-category-${index}`"
           class="mb-1 col-6 col-lg-4"
         >
-          <router-link :to="{name: 'tv-shows', params: {category: index, tag, level}}">{{ category }}</router-link>
+          <router-link
+            :to="{ name: routeType, params: { category: index, tag, level } }"
+            class="link-unstyled"
+          >
+            {{ category }}
+          </router-link>
+        </div>
+      </div>
+    </b-modal>
+    <b-modal
+      ref="levelsModal"
+      size="lg"
+      centered
+      hide-footer
+      modal-class="safe-padding-top mt-4"
+      body-class="dropdown-menu-modal-wrapper"
+      title="Levels"
+    >
+      <div class="row">
+        <div
+          class="mb-1 col-6 col-lg-4"
+        >
+          <router-link
+            :to="{
+              name: routeType,
+              params: { category, tag },
+            }"
+            class="link-unstyled"
+          >
+            All Levels
+          </router-link>
+        </div>
+        <div
+          v-for="(level, index) in levels"
+          :key="`dropdown-menu-item-level-${index}`"
+          class="mb-1 col-6 col-lg-4"
+        >
+          {{ level }}
+          <router-link
+            :to="{
+              name: routeType,
+              params: { category, tag, level: 'all' },
+            }"
+            class="link-unstyled"
+          >
+            {{
+              index === 0
+                ? level.name
+                : level.exam === "CEFR"
+                ? level.level
+                : level.name
+            }}
+            ({{ showCountByLevel(level.numeric) }})
+          </router-link>
+          <router-link
+            :to="{
+              name: routeType,
+              params: { category, tag, level: level.numeric },
+            }"
+            class="link-unstyled"
+          >
+            {{
+              index === 0
+                ? level.name
+                : level.exam === "CEFR"
+                ? level.level
+                : level.name
+            }}
+            ({{ showCountByLevel(level.numeric) }})
+          </router-link>
         </div>
       </div>
     </b-modal>
@@ -114,7 +202,7 @@ import { tify } from "chinese-conv";
 import { scrollToTargetAdjusted } from "@/lib/utils";
 import { unique } from "@/lib/utils";
 import { languageLevels } from "@/lib/utils";
-import { CATEGORIES } from '@/lib/youtube'
+import { CATEGORIES } from "@/lib/youtube";
 
 export default {
   props: {
@@ -177,13 +265,13 @@ export default {
   },
   computed: {
     categoriesFiltered() {
-      if (!this.shows) return {}
-      let categories = {}
-      let ids = this.shows.map(show => show.category).filter(c => c)
+      if (!this.shows) return {};
+      let categories = {};
+      let ids = this.shows.map((show) => show.category).filter((c) => c);
       for (let id in CATEGORIES) {
-        if (ids.includes(Number(id))) categories[id] = CATEGORIES[id]
+        if (ids.includes(Number(id))) categories[id] = CATEGORIES[id];
       }
-      return categories
+      return categories;
     },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
