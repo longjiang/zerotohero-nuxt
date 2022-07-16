@@ -34,16 +34,24 @@
         </div>
         <div class="row mb-3" v-if="showFilter">
           <div class="col-sm-12 text-center mb-4">
-            <span  v-if="categoriesFiltered !== {}" @click="showModal('categories')" class="filter-dropdown mr-2">
+            <span
+              v-if="categoriesFiltered !== {}"
+              @click="showModal('categories')"
+              class="filter-dropdown mr-2"
+            >
               {{ category ? categoriesFiltered[category] : "Categories" }}
               <i class="fa-solid fa-caret-down"></i>
             </span>
-            <span v-if="levels && levels.length > 0" @click="showModal('levels')" class="filter-dropdown mr-2">
+            <span
+              v-if="levels && levels.length > 0"
+              @click="showModal('levels')"
+              class="filter-dropdown mr-2"
+            >
               Levels
               <i class="fa-solid fa-caret-down"></i>
             </span>
             <span @click="showModal('sort')" class="filter-dropdown">
-              Sort by Popularity
+              Sort by {{ sort }}
               <i class="fa-solid fa-caret-down"></i>
             </span>
           </div>
@@ -106,9 +114,7 @@
       title="Categories"
     >
       <div class="row">
-        <div
-          class="mb-1 col-6 col-lg-4"
-        >
+        <div class="mb-1 col-6 col-lg-4">
           <router-link
             :to="{ name: routeType, params: { tag, level } }"
             class="link-unstyled"
@@ -131,6 +137,21 @@
       </div>
     </b-modal>
     <b-modal
+      ref="sortModal"
+      size="sm"
+      centered
+      hide-footer
+      modal-class="safe-padding-top mt-4"
+      body-class="dropdown-menu-modal-wrapper"
+      title="Sort"
+    >
+      <div class="row">
+        <div class="mb-1 col-12" @click="sort = 'popularity'" style="cursor: pointer">Sort by Popularity</div>
+        <div class="mb-1 col-12" @click="sort = 'title'" style="cursor: pointer">Sort by Title</div>
+        <!-- <div class="mb-1 col-12" @click="sort = 'date'">Sort by Date</div> -->
+      </div>
+    </b-modal>
+    <b-modal
       ref="levelsModal"
       size="lg"
       centered
@@ -140,9 +161,7 @@
       title="Levels"
     >
       <div class="row">
-        <div
-          class="mb-1 col-6 col-lg-4"
-        >
+        <div class="mb-1 col-6 col-lg-4">
           <router-link
             :to="{
               name: routeType,
@@ -229,6 +248,7 @@ export default {
   },
   data() {
     return {
+      sort: "popularity", // or 'title'
       type: {
         "tv-shows": "tvShows",
         talks: "talks",
@@ -370,6 +390,10 @@ export default {
       let filterElement = this.$refs.filter?.$el;
       if (filterElement) scrollToTargetAdjusted(filterElement, 60);
     },
+    sort() {
+      this.sortShows(this.shows)
+      this.$refs['sortModal']?.hide()
+    }
   },
   methods: {
     showModal(name) {
@@ -399,7 +423,10 @@ export default {
         shows.sort((x, y) =>
           x.title.localeCompare(y.title, this.$l2.locales[0])
         ) || [];
-      shows = shows.sort((x, y) => y.avg_views - x.avg_views) || [];
+      // if (this.sort === "date")
+      //   shows = shows.sort((x, y) => y.date - x.date) || [];
+      if (this.sort === "popularity")
+        shows = shows.sort((x, y) => y.avg_views - x.avg_views) || [];
       return shows;
     },
     async loadShows() {
