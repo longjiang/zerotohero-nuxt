@@ -379,11 +379,9 @@ export default {
   .language-flag-and-name {
     line-height: 1;
     text-overflow: ellipsis;
-    overflow: hidden;
     white-space: nowrap;
     display: inline-block;
     position: relative;
-    bottom: -0.15rem;
     text-align: left;
   }
 }
