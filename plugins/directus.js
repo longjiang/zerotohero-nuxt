@@ -232,7 +232,7 @@ export default ({ app }, inject) => {
         `items/tv_shows?filter[l2][eq]=${langId}&limit=500&timestamp=${adminMode ? Date.now() : 0
         }`
       );
-      let shows = response.data || [];
+      let shows = response.data?.data || [];
       let showTitles = shows.map(show => show.title);
       let regex = new RegExp(
         showTitles.map(t => Helper.escapeRegExp(t)).join("|")

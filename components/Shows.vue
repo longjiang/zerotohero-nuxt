@@ -152,8 +152,6 @@
                 <MediaSearchResults :keyword="keyword" />
                 <YouTubeSearchResults
                   :term="keyword"
-                  :start="start"
-                  :long="long"
                   :infinite="true"
                   :showProgress="false"
                   skin="dark"
