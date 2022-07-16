@@ -39,7 +39,7 @@
               @click="showModal('categories')"
               class="filter-dropdown mr-2"
             >
-              {{ category ? categoriesFiltered[category] : "Categories" }}
+              {{ category ? categoriesFiltered[category] : "All Categories" }}
               <i class="fa-solid fa-caret-down"></i>
             </span>
             <span
@@ -146,8 +146,20 @@
       title="Sort"
     >
       <div class="row">
-        <div class="mb-1 col-12" @click="sort = 'popularity'" style="cursor: pointer">Sort by Popularity</div>
-        <div class="mb-1 col-12" @click="sort = 'title'" style="cursor: pointer">Sort by Title</div>
+        <div
+          class="mb-1 col-12"
+          @click="sort = 'popularity'"
+          style="cursor: pointer"
+        >
+          Sort by Popularity
+        </div>
+        <div
+          class="mb-1 col-12"
+          @click="sort = 'title'"
+          style="cursor: pointer"
+        >
+          Sort by Title
+        </div>
         <!-- <div class="mb-1 col-12" @click="sort = 'date'">Sort by Date</div> -->
       </div>
     </b-modal>
@@ -287,7 +299,9 @@ export default {
     categoriesFiltered() {
       if (!this.shows) return {};
       let categories = {};
-      let ids = this.shows.map((show) => show.category).filter((c) => c);
+      let ids = this.filteredShowsByAudiobook
+        .map((show) => show.category)
+        .filter((c) => c);
       for (let id in CATEGORIES) {
         if (ids.includes(Number(id))) categories[id] = CATEGORIES[id];
       }
@@ -340,6 +354,9 @@ export default {
     },
     filteredShowsByAudiobook() {
       let shows = this.shows;
+      shows = shows.filter(
+        (show) => !["News", "Music", "Movies"].includes(show.title)
+      );
       if (this.routeType === "audiobooks") {
         shows = shows.filter((s) => s.audiobook);
       } else {
@@ -378,9 +395,7 @@ export default {
             return title.toLowerCase().includes(k.toLowerCase());
           });
         } else {
-          return shows.filter(
-            (show) => !["News", "Music", "Movies"].includes(show.title)
-          );
+          return shows;
         }
       }
     },
@@ -391,9 +406,9 @@ export default {
       if (filterElement) scrollToTargetAdjusted(filterElement, 60);
     },
     sort() {
-      this.sortShows(this.shows)
-      this.$refs['sortModal']?.hide()
-    }
+      this.sortShows(this.shows);
+      this.$refs["sortModal"]?.hide();
+    },
   },
   methods: {
     showModal(name) {
