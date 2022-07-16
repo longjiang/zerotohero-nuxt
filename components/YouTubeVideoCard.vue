@@ -66,13 +66,6 @@
         />
       </router-link>
       <div class="media-body">
-        <div
-          class="small mb-2"
-          style="color: #aaa"
-          v-if="video.date && (showDate || $adminMode)"
-        >
-          {{ formatDate(video.date) }}
-        </div>
         <div class="youtube-title">
           <span
             contenteditable="true"
@@ -90,6 +83,19 @@
           >
             {{ video.title }}
           </router-link>
+        </div>
+        <div class="statistics">
+          <span v-if="video.views" class="statistics-item">
+            <i class="fa-solid fa-eye"></i>
+            {{ formatK(video.views) }}
+          </span>
+          <span
+            class="statistics-item"
+            style="color: #aaa"
+            v-if="video.date && (showDate || $adminMode)"
+          >
+            {{ formatDate(video.date) }}
+          </span>
         </div>
         <client-only>
           <div
@@ -292,7 +298,6 @@
 <script>
 import Helper from "@/lib/helper";
 import DateHelper from "@/lib/date-helper";
-import Config from "@/lib/config";
 import YouTube from "@/lib/youtube";
 import Vue from "vue";
 import assParser from "ass-parser";
@@ -300,6 +305,7 @@ import languageEncoding from "detect-file-encoding-and-language";
 import { Drag, Drop } from "vue-drag-drop";
 import { parseSync } from "subtitle";
 import { mapState } from "vuex";
+import { formatK } from "@/lib/utils";
 
 export default {
   components: {
@@ -468,6 +474,9 @@ export default {
     },
     level(...args) {
       return Helper.level(...args);
+    },
+    formatK(...args) {
+      return formatK(...args);
     },
     thumbnailError(e) {
       console.log("❌ ERROR", this.video.title);
@@ -852,5 +861,14 @@ export default {
   padding: 0 0.7rem;
   top: 1rem;
   left: 0.5rem;
+}
+.statistics {
+  opacity: 0.5;
+  font-size: 0.8em;
+}
+
+.statistics-item + .statistics-item::before {
+  content: '·';
+  margin-left: 0.15rem;
 }
 </style>

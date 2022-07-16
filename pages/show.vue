@@ -449,7 +449,7 @@ export default {
           this.$l2.id
         }&filter[${this.collection}][eq]=${
           this.show.id
-        }${keywordFilter}&fields=id,title,l2,youtube_id,date,tv_show.*,talk.*&sort=${sort}&limit=${limit}&offset=${offset}&timestamp=${
+        }${keywordFilter}&fields=id,title,l2,youtube_id,date,tv_show,talk,channel_id,views,date,tags,category,locale,duration,made_for_kids,views,likes,comments&sort=${sort}&limit=${limit}&offset=${offset}&timestamp=${
           this.$adminMode ? Date.now() : 0
         }`
       );
