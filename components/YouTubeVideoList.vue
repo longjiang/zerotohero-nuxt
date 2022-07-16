@@ -36,7 +36,7 @@
               v-if="
                 checkSavedData &&
                 checkSavedDone &&
-                (generated ? shownVideos.length : videosWiththis.$subs.length) -
+                (generated ? shownVideos.length : videosWithSubs.length) -
                   savedVideos.length >
                   0
               "

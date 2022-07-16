@@ -54,8 +54,8 @@
                 v-if="titleUpdated"
               ></i>
             </h3>
-            <p style="opacity: 0.6" class="mb-3">
-              <span v-if="$adminMode && show">
+            <p style="opacity: 0.6" class="mb-3" v-if="$adminMode && show">
+              <span>
                 Cover youtube_id:
                 <span contenteditable="true" @blur="saveCover">
                   {{ show.youtube_id }}
@@ -65,6 +65,10 @@
                   v-if="coverUpdated"
                 ></i>
               </span>
+              <b-button variant="small ml-2 btn-ghost-dark" @click="deleteShow">
+                <i class="fa-solid fa-trash"></i>
+                Delete Show
+              </b-button>
             </p>
           </div>
 
@@ -78,7 +82,11 @@
                         v-model="keyword"
                         :lazy="true"
                         @compositionend.prevent.stop="() => false"
-                        :placeholder="episodeCount ? `Search inside this collection (${episodeCount} videos)` : 'Filter videos...'"
+                        :placeholder="
+                          episodeCount
+                            ? `Search inside this collection (${episodeCount} videos)`
+                            : 'Filter videos...'
+                        "
                         class="input-ghost-dark"
                       />
                     </b-input-group>
@@ -162,7 +170,6 @@
 </template>
 
 <script>
-import Config from "@/lib/config";
 import Helper from "@/lib/helper";
 import { tify, sify } from "chinese-conv";
 
@@ -302,10 +309,23 @@ export default {
         if (mutation.type === "shows/LOAD_SHOWS") {
           if (!this.show) this.getShowFromStore();
         }
+        if (mutation.type === "shows/REMOVE_SHOW") {
+          this.$toast.message('Show removed.', { duration: 5000 })
+          this.$router.go(-1)
+        }
       });
     }
   },
   methods: {
+    async deleteShow() {
+      if (confirm("Are you sure you want to DELETE this show?")) {
+        this.$store.dispatch("shows/remove", {
+          l2: this.$l2,
+          type: this.type === 'tv-show' ? 'tvShows' : 'talks',
+          show: this.show,
+        });
+      }
+    },
     getShowFromStore() {
       let collection = this.collection === "tv_show" ? "tvShow" : "talk";
       let show = this.$store.getters[`shows/${collection}`]({

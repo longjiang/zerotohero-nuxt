@@ -123,14 +123,11 @@ export const actions = {
     }
   },
   async remove(context, { l2, type, show }) {
-    let token = $nuxt.$auth.strategy.token.get()
-    if (!token) return
-    token = token.replace('Bearer ', '')
     let response = await this.$directus.delete(
       `items/${type === 'tvShows' ? 'tv_shows' : 'talks'}/${show.id}`
     );
     // response.data could be "" (empty string), which evaluates to undefined.
-    if (response) {
+    if (response?.status === 204) {
       context.commit('REMOVE_SHOW', { l2, type, show })
     }
     return true
