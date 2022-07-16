@@ -70,7 +70,7 @@
             class="link-unstyled dropdown-nav-child"
           >
             <i :class="`nav-item-icon ${child.icon} mr-1`"></i>
-            {{ child.title }}
+            {{ child.title }} <span v-if="child.count" class="nav-item-count">({{ child.count }})</span>
           </router-link>
         </div>
       </div>

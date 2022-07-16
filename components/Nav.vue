@@ -463,7 +463,7 @@ export default {
                 {
                   name: "youtube-browse",
                   title: `Other`,
-                  // count: this.stats ? this.stats.newVideos : undefined,
+                  count: this.stats ? this.stats.newVideos : undefined,
                   icon: "fa-solid fa-films",
                   show: true,
                 },
