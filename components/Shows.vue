@@ -32,7 +32,7 @@
               @click="showModal('levels')"
               class="filter-dropdown mr-2"
             >
-              {{ level && levels[level - 1] ? levels[level - 1].name : "All Levels" }}
+              {{ level && levels.find(l => l.numeric === level) ? levels.find(l => l.numeric === level).name : "All Levels" }}
               <i class="fa-solid fa-caret-down"></i>
             </span>
             <span @click="showModal('sort')" class="filter-dropdown">
@@ -192,7 +192,7 @@
           <router-link
             :to="{
               name: routeType,
-              params: { category, tag, level: level.numeric },
+              params: { category, tag, level: level.numeric  },
             }"
             class="link-unstyled"
           >
