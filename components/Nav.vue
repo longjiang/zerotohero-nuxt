@@ -166,8 +166,7 @@ feature-card-name-${child.name}`"
 <script>
 import { Capacitor } from "@capacitor/core";
 import { mapState } from "vuex";
-import { topics as TOPICS, languageLevels } from "@/lib/utils/language-levels";
-import { CATEGORIES } from "@/lib/youtube";
+import { languageLevels } from "@/lib/utils/language-levels";
 
 export default {
   props: {
@@ -276,6 +275,7 @@ export default {
   },
   computed: {
     ...mapState("fullHistory", ["fullHistory"]),
+    ...mapState('shows', ['categories']),
     fullHistoryPathsByL1L2() {
       return this.$store.getters["fullHistory/fullHistoryPathsByL1L2"]({
         l1: this.l1,
@@ -328,19 +328,6 @@ export default {
         return languageLevels(this.$l2);
       } else return {}
     },
-    categoriesFiltered() {
-      if (!this.$l2 || !['vi', 'fr'].includes(this.$l2.code)) return {}
-      let shows = [...this.$store.state.shows.tvShows?.[this.$l2.code], ...this.$store.state.shows.talks?.[this.$l2.code]]
-      if (shows.length === 0) return {};
-      let categories = {};
-      let ids = shows
-        .map((show) => show.category)
-        .filter((c) => c);
-      for (let id in CATEGORIES) {
-        if (ids.includes(Number(id))) categories[id] = CATEGORIES[id];
-      }
-      return categories;
-    },
     menu() {
       let items = [
         {
@@ -385,15 +372,9 @@ export default {
               icon: "fa fa-grid-2",
               title: `Topics`,
               // count: this.stats ? this.stats.allVideos : undefined,
-              name: "watch-history",
+              name: "youtube-browse",
               show: true,
               children: [
-                {
-                  name: "watch-history",
-                  icon: "fas fa-history",
-                  title: "My History",
-                  show: true,
-                },
                 {
                   path: this.moviesPath,
                   icon: "fa fa-film",
@@ -437,6 +418,33 @@ export default {
                   show: this.l2.code === "zh",
                 },
                 {
+                  name: "youtube-browse",
+                  title: `New Videos`,
+                  count: this.stats ? this.stats.newVideos : undefined,
+                  icon: "fa-solid fa-films",
+                  show: true,
+                },
+                ...Object.keys(this.categories).map((key) => {
+                  let title = this.categories[key];
+                  return {
+                    name: "youtube-browse",
+                    params: { category: key, level: "all" },
+                    title,
+                    show: true,
+                    icon: "fa-solid fa-films",
+                  };
+                }),
+                ...Object.keys(this.levels).map((key) => {
+                  let title = this.levels[key].name;
+                  return {
+                    name: "youtube-browse",
+                    params: { topic: "all", level: key },
+                    title,
+                    show: true,
+                    icon: "fa-solid fa-films",
+                  };
+                }),
+                {
                   name: "feed",
                   icon: "fas fa-stream",
                   title: `Feed`,
@@ -456,32 +464,11 @@ export default {
                   show: true,
                 },
                 {
-                  name: "youtube-browse",
-                  title: `New Videos`,
-                  count: this.stats ? this.stats.newVideos : undefined,
-                  icon: "fa-solid fa-films",
+                  name: "watch-history",
+                  icon: "fas fa-history",
+                  title: "My History",
                   show: true,
                 },
-                ...Object.keys(this.categoriesFiltered).map((key) => {
-                  let title = this.categoriesFiltered[key];
-                  return {
-                    name: "youtube-browse",
-                    params: { category: key, level: "all" },
-                    title,
-                    show: true,
-                    icon: "fa-solid fa-films",
-                  };
-                }),
-                ...Object.keys(this.levels).map((key) => {
-                  let title = this.levels[key].name;
-                  return {
-                    name: "youtube-browse",
-                    params: { topic: "all", level: key },
-                    title,
-                    show: true,
-                    icon: "fa-solid fa-films",
-                  };
-                }),
               ],
             },
             {

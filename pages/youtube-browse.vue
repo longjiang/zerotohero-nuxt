@@ -14,15 +14,31 @@
       :video="heroVideo"
       @videoUnavailable="onVideoUnavailable"
     />
-    <div class="youtube-browse container pt-4 pb-5">
+    <div class="youtube-browse container pb-5">
       <SocialHead
         :title="`Study ${$l2.name} videos with subs | Language Player`"
         :description="`Watch ${$l2.name} videos and study the ${
           $l2.code === 'zh' ? 'Pinyin' : $l2.name
         } subtitles.`"
       />
+      <div class="row mb-2">
+        <div class="col-sm-12 text-center mb-4">
+          <span
+            v-if="Object.keys(categories).length > 0"
+            @click="showModal('categories')"
+            class="filter-dropdown mr-2"
+          >
+            {{
+              category && categories[category]
+                ? categories[category]
+                : "All Categories"
+            }}
+            <i class="fa-solid fa-caret-down"></i>
+          </span>
+        </div>
+      </div>
       <Shows
-        v-if="!(category === 'all' && level ==='all')"
+        v-if="!(category === 'all' && level === 'all')"
         routeType="tv-shows"
         :category="category"
         tag="all"
@@ -31,7 +47,7 @@
         :showHero="false"
       />
       <Shows
-        v-if="!(category === 'all' && level ==='all')"
+        v-if="!(category === 'all' && level === 'all')"
         routeType="talks"
         :category="category"
         tag="all"
@@ -70,10 +86,50 @@
         />
       </client-only>
     </div>
+    <b-modal
+      ref="categoriesModal"
+      size="lg"
+      centered
+      hide-footer
+      modal-class="safe-padding-top mt-4"
+      body-class="dropdown-menu-modal-wrapper"
+      title="Categories"
+    >
+      <div class="row">
+        <div class="mb-1 col-6 col-lg-4">
+          <router-link
+            :to="{
+              name: 'youtube-browse',
+              params: { category: 'all', level, start, keyword },
+            }"
+            class="link-unstyled"
+          >
+            All Categories
+          </router-link>
+        </div>
+        <div
+          v-for="(category, index) in categories"
+          :key="`dropdown-menu-item-category-${index}`"
+          class="mb-1 col-6 col-lg-4"
+        >
+          <router-link
+            :to="{
+              name: 'youtube-browse',
+              params: { category: index, level, start, keyword },
+            }"
+            class="link-unstyled"
+          >
+            {{ category }}
+          </router-link>
+        </div>
+      </div>
+    </b-modal>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   props: {
     category: {
@@ -83,13 +139,14 @@ export default {
       default: "all",
     },
     keyword: {
-      default: "",
+      type: String,
     },
     start: {
       default: 0,
     },
   },
   computed: {
+    ...mapState('shows', ['categories']),
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -113,6 +170,9 @@ export default {
     };
   },
   methods: {
+    showModal(name) {
+      this.$refs[name + "Modal"]?.show();
+    },
     onVideoUnavailable(youtube_id) {
       if (this.heroVideo.youtube_id === youtube_id) {
         this.videoUnavailable = true;
@@ -128,5 +188,9 @@ export default {
   },
 };
 </script>
-<style>
+<style lang="scss" scoped>
+.filter-dropdown {
+  color: white;
+  cursor: pointer;
+}
 </style>

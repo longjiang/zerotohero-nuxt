@@ -1,4 +1,4 @@
-import Config from '@/lib/config'
+import { CATEGORIES } from "@/lib/youtube";
 import Helper from '@/lib/helper'
 
 export const state = () => {
@@ -6,8 +6,22 @@ export const state = () => {
     tvShows: {},
     talks: {},
     stats: {},
-    showsLoaded: {}
+    showsLoaded: {},
+    categories: {},
   }
+}
+
+export const categories = (l2, tvShows, talks) => {
+  if (!l2 || !["vi", "fr"].includes(l2.code)) return {};
+  tvShows = tvShows[l2.code] || []
+  talks = talks[l2.code] || []
+  let shows = [...tvShows, ...talks]
+  let categories = {};
+  let ids = shows.map((show) => show.category).filter((c) => c);
+  for (let id in CATEGORIES) {
+    if (ids.includes(Number(id))) categories[id] = CATEGORIES[id];
+  }
+  return categories;
 }
 
 export const mutations = {
@@ -15,6 +29,8 @@ export const mutations = {
     state.tvShows[l2.code] = tvShows;
     state.talks[l2.code] = talks;
     state.showsLoaded[l2.code] = true
+
+    state.categories = categories(l2, state.tvShows, state.talks)
   },
   ADD_SHOW(state, { l2, type, show }) {
     state[type][l2.code].push(show);
@@ -22,7 +38,7 @@ export const mutations = {
   REMOVE_SHOW(state, { l2, type, show }) {
     state[type][l2.code] = state[type][l2.code].filter((s) => s !== show);
   },
-  UPDATE_SHOW(state, { l2, type, id, payload}) {
+  UPDATE_SHOW(state, { l2, type, id, payload }) {
     let show = state[type][l2.code].find((s) => s.id === id);
     if (show) {
       for (let key in payload) {
