@@ -322,9 +322,10 @@ export default {
         return this.$store.state.settings.adminMode;
     },
     levels() {
-      if (this.$l2) {
+      // Levels feature works for Chinese, German, English, Spanish, French and Arabic only
+      if (this.$l2 && ['zh', 'de', 'en', 'es', 'fr', 'ar'].includes(this.$l2.code)) {
         return languageLevels(this.$l2);
-      }
+      } else return {}
     },
     menu() {
       let items = [
@@ -440,16 +441,16 @@ export default {
                   icon: "fas fa-search",
                   show: true,
                 },
-                ...Object.keys(TOPICS).map((key) => {
-                  let title = TOPICS[key];
-                  return {
-                    name: "youtube-browse",
-                    params: { topic: key, level: "all" },
-                    title,
-                    show: true,
-                    icon: "fa-solid fa-films",
-                  };
-                }),
+                // ...Object.keys(TOPICS).map((key) => {
+                //   let title = TOPICS[key];
+                //   return {
+                //     name: "youtube-browse",
+                //     params: { topic: key, level: "all" },
+                //     title,
+                //     show: true,
+                //     icon: "fa-solid fa-films",
+                //   };
+                // }),
                 ...Object.keys(this.levels).map((key) => {
                   let title = this.levels[key].name;
                   return {
@@ -462,7 +463,7 @@ export default {
                 }),
                 {
                   name: "youtube-browse",
-                  title: `Other`,
+                  title: `Uncategorized Videos`,
                   count: this.stats ? this.stats.newVideos : undefined,
                   icon: "fa-solid fa-films",
                   show: true,

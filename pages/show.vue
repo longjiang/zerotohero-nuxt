@@ -445,7 +445,7 @@ export default {
     async getVideosFromServer({ keyword, limit, offset, sort } = {}) {
       let keywordFilter = keyword ? `&filter[title][contains]=${keyword}` : "";
       let fields = "id,title,l2,youtube_id,date,tv_show,talk,channel_id";
-      if (this.$l2.code === "vi")
+      if (['vi', 'fr'].includes(this.$l2.code))
         fields = fields +
           ",views,tags,category,locale,duration,made_for_kids,views,likes,comments";
       let response = await this.$directus.get(
