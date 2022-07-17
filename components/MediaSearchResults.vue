@@ -117,6 +117,9 @@ export default {
     SimpleSearch,
   },
   props: {
+    category: {
+      default: "all",
+    },
     topic: {
       default: "all",
     },
@@ -222,36 +225,49 @@ export default {
     async getVideos(start) {
       if (!this.keyword && !this.showLatestIfKeywordMissing) return [];
       this.noMoreVideos = false;
-      let filters = "";
-      if (!this.includeShows)
-        filters = "&filter[tv_show][null]=1&filter[talk][null]=1";
+      let filters = [];
+      let sort = "sort=-id";
+      if (!this.includeShows) {
+        filters.push("filter[tv_show][null]=1");
+        filters.push("filter[talk][null]=1");
+      }
       if (this.topic !== "all") {
-        filters += "&filter[topic][eq]=" + this.topic;
+        filters.push("filter[topic][eq]=" + this.topic);
+      }
+      if (this.category !== "all") {
+        filters.push("filter[category][eq]=" + this.category);
       }
       if (this.level !== "all") {
-        filters += "&filter[level][eq]=" + this.level;
+        filters.push("filter[level][eq]=" + this.level);
       }
       if (this.keyword !== "") {
         if (this.keyword.startsWith("channel:"))
-          filters +=
-            "&filter[channel_id][eq]=" +
-            encodeURIComponent(this.keyword.replace("channel:", ""));
+          filters.push(
+            "filter[channel_id][eq]=" +
+              encodeURIComponent(this.keyword.replace("channel:", ""))
+          );
         else
-          filters +=
-            "&filter[title][contains]=" + encodeURIComponent(this.keyword);
-        filters += "&sort=title";
+          filters.push(
+            "filter[title][contains]=" + encodeURIComponent(this.keyword)
+          );
+        sort = "&sort=title";
       }
       let limit = this.perPage;
-
-      let query = `sort=-id${filters}&limit=${limit}&offset=${start}&fields=id,l2,title,youtube_id,tv_show.*,talk.*&timestamp=${
-        this.$adminMode ? Date.now() : 0
-      }`;
+      filters = filters.join(filters.join("&"));
+      let fields = "fields=id,l2,title,youtube_id,tv_show.*,talk.*";
+      let timestamp = `timestamp=${this.$adminMode ? Date.now() : 0}`;
+      let offset = `offset=${start}`;
+      let limitStr = `limit=${limit}`;
+      let query = [filters, limitStr, fields, offset, timestamp]
+        .filter((f) => f !== "")
+        .join("&");
       let videos = await this.$directus.getVideos({ l2Id: this.$l2.id, query });
       if (videos && this.$adminMode) {
         videos = await this.$directus.checkShows(videos, this.$l2.id);
         for (let video of videos) {
           try {
-            if (video.subs_l2) video.subs_l2 = this.$subs.parseSavedSubs(video.subs_l2);
+            if (video.subs_l2)
+              video.subs_l2 = this.$subs.parseSavedSubs(video.subs_l2);
           } catch (err) {}
         }
       }
