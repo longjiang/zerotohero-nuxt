@@ -246,7 +246,7 @@ export default {
           }"></PopupNote>`;
         });
       }
-      html = html.replace(/\n/g, "<br/>");
+      html = html.replace(/\n/g, " ");
       return html;
     },
     highlightMultiple() {
