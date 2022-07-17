@@ -1,6 +1,6 @@
 <router>
   {
-    path: '/:l1/:l2/youtube/browse/:topic?/:level?/:start?/:keyword?',
+    path: '/:l1/:l2/youtube/browse/:category?/:level?/:start?/:keyword?',
     props: true,
     meta: {
       skin: 'dark'
@@ -22,23 +22,25 @@
         } subtitles.`"
       />
       <Shows
-        v-if="!(topic === 'all' && level ==='all')"
+        v-if="!(category === 'all' && level ==='all')"
         routeType="tv-shows"
-        :tag="topic"
+        :category="category"
+        tag="all"
         :level="level"
         :showFilter="false"
         :showHero="false"
       />
       <Shows
-        v-if="!(topic === 'all' && level ==='all')"
+        v-if="!(category === 'all' && level ==='all')"
         routeType="talks"
-        :tag="topic"
+        :category="category"
+        tag="all"
         :level="level"
         :showFilter="false"
         :showHero="false"
       />
       <MediaSearchResults
-        :topic="topic"
+        :category="category"
         :level="level"
         :keyword="keyword"
         :start="start"
@@ -47,16 +49,16 @@
         :showSearchBar="false"
         @videosLoaded="onVideosLoaded"
       />
-      <!-- <MediaSearchResults :keyword="topic" v-if="topic !== 'all' && topic !== 'kids'" /> -->
+      <!-- <MediaSearchResults :keyword="category" v-if="category !== 'all' && category !== 'kids'" /> -->
       <!-- <YouTubeSearchResults
-        :term="topic"
+        :term="category"
         :infinite="true"
         :showProgress="false"
         skin="dark"
         ref="youtubeSearchResults"
         :showBadges="false"
         :cloakVideosWithoutSubs="!$adminMode"
-        v-if="topic !== 'all'"
+        v-if="category !== 'all'"
       /> -->
       <client-only>
         <Nav
@@ -74,7 +76,7 @@
 <script>
 export default {
   props: {
-    topic: {
+    category: {
       default: "all",
     },
     level: {
