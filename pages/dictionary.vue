@@ -69,7 +69,7 @@
                     </li>
                     <li class="mt-2" v-if="dictionarySize">
                       📖 This {{ $l2.name }} dictionary has
-                      <b>{{ $n(dictionarySize) }} words</b>
+                      <b>{{ dictionarySize }} words</b>
                     </li>
                   </ul>
                 </div>

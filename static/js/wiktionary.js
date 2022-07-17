@@ -4,7 +4,7 @@ importScripts("../vendor/hash-string/hash-string.min.js")
 
 const Dictionary = {
   name: "wiktionary",
-  version: '1.1.14',
+  version: '1.1.17',
   file: undefined,
   dictionary: undefined,
   words: [],
@@ -21,7 +21,7 @@ const Dictionary = {
   hasFrequency: [],
   indexDbVerByLang: {
     fra: 2,
-    eng: 2
+    eng: 3
   },
   hanRegex: /[\u2E80-\u2E99\u2E9B-\u2EF3\u2F00-\u2FD5\u3005\u3007\u3021-\u3029\u3038-\u303B‌​\u3400-\u4DB5\u4E00-\u9FCC\uF900-\uFA6D\uFA70-\uFAD9]+/g,
   hanRegexStrict: /^[\u2E80-\u2E99\u2E9B-\u2EF3\u2F00-\u2FD5\u3005\u3007\u3021-\u3029\u3038-\u303B‌​\u3400-\u4DB5\u4E00-\u9FCC\uF900-\uFA6D\uFA70-\uFAD9]+$/,
@@ -226,7 +226,7 @@ const Dictionary = {
           word[indexType]
         ].concat(word);
       }
-      if (/[\s']/.test(word.head)) {
+      if (/[\s'.\-]/.test(word.head)) {
         for (let w of word.head.split(/[\s']/)) {
           this.addToPhraseIndex(w, word)
         }
