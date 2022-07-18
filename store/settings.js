@@ -23,7 +23,7 @@ export const state = () => {
       showQuiz: true,
       showByeonggi: true,
       tvShowFilter: "all", // By default we only search TV shows.
-      talkFilter: [],
+      talkFilter: "all", // By default we only search TV shows.
       disableAnnotation: false
     },
     romanizationOffByDefault: ["ko", "bo", "dz", "th", "my", "hy", "vi"]
@@ -139,6 +139,14 @@ export const mutations = {
       settings[state.l2.code] = state.l2Settings;
       localStorage.setItem("zthSettings", JSON.stringify(settings));
     }
+  },
+  RESET_SHOW_FILTERS(state) {
+    state.l2Settings.tvShowFilter = "all"
+    if (state.l2?.code && 'zh en it ko es fr ja de tr ru nl'.split(' ').includes(state.l2.code)) {
+      state.l2Settings.talkFilter = [] // For languages with lots of content, only include tv shows in dictionary video search by default so as to give the user a faster experience.
+    } else {
+      state.l2Settings.talkFilter = "all"
+    }
   }
 };
 
@@ -174,4 +182,7 @@ export const actions = {
   setSubsSearchLimit({ dispatch, commit }, value) {
     commit("SET_SUBS_SEARCH_LIMIT", value);
   },
+  resetShowFilters({ dispatch, commit }, value) {
+    commit("RESET_SHOW_FILTERS")
+  }
 };

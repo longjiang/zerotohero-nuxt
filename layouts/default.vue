@@ -277,6 +277,7 @@ export default {
           if (mutation.type === "settings/SET_L1_L2") {
             this.updatei18n();
             this.loadLanguageSpecificSettings();
+            this.$store.dispatch('settings/resetShowFilters')
             if (this.$route.name !== "youtube-view")
               this.overlayPlayerYouTubeId = undefined; // Close the mini player when switching languages
           }

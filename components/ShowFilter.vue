@@ -335,20 +335,20 @@ export default {
         if (all) return "all";
         else {
           let tvShowIDs = this.tvShows.map((s) => s.id);
-          if (!this.musicChecked) {
+          if (!this.musicChecked && this.musicShow) {
             tvShowIDs = tvShowIDs.filter((id) => id !== this.musicShow.id);
           }
-          if (!this.musicChecked) {
+          if (!this.musicChecked && this.moviesShow) {
             tvShowIDs = tvShowIDs.filter((id) => id !== this.moviesShow.id);
           }
           return tvShowIDs;
         }
       } else {
         let tvShowFilter = [].concat(this.tvShowChecked);
-        if (this.musicChecked) {
+        if (this.musicChecked && this.musicShow) {
           if (this.musicShow) tvShowFilter.push(this.musicShow.id);
         }
-        if (this.moviesChecked) {
+        if (this.moviesChecked && this.moviesShow) {
           if (this.moviesShow) tvShowFilter.push(this.moviesShow.id);
         }
         return Helper.unique(tvShowFilter);
