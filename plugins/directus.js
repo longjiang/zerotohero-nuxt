@@ -178,7 +178,7 @@ export default ({ app }, inject) => {
         let qline = l2.apostrophe ? hline : SmartQuotes.string(hline); // convert to smartquotes
         line.line = qline;
       }
-      let csv = this.$subs.unparseSubs(lines, l2.code);
+      let csv = app.$subs.unparseSubs(lines, l2.code);
       let data = {
         youtube_id: video.youtube_id,
         title: video.title || "Untitled",
@@ -202,7 +202,7 @@ export default ({ app }, inject) => {
         if (tries > 1) return; // Only 2 tries
         if (!limit) limit = video.subs_l2.length;
         if (limit > 0) {
-          return this.saveVideo(video, l2, Math.floor(limit / 2), tries + 1); // Try with half the lines each time
+          return this.postVideo(video, l2, Math.floor(limit / 2), tries + 1); // Try with half the lines each time
         }
       }
     },
