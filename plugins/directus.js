@@ -268,8 +268,7 @@ export default ({ app }, inject) => {
     },
     // Initialize the user data record if there isn't one
     async createNewUserDataRecord(token, payload = {}) {
-      let res = await this.$directus
-        .post(`items/user_data`, payload)
+      let res = await this.post(`items/user_data`, payload)
         .catch((err) => {
           console.log(
             "Axios error in savedWords.js: err, url, payload",
@@ -302,9 +301,8 @@ export default ({ app }, inject) => {
           } else {
             document.cookie = "directus-zerotohero-session=" + token;
             token = token.replace("Bearer ", "");
-            let userDataRes = await app.$directus.get(
-              `items/user_data?filter[owner][eq]=${
-                user.id
+            let userDataRes = await this.get(
+              `items/user_data?filter[owner][eq]=${user.id
               }&timestamp=${Date.now()}`,
               { headers: { Authorization: `Bearer ${token}` } }
             );
