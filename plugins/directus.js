@@ -265,6 +265,72 @@ export default ({ app }, inject) => {
         }
       );
       return res && res.status === 200
-    }
+    },
+    // Initialize the user data record if there isn't one
+    async createNewUserDataRecord(token, payload = {}) {
+      let res = await this.$directus
+        .post(`items/user_data`, payload)
+        .catch((err) => {
+          console.log(
+            "Axios error in savedWords.js: err, url, payload",
+            err,
+            url,
+            payload
+          );
+        });
+      if (res && res.data && res.data.data) {
+        let userDataId = res.data.data.id;
+        return userDataId;
+      }
+    },
+    async initAndGetUserData() {
+      if (app.$auth && app.$auth.loggedIn) {
+        let user = app.$auth.user;
+        let token = app.$auth.strategy.token.get()
+          ? app.$auth.strategy.token.get().replace("Bearer ", "")
+          : undefined;
+        if (user) {
+          if (!token) {
+            await app.$auth.setUser(null); // Remind the user that they no longer have credentials
+            app.$toast.error(`Sorry, but you need to login again.`, {
+              position: "top-center",
+              duration: 5000,
+            });
+            app.$router.push({
+              name: "login",
+            });
+          } else {
+            document.cookie = "directus-zerotohero-session=" + token;
+            token = token.replace("Bearer ", "");
+            let userDataRes = await app.$directus.get(
+              `items/user_data?filter[owner][eq]=${
+                user.id
+              }&timestamp=${Date.now()}`,
+              { headers: { Authorization: `Bearer ${token}` } }
+            );
+            if (userDataRes && userDataRes.data && userDataRes.data.data) {
+              if (userDataRes.data.data[0]) {
+                let { id, saved_words, saved_phrases, history, progress } =
+                  userDataRes.data.data[0];
+                app.$auth.$storage.setUniversal("dataId", id);
+                app.store.dispatch("savedWords/importFromJSON", saved_words);
+                app.store.dispatch(
+                  "savedPhrases/importFromJSON",
+                  saved_phrases
+                );
+                app.store.dispatch("history/importFromJSON", history);
+                app.store.dispatch("progress/importFromJSON", progress);
+              } else {
+                // No user data found, let's create it
+                let dataId = await this.createNewUserDataRecord(token);
+                app.$auth.$storage.setUniversal("dataId", dataId);
+              }
+            }
+          }
+        }
+      } else {
+        return false;
+      }
+    },
   })
 }

@@ -205,7 +205,7 @@ export default {
     if (!this.$store.state.history.historyLoaded) {
       this.$store.dispatch("history/load");
     }
-    await this.initAndGetUserData(); // Make sure user data is fetched from the server
+    await this.$directus.initAndGetUserData(); // Make sure user data is fetched from the server
     console.log("Default.vue: User data initialized.");
     if (this.l1 && this.l2) {
       this.loadLanguageSpecificSettings(); // Make sure this line is AFTER registering mutation event listeners above!
@@ -366,73 +366,6 @@ export default {
           this.translateX = 0;
         }
         this.edgeDetected = false;
-      }
-    },
-    // Initialize the user data record if there isn't one
-    async createNewUserDataRecord(token, payload = {}) {
-      let res = await this.$directus
-        .post(`items/user_data`, payload)
-        .catch((err) => {
-          console.log(
-            "Axios error in savedWords.js: err, url, payload",
-            err,
-            url,
-            payload
-          );
-        });
-      if (res && res.data && res.data.data) {
-        let userDataId = res.data.data.id;
-        return userDataId;
-      }
-    },
-    async initAndGetUserData() {
-      if (this.$auth && this.$auth.loggedIn) {
-        let user = this.$auth.user;
-        let token = this.$auth.strategy.token.get()
-          ? this.$auth.strategy.token.get().replace("Bearer ", "")
-          : undefined;
-        if (user) {
-          if (!token) {
-            await this.$auth.setUser(null); // Remind the user that they no longer have credentials
-            this.$toast.error(`Sorry, but you need to login again.`, {
-              position: "top-center",
-              duration: 5000,
-            });
-            this.$router.push({
-              name: "login",
-              params: { l1: this.$l1.code, l2: this.$l2.code },
-            });
-          } else {
-            document.cookie = "directus-zerotohero-session=" + token;
-            token = token.replace("Bearer ", "");
-            let userDataRes = await this.$directus.get(
-              `items/user_data?filter[owner][eq]=${
-                user.id
-              }&timestamp=${Date.now()}`,
-              { headers: { Authorization: `Bearer ${token}` } }
-            );
-            if (userDataRes && userDataRes.data && userDataRes.data.data) {
-              if (userDataRes.data.data[0]) {
-                let { id, saved_words, saved_phrases, history, progress } =
-                  userDataRes.data.data[0];
-                this.$auth.$storage.setUniversal("dataId", id);
-                this.$store.dispatch("savedWords/importFromJSON", saved_words);
-                this.$store.dispatch(
-                  "savedPhrases/importFromJSON",
-                  saved_phrases
-                );
-                this.$store.dispatch("history/importFromJSON", history);
-                this.$store.dispatch("progress/importFromJSON", progress);
-              } else {
-                // No user data found, let's create it
-                let dataId = await this.createNewUserDataRecord(token);
-                this.$auth.$storage.setUniversal("dataId", dataId);
-              }
-            }
-          }
-        }
-      } else {
-        return false;
       }
     },
     async onAnimateStar(el) {
