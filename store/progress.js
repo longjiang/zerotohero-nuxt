@@ -91,7 +91,7 @@ export const mutations = {
 export const actions = {
   load({ commit }) {
     if (!state.progressLoaded) commit('LOAD')
-    // Data from the server is loaded via default.vue's initAndGetUserData()
+    // Data from the server is loaded via directus.js's initAndGetUserData()
   },
   async importFromJSON({ commit }, json) {
     commit('IMPORT_FROM_JSON', json)

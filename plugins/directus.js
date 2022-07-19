@@ -244,7 +244,7 @@ export default ({ app }, inject) => {
       }
       return videos;
     },
-    async sendPasswordResetEmail({email}) {
+    async sendPasswordResetEmail({ email }) {
       let host = process.server ? process.env.baseUrl : window.location.protocol + '//' + window.location.hostname + ':' + window.location.port
       let reset_url = `${host}/password-reset`
       let res = await this.post(
@@ -256,7 +256,7 @@ export default ({ app }, inject) => {
       );
       return res && res.status === 200
     },
-    async resetPassword({token, password}) {
+    async resetPassword({ token, password }) {
       let res = await this.post(
         `auth/password/reset`,
         {

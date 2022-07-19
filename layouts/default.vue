@@ -258,7 +258,7 @@ export default {
       }
     },
     "$auth.user"() {
-      this.initAndGetUserData();
+      this.$directus.initAndGetUserData();
     },
   },
   methods: {
