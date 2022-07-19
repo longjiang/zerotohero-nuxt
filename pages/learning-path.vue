@@ -55,17 +55,6 @@
       />
 
       <h3 class="mt-3">{{ $l2.name }} Learning Path</h3>
-      <p class="mb-4">
-        Total time investment:
-        <b>
-          {{
-            (($l2.hours || 1100) * 4)
-              .toString()
-              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-          }}
-          hours
-        </b>
-      </p>
       <div class="learning-path">
         <div class="level">
           <LazyLanguageInfoBox
@@ -229,6 +218,17 @@
             </template>
           </template>
           <p v-if="level.number === '7'">
+            <h4 class="mb-4">
+              <b :data-level="level.cefr">Total time from zero to mastery:</b>
+              <b>
+                {{
+                  (($l2.hours || 1100) * 4)
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                }}
+                hours
+              </b>
+            </h4>
             <span v-if="$l2.code === 'zh'">
               * HSK stands for
               <Annotate>
@@ -257,8 +257,10 @@
             </span>
           </p>
         </div>
+
       </div>
     </div>
+    
   </div>
 </template>
 

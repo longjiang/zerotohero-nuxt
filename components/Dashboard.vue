@@ -15,7 +15,7 @@
           <router-link
             class="language-overview-item"
             v-if="language && language.name"
-            :to="{ name: 'all-media', params: { l1: getL1Code(language), l2: language.code } }"
+            :to="{ name: 'learning-path', params: { l1: getL1Code(language), l2: language.code } }"
           >
             <div class="language-flag-wrapper">
               <LanguageFlag :language="language" :autocycle="true" />
