@@ -9,7 +9,7 @@
 </router>
 <template>
   <div class="audiobooks container">
-    <Shows routeType="audiobooks" :category="category" :tag="tag" :level="level" :showExtraSearchResults="true" />
+    <Shows routeType="audiobooks" :category="category" :tag="tag" :level="level" :showExtraSearchResults="true" :showLoader="true" />
   </div>
 </template>
 

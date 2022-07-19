@@ -24,7 +24,11 @@
               @click="showModal('categories')"
               class="filter-dropdown mr-2"
             >
-              {{ category && categoriesFiltered[category] ? categoriesFiltered[category] : "All Categories" }}
+              {{
+                category && categoriesFiltered[category]
+                  ? categoriesFiltered[category]
+                  : "All Categories"
+              }}
               <i class="fa-solid fa-caret-down"></i>
             </span>
             <span
@@ -32,7 +36,11 @@
               @click="showModal('levels')"
               class="filter-dropdown mr-2"
             >
-              {{ level && levels.find(l => l.numeric === level) ? levels.find(l => l.numeric === level).name : "All Levels" }}
+              {{
+                level && levels.find((l) => l.numeric === level)
+                  ? levels.find((l) => l.numeric === level).name
+                  : "All Levels"
+              }}
               <i class="fa-solid fa-caret-down"></i>
             </span>
             <span @click="showModal('sort')" class="filter-dropdown">
@@ -60,20 +68,34 @@
           <div class="col-sm-12">
             <!-- <Sale class="mt-5 mb-5" v-if="$l2.code === 'zh'" /> -->
             <div class="show-list-wrapper">
-              <div
-                :class="{
-                  'loader text-center': true,
-                  'd-none': shows,
-                }"
-                style="flex: 1"
-              >
-                <Loader :sticky="true" message="Getting shows..." />
-              </div>
-              <div class="text-center" v-if="shows && shows.length === 0">
-                Sorry, we could not find any
-                {{ routeTitles[routeType] }}
-                in {{ $l2.name }}.
-              </div>
+              <template v-if="showLoader">
+                <div
+                  :class="{
+                    'loader text-center': true,
+                    'd-none': shows,
+                  }"
+                  style="flex: 1"
+                >
+                  <Loader :sticky="true" message="Getting shows..." />
+                </div>
+                <div
+                  class="text-center"
+                  v-if="filteredShows && filteredShows.length === 0"
+                >
+                  No
+                  {{ routeTitles[routeType] }}
+                  found.
+                  <div>
+                    <router-link
+                      :to="{ name: routeType, params: {} }"
+                      class="btn btn-success mt-3"
+                    >
+                      <i class="fa-solid fa-arrows-rotate"></i>
+                      Reset filters
+                    </router-link>
+                  </div>
+                </div>
+              </template>
               <ShowList
                 v-if="shows && shows.length > 0"
                 :shows="filteredShows"
@@ -192,7 +214,7 @@
           <router-link
             :to="{
               name: routeType,
-              params: { category, tag, level: level.numeric  },
+              params: { category, tag, level: level.numeric },
             }"
             class="link-unstyled"
           >
@@ -203,7 +225,9 @@
                 ? level.level
                 : level.name
             }}
-            <span class="item-count">({{ showCountByLevel(level.numeric) }} shows)</span>
+            <span class="item-count">
+              ({{ showCountByLevel(level.numeric) }} shows)
+            </span>
           </router-link>
         </div>
       </div>
@@ -223,15 +247,15 @@ export default {
     routeType: String, // "tv-shows" or "talks"
     category: {
       type: String,
-      default: 'all'
+      default: "all",
     },
     tag: {
       type: String,
-      default: 'all'
+      default: "all",
     },
     level: {
       type: String,
-      default: 'all'
+      default: "all",
     },
     showHero: {
       type: Boolean,
@@ -249,6 +273,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    showLoader: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {

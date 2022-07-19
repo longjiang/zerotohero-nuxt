@@ -15,6 +15,7 @@
       :tag="tag"
       :level="level"
       :showExtraSearchResults="true"
+      :showLoader="true"
     />
   </div>
 </template>
