@@ -26,7 +26,7 @@
         </p>
         <p>
           If you need further assistance, please contact support by
-          <a href="mailto:jon@chinesezerotohero.com">email</a>
+          <a href="mailto:jon.long@zerotohero.ca">email</a>
           .
         </p>
       </div>

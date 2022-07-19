@@ -38,8 +38,8 @@
               <div>
                 <span>
                   <strong>{{ $t("Email:") }}</strong>
-                  <a href="mailto:ken@chinesezerotohero.com">
-                    ken@chinesezerotohero.com
+                  <a href="mailto:ken.dai@zerotohero.ca">
+                    ken.dai@zerotohero.ca
                   </a>
                 </span>
               </div>
@@ -57,8 +57,8 @@
               </div>
               <div>
                 <strong>{{ $t("Email:") }}</strong>
-                <a href="mailto:jon@chinesezerotohero.com">
-                  jon@chinesezerotohero.com
+                <a href="mailto:jon.long@zerotohero.ca">
+                  jon.long@zerotohero.ca
                 </a>
               </div>
               <div>

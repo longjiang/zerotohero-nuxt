@@ -115,7 +115,7 @@
           </client-only>
           <div class="text-center" v-if="!native">
             If you have any questions or issues, please
-            <a href="mailto:jon@chinesezerotohero.com">email us</a>
+            <a href="mailto:jon.long@zerotohero.ca">email us</a>
             .
           </div>
         </div>

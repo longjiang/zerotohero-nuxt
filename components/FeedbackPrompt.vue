@@ -14,13 +14,13 @@
       <p class="text-center">
         If have any questions, experience any problems, or would like to suggest
         a feature, please
-        <a href="mailto:jon@chinesezerotohero.com" class="strong text-success">
+        <a href="mailto:jon.long@zerotohero.ca" class="strong text-success">
           send us an email.
         </a>
       </p>
       <div class="text-center">
         <a
-          href="mailto:jon@chinesezerotohero.com"
+          href="mailto:jon.long@zerotohero.ca"
           :to="
             this.$l1 && this.$l2
               ? { name: 'discussions' }

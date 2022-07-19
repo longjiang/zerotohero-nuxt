@@ -90,7 +90,7 @@
       </p>
       <p>
         Email:&nbsp;
-        <a href="mailto:ken@chinesezerotohero.com">ken@chinesezerotohero.com</a>
+        <a href="mailto:ken.dai@zerotohero.ca">ken.dai@zerotohero.ca</a>
       </p>
     </div>
   </div>
