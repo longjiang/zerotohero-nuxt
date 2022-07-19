@@ -1,6 +1,9 @@
 <template>
   <div id="zerotohero" :class="classes">
     <div>
+      <a :href="feedbackMailToURL" class="feedback-button">
+        Feedback
+      </a>
       <div
         class="zerotohero-background"
         :style="`background-image: url(${background})`"
@@ -118,6 +121,13 @@ export default {
       l2Time: {},
       zoomLevel: 0,
       timeLoggerID: undefined,
+      host: process.server
+        ? process.env.baseUrl
+        : window.location.protocol +
+          "//" +
+          window.location.hostname +
+          ":" +
+          window.location.port,
       // transition: false,
       // edgeDetected: false,
       // translateX: 0,
@@ -127,6 +137,18 @@ export default {
     ...mapState("settings", ["l2Settings", "l1", "l2"]),
     ...mapState("history", ["history"]),
     ...mapState("fullHistory", ["fullHistory"]),
+    feedbackMailToURL() {
+      let userEmail =
+        this.$auth.loggedIn && this.$auth.user
+          ? this.$auth.user.email
+          : "(Not logged in)";
+      let previousURL =
+        this.fullHistory && this.fullHistory[this.fullHistory.length - 2]
+          ? this.host + this.fullHistory[this.fullHistory.length - 2].path
+          : "(None available)";
+      let currentURL = this.host + this.$route.fullPath;
+      return `mailto:jon.long@zerotohero.ca?subject=Feedback%20on%20Language%20Player&body=Your%20feedback%20on%20Language%20Player%3A%0D%0A%0D%0A%0D%0A%0D%0A%0D%0APlease%20attach%20a%20screenshot%20or%20screen%20recording%20(with%20your%20voice%20explaining%20your%20suggestion)%3A%0D%0A%0D%0A%0D%0A%0D%0A%0D%0A%0D%0A*%20*%20*%0D%0A%0D%0ADiagnostic%20information%3A%0D%0A%0D%0AUser%20email%3A%20${userEmail}%0D%0ACurrent%20URL%3A%20${currentURL}%0D%0APrevious%20URL%3A%20${previousURL}`
+    },
     fullHistoryPathsByL1L2() {
       return this.$store.getters["fullHistory/fullHistoryPathsByL1L2"]({
         l1: this.l1,
@@ -277,7 +299,7 @@ export default {
           if (mutation.type === "settings/SET_L1_L2") {
             this.updatei18n();
             this.loadLanguageSpecificSettings();
-            this.$store.dispatch('settings/resetShowFilters')
+            this.$store.dispatch("settings/resetShowFilters");
             if (this.$route.name !== "youtube-view")
               this.overlayPlayerYouTubeId = undefined; // Close the mini player when switching languages
           }
@@ -453,8 +475,10 @@ export default {
       if (
         !(
           this.$store.state.shows.showsLoaded[this.l2.code] &&
-          this.$store.state.tvShows && this.$store.state.tvShows[this.l2.code].length > 0 &&
-          this.$store.state.talks && this.$store.state.talks[this.l2.code].length > 0
+          this.$store.state.tvShows &&
+          this.$store.state.tvShows[this.l2.code].length > 0 &&
+          this.$store.state.talks &&
+          this.$store.state.talks[this.l2.code].length > 0
         )
       ) {
         this.$store.dispatch("shows/load", {
@@ -598,5 +622,18 @@ export default {
 .zth-footer {
   background-color: #25242cfa;
   color: white;
+}
+
+.feedback-button {
+  display: block;
+  position: fixed;
+  transform: rotate(-90deg);
+  background: #28a745;
+  color: white;
+  z-index: 999;
+  right: -1.75rem;
+  top: 50vh;
+  padding: 0.1rem 0.5rem;
+  border-radius: 0.25rem 0.25rem 0 0;
 }
 </style>
