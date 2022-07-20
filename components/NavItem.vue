@@ -1,11 +1,11 @@
 <template>
   <span
     :class="{
-      'main-nav-item': mode !== 'large-icon' && level === 1,
-      'secondary-nav-item': mode !== 'large-icon' && level === 2,
-      'nav-item-pill': mode === 'pill',
-      'nav-item-small-icon': mode === 'small-icon',
-      'nav-item-large-icon nav-item-large-icon-dark': mode === 'large-icon',
+      'main-nav-item': variant !== 'page' && level === 1,
+      'secondary-nav-item': variant !== 'page' && level === 2,
+      'nav-item-menu-bar': variant === 'menu-bar',
+      'nav-item-bottom-bar': variant === 'bottom-bar',
+      'nav-item-page nav-item-page-dark': variant === 'page',
       'nav-item-active': active,
     }"
     @click="wrapperClick"
@@ -21,13 +21,13 @@
       ref="link"
     >
       <div
-        v-if="['large-icon', 'small-icon'].includes(mode)"
+        v-if="['page', 'bottom-bar'].includes(variant)"
         class="icon-wrapper"
       >
         <i
           v-if="showIcon"
           :class="`nav-item-icon ${item.icon} ${
-            mode === 'large-icon' ? gradientClasses : ''
+            variant === 'page' ? gradientClasses : ''
           }`"
         ></i>
       </div>
@@ -81,8 +81,8 @@
 <script>
 export default {
   props: {
-    mode: {
-      default: "pill", // or "small-icon" (for bottom nav), "large-icon" (for "page" nav)
+    variant: {
+      default: "menu-bar", // or "bottom-bar" (for bottom nav), "page" (for "page" nav)
     },
     showIcon: {
       default: true,
@@ -169,7 +169,7 @@ export default {
 </script>
 
 <style lang="scss">
-.nav-item-small-icon {
+.nav-item-bottom-bar {
   .nav-item-icon {
     width: 1.25rem;
     text-align: center;
@@ -225,7 +225,7 @@ export default {
       border-radius: 0.3rem 0.3rem 0 0;
       border-bottom: none;
       margin-right: 0.2rem;
-      &.nav-item-small-icon {
+      &.nav-item-bottom-bar {
         padding: 0.5rem;
       }
       &.nav-item-active,
@@ -261,7 +261,7 @@ export default {
   }
 }
 
-.nav-item-small-icon {
+.nav-item-bottom-bar {
   .nav-item-title {
     font-size: 0.7rem;
   }
@@ -371,7 +371,7 @@ export default {
   }
 }
 
-.nav-item-large-icon {
+.nav-item-page {
   padding: 0.75rem;
   font-size: 1.2em;
   border-radius: 0.5rem;
@@ -390,7 +390,7 @@ export default {
     background-color: hsla(0deg, 100%, 100%, 0.8);
   }
 
-  &.nav-item-large-icon-light {
+  &.nav-item-page-light {
     background-color: hsla(0deg, 100%, 100%, 0.7);
     border: 1px solid rgba(255, 255, 255, 0.9);
     color: #333;
@@ -400,7 +400,7 @@ export default {
     }
   }
 
-  &.nav-item-large-icon-dark {
+  &.nav-item-page-dark {
     background: rgb(69, 69, 69);
     background: radial-gradient(
       circle,
