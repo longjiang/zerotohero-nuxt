@@ -188,6 +188,23 @@ export default {
   border: 1px solid rgb(138, 138, 138);
   box-shadow: 1px -3px 4px #00000070;
 }
+.col-compact {
+  .deck1,
+  .deck2,
+  .deck3 {
+    left: 0.5rem;
+    width: calc(100% - 1rem);
+  }
+  .deck1 {
+    top: 0;
+  }
+  .deck2 {
+    top: -0.5rem;
+  }
+  .deck3 {
+    top: -1rem;
+  }
+}
 .deck1 {
   top: -0.5rem;
   transform: scale(0.95);
