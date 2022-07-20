@@ -37,7 +37,7 @@
             <Nav
               v-if="
                 $route.params.l1 &&
-                $route.params.l1 &&
+                $route.params.l2 &&
                 l1 &&
                 l2 &&
                 !(!wide && $route.name === 'youtube-view')
@@ -54,7 +54,7 @@
             />
 
             <Nav
-              v-if="$route.params.l1 && $route.params.l1 && l1 && l2 && !wide"
+              v-if="$route.params.l1 && $route.params.l2 && l1 && l2 && !wide"
               :l1="l1"
               :l2="l2"
               :key="`nav-bottom-${l1.code}-${l2.code}`"
