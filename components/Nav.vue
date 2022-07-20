@@ -177,7 +177,7 @@ export default {
       type: Object,
     },
     variant: {
-      default: "menu-bar", // or 'page', or 'side-bar'
+      default: "menu-bar", // or 'page' (flattened grid), 'side-bar' (on wide screen), or 'bottom-bar' (on small screen)
     },
     bottom: {
       type: Boolean,
@@ -1372,13 +1372,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.zth-nav-wrapper.zth-nav-side-bar {
+.zth-main-nav-wrapper.zth-nav-side-bar {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
 }
 
 .zerotohero-wide {
-  .zth-nav-wrapper {
+  .zth-main-nav-wrapper {
     overflow: hidden;
     position: fixed;
     top: 0;

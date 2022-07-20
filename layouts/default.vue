@@ -34,39 +34,37 @@
             />
           </client-only>
           <client-only>
+            <!-- Main nav - side bar on wide screen, bottom bar on small screen /-->
+            <Nav
+              v-if="
+                $route.params.l1 &&
+                $route.params.l2 &&
+                l1 &&
+                l2
+              "
+              class="zth-main-nav-wrapper"
+              :l1="l1"
+              :l2="l2"
+              :key="`nav-main-${l1.code}-${l2.code}`"
+              :variant="wide ? 'side-bar' : 'bottom-bar'"
+              @collapsed="updateCollapsed"
+              level="main"
+            />
+            <!-- Secondary nav (hidden for youtube-view) /-->
             <Nav
               v-if="
                 $route.params.l1 &&
                 $route.params.l2 &&
                 l1 &&
                 l2 &&
-                !(!wide && $route.name === 'youtube-view')
+                !($route.name === 'youtube-view')
               "
-              class="zth-nav-wrapper"
+              class="zth-secondary-nav-wrapper"
               :l1="l1"
               :l2="l2"
-              :key="`nav-${l1.code}-${l2.code}`"
-              :variant="wide ? 'side-bar' : 'menu-bar'"
-              :skin="$route.meta.skin ? $route.meta.skin : 'light'"
-              @collapsed="updateCollapsed"
-              :showMainNav="wide"
-              mode="pill"
-            />
-
-            <Nav
-              v-if="$route.params.l1 && $route.params.l2 && l1 && l2 && !wide"
-              :l1="l1"
-              :l2="l2"
-              :key="`nav-bottom-${l1.code}-${l2.code}`"
+              :key="`nav-secondary-${l1.code}-${l2.code}`"
               variant="menu-bar"
-              :skin="$route.meta.skin ? $route.meta.skin : 'light'"
-              @collapsed="updateCollapsed"
-              :showLogo="false"
-              :showMainNav="true"
-              :showSecondaryNav="false"
-              :bottom="true"
-              mode="small-icon"
-              style="z-index: 10"
+              level="secondary"
             />
           </client-only>
           <div class="zth-content">
@@ -597,7 +595,7 @@ export default {
     overflow: visible;
     width: calc(100% - 13rem);
   }
-  .zth-nav-wrapper.has-secondary-nav + .zth-content {
+  .zth-main-nav-wrapper.has-secondary-nav + .zth-content {
     margin-left: 26rem;
     width: calc(100% - 26rem);
   }
@@ -606,7 +604,7 @@ export default {
       margin-left: 4.5rem;
       width: calc(100% - 4.5rem);
     }
-    .zth-nav-wrapper.has-secondary-nav + .zth-content {
+    .zth-main-nav-wrapper.has-secondary-nav + .zth-content {
       margin-left: 9rem;
       width: calc(100% - 9rem);
     }
@@ -614,7 +612,7 @@ export default {
 }
 
 @media screen and (max-device-width: 1024px) {
-  .zth-nav-wrapper {
+  .zth-main-nav-wrapper {
     background-attachment: scroll;
   }
 }
