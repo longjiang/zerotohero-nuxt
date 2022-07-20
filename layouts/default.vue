@@ -27,13 +27,6 @@
         <div>
           <HydrationNotice />
           <client-only>
-            <SiteTopBar
-              v-if="!wide && $route.params.l1 && $route.params.l1 && l1 && l2"
-              variant="menu-bar"
-              :badge="savedWordsCount + savedPhrasesCount"
-            />
-          </client-only>
-          <client-only>
             <!-- Main nav - side bar on wide screen, bottom bar on small screen /-->
             <Nav
               v-if="
@@ -70,6 +63,13 @@
             />
           </client-only>
           <div class="zth-content">
+            <client-only>
+              <SiteTopBar
+                v-if="$route.params.l1 && $route.params.l1 && l1 && l2"
+                variant="menu-bar"
+                :badge="savedWordsCount + savedPhrasesCount"
+              />
+            </client-only>
             <YouTubeViewComp
               id="overlay-player"
               v-if="overlayPlayerYouTubeId"

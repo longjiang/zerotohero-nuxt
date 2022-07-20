@@ -386,6 +386,16 @@ export default {
   }
 }
 
+
+.zerotohero-wide {
+  .site-top-bar {
+    left: 13rem;
+    &.site-top-bar-menu-bar {
+      width: 100%;
+    }
+  }
+}
+
 .top-bar-user-button {
   background: #5a5a5a;
   width: 2.3rem;
