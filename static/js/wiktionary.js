@@ -5,6 +5,7 @@ importScripts("../vendor/hash-string/hash-string.min.js")
 const Dictionary = {
   name: "wiktionary",
   version: '1.1.17',
+  arabicStemmer: undefined,
   file: undefined,
   dictionary: undefined,
   words: [],
@@ -29,7 +30,7 @@ const Dictionary = {
   server: "https://server.chinesezerotohero.com/",
   l1: undefined,
   l2: undefined,
-  lemmatizationLangs: {
+  lemmatizationLangs: { // Languages that can be lemmatized by https://github.com/michmech/lemmatization-lists
     ast: "ast",
     bul: "bg",
     // cat: 'ca', // Large ones are disabled because they are not necessary
@@ -155,6 +156,7 @@ const Dictionary = {
       // if (this.l2 === "fra") await this.loadFrenchConjugationsAndLemmatizer();
       if (this.l2 === "fas") await this.loadPersianRomanization();
       if (this.l2 === "tur") this.loadTurkishPOS();
+      if (this.l2 === 'ara') this.loadArabicLemmatizer()
       console.log("Wiktionary: loaded.");
       return this;
     }
@@ -455,6 +457,12 @@ const Dictionary = {
       }
     } catch (err) { }
   },
+  async loadArabicLemmatizer() {
+    console.log('Loading Arabic stemmer ...');
+    // Available from https://arabicstemmer.com/ and https://github.com/assem-ch/arabicstemmer
+    importScripts("../vendor/arabic-stemmer/snowball.babel.js");
+    this.arabicStemmer = snowballFactory.newStemmer("arabic");
+  },
   async loadFrenchConjugationsAndLemmatizer() {
     console.log('Loading French conjugations from "french-verbs-lefff"...');
     let res = await axios.get(
@@ -671,6 +679,32 @@ const Dictionary = {
     results = results.sort((a, b) => b.score - a.score);
     return results.slice(0, limit);
   },
+  /**
+   * Lemmatizes some languages (languages in this.lemmatizationLangs and Arabic)
+   */
+  lemmatizeIfAble(text) {
+    let lemmaWords = [];
+    let lemmas
+    if (this.lemmatizationLangs[this.l2]) lemmas = this.lemmatization[text];
+    if (this.l2 === 'ara') {
+      let lemma = this.arabicStemmer.stem(text)
+      lemmas = lemma && lemma !== text ? [lemma] : undefined
+    }
+    if (lemmas) {
+      for (let lemma of lemmas) {
+        lemmaWords = lemmaWords.concat(
+          this.lookupMultiple(lemma)
+        );
+      }
+      lemmaWords = lemmaWords.map(w => {
+        return {
+          score: 1,
+          w: Object.assign({ morphology: "Inflected form" }, w)
+        };
+      });
+    }
+    return lemmaWords
+  },
   lookupFuzzy(text, limit = 30, quick = false) {
     // text = 'abcde'
     if (!this.accentCritical) text = this.stripAccents(text);
@@ -679,26 +713,7 @@ const Dictionary = {
     words = (this.searchIndex[text] || []).map(w => {
       return { score: 1, w };
     });
-    if (this.lemmatizationLangs[this.l2]) {
-      let lemmas = this.lemmatization[text];
-      let lemmaWords = [];
-      if (lemmas) {
-        for (let lemma of lemmas) {
-          lemmaWords = lemmaWords.concat(
-            this.lookupMultiple(lemma).map(w => {
-              return { score: 1, w };
-            })
-          );
-        }
-        lemmaWords = lemmaWords.map(w => {
-          return {
-            score: 1,
-            w: Object.assign({ morphology: "Inflected form" }, w)
-          };
-        });
-        words = words.concat(lemmaWords);
-      }
-    }
+    words = words.concat(this.lemmatizeIfAble(text))
     if (!quick) {
       if (words.length === 0 && this.words.length < 200000) {
         for (let word of this.words) {

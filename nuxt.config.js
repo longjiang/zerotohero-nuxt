@@ -203,7 +203,7 @@ export default {
       config.resolve.alias['vue'] = 'vue/dist/vue.common'
       // Extend only webpack config for client-bundle
       if (isDev && isClient) {
-        config.devtool = '#source-map'
+        config.devtool = 'eval-source-map'
       } else {
         config.devtool = false
       }

@@ -45,7 +45,7 @@
         class="suggestion"
         v-if="
           lookingUp === false &&
-          suggestions.filter((s) => s.head.toLowerCase() === text.trim().toLowerCase()).length === 0 &&
+          suggestions.filter((s) => s.head && s.head.toLowerCase() === text.trim().toLowerCase()).length === 0 &&
           type === 'dictionary'
         "
         :to="`/${$l1.code}/${$l2.code}/phrase/search/${text.trim()}`"
