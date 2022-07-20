@@ -312,12 +312,6 @@ export default {
     menu() {
       let items = [
         {
-          icon: "fas fa-home",
-          name: "learning-path",
-          title: "Home",
-          show: true,
-        },
-        {
           icon: "fas fa-play",
           title: "Media",
           show: true,
@@ -684,6 +678,12 @@ export default {
           title: "Resources",
           show: true,
           children: [
+            {
+              icon: "fas fa-road",
+              name: "learning-path",
+              title: "Path",
+              show: true,
+            },
             {
               name: "grammar",
               icon: "fas fa-list-ul",

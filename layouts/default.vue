@@ -552,9 +552,6 @@ export default {
 
 #zerotohero {
   min-height: 100vh;
-  &.zerotohero-dark .zth-content {
-    background: black;
-  }
   .zerotohero-background {
     height: 100vh;
     width: 100vw;
@@ -581,12 +578,15 @@ export default {
   }
 }
 
-.zerotohero-light #main {
-  background: white;
-}
-
-.zerotohero-dark #main {
-  background: black;
+#zerotohero {
+  #main {
+    background: white;
+  }
+  &.zerotohero-dark {
+    #main {
+      background: black;
+    }
+  }
 }
 
 .zerotohero-with-mini-player {
