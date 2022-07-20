@@ -22,23 +22,25 @@
           variant="unstyled"
           v-if="$route.path !== '/' && params.lg !== false"
         >
-          <i class="fas fa-chevron-left"></i>
+          <i class="fas fa-arrow-left"></i>
           {{ $t("Back") }}
         </b-button>
-        <router-link
-          to="/dashboard"
-          class="btn btn-unstyled ml-2"
-          v-if="
-            $auth.loggedIn &&
-            $route.path !== '/dashboard' &&
-            params.lg !== false
-          "
-          title="Dashboard"
-        >
-          <i class="fas fa-grid mr-1"></i>
-          {{ $t("Dashboard") }}
-        </router-link>
       </div>
+      <span class="flex-1 text-center">
+        <router-link
+        to="/dashboard"
+        class="btn btn-unstyled ml-2"
+        v-if="
+          $auth.loggedIn &&
+          $route.path !== '/dashboard' &&
+          params.lg !== false
+        "
+        title="Dashboard"
+      >
+        <img src="/img/logo-play-circle-light.png" alt="" class="logo" data-not-lazy />
+        Language Player
+      </router-link>
+      </span>
       <template v-if="$route.params.l1 && $route.params.l2">
         <div>
           <router-link
@@ -94,28 +96,6 @@
               </span>
             </span>
           </div>
-          <router-link
-            id="site-top-bar-saved-words"
-            :to="
-              $auth.loggedIn
-                ? { name: 'profile', params: { l1: $l1.code, l2: $l2.code } }
-                : { name: 'login' }
-            "
-            :class="`btn top-bar-button top-bar-user-button  btn-unstyled link-unstyled ml-2`"
-          >
-            <i class="fas fa-user"></i>
-            <span class="saved-words-count" v-if="badge && badge !== 0">
-              {{ badge }}
-            </span>
-            <client-only>
-              <img
-                v-if="pro"
-                src="/img/icon-rocket.png"
-                data-not-lazy
-                class="rocket-icon"
-              />
-            </client-only>
-          </router-link>
         </div>
       </template>
       <template v-else>
@@ -222,9 +202,6 @@ export default {
   },
   computed: {
     ...mapState("fullHistory", ["fullHistory"]),
-    pro() {
-      return [1, 4].includes(Number(this.$auth.user?.role)) ? true : false;
-    },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -326,23 +303,6 @@ export default {
   position: relative;
   bottom: 0.1rem;
 }
-.top-bar-button {
-  position: relative;
-  .saved-words-count {
-    position: absolute;
-    font-size: 0.5em;
-    bottom: 18px;
-    top: inherit;
-    right: -5px;
-  }
-  .rocket-icon {
-    height: 1.5rem;
-    width: auto;
-    position: absolute;
-    bottom: -0.4rem;
-    right: -0.5rem;
-  }
-}
 .site-top-bar {
   display: flex;
   flex-direction: row;
@@ -351,14 +311,15 @@ export default {
   z-index: 20;
   line-height: 2.3;
   padding: calc(env(safe-area-inset-top) + 0.25rem) 0.75rem 0.25rem 0.75rem;
-  color: #666;
-  a {
+  color: #777;
+  font-size: .875rem;
+  .btn, a {
     line-height: 2.3rem;
   }
   &.site-top-bar-light {
     background-color: white;
     .btn, a {
-      color: #666;
+      color: #777;
       &:hover {
         color: black;
       }
@@ -404,16 +365,9 @@ export default {
   }
 }
 
-.top-bar-user-button {
-  background: #5a5a5a;
-  width: 2.3rem;
-  height: 2.3rem;
-  display: inline-block;
-  vertical-align: middle;
+.logo {
+  height: 1.3rem;
+  margin-right: 0.3rem;
   border-radius: 100%;
-  font-size: 1.2rem;
-  line-height: 3rem;
-  position: relative;
-  bottom: 0.07rem;
 }
 </style>

@@ -38,6 +38,7 @@
             l2: $t($l2.name),
           })
         }}
+        <i class="fas fa-pro" v-if="item.title === 'Me' && pro"></i>
         <span class="nav-item-count" v-cloak v-if="item.count">{{ $n(item.count) }}</span>
         <span class="saved-words-count" v-cloak v-if="badge">
           {{ badge }}
@@ -115,6 +116,9 @@ export default {
     $l2() {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
+    },
+    pro() {
+      return [1, 4].includes(Number(this.$auth.user?.role)) ? true : false;
     },
     $adminMode() {
       if (typeof this.$store.state.settings.adminMode !== "undefined")

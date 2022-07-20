@@ -285,6 +285,9 @@ export default {
           window.matchMedia("(display-mode: standalone)").matches)
       );
     },
+    pro() {
+      return [1, 4].includes(Number(this.$auth.user?.role)) ? true : false;
+    },
     currentParent() {
       return this.findParent(this.$route.name);
     },
@@ -921,23 +924,22 @@ export default {
           ],
         },
         {
-          icon: "fas fa-ellipsis-h",
-          title: "More",
+          icon: "fas fa-circle-info",
+          title: "About",
           show: true,
           children: [
-            {
-              name: "settings",
-              icon: "fas fa-cog",
-              title: "Settings",
-              shortcut: (e) => e.code === "KeyS" && e.metaKey && e.shiftKey,
-              show: true,
-            },
             // {
             //   name: "discussions",
             //   icon: "fas fa-comment",
             //   show: true,
             //   title: "Forum",
             // },
+            {
+              name: "contact",
+              icon: "fas fa-id-card",
+              show: true,
+              title: "Contact Us",
+            },
             {
               name: "updates",
               title: "What’s New",
@@ -955,12 +957,6 @@ export default {
               icon: "fas fa-question-circle",
               show: true,
               title: "FAQ",
-            },
-            {
-              name: "contact",
-              icon: "fas fa-id-card",
-              show: true,
-              title: "Contact Us",
             },
             {
               name: "page",
@@ -1063,10 +1059,10 @@ export default {
             this.$auth.loggedIn &&
             this.$auth.user &&
             this.$auth.user.first_name
-              ? "Hi, " + this.$auth.user.first_name
+              ? "Me"
               : "Login"
           }`,
-          show: false,
+          show: true,
           exact: true,
           children: [
             {
@@ -1131,6 +1127,13 @@ export default {
                   title: "My Texts",
                   icon: "fas fa-edit",
                   show: this.$auth?.loggedIn,
+                },
+                {
+                  name: "settings",
+                  icon: "fas fa-cog",
+                  title: "Settings",
+                  shortcut: (e) => e.code === "KeyS" && e.metaKey && e.shiftKey,
+                  show: true,
                 },
               ],
             },
@@ -1589,6 +1592,26 @@ export default {
   text-align: center;
   .nav-item-bottom-bar {
     padding: 0.5rem;
+  }
+}
+
+.top-bar-user-button {
+  background: #5a5a5a;
+  width: 2.3rem;
+  height: 2.3rem;
+  display: inline-block;
+  vertical-align: middle;
+  border-radius: 100%;
+  font-size: 1.2rem;
+  line-height: 3rem;
+  position: relative;
+  bottom: 0.07rem;
+  .saved-words-count {
+    position: absolute;
+    font-size: 0.5em;
+    bottom: 18px;
+    top: inherit;
+    right: -5px;
   }
 }
 </style>

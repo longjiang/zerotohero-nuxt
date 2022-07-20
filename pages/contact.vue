@@ -14,7 +14,7 @@
 </router>
 <template>
   <div class="main">
-    <div class="container pt-5 pb-5">
+    <div class="container pb-5">
       <SocialHead :title="`Support and Contact | Language Player`" />
       <template>
         <div class="row">
@@ -24,36 +24,17 @@
         </div>
         <div class="row">
           <div class="col-12">
-            <h4 class="mb-5 text-center">Our “Team”</h4>
+            <h4 class="mb-5 text-center">Conctact Language Player</h4>
           </div>
         </div>
 
         <div class="row">
-          <div class="col-sm-6 mb-4" >
-            <div class="contact-block p-4" style="height: 100%">
-              <div class="mb-3">
-                <h5>Ken Dai</h5>
-                <div>Co-founder, sales &amp; operations</div>
-              </div>
-              <div>
-                <span>
-                  <strong>{{ $t("Email:") }}</strong>
-                  <a href="mailto:ken.dai@zerotohero.ca">
-                    ken.dai@zerotohero.ca
-                  </a>
-                </span>
-              </div>
-              <div>
-                <strong>{{ $t("WeChat:") }}</strong>
-                kendai9&nbsp;
-              </div>
-            </div>
-          </div>
           <div class="col-sm-6 mb-4">
             <div class="contact-block p-4"  style="height: 100%">
               <div class="mb-3">
-                <h5>Jiang Long</h5>
-                <div>Co-founder, instructor, designer &amp; dev</div>
+                <h5>Jiang (Jon) Long</h5>
+                <div>Co-founder, design &amp; dev</div>
+                <div><a href="https://www.sfu.ca/linguistics/events/2022/07/StudentProfile_JiangLong.html">Undergrad student at SFU (Linguistics)</a></div>
               </div>
               <div>
                 <strong>{{ $t("Email:") }}</strong>
@@ -75,6 +56,26 @@
               </div>
             </div>
           </div>
+          <!-- <div class="col-sm-6 mb-4" >
+            <div class="contact-block p-4" style="height: 100%">
+              <div class="mb-3">
+                <h5>Ken Dai</h5>
+                <div>Co-founder, Chinese Zero to Hero sales &amp; operations</div>
+              </div>
+              <div>
+                <span>
+                  <strong>{{ $t("Email:") }}</strong>
+                  <a href="mailto:ken.dai@zerotohero.ca">
+                    ken.dai@zerotohero.ca
+                  </a>
+                </span>
+              </div>
+              <div>
+                <strong>{{ $t("WeChat:") }}</strong>
+                kendai9&nbsp;
+              </div>
+            </div>
+          </div> -->
         </div>
         <div class="row mt-4">
           <div class="col-sm-12">
