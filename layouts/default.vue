@@ -42,6 +42,7 @@
             <client-only>
               <SiteTopBar
                 v-if="$route.params.l1 && $route.params.l1 && l1 && l2"
+                :skin="$route.meta.skin ? $route.meta.skin : 'light'"
                 variant="menu-bar"
                 :badge="savedWordsCount + savedPhrasesCount"
               />

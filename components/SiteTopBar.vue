@@ -1,13 +1,12 @@
 <template>
   <container-query :query="query" v-model="params">
     <div
-      :class="`site-top-bar site-top-bar-${variant}`"
+      :class="`site-top-bar site-top-bar-${variant} site-top-bar-${skin}`"
       @click.self="backgroundClick"
     >
       <div>
         <span
           style="
-            color: #ccc;
             cursor: pointer;
             margin-right: 0.5rem;
             position: relative;
@@ -21,7 +20,6 @@
         <b-button
           @click="$router.back()"
           variant="unstyled"
-          style="color: #ccc"
           v-if="$route.path !== '/' && params.lg !== false"
         >
           <i class="fas fa-chevron-left"></i>
@@ -30,7 +28,6 @@
         <router-link
           to="/dashboard"
           class="btn btn-unstyled ml-2"
-          style="color: #ccc"
           v-if="
             $auth.loggedIn &&
             $route.path !== '/dashboard' &&
@@ -57,7 +54,6 @@
             variant="unstyled"
             v-if="params.sm !== false && $route.params.l1 && $route.params.l2"
             title="Quick Settings"
-            style="color: #ccc"
             @click="showSettingsModal"
           >
             <i class="fas fa-cog"></i>
@@ -69,7 +65,6 @@
             v-if="params.md !== false && $route.params.l2"
           >
             <span
-              :class="`text-white`"
               @click="showPlaylistModal"
               class="language-flag-and-name"
               style="cursor: pointer"
@@ -221,6 +216,9 @@ export default {
     badge: {
       type: [String, Number],
     },
+    skin: {
+      default: "light", // or "dark"
+    },
   },
   computed: {
     ...mapState("fullHistory", ["fullHistory"]),
@@ -352,18 +350,29 @@ export default {
   width: 100%;
   z-index: 20;
   line-height: 2.3;
-  background-color: rgb(29, 29, 29);
   padding: calc(env(safe-area-inset-top) + 0.25rem) 0.75rem 0.25rem 0.75rem;
-
+  color: #666;
   a {
-    color: #ccc;
     line-height: 2.3rem;
-
-    &:hover {
-      color: white;
+  }
+  &.site-top-bar-light {
+    background-color: white;
+    .btn, a {
+      color: #666;
+      &:hover {
+        color: black;
+      }
     }
   }
-
+  &.site-top-bar-dark {
+    background-color: black;
+    .btn, a {
+      color: #aaa;
+      &:hover {
+        color: white;
+      }
+    }
+  }
   .btn {
     margin: 0 0 0 0.3rem;
     padding: 0;
@@ -385,7 +394,6 @@ export default {
     text-align: left;
   }
 }
-
 
 .zerotohero-wide {
   .site-top-bar {
