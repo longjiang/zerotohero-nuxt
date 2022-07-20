@@ -1584,4 +1584,11 @@ export default {
 .logo {
   filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.5));
 }
+
+.nav-bottom-bar {
+  text-align: center;
+  .nav-item-bottom-bar {
+    padding: 0.5rem;
+  }
+}
 </style>
