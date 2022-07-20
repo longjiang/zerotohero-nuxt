@@ -624,7 +624,7 @@ export default {
   color: white;
   z-index: 999;
   right: -1.75rem;
-  top: 50vh;
+  bottom: 10rem;
   padding: 0.1rem 0.5rem;
   border-radius: 0.25rem 0.25rem 0 0;
 }
