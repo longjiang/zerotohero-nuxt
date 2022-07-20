@@ -1170,10 +1170,10 @@ export default {
     /* When the user scrolls down, hide the navbar. When the user scrolls up, show the navbar */
     /* https://www.w3schools.com/howto/howto_js_navbar_hide_scroll.asp */
     bindAutoHideBottomBarEvent() {
-      if (this.variant === 'bottom-bar' && this.autoHide) {
+      if (this.variant === "bottom-bar" && this.autoHide) {
         var prevScrollpos = window.pageYOffset;
         window.onscroll = () => {
-          if (this.variant === 'bottom-bar') {
+          if (this.variant === "bottom-bar") {
             var currentScrollPos = window.pageYOffset;
             if (prevScrollpos > currentScrollPos + 5) {
               this.hidden = false;
@@ -1367,6 +1367,12 @@ export default {
     width: 13rem;
     height: 100vh;
     z-index: 2;
+  }
+  .nav-menu-bar {
+    .secondary-nav {
+      width: calc(100vw - 13rem);
+      left: 13rem;
+    }
   }
 }
 

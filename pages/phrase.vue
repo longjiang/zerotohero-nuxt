@@ -226,8 +226,8 @@ export default {
     background: hsl(0deg 0% 0% / 23%);
     position: fixed;
     top: 0;
-    left: 26rem;
-    width: calc(100vw - 26rem);
+    left: 13rem;
+    width: calc(100vw - 13rem);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     z-index: 9;

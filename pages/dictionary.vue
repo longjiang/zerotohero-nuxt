@@ -516,20 +516,16 @@ export default {
 .dictionary-wide {
   .dictionary-search-bar {
     padding: 1rem;
-    background: hsl(0deg 0% 0% / 23%);
-    position: fixed;
     top: 0;
-    left: 26rem;
-    width: calc(100vw - 26rem);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    left: 13rem;
+    width: calc(100vw - 13rem);
     z-index: 9;
+    padding-top: 4rem;
   }
 
   .content-pane-left {
     overflow-y: scroll;
     padding: 1rem;
-    padding-top: 5.2rem;
 
     ::v-deep .entry-word {
       font-size: 2rem;
@@ -551,7 +547,6 @@ export default {
 
   .content-pane-right {
     padding: 1rem;
-    padding-top: 4.5rem;
   }
 }
 

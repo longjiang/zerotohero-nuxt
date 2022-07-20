@@ -47,6 +47,7 @@
               :l2="l2"
               :key="`nav-main-${l1.code}-${l2.code}`"
               :variant="wide ? 'side-bar' : 'bottom-bar'"
+              :skin="$route.meta.skin ? $route.meta.skin : 'light'"
               @collapsed="updateCollapsed"
               level="main"
             />
@@ -65,6 +66,7 @@
               :key="`nav-secondary-${l1.code}-${l2.code}`"
               variant="menu-bar"
               level="secondary"
+              :skin="$route.meta.skin ? $route.meta.skin : 'light'"
             />
           </client-only>
           <div class="zth-content">

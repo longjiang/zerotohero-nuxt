@@ -1044,13 +1044,11 @@ button.bg-primary:focus {
     flex-wrap: nowrap;
     .content-pane-left {
       width: 21rem;
-      background: rgb(244 245 244);
       height: 100vh;
       position: sticky;
-      top: 0;
+      top: 2.5rem;
     }
     .content-pane-right {
-      background: white;
       padding: 0 1rem;
       width: 100%;
       overflow: hidden;
