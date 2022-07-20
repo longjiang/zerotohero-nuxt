@@ -5,39 +5,23 @@
       'zth-nav-dark': skin === 'dark',
       'zth-nav-menu-bar': variant === 'menu-bar',
       'zth-nav-side-bar': variant === 'side-bar',
+      'zth-nav-bottom': variant === 'bottom-bar',
       'zth-nav-page': variant === 'page',
       'zth-nav-collapsed': collapsed,
-      'zth-nav-bottom': bottom,
       'zth-nav-bottom-hidden': hidden,
-      'has-secondary-nav': currentParent && currentParent.children,
     }"
   >
-    <SiteTopBar
-      v-if="variant === 'side-bar'"
-      :variant="variant"
-      :badge="savedWordsCount + savedPhrasesCount"
-      @toggleCollapsed="toggleCollapsed"
-    />
     <div
       :class="{
         'nav-menu-bar': variant === 'menu-bar',
         'nav-side-bar': variant === 'side-bar',
         'nav-page': variant === 'page',
+        'nav-bottom-bar': variant === 'bottom-bar',
       }"
     >
-      <template v-if="variant === 'menu-bar' || variant === 'side-bar'">
-        <nav :class="{ 'main-nav': true }">
-          <!-- <div class="zth-header" v-if="showLogo">
-            <LanguageLogo
-              v-if="l1 && l2"
-              :l1="l1"
-              :l2="l2"
-              branded="true"
-              :icon="collapsed && variant === 'side-bar'"
-              style="margin: 1.25rem 0 0.25rem 0"
-            />
-          </div> -->
-          <div v-if="showMainNav" :class="{ 'main-nav-items': true }">
+      <template v-if="variant !== 'page'">
+        <nav v-if="level === 'main'" :class="{ 'main-nav': true }">
+          <div :class="{ 'main-nav-items': true }">
             <template
               v-for="(item, index) in menu.filter(
                 (item) => item.show && to(item)
@@ -48,7 +32,7 @@
                 :to="to(item)"
                 :item="item"
                 :level="1"
-                :mode="mode"
+                :variant="variant"
                 :key="`nav-${index}`"
                 :active="
                   currentParent &&
@@ -63,8 +47,8 @@
               />
             </template>
           </div>
-          <div
-            v-if="showMainNav && variant === 'side-bar' && !collapsed"
+          <!-- <div
+            v-if="level === 'main' && variant === 'side-bar' && !collapsed"
             class="end-nav"
           >
             <div v-if="$l2.logo" class="icon-description">
@@ -80,40 +64,43 @@
               <b>{{ $l2.name }} ({{ $l2.code }})</b>
               .
             </div>
-          </div>
+          </div> -->
         </nav>
         <nav
-          v-if="showSecondaryNav && currentParent && currentParent.children"
+          v-else-if="
+            level === 'secondary' && currentParent && currentParent.children
+          "
           class="secondary-nav"
         >
           <!-- secondary nav items -->
-
-          <router-link
-            v-for="(child, index) in currentParent.children.filter(
-              (child) => child.show
-            )"
-            :to="last(child) || child"
-            :key="`subnav-item-${child.name || child.href}-${index}`"
-            v-slot="{ href, route, navigate, isActive, isExactActive }"
-            custom
-          >
-            <NavItem
-              :mode="mode"
-              :to="route.path"
-              :item="child"
-              :level="2"
-              :showIcon="variant === 'side-bar'"
-              :active="isExactActive"
-              :badge="
-                child.name === 'saved-words' && savedWordsCount > 0
-                  ? savedWordsCount
-                  : child.name === 'saved-phrases' && savedPhrasesCount > 0
-                  ? savedPhrasesCount
-                  : undefined
-              "
-              :href="child.href"
-            />
-          </router-link>
+          <div class="secondary-nav-items">
+            <router-link
+              v-for="(child, index) in currentParent.children.filter(
+                (child) => child.show
+              )"
+              :to="last(child) || child"
+              :key="`subnav-item-${child.name || child.href}-${index}`"
+              v-slot="{ href, route, navigate, isActive, isExactActive }"
+              custom
+            >
+              <NavItem
+                :mode="mode"
+                :to="route.path"
+                :item="child"
+                :level="2"
+                :showIcon="variant === 'side-bar'"
+                :active="isExactActive"
+                :badge="
+                  child.name === 'saved-words' && savedWordsCount > 0
+                    ? savedWordsCount
+                    : child.name === 'saved-phrases' && savedPhrasesCount > 0
+                    ? savedPhrasesCount
+                    : undefined
+                "
+                :href="child.href"
+              />
+            </router-link>
+          </div>
         </nav>
       </template>
       <template v-if="variant === 'page'">
@@ -176,12 +163,11 @@ export default {
     l2: {
       type: Object,
     },
+    level: {
+      default: "main", // or "secondary" - which level to show
+    },
     variant: {
       default: "menu-bar", // or 'page' (flattened grid), 'side-bar' (on wide screen), or 'bottom-bar' (on small screen)
-    },
-    bottom: {
-      type: Boolean,
-      default: false,
     },
     skin: {
       default: "light", // or 'dark'
@@ -198,14 +184,6 @@ export default {
       default: true,
     },
     showHeader: {
-      type: Boolean,
-      default: true,
-    },
-    showMainNav: {
-      type: Boolean,
-      default: true,
-    },
-    showSecondaryNav: {
       type: Boolean,
       default: true,
     },
@@ -275,7 +253,7 @@ export default {
   },
   computed: {
     ...mapState("fullHistory", ["fullHistory"]),
-    ...mapState('shows', ['categories']),
+    ...mapState("shows", ["categories"]),
     fullHistoryPathsByL1L2() {
       return this.$store.getters["fullHistory/fullHistoryPathsByL1L2"]({
         l1: this.l1,
@@ -324,9 +302,12 @@ export default {
     },
     levels() {
       // Levels feature works for Chinese, German, English, Spanish, French and Arabic only
-      if (this.$l2 && ['zh', 'de', 'en', 'es', 'fr', 'ar'].includes(this.$l2.code)) {
+      if (
+        this.$l2 &&
+        ["zh", "de", "en", "es", "fr", "ar"].includes(this.$l2.code)
+      ) {
         return languageLevels(this.$l2);
-      } else return {}
+      } else return {};
     },
     menu() {
       let items = [
@@ -1189,10 +1170,10 @@ export default {
     /* When the user scrolls down, hide the navbar. When the user scrolls up, show the navbar */
     /* https://www.w3schools.com/howto/howto_js_navbar_hide_scroll.asp */
     bindAutoHideBottomBarEvent() {
-      if (this.bottom && this.autoHide) {
+      if (this.variant === 'bottom-bar' && this.autoHide) {
         var prevScrollpos = window.pageYOffset;
         window.onscroll = () => {
-          if (this.bottom) {
+          if (this.variant === 'bottom-bar') {
             var currentScrollPos = window.pageYOffset;
             if (prevScrollpos > currentScrollPos + 5) {
               this.hidden = false;
@@ -1386,15 +1367,6 @@ export default {
     width: 13rem;
     height: 100vh;
     z-index: 2;
-    &.has-secondary-nav {
-      width: 26rem;
-    }
-    &.zth-nav-collapsed {
-      width: 4.5rem;
-      &.has-secondary-nav {
-        width: 9rem;
-      }
-    }
   }
 }
 
@@ -1509,10 +1481,6 @@ export default {
 
   .main-nav {
     width: 100%;
-
-    .has-secondary-nav & {
-      width: 50%;
-    }
 
     margin: 0;
     position: relative;

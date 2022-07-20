@@ -595,18 +595,10 @@ export default {
     overflow: visible;
     width: calc(100% - 13rem);
   }
-  .zth-main-nav-wrapper.has-secondary-nav + .zth-content {
-    margin-left: 26rem;
-    width: calc(100% - 26rem);
-  }
   &.zerotohero-wide-collapsed {
     .zth-content {
       margin-left: 4.5rem;
       width: calc(100% - 4.5rem);
-    }
-    .zth-main-nav-wrapper.has-secondary-nav + .zth-content {
-      margin-left: 9rem;
-      width: calc(100% - 9rem);
     }
   }
 }
