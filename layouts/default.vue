@@ -1,9 +1,7 @@
 <template>
   <div id="zerotohero" :class="classes">
     <div>
-      <a :href="feedbackMailToURL" class="feedback-button">
-        Feedback
-      </a>
+      <a :href="feedbackMailToURL" class="feedback-button">Feedback</a>
       <div
         class="zerotohero-background"
         :style="`background-image: url(${background})`"
@@ -17,8 +15,8 @@
         "
       >
         <!-- <delay-hydration> -->
-        <div>
-          <Nuxt id="main" />
+        <div id="main">
+          <Nuxt class="nuxt-content" />
         </div>
         <!-- </delay-hydration> -->
       </template>
@@ -29,12 +27,7 @@
           <client-only>
             <!-- Main nav - side bar on wide screen, bottom bar on small screen /-->
             <Nav
-              v-if="
-                $route.params.l1 &&
-                $route.params.l2 &&
-                l1 &&
-                l2
-              "
+              v-if="$route.params.l1 && $route.params.l2 && l1 && l2"
               class="zth-main-nav-wrapper"
               :l1="l1"
               :l2="l2"
@@ -44,23 +37,6 @@
               @collapsed="updateCollapsed"
               level="main"
             />
-            <!-- Secondary nav (hidden for youtube-view) /-->
-            <Nav
-              v-if="
-                $route.params.l1 &&
-                $route.params.l2 &&
-                l1 &&
-                l2 &&
-                !($route.name === 'youtube-view')
-              "
-              class="zth-secondary-nav-wrapper"
-              :l1="l1"
-              :l2="l2"
-              :key="`nav-secondary-${l1.code}-${l2.code}`"
-              variant="menu-bar"
-              level="secondary"
-              :skin="$route.meta.skin ? $route.meta.skin : 'light'"
-            />
           </client-only>
           <div class="zth-content">
             <client-only>
@@ -68,6 +44,23 @@
                 v-if="$route.params.l1 && $route.params.l1 && l1 && l2"
                 variant="menu-bar"
                 :badge="savedWordsCount + savedPhrasesCount"
+              />
+              <!-- Secondary nav (hidden for youtube-view) /-->
+              <Nav
+                v-if="
+                  $route.params.l1 &&
+                  $route.params.l2 &&
+                  l1 &&
+                  l2 &&
+                  !($route.name === 'youtube-view')
+                "
+                class="zth-secondary-nav-wrapper"
+                :l1="l1"
+                :l2="l2"
+                :key="`nav-secondary-${l1.code}-${l2.code}`"
+                variant="menu-bar"
+                level="secondary"
+                :skin="$route.meta.skin ? $route.meta.skin : 'light'"
               />
             </client-only>
             <YouTubeViewComp
@@ -84,7 +77,9 @@
               }"
               @close="overlayPlayerClose"
             />
-            <Nuxt id="main" v-if="overlayPlayerMinimized" />
+            <div id="main" v-if="overlayPlayerMinimized">
+              <Nuxt class="nuxt-content" />
+            </div>
           </div>
         </div>
         <!-- </delay-hydration> -->
@@ -147,7 +142,7 @@ export default {
           ? this.host + this.fullHistory[this.fullHistory.length - 2].path
           : "(None available)";
       let currentURL = this.host + this.$route.fullPath;
-      return `mailto:jon.long@zerotohero.ca?subject=Feedback%20on%20Language%20Player&body=Your%20feedback%20on%20Language%20Player%3A%0D%0A%0D%0A%0D%0A%0D%0A%0D%0APlease%20attach%20a%20screenshot%20or%20screen%20recording%20(with%20your%20voice%20explaining%20your%20suggestion)%3A%0D%0A%0D%0A%0D%0A%0D%0A%0D%0A%0D%0A*%20*%20*%0D%0A%0D%0ADiagnostic%20information%3A%0D%0A%0D%0AUser%20email%3A%20${userEmail}%0D%0ACurrent%20URL%3A%20${currentURL}%0D%0APrevious%20URL%3A%20${previousURL}`
+      return `mailto:jon.long@zerotohero.ca?subject=Feedback%20on%20Language%20Player&body=Your%20feedback%20on%20Language%20Player%3A%0D%0A%0D%0A%0D%0A%0D%0A%0D%0APlease%20attach%20a%20screenshot%20or%20screen%20recording%20(with%20your%20voice%20explaining%20your%20suggestion)%3A%0D%0A%0D%0A%0D%0A%0D%0A%0D%0A%0D%0A*%20*%20*%0D%0A%0D%0ADiagnostic%20information%3A%0D%0A%0D%0AUser%20email%3A%20${userEmail}%0D%0ACurrent%20URL%3A%20${currentURL}%0D%0APrevious%20URL%3A%20${previousURL}`;
     },
     fullHistoryPathsByL1L2() {
       return this.$store.getters["fullHistory/fullHistoryPathsByL1L2"]({
@@ -547,7 +542,6 @@ export default {
     width: 100%;
   }
   &:not(.route-youtube-view):not(.route-learning-path) .zth-content {
-    padding-top: 4rem;
     padding-bottom: 5rem;
   }
 }
@@ -577,10 +571,22 @@ export default {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+
     #main {
+      min-height: calc(100vh - 250px);
+      padding-top: 3rem;
+      padding-bottom: 7rem;
       flex: 1;
     }
   }
+}
+
+.zerotohero-light #main {
+  background: white;
+}
+
+.zerotohero-dark #main {
+  background: black;
 }
 
 .zerotohero-with-mini-player {
@@ -624,7 +630,7 @@ export default {
   color: white;
   z-index: 999;
   right: -1.75rem;
-  bottom: 10rem;
+  bottom: 12rem;
   padding: 0.1rem 0.5rem;
   border-radius: 0.25rem 0.25rem 0 0;
 }

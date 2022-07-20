@@ -665,10 +665,8 @@ export default {
   }
 }
 
-.zerotohero-not-wide {
-  .toggle-wrapper.maximized {
-    top: calc(env(safe-area-inset-top) + 3rem);
-  }
+.toggle-wrapper.maximized {
+  top: calc(env(safe-area-inset-top) + 3rem);
 }
 
 .zerotohero-wide {

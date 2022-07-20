@@ -529,11 +529,6 @@ export default {
   height: auto;
 }
 
-#zerotohero:not(.zerotohero-wide) {
-  .speech-bar {
-    top: calc(env(safe-area-inset-top, 0) + 7rem);
-  }
-}
 
 .annotated-line {
   color: black;

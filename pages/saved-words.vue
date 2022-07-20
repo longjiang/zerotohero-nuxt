@@ -307,9 +307,7 @@ export default {
   top: 0;
 }
 
-.zerotohero-not-wide {
-  .hide-defs {
-    top: 2.9rem;
-  }
+.hide-defs {
+  top: 3rem;
 }
 </style>
