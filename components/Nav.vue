@@ -21,6 +21,7 @@
     >
       <template v-if="variant !== 'page'">
         <nav v-if="level === 'main'" :class="{ 'main-nav': true }">
+          <Logo layout="horizontal" />
           <div :class="{ 'main-nav-items': true }">
             <template
               v-for="(item, index) in menu.filter(
