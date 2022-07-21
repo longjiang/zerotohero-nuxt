@@ -177,6 +177,7 @@ export default {
           this.$route.meta && this.$route.meta.skin === "light",
         "zerotohero-with-mini-player":
           this.overlayPlayerYouTubeId && this.overlayPlayerMinimized,
+        "zerotohero-with-nav": this.$route.params.l1 && this.$route.params.l2 && this.l1 && this.l2
       };
       classes[`route-${this.$route.name}`] = true;
       classes[`zerotohero-zoom-${this.zoomLevel}`] = true;

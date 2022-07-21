@@ -356,6 +356,12 @@ export default {
       width: calc(100% - 5rem);
     }
   }
+  &:not(.zerotohero-with-nav) {
+    .site-top-bar {
+      left: 0;
+      width: 100%;
+    }
+  }
 }
 
 .logo {
