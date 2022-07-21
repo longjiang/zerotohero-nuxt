@@ -14,7 +14,7 @@
           {{ $t("Back") }}
         </b-button>
       </div>
-      <span class="flex-1 text-center" v-if="">
+      <span class="flex-1 text-center" v-if="!wide">
         <router-link
           :to="$auth.loggedIn ? '/dashboard' : '/'"
           class="btn btn-unstyled ml-2"
@@ -292,6 +292,8 @@ export default {
   width: 100%;
   z-index: 20;
   line-height: 2.3;
+  position: fixed;
+  top: 0;
   padding: calc(env(safe-area-inset-top) + 0.25rem) 0.75rem 0.25rem 0.75rem;
   color: #777;
   font-size: 0.875rem;
@@ -344,9 +346,7 @@ export default {
 .zerotohero-wide {
   .site-top-bar {
     left: 13rem;
-    &.site-top-bar-menu-bar {
-      width: 100%;
-    }
+    width: calc(100% - 13rem)
   }
 }
 

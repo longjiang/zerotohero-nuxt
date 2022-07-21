@@ -45,6 +45,7 @@
                 :skin="$route.meta.skin ? $route.meta.skin : 'light'"
                 variant="menu-bar"
                 :badge="savedWordsCount + savedPhrasesCount"
+                :wide="wide"
               />
               <!-- Secondary nav (hidden for youtube-view) /-->
               <Nav

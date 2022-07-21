@@ -53,7 +53,10 @@
             </template>
           </div>
           <b-button variant="unstyled collapse-toggle" @click="toggleCollapsed">
-            <span v-if="!collapsed"><i class="fa-solid fa-caret-left mr-1"></i>Collapse Menu</span>
+            <span v-if="!collapsed">
+              <i class="fa-solid fa-caret-left mr-1"></i>
+              Collapse Menu
+            </span>
             <span v-else><i class="fa-solid fa-caret-right"></i></span>
           </b-button>
           <!-- <div
@@ -1388,12 +1391,6 @@ export default {
     height: 100vh;
     z-index: 2;
   }
-  .nav-menu-bar {
-    .secondary-nav {
-      width: calc(100vw - 13rem);
-      left: 13rem;
-    }
-  }
 }
 
 .main-nav {
@@ -1438,12 +1435,30 @@ export default {
   .zth-header {
     background: rgb(0, 0, 0);
   }
+}
+
+.secondary-nav {
+  width: 100vw;
+  white-space: nowrap;
+  overflow: scroll;
+  overflow-y: hidden;
+  text-align: center;
+  min-height: 61px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-bottom: 2rem;
+  position: fixed;
+  top: calc(env(safe-area-inset-top) + 2.9rem);
+  z-index: 19;
+  ::v-deep .nav-item-count {
+    display: none;
+  }
+}
+
+.zerotohero-wide {
   .secondary-nav {
-    padding: 1rem;
-    padding-bottom: 2rem;
-    position: fixed;
-    top: env(safe-area-inset-top) + 3rem;
-    z-index: 99;
+    width: calc(100vw - 13rem);
+    left: 13rem;
   }
 }
 
@@ -1454,18 +1469,6 @@ export default {
     .zth-header {
       text-align: center;
       padding-bottom: 1rem;
-    }
-  }
-
-  .secondary-nav {
-    width: 100vw;
-    white-space: nowrap;
-    overflow: scroll;
-    overflow-y: hidden;
-    text-align: center;
-    min-height: 61px;
-    ::v-deep .nav-item-count {
-      display: none;
     }
   }
 }
