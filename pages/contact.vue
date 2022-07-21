@@ -24,11 +24,12 @@
         </div>
         <div class="row">
           <div class="col-12">
-            <h4 class="mb-5 text-center">Conctact Language Player</h4>
+            <h4 class="mb-5 text-center">Contact Language Player</h4>
           </div>
         </div>
 
         <div class="row">
+          <div class="col-sm-3"></div>
           <div class="col-sm-6 mb-4">
             <div class="contact-block p-4"  style="height: 100%">
               <div class="mb-3">
@@ -56,6 +57,7 @@
               </div>
             </div>
           </div>
+          <div class="col-sm-3"></div>
           <!-- <div class="col-sm-6 mb-4" >
             <div class="contact-block p-4" style="height: 100%">
               <div class="mb-3">
@@ -87,7 +89,7 @@
             </div>
           </div>
         </div>
-        <div class="row" v-if="this.$l2.code === 'zh'">
+        <!-- <div class="row" v-if="this.$l2.code === 'zh'">
           <div class="col-sm-12">
             <h4 class="mt-5 mb-4 text-center">Chinese Language Chat</h4>
           </div>
@@ -118,7 +120,7 @@
           <div class="col-sm-12 col-md-6 mb-3">
             <TelegramPrompt bodyClasses="  p-4 " />
           </div>
-        </div>
+        </div> -->
       </template>
     </div>
   </div>
