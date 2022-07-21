@@ -21,7 +21,11 @@
     >
       <template v-if="variant !== 'page'">
         <nav v-if="level === 'main'" :class="{ 'main-nav': true }">
-          <Logo layout="horizontal" v-if="variant === 'side-bar'" class="ml-4 mt-4" />
+          <Logo
+            layout="horizontal"
+            v-if="variant === 'side-bar'"
+            class="ml-4 mt-4"
+          />
           <div :class="{ 'main-nav-items': true }">
             <template
               v-for="(item, index) in menu.filter(
@@ -48,7 +52,10 @@
               />
             </template>
           </div>
-          <b-button variant="unstyled" @click="toggleCollapsed">Collapse</b-button>
+          <b-button variant="unstyled collapse-toggle" @click="toggleCollapsed">
+            <i class="fa-solid fa-caret-left mr-1"></i>
+            Collapse Menu
+          </b-button>
           <!-- <div
             v-if="level === 'main' && variant === 'side-bar' && !collapsed"
             class="end-nav"
@@ -1615,5 +1622,16 @@ export default {
     top: inherit;
     right: -5px;
   }
+}
+
+.collapse-toggle {
+  background: rgb(255 255 255 / 20%);
+  margin-left: 1rem;
+  width: calc(100% - 2rem);
+  text-align: center;
+  position: absolute;
+  bottom: 0;
+  color: white;
+  text-shadow: rgba(0, 0, 0, 0.465) 0 1px 3px;
 }
 </style>
