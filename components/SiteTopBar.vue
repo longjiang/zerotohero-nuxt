@@ -28,18 +28,18 @@
       </div>
       <span class="flex-1 text-center">
         <router-link
-        to="/dashboard"
-        class="btn btn-unstyled ml-2"
-        v-if="
-          $auth.loggedIn &&
-          $route.path !== '/dashboard' &&
-          params.lg !== false
-        "
-        title="Dashboard"
-      >
-        <img src="/img/logo-play-circle-light.png" alt="" class="logo" data-not-lazy />
-        Language Player
-      </router-link>
+          :to="$auth.loggedIn ? '/dashboard' : '/'"
+          class="btn btn-unstyled ml-2"
+          title="Dashboard"
+        >
+          <img
+            src="/img/logo-play-circle-light.png"
+            alt=""
+            class="logo"
+            data-not-lazy
+          />
+          Language Player
+        </router-link>
       </span>
       <template v-if="$route.params.l1 && $route.params.l2">
         <div>
@@ -217,6 +217,9 @@ export default {
           window.matchMedia("(display-mode: standalone)").matches)
       );
     },
+    pro() {
+      return [1, 4].includes(Number(this.$auth.user?.role)) ? true : false;
+    },
     languageMapPath() {
       if (this.fullHistory) {
         let historyMatches = this.fullHistory
@@ -312,13 +315,15 @@ export default {
   line-height: 2.3;
   padding: calc(env(safe-area-inset-top) + 0.25rem) 0.75rem 0.25rem 0.75rem;
   color: #777;
-  font-size: .875rem;
-  .btn, a {
+  font-size: 0.875rem;
+  .btn,
+  a {
     line-height: 2.3rem;
   }
   &.site-top-bar-light {
     background-color: white;
-    .btn, a {
+    .btn,
+    a {
       color: #777;
       &:hover {
         color: black;
@@ -327,7 +332,8 @@ export default {
   }
   &.site-top-bar-dark {
     background-color: black;
-    .btn, a {
+    .btn,
+    a {
       color: #aaa;
       &:hover {
         color: white;

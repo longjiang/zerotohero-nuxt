@@ -35,11 +35,6 @@
               </div>
             </div>
           </div>
-          <div class="row">
-            <div class="col-sm-12">
-              <Logo class="mb-4" />
-            </div>
-          </div>
           <div :class="{ 'row mb-5': true }" v-if="hasDashboard">
             <div class="col-sm-12">
               <div class="home-card p-2 pt-4 pb-4 bg-white">
