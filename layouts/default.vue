@@ -573,7 +573,7 @@ export default {
 
     #main {
       min-height: calc(100vh - 250px);
-      padding-top: 3rem;
+      padding-top: 6rem;
       padding-bottom: 7rem;
       flex: 1;
     }
@@ -607,8 +607,8 @@ export default {
   }
   &.zerotohero-wide-collapsed {
     .zth-content {
-      margin-left: 4.5rem;
-      width: calc(100% - 4.5rem);
+      margin-left: 5rem;
+      width: calc(100% - 5rem);
     }
   }
 }

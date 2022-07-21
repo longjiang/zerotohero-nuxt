@@ -1,7 +1,9 @@
 <template>
   <container-query :query="query" v-model="params">
     <div
-      :class="`site-top-bar site-top-bar-${wide ? 'wide' : 'not-wide'} site-top-bar-${skin}`"
+      :class="`site-top-bar site-top-bar-${
+        wide ? 'wide' : 'not-wide'
+      } site-top-bar-${skin}`"
       @click.self="backgroundClick"
     >
       <div>
@@ -178,7 +180,8 @@ export default {
     };
   },
   props: {
-    wide: { // Whether or not the bar is displayed on a wide layout
+    wide: {
+      // Whether or not the bar is displayed on a wide layout
       type: Boolean,
       default: false,
     },
@@ -346,7 +349,13 @@ export default {
 .zerotohero-wide {
   .site-top-bar {
     left: 13rem;
-    width: calc(100% - 13rem)
+    width: calc(100% - 13rem);
+  }
+  &.zerotohero-wide-collapsed {
+    .site-top-bar {
+      left: 5rem;
+      width: calc(100% - 5rem);
+    }
   }
 }
 

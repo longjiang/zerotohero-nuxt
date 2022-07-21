@@ -24,7 +24,8 @@
           <Logo
             layout="horizontal"
             v-if="variant === 'side-bar'"
-            class="ml-4 mt-5"
+            class="mt-5"
+            style="margin-left: 1.25rem;"
           />
           <div :class="{ 'main-nav-items': true }">
             <template
@@ -1370,7 +1371,7 @@ export default {
 <style lang="scss" scoped>
 .zerotohero-wide {
   .zth-main-nav-wrapper.zth-nav-collapsed {
-    width: 4.5rem;
+    width: 5rem;
     ::v-deep .word-mark {
       display: none;
     }
@@ -1460,6 +1461,13 @@ export default {
     width: calc(100vw - 13rem);
     left: 13rem;
   }
+
+  &.zerotohero-wide-collapsed {
+    .secondary-nav {
+      width: calc(100vw - 5rem);
+      left: 5rem;
+    }
+  }
 }
 
 .nav-menu-bar {
@@ -1506,7 +1514,7 @@ export default {
   flex-wrap: nowrap;
   top: 0;
   left: 0;
-  height: calc(100% - 2.95rem);
+  height: 100%;
 
   .main-nav {
     width: 100%;
@@ -1541,8 +1549,7 @@ export default {
     }
 
     .main-nav-items {
-      padding-left: 1rem;
-      padding-top: 0.75rem;
+      padding: 1rem;
     }
 
     .end-nav {
@@ -1641,7 +1648,7 @@ export default {
   width: calc(100% - 2rem);
   text-align: center;
   position: absolute;
-  bottom: 0;
+  bottom: 1rem;
   color: white;
   text-shadow: rgba(0, 0, 0, 0.465) 0 1px 3px;
 }

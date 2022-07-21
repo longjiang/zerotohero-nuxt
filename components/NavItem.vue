@@ -226,7 +226,7 @@ export default {
 .nav-menu-bar {
   .main-nav {
     .main-nav-item {
-      border-radius: 0.3rem 0.3rem 0 0;
+      border-radius: 0.3rem;
       border-bottom: none;
       margin-right: 0.2rem;
       &.nav-item-bottom-bar {
@@ -308,7 +308,7 @@ export default {
   }
   .main-nav {
     .main-nav-item {
-      border-radius: 0.3rem 0 0 0.3rem;
+      border-radius: 0.3rem;
       border-right: 0;
       padding-left: 0.5rem;
       margin: 0.3rem 0;
