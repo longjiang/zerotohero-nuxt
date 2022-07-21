@@ -520,7 +520,6 @@ export default {
     left: 13rem;
     width: calc(100vw - 13rem);
     z-index: 9;
-    padding-top: 4rem;
   }
 
   .content-pane-left {

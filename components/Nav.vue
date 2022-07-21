@@ -53,7 +53,7 @@
               />
             </template>
           </div>
-          <b-button variant="unstyled collapse-toggle" @click="toggleCollapsed">
+          <b-button v-if="variant==='side-bar'" variant="unstyled collapse-toggle" @click="toggleCollapsed">
             <span v-if="!collapsed">
               <i class="fa-solid fa-caret-left mr-1"></i>
               Collapse Menu

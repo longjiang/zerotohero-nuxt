@@ -243,7 +243,6 @@ export default {
   }
   .secondary-nav-item {
     font-size: 0.9rem;
-    color: #ccc;
     .nav-item-icon {
       opacity: 0.4;
       margin-right: 0.5rem;

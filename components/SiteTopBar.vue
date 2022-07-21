@@ -4,7 +4,6 @@
       :class="`site-top-bar site-top-bar-${
         wide ? 'wide' : 'not-wide'
       } site-top-bar-${skin}`"
-      @click.self="backgroundClick"
     >
       <div>
         <b-button
