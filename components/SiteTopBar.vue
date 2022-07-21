@@ -188,7 +188,7 @@ export default {
       type: [String, Number],
     },
     skin: {
-      default: "light", // or "dark"
+      default: "dark", // or "light"
     },
   },
   computed: {

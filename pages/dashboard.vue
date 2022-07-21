@@ -72,6 +72,7 @@
 
 <script>
 import { mapState } from "vuex";
+import { background } from '@/lib/utils/background'
 
 export default {
   data() {
@@ -82,9 +83,7 @@ export default {
   computed: {
     ...mapState("fullHistory", ["fullHistory"]),
     background() {
-      let dayOfMonth = new Date().getDate()
-      dayOfMonth = dayOfMonth % 31 + 1
-      return `/img/backgrounds/background-${dayOfMonth}.jpg`
+      return background()
     },
     hasDashboard() {
       return (

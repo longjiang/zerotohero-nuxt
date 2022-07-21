@@ -127,6 +127,7 @@
 <script>
 import { Capacitor } from "@capacitor/core";
 import { mapState } from "vuex";
+import { background } from '@/lib/utils/background'
 
 export default {
   data() {
@@ -144,8 +145,7 @@ export default {
   computed: {
     ...mapState("fullHistory", ["fullHistory"]),
     background() {
-      let dayOfMonth = new Date().getDate()
-      return `/img/backgrounds/background-${dayOfMonth}.jpg`
+      return background()
     },
     lastFullHistoryPath() {
       if (this.fullHistory) {
