@@ -21,7 +21,7 @@
     >
       <template v-if="variant !== 'page'">
         <nav v-if="level === 'main'" :class="{ 'main-nav': true }">
-          <Logo layout="horizontal" />
+          <Logo layout="horizontal" v-if="variant === 'side-bar'" class="ml-4 mt-4" />
           <div :class="{ 'main-nav-items': true }">
             <template
               v-for="(item, index) in menu.filter(
@@ -48,6 +48,7 @@
               />
             </template>
           </div>
+          <b-button variant="unstyled" @click="toggleCollapsed">Collapse</b-button>
           <!-- <div
             v-if="level === 'main' && variant === 'side-bar' && !collapsed"
             class="end-nav"

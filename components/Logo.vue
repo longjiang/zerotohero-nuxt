@@ -1,6 +1,6 @@
 <template>
   <div :class="`z2h-logo z2h-logo-${skin} z2h-logo-${layout}`">
-    <router-link to="/" class="link-unstyled">
+    <router-link :to="$auth.loggedIn ? '/dashboard' : '/'" class="link-unstyled">
       <div class="z2h-icon-wrapper">
         <img
           src="/img/logo-play-circle-light.png"

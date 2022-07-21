@@ -1,22 +1,10 @@
 <template>
   <container-query :query="query" v-model="params">
     <div
-      :class="`site-top-bar site-top-bar-${variant} site-top-bar-${skin}`"
+      :class="`site-top-bar site-top-bar-${wide ? 'wide' : 'not-wide'} site-top-bar-${skin}`"
       @click.self="backgroundClick"
     >
       <div>
-        <span
-          style="
-            cursor: pointer;
-            margin-right: 0.5rem;
-            position: relative;
-            bottom: -0.1rem;
-          "
-          @click="collapseClick"
-          :class="{ 'd-none': variant === 'menu-bar' }"
-        >
-          <i class="fas fa-bars"></i>
-        </span>
         <b-button
           @click="$router.back()"
           variant="unstyled"
@@ -26,7 +14,7 @@
           {{ $t("Back") }}
         </b-button>
       </div>
-      <span class="flex-1 text-center">
+      <span class="flex-1 text-center" v-if="">
         <router-link
           :to="$auth.loggedIn ? '/dashboard' : '/'"
           class="btn btn-unstyled ml-2"
@@ -190,8 +178,9 @@ export default {
     };
   },
   props: {
-    variant: {
-      default: "menu-bar",
+    wide: { // Whether or not the bar is displayed on a wide layout
+      type: Boolean,
+      default: false,
     },
     badge: {
       type: [String, Number],
@@ -272,16 +261,6 @@ export default {
       this.$refs["settings-modal"].hide();
     },
     onLanguagesModalShown() {},
-    backgroundClick() {
-      if (this.variant === "menu-bar") this.scrollToTop();
-    },
-    collapseClick() {
-      if (this.variant === "side-bar") this.toggleCollapsed();
-      else this.scrollToTop();
-    },
-    toggleCollapsed() {
-      this.$emit("toggleCollapsed");
-    },
     scrollToTop() {
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
