@@ -13,6 +13,10 @@
       title="Language Player | Master any language by comprehensible input."
       description="We provide TV shows with subtitles, music with lyrics, live TV channels, phrasebooks with video examples... everything that can help you to learn a language “by osmosis.” Our company, Zero to Hero Education, is also known for our “Chinese Zero to Hero” and “English Zero to Hero” online language courses."
     />
+    <div
+        class="zerotohero-background"
+        :style="`background-image: url(${background})`"
+      />
     <div class="gradient-backdrop"></div>
     <div class="gradient-backdrop-2"></div>
     <div
@@ -139,6 +143,10 @@ export default {
   },
   computed: {
     ...mapState("fullHistory", ["fullHistory"]),
+    background() {
+      let dayOfMonth = new Date().getDate()
+      return `/img/backgrounds/background-${dayOfMonth}.jpg`
+    },
     lastFullHistoryPath() {
       if (this.fullHistory) {
         let lastFullHistoryItem = this.fullHistory[this.fullHistory.length - 1];

@@ -1214,3 +1214,15 @@ button.bg-primary:focus {
     color: #88888877;
   }
 }
+
+.zerotohero-background {
+  height: 100vh;
+  width: 100vw;
+  background-color: #000;
+  background-attachment: initial;
+  background-position: center;
+  background-size: cover;
+  position: fixed;
+  top: 0;
+  left: 0;
+}

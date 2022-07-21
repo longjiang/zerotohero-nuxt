@@ -1,12 +1,8 @@
 <template>
   <div id="zerotohero" :class="classes">
+    
     <div>
       <a :href="feedbackMailToURL" class="feedback-button">Feedback</a>
-      <div
-        class="zerotohero-background"
-        :style="`background-image: url(${background})`"
-        v-if="wide || !($route.params.l1 && $route.params.l1 && l1 && l2)"
-      />
 
       <template
         v-if="
@@ -200,11 +196,6 @@ export default {
         if (this.l2.han) classes["l2-zh"] = true;
       }
       return classes;
-    },
-    background() {
-      return this.$route.params.l2
-        ? Helper.background(this.l2)
-        : Helper.background();
     },
   },
   created() {
@@ -555,18 +546,6 @@ export default {
 
 #zerotohero {
   min-height: 100vh;
-  .zerotohero-background {
-    height: 100vh;
-    width: 100vw;
-    background-color: #000;
-    background-attachment: initial;
-    background-position: center;
-    background-size: cover;
-    z-index: -1;
-    position: fixed;
-    top: 0;
-    left: 0;
-  }
   .zth-content {
     display: flex;
     flex-direction: column;

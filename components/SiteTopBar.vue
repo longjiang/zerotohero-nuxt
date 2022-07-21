@@ -17,7 +17,7 @@
       </div>
       <span class="flex-1 text-center" v-if="!wide">
         <router-link
-          :to="$auth.loggedIn ? '/dashboard' : '/'"
+          :to="$auth.loggedIn ? $route.path === '/dashboard' ? '/' : '/dashboard' : '/'"
           class="btn btn-unstyled ml-2"
           title="Dashboard"
         >
@@ -307,7 +307,7 @@ export default {
     background-color: white;
     .btn,
     a {
-      color: #777;
+      color: #000000aa;
       &:hover {
         color: black;
       }
@@ -317,7 +317,7 @@ export default {
     background-color: black;
     .btn,
     a {
-      color: #aaa;
+      color: #ffffffaa;
       &:hover {
         color: white;
       }

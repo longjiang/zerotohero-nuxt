@@ -3,17 +3,22 @@
     name: 'dashboard',
     path: '/dashboard',
     meta: {
-      layout: 'full'
+      layout: 'full',
+      skin: 'dark'
     }
   }
 </router>
 <template>
   <div>
     <client-only>
-      <SiteTopBar />
+      <SiteTopBar skin="dark" />
       <SocialHead
         title="Language Player | Master any language by comprehensible input."
         description="We provide TV shows with subtitles, music with lyrics, live TV channels, phrasebooks with video examples... everything that can help you to learn a language “by osmosis.” Our company, Zero to Hero Education, is also known for our “Chinese Zero to Hero” and “English Zero to Hero” online language courses."
+      />
+      <div
+        class="zerotohero-background"
+        :style="`background-image: url(${background})`"
       />
       <div class="gradient-backdrop"></div>
       <div class="gradient-backdrop-2"></div>
@@ -22,7 +27,7 @@
         style="overflow: hidden; position: relative"
       >
         <div class="container pt-5 pb-5">
-          <div class="row">
+          <div class="row mt-5">
             <div class="col-sm-12">
               <div class="mt-5 text-center mb-5" v-if="!loaded">
                 <p>App is asleep due to inactivity.</p>
@@ -76,6 +81,11 @@ export default {
   },
   computed: {
     ...mapState("fullHistory", ["fullHistory"]),
+    background() {
+      let dayOfMonth = new Date().getDate()
+      dayOfMonth = dayOfMonth % 31 + 1
+      return `/img/backgrounds/background-${dayOfMonth}.jpg`
+    },
     hasDashboard() {
       return (
         this.$auth.loggedIn &&

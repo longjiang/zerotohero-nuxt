@@ -21,11 +21,16 @@
     >
       <template v-if="variant !== 'page'">
         <nav v-if="level === 'main'" :class="{ 'main-nav': true }">
+          <div
+            class="zerotohero-background"
+            :style="`background-image: url(${background}); z-index: -1; filter: blur(20px); transform: scale(1.1)`"
+            v-if="variant === 'side-bar'"
+          />
           <Logo
             layout="horizontal"
             v-if="variant === 'side-bar'"
             class="mt-5"
-            style="margin-left: 1.25rem;"
+            style="margin-left: 1.25rem"
           />
           <div :class="{ 'main-nav-items': true }">
             <template
@@ -53,7 +58,11 @@
               />
             </template>
           </div>
-          <b-button v-if="variant==='side-bar'" variant="unstyled collapse-toggle" @click="toggleCollapsed">
+          <b-button
+            v-if="variant === 'side-bar'"
+            variant="unstyled collapse-toggle"
+            @click="toggleCollapsed"
+          >
             <span v-if="!collapsed">
               <i class="fa-solid fa-caret-left mr-1"></i>
               Collapse Menu
@@ -167,6 +176,7 @@ feature-card-name-${child.name}`"
 import { Capacitor } from "@capacitor/core";
 import { mapState } from "vuex";
 import { languageLevels } from "@/lib/utils/language-levels";
+import { background } from "@/lib/utils/background";
 
 export default {
   props: {
@@ -267,6 +277,9 @@ export default {
   computed: {
     ...mapState("fullHistory", ["fullHistory"]),
     ...mapState("shows", ["categories"]),
+    background() {
+      return background(this.l2);
+    },
     fullHistoryPathsByL1L2() {
       return this.$store.getters["fullHistory/fullHistoryPathsByL1L2"]({
         l1: this.l1,
