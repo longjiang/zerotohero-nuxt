@@ -24,7 +24,7 @@
           <Logo
             layout="horizontal"
             v-if="variant === 'side-bar'"
-            class="ml-4 mt-4"
+            class="ml-4 mt-5"
           />
           <div :class="{ 'main-nav-items': true }">
             <template
@@ -53,8 +53,8 @@
             </template>
           </div>
           <b-button variant="unstyled collapse-toggle" @click="toggleCollapsed">
-            <i class="fa-solid fa-caret-left mr-1"></i>
-            Collapse Menu
+            <span v-if="!collapsed"><i class="fa-solid fa-caret-left mr-1"></i>Collapse Menu</span>
+            <span v-else><i class="fa-solid fa-caret-right"></i></span>
           </b-button>
           <!-- <div
             v-if="level === 'main' && variant === 'side-bar' && !collapsed"
@@ -1365,6 +1365,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.zerotohero-wide {
+  .zth-main-nav-wrapper.zth-nav-collapsed {
+    width: 4.5rem;
+    ::v-deep .word-mark {
+      display: none;
+    }
+  }
+}
 .zth-main-nav-wrapper.zth-nav-side-bar {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
