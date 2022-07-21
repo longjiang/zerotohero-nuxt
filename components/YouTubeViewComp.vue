@@ -697,7 +697,7 @@ export default {
     height: 100vh;
     background-color: black;
     color: #ffffffaa;
-    z-index: 9;
+    z-index: 21;
   }
 }
 </style>

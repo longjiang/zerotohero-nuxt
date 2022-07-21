@@ -642,12 +642,6 @@ export default {
   top: calc(env(safe-area-inset-top, 0) + 2.7rem);
 }
 
-.zerotohero-wide {
-  .youtube-video-wrapper {
-    top: 0;
-  }
-}
-
 .youtube-with-transcript-horizontal {
   .youtube-video-column {
     position: sticky;
@@ -656,7 +650,7 @@ export default {
   }
 }
 
-#zerotohero:not(.zerotohero-wide) {
+#zerotohero {
   .youtube-with-transcript-horizontal .youtube-video-column {
     top: calc(env(safe-area-inset-top, 0) + 2.7rem);
   }
@@ -675,6 +669,11 @@ export default {
     flex: 1;
   }
 }
+
+.youtube-transcript-column {
+  padding-top: 2.7rem;
+}
+
 
 .youtube-transcript-column {
   width: 100%;
