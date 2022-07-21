@@ -81,7 +81,82 @@ const Dictionary = {
     const map = new Map(kvArray);
     return Array.from(map.values());
   },
+  subdict(data) {
+    let newDict = Object.assign({}, this);
+    return Object.assign(newDict, { words: data });
+  },
+  subdictFromText(text) {
+    let search = text.toLowerCase();
+    let subdictFilterFunction = row => {
+      if (this.accentCritical) {
+        return text.includes(row.head) || search.includes(row.head);
+      } else {
+        let headMatches = text.includes(row.head);
+        let searchMatches =
+          row.search.length > 0 && search.includes(row.search);
+        let found = headMatches || searchMatches;
+        return found;
+      }
+    };
+    let words = this.words.filter(subdictFilterFunction);
+    return this.subdict(words);
+  },
   tokenize(text) {
+    if (this.tokenizationCache[text]) return this.tokenizationCache[text];
+    let subdict = this.subdictFromText(text);
+    let tokenized = this.tokenizeRecursively(text, subdict);
+    if (["tur"].includes(this.l2)) this.tokenizationCache[text] = tokenized;
+    return tokenized;
+  },
+  tokenizeRecursively(text, subdict) {
+    const longest = subdict.longest(text);
+    if (longest.matches?.length > 0) {
+      for (let word of longest.matches) {
+        longest.matches = this.stemWordsWithScores(word, 1).map(w => w.w).concat(longest.matches);
+        // longest.matches = longest.matches.concat(this.phrasesWithScores(word, 1)) // This is very slow
+      }
+      let result = [];
+      /*
+      result = [
+        '我',
+        {
+          text: '是'
+          candidates: [{...}, {...}, {...}
+        ],
+        '中国人。'
+      ]
+      */
+      for (let textFragment of text.split(longest.text)) {
+        result.push(textFragment); // '我'
+        result.push({
+          text: longest.text,
+          candidates: longest.matches
+        });
+      }
+      result = result.filter(item => {
+        if (typeof item === "string") {
+          return item !== "";
+        } else {
+          return item.text !== "";
+        }
+      });
+      result.pop(); // last item is always useless, remove it
+      var tokens = [];
+      for (let item of result) {
+        if (typeof item === "string" && item !== text) {
+          for (let token of this.tokenizeRecursively(item, subdict)) {
+            tokens.push(token);
+          }
+        } else {
+          tokens.push(item);
+        }
+      }
+      return tokens;
+    } else {
+      return [text];
+    }
+  },
+  tokenizeIntegral(text) {
     if (this.tokenizationCache[text]) return this.tokenizationCache[text]
     text = text.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // strip accents e.g. résumé -> resume
     tokenized = [];
@@ -275,6 +350,7 @@ const Dictionary = {
       id: id,
       bare: row.word,
       accented: row.word,
+      search: row.word.toLowerCase(),
       head: row.word,
       pronunciation: row.phonetic.replace(/:/g, 'ː').replace(/,/g, 'ˌ').replace(/'/g, 'ˈ').replace(/i(?!ː)/g, 'ɪ'),
       definitions: row.translation ? row.translation.split('\\n') : [],
