@@ -88,15 +88,6 @@
         piece of text in the language? Or perhaps even an audiobook?
       </li>
     </ul>
-    <h6 class="mt-4">Be a hero, help to spread the fire of language.</h6>
-    <hr />
-    <div>
-      Questions? Mention me on Twitter
-      <a href="https://twitter.com/panlingo" target="_blank">
-        <u>@panlingo</u>
-      </a>
-      and I'll help you out. Thanks for contributing!
-    </div>
   </div>
 </template>
 

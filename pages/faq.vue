@@ -96,12 +96,7 @@
                   <b>Contact us to have your videos blacklisted.</b>
                   If the above two options don't work for you, you can contact
                   us to have some all of your videos "blacklisted" and never
-                  again show up on this website. Please contact us via Twitter
-                  <a href="https://twitter.com/panlingo" target="_blank">
-                    @panlingo
-                  </a>
-                  , either by direct messaging, post reply, or mention. For
-                  other ways to reach us, see the
+                  again show up on this website. Please contact us via the
                   <router-link :to="{ name: 'contact-us' }">
                     Contact Us
                   </router-link>
@@ -110,7 +105,7 @@
               </ol>
             </div>
           </div>
-          <div
+          <!-- <div
             v-if="
               ($l1.code === 'en' && $l2.code === 'zh') ||
               ($l1.code === 'zh' && $l2.code === 'en')
@@ -119,7 +114,7 @@
             <hr class="mt-5 mb-5" />
             <FAQEnZh v-if="$l1.code === 'en' && $l2.code === 'zh'" />
             <FAQZhEn v-if="$l1.code === 'zh' && $l2.code === 'en'" />
-          </div>
+          </div> -->
         </div>
       </div>
     </div>

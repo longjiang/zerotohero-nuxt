@@ -10,7 +10,7 @@
 <template>
   <div class="loader-bg">
     <SocialHead
-      title="Discover TV Shows Across Languages | PanLingo"
+      title="Discover TV Shows Across Languages | Language Player"
       description="Watch TV shows across languages at random and be surprised!"
     />
     <SiteTopBar v-if="!l1 && !l2" />
