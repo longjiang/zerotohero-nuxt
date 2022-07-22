@@ -179,6 +179,7 @@ export default {
       classes[`zerotohero-zoom-${this.zoomLevel}`] = true;
       if (this.l1 && this.l2) {
         this.l1, this.l2;
+        classes["zerotohero-with-nav"] = true
         classes = Object.assign(classes, {
           "show-pinyin": this.l2Settings.showPinyin,
           "show-pinyin-for-saved":
