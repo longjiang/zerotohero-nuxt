@@ -202,8 +202,6 @@ export default {
   created() {
     this.$nuxt.$on("history", this.addFullHistoryItem); // from Language map
     this.$nuxt.$on("animateStar", this.onAnimateStar);
-    if (typeof window !== "undefined")
-      window.addEventListener("resize", this.onResize);
     if (this.$route.name === "youtube-view") {
       this.overlayPlayerYouTubeId = this.$route.params.youtube_id;
       this.overlayPlayerLesson = this.$route.params.lesson;
@@ -232,6 +230,8 @@ export default {
           window.location.pathname + window.location.search
         );
     }
+    if (typeof window !== "undefined")
+      window.addEventListener("resize", this.onResize);
   },
   beforeDestroy() {
     // you may call unsubscribe to stop the subscription

@@ -1,5 +1,6 @@
 <template>
   <container-query :query="query" v-model="params">
+    
     <div
       :class="`site-top-bar site-top-bar-${
         wide ? 'wide' : 'not-wide'
@@ -9,16 +10,16 @@
         <b-button
           @click="$router.back()"
           variant="unstyled"
-          v-if="$route.path !== '/' && params.lg !== false"
+          v-if="$route.path !== '/'"
         >
           <i class="fas fa-arrow-left"></i>
           {{ $t("Back") }}
         </b-button>
       </div>
-      <span class="flex-1 text-center" v-if="!wide">
+      <span :class="`logo ${!params.xs ? 'logo-absolute-centered' : ''} flex-1 text-center`" v-if="!wide">
         <router-link
           :to="$auth.loggedIn ? $route.path === '/dashboard' ? '/' : '/dashboard' : '/'"
-          class="btn btn-unstyled ml-2"
+          class="btn btn-unstyled"
           title="Dashboard"
         >
           <img
@@ -35,7 +36,6 @@
           <router-link
             :to="{ name: 'youtube-search' }"
             :class="`btn top-bar-buttontop btn-unstyled link-unstyled mr-1`"
-            v-if="params.md !== false"
             title="Search Videos"
           >
             <i class="fas fa-search"></i>
@@ -43,7 +43,7 @@
           <b-button
             :class="`top-bar-buttontop ml-2`"
             variant="unstyled"
-            v-if="params.sm !== false && $route.params.l1 && $route.params.l2"
+            v-if="$route.params.l1 && $route.params.l2"
             title="Quick Settings"
             @click="showSettingsModal"
           >
@@ -53,7 +53,7 @@
             class="d-inline-block"
             @mouseover="cycleFlags"
             @mouseleave="stopCycling"
-            v-if="params.md !== false && $route.params.l2"
+            v-if="$route.params.l2"
           >
             <span
               @click="showPlaylistModal"
@@ -61,7 +61,7 @@
               style="cursor: pointer"
             >
               <LanguageFlag
-                v-if="$l2 && flagCode && params.md !== false"
+                v-if="$l2 && flagCode"
                 ref="flag"
                 style="
                   transform: scale(0.7);
@@ -75,7 +75,7 @@
               />
               <span
                 :class="`${
-                  !$route.params.l2 || params.md === false ? 'd-none' : ''
+                  !$route.params.l2 ? 'd-none' : ''
                 } ml-1`"
               >
                 <i
@@ -160,20 +160,24 @@ export default {
       keyword: undefined,
       params: {},
       query: {
+        xs: {
+          minWidth: 0,
+          maxWidth: 423,
+        },
         sm: {
-          minWidth: 75,
+          minWidth: 423,
+          maxWidth: 720,
         },
         md: {
-          minWidth: 150,
+          minWidth: 720,
+          maxWidth: 960,
         },
         lg: {
-          minWidth: 320,
+          minWidth: 960,
+          maxWidth: 1140,
         },
-        xlg: {
-          minWidth: 350,
-        },
-        xxlg: {
-          minWidth: 370,
+        xl: {
+          minWidth: 1140,
         },
       },
     };
@@ -366,7 +370,11 @@ export default {
 
 .logo {
   height: 1.3rem;
-  margin-right: 0.3rem;
   border-radius: 100%;
+  &.logo-absolute-centered {
+    position: absolute;
+    left: calc(50% - 4.5rem);
+    top: .25rem;
+  }
 }
 </style>
