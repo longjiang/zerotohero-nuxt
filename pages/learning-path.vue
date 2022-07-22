@@ -159,7 +159,8 @@
                   title: 'iTalki Lessons',
                   url: 'https://www.italki.com/affshare?ref=zerotohero',
                   thumbnail: '/img/italki-banner.jpg',
-                  description: 'Take one-on-one online conversation practice sessions at iTalki. New sign-ups get $10 off.'
+                  description:
+                    'Take one-on-one online conversation practice sessions at iTalki. New sign-ups get $10 off.',
                 }"
                 buttonText="Open iTalki"
               />
@@ -217,7 +218,7 @@
               </div>
             </template>
           </template>
-          <p v-if="level.number === '7'">
+          <div v-if="level.number === '7'">
             <h4 class="mb-4">
               <b :data-level="level.cefr">Total time from zero to mastery:</b>
               <b>
@@ -255,12 +256,10 @@
               </a>
               .
             </span>
-          </p>
+          </div>
         </div>
-
       </div>
     </div>
-    
   </div>
 </template>
 
