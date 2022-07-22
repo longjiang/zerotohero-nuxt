@@ -177,7 +177,7 @@ export default {
       };
       classes[`route-${this.$route.name}`] = true;
       classes[`zerotohero-zoom-${this.zoomLevel}`] = true;
-      if (this.l1 && this.l2) {
+      if (this.$route.params.l1 && this.$route.params.l2 && this.l1 && this.l2) {
         this.l1, this.l2;
         classes["zerotohero-with-nav"] = true
         classes = Object.assign(classes, {
