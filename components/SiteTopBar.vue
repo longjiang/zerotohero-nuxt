@@ -374,7 +374,7 @@ export default {
   &.logo-absolute-centered {
     position: absolute;
     left: calc(50% - 4.5rem);
-    top: .25rem;
+    top: calc(.25rem + env(safe-area-inset-top));
   }
 }
 </style>

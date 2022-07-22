@@ -13,7 +13,7 @@ button {
 }
 
 .safe-padding-top {
-  padding-top: env(safe-area-inset-bottom);
+  padding-top: env(safe-area-inset-top);
 }
 
 .safe-padding-bottom {
