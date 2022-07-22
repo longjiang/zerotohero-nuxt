@@ -18,14 +18,10 @@
         'nav-page': variant === 'page',
         'nav-bottom-bar': variant === 'bottom-bar',
       }"
+      :style="variant === 'side-bar' ? `background-image: url(${background});` : ''"
     >
       <template v-if="variant !== 'page'">
         <nav v-if="level === 'main'" :class="{ 'main-nav': true }">
-          <div
-            class="zerotohero-background"
-            :style="`background-image: url(${background}); z-index: -1; filter: blur(20px); transform: scale(1.1)`"
-            v-if="variant === 'side-bar'"
-          />
           <Logo
             layout="horizontal"
             v-if="variant === 'side-bar'"
@@ -1390,10 +1386,6 @@ export default {
     }
   }
 }
-.zth-main-nav-wrapper.zth-nav-side-bar {
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-}
 
 .zerotohero-wide {
   .zth-main-nav-wrapper {
@@ -1412,6 +1404,13 @@ export default {
   width: 100%;
   overflow: hidden;
   display: block;
+}
+
+.nav-side-bar {
+  background-size: cover;
+  .main-nav {
+    backdrop-filter: blur(20px);
+  }
 }
 
 .zth-nav-light {
