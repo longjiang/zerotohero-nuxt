@@ -1,9 +1,10 @@
 <template>
   <div class="video-edit">
     <div class="video-details">
-      <span v-if="video.subs_l2 && video.subs_l2.length > 0">
+      <span v-if="$adminMode && video.subs_l2 && video.subs_l2.length > 0">
         <a
           :href="originalTextHref"
+          v-if="$adminMode"
           :download="`${video.title}.txt`"
           target="_blank"
           class="link-unstyled"
@@ -17,8 +18,14 @@
         </a>
         <Share class="ml-2" />
       </span>
-      <div>
+      <div class="video-meta">
         <span v-if="video.date">{{ formatDate(video.date) }}</span>
+        <span v-if="video.locale">{{ video.locale }}</span>
+      </div>
+      <div class="video-engagement">
+        <span v-if="video.views"><i class="fa-solid fa-eye"></i> {{ formatK(video.views) }}</span>
+        <span v-if="video.likes"><i class="fa-solid fa-thumbs-up"></i> {{ formatK(video.likes) }}</span>
+        <span v-if="video.comments"><i class="fa-solid fa-comment"></i> {{ formatK(video.comments) }}</span>
       </div>
       <router-link
         class="link-unstyled"
@@ -331,6 +338,7 @@ import { Drag, Drop } from "vue-drag-drop";
 import { parseSync } from "subtitle";
 import Helper from "@/lib/helper";
 import DateHelper from "@/lib/date-helper";
+import { languageLevels, formatK } from "@/lib/utils";
 import Vue from "vue";
 import SmartQuotes from "smartquotes";
 
@@ -420,8 +428,14 @@ export default {
     text() {
       this.translationURL = this.getTranslationURL();
     },
+    levels() {
+      return languageLevels(this.$l2);
+    },
   },
   methods: {
+    formatK(number) {
+      return formatK(number)
+    },
     formatDate(date) {
       return DateHelper.formatDate(date);
     },
@@ -628,5 +642,13 @@ export default {
     }
     line-height: 2;
   }
+}
+.video-meta span + span::before {
+  content: ' · ';
+  margin: 0 .25rem;
+}
+
+.video-engagement span + span {
+  margin-left: 0.5rem;
 }
 </style>
