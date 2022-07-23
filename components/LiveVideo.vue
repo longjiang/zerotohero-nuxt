@@ -10,6 +10,7 @@
             url,
             type: 'hls',
           },
+          autoplay: true
         }"
       ></d-player>
     </client-only>

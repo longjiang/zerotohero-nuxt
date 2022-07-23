@@ -565,7 +565,7 @@ export default {
         excludeTerms = Helper.unique(excludeTerms);
       }
       this.excludeTerms = excludeTerms.filter(
-        (s) => s !== "" && !this.terms.includes(s)
+        (s) => s !== "" && !this.terms.map(t => t.toLowerCase()).includes(s.toLowerCase())
       );
       let hits = await this.$subs.searchSubs({
         terms: this.terms,
