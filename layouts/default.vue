@@ -381,7 +381,7 @@ export default {
       }
     },
     async onAnimateStar(el) {
-      let target = document.querySelector("#site-top-bar-saved-words");
+      let target = document.querySelector(".saved-words-count");
       if (el && target) {
         let bounds = el.getBoundingClientRect();
         let targetBounds = target.getBoundingClientRect();
@@ -551,18 +551,15 @@ export default {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-
-    #main {
-      min-height: calc(100vh - 250px);
-      padding-top: 6rem;
-      padding-bottom: 7rem;
-      flex: 1;
-    }
   }
 }
 
 #zerotohero {
   #main {
+    min-height: calc(100vh - 250px);
+    padding-top: 6rem;
+    padding-bottom: 7rem;
+    flex: 1;
     background: white;
   }
   &.zerotohero-dark {
