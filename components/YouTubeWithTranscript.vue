@@ -670,7 +670,7 @@ export default {
   }
 }
 
-.youtube-transcript-column {
+.youtube-with-transcript-horizontal .youtube-transcript-column {
   padding-top: 2.7rem;
 }
 

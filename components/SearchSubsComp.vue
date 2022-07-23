@@ -865,6 +865,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .search-subs {
+  max-width: calc(100vh - 5rem);
+  margin: 0 auto;
   .search-subs-hit-index {
     margin-bottom: -0.52rem;
     overflow: hidden;
