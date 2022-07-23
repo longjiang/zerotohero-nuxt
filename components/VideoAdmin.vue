@@ -20,12 +20,31 @@
       </span>
       <div class="video-meta">
         <span v-if="video.date">{{ formatDate(video.date) }}</span>
-        <span v-if="video.locale">{{ video.locale }}</span>
+        <span v-if="localeDescription">
+          <img
+            v-if="country"
+            :alt="`Flag of ${country.name}`"
+            :title="`Flag of ${country.name} (${country.alpha2Code})`"
+            :src="`/vendor/flag-svgs/${country.alpha2Code}.svg`"
+            class="flag-icon mr-1"
+            style="width: 1rem; position: relative; bottom: 0.1rem;"
+          />
+          {{ localeDescription }}
+        </span>
       </div>
       <div class="video-engagement">
-        <span v-if="video.views"><i class="fa-solid fa-eye"></i> {{ formatK(video.views) }}</span>
-        <span v-if="video.likes"><i class="fa-solid fa-thumbs-up"></i> {{ formatK(video.likes) }}</span>
-        <span v-if="video.comments"><i class="fa-solid fa-comment"></i> {{ formatK(video.comments) }}</span>
+        <span v-if="video.views">
+          <i class="fa-solid fa-eye"></i>
+          {{ formatK(video.views) }}
+        </span>
+        <span v-if="video.likes">
+          <i class="fa-solid fa-thumbs-up"></i>
+          {{ formatK(video.likes) }}
+        </span>
+        <span v-if="video.comments">
+          <i class="fa-solid fa-comment"></i>
+          {{ formatK(video.comments) }}
+        </span>
       </div>
       <router-link
         class="link-unstyled"
@@ -372,6 +391,9 @@ export default {
       originalText: "",
       punctuations: "。！？；：!?;:♪",
       translationURL: undefined,
+      language: undefined, // the language object as defined in the locale
+      country: undefined, // the country object as defined in the locale
+      localeDescription: undefined, // a description string of the locale e.g. French (France)
     };
   },
   computed: {
@@ -401,10 +423,19 @@ export default {
       return Helper.makeTextFile(this.text);
     },
   },
-  mounted() {
+  async mounted() {
     this.mounted = true; // So that this component shows up on first load (updates $adminMode)
     this.originalText = this.text;
     this.translationURL = this.getTranslationURL();
+    if (this.video?.locale) {
+      let {country, language, description} = await this.getLocaleDescription(
+        this.video.locale
+      );
+      if (description) this.localeDescription = description
+      if (country) this.country = country
+      if (language) this.language = language
+    }
+      
   },
   watch: {
     showSubsEditing() {
@@ -433,8 +464,19 @@ export default {
     },
   },
   methods: {
+    async getLocaleDescription(locale) {
+      let language, country;
+      let [langCode, countryCode] = locale.split("-");
+      language = await this.$languages.getSmart(langCode);
+      if (countryCode) {
+        country = await this.$languages.countryFromCode(countryCode);
+      }
+      let description = `${language ? language.name : ""}`;
+      if (country) description += ` (${country.name})`;
+      return {country, language, description};
+    },
     formatK(number) {
-      return formatK(number)
+      return formatK(number);
     },
     formatDate(date) {
       return DateHelper.formatDate(date);
@@ -556,7 +598,7 @@ export default {
         this.video.subs_l2 = Helper.uniqueByValue(parsed, "starttime");
         this.firstLineTime = this.video.subs_l2[0].starttime;
         this.transcriptKey++;
-        this.$emit('updateTranscript', true)
+        this.$emit("updateTranscript", true);
       };
     },
     async changeLevel(slug) {
@@ -598,8 +640,8 @@ export default {
       let data = await this.$directus.patch({
         l2Id: this.$l2.id,
         id: this.video.id,
-        payload: { topic: slug }
-      })
+        payload: { topic: slug },
+      });
       if (data) {
         this.video = data;
       }
@@ -607,10 +649,10 @@ export default {
     async remove() {
       let data = await this.$directus.delete({
         l2Id: this.$l2.id,
-        id: this.video.id
-      })
+        id: this.video.id,
+      });
       if (data) {
-        this.deleted = true
+        this.deleted = true;
       }
     },
   },
@@ -644,8 +686,8 @@ export default {
   }
 }
 .video-meta span + span::before {
-  content: ' · ';
-  margin: 0 .25rem;
+  content: " · ";
+  margin: 0 0.25rem;
 }
 
 .video-engagement span + span {
