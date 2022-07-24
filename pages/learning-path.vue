@@ -146,7 +146,6 @@
                 />
                 <Resource
                   :key="`learning-path-course-${level.cefr}-${index}`"
-                  :level="$l2.code === 'zh' ? level.hsk : level.cefr"
                   class="mt-3"
                   v-for="(course, index) in courses[level.cefr]"
                   :resource="{
@@ -155,6 +154,7 @@
                     thumbnail: course.thumbnail.data.full_url,
                   }"
                   buttonText="Open Course"
+                  :showThumbnail="false"
                 />
               </div>
             </div>
@@ -169,7 +169,6 @@
             </p>
             <div class="pl-3">
               <Resource
-                :level="$l2.code === 'zh' ? level.hsk : level.cefr"
                 :resource="{
                   title: 'iTalki Lessons',
                   url: 'https://www.italki.com/affshare?ref=zerotohero',
@@ -178,6 +177,7 @@
                     'Take one-on-one online conversation practice sessions at iTalki. New sign-ups get $10 off.',
                 }"
                 buttonText="Open iTalki"
+                :showThumbnail="false"
               />
             </div>
           </div>

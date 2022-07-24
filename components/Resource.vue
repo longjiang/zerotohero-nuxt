@@ -1,14 +1,14 @@
 <template>
   <div class="resource media rounded shadow">
     <router-link :to="resource.url" v-if="internal" class="link-unstyled">
-      <img :src="resource.thumbnail" class="resource-thumbnail img-fluid" />
+      <img :src="resource.thumbnail" v-if="showThumbnail" class="resource-thumbnail img-fluid" />
       <div class="media-body">
         <h6 :data-level="level">
           <span>{{ resource.title }}</span>
         </h6>
         <div>{{ resource.description }}</div>
         <div class="mt-3 text-right">
-          <router-link :to="resource.url" :data-level="level">
+          <router-link :to="resource.url" :data-level="level" class="link-unstyled">
             {{ buttonText }}
             <i class="fa-solid fa-chevron-right"></i>
           </router-link>
@@ -16,14 +16,14 @@
       </div>
     </router-link>
     <a :href="resource.url" v-if="!internal" target="_blank" class="link-unstyled">
-      <img :src="resource.thumbnail" class="resource-thumbnail img-fluid" />
+      <img :src="resource.thumbnail" v-if="showThumbnail" class="resource-thumbnail img-fluid" />
       <div class="media-body">
         <h6 :data-level="level">
           <span>{{ resource.title }}</span>
         </h6>
         <div>{{ resource.description }}</div>
         <div class="mt-3 text-right">
-          <a :href="resource.url" target="_blank" :data-level="level">
+          <a :href="resource.url" target="_blank" :data-level="level"  class="link-unstyled">
             {{ buttonText }}
             <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i>
           </a>
@@ -51,6 +51,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    showThumbnail: {
+      type: Boolean,
+      default: true
+    }
   },
 };
 </script>
