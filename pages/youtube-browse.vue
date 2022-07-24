@@ -182,9 +182,6 @@
                 ? level.level
                 : level.name
             }}
-            <span class="item-count">
-              ({{ showCountByLevel(level.numeric) }} shows)
-            </span>
           </router-link>
         </div>
       </div>
@@ -231,15 +228,8 @@ export default {
         return this.videos[Math.floor(Math.random() * this.videos.length)];
     },
     levels() {
-      if (this.filteredShowsByAudiobookAndTags?.length > 0) {
-        let langLevels = languageLevels(this.$l2);
-        let levels = this.filteredShowsByAudiobookAndTags
-          .map((s) => s.level)
-          .filter((l) => l);
-        levels = unique(levels);
-        levels = levels.sort((a, b) => a - b);
-        return levels.map((l) => langLevels[l]);
-      }
+      let langLevels = languageLevels(this.$l2);
+      return [1, 2, 3, 4, 5, 6, 7].map(l => langLevels[l]);
     },
   },
   data() {
