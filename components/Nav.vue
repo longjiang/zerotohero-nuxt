@@ -417,13 +417,6 @@ export default {
                 //   icon: "fa fa-chalkboard-teacher",
                 //   show: this.l2.code === "zh",
                 // },
-                {
-                  name: "youtube-browse",
-                  title: `New Videos`,
-                  count: this.stats ? this.stats.newVideos : undefined,
-                  icon: "fa-solid fa-films",
-                  show: true,
-                },
                 ...Object.keys(this.categories).map((key) => {
                   let title = this.categories[key];
                   return {
@@ -438,12 +431,19 @@ export default {
                   let title = this.levels[key].name;
                   return {
                     name: "youtube-browse",
-                    params: { topic: "all", level: key },
+                    params: { category: "all", level: key },
                     title,
                     show: true,
                     icon: "fa-solid fa-films",
                   };
                 }),
+                {
+                  name: "youtube-browse",
+                  title: `New Videos`,
+                  count: this.stats ? this.stats.newVideos : undefined,
+                  icon: "fa-solid fa-films",
+                  show: true,
+                },
                 {
                   name: "feed",
                   icon: "fas fa-stream",

@@ -35,8 +35,22 @@
             }}
             <i class="fa-solid fa-caret-down"></i>
           </span>
+          <span
+            v-if="levels && levels.length > 0"
+            @click="showModal('levels')"
+            class="filter-dropdown mr-2"
+          >
+            {{
+              level && levels.find((l) => l.numeric === level)
+                ? levels.find((l) => l.numeric === level).name
+                : "All Levels"
+            }}
+            <i class="fa-solid fa-caret-down"></i>
+          </span>
         </div>
       </div>
+      <h5>TV Shows</h5>
+      <hr class="mb-4"/>
       <Shows
         v-if="!(category === 'all' && level === 'all')"
         routeType="tv-shows"
@@ -46,6 +60,8 @@
         :showFilter="false"
         :showHero="false"
       />
+      <h5>YouTube Channels</h5>
+      <hr class="mb-4"/>
       <Shows
         v-if="!(category === 'all' && level === 'all')"
         routeType="talks"
@@ -55,6 +71,8 @@
         :showFilter="false"
         :showHero="false"
       />
+      <h5>Videos</h5>
+      <hr class="mb-4"/>
       <MediaSearchResults
         :category="category"
         :level="level"
@@ -124,11 +142,60 @@
         </div>
       </div>
     </b-modal>
+    <b-modal
+      ref="levelsModal"
+      size="lg"
+      centered
+      hide-footer
+      modal-class="safe-padding-top mt-4"
+      body-class="dropdown-menu-modal-wrapper"
+      title="Levels"
+    >
+      <div class="row">
+        <div class="mb-1 col-6 col-lg-4">
+          <router-link
+            :to="{
+              name: 'youtube-browse',
+              params: { category, level: 'all' },
+            }"
+            class="link-unstyled"
+          >
+            All Levels
+          </router-link>
+        </div>
+        <div
+          v-for="(level, index) in levels"
+          :key="`dropdown-menu-item-level-${index}`"
+          class="mb-1 col-6 col-lg-4"
+        >
+          <router-link
+            :to="{
+              name: 'youtube-browse',
+              params: { category, level: level.numeric },
+            }"
+            class="link-unstyled"
+          >
+            {{
+              index === 0
+                ? level.name
+                : level.exam === "CEFR"
+                ? level.level
+                : level.name
+            }}
+            <span class="item-count">
+              ({{ showCountByLevel(level.numeric) }} shows)
+            </span>
+          </router-link>
+        </div>
+      </div>
+    </b-modal>
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
+import { languageLevels } from "@/lib/utils";
+import { unique } from "@/lib/utils";
 
 export default {
   props: {
@@ -162,6 +229,17 @@ export default {
     heroVideo() {
       if (this.videos.length > 0)
         return this.videos[Math.floor(Math.random() * this.videos.length)];
+    },
+    levels() {
+      if (this.filteredShowsByAudiobookAndTags?.length > 0) {
+        let langLevels = languageLevels(this.$l2);
+        let levels = this.filteredShowsByAudiobookAndTags
+          .map((s) => s.level)
+          .filter((l) => l);
+        levels = unique(levels);
+        levels = levels.sort((a, b) => a - b);
+        return levels.map((l) => langLevels[l]);
+      }
     },
   },
   data() {
