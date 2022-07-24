@@ -68,17 +68,19 @@
           v-for="(level, index) in levels"
           :key="`learning-path-level-${index}`"
           class="level"
-          :data-learning-path-level="level.cefr"
+          :data-learning-path-level="$l2.code === 'zh' ? level.hsk : level.cefr"
         >
-          <h4 class="level-title" :data-level="level.cefr">
-            {{ level.category }} ({{
-              $l2.code === "zh" && level.number < 7
-                ? `HSK ${level.number}`
-                : level.cefr
-            }}*) level
+          <h4 class="level-title">
+            <router-link :to="mediaUrlByLevel(level.number)"  :data-level="$l2.code === 'zh' ? level.hsk : level.cefr">
+              {{ level.category }} ({{
+                $l2.code === "zh" && level.number < 7
+                  ? `HSK ${level.number}`
+                  : level.cefr
+              }}*) level <i class="fa-solid fa-chevron-right"></i>
+            </router-link>
           </h4>
           <p>
-            <b :data-level="level.cefr">
+            <b :data-level="$l2.code === 'zh' ? level.hsk : level.cefr">
               <i class="fas fa-clock"></i>
               Time investment:
             </b>
@@ -86,7 +88,7 @@
           </p>
           <div class="level-activity">
             <p>
-              <b :data-level="level.cefr">
+              <b :data-level="$l2.code === 'zh' ? level.hsk : level.cefr">
                 <i class="fa-solid fa-headphones"></i>
                 Input by Audio & Text:
               </b>
@@ -96,18 +98,18 @@
               <Resource
                 :resource="{
                   title: `Watch videos in ${$l2.name}`,
-                  url: `/${$l1.code}/${$l2.code}/all-media`,
+                  url: mediaUrlByLevel(level.number),
                   thumbnail: '/img/youtube-banner.jpg',
                   description: `and study transcripts of ${$l2.name} videos with a popup dictionary.`,
                 }"
-                :level="level.cefr"
+                :level="$l2.code === 'zh' ? level.hsk : level.cefr"
                 buttonText="Browse Videos"
                 :internal="true"
               />
               <Resource
                 class="mt-3"
                 v-if="level.number > 3 && $hasFeature('dictionary')"
-                :level="level.cefr"
+                :level="$l2.code === 'zh' ? level.hsk : level.cefr"
                 :resource="{
                   title: `${$l2.name} reading with popup dictionary`,
                   url: `/${$l1.code}/${$l2.code}/books`,
@@ -122,7 +124,7 @@
           <template>
             <div class="level-activity">
               <div v-if="courses[level.cefr]">
-                <b :data-level="level.cefr">
+                <b :data-level="$l2.code === 'zh' ? level.hsk : level.cefr">
                   <i class="fa-solid fa-spell-check"></i>
                   Vocabulary &amp; Syntax:
                 </b>
@@ -131,7 +133,7 @@
               <div class="pl-3">
                 <Resource
                   :key="`learning-path-course-${level.cefr}-${index}`"
-                  :level="level.cefr"
+                  :level="$l2.code === 'zh' ? level.hsk : level.cefr"
                   class="mt-3"
                   v-for="(course, index) in courses[level.cefr]"
                   :resource="{
@@ -146,7 +148,7 @@
           </template>
           <div class="level-activity">
             <p>
-              <b :data-level="level.cefr">
+              <b :data-level="$l2.code === 'zh' ? level.hsk : level.cefr">
                 <i class="fa-solid fa-comment-alt"></i>
                 Conversation Practice:
               </b>
@@ -154,7 +156,7 @@
             </p>
             <div class="pl-3">
               <Resource
-                :level="level.cefr"
+                :level="$l2.code === 'zh' ? level.hsk : level.cefr"
                 :resource="{
                   title: 'iTalki Lessons',
                   url: 'https://www.italki.com/affshare?ref=zerotohero',
@@ -201,9 +203,9 @@
               >
                 <div
                   class="level-milestone-dot"
-                  :data-bg-level="level.cefr"
+                  :data-bg-level="$l2.code === 'zh' ? level.hsk : level.cefr"
                 ></div>
-                <b :data-level="level.cefr">
+                <b :data-level="$l2.code === 'zh' ? level.hsk : level.cefr">
                   <i class="fa-solid fa-trophy"></i>
                   Milestone:
                 </b>
@@ -267,7 +269,7 @@
 import Resource from "@/components/Resource";
 import { background, backgroundKeyword } from "@/lib/utils/background";
 import Helper from "@/lib/helper";
-import { LEVELS } from "@/lib/utils/language-levels";
+import { LEVELS, LANGS_WITH_LEVELS } from "@/lib/utils";
 
 export default {
   components: {
@@ -278,6 +280,7 @@ export default {
       exams: {},
       courses: {},
       resources: {},
+      LANGS_WITH_LEVELS,
     };
   },
   computed: {
@@ -316,6 +319,11 @@ export default {
     this.resources = await this.loadResources();
   },
   methods: {
+    mediaUrlByLevel(levelNum) {
+      return LANGS_WITH_LEVELS.includes(this.$l2.code)
+        ? `/${this.$l1.code}/${this.$l2.code}/youtube/browse/all/${levelNum}`
+        : `/${this.$l1.code}/${this.$l2.code}/all-media`;
+    },
     levelHours(level) {
       return Math.ceil(level.hours / 10) * 10;
     },
@@ -468,7 +476,8 @@ export default {
       }
     }
 
-    &[data-learning-path-level="C2"] {
+    &[data-learning-path-level="C2"],
+    &[data-learning-path-level="7-9"] {
       border-left-color: #0f575c;
       &::before {
         border-color: #0f575c;
@@ -484,6 +493,48 @@ export default {
         bottom: -2rem;
         height: 0;
         width: 0;
+      }
+    }
+
+    &[data-learning-path-level="1"] {
+      border-left-color: #f8b51e;
+      &::before {
+        border-color: #f8b51e;
+      }
+    }
+
+    &[data-learning-path-level="2"] {
+      border-left-color: #267f94;
+      &::before {
+        border-color: #267f94;
+      }
+    }
+
+    &[data-learning-path-level="3"] {
+      border-left-color: #fd4f1c;
+      &::before {
+        border-color: #fd4f1c;
+      }
+    }
+
+    &[data-learning-path-level="4"] {
+      border-left-color: #bb1718;
+      &::before {
+        border-color: #bb1718;
+      }
+    }
+
+    &[data-learning-path-level="5"] {
+      border-left-color: #1b3e76;
+      &::before {
+        border-color: #1b3e76;
+      }
+    }
+
+    &[data-learning-path-level="6"] {
+      border-left-color: #6a3669;
+      &::before {
+        border-color: #6a3669;
       }
     }
 
