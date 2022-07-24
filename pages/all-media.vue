@@ -130,7 +130,7 @@
           </div>
 
           <div class="media-sections" v-if="!loading">
-            <!-- <div v-if="movies && movies.length > 0" class="media-section">
+            <div v-if="movies && movies.length > 0" class="media-section">
               <h3 class="media-seaction-heading">
                 Movies
                 <router-link
@@ -149,7 +149,7 @@
                 :showAdminToolsInAdminMode="false"
                 skin="dark"
               />
-            </div> -->
+            </div>
 
             <div v-if="news && news.length > 0" class="media-section">
               <h3 class="media-seaction-heading">
@@ -213,7 +213,7 @@
               :l2="$l2"
               variant="page"
               class="youtube-browse-nav mt-5"
-              :showOnly="['Listening']"
+              :showOnly="['Media']"
             />
           </client-only>
           <client-only>
@@ -340,9 +340,9 @@ export default {
         this.musicShow = this.$store.state.shows.tvShows[this.$l2.code].find(
           (s) => s.title === "Music"
         );
-        // this.moviesShow = this.$store.state.shows.tvShows[this.$l2.code].find(
-        //   (s) => s.title === "Movies"
-        // );
+        this.moviesShow = this.$store.state.shows.tvShows[this.$l2.code].find(
+          (s) => s.title === "Movies"
+        );
         if (this.musicShow)
           this.music = await this.getVideos({
             limit: 25,
@@ -350,13 +350,13 @@ export default {
             sort: "youtube_id",
             offset: this.randomOffset("music", 25),
           });
-        // if (this.moviesShow)
-        //   this.movies = await this.getVideos({
-        //     limit: 25,
-        //     tvShow: this.moviesShow.id,
-        //     sort: "youtube_id",
-        //     offset: this.randomOffset("movies", 25),
-        //   });
+        if (this.moviesShow)
+          this.movies = await this.getVideos({
+            limit: 25,
+            tvShow: this.moviesShow.id,
+            sort: "youtube_id",
+            offset: this.randomOffset("movies", 25),
+          });
       }
       if (this.talks) {
         this.newsShow = this.$store.state.shows.talks[this.$l2.code].find(

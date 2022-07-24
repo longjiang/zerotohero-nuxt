@@ -148,7 +148,7 @@ feature-card-name-${child.name}`"
                     v-if="!child.children"
                     :to="last(child) || child"
                     :item="child"
-                    mode="large-icon"
+                    variant="page"
                     :badge="
                       child.name === 'saved-words' && savedWordsCount > 0
                         ? savedWordsCount
@@ -524,7 +524,7 @@ export default {
             },
             {
               icon: "fa fa-grid-2",
-              title: `Topics`,
+              title: `More`,
               // count: this.stats ? this.stats.allVideos : undefined,
               name: "youtube-browse",
               show: true,
