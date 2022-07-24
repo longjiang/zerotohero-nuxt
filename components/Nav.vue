@@ -171,8 +171,7 @@ feature-card-name-${child.name}`"
 <script>
 import { Capacitor } from "@capacitor/core";
 import { mapState } from "vuex";
-import { languageLevels } from "@/lib/utils/language-levels";
-import { background } from "@/lib/utils/background";
+import { languageLevels, background, LANGS_WITH_LEVELS } from "@/lib/utils";
 
 export default {
   props: {
@@ -329,7 +328,7 @@ export default {
       // Levels feature works for Chinese, German, English, Spanish, French and Arabic only
       if (
         this.$l2 &&
-        ["zh", "de", "en", "es", "fr", "ar"].includes(this.$l2.code)
+        LANGS_WITH_LEVELS.includes(this.$l2.code)
       ) {
         return languageLevels(this.$l2);
       } else return {};

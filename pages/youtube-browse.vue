@@ -36,7 +36,11 @@
             <i class="fa-solid fa-caret-down"></i>
           </span>
           <span
-            v-if="levels && levels.length > 0"
+            v-if="
+              LANGS_WITH_LEVELS.includes($l2.code) &&
+              levels &&
+              levels.length > 0
+            "
             @click="showModal('levels')"
             class="filter-dropdown mr-2"
           >
@@ -49,8 +53,8 @@
           </span>
         </div>
       </div>
-      <h5>TV Shows</h5>
-      <hr class="mb-4"/>
+      <h5 v-if="$refs['tv-shows'] && $refs['tv-shows'].filteredShowsByAudiobookAndTags && $refs['tv-shows'].filteredShowsByAudiobookAndTags.length > 0">TV Shows</h5>
+      <hr class="mb-4" />
       <Shows
         v-if="!(category === 'all' && level === 'all')"
         routeType="tv-shows"
@@ -59,9 +63,10 @@
         :level="level"
         :showFilter="false"
         :showHero="false"
+        ref="tv-shows"
       />
-      <h5>YouTube Channels</h5>
-      <hr class="mb-4"/>
+      <h5 v-if="$refs['talks'] && $refs['talks'].filteredShowsByAudiobookAndTags && $refs['talks'].filteredShowsByAudiobookAndTags.length > 0">YouTube Channels</h5>
+      <hr class="mb-4" />
       <Shows
         v-if="!(category === 'all' && level === 'all')"
         routeType="talks"
@@ -70,9 +75,10 @@
         :level="level"
         :showFilter="false"
         :showHero="false"
+        ref="talks"
       />
-      <h5>Videos</h5>
-      <hr class="mb-4"/>
+      <h5 v-if="$refs['videos'] && $refs['videos'].videos && $refs['videos'].videos.length > 0">Videos</h5>
+      <hr class="mb-4" />
       <MediaSearchResults
         :category="category"
         :level="level"
@@ -82,6 +88,7 @@
         :showNoVideosMessage="true"
         :showSearchBar="false"
         @videosLoaded="onVideosLoaded"
+        ref="videos"
       />
       <!-- <MediaSearchResults :keyword="category" v-if="category !== 'all' && category !== 'kids'" /> -->
       <!-- <YouTubeSearchResults
@@ -191,8 +198,7 @@
 
 <script>
 import { mapState } from "vuex";
-import { languageLevels } from "@/lib/utils";
-import { unique } from "@/lib/utils";
+import { languageLevels, LANGS_WITH_LEVELS } from "@/lib/utils";
 
 export default {
   props: {
@@ -210,7 +216,7 @@ export default {
     },
   },
   computed: {
-    ...mapState('shows', ['categories']),
+    ...mapState("shows", ["categories"]),
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -229,12 +235,13 @@ export default {
     },
     levels() {
       let langLevels = languageLevels(this.$l2);
-      return [1, 2, 3, 4, 5, 6, 7].map(l => langLevels[l]);
+      return [1, 2, 3, 4, 5, 6, 7].map((l) => langLevels[l]);
     },
   },
   data() {
     return {
       videos: [],
+      LANGS_WITH_LEVELS,
     };
   },
   methods: {
