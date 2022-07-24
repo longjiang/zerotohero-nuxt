@@ -156,6 +156,8 @@ export default {
             return true;
           if (title.includes(`${this.$l2.name} TV Phrases`.toLowerCase()))
             return true;
+          if (title.includes(`Anime`.toLowerCase()))
+            return true;
         });
         let third = this.phrasebooks.filter((pb) => {
           let title = pb.title.toLowerCase();
