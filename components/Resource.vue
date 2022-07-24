@@ -15,7 +15,7 @@
         </div>
       </div>
     </router-link>
-    <a :href="resource.url" v-else target="_blank" class="link-unstyled">
+    <a :href="resource.url" v-if="!internal" target="_blank" class="link-unstyled">
       <img :src="resource.thumbnail" class="resource-thumbnail img-fluid" />
       <div class="media-body">
         <h6 :data-level="level">

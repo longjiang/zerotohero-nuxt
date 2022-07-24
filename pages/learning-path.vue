@@ -99,7 +99,7 @@
                 :resource="{
                   title: `Watch videos in ${$l2.name}`,
                   url: mediaUrlByLevel(level.number),
-                  thumbnail: '/img/youtube-banner.jpg',
+                  thumbnail: '/img/banner-media.jpg',
                   description: `and study transcripts of ${$l2.name} videos with a popup dictionary.`,
                 }"
                 :level="$l2.code === 'zh' ? level.hsk : level.cefr"
@@ -113,7 +113,7 @@
                 :resource="{
                   title: `${$l2.name} reading with popup dictionary`,
                   url: `/${$l1.code}/${$l2.code}/books`,
-                  thumbnail: '/img/library-banner.jpg',
+                  thumbnail: '/img/banner-library.jpg',
                   description: `Read books and text in ${$l2.name} with the help of our popup dictionary.`,
                 }"
                 buttonText="Browse Books"
@@ -123,7 +123,7 @@
           </div>
           <template>
             <div class="level-activity">
-              <div v-if="courses[level.cefr]">
+              <div v-if="courses[level.cefr] || hasPhrasebooks">
                 <b :data-level="$l2.code === 'zh' ? level.hsk : level.cefr">
                   <i class="fa-solid fa-spell-check"></i>
                   Vocabulary &amp; Syntax:
@@ -131,6 +131,19 @@
                 {{ levelVocabularyAndSyntaxHours(level) }} hours
               </div>
               <div class="pl-3">
+                <Resource
+                  class="mt-3"
+                  v-if="level.number < 3 && hasPhrasebooks"
+                  :resource="{
+                    title: `Learn most common phrases in ${$l2.name}`,
+                    url: `/${$l1.code}/${$l2.code}/phrasebooks`,
+                    thumbnail: '/img/banner-phrasebook.jpg',
+                    description: `and study transcripts of ${$l2.name} videos with a popup dictionary.`,
+                  }"
+                  :level="$l2.code === 'zh' ? level.hsk : level.cefr"
+                  buttonText="Learn Phrases"
+                  :internal="true"
+                />
                 <Resource
                   :key="`learning-path-course-${level.cefr}-${index}`"
                   :level="$l2.code === 'zh' ? level.hsk : level.cefr"
@@ -160,7 +173,7 @@
                 :resource="{
                   title: 'iTalki Lessons',
                   url: 'https://www.italki.com/affshare?ref=zerotohero',
-                  thumbnail: '/img/italki-banner.jpg',
+                  thumbnail: '/img/banner-italki.jpg',
                   description:
                     'Take one-on-one online conversation practice sessions at iTalki. New sign-ups get $10 off.',
                 }"
@@ -281,6 +294,7 @@ export default {
       courses: {},
       resources: {},
       LANGS_WITH_LEVELS,
+      hasPhrasebooks: false,
     };
   },
   computed: {
@@ -309,7 +323,7 @@ export default {
       return {
         title: `Basic information, useful phrases`,
         url,
-        thumbnail: "/img/omniglot-banner.jpg",
+        thumbnail: "/img/banner-omniglot.jpg",
       };
     },
   },
@@ -317,8 +331,20 @@ export default {
     this.exams = await this.loadExams();
     this.courses = await this.loadCourses();
     this.resources = await this.loadResources();
+    this.checkPhrasebooks();
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (mutation.type.startsWith("phrasebooks")) {
+        this.checkPhrasebooks();
+      }
+    })
   },
   methods: {
+    checkPhrasebooks() {
+      this.hasPhrasebooks =
+        this.$store.state.phrasebooks.phrasebooks &&
+        this.$store.state.phrasebooks.phrasebooks[this.$l2.code] &&
+        this.$store.state.phrasebooks.phrasebooks[this.$l2.code].length > 0;
+    },
     mediaUrlByLevel(levelNum) {
       return LANGS_WITH_LEVELS.includes(this.$l2.code)
         ? `/${this.$l1.code}/${this.$l2.code}/youtube/browse/all/${levelNum}`

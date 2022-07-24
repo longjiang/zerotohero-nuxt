@@ -9,7 +9,7 @@
         .pop()}`"
       :to="to"
     >
-      <i class="fas fa-book-open phrasebook-icon"></i>
+      <i class="fa-solid fa-square-list phrasebook-icon"></i>
     </router-link>
     <div class="media-body" style="position: relative">
       <router-link class="link-unstyled" :to="to">
