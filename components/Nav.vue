@@ -573,7 +573,7 @@ export default {
             {
               name: "phrasebooks",
               icon: "fa fa-comment-alt",
-              title: "Phrasebooks",
+              title: "Word Lists",
               show: this.hasPhrasebooks,
             },
             {

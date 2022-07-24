@@ -13,7 +13,7 @@
     </router-link>
     <div class="media-body" style="position: relative">
       <router-link class="link-unstyled" :to="to">
-        <h5 class="phrasebook-title">{{ phrasebook.title }}</h5>
+        <h5 class="phrasebook-title">{{ phrasebook.title.replace(/(.*) Phrases/, 'Top Phrases in $1') }}</h5>
       </router-link>
       <div style="color: #999" v-if="phrasebook.phrases">
         ({{ phrasebook.phrases.length }} phrases)

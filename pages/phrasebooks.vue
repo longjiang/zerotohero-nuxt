@@ -32,8 +32,8 @@
             </div>
           </div>
         </div>
-        <h6>Featured Phrasebooks</h6>
-        <hr />
+        <h6 v-if="featuredPhrasebooks && featuredPhrasebooks.length > 0">Featured Word Lists</h6>
+        <hr v-if="featuredPhrasebooks && featuredPhrasebooks.length > 0" />
         <div
           class="row"
           v-if="featuredPhrasebooks && featuredPhrasebooks.length > 0"
@@ -53,11 +53,11 @@
           </div>
         </div>
         <div class="mt-4"></div>
-        <h6>All Phrasebooks</h6>
-        <hr />
-        <div class="row" v-if="phrasebooks && phrasebooks.length > 0">
+        <h6 v-if="notFeaturedPhrasebooks && notFeaturedPhrasebooks.length > 0">All Word Lists</h6>
+        <hr v-if="notFeaturedPhrasebooks && notFeaturedPhrasebooks.length > 0"/>
+        <div class="row" v-if="notFeaturedPhrasebooks && notFeaturedPhrasebooks.length > 0">
           <div
-            v-for="(phrasebook, phrasebookIndex) in phrasebooks"
+            v-for="(phrasebook, phrasebookIndex) in notFeaturedPhrasebooks"
             :class="{
               'col-6': params.xs,
               'col-4': params.sm,
@@ -115,6 +115,9 @@ export default {
     };
   },
   computed: {
+    notFeaturedPhrasebooks() {
+      return this.phrasebooks.filter(p => !this.featuredPhrasebooks || !this.featuredPhrasebooks.includes(p))
+    },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
