@@ -4,7 +4,6 @@
       <div
         v-if="onceAdmin"
         @click="adminMode = !adminMode"
-        style="display: inline-block"
         :class="`annotation-setting-toggle ${
           adminMode ? 'annotation-setting-toggle-active' : ''
         }`"
@@ -16,7 +15,6 @@
       </div>
       <div
         @click="autoPronounce = !autoPronounce"
-        style="display: inline-block"
         :class="`annotation-setting-toggle ${
           autoPronounce ? 'annotation-setting-toggle-active' : ''
         }`"
@@ -119,6 +117,10 @@
         @click="zoomLevel = zoomLevel < 4 ? zoomLevel + 1 : zoomLevel"
       >
         <span class="annotation-setting-icon">T</span> Bigger text
+      </div>
+      <hr/>
+      <div :class="`annotation-setting-toggle`">
+        <router-link :to="{name: 'settings'}" class="text-success"><i class="fa-solid fa-gears annotation-setting-icon"></i> More Settings <i class="fa-solid fa-chevron-right"></i></router-link>
       </div>
     </div>
     <div v-if="variant === 'page'">

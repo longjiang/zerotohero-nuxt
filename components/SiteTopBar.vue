@@ -237,6 +237,7 @@ export default {
   watch: {
     $route() {
       this.hideLanguagesModal();
+      this.hideSettingsModal();
     },
   },
   methods: {
