@@ -16,7 +16,7 @@
           {{ $t("Back") }}
         </b-button>
       </div>
-      <span :class="`logo ${!params.xs ? 'logo-absolute-centered' : ''} flex-1 text-center`" v-if="!wide">
+      <span :class="`logo ${!params.xs ? 'logo-absolute-centered' : ''} flex-1 text-center`" v-if="!wide && $route.path !== '/' ">
         <router-link
           :to="$auth.loggedIn ? $route.path === '/dashboard' ? '/' : '/dashboard' : '/'"
           class="btn btn-unstyled"
@@ -53,7 +53,7 @@
             class="d-inline-block"
             @mouseover="cycleFlags"
             @mouseleave="stopCycling"
-            v-if="$route.params.l2"
+            v-if="$route.params.l2 && $l2"
           >
             <span
               @click="showPlaylistModal"

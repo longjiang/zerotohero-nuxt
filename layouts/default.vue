@@ -1,6 +1,5 @@
 <template>
   <div id="zerotohero" :class="classes">
-    
     <div>
       <a :href="feedbackMailToURL" class="feedback-button">Feedback</a>
 
@@ -173,13 +172,19 @@ export default {
           this.$route.meta && this.$route.meta.skin === "light",
         "zerotohero-with-mini-player":
           this.overlayPlayerYouTubeId && this.overlayPlayerMinimized,
-        "zerotohero-with-nav": this.$route.params.l1 && this.$route.params.l2 && this.l1 && this.l2
+        "zerotohero-with-nav":
+          this.$route.params.l1 && this.$route.params.l2 && this.l1 && this.l2,
       };
       classes[`route-${this.$route.name}`] = true;
       classes[`zerotohero-zoom-${this.zoomLevel}`] = true;
-      if (this.$route.params.l1 && this.$route.params.l2 && this.l1 && this.l2) {
+      if (
+        this.$route.params.l1 &&
+        this.$route.params.l2 &&
+        this.l1 &&
+        this.l2
+      ) {
         this.l1, this.l2;
-        classes["zerotohero-with-nav"] = true
+        classes["zerotohero-with-nav"] = true;
         classes = Object.assign(classes, {
           "show-pinyin": this.l2Settings.showPinyin,
           "show-pinyin-for-saved":

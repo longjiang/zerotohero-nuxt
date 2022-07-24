@@ -3,7 +3,8 @@
     name: 'index',
     path: '/',
     meta: {
-      layout: 'full'
+      layout: 'full',
+      skin: 'dark'
     }
   }
 </router>
@@ -13,6 +14,14 @@
       title="Language Player | Master any language by comprehensible input."
       description="We provide TV shows with subtitles, music with lyrics, live TV channels, phrasebooks with video examples... everything that can help you to learn a language “by osmosis.” Our company, Zero to Hero Education, is also known for our “Chinese Zero to Hero” and “English Zero to Hero” online language courses."
     />
+    <client-only>
+      <SiteTopBar
+        :skin="$route.meta.skin ? $route.meta.skin : 'light'"
+        variant="menu-bar"
+        :badge="savedWordsCount + savedPhrasesCount"
+        :wide="wide"
+      />
+    </client-only>
     <div
         class="zerotohero-background"
         :style="`background-image: url(${background})`"
@@ -24,19 +33,18 @@
       style="overflow: hidden; position: relative"
     >
       <div class="container">
-        <div class="row mt-5">
+        <div class="row">
           <div class="col-sm-12 mb-3" style="max-width: 40rem; margin: 0 auto">
-            <!-- <YouTubeVideo
-              youtube="mzpu-2FV4E4"
+            <Logo class="mb-5" />
+            <YouTubeVideo
+              youtube="rGRcL_Jr6qo"
               :autoload="true"
               style="overflow: hidden; border-radius: 1rem"
-            /> -->
-            <Logo />
+            />
           </div>
         </div>
         <div class="row pt-3">
           <div class="col-sm-12">
-            <!-- <Logo class="mt-4 mb-3" /> -->
             <p class="blurb text-white text-center">
               {{ translate("Learn languages with videos.", browserLanguage) }}
             </p>

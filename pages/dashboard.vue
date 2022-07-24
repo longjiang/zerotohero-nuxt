@@ -26,8 +26,8 @@
         class="container-fluid safe-padding-top safe-padding-bottom"
         style="overflow: hidden; position: relative"
       >
-        <div class="container pt-5 pb-5">
-          <div class="row mt-5">
+        <div class="container pb-5">
+          <div class="row">
             <div class="col-sm-12">
               <div class="mt-5 text-center mb-5" v-if="!loaded">
                 <p>App is asleep due to inactivity.</p>
