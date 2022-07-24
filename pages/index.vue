@@ -18,8 +18,6 @@
       <SiteTopBar
         :skin="$route.meta.skin ? $route.meta.skin : 'light'"
         variant="menu-bar"
-        :badge="savedWordsCount + savedPhrasesCount"
-        :wide="wide"
       />
     </client-only>
     <div
@@ -324,21 +322,23 @@ export default {
 
 .gradient-backdrop {
   background: radial-gradient(rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
-  height: 100vh;
+  height: 150vh;
   width: 100%;
   z-index: 9;
   position: absolute;
   z-index: 0;
   mix-blend-mode: overlay;
+  top: -5rem;
 }
 
 .gradient-backdrop-2 {
   background: radial-gradient(rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 100%);
-  height: 100vh;
+  height: 150vh;
   width: 100%;
   z-index: 9;
   position: absolute;
   z-index: 0;
+  top: -5rem;
 }
 
 .blurb {

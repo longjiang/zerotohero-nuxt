@@ -86,6 +86,44 @@
             </b>
             <b>{{ levelHours(level) }} hours</b>
           </p>
+          <template>
+            <div class="level-activity">
+              <div v-if="courses[level.cefr] || hasPhrasebooks">
+                <b :data-level="$l2.code === 'zh' ? level.hsk : level.cefr">
+                  <i class="fa-solid fa-spell-check"></i>
+                  Vocabulary &amp; Syntax:
+                </b>
+                {{ levelVocabularyAndSyntaxHours(level) }} hours
+              </div>
+              <div class="pl-3">
+                <Resource
+                  class="mt-3"
+                  v-if="level.number < 3 && hasPhrasebooks"
+                  :resource="{
+                    title: `Learn most common phrases in ${$l2.name}`,
+                    url: `/${$l1.code}/${$l2.code}/phrasebooks`,
+                    thumbnail: '/img/banner-phrasebook.jpg',
+                    description: `by watching video clips containing the most common ${$l2.name} expressions.`,
+                  }"
+                  :level="$l2.code === 'zh' ? level.hsk : level.cefr"
+                  buttonText="Learn Phrases"
+                  :internal="true"
+                />
+                <Resource
+                  :key="`learning-path-course-${level.cefr}-${index}`"
+                  class="mt-3"
+                  v-for="(course, index) in courses[level.cefr]"
+                  :resource="{
+                    title: course.title,
+                    url: course.url,
+                    thumbnail: course.thumbnail.data.full_url,
+                  }"
+                  buttonText="Open Course"
+                  :showThumbnail="false"
+                />
+              </div>
+            </div>
+          </template>
           <div class="level-activity">
             <p>
               <b :data-level="$l2.code === 'zh' ? level.hsk : level.cefr">
@@ -121,44 +159,6 @@
               />
             </div>
           </div>
-          <template>
-            <div class="level-activity">
-              <div v-if="courses[level.cefr] || hasPhrasebooks">
-                <b :data-level="$l2.code === 'zh' ? level.hsk : level.cefr">
-                  <i class="fa-solid fa-spell-check"></i>
-                  Vocabulary &amp; Syntax:
-                </b>
-                {{ levelVocabularyAndSyntaxHours(level) }} hours
-              </div>
-              <div class="pl-3">
-                <Resource
-                  class="mt-3"
-                  v-if="level.number < 3 && hasPhrasebooks"
-                  :resource="{
-                    title: `Learn most common phrases in ${$l2.name}`,
-                    url: `/${$l1.code}/${$l2.code}/phrasebooks`,
-                    thumbnail: '/img/banner-phrasebook.jpg',
-                    description: `and study transcripts of ${$l2.name} videos with a popup dictionary.`,
-                  }"
-                  :level="$l2.code === 'zh' ? level.hsk : level.cefr"
-                  buttonText="Learn Phrases"
-                  :internal="true"
-                />
-                <Resource
-                  :key="`learning-path-course-${level.cefr}-${index}`"
-                  class="mt-3"
-                  v-for="(course, index) in courses[level.cefr]"
-                  :resource="{
-                    title: course.title,
-                    url: course.url,
-                    thumbnail: course.thumbnail.data.full_url,
-                  }"
-                  buttonText="Open Course"
-                  :showThumbnail="false"
-                />
-              </div>
-            </div>
-          </template>
           <div class="level-activity">
             <p>
               <b :data-level="$l2.code === 'zh' ? level.hsk : level.cefr">
