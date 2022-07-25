@@ -78,6 +78,10 @@ export const mutations = {
       state.l2Settings.showPinyin = false;
     }
   },
+  SET_L1_L2_TO_NULL(state) {
+    state.l1 = null
+    state.l2 = null
+  },
   SET_DICTIONARY(state, dictionary) {
     state.dictionary = dictionary;
   },

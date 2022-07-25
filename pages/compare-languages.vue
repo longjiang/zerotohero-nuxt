@@ -283,6 +283,8 @@ export default {
     },
   },
   async mounted() {
+    this.$store.commit('settings/SET_L1_L2_TO_NULL')
+    await this.$languages.loadFull()
     if (this.bookId !== "adhoc") this.loadPhraseObj();
     else this.enData = this.en;
   },

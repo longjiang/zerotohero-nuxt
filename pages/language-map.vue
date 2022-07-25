@@ -76,6 +76,7 @@ export default {
     },
   },
   async mounted() {
+    this.$store.commit('settings/SET_L1_L2_TO_NULL')
     await this.$languages.loadFull()
     await Helper.timeout(100);
     this.updateLanguages();

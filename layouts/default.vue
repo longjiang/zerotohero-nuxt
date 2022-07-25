@@ -228,7 +228,7 @@ export default {
   },
   head() {
     let head = { script: [] };
-    if (typeof this.l2 !== "undefined" && this.l2.code === "my") {
+    if (this.l2 && this.l2.code === "my") {
       head.script.push({
         src: "/vendor/myanmar-tools/zawgyi_converter.min.js",
         body: true,
@@ -291,16 +291,20 @@ export default {
           }
         }
         if (mutation.type === "progress/SET_TIME") {
-          this.l2Time[this.l2.code] = this.$store.getters["progress/time"](
-            this.l2
-          );
+          if (this.l2) {
+            this.l2Time[this.l2.code] = this.$store.getters["progress/time"](
+              this.l2
+            );
+          }
         }
         if (mutation.type === "shows/LOAD_SHOWS") {
-          if (!this.$store.state.stats.statsLoaded[this.l2.code]) {
-            this.$store.dispatch("stats/load", {
-              l2: this.l2,
-              adminMode: this.$store.state.settings.adminMode,
-            });
+          if (this.l2) {
+            if (!this.$store.state.stats.statsLoaded[this.l2.code]) {
+              this.$store.dispatch("stats/load", {
+                l2: this.l2,
+                adminMode: this.$store.state.settings.adminMode,
+              });
+            }
           }
         }
       });
@@ -326,13 +330,15 @@ export default {
     stopAndRestartLoggingUserTimeOnLanguageChange() {
       clearInterval(this.timeLoggerID);
       this.timeLoggerID = undefined;
-      this.l2Time[this.l2.code] = this.$store.getters["progress/time"](this.l2);
-      console.log(
-        `🕙 Language changed to ${this.l2.code}, timer restarted from ${
-          this.l2Time[this.l2.code] / 1000
-        } seconds.`
-      );
-      this.startLoggingUserTime();
+      if (this.l2) {
+        this.l2Time[this.l2.code] = this.$store.getters["progress/time"](this.l2);
+        console.log(
+          `🕙 Language changed to ${this.l2.code}, timer restarted from ${
+            this.l2Time[this.l2.code] / 1000
+          } seconds.`
+        );
+        this.startLoggingUserTime();
+      }
     },
     onPanStart(e) {
       if (e.center.x > window.innerWidth * 0.9) this.edgeDetected = "right";

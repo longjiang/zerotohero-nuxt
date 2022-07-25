@@ -389,7 +389,7 @@ export default {
       this.vousInOtherLangs = phrases.filter((p) => {
         let phraseMatches = (p.normalizedPhrase || "") === (this.normalizedPhrase || "")
         let noL2 = typeof this.$l2 === "undefined"
-        let notSameL2 = noL2 ? true : p.l2.code !== this.$l2.code
+        let notSameL2 = noL2 ? true : p.l2.code !== this.$l2?.code
         let notSameTranslation = p.normalizedTranslation !== this.normalizedTranslation
         let langBool = noL2 || notSameL2 || notSameTranslation
         let includePhrase = phraseMatches && langBool
