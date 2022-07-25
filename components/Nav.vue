@@ -6,6 +6,8 @@
       'zth-nav-menu-bar': variant === 'menu-bar',
       'zth-nav-side-bar': variant === 'side-bar',
       'zth-nav-bottom': variant === 'bottom-bar',
+      'zth-nav-main': (variant === level) === 'main',
+      'zth-nav-secondary': level === 'secondary',
       'zth-nav-page': variant === 'page',
       'zth-nav-collapsed': collapsed,
       'zth-nav-bottom-hidden': hidden,
@@ -18,7 +20,9 @@
         'nav-page': variant === 'page',
         'nav-bottom-bar': variant === 'bottom-bar',
       }"
-      :style="variant === 'side-bar' ? `background-image: url(${background});` : ''"
+      :style="
+        variant === 'side-bar' ? `background-image: url(${background});` : ''
+      "
     >
       <template v-if="variant !== 'page'">
         <nav v-if="level === 'main'" :class="{ 'main-nav': true }">
@@ -88,7 +92,6 @@
           v-else-if="
             level === 'secondary' && currentParent && currentParent.children
           "
-          class="secondary-nav"
         >
           <!-- secondary nav items -->
           <div class="secondary-nav-items">
@@ -326,10 +329,7 @@ export default {
     },
     levels() {
       // Levels feature works for Chinese, German, English, Spanish, French and Arabic only
-      if (
-        this.$l2 &&
-        LANGS_WITH_LEVELS.includes(this.$l2.code)
-      ) {
+      if (this.$l2 && LANGS_WITH_LEVELS.includes(this.$l2.code)) {
         return languageLevels(this.$l2);
       } else return {};
     },
@@ -1418,28 +1418,14 @@ export default {
     z-index: 3;
   }
 
-  .nav-side-bar {
-    .secondary-nav {
-      background: rgba(255, 255, 255, 0.75);
-    }
-  }
-  .nav-menu-bar {
-    .secondary-nav {
-      background: linear-gradient(white 0%, white 66%, transparent 100%);
-    }
+  &.zth-nav-secondary {
+    background: linear-gradient(white 0%, white 66%, transparent 100%);
   }
 }
 
 .zth-nav-dark {
-  .nav-side-bar {
-    .secondary-nav {
-      background: linear-gradient(90deg, rgb(50 50 50) 0%, black 100%);
-    }
-  }
-  .nav-menu-bar {
-    .secondary-nav {
-      background: linear-gradient(black 0%, black 66%, transparent 100%);
-    }
+  &.zth-nav-secondary {
+    background: linear-gradient(black 0%, black 66%, transparent 100%);
   }
 }
 
@@ -1449,7 +1435,7 @@ export default {
   }
 }
 
-.secondary-nav {
+.zth-nav-secondary {
   width: 100vw;
   white-space: nowrap;
   overflow: scroll;
@@ -1459,7 +1445,7 @@ export default {
   padding-left: 1rem;
   padding-right: 1rem;
   padding-bottom: 2rem;
-  position: fixed;
+  position: sticky;
   top: calc(env(safe-area-inset-top) + 2.9rem);
   z-index: 19;
   ::v-deep .nav-item-count {
@@ -1468,13 +1454,13 @@ export default {
 }
 
 .zerotohero-wide {
-  .secondary-nav {
+  .zth-nav-secondary {
     width: calc(100vw - 13rem);
     left: 13rem;
   }
 
   &.zerotohero-wide-collapsed {
-    .secondary-nav {
+    .zth-nav-secondary {
       width: calc(100vw - 5rem);
       left: 5rem;
     }
@@ -1606,11 +1592,6 @@ export default {
       cursor: pointer;
       font-size: 0.85em;
     }
-  }
-
-  .secondary-nav {
-    width: 50%;
-    padding: 0.5rem 0 0.5rem 0.5rem;
   }
 }
 

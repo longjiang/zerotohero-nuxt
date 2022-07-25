@@ -525,6 +525,7 @@ export default {
   .content-pane-left {
     overflow-y: scroll;
     padding: 1rem;
+    padding-top: 3rem;
 
     ::v-deep .entry-word {
       font-size: 2rem;

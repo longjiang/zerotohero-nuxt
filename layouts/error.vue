@@ -1,14 +1,26 @@
+<router>
+  {
+    name: 'error',
+    path: '/',
+    meta: {
+      layout: 'full',
+      skin: 'dark'
+    }
+  }
+</router>
 <template>
   <div
-    :style="`min-height: 100vh; background-image: url(/img/background-earth-vector-bw.jpg); background-size: cover; background-position: center;`"
+    :style="`min-height: 100vh; background-image: url(${background}); background-size: cover; background-position: center;`"
   >
+    <client-only>
+      <SiteTopBar
+        skin="dark"
+        variant="menu-bar"
+      />
+    </client-only>
     <div class="container">
       <div class="row">
         <div class="col-sm-12 text-center pt-4">
-          <div style="font-size: 2rem; color: white">
-            <div style="font-size: 3rem">😭</div>
-            <b>“Hero to Zero”</b>
-          </div>
           <div class="error-page">
             <h3 v-if="error.statusCode === 404">Route Not Found</h3>
             <h3 v-else>A {{ error.statusCode }} error has occurred.</h3>
@@ -18,30 +30,14 @@
               is invalid.
             </p>
             <p class="mt-3">
-              Send a 🐛 bug report with a
               <a
+                class="btn btn-success"
                 :href="`mailto:jon.long@zerotohero.ca?subject=Bug%20Report&body=Hi%20Jon%2C%0D%0A%0D%0AI%20found%20a%20bug%20on%20Zero%20to%20Hero!%0D%0A%0D%0AURL%3A%20${host + $route.fullPath}%0D%0A%0D%0AError%20code%3A%20${error.statusCode}%0D%0A%0D%0AFull%20error%3A%20${JSON.stringify(error)}%0D%0A%0D%0APlease%20fix%20it%20quick%2C%20we're%20counting%20on%20you!`"
               >
                 <i class="fas fa-paper-plane"></i>
-                one-click email
+                Send bug report
               </a>
             </p>
-            <b-button
-              variant="unstyled p-0 text-success"
-              @click="$router.back()"
-            >
-              <i class="fas fa-chevron-left"></i>
-              Back
-            </b-button>
-            <router-link
-              to="/dashboard"
-              class="btn btn-unstyled ml-2 text-success"
-              v-if="$auth.loggedIn"
-              title="Dashboard"
-            >
-              <i class="fas fa-tachometer-alt"></i>
-              Dashboard
-            </router-link>
           </div>
         </div>
       </div>
@@ -50,6 +46,7 @@
 </template>
 
 <script>
+import { background } from '@/lib/utils/background'
 export default {
   props: ["error"],
   layout: "error",
@@ -61,6 +58,11 @@ export default {
   mounted() {
     console.log(this.error);
   },
+  computed: {
+    background() {
+      return background()
+    },
+  }
 };
 </script>
 <style scoped>

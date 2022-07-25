@@ -299,7 +299,7 @@ export default {
   width: 100%;
   z-index: 20;
   line-height: 2.3;
-  position: fixed;
+  position: sticky;
   top: 0;
   padding: calc(env(safe-area-inset-top) + 0.25rem) 0.75rem 0.25rem 0.75rem;
   color: #777;
@@ -353,7 +353,6 @@ export default {
 .zerotohero-wide {
   .site-top-bar {
     left: 13rem;
-    width: calc(100% - 13rem);
   }
   &.zerotohero-wide-collapsed {
     .site-top-bar {

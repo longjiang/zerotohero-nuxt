@@ -27,8 +27,8 @@
     <div class="gradient-backdrop"></div>
     <div class="gradient-backdrop-2"></div>
     <div
-      class="container-fluid safe-padding-top safe-padding-bottom"
-      style="overflow: hidden; position: relative"
+      class="container-fluid safe-padding-top safe-padding-bottom pt-5"
+      style="overflow: hidden; position: relative;"
     >
       <div class="container">
         <div class="row">
@@ -52,16 +52,6 @@
               </div>
             </client-only>
           </div>
-        </div>
-
-        <div class="mt-5 text-center mb-5" v-if="!loaded">
-          <p>App is asleep due to inactivity.</p>
-          <router-link
-            :to="{ path: lastFullHistoryPath || '/' }"
-            class="btn btn-success"
-          >
-            Reactivate
-          </router-link>
         </div>
 
         <div class="row pt-3">
@@ -328,7 +318,6 @@ export default {
   position: absolute;
   z-index: 0;
   mix-blend-mode: overlay;
-  top: -5rem;
 }
 
 .gradient-backdrop-2 {
@@ -338,7 +327,6 @@ export default {
   z-index: 9;
   position: absolute;
   z-index: 0;
-  top: -5rem;
 }
 
 .blurb {

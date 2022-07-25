@@ -1,87 +1,67 @@
 <template>
   <div id="zerotohero" :class="classes">
-    <div>
-      <a :href="feedbackMailToURL" class="feedback-button">Feedback</a>
-
-      <template
-        v-if="
-          $route.meta.layout === 'full' ||
-          !($route.params.l1 && $route.params.l1 && l1 && l2)
-        "
-      >
-        <!-- <delay-hydration> -->
-        <div id="main">
-          <Nuxt class="nuxt-content" />
-        </div>
-        <!-- </delay-hydration> -->
-      </template>
-      <template v-else>
-        <!-- <delay-hydration> -->
-        <div>
-          <HydrationNotice />
-          <client-only>
-            <!-- Main nav - side bar on wide screen, bottom bar on small screen /-->
-            <Nav
-              v-if="$route.params.l1 && $route.params.l2 && l1 && l2"
-              class="zth-main-nav-wrapper"
-              :l1="l1"
-              :l2="l2"
-              :key="`nav-main-${l1.code}-${l2.code}`"
-              :variant="wide ? 'side-bar' : 'bottom-bar'"
-              :skin="$route.meta.skin ? $route.meta.skin : 'light'"
-              @collapsed="updateCollapsed"
-              level="main"
-            />
-          </client-only>
-          <div class="zth-content">
-            <client-only>
-              <SiteTopBar
-                v-if="$route.params.l1 && $route.params.l1 && l1 && l2"
-                :skin="$route.meta.skin ? $route.meta.skin : 'light'"
-                variant="menu-bar"
-                :badge="savedWordsCount + savedPhrasesCount"
-                :wide="wide"
-              />
-              <!-- Secondary nav (hidden for youtube-view) /-->
-              <Nav
-                v-if="
-                  $route.params.l1 &&
-                  $route.params.l2 &&
-                  l1 &&
-                  l2 &&
-                  !($route.name === 'youtube-view')
-                "
-                class="zth-secondary-nav-wrapper"
-                :l1="l1"
-                :l2="l2"
-                :key="`nav-secondary-${l1.code}-${l2.code}`"
-                variant="menu-bar"
-                level="secondary"
-                :skin="$route.meta.skin ? $route.meta.skin : 'light'"
-              />
-            </client-only>
-            <YouTubeViewComp
-              id="overlay-player"
-              v-if="overlayPlayerYouTubeId"
-              v-bind="{
-                youtube_id: overlayPlayerYouTubeId,
-                lesson: overlayPlayerLesson,
-                mini: overlayPlayerMinimized,
-                class: `${
-                  overlayPlayerMinimized ? 'overlay-player-minimized' : ''
-                }`,
-                key: `youtube-view-comp-${overlayPlayerYouTubeId}`,
-              }"
-              @close="overlayPlayerClose"
-            />
-            <div id="main" v-if="overlayPlayerMinimized">
-              <Nuxt class="nuxt-content" />
-            </div>
-          </div>
-        </div>
-        <!-- </delay-hydration> -->
-      </template>
+    <a :href="feedbackMailToURL" class="feedback-button">Feedback</a>
+    <!-- <delay-hydration> -->
+    <HydrationNotice />
+    <client-only>
+      <!-- Main nav - side bar on wide screen, bottom bar on small screen /-->
+      <Nav
+        v-if="$route.params.l1 && $route.params.l2 && l1 && l2"
+        class="zth-main-nav-wrapper"
+        :l1="l1"
+        :l2="l2"
+        :key="`nav-main-${l1.code}-${l2.code}`"
+        :variant="wide ? 'side-bar' : 'bottom-bar'"
+        :skin="$route.meta.skin ? $route.meta.skin : 'light'"
+        @collapsed="updateCollapsed"
+        level="main"
+      />
+    </client-only>
+    <div class="zth-content">
+      <client-only>
+        <SiteTopBar
+          v-if="$route.params.l1 && $route.params.l1 && l1 && l2"
+          :skin="$route.meta.skin ? $route.meta.skin : 'light'"
+          variant="menu-bar"
+          :badge="savedWordsCount + savedPhrasesCount"
+          :wide="wide"
+        />
+        <!-- Secondary nav (hidden for youtube-view) /-->
+        <Nav
+          v-if="
+            $route.params.l1 &&
+            $route.params.l2 &&
+            l1 &&
+            l2 &&
+            !($route.name === 'youtube-view')
+          "
+          class="zth-secondary-nav-wrapper"
+          :l1="l1"
+          :l2="l2"
+          :key="`nav-secondary-${l1.code}-${l2.code}`"
+          variant="menu-bar"
+          level="secondary"
+          :skin="$route.meta.skin ? $route.meta.skin : 'light'"
+        />
+      </client-only>
+      <YouTubeViewComp
+        id="overlay-player"
+        v-if="overlayPlayerYouTubeId"
+        v-bind="{
+          youtube_id: overlayPlayerYouTubeId,
+          lesson: overlayPlayerLesson,
+          mini: overlayPlayerMinimized,
+          class: `${overlayPlayerMinimized ? 'overlay-player-minimized' : ''}`,
+          key: `youtube-view-comp-${overlayPlayerYouTubeId}`,
+        }"
+        @close="overlayPlayerClose"
+      />
+      <div id="main" v-if="overlayPlayerMinimized">
+        <Nuxt class="nuxt-content" />
+      </div>
     </div>
+
+    <!-- </delay-hydration> -->
     <i class="fas fa-star star-animation"></i>
   </div>
 </template>
@@ -552,6 +532,12 @@ export default {
 
 #zerotohero {
   min-height: 100vh;
+  &.zerotohero-light {
+    background: white;
+  }
+  &.zerotohero-dark {
+    background: black;
+  }
   .zth-content {
     display: flex;
     flex-direction: column;
@@ -562,15 +548,7 @@ export default {
 #zerotohero {
   #main {
     min-height: calc(100vh - 250px);
-    padding-top: 6rem;
-    padding-bottom: 7rem;
     flex: 1;
-    background: white;
-  }
-  &.zerotohero-dark {
-    #main {
-      background: black;
-    }
   }
 }
 
@@ -582,17 +560,21 @@ export default {
 
 .zerotohero-wide {
   height: 100%;
+  &.zerotohero-with-nav {
+    .zth-content {
+      margin-left: 13rem;
+      width: calc(100% - 13rem);
+    }
+    &.zerotohero-wide-collapsed {
+      .zth-content {
+        margin-left: 5rem;
+        width: calc(100% - 5rem);
+      }
+    }
+  }
   .zth-content {
     flex: 1;
-    margin-left: 13rem;
     overflow: visible;
-    width: calc(100% - 13rem);
-  }
-  &.zerotohero-wide-collapsed {
-    .zth-content {
-      margin-left: 5rem;
-      width: calc(100% - 5rem);
-    }
   }
 }
 

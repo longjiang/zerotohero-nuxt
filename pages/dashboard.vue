@@ -23,8 +23,8 @@
       <div class="gradient-backdrop"></div>
       <div class="gradient-backdrop-2"></div>
       <div
-        class="container-fluid safe-padding-top safe-padding-bottom"
-        style="overflow: hidden; position: relative"
+        class="container-fluid safe-padding-top safe-padding-bottom pt-5"
+        style="overflow: hidden; position: relative;"
       >
         <div class="container pb-5">
           <div class="row">
