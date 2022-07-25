@@ -199,8 +199,6 @@
 </template>
 
 <script>
-import Config from "@/lib/config";
-import axios from "axios";
 import Papa from "papaparse";
 import Helper from "@/lib/helper";
 
