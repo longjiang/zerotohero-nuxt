@@ -76,6 +76,7 @@ export default {
     },
   },
   async mounted() {
+    await this.$languages.loadFull()
     await Helper.timeout(100);
     this.updateLanguages();
   },
