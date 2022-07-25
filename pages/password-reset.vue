@@ -1,7 +1,6 @@
 <router>
   {
     path: '/password-reset',
-    props: route => ({ token: route.query.token }),
     meta: {
       skin: 'dark',
     }
@@ -63,12 +62,8 @@
 
 <script>
 import Helper from "@/lib/helper";
-import axios from "axios";
 
 export default {
-  props: {
-    token: String,
-  },
   data() {
     return {
       form: {
@@ -77,6 +72,7 @@ export default {
       resetting: false,
       reset: false,
       shaking: false,
+      token: undefined
     };
   },
   computed: {
@@ -91,6 +87,9 @@ export default {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
+  },
+  mounted() {
+    this.token = this.$route.query?.token
   },
   methods: {
     async onSubmit(event) {
