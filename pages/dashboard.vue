@@ -27,19 +27,6 @@
         style="overflow: hidden; position: relative;"
       >
         <div class="container pb-5">
-          <div class="row">
-            <div class="col-sm-12">
-              <div class="mt-5 text-center mb-5" v-if="!loaded">
-                <p>App is asleep due to inactivity.</p>
-                <router-link
-                  :to="{ path: lastFullHistoryPath || '/' }"
-                  class="btn btn-success"
-                >
-                  Reactivate
-                </router-link>
-              </div>
-            </div>
-          </div>
           <div :class="{ 'row mb-5': true }" v-if="hasDashboard">
             <div class="col-sm-12">
               <div class="home-card p-2 pt-4 pb-4 bg-white">
@@ -75,11 +62,6 @@ import { mapState } from "vuex";
 import { background } from '@/lib/utils/background'
 
 export default {
-  data() {
-    return {
-      loaded: false,
-    };
-  },
   computed: {
     ...mapState("fullHistory", ["fullHistory"]),
     background() {
@@ -120,9 +102,6 @@ export default {
       }
       return "en";
     },
-  },
-  mounted() {
-    this.loaded = true;
   },
   methods: {
     translate(text, code) {

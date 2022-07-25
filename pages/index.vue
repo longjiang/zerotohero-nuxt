@@ -129,7 +129,6 @@ export default {
   data() {
     return {
       langKeyword: undefined,
-      loaded: false,
       hasDashboard: false,
       // The following list is SORTED by number of videos available.
       languagesWithVideos:
@@ -209,9 +208,6 @@ export default {
   },
   async created() {
     await this.$languagesPromise;
-  },
-  mounted() {
-    this.loaded = true;
   },
   methods: {
     translate(text, code) {
