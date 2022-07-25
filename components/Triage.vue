@@ -24,7 +24,8 @@
               params: { l1: l1.code, l2: l2.code === 'cmn' ? 'zh' : l2.code },
             }"
           >
-            Start Learning <i class="fa-solid fa-chevron-right"></i>
+            Start Learning
+            <i class="fa-solid fa-chevron-right"></i>
           </router-link>
         </div>
       </div>
@@ -41,6 +42,9 @@ export default {
   computed: {
     l2Options() {
       let options = this.$languages.l1s
+        .filter((language) =>
+          this.$languages.commonLangs.includes(language.code)
+        )
         .map((language) => {
           return {
             value: language,
@@ -53,7 +57,9 @@ export default {
     l1Options() {
       let l2 = this.l2;
       let supportedL1s = this.$languages.l1s.filter(
-        (language) => language.dictionaries?.[l2["iso639-3"]]
+        (language) =>
+          this.$languages.commonLangs.includes(language.code) &&
+          language.dictionaries?.[l2["iso639-3"]]
       );
       let options = supportedL1s.map((language) => {
         return {
@@ -61,8 +67,9 @@ export default {
           text: language.name,
         };
       });
-      if (options.length === 1) this.l1 = options[0].value // If only one l1 is possible, use that
-      else this.l1 = undefined
+      if (options.length === 1) this.l1 = options[0].value;
+      // If only one l1 is possible, use that
+      else this.l1 = undefined;
       return options;
     },
   },
