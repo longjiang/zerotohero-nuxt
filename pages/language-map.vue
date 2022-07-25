@@ -3,7 +3,8 @@
     path: '/language-map',
     props: true,
     meta: {
-      layout: 'full'
+      layout: 'full',
+      skin: 'dark'
     }
   }
 </router>
@@ -26,13 +27,9 @@
           </div>
           <client-only v-if="filteredLangsWithGeo">
             <div class="options-bar">
-              <b-dropdown id="dropdown-1" :text="`From ${l1Lang.name}`" style="z-index: 500">
-                <b-dropdown-item @click="l1 = 'en'">English</b-dropdown-item>
-                <b-dropdown-item @click="l1 = 'zh'">Chinese</b-dropdown-item>
-              </b-dropdown>
               <LanguageSwitch
                 style="flex: 1; z-index: 999; margin-left: 0.25rem"
-                placeholder="I want to learn..."
+                placeholder="Search languages..."
                 :nav="false"
                 :button="false"
                 :showRandom="false"
@@ -61,16 +58,6 @@ export default {
   data() {
     return {
       l1: "en",
-      l1s: [
-        {
-          value: "en",
-          text: "English",
-        },
-        {
-          value: "zh",
-          text: "中文",
-        },
-      ],
       loadingMap: true,
       filteredLangsWithGeo: undefined,
       filteredLangs: undefined,
@@ -86,11 +73,6 @@ export default {
       if (process.client) {
         return import("../components/LanguageMap.vue");
       }
-    },
-  },
-  computed: {
-    l1Lang() {
-      return this.$languages.l1s.find((language) => language.code === this.l1);
     },
   },
   async mounted() {
@@ -119,7 +101,6 @@ export default {
         if (l["iso639-3"] === "cmn") return false; // Mandarin overlaps Chinese, which is annoying
         if (!l["iso639-3"]) return false;
         // if (["A", "E", "H"].includes(l.type)) return false;
-        if (!this.hasDictionary(this.l1Lang, l)) return false;
         return true;
       });
       return languages;

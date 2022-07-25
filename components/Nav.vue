@@ -475,9 +475,15 @@ export default {
                   show: true,
                 },
                 {
+                  name: "language-map",
+                  title: `Map of Languages`,
+                  icon: "fas fa-globe-asia",
+                  show: true,
+                },
+                {
                   name: "compare-languages",
                   title: "Compare Languages",
-                  icon: "fas fa-globe-asia",
+                  icon: "fa-solid fa-arrow-right-arrow-left",
                   show: true,
                 },
                 {
