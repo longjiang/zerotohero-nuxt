@@ -16,6 +16,7 @@
         'quick-access-button quick-access-button-collapse text-center': true,
       }"
       @click="toggleCollapsed"
+      title="Hide Video (for Audiobooks)"
     >
       <i class="fas fa-caret-square-up" v-if="!collapsed"></i>
       <i class="fas fa-caret-square-down" v-if="collapsed"></i>
@@ -25,6 +26,7 @@
         'quick-access-button quick-access-button-rewind text-center': true,
       }"
       @click="rewind"
+      Title="Rewind to Beginning"
     >
       <i class="fas fa-undo"></i>
     </button>
@@ -33,12 +35,14 @@
       :disabled="!previousEpisode"
       class="quick-access-button quick-access-button-previous text-center"
       @click="$emit('previous')"
+      title="Previous Video"
     >
       <i class="fas fa-step-backward"></i>
     </button>
     <button
       class="quick-access-button quick-access-button-previous-line text-center"
       @click="$emit('goToPreviousLine')"
+      title="Previous Line"
     >
       <i v-if="layout === 'horizontal'" class="fas fa-arrow-up"></i>
       <i v-else class="fas fa-chevron-left"></i>
@@ -48,6 +52,7 @@
         'quick-access-button quick-access-button-play play-pause text-center': true,
       }"
       @click="togglePaused"
+      :title="paused ? 'Play' : 'Pause'"
     >
       <i v-if="paused && !speaking" class="fas fa-play"></i>
       <i v-if="!paused || speaking" class="fas fa-pause"></i>
@@ -55,6 +60,7 @@
     <button
       class="quick-access-button quick-access-button-next-line text-center"
       @click="$emit('goToNextLine')"
+      title="Next Line"
     >
       <i v-if="layout === 'horizontal'" class="fas fa-arrow-down"></i>
       <i v-else class="fas fa-chevron-right"></i>
@@ -64,6 +70,7 @@
       :disabled="!nextEpisode"
       class="quick-access-button quick-access-button-next text-center"
       @click="$emit('next')"
+      title="Next Video"
     >
       <i class="fas fa-step-forward"></i>
     </button>
@@ -91,6 +98,7 @@
         'quick-access-button-active': speed !== 1,
       }"
       @click="toggleSpeed"
+      title="Change Playback Speed"
     >
       <i v-if="speed === 1" class="fas fa-tachometer-alt"></i>
       <span v-else>{{ speed }}x</span>
@@ -102,6 +110,7 @@
         'quick-access-button-active': layout === 'vertical',
       }"
       @click="toggleFullscreenMode"
+      :title="layout === 'vertical' ? 'Full Screen' : 'Close Full Screen'"
     >
       <i class="fas fa-expand"></i>
     </button>
