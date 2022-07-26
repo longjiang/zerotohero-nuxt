@@ -14,7 +14,8 @@
           :variant="skin === 'light' ? 'gray' : 'ghost-dark-no-bg'"
           :disabled="hitIndex === 0"
           @click="goToPrevHit"
-          :class="{ 'ml-1 mr-1': true, disabled: hitIndex === 0 }"
+          title="Previous Clip"
+          :class="{ '': true, disabled: hitIndex === 0 }"
         >
           <i class="fas fa-step-backward" />
         </b-button>
@@ -22,14 +23,24 @@
           :variant="skin === 'light' ? 'gray' : 'ghost-dark-no-bg'"
           size="sm"
           v-if="!showFilter"
+          title="Filter Clips by Keywords"
           @click="showFilter = true"
         >
           <i class="fas fa-filter" />
         </b-button>
+        <b-button
+          size="sm"
+          :variant="skin === 'dark' ? 'ghost-dark-no-bg' : 'gray'"
+          class="playlist-toggle "
+          @click="showPlaylistModal"
+          title="List All Clips"
+        >
+          <i class="fa-solid fa-list mr-1"></i> List
+        </b-button>
         <b-form-input
           v-if="!checking && (hits.length > 0 || regex) && showFilter"
           type="text"
-          class="d-inline-block mr-1 ml-1"
+          class="d-inline-block "
           size="sm"
           v-model="regex"
           placeholder="Filter..."
@@ -41,14 +52,6 @@
         <span class="search-subs-hit-index ml-2 mr-2 d-inline-block">
           {{ hitIndex + 1 }} of {{ hits.length }}
         </span>
-        <b-button
-          size="sm"
-          :variant="skin === 'dark' ? 'ghost-dark-no-bg' : 'gray'"
-          class="playlist-toggle ml-1 mr-1"
-          @click="showPlaylistModal"
-        >
-          <i class="fa fa-stream" />
-        </b-button>
         <router-link
           v-if="currentHit"
           :to="`/${$l1.code}/${$l2.code}/youtube/view/${
@@ -56,17 +59,19 @@
           }/?t=${currentHit.video.subs_l2[currentHit.lineIndex].starttime}`"
           :class="`btn btn-${
             skin === 'light' ? 'gray' : 'ghost-dark-no-bg'
-          } btn-sm mr-1 ml-1`"
+          } btn-sm `"
+          title="Open this video with full transcript"
         >
-          <i class="fa fa-window-restore" />
+          <i class="fa-solid fa-arrows-maximize mr-1"></i> Open Full
         </router-link>
         <b-button
           size="sm"
           :disabled="hitIndex >= hits.length - 1"
           :variant="skin === 'light' ? 'gray' : 'ghost-dark-no-bg'"
           @click="goToNextHit"
+          title="Next Clip"
           :class="{
-            'ml-1 mr-1': true,
+            '': true,
             disabled: hitIndex >= hits.length - 1,
           }"
         >
