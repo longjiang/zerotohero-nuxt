@@ -87,6 +87,8 @@ import Vue from "vue";
 export default {
   data() {
     return {
+      field: this.type === "tvShows" ? "tv_show" : "talk",
+      slug: this.type === "tvShows" ? "tv-show" : "talk",
       localeDescription: undefined,
       country: undefined,
       language: undefined,
