@@ -1,81 +1,19 @@
 <template>
   <container-query :query="query" v-model="params">
     <div class="tv-shows row">
-      <div
+      <ShowCard
         v-for="show of shows"
-        :class="colClasses"
+        :show="show"
+        :type="type"
         :key="`tv-show-card-wrapper-${show.id}`"
-        style="padding-bottom: 2rem"
-      >
-        <div class="deck3"></div>
-        <div class="deck2"></div>
-        <div class="deck1"></div>
-        <div
-          :class="{
-            'tv-show-card media': true,
-            'tv-show-card-hidden': show.hidden,
-          }"
-        >
-          <router-link
-            class="youtube-thumbnail-wrapper aspect-wrapper d-block"
-            :to="path(show)"
-          >
-            <img
-              :src="`https://img.youtube.com/vi/${show.youtube_id}/hqdefault.jpg`"
-              class="youtube-thumbnail aspect"
-            />
-          </router-link>
-          <div class="tv-show-card-title">
-            <router-link :to="path(show)" class="link-unstyled">
-              <h6 class="mb-0">
-                {{ show.title }}
-                <span
-                  v-if="show.level"
-                  :data-bg-level="levels[show.level].level"
-                  class="level-tag"
-                >
-                  {{ levels[show.level].name }}
-                </span>
-              </h6>
-              <b-button
-                v-if="$adminMode"
-                size="sm"
-                class="admin-hide-button"
-                @click.stop.prevent="toggle(show, 'hidden')"
-              >
-                <i class="far fa-eye" v-if="show.hidden"></i>
-                <i class="far fa-eye-slash" v-else></i>
-              </b-button>
-              <b-button
-                v-if="$adminMode"
-                size="sm"
-                class="admin-audiobook-button"
-                @click.stop.prevent="toggle(show, 'audiobook')"
-              >
-                <i class="fa fa-microphone" v-if="show.audiobook"></i>
-                <i class="fa fa-microphone-slash" v-else></i>
-              </b-button>
-              <b-button
-                v-if="$adminMode"
-                size="sm"
-                class="admin-remove-button"
-                @click.stop.prevent="remove(show)"
-              >
-                <i class="fa fa-trash"></i>
-              </b-button>
-            </router-link>
-            <div v-if="show.avg_views" class="statistics"><i class="fa-solid fa-eye"></i> {{ formatK(show.avg_views) }}</div>
-          </div>
-        </div>
-      </div>
+        :class="colClasses"
+      />
     </div>
   </container-query>
 </template>
 
 <script>
 import { ContainerQuery } from "vue-container-query";
-import { languageLevels, formatK } from "@/lib/utils";
-import Vue from "vue";
 
 export default {
   components: {
@@ -135,150 +73,10 @@ export default {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
     },
-    levels() {
-      return languageLevels(this.$l2);
-    },
   },
-  methods: {
-    formatK(number) {
-      return formatK(number)
-    },
-    async remove(show) {
-      this.$store.dispatch("shows/remove", {
-        l2: this.$l2,
-        type: this.type,
-        show,
-      });
-    },
-    path(show) {
-      return `/${this.$l1.code}/${this.$l2.code}/show/${
-        this.slug
-      }/${encodeURIComponent(show.id)}`;
-    },
-    async toggle(show, property) {
-      let toggled = !show[property]; // If true, make it false, and vice versa
-      try {
-        let path = `items/${this.field}s/${show.id}`;
-        let payload = {};
-        payload[property] = toggled;
-        let response = await this.$directus.patch(path, payload, {
-          contentType: "application/json",
-        });
-        if (response && response.data.data) {
-          Vue.set(show, property, toggled);
-        }
-      } catch (err) {
-        // Direcuts bug
-      }
-    },
-  },
+
 };
 </script>
 
 <style lang="scss" scoped>
-.deck1,
-.deck2,
-.deck3 {
-  height: 4rem;
-  position: absolute;
-  left: 1rem;
-  width: calc(100% - 2rem);
-  border-radius: 0.25rem;
-  background-color: #767676;
-  border: 1px solid rgb(138, 138, 138);
-  box-shadow: 1px -3px 4px #00000070;
-}
-.col-compact {
-  .deck1,
-  .deck2,
-  .deck3 {
-    left: 0.5rem;
-    width: calc(100% - 1rem);
-  }
-  .deck1 {
-    top: 0;
-  }
-  .deck2 {
-    top: -0.5rem;
-  }
-  .deck3 {
-    top: -1rem;
-  }
-}
-.deck1 {
-  top: -0.5rem;
-  transform: scale(0.95);
-}
-.deck2 {
-  top: -1rem;
-  transform: scale(0.9);
-  opacity: 0.66;
-}
-.deck3 {
-  top: -1.4rem;
-  transform: scale(0.85);
-  opacity: 0.33;
-}
-.col-compact {
-  padding: 0.5rem;
-  ::v-deep .media-body {
-    font-size: 0.9em;
-  }
-}
-.show-tag {
-  font-size: 0.8em;
-  color: #888;
-}
-.show-tags {
-  line-height: 1;
-}
-.tv-show-card {
-  position: relative;
-  height: 100%;
-  &.tv-show-card-hidden {
-    opacity: 0.3;
-  }
-  .youtube-thumbnail {
-    border-radius: 0.25rem;
-  }
-  .tv-show-card-title {
-    padding-top: 0.5rem;
-    color: #fff;
-    a {
-      z-index: 1;
-      width: 100%;
-    }
-  }
-}
-
-.admin-remove-button {
-  position: absolute;
-  bottom: 0.5rem;
-  right: 0.5rem;
-}
-.admin-hide-button {
-  position: absolute;
-  bottom: 0.5rem;
-  left: 0.5rem;
-}
-.admin-audiobook-button {
-  position: absolute;
-  bottom: 0.5rem;
-  left: 2rem;
-}
-
-.level-tag {
-  font-size: 0.7em;
-  border-radius: 0.25rem;
-  display: inline-block;
-  padding: 0.1rem 0.5rem;
-  position: relative;
-  bottom: 0.1rem;
-}
-
-.statistics {
-  opacity: 0.5;
-  font-size: 0.8em;
-  margin-top: 0.25rem;
-}
 </style>

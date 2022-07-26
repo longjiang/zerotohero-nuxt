@@ -86,7 +86,7 @@ export const levelByLexDiv = (lexDiv, minLexDivByLevel) => {
 }
 
 export const actions = {
-  async load(context, { l2, adminMode, limit = 500 }) {
+  async load(context, { l2, adminMode, limit = 1000 }) {
     let tvShows = []
     let talks = []
     try {
