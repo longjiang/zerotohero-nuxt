@@ -98,8 +98,7 @@ export default {
         : window.location.protocol +
           "//" +
           window.location.hostname +
-          ":" +
-          window.location.port,
+          (window.location.port ? ':' + window.location.port : '')
       // transition: false,
       // edgeDetected: false,
       // translateX: 0,
@@ -110,6 +109,7 @@ export default {
     ...mapState("history", ["history"]),
     ...mapState("fullHistory", ["fullHistory"]),
     feedbackMailToURL() {
+      let receipient = "jon.long@zerotohero.ca";
       let userEmail =
         this.$auth.loggedIn && this.$auth.user
           ? this.$auth.user.email
@@ -119,7 +119,29 @@ export default {
           ? this.host + this.fullHistory[this.fullHistory.length - 2].path
           : "(None available)";
       let currentURL = this.host + this.$route.fullPath;
-      return `mailto:jon.long@zerotohero.ca?subject=Feedback%20on%20Language%20Player&body=Your%20feedback%20on%20Language%20Player%3A%0D%0A%0D%0A%0D%0A%0D%0A%0D%0APlease%20attach%20a%20screenshot%20or%20screen%20recording%20(with%20your%20voice%20explaining%20your%20suggestion)%3A%0D%0A%0D%0A%0D%0A%0D%0A%0D%0A%0D%0A*%20*%20*%0D%0A%0D%0ADiagnostic%20information%3A%0D%0A%0D%0AUser%20email%3A%20${userEmail}%0D%0ACurrent%20URL%3A%20${currentURL}%0D%0APrevious%20URL%3A%20${previousURL}`;
+      let subject = `Feedback on Language Player`;
+      let body = `Your feedback on Language Player:
+
+
+
+
+Please attach a screenshot or screen recording (with your voice explaining your suggestion):
+
+
+
+
+
+* * *
+
+Diagnostic information:
+
+User email: ${userEmail}
+Current URL: ${currentURL}
+Previous URL: ${previousURL}`;
+
+      return `mailto:${receipient}?subject=${encodeURIComponent(
+        subject
+      )}&body=${encodeURIComponent(body)}`;
     },
     fullHistoryPathsByL1L2() {
       return this.$store.getters["fullHistory/fullHistoryPathsByL1L2"]({
@@ -331,7 +353,9 @@ export default {
       clearInterval(this.timeLoggerID);
       this.timeLoggerID = undefined;
       if (this.l2) {
-        this.l2Time[this.l2.code] = this.$store.getters["progress/time"](this.l2);
+        this.l2Time[this.l2.code] = this.$store.getters["progress/time"](
+          this.l2
+        );
         console.log(
           `🕙 Language changed to ${this.l2.code}, timer restarted from ${
             this.l2Time[this.l2.code] / 1000
