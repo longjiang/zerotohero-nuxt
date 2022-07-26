@@ -5,9 +5,6 @@
         <div class="col-sm-12">
           <div class="mb-2">Which language would you like to learn?</div>
           <b-form-select :options="l2Options" v-model="l2"></b-form-select>
-          <div class="mt-2 text-right">
-            <u><router-link to="/language-map" class="link-unstyled text-secondary"><i class="fa-solid fa-earth-asia mr-2"></i> See more languages on a map <i class="fa-solid fa-chevron-right ml-2"></i></router-link></u>
-          </div>
         </div>
       </div>
       <div class="row mt-3" v-if="l2 && l1Options.length > 1">
@@ -21,7 +18,7 @@
       <div class="row mt-3" v-if="l1 && l2">
         <div class="col-sm-12 text-center">
           <router-link
-            class="btn btn-success"
+            class="btn btn-success pl-5 pr-5"
             :to="{
               name: 'learning-path',
               params: { l1: l1.code, l2: l2.code === 'cmn' ? 'zh' : l2.code },
@@ -31,6 +28,9 @@
             <i class="fa-solid fa-chevron-right"></i>
           </router-link>
         </div>
+      </div>
+      <div class="mt-2 text-right">
+        <u><router-link to="/language-map" class="link-unstyled text-secondary"><i class="fa-solid fa-earth-asia mr-2"></i> See more languages on a map <i class="fa-solid fa-chevron-right ml-2"></i></router-link></u>
       </div>
     </div>
   </div>
