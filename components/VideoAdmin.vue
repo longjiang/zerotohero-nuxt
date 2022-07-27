@@ -647,7 +647,7 @@ export default {
       }
     },
     async remove() {
-      let data = await this.$directus.delete({
+      let data = await this.$directus.deleteVideo({
         l2Id: this.$l2.id,
         id: this.video.id,
       });
@@ -685,6 +685,7 @@ export default {
     line-height: 2;
   }
 }
+
 .video-meta span + span::before {
   content: " · ";
   margin: 0 0.25rem;
