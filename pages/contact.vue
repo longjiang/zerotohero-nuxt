@@ -19,11 +19,6 @@
       <template>
         <div class="row">
           <div class="col-12">
-            <FeedbackPrompt class="mb-5" />
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-12">
             <h4 class="mb-5 text-center">Contact Language Player</h4>
           </div>
         </div>

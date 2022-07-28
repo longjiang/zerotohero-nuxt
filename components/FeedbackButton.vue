@@ -1,6 +1,49 @@
 <template>
   <div>
-    <a :href="feedbackMailToURL" class="feedback-button">Feedback</a>
+    <span @click="showModal" class="feedback-button">Feedback</span>
+    <b-modal
+      ref="feedback-modal"
+      centered
+      hide-footer
+      title="Feedback"
+      body-class="feedback-modal"
+    >
+      <div>
+        <h6>Your feedback on Language Player:</h6>
+        <b-form-textarea
+          id="textarea"
+          v-model="feedbackText"
+          rows="3"
+          max-rows="6"
+        ></b-form-textarea>
+      </div>
+      <div class="mt-3 text-center">
+        <b-button variant="success pl-4 pr-4" @click="sendEmail">
+          <b-spinner small v-if="sending" />
+          <span v-else>
+            <i class="fas fa-paper-plane mr-2"></i>
+            Send
+          </span>
+        </b-button>
+      </div>
+      <div class="mt-4">
+        <div class="mb-1"><small>Diagnostic information included:</small></div>
+        <div class="alert alert-secondary text-secondary small">
+          <div>
+            <b>User Email:</b>
+            {{ userEmail ? userEmail : "(Not logged in)" }}
+          </div>
+          <div>
+            <b>Current URL:</b>
+            {{ currentURL }}
+          </div>
+          <div>
+            <b>Previous URL:</b>
+            {{ previousURL }}
+          </div>
+        </div>
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -10,31 +53,33 @@ import { mapState } from "vuex";
 export default {
   data() {
     return {
+      sending: false,
+      feedbackText: undefined,
+      receipient: "jon.long@zerotohero.ca",
       host: process.server
-      ? process.env.baseUrl
-      : window.location.protocol +
-        "//" +
-        window.location.hostname +
-        (window.location.port ? ":" + window.location.port : "")
-    }
+        ? process.env.baseUrl
+        : window.location.protocol +
+          "//" +
+          window.location.hostname +
+          (window.location.port ? ":" + window.location.port : ""),
+    };
   },
   computed: {
     ...mapState("fullHistory", ["fullHistory"]),
-    feedbackMailToURL() {
-      let receipient = "jon.long@zerotohero.ca";
-      let userEmail =
-        this.$auth.loggedIn && this.$auth.user
-          ? this.$auth.user.email
-          : "(Not logged in)";
-      let previousURL =
-        this.fullHistory && this.fullHistory[this.fullHistory.length - 2]
-          ? this.host + this.fullHistory[this.fullHistory.length - 2].path
-          : "(None available)";
-      let currentURL = this.host + this.$route.fullPath;
-      let subject = `Feedback on Language Player`;
-      let body = `Your feedback on Language Player:
+    userEmail() {
+      if (this.$auth.loggedIn && this.$auth.user) return this.$auth.user.email;
+    },
+    currentURL() {
+      return this.host + this.$route.fullPath;
+    },
+    previousURL() {
+      if (this.fullHistory && this.fullHistory[this.fullHistory.length - 2])
+        return this.host + this.fullHistory[this.fullHistory.length - 2].path;
+    },
+    emailBody() {
+      let emailBody = `My feedback on Language Player:
 
-
+${this.feedbackText ? this.feedbackText : ""}
 
 
 Please attach a screenshot or screen recording (with your voice explaining your suggestion):
@@ -47,19 +92,48 @@ Please attach a screenshot or screen recording (with your voice explaining your 
 
 Diagnostic information:
 
-User email: ${userEmail}
-Current URL: ${currentURL}
-Previous URL: ${previousURL}`;
+User email: ${this.userEmail ? this.userEmail : "(Not logged in)"}
+Current URL: ${this.currentURL ? this.currentURL : "(Not available)"}
+Previous URL: ${this.previousURL ? this.previousURL : "(Not available)"}`;
+      return emailBody;
+    },
+    feedbackMailToURL() {
+      let subject = `Feedback on Language Player`;
+      let emailBody = this.emailBody;
 
-      return `mailto:${receipient}?subject=${encodeURIComponent(
+      return `mailto:${this.receipient}?subject=${encodeURIComponent(
         subject
-      )}&body=${encodeURIComponent(body)}`;
+      )}&body=${encodeURIComponent(emailBody)}`;
+    },
+  },
+  methods: {
+    showModal() {
+      this.$refs["feedback-modal"].show();
+    },
+    hideModal() {
+      this.$refs["feedback-modal"].hide();
+    },
+    async sendEmail() {
+      this.sending = true;
+      let payload = {
+        to: [this.receipient],
+        subject: "Language Player Feedback Form Reponse",
+        body: this.emailBody,
+        type: 'plain' // or 'html'
+      };
+      await this.$directus.post("mail", payload);
+      this.sending = false;
+      this.$toast.success("Feedback sent. Thank you!", {
+        duration: 5000,
+      });
+      this.hideModal();
     },
   },
 };
 </script>
 <style lang="scss" scoped>
 .feedback-button {
+  cursor: pointer;
   display: block;
   position: fixed;
   transform: rotate(-90deg);
