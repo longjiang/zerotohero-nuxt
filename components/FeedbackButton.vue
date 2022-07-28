@@ -17,7 +17,7 @@
           max-rows="6"
         ></b-form-textarea>
       </div>
-      <div class="mt-3 text-center">
+      <div class="mt-4 text-center">
         <b-button variant="success pl-4 pr-4" @click="sendEmail">
           <b-spinner small v-if="sending" />
           <span v-else>
@@ -25,23 +25,7 @@
             Send
           </span>
         </b-button>
-      </div>
-      <div class="mt-4">
-        <div class="mb-1"><small>Diagnostic information included:</small></div>
-        <div class="alert alert-secondary text-secondary small">
-          <div>
-            <b>User Email:</b>
-            {{ userEmail ? userEmail : "(Not logged in)" }}
-          </div>
-          <div>
-            <b>Current URL:</b>
-            {{ currentURL }}
-          </div>
-          <div>
-            <b>Previous URL:</b>
-            {{ previousURL }}
-          </div>
-        </div>
+        <p class="mt-3 small">Want to include a screenshot? Send a feedback email directly to <a :href="feedbackMailToURL" class="link-unstyled"><u>{{ receipient }}</u></a></p>
       </div>
     </b-modal>
   </div>
