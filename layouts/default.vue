@@ -1,6 +1,6 @@
 <template>
   <div id="zerotohero" :class="classes">
-    <FeedbackButton/>
+    <FeedbackButton />
     <!-- <delay-hydration> -->
     <HydrationNotice />
     <client-only>

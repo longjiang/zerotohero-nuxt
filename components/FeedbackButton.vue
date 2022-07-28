@@ -9,16 +9,17 @@ import { mapState } from "vuex";
 
 export default {
   data() {
-    host: process.server
+    return {
+      host: process.server
       ? process.env.baseUrl
       : window.location.protocol +
         "//" +
         window.location.hostname +
-        (window.location.port ? ":" + window.location.port : "");
+        (window.location.port ? ":" + window.location.port : "")
+    }
   },
   computed: {
     ...mapState("fullHistory", ["fullHistory"]),
-
     feedbackMailToURL() {
       let receipient = "jon.long@zerotohero.ca";
       let userEmail =
