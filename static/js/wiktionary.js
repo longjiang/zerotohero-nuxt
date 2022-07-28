@@ -4,7 +4,7 @@ importScripts("../vendor/hash-string/hash-string.min.js")
 
 const Dictionary = {
   name: "wiktionary",
-  version: '2.2.3',
+  version: '2.2.4.2',
   arabicStemmer: undefined,
   file: undefined,
   dictionary: undefined,
@@ -23,7 +23,8 @@ const Dictionary = {
   indexDbVerByLang: {
     fra: 2,
     eng: 5,
-    spa: 2
+    spa: 2,
+    est: 3
   },
   hanRegex: /[\u2E80-\u2E99\u2E9B-\u2EF3\u2F00-\u2FD5\u3005\u3007\u3021-\u3029\u3038-\u303B‌​\u3400-\u4DB5\u4E00-\u9FCC\uF900-\uFA6D\uFA70-\uFAD9]+/g,
   hanRegexStrict: /^[\u2E80-\u2E99\u2E9B-\u2EF3\u2F00-\u2FD5\u3005\u3007\u3021-\u3029\u3038-\u303B‌​\u3400-\u4DB5\u4E00-\u9FCC\uF900-\uFA6D\uFA70-\uFAD9]+$/,

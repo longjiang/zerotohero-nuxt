@@ -11,7 +11,7 @@ onmessage = async function(e) {
   if (method === 'load') {
     let moduleName = args[0]
     let options = args[1]
-    importScripts(`../js/${moduleName}.js?v=2.2.4`)
+    importScripts(`../js/${moduleName}.js?v=2.2.4.2`)
     Dictionary.load(options).then(() => {
       ready = true
       this.postMessage([1, 'load', 'ready'])
