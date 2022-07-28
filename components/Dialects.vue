@@ -78,7 +78,7 @@ Pinghua	平话	2	csp|cnp	Guilin	25.275	110.296	zh`,
 
 <style lang="scss" scoped>
 .dialects {
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 .dialect-item {
   display: flex;

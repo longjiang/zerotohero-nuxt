@@ -83,7 +83,7 @@
                   font-size: 0.8em;
                   width: 40rem;
                   max-height: 7rem;
-                  overflow: scroll;
+                  overflow: auto;
                 "
               >
                 {{ data.item.subs_l2 ? data.item.subs_l2.substr(0,100) : '' }}

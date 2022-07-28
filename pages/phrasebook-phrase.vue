@@ -512,7 +512,7 @@ export default {
 <style lang="scss" scoped>
 .zerotohero-wide {
   .content-pane-left {
-    overflow-y: scroll;
+    overflow-y: auto;
 
     ::v-deep .entry-word {
       font-size: 2rem;

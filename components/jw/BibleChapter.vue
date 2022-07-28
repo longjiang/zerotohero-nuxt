@@ -618,7 +618,7 @@ export default {
   left: 2em;
   z-index: 9999;
   max-height: calc(100vh - 4em);
-  overflow: scroll;
+  overflow: auto;
 }
 
 .scripture-processor-tooltip-content {
@@ -985,7 +985,7 @@ a.leaflet-popup-close-button {
   max-height: 20rem;
   background-color: white;
   padding: 1rem;
-  overflow: scroll;
+  overflow: auto;
 }
 
 a.leaflet-popup-close-button {

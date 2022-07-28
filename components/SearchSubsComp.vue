@@ -896,7 +896,7 @@ export default {
     width: 100vw;
     height: 100vh;
     z-index: 10;
-    overflow: scroll;
+    overflow: auto;
     margin-top: 0 !important;
   }
 

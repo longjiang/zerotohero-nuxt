@@ -425,7 +425,7 @@ export default {
   height: 100vh;
   background: white;
   z-index: 10;
-  overflow: scroll;
+  overflow: auto;
   margin-top: 0 !important;
 }
 .compare-search-subs.fullscreen >>> .youtube-video-wrapper {

@@ -256,7 +256,7 @@ export default {
   position: absolute;
   z-index: 9;
   border-radius: 0.3rem;
-  overflow: scroll;
+  overflow: auto;
   border: 1px solid #ccc;
   width: 100%;
   top: 2.9rem;

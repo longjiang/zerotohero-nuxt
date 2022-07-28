@@ -519,7 +519,7 @@ export default {
 
 .speech-bar {
   position: sticky;
-  top: 0;
+  top: 5.75rem;
   z-index: 11;
 }
 

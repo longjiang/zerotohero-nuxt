@@ -821,7 +821,7 @@ export default {
   align-items: center;
   justify-content: center;
   text-align: center;
-  overflow: scroll;
+  overflow: auto;
   font-size: 3rem;
   padding: 3rem;
   flex-direction: row-reverse;

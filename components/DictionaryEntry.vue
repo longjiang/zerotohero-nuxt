@@ -458,7 +458,7 @@ export default {
       white-space: nowrap;
       padding: 0.5rem 0 0 0;
       text-align: center;
-      overflow: scroll;
+      overflow-x: auto;
       overflow-y: hidden;
       max-width: 100%;
 

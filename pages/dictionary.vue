@@ -523,7 +523,7 @@ export default {
   }
 
   .content-pane-left {
-    overflow-y: scroll;
+    overflow-y: auto;
     padding: 1rem;
     padding-top: 3rem;
 

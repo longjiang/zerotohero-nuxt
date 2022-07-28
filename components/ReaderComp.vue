@@ -418,7 +418,7 @@ export default {
   height: 100vh;
   background: white;
   z-index: 10;
-  overflow: scroll;
+  overflow: auto;
   margin-top: 0 !important;
   padding: 1rem;
 
@@ -433,7 +433,7 @@ export default {
     position: fixed;
     width: calc(100vw - 2rem);
     height: calc(100vh - 15vh - 5.5rem);
-    overflow: scroll;
+    overflow: auto;
   }
 }
 </style>

@@ -179,7 +179,7 @@ export default {
 
 #jw-study-aid-questions-app .question-card-question-scripture {
   max-height: calc(100% - 2rem);
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 #jw-study-aid-questions-app .question-card-term,
@@ -202,7 +202,7 @@ export default {
 #jw-study-aid-questions-app .question-card-definition {
   height: 100%;
   align-items: center;
-  overflow: scroll;
+  overflow: auto;
   justify-content: center;
 }
 

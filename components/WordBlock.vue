@@ -1273,7 +1273,7 @@ export default {
   .tooltip-inner {
     border-radius: 1rem;
     text-align: left;
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
     background: $color;
     color: black;
@@ -1285,7 +1285,7 @@ export default {
     .tooltip-images {
       margin-bottom: 0.5rem;
       width: $width;
-      overflow-x: scroll;
+      overflow-x: auto;
       display: flex;
       height: 4rem;
 

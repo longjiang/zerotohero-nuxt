@@ -1444,8 +1444,6 @@ export default {
 .zth-nav-secondary {
   width: 100vw;
   white-space: nowrap;
-  overflow: scroll;
-  overflow-y: hidden;
   text-align: center;
   min-height: 61px;
   padding-left: 1rem;
@@ -1461,7 +1459,7 @@ export default {
 
 .zerotohero-wide {
   .zth-nav-secondary {
-    width: calc(100vw - 13rem);
+    width: 100%;
     left: 13rem;
   }
 
@@ -1508,7 +1506,7 @@ export default {
     padding: 0.5rem 0.5rem 0 0.5rem;
     white-space: nowrap;
     width: 100%;
-    overflow: scroll;
+    overflow: auto;
   }
 }
 

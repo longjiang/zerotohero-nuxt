@@ -335,7 +335,7 @@ export default {
 }
 
 .youtube-view-line-list {
-  overflow: scroll;
+  overflow: auto;
   border-radius: 0.3rem;
   background: white;
   color: #666;

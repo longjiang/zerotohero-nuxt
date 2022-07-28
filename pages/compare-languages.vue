@@ -333,7 +333,7 @@ export default {
   z-index: 9999;
   border-radius: 0.25rem;
   box-shadow: 0 0 5px 10px rgba(0, 0, 0, 0.2);
-  overflow-y: scroll;
+  overflow-y: auto;
   padding: 1rem;
   .all-phrases-list {
     .all-phrases-list-item {
