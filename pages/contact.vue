@@ -22,15 +22,39 @@
             <h4 class="mb-5 text-center">Contact Language Player</h4>
           </div>
         </div>
-
         <div class="row">
-          <div class="col-sm-3"></div>
           <div class="col-sm-6 mb-4">
-            <div class="contact-block p-4"  style="height: 100%">
+            <div class="contact-block p-4" style="height: 100%">
+              <h5>Join Our Discord Server</h5>
+              <p>and connect with other language learners like you!</p>
+              <a href="https://discord.gg/n9UFdaTW" target="_blank">
+                <img
+                  src="/img/screenshot-discord.png"
+                  alt="Screenshot"
+                  class="img-fluid"
+                />
+              </a>
+              <p>
+                Join link:
+                <a href="https://discord.gg/n9UFdaTW" target="_blank">
+                  https://discord.gg/n9UFdaTW
+                </a>
+              </p>
+            </div>
+          </div>
+          <div class="col-sm-6 mb-4">
+            <div class="contact-block p-4" style="height: 100%">
               <div class="mb-3">
-                <h5>Jiang (Jon) Long</h5>
+                <h5>Contact the Developer</h5>
+                <div><b>Jiang (Jon) Long</b></div>
                 <div>Co-founder, design &amp; dev</div>
-                <div><a href="https://www.sfu.ca/linguistics/events/2022/07/StudentProfile_JiangLong.html">Undergrad student at SFU (Linguistics)</a></div>
+                <div>
+                  <a
+                    href="https://www.sfu.ca/linguistics/events/2022/07/StudentProfile_JiangLong.html"
+                  >
+                    Undergrad student at SFU (Linguistics)
+                  </a>
+                </div>
               </div>
               <div>
                 <strong>{{ $t("Email:") }}</strong>
@@ -52,6 +76,10 @@
               </div>
             </div>
           </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-3"></div>
           <div class="col-sm-3"></div>
           <!-- <div class="col-sm-6 mb-4" >
             <div class="contact-block p-4" style="height: 100%">
@@ -77,9 +105,7 @@
         <div class="row mt-4">
           <div class="col-sm-12">
             <div class="text-center p-4">
-              <h4 class="mb-4">
-                Follow Us on Social Media
-              </h4>
+              <h4 class="mb-4">Follow Us on Social Media</h4>
               <SocialLogos style="line-height: 3" />
             </div>
           </div>
