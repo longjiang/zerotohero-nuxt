@@ -19,68 +19,71 @@
     <client-only>
       <SiteTopBar />
     </client-only>
-    <div class="row">
-      <div class="col-sm-12 pt-5">
-        <div class="login-page">
-          <div class="text-center mb-4">
-            <Logo skin="light" />
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12 pt-5">
+          <div class="login-page">
+            <div class="text-center mb-4">
+              <Logo skin="light" />
+            </div>
+            <b-form @submit.prevent="onSubmit" v-if="show">
+              <div class="d-flex mb-3">
+                <b-form-input
+                  id="first_name"
+                  v-model="form.first_name"
+                  type="text"
+                  placeholder="First Name"
+                  required
+                  style="flex: 1"
+                  class="mr-1"
+                ></b-form-input>
+                <b-form-input
+                  id="last_name"
+                  v-model="form.last_name"
+                  type="text"
+                  placeholder="Last Name"
+                  required
+                  style="flex: 1"
+                  class="ml-1"
+                ></b-form-input>
+              </div>
+              <b-form-group id="input-group-1" label-for="email">
+                <b-form-input
+                  id="email"
+                  v-model="form.email"
+                  type="email"
+                  placeholder="Email"
+                  required
+                ></b-form-input>
+              </b-form-group>
+
+              <b-form-group id="input-group-2" label-for="password">
+                <b-form-input
+                  id="password"
+                  type="password"
+                  v-model="form.password"
+                  placeholder="Password"
+                  required
+                ></b-form-input>
+              </b-form-group>
+
+              <b-button class="d-block w-100" type="submit" variant="success">
+                <b-spinner small v-if="loading" />
+                <span v-else>Sign Up</span>
+              </b-button>
+              <div class="mt-3 text-center">
+                <router-link
+                  :to="{
+                    name: 'login',
+                    query: { redirect: $route.query.redirect },
+                  }"
+                >
+                  I have an account
+                  <i class="fas fa-chevron-right ml-1"></i>
+                </router-link>
+              </div>
+            </b-form>
           </div>
-          <b-form @submit.prevent="onSubmit" v-if="show">
-            <div class="d-flex mb-3">
-              <b-form-input
-                id="first_name"
-                v-model="form.first_name"
-                type="text"
-                placeholder="First Name"
-                required
-                style="flex: 1"
-                class="mr-1"
-              ></b-form-input>
-              <b-form-input
-                id="last_name"
-                v-model="form.last_name"
-                type="text"
-                placeholder="Last Name"
-                required
-                style="flex: 1"
-                class="ml-1"
-              ></b-form-input>
-            </div>
-            <b-form-group id="input-group-1" label-for="email">
-              <b-form-input
-                id="email"
-                v-model="form.email"
-                type="email"
-                placeholder="Email"
-                required
-              ></b-form-input>
-            </b-form-group>
-
-            <b-form-group id="input-group-2" label-for="password">
-              <b-form-input
-                id="password"
-                type="password"
-                v-model="form.password"
-                placeholder="Password"
-                required
-              ></b-form-input>
-            </b-form-group>
-
-            <b-button class="d-block w-100" type="submit" variant="success">
-              <b-spinner small v-if="loading" /><span v-else>Sign Up</span>
-            </b-button>
-            <div class="mt-3 text-center">
-              <router-link
-                :to="{
-                  name: 'login',
-                  query: { redirect: $route.query.redirect },
-                }"
-              >
-                I have an account
-                <i class="fas fa-chevron-right ml-1"></i>
-              </router-link>
-            </div>
-          </b-form>
         </div>
       </div>
     </div>
@@ -103,7 +106,7 @@ export default {
         status: "active",
       },
       show: true,
-      loading: false
+      loading: false,
     };
   },
   computed: {
@@ -122,7 +125,7 @@ export default {
   methods: {
     async onSubmit(event) {
       try {
-        this.loading = true
+        this.loading = true;
         const res = await axios.post(
           `https://directusvps.zerotohero.ca/zerotohero/users`,
           this.form
@@ -159,7 +162,7 @@ export default {
           }
         }
       } catch (err) {
-        this.loading = false
+        this.loading = false;
         Helper.logError(err);
         if (err.response && err.response.data) {
           let message = err.response.data.error.message;
