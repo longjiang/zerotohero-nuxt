@@ -670,11 +670,6 @@ export default {
   }
 }
 
-.youtube-with-transcript-horizontal .youtube-transcript-column {
-  padding-top: 2.7rem;
-}
-
-
 .youtube-transcript-column {
   width: 100%;
 }
