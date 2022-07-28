@@ -4,7 +4,7 @@ importScripts("../vendor/hash-string/hash-string.min.js")
 
 const Dictionary = {
   name: "wiktionary",
-  version: '1.1.17',
+  version: '2.2.3',
   arabicStemmer: undefined,
   file: undefined,
   dictionary: undefined,
@@ -54,7 +54,7 @@ const Dictionary = {
     // rus: 'ru',
     slk: "sk",
     slv: "sl",
-    // swe: 'sv',
+    swe: 'sv', // Swedish is enabled because Swedish wiktionary has difficulty getting lemma
     ukr: "uk"
   },
   supplementalLangs: {
