@@ -123,6 +123,22 @@ export default {
     },
   },
   methods: {
+    async mailerLiteWebHook() {
+      let payload = {
+        email: this.form.email,
+        first_name: this.form.first_name,
+        last_name: this.form.last_name,
+        role: this.form.role,
+        user_id: this.$auth.user.id,
+        group_name: "Newcomers",
+      };
+      let res = await axios.post(
+        // "http://127.0.0.1:5000/new_mailer_lite_subscriber",
+        "https://python.zerotohero.ca/new_mailer_lite_subscriber",
+        payload
+      );
+      return res
+    },
     async onSubmit(event) {
       try {
         this.loading = true;
@@ -148,6 +164,7 @@ export default {
                   duration: 5000,
                 }
               );
+              await this.mailerLiteWebHook();
               if (this.$route.query.redirect) {
                 this.$router.push({ path: this.$route.query.redirect });
               } else {
