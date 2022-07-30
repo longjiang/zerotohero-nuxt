@@ -15,7 +15,7 @@
         </div>
         <div style="flex: 1" class="text-center">
           <router-link :to="{ name: 'stats' }">
-            <b class="stat-big-number">{{ stats.langs.length }}</b>
+            <b class="stat-big-number">{{ stats.langs.length - 11 }}</b>
           </router-link>
           <br />
           {{ translate("Languages", browserLanguage) }}

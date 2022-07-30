@@ -57,8 +57,8 @@
             </nav>
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-6 mb-3">
+        <div class="row index-section">
+          <div class="col-md-5 mb-3">
             <h3 class="text-white mb-2">
               Drastically improve your language skills by binge watching videos
               in the target language.
@@ -96,7 +96,7 @@
               </template>
             </div>
           </div>
-          <div class="col-md-6 mb-3">
+          <div class="col-md-7 mb-3">
             <div v-if="!playBtnClicked" @click="playBtnClicked = true">
               <img
                 src="/img/btn-play.png"
@@ -144,28 +144,207 @@
                   src="/img/logo-ios-app.png"
                   alt="Download on the App Store"
                   style="width: 10rem"
-                /><br/><br/>
-                <img src="/img/qr-ios-app-store.png" alt="QR Code" style="width: 9rem; border-radius: 0.5rem">
+                />
+                <br />
+                <br />
+                <img
+                  src="/img/qr-ios-app-store.png"
+                  alt="QR Code"
+                  style="width: 9rem; border-radius: 0.5rem"
+                />
               </a>
             </div>
           </div>
         </div>
-        <div class="row pt-3">
-          <div class="col-sm-12">
+        <div class="row index-section">
+          <div class="col-md-4 mb-3">
+            <h3 class="text-white mb-2">Massive content library</h3>
+            <p class="text-white">
+              With 600,000 videos in over 200 languages, you will always find
+              something interesting to watch.
+            </p>
+          </div>
+          <div class="col-md-8 mb-3">
+            <img
+              src="/img/index-massive-content-library.png"
+              alt="Screenshot"
+              style="border-radius: 0.5rem"
+              class="img-fluid"
+            />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-8 mb-3">
+            <img
+              src="/img/screenshot-player-fr.png"
+              alt="Screenshot"
+              style="border-radius: 0.5rem"
+              class="img-fluid"
+            />
+          </div>
+          <div class="col-md-4 mb-3">
+            <h3 class="text-white mb-2">
+              Interactive transcripts with English translation
+            </h3>
+            <p class="text-white">
+              Tap any line in the transcript to play that line. Tap on any word
+              to look up.
+            </p>
+          </div>
+        </div>
+        <div class="row index-section">
+          <div class="col-md-4 mb-3">
+            <h3 class="text-white mb-2">See examples of words in videos</h3>
+            <p class="text-white">
+              Learn words by watching hundreds of video clips that contain this
+              word.
+            </p>
+          </div>
+          <div class="col-md-8 mb-3">
+            <img
+              src="/img/screenshot-subs-search.png"
+              alt="Screenshot"
+              style="border-radius: 0.5rem"
+              class="img-fluid"
+            />
+          </div>
+        </div>
+        <div class="row index-section">
+          <div class="col-md-12 mb-3 text-center">
+            <h3 class="text-white mb-2">What our users say about us</h3>
+            <p class="text-white">
+              This is what our users wrote spontaneously in their emails to us,
+              <em>without solicitation</em>
+              !
+            </p>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="index-testimonial">
+              <p>
+                I’m loving this new app and happy I found it, especially as one
+                of the languages I’m studying is Estonian and it is actually
+                available!
+              </p>
+
+              <div class="name">Bailey H. (France)</div>
+              <div class="learning">Learning Estonian (et)</div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="index-testimonial">
+              <p>
+                You guys are amazing! Thank you so much for creating Language
+                Player. This site is amazing! I became a Pro member today.
+                Membership prices are very reasonable, thank you!
+              </p>
+
+              <div class="name">Emmanuelle B. (France)</div>
+              <div class="learning">Learning Chinese (zh)</div>
+            </div>
+          </div>
+        </div>
+        <div class="row index-section">
+          <div class="col-md-12 mb-3 text-center">
+            <h3 class="text-white mb-2">We support 217 languages</h3>
+            <p class="text-white">
+              Including constructed languages (Esperanto, Klingon), sign
+              languages (ASL, KSL), ancient languages (Aramaic, Gothic,
+              Classical Chinese), and dialects (Hakka, Min Nan).
+            </p>
             <client-only>
               <div class="text-center text-white mt-4">
                 <StatsComp variant="summary" />
               </div>
             </client-only>
+            <div class="mt-4">
+              <img
+                src="/img/language-list.png"
+                alt="List of 217 languages"
+                class="rounded img-fluid"
+              />
+            </div>
+            <div class="mt-4 text-white">
+              See latest
+              <router-link to="/stats" class="link-unstyled">
+                <u>stats</u>
+              </router-link>
+              .
+            </div>
           </div>
         </div>
-      </div>
-      <div class="row mt-5 bg-light">
-        <div class="col-sm-12 pt-5">
-          <h5 class="text-center mb-3">Follow us on ...</h5>
-          <SocialLogos />
-          <div class="mb-5" />
-          <LazyFooter />
+        <div class="row index-section">
+          <div class="col-md-12 mb-3 text-center">
+            <h3 class="text-white mb-2">Ready to give it a try?</h3>
+            <p class="text-white">
+              Start by creating a free account, and explore our content library.
+            </p>
+
+            <div class="mt-4">
+              <template v-if="$auth.loggedIn">
+                <router-link class="btn btn-success" to="/dashboard">
+                  Go to Dashboard
+                  <i class="ml-1 fas fa-chevron-right"></i>
+                </router-link>
+                <div class="mt-3 text-white">
+                  Or
+                  <router-link to="/logout" class="text-white">
+                    <u>logout</u>
+                  </router-link>
+                </div>
+              </template>
+              <template v-else>
+                <router-link class="btn btn-success" to="/register">
+                  Create a Free Account
+                  <i class="ml-1 fas fa-chevron-right"></i>
+                </router-link>
+                <div class="text-white mt-3 text-white">
+                  Or
+                  <router-link to="/login" class="text-white">
+                    <u>Login</u>
+                  </router-link>
+                </div>
+              </template>
+            </div>
+          </div>
+        </div>
+        <div class="row index-section">
+          <div class="col-md-12 mb-3 text-center">
+            <h3 class="text-white mb-4">Join our Discord* Server</h3>
+            <p class="text-white">
+              And connect with people passionate about learning languages, just
+              like you!
+            </p>
+            <p class="text-white small">
+              * Discord is a chat and streaming app that allows groups to create
+              separate chatrooms (channels) for different purposes.
+            </p>
+            <a href="https://discord.gg/n9UFdaTW" target="_blank">
+              <img
+                src="/img/screenshot-discord.png"
+                alt="Discord"
+                style="max-width: 20rem"
+                class="inline-block"
+              />
+            </a>
+            <div class="mt-3">
+              <a
+                href="https://discord.gg/n9UFdaTW"
+                target="_blank"
+                class="btn btn-success"
+              >
+                <i class="fa-brands fa-discord"></i>
+                Language Player Discord Server
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="row index-section">
+          <div class="col-md-12 mb-3 text-center">
+            <h3 class="text-white mb-4">
+              Made with ❤️ by language lovers like you.
+            </h3>
+            <div class="text-left text-white"><LazyFooter /></div>
+          </div>
         </div>
       </div>
     </div>
@@ -430,14 +609,18 @@ export default {
 }
 
 .index-section {
-  border-radius: 2rem;
   width: 100vw;
   margin-left: calc((100vw - 100%) / -2);
-  padding-left: calc((100vw - 100%) / 2);
-  padding-right: calc((100vw - 100%) / 2);
+  padding-left: calc((100vw - 100%) / 2 - 0.5rem);
+  padding-right: calc((100vw - 100%) / 2 - 0.5rem);
   padding-top: 3rem;
   padding-bottom: 3rem;
+  text-shadow: 0 0 20px black;
+  .btn {
+    text-shadow: none;
+  }
 }
+
 .index-section:nth-child(2n + 1) {
   background-color: #000000bb;
 }
@@ -448,5 +631,24 @@ export default {
   height: auto;
   top: calc(50% - 2rem);
   left: calc(50% - 2rem);
+}
+
+.index-testimonial {
+  color: white;
+  padding-left: 2rem;
+  position: relative;
+  .name {
+    color: #1bd445;
+  }
+  .learning {
+    opacity: 0.7;
+  }
+  &::before {
+    content: "\f10d";
+    font-family: "Font Awesome 6 Pro";
+    font-weight: 900;
+    position: absolute;
+    left: 0;
+  }
 }
 </style>
