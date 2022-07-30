@@ -31,6 +31,7 @@
           />
           {{ localeDescription }}
         </span>
+        <span><a :href="`https://downsub.com/?url=youtu.be%2F${video.youtube_id}`" target="_blank" class="link-unstyled"><u>Download Transcript</u></a></span>
       </div>
       <div class="video-engagement">
         <span v-if="video.views">
