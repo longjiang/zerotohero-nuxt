@@ -30,31 +30,33 @@
             <Logo layout="horizontal" class="d-inline-block" />
           </div>
           <div class="col-12 col-md-8 text-center text-sm-right mb-3">
-            <nav class="index-nav">
-              <a class="index-nav-item" href="#">Features</a>
-              <a class="index-nav-item" href="#">Testimonials</a>
-              <router-link
-                class="index-nav-item"
-                to="/go-pro"
-                v-if="!$auth.loggedIn"
-              >
-                Go Pro
-              </router-link>
-              <router-link
-                class="index-nav-item"
-                to="/login"
-                v-if="!$auth.loggedIn"
-              >
-                Login
-              </router-link>
-              <router-link
-                class="index-nav-item"
-                to="/logout"
-                v-if="$auth.loggedIn"
-              >
-                Logout
-              </router-link>
-            </nav>
+            <client-only>
+              <nav class="index-nav">
+                <a class="index-nav-item" href="#">Features</a>
+                <a class="index-nav-item" href="#">Testimonials</a>
+                <router-link
+                  class="index-nav-item"
+                  to="/go-pro"
+                  v-if="!$auth.loggedIn"
+                >
+                  Go Pro
+                </router-link>
+                <router-link
+                  class="index-nav-item"
+                  to="/login"
+                  v-if="!$auth.loggedIn"
+                >
+                  Login
+                </router-link>
+                <router-link
+                  class="index-nav-item"
+                  to="/logout"
+                  v-if="$auth.loggedIn"
+                >
+                  Logout
+                </router-link>
+              </nav>
+            </client-only>
           </div>
         </div>
         <div class="row index-section">
@@ -69,31 +71,33 @@
               207 other languages.
             </p>
             <div class="mt-4">
-              <template v-if="$auth.loggedIn">
-                <p class="text-white">
-                  Welcome back {{ $auth.user.first_name }}.
-                </p>
-                <router-link class="btn btn-success" to="/dashboard">
-                  Go to Dashboard
-                  <i class="ml-1 fas fa-chevron-right"></i>
-                </router-link>
-                <router-link to="/logout" class="text-white ml-3">
-                  Or
-                  <u>logout</u>
-                </router-link>
-              </template>
-              <template v-else>
-                <router-link class="btn btn-success" to="/register">
-                  Create a Free Account
-                  <i class="ml-1 fas fa-chevron-right"></i>
-                </router-link>
-                <span class="text-white ml-2">
-                  Or
-                  <router-link to="/login" class="text-white">
-                    <u>Login</u>
+              <client-only>
+                <template v-if="$auth.loggedIn">
+                  <p class="text-white">
+                    Welcome back {{ $auth.user.first_name }}.
+                  </p>
+                  <router-link class="btn btn-success" to="/dashboard">
+                    Go to Dashboard
+                    <i class="ml-1 fas fa-chevron-right"></i>
                   </router-link>
-                </span>
-              </template>
+                  <router-link to="/logout" class="text-white ml-3">
+                    Or
+                    <u>logout</u>
+                  </router-link>
+                </template>
+                <template v-else>
+                  <router-link class="btn btn-success" to="/register">
+                    Create a Free Account
+                    <i class="ml-1 fas fa-chevron-right"></i>
+                  </router-link>
+                  <span class="text-white ml-2">
+                    Or
+                    <router-link to="/login" class="text-white">
+                      <u>Login</u>
+                    </router-link>
+                  </span>
+                </template>
+              </client-only>
             </div>
           </div>
           <div class="col-md-7 mb-3">
@@ -280,30 +284,32 @@
             </p>
 
             <div class="mt-4">
-              <template v-if="$auth.loggedIn">
-                <router-link class="btn btn-success" to="/dashboard">
-                  Go to Dashboard
-                  <i class="ml-1 fas fa-chevron-right"></i>
-                </router-link>
-                <div class="mt-3 text-white">
-                  Or
-                  <router-link to="/logout" class="text-white">
-                    <u>logout</u>
+              <client-only>
+                <template v-if="$auth.loggedIn">
+                  <router-link class="btn btn-success" to="/dashboard">
+                    Go to Dashboard
+                    <i class="ml-1 fas fa-chevron-right"></i>
                   </router-link>
-                </div>
-              </template>
-              <template v-else>
-                <router-link class="btn btn-success" to="/register">
-                  Create a Free Account
-                  <i class="ml-1 fas fa-chevron-right"></i>
-                </router-link>
-                <div class="text-white mt-3 text-white">
-                  Or
-                  <router-link to="/login" class="text-white">
-                    <u>Login</u>
+                  <div class="mt-3 text-white">
+                    Or
+                    <router-link to="/logout" class="text-white">
+                      <u>logout</u>
+                    </router-link>
+                  </div>
+                </template>
+                <template v-else>
+                  <router-link class="btn btn-success" to="/register">
+                    Create a Free Account
+                    <i class="ml-1 fas fa-chevron-right"></i>
                   </router-link>
-                </div>
-              </template>
+                  <div class="text-white mt-3 text-white">
+                    Or
+                    <router-link to="/login" class="text-white">
+                      <u>Login</u>
+                    </router-link>
+                  </div>
+                </template>
+              </client-only>
             </div>
           </div>
         </div>
