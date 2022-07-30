@@ -5,7 +5,15 @@
   }
 </router>
 <template>
-  <div class="bg">
+  <div
+    :style="`min-height: 100vh; ${
+      background
+        ? 'background-image: url(' +
+          background +
+          '); background-size: cover; background-position: center;'
+        : ''
+    }`"
+  >
     <SiteTopBar />
     <div class="go-pro-wrapper container">
       <div class="row">
@@ -126,6 +134,7 @@
 
 <script>
 import { Capacitor } from "@capacitor/core";
+import { background } from "@/lib/utils/background";
 
 export default {
   data() {
@@ -134,6 +143,9 @@ export default {
     };
   },
   computed: {
+    background() {
+      return background();
+    },
     pro() {
       return [1, 4].includes(Number(this.$auth.user?.role)) ? true : false;
     },
@@ -141,15 +153,10 @@ export default {
       return Capacitor.isNativePlatform();
     },
   },
-  methods: {
-  },
+  methods: {},
 };
 </script>
 <style scoped lang="scss">
-.bg {
-  min-height: 100vh;
-  color: rgb(40, 40, 40);
-}
 .logo {
   margin-top: -5.5rem;
 }

@@ -32,17 +32,17 @@
           <div class="col-12 col-md-8 text-center text-sm-right mb-3">
             <client-only>
               <nav class="index-nav">
-                <a class="index-nav-item" href="#">Features</a>
-                <a class="index-nav-item" href="#">Testimonials</a>
+                <span class="index-nav-item" @click="scrollTo('#index-features')" style="cursor: pointer">Features</span>
+                <span class="index-nav-item" @click="scrollTo('#index-testimonials')" style="cursor: pointer">Testimonials</span>
                 <router-link
-                  class="index-nav-item"
+                  class="index-nav-item link-unstyled"
                   to="/go-pro"
                   v-if="!$auth.loggedIn"
                 >
                   Go Pro
                 </router-link>
                 <router-link
-                  class="index-nav-item"
+                  class="index-nav-item  link-unstyled"
                   to="/login"
                   v-if="!$auth.loggedIn"
                 >
@@ -160,7 +160,7 @@
             </div>
           </div>
         </div>
-        <div class="row index-section">
+        <div class="row index-section" id="index-features">
           <div class="col-md-4 mb-3">
             <h3 class="text-white mb-2">Massive content library</h3>
             <p class="text-white">
@@ -213,7 +213,7 @@
             />
           </div>
         </div>
-        <div class="row index-section">
+        <div class="row index-section" id="index-testimonials">
           <div class="col-md-12 mb-3 text-center">
             <h3 class="text-white mb-2">What our users say about us</h3>
             <p class="text-white">
