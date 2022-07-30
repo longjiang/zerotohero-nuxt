@@ -101,7 +101,7 @@
             </div>
           </div>
           <div class="col-md-7 mb-3">
-            <div v-if="!playBtnClicked" @click="playBtnClicked = true">
+            <div v-if="!playBtnClicked" @click="playBtnClicked = true" style="cursor: pointer">
               <img
                 src="/img/btn-play.png"
                 alt="Play Button"
