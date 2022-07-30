@@ -97,17 +97,27 @@
             </div>
           </div>
           <div class="col-md-6 mb-3">
-            <img
-              src="/img/screenshot-player.jpg"
-              alt="Screenshot"
-              style="border-radius: 0.5rem"
-              class="img-fluid"
-            />
-            <!-- <YouTubeVideo
+            <div v-if="!playBtnClicked" @click="playBtnClicked = true">
+              <img
+                src="/img/btn-play.png"
+                alt="Play Button"
+                class="btn-play-green"
+              />
+              <img
+                src="/img/screenshot-player.jpg"
+                alt="Screenshot"
+                style="border-radius: 0.5rem"
+                class="img-fluid"
+              />
+            </div>
+            <YouTubeVideo
               youtube="rGRcL_Jr6qo"
               :autoload="true"
+              :autoplay="true"
+              :fullscreen="true"
+              v-if="playBtnClicked"
               style="overflow: hidden; border-radius: 1rem"
-            /> -->
+            />
           </div>
         </div>
         <div class="row mt-5 index-section">
@@ -170,6 +180,7 @@ import { background } from "@/lib/utils/background";
 export default {
   data() {
     return {
+      playBtnClicked: false,
       langKeyword: undefined,
       hasDashboard: false,
       // The following list is SORTED by number of videos available.
@@ -429,5 +440,13 @@ export default {
 }
 .index-section:nth-child(2n + 1) {
   background-color: #000000bb;
+}
+
+.btn-play-green {
+  position: absolute;
+  width: 4rem;
+  height: auto;
+  top: calc(50% - 2rem);
+  left: calc(50% - 2rem);
 }
 </style>

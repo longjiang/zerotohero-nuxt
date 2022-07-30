@@ -53,6 +53,10 @@ export default {
       type: Boolean, // Whether to show cc inside the iframe player
       default: true
     },
+    fullscreen: {
+      type: Boolean, // Whether to allow fullscreen playback.
+      default: false
+    },
     icon: {
       type: Boolean,
       default: true,
@@ -173,7 +177,7 @@ export default {
             color: 'white',
             controls: this.controls ? 1 : 0,
             rel: 0,
-            fs: 0,
+            fs: this.fullscreen,
             hl: this.$l1 ? this.$l1.code : "en",
             iv_load_policy: 3,
             modestbranding: 1,
