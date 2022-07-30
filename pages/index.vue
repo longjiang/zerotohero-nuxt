@@ -14,38 +14,134 @@
       title="Language Player | Master any language by comprehensible input."
       description="We provide TV shows with subtitles, music with lyrics, live TV channels, phrasebooks with video examples... everything that can help you to learn a language “by osmosis.” Our company, Zero to Hero Education, is also known for our “Chinese Zero to Hero” and “English Zero to Hero” online language courses."
     />
-    <client-only>
-      <SiteTopBar
-        :skin="$route.meta.skin ? $route.meta.skin : 'light'"
-        variant="menu-bar"
-      />
-    </client-only>
     <div
-        class="zerotohero-background"
-        :style="`background-image: url(${background})`"
-      />
+      class="zerotohero-background"
+      :style="`background-image: url(${background})`"
+    />
     <div class="gradient-backdrop"></div>
     <div class="gradient-backdrop-2"></div>
     <div
       class="container-fluid safe-padding-top safe-padding-bottom pt-5"
-      style="overflow: hidden; position: relative;"
+      style="overflow: hidden; position: relative"
     >
       <div class="container">
+        <div class="row mb-4">
+          <div class="col-12 col-md-4 text-center text-sm-left mb-3">
+            <Logo layout="horizontal" class="d-inline-block" />
+          </div>
+          <div class="col-12 col-md-8 text-center text-sm-right mb-3">
+            <nav class="index-nav">
+              <a class="index-nav-item" href="#">Features</a>
+              <a class="index-nav-item" href="#">Testimonials</a>
+              <router-link
+                class="index-nav-item"
+                to="/go-pro"
+                v-if="!$auth.loggedIn"
+              >
+                Go Pro
+              </router-link>
+              <router-link
+                class="index-nav-item"
+                to="/login"
+                v-if="!$auth.loggedIn"
+              >
+                Login
+              </router-link>
+              <router-link
+                class="index-nav-item"
+                to="/logout"
+                v-if="$auth.loggedIn"
+              >
+                Logout
+              </router-link>
+            </nav>
+          </div>
+        </div>
         <div class="row">
-          <div class="col-sm-12 mb-3" style="max-width: 40rem; margin: 0 auto">
-            <Logo class="mb-5" />
-            <YouTubeVideo
+          <div class="col-md-6 mb-3">
+            <h3 class="text-white mb-2">
+              Drastically improve your language skills by binge watching videos
+              in the target language.
+            </h3>
+            <p class="text-white">
+              Languages include Chinese (Mandarin and Cantonese), Japanese,
+              English, French, German, Spanish, Korean, Russian, Italian, and
+              207 other languages.
+            </p>
+            <div class="mt-4">
+              <template v-if="$auth.loggedIn">
+                <p class="text-white">
+                  Welcome back {{ $auth.user.first_name }}.
+                </p>
+                <router-link class="btn btn-success" to="/dashboard">
+                  Go to Dashboard
+                  <i class="ml-1 fas fa-chevron-right"></i>
+                </router-link>
+                <router-link to="/logout" class="text-white ml-3">
+                  Or
+                  <u>logout</u>
+                </router-link>
+              </template>
+              <template v-else>
+                <router-link class="btn btn-success" to="/register">
+                  Create a Free Account
+                  <i class="ml-1 fas fa-chevron-right"></i>
+                </router-link>
+                <span class="text-white ml-2">
+                  Or
+                  <router-link to="/login" class="text-white">
+                    <u>Login</u>
+                  </router-link>
+                </span>
+              </template>
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <img
+              src="/img/screenshot-player.jpg"
+              alt="Screenshot"
+              style="border-radius: 0.5rem"
+              class="img-fluid"
+            />
+            <!-- <YouTubeVideo
               youtube="rGRcL_Jr6qo"
               :autoload="true"
               style="overflow: hidden; border-radius: 1rem"
+            /> -->
+          </div>
+        </div>
+        <div class="row mt-5 index-section">
+          <div class="col-md-6 mb-3 pl-5 pr-4">
+            <img
+              src="/img/screenshot-mobile-devices.png"
+              alt="Screenshot"
+              style="border-radius: 0.5rem"
+              class="img-fluid"
             />
+          </div>
+          <div class="col-md-6 mb-3 pl-4">
+            <h3 class="text-white mb-2">Learn on the go with our iOS app.</h3>
+            <p class="text-white">
+              Search for “Language Player 2” in the iOS App Store.
+            </p>
+            <div>
+              <a
+                href="https://apps.apple.com/us/app/zero-to-hero-languages/id1623985525"
+                target="_blank"
+              >
+                <img
+                  data-not-lazy
+                  src="/img/logo-ios-app.png"
+                  alt="Download on the App Store"
+                  style="width: 10rem"
+                /><br/><br/>
+                <img src="/img/qr-ios-app-store.png" alt="QR Code" style="width: 9rem; border-radius: 0.5rem">
+              </a>
+            </div>
           </div>
         </div>
         <div class="row pt-3">
           <div class="col-sm-12">
-            <p class="blurb text-white text-center">
-              {{ translate("Learn languages with videos.", browserLanguage) }}
-            </p>
             <client-only>
               <div class="text-center text-white mt-4">
                 <StatsComp variant="summary" />
@@ -53,60 +149,6 @@
             </client-only>
           </div>
         </div>
-
-        <div class="row pt-3">
-          <div class="col-sm-12 mt-4 text-center">
-            <template v-if="$auth.loggedIn">
-              <p class="text-white">
-                Welcome back {{ $auth.user.first_name }}.
-              </p>
-              <router-link class="btn btn-success" to="/dashboard">
-                Go to Dashboard
-                <i class="ml-1 fas fa-chevron-right"></i>
-              </router-link>
-              <p class="mt-2 text-white">
-                <router-link to="/logout" class="text-white">
-                  Or <u>logout</u>
-                </router-link>
-              </p>
-            </template>
-            <template v-else>
-              <router-link class="btn btn-success" to="/register">
-                Create a Free Account
-                <i class="ml-1 fas fa-chevron-right"></i>
-              </router-link>
-              <p class="mt-4 text-white">
-                Already have an account?
-                <router-link to="/login" class="text-white">
-                  <u>Login</u>
-                </router-link>
-              </p>
-            </template>
-          </div>
-        </div>
-
-        <client-only>
-          <div class="row" v-if="!native">
-            <div class="col-sm-12">
-              <div style="line-height: 1.2; color: white; text-align: center">
-                <div class="mt-4 mb-4">
-                  <a
-                    href="https://apps.apple.com/us/app/zero-to-hero-languages/id1623985525"
-                    target="_blank"
-                  >
-                    <img
-                      data-not-lazy
-                      src="/img/logo-ios-app.png"
-                      alt="Download on the App Store"
-                      style="width: 10rem"
-                    />
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </client-only>
-        <!-- <Sale class="mb-5" style="border-radius: 1rem !important" /> -->
       </div>
       <div class="row mt-5 bg-light">
         <div class="col-sm-12 pt-5">
@@ -123,7 +165,7 @@
 <script>
 import { Capacitor } from "@capacitor/core";
 import { mapState } from "vuex";
-import { background } from '@/lib/utils/background'
+import { background } from "@/lib/utils/background";
 
 export default {
   data() {
@@ -140,7 +182,7 @@ export default {
   computed: {
     ...mapState("fullHistory", ["fullHistory"]),
     background() {
-      return background()
+      return background();
     },
     lastFullHistoryPath() {
       if (this.fullHistory) {
@@ -367,5 +409,25 @@ export default {
 
 ::v-deep .stats-summary {
   color: #ccc;
+}
+
+.index-nav {
+  .index-nav-item {
+    color: white;
+    margin: 0 0.8rem;
+  }
+}
+
+.index-section {
+  border-radius: 2rem;
+  width: 100vw;
+  margin-left: calc((100vw - 100%) / -2);
+  padding-left: calc((100vw - 100%) / 2);
+  padding-right: calc((100vw - 100%) / 2);
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+.index-section:nth-child(2n + 1) {
+  background-color: #000000bb;
 }
 </style>
