@@ -258,7 +258,7 @@
             </client-only>
             <div class="mt-4">
               <img
-                src="/img/language-list.png"
+                src="/img/language-list.jpg"
                 alt="List of 217 languages"
                 class="rounded img-fluid"
               />
