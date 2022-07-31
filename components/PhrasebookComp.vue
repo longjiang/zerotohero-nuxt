@@ -66,7 +66,10 @@
             :class="`${$l2.direction === 'rtl' ? 'float-left' : 'float-right'}`"
             style="color: #ccc"
           >
-            #{{ (phraseObj.id || phraseIndex) + 1 }}
+            <div>#{{ (phraseObj.id || phraseIndex) + 1 }}</div>
+            <div class="text-right">
+              <i class="fa-solid fa-trash btn-remove" @click.prevent.stop="remove(phraseObj)"></i>
+            </div>
           </div>
           <div>
             <Saved
@@ -151,6 +154,12 @@ export default {
     },
   },
   methods: {
+    remove(phraseObj) {
+      this.$store.dispatch("phrasebooks/removePhrase", {
+        phrasebook: this.phrasebook,
+        phrase: phraseObj,
+      });
+    },
     genCSV() {
       let csv = Papa.unparse(
         this.phrasebook.phrases.map((p) => {
@@ -221,5 +230,9 @@ export default {
 
 ::v-deep .hide-word .word-block-text {
   opacity: 0;
+}
+
+.btn-remove:hover {
+  color: #666;
 }
 </style>

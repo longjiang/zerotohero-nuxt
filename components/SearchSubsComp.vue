@@ -894,10 +894,9 @@ export default {
     left: 0;
     top: 0;
     width: 100vw;
-    height: 100vh;
-    z-index: 10;
-    overflow: auto;
-    margin-top: 0 !important;
+    max-width: 100vw;
+    height: 100vw;
+    z-index: 99;
   }
 
   &.search-subs-light.fullscreen {
