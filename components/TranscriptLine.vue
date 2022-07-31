@@ -8,6 +8,7 @@
         'transcript-line-current': current,
         'transcript-line-wide': !single && params.lg,
         'transcript-line-with-translation': showParallelLine,
+        'transparent': hideWhileAnnotating && !annotated
       }"
       ref="lines"
       :data-line-index="lineIndex"
@@ -148,6 +149,10 @@ export default {
     enableTranslationEditing: {
       type: Boolean,
     },
+    hideWhileAnnotating: { // Whether to hide the line before annotation is complete (for reducing flickering in single-line mode)
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {

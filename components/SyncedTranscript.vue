@@ -59,6 +59,7 @@
               :hsk="hsk"
               :notes="notes"
               :enableTranslationEditing="$adminMode && enableTranslationEditing"
+              :hideWhileAnnotating="single"
               @click="lineClick(line)"
               @removeLineClick="removeLine(index + visibleMin)"
               @trasnlationLineBlur="trasnlationLineBlur"

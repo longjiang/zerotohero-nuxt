@@ -230,7 +230,7 @@ export default {
       default: false,
     },
     showLoading: {
-      default: true,
+      default: true, // Whether to show a loading animation before annotation is complete
     },
     translation: {
       type: String,
