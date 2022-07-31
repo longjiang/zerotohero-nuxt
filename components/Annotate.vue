@@ -774,11 +774,6 @@ export default {
   opacity: 0.7;
 }
 
-/* IF annotation flickering occurs, try to turn this line off, or check if v-observe-visiblility has the correct settings (e.g. 'once') */
-.annotated.add-pinyin {
-  line-height: 2.2;
-}
-
 #reader-annotated p {
   margin-bottom: 0;
 }

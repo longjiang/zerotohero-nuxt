@@ -5,6 +5,7 @@
       'search-subs-light': skin === 'dark',
       'search-subs-dark': skin === 'dark',
       fullscreen,
+      reels,
     }"
   >
     <div class="text-center pb-2">
@@ -31,16 +32,17 @@
         <b-button
           size="sm"
           :variant="skin === 'dark' ? 'ghost-dark-no-bg' : 'gray'"
-          class="playlist-toggle "
+          class="playlist-toggle"
           @click="showPlaylistModal"
           title="List All Clips"
         >
-          <i class="fa-solid fa-list mr-1"></i> List
+          <i class="fa-solid fa-list mr-1"></i>
+          List
         </b-button>
         <b-form-input
           v-if="!checking && (hits.length > 0 || regex) && showFilter"
           type="text"
-          class="d-inline-block "
+          class="d-inline-block"
           size="sm"
           v-model="regex"
           placeholder="Filter..."
@@ -62,7 +64,8 @@
           } btn-sm `"
           title="Open this video with full transcript"
         >
-          <i class="fa-solid fa-arrows-maximize mr-1"></i> Open Full
+          <i class="fa-solid fa-arrows-maximize mr-1"></i>
+          Open Full
         </router-link>
         <b-button
           size="sm"
@@ -120,6 +123,15 @@
             v-if="!checking && fullscreen && fullscreenToggle"
           >
             <i class="fas fa-times" />
+          </b-button>
+          <b-button
+            :variant="skin === 'light' ? 'gray' : 'ghost-dark-no-bg'"
+            :class="{ active: reels }"
+            size="sm"
+            @click="reels = !reels"
+            v-if="fullscreen"
+          >
+            <i class="fa-brands fa-instagram"></i>
           </b-button>
         </div>
       </span>
@@ -336,6 +348,7 @@ export default {
       fullscreen: false,
       showFilter: false,
       regex: undefined,
+      reels: false,
       excludeArr: [],
       speed: 1,
       slideIndex: 0,
@@ -570,7 +583,9 @@ export default {
         excludeTerms = Helper.unique(excludeTerms);
       }
       this.excludeTerms = excludeTerms.filter(
-        (s) => s !== "" && !this.terms.map(t => t.toLowerCase()).includes(s.toLowerCase())
+        (s) =>
+          s !== "" &&
+          !this.terms.map((t) => t.toLowerCase()).includes(s.toLowerCase())
       );
       let hits = await this.$subs.searchSubs({
         terms: this.terms,
@@ -895,7 +910,7 @@ export default {
     top: 0;
     width: 100vw;
     max-width: 100vw;
-    height: 100vw;
+    height: 100vh;
     z-index: 99;
   }
 
@@ -914,6 +929,43 @@ export default {
   }
   ::v-deep .youtube-transcript-column {
     min-height: 5rem; // Make sure the black space around the subs don't shift too much between lines
+  }
+}
+
+.btn.active {
+  color: #fd4f1c;
+}
+
+.reels {
+  ::v-deep .quick-access-buttons {
+    display: none !important;
+  }
+
+  ::v-deep .youtube-with-transcript {
+    width: calc(1080px / 2);
+    height: calc(1920px / 2);
+    background: #080808;
+    margin-left: calc((100vw - 1080px / 2) / 2);
+  }
+
+  ::v-deep .youtube {
+    width: calc(1080px / 2 * 1.77);
+    height: calc(855px / 2);
+    margin-left: calc(1080px / 2 * -0.77 / 2);
+  }
+
+  ::v-deep .transcript-line-both {
+    padding-top: 2rem;
+    font-size: 2em;
+    font-weight: bold;
+  }
+
+  ::v-deep .annotated {
+    line-height: 1;
+  }
+
+  ::v-deep .annotator-menu-toggle {
+    display: none;
   }
 }
 </style>
