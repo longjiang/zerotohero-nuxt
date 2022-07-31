@@ -230,7 +230,7 @@
                 available!
               </p>
 
-              <div class="name">Bailey H. (France)</div>
+              <div class="name">Bailey H. (UK)</div>
               <div class="learning">Learning Estonian (et)</div>
             </div>
           </div>
@@ -253,6 +253,16 @@
               </p>
 
               <div class="name">Gary B. (US)</div>
+              <div class="learning">Learning Chinese (zh)</div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="index-testimonial">
+              <p>
+                I have been using your Zero to Hero [now Language Player] service to learn Chinese alongside my college education for a couple of months, and I love it. For me, it was the single best, cheapest, and accessible language learning service available on the internet. I sincerely congratulate you on designing and implementing it.
+              </p>
+
+              <div class="name">Judson B. (US)</div>
               <div class="learning">Learning Chinese (zh)</div>
             </div>
           </div>
