@@ -2,7 +2,7 @@
   <div id="zerotohero" :class="classes">
     <FeedbackButton />
     <!-- <delay-hydration> -->
-    <HydrationNotice />
+    <!-- <HydrationNotice /> -->
     <client-only>
       <!-- Main nav - side bar on wide screen, bottom bar on small screen /-->
       <Nav

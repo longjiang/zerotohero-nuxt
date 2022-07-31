@@ -246,6 +246,16 @@
               <div class="learning">Learning Chinese (zh)</div>
             </div>
           </div>
+          <div class="col-md-4 mb-3">
+            <div class="index-testimonial">
+              <p>
+                I LIVE on this website! There really is no other service like it. Absolutely unparalleled. I recommend it to anyone who wants to take their language learning to the next level
+              </p>
+
+              <div class="name">Gary B. (US)</div>
+              <div class="learning">Learning Chinese (zh)</div>
+            </div>
+          </div>
         </div>
         <div class="row index-section">
           <div class="col-md-12 mb-3 text-center">
