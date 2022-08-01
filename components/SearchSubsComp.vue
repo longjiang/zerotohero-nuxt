@@ -5,7 +5,7 @@
       'search-subs-light': skin === 'dark',
       'search-subs-dark': skin === 'dark',
       fullscreen,
-      reels,
+      reels: fullscreen && reels,
     }"
   >
     <div class="text-center pb-2">
@@ -167,7 +167,7 @@
         :video="currentHit.video"
         :ref="`youtube-${hitIndex}`"
         :speed="speed"
-        :startLineIndex="startLineIndex"
+        :startLineIndex="Math.max(reels ? startLineIndex - 1 : startLineIndex, 0)"
         :showFullscreenToggle="false"
         :autoload="true"
         :autoplay="navigated"
