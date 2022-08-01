@@ -20,7 +20,7 @@
     <div class="zth-content">
       <client-only>
         <SiteTopBar
-          v-if="$route.params.l1 && $route.params.l1 && l1 && l2"
+          v-if="showTopBar"
           :skin="$route.meta.skin ? $route.meta.skin : 'light'"
           variant="menu-bar"
           :badge="savedWordsCount + savedPhrasesCount"
@@ -108,6 +108,10 @@ export default {
     ...mapState("settings", ["l2Settings", "l1", "l2"]),
     ...mapState("history", ["history"]),
     ...mapState("fullHistory", ["fullHistory"]),
+    showTopBar() {
+      if (this.$route.meta && this.$route.meta.layout === 'full') return false
+      else return this.$route.params.l1 && this.$route.params.l1 && this.l1 && this.l2
+    },
     fullHistoryPathsByL1L2() {
       return this.$store.getters["fullHistory/fullHistoryPathsByL1L2"]({
         l1: this.l1,
