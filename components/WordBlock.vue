@@ -927,6 +927,8 @@ export default {
       return abb[type] || type;
     },
     speak(text) {
+      let speechSynthesis = window?.speechSynthesis;
+      if (!speechSynthesis) return
       if (this.$hasFeature("speech")) {
         if (!speechSynthesis.speaking) {
           this.utterance = new SpeechSynthesisUtterance(text);

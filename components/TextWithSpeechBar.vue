@@ -373,6 +373,8 @@ export default {
       return typeof document !== "undefined";
     },
     getVoices() {
+      let speechSynthesis = window?.speechSynthesis;
+      if (!speechSynthesis) return
       let voices = speechSynthesis
         .getVoices()
         .filter(
@@ -427,24 +429,27 @@ export default {
       $(translationSentence).addClass("current");
     },
     speak(text) {
-      if (speechSynthesis.paused) {
-        if (this.utterance) {
-          this.utterance.onend = undefined;
+      let speechSynthesis = window?.speechSynthesis;
+      if (speechSynthesis) {
+        if (speechSynthesis.paused) {
+          if (this.utterance) {
+            this.utterance.onend = undefined;
+          }
+          speechSynthesis.cancel();
         }
-        speechSynthesis.cancel();
-      }
-      if (this.voices.length === 0) this.getVoices();
-      this.utterance = new SpeechSynthesisUtterance(text);
-      // this.utterance.lang = this.lang || this.$l2.code
-      this.utterance.rate = this.speed;
-      if (this.voices[this.voice]) {
-        this.utterance.voice = this.voices[this.voice];
-      }
-      speechSynthesis.speak(this.utterance);
-      if (this.utterance) {
-        this.utterance.onend = () => {
-          this.next();
-        };
+        if (this.voices.length === 0) this.getVoices();
+        this.utterance = new SpeechSynthesisUtterance(text);
+        // this.utterance.lang = this.lang || this.$l2.code
+        this.utterance.rate = this.speed;
+        if (this.voices[this.voice]) {
+          this.utterance.voice = this.voices[this.voice];
+        }
+        speechSynthesis.speak(this.utterance);
+        if (this.utterance) {
+          this.utterance.onend = () => {
+            this.next();
+          };
+        }
       }
     },
     scroll(sentence) {
@@ -458,6 +463,8 @@ export default {
       }
     },
     play() {
+      let speechSynthesis = window?.speechSynthesis;
+      if (!speechSynthesis) return
       this.speaking = true;
       if (speechSynthesis.paused && this.speakingLineIndex === this.current) {
         speechSynthesis.resume();
@@ -476,6 +483,8 @@ export default {
       }
     },
     pause() {
+      let speechSynthesis = window?.speechSynthesis;
+      if (!speechSynthesis) return
       this.speaking = false;
       if (this.speakingLineIndex === this.current) {
         speechSynthesis.pause();
@@ -528,7 +537,6 @@ export default {
   object-fit: contain;
   height: auto;
 }
-
 
 .annotated-line {
   color: black;

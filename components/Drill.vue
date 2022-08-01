@@ -78,10 +78,13 @@ export default {
   },
   methods: {
     speak(text) {
-      var utterance = new SpeechSynthesisUtterance(text)
-      let speechCode = this.$l2.code === 'yue' ? 'zh-HK' : this.$l2.code
-      utterance.lang = speechCode
-      speechSynthesis.speak(utterance)
+      if (window?.speechSynthesis) {
+        let speechSynthesis = window.speechSynthesis
+        var utterance = new SpeechSynthesisUtterance(text)
+        let speechCode = this.$l2.code === 'yue' ? 'zh-HK' : this.$l2.code
+        utterance.lang = speechCode
+        speechSynthesis.speak(utterance)
+      }
     },
     playItem(patternIndex, itemIndex) {
       let pattern = this.drill.patterns[patternIndex]
