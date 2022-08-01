@@ -25,34 +25,28 @@
       style="overflow: hidden; position: relative"
     >
       <div class="container">
-        <div class="row mb-4">
-          <div class="col-12 col-md-4 text-center text-sm-left mb-3">
+        <div class="row">
+          <div class="col-12 col-md-4 text-center text-sm-left mb-4">
             <Logo layout="horizontal" class="d-inline-block" />
           </div>
           <div class="col-12 col-md-8 text-center text-sm-right mb-3">
             <client-only>
               <nav class="index-nav">
+                <router-link
+                  class="index-nav-item link-unstyled"
+                  to="/go-pro"
+                  v-if="$auth.loggedIn && !pro"
+                >
+                  Go Pro
+                </router-link>
                 <span
                   class="index-nav-item"
                   @click="scrollTo('#index-features')"
                   style="cursor: pointer"
+                  v-else
                 >
                   Features
                 </span>
-                <span
-                  class="index-nav-item"
-                  @click="scrollTo('#index-testimonials')"
-                  style="cursor: pointer"
-                >
-                  Testimonials
-                </span>
-                <router-link
-                  class="index-nav-item link-unstyled"
-                  to="/go-pro"
-                  v-if="!$auth.loggedIn"
-                >
-                  Go Pro
-                </router-link>
                 <router-link
                   class="index-nav-item link-unstyled"
                   to="/login"
@@ -61,18 +55,59 @@
                   Login
                 </router-link>
                 <router-link
-                  class="index-nav-item"
+                  class="index-nav-item btn btn-success"
+                  to="/register"
+                  v-if="!$auth.loggedIn"
+                >
+                  Sign Up
+                </router-link>
+                <router-link
+                  class="index-nav-item link-unstyled"
                   to="/logout"
                   v-if="$auth.loggedIn"
                 >
                   Logout
+                </router-link>
+                <router-link
+                  class="index-nav-item btn btn-success"
+                  to="/dashboard"
+                  v-if="$auth.loggedIn"
+                >
+                  Dashboard
                 </router-link>
               </nav>
             </client-only>
           </div>
         </div>
         <div class="row index-section">
-          <div class="col-md-5 mb-3">
+          <div class="col-md-7 mb-5">
+            <div
+              v-if="!playBtnClicked"
+              @click="playBtnClicked = true"
+              style="cursor: pointer"
+            >
+              <img
+                src="/img/btn-play.png"
+                alt="Play Button"
+                class="btn-play-green"
+              />
+              <img
+                src="/img/screenshot-player.jpg"
+                alt="Screenshot"
+                style="border-radius: 0.5rem"
+                class="img-fluid"
+              />
+            </div>
+            <YouTubeVideo
+              youtube="rGRcL_Jr6qo"
+              :autoload="true"
+              :autoplay="true"
+              :fullscreen="true"
+              v-if="playBtnClicked"
+              style="overflow: hidden; border-radius: 1rem"
+            />
+          </div>
+          <div class="col-md-5">
             <h3 class="text-white mb-2">
               Drastically improve your language skills by binge watching videos
               in the target language.
@@ -112,35 +147,9 @@
               </client-only>
             </div>
           </div>
-          <div class="col-md-7 mb-3">
-            <div
-              v-if="!playBtnClicked"
-              @click="playBtnClicked = true"
-              style="cursor: pointer"
-            >
-              <img
-                src="/img/btn-play.png"
-                alt="Play Button"
-                class="btn-play-green"
-              />
-              <img
-                src="/img/screenshot-player.jpg"
-                alt="Screenshot"
-                style="border-radius: 0.5rem"
-                class="img-fluid"
-              />
-            </div>
-            <YouTubeVideo
-              youtube="rGRcL_Jr6qo"
-              :autoload="true"
-              :autoplay="true"
-              :fullscreen="true"
-              v-if="playBtnClicked"
-              style="overflow: hidden; border-radius: 1rem"
-            />
-          </div>
+          
         </div>
-        <div class="row mt-5 index-section">
+        <div class="row index-section">
           <div class="col-md-6 mb-3 pl-5 pr-4">
             <img
               src="/img/screenshot-mobile-devices.png"
@@ -689,7 +698,7 @@ export default {
 .index-nav {
   .index-nav-item {
     color: white;
-    margin: 0 0.8rem;
+    margin: 0 0.5rem;
   }
 }
 
