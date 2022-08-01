@@ -37,7 +37,7 @@
                   to="/go-pro"
                   v-if="$auth.loggedIn && !pro"
                 >
-                  Go Pro
+                  {{ translate("Go Pro", browserLanguage) }}
                 </router-link>
                 <span
                   class="index-nav-item"
@@ -45,35 +45,35 @@
                   style="cursor: pointer"
                   v-else
                 >
-                  Features
+                  {{ translate("Features", browserLanguage) }}
                 </span>
                 <router-link
                   class="index-nav-item link-unstyled"
                   to="/login"
                   v-if="!$auth.loggedIn"
                 >
-                  Login
+                  {{ translate("Login", browserLanguage) }}
                 </router-link>
                 <router-link
                   class="index-nav-item btn btn-success"
                   to="/register"
                   v-if="!$auth.loggedIn"
                 >
-                  Sign Up
+                  {{ translate("Sign Up", browserLanguage) }}
                 </router-link>
                 <router-link
                   class="index-nav-item link-unstyled"
                   to="/logout"
                   v-if="$auth.loggedIn"
                 >
-                  Logout
+                  {{ translate("Logout", browserLanguage) }}
                 </router-link>
                 <router-link
                   class="index-nav-item btn btn-success"
                   to="/dashboard"
                   v-if="$auth.loggedIn"
                 >
-                  Dashboard
+                  {{ translate("Dashboard", browserLanguage) }}
                 </router-link>
               </nav>
             </client-only>
@@ -109,45 +109,54 @@
           </div>
           <div class="col-md-5">
             <h3 class="text-white mb-2">
-              Drastically improve your language skills by binge watching videos
-              in the target language.
+              {{
+                translate(
+                  "Drastically improve your language skills by binge watching videos in the target language.",
+                  browserLanguage
+                )
+              }}
             </h3>
             <p class="text-white">
-              Languages include Chinese (Mandarin and Cantonese), Japanese,
-              English, French, German, Spanish, Korean, Russian, Italian, and
-              207 other languages.
+              {{
+                translate(
+                  "Languages include Chinese (Mandarin and Cantonese), Japanese, English, French, German, Spanish, Korean, Russian, Italian, and 207 other languages.",
+                  browserLanguage
+                )
+              }}
             </p>
             <div class="mt-4">
               <client-only>
                 <template v-if="$auth.loggedIn">
                   <p class="text-white">
-                    Welcome back {{ $auth.user.first_name }}.
+                    {{ translate("Welcome back", browserLanguage) }}
+                    {{ $auth.user.first_name }}.
                   </p>
                   <router-link class="btn btn-success" to="/dashboard">
-                    Go to Dashboard
+                    {{ translate("Go to Dashboard", browserLanguage) }}
                     <i class="ml-1 fas fa-chevron-right"></i>
                   </router-link>
                   <router-link to="/logout" class="text-white ml-3">
-                    Or
-                    <u>logout</u>
+                    {{ translate("Or", browserLanguage) }}
+                    <u>logout {{ translate("logout", browserLanguage) }}</u>
                   </router-link>
                 </template>
                 <template v-else>
                   <router-link class="btn btn-success" to="/register">
-                    Create a Free Account
+                    {{ translate("Create a Free Account", browserLanguage) }}
                     <i class="ml-1 fas fa-chevron-right"></i>
                   </router-link>
                   <span class="text-white ml-2">
-                    Or
+                    {{ translate("Or", browserLanguage) }}
                     <router-link to="/login" class="text-white">
-                      <u>Login</u>
+                      <u>
+                        {{ translate("Login", browserLanguage) }}
+                      </u>
                     </router-link>
                   </span>
                 </template>
               </client-only>
             </div>
           </div>
-          
         </div>
         <div class="row index-section">
           <div class="col-md-6 mb-3 pl-5 pr-4">
@@ -212,7 +221,11 @@
                     />
                     <p class="mt-3 text-white">
                       <small>
-                        <i class="fa-solid fa-shield-check text-success mr-1"></i> The app installer (APK) is open-source and safe to run. We will officially release it to Google Play soon.
+                        <i
+                          class="fa-solid fa-shield-check text-success mr-1"
+                        ></i>
+                        The app installer (APK) is open-source and safe to run.
+                        We will officially release it to Google Play soon.
                       </small>
                     </p>
                   </a>
