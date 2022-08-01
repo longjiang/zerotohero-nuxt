@@ -110,7 +110,7 @@ const Dictionary = {
   },
   tokenizeRecursively(text, subdict) {
     const longest = subdict.longest(text);
-    if (longest.matches?.length > 0) {
+    if (longest.matches && longest.matches.length > 0) {
       for (let word of longest.matches) {
         longest.matches = this.stemWordsWithScores(word, 1).map(w => w.w).concat(longest.matches);
         // longest.matches = longest.matches.concat(this.phrasesWithScores(word, 1)) // This is very slow

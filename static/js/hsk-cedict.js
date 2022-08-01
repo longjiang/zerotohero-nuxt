@@ -84,7 +84,7 @@ const Dictionary = {
         // console.log({lemma, definition})
         if (lemma) {
           let lemmaWords = this.traditionalIndex[lemma.lemma]
-          if (lemmaWords?.length > 0) {
+          if (lemmaWords && lemmaWords.length > 0) {
             this.variantIndex[word.traditional] = this.variantIndex[word.traditional] || []
             this.variantIndex[word.traditional] = this.variantIndex[word.traditional].concat(lemmaWords)
           }

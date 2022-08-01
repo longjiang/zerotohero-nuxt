@@ -642,7 +642,7 @@ const Dictionary = {
   get(id, head) {
     let word
     word = this.words.find(w => w.id === id);
-    if (head && word?.head !== head) {
+    if (head && word && word.head !== head) {
       word = this.lookup(head)
     }
     this.addPhrasesToWord(word)
