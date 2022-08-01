@@ -137,7 +137,7 @@
                   </router-link>
                   <router-link to="/logout" class="text-white ml-3">
                     {{ translate("Or", browserLanguage) }}
-                    <u>logout {{ translate("logout", browserLanguage) }}</u>
+                    <u>{{ translate("Logout", browserLanguage) }}</u>
                   </router-link>
                 </template>
                 <template v-else>

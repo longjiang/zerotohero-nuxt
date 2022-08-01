@@ -42,7 +42,7 @@
             <div class="col-sm-12">
               <div class="home-card p-2 pt-4 pb-4 bg-white">
                 <h5 class="text-center mb-2" v-if="hasDashboard">
-                  Learn another language
+                  {{ translate('Learn another language', browserLanguage) }}
                 </h5>
                 <h5 class="text-center mb-2" v-else-if="$auth.user">
                   Welcome, {{ $auth.user.first_name }}.
