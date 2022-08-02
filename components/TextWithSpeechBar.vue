@@ -429,8 +429,8 @@ export default {
       $(translationSentence).addClass("current");
     },
     speak(text) {
-      let speechSynthesis = window?.speechSynthesis;
-      if (speechSynthesis) {
+      if (window && window.speechSynthesis) {
+        let speechSynthesis = window.speechSynthesis;
         if (speechSynthesis.paused) {
           if (this.utterance) {
             this.utterance.onend = undefined;
@@ -483,16 +483,17 @@ export default {
       }
     },
     pause() {
-      let speechSynthesis = window?.speechSynthesis;
-      if (!speechSynthesis) return
-      this.speaking = false;
-      if (this.speakingLineIndex === this.current) {
-        speechSynthesis.pause();
-      } else {
-        if (this.utterance) {
-          this.utterance.onend = undefined;
+      if (window && window.speechSynthesis) {
+        let speechSynthesis = window.speechSynthesis;
+        this.speaking = false;
+        if (this.speakingLineIndex === this.current) {
+          speechSynthesis.pause();
+        } else {
+          if (this.utterance) {
+            this.utterance.onend = undefined;
+          }
+          speechSynthesis.cancel();
         }
-        speechSynthesis.cancel();
       }
     },
     previous() {

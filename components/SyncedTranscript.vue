@@ -69,7 +69,11 @@
               :key="`pop-quiz-${index}`"
               v-if="!single && quizChunks[index]"
               :lines="lines"
-              :quizContent="quizChunks[index].filter(i => $refs[`transcript-line-${i + visibleMin}`]).map(i => $refs[`transcript-line-${i + visibleMin}`][0])"
+              :quizContent="
+                quizChunks[index]
+                  .filter((i) => $refs[`transcript-line-${i + visibleMin}`])
+                  .map((i) => $refs[`transcript-line-${i + visibleMin}`][0])
+              "
             />
           </template>
           <div
@@ -199,22 +203,25 @@ export default {
      * Values are the transcript line indices on which the quiz is based
      */
     quizChunks() {
-      let quizChunks = {}
-      let seenLineIndices = []
-      let lastIndex = 0
-      let MIN_SEPARATION = 10 // minimum number of lines that separate two quizzes
+      let quizChunks = {};
+      let seenLineIndices = [];
+      let lastIndex = 0;
+      let MIN_SEPARATION = 10; // minimum number of lines that separate two quizzes
       for (let index in this.lines) {
-        index = Number(index)
-        seenLineIndices.push(index)
-        if (this.longPauseAfterLine(index)  || index > lastIndex + MIN_SEPARATION * 2) {
+        index = Number(index);
+        seenLineIndices.push(index);
+        if (
+          this.longPauseAfterLine(index) ||
+          index > lastIndex + MIN_SEPARATION * 2
+        ) {
           if (index > lastIndex + MIN_SEPARATION) {
-            quizChunks[index + 1] = seenLineIndices // Quiz the lines at the next checkpoint
-            seenLineIndices = []
-            lastIndex = index
+            quizChunks[index + 1] = seenLineIndices; // Quiz the lines at the next checkpoint
+            seenLineIndices = [];
+            lastIndex = index;
           }
         }
       }
-      return quizChunks
+      return quizChunks;
     },
     pro() {
       if (this.forcePro) return true;
@@ -343,13 +350,13 @@ export default {
   },
   methods: {
     longPauseAfterLine(index) {
-      let thisLine = this.lines[index + this.visibleMin]
-      let nextLine = this.lines[index + this.visibleMin + 1]
-      if (!thisLine) return false
-      if (!nextLine) return true  // this is the last line
-      let endTimeOfThisLine = thisLine.starttime + thisLine.duration
-      let intervalAfterThisLine = nextLine.starttime - endTimeOfThisLine
-      if (intervalAfterThisLine > 1) return true
+      let thisLine = this.lines[index + this.visibleMin];
+      let nextLine = this.lines[index + this.visibleMin + 1];
+      if (!thisLine) return false;
+      if (!nextLine) return true; // this is the last line
+      let endTimeOfThisLine = thisLine.starttime + thisLine.duration;
+      let intervalAfterThisLine = nextLine.starttime - endTimeOfThisLine;
+      if (intervalAfterThisLine > 1) return true;
     },
     play() {
       this.$emit("play");
@@ -524,7 +531,7 @@ export default {
     },
     stopAudioModeStuff() {
       this.audioCancelled = true;
-      window.speechSynthesis.cancel();
+      if (window && window.speechSynthesis) window.speechSynthesis.cancel();
       this.$emit("speechEnd");
       this.$emit("pause");
     },

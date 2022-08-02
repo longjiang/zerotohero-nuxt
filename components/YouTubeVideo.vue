@@ -14,7 +14,10 @@
       @click="loadYouTubeiFrame()"
     >
       <div :id="youtubeIframeID" class="youtube-iframe"></div>
-      <div class="youtube-icon" v-if="!posterOnly && !autoplay && !loading"></div>
+      <div
+        class="youtube-icon"
+        v-if="!posterOnly && !autoplay && !loading"
+      ></div>
     </div>
   </div>
 </template>
@@ -51,11 +54,11 @@ export default {
     },
     cc: {
       type: Boolean, // Whether to show cc inside the iframe player
-      default: true
+      default: true,
     },
     fullscreen: {
       type: Boolean, // Whether to allow fullscreen playback.
-      default: false
+      default: false,
     },
     icon: {
       type: Boolean,
@@ -71,8 +74,8 @@ export default {
     },
     muted: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
@@ -174,7 +177,7 @@ export default {
             iv_load_policy: 0,
             showinfo: 0,
             playsinline: 1,
-            color: 'white',
+            color: "white",
             controls: this.controls ? 1 : 0,
             rel: 0,
             fs: this.fullscreen,
@@ -207,14 +210,16 @@ export default {
                   this.seek(startAtRandomTime);
                 }
                 if (state === PLAYING) {
-                  window.speechSynthesis.cancel();
-                  if (
-                    this.playerIsThisPlayerNotSomeOtherPlayer() &&
-                    !this.interval
-                  ) {
-                    this.interval = setInterval(() => {
-                      this.updateCurrentTime();
-                    }, 250);
+                  if (window && window.speechSynthesis) {
+                    window.speechSynthesis.cancel();
+                    if (
+                      this.playerIsThisPlayerNotSomeOtherPlayer() &&
+                      !this.interval
+                    ) {
+                      this.interval = setInterval(() => {
+                        this.updateCurrentTime();
+                      }, 250);
+                    }
                   }
                 } else {
                   clearInterval(this.interval);
@@ -223,7 +228,7 @@ export default {
               }
             },
             onReady: (event) => {
-              if (this.muted && this.player) this.player.mute()
+              if (this.muted && this.player) this.player.mute();
               this.reportIfVideoUnavailableUponAutoload(this.youtube);
             },
           },

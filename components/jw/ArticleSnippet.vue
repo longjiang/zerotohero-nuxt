@@ -11,7 +11,9 @@
           class="publication-references-source-image"
           :href="url"
           target="_blank"
-          :style="`background-color: ${article.thumbColor || '#ccc' }; background-image: url(${
+          :style="`background-color: ${
+            article.thumbColor || '#ccc'
+          }; background-image: url(${
             article.thumbnail || 'https://wol.jw.org/img/watchtower@3x.png'
           })`"
         >
@@ -24,14 +26,28 @@
           <i class="octicon octicon-file-pdf" v-if="false" ref="pdfBtn"></i>
         </a>
         <em ref="contentElement" class="article-processor-result">
-          <strong class="scripture-citation-caption" v-if="article.caption">{{ article.caption }}</strong>
+          <strong class="scripture-citation-caption" v-if="article.caption">
+            {{ article.caption }}
+          </strong>
           <article v-html="article.content" class="wol-article"></article>
         </em>
-        <div ref="referenceElement" class="publication-references-source" v-if="article.title">
-          <a :href="article.url" class="publication-references-source-link" v-if="!secondary">
+        <div
+          ref="referenceElement"
+          class="publication-references-source"
+          v-if="article.title"
+        >
+          <a
+            :href="article.url"
+            class="publication-references-source-link"
+            v-if="!secondary"
+          >
             &ldquo;{{ article.title }}&rdquo;
           </a>
-          <a :href="article.url" class="publication-references-source-link-secondary" v-else>
+          <a
+            :href="article.url"
+            class="publication-references-source-link-secondary"
+            v-else
+          >
             &ldquo;{{ article.title }}&rdquo;
           </a>
         </div>
@@ -126,7 +142,12 @@ export default {
   async fetch() {
     if (this.url) {
       this.articles = [
-        await Wol.getArticle(this.url, {selector: this.selector, snippet: this.snippet, l1: this.$l1.code, l2: this.$l2.code}),
+        await Wol.getArticle(this.url, {
+          selector: this.selector,
+          snippet: this.snippet,
+          l1: this.$l1.code,
+          l2: this.$l2.code,
+        }),
       ];
     } else if (this.jsonUrl) {
       this.articles = await Wol.getArticlesByJson(
@@ -135,11 +156,10 @@ export default {
         this.snippet
       );
     } else if (this.article) {
-      this.articles = [this.article]
+      this.articles = [this.article];
     }
   },
   methods: {
-
     showPubsClick() {
       if (this.type === "scripture") {
         let ref = BibleChapter.parseVerseId("v" + this.verseIds[0] + "-1");
@@ -553,7 +573,7 @@ export default {
     },
 
     stopExistingSpeech() {
-      if (window.speechSynthesis.speaking) {
+      if (window && window.speechSynthesis && window.speechSynthesis.speaking) {
         window.speechSynthesis.cancel();
       }
     },
