@@ -203,7 +203,7 @@
               <div class="col-12 col-md-6">
                 <div>
                   <a
-                    href="https://server.chinesezerotohero.com/data/android/language-player-android-2.2.5.apk"
+                    href="https://server.chinesezerotohero.com/data/android/language-player-android-2.2.6.apk"
                     target="_blank"
                   >
                     <img
