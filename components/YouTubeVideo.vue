@@ -212,14 +212,15 @@ export default {
                 if (state === PLAYING) {
                   if (window && window.speechSynthesis) {
                     window.speechSynthesis.cancel();
-                    if (
-                      this.playerIsThisPlayerNotSomeOtherPlayer() &&
-                      !this.interval
-                    ) {
-                      this.interval = setInterval(() => {
-                        this.updateCurrentTime();
-                      }, 250);
-                    }
+                  }
+                  if (
+                    this.playerIsThisPlayerNotSomeOtherPlayer() &&
+                    !this.interval
+                  ) {
+                    this.interval = setInterval(() => {
+                      console.log('interval')
+                      this.updateCurrentTime();
+                    }, 250);
                   }
                 } else {
                   clearInterval(this.interval);
