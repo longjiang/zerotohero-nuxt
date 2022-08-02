@@ -218,7 +218,6 @@ export default {
                     !this.interval
                   ) {
                     this.interval = setInterval(() => {
-                      console.log('interval')
                       this.updateCurrentTime();
                     }, 250);
                   }
