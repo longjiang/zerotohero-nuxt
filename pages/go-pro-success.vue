@@ -21,7 +21,9 @@
             <div v-if="$auth.loggedIn && $auth.user && pro" class="text-center">
               <div>
                 Welcome
-                <b>{{ $auth.user ? $auth.user.first_name : "" }}</b>, you now enjoy the benefit of a Pro account across all languages.
+                <b>{{ $auth.user ? $auth.user.first_name : "" }}</b>
+                , you now enjoy the benefit of a Pro account across all
+                languages.
               </div>
               <div class="mt-4"></div>
               <div>
@@ -42,9 +44,9 @@
               <div>
                 <router-link
                   :to="{ path: '/login?redirect=/' }"
-                  class="btn btn-primary pl-4 pr-4"
+                  class="btn btn-success pl-4 pr-4"
                 >
-                  Login
+                  Login with Pro
                   <i class="fas fa-chevron-right"></i>
                 </router-link>
               </div>
@@ -57,7 +59,9 @@
 </template>
 
 <script>
-import Config from "@/lib/config";
+import { PYTHON_SERVER } from "@/lib/utils/servers";
+import { logError } from "@/lib/utils/error";
+import axios from "axios";
 
 export default {
   computed: {
@@ -67,6 +71,13 @@ export default {
   },
   async mounted() {
     if (this.$auth.loggedIn) {
+      let email = this.$auth.user?.email;
+      if (email) {
+        let url = `${PYTHON_SERVER}upgrade_mailer_lite_subscriber_to_pro`;
+        let res = await axios
+          .post(url, { email })
+          .catch((err) => logError(err));
+      }
       await this.$auth.logout();
       await this.$auth.setUser(null);
     }

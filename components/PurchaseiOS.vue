@@ -20,6 +20,7 @@
 
 <script>
 import { logError } from "@/lib/utils/error";
+import { PYTHON_SERVER } from '@/lib/utils/servers'
 import axios from "axios";
 
 const IOS_IAP_PRODUCT_ID = "pro";
@@ -52,12 +53,11 @@ export default {
     },
     oniOSProductApproved(product) {
       // synchronous
-      console.log("approved");
+      console.log("iOS Product approved.");
       return product.verify();
     },
     async elevateiOSUserToPro(receipt) {
-      console.log({ receipt });
-      let url = `https://python.zerotohero.ca/in_app_purchase_success`;
+      let url = `${PYTHON_SERVER}in_app_purchase_success`;
       let body = { user_id: this.$auth.user.id, receipt };
       try {
         let res = await axios.post(url, body);
@@ -70,7 +70,7 @@ export default {
       }
     },
     async oniOSProductVerified(product) {
-      console.log("verified");
+      console.log("iOS Product verified.");
       let receipt = product?.transaction?.appStoreReceipt;
       if (receipt && !this.iOSPurchaseVerified) {
         this.iOSPurchaseVerified = true;
@@ -80,7 +80,7 @@ export default {
     },
     oniOSProductOrder(product) {
       // Purchase in progress!
-      console.log("order");
+      console.log("iOS Product ordering.");
       this.iOSPurchaseProcessing = true;
     },
     oniOSProductOrderErr(err) {

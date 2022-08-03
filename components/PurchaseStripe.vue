@@ -60,6 +60,7 @@
 </template>
 
 <script>
+import { PYTHON_SERVER } from "@/lib/utils/servers";
 import { HOST } from "@/lib/utils/url";
 
 export default {
@@ -68,7 +69,7 @@ export default {
 
     return {
       stripeSuccessURL: this.$auth.user
-        ? `https://python.zerotohero.ca/stripe_checkout_success?user_id=${this.$auth.user.id}&host=${HOST}&session_id={CHECKOUT_SESSION_ID}`
+        ? `${PYTHON_SERVER}stripe_checkout_success?user_id=${this.$auth.user.id}&host=${HOST}&session_id={CHECKOUT_SESSION_ID}`
         : undefined, // Make sure we have the user's id
       stripeCancelURL: HOST + "/go-pro",
     };

@@ -1,6 +1,10 @@
+import { PYTHON_SERVER } from "~/lib/config";
+
 importScripts("../vendor/fastest-levenshtein/fastest-levenshtein.js");
 importScripts("../vendor/localforage/localforage.js")
 importScripts("../vendor/hash-string/hash-string.min.js")
+
+const PYTHON_SERVER = 'https://python.zerotohero.ca/'
 
 const Dictionary = {
   name: "wiktionary",
@@ -503,7 +507,7 @@ const Dictionary = {
     let row = this.romanizations.find(r => r.persian === text);
     if (row) return row.roman;
     else {
-      let url = `https://python.zerotohero.ca/transliterate-persian?text=${encodeURIComponent(
+      let url = `${PYTHON_SERVER}transliterate-persian?text=${encodeURIComponent(
         text
       )}`;
       let transliteration = await this.proxy(url, -1);
@@ -1017,7 +1021,7 @@ const Dictionary = {
   },
   async tokenizeTurkish(text) {
     text = text.replace(/-/g, "- ");
-    let url = `https://python.zerotohero.ca/lemmatize-turkish?text=${encodeURIComponent(
+    let url = `${PYTHON_SERVER}lemmatize-turkish?text=${encodeURIComponent(
       text
     )}`;
     let tokenized = await this.proxy(url, 0);

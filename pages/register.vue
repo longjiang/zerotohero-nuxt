@@ -92,7 +92,7 @@
 
 <script>
 import Helper from "@/lib/helper";
-import Config from "@/lib/config";
+import { PYTHON_SERVER } from "@/lib/utils/servers";
 
 export default {
   data() {
@@ -134,7 +134,7 @@ export default {
       };
       let res = await axios.post(
         // "http://127.0.0.1:5000/new_mailer_lite_subscriber",
-        "https://python.zerotohero.ca/new_mailer_lite_subscriber",
+        `${PYTHON_SERVER}new_mailer_lite_subscriber`,
         payload
       );
       return res

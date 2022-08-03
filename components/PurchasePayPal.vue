@@ -53,6 +53,7 @@
 </template>
 
 <script>
+import { PYTHON_SERVER } from "@/lib/utils/servers";
 import { HOST } from "@/lib/utils/url";
 
 export default {
@@ -183,7 +184,7 @@ export default {
         // Payment successful
         this.paypalPaymentStatus = "approved";
         let paymentID = e.id;
-        window.location = `https://python.zerotohero.ca/paypal_checkout_success?pay_id=${paymentID}&user_id=${this.$auth.user.id}&host=${HOST}`;
+        window.location = `${PYTHON_SERVER}paypal_checkout_success?pay_id=${paymentID}&user_id=${this.$auth.user.id}&host=${HOST}`;
       } else {
         this.paypalPaymentStatus = "error";
         // Payment unsuccessful
