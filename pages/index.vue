@@ -347,6 +347,36 @@
               <div class="learning">Learning Chinese (zh)</div>
             </div>
           </div>
+          <div class="col-md-4 mb-3">
+            <div class="index-testimonial">
+              <p>
+                I love the videos combined with the dictionary. Your site has been the best way for me to find content in Chinese and review vocab in context.
+              </p>
+
+              <div class="name">Jami C. (US)</div>
+              <div class="learning">Learning Chinese (zh)</div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="index-testimonial">
+              <p>
+                Your page has helped me immensly and I adore your library, especially the part where you offer all the videos containing one specific word just to hear them over and over again in different contexts. I'm an auditive type so this helps me a lot.
+              </p>
+
+              <div class="name">Terezija B. (Croatia)</div>
+              <div class="learning">Learning Chinese (zh)</div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="index-testimonial">
+              <p>
+                I love Zero to Hero [now Language Player] A LOT and I have started playing with my brand new PRO account today for my Korean learning. 😊
+              </p>
+
+              <div class="name">Julie-Anne P. (France)</div>
+              <div class="learning">Learning Korean (ko)</div>
+            </div>
+          </div>
         </div>
         <div class="row index-section">
           <div class="col-md-12 mb-3 text-center">
