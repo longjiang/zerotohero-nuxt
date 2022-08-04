@@ -1,5 +1,5 @@
 <template>
-  <span class="purchase-stripe">
+  <div class="purchase-stripe">
     <stripe-checkout
       ref="stripeCheckoutUSDRef"
       mode="payment"
@@ -14,49 +14,32 @@
       :cancel-url="stripeCancelURL"
       @loading="(v) => (loading = v)"
     />
-    <b-button
-      @click="submitStripeUSD"
-      variant=" pl-3 pr-3"
-      size="sm"
-      style="
-        position: relative;
-        bottom: 0.5rem;
-        padding: 0.1rem;
-        background-color: #ffc439;
-      "
-    >
-      <i class="fas fa-credit-card"></i>
-      <i class="fab fa-cc-apple-pay"></i>
-      <i class="fab fa-google-pay mr-1"></i>
+    <b-button @click="submitStripeUSD" variant="success btn-purchase" size="md">
+      <span class="icons">
+        <i class="fas fa-credit-card"></i>
+        <i class="fab fa-cc-apple-pay"></i>
+        <i class="fab fa-google-pay mr-1"></i>
+      </span>
       Credit Card
+      <i class="fa-solid fa-chevron-right ml-1"></i>
     </b-button>
     <a
       href="https://buy.stripe.com/4gw2bz7ELbvR8CccMN"
-      class="btn btn-sm pl-3 pr-3"
-      style="
-        position: relative;
-        bottom: 0.5rem;
-        padding: 0.1rem;
-        background-color: #ffc439;
-      "
+      class="btn btn-success btn-purchase"
     >
-      <i class="fab fa-weixin mr-1"></i>
+      <span class="icons"><i class="fab fa-weixin"></i></span>
       WeChat Pay
+      <i class="fa-solid fa-chevron-right ml-1"></i>
     </a>
     <a
       href="https://buy.stripe.com/4gw2bz7ELbvR8CccMN"
-      class="btn btn-sm pl-3 pr-3"
-      style="
-        position: relative;
-        bottom: 0.5rem;
-        padding: 0.1rem;
-        background-color: #ffc439;
-      "
+      class="btn btn-success btn-purchase"
     >
-      <i class="fab fa-alipay mr-1"></i>
+      <span class="icons"><i class="fab fa-alipay"></i></span>
       Alipay
+      <i class="fa-solid fa-chevron-right ml-1"></i>
     </a>
-  </span>
+  </div>
 </template>
 
 <script>
@@ -83,5 +66,22 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
+.btn-purchase {
+  display: block;
+  margin: 0.25rem auto 0.25rem auto;
+  text-align: left;
+  width: 15.5rem;
+  position: relative;
+  .icons {
+    width: 5rem;
+    display: inline-block;
+    text-align: center;
+  }
+  .fa-chevron-right {
+    position: absolute;
+    right: 0.75rem;
+    top: 0.75rem;
+  }
+}
 </style>

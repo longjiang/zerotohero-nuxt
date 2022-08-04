@@ -39,12 +39,10 @@
       :experience="paypalExperienceOptions"
       :button-style="{
         shape: 'rect',
-        size: 'responsive',
-        label: '',
-        color: 'gold',
+        size: 'medium',
+        color: 'blue',
       }"
       env="production"
-      class="btn-purchase-paypal d-inline-block"
       @payment-authorized="onPayPalPaymentAuthorized"
       @payment-completed="onPayPalPaymentCompleted"
       @payment-cancelled="onPayPalPaymentCancelled"
@@ -198,5 +196,23 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
+.btn-purchase {
+  display: block;
+  width: 100%;
+  margin: 0.25rem auto 0.25rem auto;
+  text-align: left;
+  width: 15rem;
+  position: relative;
+  .icons {
+    width: 5rem;
+    display: inline-block;
+    text-align: center;
+  }
+  .fa-chevron-right {
+    position: absolute;
+    right: 0.75rem;
+    top: 0.75rem;
+  }
+}
 </style>
