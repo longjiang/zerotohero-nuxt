@@ -98,6 +98,7 @@
 
 <script>
 import Page from "@/components/Page";
+import { CHINESE_ZERO_TO_HERO } from "@/lib/utils/servers";
 
 export default {
   computed: {
@@ -112,6 +113,9 @@ export default {
   },
   components: {
     Page,
+  },
+  mounted() {
+    if (window) window.location = CHINESE_ZERO_TO_HERO + "affiliate-program/";
   },
 };
 </script>

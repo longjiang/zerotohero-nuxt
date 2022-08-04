@@ -282,6 +282,7 @@ import fx from "money";
 import accounting from "accounting";
 import Sale from "@/components/Sale";
 import axios from "axios";
+import { CHINESE_ZERO_TO_HERO } from '@/lib/utils/servers'
 
 export default {
   components: {
@@ -331,6 +332,9 @@ export default {
         fx.base = data.base;
       }
     }
+  },
+  mounted() {
+    if (window) window.location = CHINESE_ZERO_TO_HERO + 'pricing/'
   },
   watch: {
     selectedCurrency() {

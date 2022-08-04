@@ -5,7 +5,6 @@
       :description="`Online Chinese Courses from HSK 1 to HSK 9. Free courses include “Phonetics with Chinese Characteristics”, “Learn Chinese with Songs“, “Learn Chinese with Poems“.`"
       :image="`/img/courses/bundle-ultimate.jpg`"
     />
-
     <div class="container pt-5">
       <div class="row">
         <div class="col-sm-12 text-center">
@@ -259,12 +258,16 @@
 <script>
 import Testimonials from "@/components/Testimonials";
 import TelegramPrompt from "@/components/TelegramPrompt";
+import { CHINESE_ZERO_TO_HERO } from '@/lib/utils/servers'
 
 export default {
   components: {
     Testimonials,
     TelegramPrompt,
   },
+  mounted() {
+    if (window) window.location = CHINESE_ZERO_TO_HERO
+  }
 };
 </script>
 

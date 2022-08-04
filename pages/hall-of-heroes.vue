@@ -45,6 +45,7 @@
               @click="hsk = level"
               class="btn mr-2"
               :data-bg-level="level"
+              :key="`hsk-level-${level}`"
             >
               HSK {{ level }}
             </button>
@@ -58,6 +59,7 @@
 
 <script>
 import HeroesList from "@/components/HeroesList";
+import { CHINESE_ZERO_TO_HERO } from '@/lib/utils/servers'
 
 export default {
   data() {
@@ -68,6 +70,9 @@ export default {
   components: {
     HeroesList,
   },
+  mounted() {
+    if (window) window.location = CHINESE_ZERO_TO_HERO + 'hall-of-heroes/'
+  }
 };
 </script>
 

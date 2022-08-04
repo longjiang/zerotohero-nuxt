@@ -163,7 +163,12 @@
 </template>
 
 <script>
-export default {};
+import { CHINESE_ZERO_TO_HERO } from '@/lib/utils/servers'
+export default {
+  mounted() {
+    if (window) window.location = CHINESE_ZERO_TO_HERO + 'video-count/'
+  },
+};
 </script>
 
 <style></style>
