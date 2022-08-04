@@ -287,6 +287,105 @@
             />
           </div>
         </div>
+        <div class="row index-section">
+          <div class="col-12 mb-3 text-center">
+            <h3 class="text-white mb-2">Pricing Options</h3>
+            <p class="text-white">
+              Get unlimited access with a lifetime Pro account.
+            </p>
+          </div>
+          <div class="col-12">
+            <div class="pricing-cards">
+              <div class="mb-3 bg-white pricing-card pricing-card-free">
+                <h5 class="pb-3 pt-3">Free Account</h5>
+                <hr />
+                <ul class="list-unstyled">
+                  <li>
+                    <i class="fa-solid fa-circle-check text-success mr-1"></i>
+                    Access 600,000+ videos across 207+ languages
+                  </li>
+                  <li>
+                    <i class="fa-solid fa-circle-check text-success mr-1"></i>
+                    See collocations, example sentences, verb inflections and
+                    Chinese character decomposition in the dictionary
+                  </li>
+                  <li>
+                    <i class="fa-solid fa-circle-check text-success mr-1"></i>
+                    Read books, web pages or your own text with a popup
+                    dictionary
+                  </li>
+                  <li>
+                    <i class="fa-solid fa-circle-check text-success mr-1"></i>
+                    Watch live TV in the target language
+                  </li>
+                  <li>
+                    <i class="fa-solid fa-lock text-warning mr-1"></i>
+                    See only first 10 lines of interactive transcripts with
+                    English translation
+                  </li>
+                  <li>
+                    <i class="fa-solid fa-lock text-warning mr-1"></i>
+                    See only 2 examples of words in videos
+                  </li>
+                </ul>
+              </div>
+              <div class="mb-3 bg-white pricing-card pricing-card-pro">
+                <h4>Pro Account 🚀</h4>
+
+                <div class="price">
+                  <span style="position: relative; bottom: 1.2rem">$</span>
+                  <b style="font-size: 2.68rem">89</b>
+                  <span
+                    style="
+                      display: inline-block;
+                      position: relative;
+                      bottom: 0.4rem;
+                      margin-left: 0.3rem;
+                    "
+                  >
+                    <span
+                      style="display: block; margin-bottom: 0; line-height: 0.2"
+                    >
+                      /lifetime
+                    </span>
+                    <small class="text-success">pay once, enjoy forever</small>
+                  </span>
+                </div>
+                <hr />
+                <ul class="list-unstyled">
+                  <li>
+                    <i class="fa-solid fa-circle-check text-success mr-1"></i>
+                    Access 600,000+ videos across 207+ languages
+                  </li>
+                  <li>
+                    <i class="fa-solid fa-circle-check text-success mr-1"></i>
+                    See collocations, example sentences, verb inflections and
+                    Chinese character decomposition in the dictionary
+                  </li>
+                  <li>
+                    <i class="fa-solid fa-circle-check text-success mr-1"></i>
+                    Read books, web pages or your own text with a popup
+                    dictionary
+                  </li>
+                  <li>
+                    <i class="fa-solid fa-circle-check text-success mr-1"></i>
+                    Watch live TV in the target language
+                  </li>
+                  <li>
+                    <i class="fa-solid fa-circle-check text-success mr-1"></i>
+                    See complete interactive transcripts with English
+                    translation
+                  </li>
+                  <li>
+                    <i class="fa-solid fa-circle-check text-success mr-1"></i>
+                    See hundreds of examples of words in videos, or in
+                    particular TV shows.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="row index-section" id="index-testimonials">
           <div class="col-md-12 mb-3 text-center">
             <h3 class="text-white mb-2">What our users say about us</h3>
@@ -295,6 +394,19 @@
               <em>without solicitation</em>
               !
             </p>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="index-testimonial">
+              <p>
+                I find most useful when i learn, is the collocation in
+                dictionary. (for Chinese) , the picture, the comparing two
+                words/character/sentence through videos, the courses, the
+                grammar point, able to see songs lyrics with pinyin and many
+                more. 😊
+              </p>
+              <div class="name">Clementina D. (UK)</div>
+              <div class="learning">Learning Chinese (zh)</div>
+            </div>
           </div>
           <div class="col-md-4 mb-3">
             <div class="index-testimonial">
@@ -323,9 +435,11 @@
           <div class="col-md-4 mb-3">
             <div class="index-testimonial">
               <p>
-                I LIVE on this website! There really is no other service like
-                it. Absolutely unparalleled. I recommend it to anyone who wants
-                to take their language learning to the next level
+                I
+                <em>live</em>
+                on this website! There really is no other service like it.
+                Absolutely unparalleled. I recommend it to anyone who wants to
+                take their language learning to the next level
               </p>
 
               <div class="name">Gary B. (US)</div>
@@ -335,12 +449,11 @@
           <div class="col-md-4 mb-3">
             <div class="index-testimonial">
               <p>
-                I have been using your Zero to Hero [now Language Player]
-                service to learn Chinese alongside my college education for a
-                couple of months, and I love it. For me, it was the single best,
-                cheapest, and accessible language learning service available on
-                the internet. I sincerely congratulate you on designing and
-                implementing it.
+                I have been using your [Language Player] service to learn
+                Chinese alongside my college education for a couple of months,
+                and I love it. For me, it was the single best, cheapest, and
+                accessible language learning service available on the internet.
+                I sincerely congratulate you on designing and implementing it.
               </p>
 
               <div class="name">Judson B. (US)</div>
@@ -350,7 +463,9 @@
           <div class="col-md-4 mb-3">
             <div class="index-testimonial">
               <p>
-                I love the videos combined with the dictionary. Your site has been the best way for me to find content in Chinese and review vocab in context.
+                I love the videos combined with the dictionary. Your site has
+                been the best way for me to find content in Chinese and review
+                vocab in context.
               </p>
 
               <div class="name">Jami C. (US)</div>
@@ -360,7 +475,10 @@
           <div class="col-md-4 mb-3">
             <div class="index-testimonial">
               <p>
-                Your page has helped me immensly and I adore your library, especially the part where you offer all the videos containing one specific word just to hear them over and over again in different contexts. I'm an auditive type so this helps me a lot.
+                Your page has helped me immensly and I adore your library,
+                especially the part where you offer all the videos containing
+                one specific word just to hear them over and over again in
+                different contexts. I'm an auditive type so this helps me a lot.
               </p>
 
               <div class="name">Terezija B. (Croatia)</div>
@@ -370,7 +488,10 @@
           <div class="col-md-4 mb-3">
             <div class="index-testimonial">
               <p>
-                I love Zero to Hero [now Language Player] A LOT and I have started playing with my brand new PRO account today for my Korean learning. 😊
+                I love [Language Player]
+                <em>a lot</em>
+                and I have started playing with my brand new PRO account today
+                for my Korean learning. 😊
               </p>
 
               <div class="name">Julie-Anne P. (France)</div>
@@ -786,6 +907,45 @@ export default {
     font-weight: 900;
     position: absolute;
     left: 0;
+  }
+}
+
+.pricing-card {
+  text-shadow: none;
+  padding: 2rem 2rem 1rem 2rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 0 40px #00000078;
+  li {
+    margin: 0.5rem 0;
+    text-indent: -0.7rem;
+    padding-left: 1.5rem;
+  }
+}
+
+@media screen and (min-width: 720px) {
+  .pricing-cards {
+    position: relative;
+    overflow: hidden;
+    height: 40rem;
+    margin: 0 auto;
+    width: 46rem;
+  }
+
+  .pricing-card-free {
+    width: 24rem;
+    position: relative;
+    padding-right: 4rem;
+    top: 3rem;
+  }
+  .pricing-card-pro {
+    width: 24rem;
+    position: absolute;
+    top: 0;
+    left: 22rem;
+    padding-bottom: 4rem;
+    li {
+      padding-right: 2rem;
+    }
   }
 }
 </style>
