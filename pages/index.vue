@@ -330,8 +330,14 @@
                 </ul>
               </div>
               <div class="mb-3 bg-white pricing-card pricing-card-pro">
+                <div class="badge-money-back text-center">
+                  <span>
+                    <b style="font-size: 1.3em">14 day</b>
+                    <br />
+                    money-back guarantee
+                  </span>
+                </div>
                 <h4>Pro Account 🚀</h4>
-
                 <div class="price">
                   <span style="position: relative; bottom: 1.2rem">$</span>
                   <b style="font-size: 2.68rem">89</b>
@@ -925,7 +931,6 @@ export default {
 @media screen and (min-width: 720px) {
   .pricing-cards {
     position: relative;
-    overflow: hidden;
     height: 40rem;
     margin: 0 auto;
     width: 46rem;
@@ -947,5 +952,23 @@ export default {
       padding-right: 2rem;
     }
   }
+  .badge-money-back {
+    position: absolute;
+    right: -3.625rem;
+    top: -3.625rem;
+  }
+}
+
+.badge-money-back {
+  line-height: 1.1;
+  background-color: #28a745;
+  color: white;
+  width: 7.25rem;
+  height: 7.25rem;
+  border-radius: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
 }
 </style>
