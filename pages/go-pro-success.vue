@@ -5,7 +5,14 @@
   }
 </router>
 <template>
-  <div class="bg">
+  <div 
+    :style="`min-height: 100vh; ${
+      background
+        ? 'background-image: url(' +
+          background +
+          '); background-size: cover; background-position: center;'
+        : ''
+    }`">
     <SiteTopBar />
     <div class="go-pro-wrapper container">
       <div class="row">
@@ -29,7 +36,7 @@
               <div>
                 <router-link
                   :to="{ path: '/' }"
-                  class="btn btn-primary pl-4 pr-4"
+                  class="btn btn-success pl-4 pr-4"
                 >
                   Start Using Pro
                 </router-link>
@@ -62,6 +69,7 @@
 import { PYTHON_SERVER } from "@/lib/utils/servers";
 import { logError } from "@/lib/utils/error";
 import axios from "axios";
+import { background } from "@/lib/utils/background";
 
 export default {
   computed: {
@@ -82,6 +90,12 @@ export default {
       await this.$auth.setUser(null);
     }
   },
+  computed: {
+
+    background() {
+      return background();
+    },
+  }
 };
 </script>
 <style scoped>
