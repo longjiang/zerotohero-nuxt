@@ -165,7 +165,12 @@
 </template>
 
 <script>
-export default {};
+import { ENGLISH_ZERO_TO_HERO } from '@/lib/utils/servers'
+export default {
+  mounted() {
+    if (window) window.location = ENGLISH_ZERO_TO_HERO
+  }
+};
 </script>
 
 <style>
