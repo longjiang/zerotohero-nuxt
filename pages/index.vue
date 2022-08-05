@@ -488,7 +488,7 @@
               * Discord is a chat and streaming app that allows groups to create
               separate chatrooms (channels) for different purposes.
             </p>
-            <a href="https://discord.gg/n9UFdaTW" target="_blank">
+            <a href="https://discord.gg/D7vKcuKXuA" target="_blank">
               <img
                 src="/img/screenshot-discord.png"
                 alt="Discord"
@@ -498,7 +498,7 @@
             </a>
             <div class="mt-3">
               <a
-                href="https://discord.gg/n9UFdaTW"
+                href="https://discord.gg/D7vKcuKXuA"
                 target="_blank"
                 class="btn btn-success"
               >

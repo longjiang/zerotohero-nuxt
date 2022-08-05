@@ -27,7 +27,7 @@
             <div class="contact-block p-4" style="height: 100%">
               <h5>Join Our Discord Server</h5>
               <p>and connect with other language learners like you!</p>
-              <a href="https://discord.gg/n9UFdaTW" target="_blank">
+              <a href="https://discord.gg/D7vKcuKXuA" target="_blank">
                 <img
                   src="/img/screenshot-discord.png"
                   alt="Screenshot"
@@ -36,8 +36,8 @@
               </a>
               <p>
                 Join link:
-                <a href="https://discord.gg/n9UFdaTW" target="_blank">
-                  https://discord.gg/n9UFdaTW
+                <a href="https://discord.gg/D7vKcuKXuA" target="_blank">
+                  https://discord.gg/D7vKcuKXuA
                 </a>
               </p>
             </div>
