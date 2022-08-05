@@ -214,7 +214,7 @@ export default {
   },
   target: 'static',
   generate: {
-    routes: ['/'],
+    routes: ['/', 'https://languageplayer.io/en/zh/page/17/privacy-policy'],
 //     routes: `/
 // /dashboard
 // /en/de/all-media
