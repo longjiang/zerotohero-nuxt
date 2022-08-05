@@ -90,12 +90,14 @@
                 src="/img/btn-play.png"
                 alt="Play Button"
                 class="btn-play-green"
+                data-not-lazy
               />
               <img
                 src="/img/screenshot-player.jpg"
                 alt="Screenshot"
                 style="border-radius: 0.5rem"
                 class="img-fluid"
+                data-not-lazy
               />
             </div>
             <YouTubeVideo
