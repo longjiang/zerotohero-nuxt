@@ -35,10 +35,18 @@
         <i class="fa-solid fa-arrow-pointer"></i>
         Click on any language to learn it.
       </p>
-      <p>
-        This is an interactive map of 6,000 languages of the world, including
-        4,000 living languages, 2,000 historic languages, and 6 constructed
-        languages.
+      <p v-if="filteredLangsWithGeo">
+        This is an interactive map of
+        {{ filteredLangsWithGeo.length }} languages of the world, including
+        {{ livingLangs.length }} living languages,
+        {{ historicLangs.length }} historic languages,
+        {{ extinctLangs.length }} extinct languages, and
+        {{ constructedLangs.length }} constructed languages.
+      </p>
+      <p v-else>
+        This is an interactive map of 7,268 languages of the world, including
+        6,924 living languages, 105 historic languages, 220 extinct languages,
+        and 5 constructed languages.
       </p>
       <p>
         <b class="text-white">Legend.</b>
@@ -134,12 +142,36 @@ export default {
     await Helper.timeout(100);
     this.updateLanguages();
     if (window && window.innerWidth < 720) {
-      this.hideDescription = true
+      this.hideDescription = true;
     }
   },
   watch: {
     l1() {
       this.updateLanguages();
+    },
+  },
+  computed: {
+    livingLangs() {
+      return this.filteredLangsWithGeo
+        ? this.filteredLangsWithGeo.filter((l) => l.type === "L")
+        : undefined;
+    },
+    historicLangs() {
+      return this.filteredLangsWithGeo
+        ? this.filteredLangsWithGeo.filter(
+            (l) => l.type === "H" || l.type === "A"
+          )
+        : undefined;
+    },
+    extinctLangs() {
+      return this.filteredLangsWithGeo
+        ? this.filteredLangsWithGeo.filter((l) => l.type === "E")
+        : undefined;
+    },
+    constructedLangs() {
+      return this.filteredLangsWithGeo
+        ? this.filteredLangsWithGeo.filter((l) => l.type === "C")
+        : undefined;
     },
   },
   methods: {
@@ -234,7 +266,9 @@ export default {
 .language-map-description {
   position: fixed;
   width: 19.5rem;
-  height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 9rem - 1rem);
+  height: calc(
+    100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 9rem - 1rem
+  );
   background-color: #000000ee;
   right: 1rem;
   border-radius: 0.5rem;
@@ -265,7 +299,7 @@ export default {
     width: 5rem;
     padding: 0.25rem;
     .btn-close {
-      font-size: .8em;
+      font-size: 0.8em;
       position: static;
       color: white;
     }
