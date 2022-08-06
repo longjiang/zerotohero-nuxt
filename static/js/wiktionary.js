@@ -1,5 +1,3 @@
-import { PYTHON_SERVER } from "~/lib/config";
-
 importScripts("../vendor/fastest-levenshtein/fastest-levenshtein.js");
 importScripts("../vendor/localforage/localforage.js")
 importScripts("../vendor/hash-string/hash-string.min.js")
