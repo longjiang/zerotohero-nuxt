@@ -273,7 +273,7 @@ export default {
       let l1Code = this.l1;
       if (["hak", "nan", "lzh", "ltc", "och"].includes(l2.code))
         l1Code = "zh";
-      this.$router.push(`/${l1Code}/${l2.code}/`);
+      this.$router.push(`/${l1Code}/${l2.code}/learning-path`);
     },
     openPhrases(l2) {
       let filteredPhrases = this.phrases.filter((phrase) => phrase.l2 === l2);
