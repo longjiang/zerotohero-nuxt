@@ -11,6 +11,15 @@
       <i class="fas fa-align-left"></i>
     </button> -->
     <button
+      v-if="showInfoButton"
+      :class="{
+        'quick-access-button text-center': true,
+      }"
+      @click="showInfoModal"
+    >
+      <i class="fa-solid fa-circle-info"></i>
+    </button>
+    <button
       v-if="showCollapse"
       :class="{
         'quick-access-button quick-access-button-collapse text-center': true,
@@ -155,6 +164,27 @@
         {{ line.line }}
       </div>
     </div>
+    <b-modal
+      ref="info-modal"
+      centered
+      hide-footer
+      :title="video.title || 'Video Info'"
+      body-class="video-info-modal-wrapper"
+      size="md"
+    >
+      <div class="video-info-modal">
+        <VideoAdmin :video="video" ref="videoAdmin1" />
+        <EpisodeNav
+          :video="video"
+          :episodes="episodes"
+          :showType="showType"
+          :skin="light"
+          :show="show"
+          :largeEpisodeCount="largeEpisodeCount"
+          class="mt-3"
+        />
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -170,6 +200,9 @@ export default {
     layout: {
       default: "horizontal",
     },
+    show: {
+      type: Object,
+    },
     showFullscreenToggle: {
       default: true,
     },
@@ -178,6 +211,14 @@ export default {
     },
     showCollapse: {
       default: true,
+    },
+    showInfoButton: {
+      // Whether to show an "i" button that toggles the video information display modal
+      type: Boolean,
+      default: false,
+    },
+    showType: {
+      type: String,
     },
     episodes: {
       type: Array,
@@ -233,6 +274,9 @@ export default {
   methods: {
     togglePaused() {
       this.$emit("togglePaused");
+    },
+    showInfoModal() {
+      this.$refs["info-modal"].show();
     },
     toggleSpeed() {
       let speeds = [1, 0.75, 0.5];
@@ -300,7 +344,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 .quick-access-buttons {
   text-align: center;
   display: flex;

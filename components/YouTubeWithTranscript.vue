@@ -33,14 +33,20 @@
         />
         <LazyVideoControls
           v-if="showControls && video"
-          :video="video"
-          :paused="paused"
-          :layout="layout"
-          :showFullscreenToggle="showFullscreenToggle"
-          :showLineList="showLineList"
-          :showCollapse="layout === 'horizontal'"
-          :episodes="episodes"
           ref="videoControls"
+          v-bind="{
+            video,
+            paused,
+            layout,
+            show,
+            showType,
+            largeEpisodeCount,
+            showInfoButton,
+            episodes,
+            showLineList,
+            showFullscreenToggle,
+            showCollapse: layout === 'horizontal'
+          }"
           @previous="$emit('previous')"
           @next="$emit('next')"
           @goToLine="goToLine"
@@ -166,9 +172,9 @@
           />
           <VideoAdmin
             v-if="$adminMode"
+            ref="videoAdmin2"
             :class="{ 'mt-5': true }"
             :video="video"
-            ref="videoAdmin2"
             @showSubsEditing="toggleShowSubsEditing"
             @updateTranslation="updateTranslation"
             @updateOriginalText="updateOriginalText"
@@ -198,6 +204,10 @@ export default {
     },
     showType: {
       type: String,
+    },
+    showInfoButton: { // Whether to show an "i" button that toggles the video information display modal
+      type: Boolean,
+      default: false
     },
     cc: {
       type: Boolean, // Whether to show cc inside the iframe player
