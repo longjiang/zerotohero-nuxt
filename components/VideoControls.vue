@@ -352,7 +352,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #000000aa;
+  background: #00000066;
   backdrop-filter: blur(20px);
   border-radius: 0.5rem;
   margin-right: 0.5rem;

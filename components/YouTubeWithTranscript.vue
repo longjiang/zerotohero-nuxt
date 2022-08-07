@@ -600,6 +600,7 @@ export default {
 .quick-access-buttons {
   position: relative;
   margin-top: calc(-3.5rem - 3.75rem);
+  margin-bottom: 2rem;
   padding-top: 1rem;
   padding-bottom: 1rem;
 }
@@ -620,7 +621,6 @@ export default {
       position: absolute;
       left: 9.4rem;
       top: 1rem;
-      background: none;
       height: 3.2rem;
 
       .quick-access-button-previous-line,
