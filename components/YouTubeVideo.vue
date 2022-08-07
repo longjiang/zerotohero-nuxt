@@ -53,8 +53,8 @@ export default {
       default: false,
     },
     cc: {
-      type: Boolean, // Whether to show cc inside the iframe player
-      default: true,
+      type: Boolean, // Whether to show cc inside the iframe player. If true, cc is shown. If false, cc is shown only if the user turns it on.
+      default: false,
     },
     fullscreen: {
       type: Boolean, // Whether to allow fullscreen playback.
@@ -164,29 +164,31 @@ export default {
       this.loading = true;
       let id = this.$el.querySelector(".youtube-iframe").getAttribute("id");
       this.removeYouTubeAPIVars();
+      let playerVars = {
+        start: parseInt(this.starttime),
+        autoplay: this.autoplay ? 1 : 0,
+        cc_load_policy: this.cc ? 1 : 0,
+        cc_lang_pref: this.langPref,
+        iv_load_policy: 0,
+        showinfo: 0,
+        playsinline: 1,
+        color: "white",
+        controls: this.controls ? 1 : 0,
+        rel: 0,
+        fs: this.fullscreen,
+        hl: this.$l1 ? this.$l1.code : "en",
+        iv_load_policy: 3,
+        modestbranding: 1,
+        disablekb: 1,
+        id,
+      };
+      console.log({playerVars})
       window.onYouTubePlayerAPIReady = () => {
         this.player = new YT.Player(id, {
           height: "390",
           width: "640",
           videoId: this.youtube,
-          playerVars: {
-            start: parseInt(this.starttime),
-            autoplay: this.autoplay ? 1 : 0,
-            cc_load_policy: this.cc ? 1 : 0,
-            cc_lang_pref: this.langPref,
-            iv_load_policy: 0,
-            showinfo: 0,
-            playsinline: 1,
-            color: "white",
-            controls: this.controls ? 1 : 0,
-            rel: 0,
-            fs: this.fullscreen,
-            hl: this.$l1 ? this.$l1.code : "en",
-            iv_load_policy: 3,
-            modestbranding: 1,
-            disablekb: 1,
-            id,
-          },
+          playerVars,
           events: {
             onStateChange: (event) => {
               const UNSTARTED = -1;
