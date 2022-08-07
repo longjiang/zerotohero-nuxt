@@ -107,12 +107,12 @@
       v-if="showFullscreenToggle"
       :class="{
         'quick-access-button quick-access-button-fullscreen text-center': true,
-        'quick-access-button-active': layout === 'vertical',
+        'quick-access-button-active': layout === 'horizontal',
       }"
       @click="toggleFullscreenMode"
-      :title="layout === 'vertical' ? 'Full Screen' : 'Close Full Screen'"
+      :title="layout === 'vertical' ? 'Show Transcript' : 'Hide Transcript'"
     >
-      <i class="fas fa-expand"></i>
+      <i class="fa-solid fa-align-left"></i>
     </button>
 
     <div
