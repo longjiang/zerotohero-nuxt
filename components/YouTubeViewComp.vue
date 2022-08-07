@@ -98,7 +98,7 @@ export default {
       episodes: [],
       extrasLoaded: false,
       fetchDone: false,
-      initialLayout: "horizontal",
+      initialLayout: "vertical",
       mountedDone: false,
       randomEpisodeYouTubeId: undefined,
       show: undefined,
