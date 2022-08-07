@@ -636,7 +636,7 @@ export default {
 }
 
 .youtube-video-wrapper {
-  max-width: calc((100vh - 10rem) * 16 / 9);
+  max-width: calc((100vh - 3rem - env(safe-area-inset-top) - 10rem) * 16 / 9);
   margin: 0 auto;
   position: sticky;
   top: calc(env(safe-area-inset-top, 0) + 2.7rem);

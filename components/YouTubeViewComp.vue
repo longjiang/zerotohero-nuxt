@@ -690,11 +690,7 @@ export default {
 
 .youtube-view-content {
   &.fullscreen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
+    max-height: calc(100vh - 3rem - env(safe-area-inset-top));
     background-color: black;
     color: #ffffffaa;
     z-index: 21;
