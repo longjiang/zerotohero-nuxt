@@ -352,7 +352,11 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(black 0%, black 66%, transparent 100%);
+  background: #000000aa;
+  backdrop-filter: blur(20px);
+  border-radius: 0.5rem;
+  margin-right: 0.5rem;
+  margin-left: 0.5rem;
 }
 
 .quick-access-button {
@@ -371,7 +375,7 @@ export default {
 }
 
 .quick-access-button.play-pause {
-  font-size: 1.5em;
+  font-size: 2.5em;
 }
 
 @media (orientation: landscape) {

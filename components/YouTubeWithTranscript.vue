@@ -41,12 +41,13 @@
             show,
             showType,
             largeEpisodeCount,
-            showInfoButton,
+            showInfoButton: layout === 'vertical',
             episodes,
             showLineList,
             showFullscreenToggle,
-            showCollapse: layout === 'horizontal'
+            showCollapse: layout === 'horizontal' && !landscape
           }"
+          :class="{'d-none': neverPlayed || !paused}"
           @previous="$emit('previous')"
           @next="$emit('next')"
           @goToLine="goToLine"
@@ -596,6 +597,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.quick-access-buttons {
+  position: relative;
+  margin-top: calc(-3.5rem - 3.75rem);
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+.synced-transcript-single-line {
+  margin-top: 1.5rem;
+}
 .youtube-with-transcript-mini {
   display: flex;
   .main-dark {

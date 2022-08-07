@@ -168,21 +168,20 @@ export default {
         start: parseInt(this.starttime),
         autoplay: this.autoplay ? 1 : 0,
         cc_load_policy: this.cc ? 1 : 0,
-        cc_lang_pref: this.langPref,
+        cc_lang_pref: this.$l1 ? this.$l1.code : 'en',
         iv_load_policy: 0,
         showinfo: 0,
         playsinline: 1,
-        color: "white",
+        color: "white", // Setting this to "white" will disable modestbranding.
         controls: this.controls ? 1 : 0,
         rel: 0,
         fs: this.fullscreen,
-        hl: this.$l1 ? this.$l1.code : "en",
+        hl: this.$l2 ? this.$l2.code : "en", // Setting the interface language to match L2 makes it less likely for the captions to show up in the video player.
         iv_load_policy: 3,
         modestbranding: 1,
         disablekb: 1,
         id,
       };
-      console.log({playerVars})
       window.onYouTubePlayerAPIReady = () => {
         this.player = new YT.Player(id, {
           height: "390",
