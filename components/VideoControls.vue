@@ -175,10 +175,10 @@
       <div class="video-info-modal">
         <VideoAdmin :video="video" ref="videoAdmin1" />
         <EpisodeNav
+          skin="light"
           :video="video"
           :episodes="episodes"
           :showType="showType"
-          :skin="light"
           :show="show"
           :largeEpisodeCount="largeEpisodeCount"
           class="mt-3"
@@ -222,6 +222,9 @@ export default {
     },
     episodes: {
       type: Array,
+    },
+    largeEpisodeCount: {
+      type: Number, // Mannually set the number of episode displayed in the episode navigator
     },
   },
   data() {
