@@ -1,23 +1,20 @@
 <template>
   <div
     :key="`youtube-video-info-${video.youtube_id}-${videoInfoKey}`"
-    :class="{ 'd-none': !video.id || !show, 'text-center mb-3': true }"
-    style="
-      border-radius: 0.2rem;
-      border: 1px solid #ffffff33;
-      padding: 0.3rem;
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: center;
-    "
+    :class="{
+      'episode-nav': true,
+      'episode-nav-dark': skin === 'dark',
+      'episode-nav-light': skin === 'light',
+      'd-none': !video.id || !show,
+      'text-center mb-3': true,
+    }"
   >
     <router-link
       v-if="previousEpisode"
       :to="to(previousEpisode)"
       :class="{
         'btn btn-medium': true,
-        'btn-primary': skin === 'light',
+        'btn-light': skin === 'light',
         'btn-black': skin === 'dark',
       }"
     >
@@ -34,20 +31,13 @@
       }"
       :class="{
         'btn btn-medium': true,
-        'btn-primary': skin === 'light',
+        'btn-light': skin === 'light',
         'btn-black': skin === 'dark',
+        'show-title': true,
       }"
-      style="
-        flex: 1;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: inline-block;
-        white-space: nowrap;
-        padding-left: 0;
-      "
     >
       {{ show.title }}
-      {{ largeEpisodeCount ? "(" + $n(largeEpisodeCount) + ")" : "" }}
+      {{ largeEpisodeCount ? "(" + $n(largeEpisodeCount) + ")" : "" }} <i class="fa-solid fa-chevron-right ml-1"></i>
     </router-link>
     <router-link
       v-if="episodes && episodes.length && show && !largeEpisodeCount"
@@ -67,7 +57,7 @@
       :to="to(nextEpisode)"
       :class="{
         'btn btn-medium': true,
-        'btn-primary': skin === 'light',
+        'btn-light': skin === 'light',
         'btn-black': skin === 'dark',
       }"
     >
@@ -78,7 +68,7 @@
       :to="`/${this.$l1.code}/${this.$l2.code}/youtube/view/${this.randomEpisodeYouTubeId}`"
       :class="{
         'btn btn-medium': true,
-        'bg-secondary': skin === 'light',
+        'bg-light': skin === 'light',
         'btn-black': skin === 'dark',
       }"
     >
@@ -155,8 +145,33 @@ export default {
 };
 </script>
 
-<style scoped>
-a {
-  color: #999;
+<style lang="scss" scoped>
+.episode-nav {
+  border-radius: 0.2rem;
+  padding: 0.3rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  &.episode-nav-light {
+    border: 1px solid #00000033;
+    a {
+      color: #666;
+    }
+  }
+  &.episode-nav-dark {
+    border: 1px solid #ffffff33;
+    a {
+      color: #999;
+    }
+  }
+  .show-title {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    white-space: nowrap;
+    padding-left: 0;
+  }
 }
 </style>
