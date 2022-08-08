@@ -116,7 +116,7 @@ export default {
   },
   computed: {
     notFeaturedPhrasebooks() {
-      return this.phrasebooks.filter(p => !this.featuredPhrasebooks || !this.featuredPhrasebooks.includes(p))
+      if (this.phrasebooks) return this.phrasebooks.filter(p => !this.featuredPhrasebooks || !this.featuredPhrasebooks.includes(p))
     },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")

@@ -16,7 +16,7 @@
       how they are used in TV shows.`" />
       <client-only>
         <div class="phrase-search-bar">
-          <div class="container pt-2">
+          <div class="container">
             <div class="row">
               <div class="col-sm-12">
                 <div class="search-compare-wrapper">
@@ -56,7 +56,7 @@
           <div :class="{
             'content-pane-left': wide,
             'col-sm-12': !wide,
-            'text-center': true,
+            'text-center mb-4': true,
           }">
             <PhraseHeader v-if="term" :term="term" :class="{ 'mt-4': !wide }" />
             <hr v-if="word" />
@@ -92,7 +92,7 @@
             <template v-if="dictionaryMatchCompleted">
               <LazyDictionaryEntry v-if="word" :entry="word" :showHeader="false" :showDefinitions="false"
                 :showExample="false" :showExternal="false" :key="`dictionary-entry-${word.id}`" ref="dictionaryEntry" />
-              <LazyPhraseComp v-else-if="term" :term="term" class="mt-4" :showHeader="false" />
+              <LazyPhraseComp v-else-if="term" :term="term" :showHeader="false" />
               <div class="mt-3" v-if="term && similarPhraseTranslation">
                 <SimilarPhrases :phrase="word ? word.head : term" :translation="similarPhraseTranslation"
                   :wiktionary="true" class="text-center" />
@@ -222,21 +222,13 @@ export default {
 <style lang="scss" scoped>
 .phrase-wide {
   .phrase-search-bar {
-    padding: 1rem;
-    background: hsl(0deg 0% 0% / 23%);
-    position: fixed;
-    top: 0;
-    left: 13rem;
-    width: calc(100vw - 13rem);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    padding: 0 1rem 1rem 1rem;
     z-index: 9;
   }
 
   .content-pane-left {
     overflow-y: auto;
     padding: 1rem;
-    padding-top: 6rem;
 
     ::v-deep .entry-word {
       font-size: 2rem;
@@ -258,7 +250,6 @@ export default {
 
   .content-pane-right {
     padding: 1rem;
-    padding-top: 4rem;
   }
 
   .for-the-love-of {
