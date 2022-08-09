@@ -149,6 +149,7 @@ import Config from "@/lib/config";
 import Papa from "papaparse";
 import Helper from "@/lib/helper";
 import "leaflet/dist/leaflet.css";
+import { LANGS_WITH_CONTENT } from "@/lib/utils/servers";
 
 export default {
   components: {
@@ -269,11 +270,20 @@ export default {
     isDescendant() {
       return this.$languages.isDescendant(...arguments);
     },
-    goTo(l2) {
+    to(l2) {
       let l1Code = this.l1;
       if (["hak", "nan", "lzh", "ltc", "och"].includes(l2.code))
         l1Code = "zh";
-      this.$router.push(`/${l1Code}/${l2.code}/learning-path`);
+      let name = LANGS_WITH_CONTENT.includes(l2.code)
+        ? "all-media"
+        : "language-info";
+      return {
+        name,
+        params: { l1: l1Code, l2: l2.code },
+      };
+    },
+    goTo(l2) {
+      this.$router.push(this.to(l2));
     },
     openPhrases(l2) {
       let filteredPhrases = this.phrases.filter((phrase) => phrase.l2 === l2);
