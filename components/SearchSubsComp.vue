@@ -167,7 +167,7 @@
         :video="currentHit.video"
         :ref="`youtube-${hitIndex}`"
         :speed="speed"
-        :startLineIndex="Math.max(reels ? startLineIndex - 1 : startLineIndex, 0)"
+        :startLineIndex="Math.max(startLineIndex, 0)"
         :showFullscreenToggle="false"
         :autoload="true"
         :autoplay="navigated"
@@ -941,10 +941,14 @@ export default {
     display: none !important;
   }
 
+  ::v-deep .quick-gloss {
+    display: none;
+  }
+
   ::v-deep .youtube-with-transcript {
     width: calc(1080px / 2);
     height: calc(1920px / 2);
-    background: #080808;
+    background: #010101;
     margin-left: calc((100vw - 1080px / 2) / 2);
   }
 
@@ -955,9 +959,16 @@ export default {
   }
 
   ::v-deep .transcript-line-both {
-    padding-top: 2rem;
-    font-size: 2em;
+    padding-top: 0;
+    font-size: 1.7em;
     font-weight: bold;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+    .transcript-line-l1 {
+      font-weight: normal;
+      opacity: 1;
+      line-height: 1.25;
+    }
   }
 
   ::v-deep .annotated {

@@ -99,7 +99,7 @@ export default {
       episodes: [],
       extrasLoaded: false,
       fetchDone: false,
-      initialLayout: "vertical",
+      initialLayout: this.$adminMode ? "horizontal" : "vertical",
       mountedDone: false,
       randomEpisodeYouTubeId: undefined,
       show: undefined,
@@ -118,6 +118,10 @@ export default {
         l1: this.$l1,
         l2: this.$l2,
       });
+    },
+    $adminMode() {
+      if (typeof this.$store.state.settings.adminMode !== "undefined")
+        return this.$store.state.settings.adminMode;
     },
     landscape() {
       if (this.forcePortrait) return false;
