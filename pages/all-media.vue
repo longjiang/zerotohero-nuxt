@@ -55,7 +55,27 @@
               @hasWatchHistory="onHasWatchHistory"
             />
           </div>
-          
+
+          <div v-if="talks && talks.length > 0" class="media-section">
+            <h3 class="media-seaction-heading">
+              YouTube
+              <router-link :to="{ name: 'talks' }" class="show-all">
+                More
+                <i class="fas fa-chevron-right ml-1"></i>
+              </router-link>
+            </h3>
+            <ShowList
+              :shows="
+                talks
+                  .filter((s) => !['News'].includes(s.title) && !s.audiobook)
+                  .slice(0, 12)
+              "
+              type="talks"
+              :key="`tv-shows`"
+            />
+            <div class="text-center mt-1"></div>
+          </div>
+
           <div
             :class="{
               'loader text-center': true,
@@ -75,37 +95,13 @@
             </h3>
             <ShowList
               :shows="
-                random(
-                  tvShows.filter((s) => !['Movies', 'Music'].includes(s.title)),
-                  12
-                )
+                tvShows
+                  .filter((s) => !['Movies', 'Music'].includes(s.title))
+                  .slice(0, 12)
               "
               type="tvShows"
               :key="`tv-shows`"
             />
-          </div>
-
-          <div v-if="talks && talks.length > 0" class="media-section">
-            <h3 class="media-seaction-heading">
-              YouTube
-              <router-link :to="{ name: 'talks' }" class="show-all">
-                More
-                <i class="fas fa-chevron-right ml-1"></i>
-              </router-link>
-            </h3>
-            <ShowList
-              :shows="
-                random(
-                  talks.filter(
-                    (s) => !['News'].includes(s.title) && !s.audiobook
-                  ),
-                  12
-                )
-              "
-              type="talks"
-              :key="`tv-shows`"
-            />
-            <div class="text-center mt-1"></div>
           </div>
 
           <div v-if="music && music.length > 0" class="media-section">
@@ -334,9 +330,11 @@ export default {
     async loadShows() {
       if (this.showsLoaded) return;
       else this.showsLoaded = true;
-      this.tvShows = this.$store.state.shows.tvShows[this.$l2.code];
-      this.talks = this.$store.state.shows.talks[this.$l2.code];
-      if (this.tvShows) {
+
+      let tvShows = this.$store.state.shows.tvShows[this.$l2.code];
+      let talks = this.$store.state.shows.talks[this.$l2.code];
+      if (tvShows) {
+        this.tvShows = tvShows.sort((x, y) => y.avg_views - x.avg_views) || [];
         this.musicShow = this.$store.state.shows.tvShows[this.$l2.code].find(
           (s) => s.title === "Music"
         );
@@ -358,7 +356,8 @@ export default {
             offset: this.randomOffset("movies", 25),
           });
       }
-      if (this.talks) {
+      if (talks) {
+        this.talks = talks.sort((x, y) => y.avg_views - x.avg_views) || [];
         this.newsShow = this.$store.state.shows.talks[this.$l2.code].find(
           (s) => s.title === "News"
         );
@@ -381,7 +380,7 @@ export default {
         // If we only have so many videos, we don't need arandom offset
         if (stats < max) return 0;
         else {
-          let random = this.dayOfTheYear() / 366
+          let random = this.dayOfTheYear() / 366;
           let offset = Math.floor(random * (stats - max));
           return offset;
         }
@@ -398,10 +397,13 @@ export default {
       return day;
     },
     random(array, max) {
-      let random = this.dayOfTheYear() / 366
-      let offset = Math.min(Math.floor(array.length * random), array.length - max)
+      let random = this.dayOfTheYear() / 366;
+      let offset = Math.min(
+        Math.floor(array.length * random),
+        array.length - max
+      );
       let sliced = array.slice(offset, offset + max || 12);
-      return sliced
+      return sliced;
     },
     /**
      * Retrieve videos from Directus.
