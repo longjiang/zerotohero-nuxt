@@ -17,6 +17,7 @@ export const categories = (l2, tvShows, talks) => {
   tvShows = tvShows[l2.code] || []
   talks = talks[l2.code] || []
   let shows = [...tvShows, ...talks]
+  shows = shows.filter(s => !['News', 'Music', 'Movies'].includes(s.title))
   let categories = {};
   let ids = shows.map((show) => show.category).filter((c) => c);
   for (let id in CATEGORIES) {
