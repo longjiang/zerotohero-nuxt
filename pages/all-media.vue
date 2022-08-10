@@ -717,4 +717,12 @@ h3 {
   text-align: left;
   text-shadow: 0 0 6px #000000;
 }
+
+@media screen and (min-width: 480px) {
+  .category-btn {
+    font-size: 1rem;
+    padding: 1rem;
+  }
+  
+}
 </style>

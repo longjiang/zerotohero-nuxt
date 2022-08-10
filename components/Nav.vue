@@ -344,7 +344,7 @@ export default {
             {
               name: "all-media",
               icon: "fas fa-telescope",
-              title: `Explore`,
+              title: `Home`,
               // count: this.stats ? this.stats.allVideos : undefined,
               show: true,
             },
