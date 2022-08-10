@@ -1,6 +1,6 @@
 <template>
   <div class="identical-languages" v-if="$l2.identicalLangs && $l2.code !== 'zh'">
-    For more content, please go to:
+    For more content, also try:
     <client-only>
       <span v-if="$l2.identicalLangs">
         <span
