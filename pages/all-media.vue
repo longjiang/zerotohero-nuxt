@@ -11,24 +11,27 @@
   <div class="main-dark">
     <div v-if="!all">
       <div class="container">
-        <div class="row">
+        <!-- <div class="row mb-3">
           <div class="col-sm-12">
             <b-form-input
-              v-model="text"
+              v-model="term"
               @compositionend.prevent.stop="() => false"
               @keyup.enter="
                 $router.push({
                   name: 'youtube-search',
-                  params: { term: text.trim() },
+                  params: { term: term.trim() },
                 })
               "
               placeholder="Search"
               class="input-ghost-dark"
             />
           </div>
-        </div>
-        <div class="row mt-3" style="padding-left: .75rem; padding-right: .75rem;">
-          <div class="col-6 col-md-4 col-lg-3 category-btn-wrapper">
+        </div> -->
+        <div
+          class="row"
+          style="padding-left: 0.75rem; padding-right: 0.75rem"
+        >
+          <!-- <div class="col-6 col-md-4 col-lg-3 category-btn-wrapper">
             <b-button
               variant="unstyled"
               class="category-btn text-left"
@@ -37,19 +40,22 @@
               <i class="fa-regular fa-grid-2 mr-1"></i>
               All
             </b-button>
-          </div>
+          </div> -->
           <div class="col-6 col-md-4 col-lg-3 category-btn-wrapper">
             <router-link
-              class="btn-unstyled category-btn text-left"
+              class="link-unstyled category-btn text-left"
               :to="{ name: 'watch-history' }"
             >
               <i class="fa-regular fa-history mr-1"></i>
               Watch History
             </router-link>
           </div>
-          <div class="col-6 col-md-4 col-lg-3 category-btn-wrapper" v-if="tvShows && tvShows.length > 0">
+          <div
+            class="col-6 col-md-4 col-lg-3 category-btn-wrapper"
+            v-if="tvShows && tvShows.length > 0"
+          >
             <router-link
-              class="btn-unstyled category-btn text-left"
+              class="link-unstyled category-btn text-left"
               :to="{ name: 'tv-shows' }"
             >
               <i class="fa-regular fa-tv mr-1"></i>
@@ -58,16 +64,19 @@
           </div>
           <div class="col-6 col-md-4 col-lg-3 category-btn-wrapper">
             <router-link
-              class="btn-unstyled category-btn text-left"
+              class="link-unstyled category-btn text-left"
               :to="{ name: 'live-tv' }"
             >
               <i class="fa-regular fa-tv-retro mr-1"></i>
               Live TV
             </router-link>
           </div>
-          <div class="col-6 col-md-4 col-lg-3 category-btn-wrapper" v-if="moviesShow">
+          <div
+            class="col-6 col-md-4 col-lg-3 category-btn-wrapper"
+            v-if="moviesShow"
+          >
             <router-link
-              class="btn-unstyled category-btn text-left"
+              class="link-unstyled category-btn text-left"
               :to="{
                 name: 'show',
                 params: { type: 'tv-show', id: moviesShow.id },
@@ -77,9 +86,12 @@
               Movies
             </router-link>
           </div>
-          <div class="col-6 col-md-4 col-lg-3 category-btn-wrapper" v-if="musicShow">
+          <div
+            class="col-6 col-md-4 col-lg-3 category-btn-wrapper"
+            v-if="musicShow"
+          >
             <router-link
-              class="btn-unstyled category-btn text-left"
+              class="link-unstyled category-btn text-left"
               :to="{
                 name: 'show',
                 params: { type: 'tv-show', id: musicShow.id },
@@ -89,9 +101,27 @@
               Music
             </router-link>
           </div>
-          <div class="col-6 col-md-4 col-lg-3 category-btn-wrapper" v-if="musicShow">
+          <div
+            class="col-6 col-md-4 col-lg-3 category-btn-wrapper"
+            v-if="newsShow"
+          >
             <router-link
-              class="btn-unstyled category-btn text-left"
+              class="link-unstyled category-btn text-left"
+              :to="{
+                name: 'show',
+                params: { type: 'talk', id: newsShow.id },
+              }"
+            >
+              <i class="fa-solid fa-newspaper mr-1"></i>
+              News
+            </router-link>
+          </div>
+          <div
+            class="col-6 col-md-4 col-lg-3 category-btn-wrapper"
+            v-if="musicShow"
+          >
+            <router-link
+              class="link-unstyled category-btn text-left"
               :to="{
                 name: 'audiobooks',
               }"
@@ -100,9 +130,12 @@
               Audiobooks
             </router-link>
           </div>
-          <div class="col-6 col-md-4 col-lg-3 category-btn-wrapper" v-if="musicShow">
+          <div
+            class="col-6 col-md-4 col-lg-3 category-btn-wrapper"
+            v-if="musicShow"
+          >
             <router-link
-              class="btn-unstyled category-btn text-left"
+              class="link-unstyled category-btn text-left"
               :to="{
                 name: 'youtube-browse',
                 params: { topic: 'kids', level: 'all' },
@@ -110,6 +143,38 @@
             >
               <i class="fa-solid fa-baby mr-1"></i>
               Kids
+            </router-link>
+          </div>
+        </div>
+
+        <div
+          class="row mt-3"
+          style="padding-left: 0.75rem; padding-right: 0.75rem"
+          v-if="
+            LANGS_WITH_LEVELS.includes($l2.code) && levels && levels.length > 0
+          "
+        >
+          <div
+            v-for="(level, index) in levels"
+            :key="`level-btn-level-${index}`"
+            class="col-6 col-md-4 col-lg-3 category-btn-wrapper"
+          >
+            <router-link
+              :data-bg-level="level.level"
+              style="border: none;"
+              :to="{
+                name: 'youtube-browse',
+                params: { category: 'all', level: level.numeric },
+              }"
+              class="link-unstyled category-btn text-center"
+            >
+              {{ level.category }} ({{
+                index === 0
+                  ? level.name
+                  : level.exam === "CEFR"
+                  ? level.level
+                  : level.name
+              }})
             </router-link>
           </div>
         </div>
@@ -339,6 +404,7 @@
 <script>
 import Helper from "@/lib/helper";
 import { mapState } from "vuex";
+import { languageLevels, LANGS_WITH_LEVELS } from "@/lib/utils";
 
 export default {
   data() {
@@ -356,6 +422,8 @@ export default {
       heroVideo: undefined,
       hasWatchHistory: false,
       showsLoaded: false,
+      term: undefined,
+      LANGS_WITH_LEVELS,
       all: false, // If false, show users the category selection; if true, show recent videos, tv shows, youtube videos, etc.
     };
   },
@@ -400,6 +468,10 @@ export default {
     $adminMode() {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
+    },
+    levels() {
+      let langLevels = languageLevels(this.$l2);
+      return [1, 2, 3, 4, 5, 6, 7].map((l) => langLevels[l]);
     },
   },
   watch: {
@@ -607,9 +679,10 @@ h3 {
 
 .category-btn {
   color: white;
-  padding: 1rem;
-  border: 2px solid #666;
+  padding: 0.5rem 1rem;
+  border: 1px solid #666;
   border-radius: 0.25rem;
+  font-size: 0.8rem;
   width: 100%;
   height: 100%;
   display: block;
