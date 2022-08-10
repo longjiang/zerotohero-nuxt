@@ -27,10 +27,7 @@
             />
           </div>
         </div> -->
-        <div
-          class="row"
-          style="padding-left: 0.75rem; padding-right: 0.75rem"
-        >
+        <div class="row" style="padding-left: 0.75rem; padding-right: 0.75rem">
           <!-- <div class="col-6 col-md-4 col-lg-3 category-btn-wrapper">
             <b-button
               variant="unstyled"
@@ -48,6 +45,18 @@
             >
               <i class="fa-regular fa-history mr-1"></i>
               Watch History
+            </router-link>
+          </div>
+          <div
+            class="col-6 col-md-4 col-lg-3 category-btn-wrapper"
+            v-if="talks && talks.length > 0"
+          >
+            <router-link
+              class="link-unstyled category-btn text-left"
+              :to="{ name: 'talks' }"
+            >
+              <i class="fab fa-youtube mr-1"></i>
+              YouTube
             </router-link>
           </div>
           <div
@@ -161,20 +170,38 @@
           >
             <router-link
               :data-bg-level="level.level"
-              style="border: none;"
+              style="border: none; background: linear-gradient(#00000077, #00000077);"
               :to="{
                 name: 'youtube-browse',
                 params: { category: 'all', level: level.numeric },
               }"
-              class="link-unstyled category-btn text-center"
+              class="link-unstyled category-btn"
             >
               {{ level.category }} ({{
-                index === 0
-                  ? level.name
-                  : level.exam === "CEFR"
-                  ? level.level
-                  : level.name
+                level.name.replace("CEFR ", "").replace("Pre", "Pre-")
               }})
+            </router-link>
+          </div>
+        </div>
+        <div
+          class="row mt-3"
+          style="padding-left: 0.75rem; padding-right: 0.75rem"
+          v-if="categories && Object.keys(categories).length > 0"
+        >
+          <div
+            v-for="(category, index) in categories"
+            :key="`level-btn-category-${index}`"
+            class="col-6 col-md-4 col-lg-3 category-btn-wrapper"
+          >
+            <router-link
+              :style="`border: none;  background: linear-gradient(#00000077, #00000077), url(/img/backgrounds/background-${index}.jpg); background-size: cover; background-position: center;`"
+              :to="{
+                name: 'youtube-browse',
+                params: { category: index, level: 'all' },
+              }"
+              class="link-unstyled category-btn"
+            >
+              {{ category }}
             </router-link>
           </div>
         </div>
@@ -454,6 +481,7 @@ export default {
   },
   computed: {
     ...mapState("stats", ["stats"]),
+    ...mapState("shows", ["categories"]),
     audiobooks() {
       return this.talks.filter((t) => t.audiobook);
     },
@@ -686,5 +714,7 @@ h3 {
   width: 100%;
   height: 100%;
   display: block;
+  text-align: left;
+  text-shadow: 0 0 6px #000000;
 }
 </style>
