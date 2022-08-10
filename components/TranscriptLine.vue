@@ -82,7 +82,7 @@
           <span
             v-else-if="line.line.length > 0 && (parallelLine || translation)"
             :data-line-index="lineIndex"
-            v-html="(translation || parallelLine).replace(/\n/g, '<br/>')"
+            v-html="(translation || parallelLine)"
             :contenteditable="enableTranslationEditing"
             @blur.capture="trasnlationLineBlur"
             @keydown.capture="trasnlationLineKeydown"
