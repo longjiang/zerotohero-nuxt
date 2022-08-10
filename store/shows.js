@@ -1,5 +1,5 @@
 import { CATEGORIES } from "@/lib/youtube";
-import { LANGS_WITH_META } from '@/lib/utils/servers'
+import { LANGS_WITH_CONTENT } from '@/lib/utils/servers'
 import Helper from '@/lib/helper'
 
 export const state = () => {
@@ -13,7 +13,7 @@ export const state = () => {
 }
 
 export const categories = (l2, tvShows, talks) => {
-  if (!l2 || !LANGS_WITH_META.includes(l2.code)) return {};
+  if (!l2 || !LANGS_WITH_CONTENT.includes(l2.code)) return {};
   tvShows = tvShows[l2.code] || []
   talks = talks[l2.code] || []
   let shows = [...tvShows, ...talks]
