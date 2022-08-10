@@ -15,7 +15,7 @@
           <router-link
             class="language-overview-item"
             v-if="language && language.name"
-            :to="{ name: 'learning-path', params: { l1: getL1Code(language), l2: language.code } }"
+            :to="to(language)"
           >
             <div class="language-flag-wrapper">
               <LanguageFlag :language="language" :autocycle="true" />
@@ -36,6 +36,7 @@
 import { ContainerQuery } from "vue-container-query";
 import { mapState } from "vuex";
 import SPECIAL_LANGUAGES from "@/lib/utils/special-languages";
+import { LANGS_WITH_CONTENT } from "@/lib/utils/servers";
 
 export default {
   components: {
@@ -87,12 +88,21 @@ export default {
   watch: {},
   methods: {
     getL1Code(l2) {
-      let l2Settings = this.$store.getters['settings/l2Settings'](l2.code)
+      let l2Settings = this.$store.getters["settings/l2Settings"](l2.code);
       if (l2Settings?.l1) {
-        return l2Settings.l1
+        return l2Settings.l1;
       }
-      return 'en'
-    }
+      return "en";
+    },
+    to(language) {
+      let name = LANGS_WITH_CONTENT.includes(language.code)
+        ? "all-media"
+        : "language-info";
+      return {
+        name,
+        params: { l1: this.getL1Code(language), l2: language.code },
+      };
+    },
   },
 };
 </script>
@@ -109,7 +119,7 @@ export default {
     text-align: center;
     width: 3.5rem;
     padding-top: 0.5rem;
-    ::v-deep .flag-icon-wrapper  {
+    ::v-deep .flag-icon-wrapper {
       transform: scale(1.5);
       .country-name {
         font-size: 0.5em;

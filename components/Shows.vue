@@ -120,7 +120,6 @@
                   :cloakVideosWithoutSubs="!$adminMode"
                 />
               </div>
-              <LazyIdenticalLanguages class="mt-3" :routeName="routeType" />
             </div>
           </div>
         </div>

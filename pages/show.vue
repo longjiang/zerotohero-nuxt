@@ -172,7 +172,7 @@
 <script>
 import Helper from "@/lib/helper";
 import { tify, sify } from "chinese-conv";
-import { LANGS_WITH_META } from "@/lib/utils/servers";
+import { LANGS_WITH_CONTENT } from "@/lib/utils/servers";
 
 export default {
   props: {
@@ -446,7 +446,7 @@ export default {
     async getVideosFromServer({ keyword, limit, offset, sort } = {}) {
       let keywordFilter = keyword ? `&filter[title][contains]=${keyword}` : "";
       let fields = "id,title,l2,youtube_id,date,tv_show,talk,channel_id";
-      if (LANGS_WITH_META.includes(this.$l2.code))
+      if (LANGS_WITH_CONTENT.includes(this.$l2.code))
         fields =
           fields +
           ",views,tags,category,locale,duration,made_for_kids,views,likes,comments";

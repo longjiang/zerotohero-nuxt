@@ -8,7 +8,7 @@
   }
 </router>
 <template>
-  <div class="talks container">
+  <div class="talks container mb-5">
     <Shows
       routeType="talks"
       :category="category"
@@ -17,6 +17,7 @@
       :showExtraSearchResults="true"
       :showLoader="true"
     />
+    <LazyIdenticalLanguages class="mt-3" routeName="talks" />
   </div>
 </template>
 

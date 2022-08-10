@@ -173,7 +173,7 @@ export default {
                     name: "profile",
                     params: { l1: this.$l1.code, l2: this.$l2.code },
                   });
-                else this.$router.push("/");
+                else this.$router.push("/dashboard");
               }
             }
           }
