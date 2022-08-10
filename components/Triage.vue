@@ -32,7 +32,7 @@
           <router-link
             class="btn btn-success pl-5 pr-5"
             :to="{
-              name: 'learning-path',
+              name: 'all-media',
               params: { l1: l1.code, l2: l2.code === 'cmn' ? 'zh' : l2.code },
             }"
           >
