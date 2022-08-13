@@ -225,7 +225,7 @@
           class="col-6 col-md-4 col-lg-3 category-btn-wrapper"
         >
           <router-link
-            :style="`border: none;  background: linear-gradient(#00000077, #00000077), url(/img/backgrounds/background-${index}.jpg); background-size: cover; background-position: center;`"
+            :style="`border: none;  background: linear-gradient(#00000077, #00000077), url(/img/categories/bg-category-${index}.jpg); background-size: cover; background-position: center center; padding-top: 2.5rem; padding-bottom: 0.5rem;`"
             :to="{
               name: 'youtube-browse',
               params: { category: index, level: 'all' },
