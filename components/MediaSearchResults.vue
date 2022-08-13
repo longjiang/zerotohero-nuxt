@@ -70,7 +70,7 @@
             :checkSubs="false"
             :checkSaved="false"
             :showProgress="true"
-            :showPlayButton="true"
+            :showPlayButton="false"
           />
         </template>
         <div

@@ -47,7 +47,7 @@
             showFullscreenToggle,
             showCollapse: layout === 'horizontal' && !landscape
           }"
-          :class="{'d-none': neverPlayed || !paused}"
+          :class="{'d-none': !paused}"
           @previous="$emit('previous')"
           @next="$emit('next')"
           @goToLine="goToLine"
