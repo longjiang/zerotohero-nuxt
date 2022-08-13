@@ -285,6 +285,9 @@ export default {
     margin: 0 auto;
     .transcript-line-l2 {
       padding-left: 1.5rem;
+      ::v-deep .annotated {
+        text-align: center !important  
+      }
     }
     .transcript-line-l2-rtl {
       padding-right: 1.5rem;
