@@ -1,6 +1,7 @@
 <template>
-  <div v-if="video" class="quick-access-buttons">
-    <!-- <button
+  <div class="video-controls" v-if="video">
+    <div class="quick-access-buttons">
+      <!-- <button
       v-if="showLineList"
       :class="{
         'quick-access-button   text-center': true,
@@ -10,80 +11,83 @@
     >
       <i class="fas fa-align-left"></i>
     </button> -->
-    <button
-      v-if="showInfoButton"
-      :class="{
-        'quick-access-button text-center': true,
-      }"
-      @click="showInfoModal"
-    >
-      <i class="fa-solid fa-circle-info"></i>
-    </button>
-    <button
-      v-if="showCollapse"
-      :class="{
-        'quick-access-button quick-access-button-collapse text-center': true,
-      }"
-      @click="toggleCollapsed"
-      title="Hide Video (for Audiobooks)"
-    >
-      <i class="fas fa-caret-square-up" v-if="!collapsed"></i>
-      <i class="fas fa-caret-square-down" v-if="collapsed"></i>
-    </button>
-    <button
-      :class="{
-        'quick-access-button quick-access-button-rewind text-center': true,
-      }"
-      @click="rewind"
-      Title="Rewind to Beginning"
-    >
-      <i class="fas fa-undo"></i>
-    </button>
-    <button
-      v-if="episodes"
-      :disabled="!previousEpisode"
-      class="quick-access-button quick-access-button-previous text-center"
-      @click="$emit('previous')"
-      title="Previous Video"
-    >
-      <i class="fas fa-step-backward"></i>
-    </button>
-    <button
-      class="quick-access-button quick-access-button-previous-line text-center"
-      @click="$emit('goToPreviousLine')"
-      title="Previous Line"
-    >
-      <i v-if="layout === 'horizontal'" class="fas fa-arrow-up"></i>
-      <i v-else class="fas fa-chevron-left"></i>
-    </button>
-    <button
-      :class="{
-        'quick-access-button quick-access-button-play play-pause text-center': true,
-      }"
-      @click="togglePaused"
-      :title="paused ? 'Play' : 'Pause'"
-    >
-      <i v-if="paused && !speaking" class="fas fa-play"></i>
-      <i v-if="!paused || speaking" class="fas fa-pause"></i>
-    </button>
-    <button
-      class="quick-access-button quick-access-button-next-line text-center"
-      @click="$emit('goToNextLine')"
-      title="Next Line"
-    >
-      <i v-if="layout === 'horizontal'" class="fas fa-arrow-down"></i>
-      <i v-else class="fas fa-chevron-right"></i>
-    </button>
-    <button
-      v-if="episodes"
-      :disabled="!nextEpisode"
-      class="quick-access-button quick-access-button-next text-center"
-      @click="$emit('next')"
-      title="Next Video"
-    >
-      <i class="fas fa-step-forward"></i>
-    </button>
-    <!-- <button
+      <button
+        v-if="showInfoButton"
+        :class="{
+          'quick-access-button text-center': true,
+        }"
+        @click="showInfoModal"
+      >
+        <i class="fa-solid fa-circle-info"></i>
+      </button>
+      <button
+        v-if="showCollapse"
+        :class="{
+          'quick-access-button quick-access-button-collapse text-center': true,
+        }"
+        @click="toggleCollapsed"
+        title="Hide Video (for Audiobooks)"
+      >
+        <i class="fas fa-caret-square-up" v-if="!collapsed"></i>
+        <i class="fas fa-caret-square-down" v-if="collapsed"></i>
+      </button>
+      <button
+        :class="{
+          'quick-access-button quick-access-button-rewind text-center': true,
+        }"
+        @click="rewind"
+        Title="Rewind to Beginning"
+      >
+        <i class="fas fa-undo"></i>
+      </button>
+      <button
+        v-if="episodes"
+        :disabled="!previousEpisode"
+        class="quick-access-button quick-access-button-previous text-center"
+        @click="$emit('previous')"
+        title="Previous Video"
+      >
+        <i class="fas fa-step-backward"></i>
+      </button>
+      <button
+        class="
+          quick-access-button quick-access-button-previous-line
+          text-center
+        "
+        @click="$emit('goToPreviousLine')"
+        title="Previous Line"
+      >
+        <i v-if="layout === 'horizontal'" class="fas fa-arrow-up"></i>
+        <i v-else class="fas fa-chevron-left"></i>
+      </button>
+      <button
+        :class="{
+          'quick-access-button quick-access-button-play play-pause text-center': true,
+        }"
+        @click="togglePaused"
+        :title="paused ? 'Play' : 'Pause'"
+      >
+        <i v-if="paused && !speaking" class="fas fa-play"></i>
+        <i v-if="!paused || speaking" class="fas fa-pause"></i>
+      </button>
+      <button
+        class="quick-access-button quick-access-button-next-line text-center"
+        @click="$emit('goToNextLine')"
+        title="Next Line"
+      >
+        <i v-if="layout === 'horizontal'" class="fas fa-arrow-down"></i>
+        <i v-else class="fas fa-chevron-right"></i>
+      </button>
+      <button
+        v-if="episodes"
+        :disabled="!nextEpisode"
+        class="quick-access-button quick-access-button-next text-center"
+        @click="$emit('next')"
+        title="Next Video"
+      >
+        <i class="fas fa-step-forward"></i>
+      </button>
+      <!-- <button
       :class="{
         'quick-access-button   text-center': true,
         'quick-access-button-active': repeatMode,
@@ -101,68 +105,72 @@
     >
       <i class="fas fa-headphones"></i>
     </button> -->
-    <button
-      :class="{
-        'quick-access-button  quick-access-button-speed text-center': true,
-        'quick-access-button-active': speed !== 1,
-      }"
-      @click="toggleSpeed"
-      title="Change Playback Speed"
-    >
-      <i v-if="speed === 1" class="fas fa-tachometer-alt"></i>
-      <span v-else>{{ speed }}x</span>
-    </button>
-    <button
-      v-if="showFullscreenToggle"
-      :class="{
-        'quick-access-button quick-access-button-fullscreen text-center': true,
-        'quick-access-button-active': layout === 'horizontal',
-      }"
-      @click="toggleFullscreenMode"
-      :title="layout === 'vertical' ? 'Show Transcript' : 'Hide Transcript'"
-    >
-      <i class="fa-solid fa-align-left"></i>
-    </button>
-
-    <div
-      v-if="video && showLineList"
-      :class="{ 'youtube-view-line-list': true, 'd-none': !showList }"
-    >
-      <b-input-group class="youtube-view-line-list-filter-wrapper">
-        <b-form-input
-          v-model.lazy="filterList"
-          placeholder="Filter"
-        ></b-form-input>
-        <b-input-group-append>
-          <b-input-group-text
-            v-if="!filterList"
-            class="btn quick-access-button-active"
-          >
-            <i class="fas fa-filter"></i>
-          </b-input-group-text>
-          <b-input-group-text
-            v-if="filterList"
-            class="btn quick-access-button-active"
-            @click="filterList = ''"
-          >
-            <i class="fas fa-times"></i>
-          </b-input-group-text>
-        </b-input-group-append>
-      </b-input-group>
-      <div
-        v-for="(line, index) in sortedLines"
+      <button
         :class="{
-          'youtube-view-line-list-item': true,
-          active: currentLine === line,
+          'quick-access-button  quick-access-button-speed text-center': true,
+          'quick-access-button-active': speed !== 1,
         }"
-        :key="`video-line-list-${index}`"
-        @click="
-          goToLine(line);
-          showList = !showList;
-        "
+        @click="toggleSpeed"
+        title="Change Playback Speed"
       >
-        {{ line.line }}
+        <i v-if="speed === 1" class="fas fa-tachometer-alt"></i>
+        <span v-else>{{ speed }}x</span>
+      </button>
+      <button
+        v-if="showFullscreenToggle"
+        :class="{
+          'quick-access-button quick-access-button-fullscreen text-center': true,
+          'quick-access-button-active': layout === 'horizontal',
+        }"
+        @click="toggleFullscreenMode"
+        :title="layout === 'vertical' ? 'Show Transcript' : 'Hide Transcript'"
+      >
+        <i class="fa-solid fa-align-left"></i>
+      </button>
+
+      <div
+        v-if="video && showLineList"
+        :class="{ 'youtube-view-line-list': true, 'd-none': !showList }"
+      >
+        <b-input-group class="youtube-view-line-list-filter-wrapper">
+          <b-form-input
+            v-model.lazy="filterList"
+            placeholder="Filter"
+          ></b-form-input>
+          <b-input-group-append>
+            <b-input-group-text
+              v-if="!filterList"
+              class="btn quick-access-button-active"
+            >
+              <i class="fas fa-filter"></i>
+            </b-input-group-text>
+            <b-input-group-text
+              v-if="filterList"
+              class="btn quick-access-button-active"
+              @click="filterList = ''"
+            >
+              <i class="fas fa-times"></i>
+            </b-input-group-text>
+          </b-input-group-append>
+        </b-input-group>
+        <div
+          v-for="(line, index) in sortedLines"
+          :class="{
+            'youtube-view-line-list-item': true,
+            active: currentLine === line,
+          }"
+          :key="`video-line-list-${index}`"
+          @click="
+            goToLine(line);
+            showList = !showList;
+          "
+        >
+          {{ line.line }}
+        </div>
       </div>
+    </div>
+    <div class="video-controls-progress">
+
     </div>
     <b-modal
       ref="info-modal"
@@ -347,36 +355,38 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.quick-access-buttons {
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.video-controls {
   background: #00000066;
   backdrop-filter: blur(20px);
   border-radius: 0.5rem;
   margin-right: 0.5rem;
   margin-left: 0.5rem;
 }
+.quick-access-buttons {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-.quick-access-button {
-  border: none;
-  padding: 0.5rem;
-  background: none;
-  color: #ffffffcc;
-  margin: 0 0.2rem;
-  &:disabled {
-    color: #cccccc44;
+  .quick-access-button {
+    border: none;
+    padding: 0.5rem;
+    background: none;
+    color: #ffffffcc;
+    margin: 0 0.2rem;
+    &:disabled {
+      color: #cccccc44;
+    }
+    &.quick-access-button-active {
+      color: #fd4f1c;
+    }
+    &.play-pause {
+      font-size: 2.5em;
+    }
   }
 }
 
-.quick-access-button-active {
-  color: #fd4f1c;
-}
 
-.quick-access-button.play-pause {
-  font-size: 2.5em;
-}
 
 @media (orientation: landscape) {
   .youtube-view-wrapper.fullscreen .quick-access-buttons {

@@ -597,7 +597,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.quick-access-buttons {
+.video-controls {
   position: relative;
   margin-top: calc(-3.5rem - 3.75rem);
   margin-bottom: 2rem;
@@ -617,11 +617,11 @@ export default {
     width: 8.88rem;
     max-width: 8.88rem;
     margin-right: 5rem;
-    ::v-deep .quick-access-buttons {
+    ::v-deep .video-controls {
       position: absolute;
       left: 9.4rem;
       top: 1rem;
-      height: 3.2rem;
+      height: 3.2rem; 
 
       .quick-access-button-previous-line,
       .quick-access-button-next-line,
