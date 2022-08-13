@@ -169,8 +169,8 @@
         </div>
       </div>
     </div>
-    <div class="video-controls-progress">
-
+    <div class="video-controls-progress pl-4 pr-4">
+      <input type="range" @change="onSeek" :value="currentPercentage" class="d-block w-100" />
     </div>
     <b-modal
       ref="info-modal"
@@ -201,6 +201,9 @@ export default {
   props: {
     video: {
       default: undefined,
+    },
+    duration: {
+      type: Number
     },
     paused: {
       default: true,
@@ -234,6 +237,10 @@ export default {
     largeEpisodeCount: {
       type: Number, // Mannually set the number of episode displayed in the episode navigator
     },
+    initialTime: {
+      type: Number,
+      default: 0,
+    },
   },
   data() {
     return {
@@ -246,6 +253,7 @@ export default {
       sortedLines: undefined,
       collapsed: false,
       currentLine: undefined,
+      currentTime: this.initialTime,
     };
   },
   computed: {
@@ -276,6 +284,9 @@ export default {
         return this.episodes[this.episodeIndex + 1];
       }
     },
+    currentPercentage() {
+      return this.duration ? this.currentTime / this.duration * 100 : 0
+    },
   },
   mounted() {
     if (this.showLineList) {
@@ -283,6 +294,9 @@ export default {
     }
   },
   methods: {
+    onSeek(percentage) {
+      this.$emit('seek', percentage * 0.01)
+    },
     togglePaused() {
       this.$emit("togglePaused");
     },

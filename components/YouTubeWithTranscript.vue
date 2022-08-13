@@ -45,7 +45,9 @@
             episodes,
             showLineList,
             showFullscreenToggle,
-            showCollapse: layout === 'horizontal' && !landscape
+            showCollapse: layout === 'horizontal' && !landscape,
+            duration,
+            initialTime: starttime ? starttime : 0
           }"
           :class="{'d-none': !paused}"
           @previous="$emit('previous')"
@@ -60,6 +62,7 @@
           @updateRepeatMode="(r) => (this.repeatMode = r)"
           @goToPreviousLine="$refs.transcript.goToPreviousLine()"
           @goToNextLine="$refs.transcript.goToNextLine()"
+          @seek="onSeek"
         />
       </div>
     </div>
@@ -371,6 +374,9 @@ export default {
     },
   },
   methods: {
+    onSeek(percentage) {
+      this.seekYouTube(this.duration * percentage)
+    },
     updateTranscript() {
       this.transcriptKey++
     },
@@ -523,8 +529,13 @@ export default {
       }
       if (this.$refs.transcript) {
         this.$refs.transcript.currentTime = currentTime;
-        this.$refs.videoControls.currentLine =
-          this.$refs.transcript.currentLine;
+        if (this.$refs.videoControls) {
+          this.$refs.videoControls.currentLine =
+            this.$refs.transcript.currentLine;
+        }
+      }
+      if (this.$refs.videoControls) {
+        this.$refs.videoControls.currentTime = currentTime
       }
     },
     goToPreviousLine() {
