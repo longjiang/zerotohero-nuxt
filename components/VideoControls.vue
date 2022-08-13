@@ -294,7 +294,8 @@ export default {
     }
   },
   methods: {
-    onSeek(percentage) {
+    onSeek(event) {
+      let percentage = event.target.value
       this.$emit('seek', percentage * 0.01)
     },
     togglePaused() {
@@ -384,7 +385,7 @@ export default {
 
   .quick-access-button {
     border: none;
-    padding: 0.5rem;
+    padding: 0 0.5rem;
     background: none;
     color: #ffffffcc;
     margin: 0 0.2rem;

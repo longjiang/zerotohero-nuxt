@@ -375,7 +375,8 @@ export default {
   },
   methods: {
     onSeek(percentage) {
-      this.seekYouTube(this.duration * percentage)
+      let time = this.duration * percentage
+      this.seekYouTube(time)
     },
     updateTranscript() {
       this.transcriptKey++
