@@ -48,7 +48,7 @@
                   : words[0].simplified
               }}
             </template>
-            <template v-else>{{ transform(text, $l2.code === "vi") }}</template>
+            <template v-else>{{ transform(text, false) }}</template>
           </span>
           <span
             v-if="l2Settings.showByeonggi && hanja"
