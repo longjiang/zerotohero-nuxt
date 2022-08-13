@@ -445,6 +445,12 @@ export default {
                   show: true,
                 },
                 {
+                  name: "explore-media",
+                  icon: "fas fa-telescope",
+                  title: `Explore`,
+                  show: true,
+                },
+                {
                   name: "feed",
                   icon: "fas fa-stream",
                   title: `Feed`,

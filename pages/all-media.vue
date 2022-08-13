@@ -140,7 +140,6 @@
         </div>
         <div
           class="col-6 col-md-4 col-lg-3 category-btn-wrapper"
-          v-if="musicShow"
         >
           <router-link
             class="link-unstyled category-btn text-left"
@@ -151,6 +150,19 @@
           >
             <i class="fa-solid fa-baby mr-1"></i>
             Kids
+          </router-link>
+        </div>
+        <div
+          class="col-6 col-md-4 col-lg-3 category-btn-wrapper"
+        >
+          <router-link
+            class="link-unstyled category-btn text-left"
+            :to="{
+              name: 'explore-media',
+            }"
+          >
+            <i class="fa-solid fa-telescope mr-1"></i>
+            Explore
           </router-link>
         </div>
       </div>
