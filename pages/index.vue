@@ -356,10 +356,10 @@
                 <em>live</em>
                 on this website! There really is no other service like it.
                 Absolutely unparalleled. I recommend it to anyone who wants to
-                take their language learning to the next level
+                take their language learning to the next level.
               </p>
 
-              <div class="name">Gary B. (US)</div>
+              <div class="name">Gary T. (US)</div>
               <div class="learning">Learning Chinese (zh)</div>
             </div>
           </div>
