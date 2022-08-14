@@ -1,5 +1,8 @@
 <template>
   <div class="video-controls" v-if="video">
+    <div class="video-controls-progress">
+      <input type="range" @change="onSeek" :value="currentPercentage" class="d-block w-100" />
+    </div>
     <div class="quick-access-buttons">
       <!-- <button
       v-if="showLineList"
@@ -168,9 +171,6 @@
           {{ line.line }}
         </div>
       </div>
-    </div>
-    <div class="video-controls-progress pl-4 pr-4">
-      <input type="range" @change="onSeek" :value="currentPercentage" class="d-block w-100" />
     </div>
     <b-modal
       ref="info-modal"

@@ -49,7 +49,6 @@
             duration,
             initialTime: starttime ? starttime : 0
           }"
-          :class="{'d-none': !paused}"
           @previous="$emit('previous')"
           @next="$emit('next')"
           @goToLine="goToLine"
@@ -609,16 +608,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.video-controls {
-  position: relative;
-  margin-top: calc(-3.5rem - 3.75rem);
-  margin-bottom: 2rem;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-}
-.synced-transcript-single-line {
-  margin-top: 1.5rem;
-}
 .youtube-with-transcript-mini {
   display: flex;
   .main-dark {
@@ -630,11 +619,6 @@ export default {
     max-width: 8.88rem;
     margin-right: 5rem;
     ::v-deep .video-controls {
-      position: absolute;
-      left: 9.4rem;
-      top: 1rem;
-      height: 3.2rem; 
-
       .quick-access-button-previous-line,
       .quick-access-button-next-line,
       .quick-access-button-rewind,
@@ -664,10 +648,15 @@ export default {
 }
 
 .youtube-video-wrapper {
-  max-width: calc((100vh - 3rem - env(safe-area-inset-top) - 10rem) * 16 / 9);
+  max-width: calc((100vh - 3rem - env(safe-area-inset-top) - 12rem) * 16 / 9);
   margin: 0 auto;
   position: sticky;
   top: calc(env(safe-area-inset-top, 0) + 2.7rem);
+}
+
+.zerotohero-not-wide .youtube-video-wrapper {
+  max-width: calc((100vh - 3rem - env(safe-area-inset-top) - 12rem - 4.625rem) * 16 / 9);
+
 }
 
 .youtube-with-transcript-horizontal {
