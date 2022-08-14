@@ -205,32 +205,35 @@
               <div class="col-12 col-md-6">
                 <div>
                   <a
-                    href="https://server.chinesezerotohero.com/data/android/language-player-android-2.2.6.apk"
+                    href="https://play.google.com/store/apps/details?id=ca.zerotohero.app"
                     target="_blank"
                   >
                     <img
                       data-not-lazy
-                      src="/img/btn-android-app.png"
-                      alt="Download on the App Store"
+                      src="/img/btn-google-play.png"
+                      alt="Download on Google Play"
                       style="width: 10rem"
                     />
                     <br />
                     <br />
                     <img
-                      src="/img/qr-android-app.png"
+                      src="/img/qr-google-play.png"
                       alt="QR Code"
                       style="width: 9rem; border-radius: 0.5rem"
                     />
-                    <p class="mt-3 text-white">
-                      <small>
-                        <i
-                          class="fa-solid fa-shield-check text-success mr-1"
-                        ></i>
-                        The app installer (APK) is open-source and safe to run.
-                        We will officially release it to Google Play soon.
-                      </small>
-                    </p>
                   </a>
+                  <p class="mt-3 text-white">
+                    <small>
+                      <i class="fa-solid fa-down mr-1"></i>
+                      Or, download the Android app as an
+                      <a
+                        href="https://server.chinesezerotohero.com/data/android/language-player-android-2.2.6.apk"
+                      >
+                        Android Package (APK)
+                      </a>
+                      .
+                    </small>
+                  </p>
                 </div>
               </div>
             </div>
@@ -823,5 +826,4 @@ export default {
     left: 0;
   }
 }
-
 </style>
