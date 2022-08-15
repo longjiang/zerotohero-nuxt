@@ -16,58 +16,51 @@
             )"
           >
             <TranscriptLine
-              :line="line"
-              :parallelLine="
-                $l2.code !== $l1.code && parallellines
-                  ? matchedParallelLines[
-                      single ? currentLineIndex : index + visibleMin
-                    ]
-                  : undefined
-              "
-              :showParallelLine="parallellines && parallellines.length > 0"
-              :lineIndex="index + visibleMin"
-              :key="`line-${index + visibleMin}-${
-                line.starttime
-              }-${line.line.substr(0, 10)}`"
-              :abnormal="
-                $adminMode &&
-                lines[index + visibleMin - 1] &&
-                lines[index + visibleMin - 1].starttime > line.starttime
-              "
-              :current="currentLine === line"
-              :matched="
-                !single &&
-                highlight &&
-                line &&
-                new RegExp(highlight.join('|')).test(line.line)
-              "
-              :ref="`${single ? 'transcript-line' : 'transcript-line-'}${
-                !single ? index + visibleMin : ''
-              }`"
-              :duration="
-                line.duration
+              v-bind="{
+                line,
+                showSubsEditing,
+                sticky,
+                single,
+                highlight,
+                hsk,
+                notes,
+                parallelLine: getParallelLine(line, index),
+                showParallelLine: parallellines && parallellines.length > 0,
+                lineIndex: index + visibleMin,
+                current: currentLine === line,
+                hideWhileAnnotating: single,
+                enableTranslationEditing:
+                  $adminMode && enableTranslationEditing,
+                matched:
+                  !single &&
+                  highlight &&
+                  line &&
+                  new RegExp(highlight.join('|')).test(line.line),
+                abnormal:
+                  $adminMode &&
+                  lines[index + visibleMin - 1] &&
+                  lines[index + visibleMin - 1].starttime > line.starttime,
+                duration: line.duration
                   ? line.duration
                   : lines[single ? currentLineIndex + 1 : index + 1]
                   ? lines[single ? currentLineIndex + 1 : index + 1].starttime -
                     line.starttime
-                  : 5
-              "
-              :showSubsEditing="showSubsEditing"
-              :sticky="sticky"
-              :single="single"
-              :highlight="highlight"
-              :hsk="hsk"
-              :notes="notes"
-              :enableTranslationEditing="$adminMode && enableTranslationEditing"
-              :hideWhileAnnotating="single"
+                  : 5,
+              }"
+              :key="`line-${index + visibleMin}-${
+                line.starttime
+              }-${line.line.substr(0, 10)}`"
+              :ref="`${single ? 'transcript-line' : 'transcript-line-'}${
+                !single ? index + visibleMin : ''
+              }`"
               @click="lineClick(line)"
               @removeLineClick="removeLine(index + visibleMin)"
               @trasnlationLineBlur="trasnlationLineBlur"
               @trasnlationLineKeydown="trasnlationLineKeydown"
             />
             <PopQuiz
+              v-if="quizChunks[index]"
               :key="`pop-quiz-${index}`"
-              v-if="!single && quizChunks[index]"
               :lines="lines"
               :quizContent="
                 quizChunks[index]
@@ -349,6 +342,13 @@ export default {
     },
   },
   methods: {
+    getParallelLine(line, index) {
+      return this.$l2.code !== this.$l1.code && this.parallellines
+        ? this.matchedParallelLines[
+            this.single ? this.currentLineIndex : index + this.visibleMin
+          ]
+        : undefined;
+    },
     longPauseAfterLine(index) {
       let thisLine = this.lines[index + this.visibleMin];
       let nextLine = this.lines[index + this.visibleMin + 1];
