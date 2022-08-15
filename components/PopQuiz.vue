@@ -9,7 +9,7 @@
       <Review
         v-for="(reviewItem, reviewItemIndex) in reviewItems"
         :key="`review-${reviewItemIndex}`"
-        :reviewItem="reviewItem"
+        v-bind="reviewItem"
         skin="dark"
       />
     </div>

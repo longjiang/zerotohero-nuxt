@@ -41,15 +41,15 @@
               v-if="$l2.han && $l2.code !== 'ja'"
               v-html="
                 highlightMultiple(
-                  reviewItem.line.line,
-                  unique([reviewItem.simplified, reviewItem.traditional]),
+                  line.line,
+                  unique([simplified, traditional]),
                   hsk
                 )
               "
             />
             <span
               v-else
-              v-html="highlight(reviewItem.line.line, reviewItem.text, hsk)"
+              v-html="highlight(line.line, text, hsk)"
             />
           </Annotate>
           <div
@@ -63,7 +63,7 @@
             }"
             style="opacity: 0.7"
           >
-            <span v-if="$l2.code !== $l1.code && reviewItem.parallelLines" v-html="reviewItem.parallelLines" />
+            <span v-if="$l2.code !== $l1.code && parallelLines" v-html="parallelLines" />
             <small class="ml-1" style="cursor: pointer" @click="scrollToLine">
               <i class="fa fa-arrow-up"></i>
             </small>
@@ -108,8 +108,26 @@ export default {
     },
   },
   props: {
-    reviewItem: {
-      type: Object,
+    line: {
+      type: Object // {"starttime":89.14,"duration":3.5,"line":". . . ","count":1},
+    },
+    lineIndex: {
+      type: Number
+    },
+    parallelLines: {
+      type: String // "Shouldn&#39;t respect for the living world, for nature, be enough?"
+    },
+    text: {
+      type: String // "suffire"
+    },
+    word: {
+      type: Object // Word object from the dictionary
+    },
+    simplified: {
+      type: String // simplified form of the saved word (Han script only)
+    },
+    traditional: {
+      type: String // traditional form of the saved word (Han script only)
     },
     hsk: {
       default: "outside",
@@ -120,13 +138,13 @@ export default {
   },
   async mounted() {
     this.answers = await this.generateAnswers(
-      this.reviewItem.text,
-      this.reviewItem.word
+      this.text,
+      this.word
     );
   },
   methods: {
     scrollToLine() {
-      this.$parent.$parent.seekVideoTo(this.reviewItem.line.starttime);
+      this.$parent.$parent.seekVideoTo(this.line.starttime);
       this.$parent.$parent.play();
     },
     async findSimilarWords(text) {
@@ -189,10 +207,10 @@ export default {
       return Helper.shuffle(answers);
     },
     async speak() {
-      if (this.reviewItem.parallelLines) {
-        await Helper.speak(this.reviewItem.parallelLines, this.$l1, 1.1);
+      if (this.parallelLines) {
+        await Helper.speak(this.parallelLines, this.$l1, 1.1);
       }
-      await Helper.speak(this.reviewItem.line.line, this.$l2, 1);
+      await Helper.speak(this.line.line, this.$l2, 1);
     },
     async answered(answer) {
       if (answer.correct) {

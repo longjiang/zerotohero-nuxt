@@ -4,7 +4,7 @@
       <Review
         v-for="(reviewItem, reviewItemIndex) in reviewFiltered"
         :key="`review-${reviewItemIndex}`"
-        :reviewItem="reviewItem"
+        v-bind="reviewItem"
         :hsk="hsk"
         :skin="skin"
       />

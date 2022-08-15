@@ -9,16 +9,16 @@
       <div class="row">
         <div class="col-sm-12">
           <Review
-            :reviewItem='{
+            v-bind='{
               "line":{"starttime":89.14,"duration":3.5,"line":"Est-ce que le respect du monde vivant, de la nature, ça n’devrait pas suffire ?","count":1},
               "lineIndex":17,
               "parallelLines":"Shouldn&#39;t respect for the living world, for nature, be enough?",
               "text":"suffi",
               "word":{"pronunciation":"sy.fiʁ","audio":"Fr-suffire.ogg","definitions":["to be enough, to suffice"],"pos":"verb","gender":"","search":"suffire","head":"suffire","wiktionary":true,"id":"w2292538401","phrases":[]},
               "simplified": undefined,
-              "traditional": undefined
+              "traditional": undefined,
+              skin: "dark"
             }'
-            skin="dark"
           />
         </div>
       </div>
