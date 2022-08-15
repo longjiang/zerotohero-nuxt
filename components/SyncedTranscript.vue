@@ -21,7 +21,6 @@
                 showSubsEditing,
                 sticky,
                 single,
-                highlight,
                 hsk,
                 notes,
                 parallelLine: getParallelLine(line, index),
@@ -31,11 +30,6 @@
                 hideWhileAnnotating: single,
                 enableTranslationEditing:
                   $adminMode && enableTranslationEditing,
-                matched:
-                  !single &&
-                  highlight &&
-                  line &&
-                  new RegExp(highlight.join('|')).test(line.line),
                 abnormal:
                   $adminMode &&
                   lines[index + visibleMin - 1] &&

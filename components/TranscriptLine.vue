@@ -4,7 +4,6 @@
       :class="{
         'transcript-line': true,
         'transcript-line-abnormal': abnormal,
-        'transcript-line-matched': matched,
         'transcript-line-current': current,
         'transcript-line-wide': !single && params.lg,
         'transcript-line-with-translation': showParallelLine,
@@ -116,9 +115,6 @@ export default {
     current: {
       type: Boolean,
     },
-    matched: {
-      type: Boolean,
-    },
     showSubsEditing: {
       type: Boolean,
     },
@@ -127,9 +123,6 @@ export default {
     },
     single: {
       type: Boolean,
-    },
-    highlight: {
-      type: Array,
     },
     hsk: {
       type: String,
@@ -234,12 +227,6 @@ export default {
     lineHtml(line) {
       let html = line.line;
       html = this.decodeHtmlEntities(html);
-      if (this.highlight)
-        html = this.highlightMultiple(
-          html,
-          this.highlight,
-          this.hsk || "outside"
-        );
       if (this.notes) {
         html = html.replace(/\[(\d+)\]/g, (_, num) => {
           let note;
@@ -333,10 +320,6 @@ export default {
   display: flex;
   &.transcript-line-abnormal {
     background-color: lightpink;
-  }
-  &.transcript-line-matched {
-    color: #616161;
-    font-weight: bold;
   }
   .transcript-line-l2 {
     transition: 0.2s linear all;
