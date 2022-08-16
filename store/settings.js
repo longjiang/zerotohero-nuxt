@@ -1,4 +1,4 @@
-import Config from "@/lib/config";
+export const romanizationOffByDefault = ["ko", "bo", "dz", "th", "my", "hy", "vi"]
 
 export const state = () => {
   return {
@@ -26,7 +26,6 @@ export const state = () => {
       talkFilter: "all", // By default we only search TV shows.
       disableAnnotation: false
     },
-    romanizationOffByDefault: ["ko", "bo", "dz", "th", "my", "hy", "vi"]
   };
 };
 
@@ -73,7 +72,7 @@ export const mutations = {
       (l2.scripts &&
         l2.scripts[0] &&
         ["Cyrl", "Latn"].includes(l2.scripts[0].script)) ||
-      state.romanizationOffByDefault.includes(l2.code)
+      romanizationOffByDefault.includes(l2.code)
     ) {
       state.l2Settings.showPinyin = false;
     }
