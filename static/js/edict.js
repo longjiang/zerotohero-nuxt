@@ -243,8 +243,8 @@ const Dictionary = {
    */
   get(id, head) {
     let entry = this.words.find(row => row.id === id)
-    if (head && word.head !== head) {
-      word = this.lookup(head)
+    if (head && entry.head !== head) {
+      entry = this.lookup(head)
     }
     return entry
   },
@@ -300,7 +300,7 @@ const Dictionary = {
             row => reg.test(row.kanji) || reg.test(row.kana)
           )
       } catch (err) {
-        Helper.logError(err)
+        console.log(err)
       }
     } else {
       text = text.toLowerCase().trim()
