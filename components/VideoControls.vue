@@ -1,7 +1,9 @@
 <template>
   <div class="video-controls" v-if="video">
-    <div class="video-controls-progress">
-      <input type="range" @change="onSeek" :value="currentPercentage" class="d-block w-100" />
+    <div class="video-controls-progress d-flex">
+      <div class="video-controls-time mr-2">{{ currentTime ? toHHMMSS(currentTime) : '--:--' }}</div>
+      <input type="range" @change="onSeek" :value="currentPercentage" class="d-block w-100 flex-1" />
+      <div class="video-controls-time ml-2">{{ duration ? toHHMMSS(duration) : '--:--' }}</div>
     </div>
     <div class="quick-access-buttons">
       <!-- <button
@@ -197,6 +199,7 @@
 </template>
 
 <script>
+import { toHHMMSS } from '@/lib/date-helper'
 export default {
   props: {
     video: {
@@ -294,6 +297,9 @@ export default {
     }
   },
   methods: {
+    toHHMMSS(duration) {
+      return toHHMMSS(duration)
+    },
     onSeek(event) {
       let percentage = event.target.value
       this.$emit('seek', percentage * 0.01)
@@ -374,9 +380,8 @@ export default {
   background: #00000066;
   backdrop-filter: blur(20px);
   border-radius: 0.5rem;
-  margin-right: 0.5rem;
-  margin-left: 0.5rem;
 }
+
 .quick-access-buttons {
   text-align: center;
   display: flex;
@@ -389,19 +394,20 @@ export default {
     background: none;
     color: #ffffffcc;
     margin: 0 0.2rem;
+    
     &:disabled {
       color: #cccccc44;
     }
+
     &.quick-access-button-active {
       color: #fd4f1c;
     }
+
     &.play-pause {
       font-size: 2.5em;
     }
   }
 }
-
-
 
 @media (orientation: landscape) {
   .youtube-view-wrapper.fullscreen .quick-access-buttons {
@@ -448,5 +454,10 @@ export default {
   width: calc(100% - 0.5rem);
   position: sticky;
   top: 0;
+}
+
+.video-controls-time {
+  white-space: nowrap;
+  font-size: 0.8em;
 }
 </style>
