@@ -937,8 +937,12 @@ export default {
 }
 
 .reels {
-  ::v-deep .quick-access-buttons {
+  ::v-deep .video-controls {
     display: none !important;
+  }
+
+  ::v-deep .youtube-transcript-column {
+    margin-top: 0.5rem;
   }
 
   ::v-deep .quick-gloss {
@@ -976,7 +980,8 @@ export default {
   }
 
   ::v-deep .annotator-menu-toggle {
-    display: none;
+    position: absolute;
+    right: -3rem;
   }
 }
 </style>
