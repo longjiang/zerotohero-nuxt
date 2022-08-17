@@ -22,7 +22,7 @@
         <span
           class="word-block-definition"
           v-if="
-            l2Settings.showDefinition &&
+            l2SettingsOfL2.showDefinition &&
             words[0] &&
             words[0].definitions &&
             words[0].definitions[0]
@@ -31,7 +31,7 @@
         ></span>
         <span
           class="word-block-pinyin"
-          v-if="l2Settings.showPinyin && phonetics && transliteration"
+          v-if="l2SettingsOfL2.showPinyin && phonetics && transliteration"
         >
           {{ savedTransliteration || transliteration }}
         </span>
@@ -43,7 +43,7 @@
           >
             <template v-if="$l2.han && words[0]">
               {{
-                l2Settings.useTraditional
+                l2SettingsOfL2.useTraditional
                   ? words[0].traditional
                   : words[0].simplified
               }}
@@ -51,7 +51,7 @@
             <template v-else>{{ transform(text, false) }}</template>
           </span>
           <span
-            v-if="l2Settings.showByeonggi && hanja"
+            v-if="l2SettingsOfL2.showByeonggi && hanja"
             class="word-block-text-byeonggi d-inline-block"
             v-html="hanja"
           />
@@ -370,6 +370,11 @@ export default {
   computed: {
     ...mapState("settings", ["l2Settings"]),
     ...mapState("savedWords", ["savedWords"]),
+    l2SettingsOfL2() {
+      let l2SettingsOfL2 = {}
+      if (this.l2Settings && this.l2Settings[this.$l2.code]) l2SettingsOfL2 = this.l2Settings[this.$l2.code]
+      return l2SettingsOfL2
+    },
     quickGloss() {
       return this.saved?.word?.definitions?.[0]
         ?.replace(/\s*\(.*\)/, "")
@@ -620,7 +625,7 @@ export default {
       if (isVisible && (!this.words || this.words.length === 0)) {
         if (this.$l2.code !== "fa") {
           let quick = true;
-          if (this.l2Settings.showPinyin && !this.transliteration)
+          if (this.l2SettingsOfL2.showPinyin && !this.transliteration)
             quick = false; // If the user wants to see IPA, we get all the words from the get go by setting quick to false, which can take a performance hit
           await this.lookup(quick);
         }
