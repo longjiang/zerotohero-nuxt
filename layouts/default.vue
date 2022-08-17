@@ -108,6 +108,11 @@ export default {
     ...mapState("settings", ["l2Settings", "l1", "l2"]),
     ...mapState("history", ["history"]),
     ...mapState("fullHistory", ["fullHistory"]),
+    l2SettingsOfL2() {
+      let l2SettingsOfL2 = {}
+      if (this.l2 && this.l2Settings && this.l2Settings[this.l2.code]) l2SettingsOfL2 = this.l2Settings[this.l2.code]
+      return l2SettingsOfL2
+    },
     showTopBar() {
       if (this.$route.meta && this.$route.meta.layout === 'full') return false
       else return this.$route.params.l1 && this.$route.params.l1 && this.l1 && this.l2
@@ -156,19 +161,17 @@ export default {
       ) {
         this.l1, this.l2;
         classes["zerotohero-with-nav"] = true;
-        let l2Settings
-        if (this.l2Settings) l2Settings = this.l2Settings[this.l2.code];
-        if (l2Settings) {
+        if (this.l2SettingsOfL2) {
           classes = Object.assign(classes, {
-            "show-pinyin": l2Settings.showPinyin,
+            "show-pinyin": this.l2SettingsOfL2.showPinyin,
             "show-pinyin-for-saved":
-              !l2Settings.showPinyin && this.l2 && this.l2.han,
-            "show-simplified": !l2Settings.useTraditional,
-            "show-traditional": l2Settings.useTraditional,
-            "show-definition": l2Settings.showDefinition,
-            "show-translation": l2Settings.showTranslation,
-            "show-byeonggi": l2Settings.showByeonggi,
-            "use-serif": l2Settings.useSerif
+              !this.l2SettingsOfL2.showPinyin && this.l2 && this.l2.han,
+            "show-simplified": !this.l2SettingsOfL2.useTraditional,
+            "show-traditional": this.l2SettingsOfL2.useTraditional,
+            "show-definition": this.l2SettingsOfL2.showDefinition,
+            "show-translation": this.l2SettingsOfL2.showTranslation,
+            "show-byeonggi": this.l2SettingsOfL2.showByeonggi,
+            "use-serif": this.l2SettingsOfL2.useSerif
           });
         }
         classes[`l1-${this.l1.code}`] = true;

@@ -62,6 +62,12 @@ export default {
   },
   computed: {
     ...mapState("savedWords", ["savedWords"]),
+    ...mapState("settings", ["l2Settings"]),
+    l2SettingsOfL2() {
+      let l2SettingsOfL2 = {}
+      if (this.l2Settings && this.l2Settings[this.$l2.code]) l2SettingsOfL2 = this.l2Settings[this.$l2.code]
+      return l2SettingsOfL2
+    },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -75,8 +81,8 @@ export default {
         return this.$store.state.settings.adminMode;
     },
     quiz() {
-      if (typeof this.$store.state.settings.l2Settings !== "undefined")
-        return this.$store.state.settings.l2Settings.showQuiz;
+      if (typeof this.l2SettingsOfL2 !== "undefined")
+        return this.l2SettingsOfL2.showQuiz;
       else return false;
     },
     reviewFiltered() {
