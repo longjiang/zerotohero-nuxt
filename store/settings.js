@@ -63,13 +63,14 @@ export const mutations = {
         if (typeof loadedSettings[property] !== "undefined")
           state[property] = loadedSettings[property];
       }
-      state.l2Settings = loadedSettings.l2Settings; // keyed by language
+      if (loadedSettings.l2Settings) state.l2Settings = loadedSettings.l2Settings; // keyed by language
       if (!state.l2Settings[state.l2.code]) state.l2Settings[state.l2.code] = defaultL2Settings
       // Remember the L1 the user picked, so next time when switching L2, this L1 is used.
       if (state.l1) {
         state.l2Settings[state.l2.code].l1 = state.l1.code
+        loadedSettings.l2Settings = loadedSettings.l2Settings || {}
         loadedSettings.l2Settings[state.l2.code] = state.l2Settings[state.l2.code];
-        localStorage.setItem("zthSettings", JSON.stringify(settings));
+        localStorage.setItem("zthSettings", JSON.stringify(loadedSettings));
       }
     }
     state.settingsLoaded[state.l2.code] = true;
