@@ -1,7 +1,9 @@
+import { logError } from '@/lib/utils'
+
 export const romanizationOffByDefault = ["ko", "bo", "dz", "th", "my", "hy", "vi"]
 
 export const defaultL2Settings = {
-  l1: 'en',
+  l1: 'en', // the L1 the user used last time when they studied this language
   showDefinition: false,
   showPinyin: true,
   useTraditional: false,
@@ -10,7 +12,7 @@ export const defaultL2Settings = {
   showQuiz: true,
   showByeonggi: true,
   tvShowFilter: "all", // By default we only search TV shows.
-  talkFilter: "all", // By default we only search TV shows.
+  talkFilter: "all", // By default we search all talks.
   disableAnnotation: false
 }
 
@@ -21,9 +23,9 @@ export const state = () => {
     dictionary: undefined,
     dictionaryName: undefined,
     adminMode: false,
-    hideWord: false,
-    hidePhonetics: false,
-    hideDefinitions: false,
+    hideWord: false, // as used in the <HideDefs> component
+    hidePhonetics: false, // as used in the <HideDefs> component
+    hideDefinitions: false, // as used in the <HideDefs> component
     subsSearchLimit: true,
     autoPronounce: true, // Whether or not to play the audio automatically when opening a WordBlock popup
     settingsLoaded: {},
@@ -42,11 +44,11 @@ export const saveSettingsToStorage = () => {
 export const loadSettingsFromStorage = () => {
   // console.log('⚙️ loadSettingsFromStorage')
   if (typeof localStorage !== "undefined") {
-    let loadedSettings;
+    let loadedSettings
     try {
       loadedSettings = JSON.parse(localStorage.getItem("zthSettings"));
     } catch (err) {
-      Helper.logError(err);
+      logError(err);
     }
     if (!loadedSettings) loadedSettings = {};
     return loadedSettings;
@@ -148,9 +150,10 @@ export const mutations = {
     }
   },
   SET_L2_SETTINGS(state, l2Settings) {
-    state.l2Settings[state.l2.code] = Object.assign(state.l2Settings[state.l2.code], l2Settings);
+    state.l2Settings[state.l2.code] = Object.assign(state.l2Settings[state.l2.code] || {}, l2Settings);
     if (typeof localStorage !== "undefined") {
       let settings = loadSettingsFromStorage();
+      if (!settings.l2Settings) settings.l2Settings = {}
       settings.l2Settings[state.l2.code] = state.l2Settings[state.l2.code];
       localStorage.setItem("zthSettings", JSON.stringify(settings));
     }
@@ -170,7 +173,7 @@ export const getters = {
     let l2Settings = {}
     let loadedSettings = loadSettingsFromStorage();
     if (loadedSettings.l2Settings && loadedSettings.l2Settings[l2Code]) l2Settings = loadedSettings.l2Settings[l2Code]
-    return loadedSettings
+    return l2Settings
   },
 }
 
