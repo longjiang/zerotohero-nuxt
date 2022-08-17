@@ -40,6 +40,7 @@ export const saveSettingsToStorage = () => {
 }
 
 export const loadSettingsFromStorage = () => {
+  console.log('⚙️ loadSettingsFromStorage')
   if (typeof localStorage !== "undefined") {
     let loadedSettings;
     try {
@@ -55,6 +56,7 @@ export const loadSettingsFromStorage = () => {
 
 export const mutations = {
   LOAD_SETTINGS(state) {
+    console.log('⚙️ LOAD_SETTINGS')
     if (typeof localStorage !== "undefined") {
       let loadedSettings = loadSettingsFromStorage();
       for (let property of ['adminMode', 'hideWord', 'hidePhonetics', 'hideDefinitions', 'subsSearchLimit', 'autoPronounce']) {
@@ -73,6 +75,7 @@ export const mutations = {
     state.settingsLoaded[state.l2.code] = true;
   },
   SET_L1_L2(state, { l1, l2 }) {
+    console.log('⚙️ SET_L1_L2')
     state.l1 = l1;
     if (typeof l2 === "undefined") return;
     state.l2 = l2;
@@ -82,7 +85,7 @@ export const mutations = {
         ["Cyrl", "Latn"].includes(l2.scripts[0].script)) ||
       romanizationOffByDefault.includes(l2.code)
     ) {
-      if (state.l2Settings[l2.code]) state.l2Settings[l2.code].showPinyin = false;
+      if (!state.l2Settings[l2.code]) state.l2Settings[l2.code] = defaultL2Settings
     }
   },
   SET_L1_L2_TO_NULL(state) {
@@ -168,7 +171,7 @@ export const getters = {
   },
 }
 
-export const actions = {
+export const actions = {  
   load({ dispatch, commit }) {
     commit("LOAD_SETTINGS");
   },

@@ -156,24 +156,28 @@ export default {
       ) {
         this.l1, this.l2;
         classes["zerotohero-with-nav"] = true;
-        classes = Object.assign(classes, {
-          "show-pinyin": this.l2Settings.showPinyin,
-          "show-pinyin-for-saved":
-            !this.l2Settings.showPinyin && this.l2 && this.l2.han,
-          "show-simplified": !this.l2Settings.useTraditional,
-          "show-traditional": this.l2Settings.useTraditional,
-          "show-definition": this.l2Settings.showDefinition,
-          "show-translation": this.l2Settings.showTranslation,
-          "show-byeonggi": this.l2Settings.showByeonggi,
-          "use-serif": this.l2Settings.useSerif,
-        });
+        let l2Settings
+        if (this.l2Settings) l2Settings = this.l2Settings[this.l2.code];
+        if (l2Settings) {
+          classes = Object.assign(classes, {
+            "show-pinyin": l2Settings.showPinyin,
+            "show-pinyin-for-saved":
+              !l2Settings.showPinyin && this.l2 && this.l2.han,
+            "show-simplified": !l2Settings.useTraditional,
+            "show-traditional": l2Settings.useTraditional,
+            "show-definition": l2Settings.showDefinition,
+            "show-translation": l2Settings.showTranslation,
+            "show-byeonggi": l2Settings.showByeonggi,
+            "use-serif": l2Settings.useSerif
+          });
+        }
         classes[`l1-${this.l1.code}`] = true;
         classes[`l2-${this.l2.code}`] = true;
         if (this.l2.han) classes["l2-zh"] = true;
         if (this.l2.han) classes["l2-zh"] = true;
       }
       return classes;
-    },
+    }
   },
   created() {
     this.$nuxt.$on("history", this.addFullHistoryItem); // from Language map
