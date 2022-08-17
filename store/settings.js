@@ -69,7 +69,7 @@ export const mutations = {
       if (state.l1) {
         state.l2Settings[state.l2.code].l1 = state.l1.code
         loadedSettings.l2Settings = loadedSettings.l2Settings || {}
-        loadedSettings.l2Settings[state.l2.code] = state.l2Settings[state.l2.code];
+        loadedSettings.l2Settings[state.l2.code].l1
         localStorage.setItem("zthSettings", JSON.stringify(loadedSettings));
       }
     }
@@ -151,7 +151,7 @@ export const mutations = {
     state.l2Settings[state.l2.code] = Object.assign(state.l2Settings[state.l2.code], l2Settings);
     if (typeof localStorage !== "undefined") {
       let settings = loadSettingsFromStorage();
-      settings[state.l2.code] = state.l2Settings[state.l2.code];
+      settings.l2Settings[state.l2.code] = state.l2Settings[state.l2.code];
       localStorage.setItem("zthSettings", JSON.stringify(settings));
     }
   },
