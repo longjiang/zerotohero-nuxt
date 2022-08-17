@@ -84,7 +84,7 @@
             <div
               v-if="!playBtnClicked"
               @click="playBtnClicked = true"
-              style="cursor: pointer"
+              style="cursor: pointer; position: relative"
             >
               <img
                 src="/img/btn-play.png"
