@@ -414,18 +414,20 @@ export default {
   },
   methods: {
     loadSettings() {
+      if (!this.$l2.code) return
+      if (!this.$store.state.settings.l2Settings[this.$l2.code]) return
       this.showDefinition =
-        this.$store.state.settings.l2Settings.showDefinition;
+        this.$store.state.settings.l2Settings[this.$l2.code].showDefinition;
       this.showTranslation =
-        this.$store.state.settings.l2Settings.showTranslation;
-      this.showPinyin = this.$store.state.settings.l2Settings.showPinyin;
+        this.$store.state.settings.l2Settings[this.$l2.code].showTranslation;
+      this.showPinyin = this.$store.state.settings.l2Settings[this.$l2.code].showPinyin;
       this.useTraditional =
-        this.$store.state.settings.l2Settings.useTraditional;
-      this.showQuiz = this.$store.state.settings.l2Settings.showQuiz;
-      this.useSerif = this.$store.state.settings.l2Settings.useSerif;
-      this.showByeonggi = this.$store.state.settings.l2Settings.showByeonggi;
+        this.$store.state.settings.l2Settings[this.$l2.code].useTraditional;
+      this.showQuiz = this.$store.state.settings.l2Settings[this.$l2.code].showQuiz;
+      this.useSerif = this.$store.state.settings.l2Settings[this.$l2.code].useSerif;
+      this.showByeonggi = this.$store.state.settings.l2Settings[this.$l2.code].showByeonggi;
       this.disableAnnotation =
-        this.$store.state.settings.l2Settings.disableAnnotation;
+        this.$store.state.settings.l2Settings[this.$l2.code].disableAnnotation;
       this.adminMode = this.$store.state.settings.adminMode;
       this.autoPronounce = this.$store.state.settings.autoPronounce;
       if (this.adminMode) this.onceAdmin = true;

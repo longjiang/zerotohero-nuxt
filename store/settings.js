@@ -16,8 +16,8 @@ export const defaultL2Settings = {
 
 export const state = () => {
   return {
-    l1: undefined,
-    l2: undefined,
+    l1: undefined, // L1 language object
+    l2: undefined, // L2 language object
     dictionary: undefined,
     dictionaryName: undefined,
     adminMode: false,
@@ -27,7 +27,7 @@ export const state = () => {
     subsSearchLimit: true,
     autoPronounce: true, // Whether or not to play the audio automatically when opening a WordBlock popup
     settingsLoaded: {},
-    l2Settings: defaultL2Settings,
+    l2Settings: {}, // keyed by language
   };
 };
 
@@ -53,14 +53,11 @@ export const mutations = {
         if (typeof settings[property] !== "undefined")
           state[property] = settings[property];
       }
-      state.l2Settings = Object.assign(
-        state.l2Settings,
-        settings[state.l2.code]
-      );
+      state.l2Settings = settings; // keyed by language
       // Remember the L1 the user picked, so next time when switching L2, this L1 is used.
-      if (state.l1) {
-        state.l2Settings.l1 = state.l1.code
-        settings[state.l2.code] = state.l2Settings;
+      if (state.l1 && state.l2Settings[state.l2.code]) {
+        state.l2Settings[state.l2.code].l1 = state.l1.code
+        settings[state.l2.code] = state.l2Settings[state.l2.code];
         localStorage.setItem("zthSettings", JSON.stringify(settings));
       }
     }
@@ -76,7 +73,7 @@ export const mutations = {
         ["Cyrl", "Latn"].includes(l2.scripts[0].script)) ||
       romanizationOffByDefault.includes(l2.code)
     ) {
-      state.l2Settings.showPinyin = false;
+      if (state.l2Settings[l2.code]) state.l2Settings[l2.code].showPinyin = false;
     }
   },
   SET_L1_L2_TO_NULL(state) {
@@ -138,19 +135,19 @@ export const mutations = {
     }
   },
   SET_L2_SETTINGS(state, l2Settings) {
-    state.l2Settings = Object.assign(state.l2Settings, l2Settings);
+    state.l2Settings[state.l2.code] = Object.assign(state.l2Settings[state.l2.code], l2Settings);
     if (typeof localStorage !== "undefined") {
       let settings = loadSettingsFromLocalStorage();
-      settings[state.l2.code] = state.l2Settings;
+      settings[state.l2.code] = state.l2Settings[state.l2.code];
       localStorage.setItem("zthSettings", JSON.stringify(settings));
     }
   },
   RESET_SHOW_FILTERS(state) {
-    state.l2Settings.tvShowFilter = "all"
+    state.l2Settings[state.l2.code].tvShowFilter = "all"
     if (state.l2?.code && 'zh en it ko es fr ja de tr ru nl'.split(' ').includes(state.l2.code)) {
-      state.l2Settings.talkFilter = [] // For languages with lots of content, only include tv shows in dictionary video search by default so as to give the user a faster experience.
+      state.l2Settings[state.l2.code].talkFilter = [] // For languages with lots of content, only include tv shows in dictionary video search by default so as to give the user a faster experience.
     } else {
-      state.l2Settings.talkFilter = "all"
+      state.l2Settings[state.l2.code].talkFilter = "all"
     }
   }
 };
