@@ -40,7 +40,7 @@ export const saveSettingsToStorage = () => {
 }
 
 export const loadSettingsFromStorage = () => {
-  console.log('⚙️ loadSettingsFromStorage')
+  // console.log('⚙️ loadSettingsFromStorage')
   if (typeof localStorage !== "undefined") {
     let loadedSettings;
     try {
@@ -56,7 +56,7 @@ export const loadSettingsFromStorage = () => {
 
 export const mutations = {
   LOAD_SETTINGS(state) {
-    console.log('⚙️ LOAD_SETTINGS')
+    // console.log('⚙️ LOAD_SETTINGS')
     if (typeof localStorage !== "undefined") {
       let loadedSettings = loadSettingsFromStorage();
       for (let property of ['adminMode', 'hideWord', 'hidePhonetics', 'hideDefinitions', 'subsSearchLimit', 'autoPronounce']) {
@@ -76,7 +76,7 @@ export const mutations = {
     state.settingsLoaded[state.l2.code] = true;
   },
   SET_L1_L2(state, { l1, l2 }) {
-    console.log('⚙️ SET_L1_L2')
+    // console.log('⚙️ SET_L1_L2')
     state.l1 = l1;
     if (typeof l2 === "undefined") return;
     state.l2 = l2;
@@ -167,12 +167,14 @@ export const mutations = {
 
 export const getters = {
   l2Settings: state => (l2Code) => {
-    let settings = loadSettingsFromStorage();
-    return settings[l2Code]
+    let l2Settings = {}
+    let loadedSettings = loadSettingsFromStorage();
+    if (loadedSettings.l2Settings && loadedSettings.l2Settings[l2Code]) l2Settings = loadedSettings.l2Settings[l2Code]
+    return loadedSettings
   },
 }
 
-export const actions = {  
+export const actions = {
   load({ dispatch, commit }) {
     commit("LOAD_SETTINGS");
   },

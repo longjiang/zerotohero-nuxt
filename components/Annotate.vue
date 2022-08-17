@@ -24,7 +24,7 @@
           'd-none': showLoading && !annotated,
           annotated,
           'text-right': dir() === 'rtl',
-          'add-pinyin': l2Settings && l2Settings.showPinyin,
+          'add-pinyin': l2SettingsOfL2 && l2SettingsOfL2.showPinyin,
           phonetics,
           fullscreen: fullscreenMode,
           'with-buttons': buttons,
@@ -281,6 +281,11 @@ export default {
   },
   computed: {
     ...mapState("settings", ["l2Settings"]),
+    l2SettingsOfL2() {
+      let l2SettingsOfL2 = {}
+      if (this.l2Settings && this.l2Settings[this.$l2.code]) l2SettingsOfL2 = this.l2Settings[this.$l2.code]
+      return l2SettingsOfL2
+    },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -296,7 +301,7 @@ export default {
       return this.$getHanzi();
     },
     disableAnnotation() {
-      return this.$store.state.settings.l2Settings.disableAnnotation;
+      return this.l2SettingsOfL2.disableAnnotation;
     },
   },
   watch: {

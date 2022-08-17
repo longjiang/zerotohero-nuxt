@@ -85,7 +85,6 @@ export default {
       return sorted;
     },
   },
-  watch: {},
   methods: {
     getL1Code(l2) {
       let l2Settings = this.$store.getters["settings/l2Settings"](l2.code);
