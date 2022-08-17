@@ -71,18 +71,16 @@ export const mutations = {
   LOAD_SETTINGS(state) {
     if (typeof localStorage !== "undefined") {
       let loadedSettings = loadSettingsFromStorage();
-      // for (let property in loadedSettings) {
-      //   state[property] = loadedSettings[property];
-      // }
-      // if (loadedSettings.l2Settings) state.l2Settings = loadedSettings.l2Settings; // keyed by language
-      // if (!state.l2Settings[state.l2.code]) state.l2Settings[state.l2.code] = defaultL2Settings
+      for (let property in loadedSettings) {
+        state[property] = loadedSettings[property];
+      }
       // Remember the L1 the user picked, so next time when switching L2, this L1 is used.
-      // if (state.l1) {
-      //   state.l2Settings[state.l2.code].l1 = state.l1.code
-      //   loadedSettings.l2Settings = loadedSettings.l2Settings || {}
-      //   loadedSettings.l2Settings[state.l2.code].l1 = state.l1.code
-      //   localStorage.setItem("zthSettings", JSON.stringify(loadedSettings));
-      // }
+      if (state.l1) {
+        state.l2Settings[state.l2.code].l1 = state.l1.code
+        loadedSettings.l2Settings = loadedSettings.l2Settings || {}
+        loadedSettings.l2Settings[state.l2.code].l1 = state.l1.code
+        localStorage.setItem("zthSettings", JSON.stringify(loadedSettings));
+      }
     }
     state.settingsLoaded[state.l2.code] = true;
   },
@@ -90,7 +88,9 @@ export const mutations = {
     state.l1 = l1;
     if (typeof l2 === "undefined") return;
     state.l2 = l2;
-    if (!state.l2Settings[l2.code]) state.l2Settings[l2.code] = getDefaultL2Settings(l2)
+    if (!state.l2Settings[l2.code]) {
+      state.l2Settings[l2.code] = getDefaultL2Settings(l2)
+    }
   },
   SET_L1_L2_TO_NULL(state) {
     state.l1 = null
@@ -151,15 +151,25 @@ export const mutations = {
     }
   },
   SET_L2_SETTINGS(state, l2Settings) {
+    // This method might be called (by showfilter.vue) before the settings are loaded from storage
+    // Make sure this does not overwrite what's in storage!
     if (!state.l2Settings[state.l2.code]) return
     state.l2Settings[state.l2.code] = Object.assign(state.l2Settings[state.l2.code], l2Settings);
     if (typeof localStorage !== "undefined") {
-      let settings = loadSettingsFromStorage();
-      if (!settings.l2Settings) {
-        settings.l2Settings = {}
+      let loadedSettings = loadSettingsFromStorage();
+      // Edge case: localStorage does not have l2Settings key
+      if (!loadedSettings.l2Settings) {
+        loadedSettings.l2Settings = {}
       }
-      settings.l2Settings[state.l2.code] = state.l2Settings[state.l2.code];
-      localStorage.setItem("zthSettings", JSON.stringify(settings));
+      // Edge case: localStorage does not have the current l2 initialized
+      if (!loadedSettings.l2Settings[state.l2.code]) {
+        loadedSettings.l2Settings[state.l2.code] = state.l2Settings[state.l2.code];
+      } else {
+        // Only change the value in question from the localStorage (rather than saving the entire)
+        // So we don't inadvertantly overwrite existing values in localStorage
+        loadedSettings.l2Settings[state.l2.code] = Object.assign(loadedSettings.l2Settings[state.l2.code], l2Settings)
+      }      
+      localStorage.setItem("zthSettings", JSON.stringify(loadedSettings));
     }
   },
   RESET_SHOW_FILTERS(state) {
