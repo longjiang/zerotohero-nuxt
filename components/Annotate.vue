@@ -927,4 +927,9 @@ export default {
   padding: 0.5rem 0.7rem;
   border-radius: 0.2rem;
 }
+
+.dropdown-menu li {
+  padding-top: 0.15rem;
+  padding-bottom: 0.15rem;
+}
 </style>
