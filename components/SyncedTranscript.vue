@@ -19,6 +19,7 @@
               v-bind="{
                 line,
                 showSubsEditing,
+                showAnimation,
                 sticky,
                 single,
                 hsk,
@@ -146,6 +147,9 @@ export default {
     },
     showSubsEditing: {
       default: false,
+    },
+    showAnimation: {
+      default: true,
     },
     enableTranslationEditing: {
       default: false,
@@ -658,6 +662,7 @@ export default {
       }
     },
     playCurrentLineAnimation() {
+      if (!this.showAnimation) return
       let currentLineRefs = this.single
         ? this.$refs[`transcript-line`]
         : this.$refs[`transcript-line-${this.currentLineIndex}`];

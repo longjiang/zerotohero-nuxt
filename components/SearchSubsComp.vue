@@ -151,19 +151,22 @@
     </div>
     <template v-if="pro || hitIndex < NON_PRO_MAX_SUBS_SEARCH_HITS">
       <LazyYouTubeWithTranscript
-        class="main-dark"
         v-if="currentHit"
-        initialLayout="vertical"
-        :video="currentHit.video"
         :ref="`youtube-${hitIndex}`"
-        :speed="speed"
-        :startLineIndex="Math.max(startLineIndex, 0)"
-        :showFullscreenToggle="false"
-        :autoload="true"
-        :autoplay="navigated"
-        :showLineList="false"
-        :episodes="hits.map((h) => h.video)"
-        :forcePro="true"
+        class="main-dark"
+        v-bind="{
+          video: currentHit.video,
+          showAnimation: !reels,
+          initialLayout: 'vertical',
+          startLineIndex: Math.max(startLineIndex, 0),
+          speed,
+          showFullscreenToggle: false,
+          autoload: true,
+          autoplay: navigated,
+          showLineList: false,
+          episodes: hits.map((h) => h.video),
+          forcePro: true
+        }"
         @previous="goToPrevHit"
         @next="goToNextHit"
       />

@@ -116,20 +116,23 @@
         ref="transcript"
         :class="{ 'd-none': layout === 'mini' }"
         :key="'transcript-' + video.youtube_id + '-' + transcriptKey"
-        :lines="video.subs_l2"
-        :parallellines="video.subs_l1"
-        :sticky="sticky"
-        :startLineIndex="startLineIndex"
-        :starttime="startTimeOrLineIndex"
-        :stopLineIndex="stopLineIndex"
-        :showSubsEditing="showSubsEditing"
-        :enableTranslationEditing="enableTranslationEditing"
-        :notes="video.notes"
-        :collapsed="collapsed"
-        :skin="skin"
-        :landscape="landscape"
-        :single="['vertical', 'mini'].includes(layout)"
-        :forcePro="forcePro"
+        v-bind="{
+          lines: video.subs_l2,
+          parallellines: video.subs_l1,
+          starttime: startTimeOrLineIndex,
+          single: ['vertical', 'mini'].includes(layout),
+          showAnimation,
+          showSubsEditing,
+          enableTranslationEditing,
+          sticky,
+          notes,
+          collapsed,
+          startLineIndex,
+          skin,
+          landscape,
+          stopLineIndex,
+          forcePro,
+        }"
         @seek="seekYouTube"
         @pause="pause"
         @play="play"
@@ -267,6 +270,9 @@ export default {
     },
     forcePro: {
       default: false,
+    },
+    showAnimation: {
+      default: true,
     },
   },
   data() {

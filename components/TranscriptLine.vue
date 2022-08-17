@@ -115,9 +115,6 @@ export default {
     current: {
       type: Boolean,
     },
-    showSubsEditing: {
-      type: Boolean,
-    },
     sticky: {
       type: Boolean,
     },
@@ -138,6 +135,12 @@ export default {
     },
     showParallelLine: {
       default: false, // The user can hide the line via settings/css, but if the transcript has no parallel line we control how the component is rendered
+    },
+    showSubsEditing: {
+      type: Boolean,
+    },
+    showAnimation: {
+      default: true,
     },
     enableTranslationEditing: {
       type: Boolean,
@@ -176,6 +179,7 @@ export default {
   watch: {
     annotated() {
       if (
+        this.showAnimation &&
         this.annotated &&
         this.animateOnceAnnotated !== undefined &&
         this.$refs["annotate"]
