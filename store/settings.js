@@ -42,7 +42,6 @@ export const saveSettingsToStorage = () => {
 }
 
 export const loadSettingsFromStorage = () => {
-  // console.log('⚙️ loadSettingsFromStorage')
   if (typeof localStorage !== "undefined") {
     let loadedSettings
     try {
@@ -58,12 +57,10 @@ export const loadSettingsFromStorage = () => {
 
 export const mutations = {
   LOAD_SETTINGS(state) {
-    // console.log('⚙️ LOAD_SETTINGS')
     if (typeof localStorage !== "undefined") {
       let loadedSettings = loadSettingsFromStorage();
-      for (let property of ['adminMode', 'hideWord', 'hidePhonetics', 'hideDefinitions', 'subsSearchLimit', 'autoPronounce']) {
-        if (typeof loadedSettings[property] !== "undefined")
-          state[property] = loadedSettings[property];
+      for (let property in loadedSettings) {
+        state[property] = loadedSettings[property];
       }
       if (loadedSettings.l2Settings) state.l2Settings = loadedSettings.l2Settings; // keyed by language
       if (!state.l2Settings[state.l2.code]) state.l2Settings[state.l2.code] = defaultL2Settings
@@ -71,14 +68,13 @@ export const mutations = {
       if (state.l1) {
         state.l2Settings[state.l2.code].l1 = state.l1.code
         loadedSettings.l2Settings = loadedSettings.l2Settings || {}
-        loadedSettings.l2Settings[state.l2.code].l1
+        loadedSettings.l2Settings[state.l2.code].l1 = state.l1.code
         localStorage.setItem("zthSettings", JSON.stringify(loadedSettings));
       }
     }
     state.settingsLoaded[state.l2.code] = true;
   },
   SET_L1_L2(state, { l1, l2 }) {
-    // console.log('⚙️ SET_L1_L2')
     state.l1 = l1;
     if (typeof l2 === "undefined") return;
     state.l2 = l2;
@@ -153,7 +149,9 @@ export const mutations = {
     state.l2Settings[state.l2.code] = Object.assign(state.l2Settings[state.l2.code] || {}, l2Settings);
     if (typeof localStorage !== "undefined") {
       let settings = loadSettingsFromStorage();
-      if (!settings.l2Settings) settings.l2Settings = {}
+      if (!settings.l2Settings) {
+        settings.l2Settings = {}
+      }
       settings.l2Settings[state.l2.code] = state.l2Settings[state.l2.code];
       localStorage.setItem("zthSettings", JSON.stringify(settings));
     }
