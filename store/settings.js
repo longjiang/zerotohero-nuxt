@@ -78,6 +78,7 @@ export const mutations = {
       if (state.l1) {
         state.l2Settings[state.l2.code].l1 = state.l1.code
         loadedSettings.l2Settings = loadedSettings.l2Settings || {}
+        if (!loadedSettings.l2Settings[state.l2.code]) loadedSettings.l2Settings[state.l2.code] = state.l2Settings[state.l2.code]
         loadedSettings.l2Settings[state.l2.code].l1 = state.l1.code
         localStorage.setItem("zthSettings", JSON.stringify(loadedSettings));
       }
@@ -168,7 +169,7 @@ export const mutations = {
         // Only change the value in question from the localStorage (rather than saving the entire)
         // So we don't inadvertantly overwrite existing values in localStorage
         loadedSettings.l2Settings[state.l2.code] = Object.assign(loadedSettings.l2Settings[state.l2.code], l2Settings)
-      }      
+      }
       localStorage.setItem("zthSettings", JSON.stringify(loadedSettings));
     }
   },
