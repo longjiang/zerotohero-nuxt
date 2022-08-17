@@ -31,7 +31,15 @@ export const state = () => {
   };
 };
 
-export const loadSettingsFromLocalStorage = () => {
+/**
+ * EMPTY (no data in localStorage) -> initializeSettings() -> INITIALIZED
+ */
+
+export const saveSettingsToStorage = () => {
+
+}
+
+export const loadSettingsFromStorage = () => {
   if (typeof localStorage !== "undefined") {
     let loadedSettings;
     try {
@@ -48,7 +56,7 @@ export const loadSettingsFromLocalStorage = () => {
 export const mutations = {
   LOAD_SETTINGS(state) {
     if (typeof localStorage !== "undefined") {
-      let loadedSettings = loadSettingsFromLocalStorage();
+      let loadedSettings = loadSettingsFromStorage();
       for (let property of ['adminMode', 'hideWord', 'hidePhonetics', 'hideDefinitions', 'subsSearchLimit', 'autoPronounce']) {
         if (typeof loadedSettings[property] !== "undefined")
           state[property] = loadedSettings[property];
@@ -90,7 +98,7 @@ export const mutations = {
   SET_ADMIN_MODE(state, adminMode) {
     state.adminMode = adminMode;
     if (typeof localStorage !== "undefined") {
-      let settings = loadSettingsFromLocalStorage();
+      let settings = loadSettingsFromStorage();
       settings.adminMode = adminMode;
       localStorage.setItem("zthSettings", JSON.stringify(settings));
     }
@@ -98,7 +106,7 @@ export const mutations = {
   SET_AUTO_PRONOUNCE(state, autoPronounce) {
     state.autoPronounce = autoPronounce;
     if (typeof localStorage !== "undefined") {
-      let settings = loadSettingsFromLocalStorage();
+      let settings = loadSettingsFromStorage();
       settings.autoPronounce = autoPronounce;
       localStorage.setItem("zthSettings", JSON.stringify(settings));
     }
@@ -106,7 +114,7 @@ export const mutations = {
   SET_HIDE_WORD(state, hideWord) {
     state.hideWord = hideWord;
     if (typeof localStorage !== "undefined") {
-      let settings = loadSettingsFromLocalStorage();
+      let settings = loadSettingsFromStorage();
       settings.hideWord = hideWord;
       localStorage.setItem("zthSettings", JSON.stringify(settings));
     }
@@ -114,7 +122,7 @@ export const mutations = {
   SET_HIDE_PHONETICS(state, hidePhonetics) {
     state.hidePhonetics = hidePhonetics;
     if (typeof localStorage !== "undefined") {
-      let settings = loadSettingsFromLocalStorage();
+      let settings = loadSettingsFromStorage();
       settings.hidePhonetics = hidePhonetics;
       localStorage.setItem("zthSettings", JSON.stringify(settings));
     }
@@ -122,7 +130,7 @@ export const mutations = {
   SET_HIDE_DEFINITIONS(state, hideDefinitions) {
     state.hideDefinitions = hideDefinitions;
     if (typeof localStorage !== "undefined") {
-      let settings = loadSettingsFromLocalStorage();
+      let settings = loadSettingsFromStorage();
       settings.hideDefinitions = hideDefinitions;
       localStorage.setItem("zthSettings", JSON.stringify(settings));
     }
@@ -130,7 +138,7 @@ export const mutations = {
   SET_SUBS_SEARCH_LIMIT(state, subsSearchLimit) {
     state.subsSearchLimit = subsSearchLimit;
     if (typeof localStorage !== "undefined") {
-      let settings = loadSettingsFromLocalStorage();
+      let settings = loadSettingsFromStorage();
       settings.subsSearchLimit = subsSearchLimit;
       localStorage.setItem("zthSettings", JSON.stringify(settings));
     }
@@ -138,7 +146,7 @@ export const mutations = {
   SET_L2_SETTINGS(state, l2Settings) {
     state.l2Settings[state.l2.code] = Object.assign(state.l2Settings[state.l2.code], l2Settings);
     if (typeof localStorage !== "undefined") {
-      let settings = loadSettingsFromLocalStorage();
+      let settings = loadSettingsFromStorage();
       settings[state.l2.code] = state.l2Settings[state.l2.code];
       localStorage.setItem("zthSettings", JSON.stringify(settings));
     }
@@ -155,7 +163,7 @@ export const mutations = {
 
 export const getters = {
   l2Settings: state => (l2Code) => {
-    let settings = loadSettingsFromLocalStorage();
+    let settings = loadSettingsFromStorage();
     return settings[l2Code]
   },
 }
