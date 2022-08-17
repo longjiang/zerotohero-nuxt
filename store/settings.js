@@ -16,6 +16,19 @@ export const defaultL2Settings = {
   disableAnnotation: false
 }
 
+export const getDefaultL2Settings = (l2) => {
+  let l2SettingsOfL2 = defaultL2Settings
+  if (
+    (l2.scripts &&
+      l2.scripts[0] &&
+      ["Cyrl", "Latn"].includes(l2.scripts[0].script)) ||
+    romanizationOffByDefault.includes(l2.code)
+  ) {
+    l2SettingsOfL2.showPinyin = false
+  }
+  return l2SettingsOfL2
+}
+
 export const state = () => {
   return {
     l1: undefined, // L1 language object
@@ -42,16 +55,15 @@ export const saveSettingsToStorage = () => {
 }
 
 export const loadSettingsFromStorage = () => {
+  let loadedSettings = {}
   if (typeof localStorage !== "undefined") {
-    let loadedSettings
     try {
-      loadedSettings = JSON.parse(localStorage.getItem("zthSettings"));
+      loadedSettings = JSON.parse(localStorage.getItem("zthSettings")) || {};
     } catch (err) {
       logError(err);
     }
-    if (!loadedSettings) loadedSettings = {};
-    return loadedSettings;
   }
+  return loadedSettings;
 };
 
 
@@ -59,18 +71,18 @@ export const mutations = {
   LOAD_SETTINGS(state) {
     if (typeof localStorage !== "undefined") {
       let loadedSettings = loadSettingsFromStorage();
-      for (let property in loadedSettings) {
-        state[property] = loadedSettings[property];
-      }
-      if (loadedSettings.l2Settings) state.l2Settings = loadedSettings.l2Settings; // keyed by language
-      if (!state.l2Settings[state.l2.code]) state.l2Settings[state.l2.code] = defaultL2Settings
+      // for (let property in loadedSettings) {
+      //   state[property] = loadedSettings[property];
+      // }
+      // if (loadedSettings.l2Settings) state.l2Settings = loadedSettings.l2Settings; // keyed by language
+      // if (!state.l2Settings[state.l2.code]) state.l2Settings[state.l2.code] = defaultL2Settings
       // Remember the L1 the user picked, so next time when switching L2, this L1 is used.
-      if (state.l1) {
-        state.l2Settings[state.l2.code].l1 = state.l1.code
-        loadedSettings.l2Settings = loadedSettings.l2Settings || {}
-        loadedSettings.l2Settings[state.l2.code].l1 = state.l1.code
-        localStorage.setItem("zthSettings", JSON.stringify(loadedSettings));
-      }
+      // if (state.l1) {
+      //   state.l2Settings[state.l2.code].l1 = state.l1.code
+      //   loadedSettings.l2Settings = loadedSettings.l2Settings || {}
+      //   loadedSettings.l2Settings[state.l2.code].l1 = state.l1.code
+      //   localStorage.setItem("zthSettings", JSON.stringify(loadedSettings));
+      // }
     }
     state.settingsLoaded[state.l2.code] = true;
   },
@@ -78,14 +90,7 @@ export const mutations = {
     state.l1 = l1;
     if (typeof l2 === "undefined") return;
     state.l2 = l2;
-    if (
-      (l2.scripts &&
-        l2.scripts[0] &&
-        ["Cyrl", "Latn"].includes(l2.scripts[0].script)) ||
-      romanizationOffByDefault.includes(l2.code)
-    ) {
-      if (!state.l2Settings[l2.code]) state.l2Settings[l2.code] = defaultL2Settings
-    }
+    if (!state.l2Settings[l2.code]) state.l2Settings[l2.code] = getDefaultL2Settings(l2)
   },
   SET_L1_L2_TO_NULL(state) {
     state.l1 = null
@@ -146,7 +151,8 @@ export const mutations = {
     }
   },
   SET_L2_SETTINGS(state, l2Settings) {
-    state.l2Settings[state.l2.code] = Object.assign(state.l2Settings[state.l2.code] || {}, l2Settings);
+    if (!state.l2Settings[state.l2.code]) return
+    state.l2Settings[state.l2.code] = Object.assign(state.l2Settings[state.l2.code], l2Settings);
     if (typeof localStorage !== "undefined") {
       let settings = loadSettingsFromStorage();
       if (!settings.l2Settings) {
@@ -157,6 +163,7 @@ export const mutations = {
     }
   },
   RESET_SHOW_FILTERS(state) {
+    if (!state.l2Settings[state.l2.code]) return
     state.l2Settings[state.l2.code].tvShowFilter = "all"
     if (state.l2?.code && 'zh en it ko es fr ja de tr ru nl'.split(' ').includes(state.l2.code)) {
       state.l2Settings[state.l2.code].talkFilter = [] // For languages with lots of content, only include tv shows in dictionary video search by default so as to give the user a faster experience.
