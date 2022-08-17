@@ -33,14 +33,14 @@ export const state = () => {
 
 export const loadSettingsFromLocalStorage = () => {
   if (typeof localStorage !== "undefined") {
-    let settings;
+    let loadedSettings;
     try {
-      settings = JSON.parse(localStorage.getItem("zthSettings"));
+      loadedSettings = JSON.parse(localStorage.getItem("zthSettings"));
     } catch (err) {
       Helper.logError(err);
     }
-    if (!settings) settings = {};
-    return settings;
+    if (!loadedSettings) loadedSettings = {};
+    return loadedSettings;
   }
 };
 
@@ -48,16 +48,17 @@ export const loadSettingsFromLocalStorage = () => {
 export const mutations = {
   LOAD_SETTINGS(state) {
     if (typeof localStorage !== "undefined") {
-      let settings = loadSettingsFromLocalStorage();
+      let loadedSettings = loadSettingsFromLocalStorage();
       for (let property of ['adminMode', 'hideWord', 'hidePhonetics', 'hideDefinitions', 'subsSearchLimit', 'autoPronounce']) {
-        if (typeof settings[property] !== "undefined")
-          state[property] = settings[property];
+        if (typeof loadedSettings[property] !== "undefined")
+          state[property] = loadedSettings[property];
       }
-      state.l2Settings = settings; // keyed by language
+      state.l2Settings = loadedSettings.l2Settings; // keyed by language
+      if (!state.l2Settings[state.l2.code]) state.l2Settings[state.l2.code] = defaultL2Settings
       // Remember the L1 the user picked, so next time when switching L2, this L1 is used.
-      if (state.l1 && state.l2Settings[state.l2.code]) {
+      if (state.l1) {
         state.l2Settings[state.l2.code].l1 = state.l1.code
-        settings[state.l2.code] = state.l2Settings[state.l2.code];
+        loadedSettings.l2Settings[state.l2.code] = state.l2Settings[state.l2.code];
         localStorage.setItem("zthSettings", JSON.stringify(settings));
       }
     }
