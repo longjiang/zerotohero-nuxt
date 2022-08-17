@@ -125,7 +125,7 @@
           showSubsEditing,
           enableTranslationEditing,
           sticky,
-          notes,
+          notes: video.notes,
           collapsed,
           startLineIndex,
           skin,

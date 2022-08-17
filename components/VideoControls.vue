@@ -1,9 +1,9 @@
 <template>
   <div class="video-controls" v-if="video">
     <div class="video-controls-progress d-flex">
-      <div class="video-controls-time mr-2">{{ currentTime ? toHHMMSS(currentTime) : '--:--' }}</div>
+      <div class="video-controls-time mr-2 ml-2">{{ currentTime ? toHHMMSS(currentTime) : '--:--' }}</div>
       <input type="range" @change="onSeek" :value="currentPercentage" class="d-block w-100 flex-1" />
-      <div class="video-controls-time ml-2">{{ duration ? toHHMMSS(duration) : '--:--' }}</div>
+      <div class="video-controls-time ml-2 mr-2">{{ duration ? toHHMMSS(duration) : '--:--' }}</div>
     </div>
     <div class="quick-access-buttons">
       <!-- <button
