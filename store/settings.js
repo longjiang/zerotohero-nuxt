@@ -1,5 +1,19 @@
 export const romanizationOffByDefault = ["ko", "bo", "dz", "th", "my", "hy", "vi"]
 
+export const defaultL2Settings = {
+  l1: 'en',
+  showDefinition: false,
+  showPinyin: true,
+  useTraditional: false,
+  showTranslation: true,
+  useSerif: false,
+  showQuiz: true,
+  showByeonggi: true,
+  tvShowFilter: "all", // By default we only search TV shows.
+  talkFilter: "all", // By default we only search TV shows.
+  disableAnnotation: false
+}
+
 export const state = () => {
   return {
     l1: undefined,
@@ -13,19 +27,7 @@ export const state = () => {
     subsSearchLimit: true,
     autoPronounce: true, // Whether or not to play the audio automatically when opening a WordBlock popup
     settingsLoaded: {},
-    l2Settings: {
-      l1: 'en',
-      showDefinition: false,
-      showPinyin: true,
-      useTraditional: false,
-      showTranslation: true,
-      useSerif: false,
-      showQuiz: true,
-      showByeonggi: true,
-      tvShowFilter: "all", // By default we only search TV shows.
-      talkFilter: "all", // By default we only search TV shows.
-      disableAnnotation: false
-    },
+    l2Settings: defaultL2Settings,
   };
 };
 
