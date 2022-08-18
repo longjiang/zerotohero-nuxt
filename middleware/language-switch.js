@@ -36,7 +36,7 @@ export default async function ({ error, route, app, store, params, i18n }) {
 
         if (dictionaries) {
           console.log('Setting dictionary name to', dictionaries[0])
-          store.commit('settings/SET_DICTIONARY_NAME', dictionaries[0])
+          store.commit('settings/SET_GENERAL_SETTINGS', { dictionaryName: dictionaries[0] })
         }
       }
     }

@@ -105,11 +105,8 @@ export const mutations = {
   SET_DICTIONARY(state, dictionary) {
     state.dictionary = dictionary;
   },
-  SET_DICTIONARY_NAME(state, dictionaryName) {
-    state.dictionaryName = dictionaryName;
-  },
   SET_GENERAL_SETTINGS(state, generalSettings) {
-    for (property in generalSettings) {
+    for (let property in generalSettings) {
       if (!transientProperties.includes(property)) {
         state[property] = generalSettings[property]
       }
