@@ -58,7 +58,6 @@ export const saveSettingsToStorage = (state) => {
     for (let property in state) {
       if (!transientProperties.includes(property)) settingsToSave[property] = state[property]
     }
-    console.log('saving', { settingsToSave })
     localStorage.setItem("zthSettings", JSON.stringify(settingsToSave));
   }
 }
@@ -113,30 +112,6 @@ export const mutations = {
     }
     saveSettingsToStorage(state)
   },
-  SET_ADMIN_MODE(state, adminMode) {
-    state.adminMode = adminMode;
-    saveSettingsToStorage(state)
-  },
-  SET_AUTO_PRONOUNCE(state, autoPronounce) {
-    state.autoPronounce = autoPronounce;
-    saveSettingsToStorage(state)
-  },
-  SET_HIDE_WORD(state, hideWord) {
-    state.hideWord = hideWord;
-    saveSettingsToStorage(state)
-  },
-  SET_HIDE_PHONETICS(state, hidePhonetics) {
-    state.hidePhonetics = hidePhonetics;
-    saveSettingsToStorage(state)
-  },
-  SET_HIDE_DEFINITIONS(state, hideDefinitions) {
-    state.hideDefinitions = hideDefinitions;
-    saveSettingsToStorage(state)
-  },
-  SET_SUBS_SEARCH_LIMIT(state, subsSearchLimit) {
-    state.subsSearchLimit = subsSearchLimit;
-    saveSettingsToStorage(state)
-  },
   SET_L2_SETTINGS(state, l2Settings) {
     // This method might be called (by showfilter.vue) before the settings are loaded from storage
     // Make sure this does not overwrite what's in storage!
@@ -180,29 +155,11 @@ export const getters = {
 }
 
 export const actions = {
-  setL2Settings({ commit }, l2Settings) {
-    commit("SET_L2_SETTINGS", l2Settings);
-  },
   setGeneralSettings({ commit }, generalSettings) {
     commit("SET_GENERAL_SETTINGS", generalSettings)
   },
-  setAdminMode({ commit }, value) {
-    commit("SET_ADMIN_MODE", value);
-  },
-  setAutoPronounce({ commit }, value) {
-    commit('SET_AUTO_PRONOUNCE', value)
-  },
-  setHideWord({ commit }, value) {
-    commit("SET_HIDE_WORD", value);
-  },
-  setHidePhonetics({ commit }, value) {
-    commit("SET_HIDE_PHONETICS", value);
-  },
-  setHideDefinitions({ commit }, value) {
-    commit("SET_HIDE_DEFINITIONS", value);
-  },
-  setSubsSearchLimit({ commit }, value) {
-    commit("SET_SUBS_SEARCH_LIMIT", value);
+  setL2Settings({ commit }, l2Settings) {
+    commit("SET_L2_SETTINGS", l2Settings);
   },
   resetShowFilters({ commit }, value) {
     commit("RESET_SHOW_FILTERS")

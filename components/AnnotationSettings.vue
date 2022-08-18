@@ -438,10 +438,10 @@ export default {
       $nuxt.$emit("zoom", Number(this.zoomLevel));
     },
     adminMode() {
-      this.$store.dispatch("settings/setAdminMode", this.adminMode);
+      this.$store.dispatch("settings/setGeneralSettings", { adminMode: this.adminMode });
     },
     autoPronounce() {
-      this.$store.dispatch("settings/setAutoPronounce", this.autoPronounce);
+      this.$store.dispatch("settings/setGeneralSettings", { autoPronounce: this.autoPronounce });
     },
     showDefinition() {
       this.$store.dispatch("settings/setL2Settings", {
