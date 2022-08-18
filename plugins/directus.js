@@ -310,7 +310,7 @@ export default ({ app }, inject) => {
               if (userDataRes.data.data[0]) {
                 let { id, saved_words, saved_phrases, history, progress, settings } =
                   userDataRes.data.data[0];
-                console.log({settings})
+                // console.log({settings})
                 app.$auth.$storage.setUniversal("dataId", id);
                 app.store.dispatch("savedWords/importFromJSON", saved_words);
                 app.store.dispatch(
@@ -319,7 +319,7 @@ export default ({ app }, inject) => {
                 );
                 app.store.dispatch("history/importFromJSON", history);
                 app.store.dispatch("progress/importFromJSON", progress);
-                app.store.dispatch("settings/importFromJSON", settings);
+                // app.store.dispatch("settings/importFromJSON", settings);
               } else {
                 // No user data found, let's create it
                 let dataId = await this.createNewUserDataRecord(token);

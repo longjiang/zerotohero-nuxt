@@ -97,6 +97,10 @@ export const mutations = {
     state.l1 = l1;
     if (typeof l2 === "undefined") return;
     state.l2 = l2;
+    // Make sure to initialize a default l2Settings if not present
+    if (!state.l2Settings[l2.code]) {
+      state.l2Settings[l2.code] = getDefaultL2Settings(l2)
+    }
   },
   // This assumes that SET_L1_L2 has already been called
   LOAD_SETTINGS(state, { l1, l2 }) {
@@ -202,6 +206,7 @@ export const actions = {
     }
   },
   async push({ rootState }) {
+    return
     if (!$nuxt.$auth.loggedIn) return
     let user = rootState.auth.user
     let token = $nuxt.$auth.strategy.token.get()
