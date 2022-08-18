@@ -2,6 +2,8 @@ import { logError } from '@/lib/utils'
 
 export const romanizationOffByDefault = ["ko", "bo", "dz", "th", "my", "hy", "vi"]
 
+export const transientProperties = ['l1', 'l2', 'dictionary', 'l2Settings']
+
 export const defaultL2Settings = {
   l1: 'en', // the L1 the user used last time when they studied this language
   showDefinition: false,
@@ -50,8 +52,14 @@ export const state = () => {
  * EMPTY (no data in localStorage) -> initializeSettings() -> INITIALIZED
  */
 
-export const saveSettingsToStorage = () => {
-
+export const saveSettingsToStorage = (state) => {
+  if (typeof localStorage !== "undefined") {
+    let settingsToSave = {}
+    for (let property in state) {
+      if (!transientProperties.includes(property)) settingsToSave[property] = state[property]
+    }
+    localStorage.setItem("zthSettings", JSON.stringify(settingsToSave));
+  }
 }
 
 export const loadSettingsFromStorage = () => {
@@ -102,6 +110,14 @@ export const mutations = {
   },
   SET_DICTIONARY_NAME(state, dictionaryName) {
     state.dictionaryName = dictionaryName;
+  },
+  SET_GENERAL_SETTINGS(state, generalSettings) {
+    for (property in generalSettings) {
+      if (!transientProperties.includes(property)) {
+        state[property] = generalSettings[property]
+      }
+    }
+    saveSettingsToStorage(state)
   },
   SET_ADMIN_MODE(state, adminMode) {
     state.adminMode = adminMode;
@@ -194,31 +210,34 @@ export const getters = {
 }
 
 export const actions = {
-  load({ dispatch, commit }) {
+  load({ commit }) {
     commit("LOAD_SETTINGS");
   },
-  setL2Settings({ dispatch, commit }, l2Settings) {
+  setL2Settings({ commit }, l2Settings) {
     commit("SET_L2_SETTINGS", l2Settings);
   },
-  setAdminMode({ dispatch, commit }, value) {
+  setGeneralSettings({ commit }, generalSettings) {
+    commit("SET_GENERAL_SETTINGS", generalSettings)
+  },
+  setAdminMode({ commit }, value) {
     commit("SET_ADMIN_MODE", value);
   },
   setAutoPronounce({ commit }, value) {
     commit('SET_AUTO_PRONOUNCE', value)
   },
-  setHideWord({ dispatch, commit }, value) {
+  setHideWord({ commit }, value) {
     commit("SET_HIDE_WORD", value);
   },
-  setHidePhonetics({ dispatch, commit }, value) {
+  setHidePhonetics({ commit }, value) {
     commit("SET_HIDE_PHONETICS", value);
   },
-  setHideDefinitions({ dispatch, commit }, value) {
+  setHideDefinitions({ commit }, value) {
     commit("SET_HIDE_DEFINITIONS", value);
   },
-  setSubsSearchLimit({ dispatch, commit }, value) {
+  setSubsSearchLimit({ commit }, value) {
     commit("SET_SUBS_SEARCH_LIMIT", value);
   },
-  resetShowFilters({ dispatch, commit }, value) {
+  resetShowFilters({ commit }, value) {
     commit("RESET_SHOW_FILTERS")
   }
 };
