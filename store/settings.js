@@ -43,8 +43,8 @@ export const state = () => {
     hideDefinitions: false, // as used in the <HideDefs> component
     subsSearchLimit: true,
     autoPronounce: true, // Whether or not to play the audio automatically when opening a WordBlock popup
-    settingsLoaded: {},
     l2Settings: {}, // keyed by language
+    settingsLoaded: false
   };
 };
 
@@ -76,6 +76,22 @@ export const loadSettingsFromStorage = () => {
 
 
 export const mutations = {
+  IMPORT_FROM_JSON(state, json) {
+    if (typeof localStorage !== 'undefined') {
+      let settings
+      try {
+        settings = JSON.parse(json)
+      } catch (err) {
+        logError(err)
+      }
+      if (settings) {
+        for (let property in settings)
+        state[property] = settings[property]
+        localStorage.setItem('zthSettings', JSON.stringify(state.settings))
+      }
+      state.settingsLoaded = true
+    }
+  },
   // This commit cannot use localStorage because it's called from the language switch middleware
   SET_L1_L2(state, {l1, l2}) {
     state.l1 = l1;
@@ -95,7 +111,7 @@ export const mutations = {
     }
     // Remember the L1 the user picked, so next time when switching L2, this L1 is used.
     if (state.l2Settings[l2.code]) state.l2Settings[l2.code].l1 = l1.code
-    state.settingsLoaded[l2.code] = true;
+    state.settingsLoaded = true;
   },
   SET_L1_L2_TO_NULL(state) {
     state.l1 = null
@@ -155,13 +171,49 @@ export const getters = {
 }
 
 export const actions = {
-  setGeneralSettings({ commit }, generalSettings) {
+  setGeneralSettings({ dispatch, commit }, generalSettings) {
     commit("SET_GENERAL_SETTINGS", generalSettings)
+    dispatch('push')
   },
-  setL2Settings({ commit }, l2Settings) {
+  setL2Settings({ dispatch, commit }, l2Settings) {
     commit("SET_L2_SETTINGS", l2Settings);
+    dispatch('push')
   },
-  resetShowFilters({ commit }, value) {
+  resetShowFilters({ dispatch, commit }, value) {
     commit("RESET_SHOW_FILTERS")
+    dispatch('push')
+  },
+  async importFromJSON({ commit }, json) {
+    commit('IMPORT_FROM_JSON', json)
+  },
+  async fetchSettingsFromServer() {
+    if (!$nuxt.$auth.loggedIn) return
+    let dataId = this.$auth.$storage.getUniversal('dataId');
+    let path = `items/user_data/${dataId}?fields=id,settings`
+    let res = await this.$directus.get(path)
+      .catch(async (err) => {
+        logError(err, 'settings.js: fetchSettingsFromServer()')
+      })
+    if (res && res.data && res.data.data) {
+      let settings = JSON.parse(res.data.data.settings)
+      return settings
+    } else {
+      return false
+    }
+  },
+  async push({ rootState }) {
+    if (!$nuxt.$auth.loggedIn) return
+    let user = rootState.auth.user
+    let token = $nuxt.$auth.strategy.token.get()
+    let dataId = this.$auth.$storage.getUniversal('dataId');
+    if (user && user.id && dataId && token) {
+      let payload = { settings: localStorage.getItem('zthSettings') }
+      let path = `items/user_data/${dataId}?fields=id`
+      console.log('🕙 Saving settings to the server...')
+      await this.$directus.patch(path, payload)
+        .catch(async (err) => {
+          Helper.logError(err, 'settings.js: push()')
+        })
+    }
   }
 };

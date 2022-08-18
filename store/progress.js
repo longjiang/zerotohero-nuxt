@@ -1,4 +1,3 @@
-import Config from '@/lib/config'
 import Helper from '@/lib/helper'
 
 export const DEFAULT_LEVEL = 1
@@ -114,7 +113,7 @@ export const actions = {
     let path = `items/user_data/${dataId}?fields=id,progress`
     let res = await this.$directus.get(path)
       .catch(async (err) => {
-        Helper.logError(err, 'progress.js: setTime()')
+        Helper.logError(err, 'progress.js: fetchProgressFromServer()')
       })
     if (res && res.data && res.data.data) {
       let progress = JSON.parse(res.data.data.progress)
