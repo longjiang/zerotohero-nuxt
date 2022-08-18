@@ -203,6 +203,7 @@ export default {
     if (this.l1 && this.l2) {
       this.loadLanguageSpecificSettings(); // Make sure this line is AFTER registering mutation event listeners above!
       this.onLanguageChange();
+      this.$store.commit('settings/LOAD_SETTINGS', {l1: this.l1, l2: this.l2})
     }
     this.onAllLanguagesLoaded();
     if (this.$auth.loggedIn && this.$route.path === "/") {
@@ -437,7 +438,6 @@ export default {
     loadLanguageSpecificSettings() {
       if (this.settingsLoaded === this.l2.code) return;
       this.settingsLoaded = this.l2.code;
-      this.$store.dispatch("settings/load");
       if (!this.$store.state.savedWords.savedWordsLoaded) {
         this.$store.dispatch("savedWords/load");
       }

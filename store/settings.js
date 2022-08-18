@@ -2,7 +2,7 @@ import { logError } from '@/lib/utils'
 
 export const romanizationOffByDefault = ["ko", "bo", "dz", "th", "my", "hy", "vi"]
 
-export const transientProperties = ['l1', 'l2', 'dictionary', 'l2Settings']
+export const transientProperties = ['l1', 'l2', 'dictionary']
 
 export const defaultL2Settings = {
   l1: 'en', // the L1 the user used last time when they studied this language
@@ -58,6 +58,7 @@ export const saveSettingsToStorage = (state) => {
     for (let property in state) {
       if (!transientProperties.includes(property)) settingsToSave[property] = state[property]
     }
+    console.log('saving', { settingsToSave })
     localStorage.setItem("zthSettings", JSON.stringify(settingsToSave));
   }
 }
@@ -76,30 +77,26 @@ export const loadSettingsFromStorage = () => {
 
 
 export const mutations = {
-  LOAD_SETTINGS(state) {
+  // This commit cannot use localStorage because it's called from the language switch middleware
+  SET_L1_L2(state, {l1, l2}) {
+    state.l1 = l1;
+    if (typeof l2 === "undefined") return;
+    state.l2 = l2;
+  },
+  // This assumes that SET_L1_L2 has already been called
+  LOAD_SETTINGS(state, { l1, l2 }) {
     if (typeof localStorage !== "undefined") {
       let loadedSettings = loadSettingsFromStorage();
       for (let property in loadedSettings) {
         state[property] = loadedSettings[property];
       }
-      // Remember the L1 the user picked, so next time when switching L2, this L1 is used.
-      if (state.l1) {
-        state.l2Settings[state.l2.code].l1 = state.l1.code
-        loadedSettings.l2Settings = loadedSettings.l2Settings || {}
-        if (!loadedSettings.l2Settings[state.l2.code]) loadedSettings.l2Settings[state.l2.code] = state.l2Settings[state.l2.code]
-        loadedSettings.l2Settings[state.l2.code].l1 = state.l1.code
-        localStorage.setItem("zthSettings", JSON.stringify(loadedSettings));
-      }
     }
-    state.settingsLoaded[state.l2.code] = true;
-  },
-  SET_L1_L2(state, { l1, l2 }) {
-    state.l1 = l1;
-    if (typeof l2 === "undefined") return;
-    state.l2 = l2;
     if (!state.l2Settings[l2.code]) {
       state.l2Settings[l2.code] = getDefaultL2Settings(l2)
     }
+    // Remember the L1 the user picked, so next time when switching L2, this L1 is used.
+    if (state.l2Settings[l2.code]) state.l2Settings[l2.code].l1 = l1.code
+    state.settingsLoaded[l2.code] = true;
   },
   SET_L1_L2_TO_NULL(state) {
     state.l1 = null
@@ -121,51 +118,27 @@ export const mutations = {
   },
   SET_ADMIN_MODE(state, adminMode) {
     state.adminMode = adminMode;
-    if (typeof localStorage !== "undefined") {
-      let settings = loadSettingsFromStorage();
-      settings.adminMode = adminMode;
-      localStorage.setItem("zthSettings", JSON.stringify(settings));
-    }
+    saveSettingsToStorage(state)
   },
   SET_AUTO_PRONOUNCE(state, autoPronounce) {
     state.autoPronounce = autoPronounce;
-    if (typeof localStorage !== "undefined") {
-      let settings = loadSettingsFromStorage();
-      settings.autoPronounce = autoPronounce;
-      localStorage.setItem("zthSettings", JSON.stringify(settings));
-    }
+    saveSettingsToStorage(state)
   },
   SET_HIDE_WORD(state, hideWord) {
     state.hideWord = hideWord;
-    if (typeof localStorage !== "undefined") {
-      let settings = loadSettingsFromStorage();
-      settings.hideWord = hideWord;
-      localStorage.setItem("zthSettings", JSON.stringify(settings));
-    }
+    saveSettingsToStorage(state)
   },
   SET_HIDE_PHONETICS(state, hidePhonetics) {
     state.hidePhonetics = hidePhonetics;
-    if (typeof localStorage !== "undefined") {
-      let settings = loadSettingsFromStorage();
-      settings.hidePhonetics = hidePhonetics;
-      localStorage.setItem("zthSettings", JSON.stringify(settings));
-    }
+    saveSettingsToStorage(state)
   },
   SET_HIDE_DEFINITIONS(state, hideDefinitions) {
     state.hideDefinitions = hideDefinitions;
-    if (typeof localStorage !== "undefined") {
-      let settings = loadSettingsFromStorage();
-      settings.hideDefinitions = hideDefinitions;
-      localStorage.setItem("zthSettings", JSON.stringify(settings));
-    }
+    saveSettingsToStorage(state)
   },
   SET_SUBS_SEARCH_LIMIT(state, subsSearchLimit) {
     state.subsSearchLimit = subsSearchLimit;
-    if (typeof localStorage !== "undefined") {
-      let settings = loadSettingsFromStorage();
-      settings.subsSearchLimit = subsSearchLimit;
-      localStorage.setItem("zthSettings", JSON.stringify(settings));
-    }
+    saveSettingsToStorage(state)
   },
   SET_L2_SETTINGS(state, l2Settings) {
     // This method might be called (by showfilter.vue) before the settings are loaded from storage
@@ -186,7 +159,7 @@ export const mutations = {
         // So we don't inadvertantly overwrite existing values in localStorage
         loadedSettings.l2Settings[state.l2.code] = Object.assign(loadedSettings.l2Settings[state.l2.code], l2Settings)
       }
-      localStorage.setItem("zthSettings", JSON.stringify(loadedSettings));
+      saveSettingsToStorage(state)
     }
   },
   RESET_SHOW_FILTERS(state) {
@@ -210,9 +183,6 @@ export const getters = {
 }
 
 export const actions = {
-  load({ commit }) {
-    commit("LOAD_SETTINGS");
-  },
   setL2Settings({ commit }, l2Settings) {
     commit("SET_L2_SETTINGS", l2Settings);
   },
