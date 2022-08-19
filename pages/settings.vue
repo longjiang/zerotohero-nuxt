@@ -17,41 +17,57 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
-          <h5>General settings</h5>
-          <b-form-checkbox
-            v-model="subsSearchLimit"
-          >Limit "this word in TV Shows" search result (faster)</b-form-checkbox>
-          <hr />
-          <h5>Settings specific to {{ $l2.name }}:</h5>
-          <AnnotationSettings />
-          <client-only>
-            <div class="text-right">
-              <b-form-checkbox
-                v-model="adminMode"
-                style="display: inline-block"
-                v-if="userIsAdmin"
-                class="mt-2 mb-4"
-              >Admin mode</b-form-checkbox>
-            </div>
-          </client-only>
+          <div>
+            <h5>General settings</h5>
+            <b-form-checkbox v-model="subsSearchLimit">
+              Limit "this word in TV Shows" search result (faster)
+            </b-form-checkbox>
+            <hr />
+          </div>
+          <div>
+            <h5>Settings specific to {{ $l2.name }}:</h5>
+            <AnnotationSettings />
+            <client-only>
+              <div class="text-right">
+                <b-form-checkbox
+                  v-model="adminMode"
+                  style="display: inline-block"
+                  v-if="userIsAdmin"
+                  class="mt-2 mb-4"
+                >
+                  Admin mode
+                </b-form-checkbox>
+              </div>
+            </client-only>
+          </div>
+          <div class="mb-3">
+            <h5>Content Preferences</h5>
+            <ContentPreferences />
+          </div>
           <div>
             <h5>{{ $t("Text Corpus Settings") }}</h5>
             <p v-if="$l1.code === 'zh'">
-              <a href="https://baike.baidu.com/item/%E8%AF%AD%E6%96%99%E5%BA%93" target="_blank">语料库</a>
-              是用大量语言文本编写而成的集合，让我们我们可以提取词语搭配和例句。我们的文本语料库由
               <a
-                href="https://www.sketchengine.eu/"
-              >Sketch Engine</a>
+                href="https://baike.baidu.com/item/%E8%AF%AD%E6%96%99%E5%BA%93"
+                target="_blank"
+              >
+                语料库
+              </a>
+              是用大量语言文本编写而成的集合，让我们我们可以提取词语搭配和例句。我们的文本语料库由
+              <a href="https://www.sketchengine.eu/">Sketch Engine</a>
               提供，有许多不同的英语语料库可供选择。根据你选择的语料库，你看到的例句和词语搭配会有所不同。
             </p>
             <p v-else>
               A
-              <a href="https://en.wikipedia.org/wiki/Text_corpus" target="_blank">text corpus</a>
+              <a
+                href="https://en.wikipedia.org/wiki/Text_corpus"
+                target="_blank"
+              >
+                text corpus
+              </a>
               is a large collection of text written in a language, where we can
               extract collocations and example sentences.
-              <a
-                href="https://www.sketchengine.eu/"
-              >Sketch Engine</a>
+              <a href="https://www.sketchengine.eu/">Sketch Engine</a>
               , our text corpora provider, has a number of {{ $l2.name }} text
               corpora to select from. Depending on the corpus you choose, the
               example sentences and collocations you see will be different.
@@ -74,7 +90,7 @@ import { mapState } from "vuex";
 export default {
   components: {
     CorpusSelect,
-    AnnotationSettings
+    AnnotationSettings,
   },
   mounted() {
     if (typeof this.$store.state.settings !== "undefined") {
@@ -91,7 +107,7 @@ export default {
   data() {
     return {
       subsSearchLimit: true,
-      adminMode: false
+      adminMode: false,
     };
   },
   computed: {
@@ -106,17 +122,19 @@ export default {
     userIsAdmin() {
       return this.$auth.user && this.$auth.user.role == 1;
     },
-    ...mapState("settings", ["l2Settings", "l1", "l2"])
+    ...mapState("settings", ["l2Settings", "l1", "l2"]),
   },
   watch: {
     subsSearchLimit() {
-      this.$store.dispatch("settings/setGeneralSettings", { subsSearchLimit: this.subsSearchLimit });
+      this.$store.dispatch("settings/setGeneralSettings", {
+        subsSearchLimit: this.subsSearchLimit,
+      });
     },
     adminMode() {
       this.$store.dispatch("settings/setGeneralSettings", {
-        adminMode: this.adminMode
+        adminMode: this.adminMode,
       });
-    }
-  }
+    },
+  },
 };
 </script>
