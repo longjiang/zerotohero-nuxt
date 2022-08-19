@@ -169,10 +169,10 @@
       <div class="row">
         <div
           class="mb-1 col-12"
-          @click="sort = 'popularity'"
+          @click="sort = 'views'"
           style="cursor: pointer"
         >
-          Sort by Popularity
+          Sort by Views
         </div>
         <div
           class="mb-1 col-12"
@@ -240,6 +240,7 @@ import { scrollToTargetAdjusted } from "@/lib/utils";
 import { unique } from "@/lib/utils";
 import { languageLevels } from "@/lib/utils";
 import { CATEGORIES } from "@/lib/youtube";
+import { mapState } from "vuex";
 
 export default {
   props: {
@@ -274,12 +275,12 @@ export default {
     },
     showLoader: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
-      sort: "popularity", // or 'title'
+      sort: "views", // or 'title'
       type: {
         "tv-shows": "tvShows",
         talks: "talks",
@@ -315,6 +316,7 @@ export default {
     this.unsubscribe();
   },
   computed: {
+    ...mapState("settings", ["preferredCategories"]),
     categoriesFiltered() {
       if (!this.shows) return {};
       let categories = {};
@@ -409,13 +411,17 @@ export default {
         }
         if (this.keyword) {
           let k = this.$l2.han ? tify(this.keyword) : this.keyword;
-          return shows.filter((s) => {
+          shows = shows.filter((s) => {
             let title = this.$l2.han ? tify(s.title) : s.title;
             return title.toLowerCase().includes(k.toLowerCase());
           });
-        } else {
-          return shows;
         }
+        // shows = shows.sort((x, y) => {
+        //   x = this.preferredCategories.includes(String(x.category));
+        //   y = this.preferredCategories.includes(String(y.category));
+        //   return x === y ? 0 : x ? -1 : 1;
+        // });
+        return shows;
       }
     },
   },
@@ -459,7 +465,7 @@ export default {
         ) || [];
       // if (this.sort === "date")
       //   shows = shows.sort((x, y) => y.date - x.date) || [];
-      if (this.sort === "popularity")
+      if (this.sort === "views")
         shows = shows.sort((x, y) => y.avg_views - x.avg_views) || [];
       return shows;
     },
@@ -505,6 +511,7 @@ export default {
 <style lang="scss" scoped>
 .filter-dropdown {
   color: white;
+  font-size: 0.9em;
   cursor: pointer;
 }
 ::v-deep .synced-transcript {

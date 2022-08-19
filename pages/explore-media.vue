@@ -378,7 +378,6 @@ export default {
           });
       }
       if (talks) {
-        console.log(this.preferredCategories)
         this.talks =
           talks
             .sort((x, y) => y.avg_views - x.avg_views)
