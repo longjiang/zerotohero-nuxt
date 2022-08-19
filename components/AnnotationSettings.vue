@@ -371,27 +371,28 @@
 
 <script>
 import { mapState } from "vuex";
+const defaultSettings = {
+  zoomLevel: 0,
+  autoPronounce: true,
+  adminMode: false,
+  onceAdmin: false,
+  showDefinition: undefined,
+  showTranslation: undefined,
+  showPinyin: undefined,
+  useTraditional: undefined,
+  showQuiz: undefined,
+  useSerif: undefined,
+  showByeonggi: undefined,
+  disableAnnotation: undefined
+};
 export default {
   props: {
     variant: {
-      default: "page", // or 'toolbar'
-    },
+      default: "page" // or 'toolbar'
+    }
   },
   data() {
-    return {
-      zoomLevel: 0,
-      autoPronounce: true,
-      showDefinition: undefined,
-      showTranslation: undefined,
-      showPinyin: undefined,
-      useTraditional: undefined,
-      showQuiz: undefined,
-      useSerif: undefined,
-      showByeonggi: undefined,
-      disableAnnotation: undefined,
-      adminMode: false,
-      onceAdmin: false,
-    };
+    return defaultSettings;
   },
   mounted() {
     this.loadSettings();
@@ -410,28 +411,20 @@ export default {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
-    ...mapState("settings", ["l2Settings", "l1", "l2"]),
+    l2SettingsOfL2() {
+      return this.$store.state.settings.l2Settings[this.$l2.code];
+    }
   },
   methods: {
     loadSettings() {
-      if (!this.$l2.code) return
-      if (!this.$store.state.settings.l2Settings[this.$l2.code]) return
-      this.showDefinition =
-        this.$store.state.settings.l2Settings[this.$l2.code].showDefinition;
-      this.showTranslation =
-        this.$store.state.settings.l2Settings[this.$l2.code].showTranslation;
-      this.showPinyin = this.$store.state.settings.l2Settings[this.$l2.code].showPinyin;
-      this.useTraditional =
-        this.$store.state.settings.l2Settings[this.$l2.code].useTraditional;
-      this.showQuiz = this.$store.state.settings.l2Settings[this.$l2.code].showQuiz;
-      this.useSerif = this.$store.state.settings.l2Settings[this.$l2.code].useSerif;
-      this.showByeonggi = this.$store.state.settings.l2Settings[this.$l2.code].showByeonggi;
-      this.disableAnnotation =
-        this.$store.state.settings.l2Settings[this.$l2.code].disableAnnotation;
-      this.adminMode = this.$store.state.settings.adminMode;
-      this.autoPronounce = this.$store.state.settings.autoPronounce;
+      if (!this.$l2.code) return;
+      if (!this.l2SettingsOfL2) return;
+      for (let property in defaultSettings) {
+        if (this[property] !== this.l2SettingsOfL2[property])
+          this[property] = this.l2SettingsOfL2[property];
+      }
       if (this.adminMode) this.onceAdmin = true;
-    },
+    }
   },
   watch: {
     zoomLevel() {

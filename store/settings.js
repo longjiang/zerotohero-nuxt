@@ -181,7 +181,8 @@ export const actions = {
   },
   setL2Settings({ dispatch, commit }, l2Settings) {
     commit("SET_L2_SETTINGS", l2Settings);
-    dispatch('push')
+    // sync changes (except adminMode)
+    if (!l2Settings.adminMode) dispatch('push')
   },
   resetShowFilters({ dispatch, commit }, value) {
     commit("RESET_SHOW_FILTERS")
