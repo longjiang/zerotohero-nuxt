@@ -87,7 +87,7 @@ export const mutations = {
       if (settings) {
         for (let property in settings)
           state[property] = settings[property]
-        localStorage.setItem('zthSettings', JSON.stringify(state.settings))
+        this.saveSettingsToStorage(state)
       }
       state.settingsLoaded = true
     }
@@ -213,7 +213,7 @@ export const actions = {
     let dataId = this.$auth.$storage.getUniversal('dataId');
     if (user && user.id && dataId && token) {
       let settings = localStorage.getItem('zthSettings')
-      if (settings) {
+      if (settings && settings !== 'undefined') { // For some reason sometimes settings is 'undefined', never push that to the server
         let payload = { settings }
         let path = `items/user_data/${dataId}?fields=id`
         console.log('⚙️ Saving settings to the server...', { payload })
