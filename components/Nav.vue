@@ -376,6 +376,12 @@ export default {
               show: true,
               children: [
                 {
+                  name: "all-media",
+                  icon: "fas fa-folder",
+                  title: `Categories`,
+                  show: true,
+                },
+                {
                   path: this.moviesPath,
                   icon: "fa fa-film",
                   title: `Movies`,
@@ -417,37 +423,31 @@ export default {
                 //   icon: "fa fa-chalkboard-teacher",
                 //   show: this.l2.code === "zh",
                 // },
-                ...Object.keys(this.categories).map((key) => {
-                  let title = this.categories[key];
-                  return {
-                    name: "youtube-browse",
-                    params: { category: key, level: "all" },
-                    title,
-                    show: true,
-                    icon: "fa-solid fa-films",
-                  };
-                }),
-                ...Object.keys(this.levels).map((key) => {
-                  let title = this.levels[key].name;
-                  return {
-                    name: "youtube-browse",
-                    params: { category: "all", level: key },
-                    title,
-                    show: true,
-                    icon: "fa-solid fa-films",
-                  };
-                }),
+                // ...Object.keys(this.categories).map((key) => {
+                //   let title = this.categories[key];
+                //   return {
+                //     name: "youtube-browse",
+                //     params: { category: key, level: "all" },
+                //     title,
+                //     show: true,
+                //     icon: "fa-solid fa-films",
+                //   };
+                // }),
+                // ...Object.keys(this.levels).map((key) => {
+                //   let title = this.levels[key].name;
+                //   return {
+                //     name: "youtube-browse",
+                //     params: { category: "all", level: key },
+                //     title,
+                //     show: true,
+                //     icon: "fa-solid fa-films",
+                //   };
+                // }),
                 {
                   name: "youtube-browse",
                   title: `New Videos`,
                   count: this.stats ? this.stats.newVideos : undefined,
                   icon: "fa-solid fa-films",
-                  show: true,
-                },
-                {
-                  name: "all-media",
-                  icon: "fas fa-folder",
-                  title: `All Media`,
                   show: true,
                 },
                 {
