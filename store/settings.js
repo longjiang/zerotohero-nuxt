@@ -86,14 +86,14 @@ export const mutations = {
       }
       if (settings) {
         for (let property in settings)
-        state[property] = settings[property]
+          state[property] = settings[property]
         localStorage.setItem('zthSettings', JSON.stringify(state.settings))
       }
       state.settingsLoaded = true
     }
   },
   // This commit cannot use localStorage because it's called from the language switch middleware
-  SET_L1_L2(state, {l1, l2}) {
+  SET_L1_L2(state, { l1, l2 }) {
     state.l1 = l1;
     if (typeof l2 === "undefined") return;
     state.l2 = l2;
@@ -212,14 +212,16 @@ export const actions = {
     let token = $nuxt.$auth.strategy.token.get()
     let dataId = this.$auth.$storage.getUniversal('dataId');
     if (user && user.id && dataId && token) {
-      let payload = { settings: localStorage.getItem('zthSettings') }
-      console.log({ payload })
-      let path = `items/user_data/${dataId}?fields=id`
-      console.log('🕙 Saving settings to the server...')
-      await this.$directus.patch(path, payload)
-        .catch(async (err) => {
-          logError(err, 'settings.js: push()')
-        })
+      let settings = localStorage.getItem('zthSettings')
+      if (settings) {
+        let payload = { settings }
+        let path = `items/user_data/${dataId}?fields=id`
+        console.log('⚙️ Saving settings to the server...', { payload })
+        await this.$directus.patch(path, payload)
+          .catch(async (err) => {
+            logError(err, 'settings.js: push()')
+          })
+      }
     }
   }
 };
