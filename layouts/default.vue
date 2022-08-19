@@ -93,6 +93,7 @@ export default {
       l2Time: {},
       zoomLevel: 0,
       timeLoggerID: undefined,
+      l2SettingsOfL2: undefined,
       host: process.server
         ? process.env.baseUrl
         : window.location.protocol +
@@ -108,11 +109,6 @@ export default {
     ...mapState("settings", ["l2Settings", "l1", "l2"]),
     ...mapState("history", ["history"]),
     ...mapState("fullHistory", ["fullHistory"]),
-    l2SettingsOfL2() {
-      let l2SettingsOfL2 = {}
-      if (this.l2 && this.l2Settings && this.l2Settings[this.l2.code]) l2SettingsOfL2 = this.l2Settings[this.l2.code]
-      return l2SettingsOfL2
-    },
     showTopBar() {
       if (this.$route.meta && this.$route.meta.layout === 'full') return false
       else return this.$route.params.l1 && this.$route.params.l1 && this.l1 && this.l2
@@ -434,6 +430,9 @@ export default {
         this.dictionaryCredit = await dictionary.credit();
       }
       this.stopAndRestartLoggingUserTimeOnLanguageChange();
+      let l2SettingsOfL2 = {}
+      if (this.l2 && this.l2Settings && this.l2Settings[this.l2.code]) l2SettingsOfL2 = this.l2Settings[this.l2.code]
+      this.l2SettingsOfL2 = l2SettingsOfL2
     },
     loadLanguageSpecificSettings() {
       if (this.settingsLoaded === this.l2.code) return;
