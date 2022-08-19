@@ -215,7 +215,7 @@
           <client-only>
             <LazyIdenticalLanguages
               class="mt-5 mb-5"
-              routeName="all-media"
+              routeName="explore-media"
               v-if="!loading"
             />
           </client-only>

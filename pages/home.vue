@@ -62,7 +62,7 @@ export default {
     },
   },
   mounted() {
-    let name = "all-media";
+    let name = "explore-media";
     if (this.$l1.code === "en" && this.$l2.code === "zh")
       name = "courses";
     if (this.$l1.code === "zh" && this.$l2.code === "en")

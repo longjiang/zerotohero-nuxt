@@ -61,7 +61,7 @@
             <td>
               <router-link
                 :to="{
-                  name: 'all-media',
+                  name: 'explore-media',
                   params: { l1: 'en', l2: row.language.code },
                 }"
               >

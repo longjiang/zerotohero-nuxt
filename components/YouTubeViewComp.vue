@@ -148,9 +148,9 @@ export default {
             h.includes(this.$l1.code + "/" + this.$l2.code) // Must be the same language!
         );
         if (lastNonYouTubeViewPath) return lastNonYouTubeViewPath;
-        else return { name: "all-media" };
+        else return { name: "explore-media" };
       }
-      return { name: "all-media" };
+      return { name: "explore-media" };
     },
     minimizeToggleRouterLinkTo() {
       return this.mini ? this.maximizeVideoTo : this.minimizeVideoTo;

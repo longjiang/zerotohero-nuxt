@@ -342,7 +342,7 @@ export default {
           show: LANGS_WITH_CONTENT.includes(this.$l2.code),
           children: [
             {
-              name: "all-media",
+              name: "explore-media",
               icon: "fas fa-telescope",
               title: `Home`,
               // count: this.stats ? this.stats.allVideos : undefined,
@@ -445,9 +445,9 @@ export default {
                   show: true,
                 },
                 {
-                  name: "explore-media",
-                  icon: "fas fa-telescope",
-                  title: `Explore`,
+                  name: "all-media",
+                  icon: "fas fa-folder",
+                  title: `All Media`,
                   show: true,
                 },
                 {

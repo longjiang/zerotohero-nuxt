@@ -97,7 +97,7 @@
             You haven't watched any {{ l2 ? l2.name : "" }} videos yet.
             <br />
             <br />
-            <router-link :to="{ name: 'all-media' }" class="btn btn-success">
+            <router-link :to="{ name: 'explore-media' }" class="btn btn-success">
               <i class="fas fa-play mr-1"></i>
               Start Watching
             </router-link>

@@ -5,7 +5,7 @@
         <div class="col-sm-6 col-md-4 mb-4">
           <div class="home-card p-4">
             <div class="text-center">
-              <router-link :to="`/en/zh/all-media`" class="link-unstyled">
+              <router-link :to="`/en/zh/explore-media`" class="link-unstyled">
                 <LanguageFlag
                   :language="language('zh')"
                   style="transform: scale(2); margin: 1rem"
@@ -20,22 +20,22 @@
                     class="list-unstyled text-left mb-0"
                   >
                     <li style="white-space: nowrap">
-                      <router-link to="/en/zh/all-media" class="link-unstyled">
+                      <router-link to="/en/zh/explore-media" class="link-unstyled">
                         <b>Mandarin</b>
                       </router-link>
                     </li>
                     <li style="white-space: nowrap">
-                      <router-link to="/en/yue/all-media" class="link-unstyled">
+                      <router-link to="/en/yue/explore-media" class="link-unstyled">
                         <b>Cantonese</b>
                       </router-link>
                     </li>
                     <li style="white-space: nowrap">
-                      <router-link to="/en/ltc/all-media" class="link-unstyled">
+                      <router-link to="/en/ltc/explore-media" class="link-unstyled">
                         Middle Chinese
                       </router-link>
                     </li>
                     <li style="white-space: nowrap">
-                      <router-link to="/en/och/all-media" class="link-unstyled">
+                      <router-link to="/en/och/explore-media" class="link-unstyled">
                         Old Chinese
                       </router-link>
                     </li>
@@ -47,22 +47,22 @@
                     class="list-unstyled text-left mb-0"
                   >
                     <li style="white-space: nowrap">
-                      <router-link to="/en/wuu/all-media" class="link-unstyled">
+                      <router-link to="/en/wuu/explore-media" class="link-unstyled">
                         Wu
                       </router-link>
                     </li>
                     <li style="white-space: nowrap">
-                      <router-link to="/zh/nan/all-media" class="link-unstyled">
+                      <router-link to="/zh/nan/explore-media" class="link-unstyled">
                         学习闽南话
                       </router-link>
                     </li>
                     <li style="white-space: nowrap">
-                      <router-link to="/zh/hak/all-media" class="link-unstyled">
+                      <router-link to="/zh/hak/explore-media" class="link-unstyled">
                         学习客家话
                       </router-link>
                     </li>
                     <li style="white-space: nowrap">
-                      <router-link to="/zh/lzh/all-media" class="link-unstyled">
+                      <router-link to="/zh/lzh/explore-media" class="link-unstyled">
                         学习文言文
                       </router-link>
                     </li>
@@ -76,7 +76,7 @@
           <div class="home-card p-4">
             <div class="text-center">
               <router-link
-                :to="`/${browserLanguage}/en/all-media`"
+                :to="`/${browserLanguage}/en/explore-media`"
                 class="link-unstyled"
               >
                 <LanguageFlag
@@ -95,22 +95,22 @@
                     class="list-unstyled text-left mb-0"
                   >
                     <li style="white-space: nowrap">
-                      <router-link to="/ru/en/all-media" class="link-unstyled">
+                      <router-link to="/ru/en/explore-media" class="link-unstyled">
                         Выучить англ. язык
                       </router-link>
                     </li>
                     <li style="white-space: nowrap">
-                      <router-link to="/de/en/all-media" class="link-unstyled">
+                      <router-link to="/de/en/explore-media" class="link-unstyled">
                         Lerne Englisch
                       </router-link>
                     </li>
                     <li style="white-space: nowrap">
-                      <router-link to="/pt/en/all-media" class="link-unstyled">
+                      <router-link to="/pt/en/explore-media" class="link-unstyled">
                         Aprender inglês
                       </router-link>
                     </li>
                     <li style="white-space: nowrap">
-                      <router-link to="/es/en/all-media" class="link-unstyled">
+                      <router-link to="/es/en/explore-media" class="link-unstyled">
                         Aprende inglés
                       </router-link>
                     </li>
@@ -122,17 +122,17 @@
                     class="list-unstyled text-left mb-0"
                   >
                     <li style="white-space: nowrap">
-                      <router-link to="/fr/en/all-media" class="link-unstyled">
+                      <router-link to="/fr/en/explore-media" class="link-unstyled">
                         Apprendre l’anglais
                       </router-link>
                     </li>
                     <li style="white-space: nowrap">
-                      <router-link to="/zh/en/all-media" class="link-unstyled">
+                      <router-link to="/zh/en/explore-media" class="link-unstyled">
                         学英语
                       </router-link>
                     </li>
                     <li style="white-space: nowrap">
-                      <router-link to="/ja/en/all-media" class="link-unstyled">
+                      <router-link to="/ja/en/explore-media" class="link-unstyled">
                         英語を習う
                       </router-link>
                     </li>
@@ -163,7 +163,7 @@
                 class="text-center col-4 col-sm-4 col-md-6 col-lg-4 mt-2 mb-2"
               >
                 <router-link
-                  :to="`/en/${code}/all-media`"
+                  :to="`/en/${code}/explore-media`"
                   class="link-unstyled"
                 >
                   <LanguageFlag

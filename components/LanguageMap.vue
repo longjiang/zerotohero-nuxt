@@ -275,7 +275,7 @@ export default {
       if (["hak", "nan", "lzh", "ltc", "och"].includes(l2.code))
         l1Code = "zh";
       let name = LANGS_WITH_CONTENT.includes(l2.code)
-        ? "all-media"
+        ? "explore-media"
         : "language-info";
       return {
         name,

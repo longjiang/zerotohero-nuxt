@@ -22,7 +22,7 @@
       </router-link>
       <router-link
         :to="{
-          name: 'all-media',
+          name: 'explore-media',
           params: { l1: from || english, l2: language.code },
         }"
         :class="{
@@ -165,7 +165,7 @@ export default {
       return Helper.formatK(number, 1);
     },
     languagePath(language) {
-      return `/${this.from ? this.from.code : "en"}/${language.code}/all-media`;
+      return `/${this.from ? this.from.code : "en"}/${language.code}/explore-media`;
     },
     hasDictionary(l1, l2) {
       return (

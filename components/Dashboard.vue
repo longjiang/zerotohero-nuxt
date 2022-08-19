@@ -95,7 +95,7 @@ export default {
     },
     to(language) {
       let name = LANGS_WITH_CONTENT.includes(language.code)
-        ? "all-media"
+        ? "explore-media"
         : "language-info";
       return {
         name,
