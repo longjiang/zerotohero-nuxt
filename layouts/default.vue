@@ -46,7 +46,7 @@
       </client-only>
       <YouTubeViewComp
         id="overlay-player"
-        v-if="overlayPlayerYouTubeId"
+        v-if="overlayPlayerYouTubeId && $route.params.l2"
         v-bind="{
           youtube_id: overlayPlayerYouTubeId,
           lesson: overlayPlayerLesson,
@@ -424,6 +424,7 @@ export default {
       }
     },
     async onLanguageChange() {
+      this.overlayPlayerYouTubeId = undefined
       if (this.l1) this.updatei18n();
       let dictionary = await this.$getDictionary();
       if (dictionary) {
