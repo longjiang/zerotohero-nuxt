@@ -401,8 +401,10 @@ export default {
         this.loadSettings();
       }
     });
+    this.setupWatchers()
   },
   computed: {
+    ...mapState("settings", ["l2Settings", "l1", "l2"]),
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -412,7 +414,7 @@ export default {
         return this.$store.state.settings.l2;
     },
     l2SettingsOfL2() {
-      return this.$store.state.settings.l2Settings[this.$l2.code];
+      if (this.l2Settings) return this.l2Settings[this.$l2.code];
     }
   },
   methods: {
@@ -424,58 +426,20 @@ export default {
           this[property] = this.l2SettingsOfL2[property];
       }
       if (this.adminMode) this.onceAdmin = true;
+    },
+    setupWatchers() {
+      for (let property in defaultSettings) {
+        this.$watch(property, (newValue, oldValue) => {
+          if (property === 'zoomLevel') $nuxt.$emit("zoom", Number(newValue));
+          let payload = {}
+          payload[property] = newValue
+          this.$store.dispatch("settings/setL2Settings", payload);
+        });
+      }
     }
   },
   watch: {
-    zoomLevel() {
-      $nuxt.$emit("zoom", Number(this.zoomLevel));
-    },
-    adminMode() {
-      this.$store.dispatch("settings/setGeneralSettings", { adminMode: this.adminMode });
-    },
-    autoPronounce() {
-      this.$store.dispatch("settings/setGeneralSettings", { autoPronounce: this.autoPronounce });
-    },
-    showDefinition() {
-      this.$store.dispatch("settings/setL2Settings", {
-        showDefinition: this.showDefinition,
-      });
-    },
-    showPinyin() {
-      this.$store.dispatch("settings/setL2Settings", {
-        showPinyin: this.showPinyin,
-      });
-    },
-    useTraditional() {
-      this.$store.dispatch("settings/setL2Settings", {
-        useTraditional: this.useTraditional,
-      });
-    },
-    showTranslation() {
-      this.$store.dispatch("settings/setL2Settings", {
-        showTranslation: this.showTranslation,
-      });
-    },
-    showQuiz() {
-      this.$store.dispatch("settings/setL2Settings", {
-        showQuiz: this.showQuiz,
-      });
-    },
-    useSerif() {
-      this.$store.dispatch("settings/setL2Settings", {
-        useSerif: this.useSerif,
-      });
-    },
-    showByeonggi() {
-      this.$store.dispatch("settings/setL2Settings", {
-        showByeonggi: this.showByeonggi,
-      });
-    },
-    disableAnnotation() {
-      this.$store.dispatch("settings/setL2Settings", {
-        disableAnnotation: this.disableAnnotation,
-      });
-    },
+    // set up in setupWatchers()
   },
 };
 </script>

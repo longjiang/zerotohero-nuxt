@@ -87,7 +87,7 @@ export const mutations = {
       if (settings) {
         for (let property in settings)
           state[property] = settings[property]
-        this.saveSettingsToStorage(state)
+        saveSettingsToStorage(state)
       }
       state.settingsLoaded = true
     }

@@ -308,10 +308,8 @@ export default ({ app }, inject) => {
             );
             if (userDataRes && userDataRes.data && userDataRes.data.data) {
               if (userDataRes.data.data[0]) {
-                console.log({userData: userDataRes.data.data[0]})
                 let { id, saved_words, saved_phrases, history, progress, settings } =
                   userDataRes.data.data[0];
-                // console.log({settings})
                 app.$auth.$storage.setUniversal("dataId", id);
                 app.store.dispatch("savedWords/importFromJSON", saved_words);
                 app.store.dispatch(
