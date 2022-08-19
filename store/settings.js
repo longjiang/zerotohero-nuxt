@@ -44,7 +44,8 @@ export const state = () => {
     subsSearchLimit: true,
     autoPronounce: true, // Whether or not to play the audio automatically when opening a WordBlock popup
     l2Settings: {}, // keyed by language
-    settingsLoaded: false
+    settingsLoaded: false,
+    preferredCategories: []
   };
 };
 
@@ -78,15 +79,15 @@ export const loadSettingsFromStorage = () => {
 export const mutations = {
   IMPORT_FROM_JSON(state, json) {
     if (typeof localStorage !== 'undefined') {
-      let settings
+      let importedData
       try {
-        settings = JSON.parse(json)
+        importedData = JSON.parse(json)
       } catch (err) {
         logError(err)
       }
-      if (settings) {
-        for (let property in settings)
-          state[property] = settings[property]
+      if (importedData) {
+        for (let property in importedData)
+          state[property] = importedData[property]
         saveSettingsToStorage(state)
       }
       state.settingsLoaded = true

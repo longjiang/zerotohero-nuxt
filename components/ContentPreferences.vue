@@ -25,20 +25,43 @@
 
 <script>
 import { mapState } from "vuex";
-
+const defaultSettings = {
+  preferredCategories: []
+}
 export default {
   data() {
-    return {
-      preferredCategories: []
-    }
+    return defaultSettings
   },
   computed: {
     ...mapState("shows", ["categories"]),
+  },
+  watch: {
+    // set up in setupWatchers()
+  },
+  mounted() {
+    if (typeof this.$store.state.settings !== "undefined") {
+      this.preferredCategories = this.$store.state.settings.preferredCategories;
+    }
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (mutation.type === "settings/LOAD_SETTINGS") {
+        this.preferredCategories = this.$store.state.settings.preferredCategories;
+      }
+    });
+    this.setupWatchers()
   },
   methods: {
     clickCheckBox(event) {
       let checkbox = event.target.querySelector('input')
       if (checkbox) checkbox.click()
+    },
+    setupWatchers() {
+      for (let property in defaultSettings) {
+        this.$watch(property, (newValue, oldValue) => {
+          let payload = {}
+          payload[property] = newValue
+          this.$store.dispatch("settings/setGeneralSettings", payload);
+        });
+      }
     }
   }
 };
