@@ -206,18 +206,18 @@ export const actions = {
     }
   },
   async push({ rootState }) {
-    return
     if (!$nuxt.$auth.loggedIn) return
     let user = rootState.auth.user
     let token = $nuxt.$auth.strategy.token.get()
     let dataId = this.$auth.$storage.getUniversal('dataId');
     if (user && user.id && dataId && token) {
       let payload = { settings: localStorage.getItem('zthSettings') }
+      console.log({ payload })
       let path = `items/user_data/${dataId}?fields=id`
       console.log('🕙 Saving settings to the server...')
       await this.$directus.patch(path, payload)
         .catch(async (err) => {
-          Helper.logError(err, 'settings.js: push()')
+          logError(err, 'settings.js: push()')
         })
     }
   }
