@@ -47,6 +47,9 @@
             />
             {{ localeDescription }}
           </span>
+          <span v-if="show.category">
+            {{ categories[show.category] }}
+          </span>
         </div>
         <div v-if="$adminMode">
           <b-button
@@ -83,6 +86,7 @@
 
 <script>
 import { languageLevels, formatK } from "@/lib/utils";
+import { mapState } from 'vuex';
 import Vue from "vue";
 export default {
   data() {
@@ -103,6 +107,7 @@ export default {
     },
   },
   computed: {
+    ...mapState('shows', ['categories']),
     levels() {
       return languageLevels(this.$l2);
     },

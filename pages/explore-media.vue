@@ -279,6 +279,7 @@ export default {
   computed: {
     ...mapState("stats", ["stats"]),
     ...mapState("shows", ["categories"]),
+    ...mapState("settings", ["preferredCategories"]),
     audiobooks() {
       return this.talks.filter((t) => t.audiobook);
     },
@@ -343,7 +344,18 @@ export default {
       let tvShows = this.$store.state.shows.tvShows[this.$l2.code];
       let talks = this.$store.state.shows.talks[this.$l2.code];
       if (tvShows) {
-        this.tvShows = tvShows.sort((x, y) => y.avg_views - x.avg_views) || [];
+        this.tvShows =
+          tvShows
+            .sort((x, y) => y.avg_views - x.avg_views)
+            .sort((x, y) => {
+              x = this.preferredCategories.includes(String(x.category))
+              y = this.preferredCategories.includes(String(y.category))
+              return x === y
+                ? 0
+                : x
+                ? -1
+                : 1;
+            }) || [];
         this.musicShow = this.$store.state.shows.tvShows[this.$l2.code].find(
           (s) => s.title === "Music"
         );
@@ -366,7 +378,19 @@ export default {
           });
       }
       if (talks) {
-        this.talks = talks.sort((x, y) => y.avg_views - x.avg_views) || [];
+        console.log(this.preferredCategories)
+        this.talks =
+          talks
+            .sort((x, y) => y.avg_views - x.avg_views)
+            .sort((x, y) => {
+              x = this.preferredCategories.includes(String(x.category))
+              y = this.preferredCategories.includes(String(y.category))
+              return x === y
+                ? 0
+                : x
+                ? -1
+                : 1;
+            }) || [];
         this.newsShow = this.$store.state.shows.talks[this.$l2.code].find(
           (s) => s.title === "News"
         );
