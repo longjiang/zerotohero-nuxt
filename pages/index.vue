@@ -160,7 +160,7 @@
             </div>
           </div>
         </div>
-        <div class="row index-section">
+        <div class="row index-section" v-if="!native">
           <div class="col-md-6 mb-3 pl-5 pr-4">
             <img
               src="/img/screenshot-mobile-devices.png"
