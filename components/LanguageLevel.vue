@@ -11,9 +11,9 @@
             :class="{
               'level-btn': true,
               'level-btn-selected':
-                languageLevel && languageLevel === level.numeric,
+                languageLevel && languageLevel == level.numeric,
               'level-btn-faded':
-                languageLevel && languageLevel !== level.numeric,
+                languageLevel && languageLevel != level.numeric,
             }"
             @click="setLevel(level.numeric)"
           >
