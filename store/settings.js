@@ -2,7 +2,7 @@ import { logError } from '@/lib/utils'
 
 export const romanizationOffByDefault = ["ko", "bo", "dz", "th", "my", "hy", "vi"]
 
-export const transientProperties = ['l1', 'l2', 'dictionary']
+export const transientProperties = ['l1', 'l2', 'dictionary', 'dictionaryName']
 
 export const defaultL2Settings = {
   l1: 'en', // the L1 the user used last time when they studied this language
@@ -127,9 +127,7 @@ export const mutations = {
   },
   SET_GENERAL_SETTINGS(state, generalSettings) {
     for (let property in generalSettings) {
-      if (!transientProperties.includes(property)) {
-        state[property] = generalSettings[property]
-      }
+      state[property] = generalSettings[property]
     }
     saveSettingsToStorage(state)
   },
