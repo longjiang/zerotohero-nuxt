@@ -314,22 +314,18 @@ export default {
     onHasWatchHistory() {
       this.hasWatchHistory = true;
     },
-    loadHeroVideo() {
-      let randomVideos = [
-        ...(this.movies || []),
-        ...(this.music || []),
-        ...(this.videos || []).filter((v) => v.tv_show),
-      ];
-      if (randomVideos.length < 50) {
-        randomVideos = randomVideos.concat(this.news || []);
+    async loadHeroVideo() {
+      if (this.talks) {
+        let randomTalk = this.random(this.talks.slice(0, 7), 1)[0];
+        if (randomTalk) {
+          let query = `filter[talk][eq]=${randomTalk.id}&fields=l2,id,title,youtube_id,tv_show,talk,l2&limit=1"`;
+          let randomVideos = await this.$directus.getVideos({
+            l2Id: this.$l2.id,
+            query,
+          });
+          if (randomVideos) this.heroVideo = randomVideos[0];
+        }
       }
-      if (randomVideos.length < 50) {
-        randomVideos = randomVideos.concat(
-          (this.videos || []).filter((v) => v.talk)
-        ); // Let's not feature non-tv-show non-talk videos
-      }
-      randomVideos = this.random(randomVideos);
-      this.heroVideo = randomVideos[0];
     },
     onVideoUnavailable(youtube_id) {
       if (this.heroVideo.youtube_id === youtube_id) {
