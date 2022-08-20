@@ -52,7 +52,7 @@
               style="font-weight: normal; font-size: 0.8em; margin-top: 0.5rem"
             >
               Recommendations based on your
-              <router-link :to="{ name: 'set-language-level' }">
+              <router-link :to="{ name: LANGS_WITH_LEVELS.includes(this.$l2.code) ? 'set-language-level' : 'set-content-preferences' }">
                 <u>content preferences</u>
               </router-link>
             </div>
@@ -254,7 +254,7 @@
 import { tify } from "chinese-conv";
 import { scrollToTargetAdjusted } from "@/lib/utils";
 import { unique } from "@/lib/utils";
-import { languageLevels } from "@/lib/utils";
+import { languageLevels, LANGS_WITH_LEVELS } from "@/lib/utils";
 import { CATEGORIES } from "@/lib/youtube";
 import { mapState } from "vuex";
 
@@ -307,6 +307,7 @@ export default {
       showDiscover: false,
       featureShow: undefined,
       featureEpisode: undefined,
+      LANGS_WITH_LEVELS,
       routeTitles: {
         "tv-shows": "TV Shows",
         talks: "YouTube Channels",

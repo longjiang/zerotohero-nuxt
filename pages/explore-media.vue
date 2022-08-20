@@ -71,7 +71,7 @@
                 "
               >
                 Recommendation based on your
-                <router-link :to="{ name: 'set-language-level' }">
+                <router-link :to="{ name: LANGS_WITH_LEVELS.includes(this.$l2.code) ? 'set-language-level' : 'set-content-preferences' }">
                   <u>content preferences</u>
                 </router-link>
               </p>
@@ -276,7 +276,7 @@ export default {
     };
   },
   async mounted() {
-    if (!this.languageLevel)
+    if (LANGS_WITH_LEVELS.includes(this.$l2.code) && !this.languageLevel)
       this.$router.push({
         name: "set-language-level",
         params: { l1: this.$l1.code, l2: this.$l2.code },
@@ -387,9 +387,20 @@ export default {
     async loadShows() {
       if (this.showsLoaded) return;
       else this.showsLoaded = true;
-
-      let tvShows = this.$store.state.shows.tvShows[this.$l2.code];
       let talks = this.$store.state.shows.talks[this.$l2.code];
+      if (talks) {
+        this.talks = this.sortShows(talks);
+        this.newsShow = this.$store.state.shows.talks[this.$l2.code].find(
+          (s) => s.title === "News"
+        );
+        if (this.newsShow)
+          this.news = await this.getVideos({
+            limit: 25,
+            talk: this.newsShow.id,
+            offset: this.randomOffset("news", 25),
+          });
+      }
+      let tvShows = this.$store.state.shows.tvShows[this.$l2.code];
       if (tvShows) {
         this.tvShows = this.sortShows(tvShows);
         this.musicShow = this.$store.state.shows.tvShows[this.$l2.code].find(
@@ -411,18 +422,6 @@ export default {
             tvShow: this.moviesShow.id,
             sort: "youtube_id",
             offset: this.randomOffset("movies", 25),
-          });
-      }
-      if (talks) {
-        this.talks = this.sortShows(talks);
-        this.newsShow = this.$store.state.shows.talks[this.$l2.code].find(
-          (s) => s.title === "News"
-        );
-        if (this.newsShow)
-          this.news = await this.getVideos({
-            limit: 25,
-            talk: this.newsShow.id,
-            offset: this.randomOffset("news", 25),
           });
       }
       this.loading = false;
