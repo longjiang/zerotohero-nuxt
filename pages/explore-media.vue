@@ -318,6 +318,14 @@ export default {
       let langLevels = languageLevels(this.$l2);
       return [1, 2, 3, 4, 5, 6, 7].map((l) => langLevels[l]);
     },
+    languageLevel() {
+      if (
+        this.progress &&
+        this.progress[this.$l2.code] &&
+        this.progress[this.$l2.code].level
+      )
+        return this.progress[this.$l2.code].level;
+    },
   },
   watch: {
     loading() {
@@ -359,14 +367,7 @@ export default {
       let tvShows = this.$store.state.shows.tvShows[this.$l2.code];
       let talks = this.$store.state.shows.talks[this.$l2.code];
       if (tvShows) {
-        this.tvShows =
-          tvShows
-            .sort((x, y) => y.avg_views - x.avg_views)
-            .sort((x, y) => {
-              x = this.preferredCategories.includes(String(x.category));
-              y = this.preferredCategories.includes(String(y.category));
-              return x === y ? 0 : x ? -1 : 1;
-            }) || [];
+        this.tvShows = this.sortShows(tvShows);
         this.musicShow = this.$store.state.shows.tvShows[this.$l2.code].find(
           (s) => s.title === "Music"
         );
@@ -389,14 +390,7 @@ export default {
           });
       }
       if (talks) {
-        this.talks =
-          talks
-            .sort((x, y) => y.avg_views - x.avg_views)
-            .sort((x, y) => {
-              x = this.preferredCategories.includes(String(x.category));
-              y = this.preferredCategories.includes(String(y.category));
-              return x === y ? 0 : x ? -1 : 1;
-            }) || [];
+        this.talks = this.sortShows(talks);
         this.newsShow = this.$store.state.shows.talks[this.$l2.code].find(
           (s) => s.title === "News"
         );
@@ -408,6 +402,22 @@ export default {
           });
       }
       this.loading = false;
+    },
+    sortShows(shows) {
+      shows =
+        shows
+          .sort((x, y) => y.avg_views - x.avg_views)
+          .sort((x, y) => {
+            x = this.preferredCategories.includes(String(x.category));
+            y = this.preferredCategories.includes(String(y.category));
+            return x === y ? 0 : x ? -1 : 1;
+          })
+          .sort((x, y) => {
+            x = String(x.level) === this.languageLevel;
+            y = String(y.level) === this.languageLevel;
+            return x === y ? 0 : x ? -1 : 1;
+          });
+      return shows;
     },
     /**
      * @param statsKey key in the stats, one of: 'allVideos', 'movies', 'newVideos', 'music', 'news'
