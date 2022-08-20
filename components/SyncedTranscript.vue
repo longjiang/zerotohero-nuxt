@@ -107,62 +107,65 @@ import { NON_PRO_MAX_LINES, POPULAR_LANGS } from "@/lib/config";
 export default {
   props: {
     skin: {
-      default: "light",
+      default: "light"
     },
     sticky: {
-      default: false,
+      default: false
     },
     single: {
-      default: false,
+      default: false
     },
     lines: {
-      type: Array,
+      type: Array
     },
     parallellines: {
-      type: Array,
+      type: Array
     },
     notes: {
-      type: Array,
+      type: Array
     },
     onSeek: {
-      default: false,
+      default: false
     },
     onPause: {
-      default: false,
+      default: false
     },
     highlight: {
-      type: Array,
+      type: Array
     },
     hsk: {
-      default: "outside",
+      default: "outside"
     },
     highlightSavedWords: {
-      default: true,
+      default: true
     },
     startLineIndex: {
-      default: undefined,
+      default: undefined
     },
     stopLineIndex: {
-      default: -1,
+      default: -1
     },
     showSubsEditing: {
-      default: false,
+      default: false
     },
     showAnimation: {
-      default: true,
+      default: true
     },
     enableTranslationEditing: {
-      default: false,
+      default: false
     },
     collapsed: {
-      default: false,
+      default: false
     },
     landscape: {
-      default: false,
+      default: false
     },
     forcePro: {
-      default: false,
+      default: false
     },
+    autoPause: {
+      default: false
+    }
   },
   data() {
     return {
@@ -184,7 +187,7 @@ export default {
       visibleMax: this.startLineIndex ? Number(this.startLineIndex) + 30 : 30,
       visibleRange: 30,
       preventJumpingAtStart: typeof this.startLineIndex !== "undefined",
-      NON_PRO_MAX_LINES,
+      NON_PRO_MAX_LINES
     };
   },
   computed: {
@@ -251,16 +254,14 @@ export default {
       if (!this.pro && !this.forcePro)
         filteredLines = filteredLines.slice(0, NON_PRO_MAX_LINES);
       if (this.single) {
-        return [filteredLines[this.currentLineIndex || 0]].filter(
-          (line) => line
-        );
+        return [filteredLines[this.currentLineIndex || 0]].filter(line => line);
       } else {
-        return filteredLines.filter((line) => line);
+        return filteredLines.filter(line => line);
       }
-    },
+    }
   },
   async created() {
-    this.lines.map((line) => {
+    this.lines.map(line => {
       line.starttime = Number(line.starttime);
       if (line.duration) Number(line.duration);
     });
@@ -304,17 +305,21 @@ export default {
       } else if (progressType === "within current line") {
         // do nothing
       } else if (progressType === "advance to next line") {
-        let progress = this.currentTime - this.previousTime;
-        if (this.repeatMode) {
-          if (progress > 0 && progress < 0.15) {
-            this.rewind();
-          }
+        if (this.autoPause) {
+          this.pause();
         } else {
-          this.currentLine = this.nextLine;
-          this.currentLineIndex = this.currentLineIndex + 1;
-          this.nextLine = this.lines[this.currentLineIndex + 1];
+          let progress = this.currentTime - this.previousTime;
+          if (this.repeatMode) {
+            if (progress > 0 && progress < 0.15) {
+              this.rewind();
+            }
+          } else {
+            this.currentLine = this.nextLine;
+            this.currentLineIndex = this.currentLineIndex + 1;
+            this.nextLine = this.lines[this.currentLineIndex + 1];
+          }
+          if (!this.paused && this.audioMode) this.doAudioModeStuff();
         }
-        if (!this.paused && this.audioMode) this.doAudioModeStuff();
       } else if (progressType === "jump") {
         this.playNearestLine();
       }
@@ -337,7 +342,7 @@ export default {
     },
     parallellines() {
       if (this.parallellines) this.matchParallelLines();
-    },
+    }
   },
   methods: {
     getParallelLine(line, index) {
@@ -378,7 +383,7 @@ export default {
       });
     },
     cancelSmoothScroll() {
-      let id = window.requestAnimationFrame(function () {});
+      let id = window.requestAnimationFrame(function() {});
       while (id--) {
         window.cancelAnimationFrame(id);
       }
@@ -413,7 +418,7 @@ export default {
     emitUpdateTranslation() {
       if (this.matchedParallelLines) {
         let updatedLines = this.matchedParallelLines
-          .filter((l) => l !== "")
+          .filter(l => l !== "")
           .join("\n")
           .replace(/\n+/gm, "\n")
           .trim();
@@ -442,7 +447,7 @@ export default {
               else return medianTime <= nextLine.starttime;
             }
           })
-          .map((l) => l.line)
+          .map(l => l.line)
           .join(" ");
         if (!nextLine) break;
       }
@@ -591,13 +596,13 @@ export default {
         if (Math.abs(window.scrollY - top) > 1000) {
           window.scrollTo({
             top,
-            left: 0,
+            left: 0
           });
         } else {
           window.scrollTo({
             top,
             left: 0,
-            behavior: "smooth",
+            behavior: "smooth"
           });
           // if (navigator.hardwareConcurrency >= 4) {
           //   let duration =
@@ -631,7 +636,7 @@ export default {
     adjustAllLinesBelowToMatchCurrentTime(line) {
       let delta = 0;
       let currentLine = line;
-      let currentLineIndex = this.lines.findIndex((l) => l === line);
+      let currentLineIndex = this.lines.findIndex(l => l === line);
       for (let lineIndex in this.lines) {
         lineIndex = Number(lineIndex);
         let line = this.lines[lineIndex];
@@ -653,7 +658,7 @@ export default {
     },
     goToLine(line) {
       if (!line) return;
-      this.currentLineIndex = this.lines.findIndex((l) => l === line);
+      this.currentLineIndex = this.lines.findIndex(l => l === line);
       this.currentLine = line;
       this.nextLine = this.lines[this.currentLineIndex + 1];
       this.seekVideoTo(line.starttime - 0.2); // We rewind to 200ms earlier to capture more audio at the beginning of the line
@@ -662,7 +667,7 @@ export default {
       }
     },
     playCurrentLineAnimation() {
-      if (!this.showAnimation) return
+      if (!this.showAnimation) return;
       let currentLineRefs = this.single
         ? this.$refs[`transcript-line`]
         : this.$refs[`transcript-line-${this.currentLineIndex}`];
@@ -674,15 +679,16 @@ export default {
         );
     },
     pauseCurrentLineAnimation() {
-      let currentLineRefs =
-        this.$refs[`transcript-line-${this.currentLineIndex}`];
+      let currentLineRefs = this.$refs[
+        `transcript-line-${this.currentLineIndex}`
+      ];
       if (currentLineRefs && currentLineRefs[0])
         currentLineRefs[0].pauseAnimation();
     },
     rewind() {
       this.goToLine(this.currentLine);
-    },
-  },
+    }
+  }
 };
 </script>
 

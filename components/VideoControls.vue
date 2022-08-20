@@ -122,6 +122,16 @@
         <span v-else>{{ speed }}x</span>
       </button>
       <button
+        :class="{
+          'quick-access-button  quick-access-button-speed text-center': true,
+          'quick-access-button-active': autoPause,
+        }"
+        @click="toggleAutoPause"
+        title="Toggle Auto-Pause"
+      >
+        <i class="fas fa-hand"></i>
+      </button>
+      <button
         v-if="showFullscreenToggle"
         :class="{
           'quick-access-button quick-access-button-fullscreen text-center': true,
@@ -250,6 +260,7 @@ export default {
       showList: false,
       repeatMode: false,
       speed: 1,
+      autoPause: false,
       filterList: "",
       speaking: false,
       audioMode: false,
@@ -323,6 +334,10 @@ export default {
     toggleRepeatMode() {
       this.repeatMode = !this.repeatMode;
       this.$emit("updateRepeatMode", this.repeatMode);
+    },
+    toggleAutoPause() {
+      this.autoPause = !this.autoPause;
+      this.$emit("updateAutoPause", this.autoPause);
     },
     toggleAudioMode() {
       this.audioMode = !this.audioMode;
