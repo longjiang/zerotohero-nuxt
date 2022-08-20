@@ -252,7 +252,12 @@ export default {
     };
   },
   async mounted() {
-    if (this.preferredCategories.length === 0)
+    if (!this.languageLevel)
+      this.$router.push({
+        name: "set-language-level",
+        params: { l1: this.$l1.code, l2: this.$l2.code },
+      });
+    else if (this.preferredCategories.length === 0)
       this.$router.push({
         name: "set-content-preferences",
         params: { l1: this.$l1.code, l2: this.$l2.code },
@@ -285,6 +290,15 @@ export default {
     ...mapState("stats", ["stats"]),
     ...mapState("shows", ["categories"]),
     ...mapState("settings", ["preferredCategories"]),
+    ...mapState("progress", ["progress"]),
+    languageLevel() {
+      if (
+        this.progress &&
+        this.progress[this.$l2.code] &&
+        this.progress[this.$l2.code].level
+      )
+        return this.progress[this.$l2.code].level;
+    },
     audiobooks() {
       return this.talks.filter((t) => t.audiobook);
     },
