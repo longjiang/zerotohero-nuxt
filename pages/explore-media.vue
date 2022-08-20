@@ -20,7 +20,7 @@
         :description="`Learn ${$l2.name} with Videos`"
         :image="'/img/tv-shows.jpg'"
       />
-      <div class="row mt-4">
+      <div class="row">
         <div class="col-sm-12">
           <!-- <Sale class="mt-5 mb-5" v-if="$l2.code === 'zh'" /> -->
           <!-- <SimpleSearch placeholder="Search" ref="searchLibrary" skin="dark" class="mt-4 mb-5" style="flex: 1" :action="
@@ -58,7 +58,7 @@
 
           <div v-if="talks && talks.length > 0" class="media-section">
             <h3 class="media-seaction-heading">
-              Recommended YouTube
+              YouTube Channels
               <router-link :to="{ name: 'talks' }" class="show-all">
                 More
                 <i class="fas fa-chevron-right"></i>
@@ -99,7 +99,7 @@
           </div>
           <div v-if="tvShows && tvShows.length > 0" class="media-section">
             <h3 class="media-seaction-heading">
-              Recommended TV Shows
+              TV Shows
               <router-link :to="{ name: 'tv-shows' }" class="show-all">
                 More
                 <i class="fas fa-chevron-right"></i>

@@ -369,6 +369,18 @@ export default {
               show: this.hasLiveTV,
             },
             {
+              name: "set-content-preferences",
+              icon: "fas fa-cog",
+              title: `Set Content Preferences`,
+              show: false,
+            },
+            {
+              name: "set-language-level",
+              icon: "fas fa-cog",
+              title: `Set Language Level`,
+              show: false,
+            },
+            {
               icon: "fa fa-grid-2",
               title: `More`,
               // count: this.stats ? this.stats.allVideos : undefined,
