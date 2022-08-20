@@ -431,15 +431,15 @@ export default {
       shows = shows
         .sort((x, y) => y.avg_views - x.avg_views)
         .sort((x, y) => {
+          x = String(x.level) === this.languageLevel;
+          y = String(y.level) === this.languageLevel;
+          return x === y ? 0 : x ? -1 : 1;
+        })
+        .sort((x, y) => {
           x = this.preferredCategories.includes(String(x.category));
           y = this.preferredCategories.includes(String(y.category));
           return x === y ? 0 : x ? -1 : 1;
         })
-        .sort((x, y) => {
-          x = String(x.level) === this.languageLevel;
-          y = String(y.level) === this.languageLevel;
-          return x === y ? 0 : x ? -1 : 1;
-        });
       return shows;
     },
     /**

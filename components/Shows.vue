@@ -1,10 +1,10 @@
 <template>
   <div>
-    <VideoHero
+    <!-- <VideoHero
       v-if="showHero && featureEpisode"
       :video="featureEpisode"
       @videoUnavailable="onVideoUnavailable"
-    />
+    /> -->
     <div>
       <div>
         <SocialHead
@@ -47,6 +47,15 @@
               Sort by {{ sort }}
               <i class="fa-solid fa-caret-down"></i>
             </span>
+            <div
+              v-if="sort === 'recommended'"
+              style="font-weight: normal; font-size: 0.8em; margin-top: 0.5rem"
+            >
+              Recommendations based on your
+              <router-link :to="{ name: 'set-language-level' }">
+                <u>content preferences</u>
+              </router-link>
+            </div>
           </div>
         </div>
         <div class="row" v-if="showFilter">
@@ -169,6 +178,13 @@
       <div class="row">
         <div
           class="mb-1 col-12"
+          @click="sort = 'recommended'"
+          style="cursor: pointer"
+        >
+          Sort by Recommended
+        </div>
+        <div
+          class="mb-1 col-12"
           @click="sort = 'views'"
           style="cursor: pointer"
         >
@@ -280,7 +296,7 @@ export default {
   },
   data() {
     return {
-      sort: "views", // or 'title'
+      sort: "recommended", // or 'views', 'title'
       type: {
         "tv-shows": "tvShows",
         talks: "talks",
@@ -316,7 +332,16 @@ export default {
     this.unsubscribe();
   },
   computed: {
+    ...mapState("progress", ["progress"]),
     ...mapState("settings", ["preferredCategories"]),
+    languageLevel() {
+      if (
+        this.progress &&
+        this.progress[this.$l2.code] &&
+        this.progress[this.$l2.code].level
+      )
+        return this.progress[this.$l2.code].level;
+    },
     categoriesFiltered() {
       if (!this.shows) return {};
       let categories = {};
@@ -459,15 +484,27 @@ export default {
       }
     },
     sortShows(shows) {
-      shows =
-        shows.sort((x, y) =>
+      shows = shows.sort((x, y) => y.avg_views - x.avg_views);
+      if (this.sort === "title")
+        shows = shows.sort((x, y) =>
           x.title.localeCompare(y.title, this.$l2.locales[0])
-        ) || [];
+        );
       // if (this.sort === "date")
-      //   shows = shows.sort((x, y) => y.date - x.date) || [];
-      if (this.sort === "views")
-        shows = shows.sort((x, y) => y.avg_views - x.avg_views) || [];
-      return shows;
+      //   shows = shows.sort((x, y) => y.date - x.date);
+      if (this.sort === "recommended") {
+        shows = shows
+          .sort((x, y) => {
+            x = String(x.level) === this.languageLevel;
+            y = String(y.level) === this.languageLevel;
+            return x === y ? 0 : x ? -1 : 1;
+          })
+          .sort((x, y) => {
+            x = this.preferredCategories.includes(String(x.category));
+            y = this.preferredCategories.includes(String(y.category));
+            return x === y ? 0 : x ? -1 : 1;
+          })
+      }
+      return shows || [];
     },
     async loadShows() {
       let shows = this.$store.state.shows[this.type][this.$l2.code]
