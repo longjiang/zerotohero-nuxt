@@ -38,7 +38,7 @@
               Continue Watching
               <router-link :to="{ name: 'watch-history' }" class="show-all">
                 More
-                <i class="fas fa-chevron-right ml-1"></i>
+                <i class="fas fa-chevron-right"></i>
               </router-link>
             </h3>
             <WatchHistoryComp
@@ -48,7 +48,7 @@
               :class="{ 'mt-3': true, 'd-none': !hasWatchHistory }"
               :showDate="false"
               :showClear="false"
-              :limit="12"
+              :limit="4"
               :showLanguage="false"
               :showRemove="false"
               :showPlayButton="false"
@@ -58,11 +58,23 @@
 
           <div v-if="talks && talks.length > 0" class="media-section">
             <h3 class="media-seaction-heading">
-              YouTube
+              Recommended YouTube
               <router-link :to="{ name: 'talks' }" class="show-all">
                 More
-                <i class="fas fa-chevron-right ml-1"></i>
+                <i class="fas fa-chevron-right"></i>
               </router-link>
+              <p
+                style="
+                  font-weight: normal;
+                  font-size: 0.75rem;
+                  margin-top: 0.5rem;
+                "
+              >
+                Recommendation based on your
+                <router-link :to="{ name: 'set-language-level' }">
+                  <u>content preferences</u>
+                </router-link>
+              </p>
             </h3>
             <ShowList
               :shows="
@@ -87,11 +99,23 @@
           </div>
           <div v-if="tvShows && tvShows.length > 0" class="media-section">
             <h3 class="media-seaction-heading">
-              TV Shows
+              Recommended TV Shows
               <router-link :to="{ name: 'tv-shows' }" class="show-all">
                 More
-                <i class="fas fa-chevron-right ml-1"></i>
+                <i class="fas fa-chevron-right"></i>
               </router-link>
+              <p
+                style="
+                  font-weight: normal;
+                  font-size: 0.75rem;
+                  margin-top: 0.5rem;
+                "
+              >
+                Recommendation based on your
+                <router-link :to="{ name: 'set-language-level' }">
+                  <u>content preferences</u>
+                </router-link>
+              </p>
             </h3>
             <ShowList
               :shows="
@@ -115,7 +139,7 @@
                 class="show-all"
               >
                 More
-                <i class="fas fa-chevron-right ml-1"></i>
+                <i class="fas fa-chevron-right"></i>
               </router-link>
             </h3>
             <LazyYouTubeVideoList
@@ -137,7 +161,7 @@
                   class="show-all"
                 >
                   More
-                  <i class="fas fa-chevron-right ml-1"></i>
+                  <i class="fas fa-chevron-right"></i>
                 </router-link>
               </h3>
               <LazyYouTubeVideoList
@@ -158,7 +182,7 @@
                   class="show-all"
                 >
                   More
-                  <i class="fas fa-chevron-right ml-1"></i>
+                  <i class="fas fa-chevron-right"></i>
                 </router-link>
               </h3>
               <LazyYouTubeVideoList
@@ -178,7 +202,7 @@
               Audiobooks
               <router-link :to="{ name: 'audiobooks' }" class="show-all">
                 More
-                <i class="fas fa-chevron-right ml-1"></i>
+                <i class="fas fa-chevron-right"></i>
               </router-link>
             </h3>
             <ShowList
@@ -193,7 +217,7 @@
               Newly Added
               <router-link :to="{ name: 'youtube-browse' }" class="show-all">
                 More
-                <i class="fas fa-chevron-right ml-1"></i>
+                <i class="fas fa-chevron-right"></i>
               </router-link>
             </h3>
             <LazyYouTubeVideoList
@@ -404,19 +428,18 @@ export default {
       this.loading = false;
     },
     sortShows(shows) {
-      shows =
-        shows
-          .sort((x, y) => y.avg_views - x.avg_views)
-          .sort((x, y) => {
-            x = this.preferredCategories.includes(String(x.category));
-            y = this.preferredCategories.includes(String(y.category));
-            return x === y ? 0 : x ? -1 : 1;
-          })
-          .sort((x, y) => {
-            x = String(x.level) === this.languageLevel;
-            y = String(y.level) === this.languageLevel;
-            return x === y ? 0 : x ? -1 : 1;
-          });
+      shows = shows
+        .sort((x, y) => y.avg_views - x.avg_views)
+        .sort((x, y) => {
+          x = this.preferredCategories.includes(String(x.category));
+          y = this.preferredCategories.includes(String(y.category));
+          return x === y ? 0 : x ? -1 : 1;
+        })
+        .sort((x, y) => {
+          x = String(x.level) === this.languageLevel;
+          y = String(y.level) === this.languageLevel;
+          return x === y ? 0 : x ? -1 : 1;
+        });
       return shows;
     },
     /**
@@ -533,7 +556,7 @@ h3 {
 
 .show-all {
   font-size: 1rem;
-  margin-left: 1rem;
+  margin-left: 0.5rem;
   display: inline-block;
   color: #28a745;
 }
