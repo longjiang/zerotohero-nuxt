@@ -252,6 +252,11 @@ export default {
     };
   },
   async mounted() {
+    if (this.preferredCategories.length === 0)
+      this.$router.push({
+        name: "set-content-preferences",
+        params: { l1: this.$l1.code, l2: this.$l2.code },
+      });
     if (this.$store.state.shows.showsLoaded[this.$l2.code]) this.loadShows();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type.startsWith("shows")) {
@@ -348,13 +353,9 @@ export default {
           tvShows
             .sort((x, y) => y.avg_views - x.avg_views)
             .sort((x, y) => {
-              x = this.preferredCategories.includes(String(x.category))
-              y = this.preferredCategories.includes(String(y.category))
-              return x === y
-                ? 0
-                : x
-                ? -1
-                : 1;
+              x = this.preferredCategories.includes(String(x.category));
+              y = this.preferredCategories.includes(String(y.category));
+              return x === y ? 0 : x ? -1 : 1;
             }) || [];
         this.musicShow = this.$store.state.shows.tvShows[this.$l2.code].find(
           (s) => s.title === "Music"
@@ -382,13 +383,9 @@ export default {
           talks
             .sort((x, y) => y.avg_views - x.avg_views)
             .sort((x, y) => {
-              x = this.preferredCategories.includes(String(x.category))
-              y = this.preferredCategories.includes(String(y.category))
-              return x === y
-                ? 0
-                : x
-                ? -1
-                : 1;
+              x = this.preferredCategories.includes(String(x.category));
+              y = this.preferredCategories.includes(String(y.category));
+              return x === y ? 0 : x ? -1 : 1;
             }) || [];
         this.newsShow = this.$store.state.shows.talks[this.$l2.code].find(
           (s) => s.title === "News"
