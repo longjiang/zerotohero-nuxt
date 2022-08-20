@@ -187,6 +187,14 @@ export default {
     }
   },
   async mounted() {
+    if (this.$auth.loggedIn && this.$route.path === "/") {
+      this.$router.push({ path: "/dashboard" });
+    } else {
+      if (window)
+        this.addFullHistoryItem(
+          window.location.pathname + window.location.search
+        );
+    }
     $nuxt.$on("zoom", this.onZoom);
     this.subscribeToVuexMutations();
     this.wide = Helper.wide();
@@ -202,14 +210,6 @@ export default {
       this.$store.commit('settings/LOAD_SETTINGS', {l1: this.l1, l2: this.l2})
     }
     this.onAllLanguagesLoaded();
-    if (this.$auth.loggedIn && this.$route.path === "/") {
-      this.$router.push({ path: "/dashboard" });
-    } else {
-      if (window)
-        this.addFullHistoryItem(
-          window.location.pathname + window.location.search
-        );
-    }
     if (typeof window !== "undefined")
       window.addEventListener("resize", this.onResize);
   },
