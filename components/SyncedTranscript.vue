@@ -320,6 +320,10 @@ export default {
         this.playNearestLine();
       }
     },
+    beforeJump() {
+      let interrupt = this.doAutoPause();
+      return interrupt
+    },
     onJump() {
       if (
         typeof this.startLineIndex !== "undefined" &&
@@ -331,6 +335,10 @@ export default {
     onWithinCurrentLine() {},
     onCurrentLineEneded() {
       this.doAutoPause();
+    },
+    beforeAdvanceToNextLine() {
+      let interrupt = this.doAutoPause()
+      return interrupt
     },
     onAdvanceToNextLine() {
       let progress = this.currentTime - this.previousTime;
@@ -468,13 +476,13 @@ export default {
       // ...
 
       const CURRENT_LINE_STARTED_TOLERANCE = 1; // seconds
-      const NEXT_LINE_STARTED_TOLERANCE = 0.15; // seconds
+      const NEXT_LINE_STARTED_TOLERANCE = 0.3; // seconds
 
       let currentLineStarted =
         this.currentLine && this.currentTime > this.currentLine.starttime;
 
       let nextLineStarted =
-        this.nextLine && this.currentTime > this.nextLine.starttime;
+        this.nextLine && this.currentTime > this.nextLine.starttime - NEXT_LINE_STARTED_TOLERANCE;
 
       let nextNextLine = this.lines[this.currentLineIndex + 2];
 
@@ -494,16 +502,31 @@ export default {
           this.nextLine.duration &&
           this.currentTime > this.nextLine.starttime + this.nextLine.duration);
 
+      let withinCurrentLine = currentLineStarted && !currentLineEnded
+      let withinNextLine = nextLineStarted && !nextLineEnded
+      let betweenCurrentAndNextLine = currentLineEnded && !nextLineStarted
+
       if (!this.currentLine) {
+        // console.log('first play')
         this.onFirstPlay()
-      } else if (currentLineStarted && !currentLineEnded) {
+      }
+      if (withinCurrentLine) {
+        // console.log('within current line')
         this.onWithinCurrentLine()
-      } else if (nextLineStarted && !nextLineEnded) {
-        this.onAdvanceToNextLine()
-      } else if (currentLineEnded || nextLineStarted) {
+      }
+      if (betweenCurrentAndNextLine) {
+        // console.log('between current and next line')
         this.onCurrentLineEneded()
-      } else if (!progress) {
-        this.onJump()
+      }
+      if (withinNextLine) {
+        // console.log('within next line')
+        let interrupt = this.beforeAdvanceToNextLine()
+        if (!interrupt) this.onAdvanceToNextLine()
+      }
+      if (this.currentLine && !withinCurrentLine && !betweenCurrentAndNextLine && !withinNextLine) {
+        // console.log('jump')
+        let interrupt = this.beforeJump()
+        if (!interrupt) this.onJump()
       }
     },
     nearestLineIndex(time) {
@@ -536,13 +559,16 @@ export default {
       }
     },
     doAutoPause() {
+      let interrupt = false
       if (
         this.autoPause &&
         this.autoPausedLineIndex !== this.currentLineIndex
       ) {
-        this.autoPausedLineIndex = this.currentLineIndex;
         this.pause();
+        this.autoPausedLineIndex = this.currentLineIndex;
+        interrupt = true
       }
+      return interrupt
     },
     async doAudioModeStuff() {
       if (!this.currentLineIndex) {
