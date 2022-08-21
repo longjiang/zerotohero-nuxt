@@ -107,65 +107,65 @@ import { NON_PRO_MAX_LINES, POPULAR_LANGS } from "@/lib/config";
 export default {
   props: {
     skin: {
-      default: "light"
+      default: "light",
     },
     sticky: {
-      default: false
+      default: false,
     },
     single: {
-      default: false
+      default: false,
     },
     lines: {
-      type: Array
+      type: Array,
     },
     parallellines: {
-      type: Array
+      type: Array,
     },
     notes: {
-      type: Array
+      type: Array,
     },
     onSeek: {
-      default: false
+      default: false,
     },
     onPause: {
-      default: false
+      default: false,
     },
     highlight: {
-      type: Array
+      type: Array,
     },
     hsk: {
-      default: "outside"
+      default: "outside",
     },
     highlightSavedWords: {
-      default: true
+      default: true,
     },
     startLineIndex: {
-      default: undefined
+      default: undefined,
     },
     stopLineIndex: {
-      default: -1
+      default: -1,
     },
     showSubsEditing: {
-      default: false
+      default: false,
     },
     showAnimation: {
-      default: true
+      default: true,
     },
     enableTranslationEditing: {
-      default: false
+      default: false,
     },
     collapsed: {
-      default: false
+      default: false,
     },
     landscape: {
-      default: false
+      default: false,
     },
     forcePro: {
-      default: false
+      default: false,
     },
     autoPause: {
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
@@ -188,7 +188,8 @@ export default {
       visibleRange: 30,
       autoPausedLineIndex: undefined,
       preventJumpingAtStart: typeof this.startLineIndex !== "undefined",
-      NON_PRO_MAX_LINES
+      useSmoothScroll: false,
+      NON_PRO_MAX_LINES,
     };
   },
   computed: {
@@ -255,14 +256,16 @@ export default {
       if (!this.pro && !this.forcePro)
         filteredLines = filteredLines.slice(0, NON_PRO_MAX_LINES);
       if (this.single) {
-        return [filteredLines[this.currentLineIndex || 0]].filter(line => line);
+        return [filteredLines[this.currentLineIndex || 0]].filter(
+          (line) => line
+        );
       } else {
-        return filteredLines.filter(line => line);
+        return filteredLines.filter((line) => line);
       }
-    }
+    },
   },
   async created() {
-    this.lines.map(line => {
+    this.lines.map((line) => {
       line.starttime = Number(line.starttime);
       if (line.duration) Number(line.duration);
     });
@@ -282,11 +285,13 @@ export default {
   watch: {
     async paused() {
       // Stop smooth scrolling
-      if (this.paused) {
+      if (this.paused && this.useSmoothScroll) {
         this.cancelSmoothScroll();
       }
-      if (this.paused) this.pauseCurrentLineAnimation();
-      if (!this.paused) this.playCurrentLineAnimation();
+      if (this.showAnimation) {
+        if (this.paused) this.pauseCurrentLineAnimation();
+        if (!this.paused) this.playCurrentLineAnimation();
+      }
     },
     async currentTime() {
       if (this.preventJumpingAtStart) {
@@ -306,13 +311,13 @@ export default {
     },
     currentLine() {
       if (!this.single && !this.paused) this.scrollTo(this.currentLineIndex);
-      if (!this.paused) {
+      if (!this.paused && this.showAnimation) {
         this.playCurrentLineAnimation();
       }
     },
     parallellines() {
       if (this.parallellines) this.matchParallelLines();
-    }
+    },
   },
   methods: {
     onFirstPlay() {
@@ -322,7 +327,7 @@ export default {
     },
     beforeJump() {
       let interrupt = this.doAutoPause();
-      return interrupt
+      return interrupt;
     },
     onJump() {
       if (
@@ -337,8 +342,8 @@ export default {
       this.doAutoPause();
     },
     beforeAdvanceToNextLine() {
-      let interrupt = this.doAutoPause()
-      return interrupt
+      let interrupt = this.doAutoPause();
+      return interrupt;
     },
     onAdvanceToNextLine() {
       let progress = this.currentTime - this.previousTime;
@@ -391,7 +396,7 @@ export default {
       });
     },
     cancelSmoothScroll() {
-      let id = window.requestAnimationFrame(function() {});
+      let id = window.requestAnimationFrame(function () {});
       while (id--) {
         window.cancelAnimationFrame(id);
       }
@@ -426,7 +431,7 @@ export default {
     emitUpdateTranslation() {
       if (this.matchedParallelLines) {
         let updatedLines = this.matchedParallelLines
-          .filter(l => l !== "")
+          .filter((l) => l !== "")
           .join("\n")
           .replace(/\n+/gm, "\n")
           .trim();
@@ -455,7 +460,7 @@ export default {
               else return medianTime <= nextLine.starttime;
             }
           })
-          .map(l => l.line)
+          .map((l) => l.line)
           .join(" ");
         if (!nextLine) break;
       }
@@ -482,7 +487,9 @@ export default {
         this.currentLine && this.currentTime > this.currentLine.starttime;
 
       let nextLineStarted =
-        this.nextLine && this.currentTime > this.nextLine.starttime - NEXT_LINE_STARTED_TOLERANCE;
+        this.nextLine &&
+        this.currentTime >
+          this.nextLine.starttime - NEXT_LINE_STARTED_TOLERANCE;
 
       let nextNextLine = this.lines[this.currentLineIndex + 2];
 
@@ -502,31 +509,36 @@ export default {
           this.nextLine.duration &&
           this.currentTime > this.nextLine.starttime + this.nextLine.duration);
 
-      let withinCurrentLine = currentLineStarted && !currentLineEnded
-      let withinNextLine = nextLineStarted && !nextLineEnded
-      let betweenCurrentAndNextLine = currentLineEnded && !nextLineStarted
+      let withinCurrentLine = currentLineStarted && !currentLineEnded;
+      let withinNextLine = nextLineStarted && !nextLineEnded;
+      let betweenCurrentAndNextLine = currentLineEnded && !nextLineStarted;
 
       if (!this.currentLine) {
         // console.log('first play')
-        this.onFirstPlay()
+        this.onFirstPlay();
       }
       if (withinCurrentLine) {
         // console.log('within current line')
-        this.onWithinCurrentLine()
+        this.onWithinCurrentLine();
       }
       if (betweenCurrentAndNextLine) {
         // console.log('between current and next line')
-        this.onCurrentLineEneded()
+        this.onCurrentLineEneded();
       }
       if (withinNextLine) {
         // console.log('within next line')
-        let interrupt = this.beforeAdvanceToNextLine()
-        if (!interrupt) this.onAdvanceToNextLine()
+        let interrupt = this.beforeAdvanceToNextLine();
+        if (!interrupt) this.onAdvanceToNextLine();
       }
-      if (this.currentLine && !withinCurrentLine && !betweenCurrentAndNextLine && !withinNextLine) {
+      if (
+        this.currentLine &&
+        !withinCurrentLine &&
+        !betweenCurrentAndNextLine &&
+        !withinNextLine
+      ) {
         // console.log('jump')
-        let interrupt = this.beforeJump()
-        if (!interrupt) this.onJump()
+        let interrupt = this.beforeJump();
+        if (!interrupt) this.onJump();
       }
     },
     nearestLineIndex(time) {
@@ -559,16 +571,16 @@ export default {
       }
     },
     doAutoPause() {
-      let interrupt = false
+      let interrupt = false;
       if (
         this.autoPause &&
         this.autoPausedLineIndex !== this.currentLineIndex
       ) {
         this.pause();
         this.autoPausedLineIndex = this.currentLineIndex;
-        interrupt = true
+        interrupt = true;
       }
-      return interrupt
+      return interrupt;
     },
     async doAudioModeStuff() {
       if (!this.currentLineIndex) {
@@ -632,66 +644,67 @@ export default {
       }
       return smallScreenOffset;
     },
+    /**
+     * Gets the distance from the top of the screen to top of the current video line
+     */
+    scrollOffset(el) {
+      let smallScreenYOffset = this.getSmallScreenOffset();
+      let transcriptLineHeight = el.clientHeight;
+      let stage;
+      if (smallScreenYOffset) {
+        // vertical layout
+        stage = window.innerHeight + smallScreenYOffset;
+      } else {
+        // horizontal layout
+        stage =
+          Math.min(
+            window.innerHeight / 2,
+            (this.$el.clientWidth * 9) / 16 + 52
+          ) * 2;
+      }
+      let offset = -stage / 2 + transcriptLineHeight / 2;
+      return offset;
+    },
+    smoothScrollToCurrentLine(offset) {
+      let lastDuration =
+        this.previousLine && this.currentLine
+          ? (this.currentLine.starttime - this.previousLine.starttime) * 1000
+          : 3000;
+      lastDuration = lastDuration || 3000;
+      let duration =
+        this.currentLine && this.nextLine
+          ? Math.min(
+              (this.nextLine.starttime - this.currentLine.starttime) * 1000,
+              lastDuration,
+              3000
+            )
+          : 3000;
+      this.$smoothScroll({
+        scrollTo: el,
+        updateHistory: false,
+        offset,
+        duration,
+        left: 0,
+        easingFunction: (t) => t,
+      });
+    },
     scrollTo(lineIndex) {
       let el = this.$el.querySelector(
         `.transcript-line[data-line-index="${lineIndex}"]`
       );
       if (el) {
-        let smallScreenYOffset = this.getSmallScreenOffset();
-
-        let elHeight = el.clientHeight;
-
-        let lastDuration =
-          this.previousLine && this.currentLine
-            ? (this.currentLine.starttime - this.previousLine.starttime) * 1000
-            : 3000;
-
-        lastDuration = lastDuration || 3000;
-
-        let offset =
-          -(smallScreenYOffset
-            ? window.innerHeight + smallScreenYOffset
-            : Math.min(
-                window.innerHeight / 2,
-                (this.$el.clientWidth * 9) / 16 + 52
-              ) *
-                2 -
-              elHeight / 2) /
-            2 +
-          elHeight / 2;
-
-        let offsetTop = Helper.documentOffsetTop(el);
-        let top = offsetTop + offset;
-        if (Math.abs(window.scrollY - top) > 1000) {
-          window.scrollTo({
-            top,
-            left: 0
-          });
+        let elementTop = Helper.documentOffsetTop(el); // distance from top of the document to the top of the element
+        let offset = this.scrollOffset(el);
+        let top = elementTop + offset;
+        let scrollDistanceIsLarge = Math.abs(window.scrollY - top) > 1000;
+        if (this.useSmoothScroll && !scrollDistanceIsLarge) {
+          this.smoothScrollToCurrentLine(offset);
         } else {
           window.scrollTo({
             top,
             left: 0,
-            behavior: "smooth"
+            behavior: scrollDistanceIsLarge ? "auto" : "smooth",
           });
-          // if (navigator.hardwareConcurrency >= 4) {
-          //   let duration =
-          //     this.currentLine && this.nextLine
-          //       ? Math.min(
-          //           (this.nextLine.starttime - this.currentLine.starttime) *
-          //             1000,
-          //           lastDuration,
-          //           3000
-          //         )
-          //       : 3000;
-          //   this.$smoothScroll({
-          //     scrollTo: el,
-          //     updateHistory: false,
-          //     offset,
-          //     duration,
-          //     left: 0,
-          //     easingFunction: (t) => t,
-          //   });
-          // }
         }
       }
     },
@@ -705,7 +718,7 @@ export default {
     adjustAllLinesBelowToMatchCurrentTime(line) {
       let delta = 0;
       let currentLine = line;
-      let currentLineIndex = this.lines.findIndex(l => l === line);
+      let currentLineIndex = this.lines.findIndex((l) => l === line);
       for (let lineIndex in this.lines) {
         lineIndex = Number(lineIndex);
         let line = this.lines[lineIndex];
@@ -727,7 +740,7 @@ export default {
     },
     goToLine(line) {
       if (!line) return;
-      this.currentLineIndex = this.lines.findIndex(l => l === line);
+      this.currentLineIndex = this.lines.findIndex((l) => l === line);
       this.currentLine = line;
       this.nextLine = this.lines[this.currentLineIndex + 1];
       this.seekVideoTo(line.starttime - 0.2); // We rewind to 200ms earlier to capture more audio at the beginning of the line
@@ -748,16 +761,15 @@ export default {
         );
     },
     pauseCurrentLineAnimation() {
-      let currentLineRefs = this.$refs[
-        `transcript-line-${this.currentLineIndex}`
-      ];
+      let currentLineRefs =
+        this.$refs[`transcript-line-${this.currentLineIndex}`];
       if (currentLineRefs && currentLineRefs[0])
         currentLineRefs[0].pauseAnimation();
     },
     rewind() {
       this.goToLine(this.currentLine);
-    }
-  }
+    },
+  },
 };
 </script>
 
