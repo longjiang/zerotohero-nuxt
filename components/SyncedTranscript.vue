@@ -292,36 +292,7 @@ export default {
       if (this.preventJumpingAtStart) {
         this.turnOffPreventJumptingAtStartAfter3Seconds();
       }
-      let progressType = this.checkProgress();
-      if (
-        progressType === "jump" &&
-        typeof this.startLineIndex !== "undefined" &&
-        this.preventJumpingAtStart
-      )
-        return;
-      if (progressType === "first play") {
-        if (this.currentTime >= this.lines[0].starttime) {
-          this.playNearestLine();
-        }
-      } else if (progressType === "within current line") {
-        // do nothing
-      } else if (progressType === "current line ended") {
-        this.doAutoPause();
-      } else if (progressType === "advance to next line") {
-        let progress = this.currentTime - this.previousTime;
-        if (this.repeatMode) {
-          if (progress > 0 && progress < 0.15) {
-            this.rewind();
-          }
-        } else {
-          this.currentLine = this.nextLine;
-          this.currentLineIndex = this.currentLineIndex + 1;
-          this.nextLine = this.lines[this.currentLineIndex + 1];
-        }
-        if (!this.paused && this.audioMode) this.doAudioModeStuff();
-      } else if (progressType === "jump") {
-        this.playNearestLine();
-      }
+      this.executeTimeBasedMethods();
       this.previousTime = this.currentTime;
     },
     currentLineIndex() {
@@ -344,6 +315,36 @@ export default {
     }
   },
   methods: {
+    onFirstPlay() {
+      if (this.currentTime >= this.lines[0].starttime) {
+        this.playNearestLine();
+      }
+    },
+    onJump() {
+      if (
+        typeof this.startLineIndex !== "undefined" &&
+        this.preventJumpingAtStart
+      )
+        return;
+      this.playNearestLine();
+    },
+    onWithinCurrentLine() {},
+    onCurrentLineEneded() {
+      this.doAutoPause();
+    },
+    onAdvanceToNextLine() {
+      let progress = this.currentTime - this.previousTime;
+      if (this.repeatMode) {
+        if (progress > 0 && progress < 0.15) {
+          this.rewind();
+        }
+      } else {
+        this.currentLine = this.nextLine;
+        this.currentLineIndex = this.currentLineIndex + 1;
+        this.nextLine = this.lines[this.currentLineIndex + 1];
+      }
+      if (!this.paused && this.audioMode) this.doAudioModeStuff();
+    },
     getParallelLine(line, index) {
       return this.$l2.code !== this.$l1.code && this.parallellines
         ? this.matchedParallelLines[
@@ -452,7 +453,7 @@ export default {
       }
       this.matchedParallelLines = matchedParallelLines;
     },
-    checkProgress() {
+    executeTimeBasedMethods() {
       // (video starts first time) "first play"
       // (current line starts)
       // "within current line"
@@ -493,24 +494,17 @@ export default {
           this.nextLine.duration &&
           this.currentTime > this.nextLine.starttime + this.nextLine.duration);
 
-      let progress;
       if (!this.currentLine) {
-        progress = "first play";
+        this.onFirstPlay()
       } else if (currentLineStarted && !currentLineEnded) {
-        progress = "within current line";
+        this.onWithinCurrentLine()
       } else if (nextLineStarted && !nextLineEnded) {
-        progress = "advance to next line";
+        this.onAdvanceToNextLine()
       } else if (currentLineEnded || nextLineStarted) {
-        progress = "current line ended";
-      } else if (!progress) progress = "jump";
-      // console.log({currentTime: this.currentTime, nextLineStartTime: this.nextLine?.starttime})
-      // console.log({
-      //   progress,
-      //   nextLineStarted,
-      //   currentLineStarted,
-      //   currentLineEnded
-      // });
-      return progress;
+        this.onCurrentLineEneded()
+      } else if (!progress) {
+        this.onJump()
+      }
     },
     nearestLineIndex(time) {
       let nearestLineIndex = undefined;
