@@ -454,23 +454,43 @@ export default {
       this.matchedParallelLines = matchedParallelLines;
     },
     checkProgress() {
+      // (video starts first time) "first play"
+      // (current line starts)
+      // "within current line"
+      // "within current line"
+      // "within current line"
+      // ...
+      // (current line ends: starttime + duration past) "current line ended"
+      // (next line starts)
+      // "advance to next line"
+      // "within current line"
+      // "within current line"
+      // ...
+      const withinCurrentLine = () => {
+        let currentLineStarted =
+          this.currentTime > this.currentLine.starttime - 1;
+        let nextLineNotYetStarted =
+          !this.nextLine ||
+          (this.nextLine && this.currentTime < this.nextLine.starttime);
+        return currentLineStarted && nextLineNotYetStarted;
+      };
+      const advanceToNextLine = () => {
+        return (
+          this.nextLine &&
+          this.currentTime > this.nextLine.starttime - 0.15 &&
+          this.currentTime < this.nextLine.starttime + 0.15
+        );
+      };
       if (!this.currentLine) {
         return "first play";
-      } else if (
-        this.currentTime > this.currentLine.starttime - 1 &&
-        (!this.nextLine ||
-          (this.nextLine && this.currentTime < this.nextLine.starttime))
-      ) {
-        return "within current line";
-      } else if (
-        this.nextLine &&
-        this.currentTime > this.nextLine.starttime - 0.15 &&
-        this.currentTime < this.nextLine.starttime + 0.15
-      ) {
-        return "advance to next line";
-      } else {
-        return "jump";
       }
+      if (withinCurrentLine()) {
+        return "within current line";
+      }
+      if (advanceToNextLine()) {
+        return "advance to next line";
+      }
+      return "jump";
     },
     nearestLineIndex(time) {
       let nearestLineIndex = undefined;
