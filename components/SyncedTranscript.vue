@@ -466,28 +466,34 @@ export default {
       // "within current line"
       // "within current line"
       // ...
-      const withinCurrentLine = () => {
-        let currentLineStarted =
-          this.currentTime > this.currentLine.starttime - 1;
-        let nextLineNotYetStarted =
-          !this.nextLine ||
-          (this.nextLine && this.currentTime < this.nextLine.starttime);
-        return currentLineStarted && nextLineNotYetStarted;
-      };
-      const advanceToNextLine = () => {
-        return (
-          this.nextLine &&
+      
+      let currentLineStarted =
+        this.currentLine && this.currentTime > this.currentLine.starttime - 1;
+      
+      let currentLineNotEnded = true;
+      if (
+        this.currentLine &&
+        this.currentLine.duration &&
+        this.currentTime >=
+          this.currentLine.starttime + this.currentLine.duration
+      )
+        currentLineNotEnded = false;
+      
+      let nextLineNotYetStarted = true;
+      if (this.nextLine && this.currentTime >= this.nextLine.starttime)
+        nextLineNotYetStarted = false;
+      
+      let atThreashold = this.nextLine &&
           this.currentTime > this.nextLine.starttime - 0.15 &&
           this.currentTime < this.nextLine.starttime + 0.15
-        );
-      };
+      
       if (!this.currentLine) {
         return "first play";
       }
-      if (withinCurrentLine()) {
+      if (currentLineStarted && currentLineNotEnded && nextLineNotYetStarted) {
         return "within current line";
       }
-      if (advanceToNextLine()) {
+      if (atThreashold) {
         return "advance to next line";
       }
       return "jump";
