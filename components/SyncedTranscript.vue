@@ -104,6 +104,8 @@ import Helper from "@/lib/helper";
 import Vue from "vue";
 
 import { NON_PRO_MAX_LINES, POPULAR_LANGS } from "@/lib/config";
+const CURRENT_LINE_STARTED_TOLERANCE = 1; // seconds
+const NEXT_LINE_STARTED_TOLERANCE = 0.15; // seconds
 
 export default {
   props: {
@@ -487,8 +489,6 @@ export default {
       // "within current line"
       // ...
 
-      const CURRENT_LINE_STARTED_TOLERANCE = 1; // seconds
-      const NEXT_LINE_STARTED_TOLERANCE = 0.15; // seconds
 
       let currentLineStarted =
         this.currentLine && this.currentTime > this.currentLine.starttime;
@@ -750,7 +750,7 @@ export default {
       this.currentLineIndex = this.lines.findIndex((l) => l === line);
       this.currentLine = line;
       this.nextLine = this.lines[this.currentLineIndex + 1];
-      this.seekVideoTo(line.starttime - 0.2); // We rewind to 200ms earlier to capture more audio at the beginning of the line
+      this.seekVideoTo(line.starttime - NEXT_LINE_STARTED_TOLERANCE); // We rewind to a little bit earlier to capture more audio at the beginning of the line
       if (!this.paused) {
         this.playCurrentLineAnimation();
       }
