@@ -789,6 +789,10 @@ export default {
   color: #28a745;
 }
 
+.sentence + .sentence {
+  margin-left: 0.1em;
+}
+
 .l2-zh {
   .sentence {
     margin-right: 0;

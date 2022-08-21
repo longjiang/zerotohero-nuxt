@@ -397,8 +397,10 @@ export default {
         let averageL2LineLength = this.video.subs_l2.map(l =>  l.line ? l.line.length : 0).reduce((p, c) => p + c) / this.video.subs_l2.length
         let averageL1LineLength = this.video.subs_l1 ? this.video.subs_l1.map(l =>  l.line ? l.line.length : 0).reduce((p, c) => p + c) / this.video.subs_l1.length : 0
         let length = averageL1LineLength + averageL2LineLength
-        let textSize = area / length / 1700;
+        let textSize = area / length / 550;
         textSize = Math.min(textSize, 2.2)
+        textSize = Math.max(textSize, 1)
+        console.log({ area, length, ratio: area / length,  textSize })
         this.textSize = textSize
       }
     },
