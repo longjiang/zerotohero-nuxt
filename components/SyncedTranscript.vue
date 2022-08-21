@@ -342,7 +342,9 @@ export default {
         return;
       this.playNearestLine();
     },
-    onWithinCurrentLine() {},
+    onWithinCurrentLine() {
+      this.autoPausedLineIndex = undefined // reset autopause
+    },
     onCurrentLineEneded() {
       this.doAutoPause();
     },
