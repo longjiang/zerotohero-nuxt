@@ -186,6 +186,7 @@ export default {
       visibleMin: 0,
       visibleMax: this.startLineIndex ? Number(this.startLineIndex) + 30 : 30,
       visibleRange: 30,
+      autoPausedLineIndex: undefined,
       preventJumpingAtStart: typeof this.startLineIndex !== "undefined",
       NON_PRO_MAX_LINES
     };
@@ -304,22 +305,20 @@ export default {
         }
       } else if (progressType === "within current line") {
         // do nothing
+      } else if (progressType === "current line ended") {
+        this.doAutoPause();
       } else if (progressType === "advance to next line") {
-        if (this.autoPause) {
-          this.pause();
-        } else {
-          let progress = this.currentTime - this.previousTime;
-          if (this.repeatMode) {
-            if (progress > 0 && progress < 0.15) {
-              this.rewind();
-            }
-          } else {
-            this.currentLine = this.nextLine;
-            this.currentLineIndex = this.currentLineIndex + 1;
-            this.nextLine = this.lines[this.currentLineIndex + 1];
+        let progress = this.currentTime - this.previousTime;
+        if (this.repeatMode) {
+          if (progress > 0 && progress < 0.15) {
+            this.rewind();
           }
-          if (!this.paused && this.audioMode) this.doAudioModeStuff();
+        } else {
+          this.currentLine = this.nextLine;
+          this.currentLineIndex = this.currentLineIndex + 1;
+          this.nextLine = this.lines[this.currentLineIndex + 1];
         }
+        if (!this.paused && this.audioMode) this.doAudioModeStuff();
       } else if (progressType === "jump") {
         this.playNearestLine();
       }
@@ -466,37 +465,52 @@ export default {
       // "within current line"
       // "within current line"
       // ...
-      
+
+      const CURRENT_LINE_STARTED_TOLERANCE = 1; // seconds
+      const NEXT_LINE_STARTED_TOLERANCE = 0.15; // seconds
+
       let currentLineStarted =
-        this.currentLine && this.currentTime > this.currentLine.starttime - 1;
-      
-      let currentLineNotEnded = true;
-      if (
-        this.currentLine &&
-        this.currentLine.duration &&
-        this.currentTime >=
-          this.currentLine.starttime + this.currentLine.duration
-      )
-        currentLineNotEnded = false;
-      
-      let nextLineNotYetStarted = true;
-      if (this.nextLine && this.currentTime >= this.nextLine.starttime)
-        nextLineNotYetStarted = false;
-      
-      let atThreashold = this.nextLine &&
-          this.currentTime > this.nextLine.starttime - 0.15 &&
-          this.currentTime < this.nextLine.starttime + 0.15
-      
+        this.currentLine && this.currentTime > this.currentLine.starttime;
+
+      let nextLineStarted =
+        this.nextLine && this.currentTime > this.nextLine.starttime;
+
+      let nextNextLine = this.lines[this.currentLineIndex + 2];
+
+      let nextNextLineStarted =
+        nextNextLine && this.currentTime > nextNextLine.starttime;
+
+      let currentLineEnded =
+        nextLineStarted ||
+        (this.currentLine &&
+          this.currentLine.duration &&
+          this.currentTime >
+            this.currentLine.starttime + this.currentLine.duration);
+
+      let nextLineEnded =
+        nextNextLineStarted ||
+        (this.nextLine &&
+          this.nextLine.duration &&
+          this.currentTime > this.nextLine.starttime + this.nextLine.duration);
+
+      let progress;
       if (!this.currentLine) {
-        return "first play";
-      }
-      if (currentLineStarted && currentLineNotEnded && nextLineNotYetStarted) {
-        return "within current line";
-      }
-      if (atThreashold) {
-        return "advance to next line";
-      }
-      return "jump";
+        progress = "first play";
+      } else if (currentLineStarted && !currentLineEnded) {
+        progress = "within current line";
+      } else if (nextLineStarted && !nextLineEnded) {
+        progress = "advance to next line";
+      } else if (currentLineEnded || nextLineStarted) {
+        progress = "current line ended";
+      } else if (!progress) progress = "jump";
+      // console.log({currentTime: this.currentTime, nextLineStartTime: this.nextLine?.starttime})
+      // console.log({
+      //   progress,
+      //   nextLineStarted,
+      //   currentLineStarted,
+      //   currentLineEnded
+      // });
+      return progress;
     },
     nearestLineIndex(time) {
       let nearestLineIndex = undefined;
@@ -525,6 +539,15 @@ export default {
         this.currentLine = undefined;
         this.currentLineIndex = undefined;
         this.nextLine = undefined;
+      }
+    },
+    doAutoPause() {
+      if (
+        this.autoPause &&
+        this.autoPausedLineIndex !== this.currentLineIndex
+      ) {
+        this.autoPausedLineIndex = this.currentLineIndex;
+        this.pause();
       }
     },
     async doAudioModeStuff() {
