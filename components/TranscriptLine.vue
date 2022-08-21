@@ -151,8 +151,8 @@ export default {
       type: Boolean,
       default: false,
     },
-    useAutoTextSize: {
-      default: false,
+    textSize: {
+      default: 1,
     },
   },
   data() {
@@ -166,7 +166,6 @@ export default {
       translationLoading: false,
       translation: undefined, // From user's clicking the translate button inside <Anntoate>
       params: {},
-      textSize: 1,
       query: {
         lg: {
           minWidth: 600,
@@ -187,27 +186,8 @@ export default {
   mounted() {
     this.height = this.$el.clientHeight;
     this.width = this.$el.clientWidth;
-    this.getTextSize();
-  },
-  updated() {
-    this.getTextSize();
   },
   methods: {
-    getTextSize() {
-      if (this.$el) {
-        let textSize = 1;
-        if (this.single && this.useAutoTextSize) {
-          let area = this.height * this.width;
-          let length = this.line
-            ? this.line.line.length
-            : 0 + this.parallelLine
-            ? this.parallelLine.length
-            : 0;
-          textSize = area / length / 175;
-        }
-        this.textSize = Math.min(textSize, 2.5);
-      }
-    },
     getSavedWords() {
       return this.$refs.annotate.getSavedWords();
     },

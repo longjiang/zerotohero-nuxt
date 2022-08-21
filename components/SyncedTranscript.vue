@@ -24,7 +24,7 @@
                 single,
                 hsk,
                 notes,
-                useAutoTextSize,
+                textSize,
                 parallelLine: getParallelLine(line, index),
                 showParallelLine: parallellines && parallellines.length > 0,
                 lineIndex: index + visibleMin,
@@ -161,8 +161,8 @@ export default {
     landscape: {
       default: false,
     },
-    useAutoTextSize: {
-      default: false
+    textSize: {
+      default: 1
     },
     forcePro: {
       default: false,

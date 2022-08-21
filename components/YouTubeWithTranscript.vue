@@ -130,7 +130,7 @@
           collapsed,
           startLineIndex,
           skin,
-          useAutoTextSize,
+          textSize,
           landscape,
           stopLineIndex,
           forcePro,
@@ -278,8 +278,8 @@ export default {
       default: true,
     },
     useAutoTextSize: {
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
@@ -296,6 +296,7 @@ export default {
       showSubsEditing: false,
       speaking: false,
       speed: 1,
+      textSize: 1,
       transcriptKey: 0,
       videoInfoKey: 0,
       viewportHeight: undefined,
@@ -386,6 +387,21 @@ export default {
     },
   },
   methods: {
+    getTextSize() {
+      let el = this.$el.querySelector('.synced-transcript')
+      if (el) {
+        let styles = getComputedStyle(el)
+        let height = Number(styles.height.replace('px', ''))
+        let width = Number(styles.width.replace('px', ''))
+        let area = height * width;
+        let averageL2LineLength = this.video.subs_l2.map(l =>  l.line ? l.line.length : 0).reduce((p, c) => p + c) / this.video.subs_l2.length
+        let averageL1LineLength = this.video.subs_l1 ? this.video.subs_l1.map(l =>  l.line ? l.line.length : 0).reduce((p, c) => p + c) / this.video.subs_l1.length : 0
+        let length = averageL1LineLength + averageL2LineLength
+        let textSize = area / length / 1700;
+        textSize = Math.min(textSize, 2.2)
+        this.textSize = textSize
+      }
+    },
     onSeek(percentage) {
       let time = this.duration * percentage;
       this.seekYouTube(time);
@@ -401,6 +417,7 @@ export default {
     updateLayout() {
       this.viewportWidth = this.$el.clientWidth;
       this.viewportHeight = window.innerHeight;
+      this.getTextSize();
     },
     async getL1Transcript() {
       if (this.$l2.code === this.$l1.code) return;
