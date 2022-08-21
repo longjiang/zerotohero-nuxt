@@ -309,10 +309,11 @@ export default {
         this.visibleMax = visibleMax;
       }
     },
-    currentLine() {
+    async currentLine() {
       if (!this.single && !this.paused) this.scrollTo(this.currentLineIndex);
       if (!this.paused && this.showAnimation) {
-        this.playCurrentLineAnimation();
+        if (this.single) await Helper.timeout(100) // wait for the element to render first
+        this.playCurrentLineAnimation(this.single ? 0.1 : 0);
       }
     },
     parallellines() {
@@ -481,7 +482,7 @@ export default {
       // ...
 
       const CURRENT_LINE_STARTED_TOLERANCE = 1; // seconds
-      const NEXT_LINE_STARTED_TOLERANCE = 0.3; // seconds
+      const NEXT_LINE_STARTED_TOLERANCE = 0.15; // seconds
 
       let currentLineStarted =
         this.currentLine && this.currentTime > this.currentLine.starttime;
@@ -753,12 +754,13 @@ export default {
       let currentLineRefs = this.single
         ? this.$refs[`transcript-line`]
         : this.$refs[`transcript-line-${this.currentLineIndex}`];
-      if (currentLineRefs && currentLineRefs[0])
+      if (currentLineRefs && currentLineRefs[0]) {
         currentLineRefs[0].playAnimation(
           this.single
             ? 0
             : Math.min(this.currentTime - this.currentLine.starttime, 0)
         );
+      }
     },
     pauseCurrentLineAnimation() {
       let currentLineRefs =

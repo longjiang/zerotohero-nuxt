@@ -396,9 +396,7 @@ export default {
      * @param {Number} startFrom Starting time in seconds
      */
     async playAnimation(startFrom = 0) {
-      if (!this.annotated) {
-        return;
-      } else {
+      if (this.annotated) {
         this.animate = true;
         if (this.animationDuration) {
           let blocks = this.$el.querySelectorAll(
@@ -425,6 +423,7 @@ export default {
             durationAlreadyPlayed = durationAlreadyPlayed + blockDuration;
             // Which ones should skip
             if (durationAlreadyPlayed > startFrom) {
+              
               if (!this.animate) return;
               block.classList.add("animate");
               await Helper.timeout(blockDuration * 1000);
@@ -550,6 +549,9 @@ export default {
       }
       this.annotating = false;
       this.annotated = true;
+      this.onAnnotated()
+    },
+    onAnnotated() {
       this.$emit("annotated", true);
     },
     getSavedWords() {

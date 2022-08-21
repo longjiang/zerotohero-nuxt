@@ -7,7 +7,7 @@
         'transcript-line-current': current,
         'transcript-line-wide': !single && params.lg,
         'transcript-line-with-translation': showParallelLine,
-        'transparent': hideWhileAnnotating && !annotated
+        transparent: hideWhileAnnotating && !annotated,
       }"
       ref="lines"
       :data-line-index="lineIndex"
@@ -81,7 +81,7 @@
           <span
             v-else-if="line.line.length > 0 && (parallelLine || translation)"
             :data-line-index="lineIndex"
-            v-html="(translation || parallelLine)"
+            v-html="translation || parallelLine"
             :contenteditable="enableTranslationEditing"
             @blur.capture="trasnlationLineBlur"
             @keydown.capture="trasnlationLineKeydown"
@@ -95,12 +95,12 @@
 <script>
 import Helper from "@/lib/helper";
 import { ContainerQuery } from "vue-container-query";
-import BeatLoader from 'vue-spinner/src/BeatLoader.vue'
+import BeatLoader from "vue-spinner/src/BeatLoader.vue";
 
 export default {
   components: {
     ContainerQuery,
-    BeatLoader
+    BeatLoader,
   },
   props: {
     line: {
@@ -145,10 +145,11 @@ export default {
     enableTranslationEditing: {
       type: Boolean,
     },
-    hideWhileAnnotating: { // Whether to hide the line before annotation is complete (for reducing flickering in single-line mode)
+    hideWhileAnnotating: {
+      // Whether to hide the line before annotation is complete (for reducing flickering in single-line mode)
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
@@ -176,21 +177,9 @@ export default {
         return this.$store.state.settings.l2;
     },
   },
-  watch: {
-    annotated() {
-      if (
-        this.showAnimation &&
-        this.annotated &&
-        this.animateOnceAnnotated !== undefined &&
-        this.$refs["annotate"]
-      ) {
-        this.$refs["annotate"].playAnimation(this.animateOnceAnnotated);
-      }
-    },
-  },
   methods: {
     getSavedWords() {
-      return this.$refs.annotate.getSavedWords()
+      return this.$refs.annotate.getSavedWords();
     },
     onTranslation(translation) {
       this.translation = translation;
@@ -201,11 +190,7 @@ export default {
     },
     playAnimation(startFrom) {
       if (this.$refs["annotate"]) {
-        if (this.annotated) {
-          this.$refs["annotate"].playAnimation(startFrom);
-        } else {
-          this.animateOnceAnnotated = startFrom;
-        }
+        this.$refs["annotate"].playAnimation(startFrom);
       }
     },
     pauseAnimation() {
@@ -277,7 +262,7 @@ export default {
     .transcript-line-l2 {
       padding-left: 1.5rem;
       ::v-deep .annotated {
-        text-align: center !important  
+        text-align: center !important;
       }
     }
     .transcript-line-l2-rtl {
