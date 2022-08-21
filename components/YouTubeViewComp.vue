@@ -53,6 +53,7 @@
           showType,
           episodes,
           largeEpisodeCount,
+          useAutoTextSize: true,
           showInfoButton: true,
           autoload: true,
           autoplay: false,

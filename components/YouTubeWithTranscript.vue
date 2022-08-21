@@ -5,7 +5,7 @@
         ? 'youtube-with-transcript-horizontal-' +
           (landscape ? 'landscape' : 'portrait')
         : ''
-    }`"
+    } ${useAutoTextSize ? 'youtube-with-transcript-auto-size' : ''}`"
   >
     <div
       :class="{
@@ -47,7 +47,7 @@
             showFullscreenToggle,
             showCollapse: layout === 'horizontal' && !landscape,
             duration,
-            initialTime: starttime ? starttime : 0
+            initialTime: starttime ? starttime : 0,
           }"
           @previous="$emit('previous')"
           @next="$emit('next')"
@@ -67,7 +67,10 @@
       </div>
     </div>
     <div class="youtube-transcript-column">
-      <div class="youtube-video-info youtube-video-info-top" v-if="layout === 'horizontal'">
+      <div
+        class="youtube-video-info youtube-video-info-top"
+        v-if="layout === 'horizontal'"
+      >
         <h3
           v-if="video.title"
           :class="{
@@ -127,10 +130,11 @@
           collapsed,
           startLineIndex,
           skin,
+          useAutoTextSize,
           landscape,
           stopLineIndex,
           forcePro,
-          autoPause
+          autoPause,
         }"
         @seek="seekYouTube"
         @pause="pause"
@@ -139,8 +143,10 @@
         @speechEnd="speechEnd"
         @updateTranslation="updateTranslation"
       />
-
-      <div class="mt-5 youtube-video-info youtube-video-info-bottom" v-if="layout === 'horizontal'">
+      <div
+        class="mt-5 youtube-video-info youtube-video-info-bottom"
+        v-if="layout === 'horizontal'"
+      >
         <div class="text-center mt-5 mb-5" v-if="video.checkingSubs">
           <Loader :sticky="true" message="Loading subtitles..." />
         </div>
@@ -196,80 +202,83 @@ import YouTube from "@/lib/youtube";
 export default {
   props: {
     video: {
-      type: Object
+      type: Object,
     },
     sticky: {
-      default: false
+      default: false,
     },
     show: {
-      type: Object
+      type: Object,
     },
     showType: {
-      type: String
+      type: String,
     },
     showInfoButton: {
       // Whether to show an "i" button that toggles the video information display modal
       type: Boolean,
-      default: false
+      default: false,
     },
     cc: {
       type: Boolean, // Whether to show cc inside the iframe player
-      default: false
+      default: false,
     },
     episodes: {
-      type: Array
+      type: Array,
     },
     largeEpisodeCount: {
-      type: Number // Mannually set the number of episode displayed in the episode navigator
+      type: Number, // Mannually set the number of episode displayed in the episode navigator
     },
     initialLayout: {
       type: String,
-      default: "horizontal" // or 'vertical', 'mini'
+      default: "horizontal", // or 'vertical', 'mini'
     },
     highlight: {
-      type: Array
+      type: Array,
     },
     hsk: {
-      default: "outside"
+      default: "outside",
     },
     autoload: {
-      default: false
+      default: false,
     },
     autoplay: {
-      default: false
+      default: false,
     },
     startLineIndex: {
-      default: undefined
+      default: undefined,
     },
     starttime: {
-      default: 0
+      default: 0,
     },
     startAtRandomTime: {
-      default: 0
+      default: 0,
     },
     stopLineIndex: {
-      default: -1
+      default: -1,
     },
     skin: {
-      default: "light"
+      default: "light",
     },
     forcePortrait: {
-      default: false
+      default: false,
     },
     showFullscreenToggle: {
-      default: true
+      default: true,
     },
     showLineList: {
-      default: true
+      default: true,
     },
     showControls: {
-      default: true
+      default: true,
     },
     forcePro: {
-      default: false
+      default: false,
     },
     showAnimation: {
-      default: true
+      default: true,
+    },
+    useAutoTextSize: {
+      default: false
     }
   },
   data() {
@@ -290,7 +299,7 @@ export default {
       transcriptKey: 0,
       videoInfoKey: 0,
       viewportHeight: undefined,
-      viewportWidth: undefined
+      viewportWidth: undefined,
     };
   },
   computed: {
@@ -330,7 +339,7 @@ export default {
         let landscape = this.viewportWidth > this.viewportHeight;
         return landscape;
       }
-    }
+    },
   },
   created() {
     if (process.browser) {
@@ -374,7 +383,7 @@ export default {
     },
     initialLayout() {
       this.layout = this.initialLayout;
-    }
+    },
   },
   methods: {
     onSeek(percentage) {
@@ -449,21 +458,21 @@ export default {
       this.duration = duration;
     },
     updateTranslation(translation) {
-      let translationLines = translation.split("\n").filter(t => t !== "");
+      let translationLines = translation.split("\n").filter((t) => t !== "");
       if (translationLines.length > 0 && this.video.subs_l2) {
         let subs_l1 = this.video.subs_l2.map((line, lineIndex) => {
           if (line && translationLines[lineIndex])
             return {
               starttime: line.starttime,
               line: translationLines[lineIndex],
-              l1: this.$l1.code
+              l1: this.$l1.code,
             };
         });
         Vue.set(this.video, "subs_l1", subs_l1);
       }
     },
     updateOriginalText(text) {
-      let textLines = text.split("\n").filter(t => t !== "");
+      let textLines = text.split("\n").filter((t) => t !== "");
       let subs_l2;
       if (
         textLines.length > 0 &&
@@ -474,7 +483,7 @@ export default {
         subs_l2 = textLines.map((line, lineIndex) => {
           return {
             starttime: increment * lineIndex,
-            line
+            line,
           };
         });
       } else {
@@ -482,7 +491,7 @@ export default {
           if (this.video.subs_l2[lineIndex]) {
             return {
               starttime: this.video.subs_l2[lineIndex].starttime,
-              line
+              line,
             };
           }
         });
@@ -499,9 +508,11 @@ export default {
     toggleEnableTranslationEditing(enableTranslationEditing) {
       this.enableTranslationEditing = enableTranslationEditing;
       if (this.$refs.videoAdmin1)
-        this.$refs.videoAdmin1.enableTranslationEditing = enableTranslationEditing;
+        this.$refs.videoAdmin1.enableTranslationEditing =
+          enableTranslationEditing;
       if (this.$refs.videoAdmin2)
-        this.$refs.videoAdmin2.enableTranslationEditing = enableTranslationEditing;
+        this.$refs.videoAdmin2.enableTranslationEditing =
+          enableTranslationEditing;
     },
     updateEnded(ended) {
       if (ended !== this.ended) {
@@ -532,7 +543,8 @@ export default {
       if (this.$refs.transcript) {
         this.$refs.transcript.currentTime = currentTime;
         if (this.$refs.videoControls) {
-          this.$refs.videoControls.currentLine = this.$refs.transcript.currentLine;
+          this.$refs.videoControls.currentLine =
+            this.$refs.transcript.currentLine;
         }
       }
       if (this.$refs.videoControls) {
@@ -569,7 +581,7 @@ export default {
       this.speaking = false;
     },
     getHighlightStartTime(term) {
-      let matchedLines = this.video.subs_l2.filter(line =>
+      let matchedLines = this.video.subs_l2.filter((line) =>
         line.line.includes(term)
       );
       if (matchedLines.length > 0) {
@@ -577,7 +589,7 @@ export default {
       }
     },
     getHighlightLineIndex(term) {
-      return this.video.subs_l2.findIndex(line => line.line.includes(term));
+      return this.video.subs_l2.findIndex((line) => line.line.includes(term));
     },
     seekYouTube(starttime) {
       this.$refs.youtube.seek(starttime);
@@ -603,8 +615,8 @@ export default {
     toggleFullscreenMode() {
       this.layout = this.layout === "horizontal" ? "vertical" : "horizontal";
       this.$emit("updateLayout", this.layout);
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -667,6 +679,37 @@ export default {
     top: 0;
     z-index: 2;
   }
+}
+
+.youtube-with-transcript-vertical.youtube-with-transcript-auto-size {
+  display: flex;
+  height: calc(
+    100vh - 3rem - env(safe-area-inset-top) - env(safe-area-inset-bottom)
+  );
+  flex-direction: column;
+  .youtube-video-column {
+    flex: 0;
+  }
+  .youtube-transcript-column {
+    flex: 1;
+    ::v-deep .synced-transcript {
+      height: 100%;
+    }
+    ::v-deep .transcript-wrapper {
+      height: 100%;
+    }
+    ::v-deep .transcript-line {
+      height: 100%;
+      overflow: hidden;
+    }
+  }
+}
+
+.zerotohero-not-wide .youtube-with-transcript-vertical {
+  height: calc(
+    100vh - 3rem - env(safe-area-inset-top) - env(safe-area-inset-bottom) -
+      4.75rem
+  );
 }
 
 #zerotohero {
