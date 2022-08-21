@@ -275,7 +275,7 @@ export default {
   data() {
     return {
       audioMode: false,
-      autoPause: true,
+      autoPause: false,
       collapsed: false,
       currentTime: 0,
       duration: undefined,
