@@ -267,7 +267,8 @@ export default {
 .synced-transcript-single-line {
   .transcript-line-both {
     text-align: center;
-    max-width: calc((100vh - 3rem - env(safe-area-inset-top) - 10rem) * 16 / 9);
+    // max-width: calc((100vh - 3rem - env(safe-area-inset-top) - 10rem) * 16 / 9);
+    padding: 0 1rem;
     margin: 0 auto;
     .transcript-line-l2 {
       padding-left: 1.5rem;

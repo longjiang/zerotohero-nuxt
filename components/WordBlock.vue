@@ -1099,7 +1099,7 @@ export default {
 [dir="rtl"] .annotate-template {
   font-size: 1.33em;
   .word-block-pinyin {
-    font-size: 0.66rem;
+    font-size: 0.7em;
   }
 }
 

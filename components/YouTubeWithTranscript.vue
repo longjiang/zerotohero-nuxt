@@ -335,6 +335,7 @@ export default {
         return this.$store.state.settings.adminMode;
     },
     landscape() {
+      if (this.layout === 'vertical') return false;
       if (this.forcePortrait) return false;
       if (process.browser && this.viewportWidth && this.viewportHeight) {
         let landscape = this.viewportWidth > this.viewportHeight;
@@ -397,10 +398,10 @@ export default {
         let averageL2LineLength = this.video.subs_l2.map(l =>  l.line ? l.line.length : 0).reduce((p, c) => p + c) / this.video.subs_l2.length
         let averageL1LineLength = this.video.subs_l1 ? this.video.subs_l1.map(l =>  l.line ? l.line.length : 0).reduce((p, c) => p + c) / this.video.subs_l1.length : 0
         let length = averageL1LineLength + averageL2LineLength
-        let textSize = area / length / 550;
+        let textSize = area / length / 2000;
         textSize = Math.min(textSize, 2.2)
-        textSize = Math.max(textSize, 1)
-        console.log({ area, length, ratio: area / length,  textSize })
+        textSize = Math.max(textSize, 1.2)
+
         this.textSize = textSize
       }
     },
