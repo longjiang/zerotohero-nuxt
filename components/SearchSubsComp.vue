@@ -51,9 +51,9 @@
           :style="`width: 6em`"
           @blur="showFilter = false"
         />
-        <span
-          class="search-subs-hit-index ml-2 mr-2 d-inline-block"
-        >{{ hitIndex + 1 }} of {{ hits.length }}</span>
+        <span class="search-subs-hit-index ml-2 mr-2 d-inline-block">
+          {{ hitIndex + 1 }} of {{ hits.length }}
+        </span>
         <router-link
           v-if="currentHit"
           :to="`/${$l1.code}/${$l2.code}/youtube/view/${
@@ -98,7 +98,9 @@
               opacity: 0.7;
             "
             v-if="groupsRight['zthSaved'].length > 0"
-          >{{ groupsRight["zthSaved"].length }}</span>
+          >
+            {{ groupsRight["zthSaved"].length }}
+          </span>
           <b-button
             :variant="skin === 'light' ? 'gray' : 'ghost-dark-no-bg'"
             class="search-subs-fullscreen"
@@ -134,7 +136,10 @@
         </div>
       </span>
     </div>
-    <div :class="{ 'loader text-center pb-5 pt-3': true, 'd-none': !checking }" style="flex: 1">
+    <div
+      :class="{ 'loader text-center pb-5 pt-3': true, 'd-none': !checking }"
+      style="flex: 1"
+    >
       <Loader :sticky="true" message="Searching through video captions..." />
     </div>
     <div class="text-center p-3" v-if="!checking && hits.length === 0">
@@ -144,7 +149,12 @@
         in
         <router-link :to="{ name: 'settings' }">Settings</router-link>
       </p>
-      <b-button v-if="$adminMode" size="sm" variant="primary" @click="checkHits">
+      <b-button
+        v-if="$adminMode"
+        size="sm"
+        variant="primary"
+        @click="checkHits"
+      >
         <i class="fa fa-sync-alt"></i>
         Refresh
       </b-button>
@@ -165,7 +175,7 @@
           autoplay: navigated,
           showLineList: false,
           episodes: hits.map((h) => h.video),
-          forcePro: true
+          forcePro: true,
         }"
         @previous="goToPrevHit"
         @next="goToNextHit"
@@ -196,7 +206,9 @@
               'text-white': sort === 'length',
             }"
             @click.stop.prevent="sort = 'length'"
-          >Sort By Length</button>
+          >
+            Sort By Length
+          </button>
           <button
             :class="{
               'btn btn-small': true,
@@ -204,7 +216,9 @@
               'text-white': sort === 'left',
             }"
             @click.stop.prevent="sort = 'left'"
-          >Sort Left</button>
+          >
+            Sort Left
+          </button>
           <button
             :class="{
               'btn btn-small': true,
@@ -212,14 +226,19 @@
               'text-white': sort === 'right',
             }"
             @click.stop.prevent="sort = 'right'"
-          >Sort Right</button>
+          >
+            Sort Right
+          </button>
         </div>
         <template v-for="c in get(`groupIndex${ucFirst(sort)}`)">
           <div
             :set="(theseHits = get(`groups${ucFirst(sort)}`)[c])"
             :key="`comp-subs-grouping-${sort}-${c}`"
           >
-            <hr :key="`comp-subs-grouping-${c}-divider`" v-if="theseHits && theseHits.length > 0" />
+            <hr
+              :key="`comp-subs-grouping-${c}-divider`"
+              v-if="theseHits && theseHits.length > 0"
+            />
             <template v-for="(hit, index) in theseHits">
               <div
                 @click.stop="goToHit(hit)"
@@ -292,26 +311,26 @@ import { mapState } from "vuex";
 export default {
   props: {
     terms: {
-      type: Array
+      type: Array,
     },
     level: {
-      type: String
+      type: String,
     },
     keyboard: {
-      default: true
+      default: true,
     },
     fullscreenToggle: {
-      default: true
+      default: true,
     },
     tvShow: {
-      default: undefined
+      default: undefined,
     },
     exact: {
-      default: false
+      default: false,
     },
     skin: {
-      default: "light"
-    }
+      default: "light",
+    },
   },
   data() {
     return {
@@ -356,8 +375,8 @@ export default {
         pt: "portuguese",
         ru: "russian",
         es: "spanish",
-        tr: "turkish"
-      }
+        tr: "turkish",
+      },
     };
   },
   computed: {
@@ -392,7 +411,7 @@ export default {
     },
     hitIndex() {
       let hits = this.hits;
-      return hits.findIndex(hit => hit === this.currentHit);
+      return hits.findIndex((hit) => hit === this.currentHit);
     },
     hits() {
       let hits = [];
@@ -415,7 +434,7 @@ export default {
     startLineIndex() {
       let startLineIndex = this.currentHit.lineIndex;
       return startLineIndex;
-    }
+    },
   },
   watch: {
     regex() {
@@ -433,7 +452,7 @@ export default {
       }
       this.collectContext(hits);
       this.$emit("updated", hits);
-    }
+    },
   },
   async mounted() {
     if (typeof this.$store.state.settings !== "undefined") {
@@ -531,7 +550,7 @@ export default {
       }
     },
     simplifyExcludeTerms(excludeTerms) {
-      excludeTerms = excludeTerms.map(t =>
+      excludeTerms = excludeTerms.map((t) =>
         t
           .replace(new RegExp(`.*?((${this.terms.join("|")}).).*`), "$1")
           .replace(new RegExp(`.*?(.(${this.terms.join("|")})).*`), "$1")
@@ -575,9 +594,9 @@ export default {
         excludeTerms = Helper.unique(excludeTerms);
       }
       this.excludeTerms = excludeTerms.filter(
-        s =>
+        (s) =>
           s !== "" &&
-          !this.terms.map(t => t.toLowerCase()).includes(s.toLowerCase())
+          !this.terms.map((t) => t.toLowerCase()).includes(s.toLowerCase())
       );
       let hits = await this.$subs.searchSubs({
         terms: this.terms,
@@ -590,7 +609,7 @@ export default {
         talkFilter: this.talkFilter,
         exact: this.exact,
         apostrophe: true,
-        convertToSimplified: this.$l2.han
+        convertToSimplified: this.$l2.han,
       });
 
       hits = this.updateSaved(hits);
@@ -635,18 +654,18 @@ export default {
     groupByLength(hits) {
       let hitGroups = {};
       let savedHits = [];
-      let unsavedHits = hits.filter(hit => {
+      let unsavedHits = hits.filter((hit) => {
         if (hit.saved) savedHits.push(hit);
         return !hit.saved;
       });
       let lengths = hits.map(
-        hit => hit.video.subs_l2[hit.lineIndex].line.length
+        (hit) => hit.video.subs_l2[hit.lineIndex].line.length
       );
       lengths = Helper.unique(lengths);
       for (let length of lengths) {
         if (!hitGroups[length]) hitGroups[length] = {};
         hitGroups[length] = unsavedHits.filter(
-          hit => hit.video.subs_l2[hit.lineIndex].line.length === length
+          (hit) => hit.video.subs_l2[hit.lineIndex].line.length === length
         );
       }
       hitGroups = Object.assign({ zthSaved: savedHits }, hitGroups);
@@ -660,13 +679,13 @@ export default {
     groupContext(context, hits, leftOrRight) {
       let hitGroups = {};
       let savedHits = [];
-      let unsavedHits = hits.filter(hit => {
+      let unsavedHits = hits.filter((hit) => {
         if (hit.saved) savedHits.push(hit);
         return !hit.saved;
       });
-      for (let c of context.map(s => s.charAt(0))) {
+      for (let c of context.map((s) => s.charAt(0))) {
         if (!hitGroups[c.charAt(0)]) hitGroups[c.charAt(0)] = {};
-        hitGroups[c.charAt(0)] = unsavedHits.filter(hit =>
+        hitGroups[c.charAt(0)] = unsavedHits.filter((hit) =>
           c.length > 0
             ? hit[`${leftOrRight}Context`].startsWith(c)
             : hit[`${leftOrRight}Context`] === ""
@@ -689,7 +708,7 @@ export default {
         index.push({ c, length: group[c].length });
       }
       if (sort) index = index.sort((a, b) => b.length - a.length);
-      index = index.map(i => i.c);
+      index = index.map((i) => i.c);
       index.splice(index.indexOf("zthSaved"), 1);
       return ["zthSaved"].concat(index);
     },
@@ -698,7 +717,7 @@ export default {
         hit.saved = this.$store.getters["savedHits/has"]({
           l2: this.$l2.code,
           hit,
-          terms: this.terms
+          terms: this.terms,
         });
       }
       return hits;
@@ -708,7 +727,7 @@ export default {
       this.$store.dispatch("savedHits/add", {
         terms: this.terms,
         hit: hit,
-        l2: this.$l2.code
+        l2: this.$l2.code,
       });
       hit.saved = true;
       if (this.currentHit === hit) this.goToNextHit();
@@ -722,13 +741,13 @@ export default {
       this.$store.dispatch("savedHits/remove", {
         terms: this.terms,
         hit: hit,
-        l2: this.$l2.code
+        l2: this.$l2.code,
       });
       hit.saved = false;
       if (this.currentHit === hit) this.goToNextHit();
-      let index = this.groupsLeft["zthSaved"].findIndex(h => h === hit);
+      let index = this.groupsLeft["zthSaved"].findIndex((h) => h === hit);
       if (index !== -1) this.groupsLeft["zthSaved"].splice(index, 1);
-      index = this.groupsRight["zthSaved"].findIndex(h => h === hit);
+      index = this.groupsRight["zthSaved"].findIndex((h) => h === hit);
       if (index !== -1) this.groupsRight["zthSaved"].splice(index, 1);
       this.putHitBack(this.groupsLeft, hit, "left");
       this.putHitBack(this.groupsRight, hit, "right");
@@ -737,7 +756,7 @@ export default {
       for (let c in groups) {
         if (c !== "zthSaved") {
           let group = groups[c];
-          let index = group.findIndex(h => h === hit);
+          let index = group.findIndex((h) => h === hit);
           if (index !== -1) group.splice(index, 1);
         }
       }
@@ -871,8 +890,8 @@ export default {
           return false;
         }
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -954,7 +973,7 @@ export default {
     margin-left: calc(1080px / 2 * -0.77 / 2);
   }
 
-  :deep(.transcript-line-both) {
+  :deep(.synced-transcript-single-line) .transcript-line-both {
     padding-top: 0;
     font-size: 1.7em;
     font-weight: bold;
@@ -965,15 +984,24 @@ export default {
       opacity: 1;
       line-height: 1.25;
     }
+
+    .transcript-line-l2 {
+      padding-left: 0;
+    }
+    .transcript-line-l2-rtl {
+      padding-right: 0;
+    }
   }
 
   :deep(.annotated) {
     line-height: 1;
   }
 
-  :deep(.annotator-menu-toggle) {
+  :deep(.annotator-buttons) {
     position: absolute;
     right: -3rem;
+    padding: 0;
   }
+
 }
 </style>
