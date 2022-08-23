@@ -168,7 +168,7 @@ export default {
       default: false,
     },
     textSize: {
-      default: 1
+      default: 1,
     },
     forcePro: {
       default: false,
@@ -197,9 +197,9 @@ export default {
       visibleMax: this.startLineIndex ? Number(this.startLineIndex) + 30 : 30,
       visibleRange: 30,
       autoPausedLineIndex: undefined,
-      preventJumpingAtStart: typeof this.startLineIndex !== "undefined",
       useSmoothScroll: false,
       NON_PRO_MAX_LINES,
+      preventCurrentTimeUpdate: false
     };
   },
   computed: {
@@ -304,9 +304,7 @@ export default {
       }
     },
     async currentTime() {
-      if (this.preventJumpingAtStart) {
-        this.turnOffPreventJumptingAtStartAfter3Seconds();
-      }
+      if (this.preventCurrentTimeUpdate) return;
       this.executeTimeBasedMethods();
       this.previousTime = this.currentTime;
     },
@@ -322,7 +320,7 @@ export default {
     async currentLine() {
       if (!this.single && !this.paused) this.scrollTo(this.currentLineIndex);
       if (!this.paused && this.showAnimation) {
-        if (this.single) await Helper.timeout(100) // wait for the element to render first
+        if (this.single) await Helper.timeout(100); // wait for the element to render first
         this.playCurrentLineAnimation(this.single ? 0.1 : 0);
       }
     },
@@ -341,15 +339,11 @@ export default {
       return interrupt;
     },
     onJump() {
-      if (
-        typeof this.startLineIndex !== "undefined" &&
-        this.preventJumpingAtStart
-      )
-        return;
+      if (typeof this.startLineIndex !== "undefined") return;
       this.playNearestLine();
     },
     onWithinCurrentLine() {
-      this.autoPausedLineIndex = undefined // reset autopause
+      this.autoPausedLineIndex = undefined; // reset autopause
     },
     onCurrentLineEneded() {
       this.doAutoPause();
@@ -413,10 +407,6 @@ export default {
       while (id--) {
         window.cancelAnimationFrame(id);
       }
-    },
-    async turnOffPreventJumptingAtStartAfter3Seconds() {
-      await Helper.timeout(3000);
-      this.preventJumpingAtStart = false;
     },
     visibilityChanged(isVisible) {
       if (isVisible) {
@@ -493,7 +483,6 @@ export default {
       // "within current line"
       // ...
 
-
       let currentLineStarted =
         this.currentLine && this.currentTime > this.currentLine.starttime;
 
@@ -523,21 +512,24 @@ export default {
       let withinCurrentLine = currentLineStarted && !currentLineEnded;
       let withinNextLine = nextLineStarted && !nextLineEnded;
       let betweenCurrentAndNextLine = currentLineEnded && !nextLineStarted;
+      // console.log(
+      //   `this.currentTime: ${this.currentTime}, this.currentLine.starttime: ${this.currentLine.starttime}`
+      // );
 
       if (!this.currentLine) {
-        // console.log('first play')
+        // console.log("first play");
         this.onFirstPlay();
       }
       if (withinCurrentLine) {
-        // console.log('within current line')
+        // console.log("within current line");
         this.onWithinCurrentLine();
       }
       if (betweenCurrentAndNextLine) {
-        // console.log('between current and next line')
+        // console.log("between current and next line");
         this.onCurrentLineEneded();
       }
       if (withinNextLine) {
-        // console.log('within next line')
+        // console.log("within next line");
         let interrupt = this.beforeAdvanceToNextLine();
         if (!interrupt) this.onAdvanceToNextLine();
       }
@@ -547,7 +539,7 @@ export default {
         !betweenCurrentAndNextLine &&
         !withinNextLine
       ) {
-        // console.log('jump')
+        // console.log(`JUMP: this.currentTime: ${this.currentTime}, this.currentLine.starttime: ${this.currentLine.starttime}, this.preventCurrentTimeUpdate: ${this.preventCurrentTimeUpdate}`);
         let interrupt = this.beforeJump();
         if (!interrupt) this.onJump();
       }
@@ -754,7 +746,7 @@ export default {
       this.currentLineIndex = this.lines.findIndex((l) => l === line);
       this.currentLine = line;
       this.nextLine = this.lines[this.currentLineIndex + 1];
-      this.seekVideoTo(line.starttime - NEXT_LINE_STARTED_TOLERANCE + 0.05); // We rewind to a little bit earlier to capture more audio at the beginning of the line
+      this.seekVideoTo(line.starttime - NEXT_LINE_STARTED_TOLERANCE); // We rewind to a little bit earlier to capture more audio at the beginning of the line
       if (!this.paused) {
         this.playCurrentLineAnimation();
       }

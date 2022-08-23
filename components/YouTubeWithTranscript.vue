@@ -199,6 +199,7 @@
 <script>
 import Vue from "vue";
 import YouTube from "@/lib/youtube";
+import { timeout } from "@/lib/utils";
 
 export default {
   props: {
@@ -336,7 +337,7 @@ export default {
         return this.$store.state.settings.adminMode;
     },
     landscape() {
-      if (this.layout === 'vertical') return false;
+      if (this.layout === "vertical") return false;
       if (this.forcePortrait) return false;
       if (process.browser && this.viewportWidth && this.viewportHeight) {
         let landscape = this.viewportWidth > this.viewportHeight;
@@ -390,20 +391,27 @@ export default {
   },
   methods: {
     getTextSize() {
-      let el = this.$el.querySelector('.synced-transcript')
+      let el = this.$el.querySelector(".synced-transcript");
       if (el) {
-        let styles = getComputedStyle(el)
-        let height = Number(styles.height.replace('px', ''))
-        let width = Number(styles.width.replace('px', ''))
+        let styles = getComputedStyle(el);
+        let height = Number(styles.height.replace("px", ""));
+        let width = Number(styles.width.replace("px", ""));
         let area = height * width;
-        let averageL2LineLength = this.video.subs_l2.map(l =>  l.line ? l.line.length : 0).reduce((p, c) => p + c) / this.video.subs_l2.length
-        let averageL1LineLength = this.video.subs_l1 ? this.video.subs_l1.map(l =>  l.line ? l.line.length : 0).reduce((p, c) => p + c) / this.video.subs_l1.length : 0
-        let length = averageL1LineLength + averageL2LineLength
+        let averageL2LineLength =
+          this.video.subs_l2
+            .map((l) => (l.line ? l.line.length : 0))
+            .reduce((p, c) => p + c) / this.video.subs_l2.length;
+        let averageL1LineLength = this.video.subs_l1
+          ? this.video.subs_l1
+              .map((l) => (l.line ? l.line.length : 0))
+              .reduce((p, c) => p + c) / this.video.subs_l1.length
+          : 0;
+        let length = averageL1LineLength + averageL2LineLength;
         let textSize = area / length / 2000;
-        textSize = Math.min(textSize, 2.2)
-        textSize = Math.max(textSize, 1.2)
+        textSize = Math.min(textSize, 2.2);
+        textSize = Math.max(textSize, 1.2);
 
-        this.textSize = textSize
+        this.textSize = textSize;
       }
     },
     onSeek(percentage) {
@@ -590,8 +598,20 @@ export default {
     pause() {
       this.$refs.youtube.pause();
     },
-    play() {
-      this.$refs.youtube.play();
+    async play() {
+      if (this.audioMode) {
+        if (this.speaking) {
+            this.$refs.transcript.stopAudioModeStuff();
+          } else {
+            this.$refs.transcript.doAudioModeStuff();
+          }
+      } else {
+        this.$refs.youtube.play();
+        this.$refs.transcript.preventCurrentTimeUpdate = true;
+        await timeout(500);
+        this.$refs.transcript.preventCurrentTimeUpdate = false;
+
+      }
     },
     speechStart() {
       this.$emit("speechStart");
@@ -615,23 +635,9 @@ export default {
     seekYouTube(starttime) {
       this.$refs.youtube.seek(starttime);
     },
-    pause() {
-      this.$refs.youtube.pause();
-    },
     togglePaused() {
-      if (this.audioMode) {
-        if (!this.paused) {
-          this.$refs.youtube.pause();
-        } else {
-          if (this.speaking) {
-            this.$refs.transcript.stopAudioModeStuff();
-          } else {
-            this.$refs.transcript.doAudioModeStuff();
-          }
-        }
-      } else {
-        this.$refs.youtube.togglePaused();
-      }
+      if (this.paused) this.play()
+      else this.pause()
     },
     toggleFullscreenMode() {
       this.layout = this.layout === "horizontal" ? "vertical" : "horizontal";
