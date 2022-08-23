@@ -339,7 +339,6 @@ export default {
       return interrupt;
     },
     onJump() {
-      if (typeof this.startLineIndex !== "undefined") return;
       this.playNearestLine();
     },
     onWithinCurrentLine() {
@@ -513,7 +512,7 @@ export default {
       let withinNextLine = nextLineStarted && !nextLineEnded;
       let betweenCurrentAndNextLine = currentLineEnded && !nextLineStarted;
       // console.log(
-      //   `this.currentTime: ${this.currentTime}, this.currentLine.starttime: ${this.currentLine.starttime}`
+      //   {currentTime: this.currentTime, currentLineStarttime: this.currentLine ? this.currentLine.starttime : undefined}
       // );
 
       if (!this.currentLine) {
@@ -539,7 +538,7 @@ export default {
         !betweenCurrentAndNextLine &&
         !withinNextLine
       ) {
-        // console.log(`JUMP: this.currentTime: ${this.currentTime}, this.currentLine.starttime: ${this.currentLine.starttime}, this.preventCurrentTimeUpdate: ${this.preventCurrentTimeUpdate}`);
+        // console.log('jump');
         let interrupt = this.beforeJump();
         if (!interrupt) this.onJump();
       }
