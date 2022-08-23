@@ -508,7 +508,7 @@ export default {
         background-color: #b1c751;
       }
     }
-    ::v-deep .language-list-item {
+    :deep(.language-list-item) {
       a {
         pointer-events: none;
       }
@@ -517,7 +517,7 @@ export default {
       .language-marker-size {
         background-color: #fd4f1c88;
       }
-      ::v-deep .language-list-item {
+      :deep(.language-list-item) {
         a {
           color: white;
         }
@@ -530,7 +530,7 @@ export default {
       .language-marker-size {
         background-color: #fd4f1c88;
       }
-      ::v-deep .language-list-item {
+      :deep(.language-list-item) {
         a {
           color: white;
         }

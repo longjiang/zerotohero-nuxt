@@ -527,20 +527,20 @@ export default {
     padding: 1rem;
     padding-top: 3rem;
 
-    ::v-deep .entry-word {
+    :deep(.entry-word) {
       font-size: 2rem;
     }
 
-    ::v-deep .entry-cjk {
+    :deep(.entry-cjk) {
       font-size: 1.2rem;
     }
 
-    ::v-deep .definitions-many {
+    :deep(.definitions-many) {
       columns: 1;
       margin-top: 1rem;
     }
 
-    ::v-deep .disambiguation-dropdown {
+    :deep(.disambiguation-dropdown) {
       overflow: hidden;
     }
   }
@@ -550,7 +550,7 @@ export default {
   }
 }
 
-::v-deep .disambiguation-dropdown {
+:deep(.disambiguation-dropdown) {
   margin-left: -3.5rem;
   width: 15rem;
 

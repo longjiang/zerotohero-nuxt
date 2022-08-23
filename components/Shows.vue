@@ -552,7 +552,7 @@ export default {
   font-size: 0.9em;
   cursor: pointer;
 }
-::v-deep .synced-transcript {
+:deep(.synced-transcript) {
   height: 5rem;
   overflow: hidden;
 }

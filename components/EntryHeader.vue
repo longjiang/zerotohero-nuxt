@@ -321,7 +321,7 @@ export default {
   font-size: 1.5rem;
 }
 
-::v-deep .hide-phonetics .word-block-pinyin {
+:deep(.hide-phonetics) .word-block-pinyin {
   opacity: 0;
 }
 </style>

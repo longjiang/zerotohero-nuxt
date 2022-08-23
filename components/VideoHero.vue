@@ -312,7 +312,7 @@ export default {
 @media screen and (min-width: 1280px) {
   .youtube {
     position: relative;
-    ::v-deep.youtube-screen {
+    :deep(.youtube-screen) {
       margin-top: calc(-1 * (56.25% - 50vh) / 2);
     }
   }

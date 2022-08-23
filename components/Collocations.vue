@@ -296,12 +296,12 @@ export default {
 };
 </script>
 <style scoped>
-.saved-collocations >>> .image-wall {
+.saved-collocations :deep(.image-wall) {
   flex-wrap: nowrap;
   max-width: 100%;
   overflow: hidden;
 }
-.saved-collocations >>> .image-wall-image {
+.saved-collocations :deep(.image-wall-image) {
   height: 4rem;
   max-width: 8rem;
 }

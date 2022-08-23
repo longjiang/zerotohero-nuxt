@@ -919,7 +919,7 @@ export default {
       color: rgba(255, 255, 255, 0.877);
     }
   }
-  ::v-deep .youtube-transcript-column {
+  :deep(.youtube-transcript-column) {
     min-height: 5rem; // Make sure the black space around the subs don't shift too much between lines
   }
 }
@@ -929,32 +929,32 @@ export default {
 }
 
 .reels {
-  ::v-deep .video-controls {
+  :deep(.video-controls) {
     display: none !important;
   }
 
-  ::v-deep .youtube-transcript-column {
+  :deep(.youtube-transcript-column) {
     margin-top: 0.5rem;
   }
 
-  ::v-deep .quick-gloss {
+  :deep(.quick-gloss) {
     display: none;
   }
 
-  ::v-deep .youtube-with-transcript {
+  :deep(.youtube-with-transcript) {
     width: calc(1080px / 2);
     height: calc(1920px / 2);
     background: #010101;
     margin-left: calc((100vw - 1080px / 2) / 2);
   }
 
-  ::v-deep .youtube {
+  :deep(.youtube) {
     width: calc(1080px / 2 * 1.77);
     height: calc(855px / 2);
     margin-left: calc(1080px / 2 * -0.77 / 2);
   }
 
-  ::v-deep .transcript-line-both {
+  :deep(.transcript-line-both) {
     padding-top: 0;
     font-size: 1.7em;
     font-weight: bold;
@@ -967,11 +967,11 @@ export default {
     }
   }
 
-  ::v-deep .annotated {
+  :deep(.annotated) {
     line-height: 1;
   }
 
-  ::v-deep .annotator-menu-toggle {
+  :deep(.annotator-menu-toggle) {
     position: absolute;
     right: -3rem;
   }

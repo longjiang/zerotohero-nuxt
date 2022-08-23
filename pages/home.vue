@@ -137,7 +137,7 @@ export default {
 @media (max-width: 540px) {
   .home-card {
     padding: 2rem 1rem;
-    ::v-deep .history-item-column.col-12 {
+    :deep(.history-item-column.col-12) {
       padding-left: 0.5rem;
       padding-right: 0.5rem;
     }

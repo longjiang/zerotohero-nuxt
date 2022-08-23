@@ -588,7 +588,7 @@ export default {
   }
 }
 
-::v-deep .flag {
+:deep(.flag) {
   top: -1rem;
   left: 0;
   position: relative;

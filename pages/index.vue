@@ -772,7 +772,7 @@ export default {
   right: 1rem;
 }
 
-::v-deep .stats-summary {
+:deep(.stats-summary) {
   color: #ccc;
 }
 

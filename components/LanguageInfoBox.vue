@@ -100,7 +100,7 @@ export default {
 <style lang="scss" scoped>
 .language-info-box-images {
   justify-content: center;
-  ::v-deep .image-wall-image {
+  :deep(.image-wall-image) {
     flex: 0;
     margin-right: 1rem;
     margin-bottom: 1rem;

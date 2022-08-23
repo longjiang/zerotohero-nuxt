@@ -251,15 +251,15 @@ export default {
     background: rgba(37, 36, 44, 0.651);
   }
 }
-::v-deep .youtube-title,
-::v-deep .phrasebook-title {
+:deep(.youtube-title),
+:deep(.phrasebook-title) {
   font-size: 1rem;
   line-height: 1.33rem !important;
 }
 
 .col-compact {
   padding: 0.5rem;
-  ::v-deep .media-body {
+  :deep(.media-body) {
     font-size: 0.9em;
   }
 }

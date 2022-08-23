@@ -332,7 +332,7 @@ export default {
 .youtube {
   padding-bottom: 56.25%;
   position: relative;
-  ::v-deep iframe,
+  :deep(iframe),
   .youtube-screen {
     position: absolute;
     width: 100%;

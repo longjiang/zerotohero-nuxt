@@ -660,7 +660,7 @@ export default {
     width: 8.88rem;
     max-width: 8.88rem;
     margin-right: 5rem;
-    ::v-deep .video-controls {
+    :deep(.video-controls) {
       .quick-access-button-previous-line,
       .quick-access-button-next-line,
       .quick-access-button-rewind,
@@ -721,13 +721,13 @@ export default {
   }
   .youtube-transcript-column {
     flex: 1;
-    ::v-deep .synced-transcript {
+    :deep(.synced-transcript) {
       height: 100%;
     }
-    ::v-deep .transcript-wrapper {
+    :deep(.transcript-wrapper) {
       height: 100%;
     }
-    ::v-deep .transcript-line {
+    :deep(.transcript-line) {
       height: 100%;
       overflow: hidden;
     }

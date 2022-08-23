@@ -32,11 +32,11 @@ export default {
 </script>
 
 <style scoped>
-* >>> h5 {
+* :deep(h5) {
   margin-top: 2rem;
 }
 
-* >>> h5 + div {
+* :deep(h5 + div) {
   padding-left: 2rem;
 }
 </style>

@@ -171,7 +171,7 @@ export default {
     background-color: hsla(0deg 0% 50% / 30%);
     -webkit-backdrop-filter: blur(5px);
     backdrop-filter: blur(5px);
-    ::v-deep .progress-bar {
+    :deep(.progress-bar) {
       background-color: #fd4f1c;
     }
   }

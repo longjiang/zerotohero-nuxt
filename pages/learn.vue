@@ -178,7 +178,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .content-pane-left {
-  ::v-deep .definitions-many {
+  :deep(.definitions-many) {
     columns: 1;
     margin-top: 1rem;
   }

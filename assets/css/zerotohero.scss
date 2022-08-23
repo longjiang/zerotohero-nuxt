@@ -1085,7 +1085,7 @@ button.bg-primary:focus {
   box-shadow: 0 10px 30px rgba(68, 75, 134, 0.2);
   height: 100%;
   color: #444;
-  ::v-deep .language-list .language-list-item a {
+  :deep(.language-list) .language-list-item a {
     color: #000000cc !important;
   }
   &.home-card-dark {

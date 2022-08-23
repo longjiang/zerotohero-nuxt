@@ -200,7 +200,7 @@ export default {
   height: 3rem;
   white-space: nowrap;
   overflow: hidden;
-  ::v-deep .image-wall-image {
+  :deep(.image-wall-image) {
     height: 3rem;
     width: auto;
     object-fit: cover;
@@ -224,11 +224,11 @@ export default {
   font-size: 1.3em;
 }
 
-::v-deep .hide-phonetics .word-block-pinyin {
+:deep(.hide-phonetics) .word-block-pinyin {
   opacity: 0;
 }
 
-::v-deep .hide-word .word-block-text {
+:deep(.hide-word) .word-block-text {
   opacity: 0;
 }
 

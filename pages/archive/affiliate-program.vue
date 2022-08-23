@@ -121,7 +121,7 @@ export default {
 </script>
 
 <style scoped>
-.affiliate >>> h4 {
+.affiliate :deep(h4) {
   margin-top: 3rem;
   margin-bottom: 1rem;
 }

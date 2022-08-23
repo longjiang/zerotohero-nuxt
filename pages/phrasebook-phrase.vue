@@ -514,26 +514,26 @@ export default {
   .content-pane-left {
     overflow-y: auto;
 
-    ::v-deep .entry-word {
+    :deep(.entry-word) {
       font-size: 2rem;
     }
 
-    ::v-deep .entry-cjk {
+    :deep(.entry-cjk) {
       font-size: 1.2rem;
     }
 
-    ::v-deep .definitions-many {
+    :deep(.definitions-many) {
       columns: 1;
       margin-top: 1rem;
     }
 
-    ::v-deep .disambiguation-dropdown {
+    :deep(.disambiguation-dropdown) {
       overflow: hidden;
     }
   }
 }
 
-::v-deep .disambiguation-dropdown {
+:deep(.disambiguation-dropdown) {
   margin-left: -3.5rem;
   width: 15rem;
 
@@ -553,11 +553,11 @@ export default {
   color: #999;
 }
 
-::v-deep .hide-phonetics .word-block-pinyin {
+:deep(.hide-phonetics .word-block-pinyin) {
   opacity: 0;
 }
 
-::v-deep .hide-word .word-block-text {
+:deep(.hide-word .word-block-text) {
   opacity: 0;
 }
 </style>

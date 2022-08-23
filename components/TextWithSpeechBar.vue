@@ -517,9 +517,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::v-deep .sentence.current,
-::v-deep .translation-sentence.current,
-::v-deep .annotate-translation-sentence.current {
+:deep(.sentence.current),
+:deep(.translation-sentence.current),
+:deep(.annotate-translation-sentence.current) {
   background-color: rgba(212, 212, 255, 0.5);
 }
 
@@ -533,7 +533,7 @@ export default {
   z-index: 11;
 }
 
-::v-deep img {
+:deep(img) {
   max-width: 100%;
   object-fit: contain;
   height: auto;
@@ -541,7 +541,7 @@ export default {
 
 .annotated-line {
   color: black;
-  ::v-deep .annotate-translation {
+  :deep(.annotate-translation) {
     color: #444;
   }
 }

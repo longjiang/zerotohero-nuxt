@@ -295,7 +295,7 @@ a.suggestion {
   line-height: 1;
 }
 
-.suggestion-l1 >>> .highlight {
+.suggestion-l1 :deep(.highlight) {
   font-weight: bold;
 }
 

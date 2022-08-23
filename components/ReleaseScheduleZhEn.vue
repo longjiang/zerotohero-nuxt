@@ -208,7 +208,7 @@ export default {}
 </script>
 
 <style scoped>
-  div >>> td:first-child {
+  div :deep(td:first-child) {
     color: white;
   }
 </style>

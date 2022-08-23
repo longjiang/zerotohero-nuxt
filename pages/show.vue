@@ -492,7 +492,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::v-deep .synced-transcript {
+:deep(.synced-transcript) {
   height: 5rem;
   overflow: hidden;
 }

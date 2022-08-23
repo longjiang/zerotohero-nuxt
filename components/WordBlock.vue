@@ -1168,7 +1168,7 @@ export default {
   margin-right: 0;
 }
 
-::v-deep .definition-list-item {
+:deep(.definition-list-item) {
   font-size: 1rem;
 }
 

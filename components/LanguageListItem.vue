@@ -248,11 +248,11 @@ a:active {
         position: absolute;
         bottom: -30%;
         right: -30%;
-        ::v-deep .flag-icon {
+        :deep(.flag-icon) {
           border: 2px solid white;
         }
       }
-      ::v-deep .flag-icon-wrapper {
+      :deep(.flag-icon-wrapper) {
         margin-bottom: 0.5rem;
       }
       &:hover {

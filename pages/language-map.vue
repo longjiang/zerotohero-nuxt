@@ -253,12 +253,12 @@ export default {
   align-items: center;
   justify-content: center;
 }
-::v-deep .leaflet-left .leaflet-control {
+:deep(.leaflet-left) .leaflet-control {
   margin-top: 4rem;
   margin-left: 1rem;
 }
 
-::v-deep .leaflet-right .leaflet-control {
+:deep(.leaflet-right) .leaflet-control {
   margin-top: 4rem;
   margin-right: 1rem;
 }

@@ -47,10 +47,7 @@
                 )
               "
             />
-            <span
-              v-else
-              v-html="highlight(line.line, text, hsk)"
-            />
+            <span v-else v-html="highlight(line.line, text, hsk)" />
           </Annotate>
           <div
             :dir="$l1.direction === 'rtl' ? 'rtl' : 'ltr'"
@@ -63,7 +60,10 @@
             }"
             style="opacity: 0.7"
           >
-            <span v-if="$l2.code !== $l1.code && parallelLines" v-html="parallelLines" />
+            <span
+              v-if="$l2.code !== $l1.code && parallelLines"
+              v-html="parallelLines"
+            />
             <small class="ml-1" style="cursor: pointer" @click="scrollToLine">
               <i class="fa fa-arrow-up"></i>
             </small>
@@ -109,25 +109,25 @@ export default {
   },
   props: {
     line: {
-      type: Object // {"starttime":89.14,"duration":3.5,"line":". . . ","count":1},
+      type: Object, // {"starttime":89.14,"duration":3.5,"line":". . . ","count":1},
     },
     lineIndex: {
-      type: Number
+      type: Number,
     },
     parallelLines: {
-      type: String // "Shouldn&#39;t respect for the living world, for nature, be enough?"
+      type: String, // "Shouldn&#39;t respect for the living world, for nature, be enough?"
     },
     text: {
-      type: String // "suffire"
+      type: String, // "suffire"
     },
     word: {
-      type: Object // Word object from the dictionary
+      type: Object, // Word object from the dictionary
     },
     simplified: {
-      type: String // simplified form of the saved word (Han script only)
+      type: String, // simplified form of the saved word (Han script only)
     },
     traditional: {
-      type: String // traditional form of the saved word (Han script only)
+      type: String, // traditional form of the saved word (Han script only)
     },
     hsk: {
       default: "outside",
@@ -137,10 +137,7 @@ export default {
     },
   },
   async mounted() {
-    this.answers = await this.generateAnswers(
-      this.text,
-      this.word
-    );
+    this.answers = await this.generateAnswers(this.text, this.word);
   },
   methods: {
     scrollToLine() {
@@ -153,7 +150,12 @@ export default {
       if (savedWords.length > 1) {
         savedWords = savedWords.map((s) =>
           Object.assign(
-            { distance: FastestLevenshtein.distance(s.forms[0] || s.simplified, text) },
+            {
+              distance: FastestLevenshtein.distance(
+                s.forms[0] || s.simplified,
+                text
+              ),
+            },
             s
           )
         );
@@ -256,14 +258,12 @@ export default {
     padding: 0;
     font-size: 0.8em;
   }
-  ::v-deep {
-    .highlight {
-      display: inline-block;
-      min-width: 5rem;
-      text-align: center;
-      border-bottom: 1px solid white;
-      color: #00000000 !important;
-    }
+  :deep(.highlight) {
+    display: inline-block;
+    min-width: 5rem;
+    text-align: center;
+    border-bottom: 1px solid white;
+    color: #00000000 !important;
   }
   .transcript-line-l1 {
     font-size: 13.44px;
@@ -280,7 +280,7 @@ export default {
       color: #999;
     }
     &:not(.show-answer) {
-      ::v-deep .transcript-line-l2 {
+      :deep(.transcript-line-l2) {
         .highlight {
           background-color: #ccc;
         }
@@ -294,13 +294,11 @@ export default {
     border-radius: 0.5rem;
     background: #dea4171f;
     &:not(.show-answer) {
-      ::v-deep {
-        .highlight {
-          background: rgba(0, 0, 0, 0);
-          margin: 0 0.2rem;
-          position: relative;
-          bottom: 0.2rem;
-        }
+      :deep(.highlight) {
+        background: rgba(0, 0, 0, 0);
+        margin: 0 0.2rem;
+        position: relative;
+        bottom: 0.2rem;
       }
     }
     &.show-answer {
@@ -309,7 +307,7 @@ export default {
     }
   }
   &:not(.show-answer) {
-    ::v-deep .transcript-line-l2 {
+    :deep(.transcript-line-l2) {
       .highlight {
         color: rgba(0, 0, 0, 0);
         * {

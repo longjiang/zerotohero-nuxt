@@ -677,7 +677,7 @@ export default {
 
 .zerotohero-wide {
   .youtube-view-content {
-    ::v-deep .youtube-with-transcript-landscape {
+    :deep(.youtube-with-transcript-landscape) {
       .youtube {
         border-radius: 0.3rem 0.3rem 0 0;
         overflow: hidden;

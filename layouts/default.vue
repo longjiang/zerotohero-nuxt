@@ -509,7 +509,7 @@ export default {
     top: inherit;
     overflow: hidden;
     z-index: 9;
-    ::v-deep .main-dark {
+    :deep(.main-dark) {
       background: #28a74588;
       backdrop-filter: blur(20px);
     }

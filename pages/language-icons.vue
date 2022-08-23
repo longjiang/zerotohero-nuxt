@@ -194,7 +194,7 @@ export default {
     object-fit: cover;
     border-radius: 100%;
   }
-  ::v-deep .lang-item-code {
+  :deep(.lang-item-code) {
     display: inline-block;
     background-color: rgb(241, 241, 241);
     color: rgb(143, 143, 143);

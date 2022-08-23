@@ -305,7 +305,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .youtube-browse-nav {
-  ::v-deep .feature-card-name-youtube-browse {
+  :deep(.feature-card-name-youtube-browse) {
     display: none;
   }
 }

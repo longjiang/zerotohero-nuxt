@@ -164,7 +164,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::v-deep .widget {
+:deep(.widget) {
   margin-bottom: 3rem;
 }
 </style>

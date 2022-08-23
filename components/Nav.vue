@@ -1405,7 +1405,7 @@ export default {
 .zerotohero-wide {
   .zth-main-nav-wrapper.zth-nav-collapsed {
     width: 5rem;
-    ::v-deep .word-mark {
+    :deep(.word-mark) {
       display: none;
     }
   }
@@ -1471,7 +1471,7 @@ export default {
   position: sticky;
   top: calc(env(safe-area-inset-top) + 2.9rem);
   z-index: 19;
-  ::v-deep .nav-item-count {
+  :deep(.nav-item-count) {
     display: none;
   }
 }

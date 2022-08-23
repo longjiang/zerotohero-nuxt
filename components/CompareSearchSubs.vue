@@ -414,7 +414,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.compare-search-subs.fullscreen >>> .search-subs .video-area {
+.compare-search-subs.fullscreen :deep(.search-subs) .video-area {
   background: black;
 }
 .compare-search-subs.fullscreen {
@@ -428,7 +428,7 @@ export default {
   overflow: auto;
   margin-top: 0 !important;
 }
-.compare-search-subs.fullscreen >>> .youtube-video-wrapper {
+.compare-search-subs.fullscreen :deep(.youtube-video-wrapper) {
   max-width: calc((100vh - 9rem) * 16 / 9);
   margin: 0 auto;
 }

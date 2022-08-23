@@ -812,7 +812,7 @@ export default {
     .youtube-video-card-progress {
       height: 0.3rem;
       border-radius: 0.15rem;
-      ::v-deep .progress-bar {
+      :deep(.progress-bar) {
         background-color: #fd4f1c;
       }
     }

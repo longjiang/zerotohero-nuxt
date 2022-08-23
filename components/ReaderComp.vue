@@ -367,7 +367,7 @@ export default {
   }
 }
 
-#reader-annotated >>> del .word-block {
+#reader-annotated :deep(del) .word-block {
   color: red !important;
 }
 
@@ -380,7 +380,7 @@ export default {
   padding-bottom: 0;
 }
 
-#reader-annotated >>> del .word-block .word-block-simplified::after {
+#reader-annotated :deep(del) .word-block .word-block-simplified::after {
   content: " \2717";
   color: red !important;
 }

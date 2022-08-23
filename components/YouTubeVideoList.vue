@@ -520,7 +520,7 @@ export default {
 <style lang="scss" scoped>
 .col-compact {
   padding: 0.5rem;
-  ::v-deep .media-body {
+  :deep(.media-body) {
     font-size: 0.9em;
   }
 }

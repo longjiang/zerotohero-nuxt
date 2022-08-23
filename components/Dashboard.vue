@@ -118,7 +118,7 @@ export default {
     text-align: center;
     width: 3.5rem;
     padding-top: 0.5rem;
-    ::v-deep .flag-icon-wrapper {
+    :deep(.flag-icon-wrapper) {
       transform: scale(1.5);
       .country-name {
         font-size: 0.5em;
@@ -137,10 +137,10 @@ export default {
   .language-progress {
     flex: 1;
   }
-  ::v-deep .hours-display {
+  :deep(.hours-display) {
     font-size: 1rem;
   }
-  ::v-deep .bottom-labels {
+  :deep(.bottom-labels) {
     font-size: 0.8rem;
     .bottom-label-right {
       display: none;
