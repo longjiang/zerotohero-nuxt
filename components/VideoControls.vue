@@ -1,9 +1,18 @@
 <template>
   <div class="video-controls" v-if="video">
     <div class="video-controls-progress d-flex">
-      <div class="video-controls-time mr-2 ml-2">{{ currentTime ? toHHMMSS(currentTime) : '--:--' }}</div>
-      <input type="range" @change="onSeek" :value="currentPercentage" class="d-block w-100 flex-1" />
-      <div class="video-controls-time ml-2 mr-2">{{ duration ? toHHMMSS(duration) : '--:--' }}</div>
+      <div class="video-controls-time mr-2 ml-2">
+        {{ currentTime ? toHHMMSS(currentTime) : "--:--" }}
+      </div>
+      <input
+        type="range"
+        @change="onSeek"
+        :value="currentPercentage"
+        class="d-block w-100 flex-1"
+      />
+      <div class="video-controls-time ml-2 mr-2">
+        {{ duration ? toHHMMSS(duration) : "--:--" }}
+      </div>
     </div>
     <div class="quick-access-buttons">
       <!-- <button
@@ -209,14 +218,14 @@
 </template>
 
 <script>
-import { toHHMMSS } from '@/lib/date-helper'
+import { toHHMMSS } from "@/lib/date-helper";
 export default {
   props: {
     video: {
       default: undefined,
     },
     duration: {
-      type: Number
+      type: Number,
     },
     paused: {
       default: true,
@@ -299,7 +308,7 @@ export default {
       }
     },
     currentPercentage() {
-      return this.duration ? this.currentTime / this.duration * 100 : 0
+      return this.duration ? (this.currentTime / this.duration) * 100 : 0;
     },
   },
   mounted() {
@@ -309,11 +318,11 @@ export default {
   },
   methods: {
     toHHMMSS(duration) {
-      return toHHMMSS(duration)
+      return toHHMMSS(duration);
     },
     onSeek(event) {
-      let percentage = event.target.value
-      this.$emit('seek', percentage * 0.01)
+      let percentage = event.target.value;
+      this.$emit("seek", percentage * 0.01);
     },
     togglePaused() {
       this.$emit("togglePaused");
@@ -401,7 +410,9 @@ export default {
   text-align: center;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
+  max-width: 40rem;
+  margin: 0 auto;
 
   .quick-access-button {
     border: none;
@@ -409,7 +420,7 @@ export default {
     background: none;
     color: #ffffffcc;
     margin: 0 0.2rem;
-    
+
     &:disabled {
       color: #cccccc44;
     }
