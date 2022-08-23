@@ -1,6 +1,7 @@
 import { CATEGORIES } from "@/lib/youtube";
 import { LANGS_WITH_CONTENT } from '@/lib/utils/servers'
 import Helper from '@/lib/helper'
+import Vue from 'vue'
 
 export const state = () => {
   return {
@@ -47,6 +48,13 @@ export const mutations = {
         show[key] = payload[key]
       }
     }
+  },
+  REMOVE_EPISODE_FROM_SHOW(state, { l2, collection = 'tvShows', showId, episode }) {
+    let show = state[collection][l2.code].find(s => s.id === showId)
+    if (show.episodes) show.episodes = show.episodes.filter(e => e.youtube_id !== episode.youtube_id)
+  },
+  MODIFY_VIDEO(state, { video, key, value }) {
+    Vue.set(video, key, value)
   },
   ADD_EPISODES_TO_SHOW(state, { l2, collection = 'tvShows', showId, episodes, sort = '-date' }) {
     let show = state[collection][l2.code].find(s => s.id === showId)
@@ -169,6 +177,9 @@ export const actions = {
   },
   async addEpisodesToShow({ commit }, { l2, collection = 'tvShows', showId, episodes, sort = '-date' }) {
     commit('ADD_EPISODES_TO_SHOW', { l2, collection, showId, episodes, sort })
+  },
+  async removeEpisodeFromShow({ commit }, { l2, collection = 'tvShows', showId, episode }) {
+    commit('REMOVE_EPISODE_FROM_SHOW', { l2, collection, showId, episode })
   },
   async setEpisodeCount({ commit }, { l2, collection = 'tvShows', showId, episodeCount }) {
     commit('SET_EPISODE_COUNT', { l2, collection, showId, episodeCount })

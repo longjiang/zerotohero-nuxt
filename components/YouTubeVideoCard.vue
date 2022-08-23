@@ -493,7 +493,8 @@ export default {
       let s = this.video[type];
       if (!s || s.id !== show.id) {
         this.showSaved = false;
-        Vue.set(this.video, type, show);
+        this.$store.commit('shows/MODIFY_VIDEO', {video: this.video, key: type, value: show}) // So we don't get a 'do not mutate outside vuex' erro=
+        
         if (this.video.id) {
           let payload = {};
           payload[type] = show.id;
