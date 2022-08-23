@@ -1,5 +1,8 @@
 <template>
-  <div>
+  <div class="feedback-button-wrapper">
+    <router-link :to="{ lastFullHistoryPath }" class="feedback-button">
+      <i class="fa-solid fa-arrows-rotate"></i>
+    </router-link>
     <span @click="showModal" class="feedback-button">Feedback</span>
     <b-modal
       ref="feedback-modal"
@@ -25,7 +28,12 @@
             Send
           </span>
         </b-button>
-        <p class="mt-3 small">Want to include a screenshot? Send a feedback email directly to <a :href="feedbackMailToURL" class="link-unstyled"><u>{{ receipient }}</u></a></p>
+        <p class="mt-3 small">
+          Want to include a screenshot? Send a feedback email directly to
+          <a :href="feedbackMailToURL" class="link-unstyled">
+            <u>{{ receipient }}</u>
+          </a>
+        </p>
       </div>
     </b-modal>
   </div>
@@ -50,6 +58,14 @@ export default {
   },
   computed: {
     ...mapState("fullHistory", ["fullHistory"]),
+    lastFullHistoryPath() {
+      if (this.fullHistory) {
+        let lastFullHistoryItem = this.fullHistory[this.fullHistory.length - 1];
+        if (lastFullHistoryItem && lastFullHistoryItem.path) {
+          return lastFullHistoryItem.path;
+        }
+      }
+    },
     userEmail() {
       if (this.$auth.loggedIn && this.$auth.user) return this.$auth.user.email;
     },
@@ -103,7 +119,7 @@ Previous URL: ${this.previousURL ? this.previousURL : "(Not available)"}`;
         to: [this.receipient],
         subject: "Language Player Feedback Form Reponse",
         body: this.emailBody,
-        type: 'plain' // or 'html'
+        type: "plain", // or 'html'
       };
       await this.$directus.post("mail", payload);
       this.sending = false;
@@ -116,17 +132,18 @@ Previous URL: ${this.previousURL ? this.previousURL : "(Not available)"}`;
 };
 </script>
 <style lang="scss" scoped>
-.feedback-button {
-  cursor: pointer;
-  display: block;
+.feedback-button-wrapper {
   position: fixed;
   transform: rotate(-90deg);
-  background: #28a745;
-  color: white;
   z-index: 999;
-  right: -1.75rem;
+  right: -3rem;
   bottom: 12rem;
-  padding: 0.1rem 0.5rem;
-  border-radius: 0.25rem 0.25rem 0 0;
+  .feedback-button {
+    cursor: pointer;
+    background: #28a745;
+    color: white;
+    padding: 0.1rem 0.5rem;
+    border-radius: 0.25rem 0.25rem 0 0;
+  }
 }
 </style>

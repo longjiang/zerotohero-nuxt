@@ -1,12 +1,7 @@
 <template>
-  <div v-if="!loaded" class="hydration-notice p-5 text-center bg-warning">
-    <div class="">
-      App is unresponsive due to inactivity.
-    </div>
-    <div class="mt-2">
-      <router-link :to="{ lastFullHistoryPath }" class="btn btn-success mt-2">
-        <i class="fa-solid fa-arrows-rotate mr-1"></i> Reload App
-      </router-link>
+  <div v-if="!loaded" class="hydration-notice p-3 text-center" style="background: #000">
+    <div class="text-white">
+      <b>Loading app...</b> App unresponsive? <router-link :to="{ lastFullHistoryPath }" style="color: #18d342"><u>Refresh.</u></router-link>
     </div>
   </div>
 </template>
