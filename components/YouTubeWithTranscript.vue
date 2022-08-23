@@ -734,7 +734,7 @@ export default {
   }
 }
 
-.zerotohero-not-wide .youtube-with-transcript-vertical {
+.zerotohero-not-wide .youtube-with-transcript-vertical.youtube-with-transcript-auto-size {
   height: calc(
     100vh - 3rem - env(safe-area-inset-top) - env(safe-area-inset-bottom) -
       4.75rem
