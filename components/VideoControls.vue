@@ -119,27 +119,7 @@
     >
       <i class="fas fa-headphones"></i>
     </button> -->
-      <button
-        :class="{
-          'quick-access-button  quick-access-button-speed text-center': true,
-          'quick-access-button-active': speed !== 1,
-        }"
-        @click="toggleSpeed"
-        title="Change Playback Speed"
-      >
-        <i v-if="speed === 1" class="fas fa-tachometer-alt"></i>
-        <span v-else>{{ speed }}x</span>
-      </button>
-      <button
-        :class="{
-          'quick-access-button  quick-access-button-speed text-center': true,
-          'quick-access-button-active': autoPause,
-        }"
-        @click="toggleAutoPause"
-        title="Toggle Auto-Pause"
-      >
-        <i class="fas fa-hand"></i>
-      </button>
+
       <button
         v-if="showFullscreenToggle"
         :class="{
@@ -150,6 +130,15 @@
         :title="layout === 'vertical' ? 'Show Transcript' : 'Hide Transcript'"
       >
         <i class="fa-solid fa-align-left"></i>
+      </button>
+      <button
+        :class="{
+          'quick-access-button quick-access-button-fullscreen text-center': true,
+        }"
+        @click="showSettingsModal"
+        title="Change speed, auto-pause, and other settings"
+      >
+        <i class="fa-solid fa-cog"></i>
       </button>
 
       <div
@@ -213,6 +202,45 @@
           class="mt-3"
         />
       </div>
+    </b-modal>
+    <b-modal
+      ref="settings-modal"
+      centered
+      hide-footer
+      title="Settings"
+      body-class="settings-modal-wrapper"
+      size="md"
+    >
+      <div>
+        <button
+          :class="{
+            'btn btn-unstyled text-center d-block p-0': true,
+            'text-success': speed !== 1,
+          }"
+          @click="toggleSpeed"
+          title="Change Playback Speed"
+        >
+          <span class="settings-icon">
+            <i class="fas fa-tachometer-alt"></i>
+          </span>
+          <span>{{ speed }}x Speed</span>
+        </button>
+      </div>
+      <div class="mt-1">
+        <button
+          :class="{
+            'btn btn-unstyled text-center d-block p-0': true,
+            'text-success': autoPause,
+          }"
+          @click="toggleAutoPause"
+          title="Toggle Auto-Pause"
+        >
+          <span class="settings-icon"><i class="fas fa-hand"></i></span>
+          <span>Auto-Pause</span>
+        </button>
+      </div>
+      <hr />
+      <AnnotationSettings variant="toolbar" />
     </b-modal>
   </div>
 </template>
@@ -329,6 +357,9 @@ export default {
     },
     showInfoModal() {
       this.$refs["info-modal"].show();
+    },
+    showSettingsModal() {
+      this.$refs["settings-modal"].show();
     },
     toggleSpeed() {
       let speeds = [1, 0.75, 0.5];
@@ -485,5 +516,11 @@ export default {
 .video-controls-time {
   white-space: nowrap;
   font-size: 0.8em;
+}
+
+.settings-icon {
+  width: 2rem;
+  text-align: center;
+  display: inline-block;
 }
 </style>

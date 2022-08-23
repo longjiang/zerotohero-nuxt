@@ -4,7 +4,7 @@
       <div
         v-if="onceAdmin"
         @click="adminMode = !adminMode"
-        :class="`annotation-setting-toggle ${
+        :class="`btn btn-unstyled d-block p-0 annotation-setting-toggle ${
           adminMode ? 'annotation-setting-toggle-active' : ''
         }`"
       >
@@ -13,9 +13,9 @@
         </span>
         Admin Mode
       </div>
-      <div
+      <button
         @click="autoPronounce = !autoPronounce"
-        :class="`annotation-setting-toggle ${
+        :class="`btn btn-unstyled d-block p-0 annotation-setting-toggle ${
           autoPronounce ? 'annotation-setting-toggle-active' : ''
         }`"
       >
@@ -25,11 +25,11 @@
         </span>
         <span v-if="autoPronounce">Auto pronounce words</span>
         <span v-else>Do not auto pronounce words</span>
-      </div>
-      <div
+      </button>
+      <button
         @click="showPinyin = !showPinyin"
-        :class="`annotation-setting-toggle ${
-          showPinyin ? 'annotation-setting-toggle-active' : ''
+        :class="`btn btn-unstyled d-block p-0 annotation-setting-toggle ${
+          showPinyin ? 'text-success' : ''
         }`"
       >
         <span class="annotation-setting-icon">
@@ -52,12 +52,12 @@
           <span v-else>[pʰ]</span>
         </span>
         {{ showPinyin ? "Phonetics on" : "Phonetics off" }}
-      </div>
-      <div
+      </button>
+      <button
         v-if="$l2.han"
         @click="useTraditional = !useTraditional"
-        :class="`annotation-setting-toggle ${
-          useTraditional ? 'annotation-setting-toggle-active' : ''
+        :class="`btn btn-unstyled d-block p-0 annotation-setting-toggle ${
+          useTraditional ? 'text-success' : ''
         }`"
       >
         <span class="annotation-setting-icon">
@@ -67,23 +67,23 @@
         {{
           useTraditional ? "Traditional characters" : "Simplified characters"
         }}
-      </div>
-      <div
+      </button>
+      <button
         @click="showTranslation = !showTranslation"
-        :class="`annotation-setting-toggle ${
-          showTranslation ? 'annotation-setting-toggle-active' : ''
+        :class="`btn btn-unstyled d-block p-0 annotation-setting-toggle ${
+          showTranslation ? 'text-success' : ''
         }`"
       >
         <span class="annotation-setting-icon">
           <i class="fas fa-language"></i>
         </span>
         {{ showTranslation ? "Translation on" : "Translation off" }}
-      </div>
-      <div
+      </button>
+      <button
         v-if="$l2.code === 'ko'"
         @click="showByeonggi = !showByeonggi"
-        :class="`annotation-setting-toggle ${
-          showByeonggi ? 'annotation-setting-toggle-active' : ''
+        :class="`btn btn-unstyled d-block p-0 annotation-setting-toggle ${
+          showByeonggi ? 'text-success' : ''
         }`"
       >
         <span class="annotation-setting-icon">
@@ -91,12 +91,12 @@
           <small style="font-size: 0.5em">字</small>
         </span>
         {{ showByeonggi ? "Hanja On" : "Hanja Off" }}
-      </div>
-      <div
+      </button>
+      <button
         v-if="$l2.code === 'vi'"
         @click="showByeonggi = !showByeonggi"
-        :class="`annotation-setting-toggle ${
-          showByeonggi ? 'annotation-setting-toggle-active' : ''
+        :class="`btn btn-unstyled d-block p-0 annotation-setting-toggle ${
+          showByeonggi ? 'text-success' : ''
         }`"
       >
         <span class="annotation-setting-icon">
@@ -104,22 +104,22 @@
           <small style="font-size: 0.5em">字</small>
         </span>
         {{ showByeonggi ? "Han Tự On" : "Han Tự Off" }}
-      </div>
+      </button>
 
-      <div
-        class="annotation-setting-toggle"
+      <button
+        class="btn btn-unstyled d-block p-0 annotation-setting-toggle"
         @click="zoomLevel = zoomLevel > 0 ? zoomLevel - 1 : zoomLevel"
       >
         <span class="annotation-setting-icon">ᴛ</span>
         Smaller text
-      </div>
-      <div
-        class="annotation-setting-toggle"
+      </button>
+      <button
+        class="btn btn-unstyled d-block p-0 annotation-setting-toggle"
         @click="zoomLevel = zoomLevel < 4 ? zoomLevel + 1 : zoomLevel"
       >
         <span class="annotation-setting-icon">T</span>
         Bigger text
-      </div>
+      </button>
       <hr />
       <div :class="`annotation-setting-toggle`">
         <router-link :to="{ name: 'settings' }" class="text-success">
