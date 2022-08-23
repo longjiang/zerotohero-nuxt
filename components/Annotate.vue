@@ -232,6 +232,9 @@ export default {
     showLoading: {
       default: true, // Whether to show a loading animation before annotation is complete
     },
+    animationSpeed: {
+      default: 1
+    },
     translation: {
       type: String,
     },
@@ -426,7 +429,7 @@ export default {
               
               if (!this.animate) return;
               block.classList.add("animate");
-              await Helper.timeout(blockDuration * 1000);
+              await Helper.timeout(blockDuration * 1000 / this.animationSpeed);
             }
           }
           await Helper.timeout(2000);

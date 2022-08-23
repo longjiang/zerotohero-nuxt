@@ -20,6 +20,7 @@
                 line,
                 showSubsEditing,
                 showAnimation,
+                speed,
                 sticky,
                 single,
                 hsk,
@@ -156,6 +157,9 @@ export default {
     },
     enableTranslationEditing: {
       default: false,
+    },
+    speed: {
+      default: 1,
     },
     collapsed: {
       default: false,

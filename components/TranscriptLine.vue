@@ -36,19 +36,22 @@
           <Annotate
             tag="div"
             ref="annotate"
-            :sticky="sticky"
+            v-bind="{
+              animationSpeed: speed,
+              animationDuration: duration,
+              sticky,
+              buttons: true,
+              translation: parallelLine,
+              delay: single ? false : 123,
+              showTranslation: false,
+              showLoading: false,
+            }"
             :class="{
               'transcript-line-l2': true,
               'transcript-line-l2-single': single,
               'transcript-line-l2-rtl': $l2.direction === 'rtl',
               annotated: annotated,
             }"
-            :buttons="true"
-            :animationDuration="duration"
-            :translation="parallelLine"
-            :delay="single ? false : 123"
-            :showTranslation="false"
-            :showLoading="false"
             v-if="!showSubsEditing"
             style="flex: 1"
             @translation="onTranslation"
@@ -142,6 +145,9 @@ export default {
     },
     showAnimation: {
       default: true,
+    },
+    speed: {
+      default: 1,
     },
     enableTranslationEditing: {
       type: Boolean,
