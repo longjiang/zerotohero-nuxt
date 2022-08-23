@@ -16,20 +16,22 @@
       <div class="youtube-video-wrapper" :key="'youtube-' + video.youtube_id">
         <LazyYouTubeVideo
           ref="youtube"
+          :class="{ 'd-none': collapsed }"
+          v-bind="{
+            speed,
+            cc,
+            autoload,
+            autoplay,
+            startAtRandomTime,
+            youtube: video.youtube_id,
+            controls: false,
+            starttime: startTimeOrLineIndex
+          }"
           @paused="updatePaused"
           @currentTime="updateCurrentTime"
           @ended="updateEnded"
           @duration="updateDuration"
           @videoUnavailable="onVideoUnavailable"
-          :speed="speed"
-          :youtube="video.youtube_id"
-          :controls="false"
-          :cc="cc"
-          :starttime="startTimeOrLineIndex"
-          :autoload="autoload"
-          :autoplay="autoplay"
-          :startAtRandomTime="startAtRandomTime"
-          :class="{ 'd-none': collapsed }"
         />
         <LazyVideoControls
           v-if="showControls && video"
