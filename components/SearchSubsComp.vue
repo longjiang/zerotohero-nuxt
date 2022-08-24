@@ -160,6 +160,9 @@
       </b-button>
     </div>
     <template v-if="pro || hitIndex < NON_PRO_MAX_SUBS_SEARCH_HITS">
+      <div v-if="reels && currentHit" class="video-title">
+        <span>{{ currentHit.video.title }}</span>
+      </div>
       <LazyYouTubeWithTranscript
         v-if="currentHit"
         :ref="`youtube-${hitIndex}`"
@@ -890,7 +893,7 @@ export default {
           return false;
         }
         if (e.code == "KeyI") {
-          this.reels = !this.reels
+          this.reels = !this.reels;
           e.preventDefault();
           return false;
         }
@@ -1012,5 +1015,17 @@ export default {
     padding: 0;
   }
 
+  .video-title {
+    position: absolute;
+    z-index: 1;
+    width: calc(540px - 2rem);
+    top: 3.5rem;
+    margin-left: calc((100vw - 540px) / 2 + 1rem );
+    line-height: 1.67;
+    span {
+      background: #000000aa;
+      padding: 0.33rem;
+    }
+  }
 }
 </style>
