@@ -1,8 +1,8 @@
 <template>
   <div class="feedback-button-wrapper">
-    <router-link :to="{ lastFullHistoryPath }" class="feedback-button">
+    <!-- <router-link :to="{ lastFullHistoryPath }" class="feedback-button">
       <i class="fa-solid fa-arrows-rotate"></i>
-    </router-link>
+    </router-link> -->
     <span @click="showModal" class="feedback-button">Feedback</span>
     <b-modal
       ref="feedback-modal"
@@ -136,7 +136,7 @@ Previous URL: ${this.previousURL ? this.previousURL : "(Not available)"}`;
   position: fixed;
   transform: rotate(-90deg);
   z-index: 999;
-  right: -3rem;
+  right: -2rem;
   bottom: 12rem;
   .feedback-button {
     cursor: pointer;

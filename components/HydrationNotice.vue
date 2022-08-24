@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!loaded" class="hydration-notice p-3 text-center" style="background: #000">
+  <div v-if="!loaded" class="hydration-notice text-center" style="background: #000">
     <div class="text-white">
       <b>Loading app...</b> App unresponsive? <router-link :to="{ lastFullHistoryPath }" style="color: #18d342"><u>Refresh.</u></router-link>
     </div>
@@ -39,6 +39,8 @@ export default {
 
 <style>
 .hydration-notice {
+  padding: 1rem;
+  padding-top: calc(1rem + env(safe-area-inset-top));
   position: sticky;
   z-index: 1;
 }
