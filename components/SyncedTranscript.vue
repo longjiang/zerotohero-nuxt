@@ -450,18 +450,20 @@ export default {
         let line = this.lines[lineIndex];
         let nextLine = this.lines[lineIndex + 1];
         // Assign parallel lines to this line if the parallel line starts before
+        const filterParallelLines = (parallelLine, parallelLineIndex) => {
+          if (!parallelLine) return false;
+          let nextParallelLine = this.parallellines[parallelLineIndex + 1];
+          let medianTime = nextParallelLine
+            ? (parallelLine.starttime + nextParallelLine.starttime) / 2
+            : parallelLine.starttime + 2;
+          if (medianTime >= line.starttime) {
+            if (!nextLine) return true;
+            else return medianTime <= nextLine.starttime;
+          }
+        }
         matchedParallelLines[lineIndex] = this.parallellines
-          .filter((parallelLine, parallelLineIndex) => {
-            if (!parallelLine) return false;
-            let nextParallelLine = this.parallellines[parallelLineIndex + 1];
-            let medianTime = nextParallelLine
-              ? (parallelLine.starttime + nextParallelLine.starttime) / 2
-              : parallelLine.starttime + 2;
-            if (medianTime >= line.starttime) {
-              if (!nextLine) return true;
-              else return medianTime <= nextLine.starttime;
-            }
-          })
+          .filter(filterParallelLines)
+          .slice(0, 3) // So that we don't have way too many translation lines that fills the whole screen
           .map((l) => l.line)
           .join(" ");
         if (!nextLine) break;

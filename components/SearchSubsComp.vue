@@ -889,6 +889,11 @@ export default {
           e.preventDefault();
           return false;
         }
+        if (e.code == "KeyI") {
+          this.reels = !this.reels
+          e.preventDefault();
+          return false;
+        }
       }
     },
   },
