@@ -60,9 +60,9 @@ export default {
       paypalPaymentStatus: undefined,
       paypalCredentials: {
         sandbox:
-          "AU6fgxWMbyvtTHB-xv2WGb91HI21q9zkhG9IXthI62cCvasfpsO2DA5scSSx_r9R81r19J-yyexvd97A",
+          "AWBk2Jn-5v79iEBjPLYuRWo7OHgSL4YJKfjCcxX4nWQbLJa5F9D57PrVYAMOEa7Alm5WUdYRW_2KJBTH",  // ken-facilitator@chinesezerotohero.com
         production:
-          "AeP7eWXUym5m7yGiNWAjV7hEgeS42FhEbU0l24UaqVa-8PgJf0L_OlQwTGHZXGOeVMkxs4l5-TSKc8xu",
+          "AcLhxqFEKaIXIRDdaHlKM6h2kUwtgnBdYtaBozJkFy1-hlCpIYytxePBmluj0xr9bYVUIGw6AFb17IgV",  // ken@chinesezerotohero.com
       },
       paypalItems: [
         {
