@@ -960,6 +960,10 @@ export default {
     display: none;
   }
 
+  :deep(.add-pinyin) .word-block.saved {
+    text-align: center;
+  }
+
   :deep(.youtube-with-transcript) {
     width: calc(1080px / 2);
     height: calc(1920px / 2);
