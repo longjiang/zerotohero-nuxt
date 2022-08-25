@@ -32,8 +32,9 @@
       </div>
     </div>
     <PayPal
-      amount="89.00"
       currency="USD"
+      env="production"
+      :amount="price"
       :client="paypalCredentials"
       :items="paypalItems"
       :experience="paypalExperienceOptions"
@@ -42,7 +43,6 @@
         size: 'medium',
         color: 'blue',
       }"
-      env="production"
       @payment-authorized="onPayPalPaymentAuthorized"
       @payment-completed="onPayPalPaymentCompleted"
       @payment-cancelled="onPayPalPaymentCancelled"
@@ -61,7 +61,11 @@ export default {
     }
   },
   data() {
+    let defaultPrice = "89.00"
+    let discountPrice = "44.50"
+    let price = this.sale ? discountPrice : defaultPrice
     return {
+      price,
       paypalPaymentStatus: undefined,
       paypalCredentials: {
         sandbox:
@@ -74,7 +78,7 @@ export default {
           name: "zero-to-hero-pro",
           description: "Language Player Pro features",
           quantity: "1",
-          price: this.price,
+          price,
           currency: "USD",
         },
       ],
@@ -83,13 +87,6 @@ export default {
           no_shipping: 1,
         },
       },
-    }
-  },
-  computed: {
-    price() {
-      let defaultPricee = "89.00"
-      let discountPrice = "44.50"
-      return this.sale ? discountPrice : defaultPricee
     }
   },
   methods: {
