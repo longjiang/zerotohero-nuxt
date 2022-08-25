@@ -521,7 +521,7 @@ export default {
     width: inherit;
   }
 }
-.zerotohero-not-wide {
+.zerotohero-not-wide.zerotohero-with-nav {
   .overlay-player-minimized {
     width: 100%;
   }

@@ -1,20 +1,20 @@
 <template>
   <div class="purchase-ios">
-    <b-button size="sm" variant="success" @click="executeiOSInAppPurchase">
+    <b-button size="md" variant="success" @click="executeiOSInAppPurchase" style="width: 17rem">
       <b-spinner small v-if="iOSPurchaseProcessing"></b-spinner>
       <span v-else>
         <i class="fab fa-apple mr-1"></i>
-        Pay with In-App Purchase
+        Upgrade to Pro for US$89
       </span>
     </b-button>
     <!-- <div class="mt-3">
-                      <u
-                        class="text-secondary"
-                        @click="restoreiOSInAppPurchase"
-                      >
-                        Restore Purchase
-                      </u>
-                    </div> -->
+      <u
+        class="text-secondary"
+        @click="restoreiOSInAppPurchase"
+      >
+        Restore Purchase
+      </u>
+    </div> -->
   </div>
 </template>
 
@@ -32,10 +32,8 @@ export default {
     };
   },
   mounted() {
-    if (this.native) {
-      this.registeriOSInAppPurchaseProducts();
-      this.setupiOSInAppPurchaseListeners();
-    }
+    this.registeriOSInAppPurchaseProducts();
+    this.setupiOSInAppPurchaseListeners();
   },
   beforeDestroy() {
     this.$inAppPurchase2.off(this.oniOSProductApproved);

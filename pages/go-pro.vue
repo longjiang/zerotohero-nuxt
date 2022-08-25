@@ -37,16 +37,17 @@
               </div>
               <div v-else class="mb-3 text-white">
                 <client-only>
+                  <div class="mt-5 mb-4">
+                    <h5>Ready to upgrade to Pro?</h5>
+                  </div>
                   <div v-if="native">
-                    <div class="mt-3 mb-4">
-                      <PurchaseiOS />
+                    <div class="pt-4 pb-5">
+                      <PurchaseiOS/>
                     </div>
                   </div>
                   <div v-else>
-                    <div class="mt-3 mb-4">
-                      Please choose your method of payment:
-                    </div>
                     <div>
+                      <p>Please choose your method of payment.</p>
                       <PurchaseStripe :sale="sale" />
                       <PurchasePayPal :sale="sale" />
                     </div>

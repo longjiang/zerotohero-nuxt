@@ -43,8 +43,8 @@
       <div class="price">
         <span v-if="sale">
           <del style="opacity: 0.5">
-            <span style="position: relative; bottom: 1.2rem">$</span>
-            <b style="font-size: 2.68rem">89</b>
+            <span style="position: relative; bottom: 0.4rem">$</span>
+            <b style="font-size: 1.5rem">89</b>
           </del>
           <span class="text-primary ml-2">
             <span style="position: relative; bottom: 1.2rem">$</span>
@@ -65,7 +65,7 @@
           "
         >
           <span style="display: block; margin-bottom: 0; line-height: 0.2">/lifetime</span>
-          <small class="text-success">pay once, enjoy forever</small>
+          <small class="text-success">never expires</small>
         </span>
       </div>
       <hr />
