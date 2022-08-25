@@ -525,7 +525,7 @@ export default {
     width: 100%;
   }
   &:not(.route-youtube-view):not(.route-learning-path) .zth-content {
-    padding-bottom: 5rem;
+    padding-bottom: calc(5rem + env(safe-area-inset-bottom))
   }
 }
 

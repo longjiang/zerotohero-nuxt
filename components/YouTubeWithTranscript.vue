@@ -410,7 +410,7 @@ export default {
           : 0;
         let length = averageL1LineLength + averageL2LineLength;
         let vertical = this.viewportWidth < this.viewportHeight;
-        const SCALE_FACTOR = vertical ? 700 : 2000; // Make text bigger on phones
+        const SCALE_FACTOR = vertical ? 1200 : 2000; // Make text bigger on phones
         let textSize = area / length / SCALE_FACTOR;
         textSize = Math.min(textSize, 2.2);
         textSize = Math.max(textSize, 1.2);
