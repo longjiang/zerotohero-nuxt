@@ -330,7 +330,7 @@ export default {
 
 <style lang="scss" scoped>
 .youtube {
-  // padding-bottom: 56.25%;
+  padding-bottom: 56.25%;
   position: relative;
   :deep(iframe),
   .youtube-screen {
