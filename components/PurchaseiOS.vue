@@ -4,7 +4,7 @@
       <b-spinner small v-if="iOSPurchaseProcessing"></b-spinner>
       <span v-else>
         <i class="fab fa-apple mr-1"></i>
-        Upgrade to Pro for US$89
+        Pay & Upgrade to Pro Now
       </span>
     </b-button>
     <!-- <div class="mt-3">
@@ -26,6 +26,11 @@ import axios from "axios";
 const IOS_IAP_PRODUCT_ID = "pro";
 
 export default {
+  prop: {
+    sale: {
+      default: false
+    }
+  },
   data() {
     return {
       iOSPurchaseProcessing: false,

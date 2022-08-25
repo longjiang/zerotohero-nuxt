@@ -42,7 +42,7 @@
                   </div>
                   <div v-if="native">
                     <div class="pt-4 pb-5">
-                      <PurchaseiOS/>
+                      <PurchaseiOS :sale="sale" />
                     </div>
                   </div>
                   <div v-else>
