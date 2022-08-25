@@ -25,7 +25,7 @@
             startAtRandomTime,
             youtube: video.youtube_id,
             controls: false,
-            starttime: startTimeOrLineIndex
+            starttime: startTimeOrLineIndex,
           }"
           @paused="updatePaused"
           @currentTime="updateCurrentTime"
@@ -356,8 +356,8 @@ export default {
     window.removeEventListener("resize", this.updateLayout);
   },
   async mounted() {
-    this.updateLayout();
     this.getL1Transcript();
+    this.updateLayout();
   },
   async updated() {
     if (this.$refs.transcript) {
@@ -409,7 +409,9 @@ export default {
               .reduce((p, c) => p + c) / this.video.subs_l1.length
           : 0;
         let length = averageL1LineLength + averageL2LineLength;
-        let textSize = area / length / 2000;
+        let vertical = this.viewportWidth < this.viewportHeight;
+        const SCALE_FACTOR = vertical ? 700 : 2000; // Make text bigger on phones
+        let textSize = area / length / SCALE_FACTOR;
         textSize = Math.min(textSize, 2.2);
         textSize = Math.max(textSize, 1.2);
 
@@ -483,7 +485,11 @@ export default {
           }
         }
         if (subs_l1) Vue.set(this.video, "subs_l1", subs_l1);
+        this.onL1TranscriptLoaded();
       }
+    },
+    onL1TranscriptLoaded() {
+      this.updateLayout();
     },
     updateDuration(duration) {
       this.duration = duration;
@@ -603,16 +609,15 @@ export default {
     async play() {
       if (this.audioMode) {
         if (this.speaking) {
-            this.$refs.transcript.stopAudioModeStuff();
-          } else {
-            this.$refs.transcript.doAudioModeStuff();
-          }
+          this.$refs.transcript.stopAudioModeStuff();
+        } else {
+          this.$refs.transcript.doAudioModeStuff();
+        }
       } else {
         this.$refs.youtube.play();
         this.$refs.transcript.preventCurrentTimeUpdate = true;
         await timeout(500);
         this.$refs.transcript.preventCurrentTimeUpdate = false;
-
       }
     },
     speechStart() {
@@ -638,8 +643,8 @@ export default {
       this.$refs.youtube.seek(starttime);
     },
     togglePaused() {
-      if (this.paused) this.play()
-      else this.pause()
+      if (this.paused) this.play();
+      else this.pause();
     },
     toggleFullscreenMode() {
       this.layout = this.layout === "horizontal" ? "vertical" : "horizontal";
@@ -696,10 +701,18 @@ export default {
   top: calc(env(safe-area-inset-top, 0) + 2.7rem);
 }
 
-.zerotohero-not-wide .youtube-video-wrapper {
-  max-width: calc(
-    (100vh - 3rem - env(safe-area-inset-top) - 12rem - 4.625rem) * 16 / 9
-  );
+.zerotohero-not-wide {
+  .youtube-video-wrapper {
+    max-width: calc(
+      (100vh - 3rem - env(safe-area-inset-top) - 12rem - 4.625rem) * 16 / 9
+    );
+  }
+  .youtube-with-transcript-vertical.youtube-with-transcript-auto-size {
+    height: calc(
+      100vh - 3rem - env(safe-area-inset-top) - env(safe-area-inset-bottom) -
+        4.75rem
+    );
+  }
 }
 
 .youtube-with-transcript-horizontal {
@@ -732,13 +745,6 @@ export default {
       overflow: hidden;
     }
   }
-}
-
-.zerotohero-not-wide .youtube-with-transcript-vertical.youtube-with-transcript-auto-size {
-  height: calc(
-    100vh - 3rem - env(safe-area-inset-top) - env(safe-area-inset-bottom) -
-      4.75rem
-  );
 }
 
 #zerotohero {

@@ -8,16 +8,15 @@
           <template v-if="message">{{ message }}</template>
           <template
             v-else
-          >See full transcripts of {{ stats && stats[$l2.code] ? $n(stats[$l2.code].allVideos) : '' }} {{ $l2.name }} videos with a Pro account.</template>
+          >See complete subtitles with Pro.</template>
         </p>
       </div>
       <div class="mt-3" />
-      <div class="text-primary p-1 rounded" style="max-width: 20rem; margin: 0 auto" v-if="sale"><b>FALL SALE!</b> 50% off until Sun 28 Aug</div>
       <div class="text-white pl-5">
         <span v-if="sale">
           <del style="opacity: 0.5">
             <sup style="font-size: 1rem">$</sup>
-            <span style="font-size: 2.2rem; font-weight: bold">89</span>
+            <span style="font-size: 1.7rem; font-weight: bold">89</span>
           </del>
           <span>
             <sup style="font-size: 1rem">$</sup>
@@ -25,7 +24,7 @@
             <b style="position: relative; bottom: 0.9rem">.50</b>
           </span>
           <sup style="font-size: 1rem" class="text-success">
-            <b>/ lifetime!</b>
+            <b>/ lifetime</b><br/>
           </sup>
         </span>
         <span v-else>

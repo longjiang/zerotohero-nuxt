@@ -27,7 +27,6 @@
     </div>
     <div
       :class="{
-        'pb-5': true,
         'main-dark main-dark-performant': true,
         'youtube-view-content': true,
         'youtube-view-landscape': landscape,

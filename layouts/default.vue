@@ -498,7 +498,6 @@ export default {
 }
 
 #overlay-player {
-  min-height: 100vh;
   background: black;
   &.overlay-player-minimized {
     background: none;

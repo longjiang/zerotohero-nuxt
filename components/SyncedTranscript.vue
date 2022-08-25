@@ -82,7 +82,7 @@
             <YouNeedPro
               v-if="
                 (!single && filteredLines.length < lines.length) ||
-                (single && currentLineIndex > NON_PRO_MAX_LINES - 7)
+                (single && currentLineIndex > NON_PRO_MAX_LINES)
               "
               style="position: absolute; bottom: 0; width: 100%"
             />
