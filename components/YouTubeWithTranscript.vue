@@ -433,7 +433,7 @@ export default {
     updateLayout() {
       this.viewportWidth = this.$el.clientWidth;
       this.viewportHeight = window.innerHeight;
-      if (this.useAutoTextSize) this.getTextSize();
+      // if (this.useAutoTextSize) this.getTextSize(); // Too buggy for production
     },
     async getL1Transcript() {
       if (this.$l2.code === this.$l1.code) return;

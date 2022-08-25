@@ -12,7 +12,7 @@
       ref="lines"
       :data-line-index="lineIndex"
       @click="$emit('click')"
-      :style="`font-size: ${textSize}em`"
+      :style="textSize !== 1 ? `font-size: ${textSize}em` : ''"
     >
       <div v-if="!single && showSubsEditing" class="transcript-line-edit mr-3">
         <div style="font-size: 0.7em; color: #ccc">
