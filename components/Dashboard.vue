@@ -9,21 +9,20 @@
             'col-sm-12': params.xs,
           }"
           v-for="l2Progress in sortedProgress"
-          :set="(language = $languages.getSmart(l2Progress.l2Code))"
-          :key="`language-overview-item-${l2Progress.l2Code}`"
-        >
+          :key="`language-overview-item-${l2Progress.language.code}`"
+        > 
           <router-link
             class="language-overview-item"
-            v-if="language && language.name"
-            :to="to(language)"
+            v-if="l2Progress.language && l2Progress.language.name"
+            :to="to(l2Progress.language)"
           >
             <div class="language-flag-wrapper">
-              <LanguageFlag :language="language" :autocycle="true" />
-              <span class="language-name">{{ language.name }}</span>
+              <LanguageFlag :language="l2Progress.language" :autocycle="true" />
+              <span class="language-name">{{ l2Progress.language.name }}</span>
             </div>
             <LanguageProgress
-              :$l1="$languages.getSmart(getL1Code(language))"
-              :$l2="language"
+              :$l1="$languages.getSmart(getL1Code(l2Progress.language))"
+              :$l2="l2Progress.language"
             />
           </router-link>
         </div>
@@ -75,10 +74,11 @@ export default {
     sortedProgress() {
       let sorted = Object.keys(this.progress)
         .map((l2Code) => {
-          let l2Progress = Object.assign({ l2Code }, this.progress[l2Code]);
+          let language = this.$languages.getSmart(l2Code)
+          let l2Progress = Object.assign({ language }, this.progress[l2Code]);
           return l2Progress;
         })
-        .filter((item) => item && item.l2Code && item.time !== undefined);
+        .filter((item) => item && item.language && item.language.code && item.language.name && item.time !== undefined);
       sorted = sorted
         .sort((a, b) => b.time - a.time)
         .sort((a, b) => b.level - a.level);
