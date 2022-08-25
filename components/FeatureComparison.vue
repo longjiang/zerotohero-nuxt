@@ -36,14 +36,26 @@
       <div class="badge-money-back text-center">
         <span>
           <b style="font-size: 1.3em">14 day</b>
-          <br />
-          money-back guarantee
+          <br />money-back guarantee
         </span>
       </div>
       <h4>Pro Account 🚀</h4>
       <div class="price">
-        <span style="position: relative; bottom: 1.2rem">$</span>
-        <b style="font-size: 2.68rem">89</b>
+        <span v-if="sale">
+          <del style="opacity: 0.5">
+            <span style="position: relative; bottom: 1.2rem">$</span>
+            <b style="font-size: 2.68rem">89</b>
+          </del>
+          <span class="text-primary ml-2">
+            <span style="position: relative; bottom: 1.2rem">$</span>
+            <b style="font-size: 2.68rem">44</b>
+            <b style="position: relative; bottom: 1.2rem">.50</b>
+          </span>
+        </span>
+        <span v-else>
+          <span style="position: relative; bottom: 1.2rem">$</span>
+          <b style="font-size: 2.68rem">89</b>
+        </span>
         <span
           style="
             display: inline-block;
@@ -52,9 +64,7 @@
             margin-left: 0.3rem;
           "
         >
-          <span style="display: block; margin-bottom: 0; line-height: 0.2">
-            /lifetime
-          </span>
+          <span style="display: block; margin-bottom: 0; line-height: 0.2">/lifetime</span>
           <small class="text-success">pay once, enjoy forever</small>
         </span>
       </div>
@@ -92,7 +102,13 @@
 </template>
 
 <script>
-export default {};
+export default {
+  props: {
+    sale: {
+      default: false
+    }
+  }
+};
 </script>
 
 <style lang="scss" scoped>

@@ -55,6 +55,11 @@ import { PYTHON_SERVER } from "@/lib/utils/servers";
 import { HOST } from "@/lib/utils/url";
 
 export default {
+  props: {
+    sale: {
+      default: false
+    }
+  },
   data() {
     return {
       paypalPaymentStatus: undefined,
@@ -69,7 +74,7 @@ export default {
           name: "zero-to-hero-pro",
           description: "Language Player Pro features",
           quantity: "1",
-          price: "89.00",
+          price: this.price,
           currency: "USD",
         },
       ],
@@ -80,8 +85,14 @@ export default {
       },
     }
   },
+  computed: {
+    price() {
+      let defaultPricee = "89.00"
+      let discountPrice = "44.50"
+      return this.sale ? discountPrice : defaultPricee
+    }
+  },
   methods: {
-
     onPayPalPaymentAuthorized(e) {
       // {
       //   "intent": "sale",

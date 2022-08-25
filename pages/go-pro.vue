@@ -21,9 +21,13 @@
     <div class="pt-5 pb-5 container">
       <div class="row">
         <div class="col-sm-12">
+          <div v-if="sale" class="bg-primary text-white p-3 rounded text-center mb-5" style="max-width: 46rem; margin: 0 auto; font-size: 1.2em" >
+            <div><b>FALL SALE!</b> 50% off on lifetime Pro account upgrade</div>
+            <small style="text-small">Offer ends Sunday 28 Aug</small>
+          </div>
           <client-only>
             <div class="mt-4"></div>
-            <FeatureComparison />
+            <FeatureComparison :sale="sale" />
             <div v-if="$auth.loggedIn && $auth.user" class="text-center text-white">
               <div v-if="[1, 4].includes(Number($auth.user.role))">
                 <h5 class="mb-3">🎉 You are already Pro! 🚀 Enjoy!</h5>
@@ -43,8 +47,8 @@
                       Please choose your method of payment:
                     </div>
                     <div>
-                      <PurchaseStripe />
-                      <PurchasePayPal />
+                      <PurchaseStripe :sale="sale" />
+                      <PurchasePayPal :sale="sale" />
                     </div>
                   </div>
                 </client-only>
@@ -93,6 +97,7 @@ export default {
   data() {
     return {
       loading: false,
+      sale: true
     };
   },
   computed: {

@@ -6,7 +6,7 @@
       :pk="stripePublishableKey"
       :line-items="[
         {
-          price: 'price_1LArBtG5EbMGvOaflIKUthub', // USD price for all other payment methods
+          price, // USD price for all other payment methods
           quantity: 1,
         },
       ]"
@@ -24,7 +24,7 @@
       <i class="fa-solid fa-chevron-right ml-1"></i>
     </b-button>
     <a
-      href="https://buy.stripe.com/4gw2bz7ELbvR8CccMN"
+      :href="cnyPaymentURL"
       class="btn btn-success btn-purchase"
     >
       <span class="icons"><i class="fab fa-weixin"></i></span>
@@ -32,7 +32,7 @@
       <i class="fa-solid fa-chevron-right ml-1"></i>
     </a>
     <a
-      href="https://buy.stripe.com/4gw2bz7ELbvR8CccMN"
+      :href="cnyPaymentURL"
       class="btn btn-success btn-purchase"
     >
       <span class="icons"><i class="fab fa-alipay"></i></span>
@@ -47,10 +47,28 @@ import { PYTHON_SERVER } from "@/lib/utils/servers";
 import { HOST } from "@/lib/utils/url";
 
 export default {
+  props: {
+    sale: {
+      default: false
+    }
+  },
+  computed: {
+    cnyPaymentURL() {
+      return this.sale ? this.salePriceCNYPaymentLink : this.regularPriceCNYPaymentLink
+    },
+    price() {
+      return this.sale ? this.salePriceID : this.regularPriceID
+    }
+  },
   data() {
     this.stripePublishableKey = "pk_live_9lnc7wrGHtcFdPKIWZdy9p17";
 
     return {
+      sale: true,
+      regularPriceCNYPaymentLink: 'https://buy.stripe.com/4gw2bz7ELbvR8CccMN',
+      salePriceCNYPaymentLink: 'https://buy.stripe.com/dR6dUhcZ51VhaKkdQT',
+      regularPriceID: 'price_1LArBtG5EbMGvOaflIKUthub',
+      salePriceID: 'price_1LaUOfG5EbMGvOaf3HQLg8sL',
       stripeSuccessURL: this.$auth.user
         ? `${PYTHON_SERVER}stripe_checkout_success?user_id=${this.$auth.user.id}&host=${HOST}&session_id={CHECKOUT_SESSION_ID}`
         : undefined, // Make sure we have the user's id
