@@ -245,7 +245,15 @@ export default ({ app }, inject) => {
       return videos;
     },
     async sendPasswordResetEmail({ email }) {
-      let host = process.server ? process.env.baseUrl : window.location.protocol + '//' + window.location.hostname + ':' + window.location.port
+      let host
+      if (process.server) host = process.env.baseUrl
+      if (window?.location?.protocol?.startsWith('http')) {
+        // Use whichever host the user is accessing this from: https://beta.languageplayer.io, https://languageplayer.io, http://localhost:3000, etc
+        host = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port
+      } else {
+        // The user is accessing this page through the app. Use default URL insead
+        host = 'https://languageplayer.io'
+      } 
       let reset_url = `${host}/password-reset`
       let res = await this.post(
         `auth/password/request`,

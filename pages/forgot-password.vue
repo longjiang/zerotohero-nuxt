@@ -63,16 +63,11 @@
               <div class="alert alert-success">
                 <h5 class="mb-3">
                   <i class="fas fa-check mr-1"></i>
-                  Email sent!
+                  Email being sent
                 </h5>
                 <p>
-                  You'll receive a link to reset your password at
-                  <b>{{ form.email }}</b>
-                  shortly.
-                </p>
-                <p>
-                  Please check your spam or junk folder before submitting a new
-                  request.
+                  We're sending a password reset email which can take up to a minute to arrive. Please check your
+                  spam inbox just to make sure.
                 </p>
               </div>
             </div>
@@ -85,8 +80,6 @@
 
 <script>
 import Helper from "@/lib/helper";
-import Config from "@/lib/config";
-import axios from 'axios';
 
 export default {
   props: {
@@ -119,13 +112,14 @@ export default {
     async onSubmit(event) {
       try {
         this.emailSending = true;
-        let email = this.form.email
-        let sent = await this.$directus.sendPasswordResetEmail({ email })
+        let email = this.form.email;
+        let sent = await this.$directus.sendPasswordResetEmail({ email });
         if (sent) {
           this.emailSent = true;
           this.emailSending = false;
         }
       } catch (err) {
+        console.log(err)
         if (err.response?.data?.error?.message) {
           this.$toast.error(err.response?.data?.error?.message, {
             position: "top-center",
