@@ -26,22 +26,22 @@
           :badge="savedWordsCount + savedPhrasesCount"
           :wide="wide"
         />
-        <!-- Secondary nav (hidden for youtube-view) /-->
+        <!-- SECONDARY NAV -->
         <Nav
           v-if="
+            l1 && l2 &&
             $route.params.l1 &&
-            $route.params.l2 &&
-            l1 &&
-            l2 &&
-            !($route.name === 'youtube-view')
+            $route.params.l2
           "
-          class="zth-secondary-nav-wrapper"
-          :l1="l1"
-          :l2="l2"
-          :key="`nav-secondary-${l1.code}-${l2.code}`"
+          :class="{'zth-secondary-nav-wrapper' : true, 'd-none': $route.name === 'youtube-view'}"
           variant="menu-bar"
           level="secondary"
-          :skin="$route.meta.skin ? $route.meta.skin : 'light'"
+          v-bind="{
+            l1,
+            l2,
+            skin: $route.meta.skin ? $route.meta.skin : 'light'
+          }"
+          :key="`nav-secondary-${l1.code}-${l2.code}`"
         />
       </client-only>
       <YouTubeViewComp
@@ -100,7 +100,7 @@ export default {
         : window.location.protocol +
           "//" +
           window.location.hostname +
-          (window.location.port ? ':' + window.location.port : '')
+          (window.location.port ? ":" + window.location.port : ""),
       // transition: false,
       // edgeDetected: false,
       // translateX: 0,
@@ -111,8 +111,11 @@ export default {
     ...mapState("history", ["history"]),
     ...mapState("fullHistory", ["fullHistory"]),
     showTopBar() {
-      if (this.$route.meta && this.$route.meta.layout === 'full') return false
-      else return this.$route.params.l1 && this.$route.params.l1 && this.l1 && this.l2
+      if (this.$route.meta && this.$route.meta.layout === "full") return false;
+      else
+        return (
+          this.$route.params.l1 && this.$route.params.l1 && this.l1 && this.l2
+        );
     },
     fullHistoryPathsByL1L2() {
       return this.$store.getters["fullHistory/fullHistoryPathsByL1L2"]({
@@ -168,7 +171,7 @@ export default {
             "show-definition": this.l2SettingsOfL2.showDefinition,
             "show-translation": this.l2SettingsOfL2.showTranslation,
             "show-byeonggi": this.l2SettingsOfL2.showByeonggi,
-            "use-serif": this.l2SettingsOfL2.useSerif
+            "use-serif": this.l2SettingsOfL2.useSerif,
           });
         }
         classes[`l1-${this.l1.code}`] = true;
@@ -177,7 +180,7 @@ export default {
         if (this.l2.han) classes["l2-zh"] = true;
       }
       return classes;
-    }
+    },
   },
   created() {
     this.$nuxt.$on("history", this.addFullHistoryItem); // from Language map
@@ -207,7 +210,10 @@ export default {
     console.log("Default.vue: User data initialized.");
     if (this.l1 && this.l2) {
       this.loadLanguageSpecificSettings(); // Make sure this line is AFTER registering mutation event listeners above!
-      this.$store.commit('settings/LOAD_SETTINGS', {l1: this.l1, l2: this.l2})
+      this.$store.commit("settings/LOAD_SETTINGS", {
+        l1: this.l1,
+        l2: this.l2,
+      });
       this.onLanguageChange();
     }
     this.onAllLanguagesLoaded();
@@ -423,17 +429,26 @@ export default {
       }
     },
     async onLanguageChange() {
-      let youtube = this.$refs['youtube-view-comp']
-      if (!(youtube && youtube.video && youtube.video.l2 && youtube.video.l2.id === this.l2.id)) this.overlayPlayerYouTubeId = undefined // Close the mini player unless the language matches
+      let youtube = this.$refs["youtube-view-comp"];
+      if (
+        !(
+          youtube &&
+          youtube.video &&
+          youtube.video.l2 &&
+          youtube.video.l2.id === this.l2.id
+        )
+      )
+        this.overlayPlayerYouTubeId = undefined; // Close the mini player unless the language matches
       if (this.l1) this.updatei18n();
       let dictionary = await this.$getDictionary();
       if (dictionary) {
         this.dictionaryCredit = await dictionary.credit();
       }
       this.stopAndRestartLoggingUserTimeOnLanguageChange();
-      let l2SettingsOfL2 = {}
-      if (this.l2 && this.l2Settings && this.l2Settings[this.l2.code]) l2SettingsOfL2 = this.l2Settings[this.l2.code]
-      this.l2SettingsOfL2 = l2SettingsOfL2
+      let l2SettingsOfL2 = {};
+      if (this.l2 && this.l2Settings && this.l2Settings[this.l2.code])
+        l2SettingsOfL2 = this.l2Settings[this.l2.code];
+      this.l2SettingsOfL2 = l2SettingsOfL2;
     },
     loadLanguageSpecificSettings() {
       if (this.settingsLoaded === this.l2.code) return;
@@ -527,7 +542,7 @@ export default {
     width: 100%;
   }
   &:not(.route-youtube-view):not(.route-learning-path) .zth-content {
-    padding-bottom: calc(5rem + env(safe-area-inset-bottom))
+    padding-bottom: calc(5rem + env(safe-area-inset-bottom));
   }
 }
 
@@ -593,5 +608,4 @@ export default {
   background-color: #25242cfa;
   color: white;
 }
-
 </style>
