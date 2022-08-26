@@ -177,6 +177,7 @@
           autoload: true,
           autoplay: navigated,
           showLineList: false,
+          showInfo: false,
           episodes: hits.map((h) => h.video),
           forcePro: true,
         }"

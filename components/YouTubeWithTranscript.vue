@@ -43,7 +43,7 @@
             show,
             showType,
             largeEpisodeCount,
-            showInfoButton: layout === 'vertical',
+            showInfoButton: layout === 'vertical' && showInfo,
             episodes,
             showLineList,
             showFullscreenToggle,
@@ -216,6 +216,10 @@ export default {
     },
     showType: {
       type: String,
+    },
+    showInfo: {
+      type: Boolean,
+      default: true
     },
     showInfoButton: {
       // Whether to show an "i" button that toggles the video information display modal
