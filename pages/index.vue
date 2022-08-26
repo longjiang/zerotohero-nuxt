@@ -300,7 +300,7 @@
             </p>
           </div>
           <div class="col-12">
-            <FeatureComparison />
+            <FeatureComparison :sale="true" />
           </div>
         </div>
         <div class="row index-section" id="index-testimonials">
