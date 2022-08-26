@@ -571,9 +571,6 @@ export default {
           payload: { subs_l2 },
         });
         console.log("Missing duration information added.");
-        if (data) {
-          video.channel_id = channelId;
-        }
       }
       return video;
     },

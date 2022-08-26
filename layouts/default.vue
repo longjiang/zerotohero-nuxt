@@ -46,6 +46,7 @@
       </client-only>
       <YouTubeViewComp
         id="overlay-player"
+        ref="youtube-view-comp"
         v-if="overlayPlayerYouTubeId && $route.params.l2"
         v-bind="{
           youtube_id: overlayPlayerYouTubeId,
@@ -206,8 +207,8 @@ export default {
     console.log("Default.vue: User data initialized.");
     if (this.l1 && this.l2) {
       this.loadLanguageSpecificSettings(); // Make sure this line is AFTER registering mutation event listeners above!
-      this.onLanguageChange();
       this.$store.commit('settings/LOAD_SETTINGS', {l1: this.l1, l2: this.l2})
+      this.onLanguageChange();
     }
     this.onAllLanguagesLoaded();
     if (typeof window !== "undefined")
@@ -422,7 +423,8 @@ export default {
       }
     },
     async onLanguageChange() {
-      if (this.$route.name !== 'youtube-view') this.overlayPlayerYouTubeId = undefined
+      let youtube = this.$refs['youtube-view-comp']
+      if (!(youtube && youtube.video && youtube.video.l2 && youtube.video.l2.id === this.l2.id)) this.overlayPlayerYouTubeId = undefined // Close the mini player unless the language matches
       if (this.l1) this.updatei18n();
       let dictionary = await this.$getDictionary();
       if (dictionary) {
