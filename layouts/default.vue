@@ -52,7 +52,6 @@
           youtube_id: overlayPlayerYouTubeId,
           lesson: overlayPlayerLesson,
           mini: overlayPlayerMinimized,
-          class: `${overlayPlayerMinimized ? 'overlay-player-minimized' : ''}`,
           key: `youtube-view-comp-${overlayPlayerYouTubeId}`,
         }"
         @close="overlayPlayerClose"
@@ -514,40 +513,11 @@ export default {
   display: none;
 }
 
-#overlay-player {
-  background: black;
-  &.overlay-player-minimized {
-    background: none;
-    position: fixed;
-    height: 5rem;
-    min-height: 0;
-    bottom: calc(env(safe-area-inset-bottom) + 4.88rem);
-    top: inherit;
-    overflow: hidden;
-    z-index: 9;
-    :deep(.main-dark) {
-      background: #000000aa;
-      backdrop-filter: blur(20px);
-    }
-  }
-}
 
-.zerotohero-wide {
-  .overlay-player-minimized {
-    width: inherit;
-  }
-}
 .zerotohero-not-wide.zerotohero-with-nav {
-  .overlay-player-minimized {
-    width: 100%;
-  }
   &:not(.route-youtube-view):not(.route-learning-path) .zth-content {
     padding-bottom: calc(5rem + env(safe-area-inset-bottom));
   }
-}
-
-.zerotohero-wide #overlay-player.overlay-player-minimized {
-  bottom: 0;
 }
 
 #zerotohero {

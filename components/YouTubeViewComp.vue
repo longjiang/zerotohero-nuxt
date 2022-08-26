@@ -1,6 +1,11 @@
 
 <template>
-  <div class="youtube-view" style="transition: all 0.5s ease-in-out">
+  <div
+    :class="{
+      'youtube-view': true,
+      'youtube-view-minimized': layout === 'mini',
+    }"
+  >
     <SocialHead
       :title="`${video ? video.title + ' | ' : ''}Learn ${
         $l2.name
@@ -57,7 +62,7 @@
           autoload: true,
           autoplay: false,
           forcePortrait: false,
-          initialLayout: layout
+          initialLayout: layout,
         }"
         :key="`transcript-${video.youtube_id}`"
         @ended="updateEnded"
@@ -107,7 +112,7 @@ export default {
       startLineIndex: 0,
       video: undefined,
       largeEpisodeCount: undefined,
-      starttime: 0
+      starttime: 0,
     };
   },
   computed: {
@@ -639,7 +644,7 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped >
+<style lang="scss" scoped>
 .toggle-wrapper {
   color: white;
   height: 5rem;
@@ -693,5 +698,37 @@ export default {
     color: #ffffffaa;
     z-index: 21;
   }
+}
+
+.youtube-view {
+  transition: all 1s ease-in-out;
+  position: static;
+  height: 100%;
+  &.youtube-view-minimized {
+    position: fixed;
+    height: 5rem;
+    bottom: calc(env(safe-area-inset-bottom) + 4.88rem);
+    overflow: hidden;
+    z-index: 9;
+    .main-dark {
+      background: #000000aa;
+      backdrop-filter: blur(20px);
+    }
+  }
+}
+
+.zerotohero-wide {
+  .youtube-view-minimized {
+    width: inherit;
+  }
+}
+.zerotohero-not-wide.zerotohero-with-nav {
+  .youtube-view-minimized {
+    width: 100%;
+  }
+}
+
+.zerotohero-wide #overlay-player.youtube-view-minimized {
+  bottom: 0;
 }
 </style>
