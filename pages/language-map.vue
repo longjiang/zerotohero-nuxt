@@ -237,7 +237,7 @@ export default {
 .options-bar {
   position: fixed;
   width: calc(100vw - 2rem);
-  top: 3.5rem;
+  top: calc(3.5rem + env(safe-area-inset-top));
   left: 1rem;
   z-index: 1001; // The map has a z-index of 1000
   display: flex;
