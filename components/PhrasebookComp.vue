@@ -67,8 +67,11 @@
             style="color: #ccc"
           >
             <div>#{{ (phraseObj.id || phraseIndex) + 1 }}</div>
-            <div class="text-right">
-              <i class="fa-solid fa-trash btn-remove" @click.prevent.stop="remove(phraseObj)"></i>
+            <div class="text-right" v-if="$adminMode">
+              <i
+                class="fa-solid fa-trash btn-remove"
+                @click.prevent.stop="remove(phraseObj)"
+              ></i>
             </div>
           </div>
           <div>
@@ -137,6 +140,10 @@ export default {
     this.genCSV();
   },
   computed: {
+    $adminMode() {
+      if (typeof this.$store.state.settings.adminMode !== "undefined")
+        return this.$store.state.settings.adminMode;
+    },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
