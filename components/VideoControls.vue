@@ -14,12 +14,12 @@
         {{ duration ? toHHMMSS(duration) : "--:--" }}
       </div>
     </div>
-    <div class="quick-access-buttons">
+    <div class="video-controls-buttons">
       <!-- <button
       v-if="showLineList"
       :class="{
-        'quick-access-button   text-center': true,
-        'quick-access-button-active': showList,
+        'btn-video-controls   text-center': true,
+        'btn-video-controls-active': showList,
       }"
       @click="showList = !showList"
     >
@@ -28,7 +28,7 @@
       <button
         v-if="showInfoButton"
         :class="{
-          'quick-access-button text-center': true,
+          'btn-video-controls text-center': true,
         }"
         @click="showInfoModal"
       >
@@ -37,7 +37,7 @@
       <button
         v-if="showCollapse"
         :class="{
-          'quick-access-button quick-access-button-collapse text-center': true,
+          'btn-video-controls btn-video-controls-collapse text-center': true,
         }"
         @click="toggleCollapsed"
         title="Hide Video (for Audiobooks)"
@@ -47,7 +47,7 @@
       </button>
       <button
         :class="{
-          'quick-access-button quick-access-button-rewind text-center': true,
+          'btn-video-controls btn-video-controls-rewind text-center': true,
         }"
         @click="rewind"
         Title="Rewind to Beginning"
@@ -57,7 +57,7 @@
       <button
         v-if="episodes"
         :disabled="!previousEpisode"
-        class="quick-access-button quick-access-button-previous text-center"
+        class="btn-video-controls btn-video-controls-previous text-center"
         @click="$emit('previous')"
         title="Previous Video"
       >
@@ -65,7 +65,7 @@
       </button>
       <button
         class="
-          quick-access-button quick-access-button-previous-line
+          btn-video-controls btn-video-controls-previous-line
           text-center
         "
         @click="$emit('goToPreviousLine')"
@@ -76,7 +76,7 @@
       </button>
       <button
         :class="{
-          'quick-access-button quick-access-button-play play-pause text-center': true,
+          'btn-video-controls btn-video-controls-play play-pause text-center': true,
         }"
         @click="togglePaused"
         :title="paused ? 'Play' : 'Pause'"
@@ -85,7 +85,7 @@
         <i v-if="!paused || speaking" class="fas fa-pause"></i>
       </button>
       <button
-        class="quick-access-button quick-access-button-next-line text-center"
+        class="btn-video-controls btn-video-controls-next-line text-center"
         @click="$emit('goToNextLine')"
         title="Next Line"
       >
@@ -95,7 +95,7 @@
       <button
         v-if="episodes"
         :disabled="!nextEpisode"
-        class="quick-access-button quick-access-button-next text-center"
+        class="btn-video-controls btn-video-controls-next text-center"
         @click="$emit('next')"
         title="Next Video"
       >
@@ -103,8 +103,8 @@
       </button>
       <!-- <button
       :class="{
-        'quick-access-button   text-center': true,
-        'quick-access-button-active': repeatMode,
+        'btn-video-controls   text-center': true,
+        'btn-video-controls-active': repeatMode,
       }"
       @click="toggleRepeatMode"
     >
@@ -112,8 +112,8 @@
     </button>
     <button
       :class="{
-        'quick-access-button   text-center': true,
-        'quick-access-button-active': audioMode,
+        'btn-video-controls   text-center': true,
+        'btn-video-controls-active': audioMode,
       }"
       @click="toggleAudioMode"
     >
@@ -123,8 +123,8 @@
       <button
         v-if="showFullscreenToggle"
         :class="{
-          'quick-access-button quick-access-button-fullscreen text-center': true,
-          'quick-access-button-active': layout === 'horizontal',
+          'btn-video-controls btn-video-controls-fullscreen text-center': true,
+          'btn-video-controls-active': layout === 'horizontal',
         }"
         @click="toggleFullscreenMode"
         :title="layout === 'vertical' ? 'Show Transcript' : 'Hide Transcript'"
@@ -133,7 +133,7 @@
       </button>
       <button
         :class="{
-          'quick-access-button quick-access-button-fullscreen text-center': true,
+          'btn-video-controls btn-video-controls-fullscreen text-center': true,
         }"
         @click="showSettingsModal"
         title="Change speed, auto-pause, and other settings"
@@ -153,13 +153,13 @@
           <b-input-group-append>
             <b-input-group-text
               v-if="!filterList"
-              class="btn quick-access-button-active"
+              class="btn btn-video-controls-active"
             >
               <i class="fas fa-filter"></i>
             </b-input-group-text>
             <b-input-group-text
               v-if="filterList"
-              class="btn quick-access-button-active"
+              class="btn btn-video-controls-active"
               @click="filterList = ''"
             >
               <i class="fas fa-times"></i>
@@ -431,13 +431,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.video-controls {
-  background: #00000066;
-  backdrop-filter: blur(20px);
-  border-radius: 0.5rem;
-}
-
-.quick-access-buttons {
+.video-controls-buttons {
   text-align: center;
   display: flex;
   align-items: center;
@@ -445,7 +439,7 @@ export default {
   max-width: 40rem;
   margin: 0 auto;
 
-  .quick-access-button {
+  .btn-video-controls {
     border: none;
     padding: 0 0.5rem;
     background: none;
@@ -456,19 +450,13 @@ export default {
       color: #cccccc44;
     }
 
-    &.quick-access-button-active {
+    &.btn-video-controls-active {
       color: #fd4f1c;
     }
 
     &.play-pause {
       font-size: 2.5em;
     }
-  }
-}
-
-@media (orientation: landscape) {
-  .youtube-view-wrapper.fullscreen .quick-access-buttons {
-    bottom: 0.8rem;
   }
 }
 

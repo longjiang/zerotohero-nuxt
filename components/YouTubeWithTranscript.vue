@@ -219,7 +219,7 @@ export default {
     },
     showInfo: {
       type: Boolean,
-      default: true
+      default: true,
     },
     showInfoButton: {
       // Whether to show an "i" button that toggles the video information display modal
@@ -343,11 +343,12 @@ export default {
         return this.$store.state.settings.adminMode;
     },
     landscape() {
-      if (this.layout === "vertical") return false;
-      if (this.forcePortrait) return false;
-      if (process.browser && this.viewportWidth && this.viewportHeight) {
-        let landscape = this.viewportWidth > this.viewportHeight;
-        return landscape;
+      if (this.layout === "horizontal") {
+        if (this.forcePortrait) return false;
+        if (process.browser && this.viewportWidth && this.viewportHeight) {
+          let landscape = this.viewportWidth > this.viewportHeight;
+          return landscape;
+        }
       }
     },
   },
@@ -670,13 +671,17 @@ export default {
     max-width: 8.88rem;
     margin-right: 5rem;
     :deep(.video-controls) {
-      .quick-access-button-previous-line,
-      .quick-access-button-next-line,
-      .quick-access-button-rewind,
-      // .quick-access-button-previous,
-      .quick-access-button-speed,
-      // .quick-access-button-next,
-      .quick-access-button-fullscreen {
+      position: absolute;
+      top: 0.7rem;
+      left: 9.5rem;
+      .video-controls-progress,
+      .btn-video-controls-previous-line,
+      .btn-video-controls-next-line,
+      .btn-video-controls-rewind,
+      // .btn-video-controls-previous,
+      .btn-video-controls-speed,
+      // .btn-video-controls-next,
+      .btn-video-controls-fullscreen {
         display: none !important;
       }
     }

@@ -682,10 +682,6 @@ export default {
           background: black;
         }
       }
-
-      .quick-access-buttons {
-        border-radius: 0 0 0.3rem 0.3rem;
-      }
     }
   }
 }

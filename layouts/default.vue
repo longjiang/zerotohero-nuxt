@@ -26,7 +26,7 @@
           :badge="savedWordsCount + savedPhrasesCount"
           :wide="wide"
         />
-        <!-- SECONDARY NAV -->
+        <!-- SECONDARY NAV (Hidden on YouTubeView) -->
         <Nav
           v-if="
             l1 && l2 &&
@@ -526,7 +526,7 @@ export default {
     overflow: hidden;
     z-index: 9;
     :deep(.main-dark) {
-      background: #28a74588;
+      background: #000000aa;
       backdrop-filter: blur(20px);
     }
   }
