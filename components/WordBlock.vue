@@ -141,7 +141,9 @@
                 <span v-if="$l2.code === 'de' && word.gender">
                   {{ { n: "das", m: "der", f: "die" }[word.gender] }}
                 </span>
-                {{ transform(word.head) }}</b></router-link>
+                {{ transform(word.head) }}
+              </b>
+            </router-link>
             <i class="fas fa-chevron-right text-success"></i>
             <span
               v-if="word.traditional && word.traditional !== word.simplified"
@@ -371,9 +373,10 @@ export default {
     ...mapState("settings", ["l2Settings"]),
     ...mapState("savedWords", ["savedWords"]),
     l2SettingsOfL2() {
-      let l2SettingsOfL2 = {}
-      if (this.l2Settings && this.l2Settings[this.$l2.code]) l2SettingsOfL2 = this.l2Settings[this.$l2.code]
-      return l2SettingsOfL2
+      let l2SettingsOfL2 = {};
+      if (this.l2Settings && this.l2Settings[this.$l2.code])
+        l2SettingsOfL2 = this.l2Settings[this.$l2.code];
+      return l2SettingsOfL2;
     },
     quickGloss() {
       return this.saved?.word?.definitions?.[0]
@@ -933,7 +936,7 @@ export default {
     },
     speak(text) {
       let speechSynthesis = window?.speechSynthesis;
-      if (!speechSynthesis) return
+      if (!speechSynthesis) return;
       if (this.$hasFeature("speech")) {
         if (!speechSynthesis.speaking) {
           this.utterance = new SpeechSynthesisUtterance(text);
@@ -1009,7 +1012,7 @@ export default {
 }
 
 .quick-gloss {
-  font-size: 7em;
+  font-size: 0.8rem;
   display: inline;
   opacity: 0.8;
   font-weight: normal;
@@ -1028,6 +1031,13 @@ export default {
   }
 }
 
+[dir="ltr"] .word-block.saved {
+  text-align: left;
+}
+
+[dir="rtl"] .word-block.saved {
+  text-align: right;
+}
 .add-pinyin {
   .word-block {
     display: inline-block;
@@ -1035,10 +1045,6 @@ export default {
     margin: 0;
     position: relative;
     text-indent: 0;
-
-    &.saved {
-      text-align: left;
-    }
 
     .word-block-pinyin,
     .word-block-text-byeonggi-wrapper {
