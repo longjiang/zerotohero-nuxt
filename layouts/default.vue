@@ -28,18 +28,17 @@
         />
         <!-- SECONDARY NAV (Hidden on YouTubeView) -->
         <Nav
-          v-if="
-            l1 && l2 &&
-            $route.params.l1 &&
-            $route.params.l2
-          "
-          :class="{'zth-secondary-nav-wrapper' : true, 'd-none': $route.name === 'youtube-view'}"
+          v-if="l1 && l2 && $route.params.l1 && $route.params.l2"
+          :class="{
+            'zth-secondary-nav-wrapper': true,
+            'd-none': $route.name === 'youtube-view',
+          }"
           variant="menu-bar"
           level="secondary"
           v-bind="{
             l1,
             l2,
-            skin: $route.meta.skin ? $route.meta.skin : 'light'
+            skin: $route.meta.skin ? $route.meta.skin : 'light',
           }"
           :key="`nav-secondary-${l1.code}-${l2.code}`"
         />
@@ -430,14 +429,16 @@ export default {
     async onLanguageChange() {
       let youtube = this.$refs["youtube-view-comp"];
       if (
-        !(
+        (
           youtube &&
           youtube.video &&
           youtube.video.l2 &&
-          youtube.video.l2.id === this.l2.id
+          youtube.video.l2.id &&
+          youtube.video.l2.id !== this.l2.id
         )
-      )
+      ) {
         this.overlayPlayerYouTubeId = undefined; // Close the mini player unless the language matches
+      }
       if (this.l1) this.updatei18n();
       let dictionary = await this.$getDictionary();
       if (dictionary) {
@@ -512,7 +513,6 @@ export default {
   height: 1.2rem;
   display: none;
 }
-
 
 .zerotohero-not-wide.zerotohero-with-nav {
   &:not(.route-youtube-view):not(.route-learning-path) .zth-content {
