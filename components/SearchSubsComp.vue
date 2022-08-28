@@ -956,6 +956,12 @@ export default {
   color: #fd4f1c;
 }
 
+.show-pinyin .reels {
+  :deep(.annotated) {
+    line-height: 1;
+  }
+}
+
 .reels {
   :deep(.video-controls) {
     display: none !important;
@@ -978,6 +984,7 @@ export default {
     height: calc(1920px / 2);
     background: #010101;
     margin-left: calc((100vw - 1080px / 2) / 2);
+    position: relative;
   }
 
   :deep(.youtube) {
@@ -990,8 +997,8 @@ export default {
     padding-top: 0;
     font-size: 1.7em;
     font-weight: bold;
-    padding-left: 1.25rem;
-    padding-right: 1.25rem;
+    padding-left: 1.5rem;
+    padding-right: 5.75rem;
     .transcript-line-l1 {
       font-weight: normal;
       opacity: 1;
@@ -1006,10 +1013,6 @@ export default {
     }
   }
 
-  :deep(.annotated) {
-    line-height: 1;
-  }
-
   :deep(.annotator-buttons) {
     position: absolute;
     right: -3rem;
@@ -1019,14 +1022,11 @@ export default {
   .video-title {
     position: absolute;
     z-index: 1;
-    width: calc(540px - 2rem);
-    top: 3.5rem;
-    margin-left: calc((100vw - 540px) / 2 + 1rem );
-    line-height: 1.67;
-    span {
-      background: #000000aa;
-      padding: 0.33rem;
-    }
+    width: calc(540px - 5rem);
+    bottom: 50rem;
+    margin-left: calc((100vw - 540px) / 2 + 3.5rem);
+    text-shadow: 0 0 12px black;
+    text-align: center;
   }
 }
 </style>
