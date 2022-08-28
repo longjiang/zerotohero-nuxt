@@ -59,14 +59,15 @@ const Dictionary = {
     this.rawWords = sorted;
     let data = [];
     for (let row of sorted) {
+      let hangul = row.hangul.replace(/^\-/, '')
       let word = Object.assign(row, {
-        head: row.hangul,
-        bare: row.hangul,
-        accented: row.hangul,
+        head: hangul,
+        bare: hangul,
+        accented: hangul,
         definitions: [row.english],
         cjk: {
           canonical: row.hanja && row.hanja !== "NULL" ? row.hanja : undefined,
-          phonetics: row.hungul
+          phonetics: hangul
         }
       });
       data.push(word);
@@ -89,6 +90,7 @@ const Dictionary = {
     words = words
       .filter(w => w.word.length > 0) // filter empty rows
       .map(item => {
+        item.word = item.word.replace(/^\-/, '')
         item.bare = item.word;
         item.search = item.bare.toLowerCase();
         item.head = item.word;
