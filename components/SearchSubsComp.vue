@@ -173,11 +173,11 @@
           initialLayout: 'vertical',
           startLineIndex: Math.max(startLineIndex, 0),
           speed,
-          showFullscreenToggle: false,
+          showFullscreenToggle: true,
           autoload: true,
           autoplay: navigated,
           showLineList: false,
-          showInfo: false,
+          showInfo: true,
           episodes: hits.map((h) => h.video),
           forcePro: true,
         }"
