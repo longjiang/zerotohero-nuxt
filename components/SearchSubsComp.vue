@@ -173,6 +173,8 @@
           initialLayout: 'vertical',
           startLineIndex: Math.max(startLineIndex, 0),
           speed,
+          show: currentHit.show,
+          showType: currentHit.showType,
           showFullscreenToggle: true,
           autoload: true,
           autoplay: navigated,
@@ -617,9 +619,33 @@ export default {
       });
 
       hits = this.updateSaved(hits);
+      hits = this.setShows(hits)
       this.collectContext(hits);
       this.$emit("loaded", hits);
       this.checking = false;
+    },
+    setShows(hits) {
+      for (let hit of hits) {
+        let show, showType
+        if (hit.video) {
+          if (hit.video.tv_show) {
+            show = this.$store.getters["shows/tvShow"]({
+              id: Number(hit.video.tv_show),
+              l2: this.$l2,
+            });
+            showType = "tv_show";
+          } else if (hit.video.talk) {
+            show = this.$store.getters["shows/talk"]({
+              id: hit.video.talk,
+              l2: this.$l2,
+            });
+            showType = "talk";
+          }
+          hit.show = show
+          hit.showType = showType
+        }
+      }
+      return hits
     },
     get(name) {
       return this[name];
