@@ -166,9 +166,8 @@ const Dictionary = {
    * @returns 
    */
   get(id, head) {
-    let word
-    word = this.words.find(row => row.id === id);
-    if (head && word.head !== head) {
+    let word = this.words.find(row => row.id === id);
+    if (head && word && word.head !== head) {
       word = this.lookup(head)
     }
     return word
