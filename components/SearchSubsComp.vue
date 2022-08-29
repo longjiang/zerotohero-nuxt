@@ -161,7 +161,7 @@
     </div>
     <template v-if="pro || hitIndex < NON_PRO_MAX_SUBS_SEARCH_HITS">
       <div v-if="reels && currentHit" class="video-title">
-        <span>{{ currentHit.video.title }}</span>
+        <b>VIDEO SOURCE:</b> <span>{{ currentHit.video.title }}</span>
       </div>
       <LazyYouTubeWithTranscript
         v-if="currentHit"
@@ -1048,11 +1048,16 @@ export default {
   .video-title {
     position: absolute;
     z-index: 1;
-    width: calc(540px - 5rem);
+    width: calc(540px - 9rem);
     bottom: 50rem;
-    margin-left: calc((100vw - 540px) / 2 + 3.5rem);
-    text-shadow: 0 0 12px black;
-    text-align: center;
+    margin-left: calc((100vw - 540px) / 2 + 2.5rem);
+    text-align: left;
+    background: #000000cc;
+    color: white;
+    padding: 0.5rem;
+    font-size: 0.8rem;
+    border-radius: 0.25rem;
+    backdrop-filter: blur(10px);
   }
 }
 </style>

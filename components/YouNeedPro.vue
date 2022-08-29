@@ -76,7 +76,7 @@ export default {
   },
   data() {
     return {
-      sale: true
+      sale: false
     }
   },
   computed: {

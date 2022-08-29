@@ -300,7 +300,7 @@
             </p>
           </div>
           <div class="col-12">
-            <FeatureComparison :sale="true" />
+            <FeatureComparison :sale="sale" />
           </div>
         </div>
         <div class="row index-section" id="index-testimonials">
@@ -534,6 +534,7 @@ import { background } from "@/lib/utils/background";
 export default {
   data() {
     return {
+      sale: false,
       playBtnClicked: false,
       langKeyword: undefined,
       hasDashboard: false,

@@ -98,7 +98,7 @@ export default {
   data() {
     return {
       loading: false,
-      sale: true
+      sale: false
     };
   },
   computed: {

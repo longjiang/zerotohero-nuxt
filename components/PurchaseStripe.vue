@@ -64,7 +64,7 @@ export default {
     this.stripePublishableKey = "pk_live_9lnc7wrGHtcFdPKIWZdy9p17";
 
     return {
-      sale: true,
+      sale: this.sale,
       regularPriceCNYPaymentLink: 'https://buy.stripe.com/4gw2bz7ELbvR8CccMN',
       salePriceCNYPaymentLink: 'https://buy.stripe.com/dR6dUhcZ51VhaKkdQT',
       regularPriceID: 'price_1LArBtG5EbMGvOaflIKUthub',

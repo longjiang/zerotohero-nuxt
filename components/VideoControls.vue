@@ -431,6 +431,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.video-controls {
+  background: black;
+}
+
 .video-controls-buttons {
   text-align: center;
   display: flex;
