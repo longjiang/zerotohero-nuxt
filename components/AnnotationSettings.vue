@@ -108,14 +108,14 @@
 
       <button
         class="btn btn-unstyled d-block p-0 annotation-setting-toggle"
-        @click="zoomLevel = zoomLevel > 0 ? zoomLevel - 1 : zoomLevel"
+        @click="zoomLevel = Math.max(zoomLevel - 1, 0)"
       >
         <span class="annotation-setting-icon">ᴛ</span>
         Smaller text
       </button>
       <button
         class="btn btn-unstyled d-block p-0 annotation-setting-toggle"
-        @click="zoomLevel = zoomLevel < 4 ? zoomLevel + 1 : zoomLevel"
+        @click="zoomLevel = Math.min(zoomLevel + 1, 4)"
       >
         <span class="annotation-setting-icon">T</span>
         Bigger text
@@ -430,7 +430,9 @@ export default {
     setupWatchers() {
       for (let property in defaultSettings) {
         this.$watch(property, (newValue, oldValue) => {
-          if (property === 'zoomLevel') $nuxt.$emit("zoom", Number(newValue));
+          if (property === 'zoomLevel') {
+            $nuxt.$emit("zoom", Number(newValue));
+          }
           let payload = {}
           payload[property] = newValue
           this.$store.dispatch("settings/setL2Settings", payload);
