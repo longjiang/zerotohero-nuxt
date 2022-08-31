@@ -12,32 +12,8 @@
     <SocialHead
       title="Online Translators | Language Player"
       description="Check the availability of online translators for any given language."
-      image="/img/thumbnail-language-icons.jpg"
     />
-    <div class="container-fluid">
-      <div
-        class="row bg-dark text-white pt-2 pb-2 text-left"
-        style="overflow: visible"
-      >
-        <div class="col-sm-12 d-flex" style="overflow: visible">
-          <div
-            class="d-flex align-items-center"
-            style="width: 100%; justify-content: space-between"
-          >
-            <router-link to="/" class="link-unstyled d-block">
-              <i class="fa fa-chevron-left mr-2"></i>
-              Language Player
-            </router-link>
-            <router-link
-              to="/language-map"
-              class="btn btn-unstyled link-unstyled d-block"
-            >
-              <i class="fas fa-globe-asia"></i>
-            </router-link>
-          </div>
-        </div>
-      </div>
-    </div>
+    <SiteTopBar />
 
     <div class="container" v-if="translators">
       <div class="row">
@@ -125,7 +101,7 @@
           <router-link to="/language-map">
             <div>
               <img
-                src="/img/thumbnail-language-map.jpg"
+                src="/img/thumbnail-language-map-2.jpg"
                 alt="World Language Map"
                 class="rounded shadow img-fluid"
                 style="max-width: 40rem"
@@ -135,14 +111,6 @@
         </div>
       </div>
     </div>
-    <footer class="bg-dark mt-5 p-5" style="z-index: -1">
-      <div class="text-center" style="line-height: 1.2; font-size: 1.1em">
-        <router-link class="link-unstyled text-white" to="/">
-          <strong>ZERO TO HERO</strong>
-          <span style="font-weight: 300">LANGUAGES</span>
-        </router-link>
-      </div>
-    </footer>
   </div>
 </template>
 

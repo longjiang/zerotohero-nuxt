@@ -13,7 +13,7 @@
     <SocialHead
       title="Map of World Languages | Language Player"
       description="Tap on any language label to learn the language! Live TV channels, TV shows with subtitles, music with lyrics, phrasebooks with video examples... everything that can help you to learn a language “by osmosis.”"
-      image="/img/thumbnail-language-map.jpg"
+      image="/img/thumbnail-language-map-2.jpg"
     />
     <SiteTopBar class="safe-padding-top" />
     <div
