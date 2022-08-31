@@ -137,7 +137,7 @@
         <h4 class="mt-5 text-center">
           You can help to expand this {{ $l2.name }} video library!
         </h4>
-        <LazyHowToContribute />
+        <!-- <LazyHowToContribute /> -->
         <LazyIdenticalLanguages class="mb-4" routeName="youtube-browse" />
       </div>
     </div>
