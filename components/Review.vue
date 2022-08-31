@@ -85,7 +85,7 @@
 
 <script>
 import Helper from "@/lib/helper";
-import FastestLevenshtein from "fastest-levenshtein";
+import {distance, closest} from "fastest-levenshtein";
 import { mapState } from "vuex";
 export default {
   data() {
@@ -112,7 +112,7 @@ export default {
       type: Object, // {"starttime":89.14,"duration":3.5,"line":". . . ","count":1},
     },
     lineIndex: {
-      type: Number,
+      type: [Number, String],
     },
     parallelLines: {
       type: String, // "Shouldn&#39;t respect for the living world, for nature, be enough?"
@@ -151,7 +151,7 @@ export default {
         savedWords = savedWords.map((s) =>
           Object.assign(
             {
-              distance: FastestLevenshtein.distance(
+              distance: distance(
                 s.forms[0] || s.simplified,
                 text
               ),
@@ -171,8 +171,8 @@ export default {
         words = await (await this.$getDictionary()).lookupFuzzy(text);
         words = words.sort(
           (a, b) =>
-            FastestLevenshtein.distance(a.head, text) -
-            FastestLevenshtein.distance(b.head, text)
+            distance(a.head, text) -
+            distance(b.head, text)
         );
       }
       words = words.filter(
