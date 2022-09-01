@@ -168,11 +168,7 @@
           :class="colClasses(video, videoIndex)"
           :key="`youtube-video-wrapper-${video.youtube_id}-${videoIndex}`"
         >
-          <LazyFeedItem
-            v-if="view === 'feed'"
-            :video="video"
-            :skin="skin"
-          />
+          <LazyFeedItem v-if="view === 'feed'" :video="video" :skin="skin" />
           <LazyYouTubeVideoCard
             v-else
             ref="youTubeVideoCard"
@@ -415,32 +411,29 @@ export default {
       let youtube_ids = videos
         .map((v) => v.youtube_id)
         .filter((id) => !id.includes("0x"));
-      let chunks = Helper.arrayChunk(youtube_ids, 100);
+      let chunks = Helper.arrayChunk(youtube_ids, 50);
       for (let youtube_ids of chunks) {
-        let query = `filter[youtube_id][in]=${youtube_ids}&fields=id,title,channel_id,youtube_id,tv_show.*,talk.*${
-            this.showSubsEditing ? ",subs_l2" : ""
-          }&timestamp=${
-            this.$adminMode ? Date.now() : 0
-          }`
+        let filter = `filter[youtube_id][in]=${youtube_ids}`
+        let fields = `fields=id,title,channel_id,youtube_id,tv_show.*,talk.*`
+        if (this.showSubsEditing) fields += ",subs_l2"
+        let timestamp = `timestamp=${ this.$adminMode ? Date.now() : 0 }`
+        let query = [filter, fields, timestamp].join("&")
         let savedVideos = await this.$directus.getVideos({l2Id: this.$l2.id, query})
-        if (savedVideos[0]) {
-          for (let video of videos) {
-            let savedVideo = savedVideos.find(
-              (v) => v.youtube_id === video.youtube_id
-            );
-            if (savedVideo) {
-              video.tv_show = savedVideo.tv_show;
-              video.talk = savedVideo.talk;
-              if (savedVideo.subs_l2) {
-                let subs_l2 = this.$subs.parseSavedSubs(savedVideo.subs_l2);
-                if (subs_l2[0]) {
-                  video.subs_l2 = subs_l2;
-                  this.firstLineTime = video.subs_l2[0].starttime;
-                }
-              }
-              Vue.set(video, "id", savedVideo.id);
+        let filteredVideos = videos.filter(video =>  savedVideos.find(
+            (v) => v.youtube_id === video.youtube_id
+          )
+        )
+        for (let video of filteredVideos) {
+          video.tv_show = savedVideo.tv_show;
+          video.talk = savedVideo.talk;
+          if (savedVideo.subs_l2) {
+            let subs_l2 = this.$subs.parseSavedSubs(savedVideo.subs_l2);
+            if (subs_l2[0]) {
+              video.subs_l2 = subs_l2;
+              this.firstLineTime = video.subs_l2[0].starttime;
             }
           }
+          Vue.set(video, "id", savedVideo.id);
         }
       }
     },
