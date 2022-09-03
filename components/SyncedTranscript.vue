@@ -449,21 +449,22 @@ export default {
         lineIndex = Number(lineIndex);
         let line = this.lines[lineIndex];
         let nextLine = this.lines[lineIndex + 1];
-        // Assign parallel lines to this line if the parallel line starts before
+        // Assign parallel lines to this line if the parallel line starts before this line ends, or ends before this line ends
         const filterParallelLines = (parallelLine, parallelLineIndex) => {
           if (!parallelLine) return false;
           let nextParallelLine = this.parallellines[parallelLineIndex + 1];
-          let medianTime = nextParallelLine
-            ? (parallelLine.starttime + nextParallelLine.starttime) / 2
-            : parallelLine.starttime + 2;
-          if (medianTime >= line.starttime) {
-            if (!nextLine) return true;
-            else return medianTime <= nextLine.starttime;
-          }
+          let parallelLineDuration = parallelLine.duration
+          if (!parallelLineDuration) parallelLineDuration = nextParallelLine ? nextParallelLine.starttime - parallelLine.starttime : 2
+          let parallelLineEndTime = parallelLine.starttime + parallelLineDuration
+          let medianTime = parallelLine.starttime + parallelLineDuration / 2
+          let nextLineStartTime = line.duration ? line.starttime + line.duration : nextLine ? nextLine.starttime : line.starttime + 10
+          let parallelLineStartsBeforeNextLineStarts = line.starttime <= parallelLine.starttime && parallelLine.starttime <= nextLineStartTime - 0.5
+          let parallelLineEndsBeforeNextLineStarts = line.starttime + 0.5 <= parallelLineEndTime && parallelLineEndTime <= nextLineStartTime
+          return parallelLineStartsBeforeNextLineStarts || parallelLineEndsBeforeNextLineStarts
         }
         matchedParallelLines[lineIndex] = this.parallellines
           .filter(filterParallelLines)
-          .slice(0, 3) // So that we don't have way too many translation lines that fills the whole screen
+          .slice(0, 4) // So that we don't have way too many translation lines that fills the whole screen
           .map((l) => l.line)
           .join(" ");
         if (!nextLine) break;

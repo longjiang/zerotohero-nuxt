@@ -1051,7 +1051,7 @@ export default {
     width: calc(540px - 9rem);
     bottom: 50rem;
     margin-left: calc((100vw - 540px) / 2 + 2.5rem);
-    text-align: left;
+    text-align: center;
     background: #000000cc;
     color: white;
     padding: 0.5rem;
