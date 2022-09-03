@@ -350,7 +350,8 @@ export default {
     return {
       open: false,
       showPhrase: {},
-      loading: true,
+      loading: false,
+      loaded: false,
       text: this.$slots.default ? this.$slots.default[0].text : undefined,
       images: [],
       words: [],
@@ -386,25 +387,27 @@ export default {
     saved() {
       if (!this.checkSaved) return false;
       let saved;
-      let word = this.words[0] || this.tokens?.[0];
+      let firstWord = this.words[0] || this.tokens?.[0];
       let text = this.text;
-      if (word) {
+      if (firstWord) {
         saved = this.$store.getters["savedWords/has"]({
-          id: word.id,
+          id: firstWord.id,
           l2: this.$l2.code,
         });
         if (saved) {
-          saved = Object.assign({ word }, saved);
-          return saved;
+          saved = Object.assign({ firstWord }, saved);
         }
       }
-      if (text) {
+      if (!saved && text) {
         saved = this.$store.getters["savedWords/has"]({
           text: text.toLowerCase(),
           l2: this.$l2.code,
         });
-        return saved;
       }
+      if (saved) {
+        this.appendSavedWord(saved.id, saved.forms[0])
+      }
+      return saved;
     },
     savedTransliteration() {
       let savedTransliteration = this.transliteration;
@@ -570,7 +573,7 @@ export default {
   },
   watch: {
     async wordblockHover() {
-      if ((this.words && this.words.length === 0) || this.lastLookupWasQuick) {
+      if (!this.loaded || this.lastLookupWasQuick) {
         this.lookup();
       }
       await timeout(300);
@@ -582,6 +585,11 @@ export default {
     },
   },
   methods: {
+    async appendSavedWord(id, head) {
+      let dictionary = await this.$getDictionary()
+      let savedWord = await dictionary.get(id, head)
+      this.words = uniqueByValue([savedWord, ...this.words], 'id')
+    },
     togglePhrase(id) {
       Vue.set(this.showPhrase, id, !this.showPhrase[id]);
     },
@@ -853,8 +861,9 @@ export default {
       this.$nuxt.$emit("popupClosed");
     },
     async lookup(quick = false) {
+      this.loading = true
       let dictionary = await this.$getDictionary();
-      if (this.words.length > 0) {
+      if (this.loaded) {
         if (quick) return;
         else if (!this.lastLookupWasQuick) return;
       }
@@ -915,10 +924,11 @@ export default {
       }
 
       words = uniqueByValue(words, "id");
-      this.words = words;
+      this.words = uniqueByValue([...this.words, ...words], 'id');
 
       this.updateIPA();
       this.loading = false;
+      this.loaded = true;
     },
     unique(a) {
       return a.filter((item, i, ar) => ar.indexOf(item) === i);
