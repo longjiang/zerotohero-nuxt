@@ -134,9 +134,9 @@
           />
         </client-only>
         <LazyIdenticalLanguages routeName="youtube-search" class="mt-5" />
-        <h4 class="mt-5 text-center">
+        <!-- <h4 class="mt-5 text-center">
           You can help to expand this {{ $l2.name }} video library!
-        </h4>
+        </h4> -->
         <!-- <LazyHowToContribute /> -->
         <LazyIdenticalLanguages class="mb-4" routeName="youtube-browse" />
       </div>

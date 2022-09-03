@@ -383,7 +383,7 @@ export default {
           classes
         );
       }
-      return classes
+      return classes;
     },
     onHasSubs(hasSubs) {
       this.subsChecked++;
@@ -413,17 +413,21 @@ export default {
         .filter((id) => !id.includes("0x"));
       let chunks = Helper.arrayChunk(youtube_ids, 50);
       for (let youtube_ids of chunks) {
-        let filter = `filter[youtube_id][in]=${youtube_ids}`
-        let fields = `fields=id,title,channel_id,youtube_id,tv_show.*,talk.*`
-        if (this.showSubsEditing) fields += ",subs_l2"
-        let timestamp = `timestamp=${ this.$adminMode ? Date.now() : 0 }`
-        let query = [filter, fields, timestamp].join("&")
-        let savedVideos = await this.$directus.getVideos({l2Id: this.$l2.id, query})
-        let filteredVideos = videos.filter(video =>  savedVideos.find(
+        let filter = `filter[youtube_id][in]=${youtube_ids}`;
+        let fields = `fields=id,title,channel_id,youtube_id,tv_show.*,talk.*`;
+        if (this.showSubsEditing) fields += ",subs_l2";
+        let timestamp = `timestamp=${this.$adminMode ? Date.now() : 0}`;
+        let query = [filter, fields, timestamp].join("&");
+        let savedVideos = await this.$directus.getVideos({
+          l2Id: this.$l2.id,
+          query,
+        });
+
+        for (let video of videos) {
+          let savedVideo = savedVideos.find(
             (v) => v.youtube_id === video.youtube_id
-          )
-        )
-        for (let video of filteredVideos) {
+          );
+          if (!savedVideo) continue;
           video.tv_show = savedVideo.tv_show;
           video.talk = savedVideo.talk;
           if (savedVideo.subs_l2) {
