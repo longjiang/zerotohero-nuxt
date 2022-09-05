@@ -458,8 +458,8 @@ export default {
           let parallelLineEndTime = parallelLine.starttime + parallelLineDuration
           let medianTime = parallelLine.starttime + parallelLineDuration / 2
           let nextLineStartTime = line.duration ? line.starttime + line.duration : nextLine ? nextLine.starttime : line.starttime + 10
-          let parallelLineStartsBeforeNextLineStarts = line.starttime <= parallelLine.starttime && parallelLine.starttime <= nextLineStartTime - 0.5
-          let parallelLineEndsBeforeNextLineStarts = line.starttime + 0.5 <= parallelLineEndTime && parallelLineEndTime <= nextLineStartTime
+          let parallelLineStartsBeforeNextLineStarts = line.starttime - 0.5 <= parallelLine.starttime && parallelLine.starttime <= nextLineStartTime - 0.5
+          let parallelLineEndsBeforeNextLineStarts = line.starttime + 0.5 <= parallelLineEndTime && parallelLineEndTime <= nextLineStartTime + 0.5
           return parallelLineStartsBeforeNextLineStarts || parallelLineEndsBeforeNextLineStarts
         }
         matchedParallelLines[lineIndex] = this.parallellines
