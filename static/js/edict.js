@@ -125,8 +125,7 @@ const Dictionary = {
       return word;
     });
     words = words.concat(wiktionaryWords);
-    this.words = words
-    // this.words = this.uniqueByValues(words, ["head", "kana", "pos"]);
+    this.words = this.uniqueByValues(words, ["id"]);
     words = null
     wiktionaryData = null
     return this
@@ -380,7 +379,8 @@ const Dictionary = {
       }
       let shortest = Math.min(...results.map(r => r.kana ? r.kana.length : r.head.length))
       results = results.map(word => {
-        let score = shortest / word.kana.length - 0.1 * Math.min(word.kana.replace(text, '').length, word.kanji.replace(text, '').length)
+        let w = word.kana || word.head
+        let score = shortest / w.length - 0.1 * Math.min(w.replace(text, '').length, word.kanji.replace(text, '').length)
         return Object.assign({ score }, word)
       })
       return results

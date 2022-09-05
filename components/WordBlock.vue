@@ -419,7 +419,7 @@ export default {
         return this.savedWord.jyutping ||
           this.savedWord.pinyin ||
           this.savedWord.kana ||
-          this.savedWord.pronunciation;
+          (this.savedWord.pronunciation || '').split(', ')[0];
       }
     },
     $l1() {
