@@ -6,6 +6,7 @@ const Dictionary = {
   newHSKFile: undefined,
   version: '1.1.11',
   words: [],
+  hskStandardCourseWords: {}, // a tree structure by book, lesson and dialog
   characters: [],
   newHSK: [],
   _maxWeight: 0,
@@ -27,10 +28,23 @@ const Dictionary = {
       .sort((a, b) => b.simplified.length - a.simplified.length)
     for (let row of this.words) {
       row.rank = row.weight / this._maxWeight
+      this.compileHSKStandardCourseWords(row)
     }
     this.characters = characters
     this.newHSK = newHSK
     this.createIndices()
+  },
+  compileHSKStandardCourseWords(word) {
+    let { book, lesson, dialog } = word
+    if (book && lesson && dialog) {
+      this.hskStandardCourseWords[book] = this.hskStandardCourseWords[book] || {}
+      this.hskStandardCourseWords[book][lesson] = this.hskStandardCourseWords[book][lesson] || {}
+      this.hskStandardCourseWords[book][lesson][dialog] = this.hskStandardCourseWords[book][lesson][dialog] || []
+      this.hskStandardCourseWords[book][lesson][dialog].push(word)
+    }
+  },
+  getHSKStandardCourseWords() {
+    return this.hskStandardCourseWords
   },
   lemmaFromDefinition(text) {
     let m = text.match(/(.*?)([^\s]+?)\|([^\s]+?)\[(.+?)\](.*?)/);
@@ -105,7 +119,7 @@ const Dictionary = {
         for (let w of this.words) {
           if (w.traditional.length > word.traditional.length && w.traditional.includes(word.traditional)) phrases.push(w)
         }
-        word.phrases = phrases.sort((a,b) => a.traditional.length - b.traditional.length)
+        word.phrases = phrases.sort((a, b) => a.traditional.length - b.traditional.length)
         return phrases
       } else {
         return word.phrases
@@ -231,16 +245,6 @@ const Dictionary = {
       groups[val].push(item)
       return groups
     }, {})
-  },
-  compileBooks() {
-    var books = this.groupArrayBy(this.words.filter(row => row.book), 'book')
-    for (var book in books) {
-      books[book] = this.groupArrayBy(books[book], 'lesson')
-      for (var lesson in books[book]) {
-        books[book][lesson] = this.groupArrayBy(books[book][lesson], 'dialog')
-      }
-    }
-    return books
   },
   lookupByLesson(level, lesson) {
     level = String(level)
@@ -480,7 +484,7 @@ const Dictionary = {
       .sort((a, b) => {
         return b.weight - a.weight
       })
-    
+
     return {
       matches,
       text: matches && matches.length > 0 ? matches[0][tradOrSimp] : ''

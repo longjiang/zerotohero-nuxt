@@ -5,42 +5,58 @@
         class="book"
         v-for="(book, bookIndex) in books"
         :data-book="bookIndex"
-        v-bind:key="'book-' + bookIndex"
+        :key="'book-' + bookIndex"
       >
         <div
-          class="book-title collapsed"
-          v-on:click="toggleCollapsed"
+          :class="{
+            'book-title': true,
+            collapsed: !bookOpen[bookIndex],
+          }"
+          @click="toggleBook(bookIndex)"
           :data-bg-level="bookIndex"
         >
           HSK {{ bookIndex }}
         </div>
-        <ul class="lessons collapsed">
+        <div class="lessons collapsed" v-if="!bookOpen[bookIndex]"></div>
+        <ul class="lessons" v-else>
           <li
             class="lesson"
             v-for="(lesson, lessonIndex) in book"
             :data-lesson="lessonIndex"
-            v-bind:key="'lesson-' + lessonIndex"
+            :key="'lesson-' + lessonIndex"
           >
-            <div class="lesson-title collapsed" v-on:click="toggleCollapsed">
+            <div
+              :class="{
+                'lesson-title': true,
+                collapsed: !lessonOpen[`${bookIndex}-${lessonIndex}`],
+              }"
+              @click="toggleLesson(bookIndex, lessonIndex)"
+            >
               Lesson {{ lessonIndex }}
               <br />
               <span
                 class="tile"
                 :data-bg-level="bookIndex"
                 v-for="i in countWordsInLesson(lesson)"
-                v-bind:key="'lesson-tile-' + i"
+                :key="'lesson-tile-' + i"
               ></span>
             </div>
-            <ul class="dialogs collapsed">
+            <ul
+              class="dialogs"
+              v-if="lessonOpen[`${bookIndex}-${lessonIndex}`]"
+            >
               <li
                 class="dialog"
                 v-for="(dialog, dialogIndex) in lesson"
                 :data-dialog="dialogIndex"
-                v-bind:key="'dialog-' + dialogIndex"
+                :key="'dialog-' + dialogIndex"
               >
                 <div
-                  class="dialog-title collapsed"
-                  v-on:click="toggleCollapsed"
+                  :class="{
+                    'dialog-title': true,
+                    collapsed: !dialogOpen[`${bookIndex}-${lessonIndex}-${dialogIndex}`],
+                  }"
+                  @click="toggleDialog(bookIndex, lessonIndex, dialogIndex)"
                 >
                   Part {{ dialogIndex }}
                   <br />
@@ -48,11 +64,15 @@
                     class="tile"
                     :data-bg-level="bookIndex"
                     v-for="(i, dialogIndex) in dialog"
-                    v-bind:key="'dialog-tile-' + dialogIndex"
+                    :key="'dialog-tile-' + dialogIndex"
                   ></span>
                 </div>
-                <ul class="browse-words collapsed">
-                  <WordList :words="dialog" class="ml-2" :url="url(bookIndex, lessonIndex, dialogIndex)" />
+                <ul class="browse-words" v-if="dialogOpen[`${bookIndex}-${lessonIndex}-${dialogIndex}`]">
+                  <WordList
+                    :words="dialog"
+                    class="ml-2"
+                    :url="url(bookIndex, lessonIndex, dialogIndex)"
+                  />
                   <router-link
                     class="btn btn-sm ml-2 mt-2 mb-2 learn-all-button"
                     :data-bg-level="bookIndex"
@@ -76,11 +96,16 @@ export default {
   data() {
     return {
       books: undefined,
+      bookOpen: {}, // a tree structure determining which book is open.
+      lessonOpen: {}, // a tree structure determining which lesson is open.
+      dialogOpen: {}, // a tree structure determining which dialog is open.
       browseKey: 0, // used to force re-render this component
     };
   },
-  async fetch() {
-    this.books = await (await this.$getDictionary()).compileBooks();
+  async created() {
+    this.books = await (
+      await this.$getDictionary()
+    ).getHSKStandardCourseWords();
   },
   computed: {
     $l1() {
@@ -93,8 +118,23 @@ export default {
     },
   },
   methods: {
+    toggleBook(bookIndex) {
+      let open = this.bookOpen[bookIndex];
+      this.$set(this.bookOpen, bookIndex, open ? false : true);
+    },
+    toggleLesson(bookIndex, lessonIndex) {
+      let index = `${bookIndex}-${lessonIndex}`;
+      let open = this.lessonOpen[index];
+      this.$set(this.lessonOpen, index, open ? false : true);
+    },
+    toggleDialog(bookIndex, lessonIndex, dialogIndex) {
+      let index = `${bookIndex}-${lessonIndex}-${dialogIndex}`;
+      let open = this.dialogOpen[index];
+      this.$set(this.dialogOpen, index, open ? false : true);
+    },
     url(bookIndex, lessonIndex, dialogIndex) {
-      return (word, index) => `/${this.$l1.code}/${this.$l2.code}/learn/hsk/${bookIndex},${lessonIndex},${dialogIndex}/${index}`;
+      return (word, index) =>
+        `/${this.$l1.code}/${this.$l2.code}/learn/hsk/${bookIndex},${lessonIndex},${dialogIndex}/${index}`;
     },
     saveAllClick: function (e) {
       $(e.target).parents(".browse-words").find(".add-word").click();
