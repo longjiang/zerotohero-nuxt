@@ -611,7 +611,7 @@ export default {
       else if (
         !pronunciation &&
         this.$hasFeature("transliteration") &&
-        !["tlh", "fa"].includes(this.$l2.code)
+        !["tlh", "fa", "ja"].includes(this.$l2.code)
       )
         pronunciation = this.transliterate(word.head);
       let formattedPronunciation = pronunciation ? `[${pronunciation}]` : "";
@@ -649,7 +649,7 @@ export default {
         let roman = await this.getFarsiRomanization(this.text);
         transliteration = roman.replace(/\^/g, "");
       } else if (this.token && this.token.candidates.length > 0) {
-        if (this.token.candidates[0].pronunciation) {
+        if (this.$l2.code !== 'ja' && this.token.candidates[0].pronunciation) {
           transliteration =
             this.token.candidates[0].pronunciation.split(",")[
               this.$l2.code === "vi" ? 1 : 0
@@ -806,6 +806,7 @@ export default {
       }
     },
     updateIPA() {
+      if (this.$l2.code === 'ja') return
       if (!this.transliteration && this.words && this.words[0]) {
         // let search = this.stripAccents(this.text.toLowerCase());
         let word = this.words.find(

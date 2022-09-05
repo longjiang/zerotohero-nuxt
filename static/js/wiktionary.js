@@ -375,11 +375,13 @@ const Dictionary = {
           let bare = this.accentCritical
             ? this.stripAccents(item.word)
             : item.word;
+          // let key = this.l2 === 'jpn' ? 'other' : 'ipa' // Japanese uses 'other' (kana), other languages use 'ipa'
+          let key = 'ipa'
           let pronunciations =
             item.sounds && item.sounds.length > 0
               ? item.sounds
-                .filter(s => s.ipa)
-                .map(s => s.ipa.replace(/[/\[\]]/g, ""))
+                .filter(s => s[key])
+                .map(s => s[key].replace(/[/\[\]]/g, ""))
               : [];
           if (item.heads)
             pronunciations = pronunciations.concat(

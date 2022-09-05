@@ -2,6 +2,7 @@ importScripts('../vendor/kuromoji/kuromoji.js')
 importScripts('../vendor/wanakana/wanakana.min.js')
 importScripts('../vendor/jpconjugations.js')
 importScripts('../vendor/localforage/localforage.js')
+importScripts("../vendor/hash-string/hash-string.min.js")
 
 const Dictionary = {
   file: 'https://server.chinesezerotohero.com/data/edict/edict.tsv.txt',
@@ -117,8 +118,17 @@ const Dictionary = {
       this.loadSmart('edict', this.file),
       this.loadSmart('wiktionary-jpn-eng', this.wiktionaryFile)
     ]);
-    this.words = await this.loadEdict(edictData)
-    console.log(this.words)
+    let words = await this.loadEdict(edictData)
+    let wiktionaryWords = await this.loadWiktionary(wiktionaryData);
+    wiktionaryWords = wiktionaryWords.map((word, index) => {
+      word.id = 'w' + hash(word.head + word.definitions[0]);
+      return word;
+    });
+    words = words.concat(wiktionaryWords);
+    this.words = words
+    // this.words = this.uniqueByValues(words, ["head", "kana", "pos"]);
+    words = null
+    wiktionaryData = null
     return this
   },
 
@@ -152,6 +162,46 @@ const Dictionary = {
     }
     words = words.sort((a, b) => b.head && a.head ? b.head.length - a.head.length : 0)
     return words
+  },
+  async loadWiktionary(csv) {
+    let words = this.parseDictionaryCSV(csv);
+    words = words.sort((a, b) => {
+      if (a.head && b.head) {
+        return b.head.length - a.head.length;
+      }
+    });
+    return words;
+  },
+  parseDictionaryCSV(data) {
+    console.log("Wiktionary: parsing words from CSV...");
+    let parsed = Papa.parse(data, { header: true });
+    let words = parsed.data;
+    words = words
+      .filter(w => w.word.length > 0) // filter empty rows
+      .map(item => {
+        item.word = item.word.replace(/^\-/, '')
+        item.bare = item.word;
+        item.search = item.bare.toLowerCase();
+        item.head = item.word;
+        delete item.word;
+        item.wiktionary = true;
+        item.definitions = item.definitions ? item.definitions.split("|") : [];
+        item.stems = item.stems ? item.stems.split("|") : [];
+        item.stems = this.unique(item.stems);
+        item.phrases = item.phrases ? item.phrases.split("|") : [];
+        item.kanji = item.head
+        return item;
+      });
+    return words;
+  },
+  // https://stackoverflow.com/questions/38613654/javascript-find-unique-objects-in-array-based-on-multiple-properties
+  uniqueByValues(arr, keyProps) {
+    const kvArray = arr.map(entry => {
+      const key = keyProps.map(k => entry[k]).join("|");
+      return [key, entry];
+    });
+    const map = new Map(kvArray);
+    return Array.from(map.values());
   },
   async loadSmart(name, file) {
     let data = await localforage.getItem(name)
@@ -315,7 +365,7 @@ const Dictionary = {
       text = text.toLowerCase().trim()
       results = this.words
         .filter(row =>
-          row.romaji.includes(
+          row.romaji && row.romaji.includes(
             text.replace(/ /g, '')
           )
         )
@@ -328,7 +378,7 @@ const Dictionary = {
       if (limit) {
         results = results.slice(0, limit)
       }
-      let shortest = Math.min(...results.map(r => r.kana.length))
+      let shortest = Math.min(...results.map(r => r.kana ? r.kana.length : r.head.length))
       results = results.map(word => {
         let score = shortest / word.kana.length - 0.1 * Math.min(word.kana.replace(text, '').length, word.kanji.replace(text, '').length)
         return Object.assign({ score }, word)
