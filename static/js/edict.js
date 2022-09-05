@@ -4,7 +4,8 @@ importScripts('../vendor/jpconjugations.js')
 importScripts('../vendor/localforage/localforage.js')
 
 const Dictionary = {
-  file: undefined,
+  file: 'https://server.chinesezerotohero.com/data/edict/edict.tsv.txt',
+  wiktionaryFile: "https://server.chinesezerotohero.com/data/wiktionary-csv/jpn-eng.csv.txt",
   words: [],
   tokenizationCache: {},
   name: 'edict',
@@ -112,7 +113,20 @@ const Dictionary = {
         resolve(tokenizer)
       })
     })
-    let data = await this.loadSmart('edict')
+    let [edictData, wiktionaryData] = await Promise.all([
+      this.loadSmart('edict', this.file),
+      this.loadSmart('wiktionary-jpn-eng', this.wiktionaryFile)
+    ]);
+    this.words = await this.loadEdict(edictData)
+    console.log(this.words)
+    return this
+  },
+
+  async loadEdict(csv) {
+    let results = await Papa.parse(csv, {
+      header: true
+    });
+    let data = results.data
     let sorted = data.sort((a, b) =>
       a.kana && b.kana ? a.kana.length - b.kana.length : 0
     )
@@ -136,14 +150,12 @@ const Dictionary = {
       })
       if (word.id) words.push(word)
     }
-    this.words = words.sort((a, b) => b.head && a.head ? b.head.length - a.head.length : 0)
-    return this
+    words = words.sort((a, b) => b.head && a.head ? b.head.length - a.head.length : 0)
+    return words
   },
-  async loadSmart(name) {
-    const server = 'https://server.chinesezerotohero.com/'
+  async loadSmart(name, file) {
     let data = await localforage.getItem(name)
     if (!data) {
-      let file = `${server}data/edict/${name}.tsv.txt`
       console.log(`EDICT: requesting '${file}' . . .`)
       let response = await axios.get(file)
       data = response.data
@@ -153,10 +165,7 @@ const Dictionary = {
       console.log(`EDICT: dictionary '${name}' loaded from local indexedDB via localforage`)
     }
     if (data) {
-      let results = Papa.parse(data, {
-        header: true
-      })
-      return results.data
+      return data
     }
   },
   getSize() {
