@@ -4,6 +4,7 @@
       :class="{
         'word-block': true,
         'with-popup': popup,
+        'with-quick-gloss': quickGloss,
         sticky,
         common,
         seen,
@@ -55,7 +56,7 @@
             class="word-block-text-byeonggi d-inline-block"
             v-html="hanja"
           />
-          <span v-if="quickGloss && quickGloss.length < 20" class="quick-gloss">
+          <span v-if="quickGloss" class="quick-gloss">
             {{ quickGloss }}
           </span>
         </span>
@@ -355,6 +356,7 @@ export default {
       text: this.$slots.default ? this.$slots.default[0].text : undefined,
       images: [],
       words: [],
+      savedWord: undefined,
       classes: {
         "tooltip-entry": true,
       },
@@ -380,9 +382,10 @@ export default {
       return l2SettingsOfL2;
     },
     quickGloss() {
-      return this.saved?.word?.definitions?.[0]
+      let quickGloss = this.savedWord?.definitions?.[0]
         ?.replace(/\s*\(.*\)/, "")
         ?.split(/[,;]\s*/)[0];
+      if (quickGloss && quickGloss.length < 20) return quickGloss
     },
     saved() {
       if (!this.checkSaved) return false;
@@ -405,32 +408,19 @@ export default {
         });
       }
       if (saved) {
-        this.appendSavedWord(saved.id, saved.forms[0])
+        this.appendSavedWord(saved.id, saved.forms[0]);
+      } else {
+        this.savedWord = undefined;
       }
       return saved;
     },
     savedTransliteration() {
-      let savedTransliteration = this.transliteration;
-      let savedWord = this.saved;
-      if (savedWord?.head) {
-        if (
-          ["ja", "zh", "nan", "hak", "en", "ko", "vi"].includes(this.$l2.code)
-        ) {
-          let text = this.text;
-          if (this.token?.candidates.length > 0)
-            text = this.token.candidates[0].head;
-          if (savedWord.head === text) {
-            let betterTransliteration =
-              savedWord.jyutping ||
-              savedWord.pinyin ||
-              savedWord.kana ||
-              savedWord.pronunciation;
-            savedTransliteration =
-              betterTransliteration || savedTransliteration;
-          }
-        }
+      if (this.savedWord) {
+        return this.savedWord.jyutping ||
+          this.savedWord.pinyin ||
+          this.savedWord.kana ||
+          this.savedWord.pronunciation;
       }
-      return savedTransliteration;
     },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
@@ -586,9 +576,10 @@ export default {
   },
   methods: {
     async appendSavedWord(id, head) {
-      let dictionary = await this.$getDictionary()
-      let savedWord = await dictionary.get(id, head)
-      this.words = uniqueByValue([savedWord, ...this.words], 'id')
+      let dictionary = await this.$getDictionary();
+      let savedWord = await dictionary.get(id, head);
+      this.words = uniqueByValue([savedWord, ...this.words], "id");
+      this.savedWord = savedWord;
     },
     togglePhrase(id) {
       Vue.set(this.showPhrase, id, !this.showPhrase[id]);
@@ -861,7 +852,7 @@ export default {
       this.$nuxt.$emit("popupClosed");
     },
     async lookup(quick = false) {
-      this.loading = true
+      this.loading = true;
       let dictionary = await this.$getDictionary();
       if (this.loaded) {
         if (quick) return;
@@ -924,7 +915,7 @@ export default {
       }
 
       words = uniqueByValue(words, "id");
-      this.words = uniqueByValue([...this.words, ...words], 'id');
+      this.words = uniqueByValue([...this.words, ...words], "id");
 
       this.updateIPA();
       this.loading = false;
@@ -1041,11 +1032,11 @@ export default {
   }
 }
 
-[dir="ltr"] .word-block.saved {
+[dir="ltr"] .word-block.saved.with-quick-gloss {
   text-align: left;
 }
 
-[dir="rtl"] .word-block.saved {
+[dir="rtl"] .word-block.saved.with-quick-gloss {
   text-align: right;
 }
 .add-pinyin {
