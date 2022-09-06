@@ -292,7 +292,7 @@
         >
           <span style="color: #999" v-if="$hasFeature('transliteration')">
             {{ transliterate(text) }}
-            <Speak :text="text" class="ml-1" />
+            <Speak :text="text" class="ml-1" ref="speak" />
           </span>
           <div
             data-level="outside"
@@ -316,6 +316,7 @@ import {
   uniqueByValue,
   isMobile,
   ucFirst,
+  speak
 } from "@/lib/helper";
 import { imageProxy } from "@/lib/config";
 import WordPhotos from "@/lib/word-photos";
@@ -841,8 +842,13 @@ export default {
         this.open = true;
         await timeout(123);
         if (this.open && this.l2SettingsOfL2.autoPronounce) {
-          if (this.$refs.speak && this.$refs.speak[0]) {
-            this.$refs.speak[0].speak(0.75, 0.5); // Speed and volume
+          let speed = 0.75
+          let volume = 0.5
+          // Only wiktionary has real human audio
+          if (this.$dictionaryName === 'wiktionary' && this.$refs.speak && this.$refs.speak[0]) {
+            this.$refs.speak[0].speak(speed, volume);
+          } else {
+            speak(this.text, this.$l2, speed, volume);
           }
         }
       }
