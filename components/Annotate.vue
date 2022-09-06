@@ -31,95 +31,9 @@
         }"
       >
         <div class="annotator-buttons" v-if="!empty() && buttons">
-          <b-dropdown
-            no-caret
-            toggle-class="annotator-menu-toggle"
-            :dropleft="$l2.direction !== 'rtl'"
-            :dropright="$l2.direction === 'rtl'"
-            @hide="onMenuHide"
-            variant="unstyled"
-          >
-            <template #button-content>
-              <i class="fas fa-ellipsis-v"></i>
-            </template>
-            <b-dropdown-item>
-              <Saved
-                :item="phraseItem(text, translationData)"
-                store="savedPhrases"
-                icon="bookmark"
-                class="annotator-button focus-exclude"
-                title="Save Phrase"
-                ref="savePhrase"
-              />
-              <span @click.stop.prevent="saveAsPhraseClick">
-                {{
-                  $refs["savePhrase"] && !$refs["savePhrase"].saved
-                    ? "Save as"
-                    : "Remove"
-                }}
-                Phrase
-              </span>
-            </b-dropdown-item>
-            <b-dropdown-item>
-              <Speak
-                :text="text"
-                class="annotator-button"
-                title="Speak"
-                ref="speak"
-              />
-              <span @click="readAloud">Read Aloud</span>
-            </b-dropdown-item>
-
-            <b-dropdown-item>
-              <span
-                class="annotator-button annotator-translate focus-exclude"
-                title="Translate Inline"
-                @click="translateClick"
-                ref="translation"
-              >
-                <i class="fas fa-language"></i>
-              </span>
-              <span @click="translateClick">Show Translation</span>
-            </b-dropdown-item>
-            <b-dropdown-item>
-              <span
-                class="
-                  annotator-button annotator-external-translate
-                  focus-exclude
-                "
-                title="Translate with External Translator"
-                @click="externalTranslateClick"
-              >
-                <i class="fas fa-globe"></i>
-              </span>
-              <span @click="externalTranslateClick">
-                Open Translator
-                <small><i class="fas fa-external-link-alt"></i></small>
-              </span>
-            </b-dropdown-item>
-            <!-- <b-dropdown-item>
-              <span
-                :class="{
-                  'annotator-button annotator-text-mode focus-exclude': true,
-                  active: textMode,
-                }"
-                title="Edit"
-                @click="textMode = !textMode"
-              >
-                <i class="fas fa-edit"></i>
-              </span> Edit
-            </b-dropdown-item> -->
-            <b-dropdown-item>
-              <span
-                @click="copyClick"
-                title="Copy"
-                class="annotator-button annotator-copy focus-exclude"
-              >
-                <i class="fas fa-copy"></i>
-              </span>
-              <span @click="copyClick">Copy</span>
-            </b-dropdown-item>
-          </b-dropdown>
+          <b-button class="annotator-menu-toggle" variant="unstyled" @click="showMenuModal">
+            <i class="fas fa-ellipsis-v"></i>
+          </b-button>
         </div>
         <div :class="{ 'annotate-slot': true }" v-if="!annotated">
           <slot></slot>
@@ -162,6 +76,96 @@
         />
       </div>
     </div>
+    <b-modal
+      ref="annotate-menu-modal"
+      size="sm"
+      centered
+      hide-footer
+      title="Annotated Text"
+      modal-class="safe-padding-top mt-4"
+      body-class="annotate-menu-modal-wrapper"
+      @show="onMenuShow"
+      @hide="onMenuHide"
+    >
+      <div class="annotate-menu-modal">
+        <div class="annotate-menu-modal-item">
+          <Saved
+            :item="phraseItem(text, translationData)"
+            store="savedPhrases"
+            icon="bookmark"
+            class="annotator-button focus-exclude"
+            title="Save Phrase"
+            ref="savePhrase"
+          />
+          <span @click.stop.prevent="saveAsPhraseClick">
+            {{
+              $refs["savePhrase"] && !$refs["savePhrase"].saved
+                ? "Save as"
+                : "Remove"
+            }}
+            Phrase
+          </span>
+        </div>
+        <div class="annotate-menu-modal-item">
+          <Speak
+            :text="text"
+            class="annotator-button"
+            title="Speak"
+            ref="speak"
+          />
+          <span @click="readAloud">Read Aloud</span>
+        </div>
+
+        <div class="annotate-menu-modal-item">
+          <span
+            class="annotator-button annotator-translate focus-exclude"
+            title="Translate Inline"
+            @click="translateClick"
+            ref="translation"
+          >
+            <i class="fas fa-language"></i>
+          </span>
+          <span @click="translateClick">Show Translation</span>
+        </div>
+        <div class="annotate-menu-modal-item">
+          <span
+            class="annotator-button annotator-external-translate focus-exclude"
+            title="Translate with External Translator"
+            @click="externalTranslateClick"
+          >
+            <i class="fas fa-globe"></i>
+          </span>
+          <span @click="externalTranslateClick">
+            Open Translator
+            <small><i class="fas fa-external-link-alt"></i></small>
+          </span>
+        </div>
+        <!-- <div class="annotate-menu-modal-item">
+              <span
+                :class="{
+                  'annotator-button annotator-text-mode focus-exclude': true,
+                  active: textMode,
+                }"
+                title="Edit"
+                @click="textMode = !textMode"
+              >
+                <i class="fas fa-edit"></i>
+              </span> Edit
+            </div> -->
+        <div class="annotate-menu-modal-item">
+          <span
+            @click="copyClick"
+            title="Copy"
+            class="annotator-button annotator-copy focus-exclude"
+          >
+            <i class="fas fa-copy"></i>
+          </span>
+          <span @click="copyClick">Copy</span>
+        </div>
+        <hr/>
+        <AnnotationSettings variant="toolbar" />
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -233,7 +237,7 @@ export default {
       default: true, // Whether to show a loading animation before annotation is complete
     },
     animationSpeed: {
-      default: 1
+      default: 1,
     },
     translation: {
       type: String,
@@ -285,9 +289,10 @@ export default {
   computed: {
     ...mapState("settings", ["l2Settings"]),
     l2SettingsOfL2() {
-      let l2SettingsOfL2 = {}
-      if (this.l2Settings && this.l2Settings[this.$l2.code]) l2SettingsOfL2 = this.l2Settings[this.$l2.code]
-      return l2SettingsOfL2
+      let l2SettingsOfL2 = {};
+      if (this.l2Settings && this.l2Settings[this.$l2.code])
+        l2SettingsOfL2 = this.l2Settings[this.$l2.code];
+      return l2SettingsOfL2;
     },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
@@ -308,6 +313,9 @@ export default {
     },
   },
   watch: {
+    $route() {
+      this.hideMenuModal();
+    },
     translation() {
       this.translationData = this.translation;
     },
@@ -320,6 +328,18 @@ export default {
     },
   },
   methods: {
+    showMenuModal() {
+      this.$refs["annotate-menu-modal"].show();
+    },
+    hideMenuModal() {
+      this.$refs["annotate-menu-modal"].hide();
+    },
+    onMenuShow() {
+
+    },
+    onMenuHide() {
+
+    },
     saveAsPhraseClick() {
       let s = this.$refs["savePhrase"];
       if (!s.saved) s.save();
@@ -426,10 +446,11 @@ export default {
             durationAlreadyPlayed = durationAlreadyPlayed + blockDuration;
             // Which ones should skip
             if (durationAlreadyPlayed > startFrom) {
-              
               if (!this.animate) return;
               block.classList.add("animate");
-              await Helper.timeout(blockDuration * 1000 / this.animationSpeed);
+              await Helper.timeout(
+                (blockDuration * 1000) / this.animationSpeed
+              );
             }
           }
           await Helper.timeout(2000);
@@ -552,7 +573,7 @@ export default {
       }
       this.annotating = false;
       this.annotated = true;
-      this.onAnnotated()
+      this.onAnnotated();
     },
     onAnnotated() {
       this.$emit("annotated", true);
@@ -903,31 +924,19 @@ export default {
   }
 }
 
-.annotator-buttons .dropdown-item {
-  padding: 0.1rem 0.75rem;
-  font-size: 0.8em;
-  &:hover {
-    background: none;
-  }
-
-  span {
-    color: #888;
-
+.annotate-menu-modal {
+  .annotate-menu-modal-item {
+    padding: 0.15rem 0;
+    cursor: pointer;
     &:hover {
-      color: #666;
+      color: black;
     }
-  }
-
-  .annotator-button {
-    width: 1.7rem;
-    text-align: center;
-    border-radius: 0.2rem;
-    display: inline-block;
-  }
-
-  .annotator-button.active {
-    background-color: #fd4f1c;
-    color: white;
+    .annotator-button {
+      width: 2rem;
+      text-align: center;
+      margin-right: 0.5rem;
+      display: inline-block;
+    }
   }
 }
 
@@ -937,8 +946,4 @@ export default {
   border-radius: 0.2rem;
 }
 
-.dropdown-menu li {
-  padding-top: 0.15rem;
-  padding-bottom: 0.15rem;
-}
 </style>
