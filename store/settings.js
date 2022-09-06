@@ -15,6 +15,7 @@ export const defaultL2Settings = {
   showByeonggi: true,
   tvShowFilter: "all", // By default we only search TV shows.
   talkFilter: "all", // By default we search all talks.
+  autoPronounce: true, // Whether or not to play the audio automatically when opening a WordBlock popup
   disableAnnotation: false
 }
 
@@ -42,7 +43,6 @@ export const state = () => {
     hidePhonetics: false, // as used in the <HideDefs> component
     hideDefinitions: false, // as used in the <HideDefs> component
     subsSearchLimit: true,
-    autoPronounce: true, // Whether or not to play the audio automatically when opening a WordBlock popup
     l2Settings: {}, // keyed by language
     settingsLoaded: false,
     preferredCategories: []
