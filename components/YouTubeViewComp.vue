@@ -277,49 +277,51 @@ export default {
   methods: {
     async getEpisodes(episodeCount, limit) {
       // If we already have the episodes stored in the show (in Vuex), and the episodes include the current video, just return the episodes
+      let videos = [];
+      let sort =
+        this.showType === "tv_show" || this.show.audiobook
+          ? "title"
+          : "-date";
       if (
         this.show.episodes &&
         this.show.episodes.find((s) => s.youtube_id === this.video.youtube_id)
       )
-        return this.show.episodes;
+        videos = this.show.episodes;
 
-      let videos = [];
       // News and YouTube channels are sorted by date
       // Audiobooks and TV Shows are sorted by title
+      if (videos.length === 0) {
+        let fields = "youtube_id,title,date";
+        let timestamp = this.$adminMode ? Date.now() : 0;
+        let params = { limit, sort, fields, timestamp };
+        params[`filter[${this.showType}][eq]`] = this.show.id;
 
-      let sort =
-        this.showType === "tv_show" || this.show.audiobook ? "title" : "-date";
-      let fields = "youtube_id,title,date";
-      let timestamp = this.$adminMode ? Date.now() : 0;
-      let params = { limit, sort, fields, timestamp };
-      params[`filter[${this.showType}][eq]`] = this.show.id;
+        let postParams = Object.assign({}, params);
 
-      let postParams = Object.assign({}, params);
-
-      // We assume that this is a LONG show with hundreds or even thousands of episodes (like News, Music, or some TV station show
-      // Let's grab the videos immediately PRIOR and AFTER the current video, so the user can eventually paginate through all the episodes.
-      // If sort is '-date', the user wants to see contents that are around the same date.
-      // If sort is 'title', the user wants to see contents with similar alpha-sorted titles
-      if (episodeCount > limit) {
-        if (sort === "title") {
-          postParams["filter[title][gt]"] = this.video.title;
+        // We assume that this is a LONG show with hundreds or even thousands of episodes (like News, Music, or some TV station show
+        // Let's grab the videos immediately PRIOR and AFTER the current video, so the user can eventually paginate through all the episodes.
+        // If sort is '-date', the user wants to see contents that are around the same date.
+        // If sort is 'title', the user wants to see contents with similar alpha-sorted titles
+        if (episodeCount > limit) {
+          if (sort === "title") {
+            postParams["filter[title][gt]"] = this.video.title;
+          }
+          if (sort === "-date") {
+            postParams["filter[date][lt]"] = this.video.date;
+          }
         }
-        if (sort === "-date") {
-          postParams["filter[date][lt]"] = this.video.date;
+
+        let moreVideos = await this.$directus.getVideos({
+          l2Id: this.$l2.id,
+          query: Helper.queryString(postParams),
+        });
+        if (moreVideos) {
+          videos = [...videos, ...moreVideos];
         }
+
+        // Make sure this video is included in the collection
+        videos = [this.video, ...videos];
       }
-
-      let moreVideos = await this.$directus.getVideos({
-        l2Id: this.$l2.id,
-        query: Helper.queryString(postParams),
-      });
-      if (moreVideos) {
-        videos = [...videos, ...moreVideos];
-      }
-
-      // Make sure this video is included in the collection
-      videos = [this.video, ...videos];
-
       videos = Helper.uniqueByValue(videos, "youtube_id");
       if (sort === "-date") {
         videos = videos.sort((a, b) =>
@@ -327,7 +329,11 @@ export default {
         );
       } else {
         videos = videos.sort((a, b) =>
-          a.title ? a.title.localeCompare(b.title) : 0
+          a.title
+            ? a.title.localeCompare(b.title, {
+                numeric: true,
+              })
+            : 0
         );
       }
 
