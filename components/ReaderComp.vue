@@ -110,29 +110,7 @@
             ></textarea>
           </div>
 
-          <div class="mt-2 p-1">
-            <span
-              v-for="translator of translators"
-              :key="`trans-${translator.id}`"
-            >
-              <a
-                :href="translator.url"
-                target="_blank"
-                style="
-                  font-size: 0.9em;
-                  white-space: nowrap;
-                  display: inline-block;
-                  color: black;
-                "
-                :class="{
-                  'mr-3': true,
-                }"
-              >
-                {{ translator.name }}
-                <i class="fas fa-angle-right"></i>
-              </a>
-            </span>
-          </div>
+          <TranslatorLinks v-bind="{ text }" />
         </div>
         <iframe
           v-if="showTranslate"
@@ -234,21 +212,6 @@ export default {
       let text = this.textThrottled || this.text;
       let marked = Marked(text.replace(/^ {4,}/gm, "")) || text; // 4 spaces in a row would emit <code>!
       return marked;
-    },
-    translators() {
-      let translators = this.$languages.getTranslator(this.$l1, this.$l2) || [];
-      let mappedTranslators = [];
-      for (let t of translators.translators) {
-        if (typeof t.url === "function") {
-          // Wait until the function is available
-          mappedTranslators.push({
-            name: t.name,
-            id: t.id,
-            url: t.url(this.text, this.$l1.code, this.$l2.code),
-          });
-        }
-      }
-      return mappedTranslators;
     },
     externalTranslateUrl() {
       if (!this.text) return;

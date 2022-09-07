@@ -116,7 +116,7 @@
           <span @click="readAloud">Read Aloud</span>
         </div>
 
-        <div class="annotate-menu-modal-item">
+        <div class="annotate-menu-modal-item" v-if="$adminMode">
           <span
             class="annotator-button annotator-translate focus-exclude"
             title="Translate Inline"
@@ -127,7 +127,7 @@
           </span>
           <span @click="translateClick">Show Translation</span>
         </div>
-        <div class="annotate-menu-modal-item">
+        <!-- <div class="annotate-menu-modal-item">
           <span
             class="annotator-button annotator-external-translate focus-exclude"
             title="Translate with External Translator"
@@ -139,7 +139,7 @@
             Open Translator
             <small><i class="fas fa-external-link-alt"></i></small>
           </span>
-        </div>
+        </div> -->
         <!-- <div class="annotate-menu-modal-item">
               <span
                 :class="{
@@ -162,6 +162,7 @@
           </span>
           <span @click="copyClick">Copy</span>
         </div>
+        <TranslatorLinks class="mt-2 pl-1" :text="text" />
         <hr/>
         <AnnotationSettings variant="toolbar" />
       </div>
@@ -288,6 +289,10 @@ export default {
   },
   computed: {
     ...mapState("settings", ["l2Settings"]),
+    $adminMode() {
+      if (typeof this.$store.state.settings.adminMode !== "undefined")
+        return this.$store.state.settings.adminMode;
+    },
     l2SettingsOfL2() {
       let l2SettingsOfL2 = {};
       if (this.l2Settings && this.l2Settings[this.$l2.code])

@@ -142,7 +142,7 @@
                 <span v-if="$l2.code === 'de' && word.gender">
                   {{ { n: "das", m: "der", f: "die" }[word.gender] }}
                 </span>
-                {{ transform(word.head) }}
+                <span>{{ transform(word.head) }}</span>
               </b>
             </router-link>
             <i class="fas fa-chevron-right text-success"></i>
@@ -274,6 +274,7 @@
           class="mt-2"
         /> -->
         <hr class="mb-0" />
+        <TranslatorLinks v-bind="{ text }" class="mt-2" />
         <LookUpIn
           v-if="text || token"
           :term="text ? text : token.candidates[0].head"
