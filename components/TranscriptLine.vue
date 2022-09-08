@@ -45,6 +45,7 @@
               delay: single ? false : 123,
               showTranslation: false,
               showLoading: false,
+              showGrammar: true
             }"
             :class="{
               'transcript-line-l2': true,

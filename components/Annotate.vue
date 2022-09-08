@@ -31,7 +31,11 @@
         }"
       >
         <div class="annotator-buttons" v-if="!empty() && buttons">
-          <b-button class="annotator-menu-toggle" variant="unstyled" @click="showMenuModal">
+          <b-button
+            class="annotator-menu-toggle"
+            variant="unstyled"
+            @click="showMenuModal"
+          >
             <i class="fas fa-ellipsis-v"></i>
           </b-button>
         </div>
@@ -60,6 +64,17 @@
           />
         </template>
       </component>
+      <div v-if="matchedGrammar.length > 0" class="annotate-grammar">
+        <span class="annotate-grammar-header">Grammar Notes:</span>
+        <span
+          v-for="row in matchedGrammar"
+          @click="showGrammarModal(row)"
+          class="annotate-grammar-button"
+          :key="`annotate-grammar-${row.id}`"
+        >
+          {{ row.structure }} <i class="fa fa-chevron-right" />
+        </span>
+      </div>
       <div
         class="annotate-translation"
         v-if="showTranslation && (translationLoading || translationData)"
@@ -77,6 +92,31 @@
       </div>
     </div>
     <b-modal
+      ref="grammar-modal"
+      size="xl"
+      centered
+      hide-footer
+      title="Grammar Note"
+      modal-class="safe-padding-top mt-4"
+      body-class="grammar-modal-wrapper"
+    >
+      <LazyGrammarPoint
+        v-if="grammarPointObj"
+        :grammar="grammarPointObj"
+        :key="`annotate-grammar-modal-${grammarPointObj.id}`"
+      />
+      <div class="text-center mt-3">
+        <router-link
+          class="btn btn-success"
+          v-if="grammarPointObj"
+          :to="{ name: 'grammar-view', params: { id: grammarPointObj.id } }"
+        >
+          Learn More
+          <i class="fas fa-chevron-right ml-1" />
+        </router-link>
+      </div>
+    </b-modal>
+    <b-modal
       ref="annotate-menu-modal"
       size="sm"
       centered
@@ -84,8 +124,6 @@
       title="Annotated Text"
       modal-class="safe-padding-top mt-4"
       body-class="annotate-menu-modal-wrapper"
-      @show="onMenuShow"
-      @hide="onMenuHide"
     >
       <div class="annotate-menu-modal">
         <div class="annotate-menu-modal-item">
@@ -163,7 +201,7 @@
           <span @click="copyClick">Copy</span>
         </div>
         <TranslatorLinks class="mt-2 pl-1" :text="text" />
-        <hr/>
+        <hr />
         <AnnotationSettings variant="toolbar" />
       </div>
     </b-modal>
@@ -231,6 +269,9 @@ export default {
     explore: {
       default: false,
     },
+    showGrammar: {
+      default: false,
+    },
     showTranslation: {
       default: false,
     },
@@ -263,6 +304,8 @@ export default {
       translationData: this.translation,
       text: undefined,
       wordblocks: [],
+      matchedGrammar: [],
+      grammarPointObj: undefined, // the current grammar point shown in the modal
     };
   },
   mounted() {
@@ -339,11 +382,12 @@ export default {
     hideMenuModal() {
       this.$refs["annotate-menu-modal"].hide();
     },
-    onMenuShow() {
-
+    showGrammarModal(grammarPointObj) {
+      this.grammarPointObj = grammarPointObj;
+      this.$refs["grammar-modal"].show();
     },
-    onMenuHide() {
-
+    hideGrammarModal() {
+      this.$refs["grammar-modal"].hide();
     },
     saveAsPhraseClick() {
       let s = this.$refs["savePhrase"];
@@ -524,6 +568,9 @@ export default {
       if (this.delay) await Helper.timeout(this.delay);
       if (isVisible) {
         this.convertToSentencesAndAnnotate(this.$slots.default[0]);
+        if (this.showGrammar) {
+          this.getGrammar();
+        }
       } else {
         // We unset the annotations to save memory and battery, but we set the height and width to prevent the annotated text from shifting up and down.
         // this.$el.style.minHeight = this.$el.clientHeight + "px";
@@ -531,6 +578,10 @@ export default {
         this.annotated = false;
         this.$emit("annotated", false);
       }
+    },
+    async getGrammar() {
+      let grammar = await this.$getGrammar();
+      this.matchedGrammar = grammar.findInText(this.text);
     },
     async annotateInputBlur(e) {
       let newText = e.target.value;
@@ -951,4 +1002,19 @@ export default {
   border-radius: 0.2rem;
 }
 
+.grammar-example {
+  margin-top: 1rem !important;
+}
+
+.annotate-grammar {
+  font-size: 0.8em;
+  margin-top: 0.25rem;
+  .annotate-grammar-header {
+    opacity: 0.7;
+  }
+  .annotate-grammar-button {
+    color: #28a745;
+    cursor: pointer;
+  }
+}
 </style>

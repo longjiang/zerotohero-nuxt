@@ -12,7 +12,7 @@
       ></h5>
     </Annotate>
     <div class="grammar-english">{{ grammar.english }}</div>
-    <Annotate tag="h2" class="grammar-example mt-5" :showTranslate="false">
+    <Annotate tag="h2" class="grammar-example" :showTranslate="false">
       <span
         v-html="
         Helper.highlightMultiple(grammar.example, grammar.words, grammar.book)
@@ -51,6 +51,10 @@ export default {
 </script>
 
 <style>
+.grammar-example {
+  margin-top: 3rem;
+}
+
 .grammar-example-english {
   color: #999;
   font-style: italic;
