@@ -21,7 +21,7 @@
           $l2.code === 'zh' ? 'Pinyin' : $l2.name
         } subtitles.`"
       />
-      <div class="row mb-2">
+      <div class="row mb-2" v-if="!kidsOnly">
         <div class="col-sm-12 text-center mb-4">
           <span
             v-if="Object.keys(categories).length > 0"
