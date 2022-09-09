@@ -53,54 +53,52 @@
           </span>
         </div>
       </div>
-      <h5 v-if="$refs['tv-shows'] && $refs['tv-shows'].filteredShowsByAudiobookAndTags && $refs['tv-shows'].filteredShowsByAudiobookAndTags.length > 0">TV Shows</h5>
+      <h5 v-if="$refs['tv-shows'] && $refs['tv-shows'].filteredShows && $refs['tv-shows'].filteredShows.length > 0">TV Shows</h5>
       <hr class="mb-4" />
       <Shows
-        v-if="!(category === 'all' && level === 'all')"
-        routeType="tv-shows"
-        :category="category"
-        tag="all"
-        :level="level"
-        :showFilter="false"
-        :showHero="false"
+        v-if="!(category === 'all' && level === 'all' && kidsOnly === false)"
+        v-bind="{
+          kidsOnly,
+          category,
+          level,
+          showFilter: false,
+          showHero: false,
+          routeType: 'tv-shows',
+          tag: 'all'
+        }"
         ref="tv-shows"
       />
-      <h5 v-if="$refs['talks'] && $refs['talks'].filteredShowsByAudiobookAndTags && $refs['talks'].filteredShowsByAudiobookAndTags.length > 0">YouTube Channels</h5>
+      <h5 v-if="$refs['talks'] && $refs['talks'].filteredShows && $refs['talks'].filteredShows.length > 0">YouTube Channels</h5>
       <hr class="mb-4" />
       <Shows
-        v-if="!(category === 'all' && level === 'all')"
-        routeType="talks"
-        :category="category"
-        tag="all"
-        :level="level"
-        :showFilter="false"
-        :showHero="false"
+        v-if="!(category === 'all' && level === 'all' && kidsOnly === false)"
+        v-bind="{
+          kidsOnly,
+          category,
+          level,
+          showFilter: false,
+          showHero: false,
+          routeType: 'talks',
+          tag: 'all'
+        }"
         ref="talks"
       />
       <h5 v-if="$refs['videos'] && $refs['videos'].videos && $refs['videos'].videos.length > 0">Videos</h5>
       <hr class="mb-4" />
       <MediaSearchResults
-        :category="category"
-        :level="level"
-        :keyword="keyword"
-        :start="start"
-        :showLatestIfKeywordMissing="true"
-        :showNoVideosMessage="true"
-        :showSearchBar="false"
+        v-bind="{
+          category,
+          level,
+          keyword,
+          start,
+          kidsOnly,
+          showLatestIfKeywordMissing: true,
+          showNoVideosMessage: true,
+          showSearchBar: false,
+        }"
         @videosLoaded="onVideosLoaded"
         ref="videos"
       />
-      <!-- <MediaSearchResults :keyword="category" v-if="category !== 'all' && category !== 'kids'" /> -->
-      <!-- <YouTubeSearchResults
-        :term="category"
-        :infinite="true"
-        :showProgress="false"
-        skin="dark"
-        ref="youtubeSearchResults"
-        :showBadges="false"
-        :cloakVideosWithoutSubs="!$adminMode"
-        v-if="category !== 'all'"
-      /> -->
       <client-only>
         <Nav
           :l1="$l1"
@@ -214,6 +212,9 @@ export default {
     start: {
       default: 0,
     },
+    kidsOnly: {
+      default: false
+    }
   },
   computed: {
     ...mapState("shows", ["categories"]),

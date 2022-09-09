@@ -426,7 +426,7 @@ export default {
                   icon: "fas fa-baby",
                   title: `Kids`,
                   // count: this.stats ? this.stats.music : undefined,
-                  params: { topic: "kids", level: "all" },
+                  params: { kidsOnly: true, category: "all", level: "all" },
                   show: true,
                 },
                 // {

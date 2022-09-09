@@ -132,6 +132,10 @@ export default {
     start: {
       default: 0,
     },
+    kidsOnly: {
+      type: Boolean,
+      default: false,
+    },
     showLatestIfKeywordMissing: {
       default: false,
     },
@@ -251,6 +255,9 @@ export default {
             "filter[title][contains]=" + encodeURIComponent(this.keyword)
           );
         sort = "&sort=title";
+      }
+      if (this.kidsOnly) {
+        filters.push('filter[made_for_kids][eq]=1')
       }
       let limit = this.perPage;
       filters = filters.join(filters.join("&"));

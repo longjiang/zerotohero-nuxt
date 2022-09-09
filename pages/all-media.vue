@@ -206,7 +206,7 @@
             class="link-unstyled category-btn text-left"
             :to="{
               name: 'youtube-browse',
-              params: { topic: 'kids', level: 'all' },
+              params: { kidsOnly: true, category: 'all', level: 'all' },
             }"
           >
             <i class="fa-solid fa-baby mr-1"></i>

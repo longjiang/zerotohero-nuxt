@@ -52,7 +52,13 @@
               style="font-weight: normal; font-size: 0.8em; margin-top: 0.5rem"
             >
               Recommendations based on your
-              <router-link :to="{ name: LANGS_WITH_LEVELS.includes(this.$l2.code) ? 'set-language-level' : 'set-content-preferences' }">
+              <router-link
+                :to="{
+                  name: LANGS_WITH_LEVELS.includes(this.$l2.code)
+                    ? 'set-language-level'
+                    : 'set-content-preferences',
+                }"
+              >
                 <u>content preferences</u>
               </router-link>
             </div>
@@ -273,6 +279,10 @@ export default {
       type: String,
       default: "all",
     },
+    kidsOnly: {
+      type: Boolean,
+      default: false,
+    },
     showHero: {
       type: Boolean,
       default: true,
@@ -442,6 +452,7 @@ export default {
             return title.toLowerCase().includes(k.toLowerCase());
           });
         }
+        if (this.kidsOnly) shows = shows.filter((s) => s.made_for_kids);
         // shows = shows.sort((x, y) => {
         //   x = this.preferredCategories.includes(String(x.category));
         //   y = this.preferredCategories.includes(String(y.category));
@@ -503,7 +514,7 @@ export default {
             x = this.preferredCategories.includes(String(x.category));
             y = this.preferredCategories.includes(String(y.category));
             return x === y ? 0 : x ? -1 : 1;
-          })
+          });
       }
       return shows || [];
     },
