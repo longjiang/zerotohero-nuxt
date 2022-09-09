@@ -26,6 +26,7 @@ export const actions = {
         `${LP_DIRECTUS8_TOOLS_URL}count.php?table_suffix=${tableSuffix}&lang_id=${l2.id}&type=new_videos`,
         { cacheLife: adminMode ? 0 : 86400 } // cache the count for one day (86400 seconds)
       );
+      data = Number(data) // NaN is falsy
       if (data) stats.newVideos = data
 
       let music = rootGetters["shows/music"]({ l2 })
@@ -34,6 +35,7 @@ export const actions = {
           `${LP_DIRECTUS8_TOOLS_URL}count.php?table_suffix=${tableSuffix}&lang_id=${l2.id}&type=tv_show&id=${music.id}`,
           { cacheLife: adminMode ? 0 : 86400 } // cache the count for one day (86400 seconds)
         );
+        data = Number(data) // NaN is falsy
         if (data) stats.music = data
       }
 
@@ -44,6 +46,7 @@ export const actions = {
           `${LP_DIRECTUS8_TOOLS_URL}count.php?table_suffix=${tableSuffix}&lang_id=${l2.id}&type=tv_show&id=${movies.id}`,
           { cacheLife: adminMode ? 0 : 86400 } // cache the count for one day (86400 seconds)
         );
+        data = Number(data) // NaN is falsy
         if (data) stats.movies = data
       }
 
@@ -54,6 +57,7 @@ export const actions = {
           `${LP_DIRECTUS8_TOOLS_URL}count.php?table_suffix=${tableSuffix}&lang_id=${l2.id}&type=talk&id=${news.id}`,
           { cacheLife: adminMode ? 0 : 86400 } // cache the count for one day (86400 seconds)
         );
+        data = Number(data) // NaN is falsy
         if (data) stats.news = data
       }
 
@@ -62,6 +66,7 @@ export const actions = {
         `${LP_DIRECTUS8_TOOLS_URL}count.php?table_suffix=${tableSuffix}&lang_id=${l2.id}`,
         { cacheLife: adminMode ? 0 : 86400 } // cache the count for one day (86400 seconds)
       );
+      data = Number(data) // NaN is falsy
       if (data) stats.allVideos = data
 
 
