@@ -430,9 +430,6 @@ export default {
     setupWatchers() {
       for (let property in defaultSettings) {
         this.$watch(property, (newValue, oldValue) => {
-          if (property === 'zoomLevel') {
-            $nuxt.$emit("zoom", Number(newValue));
-          }
           let payload = {}
           payload[property] = newValue
           this.$store.dispatch("settings/setL2Settings", payload);
