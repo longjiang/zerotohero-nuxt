@@ -164,8 +164,9 @@ export default {
       this.loading = true;
       let id = this.$el.querySelector(".youtube-iframe").getAttribute("id");
       this.removeYouTubeAPIVars();
+      let start = parseInt(this.starttime)
       let playerVars = {
-        start: parseInt(this.starttime),
+        start,
         autoplay: this.autoplay ? 1 : 0,
         cc_load_policy: this.cc ? 1 : 0,
         cc_lang_pref: this.$l1 ? this.$l1.code : 'en',
