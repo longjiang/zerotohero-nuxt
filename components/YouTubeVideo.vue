@@ -201,10 +201,6 @@ export default {
                 this.player.setPlaybackRate(this.speed);
                 this.$emit("paused", [UNSTARTED, PAUSED].includes(state));
                 this.$emit("ended", [ENDED].includes(state));
-                if (!this.duration) {
-                  this.duration = this.player.getDuration();
-                  this.$emit("duration", this.duration);
-                }
                 if (this.startAtRandomTime && !this.randomSeeked) {
                   this.randomSeeked = true;
                   let startAtRandomTime = Math.random() * this.duration * 0.8;
@@ -229,6 +225,12 @@ export default {
               }
             },
             onReady: (event) => {
+              if (this.player) {
+                if (!this.duration) {
+                  this.duration = this.player.getDuration();
+                  this.$emit("duration", this.duration);
+                }
+              }
               if (this.muted && this.player) this.player.mute();
               this.reportIfVideoUnavailableUponAutoload(this.youtube);
             },
