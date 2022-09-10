@@ -304,7 +304,7 @@ export default {
       sortedLines: undefined,
       collapsed: false,
       currentLine: undefined,
-      currentTime: 0,
+      currentTime: this.initialTime,
     };
   },
   computed: {
