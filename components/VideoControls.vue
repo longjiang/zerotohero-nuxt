@@ -304,7 +304,7 @@ export default {
       sortedLines: undefined,
       collapsed: false,
       currentLine: undefined,
-      currentTime: this.initialTime,
+      currentTime: 0,
     };
   },
   computed: {
@@ -342,6 +342,11 @@ export default {
   mounted() {
     if (this.showLineList) {
       this.sortedLines = this.getSortedLines();
+    }
+  },
+  watch: {
+    initialTime() {
+      this.currentTime = this.initialTime // so that the progress bar updates at the start
     }
   },
   methods: {
