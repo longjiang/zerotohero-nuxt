@@ -47,7 +47,7 @@
             episodes,
             showLineList,
             showFullscreenToggle,
-            showCollapse: layout === 'horizontal' && !landscape,
+            showCollapse: layout === 'horizontal',
             duration,
             initialTime: starttime ? starttime : 0,
           }"
@@ -343,7 +343,7 @@ export default {
         return this.$store.state.settings.adminMode;
     },
     landscape() {
-      if (this.layout === "horizontal") {
+      if (this.layout === "horizontal" && !this.collapsed) {
         if (this.forcePortrait) return false;
         if (process.browser && this.viewportWidth && this.viewportHeight) {
           let landscape = this.viewportWidth > this.viewportHeight;
