@@ -137,9 +137,9 @@
           />
           <span @click.stop.prevent="saveAsPhraseClick">
             {{
-              $refs["savePhrase"] && !$refs["savePhrase"].saved
-                ? "Save as"
-                : "Remove"
+              phraseSaved
+                ? "Remove"
+                : "Save as"
             }}
             Phrase
           </span>
@@ -332,6 +332,9 @@ export default {
   },
   computed: {
     ...mapState("settings", ["l2Settings"]),
+    phraseSaved() {
+      return this.$refs["savePhrase"] && this.$refs["savePhrase"].saved
+    },
     $adminMode() {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
@@ -556,13 +559,14 @@ export default {
     },
     copyClick() {
       let text = this.text;
-      var tempInput = document.createElement("input");
+      let tempInput = document.createElement("input");
+      let modal = document.querySelector('.annotate-menu-modal-wrapper')
       tempInput.style = "position: absolute; left: -1000px; top: -1000px";
       tempInput.value = text;
-      document.body.appendChild(tempInput);
+      modal.appendChild(tempInput);
       tempInput.select();
       document.execCommand("copy");
-      document.body.removeChild(tempInput);
+      modal.removeChild(tempInput);
     },
     async visibilityChanged(isVisible) {
       if (this.delay) await Helper.timeout(this.delay);
