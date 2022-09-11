@@ -767,10 +767,12 @@ export default {
       }
     },
     pauseCurrentLineAnimation() {
+      let currentLineRef
       let currentLineRefs =
-        this.$refs[`transcript-line-${this.currentLineIndex}`];
+        this.single ? this.$refs[`transcript-line`] : this.$refs[`transcript-line-${this.currentLineIndex}`];
       if (currentLineRefs && currentLineRefs[0])
-        currentLineRefs[0].pauseAnimation();
+        currentLineRef = currentLineRefs[0]
+      if (currentLineRef) currentLineRef.pauseAnimation();
     },
     rewind() {
       this.goToLine(this.currentLine);
