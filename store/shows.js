@@ -63,7 +63,7 @@ export const mutations = {
     if (sort === "-date") {
       episodes = episodes.sort((a, b) => b.date ? b.date.localeCompare(a.date) : 0);
     } else if (sort === 'title') {
-      episodes = episodes.sort((a, b) => a.title ? a.title.localeCompare(b.title, {
+      episodes = episodes.sort((a, b) => a.title ? a.title.localeCompare(b.title, l2 && l2.locales && l2.locales[0] ? l2.locales[0] : 'en', {
         numeric: true,
       }) : 0);
     }
