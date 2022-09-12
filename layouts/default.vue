@@ -107,6 +107,10 @@ export default {
     ...mapState("settings", ["l2Settings", "l1", "l2"]),
     ...mapState("history", ["history"]),
     ...mapState("fullHistory", ["fullHistory"]),
+    $adminMode() {
+      if (typeof this.$store.state.settings.adminMode !== "undefined")
+        return this.$store.state.settings.adminMode;
+    },
     showTopBar() {
       if (this.$route.meta && this.$route.meta.layout === "full") return false;
       else
@@ -212,6 +216,10 @@ export default {
       });
       this.onLanguageChange();
     }
+    if (this.$adminMode) this.$loadWolLangs();
+    this.$watch("$adminMode", () => {
+      if (this.$adminMode) this.$loadWolLangs();
+    });
     this.onAllLanguagesLoaded();
     if (typeof window !== "undefined")
       window.addEventListener("resize", this.onResize);
@@ -295,7 +303,7 @@ export default {
             if (!this.$store.state.stats.statsLoaded[this.l2.code]) {
               this.$store.dispatch("stats/load", {
                 l2: this.l2,
-                adminMode: this.$store.state.settings.adminMode,
+                adminMode: this.$adminMode,
               });
             }
           }
@@ -424,13 +432,11 @@ export default {
     async onLanguageChange() {
       let youtube = this.$refs["youtube-view-comp"];
       if (
-        (
-          youtube &&
-          youtube.video &&
-          youtube.video.l2 &&
-          youtube.video.l2.id &&
-          youtube.video.l2.id !== this.l2.id
-        )
+        youtube &&
+        youtube.video &&
+        youtube.video.l2 &&
+        youtube.video.l2.id &&
+        youtube.video.l2.id !== this.l2.id
       ) {
         this.overlayPlayerYouTubeId = undefined; // Close the mini player unless the language matches
       }
@@ -474,13 +480,13 @@ export default {
       ) {
         this.$store.dispatch("shows/load", {
           l2: this.l2,
-          adminMode: this.$store.state.settings.adminMode,
+          adminMode: this.$adminMode,
         });
       }
       if (!this.$store.state.phrasebooks.phrasebooksLoaded[this.l2.code]) {
         this.$store.dispatch("phrasebooks/load", {
           l2: this.l2,
-          adminMode: this.$store.state.settings.adminMode,
+          adminMode: this.$adminMode,
         });
       }
     },
