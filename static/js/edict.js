@@ -301,8 +301,10 @@ const Dictionary = {
    */
   get(id, head) {
     let entry = this.words.find(row => row.id === id)
-    if (head && entry.head !== head) {
-      entry = this.lookup(head)
+    if (head) {
+      if (!entry || entry.head !== head) {
+        entry = this.lookup(head)
+      }
     }
     return entry
   },
