@@ -120,7 +120,7 @@ const Dictionary = {
           if (w.traditional.length > word.traditional.length && w.traditional.includes(word.traditional)) phrases.push(w)
         }
         word.phrases = phrases.sort((a, b) => a.traditional.length - b.traditional.length)
-        return phrases
+        return word.phrases
       } else {
         return word.phrases
       }

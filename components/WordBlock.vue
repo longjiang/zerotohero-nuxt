@@ -923,7 +923,7 @@ export default {
       }
 
       words = uniqueByValue(words, "id");
-      this.words = uniqueByValue([...this.words, ...words], "id");
+      this.words = uniqueByValue([...words, ...this.words], "id");
 
       this.updateIPA();
       this.loading = false;
