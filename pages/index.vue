@@ -227,9 +227,9 @@
                       <i class="fa-solid fa-down mr-1"></i>
                       Or, download the Android app as an
                       <a
-                        href="https://server.chinesezerotohero.com/data/android/language-player-android-2.2.6.apk"
+                        href="https://server.chinesezerotohero.com/data/android/language-player-android-2.4.10.apk"
                       >
-                        Android Package (APK)
+                        Android Package (APK) - Version 2.4.10
                       </a>
                       .
                     </small>
