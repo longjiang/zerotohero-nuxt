@@ -436,7 +436,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.video-controls {
+.youtube-with-transcript-horizontal-portrait .video-controls {
   background: black;
 }
 
