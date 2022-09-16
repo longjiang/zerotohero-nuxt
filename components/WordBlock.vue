@@ -68,6 +68,7 @@
         @mouseenter="tooltipMouseEnter"
         @mouseleave="tooltipMouseLeave"
         v-if="open"
+        class="popover-inner-hover-area"
       >
         <div
           class="tooltip-images"
@@ -1274,7 +1275,7 @@ export default {
     background: #28a745;
     color: white;
     border: none;
-    position: absolute;
+    position: fixed;
     top: 0.5rem;
     right: 0.5rem;
     height: 1.5rem;
@@ -1299,10 +1300,14 @@ export default {
     overflow-x: hidden;
     background: $color;
     color: black;
-    padding: 1rem;
     box-shadow: 0 5px 20px rgba(black, 0.2);
     max-width: $width;
     max-height: $height;
+
+    .popover-inner-hover-area {
+      padding: .75rem;
+      position: relative;
+    }
 
     .tooltip-images {
       margin-bottom: 0.5rem;
