@@ -64,6 +64,7 @@
     "nuxt-lazy-load": "^1.2.6",
     "ogv": "^1.8.4",
     "papaparse": "^5.3.0",
+    "pinyin-tone": "^2.1.2",
     "raw-loader": "^4.0.2",
     "sanitize-html": "^2.4.0",
     "smartquotes": "^2.3.2",

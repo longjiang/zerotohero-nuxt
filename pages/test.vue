@@ -8,7 +8,7 @@
     <div class="container pt-5 pb-5">
       <div class="row">
         <div class="col-sm-12">
-          <Review
+          <!-- <Review
             v-bind='{
               "line":{"starttime":89.14,"duration":3.5,"line":"Est-ce que le respect du monde vivant, de la nature, ça n’devrait pas suffire ?","count":1},
               "lineIndex":17,
@@ -19,7 +19,9 @@
               "traditional": undefined,
               skin: "dark"
             }'
-          />
+          /> -->
+          <textarea v-model="text"></textarea>
+          <textarea :value="output.join('\n')"></textarea>
         </div>
       </div>
     </div>
@@ -29,6 +31,7 @@
 <script>
 import Config from "@/lib/config";
 import Helper from "@/lib/helper";
+import pinyin from 'pinyin-tone'
 
 export default {
   computed: {
@@ -50,16 +53,29 @@ export default {
       message: undefined,
       pasted: undefined,
       clickthrough: false,
-      text: `The biodiversity plan of the Minister of Ecology is supposed to slow down the disastrous effects of human activity on the living world. While the situation is dramatic, associations criticize the lack of means implemented. Review of the most alarming signs.
-The situation is serious. It may even be too late to save biodiversity. For several years, scientists have been warning about the mass extinction of animals. A phenomenon that continues to accelerate and whose effects could be irremediable. In July 2017, researchers at Stanford University spoke of "biological annihilation" in progress.
-Is it already too late? Elements of response with the Matins de France Culture:
-Find out more: Biodiversity plan: is it too late?
-The situation is such that our planet would experience a sixth mass extinction of biodiversity. But this time, the cause is not to be sought on the side of exceptional volcanic activity or meteorites.
-The man is responsible. The impact of our activity is not new. dddddddd`,
+      text: undefined,
+      output: []
     };
   },
   mounted() {
     this.message = `navigator.hardwareConcurrency is ${navigator.hardwareConcurrency}`;
+  },
+  watch: {
+    async text() {
+      let dictionary = await this.$getDictionary()
+      let output = []
+      for (let line of this.text.split("\n")) {
+        line = line.replace(/(\d+)(.)/g, "$1 $2")
+        line = pinyin(line)
+        let words = await dictionary.lookupByPinyin(line)
+        if (words && words.length > 0) {
+          output.push(words.map(w => w.simplified).slice(0,2).join("/"))
+        } else {
+          output.push(line)
+        }
+      }
+      this.output = output
+    }
   },
   methods: {
     async paste() {

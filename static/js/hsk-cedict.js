@@ -251,6 +251,9 @@ const Dictionary = {
     lesson = String(lesson)
     return this.words.filter(row => row.hsk === level && row.lesson === lesson)
   },
+  lookupByPinyin(pinyin) {
+    return this.words.filter(w => w.pinyin === pinyin)
+  },
   isChinese(text) {
     if (this.matchChinese(text)) return true
   },

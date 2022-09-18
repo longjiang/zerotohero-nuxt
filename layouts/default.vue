@@ -216,9 +216,9 @@ export default {
       });
       this.onLanguageChange();
     }
-    if (this.$adminMode) this.$loadWolLangs();
+    if (this.$adminMode && this.$loadWolLangs) this.$loadWolLangs();
     this.$watch("$adminMode", () => {
-      if (this.$adminMode) this.$loadWolLangs();
+      if (this.$adminMode && this.$loadWolLangs) this.$loadWolLangs();
     });
     this.onAllLanguagesLoaded();
     if (typeof window !== "undefined")
