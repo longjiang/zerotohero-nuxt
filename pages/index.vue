@@ -32,6 +32,7 @@
           <div class="col-12 col-md-8 text-center text-sm-right mb-3">
             <client-only>
               <nav class="index-nav">
+                <span class="text-white" @click="reload">RELOAD</span>
                 <router-link
                   class="index-nav-item link-unstyled"
                   to="/go-pro"
@@ -618,6 +619,9 @@ export default {
     await this.$languagesPromise;
   },
   methods: {
+    reload() {
+      location.reload()
+    },
     translate(text, code) {
       if (this.$languages) return this.$languages.translate(text, code);
       else return text;
