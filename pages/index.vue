@@ -32,7 +32,6 @@
           <div class="col-12 col-md-8 text-center text-sm-right mb-3">
             <client-only>
               <nav class="index-nav">
-                <span class="text-white" @click="reload">RELOAD</span>
                 <router-link
                   class="index-nav-item link-unstyled"
                   to="/go-pro"
@@ -161,7 +160,7 @@
             </div>
           </div>
         </div>
-        <div class="row index-section" v-if="!native">
+        <div :class="{ 'row index-section': true, 'd-none': native }">
           <div class="col-md-6 mb-3 pl-5 pr-4">
             <img
               src="/img/screenshot-mobile-devices.png"
@@ -619,9 +618,6 @@ export default {
     await this.$languagesPromise;
   },
   methods: {
-    reload() {
-      location.reload()
-    },
     translate(text, code) {
       if (this.$languages) return this.$languages.translate(text, code);
       else return text;
