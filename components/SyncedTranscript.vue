@@ -231,7 +231,6 @@ export default {
     },
     pro() {
       if (this.forcePro) return true;
-      if (!POPULAR_LANGS.includes(this.$l2.code)) return true; // Let's not charge for less popular languages
       return [1, 4].includes(Number(this.$auth.user?.role)) ? true : false;
     },
     $l1() {
