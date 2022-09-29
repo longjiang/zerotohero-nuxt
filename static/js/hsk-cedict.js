@@ -170,10 +170,10 @@ const Dictionary = {
       );
       let subdict = this.subdictFromText(newHSKWordsFlattened)
       for (let newHSKWord of newHSK) {
-        let matchedWords = subdict.lookupSimplified(newHSKWord.simplified);
+        let matchedWords = subdict.lookupSimplified(newHSKWord.simplified, newHSKWord.pinyin);
         if (matchedWords && matchedWords[0]) {
           let { hsk, pinyin, id, definitions } = matchedWords[0];
-          newHSKWord = { hsk, pinyin, id, definitions }
+          newHSKWord = Object.assign(newHSKWord, { hsk, id })
         }
       }
       this.newHSKCrunched = newHSK // Cache this
