@@ -585,8 +585,9 @@ export default {
     },
     bindKeys() {
       window.onkeydown = (e) => {
+        console.log(e.target.tagName)
         if (
-          e.target.tagName.toUpperCase() !== "INPUT" &&
+          !["INPUT", "TEXTAREA"].includes(e.target.tagName.toUpperCase()) &&
           !e.metaKey &&
           !e.target.getAttribute("contenteditable")
         ) {
