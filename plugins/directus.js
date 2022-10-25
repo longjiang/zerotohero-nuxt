@@ -11,6 +11,8 @@ export const DIRECTUS_API_URL = DIRECTUS_URL + 'zerotohero/'
 
 export const LP_DIRECTUS_TOOLS_URL = DIRECTUS_URL + 'lp-directus8-tools/'
 
+export const WEB_URL = 'https://languageplayer.io/'
+
 export const YOUTUBE_VIDEOS_TABLES = {
   2: [
     1874, // Basque
@@ -245,15 +247,8 @@ export default ({ app }, inject) => {
       return videos;
     },
     async sendPasswordResetEmail({ email }) {
-      let host
+      let host = DEFAULT_WEB_URL 
       if (process.server) host = process.env.baseUrl
-      if (window?.location?.protocol?.startsWith('http')) {
-        // Use whichever host the user is accessing this from: https://beta.languageplayer.io, https://languageplayer.io, http://localhost:3000, etc
-        host = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port
-      } else {
-        // The user is accessing this page through the app. Use default URL insead
-        host = 'https://languageplayer.io'
-      } 
       let reset_url = `${host}/password-reset`
       let res = await this.post(
         `auth/password/request`,
