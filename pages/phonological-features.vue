@@ -100,7 +100,7 @@ export default {
           if (phoneme[feature] !== features[0][feature]) {
             common = false;
           }
-          if (this.unaryFeatures.includes(feature) && !features[0].feature) {
+          if (this.unaryFeatures.includes(feature) && !features[0][feature]) {
             common = false
           }
         }
