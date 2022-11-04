@@ -49,7 +49,6 @@
 
 <script>
 import axios from "axios";
-import Config from "@/lib/config";
 
 export default {
   data() {
@@ -61,7 +60,7 @@ export default {
     };
   },
   async mounted() {
-    let res = await axios.get(`${Config.server}data/phonemes/phonemes.json`);
+    let res = await axios.get(`/data/phonemes/phonemes.json`);
     if (res && res.data) {
       this.features = res.data;
     }
@@ -100,6 +99,9 @@ export default {
         for (let phoneme of features) {
           if (phoneme[feature] !== features[0][feature]) {
             common = false;
+          }
+          if (this.unaryFeatures.includes(feature) && !features[0].feature) {
+            common = false
           }
         }
         if (common === true) {
