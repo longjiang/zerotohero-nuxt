@@ -89,7 +89,7 @@ import axios from "axios";
 export default {
   data() {
     return {
-      ipa: "ʃʒθð",
+      ipa: "kɡŋxɣɰʟ",
       features: undefined,
       unaryFeatures: ["labial", "coronal", "dorsal", "pharyngeal"],
       phonemes: [],
@@ -156,11 +156,28 @@ export default {
       }
       return commonFeatures;
     },
+    getFeatureValuePopularity(feature, value) {
+      let popularity = 0;
+      for (let key in this.features) {
+        let phoneme = this.features[key].features;
+        if (phoneme[feature] == value) {
+          popularity += 1;
+        }
+      }
+      return popularity;
+    },
     minimizeCommonFeatures(commonFeatures) {
       let phonemeArray = [];
-      let featuresArray = Object.keys(commonFeatures).map((feature) => {
-        return { feature, value: commonFeatures[feature] };
-      });
+      let featuresArray = Object.keys(commonFeatures)
+        .map((feature) => {
+          let value = commonFeatures[feature];
+          return {
+            feature,
+            value,
+            popularity: this.getFeatureValuePopularity(feature, value),
+          };
+        })
+        .sort((a, b) => a.popularity - b.popularity); // Most distinctive features first
       let minimalCommonFeatures = {};
       for (let phoneme in this.features) {
         phonemeArray.push(
@@ -168,7 +185,6 @@ export default {
         );
       }
       let filteredPhonemes = phonemeArray;
-      console.log({ commonFeatures, featuresArray });
       for (let feature of featuresArray) {
         let unfilteredLength = filteredPhonemes.length;
         let featureName = feature.feature;
@@ -190,7 +206,7 @@ export default {
         ipa = ipa.replace(phoneme, `!!!DELIMITER!!!${phoneme}!!!DELIMITER!!!`);
       }
       let tokens = ipa.split("!!!DELIMITER!!!");
-      return tokens.filter((token) => token !== "");
+      return tokens.filter((token) => phonemes.includes(token));
     },
   },
 };
