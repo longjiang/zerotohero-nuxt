@@ -15,10 +15,10 @@
     />
     <SiteTopBar />
 
-    <div class="container">
+    <div class="container pb-5">
       <div class="row">
-        <div class="col-sm-12 pt-5 pb-5">
-          <h3 class="mb-5 text-center">Phonological Features</h3>
+        <div class="col-sm-12 pt-5">
+          <h3 class="mb-4 text-center">Phonological Features</h3>
 
           <b-form-input
             v-model.lazy="ipa"
@@ -32,37 +32,39 @@
               target="_blank"
             >IPA keyboard</a>.
           </div>
-          <div class="mt-4">
-            <h6 class="mb-3" v-if="ipa">
-              <u>MINIMAL</u> set of phonological features that exclusively identify
-              <span
-                v-for="phoneme in this.phonemes"
-                :key="`phoneme-${phoneme}`"
-              >[{{ phoneme }}]</span>:
-            </h6>
-            <div v-for="(value, feature) in minimalCommonFeatures" :key="`feature-${feature}`">
-              <template v-if="!unaryFeatures.includes(feature)">
-                <template v-if="value">+</template>
-                <template v-else>-</template>
-              </template>
-              {{ expand(feature) }}
-            </div>
+        </div>
+      </div>
+      <div class="row mt-4">
+        <div class="col-sm-12 col-md-6">
+          <h6 v-if="ipa">
+            <u>MINIMAL</u> set of phonological features that exclusively identify
+            <span
+              v-for="phoneme in this.phonemes"
+              :key="`phoneme-${phoneme}`"
+            >[{{ phoneme }}]</span>:
+          </h6>
+          <div v-for="(value, feature) in minimalCommonFeatures" :key="`feature-${feature}`">
+            <template v-if="!unaryFeatures.includes(feature)">
+              <template v-if="value">+</template>
+              <template v-else>-</template>
+            </template>
+            {{ expand(feature) }}
           </div>
-          <div class="mt-4">
-            <h6 class="mb-3" v-if="ipa">
-              <u>ALL</u> common phonological features of
-              <span
-                v-for="phoneme in this.phonemes"
-                :key="`phoneme-${phoneme}`"
-              >[{{ phoneme }}]</span>:
-            </h6>
-            <div v-for="(value, feature) in commonFeatures" :key="`feature-${feature}`">
-              <template v-if="!unaryFeatures.includes(feature)">
-                <template v-if="value">+</template>
-                <template v-else>-</template>
-              </template>
-              {{ expand(feature) }}
-            </div>
+        </div>
+        <div class="col-sm-12 col-md-6">
+          <h6 v-if="ipa">
+            <u>ALL</u> set of phonological features that exclusively identify
+            <span
+              v-for="phoneme in this.phonemes"
+              :key="`phoneme-${phoneme}`"
+            >[{{ phoneme }}]</span>:
+          </h6>
+          <div v-for="(value, feature) in commonFeatures" :key="`feature-${feature}`">
+            <template v-if="!unaryFeatures.includes(feature)">
+              <template v-if="value">+</template>
+              <template v-else>-</template>
+            </template>
+            {{ expand(feature) }}
           </div>
         </div>
       </div>
@@ -151,16 +153,19 @@ export default {
           Object.assign({ phoneme }, this.features[phoneme].features)
         );
       }
-      let filteredPhonemes = phonemeArray
-      console.log({filteredPhonemes})
+      let filteredPhonemes = phonemeArray;
+      console.log({ filteredPhonemes });
       for (let key in commonFeatures) {
         minimalCommonFeatures[key] = commonFeatures[key];
-        filteredPhonemes = filteredPhonemes.filter(
-          phoneme => {
-            return  commonFeatures[key] === phoneme[key]
-          }
-        );
-        console.log({ key, value: commonFeatures[key], filteredPhonemes, minimalCommonFeatures });
+        filteredPhonemes = filteredPhonemes.filter(phoneme => {
+          return commonFeatures[key] === phoneme[key];
+        });
+        console.log({
+          key,
+          value: commonFeatures[key],
+          filteredPhonemes,
+          minimalCommonFeatures
+        });
         if (filteredPhonemes.length === this.phonemes.length) {
           return minimalCommonFeatures;
         }
