@@ -30,20 +30,27 @@
             <a
               href="https://www.internationalphoneticassociation.org/IPAcharts/inter_chart_2018/IPA_2018.html"
               target="_blank"
-            >IPA keyboard</a>.
+            >
+              IPA keyboard
+            </a>
+            .
           </div>
         </div>
       </div>
       <div class="row mt-4">
         <div class="col-sm-12 col-md-6">
           <h6 v-if="ipa">
-            <u>MINIMAL</u> set of phonological features that exclusively identify
-            <span
-              v-for="phoneme in this.phonemes"
-              :key="`phoneme-${phoneme}`"
-            >[{{ phoneme }}]</span>:
+            <u>MINIMAL</u>
+            set of phonological features that exclusively identify
+            <span v-for="phoneme in this.phonemes" :key="`phoneme-${phoneme}`">
+              [{{ phoneme }}]
+            </span>
+            :
           </h6>
-          <div v-for="(value, feature) in minimalCommonFeatures" :key="`feature-${feature}`">
+          <div
+            v-for="(value, feature) in minimalCommonFeatures"
+            :key="`feature-${feature}`"
+          >
             <template v-if="!unaryFeatures.includes(feature)">
               <template v-if="value">+</template>
               <template v-else>-</template>
@@ -53,13 +60,17 @@
         </div>
         <div class="col-sm-12 col-md-6">
           <h6 v-if="ipa">
-            <u>ALL</u> set of phonological features that exclusively identify
-            <span
-              v-for="phoneme in this.phonemes"
-              :key="`phoneme-${phoneme}`"
-            >[{{ phoneme }}]</span>:
+            <u>ALL</u>
+            set of phonological features that exclusively identify
+            <span v-for="phoneme in this.phonemes" :key="`phoneme-${phoneme}`">
+              [{{ phoneme }}]
+            </span>
+            :
           </h6>
-          <div v-for="(value, feature) in commonFeatures" :key="`feature-${feature}`">
+          <div
+            v-for="(value, feature) in commonFeatures"
+            :key="`feature-${feature}`"
+          >
             <template v-if="!unaryFeatures.includes(feature)">
               <template v-if="value">+</template>
               <template v-else>-</template>
@@ -83,7 +94,7 @@ export default {
       unaryFeatures: ["labial", "coronal", "dorsal", "pharyngeal"],
       phonemes: [],
       commonFeatures: {},
-      minimalCommonFeatures: {}
+      minimalCommonFeatures: {},
     };
   },
   async mounted() {
@@ -106,7 +117,7 @@ export default {
           this.commonFeatures
         );
       }
-    }
+    },
   },
   methods: {
     expand(feature) {
@@ -117,8 +128,8 @@ export default {
         ATR: "advanced tongue root (ATR)",
         SG: "spread glottis (SG)",
         CG: "constricted glottis (CG)",
-        cont: "continuent",
-        del_rel: "delayed release (del rel)"
+        cont: "continuant",
+        del_rel: "delayed release (del rel)",
       };
       if (this.unaryFeatures.includes(feature)) feature = feature.toUpperCase();
       return full[feature] ? full[feature] : feature;
@@ -126,7 +137,7 @@ export default {
     getCommonFeatures(ipa) {
       this.phonemes = this.tokenize(ipa);
       let features = this.phonemes.map(
-        phoneme => this.features[phoneme].features
+        (phoneme) => this.features[phoneme].features
       );
       let commonFeatures = {};
       for (let feature in features[0]) {
@@ -147,6 +158,9 @@ export default {
     },
     minimizeCommonFeatures(commonFeatures) {
       let phonemeArray = [];
+      let featuresArray = Object.keys(commonFeatures).map((feature) => {
+        return { feature, value: commonFeatures[feature] };
+      });
       let minimalCommonFeatures = {};
       for (let phoneme in this.features) {
         phonemeArray.push(
@@ -154,13 +168,15 @@ export default {
         );
       }
       let filteredPhonemes = phonemeArray;
-      for (let key in commonFeatures) {
-        let unfilteredLength = filteredPhonemes.length
-        filteredPhonemes = filteredPhonemes.filter(phoneme => {
-          return commonFeatures[key] === phoneme[key];
+      console.log({ commonFeatures, featuresArray });
+      for (let feature of featuresArray) {
+        let unfilteredLength = filteredPhonemes.length;
+        let featureName = feature.feature;
+        filteredPhonemes = filteredPhonemes.filter((phoneme) => {
+          return feature.value === phoneme[featureName];
         });
         if (filteredPhonemes.length < unfilteredLength) {
-          minimalCommonFeatures[key] = commonFeatures[key];
+          minimalCommonFeatures[featureName] = feature.value;
         }
         if (filteredPhonemes.length === this.phonemes.length) {
           return minimalCommonFeatures;
@@ -174,9 +190,9 @@ export default {
         ipa = ipa.replace(phoneme, `!!!DELIMITER!!!${phoneme}!!!DELIMITER!!!`);
       }
       let tokens = ipa.split("!!!DELIMITER!!!");
-      return tokens.filter(token => token !== "");
-    }
-  }
+      return tokens.filter((token) => token !== "");
+    },
+  },
 };
 </script>
 
