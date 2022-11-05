@@ -25,23 +25,22 @@
             @compositionend.prevent.stop="() => false"
             placeholder="Type IPA symbols here"
           />
-          <div class="mt-2">
-            Need to type IPA? Use the
+          <div class="mt-2 text-right">
             <a
               href="https://www.internationalphoneticassociation.org/IPAcharts/inter_chart_2018/IPA_2018.html"
               target="_blank"
             >
               IPA keyboard
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
             </a>
-            .
           </div>
         </div>
       </div>
       <div class="row mt-4">
-        <div class="col-sm-12 col-md-6">
+        <div class="col-sm-12 col-md-6 mb-4">
           <h6 v-if="ipa">
             <u>MINIMAL</u>
-            set of phonological features that exclusively identify
+            set of phonological features exclusively identifying
             <span v-for="phoneme in this.phonemes" :key="`phoneme-${phoneme}`">
               [{{ phoneme }}]
             </span>
@@ -58,10 +57,10 @@
             {{ expand(feature) }}
           </div>
         </div>
-        <div class="col-sm-12 col-md-6">
+        <div class="col-sm-12 col-md-6 mb-4">
           <h6 v-if="ipa">
             <u>ALL</u>
-            set of phonological features that exclusively identify
+            phonological shared by
             <span v-for="phoneme in this.phonemes" :key="`phoneme-${phoneme}`">
               [{{ phoneme }}]
             </span>
