@@ -154,18 +154,14 @@ export default {
         );
       }
       let filteredPhonemes = phonemeArray;
-      console.log({ filteredPhonemes });
       for (let key in commonFeatures) {
-        minimalCommonFeatures[key] = commonFeatures[key];
+        let unfilteredLength = filteredPhonemes.length
         filteredPhonemes = filteredPhonemes.filter(phoneme => {
           return commonFeatures[key] === phoneme[key];
         });
-        console.log({
-          key,
-          value: commonFeatures[key],
-          filteredPhonemes,
-          minimalCommonFeatures
-        });
+        if (filteredPhonemes.length < unfilteredLength) {
+          minimalCommonFeatures[key] = commonFeatures[key];
+        }
         if (filteredPhonemes.length === this.phonemes.length) {
           return minimalCommonFeatures;
         }
