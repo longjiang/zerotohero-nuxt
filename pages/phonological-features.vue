@@ -88,7 +88,7 @@ import axios from "axios";
 export default {
   data() {
     return {
-      ipa: "kɡŋxɣɰʟ",
+      ipa: "kɡŋxɣɰtʃ",
       features: undefined,
       unaryFeatures: ["labial", "coronal", "dorsal", "pharyngeal"],
       phonemes: [],
@@ -99,7 +99,10 @@ export default {
   async mounted() {
     let res = await axios.get(`/data/phonemes/phonemes.json`);
     if (res && res.data) {
-      this.features = res.data;
+      let features = res.data;
+      features["ɡ"] = features["g"]; // Normalize ASCII 'g' to IPA /ɡ/ (different characters)
+      delete features["g"];
+      this.features = features;
     }
     if (this.features) {
       this.commonFeatures = this.getCommonFeatures(this.ipa);
@@ -200,11 +203,23 @@ export default {
       return minimalCommonFeatures;
     },
     tokenize(ipa) {
-      let phonemes = Object.keys(this.features);
-      for (let phoneme of phonemes) {
-        ipa = ipa.replace(phoneme, `!!!DELIMITER!!!${phoneme}!!!DELIMITER!!!`);
+      let phonemes = Object.keys(this.features).sort(
+        (a, b) => b.length - a.length
+      );
+      let tokens = [];
+      let length = ipa.length
+      for (let i = 0; i < length; i++) {
+        let found = false
+        for (let phoneme of phonemes) {
+          if (ipa.startsWith(phoneme)) {
+            found = true
+            tokens.push(phoneme);
+            ipa = ipa.substring(phoneme.length);
+          }
+        }
+        if (!found) ipa = ipa.substring(1)
       }
-      let tokens = ipa.split("!!!DELIMITER!!!");
+      console.log({ ipa, phonemes, tokens })
       return tokens.filter((token) => phonemes.includes(token));
     },
   },
