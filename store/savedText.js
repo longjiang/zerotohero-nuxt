@@ -30,7 +30,6 @@ export const mutations = {
     state.itemsByL2[l2.code] = state.itemsByL2[l2.code].filter((i) => i.id !== itemId);
   },
   UPDATE(state, { l2, item }) {
-    console.log(state.itemsByL2[l2.code][0].id, item.id)
     let existing = state.itemsByL2[l2.code].find(i => i.id === item.id)
     if (!existing) {
       existing = {}
@@ -38,9 +37,7 @@ export const mutations = {
     }
     for (let key in item) {
       existing[key] = item[key]
-      console.log(existing)
     }
-
   },
 }
 

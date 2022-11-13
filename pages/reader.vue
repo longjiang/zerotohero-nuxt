@@ -279,7 +279,7 @@ export default {
       if (typeof location !== "undefined")
         return location.href?.replace(
           location.protocol + "//" + location.host,
-          "https://www.zerotohero.ca"
+          "https://languageplayer.io"
         );
     },
     title() {
