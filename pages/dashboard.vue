@@ -51,6 +51,20 @@
               </div>
             </div>
           </div>
+          <div class="row mt-5">
+            <div class="col-sm-12">
+              <div class="home-card p-2 pt-4 pb-4 bg-white">
+                <h5 class="text-center mb-3" v-if="hasDashboard">
+                  Tools for linguists
+                </h5>
+                <div class="row pl-3 pr-3">
+                  <div class="col-sm-12 col-md-4 mt-1 mb-1" v-for="link in linguisticsTools" :key="`linguistics-tools-link-${link.name}`">
+                    <router-link :to="link" class="text-dark"><i :class="link.icon" style="width: 2em; text-align: center"></i> {{ translate(link.title, browserLanguage) }}</router-link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </client-only>
@@ -62,6 +76,42 @@ import { mapState } from "vuex";
 import { background } from '@/lib/utils/background'
 
 export default {
+  data() {
+    return {
+      linguisticsTools: [
+        {
+          name: "language-map",
+          title: `Map of Languages`,
+          icon: "fas fa-globe-asia",
+          show: true,
+        },
+        {
+          name: "language-icons",
+          title: "Face of the Language",
+          icon: "fas fa-user",
+          show: true,
+        },
+        {
+          name: "phonological-features",
+          title: "Phonological Features",
+          icon: "fas fa-lips",
+          show: true,
+        },
+        {
+          name: "compare-languages",
+          title: "Compare Languages",
+          icon: "fa-solid fa-arrow-right-arrow-left",
+          show: true,
+        },
+        {
+          name: "translators",
+          title: "Web Translators",
+          icon: "fas fa-language",
+          show: true,
+        },
+      ]
+    }
+  },
   computed: {
     ...mapState("fullHistory", ["fullHistory"]),
     background() {

@@ -850,15 +850,21 @@ export default {
                   show: this.l2.code === "zh",
                 },
                 {
+                  name: "language-map",
+                  title: `Map of Languages`,
+                  icon: "fas fa-globe-asia",
+                  show: true,
+                },
+                {
                   name: "language-icons",
-                  title: "Language Users",
+                  title: "Face of the Language",
                   icon: "fas fa-user",
                   show: true,
                 },
                 {
-                  name: "language-map",
-                  title: `Map of Languages`,
-                  icon: "fas fa-globe-asia",
+                  name: "phonological-features",
+                  title: "Phonological Features",
+                  icon: "fas fa-lips",
                   show: true,
                 },
                 {
