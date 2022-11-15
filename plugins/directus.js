@@ -247,7 +247,7 @@ export default ({ app }, inject) => {
       return videos;
     },
     async sendPasswordResetEmail({ email }) {
-      let host = DEFAULT_WEB_URL 
+      let host = WEB_URL 
       if (process.server) host = process.env.baseUrl
       let reset_url = `${host}/password-reset`
       let res = await this.post(

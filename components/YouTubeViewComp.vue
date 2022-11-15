@@ -709,7 +709,7 @@ export default {
   transition: all 1s ease-in-out;
   position: static;
   height: 100%;
-  overflow: scroll;
+  // overflow: scroll;
   &.youtube-view-minimized {
     position: fixed;
     height: 5rem;
