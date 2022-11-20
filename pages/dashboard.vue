@@ -54,7 +54,7 @@
           <div class="row mt-5">
             <div class="col-sm-12">
               <div class="home-card p-2 pt-4 pb-4 bg-white">
-                <h5 class="text-center mb-3" v-if="hasDashboard">
+                <h5 class="text-center mb-3">
                   Tools for linguists
                 </h5>
                 <div class="row pl-3 pr-3">
