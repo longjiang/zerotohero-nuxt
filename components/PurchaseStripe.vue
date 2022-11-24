@@ -64,11 +64,10 @@ export default {
     this.stripePublishableKey = "pk_live_9lnc7wrGHtcFdPKIWZdy9p17";
 
     return {
-      sale: this.sale,
       regularPriceCNYPaymentLink: 'https://buy.stripe.com/4gw2bz7ELbvR8CccMN',
-      salePriceCNYPaymentLink: 'https://buy.stripe.com/dR6dUhcZ51VhaKkdQT',
+      salePriceCNYPaymentLink: 'https://buy.stripe.com/28o8zXe396bx6u4aEI',
       regularPriceID: 'price_1LArBtG5EbMGvOaflIKUthub',
-      salePriceID: 'price_1LaUOfG5EbMGvOaf3HQLg8sL',
+      salePriceID: 'price_1M7c8BG5EbMGvOafC1NmkFYf',
       stripeSuccessURL: this.$auth.user
         ? `${PYTHON_SERVER}stripe_checkout_success?user_id=${this.$auth.user.id}&host=${HOST}&session_id={CHECKOUT_SESSION_ID}`
         : undefined, // Make sure we have the user's id
