@@ -343,6 +343,16 @@ export default {
     if (this.showLineList) {
       this.sortedLines = this.getSortedLines();
     }
+    if (typeof this.$store.state.settings !== "undefined") {
+      this.autoPause = this.$store.state.settings.autoPause;
+      this.speed = this.$store.state.settings.speed || 1;
+    }
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (mutation.type === "settings/LOAD_SETTINGS") {
+        this.autoPause = this.$store.state.settings.autoPause;
+        this.speed = this.$store.state.settings.speed || 1;
+      }
+    });
   },
   watch: {
     initialTime() {
@@ -374,6 +384,7 @@ export default {
         if (index === speeds.length) index = 0;
       }
       this.speed = speeds[index];
+      this.$store.dispatch("settings/setGeneralSettings", { speed: this.speed });
       this.$emit("updateSpeed", this.speed);
     },
     toggleRepeatMode() {
@@ -382,6 +393,7 @@ export default {
     },
     toggleAutoPause() {
       this.autoPause = !this.autoPause;
+      this.$store.dispatch("settings/setGeneralSettings", { autoPause: this.autoPause });
       this.$emit("updateAutoPause", this.autoPause);
     },
     toggleAudioMode() {
