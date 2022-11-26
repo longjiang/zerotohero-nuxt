@@ -176,6 +176,9 @@ export default {
     autoPause: {
       default: false,
     },
+    useSmoothScroll: {
+      default: false,
+    },
   },
   data() {
     return {
@@ -197,9 +200,8 @@ export default {
       visibleMax: this.startLineIndex ? Number(this.startLineIndex) + 30 : 30,
       visibleRange: 30,
       autoPausedLineIndex: undefined,
-      useSmoothScroll: false,
       NON_PRO_MAX_LINES,
-      preventCurrentTimeUpdate: false
+      preventCurrentTimeUpdate: false,
     };
   },
   computed: {
@@ -452,15 +454,30 @@ export default {
         const filterParallelLines = (parallelLine, parallelLineIndex) => {
           if (!parallelLine) return false;
           let nextParallelLine = this.parallellines[parallelLineIndex + 1];
-          let parallelLineDuration = parallelLine.duration
-          if (!parallelLineDuration) parallelLineDuration = nextParallelLine ? nextParallelLine.starttime - parallelLine.starttime : 2
-          let parallelLineEndTime = parallelLine.starttime + parallelLineDuration
-          let medianTime = parallelLine.starttime + parallelLineDuration / 2
-          let nextLineStartTime = line.duration ? line.starttime + line.duration : nextLine ? nextLine.starttime : line.starttime + 10
-          let parallelLineStartsBeforeNextLineStarts = line.starttime - 0.5 <= parallelLine.starttime && parallelLine.starttime <= nextLineStartTime - 0.5
-          let parallelLineEndsBeforeNextLineStarts = line.starttime + 0.5 <= parallelLineEndTime && parallelLineEndTime <= nextLineStartTime + 0.5
-          return parallelLineStartsBeforeNextLineStarts || parallelLineEndsBeforeNextLineStarts
-        }
+          let parallelLineDuration = parallelLine.duration;
+          if (!parallelLineDuration)
+            parallelLineDuration = nextParallelLine
+              ? nextParallelLine.starttime - parallelLine.starttime
+              : 2;
+          let parallelLineEndTime =
+            parallelLine.starttime + parallelLineDuration;
+          let medianTime = parallelLine.starttime + parallelLineDuration / 2;
+          let nextLineStartTime = line.duration
+            ? line.starttime + line.duration
+            : nextLine
+            ? nextLine.starttime
+            : line.starttime + 10;
+          let parallelLineStartsBeforeNextLineStarts =
+            line.starttime - 0.5 <= parallelLine.starttime &&
+            parallelLine.starttime <= nextLineStartTime - 0.5;
+          let parallelLineEndsBeforeNextLineStarts =
+            line.starttime + 0.5 <= parallelLineEndTime &&
+            parallelLineEndTime <= nextLineStartTime + 0.5;
+          return (
+            parallelLineStartsBeforeNextLineStarts ||
+            parallelLineEndsBeforeNextLineStarts
+          );
+        };
         matchedParallelLines[lineIndex] = this.parallellines
           .filter(filterParallelLines)
           .slice(0, 4) // So that we don't have way too many translation lines that fills the whole screen
@@ -669,7 +686,7 @@ export default {
       let offset = -stage / 2 + transcriptLineHeight / 2;
       return offset;
     },
-    smoothScrollToCurrentLine(offset) {
+    smoothScrollToCurrentLine(offset, el) {
       let lastDuration =
         this.previousLine && this.currentLine
           ? (this.currentLine.starttime - this.previousLine.starttime) * 1000
@@ -702,7 +719,7 @@ export default {
         let top = elementTop + offset;
         let scrollDistanceIsLarge = Math.abs(window.scrollY - top) > 1000;
         if (this.useSmoothScroll && !scrollDistanceIsLarge) {
-          this.smoothScrollToCurrentLine(offset);
+          this.smoothScrollToCurrentLine(offset, el);
         } else {
           window.scrollTo({
             top,
@@ -766,11 +783,12 @@ export default {
       }
     },
     pauseCurrentLineAnimation() {
-      let currentLineRef
-      let currentLineRefs =
-        this.single ? this.$refs[`transcript-line`] : this.$refs[`transcript-line-${this.currentLineIndex}`];
+      let currentLineRef;
+      let currentLineRefs = this.single
+        ? this.$refs[`transcript-line`]
+        : this.$refs[`transcript-line-${this.currentLineIndex}`];
       if (currentLineRefs && currentLineRefs[0])
-        currentLineRef = currentLineRefs[0]
+        currentLineRef = currentLineRefs[0];
       if (currentLineRef) currentLineRef.pauseAnimation();
     },
     rewind() {

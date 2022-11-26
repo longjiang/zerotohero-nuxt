@@ -239,6 +239,19 @@
           <span>Auto-Pause</span>
         </button>
       </div>
+      <div class="mt-1">
+        <button
+          :class="{
+            'btn btn-unstyled text-center d-block p-0': true,
+            'text-success': useSmoothScroll,
+          }"
+          @click="toggleSmoothScrolling"
+          title="Toggle Smooth Scrolling"
+        >
+          <span class="settings-icon"><i class="fas fa-up-down"></i></span>
+          <span>Smooth Scrolling</span>
+        </button>
+      </div>
       <hr />
       <AnnotationSettings variant="toolbar" />
     </b-modal>
@@ -298,6 +311,7 @@ export default {
       repeatMode: false,
       speed: 1,
       autoPause: false,
+      useSmoothScroll: false,
       filterList: "",
       speaking: false,
       audioMode: false,
@@ -346,11 +360,13 @@ export default {
     if (typeof this.$store.state.settings !== "undefined") {
       this.autoPause = this.$store.state.settings.autoPause;
       this.speed = this.$store.state.settings.speed || 1;
+      this.useSmoothScroll = this.$store.state.settings.useSmoothScroll;
     }
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type === "settings/LOAD_SETTINGS") {
         this.autoPause = this.$store.state.settings.autoPause;
         this.speed = this.$store.state.settings.speed || 1;
+        this.useSmoothScroll = this.$store.state.settings.useSmoothScroll;
       }
     });
   },
@@ -395,6 +411,17 @@ export default {
       this.autoPause = !this.autoPause;
       this.$store.dispatch("settings/setGeneralSettings", { autoPause: this.autoPause });
       this.$emit("updateAutoPause", this.autoPause);
+    },
+    toggleSmoothScrolling() {
+      this.useSmoothScroll = !this.useSmoothScroll;
+      this.$store.dispatch("settings/setGeneralSettings", { useSmoothScroll: this.useSmoothScroll });
+      this.$emit("updateSmoothScroll", this.useSmoothScroll);
+
+    },
+    toggleSmoothScroll() {
+      this.useSmoothScroll = !this.useSmoothScroll;
+      this.$store.dispatch("settings/setGeneralSettings", { useSmoothScroll: this.useSmoothScroll });
+      this.$emit("updateUseSmoothScroll", this.useSmoothScroll);
     },
     toggleAudioMode() {
       this.audioMode = !this.audioMode;
