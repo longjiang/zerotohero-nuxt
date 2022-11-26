@@ -333,7 +333,7 @@ export default {
   }
   .transcript-line-l1 {
     opacity: 0.7;
-    font-size: 80%;
+    font-size: 66.7%;
     display: none;
     line-height: 1.5;
     margin-top: 0.1rem;
