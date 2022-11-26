@@ -44,7 +44,7 @@ export const state = () => {
     hidePhonetics: false, // as used in the <HideDefs> component
     hideDefinitions: false, // as used in the <HideDefs> component
     subsSearchLimit: true,
-    transcriptMode: false,
+    layout: 'vertical', // or 'horizontal'
     autoPause: false,
     speed: 1,
     l2Settings: {}, // keyed by language

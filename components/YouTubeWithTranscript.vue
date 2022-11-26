@@ -363,6 +363,16 @@ export default {
   async mounted() {
     this.getL1Transcript();
     this.updateLayout();
+    if (typeof this.$store.state.settings !== "undefined") {
+      this.layout = this.$store.state.settings.layout;
+      this.$emit("updateLayout", this.layout);
+    }
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (mutation.type === "settings/LOAD_SETTINGS") {
+        this.layout = this.$store.state.settings.layout;
+      this.$emit("updateLayout", this.layout);
+      }
+    });
   },
   async updated() {
     if (this.$refs.transcript) {
@@ -653,6 +663,7 @@ export default {
     },
     toggleFullscreenMode() {
       this.layout = this.layout === "horizontal" ? "vertical" : "horizontal";
+      this.$store.dispatch("settings/setGeneralSettings", { layout: this.layout });
       this.$emit("updateLayout", this.layout);
     },
   },
