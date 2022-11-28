@@ -19,6 +19,20 @@
         <Share class="ml-2" />
       </span>
       <div class="video-meta">
+        <span v-if="video.channel">
+          <u><router-link
+            class="link-unstyled"
+            :to="{
+              name: 'youtube-channel',
+              params: {
+                channel_id: video.channel.id,
+                title: video.channel.title || undefined,
+              },
+            }"
+          >
+            {{ video.channel.title || "Channel" }}
+          </router-link></u>
+        </span>
         <span v-if="video.date">{{ formatDate(video.date) }}</span>
         <span v-if="localeDescription">
           <img
@@ -27,11 +41,19 @@
             :title="`Flag of ${country.name} (${country.alpha2Code})`"
             :src="`/vendor/flag-svgs/${country.alpha2Code}.svg`"
             class="flag-icon mr-1"
-            style="width: 1rem; position: relative; bottom: 0.1rem;"
+            style="width: 1rem; position: relative; bottom: 0.1rem"
           />
           {{ localeDescription }}
         </span>
-        <span><a :href="`https://downsub.com/?url=youtu.be%2F${video.youtube_id}`" target="_blank" class="link-unstyled"><u>Download Transcript</u></a></span>
+        <span>
+          <a
+            :href="`https://downsub.com/?url=youtu.be%2F${video.youtube_id}`"
+            target="_blank"
+            class="link-unstyled"
+          >
+            <u>Transcript</u>
+          </a>
+        </span>
       </div>
       <div class="video-engagement">
         <span v-if="video.views">
@@ -47,26 +69,12 @@
           {{ formatK(video.comments) }}
         </span>
       </div>
-      <router-link
-        class="link-unstyled"
-        v-if="$adminMode && video.channel"
-        :to="{
-          name: 'youtube-channel',
-          params: {
-            channel_id: video.channel.id,
-            title: video.channel.title || undefined,
-          },
-        }"
-      >
-        <i class="fab fa-youtube ml-2"></i>
-        {{ video.channel.title || "Channel" }}
-      </router-link>
     </div>
     <client-only>
       <drop
         @drop="handleDrop"
         :class="{
-          'd-none': video.subs_l2 && video.subs_l2.length > 0,
+          'd-none': !$adminMode || (video.subs_l2 && video.subs_l2.length > 0),
           over: over,
           'subs-drop drop p-4': true,
         }"
@@ -429,14 +437,13 @@ export default {
     this.originalText = this.text;
     this.translationURL = this.getTranslationURL();
     if (this.video?.locale) {
-      let {country, language, description} = await this.getLocaleDescription(
+      let { country, language, description } = await this.getLocaleDescription(
         this.video.locale
       );
-      if (description) this.localeDescription = description
-      if (country) this.country = country
-      if (language) this.language = language
+      if (description) this.localeDescription = description;
+      if (country) this.country = country;
+      if (language) this.language = language;
     }
-      
   },
   watch: {
     showSubsEditing() {
@@ -474,7 +481,7 @@ export default {
       }
       let description = `${language ? language.name : ""}`;
       if (country) description += ` (${country.name})`;
-      return {country, language, description};
+      return { country, language, description };
     },
     formatK(number) {
       return formatK(number);

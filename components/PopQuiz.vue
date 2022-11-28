@@ -45,7 +45,7 @@ export default {
     async generateReviewItems() {
       let reviewItems = []
       for (let transcriptLineComp of this.quizContent ) {
-        let savedWords = transcriptLineComp.getSavedWords()
+        let savedWords = transcriptLineComp?.getSavedWords()
         if (savedWords?.length > 0) {
           for (let saved of savedWords) {
             let savedForm

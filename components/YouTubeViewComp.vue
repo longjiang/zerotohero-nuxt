@@ -277,9 +277,7 @@ export default {
       // If we already have the episodes stored in the show (in Vuex), and the episodes include the current video, just return the episodes
       let videos = [];
       let sort =
-        this.showType === "tv_show" || this.show.audiobook
-          ? "title"
-          : "-date";
+        this.showType === "tv_show" || this.show.audiobook ? "title" : "-date";
       if (
         this.show.episodes &&
         this.show.episodes.find((s) => s.youtube_id === this.video.youtube_id)
@@ -434,13 +432,25 @@ export default {
     async getTranscript(video) {
       console.log(`YouTube View: Getting ${this.$l2.name} transcript`);
       Vue.set(video, "checkingSubs", true);
-      console.log();
+      let forceRefresh = this.$adminMode;
+      let generated = false;
       let subs_l2 = await YouTube.getTranscript(
         video.youtube_id,
         video.l2Locale,
         video.l2Name,
-        this.$adminMode
+        forceRefresh,
+        generated
       );
+      if (!subs_l2 || subs_l2.length === 0) {
+        generated = true;
+        subs_l2 = await YouTube.getTranscript(
+          video.youtube_id,
+          video.l2Locale || this.$l2.code,
+          video.l2Name,
+          forceRefresh,
+          generated
+        );
+      }
       if (subs_l2 && subs_l2.length > 0) Vue.set(video, "subs_l2", subs_l2);
       Vue.set(video, "checkingSubs", false);
       return video;
