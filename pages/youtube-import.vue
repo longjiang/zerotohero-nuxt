@@ -62,7 +62,19 @@ export default {
           if (this.url.startsWith("PL")) playlistId = this.url;
           else youtubeId = this.url;
         }
-        console.log({ youtubeId, playlistId });
+        if (youtubeId) {
+          this.$router.push({
+            name: "youtube-view",
+            params: { youtube_id: youtubeId },
+          });
+        } else if (playlistId) {
+          this.$router.push({
+            name: "youtube-playlist",
+            params: { playlist_id: playlistId },
+          });
+        } else {
+          alert("We cannot recognize this URL.");
+        }
       }
     },
   },

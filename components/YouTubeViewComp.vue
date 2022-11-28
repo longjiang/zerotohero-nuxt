@@ -585,7 +585,6 @@ export default {
     },
     bindKeys() {
       window.onkeydown = (e) => {
-        console.log(e.target.tagName)
         if (
           !["INPUT", "TEXTAREA"].includes(e.target.tagName.toUpperCase()) &&
           !e.metaKey &&
