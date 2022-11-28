@@ -482,6 +482,12 @@ export default {
                   show: true,
                 },
                 {
+                  name: "youtube-import",
+                  title: `Import from YouTube`,
+                  icon: "fas fa-file-import",
+                  show: true,
+                },
+                {
                   name: "watch-history",
                   icon: "fas fa-history",
                   title: "My History",

@@ -21,15 +21,17 @@
         Import
         {{ $l2.name }} Videos from YouTube
       </h4>
-      <b-input-group class="flex-1 input-group-ghost-dark">
+      <b-input-group class="flex-1">
         <b-form-input
           v-model="url"
           :lazy="true"
           @compositionend.prevent.stop="() => false"
-          :placeholder="'URL of a YouTube video, playlist or channel...'"
-          class="input-ghost-dark"
+          :placeholder="'URL of a YouTube video or playlist...'"
         />
       </b-input-group>
+      <div class="mt-4" style="color: #aaa">
+        <p>In the input field above, type in any YouTube video URL to open that video in Language Player. Alternatively, type in a playlist URL to browse that playlist in Language Player.</p>
+      </div>
     </div>
   </div>
 </template>
