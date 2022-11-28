@@ -492,15 +492,25 @@ export default {
             video.youtube_id,
             video.l2Locale,
             video.l2Name,
-            this.$l1.code === "zh" ? "zh-Hans" : this.$l1.code
+            this.$l1.code === "zh" ? "zh-Hans" : this.$l1.code // tlang
           );
           if (!subs_l1 || !subs_l1[0]) {
             subs_l1 = await YouTube.getTranslatedTranscript(
               video.youtube_id,
               video.l2Locale,
               video.l2Name,
-              this.$l1.code === "zh" ? "zh-Hans" : this.$l1.code,
-              true
+              this.$l1.code === "zh" ? "zh-Hans" : this.$l1.code, // tlang
+              true // forceRefresh
+            );
+          }
+          if (!subs_l1 || !subs_l1[0]) {
+            subs_l1 = await YouTube.getTranslatedTranscript(
+              video.youtube_id,
+              video.l2Locale || this.$l2.code,
+              video.l2Name,
+              this.$l1.code === "zh" ? "zh-Hans" : this.$l1.code, // tlang
+              true, // forceRefresh
+              true // generated
             );
           }
         }
