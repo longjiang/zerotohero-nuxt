@@ -310,15 +310,12 @@ export default {
     }
     if (this.sW.length === 0) this.updateWords();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type.startsWith("savedWords")) {
-        this.updateWords();
-      }
       if (mutation.type === "savedWords/REMOVE_SAVED_WORD") {
         if (mutation.payload.word.id === this.entry.id) {
           let currentIndex = this.sW.findIndex(
             (item) => item.id === this.entry.id
           );
-          let nextSavedWord = this.sW[currentIndex + 1];
+          let nextSavedWord = this.sW[currentIndex + 1] || this.sW[currentIndex - 1] ;
           if (nextSavedWord) {
             this.$router.push({
               name: `dictionary`,
@@ -331,6 +328,8 @@ export default {
             });
           }
         }
+      } else if (mutation.type.startsWith("savedWords")) {
+        this.updateWords();
       }
     });
   },
