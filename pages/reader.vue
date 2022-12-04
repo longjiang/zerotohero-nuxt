@@ -150,8 +150,7 @@
     </div>
     <div class="container">
       <div class="row">
-        <div class="col-sm-12 text-center">
-        </div>
+        <div class="col-sm-12 text-center"></div>
       </div>
     </div>
   </div>
@@ -318,7 +317,12 @@ export default {
           l2: this.$l2.id,
         });
         if (res && res.data && res.data.data.id) {
-          this.shared = res.data.data;
+          let shared = res.data.data;
+          this.shared = shared;
+          this.$router.push({
+            name: "reader",
+            params: { method: "shared", arg: shared.id },
+          });
         }
         this.sharing = false;
       } catch (err) {
