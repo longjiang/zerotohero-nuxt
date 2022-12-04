@@ -176,6 +176,7 @@
           show: currentHit.show,
           showType: currentHit.showType,
           showFullscreenToggle: true,
+          skin: 'dark',
           autoload: true,
           autoplay: navigated,
           showLineList: false,

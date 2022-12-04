@@ -367,15 +367,11 @@ export default {
     this.getL1Transcript();
     this.updateLayout();
     if (typeof this.$store.state.settings !== "undefined") {
-      this.layout = this.$store.state.settings.layout;
       this.useSmoothScroll = this.$store.state.settings.useSmoothScroll;
-      this.$emit("updateLayout", this.layout);
     }
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type === "settings/LOAD_SETTINGS") {
-        this.layout = this.$store.state.settings.layout;
         this.useSmoothScroll = this.$store.state.settings.useSmoothScroll;
-        this.$emit("updateLayout", this.layout);
       }
     });
   },

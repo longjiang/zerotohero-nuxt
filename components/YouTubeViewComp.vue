@@ -56,6 +56,7 @@
           show,
           showType,
           episodes,
+          initialLayout,
           largeEpisodeCount,
           useAutoTextSize: true,
           showInfoButton: true,
@@ -218,6 +219,16 @@ export default {
   },
   beforeDestroy() {
     if (this.unsubscribe) this.unsubscribe();
+  },
+  mounted() {
+    if (typeof this.$store.state.settings !== "undefined") {
+      this.initialLayout = this.$store.state.settings.initialLayout;
+    }
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (mutation.type === "settings/LOAD_SETTINGS") {
+        this.initialLayout = this.$store.state.settings.initialLayout;
+      }
+    });
   },
   watch: {
     /**
