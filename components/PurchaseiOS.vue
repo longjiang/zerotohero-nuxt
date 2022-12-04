@@ -65,6 +65,7 @@ export default {
       try {
         let res = await axios.post(url, body);
         if (res?.data?.type === "success") {
+          console.log(res.data);
           this.$router.push("/go-pro-success");
         }
       } catch (err) {

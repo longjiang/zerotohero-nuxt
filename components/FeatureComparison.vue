@@ -49,9 +49,9 @@
             </del>
             <span class="text-primary ml-2">
               <span style="position: relative; bottom: 1.2rem">US$</span>
-              <b style="font-size: 2.68rem">62</b>
+              <b style="font-size: 2.68rem">44</b>
               <b v-if="native" style="position: relative; bottom: 1.2rem">.99</b>
-              <b v-else style="position: relative; bottom: 1.2rem">.30</b>
+              <b v-else style="position: relative; bottom: 1.2rem">.50</b>
             </span>
           </span>
           <span v-else>
