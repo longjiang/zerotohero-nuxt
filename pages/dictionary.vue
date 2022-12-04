@@ -384,9 +384,9 @@ export default {
         let savedWords = this.$store.state.savedWords.savedWords[this.$l2.code];
         let currentSavedWord = savedWords.find((w) => w.id === this.entry.id);
         if (currentSavedWord) {
-          savedWords = savedWords.filter(
-            (w) => this.dateStr(w.date) === this.dateStr(currentSavedWord.date)
-          );
+          // savedWords = savedWords.filter(
+          //   (w) => this.dateStr(w.date) === this.dateStr(currentSavedWord.date)
+          // );
           for (let savedWord of savedWords) {
             let word = await (await this.$getDictionary()).get(savedWord.id);
             if (word) {
