@@ -25,7 +25,8 @@ button {
   width: 1.3rem;
 }
 
-.klingon {
+.klingon,
+.klingon * {
   font-family: Constructium, Unifont CSUR, Code2000, Horta, Klingon pIqaD HaSta;
   font-display: swap;
 }
