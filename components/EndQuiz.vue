@@ -8,28 +8,6 @@
         :hsk="hsk"
         :skin="skin"
       />
-      <!-- <div class="text-center mt-2" v-if="review.length > 1">
-        <span
-          class="d-inline-block"
-          style="
-            position: relative;
-            bottom: 0.13rem;
-            font-weight: normal;
-            opacity: 0.5;
-            font-size: 0.8em;
-            cursor: pointer;
-          "
-        >
-          <span v-if="!reviewOpen" @click="reviewOpen = true">
-            <i class="fa fa-chevron-down mr-1"></i>
-            Show More Questions
-          </span>
-          <span v-if="reviewOpen === true" @click="reviewOpen = false">
-            <i class="fa fa-chevron-up mr-1"></i>
-            Show Fewer Questions
-          </span>
-        </span>
-      </div> -->
     </div>
   </div>
 </template>
@@ -161,15 +139,18 @@ export default {
       let reviewItems = [];
       let forms = wordForms.filter((form) => form && form !== "-");
       forms = Helper.uniqueIgnoreCase(forms);
+      let maxInstances = 1 // Limit to two questions about the same word
+      let seen = 0
       for (let form of forms.sort((a, b) => b.length - a.length)) {
         for (let lineIndex in this.lines) {
-          if (this.reviewConditions(lineIndex, form, word)) {
+          if (seen < maxInstances && this.reviewConditions(lineIndex, form, word)) {
             let reviewItem = await this.generateReviewItem(
               lineIndex,
               form,
               word
             );
             reviewItems.push(reviewItem);
+            seen++
           }
         }
       }

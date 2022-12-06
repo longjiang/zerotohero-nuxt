@@ -44,17 +44,20 @@ export default {
     },
     async generateReviewItems() {
       let reviewItems = []
+      let maxInstances = 1 // Limit to two questions about the same word
+      let seen = {}
       for (let transcriptLineComp of this.quizContent ) {
         let savedWords = transcriptLineComp?.getSavedWords()
         if (savedWords?.length > 0) {
           for (let saved of savedWords) {
+            seen[saved.id] = seen[saved.id] || 0
             let savedForm
             for (let form of saved.forms) {
               if (transcriptLineComp.line.line.toLowerCase().includes(form.toLowerCase())) savedForm = form
             }
             let dictionary = await this.$getDictionary()
             let savedWord = await dictionary.get(saved.id)
-            if (savedForm && savedWord) {
+            if (seen[saved.id] < maxInstances && savedForm && savedWord) {
               let reviewItem = {
                 line: transcriptLineComp.line,
                 lineIndex: transcriptLineComp.lineIndex,
@@ -65,6 +68,7 @@ export default {
                 traditional: savedWord.traditional,
               };
               reviewItems.push(reviewItem)
+              seen[saved.id] = seen[saved.id] + 1
             }
           }
         }
