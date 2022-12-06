@@ -346,8 +346,16 @@ h6,
 .leveloutside,
 [data-level="outside"],
 [data-hover-level="outside"]:hover,
-[data-hover-level="outside"].saved {
+[data-hover-level="outside"].saved,
+[data-hover-level="outside"]:hover .word-block-text-byeonggi,
+[data-hover-level="outside"].saved .word-block-text-byeonggi {
   color: #28a745 !important;
+}
+
+
+[data-hover-level="outside"]:hover .word-block-text-byeonggi,
+[data-hover-level="outside"].saved .word-block-text-byeonggi {
+  opacity: 0.8;
 }
 
 .bg-levelPreA1,
