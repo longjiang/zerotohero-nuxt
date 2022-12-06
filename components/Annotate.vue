@@ -72,7 +72,8 @@
           class="annotate-grammar-button"
           :key="`annotate-grammar-${row.id}`"
         >
-          {{ row.structure }} <i class="fa fa-chevron-right" />
+          {{ row.structure }}
+          <i class="fa fa-chevron-right" />
         </span>
       </div>
       <div
@@ -136,11 +137,7 @@
             ref="savePhrase"
           />
           <span @click.stop.prevent="saveAsPhraseClick">
-            {{
-              phraseSaved
-                ? "Remove"
-                : "Save as"
-            }}
+            {{ phraseSaved ? "Remove" : "Save as" }}
             Phrase
           </span>
         </div>
@@ -178,18 +175,19 @@
             <small><i class="fas fa-external-link-alt"></i></small>
           </span>
         </div> -->
-        <!-- <div class="annotate-menu-modal-item">
-              <span
-                :class="{
-                  'annotator-button annotator-text-mode focus-exclude': true,
-                  active: textMode,
-                }"
-                title="Edit"
-                @click="textMode = !textMode"
-              >
-                <i class="fas fa-edit"></i>
-              </span> Edit
-            </div> -->
+        <div class="annotate-menu-modal-item">
+          <span
+            :class="{
+              'annotator-button annotator-text-mode focus-exclude': true,
+              active: textMode,
+            }"
+            title="Edit"
+            @click="editClick"
+          >
+            <i class="fas fa-edit"></i>
+          </span>
+          <span @click="editClick">Edit</span>
+        </div>
         <div class="annotate-menu-modal-item">
           <span
             @click="copyClick"
@@ -333,7 +331,7 @@ export default {
   computed: {
     ...mapState("settings", ["l2Settings"]),
     phraseSaved() {
-      return this.$refs["savePhrase"] && this.$refs["savePhrase"].saved
+      return this.$refs["savePhrase"] && this.$refs["savePhrase"].saved;
     },
     $adminMode() {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
@@ -399,6 +397,7 @@ export default {
     },
     readAloud() {
       this.$refs["speak"].$el.click();
+      this.hideMenuModal();
     },
     getSentences() {
       let sentences = [];
@@ -437,6 +436,10 @@ export default {
       this.translationData = translation;
       this.$emit("translationLoading", false);
       this.$emit("translation", translation);
+    },
+    editClick() {
+      this.textMode = !this.textMode
+      this.hideMenuModal();
     },
     async translateClick() {
       let text = this.text;
@@ -560,13 +563,14 @@ export default {
     copyClick() {
       let text = this.text;
       let tempInput = document.createElement("input");
-      let modal = document.querySelector('.annotate-menu-modal-wrapper')
+      let modal = document.querySelector(".annotate-menu-modal-wrapper");
       tempInput.style = "position: absolute; left: -1000px; top: -1000px";
       tempInput.value = text;
       modal.appendChild(tempInput);
       tempInput.select();
       document.execCommand("copy");
       modal.removeChild(tempInput);
+      this.hideMenuModal();
     },
     async visibilityChanged(isVisible) {
       if (this.delay) await Helper.timeout(this.delay);
@@ -597,9 +601,11 @@ export default {
     },
     reannotate(newText) {
       let node = this.$el.querySelector(".annotate-slot > *");
-      node.innerText = newText;
-      this.convertToSentencesRecursive(node);
-      this.annotate(node);
+      if (node) {
+        node.innerText = newText;
+        this.convertToSentencesRecursive(node);
+        this.annotate(node);
+      }
     },
     convertToSentencesAndAnnotate(slot) {
       if (
