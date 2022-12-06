@@ -42,7 +42,7 @@
         <div :class="{ 'annotate-slot': true }" v-if="!annotated">
           <slot></slot>
         </div>
-        <div v-if="textMode && annotated">
+        <div v-if="textMode && annotated" style="width: 100%">
           <input
             :class="{
               'annotate-input': true,
@@ -599,13 +599,16 @@ export default {
       this.textMode = false;
       this.$emit("textChanged", newText);
     },
-    reannotate(newText) {
+    async reannotate(newText) {
+      this.annotated = false
+      await Helper.timeout(200);
       let node = this.$el.querySelector(".annotate-slot > *");
       if (node) {
         node.innerText = newText;
         this.convertToSentencesRecursive(node);
         this.annotate(node);
       }
+      this.annotated = true
     },
     convertToSentencesAndAnnotate(slot) {
       if (
