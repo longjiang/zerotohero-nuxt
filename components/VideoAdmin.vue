@@ -74,9 +74,9 @@
       <drop
         @drop="handleDrop"
         :class="{
-          'd-none': !$adminMode || (video.subs_l2 && video.subs_l2.length > 0),
+          'd-none': video.subs_l2 && video.subs_l2.length > 0,
           over: over,
-          'subs-drop drop p-4': true,
+          'subs-drop drop p-4 mt-3': true,
         }"
         :key="`drop-${transcriptKey}`"
         @dragover="over = true"
@@ -668,17 +668,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.main-dark {
-  .subs-drop {
-    border: 2px dashed rgba(136, 136, 136, 0.5);
-    color: rgba(136, 136, 136, 0.85);
-    border-radius: 0.25rem;
+.subs-drop {
+  border: 2px dashed rgba(136, 136, 136, 0.5);
+  color: rgba(136, 136, 136, 0.85);
+  border-radius: 0.25rem;
 
-    &:over {
-      border: 2px dashed rgba(136, 136, 136, 0.8);
-      color: rgba(136, 136, 136, 1);
-    }
+  &:over {
+    border: 2px dashed rgba(136, 136, 136, 0.8);
+    color: rgba(136, 136, 136, 1);
   }
+}
+.main-dark {
 
   .video-edit-admin {
     background-color: #88888822;

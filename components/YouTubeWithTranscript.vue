@@ -149,7 +149,7 @@
         @updateTranslation="updateTranslation"
       />
       <div
-        class="mt-5 youtube-video-info youtube-video-info-bottom"
+        class="youtube-video-info youtube-video-info-bottom"
         v-if="layout === 'horizontal'"
       >
         <div class="text-center mt-5 mb-5" v-if="video.checkingSubs">
@@ -787,7 +787,6 @@ export default {
 .youtube-video-info {
   padding-left: 0.667rem;
   padding-right: 0.667rem;
-  padding-top: 0.667rem;
 }
 
 .youtube-with-transcript-horizontal-landscape {
