@@ -1054,7 +1054,6 @@ const Dictionary = {
         tokens.push(" ");
       }
     }
-    console.log({tokens})
     return tokens;
   },
   async tokenizeTurkish(text) {
