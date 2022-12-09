@@ -1023,6 +1023,12 @@ const Dictionary = {
     if (["tur"].includes(this.l2)) this.tokenizationCache[text] = tokenized;
     return tokenized;
   },
+  // https://stackoverflow.com/questions/175739/how-can-i-check-if-a-string-is-a-valid-number
+  isNumeric(str) {
+    if (typeof str != "string") return false // we only process strings!  
+    return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
+           !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
+  },
   async tokenizeArabic(text) {
     text = text.replace(/-/g, "- ");
     let url = `${PYTHON_SERVER}lemmatize-arabic?text=${encodeURIComponent(
@@ -1033,7 +1039,10 @@ const Dictionary = {
     for (let lemmas of tokenized) {
       if (!lemmas[0]) {
         tokens.push(" ");
-      } else if (["punc", "all"].includes(lemmas[0].pos)) {
+      } else if (["punc"].includes(lemmas[0].pos)) {
+        tokens.push(lemmas[0].word);
+        tokens.push(" ");
+      } else if (["all"].includes(lemmas[0].pos) && this.isNumeric(lemmas[0].word)) {
         tokens.push(lemmas[0].word);
         tokens.push(" ");
       } else {
