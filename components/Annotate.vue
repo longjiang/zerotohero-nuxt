@@ -705,6 +705,7 @@ export default {
     },
     tokenizationType(l2) {
       let tokenizationType = "integral";
+      if (l2.code === "ar") return 'agglutenative' // so we can use the tokenizer
       if (l2.continua) {
         tokenizationType = "continua";
       } else if (

@@ -160,7 +160,7 @@ const Dictionary = {
       // if (this.l2 === "fra") await this.loadFrenchConjugationsAndLemmatizer();
       if (this.l2 === "fas") await this.loadPersianRomanization();
       if (this.l2 === "tur") this.loadTurkishPOS();
-      if (this.l2 === 'ara') this.loadArabicLemmatizer()
+      // if (this.l2 === 'ara') this.loadArabicLemmatizer()
       console.log("Wiktionary: loaded.");
       return this;
     }
@@ -469,6 +469,7 @@ const Dictionary = {
     console.log('Loading Arabic stemmer ...');
     // Available from https://arabicstemmer.com/ and https://github.com/assem-ch/arabicstemmer
     importScripts("../vendor/arabic-stemmer/snowball.babel.js");
+    importScripts("../vendor/arabic-stemmer/stemmers.js");
     this.arabicStemmer = snowballFactory.newStemmer("arabic");
   },
   async loadFrenchConjugationsAndLemmatizer() {
@@ -694,10 +695,10 @@ const Dictionary = {
     let lemmaWords = [];
     let lemmas
     if (this.lemmatizationLangs[this.l2]) lemmas = this.lemmatization[text];
-    if (this.l2 === 'ara') {
-      let lemma = this.arabicStemmer.stem(text)
-      lemmas = lemma && lemma !== text ? [lemma] : undefined
-    }
+    // if (this.l2 === 'ara') {
+    //   let lemma = this.arabicStemmer.stem(text)
+    //   lemmas = lemma && lemma !== text ? [lemma] : undefined
+    // }
     if (lemmas) {
       for (let lemma of lemmas) {
         lemmaWords = lemmaWords.concat(
@@ -1016,10 +1017,45 @@ const Dictionary = {
   tokenize(text) {
     if (this.tokenizationCache[text]) return this.tokenizationCache[text];
     if (this.l2 === "tur") return this.tokenizeTurkish(text);
+    if (this.l2 === 'ara') return this.tokenizeArabic(text);
     let subdict = this.subdictFromText(text);
     let tokenized = this.tokenizeRecursively(text, subdict);
     if (["tur"].includes(this.l2)) this.tokenizationCache[text] = tokenized;
     return tokenized;
+  },
+  async tokenizeArabic(text) {
+    text = text.replace(/-/g, "- ");
+    let url = `${PYTHON_SERVER}lemmatize-arabic?text=${encodeURIComponent(
+      text
+    )}`;
+    let tokenized = await this.proxy(url, 0);
+    let tokens = [];
+    for (let lemmas of tokenized) {
+      if (!lemmas[0]) {
+        tokens.push(" ");
+      } else if (["punc", "all"].includes(lemmas[0].pos)) {
+        tokens.push(lemmas[0].word);
+        tokens.push(" ");
+      } else {
+        let candidates = [];
+        for (let lemma of lemmas) {
+          candidates = candidates.concat(this.lookupMultiple(lemma.word));
+          candidates = candidates.concat(
+            this.lookupMultiple(lemma.lemma)
+          );
+        }
+        candidates = this.uniqueByValue(candidates, "id");
+        tokens.push({
+          text: lemmas[0].word,
+          lemmas,
+          candidates,
+          pos: lemmas[0].pos
+        });
+        tokens.push(" ");
+      }
+    }
+    console.log({tokens})
+    return tokens;
   },
   async tokenizeTurkish(text) {
     text = text.replace(/-/g, "- ");
