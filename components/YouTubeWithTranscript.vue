@@ -76,6 +76,7 @@
           <YouTubeVideoList
             :videos="related.slice(0, 6)"
             :showDate="true"
+            :showProgress="true"
             skin="dark"
           />
         </div>
@@ -214,8 +215,9 @@
         >
           <YouTubeVideoList
             :videos="related.slice(0, 24)"
-            skin="dark"
             :showDate="true"
+            :showProgress="true"
+            skin="dark"
           />
         </div>
       </div>

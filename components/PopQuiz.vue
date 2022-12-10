@@ -43,7 +43,7 @@ export default {
   data() {
     return {
       reviewItems: [],
-      showQuiz: false,
+      showQuiz: true,
       currentIndex: 0,
     }
   },

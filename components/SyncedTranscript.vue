@@ -90,14 +90,14 @@
           </template>
         </client-only>
       </div>
-      <EndQuiz
+      <!-- <EndQuiz
         v-if="!single"
         :lines="lines"
         :matchedParallelLines="matchedParallelLines"
         :hsk="hsk"
         :skin="skin"
         class="pl-4"
-      />
+      /> -->
     </client-only>
   </div>
 </template>
@@ -231,6 +231,7 @@ export default {
           }
         }
       }
+      quizChunks[this.lines.length - 1] = [...Array(this.lines.length).keys()]
       return quizChunks;
     },
     pro() {
