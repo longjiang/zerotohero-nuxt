@@ -264,7 +264,7 @@
 
 <script>
 import { toHHMMSS } from "@/lib/date-helper";
-import { shuffle, safeShuffle } from "@/lib/utils/array";
+import { shuffle, safeShuffle, uniqueByValue } from "@/lib/utils/array";
 
 export default {
   props: {
@@ -371,7 +371,7 @@ export default {
           ]),
         ];
       }
-      return related;
+      return uniqueByValue(related, 'youtube_id');
     },
   },
   mounted() {
