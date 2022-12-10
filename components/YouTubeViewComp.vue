@@ -559,24 +559,24 @@ export default {
       if (ended !== this.ended) {
         this.ended = ended;
       }
-      if (this.ended) {
-        await Helper.timeout(5000);
-        if (
-          this.ended &&
-          this.$refs.youtube &&
-          !this.$refs.youtube.showSubsEditing &&
-          !this.$refs.youtube.enableTranslationEditing
-        ) {
-          if (this.nextEpisode)
-            this.$router.push({
-              name: "youtube-view",
-              params: {
-                youtube_id: this.nextEpisode.youtube_id,
-                lesson: this.nextEpisode.lesson,
-              },
-            });
-        }
-      }
+      // if (this.ended) {
+      //   await Helper.timeout(5000);
+      //   if (
+      //     this.ended &&
+      //     this.$refs.youtube &&
+      //     !this.$refs.youtube.showSubsEditing &&
+      //     !this.$refs.youtube.enableTranslationEditing
+      //   ) {
+      //     if (this.nextEpisode)
+      //       this.$router.push({
+      //         name: "youtube-view",
+      //         params: {
+      //           youtube_id: this.nextEpisode.youtube_id,
+      //           lesson: this.nextEpisode.lesson,
+      //         },
+      //       });
+      //   }
+      // }
     },
     async patchChannelID(video, channelId) {
       let data = await this.$directus.patchVideo({
