@@ -201,6 +201,10 @@
           :largeEpisodeCount="largeEpisodeCount"
           class="mt-3"
         />
+        <YouTubeVideoList
+          :videos="related.slice(0, 24)"
+          class="p-2"
+        />
       </div>
     </b-modal>
     <b-modal
@@ -260,6 +264,8 @@
 
 <script>
 import { toHHMMSS } from "@/lib/date-helper";
+import { shuffle, safeShuffle } from "@/lib/utils/array";
+
 export default {
   props: {
     video: {
@@ -351,6 +357,21 @@ export default {
     },
     currentPercentage() {
       return this.duration ? (this.currentTime / this.duration) * 100 : 0;
+    },
+    related() {
+      let related = []
+      if (this.episodes && this.episodes.length > 0 && this.episodeIndex >= 0) {
+        let nextEpisode = this.episodes[this.episodeIndex + 1];
+        let randomEpisodes = safeShuffle(this.episodes);
+        related = [
+          nextEpisode,
+          ...shuffle([
+            ...this.episodes.slice(this.episodeIndex + 2, this.episodeIndex + 16),
+            ...shuffle(randomEpisodes.slice(0, 16)),
+          ]),
+        ];
+      }
+      return related;
     },
   },
   mounted() {
@@ -475,6 +496,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+:deep(.youtube-videos) > * {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
 .youtube-with-transcript-horizontal-portrait .video-controls {
   background: black;
 }

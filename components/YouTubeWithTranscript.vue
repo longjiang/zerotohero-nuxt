@@ -388,7 +388,7 @@ export default {
         related = [
           nextEpisode,
           ...shuffle([
-            this.episodes.slice(this.episodeIndex + 2, this.episodeIndex + 16),
+            ...this.episodes.slice(this.episodeIndex + 2, this.episodeIndex + 16),
             ...shuffle(randomEpisodes.slice(0, 16)),
           ]),
         ];
