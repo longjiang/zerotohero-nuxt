@@ -71,10 +71,11 @@
           v-if="
             landscape && related && related.length > 0
           "
-          class="pl-3 pt-1"
+          class="pl-3 pt-4"
         >
           <YouTubeVideoList
             :videos="related.slice(0, 6)"
+            :showDate="true"
             skin="dark"
           />
         </div>
@@ -213,6 +214,7 @@
           <YouTubeVideoList
             :videos="related.slice(0, 24)"
             skin="dark"
+            :showDate="true"
           />
         </div>
       </div>

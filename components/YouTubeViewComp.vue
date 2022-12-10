@@ -81,6 +81,7 @@ import Helper from "@/lib/helper";
 import DateHelper from "@/lib/date-helper";
 import Vue from "vue";
 import { mapState } from "vuex";
+import { LANGS_WITH_CONTENT } from "@/lib/utils/servers";
 
 export default {
   props: {
@@ -298,6 +299,10 @@ export default {
       // Audiobooks and TV Shows are sorted by title
       if (videos.length === 0) {
         let fields = "youtube_id,title,date";
+        if (LANGS_WITH_CONTENT.includes(this.$l2.code))
+          fields =
+            fields +
+            ",views,tags,category,locale,duration,made_for_kids,views,likes,comments";
         let timestamp = this.$adminMode ? Date.now() : 0;
         let params = { limit, sort, fields, timestamp };
         params[`filter[${this.showType}][eq]`] = this.show.id;

@@ -203,6 +203,7 @@
         />
         <YouTubeVideoList
           :videos="related.slice(0, 24)"
+          :showDate="true"
           class="p-2"
         />
       </div>
