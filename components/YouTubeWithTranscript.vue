@@ -67,6 +67,17 @@
           @goToNextLine="$refs.transcript.goToNextLine()"
           @seek="onSeek"
         />
+        <div
+          v-if="
+            landscape && related && related.length > 0
+          "
+          class="pl-3 pt-1"
+        >
+          <YouTubeVideoList
+            :videos="related.slice(0, 6)"
+            skin="dark"
+          />
+        </div>
       </div>
     </div>
     <div class="youtube-transcript-column">
@@ -139,7 +150,7 @@
           stopLineIndex,
           forcePro,
           autoPause,
-          useSmoothScroll
+          useSmoothScroll,
         }"
         @seek="seekYouTube"
         @pause="pause"
@@ -195,6 +206,15 @@
             @enableTranslationEditing="toggleEnableTranslationEditing"
           />
         </client-only>
+        <div
+          v-if="related && related.length > 0"
+          class="pl-4 pr-4 pb-5"
+        >
+          <YouTubeVideoList
+            :videos="related.slice(0, 24)"
+            skin="dark"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -204,6 +224,7 @@
 import Vue from "vue";
 import YouTube from "@/lib/youtube";
 import { timeout } from "@/lib/utils";
+import { shuffle, safeShuffle } from "@/lib/utils/array";
 
 export default {
   props: {
@@ -353,6 +374,26 @@ export default {
           return landscape;
         }
       }
+    },
+    episodeIndex() {
+      return this.episodes.findIndex(
+        (v) => v.youtube_id === this.video.youtube_id
+      );
+    },
+    related() {
+      let related = []
+      if (this.episodes && this.episodes.length > 0 && this.episodeIndex >= 0) {
+        let nextEpisode = this.episodes[this.episodeIndex + 1];
+        let randomEpisodes = safeShuffle(this.episodes);
+        related = [
+          nextEpisode,
+          ...shuffle([
+            this.episodes.slice(this.episodeIndex + 2, this.episodeIndex + 16),
+            ...shuffle(randomEpisodes.slice(0, 16)),
+          ]),
+        ];
+      }
+      return related;
     },
   },
   created() {
@@ -674,7 +715,9 @@ export default {
     },
     toggleFullscreenMode() {
       this.layout = this.layout === "horizontal" ? "vertical" : "horizontal";
-      this.$store.dispatch("settings/setGeneralSettings", { layout: this.layout });
+      this.$store.dispatch("settings/setGeneralSettings", {
+        layout: this.layout,
+      });
       this.$emit("updateLayout", this.layout);
     },
   },

@@ -56,7 +56,6 @@
           show,
           showType,
           episodes,
-          initialLayout,
           largeEpisodeCount,
           useAutoTextSize: true,
           showInfoButton: true,
