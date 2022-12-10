@@ -59,6 +59,7 @@
               v-if="quizChunks[index]"
               :key="`pop-quiz-${index}`"
               :lines="lines"
+              class="pl-4"
               :quizContent="
                 quizChunks[index]
                   .filter((i) => $refs[`transcript-line-${i + visibleMin}`])
@@ -95,6 +96,7 @@
         :matchedParallelLines="matchedParallelLines"
         :hsk="hsk"
         :skin="skin"
+        class="pl-4"
       />
     </client-only>
   </div>

@@ -2,12 +2,26 @@
   <div class="review-wrapper" v-observe-visibility="visibilityChanged">
     <div>
       <Review
-        v-for="(reviewItem, reviewItemIndex) in reviewFiltered"
-        :key="`review-${reviewItemIndex}`"
-        v-bind="reviewItem"
+        v-bind="reviewFiltered[currentIndex]"
+        :key="`review-question-${currentIndex}`"
         :hsk="hsk"
         :skin="skin"
       />
+    </div>
+    <div
+      class="pl-2 pr-2 pt-1 pb-3"
+      style="display: flex; justify-content: space-between"
+    >
+      <button class="btn btn-small btn-dark bg-dark text-gray" @click="prevQuestion" v-if="currentIndex > 0"><i class="fa fa-chevron-left mr-1" />Prev Question</button>
+      <span v-else></span>
+      <button
+        class="btn btn-small btn-dark bg-dark text-gray"
+        @click="nextQuestion"
+        v-if="currentIndex < reviewFiltered.length - 1"
+      >
+        Next Question <i class="fa fa-chevron-right ml-1" />
+      </button>
+      <span v-else></span>
     </div>
   </div>
 </template>
@@ -36,15 +50,17 @@ export default {
       active: false, // activate only when visible the first time
       review: [],
       reviewOpen: true,
+      currentIndex: 0,
     };
   },
   computed: {
     ...mapState("savedWords", ["savedWords"]),
     ...mapState("settings", ["l2Settings"]),
     l2SettingsOfL2() {
-      let l2SettingsOfL2 = {}
-      if (this.l2Settings && this.l2Settings[this.$l2.code]) l2SettingsOfL2 = this.l2Settings[this.$l2.code]
-      return l2SettingsOfL2
+      let l2SettingsOfL2 = {};
+      if (this.l2Settings && this.l2Settings[this.$l2.code])
+        l2SettingsOfL2 = this.l2Settings[this.$l2.code];
+      return l2SettingsOfL2;
     },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
@@ -80,6 +96,12 @@ export default {
     });
   },
   methods: {
+    prevQuestion() {
+      this.currentIndex--;
+    },
+    nextQuestion() {
+      this.currentIndex++;
+    },
     /**
      * Generate review items during initial load.
      */
@@ -139,18 +161,21 @@ export default {
       let reviewItems = [];
       let forms = wordForms.filter((form) => form && form !== "-");
       forms = Helper.uniqueIgnoreCase(forms);
-      let maxInstances = 1 // Limit to two questions about the same word
-      let seen = 0
+      let maxInstances = 1; // Limit to two questions about the same word
+      let seen = 0;
       for (let form of forms.sort((a, b) => b.length - a.length)) {
         for (let lineIndex in this.lines) {
-          if (seen < maxInstances && this.reviewConditions(lineIndex, form, word)) {
+          if (
+            seen < maxInstances &&
+            this.reviewConditions(lineIndex, form, word)
+          ) {
             let reviewItem = await this.generateReviewItem(
               lineIndex,
               form,
               word
             );
             reviewItems.push(reviewItem);
-            seen++
+            seen++;
           }
         }
       }
@@ -173,7 +198,7 @@ export default {
     },
     async updateReview(mutation) {
       if (mutation.type === "savedWords/LOAD") {
-        if (this.review.length === 0) this.review = await this.generateReview()
+        if (this.review.length === 0) this.review = await this.generateReview();
       }
       if (mutation.type === "savedWords/ADD_SAVED_WORD") {
         this.review = this.review.concat(

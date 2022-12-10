@@ -193,7 +193,7 @@
             :show="show"
             :showType="showType"
             :largeEpisodeCount="largeEpisodeCount"
-            class="mb-5"
+            class="mt-4 mb-4 ml-4"
           />
           <VideoAdmin
             v-if="$adminMode"
@@ -209,7 +209,8 @@
         </client-only>
         <div
           v-if="related && related.length > 0"
-          class="pl-4 pr-4 pb-5"
+          class="pr-2 pb-5 mb-5"
+          style="padding-left: 2rem !important"
         >
           <YouTubeVideoList
             :videos="related.slice(0, 24)"

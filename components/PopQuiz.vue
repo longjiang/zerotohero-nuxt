@@ -7,11 +7,26 @@
     <div class="text-center mt-2 mb-2" v-if="reviewItems.length > 0 && !showQuiz"><b-button @click="showQuiz = true" variant="success"><i class="fa-solid fa-ballot-check mr-2"></i> Do Pop Quiz ({{ reviewItems.length }}) <i class="ml-2 fa-solid fa-chevron-down"></i></b-button></div>
     <div v-if="reviewItems.length > 0 && showQuiz">
       <Review
-        v-for="(reviewItem, reviewItemIndex) in reviewItems"
-        :key="`review-${reviewItemIndex}`"
-        v-bind="reviewItem"
+        :key="`review-${currentIndex}`"
+        v-bind="reviewItems[currentIndex]"
         skin="dark"
       />
+    </div>
+    <div
+      class="pl-2 pr-2 pt-1 pb-3"
+      style="display: flex; justify-content: space-between"
+      v-if="showQuiz"
+    >
+      <button class="btn btn-small btn-dark bg-dark text-gray" @click="prevQuestion" v-if="currentIndex > 0"><i class="fa fa-chevron-left mr-1" />Prev Question</button>
+      <span v-else></span>
+      <button
+        class="btn btn-small btn-dark bg-dark text-gray"
+        @click="nextQuestion"
+        v-if="currentIndex < reviewItems.length - 1"
+      >
+        Next Question <i class="fa fa-chevron-right ml-1" />
+      </button>
+      <span v-else></span>
     </div>
   </div>
 </template>
@@ -29,6 +44,7 @@ export default {
     return {
       reviewItems: [],
       showQuiz: false,
+      currentIndex: 0,
     }
   },
   computed: {
@@ -37,6 +53,12 @@ export default {
     }
   },
   methods: {
+    prevQuestion() {
+      this.currentIndex--;
+    },
+    nextQuestion() {
+      this.currentIndex++;
+    },
     visibilityChanged(visible) {
       if(visible && this.reviewItems.length === 0) {
         this.generateReviewItems()
