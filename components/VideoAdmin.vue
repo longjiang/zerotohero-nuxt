@@ -47,7 +47,7 @@
         </span>
         <span>
           <a
-            :href="`https://downsub.com/?url=youtu.be%2F${video.youtube_id}`"
+            :href="`https://download.checksub.com/download?videoUrl=https://www.youtube.com/watch?v=${video.youtube_id}`"
             target="_blank"
             class="link-unstyled"
           >
