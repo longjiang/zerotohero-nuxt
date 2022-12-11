@@ -9,7 +9,7 @@
     <SocialHead
       :title="`${video ? video.title + ' | ' : ''}Learn ${
         $l2.name
-      } with a video | zerotohero.ca`"
+      } with Language Player`"
       :description="`Study the transcript of this video with a popup dictionary`"
       :image="`https://img.youtube.com/vi/${this.youtube_id}/hqdefault.jpg`"
     />
