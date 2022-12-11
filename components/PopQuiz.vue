@@ -18,7 +18,8 @@
       v-if="showQuiz"
     >
       <button class="btn btn-small btn-dark bg-dark text-gray" @click="prevQuestion" v-if="currentIndex > 0"><i class="fa fa-chevron-left mr-1" />Prev Question</button>
-      <span v-else></span>
+      <span v-else style="min-width: 7rem"></span>
+      <span class="text-secondary">{{ currentIndex + 1 }} / {{ reviewItems.length }}</span>
       <button
         class="btn btn-small btn-dark bg-dark text-gray"
         @click="nextQuestion"
@@ -26,7 +27,7 @@
       >
         Next Question <i class="fa fa-chevron-right ml-1" />
       </button>
-      <span v-else></span>
+      <span v-else style="min-width: 7rem"></span>
     </div>
   </div>
 </template>
