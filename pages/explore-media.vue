@@ -145,6 +145,7 @@
             <LazyYouTubeVideoList
               :videos="random(music).slice(0, 12)"
               :showAdminToolsInAdminMode="false"
+              :showDate="true"
               skin="dark"
             />
           </div>
@@ -167,6 +168,7 @@
               <LazyYouTubeVideoList
                 :videos="random(movies).slice(0, 12)"
                 :showAdminToolsInAdminMode="false"
+                :showDate="true"
                 skin="dark"
               />
             </div>
@@ -188,6 +190,7 @@
               <LazyYouTubeVideoList
                 :videos="random(news).slice(0, 12)"
                 :showAdminToolsInAdminMode="false"
+                :showDate="true"
                 skin="dark"
               />
             </div>
@@ -223,6 +226,7 @@
             <LazyYouTubeVideoList
               :videos="videos.slice(0, 12)"
               :showAdminToolsInAdminMode="false"
+              :showDate="true"
               skin="dark"
             />
           </div>
@@ -253,6 +257,7 @@
 import Helper from "@/lib/helper";
 import { mapState } from "vuex";
 import { languageLevels, LANGS_WITH_LEVELS } from "@/lib/utils";
+import { LANGS_WITH_CONTENT } from "@/lib/utils/servers";
 
 export default {
   data() {
@@ -295,8 +300,7 @@ export default {
     if (!this.videos || this.videos.length === 0) {
       let videos = await this.getVideos({
         limit: 50,
-        sort: "youtube_id",
-        offset: this.randomOffset("allVideos", 50),
+        sort: "views",
       });
       // Let's prioritize videos in tv shows or talks
       this.videos = this.random(videos)
@@ -397,7 +401,7 @@ export default {
           this.news = await this.getVideos({
             limit: 25,
             talk: this.newsShow.id,
-            offset: this.randomOffset("news", 25),
+            sort: "-date"
           });
       }
       let tvShows = this.$store.state.shows.tvShows[this.$l2.code];
@@ -413,15 +417,13 @@ export default {
           this.music = await this.getVideos({
             limit: 25,
             tvShow: this.musicShow.id,
-            sort: "youtube_id",
-            offset: this.randomOffset("music", 25),
+            sort: "-views",
           });
         if (this.moviesShow)
           this.movies = await this.getVideos({
             limit: 25,
             tvShow: this.moviesShow.id,
-            sort: "youtube_id",
-            offset: this.randomOffset("movies", 25),
+            sort: "-views",
           });
       }
       this.loading = false;
@@ -494,9 +496,14 @@ export default {
       if (tvShow) filter = `filter[tv_show][eq]=${tvShow}`;
       if (talk) filter = `filter[talk][eq]=${talk}`;
       // First find videos associated with a particular tv show, or talk
+      let fields = "id,title,l2,youtube_id,date,tv_show,talk,channel_id";
+      if (LANGS_WITH_CONTENT.includes(this.$l2.code))
+        fields =
+          fields +
+          ",views,tags,category,locale,duration,made_for_kids,views,likes,comments";
       let videos = await this.$directus.getVideos({
         l2Id: this.$l2.id,
-        query: `sort=${sort}&${filter}&limit=${limit}&fields=l2,id,title,youtube_id,tv_show,talk,l2&offset=${offset}`,
+        query: `sort=${sort}&${filter}&limit=${limit}&fields=${fields}&offset=${offset}`,
       });
       if (videos?.length > 0) {
         videos = Helper.uniqueByValue(videos, "youtube_id");
