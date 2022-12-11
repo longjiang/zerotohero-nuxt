@@ -25,7 +25,6 @@
           <div class="text-center mt-4 mb-5">
             <b-button
               class="btn-small btn-primary d-inline-block"
-              v-if="$adminMode"
               @click="enableForceRefresh"
             >
               <i class="fa fa-sync-alt mr-1"></i>
