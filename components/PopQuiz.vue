@@ -11,23 +11,22 @@
         v-bind="reviewItems[currentIndex]"
         skin="dark"
       />
-    </div>
-    <div
-      class="pl-2 pr-2 pt-1 pb-3"
-      style="display: flex; justify-content: space-between"
-      v-if="showQuiz"
-    >
-      <button class="btn btn-small btn-dark bg-dark text-gray" @click="prevQuestion" v-if="currentIndex > 0"><i class="fa fa-chevron-left mr-1" />Prev Question</button>
-      <span v-else style="min-width: 7rem"></span>
-      <span class="text-secondary">{{ currentIndex + 1 }} / {{ reviewItems.length }}</span>
-      <button
-        class="btn btn-small btn-dark bg-dark text-gray"
-        @click="nextQuestion"
-        v-if="currentIndex < reviewItems.length - 1"
+      <div
+        class="pl-2 pr-2 pt-1 pb-3"
+        style="display: flex; justify-content: space-between"
       >
-        Next Question <i class="fa fa-chevron-right ml-1" />
-      </button>
-      <span v-else style="min-width: 7rem"></span>
+        <button class="btn btn-small btn-dark bg-dark text-gray" @click="prevQuestion" v-if="currentIndex > 0"><i class="fa fa-chevron-left mr-1" />Prev Question</button>
+        <span v-else style="min-width: 7rem"></span>
+        <span class="text-secondary">{{ currentIndex + 1 }} / {{ reviewItems.length }}</span>
+        <button
+          class="btn btn-small btn-dark bg-dark text-gray"
+          @click="nextQuestion"
+          v-if="currentIndex < reviewItems.length - 1"
+        >
+          Next Question <i class="fa fa-chevron-right ml-1" />
+        </button>
+        <span v-else style="min-width: 7rem"></span>
+      </div>
     </div>
   </div>
 </template>
