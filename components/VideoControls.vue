@@ -362,15 +362,16 @@ export default {
     related() {
       let related = []
       if (this.episodes && this.episodes.length > 0 && this.episodeIndex >= 0) {
-        let nextEpisode = this.episodes[this.episodeIndex + 1];
-        let randomEpisodes = safeShuffle(this.episodes);
+        let watchedYouTubeIds = this.$store.state.history.history.map(h => h.video?.youtube_id)
+        let popularEpisodes = this.episodes.slice().filter(e => !watchedYouTubeIds.includes(e.youtube_id)).sort((a, b) => b.views - a.views)
         related = [
-          nextEpisode,
           ...shuffle([
             ...this.episodes.slice(this.episodeIndex + 2, this.episodeIndex + 16),
-            ...shuffle(randomEpisodes.slice(0, 16)),
+            ...shuffle(popularEpisodes.slice(0, 16)),
           ]),
         ];
+        let nextEpisode = this.episodes[this.episodeIndex + 1];
+        if (nextEpisode) related = [nextEpisode, ...related]
       }
       return uniqueByValue(related, 'youtube_id');
     },
