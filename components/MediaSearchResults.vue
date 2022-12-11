@@ -109,6 +109,7 @@ import YouTubeNav from "@/components/YouTubeNav";
 import YouTubeChannelCard from "@/components/YouTubeChannelCard";
 import SimpleSearch from "@/components/SimpleSearch";
 import Helper from "@/lib/helper";
+import { LANGS_WITH_CONTENT } from "@/lib/utils/servers";
 
 export default {
   components: {
@@ -230,7 +231,6 @@ export default {
       if (!this.keyword && !this.showLatestIfKeywordMissing) return [];
       this.noMoreVideos = false;
       let filters = [];
-      let sort = "sort=-id";
       if (!this.includeShows) {
         filters.push("filter[tv_show][null]=1");
         filters.push("filter[talk][null]=1");
@@ -254,18 +254,22 @@ export default {
           filters.push(
             "filter[title][contains]=" + encodeURIComponent(this.keyword)
           );
-        sort = "&sort=title";
       }
       if (this.kidsOnly) {
         filters.push('filter[made_for_kids][eq]=1')
       }
       let limit = this.perPage;
       filters = filters.join(filters.join("&"));
-      let fields = "fields=id,l2,title,youtube_id,tv_show.*,talk.*";
+      let fields = "fields=id,l2,title,youtube_id,tv_show.*,talk.*,date";
+      if (LANGS_WITH_CONTENT.includes(this.$l2.code))
+        fields =
+          fields +
+          ",views,tags,category,locale,duration,made_for_kids,views,likes,comments";
       let timestamp = `timestamp=${this.$adminMode ? Date.now() : 0}`;
       let offset = `offset=${start}`;
       let limitStr = `limit=${limit}`;
-      let query = [filters, limitStr, fields, offset, timestamp]
+      let sort = `sort=-views`
+      let query = [filters, limitStr, fields, offset, sort, timestamp]
         .filter((f) => f !== "")
         .join("&");
       let videos = await this.$directus.getVideos({ l2Id: this.$l2.id, query });

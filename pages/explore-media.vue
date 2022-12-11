@@ -56,75 +56,19 @@
             />
           </div>
 
-          <div v-if="talks && talks.length > 0" class="media-section">
+          <div v-if="videos && videos.length > 0" class="media-section">
             <h3 class="media-seaction-heading">
-              YouTube Channels
-              <router-link :to="{ name: 'talks' }" class="show-all">
+              What's Popular
+              <router-link :to="{ name: 'youtube-browse' }" class="show-all">
                 More
                 <i class="fas fa-chevron-right"></i>
               </router-link>
-              <p
-                style="
-                  font-weight: normal;
-                  font-size: 0.75rem;
-                  margin-top: 0.5rem;
-                "
-              >
-                Recommendation based on your
-                <router-link :to="{ name: LANGS_WITH_LEVELS.includes(this.$l2.code) ? 'set-language-level' : 'set-content-preferences' }">
-                  <u>content preferences</u>
-                </router-link>
-              </p>
             </h3>
-            <ShowList
-              :shows="
-                talks
-                  .filter((s) => !['News'].includes(s.title) && !s.audiobook)
-                  .slice(0, 12)
-              "
-              type="talks"
-              :key="`tv-shows`"
-            />
-            <div class="text-center mt-1"></div>
-          </div>
-
-          <div
-            :class="{
-              'loader text-center': true,
-              'd-none': showsLoaded,
-            }"
-            style="margin: 7rem 0 15rem 0"
-          >
-            <Loader :sticky="true" message="Loading videos in our library..." />
-          </div>
-          <div v-if="tvShows && tvShows.length > 0" class="media-section">
-            <h3 class="media-seaction-heading">
-              TV Shows
-              <router-link :to="{ name: 'tv-shows' }" class="show-all">
-                More
-                <i class="fas fa-chevron-right"></i>
-              </router-link>
-              <p
-                style="
-                  font-weight: normal;
-                  font-size: 0.75rem;
-                  margin-top: 0.5rem;
-                "
-              >
-                Recommendation based on your
-                <router-link :to="{ name: 'set-language-level' }">
-                  <u>content preferences</u>
-                </router-link>
-              </p>
-            </h3>
-            <ShowList
-              :shows="
-                tvShows
-                  .filter((s) => !['Movies', 'Music'].includes(s.title))
-                  .slice(0, 12)
-              "
-              type="tvShows"
-              :key="`tv-shows`"
+            <LazyYouTubeVideoList
+              :videos="videos.slice(0, 12)"
+              :showAdminToolsInAdminMode="false"
+              :showDate="true"
+              skin="dark"
             />
           </div>
 
@@ -172,7 +116,109 @@
                 skin="dark"
               />
             </div>
+          </div>
 
+
+
+          <div
+            :class="{
+              'loader text-center': true,
+              'd-none': showsLoaded,
+            }"
+            style="margin: 7rem 0 15rem 0"
+          >
+            <Loader :sticky="true" message="Loading videos in our library..." />
+          </div>
+          <div v-if="tvShows && tvShows.length > 0" class="media-section">
+            <h3 class="media-seaction-heading">
+              TV Shows
+              <router-link :to="{ name: 'tv-shows' }" class="show-all">
+                More
+                <i class="fas fa-chevron-right"></i>
+              </router-link>
+              <p
+                style="
+                  font-weight: normal;
+                  font-size: 0.75rem;
+                  margin-top: 0.5rem;
+                "
+              >
+                Recommendation based on your
+                <router-link :to="{ name: 'set-language-level' }">
+                  <u>content preferences</u>
+                </router-link>
+              </p>
+            </h3>
+            <ShowList
+              :shows="
+                tvShows
+                  .filter((s) => !['Movies', 'Music'].includes(s.title))
+                  .slice(0, 12)
+              "
+              type="tvShows"
+              :key="`tv-shows`"
+            />
+          </div>
+
+          <div v-if="talks && talks.length > 0" class="media-section">
+            <h3 class="media-seaction-heading">
+              YouTube Channels
+              <router-link :to="{ name: 'talks' }" class="show-all">
+                More
+                <i class="fas fa-chevron-right"></i>
+              </router-link>
+              <p
+                style="
+                  font-weight: normal;
+                  font-size: 0.75rem;
+                  margin-top: 0.5rem;
+                "
+              >
+                Recommendation based on your
+                <router-link
+                  :to="{
+                    name: LANGS_WITH_LEVELS.includes(this.$l2.code)
+                      ? 'set-language-level'
+                      : 'set-content-preferences',
+                  }"
+                >
+                  <u>content preferences</u>
+                </router-link>
+              </p>
+            </h3>
+            <ShowList
+              :shows="
+                talks
+                  .filter((s) => !['News'].includes(s.title) && !s.audiobook)
+                  .slice(0, 12)
+              "
+              type="talks"
+              :key="`tv-shows`"
+            />
+            <div class="text-center mt-1"></div>
+          </div>
+
+          <div
+            v-if="
+              talks && talks.length > 0 && audiobooks && audiobooks.length > 0
+            "
+            class="media-section"
+          >
+            <h3 class="media-seaction-heading">
+              Audiobooks
+              <router-link :to="{ name: 'audiobooks' }" class="show-all">
+                More
+                <i class="fas fa-chevron-right"></i>
+              </router-link>
+            </h3>
+            <ShowList
+              :shows="random(audiobooks, 12)"
+              type="talks"
+              :key="`tv-shows`"
+            />
+          </div>
+
+          <div class="media-sections" v-if="!loading">
             <div v-if="news && news.length > 0" class="media-section">
               <h3 class="media-seaction-heading">
                 News
@@ -194,41 +240,6 @@
                 skin="dark"
               />
             </div>
-          </div>
-          <div
-            v-if="
-              talks && talks.length > 0 && audiobooks && audiobooks.length > 0
-            "
-            class="media-section"
-          >
-            <h3 class="media-seaction-heading">
-              Audiobooks
-              <router-link :to="{ name: 'audiobooks' }" class="show-all">
-                More
-                <i class="fas fa-chevron-right"></i>
-              </router-link>
-            </h3>
-            <ShowList
-              :shows="random(audiobooks, 12)"
-              type="talks"
-              :key="`tv-shows`"
-            />
-          </div>
-
-          <div v-if="videos && videos.length > 0" class="media-section">
-            <h3 class="media-seaction-heading">
-              Newly Added
-              <router-link :to="{ name: 'youtube-browse' }" class="show-all">
-                More
-                <i class="fas fa-chevron-right"></i>
-              </router-link>
-            </h3>
-            <LazyYouTubeVideoList
-              :videos="videos.slice(0, 12)"
-              :showAdminToolsInAdminMode="false"
-              :showDate="true"
-              skin="dark"
-            />
           </div>
 
           <client-only>
@@ -258,6 +269,7 @@ import Helper from "@/lib/helper";
 import { mapState } from "vuex";
 import { languageLevels, LANGS_WITH_LEVELS } from "@/lib/utils";
 import { LANGS_WITH_CONTENT } from "@/lib/utils/servers";
+import { shuffle } from "@/lib/utils/array";
 
 export default {
   data() {
@@ -299,13 +311,12 @@ export default {
     });
     if (!this.videos || this.videos.length === 0) {
       let videos = await this.getVideos({
-        limit: 50,
-        sort: "views",
+        limit: 200,
+        sort: "-likes",
       });
-      // Let's prioritize videos in tv shows or talks
-      this.videos = this.random(videos)
-        .sort((a, b) => (b.talk === a.talk ? 0 : b.tv_show ? 1 : -1))
-        .sort((a, b) => (b.tv_show === a.tv_show ? 0 : b.tv_show ? 1 : -1));
+      if (this.musicShow?.id) videos = videos.filter(v => v.tv_show !== this.musicShow.id)
+      videos = shuffle(videos)
+      this.videos = videos
     }
     await Helper.timeout(5000);
     this.loading = false; // Incase resources fail to load, at least show them
@@ -401,7 +412,7 @@ export default {
           this.news = await this.getVideos({
             limit: 25,
             talk: this.newsShow.id,
-            sort: "-date"
+            sort: "-date",
           });
       }
       let tvShows = this.$store.state.shows.tvShows[this.$l2.code];
@@ -413,12 +424,14 @@ export default {
         this.moviesShow = this.$store.state.shows.tvShows[this.$l2.code].find(
           (s) => s.title === "Movies"
         );
-        if (this.musicShow)
+        if (this.musicShow) {
+          if (this.videos) this.videos = this.videos.filter(v => v.tv_show !== this.musicShow.id)
           this.music = await this.getVideos({
             limit: 25,
             tvShow: this.musicShow.id,
             sort: "-views",
           });
+        }
         if (this.moviesShow)
           this.movies = await this.getVideos({
             limit: 25,
@@ -440,7 +453,7 @@ export default {
           x = this.preferredCategories.includes(String(x.category));
           y = this.preferredCategories.includes(String(y.category));
           return x === y ? 0 : x ? -1 : 1;
-        })
+        });
       return shows;
     },
     /**
