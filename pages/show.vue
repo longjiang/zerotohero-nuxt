@@ -112,7 +112,7 @@
                       </b-button>
                       <b-button
                         variant="ghost-dark-no-bg"
-                        @click="sort = sort === 'title' ? '-date' : 'title'"
+                        @click="cycleSort"
                         title="Sort by..."
                         class="ml-1"
                       >
@@ -123,6 +123,10 @@
                         <i
                           class="fas fa-calendar-alt"
                           v-if="sort === '-date'"
+                        ></i>
+                        <i
+                          class="fas fa-eye"
+                          v-if="sort === '-views'"
                         ></i>
                       </b-button>
                     </b-button-group>
@@ -136,7 +140,7 @@
                   :videos="videos"
                   :checkSubs="false"
                   :checkSaved="false"
-                  :key="`videos-filtered-${this.keyword}`"
+                  :key="`videos-filtered-${this.keyword}-${this.sort}`"
                   :view="view"
                   :showBadges="false"
                   :showDate="showDate"
@@ -292,13 +296,12 @@ export default {
     },
     async sort() {
       this.moreVideos = 0;
-      if (this.videos) {
-        this.videos = await this.getVideos({
-          limit: this.perPage,
-          offset: this.moreVideos,
-          sort: this.sort,
-        });
-      }
+      this.videos = undefined
+      this.videos = await this.getVideos({
+        limit: this.perPage,
+        offset: this.moreVideos,
+        sort: this.sort,
+      });
     },
   },
   beforeDestroy() {
@@ -324,6 +327,11 @@ export default {
     }
   },
   methods: {
+    cycleSort() {
+      let sorts = ['title', '-date', '-views']
+      let i = sorts.findIndex(sort => sort === this.sort)
+      this.sort = sorts[(i + 1) % sorts.length]
+    },
     async deleteShow() {
       if (confirm("Are you sure you want to DELETE this show?")) {
         this.$store.dispatch("shows/remove", {
@@ -407,15 +415,7 @@ export default {
     } = {}) {
       // if (this.show.title === "Music" && this.episodeCount > 500)
       //   offset = offset + this.musicOffset;
-      if (
-        !keyword &&
-        this.show.episodes &&
-        this.show.episodes.length >= offset + limit
-      )
-        return this.show.episodes.slice(offset, limit);
-      else {
-        return await this.getVideosFromServer({ keyword, limit, offset, sort });
-      }
+      return await this.getVideosFromServer({ keyword, limit, offset, sort });
     },
     async getEpisodeCount() {
       if (this.show.episodeCount) return this.show.episodeCount;
