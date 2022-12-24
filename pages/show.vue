@@ -258,7 +258,10 @@ export default {
   watch: {
     async show() {
       this.sort =
-        this.type === "talk" && !this.show.audiobook ? "-date" : "title";
+        this.type === "talk" && !this.show.audiobook ? "-views" : "title";
+      if (this.show.title === "News") this.sort = "-date";
+      if (this.show.title === "Music") this.sort = "-views";
+      if (this.show.title === "Movies") this.sort = "-views";
       this.episodeCount = await this.getEpisodeCount();
       this.musicOffset = Math.ceil(Math.random() * this.episodeCount);
       this.videos = await this.getVideos({
@@ -402,8 +405,8 @@ export default {
       offset = 0,
       sort = "title",
     } = {}) {
-      if (this.show.title === "Music" && this.episodeCount > 500)
-        offset = offset + this.musicOffset;
+      // if (this.show.title === "Music" && this.episodeCount > 500)
+      //   offset = offset + this.musicOffset;
       if (
         !keyword &&
         this.show.episodes &&
