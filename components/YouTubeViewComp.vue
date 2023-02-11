@@ -222,11 +222,11 @@ export default {
   },
   mounted() {
     if (typeof this.$store.state.settings !== "undefined") {
-      this.initialLayout = this.$store.state.settings.initialLayout;
+      this.initialLayout = this.$store.state.settings.layout;
     }
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type === "settings/LOAD_SETTINGS") {
-        this.initialLayout = this.$store.state.settings.initialLayout;
+      if (mutation.type.startsWith("settings")) {
+        this.initialLayout = this.$store.state.settings.layout;
       }
     });
   },
