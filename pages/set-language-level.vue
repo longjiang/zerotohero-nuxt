@@ -12,7 +12,7 @@
     <div class="row">
       <div class="col-12">
         <p class="text-center mb-4 text-white">
-          What’s your level of {{ $l2.name }}?
+          {{ $t(`What’s your level of ${$l2.name}?`) }}
         </p>
         <LanguageLevel />
         <div class="text-right" v-if="languageLevel">
