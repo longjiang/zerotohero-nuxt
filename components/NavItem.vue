@@ -53,7 +53,7 @@
       hide-footer
       modal-class="safe-padding-top mt-4"
       body-class="dropdown-menu-modal-wrapper"
-      :title="this.item.title"
+      :title="$t(this.item.title)"
       v-if="isDropdown"
     >
       <div class="row">
@@ -71,7 +71,7 @@
             class="link-unstyled dropdown-nav-child"
           >
             <i :class="`nav-item-icon ${child.icon} mr-1`"></i>
-            {{ child.title }} <span v-if="child.count" class="nav-item-count">({{ child.count }})</span>
+            {{ $t(child.title) }} <span v-if="child.count" class="nav-item-count">({{ child.count }})</span>
           </router-link>
         </div>
       </div>

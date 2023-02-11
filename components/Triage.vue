@@ -36,7 +36,12 @@
               params: { l1: l1.code, l2: l2.code === 'cmn' ? 'zh' : l2.code },
             }"
           >
-            Start Learning
+            {{
+            translate(
+              "Start Learning",
+              browserLanguage
+            )
+            }}
             <i class="fa-solid fa-chevron-right"></i>
           </router-link>
         </div>
@@ -45,7 +50,12 @@
         <u>
           <router-link to="/language-map" class="link-unstyled text-secondary">
             <i class="fa-solid fa-earth-asia mr-2"></i>
-            See more languages on a map
+            {{
+            translate(
+              "See more languages on a map",
+              browserLanguage
+            )
+            }}
             <i class="fa-solid fa-chevron-right ml-2"></i>
           </router-link>
         </u>
