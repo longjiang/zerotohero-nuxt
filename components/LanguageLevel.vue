@@ -17,8 +17,8 @@
             }"
             @click="setLevel(level.numeric)"
           >
-            {{ level.category }} ({{
-              level.name.replace("CEFR ", "").replace("Pre", "Pre-")
+            {{ $t(level.category) }} ({{
+              level.name.replace("CEFR ", "").replace("Pre", $t("Pre-"))
             }})
             <div :data-bg-level="level.level" class="level-btn-bar" :style="`width: ${100 * Math.pow(0.5, 7 - level.numeric)}%`"></div>
           </b-button>

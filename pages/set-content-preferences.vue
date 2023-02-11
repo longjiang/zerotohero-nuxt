@@ -20,7 +20,7 @@
             class="btn btn-success pl-5 pr-5 mt-4"
             :to="{ name: 'explore-media' }"
           >
-            Continue
+            {{ $t('Continue') }}
             <i class="fa fa-chevron-right"></i>
           </router-link>
         </div>
