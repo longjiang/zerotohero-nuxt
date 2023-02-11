@@ -55,7 +55,7 @@
             <div class="col-sm-12">
               <div class="home-card p-2 pt-4 pb-4 bg-white">
                 <h5 class="text-center mb-3">
-                  Tools for linguists
+                  {{ translate('Tools for linguists', browserLanguage) }}
                 </h5>
                 <div class="row pl-3 pr-3">
                   <div class="col-sm-12 col-md-4 mt-1 mb-1" v-for="link in linguisticsTools" :key="`linguistics-tools-link-${link.name}`">
