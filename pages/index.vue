@@ -534,7 +534,7 @@ import { background } from "@/lib/utils/background";
 export default {
   data() {
     return {
-      sale: false,
+      sale: true,
       playBtnClicked: false,
       langKeyword: undefined,
       hasDashboard: false,

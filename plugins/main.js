@@ -9,15 +9,11 @@ import VueMq from 'vue-mq'
 import VueSmoothScroll from 'vue2-smooth-scroll'
 import Languages from '@/lib/languages'
 import AsyncComputed from 'vue-async-computed'
-import { i18n } from '~/plugins/i18n.js'
 
 Vue.config.productionTip = false
 Vue.use(VTooltip)
 Vue.use(VueSimpleSVG)
 Vue.use(VueObserveVisibility)
-Vue.use(i18n, {
-  fallbackLocale: 'en',
-})
 Vue.use(VueSmoothScroll)
 Vue.use(VueMq, {
   breakpoints: { // default breakpoints - customize this

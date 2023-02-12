@@ -22,8 +22,8 @@
       <div class="row">
         <div class="col-sm-12">
           <div v-if="sale" class="bg-primary text-white p-3 rounded text-center mb-5" style="max-width: 46rem; margin: 0 auto; font-size: 1.2em" >
-            <div><b>FALL SALE!</b> 50% off on lifetime Pro account upgrade</div>
-            <small style="text-small">Offer ends Sunday 28 Aug</small>
+            <div><b>VALENTINES DAY SALE!</b> 50% off on lifetime Pro account upgrade</div>
+            <small style="text-small">{{ $t('Offer ends:')}} {{ $d(new Date(2023, 1, 14), 'short', browserLanguage) }}</small>
           </div>
           <client-only>
             <div class="mt-4"></div>
@@ -98,7 +98,7 @@ export default {
   data() {
     return {
       loading: false,
-      sale: false
+      sale: true
     };
   },
   computed: {
@@ -110,6 +110,13 @@ export default {
     },
     native() {
       return Capacitor.isNativePlatform();
+    },
+    browserLanguage() {
+      if (process.browser) {
+        let code = navigator.language.replace(/-.*/, "");
+        return code;
+      }
+      return "en";
     },
   },
   methods: {},
