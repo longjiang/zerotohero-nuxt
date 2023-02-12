@@ -65,7 +65,7 @@
           >
             <span v-if="!collapsed">
               <i class="fa-solid fa-caret-left mr-1"></i>
-              Collapse Menu
+              {{ $t('Collapse Menu') }}
             </span>
             <span v-else><i class="fa-solid fa-caret-right"></i></span>
           </b-button>
