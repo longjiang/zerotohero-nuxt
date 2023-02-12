@@ -102,7 +102,60 @@ export default {
   modules: [
     'bootstrap-vue/nuxt',
     '@nuxtjs/axios',
-    'nuxt-i18n',
+    ['nuxt-i18n', {
+      vueI18n: {
+        fallbackLocale: 'en',
+        dateTimeFormats: {
+          'en': {
+            short: {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric'
+            },
+            long: {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+              weekday: 'long',
+              hour: 'numeric',
+              minute: 'numeric'
+            }
+          },
+          'ja': {
+            short: {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric'
+            },
+            long: {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+              weekday: 'long',
+              hour: 'numeric',
+              minute: 'numeric',
+              hour12: true
+            }
+          },
+          'zh': {
+            short: {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric'
+            },
+            long: {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+              weekday: 'long',
+              hour: 'numeric',
+              minute: 'numeric',
+              hour12: true
+            }
+          }
+        },
+      }
+    }],
     '@nuxtjs/google-fonts',
     '@nuxtjs/auth-next',
     '@nuxtjs/toast',
