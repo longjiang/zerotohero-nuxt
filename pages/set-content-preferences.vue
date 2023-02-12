@@ -12,7 +12,7 @@
     <div class="row">
       <div class="col-12">
         <p class="text-center mb-4 text-white">
-          Which categories of content interest you?
+          {{ $t('Which categories of content interest you?')}}
         </p>
         <ContentPreferences />
         <div class="text-center" v-if="preferredCategories.length > 0">

@@ -16,7 +16,7 @@
           class="category-btn"
         >
           <input type="checkbox" v-model="preferredCategories" :id="'category_' + index" :value="index"  />
-          {{ category }}
+          {{ $t(category) }}
         </div>
       </div>
     </div>
