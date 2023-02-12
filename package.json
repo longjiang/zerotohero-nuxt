@@ -65,7 +65,6 @@
     "ogv": "^1.8.4",
     "papaparse": "^5.3.0",
     "pinyin-tone": "^2.1.2",
-    "raw-loader": "^4.0.2",
     "sanitize-html": "^2.4.0",
     "smartquotes": "^2.3.2",
     "smoothscroll-polyfill": "^0.4.4",
@@ -123,6 +122,7 @@
     "eslint-plugin-nuxt": "^2.0.0",
     "eslint-plugin-vue": "^7.7.0",
     "node-sass": "npm:sass@^1.54.4",
+    "raw-loader": "^4.0.2",
     "sass": "^1.32.13",
     "vue-jest": "^3.0.4"
   }
