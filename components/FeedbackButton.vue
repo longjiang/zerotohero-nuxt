@@ -3,7 +3,7 @@
     <!-- <router-link :to="{ lastFullHistoryPath }" class="feedback-button">
       <i class="fa-solid fa-arrows-rotate"></i>
     </router-link> -->
-    <span @click="showModal" class="feedback-button">Feedback</span>
+    <span @click="showModal" class="feedback-button">{{ $t('Feedback') }}</span>
     <b-modal
       ref="feedback-modal"
       centered
