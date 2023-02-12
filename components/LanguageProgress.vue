@@ -32,7 +32,7 @@
       />
     </div>
     <div class="progress-bar-wrapper">
-      <div class="notches" v-if="hoursNeeded / weeklyHours < 25">
+      <!-- <div class="notches" v-if="hoursNeeded / weeklyHours < 25">
         <div
           class="notch"
           v-for="(item, index) in Array(Math.ceil(hoursNeeded / weeklyHours))"
@@ -43,7 +43,7 @@
         >
           &nbsp;
         </div>
-      </div>
+      </div> -->
       <b-progress
         class="mt-2"
         :max="hoursNeeded"
@@ -58,11 +58,8 @@
       </b-progress>
     </div>
     <div class="bottom-labels">
-      <div class="bottom-label-left">
-        <b class="" style="color: #e6a000">
-          {{ Math.round(weeklyHours - (hours % weeklyHours)) }}
-        </b>
-        hrs left this week
+      <div class="bottom-label-left" style="color: #999">
+        <b>{{ Math.round(hours/hoursNeeded * 100) }}%</b> to {{ goalText }}
       </div>
     </div>
     <div v-if="description" class="description">

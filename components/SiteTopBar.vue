@@ -13,7 +13,7 @@
           v-if="$route.path !== '/'"
         >
           <i class="fas fa-arrow-left"></i>
-          {{ $t("Back") }}
+          {{ translate("Back", browserLanguage) }}
         </b-button>
       </div>
       <span :class="`logo ${!params.xs ? 'logo-absolute-centered' : ''} flex-1 text-center`" v-if="!wide && $route.path !== '/' ">
@@ -233,6 +233,13 @@ export default {
     flagCode() {
       if (this.$l2) return this.$languages.countryCode(this.$l2);
     },
+    browserLanguage() {
+      if (process.browser) {
+        let code = navigator.language.replace(/-.*/, "");
+        return code;
+      }
+      return "en";
+    },
   },
   watch: {
     $route() {
@@ -241,6 +248,10 @@ export default {
     },
   },
   methods: {
+    translate(text, code) {
+      if (this.$languages) return this.$languages.translate(text, code);
+      else return text;
+    },
     hasDashboard() {
       return (
         this.$auth.loggedIn &&
