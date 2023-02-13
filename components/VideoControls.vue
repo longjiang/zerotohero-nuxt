@@ -31,6 +31,7 @@
           'btn-video-controls text-center': true,
         }"
         @click="showInfoModal"
+        :title="$t('More Info')"
       >
         <i class="fa-solid fa-circle-info"></i>
       </button>
@@ -40,7 +41,7 @@
           'btn-video-controls btn-video-controls-collapse text-center': true,
         }"
         @click="toggleCollapsed"
-        title="Hide Video (for Audiobooks)"
+        :title="$t('Collapse Video')"
       >
         <i class="fas fa-caret-square-up" v-if="!collapsed"></i>
         <i class="fas fa-caret-square-down" v-if="collapsed"></i>
@@ -50,7 +51,7 @@
           'btn-video-controls btn-video-controls-rewind text-center': true,
         }"
         @click="rewind"
-        Title="Rewind to Beginning"
+        :title="$t('Rewind to Beginning')"
       >
         <i class="fas fa-undo"></i>
       </button>
@@ -59,7 +60,7 @@
         :disabled="!previousEpisode"
         class="btn-video-controls btn-video-controls-previous text-center"
         @click="$emit('previous')"
-        title="Previous Video"
+        :title="$t('Previous Video')"
       >
         <i class="fas fa-step-backward"></i>
       </button>
@@ -69,7 +70,7 @@
           text-center
         "
         @click="$emit('goToPreviousLine')"
-        title="Previous Line"
+        :title="$t('Previous Line')"
       >
         <i v-if="layout === 'horizontal'" class="fas fa-arrow-up"></i>
         <i v-else class="fas fa-chevron-left"></i>
@@ -79,7 +80,7 @@
           'btn-video-controls btn-video-controls-play play-pause text-center': true,
         }"
         @click="togglePaused"
-        :title="paused ? 'Play' : 'Pause'"
+        :title="paused ? $t('Play') : $t('Pause')"
       >
         <i v-if="paused && !speaking" class="fas fa-play"></i>
         <i v-if="!paused || speaking" class="fas fa-pause"></i>
@@ -87,7 +88,7 @@
       <button
         class="btn-video-controls btn-video-controls-next-line text-center"
         @click="$emit('goToNextLine')"
-        title="Next Line"
+        :title="$t('Next Line')"
       >
         <i v-if="layout === 'horizontal'" class="fas fa-arrow-down"></i>
         <i v-else class="fas fa-chevron-right"></i>
@@ -97,7 +98,7 @@
         :disabled="!nextEpisode"
         class="btn-video-controls btn-video-controls-next text-center"
         @click="$emit('next')"
-        title="Next Video"
+        :title="$t('Next Video')"
       >
         <i class="fas fa-step-forward"></i>
       </button>
@@ -127,7 +128,7 @@
           'btn-video-controls-active': layout === 'horizontal',
         }"
         @click="toggleFullscreenMode"
-        :title="layout === 'vertical' ? 'Show Transcript' : 'Hide Transcript'"
+        :title="layout === $t('Show Transcript & Quizzes')"
       >
         <i class="fa-solid fa-align-left"></i>
       </button>
@@ -136,7 +137,7 @@
           'btn-video-controls btn-video-controls-fullscreen text-center': true,
         }"
         @click="showSettingsModal"
-        title="Change speed, auto-pause, and other settings"
+        :title="$t('More Options')"
       >
         <i class="fa-solid fa-cog"></i>
       </button>

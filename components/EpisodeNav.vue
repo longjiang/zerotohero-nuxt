@@ -36,7 +36,7 @@
         'show-title': true,
       }"
     >
-      {{ show.title }}
+      {{ $t(show.title) }}
       {{ largeEpisodeCount ? "(" + $n(largeEpisodeCount) + ")" : "" }} <i class="fa-solid fa-chevron-right ml-1"></i>
     </router-link>
     <router-link

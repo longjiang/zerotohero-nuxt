@@ -37,7 +37,7 @@
             <h3 class="media-seaction-heading">
               {{ $t('Continue Watching') }}
               <router-link :to="{ name: 'watch-history' }" class="show-all">
-                More
+                {{ $t('More') }}
                 <i class="fas fa-chevron-right"></i>
               </router-link>
             </h3>
@@ -58,9 +58,9 @@
 
           <div v-if="videos && videos.length > 0" class="media-section">
             <h3 class="media-seaction-heading">
-              What's Popular
+              {{ $t('What’s Popular') }}
               <router-link :to="{ name: 'youtube-browse' }" class="show-all">
-                More
+                {{ $t('More') }}
                 <i class="fas fa-chevron-right"></i>
               </router-link>
             </h3>
@@ -74,7 +74,7 @@
 
           <div v-if="music && music.length > 0" class="media-section">
             <h3 class="media-seaction-heading">
-              Music
+              {{ $t('Music') }}
               <router-link
                 :to="{
                   name: 'show',
@@ -82,7 +82,7 @@
                 }"
                 class="show-all"
               >
-                More
+                {{ $t('More') }}
                 <i class="fas fa-chevron-right"></i>
               </router-link>
             </h3>
@@ -97,7 +97,7 @@
           <div class="media-sections" v-if="!loading">
             <div v-if="movies && movies.length > 0" class="media-section">
               <h3 class="media-seaction-heading">
-                Movies
+                {{ $t('Movies') }}
                 <router-link
                   :to="{
                     name: 'show',
@@ -105,7 +105,7 @@
                   }"
                   class="show-all"
                 >
-                  More
+                  {{ $t('More') }}
                   <i class="fas fa-chevron-right"></i>
                 </router-link>
               </h3>
@@ -131,9 +131,9 @@
           </div>
           <div v-if="tvShows && tvShows.length > 0" class="media-section">
             <h3 class="media-seaction-heading">
-              TV Shows
+              {{ $t('TV Shows') }}
               <router-link :to="{ name: 'tv-shows' }" class="show-all">
-                More
+                {{ $t('More') }}
                 <i class="fas fa-chevron-right"></i>
               </router-link>
               <p
@@ -143,9 +143,9 @@
                   margin-top: 0.5rem;
                 "
               >
-                Recommendation based on your
+                {{ $t('Recommendation based on your') }}
                 <router-link :to="{ name: 'set-language-level' }">
-                  <u>content preferences</u>
+                  <u>{{ $t('content preferences') }}</u>
                 </router-link>
               </p>
             </h3>
@@ -162,9 +162,9 @@
 
           <div v-if="talks && talks.length > 0" class="media-section">
             <h3 class="media-seaction-heading">
-              YouTube Channels
+              {{ $t('YouTube Channels') }}
               <router-link :to="{ name: 'talks' }" class="show-all">
-                More
+                {{ $t('More') }}
                 <i class="fas fa-chevron-right"></i>
               </router-link>
               <p
@@ -174,7 +174,7 @@
                   margin-top: 0.5rem;
                 "
               >
-                Recommendation based on your
+                {{ $t('Recommendation based on your') }}
                 <router-link
                   :to="{
                     name: LANGS_WITH_LEVELS.includes(this.$l2.code)
@@ -182,7 +182,7 @@
                       : 'set-content-preferences',
                   }"
                 >
-                  <u>content preferences</u>
+                  <u>{{ $t('content preferences') }}</u>
                 </router-link>
               </p>
             </h3>
@@ -205,9 +205,9 @@
             class="media-section"
           >
             <h3 class="media-seaction-heading">
-              Audiobooks
+              {{ $t('Audiobooks') }}
               <router-link :to="{ name: 'audiobooks' }" class="show-all">
-                More
+                {{ $t('More') }}
                 <i class="fas fa-chevron-right"></i>
               </router-link>
             </h3>
@@ -221,7 +221,7 @@
           <div class="media-sections" v-if="!loading">
             <div v-if="news && news.length > 0" class="media-section">
               <h3 class="media-seaction-heading">
-                News
+                {{ $t('News') }}
                 <router-link
                   :to="{
                     name: 'show',
@@ -229,7 +229,7 @@
                   }"
                   class="show-all"
                 >
-                  More
+                  {{ $t('More') }}
                   <i class="fas fa-chevron-right"></i>
                 </router-link>
               </h3>

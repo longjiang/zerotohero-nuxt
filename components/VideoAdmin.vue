@@ -30,7 +30,7 @@
               },
             }"
           >
-            {{ video.channel.title || "Channel" }}
+            {{ video.channel.title || $t("Channel") }}
           </router-link></u>
         </span>
         <span v-if="video.date">{{ formatDate(video.date) }}</span>
@@ -51,7 +51,7 @@
             target="_blank"
             class="link-unstyled"
           >
-            <u>Transcript</u>
+            <u>{{ $t('Transcript') }}</u>
           </a>
         </span>
       </div>
@@ -479,15 +479,15 @@ export default {
       if (countryCode) {
         country = await this.$languages.countryFromCode(countryCode);
       }
-      let description = `${language ? language.name : ""}`;
-      if (country) description += ` (${country.name})`;
+      let description = `${language ? this.$t(language.name) : ""}`;
+      if (country) description += ` (${this.$t(country.name)})`;
       return { country, language, description };
     },
     formatK(number) {
-      return formatK(number);
+      return formatK(number, 2, this.$l1.code);
     },
     formatDate(date) {
-      return DateHelper.formatDate(date);
+      return this.$d(new Date(date), 'short', this.$l1.code);
     },
     getTranslationURL() {
       if (typeof this.$l2 !== "undefined") {
