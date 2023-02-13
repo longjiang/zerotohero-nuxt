@@ -191,7 +191,7 @@ export default {
       if (this.show) {
         if (this.show.type === "Audiobook") return "Chapters";
         if (this.show.type === "Song") return "Songs";
-        if (this.show.type === "YouTube Channel") return "Uploads";
+        if (this.show.type === "YouTube Channel") return "Episodes";
       }
       return "Episodes";
     },
