@@ -1,14 +1,14 @@
 <template>
   <div class="look-up-in">
     <div class="text-secondary small">
-      More info on:
+      {{ $t('More info on:') }}
       <a
         :href="`https://www.zdic.net/hans/${term}`"
         target="_blank"
         class="link-unstyled"
         v-if="$l2.han"
       >
-        汉典
+        {{ $t('汉典(ZDIC)') }}
       </a>
       <a
         :href="`https://dictionary.cambridge.org/dictionary/english-chinese-simplified/${term}`"
@@ -16,14 +16,14 @@
         target="_blank"
         v-if="$l2.code === 'en'"
       >
-        Cambridge
+        {{ $t('Cambridge Dictionary') }}
       </a>
       <a
         :href="`https://en.m.wiktionary.org/w/index.php?search=${term}#${$l2.name}`"
         class="link-unstyled"
         target="_blank"
       >
-        Wiktionary
+        {{ $t('Wiktionary') }}
       </a>
       <a
         :href="`https://www.etymonline.com/word/${term}`"
@@ -31,7 +31,7 @@
         class="link-unstyled"
         target="_blank"
       >
-        Etymology
+        {{ $t('Etymology Dictionary') }}
       </a>
       <a
         :href="`https://books.google.com/ngrams/graph?content=${
@@ -54,7 +54,7 @@
         class="link-unstyled"
         target="_blank"
       >
-        Ngram
+        {{ $t('Usage Trends') }}
       </a>
       <a
         :href="`https://www.moedict.tw/${traditional ? traditional : tify(term)}`"
@@ -62,7 +62,8 @@
         class="link-unstyled"
         target="_blank"
       >
-        萌典
+        
+        {{ $t('萌典(MOEDICT)') }}
       </a>
       <a
         :href="`https://baike.baidu.com/item/${term}`"
@@ -70,15 +71,17 @@
         class="link-unstyled"
         target="_blank"
       >
-        百度百科
+        
+        {{ $t('百度百科(Baidu Baike)') }}
       </a>
       <a
-        :href="`https://korean.dict.naver.com/ko${$l2.code === 'ko' ? $l1.code : $l2.code}dict/#/search?query=${term}`"
+        :href="`https://korean.dict.naver.com/${['zh', 'ko', 'ja'].includes($l1.code) ? $l1.code : 'en'}${$l2.code === 'ko' ? $l1.code : $l2.code}dict/#/search?query=${term}`"
         v-if="['zh', 'ko', 'ja'].includes($l2.code)"
         class="link-unstyled"
         target="_blank"
       >
-        Naver
+        
+        {{ $t('Naver Dictionary') }}
       </a>
       <a
         :href="`https://resources.allsetlearning.com/gramwiki/?search=${term}`"
@@ -86,14 +89,16 @@
         class="link-unstyled"
         target="_blank"
       >
-        Grammar Wiki
+        
+        {{ $t('Grammar Wiki') }}
       </a>
       <a
         :href="`https://${$l1.code}.m.wikipedia.org/w/index.php?search=${term}`"
         class="link-unstyled"
         target="_blank"
       >
-        Wikipedia
+        
+        {{ $t('Wikipedia') }}
       </a>
     </div>
   </div>

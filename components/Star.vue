@@ -6,20 +6,20 @@
         class="btn btn-unstyled not-saved btn-toggle-saved-word add-word"
         v-if="!saved"
         @click="saveWordClick"
-        title='Add to "Saved Words"'
+        :title='$t("Add to Saved Words")'
       >
         <i class="far fa-star"></i>
-        <template v-if="label">SAVE WORD</template>
+        <template v-if="label">{{ $t('SAVE WORD') }}</template>
       </button>
       <button
         class="btn btn-unstyled saved btn-toggle-saved-word remove-word"
         v-if="saved && !removeSymbol"
         @click="removeWordClick"
-        title='Remove from "Saved Words"'
+        title='Remove from Saved Words'
       >
         <!-- <i class="fas fa-bookmark"></i> -->
         <i class="fas fa-check"></i>
-        <template v-if="label">SAVED</template>
+        <template v-if="label">{{ $t('SAVED') }}</template>
         <i class="fas fa-times-circle ml-1"></i>
       </button>
       <button
