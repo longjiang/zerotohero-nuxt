@@ -48,7 +48,7 @@
             {{ localeDescription }}
           </span>
           <span v-if="show.category">
-            {{ categories[show.category] }}
+            {{ $t(categories[show.category]) }}
           </span>
         </div>
         <div v-if="$adminMode">
@@ -136,7 +136,7 @@ export default {
   },
   methods: {
     formatK(number) {
-      return formatK(number);
+      return formatK(number, 2, this.$l1.code);
     },
     async getLocaleDescription(locale) {
       let language, country;
@@ -145,8 +145,8 @@ export default {
       if (countryCode) {
         country = await this.$languages.countryFromCode(countryCode);
       }
-      let description = `${language ? language.name : ""}`;
-      if (country) description += ` (${country.name})`;
+      let description = `${language ? this.$t(language.name) : ""}`;
+      if (country) description += ` (${this.$t(country.name)})`;
       return { country, language, description };
     },
     async remove(show) {

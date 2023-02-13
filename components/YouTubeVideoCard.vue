@@ -94,7 +94,7 @@
             style="color: #aaa"
             v-if="video.date && (showDate || $adminMode)"
           >
-            {{ formatDate(video.date) }}
+            {{ $d(new Date(video.date), 'short', $l1.code) }}
           </span>
         </div>
         <client-only>
@@ -106,7 +106,7 @@
               v-if="video.hasSubs || video.id"
               class="youtube-video-card-badge"
             >
-              {{ videoL2 ? videoL2.name : $l2.name }} CC
+              {{ $t(videoL2 ? videoL2.name : $l2.name) }} CC
               <span v-if="video.l2Locale">({{ video.l2Locale }})</span>
               <span v-if="subsFile">
                 - {{ subsFile.name.replace(/[_.]/g, " ") }}
@@ -116,7 +116,7 @@
               v-if="showLanguage && language"
               class="youtube-video-card-badge"
             >
-              {{ language.name }} ({{ language.code }})
+              {{ $t(language.name) }} ({{ language.code }})
             </div>
             <div
               v-if="
@@ -475,8 +475,8 @@ export default {
     level(...args) {
       return Helper.level(...args);
     },
-    formatK(...args) {
-      return formatK(...args);
+    formatK(n) {
+      return formatK(n, 2, this.$l1.code);
     },
     thumbnailError(e) {
       console.log("❌ ERROR", this.video.title);
